@@ -11,6 +11,7 @@
 	* src/dialogs/desktop-properties.cpp, src/dialogs/rdf.cpp,
 	  src/dialogs/rdf.h: added multiline data entry items, reduced
 	  overall width of the dialog, and created the license entry areas.
+	  Auto-detection of license on load works now.
 
 2004-07-05  MenTaLguY <mental@rydia.net>
 

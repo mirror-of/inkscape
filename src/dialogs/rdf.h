@@ -10,13 +10,23 @@
 #include "helper/sp-intl.h"
 #include "document.h"
 
+// yeah, it's not a triple yet...
+/**
+ * \brief Holds license name/resource doubles for rdf_license_t entries
+ */
+struct rdf_double_t {
+    gchar *name;
+    gchar *resource;
+};
+
 /**
  * \brief Holds license name and RDF information
  */
 struct rdf_license_t {
     gchar *name;        /* localized name of this license */
-    gchar *work_rdf;    /* URL for the RDF/Work/license element */
-    gchar *license_rdf; /* XML contents for the RDF/License tag */
+    gchar *uri;         /* URL for the RDF/Work/license element */
+    struct rdf_double_t *details; /* the license details */
+//    gchar *fragment;    /* XML contents for the RDF/License tag */
 };
 
 extern rdf_license_t rdf_licenses [];
@@ -28,6 +38,7 @@ enum RDFType {
     RDF_CONTENT,  // direct between-XML-tags content
     RDF_AGENT,    // requires the "Agent" hierarchy before doing content
     RDF_RESOURCE, // stored in "rdf:resource" element
+    RDF_XML,      // literal XML
 };
 
 /**
@@ -84,8 +95,9 @@ unsigned int  rdf_set_work_entity(SPDocument * doc,
                                   struct rdf_work_entity_t * entity,
                                   const gchar * text);
 
-struct rdf_license_t * rdf_get_license();
-void                   rdf_set_license(struct rdf_license_t * license);
+struct rdf_license_t * rdf_get_license(SPDocument * doc);
+void                   rdf_set_license(SPDocument * doc,
+                                       struct rdf_license_t * license);
 
 void rdf_set_defaults ( SPDocument * document );
 

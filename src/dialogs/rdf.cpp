@@ -16,6 +16,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <string.h>
 #include <glib.h>
@@ -69,116 +70,137 @@
 </rdf:RDF>
 */
 
+struct rdf_double_t rdf_license_empty [] = {
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_cc_a [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "requires", "http://web.resource.org/cc/Attribution", },
+    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_cc_a_sa [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "requires", "http://web.resource.org/cc/Attribution", },
+    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "requires", "http://web.resource.org/cc/ShareAlike", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_cc_a_nd [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "requires", "http://web.resource.org/cc/Attribution", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_cc_a_nc [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "requires", "http://web.resource.org/cc/Attribution", },
+    { "prohibits", "http://web.resource.org/cc/CommercialUse", },
+    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_cc_a_nc_sa [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "requires", "http://web.resource.org/cc/Attribution", },
+    { "prohibits", "http://web.resource.org/cc/CommercialUse", },
+    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "requires", "http://web.resource.org/cc/ShareAlike", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_cc_a_nc_nd [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "requires", "http://web.resource.org/cc/Attribution", },
+    { "prohibits", "http://web.resource.org/cc/CommercialUse", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_gpl [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "requires", "http://web.resource.org/cc/Notice", },
+    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "requires", "http://web.resource.org/cc/ShareAlike", },
+    { "requires", "http://web.resource.org/cc/SourceCode", },
+    { NULL, NULL }
+};
+
+struct rdf_double_t rdf_license_pd [] = {
+    { "permits", "http://web.resource.org/cc/Reproduction", },
+    { "permits", "http://web.resource.org/cc/Distribution", },
+    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { NULL, NULL }
+};
 
 struct rdf_license_t rdf_licenses [] = {
     { "Creative Commons Attribution", 
-          "http://creativecommons.org/licenses/by/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-",
+      "http://creativecommons.org/licenses/by/2.0/",
+      rdf_license_cc_a,
     },
 
     { "Creative Commons Attribution-ShareAlike", 
-          "http://creativecommons.org/licenses/by/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
-",
+      "http://creativecommons.org/licenses/by/2.0/",
+      rdf_license_cc_a_sa,
     },
 
     { "Creative Commons Attribution-NoDerivs", 
-          "http://creativecommons.org/licenses/by/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-",
+      "http://creativecommons.org/licenses/by/2.0/",
+      rdf_license_cc_a_nd,
     },
 
     { "Creative Commons Attribution-NonCommercial", 
-          "http://creativecommons.org/licenses/by/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-",
+      "http://creativecommons.org/licenses/by/2.0/",
+      rdf_license_cc_a_nc,
     },
 
     { "Creative Commons Attribution-NonCommercial-ShareAlike", 
-          "http://creativecommons.org/licenses/by/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
-",
+      "http://creativecommons.org/licenses/by/2.0/",
+      rdf_license_cc_a_nc_sa,
     },
 
     { "Creative Commons Attribution-NonCommercial-NoDerivs", 
-          "http://creativecommons.org/licenses/by/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
-",
+      "http://creativecommons.org/licenses/by/2.0/",
+      rdf_license_cc_a_nc_nd,
     },
 
     { "GNU General Public License", 
-          "http://creativecommons.org/licenses/GPL/2.0/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/SourceCode\" />\
-",
+      "http://creativecommons.org/licenses/GPL/2.0/",
+      rdf_license_gpl,
     },
 
     { "GNU Lesser General Public License", 
-          "http://creativecommons.org/licenses/LGPL/2.1/",
-      "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/SourceCode\" />\
-",
+      "http://creativecommons.org/licenses/LGPL/2.1/",
+      rdf_license_gpl,
     },
 
     { "Public Domain",
       "http://web.resource.org/cc/PublicDomain",
-      "\
-     <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-     <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-     <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-",
+      rdf_license_pd,
     },
 
-    { NULL, NULL, NULL }
+    { NULL, NULL, rdf_license_empty, }
 };
 
 #define XML_TAG_NAME_METADATA "metadata"
 #define XML_TAG_NAME_RDF      "rdf:RDF"
 #define XML_TAG_NAME_WORK     "cc:Work"
+#define XML_TAG_NAME_LICENSE  "License"
 
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title"), "dc:title", RDF_CONTENT,
@@ -241,7 +263,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
     },
 
       // TRANSLATORS: fragment of XML representing the license of the document
-    { "license_fragment", N_("Fragment"), NULL, RDF_CONTENT,
+    { "license_fragment", N_("Fragment"), "License", RDF_XML,
       N_("XML fragment for the RDF 'License' section."), RDF_FORMAT_MULTILINE, RDF_EDIT_SPECIAL,
     },
     
@@ -421,6 +443,10 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             return sp_repr_content(temp);
         case RDF_RESOURCE:
             return sp_repr_attr(repr, "rdf:resource");
+        case RDF_XML:
+            return "xml goes here";
+        default:
+            break;
     }
     return NULL;
 }
@@ -489,26 +515,26 @@ rdf_set_repr_text ( SPRepr * repr,
 
         case RDF_RESOURCE:
             return sp_repr_set_attr ( parent, "rdf:resource", text );
+        case RDF_XML:
+            return 1;
+        default:
+            break;
     }
     return 0;
 }
 
-
 SPRepr *
-rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
+rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
 {
-    g_return_val_if_fail (name       != NULL, NULL);
     g_return_val_if_fail (doc        != NULL, NULL);
     g_return_val_if_fail (doc->rroot != NULL, NULL);
 
-    SPRepr * rdf = sp_repr_lookup_name ( doc->rroot,
-                                          XML_TAG_NAME_RDF );
+    SPRepr * rdf = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_RDF );
 
     if (rdf == NULL) {
         if (!build) return NULL;
 
-        SPRepr * svg = sp_repr_lookup_name ( doc->rroot,
-                                             "svg" );
+        SPRepr * svg = sp_repr_lookup_name ( doc->rroot, "svg" );
         g_return_val_if_fail ( svg != NULL, NULL );
 
         SPRepr * parent = sp_repr_lookup_name ( svg, XML_TAG_NAME_METADATA );
@@ -546,18 +572,44 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
             sp_repr_append_child ( metadata, rdf );
     }
     
-    SPRepr * work = sp_repr_lookup_name ( rdf, XML_TAG_NAME_WORK );
-    if (work == NULL) {
+    return rdf;
+}
+
+SPRepr *
+rdf_get_xml_repr( SPDocument * doc, gchar const * name, bool build )
+{
+    g_return_val_if_fail (name       != NULL, NULL);
+    g_return_val_if_fail (doc        != NULL, NULL);
+    g_return_val_if_fail (doc->rroot != NULL, NULL);
+
+    SPRepr * rdf = rdf_get_rdf_root_repr ( doc, build );
+    if (!rdf) return NULL;
+
+    SPRepr * xml = sp_repr_lookup_name ( rdf, name );
+    if (xml == NULL) {
         if (!build) return NULL;
 
-        work = sp_repr_new( XML_TAG_NAME_WORK );
-        g_return_val_if_fail (work != NULL, NULL);
+        xml = sp_repr_new( name );
+        g_return_val_if_fail (xml != NULL, NULL);
 
-        sp_repr_set_attr ( work, "rdf:about", "" );
+        sp_repr_set_attr ( xml, "rdf:about", "" );
 
-        sp_repr_append_child(rdf, work);
-        sp_repr_unref(work);
+        sp_repr_append_child(rdf, xml);
+        sp_repr_unref(xml);
     }
+
+    return xml;
+}
+
+SPRepr *
+rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
+{
+    g_return_val_if_fail (name       != NULL, NULL);
+    g_return_val_if_fail (doc        != NULL, NULL);
+    g_return_val_if_fail (doc->rroot != NULL, NULL);
+
+    SPRepr * work = rdf_get_xml_repr ( doc, XML_TAG_NAME_WORK, build );
+    if (!work) return NULL;
 
     SPRepr * item = sp_repr_lookup_name ( work, name );
     if (item == NULL) {
@@ -588,7 +640,13 @@ rdf_get_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity)
     if ( entity == NULL ) return NULL;
     //printf("want '%s'\n",entity->title);
 
-    SPRepr * item = rdf_get_work_repr( doc, entity->tag, FALSE );
+    SPRepr * item;
+    if ( entity->datatype == RDF_XML ) {
+        item = rdf_get_xml_repr ( doc, entity->tag, FALSE );
+    }
+    else {
+        item = rdf_get_work_repr( doc, entity->tag, FALSE );
+    }
     if ( item == NULL ) return NULL;
 
     const gchar * result = rdf_get_repr_text ( item, entity );
@@ -607,7 +665,10 @@ rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
                     const gchar * text)
 {
     g_return_val_if_fail ( entity != NULL, 0 );
-    g_return_val_if_fail ( text   != NULL, 0 );
+    if (text == NULL) {
+        // FIXME: on a "NULL" text, delete the entity.  For now, blank it.
+        text="";
+    }
 
     /*
     printf("changing '%s' (%s) to '%s'\n",
@@ -622,27 +683,122 @@ rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
     return rdf_set_repr_text ( item, entity, text );
 }
 
+bool
+rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
+{
+    g_assert ( repr != NULL );
+    g_assert ( license != NULL );
+
+    bool result=TRUE;
+    //printf("checking against '%s'\n",license->name);
+
+    int count = 0;
+    for (struct rdf_double_t * details = license->details;
+         details->name; details++ ) {
+        count++;
+    }
+    bool * matched = (bool*)calloc(count,sizeof(bool));
+
+    for (SPRepr * current = sp_repr_children ( repr );
+         current;
+         current = sp_repr_next ( current ) ) {
+
+        gchar const * attr = sp_repr_attr ( current, "rdf:resource" );
+        if ( attr == NULL ) continue;
+
+        //printf("\texamining '%s' => '%s'\n", sp_repr_name ( current ), attr);
+
+        bool found_match=FALSE;
+        for (int i=0; i<count; i++) {
+            // skip already matched items
+            if (matched[i]) continue;
+
+            //printf("\t\t'%s' vs '%s'\n", sp_repr_name ( current ), license->details[i].name);
+            //printf("\t\t'%s' vs '%s'\n", attr, license->details[i].resource);
+
+            if (!strcmp( sp_repr_name ( current ),
+                         license->details[i].name ) &&
+                !strcmp( attr,
+                         license->details[i].resource )) {
+                matched[i]=TRUE;
+                found_match=TRUE;
+                //printf("\t\tgood!\n");
+                break;
+            }
+        }
+        if (!found_match) {
+            // if we checked each known item of the license
+            // and didn't find it, we must abort
+            result=FALSE;
+            //printf("\t\tno '%s' element matched XML (bong)!\n",license->name);
+            break;
+        }
+    }
+    //if (result) printf("\t\tall XML found matching elements!\n");
+    for (int i=0; result && i<count; i++) {
+        // scan looking for an unmatched item
+        if (matched[i]==0) {
+            result=FALSE;
+            //printf("\t\tnot all '%s' elements used to match (bong)!\n", license->name);
+        }
+    }
+
+    //printf("\t\tall '%s' elements used to match!\n",license->name);
+
+    free(matched);
+
+    //if (result) printf("matched '%s'\n",license->name);
+    return result;
+}
+
 /**
  *  \brief   Attempts to match and retrieve a known RDF/License from the document XML
  *  \return  A pointer to the static RDF license structure
  *  
  */
 struct rdf_license_t *
-rdf_get_license()
+rdf_get_license(SPDocument * document)
 {
-    /* obviously, we need to also pass the document and then extract the
-     * desired RDF entity from the XML */
+    SPRepr * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
+    if (repr) {
+        for (struct rdf_license_t * license = rdf_licenses;
+             license->name; license++ ) {
+            if ( rdf_match_license ( repr, license ) ) return license;
+        }
+    }
     return NULL;
 }
 
 /**
  *  \brief   Stores an RDF/License XML in the document XML
+ *  \param   document  Which document to update
  *  \param   license   The desired RDF/License structure to store
  *  
  */
 void
-rdf_set_license(struct rdf_license_t * license)
+rdf_set_license(SPDocument * document, struct rdf_license_t * license)
 {
+    // drop old license section
+    SPRepr * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
+    if (repr) sp_repr_recursive_drop( repr );
+
+    if (!license) return;
+
+    // build new license section
+    repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, TRUE );
+    g_assert ( repr );
+
+    sp_repr_set_attr ( repr, "rdf:about", license->uri );
+
+    for (struct rdf_double_t * detail = license->details;
+         detail->name; detail++) {
+        SPRepr * child = sp_repr_new( detail->name );
+        g_assert ( child != NULL );
+
+        sp_repr_set_attr ( child, "rdf:resource", detail->resource );
+        sp_repr_append_child ( repr, child );
+        sp_repr_unref ( child );
+    }
 }
 
 struct rdf_entity_default_t {
@@ -650,16 +806,10 @@ struct rdf_entity_default_t {
     gchar const * text;
 };
 struct rdf_entity_default_t rdf_defaults[] = {
-    { "description",
-      "Created with Inkscape (http://www.inkscape.org/)",
-    },
-    { "format",
-      "image/svg+xml",
-    },
-    { "type",
-      "http://purl.org/dc/dcmitype/StillImage",
-    },
-    { NULL, NULL, }
+    { "description", "Created with Inkscape\nhttp://www.inkscape.org/", },
+    { "format",      "image/svg+xml", },
+    { "type",        "http://purl.org/dc/dcmitype/StillImage", },
+    { NULL,          NULL, }
 };
 
 void

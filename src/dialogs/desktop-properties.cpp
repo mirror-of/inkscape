@@ -261,27 +261,6 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     sp_document_done(doc);
 }
 
-static void
-sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
-{
-    struct rdf_license_t * license;
-    license = (struct rdf_license_t*) data;
-
-    if (!dlg || g_object_get_data(G_OBJECT(dlg), "update")) {
-        return;
-    }
-
-    if (license) {
-        /* update RDF */
-        printf("selected license '%s'\n",license->name);
-    }
-
-    /* finished */
-    if (!SP_ACTIVE_DESKTOP)
-      return;
-    
-    sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
-}
 
 /**
  *  \brief Exists to stop tabs from working until we just GTK 2.4+
@@ -307,6 +286,8 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
 
     struct rdf_work_entity_t * entity = (struct rdf_work_entity_t *)data;
     g_assert ( entity != NULL );
+
+    //printf("signal for '%s' (0x%08x)\n",entity->name,(unsigned int)data);
 
     GtkWidget *e;
     GtkTextBuffer *buf;
@@ -334,7 +315,7 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
 
     if (rdf_set_work_entity( SP_ACTIVE_DOCUMENT, entity, text )) {
         /* if we changed an RDF entity, mark the document as changed */
-        sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+        sp_document_done ( SP_ACTIVE_DOCUMENT );
     }
 }
 
@@ -543,6 +524,10 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 }
 
+/**
+ *\brief   Creates a data entry widget in a table for a given RDF entity.
+ *
+ */
 static GtkWidget *
 sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
                                 GtkWidget * t, GtkTooltips * tt, int row )
@@ -551,8 +536,9 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
     g_assert ( t != NULL );
     g_assert ( tt != NULL );
 
-    GtkWidget * packable = NULL;
-    GObject * changable = NULL;
+    GtkWidget * packable = NULL;  /* Widget to pack into the table */
+    GtkWidget * interface = NULL; /* Widget we interact with */
+    GObject * changable = NULL;   /* Object that gets "change" notices */
 
     if (dlg) {
         GtkWidget *l = gtk_label_new (entity->title);
@@ -574,6 +560,7 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
             gtk_object_set_data (GTK_OBJECT (dlg), entity->name, e);
 
             packable = GTK_WIDGET (e);
+            interface = GTK_WIDGET (e);
             changable = G_OBJECT (e);
             break;
         case RDF_FORMAT_MULTILINE:
@@ -600,16 +587,19 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
             gtk_container_add ( GTK_CONTAINER (scroller), view );
 
             packable = GTK_WIDGET (scroller);
+            interface = GTK_WIDGET (view);
             changable = G_OBJECT (buf);
             break;
         default:
             break;
         }
 
-        g_assert ( changable != NULL );
         g_assert ( packable != NULL );
+        g_assert ( interface != NULL );
+        g_assert ( changable != NULL );
 
-        gtk_object_set_data ( GTK_OBJECT (dlg), entity->name, changable);
+        gtk_object_set_data ( GTK_OBJECT (dlg), entity->name, interface);
+
         g_signal_connect( G_OBJECT(changable), "changed",
                           G_CALLBACK(sp_doc_dialog_work_entity_changed),
                           (gpointer)(entity));
@@ -619,9 +609,114 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
                           (GtkAttachOptions)0, 0, 0 );
     }
 
-    return packable;
+    return interface;
 }
 
+/*
+ * \brief   Populates the GUI text entries with RDF data from the document.
+ *
+ */
+static void
+sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
+{
+    if (dlg) {
+        g_assert ( entity != NULL );
+
+        GtkWidget *e, *view;
+        GtkTextBuffer *buf;
+
+        const gchar * text = rdf_get_work_entity( SP_ACTIVE_DOCUMENT, entity );
+    
+        switch ( entity->format ) {
+        case RDF_FORMAT_LINE:
+            e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), entity->name);
+            gtk_entry_set_text ( GTK_ENTRY (e), text ? text : "" );
+            break;
+        case RDF_FORMAT_MULTILINE:
+            view = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), entity->name);
+            buf = gtk_text_view_get_buffer ( GTK_TEXT_VIEW (view) );
+            gtk_text_buffer_set_text ( buf, text ? text : "", -1 );
+            break;
+        default:
+            break;
+        }
+    } 
+}
+
+/**
+ *\brief   Makes changes to the GUI for a given license entity
+ *
+ */
+static void
+sp_doc_dialog_license_update ( struct rdf_work_entity_t * entity,
+                               gchar const * text,
+                               bool editable )
+{
+        g_assert ( entity != NULL );
+        g_assert ( dlg != NULL );
+
+        /* find widget */
+        GtkWidget *w = (GtkWidget*)g_object_get_data ( G_OBJECT(dlg),
+                                                       entity->name );
+        g_assert ( w != NULL );
+
+        /*
+        printf("\tedit: %s '%s' -> '%s'\n", editable ? "yes" : "no",
+                                            entity->name,text);
+        */
+
+        if (!editable) {
+            /* must mark as update or bad things happen */
+            gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
+            /* load license info info RDF */
+            rdf_set_work_entity( SP_ACTIVE_DOCUMENT, entity, text );
+            /* update GUI */
+            sp_doc_dialog_update_work_entity( entity );
+            gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
+        }
+        gtk_widget_set_sensitive ( GTK_WIDGET (w), editable );
+}
+
+/**
+ *\brief   Notices changed license pulldown and changes RDF entries.
+ *
+ */
+static void
+sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
+{
+    struct rdf_license_t * license = (struct rdf_license_t*) data;
+
+    if (!dlg || g_object_get_data(G_OBJECT(dlg), "update")) {
+        return;
+    }
+
+    /*
+    if (license) {
+        printf("selected license '%s'\n",license->name);
+    }
+    else {
+        printf("selected license 'Proprietary'\n");
+    }
+    */
+
+    sp_doc_dialog_license_update ( rdf_find_entity( "license_uri" ),
+                                   license ? license->uri : NULL,
+                                   license ? FALSE : TRUE ); 
+    /*
+    sp_doc_dialog_license_update ( rdf_find_entity( "license_fragment" ),
+                                   license ? license->fragment : NULL,
+                                   license ? FALSE : TRUE ); 
+                                   */
+
+    rdf_set_license ( SP_ACTIVE_DOCUMENT, license );
+
+    sp_document_done ( SP_ACTIVE_DOCUMENT );
+}
+
+/*
+ * \brief   Creates the desktop properties dialog
+ *
+ */
 void
 sp_desktop_dialog(void)
 {
@@ -1006,9 +1101,11 @@ sp_desktop_dialog(void)
         entity = rdf_find_entity ( "license_uri" );
         GtkWidget * w = sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
         gtk_widget_set_sensitive ( w, FALSE );
+        /*
         entity = rdf_find_entity ( "license_fragment" );
         w = sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
         gtk_widget_set_sensitive ( w, FALSE );
+        */
 
         // end "Metadata" tab
 
@@ -1053,34 +1150,6 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
         sp_repr_remove_listener_by_data(SP_OBJECT_REPR(desktop->namedview), dlg);
     }
     sp_dtw_update(dialog, NULL);
-}
-
-static void
-sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
-{
-    if (dlg) {
-        g_assert ( entity != NULL );
-
-        GtkWidget *e;
-        GtkTextBuffer *buf;
-
-        const gchar * text = rdf_get_work_entity( SP_ACTIVE_DOCUMENT, entity );
-    
-        switch ( entity->format ) {
-        case RDF_FORMAT_LINE:
-            e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
-                                               entity->name);
-            gtk_entry_set_text ( GTK_ENTRY (e), text ? text : "" );
-            break;
-        case RDF_FORMAT_MULTILINE:
-            buf = (GtkTextBuffer *)g_object_get_data(G_OBJECT(dlg),
-                                                     entity->name);
-            gtk_text_buffer_set_text ( buf, text ? text : "", -1 );
-            break;
-        default:
-            break;
-        }
-    } 
 }
 
 static void
@@ -1283,9 +1352,22 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
                 sp_doc_dialog_update_work_entity( entity );
             }
         }
-        /* TODO: match & load the license info */
+        /* identify the license info */
+        struct rdf_license_t * license = rdf_get_license ( SP_ACTIVE_DOCUMENT );
+
+        GtkWidget *lm = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dialog),
+                                                         "licenses");
+        for (int i=0; rdf_licenses[i].name; i++) {
+            if (license == &rdf_licenses[i]) {
+                gtk_option_menu_set_history(GTK_OPTION_MENU(lm), i+1);
+                break;
+            }
+        }
 
         gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(FALSE));
+
+        /* update the license info outside of the "update"=1 area */
+        sp_doc_dialog_license_selected ( NULL, license );
     }
 }
 
