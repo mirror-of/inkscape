@@ -28,6 +28,7 @@
 #include "../seltrans.h"
 #include "../dropper-context.h"
 #include "../enums.h"
+#include "../selcue.h"
 
 #include "display-settings.h"
 
@@ -120,12 +121,11 @@ options_clone_orphans_toggled (GtkToggleButton *button)
 }
 
 static void
-options_selector_cue_toggled (GtkToggleButton *button)
+options_selcue_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
-		prefs_set_string_attribute ("tools.select", "cue", val);
+		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		prefs_set_int_attribute ("options.selcue", "value", val);
 	}
 }
 
@@ -228,24 +228,24 @@ options_selector ()
     gtk_widget_show (fb);
     gtk_container_add (GTK_CONTAINER (f), fb);
 
-    gchar const *cue = prefs_get_string_attribute ("tools.select", "cue");
+    gint cue = prefs_get_int_attribute ("options.selcue", "value", SP_SELCUE_MARK);
 
     b = sp_select_context_add_radio (
-        NULL, fb, tt, _("None"), _("No per-object selection indication"), "none", 0, false,
-        cue && !strcmp (cue, "none"),
-        options_selector_cue_toggled
+        NULL, fb, tt, _("None"), _("No per-object selection indication"), NULL, SP_SELCUE_NONE, true,
+        cue == SP_SELCUE_NONE,
+        options_selcue_toggled
         );
 
     b = sp_select_context_add_radio (
-        b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), "mark", 0, false,
-        (cue == NULL) || !strcmp (cue, "mark"),
-        options_selector_cue_toggled
+        b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), NULL, SP_SELCUE_MARK, true,
+        cue == SP_SELCUE_MARK,
+        options_selcue_toggled
         );
 
     sp_select_context_add_radio (
-        b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox", 0, false,
-        cue && !strcmp (cue, "bbox"),
-        options_selector_cue_toggled
+        b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), NULL, SP_SELCUE_BBOX, true,
+        cue == SP_SELCUE_BBOX,
+        options_selcue_toggled
         );
 
     f = gtk_frame_new (_("Default action when moving with grid enabled:"));

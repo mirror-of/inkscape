@@ -32,6 +32,7 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "document.h"
+#include "selcue.h"
 
 #include "dropper-context.h"
 #include <libnr/nr-point-fns.h>
@@ -110,6 +111,8 @@ sp_dropper_context_setup (SPEventContext *ec)
 	sp_canvas_bpath_set_fill (SP_CANVAS_BPATH (dc->area), 0x00000000, (SPWindRule)0);
 	sp_canvas_bpath_set_stroke (SP_CANVAS_BPATH (dc->area), 0x0000007f, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 	sp_canvas_item_hide (dc->area);
+
+	sp_sel_cue_init(&dc->selcue, SP_EVENT_CONTEXT(dc)->desktop);
 }
 
 static void
@@ -121,6 +124,8 @@ sp_dropper_context_finish (SPEventContext *ec)
 		gtk_object_destroy (GTK_OBJECT (dc->area));
 		dc->area = NULL;
 	}
+
+	sp_sel_cue_shutdown(&dc->selcue);
 }
 
 static gint

@@ -84,6 +84,7 @@ libinkpre_a_SOURCES =	\
 	selection.cpp selection.h	\
 	select-toolbar.cpp select-toolbar.h\
 	seltrans.cpp seltrans.h	\
+	selcue.cpp selcue.h \
 	seltrans-handles.cpp seltrans-handles.h	\
 	shortcuts.cpp shortcuts.h	\
 	slideshow.cpp slideshow.h	\

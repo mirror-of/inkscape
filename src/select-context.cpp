@@ -159,9 +159,6 @@ sp_select_context_setup(SPEventContext *ec)
 
     sp_event_context_read(ec, "show");
     sp_event_context_read(ec, "transform");
-    sp_event_context_read(ec, "cue");
-
-    sp_sel_trans_update_item_bboxes(&select_context->seltrans);
 
     sp_select_context_update_statusbar(select_context);
 }
@@ -177,17 +174,7 @@ sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
         } else {
             sc->seltrans.show = SP_SELTRANS_SHOW_CONTENT;
         }
-    } else if (!strcmp(key, "cue")) {
-        if (val) {
-            if (!strcmp(val, "none")) {
-                sc->seltrans.cue = SP_SELTRANS_CUE_NONE;
-            } else if (!strcmp(val, "bbox")) {
-                sc->seltrans.cue = SP_SELTRANS_CUE_BBOX;
-            } else {
-                sc->seltrans.cue = SP_SELTRANS_CUE_MARK;
-            }
-        }
-    }
+    } 
 }
 
 static gint

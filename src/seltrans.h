@@ -18,6 +18,7 @@
 #include <libnr/nr-rect.h>
 #include "knot.h"
 #include "desktop-handles.h"
+#include "selcue.h"
 #include <vector>
 
 class SPSelection;
@@ -27,12 +28,6 @@ class SPSelTrans;
 enum {
 	SP_SELTRANS_SHOW_CONTENT,
 	SP_SELTRANS_SHOW_OUTLINE
-};
-
-enum {
-        SP_SELTRANS_CUE_NONE,
-        SP_SELTRANS_CUE_MARK,
-        SP_SELTRANS_CUE_BBOX
 };
 
 enum {
@@ -51,7 +46,6 @@ struct SPSelTrans {
 
 	guint state : 1;
 	guint show : 1;
-	guint cue : 2;
 
 	unsigned int grabbed : 1;
 	unsigned int show_handles : 1;
@@ -79,7 +73,7 @@ struct SPSelTrans {
 	guint sel_modified_id;
 	GSList *stamp_cache;
 
-	GSList *item_bboxes;
+	SPSelCue selcue;
 };
 
 /*

@@ -37,6 +37,7 @@
 #include "sp-item.h"
 #include <sp-item-update-cns.h>
 #include "seltrans-handles.h"
+#include "selcue.h"
 #include "seltrans.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
@@ -95,7 +96,6 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 
 	seltrans->state = SP_SELTRANS_STATE_SCALE;
 	seltrans->show = SP_SELTRANS_SHOW_CONTENT;
-	seltrans->cue = SP_SELTRANS_CUE_MARK;
 
 	seltrans->spp = nr_new(NR::Point, SP_SELTRANS_SPP_SIZE);
 
@@ -146,7 +146,6 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 	}
 
 	seltrans->stamp_cache = NULL;
-	seltrans->item_bboxes = NULL;
 
 	/* we must call the constructors ourselves */
 	new (&seltrans->sel_changed_connection) SigC::Connection(
@@ -166,6 +165,7 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 		)
 	);
 
+	sp_sel_cue_init (&seltrans->selcue, desktop);
 }
 
 void
@@ -215,11 +215,7 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 	
 	seltrans->items.clear();
 
-	for (GSList *l = seltrans->item_bboxes; l != NULL; l = l->next) {
-		gtk_object_destroy( GTK_OBJECT (l->data));
-	}
-	g_slist_free (seltrans->item_bboxes);
-	seltrans->item_bboxes = NULL;
+	sp_sel_cue_shutdown(&seltrans->selcue);
 }
 
 void sp_sel_trans_reset_state(SPSelTrans *seltrans)
@@ -236,7 +232,7 @@ void sp_sel_trans_increase_state(SPSelTrans *seltrans)
 	}
 
 	sp_sel_trans_update_handles(*seltrans);
-	sp_sel_trans_update_item_bboxes (seltrans);
+	sp_sel_cue_update_item_bboxes (&seltrans->selcue);
 }
 
 void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
@@ -244,7 +240,7 @@ void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
 	seltrans->center = p;
 	
 	sp_sel_trans_update_handles(*seltrans);
-	sp_sel_trans_update_item_bboxes (seltrans);
+	sp_sel_cue_update_item_bboxes (&seltrans->selcue);
 }
 
 void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles)
@@ -322,7 +318,7 @@ void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, 
 	seltrans->changed = TRUE;
 
 	sp_sel_trans_update_handles(*seltrans);
-	sp_sel_trans_update_item_bboxes (seltrans);
+	sp_sel_cue_update_item_bboxes (&seltrans->selcue);
 }
 
 void sp_sel_trans_ungrab(SPSelTrans *seltrans)
@@ -672,7 +668,6 @@ static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data)
 		sp_sel_trans_update_volatile_state(*seltrans);
 		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
-		sp_sel_trans_update_item_bboxes (seltrans);
 	}
 
 }
@@ -688,7 +683,6 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 		sp_sel_trans_update_volatile_state(*seltrans);
 		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
-		sp_sel_trans_update_item_bboxes (seltrans);
 	}
 
 }
@@ -1099,60 +1093,3 @@ void sp_sel_trans_center(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Poi
 	sp_sel_trans_set_center (seltrans, pt);
 }
 
-void
-sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
-{
-       g_return_if_fail (seltrans != NULL);
-
-       GSList const* l;
-       for (l = seltrans->item_bboxes; l != NULL; l = l->next) {
-               gtk_object_destroy( GTK_OBJECT (l->data));
-       }
-       g_slist_free (seltrans->item_bboxes);
-       seltrans->item_bboxes = NULL;
-
-	 if (seltrans->cue == SP_SELTRANS_CUE_NONE)
-		 return;
-
-       g_return_if_fail (seltrans->selection != NULL);
-
-       NRRect b;
-       SPCanvasItem* box = NULL;
-       for (l = seltrans->selection->itemList(); l != NULL; l = l->next) {
-
-		 sp_item_bbox_desktop ((SPItem *) l->data, &b);
-
-		 if (seltrans->cue == SP_SELTRANS_CUE_MARK) {
-                     
-                     box = sp_canvas_item_new (SP_DT_CONTROLS (seltrans->desktop),
-                                               SP_TYPE_CTRL,
-                                               "mode", SP_CTRL_MODE_XOR,
-					     "shape", SP_CTRL_SHAPE_DIAMOND,
-					     "size", 5.0,
-					     "filled", TRUE,
-					     "fill_color", 0x000000ff,
-					     "stroked", FALSE,
-					     "stroke_color", 0x000000ff,
-					     NULL);
-                     sp_canvas_item_show (box);
-
-                     SP_CTRL(box)->moveto (NR::Point(b.x0, b.y1));
-		 }
-		 else if (seltrans->cue == SP_SELTRANS_CUE_BBOX)
-		 {
-                     
-                     box = sp_canvas_item_new (
-                         SP_DT_CONTROLS (seltrans->desktop),
-                         SP_TYPE_CTRLRECT,
-                         NULL
-                         );
-                     
-                     sp_ctrlrect_set_area (SP_CTRLRECT (box), b.x0, b.y0, b.x1, b.y1);
-                     sp_ctrlrect_set_color (SP_CTRLRECT (box), 0x000000a0, 0, 0);
-                     sp_ctrlrect_set_dashed (SP_CTRLRECT (box), 1);
-		 }
-                 
-		 if (box)
-			 seltrans->item_bboxes = g_slist_append (seltrans->item_bboxes, box);
-       }
-}
