@@ -47,7 +47,19 @@
 
 /*#########################################################################
 # Our Inkscape-exported shapes file
+# Note that the finish of the "all shapes" object exported
+# at the end of the shapes file can be modified, by defining
+# if before the #include.  Uncomment the following declaration
+# to adjust it.  Have fun.
 #########################################################################*/
+
+/*
+#declare AllShapes_Finish = finish {
+           phong 0.7
+           reflection 0.5
+           specular 0.8
+       }
+*/
 
 #include "isshapes.pov"
 
@@ -98,6 +110,7 @@ sky_sphere {
 # shapes can be discerned.
 #########################################################################*/
 
+
 object {
     /*
     //## Individually
@@ -111,16 +124,6 @@ object {
 
     //## As a group
     object { AllShapesZ }
-
-    texture
-       {
-       finish {
-           phong 0.5
-           reflection 0.3
-           specular 0.5
-       }
-    }
-
 
 
     translate<-AllShapes_CENTER_X, 0, -AllShapes_CENTER_Y>

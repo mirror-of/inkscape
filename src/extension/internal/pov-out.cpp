@@ -254,6 +254,19 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### UNION OF ALL SHAPES IN DOCUMENT\n");
         fprintf(f, "##############################################*/\n");
+        fprintf(f, "\n\n");
+        fprintf(f, "/**\n");
+        fprintf(f, " * Allow the user to redefine the finish{}\n");
+        fprintf(f, " * by declaring it before #including this file\n");
+        fprintf(f, " */\n");
+        fprintf(f, "#ifndef (%s_Finish)\n", id);
+        fprintf(f, "#declare %s_Finish = finish {\n", id);
+        fprintf(f, "    phong 0.5\n");
+        fprintf(f, "    reflection 0.3\n");
+        fprintf(f, "    specular 0.5\n");
+        fprintf(f, "}\n");
+        fprintf(f, "#end\n");
+        fprintf(f, "\n\n");
         fprintf(f, "#declare %s = union {\n", id);
         for (unsigned int i=0 ; i<povShapes.size() ; i++)
             {
@@ -263,6 +276,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                 fprintf(f, "            pigment { %s }\n", povShapes[i].color.c_str());
             else
                 fprintf(f, "            pigment { rgb <0,0,0> }\n");
+            fprintf(f, "            finish { %s_Finish }\n", id);
             fprintf(f, "            } \n");
             fprintf(f, "        } \n");
             }
@@ -282,6 +296,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                 fprintf(f, "            pigment { %s }\n", povShapes[i].color.c_str());
             else
                 fprintf(f, "            pigment { rgb <0,0,0> }\n");
+            fprintf(f, "            finish { %s_Finish }\n", id);
             fprintf(f, "            } \n");
             fprintf(f, "        scale <1, %2.5f, 1>  translate <1, %2.5f, 1>\n", 
                                      zscale, ztrans);
