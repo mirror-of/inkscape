@@ -1,3 +1,12 @@
+2004-04-06  Ted Gould <ted@gould.cx>
+
+	* src/file.cpp, src/dialogs/filedialog.cpp, src/extension/extension.cpp,
+      src/extension/system.cpp:
+	Moving code around so that the filename extension gets put on by
+	the extension that is saving the file.  This adds a couple complications
+	in that the extension now needs to check for overwriting the file
+	and also set the document URI.  Better overall, but a PITA.
+
 2004-04-05  njh <njh@mail.csse.monash.edu.au>
 
 	* debian/rules,debian/control: applied patch from Kees Cook to remove

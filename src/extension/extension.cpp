@@ -27,6 +27,9 @@
 #include "inkscape.h"
 #include "sp-object.h"
 #include "document.h"
+#include "prefs-utils.h"
+#include "file.h"
+#include "interface.h"
 #include "extension.h"
 
 #include "db.h"
@@ -798,14 +801,40 @@ void
 Output::save (SPDocument * doc, const gchar * uri)
 {
 	SPRepr * repr;
+	gchar * filename = NULL;
+
+	if ((bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1)) {
+		gchar * lowerfile = g_utf8_strdown(uri, g_utf8_strlen(uri, -1));
+		gchar * lowerext = g_utf8_strdown(get_extension(), g_utf8_strlen(get_extension(), -1));
+
+		if (!g_str_has_suffix(lowerfile, lowerext)) {
+			filename = g_strdup_printf("%s%s", uri, get_extension());
+		}
+
+		g_free(lowerfile);
+		g_free(lowerext);
+	}
+
+	if (filename == NULL) {
+		filename = g_strdup(uri);
+	}
+
+	if (!sp_ui_overwrite_file(filename)) {
+		g_free(filename);
+		sp_file_save_dialog(doc);
+		return;
+	}
+
 	repr = sp_document_repr_root(doc);
 
+	sp_document_set_uri (doc, filename);
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
 	sp_repr_set_attr(repr, "inkscape:dataloss", NULL);
+	sp_repr_set_attr(repr, "sodipodi:modified", NULL);
 	sp_document_set_undo_sensitive (doc, TRUE);
 
-    imp->save(this, doc, uri);
+    imp->save(this, doc, filename);
 
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
@@ -813,6 +842,9 @@ Output::save (SPDocument * doc, const gchar * uri)
 		sp_repr_set_attr(repr, "inkscape:dataloss", "TRUE");
 	}
 	sp_document_set_undo_sensitive (doc, TRUE);
+
+	g_free(filename);
+	return;
 }
 
 /* Inkscape::Extension::Effect */

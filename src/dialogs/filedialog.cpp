@@ -334,22 +334,6 @@ FileSaveDialog::show() {
 		g_free(filename);
 	    filename = g_strdup(dialog_filename);
 
-		if (nativeData->append_extension == TRUE && extension != NULL) {
-			Inkscape::Extension::Output * omod = dynamic_cast<Inkscape::Extension::Output *>(extension);
-			gchar * lowerfile = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
-			gchar * lowerext = g_utf8_strdown(omod->get_extension(), g_utf8_strlen(omod->get_extension(), -1));
-
-			if (!g_str_has_suffix(lowerfile, lowerext)) {
-				gchar * newfilename;
-				newfilename = g_strdup_printf("%s%s", filename, omod->get_extension());
-				g_free(filename);
-				filename = newfilename;
-			}
-
-			g_free(lowerfile);
-			g_free(lowerext);
-		}
-
 		prefs_set_int_attribute("dialogs.save_as", "append_extension", (gint)nativeData->append_extension);
 		if (extension != NULL)
 			prefs_set_string_attribute("dialogs.save_as", "default", extension->get_id());

@@ -207,8 +207,6 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
     if (!doc || !uri) //Safety check
         return FALSE;
 
-	sp_document_set_uri (doc, uri);
-
 	try {
 		sp_module_system_save (key, doc, uri, true); // save officially, with inkscape: attributes set
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
@@ -284,12 +282,6 @@ sp_file_save_dialog (SPDocument *doc)
             // TODO: bulia, please look over
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
-
-		if (!sp_ui_overwrite_file(fileName)) {
-			g_free(save_path);
-			g_free(fileName);
-			return sp_file_save_dialog(doc);
-		}
 
         sucess = file_save (doc, fileName, selectionType);
         g_free (save_path);

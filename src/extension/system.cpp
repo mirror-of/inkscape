@@ -210,7 +210,7 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		/* This is a nasty hack, but it is required to ensure that
 		   autodetect will always save with the Inkscape extensions
 		   if they are available. */
-		if (omod != NULL && !strcmp(omod->get_id(), SP_MODULE_KEY_OUTPUT_SVG)) {
+		if (omod == NULL) {
 			omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
 		}
 	} else {
@@ -231,13 +231,6 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 	prefs = omod->prefs();
 	if (prefs != NULL) {
 		gtk_dialog_run(prefs);
-	}
-
-	if (official) {
-		repr = sp_document_repr_root (doc);
-		sp_document_set_undo_sensitive (doc, FALSE);
-		sp_repr_set_attr (repr, "sodipodi:modified", NULL);
-		sp_document_set_undo_sensitive (doc, TRUE);
 	}
 
 	return omod->save(doc, filename);
