@@ -359,7 +359,6 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
                     sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, button_dt, true, true);
                 }
                 if (event_context->_grdrag) {
-        g_print ("will grakno\n");
                     event_context->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data), POINT_LG_P2, true, event->button.time);
                 }
                 rc->vector_created = true;

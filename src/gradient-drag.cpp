@@ -709,7 +709,6 @@ GrDrag::grabKnot (SPItem *item, guint point_num, bool fill_or_stroke, guint32 et
 {
     GrDragger *dragger = getDraggerFor (item, point_num, fill_or_stroke);
     if (dragger) {
-        g_print ("will start dra\n");
         sp_knot_start_dragging (dragger->knot, dragger->point, etime);
     }
 }
