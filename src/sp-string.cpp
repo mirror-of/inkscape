@@ -47,41 +47,42 @@
 #  SPSTRING
 #####################################################*/
 
-static void sp_string_class_init (SPStringClass *classname);
-static void sp_string_init (SPString *string);
+static void sp_string_class_init(SPStringClass *classname);
+static void sp_string_init(SPString *string);
 
-static void sp_string_build (SPObject *object, SPDocument *document, SPRepr *repr);
-static void sp_string_release (SPObject *object);
-static void sp_string_read_content (SPObject *object);
-static void sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags);
+static void sp_string_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_string_release(SPObject *object);
+static void sp_string_read_content(SPObject *object);
+static void sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags);
 
-static void sp_string_calculate_dimensions (SPString *string);
+static void sp_string_calculate_dimensions(SPString *string);
 
 static SPObjectClass *string_parent_class;
 
 GType
-sp_string_get_type ()
+sp_string_get_type()
 {
     static GType type = 0;
     if (!type) {
         GTypeInfo info = {
-            sizeof (SPStringClass),
+            sizeof(SPStringClass),
             NULL,    /* base_init */
             NULL,    /* base_finalize */
             (GClassInitFunc) sp_string_class_init,
             NULL,    /* class_finalize */
             NULL,    /* class_data */
-            sizeof (SPString),
+            sizeof(SPString),
             16,    /* n_preallocs */
             (GInstanceInitFunc) sp_string_init,
             NULL,    /* value_table */
         };
-        type = g_type_register_static (SP_TYPE_OBJECT, "SPString", &info, (GTypeFlags)0);
+        type = g_type_register_static(SP_TYPE_OBJECT, "SPString", &info, (GTypeFlags)0);
     }
     return type;
 }
+
 static void
-sp_string_class_init (SPStringClass *classname)
+sp_string_class_init(SPStringClass *classname)
 {
     SPObjectClass *sp_object_class;
     SPItemClass   *item_class;
@@ -89,7 +90,7 @@ sp_string_class_init (SPStringClass *classname)
     sp_object_class = (SPObjectClass *) classname;
     item_class      = (SPItemClass *) classname;
 
-    string_parent_class = (SPObjectClass*)g_type_class_ref (SP_TYPE_OBJECT);
+    string_parent_class = (SPObjectClass*)g_type_class_ref(SP_TYPE_OBJECT);
 
     sp_object_class->build        = sp_string_build;
     sp_object_class->release      = sp_string_release;
@@ -98,104 +99,119 @@ sp_string_class_init (SPStringClass *classname)
 }
 
 static void
-sp_string_init (SPString *string)
+sp_string_init(SPString *string)
 {
-	new (&string->contents) text_flow_src(SP_OBJECT(string));
-	new (&string->svg_contents) partial_text();
-}
-static void
-sp_string_build (SPObject *object, SPDocument *doc, SPRepr *repr)
-{
-//    SPString *string = SP_STRING(object);
-	sp_string_read_content (object);
-//    SPObject *parent=SP_OBJECT_PARENT(object);
-
-	if (((SPObjectClass *) string_parent_class)->build)
-		((SPObjectClass *) string_parent_class)->build (object, doc, repr);
+    new (&string->contents) text_flow_src(SP_OBJECT(string));
+    new (&string->svg_contents) partial_text();
 }
 
 static void
-sp_string_release (SPObject *object)
+sp_string_build(SPObject *object, SPDocument *doc, SPRepr *repr)
 {
-	SPString *string = SP_STRING (object);
-	
-	string->contents.~text_flow_src();
-	string->svg_contents.~partial_text();
-	
-	if (((SPObjectClass *) string_parent_class)->release)
-		((SPObjectClass *) string_parent_class)->release (object);
+    //SPString *string = SP_STRING(object);
+    sp_string_read_content(object);
+    //SPObject *parent=SP_OBJECT_PARENT(object);
+
+    if (((SPObjectClass *) string_parent_class)->build)
+        ((SPObjectClass *) string_parent_class)->build(object, doc, repr);
 }
 
 static void
-sp_string_read_content (SPObject *object)
+sp_string_release(SPObject *object)
 {
-	SPString *string = SP_STRING (object);
+    SPString *string = SP_STRING(object);
 
-	const gchar *t = object->repr->content();
-	string->svg_contents.ResetText();
-	if ( t ) {
-		string->svg_contents.AddSVGInputText((char*)t,-1);
-	} else {
-		string->svg_contents.AddSVGInputText((char*)"",0);
-	}
-	string->contents.SetStringText(&string->svg_contents);
-	object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    string->contents.~text_flow_src();
+    string->svg_contents.~partial_text();
+
+    if (((SPObjectClass *) string_parent_class)->release)
+        ((SPObjectClass *) string_parent_class)->release(object);
 }
+
 static void
-sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags)
+sp_string_read_content(SPObject *object)
 {
-	if (((SPObjectClass *) string_parent_class)->update)
-		((SPObjectClass *) string_parent_class)->update (object, ctx, flags);
-	
-	if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
-		/* Parent style or we ourselves changed, so recalculate */
-		flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
-		sp_string_calculate_dimensions (SP_STRING (object));
-	}
+    SPString *string = SP_STRING(object);
+
+    gchar const *t = object->repr->content();
+    string->svg_contents.ResetText();
+    if (t) {
+        string->svg_contents.AddSVGInputText((char*)t, -1);
+    } else {
+        string->svg_contents.AddSVGInputText((char*)"", 0);
+    }
+    string->contents.SetStringText(&string->svg_contents);
+    object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
+
+static void
+sp_string_update(SPObject *object, SPCtx *ctx, unsigned flags)
+{
+    if (((SPObjectClass *) string_parent_class)->update)
+        ((SPObjectClass *) string_parent_class)->update(object, ctx, flags);
+
+    if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
+        /* Parent style or we ourselves changed, so recalculate */
+        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
+        sp_string_calculate_dimensions(SP_STRING(object));
+    }
+}
+
 NR::Point
-sp_letterspacing_advance (const SPStyle *style)
+sp_letterspacing_advance(SPStyle const *style)
 {
-	NR::Point letterspacing_adv;
-	/* TODO: Consider making this stuff unconditional (see comment near similar code
-	   in sp-text.cpp). */
-	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
-		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
-			if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-				letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value);
-			} else {
-				letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value, 0.0);
-			}
-		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
-			// fixme: Get x height from libnrtype or pango.
-			if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-				letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value * 0.5);
-			} else {
-				letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value * 0.5, 0.0);
-			}
-		} else { // unknown unit - should not happen
-			letterspacing_adv = NR::Point(0.0, 0.0);
-		}
-	} else { // there's a real value in .computed, or it's zero
-		if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-			letterspacing_adv = NR::Point(0.0, style->text->letterspacing.computed);
-		} else {
-			letterspacing_adv = NR::Point(style->text->letterspacing.computed, 0.0);
-		}
-	} 
-	return letterspacing_adv;
+    NR::Point letterspacing_adv;
+    /* TODO: Consider making this stuff unconditional (see comment near similar code
+       in sp-text.cpp). */
+    if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
+        if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
+            if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+                letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value);
+            } else {
+                letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value, 0.0);
+            }
+        } else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
+            // fixme: Get x height from libnrtype or pango.
+            if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+                letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value * 0.5);
+            } else {
+                letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value * 0.5, 0.0);
+            }
+        } else { // unknown unit - should not happen
+            letterspacing_adv = NR::Point(0.0, 0.0);
+        }
+    } else { // there's a real value in .computed, or it's zero
+        if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+            letterspacing_adv = NR::Point(0.0, style->text->letterspacing.computed);
+        } else {
+            letterspacing_adv = NR::Point(style->text->letterspacing.computed, 0.0);
+        }
+    }
+    return letterspacing_adv;
 }
 
 
 static void
-sp_string_calculate_dimensions (SPString */*string*/)
+sp_string_calculate_dimensions(SPString *)
 {
 }
 
-char*         
-sp_string_get_text(SPString* string)
+char *
+sp_string_get_text(SPString *string)
 {
-   if ( string->contents.cleaned_up.utf8_text )
-     return string->contents.cleaned_up.utf8_text;
-   return string->svg_contents.utf8_text;
+    if (string->contents.cleaned_up.utf8_text)
+        return string->contents.cleaned_up.utf8_text;
+    return string->svg_contents.utf8_text;
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
