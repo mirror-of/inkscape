@@ -115,20 +115,19 @@ static int
 sp_intersector_ccw(NRPointF p0, NRPointF p1, NRPointF p2)
 /* Determine which way a set of three points winds. */
 {
-	int dx1, dx2, dy1, dy2;
-	dx1 = (int)(p1.x - p0.x);
-	dy1 = (int)(p1.y - p0.y);
-	dx2 = (int)(p2.x - p0.x);
-	dy2 = (int)(p2.y - p0.y);
+	float dx1 = (p1.x - p0.x);
+	float dy1 = (p1.y - p0.y);
+	float dx2 = (p2.x - p0.x);
+	float dy2 = (p2.y - p0.y);
 /* compare slopes but avoid division operation */
 	if(dx1*dy2 > dy1*dx2)
 		return +1; // ccw
 	if(dx1*dy2 < dy1*dx2)
 		return -1; // cw
 	if(dx1*dx2 < 0 || dy1*dy2 < 0)
-		return -1; // p2 p0 p1 collinear
+		return -1; // p2 p0 p1 colinear
 	if(dx1*dx1 + dy1*dy1 < dx2*dx2 + dy2*dy2)
-		return +1;// p0 p1 p2 collinear
+		return +1;// p0 p1 p2 colinear
 	return 0; // p0 p2 p1 collinear
 }
 
@@ -277,6 +276,7 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPointF *req, double dx, double dy
 }
 
 /* look for snappoint on a circle given by center (cx,cy) and distance center-req) */
+// fixme: replace with line+circle intersector.
 
 double
 sp_desktop_circular_snap (SPDesktop * desktop, NRPointF * req, double cx, double cy)
@@ -301,7 +301,7 @@ sp_desktop_circular_snap (SPDesktop * desktop, NRPointF * req, double cx, double
 	if (nv->snaptoguides) {
 		/* snap distance in desktop units */
 		best = desktop->guidesnap;
-		best *= best; // best is sqare of best distance 
+		best *= best; // best is square of best distance 
 		// vertical guides
 		for (l = nv->vguides; l != NULL; l = l->next) {
 			dx = fabs(SP_GUIDE (l->data)->position - cx);
