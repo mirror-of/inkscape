@@ -830,7 +830,7 @@ void sp_selection_copy()
         return;
     }
 
-    const GSList *items = (GSList *) selection->itemList();
+    const GSList *items = g_slist_copy ((GSList *) selection->itemList());
 
     // 0. Copy text to system clipboard
     // FIXME: for non-texts, put serialized XML as text to the clipboard; 
@@ -905,6 +905,8 @@ void sp_selection_copy()
 
     clipboard = g_slist_reverse(clipboard);
     defs_clipboard = g_slist_reverse(defs_clipboard);
+
+    g_slist_free ((GSList *) items);
 }
 
 /**
