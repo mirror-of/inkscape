@@ -393,9 +393,9 @@ Shape::Reset (int n, int m)
 	  (voronoi_point *) realloc (vorpData,
 				     maxPt * sizeof (voronoi_point));
     }
-  if (n > maxAr)
+  if (m > maxAr)
     {
-      maxAr = n;
+      maxAr = m;
       aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
       if (HasEdgesData ())
 	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
@@ -1675,7 +1675,7 @@ Shape::SortEdges (void)
 }
 
 int
-Shape::CmpToVert (NR::Point ax, NR::Point bx)
+Shape::CmpToVert (NR::Point ax, NR::Point bx,bool as,bool bs)
 {
   int tstAX = 0;
   int tstAY = 0;
@@ -1799,10 +1799,12 @@ Shape::CmpToVert (NR::Point ax, NR::Point bx)
   bv = bx;
   double si = cross (bv, av);
   int tstSi = 0;
-  if (si > 0)
-    tstSi = 1;
-  if (si < 0)
-    tstSi = -1;
+  if (si > 0.000001) tstSi = 1;
+  if (si < -0.000001) tstSi = -1;
+  if ( tstSi == 0 ) {
+    if ( as == true && bs == false ) return -1;
+    if ( as == false && bs == true ) return 1;
+  }
   return tstSi;
 }
 
@@ -1811,21 +1813,21 @@ Shape::SortEdgesList (edge_list * list, int s, int e)
 {
   if (s >= e)
     return;
-  if (e == s + 1)
-    {
-      if (CmpToVert (list[e].x, list[s].x) > 0)
-	{
-	  edge_list swap = list[s];
-	  list[s] = list[e];
-	  list[e] = swap;
-	}
-      return;
+  if (e == s + 1) {
+    int cmpval=CmpToVert (list[e].x, list[s].x,list[e].starting,list[s].starting);
+    if ( cmpval > 0 )  { // priorite aux sortants
+      edge_list swap = list[s];
+      list[s] = list[e];
+      list[e] = swap;
     }
+    return;
+ }
 
   int ppos = (s + e) / 2;
   int plast = ppos;
   NR::Point pvalx = list[ppos].x;
-
+  bool      pvals = list[ppos].starting;
+  
   int le = s, ri = e;
   while (le < ppos || ri > plast)
     {
@@ -1833,7 +1835,7 @@ Shape::SortEdgesList (edge_list * list, int s, int e)
 	{
 	  do
 	    {
-	      int test = CmpToVert (pvalx, list[le].x);
+        int test = CmpToVert (pvalx, list[le].x,pvals,list[le].starting);
 	      if (test == 0)
 		{
 		  // on colle les valeurs egales au pivot ensemble
@@ -1869,7 +1871,7 @@ Shape::SortEdgesList (edge_list * list, int s, int e)
 	{
 	  do
 	    {
-	      int test = CmpToVert (pvalx, list[ri].x);
+        int test = CmpToVert (pvalx, list[ri].x,pvals,list[ri].starting);
 	      if (test == 0)
 		{
 		  // on colle les valeurs egales au pivot ensemble

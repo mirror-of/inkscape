@@ -40,7 +40,9 @@ enum bool_op
   bool_op_union,		// A OR B
   bool_op_inters,		// A AND B
   bool_op_diff,			// A \ B
-  bool_op_symdiff		// A XOR B
+  bool_op_symdiff,  // A XOR B
+  bool_op_cut,      // coupure (pleines)
+  bool_op_slice     // coupure (contour)
 };
 typedef enum bool_op BooleanOp;
 
@@ -64,9 +66,10 @@ typedef enum join_typ JoinType;
 
 enum fill_typ
 {
-  fill_oddEven = 0,
-  fill_nonZero = 1,
-  fill_positive = 2
+  fill_oddEven   = 0,
+  fill_nonZero   = 1,
+  fill_positive  = 2,
+  fill_justDont = 3
 };
 typedef enum fill_typ FillRule;
 

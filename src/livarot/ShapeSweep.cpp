@@ -174,9 +174,12 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   Reset (0, 0);
   if (a->nbPt <= 1 || a->nbAr <= 1)
     return 0;
-  if (a->Eulerian (true) == false)
-    return shape_input_err;
-
+  if ( directed == fill_justDont ) {
+  } else {
+    if (a->Eulerian (true) == false)
+      return shape_input_err;
+  }
+  
   a->ResetSweep ();
 
   if (GetFlag (has_sweep_data))
@@ -724,7 +727,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   iData = NULL;
   nbInc = maxInc = 0;
 
-  AssembleAretes ();
+  AssembleAretes (directed);
 
 //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 
@@ -736,147 +739,159 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 //      Validate();
 
   SetFlag (need_edges_sorting, true);
-  GetWindings (a);
-
+  if ( directed == fill_justDont ) {
+    SortEdges();
+  } else {
+    GetWindings (a);
+  }
 //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 //      Plot(225.0,215.0,32.0,400.0,400.0,true,true,true,true);
 
   if (directed == fill_positive)
-    {
-      if (invert)
-	{
-	  for (int i = 0; i < nbAr; i++)
-	    {
-	      if (swdData[i].leW < 0 && swdData[i].riW >= 0)
-		{
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW >= 0 && swdData[i].riW < 0)
-		{
-		  Inverse (i);
-		  eData[i].weight = 1;
-		}
-	      else
-		{
-		  eData[i].weight = 0;
-		  SubEdge (i);
-		  i--;
-		}
-	    }
-	}
-      else
-	{
-	  for (int i = 0; i < nbAr; i++)
-	    {
-	      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-		{
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-		{
-		  Inverse (i);
-		  eData[i].weight = 1;
-		}
-	      else
-		{
-		  eData[i].weight = 0;
-		  SubEdge (i);
-		  i--;
-		}
-	    }
-	}
-    }
-  else if (directed == fill_nonZero)
-    {
-      if (invert)
-	{
-	  for (int i = 0; i < nbAr; i++)
-	    {
-	      if (swdData[i].leW < 0 && swdData[i].riW == 0)
-		{
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW > 0 && swdData[i].riW == 0)
-		{
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
-		{
-		  Inverse (i);
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
-		{
-		  Inverse (i);
-		  eData[i].weight = 1;
-		}
-	      else
-		{
-		  eData[i].weight = 0;
-		  SubEdge (i);
-		  i--;
-		}
-	    }
-	}
-      else
-	{
-	  for (int i = 0; i < nbAr; i++)
-	    {
-	      if (swdData[i].leW > 0 && swdData[i].riW == 0)
-		{
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW < 0 && swdData[i].riW == 0)
-		{
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
-		{
-		  Inverse (i);
-		  eData[i].weight = 1;
-		}
-	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
-		{
-		  Inverse (i);
-		  eData[i].weight = 1;
-		}
-	      else
-		{
-		  eData[i].weight = 0;
-		  SubEdge (i);
-		  i--;
-		}
-	    }
-	}
-    }
-  else if (directed == fill_oddEven)
+  {
+    if (invert)
     {
       for (int i = 0; i < nbAr; i++)
-	{
-	  swdData[i].leW %= 2;
-	  swdData[i].riW %= 2;
-	  if (swdData[i].leW < 0)
-	    swdData[i].leW = -swdData[i].leW;
-	  if (swdData[i].riW < 0)
-	    swdData[i].riW = -swdData[i].riW;
-	  if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+	    {
+	      if (swdData[i].leW < 0 && swdData[i].riW >= 0)
+        {
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW >= 0 && swdData[i].riW < 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+	      else
+        {
+          eData[i].weight = 0;
+          SubEdge (i);
+          i--;
+        }
+	    }
+    }
+    else
+    {
+      for (int i = 0; i < nbAr; i++)
+	    {
+	      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+        {
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+	      else
+        {
+          eData[i].weight = 0;
+          SubEdge (i);
+          i--;
+        }
+	    }
+    }
+  }
+  else if (directed == fill_nonZero)
+  {
+    if (invert)
+    {
+      for (int i = 0; i < nbAr; i++)
+	    {
+	      if (swdData[i].leW < 0 && swdData[i].riW == 0)
+        {
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW > 0 && swdData[i].riW == 0)
+        {
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+	      else
+        {
+          eData[i].weight = 0;
+          SubEdge (i);
+          i--;
+        }
+	    }
+    }
+    else
+    {
+      for (int i = 0; i < nbAr; i++)
+	    {
+	      if (swdData[i].leW > 0 && swdData[i].riW == 0)
+        {
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW < 0 && swdData[i].riW == 0)
+        {
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
+	      else
+        {
+          eData[i].weight = 0;
+          SubEdge (i);
+          i--;
+        }
+	    }
+    }
+  }
+  else if (directed == fill_oddEven)
+  {
+    for (int i = 0; i < nbAr; i++)
+    {
+      swdData[i].leW %= 2;
+      swdData[i].riW %= 2;
+      if (swdData[i].leW < 0)
+        swdData[i].leW = -swdData[i].leW;
+      if (swdData[i].riW < 0)
+        swdData[i].riW = -swdData[i].riW;
+      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
 	      eData[i].weight = 1;
 	    }
-	  else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
 	    {
 	      Inverse (i);
 	      eData[i].weight = 1;
 	    }
-	  else
+      else
 	    {
 	      eData[i].weight = 0;
 	      SubEdge (i);
 	      i--;
 	    }
-	}
     }
-
+  } else if ( directed == fill_justDont ) {
+    for (int i=0;i<nbAr;i++) {
+      if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
+        SubEdge(i);
+        i--;
+      } else {
+	      eData[i].weight = 0;
+      }
+    }
+  }
+  
 //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
   if (GetFlag (has_sweep_data))
@@ -890,13 +905,15 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   MakeSweepSrcData (false);
   MakeSweepDestData (false);
   a->CleanupSweep ();
-
-  if (Eulerian (true) == false)
+  if ( directed == fill_justDont ) {
+  } else {
+    if (Eulerian (true) == false)
     {
-//              printf( "pas euclidian2");
+      //              printf( "pas euclidian2");
       nbPt = nbAr = 0;
       return shape_euler_err;
     }
+  }
   type = shape_polygon;
   return 0;
 }
@@ -905,7 +922,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 // for choosing the edges according to their winding numbers.
 // probably one of the biggest function i ever wrote.
 int
-Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
+Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 {
   if (a == b || a == NULL || b == NULL)
     return shape_input_err;
@@ -914,11 +931,15 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
     return 0;
   if (b->nbPt <= 1 || b->nbAr <= 1)
     return 0;
-  if (a->type != shape_polygon)
-    return shape_input_err;
-  if (b->type != shape_polygon)
-    return shape_input_err;
-
+  if ( mod == bool_op_cut ) {
+  } else if ( mod == bool_op_slice ) {
+  } else {
+    if (a->type != shape_polygon)
+      return shape_input_err;
+    if (b->type != shape_polygon)
+      return shape_input_err;
+  }
+  
   a->ResetSweep ();
   b->ResetSweep ();
 
@@ -1605,117 +1626,183 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 
 //      Plot(190,70,6,400,400,true,false,true,true);
 
-  AssembleAretes ();
-
+  if ( mod == bool_op_cut ) {
+    AssembleAretes (fill_justDont);
+    // dupliquer les aretes de la coupure
+    int i=nbAr-1;
+    for (;i>=0;i--) {
+      if ( ebData[i].pathID == cutPathID ) {
+        // on duplique
+        int nEd=AddEdge(aretes[i].en,aretes[i].st);
+        ebData[nEd].pathID=cutPathID;
+        ebData[nEd].pieceID=ebData[i].pieceID;
+        ebData[nEd].tSt=ebData[i].tEn;
+        ebData[nEd].tEn=ebData[i].tSt;
+        eData[nEd].weight=eData[i].weight;
+        // lui donner les firstlinkedpoitn si besoin
+        if ( aretes[i].en >= aretes[i].st ) {
+          int cp = swsData[i].firstLinkedPoint;
+          while (cp >= 0) {
+            pData[cp].askForWindingB = nEd;
+            cp = pData[cp].nextLinkedPoint;
+          }
+          swsData[nEd].firstLinkedPoint = swsData[i].firstLinkedPoint;
+          swsData[i].firstLinkedPoint=-1;
+        }
+      }
+    }
+  } else if ( mod == bool_op_slice ) {
+  } else {
+    AssembleAretes ();
+  }
+  
   for (int i = 0; i < nbPt; i++)
     {
       pts[i].oldDegree = pts[i].dI + pts[i].dO;
     }
 
   SetFlag (need_edges_sorting, true);
-  GetWindings (a, b, mod, false);
-
+  if ( mod == bool_op_slice ) {
+  } else {
+    GetWindings (a, b, mod, false);
+  }
 //      Plot(190,70,6,400,400,true,true,true,true);
 
   if (mod == bool_op_symdiff)
+  {
+    for (int i = 0; i < nbAr; i++)
     {
-      for (int i = 0; i < nbAr; i++)
-	{
-	  swdData[i].leW = swdData[i].leW % 2;
-	  if (swdData[i].leW < 0)
-	    swdData[i].leW = -swdData[i].leW;
-	  swdData[i].riW = swdData[i].riW;
-	  if (swdData[i].riW < 0)
-	    swdData[i].riW = -swdData[i].riW;
-
-	  if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+      swdData[i].leW = swdData[i].leW % 2;
+      if (swdData[i].leW < 0)
+        swdData[i].leW = -swdData[i].leW;
+      swdData[i].riW = swdData[i].riW;
+      if (swdData[i].riW < 0)
+        swdData[i].riW = -swdData[i].riW;
+      
+      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
 	      eData[i].weight = 1;
 	    }
-	  else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
 	    {
 	      Inverse (i);
 	      eData[i].weight = 1;
 	    }
-	  else
+      else
 	    {
 	      eData[i].weight = 0;
 	      SubEdge (i);
 	      i--;
 	    }
-	}
     }
+  }
   else if (mod == bool_op_union || mod == bool_op_diff)
+  {
+    for (int i = 0; i < nbAr; i++)
     {
-      for (int i = 0; i < nbAr; i++)
-	{
-	  if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
 	      eData[i].weight = 1;
 	    }
-	  else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
 	    {
 	      Inverse (i);
 	      eData[i].weight = 1;
 	    }
-	  else
+      else
 	    {
 	      eData[i].weight = 0;
 	      SubEdge (i);
 	      i--;
 	    }
-	}
     }
+  }
   else if (mod == bool_op_inters)
+  {
+    for (int i = 0; i < nbAr; i++)
     {
-      for (int i = 0; i < nbAr; i++)
-	{
-	  if (swdData[i].leW > 1 && swdData[i].riW <= 1)
+      if (swdData[i].leW > 1 && swdData[i].riW <= 1)
 	    {
 	      eData[i].weight = 1;
 	    }
-	  else if (swdData[i].leW <= 1 && swdData[i].riW > 1)
+      else if (swdData[i].leW <= 1 && swdData[i].riW > 1)
 	    {
 	      Inverse (i);
 	      eData[i].weight = 1;
 	    }
-	  else
+      else
 	    {
 	      eData[i].weight = 0;
 	      SubEdge (i);
 	      i--;
 	    }
-	}
     }
+  } else if ( mod == bool_op_cut ) {
+    // inverser les aretes de la coupe au besoin
+    for (int i=0;i<nbAr;i++) {
+      if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
+        if ( i < nbAr-1 ) {
+          // decaler les askForWinding
+          int cp = swsData[nbAr-1].firstLinkedPoint;
+          while (cp >= 0) {
+            pData[cp].askForWindingB = i;
+            cp = pData[cp].nextLinkedPoint;
+          }
+        }
+        SwapEdges(i,nbAr-1);
+        SubEdge(nbAr-1);
+//        SubEdge(i);
+        i--;
+      } else if ( ebData[i].pathID == cutPathID ) {
+        swdData[i].leW=swdData[i].leW%2;
+        swdData[i].riW=swdData[i].riW%2;
+        if ( swdData[i].leW < swdData[i].riW ) {
+          Inverse(i);
+        }
+      }
+    }
+  } else if ( mod == bool_op_slice ) {
+    // supprimer les aretes de la coupe
+    int i=nbAr-1;
+    for (;i>=0;i--) {
+      if ( ebData[i].pathID == cutPathID || aretes[i].st < 0 || aretes[i].en < 0 ) {
+        SubEdge(i);
+      }
+    }
+  }
   else
+  {
+    for (int i = 0; i < nbAr; i++)
     {
-      for (int i = 0; i < nbAr; i++)
-	{
-	  if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
 	      eData[i].weight = 1;
 	    }
-	  else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
 	    {
 	      Inverse (i);
 	      eData[i].weight = 1;
 	    }
-	  else
+      else
 	    {
 	      eData[i].weight = 0;
 	      SubEdge (i);
 	      i--;
 	    }
-	}
     }
-
+  }
+  
   if (GetFlag (has_sweep_data))
     {
       SweepTree::DestroyList (sTree);
       SweepEvent::DestroyQueue (sEvts);
       SetFlag (has_sweep_data, false);
     }
-  MakePointData (false);
+  if ( mod == bool_op_cut ) {
+    // on garde le askForWinding
+  } else {
+    MakePointData (false);
+  }
   MakeEdgeData (false);
   MakeSweepSrcData (false);
   MakeSweepDestData (false);
@@ -2287,166 +2374,177 @@ Shape::AssemblePoints (Shape * a)
     }
 }
 void
-Shape::AssembleAretes (void)
+Shape::AssembleAretes (FillRule directed)
 {
-  for (int i = 0; i < nbPt; i++)
-    {
-      if (pts[i].dI + pts[i].dO == 2)
-	{
-	  int cb, cc;
-	  cb = pts[i].firstA;
-	  cc = pts[i].lastA;
-	  if ((aretes[cb].st == aretes[cc].st
-	       && aretes[cb].en == aretes[cc].en)
-	      || (aretes[cb].st == aretes[cc].en
-		  && aretes[cb].en == aretes[cc].en))
-	    {
-	      if (aretes[cb].st == aretes[cc].st)
-		{
-		  eData[cb].weight += eData[cc].weight;
-		}
-	      else
-		{
-		  eData[cb].weight -= eData[cc].weight;
-		}
-	      eData[cc].weight = 0;
-
-	      if (swsData[cc].firstLinkedPoint >= 0)
-		{
-		  int cp = swsData[cc].firstLinkedPoint;
-		  while (cp >= 0)
-		    {
-		      pData[cp].askForWindingB = cb;
-		      cp = pData[cp].nextLinkedPoint;
-		    }
-		  if (swsData[cb].firstLinkedPoint < 0)
-		    {
-		      swsData[cb].firstLinkedPoint =
-			swsData[cc].firstLinkedPoint;
-		    }
-		  else
-		    {
-		      int ncp = swsData[cb].firstLinkedPoint;
-		      while (pData[ncp].nextLinkedPoint >= 0)
-			{
-			  ncp = pData[ncp].nextLinkedPoint;
-			}
-		      pData[ncp].nextLinkedPoint =
-			swsData[cc].firstLinkedPoint;
-		    }
-		}
-
+  if ( directed == fill_justDont && HasBackData() == false ) directed=fill_nonZero;
+  
+  for (int i = 0; i < nbPt; i++) {
+    if (pts[i].dI + pts[i].dO == 2) {
+      int cb, cc;
+      cb = pts[i].firstA;
+      cc = pts[i].lastA;
+      bool  doublon=false;
+      if ((aretes[cb].st == aretes[cc].st && aretes[cb].en == aretes[cc].en)
+          || (aretes[cb].st == aretes[cc].en && aretes[cb].en == aretes[cc].en)) doublon=true;
+      if ( directed == fill_justDont ) {
+        if ( doublon ) {
+          if ( ebData[cb].pathID > ebData[cc].pathID ) {
+            cc = pts[i].firstA; // on swappe pour enlever cc
+            cb = pts[i].lastA;
+          } else if ( ebData[cb].pathID == ebData[cc].pathID ) {
+            if ( ebData[cb].pieceID > ebData[cc].pieceID ) {
+              cc = pts[i].firstA; // on swappe pour enlever cc
+              cb = pts[i].lastA;
+            } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) { 
+              if ( ebData[cb].tSt > ebData[cc].tSt ) {
+                cc = pts[i].firstA; // on swappe pour enlever cc
+                cb = pts[i].lastA;
+              }
+            }
+          }
+        }
+        if ( doublon ) eData[cc].weight = 0;
+      } else {
+      }
+      if ( doublon ) {
+        if (aretes[cb].st == aretes[cc].st) {
+          eData[cb].weight += eData[cc].weight;
+        } else {
+          eData[cb].weight -= eData[cc].weight;
+        }
+ 	      eData[cc].weight = 0;
+        
+	      if (swsData[cc].firstLinkedPoint >= 0) {
+          int cp = swsData[cc].firstLinkedPoint;
+          while (cp >= 0) {
+            pData[cp].askForWindingB = cb;
+            cp = pData[cp].nextLinkedPoint;
+          }
+          if (swsData[cb].firstLinkedPoint < 0) {
+            swsData[cb].firstLinkedPoint = swsData[cc].firstLinkedPoint;
+          } else {
+            int ncp = swsData[cb].firstLinkedPoint;
+            while (pData[ncp].nextLinkedPoint >= 0) {
+              ncp = pData[ncp].nextLinkedPoint;
+            }
+            pData[ncp].nextLinkedPoint = swsData[cc].firstLinkedPoint;
+          }
+        }
+        
 	      DisconnectStart (cc);
 	      DisconnectEnd (cc);
-	      if (nbAr > 1)
-		{
-		  int cp = swsData[nbAr - 1].firstLinkedPoint;
-		  while (cp >= 0)
-		    {
-		      pData[cp].askForWindingB = cc;
-		      cp = pData[cp].nextLinkedPoint;
-		    }
-		}
+	      if (nbAr > 1) {
+          int cp = swsData[nbAr - 1].firstLinkedPoint;
+          while (cp >= 0) {
+            pData[cp].askForWindingB = cc;
+            cp = pData[cp].nextLinkedPoint;
+          }
+        }
 	      SwapEdges (cc, nbAr - 1);
-	      if (cb == nbAr - 1)
-		{
-		  cb = cc;
-		}
+	      if (cb == nbAr - 1) {
+          cb = cc;
+        }
 	      nbAr--;
 	    }
-	}
-      else
-	{
-	  int cb;
-	  cb = pts[i].firstA;
-	  while (cb >= 0 && cb < nbAr)
-	    {
+    } else {
+      int cb;
+      cb = pts[i].firstA;
+      while (cb >= 0 && cb < nbAr) {
 	      int other = Other (i, cb);
 	      int cc;
 	      cc = pts[i].firstA;
-	      while (cc >= 0 && cc < nbAr)
-		{
-		  int ncc = NextAt (i, cc);
-		  if (cc != cb && Other (i, cc) == other)
-		    {
-		      // doublon
-		      if (aretes[cb].st == aretes[cc].st)
-			{
-			  eData[cb].weight += eData[cc].weight;
-			}
-		      else
-			{
-			  eData[cb].weight -= eData[cc].weight;
-			}
-		      eData[cc].weight = 0;
-
-		      if (swsData[cc].firstLinkedPoint >= 0)
-			{
-			  int cp = swsData[cc].firstLinkedPoint;
-			  while (cp >= 0)
-			    {
-			      pData[cp].askForWindingB = cb;
-			      cp = pData[cp].nextLinkedPoint;
-			    }
-			  if (swsData[cb].firstLinkedPoint < 0)
-			    {
-			      swsData[cb].firstLinkedPoint =
-				swsData[cc].firstLinkedPoint;
-			    }
-			  else
-			    {
-			      int ncp = swsData[cb].firstLinkedPoint;
-			      while (pData[ncp].nextLinkedPoint >= 0)
-				{
-				  ncp = pData[ncp].nextLinkedPoint;
-				}
-			      pData[ncp].nextLinkedPoint =
-				swsData[cc].firstLinkedPoint;
-			    }
-			}
-
-		      DisconnectStart (cc);
-		      DisconnectEnd (cc);
-		      if (nbAr > 1)
-			{
-			  int cp = swsData[nbAr - 1].firstLinkedPoint;
-			  while (cp >= 0)
-			    {
-			      pData[cp].askForWindingB = cc;
-			      cp = pData[cp].nextLinkedPoint;
-			    }
-			}
-		      SwapEdges (cc, nbAr - 1);
-		      if (cb == nbAr - 1)
-			{
-			  cb = cc;
-			}
-		      if (ncc == nbAr - 1)
-			{
-			  ncc = cc;
-			}
-		      nbAr--;
-		    }
-		  cc = ncc;
-		}
+	      while (cc >= 0 && cc < nbAr) {
+          int ncc = NextAt (i, cc);
+          bool  doublon=false;
+          if (cc != cb && Other (i, cc) == other ) doublon=true;
+          if ( directed == fill_justDont ) {
+            if ( doublon ) {
+              if ( ebData[cb].pathID > ebData[cc].pathID ) {
+                doublon=false;
+              } else if ( ebData[cb].pathID == ebData[cc].pathID ) {
+                if ( ebData[cb].pieceID > ebData[cc].pieceID ) {
+                  doublon=false;
+                } else if ( ebData[cb].pieceID == ebData[cc].pieceID ) { 
+                  if ( ebData[cb].tSt > ebData[cc].tSt ) {
+                    doublon=false;
+                  }
+                }
+              }
+            }
+            if ( doublon ) eData[cc].weight = 0;
+          } else {
+          }
+          if ( doublon ) {
+//            if (cc != cb && Other (i, cc) == other) {
+            // doublon
+            if (aretes[cb].st == aretes[cc].st) {
+              eData[cb].weight += eData[cc].weight;
+            } else {
+              eData[cb].weight -= eData[cc].weight;
+            }
+            eData[cc].weight = 0;
+            
+            if (swsData[cc].firstLinkedPoint >= 0) {
+              int cp = swsData[cc].firstLinkedPoint;
+              while (cp >= 0) {
+                pData[cp].askForWindingB = cb;
+                cp = pData[cp].nextLinkedPoint;
+              }
+              if (swsData[cb].firstLinkedPoint < 0) {
+                swsData[cb].firstLinkedPoint = swsData[cc].firstLinkedPoint;
+              } else {
+                int ncp = swsData[cb].firstLinkedPoint;
+                while (pData[ncp].nextLinkedPoint >= 0) {
+                  ncp = pData[ncp].nextLinkedPoint;
+                }
+                pData[ncp].nextLinkedPoint = swsData[cc].firstLinkedPoint;
+              }
+            }
+            
+            DisconnectStart (cc);
+            DisconnectEnd (cc);
+            if (nbAr > 1) {
+              int cp = swsData[nbAr - 1].firstLinkedPoint;
+              while (cp >= 0) {
+                pData[cp].askForWindingB = cc;
+                cp = pData[cp].nextLinkedPoint;
+              }
+            }
+            SwapEdges (cc, nbAr - 1);
+            if (cb == nbAr - 1) {
+              cb = cc;
+            }
+            if (ncc == nbAr - 1) {
+              ncc = cc;
+            }
+            nbAr--;
+          }
+          cc = ncc;
+        }
 	      cb = NextAt (i, cb);
 	    }
-	}
     }
-
-  for (int i = 0; i < nbAr; i++)
-    {
-      if (eData[i].weight == 0)
-	{
-//                      SubEdge(i);
-//                      i--;
-	}
-      else
-	{
-	  if (eData[i].weight < 0)
-	    Inverse (i);
-	}
+  }
+  
+  if ( directed == fill_justDont ) {
+    for (int i = 0; i < nbAr; i++)  {
+      if (eData[i].weight == 0) {
+//        SubEdge(i);
+ //       i--;
+      } else {
+        if (eData[i].weight < 0) Inverse (i);
+      }
     }
+  } else {
+    for (int i = 0; i < nbAr; i++)  {
+      if (eData[i].weight == 0) {
+        //                      SubEdge(i);
+        //                      i--;
+      } else {
+        if (eData[i].weight < 0) Inverse (i);
+      }
+    }
+  }
 }
 void
 Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)

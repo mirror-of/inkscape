@@ -268,14 +268,41 @@ public:
   //utilitaire pour inkscape
   void  LoadArtBPath(void *iP,NR::Matrix &tr,bool doTransformation);
   
+  // decompose le chemin en ses sous-chemin
+  // killNoSurf=true -> oublie les chemins de surface nulle
+  Path**      SubPaths(int &outNb,bool killNoSurf);
+  // pour recuperer les trous
+  // nbNest= nombre de contours
+  // conts= debut de chaque contour
+  // nesting= parent de chaque contour
+  Path**      SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int* nesting,int* conts);
+  // surface du chemin (considéré comme fermé)
+  double      Surface(void);
+  
+  void        ConvertForcedToMoveTo(void);
+  typedef struct cut_position {
+    int          piece;
+    float        t;
+  } cut_position;
+  void        ConvertPositionsToMoveTo(int nbPos,cut_position* poss);
+
 private:
+    void  Affiche(void);
     // path storage primitives
   void AlloueDCmd (int addNb);
   void AlloueDData (int addNb);
+  void ShiftDCmd(int at,int dec);
+  void ShiftDData(int at,int dec);
   // utilitary functions for the path contruction
   void CancelBezier (void);
   void CloseSubpath();
-  
+  void InsertMoveTo (NR::Point const &iPt,int at);
+  void InsertLineTo (NR::Point const &iPt,int at);
+  void InsertArcTo (NR::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise,int at);
+  void InsertCubicTo (NR::Point const &ip,  NR::Point const &iStD,  NR::Point const &iEnD,int at);
+  void InsertBezierTo (NR::Point const &iPt,int iNb,int at);
+  void InsertIntermBezierTo (NR::Point const &iPt,int at);
+ 
   // creation of dashes: take the polyline given by spP (length spL) and dash it according to head, body, etc. put the result in
   // the polyline of this instance
   void DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain);

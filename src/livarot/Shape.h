@@ -353,8 +353,10 @@ public:
   // version to use when conversion was done with ConvertWithBackData(): will attempt to merge segment belonging to 
   // the same curve
   // nota: apparently the function doesn't like very small segments of arc
-  void ConvertToForme (Path * dest, int nbP, Path * *orig);
-
+  void ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced=false);
+  // version trying to recover the nesting of subpaths (ie: holes)
+  void ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced=false);
+  
   // sweeping a digraph to produce a intersection-free polygon
   // return 0 if everything is ok and a return code otherwise (see LivarotDefs.h)
   // the input is the Shape "a"
@@ -387,7 +389,7 @@ public:
   // boolean operations on polygons (requests intersection-free poylygons)
   // boolean operation types are defined in LivarotDefs.h
   // same return code as ConvertToShape
-  int Booleen (Shape * a, Shape * b, BooleanOp mod);
+  int Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID=-1);
 
 
   // create a graph that is an offseted version of the graph "of"
@@ -480,7 +482,7 @@ private:
   }
   edge_list;
   void SortEdgesList (edge_list * edges, int s, int e);	// edge sorting function
-  static int CmpToVert (const NR::Point ax, const NR::Point bx);	// edge direction comparison function
+  static int CmpToVert (const NR::Point ax, const NR::Point bx,bool as,bool bs);	// edge direction comparison function
 
   void TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff);	// test if there is an intersection
   bool TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff);
@@ -493,7 +495,7 @@ private:
   int CreateIncidence (Shape * a, int cb, int pt);
   void AssemblePoints (Shape * a);
   int AssemblePoints (int st, int en);
-  void AssembleAretes (void);
+  void AssembleAretes (FillRule directed = fill_nonZero);
   void AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 		int &edgeHead, int type, Shape * lS, int lB, Shape * rS,
 		int rB);
@@ -540,7 +542,7 @@ private:
   void              AvanceEdge(int no,float to,AlphaLigne* line,bool exact,float step);
   
     void AddContour (Path * dest, int nbP, Path * *orig, int startBord,
-		   int curBord);
+		   int curBord, bool splitWhenForced);
   int ReFormeLineTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeArcTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeCubicTo (int bord, int curBord, Path * dest, Path * orig);

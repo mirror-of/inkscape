@@ -498,7 +498,10 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 					lastGuess=line->AppendBord(swrData[lb].curX,to-swrData[lb].curY,swrData[cb].curX,to-swrData[cb].curY,0.0);
 					swrData[lb].guess=lastGuess-1;
 					swrData[cb].guess=lastGuess;
-				}
+				} else {
+					int  lb=curS->bord;
+					swrData[lb].guess=-1;
+        }
 				curS=static_cast <SweepTree*> (curS->rightElem);
 			}
 			//			printf("\n");
@@ -1438,12 +1441,12 @@ void              Shape::CreateEdge(int no,float to,float step)
 
 	swrData[no].lastX=swrData[no].curX=pts[cPt].x[0];
 	swrData[no].lastY=swrData[no].curY=pts[cPt].x[1];
-	if ( dir[1] == 0 ) {
+	if ( fabs(dir[1]) < 0.000001 ) {
 		swrData[no].dxdy=0;
 	} else {
 		swrData[no].dxdy=dir[0]/dir[1];
 	}
-	if ( dir[0] == 0 ) {
+	if ( fabs(dir[0]) < 0.000001 ) {
 		swrData[no].dydx=0;
 	} else {
 		swrData[no].dydx=dir[1]/dir[0];
@@ -1465,7 +1468,7 @@ void              Shape::AvanceEdge(int no,float to,bool exact,float step)
 			stp=pts[aretes[no].en].x;
 			dir=-aretes[no].dx;
 		}
-		if ( dir[1] == 0 ) {
+		if ( fabs(dir[1]) < 0.000001 ) {
 			swrData[no].calcX=stp[0]+dir[0];
 		} else {
 			swrData[no].calcX=stp[0]+((to-stp[1])*dir[0])/dir[1];

@@ -68,6 +68,8 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
   }
 #endif
   
+  if ( guess >= nbBord ) guess=-1;
+  
   // add the left boundary
 	int n=nbBord++;
 	bords[n].pos=spos;
@@ -113,7 +115,9 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
     pente=0;
   }
 #endif
-	int n=nbBord++;
+  if ( guess >= nbBord ) guess=-1;
+  
+  int n=nbBord++;
 	bords[n].pos=spos;
 	bords[n].val=sval;
 	bords[n].start=true;
@@ -183,7 +187,10 @@ int              FloatLigne::AddBordR(float spos,float sval,float epos,float eva
     pente=0;
   }
 #endif
-	int n=nbBord++;
+
+  if ( guess >= nbBord ) guess=-1;
+  
+  int n=nbBord++;
 	bords[n].pos=spos;
 	bords[n].val=sval;
 	bords[n].start=true;
@@ -593,6 +600,9 @@ int              FloatLigne::AddRun(float st,float en,float vst,float ven)
 		maxRun=2*nbRun+1;
 		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
+/*  if ( nbRun > 0 && st < runs[nbRun-1].en-0.1 ) {
+    printf("o");
+  }*/
 	int n=nbRun++;
 	runs[n].st=st;
 	runs[n].en=en;
@@ -609,6 +619,9 @@ int              FloatLigne::AddRun(float st,float en,float vst,float ven,float 
 		maxRun=2*nbRun+1;
 		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
+/*  if ( nbRun > 0 && st < runs[nbRun-1].en-0.1 ) {
+    printf("o");
+  }*/
 	int n=nbRun++;
 	runs[n].st=st;
 	runs[n].en=en;

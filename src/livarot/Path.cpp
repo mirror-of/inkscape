@@ -52,6 +52,57 @@ Path::~Path (void)
 	nbPt = maxPt = sizePt = 0;
 }
 
+// debug function do dump the path contents on stdout
+void
+Path::Affiche(void)
+{
+  printf("path: %i cmds, %i data (%i %i max)\n",descr_nb,ddata_nb,descr_max,ddata_max);
+  for (int i=0;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    printf("cmd %i : t=%i s=%i ",i,typ,descr_cmd[i].dStart);
+    switch ( typ ) {
+      case descr_lineto:
+      {
+        path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
+        printf("  l %f %f",nData->p[0],nData->p[1]);
+      }
+        break;
+      case descr_moveto:
+      {
+        path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
+        printf("  m %f %f",nData->p[0],nData->p[1]);
+      }
+        break;
+      case descr_arcto:
+      {
+        path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[i].dStart );
+        printf("  a %f %f %f %f %f %i %i",nData->p[0],nData->p[1],nData->rx,nData->ry,nData->angle,((nData->clockwise)?1:0),((nData->large)?1:0));
+      }
+        break;
+      case descr_cubicto:
+      {
+        path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
+        printf("  c %f %f %f %f %f %f",nData->p[0],nData->p[1],nData->stD[0],nData->stD[1],nData->enD[0],nData->enD[1]);
+      }
+        break;
+      case descr_bezierto:
+      {
+        path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
+        printf("  b %f %f %i",nData->p[0],nData->p[1],nData->nb);
+      }
+        break;
+      case descr_interm_bezier:
+      {
+        path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i].dStart );
+        printf("  i %f %f",nData->p[0],nData->p[1]);
+      }
+        break;
+    }
+    printf("\n");
+  }
+  printf("\n");
+}
+
 void
 Path::Reset (void)
 {
@@ -97,6 +148,54 @@ void       Path::AlloueDData (int addNb)
 		ddata_max = 2 * ddata_nb + addNb;
 		descr_data =(NR::Point *) realloc (descr_data, ddata_max * sizeof (NR::Point));
 	}
+}
+void       Path::ShiftDCmd(int at,int dec)
+{
+  if ( at < 0 || at > descr_nb || dec == 0 ) return;
+  if ( at == descr_nb ) {
+    if ( dec > 0 ) {
+      AlloueDCmd(dec);
+      descr_nb+=dec;
+    }
+    return;
+  }
+  if ( dec > 0 ) {
+    AlloueDCmd(dec);
+    if ( at < descr_nb ) memmove(descr_cmd+(at+dec),descr_cmd+at,(descr_nb-at)*sizeof(path_descr));
+    descr_nb+=dec;
+  } else {
+    if ( (-dec) <= descr_nb-at ) {
+      if ( at < descr_nb+dec ) memmove(descr_cmd+at,descr_cmd+(at-dec),(descr_nb-at+dec)*sizeof(path_descr));
+      descr_nb+=dec;      
+    }
+  }
+}
+void       Path::ShiftDData(int at,int dec)
+{
+  if ( at < 0 || at > ddata_nb || dec == 0 ) return;
+  if ( at == ddata_nb ) {
+    if ( dec > 0 ) {
+      AlloueDData(dec);
+      ddata_nb+=dec;
+    }
+    return;
+  }
+  if ( dec > 0 ) {
+    AlloueDData(dec);
+    if ( at < ddata_nb ) memmove(descr_data+(at+dec),descr_data+at,(ddata_nb-at)*sizeof(NR::Point));
+    ddata_nb+=dec;
+    for (int i=0;i<descr_nb;i++) {
+      if ( descr_cmd[i].dStart >= at ) descr_cmd[i].dStart+=dec;
+    }
+  } else {
+    if ( (-dec) <= ddata_nb-at ) {
+      if ( at < ddata_nb+dec ) memmove(descr_data+at,descr_data+(at-dec),(ddata_nb-at+dec)*sizeof(NR::Point));
+      ddata_nb+=dec;      
+      for (int i=0;i<descr_nb;i++) {
+        if ( descr_cmd[i].dStart >= at-dec ) descr_cmd[i].dStart+=dec;
+      }
+    }
+  }
 }
 
 /** Returns ceil( (double) numerator / denominator ). */
@@ -223,6 +322,37 @@ Path::MoveTo (NR::Point const &iPt)
 	return descr_nb - 1;
 }
 
+void
+Path::InsertMoveTo (NR::Point const &iPt,int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    MoveTo(iPt);
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+	ShiftDData(dataPos,SizeForData(descr_moveto));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+
+	nElem->dStart = dataPos;
+	path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + dataPos );
+
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_moveto;
+	nData->p = iPt;
+}
 
 int
 Path::LineTo (NR::Point const &iPt)
@@ -248,6 +378,37 @@ Path::LineTo (NR::Point const &iPt)
 	return descr_nb - 1;
 }
 
+void
+Path::InsertLineTo (NR::Point const &iPt,int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    LineTo(iPt);
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+	ShiftDData(dataPos,SizeForData(descr_lineto));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+  
+	nElem->dStart = dataPos;
+	path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + dataPos );
+  
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_lineto;
+	nData->p = iPt;
+}
 
 int
 Path::CubicTo (NR::Point const &iPt, NR::Point const &iStD, NR::Point const &iEnD)
@@ -272,6 +433,39 @@ Path::CubicTo (NR::Point const &iPt, NR::Point const &iStD, NR::Point const &iEn
 	nData->stD = iStD;
 	nData->enD = iEnD;
 	return descr_nb - 1;
+}
+void
+Path::InsertCubicTo (NR::Point const &iPt, NR::Point const &iStD, NR::Point const &iEnD,int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    CubicTo(iPt,iStD,iEnD);
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+	ShiftDData(dataPos,SizeForData(descr_cubicto));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+  
+	nElem->dStart = dataPos;
+	path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + dataPos );
+  
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_cubicto;
+	nData->p = iPt;
+	nData->stD = iStD;
+	nData->enD = iEnD;
 }
 
 int
@@ -301,6 +495,43 @@ Path::ArcTo (NR::Point const &iPt, double iRx, double iRy, double angle,
 	nData->large = iLargeArc;
 	nData->clockwise = iClockwise;
 	return descr_nb - 1;
+}
+void
+Path::InsertArcTo (NR::Point const &iPt, double iRx, double iRy, double angle,
+                   bool iLargeArc, bool iClockwise,int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    ArcTo(iPt,iRx,iRy,angle,iLargeArc,iClockwise);
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+	ShiftDData(dataPos,SizeForData(descr_arcto));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+  
+	nElem->dStart = dataPos;
+	path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + dataPos );
+  
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_arcto;
+	nData->p = iPt;
+	nData->rx = iRx;
+	nData->ry = iRy;
+	nData->angle = angle;
+	nData->large = iLargeArc;
+	nData->clockwise = iClockwise;
 }
 
 int
@@ -679,7 +910,17 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 	double len, rad;
 	if (typ == descr_moveto) {
 		return PointAndTangentAt (piece + 1, 0.0, pos,tgt);
-	} else if (typ == descr_close || typ == descr_forced) {
+	} else if (typ == descr_close ) {
+    int cp=piece-1;
+    while ( cp >= 0 && (descr_cmd[cp].flags&descr_type_mask) != descr_moveto ) cp--;
+    if ( cp < 0 ) {
+    } else {
+      path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[cp].dStart );
+      path_descr_lineto  dst;
+      dst.p=nData->p;
+      TangentOnSegAt (at, PrevPoint (piece - 1), dst, pos, tgt, len);
+    }
+  } else if ( typ == descr_forced) {
 		return PointAndTangentAt (piece - 1, 1.0, pos,tgt);
 	} else if (typ == descr_lineto) {
 		path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + theD.dStart );

@@ -177,12 +177,12 @@ Shape::ConvertToForme (Path * dest)
 // the original(s) path(s)
 // originals are in the orig array, whose size is nbP
 void
-Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
+Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 {
   if (nbPt <= 1 || nbAr <= 1)
     return;
-  if (Eulerian (true) == false)
-    return;
+//  if (Eulerian (true) == false)
+//    return;
   
   if (HasBackData () == false)
   {
@@ -236,7 +236,6 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
         if (bestB >= 0)
 	      {
           startBord = bestB;
-          //                                      dest->MoveTo(pts[aretes[startBord].en].x,pts[aretes[startBord].en].y);
 	      }
       }
     }
@@ -244,16 +243,17 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
     {
       // parcours en profondeur pour mettre les leF et riF a leurs valeurs
       swdData[startBord].misc = (void *) 1;
-      //                      printf("part de %d\n",startBord);
+      //printf("part de %d\n",startBord);
       int curBord = startBord;
       bool back = false;
       swdData[curBord].precParc = -1;
       swdData[curBord].suivParc = -1;
+      int curStartPt=aretes[curBord].st;
       do
 	    {
 	      int cPt = aretes[curBord].en;
 	      int nb = curBord;
-	      //                              printf("de curBord= %d au point %i  -> ",curBord,cPt);
+        //printf("de curBord= %d au point %i  -> ",curBord,cPt);
 	      do
         {
           int nnb = CycleNextAt (cPt, nb);
@@ -281,14 +281,14 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
             else
             {
               swdData[curBord].suivParc = -1;
-              AddContour (dest, nbP, orig, startBord, curBord);
+              AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
             }
             //                                              dest->Close();
           }
           back = true;
           // retour en arriere
           curBord = swdData[curBord].precParc;
-          //                                      printf("retour vers %d\n",curBord);
+          //printf("retour vers %d\n",curBord);
           if (curBord < 0)
             break;
         }
@@ -296,17 +296,222 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
         {
           if (back)
           {
-            //                                              dest->MoveTo(pts[cPt].x,pts[cPt].y);
             back = false;
             startBord = nb;
+            curStartPt=aretes[nb].st;
+          } else {
+            if ( aretes[curBord].en == curStartPt ) {
+              //printf("contour %i ",curStartPt);
+              swdData[curBord].suivParc = -1;
+              AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
+              startBord=nb;
+            }
           }
           swdData[nb].misc = (void *) 1;
           swdData[nb].ind = searchInd++;
           swdData[nb].precParc = curBord;
           swdData[curBord].suivParc = nb;
           curBord = nb;
-          //                                      printf("suite %d\n",curBord);
-          //                                      dest->LineTo(pts[aretes[nb].en].x,pts[aretes[nb].en].y);
+          //printf("suite %d\n",curBord);
+        }
+	    }
+      while (1 /*swdData[curBord].precParc >= 0 */ );
+      // fin du cas non-oriente
+    }
+  }
+  while (lastPtUsed < nbPt);
+  
+  MakePointData (false);
+  MakeEdgeData (false);
+  MakeSweepDestData (false);
+}
+void 
+Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced)
+{
+  nesting=NULL;
+  contStart=NULL;
+  nbNest=0;
+
+  if (nbPt <= 1 || nbAr <= 1)
+    return;
+  //  if (Eulerian (true) == false)
+  //    return;
+  
+  if (HasBackData () == false)
+  {
+    ConvertToForme (dest);
+    return;
+  }
+  
+  dest->Reset ();
+  
+//  MakePointData (true);
+  MakeEdgeData (true);
+  MakeSweepDestData (true);
+  
+  for (int i = 0; i < nbPt; i++)
+  {
+    pData[i].rx[0] = Round (pts[i].x[0]);
+    pData[i].rx[1] = Round (pts[i].x[1]);
+  }
+  for (int i = 0; i < nbAr; i++)
+  {
+    eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
+  }
+  
+  SortEdges ();
+  
+  for (int i = 0; i < nbAr; i++)
+  {
+    swdData[i].misc = 0;
+    swdData[i].precParc = swdData[i].suivParc = -1;
+  }
+  
+  int searchInd = 0;
+  
+  int lastPtUsed = 0;
+  do
+  {
+    int dadContour=-1;
+    int startBord = -1;
+    {
+      int fi = 0;
+      for (fi = lastPtUsed; fi < nbPt; fi++)
+      {
+        if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
+          break;
+      }
+      {
+        int askTo = pData[fi].askForWindingB;
+        if (askTo < 0 || askTo >= nbAr ) {
+          dadContour=-1;
+        } else {
+          dadContour = (int) swdData[askTo].misc;
+          dadContour-=1; // pour compenser le decalage
+        }
+      }
+      lastPtUsed = fi + 1;
+      if (fi < nbPt)
+      {
+        int bestB = pts[fi].firstA;
+        while (bestB >= 0 && aretes[bestB].st != fi)
+          bestB = NextAt (fi, bestB);
+        if (bestB >= 0)
+	      {
+          startBord = bestB;
+	      }
+      }
+    }
+    if (startBord >= 0)
+    {
+      // parcours en profondeur pour mettre les leF et riF a leurs valeurs
+      swdData[startBord].misc = (void *) (1+nbNest);
+      //printf("part de %d\n",startBord);
+      int curBord = startBord;
+      bool back = false;
+      swdData[curBord].precParc = -1;
+      swdData[curBord].suivParc = -1;
+      int curStartPt=aretes[curBord].st;
+      do
+	    {
+	      int cPt = aretes[curBord].en;
+	      int nb = curBord;
+        //printf("de curBord= %d au point %i  -> ",curBord,cPt);
+	      do
+        {
+          int nnb = CycleNextAt (cPt, nb);
+          if (nnb == nb)
+          {
+            // cul-de-sac
+            nb = -1;
+            break;
+          }
+          nb = nnb;
+          if (nb < 0 || nb == curBord)
+            break;
+        }
+	      while (swdData[nb].misc != 0 || aretes[nb].st != cPt);
+        
+	      if (nb < 0 || nb == curBord)
+        {
+          if (back == false)
+          {
+            if (curBord == startBord || curBord < 0)
+            {
+              // probleme -> on vire le moveto
+              //                                                      dest->descr_nb--;
+            }
+            else
+            {
+              bool escapePath=false;
+              int tb=curBord;
+              while ( tb >= 0 && tb < nbAr ) {
+                if ( ebData[tb].pathID == wildPath ) {
+                  escapePath=true;
+                  break;
+                }
+                tb=swdData[tb].precParc;
+              }
+              nesting=(int*)realloc(nesting,(nbNest+1)*sizeof(int));
+              contStart=(int*)realloc(contStart,(nbNest+1)*sizeof(int));
+              contStart[nbNest]=dest->descr_nb;
+              if ( escapePath ) {
+                nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
+              } else {
+                nesting[nbNest++]=dadContour;
+              }
+              swdData[curBord].suivParc = -1;
+              AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
+            }
+            //                                              dest->Close();
+          }
+          back = true;
+          // retour en arriere
+          curBord = swdData[curBord].precParc;
+          //printf("retour vers %d\n",curBord);
+          if (curBord < 0)
+            break;
+        }
+	      else
+        {
+          if (back)
+          {
+            back = false;
+            startBord = nb;
+            curStartPt=aretes[nb].st;
+          } else {
+            if ( aretes[curBord].en == curStartPt ) {
+              //printf("contour %i ",curStartPt);
+              
+              bool escapePath=false;
+              int tb=curBord;
+              while ( tb >= 0 && tb < nbAr ) {
+                if ( ebData[tb].pathID == wildPath ) {
+                  escapePath=true;
+                  break;
+                }
+                tb=swdData[tb].precParc;
+              }
+              nesting=(int*)realloc(nesting,(nbNest+1)*sizeof(int));
+              contStart=(int*)realloc(contStart,(nbNest+1)*sizeof(int));
+              contStart[nbNest]=dest->descr_nb;
+              if ( escapePath ) {
+                nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
+              } else {
+                nesting[nbNest++]=dadContour;
+              }
+
+              swdData[curBord].suivParc = -1;
+              AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
+              startBord=nb;
+            }
+          }
+          swdData[nb].misc = (void *) (1+nbNest);
+          swdData[nb].ind = searchInd++;
+          swdData[nb].precParc = curBord;
+          swdData[curBord].suivParc = nb;
+          curBord = nb;
+          //printf("suite %d\n",curBord);
         }
 	    }
       while (1 /*swdData[curBord].precParc >= 0 */ );
@@ -460,8 +665,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
 // polyline. since it was a DFS, the precParc and suivParc make a nice doubly-linked list of the edges in
 // the contour. the first and last edges of the contour are startBord and curBord
 void
-Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord,
-                   int curBord)
+Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBord, bool splitWhenForced)
 {
   int bord = startBord;
   
@@ -533,27 +737,31 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord,
           dest->LineTo (pts[aretes[bord].en].x);
           bord = swdData[bord].suivParc;
         }
-	      if (bord >= 0
-            && pts[aretes[bord].st].dI + pts[aretes[bord].st].dO > 2 ) {
+	      if (bord >= 0 && pts[aretes[bord].st].dI + pts[aretes[bord].st].dO > 2 ) {
           dest->ForcePoint ();
         } else if ( bord >= 0 && pts[aretes[bord].st].oldDegree > 2 && pts[aretes[bord].st].dI + pts[aretes[bord].st].dO == 2)  {
-          if ( HasBackData() ) {
-            int   prevEdge=pts[aretes[bord].st].firstA;
-            int   nextEdge=pts[aretes[bord].st].lastA;
-            if ( aretes[prevEdge].en != aretes[bord].st ) {
-              int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
-            }
-            if ( ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID ) {
-              if ( fabsf(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05 ) {
+          if ( splitWhenForced ) {
+            // pour les coupures
+            dest->ForcePoint ();
+         } else {
+            if ( HasBackData() ) {
+              int   prevEdge=pts[aretes[bord].st].firstA;
+              int   nextEdge=pts[aretes[bord].st].lastA;
+              if ( aretes[prevEdge].en != aretes[bord].st ) {
+                int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
+              }
+              if ( ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID ) {
+                if ( fabsf(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05 ) {
+                } else {
+                  dest->ForcePoint ();
+                }
               } else {
                 dest->ForcePoint ();
               }
             } else {
               dest->ForcePoint ();
-            }
-          } else {
-            dest->ForcePoint ();
-          }    
+            }    
+          }
         }
       }
     }
