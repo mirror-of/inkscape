@@ -1,3 +1,65 @@
+2004-05-08  bulia byak <bulia@users.sourceforge.net>
+
+	* widgets/paint-selector.cpp: Tooltips, slight cosmetics
+ 
+	* main.cpp: --help edit 
+
+	*  sp-use.h sp-use.cpp: Redid move compensation using _transformed_signal
+
+	* sp-item.h sp-item.cpp: Added _transformed_signal, emitted by write_transform,
+	passes the difference transform relative to the old one (not the new transform
+	set)
+
+	* nodepath.cpp: Fix lagging update of the other handle for smooth nodes 
+
+	* widgets/dash-selector.cpp: (Almost) fixed display of shorter-than-0.5 dashes
+	in selector; proper fixing will require manual drawing the dashes instead of
+	using gdk dashes
+
+	* preferences-skeleton.h: lots of new  dasharrays 
+
+	* dialogs/stroke-style.cpp: Remove repetitive code; relocation patch from
+	mhearn; fixed, reenabled, and automated marker previews (no need for previews
+	in markers.svg)
+
+	* share/markers/markers.svg: Cleanup, sizes, remove manual previews 
+
+	* style.cpp: Disabled warning for overflow property (we need it for markers)
+ 
+	* splivarot.cpp: Fixed transform when doing boolop inside group 
+
+	* libnr/nr-path.cpp: Ported fix from sodi, fixes two bugs with endnodes of a
+	curve on the same hor/vert line
+ 
+	* sp-namedview.cpp: Use set_default_size instead of _resize for setting window
+	from namedview
+ 
+	* preferences-skeleton.h dialogs/item-properties.cpp: Objects props
+	transientized (better late than never)
+
+	* dialogs/display-settings.cpp: Added simplify threshold
+ 
+	* sp-use.cpp: Mega-kill use on unlink
+ 
+	* preferences-skeleton.h dialogs/display-settings.cpp: Orphaned clones options
+ 
+	* sp-item-group.cpp: Prevent jumps when ungrouping clone with its original
+ 
+	* sp-object.cpp: Fix crash when deleting clone and its original
+ 
+	* toolbox.cpp, tool contexts: Alt-x and top panel keyboard shortcuts now work
+	for all tools
+
+	* sp-use.cpp enums.h: Unlink option on self-delete
+
+	* sp-use.cpp: Fix: disappeating clone on undoing ungrouping (_show finally works properly)
+ 
+	* splivarot.cpp: Boolops: cleanup, preserve id, parent, position, fix to take
+	style from the bottom object
+ 
+	* interface.cpp verbs.cpp shortcuts.cpp: Mnemonics, tooltips, shortcuts,
+	cleanup, autoraise removed from menu
+ 
 2004-05-07  Kees Cook <kees@outflux.net>
 
 	* src/verbs.cpp: re-localizing tutorials.  My goof!
