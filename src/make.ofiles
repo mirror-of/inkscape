@@ -510,5 +510,4 @@ INCLUDEPATH = \
 	-Isvg \
 	-Iutest \
 	-Iwidgets \
-	-Ixml \
-
+	-Ixml/

@@ -81,7 +81,9 @@ sub make_files {
         $filepart = $2;
         if ( $path ne $last ) {
             # store dir path
-            push (@inc, $path );
+            if (length($path) > 0) {
+                push (@inc, $path );
+            }
             $last = $path;
         }
 
