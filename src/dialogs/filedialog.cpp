@@ -23,6 +23,7 @@
 #include <gtkmm/entry.h>
 #include <gdkmm/pixbuf.h>
 
+#include <vector>
 #include <map>
 
 #include <string.h>
@@ -712,7 +713,11 @@ void FileOpenDialogImpl::fileNameEntryChangedCallback()
    if (!Glib::path_is_absolute(fName))
         {
         //try appending to the current path
-        fName = get_current_folder() + "/" + fName;
+        // not this way: fName = get_current_folder() + "/" + fName;
+        std::vector<Glib::ustring> pathSegments;
+        pathSegments.push_back( get_current_folder() );
+        pathSegments.push_back( fName );
+        fName = Glib::build_filename(pathSegments);
         }
 
     //g_message("path:'%s'\n", fName.c_str());
