@@ -16,6 +16,7 @@
 #endif
 #include <locale>
 #include <sstream>
+#include <utility>  // pair
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -49,6 +50,8 @@
 #include "svg/stringstream.h"
 
 #include "rdf.h"
+
+using std::pair;
 
 static void sp_dtw_activate_desktop(Inkscape::Application *inkscape,
                                     SPDesktop *desktop, GtkWidget *dialog);
@@ -462,6 +465,22 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
 }
 
 
+static pair<double, double>
+get_paper_size(inkscape_papers_t const &paper, bool const landscape, SPUnit const *const dest_unit)
+{
+    double h, w;
+    if (landscape) {
+        w = paper.height;
+        h = paper.width;
+    } else {
+        w = paper.width;
+        h = paper.height;
+    }
+    SPUnit const *const pt = &sp_unit_get_by_id(SP_UNIT_PT);
+    sp_convert_distance(&w, pt, dest_unit);
+    sp_convert_distance(&h, pt, dest_unit);
+    return pair<double, double>(w, h);
+}
 
 static void
 sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
@@ -482,24 +501,14 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
         bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
 
         SPUnitSelector *const us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dlg), "units");
-        SPUnit const *unit = sp_unit_selector_get_unit(us);
+        SPUnit const *const unit = sp_unit_selector_get_unit(us);
 
-        double h, w;
-        if (!landscape) {
-            w = paper->width;
-            h = paper->height;
-        } else {
-            w = paper->height;
-            h = paper->width;
-        }
-        SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
-        sp_convert_distance(&w, pt, unit);
-        sp_convert_distance(&h, pt, unit);
+        pair<double, double> const w_h(get_paper_size(*paper, landscape, unit));
 
         GtkAdjustment *const aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
         GtkAdjustment *const ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
-        gtk_adjustment_set_value(aw, w);
-        gtk_adjustment_set_value(ah, h);
+        gtk_adjustment_set_value(aw, w_h.first);
+        gtk_adjustment_set_value(ah, w_h.second);
     } else {
         gtk_widget_set_sensitive(ww, TRUE);
         gtk_widget_set_sensitive(hw, TRUE);
