@@ -45,6 +45,7 @@
 #include "view.h"
 #include <glibmm/i18n.h>
 #include "xml/repr.h"
+#include "xml/attribute-record.h"
 #include "prefs-utils.h"
 
 #include "text-editing.h"
@@ -63,6 +64,7 @@ static gint sp_text_context_item_handler (SPEventContext * event_context, SPItem
 
 static void sp_text_context_selection_changed (Inkscape::Selection *selection, SPTextContext *tc);
 static void sp_text_context_selection_modified (Inkscape::Selection *selection, guint flags, SPTextContext *tc);
+static bool sp_text_context_style_set (const SPCSSAttr *css, SPTextContext *tc);
 
 static void sp_text_context_validate_cursor_iterators(SPTextContext *tc);
 static void sp_text_context_update_cursor (SPTextContext *tc, bool scroll_to_see = true);
@@ -141,12 +143,14 @@ sp_text_context_init (SPTextContext *tc)
 
 	new (&tc->sel_changed_connection) sigc::connection();
 	new (&tc->sel_modified_connection) sigc::connection();
+    new (&tc->style_set_connection) sigc::connection();
 }
 
 static void
 sp_text_context_dispose(GObject *obj)
 {
 	SPTextContext *tc=SP_TEXT_CONTEXT(obj);
+    tc->style_set_connection.~connection();
 	tc->sel_changed_connection.~connection();
 	tc->sel_modified_connection.~connection();
     tc->text_sel_end.~iterator();
@@ -206,6 +210,9 @@ sp_text_context_setup (SPEventContext *ec)
 	tc->sel_modified_connection = SP_DT_SELECTION(desktop)->connectModified(
 		sigc::bind(sigc::ptr_fun(&sp_text_context_selection_modified), tc)
 	);
+    tc->style_set_connection = desktop->connectSetStyle(
+        sigc::bind(sigc::ptr_fun(&sp_text_context_style_set), tc)
+    );
 
 	sp_text_context_selection_changed (SP_DT_SELECTION (desktop), tc);
 
@@ -224,6 +231,7 @@ sp_text_context_finish (SPEventContext *ec)
 
 	ec->enableGrDrag(false);
 
+    tc->style_set_connection.disconnect();
 	tc->sel_changed_connection.disconnect();
 	tc->sel_modified_connection.disconnect();
 
@@ -838,6 +846,33 @@ sp_text_context_selection_modified (Inkscape::Selection *selection, guint flags,
 {
 	sp_text_context_update_cursor (tc);
     sp_text_context_update_text_selection (tc);
+}
+
+static bool
+sp_text_context_style_set (const SPCSSAttr *css, SPTextContext *tc)
+{
+    if (tc->text == NULL)
+        return false;
+    if (tc->text_sel_start == tc->text_sel_end)
+        return false;    // will get picked up by the parent and applied to the whole text object
+
+    // convert SPCSSAttr to a string
+    Glib::ustring style_string;
+
+    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = css->attributeList();
+    for ( ; attributes ; attributes++) {
+        if (!style_string.empty())
+            style_string += ';';
+        style_string += g_quark_to_string(attributes->key);
+        style_string += ':';
+        style_string += attributes->value.cString();
+    }
+    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, style_string.c_str());
+	sp_document_done (SP_DT_DOCUMENT (tc->event_context.desktop));
+	sp_text_context_update_cursor (tc);
+    sp_text_context_update_text_selection (tc);
+
+    return true;
 }
 
 static void
