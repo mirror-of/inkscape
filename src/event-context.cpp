@@ -227,8 +227,8 @@ gdouble accelerate_scroll (GdkEvent *event, gdouble acceleration)
 {
       guint32 time_diff = ((GdkEventKey *) event)->time - scroll_event_time;
 
-      /* key pressed within 125ms ? (1/8 second) */
-      if (time_diff > 125 || event->key.keyval != scroll_keyval) {
+      /* key pressed within 250ms ? (1/4 second) */
+      if (time_diff > 250 || event->key.keyval != scroll_keyval) {
 		scroll_multiply = 1;
 	} else {
 		scroll_multiply += acceleration;
