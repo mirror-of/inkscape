@@ -20,6 +20,12 @@
 
 namespace Inkscape {
 
+/** 
+ *  Creates a new layer.  Advances to the next layer id indicated
+ *  by the string "layerNN", then creates a new group object of 
+ *  that id with attribute inkscape:groupmode='layer', and finally
+ *  appends the new group object to \a root after object \a layer.
+ */
 SPObject *create_layer(SPObject *root, SPObject *layer) {
     SPDocument *document=SP_OBJECT_DOCUMENT(root);
 
@@ -53,6 +59,9 @@ bool is_layer(SPObject &object) {
 
 }
 
+/** Advances to the next layer within object \a root.
+ *  Returns NULL if there are no layers within \a root
+ */
 SPObject *next_layer(SPObject *root, SPObject *layer) {
     if ( layer == root ) {
         return NULL;
@@ -66,6 +75,10 @@ SPObject *next_layer(SPObject *root, SPObject *layer) {
     );
 }
 
+
+/** Returns the layer object preceeding \a layer within \a root.
+ *  Returns NULL if there are no layers within root.
+ */
 SPObject *previous_layer(SPObject *root, SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
