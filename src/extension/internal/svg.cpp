@@ -154,14 +154,26 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 	GSList const *images = sp_document_get_resource_list (doc, "image");
 	for (GSList const *l = images; l != NULL; l = l->next) {
 		SPRepr *ir = SP_OBJECT_REPR (l->data);
+
+		// First try to figure out an absolute path to the asset
 		const gchar *href = sp_repr_attr (ir, "xlink:href");
 		if (spns && !g_path_is_absolute (href)) {
-			href = sp_repr_attr (ir, "sodipodi:absref");
+			const gchar *absref = sp_repr_attr (ir, "sodipodi:absref");
+
+			if ( absref && g_file_test(absref, G_FILE_TEST_EXISTS) )
+			{
+				// only switch over if the absref is still valid
+				href = absref;
+			}
 		}
+
+		// Once we have an absolute path, convert it relative to the new location
 		if (href && g_path_is_absolute (href)) {
 			const gchar *relname = sp_relative_path_from_path (href, save_path);
 			sp_repr_set_attr (ir, "xlink:href", relname);
 		}
+// TODO next refinement is to make the first choice keeping the relative path as-is if
+//      based on the new save location it gives us a valid file.
 	}
 
 	gboolean const s = sp_repr_save_file (sp_repr_document (repr), uri);
