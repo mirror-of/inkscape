@@ -6,6 +6,13 @@
  * it's a subclass of SPGroup
  */
 
+/*
+example:
+<g sodipodi:type="typeset" srcNoMarkup="whatever text" dstShape="[path524]"/> </>
+creates a child text object with the text properly 'typeset'
+ */
+
+
 #include "sp-item-group.h"
 
 #define SP_TYPE_TYPESET          (sp_typeset_get_type ())

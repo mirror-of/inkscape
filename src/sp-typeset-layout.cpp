@@ -484,7 +484,7 @@ public:
       pango_layout_set_text(pLayout, theText, -1);
       pango_layout_get_log_attrs(pLayout,&pAttrs,&pNAttr);
 //      textLength=strlen(theText);
-      textLength=pNAttr; // is it correct?
+      textLength=pNAttr-1; // is it correct?
       
       PangoLayoutIter* pIter=pango_layout_get_iter(pLayout);
       baselineY=pango_layout_iter_get_baseline(pIter);
@@ -505,7 +505,7 @@ public:
     pAttrs=NULL;
     textLength=0;
     if ( theText ) {       
-      textLength=strlen(theText);
+      textLength=pNAttr-1; // is it correct?
       pango_layout_set_text(pLayout, theText, -1);
       pango_layout_get_log_attrs(pLayout,&pAttrs,&pNAttr);
     }
@@ -540,26 +540,40 @@ public:
     pango_layout_index_to_pos(pLayout,start_ind,&meas);
     int             startX=meas.x;
     
-    int             lastBeforeInd=-1;
-    double          lastBeforeLen=0.0;
-    int             firstAfterInd=-1;
-    double          firstAfterLen=0.0;
-    
-    double          curAscent=0;
-    double          curDescent=0;
-    double          lastBeforeAscent=0;
-    double          lastBeforeDescent=0;
-    
+    text_chunk_solution lastBefore;
+    text_chunk_solution lastWord;
+    text_chunk_solution curSol;
+    curSol.end_of_array=false;
+    curSol.start_ind=start_ind;
+    curSol.end_ind=start_ind-1;
+    curSol.length=0;
+    curSol.ascent=0;
+    curSol.descent=0;
+    lastBefore=lastWord=curSol;
+
+    bool            inLeadingWhite=true;
+        
     for (int cur_ind=start_ind;cur_ind<textLength;cur_ind++) {
       pango_layout_index_to_pos(pLayout,cur_ind,&meas);
       int    endX=meas.x+meas.width;
-      double lineLength=endX;
-      lineLength-=startX;
-      lineLength/=1000;
       double nAscent=0.001*((double)(baselineY-meas.y));
       double nDescent=0.001*((double)(meas.y+meas.height-baselineY));
-      if ( nAscent > curAscent ) curAscent=nAscent;
-      if ( nDescent > curDescent ) curDescent=nDescent;
+      
+      curSol.end_ind=cur_ind;
+      if ( inLeadingWhite ) {
+        if ( pAttrs[cur_ind].is_white ) {
+          startX=endX;
+          curSol.start_ind=cur_ind+1;
+        } else {
+          curSol.start_ind=cur_ind;
+          inLeadingWhite=false;
+        }
+      } else {
+      }
+      
+      curSol.length=0.001*((double)(endX-startX));
+      if ( nAscent > curSol.ascent ) curSol.ascent=nAscent;
+      if ( nDescent > curSol.descent ) curSol.descent=nDescent;
       bool breaksAfter=false;
       if ( cur_ind < textLength-1 ) {
         if ( pAttrs[cur_ind+1].is_white || pAttrs[cur_ind].is_word_end ) {
@@ -569,40 +583,34 @@ public:
         // last character of the text
         breaksAfter=true;
       }
-      if ( lineLength < minLength ) {
+      
+      if ( pAttrs[cur_ind].is_white ) {
+      } else {
+        lastWord=curSol;
+      }
+      if ( curSol.length < minLength ) {
         if ( breaksAfter ) {
-          lastBeforeInd=cur_ind;
-          lastBeforeLen=lineLength;
-          lastBeforeAscent=curAscent;
-          lastBeforeDescent=curDescent;
+          lastBefore=lastWord;
+          lastWord.end_ind=lastWord.start_ind-1;
         }
-      } else if ( lineLength > maxLength ) {
+      } else if ( curSol.length > maxLength ) {
         if ( breaksAfter ) {
-          firstAfterInd=cur_ind;
-          firstAfterLen=lineLength;
           if ( strict == false || solSize <= 1 ) {
-            if ( lastBeforeInd > 0 ) {
+            if ( lastBefore.end_ind >= lastBefore.start_ind ) {
+              sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
+              sol[solSize]=sol[solSize-1];
+              sol[solSize-1]=lastBefore;
+              lastBefore.end_ind=lastBefore.start_ind-1;
+              solSize++;
+            }
+            if ( lastWord.end_ind >= lastWord.start_ind ) {
               sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
               sol[solSize]=sol[solSize-1];
               sol[solSize-1].end_of_array=false;
-              sol[solSize-1].start_ind=start_ind;
-              sol[solSize-1].end_ind=lastBeforeInd;
-              sol[solSize-1].length=lastBeforeLen;
-              sol[solSize-1].ascent=lastBeforeAscent;
-              sol[solSize-1].descent=lastBeforeDescent;
-              lastBeforeInd=-1;
+              sol[solSize-1]=lastWord;
+              lastWord.end_ind=lastWord.start_ind-1;
               solSize++;
             }
-            sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
-            sol[solSize]=sol[solSize-1];
-            sol[solSize-1].end_of_array=false;
-            sol[solSize-1].start_ind=start_ind;
-            sol[solSize-1].end_ind=firstAfterInd;
-            sol[solSize-1].length=firstAfterLen;
-            sol[solSize-1].ascent=curAscent;
-            sol[solSize-1].descent=curDescent;
-            solSize++;
-            lastBeforeInd=-1;
           }
           break;
         }
@@ -610,42 +618,30 @@ public:
         if ( breaksAfter ) {
           if ( strict ) {
           } else {
-            if ( lastBeforeInd > 0 ) {
+            if ( lastBefore.end_ind >= lastBefore.start_ind ) {
               sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
               sol[solSize]=sol[solSize-1];
-              sol[solSize-1].end_of_array=false;
-              sol[solSize-1].start_ind=start_ind;
-              sol[solSize-1].end_ind=lastBeforeInd;
-              sol[solSize-1].length=lastBeforeLen;
-              sol[solSize-1].ascent=lastBeforeAscent;
-              sol[solSize-1].descent=lastBeforeDescent;
-              lastBeforeInd=-1;
+              sol[solSize-1]=lastBefore;
+              lastBefore.end_ind=lastBefore.start_ind-1;
               solSize++;
             }
           }
-          sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
-          sol[solSize]=sol[solSize-1];
-          sol[solSize-1].end_of_array=false;
-          sol[solSize-1].start_ind=start_ind;
-          sol[solSize-1].end_ind=cur_ind;
-          sol[solSize-1].length=lineLength;
-          sol[solSize-1].ascent=curAscent;
-          sol[solSize-1].descent=curDescent;
-          solSize++;
+          if ( lastWord.end_ind >= lastWord.start_ind ) {
+            sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
+            sol[solSize]=sol[solSize-1];
+            sol[solSize-1]=lastWord;
+            lastWord.end_ind=lastWord.start_ind-1;
+            solSize++;
+          }
         }
       }
     }
     if ( strict == false || solSize <= 1 ) {
-      if ( lastBeforeInd > 0 ) {
+      if ( lastBefore.end_ind >= lastBefore.start_ind ) {
         sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
         sol[solSize]=sol[solSize-1];
-        sol[solSize-1].end_of_array=false;
-        sol[solSize-1].start_ind=start_ind;
-        sol[solSize-1].end_ind=lastBeforeInd;
-        sol[solSize-1].length=lastBeforeLen;
-        sol[solSize-1].ascent=lastBeforeAscent;
-        sol[solSize-1].descent=lastBeforeDescent;
-        lastBeforeInd=-1;
+        sol[solSize-1]=lastBefore;
+        lastBefore.end_ind=lastBefore.start_ind-1;
         solSize++;
       }
     }
@@ -671,12 +667,12 @@ public:
     int endX=meas.x+meas.width;
     for (int i=start_ind;i<=end_ind;i++) {
       pango_layout_index_to_pos(pLayout,i,&meas);
-      spans[0].g_pos[i-start_ind]=NR::Point(((double)(meas.x-startX))/1000,0);
+      spans[0].g_pos[i-start_ind]=NR::Point(0.001*((double)(meas.x-startX)),0);
       spans[0].g_start[i-start_ind]=i; // assumes correspondance char <-> grapheme
       spans[0].g_end[i-start_ind]=i;
       endX=meas.x+meas.width;
     }
-    spans[0].g_pos[spans[0].nbG]=NR::Point(((double)(endX-startX))/1000,0);
+    spans[0].g_pos[spans[0].nbG]=NR::Point(0.001*((double)(endX-startX)),0);
     spans[0].g_start[spans[0].nbG]=end_ind+1;
     spans[0].g_end[spans[0].nbG]=end_ind+1;
   };
@@ -698,7 +694,6 @@ typedef struct typeset_step {
 
 void   sp_typeset_relayout(SPTypeset *typeset)
 {
-  printf("relayout\n");
   if ( typeset == NULL || typeset->layoutDirty == false ) return;
   typeset->layoutDirty=false;
   
@@ -710,7 +705,6 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     typeset->theDst=nd;
     while ( l && l->data ) {
       shape_dest* theData=(shape_dest*)l->data;
-      printf("using shape %s \n",theData->originalID);
       if ( theData->theShape ) nd->AppendShape(theData->theShape);
       l=l->next;
     }
@@ -738,11 +732,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
 
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
     double  fsize=12.0;
-    if ( val_size ) 
-        fsize = sp_repr_css_double_property (css, "font-size", 12.0);
+    if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
 
     const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
-    printf("using text %s \n",typeset->srcText);
     if ( val_family ) {
       typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize);
     } else {
@@ -779,12 +771,12 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     // dumb layout: stuff 'til it's too big    
     double nAscent=0.0,nDescent=0.0;
     typeset->theSrc->InitialMetricsAt(0,nAscent,nDescent);
+    int           maxIndex=typeset->theSrc->MaxIndex();
     if ( nAscent < 0.0001 && nDescent < 0.0001 ) {
       // nothing to stuff?
     } else {
       int           last_step=0;
       int           prev_line_step=0;
-      int           maxIndex=typeset->theSrc->MaxIndex();
       steps[prev_line_step].box=typeset->theDst->VeryFirst();
       last_step=prev_line_step;
             
@@ -859,9 +851,10 @@ void   sp_typeset_relayout(SPTypeset *typeset)
       } while ( steps[last_step].end_ind+1 < maxIndex );
     }
   }
-  printf("found %i lines\n",nb_step);
   // create offspring
   {
+    int           maxIndex=(typeset->theSrc)?typeset->theSrc->MaxIndex():0;
+
     SPRepr *parent = SP_OBJECT_REPR(SP_OBJECT(typeset));
     char const *style = sp_repr_attr (parent, "style");
     if (!style) {
@@ -874,8 +867,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     sp_repr_unref (text_repr);
 
     for (int i=1;i<nb_step;i++) {
-      printf("line %i : %i -> %i ; %lf -> %lf (%lf %lf %lf)\n",i,steps[i].start_ind,steps[i].end_ind,steps[i].box.x_start,steps[i].box.x_end,
-             steps[i].box.y,steps[i].box.ascent,steps[i].box.descent);
+//      printf("line %i : %i -> %i = %f; %lf -> %lf (%lf %lf %lf)\n",i,steps[i].start_ind,steps[i].end_ind,,steps[i].length
+//             ,steps[i].box.x_start,steps[i].box.x_end
+//             ,steps[i].box.y,steps[i].box.ascent,steps[i].box.descent);
       if ( steps[i].end_ind >= steps[i].start_ind ) {
         int              nbS=0;
         glyphs_for_span  *span_info=NULL;
@@ -888,7 +882,15 @@ void   sp_typeset_relayout(SPTypeset *typeset)
             for (int j=0;j<span_info[k].nbG;j++) nbSrcChar+=span_info[k].g_end[j]-span_info[k].g_start[j]+1;
           }
         }
-        if ( nbSrcChar > 1 ) spacing/=(nbSrcChar-1); else spacing=0;
+        if ( nbSrcChar > 1 ) {
+          if ( steps[i].end_ind < maxIndex-1 || spacing < 0 ) {
+            spacing/=(nbSrcChar-1);
+          } else {
+            spacing=0;
+          }
+        } else {
+          spacing=0;
+        }
         
         for (int k=0;k<nbS;k++) {
           SPRepr* span_repr = sp_repr_new ("tspan");
