@@ -151,8 +151,8 @@ public:
 	SPObject*          ChunkSourceEnd(int no);
 	
 	// functions for doing the showing
-	//  - puts glyphs on the canvas
-	void               Show(NRArenaGroup* in_arena);
+	//  - put glyphs on the canvas; set the paintbox on each nr_arena_glyph_group of the flow_res (used for paintserver fill)
+	void               Show(NRArenaGroup* in_arena, NRRect *paintbox);
 	//  - compute bbox
 	void               BBox(NRRect *bbox, NR::Matrix const &transform);
 	//  - print

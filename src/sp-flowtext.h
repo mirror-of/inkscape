@@ -40,7 +40,7 @@ struct SPFlowtext : public SPItem {
 	void              UpdateFlowDest(void);
 	void              ComputeFlowRes(void);
 	void              ClearFlow(NRArenaGroup* in_arena);
-	void              BuildFlow(NRArenaGroup* in_arena);
+	void              BuildFlow(NRArenaGroup* in_arena, 	NRRect *paintbox);
 };
 
 struct SPFlowtextClass {

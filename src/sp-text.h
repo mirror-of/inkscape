@@ -55,7 +55,7 @@ struct SPText {
 	flow_res*      f_res;
 
 	void           ClearFlow(NRArenaGroup* in_arena);
-	void           BuildFlow(NRArenaGroup* in_arena);
+	void           BuildFlow(NRArenaGroup* in_arena, NRRect *paintbox);
 	void					 UpdateFlowSource(void);
 	void					 ComputeFlowRes(void);
 };

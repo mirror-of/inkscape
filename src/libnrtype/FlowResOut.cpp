@@ -158,7 +158,7 @@ void               flow_res::ApplyPath(int no,Path* i_path)
 	}
 }
 
-void               flow_res::Show(NRArenaGroup* in_arena)
+void               flow_res::Show(NRArenaGroup* in_arena, NRRect *paintbox)
 {
 	if ( nbGroup <= 0 || nbGlyph <= 0 ) return;
 	for (int i=0;i<nbGroup;i++) {
@@ -187,6 +187,8 @@ void               flow_res::Show(NRArenaGroup* in_arena)
 				nr_arena_glyphs_group_add_component (groups[i].g_gr, curF, glyphs[j].g_id, &g_mat);
 			}
 		}
+
+		nr_arena_glyphs_group_set_paintbox (NR_ARENA_GLYPHS_GROUP (groups[i].g_gr), paintbox);
 	}
 	nr_arena_item_request_update (NR_ARENA_ITEM (in_arena), NR_ARENA_ITEM_STATE_ALL, FALSE);
 }

@@ -358,7 +358,10 @@ sp_flowtext_show(SPItem *item, NRArena *arena, unsigned/* key*/, unsigned /*flag
     NRArenaGroup *flowed = NRArenaGroup::create(arena);
     nr_arena_group_set_transparent(flowed, FALSE);
 
-    group->BuildFlow(flowed);
+    // pass the bbox of the flowtext object as paintbox (used for paintserver fills)	
+    NRRect paintbox;
+    sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
+    group->BuildFlow(flowed, &paintbox);
 
     return flowed;
 }
@@ -388,9 +391,9 @@ void SPFlowtext::ClearFlow(NRArenaGroup *in_arena)
     }
 }
 
-void SPFlowtext::BuildFlow(NRArenaGroup *in_arena)
+void SPFlowtext::BuildFlow(NRArenaGroup *in_arena, NRRect *paintbox)
 {
-    if ( f_res ) f_res->Show(in_arena);
+    if ( f_res ) f_res->Show(in_arena, paintbox);
 }
 
 static void FlowReLink(SPObject *object, one_flow_src *&after, one_flow_src *from)
@@ -543,8 +546,11 @@ void SPFlowtext::ComputeFlowRes(void)
         //f_res->AfficheOutput();
     }
 
+    // pass the bbox of the flowtext object as paintbox (used for paintserver fills)	
+    NRRect paintbox;
+    sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
     for (SPItemView *v = item->display; v != NULL; v = v->next) {
-        BuildFlow(NR_ARENA_GROUP(v->arenaitem));
+        BuildFlow(NR_ARENA_GROUP(v->arenaitem), &paintbox);
     }
 
     for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {

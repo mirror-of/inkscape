@@ -442,8 +442,11 @@ sp_text_show (SPItem *item, NRArena *arena, unsigned int/* key*/, unsigned int /
 	
 	NRArenaGroup* flowed=NRArenaGroup::create(arena);
 	nr_arena_group_set_transparent (flowed, FALSE);
-	
-	group->BuildFlow(flowed);
+
+	// pass the bbox of the text object as paintbox (used for paintserver fills)	
+	NRRect paintbox;
+	sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
+	group->BuildFlow(flowed, &paintbox);
 	
 	return flowed;
 }
@@ -660,14 +663,15 @@ sp_text_set_shape (SPText *text)
 			}
 		}
 	}
-	
-	for (SPItemView* v = SP_ITEM(text)->display; v != NULL; v = v->next) {
-		text->BuildFlow(NR_ARENA_GROUP(v->arenaitem));
-	}
-	
-	
+
+
 	NRRect paintbox;
 	sp_item_invoke_bbox(SP_ITEM(text), &paintbox, NR::identity(), TRUE);
+	for (SPItemView* v = SP_ITEM(text)->display; v != NULL; v = v->next) {
+        	// pass the bbox of the text object as paintbox (used for paintserver fills)	
+		text->BuildFlow(NR_ARENA_GROUP(v->arenaitem), &paintbox);
+	}
+
 }
 
 
@@ -1453,9 +1457,9 @@ void              SPText::ClearFlow(NRArenaGroup* in_arena)
 		child=nchild;
 	}
 }
-void              SPText::BuildFlow(NRArenaGroup* in_arena)
+void              SPText::BuildFlow(NRArenaGroup* in_arena, NRRect *paintbox)
 {
-	if ( f_res ) f_res->Show(in_arena);
+	if ( f_res ) f_res->Show(in_arena, paintbox);
 }
 void              SPText::UpdateFlowSource(void)
 {
