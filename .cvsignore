@@ -1,5 +1,6 @@
 Makefile.in
 Makefile
+Makefile.mingw.common
 configure
 config.log
 config.h.in
@@ -18,6 +19,7 @@ intl
 config.h.in
 ABOUT-NLS
 inkscape.spec
+inkscape.nsi
 *.1
 *.svg
 intltool-*
