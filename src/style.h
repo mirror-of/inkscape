@@ -266,6 +266,11 @@ void sp_style_read_from_repr (SPStyle *style, SPRepr *repr);
 /**
  *
  */
+void sp_style_merge_from_style_string (SPStyle *style, const gchar *p);
+
+/**
+ *
+ */
 void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent);
 
 /**

@@ -111,7 +111,6 @@ typedef struct _SPStyleEnum SPStyleEnum;
 #########################*/
 static void sp_style_clear (SPStyle *style);
 
-static void sp_style_merge_from_style_string (SPStyle *style, const gchar *p);
 static void sp_style_merge_property (SPStyle *style, gint id, const gchar *val);
 
 static void sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent);
@@ -902,9 +901,9 @@ trim_space (const gchar *str, gint length, gint *left, gint *right)
 
 
 /**
- * Parses style="fill:red;fill-rule:evenodd;" type string
+ * Parses a style="" string and merges it with an existing SPStyle
  */
-static void
+void
 sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 {
     gchar c[BMAX];
@@ -988,7 +987,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
         style->font_size.computed = parent->font_size.computed;
     } else if (style->font_size.type == SP_FONT_SIZE_LITERAL) {
         static gfloat sizetable[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
-        /* fixme: SVG and CSS do no specify clearly, whether we should use user or screen coordinates (Lauris) */
+        /* fixme: SVG and CSS do not specify clearly, whether we should use user or screen coordinates (Lauris) */
         if (style->font_size.value < SP_CSS_FONT_SIZE_SMALLER) {
             style->font_size.computed = sizetable[style->font_size.value];
         } else if (style->font_size.value == SP_CSS_FONT_SIZE_SMALLER) {
@@ -1233,7 +1232,9 @@ sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent)
 /**
  * fixme: Write real thing
  */
-// FIXME: this function is not used anywhere and seems to be severely broken. Perhaps we should kill it.
+// FIXME: this function is not used anywhere and seems to be severely broken. Perhaps we
+// should kill it. When you need a css string from an SPStyle, you normally call
+// sp_style_write_difference to take into account the object's parent.
 gchar *
 sp_style_write_string (SPStyle *style)
 {
@@ -2052,7 +2053,7 @@ static gint
 sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIFloat *base, guint flags)
 {
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && (val->value != base->value))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (val->value != base->value))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else {
@@ -2071,7 +2072,7 @@ sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, 
 {
 
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && (val->value != base->value))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (val->value != base->value))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else {
@@ -2089,7 +2090,7 @@ static gint
 sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags)
 {
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && (val->computed != base->computed))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && (val->computed != base->computed))) {
         unsigned int i;
         for (i = 0; dict[i].key; i++) {
             if (dict[i].value == static_cast< gint > (val->value) ) {
@@ -2109,7 +2110,7 @@ static gint
 sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SPIString *base, guint flags)
 {
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && strcmp (val->value, base->value))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && strcmp (val->value, base->value))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else {
@@ -2147,7 +2148,7 @@ static gint
 sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SPILength *base, guint flags)
 {
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && sp_length_differ (val, base))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && sp_length_differ (val, base))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else {
@@ -2220,7 +2221,7 @@ sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SP
 
     set = FALSE;
     if (((flags & SP_STYLE_FLAG_IFSET) && paint->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && sp_paint_differ (paint, base))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && paint->set && sp_paint_differ (paint, base))) {
         if (paint->inherit) {
             return g_snprintf (b, len, "%s:inherit;", key);
         } else if (paint->currentcolor) {
@@ -2271,7 +2272,7 @@ static gint
 sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags)
 {
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
-        ((flags & SP_STYLE_FLAG_IFDIFF) && sp_fontsize_differ (val, base))) {
+        ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && sp_fontsize_differ (val, base))) {
         if (val->inherit) {
             return g_snprintf (p, len, "%s:inherit;", key);
         } else if (val->type == SP_FONT_SIZE_LITERAL) {
