@@ -1,3 +1,15 @@
+/**
+ *
+ * \brief headers for RDF types
+ * 
+ * Authors:
+ *  Kees Cook <kees@outflux.net>
+ *
+ * Copyright (C) 2004 Kees Cook <kees@outflux.net>
+ * 
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ * 
+ */
 #ifndef _RDF_H_
 #define _RDF_H_
 
