@@ -143,6 +143,12 @@ sp_color_slider_init (SPColorSlider *slider)
 	slider->c0[1] = 0x00;
 	slider->c0[2] = 0x00;
 	slider->c0[3] = 0xff;
+
+	slider->cm[0] = 0xff;
+	slider->cm[1] = 0x00;
+	slider->cm[2] = 0x00;
+	slider->cm[3] = 0xff;
+
 	slider->c1[0] = 0xff;
 	slider->c1[1] = 0xff;
 	slider->c1[2] = 0xff;
@@ -353,7 +359,7 @@ sp_color_slider_set_adjustment (SPColorSlider *slider, GtkAdjustment *adjustment
 }
 
 void
-sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 end)
+sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 mid, guint32 end)
 {
 	g_return_if_fail (slider != NULL);
 	g_return_if_fail (SP_IS_COLOR_SLIDER (slider));
@@ -362,6 +368,12 @@ sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 end)
 	slider->c0[1] = (start >> 16) & 0xff;
 	slider->c0[2] = (start >> 8) & 0xff;
 	slider->c0[3] = start & 0xff;
+
+	slider->cm[0] = mid >> 24;
+	slider->cm[1] = (mid >> 16) & 0xff;
+	slider->cm[2] = (mid >> 8) & 0xff;
+	slider->cm[3] = mid & 0xff;
+
 	slider->c1[0] = end >> 24;
 	slider->c1[1] = (end >> 16) & 0xff;
 	slider->c1[2] = (end >> 8) & 0xff;
@@ -472,21 +484,65 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 			d = (1024 << 16) / carea.width;
 			s = (cpaint.x - carea.x) * d;
 			b = sp_color_slider_render_map (cpaint.x - carea.x, cpaint.y - carea.y, cpaint.width, cpaint.height,
-							slider->map, s, d,
-							slider->b0, slider->b1, slider->bmask);
+																			slider->map, s, d,
+																			slider->b0, slider->b1, slider->bmask);
+			if (b != NULL) {
+				gdk_draw_rgb_image (widget->window, widget->style->black_gc,
+														cpaint.x, cpaint.y,
+														cpaint.width, cpaint.height,
+														GDK_RGB_DITHER_MAX,
+														(guchar *) b, cpaint.width * 3);
+			}
+
 		} else {
 			gint c[4], dc[4];
 			gint i;
-			/* Render gradient pixelstore */
-			for (i = 0; i < 4; i++) {
-				c[i] = slider->c0[i] << 16;
-				dc[i] = ((slider->c1[i] << 16) - c[i]) / carea.width;
-				c[i] += (cpaint.x - carea.x) * dc[i];
+			/* Render gradient */
+
+			// part 1: from c0 to cm
+			if ((cpaint.x - carea.x) <= carea.width/2) {
+				for (i = 0; i < 4; i++) {
+					c[i] = slider->c0[i] << 16;
+					dc[i] = ((slider->cm[i] << 16) - c[i]) / (carea.width/2);
+					c[i] += (cpaint.x - carea.x) * dc[i];
+				}
+				guint wi = MIN(cpaint.x - carea.x + cpaint.width, carea.width/2) - (cpaint.x - carea.x);
+				b = sp_color_slider_render_gradient (cpaint.x - carea.x, cpaint.y - carea.y, wi, cpaint.height,
+													 c, dc,
+													 slider->b0, slider->b1, slider->bmask);
+
+				/* Draw pixelstore */
+				if (b != NULL) {
+					gdk_draw_rgb_image (widget->window, widget->style->black_gc,
+															cpaint.x, cpaint.y,
+															wi, cpaint.height,
+															GDK_RGB_DITHER_MAX,
+															(guchar *) b, wi * 3);
+				}
 			}
 
-			b = sp_color_slider_render_gradient (cpaint.x - carea.x, cpaint.y - carea.y, cpaint.width, cpaint.height,
-							     c, dc,
-							     slider->b0, slider->b1, slider->bmask);
+			// part 2: from cm to c1
+			if ((cpaint.x - carea.x + cpaint.width) > carea.width/2) {
+				for (i = 0; i < 4; i++) {
+					c[i] = slider->cm[i] << 16;
+					dc[i] = ((slider->c1[i] << 16) - c[i]) / (carea.width/2);
+					if ((cpaint.x - carea.x) > carea.width/2)
+						c[i] += (cpaint.x - carea.x - carea.width/2) * dc[i];
+				}
+				guint wi = cpaint.width - MAX(0, (carea.width/2 - (cpaint.x - carea.x)));
+				b = sp_color_slider_render_gradient (MAX(cpaint.x - carea.x, carea.width/2), cpaint.y - carea.y, wi, cpaint.height,
+												 c, dc,
+												 slider->b0, slider->b1, slider->bmask);
+
+				/* Draw pixelstore */
+				if (b != NULL) {
+					gdk_draw_rgb_image (widget->window, widget->style->black_gc,
+															MAX(cpaint.x, carea.width/2 + carea.x), cpaint.y,
+															wi, cpaint.height,
+															GDK_RGB_DITHER_MAX,
+															(guchar *) b, wi * 3);
+				}
+			}
 		}
 	}
 
@@ -497,14 +553,6 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 			  0, 0,
 			  warea.width, warea.height);
 
-	/* Draw pixelstore */
-	if (b != NULL) {
-		gdk_draw_rgb_image (widget->window, widget->style->black_gc,
-				    cpaint.x, cpaint.y,
-				    cpaint.width, cpaint.height,
-				    GDK_RGB_DITHER_MAX,
-				    (guchar *) b, cpaint.width * 3);
-	}
 
 	if (gdk_rectangle_intersect (area, &aarea, &apaint)) {
 		/* Draw arrow */

@@ -153,6 +153,7 @@ void ColorWheelSelector::init()
 
     sp_color_slider_set_colors (SP_COLOR_SLIDER (_slider),
                                 SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
+                                SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.5),
                                 SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 1.0));
 
 
@@ -216,9 +217,10 @@ void ColorWheelSelector::_colorChanged( const SPColor& color, gfloat alpha )
     sp_color_wheel_set_color( SP_COLOR_WHEEL( _wheel ), &color );
 
     guint32 start = sp_color_get_rgba32_ualpha( &color, 0x00 );
+    guint32 mid = sp_color_get_rgba32_ualpha( &color, 0x7f );
     guint32 end = sp_color_get_rgba32_ualpha( &color, 0xff );
 
-    sp_color_slider_set_colors (SP_COLOR_SLIDER(_slider), start, end);
+    sp_color_slider_set_colors (SP_COLOR_SLIDER(_slider), start, mid, end);
 
     set255 (_adj, alpha);
 
@@ -277,9 +279,10 @@ void ColorWheelSelector::_wheelChanged( SPColorWheel *wheel, SPColorWheelSelecto
     sp_color_wheel_get_color( wheel, &color );
 
     guint32 start = sp_color_get_rgba32_ualpha( &color, 0x00 );
+    guint32 mid = sp_color_get_rgba32_ualpha( &color, 0x7f );
     guint32 end = sp_color_get_rgba32_ualpha( &color, 0xff );
 
-    sp_color_slider_set_colors (SP_COLOR_SLIDER(wheelSelector->_slider), start, end);
+    sp_color_slider_set_colors (SP_COLOR_SLIDER(wheelSelector->_slider), start, mid, end);
 
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, sp_color_wheel_is_adjusting( wheel ) );
 }

@@ -36,7 +36,7 @@ struct SPColorSlider {
 
 	gfloat value;
 	gfloat oldvalue;
-	guchar c0[4], c1[4];
+	guchar c0[4], cm[4], c1[4];
 	guchar b0, b1;
 	guchar bmask;
 
@@ -58,7 +58,7 @@ GtkType sp_color_slider_get_type (void);
 GtkWidget *sp_color_slider_new (GtkAdjustment *adjustment);
 
 void sp_color_slider_set_adjustment (SPColorSlider *slider, GtkAdjustment *adjustment);
-void sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 end);
+void sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 mid, guint32 end);
 void sp_color_slider_set_map (SPColorSlider *slider, const guchar *map);
 void sp_color_slider_set_background (SPColorSlider *slider, guint dark, guint light, guint size);
 
