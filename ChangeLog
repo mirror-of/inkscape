@@ -2,6 +2,10 @@
 
 	* Replaced inline function sp_repr_name with direct call to
 	  repr->name.
+	* Replaced inline function sp_repr_content with direct call to
+	  repr->content.
+	* Replaced inline function sp_repr_has_attr with direct call to
+	  repr->matchAttributeName.
 
 2005-02-15  MenTaLguY  <mental@rydia.net>
 

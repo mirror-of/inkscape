@@ -206,7 +206,7 @@ item_text_match (SPItem *item, const gchar *text, bool exact)
     if (SP_OBJECT_REPR (item) == NULL)
         return false;
 
-    const gchar *item_text = sp_repr_content (SP_OBJECT_REPR (item));
+    const gchar *item_text = SP_OBJECT_REPR (item)->content();
     if (item_text == NULL)
         return false;
 
@@ -245,7 +245,7 @@ item_attr_match (SPItem *item, const gchar *name, bool exact)
         const gchar *attr_value = sp_repr_attr (SP_OBJECT_REPR (item), name);
         return ((bool) (attr_value != NULL));
     } else {
-        return sp_repr_has_attr (SP_OBJECT_REPR (item), name);
+        return SP_OBJECT_REPR (item)->matchAttributeName(name);
     }
 }
 

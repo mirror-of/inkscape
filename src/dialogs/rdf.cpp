@@ -450,7 +450,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             temp = sp_repr_children(repr);
             if ( temp == NULL ) return NULL;
             
-            return sp_repr_content(temp);
+            return temp->content();
 
         case RDF_AGENT:
             temp = sp_repr_lookup_name ( repr, "cc:Agent", 1 );
@@ -462,7 +462,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             temp = sp_repr_children(temp);
             if ( temp == NULL ) return NULL;
 
-            return sp_repr_content(temp);
+            return temp->content();
 
         case RDF_RESOURCE:
             return sp_repr_attr(repr, "rdf:resource");
@@ -481,7 +481,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
                 temp = sp_repr_children(repr);
                 if ( temp == NULL ) return NULL;
             
-                return sp_repr_content(temp);
+                return temp->content();
             }
 
             for ( temp = sp_repr_children(temp) ;

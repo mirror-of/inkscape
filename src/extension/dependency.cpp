@@ -75,7 +75,7 @@ Dependency::Dependency (SPRepr * in_repr)
         }
     }
 
-    _string = sp_repr_content(sp_repr_children(_repr));
+    _string = sp_repr_children(_repr)->content();
 
     _description = sp_repr_attr(_repr, "description");
 

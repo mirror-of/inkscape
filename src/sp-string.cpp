@@ -131,7 +131,7 @@ sp_string_read_content (SPObject *object)
 {
 	SPString *string = SP_STRING (object);
 
-	const gchar *t = sp_repr_content (object->repr);
+	const gchar *t = object->repr->content();
 	string->svg_contents.ResetText();
 	if ( t ) {
 		string->svg_contents.AddSVGInputText((char*)t,-1);
@@ -199,9 +199,3 @@ sp_string_get_text(SPString* string)
      return string->contents.cleaned_up.utf8_text;
    return string->svg_contents.utf8_text;
 }
-
-
-
-
-
-

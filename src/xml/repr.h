@@ -179,16 +179,9 @@ inline unsigned int sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *
 }
 
 /* Contents */
-inline const char *sp_repr_content(SPRepr const *repr) {
-	return repr->content();
-}
 inline const char *sp_repr_attr(SPRepr const *repr, gchar const *key) {
 	return repr->attribute(key);
 }
-inline bool sp_repr_has_attr(SPRepr const *repr, gchar const *partial_name) {
-	return repr->matchAttributeName(partial_name);
-}
-
 inline unsigned int sp_repr_set_content(SPRepr *repr, gchar const *content) {
 	repr->setContent(content);
 	return true;

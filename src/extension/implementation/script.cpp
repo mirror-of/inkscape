@@ -91,13 +91,13 @@ Script::solve_reldir (SPRepr * reprin) {
     reldir = sp_repr_attr(reprin, "reldir");
 
     if (reldir == NULL) {
-        return g_strdup(sp_repr_content(sp_repr_children(reprin)));
+        return g_strdup(sp_repr_children(reprin)->content());
     }
 
     if (!strcmp(reldir, "extensions")) {
-        return g_build_filename(INKSCAPE_EXTENSIONDIR, sp_repr_content(sp_repr_children(reprin)), NULL);
+        return g_build_filename(INKSCAPE_EXTENSIONDIR, sp_repr_children(reprin)->content(), NULL);
     } else {
-        return g_strdup(sp_repr_content(sp_repr_children(reprin)));
+        return g_strdup(sp_repr_children(reprin)->content());
     }
 
     return NULL;
@@ -225,7 +225,7 @@ Script::load (Inkscape::Extension::Extension * module)
                     command_text = solve_reldir(child_repr);
                 }
                 if (!strcmp(child_repr->name(), "helper_extension")) {
-                    helper_extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
+                    helper_extension = g_strdup(sp_repr_children(child_repr)->content());
                 }
                 child_repr = sp_repr_next(child_repr);
             }
@@ -294,7 +294,7 @@ Script::check (Inkscape::Extension::Extension * module)
                 if (!strcmp(child_repr->name(), "helper_extension")) {
                     const gchar * helper;
 
-                    helper = sp_repr_content(sp_repr_children(child_repr));
+                    helper = sp_repr_children(child_repr)->content();
                     if (Inkscape::Extension::db.get(helper) == NULL) {
                         //printf("Couldn't find helper\n");
                         return FALSE;

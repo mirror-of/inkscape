@@ -78,11 +78,11 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
         /* TODO: Handle what happens if we don't have these two */
         while (child_repr != NULL) {
             if (!strcmp(child_repr->name(), "id")) {
-                gchar const *val = sp_repr_content(sp_repr_children(child_repr));
+                gchar const *val = sp_repr_children(child_repr)->content();
                 id = g_strdup (val);
             } /* id */
             if (!strcmp(child_repr->name(), "name")) {
-                name = g_strdup (sp_repr_content(sp_repr_children(child_repr)));
+                name = g_strdup (sp_repr_children(child_repr)->content());
             } /* name */
             if (!strcmp(child_repr->name(), "param")) {
                 make_param(child_repr);
@@ -384,8 +384,8 @@ Extension::make_param (SPRepr * paramrepr)
 
     name = sp_repr_attr(paramrepr, "name");
     type = sp_repr_attr(paramrepr, "type");
-    // defaultval = sp_repr_content(paramrepr);
-    defaultval = sp_repr_content(sp_repr_children(paramrepr));
+    // defaultval = paramrepr->content();
+    defaultval = sp_repr_children(paramrepr)->content();
 
     /* In this case we just don't have enough information */
     if (name == NULL || type == NULL) {

@@ -281,7 +281,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
             char *text = "";
             for (SPRepr *textChild = sp_repr_children(node) ; textChild ; textChild=sp_repr_next(textChild))
                 {
-                text = (char *)sp_repr_content(textChild);
+                text = (char *)textChild->content();
                 if (text)
                     break;
                 }

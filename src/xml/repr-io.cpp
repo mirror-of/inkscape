@@ -683,9 +683,9 @@ sp_repr_write_stream (SPRepr *repr, Writer &out, gint indent_level,
                       gboolean add_whitespace, Glib::QueryQuark elide_prefix)
 {
     if (repr->type() == SP_XML_TEXT_NODE) {
-        repr_quote_write (out, sp_repr_content (repr));
+        repr_quote_write (out, repr->content());
     } else if (repr->type() == SP_XML_COMMENT_NODE) {
-        out.printf( "<!--%s-->", sp_repr_content (repr) );
+        out.printf( "<!--%s-->", repr->content() );
     } else if (repr->type() == SP_XML_ELEMENT_NODE) {
         sp_repr_write_stream_element(repr, out, indent_level, add_whitespace, elide_prefix, repr->attributeList());
     } else {

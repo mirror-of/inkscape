@@ -51,22 +51,22 @@ Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Ext
                 while (child_repr != NULL) {
                     if (!strcmp(child_repr->name(), "extension")) {
                         g_free (extension);
-                        extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
+                        extension = g_strdup(sp_repr_children(child_repr)->content());
                     }
                     if (!strcmp(child_repr->name(), "mimetype")) {
                         g_free (mimetype);
-                        mimetype = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
+                        mimetype = g_strdup(sp_repr_children(child_repr)->content());
                     }
                     if (!strcmp(child_repr->name(), "filetypename")) {
                         g_free (filetypename);
-                        filetypename = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
+                        filetypename = g_strdup(sp_repr_children(child_repr)->content());
                     }
                     if (!strcmp(child_repr->name(), "filetypetooltip")) {
                         g_free (filetypetooltip);
-                        filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
+                        filetypetooltip = g_strdup(sp_repr_children(child_repr)->content());
                     }
                     if (!strcmp(child_repr->name(), "dataloss")) {
-                        if (!strcmp(sp_repr_content(sp_repr_children(child_repr)), "FALSE")) {
+                        if (!strcmp(sp_repr_children(child_repr)->content(), "FALSE")) {
 							dataloss = FALSE;
 						}
 					}
