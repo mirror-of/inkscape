@@ -48,8 +48,6 @@ struct SPGradientSelector {
 	GtkWidget *edit, *add;
 	/* Position widget */
 	GtkWidget *position;
-	/* Units selector */
-	GtkWidget *units;
 	/* Spread selector */
 	GtkWidget *spread;
 };
@@ -73,6 +71,9 @@ void sp_gradient_selector_set_spread (SPGradientSelector *sel, guint spread);
 void sp_gradient_selector_set_vector (SPGradientSelector *sel, SPDocument *doc, SPGradient *vector);
 void sp_gradient_selector_set_bbox (SPGradientSelector *sel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 
+SPGradientUnits sp_gradient_selector_get_units (SPGradientSelector *sel);
+SPGradientSpread sp_gradient_selector_get_spread (SPGradientSelector *sel);
+
 void sp_gradient_selector_set_gs2d_matrix(SPGradientSelector *gsel, NR::Matrix const &gs2d);
 void sp_gradient_selector_set_gs2d_matrix_f(SPGradientSelector *gsel, NRMatrix const *gs2d);
 void sp_gradient_selector_get_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrix *gs2d);
@@ -87,7 +88,5 @@ void sp_gradient_selector_get_rgradient_position_floatv (SPGradientSelector *gse
 
 void sp_gradient_selector_get_lgradient_position_floatv (SPGradientSelector *gsel, gfloat *pos);
 void sp_gradient_selector_get_rgradient_position_floatv (SPGradientSelector *gsel, gfloat *pos);
-
-
 
 #endif

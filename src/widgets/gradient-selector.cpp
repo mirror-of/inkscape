@@ -53,7 +53,6 @@ static void sp_gradient_selector_position_changed (SPGradientPosition *pos, SPGr
 static void sp_gradient_selector_edit_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
 static void sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel);
 
-static void sp_gradient_selector_units_activate (GtkWidget *widget, SPGradientSelector *sel);
 static void sp_gradient_selector_spread_activate (GtkWidget *widget, SPGradientSelector *sel);
 
 static GtkVBoxClass *parent_class;
@@ -159,36 +158,6 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	gtk_widget_show (hb);
 	gtk_box_pack_start (GTK_BOX (sel), hb, FALSE, FALSE, 0);
 
-	sel->units = gtk_option_menu_new ();
-	gtk_widget_show (sel->units);
-	gtk_box_pack_end (GTK_BOX (hb), sel->units, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip (ttips, sel->units,
-	// TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
-					_("Whether the gradient vector is defined in the user space coordinates "
-					"(gradientUnits=\"userSpaceOnUse\") or relative to the object's bounding box "
-					"(gradientUnits=\"objectBoundingBox\")"), NULL);
-
-	m = gtk_menu_new ();
-	mi = gtk_menu_item_new_with_label (_("object"));
-	gtk_menu_append (GTK_MENU (m), mi);
-	g_object_set_data (G_OBJECT (mi), "gradientUnits", GUINT_TO_POINTER (SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX));
-	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_units_activate), sel);
-	mi = gtk_menu_item_new_with_label (_("user space"));
-	gtk_menu_append (GTK_MENU (m), mi);
-	g_object_set_data (G_OBJECT (mi), "gradientUnits", GUINT_TO_POINTER (SP_GRADIENT_UNITS_USERSPACEONUSE));
-	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_units_activate), sel);
-	gtk_widget_show_all (m);
-
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (sel->units), m);
-
-	l = gtk_label_new (_("Coordinates:"));
-	gtk_widget_show (l);
-	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 4);
-
-	hb = gtk_hbox_new (FALSE, 0);
-	gtk_widget_show (hb);
-	gtk_box_pack_start (GTK_BOX (sel), hb, FALSE, FALSE, 0);
-
 	sel->spread = gtk_option_menu_new ();
 	gtk_widget_show (sel->spread);
 	gtk_box_pack_end (GTK_BOX (hb), sel->spread, FALSE, FALSE, 0);
@@ -260,8 +229,6 @@ sp_gradient_selector_set_units (SPGradientSelector *sel, guint units)
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
 
 	sel->gradientUnits = (SPGradientUnits)units;
-
-	gtk_option_menu_set_history (GTK_OPTION_MENU (sel->units), sel->gradientUnits);
 }
 
 void
@@ -275,6 +242,18 @@ sp_gradient_selector_set_spread (SPGradientSelector *sel, guint spread)
 	sp_gradient_position_set_spread (SP_GRADIENT_POSITION (sel->position), sel->gradientSpread);
 
 	gtk_option_menu_set_history (GTK_OPTION_MENU (sel->spread), sel->gradientSpread);
+}
+
+SPGradientUnits
+sp_gradient_selector_get_units (SPGradientSelector *sel)
+{
+	return (SPGradientUnits) sel->gradientUnits;
+}
+
+SPGradientSpread
+sp_gradient_selector_get_spread (SPGradientSelector *sel)
+{
+	return (SPGradientSpread) sel->gradientSpread;
 }
 
 void
@@ -455,14 +434,6 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 
 	gr = (SPGradient *) doc->getObjectByRepr(repr);
 	sp_gradient_vector_selector_set_gradient (SP_GRADIENT_VECTOR_SELECTOR (sel->vectors), doc, gr);
-}
-
-static void
-sp_gradient_selector_units_activate (GtkWidget *widget, SPGradientSelector *sel)
-{
-	sel->gradientUnits = (SPGradientUnits)GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "gradientUnits"));
-
-	g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0);
 }
 
 static void
