@@ -428,6 +428,57 @@ private :
     }
 };
 
+class ActionRadomize : public Action {
+public :
+    ActionRadomize(const Glib::ustring &id,
+               const Glib::ustring &tiptext,
+               guint row,
+               guint column,
+               DialogAlign &dialog):
+        Action(id, tiptext, row, column,
+               dialog.distribute_table(), dialog.tooltips())
+    {}
+
+private :
+    virtual void on_button_click()
+    {
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (!desktop) return;
+
+        Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+        if (!selection) return;
+
+        std::list<SPItem *> selected;
+        selection->list(selected);
+        if (selected.empty()) return;
+
+        //Check 2 or more selected objects
+        if (selected.size() < 2) return;
+
+        // Fixme: cache this bbox between calls to randomize, so that there's no growth nor shrink
+        // nor drift on sequential randomizations. Discard cache on global (or better active
+        // desktop's) selection_change signal.
+        NR::Rect sel_box = selection->bounds();
+
+        for (std::list<SPItem *>::iterator it(selected.begin());
+            it != selected.end();
+            ++it)
+        {
+            NR::Rect item_box = sp_item_bbox_desktop (*it);
+            // find new center 
+            double x = sel_box.min()[NR::X] + 
+                g_random_double_range (0, sel_box.extent(NR::X));
+            double y = sel_box.min()[NR::Y] + 
+                g_random_double_range (0, sel_box.extent(NR::Y));
+            // displacement is the new center minus old:
+            NR::Point t = NR::Point (x, y) - 0.5*(item_box.max() + item_box.min());
+            sp_item_move_rel(*it, NR::translate(t));
+        }
+
+        sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+    }
+};
+
 struct Baselines
 {
     SPItem *_item;
@@ -605,6 +656,15 @@ void DialogAlign::addUnclumpButton(const Glib::ustring &id, const Glib::ustring 
         );
 }
 
+void DialogAlign::addRandomizeButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                                      guint row, guint col)
+{
+    _actionList.push_back(
+        new ActionRadomize(
+            id, tiptext, row, col, *this)
+        );
+}
+
 void DialogAlign::addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
                                     guint row, guint col, Gtk::Table &table, NR::Dim2 orientation, bool distribute)
 {
@@ -668,7 +728,7 @@ DialogAlign::DialogAlign():
     //The distribute buttons
     addDistributeButton("distribute_hdist",
                         _("Make horizontal gaps between objects equal"),
-                        0, 0, true, NR::X, .5, .5);
+                        0, 4, true, NR::X, .5, .5);
 
     addDistributeButton("distribute_left",
                         _("Distribute left sides equidistantly"),
@@ -682,7 +742,7 @@ DialogAlign::DialogAlign():
 
     addDistributeButton("distribute_vdist",
                         _("Make vertical gaps between objects equal"),
-                        1, 0, true, NR::Y, .5, .5);
+                        1, 4, true, NR::Y, .5, .5);
 
     addDistributeButton("distribute_bottom",
                         _("Distribute bottoms equidistantly"),
@@ -702,10 +762,13 @@ DialogAlign::DialogAlign():
                    _("Distribute baseline anchors of texts vertically"),
                      1, 5, this->distribute_table(), NR::Y, true);
 
-    //Unclump
+    //Randomize & Unclump
+    addRandomizeButton("distribute_randomize",
+                        _("Randomize centers in both dimensions"),
+                        2, 2);
     addUnclumpButton("unclump",
-                        _("Unclump selected objects"),
-                        2, 0);
+                        _("Unclump objects: try to equalize edge-to-edge distances"),
+                        2, 4);
 
     //Node Mode buttons
     addNodeButton("node_halign",
