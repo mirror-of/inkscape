@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-01 23:23+0100\n"
-"PO-Revision-Date: 2004-10-26 15:26+0200\n"
+"PO-Revision-Date: 2004-11-02 14:45+1100\n"
 "Last-Translator: Frederic Rodrigo <f.rodrigo free.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -2923,7 +2923,7 @@ msgstr ""
 #: src/nodepath.cpp:1125 src/nodepath.cpp:1137 src/nodepath.cpp:1217
 #: src/nodepath.cpp:1229
 msgid "To join, you must have <b>two endnodes</b> selected."
-msgstr "Pour joindre, vous devez avoir sélectionné <b>deux nœuds finaux<b>."
+msgstr "Pour joindre, vous devez avoir sélectionné <b>deux nœuds finaux</b>."
 
 #: src/nodepath.cpp:1354 src/nodepath.cpp:1368
 msgid ""
@@ -3318,7 +3318,7 @@ msgstr "Sélectionner les <b>objets</b> à dupliquer."
 
 #: src/selection-chemistry.cpp:267
 msgid "Select <b>two or more objects</b> to group."
-msgstr "Sélectionner <b>deux objets ou plus<b> pour les grouper."
+msgstr "Sélectionner <b>deux objets ou plus</b> pour les grouper."
 
 #: src/selection-chemistry.cpp:275
 msgid "Select <b>at least two objects</b> to group."
@@ -3381,7 +3381,7 @@ msgstr "Rien dans le presse-papiers."
 
 #: src/selection-chemistry.cpp:915
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Sélectionner des <b>objets<b> pour pouvoir y coller un style dessus."
+msgstr "Sélectionner des <b>objets</b> pour pouvoir y coller un style dessus."
 
 #: src/selection-chemistry.cpp:1459
 msgid "Select an <b>object</b> to clone."
@@ -4051,7 +4051,7 @@ msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
 "resize. <b>Click</b> to select."
 msgstr ""
-"<b>Cliquer-déplacer<b> pour créer un rectangle. <b>Déplacer les contrôles</"
+"<b>Cliquer-déplacer</b> pour créer un rectangle. <b>Déplacer les contrôles</"
 "b> pour arrondir les coins. <b>Clic</b> pour sélectionner."
 
 #: src/tools-switch.cpp:141
@@ -4059,7 +4059,7 @@ msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
 "segment. <b>Click</b> to select."
 msgstr ""
-"<b>Cliquer-déplacer<b> pour créer une ellipse. <b>Déplacer les contrôles</b> "
+"<b>Cliquer-déplacer</b> pour créer une ellipse. <b>Déplacer les contrôles</b> "
 "pour faire des arcs ou des segment. <b>Clic</b> pour sélectionner."
 
 #: src/tools-switch.cpp:147
@@ -4067,7 +4067,7 @@ msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
 "<b>Click</b> to select."
 msgstr ""
-"<b>Cliquer-déplacer<b> pour créer une étoile. <b>Déplacer les contrôles</b> "
+"<b>Cliquer-déplacer</b> pour créer une étoile. <b>Déplacer les contrôles</b> "
 "pour éditer la forme de l'étoile. <b>Clic</b> pour sélectionner."
 
 #: src/tools-switch.cpp:153
@@ -4075,14 +4075,14 @@ msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral "
 "shape. <b>Click</b> to select."
 msgstr ""
-"<b>Cliquer-déplacer<b> pour créer un spirale. <b>Déplacer les contrôles</b> "
+"<b>Cliquer-déplacer</b> pour créer un spirale. <b>Déplacer les contrôles</b> "
 "pour éditer la forme de la spirale. <b>Clic</b> pour sélectionner."
 
 #: src/tools-switch.cpp:159
 msgid ""
 "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
 msgstr ""
-"<b>Cliquer-déplacer<b> pour créer une ligne à main levée. Appuyer sur <b>a</"
+"<b>Cliquer-déplacer</b> pour créer une ligne à main levée. Appuyer sur <b>a</"
 "b> pour alterner Ajout/Nouveau."
 
 #: src/tools-switch.cpp:165
@@ -4095,7 +4095,7 @@ msgstr ""
 
 #: src/tools-switch.cpp:171
 msgid "<b>Drag</b> to paint a calligraphic stroke."
-msgstr "<b>Cliquer-déplacer<b> pour tracer des lignes calligraphiques."
+msgstr "<b>Cliquer-déplacer</b> pour tracer des lignes calligraphiques."
 
 #: src/tools-switch.cpp:177
 msgid "<b>Click</b> to select or create text object, then type."
