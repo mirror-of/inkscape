@@ -213,7 +213,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
     SPPaintSelector *psel = SP_PAINT_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw),
                                                                   "paint-selector"));
 
-    if (!sel || sp_selection_is_empty(sel)) {
+    if ( !sel || sel->isEmpty() ) {
         /* No objects, set empty */
         sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_EMPTY);
         gtk_object_set_data( GTK_OBJECT(spw), "update",
@@ -1424,7 +1424,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
     GtkWidget *units = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "units"));
     GtkWidget *dsel = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
 
-    if (!sel || sp_selection_is_empty(sel)) {
+    if ( !sel || sel->isEmpty() ) {
         /* No objects, set empty */
         gtk_widget_set_sensitive(sset, FALSE);
         gtk_object_set_data( GTK_OBJECT(spw), "update",

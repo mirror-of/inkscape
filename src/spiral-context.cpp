@@ -325,7 +325,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 			sp_spiral_finish (sc);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-                sp_selection_set_item (SP_DT_SELECTION (desktop), event_context->item_to_select);
+                SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
             } else {
                 // click in an empty space
                 sp_selection_empty (SP_DT_SELECTION (desktop));
@@ -433,7 +433,7 @@ sp_spiral_finish (SPSpiralContext * sc)
 		sp_shape_set_shape(SP_SHAPE(spiral));
 		sp_object_invoke_write (SP_OBJECT (spiral), NULL, SP_OBJECT_WRITE_EXT);
 
-		sp_selection_set_item (SP_DT_SELECTION (desktop), sc->item);
+		SP_DT_SELECTION(desktop)->setItem(sc->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));
 
 		sc->item = NULL;

@@ -114,7 +114,7 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Select item */
 	w = gtk_menu_item_new_with_mnemonic (_("_Select This"));
-	if (sp_selection_item_selected (SP_DT_SELECTION (desktop), item)) {
+	if (SP_DT_SELECTION (desktop)->includesItem(item)) {
 		gtk_widget_set_sensitive (w, FALSE);
 	} else {
 		gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
@@ -153,7 +153,7 @@ sp_item_properties (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	sp_selection_set_item (SP_DT_SELECTION (desktop), item);
+	SP_DT_SELECTION(desktop)->setItem(item);
 
 	sp_item_dialog ();
 }
@@ -169,7 +169,7 @@ sp_item_select_this (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	sp_selection_set_item (SP_DT_SELECTION (desktop), item);
+	SP_DT_SELECTION(desktop)->setItem(item);
 }
 
 static void
@@ -224,7 +224,7 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 
 	sp_object_attributes_dialog (object, "SPAnchor");
 
-	sp_selection_set_item (SP_DT_SELECTION (desktop), SP_ITEM (object));
+	SP_DT_SELECTION(desktop)->setItem(SP_ITEM(object));
 }
 
 /* SPGroup */
@@ -381,7 +381,7 @@ sp_shape_fill_settings (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	sp_selection_set_item (SP_DT_SELECTION (desktop), item);
+	SP_DT_SELECTION(desktop)->setItem(item);
 
 	sp_object_properties_dialog ();
 }

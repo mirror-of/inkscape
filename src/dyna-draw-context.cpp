@@ -569,7 +569,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
 
             sp_document_add_repr(SP_DT_DOCUMENT(desktop), dc->repr);
             sp_repr_unref(dc->repr);
-            sp_selection_set_repr(SP_DT_SELECTION(desktop), dc->repr);
+            SP_DT_SELECTION(desktop)->setRepr(dc->repr);
         }
         abp = nr_artpath_affine(sp_curve_first_bpath(dc->accumulated), sp_desktop_dt2root_affine(desktop));
         str = sp_svg_write_path(abp);

@@ -413,7 +413,7 @@ static void sp_verb_action_object_perform ( SPAction *action, void *data,
 
     SPSelection *sel = SP_DT_SELECTION(dt);
 
-    if (sp_selection_is_empty (sel))
+    if (sel->isEmpty())
         return;
 
     NR::Point const center(sel->bounds().midpoint());

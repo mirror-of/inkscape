@@ -746,7 +746,7 @@ set_dt_select (SPRepr *repr)
             /* TODO: when a tspan is highlighted, set selection to its parent 
              * text
              */
-            sp_selection_set_item (selection, SP_ITEM (object));
+            selection->setItem(SP_ITEM(object));
     }
     blocked--;
     

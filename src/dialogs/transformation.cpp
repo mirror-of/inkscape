@@ -184,7 +184,7 @@ sp_transformation_dialog_update_selection ( GObject *dlg, unsigned int page,
     }
 
     apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
-    if (selection && !sp_selection_is_empty (selection)) {
+    if (selection && !selection->isEmpty()) {
         gtk_widget_set_sensitive (apply, TRUE);
     } else {
         gtk_widget_set_sensitive (apply, FALSE); 
@@ -384,7 +384,7 @@ static void sp_transformation_dialog_apply(GObject *, GObject *dlg)
     SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
     g_return_if_fail (desktop != NULL);
     SPSelection * const selection = SP_DT_SELECTION(desktop);
-    g_return_if_fail (!sp_selection_is_empty (selection));
+    g_return_if_fail (!selection->isEmpty());
 
     GtkWidget * const nbookw = GTK_WIDGET(g_object_get_data(dlg, "notebook"));
     int const page = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbookw));
@@ -449,7 +449,7 @@ sp_transformation_move_relative_toggled (GtkToggleButton *tb, GObject *dlg)
         
     selection = SP_DT_SELECTION (desktop);
     
-    if (sp_selection_is_empty (selection))
+    if (selection->isEmpty())
         return;
 
     /* Read values from widget */
@@ -569,7 +569,7 @@ sp_transformation_move_update (GObject *dlg, SPSelection *selection)
 
     page = GTK_WIDGET(g_object_get_data (dlg, "move"));
 
-    if (selection && !sp_selection_is_empty (selection)) {
+    if (selection && !selection->isEmpty()) {
         GtkToggleButton *cb;
         cb = GTK_TOGGLE_BUTTON(g_object_get_data (dlg, "move_relative"));
         
@@ -643,7 +643,7 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
     
     selection = SP_DT_SELECTION (desktop);
     
-    if (sp_selection_is_empty (selection))
+    if (selection->isEmpty())
         return FALSE;
 
     if ((old->base == SP_UNIT_ABSOLUTE) && 
@@ -783,7 +783,7 @@ sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
 
     page = GTK_WIDGET(g_object_get_data (dlg, "scale"));
 
-    if (selection && !sp_selection_is_empty (selection)) {
+    if (selection && !selection->isEmpty()) {
     
         GtkAdjustment *ax, *ay;
         SPUnitSelector *us;
@@ -901,7 +901,7 @@ sp_transformation_rotate_update (GObject *dlg, SPSelection *selection)
 
     page = GTK_WIDGET(g_object_get_data (dlg, "rotate"));
 
-    if (selection && !sp_selection_is_empty (selection)) {
+    if (selection && !selection->isEmpty()) {
         gtk_widget_set_sensitive (page, TRUE);
     } else {
         gtk_widget_set_sensitive (page, FALSE);

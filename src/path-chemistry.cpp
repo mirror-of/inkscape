@@ -121,7 +121,7 @@ sp_selected_path_combine (void)
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
-	sp_selection_set_repr (selection, repr);
+	selection->setRepr(repr);
 
 	sp_repr_unref (repr);
 }
@@ -133,7 +133,7 @@ sp_selected_path_break_apart (void)
 	if (!SP_IS_DESKTOP(desktop)) return;
 	SPSelection *selection = SP_DT_SELECTION (desktop);
 
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to break apart."));
 		return;
 	}

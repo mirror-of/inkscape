@@ -1,3 +1,17 @@
+2004-04-24  MenTaLguY <mental@rydia.net>
+
+	* src/arc-context.cpp, src/dyna-draw-context.cpp, src/object-ui.cpp,
+	  src/path-chemistry.cpp, src/rect-context.cpp, src/select-context.cpp,
+	  src/select-toolbar.cpp, src/selection-chemistry.cpp, src/selection.h,
+	  src/spiral-context.cpp, src/star-context.cpp, src/text-context.cpp,
+	  src/verbs.cpp, src/dialogs/export.cpp, src/dialogs/fill-style.cpp,
+	  src/dialogs/in-dt-coordsys.cpp, src/dialogs/stroke-style.cpp,
+	  src/dialogs/transformation.cpp, src/dialogs/xml-tree.cpp:
+
+	  removed sp_selection_set_item(), sp_selection_set_repr(),
+	  sp_selection_is_empty(), sp_selection_item_selected(),
+	  and sp_selection_repr_selected()
+
 2004-04-24  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/ill2svg.pl:

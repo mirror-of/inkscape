@@ -81,7 +81,7 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 
 	f = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "frame");
 
-	if (sel && !sp_selection_is_empty (sel)) {
+	if ( sel && !sel->isEmpty() ) {
 		NRRect bbox;
 
 		sel->bounds(&bbox);

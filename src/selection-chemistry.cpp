@@ -59,7 +59,7 @@ void sp_selection_delete()
 	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	// check if something is selected
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing was deleted."));
 		return;
 	}
@@ -85,7 +85,7 @@ void sp_selection_duplicate()
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to duplicate."));
 		return;
 	}
@@ -156,7 +156,7 @@ void sp_edit_select_all()
 	GSList *items = sp_item_group_item_list(SP_GROUP(sp_document_root(doc)));
 	while (items) {
 		SPRepr *repr = SP_OBJECT_REPR (items->data);
-		if (!sp_selection_repr_selected (selection, repr))
+		if (!selection->includesRepr(repr))
 			selection->addRepr(repr);
 		items = g_slist_remove (items, items->data);
 	}
@@ -219,7 +219,7 @@ void sp_selection_group()
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select two or more objects to group."));
 		return;
 	}
@@ -272,7 +272,7 @@ void sp_selection_group()
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
-	sp_selection_set_repr (selection, group);
+	selection->setRepr(group);
 	sp_repr_unref (group);
 }
 
@@ -281,7 +281,7 @@ void sp_selection_ungroup()
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!desktop) return;
 
-	if (sp_selection_is_empty(SP_DT_SELECTION(desktop))) {
+	if (SP_DT_SELECTION(desktop)->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select a group to ungroup."));
 		return;
 	}
@@ -420,7 +420,7 @@ void sp_selection_raise_to_top()
 	SPDocument *document = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
 	SPSelection *selection = SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to raise to top."));
 		return;
 	}
@@ -499,7 +499,7 @@ void sp_selection_lower_to_bottom()
 	SPDocument *document = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
 	SPSelection *selection = SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select some objects to lower to bottom."));
 		return;
 	}
@@ -561,7 +561,7 @@ void sp_selection_copy()
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing was copied."));
 		return;
 	}
@@ -722,7 +722,7 @@ void sp_selection_paste_style()
 	}
 
 	// check if something is selected
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select objects to paste style to."));
 		return;
 	}
@@ -1015,7 +1015,7 @@ sp_selection_move (gdouble dx, gdouble dy)
 	if (!selection) {
 		return;
 	}
-	if (sp_selection_is_empty(selection)) {
+	if (selection->isEmpty()) {
 		return;
 	}
 
@@ -1043,7 +1043,7 @@ sp_selection_move_screen (gdouble dx, gdouble dy)
 	if (!selection) {
 		return;
 	}
-	if (sp_selection_is_empty(selection)) {
+	if (selection->isEmpty()) {
 		return;
 	}
 
@@ -1092,7 +1092,7 @@ sp_selection_item_next (void)
 		return;
 	}
 	SPItem *item = NULL;
-	if (sp_selection_is_empty(selection)) {
+	if (selection->isEmpty()) {
 		item = SP_ITEM(children->data);
 	} else {
 		GSList *l = g_slist_find(children, selection->itemList()->data);
@@ -1105,7 +1105,7 @@ sp_selection_item_next (void)
 
 	// set selection to item
 	if (item != NULL) {
-		sp_selection_set_item(selection, item);
+		selection->setItem(item);
 	} else {
 		return;
 	}
@@ -1147,7 +1147,7 @@ sp_selection_item_prev (void)
 		return;
 	}
 	SPItem *item = NULL;
-	if (sp_selection_is_empty(selection)) {
+	if (selection->isEmpty()) {
 		item = SP_ITEM(g_slist_last(children)->data);
 	} else {
 		GSList *l = children;
@@ -1159,7 +1159,7 @@ sp_selection_item_prev (void)
 
 	// set selection to item
 	if (item != NULL) {
-		sp_selection_set_item(selection, item);
+		selection->setItem(item);
 	} else {
 		return;
 	}
@@ -1225,7 +1225,7 @@ sp_selection_clone ()
 	SPSelection *selection = SP_DT_SELECTION(desktop);
 
 	// check if something is selected
-	if (sp_selection_is_empty (selection)) {
+	if (selection->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select an object to clone."));
 		return;
 	}
@@ -1250,7 +1250,7 @@ sp_selection_clone ()
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
-	sp_selection_set_repr (selection, clone);
+	selection->setRepr(clone);
 	sp_repr_unref (clone);
 }
 
@@ -1260,7 +1260,7 @@ sp_selection_unlink ()
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!desktop) return;
 
-	if (sp_selection_is_empty(SP_DT_SELECTION(desktop))) {
+	if (SP_DT_SELECTION(desktop)->isEmpty()) {
 		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select a clone to unlink."));
 		return;
 	}

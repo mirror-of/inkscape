@@ -236,7 +236,7 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 			// find out clicked item, disregarding groups
 			item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 			if (SP_IS_TEXT (item_ungrouped)) {
-				sp_selection_set_item (SP_DT_SELECTION (ec->desktop), item_ungrouped);
+				SP_DT_SELECTION(ec->desktop)->setItem(item_ungrouped);
 				if (tc->text) {
 					// find out click point in document coordinates
 					NR::Point p = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
@@ -305,7 +305,8 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_unref (rstring);
 	SPItem *text_item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (ec->desktop), rtext);
 	/* fixme: Is selection::changed really immediate? */
-	sp_selection_set_item (SP_DT_SELECTION (ec->desktop), text_item);
+	/* yes, it's immediate .. why does it matter? */
+	SP_DT_SELECTION(ec->desktop)->setItem(text_item);
 	sp_repr_unref (rtext);
 	sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 }

@@ -350,7 +350,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
     psel = SP_PAINT_SELECTOR (g_object_get_data ( G_OBJECT (spw), 
                                                   "paint-selector"));
 
-    if (!sel || sp_selection_is_empty (sel)) {
+    if ( !sel || sel->isEmpty() ) {
         /* No objects, set empty */
         sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_EMPTY);
         g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));

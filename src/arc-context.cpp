@@ -322,7 +322,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 			sp_arc_finish (ac);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-	        SP_DT_SELECTION (desktop)->setItem(event_context->item_to_select);
+                SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
             } else {
                 // click in an empty space
 	        SP_DT_SELECTION (desktop)->clear();

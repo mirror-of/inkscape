@@ -273,12 +273,12 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 					SPItem *item_at_point = sp_desktop_item_at_point(desktop, button_pt, TRUE);
 					SPItem *group_at_point = sp_desktop_group_at_point(desktop, button_pt);
 					// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item passed with the event
-					if ((!item_at_point || !sp_selection_item_selected (selection, item_at_point)) && 
-					    (!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
+					if ((!item_at_point || !selection->includesItem(item_at_point)) && 
+					    (!group_at_point || !selection->includesItem(group_at_point))) {
 						// have to select here since selecting is done when releasing
 						sp_sel_trans_reset_state (seltrans);
-						if (!sp_selection_item_selected (selection, sc->item))
-							sp_selection_set_item (selection, sc->item);
+						if (!selection->includesItem(sc->item))
+							selection->setItem(sc->item);
 					} // otherwise, do not change selection so that dragging selected-within-group items is possible
 					sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
 					sc->moved = TRUE;
@@ -300,25 +300,25 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 				sp_select_context_update_statusbar(sc);
 			} else {
 				// item has not been moved -> do selecting
-				if (!sp_selection_is_empty (selection)) {
+				if (!selection->isEmpty()) {
 					if (event->button.state & GDK_SHIFT_MASK) {
 						sp_sel_trans_reset_state (seltrans);
-						if (sp_selection_item_selected (selection, sc->item)) {
+						if (selection->includesItem(sc->item)) {
 							selection->removeItem(sc->item);
 						} else {
 							selection->addItem(sc->item);
 						}
 					} else {
-						if (sp_selection_item_selected (selection, sc->item)) {
+						if (selection->includesItem(sc->item)) {
 							sp_sel_trans_increase_state (seltrans);
 						} else {
 							sp_sel_trans_reset_state (seltrans);
-							sp_selection_set_item (selection, sc->item);
+							selection->setItem(sc->item);
 						}
 					}
 				} else {
 					sp_sel_trans_reset_state (seltrans);
-					sp_selection_set_item (selection, sc->item);
+					selection->setItem(sc->item);
 				}
 			}
 			sc->dragging = FALSE;
@@ -440,13 +440,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						item_in_group = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 						group_at_point = sp_desktop_group_at_point (desktop, NR::Point(event->button.x, event->button.y));
 						// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
-						if ((!item_in_group || !sp_selection_item_selected (selection, item_in_group)) && 
-								(!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
+						if ((!item_in_group || !selection->includesItem(item_in_group)) && 
+								(!group_at_point || !selection->includesItem(group_at_point))) {
 							// have to select here since selecting is done when releasing
 							sp_sel_trans_reset_state (seltrans);
 							// when simply ctrl-dragging, we don't want to go into groups
-							if (item_at_point && !sp_selection_item_selected (selection, item_at_point))
-								sp_selection_set_item (selection, item_at_point);
+							if (item_at_point && !selection->includesItem(item_at_point))
+								selection->setItem(item_at_point);
 						} // otherwise, do not change selection so that dragging selected-within-group items is possible
 						sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
 						sc->moved = TRUE;
@@ -476,27 +476,27 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sp_select_context_update_statusbar(sc);
 				} else {
 					// item has not been moved -> simply a click, do selecting
-					if (!sp_selection_is_empty (selection)) {
+					if (!selection->isEmpty()) {
 						if (event->button.state & GDK_SHIFT_MASK) { 
 							// with shift, toggle selection
 							sp_sel_trans_reset_state (seltrans);
-							if (sp_selection_item_selected (selection, sc->item)) {
+							if (selection->includesItem(sc->item)) {
 								selection->removeItem(sc->item);
 							} else {
 								selection->addItem (sc->item);
 							}
 						} else {
 							// without shift, increase state (i.e. toggle scale/rotation handles)
-							if (sp_selection_item_selected (selection, sc->item)) {
+							if (selection->includesItem(sc->item)) {
 								sp_sel_trans_increase_state (seltrans);
 							} else {
 								sp_sel_trans_reset_state (seltrans);
-								sp_selection_set_item (selection, sc->item);
+								selection->setItem(sc->item);
 							}
 						}
 					} else {
 						sp_sel_trans_reset_state (seltrans);
-						sp_selection_set_item (selection, sc->item);
+						selection->setItem(sc->item);
 					}
 				}
 				sc->dragging = FALSE;
@@ -512,7 +512,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						// with shift, add to selection
 						while (l) {
 							item = SP_ITEM (l->data);
-							if (sp_selection_item_selected (selection, item)) {
+							if (selection->includesItem(item)) {
 								// uncomment if you want toggle behavior for shift-rubberband
 								//	selection->removeItem(item);
 							} else {
@@ -540,13 +540,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						}
 						// if there's both a group and an item at point, deselect group to prevent double selection
 						if (group) {
-							if (sp_selection_item_selected (selection, group)) {
+							if (selection->includesItem(group)) {
 								selection->removeItem(group);
 							}
 						}
 						if (item) {
 							// toggle selected status
-							if (sp_selection_item_selected (selection, item)) {
+							if (selection->includesItem(item)) {
 								selection->removeItem(item);
 							} else {
 								selection->addItem(item);
@@ -561,17 +561,17 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						item = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 
 						if (item) {
-							if (sp_selection_item_selected (selection, item)) {
+							if (selection->includesItem(item)) {
 								sp_sel_trans_increase_state (seltrans);
 							} else {
 								sp_sel_trans_reset_state (seltrans);
-								sp_selection_set_item (selection, item);
+								selection->setItem(item);
 							}
 							item = NULL;
 						}
 
 					} else { // click without shift, simply deselect
-						if (!sp_selection_is_empty (selection)) {
+						if (!selection->isEmpty()) {
 							if (!(rb_escaped) && !(drag_escaped)) // unless something was cancelled
 								sp_selection_empty (selection);
 							rb_escaped = 0;

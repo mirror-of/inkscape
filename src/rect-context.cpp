@@ -359,8 +359,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
                 sp_rect_finish(rc);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-                sp_selection_set_item(SP_DT_SELECTION(desktop),
-                                      event_context->item_to_select);
+                SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
             } else {
                 // click in an empty space
                 sp_selection_empty(SP_DT_SELECTION(desktop));
@@ -518,7 +517,7 @@ static void sp_rect_finish(SPRectContext *rc)
 
         sp_object_invoke_write(SP_OBJECT(rc->item), SP_OBJECT_REPR(rc->item), SP_OBJECT_WRITE_EXT);
 
-        sp_selection_set_item(SP_DT_SELECTION(dt), rc->item);
+        SP_DT_SELECTION(dt)->setItem(rc->item);
         sp_document_done(SP_DT_DOCUMENT(dt));
 
         rc->item = NULL;

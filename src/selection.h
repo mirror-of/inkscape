@@ -259,33 +259,14 @@ struct SPSelectionClass {
  * contents at their call sites */
 
 inline __attribute__ ((deprecated))
-gboolean sp_selection_item_selected(SPSelection const *selection,
-		                    SPItem *item)
+void sp_selection_set_item_list(SPSelection *selection, GSList const *list)
 {
-	return selection->includesItem(item);
+	selection->setItemList(list);
 }
 inline __attribute__ ((deprecated))
-gboolean sp_selection_repr_selected(SPSelection const *selection,
-                                    SPRepr *repr)
+void sp_selection_set_repr_list(SPSelection *selection, GSList const *list)
 {
-	return selection->includesRepr(repr);
-}
-
-inline __attribute__ ((deprecated))
-gboolean sp_selection_is_empty(SPSelection const *selection)
-{
-	return selection->isEmpty();
-}
-
-inline __attribute__ ((deprecated))
-void sp_selection_set_item(SPSelection *selection, SPItem *item)
-{
-	selection->setItem(item);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_set_repr(SPSelection *selection, SPRepr *repr)
-{
-	selection->setRepr(repr);
+	selection->setReprList(list);
 }
 inline __attribute__ ((deprecated))
 void sp_selection_empty(SPSelection *selection)
