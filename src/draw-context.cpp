@@ -1016,7 +1016,7 @@ sp_pencil_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 /* fixme: I am not sure whether we want to snap to anchors in middle of freehand (Lauris) */
                 if (anchor) {
                     p = anchor->dp;
-                } else {
+                } else if ((event->button.state & GDK_SHIFT_MASK) == 0) {
                     namedview_free_snap_all_types(dt->namedview, p);
                 }
                 if ( dc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!

@@ -10,7 +10,8 @@
 	desktop any more.
 
 	* src/draw-context.cpp: Temporary hack to prevent snapping
-	completely failing to work when snapping to bbox points.
+	completely failing to work when snapping to bbox points.  Support
+	shift-disables-snap for freehand drawing.
 
 	* src/snap.cpp, src/snap.h: Added some temporary methods to assist
 	with hacks elsewhere.
