@@ -51,8 +51,8 @@ struct _SPLayoutData {
 	/* fixme: Vectors */
 	SPSVGLength x;
 	SPSVGLength y;
-	SPSVGLength dx;
-	SPSVGLength dy;
+	GList *dx; // list of SPSVGLength
+	GList *dy; // list of SPSVGLength
 	unsigned int rotate_set : 1;
 	float rotate;
 	float linespacing;
