@@ -255,12 +255,18 @@ static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem *item)
 
 	std::vector<NR::Point> p;
 
-	/* We use corners of item and center of ellipse. */
-	if (((SPItemClass *) ge_parent_class)->snappoints) {
-		p = ((SPItemClass *) ge_parent_class)->snappoints (item);
-	}
-	
-	p.push_back(NR::Point(ge->cx.computed, ge->cy.computed) * sp_item_i2d_affine(item));
+	NR::Matrix const i2d = sp_item_i2d_affine(item);
+
+	/* Use the bounding box corners */
+	NRRect bbox;
+	sp_item_invoke_bbox(item, &bbox, i2d, TRUE);
+	p.push_back(NR::Point(bbox.x0, bbox.y0));
+	p.push_back(NR::Point(bbox.x1, bbox.y0));
+	p.push_back(NR::Point(bbox.x1, bbox.y1));
+	p.push_back(NR::Point(bbox.x0, bbox.y1));
+
+	/* And the centre */
+	p.push_back(NR::Point(ge->cx.computed, ge->cy.computed) * i2d);
 
 	return p;
 }
