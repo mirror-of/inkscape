@@ -208,6 +208,7 @@ void ColorNotebook::init()
 //        SP_TYPE_COLOR_GTKSELECTOR;
 
 	_updating = FALSE;
+	_updatingrgba = FALSE;
 	_btn = 0;
 	_popup = 0;
 	_trackerList = g_ptr_array_new ();
