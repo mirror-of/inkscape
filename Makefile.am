@@ -29,11 +29,10 @@ EXTRA_DIST = \
 	inkscape.png \
 	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico \
 	debian/changelog \
-	debian/copyright \ 
+	debian/copyright \
 	debian/control \
 	debian/rules \
 	debian/inkscape.menu
-
 
 DISTCLEANFILES = inkscape.desktop \
                  intltool-extract \
