@@ -402,12 +402,10 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 		slot->glyph.tg.px[0] = 0;
 		slot->type = NRRF_TYPE_TINY;
 		if (nr_font_glyph_outline_get (rf->font, glyph, &gbp, 0) && (gbp.path && (gbp.path->code == ART_MOVETO))) {
-			NRSVP *svp;
-			NRMatrix a;
 			NRRect bbox;
 			int x0, y0, x1, y1, w, h;
 
-			a = rf->transform;
+			NRMatrix a = rf->transform;
 			a[4] = 0.0;
 			a[5] = 0.0;
 #ifdef test_rf_liv
@@ -419,11 +417,9 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
         bp.path = gbp.path;
         nr_path_matrix_f_bbox_f_union(&bp, &a, &bbox, 1.0);
       }
-#else 
-			NRSVL *svl;
-
-			svl = nr_svl_from_art_bpath (gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
-			svp = nr_svp_from_svl (svl, NULL);
+#else
+			NRSVL *svl = nr_svl_from_art_bpath(gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
+			NRSVP *svp = nr_svp_from_svl(svl, NULL);
 			nr_svl_free_list (svl);
 
 			nr_svp_bbox (svp, &bbox, TRUE);

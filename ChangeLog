@@ -1,5 +1,8 @@
 2004-03-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/nr-rasterfont.cpp (nr_rasterfont_ensure_glyph_slot):
+	Address compiler warning.
+
 	* src/seltrans.cpp (sp_sel_trans_ungrab): Disable the persistent
 	snapping stuff added 2004-02-19.
 
