@@ -1,5 +1,8 @@
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp:
+	  NR::Matrix *= NR::scale: new.
+
 	* src/sp-object.cpp, src/sp-object.h, src/sp-object-tree-iterator.h:
 	  Move TreeIterator<SPObject *> specialization to snew file
 	  sp-object-tree-iterator.h.

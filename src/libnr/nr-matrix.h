@@ -135,6 +135,8 @@ public:
 
 	Matrix &operator*=(Matrix const &o);
 
+	Matrix &operator*=(scale const &o);
+
 	Matrix &operator*=(translate const &o) {
 		_c[4] += o[X];
 		_c[5] += o[Y];

@@ -138,6 +138,16 @@ Matrix &Matrix::operator*=(Matrix const &o)
 	return *this;
 }
 
+Matrix &Matrix::operator*=(scale const &o)
+{
+	for(unsigned i = 0; i < 3; ++i) {
+		for (unsigned j = 0; j < 2; ++j) {
+			this->_c[i * 2 + j] *= o[j];
+		}
+	}
+	return *this;
+}
+
 Matrix Matrix::inverse() const
 {
 	Matrix d(0,0,0,0,0,0);
