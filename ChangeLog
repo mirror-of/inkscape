@@ -1,3 +1,8 @@
+2003-12-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/style.cpp (sp_style_read_ipaint): Skip leading whitespace.
+	Fixes #853804.  Improves rendering of Dia-exported SVG.
+
 2003-12-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-spiral.cpp (sp_spiral_set): Fix clamping of t0 value: change

@@ -1568,6 +1568,9 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
 static void
 sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document)
 {
+	while (isspace (*str)) {
+		++str;
+	}
 	if (!strcmp (str, "inherit")) {
 		paint->set = TRUE;
 		paint->inherit = TRUE;
