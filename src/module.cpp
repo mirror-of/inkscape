@@ -164,7 +164,7 @@ sp_module_finalize (GObject *object)
 	\param   repr    The repr that should be used to build it
 
 	This function is the basis of building a module for Sodipodi.  It
-	currently extracts the feilds from the Repr that are used in the
+	currently extracts the fields from the Repr that are used in the
 	module.  The Repr will likely include other children that are
 	not related to the module directly.  If the Repr does not include
 	a name and an ID the module will be left in an errored state.
