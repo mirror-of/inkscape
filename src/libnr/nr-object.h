@@ -66,8 +66,6 @@ class NRObject : public Inkscape::GC::Managed<>,
                  public Inkscape::GC::Anchored
 {
 public:
-	NRObject() : klass(NULL) {}
-
 	NRObjectClass *klass;
 
 	static NRObject *alloc(NRType type);
@@ -85,6 +83,9 @@ public:
 		Inkscape::GC::release(this);
 		return NULL;
 	}
+
+protected:
+	NRObject() {}
 
 private:
 	NRObject(NRObject const &);

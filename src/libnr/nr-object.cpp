@@ -154,16 +154,6 @@ nr_class_tree_object_invoke_init (NRObjectClass *klass, NRObject *object)
 	klass->iinit (object);
 }
 
-namespace {
-
-void perform_finalization(void *base, void *obj) {
-	NRObject *object=reinterpret_cast<NRObject *>(obj);
-	object->klass->finalize(object);
-	object->~NRObject();
-}
-
-}
-
 NRObject *NRObject::alloc(NRType type) {
 	nr_return_val_if_fail (type < classes_len, NULL);
 
@@ -174,11 +164,10 @@ NRObject *NRObject::alloc(NRType type) {
 	}
 
 	NRObject *object = reinterpret_cast<NRObject *>(::operator new(klass->isize, Inkscape::GC::SCANNED));
-	GC_register_finalizer_ignore_self(GC_base(object), perform_finalization, object, NULL, NULL);
 	memset(object, 0xf0, klass->isize);
 
+	object->klass = klass;
 	klass->cpp_ctor(object);
-	object->klass = klass; // one of our parent constructors resets this :/
 	nr_class_tree_object_invoke_init (klass, object);
 
 	return object;
