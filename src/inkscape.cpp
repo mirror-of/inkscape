@@ -600,8 +600,7 @@ SPRepr *
 inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 {
 	SPRepr * repr;
-	const gchar * id, * s, * e;
-	guint len;
+	gchar const *s;
 
 	if (key == NULL) return NULL;
 
@@ -610,7 +609,10 @@ inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 
 	s = key;
 	while ((s) && (*s)) {
+		gchar const *e;
 		SPRepr * child;
+		guint len;
+
 		/* Find next name */
 		if ((e = strchr (s, '.'))) {
 			len = e++ - s;
@@ -618,7 +620,7 @@ inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 			len = strlen (s);
 		}
 		for (child = repr->children; child != NULL; child = child->next) {
-			id = sp_repr_attr (child, "id");
+			gchar const *id = sp_repr_attr (child, "id");
 			if ((id) && (strlen (id) == len) && (!strncmp (id, s, len)))
 			{
 				break;
