@@ -14,7 +14,12 @@
 #include "layer-fns.h"
 #include "document.h"
 #include "sp-object.h"
+#include "sp-item-group.h"
 #include "xml/repr.h"
+#include "algorithms/longest-suffix.h"
+#include "algorithms/shortest-prefix.h"
+#include "sp-object-tree-iterator.h"
+#include "util/sibling-axis.h"
 
 namespace Inkscape {
 
@@ -42,16 +47,63 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
     return document->getObjectByRepr(repr);
 }
 
+namespace {
+
+struct starts_with_any_layer {
+    starts_with_any_layer() {}
+
+    template <typename List>
+    bool operator()(List os) const {
+        SPObject *o=Inkscape::Traits::List<List>::first(os);
+        return ( SP_IS_GROUP(o) && SP_GROUP(o)->layerMode() == SPGroup::LAYER );
+    }
+};
+
+struct starts_with_object {
+    SPObject *object;
+
+    starts_with_object(SPObject *o) : object(o) {}
+
+    template <typename List>
+    bool operator()(List os) const {
+        SPObject *o=Inkscape::Traits::List<List>::first(os);
+        return ( o == object );
+    }
+};
+
+}
+
 SPObject *next_layer(SPObject *root, SPObject *layer) {
-    // TODO
-    return layer;
+    using Inkscape::Util::SiblingAxis;
+    using Inkscape::Algorithms::longest_suffix;
+
+    if ( layer == root ) {
+        return NULL;
+    }
+
+    // TODO: look to cousins, children, and ancestors also (depth-last order)
+    return longest_suffix<SiblingAxis<SPObject *> >(starts_with_any_layer(), SP_OBJECT_NEXT(layer));
 }
 
 SPObject *previous_layer(SPObject *root, SPObject *layer) {
-    // TODO
-    return layer;
-}
+    using Inkscape::Util::SiblingAxis;
+    using Inkscape::Util::List;
+    using Inkscape::Algorithms::longest_suffix;
+    using Inkscape::Algorithms::shortest_prefix;
 
+    if ( layer == root ) {
+        return NULL;
+    }
+
+    // TODO: look to cousins, children, and ancestors also (depth-last order)
+    List<SPObject *> *found=longest_suffix(
+        starts_with_any_layer(),
+        shortest_prefix<SiblingAxis<SPObject *> >(
+            starts_with_object(layer), SP_OBJECT_PARENT(layer)->firstChild()
+        )->next()
+    );
+    return ( found ? found->data() : NULL );
+}
 
 }
 

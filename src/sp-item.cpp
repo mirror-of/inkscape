@@ -168,10 +168,10 @@ struct starts_with_object {
 }
 
 void SPItem::raiseToTop() {
-    using Inkscape::Algorithms::longest_suffix;
+    using Inkscape::Algorithms::shortest_suffix;
     using Inkscape::Util::SiblingAxis;
 
-    SPObject *topmost=longest_suffix<SiblingAxis<SPObject *> >(
+    SPObject *topmost=shortest_suffix<SiblingAxis<SPObject *> >(
         starts_with_any_item(), SP_OBJECT_NEXT(this)
     );
     if (topmost) {
@@ -181,10 +181,10 @@ void SPItem::raiseToTop() {
 }
 
 void SPItem::raiseOne() {
-    using Inkscape::Algorithms::shortest_suffix;
+    using Inkscape::Algorithms::longest_suffix;
     using Inkscape::Util::SiblingAxis;
 
-    SPObject *next_higher=shortest_suffix<SiblingAxis<SPObject *> >(
+    SPObject *next_higher=longest_suffix<SiblingAxis<SPObject *> >(
         starts_with_any_item(), SP_OBJECT_NEXT(this)
     );
     if (next_higher) {
@@ -195,12 +195,12 @@ void SPItem::raiseOne() {
 }
 
 void SPItem::lowerOne() {
-    using Inkscape::Algorithms::shortest_suffix;
+    using Inkscape::Algorithms::longest_suffix;
     using Inkscape::Algorithms::shortest_prefix;
     using Inkscape::Util::List;
     using Inkscape::Util::SiblingAxis;
 
-    List<SPObject *> *next_lower=shortest_suffix(
+    List<SPObject *> *next_lower=longest_suffix(
         starts_with_any_item(),
         shortest_prefix<SiblingAxis<SPObject *> >(
             starts_with_object(this), SP_OBJECT_PARENT(this)->firstChild()

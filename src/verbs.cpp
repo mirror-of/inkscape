@@ -479,7 +479,7 @@ static void sp_verb_action_layer_perform (SPAction *action, void *data,
 
             switch (verb) {
                 case SP_VERB_LAYER_TO_TOP:
-                    layer->lowerToBottom();
+                    layer->raiseToTop();
                     break;
                 case SP_VERB_LAYER_TO_BOTTOM:
                     layer->lowerToBottom();
@@ -512,7 +512,19 @@ static void sp_verb_action_layer_perform (SPAction *action, void *data,
         }
         case SP_VERB_LAYER_DELETE: {
             if ( dt->currentLayer() != dt->currentRoot() ) {
-                dt->currentLayer()->deleteObject();
+		SPObject *old_layer=dt->currentLayer();
+
+		sp_object_ref(old_layer, NULL);
+		SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
+		if (!survivor) {
+			survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
+		}
+		if (survivor) {
+			dt->setCurrentLayer(survivor);
+		}
+		old_layer->deleteObject();
+		sp_object_unref(old_layer, NULL);
+
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
             } else {
                 dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
@@ -1061,19 +1073,19 @@ static const SPVerbActionDef props[] = {
 
     {SP_VERB_LAYER_NEW, "LayerNew", N_("New Layer"),
         N_("Create a new layer"), NULL},
-    {SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Next Layer"),
+    {SP_VERB_LAYER_NEXT, "LayerNext", N_("Move to Next Layer"),
         N_("Switch to the next layer in the document"), NULL},
-    {SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Previous Layer"),
+    {SP_VERB_LAYER_PREV, "LayerPrev", N_("Move to Previous Layer"),
         N_("Switch to the previous layer in the document"), NULL},
-    {SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Current Layer to Top"),
+    {SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Layer to Top"),
         N_("Raise the current layer to the top"), NULL},
-    {SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Current Layer to Bottom"),
+    {SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Layer to Bottom"),
         N_("Lower the current layer to the bottom"), NULL},
-    {SP_VERB_LAYER_RAISE, "LayerRaise", N_("Raise Current Layer"),
+    {SP_VERB_LAYER_RAISE, "LayerRaise", N_("Raise Layer"),
         N_("Raise the current layer"), NULL},
-    {SP_VERB_LAYER_LOWER, "LayerLower", N_("Lower Current Layer"),
+    {SP_VERB_LAYER_LOWER, "LayerLower", N_("Lower Layer"),
         N_("Lower the current layer"), NULL},
-    {SP_VERB_LAYER_DELETE, "LayerDelete", N_("Delete the Current Layer"),
+    {SP_VERB_LAYER_DELETE, "LayerDelete", N_("Delete Current Layer"),
         N_("Delete the current layer"), NULL},
 
     /* Object */

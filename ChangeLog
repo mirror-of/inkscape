@@ -1,3 +1,14 @@
+2004-09-24  MenTaLguY <mental@rydia.net>
+
+	* src/selection-chemistry.cpp:
+	
+	  "select all" and "clear" now operate on the current layer rather than on
+	  the document root
+
+	* src/verbs.cpp, src/shortcuts.cpp, layer-fns.cpp, src/sp-item.cpp:
+	
+	  keyboard shortcuts and fixes for layer verbs
+
 2004-09-23  MenTaLguY <mental@rydia.net>
 
 	* src/message-stack.h, src/message-stack.cpp:

@@ -237,6 +237,20 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_v, SP_VERB_OBJECT_FLIP_VERTICAL, true);
 	sp_shortcut_set (GDK_V, SP_VERB_OBJECT_FLIP_VERTICAL, false);
 
+	/* Layer */
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_Page_Up, SP_VERB_LAYER_RAISE, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Up, SP_VERB_LAYER_RAISE, false);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_Page_Down, SP_VERB_LAYER_LOWER, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Down, SP_VERB_LAYER_LOWER, false);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_Home, SP_VERB_LAYER_TO_TOP, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_KP_Home, SP_VERB_LAYER_TO_TOP, false);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_End, SP_VERB_LAYER_TO_BOTTOM, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_KP_End, SP_VERB_LAYER_TO_BOTTOM, false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_Page_Up, SP_VERB_LAYER_NEXT, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Up, SP_VERB_LAYER_NEXT, false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_Page_Down, SP_VERB_LAYER_PREV, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Down, SP_VERB_LAYER_PREV, false);
+
 	/* Selection */
 	sp_shortcut_set (GDK_Home, SP_VERB_SELECTION_TO_FRONT, true);
 	sp_shortcut_set (GDK_KP_Home, SP_VERB_SELECTION_TO_FRONT, false);

@@ -170,7 +170,8 @@ void sp_edit_clear_all()
     SPDocument *doc = SP_DT_DOCUMENT(dt);
     SP_DT_SELECTION(dt)->clear();
 
-    GSList *items = sp_item_group_item_list(SP_GROUP(sp_document_root(doc)));
+    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
+    GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
 
     while (items) {
         SP_OBJECT (items->data)->deleteObject();
@@ -189,7 +190,8 @@ void sp_edit_select_all()
     SPDocument *doc = SP_DT_DOCUMENT(dt);
     SPSelection *selection = SP_DT_SELECTION(dt);
 
-    GSList *items = sp_item_group_item_list(SP_GROUP(sp_document_root(doc)));
+    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
+    GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
     while (items) {
         SPRepr *repr = SP_OBJECT_REPR(items->data);
         if (!selection->includesRepr(repr))
