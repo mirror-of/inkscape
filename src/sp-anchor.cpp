@@ -86,8 +86,6 @@ static void sp_anchor_init(SPAnchor *anchor)
 
 static void sp_anchor_build(SPObject *object, SPDocument *document, SPRepr *repr)
 {
-    SPAnchor *anchor = SP_ANCHOR(object);
-
     if (((SPObjectClass *) (parent_class))->build) {
         ((SPObjectClass *) (parent_class))->build(object, document, repr);
     }
