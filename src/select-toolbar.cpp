@@ -150,17 +150,12 @@ sp_selection_layout_widget_change_selection (SPWidget *spw, SPSelection *selecti
 static void
 sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 {
-	GtkWidget *us;
-	GtkAdjustment *a;
-	const SPUnit *unit;
-	gdouble x0, y0, x1, y1, dx0, dy0, dx1, dy1, xrel, yrel;
-
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) {
 		return;
 	}
 
-	us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "units");
-	unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+	GtkWidget *us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "units");
+	const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 	if (sp_unit_selector_update_test (SP_UNIT_SELECTOR (us))) {
 		/*
 		 * When only units are being changed, don't treat changes
@@ -176,6 +171,9 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	if (!((bbox.max()[NR::X] - bbox.min()[NR::X] > 1e-6) || (bbox.max()[NR::Y] - bbox.min()[NR::Y] > 1e-6))) {
 		return;
 	}
+
+	GtkAdjustment *a;
+	gdouble x0, y0, x1, y1, dx0, dy0, dx1, dy1, xrel, yrel;
 
 	if (unit->base == SP_UNIT_ABSOLUTE) {
 		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
@@ -248,24 +246,20 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 GtkWidget *
 sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar *tooltip, gboolean altx)
 {
-	GtkTooltips *tt;
-	GtkWidget *hb, *l, *sb;
-	GtkObject *a;
+	GtkTooltips *tt = gtk_tooltips_new ();
 
-	tt = gtk_tooltips_new ();
-
-	hb = gtk_hbox_new (FALSE, 1);
-	l = gtk_label_new (_(label));
+	GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+	GtkWidget *l = gtk_label_new (_(label));
 	gtk_tooltips_set_tip (tt, l, tooltip, NULL);
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 	gtk_container_add (GTK_CONTAINER (hb), l);
 
-	a = gtk_adjustment_new (0.0, lower_limit, 1e6, SPIN_STEP, SPIN_PAGE_STEP, SPIN_PAGE_STEP);
+	GtkObject *a = gtk_adjustment_new (0.0, lower_limit, 1e6, SPIN_STEP, SPIN_PAGE_STEP, SPIN_PAGE_STEP);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	gtk_object_set_data (GTK_OBJECT (spw), data, a);
 
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), SPIN_STEP, 2);
+	GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), SPIN_STEP, 2);
 	gtk_tooltips_set_tip (tt, sb, tooltip, NULL);
 	gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
 	gtk_widget_show (sb);
