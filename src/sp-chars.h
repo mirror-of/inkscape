@@ -13,9 +13,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnrtype/FontInstance.h>
 #include "display/curve.h"
 #include "sp-item.h"
+#include "libnrtype/nrtype-forward.h"
 
 #define SP_TYPE_CHARS (sp_chars_get_type ())
 #define SP_CHARS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_CHARS, SPChars))
