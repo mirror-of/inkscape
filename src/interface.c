@@ -309,9 +309,11 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
         };
 
 	static const unsigned int file_verbs_two[] = {
-		SP_VERB_FILE_SAVE, SP_VERB_FILE_SAVE_AS,
+		SP_VERB_FILE_SAVE, 
+		SP_VERB_FILE_SAVE_AS,
 		SP_VERB_NONE,
-		SP_VERB_FILE_IMPORT, SP_VERB_FILE_EXPORT,
+		SP_VERB_FILE_IMPORT, 
+		SP_VERB_FILE_EXPORT,
 		SP_VERB_NONE,
 		SP_VERB_FILE_PRINT,
 		SP_VERB_LAST
@@ -345,18 +347,30 @@ static void
 sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc)
 {
 	static const unsigned int edit_verbs[] = {
-		SP_VERB_EDIT_UNDO, SP_VERB_EDIT_REDO,
+		SP_VERB_EDIT_UNDO, 
+		SP_VERB_EDIT_REDO,
 		SP_VERB_NONE,
-		SP_VERB_EDIT_CUT, SP_VERB_EDIT_COPY, SP_VERB_EDIT_PASTE, SP_VERB_EDIT_PASTE_STYLE,
+		SP_VERB_EDIT_CUT, 
+		SP_VERB_EDIT_COPY, 
+		SP_VERB_EDIT_PASTE, 
+		SP_VERB_EDIT_PASTE_STYLE,
 		SP_VERB_NONE,
-		SP_VERB_EDIT_DUPLICATE, SP_VERB_EDIT_DELETE,
+		SP_VERB_EDIT_DUPLICATE, 
+		SP_VERB_EDIT_DELETE,
 		SP_VERB_NONE,
-		SP_VERB_EDIT_CLEAR_ALL,
 		SP_VERB_EDIT_SELECT_ALL,
+		SP_VERB_EDIT_CLEAR_ALL,
 		SP_VERB_LAST
 	};
+	sp_ui_menu_append (menu, edit_verbs);
+}
+
+static void
+sp_ui_object_menu (GtkMenu *menu, SPDocument *doc)
+{
 	static const unsigned int selection[] = {
-		SP_VERB_SELECTION_GROUP, SP_VERB_SELECTION_UNGROUP,
+		SP_VERB_SELECTION_GROUP, 
+		SP_VERB_SELECTION_UNGROUP,
 		SP_VERB_NONE,
 		SP_VERB_SELECTION_TO_FRONT,
 		SP_VERB_SELECTION_TO_BACK,
@@ -373,10 +387,9 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc)
 		SP_VERB_SELECTION_BREAK_APART,
 		SP_VERB_LAST
 	};
-	sp_ui_menu_append (menu, edit_verbs);
+	sp_ui_menu_append (menu, selection);
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item (menu, NULL, _("Cleanup"), G_CALLBACK (sp_edit_cleanup), NULL);
-	sp_ui_menu_append (menu, selection);
 }
 
 static void
@@ -424,7 +437,7 @@ sp_ui_help_menu(GtkWidget *m)
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 #ifdef WITH_MODULES
 #if 0
-	/* Modules need abouts too */
+	/* TODO: Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Modules"), NULL, NULL)),
 			                   GTK_WIDGET(sp_module_menu_about()));
 #endif
@@ -448,6 +461,12 @@ sp_ui_main_menubar (void)
 	mitem = gtk_menu_item_new_with_label (_("Edit"));
 	menu = gtk_menu_new ();
 	sp_ui_edit_menu (GTK_MENU (menu), NULL);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
+	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
+
+	mitem = gtk_menu_item_new_with_label (_("Object"));
+	menu = gtk_menu_new ();
+	sp_ui_object_menu (GTK_MENU (menu), NULL);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
