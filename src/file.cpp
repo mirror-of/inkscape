@@ -56,6 +56,8 @@
 #include "desktop-handles.h"
 
 #include "extension/extension.h"
+#include "extension/input.h"
+#include "extension/output.h"
 /* #include "extension/menu.h"  */
 #include "extension/system.h"
 

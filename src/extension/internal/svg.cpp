@@ -24,6 +24,7 @@
 #include "../implementation/implementation.h"
 #include "svg.h"
 #include <extension/system.h>
+#include <extension/output.h>
 
 namespace Inkscape {
 namespace Extension {

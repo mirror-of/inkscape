@@ -24,6 +24,8 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
+#include <xml/repr.h>
+
 #include "macros.h"
 #include "helper/sp-intl.h"
 #include "svg/svg.h"

@@ -57,9 +57,8 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 
     id = NULL;
     name = NULL;
-    state = STATE_UNLOADED;
+    _state = STATE_UNLOADED;
     parameters = NULL;
-	_deactivated = FALSE;
 
     if (in_imp == NULL) {
         imp = new Implementation::Implementation();
@@ -127,16 +126,25 @@ Extension::~Extension (void)
 void
 Extension::set_state (state_t in_state)
 {
-    if (in_state != state) {
-        /* TODO: Need some error checking here! */
-        if (in_state == STATE_LOADED) {
-            if (imp->load(this))
-                state = STATE_LOADED;
-        } else {
-            imp->unload(this);
-            state = STATE_UNLOADED;
-        }
+	if (_state == STATE_DEACTIVATED) return;
+    if (in_state != _state) {
+        /** \todo Need some more error checking here! */
+		switch (in_state) {
+			case STATE_LOADED:
+				if (imp->load(this))
+					_state = STATE_LOADED;
+				break;
+			case STATE_UNLOADED:
+				imp->unload(this);
+				_state = STATE_UNLOADED;
+				break;
+			case STATE_DEACTIVATED:
+				break;
+			default:
+				break;
+		}
     }
+
     return;
 }
 
@@ -147,7 +155,7 @@ Extension::set_state (state_t in_state)
 Extension::state_t
 Extension::get_state (void)
 {
-    return state;
+    return _state;
 }
 
 /**
@@ -157,7 +165,7 @@ Extension::get_state (void)
 bool
 Extension::loaded (void)
 {
-    return state == STATE_LOADED;
+    return get_state() == STATE_LOADED;
 }
 
 /**
@@ -219,19 +227,19 @@ Extension::get_name (void)
 	         unusable, but not deleted)
 	
     This function is used to removed an extension from functioning, but
-	not delete it completely.  It sets the \c _deactivated variable to
+	not delete it completely.  It sets the state to \c STATE_DEACTIVATED to
 	mark to the world that it has been deactivated.  It also removes
 	the current implementation and replaces it with a standard one.  This
 	makes it so that we don't have to continually check if there is an
 	implementation, but we are gauranteed to have a benign one.
 
-	It is important to note that there is no 'activate' function.
+	\warning It is important to note that there is no 'activate' function.
 	Running this function is irreversable.
 */
 void
 Extension::deactivate (void)
 {
-	_deactivated = TRUE;
+	set_state(STATE_DEACTIVATED);
 
 	/* Removing the old implementation, and making this use the default. */
 	/* This should save some memory */
@@ -248,7 +256,7 @@ Extension::deactivate (void)
 bool
 Extension::deactivated (void)
 {
-	return _deactivated;
+	return get_state() == STATE_DEACTIVATED;
 }
 
 /**
@@ -620,529 +628,6 @@ Extension::set_param_string (const gchar * name, const gchar * value, SPReprDoc 
 
     return value;
 }
-
-/* Inkscape::Extension::Input */
-
-/**
-    \return   None
-    \brief    Builds a SPModuleInput object from a XML description
-    \param    module  The module to be initialized
-    \param    repr    The XML description in a SPRepr tree
-
-    Okay, so you want to build a SPModuleInput object.
-
-    This function first takes and does the build of the parent class,
-    which is SPModule.  Then, it looks for the <input> section of the
-    XML description.  Under there should be several fields which
-    describe the input module to excruciating detail.  Those are parsed,
-    copied, and put into the structure that is passed in as module.
-    Overall, there are many levels of indentation, just to handle the
-    levels of indentation in the XML file.
-*/
-Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
-{
-    mimetype = NULL;
-    extension = NULL;
-    filetypename = NULL;
-    filetypetooltip = NULL;
-	output_extension = NULL;
-
-    if (repr != NULL) {
-        SPRepr * child_repr;
-
-        child_repr = sp_repr_children(repr);
-
-        while (child_repr != NULL) {
-            if (!strcmp(sp_repr_name(child_repr), "input")) {
-                child_repr = sp_repr_children(child_repr);
-                while (child_repr != NULL) {
-                    if (!strcmp(sp_repr_name(child_repr), "extension")) {
-                        g_free (extension);
-                        extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "mimetype")) {
-                        g_free (mimetype);
-                        mimetype = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "filetypename")) {
-                        g_free (filetypename);
-                        filetypename = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "filetypetooltip")) {
-                        g_free (filetypetooltip);
-                        filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "output_extension")) {
-                        g_free (output_extension);
-                        output_extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-
-                    child_repr = sp_repr_next(child_repr);
-                }
-
-                break;
-            }
-
-            child_repr = sp_repr_next(child_repr);
-        }
-
-    }
-
-    return;
-}
-
-/**
-	\return  None
-	\brief   Destroys an Input extension
-*/
-Input::~Input (void)
-{
-    g_free(mimetype);
-    g_free(extension);
-    g_free(filetypename);
-    g_free(filetypetooltip);
-	g_free(output_extension);
-    return;
-}
-
-/**
-    \return  Whether this extension checks out
-	\brief   Validate this extension
-
-	This function checks to make sure that the input extension has
-	a filename extension and a MIME type.  Then it calls the parent
-	class' check function which also checks out the implmentation.
-*/
-bool
-Input::check (void)
-{
-	if (extension == NULL)
-		return FALSE;
-	if (mimetype == NULL)
-		return FALSE;
-
-	return Extension::check();
-}
-
-/**
-    \return  A new document
-	\brief   This function creates a document from a file
-	\param   uri  The filename to create the document from
-
-	This function acts as the first step in creating a new document
-	from a file.  The first thing that this does is make sure that the
-	file actually exists.  If it doesn't, a NULL is returned.  If the
-	file exits, then it is opened using the implmentation of this extension.
-
-	After opening the document the output_extension is set.  What this
-	accomplishes is that save can try to use an extension that supports
-	the same fileformat.  So something like opening and saveing an 
-	Adobe Illustrator file can be transparent (not recommended, but
-	transparent).  This is all done with undo being turned off.
-*/
-SPDocument *
-Input::open (const gchar *uri)
-{
-	SPDocument * doc;
-	SPRepr * repr;
-
-	gsize bytesRead = 0;
-	gsize bytesWritten = 0;
-	GError* error = NULL;
-	gchar* local_uri = g_filename_from_utf8 ( uri,
-                                 -1,  &bytesRead,  &bytesWritten, &error);
-
-	if (!g_file_test(local_uri, G_FILE_TEST_EXISTS)) {
-		g_free(local_uri);
-		return NULL;
-	}
-	g_free(local_uri);
-
-	doc = imp->open(this, uri);
-
-	if (doc != NULL) {
-		repr = sp_document_repr_root(doc);
-		sp_document_set_undo_sensitive (doc, FALSE);
-		sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
-		sp_document_set_undo_sensitive (doc, TRUE);
-	}
-
-	return doc;
-}
-
-/**
-    \return  IETF mime-type for the extension
-	\brief   Get the mime-type that describes this extension
-*/
-gchar *
-Input::get_mimetype(void)
-{
-    return mimetype;
-}
-
-/**
-    \return  Filename extension for the extension
-	\brief   Get the filename extension for this extension
-*/
-gchar *
-Input::get_extension(void)
-{
-    return extension;
-}
-
-/**
-    \return  The name of the filetype supported
-	\brief   Get the name of the filetype supported
-*/
-gchar *
-Input::get_filetypename(void)
-{
-    return filetypename;
-}
-
-/**
-    \return  Tooltip giving more information on the filetype
-	\brief   Get the tooltip for more information on the filetype
-*/
-gchar *
-Input::get_filetypetooltip(void)
-{
-    return filetypetooltip;
-}
-
-/**
-    \return  A dialog to get settings for this extension
-	\brief   Create a dialog for preference for this extension
-
-	Calls the implementation to get the preferences.
-*/
-GtkDialog *
-Input::prefs (const gchar *uri)
-{
-    return imp->prefs_input(this, uri);
-}
-
-
-/* Inkscape::Extension::Output */
-
-/**
-    \return   None
-    \brief    Builds a SPModuleOutput object from a XML description
-    \param    module  The module to be initialized
-    \param    repr    The XML description in a SPRepr tree
-
-    Okay, so you want to build a SPModuleOutput object.
-
-    This function first takes and does the build of the parent class,
-    which is SPModule.  Then, it looks for the <output> section of the
-    XML description.  Under there should be several fields which
-    describe the output module to excruciating detail.  Those are parsed,
-    copied, and put into the structure that is passed in as module.
-    Overall, there are many levels of indentation, just to handle the
-    levels of indentation in the XML file.
-*/
-Output::Output (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
-{
-    mimetype = NULL;
-    extension = NULL;
-    filetypename = NULL;
-    filetypetooltip = NULL;
-	dataloss = TRUE;
-
-    if (repr != NULL) {
-        SPRepr * child_repr;
-
-        child_repr = sp_repr_children(repr);
-
-        while (child_repr != NULL) {
-            if (!strcmp(sp_repr_name(child_repr), "output")) {
-                child_repr = sp_repr_children(child_repr);
-                while (child_repr != NULL) {
-                    if (!strcmp(sp_repr_name(child_repr), "extension")) {
-                        g_free (extension);
-                        extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "mimetype")) {
-                        g_free (mimetype);
-                        mimetype = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "filetypename")) {
-                        g_free (filetypename);
-                        filetypename = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "filetypetooltip")) {
-                        g_free (filetypetooltip);
-                        filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
-                    }
-                    if (!strcmp(sp_repr_name(child_repr), "dataloss")) {
-                        if (!strcmp(sp_repr_content(sp_repr_children(child_repr)), "FALSE")) {
-							dataloss = FALSE;
-						}
-					}
-
-                    child_repr = sp_repr_next(child_repr);
-                }
-
-                break;
-            }
-
-            child_repr = sp_repr_next(child_repr);
-        }
-
-    }
-}
-
-/**
-    \brief  Destroy an output extension
-*/
-Output::~Output (void)
-{
-    g_free(mimetype);
-    g_free(extension);
-    g_free(filetypename);
-    g_free(filetypetooltip);
-    return;
-}
-
-/**
-    \return  Whether this extension checks out
-	\brief   Validate this extension
-
-	This function checks to make sure that the output extension has
-	a filename extension and a MIME type.  Then it calls the parent
-	class' check function which also checks out the implmentation.
-*/
-bool
-Output::check (void)
-{
-	if (extension == NULL)
-		return FALSE;
-	if (mimetype == NULL)
-		return FALSE;
-
-	return Extension::check();
-}
-
-/**
-    \return  IETF mime-type for the extension
-	\brief   Get the mime-type that describes this extension
-*/
-gchar *
-Output::get_mimetype(void)
-{
-    return mimetype;
-}
-
-/**
-    \return  Filename extension for the extension
-	\brief   Get the filename extension for this extension
-*/
-gchar *
-Output::get_extension(void)
-{
-    return extension;
-}
-
-/**
-    \return  The name of the filetype supported
-	\brief   Get the name of the filetype supported
-*/
-gchar *
-Output::get_filetypename(void)
-{
-    return filetypename;
-}
-
-/**
-    \return  Tooltip giving more information on the filetype
-	\brief   Get the tooltip for more information on the filetype
-*/
-gchar *
-Output::get_filetypetooltip(void)
-{
-    return filetypetooltip;
-}
-
-/**
-    \return  A dialog to get settings for this extension
-	\brief   Create a dialog for preference for this extension
-
-	Calls the implementation to get the preferences.
-*/
-GtkDialog *
-Output::prefs (void)
-{
-    return imp->prefs_output(this);
-}
-
-/**
-    \return  None
-	\brief   Save a document as a file
-	\param   doc  Document to save
-	\param   uri  File to save the document as
-
-	This function does a little of the dirty work involved in saving
-	a document so that the implementation only has to worry about geting
-	bits on the disk.
-
-	The big thing that it does is remove and readd the fields that are
-	only used at runtime and shouldn't be saved.  One that may surprise
-	people is the output extension.  This is not saved so that the IDs
-	could be changed, and old files will still work properly.
-
-	After the file is saved by the implmentation the output_extension
-	and dataloss variables are recreated.  The output_extension is set
-	to this extension so that future saves use this extension.  Dataloss
-	is set so that a warning will occur on closing the document that
-	there may be some dataloss from this extension.
-*/
-void
-Output::save (SPDocument * doc, const gchar * uri)
-{
-	SPRepr * repr;
-
-	repr = sp_document_repr_root(doc);
-
-	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
-	sp_repr_set_attr(repr, "inkscape:dataloss", NULL);
-	sp_repr_set_attr(repr, "sodipodi:modified", NULL);
-	sp_document_set_undo_sensitive (doc, TRUE);
-
-    imp->save(this, doc, uri);
-
-	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
-	if (dataloss) {
-		sp_repr_set_attr(repr, "inkscape:dataloss", "TRUE");
-	}
-	sp_document_set_undo_sensitive (doc, TRUE);
-
-	return;
-}
-
-/* Inkscape::Extension::Effect */
-
-Effect::Effect (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
-{
-    return;
-}
-
-Effect::~Effect (void)
-{
-    return;
-}
-
-bool
-Effect::check (void)
-{
-	return Extension::check();
-}
-
-GtkDialog *
-Effect::prefs (void)
-{
-    return imp->prefs_effect(this);
-}
-
-void
-Effect::effect (SPDocument * doc)
-{
-    return imp->effect(this, doc);
-}
-
-/* Inkscape::Extension::Print */
-
-Print::Print (SPRepr * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
-{
-    base = NULL;
-    arena = NULL;
-    root = NULL;
-    dkey = 0;
-
-    return;
-}
-
-Print::~Print (void)
-{
-    return;
-}
-
-bool
-Print::check (void)
-{
-	return Extension::check();
-}
-
-unsigned int
-Print::setup (void)
-{
-    return imp->setup(this);
-}
-
-unsigned int
-Print::set_preview (void)
-{
-    return imp->set_preview(this);
-}
-
-unsigned int
-Print::begin (SPDocument *doc)
-{
-    return imp->begin(this, doc);
-}
-
-unsigned int
-Print::finish (void)
-{
-    return imp->finish(this);
-}
-
-unsigned int
-Print::bind (const NRMatrix *transform, float opacity)
-{
-    return imp->bind (this, transform, opacity);
-}
-
-unsigned int
-Print::release (void)
-{
-    return imp->release(this);
-}
-
-unsigned int
-Print::fill (const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-                   const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
-{
-    return imp->fill (this, bpath, ctm, style, pbox, dbox, bbox);
-}
-
-unsigned int
-Print::stroke (const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
-                 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
-{
-    return imp->stroke (this, bpath, transform, style, pbox, dbox, bbox);
-}
-
-unsigned int
-Print::image (unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-                const NRMatrix *transform, const SPStyle *style)
-{
-    return imp->image (this, px, w, h, rs, transform, style);
-}
-
-unsigned int
-Print::text (const char* text, NR::Point p, const SPStyle* style)
-{
-    return imp->text (this, text, p, style);
-}
-
-bool
-Print::textToPath (void)
-{
-	return imp->textToPath(this);
-}
-
 
 }; /* namespace Extension */
 }; /* namespace Inkscape */

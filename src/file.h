@@ -15,7 +15,8 @@
  */
 
 #include "forward.h"
-#include <extension/extension.h>
+#include <extension/extension-forward.h>
+#include <gtk/gtkwidget.h>
 
 /*######################
 ## N E W

@@ -46,6 +46,7 @@
 #include "../interface.h"
 
 #include "extension/extension.h"
+#include "extension/output.h"
 #include "extension/db.h"
 
 #include "export.h"

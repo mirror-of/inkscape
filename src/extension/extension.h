@@ -14,14 +14,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtkdialog.h>
-
-#include "widgets/menu.h"
+#include <vector>
 #include "xml/repr.h"
 #include "xml/repr-private.h"
-#include "forward.h"
-#include <libnr/nr-path.h>
-#include <display/nr-arena-forward.h>
 #include <extension/extension-forward.h>
 
 /** The key that is used to identify that the I/O should be autodetected */
@@ -71,15 +66,16 @@ class Extension {
 public:
     /** An enumeration to identify if the Extension has been loaded or not. */
     typedef enum {
-        STATE_LOADED,  /**< The extension has been loaded successfully */
-        STATE_UNLOADED /**< The extension has not been loaded */
+        STATE_LOADED,      /**< The extension has been loaded successfully */
+        STATE_UNLOADED,    /**< The extension has not been loaded */
+        STATE_DEACTIVATED, /**< The extension is missing something which makes it unusable */
     } state_t;
 
 private:
-    gchar   *id;                          /**< The unique identifier for the Extension */
-    gchar   *name;                        /**< A user friendly name for the Extension */
-    state_t  state;                       /**< Which state the Extension is currently in */
-    bool    _deactivated;                 /**< If the extension still exists, but shouldn't be used */
+    gchar     *id;                        /**< The unique identifier for the Extension */
+    gchar     *name;                      /**< A user friendly name for the Extension */
+    state_t    _state;                    /**< Which state the Extension is currently in */
+    std::vector<Dependency *>  _deps;     /**< Dependencies for this extension */
 
 protected:
     SPRepr *repr;                         /**< The XML description of the Extension */
@@ -166,114 +162,7 @@ public:
                                        SPReprDoc *   doc = NULL);
 };
 
-class Input : public Extension {
-    gchar *mimetype;             /**< What is the mime type this inputs? */
-    gchar *extension;            /**< The extension of the input files */
-    gchar *filetypename;         /**< A userfriendly name for the file type */
-    gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
-public: /* this is a hack for this release, this will be private shortly */
-    gchar *output_extension;     /**< Setting of what output extension should be used */
-
-public:
-    class open_failed {};        /**< Generic failure for an undescribed reason */
-    class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
-
-                  Input                (SPRepr * in_repr,
-                                        Implementation::Implementation * in_imp);
-    virtual      ~Input                (void);
-    virtual bool  check                (void);
-    SPDocument *  open                 (gchar const *uri);
-    gchar *       get_mimetype         (void);
-    gchar *       get_extension        (void);
-    gchar *       get_filetypename     (void);
-    gchar *       get_filetypetooltip  (void);
-    GtkDialog *   prefs                (gchar const *uri);
-};
-
-class Output : public Extension {
-    gchar *mimetype;             /**< What is the mime type this inputs? */
-    gchar *extension;            /**< The extension of the input files */
-    gchar *filetypename;         /**< A userfriendly name for the file type */
-    gchar *filetypetooltip;      /**< A more detailed description of the filetype */
-    bool   dataloss;             /**< The extension causes data loss on save */
-
-public:
-    class save_failed {};        /**< Generic failure for an undescribed reason */
-    class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
-
-                 Output (SPRepr * in_repr,
-                         Implementation::Implementation * in_imp);
-    virtual     ~Output (void);
-    virtual bool check                (void);
-    void         save (SPDocument *doc,
-                       gchar const *uri);
-    GtkDialog *  prefs (void);
-    gchar *      get_mimetype(void);
-    gchar *      get_extension(void);
-    gchar *      get_filetypename(void);
-    gchar *      get_filetypetooltip(void);
-};
-
-class Effect : public Extension {
-
-public:
-                 Effect  (SPRepr * in_repr,
-                          Implementation::Implementation * in_imp);
-    virtual     ~Effect  (void);
-    virtual bool check                (void);
-    GtkDialog *  prefs   (void);
-    void         effect  (SPDocument * doc);
-};
-
-class Print : public Extension {
-
-public: /* TODO: These are public for the short term, but this should be fixed */
-    SPItem *base;            /**< TODO: Document these */
-    NRArena *arena;          /**< TODO: Document these */
-    NRArenaItem *root;       /**< TODO: Document these */
-    unsigned int dkey;       /**< TODO: Document these */
-
-public:
-                  Print       (SPRepr * in_repr,
-                               Implementation::Implementation * in_imp);
-                 ~Print       (void);
-    virtual bool  check       (void);
-
-    /* FALSE means user hit cancel */
-    unsigned int  setup       (void);
-    unsigned int  set_preview (void);
-
-    unsigned int  begin       (SPDocument *doc);
-    unsigned int  finish      (void);
-
-    /* Rendering methods */
-    unsigned int  bind        (NRMatrix const *transform,
-                               float opacity);
-    unsigned int  release     (void);
-    unsigned int  fill        (NRBPath const *bpath,
-                               NRMatrix const *ctm,
-                               SPStyle const *style,
-                               NRRect const *pbox,
-                               NRRect const *dbox,
-                               NRRect const *bbox);
-    unsigned int  stroke      (NRBPath const *bpath,
-                               NRMatrix const *transform,
-                               SPStyle const *style,
-                               NRRect const *pbox,
-                               NRRect const *dbox,
-                               NRRect const *bbox);
-    unsigned int  image       (unsigned char *px,
-                               unsigned int w,
-                               unsigned int h,
-                               unsigned int rs,
-                               NRMatrix const *transform,
-                               SPStyle const *style);
-    unsigned int  text        (char const *text,
-                               NR::Point p,
-                               SPStyle const *style);
-    bool          textToPath  (void);
-};
 
 /*
 

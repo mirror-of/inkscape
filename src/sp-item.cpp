@@ -54,6 +54,9 @@
 #include "algorithms/longest-prefix.h"
 #include "algorithms/shortest-prefix.h"
 
+#include "xml/repr.h"
+#include "xml/repr-private.h"
+
 #define noSP_ITEM_DEBUG_IDLE
 
 static void sp_item_class_init(SPItemClass *klass);

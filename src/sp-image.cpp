@@ -31,6 +31,7 @@
 #include "sp-image.h"
 #include "helper/sp-intl.h"
 #include <libnr/nr-matrix-ops.h>
+#include <xml/repr.h>
 
 /*
  * SPImage

@@ -24,6 +24,8 @@
 #include "verbs.h"
 #include "helper/sp-intl.h"
 
+#include <xml/repr.h>
+
 #include "select-context.h"
 #include "node-context.h"
 #include "rect-context.h"

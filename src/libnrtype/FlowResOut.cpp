@@ -41,6 +41,8 @@
 #include "display/nr-arena-group.h"
 #include "display/nr-arena-glyphs.h"
 
+#include "extension/print.h"
+
 /*
  *
  */

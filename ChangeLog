@@ -1,3 +1,23 @@
+2004-10-10  Ted Gould  <ted@gould.cx>
+
+	* src/event-context.cpp, src/file.cpp, src/file.h, src/print.cpp,
+	src/print.h, src/selection-chemistry.h, src/sp-image.cpp, src/sp-item.cpp,
+	src/sp-marker.cpp, src/sp-root.cpp, src/sp-shape.cpp, src/sp-symbol.cpp,
+	src/tools-switch.cpp, src/dialogs/export.cpp, src/dialogs/filedialog.cpp,
+	src/extension/Makefile_insert, src/extension/db.cpp,
+	src/extension/dependency.cpp, src/extension/dependency.h,
+	src/extension/effect.cpp, src/extension/effect.h,
+	src/extension/extension-forward.h, src/extension/extension.cpp,
+	src/extension/extension.h, src/extension/input.cpp, src/extension/input.h,
+	src/extension/output.cpp, src/extension/output.h, src/extension/print.cpp,
+	src/extension/print.h, src/extension/system.cpp,
+	src/extension/internal/eps-out.cpp, src/extension/internal/ps.cpp,
+	src/extension/internal/svg.cpp, src/libnrtype/FlowResOut.cpp:
+
+	Splitting out the different types of extensions into their own files so
+	that the overall dependencies can be reduced.  Caused a ripple through
+	lots of other files.  Hopefully the dependency situation is better now.
+
 2004-10-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/draw-context.cpp:

@@ -17,6 +17,7 @@
 #include "libnr/nr-matrix-ops.h"
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"
+#include "xml/repr.h"
 #include "attributes.h"
 #include "print.h"
 #include "document.h"

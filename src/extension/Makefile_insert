@@ -15,7 +15,19 @@ extension_libextension_a_SOURCES =	\
 	extension/extension-forward.h	\
 	extension/db.cpp	\
 	extension/db.h	\
+	extension/dependency.cpp \
+	extension/dependency.h \
 	extension/init.cpp	\
 	extension/init.h	\
 	extension/system.cpp	\
-	extension/system.h
+	extension/system.h \
+	\
+	extension/input.h \
+	extension/input.cpp \
+	extension/output.h \
+	extension/output.cpp \
+	extension/effect.h \
+	extension/effect.cpp \
+	extension/print.h \
+	extension/print.cpp
+

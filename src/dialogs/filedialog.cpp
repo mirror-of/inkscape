@@ -705,7 +705,7 @@ void FileOpenDialogImpl::fileNameEntryChangedCallback()
         //dialog with either (1) select a regular file or (2) cd to dir
         //simulate an 'OK'
         set_filename(fileName);
-        response(GTK_RESPONSE_OK);
+        response(Gtk::RESPONSE_OK);
     }
 }
 
@@ -855,8 +855,8 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
     signal_selection_changed().connect( 
          sigc::mem_fun(*this, &FileOpenDialogImpl::fileSelectedCallback) );
 
-    add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
-    add_button(Gtk::Stock::OPEN,   GTK_RESPONSE_OK);
+    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    add_button(Gtk::Stock::OPEN,   Gtk::RESPONSE_OK);
 
 }
 
@@ -899,7 +899,7 @@ FileOpenDialogImpl::show()
     gint b = run();                        //Dialog
     hide();
 
-    if (b == GTK_RESPONSE_OK)
+    if (b == Gtk::RESPONSE_OK)
         {
         //This is a hack, to avoid the warning messages that
         //Gtk::FileChooser::get_filter() returns
@@ -1109,7 +1109,7 @@ void FileSaveDialogImpl::fileNameEntryChangedCallback()
         //dialog with either (1) select a regular file or (2) cd to dir
         //simulate an 'OK'
         set_filename(fileName);
-        response(GTK_RESPONSE_OK);
+        response(Gtk::RESPONSE_OK);
     }
 }
 
@@ -1313,8 +1313,8 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
     //if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
 
-    add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
-    add_button(Gtk::Stock::SAVE,   GTK_RESPONSE_OK);
+    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    add_button(Gtk::Stock::SAVE,   Gtk::RESPONSE_OK);
 
     show_all_children();
 }
@@ -1360,7 +1360,7 @@ FileSaveDialogImpl::show()
     gint b = run();                        //Dialog
     hide();
 
-    if (b == GTK_RESPONSE_OK)
+    if (b == Gtk::RESPONSE_OK)
         {
         int sel = fileTypeComboBox.get_active_row_number ();
         if (sel>=0 && sel< (int)fileTypes.size())

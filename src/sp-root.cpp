@@ -27,6 +27,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-scale-ops.h>
+#include <xml/repr.h>
 
 static void sp_root_class_init (SPRootClass *klass);
 static void sp_root_init (SPRoot *root);

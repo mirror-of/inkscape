@@ -14,8 +14,10 @@
 #include <gtk/gtk.h>
 #include <print.h>
 #include <helper/sp-intl.h>
+#include <extension/extension.h>
 #include <extension/system.h>
 #include <extension/db.h>
+#include <extension/output.h>
 #include <dialogs/dialog-events.h>
 
 namespace Inkscape {

@@ -18,6 +18,8 @@
 #include <glib.h>
 #include <helper/sp-intl.h>
 #include "db.h"
+#include "input.h"
+#include "output.h"
 
 /* Globals */
 

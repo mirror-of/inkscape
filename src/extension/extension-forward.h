@@ -10,6 +10,9 @@ class Input;
 class Output;
 class Print;
 
+class Dependency;
+class Parameter;
+
 namespace Implementation {
 class Implementation;
 };

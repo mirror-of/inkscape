@@ -28,6 +28,10 @@
 
 #include "system.h"
 #include "db.h"
+#include "input.h"
+#include "output.h"
+#include "effect.h"
+#include "print.h"
 #include "implementation/script.h"
 #include "implementation/plugin.h"
 

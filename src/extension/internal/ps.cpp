@@ -58,6 +58,8 @@
 
 #include "ps.h"
 #include <extension/system.h>
+#include <extension/extension.h>
+#include <extension/print.h>
 
 
 namespace Inkscape {

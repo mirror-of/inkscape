@@ -12,7 +12,7 @@
 
 #include <libnr/nr-path.h>
 #include "forward.h"
-#include "extension/extension.h"
+#include "extension/extension-forward.h"
 
 struct SPPrintContext {
 	Inkscape::Extension::Print * module;

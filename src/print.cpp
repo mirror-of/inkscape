@@ -24,7 +24,7 @@
 #include "sp-item.h"
 #include "style.h"
 #include "sp-paint-server.h"
-#include "extension/extension.h"
+#include "extension/print.h"
 #include "extension/system.h"
 #include "print.h"
 
