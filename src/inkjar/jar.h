@@ -12,7 +12,7 @@ namespace Inkjar {
 
 const unsigned int RDSZ  = 4096;
 
-#define DEBUG 1
+//#define DEBUG 1 //uncommment for debug messages
 
 enum JarFileReaderState {CLOSED, OPEN};
 

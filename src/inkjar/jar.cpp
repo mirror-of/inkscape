@@ -262,7 +262,7 @@ GByteArray *JarFile::get_next_file_contents()
 	    return NULL;
 	}
 	g_byte_array_append(gba, file_data, file_length);
-    } else {
+    } else if (method == 0) {
 	guint8 *file_data = get_uncompressed_file(compressed_size, crc, 
 						  eflen, flags); 
 
@@ -271,6 +271,10 @@ GByteArray *JarFile::get_next_file_contents()
 	    return NULL;
 	}
 	g_byte_array_append(gba, file_data, compressed_size);
+    } else {
+	lseek(fd, compressed_size+eflen, SEEK_CUR);
+	g_byte_array_free(gba, FALSE);
+	return NULL;
     }
         
     
@@ -324,6 +328,7 @@ int JarFile::read(guint8 *buf, int count)
     int nbytes;
     if ((nbytes = ::read(fd, buf, count)) != count) {
 	fprintf(stderr, "read error\n");
+	exit(1);
 	return 0;
     }
     return nbytes;
@@ -417,8 +422,10 @@ bool JarFile::check_crc(guint32 oldcrc, guint32 crc, guint16 flags)
 	
     }
     if (oldcrc != crc) {
+#ifdef DEBUG
 	std::fprintf(stderr, "Error! CRCs do not match! Got %x, expected %x\n",
 		     oldcrc, crc);
+#endif
     }
     return true;
 }
@@ -506,7 +513,7 @@ int main(int argc, char *argv[])
 {
     gchar *filename;
     if (argc < 2) {
-	filename = "./new.jar\0";
+	filename = "./ide.jar\0";
     } else {
 	filename = argv[1];
     }
