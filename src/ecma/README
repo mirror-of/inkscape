@@ -60,6 +60,15 @@ under the LGPL.  Many thanks to Mozilla.org for their generosity.
 
 
 
+script01.svg
+------------
+This is the example SVG file, with scripting from this page:
+
+http://www.w3.org/TR/SVG11/script.html
+
+Getting this interaction to work correctly will be Target #1
+on our quest.
+
 ==============
 
 More information will be provided here as it becomes available.
