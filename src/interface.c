@@ -229,6 +229,16 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 	}
 }
 
+static void
+sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
+{
+	const gchar *as, *cs, *ss;
+	as = (shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
+	cs = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
+	ss = (shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
+	g_snprintf (c, 256, "%s%s%s%s", as, cs, ss, gdk_keyval_name (shortcut & 0xffffff));
+}
+
 static GtkWidget *
 sp_ui_menu_append_item_from_verb (GtkMenu *menu, unsigned int verb)
 {
@@ -242,12 +252,8 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, unsigned int verb)
 		if (!action) return NULL;
 		if (action->shortcut) {
 			gchar c[256];
-			const gchar *as, *cs, *ss;
 			GtkWidget *hb, *l;
-			as = (action->shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
-			cs = (action->shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
-			ss = (action->shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
-			g_snprintf (c, 256, "%s%s%s%s", as, cs, ss, gdk_keyval_name (action->shortcut & 0xffffff));
+			sp_ui_shortcut_string (action->shortcut, c);
 			hb = gtk_hbox_new (FALSE, 16);
 			l = gtk_label_new (action->name);
 			gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
