@@ -11,6 +11,8 @@
 
 #include "InkscapeScript.h"
 
+#include "InkscapeInterpreter.h"
+
 #ifdef WITH_PERL
 #include "InkscapePerl.h"
 #endif
@@ -61,7 +63,7 @@ bool InkscapeScript::interpretScript(Glib::ustring &script,
                                  ScriptLanguage language)
 {
 
-    InkscapeInterpreter *interp;
+    InkscapeInterpreter *interp = NULL;
     //if() instead of switch() lets us scope vars
     if (language == InkscapeScript::PERL)
         {
@@ -105,7 +107,7 @@ bool InkscapeScript::interpretUri(Glib::ustring &uri,
                                  ScriptLanguage language)
 {
 
-    InkscapeInterpreter *interp;
+    InkscapeInterpreter *interp = NULL;
     //if() instead of switch() lets us scope vars
     if (language == InkscapeScript::PERL)
         {
