@@ -62,10 +62,6 @@ unsigned int sp_svg_transform_read (const gchar *str, NRMatrix *transform);
 
 unsigned int sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform);
 
-#if 0
-gint sp_svg_write_length (gchar *buf, gint buflen, gdouble val, const SPUnit *unit);
-#endif
-
 double sp_svg_read_percentage (const char * str, double def);
 int sp_svg_write_percentage (char * buf, int buflen, double val);
 
