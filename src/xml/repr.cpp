@@ -135,7 +135,7 @@ repr_init (SPRepr *repr)
 	repr->doc = NULL;
 	repr->parent = repr->next = repr->children = NULL;
 	repr->attributes = NULL;
-	repr->listeners = NULL;
+	repr->last_listener = repr->listeners = NULL;
 	repr->content = NULL;
 }
 
@@ -731,25 +731,22 @@ sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, void *
 void
 sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data)
 {
-	SPReprListener *rl, *last;
+	SPReprListener *rl;
 
 	g_assert (repr != NULL);
 	g_assert (vector != NULL);
-
-	last = NULL;
-	if (repr->listeners) {
-		last = repr->listeners;
-		while (last->next) last = last->next;
-	}
 
 	rl = sp_listener_alloc ();
 	rl->next = NULL;
 	rl->vector = vector;
 	rl->data = data;
 
-	if (last) {
-		last->next = rl;
+	if (repr->last_listener) {
+		rl->next = repr->last_listener->next;
+		repr->last_listener->next = rl;
+		repr->last_listener = rl;
 	} else {
+		rl->next = NULL;
 		repr->listeners = rl;
 	}
 }
@@ -757,13 +754,21 @@ sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data
 static void
 sp_repr_remove_listener (SPRepr *repr, SPListener *listener)
 {
-	if (listener == repr->listeners) {
-		repr->listeners = listener->next;
-	} else {
-		SPListener *prev;
-		prev = repr->listeners;
-		while (prev->next != listener) prev = prev->next;
-		prev->next = listener->next;
+	SPReprListener *prev, *iter;
+	prev = NULL;
+	for ( iter = repr->listeners ; iter ; iter = iter->next ) {
+		if ( iter == listener ) {
+			if (prev) {
+				prev->next = listener->next;
+			} else {
+				repr->listeners = listener->next;
+			}
+			if (!listener->next) {
+				repr->last_listener = prev;
+			}
+			break;
+		}
+		prev = iter;
 	}
 
 	sp_listener_free (listener);
@@ -772,23 +777,25 @@ sp_repr_remove_listener (SPRepr *repr, SPListener *listener)
 void
 sp_repr_remove_listener_by_data (SPRepr *repr, void *data)
 {
-	SPReprListener * last, * rl;
+	SPReprListener *prev, *rl;
 
-	if (repr == NULL)
-		return;
+	g_return_if_fail(repr != NULL);
 
-	last = NULL;
+	prev = NULL;
 	for (rl = repr->listeners; rl != NULL; rl = rl->next) {
 		if (rl->data == data) {
-			if (last) {
-				last->next = rl->next;
+			if (prev) {
+				prev->next = rl->next;
 			} else {
 				repr->listeners = rl->next;
+			}
+			if (!rl->next) {
+				repr->last_listener = prev;
 			}
 			sp_listener_free (rl);
 			return;
 		}
-		last = rl;
+		prev = rl;
 	}
 }
 

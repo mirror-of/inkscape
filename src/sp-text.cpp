@@ -792,6 +792,10 @@ sp_string_calculate_dimensions (SPString *string)
 
     const SPStyle *style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
 
+    if (!style) {
+        return;
+    }
+
     guint dx_offset, dy_offset;
     GList *dx = sp_effective_dx (SP_OBJECT(string), &dx_offset);
     GList *dy = sp_effective_dy (SP_OBJECT(string), &dy_offset);

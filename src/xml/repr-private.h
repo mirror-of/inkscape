@@ -70,6 +70,7 @@ struct _SPRepr {
 
 	SPReprAttr *attributes;
 	SPReprListener *listeners;
+	SPReprListener *last_listener;
 	gchar *content;
 };
 

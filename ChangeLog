@@ -1,3 +1,16 @@
+2004-03-13  MenTaLguY <mental@rydia.net>
+
+    * src/sp-text.cpp: SPString now copes with parents that don't have style
+	                   information (comment on bug #896706)
+
+    * src/xml/repr.cpp, src/xml/repr-private.h:
+	  adding listeners is now O(1), which should make files which make heavy
+	  use of <use> more tolerable; I decided to add an extra "last" pointer
+	  rather than just prepending to the list (which would have reversed
+      its order, and make the common case for removal traverse the entire
+	  list -- removal is still O(N) overall, but at least this way we usually
+	  hit the best-case) (bug #896076)
+
 2004-03-11  bulia byak <bulia@users.sourceforge.net>
 
 	* src/sp-item.h src/sp-item.cpp: Restore i2root_affine: same as i2doc but
@@ -61,7 +74,11 @@
 
 2004-03-09  MenTaLguY  <mental@rydia.net>
 
+    * src/ast/*: more AST work
+
     * src/sp-text.cpp: fixed uninitialized variable
+
+    * src/sp-text.cpp: rewrote recursive character-counting algorithm
 
 2004-03-08  MenTaLguY  <mental@rydia.net>
 
