@@ -19,23 +19,23 @@
 
 void sp_edit_cleanup (gpointer object, gpointer data);
 
-void sp_selection_delete (gpointer object, gpointer data);
-void sp_selection_duplicate (gpointer object, gpointer data);
-void sp_edit_clear_all (gpointer object, gpointer data);
-void sp_edit_select_all (gpointer object, gpointer data);
+void sp_selection_delete();
+void sp_selection_duplicate();
+void sp_edit_clear_all();
+void sp_edit_select_all();
 
-void sp_selection_group (gpointer object, gpointer data);
-void sp_selection_ungroup (gpointer object, gpointer data);
+void sp_selection_group();
+void sp_selection_ungroup();
 
-void sp_selection_raise (GtkWidget * widget);
-void sp_selection_raise_to_top (GtkWidget * widget);
-void sp_selection_lower (GtkWidget * widget);
-void sp_selection_lower_to_bottom (GtkWidget * widget);
+void sp_selection_raise();
+void sp_selection_raise_to_top();
+void sp_selection_lower();
+void sp_selection_lower_to_bottom();
 
-void sp_selection_cut (GtkWidget * widget);
-void sp_selection_copy (GtkWidget * widget);
-void sp_selection_paste (GtkWidget *widget, bool in_place);
-void sp_selection_paste_style (GtkWidget * widget);
+void sp_selection_cut();
+void sp_selection_copy();
+void sp_selection_paste(bool in_place);
+void sp_selection_paste_style();
 
 void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine);
 void sp_selection_remove_transform (void);

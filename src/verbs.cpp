@@ -233,34 +233,34 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
 		sp_redo (dt, SP_DT_DOCUMENT (dt));
 		break;
 	case SP_VERB_EDIT_CUT:
-		sp_selection_cut (NULL);
+		sp_selection_cut();
 		break;
 	case SP_VERB_EDIT_COPY:
-		sp_selection_copy (NULL);
+		sp_selection_copy();
 		break;
 	case SP_VERB_EDIT_PASTE:
-		sp_selection_paste (NULL, false); 
+		sp_selection_paste(false);
 		break;
 	case SP_VERB_EDIT_PASTE_STYLE:
-		sp_selection_paste_style (NULL); 
+		sp_selection_paste_style();
 		break;
 	case SP_VERB_EDIT_PASTE_IN_PLACE:
-		sp_selection_paste (NULL, true); 
+		sp_selection_paste(true);
 		break;
 	case SP_VERB_EDIT_DELETE:
-		sp_selection_delete (NULL, NULL);
+		sp_selection_delete();
 		break;
 	case SP_VERB_EDIT_DUPLICATE:
-		sp_selection_duplicate (NULL, NULL);
+		sp_selection_duplicate();
 		break;
 	case SP_VERB_EDIT_CLEAR_ALL:
-	  	sp_edit_clear_all (NULL, NULL);
+	  	sp_edit_clear_all();
 		break;
 	case SP_VERB_EDIT_SELECT_ALL:
  		if (tools_isactive (dt, TOOLS_NODES)) {
  			sp_nodepath_select_all (SP_NODE_CONTEXT(ec)->nodepath);
  		} else {
- 			sp_edit_select_all (NULL, NULL);
+ 			sp_edit_select_all();
  		}
 		break;
 	case SP_VERB_EDIT_DESELECT:
@@ -285,22 +285,22 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 
 	switch ((int) data) {
 	case SP_VERB_SELECTION_TO_FRONT:
-		sp_selection_raise_to_top (NULL);
+		sp_selection_raise_to_top();
 		break;
 	case SP_VERB_SELECTION_TO_BACK:
-		sp_selection_lower_to_bottom (NULL);
+		sp_selection_lower_to_bottom();
 		break;
 	case SP_VERB_SELECTION_RAISE:
-		sp_selection_raise (NULL);
+		sp_selection_raise();
 		break;
 	case SP_VERB_SELECTION_LOWER:
-		sp_selection_lower (NULL);
+		sp_selection_lower();
 		break;
 	case SP_VERB_SELECTION_GROUP:
-		sp_selection_group (NULL, NULL);
+		sp_selection_group();
 		break;
 	case SP_VERB_SELECTION_UNGROUP:
-		sp_selection_ungroup (NULL, NULL);
+		sp_selection_ungroup();
 		break;
 
 	case SP_VERB_SELECTION_UNION:

@@ -1187,7 +1187,7 @@ void sp_node_selected_delete()
 	if (nodepath->subpaths == NULL ||
 		sp_nodepath_get_node_count(nodepath) < 2) {
 			sp_nodepath_destroy (nodepath);
-			sp_selection_delete (NULL, NULL);
+			sp_selection_delete();
 			return;
 	}
 
@@ -1355,7 +1355,7 @@ sp_node_selected_delete_segment (void)
 	if (nodepath->subpaths == NULL ||
 		sp_nodepath_get_node_count(nodepath) < 2) {
 			sp_nodepath_destroy (nodepath);
-			sp_selection_delete (NULL, NULL);
+			sp_selection_delete();
 			return;
 	}
 
@@ -1884,7 +1884,7 @@ static void node_clicked(SPKnot *knot, guint state, gpointer data)
 			sp_nodepath_node_destroy (n);
 			if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
 				sp_nodepath_destroy (nodepath);
-				sp_selection_delete (NULL, NULL);
+				sp_selection_delete();
 			} else {
 				sp_nodepath_ensure_ctrls (nodepath);
 				update_repr (nodepath);

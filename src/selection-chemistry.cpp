@@ -44,8 +44,7 @@ GSList *clipboard = NULL;
 
 static void sp_matrix_d_set_rotate (NRMatrix *m, double theta);
 
-void
-sp_selection_delete (gpointer object, gpointer data)
+void sp_selection_delete()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -71,7 +70,7 @@ sp_selection_delete (gpointer object, gpointer data)
 }
 
 /* fixme: sequencing */
-void sp_selection_duplicate (gpointer object, gpointer data)
+void sp_selection_duplicate()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -123,8 +122,7 @@ void sp_selection_duplicate (gpointer object, gpointer data)
 	g_slist_free (newsel);
 }
 
-void
-sp_edit_clear_all (gpointer object, gpointer data)
+void sp_edit_clear_all()
 {
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
@@ -141,7 +139,7 @@ sp_edit_clear_all (gpointer object, gpointer data)
 	sp_document_done (doc);
 }
 
-void sp_edit_select_all(gpointer object, gpointer data)
+void sp_edit_select_all()
 {
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
@@ -190,8 +188,7 @@ sp_group_cleanup (SPGroup *group)
 	}
 }
 
-void
-sp_edit_cleanup (gpointer object, gpointer data)
+void sp_edit_cleanup(gpointer, gpointer)
 {
 	SPDocument *doc = SP_ACTIVE_DOCUMENT;
 	if (!doc) return;
@@ -208,7 +205,7 @@ sp_edit_cleanup (gpointer object, gpointer data)
 
 /* fixme: sequencing */
 
-void sp_selection_group(gpointer object, gpointer data)
+void sp_selection_group()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -266,7 +263,7 @@ void sp_selection_group(gpointer object, gpointer data)
 	sp_repr_unref (group);
 }
 
-void sp_selection_ungroup(gpointer object, gpointer data)
+void sp_selection_ungroup()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!desktop) return;
@@ -324,7 +321,7 @@ sp_item_list_common_parent_group (const GSList *items)
 	return SP_GROUP (parent);
 }
 
-void sp_selection_raise(GtkWidget *widget)
+void sp_selection_raise()
 {
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
@@ -360,7 +357,7 @@ void sp_selection_raise(GtkWidget *widget)
 	sp_document_done (SP_DT_DOCUMENT (dt));
 }
 
-void sp_selection_raise_to_top(GtkWidget *widget)
+void sp_selection_raise_to_top()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -381,8 +378,7 @@ void sp_selection_raise_to_top(GtkWidget *widget)
 	sp_document_done (document);
 }
 
-void
-sp_selection_lower (GtkWidget *widget)
+void sp_selection_lower()
 {
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
@@ -442,7 +438,7 @@ sp_selection_lower (GtkWidget *widget)
 	sp_document_done (SP_DT_DOCUMENT (dt));
 }
 
-void sp_selection_lower_to_bottom(GtkWidget *widget)
+void sp_selection_lower_to_bottom()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -493,13 +489,13 @@ sp_redo (SPDesktop *desktop, SPDocument *doc)
 	}
 }
 
-void sp_selection_cut(GtkWidget *widget)
+void sp_selection_cut()
 {
-	sp_selection_copy (widget);
-	sp_selection_delete (NULL, NULL);
+	sp_selection_copy();
+	sp_selection_delete();
 }
 
-void sp_selection_copy(GtkWidget *widget)
+void sp_selection_copy()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -536,7 +532,7 @@ void sp_selection_copy(GtkWidget *widget)
 	clipboard = g_slist_reverse (clipboard);
 }
 
-void sp_selection_paste (GtkWidget *widget, bool in_place)
+void sp_selection_paste(bool in_place)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -576,7 +572,7 @@ void sp_selection_paste (GtkWidget *widget, bool in_place)
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
-void sp_selection_paste_style(GtkWidget *widget)
+void sp_selection_paste_style()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;

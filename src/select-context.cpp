@@ -669,7 +669,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		case GDK_a:
 		case GDK_A:
 			if (MOD__CTRL_ONLY) {
-				sp_edit_select_all (NULL, NULL);
+				sp_edit_select_all();
 				ret = TRUE;
 			}
 			break;

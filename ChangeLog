@@ -1,3 +1,13 @@
+2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/selection-chemistry.h, src/selection-chemistry.cpp
+	(sp_selection_delete, sp_selection_duplicate, sp_edit_clear_all,
+	sp_edit_select_all, sp_selection_group, sp_selection_ungroup,
+	sp_selection_raise, sp_selection_raise_to_top, sp_selection_lower,
+	sp_selection_lower_to_bottom, sp_selection_cut, sp_selection_copy,
+	sp_selection_paste, sp_selection_paste_style):
+	Remove unused parameters.  Update callers.
+
 2004-03-01  Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* src/draw-context.cpp: Fixed edge case in freehand tool.  Added
