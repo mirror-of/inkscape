@@ -1,3 +1,8 @@
+2004-02-14  MenTaLguY <mental@rydia.net>
+
+    * src/svg/svg-path.cpp: switched to locale-safe iostreams-based path
+                            serialization
+
 2004-02-14  bulia byak <bulia@users.sourceforge.net>
 
   * src/dialogs/dialog-events.cpp: Added UTILITY hint to sp_transientize() 

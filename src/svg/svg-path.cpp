@@ -1,5 +1,5 @@
 #define __SP_SVG_PARSE_C__
-
+/* ex:set sw=4 ts=4 et: */
 /* 
    svg-path.c: Parse SVG path element data into bezier path.
  
@@ -32,6 +32,9 @@
 #include <libart_lgpl/art_misc.h>
 #include "gnome-canvas-bpath-util.h"
 #include "svg.h"
+
+#include <locale>
+#include <sstream>
 
 /* This module parses an SVG path element into an RsvgBpathDef.
 
@@ -542,23 +545,11 @@ rsvg_parse_path_data (RSVGParsePathCtx *ctx, const char *data)
         case 's':
         case 'q':
         case 't':
-#ifndef RSVGV_RELATIVE
-          /* rule: even-numbered params are x-relative, odd-numbered
-             are y-relative */
-          if ((ctx->param & 1) == 0)
-            val += ctx->cpx;
-          else if ((ctx->param & 1) == 1)
-            val += ctx->cpy;
-          break;
-#else
-          /* rule: even-numbered params are x-relative, odd-numbered
-             are y-relative */
-          if (ctx->param == 0 || (ctx->param % 2 ==0))
-            val += ctx->cpx;
-          else 
-            val += ctx->cpy;
-          break;
-#endif
+          if ( ctx->param & 1 ) {
+              val += ctx->cpy; /* odd param, y */
+          } else {
+              val += ctx->cpx; /* even param, x */
+          }
         case 'a':
           /* rule: sixth and seventh are x and y, rest are not
              relative */
@@ -599,9 +590,6 @@ rsvg_parse_path_data (RSVGParsePathCtx *ctx, const char *data)
     {
       if (ctx->param)
         rsvg_parse_path_do_cmd (ctx, TRUE);
-#ifdef VERBOSE
-      g_print ("'z' closepath\n");
-#endif
       rsvg_bpath_def_closepath (ctx->bpath);
     }
       else if (c >= 'A' && c <= 'Z' && c != 'E')
@@ -654,86 +642,46 @@ sp_svg_read_path (const gchar *str)
 gchar *
 sp_svg_write_path (const ArtBpath * bpath)
 {
-    GString *result;
-    int     i;
-    int     closed = 0;
-    char    *res;
-    gchar c[32];
+    std::ostringstream os;
+    bool closed=false;
     
     g_return_val_if_fail (bpath != NULL, NULL);
 
+    os.imbue(std::locale::classic());
+    os.setf(std::ios::showpoint);
+    os.precision(8);
 
-    result = g_string_sized_new (40);
-
-    for (i = 0; bpath[i].code != ART_END; i++){
+    for (int i = 0; bpath[i].code != ART_END; i++){
+        if (i) {
+            os << " ";
+        }
         switch (bpath [i].code){
         case ART_LINETO:
-            //Change to Locale-independent form. sprintfa is
-            //deprecated.
-            //g_string_sprintfa (result, "L %.8g %.8g ",
-            //      bpath [i].x3, bpath [i].y3);
-            g_string_append(result, "L ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x3);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y3);
-            g_string_append(result, c);
-            g_string_append(result, " ");
+            os << "L " << bpath[i].x3 << "," << bpath[i].y3;
             break;
 
         case ART_CURVETO:
-            //Change to Locale-independent.  Replaces the deprecated:
-            //g_string_sprintfa (
-            //    result, "C %.8g %.8g %.8g %.8g %.8g %.8g ",
-            //    bpath [i].x1, bpath [i].y1,
-            //    bpath [i].x2, bpath [i].y2,
-            //    bpath [i].x3, bpath [i].y3);
-            g_string_append(result, "C ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x1);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y1);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x2);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y2);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x3);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y3);
-            g_string_append(result, c);
-            g_string_append(result, " ");
+            os << "C " << bpath[i].x1 << "," << bpath[i].y1
+               << " "  << bpath[i].x2 << "," << bpath[i].y2
+               << " "  << bpath[i].x3 << "," << bpath[i].y3;
             break;
 
         case ART_MOVETO_OPEN:
         case ART_MOVETO:
-            if (closed)
-                g_string_append  (result, "z ");
-            closed = (bpath [i].code == ART_MOVETO);
-            //Change to Locale-independent.  Replaces the deprecated:
-            //g_string_sprintfa (result, "M %.8g %.8g ",
-            //         bpath [i].x3, bpath [i].y3);
-            g_string_append(result, "M ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x3);
-            g_string_append(result, c);
-            g_string_append(result, " ");
-            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y3);
-            g_string_append(result, c);
-            g_string_append(result, " ");
+            if (closed) {
+                os << "z ";
+            }
+            closed = ( bpath[i].code == ART_MOVETO );
+            os << "M " << bpath[i].x3 << "," << bpath[i].y3;
             break;
         default:
             g_assert_not_reached ();
         }
     }
-    if (closed)
-        g_string_append (result, "z ");
-    res = result->str;
-    g_string_free (result, FALSE);
+    if (closed) {
+        os << " z ";
+    }
 
-    return res;
+    return g_strdup((const gchar *)os.str().c_str());
 }
 
