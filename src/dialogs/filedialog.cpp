@@ -45,12 +45,9 @@
 #include "uri.h"
 
 
-namespace Inkscape
-{
-namespace UI
-{
-namespace Dialogs
-{
+namespace Inkscape {
+namespace UI {
+namespace Dialogs {
 
 /*#########################################################################
 ### SVG Preview Widget
@@ -62,50 +59,50 @@ namespace Dialogs
  */
 class SVGPreview : public Gtk::VBox
 {
-    public:
-        SVGPreview();
-        ~SVGPreview();
+public:
+    SVGPreview();
+    ~SVGPreview();
 
-        bool setDocument(SPDocument *doc);
+    bool setDocument(SPDocument *doc);
 
-        bool setFileName(Glib::ustring &fileName);
+    bool setFileName(Glib::ustring &fileName);
 
-        bool setFromMem(const char *xmlBuffer);
+    bool setFromMem(char const *xmlBuffer);
 
-        bool set(Glib::ustring &fileName, int dialogType);
+    bool set(Glib::ustring &fileName, int dialogType);
 
-        bool setURI(URI &uri);
+    bool setURI(URI &uri);
 
-        /**
-         * Show image embedded in SVG
-         */
-        void showImage(Glib::ustring &fileName);
+    /**
+     * Show image embedded in SVG
+     */
+    void showImage(Glib::ustring &fileName);
 
-        /**
-         * Show the "No preview" image
-         */
-        void showNoPreview();
+    /**
+     * Show the "No preview" image
+     */
+    void showNoPreview();
 
-        /**
-         * Show the "Too large" image
-         */
-        void showTooLarge(long fileLength);
+    /**
+     * Show the "Too large" image
+     */
+    void showTooLarge(long fileLength);
 
-    private:
-        /**
-         * The svg document we are currently showing
-         */
-        SPDocument *document;
+private:
+    /**
+     * The svg document we are currently showing
+     */
+    SPDocument *document;
 
-        /**
-         * The sp_svg_view widget
-         */
-        GtkWidget *viewerGtk;
+    /**
+     * The sp_svg_view widget
+     */
+    GtkWidget *viewerGtk;
 
-        /**
-         * are we currently showing the "no preview" image?
-         */
-        bool showingNoPreview;
+    /**
+     * are we currently showing the "no preview" image?
+     */
+    bool showingNoPreview;
 
 };
 
@@ -119,17 +116,14 @@ bool SVGPreview::setDocument(SPDocument *doc)
     document = doc;
 
     //This should remove it from the box, and free resources
-    if (viewerGtk)
-        {
+    if (viewerGtk) {
         gtk_widget_destroy(viewerGtk);
-        }
+    }
 
-     viewerGtk  = sp_svg_view_widget_new(doc);
-     GtkWidget *vbox = (GtkWidget *)gobj();
-     gtk_box_pack_start (GTK_BOX (vbox), viewerGtk, TRUE, TRUE, 0);
-     gtk_widget_show(viewerGtk);
-
-
+    viewerGtk  = sp_svg_view_widget_new(doc);
+    GtkWidget *vbox = (GtkWidget *)gobj();
+    gtk_box_pack_start(GTK_BOX(vbox), viewerGtk, TRUE, TRUE, 0);
+    gtk_widget_show(viewerGtk);
 
     return true;
 }
@@ -137,11 +131,10 @@ bool SVGPreview::setDocument(SPDocument *doc)
 bool SVGPreview::setFileName(Glib::ustring &fileName)
 { 
     SPDocument *doc = sp_document_new (fileName.c_str(), 0, 0);
-    if (!doc)
-        {
+    if (!doc) {
         g_warning("SVGView: error loading document '%s'\n",fileName.c_str());
         return false;
-        }
+    }
 
     setDocument(doc);
 
@@ -150,15 +143,14 @@ bool SVGPreview::setFileName(Glib::ustring &fileName)
 
 
 
-bool SVGPreview::setFromMem(const char *xmlBuffer)
+bool SVGPreview::setFromMem(char const *xmlBuffer)
 { 
     gint len = (gint)strlen(xmlBuffer);
-    SPDocument *doc = sp_document_new_from_mem (xmlBuffer, len, 0, 0);
-    if (!doc)
-        {
+    SPDocument *doc = sp_document_new_from_mem(xmlBuffer, len, 0, 0);
+    if (!doc) {
         g_warning("SVGView: error loading buffer '%s'\n",xmlBuffer);
         return false;
-        }
+    }
 
     setDocument(doc);
 
@@ -207,31 +199,32 @@ void SVGPreview::showImage(Glib::ustring &fileName)
     gint rectHeight = scaledImgHeight+2;        
 
     //Our template.  Modify to taste
-    gchar *xformat =
+    gchar const *xformat =
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
           "<svg\n"
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
           "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
           "width=\"%d\" height=\"%d\">\n"
           "<rect\n"
-            "style=\"fill:#eeeeee;stroke:none;\"\n"
-            "x=\"-100\" y=\"-100\" width=\"4000\" height=\"4000\"/>\n"
+          "  style=\"fill:#eeeeee;stroke:none;\"\n"
+          "  x=\"-100\" y=\"-100\" width=\"4000\" height=\"4000\"/>\n"
           "<image x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"\n"
           "xlink:href=\"%s\"/>\n"
           "<rect\n"
-            "style=\"fill:none;"
-              "stroke:#000000;stroke-width:1.0;"
-              "stroke-linejoin:miter;stroke-opacity:1.0000000;"
-              "stroke-miterlimit:4.0000000;stroke-dasharray:none;\"\n"
-            "x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"/>\n"
+          "  style=\"fill:none;"
+          "    stroke:#000000;stroke-width:1.0;"
+          "    stroke-linejoin:miter;stroke-opacity:1.0000000;"
+          "    stroke-miterlimit:4.0000000;stroke-dasharray:none;\"\n"
+          "  x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"/>\n"
           "<text\n"
-            "style=\"font-size:24.000000;font-style:normal;font-weight:normal;"
-              "fill:#000000;fill-opacity:1.0000000;stroke:none;"
-              "font-family:Bitstream Vera Sans;\"\n"
-            "x=\"10\" y=\"26\">%d x %d</text>\n"
+          "  style=\"font-size:24.000000;font-style:normal;font-weight:normal;"
+          "    fill:#000000;fill-opacity:1.0000000;stroke:none;"
+          "    font-family:Bitstream Vera Sans;\"\n"
+          "  x=\"10\" y=\"26\">%d x %d</text>\n"
           "</svg>\n\n";
 
     //Fill in the template
+    /* FIXME: Do proper XML quoting for fileName. */
     gchar *xmlBuffer = g_strdup_printf(xformat, 
            previewWidth, previewHeight,
            imgX, imgY, scaledImgWidth, scaledImgHeight,
@@ -259,7 +252,7 @@ void SVGPreview::showNoPreview()
     gint previewHeight = 600;
 
     //Our template.  Modify to taste
-    gchar *xformat =
+    gchar const *xformat =
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
           "<svg\n"
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
@@ -351,7 +344,7 @@ void SVGPreview::showTooLarge(long fileLength)
     gint previewHeight = 600;
 
     //Our template.  Modify to taste
-    gchar *xformat =
+    gchar const *xformat =
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
           "<svg\n"
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
@@ -452,30 +445,26 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
     gchar *fName = (gchar *)fileName.c_str();
 
 
-    if (Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR))
-        {
+    if (Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR)) {
         struct stat info;
-        if (stat(fName, &info))
-            {
+        if (stat(fName, &info)) {
             return FALSE;
-            }
+        }
         long fileLen = info.st_size;
-        if (fileLen > 0x100000L)
-            {
+        if (fileLen > 0x100000L) {
             showingNoPreview = false;
             showTooLarge(fileLen);
             return FALSE;
-            }
         }
+    }
     if (dialogType == SVG_TYPES &&
            (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
          )
-        {
+    {
         bool retval = setFileName(fileName);
         showingNoPreview = false;
         return retval;
-        }
-    else if (/*(dialogType == IMPORT_TYPES || dialogType == EXPORT_TYPES) &&*/
+    } else if (/*(dialogType == IMPORT_TYPES || dialogType == EXPORT_TYPES) &&*/
                  (
                   g_str_has_suffix(fName, ".bmp" ) ||
                   g_str_has_suffix(fName, ".gif" ) ||
@@ -486,16 +475,14 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
                   g_str_has_suffix(fName, ".tiff")
                  )
              )
-        {
+    {
         showImage(fileName);
         showingNoPreview = false;
         return true;
-        }
-    else
-        {
+    } else {
         showNoPreview();
         return false;
-        }
+    }
 }
 
 
@@ -566,35 +553,30 @@ static void createFilterMenu(Gtk::FileChooserDialog *dlg,
     }
 
     for (GSList *current_item = g_slist_next(extension_list);
-                   current_item; current_item = g_slist_next(current_item)) {
-
+         current_item; current_item = g_slist_next(current_item))
+    {
         Inkscape::Extension::DB::IOExtensionDescription * ioext = 
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
         Glib::ustring upattern("*");
         upattern += ioext->file_extension;
-        if ( !(strcmp(".svg",  ioext->file_extension)==0 ||
-             strcmp(".svgz", ioext->file_extension)==0) )
-            {
+        if (!( strcmp(".svg",  ioext->file_extension)==0 ||
+               strcmp(".svgz", ioext->file_extension)==0   ))
+        {
             Gtk::FileFilter filter;
             Glib::ustring uname(_(ioext->name));
             filter.set_name(uname);
             filter.add_pattern(upattern);
             dlg->add_filter(filter);
             (*extensionMap)[uname]=ioext->extension;
-            }
+        }
         //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
         allInkscapeFilter.add_pattern(upattern);
         if ( strncmp("image", ioext->mimetype, 5)==0 )
             allImageFilter.add_pattern(upattern);
-
     }
 
     Inkscape::Extension::db.free_list(extension_list);
-
-
-
-
 }
 
 
@@ -608,73 +590,72 @@ static void createFilterMenu(Gtk::FileChooserDialog *dlg,
  */
 class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 {
-    public:
-        FileOpenDialogImpl(const char *dir,
-                           FileDialogType fileTypes,
-                           const char *title);
-                           
+public:
+    FileOpenDialogImpl(char const *dir,
+                       FileDialogType fileTypes,
+                       char const *title);
 
-        virtual ~FileOpenDialogImpl();
+    virtual ~FileOpenDialogImpl();
 
-        bool show();
-    
-        Inkscape::Extension::Extension * getSelectionType();
+    bool show();
 
-        gchar * getFilename ();
+    Inkscape::Extension::Extension *getSelectionType();
 
-
-    protected:
+    gchar *getFilename();
 
 
-
-    private:
-
-
-        /**
-         * What type of 'open' are we? (open, import, place, etc)
-         */
-        FileDialogType dialogType;
-
-        /**
-         * Our svg preview widget
-         */
-        SVGPreview svgPreview;
-
-        /**
-         * Callback for seeing if the preview needs to be drawn
-         */
-        void updatePreviewCallback();
-
-        /**
-         * Fix to allow the user to type the file name 
-         */
-        Gtk::Entry fileNameEntry;
-
-        /**
-         * Callback for user input into fileNameEntry
-         */
-        void fileNameEntryChangedCallback();
-
-        /**
-         * Callback for user changing which item is selected on the list
-         */
-        void fileSelectedCallback();
+protected:
 
 
-        /**
-         * Filter name->extension lookup
-         */
-        std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
 
-        /**
-         * The extension to use to write this file
-         */
-        Inkscape::Extension::Extension * extension;
+private:
 
-        /**
-         * Filename that was given
-         */
-        Glib::ustring myFilename;
+
+    /**
+     * What type of 'open' are we? (open, import, place, etc)
+     */
+    FileDialogType dialogType;
+
+    /**
+     * Our svg preview widget
+     */
+    SVGPreview svgPreview;
+
+    /**
+     * Callback for seeing if the preview needs to be drawn
+     */
+    void updatePreviewCallback();
+
+    /**
+     * Fix to allow the user to type the file name 
+     */
+    Gtk::Entry fileNameEntry;
+
+    /**
+     * Callback for user input into fileNameEntry
+     */
+    void fileNameEntryChangedCallback();
+
+    /**
+     * Callback for user changing which item is selected on the list
+     */
+    void fileSelectedCallback();
+
+
+    /**
+     * Filter name->extension lookup
+     */
+    std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
+
+    /**
+     * The extension to use to write this file
+     */
+    Inkscape::Extension::Extension *extension;
+
+    /**
+     * Filename that was given
+     */
+    Glib::ustring myFilename;
 
 };
 
@@ -710,30 +691,25 @@ void FileOpenDialogImpl::fileNameEntryChangedCallback()
     Glib::ustring fName = fileNameEntry.get_text();
     //g_message("User hit return.  Text is '%s'\n", fName.c_str());
 
-   if (!Glib::path_is_absolute(fName))
-        {
+    if (!Glib::path_is_absolute(fName)) {
         //try appending to the current path
         // not this way: fName = get_current_folder() + "/" + fName;
         std::vector<Glib::ustring> pathSegments;
         pathSegments.push_back( get_current_folder() );
         pathSegments.push_back( fName );
         fName = Glib::build_filename(pathSegments);
-        }
+    }
 
     //g_message("path:'%s'\n", fName.c_str());
 
-    if (Glib::file_test(fName, Glib::FILE_TEST_IS_DIR))
-        {
+    if (Glib::file_test(fName, Glib::FILE_TEST_IS_DIR)) {
         set_current_folder(fName);
-        }
-    else if (Glib::file_test(fName, Glib::FILE_TEST_IS_REGULAR))
-       {
-       //dialog with either (1) select a regular file or (2) cd to dir
-       //simulate an 'OK'
-       set_filename(fName);
-       response(GTK_RESPONSE_OK);
-       }
-
+    } else if (Glib::file_test(fName, Glib::FILE_TEST_IS_REGULAR)) {
+        //dialog with either (1) select a regular file or (2) cd to dir
+        //simulate an 'OK'
+        set_filename(fName);
+        response(GTK_RESPONSE_OK);
+    }
 }
 
 
@@ -759,10 +735,11 @@ void FileOpenDialogImpl::fileSelectedCallback()
 /**
  * Constructor.  Not called directly.  Use the factory.
  */
-FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
+FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
                                        FileDialogType fileTypes,
-                                       const char *title) :
-                                       Gtk::FileChooserDialog(Glib::ustring(title)) {
+                                       char const *title) :
+    Gtk::FileChooserDialog(Glib::ustring(title))
+{
 
     /* One file at a time */
     set_select_multiple(false);
@@ -770,7 +747,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
     /* Initalize to Autodetect */
     extension = NULL;
     /* No filename to start out with */
-    myFilename  = "";
+    myFilename = "";
 
     /* Set our dialog type (open, import, etc...)*/
     dialogType = fileTypes;
@@ -818,9 +795,9 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
 /**
  * Public factory.  Called by file.cpp, among others.
  */
-FileOpenDialog * FileOpenDialog::create(const char *path, 
-                                        FileDialogType fileTypes,
-                                        const char *title)
+FileOpenDialog *FileOpenDialog::create(char const *path, 
+                                       FileDialogType fileTypes,
+                                       char const *title)
 {
     FileOpenDialog *dialog = new FileOpenDialogImpl(path, fileTypes, title);
     return dialog;
@@ -846,25 +823,21 @@ FileOpenDialogImpl::~FileOpenDialogImpl()
 bool
 FileOpenDialogImpl::show()
 {
-
     set_modal (TRUE);                      //Window
     sp_transientize((GtkWidget *)gobj());  //Make transient
     gint b = run();                        //Dialog
     hide();
 
-    if (b == GTK_RESPONSE_OK)
-        {
+    if (b == GTK_RESPONSE_OK) {
         if (get_filter()) {
             //Get which extension was chosen, if any
             extension = extensionMap[get_filter()->get_name()];
-            }
+        }
         myFilename = get_filename();
         return TRUE;
-        }
-    else
-        {
+    } else {
         return FALSE;
-        }
+    }
 }
 
 
@@ -907,58 +880,58 @@ FileOpenDialogImpl::getFilename (void)
 class FileSaveDialogImpl : public FileSaveDialog, public Gtk::FileChooserDialog
 {
 
-    public:
-        FileSaveDialogImpl(const char *dir,
-                           FileDialogType fileTypes,
-                           const char *title,
-                           const char * default_key);
+public:
+    FileSaveDialogImpl(char const *dir,
+                       FileDialogType fileTypes,
+                       char const *title,
+                       char const *default_key);
 
-        virtual ~FileSaveDialogImpl();
+    virtual ~FileSaveDialogImpl();
 
-        bool show();
+    bool show();
 
-        Inkscape::Extension::Extension * getSelectionType();
+    Inkscape::Extension::Extension *getSelectionType();
 
-        gchar * getFilename ();
+    gchar *getFilename();
 
-    protected:
+protected:
 
-        //# Child widgets
-        Gtk::CheckButton checkbox;
+    //# Child widgets
+    Gtk::CheckButton checkbox;
 
-    private:
+private:
 
-        /**
-         * What type of 'open' are we? (save, export, etc)
-         */
-        FileDialogType dialogType;
+    /**
+     * What type of 'open' are we? (save, export, etc)
+     */
+    FileDialogType dialogType;
 
-        /**
-         * Our svg preview widget
-         */
-        SVGPreview svgPreview;
+    /**
+     * Our svg preview widget
+     */
+    SVGPreview svgPreview;
 
-        /**
-         * Callback for seeing if the preview needs to be drawn
-         */
-        void updatePreviewCallback();
+    /**
+     * Callback for seeing if the preview needs to be drawn
+     */
+    void updatePreviewCallback();
 
-        /**
-         * Filter name->extension lookup
-         */
-        std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
+    /**
+     * Filter name->extension lookup
+     */
+    std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
 
-        bool append_extension;
+    bool append_extension;
 
-        /**
-         * The extension to use to write this file
-         */
-        Inkscape::Extension::Extension * extension;
+    /**
+     * The extension to use to write this file
+     */
+    Inkscape::Extension::Extension *extension;
 
-        /**
-         * Filename that was given
-         */
-        Glib::ustring myFilename;
+    /**
+     * Filename that was given
+     */
+    Glib::ustring myFilename;
 };
 
 
@@ -977,7 +950,6 @@ void FileSaveDialogImpl::updatePreviewCallback()
 
     bool retval = svgPreview.set(fileName, dialogType);
     set_preview_widget_active(retval);
-
 }
 
 
@@ -985,14 +957,13 @@ void FileSaveDialogImpl::updatePreviewCallback()
 /**
  * Constructor
  */
-FileSaveDialogImpl::FileSaveDialogImpl(const char *dir, 
+FileSaveDialogImpl::FileSaveDialogImpl(char const *dir, 
                                        FileDialogType fileTypes,
-                                       const char *title,
-                                       const char * default_key) :
-                                       FileChooserDialog(Glib::ustring(title),
-                                           Gtk::FILE_CHOOSER_ACTION_SAVE) {
-
-
+                                       char const *title,
+                                       char const *default_key) :
+    FileChooserDialog(Glib::ustring(title),
+                      Gtk::FILE_CHOOSER_ACTION_SAVE)
+{
     append_extension = (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1);
 
     /* One file at a time */
@@ -1001,7 +972,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
     /* Initalize to Autodetect */
     extension = NULL;
     /* No filename to start out with */
-    myFilename  = "";
+    myFilename = "";
 
     /* Set our dialog type (save, export, etc...)*/
     dialogType = fileTypes;
@@ -1033,7 +1004,6 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
 
     add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
     add_button(Gtk::Stock::SAVE,   GTK_RESPONSE_OK);
-
 }
 
 
@@ -1041,10 +1011,10 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
 /**
  * Public factory method.  Used in file.cpp
  */
-FileSaveDialog * FileSaveDialog::create(const char *path, 
-                                        FileDialogType fileTypes,
-                                        const char *title,
-                                        const char * default_key)
+FileSaveDialog *FileSaveDialog::create(char const *path, 
+                                       FileDialogType fileTypes,
+                                       char const *title,
+                                       char const *default_key)
 {
     FileSaveDialog *dialog = new FileSaveDialogImpl(path, fileTypes, title, default_key);
     return dialog;
@@ -1069,8 +1039,8 @@ FileSaveDialogImpl::~FileSaveDialogImpl()
  * Show this dialog modally.  Return true if user hits [OK]
  */
 bool
-FileSaveDialogImpl::show() {
-
+FileSaveDialogImpl::show()
+{
     set_modal (TRUE);                      //Window
     sp_transientize((GtkWidget *)gobj());  //Make transient
     gint b = run();                        //Dialog
@@ -1078,18 +1048,18 @@ FileSaveDialogImpl::show() {
 
     if (b == GTK_RESPONSE_OK) {
         if (get_filter()) {
-                //Get which extension was chosen, if any
-                extension = extensionMap[get_filter()->get_name()];
+            // Get which extension was chosen, if any.
+            extension = extensionMap[get_filter()->get_name()];
         }
         myFilename = get_filename();
         return TRUE;
+        /* FIXME: Why do we have more code after this `return' ? */
 
         append_extension = checkbox.get_active();
         prefs_set_int_attribute("dialogs.save_as", "append_extension", append_extension);
-        if (extension != NULL)
-            prefs_set_string_attribute("dialogs.save_as", "default", extension->get_id());
-        else
-            prefs_set_string_attribute("dialogs.save_as", "default", "");
+        prefs_set_string_attribute("dialogs.save_as", "default", ( extension != NULL
+                                                                   ? extension->get_id()
+                                                                   : "" ));
 
         return TRUE;
     } else {
@@ -1112,12 +1082,10 @@ FileSaveDialogImpl::getSelectionType()
  * Get the file name chosen by the user.   Valid after an [OK]
  */
 gchar *
-FileSaveDialogImpl::getFilename (void)
+FileSaveDialogImpl::getFilename()
 { 
     return g_strdup(myFilename.c_str());
 }
-
-
 
 
 
@@ -1126,3 +1094,14 @@ FileSaveDialogImpl::getFilename (void)
 }; //namespace UI
 }; //namespace Inkscape
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
