@@ -193,6 +193,7 @@ desktop.o: \
 	module.h \
 	modules/menu.h \
 	modules/svg.h \
+	prefs-utils.h \
 	select-context.h \
 	selection.h \
 	seltrans.h \
@@ -4098,9 +4099,6 @@ svg/svg-path.o: \
 	svg/svg-path.cpp \
 	modules/svg.h \
 	svg/gnome-canvas-bpath-util.h
-
-test.o: \
-	test.c
 
 text-context.o: \
 	text-context.cpp \

@@ -400,7 +400,6 @@ svg/svg-length.cpp
 svg/svg-path.cpp
 svg/svg-types.h
 svg/svg.h
-test.c
 text-context.cpp
 text-context.h
 toolbox.cpp

@@ -19,6 +19,8 @@ libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
 modules/gnome.cpp
 svg/gill-svg-path.cpp
+test.c
+test.cpp
 widgets/sp-hwrap-box.cpp
 widgets/sp-vwrap-box.cpp
 widgets/sp-toolbox.cpp

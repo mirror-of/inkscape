@@ -206,7 +206,6 @@ OBJECTS = \
 	svg/svg-color.o \
 	svg/svg-length.o \
 	svg/svg-path.o \
-	test.o \
 	text-context.o \
 	toolbox.o \
 	tools-switch.o \
@@ -454,7 +453,6 @@ LINTS = \
 	svg/svg-color.lint \
 	svg/svg-length.lint \
 	svg/svg-path.lint \
-	test.lint \
 	text-context.lint \
 	toolbox.lint \
 	tools-switch.lint \
