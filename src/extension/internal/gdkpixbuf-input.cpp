@@ -1,3 +1,4 @@
+#include <string.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <document.h>
 #include <dir-util.h>
@@ -68,9 +69,14 @@ GdkpixbufInput::init (void)
 
         pixformat = (GdkPixbufFormat *)formatlist->data;
 
+        /* thanks but no thanks, we'll handle SVG extensions... */        
+        if (strcmp(gdk_pixbuf_format_get_extensions(pixformat)[0],"svg")==0) {
+            continue;
+        }
+
         xmlString = g_strdup_printf(
             "<spmodule>\n"
-                "<name>%s Input</name>\n"
+                "<name>%s GDK pixbuf Input</name>\n"
                 "<id>modules.input.gdkpixbuf.%s</id>\n"
                 "<input>\n"
                     "<extension>.%s</extension>\n"
