@@ -11,8 +11,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <list>
 
 #include "helper/sp-marshal.h"
@@ -26,6 +25,10 @@
 
 #include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"
+using std::strchr;
+using std::strcmp;
+using std::strlen;
+using std::strstr;
 
 #define noSP_OBJECT_DEBUG_CASCADE
 
@@ -1153,12 +1156,10 @@ sp_object_removeAttribute (SPObject *object, const gchar *key, SPException *ex)
 static gchar *
 sp_object_get_unique_id (SPObject * object, const gchar * id)
 {
-	static gint count = 0;
+	static unsigned long count = 0;
 
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (SP_IS_DOCUMENT (object->document));
-
-	count++;
 
 	const gchar *name = sp_repr_name (object->repr);
 	g_assert (name != NULL);
@@ -1168,29 +1169,23 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 		name = local + 1;
 	}
 
-	gint len = strlen (name) + 17;
-	gchar *b = (gchar*) alloca (len);
-	g_assert (b != NULL);
-	gchar *realid = NULL;
-
 	if (id != NULL) {
 		if (object->document->getObjectById(id) == NULL) {
-			realid = g_strdup (id);
-			g_assert (realid != NULL);
+			return g_strdup(id);
 		}
 	}
 
-	while (realid == NULL) {
-		g_snprintf (b, len, "%s%d", name, count);
-		if (object->document->getObjectById(b) == NULL) {
-			realid = g_strdup (b);
-			g_assert (realid != NULL);
-		} else {
-			count++;
-		}
-	}
-
-	return realid;
+	size_t const name_len = strlen(name);
+	size_t const buflen = name_len + (sizeof(count) * 10 / 4) + 1;
+	gchar *const buf = (gchar *) g_malloc(buflen);
+	memcpy(buf, name, name_len);
+	gchar *const count_buf = buf + name_len;
+	size_t const count_buflen = buflen - name_len;
+	do {
+		++count;
+		g_snprintf(count_buf, count_buflen, "%ul", count);
+	} while ( object->document->getObjectById(buf) != NULL );
+	return buf;
 }
 
 /* Style */
