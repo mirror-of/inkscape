@@ -524,15 +524,12 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
 unsigned
 sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
 {
-    g_return_val_if_fail(( child
-                           && ( child->parent == repr )
-                           && ( child != ref )
-                           && ( !ref || ( ref->parent == repr ) ) ),
+    g_return_val_if_fail(child != NULL, FALSE);
+    g_return_val_if_fail(child->parent == repr, FALSE);
+    g_return_val_if_fail(child != ref, FALSE);
+    g_return_val_if_fail(( !ref || ( repr
+                                     && ( ref->parent == repr ) ) ),
                          FALSE);
-    /* TODO: Decide whether to allow parentless reprs to have siblings.  If disallowed, then
-       require (repr || !ref).  If allowed, then note that sp_repr_prev will wrongly return NULL
-       for siblings other than the first, so undo information will be wrong.  One fix would be to
-       add an invisible root repr to act as a parent for these otherwise-parentless nodes. */
 
     SPRepr *const prev = sp_repr_prev(child);
 
