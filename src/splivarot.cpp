@@ -361,6 +361,8 @@ sp_selected_path_outline ()
   ButtType o_butt;
   NRMatrix i2root;
 
+  curve = NULL;
+
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
@@ -633,6 +635,8 @@ sp_selected_path_create_offset_object (bool expand,bool updating)
   ButtType o_butt;
   NRMatrix i2root;
 
+  curve = NULL;
+
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
@@ -839,6 +843,8 @@ sp_selected_path_do_offset (bool expand)
   JoinType o_join;
   ButtType o_butt;
   NRMatrix i2root;
+
+  curve = NULL;
 
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
@@ -1089,6 +1095,8 @@ sp_selected_path_simplify ()
   SPDesktop *desktop;
   NRMatrix i2root;
 
+  curve = NULL;
+
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
@@ -1235,9 +1243,12 @@ Path_for_item (SPItem * item)
   dest->SetWeighted (false);
   dest->SetBackData (false);
   {
-    int i;
-    bool closed = false;
-    float lastX, lastY;
+    int   i;
+    bool  closed = false;
+    float lastX  = 0.0;
+    float lastY  = 0.0;
+
+
 
     for (i = 0; bpath[i].code != ART_END; i++)
       {
