@@ -22,26 +22,24 @@ namespace Internal {
 class PsOutput : Inkscape::Extension::Implementation::Implementation {
 
 public:
-	bool check (Inkscape::Extension::Extension * module);
-	void          save  (Inkscape::Extension::Output *mod,
-	                     SPDocument *doc,
-	                     const gchar *uri);
-	static void   init  (void);
-
+    bool check(Inkscape::Extension::Extension *module);
+    void save(Inkscape::Extension::Output *mod,
+              SPDocument *doc,
+              gchar const *uri);
+    static void init();
 };
 
 } } }  /* namespace Inkscape, Extension, Implementation */
 
-#endif /* EXTENSION_INTERNAL_PS_OUT_H */
+#endif /* !EXTENSION_INTERNAL_PS_OUT_H */
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
-
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
