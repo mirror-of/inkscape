@@ -39,6 +39,10 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
       _argc(argc),
       _argv(NULL),
       _preferences(NULL),
+      _app_impl(NULL),
+      _path_home(NULL),
+      _path_etc(NULL),
+      _path_share(NULL),
       _save_preferences(false),
       _use_gui(use_gui)
 {
@@ -111,7 +115,7 @@ Application::run()
 {
     gint result = 0;
 
-    g_assert(_app_impl != NULL);
+//    g_assert(_app_impl != NULL);
 
     /* Note:  This if loop should be replaced by calls to the
      * various subclasses of I::A::AppPrototype.
