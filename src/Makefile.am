@@ -111,6 +111,7 @@ TESTS =	\
 	mod360-test$(EXEEXT)	\
 	round-test$(EXEEXT)	\
 	sp-gradient-test$(EXEEXT)	\
+	style-test$(EXEEXT)	\
 	display/bezier-utils-test$(EXEEXT)	\
 	helper/units-test$(EXEEXT)	\
 	libnr/in-svg-plane-test$(EXEEXT)	\
@@ -133,6 +134,7 @@ check_PROGRAMS =	\
 	mod360-test	\
 	round-test	\
 	sp-gradient-test	\
+	style-test	\
 	display/bezier-utils-test	\
 	helper/units-test	\
 	libnr/in-svg-plane-test	\

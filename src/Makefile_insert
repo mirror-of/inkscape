@@ -281,5 +281,8 @@ round_test_LDADD = libinkpost.a
 sp_gradient_test_SOURCES = sp-gradient-test.cpp
 sp_gradient_test_LDADD = $(all_libs) 
 
+style_test_SOURCES = style-test.cpp
+style_test_LDADD = $(all_libs)
+
 inkscape_version.h: ../configure.ac
 	echo '#define INKSCAPE_VERSION "$(VERSION)"' > inkscape_version.h
