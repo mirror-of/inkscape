@@ -1,3 +1,25 @@
+2004-02-04  bulia byak <bulia@users.sourceforge.net>
+
+	* src/style.h src/style.cpp src/sp-text.cpp: Read-only (so far) support for
+	letter-spacing CSS property
+
+	* src/event-context.cpp src/select-context.cpp src/draw-context.cpp
+	src/dyna-draw-context.cpp src/knotholder.cpp src/nodepath.cpp src/object-edit.cpp:
+	Trimming #if 0
+
+	* src/text-context.cpp: Trimming #if 0, removing unneeded document_done
+
+	* src/spiral-context.cpp src/star-context.cpp: Trimming #if 0, enabling ctrl-drag
+
+	* src/dialogs/dialog-events.cpp src/preferences-skeleton.h: Added
+	options.transientpolicy, 1 as default
+ 
+	* src/preferences-skeleton.h: Increased options.keyscroll
+ 
+	* src/dialogs/xml-tree.cpp: Fix for 852619, fix for failed asserts when selecting root
+ 
+	* src/widgets/gradient-selector.cpp: Fix for 854514, 856682 
+
 2004-02-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-snap.h, src/desktop-snap.cpp: Indicate that the snap_list
