@@ -1,3 +1,19 @@
+2004-09-06  Ted Gould  <ted@gould.cx>
+	* src/extension/plugin/gimgrad.cpp, src/extension/implementation/plugin*
+	  share/extension/gimpgrad.inkmod, src/extension/system.cpp,
+	  src/extension/extension.h:
+
+	Mega commit.  This commit does two things, it adds in the ability to
+	do plugins in Inkscape.  This means that there are loadable modules
+	that can be used for just about anything.  It also provides a sample
+	implementation of a plugin to load GIMP gradients.  This means that
+	GIMP gradients can be imported into Inkscape, giving a larger set of
+	gradients that can be used in Inkscape.
+
+	Currently, nothing here is really complete, but it is functional.  The
+	plugins really only work for input plugins, and the GIMP gradient example
+	isn't very robust.  They will come shortly.
+
 2004-09-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/curve.h, src/display/curve.cpp:
