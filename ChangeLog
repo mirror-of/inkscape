@@ -1,6 +1,6 @@
 2004-01-02  Kees Cook  <kees@outflux.net>
 
-	* share/icons/icons.svg: updated view and location
+    * share/icons/icons.svg: updated view and location
     * src/document.cpp, src/dialogs/rdf.cpp: fixed another bug in metadata
 	  due to svg: prefix change.
     * src/inkscape-stock.h, src/inkscape-stock.cpp, share/icons/Makefile.am:
