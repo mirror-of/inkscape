@@ -31,12 +31,14 @@
 #include "internal/win32.h"
 #endif
 #include "internal/ps-out.h"
+#include "internal/eps-out.h"
 
 /** This is the extention that all files are that are pulled from
     the extension directory and parsed */
 #define SP_MODULE_EXTENSION  "inkmod"
 
 static void build_module_from_dir (const gchar * dirname);
+static void check_extensions (void);
 
 /**
 	\return   none
@@ -55,6 +57,7 @@ sp_modules_init (void)
 	/* TODO: Change to Internal */
 	Inkscape::Extension::Internal::Svg::init();
 	Inkscape::Extension::Internal::PsOutput::init();
+	Inkscape::Extension::Internal::EpsOutput::init();
 	Inkscape::Extension::Internal::PrintPS::init();
 #ifdef WITH_GNOME_PRINT
 	Inkscape::Extension::Internal::PrintGNOME::init();
@@ -63,6 +66,9 @@ sp_modules_init (void)
 	Inkscape::Extension::Internal::PrintWin32::init();
 #endif
 	build_module_from_dir(INKSCAPE_MODULESDIR);
+
+	/* now we need to check and make sure everyone is happy */
+	check_extensions();
 
 	return;
 }
@@ -111,4 +117,10 @@ build_module_from_dir (const gchar * dirname)
 	return;
 }
 
+static void
+check_extensions (void)
+{
+
+
+}
 

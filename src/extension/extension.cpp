@@ -27,8 +27,7 @@
 #include "inkscape.h"
 #include "sp-object.h"
 #include "document.h"
-#include "file.h"
-#include "interface.h"
+#include "prefs-utils.h"
 #include "extension.h"
 
 #include "db.h"
@@ -159,6 +158,13 @@ bool
 Extension::loaded (void)
 {
     return state == STATE_LOADED;
+}
+
+bool
+Extension::check (void)
+{
+	/* Need to check the local settings here */
+	return imp->check(this);
 }
 
 /**

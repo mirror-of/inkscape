@@ -23,6 +23,7 @@ libinternal_a_SOURCES = \
 		svg.h svg.cpp \
 		ps.h ps.cpp \
 		ps-out.h ps-out.cpp \
+		eps-out.h eps-out.cpp \
 		$(gnome_print_sources)
 
 EXTRA_DIST = \

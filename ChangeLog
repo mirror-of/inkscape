@@ -1,3 +1,31 @@
+2004-04-09  Ted Gould <ted@gould.cx>
+
+	* share/extensions/Makefile.am, share/extensions/epsi_output.inkmod,
+      share/extensions/ps2epsi.sh, src/extension/extension.cpp,
+      src/extension/extension.h, src/extension/init.cpp,
+      src/extension/implementation/implementation.cpp,
+	  src/extension/implementation/implementation.h,
+	  src/extension/implementation/script.cpp,
+	  src/extension/implementation/script.h,
+	  src/extension/internal/Makefile.am, src/extension/internal/eps-out.cpp,
+	  src/extension/internal/eps-out.h, src/extension/internal/ps.cpp:
+
+	  Okay, these are some changes that I've had in my directory for
+	  a little while.
+
+	  1) adding the basics of checking extensions.  This will allow
+	     them to remove themselves based on their dependencies failing.
+
+	  2) Adding the concepts of a 'helper extension' to scripts.  This
+	     allows them to use other extensions for handling the data, so
+		 they don't have to deal with SVG directly - Inkscape will
+		 build the pipeline.  An example of this is the epsi output.
+
+      3) Adding the bounding box change provided by Carl Hetherington
+	     to the Postscript output.  The EPS output plugin sets this, so
+		 now EPSes have smaller bounding boxes.  A GUI needs to be
+		 written for this setting.
+
 2004-04-08  MenTaLguY <mental@rydia.net>
 
     * configure.in, src/svg/ftos.cpp: fix for OS X build

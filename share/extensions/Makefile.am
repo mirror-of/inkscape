@@ -11,6 +11,7 @@ extensions = \
 	SpSVG.pm \
 	svg_dropshadow \
 	dia2svg.sh \
+	ps2epsi.sh \
 	txt2svg.pl
 
 otherstuff = \
@@ -23,6 +24,7 @@ modules = \
 	roundhole.inkmod \
 	dropshadow.inkmod \
 	dia.inkmod \
+	epsi_output.inkmod \
 	txt2svg.inkmod
 
 extension_SCRIPTS = \

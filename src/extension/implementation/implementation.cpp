@@ -35,6 +35,12 @@ Implementation::unload (Inkscape::Extension::Extension * module) {
 	return;
 } /* Implementation::unload */
 
+bool
+Implementation::check (Inkscape::Extension::Extension * module) {
+	/* If there are no checks, they all pass */
+	return TRUE;
+} /* Implemenation::check */
+
 GtkDialog *
 Implementation::prefs (Inkscape::Extension::Input * module, const gchar * filename) {
 	return NULL;

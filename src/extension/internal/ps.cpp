@@ -297,14 +297,28 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
 	if (_bitmap) return 0;
 
-	if (res >= 0) res = fprintf (_stream, "%%%%BoundingBox: %i %i %i %i\n",
-															 0, 0,
-															 (int) ceil (sp_document_width (doc)),
-															 (int) ceil (sp_document_height (doc)));
-	if (res >= 0) res = fprintf (_stream, "%%%%HiResBoundingBox: %g %g %g %g\n",
-															 0.0, 0.0,
-															 sp_document_width (doc),
-															 sp_document_height (doc));
+	NRRect d;
+	bool   pageBoundingBox;
+	mod->get_param("pageBoundingBox", &pageBoundingBox);
+	// printf("Page Bounding Box: %s\n", pageBoundingBox ? "TRUE" : "FALSE");
+	if (pageBoundingBox)
+	{
+		d.x0 = d.y0 = 0;
+		d.x1 = ceil (sp_document_width (doc));
+		d.y1 = ceil (sp_document_height (doc));
+	}
+	else
+	{
+		SPItem* doc_item = SP_ITEM (sp_document_root (doc));
+		sp_item_bbox_desktop (doc_item, &d);
+	}
+
+	if (res >= 0)
+		res = fprintf (_stream, "%%%%BoundingBox: %i %i %i %i\n",
+						(int) d.x0, (int) d.y0, (int) ceil (d.x1), (int) ceil (d.y1));
+	if (res >= 0)
+		res = fprintf (_stream, "%%%%HiResBoundingBox: %g %g %g %g\n",
+						d.x0, d.y0, d.x1, d.y1);
 
 	if (res >= 0) res = fprintf (_stream, "%g %g translate\n", 0.0, sp_document_height (doc));
 	if (res >= 0) res = fprintf (_stream, "0.8 -0.8 scale\n");
@@ -838,6 +852,7 @@ PrintPS::init (void)
 			"<param name=\"bitmap\" type=\"boolean\">FALSE</param>\n"
 			"<param name=\"resolution\" type=\"string\">72</param>\n"
 			"<param name=\"destination\" type=\"string\">lp</param>\n"
+			"<param name=\"pageBoundingBox\" type=\"boolean\">TRUE</param>\n"
 			"<print/>\n"
 		"</spmodule>", new PrintPS());
 

@@ -35,6 +35,7 @@ public:
     /* Basic functions for all Extension */
     virtual bool          load        (Inkscape::Extension::Extension * module);    /**< The function that should be called to load the module */
     virtual void          unload      (Inkscape::Extension::Extension * module);    /**< The function that should be called to unload the module */
+	virtual bool          check       (Inkscape::Extension::Extension * module);    /**< A function to verify any dependencies */
 
     /* Input functions */
     virtual GtkDialog *   prefs       (Inkscape::Extension::Input * module,

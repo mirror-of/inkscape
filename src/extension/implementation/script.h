@@ -41,6 +41,7 @@ public:
                           Script       (void);
     virtual bool          load         (Inkscape::Extension::Extension * module);
     virtual void          unload       (Inkscape::Extension::Extension * module);
+	virtual bool          check        (Inkscape::Extension::Extension * module);
     virtual GtkDialog *   prefs        (Inkscape::Extension::Input * module,
                                         const gchar * filename);
     virtual SPDocument *  open         (Inkscape::Extension::Input * module,

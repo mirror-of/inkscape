@@ -1,0 +1,14 @@
+<spmodule>
+    <name>EPSI Output</name>
+    <id>modules.output.epsi</id>
+    <output>
+        <extension>.epsi</extension>
+        <mimetype>image/x-encapsulated-postscript</mimetype>
+        <filetypename>Encapsulated Postscript Interchange (*.epsi)</filetypename>
+        <filetypetooltip>Encapsulated Postscript with a thumbnail</filetypetooltip>
+    </output>
+    <extension>
+        <command reldir="extensions">ps2epsi.sh</command>
+		<helper_extension>module.output.ps</helper_extension>
+    </extension>
+</spmodule>

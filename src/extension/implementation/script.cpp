@@ -57,6 +57,7 @@ namespace Implementation {
 Script::Script (void) : Implementation::Implementation()
 {
 	command = NULL;
+	helper_extension = NULL;
 	return;
 }
 
@@ -149,11 +150,6 @@ Script::load (Inkscape::Extension::Extension * module)
 	g_free(command);
 	command = command_text;
 
-	if (helper_extension != NULL) {
-		g_free(helper_extension);
-		helper_extension = NULL;
-	}
-
 	return TRUE;
 }
 
@@ -171,6 +167,52 @@ Script::unload (Inkscape::Extension::Extension * module)
 	g_free(command);
 	g_free(helper_extension);
 	return;
+}
+
+/**
+	\return   Whether the check passed or not
+	\breif    Check every dependency that was given to make sure we should keep this extension
+	\param    module  The Extension in question
+
+*/
+bool
+Script::check (Inkscape::Extension::Extension * module)
+{
+	SPRepr * child_repr;
+	gchar * command_text;
+
+	child_repr = sp_repr_children(module->get_repr());
+	while (child_repr != NULL) {
+		if (!strcmp(sp_repr_name(child_repr), "extension")) {
+			child_repr = sp_repr_children(child_repr);
+			while (child_repr != NULL) {
+				if (!strcmp(sp_repr_name(child_repr), "check")) {
+					command_text = solve_reldir(child_repr);
+					
+					/* I've got the command */
+
+
+
+				}
+
+				if (!strcmp(sp_repr_name(child_repr), "helper_extension")) {
+					const gchar * helper;
+
+					helper = sp_repr_content(sp_repr_children(child_repr));
+					if (Inkscape::Extension::db.get(helper) == NULL) {
+						return FALSE;
+					}
+				}
+
+				child_repr = sp_repr_next(child_repr);
+			}
+
+			break;
+		}
+		child_repr = sp_repr_next(child_repr);
+	}
+
+	return TRUE;
 }
 
 /**

@@ -88,16 +88,17 @@ protected:
     Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
 
 public:
-              Extension    (SPRepr * in_repr,
-                            Implementation::Implementation * in_imp);
-    virtual  ~Extension    (void);
+                  Extension    (SPRepr * in_repr,
+                                Implementation::Implementation * in_imp);
+    virtual      ~Extension    (void);
 
-    void      set_state    (state_t in_state);
-    state_t   get_state    (void);
-    bool      loaded       (void);
-    SPRepr *  get_repr     (void);
-    gchar *   get_id       (void);
-    gchar *   get_name     (void);
+    void          set_state    (state_t in_state);
+    state_t       get_state    (void);
+    bool          loaded       (void);
+	virtual bool  check        (void);
+    SPRepr *      get_repr     (void);
+    gchar *       get_id       (void);
+    gchar *       get_name     (void);
 
 
 /* Parameter Stuff */
