@@ -676,8 +676,8 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
             sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font, style->font_size.computed);
             sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font, SP_FONT_SELECTOR(fontsel));
 
-						font->Unref();
-						font=NULL;
+//						font->Unref();
+//						font=NULL;
         }
 
         if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
