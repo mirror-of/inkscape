@@ -11,6 +11,8 @@
     * src/selection.h, src/selection.cpp: touched up and documented
 	  SPSelection
 
+	* src/uri-references.h: documentation touch-ups
+
 2004-04-20  Kees Cook <kees@outflux.net>
 
 	* src/file.cpp, src/desktop.cpp: moved sp_file_open unselection code into

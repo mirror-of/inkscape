@@ -36,6 +36,9 @@ class URIReference : public SigC::Object {
 public:
 	/**
 	 * Constructor.
+	 *
+	 * @param owner The object on whose behalf this URIReference
+	 *              is holding a reference to the target object.
 	 */
 	URIReference(SPObject *owner);
 
