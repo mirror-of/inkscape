@@ -41,7 +41,7 @@ public :
     static DialogAlign & get();
     virtual Gtk::Container & get_main_widget() {return _widget;}
     Gtk::Table &align_table(){return _alignTable;}
-    Gtk::Table &ditribute_table(){return _distributeTable;}
+    Gtk::Table &distribute_table(){return _distributeTable;}
     Gtk::Table &nodes_table(){return _nodesTable;}
     Gtk::Tooltips &tooltips(){return _tooltips;}
     enum 
@@ -63,6 +63,8 @@ private :
                         guint row, guint col);
     void addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
                         guint col, NR::Dim2 orientation, bool distribute);
+    void addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+                        guint row, guint col);
     
     virtual ~DialogAlign();
    

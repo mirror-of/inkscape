@@ -21,6 +21,8 @@
 #include "dialogs/docker.h"
 #include "dialogs/dockable.h"
 
+#include "dialogs/unclump.h"
+
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/button.h>
 #include <gtkmm/table.h>
@@ -262,7 +264,7 @@ public :
                      double kBegin, double kEnd
         ):
         Action(id, tiptext, row, column,
-               dialog.ditribute_table(), dialog.tooltips()),
+               dialog.distribute_table(), dialog.tooltips()),
         _dialog(dialog),
         _onInterSpace(onInterSpace),
         _orientation(orientation),
@@ -402,6 +404,27 @@ private :
     }
 };
 
+class ActionUnclump : public Action {
+public :
+    ActionUnclump(const Glib::ustring &id,
+               const Glib::ustring &tiptext,
+               guint row,
+               guint column,
+               DialogAlign &dialog):
+        Action(id, tiptext, row, column,
+               dialog.distribute_table(), dialog.tooltips())
+    {}
+
+private :
+    virtual void on_button_click()
+    {
+        if (!SP_ACTIVE_DESKTOP) return;
+
+        unclump ((GSList *) SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList());
+
+        sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+    }
+};
 
 void DialogAlign::on_ref_change(){
 //Make blink the master
@@ -449,6 +472,7 @@ void DialogAlign::addDistributeButton(const Glib::ustring &id, const Glib::ustri
             )
         );
 }
+
 void DialogAlign::addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext,
                    guint col, NR::Dim2 orientation, bool distribute)
 {
@@ -458,13 +482,23 @@ void DialogAlign::addNodeButton(const Glib::ustring &id, const Glib::ustring tip
             *this, orientation, distribute));
 }
 
+void DialogAlign::addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                                      guint row, guint col)
+{
+    _actionList.push_back(
+        new ActionUnclump(
+            id, tiptext, row, col, *this)
+        );
+}
+
+
 DialogAlign::DialogAlign():
     Dockable(_("Layout"), "dialogs.align"),
     _alignFrame(_("Align")),
     _distributeFrame(_("Distribute")),
     _nodesFrame(_("Nodes")),
     _alignTable(2,5, true),
-    _distributeTable(2,4, true),
+    _distributeTable(3,4, true),
     _nodesTable(1, 4, true),
     _anchorLabel(_("Relative to: "))
 {
@@ -530,6 +564,10 @@ DialogAlign::DialogAlign():
     addDistributeButton("distribute_top",
                         _("Distribute tops equidistantly"),
                         1, 3, false, NR::Y, 0, 1);
+
+    addUnclumpButton("unclump",
+                        _("Unclump selected objects"),
+                        2, 0);
 
     //Node Mode buttons
     addNodeButton("node_halign",
