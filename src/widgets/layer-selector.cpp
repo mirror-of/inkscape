@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
 #include <functional>
 #include <gtkmm/liststore.h>
 #include "widgets/layer-selector.h"
@@ -32,7 +33,11 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
 
     _layer_model = Gtk::ListStore::create(_model_columns);
     _selector.set_model(_layer_model);
-    _selector.pack_start(_model_columns.label);
+    _selector.pack_start(_label_renderer);
+    _selector.set_cell_data_func(
+        _label_renderer,
+        sigc::mem_fun(*this, &LayerSelector::_prepareLabelRenderer)
+    );
 
     setDesktop(desktop);
 }
@@ -75,11 +80,24 @@ namespace {
 class is_layer {
 public:
     is_layer(SPDesktop *desktop) : _desktop(desktop) {}
-
-    bool operator()(SPObject &object) { return _desktop->isLayer(&object); }
-
+    bool operator()(SPObject &object) const {
+        return _desktop->isLayer(&object);
+    }
 private:
     SPDesktop *_desktop;
+};
+
+class column_matches_object {
+public:
+    column_matches_object(Gtk::TreeModelColumn<SPObject *> &column,
+                          SPObject *object)
+    : _column(column), _object(object) {}
+    bool operator()(Gtk::TreeModel::const_iterator const &iter) const {
+        return (*iter)[_column] == _object;
+    }
+private:
+    Gtk::TreeModelColumn<SPObject *> &_column;
+    SPObject *_object;
 };
 
 }
@@ -97,15 +115,11 @@ void LayerSelector::_updateLayer(SPObject *layer) {
             reverse_list<SPObject &, SPObject::ParentIterator>(layer, root)
         ));
 
-        Gtk::ListStore::iterator iter(_layer_model->children().begin());
-        while ( iter != _layer_model->children().end() ) {
-            if ( iter->get_value(_model_columns.object) == layer ) {
-                iter->set_value(_model_columns.is_selected, true);
-                _selector.set_active(iter);
-                break;
-            }
-            ++iter;
-        }
+        _selector.set_active(
+            std::find_if(_layer_model->children().begin(),
+                         _layer_model->children().end(),
+                         column_matches_object(_model_columns.object, layer))
+        );
     }
 }
 
@@ -125,10 +139,10 @@ void LayerSelector::_buildEntries(unsigned depth,
     }
 }
 
-void LayerSelector::_buildSiblingEntries(unsigned depth,
-                                         SPObject &parent,
-                                         Inkscape::Util::List<SPObject &> hierarchy)
-{
+void LayerSelector::_buildSiblingEntries(
+    unsigned depth, SPObject &parent,
+    Inkscape::Util::List<SPObject &> hierarchy
+) {
     using Inkscape::Util::List;
     using Inkscape::Util::rest;
     using Inkscape::Util::reverse_list_in_place;
@@ -155,11 +169,59 @@ void LayerSelector::_buildSiblingEntries(unsigned depth,
 
 void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
     Gtk::ListStore::iterator entry(_layer_model->append());
-    entry->set_value(_model_columns.is_selected, false);
-    gchar *label=g_strdup_printf("%*s#%s", depth*2, "", sp_repr_attr(SP_OBJECT_REPR(&object), "id"));
-    entry->set_value(_model_columns.label, Glib::ustring(label));
-    g_free(label);
+
+    entry->set_value(_model_columns.depth, depth);
     entry->set_value(_model_columns.object, &object);
+}
+
+void LayerSelector::_prepareLabelRenderer(
+    Gtk::TreeModel::const_iterator const &row
+) {
+    unsigned depth=(*row)[_model_columns.depth];
+    SPObject *object=(*row)[_model_columns.object];
+
+    // TODO: when the currently selected row is removed,
+    //       (or before one has been selected) something appears to
+    //       "invent" an iterator with null data and try to render it;
+    //       where does it come from, and how can we avoid it?
+    if (object) {
+        SPObject *layer=( _desktop ? _desktop->currentLayer() : NULL );
+
+        gchar const *format;
+        if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ) {
+            format="%*s<small>%s%s%s</small>";
+        } else {
+            format="%*s<small><small>%s%s%s</small></small>";
+        }
+
+        gchar const *prefix="";
+        gchar const *suffix="";
+
+        gchar const *label;
+        if (depth) {
+            if (object->label()) {
+                label = object->label();
+            } else {
+                prefix = "(#";
+                label = SP_OBJECT_ID(object);
+                suffix = ")";
+            }
+        } else {
+            prefix = "(";
+            label = "root";
+            suffix = ")";
+        }
+
+        gchar *text=g_markup_printf_escaped(format, depth*3, "",
+                                            prefix, label, suffix);
+        _label_renderer.property_markup() = text;
+        g_free(text);
+    } else {
+        _label_renderer.property_markup() = "<small></small>";
+    }
+
+    _label_renderer.property_ypad() = 1;
+    _label_renderer.property_yalign() = 0.25;
 }
 
 }

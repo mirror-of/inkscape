@@ -840,7 +840,6 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     GtkWidget *w;
 
     GtkWidget *hbox;
-    GtkWidget *coord_box;
     GtkWidget *eventbox;
     GtkTooltips *tt;
     GtkStyle *style;
@@ -856,7 +855,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_container_add (GTK_CONTAINER (dtw), dtw->vbox);
 
     dtw->statusbar = gtk_hbox_new (FALSE, 0);
-    gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
+    //gtk_widget_set_usize (dtw->statusbar, -1, BOTTOM_BAR_HEIGHT);
     gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->statusbar, FALSE, TRUE, 0);
 
     hbox = gtk_hbox_new (FALSE, 0);
@@ -948,14 +947,15 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
     // cursor coordinates
-    coord_box = gtk_vbox_new (FALSE, 0);
     dtw->coord_status = gtk_label_new ("");
     // FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
+    // that's because labels are "lightweight" widgets that don't have
+    // their own gdk window (and so can't receive events to detect hover);
+    // you need to put them in an eventbox at minimum
     gtk_tooltips_set_tip (tt, dtw->coord_status, _("Cursor coordinates"), NULL);
-    gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, SP_ICON_SIZE_BUTTON);
+    gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, -1);
     sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
-    gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, STATUS_COORD_SKIP);
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), coord_box, FALSE, FALSE, 1);
+    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->coord_status, FALSE, FALSE, 1);
 
     dtw->layer_selector_gtkmm = new Inkscape::Widgets::LayerSelector(NULL);
     dtw->layer_selector_gtkmm->reference();
@@ -964,7 +964,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     dtw->layer_selector = gtk_option_menu_new();
     gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Select layer"), NULL);
-    gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
+    //gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), dtw->layer_selector, FALSE, FALSE, 1);
 
     dtw->select_status = gtk_label_new (NULL);//gtk_statusbar_new ();

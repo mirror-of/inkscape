@@ -44,16 +44,14 @@ private:
 
     class LayerModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
-        Gtk::TreeModelColumn<bool> is_selected;
-        Gtk::TreeModelColumn<Glib::ustring> label;
+        Gtk::TreeModelColumn<unsigned> depth;
         Gtk::TreeModelColumn<SPObject *> object;
 
-        LayerModelColumns() { add(is_selected); add(label); add(object); }
+        LayerModelColumns() { add(depth); add(object); }
     };
 
     LayerModelColumns _model_columns;
-    Gtk::CellRendererToggle _selected_column_renderer;
-    Gtk::CellRendererText _name_column_renderer;
+    Gtk::CellRendererText _label_renderer;
     Glib::RefPtr<Gtk::ListStore> _layer_model;
 
     sigc::connection _layer_changed_connection;
@@ -61,12 +59,15 @@ private:
     SPDesktop *_desktop;
 
     void _updateLayer(SPObject *layer);
+
     void _buildEntry(unsigned depth, SPObject &object);
     void _buildEntries(unsigned depth,
                        Inkscape::Util::List<SPObject &> hierarchy);
     void _buildSiblingEntries(unsigned depth,
                               SPObject &parent,
                               Inkscape::Util::List<SPObject &> hierarchy);
+
+    void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 };
 
 }

@@ -1,5 +1,11 @@
 2004-10-23  MenTaLguY  <mental@rydia.net>
 
+	* src/desktop.cpp: removed vertical usize limits on statusbar
+
+	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
+	  more layer selector work; simplfied model and customized CellRenderer
+	  settings a bit
+
 	* src/attributes.cpp, src/attributes.h, src/sp-object.cpp, src/sp-object.h:
 	  add inkscape:label attribute
 
