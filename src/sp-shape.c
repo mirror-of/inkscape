@@ -159,11 +159,12 @@ sp_shape_release (SPObject *object)
 	SPItem *item;
 	SPShape *shape;
 	SPItemView *v;
+	int i;
 
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
 
-	for (int i=0; i<SP_MARKER_LOC_QTY; i++) {
+	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
 	  if (shape->marker[i]) {
 	    sp_signal_disconnect_by_data (shape->marker[i], object);
 	    for (v = item->display; v != NULL; v = v->next) {
@@ -186,6 +187,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
 	SPItem *item;
 	SPShape *shape;
+	int i;
 
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
@@ -199,7 +201,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	 * sets it.
 	 */
 	/* TODO:  It would be nice if this could be done at an earlier level */
-	for (int i=0; i<SP_MARKER_LOC_QTY; i++) {
+	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
 	  if (shape->marker[i] == NULL) {
 	    /* g_message("Setting marker[%d] to '%s'", i, object->style->marker[i].value); */
 	    sp_shape_set_marker (object, i, object->style->marker[i].value);
@@ -260,8 +262,9 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		}
 		/* Dimension marker views */
 		for (v = item->display; v != NULL; v = v->next) {
+			int i;
 			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
-			for (int i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
+			for (i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
 			  if (shape->marker[i]) {
 			    sp_marker_show_dimension ((SPMarker *) shape->marker[i],
 						      NR_ARENA_ITEM_GET_KEY (v->arenaitem) + i-SP_MARKER_LOC_START,
@@ -496,10 +499,11 @@ sp_shape_hide (SPItem *item, unsigned int key)
 {
 	SPShape *shape;
 	SPItemView *v;
+	int i;
 
 	shape = (SPShape *) item;
 
-	for (int i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
+	for (i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
 	  if (shape->marker[i]) {
 	    for (v = item->display; v != NULL; v = v->next) {
 	      sp_marker_hide ((SPMarker *) shape->marker[i], 
@@ -519,10 +523,11 @@ static void
 sp_shape_marker_release (SPObject *marker, SPShape *shape)
 {
 	SPItem *item;
+	int i;
 
 	item = (SPItem *) shape;
 
-	for (int i=0; i<SP_MARKER_LOC_QTY; i++) {
+	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
 	  if (marker == shape->marker[i]) {
 	    SPItemView *v;
 	    /* Hide marker */

@@ -795,6 +795,8 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 void
 sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 {
+	int i;
+
 	g_return_if_fail (style != NULL);
 
 	if (!parent) return;
@@ -952,7 +954,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 	}
 
 	/* Markers - Free the old value and make copy of the new */
-	for (int i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
+	for (i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
 		if (!style->marker[i].set || style->marker[i].inherit) {
 			g_free(style->marker[i].value);
 			style->marker[i].value = g_strdup(parent->marker[i].value);
@@ -1154,6 +1156,7 @@ sp_style_clear (SPStyle *style)
 	gint refcount;
 	SPTextStyle *text;
 	unsigned int text_private;
+	int i;
 
 	g_return_if_fail (style != NULL);
 
@@ -1218,7 +1221,7 @@ sp_style_clear (SPStyle *style)
 	style->writing_mode.set = FALSE;
 	style->writing_mode.computed = SP_CSS_WRITING_MODE_LR;
 
-	for (int i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
+	for (i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
 	  g_free(style->marker[i].value);
 	  style->marker[i].set      = FALSE;
 	}
