@@ -1,6 +1,7 @@
 2004-01-28  Kees Cook  <kees@outflux.net>
 
 	* configure.ac: added test for libgc 6.4 or better.
+	* src/main.cpp: calling new SPRepr methods instead of inline wrappers.
 
 2004-01-27  MenTaLguY  <mental@rydia.net>
 

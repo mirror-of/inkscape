@@ -464,9 +464,9 @@ sp_main_console(int argc, char const **argv)
                 SPReprDoc *rdoc;
                 SPRepr *repr;
                 rdoc = sp_repr_document_new("svg:svg");
-                repr = sp_repr_document_root(rdoc);
+                repr = rdoc->root();
                 repr = sp_document_root(doc)->updateRepr(repr, SP_OBJECT_WRITE_BUILD);
-                sp_repr_save_file(sp_repr_document(repr), sp_export_svg, SP_SVG_NS_URI);
+                sp_repr_save_file(repr->document(), sp_export_svg, SP_SVG_NS_URI);
             }
         }
         fl = g_slist_remove(fl, fl->data);
@@ -512,7 +512,7 @@ sp_do_export_png(SPDocument *doc)
             if (sp_export_use_hints) {
 
                 // retrieve export filename hint
-                const gchar *fn_hint = sp_repr_attr (SP_OBJECT_REPR (o), "inkscape:export-filename");
+                const gchar *fn_hint = SP_OBJECT_REPR(o)->attribute("inkscape:export-filename");
                 if (fn_hint) {
                     if (sp_export_png) {
                         g_warning ("Using export filename from the command line (--export-png). Filename hint %s is ignored.", fn_hint);
@@ -526,7 +526,7 @@ sp_do_export_png(SPDocument *doc)
                 }
 
                 // retrieve export dpi hints
-                const gchar *dpi_hint = sp_repr_attr (SP_OBJECT_REPR (o), "inkscape:export-xdpi"); // only xdpi, ydpi is always the same now
+                const gchar *dpi_hint = SP_OBJECT_REPR(o)->attribute("inkscape:export-xdpi"); // only xdpi, ydpi is always the same now
                 if (dpi_hint) {
                     if (sp_export_dpi || sp_export_width || sp_export_height) {
                         g_warning ("Using bitmap dimensions from the command line (--export-dpi, --export-width, or --export-height). DPI hint %s is ignored.", dpi_hint);
@@ -623,9 +623,9 @@ sp_do_export_png(SPDocument *doc)
     } else {
         // read from namedview
         SPRepr *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
-        if (nv && sp_repr_attr (nv, "pagecolor"))
-            bgcolor = sp_svg_read_color(sp_repr_attr (nv, "pagecolor"), 0xffffff00);
-        if (nv && sp_repr_attr (nv, "inkscape:pageopacity"))
+        if (nv && nv->attribute("pagecolor"))
+            bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
+        if (nv && nv->attribute("inkscape:pageopacity"))
             bgcolor |= SP_COLOR_F_TO_U(sp_repr_get_double_attribute (nv, "inkscape:pageopacity", 1.0));
     }
 
