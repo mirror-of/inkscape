@@ -238,9 +238,6 @@ main (int argc, const char **argv)
 int
 sp_main_gui (int argc, const char **argv)
 {
-#if WITH_POPT
-	poptContext ctx;
-#endif
 	GSList *fl = NULL;
 
 	gtk_init(&argc, const_cast<char ***>(&argv));
@@ -258,7 +255,8 @@ sp_main_gui (int argc, const char **argv)
 	g_get_charset(&charset);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, charset);
 
-	ctx = poptGetContext (NULL, argc, argv, options, 0);
+	poptContext ctx = poptGetContext (NULL, argc, argv, options, 0);
+	poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
 	g_return_val_if_fail (ctx != NULL, 1);
 	/* Collect own arguments */
 	fl = sp_process_args (ctx);
@@ -353,6 +351,7 @@ sp_main_console (int argc, const char **argv)
 	bind_textdomain_codeset (GETTEXT_PACKAGE, charset);
 
        ctx = poptGetContext (NULL, argc, argv, options, 0);
+	poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
        g_return_val_if_fail (ctx != NULL, 1);
        fl = sp_process_args (ctx);
        poptFreeContext (ctx);
