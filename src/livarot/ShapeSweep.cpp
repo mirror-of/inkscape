@@ -171,36 +171,42 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   for (unsigned i = 0; i < a->pts.size(); i++)
     {
-      a->pData[i].pending = 0;
-      a->pData[i].edgeOnLeft = -1;
-      a->pData[i].nextLinkedPoint = -1;
-      a->pData[i].rx[0] = Round (a->pts[i].x[0]);
-      a->pData[i].rx[1] = Round (a->pts[i].x[1]);
+      struct Shape::point_data *pointData  = &(a->pData[i]);
+      pointData->pending         = 0;
+      pointData->edgeOnLeft      = -1;
+      pointData->nextLinkedPoint = -1;
+      pointData->rx[0]           = Round (a->pts[i].x[0]);
+      pointData->rx[1]           = Round (a->pts[i].x[1]);
     }
   for (unsigned i = 0; i < a->aretes.size(); i++)
     {
-      a->eData[i].rdx =
-	a->pData[a->aretes[i].en].rx - a->pData[a->aretes[i].st].rx;
-      a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
-      a->eData[i].ilength = 1 / a->eData[i].length;
-      a->eData[i].sqlength = sqrt (a->eData[i].length);
-      a->eData[i].isqlength = 1 / a->eData[i].sqlength;
-      a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
-      a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
-      if (a->eData[i].siEd < 0)
-        {
-          a->eData[i].siEd = -a->eData[i].siEd;
-          a->eData[i].coEd = -a->eData[i].coEd;
-        }
+      struct Shape::edge_data      *edgeData  = &(a->eData[i]);
+      struct Shape::sweep_src_data *swsData   = &(a->swsData[i]);
 
-      a->swsData[i].misc = NULL;
-      a->swsData[i].firstLinkedPoint = -1;
-      a->swsData[i].stPt = a->swsData[i].enPt = -1;
-      a->swsData[i].leftRnd = a->swsData[i].rightRnd = -1;
-      a->swsData[i].nextSh = NULL;
-      a->swsData[i].nextBo = -1;
-      a->swsData[i].curPoint = -1;
-      a->swsData[i].doneTo = -1;
+      edgeData->rdx         = a->pData[a->aretes[i].en].rx - 
+                              a->pData[a->aretes[i].st].rx;
+      edgeData->length      = dot(edgeData->rdx,edgeData->rdx);
+      edgeData->ilength     = 1 / edgeData->length;
+      edgeData->sqlength    = sqrt (edgeData->length);
+      edgeData->isqlength   = 1 / edgeData->sqlength;
+      edgeData->siEd        = edgeData->rdx[1] * edgeData->isqlength;
+      edgeData->coEd        = edgeData->rdx[0] * edgeData->isqlength;
+      if (edgeData->siEd < 0)
+        {
+          edgeData->siEd = -edgeData->siEd;
+          edgeData->coEd = -edgeData->coEd;
+	}
+
+      swsData->misc             = NULL;
+      swsData->firstLinkedPoint = -1;
+      swsData->stPt             = -1;
+      swsData->enPt             = -1;
+      swsData->leftRnd          = -1;
+      swsData->rightRnd         = -1;
+      swsData->nextSh           = NULL;
+      swsData->nextBo           = -1;
+      swsData->curPoint         = -1;
+      swsData->doneTo           = -1;
     }
 
   a->SortPointsRounded ();
@@ -911,44 +917,51 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   for (unsigned i = 0; i < a->pts.size(); i++)
     {
-      a->pData[i].pending = 0;
-      a->pData[i].edgeOnLeft = -1;
-      a->pData[i].nextLinkedPoint = -1;
-      a->pData[i].rx[0] = Round (a->pts[i].x[0]);
-      a->pData[i].rx[1] = Round (a->pts[i].x[1]);
+      struct Shape::point_data *pointData  = &(a->pData[i]);
+      pointData->pending         = 0;
+      pointData->edgeOnLeft      = -1;
+      pointData->nextLinkedPoint = -1;
+      pointData->rx[0]           = Round (a->pts[i].x[0]);
+      pointData->rx[1]           = Round (a->pts[i].x[1]);
     }
   for (unsigned i = 0; i < b->pts.size(); i++)
     {
-      b->pData[i].pending = 0;
-      b->pData[i].edgeOnLeft = -1;
-      b->pData[i].nextLinkedPoint = -1;
-      b->pData[i].rx[0] = Round (b->pts[i].x[0]);
-      b->pData[i].rx[1] = Round (b->pts[i].x[1]);
+      struct Shape::point_data *pointData  = &(b->pData[i]);
+      pointData->pending         = 0;
+      pointData->edgeOnLeft      = -1;
+      pointData->nextLinkedPoint = -1;
+      pointData->rx[0]           = Round (b->pts[i].x[0]);
+      pointData->rx[1]           = Round (b->pts[i].x[1]);
     }
   for (unsigned i = 0; i < a->aretes.size(); i++)
     {
-      a->eData[i].rdx =
-	a->pData[a->aretes[i].en].rx - a->pData[a->aretes[i].st].rx;
-      a->eData[i].length = 	dot(a->eData[i].rdx,a->eData[i].rdx);
-      a->eData[i].ilength = 1 / a->eData[i].length;
-      a->eData[i].sqlength = sqrt (a->eData[i].length);
-      a->eData[i].isqlength = 1 / a->eData[i].sqlength;
-      a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
-      a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
-      if (a->eData[i].siEd < 0)
-	{
-	  a->eData[i].siEd = -a->eData[i].siEd;
-	  a->eData[i].coEd = -a->eData[i].coEd;
+      struct Shape::edge_data      *edgeData  = &(a->eData[i]);
+      struct Shape::sweep_src_data *swsData   = &(a->swsData[i]);
+
+      edgeData->rdx         = a->pData[a->aretes[i].en].rx - 
+                              a->pData[a->aretes[i].st].rx;
+      edgeData->length      = dot(edgeData->rdx,edgeData->rdx);
+      edgeData->ilength     = 1 / edgeData->length;
+      edgeData->sqlength    = sqrt (edgeData->length);
+      edgeData->isqlength   = 1 / edgeData->sqlength;
+      edgeData->siEd        = edgeData->rdx[1] * edgeData->isqlength;
+      edgeData->coEd        = edgeData->rdx[0] * edgeData->isqlength;
+      if (edgeData->siEd < 0)
+        {
+          edgeData->siEd = -edgeData->siEd;
+          edgeData->coEd = -edgeData->coEd;
 	}
 
-      a->swsData[i].misc = NULL;
-      a->swsData[i].firstLinkedPoint = -1;
-      a->swsData[i].stPt = a->swsData[i].enPt = -1;
-      a->swsData[i].leftRnd = a->swsData[i].rightRnd = -1;
-      a->swsData[i].nextSh = NULL;
-      a->swsData[i].nextBo = -1;
-      a->swsData[i].curPoint = -1;
-      a->swsData[i].doneTo = -1;
+      swsData->misc             = NULL;
+      swsData->firstLinkedPoint = -1;
+      swsData->stPt             = -1;
+      swsData->enPt             = -1;
+      swsData->leftRnd          = -1;
+      swsData->rightRnd         = -1;
+      swsData->nextSh           = NULL;
+      swsData->nextBo           = -1;
+      swsData->curPoint         = -1;
+      swsData->doneTo           = -1;
     }
   for (unsigned i = 0; i < b->aretes.size(); i++)
     {
