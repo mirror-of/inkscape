@@ -31,10 +31,16 @@ static const SPAttrDesc anchor_desc[] = {
     { N_("Href:"), "xlink:href"},
     { N_("Target:"), "target"},
     { N_("Type:"), "xlink:type"},
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkRoleAttribute
+    // Identifies the type of the related resource with an absolute URI
     { N_("Role:"), "xlink:role"},
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkArcRoleAttribute
+    // For situations where the nature/role alone isn't enough, this offers an additional URI defining the purpose of the link.
     { N_("Arcrole:"), "xlink:arcrole"},
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkTitleAttribute
     { N_("Title:"), "xlink:title"},
     { N_("Show:"), "xlink:show"},
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkActuateAttribute
     { N_("Actuate:"), "xlink:actuate"},
     { NULL, NULL}
 };
@@ -58,6 +64,7 @@ static const SPAttrDesc spiral_desc[] = {
     { N_("Revolution:"), "sodipodi:revolution"},
     { N_("Radius:"), "sodipodi:radius"},
     { N_("Argument:"), "sodipodi:argument"},
+    // TRANSLATORS: this is "T-zero", not "to"
     { N_("T0:"), "sodipodi:t0"},
     { NULL, NULL}
 };

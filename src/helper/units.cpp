@@ -48,7 +48,9 @@ static const SPUnit sp_units[] = {
 	{0, SP_UNIT_ABSOLUTE, (72.0 / 2.54), N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
 	{0, SP_UNIT_ABSOLUTE, (72.0 / 0.0254), N_("Meter"), N_("m"), N_("meters"), N_("m")},
 	{0, SP_UNIT_ABSOLUTE, (72.0), N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+	// TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
 	{0, SP_UNIT_VOLATILE, 1.0, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
+	// TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
 	{0, SP_UNIT_VOLATILE, 1.0, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
 };
 
