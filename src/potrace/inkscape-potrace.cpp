@@ -32,6 +32,57 @@ namespace Inkscape
 namespace Potrace
 {
 
+/**
+ *
+ */
+PotraceTracingEngine::PotraceTracingEngine()
+{
+
+    //##### Our defaults
+    useCanny            = false;
+    useBrightness       = true;
+    brightnessThreshold = 0.5;
+
+
+    //##### Potrace's defaults
+    //backend_lookup("eps", &info.backend);
+#define UNDEF ((double)(1e30))   /* a value to represent "undefined" */
+    info.debug        = 0;
+    info.width_d.x    = UNDEF;
+    info.height_d.x   = UNDEF;
+    info.rx           = UNDEF;
+    info.ry           = UNDEF;
+    info.sx           = UNDEF;
+    info.sy           = UNDEF;
+    info.stretch      = 1;
+    info.lmar_d.x     = UNDEF;
+    info.rmar_d.x     = UNDEF;
+    info.tmar_d.x     = UNDEF;
+    info.bmar_d.x     = UNDEF;
+    info.angle        = 0;
+    info.paperwidth   = DEFAULT_PAPERWIDTH;
+    info.paperheight  = DEFAULT_PAPERHEIGHT;
+    info.turdsize     = 2;
+    info.unit         = 10;
+    info.compress     = 0; //not applicable
+    info.pslevel      = 2;
+    info.color        = 0x000000;
+    info.turnpolicy   = POLICY_MINORITY;
+    info.gamma        = 2.2;
+    info.opticurve    = 1;
+    info.longcoding   = 0;
+    info.alphamax     = 1.0;
+    info.opttolerance = 0.2;
+    info.outfile      = NULL;
+    info.blacklevel   = 0.5;
+    info.invert       = 0;
+    info.opaque       = 0;
+    info.group        = 0;
+    info.fillcolor    = 0xffffff;
+}
+
+
+
 
 static void
 writePaths(path_t *plist, Inkscape::SVGOStringStream& data)

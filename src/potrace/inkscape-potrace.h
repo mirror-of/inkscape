@@ -31,12 +31,7 @@ class PotraceTracingEngine : public TracingEngine
     /**
      *
      */
-    PotraceTracingEngine()
-        {
-        useCanny            = false;
-        useBrightness       = true;
-        brightnessThreshold = 0.5;
-        }
+    PotraceTracingEngine();
 
     /**
      *
