@@ -750,10 +750,6 @@ sp_stroke_radio_button(GtkWidget *tb, char const *icon,
 
 }
 
-void mm_print (gchar *say, NR::Matrix m)
-{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
-
-
 static GtkWidget *
 sp_marker_prev_new(unsigned size, gchar const *mname,
                    SPDocument *source, SPDocument *sandbox,
