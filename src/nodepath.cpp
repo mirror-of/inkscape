@@ -2099,19 +2099,38 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
 
     if (state & GDK_CONTROL_MASK) { // constrained motion
 
-        // calculate relative distances of control points
+        // calculate relative distances of handles
+        // n handle:
         yn = n->n.pos[NR::Y] - n->pos[NR::Y];
         xn = n->n.pos[NR::X] - n->pos[NR::X];
-        if (xn < 0) { xn = -xn; yn = -yn; } // limit the handle angle to between 0 and pi
+        // if there's no n handle (straight line), see if we can use the direction to the next point on path
+        if ((n->n.other && n->n.other->code == NR_LINETO) || fabs(yn) + fabs(xn) < 1e-6) {
+            if (n->n.other) { // if there is the next point
+                if (L2(n->n.other->p.pos - n->n.other->pos) < 1e-6) // and the next point has no handle either
+                    yn = n->n.other->pos[NR::Y] - n->origin[NR::Y]; // use origin because otherwise the direction will change as you drag
+                    xn = n->n.other->pos[NR::X] - n->origin[NR::X];
+            }
+        }
+        if (xn < 0) { xn = -xn; yn = -yn; } // limit the angle to between 0 and pi
         if (yn < 0) { xn = -xn; yn = -yn; }
 
+        // p handle:
         yp = n->p.pos[NR::Y] - n->pos[NR::Y];
         xp = n->p.pos[NR::X] - n->pos[NR::X];
-        if (xp < 0) { xp = -xp; yp = -yp; } // limit the handle angle to between 0 and pi
+        // if there's no p handle (straight line), see if we can use the direction to the prev point on path
+        if (n->code == NR_LINETO || fabs(yp) + fabs(xp) < 1e-6) {
+            if (n->p.other) {
+                if (L2(n->p.other->n.pos - n->p.other->pos) < 1e-6)
+                    yp = n->p.other->pos[NR::Y] - n->origin[NR::Y];
+                    xp = n->p.other->pos[NR::X] - n->origin[NR::X];
+            }
+        }
+        if (xp < 0) { xp = -xp; yp = -yp; } // limit the angle to between 0 and pi
         if (yp < 0) { xp = -xp; yp = -yp; }
 
         if (state & GDK_MOD1_MASK && !(xn == 0 && xp == 0)) {
             // sliding on handles, only if at least one of the handles is non-vertical
+            // (otherwise it's the same as ctrl+drag anyway)
 
             // calculate angles of the control handles
             if (xn == 0) {
