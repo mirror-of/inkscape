@@ -50,17 +50,13 @@ void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
         dest->Reset(3 * pts.size(), 3 * pts.size());
     }
     
-    if (pts.size() <= 1) {
-        return;
-    }
-    
     dest->MakeBackData(false);
 
     int lastM = 0;
     while (lastM < int(pts.size())) {
 
         int lastP = lastM + 1;
-        while (lastP < int(pts.size())
+        while (lastP < int(pts.size()) // select one subpath
                && (pts[lastP].isMoveTo == polyline_lineto
                    || pts[lastP].isMoveTo == polyline_forced))
         {
@@ -70,12 +66,24 @@ void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
         if ( lastP > lastM+1 ) {
             NR::Point sbStart = pts[lastM].p;
             NR::Point sbEnd = pts[lastP - 1].p;
-            if ( NR::LInfty(sbEnd-sbStart) < 0.00001 ) {
+            if ( NR::LInfty(sbEnd-sbStart) < 0.00001 ) {       // why close lines that shouldn't be closed? ah I see, because close is defined here for a hole path and should be defined per subpath.
                 // debut==fin => ferme (on devrait garder un element pour les close(), mais tant pis)
                 DoStroke(lastM, lastP - lastM, dest, true, width, join, butt, miter, true);
             } else {
                 DoStroke(lastM, lastP - lastM, dest, doClose, width, join, butt, miter, true);
             }
+        } else if (butt == butt_round) {       // special case: zero length round butt is a circle
+            int last[2] = { -1, -1 };
+            NR::Point dir;
+            dir[0] = 1;
+            dir[1] = 0;
+            NR::Point pos = pts[lastM].p;
+            DoButt(dest, width, butt, pos, dir, last[RIGHT], last[LEFT]);
+            int end[2];
+            dir = -dir;
+            DoButt(dest, width, butt, pos, dir, end[LEFT], end[RIGHT]);
+            dest->AddEdge (end[LEFT], last[LEFT]);
+            dest->AddEdge (last[RIGHT], end[RIGHT]);
         }
         lastM = lastP;
     }
@@ -131,6 +139,18 @@ void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, Joi
             nextI++;
         }
         if (nextI > upTo) {
+            if (butt == butt_round) {  // special case: (nearly) zero length round butt is a circle
+                int last[2] = { -1, -1 };
+                NR::Point dir;
+                dir[0] = 1;
+                dir[1] = 0;
+                DoButt(dest, width, butt, curP, dir, last[RIGHT], last[LEFT]);
+                int end[2];
+                dir = -dir;
+                DoButt(dest, width, butt, curP, dir, end[LEFT], end[RIGHT]);
+                dest->AddEdge (end[LEFT], last[LEFT]);
+                dest->AddEdge (last[RIGHT], end[RIGHT]);
+            }
             return;
         }
     }
