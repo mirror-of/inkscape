@@ -20,7 +20,7 @@ typedef struct _NRTypeFaceClass NRTypeFaceClass;
 typedef struct _NRTypeFaceDef NRTypeFaceDef;
 class NRTypePosDef;
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-forward.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-object.h>
 #include <libnrtype/nr-font.h>
