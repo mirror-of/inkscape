@@ -51,4 +51,5 @@ testnr_SOURCES = \
 	testnr.cpp
 
 testnr_LDADD = \
-	libnr.a
+	libnr.a \
+	-lglib-2.0
