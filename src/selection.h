@@ -15,11 +15,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <vector>
 #include <sigc++/sigc++.h>
-#include "forward.h"
-#include "sp-item.h"
+
 #include "libnr/nr-rect.h"
+#include "forward.h"
 #include "refcounted.h"
+#include "sp-item.h"
 #include "xml/xml-forward.h"
 
 #include <list>
