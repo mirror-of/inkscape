@@ -486,7 +486,6 @@ src/display/makefile
 src/extension/makefile
 src/extension/implementation/makefile
 src/extension/internal/makefile
-src/extension/plugin/makefile
 src/helper/makefile
 src/inkjar/makefile
 src/libnr/makefile
