@@ -2715,22 +2715,22 @@ sp_css_attr_unset_uris (SPCSSAttr *css)
 }
 
 void
-sp_css_attr_scale_property_single (SPCSSAttr *css, const gchar *property, double ex, bool only_with_units = false)
+sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property, double ex, bool only_with_units = false)
 {
-    const gchar *w = sp_repr_css_property (css, property, NULL);
+    gchar const *w = sp_repr_css_property(css, property, NULL);
     if (w) {
         gchar *units = NULL;
         double wd = g_ascii_strtod (w, &units) * ex;
         if (w == units) {// nothing converted, non-numeric value
             return;
         }
-        if (only_with_units && (units == NULL || *units == NULL)) { // only_with_units, but no units found, do nothing
+        if (only_with_units && (units == NULL || *units == '\0')) {
+            // only_with_units, but no units found, so do nothing.
             return;
         }
         Inkscape::SVGOStringStream os;
-        //g_print ("%s; %g; %g %s\n", w, ex, wd, units);
         os << wd << units; // reattach units!
-        sp_repr_css_set_property (css, property, os.str().c_str());
+        sp_repr_css_set_property(css, property, os.str().c_str());
     }
 }
 
