@@ -729,7 +729,9 @@ sp_desktop_get_default_unit (SPDesktop *dt)
 SPItem *
 sp_desktop_item_from_list_at_point_bottom (SPDesktop const *desktop, const GSList *list, NR::Point const p)
 {
-    return sp_document_item_from_list_at_point_bottom (desktop->dkey, list, p);
+    SPDocument *document = SP_VIEW (desktop)->doc;
+    g_return_val_if_fail (document != NULL, NULL);
+    return sp_document_item_from_list_at_point_bottom (desktop->dkey, SP_GROUP (document->root), list, p);
 }
 
 SPItem *

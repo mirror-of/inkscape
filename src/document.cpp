@@ -774,18 +774,31 @@ bool item_is_in_group (SPItem *item, SPGroup *group)
 }
 
 /**
-Returns the first item from the list which is at the point, or NULL if none. 
+Returns the bottommost item from the list which is at the point, or NULL if none. 
 */
 SPItem*
-sp_document_item_from_list_at_point_bottom (unsigned int dkey, const GSList *list, NR::Point const p, bool take_insensitive)
+sp_document_item_from_list_at_point_bottom (unsigned int dkey, SPGroup *group, const GSList *list, NR::Point const p, bool take_insensitive)
 {
-	for (const GSList *i = list; i; i = i->next) {
-		SPItem *item = SP_ITEM (i->data);
+	g_return_val_if_fail (group, NULL);
+
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+
+		if (!SP_IS_ITEM (o)) continue;
+
+		SPItem *item = SP_ITEM (o);
 		NRArenaItem *arenaitem = sp_item_get_arenaitem(item, dkey);
 		if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
                       && (take_insensitive || item->sensitive)) {
-			return item;
+			if (g_slist_find((GSList *) list, item) != NULL)
+				return item;
 		}
+
+		if (SP_IS_GROUP (o)) {
+			SPItem *found = sp_document_item_from_list_at_point_bottom (dkey, SP_GROUP(o), list, p, take_insensitive);
+			if (found)
+				return found;
+		}
+
 	}
 	return NULL;
 }
