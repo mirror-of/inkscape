@@ -26,8 +26,6 @@ trace_libtrace_a_SOURCES =	\
 	trace/potrace/bits.h \
 	trace/potrace/curve.cpp \
 	trace/potrace/curve.h \
-	trace/potrace/flate.cpp \
-	trace/potrace/flate.h \
 	trace/potrace/greymap.cpp \
 	trace/potrace/greymap.h \
 	trace/potrace/lists.h \
