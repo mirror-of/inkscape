@@ -342,6 +342,13 @@ SPObject::setVisible(bool val) {
 void SPObject::requestOrphanCollection() {
 	g_return_if_fail(document != NULL);
 	document->queueForOrphanCollection(this);
+
+	// This is a temporary hack added to make fill&stroke rebuild its gradient list when
+	// the defs are vacuumed.  gradient-vector.cpp listens to the modified signal on defs,
+	// and now we give it that signal.  Mental says that this should be made automatic by
+	// merging SPObjectGroup with SPObject; SPObjectGroup would issue this signal
+	// automatically. Or maybe just derive SPDefs from SPObjectGroup?
+	this->requestModified (SP_OBJECT_CHILD_MODIFIED_FLAG);
 }
 
 /** Sends the delete signal to all children of this object recursively */
