@@ -400,7 +400,7 @@ inkscape_segv_handler (int signum)
     }
     recursion = TRUE;
 
-    g_warning ("Emergency save activated");
+    fprintf(stderr, "\nEmergency save activated!\n");
 
     const gchar *home = g_get_home_dir ();
     time_t sptime = time (NULL);
@@ -467,13 +467,13 @@ inkscape_segv_handler (int signum)
     savednames = g_slist_reverse (savednames);
     failednames = g_slist_reverse (failednames);
     if (savednames) {
-        fprintf (stderr, "\nEmergency save locations:\n");
+        fprintf (stderr, "\nEmergency save document locations:\n");
         for (GSList *l = savednames; l != NULL; l = l->next) {
             fprintf (stderr, "  %s\n", (gchar *) l->data);
         }
     }
     if (failednames) {
-        fprintf (stderr, "Failed to do emergency save for:\n");
+        fprintf (stderr, "\nFailed to do emergency save for documents:\n");
         for (GSList *l = failednames; l != NULL; l = l->next) {
             fprintf (stderr, "  %s\n", (gchar *) l->data);
         }
@@ -483,9 +483,9 @@ inkscape_segv_handler (int signum)
         inkscape_save_preferences (inkscape);
     }
 
-    g_print ("Emergency save completed. Inkscape will close now.\n");
-    g_print ("If you can reproduce this crash, please file a bug at www.inkscape.org\n");
-    g_print ("with a detailed description of the steps leading to the crash, so we can fix it.\n");
+    fprintf (stderr, "Emergency save completed. Inkscape will close now.\n");
+    fprintf (stderr, "If you can reproduce this crash, please file a bug at www.inkscape.org\n");
+    fprintf (stderr, "with a detailed description of the steps leading to the crash, so we can fix it.\n");
 
     /* Show nice dialog box */
 
