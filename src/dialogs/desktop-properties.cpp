@@ -58,6 +58,7 @@
 #include "desktop-properties.h"
 #include "svg/stringstream.h"
 
+#include "rdf.h"
 
 static void sp_dtw_activate_desktop(Inkscape::Application *inkscape,
                                     SPDesktop *desktop, GtkWidget *dialog);
@@ -252,6 +253,42 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     sp_repr_set_attr(repr, key, os.str().c_str());
     sp_document_set_undo_sensitive(doc, TRUE);
     sp_document_done(doc);
+}
+
+static void
+sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
+{
+    struct rdf_license_t * license;
+    license = (struct rdf_license_t*) data;
+
+    if (!dlg || g_object_get_data(G_OBJECT(dlg), "update")) {
+        return;
+    }
+
+    if (license) {
+        /* update RDF */
+        printf("selected license '%s'\n",license->name);
+    }
+
+    /* finished */
+    if (!SP_ACTIVE_DESKTOP)
+      return;
+    
+    sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+}
+
+static void
+sp_doc_dialog_text_changed ( GtkWidget *widget, gpointer data )
+{
+    if (!dlg || g_object_get_data(G_OBJECT(dlg), "update")) {
+        return;
+    }
+
+    char * name = (char*)data;
+
+    GtkWidget *e = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), name));
+
+    printf("changed '%s' to '%s'\n",name,gtk_entry_get_text ( GTK_ENTRY(e) ));
 }
 
 
@@ -458,6 +495,37 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
     gtk_adjustment_set_value(ah, h);
 
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
+}
+
+static void
+sp_doc_dialog_add_entry( gchar * label, char * name,
+                         GtkWidget * t, int row )
+{
+    if (dlg && t && label && name) {
+        /*
+        GtkWidget * hb = gtk_hbox_new (FALSE, 4);
+        gtk_widget_show (hb);
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+        */
+
+        GtkWidget *l = gtk_label_new (label);
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        //gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        gtk_table_attach( GTK_TABLE(t), l, 0, 1, row, row+1,
+                          (GtkAttachOptions)( GTK_SHRINK ),
+                          (GtkAttachOptions)0, 0, 0 );
+        GtkWidget *e = gtk_entry_new ();
+        gtk_widget_show (e);
+        g_signal_connect ( G_OBJECT (e), "changed",
+                           G_CALLBACK (sp_doc_dialog_text_changed),
+                           (gpointer)(name));
+        //gtk_box_pack_start (GTK_BOX (hb), e, TRUE, TRUE, 0);
+        gtk_table_attach( GTK_TABLE(t), e, 1, 2, row, row+1,
+                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                          (GtkAttachOptions)0, 0, 0 );
+        gtk_object_set_data (GTK_OBJECT (dlg), name, e);
+    }
 }
 
 void
@@ -771,6 +839,71 @@ sp_desktop_dialog(void)
 
         // end of former "document settings" stuff
 
+	/*
+	 * Ownership metadata tab
+	 */
+        l = gtk_label_new (_("Metadata"));
+        gtk_widget_show (l);
+        t = gtk_table_new (5, 2, FALSE);
+        gtk_widget_show (t);
+        gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+        gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+        gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+
+        row=0;
+        sp_doc_dialog_add_entry( _("Title:"), "title", t, row++ );
+        sp_doc_dialog_add_entry( _("Date:"), "date", t, row++ );
+        sp_doc_dialog_add_entry( _("Creator:"), "creator", t, row++ );
+        sp_doc_dialog_add_entry( _("Owner:"), "owner", t, row++ );
+        sp_doc_dialog_add_entry( _("Publisher:"), "publisher", t, row++ );
+        sp_doc_dialog_add_entry( _("Source (URL):"), "source", t, row++ );
+        sp_doc_dialog_add_entry( _("Keywords:"), "keywords", t, row++ );
+
+        /* this needs to be multi-line text entry */
+        sp_doc_dialog_add_entry( _("Description:"), "description", t, row++ );
+
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_table_attach ( GTK_TABLE (t), vb, 0, 2, row, row+1, 
+                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                           (GtkAttachOptions)0, 0, 0 );
+        row++;
+
+        hb = gtk_hbox_new (FALSE, 4);
+        gtk_widget_show (hb);
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+        l = gtk_label_new (_("License:"));
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        om = gtk_option_menu_new ();
+        gtk_widget_show (om);
+        gtk_box_pack_start (GTK_BOX (hb), om, TRUE, TRUE, 0);
+        gtk_object_set_data (GTK_OBJECT (dlg), "licenses", om);
+
+        m = gtk_menu_new ();
+        gtk_widget_show (m);
+
+        for (struct rdf_license_t * license = rdf_licenses;
+             license && license->name;
+             license++) {
+            i = gtk_menu_item_new_with_label (license->name);
+            gtk_widget_show (i);
+            g_signal_connect ( G_OBJECT (i), "activate",
+                G_CALLBACK (sp_doc_dialog_license_selected),
+                (gpointer)(license));
+            gtk_menu_append (GTK_MENU (m), i);
+	}
+        i = gtk_menu_item_new_with_label (_("Proprietary"));
+        gtk_widget_show (i);
+        g_signal_connect ( G_OBJECT (i), "activate", 
+                           G_CALLBACK (sp_doc_dialog_license_selected), NULL);
+        gtk_menu_prepend (GTK_MENU (m), i);
+        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+        // end "Description" tab
+
+
         g_signal_connect( G_OBJECT(INKSCAPE), "activate_desktop",
                           G_CALLBACK(sp_dtw_activate_desktop), dlg);
 
@@ -786,7 +919,6 @@ sp_desktop_dialog(void)
 
 
 } // end of sp_desktop_dialog(void)
-
 
 
 static void

@@ -46,6 +46,8 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/transformation.h	\
 	dialogs/xml-tree.cpp	\
 	dialogs/xml-tree.h      \
+	dialogs/rdf.cpp	\
+	dialogs/rdf.h      \
 	dialogs/find.cpp        \
 	dialogs/find.h
 
