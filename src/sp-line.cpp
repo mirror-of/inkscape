@@ -37,7 +37,8 @@ static SPRepr *sp_line_write (SPObject *object, SPRepr *repr, guint flags);
 static gchar *sp_line_description (SPItem * item);
 static NR::Matrix sp_line_set_transform(SPItem *item, NR::Matrix const &xform);
 
-static void sp_line_set_shape (SPLine * line);
+static void sp_line_update (SPObject *object, SPCtx *ctx, guint flags);
+static void sp_line_set_shape (SPShape *shape);
 
 static SPShapeClass *parent_class;
 
@@ -77,6 +78,11 @@ sp_line_class_init (SPLineClass *klass)
 	SPItemClass *item_class = (SPItemClass *) klass;
 	item_class->description = sp_line_description;
 	item_class->set_transform = sp_line_set_transform;
+
+	sp_object_class->update = sp_line_update;
+
+	SPShapeClass *shape_class = (SPShapeClass *) klass;
+	shape_class->set_shape = sp_line_set_shape;
 }
 
 static void
@@ -114,25 +120,25 @@ sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!sp_svg_length_read (value, &line->x1)) {
 			sp_svg_length_unset (&line->x1, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_line_set_shape (line);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y1:
 		if (!sp_svg_length_read (value, &line->y1)) {
 			sp_svg_length_unset (&line->y1, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_line_set_shape (line);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_X2:
 		if (!sp_svg_length_read (value, &line->x2)) {
 			sp_svg_length_unset (&line->x2, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_line_set_shape (line);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y2:
 		if (!sp_svg_length_read (value, &line->y2)) {
 			sp_svg_length_unset (&line->y2, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_line_set_shape (line);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
@@ -141,9 +147,32 @@ sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
+static void
+sp_line_update (SPObject *object, SPCtx *ctx, guint flags)
+{
+	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+		SPLine *line = SP_LINE (object);
+
+ 		SPStyle *style = object->style;
+ 		double const d = 1.0 / NR_MATRIX_DF_EXPANSION (&((SPItemCtx *) ctx)->i2vp);
+ 		sp_svg_length_update (&line->x1, style->font_size.computed, style->font_size.computed * 0.5, d);
+ 		sp_svg_length_update (&line->x2, style->font_size.computed, style->font_size.computed * 0.5, d);
+ 		sp_svg_length_update (&line->y1, style->font_size.computed, style->font_size.computed * 0.5, d);
+ 		sp_svg_length_update (&line->y2, style->font_size.computed, style->font_size.computed * 0.5, d);
+
+		sp_shape_set_shape ((SPShape *) object);
+	}
+
+	if (((SPObjectClass *) parent_class)->update)
+		((SPObjectClass *) parent_class)->update (object, ctx, flags);
+}
+
+
 static SPRepr *
 sp_line_write (SPObject *object, SPRepr *repr, guint flags)
 {
+	SPLine *line  = SP_LINE (object);
+
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("line");
 	}
@@ -151,6 +180,11 @@ sp_line_write (SPObject *object, SPRepr *repr, guint flags)
 	if (repr != SP_OBJECT_REPR (object)) {
 		sp_repr_merge (repr, SP_OBJECT_REPR (object), "id");
 	}
+
+	sp_repr_set_double (repr, "x1", line->x1.computed);
+	sp_repr_set_double (repr, "y1", line->y1.computed);
+	sp_repr_set_double (repr, "x2", line->x2.computed);
+	sp_repr_set_double (repr, "y2", line->y2.computed);
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -173,40 +207,33 @@ sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 	points[0] = NR::Point(line->x1.computed, line->y1.computed);
 	points[1] = NR::Point(line->x2.computed, line->y2.computed);
 
-	points[0] = points[0] * xform;
-	points[1] = points[1] * xform;
+	points[0] *= xform;
+	points[1] *= xform;
 
-	line->x1 = points[0][NR::X];
-	line->y1 = points[0][NR::Y];
-	line->x2 = points[1][NR::X];
-	line->y2 = points[1][NR::Y];
+	line->x1.computed = points[0][NR::X];
+	line->y1.computed = points[0][NR::Y];
+	line->x2.computed = points[1][NR::X];
+	line->y2.computed = points[1][NR::Y];
 
-	sp_line_set_shape(line);
+	sp_shape_adjust_stroke(item, NR::expansion(xform));
 
-	/* Scalers */
-	const double sw = sqrt (xform[0] * xform[0] + xform[1] * xform[1]);
-	const double sh = sqrt (xform[2] * xform[2] + xform[3] * xform[3]);
-
-	/* Scale changed, so we have to adjust stroke width */
-	if ((fabs (sw - 1.0) > 1e-9) || (fabs (sh - 1.0) > 1e-9)) {
-		SPStyle *style=SP_OBJECT_STYLE (item);
-		style->stroke_width.computed *= sqrt (fabs (sw * sh));
-	}
-
-	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+	SP_OBJECT (item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
 	return NR::identity();
 }
 
 static void
-sp_line_set_shape (SPLine * line)
+sp_line_set_shape (SPShape *shape)
 {
+	SPLine *line = SP_LINE (shape);
+
 	SPCurve *c = sp_curve_new ();
 
 	sp_curve_moveto (c, line->x1.computed, line->y1.computed);
 	sp_curve_lineto (c, line->x2.computed, line->y2.computed);
 
-	sp_shape_set_curve (SP_SHAPE (line), c, TRUE);
+	sp_shape_set_curve_insync (shape, c, TRUE); // *_insync does not call update, avoiding infinite recursion when set_shape is called by update
+
 	sp_curve_unref (c);
 }
 
