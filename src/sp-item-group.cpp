@@ -18,6 +18,7 @@
 #include "display/nr-arena-group.h"
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-matrix-fns.h>
 #include <xml/repr.h>
 #include <xml/node-fns-tree.h>
 #include "sp-object-repr.h"
@@ -464,12 +465,16 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 	SPItem *gitem = SP_ITEM (group);
 	Inkscape::XML::Node *grepr = SP_OBJECT_REPR (gitem);
+
+	g_return_if_fail (!strcmp (grepr->name(), "svg:g") || !strcmp (grepr->name(), "svg:a") || !strcmp (grepr->name(), "svg:switch"));
+
+      // this converts the gradient/pattern fill/stroke on the group, if any, to userSpaceOnUse
+      sp_item_adjust_paint_recursive (gitem, NR::identity(), NR::identity(), false);
+
 	SPCSSAttr *gstyle = sp_css_attr_from_style (SP_OBJECT (gitem));
 
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
 	Inkscape::XML::Node *prepr = SP_OBJECT_REPR (pitem);
-
-	g_return_if_fail (!strcmp (grepr->name(), "svg:g") || !strcmp (grepr->name(), "svg:a") || !strcmp (grepr->name(), "svg:switch"));
 
 	/* Step 1 - generate lists of children objects */
 	GSList *items = NULL;
@@ -510,13 +515,20 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			}
 
 			/* Merging of style */
+
+			// this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
+			// it here _before_ the new transform is set, so as to use the pre-transform bbox
+			sp_item_adjust_paint_recursive (citem, NR::identity(), NR::identity(), false);
+
 			// we do this by merging SPCSSAttrs, because there's no easy way to do this with SPStyle
 			// perhaps we need to program some sort of sp_style_combine_with_parent (SPStyle *, SPStyle *)
 			SPCSSAttr *cstyle = sp_repr_css_attr_new ();
-			if (gstyle)
+			if (gstyle) {
 				sp_repr_css_merge (cstyle, gstyle);
-			if (SP_OBJECT_STYLE (SP_OBJECT (citem)))
+			}
+			if (SP_OBJECT_STYLE (SP_OBJECT (citem))) {
 				sp_repr_css_merge (cstyle, sp_css_attr_from_style (SP_OBJECT (citem)));
+			}
 			sp_repr_css_change (nrepr, cstyle, "style");
 
 			items = g_slist_prepend (items, nrepr);
