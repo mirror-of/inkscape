@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-06 12:45+0100\n"
+"POT-Creation-Date: 2004-11-07 20:47+0100\n"
 "PO-Revision-Date: 2004-10-26 23:26+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -483,7 +483,7 @@ msgstr "単位:"
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 msgid "Width:"
 msgstr "幅:"
 
@@ -2031,31 +2031,34 @@ msgstr "ノードを下げる"
 msgid "Delete attribute"
 msgstr "属性を削除"
 
-#: src/dialogs/xml-tree.cpp:478
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:479
 msgid "Attribute name"
 msgstr "属性名"
 
-#: src/dialogs/xml-tree.cpp:497
+#. TRANSLATORS: "Set" is a verb here
+#: src/dialogs/xml-tree.cpp:499
 msgid "Set attribute"
 msgstr "属性を追加"
 
-#: src/dialogs/xml-tree.cpp:518
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:521
 msgid "Attribute value"
 msgstr "属性値"
 
-#: src/dialogs/xml-tree.cpp:581
+#: src/dialogs/xml-tree.cpp:584
 msgid "<b>XML Editor</b> Select attributes and edit them."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1284
+#: src/dialogs/xml-tree.cpp:1287
 msgid "New element node..."
 msgstr "要素ノードの新規作成..."
 
-#: src/dialogs/xml-tree.cpp:1305
+#: src/dialogs/xml-tree.cpp:1308
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/dialogs/xml-tree.cpp:1311
+#: src/dialogs/xml-tree.cpp:1314
 msgid "Create"
 msgstr "作成"
 
@@ -3434,7 +3437,7 @@ msgstr "画像 URI:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "%d オブジェクトのグループ"
 
-#: src/sp-item.cpp:617
+#: src/sp-item.cpp:631
 msgid "Object"
 msgstr "オブジェクト"
 
@@ -3675,7 +3678,7 @@ msgstr "選択セグメントを曲線に"
 
 #: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
 #: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2131 src/toolbox.cpp:2171
+#: src/toolbox.cpp:2145 src/toolbox.cpp:2185
 msgid "<b>New:</b>"
 msgstr "<b>新規:</b>"
 
@@ -3685,7 +3688,7 @@ msgstr "<b>新規:</b>"
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
 #: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2133 src/toolbox.cpp:2152
+#: src/toolbox.cpp:2147 src/toolbox.cpp:2166
 msgid "<b>Change:</b>"
 msgstr "<b>設定:</b>"
 
@@ -3731,11 +3734,11 @@ msgstr "ランダム度"
 msgid "Scatter randomly the corners and angles"
 msgstr "ランダムに角と角度を変形"
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1894
+#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1908
 msgid "Defaults"
 msgstr "デフォルト"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1895
+#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1909
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3790,88 +3793,90 @@ msgstr "内半径:"
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "中心部の最小半径(相対値)"
 
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 #, fuzzy
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "カリグラフィックペンの太さ"
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 #, fuzzy
 msgid "Thinning:"
 msgstr "全て"
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
 
-#: src/toolbox.cpp:1851
-#, fuzzy
-msgid "Flatness:"
-msgstr "面数:"
-
-#: src/toolbox.cpp:1851
-msgid "How flat is the pen's nib (0 = round, 1 = flat)"
-msgstr ""
-
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid "Angle:"
 msgstr "角度:"
 
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
-"flatness = 0)"
+"fixation = 0)"
 msgstr ""
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1867
+#, fuzzy
+msgid "Fixation:"
+msgstr "展開係数:"
+
+#: src/toolbox.cpp:1867
+msgid ""
+"How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
+"= fixed)"
+msgstr ""
+
+#: src/toolbox.cpp:1880
 msgid "Mass:"
 msgstr "質量:"
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1880
 msgid "How much inertia affects the movement of the pen"
 msgstr "ペンの移動時の慣性の強さ"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "Drag:"
 msgstr "抵抗:"
 
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "How much resistance affects the movement of the pen"
 msgstr "ペンの動きに対する抵抗"
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "Start:"
 msgstr "始点:"
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "始点と水平の間の角度"
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "End:"
 msgstr "終点:"
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "終点と水平の間の角度"
 
-#: src/toolbox.cpp:2200
+#: src/toolbox.cpp:2214
 msgid "Open arc"
 msgstr "弧を開放"
 
-#: src/toolbox.cpp:2201
+#: src/toolbox.cpp:2215
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr "円と弧を切替え"
 
-#: src/toolbox.cpp:2228
+#: src/toolbox.cpp:2242
 msgid "Make whole"
 msgstr "弧を円に"
 
-#: src/toolbox.cpp:2229
+#: src/toolbox.cpp:2243
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "弧を閉じた円に"
 
@@ -4352,12 +4357,12 @@ msgid "Remove text from path"
 msgstr "パスに乗せたテキストを分離"
 
 #: src/verbs.cpp:1506
-msgid "Remove Manual _Kerning"
+msgid "Remove Manual _Kerns"
 msgstr ""
 
 #: src/verbs.cpp:1507
 #, fuzzy
-msgid "Remove all manual kerning from a text object"
+msgid "Remove all manual kerns from a text object"
 msgstr "オブジェクトの変形を解除"
 
 #: src/verbs.cpp:1509
@@ -5208,32 +5213,34 @@ msgstr "グラデーションが選択されていません"
 msgid "No stops in gradient"
 msgstr "グラデーション色がありません"
 
-#: src/widgets/gradient-vector.cpp:763
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:764
 msgid "Add stop"
 msgstr "色を追加"
 
-#: src/widgets/gradient-vector.cpp:766
+#: src/widgets/gradient-vector.cpp:767
 msgid "Add another control stop to gradient"
 msgstr "グラデーションに制御色を追加"
 
-#: src/widgets/gradient-vector.cpp:768
+#: src/widgets/gradient-vector.cpp:769
 msgid "Delete stop"
 msgstr "色を削除"
 
-#: src/widgets/gradient-vector.cpp:771
+#: src/widgets/gradient-vector.cpp:772
 msgid "Delete current control stop from gradient"
 msgstr "グラデーションから制御色を削除"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:783
 msgid "Offset:"
 msgstr "オフセット:"
 
-#: src/widgets/gradient-vector.cpp:826
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:828
 msgid "Stop Color"
 msgstr "色"
 
-#: src/widgets/gradient-vector.cpp:852
+#: src/widgets/gradient-vector.cpp:854
 msgid "Gradient editor"
 msgstr "グラデーションエディタ"
 
@@ -5424,6 +5431,10 @@ msgstr "属性"
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "値"
+
+#, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "面数:"
 
 #~ msgid "The angle of the calligraphic pen (in degrees)"
 #~ msgstr "カリグラフィックペンの角度"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-06 12:45+0100\n"
+"POT-Creation-Date: 2004-11-07 20:47+0100\n"
 "PO-Revision-Date: 2004-11-02 09:49+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
@@ -484,7 +484,7 @@ msgstr "Unidades:"
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 msgid "Width:"
 msgstr "Ancho:"
 
@@ -2102,31 +2102,34 @@ msgstr "Bajar nodo"
 msgid "Delete attribute"
 msgstr "Borrar atributo"
 
-#: src/dialogs/xml-tree.cpp:478
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:479
 msgid "Attribute name"
 msgstr "Nombre de atributo"
 
-#: src/dialogs/xml-tree.cpp:497
+#. TRANSLATORS: "Set" is a verb here
+#: src/dialogs/xml-tree.cpp:499
 msgid "Set attribute"
 msgstr "Definir atributo"
 
-#: src/dialogs/xml-tree.cpp:518
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:521
 msgid "Attribute value"
 msgstr "Valor del atributo"
 
-#: src/dialogs/xml-tree.cpp:581
+#: src/dialogs/xml-tree.cpp:584
 msgid "<b>XML Editor</b> Select attributes and edit them."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1284
+#: src/dialogs/xml-tree.cpp:1287
 msgid "New element node..."
 msgstr "Nuevo nodo elemento..."
 
-#: src/dialogs/xml-tree.cpp:1305
+#: src/dialogs/xml-tree.cpp:1308
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/dialogs/xml-tree.cpp:1311
+#: src/dialogs/xml-tree.cpp:1314
 msgid "Create"
 msgstr "Crear"
 
@@ -3593,7 +3596,7 @@ msgstr "URI de la imagen:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "<b>Grupo</b> de <b>%d</b> objetos"
 
-#: src/sp-item.cpp:617
+#: src/sp-item.cpp:631
 msgid "Object"
 msgstr "Objeto"
 
@@ -3852,7 +3855,7 @@ msgstr "Convertir los segmentos seleccionados a curvas"
 
 #: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
 #: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2131 src/toolbox.cpp:2171
+#: src/toolbox.cpp:2145 src/toolbox.cpp:2185
 msgid "<b>New:</b>"
 msgstr "<b>Nuevo:</b>"
 
@@ -3866,7 +3869,7 @@ msgstr "<b>Nuevo:</b>"
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
 #: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2133 src/toolbox.cpp:2152
+#: src/toolbox.cpp:2147 src/toolbox.cpp:2166
 msgid "<b>Change:</b>"
 msgstr "<b>Cambio:</b>"
 
@@ -3912,11 +3915,11 @@ msgstr "Aleatorización:"
 msgid "Scatter randomly the corners and angles"
 msgstr "Esparcir las esquinas y ángulos aleatoriamente"
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1894
+#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1908
 msgid "Defaults"
 msgstr "Predeterminados"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1895
+#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1909
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3973,90 +3976,92 @@ msgstr "Radio interior:"
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radio de la revolución más interior (relativa al tamaño de la espiral)"
 
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 #, fuzzy
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "El ancho de la pluma caligráfica"
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 #, fuzzy
 msgid "Thinning:"
 msgstr "serpenteante"
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
 
-#: src/toolbox.cpp:1851
-#, fuzzy
-msgid "Flatness:"
-msgstr "Caras:"
-
-#: src/toolbox.cpp:1851
-msgid "How flat is the pen's nib (0 = round, 1 = flat)"
-msgstr ""
-
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid "Angle:"
 msgstr "Ángulo:"
 
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
-"flatness = 0)"
+"fixation = 0)"
 msgstr ""
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1867
+#, fuzzy
+msgid "Fixation:"
+msgstr "Orientación:"
+
+#: src/toolbox.cpp:1867
+msgid ""
+"How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
+"= fixed)"
+msgstr ""
+
+#: src/toolbox.cpp:1880
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1880
 msgid "How much inertia affects the movement of the pen"
 msgstr "Cuánta inercia afecta al movimiento de la pluma"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "Drag:"
 msgstr "Resistencia:"
 
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "How much resistance affects the movement of the pen"
 msgstr "Cuánta resistencia afecta al movimiento de la pluma"
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "Start:"
 msgstr "Inicio:"
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "El ángulo (en grados) desde la horizontal al punto inicial del arco"
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "End:"
 msgstr "Fin:"
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 "El ángulo (en grados) desde la horizontal hasta el punto final del arco"
 
-#: src/toolbox.cpp:2200
+#: src/toolbox.cpp:2214
 msgid "Open arc"
 msgstr "Arco abierto"
 
-#: src/toolbox.cpp:2201
+#: src/toolbox.cpp:2215
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Cambiar entre arco (forma abierta) y segmento (forma cerrada con dos radios)"
 
-#: src/toolbox.cpp:2228
+#: src/toolbox.cpp:2242
 msgid "Make whole"
 msgstr "Completar"
 
-#: src/toolbox.cpp:2229
+#: src/toolbox.cpp:2243
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Hacer una elipse completa, no un arco o segmento"
 
@@ -4550,12 +4555,12 @@ msgstr "Retirar texto de trayecto"
 
 #: src/verbs.cpp:1506
 #, fuzzy
-msgid "Remove Manual _Kerning"
+msgid "Remove Manual _Kerns"
 msgstr "Eliminar todos los _kerns"
 
 #: src/verbs.cpp:1507
 #, fuzzy
-msgid "Remove all manual kerning from a text object"
+msgid "Remove all manual kerns from a text object"
 msgstr "Eliminar todos los kerns de un objeto de texto"
 
 #: src/verbs.cpp:1509
@@ -5401,32 +5406,34 @@ msgstr "Sin gradiente seleccionado"
 msgid "No stops in gradient"
 msgstr "Gradiente sin paradas"
 
-#: src/widgets/gradient-vector.cpp:763
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:764
 msgid "Add stop"
 msgstr "Añadir parada"
 
-#: src/widgets/gradient-vector.cpp:766
+#: src/widgets/gradient-vector.cpp:767
 msgid "Add another control stop to gradient"
 msgstr "Añadir otro control de parada al gradiente"
 
-#: src/widgets/gradient-vector.cpp:768
+#: src/widgets/gradient-vector.cpp:769
 msgid "Delete stop"
 msgstr "Borrar parada"
 
-#: src/widgets/gradient-vector.cpp:771
+#: src/widgets/gradient-vector.cpp:772
 msgid "Delete current control stop from gradient"
 msgstr "Eliminar el control de parada actual"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:783
 msgid "Offset:"
 msgstr "Offset:"
 
-#: src/widgets/gradient-vector.cpp:826
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:828
 msgid "Stop Color"
 msgstr "Color de parada"
 
-#: src/widgets/gradient-vector.cpp:852
+#: src/widgets/gradient-vector.cpp:854
 msgid "Gradient editor"
 msgstr "Editor de gradiente"
 
@@ -5618,6 +5625,10 @@ msgstr "Atributo"
 msgid "Value"
 msgstr "Valor"
 
+#, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "Caras:"
+
 #~ msgid "The angle of the calligraphic pen (in degrees)"
 #~ msgstr "El ángulo de la pluma caligráfica (en grados)"
 
@@ -5706,9 +5717,6 @@ msgstr "Valor"
 
 #~ msgid "Alignment:"
 #~ msgstr "Alineación:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orientación:"
 
 #~ msgid "Text and font"
 #~ msgstr "Texto y tipografía"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-06 12:45+0100\n"
+"POT-Creation-Date: 2004-11-07 20:47+0100\n"
 "PO-Revision-Date: 2003-06-15 09:44+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <mk@li.org>\n"
@@ -499,7 +499,7 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 #, fuzzy
 msgid "Width:"
 msgstr "Ширина:"
@@ -2117,32 +2117,35 @@ msgstr ""
 msgid "Delete attribute"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:478
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:479
 msgid "Attribute name"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:497
+#. TRANSLATORS: "Set" is a verb here
+#: src/dialogs/xml-tree.cpp:499
 msgid "Set attribute"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:518
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:521
 msgid "Attribute value"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:581
+#: src/dialogs/xml-tree.cpp:584
 msgid "<b>XML Editor</b> Select attributes and edit them."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1284
+#: src/dialogs/xml-tree.cpp:1287
 msgid "New element node..."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1305
+#: src/dialogs/xml-tree.cpp:1308
 #, fuzzy
 msgid "Cancel"
 msgstr "Откажи"
 
-#: src/dialogs/xml-tree.cpp:1311
+#: src/dialogs/xml-tree.cpp:1314
 #, fuzzy
 msgid "Create"
 msgstr "Создади"
@@ -3505,7 +3508,7 @@ msgstr ""
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr ""
 
-#: src/sp-item.cpp:617
+#: src/sp-item.cpp:631
 #, fuzzy
 msgid "Object"
 msgstr "Објект"
@@ -3745,7 +3748,7 @@ msgstr ""
 
 #: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
 #: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2131 src/toolbox.cpp:2171
+#: src/toolbox.cpp:2145 src/toolbox.cpp:2185
 msgid "<b>New:</b>"
 msgstr ""
 
@@ -3755,7 +3758,7 @@ msgstr ""
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
 #: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2133 src/toolbox.cpp:2152
+#: src/toolbox.cpp:2147 src/toolbox.cpp:2166
 msgid "<b>Change:</b>"
 msgstr ""
 
@@ -3802,12 +3805,12 @@ msgstr ""
 msgid "Scatter randomly the corners and angles"
 msgstr ""
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1894
+#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1908
 #, fuzzy
 msgid "Defaults"
 msgstr "Номинални"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1895
+#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1909
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3861,87 +3864,89 @@ msgstr ""
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr ""
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 msgid "Thinning:"
 msgstr ""
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
 
-#: src/toolbox.cpp:1851
-#, fuzzy
-msgid "Flatness:"
-msgstr "Големина на фонт:"
-
-#: src/toolbox.cpp:1851
-msgid "How flat is the pen's nib (0 = round, 1 = flat)"
-msgstr ""
-
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid "Angle:"
 msgstr ""
 
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
-"flatness = 0)"
+"fixation = 0)"
 msgstr ""
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1867
+#, fuzzy
+msgid "Fixation:"
+msgstr "Ориентација:"
+
+#: src/toolbox.cpp:1867
+msgid ""
+"How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
+"= fixed)"
+msgstr ""
+
+#: src/toolbox.cpp:1880
 msgid "Mass:"
 msgstr ""
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1880
 msgid "How much inertia affects the movement of the pen"
 msgstr ""
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "Drag:"
 msgstr ""
 
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "How much resistance affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "Start:"
 msgstr ""
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "End:"
 msgstr ""
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 
-#: src/toolbox.cpp:2200
+#: src/toolbox.cpp:2214
 #, fuzzy
 msgid "Open arc"
 msgstr "Отвори"
 
-#: src/toolbox.cpp:2201
+#: src/toolbox.cpp:2215
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 
-#: src/toolbox.cpp:2228
+#: src/toolbox.cpp:2242
 msgid "Make whole"
 msgstr ""
 
-#: src/toolbox.cpp:2229
+#: src/toolbox.cpp:2243
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 
@@ -4443,11 +4448,11 @@ msgid "Remove text from path"
 msgstr ""
 
 #: src/verbs.cpp:1506
-msgid "Remove Manual _Kerning"
+msgid "Remove Manual _Kerns"
 msgstr ""
 
 #: src/verbs.cpp:1507
-msgid "Remove all manual kerning from a text object"
+msgid "Remove all manual kerns from a text object"
 msgstr ""
 
 #: src/verbs.cpp:1509
@@ -5334,33 +5339,35 @@ msgstr ""
 msgid "No stops in gradient"
 msgstr ""
 
-#: src/widgets/gradient-vector.cpp:763
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:764
 msgid "Add stop"
 msgstr ""
 
-#: src/widgets/gradient-vector.cpp:766
+#: src/widgets/gradient-vector.cpp:767
 msgid "Add another control stop to gradient"
 msgstr ""
 
-#: src/widgets/gradient-vector.cpp:768
+#: src/widgets/gradient-vector.cpp:769
 #, fuzzy
 msgid "Delete stop"
 msgstr "Избриши"
 
-#: src/widgets/gradient-vector.cpp:771
+#: src/widgets/gradient-vector.cpp:772
 msgid "Delete current control stop from gradient"
 msgstr ""
 
 #. Label
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:783
 msgid "Offset:"
 msgstr ""
 
-#: src/widgets/gradient-vector.cpp:826
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:828
 msgid "Stop Color"
 msgstr ""
 
-#: src/widgets/gradient-vector.cpp:852
+#: src/widgets/gradient-vector.cpp:854
 msgid "Gradient editor"
 msgstr ""
 
@@ -5565,6 +5572,10 @@ msgid "Value"
 msgstr "Вредност"
 
 #, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "Големина на фонт:"
+
+#, fuzzy
 #~ msgid "Select layer"
 #~ msgstr "Избор"
 
@@ -5575,10 +5586,6 @@ msgstr "Вредност"
 #, fuzzy
 #~ msgid "object"
 #~ msgstr "Објект"
-
-#, fuzzy
-#~ msgid "Orientation:"
-#~ msgstr "Ориентација:"
 
 #, fuzzy
 #~ msgid "Active group"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040709\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-06 12:45+0100\n"
+"POT-Creation-Date: 2004-11-07 20:47+0100\n"
 "PO-Revision-Date: 2004-07-09 22:11+0200\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -498,7 +498,7 @@ msgstr "Jedinica mere:"
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 msgid "Width:"
 msgstr "Širina:"
 
@@ -2119,31 +2119,34 @@ msgstr "Zakloni čvor"
 msgid "Delete attribute"
 msgstr "Obriši osobinu"
 
-#: src/dialogs/xml-tree.cpp:478
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:479
 msgid "Attribute name"
 msgstr "Naziv osobine"
 
-#: src/dialogs/xml-tree.cpp:497
+#. TRANSLATORS: "Set" is a verb here
+#: src/dialogs/xml-tree.cpp:499
 msgid "Set attribute"
 msgstr "Postavi osobinu"
 
-#: src/dialogs/xml-tree.cpp:518
+#. TRANSLATORS: "Attribute" is a noun here
+#: src/dialogs/xml-tree.cpp:521
 msgid "Attribute value"
 msgstr "Vrednost osobine"
 
-#: src/dialogs/xml-tree.cpp:581
+#: src/dialogs/xml-tree.cpp:584
 msgid "<b>XML Editor</b> Select attributes and edit them."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1284
+#: src/dialogs/xml-tree.cpp:1287
 msgid "New element node..."
 msgstr "Novi čvor elementa..."
 
-#: src/dialogs/xml-tree.cpp:1305
+#: src/dialogs/xml-tree.cpp:1308
 msgid "Cancel"
 msgstr "Otkaži"
 
-#: src/dialogs/xml-tree.cpp:1311
+#: src/dialogs/xml-tree.cpp:1314
 msgid "Create"
 msgstr "Napravi"
 
@@ -3579,7 +3582,7 @@ msgstr "Adresa slike:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "Grupa od %d objekata"
 
-#: src/sp-item.cpp:617
+#: src/sp-item.cpp:631
 msgid "Object"
 msgstr "Objekat"
 
@@ -3839,7 +3842,7 @@ msgstr "Napravi krivu liniju od izabranih delova"
 
 #: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
 #: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2131 src/toolbox.cpp:2171
+#: src/toolbox.cpp:2145 src/toolbox.cpp:2185
 msgid "<b>New:</b>"
 msgstr ""
 
@@ -3849,7 +3852,7 @@ msgstr ""
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
 #: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2133 src/toolbox.cpp:2152
+#: src/toolbox.cpp:2147 src/toolbox.cpp:2166
 msgid "<b>Change:</b>"
 msgstr ""
 
@@ -3896,11 +3899,11 @@ msgstr ""
 msgid "Scatter randomly the corners and angles"
 msgstr "Promena veličine zaobljenih uglova pravougaonika"
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1894
+#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1908
 msgid "Defaults"
 msgstr "Podrazumevano"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1895
+#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1909
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3959,89 +3962,91 @@ msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 "Poluprečnik najmanje unutrašnje revolucije (odnosi se na veličinu spirale)"
 
-#: src/toolbox.cpp:1831
+#: src/toolbox.cpp:1834
 #, fuzzy
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "Širina kaligrafske olovke"
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 #, fuzzy
 msgid "Thinning:"
 msgstr "Puna popuna"
 
-#: src/toolbox.cpp:1841
+#: src/toolbox.cpp:1844
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
 
-#: src/toolbox.cpp:1851
-#, fuzzy
-msgid "Flatness:"
-msgstr "Ravne strane:"
-
-#: src/toolbox.cpp:1851
-msgid "How flat is the pen's nib (0 = round, 1 = flat)"
-msgstr ""
-
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid "Angle:"
 msgstr "Ugao:"
 
-#: src/toolbox.cpp:1861
+#: src/toolbox.cpp:1857
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
-"flatness = 0)"
+"fixation = 0)"
 msgstr ""
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1867
+#, fuzzy
+msgid "Fixation:"
+msgstr "Orijentacija:"
+
+#: src/toolbox.cpp:1867
+msgid ""
+"How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
+"= fixed)"
+msgstr ""
+
+#: src/toolbox.cpp:1880
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1871
+#: src/toolbox.cpp:1880
 msgid "How much inertia affects the movement of the pen"
 msgstr "Koliko se inercija odražava na potez olovke"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "Drag:"
 msgstr "Povlačenje:"
 
-#: src/toolbox.cpp:1882
+#: src/toolbox.cpp:1894
 msgid "How much resistance affects the movement of the pen"
 msgstr "Koliko se otpor odražava na potez olovke"
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "Start:"
 msgstr "Početak:"
 
-#: src/toolbox.cpp:2179
+#: src/toolbox.cpp:2193
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Ugao (u stepenima) od vodoravne do lučne početne tačke"
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "End:"
 msgstr "Završetak:"
 
-#: src/toolbox.cpp:2189
+#: src/toolbox.cpp:2203
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Ugao (u stepenima) od vodoravne do lučne krajnje tačke"
 
-#: src/toolbox.cpp:2200
+#: src/toolbox.cpp:2214
 msgid "Open arc"
 msgstr "Otvoreni luk"
 
-#: src/toolbox.cpp:2201
+#: src/toolbox.cpp:2215
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Promena između luka (otvorene linije) i dela (zatvorena linija sa dva ugla)"
 
-#: src/toolbox.cpp:2228
+#: src/toolbox.cpp:2242
 msgid "Make whole"
 msgstr "Upotpuni"
 
-#: src/toolbox.cpp:2229
+#: src/toolbox.cpp:2243
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Zatvori liniju u elipsu, ne kao luk ili deo"
 
@@ -4556,12 +4561,12 @@ msgid "Remove text from path"
 msgstr "Pretvori tekst u krive"
 
 #: src/verbs.cpp:1506
-msgid "Remove Manual _Kerning"
+msgid "Remove Manual _Kerns"
 msgstr ""
 
 #: src/verbs.cpp:1507
 #, fuzzy
-msgid "Remove all manual kerning from a text object"
+msgid "Remove all manual kerns from a text object"
 msgstr "Ukloni transformacije objekta"
 
 #: src/verbs.cpp:1509
@@ -5460,32 +5465,34 @@ msgstr "Preliv nije izabran"
 msgid "No stops in gradient"
 msgstr "Bez stanice boje u prelivu"
 
-#: src/widgets/gradient-vector.cpp:763
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:764
 msgid "Add stop"
 msgstr "Dodaj stanicu boje"
 
-#: src/widgets/gradient-vector.cpp:766
+#: src/widgets/gradient-vector.cpp:767
 msgid "Add another control stop to gradient"
 msgstr "Dodavanje još jedne kontrolne stanice boje u preliv"
 
-#: src/widgets/gradient-vector.cpp:768
+#: src/widgets/gradient-vector.cpp:769
 msgid "Delete stop"
 msgstr "Ukloni stanicu boje"
 
-#: src/widgets/gradient-vector.cpp:771
+#: src/widgets/gradient-vector.cpp:772
 msgid "Delete current control stop from gradient"
 msgstr "Uklanjanje trenutne kontrolne stanice boje iz preliva"
 
 #. Label
-#: src/widgets/gradient-vector.cpp:782
+#: src/widgets/gradient-vector.cpp:783
 msgid "Offset:"
 msgstr "Razmak:"
 
-#: src/widgets/gradient-vector.cpp:826
+#. TRANSLATORS: "Stop" means: a "phase" of a gradient
+#: src/widgets/gradient-vector.cpp:828
 msgid "Stop Color"
 msgstr "Stanica boje"
 
-#: src/widgets/gradient-vector.cpp:852
+#: src/widgets/gradient-vector.cpp:854
 msgid "Gradient editor"
 msgstr "Uređivač preliva"
 
@@ -5678,6 +5685,10 @@ msgstr "Osobina"
 msgid "Value"
 msgstr "Vrednost"
 
+#, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "Ravne strane:"
+
 #~ msgid "The angle of the calligraphic pen (in degrees)"
 #~ msgstr "Ugao kaligrafske olovke (u stepenima)"
 
@@ -5749,9 +5760,6 @@ msgstr "Vrednost"
 
 #~ msgid "Alignment:"
 #~ msgstr "Poravnanje:"
-
-#~ msgid "Orientation:"
-#~ msgstr "Orijentacija:"
 
 #~ msgid "Text and font"
 #~ msgstr "Tekst i font"
