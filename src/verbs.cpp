@@ -901,9 +901,9 @@ static const SPVerbActionDef props[] = {
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
     /* Dialogs */
     {SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"),
-        N_("Global Inkscape options"), NULL},
+        N_("Global Inkscape options"), "inkscape_options"},
     {SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"),
-        N_("Options saved with the document"), NULL},
+        N_("Options saved with the document"), "document_options"},
     {SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Tool Optio_ns"),
         N_("Tool options"), NULL},
     {SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke"),
