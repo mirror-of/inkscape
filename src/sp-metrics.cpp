@@ -85,7 +85,7 @@ sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SP
 	g_string_sprintf (str, os.str().c_str());
     break;
   case SP_IN:
-    os << len << (m?" \"":"");
+    os << len << (m?"\"":"");
 	g_string_sprintf (str, os.str().c_str());
     break;
   case SP_PT:
