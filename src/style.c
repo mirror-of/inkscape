@@ -130,10 +130,10 @@ static const SPStyleEnum enum_font_style[] = {
 };
 
 static const SPStyleEnum enum_marker[] = {
-  {"none",                SP_MARKER_NONE},
-  {"url(#mTriangle)",     SP_MARKER_TRIANGLE},
-  {"url(#mArrow)",        SP_MARKER_ARROW},
-  {NULL, -1}
+	{"none",                SP_MARKER_NONE},
+	{"url(#mTriangle)",     SP_MARKER_TRIANGLE},
+	{"url(#mArrow)",        SP_MARKER_ARROW},
+	{NULL, -1}
 };
 
 static const SPStyleEnum enum_font_size[] = {
@@ -275,6 +275,9 @@ sp_style_unref (SPStyle *style)
 	return NULL;
 }
 
+/**
+ *  Reads the various style parameters for an object
+ */
 static void
 sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 {
@@ -365,7 +368,14 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 	SPS_READ_PLENGTH_IF_UNSET (&style->stroke_width, repr, "stroke-width");
 	SPS_READ_PENUM_IF_UNSET (&style->stroke_linecap, repr, "stroke-linecap", enum_stroke_linecap, TRUE);
 	SPS_READ_PENUM_IF_UNSET (&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, TRUE);
-	/* stroke-opacity */
+ 
+       /* marker */
+        SPS_READ_PENUM_IF_UNSET (&style->marker, repr, "marker", enum_marker, TRUE);
+        SPS_READ_PENUM_IF_UNSET (&style->marker_start, repr, "marker-start", enum_marker, TRUE);
+        SPS_READ_PENUM_IF_UNSET (&style->marker_mid, repr, "marker-mid", enum_marker, TRUE);
+        SPS_READ_PENUM_IF_UNSET (&style->marker_end, repr, "marker-end", enum_marker, TRUE);
+                                                                                                         
+ 	/* stroke-opacity */
 	if (!style->stroke_opacity.set) {
 		val = sp_repr_attr (repr, "stroke-opacity");
 		if (val) {
