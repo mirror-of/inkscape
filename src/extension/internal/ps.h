@@ -41,8 +41,8 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
 	/* ASCII 85 Functions */
 	void ascii85_init (void);
 	void ascii85_flush (FILE *ofp);
-	inline void ascii85_out (gchar byte, FILE *ofp);
-	void ascii85_nout (int n, gchar *uptr, FILE *ofp);
+	inline void ascii85_out (guchar byte, FILE *ofp);
+	void ascii85_nout (int n, guchar *uptr, FILE *ofp);
 	void ascii85_done (FILE *ofp);
 
 

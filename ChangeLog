@@ -1,3 +1,10 @@
+2004-04-20  Carl Hetherington <inkscape@carlh.net>
+
+	* src/extension/internal/ps.cpp, src/extension/internal/ps.h:
+	Fixed some bugs in exporting images that seem to have been
+	introduced when the code was copied from the gimp.  They caused
+	problems when exporting bitmap images to PS.
+
 2004-04-19  MenTaLguY <mental@rydia.net>
 
     * src/arc-context.cpp, src/desktop-handles.h, src/desktop.h,

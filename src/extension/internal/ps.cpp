@@ -514,9 +514,9 @@ PrintPS::image (Inkscape::Extension::Print *mod, guchar *px, unsigned int w, uns
 	fprintf (_stream, "{currentfile rowdata readhexstring pop}\n");
 	fprintf (_stream, "false 3 colorimage\n");
 
-	for (r = 0; r < h; r++) {
+	for (unsigned int r = 0; r < h; r++) {
 		guchar *s;
-		int c0, c1, c;
+		unsigned int c0, c1, c;
 		s = px + r * rs;
 		for (c0 = 0; c0 < w; c0 += 24) {
 			c1 = MIN (w, c0 + 24);
@@ -605,19 +605,29 @@ PrintPS::print_bpath (FILE *stream, const NArtBpath *bp)
 	}
 }
 
-/* The following code is licensed under GNU GPL */
+/* The following code is licensed under GNU GPL.
+** The packbits, ascii85 and imaging printing code
+** is from the gimp's postscript.c.
+*/
 
+/**
+* \param nin Number of bytes of source data.
+* \param src Source data.
+* \param nout Number of output bytes.
+* \param dst Buffer for output.
+*/
 void
 PrintPS::compress_packbits (int nin,
                             guchar *src,
                             int *nout,
                             guchar *dst)
 
-{register gchar c;
- int nrepeat, nliteral;
- guchar *run_start;
- guchar *start_dst = dst;
- guchar *last_literal = NULL;
+{
+  register guchar c;
+  int nrepeat, nliteral;
+  guchar *run_start;
+  guchar *start_dst = dst;
+  guchar *last_literal = NULL;
 
  for (;;)
  {
@@ -740,7 +750,7 @@ PrintPS::ascii85_flush (FILE *ofp)
 }
 
 inline void
-PrintPS::ascii85_out (gchar byte, FILE *ofp)
+PrintPS::ascii85_out (guchar byte, FILE *ofp)
 {
   if (ascii85_len == 4)
     ascii85_flush (ofp);
@@ -751,7 +761,7 @@ PrintPS::ascii85_out (gchar byte, FILE *ofp)
 }
 
 void
-PrintPS::ascii85_nout (int n, gchar *uptr, FILE *ofp)
+PrintPS::ascii85_nout (int n, guchar *uptr, FILE *ofp)
 {
  while (n-- > 0)
  {
@@ -833,8 +843,9 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 				src_ptr += 4;
 			}
 			compress_packbits (width, plane, &nout, packb);
+
 			ascii85_init ();
-			ascii85_nout (nout, (gchar*)packb, ofp);
+			ascii85_nout (nout, packb, ofp);
 			ascii85_out (128, ofp); /* Write EOD of RunLengthDecode filter */
 			ascii85_done (ofp);
 		}
