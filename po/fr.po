@@ -9,14 +9,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
-"POT-Creation-Date: 2004-04-06 18:25-0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-07 22:56-0700\n"
 "PO-Revision-Date: 2004-04-02 20:41+0200\n"
 "Last-Translator: Frederic Rodrigo <f.rodrigo@tuxfamily.org>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: KBabel 1.3\n"
 
 #: inkscape.desktop.in.h:1
@@ -359,7 +359,7 @@ msgstr "Unités :"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:829
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Largeur :"
@@ -723,37 +723,37 @@ msgstr "Ligne calligraphique"
 msgid "Text"
 msgstr "Texte"
 
-#: src/dialogs/stroke-style.cpp:815
+#: src/dialogs/stroke-style.cpp:814
 msgid "Stroke settings"
 msgstr "Paramètres du tracé"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:854
+#: src/dialogs/stroke-style.cpp:853
 msgid "Join:"
 msgstr "Joindre :"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:872
+#: src/dialogs/stroke-style.cpp:871
 msgid "Cap:"
 msgstr "Coiffe :"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:890
+#: src/dialogs/stroke-style.cpp:889
 msgid "Pattern:"
 msgstr "Motif de remplissage :"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:906
+#: src/dialogs/stroke-style.cpp:905
 msgid "Start Markers:"
 msgstr "Marqueurs de début :"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:926
+#: src/dialogs/stroke-style.cpp:925
 msgid "Mid Markers:"
 msgstr "Marqueurs intermédiaires :"
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:946
+#: src/dialogs/stroke-style.cpp:945
 msgid "End Markers:"
 msgstr "Marqueurs de fin :"
 
@@ -948,18 +948,18 @@ msgstr "Échec du chargement du fichier %s"
 msgid "Select file to open"
 msgstr "Sélectionnez un fichier à ouvrir"
 
-#: src/file.cpp:216
+#: src/file.cpp:214
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:217 src/file.cpp:223
+#: src/file.cpp:215 src/file.cpp:221
 msgid "Document not saved."
 msgstr "Document non sauvé."
 
-#: src/file.cpp:222
+#: src/file.cpp:220
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
@@ -972,16 +972,16 @@ msgstr "Document sauvé."
 msgid "Select file to save"
 msgstr "Sauver le fichier sous ..."
 
-#: src/file.cpp:331
+#: src/file.cpp:325
 msgid "No changes need to be saved."
 msgstr "Pas de changement à sauver."
 
-#: src/file.cpp:466
+#: src/file.cpp:460
 #, c-format
 msgid "Unable to import image '%s': %s"
 msgstr "Impossible de d'importer l'image '%s' : %s"
 
-#: src/file.cpp:496
+#: src/file.cpp:490
 msgid "Select file to import"
 msgstr "Sélectionnez un fichier à importer"
 
@@ -1417,7 +1417,7 @@ msgstr ""
 "Utilisez '> fichier' pour imprimer vers un fichier.\n"
 "Utilisez '| prog arg...' pour relier à un programme."
 
-#: src/extension/internal/ps.cpp:808
+#: src/extension/internal/ps.cpp:817
 #, fuzzy
 msgid "write error occurred"
 msgstr "Une erreur d'écriture s'est produite"

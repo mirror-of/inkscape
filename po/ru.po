@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.37+\n"
-"POT-Creation-Date: 2004-04-07 16:39-0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-07 22:56-0700\n"
 "PO-Revision-Date: 2004-04-07 12:45+0400\n"
 "Last-Translator: Alexey Remizov <alexey@remizov.pp.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -362,7 +362,7 @@ msgstr "Единицы:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:829
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Ширина:"
@@ -724,37 +724,37 @@ msgstr "Каллиграфическая кисть"
 msgid "Text"
 msgstr "Текст"
 
-#: src/dialogs/stroke-style.cpp:815
+#: src/dialogs/stroke-style.cpp:814
 msgid "Stroke settings"
 msgstr "Параметры штриха"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:854
+#: src/dialogs/stroke-style.cpp:853
 msgid "Join:"
 msgstr "Соединение:"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:872
+#: src/dialogs/stroke-style.cpp:871
 msgid "Cap:"
 msgstr "Края:"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:890
+#: src/dialogs/stroke-style.cpp:889
 msgid "Pattern:"
 msgstr "Шаблон:"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:906
+#: src/dialogs/stroke-style.cpp:905
 msgid "Start Markers:"
 msgstr "Начальные маркеры:"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:926
+#: src/dialogs/stroke-style.cpp:925
 msgid "Mid Markers:"
 msgstr "Серединные маркеры:"
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:946
+#: src/dialogs/stroke-style.cpp:945
 msgid "End Markers:"
 msgstr "Конечные маркеры:"
 
@@ -1431,7 +1431,7 @@ msgstr ""
 "Используйте '> filename' для вывода результата печати в файл. \n"
 "Используйте '| prog arg' для передачи результата печати программе"
 
-#: src/extension/internal/ps.cpp:808
+#: src/extension/internal/ps.cpp:817
 msgid "write error occurred"
 msgstr "произошла ошибка записи"
 
