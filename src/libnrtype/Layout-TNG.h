@@ -441,7 +441,7 @@ public:
     /** Basically uses characterBoundingBox() on all the characters from
     \a start to \a end and returns the union of these boxes. Free the result
     with delete. */
-    Shape* createSelectionShape(iterator const &it_start, iterator const &it_end) const;
+    Shape* createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const;
 
     inline bool isCursorPosition(iterator const &it) const;
 
@@ -757,6 +757,7 @@ public:
     bool prevStartOfLine();
     bool thisStartOfLine();
     bool nextStartOfLine();
+    inline bool thisEndOfLine();
 
     //shape
     bool prevStartOfShape();
@@ -916,6 +917,14 @@ inline bool Layout::iterator::prevGlyph()
     if (_glyph_index == 0) return false;
     _char_index = _parent_layout->_glyphs[--_glyph_index].in_character;
     return true;
+}
+
+
+inline bool Layout::iterator::thisEndOfLine()
+{
+    if (nextStartOfLine())
+        return prevCursorPosition();
+    return false;
 }
 
 inline bool Layout::iterator::nextCharacter()

@@ -51,6 +51,7 @@
 #include "sp-flowdiv.h"
 #include "sp-tspan.h"
 #include "sp-string.h"
+#include "display/nr-arena-shape.h"
 
 #include "text-editing.h"
 
@@ -89,6 +90,49 @@ sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
     NR::Point p = i_p * im;
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     return layout->getNearestCursorPositionTo(p);
+}
+
+NRArenaShape* sp_te_create_selection_arena_item(SPItem *item, NRArena *arena, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform)
+{
+    if (start == end)
+        return NULL;
+    Inkscape::Text::Layout const *layout = te_get_layout(item);
+    if (layout == NULL)
+        return NULL;
+
+    Shape *sel_shape;
+    if (start > end)
+        sel_shape = layout->createSelectionShape(end, start, transform);
+    else
+        sel_shape = layout->createSelectionShape(start, end, transform);
+    Path sel_path;
+    sel_shape->ConvertToForme(&sel_path);
+    delete sel_shape;
+    sel_path.Convert(0.25);
+    NArtBpath *sel_bpath = (NArtBpath*)sel_path.MakeArtBPath();
+    SPCurve *sel_spcurve = sp_curve_new_from_bpath(sel_bpath);  // takes ownership of sel_bpath
+
+    NRRect  paintbox;
+    NRBPath bp;
+    bp.path = SP_CURVE_BPATH(sel_spcurve);
+    paintbox.x0 = paintbox.y0 = NR_HUGE;
+    paintbox.x1 = paintbox.y1 = -NR_HUGE;
+    nr_path_matrix_bbox_union(&bp, NR::identity(), &paintbox);
+
+    SPStyle *style = sp_style_new();
+    sp_style_merge_from_style_string(style, "fill:blue;fill-opacity:0.5");
+
+    NRArenaShape *arena_shape = NRArenaShape::create(arena);
+    nr_arena_shape_set_style (arena_shape, style);
+    sp_style_unref(style);   // arena takes a reference
+    nr_arena_shape_set_path(arena_shape, sel_spcurve, false);
+    nr_arena_shape_set_paintbox (arena_shape, &paintbox);
+
+    sp_curve_unref(sel_spcurve);  // arena takes a reference
+    return arena_shape;
+    // with the return value do:
+    //   nr_arena_item_add_child(flowed, arena_shape, NULL);
+    //   nr_arena_item_unref(arena_shape);
 }
 
 /*

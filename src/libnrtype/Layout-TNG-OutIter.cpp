@@ -14,6 +14,7 @@
 #include "livarot/Shape.h"
 #include "Layout-TNG-Scanline-Maker.h"
 #include "svg/svg-types.h"
+#include "libnr/nr-matrix-rotate-ops.h"
 
 namespace Inkscape {
 namespace Text {
@@ -360,7 +361,7 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
     return NR::Rect(top_left, bottom_right);
 }
 
-Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end) const
+Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const
 {
     double rotation_angle;
     Shape *selection_shape = new Shape;
@@ -372,14 +373,10 @@ Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it
     for (iterator it = it_start ; it < it_end ; it.nextCharacter()) {
         NR::Rect box = characterBoundingBox(it, &rotation_angle);
         Path rect_path;
-	NR::rotate transform(rotation_angle);
-	for(int i = 0; i < 4; i ++) {
-		NR::Point corner = box.corner(i) * transform;
-		if(i == 0)
-			rect_path.MoveTo(corner);
-		else
-			rect_path.LineTo(corner);
-	}
+        NR::Matrix total_transform = transform * NR::rotate(rotation_angle);
+        rect_path.MoveTo(box.corner(0) * total_transform);
+        for(int i = 1; i < 4; i ++)
+            rect_path.LineTo(box.corner(i) * total_transform);
         rect_path.Close();
         rect_path.Convert(0.25);
         rect_path.Fill(&rect_shape);
