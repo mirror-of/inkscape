@@ -656,7 +656,6 @@ sp_gradient_set_spread (SPGradient *gr, SPGradientSpread spread)
 void
 sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vector)
 {
-	SPRepr *child;
 	GSList *sl, *cl;
 	gint i;
 
@@ -683,8 +682,10 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 
 	/* Now collect stops from original repr */
 	sl = NULL;
-	for (child = repr->children; child != NULL; child = child->next) {
-		if (!strcmp (sp_repr_name (child), "stop")) sl = g_slist_prepend (sl, child);
+	for (SPRepr *child = repr->children; child != NULL; child = child->next) {
+		if (!strcmp (sp_repr_name (child), "stop")) {
+			sl = g_slist_prepend (sl, child);
+		}
 	}
 	/* Remove all stops */
 	while (sl) {
@@ -695,9 +696,17 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 
 	/* And insert new children from list */
 	while (cl) {
-		sp_repr_add_child (repr, (SPRepr *) cl->data, NULL);
-		sp_repr_unref (child);
-		cl = g_slist_remove (cl, cl->data);
+		SPRepr *child = static_cast<SPRepr *>(cl->data);
+		sp_repr_add_child(repr, child, NULL);
+		/* TODO: Previously, the below passed as first argument an expression always equal
+		   to NULL (which would generate a CRITICAL warning from sp_repr_unref if this code
+		   were executed).  I've guessed that the intention is to unref cl->data, but I
+		   can't work out how to get this code called, to check that it's doing the right
+		   thing.  Remove the below g_warning once you're sure that this new version is
+		   correct. */
+		g_warning("Congratulations, you've found a way to get this code to run.  Please run under valgrind (or other detector of leaks and premature free's) to check that the below unreferencing (from the above sp_repr_new call) is correct.");
+		sp_repr_unref(child);
+		cl = g_slist_remove(cl, child);
 	}
 }
 

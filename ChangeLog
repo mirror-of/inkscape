@@ -1,5 +1,10 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-gradient.cpp (sp_gradient_repr_set_vector): "Fix" a memory
+	leak.  However, I haven't worked out how to get this code to run, in
+	order to check that the guessed replacement code is correct.  Instead
+	I've inserted a g_warning and a TODO comment.
+
 	* src/libnrtype/nr-type-directory.cpp
 	(nr_type_calculate_position): Fix bug where `ultra bold' and `extra
 	bold' were getting parsed as `bold'.
@@ -37,7 +42,7 @@
 	Slight restructuring using g_snprintf instead of less readable (&
 	slightly less efficient in this case) strlen/memcpy.
 
-	* src/sp-metrics.h: Increase precision of PT_PER_CM etc.
+	* src/sp-metrics.h: Increase accuracy of PT_PER_CM etc.
 	Add FIXME comment.
 
 	* src/dialogs/item-properties.cpp, src/display/nr-arena-shape.cpp:
