@@ -165,4 +165,25 @@ spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
   return sb;
 }
 
+void
+sp_set_font_size_recursive (GtkWidget *w, gpointer font)
+{
+	guint size = GPOINTER_TO_UINT (font);
 
+	PangoFontDescription* pan = pango_font_description_new ();
+	pango_font_description_set_size (pan, size);
+
+	gtk_widget_modify_font (w, pan);
+
+	if (GTK_IS_CONTAINER(w)) {
+		gtk_container_foreach (GTK_CONTAINER(w), (GtkCallback) sp_set_font_size_recursive, font);
+	}
+
+	pango_font_description_free (pan);
+}
+
+void
+sp_set_font_size (GtkWidget *w, guint font)
+{
+	sp_set_font_size_recursive (w, GUINT_TO_POINTER(font));
+}

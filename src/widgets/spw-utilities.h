@@ -20,8 +20,6 @@
 
 #include <glib.h>
 
-
-
 GtkWidget *
 spw_label(GtkWidget * table, const gchar *label_text, int col, int row);
 
@@ -44,6 +42,6 @@ spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 		  const gchar * label, gchar * key, int row,
 		  GtkWidget * us, GCallback cb);
 
-
+void sp_set_font_size (GtkWidget *w, guint font);
 
 #endif
