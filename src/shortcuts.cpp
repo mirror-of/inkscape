@@ -279,6 +279,9 @@ sp_shortcut_init ()
 
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_m, SP_VERB_DIALOG_TRANSFORM, true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_M, SP_VERB_DIALOG_TRANSFORM, false);
+
+	sp_shortcut_set (GDK_F12, SP_VERB_DIALOG_TOGGLE, true);
+	sp_shortcut_set (GDK_grave, SP_VERB_DIALOG_TOGGLE, false);
 }
 
 void
