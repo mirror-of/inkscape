@@ -1,3 +1,8 @@
+2004-02-07  MenTaLguY <mental@rydia.net>
+
+    * src/modules/db.cpp: cleaned up some very grotty code that gcc 3.4
+      (rightly) refused to compile
+
 2004-02-05  bulia byak <bulia@users.sourceforge.net>
 
     * src/sp-text.cpp src/sp-text.h: Function to adjust letterspacing
