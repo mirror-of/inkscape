@@ -1,5 +1,8 @@
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/inkview.cpp: Address compiler warning: declare is_jar iff it is
+	defined, i.e. #ifdef WITH_INKJAR.
+
 	* src/desktop-affine.cpp, src/knotholder.cpp,
 	src/desktop-events.cpp, src/nodepath.cpp, src/sp-ellipse.cpp,
 	src/sp-image.cpp, src/sp-item-notify-moveto.cpp, src/sp-rect.cpp,

@@ -77,7 +77,9 @@ static int sp_svgview_show_next_cb (GtkWidget *widget, void *data);
 static int sp_svgview_show_prev_cb (GtkWidget *widget, void *data);
 static int sp_svgview_goto_first_cb (GtkWidget *widget, void *data);
 static int sp_svgview_goto_last_cb (GtkWidget *widget, void *data);
+#ifdef WITH_INKJAR
 static bool is_jar(const gchar *filename);
+#endif
 static void usage();
 
 static GtkWidget *ctrlwin = NULL;
