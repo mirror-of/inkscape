@@ -527,7 +527,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 	/* Step 2 - clear group */
 	// remember the position of the group
-	SPRepr *g_prev_sibling = sp_repr_prev(SP_OBJECT_REPR(group));
+	gint pos = SP_OBJECT_REPR(group)->position();
 
 	// the group is leaving forever, no heir, clones should take note; its children however are going to reemerge
 	SP_OBJECT (group)->deleteObject(true, false);
@@ -547,7 +547,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	while (items) {
 		SPRepr *repr = (SPRepr *) items->data;
 		// add item
-		sp_repr_add_child(prepr, repr, g_prev_sibling);
+		prepr->appendChild(repr);
+		// restore position; since the items list was prepended (i.e. reverse), we now add
+		// all children at the same pos, which inverts the order once again
+		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
 		// fill in the children list if non-null
 		SPItem *nitem = (SPItem *) doc->getObjectByRepr(repr);
