@@ -102,6 +102,8 @@ libinkpre_a_SOURCES =	\
 	sp-anchor.cpp sp-anchor.h	\
 	sp-animation.cpp sp-animation.h	\
 	sp-chars.cpp sp-chars.h	\
+	sp-conn-end.cpp sp-conn-end.h	\
+	sp-conn-end-pair.cpp sp-conn-end-pair.h	\
 	sp-flowdiv.h sp-flowdiv.cpp \
 	sp-flowregion.h sp-flowregion.cpp \
 	sp-flowtext.h sp-flowtext.cpp \

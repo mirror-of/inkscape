@@ -1,3 +1,12 @@
+2004-08-12  Peter Moulder  <pmoulder@river>
+
+	* src/attributes.h, src/attributes.cpp: New attributes
+	  SP_ATTR_CONNECTION_START, SP_ATTR_CONNECTION_END.
+	* src/sp-conn-end.h, src/sp-conn-end.cpp,
+	  src/sp-conn-end-pair.h, src/sp-conn-end-pair.cpp:
+	  New files.
+	* src/Makefile_insert (libinkpre_a_SOURCES): Add the new files.
+
 2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/curve.h, src/display/curve.cpp
