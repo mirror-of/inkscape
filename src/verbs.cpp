@@ -284,7 +284,7 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
             sp_selection_tile();
             break;
         case SP_VERB_EDIT_UNTILE:
-					//sp_selection_untile();
+		sp_selection_untile();
             break;
         case SP_VERB_EDIT_CLEAR_ALL:
             sp_edit_clear_all();

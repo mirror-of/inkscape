@@ -638,6 +638,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         SP_VERB_NONE,
         SP_VERB_EDIT_TILE,
+        SP_VERB_EDIT_UNTILE,
 
         SP_VERB_NONE,
         SP_VERB_EDIT_DELETE,

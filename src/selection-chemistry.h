@@ -29,6 +29,7 @@ void sp_selection_unlink();
 void sp_select_clone_original ();
 
 void sp_selection_tile();
+void sp_selection_untile();
 
 void sp_selection_group();
 void sp_selection_ungroup();

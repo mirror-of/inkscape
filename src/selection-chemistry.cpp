@@ -785,6 +785,9 @@ void sp_selection_paste_style()
         return;
     }
 
+    // FIXME: use desktop's set_style method when it's done, to recursively merge with all children recursively
+    // FIXME: in set_style, compensate pattern and gradient fills for the object's own transform so that pasting fills does not depend on preserve/optimize
+
     GSList *selected = g_slist_copy((GSList *) selection->itemList());
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
 
@@ -1353,6 +1356,13 @@ sp_select_clone_original()
 
     SPItem *original = sp_use_get_original(SP_USE(selection->singleItem()));
 
+    for (SPObject *o = original; o && !SP_IS_ROOT(o); o = SP_OBJECT_PARENT (o)) {
+        if (SP_IS_DEFS (o)) {
+            desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("This clone's original is not a visible object (it is in <defs>)"));
+            return;
+        }
+    }
+
     if (original) {
         selection->clear();
         selection->setItem(original);
@@ -1383,7 +1393,7 @@ sp_selection_tile()
 
     sp_document_ensure_up_to_date(document);
     NR::Point m = (NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y))));
-    sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
+    sp_selection_move_relative(selection, m[NR::X], m[NR::Y]); // FIXME: set adv=identity so that clones don't jump
 
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
 
@@ -1399,26 +1409,107 @@ sp_selection_tile()
     if (sort)
         reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
 
-    reprs = g_slist_reverse (reprs);
+    // create a list of duplicates
+    GSList *repr_copies = NULL;
+    for (GSList *i = reprs; i != NULL; i = i->next) {
+        SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));
+        repr_copies = g_slist_prepend (repr_copies, dup);
+    }
 
-    SPRepr *rect = pattern_tile (reprs, 
+    // delete objects so that their clones don't get alerted; this object will be restored shortly 
+    for (GSList *i = reprs; i != NULL; i = i->next) {
+        SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
+        item->deleteObject (false);
+    }
+
+    SPRepr *rect = pattern_tile (repr_copies, 
                                  NR::Rect (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max())),
-                                 document, NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, r.min()))));
+                                 document, NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))));
 
     SPItem *rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
     sp_repr_unref (rect);
 
     selection->clear();
 
-    for (GSList *i = reprs; i != NULL; i = i->next) {
-        SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
-        item->deleteObject();
-    }
-
     selection->setItem (rectangle);
 
     sp_document_done (document);
 }
+
+void
+sp_selection_untile()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop == NULL)
+        return;
+
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    // check if something is selected
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an object with pattern fill to to untile."));
+        return;
+    }
+
+    GSList *new_select = NULL;
+
+    bool did = false;
+
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
+         items != NULL;
+         items = items->next) {
+
+        SPItem *item = (SPItem *) items->data;
+
+        SPStyle *style = SP_OBJECT_STYLE (item);
+
+        if (!style || style->fill.type != SP_PAINT_TYPE_PAINTSERVER) 
+            continue;
+
+        did = true;
+
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+        SPPattern *pattern = pattern_getroot (SP_PATTERN (server));
+
+        NR::Matrix pat_transform = pattern_patternTransform (SP_PATTERN (server));
+        pat_transform = pat_transform * NR::Matrix (item->transform);
+
+        for (SPObject *child = sp_object_first_child(SP_OBJECT(pattern)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+            SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(child));
+            SPItem *i = SP_ITEM (desktop->currentLayer()->appendChildRepr(copy));
+
+           // FIXME: relink clones to the new canvas objects
+           // use SPObject::setid when mental finishes it to steal ids of 
+
+            // this is needed to make sure the new item has curve (simply requestDisplayUpdate does not work)
+            sp_document_ensure_up_to_date (document);
+
+            NR::Matrix transform = NR::Matrix (i->transform) * pat_transform;
+            NRMatrix transform_;
+            transform.copyto (&transform_);
+            sp_item_write_transform(i, SP_OBJECT_REPR(i), &transform_);
+
+            new_select = g_slist_prepend(new_select, i);
+        }
+
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+        sp_repr_css_set_property (css, "fill", "none");
+        sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
+    }
+
+    if (!did) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No pattern fills to untile in the selection."));
+    } else {
+        sp_document_done(SP_DT_DOCUMENT(desktop));
+        selection->setItemList (new_select);
+    }
+}
+
+
+
+
 
 
 /*
