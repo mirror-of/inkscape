@@ -107,6 +107,7 @@ EXTRA_PROGRAMS =	\
 
 TESTS =	\
 	attributes-test$(EXEEXT)	\
+	dir-util-test$(EXEEXT)	\
 	extract-uri-test$(EXEEXT)	\
 	mod360-test$(EXEEXT)	\
 	round-test$(EXEEXT)	\
@@ -130,6 +131,7 @@ TESTS =	\
 
 check_PROGRAMS =	\
 	attributes-test	\
+	dir-util-test	\
 	extract-uri-test	\
 	mod360-test	\
 	round-test	\
