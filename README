@@ -4,9 +4,22 @@ Inkscape. Draw Freely.
 
 http://www.inkscape.org
 
-Inkscape is an open source drawing tool with capabilities similar to Illustrator, Freehand, and CorelDraw that uses the W3C standard scalable vector graphics  format (SVG). Some supported SVG features include basic shapes, paths, text, markers, clones, alpha blending, transforms, gradients, and grouping. In addition, Inkscape supports Creative Commons meta-data, node-editing, layers, complex path operations, text-on-path, and SVG XML editing. It also imports several formats like EPS, Postscript, JPEG, PNG, BMP, and TIFF and exports PNG as well as multiple vector-based formats.
+Inkscape is an open source drawing tool with capabilities similar to
+Illustrator, Freehand, and CorelDraw that uses the W3C standard scalable
+vector graphics  format (SVG). Some supported SVG features include
+basic shapes, paths, text, markers, clones, alpha blending, transforms,
+gradients, and grouping. In addition, Inkscape supports Creative Commons
+meta-data, node-editing, layers, complex path operations, text-on-path,
+and SVG XML editing. It also imports several formats like EPS, Postscript,
+JPEG, PNG, BMP, and TIFF and exports PNG as well as multiple vector-based
+formats.
 
-Inkscape's main motivation is to provide the Open Source community with a fully W3C compliant XML, SVG, and CSS2 drawing tool. Additional planned work includes conversion of the codebase from C/Gtk to C++/Gtkmm, emphasizing a lightweight core with powerful features added through an extension mechanism, and the establishment of a friendly, open, community-oriented development processes.
+Inkscape's main motivation is to provide the Open Source community
+with a fully W3C compliant XML, SVG, and CSS2 drawing tool. Additional
+planned work includes conversion of the codebase from C/Gtk to C++/Gtkmm,
+emphasizing a lightweight core with powerful features added through
+an extension mechanism, and the establishment of a friendly, open,
+community-oriented development processes.
 
 Inkscape uses the standard procedure for compilation and installation: 
 
