@@ -416,7 +416,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 	} else {
 		if ((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0)) {
 			GtkWidget *dlg, *prg, *btn; /* progressbar-stuff */
-			const char *fn;
+			char *fn;
 			gchar *text;
 			
 			dlg = gtk_dialog_new ();
