@@ -46,10 +46,11 @@ private:
     public:
         Gtk::TreeModelColumn<unsigned> depth;
         Gtk::TreeModelColumn<SPObject *> object;
+        Gtk::TreeModelColumn<SPRepr *> repr;
         Gtk::TreeModelColumn<void *> callbacks;
 
         LayerModelColumns() {
-            add(depth); add(object); add(callbacks);
+            add(depth); add(object); add(repr); add(callbacks);
         }
     };
 

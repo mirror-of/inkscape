@@ -2,6 +2,9 @@
 
 	* src/util/glib-list.h: adaptor for glib lists
 
+	* src/widgets/layer-selector.h, src/widgets/layer-selector.cpp:
+	  save the repr next to the SPObject
+
 2004-10-30  MenTaLguY  <mental@rydia.net>
 
 	* src/util/list.h: more list cleanups and documentation
