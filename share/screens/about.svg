@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
 "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
    id="svg559"
    sodipodi:version="0.32"
    width="600pt"
    height="500pt"
    sodipodi:docname="about.svg"
-   inkscape:version="0.37"
+   inkscape:version="0.38cvs"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xml="http://www.w3.org/XML/1998/namespace"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="/home/phillipsjd/temp/inkscape-project/inkscape/share/screens">
+   sodipodi:docbase="/usr/src/inkscape-project/inkscape/share/screens">
   <defs
      id="defs561">
     <linearGradient
@@ -39,12 +38,12 @@
   <sodipodi:namedview
      id="base"
      inkscape:zoom="1.08000000"
-     inkscape:cx="363.119316"
-     inkscape:cy="207.656860"
+     inkscape:cx="363.11930904"
+     inkscape:cy="207.65686035"
      inkscape:window-width="1022"
      inkscape:window-height="740"
      inkscape:window-x="0"
-     inkscape:window-y="5" />
+     inkscape:window-y="25" />
   <rect
      style="font-size:12;fill:#0082ab;fill-rule:evenodd;stroke:none;stroke-width:2.05668pt;"
      id="rect3983"
@@ -86,14 +85,14 @@
      id="path4235" />
   <text
      xml:space="preserve"
-     style="fill:#ffffff;fill-opacity:1;stroke:none;font-family:Nimbus Sans L;font-style:normal;font-weight:bold;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;font-family:Nimbus Sans L;font-style:normal;font-weight:bold;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;"
      x="45.7237203"
      y="317.165700"
      id="text4185"
      transform="scale(1.606053,1.606047)"
      sodipodi:linespacing="100%"><tspan
-       x="45.7237206"
-       y="317.165710"
+       x="45.72372055"
+       y="317.16571045"
        sodipodi:role="line"
        id="tspan4186">Open Source Scalable Vector Graphics Editor . www.inkscape.org</tspan></text>
   <path
@@ -180,38 +179,40 @@
      y="539.615512"
      id="text624"
      sodipodi:linespacing="120%"><tspan
-       x="377.259064"
-       y="539.615540"
+       x="377.25906372"
+       y="539.61553955"
        sodipodi:role="line"
        id="tspan985">CONTRIBUTORS: Alexander Clausen  John Bintz  Daniel Borgmann  Hans Breuer  Bulia Byak  Chema Celorio</tspan><tspan
        sodipodi:role="line"
        id="tspan1008"
-       x="377.259064"
-       y="554.015540">Johan Ceuppens  Zbigniew Chyla  Kees Cook  Robert Crosbie  Jon Cruz  Danilo Egan  Frank Felfe  Ted Gould</tspan><tspan
+       x="377.25906372"
+       y="554.01554012">Johan Ceuppens  Zbigniew Chyla  Kees Cook  Robert Crosbie  Jon Cruz  Danilo Egan  Frank Felfe  Ted Gould</tspan><tspan
        sodipodi:role="line"
        id="tspan1010"
-       x="377.259064"
-       y="568.415541">Bryce Harrington  Nathan Hurst  Thomas Ingham  Bob Jamison  Lauris Kaplinski  Lynn Kerby  Petr Kovar</tspan><tspan
+       x="377.25906372"
+       y="568.41554070">Bryce Harrington  Nathan Hurst  Thomas Ingham  Bob Jamison  Lauris Kaplinski  Lynn Kerby  Petr Kovar</tspan><tspan
        sodipodi:role="line"
        id="tspan1016"
-       x="377.259064"
-       y="582.815541">Raph Levien  Vitaly Lipatov  Dmitry G. Mastrukov  Michael Meeks  Federico Mena  MenTaLguY  Peter Moulder</tspan><tspan
+       x="377.25906372"
+       y="582.81554127">Raph Levien  Vitaly Lipatov  Dmitry G. Mastrukov  Michael Meeks  Federico Mena  MenTaLguY  Peter Moulder</tspan><tspan
        sodipodi:role="line"
        id="tspan1020"
-       x="377.259064"
-       y="597.215542">Yukihiro Nakai  Christian Neumair  Mitsuru Oka  Jon Phillips  Christian Schaller</tspan><tspan
+       x="377.25906372"
+       y="597.21554184">Yukihiro Nakai  Christian Neumair  Mitsuru Oka  Jon Phillips  Christian Schaller</tspan><tspan
        sodipodi:role="line"
        id="tspan1022"
-       x="377.259064"
-       y="611.615542">Tom von Schwerdtner  Daniel Yacob  Masatake Yamato</tspan></text>
+       x="377.25906372"
+       y="611.61554241">Tom von Schwerdtner  Daniel Yacob  Masatake Yamato</tspan></text>
   <text
      style="fill:#ffffff;stroke:none;font-family:Baekmuk Batang;font-style:normal;font-weight:normal;font-size:36;text-anchor:end;writing-mode:lr;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
      x="706.831360"
      y="46.9632586"
      id="text1003"
      sodipodi:linespacing="100%"><tspan
-       x="706.831360"
-       y="46.9632568"
+       x="706.83135986"
+       y="46.96325684"
        sodipodi:role="line"
-       id="tspan1006">[% Release %]</tspan></text>
+       id="tspan1006"
+       dx="0 0 0 0 0 0 0"
+       dy="0 0 0 0 0 0 0">0.38CVS</tspan></text>
 </svg>
