@@ -543,13 +543,28 @@ update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget 
     }
 
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-		GtkWidget *sub_toolbox = GTK_WIDGET (g_object_get_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name));
+        GtkWidget *sub_toolbox = GTK_WIDGET (g_object_get_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name));
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
             gtk_widget_show (sub_toolbox);
+            g_object_set_data (G_OBJECT(toolbox), "shows", sub_toolbox);
         } else {
             gtk_widget_hide (sub_toolbox);
         }
     }
+}
+
+void show_aux_toolbox (GtkWidget *toolbox_toplevel)
+{
+    gtk_widget_show (toolbox_toplevel);
+    GtkWidget *toolbox = gtk_bin_get_child (GTK_BIN (toolbox_toplevel));
+
+    GtkWidget *shown_toolbox = GTK_WIDGET (g_object_get_data(G_OBJECT(toolbox), "shows"));
+    if (!shown_toolbox) {
+        return;
+    }
+
+    gtk_widget_show (toolbox);
+    gtk_widget_show_all (shown_toolbox);
 }
 
 void
