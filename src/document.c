@@ -19,7 +19,8 @@
 #include <string.h>
 #include <glib.h>
 #include <gtk/gtkmain.h>
-#include <xml/repr.h>
+#include "xml/repr.h"
+#include "xml/repr-action.h"
 #include "helper/sp-marshal.h"
 #include "helper/sp-intl.h"
 #include "inkscape-private.h"
