@@ -322,9 +322,13 @@ sp_file_save_dialog (SPDocument *doc)
 	}
 	// printf("Extension: %s\n", default_extension);
 
-	save_loc = doc->uri; /* \todo should use a getter */
-	if (save_loc == NULL)
-		save_loc = save_path;
+	if (doc->uri == NULL)
+            if (save_path != NULL)
+                save_loc = g_build_filename(save_path, _("untitled.svg"), NULL);
+            else
+                save_loc = g_build_filename(g_get_home_dir(), _("untitled.svg"), NULL);
+        else
+            save_loc = g_strdup(doc->uri); /* \todo should use a getter */
 
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
@@ -337,9 +341,10 @@ sp_file_save_dialog (SPDocument *doc)
     char *fileName = sucess ? g_strdup(dlg->getFilename()) : NULL;
 	Inkscape::Extension::Extension * selectionType = dlg->getSelectionType();
 
+        delete dlg;
+        g_free(save_loc);
 	if (!sucess) return sucess;
 
-    delete dlg;
     if (fileName && *fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
