@@ -1369,7 +1369,7 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
 
     /* fixme: Per type methods need default flag too */
     if (from->opacity.set && from->opacity.value != SP_SCALE24_MAX) {
-        p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &from->opacity, &to->opacity, SP_STYLE_FLAG_IFDIFF);
+        p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &from->opacity, &to->opacity, SP_STYLE_FLAG_IFSET);
     }
     p += sp_style_write_ipaint (p, c + BMAX - p, "color", &from->color, &to->color, SP_STYLE_FLAG_IFSET);
     p += sp_style_write_ipaint (p, c + BMAX - p, "fill", &from->fill, &to->fill, SP_STYLE_FLAG_IFDIFF);
@@ -2427,8 +2427,13 @@ sp_style_paint_clear (SPStyle *style, SPIPaint *paint,
 void
 sp_style_unset_property_attrs (SPObject *o)
 {
+    if (!o) return;
+
     SPStyle *style = SP_OBJECT_STYLE (o);
+    if (!style) return;
+
     SPRepr *repr = SP_OBJECT_REPR (o);
+    if (!repr) return;
 
     if (style->opacity.set) {
         sp_repr_set_attr (repr, "opacity", NULL);
