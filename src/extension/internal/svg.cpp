@@ -102,7 +102,10 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 
 	doc = sp_document_new (uri, TRUE, TRUE);
 	repr = sp_document_repr_root(doc);
+
+	sp_document_set_undo_sensitive(doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
+	sp_document_set_undo_sensitive(doc, TRUE);
 
 	return doc;
 }
