@@ -67,6 +67,7 @@
 #include "widgets/icon.h"
 #include "helper/stock-items.h"
 #include <file.h>
+#include "common-style.h"
 
 #include "dialogs/stroke-style.h"
 
@@ -699,7 +700,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     gchar *urltext = g_strdup_printf ("url(#%s)", sp_repr_attr (patrepr, "id"));
                     sp_repr_css_set_property (css, "stroke", urltext);
 
-                    for (const GSList *i = items; i != NULL; i = i->next) {
+                    for (GSList const *i = items; i != NULL; i = i->next) {
                          SPRepr *selrepr = SP_OBJECT_REPR (i->data);
                          SPObject *selobj = SP_OBJECT (i->data);
                          if (!selrepr)
@@ -825,10 +826,12 @@ void mm_print (gchar *say, NR::Matrix m)
 
 
 static GtkWidget *
-sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, SPDocument *sandbox, gchar *menu_id, const NRArena *arena, unsigned int visionkey, NRArenaItem *root)
+sp_marker_prev_new(unsigned size, gchar const *mname,
+                   SPDocument *source, SPDocument *sandbox,
+                   gchar *menu_id, NRArena const *arena, unsigned visionkey, NRArenaItem *root)
 {
     // the object of the marker
-    const SPObject *marker = source->getObjectById(mname);
+    SPObject const *marker = source->getObjectById(mname);
     if (marker == NULL)
         return NULL;
 
@@ -956,9 +959,9 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 
     // Do this here, outside of loop, to speed up preview generation:
     /* Create new arena */
-    const NRArena *arena = NRArena::create();
+    NRArena const *arena = NRArena::create();
     /* Create ArenaItem and set transform */
-    const unsigned int visionkey = sp_item_display_key_new(1);
+    unsigned const visionkey = sp_item_display_key_new(1);
     NRArenaItem *root =  sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), (NRArena *) arena, visionkey, SP_ITEM_SHOW_PRINT );
 
     for (; ml != NULL; ml = ml->next) {
@@ -990,7 +993,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         else
             g_object_set_data (G_OBJECT(i), "stockid", (void *) "false");
 
-        const gchar *markid = sp_repr_attr (repr, "id");
+        gchar const *markid = sp_repr_attr(repr, "id");
         g_object_set_data (G_OBJECT(i), "marker", (void *) markid);
 
         GtkWidget *hb = gtk_hbox_new(FALSE, MARKER_ITEM_MARGIN);
@@ -1021,7 +1024,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 SPDocument *
 ink_markers_preview_doc ()
 {
-const gchar *buffer = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
+gchar const *buffer = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 "  <defs id=\"defs\" />"
 
 "  <g id=\"marker-start\">"
@@ -1733,7 +1736,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
         return;
     }
 
-    const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+    SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
 
     if (stroke_width_varying (objects)) {
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
@@ -1922,7 +1925,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
         double width_typed = wadj->value;
         double const miterlimit = ml->value;
 
-        const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+        SPUnit const *const unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us));
 
         double *dash, offset;
         int ndash;
@@ -2043,7 +2046,7 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
         }
 
         GSList *reprs;
-        const GSList *items;
+        GSList const *items;
         if (spw->inkscape) {
             reprs = NULL;
             items = sp_widget_get_item_list(spw);
@@ -2351,7 +2354,6 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
 static SPObject*
 ink_extract_marker_name(gchar const *n)
 {
-
     gchar const *p = n;
     while (*p != '\0' && *p != '#') {
         p++;

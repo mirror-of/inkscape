@@ -55,6 +55,7 @@
 #include <inkscape.h>
 #include <document-private.h>
 #include <file.h>
+#include "common-style.h"
 
 
 #include "fill-style.h"
@@ -76,9 +77,9 @@ static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
                                                       SPPaintSelector *psel );
 
 static void sp_fill_style_widget_attr_changed       ( SPWidget *spw,
-                                                      const gchar *key,
-                                                      const gchar *oldval,
-                                                      const gchar *newval );
+                                                      gchar const *key,
+                                                      gchar const *oldval,
+                                                      gchar const *newval );
 
 static void sp_fill_style_widget_update             ( SPWidget *spw,
                                                       SPSelection *sel );
@@ -98,10 +99,10 @@ static void sp_fill_style_widget_paint_changed      ( SPPaintSelector *psel,
 
 static void sp_fill_style_widget_fill_rule_activate ( GtkWidget *w, SPWidget *spw);
 
-static void sp_fill_style_get_average_color_rgba    ( const GSList *objects,
+static void sp_fill_style_get_average_color_rgba    ( GSList const *objects,
                                                       gfloat *c);
 
-static void sp_fill_style_get_average_color_cmyka   ( const GSList *objects,
+static void sp_fill_style_get_average_color_cmyka   ( GSList const *objects,
                                                       gfloat *c);
 
 static SPPaintSelectorMode
@@ -183,9 +184,9 @@ sp_fill_style_widget_new (void)
     g_object_set_data (G_OBJECT (spw), "fill-rule", om);
     gtk_tooltips_set_tip (ttips, om,
     // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-				_("Specifies the method of filling overlapping areas when an object intersects itself. "
-				"With the \"winding fill\" method (fill-rule:nonzero), all overlapping areas are filled; "
-				"with the \"alternating fill\" method (fill-rule:evenodd), every other of them is filled."), NULL);
+                          _("Specifies the method of filling overlapping areas when an object intersects itself. "
+                            "With the \"winding fill\" method (fill-rule:nonzero), all overlapping areas are filled; "
+                            "with the \"alternating fill\" method (fill-rule:evenodd), every other of them is filled."), NULL);
 
     /* 0 - nonzero 1 - evenodd */
     GtkWidget *m = gtk_menu_new ();
@@ -287,8 +288,8 @@ sp_fill_style_widget_change_selection ( SPWidget *spw,
 
 
 static void
-sp_fill_style_widget_attr_changed ( SPWidget *spw, const gchar *key,
-                                    const gchar *oldval, const gchar *newval )
+sp_fill_style_widget_attr_changed ( SPWidget *spw, gchar const *key,
+                                    gchar const *oldval, gchar const *newval )
 {
 
     if (!strcmp (key, "style")) {
@@ -321,7 +322,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
         return;
     }
 
-    const GSList *objects = sel->itemList();
+    GSList const *objects = sel->itemList();
     SPObject *object = SP_OBJECT (objects->data);
     // prevent change of style on clones.
     for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
@@ -335,7 +336,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
     SPPaintSelectorMode pselmode =
         sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object));
 
-    for (const GSList *l = objects->next; l != NULL; l = l->next) {
+    for (GSList const *l = objects->next; l != NULL; l = l->next) {
         SPPaintSelectorMode nextmode =
             sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (l->data));
 
@@ -393,8 +394,8 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
                                                 (object)),
                                          FALSE );
 
-            for (const GSList *l = objects->next; l != NULL; l = l->next) {
-                const SPObject *next = SP_OBJECT (l->data);
+            for (GSList const *l = objects->next; l != NULL; l = l->next) {
+                SPObject const *next = SP_OBJECT(l->data);
 
                 if (sp_gradient_get_vector ( SP_GRADIENT
                                              (SP_OBJECT_STYLE_FILL_SERVER
@@ -448,8 +449,8 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
                                                 (object)),
                                          FALSE );
 
-            for (const GSList *l = objects->next; l != NULL; l = l->next) {
-                const SPObject *next = SP_OBJECT (l->data);
+            for (GSList const *l = objects->next; l != NULL; l = l->next) {
+                SPObject const *next = SP_OBJECT(l->data);
                 if (sp_gradient_get_vector ( SP_GRADIENT
                                                 (SP_OBJECT_STYLE_FILL_SERVER
                                                     (next)),
@@ -661,8 +662,8 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
             SPColor color;
             gfloat alpha;
             sp_paint_selector_get_color_alpha (psel, &color, &alpha);
-            const GSList *items = sp_widget_get_item_list (spw);
-            for (const GSList *i = items; i != NULL; i = i->next) {
+            GSList const *items = sp_widget_get_item_list(spw);
+            for (GSList const *i = items; i != NULL; i = i->next) {
                 sp_style_set_fill_color_alpha ( SP_OBJECT_STYLE (i->data),
                                                 &color, alpha, TRUE, TRUE);
             }
@@ -673,8 +674,8 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
         {
             SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
             vector = sp_gradient_ensure_vector_normalized (vector);
-            const GSList *items = sp_widget_get_item_list (spw);
-            for (const GSList *i = items; i != NULL; i = i->next) {
+            GSList const *items = sp_widget_get_item_list(spw);
+            for (GSList const *i = items; i != NULL; i = i->next) {
                 SPGradient *lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                 sp_paint_selector_write_lineargradient ( psel,
                                                          SP_LINEARGRADIENT (lg),
@@ -687,8 +688,8 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
         {
             SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
             vector = sp_gradient_ensure_vector_normalized (vector);
-            const GSList *items = sp_widget_get_item_list (spw);
-            for (const GSList *i = items; i != NULL; i = i->next) {
+            GSList const *items = sp_widget_get_item_list(spw);
+            for (GSList const *i = items; i != NULL; i = i->next) {
                 SPGradient *rg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                 sp_paint_selector_write_radialgradient ( psel,
                                                          SP_RADIALGRADIENT (rg),
@@ -711,7 +712,7 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 
 
 /**
-This is called (at least) when: 
+This is called (at least) when:
 1  paint selector mode is switched (e.g. flat color -> gradient)
 2  you finished dragging a gradient node and released mouse
 3  you changed a gradient selector parameter (e.g. spread)
@@ -732,7 +733,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 #endif
 
     GSList *reprs = NULL;
-    const GSList* items = NULL;
+    GSList const *items = NULL;
     if (spw->inkscape) {
         /* fixme: */
         if (!SP_WIDGET_DOCUMENT (spw)) {
@@ -741,7 +742,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             return;
         }
         items = sp_widget_get_item_list (spw);
-        for (const GSList *i = items; i != NULL; i = i->next) {
+        for (GSList const *i = items; i != NULL; i = i->next) {
             reprs = g_slist_prepend (reprs, SP_OBJECT_REPR (i->data));
         }
     } else {
@@ -840,7 +841,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), true);
                     }
 
-                    for (const GSList *i = items; i != NULL; i = i->next) {
+                    for (GSList const *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
@@ -853,7 +854,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                 } else {
                      // We have changed from another gradient type, or modified spread/units within this gradient type
                     vector = sp_gradient_ensure_vector_normalized (vector);
-                    for (const GSList *i = items; i != NULL; i = i->next) {
+                    for (GSList const *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
@@ -885,7 +886,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), true);
                     }
 
-                    for (const GSList *i = items; i != NULL; i = i->next) {
+                    for (GSList const *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
@@ -898,16 +899,16 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
                 } else {
                     vector = sp_gradient_ensure_vector_normalized (vector);
-                    for (const GSList *i = items; i != NULL; i = i->next) {
+                    for (GSList const *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                         SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                         sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
-                } 
+                }
 
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
-            } 
+            }
 
             break;
 
@@ -928,7 +929,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     gchar *urltext = g_strdup_printf ("url(#%s)", sp_repr_attr (patrepr, "id"));
                     sp_repr_css_set_property (css, "fill", urltext);
 
-                    for (const GSList *i = items; i != NULL; i = i->next) {
+                    for (GSList const *i = items; i != NULL; i = i->next) {
                          SPRepr *selrepr = SP_OBJECT_REPR (i->data);
                          SPObject *selobj = SP_OBJECT (i->data);
                          if (!selrepr)
@@ -982,11 +983,11 @@ sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
     sp_repr_css_set_property ( css, "fill-rule",
-                               (const gchar *)g_object_get_data (G_OBJECT (w),
+                               (gchar const *)g_object_get_data (G_OBJECT (w),
                                "fill-rule") );
 
     sp_desktop_set_style (desktop, css);
-  
+
     sp_repr_css_attr_unref (css);
 
     if (spw->inkscape) {
@@ -998,7 +999,7 @@ sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
 
 
 static void
-sp_fill_style_get_average_color_rgba (const GSList *objects, gfloat *c)
+sp_fill_style_get_average_color_rgba(GSList const *objects, gfloat *c)
 {
     c[0] = 0.0;
     c[1] = 0.0;
@@ -1030,7 +1031,7 @@ sp_fill_style_get_average_color_rgba (const GSList *objects, gfloat *c)
 
 
 static void
-sp_fill_style_get_average_color_cmyka (const GSList *objects, gfloat *c)
+sp_fill_style_get_average_color_cmyka(GSList const *objects, gfloat *c)
 {
     c[0] = 0.0;
     c[1] = 0.0;
