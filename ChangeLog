@@ -1,3 +1,11 @@
+2004-07-02  Kees Cook  <kees@outflux.net>
+
+	* src/document.cpp, src/dialogs/desktop-properties.cpp, 
+	  src/dialogs/rdf.cpp, src/dialogs/rdf.h, src/xml/repr.h:
+	  Made RDF's writable now.  Handling modifications and defaults.
+	  Mental and others will most likely kill me when they finally
+	  read this code.
+
 2004-07-02  MenTaLguY  <mental@rydia.net>
 
 	* src/attributes.cpp, src/attributes.h, src/sp-item-group.cpp,

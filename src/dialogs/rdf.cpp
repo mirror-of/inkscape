@@ -1,6 +1,8 @@
 /**
  * \brief  RDF manipulation functions
  *
+ * FIXME: move these to xml/ instead of dialogs/
+ *
  * Authors:
  *   Kees Cook <kees@outflux.net>
  *
@@ -148,6 +150,10 @@ struct rdf_license_t rdf_licenses [] = {
 
     { NULL, NULL, NULL }
 };
+
+#define XML_TAG_NAME_METADATA "metadata"
+#define XML_TAG_NAME_RDF      "rdf:RDF"
+#define XML_TAG_NAME_WORK     "cc:Work"
 
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title"), "dc:title", RDF_CONTENT },
@@ -314,7 +320,7 @@ rdf_string(struct rdf_t * rdf)
  *  
  */
 const gchar *
-rdf_text_from_repr ( SPRepr * repr, struct rdf_work_entity_t * entity )
+rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
 {
     g_return_val_if_fail (repr != NULL, NULL);
     g_return_val_if_fail (entity != NULL, NULL);
@@ -325,23 +331,175 @@ rdf_text_from_repr ( SPRepr * repr, struct rdf_work_entity_t * entity )
     switch (entity->datatype) {
         case RDF_CONTENT:
             temp = sp_repr_children(repr);
-            g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return "";
+            //g_return_val_if_fail (temp != NULL, NULL);
             return sp_repr_content(temp);
         case RDF_AGENT:
             temp = sp_repr_lookup_name ( repr, "cc:Agent" );
-            g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return "";
+            //g_return_val_if_fail (temp != NULL, NULL);
 
             temp = sp_repr_lookup_name ( temp, "dc:title" );
-            g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return "";
+            //g_return_val_if_fail (temp != NULL, NULL);
 
             temp = sp_repr_children(temp);
-            g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return "";
+            //g_return_val_if_fail (temp != NULL, NULL);
             return sp_repr_content(temp);
         case RDF_RESOURCE:
             return sp_repr_attr(repr, "rdf:resource");
     }
-    return NULL;
+    return "";
 }
+
+unsigned int
+rdf_set_repr_text ( SPRepr * repr,
+                    struct rdf_work_entity_t * entity,
+                    gchar const * text )
+{
+    g_return_val_if_fail ( repr != NULL, 0);
+    g_return_val_if_fail ( entity != NULL, 0);
+    g_return_val_if_fail ( text != NULL, 0);
+
+    SPRepr * temp=NULL;
+    SPRepr * parent=repr;
+    switch (entity->datatype) {
+        case RDF_CONTENT:
+            temp = sp_repr_children(parent);
+            if ( temp == NULL ) {
+                temp = sp_repr_new_text( text );
+                g_return_val_if_fail (temp != NULL, 0);
+
+                sp_repr_append_child ( parent, temp );
+                sp_repr_unref ( temp );
+
+                return TRUE;
+            }
+            else {
+                return sp_repr_set_content( temp, text );
+            }
+
+        case RDF_AGENT:
+            temp = sp_repr_lookup_name ( parent, "cc:Agent" );
+            if ( temp == NULL ) {
+                temp = sp_repr_new ( "cc:Agent" );
+                g_return_val_if_fail (temp != NULL, 0);
+
+                sp_repr_append_child ( parent, temp );
+                sp_repr_unref ( temp );
+            }
+            parent = temp;
+
+            temp = sp_repr_lookup_name ( parent, "dc:title" );
+            if ( temp == NULL ) {
+                temp = sp_repr_new ( "dc:title" );
+                g_return_val_if_fail (temp != NULL, 0);
+
+                sp_repr_append_child ( parent, temp );
+                sp_repr_unref ( temp );
+            }
+            parent = temp;
+
+            temp = sp_repr_children(parent);
+            if ( temp == NULL ) {
+                temp = sp_repr_new_text( text );
+                g_return_val_if_fail (temp != NULL, 0);
+
+                sp_repr_append_child ( parent, temp );
+                sp_repr_unref ( temp );
+
+                return TRUE;
+            }
+            else {
+                return sp_repr_set_content( temp, text );
+            }
+
+        case RDF_RESOURCE:
+            return sp_repr_set_attr ( parent, "rdf:resource", text );
+    }
+    return 0;
+}
+
+
+SPRepr *
+rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
+{
+    g_return_val_if_fail (name       != NULL, NULL);
+    g_return_val_if_fail (doc        != NULL, NULL);
+    g_return_val_if_fail (doc->rroot != NULL, NULL);
+
+    SPRepr * rdf = sp_repr_lookup_name ( doc->rroot,
+                                          XML_TAG_NAME_RDF );
+
+    if (rdf == NULL) {
+        if (!build) return NULL;
+
+        SPRepr * svg = sp_repr_lookup_name ( doc->rroot,
+                                             "svg" );
+        g_return_val_if_fail ( svg != NULL, NULL );
+
+        SPRepr * parent = sp_repr_lookup_name ( svg, XML_TAG_NAME_METADATA );
+        if ( parent == NULL ) {
+            parent = sp_repr_new( XML_TAG_NAME_METADATA );
+            g_return_val_if_fail ( parent != NULL, NULL);
+
+            sp_repr_append_child(svg, parent);
+            sp_repr_unref(parent);
+        }
+
+        rdf = sp_repr_new( XML_TAG_NAME_RDF );
+        g_return_val_if_fail (rdf != NULL, NULL);
+
+        sp_repr_append_child(parent, rdf);
+        sp_repr_unref(rdf);
+    }
+
+    /*
+     * some implementations do not put RDF stuff inside <metadata>,
+     * so we need to check for it and add it if we don't see it
+     */
+    SPRepr * want_metadata = sp_repr_parent ( rdf );
+    g_return_val_if_fail (want_metadata != NULL, NULL);
+    if (strcmp( sp_repr_name(want_metadata), XML_TAG_NAME_METADATA )) {
+            SPRepr * metadata = sp_repr_new( XML_TAG_NAME_METADATA );
+            g_return_val_if_fail (metadata != NULL, NULL);
+
+            /* attach the metadata node */
+            sp_repr_append_child ( want_metadata, metadata );
+            sp_repr_unref ( metadata );
+
+            /* move the RDF into it */
+            sp_repr_unparent ( rdf );
+            sp_repr_append_child ( metadata, rdf );
+    }
+    
+    SPRepr * work = sp_repr_lookup_name ( rdf, XML_TAG_NAME_WORK );
+    if (work == NULL) {
+        if (!build) return NULL;
+
+        work = sp_repr_new( XML_TAG_NAME_WORK );
+        g_return_val_if_fail (work != NULL, NULL);
+
+        sp_repr_append_child(rdf, work);
+        sp_repr_unref(work);
+    }
+
+    SPRepr * item = sp_repr_lookup_name ( work, name );
+    if (item == NULL) {
+        if (!build) return NULL;
+
+        item = sp_repr_new( name );
+        g_return_val_if_fail (item != NULL, NULL);
+
+        sp_repr_append_child(work, item);
+        sp_repr_unref(item);
+    }
+
+    return item;
+}
+
+
 
 /**
  *  \brief   Retrieves a known RDF/Work entity's contents from the document XML by name
@@ -350,23 +508,17 @@ rdf_text_from_repr ( SPRepr * repr, struct rdf_work_entity_t * entity )
  *  
  */
 const gchar *
-rdf_get_work_entity(struct rdf_work_entity_t * entity)
+rdf_get_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity)
 {
+    g_return_val_if_fail (doc    != NULL, NULL);
     g_return_val_if_fail (entity != NULL, NULL);
-
     //printf("want '%s'\n",entity->title);
 
-    SPRepr * rdf = sp_repr_lookup_name ( SP_ACTIVE_DOCUMENT->rroot, "rdf:RDF" );
+    SPRepr * item = rdf_get_work_repr( doc, entity->tag, FALSE );
+    if ( item == NULL ) return "";
+    //g_return_val_if_fail (item != NULL, NULL);
 
-    if (rdf == NULL) return NULL;
-    
-    SPRepr * work = sp_repr_lookup_name ( rdf, "cc:Work" );
-    if (work == NULL) return NULL;
-
-    SPRepr * item = sp_repr_lookup_name ( rdf, entity->tag );
-    if (item == NULL) return NULL;
-
-    const gchar * result = rdf_text_from_repr ( item, entity );
+    const gchar * result = rdf_get_repr_text ( item, entity );
     //printf("found '%s' == '%s'\n", entity->title, result );
     return result;
 }
@@ -377,18 +529,24 @@ rdf_get_work_entity(struct rdf_work_entity_t * entity)
  *  \param   string The string to replace the entity contents with
  *  
  */
-void
-rdf_set_work_entity(struct rdf_work_entity_t * entity, const gchar * string)
+unsigned int
+rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
+                    const gchar * text)
 {
-    g_assert ( entity != NULL );
-    g_assert ( string != NULL );
+    g_return_val_if_fail ( entity != NULL, 0 );
+    g_return_val_if_fail ( text   != NULL, 0 );
 
+    /*
     printf("need to change '%s' (%s) to '%s'\n",
         entity->title,
         entity->tag,
-        string);
+        text);
+    */
 
-    /* TODO: update the XML */
+    SPRepr * item = rdf_get_work_repr( doc, entity->tag, TRUE );
+    g_return_val_if_fail ( item != NULL, 0 );
+
+    return rdf_set_repr_text ( item, entity, text );
 }
 
 /**

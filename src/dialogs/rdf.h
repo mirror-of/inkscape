@@ -53,9 +53,11 @@ struct rdf_t {
 
 struct rdf_work_entity_t * rdf_find_entity(char * name);
 
-const gchar * rdf_get_work_entity(struct rdf_work_entity_t * entity);
-void    rdf_set_work_entity(struct rdf_work_entity_t * entity,
-                            const gchar * string);
+const gchar * rdf_get_work_entity(SPDocument * doc,
+                                  struct rdf_work_entity_t * entity);
+unsigned int  rdf_set_work_entity(SPDocument * doc,
+                                  struct rdf_work_entity_t * entity,
+                                  const gchar * text);
 
 struct rdf_license_t * rdf_get_license();
 void                   rdf_set_license(struct rdf_license_t * license);

@@ -154,6 +154,9 @@ A: If it is a leaf repr, just called "sp_repr_unparent".  If you want
 Q: What about listeners?
 A: I have no idea yet...
 
+Q: How do I add a namespace to a newly created document?
+A: The current hack is in document.cpp:sp_document_create
+
  Kees Cook  2004-07-01
 
  */

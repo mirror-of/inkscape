@@ -296,7 +296,11 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
     GtkWidget *e = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg),
                                                     entity->name));
 
-    rdf_set_work_entity( entity, (gchar*)gtk_entry_get_text ( GTK_ENTRY(e) ) );
+    if (rdf_set_work_entity( SP_ACTIVE_DOCUMENT, entity,
+                             (gchar*)gtk_entry_get_text ( GTK_ENTRY(e) ) ) ) {
+        /* if we changed an RDF entity, mark the document as changed */
+        sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+    }
 }
 
 
@@ -963,7 +967,7 @@ sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
        GtkWidget *e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
                                                       entity->name);
 
-       const gchar * text = rdf_get_work_entity( entity );
+       const gchar * text = rdf_get_work_entity( SP_ACTIVE_DOCUMENT, entity );
        gtk_entry_set_text ( GTK_ENTRY (e), text ? text : "" );
    } 
 }

@@ -38,6 +38,8 @@
 #include "display/canvas-arena.h"
 #include "desktop-handles.h"
 
+#include "dialogs/rdf.h"
+
 #define A4_WIDTH_STR "210mm"
 #define A4_HEIGHT_STR "297mm"
 
@@ -313,6 +315,9 @@ sp_document_create (SPReprDoc *rdoc,
 	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_SODIPODI_NS_URI);
 	sp_repr_set_attr (rroot, "xmlns:inkscape", SP_INKSCAPE_NS_URI);
 	sp_repr_set_attr (rroot, "xmlns:xlink", SP_XLINK_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:rdf", SP_RDF_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:cc", SP_CC_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:dc", SP_DC_NS_URI);
 	/* End of quick hack */
 
 	/* Quick hack 2 - get default image size into document */
@@ -365,6 +370,10 @@ sp_document_create (SPReprDoc *rdoc,
 		sp_repr_unref (r);
 		g_assert (SP_ROOT (document->root)->defs);
 	}
+
+	/* Default RDF */
+	rdf_set_work_entity ( document, rdf_find_entity ( "description" ),
+                        "Created with Inkscape (http://www.inkscape.org/)" );
 
 	if (keepalive) {
 		inkscape_ref ();
