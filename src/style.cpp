@@ -2111,6 +2111,8 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
         paint->inherit = FALSE;
         paint->currentcolor = FALSE;
     } else if (strneq(str, "url", 3)) {
+        // this is alloc'd uri, but seems to be shared with a parent
+        // potentially, so it's not any easy g_free case...
         paint->value.paint.uri = extract_uri(str);
         if (paint->value.paint.uri == NULL || *(paint->value.paint.uri) == '\0') {
             paint->type = SP_PAINT_TYPE_NONE;

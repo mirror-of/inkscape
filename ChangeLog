@@ -15,6 +15,7 @@
 	* src/inkscape.cpp, src/inkscape.h, src/dialogs/export.cpp: correction
 	  for export dialog paths.  Closes bug #1114714.
 	* inkscape.nsi, Makefile.mingw.common: version bumps
+	* src/text-context.cpp: removed preedit code; it was broken and unneeded.
 
 2005-02-08  Ted Gould  <ted@gould.cx>
 

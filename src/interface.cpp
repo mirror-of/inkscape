@@ -649,10 +649,14 @@ sp_menu_append_new_templates (GtkWidget *menu, SPView *view)
             continue; // skip default.svg - it's in the menu already
 
         const gchar *filepath = g_build_filename(INKSCAPE_TEMPLATESDIR, file, NULL);
-        const gchar *filename =  g_filename_to_utf8(g_strndup (file, strlen(file) - 4),  -1, NULL, NULL, NULL);
-
+        gchar * dupfile = g_strndup(file, strlen(file) - 4);
+        gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
+        g_free(dupfile);
         GtkWidget *item = gtk_menu_item_new_with_label (filename);
+        g_free(filename);
+
         gtk_widget_show(item);
+        // how does "filepath" ever get freed?
         g_signal_connect(G_OBJECT(item),
                          "activate",
                          G_CALLBACK(sp_file_new_from_template),
