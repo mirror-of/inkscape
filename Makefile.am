@@ -27,7 +27,7 @@ EXTRA_DIST = \
 	inkscape.spec		\
 	README HACKING		\
 	inkscape.png \
-	inkscape.ico
+	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico
 
 DISTCLEANFILES = inkscape.desktop \
                  intltool-extract \
