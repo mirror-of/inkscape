@@ -27,11 +27,11 @@ static gint
 sp_slideshow_event (SPViewWidget *vw, GdkEvent *event, GtkWidget *window)
 {
 	GSList *slides;
-	const unsigned char *fname, *nname;
+	const gchar *fname, *nname;
 	int idx;
 
-	slides = g_object_get_data (G_OBJECT (window), "slides");
-	fname = g_object_get_data (G_OBJECT (window), "current");
+	slides = (GSList*)g_object_get_data (G_OBJECT (window), "slides");
+	fname = (const gchar*)g_object_get_data (G_OBJECT (window), "current");
 	idx = g_slist_index (slides, fname);
 
 	switch (event->type) {
@@ -58,7 +58,7 @@ sp_slideshow_event (SPViewWidget *vw, GdkEvent *event, GtkWidget *window)
 		break;
 	}
 
-	nname = g_slist_nth_data (slides, idx);
+	nname = (const gchar*)g_slist_nth_data (slides, idx);
 	g_print ("Old %s new %s\n", fname, nname);
 
 	if (nname && (nname != fname)) {
@@ -81,7 +81,7 @@ sp_slideshow_new (const GSList *files)
 	SPDocument *doc;
 	GtkWidget *w, *v;
 
-	doc = sp_document_new ((unsigned char *) files->data, FALSE, TRUE);
+	doc = sp_document_new ((const gchar*)files->data, FALSE, TRUE);
 	g_return_val_if_fail (doc != NULL, NULL);
 
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
