@@ -2692,7 +2692,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", NODE_FILL_HI,
                  "stroke", NODE_STROKE,
                  "stroke_mouseover", NODE_STROKE_HI,
-                 "tip", _("<b>Node:</b> drag to edit the path; with <b>Ctrl</b> to snap to horizontal/vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"),
+                 "tip", _("<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"),
                  NULL);
     if (n->type == Path::NODE_CUSP)
         g_object_set(G_OBJECT(n->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
