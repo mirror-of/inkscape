@@ -89,6 +89,7 @@ TESTS =	\
 	extract-uri-test$(EXEEXT)	\
 	mod360-test$(EXEEXT)	\
 	display/bezier-utils-test$(EXEEXT)	\
+	helper/units-test$(EXEEXT)	\
 	libnr/nr-matrix-test$(EXEEXT)	\
 	libnr/nr-point-fns-test$(EXEEXT)	\
 	libnr/nr-rotate-test$(EXEEXT)	\
@@ -106,6 +107,7 @@ check_PROGRAMS =	\
 	extract-uri-test	\
 	mod360-test	\
 	display/bezier-utils-test	\
+	helper/units-test	\
 	libnr/nr-matrix-test	\
 	libnr/nr-point-fns-test	\
 	libnr/nr-rotate-test	\

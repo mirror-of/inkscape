@@ -1,5 +1,9 @@
 2004-06-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am:
+	* src/helper/Makefile_insert:
+	* src/helper/units-test.cpp: New unit test.
+
 	* src/select-toolbar.cpp: Greater conformance to CodingStyle.
 
 2004-06-14  Carl Hetherington  <inkscape@carlh.net>
