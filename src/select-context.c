@@ -434,6 +434,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
           switch (event->key.keyval) {  
 					case GDK_Left: // move selection left
 					case GDK_KP_Left: 
+					case GDK_KP_4: 
 						if (!MOD__CTRL) { // not ctrl
 							if (MOD__ALT) { // alt
 								if (MOD__SHIFT) sp_selection_move_screen (-10, 0); // shift
@@ -448,6 +449,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						break;
 					case GDK_Up: // move selection up
 					case GDK_KP_Up: 
+					case GDK_KP_8: 
 						if (!MOD__CTRL) { // not ctrl
 							if (MOD__ALT) { // alt
 								if (MOD__SHIFT) sp_selection_move_screen (0, 10); // shift
@@ -462,6 +464,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						break;
 					case GDK_Right: // move selection right
 					case GDK_KP_Right: 
+					case GDK_KP_6: 
 						if (!MOD__CTRL) { // not ctrl
 							if (MOD__ALT) { // alt
 								if (MOD__SHIFT) sp_selection_move_screen (10, 0); // shift
@@ -476,6 +479,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						break;
 					case GDK_Down: // move selection down
 					case GDK_KP_Down: 
+					case GDK_KP_2: 
 						if (!MOD__CTRL) { // not ctrl
 							if (MOD__ALT) { // alt
 								if (MOD__SHIFT) sp_selection_move_screen (0, -10); // shift
@@ -500,7 +504,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					case GDK_a:
 					case GDK_A:
 						if (MOD__CTRL_ONLY) {
-							sp_edit_select_all(NULL, NULL);
+							sp_edit_select_all (NULL, NULL);
 							ret = TRUE;
 						}
 						break;
