@@ -216,6 +216,9 @@ public:
 	//      method for that
 	GSList const *reprList();
 
+	/** @brief Returns the number of layers in which there are selected objects */
+	guint SPSelection::numberOfLayers();
+
 	/** @brief Returns the bounding rectangle of the selection */
 	NRRect *bounds(NRRect *dest) const;
 	/** @brief Returns the bounding rectangle of the selection */

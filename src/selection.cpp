@@ -391,6 +391,20 @@ SPObject *SPSelection::_objectForRepr(SPRepr *repr) const {
     return object;
 }
 
+guint SPSelection::numberOfLayers() {
+      GSList const *items = const_cast<SPSelection *>(this)->itemList();
+	GSList *layers = NULL;
+	for (GSList const *iter = items; iter != NULL; iter = iter->next) {
+		SPObject *layer = desktop()->layerForObject(SP_OBJECT(iter->data));
+		if (g_slist_find (layers, layer) == NULL) {
+				layers = g_slist_prepend (layers, layer);
+		}
+	}
+	guint ret = g_slist_length (layers);
+	g_slist_free (layers);
+	return ret;
+}
+
 /*
   Local Variables:
   mode:c++
