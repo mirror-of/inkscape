@@ -40,6 +40,7 @@ livarot/Path-test.cpp
 main.cpp
 round-test.cpp
 svg/gill-svg-path.cpp
+svg/tst.cpp
 test.c
 test.cpp
 widgets/sp-hwrap-box.cpp
