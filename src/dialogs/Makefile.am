@@ -26,6 +26,7 @@ libspdialogs_a_SOURCES = \
 	align.cpp align.h	\
 	display-settings.cpp display-settings.h \
 	desktop-properties.cpp desktop-properties.h \
+	filedialog.cpp filedialog.h \
 	object-properties.cpp object-properties.h \
 	item-properties.cpp item-properties.h \
 	object-attributes.cpp object-attributes.h \
