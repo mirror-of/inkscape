@@ -45,6 +45,9 @@ static gboolean sp_node_context_stamp (SPNodeContext * node_context);
 static SPEventContextClass * parent_class;
 GdkCursor * CursorNodeMouseover = NULL, * CursorNodeDragging = NULL;
 
+gint nodeedit_rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
+gint nodeedit_drag_escaped = 0; // if non-zero, drag was canceled by esc
+
 GType
 sp_node_context_get_type (void)
 {
@@ -225,6 +228,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				}
 				ret = TRUE;
 			}
+			nodeedit_rb_escaped = 0;
 			nc->drag = FALSE;
 			break;
 		}
@@ -353,6 +357,30 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				}
 				ret = TRUE;
 			}
+			break;
+		case GDK_Tab: // Tab - cycle selection forward
+			sp_nodepath_select_next (nc->nodepath);
+			ret = TRUE;
+			break;
+		case GDK_ISO_Left_Tab:  // Shift Tab - cycle selection backward
+			sp_nodepath_select_prev (nc->nodepath);
+			ret = TRUE;
+			break;
+		case GDK_A:
+		case GDK_a:
+			if (MOD__CTRL_ONLY) {
+				sp_nodepath_select_all (nc->nodepath);
+				ret = TRUE;
+			}
+			break;
+		case GDK_Escape:
+			if (sp_rubberband_rect (&b)) { // cancel rubberband
+				sp_rubberband_stop ();
+				nodeedit_rb_escaped = 1;
+			} else {
+				sp_nodepath_deselect (nc->nodepath); // deselect
+			}
+			ret = TRUE;
 			break;
 		default:
 			ret = node_key (event);

@@ -29,15 +29,15 @@ typedef enum {
 struct _SPNodePath {
 	SPDesktop * desktop;
 	SPPath * path;
-	GSList * subpaths;
-	GSList * selected;
+	GList * subpaths;
+	GList * selected;
 	NRMatrixD i2d, d2i;
 };
 
 struct _SPNodeSubPath {
 	SPNodePath * nodepath;
 	gboolean closed;
-	GSList * nodes;
+	GList * nodes;
 	SPPathNode * first;
 	SPPathNode * last;
 };
@@ -63,6 +63,10 @@ struct _SPPathNode {
 SPNodePath * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
 void sp_nodepath_destroy (SPNodePath * nodepath);
 
+void sp_nodepath_deselect (SPNodePath *nodepath);
+void sp_nodepath_select_all (SPNodePath *nodepath);
+void sp_nodepath_select_next (SPNodePath *nodepath);
+void sp_nodepath_select_prev (SPNodePath *nodepath);
 void sp_nodepath_select_rect (SPNodePath * nodepath, NRRectD * b, gboolean incremental);
 gboolean node_key (GdkEvent * event);
 
