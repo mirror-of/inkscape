@@ -212,6 +212,10 @@ sp_text_edit_dialog (void)
 #ifdef WITH_GTKSPELL
         GError *error = NULL;
         char *errortext = NULL;
+        /* todo: Use computed xml:lang attribute of relevant element, if present, to specify the
+           language (either as 2nd arg of gtkspell_new_attach, or with explicit
+           gtkspell_set_language call in; see advanced.c example in gtkspell docs).
+           sp_text_edit_dialog_read_selection looks like a suitable place. */
         if (gtkspell_new_attach(GTK_TEXT_VIEW(txt), NULL, &error) == NULL) {
             g_print("gtkspell error: %s\n", error->message);
             errortext = g_strdup_printf("GtkSpell was unable to initialize.\n"
