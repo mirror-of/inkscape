@@ -29,7 +29,10 @@ helper_libspchelp_a_SOURCES =	\
 	helper/units.cpp	\
 	helper/units.h	\
 	helper/window.cpp	\
-	helper/window.h
+	helper/window.h		\
+	helper/stock-items.cpp	\
+	helper/stock-items.h	
+
 
 # TODO: Check that the generated sp-marshal.h is the same as before.
 helper/sp-marshal.h: helper/sp-marshal.list
