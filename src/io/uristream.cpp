@@ -14,10 +14,68 @@
 #include "uristream.h"
 
 
+
+
 namespace Inkscape
 {
 namespace IO
 {
+
+/*
+A temporary modification of Jon Cruz's portable fopen().
+Simplified a bit, since we will always use binary
+*/
+
+#define FILE_READ  1
+#define FILE_WRITE 2
+
+static FILE *fopen_utf8name( char const *utf8name, int mode )
+{
+    FILE *fp = NULL;
+    if (!utf8name)
+        {
+        return NULL;
+        }
+    if (mode!=FILE_READ && mode!=FILE_WRITE)
+        {
+        return NULL;
+        }
+
+#ifndef WIN32
+    gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+    if ( filename ) {
+        if (mode == FILE_READ)
+            fp = std::fopen(filename, "rb");
+        else
+            fp = std::fopen(filename, "wb");
+        g_free(filename);
+    }
+#else
+    if ( PrintWin32::is_os_wide() ) {
+        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
+        if ( wideName )  {
+            if (mode == FILE_READ)
+                fp = _wfopen( (wchar_t*)wideName, L"rb" );
+            else
+                fp = _wfopen( (wchar_t*)wideName, L"wb" );
+            g_free( wideName );
+        } else {
+            g_message("Unable to convert filename from UTF-8 to UTF-16");
+        }
+    } else {
+        gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+        if (mode == FILE_READ)
+            fp = std::fopen(filename, "rb");
+        else
+            fp = std::fopen(filename, "wb");
+        g_free(filename);
+    }
+#endif
+
+    return fp;
+}
+
+
 
 //#########################################################################
 //# U R I    I N P U T    S T R E A M    /     R E A D E R
@@ -32,7 +90,8 @@ UriInputStream::UriInputStream(Inkscape::URI &source)
 {
     char *cpath = (char *)uri.toNativeFilename();
     //printf("path:'%s'\n", cpath);
-    inf = fopen(cpath, "rb");
+    inf = fopen_utf8name(cpath, FILE_READ);
+    //inf = fopen(cpath, "rb");
     if (!inf)
        {
        Glib::ustring err = "UriInputStream cannot open file ";
@@ -148,7 +207,8 @@ UriOutputStream::UriOutputStream(Inkscape::URI &destination)
                     throw (StreamException): uri(destination) 
 {
     char *cpath = (char *)uri.getPath();
-    outf = fopen(cpath, "wb");
+    outf = fopen_utf8name(cpath, FILE_WRITE);
+    //outf = fopen(cpath, "wb");
     if (!outf)
        {
        Glib::ustring err = "UriOutputStream cannot open file ";
