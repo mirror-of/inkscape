@@ -18,7 +18,14 @@
 #define INKSCAPE_DATADIR       "."
 #define PACKAGE_LOCALE_DIR     "locale"
 
+
+/*######################################
+#### OTHER DEFINITIONS
+######################################*/
+
 #define GETTEXT_PACKAGE "inkscape"
+
+#define PACKAGE_STRING                VERSION
 
 #define HAVE_STRING_H                 1
 #define HAVE_MALLOC_H                 1

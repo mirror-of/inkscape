@@ -103,9 +103,10 @@ MSGFMT = $(GTKDOS)$(S)bin$(S)msgfmt
 
 endif
 
-
-#VERSION = \"0.40\"
-VERSION = \"0.40cvs-${DTG}\"
+MAJOR = 0
+MINOR = 40
+VERSION_NR = $(MAJOR).$(MINOR)
+VERSION = \"$(VERSION_NR)cvs-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a
 CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
