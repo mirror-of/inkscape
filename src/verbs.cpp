@@ -870,6 +870,9 @@ static const SPVerbActionDef props[] = {
         N_("Cut the bottom object into pieces"), "division"},
     {SP_VERB_SELECTION_SLICE, "SelectionCutPath", N_("Cut _Path"),
         N_("Cut the bottom path into pieces"), "cut_path"},
+    // TRANSLATORS: "outset": expand a shape by offsetting the object's path,
+    // i.e. by displacing it perpendicular to the path in each point.
+    // See also the Advanced Tutorial for explanation.
     {SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Ou_tset"),
         N_("Outset selected paths"), "outset_path"},
     {SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen", 
@@ -878,6 +881,9 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10", 
         N_("O_utset Path by 10px"),
         N_("Outset selected paths by 10px"), NULL},
+    // TRANSLATORS: "inset": contract a shape by offsetting the object's path,
+    // i.e. by displacing it perpendicular to the path in each point.
+    // See also the Advanced Tutorial for explanation.
     {SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset"),
         N_("Inset selected paths"), "inset_path"},
     {SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen", 
