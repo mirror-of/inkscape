@@ -189,19 +189,29 @@ sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, SPGr
 	    (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) ||
 	    (SP_OBJECT_HREFCOUNT (gr) > 1)) {
        	// we have to clone a fresh new private gradient for the given vector
+
+		// create an empty one
 		SPGradient *gr_new = sp_gradient_get_private_normalized (doc, vector, type);
+
+		// copy all the attributes to it
 		SPRepr *repr_new = SP_OBJECT_REPR (gr_new);
 		SPRepr *repr = SP_OBJECT_REPR (gr);
 		sp_repr_set_attr (repr_new, "gradientUnits", sp_repr_attr (repr, "gradientUnits"));
 		sp_repr_set_attr (repr_new, "gradientTransform", sp_repr_attr (repr, "gradientTransform"));
 		sp_repr_set_attr (repr_new, "spreadMethod", sp_repr_attr (repr, "spreadMethod"));
 		if (SP_IS_RADIALGRADIENT (gr)) {
+			sp_repr_set_attr (repr_new, "cx", sp_repr_attr (repr, "cx"));
+			sp_repr_set_attr (repr_new, "cy", sp_repr_attr (repr, "cy"));
+			sp_repr_set_attr (repr_new, "fx", sp_repr_attr (repr, "fx"));
+			sp_repr_set_attr (repr_new, "fy", sp_repr_attr (repr, "fy"));
+			sp_repr_set_attr (repr_new, "r", sp_repr_attr (repr, "r"));
 		} else {
-		sp_repr_set_attr (repr_new, "x1", sp_repr_attr (repr, "x1"));
-		sp_repr_set_attr (repr_new, "y1", sp_repr_attr (repr, "y1"));
-		sp_repr_set_attr (repr_new, "x2", sp_repr_attr (repr, "x2"));
-		sp_repr_set_attr (repr_new, "y2", sp_repr_attr (repr, "y2"));
+			sp_repr_set_attr (repr_new, "x1", sp_repr_attr (repr, "x1"));
+			sp_repr_set_attr (repr_new, "y1", sp_repr_attr (repr, "y1"));
+			sp_repr_set_attr (repr_new, "x2", sp_repr_attr (repr, "x2"));
+			sp_repr_set_attr (repr_new, "y2", sp_repr_attr (repr, "y2"));
 		}
+
 		return gr_new;
 	} else {
 		/* Set state */
@@ -231,6 +241,7 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
 {
 	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
 
+	// First, clone it if it is shared
 	gr = sp_gradient_clone_private_if_necessary (gr, sp_gradient_get_vector (gr, FALSE), 
 					 SP_IS_RADIALGRADIENT (gr) ? SP_GRADIENT_TYPE_RADIAL : SP_GRADIENT_TYPE_LINEAR);
 
@@ -238,33 +249,84 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
 
 		SPRepr *repr = SP_OBJECT_REPR (gr);
 
+		// calculate the bbox of the item
 		NRRect bbox;
 		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
 		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
 		NR::Matrix bbox2user (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
 
+		// skew is the additional transform, defined by the proportions of the item, 
+		// that we need to apply to the gradient in order to work around this weird bit from SVG 1.1:
+
+			// When gradientUnits="objectBoundingBox" and gradientTransform is the identity
+			// matrix, the stripes of the linear gradient are perpendicular to the gradient
+			// vector in object bounding box space (i.e., the abstract coordinate system where
+			// (0,0) is at the top/left of the object bounding box and (1,1) is at the
+			// bottom/right of the object bounding box). When the object's bounding box is not
+			// square, the stripes that are conceptually perpendicular to the gradient vector
+			// within object bounding box space will render non-perpendicular relative to the
+			// gradient vector in user space due to application of the non-uniform scaling
+			// transformation from bounding box space to user space.
+
+		NR::Matrix skew = bbox2user;
+		double exp = skew.expansion();
+		skew[0] /= exp;
+		skew[1] /= exp;
+		skew[2] /= exp;
+		skew[3] /= exp;
+		skew[4] = 0;
+		skew[5] = 0;
+
+		// apply skew to the gradient
+		for(int i = 0; i < 6; i++) {
+			gr->gradientTransform[i] = skew[i];
+		}
+		gr->gradientTransform_set = TRUE;
+		SP_OBJECT (gr)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+
+		// Matrix to convert points to userspace coords; postmultiply by inverses of item
+		// transform and skew so as to cancel them out when they are applied to the
+		// gradient during rendering
+		NR::Matrix point_convert = bbox2user * NR::Matrix(item->transform).inverse() * skew.inverse();
+
 		if (SP_IS_RADIALGRADIENT (gr)) {
+			SPRadialGradient *rg = SP_RADIALGRADIENT (gr);
+
+			NR::Point c_b = NR::Point (rg->cx.computed, rg->cy.computed);
+			NR::Point f_b = NR::Point (rg->fx.computed, rg->fy.computed);
+			double r_b = rg->r.computed;
+
+			NR::Point c_u = c_b * point_convert; 
+			NR::Point f_u = f_b * point_convert; 
+			double r_u = r_b * point_convert.expansion();
+
+			sp_repr_set_double (repr, "cx", c_u[NR::X]);
+			sp_repr_set_double (repr, "cy", c_u[NR::Y]);
+			sp_repr_set_double (repr, "fx", f_u[NR::X]);
+			sp_repr_set_double (repr, "fy", f_u[NR::Y]);
+			sp_repr_set_double (repr, "r", r_u);
 
 		} else {
 			SPLinearGradient *lg = SP_LINEARGRADIENT (gr);
 
-			//g_print ("bbox %g %g %g %g    p1 %g %g    p2 %g %g\n", bbox.x0, bbox.y0, bbox.x1, bbox.y1, lg->x1.computed, lg->y1.computed, lg->x2.computed, lg->y2.computed);
+			// original points in the bbox coords
+			NR::Point p1_b = NR::Point (lg->x1.computed, lg->y1.computed);
+			NR::Point p2_b = NR::Point (lg->x2.computed, lg->y2.computed);
 
-			NR::Point p1 = NR::Point (lg->x1.computed, lg->y1.computed) * bbox2user;
-			NR::Point p2 = NR::Point (lg->x2.computed, lg->y2.computed) * bbox2user;
+			NR::Point p1_u = p1_b * point_convert; 
+			NR::Point p2_u = p2_b * point_convert;
 
-			sp_repr_set_double (repr, "x1", p1[NR::X]);
-			sp_repr_set_double (repr, "y1", p1[NR::Y]);
-			sp_repr_set_double (repr, "x2", p2[NR::X]);
-			sp_repr_set_double (repr, "y2", p2[NR::Y]);
-
-			//g_print ("x1 %g  y1 %g  x2 %g  y2 %g\n", p1[NR::X], p1[NR::Y], p2[NR::X], p2[NR::Y]);
+			sp_repr_set_double (repr, "x1", p1_u[NR::X]);
+			sp_repr_set_double (repr, "y1", p1_u[NR::Y]);
+			sp_repr_set_double (repr, "x2", p2_u[NR::X]);
+			sp_repr_set_double (repr, "y2", p2_u[NR::Y]);
 		}
 
+		// set the gradientUnits
 		sp_repr_set_attr (repr, "gradientUnits", "userSpaceOnUse");
-		SP_OBJECT(gr)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 	}
 
+	// apply the gradient to the item (may be necessary if we cloned it)
 	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", gr);
 
 	return gr;

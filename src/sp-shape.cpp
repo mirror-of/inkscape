@@ -959,12 +959,17 @@ sp_shape_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matr
 
             SPGradient *gradient = SP_GRADIENT (server);
 
+            // Bbox units for a gradient are generally a bad idea because with them, you cannot
+            // preserve the relative position of the object and its gradient after rotation or
+            // skew. So now we convert them to userspace units which are easy to keep in sync just
+            // by adding the object's transform to gradientTransform.  FIXME: convert back to bbox
+            // units after transforming with the item, so as to preserve the original units.
             gradient = sp_gradient_convert_to_userspace (gradient, item, true);
 
             if (set) {
                 gradient->gradientTransform = postmul;
             } else {
-                gradient->gradientTransform = NR::Matrix(gradient->gradientTransform) * postmul; // fixme: get gradient transform by climbing to parents?
+                gradient->gradientTransform = NR::Matrix(gradient->gradientTransform) * postmul; // fixme: get gradient transform by climbing to hrefs?
             }
             gradient->gradientTransform_set = TRUE;
 
