@@ -52,6 +52,7 @@
 #include "xml/repr-private.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
+#include "prefix.h"
 #include "widgets/icon.h"
 
 #include "dialogs/stroke-style.h"
