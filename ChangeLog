@@ -1,3 +1,10 @@
+2004-07-06  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop.cpp: minor tweaks to make the existing layers
+	  code easier to work with in its current state (particularly,
+	  to sidestep some existing bugs that otherwise require more
+	  UI work to fix)
+
 2004-07-06  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/seltrans.cpp, src/sp-namedview.cpp,

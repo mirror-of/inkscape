@@ -65,6 +65,7 @@
 #include "message-stack.h"
 #include "message-context.h"
 #include "object-hierarchy.h"
+#include "xml/repr-private.h"
 
 #include "file.h"
 
@@ -1386,10 +1387,7 @@ void SPDesktop::_selection_changed(SPSelection *selection, SPDesktop *desktop)
     SPItem *item=selection->singleItem();
     if (item) {
         SPObject *layer=desktop->layerForObject(item);
-        if ( layer &&
-             layer != desktop->currentLayer() &&
-             layer != desktop->currentRoot() )
-        {
+        if ( layer && layer != desktop->currentLayer() ) {
             desktop->setCurrentLayer(layer);
         }
     }
@@ -2122,6 +2120,36 @@ sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
 
 namespace {
 
+void update_label(GtkLabel *label, gchar const *id) {
+    unsigned indent=GPOINTER_TO_INT(g_object_get_data(G_OBJECT(label), "indent"));
+    gchar *text=g_strdup_printf("%*s#%s", indent*2, "", id);
+    gtk_label_set_text(label, text);
+    g_free(text);    
+}
+
+void update_label_from_attr(SPRepr *repr, gchar const *name, gchar const *, gchar const *value, bool, void *data)
+{
+    update_label(GTK_LABEL(data), value);
+}
+
+SPReprEventVector label_events={
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    update_label_from_attr,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+void label_destroy(GtkLabel *label, SPRepr *repr) {
+    sp_repr_remove_listener_by_data(repr, label);
+}
+
 void select_layer(GtkMenuItem *item, SPObject *layer) {
     if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(item))) {
         SPDesktop *desktop=SP_DESKTOP(g_object_get_data(G_OBJECT(item), "desktop"));
@@ -2134,10 +2162,12 @@ void build_item(SPDesktop *desktop, GSList *&items, SPObject *layer,
 {
     GtkWidget *item;
     if (layer) {
-        gchar *label=g_strdup_printf("%*s#%s", indent*2, "", SP_OBJECT_ID(layer));
-        item=gtk_radio_menu_item_new_with_label(items, label);
-        g_free(label);
-
+        item=gtk_radio_menu_item_new_with_label(items, "");
+        GtkLabel *label=GTK_LABEL(gtk_bin_get_child(GTK_BIN(item)));
+        g_object_set_data(G_OBJECT(label), "indent", GINT_TO_POINTER(indent));
+        update_label(label, SP_OBJECT_ID(layer));
+        sp_repr_add_listener(SP_OBJECT_REPR(layer), &label_events, label);
+        g_signal_connect(G_OBJECT(label), "destroy", GCallback(&label_destroy), SP_OBJECT_REPR(layer));
     } else {
         layer = desktop->currentRoot();
         item=gtk_radio_menu_item_new_with_label(items, "        ");
@@ -2176,8 +2206,7 @@ unsigned build_sibling_items(SPDesktop *desktop, GSList *&items,
 
     SPObject *object=sp_object_first_child(parent);
     while (object) {
-        // later, desktop->isLayer(object)
-        if (SP_IS_GROUP(object)) {
+        if (desktop->isLayer(object)) {
             layers = g_slist_prepend(layers, object);
         }
         object = SP_OBJECT_NEXT(object);
@@ -2213,11 +2242,12 @@ unsigned build_layer_menu_items(SPDesktop *desktop, GtkMenu *menu, SPObject *lay
     SPObject *parent=SP_OBJECT_PARENT(layer);
     GSList *items=NULL;
     unsigned offset;
+
+    build_item(desktop, items, NULL, 0, true);
     if ( parent && layer != root ) {
-        offset = build_ancestor_items(desktop, items, parent, root, 0);
+        offset = build_ancestor_items(desktop, items, parent, root, 0) + 1;
         offset += build_sibling_items(desktop, items, layer, parent, offset);
     } else {
-        build_item(desktop, items, NULL, 0, true);
         build_sibling_items(desktop, items, NULL, layer, 0);
         offset = 0;
     }
