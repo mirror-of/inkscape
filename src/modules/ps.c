@@ -85,7 +85,7 @@ sp_module_print_plain_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_print_plain_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintPlain", &info, 0);
+		type = (GType) g_type_register_static (SP_TYPE_MODULE_PRINT, "SPModulePrintPlain", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -99,7 +99,7 @@ sp_module_print_plain_class_init (SPModulePrintPlainClass *klass)
 	g_object_class = (GObjectClass *)klass;
 	module_print_class = (SPModulePrintClass *) klass;
 
-	print_plain_parent_class = g_type_class_peek_parent (klass);
+	print_plain_parent_class = (SPModulePrintClass*)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_print_plain_finalize;
 
@@ -248,7 +248,7 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 		FILE *osf, *osp;
 		pmod->bitmap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
 		sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (combo)->entry));
-		pmod->dpi = MAX (atof (sstr), 1);
+		pmod->dpi = (unsigned int) MAX (int(atof (sstr)), 1);
 		/* Arrgh, have to do something */
 		fn = gtk_entry_get_text (GTK_ENTRY (e));
 		/* g_print ("Printing to %s\n", fn); */
@@ -366,9 +366,10 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 			nr_matrix_d_set_identity (&gc.transform);
 			nr_arena_item_invoke_update (mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 			/* Render */
+			/* This should take gchar* instead of unsigned char*) */
 			nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
 						  bbox.x0, bbox.y0, bbox.x1, bbox.y1,
-						  px, 4 * width, FALSE, FALSE);
+						  (unsigned char*)px, 4 * width, FALSE, FALSE);
 			memset (px, 0xff, 4 * width * 64);
 			nr_arena_item_invoke_render (mod->root, &bbox, &pb, 0);
 			/* Blitter goes here */
@@ -397,7 +398,7 @@ sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrixF *transform, floa
 
 	pmod = (SPModulePrintPlain *) mod;
 
-	if (!pmod->stream) return -1;
+	if (!pmod->stream) return 0;  // XXX: fixme, returning -1 as unsigned.
 	if (pmod->bitmap) return 0;
 
 	return fprintf (pmod->stream, "gsave [%g %g %g %g %g %g] concat\n",
@@ -413,7 +414,7 @@ sp_module_print_plain_release (SPModulePrint *mod)
 
 	pmod = (SPModulePrintPlain *) mod;
 
-	if (!pmod->stream) return -1;
+	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
 	if (pmod->bitmap) return 0;
 
 	return fprintf (pmod->stream, "grestore\n");
@@ -427,7 +428,7 @@ sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 
 	pmod = (SPModulePrintPlain *) mod;
 
-	if (!pmod->stream) return -1;
+	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
 	if (pmod->bitmap) return 0;
 
 	if (style->fill.type == SP_PAINT_TYPE_COLOR) {
@@ -457,7 +458,7 @@ sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NR
 
 	pmod = (SPModulePrintPlain *) mod;
 
-	if (!pmod->stream) return -1;
+	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
 	if (pmod->bitmap) return 0;
 
 	if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
@@ -498,7 +499,7 @@ sp_module_print_plain_image (SPModulePrint *mod, gchar *px, unsigned int w, unsi
 
 	pmod = (SPModulePrintPlain *) mod;
 
-	if (!pmod->stream) return -1;
+	if (!pmod->stream) return 0; // XXX: fixme, returning -1 as unsigned.
 	if (pmod->bitmap) return 0;
 
 	return sp_ps_print_image (pmod->stream, px, w, h, rs, transform);
