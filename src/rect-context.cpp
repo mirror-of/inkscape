@@ -332,7 +332,8 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             rc->center = button_dt;
             namedview_free_snap_all_types(event_context->desktop->namedview, rc->center);
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                ( GDK_BUTTON_RELEASE_MASK       |
+                                ( GDK_KEY_PRESS_MASK | 
+                                  GDK_BUTTON_RELEASE_MASK       |
                                   GDK_POINTER_MOTION_MASK       |
                                   GDK_POINTER_MOTION_HINT_MASK  |
                                   GDK_BUTTON_PRESS_MASK ),

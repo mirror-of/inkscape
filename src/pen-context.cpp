@@ -385,7 +385,7 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
     if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
         /* Grab mouse, so release will not pass unnoticed */
         pc->grab = SP_CANVAS_ITEM(dt->acetate);
-        sp_canvas_item_grab(pc->grab, ( GDK_BUTTON_PRESS_MASK   |
+        sp_canvas_item_grab(pc->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                         GDK_BUTTON_RELEASE_MASK |
                                         GDK_POINTER_MOTION_MASK  ),
                             NULL, mevent.time);

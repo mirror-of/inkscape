@@ -312,7 +312,7 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             /* Snap center to nearest magnetic point */
             namedview_free_snap (event_context->desktop->namedview, Snapper::SNAP_POINT, sc->center);
             sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
-                                 GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
+                                 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
                                  NULL, event->button.time);
             ret = TRUE;
         }
