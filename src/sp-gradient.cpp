@@ -22,9 +22,11 @@
 
 #include <libnr/nr-gradient.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-scale-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
+#include "libnr/nr-scale-translate-ops.h"
 
 #include <gtk/gtksignal.h>
 
