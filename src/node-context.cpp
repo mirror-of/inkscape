@@ -163,6 +163,15 @@ sp_node_context_dispose(GObject *object)
         delete nc->_node_message_context;
     }
 
+    if (CursorNodeDragging) {
+        gdk_cursor_unref (CursorNodeDragging);
+        CursorNodeDragging = NULL;
+    }
+    if (CursorNodeMouseover) {
+        gdk_cursor_unref (CursorNodeMouseover);
+        CursorNodeMouseover = NULL;
+    }
+
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 

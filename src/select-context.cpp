@@ -155,6 +155,15 @@ sp_select_context_dispose(GObject *object)
     delete sc->_describer;
     sc->_describer = NULL;
 
+    if (CursorSelectDragging) {
+        gdk_cursor_unref (CursorSelectDragging);
+        CursorSelectDragging = NULL;
+    }
+    if (CursorSelectMouseover) {
+        gdk_cursor_unref (CursorSelectMouseover);
+        CursorSelectMouseover = NULL;
+    }
+
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
