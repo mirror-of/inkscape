@@ -202,6 +202,8 @@ struct rdf_license_t rdf_licenses [] = {
 #define XML_TAG_NAME_WORK     "cc:Work"
 #define XML_TAG_NAME_LICENSE  "cc:License"
 
+// Remember when using the "title" and "tip" elements to pass them through
+// the localization functions when you use them!
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title"), "dc:title", RDF_CONTENT,
       N_("Name by which this document is formally known."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,

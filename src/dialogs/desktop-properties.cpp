@@ -544,7 +544,7 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
     GObject * changable = NULL;   /* Object that gets "change" notices */
 
     if (dlg) {
-        GtkWidget *l = gtk_label_new (entity->title);
+        GtkWidget *l = gtk_label_new ( _(entity->title) );
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
         gtk_table_attach( GTK_TABLE(t), l, 0, 1, row, row+1,
@@ -558,7 +558,7 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
         case RDF_FORMAT_LINE:
             // single line entry
             e = gtk_entry_new ();
-            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, entity->tip, NULL );
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, _(entity->tip), NULL );
             gtk_widget_show (e);
             gtk_object_set_data (GTK_OBJECT (dlg), entity->name, e);
 
@@ -585,7 +585,7 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
 
             buf = gtk_text_view_get_buffer (GTK_TEXT_VIEW(view));
             // FIXME: looks like tool tips don't show up for GtkTextViews
-            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), scroller, entity->tip, NULL );
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), scroller, _(entity->tip), NULL );
             gtk_widget_show (view);
             gtk_container_add ( GTK_CONTAINER (scroller), view );
 
