@@ -196,7 +196,7 @@ sp_file_do_save (SPDocument *doc, const gchar *uri, const gchar *key)
  	return sp_module_system_save (key, doc, uri);
 }
 
-static void
+static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
 #ifdef WIN32
@@ -209,6 +209,10 @@ sp_file_save_dialog (SPDocument *doc)
 		save_path = g_dirname (filename);
 		save_path = g_strdup (save_path);
 		g_free (filename);
+		
+		return TRUE;
+	} else {
+		return FALSE;
 	}
 #else
 	GtkFileSelection *fs;
@@ -239,9 +243,13 @@ sp_file_save_dialog (SPDocument *doc)
 
 	if (b == GTK_RESPONSE_OK) {
 		sp_file_save_ok (dlg, doc, (gchar const *)((SPMenu *) menu)->activedata);
+		
+		gtk_widget_destroy (dlg);
+		return TRUE;
+	} else {
+		gtk_widget_destroy (dlg);
+		return FALSE;
 	}
-
-	gtk_widget_destroy (dlg);
 #endif
 }
 
@@ -283,11 +291,12 @@ sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
 }
 #endif
 
-void
+gboolean
 sp_file_save_document (SPDocument *doc)
 {
 	SPRepr * repr;
 	const gchar * fn;
+	gboolean success;
 
 	repr = sp_document_repr_root (doc);
 
@@ -295,19 +304,26 @@ sp_file_save_document (SPDocument *doc)
 	if (fn != NULL) {
 		fn = sp_repr_attr (repr, "sodipodi:docname");
 		if (fn == NULL) {
-			sp_file_save_dialog (doc);
+			success = sp_file_save_dialog (doc);
 		} else {
 			/* TODO: This currently requires a recognizable extension to
 				 be on the file name - odd stuff won't work */
 			sp_file_do_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
+			success = TRUE;
 		}
 
-		//TODO: make this dependent on the success of the save operation
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
+		if (success) {
+			sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
+		} else {
+			sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document not saved.");
+		}
 
 	} else {
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "No changes need to be saved.");
+		success = TRUE;
 	}
+	
+	return success;
 }
 
 void

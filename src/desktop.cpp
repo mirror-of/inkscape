@@ -944,46 +944,119 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
 #endif
 }
 
-static gint x = 0, y = 0; // the position of the save confirmation dialog
+// static gint x = 0, y = 0; // the position of the save confirmation dialog
 
 static gboolean
 sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 {
 	SPDocument *doc;
-	gint x1 = 0, y1 = 0;
+	// gint x1 = 0, y1 = 0;
 	doc = SP_VIEW_DOCUMENT (view);
 
 	if (doc && (((GObject *) doc)->ref_count == 1)) {
 		if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL) {
 			GtkWidget *dlg;
+			GtkWidget *lbl;
+			GtkWidget *warn_icon;
+			GtkWidget *close_btn;
+			GtkWidget *close_lbl;
+			GtkWidget *close_icon;
+			GtkWidget *close_box;
+			GtkWidget *close_align;
+			GtkWidget *hbox1;
+			char markup[255];
 			gint b;
-			dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-						      _("Document %s has unsaved changes, save them?"), SP_DOCUMENT_NAME(doc));
-			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_NO, GTK_RESPONSE_NO);
+			
+			// The dialog label
+			g_snprintf(markup,
+				255,
+			        "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n" \
+			        "If you close without saving, your changes will be discarded.",
+				SP_DOCUMENT_NAME(doc));
+			
+			lbl = gtk_label_new (NULL);
+			gtk_label_set_markup (GTK_LABEL (lbl), markup);
+			gtk_label_set_selectable (GTK_LABEL (lbl), TRUE);
+			gtk_label_set_line_wrap (GTK_LABEL (lbl), TRUE);
+			gtk_misc_set_alignment (GTK_MISC (lbl), 0.5, 0);
+			
+			
+			// The dialog icon
+			warn_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
+			gtk_misc_set_alignment (GTK_MISC (warn_icon), 0.5, 0);
+			
+			
+			// The dialog content (icon + label)
+			hbox1 = gtk_hbox_new (FALSE, 0);
+			gtk_box_set_spacing (GTK_BOX (hbox1), 12);
+			gtk_container_set_border_width (GTK_CONTAINER (hbox1), 6);
+			
+			gtk_box_pack_start (GTK_BOX (hbox1), warn_icon, FALSE, FALSE, 0);
+			gtk_box_pack_start (GTK_BOX (hbox1), lbl, FALSE, FALSE, 0);
+			
+			
+			// The "Close without Saving" button
+			close_btn = gtk_button_new ();
+			
+			close_box = gtk_hbox_new (FALSE, 3);
+			
+			close_icon = gtk_image_new_from_stock (GTK_STOCK_QUIT, GTK_ICON_SIZE_BUTTON);
+			close_lbl = gtk_label_new_with_mnemonic ("C_lose without Saving");
+			
+			gtk_box_pack_start (GTK_BOX (close_box), close_icon, TRUE, FALSE, 0);
+			gtk_box_pack_start (GTK_BOX (close_box), close_lbl, TRUE, FALSE, 0);
+			
+			close_align = gtk_alignment_new (0.5, 0.5, 0, 0);
+			gtk_container_add (GTK_CONTAINER (close_align), close_box);
+			
+			gtk_container_add (GTK_CONTAINER (GTK_BUTTON (close_btn)), close_align);
+			
+			gtk_widget_show_all (close_btn);
+			
+
+			// The dialog			
+			dlg = gtk_dialog_new ();
+			gtk_window_set_title (GTK_WINDOW (dlg), "");
+			gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
+			gtk_dialog_set_has_separator (GTK_DIALOG (dlg), FALSE);
+			gtk_container_set_border_width (GTK_CONTAINER (dlg), 6);
+			
+			gtk_dialog_add_action_widget (GTK_DIALOG (dlg), close_btn, GTK_RESPONSE_NO);
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
 			gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_YES);
 
-			if (x == 0 && y == 0) { // if no previous position remembered,
+			
+			gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dlg)->vbox), hbox1);
+			gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dlg)->vbox), 12);
+					  
+			gtk_widget_show_all (GTK_DIALOG (dlg)->vbox);
+			
+			/* if (x == 0 && y == 0) { // if no previous position remembered,
 				//position its bottom right curner under the cursor
 				gdk_window_get_pointer (NULL, &x, &y, NULL); // NULL means relative to the root window
 			} // otherwise put this dialog where the previous one was
 			gtk_window_get_size ((GtkWindow *) dlg, &x1, &y1);
-			gtk_window_move((GtkWindow *) dlg, MAX(x-x1, 0), MAX(y-y1, 0));
+			gtk_window_move((GtkWindow *) dlg, MAX(x-x1, 0), MAX(y-y1, 0)); */
+			
 			sp_transientize (dlg);
 
 			b = gtk_dialog_run (GTK_DIALOG(dlg));
-			gtk_widget_destroy(dlg);
+			gtk_widget_destroy (dlg);
 			switch (b) {
 			case GTK_RESPONSE_YES:
 				sp_document_ref (doc);
-				sp_file_save_document (doc);
-				sp_document_unref (doc);
-				break;
+				if (sp_file_save_document (doc)) {
+					sp_document_unref (doc);
+					break;
+				} else { // save dialog canceled or save failed
+					sp_document_unref (doc);
+					return TRUE;
+				}
 			case GTK_RESPONSE_NO:
 				break;
 			default: // cancel pressed, or dialog was closed
-				x = y = 0; // forget the position of the dialog
+				// x = y = 0; // forget the position of the dialog
 				return TRUE;
 				break;
 			}
