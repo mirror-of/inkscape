@@ -53,6 +53,10 @@ public:
     makeScanline() will give an error if there is no more space. */
     virtual void completeLine() =0;
 
+    /** Returns the y coordinate of the top of the scanline that will be
+    returned by the next call to makeScanline(). */
+    virtual double yCoordinate() = 0;
+    
     /** Forces an arbitrary change in the stored y coordinate of the object.
     The next call to makeScanline() will return runs whose top is at
     the new coordinate. */
@@ -89,6 +93,9 @@ public:
     /** Increments the current y by the current line height */
     virtual void completeLine();
 
+    virtual double yCoordinate()
+        {return _y;}
+
     /** Just changes y */
     virtual void setNewYCoordinate(double new_y);
 
@@ -115,6 +122,9 @@ public:
     virtual std::vector<ScanRun> makeScanline(Layout::LineHeight const &line_height);
 
     virtual void completeLine();
+
+    virtual double yCoordinate()
+        {return _y;}
 
     virtual void setNewYCoordinate(double new_y);
 

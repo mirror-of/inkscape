@@ -466,7 +466,7 @@ public:
         double descent;
         double leading;
         inline double total() const {return ascent + descent + leading;}
-        void max(LineHeight const &other);   /// makes this object contain the largest of all three members between both objects
+        void max(LineHeight const &other, double multiplier);   /// makes this object contain the largest of all three members between this object and other * multiplier
     };
 
     /// see _enum_converter()
@@ -515,10 +515,10 @@ private:
         std::vector<SPSVGLength> dy;
         std::vector<SPSVGLength> rotate;
         
-        // SPStyle is facing impending doom, so lets break out some stuff into functions so it's easier to plug the new implementation in
+        // a few functions for some of the more complicated style accesses
         float styleComputeFontSize() const;
         font_instance *styleGetFontInstance() const;
-        Direction styleComputeBlockProgression() const;
+        Direction styleGetBlockProgression() const;
         Alignment styleGetAlignment(Direction para_direction) const;
     };
 
@@ -551,7 +551,7 @@ private:
 
     /** The overall block-progression of the whole flow. */
     inline Direction _blockProgression() const
-        {return static_cast<InputStreamTextSource*>(_input_stream.front())->styleComputeBlockProgression();}
+        {return static_cast<InputStreamTextSource*>(_input_stream.front())->styleGetBlockProgression();}
 
     /** so that LEFT_TO_RIGHT == RIGHT_TO_LEFT but != TOP_TO_BOTTOM */
     static bool _directions_are_orthogonal(Direction d1, Direction d2);
@@ -828,10 +828,10 @@ inline int Layout::glyphAt(iterator const &it) const   /// the actual glyph, not
     {return _glyphs[it._glyph_index].glyph;}
 
 inline unsigned Layout::lineIndex(iterator const &it) const
-    {return _characters[it._char_index].chunk(this).in_line;}
+    {return it._char_index == _characters.size() ? _lines.size() : _characters[it._char_index].chunk(this).in_line;}
 
 inline unsigned Layout::shapeIndex(iterator const &it) const
-    {return _characters[it._char_index].line(this).in_shape;}
+    {return it._char_index == _characters.size() ? _input_wrap_shapes.size() : _characters[it._char_index].line(this).in_shape;}
 
 inline bool Layout::isWhitespace(iterator const &it) const
     {return _characters[it._char_index].char_attributes.is_white;}
@@ -860,7 +860,7 @@ inline bool Layout::isEndOfSentence(iterator const &it) const
     {return _characters[it._char_index].char_attributes.is_sentence_end;}
 
 inline unsigned Layout::paragraphIndex(iterator const &it) const
-    {return _characters[it._char_index].line(this).in_paragraph;}
+    {return it._char_index == _characters.size() ? _paragraphs.size() : _characters[it._char_index].line(this).in_paragraph;}
 
 inline bool Layout::iterator::nextGlyph()
 {

@@ -130,7 +130,6 @@ private:
 struct SPText : public SPItem {
     TextTagAttributes attributes;
     Inkscape::Text::Layout layout;
-    SPSVGLength linespacing;      //RH: deprecated, to be put in SPStyle
 	
     guint relayout : 1;
 	

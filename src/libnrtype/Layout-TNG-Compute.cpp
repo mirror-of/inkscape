@@ -12,6 +12,7 @@
 #include "style.h"
 #include "font-instance.h"
 #include "svg/svg-types.h"
+#include "sp-object.h"
 #include "Layout-TNG-Scanline-Maker.h"
 #include "FontFactory.h"
 #include <pango/pango.h>
@@ -126,6 +127,7 @@ class Layout::Calculator
         Glib::ustring::const_iterator input_stream_first_character;
         double font_size;
         LineHeight line_height;
+        double line_height_multiplier;  /// calculated from the font-height css property
         unsigned text_bytes;
         unsigned char_index_in_para;    /// the index of the first character in this span in the paragraph, for looking up char_attributes
         // these are copies of the <tspan> attributes. We change our spans when we encounter one.
@@ -224,7 +226,7 @@ class Layout::Calculator
 
             } else if (_flow._input_stream[input_index]->Type() == TEXT_SOURCE) {
                 Layout::InputStreamTextSource *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[input_index]);
-                Direction this_block_progression = text_source->styleComputeBlockProgression();
+                Direction this_block_progression = text_source->styleGetBlockProgression();
                 if (this_block_progression != prev_block_progression) {
                     if (prev_block_progression != _block_progression) {
                         // need to back up so that control codes belong outside the block-progression change
@@ -317,6 +319,8 @@ class Layout::Calculator
         if (pango_items_glist == NULL) {
             pango_items_glist = pango_itemize(_pango_context, para_text.data(), 0, para_text.bytes(), attributes_list, NULL);
 
+            // I think according to the css spec this is wrong and we're never allowed to guess the directionality
+            // of a paragraph. Need to talk to an rtl speaker.
             if (pango_items_glist == NULL || pango_items_glist->data == NULL) _para.direction = LEFT_TO_RIGHT;
             else _para.direction = (((PangoItem*)pango_items_glist->data)->analysis.level & 1) ? RIGHT_TO_LEFT : LEFT_TO_RIGHT;
         }
@@ -340,6 +344,50 @@ class Layout::Calculator
         pango_get_log_attrs(para_text.data(), para_text.bytes(), -1, NULL, &*_para.char_attributes.begin(), _para.char_attributes.size());
 
         TRACE("end para itemize, direction = %d", _para.direction);
+    }
+
+    /** gets the ascent, descent and leading for a font and the alteration that
+    has to be performed according to the value specified by the line-height css
+    property. The result of multiplying \a line_height by \a line_height_multiplier
+    is the inline box height as specified in css2 section 10.8. */
+    static void _computeFontLineHeight(font_instance *font, double font_size, SPStyle const *style, LineHeight *line_height, double *line_height_multiplier)
+    {
+        if (font == NULL) {
+            line_height->ascent = 0.0;
+            line_height->descent = 0.0;
+            line_height->leading = 0.0;
+            *line_height_multiplier = 1.0;
+        }
+        font->FontMetrics(line_height->ascent, line_height->descent, line_height->leading);
+        line_height->ascent *= font_size;
+        line_height->descent *= font_size;
+        line_height->leading *= font_size;
+
+        *line_height_multiplier = 1.0;
+        // yet another borked SPStyle member that we're going to have to fix ourselves
+        for ( ; ; ) {
+            if (style->line_height.set && !style->line_height.inherit) {
+                switch (style->line_height.unit) {
+                    case SP_CSS_UNIT_NONE:
+                        *line_height_multiplier = style->line_height.computed * font_size / line_height->total();
+                        break;
+                    case SP_CSS_UNIT_EX:
+                        *line_height_multiplier = style->line_height.value * 0.5 * font_size / line_height->total();
+                                 // 0.5 is an approximation of the x-height. Fixme.
+                        break;
+                    case SP_CSS_UNIT_EM: 
+                    case SP_CSS_UNIT_PERCENT:
+                        *line_height_multiplier = style->line_height.value * font_size / line_height->total();
+                        break;
+                    default:  // absolute values
+                        *line_height_multiplier = style->line_height.computed / line_height->total();
+                        break;
+                }
+                break;
+            }
+            if (style->object->parent == NULL) break;
+            style = style->object->parent->style;
+        }
     }
 
     /** split the paragraph into spans. Also calls pango_shape()  on them.
@@ -424,6 +472,7 @@ class Layout::Calculator
                     // if we've still got anything to add, add it
                     PangoGlyphStringAutoPtr new_glyph_string(pango_glyph_string_new());
                     new_span.glyph_string = new_glyph_string;
+                    new_span.font_size = text_source->styleComputeFontSize();
                     if (new_span.text_bytes) {
                         int original_bidi_level = _para.pango_items[pango_item_index].item->analysis.level;
                         _para.pango_items[pango_item_index].item->analysis.level = 0;
@@ -435,25 +484,22 @@ class Layout::Calculator
                                     new_span.glyph_string.get());
                         _para.pango_items[pango_item_index].item->analysis.level = original_bidi_level;
                         new_span.pango_item_index = pango_item_index;
-                        _para.pango_items[pango_item_index].font->FontMetrics(new_span.line_height.ascent, new_span.line_height.descent, new_span.line_height.leading);
+                        _computeFontLineHeight(_para.pango_items[pango_item_index].font, new_span.font_size, text_source->style, &new_span.line_height, &new_span.line_height_multiplier);
                         // TODO: metrics for vertical text
                     } else {
                         // if there's no text we still need to initialise the styles
                         new_span.pango_item_index = -1;
                         font_instance *font = text_source->styleGetFontInstance();
                         if (font) {
-                            font->FontMetrics(new_span.line_height.ascent,new_span.line_height.descent,new_span.line_height.leading);
+                            _computeFontLineHeight(font, new_span.font_size, text_source->style, &new_span.line_height, &new_span.line_height_multiplier);
                             font->Unref();
                         } else {
                             new_span.line_height.ascent = 0.0;
                             new_span.line_height.descent = 0.0;
                             new_span.line_height.leading = 0.0;
+                            new_span.line_height_multiplier = 1.0;
                         }
                     }
-                    new_span.font_size = text_source->styleComputeFontSize();
-                    new_span.line_height.ascent *= new_span.font_size;
-                    new_span.line_height.descent *= new_span.font_size;
-                    new_span.line_height.leading *= new_span.font_size;
                     _para.spans.push_back(new_span);
                     byte_index_in_para += new_span.text_bytes;
                     char_index_in_source += g_utf8_strlen(&*new_span.input_stream_first_character.base(), new_span.text_bytes);
@@ -651,7 +697,7 @@ class Layout::Calculator
                     new_span.font->Ref();
                     new_span.font_size = iter_span->font_size;
                     new_span.direction = _para.pango_items[iter_span->pango_item_index].item->analysis.level & 1 ? RIGHT_TO_LEFT : LEFT_TO_RIGHT;
-                    new_span.block_progression = text_source->styleComputeBlockProgression();
+                    new_span.block_progression = text_source->styleGetBlockProgression();
                     if (iter_span == chunk_info[chunk_index].start_pos.iter_span)    // the first span broke across the chunk
                         new_span.input_stream_first_character = Glib::ustring::const_iterator(iter_span->input_stream_first_character.base() + chunk_info[chunk_index].start_pos.char_byte);
                     else 
@@ -677,7 +723,7 @@ class Layout::Calculator
                         for (iter_following_span = iter_span ; ; iter_following_span++) {
                             if (iter_following_span == chunk_info[chunk_index+1].start_pos.iter_span && chunk_info[chunk_index+1].start_pos.char_byte == 0) break;
                             if (iter_following_span == chunk_info[chunk_index+1].start_pos.iter_span + 1) break;
-                            Layout::Direction following_span_progression = static_cast<InputStreamTextSource const *>(_flow._input_stream[iter_following_span->input_index])->styleComputeBlockProgression();
+                            Layout::Direction following_span_progression = static_cast<InputStreamTextSource const *>(_flow._input_stream[iter_following_span->input_index])->styleGetBlockProgression();
                             if (!Layout::_directions_are_orthogonal(following_span_progression, _block_progression)) {
                                 if (iter_following_span->pango_item_index == -1) {   // when the span came from a control code
                                     if (new_span.direction != _para.direction) break;
@@ -863,10 +909,10 @@ class Layout::Calculator
 
             width_at_last_span_start = current_pos.total_width;
             // see if this span is too tall to fit on the current line
-            if (   current_pos.start_pos.iter_span->line_height.ascent  > _line.line_height.ascent
-                || current_pos.start_pos.iter_span->line_height.descent > _line.line_height.descent
-                || current_pos.start_pos.iter_span->line_height.leading > _line.line_height.leading) {
-                _line.line_height.max(current_pos.start_pos.iter_span->line_height);
+            if (   current_pos.start_pos.iter_span->line_height.ascent * current_pos.start_pos.iter_span->line_height_multiplier  > _line.line_height.ascent
+                || current_pos.start_pos.iter_span->line_height.descent * current_pos.start_pos.iter_span->line_height_multiplier > _line.line_height.descent
+                || current_pos.start_pos.iter_span->line_height.leading * current_pos.start_pos.iter_span->line_height_multiplier > _line.line_height.leading) {
+                _line.line_height.max(current_pos.start_pos.iter_span->line_height, current_pos.start_pos.iter_span->line_height_multiplier);
                 if (!_scanline_maker->canExtendCurrentScanline(_line.line_height))
                     return false;
             }
@@ -897,7 +943,7 @@ class Layout::Calculator
             } else if (_flow._input_stream[current_pos.start_pos.iter_span->input_index]->Type() == TEXT_SOURCE) {
                 InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream[current_pos.start_pos.iter_span->input_index]);
                 double font_size_multiplier = current_pos.start_pos.iter_span->font_size / (PANGO_SCALE * _font_factory_size_multiplier);
-                Direction span_block_progression = text_source->styleComputeBlockProgression();
+                Direction span_block_progression = text_source->styleGetBlockProgression();
 
                 if (current_pos.start_pos.char_byte == 0
                     && _directions_are_orthogonal(_block_progression, span_block_progression)) {
@@ -1102,27 +1148,20 @@ public:
                         font_instance *font = text_source->styleGetFontInstance();
                         if (font) {
                             double font_size = text_source->styleComputeFontSize();
-                            font->FontMetrics(_line.line_height.ascent, _line.line_height.descent, _line.line_height.leading);
+                            double multiplier;
+                            _computeFontLineHeight(font, font_size, text_source->style, &_line.line_height, &multiplier);
                             font->Unref();
-                            _line.line_height.ascent *= font_size;
-                            _line.line_height.descent *= font_size;
-                            _line.line_height.leading *= font_size;
-                            double initial_y = 0.0;
-                            if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
-                                if (!text_source->x.empty())
-                                    initial_y = text_source->x.front().computed;
-                            } else {
-                                if (!text_source->y.empty())
-                                    initial_y = text_source->y.front().computed;
-                            }
-                            _scanline_maker->setNewYCoordinate(initial_y - _line.line_height.ascent);
+                            _line.line_height.ascent *= multiplier;
+                            _line.line_height.descent *= multiplier;
+                            _line.line_height.leading *= multiplier;
+                            _scanline_maker->setNewYCoordinate(_scanline_maker->yCoordinate() - _line.line_height.ascent);
                         } else {
                             _line.line_height.ascent = 0.0;
                             _line.line_height.descent = 0.0;
                             _line.line_height.leading = 0.0;
                         }
-                    } else    // empty subsequent para
-                        _line.line_height = _flow._spans.back().line_height;
+                    }
+                    // else empty subsequent para, keep the old _line.line_height (wrong!)
                 } else
                     _line.line_height = span_pos.iter_span->line_height;
 
@@ -1138,6 +1177,7 @@ public:
 
                 if (_scanline_maker == NULL) break;
                 _scanline_maker->completeLine();
+                
                 if (span_pos.iter_span == _para.spans.end()) break;
             }
 

@@ -142,6 +142,7 @@ static void sp_style_read_penum(SPIEnum *val, Inkscape::XML::Node *repr, const g
 static void sp_style_read_plength (SPILength *val, Inkscape::XML::Node *repr, const gchar *key);
 static void sp_style_read_pfontsize (SPIFontSize *val, Inkscape::XML::Node *repr, const gchar *key);
 static void sp_style_read_pfloat (SPIFloat *val, Inkscape::XML::Node *repr, const gchar *key);
+static void sp_style_set_direction_and_progression_from_writing_mode(SPStyle *style);
 
 static gint sp_style_write_ifloat(gchar *p, gint len, gchar const *key, SPIFloat const *val, SPIFloat const *base, guint flags);
 static gint sp_style_write_iscale24(gchar *p, gint len, gchar const *key, SPIScale24 const *val, SPIScale24 const *base, guint flags);
@@ -250,6 +251,8 @@ static const SPStyleEnum enum_font_stretch[] = {
 };
 
 static const SPStyleEnum enum_text_align[] = {
+    {"start", SP_CSS_TEXT_ALIGN_START},
+    {"end", SP_CSS_TEXT_ALIGN_END},
     {"left", SP_CSS_TEXT_ALIGN_LEFT},
     {"right", SP_CSS_TEXT_ALIGN_RIGHT},
     {"center", SP_CSS_TEXT_ALIGN_CENTER},
@@ -538,6 +541,7 @@ sp_style_read (SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     /* SVG */
     SPS_READ_PENUM_IF_UNSET(&style->writing_mode, repr, "writing-mode",
                             enum_writing_mode, true);
+    sp_style_set_direction_and_progression_from_writing_mode(style);
     SPS_READ_PENUM_IF_UNSET(&style->text_anchor, repr, "text-anchor",
                             enum_text_anchor, true);
 
@@ -792,6 +796,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         break;
     case SP_PROP_WRITING_MODE:
         SPS_READ_IENUM_IF_UNSET(&style->writing_mode, val, enum_writing_mode, true);
+        sp_style_set_direction_and_progression_from_writing_mode(style);
         break;
     case SP_PROP_TEXT_ANCHOR:
         SPS_READ_IENUM_IF_UNSET(&style->text_anchor, val, enum_text_anchor, true);
@@ -1745,7 +1750,7 @@ sp_style_clear (SPStyle *style)
     style->text_indent.computed = 0.0;
 
     style->text_align.set = FALSE;
-    style->text_align.value = style->text_align.computed = SP_CSS_TEXT_ALIGN_LEFT;    // not strictly true, but sorted out by Text::Layout
+    style->text_align.value = style->text_align.computed = SP_CSS_TEXT_ALIGN_START;
 
     style->text_decoration.set = FALSE;
     style->text_decoration.underline = FALSE;
@@ -2186,7 +2191,6 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
                 /* Percentage */
                 val->unit = SP_CSS_UNIT_PERCENT;
                 val->value = value * 0.01;
-                return;
             } else {
                 /* Invalid */
                 return;
@@ -2631,7 +2635,7 @@ sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PERCENT:
-                os << key << ":" << val->value << "%;";
+                os << key << ":" << (val->value * 100.0) << "%;";
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             default:
@@ -2833,6 +2837,38 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
     return 0;
 }
 
+
+// block-progression and direction are based on the writing-mode attribute so to
+// make sure they get inherited correctly we need to set them
+static void sp_style_set_direction_and_progression_from_writing_mode(SPStyle *style)
+{
+    if (!style->writing_mode.set || style->writing_mode.inherit)
+        return;
+
+    style->direction.set = TRUE;
+    style->direction.inherit = TRUE;
+    style->block_progression.set = TRUE;
+    style->block_progression.inherit = TRUE;
+    switch(style->writing_mode.computed) {
+	    case SP_CSS_WRITING_MODE_LR_TB:
+        default:
+            style->direction.value = style->direction.computed = SP_CSS_DIRECTION_LTR;
+            style->block_progression.value = style->block_progression.computed = SP_CSS_BLOCK_PROGRESSION_TB;
+            break;
+	    case SP_CSS_WRITING_MODE_RL_TB:
+            style->direction.value = style->direction.computed = SP_CSS_DIRECTION_RTL;
+            style->block_progression.value = style->block_progression.computed = SP_CSS_BLOCK_PROGRESSION_TB;
+            break;
+	    case SP_CSS_WRITING_MODE_TB_RL:
+            style->direction.value = style->direction.computed = SP_CSS_DIRECTION_LTR;
+            style->block_progression.value = style->block_progression.computed = SP_CSS_BLOCK_PROGRESSION_RL;
+            break;
+	    case SP_CSS_WRITING_MODE_TB_LR:
+            style->direction.value = style->direction.computed = SP_CSS_DIRECTION_LTR;
+            style->block_progression.value = style->block_progression.computed = SP_CSS_BLOCK_PROGRESSION_LR;
+            break;
+    }
+}
 
 /**
  *

@@ -37,11 +37,11 @@ void Layout::_clearOutputObjects()
     _path_fitted = NULL;
 }
 
-void Layout::LineHeight::max(LineHeight const &other)
+void Layout::LineHeight::max(LineHeight const &other, double multiplier)
 {
-    if (other.ascent  > ascent)  ascent  = other.ascent;
-    if (other.descent > descent) descent = other.descent;
-    if (other.leading > leading) leading = other.leading;
+    if (other.ascent * multiplier  > ascent)  ascent  = other.ascent * multiplier;
+    if (other.descent * multiplier > descent) descent = other.descent * multiplier;
+    if (other.leading * multiplier > leading) leading = other.leading * multiplier;
 }
 
 void Layout::_getGlyphTransformMatrix(int glyph_index, NRMatrix *matrix) const

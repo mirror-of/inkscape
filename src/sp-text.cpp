@@ -51,6 +51,7 @@
 #include "document.h"
 #include "desktop.h"
 #include "fontsize-expansion.h"
+#include "unit-constants.h"
 #include "style.h"
 #include "version.h"
 #include "inkscape.h"
@@ -153,8 +154,6 @@ sp_text_init (SPText *text)
 {
     new (&text->layout) Inkscape::Text::Layout;
     new (&text->attributes) TextTagAttributes;
-    text->linespacing.set = 0;
-    text->linespacing.value = text->linespacing.computed = 1.0;
 }
 
 static void
@@ -178,10 +177,11 @@ sp_text_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "dx");
     sp_object_read_attr(object, "dy");
     sp_object_read_attr(object, "rotate");
-    sp_object_read_attr(object, "sodipodi:linespacing");
 
     if (((SPObjectClass *) text_parent_class)->build)
         ((SPObjectClass *) text_parent_class)->build(object, doc, repr);
+
+    sp_object_read_attr(object, "sodipodi:linespacing");    // has to happen after the styles are read
 
     sp_text_update_immediate_state(text);
 }
@@ -196,12 +196,13 @@ sp_text_set(SPObject *object, unsigned key, gchar const *value)
     } else {
         switch (key) {
             case SP_ATTR_SODIPODI_LINESPACING:
+                // convert deprecated tag to css
                 if (value) {
-                    text->linespacing.set=1;
-                    text->linespacing.unit=SP_SVG_UNIT_PERCENT;
-                    text->linespacing.value=text->linespacing.computed=sp_svg_read_percentage (value, 1.0);
-                } else {
-                    text->linespacing.set=0;
+                    text->style->line_height.set = TRUE;
+                    text->style->line_height.inherit = FALSE;
+                    text->style->line_height.normal = FALSE;
+                    text->style->line_height.unit = SP_CSS_UNIT_PERCENT;
+                    text->style->line_height.value = text->style->line_height.computed = sp_svg_read_percentage (value, 1.0);
                 }
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;
@@ -345,6 +346,15 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 
     text->attributes.writeTo(repr);
+
+    // deprecated attribute, but keep it around for backwards compatibility
+    if (text->style->line_height.set && !text->style->line_height.inherit && !text->style->line_height.normal && text->style->line_height.unit == SP_CSS_UNIT_PERCENT) {
+	    Inkscape::SVGOStringStream os;
+        os << (text->style->line_height.value * 100.0) << "%";
+        SP_OBJECT_REPR(text)->setAttribute("sodipodi:linespacing", os.str().c_str());
+    }
+    else
+        SP_OBJECT_REPR(text)->setAttribute("sodipodi:linespacing", NULL);
 
     if (((SPObjectClass *) (text_parent_class))->write)
         ((SPObjectClass *) (text_parent_class))->write (object, repr, flags);
@@ -801,9 +811,8 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
 
     style->letter_spacing.set = TRUE;
 
-    gchar *str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT (text)));
-    sp_repr_set_attr (SP_OBJECT_REPR (source_obj->parent), "style", str);
-    g_free (str);
+    text->updateRepr();
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
 void
@@ -811,35 +820,65 @@ sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
 {
     SPStyle *style = SP_OBJECT_STYLE (text);
 
-    // the value is stored as multiple of font size (i.e. in em)
-    double val = style->font_size.computed * text->linespacing.value;
-
-    // calculate the number of lines
-    SPObject *child;
-    int lines = 0;
-    for (child = sp_object_first_child(SP_OBJECT(text)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        if (SP_IS_TSPAN (child) && SP_TSPAN (child)->role == SP_TSPAN_ROLE_LINE) {
-            lines ++;
-        }
+    if (!style->line_height.set || style->line_height.inherit || style->line_height.normal) {
+        style->line_height.set = TRUE;
+        style->line_height.inherit = FALSE;
+        style->line_height.normal = FALSE;
+        style->line_height.unit = SP_CSS_UNIT_PERCENT;
+        style->line_height.value = style->line_height.computed = 1.0;
     }
+
+    unsigned line_count = text->layout.lineIndex(text->layout.end());
 
     // divide increment by zoom and by the number of lines,
     // so that the entire object is expanded by by pixels
-    gdouble zoom = SP_DESKTOP_ZOOM (desktop);
-    gdouble zby = by / (zoom * (lines > 1 ? lines - 1 : 1));
+    gdouble zby = by / (SP_DESKTOP_ZOOM (desktop) * (line_count > 1 ? line_count - 1 : 1));
 
     // divide increment by matrix expansion
     NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(text));
     zby = zby / NR::expansion(t);
 
-    val += zby;
-
-    // fixme: why not allow it to be negative? needs fixing in many places, though
-    if (val < 0) val = 0;
-
-    // set back value
-    sp_repr_set_double (SP_OBJECT_REPR (text), "sodipodi:linespacing", val / style->font_size.computed);
-    SP_OBJECT (text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+    switch (style->line_height.unit) {
+        case SP_CSS_UNIT_NONE:
+        default:
+            // multiplier-type units, stored in computed
+            style->line_height.computed += zby;
+            style->line_height.value = style->line_height.computed;
+            break;
+        case SP_CSS_UNIT_EM:
+        case SP_CSS_UNIT_EX:
+        case SP_CSS_UNIT_PERCENT:
+            // multiplier-type units, stored in value
+            style->line_height.value += zby;
+            break;
+            // absolute-type units
+	    case SP_CSS_UNIT_PX:
+            style->line_height.computed += zby / style->font_size.computed;
+            style->line_height.value = style->line_height.computed;
+            break;
+	    case SP_CSS_UNIT_PT:
+            style->line_height.computed += zby / style->font_size.computed * PT_PER_PX;
+            style->line_height.value = style->line_height.computed;
+            break;
+	    case SP_CSS_UNIT_PC:
+            style->line_height.computed += zby / style->font_size.computed * (PT_PER_PX / 12);
+            style->line_height.value = style->line_height.computed;
+            break;
+	    case SP_CSS_UNIT_MM:
+            style->line_height.computed += zby / style->font_size.computed * MM_PER_PX;
+            style->line_height.value = style->line_height.computed;
+            break;
+	    case SP_CSS_UNIT_CM:
+            style->line_height.computed += zby / style->font_size.computed * CM_PER_PX;
+            style->line_height.value = style->line_height.computed;
+            break;
+	    case SP_CSS_UNIT_IN:
+            style->line_height.computed += zby / style->font_size.computed * IN_PER_PX;
+            style->line_height.value = style->line_height.computed;
+            break;
+    }
+    text->updateRepr();
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
 /*

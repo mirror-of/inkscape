@@ -101,27 +101,19 @@ int Layout::_enum_converter(int input, EnumConversionItem const *conversion_tabl
 }
 
 // ***** the style format interface
-// this doesn't include all accesses to SPStyle, only the ones that will be a pain to change when we start using libcroco
-
-Layout::Direction Layout::InputStreamTextSource::styleComputeBlockProgression() const
-{
-    // SPStyle's implementation of this is all wrong. FIXME.
-    if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR)
-        return LEFT_TO_RIGHT;
-    return TOP_TO_BOTTOM;
-}
+// this doesn't include all accesses to SPStyle, only the ones that are non-trivial
 
 static const float medium_font_size = 12.0;     // more of a default if all else fails than anything else
 float Layout::InputStreamTextSource::styleComputeFontSize() const
 {
     return style->font_size.computed;
 
-    // OK, I have no idea how the style system works, so this lot is all archived and never executed:
+    // in case the computed value's not good enough, here's some manual code held in reserve:
     SPStyle const *this_style = style;
     float inherit_multiplier = 1.0;
 
     for ( ; ; ) {
-        if (!this_style->font_size.inherit) {
+        if (this_style->font_size.set && !this_style->font_size.inherit) {
             switch (this_style->font_size.type) {
                 case SP_FONT_SIZE_LITERAL: {
                     switch(this_style->font_size.value) {   // these multipliers are straight out of the CSS spec
@@ -147,20 +139,53 @@ float Layout::InputStreamTextSource::styleComputeFontSize() const
                 }
             }
         }
-        if (this_style->object->parent == NULL)
-            return medium_font_size * inherit_multiplier;
+        if (this_style->object->parent == NULL) break;
         this_style = this_style->object->parent->style;
     }
-    // never get here
+    return medium_font_size * inherit_multiplier;
+}
+
+static const Layout::EnumConversionItem enum_convert_spstyle_block_progression_to_direction[] = {
+    {SP_CSS_BLOCK_PROGRESSION_TB, Layout::TOP_TO_BOTTOM},
+    {SP_CSS_BLOCK_PROGRESSION_LR, Layout::LEFT_TO_RIGHT},
+    {SP_CSS_BLOCK_PROGRESSION_RL, Layout::RIGHT_TO_LEFT}};
+
+Layout::Direction Layout::InputStreamTextSource::styleGetBlockProgression() const
+{
+    return (Layout::Direction)_enum_converter(style->block_progression.computed, enum_convert_spstyle_block_progression_to_direction, sizeof(enum_convert_spstyle_block_progression_to_direction)/sizeof(enum_convert_spstyle_block_progression_to_direction[0]));
 }
 
 Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direction para_direction) const
 {
-    // all wrong again
-    switch (style->text_anchor.computed) {
-        case SP_CSS_TEXT_ANCHOR_START: break;  // this is especially wrong, because 'start' means left, even for rtl
-        case SP_CSS_TEXT_ANCHOR_MIDDLE: return CENTER;
-        case SP_CSS_TEXT_ANCHOR_END: return RIGHT;
+    // there's no way to tell the difference between text-anchor set higher up the cascade to the default and
+    // text-anchor never set anywhere in the cascade, so in order to detect which of text-anchor or text-align
+    // to use we'll have to run up the style tree ourselves.
+    SPStyle const *this_style = style;
+
+    for ( ; ; ) {
+        // It's not clear from the specs whether svg's text-anchor or css's text-align takes precedence.
+        // Since we're an svg tool, lets choose text-anchor.
+        if (this_style->text_anchor.set) {
+            switch (this_style->text_anchor.computed) {
+                default:
+                case SP_CSS_TEXT_ANCHOR_START:  return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
+                case SP_CSS_TEXT_ANCHOR_MIDDLE: return CENTER;
+                case SP_CSS_TEXT_ANCHOR_END:    return para_direction == LEFT_TO_RIGHT ? RIGHT : LEFT;
+            }
+        }
+        if (this_style->text_align.set) {
+            switch (style->text_align.computed) {
+                default:
+                case SP_CSS_TEXT_ALIGN_START:   return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
+                case SP_CSS_TEXT_ALIGN_END:     return para_direction == LEFT_TO_RIGHT ? RIGHT : LEFT;
+                case SP_CSS_TEXT_ALIGN_LEFT:    return LEFT;
+                case SP_CSS_TEXT_ALIGN_RIGHT:   return RIGHT;
+                case SP_CSS_TEXT_ALIGN_CENTER:  return CENTER;
+                case SP_CSS_TEXT_ALIGN_JUSTIFY: return FULL;
+            }
+        }
+        if (this_style->object->parent == NULL) break;
+        this_style = this_style->object->parent->style;
     }
     return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
 }
