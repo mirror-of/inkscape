@@ -483,7 +483,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							if (selection->includesItem(sc->item)) {
 								selection->removeItem(sc->item);
 							} else {
-								selection->addItem (sc->item);
+								selection->addItem(sc->item);
 							}
 						} else {
 							// without shift, increase state (i.e. toggle scale/rotation handles)
@@ -573,7 +573,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					} else { // click without shift, simply deselect
 						if (!selection->isEmpty()) {
 							if (!(rb_escaped) && !(drag_escaped)) // unless something was cancelled
-								sp_selection_empty (selection);
+								selection->clear();
 							rb_escaped = 0;
 							ret = TRUE;
 						}
@@ -669,7 +669,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sp_select_context_update_statusbar(sc);
 					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), _("Selection cancelled."));
 				} else {
-					sp_selection_empty (selection); // deselect
+					selection->clear();
 				}
 			}
 			ret = TRUE;
@@ -814,7 +814,7 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 static void sp_select_context_update_statusbar(SPSelectContext *sc) {
 	SPEventContext *ec=SP_EVENT_CONTEXT(sc);
         char const *when_selected = _("Click selection to toggle scale/rotation handles");
-	GSList const *items=SP_DT_SELECTION(ec->desktop)->itemList();
+	GSList const *items = SP_DT_SELECTION(ec->desktop)->itemList();
 	if (!items) { // no items
 		sp_view_set_statusf(SP_VIEW (ec->desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
 	} else if (!items->next) { // one item
