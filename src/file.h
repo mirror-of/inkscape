@@ -14,6 +14,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <stdio.h>
+
 #include "forward.h"
 #include <extension/extension-forward.h>
 #include <gtk/gtkwidget.h>
@@ -146,6 +148,15 @@ void sp_file_print_preview (gpointer object, gpointer data);
  * clean unused defs out of file
  */
 void sp_file_vacuum ();
+
+
+namespace Inkscape {
+namespace IO {
+
+void dump_fopen_call( char const *utf8name, char const *id );
+FILE *fopen_utf8name( char const *utf8name, char const *mode );
+}
+}
 
 
 #endif

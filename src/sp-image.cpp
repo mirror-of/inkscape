@@ -376,18 +376,8 @@ sp_image_repr_read_image (SPRepr * repr)
 		if (strncmp (filename,"file:",5) == 0) {
 			fullname = g_filename_from_uri(filename, NULL, NULL);
 			if (fullname) {
-				// TODO: bulia, please look over
-				gsize bytesRead = 0;
-				gsize bytesWritten = 0;
-				GError* error = NULL;
-				gchar* localFilename = g_filename_from_utf8 ( fullname,
-															  -1,
-															  &bytesRead,
-															  &bytesWritten,
-															  &error);
-				pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
-				g_free (localFilename);
-				g_free (fullname);
+				// TODO check this. Was doing a UTF-8 to filename conversion here.
+				pixbuf = gdk_pixbuf_new_from_file (fullname, NULL);
 				if (pixbuf != NULL) return pixbuf;
 			}
 		} else if (strncmp (filename,"data:",5) == 0) {
@@ -836,7 +826,8 @@ load_splines(at_splines_type * splines)
 	/* Make the mode of temporary svg file
 	   "readable and writable by the user only". */
 	old_mask = umask(066);
-	tmp_fp = fopen(filename, "w");
+	Inkscape::IO::dump_fopen_call(filename, "A");
+	tmp_fp = Inkscape::IO::fopen_utf8name(filename, "w");
 	umask(old_mask);
 
 	writer = at_output_get_handler_by_suffix ("svg");
@@ -945,3 +936,15 @@ build_header_area(SPRepr *repr)
 }
 
 #endif /* Def: ENABLE_AUTOTRACE */
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

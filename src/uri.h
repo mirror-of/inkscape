@@ -30,9 +30,9 @@ public:
 	const gchar *getQuery() const { return _impl->getQuery(); }
 	const gchar *getFragment() const { return _impl->getFragment(); }
 
-	static gchar *to_native_filename(URI const &uri) throw(BadURIException);
 	static URI from_native_filename(gchar const *path) throw(BadURIException);
 
+	gchar *toNativeFilename() const throw(BadURIException);
 	gchar *toString() const { return _impl->toString(); }
 private:
 	class Impl {

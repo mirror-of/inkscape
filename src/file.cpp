@@ -27,6 +27,8 @@
 #include <libnr/nr-pixops.h>
 #include <glib.h>
 
+#include <gtkmm.h>
+
 #include "macros.h"
 #include "xml/repr-private.h"
 #include "xml/repr-get-children.h"
@@ -61,6 +63,11 @@
 /* #include "extension/menu.h"  */
 #include "extension/system.h"
 
+#ifdef WIN32
+// For now to get at is_os_wide().
+#include "extension/internal/win32.h"
+#endif
+
 
 /**
  * 'Current' paths.  Used to remember which directory
@@ -70,6 +77,14 @@
  */
 static gchar *import_path = NULL;
 
+//#define INK_DUMP_FILENAME_CONV 1
+#undef INK_DUMP_FILENAME_CONV
+
+//#define INK_DUMP_FOPEN 1
+#undef INK_DUMP_FOPEN
+
+void ::dump_str( const gchar* str, const gchar* prefix );
+void ::dump_ustr( const Glib::ustring& ustr );
 
 
 /*######################
@@ -225,6 +240,106 @@ sp_file_revert_dialog()
     }
 }
 
+void dump_str( const gchar* str, const gchar* prefix )
+{
+    Glib::ustring tmp;
+    tmp = prefix;
+    tmp += " [";
+    int total = strlen(str);
+    for ( int i = 0; i < total; i++ )
+    {
+        gchar* tmp2 = g_strdup_printf( " %02x", (0x0ff & str[i]) );
+        tmp += tmp2;
+        g_free( tmp2 );
+    }
+
+    tmp += "]";
+    g_message( tmp.c_str() );
+}
+
+void ::dump_ustr( const Glib::ustring& ustr )
+{
+    const char* cstr = ustr.c_str();
+    const char* data = ustr.data();
+    Glib::ustring::size_type byteLen = ustr.bytes();
+    Glib::ustring::size_type dataLen = ustr.length();
+    Glib::ustring::size_type cstrLen = strlen(cstr);
+
+    g_message("   size: %d\n   length: %d\n   bytes: %d\n    clen: %d", ustr.size(), dataLen, byteLen, cstrLen );
+    g_message( "  ASCII? %s", (ustr.is_ascii() ? "yes":"no") );
+    g_message( "  UTF-8? %s", (ustr.validate() ? "yes":"no") );
+
+    try
+    {
+        Glib::ustring tmp;
+        for ( Glib::ustring::size_type i = 0; i < ustr.bytes(); i++ )
+        {
+            tmp = "    ";
+            if ( i < dataLen )
+            {
+                Glib::ustring::value_type val = ustr.at(i);
+                gchar* tmp2 = g_strdup_printf( (((val & 0xff00) == 0) ? "  %02x" : "%04x"), val );
+                tmp += tmp2;
+                g_free( tmp2 );
+            }
+            else
+            {
+                tmp += "    ";
+            }
+
+            if ( i < byteLen )
+            {
+                int val = (0x0ff & data[i]);
+                gchar* tmp2 = g_strdup_printf( "    %02x", val );
+                tmp += tmp2;
+                g_free( tmp2 );
+                if ( val > 32 && val < 127 )
+                {
+                    tmp2 = g_strdup_printf( "   '%c'", (gchar)val );
+                    tmp += tmp2;
+                    g_free( tmp2 );
+                }
+                else
+                {
+                    tmp += "    . ";
+                }
+            }
+            else
+            {
+                tmp += "       ";
+            }
+
+            if ( i < cstrLen )
+            {
+                int val = (0x0ff & cstr[i]);
+                gchar* tmp2 = g_strdup_printf( "    %02x", val );
+                tmp += tmp2;
+                g_free( tmp2 );
+                if ( val > 32 && val < 127 )
+                {
+                    tmp2 = g_strdup_printf( "   '%c'", (gchar)val );
+                    tmp += tmp2;
+                    g_free( tmp2 );
+                }
+                else
+                {
+                    tmp += "    . ";
+                }
+            }
+            else
+            {
+                tmp += "            ";
+            }
+
+            g_message( tmp.c_str() );
+        }
+    }
+    catch (...)
+    {
+        g_message("XXXXXXXXXXXXXXXXXX Exception" );
+    }
+    g_message("---------------");
+}
 
 static Inkscape::UI::Dialogs::FileOpenDialog *openDialogInstance = NULL;
 
@@ -270,6 +385,9 @@ sp_file_open_dialog(gpointer object, gpointer data)
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         GError *error = NULL;
+#ifdef INK_DUMP_FILENAME_CONV
+        dump_str( fileName, "A file pre  is " );
+#endif
         gchar *newFileName = g_filename_to_utf8( fileName,
                                                  -1,
                                                  &bytesRead,
@@ -279,6 +397,9 @@ sp_file_open_dialog(gpointer object, gpointer data)
         {
             g_free(fileName);
             fileName = newFileName;
+#ifdef INK_DUMP_FILENAME_CONV
+            dump_str( fileName, "A file post is " );
+#endif
         }
         else
         {
@@ -435,11 +556,17 @@ sp_file_save_dialog(SPDocument *doc)
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         GError* error = NULL;
+#ifdef INK_DUMP_FILENAME_CONV
+        dump_str( save_loc, "B file pre  is " );
+#endif
         gchar* save_loc_local = g_filename_from_utf8 ( save_loc, -1, &bytesRead, &bytesWritten, &error);
 
         if ( save_loc_local != NULL ) {
             g_free(save_loc);
             save_loc = save_loc_local;
+#ifdef INK_DUMP_FILENAME_CONV
+            dump_str( save_loc, "B file post is " );
+#endif
         } else {
             g_warning( "Error converting save filename stored in the file to locale encoding.");
         }
@@ -469,6 +596,9 @@ sp_file_save_dialog(SPDocument *doc)
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         GError *error = NULL;
+#ifdef INK_DUMP_FILENAME_CONV
+        dump_str( fileName, "C file pre  is " );
+#endif
         gchar *newFileName = g_filename_to_utf8( fileName,
                                                  -1,
                                                  &bytesRead,
@@ -478,6 +608,9 @@ sp_file_save_dialog(SPDocument *doc)
         {
             g_free(fileName);
             fileName = newFileName;
+#ifdef INK_DUMP_FILENAME_CONV
+            dump_str( fileName, "C file post is " );
+#endif
         }
         else
         {
@@ -684,6 +817,9 @@ sp_file_import(GtkWidget *widget)
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         GError *error = NULL;
+#ifdef INK_DUMP_FILENAME_CONV
+        dump_str( fileName, "D file pre  is " );
+#endif
         gchar *newFileName = g_filename_to_utf8( fileName,
                                                  -1,
                                                  &bytesRead,
@@ -693,6 +829,9 @@ sp_file_import(GtkWidget *widget)
         {
             g_free(fileName);
             fileName = newFileName;
+#ifdef INK_DUMP_FILENAME_CONV
+            dump_str( fileName, "D file post is " );
+#endif
         }
         else
         {
@@ -964,6 +1103,72 @@ sp_file_print_preview(gpointer object, gpointer data)
         sp_print_preview_document(doc);
 
 }
+
+void Inkscape::IO::dump_fopen_call( char const *utf8name, char const *id )
+{
+#ifdef INK_DUMP_FOPEN
+    Glib::ustring str;
+    for ( int i = 0; utf8name[i]; i++ )
+    {
+        if ( utf8name[i] == '\\' )
+        {
+            str += "\\\\";
+        }
+        if ( (utf8name[i] >= 0x20) && ((0x0ff & utf8name[i]) <= 0x7f) )
+        {
+            str += utf8name[i];
+        }
+        else
+        {
+            gchar tmp[32];
+            g_snprintf( tmp, sizeof(tmp), "\\x%02x", (0x0ff & utf8name[i]) );
+            str += tmp;
+        }
+    }
+    g_message( "fopen call %s for [%s]", id, str.data() );
+#endif
+}
+
+FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
+{
+    FILE* fp = NULL;
+
+#ifndef WIN32
+    gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+    if ( filename )
+    {
+        fp = std::fopen(filename, mode);
+        g_free(filename);
+        filename = 0;
+    }
+#else
+    if ( PrintWin32::is_os_wide() )
+    {
+        gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
+        if ( wideName )
+        {
+            gunichar2 *wideMode = g_utf8_to_utf16( mode, -1, NULL, NULL, NULL );
+            if ( wideMode )
+            {
+                fp = std::_wfopen( wideName, wideMode );
+                g_free( wideMode );
+                wideMode = 0;
+            }
+            g_free( wideName );
+            wideName = 0;
+        }
+    }
+    else
+    {
+        gchar *filename = URI::to_native_filename(uri);
+        fp = std::fopen(filename, mode);
+        g_free(filename);
+        filename = 0;
+    }
+#endif
+    return fp;
+}
+
 
 
 /*

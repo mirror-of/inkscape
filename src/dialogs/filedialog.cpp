@@ -54,6 +54,12 @@
 #include "svg-view.h"
 #include "uri.h"
 
+#undef INK_DUMP_FILENAME_CONV
+
+#ifdef INK_DUMP_FILENAME_CONV
+void dump_str( const gchar* str, const gchar* prefix );
+void dump_ustr( const Glib::ustring& ustr );
+#endif
 
 namespace Inkscape {
 namespace UI {
@@ -682,9 +688,9 @@ void FileOpenDialogImpl::updatePreviewCallback()
 void FileOpenDialogImpl::fileNameEntryChangedCallback()
 {
     Glib::ustring fileName = fileNameEntry.get_text();
-    
-    if (!Glib::get_charset()) //If we are not utf8
-        fileName = Glib::filename_from_utf8(fileName);
+
+    // TODO remove this leak
+    fileName = Glib::filename_from_utf8(fileName);
 
     //g_message("User hit return.  Text is '%s'\n", fName.c_str());
 
@@ -724,6 +730,9 @@ void FileOpenDialogImpl::fileSelectedCallback()
     //g_message("User selected '%s'\n",
     //       filename().c_str());
 
+#ifdef INK_DUMP_FILENAME_CONV
+    ::dump_ustr( get_filename() );
+#endif
     fileNameEntry.set_text(fileName);
 }
 
@@ -1071,7 +1080,6 @@ void FileSaveDialogImpl::updatePreviewCallback()
     Glib::ustring fileName = get_preview_filename();
     if (!fileName.c_str())
         return;
-
     bool retval = svgPreview.set(fileName, dialogType);
     set_preview_widget_active(retval);
 }
@@ -1342,7 +1350,6 @@ FileSaveDialog *FileSaveDialog::create(char const *path,
  */
 FileSaveDialogImpl::~FileSaveDialogImpl()
 {
-
 }
 
 
@@ -1393,7 +1400,7 @@ FileSaveDialogImpl::show()
  */
 Inkscape::Extension::Extension *
 FileSaveDialogImpl::getSelectionType()
-{ 
+{
     return extension;
 }
 

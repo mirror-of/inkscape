@@ -447,14 +447,17 @@ inkscape_segv_handler (int signum)
 
             if (!docname || !*docname) docname = "emergency";
             g_snprintf (c, 1024, "%s/.inkscape/%.256s.%s.%d", home, docname, sptstr, count);
-            file = fopen (c, "w");
+            Inkscape::IO::dump_fopen_call(c, "E");
+            file = Inkscape::IO::fopen_utf8name(c, "w");
             if (!file) {
                 g_snprintf (c, 1024, "%s/inkscape-%.256s.%s.%d", home, docname, sptstr, count);
-                file = fopen (c, "w");
+                Inkscape::IO::dump_fopen_call(c, "F");
+                file = Inkscape::IO::fopen_utf8name(c, "w");
             }
             if (!file) {
                 g_snprintf (c, 1024, "/tmp/inkscape-%.256s.%s.%d", docname, sptstr, count);
-                file = fopen (c, "w");
+                Inkscape::IO::dump_fopen_call(c, "G");
+                file = Inkscape::IO::fopen_utf8name(c, "w");
             }
             if (file) {
                 sp_repr_save_stream (sp_repr_document (repr), file);
@@ -1128,7 +1131,8 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 
     gchar *fn = profile_path(config_name);
 
-    FILE *fh = fopen(fn, "w");
+    Inkscape::IO::dump_fopen_call(fn, "H");
+    FILE *fh = Inkscape::IO::fopen_utf8name(fn, "w");
     if (!fh) {
         /* Cannot create file */
         GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);

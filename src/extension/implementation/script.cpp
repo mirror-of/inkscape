@@ -663,7 +663,8 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	  return;
 	}
 
-	pfile = fopen(fileout, "w");
+        Inkscape::IO::dump_fopen_call(fileout, "J");
+	pfile = Inkscape::IO::fopen_utf8name(fileout, "w");
 
 	if (pfile == NULL) {
 	  /* Error - could not open file */
