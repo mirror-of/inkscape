@@ -1,5 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
+if PLATFORM_WIN32
+win32_sources = winmain.cpp
+win32ldflags = -lcomdlg32
+endif 
+
 module_libs = modules/libspmodules.a
 module_src = module.cpp module.h
 
@@ -127,6 +132,7 @@ inkscape_SOURCES = \
 	\
 	knot.cpp knot.h \
 	\
+	$(win32_sources) \
 	main.cpp \
 	help.cpp help.h \
 	sp-cursor.cpp sp-cursor.h \
@@ -169,7 +175,8 @@ inkscape_LDADD = \
 	$(GNOME_PRINT_LIBS) \
 	$(XFT_LIBS) \
 	$(FREETYPE_LIBS) \
-	$(kdeldadd)
+	$(kdeldadd) \
+	$(win32ldflags)
 
 inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 
@@ -200,7 +207,8 @@ inkview_LDADD = \
 	$(GNOME_PRINT_LIBS) \
 	$(XFT_LIBS) \
 	$(FREETYPE_LIBS) \
-	$(kdeldadd)
+	$(kdeldadd) \
+	$(win32ldflags)
 
 dist-hook:
 	mkdir $(distdir)/pixmaps

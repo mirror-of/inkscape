@@ -3,6 +3,10 @@ if USE_GNOME_PRINT
 gnome_print_sources = gnome.cpp gnome.h
 endif
 
+if PLATFORM_WIN32
+win32_sources = win32.cpp win32.h
+endif 
+
 extdir = $(libdir)/inkscape/extensions
 extdatadir = $(datadir)/inkscape/extensions
 moduledir = $(datadir)/inkscape/modules
@@ -36,7 +40,8 @@ libspmodules_a_SOURCES = \
 \
 		ps.cpp ps.h \
 		$(kdeprivsources) \
-		$(gnome_print_sources)
+		$(gnome_print_sources) \
+		$(win32_sources)
 
 EXTRA_DIST = \
 	$(gnome_print_sources) \

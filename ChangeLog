@@ -50,6 +50,10 @@
 
 2004-01-26 MenTaLguY <mental@rydia.net>
 
+	* src/configure.in, src/Makefile.am, src/modules/Makefile.am,
+	  src/libnrtype/Makefile.am:
+	  merged patch #847856 for autotools builds on mingw/win32
+
 	* src/sp-marker.h: added a URIReference subclass for markers
 
 	* src/sp-path.cpp: fixed backwards-compatiblilty thing with
