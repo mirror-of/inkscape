@@ -20,9 +20,7 @@
 
 #include <glib.h>
 
-typedef struct _ArikkeiToken ArikkeiToken;
-
-struct _ArikkeiToken {
+struct ArikkeiToken {
 	const gchar *cdata;
 	int start, end;
 };

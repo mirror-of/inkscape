@@ -59,9 +59,7 @@ nr_svp_run_A8_OR (unsigned char *d, int len, int c0_24, int s0_24, void *data)
 }
 
 
-typedef struct _NRRun NRRun;
-
-struct _NRRun {
+struct NRRun {
     NRRun *next;
     NR::Coord x0, y0, x1, y1;
     float step;
@@ -75,9 +73,7 @@ static NRRun *nr_run_free_one (NRRun *run);
 static void nr_run_free_list (NRRun *run);
 static NRRun *nr_run_insort (NRRun *start, NRRun *run);
 
-typedef struct _NRSlice NRSlice;
-
-struct _NRSlice {
+struct NRSlice {
     NRSlice *next;
     int wind;
     NRPoint *points;

@@ -19,9 +19,7 @@
 
 
 
-typedef struct _GnomeCanvasBpathDef GnomeCanvasBpathDef;
-
-struct _GnomeCanvasBpathDef {
+struct GnomeCanvasBpathDef {
 	int ref_count;
 	NArtBpath *bpath;
 	int n_bpath;

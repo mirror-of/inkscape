@@ -31,17 +31,17 @@
 #define SP_IS_ATTRIBUTE_TABLE(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_ATTRIBUTE_TABLE))
 #define SP_IS_ATTRIBUTE_TABLE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_ATTRIBUTE_TABLE))
 
-typedef struct _SPAttributeWidget SPAttributeWidget;
-typedef struct _SPAttributeWidgetClass SPAttributeWidgetClass;
+struct SPAttributeWidget;
+struct SPAttributeWidgetClass;
 
-typedef struct _SPAttributeTable SPAttributeTable;
-typedef struct _SPAttributeTableClass SPAttributeTableClass;
+struct SPAttributeTable;
+struct SPAttributeTableClass;
 
 #include <gtk/gtkentry.h>
 #include <gtk/gtkvbox.h>
 #include "../forward.h"
 
-struct _SPAttributeWidget {
+struct SPAttributeWidget {
     GtkEntry entry;
     guint blocked : 1;
     guint hasobj : 1;
@@ -52,7 +52,7 @@ struct _SPAttributeWidget {
     gchar *attribute;
 };
 
-struct _SPAttributeWidgetClass {
+struct SPAttributeWidgetClass {
     GtkEntryClass entry_class;
 };
 
@@ -70,7 +70,7 @@ void sp_attribute_widget_set_repr ( SPAttributeWidget *spw,
 
 /* SPAttributeTable */
 
-struct _SPAttributeTable {
+struct SPAttributeTable {
     GtkVBox vbox;
     guint blocked : 1;
     guint hasobj : 1;
@@ -84,7 +84,7 @@ struct _SPAttributeTable {
     GtkWidget **entries;
 };
 
-struct _SPAttributeTableClass {
+struct SPAttributeTableClass {
     GtkEntryClass entry_class;
 };
 

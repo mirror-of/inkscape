@@ -13,13 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-typedef struct _SPSVGLength SPSVGLength;
-
-#define SP_SVG_PX_FROM_PT(v) ((v) / 1.25)
-#define SP_SVG_PX_FROM_MM(v) ((v) / 3.543307)
-#define SP_SVG_PT_FROM_PX(v) ((v) * 1.25)
-#define SP_SVG_MM_FROM_PX(v) ((v) * 3.543307)
-
 enum {
 	SP_SVG_UNIT_NONE,
 	SP_SVG_UNIT_PX,
@@ -33,7 +26,7 @@ enum {
 	SP_SVG_UNIT_PERCENT
 };
 
-struct _SPSVGLength {
+struct SPSVGLength {
 	unsigned int set : 1;
 	unsigned int unit : 4;
 	float value;

@@ -637,7 +637,7 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
 
 
 
-struct _SPBBoxSort {
+struct SPBBoxSort {
     SPItem *item;
     NRRect bbox;
     float anchor;
@@ -648,9 +648,9 @@ struct _SPBBoxSort {
 static int
 sp_align_bbox_sort ( const void *a, const void *b )
 {
-    const struct _SPBBoxSort *bbsa, *bbsb;
-    bbsa = (struct _SPBBoxSort *) a;
-    bbsb = (struct _SPBBoxSort *) b;
+    const SPBBoxSort *bbsa, *bbsb;
+    bbsa = (SPBBoxSort *) a;
+    bbsb = (SPBBoxSort *) b;
     
     if (bbsa->anchor < bbsb->anchor) 
         return -1;
@@ -678,7 +678,7 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
         return;
 
     int len = g_slist_length ((GSList *) slist);
-    struct _SPBBoxSort *bbs = g_new (struct _SPBBoxSort, len);
+    SPBBoxSort *bbs = g_new (SPBBoxSort, len);
     
     
     {
@@ -695,7 +695,7 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
     }
     
 
-    qsort (bbs, len, sizeof (struct _SPBBoxSort), sp_align_bbox_sort);
+    qsort (bbs, len, sizeof (SPBBoxSort), sp_align_bbox_sort);
 
     unsigned int changed = FALSE;
 
@@ -760,7 +760,7 @@ static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
         return;
 
     int len = g_slist_length ((GSList *) slist);
-    struct _SPBBoxSort *bbs = g_new (struct _SPBBoxSort, len);
+    SPBBoxSort *bbs = g_new (SPBBoxSort, len);
     
     
     {
@@ -776,7 +776,7 @@ static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
     }
 
     
-    qsort ( bbs, len, sizeof (struct _SPBBoxSort), sp_align_bbox_sort );
+    qsort ( bbs, len, sizeof (SPBBoxSort), sp_align_bbox_sort );
 
     unsigned int changed = FALSE;
 

@@ -27,9 +27,7 @@
 #include <glib.h>
 #include "svg.h"
 
-typedef struct _SPSVGColor SPSVGColor;
-
-struct _SPSVGColor {
+struct SPSVGColor {
 	unsigned long rgb;
 	char const *name;
 };

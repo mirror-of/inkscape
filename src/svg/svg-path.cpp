@@ -55,9 +55,7 @@
 #define rsvg_bpath_def_curveto gnome_canvas_bpath_def_curveto
 #define rsvg_bpath_def_closepath gnome_canvas_bpath_def_closepath
 
-typedef struct _RSVGParsePathCtx RSVGParsePathCtx;
-
-struct _RSVGParsePathCtx {
+struct RSVGParsePathCtx {
     GnomeCanvasBpathDef *bpath;
     double cpx, cpy;  /* current point */
     double rpx, rpy;  /* reflection point (for 's' and 't' commands) */

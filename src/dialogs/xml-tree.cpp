@@ -58,10 +58,10 @@
 #include "../verbs.h"
 #include "../interface.h"
 
-typedef struct _EditableDest {
+struct EditableDest {
     GtkEditable * editable;
     gchar * text;
-} EditableDest;
+};
 
 static GtkWidget * dlg = NULL;
 static SigC::Connection sel_changed_connection;
