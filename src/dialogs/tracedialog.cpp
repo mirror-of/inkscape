@@ -385,6 +385,8 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBox.pack_start(potraceCreditsFrame);
 
     /*done */
+    // TRANSLATORS: Potrace is an application for transforming bitmaps into
+    //  vector graphics (http://potrace.sourceforge.net/)
     notebook.append_page(potraceBox, _("Potrace"));
 
     //##Set up the Other panel
