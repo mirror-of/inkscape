@@ -19,6 +19,7 @@
 #include "document.h"
 
 #include "win32.h"
+#include "system.h"
 
 /* Initialization */
 
@@ -28,8 +29,11 @@ namespace Internal {
 
 static unsigned int SPWin32Modal = FALSE;
 
-void
-PrintWin32::gdk_event_handler (GdkEvent *event)
+/**
+ * Callback function..  not a method
+ */
+static void
+my_gdk_event_handler (GdkEvent *event)
 {
 	if (SPWin32Modal) {
 		/* Win32 widget is modal, filter events */
@@ -61,7 +65,7 @@ PrintWin32::gdk_event_handler (GdkEvent *event)
 void
 PrintWin32::main_init (int argc, char **argv, const char *name)
 {
-	gdk_event_handler_set ((GdkEventFunc) sp_win32_gdk_event_handler, NULL, NULL);
+	gdk_event_handler_set ((GdkEventFunc) my_gdk_event_handler, NULL, NULL);
 }
 
 void
@@ -71,8 +75,12 @@ PrintWin32::finish (void)
 
 #define SP_FOREIGN_MAX_ITER 10
 
-VOID CALLBACK
-PrintWin32::timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+
+/**
+ * Callback function..  not a method
+ */
+static VOID CALLBACK
+my_timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	int cdown = 0;
 	while ((cdown++ < SP_FOREIGN_MAX_ITER) && gdk_events_pending ()) {
@@ -114,21 +122,23 @@ PrintWin32::is_os_wide()
 
 /* Printing */
 
-void
 PrintWin32::PrintWin32 (void)
 {
 	/* Nothing here */
 }
 
-void
+
 PrintWin32::~PrintWin32 (void)
 {
 	DeleteDC (_hDC);
 }
 
 
-UINT_PTR CALLBACK
-PrintWin32::print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+/**
+ * Callback function..  not a method
+ */
+static UINT_PTR CALLBACK
+print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
 #if 0
 	int cdown = 0;
@@ -158,12 +168,11 @@ PrintWin32::setup (Inkscape::Extension::Print *mod)
 		NULL, NULL, NULL, NULL, NULL, NULL
 	};
 	UINT_PTR timer;
-	int caps;
 
 	SPWin32Modal = TRUE;
 	pd.Flags |= PD_ENABLEPRINTHOOK;
-	pd.lpfnPrintHook = sp_w32_print_hook;
-	timer = SetTimer (NULL, 0, 40, sp_win32_timer);
+	pd.lpfnPrintHook = print_hook;
+	timer = SetTimer (NULL, 0, 40, my_timer);
 
 	res = PrintDlg (&pd);
 
@@ -243,27 +252,27 @@ PrintWin32::finish (Inkscape::Extension::Print *mod)
 	BITMAPINFO bmInfo = {
 		{
 			sizeof (BITMAPINFOHEADER), // bV4Size 
-			64, /* biWidth */
-			64, /* biHeight */
-			1, /* biPlanes */
-			32, /* biBitCount */
-			BI_RGB, /* biCompression */
-			0, /* biSizeImage */
-			2835, /* biXPelsPerMeter */
-			2835, /* biYPelsPerMeter */
-			0, /* biClrUsed */
-			0, /* biClrImportant */
+			64,      // biWidth
+			64,      // biHeight
+			1,       // biPlanes
+			32,      // biBitCount
+			BI_RGB,  // biCompression
+			0,       // biSizeImage
+			2835,    // biXPelsPerMeter
+			2835,    // biYPelsPerMeter
+			0,       // biClrUsed
+			0        // biClrImportant
 		},
-		{0, 0, 0, 0} /* bmiColors */
+		{0, 0, 0, 0} // bmiColors
 	};
-	RECT wrect;
+	//RECT wrect;
 	int res;
 
 	SPWin32Modal = TRUE;
 
 	// Number of pixels per logical inch
-	dpiX = (float) GetDeviceCaps (_hDC, LOGPIXELSX);
-	dpiY = (float) GetDeviceCaps (_hDC, LOGPIXELSY);
+	dpiX = (int) GetDeviceCaps (_hDC, LOGPIXELSX);
+	dpiY = (int) GetDeviceCaps (_hDC, LOGPIXELSY);
 	// Size in pixels of the printable area
 	pPhysicalWidth = GetDeviceCaps (_hDC, PHYSICALWIDTH); 
 	pPhysicalHeight = GetDeviceCaps (_hDC, PHYSICALHEIGHT); 
@@ -308,7 +317,6 @@ PrintWin32::finish (Inkscape::Extension::Print *mod)
 		NRRectL bbox;
 		NRGC gc;
 		int num_rows;
-		guint32 *iter;
 		int i;
 
 		num_rows = sheight;
@@ -398,7 +406,7 @@ PrintWin32::get_open_filename (unsigned char *dir, unsigned char *filter, unsign
 	UINT_PTR timer;
 
 	SPWin32Modal = TRUE;
-	timer = SetTimer (NULL, 0, 40, sp_win32_timer);
+	timer = SetTimer (NULL, 0, 40, my_timer);
 
 	retval = GetOpenFileName (&ofn);
 
@@ -449,7 +457,7 @@ PrintWin32::get_save_filename (unsigned char *dir, unsigned int *spns)
 	UINT_PTR timer;
 
 	SPWin32Modal = TRUE;
-	timer = SetTimer (NULL, 0, 40, sp_win32_timer);
+	timer = SetTimer (NULL, 0, 40, my_timer);
 
 	retval = GetSaveFileName (&ofn);
 
