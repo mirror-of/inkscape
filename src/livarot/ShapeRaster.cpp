@@ -130,24 +130,12 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			nPt=curPt++;
       
       // treat a new point: remove and add edges incident to it
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).incidentEdge[FIRST];
-      // count the number of edge coming in nPt from above if nbUp, and the number of edge exiting nPt to go below in nbDn
-      // upNo and dnNo are one of these edges, if any exist
-			while ( cb >= 0 && cb < numberOfEdges() ) {
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=NextAt(nPt,cb);
-			}
-      
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
+                        _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+
 			if ( nbDn <= 0 ) {
 				upNo=-1;
 			}
@@ -157,7 +145,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
 			if ( nbUp > 0 ) {
         // first remove edges coming from above
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
@@ -199,7 +187,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
       // add the remaining edges
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -222,21 +210,11 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			int           nPt=-1;
 			nPt=--curPt;
       
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).incidentEdge[FIRST];
-			while ( cb >= 0 && cb < numberOfEdges() ) {
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=NextAt(nPt,cb);
-			}
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
+                        _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
       
 			if ( nbDn <= 0 ) {
 				upNo=-1;
@@ -246,7 +224,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			}
       
 			if ( nbUp > 0 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -286,7 +264,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			}
       
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -327,21 +305,11 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			int           nPt=-1;
 			nPt=curPt++;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).incidentEdge[FIRST];
-			while ( cb >= 0 && cb < numberOfEdges() ) {
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=NextAt(nPt,cb);
-			}
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
+                        _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 
 			if ( nbDn <= 0 ) {
 				upNo=-1;
@@ -351,7 +319,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbUp > 0 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -377,7 +345,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -397,21 +365,11 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			int           nPt=-1;
 			nPt=--curPt;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).incidentEdge[FIRST];
-			while ( cb >= 0 && cb < numberOfEdges() ) {
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=NextAt(nPt,cb);
-			}
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
+                        _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 
 			if ( nbDn <= 0 ) {
 				upNo=-1;
@@ -421,7 +379,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbUp > 0 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -448,7 +406,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -853,43 +811,15 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
       // same thing as the usual Scan(), just with a hardcoded "indegree+outdegree=2" case, since
       // it's the most common one
 
-            int cb;
-            int nbUp = 0;
-            int nbDn = 0;
-            int upNo = -1;
-            int dnNo = -1;
+            int nbUp;
+            int nbDn;
+            int upNo;
+            int dnNo;
             if ( getPoint(nPt).totalDegree() == 2 ) {
-
-                for (int i = 0; i < 2; i++) {
-                    cb = getPoint(nPt).incidentEdge[i];
-                    Shape::dg_arete const &e = getEdge(cb);
-                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
-                        upNo = cb;
-                        nbUp++;
-                    }
-                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
-                        dnNo = cb;
-                        nbDn++;
-                    }
-                }
-                
+                _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
             } else {
-
-                cb = getPoint(nPt).incidentEdge[FIRST];
-                while ( cb >= 0 && cb < numberOfEdges() ) {
-                    Shape::dg_arete const &e = getEdge(cb);
-                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
-                        upNo = cb;
-                        nbUp++;
-                    }
-                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
-                        dnNo = cb;
-                        nbDn++;
-                    }
-                    cb=NextAt(nPt,cb);
-                }
+                _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
             }
-
 
             if ( nbDn <= 0 ) {
                 upNo=-1;
@@ -899,7 +829,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
             }
 
             if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-                cb = getPoint(nPt).incidentEdge[FIRST];
+                int cb = getPoint(nPt).incidentEdge[FIRST];
                 while ( cb >= 0 && cb < numberOfEdges() ) {
                     Shape::dg_arete const &e = getEdge(cb);
                     if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
@@ -912,7 +842,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
                                 swrData[cb].curY = getPoint(nPt).x[1];
                                 swrData[cb].misc = NULL;
                                 // create trapezoid for the chunk of edge intersecting with the line
-                                DestroyEdge(cb,to,line,step);
+                                DestroyEdge(cb, to, line);
                                 node->Remove(*sTree, *sEvts, true);
                             }
                         }
@@ -932,7 +862,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
                     swrData[upNo].lastY = swrData[upNo].curY;
                     swrData[upNo].curX = getPoint(nPt).x[0];
                     swrData[upNo].curY = getPoint(nPt).x[1];
-                    DestroyEdge(upNo, to, line, step);
+                    DestroyEdge(upNo, to, line);
 
                     node->ConvertTo(this, dnNo, 1, nPt);
 
@@ -950,7 +880,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
             }
 
             if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-                cb = getPoint(nPt).incidentEdge[FIRST];
+                int cb = getPoint(nPt).incidentEdge[FIRST];
                 while ( cb >= 0 && cb < numberOfEdges() ) {
                     Shape::dg_arete const &e = getEdge(cb);
                     if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
@@ -1048,42 +978,15 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			int           nPt=-1;
 			nPt=curPt++;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
+			int cb;
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=getPoint(nPt).incidentEdge[LAST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-
+                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			} else {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						upNo=cb;
-						nbUp++;
-					}
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						dnNo=cb;
-						nbDn++;
-					}
-					cb=NextAt(nPt,cb);
-				}
+                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			}
 
 			if ( nbDn <= 0 ) {
@@ -1094,7 +997,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1105,7 +1008,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 								swrData[cb].curX=getPoint(nPt).x[0];
 								swrData[cb].curY=getPoint(nPt).x[1];
 								swrData[cb].misc=NULL;
-								DestroyEdge(cb,to,line,step);
+								DestroyEdge(cb, line);
 
 								node->Remove(*sTree,*sEvts,true);
 							}
@@ -1125,7 +1028,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 					swrData[upNo].lastY=swrData[upNo].curY;
 					swrData[upNo].curX=getPoint(nPt).x[0];
 					swrData[upNo].curY=getPoint(nPt).x[1];
-					DestroyEdge(upNo,to,line,step);
+					DestroyEdge(upNo, line);
 
 					node->ConvertTo(this,dnNo,1,nPt);
 
@@ -1194,42 +1097,14 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			int           nPt=-1;
 			nPt=curPt++;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=getPoint(nPt).incidentEdge[LAST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-
+                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			} else {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						upNo=cb;
-						nbUp++;
-					}
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						dnNo=cb;
-						nbDn++;
-					}
-					cb=NextAt(nPt,cb);
-				}
+                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			}
 
 			if ( nbDn <= 0 ) {
@@ -1240,7 +1115,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1251,7 +1126,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 								swrData[cb].curX=getPoint(nPt).x[0];
 								swrData[cb].curY=getPoint(nPt).x[1];
 								swrData[cb].misc=NULL;
-								DestroyEdge(cb,to,line,step);
+								DestroyEdge(cb, line);
 
 								node->Remove(*sTree,*sEvts,true);
 							}
@@ -1271,7 +1146,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 					swrData[upNo].lastY=swrData[upNo].curY;
 					swrData[upNo].curX=getPoint(nPt).x[0];
 					swrData[upNo].curY=getPoint(nPt).x[1];
-					DestroyEdge(upNo,to,line,step);
+					DestroyEdge(upNo, line);
 
 					node->ConvertTo(this,dnNo,1,nPt);
 
@@ -1289,7 +1164,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1349,42 +1224,14 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			int           nPt=-1;
 			nPt=curPt++;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=getPoint(nPt).incidentEdge[LAST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-
+                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			} else {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						upNo=cb;
-						nbUp++;
-					}
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						dnNo=cb;
-						nbDn++;
-					}
-					cb=NextAt(nPt,cb);
-				}
+                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			}
 
 			if ( nbDn <= 0 ) {
@@ -1395,7 +1242,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1406,7 +1253,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 							swrData[cb].curX=getPoint(nPt).x[0];
 							swrData[cb].curY=getPoint(nPt).x[1];
 							swrData[cb].misc=NULL;
-							DestroyEdge(cb,to,line,step);
+							DestroyEdge(cb,to,line);
 						}
 					}
 					cb=NextAt(nPt,cb);
@@ -1424,7 +1271,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 					swrData[upNo].curX=getPoint(nPt).x[0];
 					swrData[upNo].curY=getPoint(nPt).x[1];
 					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo,to,line,step);
+					DestroyEdge(upNo,to,line);
 
 					CreateEdge(dnNo,to,step);
 					swrData[dnNo].guess=swrData[upNo].guess;
@@ -1435,7 +1282,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1517,42 +1364,14 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			int           nPt=-1;
 			nPt=curPt++;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=getPoint(nPt).incidentEdge[LAST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-
+                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			} else {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						upNo=cb;
-						nbUp++;
-					}
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						dnNo=cb;
-						nbDn++;
-					}
-					cb=NextAt(nPt,cb);
-				}
+                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			}
 
 			if ( nbDn <= 0 ) {
@@ -1563,7 +1382,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1574,7 +1393,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 							swrData[cb].curX=getPoint(nPt).x[0];
 							swrData[cb].curY=getPoint(nPt).x[1];
 							swrData[cb].misc=NULL;
-							DestroyEdge(cb,to,line,step);
+							DestroyEdge(cb, line);
 						}
 					}
 					cb=NextAt(nPt,cb);
@@ -1591,7 +1410,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 					swrData[upNo].curX=getPoint(nPt).x[0];
 					swrData[upNo].curY=getPoint(nPt).x[1];
 					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo,to,line,step);
+					DestroyEdge(upNo, line);
 
 					CreateEdge(dnNo,to,step);
 				} else {
@@ -1601,7 +1420,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1658,42 +1477,14 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			int           nPt=-1;
 			nPt=curPt++;
 
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
+			int nbUp;
+                        int nbDn;
+			int upNo;
+                        int dnNo;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=getPoint(nPt).incidentEdge[LAST];
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-
+                            _countUpDownTotalDegree2(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			} else {
-				cb=getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						upNo=cb;
-						nbUp++;
-					}
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						dnNo=cb;
-						nbDn++;
-					}
-					cb=NextAt(nPt,cb);
-				}
+                            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
 			}
 
 			if ( nbDn <= 0 ) {
@@ -1704,7 +1495,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1715,7 +1506,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 							swrData[cb].curX=getPoint(nPt).x[0];
 							swrData[cb].curY=getPoint(nPt).x[1];
 							swrData[cb].misc=NULL;
-							DestroyEdge(cb,to,line,step);
+							DestroyEdge(cb, line);
 						}
 					}
 					cb=NextAt(nPt,cb);
@@ -1732,7 +1523,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 					swrData[upNo].curX=getPoint(nPt).x[0];
 					swrData[upNo].curY=getPoint(nPt).x[1];
 					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo,to,line,step);
+					DestroyEdge(upNo, line);
 
 					CreateEdge(dnNo,to,step);
 					swrData[dnNo].guess=swrData[upNo].guess;
@@ -1743,7 +1534,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).incidentEdge[FIRST];
+				int cb = getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1836,107 +1627,306 @@ void              Shape::AvanceEdge(int no,float to,bool exact,float step)
 /*
  * specialisation par type de structure utilise
  */
-void              Shape::DestroyEdge(int no,float to,FloatLigne* line,float /*step*/)
-{
-	if ( swrData[no].sens ) {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			swrData[no].guess=line->AddBordR(swrData[no].curX,to-swrData[no].curY,swrData[no].lastX,to-swrData[no].lastY,-swrData[no].dydx,swrData[no].guess);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			swrData[no].guess=line->AddBord(swrData[no].lastX,-(to-swrData[no].lastY),swrData[no].curX,-(to-swrData[no].curY),swrData[no].dydx,swrData[no].guess);
-		}
-	} else {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			swrData[no].guess=line->AddBordR(swrData[no].curX,-(to-swrData[no].curY),swrData[no].lastX,-(to-swrData[no].lastY),swrData[no].dydx,swrData[no].guess);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			swrData[no].guess=line->AddBord(swrData[no].lastX,to-swrData[no].lastY,swrData[no].curX,to-swrData[no].curY,-swrData[no].dydx,swrData[no].guess);
-		}
-	}
-}
-void              Shape::AvanceEdge(int no,float to,FloatLigne* line,bool exact,float step)
-{
-	AvanceEdge(no,to,exact,step);
 
-	if ( swrData[no].sens ) {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			swrData[no].guess=line->AddBordR(swrData[no].curX,to-swrData[no].curY,swrData[no].lastX,to-swrData[no].lastY,-swrData[no].dydx,swrData[no].guess);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			swrData[no].guess=line->AddBord(swrData[no].lastX,-(to-swrData[no].lastY),swrData[no].curX,-(to-swrData[no].curY),swrData[no].dydx,swrData[no].guess);
-		}
-	} else {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			swrData[no].guess=line->AddBordR(swrData[no].curX,-(to-swrData[no].curY),swrData[no].lastX,-(to-swrData[no].lastY),swrData[no].dydx,swrData[no].guess);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			swrData[no].guess=line->AddBord(swrData[no].lastX,to-swrData[no].lastY,swrData[no].curX,to-swrData[no].curY,-swrData[no].dydx,swrData[no].guess);
-		}
-	}
-}
-void              Shape::DestroyEdge(int no,float /*to*/,BitLigne* line,float /*step*/)
+void Shape::DestroyEdge(int no, float to, FloatLigne* line)
 {
-	if ( swrData[no].sens ) {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,swrData[no].lastX,false);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,swrData[no].curX,false);
-		}
-	} else {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,swrData[no].lastX,false);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,swrData[no].curX,false);
-		}
-	}
-}
-void              Shape::AvanceEdge(int no,float to,BitLigne* line,bool exact,float step)
-{
-	AvanceEdge(no,to,exact,step);
+    if ( swrData[no].sens ) {
 
-	if ( swrData[no].sens ) {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,swrData[no].lastX,false);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,swrData[no].curX,false);
-		}
-	} else {
-		if ( swrData[no].curX < swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,swrData[no].lastX,false);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,swrData[no].curX,false);
-		}
-	}
-}
-void              Shape::DestroyEdge(int no,float /*to*/,AlphaLigne* line,float /*step*/)
-{
-	if ( swrData[no].sens ) {
-		if ( swrData[no].curX <= swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,0,swrData[no].lastX,swrData[no].curY-swrData[no].lastY,-swrData[no].dydx);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,0,swrData[no].curX,swrData[no].curY-swrData[no].lastY,swrData[no].dydx);
-		}
-	} else {
-		if ( swrData[no].curX <= swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,0,swrData[no].lastX,swrData[no].lastY-swrData[no].curY,swrData[no].dydx);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,0,swrData[no].curX,swrData[no].lastY-swrData[no].curY,-swrData[no].dydx);
-		}
-	}
-}
-void              Shape::AvanceEdge(int no,float to,AlphaLigne* line,bool exact,float step)
-{
-	AvanceEdge(no,to,exact,step);
+        if ( swrData[no].curX < swrData[no].lastX ) {
 
-	if ( swrData[no].sens ) {
-		if ( swrData[no].curX <= swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,0,swrData[no].lastX,swrData[no].curY-swrData[no].lastY,-swrData[no].dydx);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,0,swrData[no].curX,swrData[no].curY-swrData[no].lastY,swrData[no].dydx);
-		}
-	} else {
-		if ( swrData[no].curX <= swrData[no].lastX ) {
-			line->AddBord(swrData[no].curX,0,swrData[no].lastX,swrData[no].lastY-swrData[no].curY,swrData[no].dydx);
-		} else if ( swrData[no].curX > swrData[no].lastX ) {
-			line->AddBord(swrData[no].lastX,0,swrData[no].curX,swrData[no].lastY-swrData[no].curY,-swrData[no].dydx);
-		}
-	}
+            swrData[no].guess = line->AddBordR(swrData[no].curX,
+                                               to - swrData[no].curY,
+                                               swrData[no].lastX,
+                                               to - swrData[no].lastY,
+                                               -swrData[no].dydx,
+                                               swrData[no].guess);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            swrData[no].guess = line->AddBord(swrData[no].lastX,
+                                              -(to - swrData[no].lastY),
+                                              swrData[no].curX,
+                                              -(to - swrData[no].curY),
+                                              swrData[no].dydx,
+                                              swrData[no].guess);
+        }
+        
+    } else {
+        
+        if ( swrData[no].curX < swrData[no].lastX ) {
+
+            swrData[no].guess = line->AddBordR(swrData[no].curX,
+                                               -(to - swrData[no].curY),
+                                               swrData[no].lastX,
+                                               -(to - swrData[no].lastY),
+                                               swrData[no].dydx,
+                                               swrData[no].guess);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            swrData[no].guess = line->AddBord(swrData[no].lastX,
+                                              to - swrData[no].lastY,
+                                              swrData[no].curX,
+                                              to - swrData[no].curY,
+                                              -swrData[no].dydx,
+                                              swrData[no].guess);
+        }
+    }
+}
+
+
+
+void Shape::AvanceEdge(int no, float to, FloatLigne *line, bool exact, float step)
+{
+    AvanceEdge(no,to,exact,step);
+
+    if ( swrData[no].sens ) {
+        
+        if ( swrData[no].curX < swrData[no].lastX ) {
+            
+            swrData[no].guess = line->AddBordR(swrData[no].curX,
+                                               to - swrData[no].curY,
+                                               swrData[no].lastX,
+                                               to - swrData[no].lastY,
+                                               -swrData[no].dydx,
+                                               swrData[no].guess);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            swrData[no].guess = line->AddBord(swrData[no].lastX,
+                                              -(to - swrData[no].lastY),
+                                              swrData[no].curX,
+                                              -(to - swrData[no].curY),
+                                              swrData[no].dydx,
+                                              swrData[no].guess);
+        }
+        
+    } else {
+
+        if ( swrData[no].curX < swrData[no].lastX ) {
+
+            swrData[no].guess = line->AddBordR(swrData[no].curX,
+                                               -(to-swrData[no].curY),
+                                               swrData[no].lastX,
+                                               -(to-swrData[no].lastY),
+                                               swrData[no].dydx,
+                                               swrData[no].guess);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            swrData[no].guess = line->AddBord(swrData[no].lastX,
+                                              to - swrData[no].lastY,
+                                              swrData[no].curX,
+                                              to - swrData[no].curY,
+                                              -swrData[no].dydx,
+                                              swrData[no].guess);
+        }
+    }
+}
+
+
+void Shape::DestroyEdge(int no, BitLigne *line)
+{
+    if ( swrData[no].sens ) {
+        
+        if ( swrData[no].curX < swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].curX, swrData[no].lastX, false);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX,swrData[no].curX,false);
+        }
+        
+    } else {
+
+	if ( swrData[no].curX < swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].curX, swrData[no].lastX, false);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX, swrData[no].curX, false);
+            
+        }
+    }
+}
+
+
+void Shape::AvanceEdge(int no, float to, BitLigne *line, bool exact, float step)
+{
+    AvanceEdge(no, to, exact, step);
+
+    if ( swrData[no].sens ) {
+        
+        if ( swrData[no].curX < swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].curX, swrData[no].lastX, false);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX, swrData[no].curX, false);
+        }
+
+    } else {
+        
+        if ( swrData[no].curX < swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].curX, swrData[no].lastX, false);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX, swrData[no].curX, false);
+        }
+    }
+}
+
+
+void Shape::DestroyEdge(int no, AlphaLigne* line)
+{
+    if ( swrData[no].sens ) {
+        
+        if ( swrData[no].curX <= swrData[no].lastX ) {
+
+            line->AddBord(swrData[no].curX,
+                          0,
+                          swrData[no].lastX,
+                          swrData[no].curY - swrData[no].lastY,
+                          -swrData[no].dydx);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX,
+                          0,
+                          swrData[no].curX,
+                          swrData[no].curY - swrData[no].lastY,
+                          swrData[no].dydx);
+        }
+        
+    } else {
+        
+        if ( swrData[no].curX <= swrData[no].lastX ) {
+
+            line->AddBord(swrData[no].curX,
+                          0,
+                          swrData[no].lastX,
+                          swrData[no].lastY - swrData[no].curY,
+                          swrData[no].dydx);
+
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+
+            line->AddBord(swrData[no].lastX,
+                          0,
+                          swrData[no].curX,
+                          swrData[no].lastY - swrData[no].curY,
+                          -swrData[no].dydx);
+        }
+    }
+}
+
+
+void Shape::AvanceEdge(int no, float to, AlphaLigne *line, bool exact, float step)
+{
+    AvanceEdge(no,to,exact,step);
+
+    if ( swrData[no].sens ) {
+        
+        if ( swrData[no].curX <= swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].curX,
+                          0,
+                          swrData[no].lastX,
+                          swrData[no].curY - swrData[no].lastY,
+                          -swrData[no].dydx);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX,
+                          0,
+                          swrData[no].curX,
+                          swrData[no].curY - swrData[no].lastY,
+                          swrData[no].dydx);
+        }
+        
+    } else {
+        
+        if ( swrData[no].curX <= swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].curX,
+                          0,
+                          swrData[no].lastX,
+                          swrData[no].lastY - swrData[no].curY,
+                          swrData[no].dydx);
+            
+        } else if ( swrData[no].curX > swrData[no].lastX ) {
+            
+            line->AddBord(swrData[no].lastX,
+                          0,
+                          swrData[no].curX,
+                          swrData[no].lastY - swrData[no].curY,
+                          -swrData[no].dydx);
+        }
+    }
+}
+
+/**
+ *    \param P point index.
+ *    \param numberUp Filled in with the number of edges coming into P from above.
+ *    \param numberDown Filled in with the number of edges coming exiting P to go below.
+ *    \param upEdge One of the numberUp edges, or -1.
+ *    \param downEdge One of the numberDown edges, or -1.
+ */
+
+void Shape::_countUpDown(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const
+{
+    *numberUp = 0;
+    *numberDown = 0;
+    *upEdge = -1;
+    *downEdge = -1;
+    
+    int i = getPoint(P).incidentEdge[FIRST];
+    
+    while ( i >= 0 && i < numberOfEdges() ) {
+        Shape::dg_arete const &e = getEdge(i);
+        if ( ( e.st < e.en && P == e.en ) || ( e.st > e.en && P == e.st ) ) {
+            *upEdge = i;
+            (*numberUp)++;
+        }
+        if ( ( e.st > e.en && P == e.en ) || ( e.st < e.en && P == e.st ) ) {
+            *downEdge = i;
+            (*numberDown)++;
+        }
+        i = NextAt(P, i);
+    }
+    
+}
+
+
+
+/**
+ *     Version of Shape::_countUpDown optimised for the case when getPoint(P).totalDegree() == 2.
+ */
+
+void Shape::_countUpDownTotalDegree2(int P,
+                                     int *numberUp, int *numberDown, int *upEdge, int *downEdge) const
+{
+    *numberUp = 0;
+    *numberDown = 0;
+    *upEdge = -1;
+    *downEdge = -1;
+    
+    for (int i = 0; i < 2; i++) {
+        int const j = getPoint(P).incidentEdge[i];
+        Shape::dg_arete const &e = getEdge(j);
+        if ( ( e.st < e.en && P == e.en ) || ( e.st > e.en && P == e.st ) ) {
+            *upEdge = j;
+            (*numberUp)++;
+        }
+        if ( ( e.st > e.en && P == e.en ) || ( e.st < e.en && P == e.st ) ) {
+            *downEdge = j;
+            (*numberDown)++;
+        }
+    }
 }
 
 
