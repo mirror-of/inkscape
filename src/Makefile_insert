@@ -40,19 +40,18 @@ libinkpre_a_SOURCES =	\
 	attributes.cpp attributes.h	\
 	bad-uri-exception.h	\
 	brokenimage.xpm	\
-	color.cpp color.h	\
 	color-rgba.h	\
-	common-style.cpp common-style.h	fill-or-stroke.h \
+	color.cpp color.h	\
+	common-style.cpp common-style.h	\
 	desktop-affine.cpp desktop-affine.h	\
-	desktop.cpp desktop.h	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\
 	desktop-style.cpp desktop-style.h	\
-	snap.cpp snap.h	\
 	desktop-units.h	\
+	desktop.cpp desktop.h	\
 	dir-util.cpp dir-util.h	\
-	document.cpp document.h document-private.h	\
 	document-undo.cpp	\
+	document.cpp document.h document-private.h	\
 	draw-anchor.cpp	\
 	draw-anchor.h	\
 	draw-context.cpp draw-context.h	\
@@ -62,29 +61,30 @@ libinkpre_a_SOURCES =	\
 	event-context.cpp event-context.h	\
 	extract-uri.cpp extract-uri.h	\
 	file.cpp file.h	\
+	fill-or-stroke.h	\
 	forward.h	\
-	gc.cpp \
 	gc-alloc.h \
 	gc-anchored.h \
 	gc-core.h \
 	gc-finalized.h \
 	gc-managed.h \
+	gc.cpp \
 	geom.cpp geom.h	\
 	help.cpp help.h	\
-	inkscape.cpp inkscape.h inkscape-private.h	\
 	inkscape-stock.cpp inkscape-stock.h\
+	inkscape.cpp inkscape.h inkscape-private.h	\
 	interface.cpp interface.h	\
 	isnan.h \
-	knot.cpp knot.h	\
 	knot-enums.h	\
 	knot-holder-entity.h	\
+	knot.cpp knot.h	\
 	knotholder.cpp knotholder.h	\
 	layer-fns.cpp layer-fns.h	\
 	macros.h	\
 	marker-status.cpp marker-status.h	\
-	message.h \
 	message-context.cpp message-context.h \
 	message-stack.cpp message-stack.h \
+	message.h \
 	mod360.cpp mod360.h	\
 	modifier-fns.h	\
 	node-context.cpp node-context.h	\
@@ -108,94 +108,95 @@ libinkpre_a_SOURCES =	\
 	require-config.h \
 	rubberband.cpp rubberband.h	\
 	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
+	selcue.cpp selcue.h \
 	select-context.cpp select-context.h	\
+	select-toolbar.cpp select-toolbar.h\
 	selection-chemistry.cpp selection-chemistry.h	\
 	selection-describer.cpp selection-describer.h   \
 	selection.cpp selection.h	\
-	select-toolbar.cpp select-toolbar.h\
-	seltrans.cpp seltrans.h	\
-	selcue.cpp selcue.h \
 	seltrans-handles.cpp seltrans-handles.h	\
+	seltrans.cpp seltrans.h	\
 	shortcuts.cpp shortcuts.h	\
 	slideshow.cpp slideshow.h	\
+	snap.cpp snap.h	\
 	sp-anchor.cpp sp-anchor.h	\
 	sp-animation.cpp sp-animation.h	\
-	sp-conn-end.cpp sp-conn-end.h	\
-	sp-conn-end-pair.cpp sp-conn-end-pair.h	\
-	sp-flowdiv.h sp-flowdiv.cpp \
-	sp-flowregion.h sp-flowregion.cpp \
-	sp-flowtext.h sp-flowtext.cpp \
 	sp-clippath.cpp sp-clippath.h	\
+	sp-conn-end-pair.cpp sp-conn-end-pair.h	\
+	sp-conn-end.cpp sp-conn-end.h	\
 	sp-cursor.cpp sp-cursor.h	\
 	sp-defs.cpp sp-defs.h	\
 	sp-desktop-widget.h	\
 	sp-ellipse.cpp sp-ellipse.h	\
-	sp-gradient.cpp sp-gradient.h	\
+	sp-flowdiv.h sp-flowdiv.cpp \
+	sp-flowregion.h sp-flowregion.cpp \
+	sp-flowtext.h sp-flowtext.cpp \
 	sp-gradient-fns.h	\
 	sp-gradient-reference.cpp	\
 	sp-gradient-reference.h	\
 	sp-gradient-spread.h	\
 	sp-gradient-units.h	\
 	sp-gradient-vector.h	\
+	sp-gradient.cpp sp-gradient.h	\
 	sp-guide-attachment.h	\
 	sp-guide-constraint.h	\
 	sp-guide.cpp sp-guide.h	\
 	sp-image.cpp sp-image.h	\
-	spiral-context.cpp spiral-context.h	\
-	sp-item.cpp sp-item.h	\
 	sp-item-group.cpp sp-item-group.h	\
 	sp-item-notify-moveto.cpp sp-item-notify-moveto.h	\
 	sp-item-rm-unsatisfied-cns.cpp sp-item-rm-unsatisfied-cns.h	\
 	sp-item-transform.cpp sp-item-transform.h	\
 	sp-item-update-cns.cpp sp-item-update-cns.h	\
+	sp-item.cpp sp-item.h	\
 	sp-line.cpp sp-line.h	\
-	sp-linear-gradient.h	\
 	sp-linear-gradient-fns.h	\
-	splivarot.cpp splivarot.h	\
-	sp-marker.cpp sp-marker.h	\
+	sp-linear-gradient.h	\
 	sp-marker-loc.h	\
+	sp-marker.cpp sp-marker.h	\
 	sp-mask.cpp sp-mask.h	\
 	sp-metadata.cpp sp-metadata.h	\
 	sp-metrics.cpp sp-metrics.h	\
 	sp-namedview.cpp sp-namedview.h	\
-	sp-object.cpp sp-object.h	\
 	sp-object-group.cpp sp-object-group.h	\
 	sp-object-repr.cpp sp-object-repr.h	\
+	sp-object.cpp sp-object.h	\
 	sp-offset.cpp sp-offset.h	\
 	sp-paint-server.cpp sp-paint-server.h	\
 	sp-path.cpp sp-path.h	\
 	sp-pattern.cpp sp-pattern.h	\
 	sp-polygon.cpp sp-polygon.h	\
 	sp-polyline.cpp sp-polyline.h	\
-	sp-radial-gradient.h	\
 	sp-radial-gradient-fns.h	\
+	sp-radial-gradient.h	\
 	sp-rect.cpp sp-rect.h	\
 	sp-root.cpp sp-root.h	\
 	sp-shape.cpp sp-shape.h	\
 	sp-spiral.cpp sp-spiral.h	\
 	sp-star.cpp sp-star.h	\
-	sp-stop.h	\
 	sp-stop-fns.h	\
+	sp-stop.h	\
+	sp-string.cpp sp-string.h	\
 	sp-symbol.cpp sp-symbol.h	\
 	sp-text.cpp sp-text.h	\
-	sp-string.cpp sp-string.h	\
 	sp-tspan.cpp sp-tspan.h	\
-	sp-use.cpp sp-use.h	\
 	sp-use-reference.cpp sp-use-reference.h	\
+	sp-use.cpp sp-use.h	\
+	spiral-context.cpp spiral-context.h	\
+	splivarot.cpp splivarot.h	\
 	star-context.cpp star-context.h	\
 	streams-gzip.h streams-gzip.cpp	\
 	streams-handles.h streams-handles.cpp	\
-	streams-zlib.h streams-zlib.cpp	\
 	streams-jar.h streams-jar.cpp	\
+	streams-zlib.h streams-zlib.cpp	\
 	style.cpp style.h	\
+	svg-profile.h \
 	svg-view.cpp svg-view.h	\
 	text-chemistry.cpp text-chemistry.h	\
 	text-context.cpp text-context.h	\
 	toolbox.cpp toolbox.h	\
 	tools-switch.cpp tools-switch.h\
-	uri.cpp uri.h	\
 	uri-references.cpp uri-references.h	\
-	svg-profile.h \
+	uri.cpp uri.h	\
 	verbs.cpp verbs.h	\
 	version.cpp version.h	\
 	view.cpp view.h	\
