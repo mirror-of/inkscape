@@ -37,9 +37,11 @@ public:
 
     void setSnapToPoints(bool s);
     void setSnapToBBox(bool s);
+    void setEnabled(bool s);
 
     bool getSnapToPoints() const;
     bool getSnapToBBox() const;
+    bool getEnabled() const;
     
     void setDistance(NR::Coord const d);
 
@@ -47,6 +49,7 @@ public:
 
 private:
     NR::Coord _distance;
+    bool _enabled;
     bool _snap_to_points;
     bool _snap_to_bbox;
 };

@@ -134,7 +134,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::
     SPNamedView const &nv = *desktop->namedview;
     NR::Point snapped = req;
 
-    if (nv.snaptoguides) {
+    if (nv.guide_snapper.getEnabled()) {
         upper = nv.guide_snapper.getDistance();
         for (GSList const *l = nv.guides; l != NULL; l = l->next) {
             SPGuide const &g = *SP_GUIDE(l->data);
@@ -151,7 +151,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::
         }
     }
 
-    if (nv.snaptogrid) {
+    if (nv.grid_snapper.getEnabled()) {
         /*  find nearest grid line (either H or V whatever is closer) along
          *  the vector to the requested point.  If the distance along the
          *  vector is less than the snap distance then snap.
@@ -310,9 +310,19 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, const std::vector
 
 
 Snapper::Snapper(NR::Coord const d)
-    : _distance(d), _snap_to_points(false), _snap_to_bbox(false)
+    : _distance(d), _enabled(false), _snap_to_points(false), _snap_to_bbox(false)
 {
 
+}
+
+void Snapper::setEnabled(bool s)
+{
+    _enabled = s;
+}
+
+bool Snapper::getEnabled() const
+{
+    return _enabled;
 }
 
 void Snapper::setDistance(NR::Coord const d)

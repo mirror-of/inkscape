@@ -110,9 +110,7 @@ sp_namedview_init (SPNamedView * nv)
 {
 	nv->editable = TRUE;
 	nv->showgrid = FALSE;
-	nv->snaptogrid = FALSE;
 	nv->showguides = TRUE;
-	nv->snaptoguides = FALSE;
 	nv->showborder = TRUE;
 
 	nv->guides = NULL;
@@ -233,7 +231,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SNAPTOGRID:
-		nv->snaptogrid = sp_str_to_bool (value);
+		nv->grid_snapper.setEnabled(sp_str_to_bool(value));
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SHOWGUIDES:
@@ -246,7 +244,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SNAPTOGUIDES:
-		nv->snaptoguides = sp_str_to_bool (value);
+		nv->guide_snapper.setEnabled(sp_str_to_bool(value));
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRIDTOLERANCE:

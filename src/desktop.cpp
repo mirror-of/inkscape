@@ -444,12 +444,12 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 
     // Fixme: expansion?
     gdouble const px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
-    NR::Coord const grid_tolerance_val = ( nv.snaptogrid ? nv.gridtolerance : 0.0 );
+    NR::Coord const grid_tolerance_val = ( nv.grid_snapper.getEnabled() ? nv.gridtolerance : 0.0 );
     nv.grid_snapper.setDistance(sp_convert_distance_full(grid_tolerance_val,
                                                          *nv.gridtoleranceunit,
                                                          *px,
                                                          px2doc));
-    NR::Coord const guide_tolerance_val = ( nv.snaptoguides ? nv.guidetolerance : 0.0 );
+    NR::Coord const guide_tolerance_val = ( nv.guide_snapper.getEnabled() ? nv.guidetolerance : 0.0 );
     nv.guide_snapper.setDistance(sp_convert_distance_full(guide_tolerance_val,
                                                           *nv.guidetoleranceunit,
                                                           *px,

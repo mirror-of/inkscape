@@ -34,9 +34,7 @@ struct SPNamedView {
 	SPObjectGroup objectgroup;
 	unsigned int editable : 1;
 	unsigned int showgrid : 1;
-	unsigned int snaptogrid : 1;
 	unsigned int showguides : 1;
-	unsigned int snaptoguides : 1;
 	unsigned int showborder : 1;
 	unsigned int borderlayer : 2;
 

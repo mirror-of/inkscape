@@ -844,14 +844,14 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showgrid);
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptogrid");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptogrid);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->grid_snapper.getEnabled());
 
 	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:grid-bbox");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->grid_snapper.getSnapToBBox());
-	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptogrid);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->grid_snapper.getEnabled());
 	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:grid-points");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->grid_snapper.getSnapToPoints());
-	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptogrid);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->grid_snapper.getEnabled());
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "grid_units");
         sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->gridunit);
@@ -890,14 +890,14 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showguides);
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptoguides");
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptoguides);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->guide_snapper.getEnabled());
 
 	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:guide-bbox");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->guide_snapper.getSnapToBBox());
-	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptoguides);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->guide_snapper.getEnabled());
 	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:guide-points");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->guide_snapper.getSnapToPoints());
-	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptoguides);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->guide_snapper.getEnabled());
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
         sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->guidetoleranceunit);
