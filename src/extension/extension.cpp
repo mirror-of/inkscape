@@ -33,6 +33,7 @@
 #include <libnr/nr-point.h>
 
 #include "db.h"
+#include "dependency.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -81,6 +82,9 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
             if (!strcmp(sp_repr_name(child_repr), "param")) {
                 make_param(child_repr);
             } /* param */
+            if (!strcmp(sp_repr_name(child_repr), "dependency")) {
+                _deps.push_back(new Dependency(child_repr));
+            } /* param */
             child_repr = sp_repr_next(child_repr);
         }
 
@@ -109,6 +113,12 @@ Extension::~Extension (void)
     g_free(id);
     g_free(name);
     /** \todo Need to do parameters here */
+
+	for (unsigned int i = 0 ; i < _deps.size(); i++) {
+		delete _deps[i];
+	}
+	_deps.clear();
+
     return;
 }
 
@@ -139,6 +149,7 @@ Extension::set_state (state_t in_state)
 				_state = STATE_UNLOADED;
 				break;
 			case STATE_DEACTIVATED:
+				_state = STATE_DEACTIVATED;
 				break;
 			default:
 				break;
@@ -173,12 +184,15 @@ Extension::loaded (void)
 	\brief   A function to check the validity of the extension
 
 	This function chekcs to make sure that there is an id, a name, a
-	repr and an implemenation for this extension.  Then it asks the
+	repr and an implemenation for this extension.  Then it checks all
+	of the dependencies to see if they pass.  Finally, it asks the
 	implmentation to do a check of itself.
 */
 bool
 Extension::check (void)
 {
+	// static int i = 0;
+	// std::cout << "Checking module[" << i++ << "]: " << name << std::endl;
 	if (id == NULL)
 		return FALSE;
 	if (name == NULL)
@@ -187,6 +201,13 @@ Extension::check (void)
 		return FALSE;
 	if (imp == NULL)
 		return FALSE;
+
+	for (unsigned int i = 0 ; i < _deps.size(); i++) {
+		if (_deps[i]->check() == FALSE) {
+			// std::cout << "Failed: " << *(_deps[i]) << std::endl;
+			return FALSE;
+		}
+	}
 
 	return imp->check(this);
 }

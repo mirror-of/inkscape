@@ -1,6 +1,8 @@
 <inkscape-extension>
     <name>Postscript Input</name>
     <id>org.inkscape.input.ps</id>
+	<dependency type="extension">org.inkscape.input.sk</dependency>
+	<dependency type="executable">pstoedit</dependency>
     <input>
         <extension>.ps</extension>
         <mimetype>image/x-postscript</mimetype>

@@ -1,6 +1,8 @@
 <inkscape-extension>
     <name>Text Input</name>
     <id>org.inkscape.input.txt</id>
+	<dependency type="executable" location="extensions">txt2svg.pl</dependency>
+	<dependency type="executable" location="absolute">/usr/bin/perl</dependency>
     <input>
         <extension>.txt</extension>
         <mimetype>text/html</mimetype>

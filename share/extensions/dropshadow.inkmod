@@ -1,10 +1,11 @@
 <inkscape-extension>
     <name>Dropshadow</name>
     <id>org.inkscape.filter.dropshadow</id>
+	<dependency type="executable" location="extensions">svg_dropshadow</dependency>
     <effect>
+		<object-type>all</object-type>
     </effect>
     <script>
         <command reldir="extensions">svg_dropshadow --opacity=0.9 --color=black</command>
-        <check reldir="extensions">svg_dropshadow</check>
     </script>
 </inkscape-extension>

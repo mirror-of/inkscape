@@ -1,10 +1,10 @@
 <inkscape-extension>
     <name>Roundhole</name>
     <id>org.inkscape.filter.roundhole</id>
+	<dependency type="executable" location="extensions">roundhole</dependency>
     <effect>
     </effect>
     <script>
         <command reldir="extensions">roundhole</command>
-        <check reldir="extensions">roundhole</check>
     </script>
 </inkscape-extension>

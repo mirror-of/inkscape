@@ -1,3 +1,20 @@
+2004-10-12  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/ai_input.inkmod, share/extensions/ai_output.inkmod,
+	share/extensions/dia.inkmod, share/extensions/dropshadow.inkmod,
+	share/extensions/eps_input.inkmod, share/extensions/epsi_output.inkmod,
+	share/extensions/gimpgrad.inkmod, share/extensions/ps_input.inkmod,
+	share/extensions/roundhole.inkmod, share/extensions/sk_input.inkmod,
+	share/extensions/svgz_input.inkmod, share/extensions/svgz_output.inkmod,
+	share/extensions/txt2svg.inkmod, share/extensions/wmf_input.inkmod,
+	src/extension/dependency.cpp, src/extension/dependency.h,
+	src/extension/extension.cpp, src/extension/init.cpp:
+
+	Moving all of the dependency stuff from the scripts, up to the root
+	extension level.  This means that everyone can have dependencies, and
+	dependency checking (a good thing).  This makes use of the new
+	'Dependency' class that is also in the extension directory.
+
 2004-10-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/pencil-context.cpp (sp_pencil_context_root_handler): Split into

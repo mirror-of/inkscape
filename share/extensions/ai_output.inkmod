@@ -1,6 +1,8 @@
 <inkscape-extension>
     <name>AI Output</name>
     <id>org.inkscape.output.ai</id>
+	<dependency type="executable" location="path">pstoedit</dependency>
+	<dependency type="extension">org.inkscape.output.ps</dependency>
     <output>
         <extension>.ai</extension>
         <mimetype>image/x-adobe-illustrator</mimetype>
@@ -10,6 +12,5 @@
     <script>
         <command reldir="path">pstoedit -f ps2ai</command>
 		<helper_extension>org.inkscape.output.ps</helper_extension>
-		<check reldir="path">pstoedit</check>
     </script>
 </inkscape-extension>

@@ -1,6 +1,8 @@
 <inkscape-extension>
     <name>Dia Input</name>
     <id>org.inkscape.input.dia</id>
+	<dependency type="executable" location="extensions">dia2svg.sh</dependency>
+	<dependency type="executable">dia</dependency>
     <input>
         <extension>.dia</extension>
         <mimetype>application/x-dia</mimetype>
@@ -9,7 +11,5 @@
     </input>
     <script>
         <command reldir="extensions">dia2svg.sh</command>
-        <check reldir="extensions">dia2svg.sh</check>
-		<check reldir="path">dia</check>
     </script>
 </inkscape-extension>

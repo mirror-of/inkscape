@@ -1,6 +1,9 @@
 <inkscape-extension>
     <name>EPSI Output</name>
     <id>org.inkscape.output.epsi</id>
+	<dependency type="extension">org.inkscape.output.ps</dependency>
+	<dependency type="executable" location="extensions">ps2epsi.sh</dependency>
+	<dependency type="executable">ps2epsi</dependency>
     <output>
         <extension>.epsi</extension>
         <mimetype>image/x-encapsulated-postscript</mimetype>
@@ -10,7 +13,5 @@
     <script>
         <command reldir="extensions">ps2epsi.sh</command>
 		<helper_extension>org.inkscape.output.ps</helper_extension>
-        <check reldir="extensions">ps2epsi.sh</check>
-		<check reldir="path">ps2epsi</check>
     </script>
 </inkscape-extension>

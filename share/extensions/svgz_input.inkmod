@@ -1,6 +1,8 @@
 <inkscape-extension>
     <name>SVGZ Input</name>
     <id>org.inkscape.input.svgz</id>
+	<dependency type="executable">gzip</dependency>
+	<dependency type="extension">org.inkscape.input.svg</dependency>
     <input>
         <extension>.svgz</extension>
         <mimetype>image/x-svgz</mimetype>

@@ -1,6 +1,8 @@
 <inkscape-extension>
     <name>SVGZ Output</name>
     <id>org.inkscape.output.SVGZ</id>
+	<dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+	<dependency type="executable">gzip</dependency>
     <output>
         <extension>.svgz</extension>
         <mimetype>image/x-svgz</mimetype>
@@ -11,6 +13,5 @@
     <script>
         <command reldir="path">gzip -c</command>
 		<helper_extension>org.inkscape.output.svg.inkscape</helper_extension>
-		<check reldir="path">gzip</check>
     </script>
 </inkscape-extension>

@@ -189,6 +189,7 @@ static void
 check_extensions (void)
 {
 	int count = 1;
+	// int pass = 0;
 	while (count != 0) {
 		// printf("Check extensions pass %d\n", pass++);
 		count = 0;

@@ -16,17 +16,54 @@
 namespace Inkscape {
 namespace Extension {
 
+/** \brief  A class to represent a dependency for an extension.  There
+            are different things that can be done in a dependency, and
+            this class takes care of all of them. */
 class Dependency {
-    bool _check;
+    /** \brief  The XML representation of the dependency. */
+    SPRepr * _repr;
+    /** \brief  The string that is in the XML tags pulled out. */
+    const gchar * _string;
 
+    /** \brief  All the possible types of dependencies. */
+    enum type_t {
+        TYPE_EXECUTABLE, /**< Look for an executable */
+        TYPE_FILE,       /**< Look to make sure a file exists */
+        TYPE_EXTENSION,  /**< Make sure a specific extension is loaded and functional */
+        TYPE_PLUGIN,     /**< Look for a library to be loaded as a plugin */
+        TYPE_CNT         /**< Number of types */
+    };
+    /** \brief  Storing the type of this particular dependency. */
+    type_t _type;
+
+    /** \brief  All of the possible locations to look for the dependency. */
+    enum location_t {
+        LOCATION_PATH,       /**< Look in the PATH for this depdendency */
+        LOCATION_EXTENSIONS, /**< Look in the extensions directory */
+        LOCATION_ABSOLUTE,   /**< This dependency is already defined in absolute terms */
+        LOCATION_CNT         /**< Number of locations to look */
+    };
+    /** \brief  The location to look for this particular dependency. */
+    location_t _location;
+
+    /** \brief  Strings to reperesent the different enum values in
+                \c type_t in the XML */
+    static gchar const * _type_str[TYPE_CNT]; 
+    /** \brief  Strings to reperesent the different enum values in
+                \c location_t in the XML */
+    static gchar const * _location_str[LOCATION_CNT]; 
 
 public:
-    Dependency (SPRepr * in_repr);
-    bool check (void) const;
+    Dependency  (SPRepr * in_repr);
+    ~Dependency (void);
+    bool check  (void) const;
     Glib::ustring &get_help (void) const;
     Glib::ustring &get_link (void) const;
 
+    friend std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);
 }; /* class Dependency */
+
+std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);
 
 };}; /* namespace Extension, Inkscape */
 
