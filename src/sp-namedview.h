@@ -50,8 +50,7 @@ struct _SPNamedView {
 	const SPUnit *gridunit;
 	/* Grid data is in points regardless of unit */
 	NR::Point gridorigin;
-	gdouble gridspacingx;
-	gdouble gridspacingy;
+	gdouble gridspacing[2];
 
 	const SPUnit *gridtoleranceunit;
 	gdouble gridtolerance;
@@ -62,8 +61,8 @@ struct _SPNamedView {
 	guint32 gridcolor;
 	guint32 guidecolor;
 	guint32 guidehicolor;
-	GSList * hguides;
-	GSList * vguides;
+
+	GSList * guides;
 	GSList * views;
 	GSList * gridviews;
         gint viewcount;
