@@ -15,22 +15,9 @@
 #include "sp-path.h"
 #include "desktop-handles.h"
 
-/**
- * In the following data model.   Nodepaths are made up of subpaths which
- * are comprised of nodes.
- *
- * Nodes are linked thus:
- *<pre>
- *        n            other
- *  node----->nodeside------> node
- *
- *</pre>
- *
- */
 
-
-/**
- *
+/** Radial objects are represented by an angle and a distance from
+ * 0,0.  0,0 is represented by a == big_num.
  */
 class Radial{
  public:
@@ -56,6 +43,19 @@ typedef struct _SPNodeContext SPNodeContext;
 
 
 namespace Path{
+
+/**
+ * In the following data model.   Nodepaths are made up of subpaths which
+ * are comprised of nodes.
+ *
+ * Nodes are linked thus:
+ *<pre>
+ *        n            other
+ *  node----->nodeside------> node
+ *
+ *</pre>
+ *
+ */
 
 /**
  * This is a node on a subpath
@@ -118,17 +118,20 @@ class SubPath {
 
 
 /**
- *  What kind of node is this?  This the value for the node->type field.
- * Describes the kind of rendering which shall be done for this node.
+ *  What kind of node is this?  This the value for the node->type
+ *  field.  NodeType indicates the degree of continuity required for
+ *  the node.  I think that the corresponding integer indicates which
+ *  derivate is connected. (Thus 2 means that the node is continuous
+ *  to the second derivative, i.e. has matching endpoints and tangents)
  */
 typedef enum {
 /**  A normal node */
 	NODE_NONE,
-/**  This node non-continuously joins two segments*/
+/**  This node non-continuously joins two segments.*/
 	NODE_CUSP,
-/**  This node continuously joins two segments */
+/**  This node continuously joins two segments. */
 	NODE_SMOOTH,
-/**  This node is symmetric */
+/**  This node is symmetric. */
 	NODE_SYMM
 } NodeType;
 
@@ -144,7 +147,9 @@ class NodeSide{
 	Node * other;
 /**  Position */
 	NR::Point pos;
-/**  */
+/**  Knots are Inkscape's way of providing draggable points.  This
+ *  Knot is the point on the curve representing the control point in a
+ *  bezier curve.*/
 	SPKnot * knot;
 /**  What kind of rendering? */
 	SPCanvasItem * line;
@@ -159,9 +164,10 @@ class Node {
  public:
 /**  The parent subpath of this node */
 	SubPath * subpath;
-/**  */
+/**  Type is selected from NodeType.*/
 	guint type : 4;
-/**  */
+/**  Code refers to which ArtCode is used to represent the segment
+ *  (which segment?).*/
 	guint code : 4;
 /**  Boolean.  Am I currently selected or not? */
 	guint selected : 1;
@@ -169,7 +175,8 @@ class Node {
 	NR::Point pos;
 /**  */
 	NR::Point origin;
-/**  */
+/**  Knots are Inkscape's way of providing draggable points.  This
+ *  Knot is the point on the curve representing the endpoint.*/
 	SPKnot * knot;
 /**  The NodeSide in the 'next' direction */
 	NodeSide n;
