@@ -22,7 +22,7 @@ sp-clippath.o sp-cursor.o sp-defs.o sp-ellipse.o sp-gradient.o \
 sp-guide.o sp-image.o spiral-context.o sp-item-group.o sp-item.o \
 sp-item-transform.o sp-line.o splivarot.o sp-marker.o sp-mask.o \
 sp-metrics.o sp-namedview.o sp-object-group.o sp-object.o \
-sp-object-repr.o sp-paint-server.o sp-path.o sp-pattern.o \
+sp-object-repr.o sp-offset.o sp-paint-server.o sp-path.o sp-pattern.o \
 sp-polygon.o sp-polyline.o sp-rect.o sp-root.o sp-shape.o sp-spiral.o \
 sp-star.o sp-symbol.o sp-text.o sp-use.o star-context.o style.o \
 svg-view.o text-context.o toolbox.o tools-switch.o uri-references.o \

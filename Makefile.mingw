@@ -13,6 +13,12 @@ dist:
 	deltree /y inkscape
 	mkdir inkscape
 	copy src\inkscape.exe inkscape
+	copy $(GTKDOS)\bin\libgtkmm-2.0-1.dll inkscape
+	copy $(GTKDOS)\bin\libsigc-1.2-5.dll inkscape
+	copy $(GTKDOS)\bin\libgdkmm-2.0-1.dll inkscape
+	copy $(GTKDOS)\bin\libglibmm-2.0-1.dll inkscape
+	copy $(GTKDOS)\bin\libatkmm-1.0-1.dll inkscape
+	copy $(GTKDOS)\bin\libpangomm-1.0-1.dll inkscape
 	copy $(GTKDOS)\bin\freetype-6.dll inkscape
 	copy $(GTKDOS)\bin\iconv.dll inkscape
 	copy $(GTKDOS)\bin\intl.dll inkscape
