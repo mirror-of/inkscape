@@ -85,44 +85,51 @@ GType
 sp_object_type_lookup (const gchar * name)
 {
 	if (!dtable) {
-		dtable = g_hash_table_new (g_str_hash, g_str_equal);
-		g_hash_table_insert (dtable, (void *)"a", GINT_TO_POINTER (SP_TYPE_ANCHOR));
-		g_hash_table_insert (dtable, (void *)"animate", GINT_TO_POINTER (SP_TYPE_ANIMATE));
-		g_hash_table_insert (dtable, (void *)"arc", GINT_TO_POINTER (SP_TYPE_ARC));
-		g_hash_table_insert (dtable, (void *)"circle", GINT_TO_POINTER (SP_TYPE_CIRCLE));
-		g_hash_table_insert (dtable, (void *)"clipPath", GINT_TO_POINTER (SP_TYPE_CLIPPATH));
-		g_hash_table_insert (dtable, (void *)"defs", GINT_TO_POINTER (SP_TYPE_DEFS));
-		g_hash_table_insert (dtable, (void *)"ellipse", GINT_TO_POINTER (SP_TYPE_ELLIPSE));
-		g_hash_table_insert (dtable, (void *)"g", GINT_TO_POINTER (SP_TYPE_GROUP));
-		g_hash_table_insert (dtable, (void *)"image", GINT_TO_POINTER (SP_TYPE_IMAGE));
-		g_hash_table_insert (dtable, (void *)"line", GINT_TO_POINTER (SP_TYPE_LINE));
-		g_hash_table_insert (dtable, (void *)"linearGradient", GINT_TO_POINTER (SP_TYPE_LINEARGRADIENT));
-		g_hash_table_insert (dtable, (void *)"mask", GINT_TO_POINTER (SP_TYPE_MASK));
-		g_hash_table_insert (dtable, (void *)"marker", GINT_TO_POINTER (SP_TYPE_MARKER));
-		g_hash_table_insert (dtable, (void *)"path", GINT_TO_POINTER (SP_TYPE_PATH));
-		g_hash_table_insert (dtable, (void *)"pattern", GINT_TO_POINTER (SP_TYPE_PATTERN));
-		g_hash_table_insert (dtable, (void *)"polygon", GINT_TO_POINTER (SP_TYPE_POLYGON));
-		g_hash_table_insert (dtable, (void *)"polyline", GINT_TO_POINTER (SP_TYPE_POLYLINE));
-		g_hash_table_insert (dtable, (void *)"radialGradient", GINT_TO_POINTER (SP_TYPE_RADIALGRADIENT));
-		g_hash_table_insert (dtable, (void *)"rect", GINT_TO_POINTER (SP_TYPE_RECT));
-		g_hash_table_insert (dtable, (void *)"spiral", GINT_TO_POINTER (SP_TYPE_SPIRAL));
-		g_hash_table_insert (dtable, (void *)"inkscape:offset", GINT_TO_POINTER (SP_TYPE_OFFSET));
-		g_hash_table_insert (dtable, (void *)"star", GINT_TO_POINTER (SP_TYPE_STAR));
-		g_hash_table_insert (dtable, (void *)"stop", GINT_TO_POINTER (SP_TYPE_STOP));
-		g_hash_table_insert (dtable, (void *)"svg", GINT_TO_POINTER (SP_TYPE_ROOT));
-		g_hash_table_insert (dtable, (void *)"symbol", GINT_TO_POINTER (SP_TYPE_SYMBOL));
-		g_hash_table_insert (dtable, (void *)"text", GINT_TO_POINTER (SP_TYPE_TEXT));
-		g_hash_table_insert (dtable, (void *)"tspan", GINT_TO_POINTER (SP_TYPE_TSPAN));
-		g_hash_table_insert (dtable, (void *)"use", GINT_TO_POINTER (SP_TYPE_USE));
-		g_hash_table_insert (dtable, (void *)"textPath", GINT_TO_POINTER (SP_TYPE_TEXTPATH));		
-		g_hash_table_insert (dtable, (void *)"flowDiv", GINT_TO_POINTER (SP_TYPE_FLOWDIV));
-		g_hash_table_insert (dtable, (void *)"flowSpan", GINT_TO_POINTER (SP_TYPE_FLOWTSPAN));
-		g_hash_table_insert (dtable, (void *)"flowPara", GINT_TO_POINTER (SP_TYPE_FLOWPARA));
-		g_hash_table_insert (dtable, (void *)"flowRegion", GINT_TO_POINTER (SP_TYPE_FLOWREGION));
-		g_hash_table_insert (dtable, (void *)"flowRegionExclude", GINT_TO_POINTER (SP_TYPE_FLOWREGIONEXCLUDE));
-		g_hash_table_insert (dtable, (void *)"flowRoot", GINT_TO_POINTER (SP_TYPE_FLOWTEXT));
-		g_hash_table_insert (dtable, (void *)"flowLine", GINT_TO_POINTER (SP_TYPE_FLOWLINE));		
-		g_hash_table_insert (dtable, (void *)"flowRegionBreak", GINT_TO_POINTER (SP_TYPE_FLOWREGIONBREAK));		
+		struct { char const *const name; GType const type_id; } const entries[] = {
+			{ "a", SP_TYPE_ANCHOR },
+			{ "animate", SP_TYPE_ANIMATE },
+			{ "arc", SP_TYPE_ARC },
+			{ "circle", SP_TYPE_CIRCLE },
+			{ "clipPath", SP_TYPE_CLIPPATH },
+			{ "defs", SP_TYPE_DEFS },
+			{ "ellipse", SP_TYPE_ELLIPSE },
+			{ "flowDiv", SP_TYPE_FLOWDIV },
+			{ "flowLine", SP_TYPE_FLOWLINE },
+			{ "flowPara", SP_TYPE_FLOWPARA },
+			{ "flowRegion", SP_TYPE_FLOWREGION },
+			{ "flowRegionBreak", SP_TYPE_FLOWREGIONBREAK },
+			{ "flowRegionExclude", SP_TYPE_FLOWREGIONEXCLUDE },
+			{ "flowRoot", SP_TYPE_FLOWTEXT },
+			{ "flowSpan", SP_TYPE_FLOWTSPAN },
+			{ "g", SP_TYPE_GROUP },
+			{ "image", SP_TYPE_IMAGE },
+			{ "inkscape:offset", SP_TYPE_OFFSET },
+			{ "line", SP_TYPE_LINE },
+			{ "linearGradient", SP_TYPE_LINEARGRADIENT },
+			{ "marker", SP_TYPE_MARKER },
+			{ "mask", SP_TYPE_MASK },
+			{ "path", SP_TYPE_PATH },
+			{ "pattern", SP_TYPE_PATTERN },
+			{ "polygon", SP_TYPE_POLYGON },
+			{ "polyline", SP_TYPE_POLYLINE },
+			{ "radialGradient", SP_TYPE_RADIALGRADIENT },
+			{ "rect", SP_TYPE_RECT },
+			{ "spiral", SP_TYPE_SPIRAL },
+			{ "star", SP_TYPE_STAR },
+			{ "stop", SP_TYPE_STOP },
+			{ "svg", SP_TYPE_ROOT },
+			{ "symbol", SP_TYPE_SYMBOL },
+			{ "text", SP_TYPE_TEXT },
+			{ "textPath", SP_TYPE_TEXTPATH },
+			{ "tspan", SP_TYPE_TSPAN },
+			{ "use", SP_TYPE_USE }
+		};
+		dtable = g_hash_table_new(g_str_hash, g_str_equal);
+		for (unsigned i = 0; i < G_N_ELEMENTS(entries); ++i) {
+			g_hash_table_insert(dtable,
+					    (void *)entries[i].name,
+					    GINT_TO_POINTER(entries[i].type_id));
+		}
 	}
 
 	gpointer const data = g_hash_table_lookup(dtable, name);
