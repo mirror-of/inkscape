@@ -614,27 +614,6 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     sp_ui_menu_append (menu, selection, view);
 } // end of sp_ui_path_menu
 
-#ifndef WIN32
-static void window_policy_toggled(GtkCheckMenuItem *menuitem,
-                                  gpointer user_data)
-{
-	gboolean checked = gtk_check_menu_item_get_active(menuitem);
-	prefs_set_int_attribute("options.transientpolicy", "value", checked);
-}
- 
-static gboolean window_policy_update(GtkWidget *widget,
-                                     GdkEventExpose *event,
-                                     gpointer user_data)
-{
-	GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget);
-	gint policy = prefs_get_int_attribute_limited("options.transientpolicy", "value", 1, 0, 2);
-	g_signal_handlers_block_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)window_policy_toggled, user_data);
-	gtk_check_menu_item_set_active(menuitem, policy);
-	g_signal_handlers_unblock_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)window_policy_toggled, user_data);
-	return FALSE;
-}
-#endif
-
 static void
 sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
