@@ -475,11 +475,13 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
                 if (it._char_index != 0)
                     span = &_spans[_characters[it._char_index - 1].in_span];
             }
-            if (x < 0.0) x = 0.0;
+            double path_length = const_cast<Path*>(_path_fitted)->Length();
+            double x_on_path = x;
+            if (x_on_path < 0.0) x_on_path = 0.0;
 
             int unused = 0;
                 // as far as I know these functions are const, they're just not marked as such
-            Path::cut_position *path_parameter_list = const_cast<Path*>(_path_fitted)->CurvilignToPosition(1, &x, unused);
+            Path::cut_position *path_parameter_list = const_cast<Path*>(_path_fitted)->CurvilignToPosition(1, &x_on_path, unused);
             Path::cut_position path_parameter;
             if (path_parameter_list != NULL && path_parameter_list[0].piece >= 0)
                 path_parameter = path_parameter_list[0];
@@ -492,6 +494,10 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
             NR::Point point;
             NR::Point tangent;
             const_cast<Path*>(_path_fitted)->PointAndTangentAt(path_parameter.piece, path_parameter.t, point, tangent);
+            if (x < 0.0)
+                point += x * tangent;
+            if (x > path_length )
+                point += (x - path_length) * tangent;
             *rotation = atan2(tangent);
             (*position)[0] = point[0] - tangent[1] * span->baseline_shift;
             (*position)[1] = point[1] + tangent[0] * span->baseline_shift;
