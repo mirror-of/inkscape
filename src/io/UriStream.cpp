@@ -19,7 +19,7 @@ namespace IO
 {
 
 //#########################################################################
-//# U R I    I N P U T    S T R E A M
+//# U R I    I N P U T    S T R E A M    /     R E A D E R
 //#########################################################################
 
 
@@ -92,8 +92,52 @@ int UriInputStream::get() throw(StreamException)
 
 
 
+
+/**
+ *
+ */
+UriReader::UriReader(Inkscape::URI &uri)
+                    throw (StreamException)
+{
+    inputStream = new UriInputStream(uri);
+}
+
+/**
+ *
+ */
+UriReader::~UriReader() throw (StreamException)
+{
+    delete inputStream;
+}
+
+/**
+ *
+ */
+int UriReader::available() throw(StreamException)
+{
+    return inputStream->available();
+}
+    
+/**
+ *
+ */
+void UriReader::close() throw(StreamException)
+{
+    inputStream->close();
+}
+    
+/**
+ *
+ */
+gunichar UriReader::get() throw(StreamException)
+{
+    gunichar ch = (gunichar)inputStream->get();
+    return ch;
+}
+
+
 //#########################################################################
-//#  U R I    O U T P U T    S T R E A M
+//#  U R I    O U T P U T    S T R E A M    /     W R I T E R
 //#########################################################################
 
 /**
@@ -157,6 +201,52 @@ void UriOutputStream::put(int ch) throw(StreamException)
     unsigned char uch = (unsigned char)(ch & 0xff);
     fputc(uch, outf);
     //fwrite(uch, 1, 1, outf);
+}
+
+
+
+
+
+/**
+ *
+ */
+UriWriter::UriWriter(Inkscape::URI &uri)
+                    throw (StreamException)
+{
+    outputStream = new UriOutputStream(uri);
+}
+
+/**
+ *
+ */
+UriWriter::~UriWriter() throw (StreamException)
+{
+    delete outputStream;
+}
+
+/**
+ *
+ */
+void UriWriter::close() throw(StreamException)
+{
+    outputStream->close();
+}
+    
+/**
+ *
+ */
+void UriWriter::flush() throw(StreamException)
+{
+    outputStream->flush();
+}
+    
+/**
+ *
+ */
+void UriWriter::put(gunichar ch) throw(StreamException)
+{
+    int ich = (int)ch;
+    outputStream->put(ich);
 }
 
 

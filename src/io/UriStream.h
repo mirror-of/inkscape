@@ -13,7 +13,8 @@
  */
 
 
-#include "uri.h"
+#include <uri.h>
+
 #include "InkscapeStream.h"
 
 
@@ -23,7 +24,7 @@ namespace IO
 {
 
 //#########################################################################
-//# U R I    I N P U T    S T R E A M
+//# U R I    I N P U T    S T R E A M   /   R E A D E R
 //#########################################################################
 
 /**
@@ -58,8 +59,35 @@ private:
 
 
 
+/**
+ * This class is for receiving a stream of formatted data from a resource
+ * defined in a URI
+ */
+class UriReader : public BasicReader
+{
+
+public:
+
+    UriReader(Inkscape::URI &source) throw(StreamException);
+    
+    virtual ~UriReader() throw(StreamException);
+    
+    virtual int available() throw(StreamException);
+    
+    virtual void close() throw(StreamException);
+    
+    virtual gunichar get() throw(StreamException);
+    
+private:
+
+    UriInputStream *inputStream;
+    
+}; // class UriReader
+
+
+
 //#########################################################################
-//# U R I    O U T P U T    S T R E A M
+//# U R I    O U T P U T    S T R E A M    /    W R I T E R
 //#########################################################################
 
 /**
@@ -92,6 +120,38 @@ private:
 
 
 }; // class UriOutputStream
+
+
+
+
+
+/**
+ * This class is for sending a stream of formatted data to a resource
+ * defined in a URI
+ */
+class UriWriter : public BasicWriter
+{
+
+public:
+
+    UriWriter(Inkscape::URI &source) throw(StreamException);
+    
+    virtual ~UriWriter() throw(StreamException);
+    
+    virtual void close() throw(StreamException);
+    
+    virtual void flush() throw(StreamException);
+    
+    virtual void put(gunichar ch) throw(StreamException);
+    
+private:
+
+    UriOutputStream *outputStream;
+    
+}; // class UriReader
+
+
+
 
 
 

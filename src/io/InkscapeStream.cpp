@@ -137,14 +137,14 @@ void BasicOutputStream::put(int ch)
 
 
 //#########################################################################
-//# R E A D E R
+//# B A S I C    R E A D E R
 //#########################################################################
 
 
 /**
  *
  */ 
-Reader::Reader(Reader &sourceReader)
+BasicReader::BasicReader(Reader &sourceReader)
 {
     source = &sourceReader;
 }
@@ -154,7 +154,7 @@ Reader::Reader(Reader &sourceReader)
  * this reader without blocking by the next caller of a method for
  * this reader.
  */ 
-int Reader::available()
+int BasicReader::available()
 {
     if (source)
         return source->available();
@@ -167,7 +167,7 @@ int Reader::available()
  *  Closes this reader and releases any system resources
  *  associated with the reader.
  */ 
-void Reader::close()
+void BasicReader::close()
 {
     if (source)
         source->close();
@@ -176,7 +176,7 @@ void Reader::close()
 /**
  * Reads the next byte of data from the reader.
  */ 
-gunichar Reader::get()
+gunichar BasicReader::get()
 {
     if (source)
         return source->get();
@@ -192,7 +192,7 @@ gunichar Reader::get()
 /**
  * Reads a line of data from the reader.
  */ 
-Glib::ustring Reader::readLine()
+Glib::ustring BasicReader::readLine()
 {
     Glib::ustring str;
     while (available() > 0)
@@ -208,7 +208,7 @@ Glib::ustring Reader::readLine()
 /**
  * Reads a line of data from the reader.
  */ 
-Glib::ustring Reader::readWord()
+Glib::ustring BasicReader::readWord()
 {
     Glib::ustring str;
     while (available() > 0)
@@ -264,7 +264,7 @@ static bool getDouble(Glib::ustring &str, double *val)
 /**
  *
  */
-const Reader &Reader::readBool (bool& val )
+const Reader &BasicReader::readBool (bool& val )
 {
     Glib::ustring buf = readWord();
     if (buf == "true")
@@ -277,7 +277,7 @@ const Reader &Reader::readBool (bool& val )
 /**
  *
  */
-const Reader &Reader::readShort (short& val )
+const Reader &BasicReader::readShort (short& val )
 {
     Glib::ustring buf = readWord();
     long ival;
@@ -289,7 +289,7 @@ const Reader &Reader::readShort (short& val )
 /**
  *
  */
-const Reader &Reader::readUnsignedShort (unsigned short& val )
+const Reader &BasicReader::readUnsignedShort (unsigned short& val )
 {
     Glib::ustring buf = readWord();
     unsigned long ival;
@@ -301,7 +301,7 @@ const Reader &Reader::readUnsignedShort (unsigned short& val )
 /**
  *
  */
-const Reader &Reader::readInt (int& val )
+const Reader &BasicReader::readInt (int& val )
 {
     Glib::ustring buf = readWord();
     long ival;
@@ -313,7 +313,7 @@ const Reader &Reader::readInt (int& val )
 /**
  *
  */
-const Reader &Reader::readUnsignedInt (unsigned int& val )
+const Reader &BasicReader::readUnsignedInt (unsigned int& val )
 {
     Glib::ustring buf = readWord();
     unsigned long ival;
@@ -325,7 +325,7 @@ const Reader &Reader::readUnsignedInt (unsigned int& val )
 /**
  *
  */
-const Reader &Reader::readLong (long& val )
+const Reader &BasicReader::readLong (long& val )
 {
     Glib::ustring buf = readWord();
     long ival;
@@ -337,7 +337,7 @@ const Reader &Reader::readLong (long& val )
 /**
  *
  */
-const Reader &Reader::readUnsignedLong (unsigned long& val )
+const Reader &BasicReader::readUnsignedLong (unsigned long& val )
 {
     Glib::ustring buf = readWord();
     unsigned long ival;
@@ -349,7 +349,7 @@ const Reader &Reader::readUnsignedLong (unsigned long& val )
 /**
  *
  */
-const Reader &Reader::readFloat (float& val )
+const Reader &BasicReader::readFloat (float& val )
 {
     Glib::ustring buf = readWord();
     double ival;
@@ -361,7 +361,7 @@ const Reader &Reader::readFloat (float& val )
 /**
  *
  */
-const Reader &Reader::readDouble (double& val )
+const Reader &BasicReader::readDouble (double& val )
 {
     Glib::ustring buf = readWord();
     double ival;
@@ -372,16 +372,109 @@ const Reader &Reader::readDouble (double& val )
 
 
 
+//#########################################################################
+//# I N P U T    S T R E A M    R E A D E R
+//#########################################################################
+
+
+InputStreamReader::InputStreamReader(InputStream &inputStreamSource)
+                     : inputStream(inputStreamSource)
+{
+}
+
+    
+
+/**
+ *  Close the underlying OutputStream
+ */
+void InputStreamReader::close()
+{
+    inputStream.close();
+}
+    
+/**
+ *  Flush the underlying OutputStream
+ */
+int InputStreamReader::available()
+{
+    return inputStream.available();
+}
+    
+/**
+ *  Overloaded to receive its bytes from an InputStream
+ *  rather than a Reader
+ */
+gunichar InputStreamReader::get()
+{
+    //Do we need conversions here?
+    gunichar ch = (gunichar)inputStream.get();
+    return ch;
+}
+
 
 
 //#########################################################################
-//# W R I T E R
+//# S T D    R E A D E R
+//#########################################################################
+
+
+/**
+ *
+ */
+StdReader::StdReader()
+{
+    inputStream = new StdInputStream();
+}
+
+/**
+ *
+ */
+StdReader::~StdReader()
+{
+    delete inputStream;
+}
+
+    
+
+/**
+ *  Close the underlying OutputStream
+ */
+void StdReader::close()
+{
+    inputStream->close();
+}
+    
+/**
+ *  Flush the underlying OutputStream
+ */
+int StdReader::available()
+{
+    return inputStream->available();
+}
+    
+/**
+ *  Overloaded to receive its bytes from an InputStream
+ *  rather than a Reader
+ */
+gunichar StdReader::get()
+{
+    //Do we need conversions here?
+    gunichar ch = (gunichar)inputStream->get();
+    return ch;
+}
+
+
+
+
+
+//#########################################################################
+//# B A S I C    W R I T E R
 //#########################################################################
 
 /**
  *
  */ 
-Writer::Writer(Writer &destinationWriter)
+BasicWriter::BasicWriter(Writer &destinationWriter)
 {
     destination = &destinationWriter;
 }
@@ -390,7 +483,7 @@ Writer::Writer(Writer &destinationWriter)
  * Closes this writer and releases any system resources
  * associated with this writer.
  */ 
-void Writer::close()
+void BasicWriter::close()
 {
     if (destination)
         destination->close();
@@ -400,7 +493,7 @@ void Writer::close()
  *  Flushes this output stream and forces any buffered output
  *  bytes to be written out.
  */ 
-void Writer::flush()
+void BasicWriter::flush()
 {
     if (destination)
         destination->flush();
@@ -409,7 +502,7 @@ void Writer::flush()
 /**
  * Writes the specified byte to this output writer.
  */ 
-void Writer::put(gunichar ch)
+void BasicWriter::put(gunichar ch)
 {
     if (destination)
         destination->put(ch);
@@ -418,7 +511,7 @@ void Writer::put(gunichar ch)
 /**
  * Provide printf()-like formatting
  */ 
-Writer &Writer::printf(char *fmt, ...)
+Writer &BasicWriter::printf(char *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -428,13 +521,12 @@ Writer &Writer::printf(char *fmt, ...)
         writeString(buf);
         g_free(buf);
     }
-  return *this;
     return *this;
 }
 /**
  * Writes the specified character to this output writer.
  */ 
-Writer &Writer::writeChar(char ch)
+Writer &BasicWriter::writeChar(char ch)
 {
     gunichar uch = ch;
     put(uch);
@@ -445,7 +537,7 @@ Writer &Writer::writeChar(char ch)
 /**
  * Writes the specified unicode string to this output writer.
  */ 
-Writer &Writer::writeUString(Glib::ustring &str)
+Writer &BasicWriter::writeUString(Glib::ustring &str)
 {
     for (int i=0; i< str.size(); i++)
         put(str[i]);
@@ -455,7 +547,7 @@ Writer &Writer::writeUString(Glib::ustring &str)
 /**
  * Writes the specified standard string to this output writer.
  */ 
-Writer &Writer::writeStdString(std::string &str)
+Writer &BasicWriter::writeStdString(std::string &str)
 {
     Glib::ustring tmp(str);
     writeUString(tmp);
@@ -465,7 +557,7 @@ Writer &Writer::writeStdString(std::string &str)
 /**
  * Writes the specified character string to this output writer.
  */ 
-Writer &Writer::writeString(const char *str)
+Writer &BasicWriter::writeString(const char *str)
 {
     Glib::ustring tmp;
     if (str)
@@ -482,7 +574,7 @@ Writer &Writer::writeString(const char *str)
 /**
  *
  */
-Writer &Writer::writeBool (bool val )
+Writer &BasicWriter::writeBool (bool val )
 {
     if (val)
         writeString("true");
@@ -495,7 +587,7 @@ Writer &Writer::writeBool (bool val )
 /**
  *
  */
-Writer &Writer::writeShort (short val )
+Writer &BasicWriter::writeShort (short val )
 {
     gchar *buf = g_strdup_printf("%d", val);
     if (buf) {
@@ -510,7 +602,7 @@ Writer &Writer::writeShort (short val )
 /**
  *
  */
-Writer &Writer::writeUnsignedShort (unsigned short val )
+Writer &BasicWriter::writeUnsignedShort (unsigned short val )
 {
     gchar *buf = g_strdup_printf("%u", val);
     if (buf) {
@@ -523,7 +615,7 @@ Writer &Writer::writeUnsignedShort (unsigned short val )
 /**
  *
  */
-Writer &Writer::writeInt (int val)
+Writer &BasicWriter::writeInt (int val)
 {
     gchar *buf = g_strdup_printf("%d", val);
     if (buf) {
@@ -536,7 +628,7 @@ Writer &Writer::writeInt (int val)
 /**
  *
  */
-Writer &Writer::writeUnsignedInt (unsigned int val)
+Writer &BasicWriter::writeUnsignedInt (unsigned int val)
 {
     gchar *buf = g_strdup_printf("%u", val);
     if (buf) {
@@ -549,7 +641,7 @@ Writer &Writer::writeUnsignedInt (unsigned int val)
 /**
  *
  */
-Writer &Writer::writeLong (long val)
+Writer &BasicWriter::writeLong (long val)
 {
     gchar *buf = g_strdup_printf("%ld", val);
     if (buf) {
@@ -562,7 +654,7 @@ Writer &Writer::writeLong (long val)
 /**
  *
  */
-Writer &Writer::writeUnsignedLong(unsigned long val)
+Writer &BasicWriter::writeUnsignedLong(unsigned long val)
 {
     gchar *buf = g_strdup_printf("%lu", val);
     if (buf) {
@@ -575,7 +667,7 @@ Writer &Writer::writeUnsignedLong(unsigned long val)
 /**
  *
  */
-Writer &Writer::writeFloat(float val)
+Writer &BasicWriter::writeFloat(float val)
 {
 #if 1
     gchar *buf = g_strdup_printf("%8.3f", val);
@@ -593,7 +685,7 @@ Writer &Writer::writeFloat(float val)
 /**
  *
  */
-Writer &Writer::writeDouble(double val)
+Writer &BasicWriter::writeDouble(double val)
 {
 #if 1
     gchar *buf = g_strdup_printf("%8.3f", val);
@@ -688,6 +780,58 @@ void OutputStreamWriter::put(gunichar ch)
     //Do we need conversions here?
     int intCh = (int) ch;
     outputStream.put(intCh);
+}
+
+//#########################################################################
+//# S T D    W R I T E R
+//#########################################################################
+
+
+/**
+ *  
+ */
+StdWriter::StdWriter()
+{
+    outputStream = new StdOutputStream();
+}
+
+    
+/**
+ *  
+ */
+StdWriter::~StdWriter()
+{
+    delete outputStream;
+}
+
+    
+
+/**
+ *  Close the underlying OutputStream
+ */
+void StdWriter::close()
+{
+    flush();
+    outputStream->close();
+}
+    
+/**
+ *  Flush the underlying OutputStream
+ */
+void StdWriter::flush()
+{
+      outputStream->flush();
+}
+    
+/**
+ *  Overloaded to redirect the output chars from the next Writer
+ *  in the chain to an OutputStream instead.
+ */
+void StdWriter::put(gunichar ch)
+{
+    //Do we need conversions here?
+    int intCh = (int) ch;
+    outputStream->put(intCh);
 }
 
 

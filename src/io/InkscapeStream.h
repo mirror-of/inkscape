@@ -234,7 +234,7 @@ public:
 
 
 /**
- * This class and its descendants are for unicode character-oriented input
+ * This interface and its descendants are for unicode character-oriented input
  *
  */
 class Reader
@@ -242,9 +242,60 @@ class Reader
 
 public:
 
-    Reader(Reader &sourceStream);
+    virtual int available() = 0;
     
-    virtual ~Reader() {}
+    virtual void close() = 0;
+    
+    virtual gunichar get() = 0;
+    
+    virtual Glib::ustring readLine() = 0;
+    
+    virtual Glib::ustring readWord() = 0;
+    
+    /* Input formatting */
+    virtual const Reader& readBool (bool& val ) = 0;
+    virtual const Reader& operator>> (bool& val ) = 0;
+        
+    virtual const Reader& readShort (short &val) = 0;
+    virtual const Reader& operator>> (short &val) = 0;
+        
+    virtual const Reader& readUnsignedShort (unsigned short &val) = 0;
+    virtual const Reader& operator>> (unsigned short &val) = 0;
+        
+    virtual const Reader& readInt (int &val) = 0;
+    virtual const Reader& operator>> (int &val) = 0;
+        
+    virtual const Reader& readUnsignedInt (unsigned int &val) = 0;
+    virtual const Reader& operator>> (unsigned int &val) = 0;
+        
+    virtual const Reader& readLong (long &val) = 0;
+    virtual const Reader& operator>> (long &val) = 0;
+        
+    virtual const Reader& readUnsignedLong (unsigned long &val) = 0;
+    virtual const Reader& operator>> (unsigned long &val) = 0;
+        
+    virtual const Reader& readFloat (float &val) = 0;
+    virtual const Reader& operator>> (float &val) = 0;
+        
+    virtual const Reader& readDouble (double &val) = 0;
+    virtual const Reader& operator>> (double &val) = 0;
+
+}; // interface Reader
+
+
+
+/**
+ * This class and its descendants are for unicode character-oriented input
+ *
+ */
+class BasicReader : public Reader
+{
+
+public:
+
+    BasicReader(Reader &sourceStream);
+    
+    virtual ~BasicReader() {}
 
     virtual int available();
     
@@ -257,40 +308,40 @@ public:
     virtual Glib::ustring readWord();
     
     /* Input formatting */
-    const Reader& readBool (bool& val );
-    const Reader& operator>> (bool& val )
+    virtual const Reader& readBool (bool& val );
+    virtual const Reader& operator>> (bool& val )
         { return readBool(val); }
         
-    const Reader& readShort (short &val);
-    const Reader& operator>> (short &val)
+    virtual const Reader& readShort (short &val);
+    virtual const Reader& operator>> (short &val)
         { return readShort(val); }
         
-    const Reader& readUnsignedShort (unsigned short &val);
-    const Reader& operator>> (unsigned short &val)
+    virtual const Reader& readUnsignedShort (unsigned short &val);
+    virtual const Reader& operator>> (unsigned short &val)
         { return readUnsignedShort(val); }
         
-    const Reader& readInt (int &val);
-    const Reader& operator>> (int &val)
+    virtual const Reader& readInt (int &val);
+    virtual const Reader& operator>> (int &val)
         { return readInt(val); }
         
-    const Reader& readUnsignedInt (unsigned int &val);
-    const Reader& operator>> (unsigned int &val)
+    virtual const Reader& readUnsignedInt (unsigned int &val);
+    virtual const Reader& operator>> (unsigned int &val)
         { return readUnsignedInt(val); }
         
-    const Reader& readLong (long &val);
-    const Reader& operator>> (long &val)
+    virtual const Reader& readLong (long &val);
+    virtual const Reader& operator>> (long &val)
         { return readLong(val); }
         
-    const Reader& readUnsignedLong (unsigned long &val);
-    const Reader& operator>> (unsigned long &val)
+    virtual const Reader& readUnsignedLong (unsigned long &val);
+    virtual const Reader& operator>> (unsigned long &val)
         { return readUnsignedLong(val); }
         
-    const Reader& readFloat (float &val);
-    const Reader& operator>> (float &val)
+    virtual const Reader& readFloat (float &val);
+    virtual const Reader& operator>> (float &val)
         { return readFloat(val); }
         
-    const Reader& readDouble (double &val);
-    const Reader& operator>> (double &val)
+    virtual const Reader& readDouble (double &val);
+    virtual const Reader& operator>> (double &val)
         { return readDouble(val); }
  
 
@@ -298,12 +349,67 @@ protected:
 
     Reader *source;
 
-    Reader()
+    BasicReader()
         { source = NULL; }
 
 private:
 
-}; // class Reader
+}; // class BasicReader
+
+
+
+/**
+ * Class for placing a Reader on an open InputStream
+ *
+ */
+class InputStreamReader : public BasicReader
+{
+public:
+
+    InputStreamReader(InputStream &inputStreamSource);
+    
+    /*Overload these 3 for your implementation*/
+    virtual int available();
+    
+    virtual void close();
+    
+    virtual gunichar get();
+
+
+private:
+
+    InputStream &inputStream;
+
+
+};
+
+/**
+ * Convenience class for reading formatted from standard input
+ *
+ */
+class StdReader : public BasicReader
+{
+public:
+
+    StdReader();
+
+    ~StdReader();
+    
+    /*Overload these 3 for your implementation*/
+    virtual int available();
+    
+    virtual void close();
+    
+    virtual gunichar get();
+
+
+private:
+
+    InputStream *inputStream;
+
+
+};
+
 
 
 
@@ -313,7 +419,7 @@ private:
 //#########################################################################
 
 /**
- * This class and its descendants are for unicode character-oriented output
+ * This interface and its descendants are for unicode character-oriented output
  *
  */
 class Writer
@@ -321,9 +427,58 @@ class Writer
 
 public:
 
-    Writer(Writer &destinationWriter);
+    virtual void close() = 0;
+    
+    virtual void flush() = 0;
+    
+    virtual void put(gunichar ch) = 0;
+    
+    /* Formatted output */
+    virtual Writer &printf(char *fmt, ...) = 0;
 
-    virtual ~Writer() {}
+    virtual Writer& writeChar(char val) = 0;
+
+    virtual Writer& writeUString(Glib::ustring &val) = 0;
+
+    virtual Writer& writeStdString(std::string &val) = 0;
+
+    virtual Writer& writeString(const char *str) = 0;
+
+    virtual Writer& writeBool (bool val ) = 0;
+
+    virtual Writer& writeShort (short val ) = 0;
+
+    virtual Writer& writeUnsignedShort (unsigned short val ) = 0;
+
+    virtual Writer& writeInt (int val ) = 0;
+
+    virtual Writer& writeUnsignedInt (unsigned int val ) = 0;
+
+    virtual Writer& writeLong (long val ) = 0;
+
+    virtual Writer& writeUnsignedLong (unsigned long val ) = 0;
+
+    virtual Writer& writeFloat (float val ) = 0;
+
+    virtual Writer& writeDouble (double val ) = 0;
+
+ 
+
+}; // interface Writer
+
+
+/**
+ * This class and its descendants are for unicode character-oriented output
+ *
+ */
+class BasicWriter : public Writer
+{
+
+public:
+
+    BasicWriter(Writer &destinationWriter);
+
+    virtual ~BasicWriter() {}
 
     /*Overload these 3 for your implementation*/
     virtual void close();
@@ -335,45 +490,45 @@ public:
     
     
     /* Formatted output */
-    Writer &printf(char *fmt, ...);
+    virtual Writer &printf(char *fmt, ...);
 
-    Writer& writeChar(char val);
+    virtual Writer& writeChar(char val);
 
-    Writer& writeUString(Glib::ustring &val);
+    virtual Writer& writeUString(Glib::ustring &val);
 
-    Writer& writeStdString(std::string &val);
+    virtual Writer& writeStdString(std::string &val);
 
-    Writer& writeString(const char *str);
+    virtual Writer& writeString(const char *str);
 
-    Writer& writeBool (bool val );
+    virtual Writer& writeBool (bool val );
 
-    Writer& writeShort (short val );
+    virtual Writer& writeShort (short val );
 
-    Writer& writeUnsignedShort (unsigned short val );
+    virtual Writer& writeUnsignedShort (unsigned short val );
 
-    Writer& writeInt (int val );
+    virtual Writer& writeInt (int val );
 
-    Writer& writeUnsignedInt (unsigned int val );
+    virtual Writer& writeUnsignedInt (unsigned int val );
 
-    Writer& writeLong (long val );
+    virtual Writer& writeLong (long val );
 
-    Writer& writeUnsignedLong (unsigned long val );
+    virtual Writer& writeUnsignedLong (unsigned long val );
 
-    Writer& writeFloat (float val );
+    virtual Writer& writeFloat (float val );
 
-    Writer& writeDouble (double val );
+    virtual Writer& writeDouble (double val );
 
  
 protected:
 
     Writer *destination;
 
-    Writer()
+    BasicWriter()
         { destination = NULL; }
     
 private:
 
-}; // class Writer
+}; // class BasicWriter
 
 
 
@@ -404,15 +559,13 @@ Writer& operator<< (Writer &writer, float val);
 Writer& operator<< (Writer &writer, double val);
 
 
-//#########################################################################
-//# O U T P U T    S T R E A M    W R I T E R
-//#########################################################################
+
 
 /**
  * Class for placing a Writer on an open OutputStream
  *
  */
-class OutputStreamWriter : public Writer
+class OutputStreamWriter : public BasicWriter
 {
 public:
 
@@ -433,6 +586,32 @@ private:
 
 };
 
+
+/**
+ * Convenience class for writing to standard output
+ */
+class StdWriter : public BasicWriter
+{
+public:
+    StdWriter();
+
+    ~StdWriter();
+
+
+    virtual void close();
+
+    
+    virtual void flush();
+
+    
+    virtual void put(gunichar ch);
+
+
+private:
+
+    OutputStream *outputStream;
+
+};
 
 //#########################################################################
 //# U T I L I T Y
