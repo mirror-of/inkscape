@@ -112,7 +112,7 @@ sp_file_exit (void)
 /**
  *  Open a file, add the document to the desktop
  */
-void
+bool
 sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
 {
     SPDocument *doc;
@@ -128,8 +128,8 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
     if (doc) {
         // If the current desktop is empty, open the document there
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPDocument *existing = SP_DT_DOCUMENT (desktop);
-        if (existing->virgin) {
+        SPDocument *existing = desktop ? SP_DT_DOCUMENT (desktop) : NULL;
+        if (existing && existing->virgin) {
             sp_desktop_change_document (desktop, doc);
             /* in situations where the document is marked virgin, but there
              * are things in it (like for a "revert"), unselect everything
@@ -145,10 +145,12 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
         }
         sp_namedview_window_from_document (desktop);
         doc->virgin = FALSE;
+        return TRUE;
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
         sp_ui_error_dialog (text);
         g_free (text);
+        return FALSE;
     }
 }
 

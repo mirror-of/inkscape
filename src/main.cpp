@@ -206,6 +206,7 @@ main (int argc, const char **argv)
 		    !strcmp (argv[i], "-e") ||
 		    !strncmp (argv[i], "--export-png", 12) ||
 		    !strncmp (argv[i], "--export-svg", 12)) {
+			/* main_console handles any exports -- not the gui */
 			use_gui = FALSE;
 			break;
 		} else if (!strcmp (argv[i], "-x") || !strcmp (argv[i], "--with-gui")) {
@@ -278,39 +279,13 @@ sp_main_gui (int argc, const char **argv)
 		// FIXME BROKEN - non-UTF-8 sneaks in here.
 		inkscape_application_init (argv[0]);
 
-		if (fl) { // no documents on command line
-			while (fl) {
-				SPDocument *doc;
-
-				try {
-					doc = Inkscape::Extension::open(NULL, (gchar *)fl->data);
-				} catch (Inkscape::Extension::Input::no_extension_found &e) {
-					doc = NULL;
-				} catch (Inkscape::Extension::Input::open_failed &e) {
-					doc = NULL;
-				}
-
-				if (doc != NULL) {
-					if (sp_export_png) {
-						sp_do_export_png (doc);
-					} else {
-						SPViewWidget *dtw;
-						dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
-						if (dtw) sp_create_window (dtw, TRUE);
-						sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
-						create_new = FALSE;
-					}
-					sp_document_unref (doc);
-				} else {
-					gchar *text = g_strdup_printf (_("Failed to load the requested file %s"), 
-							(const gchar *) fl->data);
-					sp_ui_error_dialog (text);
-					g_free (text);
-				}
-				fl = g_slist_remove (fl, fl->data);
+		while (fl) {
+			if (sp_file_open((gchar *)fl->data,NULL)) {
+				create_new=FALSE;
 			}
+			fl = g_slist_remove (fl, fl->data);
 		}
-		if (create_new == TRUE) {
+		if (create_new) {
 			sp_file_new ();
 		}
 		inkscape_unref ();

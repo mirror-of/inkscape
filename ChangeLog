@@ -9,6 +9,8 @@
 	* src/file.cpp, src/interface.cpp, share/icons/icons.svg, src/verbs.cbb:
 	  finished "File / Revert" implementation.  Found a memory leak in
       "file_save".
+	* src/main.cpp, src/file.h, src/file.cpp: removed redundant code, implemented
+	  in "sp_file_open".
 
 2004-04-13  Kees Cook <kees@outflux.net>
 
