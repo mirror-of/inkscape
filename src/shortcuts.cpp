@@ -153,6 +153,12 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_5, SP_VERB_ZOOM_PAGE, true);
 	sp_shortcut_set (GDK_KP_5, SP_VERB_ZOOM_PAGE, false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_r, SP_VERB_TOGGLE_RULERS, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_R, SP_VERB_TOGGLE_RULERS, false);
+
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_b, SP_VERB_TOGGLE_SCROLLBARS, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_B, SP_VERB_TOGGLE_SCROLLBARS, false);
+
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_bar, SP_VERB_TOGGLE_GUIDES, false);
 	sp_shortcut_set (GDK_bar, SP_VERB_TOGGLE_GUIDES, true);
 
