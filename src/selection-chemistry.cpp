@@ -617,7 +617,7 @@ void sp_selection_cut()
     sp_selection_delete();
 }
 
-static void sp_copy_stuff_used_by_item(SPItem *item);
+static void sp_copy_stuff_used_by_item(SPItem *item, const GSList *items);
 
 void sp_copy_gradient (SPGradient *gradient)
 {
@@ -645,7 +645,7 @@ void sp_copy_pattern (SPPattern *pattern)
         for (SPObject *child = sp_object_first_child(SP_OBJECT(ref)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
             if (!SP_IS_ITEM (child))
                 continue;
-            sp_copy_stuff_used_by_item ((SPItem *) child);
+            sp_copy_stuff_used_by_item ((SPItem *) child, NULL);
         }
 
         ref = ref->ref->getObject();
@@ -659,7 +659,18 @@ void sp_copy_marker (SPMarker *marker)
 }
 
 
-void sp_copy_stuff_used_by_item (SPItem *item)
+void sp_copy_textpath_path (SPTextPath *tp, const GSList *items)
+{
+    SPItem *path = sp_textpath_get_path_item (tp);
+    if (!path)
+        return;
+    if (items && g_slist_find ((GSList *) items, path)) // do not copy it to defs if it is already in the list of items copied
+        return;
+    SPRepr *repr = sp_repr_duplicate (SP_OBJECT_REPR(path));
+    defs_clipboard = g_slist_prepend (defs_clipboard, repr);
+}
+
+void sp_copy_stuff_used_by_item (SPItem *item, const GSList *items)
 {
     SPStyle *style = SP_OBJECT_STYLE (item); 
 
@@ -688,10 +699,14 @@ void sp_copy_stuff_used_by_item (SPItem *item)
         }
     }
 
+    if (SP_IS_TEXT_TEXTPATH (item)) {
+        sp_copy_textpath_path (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item))), items);
+    }
+
     // recurse
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
-            sp_copy_stuff_used_by_item (SP_ITEM (o));
+            sp_copy_stuff_used_by_item (SP_ITEM (o), items);
     }
 }
 
@@ -775,7 +790,7 @@ void sp_selection_copy()
     }
     // copy stuff referenced by all items to defs_clipboard
     for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
-        sp_copy_stuff_used_by_item (SP_ITEM (i->data));
+        sp_copy_stuff_used_by_item (SP_ITEM (i->data), items);
     }
 
     GSList *reprs = g_slist_copy ((GSList *) selection->reprList());
