@@ -293,7 +293,7 @@ Script::check (Inkscape::Extension::Extension * module)
 
 					helper = sp_repr_content(sp_repr_children(child_repr));
 					if (Inkscape::Extension::db.get(helper) == NULL) {
-						printf("Couldn't find helper\n");
+						//printf("Couldn't find helper\n");
 						return FALSE;
 					}
 				}
