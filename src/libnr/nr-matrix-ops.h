@@ -108,6 +108,11 @@ inline Matrix operator*(scale const &s, Matrix const &m)
     return ret;
 }
 
+inline Matrix operator*(Matrix const &a, NRMatrix const &b)
+{
+    return a * NR::Matrix(b);
+}
+
 } /* namespace NR */
 
 
