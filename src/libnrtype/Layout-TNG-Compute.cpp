@@ -1238,6 +1238,7 @@ public:
                     if (new_span.font)
                         new_span.font->Ref();
                     new_span.x_start = new_span.x_end;
+                    new_span.baseline_shift = 0.0;
                     new_span.direction = para.direction;
                     new_span.block_progression = _block_progression;
                     if (para_end_input_index == _flow._input_stream.size())
