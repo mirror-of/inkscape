@@ -1,3 +1,27 @@
+2004-01-06  bulia byak <bulia@dr.com>
+
+        * src/document-undo.cpp src/document.h: Undo and redo now return gbooleans
+
+        * src/selection-chemistry.{cpp|h}: sp_undo, sp_redo: new, with statusbar diagnostics
+
+        * src/verbs.cpp: Use sp_undo, sp_redo. Tooltip edits
+
+        * src/toolbox.cpp src/toolbox.h: New aux_toolbox_space()
+
+        * src/interface.cpp: New commands in view (cycling desktops) and dialogs (hide dialogs)
+
+        * src/main.cpp: Removed unneeded include
+
+        * src/select-toolbar.cpp src/select-toolbar.h: New selector aux toolbar with XYWH
+        spinbuttons (taken mostly from the size&position dialog)
+
+        * src/toolbox.cpp src/toolbox.h: Removed selector aux toolbar code from here
+
+        * src/helper/unit-menu.cpp: Use abbreviations in the unit menu
+
+        * src/widgets/sp-widget.cpp: Added checks that the inkscape object is valid before
+        disconnecting SPWidget from it
+
 2004-01-06 MenTaLguY <mental@rydia.net>
 
 	* src/Makefile.am: removed monostd.h
@@ -85,6 +109,22 @@
 
 	* src/helper/bezier-utils.cpp, src/inkscape-stock.h:
 	  Fixing some Doxygen errors.
+
+2004-01-03  bulia byak <bulia@dr.com>
+
+        * src/dialogs/dialog-events.{cpp|h}: Hide/unhide callbacks
+
+        * all dialog files: Connected hide/unhide signals
+
+        * src/inkscape.cpp src/inkscape.h: New functions for dialog hide, unhide, toggle
+
+        * src/verbs.cpp src/verbs.h: New verb for dialog toggle
+
+        * src/shortcuts.cpp: F12, quoteleft toggle dialogs
+
+        * src/desktop.cpp: Zoom field width increased
+
+        * src/node-context.cpp: Crash fix by Robert Crosbie
 
 2004-01-03  MenTaLguY <mental@rydia.net>
 
