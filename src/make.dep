@@ -66,6 +66,7 @@ arc-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
+	widgets/spw-utilities.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -478,6 +479,7 @@ dialogs/display-settings.o: \
 	dialogs/dialog-events.h \
 	dialogs/display-settings.h \
 	dropper-context.h \
+	enums.h \
 	event-context.h \
 	forward.h \
 	helper/action.h \
@@ -678,6 +680,7 @@ dialogs/item-properties.o: \
 	dialogs/item-properties.cpp \
 	color.h \
 	desktop-handles.h \
+	dialogs/dialog-events.h \
 	dialogs/item-properties.h \
 	display/nr-arena-forward.h \
 	document.h \
@@ -688,11 +691,13 @@ dialogs/item-properties.o: \
 	extension/internal/svg.h \
 	forward.h \
 	forward.h \
+	helper/action.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	helper/window.h \
 	inkscape.h \
+	interface.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -700,6 +705,7 @@ dialogs/item-properties.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -709,6 +715,8 @@ dialogs/item-properties.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	macros.h \
+	prefs-utils.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -722,7 +730,10 @@ dialogs/item-properties.o: \
 	uri-references.h \
 	uri.h \
 	uri.h \
+	verbs.h \
+	verbs.h \
 	version.h \
+	view.h \
 	widgets/menu.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
@@ -873,6 +884,7 @@ dialogs/stroke-style.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	marker-status.h \
+	prefix.h \
 	selection.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -1112,6 +1124,7 @@ display/canvas-arena.o: \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
 	display/sp-canvas-util.h \
+	display/sp-canvas.h \
 	display/sp-canvas.h \
 	display/sp-canvas.h \
 	helper/helper-forward.h \
@@ -1508,7 +1521,6 @@ display/nr-arena.o: \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
-	libnr/nr-rect.h \
 	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
@@ -1986,6 +1998,7 @@ dyna-draw-context.o: \
 	selection.h \
 	view.h \
 	widgets/menu.h \
+	widgets/spw-utilities.h \
 	xml/repr.h
 
 event-context.o: \
@@ -2158,6 +2171,7 @@ extension/init.o: \
 	extension/init.cpp \
 	display/nr-arena-forward.h \
 	document.h \
+	extension/db.h \
 	extension/extension.h \
 	extension/extension.h \
 	extension/extension.h \
@@ -2167,6 +2181,7 @@ extension/init.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/script.h \
 	extension/internal/eps-out.h \
+	extension/internal/gdkpixbuf-input.h \
 	extension/internal/gnome.h \
 	extension/internal/ps-out.h \
 	extension/internal/ps.h \
@@ -2201,10 +2216,28 @@ extension/internal/eps-out.o: \
 	widgets/menu.h \
 	xml/repr.h
 
+extension/internal/gdkpixbuf-input.o: \
+	extension/internal/gdkpixbuf-input.cpp \
+	dir-util.h \
+	display/nr-arena-forward.h \
+	document.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/gdkpixbuf-input.h \
+	extension/system.h \
+	forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	widgets/menu.h \
+	xml/repr.h
+
 extension/internal/ps-out.o: \
 	extension/internal/ps-out.cpp \
 	display/nr-arena-forward.h \
 	document.h \
+	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
@@ -2506,6 +2539,7 @@ help.o: \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
+	inkscape_version.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -2529,6 +2563,7 @@ help.o: \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-typeface.h \
+	prefix.h \
 	sp-chars.h \
 	sp-item.h \
 	sp-object.h \
@@ -2608,7 +2643,8 @@ inkjar/jar.o: \
 
 inkscape-stock.o: \
 	inkscape-stock.cpp \
-	inkscape-stock.h
+	inkscape-stock.h \
+	prefix.h
 
 inkscape.o: \
 	inkscape.cpp \
@@ -2809,10 +2845,6 @@ knotholder.o: \
 	version.h \
 	view.h \
 	xml/repr.h
-
-libarikkei/arikkei-token.o: \
-	libarikkei/arikkei-token.cpp \
-	libarikkei/arikkei-token.h
 
 libnr/have_mmx.o: \
 	libnr/have_mmx.S
@@ -3454,7 +3486,6 @@ libnrtype/nr-rasterfont.o: \
 
 libnrtype/nr-type-directory.o: \
 	libnrtype/nr-type-directory.cpp \
-	libarikkei/arikkei-token.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -4186,6 +4217,10 @@ path-chemistry.o: \
 	xml/repr.h \
 	xml/repr.h
 
+prefix.o: \
+	prefix.cpp \
+	prefix.h
+
 prefs-utils.o: \
 	prefs-utils.cpp \
 	arc-context.h \
@@ -4376,6 +4411,7 @@ rect-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
+	widgets/spw-utilities.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -4780,6 +4816,11 @@ seltrans.o: \
 	sp-item.h \
 	sp-metrics.h \
 	sp-object.h \
+	sp-use.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/menu.h \
@@ -5232,6 +5273,9 @@ sp-item-group.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
@@ -5253,6 +5297,7 @@ sp-item-group.o: \
 	sp-object-repr.h \
 	sp-object.h \
 	sp-root.h \
+	sp-use.h \
 	style.h \
 	svg/svg-types.h \
 	uri-references.h \
@@ -5439,6 +5484,7 @@ sp-item.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	prefs-utils.h \
 	print.h \
 	selection.h \
 	sp-anchor.h \
@@ -5479,6 +5525,9 @@ sp-line.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-path.h \
@@ -5912,6 +5961,9 @@ sp-path.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-path.h \
@@ -6481,6 +6533,7 @@ sp-use.o: \
 	display/nr-arena-group.h \
 	display/nr-arena-item.h \
 	document.h \
+	enums.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
@@ -6512,6 +6565,8 @@ sp-use.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	macros.h \
+	prefs-utils.h \
 	sp-item.h \
 	sp-object-repr.h \
 	sp-object.h \
@@ -6523,6 +6578,9 @@ sp-use.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
+	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
 	xml/repr.h
 
 spiral-context.o: \
@@ -6587,6 +6645,7 @@ spiral-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
+	widgets/spw-utilities.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -6734,6 +6793,7 @@ star-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
+	widgets/spw-utilities.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -7071,6 +7131,7 @@ toolbox.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	mod360.h \
 	nodepath.h \
 	path-chemistry.h \
 	prefs-utils.h \
@@ -7681,6 +7742,7 @@ widgets/icon.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	prefix.h \
 	sp-item.h \
 	sp-object.h \
 	version.h \
@@ -7983,12 +8045,6 @@ widgets/spw-utilities.o: \
 	widgets/button.h \
 	widgets/spw-utilities.h \
 	xml/repr.h
-
-widgets/test-wrapbox.o: \
-	widgets/test-wrapbox.cpp \
-	widgets/sp-hwrap-box.h \
-	widgets/sp-vwrap-box.h \
-	widgets/sp-wrap-box.h
 
 xml/repr-action-test.o: \
 	xml/repr-action-test.cpp \

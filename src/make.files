@@ -121,6 +121,8 @@ extension/init.cpp
 extension/init.h
 extension/internal/eps-out.cpp
 extension/internal/eps-out.h
+extension/internal/gdkpixbuf-input.cpp
+extension/internal/gdkpixbuf-input.h
 extension/internal/gnome.h
 extension/internal/ps-out.cpp
 extension/internal/ps-out.h
@@ -168,14 +170,13 @@ inkscape-stock.cpp
 inkscape-stock.h
 inkscape.cpp
 inkscape.h
+inkscape_version.h
 interface.cpp
 interface.h
 knot.cpp
 knot.h
 knotholder.cpp
 knotholder.h
-libarikkei/arikkei-token.cpp
-libarikkei/arikkei-token.h
 libnr/have_mmx.S
 libnr/nr-blit.cpp
 libnr/nr-blit.h
@@ -327,6 +328,8 @@ object-ui.h
 path-chemistry.cpp
 path-chemistry.h
 preferences-skeleton.h
+prefix.cpp
+prefix.h
 prefs-utils.cpp
 prefs-utils.h
 print.cpp
@@ -519,11 +522,8 @@ widgets/sp-color-wheel-selector.cpp
 widgets/sp-color-wheel-selector.h
 widgets/sp-color-wheel.cpp
 widgets/sp-color-wheel.h
-widgets/sp-hwrap-box.h
-widgets/sp-vwrap-box.h
 widgets/sp-widget.cpp
 widgets/sp-widget.h
-widgets/sp-wrap-box.h
 widgets/sp-xmlview-attr-list.cpp
 widgets/sp-xmlview-attr-list.h
 widgets/sp-xmlview-content.cpp
@@ -534,7 +534,6 @@ widgets/spinbutton-events.cpp
 widgets/spinbutton-events.h
 widgets/spw-utilities.cpp
 widgets/spw-utilities.h
-widgets/test-wrapbox.cpp
 widgets/widget-sizes.h
 xml/repr-action-test.cpp
 xml/repr-action.cpp

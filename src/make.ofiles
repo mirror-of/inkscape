@@ -60,6 +60,7 @@ OBJECTS = \
 	extension/implementation/script.o \
 	extension/init.o \
 	extension/internal/eps-out.o \
+	extension/internal/gdkpixbuf-input.o \
 	extension/internal/ps-out.o \
 	extension/internal/ps.o \
 	extension/internal/svg.o \
@@ -84,7 +85,6 @@ OBJECTS = \
 	interface.o \
 	knot.o \
 	knotholder.o \
-	libarikkei/arikkei-token.o \
 	libnr/have_mmx.o \
 	libnr/nr-blit.o \
 	libnr/nr-compose-transform.o \
@@ -162,6 +162,7 @@ OBJECTS = \
 	object-edit.o \
 	object-ui.o \
 	path-chemistry.o \
+	prefix.o \
 	prefs-utils.o \
 	print.o \
 	rect-context.o \
@@ -263,7 +264,6 @@ OBJECTS = \
 	widgets/sp-xmlview-tree.o \
 	widgets/spinbutton-events.o \
 	widgets/spw-utilities.o \
-	widgets/test-wrapbox.o \
 	xml/repr-action-test.o \
 	xml/repr-action.o \
 	xml/repr-css.o \
@@ -332,6 +332,7 @@ LINTS = \
 	extension/implementation/script.lint \
 	extension/init.lint \
 	extension/internal/eps-out.lint \
+	extension/internal/gdkpixbuf-input.lint \
 	extension/internal/ps-out.lint \
 	extension/internal/ps.lint \
 	extension/internal/svg.lint \
@@ -356,7 +357,6 @@ LINTS = \
 	interface.lint \
 	knot.lint \
 	knotholder.lint \
-	libarikkei/arikkei-token.lint \
 	libnr/have_mmx.lint \
 	libnr/nr-blit.lint \
 	libnr/nr-compose-transform.lint \
@@ -434,6 +434,7 @@ LINTS = \
 	object-edit.lint \
 	object-ui.lint \
 	path-chemistry.lint \
+	prefix.lint \
 	prefs-utils.lint \
 	print.lint \
 	rect-context.lint \
@@ -535,7 +536,6 @@ LINTS = \
 	widgets/sp-xmlview-tree.lint \
 	widgets/spinbutton-events.lint \
 	widgets/spw-utilities.lint \
-	widgets/test-wrapbox.lint \
 	xml/repr-action-test.lint \
 	xml/repr-action.lint \
 	xml/repr-css.lint \
@@ -554,7 +554,6 @@ INCLUDEPATH = \
 	-Iextension \
 	-Ihelper \
 	-Iinkjar \
-	-Ilibarikkei \
 	-Ilibnr \
 	-Ilibnrtype \
 	-Ilivarot \
