@@ -212,6 +212,8 @@ sp_file_revert_dialog()
 }
 
 
+static Inkscape::UI::Dialogs::FileOpenDialog *openDialogInstance = NULL;
+
 /**
  *  Display an file Open selector.  Open a document if OK is pressed.
  */
@@ -233,17 +235,20 @@ sp_file_open_dialog(gpointer object, gpointer data)
     if (open_path == NULL)
         open_path = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, NULL);
 
-    Inkscape::UI::Dialogs::FileOpenDialog *dlg =
-        Inkscape::UI::Dialogs::FileOpenDialog::create(
+    if (!openDialogInstance)
+        {
+        openDialogInstance = 
+              Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (char const *)_("Select file to open"));
-    bool const success = dlg->show();
+        }
+    bool const success = openDialogInstance->show();
     gchar *fileName = ( success
-                        ? g_strdup(dlg->getFilename())
+                        ? g_strdup(openDialogInstance->getFilename())
                         : NULL );
-    Inkscape::Extension::Extension *selection = dlg->getSelectionType();
-    delete dlg;
+    Inkscape::Extension::Extension *selection =
+            openDialogInstance->getSelectionType();
     g_free(open_path);
 
     if (!success) return;
@@ -328,6 +333,8 @@ file_save(SPDocument *doc, gchar const *uri, Inkscape::Extension::Extension *key
     return TRUE;
 }
 
+static Inkscape::UI::Dialogs::FileSaveDialog *saveDialogInstance = NULL;
+
 /**
  *  Display a SaveAs dialog.  Save the document if OK pressed.
  */
@@ -397,19 +404,22 @@ sp_file_save_dialog(SPDocument *doc)
         }
     }
 
-    Inkscape::UI::Dialogs::FileSaveDialog *dlg =
-        Inkscape::UI::Dialogs::FileSaveDialog::create(
+    if (!saveDialogInstance)
+        {
+        saveDialogInstance =
+             Inkscape::UI::Dialogs::FileSaveDialog::create(
                  (char const *) save_loc,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (char const *) _("Select file to save to"),
                  default_extension
             );
-    bool success = dlg->show();
+        }
+    bool success = saveDialogInstance->show();
     char *fileName = ( success
-                       ? g_strdup(dlg->getFilename())
+                       ? g_strdup(saveDialogInstance->getFilename())
                        : NULL );
-    Inkscape::Extension::Extension *selectionType = dlg->getSelectionType();
-    delete dlg;
+    Inkscape::Extension::Extension *selectionType =
+        saveDialogInstance->getSelectionType();
     g_free(save_loc);
     g_free(save_path);
     if (!success) return success;
@@ -601,6 +611,8 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 }
 
 
+static Inkscape::UI::Dialogs::FileOpenDialog *importDialogInstance = NULL;
+
 /**
  *  Display an Open dialog, import a resource if OK pressed.
  */
@@ -611,17 +623,20 @@ sp_file_import(GtkWidget *widget)
     if (!SP_IS_DOCUMENT(doc))
         return;
 
-    Inkscape::UI::Dialogs::FileOpenDialog *dlg =
-        Inkscape::UI::Dialogs::FileOpenDialog::create(
+    if (!importDialogInstance)
+        {
+        importDialogInstance =
+             Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)import_path,
                  Inkscape::UI::Dialogs::IMPORT_TYPES,
                  (char const *)_("Select file to import"));
-    bool success = dlg->show();
+        }
+    bool success = importDialogInstance->show();
     char *fileName = ( success
-                       ? g_strdup(dlg->getFilename())
+                       ? g_strdup(importDialogInstance->getFilename())
                        : NULL );
-    Inkscape::Extension::Extension *selection = dlg->getSelectionType();
-    delete dlg;
+    Inkscape::Extension::Extension *selection =
+        importDialogInstance->getSelectionType();
 
     if (!success) return;
     if (fileName) {

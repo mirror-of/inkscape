@@ -372,7 +372,9 @@ bool
 FileOpenDialogImpl::show()
 {
 
+    set_modal(true);
     gint b = run();  //Dialog
+    hide();
 
     if (b == GTK_RESPONSE_OK)
         {
