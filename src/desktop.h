@@ -42,7 +42,7 @@ struct SPDesktop {
 	Inkscape::Application *inkscape;
 
 	SPNamedView *namedview;
-	SPSelection *selection;
+        SPSelection *selection; ///< current selection; will never generally be NULL
 	SigC::Connection sel_modified_connection;
 	SPEventContext *event_context;
 
