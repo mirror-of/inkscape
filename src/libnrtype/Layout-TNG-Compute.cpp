@@ -678,9 +678,11 @@ class Layout::Calculator
             // see if this span is too tall to fit on the current line
             LineHeight total_height = new_span.start.iter_span->line_height;
             total_height *= new_span.start.iter_span->line_height_multiplier;
-            if (   total_height.ascent  > line_height->ascent
-                || total_height.descent > line_height->descent
-                || total_height.leading > line_height->leading) {
+            /* floating point 80-bit/64-bit rounding problems require epsilon. See
+            discussion http://inkscape.gristle.org/2005-03-16.txt around 22:00 */
+            if (   total_height.ascent  > line_height->ascent  + FLT_EPSILON
+                || total_height.descent > line_height->descent + FLT_EPSILON
+                || total_height.leading > line_height->leading + FLT_EPSILON) {
                 line_height->max(total_height);
                 if (!_scanline_maker->canExtendCurrentScanline(*line_height))
                     return false;
