@@ -61,11 +61,19 @@ sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relati
 void
 sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines)
 {
+    // non-items should not have style
+    if (!SP_IS_ITEM(o))
+        return;
+
     // 1. tspans with role=line are not regular objects in that they are not supposed to have style of their own,
     // but must always inherit from the parent text. Same for textPath.
     // However, if the line tspan or textPath contains some style (old file?), we reluctantly set our style to it too.
-    // 2. Generally we allow setting style on clones (reconsider?) but when it's inside flowRegion, do not touch it;
-    // it's just styleless shape. We also should not set style to its parents because it will be inherited. So we skip them.
+
+    // 2. Generally we allow setting style on clones (though fill&stroke currently forbids this,
+    // will be fixed) but when it's inside flowRegion, do not touch it; it's just styleless shape
+    // (because that's how Inkscape does flowtext). We also should not set style to its parents
+    // because it will be inherited. So we skip them.
+
     if (!(skip_lines 
           && ((SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE) || SP_IS_TEXTPATH(o))
           && !sp_repr_attr(SP_OBJECT_REPR(o), "style"))
@@ -81,7 +89,19 @@ sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines)
           )
          )
         ) {
-        sp_repr_css_change (SP_OBJECT_REPR (o), css, "style");
+
+        SPCSSAttr *css_set = sp_repr_css_attr_new ();
+        sp_repr_css_merge (css_set, css);
+
+        // scale the style by the inverse of the accumulated parent transform in the paste context
+        NR::Matrix local = sp_item_i2doc_affine (SP_ITEM (o));
+        if (!local.test_identity()) {
+            sp_css_attr_scale (css_set, 1/local.expansion());
+        }
+
+        sp_repr_css_change (SP_OBJECT_REPR (o), css_set, "style");
+
+        sp_repr_css_attr_unref (css_set);
     }
 
     // setting style on child of clone spills into the clone original (via shared repr), don't do it!
