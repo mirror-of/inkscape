@@ -23,7 +23,6 @@
 #include <libnr/nr-forward.h>
 
 
-/* FIXME: these classes are work-in-progress */
 /* Consider moving Snapper etc. to separate files if this reduces the number of translation units
  * that #include these class definitions.  Doing so reduces the amount of work of the compiler, and
  * reduces the number of recompilations necessary.
@@ -115,6 +114,18 @@ std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
 
 NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
                                        NR::Point const &norm, double const sx, NR::Dim2 const dim);
+
+
+/* FIXME:
+** Temporary methods.  These snap a single point as if it were both a snap point
+** and a bbox point.  Any callers of these methods should instead be calling
+** namedview_*_snap twice; once with a snap point and once with the corresponding
+** bbox point (taking, e.g., stroke width into account).  However in some cases
+** working out the bbox point is hard, so these methods are a hack for the
+** 0.39 release.  They should be removed.
+*/
+NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req);
+NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Point const &d);
 
 
 #endif /* !SEEN_DESKTOP_SNAP_H */

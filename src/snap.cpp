@@ -468,6 +468,29 @@ NR::Coord GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const
     return best;
 }
 
+
+NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req)
+{
+    NR::Point snap_req = req;
+    NR::Coord snap_dist = namedview_free_snap(nv, Snapper::SNAP_POINT, snap_req);
+    NR::Point bbox_req = req;
+    NR::Coord bbox_dist = namedview_free_snap(nv, Snapper::BBOX_POINT, bbox_req);
+
+    req = snap_dist < bbox_dist ? snap_req : bbox_req;
+    return std::min(snap_dist, bbox_dist);
+}
+
+NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Point const &d)
+{
+    NR::Point snap_req = req;
+    NR::Coord snap_dist = namedview_vector_snap(nv, Snapper::SNAP_POINT, snap_req, d);
+    NR::Point bbox_req = req;
+    NR::Coord bbox_dist = namedview_vector_snap(nv, Snapper::BBOX_POINT, bbox_req, d);
+
+    req = snap_dist < bbox_dist ? snap_req : bbox_req;
+    return std::min(snap_dist, bbox_dist);
+}
+
 /*
   Local Variables:
   mode:c++
