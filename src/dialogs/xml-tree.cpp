@@ -113,7 +113,7 @@ static void on_destroy (GtkObject * object, gpointer data);
 static gboolean on_delete (GtkObject *object, GdkEvent *event, gpointer data);
 
 static void on_tree_select_row_enable_if_element (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
-static void on_tree_select_row_enable_if_non_root (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
+static void on_tree_select_row_enable_if_mutable (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
 static void on_tree_select_row_show_if_element (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
 static void on_tree_select_row_show_if_text (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
 static void on_tree_select_row_enable_if_indentable (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
@@ -348,7 +348,7 @@ sp_xml_tree_dialog (void)
 
         gtk_signal_connect_while_alive (GTK_OBJECT (tree),
                         "tree_select_row",
-                        G_CALLBACK (on_tree_select_row_enable_if_non_root),
+                        G_CALLBACK (on_tree_select_row_enable_if_mutable),
                         button,
                         GTK_OBJECT (button));
 
@@ -367,7 +367,7 @@ sp_xml_tree_dialog (void)
                                            G_CALLBACK (cmd_delete_node), NULL );
 
         gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_select_row",
-                        G_CALLBACK (on_tree_select_row_enable_if_non_root),
+                        G_CALLBACK (on_tree_select_row_enable_if_mutable),
                         button, GTK_OBJECT (button));
         gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_unselect_row",
                         G_CALLBACK (on_tree_unselect_row_disable),
@@ -1004,16 +1004,40 @@ on_tree_select_row_show_if_text ( GtkCTree * tree, GtkCTreeNode * node,
 }
 
 
+gboolean
+xml_tree_node_mutable ( GtkCTreeNode * node )
+{
+    // top-level is immutable, obviously
+    if (!GTK_CTREE_ROW (node)->parent) {
+        return false;
+    }
+
+    // if not in base level (where namedview, defs, etc go), we're mutable
+    if (GTK_CTREE_ROW(GTK_CTREE_ROW (node)->parent)->parent) {
+        return true; 
+    }
+
+    SPRepr * repr;
+    repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
+    g_assert (repr);
+
+    // don't let "defs" or "namedview" disappear
+    if ( !strcmp(sp_repr_name(repr),"defs") ||
+         !strcmp(sp_repr_name(repr),"sodipodi:namedview") ) {
+        return false;
+    }
+
+    // everyone else is okay, I guess.  :)
+    return true;
+}
+
 
 void
-on_tree_select_row_enable_if_non_root ( GtkCTree * tree, GtkCTreeNode * node,
+on_tree_select_row_enable_if_mutable ( GtkCTree * tree, GtkCTreeNode * node,
                                         gint column, gpointer data )
 {
-    if (GTK_CTREE_ROW (node)->parent) {
-        gtk_widget_set_sensitive (GTK_WIDGET (data), TRUE);
-    } else {
-        gtk_widget_set_sensitive (GTK_WIDGET (data), FALSE);
-    }
+
+    gtk_widget_set_sensitive (GTK_WIDGET (data), xml_tree_node_mutable(node));
 }
 
 
@@ -1141,28 +1165,30 @@ on_attr_select_row_set_value_content ( GtkCList *list, gint row, gint column,
 }
 
 
-
 void
 on_tree_select_row_enable_if_indentable ( GtkCTree * tree, GtkCTreeNode * node,
                                           gint column, gpointer data )
 {
-    SPRepr * repr, * prev;
-    gboolean indentable;
-    indentable = FALSE;
-    repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
+    gboolean indentable = FALSE;
 
-    if ( repr->parent && repr != repr->parent->children ) {
-        g_assert (repr->parent->children);
+    if ( xml_tree_node_mutable( node ) ) {
+        SPRepr * repr, * prev;
+        repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-        // skip to the child just before the current repr
-        for ( prev = repr->parent->children ;
-              prev && prev->next != repr ;
-              prev = prev->next );
+        if ( repr->parent && repr != repr->parent->children ) {
+            g_assert (repr->parent->children);
 
-        if (prev && SP_REPR_TYPE (prev) == SP_XML_ELEMENT_NODE) {
-            indentable = TRUE;
+            // skip to the child just before the current repr
+            for ( prev = repr->parent->children ;
+                  prev && prev->next != repr ;
+                  prev = prev->next );
+
+            if (prev && SP_REPR_TYPE (prev) == SP_XML_ELEMENT_NODE) {
+                indentable = TRUE;
+            }
         }
     }
+
     gtk_widget_set_sensitive (GTK_WIDGET (data), indentable);
 }
 

@@ -13,6 +13,7 @@
 	  created some example SPObject implementations for a basis for any
 	  new SPObjects in the future.
 	* src/dialogs/xml-tree.cpp: fixing logic bug in identability checker.
+	  Added immutability test to actually close 1069772.
 
 2004-11-20  Jon A. Cruz  <jon@joncruz.org>
 
