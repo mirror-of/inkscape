@@ -676,7 +676,7 @@ sp_curve_append (SPCurve *curve,
 
 	ArtBpath const *bs = curve2->bpath;
 
-	gboolean closed = curve->closed;
+	bool closed = curve->closed;
 
 	for (ArtBpath const *bp = bs; bp->code != ART_END; bp++) {
 		switch (bp->code) {
@@ -688,7 +688,7 @@ sp_curve_append (SPCurve *curve,
 				if (closed) sp_curve_closepath (curve);
 				sp_curve_moveto (curve, bp->x3, bp->y3);
 			}
-			closed = FALSE;
+			closed = false;
 			break;
 		case ART_MOVETO:
 			if (use_lineto && curve->hascpt) {
@@ -698,7 +698,7 @@ sp_curve_append (SPCurve *curve,
 				if (closed) sp_curve_closepath (curve);
 				sp_curve_moveto (curve, bp->x3, bp->y3);
 			}
-			closed = TRUE;
+			closed = true;
 			break;
 		case ART_LINETO:
 			sp_curve_lineto (curve, bp->x3, bp->y3);
