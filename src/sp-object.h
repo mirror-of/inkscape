@@ -140,7 +140,12 @@ struct SPObject : public GObject {
 
 	void setId(gchar const *id);
 
-	void deleteObject(bool propagate=true);
+	void _sendDeleteSignalRecursive (bool propagate_descendants);
+
+	void deleteObject(bool propagate, bool propagate_descendants);
+	void deleteObject(bool propagate = true) {
+		deleteObject(propagate, propagate);
+	}
 
 	SigC::Connection connectDelete(SigC::Slot1<void, SPObject *> slot) {
 		return _delete_signal.connect(slot);

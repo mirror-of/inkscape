@@ -689,7 +689,7 @@ sp_selected_path_outline ()
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
 
         selection->removeItem (item);
-        sp_repr_unparent (SP_OBJECT_REPR (item));
+        SP_OBJECT (item)->deleteObject(false);
 
         if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
 
@@ -927,7 +927,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     if ( updating ) {
         // on conserve l'original
     } else {
-        sp_repr_unparent (SP_OBJECT_REPR (item));
+        SP_OBJECT (item)->deleteObject(false);
     }
   
     if (res->descr_nb <= 1)
@@ -1191,7 +1191,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
 
         selection->removeItem (item);
-        sp_repr_unparent (SP_OBJECT_REPR (item));
+        SP_OBJECT (item)->deleteObject(false);
 
         if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
 
@@ -1318,7 +1318,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
         const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
         selection->removeItem (item);
-        sp_repr_unparent (SP_OBJECT_REPR (item));
+        SP_OBJECT (item)->deleteObject(false);
 
         {
             if ( justCoalesce ) {

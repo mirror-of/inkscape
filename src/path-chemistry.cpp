@@ -183,7 +183,9 @@ sp_selected_path_break_apart (void)
 		NArtBpath *abp = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (SP_ITEM (path)));
 
 		sp_curve_unref (curve);
-		sp_repr_unparent (SP_OBJECT_REPR (item));
+
+		// it's going to resurrect as one of the pieces, so we delete without advertisement
+		SP_OBJECT (item)->deleteObject(false);
 
 		curve = sp_curve_new_from_bpath (abp);
 		g_assert (curve != NULL);
@@ -274,7 +276,9 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
 		selection->removeItem (item);
-		sp_repr_unparent (SP_OBJECT_REPR (item));
+
+		// it's going to resurrect, so we delete without advertisement
+		SP_OBJECT (item)->deleteObject(false);
 
 		// restore id
 		sp_repr_set_attr (repr, "id", id);
@@ -370,7 +374,7 @@ sp_path_cleanup (SPPath *path)
 	}
 
 	if (sp_curve_is_empty (curve)) {
-		sp_repr_unparent (SP_OBJECT_REPR (path));
+		SP_OBJECT (path)->deleteObject();
 	} else if (dropped) {
 		gchar *svgpath;
 		svgpath = sp_svg_write_path (curve->bpath);

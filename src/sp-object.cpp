@@ -226,18 +226,32 @@ void SPObject::setId(gchar const *id) {
 	sp_object_set(this, SP_ATTR_ID, id);
 }
 
-void SPObject::deleteObject(bool propagate)
+void SPObject::_sendDeleteSignalRecursive (bool propagate_descendants) {
+	for (SPObject *child = sp_object_first_child(this); child; child = SP_OBJECT_NEXT (child)) {
+		if (propagate_descendants) {
+			child->_delete_signal.emit(child);
+		}
+		child->_sendDeleteSignalRecursive (propagate_descendants);
+	}
+}
+
+void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 {
 	if (propagate) {
 		_delete_signal.emit(this);
 	}
+
+	if (propagate_descendants) {
+		this->_sendDeleteSignalRecursive (propagate_descendants);
+	}
+
 	SPRepr *repr=SP_OBJECT_REPR(this);
 	if (repr && sp_repr_parent(repr)) {
 		sp_repr_unparent(repr);
 	}
 
 	if (_successor) {
-		_successor->deleteObject(propagate);
+		_successor->deleteObject(propagate, propagate_descendants);
 	}
 }
 

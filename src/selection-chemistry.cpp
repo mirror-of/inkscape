@@ -150,7 +150,7 @@ void sp_edit_clear_all()
     GSList *items = sp_item_group_item_list(SP_GROUP(sp_document_root(doc)));
 
     while (items) {
-        sp_repr_unparent(SP_OBJECT_REPR(items->data));
+        SP_OBJECT (items->data)->deleteObject();
         items = g_slist_remove(items, items->data);
     }
 

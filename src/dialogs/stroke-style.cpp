@@ -800,7 +800,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     SPRepr *defsrepr = SP_OBJECT_REPR (sp_document_lookup_id (sandbox, "defs"));
     SPObject *oldmarker = sp_document_lookup_id (sandbox, "sample");
     if (oldmarker)
-        sp_repr_unparent (SP_OBJECT_REPR (oldmarker));
+        oldmarker->deleteObject(false);
     sp_repr_append_child (defsrepr, mrepr);
     sp_repr_unref (mrepr);
 

@@ -398,32 +398,28 @@ sp_group_hide (SPItem *item, unsigned int key)
 void
 sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 {
-	SPDocument *doc;
-	SPItem *gitem, *pitem;
-	SPRepr *grepr, *prepr, *lrepr;
-	SPObject *root, *defs, *child;
-	GSList *items, *objects;
-
 	g_return_if_fail (group != NULL);
 	g_return_if_fail (SP_IS_GROUP (group));
 
-	doc = SP_OBJECT_DOCUMENT (group);
-	root = SP_DOCUMENT_ROOT (doc);
-	defs = SP_OBJECT (SP_ROOT (root)->defs);
+	SPDocument *doc = SP_OBJECT_DOCUMENT (group);
+	SPObject *root = SP_DOCUMENT_ROOT (doc);
+	SPObject *defs = SP_OBJECT (SP_ROOT (root)->defs);
 
-	gitem = SP_ITEM (group);
-	grepr = SP_OBJECT_REPR (gitem);
-	pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
-	prepr = SP_OBJECT_REPR (pitem);
+	SPItem *gitem = SP_ITEM (group);
+	SPRepr *grepr = SP_OBJECT_REPR (gitem);
+
+	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
+	SPRepr *prepr = SP_OBJECT_REPR (pitem);
 
 	g_return_if_fail (!strcmp (sp_repr_name (grepr), "g") || !strcmp (sp_repr_name (grepr), "a"));
 
 	/* Step 1 - generate lists of children objects */
-	items = NULL;
-	objects = NULL;
-	for (child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-		SPRepr *nrepr;
-		nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
+	GSList *items = NULL;
+	GSList *objects = NULL;
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+
+		SPRepr *nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
+
 		if (SP_IS_ITEM (child)) {
 			SPItem *citem;
 			NRMatrix ctrans;
@@ -465,10 +461,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	objects = g_slist_reverse (objects);
 
 	/* Step 2 - clear group */
-	while (sp_object_first_child(SP_OBJECT(group))) {
-		/* Now it is time to remove original */
-		sp_repr_remove_child (grepr, SP_OBJECT_REPR (sp_object_first_child(SP_OBJECT(group))));
-	}
+	// remember the position of the group
+	gint pos = sp_repr_position (SP_OBJECT_REPR (group));
+	// the group is leaving forever, no heir, clones should take note; its children however are going to reemerge
+	SP_OBJECT (group)->deleteObject(true, false);
 
 	/* Step 3 - add nonitems */
 	while (objects) {
@@ -478,18 +474,23 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	}
 
 	/* Step 4 - add items */
-	lrepr = grepr;
 	while (items) {
-		SPItem *nitem;
-		sp_repr_add_child (prepr, (SPRepr *) items->data, lrepr);
-		lrepr = (SPRepr *) items->data;
-		nitem = (SPItem *) sp_document_lookup_id (doc, sp_repr_attr ((SPRepr *) items->data, "id"));
-		sp_repr_unref ((SPRepr *) items->data);
-		if (children && SP_IS_ITEM (nitem)) *children = g_slist_prepend (*children, nitem);
+
+		SPRepr *repr = (SPRepr *) items->data;
+		// add item
+		sp_repr_append_child (prepr, repr);
+		// move to the saved position 
+		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+		// fill in the children list if non-null
+		SPItem *nitem = (SPItem *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
+		sp_repr_unref (repr);
+		if (children && SP_IS_ITEM (nitem)) 
+			*children = g_slist_prepend (*children, nitem);
+
 		items = g_slist_remove (items, items->data);
 	}
 
-	sp_repr_unparent (grepr);
 	if (do_done) sp_document_done (doc);
 }
 

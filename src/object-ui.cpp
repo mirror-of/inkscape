@@ -202,24 +202,23 @@ sp_item_toggle_sensitivity (GtkMenuItem * menuitem, SPItem * item)
 static void
 sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 {
-	SPRepr *repr, *child;
-	SPObject *object;
-	SPDesktop *desktop;
-
 	g_assert (SP_IS_ITEM (item));
 	g_assert (!SP_IS_ANCHOR (item));
 
-	desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+	SPDesktop *desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	repr = sp_repr_new ("a");
+	SPRepr *repr = sp_repr_new ("a");
 	sp_repr_add_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), repr, SP_OBJECT_REPR (item));
-	object = sp_document_lookup_id (SP_OBJECT_DOCUMENT (item), sp_repr_attr (repr, "id"));
+	SPObject *object = sp_document_lookup_id (SP_OBJECT_DOCUMENT (item), sp_repr_attr (repr, "id"));
 	g_return_if_fail (SP_IS_ANCHOR (object));
-	child = sp_repr_duplicate (SP_OBJECT_REPR (item));
-	sp_repr_unparent (SP_OBJECT_REPR (item));
+
+	const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+	SPRepr *child = sp_repr_duplicate (SP_OBJECT_REPR (item));
+	SP_OBJECT (item)->deleteObject(false);
 	sp_repr_add_child (repr, child, NULL);
+	sp_repr_set_attr (child, "id", id);
 	sp_document_done (SP_OBJECT_DOCUMENT (object));
 
 	sp_object_attributes_dialog (object, "SPAnchor");
