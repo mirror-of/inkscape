@@ -170,7 +170,7 @@ sp_transformation_dialog_update_selection (GObject *dlg, unsigned int page, SPSe
 }
 
 static void
-sp_transformation_dialog_selection_changed (Inkscape *inkscape, SPSelection *selection, GObject *obj)
+sp_transformation_dialog_selection_changed (Inkscape::Application *inkscape, SPSelection *selection, GObject *obj)
 {
 	GObject *notebook;
 	int page;
@@ -182,7 +182,7 @@ sp_transformation_dialog_selection_changed (Inkscape *inkscape, SPSelection *sel
 }
 
 static void
-sp_transformation_dialog_selection_modified (Inkscape *inkscape, SPSelection *selection, unsigned int flags, GObject *obj)
+sp_transformation_dialog_selection_modified (Inkscape::Application *inkscape, SPSelection *selection, unsigned int flags, GObject *obj)
 {
 	GObject *notebook;
 	int page;

@@ -69,51 +69,51 @@ enum {
 
 #define DESKTOP_IS_ACTIVE(d) ((d) == inkscape->desktops->data)
 
-static void inkscape_class_init (InkscapeClass *klass);
+static void inkscape_class_init (Inkscape::ApplicationClass *klass);
 static void inkscape_init (SPObject *object);
 static void inkscape_dispose (GObject *object);
 
-static void inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
-static void inkscape_deactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
+static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
+static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 
 static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
 				  const gchar *e_mkdir,
 				  const gchar *e_notdir,
 				  const gchar *e_ccf,
 				  const gchar *e_cwf);
-static void inkscape_init_preferences (Inkscape *inkscape);
+static void inkscape_init_preferences (Inkscape::Application *inkscape);
 
-static void inkscape_init_preferences (Inkscape * inkscape);
+static void inkscape_init_preferences (Inkscape::Application * inkscape);
 
-struct _Inkscape {
+struct Inkscape::Application {
 	GObject object;
 	SPReprDoc *preferences;
 	GSList *documents;
 	GSList *desktops;
 };
 
-struct _InkscapeClass {
+struct Inkscape::ApplicationClass {
 	GObjectClass object_class;
 
 	/* Signals */
-	void (* change_selection) (Inkscape * inkscape, SPSelection * selection);
-	void (* modify_selection) (Inkscape * inkscape, SPSelection * selection, guint flags);
-	void (* set_selection) (Inkscape * inkscape, SPSelection * selection);
-	void (* set_eventcontext) (Inkscape * inkscape, SPEventContext * eventcontext);
-	void (* new_desktop) (Inkscape * inkscape, SPDesktop * desktop);
-	void (* destroy_desktop) (Inkscape * inkscape, SPDesktop * desktop);
-	void (* activate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
-	void (* deactivate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
-	void (* new_document) (Inkscape *inkscape, SPDocument *doc);
-	void (* destroy_document) (Inkscape *inkscape, SPDocument *doc);
-	void (* color_set) (Inkscape *inkscape, SPColor *color, double opacity);
-	void (* shut_down) (Inkscape *inkscape);
+	void (* change_selection) (Inkscape::Application * inkscape, SPSelection * selection);
+	void (* modify_selection) (Inkscape::Application * inkscape, SPSelection * selection, guint flags);
+	void (* set_selection) (Inkscape::Application * inkscape, SPSelection * selection);
+	void (* set_eventcontext) (Inkscape::Application * inkscape, SPEventContext * eventcontext);
+	void (* new_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
+	void (* destroy_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
+	void (* activate_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
+	void (* deactivate_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
+	void (* new_document) (Inkscape::Application *inkscape, SPDocument *doc);
+	void (* destroy_document) (Inkscape::Application *inkscape, SPDocument *doc);
+	void (* color_set) (Inkscape::Application *inkscape, SPColor *color, double opacity);
+	void (* shut_down) (Inkscape::Application *inkscape);
 };
 
 static GObjectClass * parent_class;
 static guint inkscape_signals[LAST_SIGNAL] = {0};
 
-Inkscape *inkscape = NULL;
+Inkscape::Application *inkscape = NULL;
 
 static void (* segv_handler) (int) = NULL;
 
@@ -125,21 +125,21 @@ inkscape_get_type (void)
 	static GType type = 0;
 	if (!type) {
 		GTypeInfo info = {
-			sizeof (InkscapeClass),
+			sizeof (Inkscape::ApplicationClass),
 			NULL, NULL,
 			(GClassInitFunc) inkscape_class_init,
 			NULL, NULL,
-			sizeof (Inkscape),
+			sizeof (Inkscape::Application),
 			4,
 			(GInstanceInitFunc) inkscape_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "Inkscape", &info, (GTypeFlags)0);
+		type = g_type_register_static (G_TYPE_OBJECT, "Inkscape_Application", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-inkscape_class_init (InkscapeClass * klass)
+inkscape_class_init (Inkscape::ApplicationClass * klass)
 {
 	GObjectClass * object_class;
 
@@ -150,7 +150,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[MODIFY_SELECTION] = g_signal_new ("modify_selection",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, modify_selection),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, modify_selection),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER_UINT,
 							   G_TYPE_NONE, 2,
@@ -158,7 +158,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[CHANGE_SELECTION] = g_signal_new ("change_selection",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, change_selection),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, change_selection),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -166,7 +166,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[SET_SELECTION] =    g_signal_new ("set_selection",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, set_selection),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, set_selection),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -174,7 +174,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[SET_EVENTCONTEXT] = g_signal_new ("set_eventcontext",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, set_eventcontext),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, set_eventcontext),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -182,7 +182,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[NEW_DESKTOP] =      g_signal_new ("new_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, new_desktop),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, new_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -190,7 +190,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[DESTROY_DESKTOP] =  g_signal_new ("destroy_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, destroy_desktop),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, destroy_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -198,7 +198,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[ACTIVATE_DESKTOP] = g_signal_new ("activate_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, activate_desktop),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, activate_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -206,7 +206,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[DEACTIVATE_DESKTOP] = g_signal_new ("deactivate_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, deactivate_desktop),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, deactivate_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -214,7 +214,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[NEW_DOCUMENT] =     g_signal_new ("new_document",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, new_document),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, new_document),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -222,7 +222,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[DESTROY_DOCUMENT] = g_signal_new ("destroy_document",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, destroy_document),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, destroy_document),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -230,7 +230,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[COLOR_SET] =        g_signal_new ("color_set",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, color_set),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, color_set),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER_DOUBLE,
 							   G_TYPE_NONE, 2,
@@ -238,7 +238,7 @@ inkscape_class_init (InkscapeClass * klass)
 	inkscape_signals[SHUTDOWN_SIGNAL] =        g_signal_new ("shut_down",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, shut_down),
+							   G_STRUCT_OFFSET (Inkscape::ApplicationClass, shut_down),
 							   NULL, NULL,
 							   g_cclosure_marshal_VOID__VOID,
 							   G_TYPE_NONE, 0);
@@ -253,7 +253,7 @@ static void
 inkscape_init (SPObject * object)
 {
 	if (!inkscape) {
-		inkscape = (Inkscape *) object;
+		inkscape = (Inkscape::Application *) object;
 	} else {
 		g_assert_not_reached ();
 	}
@@ -270,9 +270,9 @@ inkscape_init (SPObject * object)
 static void
 inkscape_dispose (GObject *object)
 {
-	Inkscape *inkscape;
+	Inkscape::Application *inkscape;
 
-	inkscape = (Inkscape *) object;
+	inkscape = (Inkscape::Application *) object;
 
 	while (inkscape->documents) {
 		g_object_unref (G_OBJECT (inkscape->documents->data));
@@ -305,13 +305,13 @@ inkscape_unref (void)
 }
 
 static void
-inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
+inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop)
 {
 	sp_desktop_set_active (desktop, TRUE);
 }
 
 static void
-inkscape_deactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
+inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop)
 {
 	sp_desktop_set_active (desktop, FALSE);
 }
@@ -480,12 +480,12 @@ inkscape_segv_handler (int signum)
 	(* segv_handler) (signum);
 }
 
-Inkscape *
+Inkscape::Application *
 inkscape_application_new (void)
 {
-	Inkscape *sp;
+	Inkscape::Application *sp;
 
-	sp = (Inkscape *)g_object_new (SP_TYPE_INKSCAPE, NULL);
+	sp = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
 	/* fixme: load application defaults */
 
 #ifndef WIN32
@@ -559,7 +559,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 /* Preferences management */
 
 void
-inkscape_load_preferences (Inkscape *inkscape)
+inkscape_load_preferences (Inkscape::Application *inkscape)
 {
 	inkscape_load_config (preferences_file, inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("%s is not regular file.\n"
@@ -577,7 +577,7 @@ inkscape_load_preferences (Inkscape *inkscape)
 }
 
 void
-inkscape_save_preferences (Inkscape * inkscape)
+inkscape_save_preferences (Inkscape::Application * inkscape)
 {
 	gchar * fn;
 
@@ -597,7 +597,7 @@ inkscape_save_preferences (Inkscape * inkscape)
 
 /* We use '.' as separator */
 SPRepr *
-inkscape_get_repr (Inkscape *inkscape, const gchar *key)
+inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
 {
 	SPRepr * repr;
 	gchar const *s;
@@ -934,7 +934,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 /* This routine should be obsoleted in favor of the generic version */
 
 static void
-inkscape_init_preferences (Inkscape *inkscape)
+inkscape_init_preferences (Inkscape::Application *inkscape)
 {
 	inkscape_init_config (inkscape->preferences, preferences_file, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("Cannot create directory %s.\n"
@@ -956,7 +956,7 @@ inkscape_init_preferences (Inkscape *inkscape)
 }
 
 void
-inkscape_refresh_display (Inkscape *inkscape)
+inkscape_refresh_display (Inkscape::Application *inkscape)
 {
 	GSList *l;
 
@@ -966,7 +966,7 @@ inkscape_refresh_display (Inkscape *inkscape)
 }
 
 void
-inkscape_exit (Inkscape *inkscape)
+inkscape_exit (Inkscape::Application *inkscape)
 {
 	//emit shutdown signal so that dialogs could remember layout
 	g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);

@@ -46,8 +46,8 @@
 
 #include "desktop-properties.h"
 
-static void sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
-static void sp_dtw_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_dtw_activate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_dtw_deactivate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop);
 
 static GtkWidget *sp_color_picker_new (gchar *colorkey, gchar *alphakey, gchar *title, guint32 rgba);
@@ -330,13 +330,13 @@ sp_desktop_dialog (void)
 }
 
 static void
-sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+sp_dtw_activate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_dtw_update (dialog, desktop);
 }
 
 static void
-sp_dtw_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+sp_dtw_deactivate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_dtw_update (dialog, NULL);
 }

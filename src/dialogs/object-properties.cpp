@@ -128,7 +128,7 @@ sp_object_properties_page(GtkWidget *nb, GtkWidget *page,
 
 
 static void
-sp_object_properties_color_set (Inkscape *inkscape, SPColor *color, double opacity, GObject *dlg)
+sp_object_properties_color_set (Inkscape::Application *inkscape, SPColor *color, double opacity, GObject *dlg)
 {
 	GtkNotebook *nb;
 	int pnum;

@@ -35,7 +35,7 @@ struct _SPDesktop {
 	SPView view;
 
 	SPDesktopWidget *owner;
-	Inkscape *inkscape;
+	Inkscape::Application *inkscape;
 
 	SPNamedView *namedview;
 	SPSelection *selection;

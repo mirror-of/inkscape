@@ -37,19 +37,19 @@
 #define INKSCAPE inkscape
 
 #ifndef __INKSCAPE_C__
-	extern Inkscape * inkscape;
+	extern Inkscape::Application * inkscape;
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-Inkscape * inkscape_application_new (void);
+Inkscape::Application * inkscape_application_new (void);
 
 /* Preference management */
-void inkscape_load_preferences (Inkscape * inkscape);
-void inkscape_save_preferences (Inkscape * inkscape);
-SPRepr *inkscape_get_repr (Inkscape *inkscape, const gchar *key);
+void inkscape_load_preferences (Inkscape::Application * inkscape);
+void inkscape_save_preferences (Inkscape::Application * inkscape);
+SPRepr *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key);
 
 #define SP_ACTIVE_EVENTCONTEXT inkscape_active_event_context ()
 SPEventContext * inkscape_active_event_context (void);
@@ -68,12 +68,12 @@ SPDesktop * inkscape_active_desktop (void);
  * fixme: This has to be rethought
  */
 
-void inkscape_refresh_display (Inkscape *inkscape);
+void inkscape_refresh_display (Inkscape::Application *inkscape);
 
 /*
  * fixme: This also
  */
 
-void inkscape_exit (Inkscape *inkscape);
+void inkscape_exit (Inkscape::Application *inkscape);
 
 #endif

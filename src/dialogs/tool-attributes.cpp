@@ -28,7 +28,7 @@
 #include "tool-attributes.h"
 
 static void sp_tool_attributes_dialog_destroy (GtkObject *object, gpointer data);
-static void sp_tool_attributes_dialog_set_eventcontext (Inkscape *inkscape, SPEventContext *ec, gpointer data);
+static void sp_tool_attributes_dialog_set_eventcontext (Inkscape::Application *inkscape, SPEventContext *ec, gpointer data);
 
 static void sp_tool_attributes_dialog_setup (SPEventContext *ec);
 
@@ -64,7 +64,7 @@ sp_tool_attributes_dialog_destroy (GtkObject *object, gpointer data)
 }
 
 static void
-sp_tool_attributes_dialog_set_eventcontext (Inkscape *inkscape, SPEventContext *ec, gpointer data)
+sp_tool_attributes_dialog_set_eventcontext (Inkscape::Application *inkscape, SPEventContext *ec, gpointer data)
 {
 	g_assert (dlg != NULL);
 	g_assert (tbl != NULL);

@@ -21,8 +21,10 @@ G_BEGIN_DECLS
 
 /* Generic containers */
 
-typedef struct _Inkscape Inkscape;
-typedef struct _InkscapeClass InkscapeClass;
+namespace Inkscape {
+	struct Application;
+	struct ApplicationClass;
+};
 
 /* Editing window */
 

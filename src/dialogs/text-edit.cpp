@@ -53,8 +53,8 @@
 
 #include "text-edit.h"
 
-static void sp_text_edit_dialog_modify_selection (Inkscape *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg);
-static void sp_text_edit_dialog_change_selection (Inkscape *inkscape, SPSelection *sel, GtkWidget *dlg);
+static void sp_text_edit_dialog_modify_selection (Inkscape::Application *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg);
+static void sp_text_edit_dialog_change_selection (Inkscape::Application *inkscape, SPSelection *sel, GtkWidget *dlg);
 
 static void sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg);
 static void sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg);
@@ -284,7 +284,7 @@ sp_text_edit_dialog (void)
 }
 
 static void
-sp_text_edit_dialog_modify_selection (Inkscape *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg)
+sp_text_edit_dialog_modify_selection (Inkscape::Application *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg)
 {
 	gboolean style, content;
 
@@ -294,7 +294,7 @@ sp_text_edit_dialog_modify_selection (Inkscape *inkscape, SPSelection *sel, guin
 }
 
 static void
-sp_text_edit_dialog_change_selection (Inkscape *inkscape, SPSelection *sel, GtkWidget *dlg)
+sp_text_edit_dialog_change_selection (Inkscape::Application *inkscape, SPSelection *sel, GtkWidget *dlg)
 {
 	sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
 }

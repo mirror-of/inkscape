@@ -53,8 +53,8 @@ static GList *papers = NULL;
 #endif
 
 static GtkWidget *sp_doc_dialog_new (void);
-static void sp_doc_dialog_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
-static void sp_doc_dialog_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_doc_dialog_activate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_doc_dialog_deactivate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_doc_dialog_update (GtkWidget *dialog, SPDocument *doc);
 
 static void
@@ -273,13 +273,13 @@ sp_doc_dialog_new (void)
 }
 
 static void
-sp_doc_dialog_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+sp_doc_dialog_activate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_doc_dialog_update (dialog, (desktop) ? SP_DT_DOCUMENT (desktop) : NULL);
 }
 
 static void
-sp_doc_dialog_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+sp_doc_dialog_deactivate_desktop (Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_doc_dialog_update (dialog, NULL);
 }

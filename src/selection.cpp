@@ -175,7 +175,7 @@ sp_selection_idle_handler (gpointer data)
 	/* Emit our own "modified" signal */
 	g_signal_emit (G_OBJECT (selection), selection_signals [MODIFIED], 0, flags);
 
-	/* Request "selection_modified" signal on Inkscape */
+	/* Request "selection_modified" signal on Inkscape::Application */
 	inkscape_selection_modified (selection, flags);
 
 	return FALSE;

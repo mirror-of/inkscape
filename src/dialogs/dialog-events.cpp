@@ -119,7 +119,7 @@ sp_transientize (GtkWidget *dialog)
 }
 
 void
-sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd)
+sp_transientize_callback (Inkscape::Application *inkscape, SPDesktop *desktop, win_data *wd)
 {
 #ifndef WIN32
 	if (wd->stop) { // if retransientizing of this dialog is still forbidden after previous call

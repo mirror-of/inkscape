@@ -1,5 +1,8 @@
 2003-12-19  MenTaLguY <mental@rydia.net>
 
+	* Renamed the Inkscape class (struct really) to Inkscape::Application; we can now
+	  use the Inkscape namespace.
+
 	* src/toolbox.cpp, src/helper/action.cpp, src/helper/action.h:
 	  SPActions now know their desktop, and toolbar buttons get it assigned correctly
 

@@ -35,7 +35,7 @@ typedef struct _SPWidgetClass SPWidgetClass;
 struct _SPWidget {
 	GtkBin bin;
 
-	Inkscape *inkscape;
+	Inkscape::Application *inkscape;
 	SPObject *object;
 	SPRepr *repr;
 
@@ -61,8 +61,8 @@ GtkType sp_widget_get_type (void);
 
 /* fixme: Think (Lauris) */
 /* Generic constructor for global widget */
-GtkWidget *sp_widget_new_global (Inkscape *inkscape);
-GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape *inkscape);
+GtkWidget *sp_widget_new_global (Inkscape::Application *inkscape);
+GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape);
 /* Generic constructor for global widget */
 GtkWidget *sp_widget_new_repr (SPRepr *repr);
 GtkWidget *sp_widget_construct_repr (SPWidget *spw, SPRepr *repr);

@@ -44,9 +44,9 @@ static gint sp_widget_expose (GtkWidget *widget, GdkEventExpose *event);
 static void sp_widget_size_request (GtkWidget *widget, GtkRequisition *requisition);
 static void sp_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 
-static void sp_widget_modify_selection (Inkscape *inkscape, SPSelection *selection, guint flags, SPWidget *spw);
-static void sp_widget_change_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw);
-static void sp_widget_set_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw);
+static void sp_widget_modify_selection (Inkscape::Application *inkscape, SPSelection *selection, guint flags, SPWidget *spw);
+static void sp_widget_change_selection (Inkscape::Application *inkscape, SPSelection *selection, SPWidget *spw);
+static void sp_widget_set_selection (Inkscape::Application *inkscape, SPSelection *selection, SPWidget *spw);
 
 static GtkBinClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
@@ -294,7 +294,7 @@ sp_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 /* Methods */
 
 GtkWidget *
-sp_widget_new_global (Inkscape *inkscape)
+sp_widget_new_global (Inkscape::Application *inkscape)
 {
 	SPWidget *spw;
 
@@ -326,7 +326,7 @@ sp_widget_new_repr (SPRepr *repr)
 }
 
 GtkWidget *
-sp_widget_construct_global (SPWidget *spw, Inkscape *inkscape)
+sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape)
 {
 	g_return_val_if_fail (!spw->inkscape, NULL);
 
@@ -383,19 +383,19 @@ sp_widget_construct_repr (SPWidget *spw, SPRepr *repr)
 }
 
 static void
-sp_widget_modify_selection (Inkscape *inkscape, SPSelection *selection, guint flags, SPWidget *spw)
+sp_widget_modify_selection (Inkscape::Application *inkscape, SPSelection *selection, guint flags, SPWidget *spw)
 {
 	g_signal_emit (G_OBJECT (spw), signals[MODIFY_SELECTION], 0, selection, flags);
 }
 
 static void
-sp_widget_change_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw)
+sp_widget_change_selection (Inkscape::Application *inkscape, SPSelection *selection, SPWidget *spw)
 {
 	g_signal_emit (G_OBJECT (spw), signals[CHANGE_SELECTION], 0, selection);
 }
 
 static void
-sp_widget_set_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw)
+sp_widget_set_selection (Inkscape::Application *inkscape, SPSelection *selection, SPWidget *spw)
 {
 	/* Emit "set_selection" signal */
 	g_signal_emit (G_OBJECT (spw), signals[SET_SELECTION], 0, selection);
