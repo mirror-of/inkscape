@@ -792,13 +792,13 @@ sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, 
 }
 
 void
-sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle)
+sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle_degrees)
 {
 	NRMatrix rotate, n2d, d2n, final, s;
 
 	nr_matrix_set_translate (&n2d, -center->x, -center->y);
 	nr_matrix_invert (&d2n, &n2d);
-	sp_matrix_d_set_rotate (&rotate, angle);
+	sp_matrix_d_set_rotate (&rotate, angle_degrees);
 
 	nr_matrix_multiply (&s, &n2d, &rotate);
 	nr_matrix_multiply (&final, &s, &d2n);
@@ -860,7 +860,7 @@ sp_selection_rotate_90 (void)
 }
 
 void
-sp_selection_rotate (SPSelection *selection, gdouble angle)
+sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 {
 	NRRect bbox;
 	NRPoint center;
@@ -872,10 +872,10 @@ sp_selection_rotate (SPSelection *selection, gdouble angle)
 
 	//	g_print ("%g  %g  %g  %g\n", bbox.x0, bbox.x1, bbox.y0, bbox.y1);
 
-	sp_selection_rotate_relative (selection, &center, angle);
+	sp_selection_rotate_relative (selection, &center, angle_degrees);
 
 	//	sp_selection_changed (selection);
-	if (angle > 0)
+	if ( angle_degrees > 0 )
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
 	else
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:cw");
@@ -1193,11 +1193,11 @@ static void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 
 
 static void
-sp_matrix_d_set_rotate (NRMatrix *m, double theta)
+sp_matrix_d_set_rotate (NRMatrix *m, double theta_degrees)
 {
 	double s, c;
-	s = sin (theta * M_PI / 180.0);
-	c = cos (theta * M_PI / 180.0);
+	s = sin(theta_degrees / 180.0 * M_PI);
+	c = cos(theta_degrees / 180.0 * M_PI);
 	m->c[0] = c;
 	m->c[1] = s;
 	m->c[2] = -s;

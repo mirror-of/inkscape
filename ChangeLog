@@ -1,5 +1,10 @@
 2004-01-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/selection-chemistry.cpp (sp_matrix_d_set_rotate):
+	Slight reduction in numerical error.
+	(Also rename variables from `angle' to `angle_degrees' in several
+	places.)
+
 	* src/node-context.cpp (sp_node_context_root_handler):
 	* src/object-edit.cpp (sp_arc_start_set, sp_arc_end_set,
 	sp_spiral_inner_set, sp_spiral_outer_set):
