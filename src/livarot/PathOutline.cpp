@@ -897,22 +897,33 @@ Path::IsNulCurve (std::vector<PathDescr*> const &cmd, int curD, NR::Point const 
 
 // tangents and cuvarture computing, for the different path command types.
 // the need for tangent is obvious: it gives the normal, along which we offset points
-// curvature is used to do strength correction on the length of the tangents to the offset (see cubic offset)
+// curvature is used to do strength correction on the length of the tangents to the offset (see
+// cubic offset)
+
+/**
+ *    \param at Distance along a tangent (0 <= at <= 1).
+ *    \param iS Start point.
+ *    \param fin LineTo description containing end point.
+ *    \param pos Filled in with the position of `at' on the segment.
+ *    \param tgt Filled in with the normalised tangent vector.
+ *    \param len Filled in with the length of the segment.
+ */
+
 void Path::TangentOnSegAt(double at, NR::Point const &iS, PathDescrLineTo const &fin,
                           NR::Point &pos, NR::Point &tgt, double &len)
 {
-	NR::Point const iE = fin.p;
-	NR::Point const seg = iE - iS;
-	double const l = L2(seg);
-	if (l <= 0.000001) {
-		pos = iS;
-		tgt = NR::Point(0, 0);
-		len = 0;
-	} else {
-		tgt = seg / l;
-		pos = (1 - at)*iS + at*iE;
-		len = l;
-	}
+    NR::Point const iE = fin.p;
+    NR::Point const seg = iE - iS;
+    double const l = L2(seg);
+    if (l <= 0.000001) {
+        pos = iS;
+        tgt = NR::Point(0, 0);
+        len = 0;
+    } else {
+        tgt = seg / l;
+        pos = (1 - at) * iS + at * iE; // in other words, pos = iS + at * seg
+        len = l;
+    }
 }
 
 // barf
