@@ -849,11 +849,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
                     if ( cb != upNo ) {
                         SweepTree* node = swrData[cb].misc;
                         if ( node ) {
-                            swrData[cb].lastX = swrData[cb].curX;
-                            swrData[cb].lastY = swrData[cb].curY;
-                            swrData[cb].curX = getPoint(nPt).x[0];
-                            swrData[cb].curY = getPoint(nPt).x[1];
-                            swrData[cb].misc = NULL;
+                            _updateIntersection(cb, nPt);
                             // create trapezoid for the chunk of edge intersecting with the line
                             DestroyEdge(cb, to, line);
                             node->Remove(*sTree, *sEvts, true);
@@ -870,11 +866,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
-                swrData[upNo].misc = NULL;
-                swrData[upNo].lastX = swrData[upNo].curX;
-                swrData[upNo].lastY = swrData[upNo].curY;
-                swrData[upNo].curX = getPoint(nPt).x[0];
-                swrData[upNo].curY = getPoint(nPt).x[1];
+                _updateIntersection(upNo, nPt);
                 DestroyEdge(upNo, to, line);
                 
                 node->ConvertTo(this, dnNo, 1, nPt);
@@ -1034,13 +1026,8 @@ void Shape::Scan(float &pos, int &curP, float to, FillRule directed, BitLigne *l
                     if ( cb != upNo ) {
                         SweepTree* node=swrData[cb].misc;
                         if ( node ) {
-                            swrData[cb].lastX = swrData[cb].curX;
-                            swrData[cb].lastY = swrData[cb].curY;
-                            swrData[cb].curX = getPoint(nPt).x[0];
-                            swrData[cb].curY = getPoint(nPt).x[1];
-                            swrData[cb].misc = NULL;
+                            _updateIntersection(cb, nPt);
                             DestroyEdge(cb, line);
-                            
                             node->Remove(*sTree,*sEvts,true);
                         }
                     }
@@ -1054,11 +1041,7 @@ void Shape::Scan(float &pos, int &curP, float to, FillRule directed, BitLigne *l
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
-                swrData[upNo].misc = NULL;
-                swrData[upNo].lastX = swrData[upNo].curX;
-                swrData[upNo].lastY = swrData[upNo].curY;
-                swrData[upNo].curX = getPoint(nPt).x[0];
-                swrData[upNo].curY = getPoint(nPt).x[1];
+                _updateIntersection(upNo, nPt);
                 DestroyEdge(upNo, line);
                 
                 node->ConvertTo(this, dnNo, 1, nPt);
@@ -1153,13 +1136,8 @@ void Shape::Scan(float &pos, int &curP, float to, AlphaLigne *line, bool exact, 
                     if ( cb != upNo ) {
                         SweepTree* node = swrData[cb].misc;
                         if ( node ) {
-                            swrData[cb].lastX = swrData[cb].curX;
-                            swrData[cb].lastY = swrData[cb].curY;
-                            swrData[cb].curX = getPoint(nPt).x[0];
-                            swrData[cb].curY = getPoint(nPt).x[1];
-                            swrData[cb].misc = NULL;
+                            _updateIntersection(cb, nPt);
                             DestroyEdge(cb, line);
-                            
                             node->Remove(*sTree, *sEvts, true);
                         }
                     }
@@ -1174,11 +1152,7 @@ void Shape::Scan(float &pos, int &curP, float to, AlphaLigne *line, bool exact, 
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
-                swrData[upNo].misc = NULL;
-                swrData[upNo].lastX = swrData[upNo].curX;
-                swrData[upNo].lastY = swrData[upNo].curY;
-                swrData[upNo].curX = getPoint(nPt).x[0];
-                swrData[upNo].curY = getPoint(nPt).x[1];
+                _updateIntersection(upNo, nPt);
                 DestroyEdge(upNo, line);
 
                 node->ConvertTo(this, dnNo, 1, nPt);
@@ -1313,11 +1287,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, FloatLigne* line, float s
                 if ( nPt == std::max(e.st, e.en) ) {
                     if ( cb != upNo ) {
                         QuickRasterSubEdge(cb);
-                        swrData[cb].lastX = swrData[cb].curX;
-                        swrData[cb].lastY = swrData[cb].curY;
-                        swrData[cb].curX = getPoint(nPt).x[0];
-                        swrData[cb].curY = getPoint(nPt).x[1];
-                        swrData[cb].misc = NULL;
+                        _updateIntersection(cb, nPt);
                         DestroyEdge(cb, to, line);
                     }
                 }
@@ -1330,11 +1300,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, FloatLigne* line, float s
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 ins_guess = QuickRasterChgEdge(upNo ,dnNo, getPoint(nPt).x[0]);
-                swrData[upNo].lastX = swrData[upNo].curX;
-                swrData[upNo].lastY = swrData[upNo].curY;
-                swrData[upNo].curX = getPoint(nPt).x[0];
-                swrData[upNo].curY = getPoint(nPt).x[1];
-                swrData[upNo].misc = NULL;
+                _updateIntersection(upNo, nPt);
                 DestroyEdge(upNo, to, line);
 
                 CreateEdge(dnNo, to, step);
@@ -1474,12 +1440,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, FillRule directed, BitLig
                 if ( nPt == std::max(e.st, e.en) ) {
                     if ( cb != upNo ) {
                         QuickRasterSubEdge(cb);
-
-                        swrData[cb].lastX = swrData[cb].curX;
-                        swrData[cb].lastY = swrData[cb].curY;
-                        swrData[cb].curX = getPoint(nPt).x[0];
-                        swrData[cb].curY = getPoint(nPt).x[1];
-                        swrData[cb].misc = NULL;
+                        _updateIntersection(cb, nPt);
                         DestroyEdge(cb, line);
                     }
                 }
@@ -1492,11 +1453,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, FillRule directed, BitLig
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 ins_guess = QuickRasterChgEdge(upNo, dnNo, getPoint(nPt).x[0]);
-                swrData[upNo].lastX = swrData[upNo].curX;
-                swrData[upNo].lastY = swrData[upNo].curY;
-                swrData[upNo].curX = getPoint(nPt).x[0];
-                swrData[upNo].curY = getPoint(nPt).x[1];
-                swrData[upNo].misc = NULL;
+                _updateIntersection(upNo, nPt);
                 DestroyEdge(upNo, line);
                 
                 CreateEdge(dnNo, to, step);
@@ -1577,12 +1534,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, AlphaLigne* line, float s
                 if ( nPt == std::max(e.st, e.en) ) {
                     if ( cb != upNo ) {
                         QuickRasterSubEdge(cb);
-                        
-                        swrData[cb].lastX = swrData[cb].curX;
-                        swrData[cb].lastY = swrData[cb].curY;
-                        swrData[cb].curX = getPoint(nPt).x[0];
-                        swrData[cb].curY = getPoint(nPt).x[1];
-                        swrData[cb].misc = NULL;
+                        _updateIntersection(cb, nPt);
                         DestroyEdge(cb, line);
                     }
                 }
@@ -1595,11 +1547,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, AlphaLigne* line, float s
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 ins_guess = QuickRasterChgEdge(upNo, dnNo, getPoint(nPt).x[0]);
-                swrData[upNo].lastX = swrData[upNo].curX;
-                swrData[upNo].lastY = swrData[upNo].curY;
-                swrData[upNo].curX = getPoint(nPt).x[0];
-                swrData[upNo].curY = getPoint(nPt).x[1];
-                swrData[upNo].misc = NULL;
+                _updateIntersection(upNo, nPt);
                 DestroyEdge(upNo, line);
 
                 CreateEdge(dnNo, to, step);
@@ -1791,9 +1739,9 @@ void Shape::AvanceEdge(int no, float to, FloatLigne *line, bool exact, float ste
         if ( swrData[no].curX < swrData[no].lastX ) {
 
             swrData[no].guess = line->AddBordR(swrData[no].curX,
-                                               -(to-swrData[no].curY),
+                                               -(to - swrData[no].curY),
                                                swrData[no].lastX,
-                                               -(to-swrData[no].lastY),
+                                               -(to - swrData[no].lastY),
                                                swrData[no].dydx,
                                                swrData[no].guess);
             
@@ -2013,6 +1961,17 @@ void Shape::_countUpDownTotalDegree2(int P,
         }
     }
 }
+
+
+void Shape::_updateIntersection(int e, int p)
+{
+    swrData[e].lastX = swrData[e].curX;
+    swrData[e].lastY = swrData[e].curY;
+    swrData[e].curX = getPoint(p).x[0];
+    swrData[e].curY = getPoint(p).x[1];
+    swrData[e].misc = NULL;
+}
+
 
 /*
   Local Variables:

@@ -442,7 +442,8 @@ private:
 
     void _countUpDown(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const;
     void _countUpDownTotalDegree2(int P, int *numberUp, int *numberDown, int *upEdge, int *downEdge) const;
-    
+    void _updateIntersection(int e, int p);
+  
     // activation/deactivation of the temporary data arrays
     void MakePointData(bool nVal);
     void MakeEdgeData(bool nVal);
@@ -489,7 +490,6 @@ private:
     void SortPointsRounded(int s, int e);
     
     void CreateEdge(int no, float to, float step);
-    void DestroyEdge(int no, float to, float step);
     void AvanceEdge(int no, float to, bool exact, float step);
     void DestroyEdge(int no, float to, FloatLigne *line);
     void AvanceEdge(int no, float to, FloatLigne *line, bool exact, float step);
