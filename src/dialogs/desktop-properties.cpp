@@ -132,6 +132,9 @@ static inkscape_papers_t const inkscape_papers[] = {
     { "Folio", 935, 595 },
     { "Ledger", 792, 1224 },
     { "Tabloid", 1225, 792 },
+    { "Banner 468x60", 60, 468 },
+    { "Icon 16x16", 16, 16 },
+    { "Icon 32x32", 32, 32 },
     { NULL, 0, 0 },
 };
 
