@@ -860,9 +860,11 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             if (items) {
                     SPCSSAttr *css = sp_repr_css_attr_new ();
                     sp_repr_css_unset_property (css, "fill");
-                    for (GSList const *i = items; i != NULL; i = i->next) {
-                        sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
-                    }
+
+                    sp_desktop_set_style (desktop, css);
+
+                    sp_repr_css_attr_unref (css);
+
                     sp_document_done (SP_WIDGET_DOCUMENT (spw));
             }
             break;
