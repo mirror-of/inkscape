@@ -26,5 +26,6 @@ void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change = true
 SPCSSAttr *sp_desktop_get_style(SPDesktop *desktop, bool with_text);
 guint32 sp_desktop_get_color (SPDesktop *desktop, bool is_fill);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, SPRepr *repr, char const *tool, bool with_text);
+bool items_have_same_color (const GSList *items, bool is_fill);
 
 #endif

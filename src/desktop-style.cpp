@@ -149,6 +149,26 @@ sp_desktop_apply_style_tool (SPDesktop *desktop, SPRepr *repr, const char *tool,
 	}
 }
 
+bool 
+items_have_same_color (const GSList *items, bool is_fill)
+{
+    guint32 rgb = 0;
+
+    for (const GSList *i = items; i != NULL; i = i->next) {
+        SPObject *o = SP_OBJECT (i->data);
+        guint type = is_fill ? SP_OBJECT_STYLE (o)->fill.type : SP_OBJECT_STYLE (o)->stroke.type;
+        if (type == SP_PAINT_TYPE_COLOR) {
+            gfloat d[4];
+            sp_color_get_rgb_floatv (is_fill ? &(SP_OBJECT_STYLE (o)->fill.value.color) : &(SP_OBJECT_STYLE (o)->stroke.value.color), d);
+            guint32 this_rgb = SP_RGBA32_F_COMPOSE(d[0], d[1], d[2], 1.0) >> 8;
+            if (rgb != 0 && this_rgb != rgb) 
+                return false;
+            rgb = this_rgb;
+        }
+    }
+    return true;
+}
+
 
 /*
   Local Variables:

@@ -835,11 +835,18 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                      * changed mode
                      */
 
+                    bool same = items_have_same_color (items, true);
+                    if (same) {
+                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), true);
+                    }
+
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
-                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
+                        if (!same) {
+                            vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
+                        }
 
                         sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                     }
@@ -873,11 +880,18 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                      * changed mode
                      */
 
+                    bool same = items_have_same_color (items, true);
+                    if (same) {
+                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), true);
+                    }
+
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
-                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
+                        if (!same) {
+                            vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
+                        }
 
                         sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                     }
