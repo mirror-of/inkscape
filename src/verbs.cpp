@@ -483,6 +483,10 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 static void
 sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 {
+	if ((int) data != SP_VERB_DIALOG_TOGGLE) { // unhide all when opening a new dialog
+		inkscape_dialogs_unhide ();
+	}
+
 	switch ((int) data) {
 	case SP_VERB_DIALOG_DISPLAY:
 		sp_display_dialog ();
@@ -516,6 +520,9 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 		break;
 	case SP_VERB_DIALOG_XML_EDITOR:
 		sp_xml_tree_dialog ();
+		break;
+	case SP_VERB_DIALOG_TOGGLE:
+		inkscape_dialogs_toggle ();
 		break;
 	case SP_VERB_DIALOG_ITEM:
 		sp_item_dialog ();
@@ -647,6 +654,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute"), N_("Align and distribute objects"), "object_align"},
 	{SP_VERB_DIALOG_TEXT, "Dialogtext", N_("_Text and Font"), N_("Text editing and font settings"), "object_font"},
 	{SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor"), N_("XML Editor"), NULL},
+	{SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("_Hide/View dialogs"), N_("Toggle visibility of all active dialogs"), NULL},
 	{SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item _Properties"), N_("Item properties"), NULL},
 	/* Footer */
 	{SP_VERB_LAST, NULL, NULL, NULL, NULL}
