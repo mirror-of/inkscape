@@ -13,7 +13,6 @@
  */
 
 // comment out the extern "C" if compiling with g++
-extern "C" {
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
 #include "xml/repr.h"
@@ -29,7 +28,6 @@ extern "C" {
 #include "desktop.h"
 #include "splivarot.h"
 #include "helper/canvas-bpath.h"
-}
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"

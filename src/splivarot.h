@@ -9,6 +9,10 @@
 
 #include "forward.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // boolean operations
 // work on the current selection
 // selection has 2 contain exactly 2 items
@@ -25,5 +29,9 @@ void sp_selected_path_inset (void);
 // outline of a curve
 // uses the stroke-width
 void sp_selected_path_outline (void);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif
