@@ -348,16 +348,6 @@ sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_image_image_properties), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-
-#ifdef ENABLE_AUTOTRACE
-	/* Autotrace dialog */
-	// TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
-	w = gtk_menu_item_new_with_mnemonic (_("_Trace"));
-	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
-	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_image_autotrace), item);
-	gtk_widget_show (w);
-	gtk_menu_append (GTK_MENU (m), w);
-#endif /* Def: ENABLE_AUTOTRACE */
 }
 
 static void

@@ -9,6 +9,9 @@
 	* src/inkscape.cpp, src/main.cpp, src/widgets/icon.cpp:
 	  removed sp_bitmap_icons
 
+	* src/sp-image.cpp, src/object-ui.cpp:
+	  removed stale autotrace support code
+
 2004-11-10  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-item.cpp, src/sp-clippath.cpp, src/cp-mask.cpp:
