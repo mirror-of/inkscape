@@ -2078,19 +2078,19 @@ node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 
 	if (state & GDK_CONTROL_MASK) { // constrained motion 
 
+		// calculate relative distances of control points
+		yn = n->n.pos.y - n->pos.y; 
+		xn = n->n.pos.x - n->pos.x;
+		if (xn < 0) { xn = -xn; yn = -yn; } // limit the handle angle to between 0 and pi
+		if (yn < 0) { xn = -xn; yn = -yn; } 
+
+		yp = n->p.pos.y - n->pos.y;
+		xp = n->p.pos.x - n->pos.x;
+		if (xp < 0) { xp = -xp; yp = -yp; } // limit the handle angle to between 0 and pi
+		if (yp < 0) { xp = -xp; yp = -yp; } 
+
 		if (state & GDK_MOD1_MASK && !(xn == 0 && xp == 0)) { 
 			// sliding on handles, only if at least one of the handles is non-vertical
-
-			// calculate relative distances of control points
-			yn = n->n.pos.y - n->pos.y; 
-			xn = n->n.pos.x - n->pos.x;
-			if (xn < 0) { xn = -xn; yn = -yn; } // limit the handle angle to between 0 and pi
-			if (yn < 0) { xn = -xn; yn = -yn; } 
-
-			yp = n->p.pos.y - n->pos.y;
-			xp = n->p.pos.x - n->pos.x;
-			if (xp < 0) { xp = -xp; yp = -yp; } // limit the handle angle to between 0 and pi
-			if (yp < 0) { xp = -xp; yp = -yp; } 
 
 			// calculate angles of the control handles
 			if (xn == 0) {
