@@ -101,8 +101,28 @@ AC_CHECK_HEADERS([gc.h gc/gc.h],
 				  break], [gc_ok=no], [$gc_libs])
 		    break],
                  [gc_ok=no])
+if test "x$gc_ok" == "xyes"; then
+	AC_MSG_CHECKING([libgc version 6.4+])
+	AC_RUN_IFELSE(
+		[AC_LANG_SOURCE([[
+			#ifdef HAVE_GC_GC_H
+			# include <gc/gc.h>
+			#else
+			# include <gc.h>
+			#endif
+			extern unsigned GC_version;
+			int main(void){
+				unsigned min = ((6 << 16) | (4 << 8) | 0);
+				if (GC_version>=min) return 0;
+				return 1;
+			}]])],
+		[gc_ok=yes],
+		[gc_ok=no]
+	)
+	AC_MSG_RESULT([$gc_ok])
+fi
 if test "x$gc_ok" != "xyes"; then
-	AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
+	AC_MSG_ERROR([libgc (the Boehm Conservative Collector) 6.4+, is needed to compile inkscape])
 fi
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
