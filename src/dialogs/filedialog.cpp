@@ -1182,8 +1182,7 @@ void FileSaveDialogImpl::createFileTypeMenu()
         Inkscape::Extension::DB::IOExtensionDescription * ioext =
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
-        if ( ( strcmp(".svg",  ioext->file_extension)==0 ||
-               strcmp(".svgz", ioext->file_extension)==0   ))
+        if ( ( strcmp(".svg",  ioext->file_extension)==0 ))
             {
             //Skip these. we already did them
             }
