@@ -28,6 +28,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkmenuitem.h>
+#include <gtk/gtktooltips.h>
 
 #include <libnr/nr-values.h>
 
@@ -169,9 +170,9 @@ sp_fill_style_widget_new (void)
     hb = gtk_hbox_new (FALSE, 4);
     gtk_widget_show (hb);
     gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+    GtkTooltips *ttips = gtk_tooltips_new ();
 
-    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-    l = gtk_label_new (_("Fill Rule"));
+    l = gtk_label_new (_("Fill:"));
     gtk_widget_show (l);
     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
@@ -180,12 +181,17 @@ sp_fill_style_widget_new (void)
     gtk_widget_show (om);
     gtk_box_pack_start (GTK_BOX (hb), om, FALSE, FALSE, 0);
     g_object_set_data (G_OBJECT (spw), "fill-rule", om);
+    gtk_tooltips_set_tip (ttips, om,
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
+				_("Specifies the method of filling overlapping areas when an object intersects itself. "
+				"With the \"winding fill\" method (fill-rule:nonzero), all overlapping areas are filled; "
+				"with the \"alternating fill\" method (fill-rule:evenodd), every other of them is filled."), NULL);
 
     /* 0 - nonzero 1 - evenodd */
     m = gtk_menu_new ();
     gtk_widget_show (m);
 
-    mi = gtk_menu_item_new_with_label ("nonzero");
+    mi = gtk_menu_item_new_with_label (_("winding"));
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
     g_object_set_data ( G_OBJECT (mi), "fill-rule", 
@@ -193,7 +199,7 @@ sp_fill_style_widget_new (void)
     g_signal_connect ( G_OBJECT (mi), "activate", 
                        G_CALLBACK (sp_fill_style_widget_fill_rule_activate), 
                        spw );
-    mi = gtk_menu_item_new_with_label ("evenodd");
+    mi = gtk_menu_item_new_with_label (_("alternating"));
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
     g_object_set_data (G_OBJECT (mi), "fill-rule", (void *)"evenodd");
