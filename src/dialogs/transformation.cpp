@@ -570,17 +570,16 @@ static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection)
     SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
     GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
-    float x = sp_unit_selector_get_value_in_points (us, ax);
-    float y = sp_unit_selector_get_value_in_points (us, ay);
+    NR::Point const move(sp_unit_selector_get_value_in_points(us, ax),
+                         sp_unit_selector_get_value_in_points(us, ay));
 
     GtkToggleButton *cb = GTK_TOGGLE_BUTTON(g_object_get_data (dlg, "move_relative"));
-    
+
     if (gtk_toggle_button_get_active (cb)) {
-        sp_selection_move_relative (selection, x, y);
-    
+        sp_selection_move_relative(selection, move);
     } else {
-        NR::Rect bbox = selection->bounds();
-        sp_selection_move_relative (selection, x - bbox.min()[NR::X], y - bbox.min()[NR::Y]);
+        sp_selection_move_relative(selection,
+                                   move - selection->bounds().min());
     }
 
     if (selection)
