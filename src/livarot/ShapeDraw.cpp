@@ -50,15 +50,15 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
   
 	if ( doPoint ) {
 		for (int i=0;i<nbPt;i++) {
-			double   ph=(pts[i].x[0]-ix)*ir+mx;
-			double   pv=(pts[i].x[1]-iy)*ir+my;
+			double   ph=(getPoint(i).x[0]-ix)*ir+mx;
+			double   pv=(getPoint(i).x[1]-iy)*ir+my;
       fprintf(outFile,"     <circle cx=\"%f\" cy=\"%f\" r=\"5\" fill=\"none\" stroke=\"red\" stroke-width=\"0.25\" />\n",ph,pv); // localizing ok
     }
 	}
   if ( pointsNo ) {
 		for (int i=0;i<nbPt;i++) {
-			double   ph=(pts[i].x[0]-ix)*ir+mx;
-			double   pv=(pts[i].x[1]-iy)*ir+my;
+			double   ph=(getPoint(i).x[0]-ix)*ir+mx;
+			double   pv=(getPoint(i).x[1]-iy)*ir+my;
       fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",ph-2,pv+1); // localizing ok
       fprintf(outFile,"%i\n",i);
       fprintf(outFile,"     </text>\n");
@@ -69,10 +69,10 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 			int     stP=aretes[i].st;
 			int     enP=aretes[i].en;
 			if ( stP < 0 || enP < 0 ) continue;
-			double   sh=(pts[stP].x[0]-ix)*ir+mx;
-			double   sv=(pts[stP].x[1]-iy)*ir+my;
-			double   eh=(pts[enP].x[0]-ix)*ir+mx;
-			double   ev=(pts[enP].x[1]-iy)*ir+my;
+			double   sh=(getPoint(stP).x[0]-ix)*ir+mx;
+			double   sv=(getPoint(stP).x[1]-iy)*ir+my;
+			double   eh=(getPoint(enP).x[0]-ix)*ir+mx;
+			double   ev=(getPoint(enP).x[1]-iy)*ir+my;
 			if ( doDir ) {
 				double   endh=(9*eh+1*sh)/10;
 				double   endv=(9*ev+1*sv)/10;
@@ -87,10 +87,10 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 			int     stP=aretes[i].st;
 			int     enP=aretes[i].en;
 			if ( stP < 0 || enP < 0 ) continue;
-			double   sh=(pts[stP].x[0]-ix)*ir+mx;
-			double   sv=(pts[stP].x[1]-iy)*ir+my;
-			double   eh=(pts[enP].x[0]-ix)*ir+mx;
-			double   ev=(pts[enP].x[1]-iy)*ir+my;
+			double   sh=(getPoint(stP).x[0]-ix)*ir+mx;
+			double   sv=(getPoint(stP).x[1]-iy)*ir+my;
+			double   eh=(getPoint(enP).x[0]-ix)*ir+mx;
+			double   ev=(getPoint(enP).x[1]-iy)*ir+my;
       fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",(sh+eh)/2+2,(sv+ev)/2); // localizing ok
       fprintf(outFile,"%i\n",i);
       fprintf(outFile,"     </text>\n");

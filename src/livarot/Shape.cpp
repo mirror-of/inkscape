@@ -64,6 +64,7 @@ Shape::~Shape (void)
 
 void Shape::Affiche(void)
 {
+  /*
   printf("sh=%p nbPt=%i nbAr=%i\n",this,nbPt,nbAr); // localizing ok
   for (int i=0;i<nbPt;i++) {
     printf("pt %i : x=(%f %f) dI=%i dO=%i\n",i,pts[i].x[0],pts[i].x[1],pts[i].dI,pts[i].dO); // localizing ok
@@ -71,6 +72,7 @@ void Shape::Affiche(void)
   for (int i=0;i<nbAr;i++) {
     printf("ar %i : dx=(%f %f) st=%i en=%i\n",i,aretes[i].dx[0],aretes[i].dx[1],aretes[i].st,aretes[i].en); // localizing ok
   }
+  */
 }
 
 void
@@ -258,8 +260,10 @@ Shape::MakeVoronoiData (bool nVal)
     }
 }
 
-/*
- *
+
+/**
+ *  Copy point and edge data from `who' into this object, discarding
+ *  any cached data that we have.
  */
 void
 Shape::Copy (Shape * who)
@@ -299,7 +303,7 @@ Shape::Copy (Shape * who)
   _has_back_data = false;
   _has_voronoi_data = false;
 
-  pts = who->pts;
+  _pts = who->_pts;
   aretes = who->aretes;
 }
 
@@ -339,7 +343,7 @@ Shape::Reset (int n, int m)
 	voreData =
 	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
     }
-  pts.resize(n);
+  _pts.resize(n);
   aretes.resize(m);
   _need_points_sorting = false;
   _need_edges_sorting = false;
@@ -359,10 +363,10 @@ Shape::AddPoint (const NR::Point x)
 				     maxPt * sizeof (voronoi_point));
     }
   int n = nbPt++;
-  pts.resize(nbPt);
-  pts[n].x = x;
-  pts[n].dI = pts[n].dO = 0;
-  pts[n].firstA = pts[n].lastA = -1;
+  _pts.resize(nbPt);
+  _pts[n].x = x;
+  _pts[n].dI = _pts[n].dO = 0;
+  _pts[n].firstA = _pts[n].lastA = -1;
   if (_has_points_data)
     {
       pData[n].pending = 0;
@@ -387,7 +391,7 @@ Shape::SubPoint (int p)
     return;
   _need_points_sorting = true;
   int cb;
-  cb = pts[p].firstA;
+  cb = getPoint(p).firstA;
   while (cb >= 0 && cb < nbAr)
     {
       if (aretes[cb].st == p)
@@ -409,7 +413,7 @@ Shape::SubPoint (int p)
 	  break;
 	}
     }
-  pts[p].firstA = pts[p].lastA = -1;
+  _pts[p].firstA = _pts[p].lastA = -1;
   if (p < nbPt - 1)
     SwapPoints (p, nbPt - 1);
   nbPt--;
@@ -420,9 +424,9 @@ Shape::SwapPoints (int a, int b)
 {
   if (a == b)
     return;
-  if (pts[a].dI + pts[a].dO == 2 && pts[b].dI + pts[b].dO == 2)
+  if (getPoint(a).dI + getPoint(a).dO == 2 && getPoint(b).dI + getPoint(b).dO == 2)
     {
-      int cb = pts[a].firstA;
+      int cb = getPoint(a).firstA;
       if (aretes[cb].st == a)
 	{
 	  aretes[cb].st = nbPt;
@@ -431,7 +435,7 @@ Shape::SwapPoints (int a, int b)
 	{
 	  aretes[cb].en = nbPt;
 	}
-      cb = pts[a].lastA;
+      cb = getPoint(a).lastA;
       if (aretes[cb].st == a)
 	{
 	  aretes[cb].st = nbPt;
@@ -441,7 +445,7 @@ Shape::SwapPoints (int a, int b)
 	  aretes[cb].en = nbPt;
 	}
 
-      cb = pts[b].firstA;
+      cb = getPoint(b).firstA;
       if (aretes[cb].st == b)
 	{
 	  aretes[cb].st = a;
@@ -450,7 +454,7 @@ Shape::SwapPoints (int a, int b)
 	{
 	  aretes[cb].en = a;
 	}
-      cb = pts[b].lastA;
+      cb = getPoint(b).lastA;
       if (aretes[cb].st == b)
 	{
 	  aretes[cb].st = a;
@@ -460,7 +464,7 @@ Shape::SwapPoints (int a, int b)
 	  aretes[cb].en = a;
 	}
 
-      cb = pts[a].firstA;
+      cb = getPoint(a).firstA;
       if (aretes[cb].st == nbPt)
 	{
 	  aretes[cb].st = b;
@@ -469,7 +473,7 @@ Shape::SwapPoints (int a, int b)
 	{
 	  aretes[cb].en = b;
 	}
-      cb = pts[a].lastA;
+      cb = getPoint(a).lastA;
       if (aretes[cb].st == nbPt)
 	{
 	  aretes[cb].st = b;
@@ -483,7 +487,7 @@ Shape::SwapPoints (int a, int b)
   else
     {
       int cb;
-      cb = pts[a].firstA;
+      cb = getPoint(a).firstA;
       while (cb >= 0)
 	{
 	  int ncb = NextAt (a, cb);
@@ -497,7 +501,7 @@ Shape::SwapPoints (int a, int b)
 	    }
 	  cb = ncb;
 	}
-      cb = pts[b].firstA;
+      cb = getPoint(b).firstA;
       while (cb >= 0)
 	{
 	  int ncb = NextAt (b, cb);
@@ -511,7 +515,7 @@ Shape::SwapPoints (int a, int b)
 	    }
 	  cb = ncb;
 	}
-      cb = pts[a].firstA;
+      cb = getPoint(a).firstA;
       while (cb >= 0)
 	{
 	  int ncb = NextAt (nbPt, cb);
@@ -527,9 +531,9 @@ Shape::SwapPoints (int a, int b)
 	}
     }
   {
-    dg_point swap = pts[a];
-    pts[a] = pts[b];
-    pts[b] = swap;
+    dg_point swap = getPoint(a);
+    _pts[a] = getPoint(b);
+    _pts[b] = swap;
   }
   if (_has_points_data)
     {
@@ -577,16 +581,16 @@ Shape::SortPoints (int s, int e)
     return;
   if (e == s + 1)
     {
-      if (pts[s].x[1] > pts[e].x[1]
-	  || (pts[s].x[1] == pts[e].x[1] && pts[s].x[0] > pts[e].x[0]))
+      if (getPoint(s).x[1] > getPoint(e).x[1]
+	  || (getPoint(s).x[1] == getPoint(e).x[1] && getPoint(s).x[0] > getPoint(e).x[0]))
 	SwapPoints (s, e);
       return;
     }
 
   int ppos = (s + e) / 2;
   int plast = ppos;
-  double pvalx = pts[ppos].x[0];
-  double pvaly = pts[ppos].x[1];
+  double pvalx = getPoint(ppos).x[0];
+  double pvaly = getPoint(ppos).x[1];
 
   int le = s, ri = e;
   while (le < ppos || ri > plast)
@@ -596,17 +600,17 @@ Shape::SortPoints (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[le].x[1] > pvaly)
+	      if (getPoint(le).x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[le].x[1] == pvaly)
+	      else if (getPoint(le).x[1] == pvaly)
 		{
-		  if (pts[le].x[0] > pvalx)
+		  if (getPoint(le).x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[le].x[0] == pvalx)
+		  else if (getPoint(le).x[0] == pvalx)
 		    {
 		      test = 0;
 		    }
@@ -652,17 +656,17 @@ Shape::SortPoints (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[ri].x[1] > pvaly)
+	      if (getPoint(ri).x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[ri].x[1] == pvaly)
+	      else if (getPoint(ri).x[1] == pvaly)
 		{
-		  if (pts[ri].x[0] > pvalx)
+		  if (getPoint(ri).x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[ri].x[0] == pvalx)
+		  else if (getPoint(ri).x[0] == pvalx)
 		    {
 		      test = 0;
 		    }
@@ -758,8 +762,8 @@ Shape::SortPointsByOldInd (int s, int e)
     return;
   if (e == s + 1)
     {
-      if (pts[s].x[1] > pts[e].x[1] || (pts[s].x[1] == pts[e].x[1] && pts[s].x[0] > pts[e].x[0])
-	  || (pts[s].x[1] == pts[e].x[1] && pts[s].x[0] == pts[e].x[0]
+      if (getPoint(s).x[1] > getPoint(e).x[1] || (getPoint(s).x[1] == getPoint(e).x[1] && getPoint(s).x[0] > getPoint(e).x[0])
+	  || (getPoint(s).x[1] == getPoint(e).x[1] && getPoint(s).x[0] == getPoint(e).x[0]
 	      && pData[s].oldInd > pData[e].oldInd))
 	SwapPoints (s, e);
       return;
@@ -767,8 +771,8 @@ Shape::SortPointsByOldInd (int s, int e)
 
   int ppos = (s + e) / 2;
   int plast = ppos;
-  double pvalx = pts[ppos].x[0];
-  double pvaly = pts[ppos].x[1];
+  double pvalx = getPoint(ppos).x[0];
+  double pvaly = getPoint(ppos).x[1];
   int pvali = pData[ppos].oldInd;
 
   int le = s, ri = e;
@@ -779,17 +783,17 @@ Shape::SortPointsByOldInd (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[le].x[1] > pvaly)
+	      if (getPoint(le).x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[le].x[1] == pvaly)
+	      else if (getPoint(le).x[1] == pvaly)
 		{
-		  if (pts[le].x[0] > pvalx)
+		  if (getPoint(le).x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[le].x[0] == pvalx)
+		  else if (getPoint(le).x[0] == pvalx)
 		    {
 		      if (pData[le].oldInd > pvali)
 			{
@@ -846,17 +850,17 @@ Shape::SortPointsByOldInd (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[ri].x[1] > pvaly)
+	      if (getPoint(ri).x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[ri].x[1] == pvaly)
+	      else if (getPoint(ri).x[1] == pvaly)
 		{
-		  if (pts[ri].x[0] > pvalx)
+		  if (getPoint(ri).x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[ri].x[0] == pvalx)
+		  else if (getPoint(ri).x[0] == pvalx)
 		    {
 		      if (pData[ri].oldInd > pvali)
 			{
@@ -1178,7 +1182,7 @@ Shape::AddEdge (int st, int en)
   aretes[n].prevE = aretes[n].nextE = -1;
   if (st >= 0 && en >= 0)
     {
-      aretes[n].dx = pts[en].x - pts[st].x;
+      aretes[n].dx = getPoint(en).x - getPoint(st).x;
     }
   else
     {
@@ -1219,7 +1223,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
   if (st < 0 || en < 0)
     return -1;
   {
-    int cb = pts[st].firstA;
+    int cb = getPoint(st).firstA;
     while (cb >= 0)
       {
 	if (aretes[cb].st == st && aretes[cb].en == en)
@@ -1260,7 +1264,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
   aretes[n].prevE = aretes[n].nextE = -1;
   if (st >= 0 && en >= 0)
     {
-      aretes[n].dx = pts[en].x - pts[st].x;
+      aretes[n].dx = getPoint(en).x - getPoint(st).x;
     }
   else
     {
@@ -1358,17 +1362,17 @@ Shape::SwapEdges (int a, int b)
     }
   if (aretes[a].st >= 0)
     {
-      if (pts[aretes[a].st].firstA == a)
-	pts[aretes[a].st].firstA = nbAr;
-      if (pts[aretes[a].st].lastA == a)
-	pts[aretes[a].st].lastA = nbAr;
+      if (getPoint(aretes[a].st).firstA == a)
+	_pts[aretes[a].st].firstA = nbAr;
+      if (getPoint(aretes[a].st).lastA == a)
+	_pts[aretes[a].st].lastA = nbAr;
     }
   if (aretes[a].en >= 0)
     {
-      if (pts[aretes[a].en].firstA == a)
-	pts[aretes[a].en].firstA = nbAr;
-      if (pts[aretes[a].en].lastA == a)
-	pts[aretes[a].en].lastA = nbAr;
+      if (getPoint(aretes[a].en).firstA == a)
+	_pts[aretes[a].en].firstA = nbAr;
+      if (getPoint(aretes[a].en).lastA == a)
+	_pts[aretes[a].en].lastA = nbAr;
     }
 
 
@@ -1418,32 +1422,32 @@ Shape::SwapEdges (int a, int b)
     }
   if (aretes[b].st >= 0)
     {
-      if (pts[aretes[b].st].firstA == b)
-	pts[aretes[b].st].firstA = a;
-      if (pts[aretes[b].st].lastA == b)
-	pts[aretes[b].st].lastA = a;
+      if (getPoint(aretes[b].st).firstA == b)
+	_pts[aretes[b].st].firstA = a;
+      if (getPoint(aretes[b].st).lastA == b)
+	_pts[aretes[b].st].lastA = a;
     }
   if (aretes[b].en >= 0)
     {
-      if (pts[aretes[b].en].firstA == b)
-	pts[aretes[b].en].firstA = a;
-      if (pts[aretes[b].en].lastA == b)
-	pts[aretes[b].en].lastA = a;
+      if (getPoint(aretes[b].en).firstA == b)
+	_pts[aretes[b].en].firstA = a;
+      if (getPoint(aretes[b].en).lastA == b)
+	_pts[aretes[b].en].lastA = a;
     }
 
   if (aretes[a].st >= 0)
     {
-      if (pts[aretes[a].st].firstA == nbAr)
-	pts[aretes[a].st].firstA = b;
-      if (pts[aretes[a].st].lastA == nbAr)
-	pts[aretes[a].st].lastA = b;
+      if (getPoint(aretes[a].st).firstA == nbAr)
+	_pts[aretes[a].st].firstA = b;
+      if (getPoint(aretes[a].st).lastA == nbAr)
+	_pts[aretes[a].st].lastA = b;
     }
   if (aretes[a].en >= 0)
     {
-      if (pts[aretes[a].en].firstA == nbAr)
-	pts[aretes[a].en].firstA = b;
-      if (pts[aretes[a].en].lastA == nbAr)
-	pts[aretes[a].en].lastA = b;
+      if (getPoint(aretes[a].en).firstA == nbAr)
+	_pts[aretes[a].en].firstA = b;
+      if (getPoint(aretes[a].en).lastA == nbAr)
+	_pts[aretes[a].en].lastA = b;
     }
 
   if (aretes[a].prevS == b)
@@ -1523,11 +1527,11 @@ Shape::SortEdges (void)
   edge_list *list = (edge_list *) g_malloc(nbAr * sizeof (edge_list));
   for (int p = 0; p < nbPt; p++)
     {
-      int d = pts[p].dI + pts[p].dO;
+      int d = getPoint(p).dI + getPoint(p).dO;
       if (d > 1)
 	{
 	  int cb;
-	  cb = pts[p].firstA;
+	  cb = getPoint(p).firstA;
 	  int nb = 0;
 	  while (cb >= 0)
 	    {
@@ -1546,8 +1550,8 @@ Shape::SortEdges (void)
 	      cb = NextAt (p, cb);
 	    }
 	  SortEdgesList (list, 0, nb - 1);
-	  pts[p].firstA = list[0].no;
-	  pts[p].lastA = list[nb - 1].no;
+	  _pts[p].firstA = list[0].no;
+	  _pts[p].lastA = list[nb - 1].no;
 	  for (int i = 0; i < nb; i++)
 	    {
 	      if (list[i].starting)
@@ -1897,23 +1901,23 @@ Shape::ConnectStart (int p, int b)
   if (aretes[b].st >= 0)
     DisconnectStart (b);
   aretes[b].st = p;
-  pts[p].dO++;
+  _pts[p].dO++;
   aretes[b].nextS = -1;
-  aretes[b].prevS = pts[p].lastA;
-  if (pts[p].lastA >= 0)
+  aretes[b].prevS = getPoint(p).lastA;
+  if (getPoint(p).lastA >= 0)
     {
-      if (aretes[pts[p].lastA].st == p)
+      if (aretes[getPoint(p).lastA].st == p)
 	{
-	  aretes[pts[p].lastA].nextS = b;
+	  aretes[getPoint(p).lastA].nextS = b;
 	}
-      else if (aretes[pts[p].lastA].en == p)
+      else if (aretes[getPoint(p).lastA].en == p)
 	{
-	  aretes[pts[p].lastA].nextE = b;
+	  aretes[getPoint(p).lastA].nextE = b;
 	}
     }
-  pts[p].lastA = b;
-  if (pts[p].firstA < 0)
-    pts[p].firstA = b;
+  _pts[p].lastA = b;
+  if (getPoint(p).firstA < 0)
+    _pts[p].firstA = b;
 }
 
 void
@@ -1922,23 +1926,23 @@ Shape::ConnectEnd (int p, int b)
   if (aretes[b].en >= 0)
     DisconnectEnd (b);
   aretes[b].en = p;
-  pts[p].dI++;
+  _pts[p].dI++;
   aretes[b].nextE = -1;
-  aretes[b].prevE = pts[p].lastA;
-  if (pts[p].lastA >= 0)
+  aretes[b].prevE = getPoint(p).lastA;
+  if (getPoint(p).lastA >= 0)
     {
-      if (aretes[pts[p].lastA].st == p)
+      if (aretes[getPoint(p).lastA].st == p)
 	{
-	  aretes[pts[p].lastA].nextS = b;
+	  aretes[getPoint(p).lastA].nextS = b;
 	}
-      else if (aretes[pts[p].lastA].en == p)
+      else if (aretes[getPoint(p).lastA].en == p)
 	{
-	  aretes[pts[p].lastA].nextE = b;
+	  aretes[getPoint(p).lastA].nextE = b;
 	}
     }
-  pts[p].lastA = b;
-  if (pts[p].firstA < 0)
-    pts[p].firstA = b;
+  _pts[p].lastA = b;
+  if (getPoint(p).firstA < 0)
+    _pts[p].firstA = b;
 }
 
 void
@@ -1946,7 +1950,7 @@ Shape::DisconnectStart (int b)
 {
   if (aretes[b].st < 0)
     return;
-  pts[aretes[b].st].dO--;
+  _pts[aretes[b].st].dO--;
   if (aretes[b].prevS >= 0)
     {
       if (aretes[aretes[b].prevS].st == aretes[b].st)
@@ -1969,10 +1973,10 @@ Shape::DisconnectStart (int b)
 	  aretes[aretes[b].nextS].prevE = aretes[b].prevS;
 	}
     }
-  if (pts[aretes[b].st].firstA == b)
-    pts[aretes[b].st].firstA = aretes[b].nextS;
-  if (pts[aretes[b].st].lastA == b)
-    pts[aretes[b].st].lastA = aretes[b].prevS;
+  if (getPoint(aretes[b].st).firstA == b)
+    _pts[aretes[b].st].firstA = aretes[b].nextS;
+  if (getPoint(aretes[b].st).lastA == b)
+    _pts[aretes[b].st].lastA = aretes[b].prevS;
   aretes[b].st = -1;
 }
 
@@ -1981,7 +1985,7 @@ Shape::DisconnectEnd (int b)
 {
   if (aretes[b].en < 0)
     return;
-  pts[aretes[b].en].dI--;
+  _pts[aretes[b].en].dI--;
   if (aretes[b].prevE >= 0)
     {
       if (aretes[aretes[b].prevE].st == aretes[b].en)
@@ -2004,10 +2008,10 @@ Shape::DisconnectEnd (int b)
 	  aretes[aretes[b].nextE].prevE = aretes[b].prevE;
 	}
     }
-  if (pts[aretes[b].en].firstA == b)
-    pts[aretes[b].en].firstA = aretes[b].nextE;
-  if (pts[aretes[b].en].lastA == b)
-    pts[aretes[b].en].lastA = aretes[b].prevE;
+  if (getPoint(aretes[b].en).firstA == b)
+    _pts[aretes[b].en].firstA = aretes[b].nextE;
+  if (getPoint(aretes[b].en).lastA == b)
+    _pts[aretes[b].en].lastA = aretes[b].prevE;
   aretes[b].en = -1;
 }
 
@@ -2018,7 +2022,7 @@ Shape::Eulerian (bool directed)
     {
       for (int i = 0; i < nbPt; i++)
 	{
-	  if (pts[i].dI != pts[i].dO)
+	  if (getPoint(i).dI != getPoint(i).dO)
 	    {
 	      return false;
 	    }
@@ -2028,7 +2032,7 @@ Shape::Eulerian (bool directed)
     {
       for (int i = 0; i < nbPt; i++)
 	{
-	  int d = pts[i].dI + pts[i].dO;
+	  int d = getPoint(i).dI + getPoint(i).dO;
 	  if (d % 2 == 1)
 	    {
 	      return false;
@@ -2054,13 +2058,13 @@ Shape::Inverse (int b)
   aretes[b].dx = -aretes[b].dx;
   if (aretes[b].st >= 0)
     {
-      pts[aretes[b].st].dO++;
-      pts[aretes[b].st].dI--;
+      _pts[aretes[b].st].dO++;
+      _pts[aretes[b].st].dI--;
     }
   if (aretes[b].en >= 0)
     {
-      pts[aretes[b].en].dO--;
-      pts[aretes[b].en].dI++;
+      _pts[aretes[b].en].dO--;
+      _pts[aretes[b].en].dI++;
     }
   if (_has_edges_data)
     eData[b].weight = -eData[b].weight;
@@ -2091,21 +2095,21 @@ Shape::CalcBBox (bool strict_degree)
     leftX = rightX = topY = bottomY = 0;
     return;
   }
-  leftX = rightX = pts[0].x[0];
-  topY = bottomY = pts[0].x[1];
+  leftX = rightX = getPoint(0).x[0];
+  topY = bottomY = getPoint(0).x[1];
   bool not_set=true;
   for (int i = 0; i < nbPt; i++)
   {
-    if ( strict_degree == false || pts[i].dI > 0 || pts[i].dO > 0 ) {
+    if ( strict_degree == false || getPoint(i).dI > 0 || getPoint(i).dO > 0 ) {
       if ( not_set ) {
-        leftX = rightX = pts[i].x[0];
-        topY = bottomY = pts[i].x[1];
+        leftX = rightX = getPoint(i).x[0];
+        topY = bottomY = getPoint(i).x[1];
         not_set=false;
       } else {
-        if (  pts[i].x[0] < leftX) leftX = pts[i].x[0];
-        if (  pts[i].x[0] > rightX) rightX = pts[i].x[0];
-        if (  pts[i].x[1] < topY) topY = pts[i].x[1];
-        if (  pts[i].x[1] > bottomY) bottomY = pts[i].x[1];
+        if (  getPoint(i).x[0] < leftX) leftX = getPoint(i).x[0];
+        if (  getPoint(i).x[0] > rightX) rightX = getPoint(i).x[0];
+        if (  getPoint(i).x[1] < topY) topY = getPoint(i).x[1];
+        if (  getPoint(i).x[1] > bottomY) bottomY = getPoint(i).x[1];
       }
     }
   }
@@ -2134,7 +2138,7 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 */
     double const max_l1 = max_l2 * M_SQRT2;
     for (int i = 0; i < nbPt; i++) {
-      NR::Point const offset( thePt - pts[i].x );
+      NR::Point const offset( thePt - getPoint(i).x );
       double const l1 = NR::L1(offset);
       if ( ( l1 <= max_l2 )
            || ( ( l1 <= max_l1 )
@@ -2148,8 +2152,8 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
   for (int i = 0; i < nbAr; i++) {
     if ( aretes[i].st >= 0 &&
          aretes[i].en >= 0 ) {
-      NR::Point const st(pts[aretes[i].st].x);
-      NR::Point const en(pts[aretes[i].en].x);
+      NR::Point const st(getPoint(aretes[i].st).x);
+      NR::Point const en(getPoint(aretes[i].en).x);
       NR::Point const d( thePt - st );
       NR::Point const e( en - st );
       double const el = NR::L2(e);
@@ -2177,10 +2181,10 @@ double Shape::Distance(NR::Point const thePt)
     return 0.0;
   }
   
-  double bdot=NR::dot(thePt-pts[0].x,thePt-pts[0].x);
+  double bdot=NR::dot(thePt-getPoint(0).x,thePt-getPoint(0).x);
   {
     for (int i = 0; i < nbPt; i++) {
-      NR::Point const offset( thePt - pts[i].x );
+      NR::Point const offset( thePt - getPoint(i).x );
       double ndot=NR::dot(offset,offset);
       if ( ndot < bdot ) {
         bdot=ndot;
@@ -2191,8 +2195,8 @@ double Shape::Distance(NR::Point const thePt)
   for (int i = 0; i < nbAr; i++) {
     if ( aretes[i].st >= 0 &&
          aretes[i].en >= 0 ) {
-      NR::Point const st(pts[aretes[i].st].x);
-      NR::Point const en(pts[aretes[i].en].x);
+      NR::Point const st(getPoint(aretes[i].st).x);
+      NR::Point const en(getPoint(aretes[i].en).x);
       NR::Point const d( thePt - st );
       NR::Point const e( en - st );
       double const el = NR::dot(e,e);
@@ -2225,8 +2229,8 @@ Shape::PtWinding (const NR::Point px) const
   {
     NR::Point const adir = aretes[i].dx;
 
-    NR::Point const ast = pts[aretes[i].st].x;
-    NR::Point const aen = pts[aretes[i].en].x;
+    NR::Point const ast = getPoint(aretes[i].st).x;
+    NR::Point const aen = getPoint(aretes[i].en).x;
     
     //int const nWeight = eData[i].weight;
     int const nWeight = 1;

@@ -83,11 +83,11 @@ public:
 
   bool hasBackData() const { return _has_back_data; }
 
-  dg_point const &getPoint(int n) const { return pts[n]; }
+  dg_point const &getPoint(int n) const { return _pts[n]; }
 
 private:
 
-  std::vector<dg_point> pts; /* FIXME: rename to _pts */
+  std::vector<dg_point> _pts;
   
   int nbPt; ///< number of points [FIXME: remove this in favour of pts.size()]
   int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
@@ -304,13 +304,13 @@ public:
     if (p == aretes[b].st)
       {
 	if (aretes[b].nextS < 0)
-	  return pts[p].firstA;
+	  return getPoint(p).firstA;
 	return aretes[b].nextS;
       }
     else if (p == aretes[b].en)
       {
 	if (aretes[b].nextE < 0)
-	  return pts[p].firstA;
+	  return getPoint(p).firstA;
 	return aretes[b].nextE;
       }
     return -1;
@@ -320,13 +320,13 @@ public:
     if (p == aretes[b].st)
       {
 	if (aretes[b].prevS < 0)
-	  return pts[p].lastA;
+	  return getPoint(p).lastA;
 	return aretes[b].prevS;
       }
     else if (p == aretes[b].en)
       {
 	if (aretes[b].prevE < 0)
-	  return pts[p].lastA;
+	  return getPoint(p).lastA;
 	return aretes[b].prevE;
       }
     return -1;

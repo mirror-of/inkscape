@@ -129,9 +129,9 @@ public:
 
   // the find function that was missing in the AVLTrree class
   // the return values are defined in LivarotDefs.h
-  int Find (NR::Point &iPt, SweepTree * newOne, SweepTree * &insertL,
+  int Find (NR::Point const &iPt, SweepTree * newOne, SweepTree * &insertL,
 	    SweepTree * &insertR, bool sweepSens = true);
-  int Find (NR::Point &iPt, SweepTree * &insertL, SweepTree * &insertR);
+  int Find (NR::Point const &iPt, SweepTree * &insertL, SweepTree * &insertR);
   // removes sweepevents attached to this node
   void RemoveEvents (SweepEventQueue & queue);
   // onLeft=true: only remove left sweepevent

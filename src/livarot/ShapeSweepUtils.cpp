@@ -409,7 +409,7 @@ SweepTree::AddInList (Shape * iSrc, int iBord, int iWeight, int iStartPoint,
 // lying at y=px[1].
 // px is the upper endpoint of newOne
 int
-SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
+SweepTree::Find (NR::Point const &px, SweepTree * newOne, SweepTree * &insertL,
 		 SweepTree * &insertR, bool sweepSens)
 {
   // get the edge associated with this node: one point+one direction
@@ -519,7 +519,7 @@ SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
 
 // only find a point's position
 int
-SweepTree::Find (NR::Point &px, SweepTree * &insertL,
+SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
 		 SweepTree * &insertR)
 {
   NR::Point bOrig, bNorm;
@@ -651,7 +651,7 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
   SweepTree *insertL = NULL;
   SweepTree *insertR = NULL;
   int insertion =
-    list.racine->Find (iDst->pts[iAtPoint].x, this,
+    list.racine->Find (iDst->getPoint(iAtPoint).x, this,
 		       insertL, insertR, sweepSens);
   if (insertion == found_on_left)
     {
