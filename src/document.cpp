@@ -49,15 +49,15 @@ enum {
 	LAST_SIGNAL
 };
 
-static void sp_document_class_init (SPDocumentClass * klass);
-static void sp_document_init (SPDocument *document);
-static void sp_document_dispose (GObject *object);
+static void sp_document_class_init(SPDocumentClass *klass);
+static void sp_document_init(SPDocument *document);
+static void sp_document_dispose(GObject *object);
 
-static gint sp_document_idle_handler (gpointer data);
+static gint sp_document_idle_handler(gpointer data);
 
-gboolean sp_document_resource_list_free (gpointer key, gpointer value, gpointer data);
+gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
 
-static GObjectClass * parent_class;
+static GObjectClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
 static gint doc_count = 0;
 
@@ -82,11 +82,9 @@ sp_document_get_type (void)
 }
 
 static void
-sp_document_class_init (SPDocumentClass * klass)
+sp_document_class_init(SPDocumentClass *klass)
 {
-	GObjectClass * object_class;
-
-	object_class = (GObjectClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
 
 	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
@@ -164,11 +162,8 @@ sp_document_init (SPDocument *doc)
 static void
 sp_document_dispose (GObject *object)
 {
-	SPDocument *doc;
-	SPDocumentPrivate * priv;
-
-	doc = (SPDocument *) object;
-	priv = doc->priv;
+	SPDocument *doc = (SPDocument *) object;
+	SPDocumentPrivate *priv = doc->priv;
 
 	if (priv) {
 		inkscape_remove_document (doc);
@@ -443,8 +438,7 @@ sp_document_unref (SPDocument *doc)
 	return NULL;
 }
 
-gdouble
-sp_document_width (SPDocument * document)
+gdouble sp_document_width(SPDocument *document)
 {
 	g_return_val_if_fail (document != NULL, 0.0);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), 0.0);
@@ -454,8 +448,7 @@ sp_document_width (SPDocument * document)
 	return SP_ROOT (document->root)->width.computed / 1.25;
 }
 
-gdouble
-sp_document_height (SPDocument * document)
+gdouble sp_document_height(SPDocument *document)
 {
 	g_return_val_if_fail (document != NULL, 0.0);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), 0.0);
@@ -465,11 +458,8 @@ sp_document_height (SPDocument * document)
 	return SP_ROOT (document->root)->height.computed / 1.25;
 }
 
-void
-sp_document_set_uri (SPDocument *document, const gchar *uri)
+void sp_document_set_uri(SPDocument *document, gchar const *uri)
 {
-	SPRepr *repr;
-
 	g_return_if_fail (document != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (document));
 
@@ -511,8 +501,8 @@ sp_document_set_uri (SPDocument *document, const gchar *uri)
 		document->name = g_strdup (document->uri);
 	}
 
-	// update saveable repr attributes
-	repr = sp_document_repr_root (document);
+	// Update saveable repr attributes.
+	SPRepr *repr = sp_document_repr_root(document);
 	// changing uri in the document repr must not be not undoable
 	sp_document_set_undo_sensitive (document, FALSE);
 	sp_repr_set_attr (repr, "sodipodi:docbase", document->base);
@@ -533,15 +523,12 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width / 1.25, height / 1.25);
 }
 
-void
-sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object)
+void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)
 {
-	SigC::Signal1<void, SPObject *> *signal;
-	GQuark idq;
-
-	idq = g_quark_from_string(id);
-
-	signal = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(g_hash_table_lookup(document->priv->idsignals, GINT_TO_POINTER(idq)));
+	GQuark idq = g_quark_from_string(id);
+	SigC::Signal1<void, SPObject *> *signal
+	  = reinterpret_cast<SigC::Signal1<void, SPObject *> *>(g_hash_table_lookup(document->priv->idsignals,
+										    GINT_TO_POINTER(idq)));
 
 	if (object) {
 		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) == NULL);
@@ -735,16 +722,15 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 {
 	g_return_val_if_fail (SP_IS_GROUP (group), s);
 
-	for (SPObject * o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) &&
 		    SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER)
 		{
 			s = find_items_in_area (s, SP_GROUP (o), area, test);
 		} else {
+			SPItem *child = SP_ITEM(o);
 			NRRect box;
-			SPItem * child = SP_ITEM (o);
-
 			sp_item_bbox_desktop (child, &box);
 			if (test (area, &box)) {
 				s = g_slist_append (s, child);
@@ -761,9 +747,8 @@ SPItem*
 find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_groups)
 {
 	SPItem *seen = NULL, *newseen = NULL;
-	NRArenaItem *arenaitem;
 
-	for (SPObject * o = group->children ; o != NULL ; o = o->next ) {
+	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && (SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
@@ -773,9 +758,8 @@ find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_
 				newseen = NULL;
 			}
 		} else {
-			SPItem * child = SP_ITEM (o);
-
-			arenaitem = sp_item_get_arenaitem (child, dkey);
+			SPItem *child = SP_ITEM(o);
+			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
 			// seen remembers the last (topmost) of items pickable at this point
 			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL) {
@@ -790,14 +774,12 @@ SPItem*
 find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
 {
 	SPItem *seen = NULL;
-	NRArenaItem *arenaitem;
 
 	for (SPObject *o = group->children ; o != NULL ; o = o->next ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && SP_GROUP (o)->mode != SP_GROUP_MODE_LAYER) {
-			SPItem * child = SP_ITEM (o);
-
-			arenaitem = sp_item_get_arenaitem (child, dkey);
+			SPItem *child = SP_ITEM(o);
+			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
 			// seen remembers the last (topmost) of groups pickable at this point
 			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL) {

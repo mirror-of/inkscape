@@ -64,11 +64,11 @@ static void sp_draw_context_class_init (SPDrawContextClass *klass);
 static void sp_draw_context_init (SPDrawContext *dc);
 static void sp_draw_context_dispose (GObject *object);
 
-static void sp_draw_context_setup (SPEventContext *ec);
-static void sp_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *value);
-static void sp_draw_context_finish (SPEventContext *ec);
+static void sp_draw_context_setup(SPEventContext *ec);
+static void sp_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *value);
+static void sp_draw_context_finish(SPEventContext *ec);
 
-static gint sp_draw_context_root_handler (SPEventContext * event_context, GdkEvent * event);
+static gint sp_draw_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 
 static void spdc_set_attach (SPDrawContext *dc, gboolean attach);
 
@@ -85,10 +85,10 @@ static void spdc_reset_colors (SPDrawContext *dc);
 static void spdc_reset_white (SPDrawContext *dc);
 static void spdc_free_colors (SPDrawContext *dc);
 
-static SPDrawAnchor *test_inside (SPDrawContext * dc, NR::Point p);
-static SPDrawAnchor *sp_draw_anchor_test (SPDrawAnchor *anchor, NR::Point w, gboolean activate);
+static SPDrawAnchor *test_inside(SPDrawContext *dc, NR::Point p);
+static SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, NR::Point w, gboolean activate);
 
-static void fit_and_split (SPDrawContext * dc);
+static void fit_and_split(SPDrawContext *dc);
 
 static SPDrawAnchor *sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point p);
 static SPDrawAnchor *sp_draw_anchor_destroy (SPDrawAnchor *anchor);
@@ -620,9 +620,8 @@ spdc_flush_white (SPDrawContext *dc, SPCurve *gc)
  * Returns FIRST active anchor (the activated one)
  */
 
-static SPDrawAnchor * test_inside (SPDrawContext *dc, NR::Point p)
+static SPDrawAnchor *test_inside(SPDrawContext *dc, NR::Point p)
 {
-	GSList *l;
 	SPDrawAnchor *active;
 
 	active = NULL;
@@ -632,7 +631,7 @@ static SPDrawAnchor * test_inside (SPDrawContext *dc, NR::Point p)
 		active = sp_draw_anchor_test (dc->green_anchor, p, TRUE);
 	}
 
-	for (l = dc->white_anchors; l != NULL; l = l->next) {
+	for (GSList *l = dc->white_anchors; l != NULL; l = l->next) {
 		SPDrawAnchor *na = sp_draw_anchor_test ((SPDrawAnchor *) l->data, p, !active);
 		if (!active && na) active = na;
 	}
@@ -640,16 +639,14 @@ static SPDrawAnchor * test_inside (SPDrawContext *dc, NR::Point p)
 	return active;
 }
 
-static void fit_and_split (SPDrawContext * dc)
+static void fit_and_split(SPDrawContext *dc)
 {
-	NR::Point b[4];
-	gdouble tolerance;
-
 	g_assert (dc->npoints > 1);
 
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * prefs_get_double_attribute_limited ("tools.freehand.pencil", "tolerance", 10.0, 1.0, 100.0);
+	gdouble tolerance = SP_EVENT_CONTEXT(dc)->desktop->w2d[0] * prefs_get_double_attribute_limited("tools.freehand.pencil", "tolerance", 10.0, 1.0, 100.0);
 	tolerance = tolerance * tolerance;
 
+	NR::Point b[4];
 	if (sp_bezier_fit_cubic (b, dc->p, dc->npoints, tolerance) > 0 && dc->npoints < SP_DRAW_POINTS_MAX) {
 		/* Fit and draw and reset state */
 		sp_curve_reset (dc->red_curve);
@@ -831,7 +828,7 @@ static void sp_pencil_context_class_init (SPPencilContextClass *klass);
 static void sp_pencil_context_init (SPPencilContext *dc);
 static void sp_pencil_context_dispose (GObject *object);
 
-static gint sp_pencil_context_root_handler (SPEventContext * event_context, GdkEvent * event);
+static gint sp_pencil_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 
 static void spdc_set_startpoint (SPPencilContext *dc, NR::Point p, guint state);
 static void spdc_set_endpoint (SPPencilContext *dc, NR::Point p, guint state);
