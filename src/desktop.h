@@ -112,6 +112,7 @@ void sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, f
 void sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom);
 void sp_desktop_zoom_relative (SPDesktop *dt, float cx, float cy, float zoom);
 void sp_desktop_zoom_page (SPDesktop *dt);
+void sp_desktop_zoom_page_width (SPDesktop *dt);
 void sp_desktop_zoom_drawing (SPDesktop *dt);
 void sp_desktop_zoom_selection (SPDesktop *dt);
 void sp_desktop_scroll_world (SPDesktop *dt, float dx, float dy);
