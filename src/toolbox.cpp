@@ -737,7 +737,7 @@ static GtkWidget *
 sp_star_toolbox_new (SPDesktop *desktop)
 {
 
-    const gchar *flatsidedstr;
+    const gchar *flatsidedstr = NULL;
     GtkWidget *tbl,*hb,*sb1,*sb2,*fscb,*l,*b;
     GtkObject *mag_adj,*proportion_adj;
 
@@ -770,9 +770,11 @@ sp_star_toolbox_new (SPDesktop *desktop)
     hb = gtk_hbox_new (FALSE, 1);
     fscb = gtk_check_button_new_with_label (_("Polygon"));
     gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
-    if (flatsidedstr && !strcmp (flatsidedstr,"false" ))
-            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
-    else gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
+    flatsidedstr = prefs_get_string_attribute ("tools.shapes.star", "isflatsided");
+    if (flatsidedstr && !strcmp (flatsidedstr, "false"))
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
+    else 
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
     gtk_tooltips_set_tip (tt, fscb, _("Create polygons instead of stars"), NULL);
     gtk_widget_show (fscb);
     gtk_object_set_data (GTK_OBJECT (tbl), "flat_checkbox", fscb);
@@ -793,10 +795,10 @@ sp_star_toolbox_new (SPDesktop *desktop)
     gtk_widget_set_size_request (sb2, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
     gtk_widget_show (sb2);
     g_object_set_data (G_OBJECT (tbl), "prop_widget", sb2);
-    flatsidedstr = prefs_get_string_attribute ("tools.shapes.star", "isflatsided");
-    if (flatsidedstr && !strcmp (flatsidedstr,"false" ))
-    gtk_widget_set_sensitive (GTK_WIDGET (sb2), TRUE);
-    else gtk_widget_set_sensitive (GTK_WIDGET (sb2), FALSE);
+    if (flatsidedstr && !strcmp (flatsidedstr, "false" ))
+        gtk_widget_set_sensitive (GTK_WIDGET (sb2), TRUE);
+    else 
+        gtk_widget_set_sensitive (GTK_WIDGET (sb2), FALSE);
     gtk_signal_connect (GTK_OBJECT (sb2), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), tbl);
     gtk_signal_connect (GTK_OBJECT (sb2), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), tbl);
     gtk_container_add (GTK_CONTAINER (hb), sb2);
