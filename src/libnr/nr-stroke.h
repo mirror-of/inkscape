@@ -30,9 +30,4 @@ NRSVL *nr_bpath_stroke (const NRBPath *path, NRMatrix *transform,
 			unsigned int cap, unsigned int join, float miterlimit,
 			float flatness);
 
-NRSVL *nr_vpath_stroke (const ArtVpath *path, NRMatrix *transform,
-			float width,
-			unsigned int cap, unsigned int join, float miterlimit,
-			float flatness);
-
 #endif

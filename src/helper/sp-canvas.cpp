@@ -682,7 +682,7 @@ sp_canvas_group_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned i
 {
 	const SPCanvasGroup *group = SP_CANVAS_GROUP (item);
 
-	ArtDRect bbox;
+	NRRect bbox;
 	bbox.x0 = 0;
 	bbox.y0 = 0;
 	bbox.x1 = 0;
@@ -693,12 +693,12 @@ sp_canvas_group_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned i
 
 		sp_canvas_item_invoke_update (i, affine, flags);
 
-		ArtDRect child_bbox;
+		NRRect child_bbox;
 		child_bbox.x0 = i->x1;
 		child_bbox.y0 = i->y1;
 		child_bbox.x1 = i->x2;
 		child_bbox.y1 = i->y2;
-		art_drect_union (&bbox, &bbox, &child_bbox);
+		nr_rect_d_union (&bbox, &bbox, &child_bbox);
 	}
 	item->x1 = bbox.x0;
 	item->y1 = bbox.y0;

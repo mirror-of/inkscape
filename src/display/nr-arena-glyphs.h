@@ -28,9 +28,7 @@
 
 #define test_glyph_liv
 
-#ifdef test_glyph_liv
 class Shape;
-#endif
 
 struct _NRArenaGlyphs {
 	NRArenaItem item;
@@ -45,16 +43,12 @@ struct _NRArenaGlyphs {
 	NRRasterFont *rfont;
 	float x, y;
 
-#ifdef test_glyph_liv
-  NRMatrix cached_tr;
-  Shape  *cached_shp;
-  bool   cached_shp_dirty;
-  bool   cached_style_dirty;
-  
-  Shape  *stroke_shp;
-#else
-	ArtSVP *stroke_svp;
-#endif
+	NRMatrix cached_tr;
+	Shape  *cached_shp;
+	bool   cached_shp_dirty;
+	bool   cached_style_dirty;
+	
+	Shape  *stroke_shp;
 };
 
 struct _NRArenaGlyphsClass {
@@ -103,6 +97,6 @@ void nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *group, NRFont *fon
 
 void nr_arena_glyphs_group_set_style (NRArenaGlyphsGroup *group, SPStyle *style);
 
-void nr_arena_glyphs_group_set_paintbox (NRArenaGlyphsGroup *group, const ArtDRect *pbox);
+void nr_arena_glyphs_group_set_paintbox (NRArenaGlyphsGroup *group, const NRRect *pbox);
 
 #endif

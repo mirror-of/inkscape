@@ -409,49 +409,6 @@ nr_svl_build_curveto (NRSVLBuild *svlb, NR::Coord x0, NR::Coord y0, NR::Coord x1
 }
 
 NRSVL *
-nr_svl_from_art_vpath (ArtVpath *vpath, unsigned int windrule)
-{
-    NRSVLBuild svlb;
-    ArtVpath *s;
-
-    /* Initialize NRSVLBuild */
-    svlb.svl = NULL;
-    svlb.flats = NULL;
-    svlb.refvx = NULL;
-    svlb.bbox.x0 = svlb.bbox.y0 = NR_HUGE;
-    svlb.bbox.x1 = svlb.bbox.y1 = -NR_HUGE;
-    svlb.dir = 0;
-    svlb.sx = svlb.sy = 0.0;
-
-    for (s = vpath; s->code != ART_END; s++) {
-        switch (s->code) {
-        case ART_MOVETO:
-        case ART_MOVETO_OPEN:
-            nr_svl_build_moveto (&svlb, (float) s->x, (float) s->y);
-            break;
-        case ART_LINETO:
-            nr_svl_build_lineto (&svlb, (float) s->x, (float) s->y);
-            break;
-        default:
-            /* fixme: free lists */
-            return NULL;
-            break;
-        }
-    }
-    nr_svl_build_finish_segment (&svlb);
-    if (svlb.svl) {
-        /* NRSVL *s; */
-        *svlb.svl = nr_svl_uncross_full (*svlb.svl, *svlb.flats, windrule);
-    } else {
-        nr_flat_free_list (*svlb.flats);
-    }
-    /* This happnes in uncross */
-    /* nr_flat_free_list (flats); */
-
-    return *svlb.svl;
-}
-
-NRSVL *
 nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrix *transform, unsigned int windrule, unsigned int close, float flatness)
 {
     NRSVLBuild svlb;

@@ -26,7 +26,6 @@ enum {
 	NR_WIND_RULE_EVENODD
 };
 
-#include <libart_lgpl/art_vpath.h>
 #include <libart_lgpl/art_bpath.h>
 
 typedef struct _NRPathCode NRPathCode;
@@ -43,23 +42,7 @@ union _NRPathElement {
 	NR::Coord value;
 };
 
-/*
- * VPath structure:
- *   Number of elements
- *   Number of segments
- *   Length + closed
- *   x, y, x, y...
- */
-
-struct _NRVPath {
-	NRPathElement *elements;
-};
-
 /* fixme: (Lauris) */
-
-NRVPath *nr_vpath_setup_from_art_vpath (NRVPath *d, const ArtVpath *avpath);
-
-void nr_vpath_release (NRVPath *vpath);
 
 struct _NRBPath {
 	ArtBpath *path;

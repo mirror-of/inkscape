@@ -40,7 +40,6 @@ void nr_svl_build_curveto (NRSVLBuild *svlb,
 /* fixme: Remove these if ready (Lauris) */
 #include <libart_lgpl/art_svp.h>
 
-NRSVL *nr_svl_from_art_vpath (ArtVpath *vpath, unsigned int windrule);
 NRSVL *nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrix *transform, unsigned int windrule, unsigned int close, float flatness);
 NRSVL *nr_svl_from_art_svp (ArtSVP *asvp);
 ArtSVP *nr_art_svp_from_svl (NRSVL *svl);

@@ -35,7 +35,7 @@ struct SPCharElement {
 struct SPChars {
 	SPItem item;
 	SPCharElement *elements;
-	ArtDRect paintbox;
+	NRRect paintbox;
 };
 
 struct SPCharsClass {

@@ -415,7 +415,7 @@ sp_main_console (int argc, const char **argv)
 static void
 sp_do_export_png (SPDocument *doc)
 {
-	ArtDRect area;
+	NRRect area;
 	gdouble dpi;
 	gboolean has_area;
 	gint width, height;

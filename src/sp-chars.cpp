@@ -219,32 +219,28 @@ sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix 
 SPCurve *
 sp_chars_normalized_bpath (SPChars *chars)
 {
-	SPCharElement *el;
-	GSList *cc;
-	SPCurve *curve;
-
-	cc = NULL;
-	for (el = chars->elements; el != NULL; el = el->next) {
+	GSList *cc = NULL;
+	for (SPCharElement *el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bp;
-		ArtBpath *abp;
-		SPCurve *c;
 		gdouble a[6];
-		gint i;
-		for (i = 0; i < 6; i++) a[i] = el->transform.c[i];
+		for (gint i = 0; i < 6; i++)
+			a[i] = el->transform.c[i];
 		if (nr_font_glyph_outline_get (el->font, el->glyph, &bp, FALSE)) {
-			abp = art_bpath_affine_transform (bp.path, a);
-			c = sp_curve_new_from_bpath (abp);
-			if (c) cc = g_slist_prepend (cc, c);
+			ArtBpath *abp = art_bpath_affine_transform (bp.path, a);
+			SPCurve *c = sp_curve_new_from_bpath (abp);
+			if (c)
+				cc = g_slist_prepend (cc, c);
 		}
 	}
 
 	cc = g_slist_reverse (cc);
 
-  if ( cc ) {
-    curve = sp_curve_concat (cc);
-  } else {
-      curve=sp_curve_new();
-  }
+	SPCurve *curve;
+	if ( cc ) {
+		curve = sp_curve_concat (cc);
+	} else {
+		curve = sp_curve_new();
+	}
   
 	while (cc) {
 		/* fixme: This is dangerous, as we are mixing art_alloc and g_new */
