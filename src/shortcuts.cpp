@@ -153,6 +153,8 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_5, SP_VERB_ZOOM_PAGE, true);
 	sp_shortcut_set (GDK_KP_5, SP_VERB_ZOOM_PAGE, false);
 
+	sp_shortcut_set (GDK_6, SP_VERB_ZOOM_PAGE_WIDTH, true);
+
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_r, SP_VERB_TOGGLE_RULERS, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_R, SP_VERB_TOGGLE_RULERS, false);
 
@@ -255,6 +257,12 @@ sp_shortcut_init ()
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_parenleft, SP_VERB_SELECTION_INSET, true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_parenleft, SP_VERB_SELECTION_INSET, false);
+
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_j, SP_VERB_SELECTION_DYNAMIC_OFFSET, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_J, SP_VERB_SELECTION_DYNAMIC_OFFSET, false);
+
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_ALT_MASK | GDK_j, SP_VERB_SELECTION_LINKED_OFFSET, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_ALT_MASK | GDK_J, SP_VERB_SELECTION_LINKED_OFFSET, false);
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_ALT_MASK | GDK_c, SP_VERB_SELECTION_OUTLINE, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_ALT_MASK | GDK_C, SP_VERB_SELECTION_OUTLINE, false);
