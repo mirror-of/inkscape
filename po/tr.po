@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-04 22:41+0200\n"
+"POT-Creation-Date: 2004-05-07 19:11-0700\n"
 "PO-Revision-Date: 2003-02-03 02:18+0200\n"
 "Last-Translator: Arman Aksoy (Armish) <armish@linux-sevenler.de>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -46,33 +46,33 @@ msgstr ""
 msgid "Move %s"
 msgstr " Taşı "
 
-#: src/desktop.cpp:797 src/verbs.cpp:950
+#: src/desktop.cpp:802 src/verbs.cpp:950
 msgid "Zoom"
 msgstr "Büyüt"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:820
+#: src/desktop.cpp:825
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:830
+#: src/desktop.cpp:835
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:879
+#: src/desktop.cpp:884
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:881
+#: src/desktop.cpp:886
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1019
+#: src/desktop.cpp:1024
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -81,11 +81,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1033 src/desktop.cpp:1092
+#: src/desktop.cpp:1038 src/desktop.cpp:1097
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1077
+#: src/desktop.cpp:1082
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -94,25 +94,25 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1388
+#: src/desktop.cpp:1393
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1417
+#: src/desktop.cpp:1422
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1814 src/dialogs/align.cpp:452
+#: src/desktop.cpp:1819 src/dialogs/align.cpp:452
 #: src/dialogs/desktop-properties.cpp:516 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Sayfa"
 
-#: src/desktop.cpp:1818 src/dialogs/align.cpp:455 src/dialogs/export.cpp:280
+#: src/desktop.cpp:1823 src/dialogs/align.cpp:455 src/dialogs/export.cpp:280
 msgid "Drawing"
 msgstr "Çizim"
 
-#: src/desktop.cpp:1822 src/dialogs/align.cpp:458 src/dialogs/export.cpp:287
+#: src/desktop.cpp:1827 src/dialogs/align.cpp:458 src/dialogs/export.cpp:287
 msgid "Selection"
 msgstr "Seçim"
 
@@ -934,6 +934,7 @@ msgstr "Doldurma stili"
 msgid "Fill:"
 msgstr "Doldur"
 
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: src/dialogs/fill-style.cpp:186
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
@@ -1169,13 +1170,9 @@ msgstr "Karalama çizgisi"
 msgid "Text"
 msgstr "Metin"
 
-#: src/dialogs/stroke-style.cpp:1037 src/widgets/gradient-vector.cpp:262
+#: src/dialogs/stroke-style.cpp:1052 src/widgets/gradient-vector.cpp:262
 msgid "No document selected"
 msgstr "Döküman seçilmedi"
-
-#: src/dialogs/stroke-style.cpp:1173
-msgid "Stroke settings"
-msgstr "Vuruş ayarları"
 
 #: src/dialogs/stroke-style.cpp:1195
 #, fuzzy
@@ -1192,14 +1189,14 @@ msgstr "Ekle:"
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1227
+#: src/dialogs/stroke-style.cpp:1229
 msgid "Miter join"
 msgstr ""
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1235
+#: src/dialogs/stroke-style.cpp:1239
 #, fuzzy
 msgid "Round join"
 msgstr "2 seçili bitiş noktasını birleştir"
@@ -1207,7 +1204,7 @@ msgstr "2 seçili bitiş noktasını birleştir"
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1243
+#: src/dialogs/stroke-style.cpp:1249
 msgid "Bevel join"
 msgstr ""
 
@@ -1218,84 +1215,81 @@ msgstr ""
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1254
+#: src/dialogs/stroke-style.cpp:1260
 msgid "Miter limit:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1262
+#: src/dialogs/stroke-style.cpp:1268
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1275
+#: src/dialogs/stroke-style.cpp:1281
 msgid "Cap:"
 msgstr "Kapak:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1285
+#: src/dialogs/stroke-style.cpp:1294
 msgid "Butt cap"
 msgstr ""
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1292
+#: src/dialogs/stroke-style.cpp:1303
 #, fuzzy
 msgid "Round cap"
 msgstr "2 seçili bitiş noktasını birleştir"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1299
+#: src/dialogs/stroke-style.cpp:1312
 #, fuzzy
 msgid "Square cap"
 msgstr "2 seçili bitiş noktasını birleştir"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1305
+#: src/dialogs/stroke-style.cpp:1318
 msgid "Pattern:"
 msgstr "Motif:"
 
-#. Drop down marker selectors
-#. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
-#. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1322
+#: src/dialogs/stroke-style.cpp:1339
 #, fuzzy
 msgid "Start Markers:"
 msgstr "Yıldız Ayarları"
 
-#: src/dialogs/stroke-style.cpp:1332
+#: src/dialogs/stroke-style.cpp:1349
 msgid "Mid Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1343
+#: src/dialogs/stroke-style.cpp:1360
 msgid "End Markers:"
 msgstr ""
 
 #. Layout
-#: src/dialogs/text-edit.cpp:233
+#: src/dialogs/text-edit.cpp:250
 msgid "Layout"
 msgstr "Konumlama"
 
-#: src/dialogs/text-edit.cpp:242
+#: src/dialogs/text-edit.cpp:259
 msgid "Alignment:"
 msgstr "Hiza:"
 
-#: src/dialogs/text-edit.cpp:277
+#: src/dialogs/text-edit.cpp:294
 msgid "Orientation:"
 msgstr "Oran:"
 
-#: src/dialogs/text-edit.cpp:302
+#: src/dialogs/text-edit.cpp:319
 #, fuzzy
 msgid "Line spacing:"
 msgstr "X aralığı:"
 
-#: src/dialogs/text-edit.cpp:333
+#: src/dialogs/text-edit.cpp:350
 msgid "Text and font"
 msgstr "Metin ve yazı tipi"
 
-#: src/dialogs/text-edit.cpp:344
+#: src/dialogs/text-edit.cpp:361
 msgid "Set as default"
 msgstr "Öntanımlı olarak ata"
 
@@ -1453,7 +1447,7 @@ msgstr ""
 msgid "Click to pick, click and drag to pick the average color of an area."
 msgstr ""
 
-#: src/extension/init.cpp:99
+#: src/extension/init.cpp:101
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -1549,7 +1543,7 @@ msgstr ""
 msgid "write error occurred"
 msgstr ""
 
-#: src/file.cpp:150
+#: src/file.cpp:150 src/file.cpp:483
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
@@ -1582,43 +1576,38 @@ msgstr ""
 msgid "Select file to open"
 msgstr "Açılacak dosyayı seçin"
 
-#: src/file.cpp:288
+#: src/file.cpp:289
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:289 src/file.cpp:296
+#: src/file.cpp:290 src/file.cpp:297
 #, fuzzy
 msgid "Document not saved."
 msgstr "Döküman Adı:"
 
-#: src/file.cpp:295
+#: src/file.cpp:296
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
 
-#: src/file.cpp:304
+#: src/file.cpp:305
 #, fuzzy
 msgid "Document saved."
 msgstr "Döküman Adı:"
 
-#: src/file.cpp:332
+#: src/file.cpp:333
 #, fuzzy
 msgid "Select file to save"
 msgstr "Açılacak dosyayı seçin"
 
-#: src/file.cpp:407
+#: src/file.cpp:408
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:542
-#, c-format
-msgid "Unable to import image '%s': %s"
-msgstr ""
-
-#: src/file.cpp:572
+#: src/file.cpp:507
 msgid "Select file to import"
 msgstr "İçeri aktarılacak dosyayı seçin"
 
@@ -1996,6 +1985,13 @@ msgstr ""
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr ""
 
+#: src/main.cpp:259 src/main.cpp:354
+msgid ""
+"[OPTIONS...] [FILE...]\n"
+"\n"
+"Available options:"
+msgstr ""
+
 #: src/nodepath.cpp:1001 src/nodepath.cpp:1013 src/nodepath.cpp:1093
 #: src/nodepath.cpp:1105
 msgid "To join, you must have two endnodes selected."
@@ -2013,41 +2009,41 @@ msgid "Cannot find path between nodes."
 msgstr "Seçilen düğümleri çizgilere ekle"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2711
+#: src/nodepath.cpp:2712
 #, fuzzy
 msgid "cusp"
 msgstr "_Biz"
 
-#: src/nodepath.cpp:2713
+#: src/nodepath.cpp:2714
 msgid "smooth"
 msgstr ""
 
-#: src/nodepath.cpp:2715
+#: src/nodepath.cpp:2716
 #, fuzzy
 msgid "symmetric"
 msgstr "Asimetrik"
 
-#: src/nodepath.cpp:2725
+#: src/nodepath.cpp:2726
 msgid "Drag nodes or control points to edit the path"
 msgstr ""
 
-#: src/nodepath.cpp:2739
+#: src/nodepath.cpp:2740
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 
-#: src/nodepath.cpp:2741
+#: src/nodepath.cpp:2742
 #, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
 msgstr ""
 
-#: src/nodepath.cpp:2743
+#: src/nodepath.cpp:2744
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr ""
 
-#: src/nodepath.cpp:2745
+#: src/nodepath.cpp:2746
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "Seçilen düğümleri çizgilere ekle"
@@ -2421,7 +2417,7 @@ msgstr "Resim Adresi:"
 msgid "Group of %d objects"
 msgstr "%d birimden oluşan grup"
 
-#: src/sp-item.cpp:495
+#: src/sp-item.cpp:498
 msgid "Object"
 msgstr "Nesne"
 
@@ -2453,12 +2449,12 @@ msgstr ""
 msgid "Text (%s, %.5gpt)"
 msgstr ""
 
-#: src/sp-use.cpp:320
+#: src/sp-use.cpp:318
 #, c-format
 msgid "Clone of: %s. Use Shift+D to look up original"
 msgstr ""
 
-#: src/sp-use.cpp:322
+#: src/sp-use.cpp:320
 msgid "Orphaned clone"
 msgstr ""
 
@@ -2799,6 +2795,22 @@ msgstr ""
 #: src/tools-switch.cpp:177
 msgid ""
 "Click to pick a color, click and drag to pick the average color of an area."
+msgstr ""
+
+#: src/verbs.cpp:678
+msgid "tutorial-basic.svg"
+msgstr ""
+
+#: src/verbs.cpp:681
+msgid "tutorial-advanced.svg"
+msgstr ""
+
+#: src/verbs.cpp:684
+msgid "elementsofdesign.svg"
+msgstr ""
+
+#: src/verbs.cpp:687
+msgid "tipsandtricks.svg"
 msgstr ""
 
 #: src/verbs.cpp:784
@@ -3772,12 +3784,12 @@ msgstr ""
 msgid "Miscellaneous Tips and Tricks"
 msgstr ""
 
-#: src/widgets/dash-selector.cpp:103
+#: src/widgets/dash-selector.cpp:104
 #, fuzzy
-msgid "Stroke pattern"
+msgid "Dash pattern"
 msgstr "Sayfa genişliğini ayarla"
 
-#: src/widgets/dash-selector.cpp:118
+#: src/widgets/dash-selector.cpp:119
 #, fuzzy
 msgid "Pattern offset"
 msgstr "Motif"
@@ -3808,6 +3820,7 @@ msgstr "Düzenle"
 msgid "Add"
 msgstr "Ekle"
 
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
 #: src/widgets/gradient-selector.cpp:166
 msgid ""
 "Whether the gradient vector is defined in the user space coordinates "
@@ -3830,6 +3843,7 @@ msgstr "Kullanıcı boşluk birimi"
 msgid "Coordinates:"
 msgstr "Köşeler:"
 
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: src/widgets/gradient-selector.cpp:196
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
@@ -3904,56 +3918,57 @@ msgstr "Başlangıç rengi"
 msgid "Gradient editor"
 msgstr "Geçiş vektörü"
 
-#: src/widgets/paint-selector.cpp:599
-msgid "No objects"
-msgstr "Nesne yok"
-
-#: src/widgets/paint-selector.cpp:613
-msgid "Multiple styles"
-msgstr "Çoklu stiller"
-
-#: src/widgets/paint-selector.cpp:627
+#: src/widgets/paint-selector.cpp:154 src/widgets/paint-selector.cpp:623
 msgid "No paint"
 msgstr "Çizim yok"
 
+#: src/widgets/paint-selector.cpp:156 src/widgets/paint-selector.cpp:738
+#, fuzzy
+msgid "Flat color"
+msgstr "renk"
+
+#: src/widgets/paint-selector.cpp:158 src/widgets/paint-selector.cpp:808
+msgid "Linear gradient"
+msgstr "Çizgisel geçiş"
+
+#: src/widgets/paint-selector.cpp:160 src/widgets/paint-selector.cpp:811
+msgid "Radial gradient"
+msgstr "Radyal geçiş"
+
+#: src/widgets/paint-selector.cpp:595
+msgid "No objects"
+msgstr "Nesne yok"
+
+#: src/widgets/paint-selector.cpp:609
+msgid "Multiple styles"
+msgstr "Çoklu stiller"
+
 #. Label
-#: src/widgets/paint-selector.cpp:690
+#: src/widgets/paint-selector.cpp:686
 msgid "Mode:"
 msgstr "Mod:"
 
-#: src/widgets/paint-selector.cpp:700 src/widgets/sp-color-scales.cpp:81
+#: src/widgets/paint-selector.cpp:696 src/widgets/sp-color-scales.cpp:81
 msgid "RGB"
 msgstr "RGB"
 
-#: src/widgets/paint-selector.cpp:700
+#: src/widgets/paint-selector.cpp:696
 msgid "RGB Colorspace"
 msgstr ""
 
 #. sp_menu_append (SP_MENU (m), _("HSV"), _("RGB Colorspace"), GUINT_TO_POINTER (SP_PAINT_SELECTOR_MODE_HSV));
-#: src/widgets/paint-selector.cpp:702 src/widgets/sp-color-scales.cpp:81
+#: src/widgets/paint-selector.cpp:698 src/widgets/sp-color-scales.cpp:81
 msgid "CMYK"
 msgstr "CMYK"
 
-#: src/widgets/paint-selector.cpp:702
+#: src/widgets/paint-selector.cpp:698
 msgid "CMYK Colorspace"
 msgstr ""
 
 #. Use dropper
-#: src/widgets/paint-selector.cpp:709
+#: src/widgets/paint-selector.cpp:705
 msgid "Get from dropper"
 msgstr ""
-
-#: src/widgets/paint-selector.cpp:742
-msgid "Color paint"
-msgstr "Renkli resim"
-
-#: src/widgets/paint-selector.cpp:812
-msgid "Linear gradient"
-msgstr "Çizgisel geçiş"
-
-#: src/widgets/paint-selector.cpp:815
-msgid "Radial gradient"
-msgstr "Radyal geçiş"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
@@ -4026,6 +4041,12 @@ msgstr "Özellik"
 #: src/widgets/sp-xmlview-attr-list.cpp:56
 msgid "Value"
 msgstr "Değer"
+
+#~ msgid "Stroke settings"
+#~ msgstr "Vuruş ayarları"
+
+#~ msgid "Color paint"
+#~ msgstr "Renkli resim"
 
 #~ msgid "Item properties"
 #~ msgstr "Nesne özellikleri"
@@ -4746,9 +4767,6 @@ msgstr "Değer"
 #, fuzzy
 #~ msgid "centimeter"
 #~ msgstr "İçerik"
-
-#~ msgid "color"
-#~ msgstr "renk"
 
 #, fuzzy
 #~ msgid "millimeters"

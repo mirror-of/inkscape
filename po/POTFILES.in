@@ -81,7 +81,6 @@ src/inkview.cpp
 src/interface.cpp
 src/knot.cpp
 src/knotholder.cpp
-src/libarikkei/arikkei-token.cpp
 src/libnr/nr-blit.cpp
 src/libnr/nr-compose-transform.cpp
 src/libnr/nr-compose.cpp

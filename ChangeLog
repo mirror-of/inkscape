@@ -1,6 +1,7 @@
 2004-05-07  Kees Cook <kees@outflux.net>
 
 	* src/verbs.cpp: re-localizing tutorials.  My goof!
+	* po/POTFILES.in: removed arikkei references
 
 2004-05-07  Carl Hetherington <inkscape@carlh.net>
 
