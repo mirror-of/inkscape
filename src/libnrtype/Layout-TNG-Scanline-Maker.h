@@ -105,6 +105,7 @@ public:
 private:
     double _x, _y;
     Layout::LineHeight _current_line_height;
+    bool _negative_block_progression;     /// if true, indicates that completeLine() should decrement rather than increment, ie block-progression is either rl or bt
 };
 
 /** \brief private to Layout. Generates scanlines inside an arbitrary shape
@@ -146,6 +147,8 @@ private:
     float _rasterizer_y;
     int _current_rasterization_point;
     float _current_line_height;
+
+    bool _negative_block_progression;     /// if true, indicates that completeLine() should decrement rather than increment, ie block-progression is either rl or bt
 };
 
 }//namespace Text

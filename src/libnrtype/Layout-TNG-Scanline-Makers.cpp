@@ -35,6 +35,8 @@ Layout::InfiniteScanlineMaker::InfiniteScanlineMaker(double initial_x, double in
             _y = initial_y;
             break;
     }
+    _negative_block_progression = block_progression == RIGHT_TO_LEFT || block_progression == BOTTOM_TO_TOP;
+        
 }
 
 Layout::InfiniteScanlineMaker::~InfiniteScanlineMaker()
@@ -53,7 +55,10 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::InfiniteScanlineMaker::makeS
 
 void Layout::InfiniteScanlineMaker::completeLine()
 {
-    _y += _current_line_height.total();
+    if (_negative_block_progression)
+        _y -= _current_line_height.total();
+    else
+        _y += _current_line_height.total();
     _current_line_height.ascent = 0.0;
     _current_line_height.descent = 0.0;
     _current_line_height.leading = 0.0;
@@ -94,6 +99,7 @@ Layout::ShapeScanlineMaker::ShapeScanlineMaker(Shape const *shape, Layout::Direc
     _y = _rasterizer_y = _bounding_box_top;
     _current_rasterization_point = 0;
     _rotated_shape->BeginRaster(_y, _current_rasterization_point);
+    _negative_block_progression = block_progression == RIGHT_TO_LEFT || block_progression == BOTTOM_TO_TOP;
 }
 
 
@@ -142,7 +148,10 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
 
 void Layout::ShapeScanlineMaker::completeLine()
 {
-    _y += _current_line_height;
+    if (_negative_block_progression)
+        _y -= _current_line_height;
+    else
+        _y += _current_line_height;
 }
 
 void Layout::ShapeScanlineMaker::setNewYCoordinate(double new_y)

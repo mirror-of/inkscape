@@ -834,10 +834,12 @@ class Layout::Calculator
             double char_width = 0.0;
             while (span->end_glyph_index < (unsigned)span->end.iter_span->glyph_string->num_glyphs
                    && span->end.iter_span->glyph_string->log_clusters[span->end_glyph_index] <= (int)span->end.char_byte) {
-                char_width += span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].geometry.width;
+                if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
+                    char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].glyph, true);
+                else
+                    char_width += font_size_multiplier * span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].geometry.width;
                 span->end_glyph_index++;
             }
-            char_width *= font_size_multiplier;
             if (char_attributes.is_cursor_position)
                 char_width += text_source->style->letter_spacing.computed;
             if (char_attributes.is_white)
@@ -1063,17 +1065,23 @@ class Layout::Calculator
                         new_glyph.glyph = unbroken_span.glyph_string->glyphs[glyph_index].glyph;
                         new_glyph.in_character = cluster_start_char_index;
                         new_glyph.rotation = glyph_rotate;
-                        new_glyph.x = x + counter_directional_width_remaining + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier;
-                        new_glyph.y = _y_offset + unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset * font_size_multiplier;
 
-                        /* put this back in when we do glyph-rotation-horizontal/vertical
+                        /* put something like this back in when we do glyph-rotation-horizontal/vertical
                         if (new_span.block_progression == LEFT_TO_RIGHT || new_span.block_progression == RIGHT_TO_LEFT) {
                             new_glyph.x += new_span.line_height.ascent;
                             new_glyph.y -= unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * font_size_multiplier * 0.5;
                             new_glyph.width = new_span.line_height.ascent + new_span.line_height.descent;
                         } else */
 
-                        new_glyph.width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * font_size_multiplier;
+                        if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
+                            new_glyph.x = x + counter_directional_width_remaining + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier + new_span.line_height.ascent;
+                            new_glyph.y = _y_offset + (unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset - unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * 0.5) * font_size_multiplier;
+                            new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[glyph_index].glyph, true);
+                        } else {
+                            new_glyph.x = x + counter_directional_width_remaining + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier;
+                            new_glyph.y = _y_offset + unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset * font_size_multiplier;
+                            new_glyph.width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * font_size_multiplier;
+                        }
                         if (new_span.direction == RIGHT_TO_LEFT) {
                             // pango wanted to give us glyphs in visual order but we refused, so we need to work
                             // out where the cluster start is ourselves
@@ -1081,11 +1089,13 @@ class Layout::Calculator
                             for (unsigned rtl_index = glyph_index + 1; rtl_index < it_span->end_glyph_index ; rtl_index++) {
                                 if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start)
                                     break;
-                                cluster_width += unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
+                                if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
+                                    cluster_width += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[rtl_index].glyph, true);
+                                else
+                                    cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
                             }
-                            new_glyph.x -= cluster_width * font_size_multiplier;
+                            new_glyph.x -= cluster_width;
                         }
-                        //if (new_span.direction == RIGHT_TO_LEFT) new_glyph.x -= new_glyph.width;
                         _flow._glyphs.push_back(new_glyph);
 
                         // create the Layout::Character(s)
