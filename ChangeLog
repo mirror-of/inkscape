@@ -1,3 +1,11 @@
+2004-01-31  Johan Ceuppens  <jceuppen@easynet.be>
+	* src/verbs.cpp src/verbs.h: removed sp_fullscreen and put it in
+	desktop.cpp and desktop.h as fullscreen
+	* configure.in src/interface.cpp src/shortcuts.cpp src/inkscape.cpp 
+	src/inkscape.h src/desktop.cpp src/desktop.h: 
+	Added HAVE_GTK_WINDOW_FULLSCREEN as conditional compilation based
+	on a function check for gtk_window_fullscreen in configure script
+
 2004-01-30  Johan Ceuppens  <jceuppen@easynet.be>
 	* src/verbs.cpp src/verbs.h: Added fullscreen verb. Fullscreen action
 	is in SP_VERB_IS_ZOOM.
