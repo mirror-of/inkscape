@@ -398,7 +398,11 @@ sp_image_repr_read_image (SPRepr * repr)
 			/* try to load from relative pos */
 			docbase = sp_repr_attr (sp_repr_document_root (sp_repr_document (repr)), "sodipodi:docbase");
 			if (!docbase) docbase = "./";
-			fullname = g_strconcat (docbase, filename, NULL);
+			#ifdef WIN32
+                fullname = g_strconcat (docbase, "\\", filename, NULL);
+            #else
+                fullname = g_strconcat (docbase, filename, NULL);
+            #endif
 			// TODO: bulia, please look over
 			gsize bytesRead = 0;
 			gsize bytesWritten = 0;
@@ -502,7 +506,7 @@ sp_image_update_canvas_image (SPImage *image)
 static std::vector<NR::Point> sp_image_snappoints(SPItem *item)
 {
      std::vector<NR::Point> p;
-    
+
      if (((SPItemClass *) parent_class)->snappoints) {
          p = ((SPItemClass *) parent_class)->snappoints (item);
      }
@@ -746,33 +750,33 @@ autotrace_dialog (SPImage * img)
 	trace_dialog = frontline_dialog_new();
 	gtk_window_set_title (GTK_WINDOW (trace_dialog), title);
 
-	gtk_signal_connect_object_while_alive (GTK_OBJECT (img), 
+	gtk_signal_connect_object_while_alive (GTK_OBJECT (img),
 					       "release",
 					       GTK_SIGNAL_FUNC (gtk_widget_destroy),
 					       GTK_OBJECT (trace_dialog));
 	gtk_signal_connect_object (GTK_OBJECT(FRONTLINE_DIALOG(trace_dialog)->close_button),
 				   "clicked",
-				   GTK_SIGNAL_FUNC(gtk_widget_destroy), 
+				   GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				   GTK_OBJECT(trace_dialog));
 	gtk_signal_connect(GTK_OBJECT(trace_dialog),
 			   "trace_done",
-			   GTK_SIGNAL_FUNC (load_trace_result), 
+			   GTK_SIGNAL_FUNC (load_trace_result),
 			   trace_dialog);
-	
+
 	header_area = build_header_area(SP_OBJECT_REPR(img));
 	gtk_box_pack_start_defaults(GTK_BOX(FRONTLINE_DIALOG(trace_dialog)->header_area),
 				    header_area);
 	gtk_widget_show(header_area);
-	
+
 	header_sep = gtk_hseparator_new();
-	gtk_box_pack_start_defaults(GTK_BOX(FRONTLINE_DIALOG(trace_dialog)->header_area), 
+	gtk_box_pack_start_defaults(GTK_BOX(FRONTLINE_DIALOG(trace_dialog)->header_area),
 				    header_sep);
 	gtk_widget_show(header_sep);
 
-	
+
 	bitmap = gdk_pixbuf_to_at_bitmap(img->pixbuf);
 	frontline_dialog_set_bitmap(FRONTLINE_DIALOG(trace_dialog), bitmap);
-	
+
 	gtk_widget_show (trace_dialog);
 }
 
@@ -785,7 +789,7 @@ gdk_pixbuf_to_at_bitmap (GdkPixbuf * pixbuf)
 	int i, j;
 
 	if (GDK_PIXBUF_TO_AT_BITMAP_DEBUG)
-		g_message("%d:channel %d:width %d:height %d:bits_per_sample %d:has_alpha %d:rowstride\n", 
+		g_message("%d:channel %d:width %d:height %d:bits_per_sample %d:has_alpha %d:rowstride\n",
 			  gdk_pixbuf_get_n_channels(pixbuf),
 			  gdk_pixbuf_get_width(pixbuf),
 			  gdk_pixbuf_get_height(pixbuf),
@@ -815,8 +819,8 @@ load_trace_result(FrontlineDialog * fl_dialog, gpointer user_data)
 {
 	FrontlineDialog * trace_dialog;
 	trace_dialog = FRONTLINE_DIALOG(user_data);
-	
-	if (!trace_dialog->splines) 
+
+	if (!trace_dialog->splines)
 	  return;
 	if (fl_ask(GTK_WINDOW(trace_dialog), trace_dialog->splines))
 	  load_splines(trace_dialog->splines);
@@ -833,22 +837,22 @@ load_splines(at_splines_type * splines)
 
 	mode_t old_mask;
 
-  	filename = g_strdup_printf("/tmp/at-%s-%d-%d.svg", 
+  	filename = g_strdup_printf("/tmp/at-%s-%d-%d.svg",
 				   g_get_user_name(),
-				   getpid(), 
+				   getpid(),
 				   serial_num++);
-	
-	/* Make the mode of temporary svg file 
+
+	/* Make the mode of temporary svg file
 	   "readable and writable by the user only". */
 	old_mask = umask(066);
 	tmp_fp = fopen(filename, "w");
 	umask(old_mask);
-  
+
 	writer = at_output_get_handler_by_suffix ("svg");
 	at_splines_write (writer, tmp_fp, filename, NULL, splines,
 			  handle_msg, filename);
 	fclose(tmp_fp);
-  
+
 	load_file (filename);
 
 	unlink(filename);
@@ -861,7 +865,7 @@ load_file (const guchar *filename)
 {
 	SPDocument * doc;
 	SPViewWidget *dtw;
-  
+
 	/* fixme: Either use file:: method, or amke this private (Lauris) */
 	/* fixme: In latter case we may want to publish it on save (Lauris) */
 	doc = sp_document_new (filename, TRUE);
@@ -876,10 +880,10 @@ handle_msg(at_string msg, at_msg_type msg_type, at_address client_data)
 	GtkWidget *dialog;
 	guchar * long_msg;
 	guchar * target = client_data;
-	
+
 	if (msg_type == AT_MSG_FATAL) {
-		long_msg = g_strdup_printf(_("Error writing %s: %s"), 
-					   target, msg);	
+		long_msg = g_strdup_printf(_("Error writing %s: %s"),
+					   target, msg);
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_OK,
@@ -890,7 +894,7 @@ handle_msg(at_string msg, at_msg_type msg_type, at_address client_data)
 		g_free(long_msg);
 	}
 	else {
-		long_msg = g_strdup_printf("%s: %s", msg, target);	
+		long_msg = g_strdup_printf("%s: %s", msg, target);
 		g_warning("%s", long_msg);
 		g_free(long_msg);
 	}
@@ -904,19 +908,19 @@ build_header_area(SPRepr *repr)
 	GtkWidget * hbox;
 	GtkWidget * label;
 	GtkWidget * entry;
-	
+
 	vbox = gtk_vbox_new(TRUE, 4);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
-	
+
 	/* Doc name */
-	doc_name = sp_repr_attr(sp_repr_document_root(sp_repr_document(repr)), 
+	doc_name = sp_repr_attr(sp_repr_document_root(sp_repr_document(repr)),
 				"sodipodi:docname");
 	if (!doc_name)
 		doc_name = _("Untitled");
 	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_box_pack_start_defaults(GTK_BOX(vbox), hbox);
 	gtk_widget_show(hbox);
-	
+
 	label = gtk_label_new(_("Document Name:"));
 	entry = gtk_entry_new();
 	gtk_entry_set_text(GTK_ENTRY(entry), doc_name);
@@ -935,7 +939,7 @@ build_header_area(SPRepr *repr)
 	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_box_pack_start_defaults(GTK_BOX(vbox), hbox);
 	gtk_widget_show(hbox);
-	
+
 	label = gtk_label_new(_("Image URI:"));
 	entry = gtk_entry_new();
 	gtk_entry_set_text(GTK_ENTRY(entry), img_uri);
@@ -945,7 +949,7 @@ build_header_area(SPRepr *repr)
 	gtk_widget_show(label);
 	gtk_widget_show(entry);
 	gtk_widget_set_sensitive(entry, FALSE);
-	
+
 	return vbox;
 }
 
