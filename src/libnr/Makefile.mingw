@@ -16,8 +16,9 @@ nr_mmx_R8G8B8A8_P_R8G8B8A8_P_A8_RGBAP.o \
 nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM.o \
 nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.o nr-object.o nr-path.o \
 nr-pixblock-line.o nr-pixblock.o nr-pixblock-pattern.o \
-nr-pixblock-pixel.o nr-rect.o nr-stroke.o nr-svp.o nr-svp-render.o \
-nr-svp-uncross.o nr-uta.o nr-values.o testnr.o
+nr-pixblock-pixel.o nr-point-fns.o nr-rect.o nr-stroke.o \
+nr-svp.o nr-svp-render.o \
+nr-types.o nr-svp-uncross.o nr-uta.o nr-values.o testnr.o
 
 all: $(OBJ)
 
