@@ -293,7 +293,8 @@ static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint fl
 		sp_repr_set_double (repr, "sodipodi:rx", ellipse->rx.computed);
 		sp_repr_set_double (repr, "sodipodi:ry", ellipse->ry.computed);
 
-		sp_arc_set_elliptical_path_attribute (SP_ARC (object), SP_OBJECT_REPR (object));
+		if (SP_IS_ARC(ellipse))
+			sp_arc_set_elliptical_path_attribute (SP_ARC (object), SP_OBJECT_REPR (object));
 	}
 
 	if (((SPObjectClass *) ge_parent_class)->write)
@@ -383,8 +384,6 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_double (repr, "cy", ellipse->cy.computed);
 	sp_repr_set_double (repr, "rx", ellipse->rx.computed);
 	sp_repr_set_double (repr, "ry", ellipse->ry.computed);
-
-	sp_arc_set_elliptical_path_attribute(SP_ARC(object), repr);
 
 	if (((SPObjectClass *) ellipse_parent_class)->write)
 		(* ((SPObjectClass *) ellipse_parent_class)->write) (object, repr, flags);
