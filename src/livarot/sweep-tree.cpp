@@ -3,6 +3,7 @@
 #include "libnr/nr-point-fns.h"
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree.h"
+#include "livarot/sweep-tree-list.h"
 #include "livarot/Shape.h"
 
 
@@ -14,63 +15,61 @@
  * neighbours, plus the fact that it's stored in an array that's realloc'd
  */
 
-SweepTree::SweepTree (void)
+SweepTree::SweepTree()
 {
-  src = NULL;
-  bord = -1;
-  startPoint = -1;
-  evt[LEFT] = evt[RIGHT] = NULL;
-  sens = true;
-//      invDirLength=1;
+    src = NULL;
+    bord = -1;
+    startPoint = -1;
+    evt[LEFT] = evt[RIGHT] = NULL;
+    sens = true;
+    //invDirLength=1;
 }
-SweepTree::~SweepTree (void)
+
+SweepTree::~SweepTree()
 {
-  MakeDelete ();
+    MakeDelete();
 }
 
 void
-SweepTree::MakeNew (Shape * iSrc, int iBord, int iWeight, int iStartPoint)
+SweepTree::MakeNew(Shape *iSrc, int iBord, int iWeight, int iStartPoint)
 {
-  AVLTree::MakeNew ();
-  ConvertTo (iSrc, iBord, iWeight, iStartPoint);
+    AVLTree::MakeNew();
+    ConvertTo(iSrc, iBord, iWeight, iStartPoint);
 }
 
 void
-SweepTree::ConvertTo (Shape * iSrc, int iBord, int iWeight, int iStartPoint)
+SweepTree::ConvertTo(Shape *iSrc, int iBord, int iWeight, int iStartPoint)
 {
-  src = iSrc;
-  bord = iBord;
-  evt[LEFT] = evt[RIGHT] = NULL;
-  startPoint = iStartPoint;
-  if (src->getEdge(bord).st < src->getEdge(bord).en)
-    {
-      if (iWeight >= 0)
-	sens = true;
-      else
-	sens = false;
+    src = iSrc;
+    bord = iBord;
+    evt[LEFT] = evt[RIGHT] = NULL;
+    startPoint = iStartPoint;
+    if (src->getEdge(bord).st < src->getEdge(bord).en) {
+        if (iWeight >= 0)
+            sens = true;
+        else
+            sens = false;
+    } else {
+        if (iWeight >= 0)
+            sens = false;
+        else
+            sens = true;
     }
-  else
-    {
-      if (iWeight >= 0)
-	sens = false;
-      else
-	sens = true;
-    }
-//      invDirLength=src->eData[bord].isqlength;
-//      invDirLength=1/sqrt(src->getEdge(bord).dx*src->getEdge(bord).dx+src->getEdge(bord).dy*src->getEdge(bord).dy);
+    //invDirLength=src->eData[bord].isqlength;
+    //invDirLength=1/sqrt(src->getEdge(bord).dx*src->getEdge(bord).dx+src->getEdge(bord).dy*src->getEdge(bord).dy);
 }
 
 
 void SweepTree::MakeDelete()
 {
-  for (int i = 0; i < 2; i++) {
-    if (evt[i]) {
-      evt[i]->sweep[1 - i] = NULL;
+    for (int i = 0; i < 2; i++) {
+        if (evt[i]) {
+            evt[i]->sweep[1 - i] = NULL;
+        }
+        evt[i] = NULL;
     }
-    evt[i] = NULL;
-  }
 
-  AVLTree::MakeDelete ();
+    AVLTree::MakeDelete();
 }
 
 
@@ -79,117 +78,95 @@ void SweepTree::MakeDelete()
 // lying at y=px[1].
 // px is the upper endpoint of newOne
 int
-SweepTree::Find (NR::Point const &px, SweepTree * newOne, SweepTree * &insertL,
-		 SweepTree * &insertR, bool sweepSens)
+SweepTree::Find(NR::Point const &px, SweepTree *newOne, SweepTree *&insertL,
+                SweepTree *&insertR, bool sweepSens)
 {
-  // get the edge associated with this node: one point+one direction
-  // since we're dealing with line, the direction (bNorm) is taken downwards
-  NR::Point bOrig, bNorm;
-  bOrig = src->pData[src->getEdge(bord).st].rx;
-  bNorm = src->eData[bord].rdx;
-  if (src->getEdge(bord).st > src->getEdge(bord).en)
-    {
-      bNorm = -bNorm;
+    // get the edge associated with this node: one point+one direction
+    // since we're dealing with line, the direction (bNorm) is taken downwards
+    NR::Point bOrig, bNorm;
+    bOrig = src->pData[src->getEdge(bord).st].rx;
+    bNorm = src->eData[bord].rdx;
+    if (src->getEdge(bord).st > src->getEdge(bord).en) {
+        bNorm = -bNorm;
     }
-  // rotate to get the normal to the edge
-  bNorm=bNorm.ccw();
+    // rotate to get the normal to the edge
+    bNorm=bNorm.ccw();
 
-  NR::Point diff;
-  diff = px - bOrig;
+    NR::Point diff;
+    diff = px - bOrig;
 
-  // compute (px-orig)^dir to know on which side of this edge the point px lies
-  double y = 0;
-  //      if ( startPoint == newOne->startPoint ) {
-  //             y=0;
-  //     } else {
-  y = dot (bNorm, diff);
-  //      }
-  //      y*=invDirLength;
-  if (fabs(y) < 0.000001)
-    {
-    // that damn point px lies on me, so i need to consider to direction of the edge in
-    // newOne to know if it goes toward my left side or my right side
-    // sweepSens is needed (actually only used by the Scan() functions) because if the sweepline goes upward,
-    // signs change
-      // prendre en compte les directions
-      NR::Point nNorm;
-      nNorm = newOne->src->eData[newOne->bord].rdx;
-      if (newOne->src->getEdge(newOne->bord).st >
-	  newOne->src->getEdge(newOne->bord).en)
+    // compute (px-orig)^dir to know on which side of this edge the point px lies
+    double y = 0;
+    //if ( startPoint == newOne->startPoint ) {
+    //   y=0;
+    //} else {
+    y = dot(bNorm, diff);
+    //}
+    //y*=invDirLength;
+    if (fabs(y) < 0.000001) {
+        // that damn point px lies on me, so i need to consider to direction of the edge in
+        // newOne to know if it goes toward my left side or my right side
+        // sweepSens is needed (actually only used by the Scan() functions) because if the sweepline goes upward,
+        // signs change
+        // prendre en compte les directions
+        NR::Point nNorm;
+        nNorm = newOne->src->eData[newOne->bord].rdx;
+        if (newOne->src->getEdge(newOne->bord).st >
+            newOne->src->getEdge(newOne->bord).en)
 	{
-	  nNorm = -nNorm;
+            nNorm = -nNorm;
 	}
-      nNorm=nNorm.ccw();
+        nNorm=nNorm.ccw();
 
-      if (sweepSens)
-	{
-	  y = cross (nNorm, bNorm);
+        if (sweepSens) {
+            y = cross(nNorm, bNorm);
+        } else {
+            y = cross(bNorm, nNorm);
+        }
+        if (y == 0) {
+            y = dot(bNorm, nNorm);
+            if (y == 0) {
+                insertL = this;
+                insertR = static_cast<SweepTree *>(elem[RIGHT]);
+                return found_exact;
+            }
+        }
+    }
+    if (y < 0) {
+        if (son[LEFT]) {
+            return (static_cast<SweepTree *>(son[LEFT]))->Find(px, newOne,
+                                                               insertL, insertR,
+                                                               sweepSens);
+	} else {
+            insertR = this;
+            insertL = static_cast<SweepTree *>(elem[LEFT]);
+            if (insertL) {
+                return found_between;
+            } else {
+                return found_on_left;
+	    }
 	}
-      else
-	{
-	  y = cross (bNorm, nNorm);
-	}
-      if (y == 0)
-	{
-	  y = dot (bNorm, nNorm);
-	  if (y == 0)
-	    {
-	      insertL = this;
-	      insertR = static_cast < SweepTree * >(elem[RIGHT]);
-	      return found_exact;
+    } else {
+        if (son[RIGHT]) {
+            return (static_cast<SweepTree *>(son[RIGHT]))->Find(px, newOne,
+                                                                insertL, insertR,
+                                                                sweepSens);
+	} else {
+            insertL = this;
+            insertR = static_cast<SweepTree *>(elem[RIGHT]);
+            if (insertR) {
+                return found_between;
+	    } else {
+                return found_on_right;
 	    }
 	}
     }
-  if (y < 0)
-    {
-      if (son[LEFT])
-	{
-	  return (static_cast < SweepTree * >(son[LEFT]))->Find (px, newOne,
-							    insertL, insertR,
-							    sweepSens);
-	}
-      else
-	{
-	  insertR = this;
-	  insertL = static_cast < SweepTree * >(elem[LEFT]);
-	  if (insertL)
-	    {
-	      return found_between;
-	    }
-	  else
-	    {
-	      return found_on_left;
-	    }
-	}
-    }
-  else
-    {
-      if (son[RIGHT])
-	{
-	  return (static_cast < SweepTree * >(son[RIGHT]))->Find (px, newOne,
-							    insertL, insertR,
-							    sweepSens);
-	}
-      else
-	{
-	  insertL = this;
-	  insertR = static_cast < SweepTree * >(elem[RIGHT]);
-	  if (insertR)
-	    {
-	      return found_between;
-	    }
-	  else
-	    {
-	      return found_on_right;
-	    }
-	}
-    }
-  return not_found;
+    return not_found;
 }
 
 // only find a point's position
 int
-SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
+SweepTree::Find(NR::Point const &px, SweepTree * &insertL,
 		 SweepTree * &insertR)
 {
   NR::Point bOrig, bNorm;
@@ -205,24 +182,24 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
   diff = px - bOrig;
 
   double y = 0;
-  y = dot (bNorm, diff);
+  y = dot(bNorm, diff);
   if (y == 0)
     {
       insertL = this;
-      insertR = static_cast < SweepTree * >(elem[RIGHT]);
+      insertR = static_cast<SweepTree *>(elem[RIGHT]);
       return found_exact;
     }
   if (y < 0)
     {
       if (son[LEFT])
 	{
-	  return (static_cast < SweepTree * >(son[LEFT]))->Find (px, insertL,
+	  return (static_cast<SweepTree *>(son[LEFT]))->Find(px, insertL,
 							    insertR);
 	}
       else
 	{
 	  insertR = this;
-	  insertL = static_cast < SweepTree * >(elem[LEFT]);
+	  insertL = static_cast<SweepTree *>(elem[LEFT]);
 	  if (insertL)
 	    {
 	      return found_between;
@@ -237,13 +214,13 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
     {
       if (son[RIGHT])
 	{
-	  return (static_cast < SweepTree * >(son[RIGHT]))->Find (px, insertL,
+	  return (static_cast<SweepTree *>(son[RIGHT]))->Find(px, insertL,
 							    insertR);
 	}
       else
 	{
 	  insertL = this;
-	  insertR = static_cast < SweepTree * >(elem[RIGHT]);
+	  insertR = static_cast<SweepTree *>(elem[RIGHT]);
 	  if (insertR)
 	    {
 	      return found_between;
@@ -258,29 +235,29 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
 }
 
 void
-SweepTree::RemoveEvents (SweepEventQueue & queue)
+SweepTree::RemoveEvents(SweepEventQueue & queue)
 {
-  RemoveEvent(queue, LEFT);
-  RemoveEvent(queue, RIGHT);
+    RemoveEvent(queue, LEFT);
+    RemoveEvent(queue, RIGHT);
 }
 
 void SweepTree::RemoveEvent(SweepEventQueue &queue, Side s)
 {
-  if (evt[s]) {
-    queue.remove(evt[s]);
-    evt[s] = NULL;
-  }
+    if (evt[s]) {
+        queue.remove(evt[s]);
+        evt[s] = NULL;
+    }
 }
 
 int
-SweepTree::Remove (SweepTreeList & list, SweepEventQueue & queue,
-		   bool rebalance)
+SweepTree::Remove(SweepTreeList &list, SweepEventQueue &queue,
+                  bool rebalance)
 {
-  RemoveEvents (queue);
-  AVLTree *tempR = static_cast < AVLTree * >(list.racine);
-  int err = AVLTree::Remove (tempR, rebalance);
-  list.racine = static_cast < SweepTree * >(tempR);
-  MakeDelete ();
+  RemoveEvents(queue);
+  AVLTree *tempR = static_cast<AVLTree *>(list.racine);
+  int err = AVLTree::Remove(tempR, rebalance);
+  list.racine = static_cast<SweepTree *>(tempR);
+  MakeDelete();
   if (list.nbTree <= 1)
     {
       list.nbTree = 0;
@@ -290,14 +267,14 @@ SweepTree::Remove (SweepTreeList & list, SweepEventQueue & queue,
     {
       if (list.racine == list.trees + (list.nbTree - 1))
 	list.racine = this;
-      list.trees[--list.nbTree].Relocate (this);
+      list.trees[--list.nbTree].Relocate(this);
     }
   return err;
 }
 
 int
-SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
-		   Shape * iDst, int iAtPoint, bool rebalance, bool sweepSens)
+SweepTree::Insert(SweepTreeList &list, SweepEventQueue &queue,
+                  Shape *iDst, int iAtPoint, bool rebalance, bool sweepSens)
 {
   if (list.racine == NULL)
     {
@@ -307,7 +284,7 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
   SweepTree *insertL = NULL;
   SweepTree *insertR = NULL;
   int insertion =
-    list.racine->Find (iDst->getPoint(iAtPoint).x, this,
+    list.racine->Find(iDst->getPoint(iAtPoint).x, this,
 		       insertL, insertR, sweepSens);
   
     if (insertion == found_exact) {
@@ -319,15 +296,15 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
 	}
 
     } else if (insertion == found_between) {
-      insertR->RemoveEvent (queue, LEFT);
-      insertL->RemoveEvent (queue, RIGHT);
+      insertR->RemoveEvent(queue, LEFT);
+      insertL->RemoveEvent(queue, RIGHT);
     }
 
-  AVLTree *tempR = static_cast < AVLTree * >(list.racine);
+  AVLTree *tempR = static_cast<AVLTree *>(list.racine);
   int err =
-    AVLTree::Insert (tempR, insertion, static_cast < AVLTree * >(insertL),
-		     static_cast < AVLTree * >(insertR), rebalance);
-  list.racine = static_cast < SweepTree * >(tempR);
+    AVLTree::Insert(tempR, insertion, static_cast<AVLTree *>(insertL),
+		     static_cast<AVLTree *>(insertR), rebalance);
+  list.racine = static_cast<SweepTree *>(tempR);
   return err;
 }
 
@@ -337,9 +314,9 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
 // where d is the number of edge to add in this fashion. hopefully d remains small
 
 int
-SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
-		     Shape * iDst, SweepTree * insNode, int fromPt,
-		     bool rebalance, bool sweepSens)
+SweepTree::InsertAt(SweepTreeList &list, SweepEventQueue &queue,
+                    Shape *iDst, SweepTree *insNode, int fromPt,
+                    bool rebalance, bool sweepSens)
 {
   if (list.racine == NULL)
     {
@@ -370,16 +347,16 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 
   SweepTree *insertL = NULL;
   SweepTree *insertR = NULL;
-  double ang = cross (nNorm, bNorm);
+  double ang = cross(nNorm, bNorm);
   if (ang == 0)
     {
       insertL = insNode;
-      insertR = static_cast < SweepTree * >(insNode->elem[RIGHT]);
+      insertR = static_cast<SweepTree *>(insNode->elem[RIGHT]);
     }
   else if (ang > 0)
     {
       insertL = insNode;
-      insertR = static_cast < SweepTree * >(insNode->elem[RIGHT]);
+      insertR = static_cast<SweepTree *>(insNode->elem[RIGHT]);
 
       while (insertL)
 	{
@@ -409,19 +386,19 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	    {
 	      bNorm = -bNorm;
 	    }
-	  ang = cross (nNorm, bNorm);
+	  ang = cross(nNorm, bNorm);
 	  if (ang <= 0)
 	    {
 	      break;
 	    }
 	  insertR = insertL;
-	  insertL = static_cast < SweepTree * >(insertR->elem[LEFT]);
+	  insertL = static_cast<SweepTree *>(insertR->elem[LEFT]);
 	}
     }
   else if (ang < 0)
     {
       insertL = insNode;
-      insertR = static_cast < SweepTree * >(insNode->elem[RIGHT]);
+      insertR = static_cast<SweepTree *>(insNode->elem[RIGHT]);
 
       while (insertR)
 	{
@@ -451,13 +428,13 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	    {
 	      bNorm = -bNorm;
 	    }
-	  ang = cross (nNorm, bNorm);
+	  ang = cross(nNorm, bNorm);
 	  if (ang > 0)
 	    {
 	      break;
 	    }
 	  insertL = insertR;
-	  insertR = static_cast < SweepTree * >(insertL->elem[RIGHT]);
+	  insertR = static_cast<SweepTree *>(insertL->elem[RIGHT]);
 	}
     }
 
@@ -483,20 +460,20 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
       insertL->RemoveEvent(queue, RIGHT);
   }
 
-  AVLTree *tempR = static_cast < AVLTree * >(list.racine);
+  AVLTree *tempR = static_cast<AVLTree *>(list.racine);
   int err =
-    AVLTree::Insert (tempR, insertion, static_cast < AVLTree * >(insertL),
-		     static_cast < AVLTree * >(insertR), rebalance);
-  list.racine = static_cast < SweepTree * >(tempR);
+    AVLTree::Insert(tempR, insertion, static_cast<AVLTree *>(insertL),
+		     static_cast<AVLTree *>(insertR), rebalance);
+  list.racine = static_cast<SweepTree *>(tempR);
   return err;
 }
 
 void
-SweepTree::Relocate (SweepTree * to)
+SweepTree::Relocate(SweepTree * to)
 {
   if (this == to)
     return;
-  AVLTree::Relocate (to);
+  AVLTree::Relocate(to);
   to->src = src;
   to->bord = bord;
   to->sens = sens;
@@ -514,40 +491,41 @@ SweepTree::Relocate (SweepTree * to)
 }
 
 void
-SweepTree::SwapWithRight (SweepTreeList & list, SweepEventQueue & queue)
+SweepTree::SwapWithRight(SweepTreeList &list, SweepEventQueue &queue)
 {
-  SweepTree *tL = this;
-  SweepTree *tR = static_cast < SweepTree * >(elem[RIGHT]);
+    SweepTree *tL = this;
+    SweepTree *tR = static_cast<SweepTree *>(elem[RIGHT]);
 
-  tL->src->swsData[tL->bord].misc = tR;
-  tR->src->swsData[tR->bord].misc = tL;
+    tL->src->swsData[tL->bord].misc = tR;
+    tR->src->swsData[tR->bord].misc = tL;
 
-  {
-    Shape *swap = tL->src;
-    tL->src = tR->src;
-    tR->src = swap;
-  }
-  {
-    int swap = tL->bord;
-    tL->bord = tR->bord;
-    tR->bord = swap;
-  }
-  {
-    int swap = tL->startPoint;
-    tL->startPoint = tR->startPoint;
-    tR->startPoint = swap;
-  }
-//      {double swap=tL->invDirLength;tL->invDirLength=tR->invDirLength;tR->invDirLength=swap;}
-  {
-    bool swap = tL->sens;
-    tL->sens = tR->sens;
-    tR->sens = swap;
-  }
+    {
+        Shape *swap = tL->src;
+        tL->src = tR->src;
+        tR->src = swap;
+    }
+    {
+        int swap = tL->bord;
+        tL->bord = tR->bord;
+        tR->bord = swap;
+    }
+    {
+        int swap = tL->startPoint;
+        tL->startPoint = tR->startPoint;
+        tR->startPoint = swap;
+    }
+    //{double swap=tL->invDirLength;tL->invDirLength=tR->invDirLength;tR->invDirLength=swap;}
+    {
+        bool swap = tL->sens;
+        tL->sens = tR->sens;
+        tR->sens = swap;
+    }
 }
+
 void
-SweepTree::Avance (Shape * dstPts, int curPoint, Shape * a, Shape * b)
+SweepTree::Avance(Shape *dstPts, int curPoint, Shape *a, Shape *b)
 {
-  return;
+    return;
 /*	if ( curPoint != startPoint ) {
 		int nb=-1;
 		if ( sens ) {
