@@ -1,3 +1,9 @@
+2005-04-01  Jon A. Cruz  <jon@joncruz.org>
+    * src/ui/widget/panel.h, src/ui/widget/panel.cpp, src/ui/previewholder.h,
+      src/ui/previewholder.cpp,src/dialogs/swatches.cpp,
+      src/dialogs/swatches.h:
+      Added UI for switching palettes
+
 2005-04-01  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
     * src/style.cpp (sp_style_merge_from_dying_parent): New function to
       combine the styles of the <use> element and its ghost child when

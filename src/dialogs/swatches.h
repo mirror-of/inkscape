@@ -38,7 +38,7 @@ public:
     static SwatchesPanel& getInstance();
 
 protected:
-    void _handleAction( int setId, int itemId );
+    virtual void _handleAction( int setId, int itemId );
 
 private:
     SwatchesPanel(SwatchesPanel const &); // no copy

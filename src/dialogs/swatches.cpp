@@ -21,6 +21,7 @@
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
+#include <gtkmm/radiomenuitem.h>
 #include "interface.h"
 #include "verbs.h"
 #include "prefs-utils.h"
@@ -363,7 +364,18 @@ SwatchesPanel::SwatchesPanel() :
         for ( std::vector<ColorItem*>::iterator it = first->_colors.begin(); it != first->_colors.end(); it++ ) {
             _holder->addPreview(*it);
         }
+
+        Gtk::RadioMenuItem::Group groupOne;
+        int i = 0;
+        for ( std::vector<JustForNow*>::iterator it = possible.begin(); it != possible.end(); it++ ) {
+            JustForNow* curr = *it;
+            Gtk::RadioMenuItem* single = manage(new Gtk::RadioMenuItem(groupOne, curr->_name));
+            _regItem( single, 3, i );
+            i++;
+        }
+
     }
+
 
     pack_start(*_holder, Gtk::PACK_EXPAND_WIDGET);
     _setTargetFillable(_holder);
@@ -377,6 +389,19 @@ SwatchesPanel::~SwatchesPanel()
 
 void SwatchesPanel::_handleAction( int setId, int itemId )
 {
+    switch( setId ) {
+        case 3:
+        {
+            if ( itemId >= 0 && itemId < static_cast<int>(possible.size()) ) {
+                _holder->clear();
+                JustForNow* curr = possible[itemId];
+                for ( std::vector<ColorItem*>::iterator it = curr->_colors.begin(); it != curr->_colors.end(); it++ ) {
+                    _holder->addPreview(*it);
+                }
+            }
+        }
+        break;
+    }
 }
 
 } //namespace Dialogs
