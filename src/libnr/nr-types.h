@@ -53,9 +53,19 @@ class Point{
 		pt[Y] = y;
 	}
 
-	Point(const NRPoint &p) {
+	Point(NRPoint const &p) {
 		pt[X] = p.x;
 		pt[Y] = p.y;
+	}
+
+	double operator[](unsigned i) const {
+		g_assert(i <= 1);
+		return pt[i];
+	}
+
+	double &operator[](unsigned i) {
+		g_assert(i <= 1);
+		return pt[i];
 	}
 
 	/** Return a point like this point but rotated -90 degrees.
@@ -74,19 +84,27 @@ class Point{
 		return Point(-pt[Y], pt[X]);
 	}
 
-	Coord L1() const ;
-/** Compute the L1 norm, or manhattan distance, of this vector */
-	Coord L2() const ;
-/** Compute the L2 or euclidean norm of this vector */
-	Coord Linfty() const ;
-/** Compute the L infinity or maximum norm of this vector */
-	void Normalize();
+	void normalize();
 	
 	operator NRPoint() const {
 		NRPoint nrp;
 		nrp.x = pt[0];
 		nrp.y = pt[1];
 		return nrp;
+	}
+
+	Point &operator+=(Point const &o) {
+		for(unsigned i = 0; i < 2; ++i) {
+			pt[i] += o.pt[i];
+		}
+		return *this;
+	}
+
+	Point &operator/=(double s) {
+		for(unsigned i = 0; i < 2; ++i) {
+			pt[i] /= s;
+		}
+		return *this;
 	}
 };
 
@@ -109,15 +127,16 @@ operator-(Point const &a, Point const &b) {
 }
 
 inline Point
-operator*(Point const &a, Point const &b) {
-	Point r;
-	for(int i = 0; i < 2; i++)
-		r.pt[i] = a.pt[i]*b.pt[i];
-	return r;
+operator-(Point const &a) {
+	Point ret;
+	for(unsigned i = 0; i < 2; i++) {
+		ret.pt[i] = -a.pt[i];
+	}
+	return ret;
 }
 
 inline Point
-operator*(const Coord s, Point const &b) {
+operator*(double const s, Point const &b) {
 	Point ret;
 	for(int i = 0; i < 2; i++) {
 		ret.pt[i] = s * b.pt[i];
@@ -126,7 +145,7 @@ operator*(const Coord s, Point const &b) {
 }
 
 inline Point
-operator/(Point const &b, const Coord d) {
+operator/(Point const &b, double const d) {
 	Point ret;
 	for(int i = 0; i < 2; i++) {
 		ret.pt[i] = b.pt[i] / d;
@@ -143,6 +162,18 @@ dot(Point const &a, Point const &b) {
 	return ret;
 }
 
+inline bool
+operator==(Point const &a, Point const &b) {
+	return ((a.pt[X] == b.pt[X])  &&
+		(a.pt[Y] == b.pt[Y]));
+}
+
+inline bool
+operator!=(Point const &a, Point const &b) {
+	return ((a.pt[X] != b.pt[X])  ||
+		(a.pt[Y] != b.pt[Y]));
+}
+
 inline Coord
 cross(Point const &a, Point const &b) {
 	Coord ret = 0;
@@ -151,11 +182,6 @@ cross(Point const &a, Point const &b) {
 	return ret;
 }
 
-inline void Point::Normalize() {
-	Coord d = L2();
-	if(d > 0.0001) // Why this number?
-		*this = (1/d)**this;
-}
 
 Point abs(Point const &b);
 
