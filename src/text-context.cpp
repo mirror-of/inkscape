@@ -935,6 +935,8 @@ sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 	}
 
 	tc->text_sel_start = tc->text_sel_end = sp_te_replace (tc->text, tc->text_sel_start, tc->text_sel_end, string);
+	sp_text_context_update_cursor (tc);
+    sp_text_context_update_text_selection (tc);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
 }

@@ -616,14 +616,21 @@ Inkscape::Text::Layout::iterator
 sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end)
 {
     if (start == end) return start;
-    g_assert(start < end);
+    Inkscape::Text::Layout::iterator first, last;
+    if (start < end) {
+        first = start;
+        last = end;
+    } else {
+        first = end;
+        last = start;
+    }
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     SPObject *start_item, *end_item;
     Glib::ustring::iterator start_text_iter, end_text_iter;
-    layout->getSourceOfCharacter(start, (void**)&start_item, &start_text_iter);
-    layout->getSourceOfCharacter(end, (void**)&end_item, &end_text_iter);
+    layout->getSourceOfCharacter(first, (void**)&start_item, &start_text_iter);
+    layout->getSourceOfCharacter(last, (void**)&end_item, &end_text_iter);
     if (start_item == NULL)
-        return start;   // start is at end of text
+        return first;   // start is at end of text
     if (is_line_break_object(start_item))
         move_to_end_of_paragraph(&start_item, &start_text_iter);
     if (end_item == NULL) {
@@ -708,9 +715,8 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
     item->updateRepr(SP_OBJECT_REPR(item),SP_OBJECT_WRITE_EXT);
     te_update_layout_now(item);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    Inkscape::Text::Layout::iterator start_copy = start;
-    layout->validateIterator(&start_copy);
-    return start_copy;
+    layout->validateIterator(&first);
+    return first;
 }
 
 void
