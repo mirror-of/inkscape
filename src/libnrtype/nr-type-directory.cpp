@@ -238,7 +238,10 @@ ink_strstr (const char *a, const char *b)
 #ifndef WIN32
 	return (strcasestr(a, b) != NULL);
 #else
-	return (bool) stristr(a, b);
+	gchar *aa = g_ascii_strdown (a, -1);
+	gchar *bb = g_ascii_strdown (b, -1);
+
+	return (bool) strstr(aa, bb);
 #endif
 }
 
