@@ -717,6 +717,7 @@ static GtkWidget *  build_header_area(SPRepr *repr);
 static void
 autotrace_dialog (SPImage * img)
 {
+	// TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
 	gchar *title = _("Trace");
 
 	GtkWidget *trace_dialog;
