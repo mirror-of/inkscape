@@ -1210,6 +1210,8 @@ sp_stroke_style_line_widget_new(void)
     i++;
 
     /* Join type */
+    // TRANSLATORS: The line join style specifies the shape to be used at the
+    //  corners of paths. It can be "miter", "round" or "bevel".
     spw_label(t, _("Join:"), 0, i);
 
     hb = spw_hbox(t, 3, 1, i);
@@ -1219,21 +1221,36 @@ sp_stroke_style_line_widget_new(void)
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_MITER,
                                 INKSCAPE_PIXMAPDIR "/join_miter.xpm",
                                 hb, spw, "join", "miter");
+    // TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
+    //  For an example, draw a triangle with a large stroke width and modify the
+    //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Miter join"), NULL);
 
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_ROUND,
                                 INKSCAPE_PIXMAPDIR "/join_round.xpm",
                                 hb, spw, "join", "round");
+    // TRANSLATORS: Round join: joining lines with a rounded corner.
+    //  For an example, draw a triangle with a large stroke width and modify the
+    //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Round join"), NULL);
 
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
                                 INKSCAPE_PIXMAPDIR "/join_bevel.xpm",
                                 hb, spw, "join", "bevel");
+    // TRANSLATORS: Bevel join: joining lines with a blunted (flatten) corner.
+    //  For an example, draw a triangle with a large stroke width and modify the
+    //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Bevel join"), NULL);
 
     i++;
 
     /* Miterlimit  */
+    // TRANSLATORS: Miter limit: only for "miter join", this limits the length
+    //  of the sharp "spike" when the lines connect at too sharp an angle.
+    // When two line segments meet at a sharp angle, a miter join results in a
+    //  spike that extends well beyond the connection point. The purpose of the
+    //  miter limit is to cut off such spikes (i.e. convert them into bevels)
+    //  when they become too long.
     spw_label(t, _("Miter limit:"), 0, i);
 
     hb = spw_hbox(t, 3, 1, i);
