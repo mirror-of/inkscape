@@ -40,6 +40,8 @@
 #include "sp-rect.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
+#include "sp-object-tree-iterator.h"
+#include "util/sibling-axis.h"
 #include "prefs-utils.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-div.h"
@@ -47,6 +49,10 @@
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rect.h"
 #include "svg/stringstream.h"
+#include "algorithms/longest-suffix.h"
+#include "algorithms/shortest-suffix.h"
+#include "algorithms/longest-prefix.h"
+#include "algorithms/shortest-prefix.h"
 
 #define noSP_ITEM_DEBUG_IDLE
 
@@ -135,6 +141,94 @@ sp_item_init(SPItem *item)
     if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 
     new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
+}
+
+namespace {
+
+struct starts_with_any_item {
+    template <typename List>
+    bool operator()(List os) const {
+        SPObject *object=Inkscape::Traits::List<List>::first(os);
+        return SP_IS_ITEM(object);
+    }
+};
+
+struct starts_with_object {
+    SPObject *object;
+
+    starts_with_object(SPObject *o) : object(o) {}
+
+    template <typename List>
+    bool operator()(List os) const {
+        SPObject *o=Inkscape::Traits::List<List>::first(os);
+        return o == object;
+    }
+};
+
+}
+
+void SPItem::raiseToTop() {
+    using Inkscape::Algorithms::longest_suffix;
+    using Inkscape::Util::SiblingAxis;
+
+    SPObject *topmost=longest_suffix<SiblingAxis<SPObject *> >(
+        starts_with_any_item(), SP_OBJECT_NEXT(this)
+    );
+    if (topmost) {
+        SPRepr *repr=SP_OBJECT_REPR(this);
+        sp_repr_change_order(sp_repr_parent(repr), repr, SP_OBJECT_REPR(topmost));
+    }
+}
+
+void SPItem::raiseOne() {
+    using Inkscape::Algorithms::shortest_suffix;
+    using Inkscape::Util::SiblingAxis;
+
+    SPObject *next_higher=shortest_suffix<SiblingAxis<SPObject *> >(
+        starts_with_any_item(), SP_OBJECT_NEXT(this)
+    );
+    if (next_higher) {
+        SPRepr *repr=SP_OBJECT_REPR(this);
+        SPRepr *ref=SP_OBJECT_REPR(next_higher);
+        sp_repr_change_order(sp_repr_parent(repr), repr, ref);
+    }
+}
+
+void SPItem::lowerOne() {
+    using Inkscape::Algorithms::shortest_suffix;
+    using Inkscape::Algorithms::shortest_prefix;
+    using Inkscape::Util::List;
+    using Inkscape::Util::SiblingAxis;
+
+    List<SPObject *> *next_lower=shortest_suffix(
+        starts_with_any_item(),
+        shortest_prefix<SiblingAxis<SPObject *> >(
+            starts_with_object(this), SP_OBJECT_PARENT(this)->firstChild()
+        )->next()
+    );
+
+    if (next_lower) {
+        next_lower = next_lower->next();
+        SPRepr *repr=SP_OBJECT_REPR(this);
+        SPRepr *ref=( next_lower ? SP_OBJECT_REPR(next_lower->data()) : NULL );
+        sp_repr_change_order(sp_repr_parent(repr), repr, ref);
+    }
+}
+
+void SPItem::lowerToBottom() {
+    using Inkscape::Algorithms::shortest_prefix;
+    using Inkscape::Util::List;
+    using Inkscape::Util::SiblingAxis;
+
+    List<SPObject *> *bottom=shortest_prefix<SiblingAxis<SPObject *> >(
+        starts_with_any_item(), SP_OBJECT_PARENT(this)->firstChild()
+    );
+    if ( bottom && bottom->data() != this ) {
+        bottom = bottom->next();
+        SPRepr *repr=SP_OBJECT_REPR(this);
+        SPRepr *ref=( bottom ? SP_OBJECT_REPR(bottom->data()) : NULL );
+        sp_repr_change_order(sp_repr_parent(repr), repr, ref);
+    }
 }
 
 static void

@@ -10,6 +10,26 @@ namespace Traits {
 template <typename T> struct TreeIterator;
 
 template <>
+struct TreeIterator<SPObject *> {
+    typedef SPObject *Node;
+
+    static bool is_null(Node o) { return o == NULL; }
+    static Node null() { return NULL; }
+
+    static Node node(Node o) { return o; }
+
+    static Node first_child(Node o) {
+        return o->firstChild();
+    }
+    static Node parent(Node o) {
+        return SP_OBJECT_PARENT(o);
+    }
+    static Node next(Node o) {
+        return SP_OBJECT_NEXT(o);
+    }
+};
+
+template <>
 struct TreeIterator<SPObject const *> {
     typedef SPObject const *Node;
 

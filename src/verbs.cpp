@@ -59,6 +59,7 @@
 #include "splivarot.h"
 #include "sp-namedview.h"
 #include "sp-flowtext.h"
+#include "layer-fns.h"
 
 #include "select-context.h"
 #include "node-context.h"
@@ -429,6 +430,103 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 } // end of sp_verb_action_selection_perform()
 
 
+static void sp_verb_action_layer_perform (SPAction *action, void *data,
+                                          void *pdata)
+{
+    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    int verb=reinterpret_cast<int>(data);
+
+    if ( !dt || !dt->currentLayer() ) {
+        return;
+    }
+
+    switch (verb) {
+        case SP_VERB_LAYER_NEW: {
+            SPObject *parent;
+            if ( dt->currentLayer() == dt->currentRoot() ) {
+                parent = dt->currentRoot();
+            } else {
+                parent = SP_OBJECT_PARENT(dt->currentLayer());
+            }
+            SPObject *layer=Inkscape::create_layer(parent);
+            dt->setCurrentLayer(layer);
+            dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
+            break;
+        }
+        case SP_VERB_LAYER_NEXT: {
+            SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
+            if (next) {
+                dt->setCurrentLayer(next);
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to next layer."));
+            }
+            break;
+        }
+        case SP_VERB_LAYER_PREV: {
+            SPObject *prev=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
+            if (prev) {
+                dt->setCurrentLayer(prev);
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Switched to previous layer."));
+            }
+            break;
+        }
+        case SP_VERB_LAYER_TO_TOP:
+        case SP_VERB_LAYER_TO_BOTTOM:
+        case SP_VERB_LAYER_RAISE:
+        case SP_VERB_LAYER_LOWER: {
+            if ( dt->currentLayer() == dt->currentRoot() ) {
+                dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
+                return;
+            }
+
+            SPItem *layer=SP_ITEM(dt->currentLayer());
+            g_return_if_fail(layer != NULL);
+
+            SPObject *old_pos=SP_OBJECT_NEXT(layer);
+
+            switch (verb) {
+                case SP_VERB_LAYER_TO_TOP:
+                    layer->lowerToBottom();
+                    break;
+                case SP_VERB_LAYER_TO_BOTTOM:
+                    layer->lowerToBottom();
+                    break;
+                case SP_VERB_LAYER_RAISE:
+                    layer->raiseOne();
+                    break;
+                case SP_VERB_LAYER_LOWER:
+                    layer->lowerOne();
+                    break;
+            }
+
+            if ( SP_OBJECT_NEXT(layer) != old_pos ) {
+                char const *message;
+                switch (verb) {
+                    case SP_VERB_LAYER_TO_TOP:
+                    case SP_VERB_LAYER_RAISE:
+                        message = _("Raised layer.");
+                        break;
+                    case SP_VERB_LAYER_TO_BOTTOM:
+                    case SP_VERB_LAYER_LOWER:
+                        message = _("Lowered layer.");
+                        break;
+                };
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, message);
+            } else {
+                dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move layer any further."));
+            }
+            break;
+        }
+        case SP_VERB_LAYER_DELETE: {
+            if ( dt->currentLayer() != dt->currentRoot() ) {
+                dt->currentLayer()->deleteObject();
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
+            } else {
+                dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No current layer."));
+            }
+            break;
+        }
+    }
+} // end of sp_verb_action_layer_perform()
 
 static void sp_verb_action_object_perform ( SPAction *action, void *data,
                                             void *pdata )
@@ -747,6 +845,13 @@ static SPActionEventVector action_edit_vector =
  */
 static SPActionEventVector action_selection_vector =
             {{NULL}, sp_verb_action_selection_perform, NULL, NULL, NULL};
+
+/**
+ * Action vector to define functions called if a staticly defined layer
+ * verb is called
+ */
+static SPActionEventVector action_layer_vector =
+            {{NULL}, sp_verb_action_layer_perform, NULL, NULL, NULL};
 /**
  * Action vector to define functions called if a staticly defined object
  * editing verb is called
@@ -792,6 +897,7 @@ static SPActionEventVector action_tutorial_vector =
 #define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
 #define SP_VERB_IS_EDIT(v) ((v >= SP_VERB_EDIT_UNDO) && (v <= SP_VERB_EDIT_DESELECT))
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
+#define SP_VERB_IS_LAYER(v) ((v >= SP_VERB_LAYER_NEW) && (v <= SP_VERB_LAYER_DELETE))
 #define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90_CW) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
 #define SP_VERB_IS_CONTEXT(v) ((v >= SP_VERB_CONTEXT_SELECT) && (v <= SP_VERB_CONTEXT_DROPPER))
 #define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_ZOOM_SELECTION))
@@ -958,6 +1064,24 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
         N_("Break selected path(s) into subpaths"), "selection_break"},
 
+
+    {SP_VERB_LAYER_NEW, "LayerNew", N_("New Layer"),
+        N_("Create a new layer"), "layer_new"},
+    {SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Next Layer"),
+        N_("Switch to the next layer in the document"), "layer_next"},
+    {SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Previous Layer"),
+        N_("Switch to the previous layer in the document"), "layer_prev"},
+    {SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Current Layer to Top"),
+        N_("Raise the current layer to the top"), "layer_to_top"},
+    {SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Current Layer to Bottom"),
+        N_("Lower the current layer to the bottom"), "layer_to_bottom"},
+    {SP_VERB_LAYER_RAISE, "LayerRaise", N_("Raise Current Layer"),
+        N_("Raise the current layer"), "layer_raise"},
+    {SP_VERB_LAYER_LOWER, "LayerLower", N_("Lower Current Layer"),
+        N_("Lower the current layer"), "layer_lower"},
+    {SP_VERB_LAYER_DELETE, "LayerDelete", N_("Delete the Current Layer"),
+        N_("Delete the current layer"), "layer_delete"},
+
     /* Object */
     {SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90 deg CW"),
         N_("Rotate selection 90 degrees clockwise"), "object_rotate_90_CW"},
@@ -1122,6 +1246,11 @@ make_action (sp_verb_t verb, SPView *view)
                         (NRObjectEventVector *) &action_selection_vector,
                         sizeof (SPActionEventVector),
                         (void *) verb);
+    } else if (SP_VERB_IS_LAYER (verb)) {
+        nr_active_object_add_listener ((NRActiveObject *) action,
+			(NRObjectEventVector *) &action_layer_vector,
+			sizeof (SPActionEventVector),
+			(void *) verb);
     } else if (SP_VERB_IS_OBJECT (verb)) {
         nr_active_object_add_listener ((NRActiveObject *) action,
                         (NRObjectEventVector *) &action_object_vector,

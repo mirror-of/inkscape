@@ -89,6 +89,10 @@ EXTRA_DIST =	\
 	utest/utest.h	\
 	utest/test-1ary-cases.h	\
 	algorithms/longest-common-suffix.h \
+	algorithms/longest-prefix.h \
+	algorithms/longest-suffix.h \
+	algorithms/shortest-prefix.h \
+	algorithms/shortest-suffix.h \
 	traits/function.h	\
 	traits/list.h	\
 	traits/reference.h	\

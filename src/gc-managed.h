@@ -15,8 +15,6 @@
 #ifndef SEEN_INKSCAPE_GC_MANAGED_H
 #define SEEN_INKSCAPE_GC_MANAGED_H
 
-#include <new>
-#include <glib/gmessages.h>
 #include "gc-core.h"
 
 namespace Inkscape {
@@ -27,6 +25,16 @@ template <ScanPolicy default_scan=SCANNED,
           CollectionPolicy default_collect=AUTO>
 class Managed {
 public:
+    template <typename T>
+    void clearOnceInaccessible(T **p_ptr) {
+        GC_general_register_disappearing_link((GC_PTR *)p_ptr, GC_base(this));
+    }
+
+    template <typename T>
+    void cancelClearOnceInaccessible(T **p_ptr) {
+        GC_unregister_disappearing_link((GC_PTR *)p_ptr);
+    }
+
     void *operator new(size_t size,
                        ScanPolicy scan=default_scan,
                        CollectionPolicy collect=default_collect)

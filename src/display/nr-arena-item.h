@@ -66,7 +66,12 @@ struct NRGC {
 	NRMatrix transform;
 };
 
-struct NRArenaItem : public NRObject{
+struct NRArenaItem : public NRObject {
+	NRArenaItem() {
+		clearOnceInaccessible(&arena);
+		clearOnceInaccessible(&parent);
+	}
+
 	NRArena *arena;
 	NRArenaItem *parent;
 	NRArenaItem *next;

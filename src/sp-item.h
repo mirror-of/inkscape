@@ -101,6 +101,11 @@ struct SPItem : public SPObject {
 
 	NR::Matrix getRelativeTransform(SPObject const *obj) const;
 
+	void raiseOne();
+	void lowerOne();
+	void raiseToTop();
+	void lowerToBottom();
+
 	sigc::connection connectTransformed(sigc::slot<void, NR::Matrix const *, SPItem *> slot)  {
                 return _transformed_signal.connect(slot);
         }
