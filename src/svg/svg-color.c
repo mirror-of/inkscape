@@ -11,9 +11,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
+
 #include <math.h>
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
+
+#if HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
+
 #include <ctype.h>
 #include <glib.h>
 #include "svg.h"
@@ -315,7 +324,7 @@ sp_svg_create_color_hash (void)
 
 	colors = g_hash_table_new (g_str_hash, g_str_equal);
 
-	for (i = 0; i < SP_SVG_NUMCOLORS; i++)
+	for (i = 0; i < INK_STATIC_CAST(int, SP_SVG_NUMCOLORS); i++)
 	{
 		name = sp_svg_color_named[i].name;
 		val = &(sp_svg_color_named[i].rgb);

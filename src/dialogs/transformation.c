@@ -187,7 +187,7 @@ static GtkWidget *
 sp_transformation_dialog_new (void)
 {
 	GtkWidget *dlg;
-	GtkWidget *hb, *vb, *nbook, *page, *img, *hs, *bb, *b, *l;
+	GtkWidget *hb, *vb, *nbook, *page, *hs, *bb, *b, *l;
 	SPSelection *sel;
 
 	dlg = sp_window_new (_("Transform selection"), FALSE);

@@ -19,7 +19,8 @@
 void
 nr_pixblock_setup_fast (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int clear)
 {
-	int w, h, bpp, size;
+	int w, h, bpp;
+	size_t size;
 
 	w = x1 - x0;
 	h = y1 - y0;
@@ -57,7 +58,8 @@ nr_pixblock_setup_fast (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1
 void
 nr_pixblock_setup (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int clear)
 {
-	int w, h, bpp, size;
+	int w, h, bpp;
+	size_t size;
 
 	w = x1 - x0;
 	h = y1 - y0;

@@ -188,8 +188,7 @@ sp_dtw_guides_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialo
 static GtkWidget *
 sp_desktop_dialog_new (void)
 {
-	GtkWidget *dialog, *nb, *l, *t, *b, *us, *sb, *cp, *i;
-	GtkObject *a;
+	GtkWidget *dialog, *nb, *l, *t, *b, *us;
 	GCallback cb;
 	int row;
 

@@ -734,7 +734,10 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 	SPStyle *style;
 	gdouble avgwidth;
 	gboolean stroked;
-	gint jointype, captype;
+	gboolean joinValid = TRUE;
+	unsigned int jointype;
+	gboolean capValid = TRUE;
+	unsigned int captype;
 	GtkWidget *tb;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
@@ -792,39 +795,51 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 	for (l = objects->next; l != NULL; l = l->next) {
 		SPObject *o;
 		o = SP_OBJECT (l->data);
-		if (o->style->stroke_linejoin.value != jointype) jointype = -1;
-		if (o->style->stroke_linecap.value != captype) captype = -1;
+		if (o->style->stroke_linejoin.value != jointype)
+		{
+			joinValid = FALSE;
+		}
+		if (o->style->stroke_linecap.value != captype)
+		{
+			capValid = FALSE;
+		}
 	}
 
-	switch (jointype) {
-	case SP_STROKE_LINEJOIN_MITER:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER));
-		break;
-	case SP_STROKE_LINEJOIN_ROUND:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND));
-		break;
-	case SP_STROKE_LINEJOIN_BEVEL:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL));
-		break;
-	default:
-		tb = NULL;
-		break;
+	tb = NULL;
+	if ( joinValid )
+	{
+		switch (jointype) {
+		case SP_STROKE_LINEJOIN_MITER:
+			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_MITER));
+			break;
+		case SP_STROKE_LINEJOIN_ROUND:
+			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_ROUND));
+			break;
+		case SP_STROKE_LINEJOIN_BEVEL:
+			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_JOIN_BEVEL));
+			break;
+		default:
+			break;
+		}
 	}
 	sp_stroke_style_set_join_buttons (spw, tb);
 
-	switch (captype) {
-	case SP_STROKE_LINECAP_BUTT:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT));
-		break;
-	case SP_STROKE_LINECAP_ROUND:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND));
-		break;
-	case SP_STROKE_LINECAP_SQUARE:
-		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE));
-		break;
-	default:
-		tb = NULL;
-		break;
+	tb = NULL;
+	if ( capValid )
+	{
+		switch (captype) {
+		case SP_STROKE_LINECAP_BUTT:
+			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_BUTT));
+			break;
+		case SP_STROKE_LINECAP_ROUND:
+			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_ROUND));
+			break;
+		case SP_STROKE_LINECAP_SQUARE:
+			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_CAP_SQUARE));
+			break;
+		default:
+			break;
+		}
 	}
 	sp_stroke_style_set_cap_buttons (spw, tb);
 

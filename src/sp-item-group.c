@@ -113,7 +113,6 @@ static void sp_group_build (SPObject *object, SPDocument * document, SPRepr * re
 	SPGroup * group;
 	SPObject * last;
 	SPRepr * rchild;
-	const gchar *mode;
 
 	group = SP_GROUP (object);
 

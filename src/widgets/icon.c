@@ -13,8 +13,13 @@
 
 #include <config.h>
 
+#if HAVE_STRING_H
 #include <string.h>
+#endif
+
+#if HAVE_SYS_STAT_H
 #include <sys/stat.h>
+#endif
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-rect.h>
@@ -229,7 +234,8 @@ sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size,
 		GdkPixbuf *pb;
 		guchar *px, *spx; // pixel data is unsigned
 		GtkIconSize gtksize;
-		int srs, y;
+		int srs;
+		unsigned int y;
 		gtksize = sp_icon_get_gtk_size (size);
 		pb = gtk_widget_render_icon (widget, name, gtksize, NULL);
 		if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
@@ -260,8 +266,8 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 
 	x0 = MAX (area->x, widget->allocation.x + padx);
 	y0 = MAX (area->y, widget->allocation.y + pady);
-	x1 = MIN (area->x + area->width, widget->allocation.x + padx + icon->size);
-	y1 = MIN (area->y + area->height, widget->allocation.y + pady + icon->size);
+	x1 = MIN (area->x + area->width, widget->allocation.x + padx + INK_STATIC_CAST(int, icon->size));
+	y1 = MIN (area->y + area->height, widget->allocation.y + pady + INK_STATIC_CAST(int, icon->size));
 
 	for (y = y0; y < y1; y += 64) {
 		for (x = x0; x < x1; x += 64) {
@@ -328,9 +334,12 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 	}
 	if (pb) {
 		guchar *spx;
-		int srs, y;
-		if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
-		if ((gdk_pixbuf_get_width (pb) != size) || (gdk_pixbuf_get_height (pb) != size)) {
+		int srs;
+		unsigned int y;
+		if (!gdk_pixbuf_get_has_alpha (pb))
+			gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
+		if ((INK_STATIC_CAST(unsigned int, gdk_pixbuf_get_width(pb)) != size)
+			||(INK_STATIC_CAST(unsigned int, gdk_pixbuf_get_height(pb)) != size)) {
 			GdkPixbuf *spb;
 			spb = gdk_pixbuf_scale_simple (pb, size, size, GDK_INTERP_HYPER);
 			g_object_unref (G_OBJECT (pb));

@@ -121,7 +121,7 @@ void
 sp_object_properties_dialog (void)
 {
 	if (!dlg) {
-		GtkWidget *vb, *nb, *hb, *l, *px, *page, *hs, *om, *m, *mi;
+		GtkWidget *vb, *nb, *hb, *l, *page, *hs, *om, *m, *mi;
 
 		gchar c[500];
 		sp_ui_dialog_title_string (SP_VERB_DIALOG_FILL_STROKE, c);

@@ -13,9 +13,18 @@
  * Licensed under GNU GPL
  */
 
+#include "config.h"
+
 #include <math.h>
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
+
+#if HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
+
 #include <stdio.h>
 
 #include <glib.h>
@@ -488,7 +497,8 @@ sp_repr_lookup_child (SPRepr       *repr,
 	
 	for (child = repr->children; child != NULL; child = child->next) {
 		for (attr = child->attributes; attr != NULL; attr = attr->next) {
-			if ((attr->key == quark) && !strcmp (attr->value, value)) return child;
+			if ( (INK_STATIC_CAST(unsigned int, attr->key) == quark) && !strcmp (attr->value, value))
+				return child;
 		}
 	}
 

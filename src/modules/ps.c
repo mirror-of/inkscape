@@ -789,7 +789,7 @@ static unsigned int
 sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 		   const NRMatrixF *transform)
 {
-	int i, j;
+	unsigned int i, j;
 	/* gchar *data, *src; */
 	guchar *packb = NULL, *plane = NULL;
 

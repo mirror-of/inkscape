@@ -1,6 +1,5 @@
 Makefile.in
 Makefile
-autom4te.cache
 configure
 config.log
 config.h.in
@@ -24,6 +23,6 @@ inkscape.1
 intltool-*
 inkscape.desktop
 GNOME_Sodipodi.oaf
-autom4te-2.5x.cache
+autom4te*cache
 toru
 stamp-h1

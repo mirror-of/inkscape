@@ -16,8 +16,13 @@
 
 #define noREPR_VERBOSE
 
+#include "config.h"
+
 #include <string.h>
+
+#if HAVE_STDDEF_H
 #include <stddef.h>
+#endif
 
 #include <glib.h>
 
@@ -275,7 +280,11 @@ sp_repr_attr (const SPRepr *repr, const gchar *key)
 
 	q = g_quark_from_string (key);
 
-	for (ra = repr->attributes; ra != NULL; ra = ra->next) if (ra->key == q) return ra->value;
+	for (ra = repr->attributes; ra != NULL; ra = ra->next)
+	{
+		if ( INK_STATIC_CAST( unsigned int, ra->key ) == q )
+			return ra->value;
+	}
 
 	return NULL;
 }
@@ -332,7 +341,10 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key)
 
 	q = g_quark_from_string (key);
 	prev = NULL;
-	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) prev = attr;
+	for (attr = repr->attributes; attr && (INK_STATIC_CAST(unsigned int, attr->key) != q); attr = attr->next)
+	{
+		prev = attr;
+	}
 
 	if (attr) {
 		gchar *oldval;
@@ -383,7 +395,11 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 	oldval = NULL;
 	q = g_quark_from_string (key);
 	prev = NULL;
-	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) prev = attr;
+	for (attr = repr->attributes; attr && (INK_STATIC_CAST(unsigned int, attr->key) != q); attr = attr->next)
+	{
+		prev = attr;
+	}
+
 	if (attr) {
 		if (!strcmp (attr->value, value)) return TRUE;
 		oldval = attr->value;

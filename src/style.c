@@ -12,9 +12,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
+
 #include <ctype.h>
+
+#if HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
+
 #include <gtk/gtksignal.h>
 
 #include "svg/svg.h"
@@ -1571,9 +1580,9 @@ sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *d
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && (val->computed != base->computed))) {
-		gint i;
+		unsigned int i;
 		for (i = 0; dict[i].key; i++) {
-			if (dict[i].value == val->value) {
+			if (dict[i].value == INK_STATIC_CAST(gint, val->value)) {
 				return g_snprintf (p, len, "%s:%s;", key, dict[i].key);
 			}
 		}
@@ -1716,9 +1725,9 @@ sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val
 		if (val->inherit) {
 			return g_snprintf (p, len, "%s:inherit;", key);
 		} else if (val->type == SP_FONT_SIZE_LITERAL) {
-			gint i;
+			unsigned int i;
 			for (i = 0; enum_font_size[i].key; i++) {
-				if (enum_font_size[i].value == val->value) {
+				if (enum_font_size[i].value == INK_STATIC_CAST(gint, val->value)) {
 					return g_snprintf (p, len, "%s:%s;", key, enum_font_size[i].key);
 				}
 			}

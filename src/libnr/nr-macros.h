@@ -10,8 +10,14 @@
  * This code is in public domain
  */
 
+#include "config.h"
+
 #include <math.h>
+
+#if HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
+
 #include <libnr/nr-types.h>
 
 #define nr_new(t,n) ((t *) malloc ((n) * sizeof (t)))

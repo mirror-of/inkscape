@@ -319,7 +319,6 @@ sp_toolbox_file_create (void)
 	GtkWidget *t, *tb, *b;
 	GtkTooltips *tt;
 	SPRepr *repr;
-	SPAction *action;
 
 	t = gtk_table_new (2, 4, TRUE);
 	gtk_widget_show (t);

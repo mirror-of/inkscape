@@ -19,7 +19,6 @@
 gboolean
 sp_version_from_string(const gchar *string, SPVersion *version)
 {
-	int result;
 	if (!string) return FALSE;
 
 	version->major = 0;

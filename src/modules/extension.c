@@ -59,7 +59,6 @@ static void extension_execute (const gchar * command, const gchar * filein, cons
 gchar *
 solve_reldir (SPRepr * reprin) {
 	const gchar * reldir;
-	guchar * returnval;
 
 	reldir = sp_repr_attr(reprin, "reldir");
 

@@ -76,7 +76,6 @@ void
 sp_file_open (const gchar *uri, const gchar *key)
 {
 	SPDocument *doc;
-	SPModule *mod;
 
 	doc = NULL;
 	if (!key) key = SP_MODULE_KEY_INPUT_DEFAULT;
@@ -180,8 +179,6 @@ void sp_file_open_dialog (gpointer object, gpointer data)
 static void
 sp_file_do_save (SPDocument *doc, const gchar *uri, const gchar *key)
 {
-	SPModule *mod;
-
 	if (!doc) return;
 	if (!uri) return;
 

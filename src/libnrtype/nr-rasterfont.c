@@ -323,8 +323,8 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 				slot->glyph.ig.advance.y = (NRShort)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			case NRRF_TYPE_SVP:
-				slot->glyph.sg.advance.x = (NRShort)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-				slot->glyph.sg.advance.y = (NRShort)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
+				slot->glyph.sg.advance.x = (NRLong)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
+				slot->glyph.sg.advance.y = (NRLong)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			default:
 				break;

@@ -101,7 +101,7 @@ nr_arena_request_update (NRArena *arena, NRArenaItem *item)
 	nr_return_if_fail (NR_IS_ARENA_ITEM (item));
 
 	if (aobject->callbacks) {
-		int i;
+		unsigned int i;
 		for (i = 0; i < aobject->callbacks->length; i++) {
 			NRObjectListener *listener;
 			NRArenaEventVector *avector;
@@ -126,7 +126,7 @@ nr_arena_request_render_rect (NRArena *arena, NRRectL *area)
 	nr_return_if_fail (area != NULL);
 
 	if (aobject->callbacks && area && !nr_rect_l_test_empty (area)) {
-		int i;
+		unsigned int i;
 		for (i = 0; i < aobject->callbacks->length; i++) {
 			NRObjectListener *listener;
 			NRArenaEventVector *avector;

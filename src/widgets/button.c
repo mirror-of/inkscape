@@ -11,7 +11,11 @@
  * This code is in public domain
  */
 
+#include "config.h"
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-rect.h>
@@ -166,7 +170,7 @@ sp_button_destroy (GtkObject *object)
 	}
 
 	if (button->options) {
-		int i;
+		unsigned int i;
 		for (i = 0; i < button->noptions; i++) {
 			nr_active_object_remove_listener_by_data ((NRActiveObject *) button->options[i].action, button);
 			nr_free (button->options[i].px);
@@ -369,7 +373,7 @@ static int
 sp_button_timeout (gpointer data)
 {
 	SPButton *button;
-	int i;
+	unsigned int i;
 
 	button = SP_BUTTON (data);
 
@@ -607,7 +611,7 @@ sp_button_action_set_active (SPAction *action, unsigned int active, void *data)
 	SPButton *button;
 	button = (SPButton *) data;
 	if (button->type == SP_BUTTON_TYPE_TOGGLE) {
-		int aidx;
+		unsigned int aidx;
 		for (aidx = 0; aidx < button->noptions; aidx++) {
 			if (action == button->options[aidx].action) break;
 		}

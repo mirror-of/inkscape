@@ -13,8 +13,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
+
+#if HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
+
 #include "xml/repr-private.h"
 #include "xml/repr-action.h"
 #include "sp-object.h"
@@ -35,9 +43,10 @@ sp_document_set_undo_sensitive (SPDocument *doc, gboolean sensitive)
 	g_assert (doc != NULL);
 	g_assert (SP_IS_DOCUMENT (doc));
 	g_assert (doc->priv != NULL);
-	g_return_if_fail (sensitive != doc->priv->sensitive);
+	g_return_if_fail ( !(sensitive) != !(doc->priv->sensitive) );
 
-	if (sensitive == doc->priv->sensitive) return;
+	if ( !(sensitive) == !(doc->priv->sensitive) )
+		return;
 
 	if (sensitive) {
 		sp_repr_begin_transaction (doc->rdoc);
@@ -109,8 +118,6 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 void
 sp_document_cancel (SPDocument *doc)
 {
-	SPReprAction *log;
-
 	g_assert (doc != NULL);
 	g_assert (SP_IS_DOCUMENT (doc));
 	g_assert (doc->priv != NULL);

@@ -434,7 +434,7 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	/* As last step set additional transform of arena group */
 	for (v = marker->views; v != NULL; v = v->next) {
 		NRMatrixF vbf;
-		int i;
+		unsigned int i;
 		nr_matrix_f_from_d (&vbf, &marker->c2p);
 		for (i = 0; i < v->size; i++) {
 			if (v->items[i]) nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->items[i]), &vbf);
@@ -532,7 +532,7 @@ void
 sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 {
 	SPMarkerView *view;
-	int i;
+	unsigned int i;
 
 	for (view = marker->views; view != NULL; view = view->next) {
 		if (view->key == key) break;
@@ -626,7 +626,7 @@ sp_marker_hide (SPMarker *marker, unsigned int key)
 static void
 sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destroyitems)
 {
-	int i;
+	unsigned int i;
 	if (view == marker->views) {
 		marker->views = view->next;
 	} else {

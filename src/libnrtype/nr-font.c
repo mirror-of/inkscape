@@ -9,7 +9,11 @@
  * This code is in public domain
  */
 
+#include "config.h"
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-rect.h>
@@ -101,7 +105,7 @@ void
 nr_font_generic_free (NRFont *font)
 {
 	NRFontGeneric *fg;
-	int i;
+	unsigned int i;
 
 	fg = (NRFontGeneric *) font;
 

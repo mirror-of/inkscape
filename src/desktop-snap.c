@@ -116,8 +116,10 @@ sp_intersector_ccw(NRPointF p0, NRPointF p1, NRPointF p2)
 /* Determine which way a set of three points winds. */
 {
 	int dx1, dx2, dy1, dy2;
-	dx1 = p1.x-p0.x; dy1 = p1.y - p0.y;
-	dx2 = p2.x-p0.x; dy2 = p2.y - p0.y;
+	dx1 = (int)(p1.x - p0.x);
+	dy1 = (int)(p1.y - p0.y);
+	dx2 = (int)(p2.x - p0.x);
+	dy2 = (int)(p2.y - p0.y);
 /* compare slopes but avoid division operation */
 	if(dx1*dy2 > dy1*dx2)
 		return +1; // ccw

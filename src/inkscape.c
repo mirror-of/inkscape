@@ -617,7 +617,7 @@ inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 {
 	SPRepr * repr;
 	const gchar * id, * s, * e;
-	gint len;
+	guint len;
 
 	if (key == NULL) return NULL;
 
@@ -639,7 +639,10 @@ inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 		}
 		for (child = repr->children; child != NULL; child = child->next) {
 			id = sp_repr_attr (child, "id");
-			if ((id) && (strlen (id) == len) && (!strncmp (id, s, len))) break;
+			if ((id) && (strlen (id) == len) && (!strncmp (id, s, len)))
+			{
+				break;
+			}
 		}
 		if (child == NULL) return NULL;
 

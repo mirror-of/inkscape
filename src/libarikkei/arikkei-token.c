@@ -11,9 +11,22 @@
  * This code is in public domain
  *
  */
-#include <stdlib.h>
+
+#include "config.h"
+
+#if HAVE_MALLOC_H
+#include <malloc.h>
+#elif HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+#if HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
+#if HAVE_STRING_H
 #include <string.h>
+#endif
 
 #include "arikkei-token.h"
 
@@ -108,12 +121,15 @@ arikkei_token_strcpy (const ArikkeiToken *this_tok, gchar *b)
 int
 arikkei_token_strncpy (const ArikkeiToken *this_tok, gchar *b, size_t size)
 {
-	if (size < 1) return 0;
+	if (size < 1)
+		return 0;
 	if (arikkei_token_is_valid (this_tok) && (size > 1)) {
-		int len;
+		size_t len;
 		len = this_tok->end - this_tok->start;
-		if (len > (size - 1)) len = size - 1;
-		if (len) strncpy (b, this_tok->cdata + this_tok->start, len);
+		if (len > (size - 1))
+			len = size - 1;
+		if (len)
+			strncpy (b, this_tok->cdata + this_tok->start, len);
 		b[len] = 0;
 		return len;
 	} else {
@@ -139,13 +155,16 @@ arikkei_token_strncmp (const ArikkeiToken *this_tok, const gchar *b, size_t size
 	if (!arikkei_token_is_valid (this_tok)) return -1;
 	if (!arikkei_token_is_empty (this_tok)) {
 		if (size > 0) {
-			int len, clen, cval;
+			size_t len, clen, cval;
 			len = this_tok->end - this_tok->start;
 			clen = (len < size) ? len : size;
 			cval = strncmp (this_tok->cdata + this_tok->start, b, clen);
-			if (cval) return cval;
-			if (len < size) return -1;
-			if (len > size) return 1;
+			if (cval)
+				return cval;
+			if (len < size)
+				return -1;
+			if (len > size)
+				return 1;
 			return 0;
 		} else {
 			return 1;

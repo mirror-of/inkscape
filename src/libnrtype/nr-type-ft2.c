@@ -102,7 +102,7 @@ nr_typeface_ft2_finalize (NRObject *object)
 	if (tff->ft_face) {
 		FT_Done_Face (tff->ft_face);
 		if (tff->slots) {
-			int i;
+			unsigned int i;
 			for (i = 0; i < tff->slots_length; i++) {
 				if (tff->slots[i].outline.path) {
 					nr_free (tff->slots[i].outline.path);
@@ -413,7 +413,7 @@ static NRTypeFaceGlyphFT2 *
 nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, unsigned int glyph)
 {
 	if (!tff->hgidx) {
-		int i;
+		unsigned int i;
 		tff->hgidx = nr_new (int, tff->typeface.nglyphs);
 		for (i = 0; i < tff->typeface.nglyphs; i++) {
 			tff->hgidx[i] = -1;
@@ -453,7 +453,7 @@ static NRTypeFaceGlyphFT2 *
 nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 {
 	if (!tff->vgidx) {
-		int i;
+		unsigned int i;
 		tff->vgidx = nr_new (int, tff->typeface.nglyphs);
 		for (i = 0; i < tff->typeface.nglyphs; i++) {
 			tff->vgidx[i] = -1;

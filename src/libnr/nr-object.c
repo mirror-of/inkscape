@@ -265,7 +265,7 @@ nr_active_object_finalize (NRObject *object)
 	aobject = (NRActiveObject *) object;
 
 	if (aobject->callbacks) {
-		int i;
+		unsigned int i;
 		for (i = 0; i < aobject->callbacks->length; i++) {
 			NRObjectListener *listener;
 			listener = aobject->callbacks->listeners + i;
@@ -304,7 +304,7 @@ void
 nr_active_object_remove_listener_by_data (NRActiveObject *object, void *data)
 {
 	if (object->callbacks) {
-		int i;
+		unsigned int i;
 		for (i = 0; i < object->callbacks->length; i++) {
 			NRObjectListener *listener;
 			listener = object->callbacks->listeners + i;

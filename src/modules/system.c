@@ -324,7 +324,6 @@ build_from_reprdoc (SPReprDoc * doc)
 		MODULE_FILTER,
 		MODULE_UNKNOWN_FUNC
 	} module_functional_type = MODULE_UNKNOWN_FUNC;
-	const guchar * type;
 	SPRepr * old_repr;
 	SPRepr * child_repr;
 
@@ -396,6 +395,8 @@ build_from_reprdoc (SPReprDoc * doc)
 			module->load   = extension_load;
 			module->unload = extension_unload;
 			break;
+	default:
+		;
 	}
 
 while_end:

@@ -99,7 +99,7 @@ sp_action_perform (SPAction *action)
 
 	aobject = (NRActiveObject *) action;
 	if (aobject->callbacks) {
-		int i;
+		unsigned int i;
 		for (i = 0; i < aobject->callbacks->length; i++) {
 			NRObjectListener *listener;
 			SPActionEventVector *avector;
@@ -123,7 +123,7 @@ sp_action_set_active (SPAction *action, unsigned int active)
 		action->active = active;
 		aobject = (NRActiveObject *) action;
 		if (aobject->callbacks) {
-			int i;
+			unsigned int i;
 			for (i = 0; i < aobject->callbacks->length; i++) {
 				NRObjectListener *listener;
 				SPActionEventVector *avector;
@@ -148,7 +148,7 @@ sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 		action->sensitive = sensitive;
 		aobject = (NRActiveObject *) action;
 		if (aobject->callbacks) {
-			int i;
+			unsigned int i;
 			for (i = 0; i < aobject->callbacks->length; i++) {
 				NRObjectListener *listener;
 				SPActionEventVector *avector;
@@ -173,7 +173,7 @@ sp_action_set_shortcut (SPAction *action, unsigned int shortcut)
 		action->shortcut = shortcut;
 		aobject = (NRActiveObject *) action;
 		if (aobject->callbacks) {
-			int i;
+			unsigned int i;
 			for (i = 0; i < aobject->callbacks->length; i++) {
 				NRObjectListener *listener;
 				SPActionEventVector *avector;

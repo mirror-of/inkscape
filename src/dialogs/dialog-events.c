@@ -48,7 +48,8 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 		switch (event->key.keyval) {
 		case GDK_Escape: 
 			// send focus to the canvas
-			if (w = gtk_window_get_transient_for ((GtkWindow *) win)) {
+			w = w = gtk_window_get_transient_for ((GtkWindow *) win);
+			if (w) {
 				gtk_window_present (w);
 			}
 			ret = TRUE; 
@@ -73,7 +74,8 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 			}
 			break;
 		default: // pass keypress to the canvas
-			if (w = gtk_window_get_transient_for ((GtkWindow *) win)) {
+			w = gtk_window_get_transient_for ((GtkWindow *) win);
+			if (w) {
 				dtw = (SPDesktopWidget *)g_object_get_data (G_OBJECT (w), "desktopwidget");
 				inkscape_activate_desktop (dtw->desktop);
 				gtk_propagate_event (GTK_WIDGET (dtw->canvas), event);
@@ -81,7 +83,8 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 			}
 			break;
 		}
-
+	default:
+		;
 	}
 	return ret; 
 }

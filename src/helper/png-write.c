@@ -12,6 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
+
 #include <png.h>
 #include <glib.h>
 #include "png-write.h"
@@ -338,7 +340,7 @@ sp_png_write_rgba_striped (const gchar *filename, int width, int height,
 	 */
 
 	r = 0;
-	while (r < height) {
+	while (r < INK_STATIC_CAST(png_uint_32, height)) {
 		png_bytep row_pointers[64];
 		int h, n;
 

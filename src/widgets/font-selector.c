@@ -15,8 +15,14 @@
 
 #include "config.h"
 
+#if HAVE_STRING_H
 #include <string.h>
+#endif
+
+#if HAVE_STDLIB_H
 #include <stdlib.h>
+#endif
+
 #include <ctype.h>
 
 #include <libnr/nr-matrix.h>
@@ -135,7 +141,7 @@ sp_font_selector_init (SPFontSelector *fsel)
 {
 	GtkWidget *f, *sw, *vb, *hb, *l;
 	GList *sl;
-	int i;
+	unsigned int i;
 
 	gtk_box_set_homogeneous (GTK_BOX (fsel), TRUE);
 	gtk_box_set_spacing (GTK_BOX (fsel), 4);
@@ -159,7 +165,7 @@ sp_font_selector_init (SPFontSelector *fsel)
 	gtk_container_add (GTK_CONTAINER (sw), fsel->family);
 
 	if (nr_type_directory_family_list_get (&fsel->families)) {
-		gint i;
+		guint i;
 		gtk_clist_freeze (GTK_CLIST (fsel->family));
 		for (i = 0; i < fsel->families.length; i++) {
 			gtk_clist_append (GTK_CLIST (fsel->family), (gchar **) fsel->families.names + i);
@@ -260,11 +266,11 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 	}
 	gtk_clist_clear (GTK_CLIST (fsel->style));
 
-	if (fsel->familyidx < fsel->families.length) {
+	if ( INK_STATIC_CAST(unsigned int, fsel->familyidx) < fsel->families.length) {
 		const gchar *family;
 		family = fsel->families.names[fsel->familyidx];
 		if (nr_type_directory_style_list_get (family, &fsel->styles)) {
-			gint i;
+			unsigned int i;
 			gtk_clist_freeze (GTK_CLIST (fsel->style));
 			for (i = 0; i < fsel->styles.length; i++) {
 				const gchar *p;
@@ -274,7 +280,7 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 				if (!*p) p = "Normal";
 
 				gtk_clist_append (GTK_CLIST (fsel->style), (gchar **) &p);
-				gtk_clist_set_row_data (GTK_CLIST (fsel->style), i, GUINT_TO_POINTER (i));
+				gtk_clist_set_row_data (GTK_CLIST (fsel->style), INK_STATIC_CAST(gint, i), GUINT_TO_POINTER (i));
 			}
 			gtk_clist_thaw (GTK_CLIST (fsel->style));
 			gtk_clist_select_row (GTK_CLIST (fsel->style), 0, 0);
@@ -309,7 +315,7 @@ sp_font_selector_emit_set (SPFontSelector *fsel)
 	NRTypeFace *tf;
 	NRFont *font;
 
-	if (fsel->styleidx < fsel->styles.length) {
+	if (INK_STATIC_CAST(unsigned int, fsel->styleidx) < fsel->styles.length) {
 		tf = nr_type_directory_lookup (fsel->styles.names[fsel->styleidx]);
 		font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_DEFAULT, fsel->fontsize);
 		nr_typeface_unref (tf);
@@ -348,7 +354,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 
 	if (font) {
 		gchar n[256], s[8];
-		int i;
+		unsigned int i;
 		nr_typeface_family_name_get (NR_FONT_TYPEFACE (font), n, 256);
 		for (i = 0; i < fsel->families.length; i++) {
 			if (!strcmp (n, fsel->families.names[i])) break;

@@ -9,6 +9,8 @@
  * This code is in public domain
  */
 
+#include "config.h"
+
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
 #include "svg/svg.h"
@@ -594,7 +596,8 @@ sp_nodepath_set_line_type (SPPathNode * end, ArtPathcode code)
 	g_assert (end->subpath);
 	g_assert (end->p.other);
 
-	if (end->code == code) return;
+	if (end->code == INK_STATIC_CAST(guint, code) )
+		return;
 
 	start = end->p.other;
 
@@ -628,7 +631,8 @@ sp_nodepath_set_node_type (SPPathNode * node, SPPathNodeType type)
 	g_assert (node);
 	g_assert (node->subpath);
 
-	if (type == node->type) return node;
+	if (type == INK_STATIC_CAST(SPPathNodeType, INK_STATIC_CAST(guint, node->type) ) )
+		return node;
 
 	if ((node->p.other != NULL) && (node->n.other != NULL)) {
 		if ((node->code == ART_LINETO) && (node->n.other->code == ART_LINETO)) {

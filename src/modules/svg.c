@@ -41,7 +41,6 @@ static SPDocument * svg_open (SPModule *mod, const gchar *uri);
 void
 svg_init(void)
 {
-	SPRepr * repr;
 	SPModuleInput * imod;
 	SPModuleOutput * omod;
 

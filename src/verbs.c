@@ -237,7 +237,7 @@ sp_verb_action_ctx_perform (SPAction *action, void *data)
 {
 	SPDesktop *dt;
 	unsigned int verb;
-	int vidx;
+	unsigned int vidx;
 
 	dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
@@ -503,7 +503,7 @@ static const SPVerbActionDef props[] = {
 static void
 sp_verbs_init (void)
 {
-	int v;
+	unsigned int v;
 	verb_actions = nr_new (SPAction, SP_VERB_LAST);
 	for (v = 0; v < SP_VERB_LAST; v++) {
 		assert (props[v].code == v);
