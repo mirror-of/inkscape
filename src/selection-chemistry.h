@@ -39,6 +39,8 @@ void sp_selection_raise_to_top();
 void sp_selection_lower();
 void sp_selection_lower_to_bottom();
 
+SPCSSAttr *take_style_from_item (SPItem *item);
+
 void sp_selection_cut();
 void sp_selection_copy();
 void sp_selection_paste(bool in_place);

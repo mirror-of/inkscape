@@ -688,6 +688,35 @@ void sp_copy_stuff_used_by_item (SPItem *item)
     }
 }
 
+SPCSSAttr *
+take_style_from_item (SPItem *item)
+{
+    // write the complete cascaded style, context-free
+    SPCSSAttr *css = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
+    if ((SP_IS_GROUP(item) && SP_OBJECT(item)->children) ||
+        (SP_IS_TEXT (item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
+        // if this is a text with exactly one tspan child, merge the style of that tspan as well
+        // If this is a group, merge the style of its first child
+        SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_IFSET);
+        sp_repr_css_merge (css, temp);
+        sp_repr_css_attr_unref (temp);
+    }
+    if (!(SP_IS_TEXT (item) || SP_IS_TSPAN (item) || SP_IS_STRING (item))) {
+        // do not copy text properties from non-text objects, it's confusing
+        css = sp_css_attr_unset_text (css);
+    }
+
+    // FIXME: also transform gradient/pattern fills
+    double ex = NR::expansion(sp_item_i2doc_affine(item));
+    if (ex != 1.0) {
+        css = sp_css_attr_scale (css, ex);
+    }
+
+    //sp_repr_css_print (style_clipboard);
+
+    return css;
+}
+
 void sp_selection_copy()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -746,21 +775,7 @@ void sp_selection_copy()
         sp_repr_css_attr_unref (style_clipboard);
     }
     SPItem *item = SP_ITEM (items->data);
-    // write the complete cascaded style, context-free
-    style_clipboard = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
-    if ((SP_IS_GROUP(item) && SP_OBJECT(item)->children) ||
-        (SP_IS_TEXT (item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
-        // if this is a text with exactly one tspan child, merge the style of that tspan as well
-        // If this is a group, merge the style of its first child
-        SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_IFSET);
-        sp_repr_css_merge (style_clipboard, temp);
-        sp_repr_css_attr_unref (temp);
-    }
-    if (!(SP_IS_TEXT (item) || SP_IS_TSPAN (item) || SP_IS_STRING (item))) {
-        // do not copy text properties from non-text objects, it's confusing
-        style_clipboard = sp_css_attr_unset_text (style_clipboard);
-    }
-    //sp_repr_css_print (style_clipboard);
+    style_clipboard = take_style_from_item (item);
 
     // 3.  Sort items:
     SPRepr *parent = ((SPRepr *) reprs->data)->parent;
