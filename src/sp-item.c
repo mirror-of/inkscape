@@ -42,7 +42,7 @@ static void sp_item_init (SPItem *item);
 
 static void sp_item_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_item_release (SPObject *object);
-static void sp_item_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_item_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_item_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_item_write (SPObject *object, SPRepr *repr, guint flags);
 
@@ -68,7 +68,7 @@ sp_item_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_item_init,
 		};
-		type = g_type_register_static (SP_TYPE_OBJECT, "SPItem", &info, 0);
+		type = g_type_register_static (SP_TYPE_OBJECT, "SPItem", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -82,7 +82,7 @@ sp_item_class_init (SPItemClass *klass)
 	object_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECT);
+	parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 
 	sp_object_class->build = sp_item_build;
 	sp_object_class->release = sp_item_release;
@@ -209,7 +209,7 @@ sp_item_mask_modified (SPMask *mask, guint flags, SPItem *item)
 }
 
 static void
-sp_item_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPItem *item;
 	SPItemView *v;
@@ -372,8 +372,8 @@ static SPRepr *
 sp_item_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	SPItem *item;
-	guchar c[256];
-	guchar *s;
+	gchar c[256];
+	gchar *s;
 
 	item = SP_ITEM (object);
 
@@ -616,7 +616,7 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform)
 			lt = *transform;
 			((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform (item, repr, &lt);
 		} else {
-			guchar t[80];
+			gchar t[80];
 			if (sp_svg_transform_write (t, 80, &item->transform)) {
 				sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", t);
 			} else {
@@ -813,21 +813,21 @@ sp_item_dt2i_affine (SPItem *item, SPDesktop *dt, NRMatrixF *affine)
 static SPItemView *
 sp_item_view_new_prepend (SPItemView * list, SPItem * item, unsigned int flags, unsigned int key, NRArenaItem *arenaitem)
 {
-	SPItemView * new;
+	SPItemView * new_view;
 
 	g_assert (item != NULL);
 	g_assert (SP_IS_ITEM (item));
 	g_assert (arenaitem != NULL);
 	g_assert (NR_IS_ARENA_ITEM (arenaitem));
 
-	new = g_new (SPItemView, 1);
+	new_view = g_new (SPItemView, 1);
 
-	new->next = list;
-	new->flags = flags;
-	new->key = key;
-	new->arenaitem = arenaitem;
+	new_view->next = list;
+	new_view->flags = flags;
+	new_view->key = key;
+	new_view->arenaitem = arenaitem;
 
-	return new;
+	return new_view;
 }
 
 static SPItemView *

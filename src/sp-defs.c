@@ -27,7 +27,7 @@ static void sp_defs_build (SPObject *object, SPDocument * document, SPRepr * rep
 static void sp_defs_release (SPObject *object);
 static void sp_defs_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
 static void sp_defs_remove_child (SPObject * object, SPRepr * child);
-static void sp_defs_order_changed (SPObject * object, SPRepr * child, SPRepr * old, SPRepr * new);
+static void sp_defs_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
 static void sp_defs_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_defs_modified (SPObject *object, guint flags);
 static SPRepr *sp_defs_write (SPObject *object, SPRepr *repr, guint flags);
@@ -52,7 +52,7 @@ sp_defs_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_defs_init,
 		};
-		defs_type = g_type_register_static (SP_TYPE_OBJECT, "SPDefs", &defs_info, 0);
+		defs_type = g_type_register_static (SP_TYPE_OBJECT, "SPDefs", &defs_info, (GTypeFlags)0);
 	}
 	return defs_type;
 }
@@ -66,7 +66,7 @@ sp_defs_class_init (SPDefsClass * klass)
 	object_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECT);
+	parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 
 	sp_object_class->build = sp_defs_build;
 	sp_object_class->release = sp_defs_release;
@@ -100,7 +100,7 @@ static void sp_defs_build (SPObject * object, SPDocument * document, SPRepr * re
 		GType type;
 		SPObject * child;
 		type = sp_repr_type_lookup (rchild);
-		child = g_object_new (type, 0);
+		child = SP_OBJECT(g_object_new (type, 0));
 		if (last) {
 			last->next = sp_object_attach_reref (object, child, NULL);
 		} else {
@@ -139,7 +139,7 @@ sp_defs_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
 	type = sp_repr_type_lookup (child);
-	ochild = g_object_new (type, 0);
+	ochild = SP_OBJECT(g_object_new (type, 0));
 	ochild->parent = object;
 
 	prev = sp_defs_get_child_by_repr (defs, ref);
@@ -184,7 +184,7 @@ sp_defs_remove_child (SPObject * object, SPRepr * child)
 }
 
 static void
-sp_defs_order_changed (SPObject * object, SPRepr * child, SPRepr * old, SPRepr * new)
+sp_defs_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref)
 {
 	SPDefs * defs;
 	SPObject * ochild, * oold, * onew;
@@ -192,11 +192,11 @@ sp_defs_order_changed (SPObject * object, SPRepr * child, SPRepr * old, SPRepr *
 	defs = SP_DEFS (object);
 
 	if (((SPObjectClass *) (parent_class))->order_changed)
-		(* ((SPObjectClass *) (parent_class))->order_changed) (object, child, old, new);
+		(* ((SPObjectClass *) (parent_class))->order_changed) (object, child, old_ref, new_ref);
 
 	ochild = sp_defs_get_child_by_repr (defs, child);
-	oold = sp_defs_get_child_by_repr (defs, old);
-	onew = sp_defs_get_child_by_repr (defs, new);
+	oold = sp_defs_get_child_by_repr (defs, old_ref);
+	onew = sp_defs_get_child_by_repr (defs, new_ref);
 
 	if (oold) {
 		oold->next = ochild->next;
