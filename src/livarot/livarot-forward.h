@@ -5,6 +5,7 @@ class Path;
 class Shape;
 struct float_ligne_run;
 class FloatLigne;
+class BitLigne;
 
 
 #endif /* !SEEN_LIVAROT_FORWARD_H */

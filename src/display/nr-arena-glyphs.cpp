@@ -32,7 +32,6 @@
 #include "../livarot/LivarotDefs.h"
 #include "../livarot/Path.h"
 #include "../livarot/Shape.h"
-#include "../livarot/Ligne.h"
 #include <libnr/nr-matrix-ops.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/raster-glyph.h>

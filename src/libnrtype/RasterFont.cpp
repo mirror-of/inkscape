@@ -9,7 +9,8 @@
 #endif
 #include "RasterFont.h"
 
-#include <livarot/Ligne.h>
+#include <livarot/float-line.h>
+#include <livarot/int-line.h>
 #include <livarot/Path.h>
 #include <livarot/Shape.h>
 #include <libnr/nr-point.h>

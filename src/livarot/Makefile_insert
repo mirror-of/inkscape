@@ -12,8 +12,10 @@ livarot_libvarot_a_SOURCES =	\
 	livarot/AlphaLigne.h	\
 	livarot/BitLigne.cpp	\
 	livarot/BitLigne.h	\
-	livarot/Ligne.cpp	\
-	livarot/Ligne.h	\
+	livarot/float-line.cpp	\
+	livarot/float-line.h	\
+	livarot/int-line.cpp	\
+	livarot/int-line.h	\
 	livarot/LivarotDefs.h	\
 	livarot/MyMath.h	\
 	livarot/MySeg.cpp	\

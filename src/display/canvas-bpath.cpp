@@ -21,7 +21,7 @@
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
 #include <livarot/AlphaLigne.h>
-#include <livarot/Ligne.h>
+#include <livarot/int-line.h>
 #include <livarot/BitLigne.h>
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>

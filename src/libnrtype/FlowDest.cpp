@@ -16,7 +16,7 @@
 #include "livarot/LivarotDefs.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
-#include "livarot/Ligne.h"
+#include "livarot/float-line.h"
 
 flow_dest::flow_dest(void)
 {

@@ -30,7 +30,6 @@
 #include "livarot/LivarotDefs.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
-#include "livarot/Ligne.h"
 
 static void sp_flowregion_class_init (SPFlowregionClass *klass);
 static void sp_flowregion_init (SPFlowregion *group);
