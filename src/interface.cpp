@@ -667,7 +667,7 @@ sp_menu_append_recent_documents (GtkWidget *menu, SPView* /* view */)
 static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
-    sp_ui_menu_append_submenu (fm, view, sp_menu_append_new_templates, _("_New"), _("Create new document"), NULL);
+    sp_ui_menu_append_submenu (fm, view, sp_menu_append_new_templates, _("_New"), _("Create new document"), "file_templates" );
 
     static Inkscape::Verb * file_verbs_one[] = {
 	Inkscape::Verb::get(SP_VERB_FILE_OPEN),
@@ -728,7 +728,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_EDIT_PASTE_STYLE),
 
         Inkscape::Verb::get(SP_VERB_NONE),
-       Inkscape::Verb::get(SP_VERB_DIALOG_FIND),
+        Inkscape::Verb::get(SP_VERB_DIALOG_FIND),
 
         Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE),
@@ -749,7 +749,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_EDIT_DESELECT),
 
         Inkscape::Verb::get(SP_VERB_NONE),
-       Inkscape::Verb::get(SP_VERB_DIALOG_XML_EDITOR),
+        Inkscape::Verb::get(SP_VERB_DIALOG_XML_EDITOR),
 
         Inkscape::Verb::get(SP_VERB_LAST
     )};
@@ -935,7 +935,6 @@ sp_ui_text_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_SELECTION_TEXTFROMPATH),
 
         Inkscape::Verb::get(SP_VERB_NONE),
-
         Inkscape::Verb::get(SP_VERB_SELECTION_REMOVE_KERNS),
 
         Inkscape::Verb::get(SP_VERB_LAST)
