@@ -222,6 +222,7 @@ void            Path::Convert(float treshhold)
 		curW=1;
 	}
 	if ( weighted ) lastMoveTo=AddPoint(curX,curY,curW,true); else lastMoveTo=AddPoint(curX,curY,true);
+	(descr_data)->associated=lastMoveTo;
 	
 		// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
@@ -237,6 +238,8 @@ void            Path::Convert(float treshhold)
 			nextY=curD->d.m.y;
 			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;
 			if ( weighted ) lastMoveTo=AddPoint(nextX,nextY,nextW,true); else lastMoveTo=AddPoint(nextX,nextY,true);
+			curD->associated=lastMoveTo;
+			
 			// et on avance
 			curP++;
 		} else if ( nType == descr_close ) {
@@ -244,18 +247,39 @@ void            Path::Convert(float treshhold)
 				nextX=((path_lineto_w*)pts)[lastMoveTo].x;
 				nextY=((path_lineto_w*)pts)[lastMoveTo].y;
 				nextW=((path_lineto_w*)pts)[lastMoveTo].w;
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
 				nextX=((path_lineto*)pts)[lastMoveTo].x;
 				nextY=((path_lineto*)pts)[lastMoveTo].y;
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			curP++;
 		} else if ( nType == descr_lineto ) {
 			nextX=curD->d.l.x;
 			nextY=curD->d.l.y;
 			if ( nWeight ) nextW=curD->d.l.w; else nextW=1;
-			if ( weighted ) AddPoint(nextX,nextY,nextW,false); else AddPoint(nextX,nextY,false);
+			if ( weighted ) curD->associated=AddPoint(nextX,nextY,nextW,false); else curD->associated=AddPoint(nextX,nextY,false);
+			if ( curD->associated < 0 ) {
+				if ( curP == 0 ) {
+					curD->associated=0;
+				} else {
+					curD->associated=(curD-1)->associated;
+				}
+			}
 			// et on avance
 			curP++;
 		} else if ( nType == descr_cubicto ) {
@@ -264,10 +288,24 @@ void            Path::Convert(float treshhold)
 			if ( nWeight ) nextW=curD->d.c.w; else nextW=1;
 			if ( weighted ) {
 				RecCubicTo(curX,curY,curW,curD->d.c.stDx,curD->d.c.stDy,nextX,nextY,nextW,curD->d.c.enDx,curD->d.c.enDy,treshhold,8);
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
 				RecCubicTo(curX,curY,curD->d.c.stDx,curD->d.c.stDy,nextX,nextY,curD->d.c.enDx,curD->d.c.enDy,treshhold,8);
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			// et on avance
 			curP++;
@@ -277,10 +315,24 @@ void            Path::Convert(float treshhold)
 			if ( nWeight ) nextW=curD->d.a.w; else nextW=1;
 			if ( weighted ) {
 				DoArc(curX,curY,curW,nextX,nextY,nextW,curD->d.a.rx,curD->d.a.ry,curD->d.a.angle,curD->d.a.large,curD->d.a.clockwise,treshhold);
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
 				DoArc(curX,curY,nextX,nextY,curD->d.a.rx,curD->d.a.ry,curD->d.a.angle,curD->d.a.large,curD->d.a.clockwise,treshhold);
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			// et on avance
 			curP++;
@@ -289,6 +341,7 @@ void            Path::Convert(float treshhold)
 			nextX=curD->d.b.x;
 			nextY=curD->d.b.y;
 			if ( nWeight ) nextW=curD->d.b.w; else nextW=1;
+			path_descr* curBD=curD;
 			
 			curP++;
 			curD=descr_data+curP;
@@ -344,7 +397,14 @@ void            Path::Convert(float treshhold)
 					float  sty=(by+cy)/2;
 					float  stw=(bw+cw)/2;
 					if ( k > 0 ) {
-						if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
+						if ( weighted ) (intermPoints-2)->associated=AddPoint(stx,sty,stw,false); else (intermPoints-2)->associated=AddPoint(stx,sty,false);
+						if ( (intermPoints-2)->associated < 0 ) {
+							if ( curP == 0 ) {
+								(intermPoints-2)->associated=0;
+							} else {
+								(intermPoints-2)->associated=(intermPoints-3)->associated;
+							}
+						}
 					}
 					
 					if ( weighted ) {
@@ -372,7 +432,14 @@ void            Path::Convert(float treshhold)
 					float  sty=(by+cy)/2;
 					float  stw=(bw+cw)/2;
 					
-					if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
+					if ( weighted ) (intermPoints-1)->associated=AddPoint(stx,sty,stw,false); else (intermPoints-1)->associated=AddPoint(stx,sty,false);
+					if ( (intermPoints-1)->associated < 0 ) {
+						if ( curP == 0 ) {
+							(intermPoints-1)->associated=0;
+						} else {
+							(intermPoints-1)->associated=(intermPoints-2)->associated;
+						}
+					}
 					
 					if ( weighted ) {
 						RecBezierTo(cx,cy,cw,stx,sty,stw,(cx+dx)/2,(cy+dy)/2,(cw+dw)/2,treshhold,8);
@@ -381,7 +448,14 @@ void            Path::Convert(float treshhold)
 					}
 				}
 			}
-			if ( weighted ) AddPoint(nextX,nextY,nextW,false); else AddPoint(nextX,nextY,false);
+			if ( weighted ) curBD->associated=AddPoint(nextX,nextY,nextW,false); else curBD->associated=AddPoint(nextX,nextY,false);
+			if ( (curBD)->associated < 0 ) {
+				if ( curP == 0 ) {
+					(curBD)->associated=0;
+				} else {
+					(curBD)->associated=(curBD-1)->associated;
+				}
+			}
 			
 			// et on avance
 			curP+=nbInterm;
@@ -411,6 +485,7 @@ void            Path::ConvertEvenLines(float treshhold)
 		curW=1;
 	}
 	if ( weighted ) lastMoveTo=AddPoint(curX,curY,curW,true); else lastMoveTo=AddPoint(curX,curY,true);
+	(descr_data)->associated=lastMoveTo;
 	
 		// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
@@ -426,6 +501,7 @@ void            Path::ConvertEvenLines(float treshhold)
 			nextY=curD->d.m.y;
 			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;
 			if ( weighted ) lastMoveTo=AddPoint(nextX,nextY,nextW,true); else lastMoveTo=AddPoint(nextX,nextY,true);
+			(curD)->associated=lastMoveTo;
 			// et on avance
 			curP++;
 		} else if ( nType == descr_close ) {
@@ -441,7 +517,14 @@ void            Path::ConvertEvenLines(float treshhold)
 						}
 					}
 				}
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
 				nextX=((path_lineto*)pts)[lastMoveTo].x;
 				nextY=((path_lineto*)pts)[lastMoveTo].y;
@@ -453,7 +536,14 @@ void            Path::ConvertEvenLines(float treshhold)
 						}
 					}
 				}
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			curP++;
 		} else if ( nType == descr_lineto ) {
@@ -461,25 +551,35 @@ void            Path::ConvertEvenLines(float treshhold)
 			nextY=curD->d.l.y;
 			if ( nWeight ) nextW=curD->d.l.w; else nextW=1;
 			if ( weighted ) {
-			{
 				float segL=sqrt((nextX-curX)*(nextX-curX)+(nextY-curY)*(nextY-curY));
 				if ( segL > 4*treshhold ) {
 					for (float i=4*treshhold;i<segL;i+=4*treshhold) {
 						AddPoint(((segL-i)*curX+i*nextX)/segL,((segL-i)*curY+i*nextY)/segL,((segL-i)*curW+i*nextW)/segL);
 					}
 				}
-			}
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
-			{
 				float segL=sqrt((nextX-curX)*(nextX-curX)+(nextY-curY)*(nextY-curY));
 				if ( segL > 4*treshhold ) {
 					for (float i=4*treshhold;i<segL;i+=4*treshhold) {
 						AddPoint(((segL-i)*curX+i*nextX)/segL,((segL-i)*curY+i*nextY)/segL);
 					}
 				}
-			}
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			// et on avance
 			curP++;
@@ -489,10 +589,24 @@ void            Path::ConvertEvenLines(float treshhold)
 			if ( nWeight ) nextW=curD->d.c.w; else nextW=1;
 			if ( weighted ) {
 				RecCubicTo(curX,curY,curW,curD->d.c.stDx,curD->d.c.stDy,nextX,nextY,nextW,curD->d.c.enDx,curD->d.c.enDy,treshhold,8,4*treshhold);
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
 				RecCubicTo(curX,curY,curD->d.c.stDx,curD->d.c.stDy,nextX,nextY,curD->d.c.enDx,curD->d.c.enDy,treshhold,8,4*treshhold);
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			// et on avance
 			curP++;
@@ -502,10 +616,24 @@ void            Path::ConvertEvenLines(float treshhold)
 			if ( nWeight ) nextW=curD->d.a.w; else nextW=1;
 			if ( weighted ) {
 				DoArc(curX,curY,curW,nextX,nextY,nextW,curD->d.a.rx,curD->d.a.ry,curD->d.a.angle,curD->d.a.large,curD->d.a.clockwise,treshhold);
-				AddPoint(nextX,nextY,nextW,false);
+				curD->associated=AddPoint(nextX,nextY,nextW,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			} else {
 				DoArc(curX,curY,nextX,nextY,curD->d.a.rx,curD->d.a.ry,curD->d.a.angle,curD->d.a.large,curD->d.a.clockwise,treshhold);
-				AddPoint(nextX,nextY,false);
+				curD->associated=AddPoint(nextX,nextY,false);
+				if ( curD->associated < 0 ) {
+					if ( curP == 0 ) {
+						curD->associated=0;
+					} else {
+						curD->associated=(curD-1)->associated;
+					}
+				}
 			}
 			// et on avance
 			curP++;
@@ -514,6 +642,7 @@ void            Path::ConvertEvenLines(float treshhold)
 			nextX=curD->d.b.x;
 			nextY=curD->d.b.y;
 			if ( nWeight ) nextW=curD->d.b.w; else nextW=1;
+			path_descr*  curBD=curD;
 			
 			curP++;
 			curD=descr_data+curP;
@@ -569,7 +698,14 @@ void            Path::ConvertEvenLines(float treshhold)
 					float  sty=(by+cy)/2;
 					float  stw=(bw+cw)/2;
 					if ( k > 0 ) {
-						if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
+						if ( weighted ) (intermPoints-2)->associated=AddPoint(stx,sty,stw,false); else (intermPoints-2)->associated=AddPoint(stx,sty,false);
+						if ( (intermPoints-2)->associated < 0 ) {
+							if ( curP == 0 ) {
+								(intermPoints-2)->associated=0;
+							} else {
+								(intermPoints-2)->associated=(intermPoints-3)->associated;
+							}
+						}
 					}
 					
 					if ( weighted ) {
@@ -597,7 +733,14 @@ void            Path::ConvertEvenLines(float treshhold)
 					float  sty=(by+cy)/2;
 					float  stw=(bw+cw)/2;
 					
-					if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
+					if ( weighted ) (intermPoints-1)->associated=AddPoint(stx,sty,stw,false); else (intermPoints-1)->associated=AddPoint(stx,sty,false);
+					if ( (intermPoints-1)->associated < 0 ) {
+						if ( curP == 0 ) {
+							(intermPoints-1)->associated=0;
+						} else {
+							(intermPoints-1)->associated=(intermPoints-2)->associated;
+						}
+					}
 					
 					if ( weighted ) {
 						RecBezierTo(cx,cy,cw,stx,sty,stw,(cx+dx)/2,(cy+dy)/2,(cw+dw)/2,treshhold,8,4*treshhold);
@@ -606,8 +749,15 @@ void            Path::ConvertEvenLines(float treshhold)
 					}
 				}
 			}
-			if ( weighted ) AddPoint(nextX,nextY,nextW,false); else AddPoint(nextX,nextY,false);
-			
+			if ( weighted ) curBD->associated=AddPoint(nextX,nextY,nextW,false); else curBD->associated=AddPoint(nextX,nextY,false);
+			if ( (curBD)->associated < 0 ) {
+				if ( curP == 0 ) {
+					(curBD)->associated=0;
+				} else {
+					(curBD)->associated=(curBD-1)->associated;
+				}
+			}
+						
 			// et on avance
 			curP+=nbInterm;
 		}

@@ -9,8 +9,6 @@
 #include "Shape.h"
 #include "MyMath.h"
 
-int      Shape::round_power=5;
-
 Shape::Shape(void)
 {
 	leftX=topY=rightX=bottomY=0;
@@ -436,12 +434,12 @@ void              Shape::SortPoints(int s,int e)
 		if ( pts[s].y > pts[e].y || ( pts[s].y == pts[e].y && pts[s].x > pts[e].x ) ) SwapPoints(s,e);
 		return;
 	}
-
+	
 	int  ppos=(s+e)/2;
 	int  plast=ppos;
 	float  pvalx=pts[ppos].x;
 	float  pvaly=pts[ppos].y;
-
+	
 	int le=s,ri=e;
 	while ( le < ppos || ri > plast ) {
 		if ( le < ppos ) {
@@ -547,6 +545,139 @@ void              Shape::SortPoints(int s,int e)
 	}
 	SortPoints(s,ppos-1);
 	SortPoints(plast+1,e);
+}
+void              Shape::SortPointsByOldInd(int s,int e)
+{
+	if ( s >= e ) return;
+	if ( e == s+1 ) {
+		if ( pts[s].y > pts[e].y || ( pts[s].y == pts[e].y && pts[s].x > pts[e].x ) ||
+			  ( pts[s].y == pts[e].y && pts[s].x == pts[e].x && pData[s].oldInd > pData[e].oldInd ) ) SwapPoints(s,e);
+		return;
+	}
+	
+	int  ppos=(s+e)/2;
+	int  plast=ppos;
+	float  pvalx=pts[ppos].x;
+	float  pvaly=pts[ppos].y;
+	int     pvali=pData[ppos].oldInd;
+	
+	int le=s,ri=e;
+	while ( le < ppos || ri > plast ) {
+		if ( le < ppos ) {
+			do {
+				int test=0;
+				if ( pts[le].y > pvaly ) {
+					test=1;
+				} else if ( pts[le].y == pvaly ) {
+					if ( pts[le].x > pvalx ) {
+						test=1;
+					} else if ( pts[le].x == pvalx ) {
+						if ( pData[le].oldInd > pvali ) {
+							test=1;
+						} else if ( pData[le].oldInd == pvali ) {
+							test=0;
+						} else {
+							test=-1;
+						}
+					} else {
+						test=-1;
+					}
+				} else {
+					test=-1;
+				}
+				if ( test == 0 ) {
+					// on colle les valeurs egales au pivot ensemble
+					if ( le < ppos-1 ) {
+						SwapPoints(le,ppos-1,ppos);
+						ppos--;
+						continue; // sans changer le
+					} else if ( le == ppos-1 ) {
+						ppos--;
+						break;
+					} else {
+						// oupsie
+						break;
+					}
+				}
+				if ( test > 0 ) {
+					break;
+				}
+				le++;
+			} while ( le < ppos );
+		}
+		if ( ri > plast ) {
+			do {
+				int test=0;
+				if ( pts[ri].y > pvaly ) {
+					test=1;
+				} else if ( pts[ri].y == pvaly ) {
+					if ( pts[ri].x > pvalx ) {
+						test=1;
+					} else if ( pts[ri].x == pvalx ) {
+						if ( pData[ri].oldInd > pvali ) {
+							test=1;
+						} else if ( pData[ri].oldInd == pvali ) {
+							test=0;
+						} else {
+							test=-1;
+						}
+					} else {
+						test=-1;
+					}
+				} else {
+					test=-1;
+				}
+				if ( test == 0 ) {
+					// on colle les valeurs egales au pivot ensemble
+					if ( ri > plast+1 ) {
+						SwapPoints(ri,plast+1,plast);
+						plast++;
+						continue; // sans changer ri
+					} else if ( ri == plast+1 ) {
+						plast++;
+						break;
+					} else {
+						// oupsie
+						break;
+					}
+				}
+				if ( test < 0 ) {
+					break;
+				}
+				ri--;
+			} while ( ri > plast );
+		}
+		if ( le < ppos ) {
+			if ( ri > plast ) {
+				SwapPoints(le,ri);
+				le++;ri--;
+			} else {
+				if ( le < ppos-1 ) {
+					SwapPoints(ppos-1,plast,le);
+					ppos--;
+					plast--;
+				} else if ( le == ppos-1 ) {
+					SwapPoints(plast,le);
+					ppos--;
+					plast--;
+				}
+			}
+		} else {
+			if ( ri > plast+1 ) {
+				SwapPoints(plast+1,ppos,ri);
+				ppos++;
+				plast++;
+			} else if ( ri == plast+1 ) {
+				SwapPoints(ppos,ri);
+				ppos++;
+				plast++;
+			} else {
+				break;
+			}
+		}
+	}
+	SortPointsByOldInd(s,ppos-1);
+	SortPointsByOldInd(plast+1,e);
 }
 
 void              Shape::SortPointsRounded(int s,int e)

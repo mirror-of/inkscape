@@ -501,6 +501,7 @@ SweepEvent::ExtractFromQueue(intersL,intersR,ptX,ptY,ptL,ptR,sEvts);
 	chgts=NULL;
 	nbChgt=maxChgt=0;
 
+	Plot(98.0,112.0,8.0,400.0,400.0,true,true,true,true);
 //	Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
 	//	AssemblePoints(a);
@@ -514,6 +515,8 @@ SweepEvent::ExtractFromQueue(intersL,intersR,ptX,ptY,ptL,ptR,sEvts);
 	
 	AssembleAretes();
 
+	Plot(98.0,112.0,8.0,400.0,400.0,true,true,true,true);
+
 	for (int i=0;i<nbPt;i++) {
 		pts[i].oldDegree=pts[i].dI+pts[i].dO;
 	}
@@ -523,6 +526,7 @@ SweepEvent::ExtractFromQueue(intersL,intersR,ptX,ptY,ptL,ptR,sEvts);
 	SetFlag(need_edges_sorting,true);
 	GetWindings(a);
 
+	Plot(98.0,112.0,8.0,400.0,400.0,true,true,true,true);
 //	Plot(225.0,215.0,32.0,400.0,400.0,true,true,true,true);
 
 	if ( directed == fill_positive) {
@@ -1572,7 +1576,8 @@ int              Shape::AssemblePoints(int st,int en)
 {
 	if ( en > st ) {
 		for (int i=st;i<en;i++) pData[i].oldInd=i;
-		SortPoints(st,en-1);
+//		SortPoints(st,en-1);
+		SortPointsByOldInd(st,en-1);
 		for (int i=st;i<en;i++) pData[pData[i].oldInd].newInd=i;
 
 		int   lastI=st;
@@ -1583,6 +1588,16 @@ int              Shape::AssemblePoints(int st,int en)
 				if ( pData[pData[i].pending].askForWindingS == NULL ) {
 					pData[pData[i].pending].askForWindingS=pData[i].askForWindingS;
 					pData[pData[i].pending].askForWindingB=pData[i].askForWindingB;
+				} else {
+					if ( pData[pData[i].pending].askForWindingS == pData[i].askForWindingS && pData[pData[i].pending].askForWindingB == pData[i].askForWindingB ) {
+						// meme bord, c bon
+					} else {
+						// meme point, mais pas le meme bord: ouille!
+						// il faut prendre le bord le plus a gauche
+						// en pratique, n'arrive que si 2 maxima sont dans la meme case -> le mauvais choix prend une arete incidente 
+						// au bon choix
+//						printf("doh");
+					}
 				}
 				lastI--;
 			} else {

@@ -511,3 +511,121 @@ float                  Path::RaffineTk(vec2 pt,vec2 p0,vec2 p1,vec2 p2,vec2 p3,f
 	}
 	return it;
 }
+
+void            Path::Coalesce(float tresh)
+{
+	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	if ( descr_nb <= 2 ) return;
+	
+	SetWeighted(false);
+	SetBackData(false);
+	
+	ConvertEvenLines(tresh);
+
+	int         lastP=0;
+	int         writeP=0;
+	int					lastA=descr_data[0].associated;
+	vec2        firstP;
+	path_descr  lastAddition;
+	lastAddition.flags=descr_moveto;
+	for (int curP=0;curP<descr_nb;curP++) {
+		int typ=descr_data[curP].flags&descr_type_mask;
+		int nextA=lastA;
+		if ( typ == descr_moveto ) {
+			if ( lastAddition.flags != descr_moveto ) {
+				descr_data[writeP++]=lastAddition;
+			}
+			lastAddition=descr_data[curP];
+			descr_data[writeP++]=lastAddition; // ajouté automatiquement (tant pis pour les moveto multiples)
+			
+			firstP.x=descr_data[curP].d.m.x;
+			firstP.y=descr_data[curP].d.m.y;
+			lastA=descr_data[curP].associated;
+		} else if ( typ == descr_close ) {
+			nextA=descr_data[curP].associated;
+			if ( lastAddition.flags != descr_moveto ) {
+				path_lineto* sav_pts=(path_lineto*)pts;
+				int          sav_nbPt=nbPt;
+				
+				pts=(char*)(sav_pts+lastA);
+				nbPt=nextA-lastA+1;
+				
+				path_descr_cubicto res;
+				if ( AttemptSimplify(tresh,res) ) {
+					lastAddition.flags=descr_cubicto;
+					lastAddition.d.c.x=res.x;
+					lastAddition.d.c.y=res.y;
+					lastAddition.d.c.stDx=res.stDx;
+					lastAddition.d.c.stDy=res.stDy;
+					lastAddition.d.c.enDx=res.enDx;
+					lastAddition.d.c.enDy=res.enDy;
+				} else {
+				}
+				
+				descr_data[writeP++]=lastAddition;
+				descr_data[writeP++]=descr_data[curP];
+				
+				pts=(char*)sav_pts;
+				nbPt=sav_nbPt;
+			} else {
+				descr_data[writeP++]=descr_data[curP];
+			}
+			lastAddition.flags=descr_moveto;
+			lastA=nextA;
+		} else if ( typ == descr_lineto || typ == descr_cubicto || typ == descr_arcto) {
+			nextA=descr_data[curP].associated;
+			if ( lastAddition.flags != descr_moveto ) {
+				path_lineto* sav_pts=(path_lineto*)pts;
+				int          sav_nbPt=nbPt;
+				
+				pts=(char*)(sav_pts+lastA);
+				nbPt=nextA-lastA+1;
+				
+				path_descr_cubicto res;
+				if ( AttemptSimplify(tresh,res) ) {
+					lastAddition.flags=descr_cubicto;
+					lastAddition.d.c.x=res.x;
+					lastAddition.d.c.y=res.y;
+					lastAddition.d.c.stDx=res.stDx;
+					lastAddition.d.c.stDy=res.stDy;
+					lastAddition.d.c.enDx=res.enDx;
+					lastAddition.d.c.enDy=res.enDy;
+				} else {
+					lastA=descr_data[curP-1].associated; // pourrait etre surecrit par la ligne suivante
+					descr_data[writeP++]=lastAddition;
+					lastAddition=descr_data[curP];
+				}
+								
+				pts=(char*)sav_pts;
+				nbPt=sav_nbPt;
+			} else {
+				lastA=descr_data[curP-1].associated;
+				lastAddition=descr_data[curP];
+			}
+		} else if ( typ == descr_bezierto ) {
+			if ( lastAddition.flags != descr_moveto ) {
+				descr_data[writeP++]=lastAddition;
+				lastAddition.flags=descr_moveto;
+			} else {
+			}
+			lastA=descr_data[curP].associated;
+			for (int i=1;i<=descr_data[curP].d.b.nb;i++) descr_data[writeP++]=descr_data[curP+i];
+			curP+=descr_data[curP].d.b.nb;
+		} else if ( typ == descr_interm_bezier ) {
+			continue;
+		} else if ( typ == descr_forced ) {
+			continue;
+		} else {
+			continue;		
+		}
+	}
+	if ( lastAddition.flags != descr_moveto ) {
+		descr_data[writeP++]=lastAddition;
+	}
+	descr_nb=writeP;
+}
+void            Path::DoCoalesce(Path* dest,float tresh)
+{
+	
+	
+}

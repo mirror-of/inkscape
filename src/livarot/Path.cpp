@@ -75,6 +75,18 @@ void            Path::Reset(void)
 	pending_moveto=-1;
 	descr_flags=0;
 }
+void            Path::Copy(Path* who)
+{
+	ResetPoints(0);
+	if ( who->descr_nb > descr_max ) {
+		descr_max=who->descr_nb;
+		descr_data=(path_descr*)realloc(descr_data,descr_max*sizeof(path_descr));
+	}
+	SetWeighted(who->weighted);
+	descr_nb=who->descr_nb;
+	memcpy(descr_data,who->descr_data,descr_nb*sizeof(path_descr));
+}
+
 void            Path::Alloue(int addSize)
 {
 	if ( descr_nb+addSize > descr_max ) {

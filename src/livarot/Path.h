@@ -114,6 +114,7 @@ public:
 	
 	typedef struct path_descr {
 		int           flags;
+		int						associated; // le no du moveto/lineto dans la polyligne.
 		union {
 			path_descr_moveto_w          m;
 			path_descr_lineto_w          l;
@@ -166,6 +167,7 @@ public:
 
 	// creation of the path description
 	void            Reset(void); // reset to the empty description
+	void            Copy(Path* who);
 	
 	// dumps the path description on the standard output
 	void					  Affiche(void);
@@ -233,6 +235,8 @@ public:
 	
 	// polyline to cubic bezier
 	void            Simplify(float treshhold);
+	// description simplification
+	void            Coalesce(float tresh);
 
 	void						PrevPoint(int i,float &x,float &y);
 private:
@@ -316,6 +320,8 @@ private:
 	static void            RecRound(Shape* dest,int sNo,int eNo,float px,float py,float sx,float sy,float ex,float ey,float tresh,int lev);
 	static void            DashTo(Shape* dest,dashTo_info *dTo,float &dashAbs,int& dashNo,float& dashPos,bool& inGap,int& lastLeft,int& lastRight,int nbDash,one_dash* dashs);
 
+	void                   DoCoalesce(Path* dest,float tresh);
+	
 	void                   DoSimplify(float treshhold);
 	bool                   AttemptSimplify(float treshhold,path_descr_cubicto &res);
 	float                  RaffineTk(vec2 pt,vec2 p0,vec2 p1,vec2 p2,vec2 p3,float it);

@@ -32,6 +32,7 @@ extern "C" {
 	
 #include "xml/repr.h"
 #include "xml/repr-private.h"
+#include "libnr/nr-types.h"
 }
 
 #include "livarot/Path.h"
@@ -96,6 +97,7 @@ sp_selected_path_boolop (bool_op bop)
 		SPRepr* a=SP_OBJECT_REPR(il->data);
 		SPRepr* b=SP_OBJECT_REPR(il->next->data);
 		if ( a == NULL || b == NULL ) {
+			g_warning ("unable to determine z-order of the objects involved in the difference");
 			return;
 		}
 		if ( Ancetre(a,b) ) {
@@ -105,6 +107,7 @@ sp_selected_path_boolop (bool_op bop)
 		} else {
 			SPRepr* dad=LCA(a,b);
 			if ( dad == NULL ) {
+				g_warning ("unable to determine z-order of the objects involved in the difference");
 				return;
 			}
 			SPRepr* as=AncetreFils(a,dad);
@@ -124,7 +127,10 @@ sp_selected_path_boolop (bool_op bop)
 
 	for (l = il; l != NULL; l = l->next) {
 		item = (SPItem *) l->data;
-		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item)) return;
+		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item)) {
+			g_warning ("one of the objects is not a path");
+			return;
+		}
 	}
 
 	// choper les originaux pour faire l'operation demandŽe
@@ -457,23 +463,25 @@ void sp_selected_path_outline(void)
 	
 	sp_curve_unref (curve);
 	
-		{
+	{
 		
 		orig->Outline(res,0.5*o_width,o_join,o_butt,o_miter);
 	
+	//		orig->ConvertEvenLines(0.1*o_width);
+	//		orig->Simplify(0.05*o_width);
+		orig->Coalesce(0.5*o_width);
+		
+
 		Shape*  theShape=new Shape;
+		Shape*  theRes=new Shape;
+
 		res->ConvertWithBackData(1.0);
 		res->Fill(theShape,0);
-		Shape*  theRes=new Shape;
 		theRes->ConvertToShape(theShape,fill_positive);
 	
 		Path*  originaux[1];
 		originaux[0]=res;
-		orig->Reset();
 		theRes->ConvertToForme(orig,1,originaux);
-		
-		orig->ConvertEvenLines(0.1*o_width);
-		orig->Simplify(0.05*o_width);
 		
 		delete theShape;
 		delete theRes;
@@ -627,6 +635,7 @@ void        sp_selected_path_do_offset(bool expand)
 		
 		if ( val == NULL || strcmp(val,"none") == 0 ) {
 			// pas de stroke pas de chocolat
+			g_warning ("the offset/inset operation uses the stroke width as offset value: give a stroke to the object");
 			sp_curve_unref (curve);
 			return;
 		}
@@ -682,13 +691,10 @@ void        sp_selected_path_do_offset(bool expand)
 
 		Shape*  theShape=new Shape;
 		Shape*  theRes=new Shape;
+		
 		orig->ConvertWithBackData(1.0);
 		orig->Fill(theShape,0);
 		
-/*		printf("original\n");
-		orig->Affiche();
-		fflush(stdout);*/
-
 		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
 		val = sp_repr_css_property (css, "fill-rule", NULL);
 		if ( val && strcmp (val,"nonzero") == 0 ) {
@@ -698,22 +704,10 @@ void        sp_selected_path_do_offset(bool expand)
 		} else {
 			theRes->ConvertToShape(theShape,fill_nonZero);
 		}
-		
-		if ( expand ) {
-			theShape->MakeOffset(theRes,0.5*o_width,o_join,o_miter);
-		} else {
-			theShape->MakeOffset(theRes,-0.5*o_width,o_join,o_miter);
-		}
-		theRes->ConvertToShape(theShape,fill_positive);
-		theRes->ConvertToForme(res);
-		
-/*		Path*  originaux[1];
+				
+		Path* originaux[1];
 		originaux[0]=orig;
 		theRes->ConvertToForme(res,1,originaux);
-		
-		printf("intersecte\n");
-		res->Affiche();
-		fflush(stdout);
 		
 		// et maintenant: offset
 		if ( expand ) {
@@ -722,31 +716,16 @@ void        sp_selected_path_do_offset(bool expand)
 			res->OutsideOutline(orig,-0.5*o_width,o_join,o_butt,o_miter);
 		}
 
-		printf("offsete\n");
-		orig->Affiche();
-		fflush(stdout);
-
 		orig->ConvertWithBackData(1.0);
 		orig->Fill(theShape,0);
 		theRes->ConvertToShape(theShape,fill_positive);
-		
 		originaux[0]=orig;
-		theRes->ConvertToForme(res,1,originaux);
+		theRes->ConvertToForme(res,1,originaux);		
 		
-		printf("offsete intersecte\n");
-		res->Affiche();
-		fflush(stdout);*/
-		
-		res->ConvertEvenLines(0.5*o_width);
-		res->Simplify(0.1*o_width);
+		res->Coalesce(0.5*o_width);
 
-/*		printf("simplifie\n");
-		res->Affiche();
-		fflush(stdout);*/
-		
 		delete theShape;
 		delete theRes;
-
 	}
 	
 	sp_curve_unref (curve);

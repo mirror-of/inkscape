@@ -50,7 +50,6 @@ class Shape  {
 	friend class SweepTree;
 	friend class SweepEvent;
 public:
-		static int       round_power;
 	// bounding box stuff
 	float            leftX,topY,rightX,bottomY;
 
@@ -310,16 +309,15 @@ public:
 	                                        // be careful when using this function
 
 	// the coordinate rounding function
-	static float             Round(float x) {return ldexpf(rintf(ldexpf(x,round_power)),-round_power);};
+	static float             Round(float x) {return ldexpf(roundf(ldexpf(x,5)),-5);};
 	// 2 miscannellous variations on it, to scale to and back the rounding grid
-	static float             HalfRound(float x) {return ldexpf(x,-round_power);};
-	static float             IHalfRound(float x) {return ldexpf(x,round_power);};
+	static float             HalfRound(float x) {return ldexpf(x,-5);};
+	static float             IHalfRound(float x) {return ldexpf(x,5);};
 
 	// boolean operations on polygons (requests intersection-free poylygons)
 	// boolean operation types are defined in LivarotDefs.h
 	// same return code as ConvertToShape
 	int               Booleen(Shape* a,Shape* b,BooleanOp mod);
-
 
 	
 	// create a graph that is an offseted version of the graph "of"
@@ -350,10 +348,12 @@ private:
 	bool              HasVoronoiData(void) {return (flags&has_voronoi_data);};
 	
 	void              SortPoints(int s,int e);
+	void              SortPointsByOldInd(int s,int e);
 
 	// fonctions annexes pour ConvertToShape et Booleen
 	void              ResetSweep(void); // allocates sweep structures
 	void              CleanupSweep(void); // deallocates them
+//public:
 private:
 		typedef struct edge_list { // temporary array of edges for easier sorting
 			int             no;
