@@ -109,10 +109,10 @@ struct _SPILength {
 	float computed;
 };
 
-#define SP_STYLE_FILL_SERVER(s) (((SPStyle *) (s))->fill.value.server)
-#define SP_STYLE_STROKE_SERVER(s) (((SPStyle *) (s))->stroke.value.server)
-#define SP_OBJECT_STYLE_FILL_SERVER(o) (SP_OBJECT (o)->style->fill.value.server)
-#define SP_OBJECT_STYLE_STROKE_SERVER(o) (SP_OBJECT (o)->style->stroke.value.server)
+#define SP_STYLE_FILL_SERVER(s) (((SPStyle *) (s))->fill.value.paint.server)
+#define SP_STYLE_STROKE_SERVER(s) (((SPStyle *) (s))->stroke.value.paint.server)
+#define SP_OBJECT_STYLE_FILL_SERVER(o) (SP_OBJECT (o)->style->fill.value.paint.server)
+#define SP_OBJECT_STYLE_STROKE_SERVER(o) (SP_OBJECT (o)->style->stroke.value.paint.server)
 
 enum {
 	SP_PAINT_TYPE_NONE,
@@ -127,7 +127,10 @@ struct _SPIPaint {
 	unsigned int type : 2;
 	union {
 		SPColor color;
-		SPPaintServer *server;
+		struct {
+			SPPaintServer *server;
+			gchar *uri;
+		} paint;
 	} value;
 };
 
