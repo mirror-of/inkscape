@@ -144,6 +144,7 @@ src/rubberband.cpp
 src/select-context.cpp
 src/select-toolbar.cpp
 src/selection-chemistry.cpp
+src/selection-describer.cpp
 src/selection.cpp
 src/seltrans-handles.cpp
 src/seltrans.cpp
