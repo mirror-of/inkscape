@@ -1153,6 +1153,12 @@ Print::text (const char* text, NR::Point p, const SPStyle* style)
     return imp->text (this, text, p, style);
 }
 
+bool
+Print::textToPath (void)
+{
+	return imp->textToPath(this);
+}
+
 
 }; /* namespace Extension */
 }; /* namespace Inkscape */

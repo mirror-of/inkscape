@@ -143,6 +143,21 @@ Implementation::text (Inkscape::Extension::Print * module, const char *text,
 	return 0;
 }
 
+/**
+   \brief  Tell the printing engine whether text should be text or path
+   \retval TRUE  Render the text as a path
+   \retval FALSE Render text using the text function (above)
+ 
+    Default value is FALSE because most printing engines will support
+    paths more than they'll support text.  (atleast they do today)
+*/
+bool
+Implementation::textToPath(Inkscape::Extension::Print * ext)
+{
+    return FALSE;
+}
+
+
 }; /* namespace Implementation */
 }; /* namespace Extension */
 }; /* namespace Inkscape */

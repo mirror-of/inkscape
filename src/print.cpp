@@ -42,10 +42,6 @@
 
 /* Identity typedef */
 
-struct SPPrintContext {
-	Inkscape::Extension::Print * module;
-};
-
 unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, float opacity)
 {
 	NRMatrix const ntransform(transform);
@@ -90,11 +86,6 @@ unsigned int sp_print_text (SPPrintContext* ctx, const char* text, NR::Point p,
 			    const SPStyle* style)
 {
   return ctx->module->text(text, p, style);
-}
-
-void sp_print_get_param(SPPrintContext *ctx, gchar* name, bool *value)
-{
-  ctx->module->get_param(name, value);
 }
 
 #include "display/nr-arena.h"

@@ -264,6 +264,7 @@ public:
     unsigned int  text        (char const *text,
                                NR::Point p,
                                SPStyle const *style);
+    bool          textToPath  (void);
 };
 
 }; /* namespace Extension */

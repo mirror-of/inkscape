@@ -66,6 +66,7 @@ public:
     virtual unsigned begin(Inkscape::Extension::Print *module,
                            SPDocument *doc);
     virtual unsigned finish(Inkscape::Extension::Print *module);
+    virtual bool     textToPath(Inkscape::Extension::Print *ext);
 
     /* ----- Rendering methods ----- */
     virtual unsigned bind(Inkscape::Extension::Print *module,

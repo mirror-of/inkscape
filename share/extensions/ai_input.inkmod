@@ -9,7 +9,7 @@
 		<output_extension>modules.output.ai</output_extension>
     </input>
     <extension>
-        <command reldir="extensions">ill2svg.pl -l &quot;mac&quot;</command>
+        <command reldir="extensions">ill2svg.pl</command>
         <check>/usr/bin/perl</check>
         <check reldir="extensions">ill2svg.pl</check>
     </extension>

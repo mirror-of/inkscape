@@ -12,6 +12,11 @@
 
 #include <libnr/nr-path.h>
 #include "forward.h"
+#include "extension/extension.h"
+
+struct SPPrintContext {
+	Inkscape::Extension::Print * module;
+};
 
 unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, float opacity);
 unsigned int sp_print_bind(SPPrintContext *ctx, NRMatrix const *transform, float opacity);

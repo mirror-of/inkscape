@@ -73,6 +73,7 @@ public:
         virtual unsigned int text (Inkscape::Extension::Print *module, const char *text,
 				   NR::Point p, const SPStyle *style);
 
+	bool textToPath (Inkscape::Extension::Print * ext);
 	static void init (void);
 };
 

@@ -2244,7 +2244,7 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
     sp_item_i2d_affine (item, &ctm);
 
     bool text_to_path;
-    sp_print_get_param(ctx, "textToPath", &text_to_path);
+	text_to_path = ctx->module->textToPath();
     if (text_to_path) {
       for (SPObject *ch = sp_object_first_child(SP_OBJECT(text)) ; ch != NULL ; ch = SP_OBJECT_NEXT(ch) ) {
         if (SP_IS_TSPAN (ch)) {

@@ -902,6 +902,14 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 #undef GET_RGB_TILE
 }
 
+bool
+PrintPS::textToPath (Inkscape::Extension::Print * ext)
+{
+	bool param;
+	ext->get_param("textToPath", &param);
+	return param;
+}
+
 void
 PrintPS::init (void)
 {
