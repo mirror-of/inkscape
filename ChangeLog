@@ -1,3 +1,7 @@
+2004-03-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/desktop-events.cpp (sp_dt_ruler_event): Minor cleanup.
+
 2004-03-19  bulia byak <bulia@users.sourceforge.net>
 
 	* src/selection-chemistry.cpp: Prevent it from scaling above 1e6 pt

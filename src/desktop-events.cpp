@@ -132,9 +132,12 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 			dragging = FALSE;
 			gtk_object_destroy (GTK_OBJECT (guide));
 			guide = NULL;
-			if ((horiz && (wy >= 0)) || (!horiz && (wx >= 0))) {
-				SPRepr *repr;
-				repr = sp_repr_new ("sodipodi:guide");
+			if ( ( horiz
+			       ? wy
+			       : wx )
+			     >= 0 )
+			{
+				SPRepr *repr = sp_repr_new("sodipodi:guide");
 				sp_repr_set_attr (repr, "orientation", (horiz) ? "horizontal" : "vertical");
 				double const guide_pos_dt = event_dt[ horiz
 								      ? NR::Y
