@@ -73,6 +73,65 @@ public:
         TS_ASSERT_EQUALS( ab - b, a );
         TS_ASSERT_DIFFERS( ab + a, b );
     }
+
+    void testUnaryMinus(void)
+    {
+        TS_ASSERT_EQUALS( -a, Point(-a[X], -a[Y]) );
+    }
+
+    void tetScaleDivide(void)
+    {
+        TS_ASSERT_EQUALS( -a, -1.0 * a );
+        TS_ASSERT_EQUALS( a + a + a, 3.0 * a );
+        TS_ASSERT_EQUALS( a / .5, 2.0 * a );
+    }
+
+    void testDot(void)
+    {
+        TS_ASSERT_EQUALS( dot(a, b), ( a[X] * b[X]  +
+                                       a[Y] * b[Y] ) );
+        TS_ASSERT_EQUALS( dot(a, NR::rot90(a)), 0.0 );
+        TS_ASSERT_EQUALS( dot(-a, NR::rot90(a)), 0.0 );
+    }
+
+    void testL1L2LInftyNorms(void)
+    {
+        // TODO look at TS_ASSERT_DELTA
+
+        TS_ASSERT_EQUALS( L1(small_left), small );
+        TS_ASSERT_EQUALS( L2(small_left), small );
+        TS_ASSERT_EQUALS( LInfty(small_left), small );
+
+        TS_ASSERT_EQUALS( L1(smallish_3_neg4), 7.0 * small );
+        TS_ASSERT_EQUALS( L2(smallish_3_neg4), 5.0 * small );
+        TS_ASSERT_EQUALS( LInfty(smallish_3_neg4), 4.0 * small );
+    }
+
+    void testOperatorPlusEquals(void)
+    {
+        Point x(a);
+        x += b;
+        TS_ASSERT_EQUALS( x, ab );
+    }
+
+    void tetOperatorDivEquals(void)
+    {
+        Point x(a);
+        x /= .5;
+        TS_ASSERT_EQUALS( x, a + a );
+    }
+
+    void testNormalize(void)
+    {
+        Point x(small_left);
+        x.normalize();
+        TS_ASSERT_EQUALS( x, Point(-1.0, 0.0) );
+
+        x = smallish_3_neg4;
+        x.normalize();
+        TS_ASSERT_EQUALS( x, Point(0.6, -0.8) );
+    }
+
 };
 
 /*
