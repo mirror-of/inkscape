@@ -422,12 +422,9 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             SPLinearGradient *lg = SP_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
             NRRect bb;
             sp_item_invoke_bbox(SP_ITEM(object), &bb, NR::identity(), TRUE);
-            NRMatrix fctm;
-            sp_item_i2doc_affine (SP_ITEM (object), &fctm);
-            NRMatrix gs2d;
-            sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (lg), &fctm, &bb,
-                                            &gs2d);
-            sp_paint_selector_set_gradient_gs2d_matrix_f (psel, &gs2d);
+            NR::Matrix const fctm(sp_item_i2doc_affine(SP_ITEM(object)));
+            NR::Matrix const gs2d(sp_gradient_get_gs2d_matrix(SP_GRADIENT(lg), fctm, bb));
+            sp_paint_selector_set_gradient_gs2d_matrix(psel, gs2d);
             sp_paint_selector_set_gradient_properties (psel,
                                                        SP_GRADIENT_UNITS (lg),
                                                        SP_GRADIENT_SPREAD (lg));
