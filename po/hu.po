@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-04 17:57+0200\n"
-"PO-Revision-Date: 2004-07-04 19:01+0200\n"
+"POT-Creation-Date: 2004-07-04 22:21+0200\n"
+"PO-Revision-Date: 2004-07-04 22:35+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -402,7 +402,7 @@ msgid "Metadata"
 msgstr "Metaadatok"
 
 #. this uses an element
-#: src/dialogs/desktop-properties.cpp:898 src/dialogs/rdf.cpp:237
+#: src/dialogs/desktop-properties.cpp:898 src/dialogs/rdf.cpp:239
 msgid "License"
 msgstr "Licenc"
 
@@ -445,7 +445,7 @@ msgstr "Kijelölés objektumonkénti jelzése:"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
-#: src/interface.cpp:984 src/verbs.cpp:797
+#: src/interface.cpp:985 src/verbs.cpp:797
 msgid "None"
 msgstr "Nincs"
 
@@ -1578,7 +1578,9 @@ msgstr "Készítõ"
 
 #: src/dialogs/rdf.cpp:198
 msgid "Name of entity primarily responsible for making the content of this document."
-msgstr "A dokumentum tartalmának elkészítéséért elsõdlegesen felelõs személy (entitás) neve."
+msgstr ""
+"A dokumentum tartalmának elkészítéséért elsõdlegesen felelõs személy "
+"(entitás) neve."
 
 #: src/dialogs/rdf.cpp:200
 msgid "Rights"
@@ -1605,7 +1607,9 @@ msgstr "Közremûködõk"
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
-msgstr "A dokumentum tartalmának elkészítésében közremûködõ személyek (entitások) neve."
+msgstr ""
+"A dokumentum tartalmának elkészítésében közremûködõ személyek (entitások) "
+"neve."
 
 #: src/dialogs/rdf.cpp:212
 msgid "Identifier"
@@ -1648,29 +1652,32 @@ msgid "Keywords"
 msgstr "Kulcsszavak"
 
 #: src/dialogs/rdf.cpp:225
-msgid "The topic of this document as key words, phrases, or classication."
+msgid "The topic of this document as key words, phrases, or classification."
 msgstr "A dokumentum témája - kulcsszavak, kifejezések, besorolás."
 
-#: src/dialogs/rdf.cpp:227
+#. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
+#. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
+#: src/dialogs/rdf.cpp:229
 msgid "Coverage"
-msgstr "Témakörök"
+msgstr "Hely/idõ"
 
-#: src/dialogs/rdf.cpp:228
+#: src/dialogs/rdf.cpp:230
 msgid "Extent or scope of this document."
-msgstr "A dokumentum által érintett témakörök."
+msgstr "A dokumentum által átfogott hely vagy idõ."
 
 #. this should be a multi-line tag
-#: src/dialogs/rdf.cpp:232
+#: src/dialogs/rdf.cpp:234
 msgid "Description"
 msgstr "Leírás"
 
-#: src/dialogs/rdf.cpp:233
+#: src/dialogs/rdf.cpp:235
 msgid "A short account of the content of this document."
 msgstr "A dokumentum tartalmának rövid leírása."
 
-#: src/dialogs/rdf.cpp:238
-msgid "URI to the License namespace definition."
-msgstr "A licenc-névtér definíciójára utaló URI."
+#. TRANSLATORS: this is where you put a URL to a page that defines the license
+#: src/dialogs/rdf.cpp:241
+msgid "URI to this document's license's namespace definition."
+msgstr "A dokumentum licencének névtérdefiníciójára utaló URI."
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:832
@@ -2453,20 +2460,21 @@ msgstr "_Segítség"
 msgid "Ascend to Parent Layer"
 msgstr "Fel a szülõrétegbe"
 
-#: src/interface.cpp:936
+#. TRANSLATORS: "Make Current Layer" means "Make it the current layer"
+#: src/interface.cpp:937
 msgid "Make Current Layer"
 msgstr "Aktuális réteggé tétel"
 
-#: src/interface.cpp:1020
+#: src/interface.cpp:1021
 msgid "Could not parse SVG data"
 msgstr "Nem sikerült értelmezni az SVG-adatokat"
 
-#: src/interface.cpp:1182
+#: src/interface.cpp:1183
 #, c-format
 msgid "Overwrite %s"
 msgstr "%s felülírása"
 
-#: src/interface.cpp:1200
+#: src/interface.cpp:1201
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "

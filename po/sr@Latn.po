@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-04 17:57+0200\n"
+"POT-Creation-Date: 2004-07-04 22:21+0200\n"
 "PO-Revision-Date: 2003-08-17 14:01+0200\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -407,7 +407,7 @@ msgid "Metadata"
 msgstr ""
 
 #. this uses an element
-#: src/dialogs/desktop-properties.cpp:898 src/dialogs/rdf.cpp:237
+#: src/dialogs/desktop-properties.cpp:898 src/dialogs/rdf.cpp:239
 msgid "License"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
-#: src/interface.cpp:984 src/verbs.cpp:797
+#: src/interface.cpp:985 src/verbs.cpp:797
 msgid "None"
 msgstr "Ništa"
 
@@ -1659,29 +1659,32 @@ msgid "Keywords"
 msgstr ""
 
 #: src/dialogs/rdf.cpp:225
-msgid "The topic of this document as key words, phrases, or classication."
+msgid "The topic of this document as key words, phrases, or classification."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:227
+#. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
+#. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
+#: src/dialogs/rdf.cpp:229
 msgid "Coverage"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:228
+#: src/dialogs/rdf.cpp:230
 msgid "Extent or scope of this document."
 msgstr ""
 
 #. this should be a multi-line tag
-#: src/dialogs/rdf.cpp:232
+#: src/dialogs/rdf.cpp:234
 #, fuzzy
 msgid "Description"
 msgstr "Izbor"
 
-#: src/dialogs/rdf.cpp:233
+#: src/dialogs/rdf.cpp:235
 msgid "A short account of the content of this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:238
-msgid "URI to the License namespace definition."
+#. TRANSLATORS: this is where you put a URL to a page that defines the license
+#: src/dialogs/rdf.cpp:241
+msgid "URI to this document's license's namespace definition."
 msgstr ""
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
@@ -2468,21 +2471,22 @@ msgstr "_Pomoć"
 msgid "Ascend to Parent Layer"
 msgstr ""
 
-#: src/interface.cpp:936
+#. TRANSLATORS: "Make Current Layer" means "Make it the current layer"
+#: src/interface.cpp:937
 #, fuzzy
 msgid "Make Current Layer"
 msgstr "Postavi na _tekuću stranicu"
 
-#: src/interface.cpp:1020
+#: src/interface.cpp:1021
 msgid "Could not parse SVG data"
 msgstr ""
 
-#: src/interface.cpp:1182
+#: src/interface.cpp:1183
 #, c-format
 msgid "Overwrite %s"
 msgstr ""
 
-#: src/interface.cpp:1200
+#: src/interface.cpp:1201
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
