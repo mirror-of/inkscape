@@ -8,6 +8,7 @@
  *   MenTaLguY <mental@rydia.net>
  *
  * Copyright (C) 1999-2002 Authors
+ * Copyright (C) 2004 David Turner
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -57,6 +58,9 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
+
+#include "shortcuts.h"
+#include <gdk/gdkkeysyms.h>
 
 struct EditableDest {
     GtkEditable * editable;
@@ -143,6 +147,8 @@ static void cmd_unindent_node (GtkObject * object, gpointer data);
 
 static void cmd_delete_attr (GtkObject * object, gpointer data);
 static void cmd_set_attr (GtkObject * object, gpointer data);
+
+static gboolean sp_xml_tree_key_press (GtkWidget *widget, GdkEventKey *event);
 
 void
 sp_xml_tree_dialog (void)
@@ -538,6 +544,8 @@ sp_xml_tree_dialog (void)
         g_signal_connect ( G_OBJECT (INKSCAPE), "deactivate_desktop", 
                            G_CALLBACK (sp_xmltree_desktop_change), dlg);
 
+        g_signal_connect ((GObject *) dlg, "key_press_event", (GCallback) sp_xml_tree_key_press, NULL);
+
     } // end of if (dlg == NULL)
     
     gtk_window_present ((GtkWindow *) dlg);
@@ -546,6 +554,28 @@ sp_xml_tree_dialog (void)
     set_tree_desktop (desktop);
 
 } // end of sp_xml_tree_dialog()
+
+static gboolean
+sp_xml_tree_key_press (GtkWidget *widget, GdkEventKey *event)
+{
+
+    unsigned int shortcut = event->keyval |
+        ( event->state & GDK_SHIFT_MASK ?
+          SP_SHORTCUT_SHIFT_MASK : 0 ) |
+        ( event->state & GDK_CONTROL_MASK ?
+          SP_SHORTCUT_CONTROL_MASK : 0 ) |
+        ( event->state & GDK_MOD1_MASK ?
+          SP_SHORTCUT_ALT_MASK : 0 );
+
+    /* fixme: if you need to add more xml-tree-specific callbacks, you should probably upgrade
+     * the sp_shortcut mechanism to take into account windows. */
+    if (shortcut == (SP_SHORTCUT_CONTROL_MASK | GDK_Return)) {
+        cmd_set_attr (NULL, NULL);
+        return true;
+    }
+    return false;
+}
+
 
 static void
 sp_xmltree_desktop_change ( Inkscape::Application *inkscape, 
@@ -946,6 +976,7 @@ on_attr_select_row ( GtkCList *list, gint row, gint column,
                      GdkEventButton *event, gpointer data )
 {
     selected_attr = sp_xmlview_attr_list_get_row_key (list, row);
+    gtk_window_set_focus (GTK_WINDOW (dlg), GTK_WIDGET (attr_value));
 }
 
 
@@ -1248,6 +1279,9 @@ cmd_new_text_node (GtkObject * object, gpointer data)
 
     set_tree_select (text);
     set_dt_select (text);
+
+    gtk_window_set_focus (GTK_WINDOW (dlg), GTK_WIDGET (content));
+
 }
 
 void

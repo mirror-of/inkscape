@@ -3,6 +3,10 @@
 	* src/display/curve.cpp, src/display/curve.h:
 	  Greater conformance with CodingStyle.
 
+2004-07-31  David Turner
+
+	* dialogs/xml-tree.cpp: Improved focus, added keystroke for attr commit.
+
 2004-07-31  Ted Gould  <ted@gould.cx>
 
 	* src/extension/extension.cpp,
