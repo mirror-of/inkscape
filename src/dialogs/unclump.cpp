@@ -92,8 +92,8 @@ unclump_dist (SPItem *item1, SPItem *item2)
 	if (a2 > M_PI/2) a2 = M_PI - a2;
 
 	// get the radius of each item for the given angle
-	double r1 = wh1[NR::X] + (wh1[NR::Y] - wh1[NR::X]) * (a1/(M_PI/2));
-	double r2 = wh2[NR::X] + (wh2[NR::Y] - wh2[NR::X]) * (a2/(M_PI/2));
+	double r1 = 0.5 * (wh1[NR::X] + (wh1[NR::Y] - wh1[NR::X]) * (a1/(M_PI/2)));
+	double r2 = 0.5 * (wh2[NR::X] + (wh2[NR::Y] - wh2[NR::X]) * (a2/(M_PI/2)));
 
 	return (NR::L2 (c2 - c1) - r1 - r2);
 }
