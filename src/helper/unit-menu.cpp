@@ -152,7 +152,7 @@ sp_unit_selector_setsize(GtkWidget *us, guint w, guint h)
 }
 
 SPUnit const *
-sp_unit_selector_get_unit(SPUnitSelector *us)
+sp_unit_selector_get_unit(SPUnitSelector const *us)
 {
     g_return_val_if_fail(us != NULL, NULL);
     g_return_val_if_fail(SP_IS_UNIT_SELECTOR(us), NULL);
@@ -344,7 +344,7 @@ sp_unit_selector_update_test(SPUnitSelector const *selector)
 }
 
 double
-sp_unit_selector_get_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *adj)
+sp_unit_selector_get_value_in_pixels(SPUnitSelector const *selector, GtkAdjustment *adj)
 {
     g_return_val_if_fail(selector != NULL, adj->value);
     g_return_val_if_fail(SP_IS_UNIT_SELECTOR(selector), adj->value);
