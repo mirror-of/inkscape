@@ -44,6 +44,7 @@
 #include "seltrans-handles.h"
 #include "selcue.h"
 #include "seltrans.h"
+#include "selection-chemistry.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
 #include "widgets/spw-utilities.h"
@@ -339,31 +340,8 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 	bool updh = true;
 	if (!seltrans->empty && seltrans->changed) {
 
-		for (GSList const *l = selection->itemList(); l != NULL; l = l->next) {
-			SPItem *item = SP_ITEM(l->data);
+            sp_selection_apply_affine(selection, seltrans->current, (seltrans->show == SP_SELTRANS_SHOW_OUTLINE)? true : false);
 
-#if 0 /* Re-enable this once persistent guides have a graphical indication.
-	 At the time of writing, this is the only place to re-enable. */
-			sp_item_update_cns(*item, *seltrans->desktop);
-#endif
-
-			// If this is a clone and it's selected along with its original, do not move it;
-			// it will feel the transform of its original and respond to it itself. 
-			// WIthout this, a clone is doubly transformed, very unintuitive.
-			if (seltrans->current.is_translation() && SP_IS_USE(item) && selection->includesItem(sp_use_get_original (SP_USE(item)))) {
-				// just restore the transform field from the repr
-				sp_object_read_attr (SP_OBJECT (item), "transform");
-			} else {
-
-				/* fixme: We do not have to set it here (Lauris) */
-				if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
-					NR::Matrix const i2dnew( sp_item_i2d_affine(item) * seltrans->current );
-					sp_item_set_i2d_affine(item, i2dnew);
-				}
-
-				sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform);
-			} 
-		}
 		seltrans->center *= seltrans->current;
 
 		sp_document_done (SP_DT_DOCUMENT (seltrans->desktop));

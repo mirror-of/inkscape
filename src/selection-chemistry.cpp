@@ -55,6 +55,7 @@
 #include "sp-pattern.h"
 #include "sp-use-reference.h"
 #include "sp-namedview.h"
+#include "prefs-utils.h"
 using NR::X;
 using NR::Y;
 
@@ -609,11 +610,10 @@ void sp_copy_stuff_used_by_item (SPItem *item);
 void sp_copy_gradient (SPGradient *gradient)
 {
     SPGradient *ref = gradient;
-    SPRepr *grad_repr;
 
     while (ref) { 
         // climb up the refs, copying each one in the chain
-        grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
+        SPRepr *grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
         defs_clipboard = g_slist_prepend(defs_clipboard, grad_repr);
 
         ref = ref->ref->getObject();
@@ -624,8 +624,8 @@ void sp_copy_pattern (SPPattern *pattern)
 {
     SPPattern *ref = pattern;
 
-    while ( ref ) {
-
+    while (ref) {
+        // climb up the refs, copying each one in the chain
         SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
         defs_clipboard = g_slist_prepend(defs_clipboard, pattern_repr);
 
@@ -893,7 +893,7 @@ void sp_selection_paste_style()
     sp_document_done(SP_DT_DOCUMENT (desktop));
 }
 
-void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
+void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine, bool set_i2d)
 {
     if (selection->isEmpty())
         return;
@@ -901,13 +901,37 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
     for (GSList const *l = selection->itemList(); l != NULL; l = l-> next) {
         SPItem *item = SP_ITEM(l->data);
 
-        // see comment in seltrans.cpp/sp_sel_trans_ungrab
-        if (affine.is_translation() && SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject())) {
-            ; //do nothing
+#if 0 /* Re-enable this once persistent guides have a graphical indication.
+	 At the time of writing, this is the only place to re-enable. */
+        sp_item_update_cns(*item, selection->desktop());
+#endif
+
+        // we're moving both a clone and its original
+        bool move_clone_with_original = (affine.is_translation() && SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject()));
+
+        // "clones are unmoved when original is moved" preference
+        bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
+
+	// If this is a clone and it's selected along with its original, do not move it; it will feel the
+	// transform of its original and respond to it itself. WIthout this, a clone is doubly
+	// transformed, very unintuitive.
+        if (move_clone_with_original && !prefs_unmoved) {
+		// just restore the transform field from the repr
+            sp_object_read_attr (SP_OBJECT (item), "transform");
         } else {
-            sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
-            /* update repr -  needed for undo */
-            sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform);
+
+            if (set_i2d) {
+                sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
+            }
+
+            // we need to store this in a variable so that we can take a pointer
+            NR::Matrix inv = (item->transform).inverse();
+
+            // send inv as advertised transform if we're moving clone with original _and_ clones
+            // compensation is set to unmoved - in this case we actually _want_ to move it (bug
+            // 983568), so we're sending the inverse transform to balance out the compensation in
+            // sp_use_move_compensate
+            sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform, (move_clone_with_original && prefs_unmoved) ? &inv : NULL);
         }
     }
 }
