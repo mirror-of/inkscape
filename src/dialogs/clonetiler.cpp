@@ -1069,6 +1069,7 @@ clonetiler_dialog (void)
 
 
             {
+                // TRANSLATORS: "Alternate" is a verb here
                 GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of the shifts for each row or column"), "alternate_xy");
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
