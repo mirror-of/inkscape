@@ -299,6 +299,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 	}
   // the final touch: edges intersecting the sweepline must be update so that their intersection with
   // said sweepline is correct.
+  pos=to;
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {
@@ -455,6 +456,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	for (int i=0;i<nbQRas;i++) {
 		int cb=qrsData[i].bord;
 		AvanceEdge(cb,to,true,step);
@@ -712,6 +714,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
 	}
   // the final touch: edges intersecting the sweepline must be update so that their intersection with
   // said sweepline is correct.
+  pos=to;
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {
@@ -772,6 +775,7 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
     curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	for (int i=0;i<nbQRas;i++) {
 		int cb=qrsData[i].bord;
 		AvanceEdge(cb,to,true,step);
@@ -936,6 +940,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
   // update intersections with the sweepline, and add trapezoids for edges crossing the line
+  pos=to;
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {
@@ -1115,6 +1120,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {
@@ -1261,6 +1267,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	if ( sTree.racine ) {
 		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
 		while ( curS ) {
@@ -1404,6 +1411,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	for (int i=0;i<nbQRas;i++) {
 		int cb=qrsData[i].bord;
 		AvanceEdge(cb,to,line,true,step);
@@ -1569,6 +1577,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	for (int i=0;i<nbQRas;i++) {
 		int cb=qrsData[i].bord;
 		AvanceEdge(cb,to,line,true,step);
@@ -1710,6 +1719,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 		curP=curPt;
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	}
+  pos=to;
 	for (int i=0;i<nbQRas;i++) {
 		int cb=qrsData[i].bord;
 		AvanceEdge(cb,to,line,true,step);

@@ -79,6 +79,7 @@ typedef struct glyphs_for_span {
   int             *g_start;
   int             *g_end;
   NR::Point       *g_pos; // wrp the start of the span
+  char            *g_text;
 } glyphs_for_span;
 
 class text_chunker {
