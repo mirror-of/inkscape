@@ -134,6 +134,8 @@ sp_icon_destroy (GtkObject *object)
 
     sp_icon_clear(icon);
     if ( icon->name ) {
+        g_free( icon->name );
+        icon->name = 0;
     }
 
     ((GtkObjectClass *) (parent_class))->destroy (object);
