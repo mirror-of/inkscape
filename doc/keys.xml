@@ -680,12 +680,22 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>letter-spacing (when editing)</title>
+<title>Letter spacing</title>
 <keys><key><alt/>&gt;</key> <action>expand the line by 1 pixel</action></keys>
 <keys><key><shift/><alt/>&gt;</key> <action>expand the line by 10 pixels</action></keys>
 <keys><key><alt/>&lt;</key> <action>contract the line by 1 pixel</action></keys>
 <keys><key><shift/><alt/>&lt;</key> <action>contract the line by 10 pixels</action></keys>
-<note>These commands affect the current line of a text object.</note>
+<note>These commands work when you are editing a text object. They affect the current line only.</note>
+<note>The actual adjustment for pixel movements depends on zoom level. Zoom in for finer adjustment.</note>
+</group>
+
+<group>
+<title>Kerning and shifting</title>
+<mouse><key><alt/><arrows/></key> <action>shift next characters by 1 pixel</action></mouse>
+<mouse><key><shift/><alt/><arrows/></key> <action>shift next characters by 10 pixels</action></mouse>
+<note>These commands work when you are editing a text object.</note> 
+<note>They shift (horizontally or vertically) the character after the cursor and the rest of characters until the end of line.</note>
+<note>E.g., to shift down one character, place the cursor before it, press Alt+Down, then move cursor after it and press Alt+Up.</note>
 <note>The actual adjustment for pixel movements depends on zoom level. Zoom in for finer adjustment.</note>
 </group>
 </section>
