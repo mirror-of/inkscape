@@ -170,6 +170,16 @@ public:
 	 */
 	void setReprList(GSList const *reprs);
 
+	/** \brief  Set the Items in a selection using an STL list
+		\param  list  The list of items to make into the selection
+	*/
+	void setStlItemList(std::list<SPItem *> &list);
+
+	/** \brief  Add items from an STL list to the selection
+		\param  list  The list of items to be added
+	*/
+	void addStlItemList(std::list<SPItem *> &list);
+
 	/**
 	 * @brief Unselects all selected objects.
 	 */
@@ -230,7 +240,7 @@ public:
 	GSList const *reprList();
 
 	/** @brief Returns the number of layers in which there are selected objects */
-	guint SPSelection::numberOfLayers();
+	guint numberOfLayers();
 
 	/** @brief Returns the bounding rectangle of the selection */
 	NRRect *bounds(NRRect *dest) const;
