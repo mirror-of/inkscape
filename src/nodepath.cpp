@@ -834,7 +834,7 @@ sp_node_selected_move(gdouble dx, gdouble dy)
     Path::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return;
 
-    sp_nodepath_selected_nodes_move(nodepath, dx, dy);
+    sp_nodepath_selected_nodes_move(nodepath, dx, dy, false);
 
     if (dx == 0) {
         update_repr_keyed(nodepath, "node:move:vertical");
@@ -860,7 +860,7 @@ sp_node_selected_move_screen(gdouble dx, gdouble dy)
     Path::Path *nodepath = sp_nodepath_current();
     if (!nodepath) return;
 
-    sp_nodepath_selected_nodes_move(nodepath, zdx, zdy);
+    sp_nodepath_selected_nodes_move(nodepath, zdx, zdy, false);
 
     if (dx == 0) {
         update_repr_keyed(nodepath, "node:move:vertical");
