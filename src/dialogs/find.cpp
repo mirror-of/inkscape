@@ -59,9 +59,12 @@ void DialogFind::addSearchField(Glib::ustring label, Glib::ustring tiptext, int 
     _fieldsTable.attach(*tf, 1, 4, line, line+1);
 }
 
-GtkWidget *sp_find_dialog(){
-    DialogFind::get().present();
-    return sp_find_dialog_old ();
+void
+//GtkWidget *
+sp_find_dialog(){
+    // DialogFind::get().present();
+    sp_find_dialog_old ();
+    return;
 }
 
 DialogFind::DialogFind():

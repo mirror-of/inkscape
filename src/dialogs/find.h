@@ -14,7 +14,7 @@
 
 #include <gtk/gtkstyle.h>
 
-GtkWidget *sp_find_dialog();
+void sp_find_dialog();
 
 
 #endif /* !SEEN_FIND_H */

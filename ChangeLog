@@ -6,6 +6,8 @@
 	* src/dialogs/align.cpp: saving erased iterator.  Closes bug #1054270.
 	* share/extensions/ill2svg.pl: added strict, warnings, and detection
 	  of Image::Magick module.  Closes bug #990659.
+	* src/dialogs/find.h, src/dialogs/find.cpp: removed unfinished new
+	  find dialog instantiation.  Closes bug #1048802.
 
 2004-10-27  Carl Hetherington  <inkscape@carlh.net>
 
