@@ -76,7 +76,7 @@ AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADERS([gc.h gc/gc.h], [gc_ok=yes; break]
 if test "x$gc_ok" != "xyes"; then
 	AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
 fi
-LIBS="$LIBS -lgc"
+LIBS="$LIBS -lgc -lpthread -ldl"
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
 if test "x$FREETYPE_CONFIG" = "xno"; then
