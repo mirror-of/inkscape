@@ -17,9 +17,7 @@ bonobo
 dialogs/filedialog-win32.cpp
 display/testnr.cpp
 display/bezier-utils-test.cpp
-ecma/ecmatest.cpp
-ecma/svgview.cpp
-ecma/SVGViewer.cpp
+ecma
 extension/api.cpp
 extension/internal/gnome.cpp
 extension/script
