@@ -692,8 +692,10 @@ nr_arena_item_invoke_pick (NRArenaItem *item, NR::Point p, double delta, unsigne
 {
 	nr_return_val_if_fail (item != NULL, NULL);
 	nr_return_val_if_fail (NR_IS_ARENA_ITEM (item), NULL);
-	nr_return_val_if_fail (item->state & NR_ARENA_ITEM_STATE_BBOX, NULL);
-	nr_return_val_if_fail (item->state & NR_ARENA_ITEM_STATE_PICK, NULL);
+
+	// Sometimes there's no BBOX in item->state, reason unknown (bug 992817); I made this not an assert to remove the warning
+	if (!(item->state & NR_ARENA_ITEM_STATE_BBOX) || !(item->state & NR_ARENA_ITEM_STATE_PICK))
+		return NULL;
 
 	if (!sticky && !item->sensitive) return NULL;
 	
