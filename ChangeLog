@@ -1,3 +1,8 @@
+2004-05-05 Spundun Bhatt <spundun@isi.edu>
+ 
+        * configure.in: Stole Nathan's configure hack and used it to 
+        support gtkmm-2.4
+ 
 2004-05-06  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/extension/extension.cpp, src/extension/init.cpp,

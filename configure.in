@@ -223,11 +223,17 @@ if pkg-config --exists gtkspell-2.0; then
 	AC_DEFINE(WITH_GTKSPELL, 1, [enable gtk spelling widget])
 fi
 
+ink_gtkmm_pkg=gtkmm-2.0
+if pkg-config --exists gtkmm-2.4; then
+       ink_gtkmm_pkg=gtkmm-2.4
+       AC_DEFINE(WITH_GTKMM_2_4, 1, [enable gtkmm version 2.4])
+fi
+
 dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
-PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libxml-2.0 >= 2-2.4.24  sigc++-1.2  gtkmm-2.0 $ink_spell_pkg)
+PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libxml-2.0 >= 2-2.4.24  sigc++-1.2  $ink_gtkmm_pkg $ink_spell_pkg)
 INKSCAPE_LIBS="$INKSCAPE_LIBS $POPT_LIBS -lpng -lz"
 
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
