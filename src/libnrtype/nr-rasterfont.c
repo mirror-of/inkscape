@@ -315,16 +315,16 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 		if (nr_font_glyph_advance_get (rf->font, glyph, &a)) {
 			switch (slot->type) {
 			case NRRF_TYPE_TINY:
-				slot->glyph.tg.advance.x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-				slot->glyph.tg.advance.y = NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
+				slot->glyph.tg.advance.x = (NRShort)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
+				slot->glyph.tg.advance.y = (NRShort)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			case NRRF_TYPE_IMAGE:
-				slot->glyph.ig.advance.x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-				slot->glyph.ig.advance.y = NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
+				slot->glyph.ig.advance.x = (NRShort)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
+				slot->glyph.ig.advance.y = (NRShort)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			case NRRF_TYPE_SVP:
-				slot->glyph.sg.advance.x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-				slot->glyph.sg.advance.y = NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
+				slot->glyph.sg.advance.x = (NRShort)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
+				slot->glyph.sg.advance.y = (NRShort)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			default:
 				break;
