@@ -542,7 +542,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
             return FALSE;
             }
         long fileLen = info.st_size;
-        if (fileLen > 0x100000L)
+        if (fileLen > 0x150000L)
             {
             showingNoPreview = false;
             showTooLarge(fileLen);
