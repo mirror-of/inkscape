@@ -35,7 +35,6 @@
 
 #include "prefs-utils.h"
 #include "inkscape-stock.h"
-#include "verbs.h"
 #include "file.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"

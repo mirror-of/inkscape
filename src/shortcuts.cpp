@@ -13,6 +13,8 @@
 #include <glib.h>
 #include <gdk/gdkkeysyms.h>
 
+#include <config.h>
+/* ALWAYS include config.h before verbs.h */
 #include "verbs.h"
 
 #include "shortcuts.h"

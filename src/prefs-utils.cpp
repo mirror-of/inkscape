@@ -11,6 +11,8 @@
 
 #include <string.h>
 
+#include <config.h>
+
 #include "select-context.h"
 #include "node-context.h"
 #include "rect-context.h"

@@ -21,6 +21,8 @@
 
 #include <gtk/gtkstock.h>
 
+#include <config.h>
+
 #include "helper/sp-intl.h"
 
 #include "dialogs/text-edit.h"
