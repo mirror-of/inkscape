@@ -84,9 +84,9 @@ sp_knot_holder_destroy	(SPKnotHolder *kh)
 }
 
 void
-sp_knot_holder_add (SPKnotHolder *knot_holder, SPKnotHolderSetFunc knot_set, SPKnotHolderGetFunc knot_get)
+sp_knot_holder_add (SPKnotHolder *knot_holder, SPKnotHolderSetFunc knot_set, SPKnotHolderGetFunc knot_get, const gchar *tip)
 {
-	sp_knot_holder_add_full (knot_holder, knot_set, knot_get, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR);
+	sp_knot_holder_add_full (knot_holder, knot_set, knot_get, SP_KNOT_SHAPE_DIAMOND, SP_KNOT_MODE_XOR, tip);
 }
 
 void
@@ -94,7 +94,8 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 			 SPKnotHolderSetFunc knot_set,
 			 SPKnotHolderGetFunc knot_get,
 			 SPKnotShapeType     shape,
-			 SPKnotModeType      mode)
+			 SPKnotModeType      mode,
+			 const gchar *tip)
 {
 	g_return_if_fail (knot_holder != NULL);
 	g_return_if_fail (knot_set != NULL);
@@ -104,7 +105,7 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 
 	/* create new SPKnotHolderEntry */
 	SPKnotHolderEntity *e = g_new (SPKnotHolderEntity, 1);
-	e->knot = sp_knot_new (knot_holder->desktop);
+	e->knot = sp_knot_new (knot_holder->desktop, tip);
 	e->knot_set = knot_set;
 	e->knot_get = knot_get;
 

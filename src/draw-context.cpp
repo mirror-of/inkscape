@@ -51,7 +51,7 @@
 
 /* Drawing anchors */
 
-struct SPDrawAnchor {
+struct SPDrawAnchor { // FIXME: make this a regular knot, this will allow to set statusbar tips
     SPDrawContext *dc;
     SPCurve *curve;
     guint start : 1;

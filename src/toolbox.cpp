@@ -1478,7 +1478,7 @@ sp_rect_toolbox_new (SPDesktop *desktop)
 
     /* rx */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Rx:"), _("Horizontal radius of rounded corner"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Rx:"), _("Horizontal radius of rounded corners"), 
                                           "tools.shapes.rect", "rx", 0,
                                           us, (SPWidget *) tbl, TRUE, "altx-rect",
                                           0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
@@ -1488,7 +1488,7 @@ sp_rect_toolbox_new (SPDesktop *desktop)
 
     /* ry */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Ry:"), _("Vertical radius of rounded corner"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Ry:"), _("Vertical radius of rounded corners"), 
                                           "tools.shapes.rect", "ry", 0,
                                           us, (SPWidget *) tbl, FALSE, NULL,
                                           0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,

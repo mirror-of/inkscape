@@ -2672,6 +2672,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", NODE_FILL_HI,
                  "stroke", NODE_STROKE,
                  "stroke_mouseover", NODE_STROKE_HI,
+                 "tip", _("Drag the node to edit the path; with Ctrl to snap to horizontal/vertical, with Ctrl+Alt to snap to handles' directions"),
                  NULL);
     if (n->type == Path::NODE_CUSP)
         g_object_set(G_OBJECT(n->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
@@ -2695,6 +2696,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
+                 "tip", _("Drag the node handle; with Ctrl to snap angle, with Alt to lock length, with Shift to rotate the opposite handle in sync"),
                  NULL);
     g_signal_connect(G_OBJECT(n->p.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->p.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
@@ -2718,6 +2720,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
+                 "tip", _("Drag the node handle; with Ctrl to snap angle, with Alt to lock length, with Shift to rotate the opposite handle in sync"),
                  NULL);
     g_signal_connect(G_OBJECT(n->n.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->n.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
@@ -2857,7 +2860,7 @@ sp_nodepath_update_statusbar(Path::Path *nodepath)
 {
     if (!nodepath) return;
 
-    gchar const *when_selected = _("Drag nodes or control points to edit the path");
+    gchar const *when_selected = _("Drag nodes or node handles to edit the path");
 
     gint total = 0;
 

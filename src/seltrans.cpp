@@ -500,13 +500,13 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
 	if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_remove_handles(seltrans.rhandle, 8);
 		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8,
-                    _("Squeeze or stretch selection; with Ctrl to scale uniformly, with Shift to scale around rotation center"), 
-                    _("Scale selection; with Ctrl to scale uniformly, with Shift to scale around rotation center"));
+                    _("Squeeze or stretch selection; with Ctrl to scale uniformly; with Shift to scale around rotation center"), 
+                    _("Scale selection; with Ctrl to scale uniformly; with Shift to scale around rotation center"));
 	} else {
 		sp_remove_handles(seltrans.shandle, 8);
 		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
                     _("Skew selection; with Shift to skew around the opposite side"), // fixme: CTRL SNAP!!! remove "skew and scale"
-                    _("Rotate selection; with Ctrl to snap, with Shift to rotate around the opposite corner"));
+                    _("Rotate selection; with Ctrl to snap angle; with Shift to rotate around the opposite corner"));
 	}
         if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_knot_hide(seltrans.chandle);

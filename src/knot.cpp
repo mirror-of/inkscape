@@ -618,7 +618,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 }
 
 SPKnot *
-sp_knot_new (SPDesktop * desktop)
+sp_knot_new (SPDesktop * desktop, const gchar *tip)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
@@ -628,6 +628,8 @@ sp_knot_new (SPDesktop * desktop)
 
 	knot->desktop = desktop;
 	knot->flags = SP_KNOT_VISIBLE;
+	if (tip)
+	        knot->tip = g_strdup (tip);
 
 	knot->item = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
 		SP_TYPE_CTRL,

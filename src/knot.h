@@ -108,7 +108,7 @@ struct SPKnotClass {
 
 GType sp_knot_get_type (void);
 
-SPKnot * sp_knot_new (SPDesktop * desktop);
+SPKnot * sp_knot_new (SPDesktop * desktop, const gchar *tip = NULL);
 
 #define SP_KNOT_IS_VISIBLE(k) ((k->flags & SP_KNOT_VISIBLE) != 0)
 #define SP_KNOT_IS_MOSEOVER(k) ((k->flags & SP_KNOT_MOUSEOVER) != 0)
