@@ -131,7 +131,7 @@ typedef struct {
 /**  Pointer to the next node, */
 	SPPathNode * other;
 /**  Position */
-	NRPoint pos;
+	NR::Point pos;
 /**  */
 	SPKnot * knot;
 /**  What kind of rendering? */
@@ -158,9 +158,9 @@ struct _SPPathNode {
 /**  Boolean.  Am I currently selected or not? */
 	guint selected : 1;
 /**  */
-	NRPoint pos;
+	NR::Point pos;
 /**  */
-	NRPoint origin;
+	NR::Point origin;
 /**  */
 	SPKnot * knot;
 /**  The NodeSide in the 'next' direction */

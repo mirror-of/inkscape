@@ -36,6 +36,8 @@
 #include "object-edit.h"
 #include "prefs-utils.h"
 
+#include <libnr/nr-point-fns.h>
+
 /* fixme: Implement these via preferences */
 
 #define NODE_FILL 0xbfbfbfff
@@ -80,12 +82,12 @@ static void sp_node_adjust_knots (SPPathNode * node);
 static void node_clicked (SPKnot * knot, guint state, gpointer data);
 static void node_grabbed (SPKnot * knot, guint state, gpointer data);
 static void node_ungrabbed (SPKnot * knot, guint state, gpointer data);
-static gboolean node_request (SPKnot * knot, NRPoint *p, guint state, gpointer data);
+static gboolean node_request (SPKnot * knot, NR::Point *p, guint state, gpointer data);
 static void node_ctrl_clicked (SPKnot * knot, guint state, gpointer data);
 static void node_ctrl_grabbed (SPKnot * knot, guint state, gpointer data);
 static void node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data);
-static gboolean node_ctrl_request (SPKnot * knot, NRPoint *p, guint state, gpointer data);
-static void node_ctrl_moved (SPKnot * knot, NRPoint *p, guint state, gpointer data);
+static gboolean node_ctrl_request (SPKnot * knot, NR::Point *p, guint state, gpointer data);
+static void node_ctrl_moved (SPKnot * knot, NR::Point *p, guint state, gpointer data);
 
 /* Constructors and destructors */
 
@@ -94,7 +96,7 @@ static void sp_nodepath_subpath_destroy (SPNodeSubPath * subpath);
 static void sp_nodepath_subpath_close (SPNodeSubPath * sp);
 static void sp_nodepath_subpath_open (SPNodeSubPath * sp, SPPathNode * n);
 static SPPathNode * sp_nodepath_node_new (SPNodeSubPath * sp, SPPathNode * next, SPPathNodeType type, ArtPathcode code,
-					  NRPoint *ppos, NRPoint *pos, NRPoint *npos);
+					  NR::Point *ppos, NR::Point *pos, NR::Point *npos);
 static void sp_nodepath_node_destroy (SPPathNode * node);
 
 /* Helpers */
@@ -313,7 +315,7 @@ subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
 {
 	SPNodeSubPath * sp;
 	SPPathNode * n;
-	NRPoint ppos, pos, npos;
+	NR::Point ppos, pos, npos;
 	gboolean closed;
 
 	g_assert ((b->code == ART_MOVETO) || (b->code == ART_MOVETO_OPEN));
@@ -321,11 +323,11 @@ subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
 	sp = sp_nodepath_subpath_new (np);
 	closed = (b->code == ART_MOVETO);
 
-	pos.x = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x3, b->y3);
-	pos.y = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x3, b->y3);
+	pos[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x3, b->y3);
+	pos[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x3, b->y3);
 	if (b[1].code == ART_CURVETO) {
-		npos.x = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b[1].x1, b[1].y1);
-		npos.y = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b[1].x1, b[1].y1);
+		npos[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b[1].x1, b[1].y1);
+		npos[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b[1].x1, b[1].y1);
 	} else {
 		npos = pos;
 	}
@@ -336,17 +338,17 @@ subpath_from_bpath (SPNodePath * np, ArtBpath * b, const gchar * t)
 	b++;
 	t++;
 	while ((b->code == ART_CURVETO) || (b->code == ART_LINETO)) {
-		pos.x = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x3, b->y3);
-		pos.y = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x3, b->y3);
+		pos[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x3, b->y3);
+		pos[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x3, b->y3);
 		if (b->code == ART_CURVETO) {
-			ppos.x = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x2, b->y2);
-			ppos.y = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x2, b->y2);
+			ppos[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b->x2, b->y2);
+			ppos[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b->x2, b->y2);
 		} else {
 			ppos = pos;
 		}
 		if (b[1].code == ART_CURVETO) {
-			npos.x = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b[1].x1, b[1].y1);
-			npos.y = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b[1].x1, b[1].y1);
+			npos[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->i2d, b[1].x1, b[1].y1);
+			npos[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->i2d, b[1].x1, b[1].y1);
 		} else {
 			npos = pos;
 		}
@@ -485,7 +487,7 @@ static SPCurve *
 create_curve (SPNodePath * np)
 {
 	SPCurve * curve;
-	NRPoint p1, p2, p3;
+	NR::Point p1, p2, p3;
 
 	curve = sp_curve_new ();
 
@@ -493,23 +495,23 @@ create_curve (SPNodePath * np)
 		SPNodeSubPath * sp;
 		SPPathNode * n;
 		sp = (SPNodeSubPath *) spl->data;
-		p3.x = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, sp->first->pos.x, sp->first->pos.y);
-		p3.y = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, sp->first->pos.x, sp->first->pos.y);
-		sp_curve_moveto (curve, p3.x, p3.y);
+		p3[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, sp->first->pos[NR::X], sp->first->pos[NR::Y]);
+		p3[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, sp->first->pos[NR::X], sp->first->pos[NR::Y]);
+		sp_curve_moveto (curve, p3[NR::X], p3[NR::Y]);
 		n = sp->first->n.other;
 		while (n) {
-			p3.x = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, n->pos.x, n->pos.y);
-			p3.y = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, n->pos.x, n->pos.y);
+			p3[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, n->pos[NR::X], n->pos[NR::Y]);
+			p3[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, n->pos[NR::X], n->pos[NR::Y]);
 			switch (n->code) {
 			case ART_LINETO:
-				sp_curve_lineto (curve, p3.x, p3.y);
+				sp_curve_lineto (curve, p3[NR::X], p3[NR::Y]);
 				break;
 			case ART_CURVETO:
-				p1.x = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, n->p.other->n.pos.x, n->p.other->n.pos.y);
-				p1.y = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, n->p.other->n.pos.x, n->p.other->n.pos.y);
-				p2.x = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, n->p.pos.x, n->p.pos.y);
-				p2.y = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, n->p.pos.x, n->p.pos.y);
-				sp_curve_curveto (curve, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+				p1[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, n->p.other->n.pos[NR::X], n->p.other->n.pos[NR::Y]);
+				p1[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, n->p.other->n.pos[NR::X], n->p.other->n.pos[NR::Y]);
+				p2[NR::X] = NR_MATRIX_DF_TRANSFORM_X (&np->d2i, n->p.pos[NR::X], n->p.pos[NR::Y]);
+				p2[NR::Y] = NR_MATRIX_DF_TRANSFORM_Y (&np->d2i, n->p.pos[NR::X], n->p.pos[NR::Y]);
+				sp_curve_curveto (curve, p1[NR::X], p1[NR::Y], p2[NR::X], p2[NR::Y], p3[NR::X], p3[NR::Y]);
 				break;
 			default:
 				g_assert_not_reached ();
@@ -632,42 +634,42 @@ sp_nodepath_line_midpoint (SPPathNode * new_path, SPPathNode * end, gdouble t)
 	if (end->code == ART_LINETO) {
 		new_path->type = SP_PATHNODE_CUSP;
 		new_path->code = ART_LINETO;
-		new_path->pos.x = (t * start->pos.x + (1 - t) * end->pos.x);
-		new_path->pos.y = (t * start->pos.y + (1 - t) * end->pos.y);
+		new_path->pos[NR::X] = (t * start->pos[NR::X] + (1 - t) * end->pos[NR::X]);
+		new_path->pos[NR::Y] = (t * start->pos[NR::Y] + (1 - t) * end->pos[NR::Y]);
 	} else {
 		new_path->type = SP_PATHNODE_SMOOTH;
 		new_path->code = ART_CURVETO;
 		s = 1 - t;
-		f000 = start->pos.x;
-		f001 = start->n.pos.x;
-		f011 = end->p.pos.x;
-		f111 = end->pos.x;
+		f000 = start->pos[NR::X];
+		f001 = start->n.pos[NR::X];
+		f011 = end->p.pos[NR::X];
+		f111 = end->pos[NR::X];
 		f00t = s * f000 + t * f001;
 		f01t = s * f001 + t * f011;
 		f11t = s * f011 + t * f111;
 		f0tt = s * f00t + t * f01t;
 		f1tt = s * f01t + t * f11t;
 		fttt = s * f0tt + t * f1tt;
-		start->n.pos.x = f00t;
-		new_path->p.pos.x = f0tt;
-		new_path->pos.x = fttt;
-		new_path->n.pos.x = f1tt;
-		end->p.pos.x = f11t;
-		f000 = start->pos.y;
-		f001 = start->n.pos.y;
-		f011 = end->p.pos.y;
-		f111 = end->pos.y;
+		start->n.pos[NR::X] = f00t;
+		new_path->p.pos[NR::X] = f0tt;
+		new_path->pos[NR::X] = fttt;
+		new_path->n.pos[NR::X] = f1tt;
+		end->p.pos[NR::X] = f11t;
+		f000 = start->pos[NR::Y];
+		f001 = start->n.pos[NR::Y];
+		f011 = end->p.pos[NR::Y];
+		f111 = end->pos[NR::Y];
 		f00t = s * f000 + t * f001;
 		f01t = s * f001 + t * f011;
 		f11t = s * f011 + t * f111;
 		f0tt = s * f00t + t * f01t;
 		f1tt = s * f01t + t * f11t;
 		fttt = s * f0tt + t * f1tt;
-		start->n.pos.y = f00t;
-		new_path->p.pos.y = f0tt;
-		new_path->pos.y = fttt;
-		new_path->n.pos.y = f1tt;
-		end->p.pos.y = f11t;
+		start->n.pos[NR::Y] = f00t;
+		new_path->p.pos[NR::Y] = f0tt;
+		new_path->pos[NR::Y] = fttt;
+		new_path->n.pos[NR::Y] = f1tt;
+		end->p.pos[NR::Y] = f11t;
 	}
 }
 
@@ -776,15 +778,15 @@ sp_nodepath_node_duplicate (SPPathNode * node)
 static void
 sp_node_control_mirror_n_to_p (SPPathNode * node)
 {
-	node->p.pos.x = (node->pos.x + (node->pos.x - node->n.pos.x));
-	node->p.pos.y = (node->pos.y + (node->pos.y - node->n.pos.y));
+	node->p.pos[NR::X] = (node->pos[NR::X] + (node->pos[NR::X] - node->n.pos[NR::X]));
+	node->p.pos[NR::Y] = (node->pos[NR::Y] + (node->pos[NR::Y] - node->n.pos[NR::Y]));
 }
 
 static void
 sp_node_control_mirror_p_to_n (SPPathNode * node)
 {
-	node->n.pos.x = (node->pos.x + (node->pos.x - node->p.pos.x));
-	node->n.pos.y = (node->pos.y + (node->pos.y - node->p.pos.y));
+	node->n.pos[NR::X] = (node->pos[NR::X] + (node->pos[NR::X] - node->p.pos[NR::X]));
+	node->n.pos[NR::Y] = (node->pos[NR::Y] + (node->pos[NR::Y] - node->p.pos[NR::Y]));
 }
 
 
@@ -813,12 +815,12 @@ sp_nodepath_set_line_type (SPPathNode * end, ArtPathcode code)
 		sp_node_adjust_knot (start, -1);
 		sp_node_adjust_knot (end, 1);
 	} else {
-		dx = end->pos.x - start->pos.x;
-		dy = end->pos.y - start->pos.y;
-		start->n.pos.x = start->pos.x + dx / 3;
-		start->n.pos.y = start->pos.y + dy / 3;
-		end->p.pos.x = end->pos.x - dx / 3;
-		end->p.pos.y = end->pos.y - dy / 3;
+		dx = end->pos[NR::X] - start->pos[NR::X];
+		dy = end->pos[NR::Y] - start->pos[NR::Y];
+		start->n.pos[NR::X] = start->pos[NR::X] + dx / 3;
+		start->n.pos[NR::Y] = start->pos[NR::Y] + dy / 3;
+		end->p.pos[NR::X] = end->pos[NR::X] - dx / 3;
+		end->p.pos[NR::Y] = end->pos[NR::Y] - dy / 3;
 		sp_node_adjust_knot (start, 1);
 		sp_node_adjust_knot (end, -1);
 	}
@@ -860,24 +862,13 @@ sp_nodepath_set_node_type (SPPathNode * node, SPPathNodeType type)
 static void
 sp_node_moveto (SPPathNode * node, double x, double y)
 {
-	SPNodePath * nodepath;
-	ArtPoint p;
-	double dx, dy;
+	NR::Point p(x, y);
 
-	nodepath = node->subpath->nodepath;
+	NR::Point delta = p - node->pos;
+	node->pos = p;
 
-	p.x = x;
-	p.y = y;
-
-	dx = p.x - node->pos.x;
-	dy = p.y - node->pos.y;
-	node->pos.x = p.x;
-	node->pos.y = p.y;
-
-	node->p.pos.x += dx;
-	node->p.pos.y += dy;
-	node->n.pos.x += dx;
-	node->n.pos.y += dy;
+	node->p.pos += delta;
+	node->n.pos += delta;
 
 	if (node->p.other) {
 		if (node->code == ART_LINETO) {
@@ -907,25 +898,25 @@ sp_nodepath_selected_nodes_move (SPNodePath * nodepath, gdouble dx, gdouble dy)
 
 	for (l = nodepath->selected; l != NULL; l = l->next) {
 		SPPathNode * n = (SPPathNode *) l->data;
-		NR::Point p(n->pos.x + dx, n->pos.y + dy);
+		NR::Point p(n->pos[NR::X] + dx, n->pos[NR::Y] + dy);
 		dist = sp_desktop_horizontal_snap (nodepath->desktop, &p);
 		if (dist < besth) {
 			g_message("Snapping X");
 			besth = dist;
-			bx = p[0] - n->pos.x;
+			bx = p[0] - n->pos[NR::X];
 		}
 		dist = sp_desktop_vertical_snap (nodepath->desktop, &p);
 		if (dist < bestv) {
 			g_message("Snapping Y");
 			bestv = dist;
-			by = p[1] - n->pos.y;
+			by = p[1] - n->pos[NR::Y];
 		}
 	}
 
 	for (l = nodepath->selected; l != NULL; l = l->next) {
 		SPPathNode * n;
 		n = (SPPathNode *) l->data;
-		sp_node_moveto (n, n->pos.x + bx, n->pos.y + by);
+		sp_node_moveto (n, n->pos[NR::X] + bx, n->pos[NR::Y] + by);
 	}
 
 	update_object (nodepath);
@@ -984,7 +975,7 @@ sp_node_ensure_knot (SPPathNode * node, gint which, gboolean show_knot)
 	SPNodePath * nodepath;
 	SPPathNodeSide * side;
 	ArtPathcode code;
-	NRPoint p;
+	NR::Point p;
 
 	g_assert (node != NULL);
 
@@ -1000,10 +991,10 @@ sp_node_ensure_knot (SPPathNode * node, gint which, gboolean show_knot)
 			sp_knot_show (side->knot);
 		}
 
-		p.x = side->pos.x;
-		p.y = side->pos.y;
+		p[NR::X] = side->pos[NR::X];
+		p[NR::Y] = side->pos[NR::Y];
 
-		sp_knot_set_position (side->knot, &p, 0);
+		sp_knot_set_position (side->knot, p, 0);
 		sp_canvas_item_show (side->line);
 
 	} else {
@@ -1018,7 +1009,7 @@ void
 sp_node_ensure_ctrls (SPPathNode * node)
 {
 	SPNodePath * nodepath;
-	NRPoint p;
+	NR::Point p;
 	gboolean show_knots;
 
 	g_assert (node != NULL);
@@ -1029,10 +1020,10 @@ sp_node_ensure_ctrls (SPPathNode * node)
 		sp_knot_show (node->knot);
 	}
 
-	p.x = node->pos.x;
-	p.y = node->pos.y;
+	p[NR::X] = node->pos[NR::X];
+	p[NR::Y] = node->pos[NR::Y];
 
-	sp_knot_set_position (node->knot, &p, 0);
+	sp_knot_set_position (node->knot, p, 0);
 
 	show_knots = node->selected;
 	if (node->p.other != NULL) {
@@ -1168,7 +1159,7 @@ sp_node_selected_join (void)
 	SPNodePath * nodepath;
 	SPNodeSubPath * sa, * sb;
 	SPPathNode * a, * b, * n;
-	NRPoint p, c;
+	NR::Point p, c;
 	ArtPathcode code;
 
 	nodepath = sp_nodepath_current ();
@@ -1193,8 +1184,8 @@ sp_node_selected_join (void)
 
 	/* a and b are endpoints */
 
-	c.x = (a->pos.x + b->pos.x) / 2;
-	c.y = (a->pos.y + b->pos.y) / 2;
+	c[NR::X] = (a->pos[NR::X] + b->pos[NR::X]) / 2;
+	c[NR::Y] = (a->pos[NR::Y] + b->pos[NR::Y]) / 2;
 
 	if (a->subpath == b->subpath) {
 		SPNodeSubPath * sp;
@@ -1267,7 +1258,7 @@ sp_node_selected_join_segment (void)
 	SPNodePath * nodepath;
 	SPNodeSubPath * sa, * sb;
 	SPPathNode * a, * b, * n;
-	NRPoint p;
+	NR::Point p;
 	ArtPathcode code;
 
 	nodepath = sp_nodepath_current ();
@@ -1823,7 +1814,7 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRect *b, gboolean incremental)
 {
 	SPNodeSubPath * subpath;
 	SPPathNode * node;
-	ArtPoint p;
+	NR::Point p;
 	GList * spl, * nl;
 
 	if (!incremental) {
@@ -1835,10 +1826,9 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRect *b, gboolean incremental)
 		for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
 			node = (SPPathNode *) nl->data;
 
-			p.x = node->pos.x;
-			p.y = node->pos.y;
+			p = node->pos;
 
-			if ((p.x > b->x0) && (p.x < b->x1) && (p.y > b->y0) && (p.y < b->y1)) {
+			if ((p[NR::X] > b->x0) && (p[NR::X] < b->x1) && (p[NR::Y] > b->y0) && (p[NR::Y] < b->y1)) {
 				sp_nodepath_node_select (node, TRUE, FALSE);
 			}
 		}
@@ -1899,7 +1889,7 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 	SPPathNode * othernode;
 	SPPathNodeSide * me, * other;
 	ArtPathcode mecode, ocode;
-	double len, otherlen, linelen, dx, dy;
+	double len, otherlen, linelen;
 
 	g_assert (node);
 
@@ -1929,21 +1919,18 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 	/* Other has line */
 
 	if (node->type == SP_PATHNODE_CUSP) return;
-
+	
+	NR::Point delta;
 	if (ocode == ART_LINETO) {
 		/* other is lineto, we are either smooth or symm */
 		othernode = other->other;
-		dx = me->pos.x - node->pos.x;
-		dy = me->pos.y - node->pos.y;
-		len = hypot (dx, dy);
-		dx = node->pos.x - othernode->pos.x;
-		dy = node->pos.y - othernode->pos.y;
-		linelen = hypot (dx, dy);
+		len = NR::L2(me->pos - node->pos);
+		delta = node->pos - othernode->pos;
+		linelen = NR::L2(delta);
 		if (linelen < 1e-18) return;
 
-		me->pos.x = node->pos.x + dx * len / linelen;
-		me->pos.y = node->pos.y + dy * len / linelen;
-		sp_knot_set_position (me->knot, &me->pos, 0);
+		me->pos = node->pos + (len / linelen)*delta;
+		sp_knot_set_position (me->knot, me->pos, 0);
 
 		sp_node_ensure_ctrls (node);
 		return;
@@ -1951,9 +1938,8 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 
 	if (node->type == SP_PATHNODE_SYMM) {
 
-		me->pos.x = 2 * node->pos.x - other->pos.x;
-		me->pos.y = 2 * node->pos.y - other->pos.y;
-		sp_knot_set_position (me->knot, &me->pos, 0);
+		me->pos = 2 * node->pos - other->pos;
+		sp_knot_set_position (me->knot, me->pos, 0);
 
 		sp_node_ensure_ctrls (node);
 		return;
@@ -1961,17 +1947,13 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 
 	/* We are smooth */
 
-	dx = me->pos.x - node->pos.x;
-	dy = me->pos.y - node->pos.y;
-	len = hypot (dx, dy);
-	dx = other->pos.x - node->pos.x;
-	dy = other->pos.y - node->pos.y;
-	otherlen = hypot (dx, dy);
+	len = NR::L2 (me->pos - node->pos);
+	delta = other->pos - node->pos;
+	otherlen = NR::L2 (delta);
 	if (otherlen < 1e-18) return;
 
-	me->pos.x = node->pos.x - dx * len / otherlen;
-	me->pos.y = node->pos.y - dy * len / otherlen;
-	sp_knot_set_position (me->knot, &me->pos, 0);
+	me->pos = node->pos - (len / otherlen) * delta;
+	sp_knot_set_position (me->knot, me->pos, 0);
 
 	sp_node_ensure_ctrls (node);
 }
@@ -1982,12 +1964,7 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 static void
 sp_node_adjust_knots (SPPathNode * node)
 {
-	SPNodePath * nodepath;
-	double dx, dy, pdx, pdy, ndx, ndy, plen, nlen, scale;
-
 	g_assert (node);
-
-	nodepath = node->subpath->nodepath;
 
 	if (node->type == SP_PATHNODE_CUSP) return;
 
@@ -2013,34 +1990,23 @@ sp_node_adjust_knots (SPPathNode * node)
 
 	/* both are curves */
 
-	dx = node->n.pos.x - node->p.pos.x;
-	dy = node->n.pos.y - node->p.pos.y;
+	NR::Point delta  = node->n.pos - node->p.pos;
 
 	if (node->type == SP_PATHNODE_SYMM) {
-		node->p.pos.x = node->pos.x - dx / 2;
-		node->p.pos.y = node->pos.y - dy / 2;
-		node->n.pos.x = node->pos.x + dx / 2;
-		node->n.pos.y = node->pos.y + dy / 2;
+		node->p.pos = node->pos - delta / 2;
+		node->n.pos = node->pos + delta / 2;
 		sp_node_ensure_ctrls (node);
 		return;
 	}
 
 	/* We are smooth */
 
-	pdx = node->p.pos.x - node->pos.x;
-	pdy = node->p.pos.y - node->pos.y;
-	plen = hypot (pdx, pdy);
+	double plen = NR::L2(node->p.pos - node->pos);
 	if (plen < 1e-18) return;
-	ndx = node->n.pos.x - node->pos.x;
-	ndy = node->n.pos.y - node->pos.y;
-	nlen = hypot (ndx, ndy);
+	double nlen = NR::L2(node->n.pos - node->pos);
 	if (nlen < 1e-18) return;
-	scale = plen / (plen + nlen);
-	node->p.pos.x = node->pos.x - dx * scale;
-	node->p.pos.y = node->pos.y - dy * scale;
-	scale = nlen / (plen + nlen);
-	node->n.pos.x = node->pos.x + dx * scale;
-	node->n.pos.y = node->pos.y + dy * scale;
+	node->p.pos = node->pos - (plen / (plen + nlen)) * delta;
+	node->n.pos = node->pos + (nlen / (plen + nlen)) * delta;
 	sp_node_ensure_ctrls (node);
 }
 
@@ -2159,8 +2125,8 @@ node_grabbed (SPKnot * knot, guint state, gpointer data)
 
 	n = (SPPathNode *) data;
 
-	n->origin.x = knot->x;
-	n->origin.y = knot->y;
+	n->origin[NR::X] = knot->x;
+	n->origin[NR::Y] = knot->y;
 
 	if (!n->selected) {
 		sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
@@ -2170,33 +2136,28 @@ node_grabbed (SPKnot * knot, guint state, gpointer data)
 static void
 node_ungrabbed (SPKnot * knot, guint state, gpointer data)
 {
-	SPPathNode * n;
-
-	n = (SPPathNode *) data;
+	SPPathNode *n = (SPPathNode *) data;
 
 	update_repr (n->subpath->nodepath);
 }
 
-static void
-xy_to_radial (double x, double y, radial *r)
+static void xy_to_radial (NR::Point p, radial *r)
 {
-	r->r = sqrt(x*x + y*y);
+	r->r = NR::L2(p);
 	if (r->r > 0) {
-		r->a = atan2 (y, x);
+		r->a = NR::atan2 (p);
 	} else {
 		r->a = HUGE_VAL; //undefined
 	}
 }
 
 static void
-radial_to_xy (radial const *r, NRPoint const *origin, NRPoint *p)
+radial_to_xy (radial const *r, NR::Point const *origin, NR::Point *p)
 {
 	if (r->a == HUGE_VAL) {
-		p->x = origin->x;
-		p->y = origin->y;
+		*p = *origin;
 	} else {
-		p->x = origin->x + cos(r->a)*(r->r);
-		p->y = origin->y + sin(r->a)*(r->r);
+		*p = *origin + r->r*NR::Point(cos(r->a), sin(r->a));
 	}
 }
 
@@ -2207,14 +2168,14 @@ radial_to_xy (radial const *r, NRPoint const *origin, NRPoint *p)
 \param closest   pointer to the point struct where the result is stored
 */
 void
-point_line_closest (NRPoint *p, double a, NRPoint *closest)
+point_line_closest (NR::Point *p, double a, NR::Point *closest)
+// FIXME: use dot product perhaps?
 {
 	if (a == HUGE_VAL) { // vertical
-		closest->x = 0;
-		closest->y = p->y;
+		*closest = NR::Point(0, (*p)[NR::Y]);
 	} else {
-		closest->x = (a*p->y + p->x)/(a*a + 1);
-		closest->y = a*closest->x;
+		*closest = NR::Point((a*(*p)[NR::Y] + (*p)[NR::X])/(a*a + 1), 
+							 a*(*closest)[NR::X]);
 	}
 }
 
@@ -2224,38 +2185,38 @@ point_line_closest (NRPoint *p, double a, NRPoint *closest)
 \param a   angle of the line; it is assumed to go through coordinate origin
 */
 double
-point_line_distance (NRPoint *p, double a)
+point_line_distance (NR::Point *p, double a)
 {
-	NRPoint c;
+	NR::Point c;
 	point_line_closest (p, a, &c);
-	return sqrt ((p->x - c.x)*(p->x - c.x) + (p->y - c.y)*(p->y - c.y));
+	return sqrt (((*p)[NR::X] - c[NR::X])*((*p)[NR::X] - c[NR::X]) + ((*p)[NR::Y] - c[NR::Y])*((*p)[NR::Y] - c[NR::Y]));
 }
 
 
 /* fixme: This goes to "moved" event? */
 static gboolean
-node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
+node_request (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 {
 	SPPathNode * n;
 	double yn, xn, yp, xp;
 	double an, ap, na, pa;
 	double d_an, d_ap, d_na, d_pa;
 	gboolean collinear = FALSE;
-	NRPoint c;
-	NRPoint pr;
+	NR::Point c;
+	NR::Point pr;
 
 	n = (SPPathNode *) data;
 
 	if (state & GDK_CONTROL_MASK) { // constrained motion 
 
 		// calculate relative distances of control points
-		yn = n->n.pos.y - n->pos.y; 
-		xn = n->n.pos.x - n->pos.x;
+		yn = n->n.pos[NR::Y] - n->pos[NR::Y]; 
+		xn = n->n.pos[NR::X] - n->pos[NR::X];
 		if (xn < 0) { xn = -xn; yn = -yn; } // limit the handle angle to between 0 and pi
 		if (yn < 0) { xn = -xn; yn = -yn; } 
 
-		yp = n->p.pos.y - n->pos.y;
-		xp = n->p.pos.x - n->pos.x;
+		yp = n->p.pos[NR::Y] - n->pos[NR::Y];
+		xp = n->p.pos[NR::X] - n->pos[NR::X];
 		if (xp < 0) { xp = -xp; yp = -yp; } // limit the handle angle to between 0 and pi
 		if (yp < 0) { xp = -xp; yp = -yp; } 
 
@@ -2287,8 +2248,7 @@ node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 			//	g_print("an %g    ap %g\n", an, ap);
 
 			// mouse point relative to the node's original pos
-			pr.x = p->x - n->origin.x;
-			pr.y = p->y - n->origin.y;
+			pr = (*p) - n->origin;
 
 			// distances to the four lines (two handles and to perpendiculars)
 			d_an = point_line_distance(&pr, an);
@@ -2308,18 +2268,18 @@ node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 			}
 
 			// move the node to the closest point
-			sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin.x + c.x - n->pos.x, n->origin.y + c.y - n->pos.y);
+			sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin[NR::X] + c[NR::X] - n->pos[NR::X], n->origin[NR::Y] + c[NR::Y] - n->pos[NR::Y]);
 
 		} else {  // constraining to hor/vert
 
-			if (fabs(p->x - n->origin.x) > fabs(p->y - n->origin.y)) { // snap to hor
-				sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - n->pos.x, n->origin.y - n->pos.y);
+			if (fabs((*p)[NR::X] - n->origin[NR::X]) > fabs((*p)[NR::Y] - n->origin[NR::Y])) { // snap to hor
+				sp_nodepath_selected_nodes_move (n->subpath->nodepath, (*p)[NR::X] - n->pos[NR::X], n->origin[NR::Y] - n->pos[NR::Y]);
 			} else { // snap to vert
-				sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin.x - n->pos.x, p->y - n->pos.y);
+				sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin[NR::X] - n->pos[NR::X], (*p)[NR::Y] - n->pos[NR::Y]);
 			}
 		}
 	} else { // move freely
-		sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - n->pos.x, p->y - n->pos.y);
+		sp_nodepath_selected_nodes_move (n->subpath->nodepath, (*p)[NR::X] - n->pos[NR::X], (*p)[NR::Y] - n->pos[NR::Y]);
 	}
 
 	return TRUE;
@@ -2328,9 +2288,7 @@ node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 static void
 node_ctrl_clicked (SPKnot * knot, guint state, gpointer data)
 {
-	SPPathNode * n;
-
-	n = (SPPathNode *) data;
+	SPPathNode *n = (SPPathNode *) data;
 
 	sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
 }
@@ -2338,9 +2296,7 @@ node_ctrl_clicked (SPKnot * knot, guint state, gpointer data)
 static void
 node_ctrl_grabbed (SPKnot * knot, guint state, gpointer data)
 {
-	SPPathNode * n;
-
-	n = (SPPathNode *) data;
+	SPPathNode *n = (SPPathNode *) data;
 
 	if (!n->selected) {
 		sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
@@ -2348,9 +2304,9 @@ node_ctrl_grabbed (SPKnot * knot, guint state, gpointer data)
 
 	// remember the origin of the control
 	if (n->p.knot == knot) {
-		xy_to_radial (n->p.pos.x - n->pos.x, n->p.pos.y - n->pos.y, &(n->p.origin));
+		xy_to_radial (n->p.pos - n->pos, &(n->p.origin));
 	} else if (n->n.knot == knot) {
-		xy_to_radial (n->n.pos.x - n->pos.x, n->n.pos.y - n->pos.y, &(n->n.origin));
+		xy_to_radial (n->n.pos - n->pos, &(n->n.origin));
 	} else {
 		g_assert_not_reached ();
 	}
@@ -2365,10 +2321,10 @@ node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data)
 	// forget origin and set knot position once more (because it can be wrong now due to restrictions)
 	if (n->p.knot == knot) {
 		n->p.origin.a = 0;
-		sp_knot_set_position (knot, &(n->p.pos), state);
+		sp_knot_set_position (knot, n->p.pos, state);
 	} else if (n->n.knot == knot) {
 		n->n.origin.a = 0;
-		sp_knot_set_position (knot, &(n->n.pos), state);
+		sp_knot_set_position (knot, n->n.pos, state);
 	} else {
 		g_assert_not_reached ();
 	}
@@ -2377,7 +2333,7 @@ node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data)
 }
 
 static gboolean
-node_ctrl_request (SPKnot * knot, NRPoint *p, guint state, gpointer data)
+node_ctrl_request (SPKnot * knot, NR::Point *p, guint state, gpointer data)
 {
 	SPPathNodeSide * me, * opposite;
 	ArtPathcode othercode;
@@ -2405,17 +2361,17 @@ node_ctrl_request (SPKnot * knot, NRPoint *p, guint state, gpointer data)
 		SPPathNode * othernode;
 		gdouble dx, dy, ndx, ndy, len, linelen, scal;
 		/* We are smooth node adjacent with line */
-		dx = p->x - n->pos.x;
-		dy = p->y - n->pos.y;
+		dx = (*p)[NR::X] - n->pos[NR::X];
+		dy = (*p)[NR::Y] - n->pos[NR::Y];
 		len = hypot (dx, dy);
 		othernode = opposite->other;
-		ndx = n->pos.x - othernode->pos.x;
-		ndy = n->pos.y - othernode->pos.y;
+		ndx = n->pos[NR::X] - othernode->pos[NR::X];
+		ndy = n->pos[NR::Y] - othernode->pos[NR::Y];
 		linelen = hypot (ndx, ndy);
 		if ((len > 1e-18) && (linelen > 1e-18)) {
 			scal = (dx * ndx + dy * ndy) / linelen;
-			p->x = n->pos.x + ndx / linelen * scal;
-			p->y = n->pos.y + ndy / linelen * scal;
+			(*p)[NR::X] = n->pos[NR::X] + ndx / linelen * scal;
+			(*p)[NR::Y] = n->pos[NR::Y] + ndy / linelen * scal;
 		}
 		NR::Point pp = *p;
 		sp_desktop_vector_snap (n->subpath->nodepath->desktop, pp, NR::Point(ndx, ndy));
@@ -2432,13 +2388,13 @@ node_ctrl_request (SPKnot * knot, NRPoint *p, guint state, gpointer data)
 }
 
 static void
-node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
+node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 {
 	SPPathNode * n;
 	SPPathNodeSide *me    = NULL;
     SPPathNodeSide *other = NULL;
 	radial rme, rother, rnew; 
-	NRPoint o;
+	NR::Point o;
 
 	n = (SPPathNode *) data;
 
@@ -2454,9 +2410,9 @@ node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 	}
 
 	// calculate radial coordinates of the grabbed control, other control, and the mouse point
-	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
-	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
-	xy_to_radial (p->x - n->pos.x, p->y - n->pos.y, &rnew);
+	xy_to_radial (me->pos - n->pos, &rme);
+	xy_to_radial (other->pos - n->pos, &rother);
+	xy_to_radial (*p - n->pos, &rnew);
 
 	if (state & GDK_CONTROL_MASK && rnew.a != HUGE_VAL) { 
 		double a_snapped, a_ortho;
@@ -2485,22 +2441,20 @@ node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 		// rotate the other handle correspondingly, if both old and new angles exist
 		rother.a += rnew.a - rme.a;
 		radial_to_xy (&rother, &(n->pos), &o);
-		other->pos.x = o.x;
-		other->pos.y = o.y;
-		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos.x, n->pos.y, other->pos.x, other->pos.y);
-		sp_knot_set_position (other->knot, &(other->pos), 0);
+		other->pos = o;
+		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos[NR::X], n->pos[NR::Y], other->pos[NR::X], other->pos[NR::Y]);
+		sp_knot_set_position (other->knot, other->pos, 0);
 	} 
 
 	radial_to_xy (&rnew, &(n->pos), &o);
-	me->pos.x = o.x;
-	me->pos.y = o.y;
-	sp_ctrlline_set_coords (SP_CTRLLINE (me->line), n->pos.x, n->pos.y, me->pos.x, me->pos.y);
+	me->pos = o;
+	sp_ctrlline_set_coords (SP_CTRLLINE (me->line), n->pos[NR::X], n->pos[NR::Y], me->pos[NR::X], me->pos[NR::Y]);
 
 	// this is what sp_knot_set_position does, but without emitting the signal:
 	// we cannot emit a "moved" signal because we're now processing it
-	if (me->knot->item) sp_ctrl_moveto (SP_CTRL (me->knot->item), me->pos.x, me->pos.y);
+	if (me->knot->item) sp_ctrl_moveto (SP_CTRL (me->knot->item), me->pos[NR::X], me->pos[NR::Y]);
 
-	sp_desktop_set_coordinate_status (knot->desktop, me->pos.x, me->pos.y, 0);
+	sp_desktop_set_coordinate_status (knot->desktop, me->pos[NR::X], me->pos[NR::Y], 0);
 
 	update_object (n->subpath->nodepath);
 }
@@ -2564,7 +2518,6 @@ node_rotate_common (SPPathNode *n, gdouble angle, int which, gboolean screen)
 	SPPathNodeSide *me, *other;
 	gboolean both = FALSE;
 	radial rme, rother;
-	NRPoint o;
 
 	if (which > 0) {
 		me = &(n->n);
@@ -2578,8 +2531,8 @@ node_rotate_common (SPPathNode *n, gdouble angle, int which, gboolean screen)
 		both = TRUE;
 	}
 
-	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
-	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
+	xy_to_radial (me->pos - n->pos, &rme);
+	xy_to_radial (other->pos - n->pos, &rother);
 
 	if (screen) {
 		node_rotate_internal_screen (n, angle, &rme, &rother, both);
@@ -2587,14 +2540,13 @@ node_rotate_common (SPPathNode *n, gdouble angle, int which, gboolean screen)
 		node_rotate_internal (n, angle, &rme, &rother, both);
 	}
 
+	NR::Point o;
 	radial_to_xy (&rme, &(n->pos), &o);
-	me->pos.x = o.x;
-	me->pos.y = o.y;
+	me->pos = o;
 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) {
 		radial_to_xy (&rother, &(n->pos), &o);
-		other->pos.x = o.x;
-		other->pos.y = o.y;
+		other->pos = o;
 	}
 
 	sp_node_ensure_ctrls (n);
@@ -2642,7 +2594,7 @@ node_scale (SPPathNode *n, gdouble grow, int which)
 	SPPathNodeSide *me, *other;
 	gboolean both = FALSE;
 	radial rme, rother;
-	NRPoint o;
+	NR::Point o;
 
 	if (which > 0) {
 		me = &(n->n);
@@ -2656,8 +2608,8 @@ node_scale (SPPathNode *n, gdouble grow, int which)
 		both = TRUE;
 	}
 
-	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
-	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
+	xy_to_radial (me->pos - n->pos, &rme);
+	xy_to_radial (other->pos - n->pos, &rother);
 
 	rme.r += grow; 
 	if (rme.r < 0) rme.r = 1e-6; // not 0, so that direction is not lost
@@ -2675,13 +2627,11 @@ node_scale (SPPathNode *n, gdouble grow, int which)
 	}
 
 	radial_to_xy (&rme, &(n->pos), &o);
-	me->pos.x = o.x;
-	me->pos.y = o.y;
+	me->pos = o;
 
 	if (both || n->type == SP_PATHNODE_SYMM) {
 		radial_to_xy (&rother, &(n->pos), &o);
-		other->pos.x = o.x;
-		other->pos.y = o.y;
+		other->pos = o;
 	}
 
 	sp_node_ensure_ctrls (n);
@@ -2813,7 +2763,7 @@ sp_nodepath_subpath_open (SPNodeSubPath * sp, SPPathNode * n)
 
 SPPathNode *
 sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, ArtPathcode code,
-		      NRPoint *ppos, NRPoint *pos, NRPoint *npos)
+		      NR::Point *ppos, NR::Point *pos, NR::Point *npos)
 {
 	SPPathNode * n, * prev;
 
@@ -2858,7 +2808,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	n->n.other = next;
 
 	n->knot = sp_knot_new (sp->nodepath->desktop);
-	sp_knot_set_position (n->knot, pos, 0);
+	sp_knot_set_position (n->knot, *pos, 0);
 	g_object_set (G_OBJECT (n->knot),
 		      "anchor", GTK_ANCHOR_CENTER,
 		      "fill", NODE_FILL,
@@ -2879,7 +2829,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	sp_knot_show (n->knot);
 
 	n->p.knot = sp_knot_new (sp->nodepath->desktop);
-	sp_knot_set_position (n->p.knot, ppos, 0);
+	sp_knot_set_position (n->p.knot, *ppos, 0);
 	g_object_set (G_OBJECT (n->p.knot),
 		      "shape", SP_KNOT_SHAPE_CIRCLE,
 		      "size", 7,
@@ -2902,7 +2852,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	sp_canvas_item_hide (n->p.line);
 
 	n->n.knot = sp_knot_new (sp->nodepath->desktop);
-	sp_knot_set_position (n->n.knot, npos, 0);
+	sp_knot_set_position (n->n.knot, *npos, 0);
 	g_object_set (G_OBJECT (n->n.knot),
 		      "shape", SP_KNOT_SHAPE_CIRCLE,
 		      "size", 7,
