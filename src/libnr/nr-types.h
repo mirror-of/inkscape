@@ -19,8 +19,11 @@
 
 namespace NR {
 
-typedef double Coord; /**< "real" type with sufficient precision for coordinates */
-typedef gint32 ICoord; /**< integer type with sufficient precision for coordinates */
+/** a "real" type with sufficient precision for coordinates */
+typedef double Coord;
+
+/** an integer type with sufficient precision for coordinates */
+typedef gint32 ICoord;
 
 } /* namespace NR */
 
