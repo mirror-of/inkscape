@@ -1,3 +1,9 @@
+2004-08-22  MenTaLguY <mental@rydia.net>
+
+	* src/Makefile_insert, src/gc-alloc.h:
+
+	  introduced a GC-aware STL allocator
+
 2004-08-21  MenTaLguY <mental@rydia.net>
 
 	* src/Makefile_insert, src/util/Makefile_insert: get libinkutil
@@ -23,6 +29,10 @@
 	                             to prevent collection while non-gc-aware
 								 objects are holding references; replaces
 								 Inkscape::Refcounted
+
+      Note that they no longer inherit from each other(!), so you will
+	  need to mix-and-match via multiple inheritance.  The latter two
+	  don't do anything useful without the first, however.
 
 	* src/gc-object.h, src/refcounted.h: removed
 
