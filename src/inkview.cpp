@@ -176,10 +176,11 @@ main (int argc, const char **argv)
 
     for (i = 1; i < argc; i++) {
 	struct stat st;
-	if (!stat (argv[i], &st) 
-	    && S_ISREG (st.st_mode) 
-	    && (st.st_size > 64)) {
-	    
+	if (stat (argv[i], &st) 
+	      || !S_ISREG (st.st_mode) 
+	      || (st.st_size < 64)) {
+		fprintf(stderr, "could not open file %s\n", argv[i]);
+	} else {
 
 #ifdef WITH_INKJAR
 	    if (is_jar(argv[i])) {
@@ -241,8 +242,11 @@ main (int argc, const char **argv)
 	    }
 #endif
 	}
-		
     }
+    
+    if(!ss.doc)
+       return 1; /* none of the slides loadable */
+
     w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (w), SP_DOCUMENT_NAME (ss.doc));
     gtk_window_set_default_size (GTK_WINDOW (w),
