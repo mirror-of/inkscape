@@ -359,7 +359,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
     return NR_ARENA_ITEM_STATE_ALL;
 }
 
-int matrix_is_isometry(NR::Matrix const &p) {
+int matrix_is_isometry(NR::Matrix p) {
     NR::Matrix   tp;
     // transposition
     tp[0]=p[0];
