@@ -109,7 +109,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     _hide_toggled_connection = _visibility_toggle.signal_toggled().connect(
         sigc::compose(
             sigc::mem_fun(*this, &LayerSelector::_hideLayer),
-            sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
+            sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
         )
     );
 

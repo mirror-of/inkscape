@@ -308,7 +308,7 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 		} else {
 			value = NULL;
 		}
-		sp_repr_set_attr(repr, "inkscape:groupmode", NULL);
+		sp_repr_set_attr(repr, "inkscape:groupmode", value);
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)
