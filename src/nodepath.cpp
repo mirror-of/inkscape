@@ -122,9 +122,12 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 {
     SPRepr *repr = SP_OBJECT(item)->repr;
 
+    // FIXME: remove this. We don't want to edit paths inside flowtext.
+    // Instead we will build our flowtext with cloned paths, so that the
+    // real paths are outside the flowtext and thus editable as usual.
     if (SP_IS_FLOWTEXT(item)) {
         for (SPObject *child = sp_object_first_child(SP_OBJECT(item)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            //if SP_IS_FLOWREGION(child) {
+            //if SP_IS_FLOWREGION(child) { // stupid! we can't include sp-flowregion.h because it has a Path class too
             SPObject *grandchild = sp_object_first_child(SP_OBJECT(child));
             if (grandchild && SP_IS_PATH(grandchild)) {
                 item = SP_ITEM(grandchild);
@@ -1521,8 +1524,6 @@ sp_node_selected_set_line_type(NRPathcode code)
 void
 sp_node_selected_set_type(Path::NodeType type)
 {
-    /* fixme: do it the right way */
-    /* What is the right way?  njh */
     Path::Path *nodepath = sp_nodepath_current();
     if (nodepath == NULL) return;
 
@@ -2064,8 +2065,6 @@ static void point_line_closest(NR::Point *p, double a, NR::Point *closest)
     if (a == HUGE_VAL) { // vertical
         *closest = NR::Point(0, (*p)[NR::Y]);
     } else {
-        //*closest = NR::Point(( ( a * (*p)[NR::Y] + (*p)[NR::X]) / (a*a + 1) ),
-        //                     a * (*closest)[NR::X]);
         (*closest)[NR::X] = ( a * (*p)[NR::Y] + (*p)[NR::X]) / (a*a + 1);
         (*closest)[NR::Y] = a * (*closest)[NR::X];
     }
