@@ -708,7 +708,7 @@ static void
 sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPRoot *root;
-	NRMatrix a[6];
+	NRMatrix a;
 
 	root = SP_ROOT (item);
 

@@ -43,6 +43,29 @@ NRMatrix *nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta);
 #define NR_MATRIX_DF_EXPANSION(m) (sqrt (NR_MATRIX_DF_EXPANSION2 (m)))
 
 namespace NR{
+class scale : public Point{
+ public:
+	Point operator *(const Point v) const {
+		return Point(pt[0]*v.pt[0], pt[1]*v.pt[1]);
+	}
+};
+ 
+class rotate : public Point{
+ public:
+	rotate(Coord theta);
+	rotate(Point p) : Point(p) {}
+};
+
+class translate : public Point{};
+
+inline Point operator *(const rotate r, const Point v) {
+	return Point(dot(r, v), cross(r, v));
+}
+
+inline Point operator *(const translate t, const Point v) {
+	return t + v;
+}
+
 class Matrix{
  public:
 /*
@@ -63,6 +86,22 @@ class Matrix{
 			c[i] = m.c[i];
 	}
 
+	Matrix(const scale& sm) {
+		for(int i = 0; i < 6; i++)
+			c[i] = 0;
+		c[0] = sm.pt[0];
+		c[3] = sm.pt[1];
+	}
+	Matrix(const rotate& rm) {
+		c[0] = rm.pt[0]; c[2] = -rm.pt[1]; c[4] = 0;
+		c[1] = rm.pt[1]; c[3] =  rm.pt[0]; c[5] = 0;
+	}
+	Matrix(const translate& tm) {
+		for(int i = 0; i < 4; i++)
+			c[i] = 0;
+		c[4] = tm[0];
+		c[5] = tm[1];
+	}
 	Matrix(NRMatrix const *nr);
 	
 	bool test_identity() const;
@@ -86,14 +125,14 @@ class Matrix{
 	void copyto(NRMatrix* nrm);
 	operator NRMatrix*() const;
 };
- 
+
 // Matrix factories
  Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset=Point(0,0));
 
  Matrix identity();
- Matrix translate(const Point p);
- Matrix scale(const Point s);
- Matrix rotate(const NR::Coord angle);
+ //Matrix translate(const Point p);
+ //Matrix scale(const Point s);
+ //Matrix rotate(const NR::Coord angle);
 
 Matrix operator*(const Matrix a, const Matrix b);
 

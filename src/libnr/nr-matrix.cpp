@@ -185,7 +185,7 @@ Matrix Matrix::inverse() const
 	return d;
 }
 
-Matrix translate (const Point p)
+/*Matrix translate (const Point p)
 {
 	Matrix m;
 	m.c[0] = 1.0; m.c[2] = 0.0;
@@ -194,7 +194,7 @@ Matrix translate (const Point p)
 	for(int i = 0; i < 2; i++)
 		m.c[4+i] = p.pt[i];
 	return m;
-}
+}*/
 
 void Matrix::set_identity ()
 {
@@ -221,7 +221,7 @@ Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) 
 	return m;
 }
 
-Matrix scale (const Point scale)
+/*Matrix scale (const Point scale)
 {
 	Matrix m;
 	m.c[0] = scale.pt[NR::X];  m.c[2] = 0.0;
@@ -243,6 +243,12 @@ Matrix rotate (const NR::Coord theta)
 	m.c[4] = 0.0;
 	m.c[5] = 0.0;
 	return m;
+}*/
+
+rotate::rotate (const NR::Coord theta)
+{
+	pt[X] = cos (theta);
+	pt[Y] = sin (theta);
 }
 
 NR::Coord Matrix::det() const {

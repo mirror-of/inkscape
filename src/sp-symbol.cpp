@@ -456,7 +456,7 @@ static void
 sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPSymbol *symbol;
-	NRMatrix a[6];
+	NRMatrix a;
 
 	symbol = SP_SYMBOL (item);
 
