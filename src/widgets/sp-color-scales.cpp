@@ -246,22 +246,11 @@ void ColorScales::_recalcColor( gboolean changing )
 /* Helpers for setting color value */
 gfloat get1( const GtkAdjustment *a )
 {
-	gfloat v = gtk_adjustment_get_value  (GTK_ADJUSTMENT (a));
-
-	if (v > 0.0 && v < 1.0) {
-		//				g_print ("%g\n", a->value);
-		return (v);
-	} else {
-		//				g_print ("%g, but %g\n", a->value, (a->value)/255);
-		return (v)/255;
-	}
+	return (a->value)/255;
 }
 
 void set255( GtkAdjustment *a, gfloat v)
 {
-	if (v > 1)
-	gtk_adjustment_set_value  (a, v);
-else
 	gtk_adjustment_set_value  (a, v*255.0);
 }
 
@@ -522,9 +511,12 @@ guint ColorScales::getSubmode() const
 
 void ColorScales::_adjustmentAnyChanged( GtkAdjustment *adjustment, SPColorScales *cs )
 {
-	gint channel;
+	// if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255 
+	if (adjustment->value > 0.0 && adjustment->value < 1.0) {
+		gtk_adjustment_set_value  (adjustment, floor ((adjustment->value)*255.0 + 0.5));
+	} 
 
-	channel = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (adjustment), "channel"));
+	gint channel = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (adjustment), "channel"));
 
 	_adjustmentChanged(cs, channel);
 }
