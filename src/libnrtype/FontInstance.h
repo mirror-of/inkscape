@@ -19,7 +19,9 @@
 #include <libnr/nr-rect.h>
 
 #ifdef WITH_XFT
-#include <freetype/freetype.h>
+//#include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #endif
 #ifdef WIN32
 #include <windows.h>
