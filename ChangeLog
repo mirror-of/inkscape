@@ -1,3 +1,9 @@
+2004-05-16  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/extension/internal/svg.cpp:
+	Throw an exception if sp_repr_save_file fails.  This should close
+	bug 948921.
+
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/check-header-compile.in: New script.
