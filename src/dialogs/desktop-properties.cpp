@@ -181,7 +181,12 @@ sp_doc_dialog_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 	key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adjustment), "key");
 	us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (adjustment), "unit_selector");
 
-	g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
+	// SVG does not support meters as a unit, so we must translate meters to cm when writing
+	if (!strcmp(sp_unit_selector_get_unit (us)->abbr, "m")) {
+		g_snprintf (c, 32, "%g%s", 100*adjustment->value, "cm");
+	} else {
+		g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
+	}
 
 	sp_repr_set_attr (repr, key, c);
 
@@ -223,6 +228,7 @@ sp_dtw_guides_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialo
 	us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
 
 	g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
+
 	sp_repr_set_attr (repr, "guidetolerance", c);
 }
 
