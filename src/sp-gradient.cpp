@@ -740,6 +740,7 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 			stop = SP_STOP (child);
 			if (stop->offset > (offset + 1e-9)) {
 				pos += 1;
+				g_assert( pos < gr->vector->nstops );
 				gr->vector->stops[pos].offset = (stop->offset - offsets) / (offsete - offsets);
 				offset = stop->offset;
 			}

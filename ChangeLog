@@ -1,3 +1,7 @@
+2004-03-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-gradient.cpp (sp_gradient_rebuild_vector): Add assertion.
+	
 2004-03-15  Ted Gould <ted@gould.cx>
 
 	* src/extension/extension.cpp:  Adding in some comments for my
@@ -6,10 +10,10 @@
 
 2004-03-14  Jon Phillips <jon@jonphillips.info>
 
-    * src/toolbox.cpp src/verbs.cpp src/interface.cpp share/icons/icons.svg: 
-      I added all the icons in the VIEW menu. They might need some tweaking, 
-      but its a start. I also cleaned up some coding conventions for these 
-      files. 
+	* src/toolbox.cpp src/verbs.cpp src/interface.cpp
+	share/icons/icons.svg: Added all the icons in the VIEW
+	menu. They might need some tweaking, but its a start. Also
+	cleaned up some coding conventions for these files.
 
 2004-03-14  Bryce Harrington <bryce@bryceharrington.com>
 
@@ -21,7 +25,7 @@
 2004-03-14  Ted Gould <ted@gould.cx>
 
 	* src/extension/extension.cpp, src/extension/extension.h,
-      src/extension/internal/ps.cpp: Adding in parameters for extensions.
+	  src/extension/internal/ps.cpp: Adding in parameters for extensions.
 	  This will make it so that extensions can have easy settings that
 	  are used.  They are not currently persistent - but that will be
 	  a future feature.
@@ -66,22 +70,22 @@
 
 2004-03-14  rejon <jon@protofunk.org>
 
-    * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 
-      standards. I also have begun to add new icons to our program.
+	* src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 
+	  standards. I also have begun to add new icons to our program.
 
 2004-03-13  MenTaLguY <mental@rydia.net>
 
-    * src/document.cpp: bumped the update limit on documents a bit
+	* src/document.cpp: bumped the update limit on documents a bit
 	  (bug #896076)
 
-    * src/sp-text.cpp: SPString now copes with parents that don't have style
+	* src/sp-text.cpp: SPString now copes with parents that don't have style
 	                   information (comment on bug #896706)
 
-    * src/xml/repr.cpp, src/xml/repr-private.h:
+	* src/xml/repr.cpp, src/xml/repr-private.h:
 	  adding listeners is now O(1), which should make files which make heavy
 	  use of <use> more tolerable; I decided to add an extra "last" pointer
 	  rather than just prepending to the list (which would have reversed
-      its order, and make the common case for removal traverse the entire
+	  its order, and make the common case for removal traverse the entire
 	  list -- removal is still O(N) overall, but at least this way we usually
 	  hit the best-case) (bug #896076)
 
@@ -136,53 +140,54 @@
 
 2004-03-09  rejon <jon@protofunk.org>
 
-    * samples: I moved the contents of samples into the proper share dirs.
+	* samples: Moved the contents of samples into the proper share dirs.
 
-    * share/tutorials/tutorial.svg: I moved the default tutorial.svg to this 
-      location. It was in the wrong place.
+	* share/tutorials/tutorial.svg: Moved the default tutorial.svg to this 
+          location. It was in the wrong place.
 
-    * share/tutorials/elementsofdesign.svg src/help.cpp src/interface.cpp: 
-      Added the textual gloss of this new tutorial. I need to add some more 
-      graphics to it. But I just wanted to first of all flesh out the document 
-      so that others could chunk in graphics and so forth.
+	* share/tutorials/elementsofdesign.svg src/help.cpp src/interface.cpp:
+	  Added the textual gloss of this new tutorial. I need to add some
+	  more graphics to it. But I just wanted to first of all flesh out
+	  the document so that others could chunk in graphics and so
+	  forth.
 
 2004-03-09  MenTaLguY  <mental@rydia.net>
 
-    * src/ast/*: more AST work
+	* src/ast/*: more AST work
 
-    * src/sp-text.cpp: fixed uninitialized variable
+	* src/sp-text.cpp: fixed uninitialized variable
 
-    * src/sp-text.cpp: rewrote recursive character-counting algorithm
+	* src/sp-text.cpp: rewrote recursive character-counting algorithm
 
 2004-03-08  MenTaLguY  <mental@rydia.net>
 
-    * src/sp-text.cpp: fixes for initialization and updating of SPString
+	* src/sp-text.cpp: fixes for initialization and updating of SPString
 
 2004-03-07  MenTaLguY  <mental@rydia.net>
 
-    * src/sp-item.cpp: the item's arenaitems shouldn't be destroyed until
+	* src/sp-item.cpp: the item's arenaitems shouldn't be destroyed until
 	  its children have had a chance to clean up
 
-    * src/sp-object.cpp: fix sp_object_reorder() to correctly handle
+	* src/sp-object.cpp: fix sp_object_reorder() to correctly handle
 	  next == NULL
 
 	* src/sp-item.cpp, src/sp-object-group.cpp, src/sp-object-repr.cpp,
-      src/sp-object.cpp, src/sp-object.h, src/sp-text.cpp, src/sp-use.cpp:
+	  src/sp-object.cpp, src/sp-object.h, src/sp-text.cpp, src/sp-use.cpp:
 	  finished transition to SPObject::children
 
-    * src/sp-text.cpp: reworked SPTSpan a bit so that it copes with
+	* src/sp-text.cpp: reworked SPTSpan a bit so that it copes with
 	  the child changes a little better with respect to SPTSpan::string
 
 2004-03-06  MenTaLguY  <mental@rydia.net>
 
-    * src/ast/*: initial work on AST code
+	* src/ast/*: initial work on AST code
 
 	* src/libnr/nr-convex-hull-ops.h, src/libnr/nr-convex-hull.h,
 	  src/libnr/nr-matrix-fns.h, src/libnr/nr-maybe.h,
 	  src/libnr/nr-rect-ops.h:
 	  basic cleanups and work on NR::ConvexHull
 
-    * src/document.cpp, src/gradient-chemistry.cpp,
+	* src/document.cpp, src/gradient-chemistry.cpp,
 	  src/selection-chemistry.cpp, src/selection.cpp, src/sp-clippath.cpp,
 	  src/sp-defs.cpp, src/sp-defs.h, src/sp-gradient.cpp, src/sp-gradient.h,
 	  src/sp-item-group.cpp, src/sp-item-group.h, src/sp-item.cpp,
