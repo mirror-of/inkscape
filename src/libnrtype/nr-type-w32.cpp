@@ -179,7 +179,7 @@ nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 
     tfw32->fonts = NULL;
     tfw32->logfont = (LOGFONT *)g_hash_table_lookup (namedict, def->name);
-    tfw32->logfont->lfHeight = 1000;
+    tfw32->logfont->lfHeight = -1000;
     tfw32->logfont->lfWidth = 0;
     tfw32->hfont = CreateFontIndirect (tfw32->logfont);
 
