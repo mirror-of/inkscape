@@ -34,32 +34,30 @@ enum {
 	LAST_SIGNAL
 };
 
-static void sp_selection_class_init (SPSelectionClass *klass);
-static void sp_selection_init (SPSelection *selection);
-static void sp_selection_dispose (GObject *object);
-
 static void sp_selection_private_changed (SPSelection *selection);
 
 static void sp_selection_frozen_empty (SPSelection *selection);
-
-static gint sp_selection_idle_handler (gpointer data);
 
 static GObjectClass *parent_class;
 static guint selection_signals[LAST_SIGNAL] = { 0 };
 
 GType
-sp_selection_get_type (void)
-{
+sp_selection_get_type() {
+	return SPSelection::gobject_type();
+}
+
+GType
+SPSelection::gobject_type() {
 	static GType type = 0;
 	if (!type) {
 		GTypeInfo info = {
 			sizeof (SPSelectionClass),
 			NULL, NULL,
-			(GClassInitFunc) sp_selection_class_init,
+			(GClassInitFunc)&SPSelection::_class_init,
 			NULL, NULL,
 			sizeof (SPSelection),
 			4,
-			(GInstanceInitFunc) sp_selection_init,
+			(GInstanceInitFunc)&SPSelection::_init,
 			NULL
 		};
 		type = g_type_register_static (G_TYPE_OBJECT, "SPSelection", &info, (GTypeFlags)0);
@@ -67,8 +65,8 @@ sp_selection_get_type (void)
 	return type;
 }
 
-static void
-sp_selection_class_init (SPSelectionClass *klass)
+void
+SPSelection::_class_init(SPSelectionClass *klass)
 {
 	GObjectClass *object_class = (GObjectClass *) klass;
 
@@ -90,30 +88,32 @@ sp_selection_class_init (SPSelectionClass *klass)
 						     G_TYPE_NONE, 1,
 						     G_TYPE_UINT);
 
-	object_class->dispose = sp_selection_dispose;
+	object_class->dispose = &SPSelection::_dispose;
 
 	klass->changed = sp_selection_private_changed;
 }
 
-static void
-sp_selection_init (SPSelection *selection)
+SPSelection::SPSelection()
+: reprs(NULL), items(NULL), flags(0), _idle(0)
 {
-	selection->reprs = NULL;
-	selection->items = NULL;
-	selection->idle = 0;
-	selection->flags = 0;
 }
 
-static void
-sp_selection_dispose (GObject *object)
+void
+SPSelection::_init(void *mem)
+{
+	new (mem) SPSelection();
+}
+
+void
+SPSelection::_dispose(GObject *object)
 {
 	SPSelection *selection = SP_SELECTION (object);
 
 	sp_selection_frozen_empty (selection);
 
-	if (selection->idle) {
-		gtk_idle_remove (selection->idle);
-		selection->idle = 0;
+	if (selection->_idle) {
+		gtk_idle_remove (selection->_idle);
+		selection->_idle = 0;
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -124,7 +124,8 @@ static void sp_selection_private_changed(SPSelection *selection)
 	inkscape_selection_changed (selection);
 }
 
-static void sp_selection_selected_item_release(SPItem *item, SPSelection *selection)
+void
+SPSelection::release_item(SPItem *item, SPSelection *selection)
 {
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
@@ -140,31 +141,29 @@ static void sp_selection_selected_item_release(SPItem *item, SPSelection *select
 
 /* Handler for selected objects "modified" signal */
 
-static void
-sp_selection_selected_item_modified (SPItem *item, guint flags, SPSelection *selection)
+void
+SPSelection::item_modified(SPItem *item, guint flags, SPSelection *selection)
 {
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 	g_return_if_fail (sp_selection_item_selected (selection, item));
 
-	if (!selection->idle) {
-		/* Request handling to be run in idle loop */
-		selection->idle = gtk_idle_add_priority (SP_SELECTION_UPDATE_PRIORITY, sp_selection_idle_handler, selection);
+	if (!selection->_idle) {
+		/* Request handling to be run in _idle loop */
+		selection->_idle = gtk_idle_add_priority (SP_SELECTION_UPDATE_PRIORITY, (GtkFunction)&SPSelection::_idle_handler, selection);
 	}
 
 	/* Collect all flags */
 	selection->flags |= flags;
 }
 
-/* Our idle loop handler */
+/* Our _idle loop handler */
 
-static gint
-sp_selection_idle_handler (gpointer data)
+gboolean
+SPSelection::_idle_handler(SPSelection *selection)
 {
-	SPSelection *selection = SP_SELECTION (data);
-
 	/* Clear our id, so next request will be rescheduled */
-	selection->idle = 0;
+	selection->_idle = 0;
 	guint flags = selection->flags;
 	selection->flags = 0;
 	/* Emit our own "modified" signal */
@@ -282,9 +281,9 @@ void sp_selection_add_item(SPSelection *selection, SPItem *item)
 
 	selection->items = g_slist_prepend (selection->items, item);
 	g_signal_connect (G_OBJECT (item), "release",
-			  G_CALLBACK (sp_selection_selected_item_release), selection);
+			  G_CALLBACK(&SPSelection::release_item), selection);
 	g_signal_connect (G_OBJECT (item), "modified",
-			  G_CALLBACK (sp_selection_selected_item_modified), selection);
+			  G_CALLBACK(&SPSelection::item_modified), selection);
 
 	// when selecting a group, we need to deselect all its descendants to prevent double selection
 	if (SP_IS_GROUP (item)) {
@@ -384,9 +383,9 @@ void sp_selection_set_item_list(SPSelection *selection, GSList const *list)
 			if (!SP_IS_ITEM (i)) break;
 			selection->items = g_slist_prepend (selection->items, i);
 			g_signal_connect (G_OBJECT (i), "release",
-					  G_CALLBACK (sp_selection_selected_item_release), selection);
+					  G_CALLBACK (&SPSelection::release_item), selection);
 			g_signal_connect (G_OBJECT (i), "modified",
-					  G_CALLBACK (sp_selection_selected_item_modified), selection);
+					  G_CALLBACK (&SPSelection::item_modified), selection);
 		}
 	}
 

@@ -40,7 +40,7 @@ GType sp_desktop_get_type ();
 class SPSelection;
 class SPSelectionClass;
 
-#define SP_TYPE_SELECTION (sp_selection_get_type ())
+#define SP_TYPE_SELECTION (sp_selection_get_type())
 #define SP_SELECTION(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_SELECTION, SPSelection))
 #define SP_IS_SELECTION(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_SELECTION))
 

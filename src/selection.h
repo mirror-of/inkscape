@@ -18,13 +18,29 @@
 
 
 
-struct SPSelection {
-	GObject object;
+struct SPSelection : public GObject {
+public:
 	SPDesktop *desktop;
 	GSList *reprs;
 	GSList *items;
-	guint idle;
 	guint flags;
+
+	static GType gobject_type();
+	static void item_modified(SPItem *item, guint flags, SPSelection *selection);
+	static void release_item(SPItem *item, SPSelection *selection);
+
+private:
+	SPSelection();
+	SPSelection(SPSelection const &);
+	void operator=(SPSelection const &);
+
+	static void _init(void *mem);
+	static void _class_init(SPSelectionClass *klass);
+	static void _dispose(GObject *object);
+
+	static gboolean _idle_handler(SPSelection *selection);
+
+	guint _idle;
 };
 
 struct SPSelectionClass {
