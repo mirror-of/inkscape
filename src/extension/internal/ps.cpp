@@ -133,7 +133,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
 						  _("Use PostScript vector operators. The resulting image is usually smaller "
 						    "in file size and can be arbitrarily scaled, but alpha transparency, "
-							"gradients, markers, and patterns will be lost."), NULL);
+							"gradients and patterns will be lost."), NULL);
 	if (!p2bm) gtk_toggle_button_set_active ((GtkToggleButton *) rb, TRUE);
 	gtk_box_pack_start (GTK_BOX (vb), rb, FALSE, FALSE, 0);
 	rb = gtk_radio_button_new_with_label (gtk_radio_button_get_group ((GtkRadioButton *) rb), _("Print as bitmap"));
@@ -540,6 +540,30 @@ PrintPS::image (Inkscape::Extension::Print *mod, guchar *px, unsigned int w, uns
 #endif
 }
 
+unsigned int
+PrintPS::text (Inkscape::Extension::Print *mod, const char *text, NR::Point p,
+	       const SPStyle* style)
+{
+  if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
+  if (_bitmap) return 0;
+
+  NRMatrix m;
+  nr_matrix_set_scale (&m, 1, -1);
+  m.c[5] = 2 * p[NR::Y];
+  bind(mod, &m, 0);
+  
+  fprintf(_stream, "/Times-Roman findfont\n");
+  fprintf(_stream, "%f scalefont\n", style->font_size.computed);
+  fprintf(_stream, "setfont newpath\n");
+  fprintf(_stream, "%g %g moveto\n", p[NR::X], p[NR::Y]);
+  fprintf(_stream, "(%s) show\n", text);
+  release(mod);
+
+  return 0;
+}
+	
+
+
 /* PostScript helpers */
 
 void
@@ -853,6 +877,7 @@ PrintPS::init (void)
 			"<param name=\"resolution\" type=\"string\">72</param>\n"
 			"<param name=\"destination\" type=\"string\">lp</param>\n"
 			"<param name=\"pageBoundingBox\" type=\"boolean\">TRUE</param>\n"
+			"<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
 			"<print/>\n"
 		"</spmodule>", new PrintPS());
 
