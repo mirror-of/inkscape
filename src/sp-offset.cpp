@@ -1,8 +1,10 @@
 #define __SP_OFFSET_C__
 
+/** \file
+ * Implementation of SPOffset, i.e. <path sodipodi:type="inkscape:offset">.
+ */
+
 /*
- * <inkscape:offset> implementation
- *
  * Authors (of the sp-spiral.c upon which this file was constructed):
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
  *   Lauris Kaplinski <lauris@kaplinski.com>
