@@ -29,6 +29,12 @@
 
 #include <glib.h>
 
+#include "repr-private.h"
+
+/*#####################
+# DEFINITIONS
+#####################*/
+
 #ifndef FALSE
 #define FALSE 0
 #endif
@@ -41,12 +47,88 @@
 #define MAX(a,b) (((a) < (b)) ? (b) : (a))
 #endif
 
-#include "repr-private.h"
+/*#####################
+# FORWARD DECLARATIONS
+#####################*/
 
 static void sp_xml_ns_register_defaults ();
 static char *sp_xml_ns_auto_prefix (const char *uri);
 
-/* SPXMLNs */
+/*#####################
+# UTILITY
+#####################*/
+
+/**
+ * Locale-independent double to string conversion
+ */
+unsigned int
+sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
+{
+	double dival, fval, epsilon;
+	int idigits, ival, i;
+	i = 0;
+	if (val < 0.0) {
+		buf[i++] = '-';
+		val = fabs (val);
+	}
+	/* Determine number of integral digits */
+	if (val >= 1.0) {
+		idigits = (int) floor (log10 (val));
+	} else {
+		idigits = 0;
+	}
+	/* Determine the actual number of fractional digits */
+	fprec = MAX (fprec, tprec - idigits);
+	/* Find epsilon */
+	epsilon = 0.5 * pow (10.0, - (double) fprec);
+	/* Round value */
+	val += epsilon;
+	/* Extract integral and fractional parts */
+	dival = floor (val);
+	ival = (int) dival;
+	fval = val - dival;
+	/* Write integra */
+	if (ival > 0) {
+		char c[32];
+		int j;
+		j = 0;
+		while (ival > 0) {
+			c[32 - (++j)] = '0' + (ival % 10);
+			ival /= 10;
+		}
+		memcpy (buf + i, &c[32 - j], j);
+		i += j;
+		tprec -= j;
+	} else {
+		buf[i++] = '0';
+		tprec -= 1;
+	}
+	if ((fprec > 0) && (padf || (fval > epsilon))) {
+		buf[i++] = '.';
+		while ((fprec > 0) && (padf || (fval > epsilon))) {
+			fval *= 10.0;
+			dival = floor (fval);
+			fval -= dival;
+			buf[i++] = '0' + (int) dival;
+			fprec -= 1;
+		}
+
+	}
+	buf[i] = 0;
+	return i;
+}
+
+
+
+
+
+/*#####################
+# MAIN
+#####################*/
+
+/**
+ * SPXMLNs
+ */
 
 static SPXMLNs *namespaces=NULL;
 
@@ -280,6 +362,9 @@ sp_repr_set_double_attribute (SPRepr * repr, const char * key, double value)
 	g_return_val_if_fail (key != NULL, FALSE);
 
 	g_snprintf (c, 32, "%.8f", value);
+    /* Suggest replacing with this locale-portable call
+	sp_xml_dtoa (c, val, 8, 0, FALSE);
+    */
 
 	return sp_repr_set_attr (repr, key, c);
 }
@@ -572,63 +657,6 @@ sp_repr_set_int (SPRepr *repr, const gchar *key, int val)
 	g_snprintf (c, 32, "%d", val);
 
 	return sp_repr_set_attr (repr, key, c);
-}
-
-unsigned int
-sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
-{
-	double dival, fval, epsilon;
-	int idigits, ival, i;
-	i = 0;
-	if (val < 0.0) {
-		buf[i++] = '-';
-		val = fabs (val);
-	}
-	/* Determine number of integral digits */
-	if (val >= 1.0) {
-		idigits = (int) floor (log10 (val));
-	} else {
-		idigits = 0;
-	}
-	/* Determine the actual number of fractional digits */
-	fprec = MAX (fprec, tprec - idigits);
-	/* Find epsilon */
-	epsilon = 0.5 * pow (10.0, - (double) fprec);
-	/* Round value */
-	val += epsilon;
-	/* Extract integral and fractional parts */
-	dival = floor (val);
-	ival = (int) dival;
-	fval = val - dival;
-	/* Write integra */
-	if (ival > 0) {
-		char c[32];
-		int j;
-		j = 0;
-		while (ival > 0) {
-			c[32 - (++j)] = '0' + (ival % 10);
-			ival /= 10;
-		}
-		memcpy (buf + i, &c[32 - j], j);
-		i += j;
-		tprec -= j;
-	} else {
-		buf[i++] = '0';
-		tprec -= 1;
-	}
-	if ((fprec > 0) && (padf || (fval > epsilon))) {
-		buf[i++] = '.';
-		while ((fprec > 0) && (padf || (fval > epsilon))) {
-			fval *= 10.0;
-			dival = floor (fval);
-			fval -= dival;
-			buf[i++] = '0' + (int) dival;
-			fprec -= 1;
-		}
-
-	}
-	buf[i] = 0;
-	return i;
 }
 
 unsigned int
