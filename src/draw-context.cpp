@@ -593,7 +593,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
             repr = SP_OBJECT_REPR(dc->white_item);
         } else {
             repr = sp_repr_new("path");
-		/* Set style */
+            /* Set style */
             if (SP_IS_PEN_CONTEXT(dc)) {
                 sp_desktop_apply_style_tool (desktop, repr, "tools.freehand.pen", false);
             } else {
@@ -1353,30 +1353,70 @@ sp_pen_context_set(SPEventContext *ec, const gchar *key, const gchar *val)
     }
 }
 
+
+static gint pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent);
+static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent);
+static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent);
+static gint pen_handle_2button_press(SPPenContext *const pc);
+static gint pen_handle_key_press(SPPenContext *const pc, guint const keyval);
+
 gint
 sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
-    SPDrawContext *const dc = SP_DRAW_CONTEXT(ec);
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
-    SPDesktop *const dt = ec->desktop;
 
     gint ret = FALSE;
 
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
     switch (event->type) {
-    case GDK_BUTTON_PRESS:
-        if ( event->button.button == 1 ) {
+        case GDK_BUTTON_PRESS:
+            ret = pen_handle_button_press(pc, event->button);
+            break;
+
+        case GDK_MOTION_NOTIFY:
+            ret = pen_handle_motion_notify(pc, event->motion);
+            break;
+
+        case GDK_BUTTON_RELEASE:
+            ret = pen_handle_button_release(pc, event->button);
+            break;
+
+        case GDK_2BUTTON_PRESS:
+            ret = pen_handle_2button_press(pc);
+            break;
+
+        case GDK_KEY_PRESS:
+            ret = pen_handle_key_press(pc, event->key.keyval);
+            break;
+
+        default:
+            break;
+    }
+
+    if (!ret) {
+        if (((SPEventContextClass *) pen_parent_class)->root_handler)
+            return ((SPEventContextClass *) pen_parent_class)->root_handler(ec, event);
+    }
+
+    return ret;
+}
+
+static gint
+pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
+{
+        gint ret = FALSE;
+        if ( bevent.button == 1 ) {
 
             // save drag origin
-            xp = (gint) event->button.x; 
-            yp = (gint) event->button.y;
+            xp = (gint) bevent.x; 
+            yp = (gint) bevent.y;
             within_tolerance = true;
 
             /* Find desktop coordinates */
-            NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(event->button.x, event->button.y));
+            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, NR::Point(bevent.x, bevent.y));
 
             /* Test whether we hit any anchor. */
-            SPDrawAnchor *anchor = test_inside(dc, NR::Point(event->button.x, event->button.y));
+            SPDrawAnchor *anchor = test_inside(pc, NR::Point(bevent.x, bevent.y));
 
             switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1399,28 +1439,28 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 case SP_PEN_CONTEXT_STOP:
                     /* This is allowed, if we just cancelled curve */
                 case SP_PEN_CONTEXT_POINT:
-                    if ( dc->npoints == 0 ) {
+                    if ( pc->npoints == 0 ) {
                         /* Set start anchor */
-                        dc->sa = anchor;
+                        pc->sa = anchor;
                         if (anchor) {
                             /* Adjust point to anchor if needed */
                             p = anchor->dp;
                         } else {
                             /* Create green anchor */
-                            spdc_endpoint_snap(dc, p, event->motion.state);
-                            dc->green_anchor = sp_draw_anchor_new(dc, dc->green_curve, TRUE, p);
+                            spdc_endpoint_snap(pc, p, bevent.state);
+                            pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, p);
                         }
                         spdc_pen_set_initial_point(pc, p);
                     } else {
                         /* Set end anchor */
-                        dc->ea = anchor;
+                        pc->ea = anchor;
                         if (!anchor) {   /* Snap node only if not hitting anchor */
-                            spdc_endpoint_snap(dc, p, event->motion.state);
+                            spdc_endpoint_snap(pc, p, bevent.state);
                         } else {
                             p = anchor->dp;
                         }
                         spdc_pen_set_subsequent_point(pc, p);
-                        if ( dc->green_anchor && dc->green_anchor->active ) {
+                        if ( pc->green_anchor && pc->green_anchor->active ) {
                             pc->state = SP_PEN_CONTEXT_CLOSE;
                             ret = TRUE;
                             break;
@@ -1442,44 +1482,49 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
             default:
                 break;
             }
-        } else if (event->button.button == 3) {
-            if (dc->npoints != 0) {
+        } else if (bevent.button == 3) {
+            if (pc->npoints != 0) {
                 spdc_pen_finish(pc, FALSE);
                 ret = TRUE;
             }
         }
-        break;
-    case GDK_MOTION_NOTIFY:
-    {
+        return ret;
+}
+
+static gint
+pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
+{
+        gint ret = FALSE;
         if ( within_tolerance
-             && ( abs( (gint) event->motion.x - xp ) < tolerance )
-             && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
-            break; // do not drag if we're within tolerance from origin
+             && ( abs( (gint) mevent.x - xp ) < tolerance )
+             && ( abs( (gint) mevent.y - yp ) < tolerance ) ) {
+            return FALSE; // do not drag if we're within tolerance from origin
         }
         // Once the user has moved farther than tolerance from the original location 
         // (indicating they intend to move the object, not click), then always process the 
         // motion notify coordinates as given (no snapping back to origin)
         within_tolerance = false; 
 
-        if ( ( event->motion.state & GDK_BUTTON1_MASK ) && !dc->grab ) {
+        SPDesktop *const dt = pc->desktop;
+        if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
             /* Grab mouse, so release will not pass unnoticed */
-            dc->grab = SP_CANVAS_ITEM(dt->acetate);
-            sp_canvas_item_grab(dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
+            pc->grab = SP_CANVAS_ITEM(dt->acetate);
+            sp_canvas_item_grab(pc->grab, SPDC_EVENT_MASK, NULL, mevent.time);
         }
 
         /* Find desktop coordinates */
-        NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(event->motion.x, event->motion.y));
+        NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(mevent.x, mevent.y));
 
         /* Test, whether we hit any anchor */
-        SPDrawAnchor *anchor = test_inside(dc, NR::Point(event->button.x, event->button.y));
+        SPDrawAnchor *anchor = test_inside(pc, NR::Point(mevent.x, mevent.y));
 
         switch (pc->mode) {
         case SP_PEN_CONTEXT_MODE_CLICK:
             switch (pc->state) {
             case SP_PEN_CONTEXT_POINT:
-                if ( dc->npoints != 0 ) {
+                if ( pc->npoints != 0 ) {
                     /* Only set point, if we are already appending */
-                    spdc_endpoint_snap(dc, p, event->motion.state);
+                    spdc_endpoint_snap(pc, p, mevent.state);
                     spdc_pen_set_subsequent_point(pc, p);
                     ret = TRUE;
                 }
@@ -1487,8 +1532,8 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
             case SP_PEN_CONTEXT_CONTROL:
             case SP_PEN_CONTEXT_CLOSE:
                 /* Placing controls is last operation in CLOSE state */
-                spdc_endpoint_snap(dc, p, event->motion.state);
-                spdc_pen_set_ctrl(pc, p, event->motion.state);
+                spdc_endpoint_snap(pc, p, mevent.state);
+                spdc_pen_set_ctrl(pc, p, mevent.state);
                 ret = TRUE;
                 break;
             case SP_PEN_CONTEXT_STOP:
@@ -1501,11 +1546,11 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
         case SP_PEN_CONTEXT_MODE_DRAG:
             switch (pc->state) {
             case SP_PEN_CONTEXT_POINT:
-                if ( dc->npoints > 0 ) {
+                if ( pc->npoints > 0 ) {
                     /* Only set point, if we are already appending */
 
                     if (!anchor) {   /* Snap node only if not hitting anchor */
-                        spdc_endpoint_snap(dc, p, event->motion.state);
+                        spdc_endpoint_snap(pc, p, mevent.state);
                     }
 
                     spdc_pen_set_subsequent_point(pc, p);
@@ -1517,9 +1562,9 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 /* Placing controls is last operation in CLOSE state */
 
                 // snap the handle
-                spdc_endpoint_snap_handle(pc, p, event->motion.state);
+                spdc_endpoint_snap_handle(pc, p, mevent.state);
 
-                spdc_pen_set_ctrl(pc, p, event->motion.state);
+                spdc_pen_set_ctrl(pc, p, mevent.state);
                 ret = TRUE;
                 break;
             case SP_PEN_CONTEXT_STOP:
@@ -1532,32 +1577,36 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
         default:
             break;
         }
-        break;
-    }
-    case GDK_BUTTON_RELEASE:
+        return ret;
+}
+
+static gint
+pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent)
+{
+        gint ret = FALSE;
         xp = yp = 0;
-        if ( event->button.button == 1 ) {
+        if ( revent.button == 1 ) {
             /* Find desktop coordinates */
-            NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(event->motion.x, event->motion.y));
+            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, NR::Point(revent.x, revent.y));
 
             /* Test whether we hit any anchor. */
-            SPDrawAnchor *anchor = test_inside(dc, NR::Point(event->button.x, event->button.y));
+            SPDrawAnchor *anchor = test_inside(pc, NR::Point(revent.x, revent.y));
 
             switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
                 switch (pc->state) {
                 case SP_PEN_CONTEXT_POINT:
-                    if ( dc->npoints == 0 ) {
+                    if ( pc->npoints == 0 ) {
                         /* Start new thread only with button release */
                         if (anchor) {
                             p = anchor->dp;
                         }
-                        dc->sa = anchor;
-                        spdc_endpoint_snap(dc, p, event->motion.state);
+                        pc->sa = anchor;
+                        spdc_endpoint_snap(pc, p, revent.state);
                         spdc_pen_set_initial_point(pc, p);
                     } else {
                         /* Set end anchor here */
-                        dc->ea = anchor;
+                        pc->ea = anchor;
                          if (anchor) {
                             p = anchor->dp;
                         }
@@ -1567,17 +1616,17 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                     break;
                 case SP_PEN_CONTEXT_CONTROL:
                     /* End current segment */
-                    spdc_endpoint_snap(dc, p, event->motion.state);
-                    spdc_pen_finish_segment(pc, p, event->button.state);
+                    spdc_endpoint_snap(pc, p, revent.state);
+                    spdc_pen_finish_segment(pc, p, revent.state);
                     pc->state = SP_PEN_CONTEXT_POINT;
                     ret = TRUE;
                     break;
                 case SP_PEN_CONTEXT_CLOSE:
                     /* End current segment */
                     if (!anchor) {   /* Snap node only if not hitting anchor */
-                        spdc_endpoint_snap(dc, p, event->motion.state);
+                        spdc_endpoint_snap(pc, p, revent.state);
                     }
-                    spdc_pen_finish_segment(pc, p, event->button.state);
+                    spdc_pen_finish_segment(pc, p, revent.state);
                     spdc_pen_finish(pc, TRUE);
                     pc->state = SP_PEN_CONTEXT_POINT;
                     ret = TRUE;
@@ -1595,12 +1644,12 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 switch (pc->state) {
                 case SP_PEN_CONTEXT_POINT:
                 case SP_PEN_CONTEXT_CONTROL:
-                    spdc_endpoint_snap(dc, p, event->motion.state);
-                    spdc_pen_finish_segment(pc, p, event->button.state);
+                    spdc_endpoint_snap(pc, p, revent.state);
+                    spdc_pen_finish_segment(pc, p, revent.state);
                     break;
                 case SP_PEN_CONTEXT_CLOSE:
-                    spdc_endpoint_snap(dc, p, event->motion.state);
-                    spdc_pen_finish_segment(pc, p, event->button.state);
+                    spdc_endpoint_snap(pc, p, revent.state);
+                    spdc_pen_finish_segment(pc, p, revent.state);
                     spdc_pen_finish(pc, TRUE);
                     break;
                 case SP_PEN_CONTEXT_STOP:
@@ -1616,33 +1665,43 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 break;
             }
 
-            if (dc->grab) {
+            if (pc->grab) {
                 /* Release grab now */
-                sp_canvas_item_ungrab(dc->grab, event->button.time);
-                dc->grab = NULL;
+                sp_canvas_item_ungrab(pc->grab, revent.time);
+                pc->grab = NULL;
             }
 
             ret = TRUE;
         }
-        break;
-    case GDK_2BUTTON_PRESS:
-        if (dc->npoints != 0) {
+        return ret;
+}
+
+static gint
+pen_handle_2button_press(SPPenContext *const pc)
+{
+        gint ret = FALSE;
+        if (pc->npoints != 0) {
             spdc_pen_finish(pc, FALSE);
             ret = TRUE;
         }
-        break;
-    case GDK_KEY_PRESS:
+        return ret;
+}
+
+static gint
+pen_handle_key_press(SPPenContext *const pc, guint const keyval)
+{
+        gint ret = FALSE;
         /* fixme: */
-        switch (event->key.keyval) {
+        switch (keyval) {
         case GDK_Return:
-            if (dc->npoints != 0) {
+            if (pc->npoints != 0) {
                 spdc_pen_finish(pc, FALSE);
                 ret = TRUE;
             }
             break;
         case GDK_Escape:
             pc->state = SP_PEN_CONTEXT_STOP;
-            spdc_reset_colors(dc);
+            spdc_reset_colors(pc);
             sp_canvas_item_hide(pc->c0);
             sp_canvas_item_hide(pc->c1);
             sp_canvas_item_hide(pc->cl0);
@@ -1650,10 +1709,10 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
             ret = TRUE;
             break;
         case GDK_BackSpace:
-            if (sp_curve_is_empty(dc->green_curve)) {
+            if (sp_curve_is_empty(pc->green_curve)) {
                 /* Same as cancel */
                 pc->state = SP_PEN_CONTEXT_STOP;
-                spdc_reset_colors(dc);
+                spdc_reset_colors(pc);
                 sp_canvas_item_hide(pc->c0);
                 sp_canvas_item_hide(pc->c1);
                 sp_canvas_item_hide(pc->cl0);
@@ -1662,25 +1721,25 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 break;
             } else {
                 /* Reset red curve */
-                sp_curve_reset(dc->red_curve);
+                sp_curve_reset(pc->red_curve);
                 /* Destroy topmost green bpath */
-                gtk_object_destroy(GTK_OBJECT(dc->green_bpaths->data));
-                dc->green_bpaths = g_slist_remove(dc->green_bpaths, dc->green_bpaths->data);
+                gtk_object_destroy(GTK_OBJECT(pc->green_bpaths->data));
+                pc->green_bpaths = g_slist_remove(pc->green_bpaths, pc->green_bpaths->data);
 
                 /* Get last segment */
-                NArtBpath const *const p = SP_CURVE_BPATH(dc->green_curve);
-                gint const e = SP_CURVE_LENGTH(dc->green_curve);
+                NArtBpath const *const p = SP_CURVE_BPATH(pc->green_curve);
+                gint const e = SP_CURVE_LENGTH(pc->green_curve);
                 if ( e < 2 ) {
                     g_warning("Green curve length is %d", e);
                     break;
                 }
-                dc->p[0] = p[e - 2].c(3);
-                dc->p[1] = p[e - 1].c(1);
-                NR::Point const pt(( dc->npoints < 4
+                pc->p[0] = p[e - 2].c(3);
+                pc->p[1] = p[e - 1].c(1);
+                NR::Point const pt(( pc->npoints < 4
                                      ? p[e - 1].c(3)
-                                     : dc->p[3] ));
-                dc->npoints = 2;
-                sp_curve_backspace(dc->green_curve);
+                                     : pc->p[3] ));
+                pc->npoints = 2;
+                sp_curve_backspace(pc->green_curve);
                 sp_canvas_item_hide(pc->c0);
                 sp_canvas_item_hide(pc->c1);
                 sp_canvas_item_hide(pc->cl0);
@@ -1693,18 +1752,9 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
         default:
             break;
         }
-        break;
-    default:
-        break;
-    }
-
-    if (!ret) {
-        if (((SPEventContextClass *) pen_parent_class)->root_handler)
-            return ((SPEventContextClass *) pen_parent_class)->root_handler(ec, event);
-    }
-
-    return ret;
+        return ret;
 }
+
 
 static void
 spdc_pen_set_initial_point(SPPenContext *pc, NR::Point const p)
@@ -1829,9 +1879,9 @@ spdc_pen_finish(SPPenContext *pc, gboolean closed)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
