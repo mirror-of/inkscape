@@ -44,10 +44,10 @@ DB::DB (void) {
 void
 DB::register_ext (Extension *module)
 {
+	g_return_if_fail(module != NULL);
 	g_return_if_fail(module->get_id() != NULL);
 
 	// only add to list if it's a never-before-seen module
-	//bool add_to_list=((*moduledict.find(module->get_id())).second == NULL);
         bool add_to_list = 
                ( moduledict.find(module->get_id()) == moduledict.end());
         
@@ -64,12 +64,13 @@ DB::register_ext (Extension *module)
 void
 DB::unregister_ext (Extension * module)
 {
+	g_return_if_fail(module != NULL);
 	g_return_if_fail(module->get_id() != NULL);
 
 	// printf("Extension DB: removing %s\n", module->get_id());
 	moduledict.erase(moduledict.find(module->get_id()));
 	// only remove if it's not there any more
-	if ((*moduledict.find(module->get_id())).second == NULL)
+	if ( moduledict.find(module->get_id()) != moduledict.end())
 		modulelist.remove(module);
 }
 
@@ -87,10 +88,12 @@ Extension *
 DB::get (const gchar *key)
 {
 	Extension *mod;
+	std::map<const char *, Extension *, ltstr>::iterator iter;
 
 	if (key == NULL) return NULL;
 
-	mod = (*moduledict.find(key)).second;
+	if ( ( iter = moduledict.find(key) ) != moduledict.end())
+		mod = (*iter).second;
 
 	if ( !mod || mod->deactivated() )
 		return NULL;
