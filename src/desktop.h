@@ -60,6 +60,10 @@ struct _SPDesktop {
 	gdouble guidesnap;
 	/* fixme: This has to be implemented in different way */
 	guint guides_active : 1;
+
+	GList *zooms_past;
+	GList *zooms_future;
+	gboolean can_go_forward;
 };
 
 struct _SPDesktopClass {
@@ -119,6 +123,8 @@ void sp_desktop_zoom_page_width (SPDesktop *dt);
 void sp_desktop_zoom_drawing (SPDesktop *dt);
 void sp_desktop_zoom_selection (SPDesktop *dt);
 void sp_desktop_scroll_world (SPDesktop *dt, float dx, float dy);
+void sp_desktop_prev_zoom (SPDesktop *dt);
+void sp_desktop_next_zoom (SPDesktop *dt);
 
 const SPUnit *sp_desktop_get_default_unit (SPDesktop *dt);
 

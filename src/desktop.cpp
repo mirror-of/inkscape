@@ -194,6 +194,10 @@ sp_desktop_init (SPDesktop *desktop)
 	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (desktop->doc2dt), 0.8, -0.8);
 
 	desktop->guides_active = FALSE;
+
+	desktop->zooms_past = NULL;
+	desktop->zooms_future = NULL;
+	desktop->can_go_forward = FALSE;
 }
 
 static void
@@ -226,6 +230,9 @@ sp_desktop_dispose (GObject *object)
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
+
+	g_list_free (dt->zooms_past);
+	g_list_free (dt->zooms_future);
 }
 
 static void
@@ -1253,6 +1260,7 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 {
 	SPDesktopWidget *dtw;
 	NRRect viewbox;
+	NRRect *old_zoom;
 	float cx, cy;
 	double scale, newscale;
 	int clear;
@@ -1264,6 +1272,26 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 	cy = 0.5 * (y0 + y1);
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+
+	// save the zoom 
+	old_zoom = g_new(NRRect, 1);
+	old_zoom->x0 = x0;
+	old_zoom->x1 = x1;
+	old_zoom->y0 = y0;
+	old_zoom->y1 = y1;
+	if (dt->zooms_past == NULL || !(
+		((NRRect *) dt->zooms_past->data)->x0 == old_zoom->x0 &&
+		((NRRect *) dt->zooms_past->data)->x1 == old_zoom->x1 &&
+		((NRRect *) dt->zooms_past->data)->y0 == old_zoom->y0 &&
+		((NRRect *) dt->zooms_past->data)->y1 == old_zoom->y1
+		)) {
+		dt->zooms_past = g_list_prepend (dt->zooms_past, old_zoom);
+		if (dt->can_go_forward == FALSE) {
+			g_list_free (dt->zooms_future);
+			dt->zooms_future = NULL;
+		}
+		dt->can_go_forward = FALSE;
+	}
 
 	viewbox.x0 += border;
 	viewbox.y0 += border;
@@ -1300,6 +1328,58 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 	sp_desktop_widget_update_rulers (dtw);
 	sp_desktop_update_scrollbars (dt);
 	sp_desktop_widget_update_zoom (dtw);
+}
+
+void
+sp_desktop_prev_zoom (SPDesktop *dt)
+{
+	if (dt->zooms_past == NULL || dt->zooms_past->next == NULL) {
+		sp_view_set_statusf_flash (SP_VIEW(dt), _("No previous zoom."));
+		return;
+	}
+
+	// restore previous zoom
+	sp_desktop_set_display_area (dt, 
+		((NRRect *) dt->zooms_past->next->data)->x0,
+		((NRRect *) dt->zooms_past->next->data)->y0, 
+		((NRRect *) dt->zooms_past->next->data)->x1, 
+		((NRRect *) dt->zooms_past->next->data)->y1, 
+		0);
+
+	// having stepped backwards, we can now go forward
+	dt->can_go_forward = TRUE;
+
+	// remove the just-added zoom from the list
+	if (dt->zooms_past)
+		dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
+	// remove the current zoom, but save it in the zooms_future list
+	if (dt->zooms_past) {
+		dt->zooms_future = g_list_prepend (dt->zooms_future, ((NRRect *) dt->zooms_past->data));
+		dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
+	}
+}
+
+void
+sp_desktop_next_zoom (SPDesktop *dt)
+{
+	if (dt->zooms_future == NULL || 	dt->can_go_forward == FALSE) {
+		sp_view_set_statusf_flash (SP_VIEW(dt), _("No next zoom."));
+		return;
+	}
+
+	// restore next zoom
+	sp_desktop_set_display_area (dt, 
+		((NRRect *) dt->zooms_future->data)->x0,
+		((NRRect *) dt->zooms_future->data)->y0, 
+		((NRRect *) dt->zooms_future->data)->x1, 
+		((NRRect *) dt->zooms_future->data)->y1, 
+		0);
+
+	// we still can go forward
+	dt->can_go_forward = TRUE;
+
+	// remove the just-used zoom from the zooms_future list
+	dt->zooms_future = g_list_remove (dt->zooms_future, ((NRRect *) dt->zooms_future->data));
 }
 
 NRRect *
@@ -1353,10 +1433,8 @@ sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
 void
 sp_desktop_zoom_relative (SPDesktop *dt, float cx, float cy, float zoom)
 {
-        gdouble scale;
-
+	gdouble scale;
 	scale = SP_DESKTOP_ZOOM (dt) * zoom;
-
 	sp_desktop_zoom_absolute (dt, cx, cy, scale);
 }
 
@@ -1524,7 +1602,9 @@ sp_desktop_update_scrollbars (SPDesktop *dt)
 static void
 sp_desktop_widget_update_zoom (SPDesktopWidget *dtw)
 {
+	g_signal_handlers_block_by_func (G_OBJECT (dtw->zoom_status), (gpointer)G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (dtw->zoom_status), log(SP_DESKTOP_ZOOM(dtw->desktop)) / log(2));
+	g_signal_handlers_unblock_by_func (G_OBJECT (dtw->zoom_status), (gpointer)G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 }
 
 gint
