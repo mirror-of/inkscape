@@ -545,7 +545,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		}
 		break;
 	case SP_PROP_OVERFLOW:
-		g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", __LINE__, id, val);
+		g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", id, val);
 		break;
 	case SP_PROP_VISIBILITY:
 		if (!style->visibility_set) {
@@ -608,7 +608,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		g_warning ("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
 		break;
 	case SP_PROP_COLOR_RENDERING:
-		g_warning ("Unimplemented style property SP_PROP_COLOR_RENDERING: %d value at %d: %s", __LINE__, id, val);
+		g_warning ("Unimplemented style property SP_PROP_COLOR_RENDERING: value: %s", val);
 		break;
 	case SP_PROP_FILL:
 		if (!style->fill.set) {
@@ -1076,16 +1076,16 @@ sp_style_write_string (SPStyle *style)
 	g_message ("sp_style_write_string:  Writing markers");
 #endif
 	if (&style->marker[SP_MARKER_LOC].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker:%s", &style->marker[SP_MARKER_LOC].value);
+	  p += g_snprintf (p, c + BMAX - p, "marker:%s", style->marker[SP_MARKER_LOC].value);
 	}
 	if (&style->marker[SP_MARKER_LOC_START].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker-start:%s", &style->marker[SP_MARKER_LOC_START].value);
+	  p += g_snprintf (p, c + BMAX - p, "marker-start:%s", style->marker[SP_MARKER_LOC_START].value);
 	}
 	if (&style->marker[SP_MARKER_LOC_MID].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker-mid:%s", &style->marker[SP_MARKER_LOC_MID].value);
+	  p += g_snprintf (p, c + BMAX - p, "marker-mid:%s", style->marker[SP_MARKER_LOC_MID].value);
 	}
 	if (&style->marker[SP_MARKER_LOC_END].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker-end:%s", &style->marker[SP_MARKER_LOC_END].value);
+	  p += g_snprintf (p, c + BMAX - p, "marker-end:%s", style->marker[SP_MARKER_LOC_END].value);
 	}
 
 	p += sp_style_write_ifloat (p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, SP_STYLE_FLAG_IFSET);

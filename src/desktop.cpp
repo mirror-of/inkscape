@@ -984,7 +984,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_WARNING,
 				GTK_BUTTONS_NONE,
-				NULL);
+				"Document modified");
 
 			gchar *markup;
 			/* FIXME !!! obviously this will have problems if the document name contains markup characters */
@@ -997,7 +997,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
 			g_free(markup);
 
-			//gtk_window_set_title(GTK_WINDOW(dialog), "Document has unsaved changes");
+			gtk_window_set_title(GTK_WINDOW(dialog), "Warning: Document modified");
 			
 			GtkWidget *close_button;
 			close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));

@@ -1,5 +1,7 @@
 2004-01-01  MenTaLguY <mental@rydia.net>
 
+	* src/desktop.cpp, src/style.cpp: compilation cleanups
+
 	* src/libnr/nr-types.h: documented NR::Coord and NR::ICoord
 
 2003-12-31  MenTaLguY <mental@rydia.net>
