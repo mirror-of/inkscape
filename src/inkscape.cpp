@@ -579,9 +579,9 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 	gchar * fn;
 
 #ifdef WIN32
-	//FIXME: find out if this works on windows:
+	//TODO:WIN32: find out if this works on windows:
 	//fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);
-	//this is the old code storing in current dir:
+	//this is the old code that stores prefs in current dir:
 	fn = g_strdup ("inkscape/preferences.xml");
 #else
 	fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);

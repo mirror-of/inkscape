@@ -56,7 +56,7 @@ static void sp_document_dispose (GObject *object);
 
 static gint sp_document_idle_handler (gpointer data);
 
-char *g_rel2abs (const char *path, const char *base, char *result, const size_t size);
+char *inkscape_rel2abs (const char *path, const char *base, char *result, const size_t size);
 
 gboolean sp_document_resource_list_free (gpointer key, gpointer value, gpointer data);
 
@@ -243,13 +243,15 @@ sp_document_create (SPReprDoc *rdoc,
 #ifndef WIN32
 	if (uri) { // compute absolute path
 		full_path = (char *) g_malloc (1000);
-		g_rel2abs (uri, g_get_current_dir(), full_path, 1000);
+		inkscape_rel2abs (uri, g_get_current_dir(), full_path, 1000);
 		document->uri = g_strdup (full_path);
 		g_free (full_path);
 	} else {
 		document->uri = NULL;
 	}
 #else
+	//TODO:WIN32: program the windows equivalent of the above code for finding out 
+	// the normalized absolute path of the file, including the drive letter
 	document->uri = g_strdup (uri);
 #endif
 
@@ -833,7 +835,7 @@ sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
 }
 
 
-// g_rel2abs function by Shigio Yamaguchi
+// based on g_rel2abs function by Shigio Yamaguchi
 
 /* current == "./", parent == "../" */
 static char dots[] = {'.', '.', G_DIR_SEPARATOR, '\0'};
@@ -851,7 +853,7 @@ static char *current = dots + 1;
  *			== NULL: error
  */
 char *
-g_rel2abs (const char *path, const char *base, char *result, const size_t size)
+inkscape_rel2abs (const char *path, const char *base, char *result, const size_t size)
 {
   const char *pp, *bp;
   /* endp points the last position which is safe in the result buffer. */
