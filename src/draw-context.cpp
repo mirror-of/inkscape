@@ -210,9 +210,6 @@ sp_draw_context_setup(SPEventContext *ec)
     dc->green_anchor = NULL;
 
     spdc_set_attach(dc, FALSE);
-
-    if (prefs_get_int_attribute("tools.freehand.pencil", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void
@@ -232,8 +229,6 @@ sp_draw_context_finish(SPEventContext *ec)
     }
 
     spdc_free_colors(dc);
-
-    sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 static void
@@ -872,6 +867,7 @@ sp_draw_anchor_test(SPDrawAnchor *anchor, NR::Point w, gboolean activate)
 
 static void sp_pencil_context_class_init(SPPencilContextClass *klass);
 static void sp_pencil_context_init(SPPencilContext *dc);
+static void sp_pencil_context_setup(SPEventContext *ec);
 static void sp_pencil_context_dispose(GObject *object);
 
 static gint sp_pencil_context_root_handler(SPEventContext *event_context, GdkEvent *event);
@@ -916,6 +912,7 @@ sp_pencil_context_class_init(SPPencilContextClass *klass)
 
     object_class->dispose = sp_pencil_context_dispose;
 
+    event_context_class->setup = sp_pencil_context_setup;
     event_context_class->root_handler = sp_pencil_context_root_handler;
 }
 
@@ -926,13 +923,25 @@ sp_pencil_context_init(SPPencilContext *pc)
 }
 
 static void
+sp_pencil_context_setup (SPEventContext *ec)
+{
+	if (prefs_get_int_attribute("tools.freehand.pencil", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+
+    if (((SPEventContextClass *) pencil_parent_class)->setup) {
+        ((SPEventContextClass *) pencil_parent_class)->setup(ec);
+    }
+}
+
+
+static void
 sp_pencil_context_dispose(GObject *object)
 {
-    SPPencilContext *pc;
-
-    pc = SP_PENCIL_CONTEXT(object);
+    SPEventContext *ec = SP_EVENT_CONTEXT(object);
 
     G_OBJECT_CLASS(pencil_parent_class)->dispose(object);
+
+    sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 gint
