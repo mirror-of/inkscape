@@ -36,10 +36,12 @@ ecma/svgview.cpp
 ecma/SVGViewer.cpp
 extension/menu.h
 extension/menu.cpp
+extract-uri-test.cpp
 ink-snprintf.cpp
 inkview.cpp
 libnr/nr-matrix-test.cpp
 libnr/nr-point-fns-test.cpp
+libnr/nr-rotate-test.cpp
 libnr/nr-types-test.cpp
 libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp

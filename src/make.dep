@@ -50,6 +50,7 @@ arc-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -115,6 +116,7 @@ desktop-affine.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -178,6 +180,7 @@ desktop-events.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	snap.h \
 	sp-guide.h \
@@ -232,6 +235,7 @@ desktop-handles.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -312,6 +316,7 @@ desktop.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	select-context.h \
 	selection-describer.h \
@@ -390,6 +395,7 @@ dialogs/align.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-item-transform.h \
 	sp-item.h \
@@ -453,6 +459,7 @@ dialogs/desktop-properties.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	snap.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -521,6 +528,7 @@ dialogs/dialog-events.o: \
 	message.h \
 	prefs-utils.h \
 	refcounted.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -575,6 +583,7 @@ dialogs/display-settings.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selcue.h \
 	seltrans.h \
@@ -634,6 +643,7 @@ dialogs/export.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	snap.h \
 	sp-item-group.h \
@@ -717,6 +727,7 @@ dialogs/fill-style.o: \
 	libnr/nr-values.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -791,6 +802,7 @@ dialogs/find.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection-chemistry.h \
 	selection-chemistry.h \
 	selection.h \
@@ -849,6 +861,7 @@ dialogs/in-dt-coordsys.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-object.h \
@@ -900,6 +913,7 @@ dialogs/item-properties.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -947,6 +961,7 @@ dialogs/object-attributes.o: \
 	libnr/nr-values.h \
 	macros.h \
 	require-config.h \
+	round.h \
 	sp-anchor.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -1000,6 +1015,7 @@ dialogs/object-properties.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	verbs.h \
 	view.h \
 	widgets/icon.h \
@@ -1092,6 +1108,7 @@ dialogs/stroke-style.o: \
 	prefix.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-chars.h \
 	sp-defs.h \
@@ -1180,6 +1197,7 @@ dialogs/text-edit.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -1247,6 +1265,7 @@ dialogs/transformation.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection-chemistry.h \
 	selection.h \
 	sp-item-group.h \
@@ -1310,6 +1329,7 @@ dialogs/xml-tree.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-chars.h \
 	sp-defs.h \
@@ -1352,7 +1372,8 @@ display/bezier-utils.o: \
 	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
-	libnr/nr-point.h
+	libnr/nr-point.h \
+	round.h
 
 display/canvas-arena.o: \
 	display/canvas-arena.cpp \
@@ -1387,7 +1408,8 @@ display/canvas-arena.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	prefs-utils.h
+	prefs-utils.h \
+	round.h
 
 display/canvas-bpath.o: \
 	display/canvas-bpath.cpp \
@@ -1429,7 +1451,8 @@ display/canvas-bpath.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 display/canvas-grid.o: \
 	display/canvas-grid.cpp \
@@ -1457,7 +1480,8 @@ display/canvas-grid.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/curve.o: \
 	display/curve.cpp \
@@ -1467,7 +1491,8 @@ display/curve.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-path.h \
-	libnr/nr-point.h
+	libnr/nr-point.h \
+	round.h
 
 display/gnome-canvas-acetate.o: \
 	display/gnome-canvas-acetate.cpp \
@@ -1490,7 +1515,8 @@ display/gnome-canvas-acetate.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/guideline.o: \
 	display/guideline.cpp \
@@ -1517,7 +1543,8 @@ display/guideline.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/nr-arena-glyphs.o: \
 	display/nr-arena-glyphs.cpp \
@@ -1575,6 +1602,7 @@ display/nr-arena-glyphs.o: \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -1612,7 +1640,8 @@ display/nr-arena-group.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/nr-arena-image.o: \
 	display/nr-arena-image.cpp \
@@ -1642,7 +1671,8 @@ display/nr-arena-image.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	prefs-utils.h
+	prefs-utils.h \
+	round.h
 
 display/nr-arena-item.o: \
 	display/nr-arena-item.cpp \
@@ -1670,7 +1700,8 @@ display/nr-arena-item.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	prefs-utils.h
+	prefs-utils.h \
+	round.h
 
 display/nr-arena-shape.o: \
 	display/nr-arena-shape.cpp \
@@ -1723,6 +1754,7 @@ display/nr-arena-shape.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -1759,7 +1791,8 @@ display/nr-arena.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/nr-gradient-gpl.o: \
 	display/nr-gradient-gpl.cpp \
@@ -1786,7 +1819,8 @@ display/nr-gradient-gpl.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/nr-plain-stuff-gdk.o: \
 	display/nr-plain-stuff-gdk.cpp \
@@ -1805,7 +1839,8 @@ display/nr-plain-stuff-gdk.o: \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/nr-plain-stuff.o: \
 	display/nr-plain-stuff.cpp \
@@ -1835,7 +1870,8 @@ display/sodipodi-ctrl.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/sodipodi-ctrlrect.o: \
 	display/sodipodi-ctrlrect.cpp \
@@ -1859,7 +1895,8 @@ display/sodipodi-ctrlrect.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/sp-canvas-util.o: \
 	display/sp-canvas-util.cpp \
@@ -1885,7 +1922,8 @@ display/sp-canvas-util.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/sp-canvas.o: \
 	display/sp-canvas.cpp \
@@ -1913,7 +1951,8 @@ display/sp-canvas.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 display/sp-ctrlline.o: \
 	display/sp-ctrlline.cpp \
@@ -1952,7 +1991,8 @@ display/sp-ctrlline.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 document-undo.o: \
 	document-undo.cpp \
@@ -1977,6 +2017,7 @@ document-undo.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	refcounted.h \
+	round.h \
 	selection.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -2041,6 +2082,7 @@ document.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	snap.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -2115,6 +2157,7 @@ draw-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -2191,6 +2234,7 @@ dropper-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -2261,6 +2305,7 @@ dyna-draw-context.o: \
 	mod360.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -2346,6 +2391,7 @@ event-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	select-context.h \
 	selection-chemistry.h \
@@ -2412,6 +2458,7 @@ extension/extension.o: \
 	libnr/nr-point.h \
 	prefs-utils.h \
 	require-config.h \
+	round.h \
 	sp-object.h \
 	version.h \
 	widgets/menu.h \
@@ -2430,6 +2477,7 @@ extension/implementation/implementation.o: \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	libnr/nr-point.h \
+	round.h \
 	widgets/menu.h \
 	xml/repr.h \
 	xml/xml-forward.h
@@ -2481,6 +2529,7 @@ extension/implementation/script.o: \
 	prefix.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	snap.h \
 	sp-item-group.h \
@@ -2591,6 +2640,7 @@ extension/internal/gdkpixbuf-input.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	prefs-utils.h \
+	round.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -2663,6 +2713,7 @@ extension/internal/ps.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -2734,6 +2785,7 @@ extension/internal/win32.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	widgets/menu.h \
 	xml/repr.h \
 	xml/xml-forward.h
@@ -4129,16 +4181,12 @@ extension/system.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	verbs.h \
 	view.h \
 	widgets/menu.h \
 	xml/repr.h \
 	xml/xml-forward.h
-
-extract-uri-test.o: \
-	extract-uri-test.cpp \
-	extract-uri.h \
-	utest/utest.h
 
 extract-uri.o: \
 	extract-uri.cpp \
@@ -4203,6 +4251,7 @@ file.o: \
 	print.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection-chemistry.h \
 	selection.h \
 	snap.h \
@@ -4244,7 +4293,8 @@ geom.o: \
 	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
-	libnr/nr-point.h
+	libnr/nr-point.h \
+	round.h
 
 gradient-chemistry.o: \
 	gradient-chemistry.cpp \
@@ -4273,6 +4323,7 @@ gradient-chemistry.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
@@ -4331,6 +4382,7 @@ help.o: \
 	prefix.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item.h \
 	sp-object.h \
@@ -4356,6 +4408,7 @@ helper/action.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	view.h
 
 helper/gnome-utils.o: \
@@ -4401,6 +4454,7 @@ helper/stock-items.o: \
 	libnr/nr-values.h \
 	path-prefix.h \
 	prefix.h \
+	round.h \
 	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
@@ -4456,6 +4510,7 @@ helper/window.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	shortcuts.h \
 	verbs.h \
 	view.h \
@@ -4520,6 +4575,7 @@ inkscape.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	shortcuts.h \
@@ -4594,6 +4650,7 @@ interface.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection-chemistry.h \
 	shortcuts.h \
@@ -4667,6 +4724,7 @@ knot.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-guide.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -4716,6 +4774,7 @@ knotholder.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -4751,7 +4810,8 @@ libnr/nr-blit.o: \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-compose-transform.o: \
 	libnr/nr-compose-transform.cpp \
@@ -4767,7 +4827,8 @@ libnr/nr-compose-transform.o: \
 	libnr/nr-point.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
-	libnr/nr-translate.h
+	libnr/nr-translate.h \
+	round.h
 
 libnr/nr-compose.o: \
 	libnr/nr-compose.cpp \
@@ -4798,7 +4859,8 @@ libnr/nr-gradient.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-matrix-fns.o: \
 	libnr/nr-matrix-fns.cpp \
@@ -4812,7 +4874,8 @@ libnr/nr-matrix-fns.o: \
 	libnr/nr-point.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
-	libnr/nr-translate.h
+	libnr/nr-translate.h \
+	round.h
 
 libnr/nr-matrix.o: \
 	libnr/nr-matrix.cpp \
@@ -4827,7 +4890,8 @@ libnr/nr-matrix.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-object.o: \
 	libnr/nr-object.cpp \
@@ -4854,7 +4918,8 @@ libnr/nr-path.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-pixblock-line.o: \
 	libnr/nr-pixblock-line.cpp \
@@ -4873,7 +4938,8 @@ libnr/nr-pixblock-line.o: \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-pixblock-pattern.o: \
 	libnr/nr-pixblock-pattern.cpp \
@@ -4892,7 +4958,8 @@ libnr/nr-pixblock-pattern.o: \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-pixblock-pixel.o: \
 	libnr/nr-pixblock-pixel.cpp \
@@ -4910,7 +4977,8 @@ libnr/nr-pixblock-pixel.o: \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-pixblock.o: \
 	libnr/nr-pixblock.cpp \
@@ -4927,7 +4995,8 @@ libnr/nr-pixblock.o: \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-point-fns.o: \
 	libnr/nr-point-fns.cpp \
@@ -4936,7 +5005,8 @@ libnr/nr-point-fns.o: \
 	libnr/nr-macros.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
-	libnr/nr-point.h
+	libnr/nr-point.h \
+	round.h
 
 libnr/nr-rect-l.o: \
 	libnr/nr-rect-l.cpp \
@@ -4951,7 +5021,8 @@ libnr/nr-rect-l.o: \
 	libnr/nr-point.h \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-rect.o: \
 	libnr/nr-rect.cpp \
@@ -4972,7 +5043,8 @@ libnr/nr-rect.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-rotate-fns-test.o: \
 	libnr/nr-rotate-fns-test.cpp \
@@ -4984,6 +5056,7 @@ libnr/nr-rotate-fns-test.o: \
 	libnr/nr-point.h \
 	libnr/nr-rotate-fns.h \
 	libnr/nr-rotate.h \
+	round.h \
 	utest/utest.h
 
 libnr/nr-rotate-fns.o: \
@@ -4996,26 +5069,8 @@ libnr/nr-rotate-fns.o: \
 	libnr/nr-point.h \
 	libnr/nr-rotate-fns.h \
 	libnr/nr-rotate-ops.h \
-	libnr/nr-rotate.h
-
-libnr/nr-rotate-test.o: \
-	libnr/nr-rotate-test.cpp \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix-fns.h \
-	libnr/nr-matrix-ops.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rotate-fns.h \
-	libnr/nr-rotate-ops.h \
 	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	utest/utest.h
+	round.h
 
 libnr/nr-scale-test.o: \
 	libnr/nr-scale-test.cpp \
@@ -5025,6 +5080,7 @@ libnr/nr-scale-test.o: \
 	libnr/nr-point.h \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
+	round.h \
 	utest/utest.h
 
 libnr/nr-svp-render.o: \
@@ -5046,7 +5102,8 @@ libnr/nr-svp-render.o: \
 	libnr/nr-rect.h \
 	libnr/nr-svp-render.h \
 	libnr/nr-svp.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-svp.o: \
 	libnr/nr-svp.cpp \
@@ -5070,7 +5127,8 @@ libnr/nr-svp.o: \
 	libnr/nr-svp.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-translate-test.o: \
 	libnr/nr-translate-test.cpp \
@@ -5088,6 +5146,7 @@ libnr/nr-translate-test.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate-ops.h \
 	libnr/nr-translate.h \
+	round.h \
 	utest/utest.h
 
 libnr/nr-types.o: \
@@ -5110,7 +5169,8 @@ libnr/nr-types.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-types.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr-values.o: \
 	libnr/nr-values.cpp \
@@ -5132,7 +5192,8 @@ libnr/nr-values.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.o: \
 	libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.S
@@ -5169,7 +5230,8 @@ libnr/testnr.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-types.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 libnrtype/FontFactory.o: \
 	libnrtype/FontFactory.cpp \
@@ -5192,7 +5254,8 @@ libnrtype/FontFactory.o: \
 	libnrtype/nrtype-forward.h \
 	livarot/LivarotDefs.h \
 	livarot/livarot-forward.h \
-	require-config.h
+	require-config.h \
+	round.h
 
 libnrtype/FontInstance.o: \
 	libnrtype/FontInstance.cpp \
@@ -5227,7 +5290,8 @@ libnrtype/FontInstance.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
-	require-config.h
+	require-config.h \
+	round.h
 
 libnrtype/RasterFont.o: \
 	libnrtype/RasterFont.cpp \
@@ -5267,7 +5331,8 @@ libnrtype/RasterFont.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
-	require-config.h
+	require-config.h \
+	round.h
 
 libnrtype/TextWrapper.o: \
 	libnrtype/TextWrapper.cpp \
@@ -5295,7 +5360,8 @@ libnrtype/TextWrapper.o: \
 	libnrtype/nrtype-forward.h \
 	livarot/LivarotDefs.h \
 	livarot/livarot-forward.h \
-	require-config.h
+	require-config.h \
+	round.h
 
 libnrtype/font-style-to-pos.o: \
 	libnrtype/font-style-to-pos.cpp \
@@ -5320,6 +5386,7 @@ libnrtype/font-style-to-pos.o: \
 	libnr/nr-values.h \
 	libnrtype/font-style-to-pos.h \
 	libnrtype/nr-type-pos-def.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -5390,7 +5457,8 @@ livarot/Path.o: \
 	libnr/nr-translate.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/PathConversion.o: \
 	livarot/PathConversion.cpp \
@@ -5412,7 +5480,8 @@ livarot/PathConversion.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/PathCutting.o: \
 	livarot/PathCutting.cpp \
@@ -5445,7 +5514,8 @@ livarot/PathCutting.o: \
 	libnr/nr-values.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/PathOutline.o: \
 	livarot/PathOutline.cpp \
@@ -5457,7 +5527,8 @@ livarot/PathOutline.o: \
 	libnr/nr-point.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/PathSimplify.o: \
 	livarot/PathSimplify.cpp \
@@ -5476,7 +5547,8 @@ livarot/PathSimplify.o: \
 	libnr/nr-translate.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/PathStroke.o: \
 	livarot/PathStroke.cpp \
@@ -5497,7 +5569,8 @@ livarot/PathStroke.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/Shape.o: \
 	livarot/Shape.cpp \
@@ -5512,7 +5585,8 @@ livarot/Shape.o: \
 	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/ShapeDraw.o: \
 	livarot/ShapeDraw.cpp \
@@ -5524,7 +5598,8 @@ livarot/ShapeDraw.o: \
 	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/ShapeMisc.o: \
 	livarot/ShapeMisc.cpp \
@@ -5540,7 +5615,8 @@ livarot/ShapeMisc.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/ShapeRaster.o: \
 	livarot/ShapeRaster.cpp \
@@ -5558,7 +5634,8 @@ livarot/ShapeRaster.o: \
 	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/ShapeSweep.o: \
 	livarot/ShapeSweep.cpp \
@@ -5577,7 +5654,8 @@ livarot/ShapeSweep.o: \
 	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 livarot/ShapeSweepUtils.o: \
 	livarot/ShapeSweepUtils.cpp \
@@ -5592,7 +5670,8 @@ livarot/ShapeSweepUtils.o: \
 	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	round.h
 
 marker-status.o: \
 	marker-status.cpp \
@@ -5670,6 +5749,7 @@ node-context.o: \
 	path-chemistry.h \
 	prefs-utils.h \
 	refcounted.h \
+	round.h \
 	rubberband.h \
 	selcue.h \
 	selection.h \
@@ -5747,6 +5827,7 @@ nodepath.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection-chemistry.h \
 	selection.h \
@@ -5807,6 +5888,7 @@ object-edit.o: \
 	macros.h \
 	object-edit.h \
 	prefs-utils.h \
+	round.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -5878,6 +5960,7 @@ object-ui.o: \
 	object-ui.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-anchor.h \
 	sp-image.h \
@@ -5941,6 +6024,7 @@ path-chemistry.o: \
 	path-chemistry.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -6018,6 +6102,7 @@ print.o: \
 	libnr/nr-values.h \
 	print.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -6085,6 +6170,7 @@ rect-context.o: \
 	rect-context.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -6144,6 +6230,7 @@ rubberband.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	rubberband.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6188,6 +6275,7 @@ satisfied-guide-cns.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	satisfied-guide-cns.h \
 	snap.h \
 	sp-guide-attachment.h \
@@ -6246,6 +6334,7 @@ selcue.o: \
 	message.h \
 	prefs-utils.h \
 	refcounted.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	sp-item-group.h \
@@ -6311,6 +6400,7 @@ select-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	rubberband.h \
 	selcue.h \
 	select-context.h \
@@ -6390,6 +6480,7 @@ select-toolbar.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	select-toolbar.h \
 	selection-chemistry.h \
 	selection.h \
@@ -6471,6 +6562,7 @@ selection-chemistry.o: \
 	path-chemistry.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection-chemistry.h \
 	selection.h \
 	snap.h \
@@ -6531,6 +6623,7 @@ selection-describer.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection-describer.h \
 	selection.h \
 	sp-item.h \
@@ -6575,6 +6668,7 @@ selection.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6618,6 +6712,7 @@ seltrans-handles.o: \
 	libnr/nr-values.h \
 	message-context.h \
 	message.h \
+	round.h \
 	selcue.h \
 	seltrans-handles.h \
 	seltrans.h
@@ -6676,6 +6771,7 @@ seltrans.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	select-context.h \
 	selection-describer.h \
@@ -6714,6 +6810,7 @@ shortcuts.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	shortcuts.h \
 	verbs.h \
 	view.h
@@ -6748,6 +6845,7 @@ slideshow.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item.h \
 	sp-object.h \
@@ -6773,6 +6871,7 @@ snap.o: \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
 	libnr/nr-values.h \
+	round.h \
 	snap.h \
 	sp-guide.h \
 	sp-namedview.h \
@@ -6813,6 +6912,7 @@ sp-anchor.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-anchor.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6877,6 +6977,7 @@ sp-chars.o: \
 	macros.h \
 	print.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6923,6 +7024,7 @@ sp-clippath.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-clippath.h \
 	sp-item.h \
 	sp-object-group.h \
@@ -6983,6 +7085,7 @@ sp-ellipse.o: \
 	libnr/nr-values.h \
 	prefs-utils.h \
 	require-config.h \
+	round.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7037,6 +7140,7 @@ sp-gradient.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	round.h \
 	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
@@ -7089,6 +7193,7 @@ sp-guide.o: \
 	libnr/nr-values.h \
 	remove-last.h \
 	require-config.h \
+	round.h \
 	sp-guide-attachment.h \
 	sp-guide-constraint.h \
 	sp-guide.h \
@@ -7150,6 +7255,7 @@ sp-image.o: \
 	print.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-image.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7205,6 +7311,7 @@ sp-item-group.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -7246,6 +7353,7 @@ sp-item-notify-moveto.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-guide.h \
 	sp-item-notify-moveto.h \
 	sp-item-rm-unsatisfied-cns.h \
@@ -7276,6 +7384,7 @@ sp-item-rm-unsatisfied-cns.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	remove-last.h \
+	round.h \
 	sp-guide-attachment.h \
 	sp-guide-constraint.h \
 	sp-guide.h \
@@ -7310,6 +7419,7 @@ sp-item-transform.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-item-transform.h \
 	sp-item.h \
 	sp-object.h \
@@ -7338,6 +7448,7 @@ sp-item-update-cns.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	remove-last.h \
+	round.h \
 	satisfied-guide-cns.h \
 	sp-guide-attachment.h \
 	sp-guide-constraint.h \
@@ -7393,6 +7504,7 @@ sp-item.o: \
 	print.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-anchor.h \
 	sp-clippath.h \
@@ -7450,6 +7562,7 @@ sp-line.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-line.h \
@@ -7509,6 +7622,7 @@ sp-marker.o: \
 	message.h \
 	print.h \
 	refcounted.h \
+	round.h \
 	snap.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -7558,6 +7672,7 @@ sp-mask.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-item.h \
 	sp-mask.h \
 	sp-object-group.h \
@@ -7623,6 +7738,7 @@ sp-namedview.o: \
 	message.h \
 	prefs-utils.h \
 	refcounted.h \
+	round.h \
 	snap.h \
 	sp-guide.h \
 	sp-item-group.h \
@@ -7683,6 +7799,7 @@ sp-object-repr.o: \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
 	livarot/livarot-forward.h \
+	round.h \
 	snap.h \
 	sp-anchor.h \
 	sp-animation.h \
@@ -7751,6 +7868,7 @@ sp-object.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -7812,6 +7930,7 @@ sp-offset.o: \
 	livarot/livarot-forward.h \
 	prefs-utils.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7850,6 +7969,7 @@ sp-paint-server.o: \
 	libnr/nr-rect-l.h \
 	libnr/nr-rect.h \
 	libnr/nr-values.h \
+	round.h \
 	sp-object.h \
 	sp-paint-server.h \
 	version.h \
@@ -7887,6 +8007,7 @@ sp-path.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -7940,6 +8061,7 @@ sp-pattern.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	round.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7984,6 +8106,7 @@ sp-polygon.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -8025,6 +8148,7 @@ sp-polyline.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -8074,6 +8198,7 @@ sp-rect.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -8136,6 +8261,7 @@ sp-root.o: \
 	message.h \
 	print.h \
 	refcounted.h \
+	round.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8213,6 +8339,7 @@ sp-shape.o: \
 	print.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -8268,6 +8395,7 @@ sp-spiral.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -8323,6 +8451,7 @@ sp-star.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -8385,6 +8514,7 @@ sp-symbol.o: \
 	message.h \
 	print.h \
 	refcounted.h \
+	round.h \
 	snap.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -8468,6 +8598,7 @@ sp-text.o: \
 	print.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8543,6 +8674,7 @@ sp-typeset-kplayout.o: \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8621,6 +8753,7 @@ sp-typeset-layout.o: \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8685,6 +8818,7 @@ sp-typeset-utils.o: \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
 	require-config.h \
+	round.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8759,6 +8893,7 @@ sp-typeset.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -8841,6 +8976,7 @@ sp-use.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -8910,6 +9046,7 @@ spiral-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -8989,6 +9126,7 @@ splivarot.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -9063,6 +9201,7 @@ star-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	snap.h \
@@ -9154,6 +9293,7 @@ style.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	marker-status.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -9203,6 +9343,7 @@ svg-view.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	sp-item.h \
 	sp-object.h \
 	svg-view.h \
@@ -9244,7 +9385,8 @@ svg/svg-affine.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	round.h
 
 svg/svg-color.o: \
 	svg/svg-color.cpp \
@@ -9324,6 +9466,7 @@ text-context.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	selection.h \
 	sp-chars.h \
@@ -9412,6 +9555,7 @@ toolbox.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	select-toolbar.h \
 	selection-chemistry.h \
@@ -9510,6 +9654,7 @@ tools-switch.o: \
 	rect-context.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	select-context.h \
 	selection-chemistry.h \
@@ -9624,6 +9769,7 @@ verbs.o: \
 	rect-context.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selcue.h \
 	select-context.h \
 	selection-chemistry.h \
@@ -9678,6 +9824,7 @@ view.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	view.h \
 	xml/xml-forward.h
 
@@ -9712,6 +9859,7 @@ widgets/button.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	shortcuts.h \
 	verbs.h \
 	view.h \
@@ -9742,6 +9890,7 @@ widgets/dash-selector.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -9794,6 +9943,7 @@ widgets/font-selector.o: \
 	livarot/LivarotDefs.h \
 	livarot/livarot-forward.h \
 	require-config.h \
+	round.h \
 	widgets/font-selector.h
 
 widgets/gradient-image.o: \
@@ -9817,6 +9967,7 @@ widgets/gradient-image.o: \
 	libnr/nr-rect.h \
 	libnr/nr-values.h \
 	macros.h \
+	round.h \
 	sp-gradient.h \
 	sp-object.h \
 	sp-paint-server.h \
@@ -9871,6 +10022,7 @@ widgets/gradient-position.o: \
 	nodepath.h \
 	prefs-utils.h \
 	require-config.h \
+	round.h \
 	sp-gradient.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -9921,6 +10073,7 @@ widgets/gradient-selector.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	require-config.h \
+	round.h \
 	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
@@ -9988,6 +10141,7 @@ widgets/gradient-vector.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -10053,6 +10207,7 @@ widgets/icon.o: \
 	libnr/nr-values.h \
 	path-prefix.h \
 	prefix.h \
+	round.h \
 	sp-item.h \
 	sp-object.h \
 	version.h \
@@ -10101,6 +10256,7 @@ widgets/paint-selector.o: \
 	libnr/nr-values.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -10240,6 +10396,7 @@ widgets/sp-color-wheel.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
+	round.h \
 	widgets/sp-color-wheel.h
 
 widgets/sp-widget.o: \
@@ -10276,6 +10433,7 @@ widgets/sp-widget.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
+	round.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -10332,6 +10490,7 @@ widgets/sp-xmlview-content.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	round.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -10403,6 +10562,7 @@ widgets/spw-utilities.o: \
 	message.h \
 	refcounted.h \
 	require-config.h \
+	round.h \
 	selection.h \
 	sp-item.h \
 	sp-object.h \
@@ -10505,6 +10665,7 @@ zoom-context.o: \
 	message.h \
 	prefs-utils.h \
 	refcounted.h \
+	round.h \
 	rubberband.h \
 	selcue.h \
 	selection.h \

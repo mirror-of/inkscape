@@ -303,7 +303,6 @@ extension/script/js/prmjtime.h
 extension/script/js/resource.h
 extension/system.cpp
 extension/system.h
-extract-uri-test.cpp
 extract-uri.cpp
 extract-uri.h
 file.cpp
@@ -400,7 +399,6 @@ libnr/nr-rotate-fns-test.cpp
 libnr/nr-rotate-fns.cpp
 libnr/nr-rotate-fns.h
 libnr/nr-rotate-ops.h
-libnr/nr-rotate-test.cpp
 libnr/nr-rotate.h
 libnr/nr-scale-ops.h
 libnr/nr-scale-test.cpp
