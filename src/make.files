@@ -27,6 +27,8 @@ dialogs/display-settings.cpp
 dialogs/display-settings.h
 dialogs/export.cpp
 dialogs/export.h
+dialogs/filedialog-win32.cpp
+dialogs/filedialog.h
 dialogs/fill-style.cpp
 dialogs/fill-style.h
 dialogs/item-properties.cpp
@@ -131,6 +133,10 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
+ink-snprintf.cpp
+ink-snprintf.h
+inkjar/jar.cpp
+inkjar/jar.h
 inkscape-private.h
 inkscape-stock.cpp
 inkscape-stock.h

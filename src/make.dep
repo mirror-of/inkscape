@@ -240,8 +240,10 @@ dialogs/align.o: \
 	inkscape.h \
 	interface.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	macros.h \
 	prefs-utils.h \
 	selection.h \
@@ -296,6 +298,10 @@ dialogs/desktop-properties.o: \
 	widgets/sp-color-selector.h \
 	widgets/sp-color-selector.h \
 	widgets/spw-utilities.h \
+	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
+	xml/repr.h \
 	xml/repr.h
 
 dialogs/dialog-events.o: \
@@ -335,6 +341,7 @@ dialogs/display-settings.o: \
 	inkscape.h \
 	interface.h \
 	libnr/nr-object.h \
+	libnr/nr-types.h \
 	macros.h \
 	prefs-utils.h \
 	verbs.h \
@@ -386,6 +393,17 @@ dialogs/export.o: \
 	widgets/spw-utilities.h \
 	xml/repr.h
 
+dialogs/filedialog-win32.o: \
+	dialogs/filedialog-win32.cpp \
+	dialogs/filedialog.h \
+	display/nr-arena-forward.h \
+	forward.h \
+	libnr/nr-path.h \
+	libnr/nr-types.h \
+	module.h \
+	modules/menu.h \
+	xml/repr.h
+
 dialogs/fill-style.o: \
 	dialogs/fill-style.cpp \
 	color.h \
@@ -404,6 +422,8 @@ dialogs/fill-style.o: \
 	helper/window.h \
 	inkscape.h \
 	libnr/nr-forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -444,6 +464,8 @@ dialogs/item-properties.o: \
 	helper/units.h \
 	helper/window.h \
 	inkscape.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	modules/svg.h \
@@ -473,7 +495,10 @@ dialogs/object-attributes.o: \
 	helper/sp-intl.h \
 	helper/units.h \
 	helper/window.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	macros.h \
 	sp-anchor.h \
 	sp-item-group.h \
@@ -1453,10 +1478,19 @@ helper/window.o: \
 	helper/window.h \
 	inkscape.h \
 	libnr/nr-object.h \
+	libnr/nr-types.h \
 	shortcuts.h \
 	verbs.h \
 	view.h \
 	xml/repr.h
+
+ink-snprintf.o: \
+	ink-snprintf.cpp \
+	ink-snprintf.h
+
+inkjar/jar.o: \
+	inkjar/jar.cpp \
+	inkjar/jar.h
 
 inkscape-stock.o: \
 	inkscape-stock.cpp \
@@ -1862,7 +1896,10 @@ libnrtype/font-style-to-pos.o: \
 	enums.h \
 	forward.h \
 	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	libnrtype/font-style-to-pos.h \
 	libnrtype/nr-type-pos-def.h \
 	sp-item-group.h \
@@ -2017,7 +2054,6 @@ livarot/MySeg.o: \
 
 livarot/Path.o: \
 	livarot/Path.cpp \
-	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h
@@ -2086,7 +2122,6 @@ livarot/ShapeDraw.o: \
 
 livarot/ShapeMisc.o: \
 	livarot/ShapeMisc.cpp \
-	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	libnr/nr-types.h \
 	livarot/AVL.h \
@@ -2420,8 +2455,11 @@ object-edit.o: \
 	helper/units.h \
 	knot.h \
 	knotholder.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	object-edit.h \
 	prefs-utils.h \
 	sp-ellipse.h \
@@ -2794,6 +2832,7 @@ select-toolbar.o: \
 
 selection-chemistry.o: \
 	selection-chemistry.cpp \
+	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
@@ -2802,6 +2841,8 @@ selection-chemistry.o: \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
+	helper/helper-forward.h \
+	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -2921,6 +2962,7 @@ shortcuts.o: \
 	forward.h \
 	helper/action.h \
 	libnr/nr-object.h \
+	libnr/nr-types.h \
 	shortcuts.h \
 	verbs.h \
 	view.h
@@ -2968,6 +3010,7 @@ sp-anchor.o: \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -3314,7 +3357,10 @@ sp-line.o: \
 	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	modules/svg.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -3673,7 +3719,10 @@ sp-polygon.o: \
 	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -3697,7 +3746,10 @@ sp-polyline.o: \
 	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -3842,8 +3894,11 @@ sp-spiral.o: \
 	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	modules/svg.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -4086,7 +4141,6 @@ splivarot.o: \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
-	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-types.h \
@@ -4186,6 +4240,7 @@ style.o: \
 	helper/units.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -4218,6 +4273,7 @@ svg-view.o: \
 	helper/units.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -4503,6 +4559,8 @@ verbs.o: \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
+	sp-namedview.h \
+	sp-object-group.h \
 	sp-object.h \
 	sp-path.h \
 	sp-shape.h \
@@ -4568,6 +4626,7 @@ widgets/dash-selector.o: \
 	forward.h \
 	helper/units.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	sp-item-group.h \
@@ -5018,8 +5077,10 @@ widgets/spw-utilities.o: \
 	helper/window.h \
 	inkscape.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	selection.h \
 	sp-item-transform.h \
 	sp-item.h \

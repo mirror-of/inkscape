@@ -10,12 +10,14 @@ bonobo/embeddable-document.h
 bonobo/embeddable-drawing.h
 bonobo/sodipodi-bonobo.h
 bonobo/svg-doc-factory.h
-dialogs/FileDialog.cpp
-dialogs/FileDialog-win32.cpp
+dialogs/filedialog.cpp
+dialogs/fxiledialog-win32.cpp
 display/nr-uta.cpp
 display/testnr.cpp
 helper/bezier-utils-test.cpp
 inkview.cpp
+libnr/nr-matrix-test.cpp
+libnr/nr-point-fns-test.cpp
 libnr/nr-types-test.cpp
 libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
