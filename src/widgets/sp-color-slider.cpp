@@ -15,6 +15,8 @@
 #include <gdk/gdkrgb.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtktooltips.h>
+#include "sp-color-scales.h"
 #include "sp-color-slider.h"
 
 #define SLIDER_WIDTH 96
@@ -261,7 +263,7 @@ sp_color_slider_button_press (GtkWidget *widget, GdkEventButton *event)
 		gtk_signal_emit (GTK_OBJECT (slider), slider_signals[GRABBED]);
 		slider->dragging = TRUE;
 		slider->oldvalue = slider->value;
-		gtk_adjustment_set_value (slider->adjustment, CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0));
+		set255 (slider->adjustment, CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0));
 		gtk_signal_emit (GTK_OBJECT (slider), slider_signals[DRAGGED]);
 		gdk_pointer_grab (widget->window, FALSE,
 				  (GdkEventMask)(GDK_POINTER_MOTION_MASK |
@@ -300,7 +302,7 @@ sp_color_slider_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 		gint cx, cw;
 		cx = widget->style->xthickness;
 		cw = widget->allocation.width - 2 * cx;
-		gtk_adjustment_set_value (slider->adjustment, CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0));
+		set255 (slider->adjustment, CLAMP ((gfloat) (event->x - cx) / cw, 0.0, 1.0));
 		gtk_signal_emit (GTK_OBJECT (slider), slider_signals[DRAGGED]);
 	}
 
@@ -344,7 +346,7 @@ sp_color_slider_set_adjustment (SPColorSlider *slider, GtkAdjustment *adjustment
 		gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
 				    GTK_SIGNAL_FUNC (sp_color_slider_adjustment_value_changed), slider);
 
-		slider->value = adjustment->value;
+		slider->value = get1 (adjustment);
 
 		sp_color_slider_adjustment_changed (adjustment, slider);
 	}
@@ -405,17 +407,17 @@ sp_color_slider_adjustment_value_changed (GtkAdjustment *adjustment, SPColorSlid
 
 	widget = GTK_WIDGET (slider);
 
-	if (slider->value != adjustment->value) {
+	if (slider->value != get1 (adjustment)) {
 		gint cx, cy, cw, ch;
 		cx = widget->style->xthickness;
 		cy = widget->style->ythickness;
 		cw = widget->allocation.width - 2 * cx;
 		ch = widget->allocation.height - 2 * cy;
-		if ((gint) (adjustment->value * cw) != (gint) (slider->value * cw)) {
+		if ((gint) (get1 (adjustment) * cw) != (gint) (slider->value * cw)) {
 			gint ax, ay;
 			gfloat value;
 			value = slider->value;
-			slider->value = adjustment->value;
+			slider->value = get1 (adjustment);
 			ax = (int)(cx + value * cw - ARROW_SIZE / 2 - 2);
 			ay = cy;
 			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 4, ch);
@@ -423,7 +425,7 @@ sp_color_slider_adjustment_value_changed (GtkAdjustment *adjustment, SPColorSlid
 			ay = cy;
 			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 4, ch);
 		} else {
-			slider->value = adjustment->value;
+			slider->value = get1 (adjustment);
 		}
 	}
 }

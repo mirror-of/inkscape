@@ -88,6 +88,8 @@ GType sp_color_scales_get_type (void);
 
 GtkWidget *sp_color_scales_new (void);
 
+gfloat get1( const GtkAdjustment *a );
+void set255( GtkAdjustment *a, gfloat v );
 
 
 #endif
