@@ -34,7 +34,9 @@
 
 #include "svg/svg.h"
 
+#include "libnr/nr-point.h"
 #include "libnr/nr-point-ops.h"
+#include "libnr/nr-point-fns.h"
 #include "libnr/nr-rect.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
@@ -137,6 +139,7 @@ clonetiler_get_transform (
 
     // values from the dialog:
     double d_x_per_x, double d_y_per_x, double d_x_per_y, double d_y_per_y, int alternate_xy, double rand_xy,
+    int d_per_x_cumul, int d_per_y_cumul, 
     double d_rot_per_x, double d_rot_per_y, int alternate_rot, double rand_rot,
     double d_scalex_per_x, double d_scaley_per_x, double d_scalex_per_y, double d_scaley_per_y, int alternate_scale, double rand_scale
     )
@@ -144,8 +147,8 @@ clonetiler_get_transform (
     int eff_x, eff_y;
 
     // in abs units
-    eff_x = (alternate_xy? (x%2) : (x));
-    eff_y = (alternate_xy? (y%2) : (y));
+    eff_x = (alternate_xy? (x%2) : (d_per_x_cumul? x * x * (x + 1)/2 : x));
+    eff_y = (alternate_xy? (y%2) : (d_per_y_cumul? y * y * (y + 1)/2 : y));
     double dx = d_x_per_x * w * eff_x + d_x_per_y  * w * eff_y + rand_xy * w * g_random_double_range (-1, 1);
     double dy = d_y_per_x * h * eff_x + d_y_per_y  * h * eff_y + rand_xy * h * g_random_double_range (-1, 1);
 
@@ -589,8 +592,295 @@ clonetiler_get_transform (
     return NR::identity();
 }
 
+/**
+Center of bbox of item
+*/
+NR::Point
+unclump_center (SPItem *item)
+{
+    // without this, sometimes bbox is wrong for just-moved objects
+    sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
+
+    NRRect r;
+    sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
+    NR::Point c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
+    return c; 
+}
+
+
+/**
+Distance from item1 to the "edge" of item2. "Edge" is defined as that of an equal-area circle with
+the same center. May be negative if the center of item1 is between the center and the edge of
+item2.
+*/
+double
+unclump_dist (SPItem *item1, SPItem *item2)
+{
+    // without this, sometimes bbox is wrong for just-moved objects
+    sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item1));
+
+    NRRect r2;
+    sp_item_invoke_bbox(item2, &r2, sp_item_i2d_affine(item2), TRUE);
+    NR::Point c2 = NR::Point ((r2.x0 + r2.x1)/2, (r2.y0 + r2.y1)/2); 
+    double w = fabs (r2.x1 - r2.x0); 
+    double h = fabs (r2.y1 - r2.y0); 
+    double r = sqrt (w * h / M_PI); // the radius of the equal-area circle
+
+    NRRect r1;
+    sp_item_invoke_bbox(item1, &r1, sp_item_i2d_affine(item1), TRUE);
+    NR::Point c1 = NR::Point ((r1.x0 + r1.x1)/2, (r1.y0 + r1.y1)/2); 
+
+    return (NR::L2 (c2 - c1) - r);
+}
+
+/**
+Average unclump_dist from item to others
+*/
+double unclump_average (SPItem *item, GSList *others)
+{
+    int n = 0;
+    double sum = 0;
+
+    for (GSList *i = others; i != NULL; i = i->next) {
+        SPItem *other = SP_ITEM (i->data);
+
+        if (other == item)
+            continue;
+
+        n++;
+        sum += unclump_dist (item, other);
+    }
+
+    if (n != 0)
+        return sum/n;
+    else
+        return 0;
+}
+
+/**
+Closest to item among others
+ */
+SPItem *unclump_closest (SPItem *item, GSList *others)
+{
+    double min = HUGE_VAL;
+    SPItem *closest = NULL;
+
+    for (GSList *i = others; i != NULL; i = i->next) {
+        SPItem *other = SP_ITEM (i->data);
+
+        if (other == item)
+            continue;
+
+        double dist = unclump_dist (item, other);
+        if (dist < min && fabs (dist) < 1e6) {
+            min = dist;
+            closest = other;
+        }
+    }
+
+    return closest;
+}
+
+/**
+Most distant from item among others
+ */
+SPItem *unclump_farest (SPItem *item, GSList *others)
+{
+    double max = -HUGE_VAL;
+    SPItem *farest = NULL;
+
+    for (GSList *i = others; i != NULL; i = i->next) {
+        SPItem *other = SP_ITEM (i->data);
+
+        if (other == item)
+            continue;
+
+        double dist = unclump_dist (item, other);
+        if (dist > max && fabs (dist) < 1e6) {
+            max = dist;
+            farest = other;
+        }
+    }
+
+    return farest;
+}
+
+/**
+Removes from the \a rest list those items that are "behind" \a closest as seen from \a item,
+i.e. those on the other side of the line through \a closest perpendicular to the direction from \a
+item to \a closest. Returns a newly created list which must be freed.
+ */
+GSList *
+unclump_remove_behind (SPItem *item, SPItem *closest, GSList *rest)
+{
+    NR::Point it = unclump_center (item);
+    NR::Point p1 = unclump_center (closest);
+
+    // perpendicular through closest to the direction to item:
+    NR::Point perp = NR::rot90(it - p1);
+    NR::Point p2 = p1 + perp;
+
+    // get the standard Ax + By + C = 0 form for p1-p2:
+    double A = p1[NR::Y] - p2[NR::Y];
+    double B = p2[NR::X] - p1[NR::X];
+    double C = p2[NR::Y] * p1[NR::X] - p1[NR::Y] * p2[NR::X];
+
+    // substitute the item into it:
+    double val_item = A * it[NR::X] + B * it[NR::Y] + C;
+
+    GSList *out = g_slist_copy (rest);
+
+    for (GSList *i = rest; i != NULL; i = i->next) {
+        SPItem *other = SP_ITEM (i->data);
+
+        if (other == item)
+            continue;
+
+        NR::Point o = unclump_center (other);
+        double val_other = A * o[NR::X] + B * o[NR::Y] + C;
+
+        if (val_item * val_other <= 1e-6) {
+            // different signs, which means item and other are on the different sides of p1-p2 line
+            out = g_slist_remove (out, other);
+        }
+    }
+
+    return out;
+}
+
+/**
+Moves \a what away from \a from by \a dist
+ */
+void
+unclump_push (SPItem *from, SPItem *what, double dist)
+{
+    NR::Point it = unclump_center (what);
+    NR::Point p = unclump_center (from);
+    NR::Point by = dist * NR::unit_vector (- (p - it));
+
+    NR::Matrix move = NR::Matrix (NR::translate (by));
+
+    //g_print ("push %s at %g,%g from %g,%g by %g,%g, dist %g\n", SP_OBJECT_ID(what), it[NR::X],it[NR::Y], p[NR::X],p[NR::Y], by[NR::X],by[NR::Y], dist);
+
+    sp_item_set_i2d_affine(what, sp_item_i2d_affine(what) * move);
+    sp_item_write_transform(what, SP_OBJECT_REPR(what), what->transform, NULL);
+}
+
+/**
+Moves \a what towards \a to by \a dist
+ */
+void
+unclump_pull (SPItem *to, SPItem *what, double dist)
+{
+    NR::Point it = unclump_center (what);
+    NR::Point p = unclump_center (to);
+
+    NR::Point by = dist * NR::unit_vector (p - it);
+
+    NR::Matrix move = NR::Matrix (NR::translate (by));
+
+    //g_print ("pull %s at %g,%g to %g,%g by %g,%g, dist %g\n", SP_OBJECT_ID(what), it[NR::X],it[NR::Y], p[NR::X],p[NR::Y], by[NR::X],by[NR::Y], dist);
+
+    sp_item_set_i2d_affine(what, sp_item_i2d_affine(what) * move);
+    sp_item_write_transform(what, SP_OBJECT_REPR(what), what->transform, NULL);
+}
+
+
+/**
+Unclumps the items in \a items, reducing local unevenness in their distribution. Produces an effect
+similar to "engraver dots". The only distribution which is unchanged by unclumping is a hexagonal
+grid. May be called repeatedly for stronger effect. 
+ */
 static void
-clonetiler_remove (GtkWidget *widget, void *)
+unclump (GSList *items)
+{
+    for (GSList *i = items; i != NULL; i = i->next) { //  for each original/clone x: 
+        SPItem *item = SP_ITEM (i->data);
+
+        GSList *nei = NULL;
+
+        GSList *rest = g_slist_copy (items);
+        rest = g_slist_remove (rest, item);
+
+        while (rest != NULL) {
+            SPItem *closest = unclump_closest (item, rest);
+            if (closest) {
+                nei = g_slist_prepend (nei, closest);
+                rest = g_slist_remove (rest, closest);
+                GSList *new_rest = unclump_remove_behind (item, closest, rest);
+                g_slist_free (rest);
+                rest = new_rest;
+            } else {
+                g_slist_free (rest);
+                break;
+            }
+        } 
+
+        if (g_slist_length (nei) >= 2) {
+            double ave = unclump_average (item, nei);
+
+            SPItem *closest = unclump_closest (item, nei);
+            SPItem *farest = unclump_farest (item, nei);
+
+            double dist_closest = unclump_dist (closest, item);
+            double dist_farest = unclump_dist (farest, item);
+
+            //g_print ("NEI %d for item %s    closest %s at %g  farest %s at %g  ave %g\n", g_slist_length(nei), SP_OBJECT_ID(item), SP_OBJECT_ID(closest), dist_closest, SP_OBJECT_ID(farest), dist_farest, ave);
+
+            if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farest) < 1e6) { // otherwise the items are bogus
+                unclump_push (closest, item, (ave - dist_closest) / 3 ); // reduce this divisor to make unclumping more aggressive
+                unclump_pull (farest, item, (dist_farest - ave) / 3 );
+            }
+        }
+    }
+}
+
+static void
+clonetiler_unclump (GtkWidget *widget, void *)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop == NULL)
+        return;
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    // check if something is selected
+    if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
+        return;
+    }
+
+    SPObject *obj = SP_OBJECT(selection->singleItem());
+    Inkscape::XML::Node *obj_repr = SP_OBJECT_REPR(obj);
+    const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
+    SPObject *parent = SP_OBJECT_PARENT (obj);
+
+    GSList *to_unclump = NULL;
+
+    to_unclump = g_slist_prepend (to_unclump, SP_ITEM (obj));
+
+    for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
+        if (SP_IS_USE(child) && 
+            SP_OBJECT_REPR(child)->attribute("xlink:href") &&
+            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("xlink:href")) && 
+            SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of") &&
+            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of"))) {
+            to_unclump = g_slist_prepend (to_unclump, child);
+        }
+    }
+
+    sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
+
+    unclump (to_unclump);
+
+    g_slist_free (to_unclump);
+
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+
+static void
+clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == NULL)
@@ -624,6 +914,9 @@ clonetiler_remove (GtkWidget *widget, void *)
         SP_OBJECT(i->data)->deleteObject();
     }
     g_slist_free (to_delete);
+
+    if (do_undo)
+        sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 
@@ -654,29 +947,33 @@ clonetiler_apply (GtkWidget *widget, void *)
     const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = SP_OBJECT_PARENT (obj);
 
-    clonetiler_remove (NULL, NULL);
+    clonetiler_remove (NULL, NULL, false);
 
-    double d_x_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_x_per_x", 0, -1, 1);
-    double d_y_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_x", 0, -1, 1);
-    double d_x_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_x_per_y", 0, -1, 1);
-    double d_y_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_y", 0, -1, 1);
+    double d_x_per_x = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_x_per_x", 0, -100, 1000);
+    double d_y_per_x = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_x", 0, -100, 1000);
+    int d_per_x_cumul = prefs_get_int_attribute ("dialogs.clonetiler", "d_per_x_cumul", 0);
+    double d_x_per_y = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_x_per_y", 0, -100, 1000);
+    double d_y_per_y = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_y", 0, -100, 1000);
+    int d_per_y_cumul = prefs_get_int_attribute ("dialogs.clonetiler", "d_per_y_cumul", 0);
     int alternate_xy = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_xy", 0);
-    double rand_xy = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_xy", 0, 0, 1);
+    double rand_xy = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_xy", 0, 0, 1000);
+
     double d_rot_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_rot_per_x", 0, -180, 180);
     double d_rot_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_rot_per_y", 0, -180, 180);
     int alternate_rot = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_rot", 0);
-    double rand_rot = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_rot", 0, 0, 1);
-    double d_scalex_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scalex_per_x", 0, -1, 1);
-    double d_scaley_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scaley_per_x", 0, -1, 1);
-    double d_scalex_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scalex_per_y", 0, -1, 1);
-    double d_scaley_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scaley_per_y", 0, -1, 1);
-    int alternate_scale = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_scale", 0);
-    double rand_scale = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_scale", 0, 0, 1);
+    double rand_rot = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_rot", 0, 0, 100);
 
-    double d_opacity_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_opacity_per_y", 0, 0, 1);
-    double d_opacity_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_opacity_per_x", 0, 0, 1);
+    double d_scalex_per_x = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scalex_per_x", 0, -100, 1000);
+    double d_scaley_per_x = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scaley_per_x", 0, -100, 1000);
+    double d_scalex_per_y = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scalex_per_y", 0, -100, 1000);
+    double d_scaley_per_y = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scaley_per_y", 0, -100, 1000);
+    int alternate_scale = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_scale", 0);
+    double rand_scale = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_scale", 0, 0, 1000);
+
+    double d_opacity_per_y = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_opacity_per_y", 0, 0, 100);
+    double d_opacity_per_x = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_opacity_per_x", 0, 0, 100);
     int alternate_opacity = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_opacity", 0);
-    double rand_opacity = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_opacity", 0, 0, 1);
+    double rand_opacity = 0.01 * prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_opacity", 0, 0, 100);
 
     int xmax = prefs_get_int_attribute ("dialogs.clonetiler", "xmax", 2);
     int ymax = prefs_get_int_attribute ("dialogs.clonetiler", "ymax", 2);
@@ -721,16 +1018,22 @@ clonetiler_apply (GtkWidget *widget, void *)
             if (y == 0 && x == 0) // original
                 continue;
 
+            NR::Matrix t = clonetiler_get_transform (type, x, y, c[NR::X], c[NR::Y], w, h,
+                                                     d_x_per_x, d_y_per_x, d_x_per_y, d_y_per_y, alternate_xy, rand_xy, 
+                                                     d_per_x_cumul, d_per_y_cumul, 
+                                                     d_rot_per_x, d_rot_per_y, alternate_rot, rand_rot,
+                                                     d_scalex_per_x, d_scaley_per_x, d_scalex_per_y, d_scaley_per_y, alternate_scale, rand_scale);
+
+            if (fabs(t[0]) < 1e-9 || fabs(t[3]) < 1e-9) { // too small 
+                    continue;
+            }
+
             Inkscape::XML::Node *clone = sp_repr_new("svg:use");
             sp_repr_set_attr(clone, "x", "0");
             sp_repr_set_attr(clone, "y", "0");
             sp_repr_set_attr(clone, "inkscape:tiled-clone-of", id_href);
             sp_repr_set_attr(clone, "xlink:href", id_href);
 
-            NR::Matrix t = clonetiler_get_transform (type, x, y, c[NR::X], c[NR::Y], w, h,
-                                                     d_x_per_x, d_y_per_x, d_x_per_y, d_y_per_y, alternate_xy, rand_xy, 
-                                                     d_rot_per_x, d_rot_per_y, alternate_rot, rand_rot,
-                                                     d_scalex_per_x, d_scaley_per_x, d_scalex_per_y, d_scaley_per_y, alternate_scale, rand_scale);
             gchar affinestr[80];
 
             if (sp_svg_transform_write(affinestr, 79, t)) {
@@ -749,6 +1052,7 @@ clonetiler_apply (GtkWidget *widget, void *)
 
             // add the new clone to the top of the original's parent
             SP_OBJECT_REPR(parent)->appendChild(clone);
+            sp_repr_unref (clone);
         }
     }
 
@@ -797,7 +1101,7 @@ static void
 clonetiler_percent_changed (GtkAdjustment *adj, gpointer data)
 {
     const gchar *pref = (const gchar *) data;
-    prefs_set_double_attribute ("dialogs.clonetiler", pref, 0.01 * adj->value);
+    prefs_set_double_attribute ("dialogs.clonetiler", pref, adj->value);
 }
 
 static void
@@ -808,7 +1112,7 @@ clonetiler_angle_changed (GtkAdjustment *adj, gpointer data)
 }
 
 GtkWidget *
-clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr, bool onlypos = false, bool angle = false)
+clonetiler_spinbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr, double lower, double upper, const gchar *suffix, void (*callback)(GtkAdjustment *, gpointer))
 {
     GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
 
@@ -820,13 +1124,16 @@ clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip,
 
     {
         GtkWidget *l = gtk_label_new ("");
-        gtk_label_set_markup (GTK_LABEL(l), angle? "&#176;" : "%");
+        gtk_label_set_markup (GTK_LABEL(l), suffix);
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0);
         gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
 
     {
-        GtkObject *a;
+        GtkObject *a = gtk_adjustment_new(0.0, lower, upper, 1, 10, 10);
+/*
+
+angle? "&#176;" : "%"
         if (angle) {
             a = gtk_adjustment_new(0.0, -180, 180, 1, 10, 10);
         } else {
@@ -836,22 +1143,20 @@ clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip,
                 a = gtk_adjustment_new(0.0, -100, 100, 1, 10, 10);
         }
 
+clonetiler_angle_changed
+clonetiler_percent_changed
+*/
+
+
         GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tip, NULL);
         gtk_entry_set_width_chars (GTK_ENTRY (sb), 3);
         gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
-        if (angle) {
-            double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, -180, 180);
+            double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, lower, upper);
             gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
             gtk_signal_connect(GTK_OBJECT(a), "value_changed",
-                           GTK_SIGNAL_FUNC(clonetiler_angle_changed), (gpointer) attr);
-        } else {
-            double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, -1, 1);
-            gtk_adjustment_set_value (GTK_ADJUSTMENT (a), (value * 100));
-            gtk_signal_connect(GTK_OBJECT(a), "value_changed",
-                           GTK_SIGNAL_FUNC(clonetiler_percent_changed), (gpointer) attr);
-        }
+                           GTK_SIGNAL_FUNC(callback), (gpointer) attr);
 
         g_object_set_data (G_OBJECT(sb), "zeroable", GINT_TO_POINTER(TRUE));
     }
@@ -1040,19 +1345,25 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt,
+                    GtkWidget *l = clonetiler_spinbox (_("X:"), tt,
                     // TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
                     // xgettext:no-c-format
-                    _("Horizontal shift per each row (in % of tile width)"), "d_x_per_y");
+                    _("Horizontal shift per each row (in % of tile width)"), "d_x_per_y", -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt,
+                    GtkWidget *l = clonetiler_spinbox (_("Y:"), tt,
                     // TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
                     // xgettext:no-c-format
-                    _("Vertical shift per each row (in % of tile height)"), "d_y_per_y");
+                    _("Vertical shift per each row (in % of tile height)"), "d_y_per_y", -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+
+                {
+                    GtkWidget *l = clonetiler_checkbox (_("Cumulative"), tt, _("If set, successive rows are shifted more and more; otherwise they're distributed evenly"), "d_per_y_cumul");
+                    gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, 0);
                 }
             }
 
@@ -1067,15 +1378,22 @@ clonetiler_dialog (void)
 
                 {
                     // xgettext:no-c-format
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each column (in % of tile width)"), "d_x_per_x");
+                    GtkWidget *l = clonetiler_spinbox (_("X:"), tt, _("Horizontal shift per each column (in % of tile width)"), "d_x_per_x", 
+                                                        -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
-
                 {
                     // xgettext:no-c-format
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each column (in % of tile height)"), "d_y_per_x");
+                    GtkWidget *l = clonetiler_spinbox (_("Y:"), tt, _("Vertical shift per each column (in % of tile height)"), "d_y_per_x",
+                                                         -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+
+                {
+                    GtkWidget *l = clonetiler_checkbox (_("Cumulative"), tt, _("If set, successive columns are shifted more and more; otherwise they're distributed evenly"), "d_per_x_cumul");
+                    gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, 0);
                 }
             }
 
@@ -1088,7 +1406,8 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile positions"),"rand_xy", true);
+                GtkWidget *l = clonetiler_spinbox (_("Randomize:"), tt, _("How much to randomize tile positions (in % of tile size)"), "rand_xy", 
+                                                        0, 1000, "%", clonetiler_percent_changed);
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
@@ -1112,12 +1431,14 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each row"), "d_scalex_per_y");
+                    GtkWidget *l = clonetiler_spinbox (_("X:"), tt, _("Horizontal scale per each row"), "d_scalex_per_y",
+                                                         -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each row"), "d_scaley_per_y");
+                    GtkWidget *l = clonetiler_spinbox (_("Y:"), tt, _("Vertical scale per each row"), "d_scaley_per_y",
+                                                         -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1132,13 +1453,15 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each column"), "d_scalex_per_x");
+                    GtkWidget *l = clonetiler_spinbox (_("X:"), tt, _("Horizontal scale per each column"), "d_scalex_per_x",
+                                                         -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each column"), "d_scaley_per_x");
+                    GtkWidget *l = clonetiler_spinbox (_("Y:"), tt, _("Vertical scale per each column"), "d_scaley_per_x",
+                                                         -100, 1000, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1152,7 +1475,8 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile sizes"),"rand_scale", true);
+                GtkWidget *l = clonetiler_spinbox (_("Randomize:"), tt, _("How much to randomize tile sizes"), "rand_scale", 
+                                                         0, 1000, "%", clonetiler_percent_changed);
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
@@ -1175,7 +1499,8 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tiles by this angle for each row"), "d_rot_per_y", false, true);
+                    GtkWidget *l = clonetiler_spinbox (_("Angle:"), tt, _("Rotate tiles by this angle for each row"), "d_rot_per_y", 
+                                                         -180, 180, "&#176;", clonetiler_angle_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1190,7 +1515,8 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tiles by this angle for each column"), "d_rot_per_x", false, true);
+                    GtkWidget *l = clonetiler_spinbox (_("Angle:"), tt, _("Rotate tiles by this angle for each column"), "d_rot_per_x", 
+                                                         -180, 180, "&#176;", clonetiler_angle_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1204,7 +1530,8 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile rotation"),"rand_rot", true);
+                GtkWidget *l = clonetiler_spinbox (_("Randomize:"), tt, _("How much to randomize tile rotation"),"rand_rot",
+                                                      0, 100, "%", clonetiler_percent_changed);
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
@@ -1227,7 +1554,9 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease tile opacity by this percentage for each row"), "d_opacity_per_y", true);
+                    GtkWidget *l = clonetiler_spinbox (_("Dissolve:"), tt, 
+                                                       _("Decrease tile opacity by this percentage for each row"), "d_opacity_per_y",
+                                                      0, 100, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1242,7 +1571,9 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease tile opacity by this percentage for each column"), "d_opacity_per_x", true);
+                    GtkWidget *l = clonetiler_spinbox (_("Dissolve:"), tt, 
+                                                       _("Decrease tile opacity by this percentage for each column"), "d_opacity_per_x",
+                                                       0, 100, "%", clonetiler_percent_changed);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1256,7 +1587,9 @@ clonetiler_dialog (void)
             }
 
             {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile opacity"),"rand_opacity", true);
+                GtkWidget *l = clonetiler_spinbox (_("Randomize:"), tt, 
+                                                           _("How much to randomize tile opacity"),"rand_opacity",
+                                                           0, 100, "%", clonetiler_percent_changed);
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
@@ -1350,6 +1683,13 @@ clonetiler_dialog (void)
                 gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
 
+           {
+                GtkWidget *b = gtk_button_new_with_mnemonic (_(" _Unclump "));
+                gtk_tooltips_set_tip (tt, b, _("Spread out clones to reduce clumping; can be applied repeatedly"), NULL);
+                gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_unclump), NULL);
+                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+            }
+
             {
                 GtkWidget *b = gtk_button_new_with_mnemonic (_(" Re_move "));
                 gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
@@ -1360,9 +1700,9 @@ clonetiler_dialog (void)
             {
                 GtkWidget *b = gtk_button_new_with_mnemonic (_(" R_eset "));
                 // TRANSLATORS: "change" is a noun here
-                gtk_tooltips_set_tip (tt, b, _("Reset all shifts, scales, rotates, and opacity changes to zero"), NULL);
+                gtk_tooltips_set_tip (tt, b, _("Reset all shifts, scales, rotates, and opacity changes in the dialog to zero"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_reset), NULL);
-                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+                gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
         }
 
