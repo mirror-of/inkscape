@@ -863,9 +863,9 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
           double nlen = sqrt (dot(nx , nx));
           nx /= nlen;
           int pb, cb, fb;
-          fb = theRes->getPoint(i).lastA;
-          pb = theRes->getPoint(i).lastA;
-          cb = theRes->getPoint(i).firstA;
+          fb = theRes->getPoint(i).incidentEdge[LAST];
+          pb = theRes->getPoint(i).incidentEdge[LAST];
+          cb = theRes->getPoint(i).incidentEdge[FIRST];
           do
           {
             // one angle

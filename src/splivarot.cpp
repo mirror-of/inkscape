@@ -326,7 +326,7 @@ sp_selected_path_boolop (bool_op bop)
                         // possibly an intersection
                         // we need to check that at least one edge from the source path is incident to it
                         // before we declare it's an intersection
-                        int cb = theShape->getPoint(i).firstA;
+                        int cb = theShape->getPoint(i).incidentEdge[FIRST];
                         int   nbOrig=0;
                         int   nbOther=0;
                         int   piece=-1;
