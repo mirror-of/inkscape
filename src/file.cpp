@@ -28,7 +28,10 @@
 
 #include "macros.h"
 #include "xml/repr-private.h"
+#include "xml/repr-get-children.h"
 #include "document.h"
+#include "document-private.h"
+#include "selection-chemistry.h"
 #include "view.h"
 #include "dir-util.h"
 #include "helper/png-write.h"
@@ -467,23 +470,65 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
     }
 
     if (doc != NULL) {
+        // the import extension has passed us a document, now we need to embed it into our document
+
+        // move imported defs to our document's defs
+        SPObject *in_defs = SP_DOCUMENT_DEFS (in_doc);
+        SPObject *defs = SP_DOCUMENT_DEFS (doc);
+        SPRepr *last_def = sp_repr_last_child(SP_OBJECT_REPR(in_defs));
+        for (SPObject *child = sp_object_first_child(defs); child != NULL; child = SP_OBJECT_NEXT(child) ) {
+            // FIXME: in case of id conflict, newly added thing will be re-ided and thus likely break a reference to it from imported stuff
+            sp_repr_add_child(SP_OBJECT_REPR(in_defs), sp_repr_duplicate(SP_OBJECT_REPR(child)), last_def);
+        }
+
         SPRepr *repr = sp_document_repr_root (doc);
+        guint items_count = 0;
+        for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
+            if (SP_IS_ITEM(child))
+                items_count ++;
+        }
         const gchar *style = sp_repr_attr (repr, "style");
 
-        SPRepr *newgroup = sp_repr_new ("g");
-        sp_repr_set_attr (newgroup, "style", style);
+        SPObject *new_obj = NULL;
 
-        for (SPRepr *child = repr->children; child != NULL; child = child->next) {
-            SPRepr * newchild;
-            newchild = sp_repr_duplicate (child);
-            sp_repr_append_child (newgroup, newchild);
+        if (style || items_count > 1) {
+            // create group
+            SPRepr *newgroup = sp_repr_new ("g");
+            sp_repr_set_attr (newgroup, "style", style);
+
+            for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
+                if (SP_IS_ITEM(child)) {
+                    sp_repr_append_child (newgroup, sp_repr_duplicate(SP_OBJECT_REPR(child)));
+                }
+            }
+
+            sp_document_add_repr (in_doc, newgroup);
+            new_obj = sp_document_lookup_id (in_doc, sp_repr_attr(newgroup, "id"));
+            sp_repr_unref (newgroup);
+        } else {
+            // just add one item
+            for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
+                if (SP_IS_ITEM(child)) {
+                    SPRepr *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
+                    sp_document_add_repr (in_doc, newitem);
+                    new_obj = sp_document_lookup_id (in_doc, sp_repr_attr(newitem, "id"));
+                }
+            }
+        }
+
+        // select and move the imported item
+        if (new_obj && SP_IS_ITEM(new_obj)) {
+            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+            SPSelection *selection = SP_DT_SELECTION(desktop);
+            selection->setItem(SP_ITEM(new_obj));
+            sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
+            NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
+            sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
         }
 
         sp_document_unref (doc);
-
-        sp_document_add_repr (in_doc, newgroup);
-        sp_repr_unref (newgroup);
         sp_document_done (in_doc);
+
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
         sp_ui_error_dialog (text);
