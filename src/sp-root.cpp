@@ -41,6 +41,11 @@ static void sp_root_print (SPItem *item, SPPrintContext *ctx);
 
 static SPGroupClass *parent_class;
 
+/** sp_root_get_type()
+ *
+ *  This returns the type info of sp_root, including its class sizes
+ *  and initialization routines.
+ */
 GType
 sp_root_get_type (void)
 {
@@ -60,6 +65,12 @@ sp_root_get_type (void)
 	return type;
 }
 
+/** sp_root_class_init(klass)
+ * 
+ *  This routine initializes an SPRootClass object by setting its class
+ *  and parent class objects, and registering function pointers 
+ *  (ala virtual functions) for various operations.
+ */
 static void
 sp_root_class_init (SPRootClass *klass)
 {
@@ -87,6 +98,11 @@ sp_root_class_init (SPRootClass *klass)
 	sp_item_class->print = sp_root_print;
 }
 
+/** sp_root_init(root)
+ *
+ *  This routine initializes an SPRoot object by setting its
+ *  default parameter values.
+ */
 static void
 sp_root_init (SPRoot *root)
 {
@@ -113,6 +129,12 @@ sp_root_init (SPRoot *root)
 	root->defs = NULL;
 }
 
+/** sp_root_build(object, document, repr)
+ *
+ *  This fills in the data for an SPObject from its SPRepr object.
+ *  It fills in data such as version, x, y, width, height, etc.
+ *  It then calls the object's parent class object's build function.
+ */
 static void
 sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
@@ -153,6 +175,11 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	}
 }
 
+/** sp_root_release(object)
+ *
+ *  This is a destructor routine for SPRoot objects.  It de-references any
+ *  <def> items and calls the parent class destructor.
+ */
 static void
 sp_root_release (SPObject *object)
 {
@@ -170,6 +197,12 @@ sp_root_release (SPObject *object)
 		((SPObjectClass *) parent_class)->release (object);
 }
 
+/** sp_root_set(object, key, value)
+ *
+ *  This routine sets the attribute given by key for SPRoot objects to 
+ *  the value specified by value.
+ *  
+ */
 static void
 sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 {
@@ -346,6 +379,11 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
+/** sp_root_child_added(object, child, ref)
+ * 
+ *  This routine is for adding a child SVG object to an SPRoot object.
+ *  The SPRoot object is taken to be an SPGroup.
+ */
 static void
 sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 {
@@ -381,6 +419,10 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	}
 }
 
+/** sp_root_remove_child(object, child)
+ *  
+ *  Removes the given child from this SPRoot object.
+ */
 static void
 sp_root_remove_child (SPObject * object, SPRepr * child)
 {
@@ -412,6 +454,11 @@ sp_root_remove_child (SPObject * object, SPRepr * child)
 		(* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
 }
 
+/** sp_root_update(object, ctx, flags)
+ *  
+ *  This callback routine updates the SPRoot object when its attributes
+ *  have been changed.
+ */
 static void
 sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 {
@@ -578,6 +625,12 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 	}
 }
 
+/** sp_root_modified(object, flags)
+ *
+ *  This routine calls the modified routine of the SPRoot object's parent class.
+ *  Also, if the viewport has been modified, it sets the document size to the new
+ *  height and width.
+ */
 static void
 sp_root_modified (SPObject *object, guint flags)
 {
@@ -594,6 +647,10 @@ sp_root_modified (SPObject *object, guint flags)
 	}
 }
 
+/** sp_root_write(object, repr, flags)
+ *
+ *  This writes the object into the repr object, then calls the parent's write routine
+ */
 static SPRepr *
 sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 {
@@ -635,6 +692,10 @@ sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
+/** sp_root_show(item, arena, key, flags)
+ *
+ *  This routine displays the SPRoot item on the NRArena
+ */
 static NRArenaItem *
 sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 {
@@ -672,6 +733,11 @@ sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 	}
 }
 
+/** sp_root_print(item, ctx)
+ *
+ *  This routine obtains the NRMatrixF object from the SPRoot
+ *  and then prints it via the parent class' print function.
+ */
 static void
 sp_root_print (SPItem *item, SPPrintContext *ctx)
 {
