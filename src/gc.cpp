@@ -134,6 +134,9 @@ Ops const &get_ops() throw (InvalidGCModeError) {
 
 }
 
+// maybe replace these with stubs which abort() later;
+// the important thing is that execution shouldn't be allowed
+// to continue if an op function is called before GC::init()
 Ops ops = {
     NULL,
     NULL,
