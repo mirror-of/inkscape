@@ -43,6 +43,8 @@
 #include <gtk/gtktable.h>
 #include <gtk/gtkbutton.h>
 
+#include "gc-core.h"
+
 #include "helper/sp-intl.h"
 #include "document.h"
 #include "svg-view.h"
@@ -163,8 +165,10 @@ main (int argc, const char **argv)
     textdomain (GETTEXT_PACKAGE);
 
     LIBXML_TEST_VERSION
+    
+    Inkscape::GC::init();
 
-	gtk_init (&argc, (char ***) &argv);
+    gtk_init (&argc, (char ***) &argv);
 
 #ifdef lalaWITH_MODULES
     g_warning ("Have to autoinit modules (lauris)");
