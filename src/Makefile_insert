@@ -244,7 +244,9 @@ all_libs =	\
 	$(XFT_LIBS)	\
 	$(FREETYPE_LIBS)	\
 	$(kdeldadd)	\
-	$(win32ldflags)
+	$(win32ldflags) \
+	$(PERL_LDFLAGS) \
+	$(PYTHON_LIBS)
 
 desktop.$(OBJEXT): helper/sp-marshal.h
 document.$(OBJEXT): helper/sp-marshal.h inkscape_version.h
@@ -266,7 +268,7 @@ help.$(OBJEXT): inkscape_version.h
 
 
 inkscape_SOURCES = main.cpp $(win32_sources)
-inkscape_LDADD = $(all_libs) $(PERL_LDFLAGS) $(PYTHON_LIBS)
+inkscape_LDADD = $(all_libs)
 inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 
 inkview_SOURCES = inkview.cpp $(win32_sources)
