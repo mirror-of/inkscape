@@ -2,6 +2,11 @@
 
 	* src/interface.c: switched to GNOME HIG menu style
 
+	* src/utest/Makefile.am, src/utest/utest.c, src/utest/utest.h,
+	  src/xml/Makefile.am: turned the utest stuff into a giant .h
+	  file again, which hopefully won't confuse things like the .inc
+	  extension did.
+
 2003-11-29  bulia byak <bulia@dr.com>
 
 	* shortening tooltips, new verb and menu command for zoom to page width 
