@@ -1067,7 +1067,9 @@ sp_node_selected_join (void)
 	ArtPathcode code;
 
 	nodepath = sp_nodepath_current ();
-	if (!nodepath || g_list_length (nodepath->selected) != 2) {
+	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
+
+	if (g_list_length (nodepath->selected) != 2) {
 		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
 		return;
 	}
@@ -1164,7 +1166,9 @@ sp_node_selected_join_segment (void)
 	ArtPathcode code;
 
 	nodepath = sp_nodepath_current ();
-	if (!nodepath || g_list_length (nodepath->selected) != 2) {
+	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
+
+	if (g_list_length (nodepath->selected) != 2) {
 		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
 		return;
 	}
