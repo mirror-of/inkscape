@@ -17,7 +17,8 @@
 #include <gtkmm/toggleaction.h>
 #include <glibmm/refptr.h>
 #include <gtk/gtkmain.h>
-#include "toolbox.h"
+#include "ui/widget/toolbox.h"
+#include "path-prefix.h"
 
 namespace Inkscape {
 namespace UI {
@@ -46,6 +47,15 @@ Gtk::Toolbar&
 Toolbox::get_toolbar()
 {
     return static_cast<Gtk::Toolbar&>(*_widget);
+}
+
+static Glib::ustring
+get_uidir_filename(char const *basename_utf8)
+{
+    char *const ret_str = g_build_filename(INKSCAPE_UIDIR, basename_utf8, NULL);
+    Glib::ustring const ret(ret_str);
+    g_free(ret_str);
+    return ret;
 }
 
 void
@@ -78,7 +88,7 @@ Toolbox::init_actions()
     _ui_mgr = Gtk::UIManager::create();
     _ui_mgr->insert_action_group(_action_grp);
     _ui_mgr->insert_action_group(_detach_grp);
-    _ui_mgr->add_ui_from_file("/usr/share/inkscape/ui/toolbox.xml");
+    _ui_mgr->add_ui_from_file(get_uidir_filename("toolbox.xml"));
 
     _context_menu = static_cast<Gtk::Menu*>(_ui_mgr->get_widget("/ToolboxMenu"));
 
