@@ -79,14 +79,71 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         SPCurve *curve = SP_SHAPE(opath)->curve; 
         if (sp_curve_empty(curve))
             continue;
+
+
         int curveNr;
+
+        //Count the NR_CURVETOs/LINETOs
+        int segmentCount=0;
         NArtBpath *bp = curve->bpath;
         for (curveNr=0 ; curveNr<curve->length ; curveNr++, bp++)
+            if (bp->code == NR_CURVETO || bp->code == NR_LINETO)
+                segmentCount++;
+
+        bp = curve->bpath;
+        double lastx = 0.0;
+        double lasty = 0.0;
+        fprintf(f, "/*##############################################\n");
+        fprintf(f, "### PRISM:  %s\n", id);
+        fprintf(f, "##############################################*/\n");
+        fprintf(f, "#declare %s = prism {\n", id);
+        fprintf(f, "    linear_sweep\n");
+        fprintf(f, "    bezier_spline\n");
+        fprintf(f, "    0.0, //base\n");
+        fprintf(f, "    1.0, //top\n");
+        fprintf(f, "    %d, //nr points\n", segmentCount * 4);
+        int segmentNr = 0;
+        for (bp = curve->bpath, curveNr=0 ; curveNr<curve->length ; curveNr++, bp++)
             {
-            g_message("Code:%d [%f,%f]  [%f,%f]  [%f,%f]\n", bp->code,
-               bp->x1, bp->y1, bp->x2, bp->y2, bp->x3, bp->y3);
+            switch (bp->code)
+                {
+                case NR_MOVETO:
+                case NR_MOVETO_OPEN:
+                    //fprintf(f, "moveto: %f %f\n", bp->x3, bp->y3);
+                break;
+                case NR_CURVETO:
+                    fprintf(f, "/*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
+                        segmentNr++, lastx, lasty, bp->x1, bp->y1, 
+                        bp->x2, bp->y2, bp->x3, bp->y3);
+                    if (segmentNr < segmentCount)
+                        fprintf(f, ",\n");
+                    else
+                        fprintf(f, "\n");
+                break;
+                case NR_LINETO:
+                    fprintf(f, "/*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
+                        segmentNr++, lastx, lasty, lastx, lasty, 
+                        bp->x3, bp->y3, bp->x3, bp->y3);
+                    if (segmentNr < segmentCount)
+                        fprintf(f, ",\n");
+                    else
+                        fprintf(f, "\n");
+                    //fprintf(f, "lineto\n");
+                break;
+                case NR_END:
+                    //fprintf(f, "end\n");
+                break;
+                }
+            lastx = bp->x3;
+            lasty = bp->y3;
             }
+        fprintf(f, "}\n");
+        fprintf(f, "/*##############################################\n");
+        fprintf(f, "### end %s\n", id);
+        fprintf(f, "##############################################*/\n\n\n\n");
         }
+
+    //All done
     fclose(f);
 }
 
@@ -107,8 +164,8 @@ PovOutput::init (void)
 			"<output>\n"
 				"<extension>.pov</extension>\n"
 				"<mimetype>text/x-povray-script</mimetype>\n"
-				"<filetypename>PovRay (*.pov)</filetypename>\n"
-				"<filetypetooltip>PovRay File (export curves)</filetypetooltip>\n"
+				"<filetypename>PovRay (*.pov) (export splines)</filetypename>\n"
+				"<filetypetooltip>PovRay Raytracer File</filetypetooltip>\n"
 			"</output>\n"
 		"</inkscape-extension>", new PovOutput());
 
