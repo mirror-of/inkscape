@@ -613,8 +613,10 @@ clonetiler_remove (GtkWidget *widget, void *)
     GSList *to_delete = NULL;
     for (SPObject *child = sp_object_first_child(parent); child != NULL; child = SP_OBJECT_NEXT(child)) {
         if (SP_IS_USE(child) && 
-            !strcmp(id_href, (SP_OBJECT_REPR(child)->attribute("xlink:href"))) && 
-            !strcmp(id_href, (SP_OBJECT_REPR(child))->attribute("inkscape:tiled-clone-of"))) {
+            SP_OBJECT_REPR(child)->attribute("xlink:href") &&
+            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("xlink:href")) && 
+            SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of") &&
+            !strcmp(id_href, SP_OBJECT_REPR(child)->attribute("inkscape:tiled-clone-of"))) {
             to_delete = g_slist_prepend (to_delete, child);
         }
     }
