@@ -29,13 +29,21 @@ helper/units-test.cpp
 inkview.cpp
 libnr/nr-matrix-test.cpp
 libnr/nr-point-fns-test.cpp
+libnr/nr-rotate-fns-test.cpp
 libnr/nr-rotate-test.cpp
+libnr/nr-scale-test.cpp
+libnr/nr-translate-test.cpp
 libnr/nr-types-test.cpp
 livarot/Path-test.cpp
 main.cpp
+mod360-test.cpp
 potrace/potest.cpp
 round-test.cpp
+svg/ftos.cpp
 utest
 widgets/test-widgets.cpp
 winmain.cpp
+xml/quote-test.cpp
+xml/repr-action-test.cpp
+xpath/xtest.cpp
 
