@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-ops.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "style.h"

@@ -13,6 +13,7 @@
  */
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include "desktop.h"
 #include "document.h"
 #include "sp-root.h"

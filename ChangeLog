@@ -1,3 +1,11 @@
+2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/desktop-affine.cpp, src/knotholder.cpp,
+	src/desktop-events.cpp, src/nodepath.cpp, src/sp-ellipse.cpp,
+	src/sp-image.cpp, src/sp-item-notify-moveto.cpp, src/sp-rect.cpp,
+	src/text-context.cpp:
+	#include libnr/nr-matrix-ops.h.
+
 2004-02-22  Ted Gould <ted@gould.cx>
 
 	* doc/Makefile.am, po/POTFILES.in: keeping these up to date
@@ -12,13 +20,13 @@
 
 2004-02-21  MenTaLguY <mental@rydia.net>
 
-    * src/xml/repr-util.cpp, src/xml/repr.h: added RDF namespace by default
+	* src/xml/repr-util.cpp, src/xml/repr.h: added RDF namespace by default
 
 	* src/inkscape.cpp, src/inkscape.h, src/widgets/sp-widget.cpp,
 	  src/inkview.cpp: nuked global 'inkscape' variable and replaced
 	  it with a module-local variable and an accessor function.
 
-    * src/uri.h, src/uri.c: added native filename to/from thingy
+	* src/uri.h, src/uri.c: added native filename to/from thingy
 
 2004-02-20  bulia byak <bulia@users.sourceforge.net>
 

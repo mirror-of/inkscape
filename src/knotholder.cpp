@@ -20,6 +20,7 @@
 #include "sp-item.h"
 #include "sp-shape.h"
 #include "knotholder.h"
+#include <libnr/nr-matrix-ops.h>
 
 static void knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data);
 static void knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh);

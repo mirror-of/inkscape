@@ -21,6 +21,7 @@
 #include <gtk/gtkmain.h>
 #include <helper/sp-ctrlline.h>
 #include <helper/sodipodi-ctrlrect.h>
+#include <libnr/nr-matrix-ops.h>
 #include <gtk/gtkimmulticontext.h>
 #include "macros.h"
 #include "sp-text.h"

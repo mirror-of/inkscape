@@ -21,6 +21,7 @@
 #include <gtk/gtkstock.h>
 #include "helper/guideline.h"
 #include "helper/unit-menu.h"
+#include "libnr/nr-matrix-ops.h"
 #include "widgets/icon.h"
 #include "inkscape-private.h"
 #include "desktop.h"

@@ -29,6 +29,7 @@
 #include "dialogs/object-attributes.h"
 #include "sp-image.h"
 #include "helper/sp-intl.h"
+#include <libnr/nr-matrix-ops.h>
 
 /*
  * SPImage

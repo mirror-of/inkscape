@@ -36,6 +36,7 @@
 #include "object-edit.h"
 #include "prefs-utils.h"
 
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
 /* fixme: Implement these via preferences */
