@@ -60,8 +60,7 @@ static NR::Point sp_rect_rx_get (SPItem *item)
 {
 	SPRect *rect = SP_RECT (item);
 
-	return NR::Point(rect->x.computed + rect->rx.computed,
-			 rect->y.computed);
+	return NR::Point(rect->x.computed + rect->width.computed - rect->rx.computed, rect->y.computed);
 }
 
 static void
@@ -71,10 +70,10 @@ sp_rect_rx_set (SPItem *item, const NR::Point &p, guint state)
 	
 	if (state & GDK_CONTROL_MASK) {
 		gdouble temp = MIN (rect->height.computed, rect->width.computed) / 2.0;
-		rect->rx.computed = rect->ry.computed = CLAMP (p[NR::X] - rect->x.computed, 0.0, temp);
+		rect->rx.computed = rect->ry.computed = CLAMP (rect->x.computed + rect->width.computed - p[NR::X], 0.0, temp);
 		rect->rx.set = rect->ry.set = TRUE;
 	} else {
-		rect->rx.computed = CLAMP (p[NR::X] - rect->x.computed, 0.0, rect->width.computed / 2.0);
+		rect->rx.computed = CLAMP (rect->x.computed + rect->width.computed - p[NR::X], 0.0, rect->width.computed / 2.0);
 		rect->rx.set = TRUE;
 	}
 	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
@@ -85,8 +84,7 @@ static NR::Point sp_rect_ry_get (SPItem *item)
 {
 	SPRect *rect = SP_RECT(item);
 
-	return NR::Point(rect->x.computed,
-			 rect->y.computed + rect->ry.computed);
+	return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->ry.computed);
 }
 
 static void
@@ -105,6 +103,40 @@ sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
 	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
 }
 
+static NR::Point sp_rect_wh_get (SPItem *item)
+{
+	SPRect *rect = SP_RECT(item);
+
+	return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed);
+}
+
+static void
+sp_rect_wh_set (SPItem *item, const NR::Point &p, guint state)
+{
+	SPRect *rect = SP_RECT(item);
+	
+	if (state & GDK_CONTROL_MASK) {
+		gdouble ratio = (rect->width.computed / rect->height.computed);
+		gdouble minx = p[NR::X] - (rect->x.computed + rect->width.computed);
+		gdouble miny = p[NR::Y] - (rect->y.computed + rect->height.computed);
+		if (minx > miny) {
+			rect->width.computed += miny * ratio;
+			rect->height.computed += miny;
+		} else {
+			rect->width.computed += minx;
+			rect->height.computed += minx / ratio;
+		}
+		rect->width.set = rect->height.set = TRUE;
+	} else {
+		rect->width.computed = fabs (p[NR::X] - rect->x.computed);
+		rect->height.computed = fabs (p[NR::Y] - rect->y.computed);
+		rect->width.set = rect->height.set = TRUE;
+	}
+	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
+}
+
+
+
 static SPKnotHolder *
 sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 {
@@ -112,6 +144,7 @@ sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 	
 	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get);
 	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get);
+	sp_knot_holder_add (knot_holder, sp_rect_wh_set, sp_rect_wh_get);
 	
 	return knot_holder;
 }
