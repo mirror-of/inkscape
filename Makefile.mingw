@@ -31,7 +31,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)msvcr70.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib.dll inkscape
-	strip -g inkscape/*.dll
+#	strip -g inkscape/*.dll
 #These two don't like 'strip'
 	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)intl.dll inkscape
