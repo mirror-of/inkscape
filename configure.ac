@@ -220,7 +220,7 @@ dnl ******************************
 AC_MSG_CHECKING(whether to use Perl for embedded scripting)
 AC_ARG_WITH(perl,
             AC_HELP_STRING([--with-perl], [use Perl for embedded scripting]),
-            [with_perl=$withval], [with_perl=yes])
+            [with_perl=$withval], [with_perl=no])
 
 if test "x$with_perl" = "xyes"; then
     PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts 2>/dev/null`
@@ -247,7 +247,7 @@ dnl ******************************
 AC_MSG_CHECKING(whether to use Python for embedded scripting)
 AC_ARG_WITH(python,
             AC_HELP_STRING([--with-python], [use Python for embedded scripting]),
-            [with_python=$withval], [with_python=yes])
+            [with_python=$withval], [with_python=no])
 
 if test "x$with_python" = "xyes"; then
     PYTHON_CFLAGS=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')" 2>/dev/null`
