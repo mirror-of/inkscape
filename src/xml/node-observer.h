@@ -31,6 +31,10 @@ namespace XML {
 
 class NodeObserver {
 public:
+    NodeObserver() {}
+    
+    virtual ~NodeObserver() {}
+    
     virtual void notifyChildAdded(Node &node, Node &child, Node *prev)=0;
 
     virtual void notifyChildRemoved(Node &node, Node &child, Node *prev)=0;
