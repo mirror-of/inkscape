@@ -212,6 +212,7 @@ is_regular (const char *s)
 	if (strstr(s, " Regular")) return true;
 	if (strstr(s, " Roman")) return true;
 	if (strstr(s, " Normal")) return true;
+	if (strstr(s, " Plain")) return true;
 	return false;
 }
 
@@ -245,7 +246,6 @@ style_name_compare (const void *aa, const void *bb)
 	const char *a = *((char **) aa);
 	const char *b = *((char **) bb);
 
-#ifndef WIN32
  if (is_regular(a) && !is_regular(b)) return -1;
  if (is_regular(b) && !is_regular(a)) return 1;
 
@@ -259,10 +259,6 @@ style_name_compare (const void *aa, const void *bb)
  if (is_nonbold(b) && !is_nonbold(a)) return -1;
 
  return strcasecmp (a, b);
-
-#else
-	return stricmp ((const char *)a, (const char *)b);
-#endif
 }
 
 

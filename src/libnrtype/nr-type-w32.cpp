@@ -155,21 +155,11 @@ nr_type_read_w32_list (void)
 
 		const unsigned char *family = (const unsigned char *) (wnames.families[i]);
 
-// 		const unsigned char *family;
-// 		family = NULL;
-// 		for (j = wfamilies.length - 1; j >= 0; j--) {
-// 			int len;
-// 			len = strlen ((gchar *)wfamilies.names[j]);
-// 			if (!strncmp ((gchar *)wfamilies.names[j], (gchar *)wnames.names[i], len)) {
-// 				family = (const unsigned char *)wfamilies.names[j];
-// 				break;
-// 			}
-// 		}
-
 		if (family) {
 			tdef = nr_new (NRTypeFaceDef, 1);
 			tdef->next = NULL;
 			tdef->pdef = NULL;
+
 			nr_type_w32_build_def (tdef, (const unsigned char *)wnames.names[i], family);
 			nr_type_register (tdef);
 		}
@@ -629,48 +619,52 @@ nr_typeface_w32_font_free (NRFont *font)
 static int CALLBACK
 nr_type_w32_inner_enum_proc (ENUMLOGFONTEX *elfex, NEWTEXTMETRICEX *tmex, DWORD fontType, LPARAM lParam)
 {
-    unsigned char *name;
-
 	switch (elfex->elfLogFont.lfCharSet) {
-
 	    case MAC_CHARSET:
-
 	    case OEM_CHARSET:
-
 	    case SYMBOL_CHARSET:
-
 	         return 1;
-
 	         break;
-
 	    default:
-
 	         break;
-
 	}
 
+	//	const char *ch = NULL;
+	//	g_get_charset (&ch);
+	//	g_print("==== Locale: %s\n", ch);;
 
+      unsigned char *s = (unsigned char *)g_strdup (elfex->elfLogFont.lfFaceName);
+      unsigned char *s_u;// = (unsigned char *) g_locale_to_utf8 ((gchar *) s, -1, NULL, NULL, NULL);
+			//      if (s_u == NULL) 
+	s_u = s;
 
-    if (!g_hash_table_lookup (familydict, elfex->elfLogFont.lfFaceName)) {
-        unsigned char *s;
+	//		gsize br, bw;
+	//		GError *gep = NULL;
+
+      unsigned char *name = (unsigned char *)g_strdup_printf ("%s %s", elfex->elfLogFont.lfFaceName, elfex->elfStyle);
+      unsigned char *name_u; //= (unsigned char *) g_convert ((gchar *) name, -1, "UTF-8", "ISO-8859-1", &br, &bw, &gep);
+	       	//    if (name_u == NULL) 
+      name_u = name;
+
+			//		if (gep)
+			//		g_print("== Name: %s;  br %d  bw %d  err %s  co %d\n", name_u, (int)br, (int)bw, gep->message, gep->code);
+			//		else 
+			//		g_print("== Name: %s;  br %d  bw %d noerr", name_u, (int)br, (int)bw);
+
+    if (!g_hash_table_lookup (familydict, s_u)) {
         /* Register family */
-        s = (unsigned char *)g_strdup (elfex->elfLogFont.lfFaceName);
-        familylist = g_slist_prepend (familylist, s);
-        g_hash_table_insert (familydict, s, GUINT_TO_POINTER (TRUE));
+        familylist = g_slist_prepend (familylist, s_u);
+        g_hash_table_insert (familydict, s_u, GUINT_TO_POINTER (TRUE));
     }
 
-    name = (unsigned char *)g_strdup_printf ("%s %s", elfex->elfLogFont.lfFaceName, elfex->elfStyle);
-    if (!g_hash_table_lookup (namedict, name)) {
+
+    if (!g_hash_table_lookup (namedict, name_u)) {
         LOGFONT *plf;
         plf = g_new (LOGFONT, 1);
         *plf = elfex->elfLogFont;
-        namelist = g_slist_prepend (namelist, name);
-        name_family_list = g_slist_prepend (name_family_list, elfex->elfLogFont.lfFaceName);
-        g_hash_table_insert (namedict, name, plf);
-
-        /*This needs to be logged instead
-        g_print ("%s | ", name);
-        */
+        namelist = g_slist_prepend (namelist, name_u);
+        name_family_list = g_slist_prepend (name_family_list, s_u);
+        g_hash_table_insert (namedict, name_u, plf);
     } else {
         g_free (name);
     }
@@ -699,10 +693,6 @@ nr_type_w32_init (void)
     GSList *l, *lf;
     int pos;
 
-    /*This needs to be logged instead
-    g_print ("Loading W32 type directory...\n");
-    */
-
     hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
 
     familydict = g_hash_table_new (g_str_hash, g_str_equal);
@@ -714,6 +704,7 @@ nr_type_w32_init (void)
     EnumFontFamiliesExA (hdc, &logfont, (FONTENUMPROC) nr_type_w32_typefaces_enum_proc, 0, 0);
 
     /* Fill in lists */
+
     NRW32Families.length = g_slist_length (familylist);
     NRW32Families.names = g_new (guchar *, NRW32Families.length);
     pos = 0;
@@ -721,7 +712,8 @@ nr_type_w32_init (void)
         NRW32Families.names[pos] = (guchar *) l->data;
         pos += 1;
     }
-    NRW32Typefaces.length = g_slist_length (namelist) * 2;
+
+    NRW32Typefaces.length = g_slist_length (namelist);
     NRW32Typefaces.names = g_new (guchar *, NRW32Typefaces.length);
     NRW32Typefaces.families = g_new (guchar *, NRW32Typefaces.length);
     pos = 0;
