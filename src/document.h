@@ -4,9 +4,11 @@
 /*
  * Typed SVG document implementation
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
+ * Copyright (C) 2004-2005 MenTaLguY
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
@@ -30,6 +32,9 @@ class SPDocumentPrivate;
 struct SPDocument {
 	typedef sigc::signal<void, SPObject *> IDChangedSignal;
 	typedef sigc::signal<void> ResourcesChangedSignal;
+	typedef sigc::signal<void, guint> ModifiedSignal;
+	typedef sigc::signal<void, gchar const *> URISetSignal;
+	typedef sigc::signal<void, double, double> ResizedSignal;
 
 	GObject object;
 
@@ -52,9 +57,13 @@ struct SPDocument {
 	/* Handler ID */
 	guint modified_id;
 
+	sigc::connection connectModified(ModifiedSignal::slot_type slot);
+	sigc::connection connectURISet(URISetSignal::slot_type slot);
+	sigc::connection connectResized(ResizedSignal::slot_type slot);
+
 	void bindObjectToId(gchar const *id, SPObject *object);
 	SPObject *getObjectById(gchar const *id);
-	sigc::connection connectIdChanged(const gchar *id, SPDocument::IDChangedSignal::slot_type slot);
+	sigc::connection connectIdChanged(const gchar *id, IDChangedSignal::slot_type slot);
 
 	void bindObjectToRepr(SPRepr *repr, SPObject *object);
 	SPObject *getObjectByRepr(SPRepr *repr);
@@ -62,15 +71,13 @@ struct SPDocument {
 	void queueForOrphanCollection(SPObject *object);
 	void collectOrphans();
 
+	void _emitModified();
+
 	GSList *_collection_queue;
 };
 
 struct SPDocumentClass {
 	GObjectClass parent_class;
-
-	void (* modified) (SPDocument *document, guint flags);
-	void (* uri_set) (SPDocument *document, const gchar *uri);
-	void (* resized) (SPDocument *document, gdouble width, gdouble height);
 };
 
 /* Fetches document from URI, or creates new, if NULL

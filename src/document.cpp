@@ -5,7 +5,9 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
+ * Copyright (C) 2004-2005 MenTaLguY
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
@@ -50,13 +52,6 @@
 #include <locale>
 #include <sstream>
 
-enum {
-	MODIFIED,
-	URI_SET,
-	RESIZED,
-	LAST_SIGNAL
-};
-
 static void sp_document_class_init(SPDocumentClass *klass);
 static void sp_document_init(SPDocument *document);
 static void sp_document_dispose(GObject *object);
@@ -66,7 +61,6 @@ static gint sp_document_idle_handler(gpointer data);
 gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
 
 static GObjectClass *parent_class;
-static guint signals[LAST_SIGNAL] = {0};
 static gint doc_count = 0;
 
 GType
@@ -96,30 +90,6 @@ sp_document_class_init(SPDocumentClass *klass)
 
 	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
-	signals[MODIFIED] = g_signal_new ("modified",
-					    G_TYPE_FROM_CLASS(klass),
-					    G_SIGNAL_RUN_FIRST,
-					    G_STRUCT_OFFSET (SPDocumentClass, modified),
-					    NULL, NULL,
-					    sp_marshal_NONE__UINT,
-					    G_TYPE_NONE, 1,
-					    G_TYPE_UINT);
-	signals[URI_SET] =    g_signal_new ("uri_set",
-					    G_TYPE_FROM_CLASS(klass),
-					    G_SIGNAL_RUN_FIRST,
-					    G_STRUCT_OFFSET (SPDocumentClass, uri_set),
-					    NULL, NULL,
-					    sp_marshal_NONE__POINTER,
-					    G_TYPE_NONE, 1,
-					    G_TYPE_POINTER);
-	signals[RESIZED] =    g_signal_new ("resized",
-					    G_TYPE_FROM_CLASS(klass),
-					    G_SIGNAL_RUN_FIRST,
-					    G_STRUCT_OFFSET (SPDocumentClass, uri_set),
-					    NULL, NULL,
-					    sp_marshal_NONE__DOUBLE_DOUBLE,
-					    G_TYPE_NONE, 2,
-					    G_TYPE_DOUBLE, G_TYPE_DOUBLE);
 	object_class->dispose = sp_document_dispose;
 }
 
@@ -532,7 +502,7 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 	sp_repr_set_attr (repr, "sodipodi:docname", document->name);
 	sp_document_set_undo_sensitive (document, saved);
 
-	g_signal_emit (G_OBJECT (document), signals [URI_SET], 0, document->uri);
+	document->priv->uri_set_signal.emit(document->uri);
 }
 
 void
@@ -540,7 +510,28 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 {
 	g_return_if_fail (doc != NULL);
 
-	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width, height);
+	doc->priv->resized_signal.emit(width, height);
+}
+
+sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
+{
+	return priv->modified_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
+{
+	return priv->uri_set_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
+{
+	return priv->resized_signal.connect(slot);
+}
+
+void SPDocument::_emitModified() {
+	static const guint flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
+	root->emitModified(0);
+	priv->modified_signal.emit(flags);
 }
 
 void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
@@ -631,11 +622,7 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 			nr_matrix_set_identity (&ctx.i2vp);
 			doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		}
-		/* Emit "modified" signal on objects */
-		doc->root->emitModified(0);
-		/* Emit our own "modified" signal */
-		g_signal_emit (G_OBJECT (doc), signals [MODIFIED], 0,
-			       SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG);
+		doc->_emitModified();
 	}
 	if (doc->modified_id) {
 		/* Remove handler */
@@ -678,20 +665,7 @@ sp_document_idle_handler (gpointer data)
 		/* if (doc->root->uflags & SP_OBJECT_MODIFIED_FLAG) return TRUE; */
 	}
 
-	/* Emit "modified" signal on objects */
-	doc->root->emitModified(0);
-
-#ifdef SP_DOCUMENT_DEBUG_IDLE
-	g_print ("\n->");
-#endif
-
-	/* Emit our own "modified" signal */
-	g_signal_emit (G_OBJECT (doc), signals [MODIFIED], 0,
-			 SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG);
-
-#ifdef SP_DOCUMENT_DEBUG_IDLE
-	g_print (" S ->\n");
-#endif
+	doc->_emitModified();
 
 	repeat = (doc->root->uflags || doc->root->mflags);
 	if (!repeat) doc->modified_id = 0;

@@ -73,6 +73,7 @@ struct EditableDest {
 
 static GtkWidget * dlg = NULL;
 static sigc::connection sel_changed_connection;
+static sigc::connection document_uri_set_connection;
 static win_data wd;
 // impossible original values to make sure they are read from prefs
 static gint x = -1000, y = -1000, w = 0, h = 0;
@@ -140,7 +141,7 @@ static void on_attr_unselect_row_clear_text (GtkCList *list, gint row, gint colu
 static void on_editable_changed_enable_if_valid_xml_name (GtkEditable * editable, gpointer data);
 
 static void on_desktop_selection_changed (SPSelection * selection);
-static void on_document_uri_set (SPDocument * document, const gchar * uri, gpointer data);
+static void on_document_uri_set (gchar const *uri, SPDocument * document);
 
 static void on_clicked_get_editable_text (GtkWidget * widget, gpointer data);
 
@@ -686,14 +687,13 @@ set_tree_document (SPDocument * document)
         return;
 
     if (current_document) {
-        sp_signal_disconnect_by_data (current_document, dlg);
+        document_uri_set_connection.disconnect();
     }
     current_document = document;
     if (current_document) {
-        g_signal_connect ( G_OBJECT (current_document), "uri_set",
-                           G_CALLBACK (on_document_uri_set), dlg );
-        on_document_uri_set ( current_document,
-                              SP_DOCUMENT_URI (current_document), dlg );
+        
+        document_uri_set_connection = current_document->connectURISet(sigc::bind(sigc::ptr_fun(&on_document_uri_set), current_document));
+        on_document_uri_set(SP_DOCUMENT_URI (current_document), current_document);
         set_tree_repr (sp_document_repr_root (current_document));
 
     } else {
@@ -1320,9 +1320,7 @@ on_desktop_selection_changed (SPSelection * selection)
 }
 
 
-void
-on_document_uri_set ( SPDocument * document, const gchar * uri, gpointer data )
-{
+void on_document_uri_set(gchar const *uri, SPDocument *document) {
     gchar *t;
     gchar title[500];
 

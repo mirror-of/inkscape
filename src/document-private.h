@@ -39,6 +39,10 @@ struct SPDocumentPrivate {
 	GHashTable *resources;
 	ResourcesChangedSignalMap resources_changed_signals;
 
+	SPDocument::ModifiedSignal modified_signal;
+	SPDocument::URISetSignal uri_set_signal;
+	SPDocument::ResizedSignal resized_signal;
+
 	/* Undo/Redo state */
 	guint sensitive: 1; /* If we save actions to undo stack */
 	SPReprAction * partial; /* partial undo log when interrupted */

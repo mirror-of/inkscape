@@ -34,8 +34,8 @@ enum {
 
 static void sp_view_class_init(SPViewClass *vc);
 
-static void sp_view_document_uri_set(SPDocument *doc, const guchar *uri, SPView *view);
-static void sp_view_document_resized(SPDocument *doc, gdouble width, gdouble height, SPView *view);
+static void sp_view_document_uri_set(gchar const *uri, SPView *view);
+static void sp_view_document_resized(gdouble width, gdouble height, SPView *view);
 
 static GObjectClass *parent_class;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -147,6 +147,8 @@ void SPView::init(SPView *view)
     view->doc = NULL;
 
     new (&view->_message_changed_connection) sigc::connection();
+    new (&view->_document_uri_set_connection) sigc::connection();
+    new (&view->_document_resized_connection) sigc::connection();
 
     view->_message_stack = new Inkscape::MessageStack();
 
@@ -174,11 +176,15 @@ void SPView::dispose(GObject *object)
     view->_message_stack = NULL;
 
     if (view->doc) {
-        sp_signal_disconnect_by_data(view->doc, view);
-        view->doc = sp_document_unref(view->doc);
+        view->_document_uri_set_connection.disconnect();
+        view->_document_resized_connection.disconnect();
+        sp_document_unref(view->doc);
+        view->doc = NULL;
     }
     
     view->_message_changed_connection.~connection();
+    view->_document_uri_set_connection.~connection();
+    view->_document_resized_connection.~connection();
 
     Inkscape::Verb::delete_all_view(view);
     
@@ -230,14 +236,16 @@ void sp_view_set_document(SPView *view, SPDocument *doc)
     }
 
     if (view->doc) {
-        sp_signal_disconnect_by_data(view->doc, view);
-        view->doc = sp_document_unref(view->doc);
+        view->_document_uri_set_connection.disconnect();
+        view->_document_resized_connection.disconnect();
+        sp_document_unref(view->doc);
+        view->doc = NULL;
     }
 
     if (doc) {
         view->doc = sp_document_ref(doc);
-        g_signal_connect(G_OBJECT(doc), "uri_set", G_CALLBACK(sp_view_document_uri_set), view);
-        g_signal_connect(G_OBJECT(doc), "resized", G_CALLBACK(sp_view_document_resized), view);
+        view->_document_uri_set_connection = doc->connectURISet(sigc::bind(sigc::ptr_fun(&sp_view_document_uri_set), view));
+        view->_document_resized_connection = doc->connectResized(sigc::bind(sigc::ptr_fun(&sp_view_document_resized), view));
     }
 
     g_signal_emit(G_OBJECT(view), signals[URI_SET], 0, (doc) ? SP_DOCUMENT_URI(doc) : NULL);
@@ -259,15 +267,15 @@ void sp_view_set_position(SPView *view, gdouble x, gdouble y)
     g_signal_emit(G_OBJECT(view), signals[POSITION_SET], 0, x, y);
 }
 
-static void sp_view_document_uri_set(SPDocument *doc, const guchar *uri, SPView *view)
+static void sp_view_document_uri_set(gchar const *uri, SPView *view)
 {
     g_signal_emit(G_OBJECT(view), signals[URI_SET], 0, uri);
 }
 
-static void sp_view_document_resized(SPDocument *doc, gdouble width, gdouble height, SPView *view)
+static void sp_view_document_resized(gdouble width, gdouble height, SPView *view)
 {
     if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->document_resized) {
-        ((SPViewClass *) G_OBJECT_GET_CLASS(view))->document_resized(view, doc, width, height);
+        ((SPViewClass *) G_OBJECT_GET_CLASS(view))->document_resized(view, view->doc, width, height);
     }
 }
 

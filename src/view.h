@@ -14,6 +14,7 @@
  */
 
 #include <libnr/nr-point.h>
+#include <sigc++/connection.h>
 
 #define SP_TYPE_VIEW (sp_view_get_type ())
 #define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, SPView))
@@ -61,6 +62,9 @@ private:
 	Inkscape::MessageContext *_legacy_message_context;
 
 	sigc::connection _message_changed_connection;
+public: // for now...
+	sigc::connection _document_uri_set_connection;
+	sigc::connection _document_resized_connection;
 };
 
 struct SPViewClass {
