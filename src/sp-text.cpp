@@ -811,6 +811,37 @@ void TextTagAttributes::splitSingleAttribute(std::vector<SPSVGLength> *first_vec
             first_vector->resize(first_vector->size() - 1);
 }
 
+void TextTagAttributes::join(TextTagAttributes const &first, TextTagAttributes const &second, unsigned second_index)
+{
+    if (second.singleXYCoordinates()) {
+        attributes.x = first.attributes.x;
+        attributes.y = first.attributes.y;
+    } else {
+        joinSingleAttribute(&attributes.x, first.attributes.x, second.attributes.x, second_index);
+        joinSingleAttribute(&attributes.y, first.attributes.y, second.attributes.y, second_index);
+    }
+    joinSingleAttribute(&attributes.dx, first.attributes.dx, second.attributes.dx, second_index);
+    joinSingleAttribute(&attributes.dy, first.attributes.dy, second.attributes.dy, second_index);
+    joinSingleAttribute(&attributes.rotate, first.attributes.rotate, second.attributes.rotate, second_index);
+}
+
+void TextTagAttributes::joinSingleAttribute(std::vector<SPSVGLength> *dest_vector, std::vector<SPSVGLength> const &first_vector, std::vector<SPSVGLength> const &second_vector, unsigned second_index)
+{
+    if (second_vector.empty())
+        *dest_vector = first_vector;
+    else {
+        dest_vector->resize(second_index + second_vector.size());
+        if (first_vector.size() < second_index) {
+            std::copy(first_vector.begin(), first_vector.end(), dest_vector->begin());
+            SPSVGLength zero_length;
+            zero_length = 0.0;
+            std::fill(dest_vector->begin() + first_vector.size(), dest_vector->begin() + second_index, zero_length);
+        } else
+            std::copy(first_vector.begin(), first_vector.begin() + second_index, dest_vector->begin());
+        std::copy(second_vector.begin(), second_vector.end(), dest_vector->begin() + second_index);
+    }
+}
+
 void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, double scale_y)
 {
     SPSVGLength zero_length;

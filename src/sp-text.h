@@ -96,6 +96,11 @@ public:
     line breaking. */
     void split(unsigned index, TextTagAttributes *second);
 
+    /** overwrites all the attributes contained in this object with the
+    given parameters by putting \a first at the beginning, then the
+    contents of \a second after \a second_index. */
+    void join(TextTagAttributes const &first, TextTagAttributes const &second, unsigned second_index);
+
     /** applies the given transformation to the stored coordinates. Pairs
     of x and y coordinates are multiplied by the matrix and the dx and dy
     vectors are multiplied by the given parameters. rotate is not altered. */
@@ -131,6 +136,9 @@ private:
 
     /// does the work for split()
     static void splitSingleAttribute(std::vector<SPSVGLength> *first_vector, unsigned index, std::vector<SPSVGLength> *second_vector, bool trimZeros);
+
+    /// does the work for join()
+    static void joinSingleAttribute(std::vector<SPSVGLength> *dest_vector, std::vector<SPSVGLength> const &first_vector, std::vector<SPSVGLength> const &second_vector, unsigned second_index);
 };
 
 

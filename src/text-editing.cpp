@@ -487,9 +487,12 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
                 next_item = SP_OBJECT_NEXT(item);
                 *next_is_sibling = false;
             }
-            TextTagAttributes *attributes = attributes_for_object(SP_OBJECT_NEXT(item));
-            if (attributes)
-                attributes->insert(0, moved_char_count);
+            TextTagAttributes *attributes_this = attributes_for_object(item);
+            TextTagAttributes *attributes_next = attributes_for_object(SP_OBJECT_NEXT(item));
+            if (attributes_next) {
+                TextTagAttributes attributes_next_copy = *attributes_next;
+                attributes_next->join(*attributes_this, attributes_next_copy, moved_char_count);
+            }
             move_child_nodes(this_repr, next_repr, true);
             done = true;
         }
