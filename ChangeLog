@@ -1,3 +1,7 @@
+2004-06-06  Bryce Harrington <bryce@bryceharrington.com>
+
+	* libnrtype/nr-type-xft.cpp:  Documenting routines
+
 2004-06-06  Ted Gould  <ted@gould.cx>
 
 	* src/main.cpp, src/preferences-skeleton.h, src/extension/extension.cpp:

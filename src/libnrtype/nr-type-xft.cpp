@@ -32,6 +32,10 @@ static XftFontSet *NRXftPatterns = NULL;
 static GHashTable *NRXftNamedict = NULL;
 static GHashTable *NRXftFamilydict = NULL;
 
+/** 
+ * Gets the typefaces for Xft
+ * Fills in the names parameter with the NRXftTypefaces object.
+ */
 void
 nr_type_xft_typefaces_get (NRNameList *names)
 {
@@ -40,6 +44,10 @@ nr_type_xft_typefaces_get (NRNameList *names)
 	*names = NRXftTypefaces;
 }
 
+/**
+ * Gets the font families for Xft
+ * Fills in the names parameter with the NRXftFamiles object.
+ */
 void
 nr_type_xft_families_get (NRNameList *names)
 {
@@ -48,6 +56,11 @@ nr_type_xft_families_get (NRNameList *names)
 	*names = NRXftFamilies;
 }
 
+/**
+ * Retrieves 'name' from the Xft Name dictionary, and uses the filename
+ * and index of the font to build a def in the dft2 parameter for the
+ * indicated font family.
+ */
 void
 nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const gchar *name, const gchar *family)
 {
@@ -65,6 +78,10 @@ nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const gchar *name, const gchar *f
 	}
 }
 
+/**
+ * Gets the Xft typefaces and families, then for each font creates and
+ * registers an NRTypeFaceDef definition for it.
+ */
 void
 nr_type_read_xft_list (void)
 {
@@ -100,6 +117,11 @@ nr_type_read_xft_list (void)
 	nr_name_list_release (&gnames);
 }
 
+/**
+ * Initializes Xft by reading in the font database, gets the font families and
+ * typefaces, then for each font pattern it gathers and registers the font
+ * family, style, weight, slant, etc.
+ */
 static void
 nr_type_xft_init (void)
 {
