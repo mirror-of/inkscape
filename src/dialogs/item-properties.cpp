@@ -392,9 +392,6 @@ sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw)
 {
 	SPException ex;
 	SPItem *item;
-	NRMatrix t;
-	gchar c[64];
-	int i;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) return;
 
@@ -403,12 +400,14 @@ sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-	for (i = 0; i < 6; i++) {
+	NRMatrix t;
+	for (unsigned i = 0; i < 6; i++) {
 		gchar c[8];
-		g_snprintf (c, 8, "t%d", i);
+		g_snprintf (c, 8, "t%u", i);
 		t.c[i] = GTK_ADJUSTMENT (gtk_object_get_data (GTK_OBJECT (spw), c))->value;
 	}
 
+	gchar c[64];
 	sp_svg_transform_write (c, 64, &t);
 	SP_EXCEPTION_INIT (&ex);
 	sp_object_setAttribute (SP_OBJECT (item), "transform", c, &ex);

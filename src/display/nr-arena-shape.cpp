@@ -321,21 +321,21 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 					       0.25);
 		} else {
 			double dlen;
-			int i;
 			ArtVpath *vp, *pvp;
 			ArtSVP *asvp;
 			vp = art_bez_path_to_vec (bp.path, 0.25);
 			pvp = art_vpath_perturb (vp);
 			art_free (vp);
 			dlen = 0.0;
-			for (i = 0; i < style->stroke_dash.n_dash; i++) dlen += style->stroke_dash.dash[i] * scale;
+			for (int i = 0; i < style->stroke_dash.n_dash; i++) {
+				dlen += style->stroke_dash.dash[i] * scale;
+			}
 			if (dlen >= 1.0) {
 				ArtVpathDash dash;
-				int i;
 				dash.offset = style->stroke_dash.offset * scale;
 				dash.n_dash = style->stroke_dash.n_dash;
 				dash.dash = g_new (double, dash.n_dash);
-				for (i = 0; i < dash.n_dash; i++) {
+				for (int i = 0; i < dash.n_dash; i++) {
 					dash.dash[i] = style->stroke_dash.dash[i] * scale;
 				}
 				vp = art_vpath_dash (pvp, &dash);

@@ -1,15 +1,15 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-text.cpp (sp_text_font_style_to_lookup),
-	src/dialogs/text-edit.cpp
-	(sp_text_edit_dialog_font_style_to_lookup): Slight restructuring
-	using g_snprintf instead of less readable (& slightly less
-	efficient in this case) strlen/memcpy.
+	src/dialogs/text-edit.cpp (sp_text_edit_dialog_font_style_to_lookup):
+	Slight restructuring using g_snprintf instead of less readable (&
+	slightly less efficient in this case) strlen/memcpy.
 
 	* src/sp-metrics.h: Increase precision of PT_PER_CM etc.
 	Add FIXME comment.
 
-	* src/dialogs/item-properties.cpp: Address `-Wshadow' warnings.
+	* src/dialogs/item-properties.cpp, src/display/nr-arena-shape.cpp:
+	Address `-Wshadow' warnings.
 
 	* src/nodepath.h, src/nodepath.cpp: Make some functions static.
 	(sp_nodepath_node_deselect) Remove unused function.
