@@ -3,10 +3,11 @@
 /*
  * Various utility methods for gradients
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak
  *
- * Copyright (C) 2001-2002 Lauris Kaplinski
+ * Copyright (C) 2001-2005 authors
  * Copyright (C) 2001 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -475,9 +476,11 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 
 		SPRadialGradient *rg = SP_RADIALGRADIENT(gradient);
 		NR::Point c (rg->cx.computed, rg->cy.computed);
-		NR::Point c_w = c * gradient->gradientTransform * i2d; // in desktop coords
-           if ((point_num == POINT_RG_R1 || point_num == POINT_RG_R2) && NR::L2 (p_w - c_w) < 1e-3) 
+		NR::Point c_w = c * gradient->gradientTransform * i2d; // now in desktop coords
+           if ((point_num == POINT_RG_R1 || point_num == POINT_RG_R2) && NR::L2 (p_w - c_w) < 1e-3) {
+               // prevent setting a radius too close to the center
                return;
+           }
 		NR::Matrix new_transform;
 		bool transform_set = false;
 
@@ -814,10 +817,8 @@ sp_document_default_gradient_vector(SPDocument *document, guint32 color)
 }
 
 /**
-Return the preferred vector for \a o, made from its current color or from desktop style if \a o
-doesn't have flat color.
-
-\pre o != NULL
+Return the preferred vector for \a o, made from its current fill or stroke color, or from desktop
+style if \a o is NULL or doesn't have flat color.
 */
 SPGradient *
 sp_gradient_vector_for_object(SPDocument *const doc, SPDesktop *const desktop,
@@ -834,6 +835,13 @@ sp_gradient_vector_for_object(SPDocument *const doc, SPDesktop *const desktop,
                                   : style.stroke );
         if (paint.type == SP_PAINT_TYPE_COLOR) {
             rgba = sp_color_get_rgba32_ualpha(&paint.value.color, 0xff);
+        } else if (paint.type == SP_PAINT_TYPE_PAINTSERVER) {
+            SPObject *server = is_fill? SP_OBJECT_STYLE_FILL_SERVER(o) : SP_OBJECT_STYLE_STROKE_SERVER(o);
+            if (SP_IS_GRADIENT (server)) {
+                return sp_gradient_get_vector(SP_GRADIENT (server), TRUE);
+            } else {
+                rgba = sp_desktop_get_color(desktop, is_fill);
+            }
         } else {
             // if o doesn't use flat color, then take current color of the desktop.
             rgba = sp_desktop_get_color(desktop, is_fill);
