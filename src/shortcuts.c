@@ -56,7 +56,7 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_I, SP_VERB_FILE_IMPORT, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_q, SP_VERB_FILE_QUIT, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_Q, SP_VERB_FILE_QUIT, TRUE);
-	/* Event contexts */
+	/* Tools (event contexts) */
 	sp_shortcut_set_verb (GDK_F1, SP_VERB_CONTEXT_SELECT, FALSE);
 	sp_shortcut_set_verb (GDK_s, SP_VERB_CONTEXT_SELECT, TRUE);
 	sp_shortcut_set_verb (GDK_S, SP_VERB_CONTEXT_SELECT, FALSE);
@@ -90,6 +90,8 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_i, SP_VERB_CONTEXT_SPIRAL, TRUE);
 	sp_shortcut_set_verb (GDK_I, SP_VERB_CONTEXT_SPIRAL, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_F9, SP_VERB_CONTEXT_STAR, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_asterisk, SP_VERB_CONTEXT_STAR, TRUE);
+	sp_shortcut_set_verb (GDK_KP_Multiply, SP_VERB_CONTEXT_STAR, TRUE);
 	/* Zooming and desktop */
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_plus, SP_VERB_ZOOM_IN, TRUE);
 	sp_shortcut_set_verb (GDK_equal, SP_VERB_ZOOM_IN, FALSE);
