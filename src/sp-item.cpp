@@ -354,7 +354,7 @@ sp_item_set(SPObject *object, unsigned key, gchar const *value)
         case SP_ATTR_SODIPODI_INSENSITIVE:
             item->sensitive = !value;
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                nr_arena_item_set_sensitive(v->arenaitem, item->sensitive && item->style->visibility);
+                nr_arena_item_set_sensitive(v->arenaitem, item->sensitive);
             }
             break;
         case SP_ATTR_SODIPODI_NONPRINTABLE:
@@ -676,7 +676,7 @@ sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags)
         nr_arena_item_set_transform(ai, item->transform);
         nr_arena_item_set_opacity(ai, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
         nr_arena_item_set_visible(ai, SP_OBJECT_STYLE(item)->visibility);
-        nr_arena_item_set_sensitive(ai, item->sensitive && SP_OBJECT_STYLE(item)->visibility);
+        nr_arena_item_set_sensitive(ai, item->sensitive);
         if (flags & SP_ITEM_SHOW_PRINT) {
             nr_arena_item_set_visible(ai, item->printable);
         }
