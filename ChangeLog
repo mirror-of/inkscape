@@ -1,3 +1,15 @@
+2004-11-25  MenTaLguY  <mental@rydia.net>
+
+	* src/inkscape.cpp: eliminate duplicated code across #ifdefs
+
+	* src/verbs.cpp, src/dialogs/layer-properties.cpp,
+	  src/dialogs/layer-properties.h:
+
+	  LayerPropertiesDialog is no longer a singleton, since it's kind of a
+	  per-desktop (well, ideally per-document) thing.  Remaining to do:
+	  fix update of layer selector widget, and eliminate leak of dialog
+	  objects.
+
 2004-11-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/draw-context.cpp (spdc_concat_colors_and_flush):

@@ -569,16 +569,15 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
 
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON */
 #ifdef WIN32
-    if (prefs_get_int_attribute("dialogs.debug", "redirect", 1))
-        {
-        Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
-        }
+#define DEFAULT_LOG_REDIRECT true
 #else
-    if (prefs_get_int_attribute("dialogs.debug", "redirect", 0))
-        {
-        Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
-        }
+#define DEFAULT_LOG_REDIRECT false
 #endif
+
+    if (prefs_get_int_attribute("dialogs.debug", "redirect", DEFAULT_LOG_REDIRECT))
+    {
+        Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
+    }
 
     /* Initialize the extensions */
     Inkscape::Extension::init();

@@ -30,17 +30,16 @@ namespace Dialogs {
 class LayerPropertiesDialog : public Gtk::Dialog {
  public:
     LayerPropertiesDialog();
+    ~LayerPropertiesDialog();
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 
-    static void showRename(SPDesktop *desktop) {
-        _instance()._showDialog(Rename::instance(), desktop);
+    static void showRename(SPDesktop *desktop, SPObject *layer) {
+        _showDialog(Rename::instance(), desktop, layer);
     }
-    static void showCreate(SPDesktop *desktop) {
-        _instance()._showDialog(Create::instance(), desktop);
+    static void showCreate(SPDesktop *desktop, SPObject *layer) {
+        _showDialog(Create::instance(), desktop, layer);
     }
-
-    bool       userHidden() { return _userHidden; }
 
 protected:
     struct Strategy {
@@ -62,8 +61,9 @@ protected:
     friend class Create;
 
     Strategy *_strategy;
+    SPDesktop *_desktop;
+    SPObject *_layer;
 
-    bool              _userHidden;
     Gtk::HBox         _layer_name_hbox;
     Gtk::Label        _layer_name_label;
     Gtk::Entry        _layer_name_entry;
@@ -71,12 +71,17 @@ protected:
     Gtk::Button       _close_button;
     Gtk::Button       _apply_button;
 
+    sigc::connection    _destroy_connection;
+
     static LayerPropertiesDialog &_instance() {
         static LayerPropertiesDialog instance;
         return instance;
     }
 
-    void _showDialog(Strategy &strategy, SPDesktop *desktop);
+    void _setDesktop(SPDesktop *desktop);
+    void _setLayer(SPObject *layer);
+
+    static void _showDialog(Strategy &strategy, SPDesktop *desktop, SPObject *layer);
     void _apply();
     void _close();
 

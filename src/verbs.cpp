@@ -871,11 +871,11 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
 
     switch (verb) {
         case SP_VERB_LAYER_NEW: {
-            Inkscape::UI::Dialogs::LayerPropertiesDialog::showCreate(dt);
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showCreate(dt, dt->currentLayer());
             break;
         }
         case SP_VERB_LAYER_RENAME: {
-            Inkscape::UI::Dialogs::LayerPropertiesDialog::showRename(dt);
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showRename(dt, dt->currentLayer());
             break;
         }
         case SP_VERB_LAYER_NEXT: {
