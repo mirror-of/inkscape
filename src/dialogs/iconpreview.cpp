@@ -21,7 +21,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
-#include <gtkmm/toolbutton.h>
+#include <gtkmm/toggletoolbutton.h>
 
 #include <gtk/gtk.h>
 
@@ -124,6 +124,7 @@ private:
     Gtk::Image** images;
     Gtk::Image* magnified;
     Glib::ustring** labels;
+    Gtk::ToggleToolButton** buttons;
 };
 
 
@@ -203,6 +204,7 @@ IconPreviewImpl::IconPreviewImpl() :
     pixMem = new guchar*[numEntries];
     images = new Gtk::Image*[numEntries];
     labels = new Glib::ustring*[numEntries];
+    buttons = new Gtk::ToggleToolButton*[numEntries];
 
     sizes[0] = 16;
     labels[0] = new Glib::ustring("16x16");
@@ -256,9 +258,7 @@ IconPreviewImpl::IconPreviewImpl() :
 
     Gtk::VBox* magBox = new Gtk::VBox();
     magnified = new Gtk::Image();
-    Gtk::Alignment* align = new Gtk::Alignment();
-    align->add( *magnified );
-    magBox->add( *align );
+    magBox->add( *magnified );
 
     Gtk::VBox * verts = new Gtk::VBox();
     for ( int i = 0; i < numEntries; i++ ) {
@@ -269,14 +269,15 @@ IconPreviewImpl::IconPreviewImpl() :
         GtkImage* img = GTK_IMAGE( gtk_image_new_from_pixbuf( pb ) );
         images[i] = Glib::wrap(img);
         Glib::ustring label(*labels[i]);
-        Gtk::ToolButton* btn = new Gtk::ToolButton(label);
-        btn->set_icon_widget(*images[i]);
+        buttons[i] = new Gtk::ToggleToolButton(label);
+        buttons[i]->set_active( i == hot );
+        buttons[i]->set_icon_widget(*images[i]);
 
 
-        btn->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &IconPreviewImpl::on_button_clicked), i) );
+        buttons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &IconPreviewImpl::on_button_clicked), i) );
 
 
-        verts->add(*btn);
+        verts->add(*buttons[i]);
     }
 
     iconBox.pack_start(splitter);
@@ -301,9 +302,13 @@ IconPreviewImpl::IconPreviewImpl() :
 
 void IconPreviewImpl::on_button_clicked(int which)
 {
-    hot = which;
-    updateMagnify();
-    queue_draw();
+    if ( hot != which ) {
+        buttons[hot]->set_active( false );
+
+        hot = which;
+        updateMagnify();
+        queue_draw();
+    }
 }
 
 
@@ -328,7 +333,7 @@ IconPreviewImpl::~IconPreviewImpl()
 
 
 /* static instance, to reduce dependencies */
-static IconPreview *iconPreviewInstance = NULL;
+static IconPreviewImpl *iconPreviewInstance = NULL;
 
 IconPreview *IconPreview::getInstance()
 {
@@ -336,6 +341,7 @@ IconPreview *IconPreview::getInstance()
         {
         iconPreviewInstance = new IconPreviewImpl();
         }
+    iconPreviewInstance->refreshPreview();
     return iconPreviewInstance;
 }
 
