@@ -51,7 +51,6 @@
 #include "document.h"
 #include "desktop.h"
 #include "sp-object.h"
-#include "toolbox.h"
 #include "interface.h"
 #include "print.h"
 #include "slideshow.h"
