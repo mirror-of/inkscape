@@ -362,7 +362,6 @@ inkscape_segv_handler (int signum)
 	static gint recursion = FALSE;
 	GSList *savednames, *failednames, *l;
 	const gchar *home;
-	gchar *istr, *sstr, *fstr, *b;
 	gint count, nllen, len, pos;
 	time_t sptime;
 	struct tm *sptm;
@@ -464,9 +463,9 @@ inkscape_segv_handler (int signum)
 
 	/* Show nice dialog box */
 
-	istr = N_("Inkscape encountered an internal error and will close now.\n");
-	sstr = N_("Automatic backups of unsaved documents were done to following locations:\n");
-	fstr = N_("Automatic backup of following documents failed:\n");
+	char const *istr = N_("Inkscape encountered an internal error and will close now.\n");
+	char const *sstr = N_("Automatic backups of unsaved documents were done to following locations:\n");
+	char const *fstr = N_("Automatic backup of following documents failed:\n");
 	nllen = strlen ("\n");
 	len = strlen (istr) + strlen (sstr) + strlen (fstr);
 	for (l = savednames; l != NULL; l = l->next) {
@@ -476,7 +475,7 @@ inkscape_segv_handler (int signum)
 		len = len + SP_INDENT + strlen ((gchar *) l->data) + nllen;
 	}
 	len += 1;
-	b = g_new (gchar, len);
+	gchar *b = g_new (gchar, len);
 	pos = 0;
 	len = strlen (istr);
 	memcpy (b + pos, istr, len);

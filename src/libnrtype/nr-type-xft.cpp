@@ -156,11 +156,14 @@ nr_type_xft_init (void)
 	pos = 0;
 	fpos = 0;
 	for (i = 0; i < NRXftPatterns->nfont; i++) {
-		char *name, *file;
-		XftPatternGetString (NRXftPatterns->fonts[i], XFT_FAMILY, 0, &name);
-		if (debug) {
-			fprintf (stderr, "Typeface %s\n", name);
+		{
+			char const *name;
+			XftPatternGetString (NRXftPatterns->fonts[i], XFT_FAMILY, 0, &name);
+			if (debug) {
+				fprintf (stderr, "Typeface %s\n", name);
+			}
 		}
+		char const *file;
 		XftPatternGetString (NRXftPatterns->fonts[i], XFT_FILE, 0, &file);
 		if (file) {
 			int len;
@@ -184,7 +187,7 @@ nr_type_xft_init (void)
 			  */
 			     strcmp (file + len - 4, ".pfa") &&
 			     strcmp (file + len - 4, ".PFA")) {
-				char *fn, *wn, *sn, *name;
+				char const *fn, *wn, *sn;
 				int weight;
 				int slant;
 				if (debug) {
@@ -227,7 +230,7 @@ nr_type_xft_init (void)
 					sn = "Normal";
 					break;
 				}
-				name = g_strdup_printf ("%s %s %s", fn, wn, sn);
+				char *name = g_strdup_printf ("%s %s %s", fn, wn, sn);
 				if (!g_hash_table_lookup (NRXftNamedict, name)) {
 					if (!g_hash_table_lookup (NRXftFamilydict, fn)) {
 						NRXftFamilies.names[fpos] = g_strdup (fn);

@@ -18,7 +18,7 @@
 
 typedef struct {
 	gint code;
-	gchar *name;
+	gchar const *name;
 } SPStyleProp;
 
 static const SPStyleProp props[] = {
@@ -262,7 +262,9 @@ sp_attribute_lookup (const gchar *key)
 		propdict = g_hash_table_new (g_str_hash, g_str_equal);
 		for (i = 1; i < n_attrs; i++) {
 			g_assert (props[i].code == static_cast< gint >(i) );
-			g_hash_table_insert (propdict, props[i].name, GINT_TO_POINTER (props[i].code));
+			g_hash_table_insert(propdict,
+					    const_cast<void *>(static_cast<void const *>(props[i].name)),
+					    GINT_TO_POINTER (props[i].code));
 		}
 	}
 

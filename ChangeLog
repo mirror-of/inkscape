@@ -1,5 +1,10 @@
 2004-01-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/attributes.cpp, src/color.cpp, src/inkscape.cpp,
+	  src/interface.cpp, src/helper/units.h, src/libnrtype/nr-type-xft.cpp,
+	  src/svg/svg-color.cpp, src/widgets/gradient-vector.cpp:
+	  Address some `-Wwrite-strings' warnings.
+
 	* src/document.h, src/document.cpp,
 	  src/prefs-utils.h, src/prefs-utils.cpp,
 	  src/select-toolbar.cpp,

@@ -31,7 +31,7 @@ typedef struct _SPSVGColor SPSVGColor;
 
 struct _SPSVGColor {
 	unsigned long rgb;
-	char* name;
+	char const *name;
 };
 
 /*
@@ -317,18 +317,12 @@ sp_svg_write_color (gchar * buf, gint buflen, guint32 color)
 static GHashTable *
 sp_svg_create_color_hash (void)
 {
-	GHashTable * colors;
-	int i;
-	unsigned long *val;
-	char *name;
+	GHashTable * colors = g_hash_table_new (g_str_hash, g_str_equal);
 
-	colors = g_hash_table_new (g_str_hash, g_str_equal);
-
-	for (i = 0 ; i < static_cast< int > SP_SVG_NUMCOLORS ; i++)
-	{
-		name = sp_svg_color_named[i].name;
-		val = &(sp_svg_color_named[i].rgb);
-		g_hash_table_insert (colors,name, (gpointer) val);
+	for (unsigned i = 0 ; i < SP_SVG_NUMCOLORS ; i++) {
+		void const *name = sp_svg_color_named[i].name;
+		gpointer val = &(sp_svg_color_named[i].rgb);
+		g_hash_table_insert(colors, const_cast<gpointer>(name), val);
 	}
 
 	return colors;

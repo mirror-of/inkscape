@@ -62,7 +62,7 @@ static guint signals[LAST_SIGNAL] = {0};
 static GtkWidget *dlg = NULL;
 static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
-static gchar *prefs_path = "dialogs.gradienteditor";
+static gchar const *prefs_path = "dialogs.gradienteditor";
 
 GtkType
 sp_gradient_vector_selector_get_type (void)

@@ -231,11 +231,10 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 /**
 \brief  a wrapper around gdk_keyval_name producing (when possible) characters, not names
  */
-gchar *
+static gchar const *
 sp_key_name (guint keyval)
 {
-	gchar *n;
-	n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+	gchar const *n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
 	
 	if (!strcmp (n, "asciicircum")) return "^";
 	else if (!strcmp (n, "parenleft")) return "(";
