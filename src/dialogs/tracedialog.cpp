@@ -148,7 +148,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessLabel.set_text(_("Brightness Threshold"));
     potraceBrightnessBox.pack_start(potraceBrightnessLabel);
     potraceBrightnessSpinner.set_digits(5);
-    potraceBrightnessSpinner.set_increments(0.05, 0.25);
+    potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.5);
     potraceBrightnessBox.pack_start(potraceBrightnessSpinner);
