@@ -117,8 +117,9 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "height");
 	sp_object_read_attr (object, "xlink:href");
 
-	if (((SPObjectClass *) parent_class)->build)
+	if (((SPObjectClass *) parent_class)->build) {
 		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
+	}
 
 	if (use->href) {
 		SPObject *refobj;

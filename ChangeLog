@@ -1,3 +1,10 @@
+2004-03-14  Bryce Harrington <bryce@bryceharrington.com>
+
+	* src/view.cpp:  Adding an accumulator function for checking
+  	  return values of shutdown signal handlers, so that if any one of
+	  them returns a value indicating an abort of the shutdown, the
+	  shutdown process will be aborted.
+
 2004-03-14  Ted Gould <ted@gould.cx>
 
 	* src/extension/extension.cpp, src/extension/extension.h,

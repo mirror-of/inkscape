@@ -190,7 +190,7 @@ sp_ui_close_all (void)
     while (SP_ACTIVE_DESKTOP) {
 	GtkWidget *w;
 	w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
-	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP)) == 0) {
+	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) {
 	    /* The user cancelled the operation, so end doing the close */
 	    return FALSE;
 	}

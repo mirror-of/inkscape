@@ -452,8 +452,9 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 
 	/* Invoke derived methods, if any */
 
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->build)
+	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->build) {
 		(*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->build) (object, document, repr);
+	}
 
 	/* Signalling (should be connected AFTER processing derived methods */
 	sp_repr_add_listener (repr, &object_event_vector, object);

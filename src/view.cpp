@@ -39,6 +39,8 @@ static void sp_view_document_resized (SPDocument *doc, gdouble width, gdouble he
 static GObjectClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
 
+static GValue  shutdown_accumulator_data;
+
 GtkType
 sp_view_get_type (void)
 {
@@ -59,6 +61,40 @@ sp_view_get_type (void)
 	return type;
 }
 
+/**
+ * This signal accumulator is a special callback function for collecting the
+ * return values of the various callbacks that are called during the SHUTDOWN 
+ * signal emission.  This allows us to see if any of the views being shutdown
+ * return a 'cancel' value that needs to be honored.  Without this accumulator
+ * only the return value of the last view would be checked.
+ *
+ * ihint:           Signal invocation hint
+ * return_accu:     Accumulator to collect callback return values in, this is 
+ *                  the return value of the current signal emission. 
+ * handler_return:  Return value of the signal handler this function will check.
+ * data:            
+ *
+ * Returns:         The accumulator function returns whether the signal emission 
+ *                  should be aborted. Returning FALSE means to abort the current 
+ *                  emission and TRUE is returned for continuation. 
+ */
+static gboolean
+sp_shutdown_accumulator (GSignalInvocationHint *ihint, GValue *return_accu,
+			 const GValue *handler_return, gpointer data)
+{
+    if (G_VALUE_HOLDS_BOOLEAN(handler_return)) {
+	/* If the signal returned TRUE, it means the user cancelled the operation 
+	   so we return FALSE, indicating we should abort signal emission. 
+	*/
+	if (g_value_get_boolean(handler_return)) {
+	    g_value_set_boolean(return_accu, TRUE);
+	}
+	return ! g_value_get_boolean(handler_return);
+    }
+
+    return TRUE;   /* Signal emission can continue */
+}
+
 static void
 sp_view_class_init (SPViewClass *klass)
 {
@@ -68,11 +104,15 @@ sp_view_class_init (SPViewClass *klass)
 
 	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
+	g_value_init(&shutdown_accumulator_data, G_TYPE_BOOLEAN);
+	g_value_set_boolean(&shutdown_accumulator_data, FALSE);
+
 	signals[SHUTDOWN] =     g_signal_new ("shutdown",
 					      G_TYPE_FROM_CLASS(klass),
 					      G_SIGNAL_RUN_LAST,
 					      G_STRUCT_OFFSET (SPViewClass, shutdown),
-					      NULL, NULL,
+					      sp_shutdown_accumulator, 
+					      &shutdown_accumulator_data,
 					      sp_marshal_BOOLEAN__NONE,
 					      G_TYPE_BOOLEAN, 0);
 	signals[URI_SET] =      g_signal_new ("uri_set",
@@ -140,12 +180,10 @@ sp_view_dispose (GObject *object)
 gboolean
 sp_view_shutdown (SPView *view)
 {
-	gboolean result;
+	gboolean result = FALSE;
 
 	g_return_val_if_fail (view != NULL, TRUE);
 	g_return_val_if_fail (SP_IS_VIEW (view), TRUE);
-
-	result = FALSE;
 
 	g_signal_emit (G_OBJECT (view), signals[SHUTDOWN], 0, &result);
 
@@ -158,8 +196,9 @@ sp_view_request_redraw (SPView *view)
 	g_return_if_fail (view != NULL);
 	g_return_if_fail (SP_IS_VIEW (view));
 
-	if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->request_redraw)
+	if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->request_redraw) {
 		((SPViewClass *) G_OBJECT_GET_CLASS(view))->request_redraw (view);
+	}
 }
 
 void
