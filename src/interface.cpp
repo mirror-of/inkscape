@@ -266,25 +266,16 @@ sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 	gchar *s; 
 	gint i, j;
 	gchar key[256];
-	gchar temp[256];
+	gchar *atitle;
 
 	action = sp_verb_get_action (verb, NULL);
 	if (!action) return; 
 	
-	/* Action names can contain underscores, used for mnemonics. Of course
-	   we don't want those underscores to appear in the title string.
-	   Another solution for this would be to add another field to SPAction, 
-	   but it's most probably not neccessary.
-	*/
-	for (i = j = 0; i < strlen(action->name); i++)  {
-		if ( action->name[i] != '_' ) {
-			temp[j] = action->name[i];
-			j++;
-		}
-	}
-	temp[j] = '\0';
+	atitle = sp_action_get_title (action);
 	
-	s = g_stpcpy (c, temp);
+	s = g_stpcpy (c, atitle);
+	
+	g_free (atitle);
 
 	shortcut = sp_shortcut_get_primary (verb);
 	if (shortcut) {

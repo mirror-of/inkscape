@@ -114,4 +114,6 @@ public:
 SPAction *sp_verb_get_action (sp_verb_t verb, SPView *view);
 sp_verb_t sp_verb_register (SPVerbActionFactory *factory);
 
+gchar *sp_action_get_title (const SPAction *action);
+
 #endif

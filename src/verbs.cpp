@@ -136,6 +136,29 @@ sp_verb_get_action (sp_verb_t verb, SPView * view)
 	}
 }
 
+/*
+	Return the name without underscores, for use in dialog titles, etc
+	Allocated memory must be freed by caller
+*/
+gchar *
+sp_action_get_title (const SPAction *action)
+{
+	gchar *s;
+	gint i, j;
+	
+	s = g_new (gchar, 256);
+	
+	for (i = j = 0; i < strlen(action->name); i++)  {
+		if ( action->name[i] != '_' ) {
+			s[j] = action->name[i];
+			j++;
+		}
+	}
+	s[j] = '\0';	
+	
+	return s;
+}
+
 static void
 sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
 {
