@@ -437,7 +437,7 @@ test_attributes()
         for (unsigned id = 1; id < n_ids; ++id) {
             if (!ids[id]) {
                 unsigned char const *str = sp_attribute_name(id);
-                printf("%s\n", str);
+                printf("%s\n", (const char *)str); /* Apparently printf doesn't like unsigned strings -- Ted */
                 found = true;
             }
         }
