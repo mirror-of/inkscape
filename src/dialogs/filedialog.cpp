@@ -287,10 +287,8 @@ FileSaveDialog::FileSaveDialog(
 	guint       i;
 
     nativeData = (FileSaveNativeData *) g_malloc( sizeof(FileSaveNativeData));
-    if ( !nativeData ) {
-        //do we want an exception?
-        return;
-    }
+    g_return_if_fail ( nativeData != NULL );
+
 	nativeData->append_extension = (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1);
 
 	/* Initalize to Autodetect */
@@ -299,11 +297,7 @@ FileSaveDialog::FileSaveDialog(
 	filename  = NULL;
 
 	extension_list = Inkscape::Extension::db.get_output_list();
-	if (extension_list == NULL) {
-		// Another exception
-		printf("Ted, you messed up somewhere\n");
-		return;
-	}
+	g_return_if_fail ( extension_list != NULL );
 
     /*
     We will want to use FileChooserDialog here, but that will

@@ -1,7 +1,8 @@
 2004-07-11  Kees Cook  <kees@outflux.net>
 
-	* src/preferences-skeleton.h: with simarilius tracked down the cause
-	  of bug #988445.  Hooked pref up to extension name #define.
+	* src/preferences-skeleton.h, src/extension/init.cpp: with simarilius,
+	  tracked down the cause of bug #988445.  Extension code now has a
+	  small section that validates preferences for valid extension names.
 	* src/dialogs/filedialog-win32.cpp: corrected an assert test, and
 	  changed dialog to take the passed window title.
 

@@ -39,6 +39,7 @@
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
 #include "prefix.h"
+#include "prefs-utils.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -49,6 +50,37 @@ namespace Extension {
 
 static void build_module_from_dir (const gchar * dirname);
 static void check_extensions (void);
+
+/**
+ *	\return    none
+ *	\brief     Examines the given string preference and checks to see
+ *	           that at least one of the registered extensions matches
+ *	           it.  If not, a default is assigned.
+ *	\param     pref_path        Preference path to load
+ *	\param     pref_attr        Attribute to load from the preference
+ *	\param     pref_default     Default string to set
+ *	\param     extension_family List of extensions to search
+ */
+static void
+update_pref (gchar const * pref_path, gchar const * pref_attr,
+             gchar const * pref_default) // , GSList * extension_family)
+{
+    gchar const * pref = prefs_get_string_attribute(pref_path,pref_attr);
+    /*
+    gboolean missing=TRUE;
+    for (GSList * list = extension_family; list; list = g_slist_next(list)) {
+	g_assert ( list->data );
+
+	Inkscape::Extension * extension;
+       	extension = reinterpret_cast<Inkscape::Extension *>(list->data);
+
+        if (!strcmp(extension->get_id(),pref)) missing=FALSE;
+    }
+    */
+    if (!Inkscape::Extension::db.get ( pref ) /*missing*/) {
+        prefs_set_string_attribute(pref_path, pref_attr, pref_default);
+    }
+}
 
 /**
 	\return   none
@@ -80,6 +112,13 @@ init (void)
 
 	/* now we need to check and make sure everyone is happy */
 	check_extensions();
+
+	/* This is a hack to deal with updating saved outdated module
+	 * names in the prefs...
+	 */
+	update_pref ("dialogs.save_as", "default",
+		     SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE );
+		     // Inkscape::Extension::db.get_output_list() );
 
 	return;
 }
