@@ -25,11 +25,14 @@
 #include <libnr/nr-pixblock-pattern.h>
 #include <libnr/nr-pixops.h>
 
+#include <map>
+
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
 
 #include "forward.h"
 #include "inkscape-private.h"
+#include "inkscape.h"
 #include "document.h"
 #include "sp-item.h"
 #include "display/nr-arena.h"
@@ -157,7 +160,7 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
 	if (pixels) {
-		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, (GdkPixbufDestroyNotify)nr_free, NULL);
+		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
 		icon->pb_faded = gdk_pixbuf_copy(icon->pb);
 
 		pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
@@ -351,43 +354,15 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 	return NULL;
 }
 
+// takes doc, root, icon name, size, and scale to produce pixels
 static guchar *
-sp_icon_image_load_svg ( const gchar *name, 
-                         unsigned int size, 
-                         unsigned int scale )
+sp_icon_doc_icon ( SPDocument *doc, NRArenaItem *root,
+		   const gchar *name,
+		   unsigned int size, unsigned int scale )
 {
-    static SPDocument *doc = NULL;
-    static NRArena *arena = NULL;
-    static NRArenaItem *root = NULL;
-    static unsigned int edoc = FALSE;
-    guchar *px;
+    guchar *px = NULL;
 
-    /* Try to load from document */
-    if (!edoc && !doc) {
-        if (g_file_test("icons/icons.svg", G_FILE_TEST_IS_REGULAR))
-            doc = sp_document_new ("icons/icons.svg", FALSE, FALSE);
-
-	 char *icons = g_build_filename(INKSCAPE_PIXMAPDIR, "/icons.svg", NULL);
-        if ( !doc && g_file_test( icons, G_FILE_TEST_IS_REGULAR) )
-            doc = sp_document_new ( icons, FALSE, FALSE );
-	 g_free(icons);
-	
-        if (doc) {
-            unsigned int visionkey;
-            sp_document_ensure_up_to_date (doc);
-            /* Create new arena */
-            arena = NRArena::create();
-            /* Create ArenaItem and set transform */
-            visionkey = sp_item_display_key_new (1);
-            /* fixme: Memory manage root if needed (Lauris) */
-            root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)), 
-                                         arena, visionkey, SP_ITEM_SHOW_DISPLAY );
-        } else {
-            edoc = TRUE;
-        }
-    }
-
-    if (!edoc && doc) {
+    if (doc) {
         SPObject *object;
         object = doc->getObjectById(name);
         if (object && SP_IS_ITEM (object)) {
@@ -446,16 +421,106 @@ sp_icon_image_load_svg ( const gchar *name,
                 nr_arena_item_invoke_render ( root, &ua, &B, 
                                               NR_ARENA_ITEM_RENDER_NO_CACHE );
                 nr_pixblock_release (&B);
-                return px;
             }
         }
     }
 
-    return NULL;
+    return px;
+} // end of sp_icon_doc_icon()
 
+
+
+struct svg_doc_cache_t
+{
+    SPDocument *doc;
+    NRArenaItem *root;
+};
+
+
+static guchar *
+sp_icon_image_load_svg ( const gchar *name, 
+                         unsigned int size, 
+                         unsigned int scale )
+{
+    static std::map<Glib::ustring, svg_doc_cache_t *> doc_cache;
+    static std::map<Glib::ustring, guchar *> px_cache;
+    SPDocument *doc = NULL;
+    NRArenaItem *root = NULL;
+    svg_doc_cache_t * info = NULL;
+
+    Glib::ustring icon_index = name;
+    icon_index += ":";
+    icon_index += size;
+    icon_index += ":";
+    icon_index += scale;
+
+    // did we already load this icon at this scale/size?
+    guchar *px = px_cache[icon_index];
+    if (px) return px;
+
+    // fall back from user prefs dir into system locations
+    Glib::ustring iconsvg = name;
+    iconsvg += ".svg";
+    std::list<gchar *> sources;
+    sources.push_back(g_build_filename(profile_path("icons"),iconsvg.c_str(), NULL));
+    sources.push_back(g_build_filename(profile_path("icons"),"icons.svg", NULL));
+    sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, iconsvg.c_str(), NULL));
+    sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, "icons.svg", NULL));
+
+    // use this loop to iterate through a list of possible document locations
+    std::list<gchar *>::iterator it;
+    while ( (it = sources.begin()) != sources.end() ) {
+        gchar *doc_filename = *it;
+
+        //g_warning("trying to load '%s' from '%s'", name, doc_filename);
+
+        // did we already load this doc?
+        info = doc_cache[Glib::ustring(doc_filename)];
+
+        /* Try to load from document */
+        if (!info && 
+            g_file_test( doc_filename, G_FILE_TEST_IS_REGULAR ) &&
+            (doc = sp_document_new ( doc_filename, FALSE, FALSE )) ) {
+
+            // prep the document
+            sp_document_ensure_up_to_date (doc);
+            /* Create new arena */
+            NRArena *arena = NRArena::create();
+            /* Create ArenaItem and set transform */
+            unsigned int visionkey = sp_item_display_key_new (1);
+            /* fixme: Memory manage root if needed (Lauris) */
+            root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)), 
+                                         arena, visionkey, SP_ITEM_SHOW_DISPLAY );
+
+            // store into the cache
+            info = new svg_doc_cache_t;
+            g_assert(info);
+
+            info->doc=doc;
+            info->root=root;
+            doc_cache[Glib::ustring(doc_filename)]=info;
+        }
+        if (info) {
+            doc=info->doc;
+            root=info->root;
+        }
+
+        // toss the filename
+        g_free(doc_filename);
+        sources.erase(it);
+
+        // move on to the next document
+        if (!info && !doc) continue;
+
+        px = sp_icon_doc_icon( doc, root, name, size, scale );
+        if (px) {
+            px_cache[icon_index] = px;
+            break;
+        }
+    }
+    
+    return px;
 } // end of sp_icon_image_load_svg()
-
-
 
 
 

@@ -116,8 +116,6 @@ static void inkscape_init_preferences (Inkscape::Application *inkscape);
 
 static void inkscape_init_preferences (Inkscape::Application * inkscape);
 
-static gchar *profile_path(const char *filename);
-
 struct Inkscape::Application {
     GObject object;
     SPReprDoc *preferences;
