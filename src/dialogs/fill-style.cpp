@@ -852,7 +852,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                             vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
                         }
 
-                        sp_item_set_gradient ( SP_ITEM (i->data), vector, gradient_type, true);
+                        sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, true);
                     }
                 } else {
                     /* We have changed from another gradient type, or modified spread/units within
@@ -862,7 +862,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
 
-                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, gradient_type, true);
+                        SPGradient *gr = sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, true);
                         sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 }
@@ -1079,14 +1079,13 @@ sp_fill_style_determine_paint_selector_mode (SPStyle *style)
 } // end of sp_fill_style_determine_paint_selector_mode()
 
 
-
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
