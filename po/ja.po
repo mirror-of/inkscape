@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.33\n"
-"POT-Creation-Date: 2003-11-02 19:50-0800\n"
+"POT-Creation-Date: 2003-11-07 21:48-0500\n"
 "PO-Revision-Date: 2003-07-09 17:08+0900\n"
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japan GNOME Users Group <translation@gnome.gr.jp>\n"
@@ -45,7 +45,7 @@ msgstr "ドキュメント %s は未保存の変更がありますが、保存�
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
 #: src/dialogs/export.c:135 src/verbs.c:484
 msgid "Page"
 msgstr "ページ"
@@ -214,60 +214,60 @@ msgstr "X方向の間隔:"
 msgid "Spacing Y:"
 msgstr "Y方向の間隔:"
 
-#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
 msgid "Snap distance:"
 msgstr "合わせる距離:"
 
-#: src/dialogs/desktop-properties.c:238
+#: src/dialogs/desktop-properties.c:239
 msgid "Grid color:"
 msgstr "グリッドのカラー:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:240
 msgid "Grid color"
 msgstr "グリッドのカラー:"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:243
+#: src/dialogs/desktop-properties.c:244
 msgid "Guides"
 msgstr "ガイドライン"
 
-#: src/dialogs/desktop-properties.c:252
+#: src/dialogs/desktop-properties.c:253
 msgid "Show guides"
 msgstr "ガイドラインの表示"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:254
 msgid "Snap to guides"
 msgstr "ガイドに合わせる"
 
-#: src/dialogs/desktop-properties.c:256
+#: src/dialogs/desktop-properties.c:257
 msgid "Snap units:"
 msgstr "ユニットに合わせる:"
 
-#: src/dialogs/desktop-properties.c:261
+#: src/dialogs/desktop-properties.c:262
 msgid "Guides color:"
 msgstr "ガイドカラー:"
 
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:263
 msgid "Guideline color"
 msgstr "ガイドラインカラー"
 
-#: src/dialogs/desktop-properties.c:264
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlight color:"
 msgstr "ハイライトカラー:"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:266
 msgid "Highlighted guideline color"
 msgstr "ガイドラインカラーのハイライト"
 
-#: src/dialogs/desktop-properties.c:278
+#: src/dialogs/desktop-properties.c:279
 msgid "Show border"
 msgstr "境界の表示"
 
-#: src/dialogs/desktop-properties.c:280
+#: src/dialogs/desktop-properties.c:281
 msgid "Border on top of drawing"
 msgstr "描画領域の上端の境界"
 
-#: src/dialogs/desktop-properties.c:543
+#: src/dialogs/desktop-properties.c:544
 msgid "Close"
 msgstr "閉じる"
 

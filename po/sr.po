@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Sodipodi\n"
-"POT-Creation-Date: 2003-11-02 19:50-0800\n"
+"POT-Creation-Date: 2003-11-07 21:48-0500\n"
 "PO-Revision-Date: 2003-08-17 14:01+0200\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -44,7 +44,7 @@ msgstr "Документ %s садржи несачуване измене. Са
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
 #: src/dialogs/export.c:135 src/verbs.c:484
 msgid "Page"
 msgstr "Страна"
@@ -213,60 +213,60 @@ msgstr "Водоравни размаци:"
 msgid "Spacing Y:"
 msgstr "Усправни размаци:"
 
-#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
 msgid "Snap distance:"
 msgstr "Удаљеност за пријањање:"
 
-#: src/dialogs/desktop-properties.c:238
+#: src/dialogs/desktop-properties.c:239
 msgid "Grid color:"
 msgstr "Боја мреже:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:240
 msgid "Grid color"
 msgstr "Боја мреже"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:243
+#: src/dialogs/desktop-properties.c:244
 msgid "Guides"
 msgstr "Вођице"
 
-#: src/dialogs/desktop-properties.c:252
+#: src/dialogs/desktop-properties.c:253
 msgid "Show guides"
 msgstr "Прикажи вођице"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:254
 msgid "Snap to guides"
 msgstr "Пријањај уз вођице"
 
-#: src/dialogs/desktop-properties.c:256
+#: src/dialogs/desktop-properties.c:257
 msgid "Snap units:"
 msgstr "Јединице пријањања:"
 
-#: src/dialogs/desktop-properties.c:261
+#: src/dialogs/desktop-properties.c:262
 msgid "Guides color:"
 msgstr "Боја вођица:"
 
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:263
 msgid "Guideline color"
 msgstr "Боја линије водиље"
 
-#: src/dialogs/desktop-properties.c:264
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlight color:"
 msgstr "Боја истицања:"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:266
 msgid "Highlighted guideline color"
 msgstr "Боја истакнутих вођица"
 
-#: src/dialogs/desktop-properties.c:278
+#: src/dialogs/desktop-properties.c:279
 msgid "Show border"
 msgstr "Прикажи ивицу"
 
-#: src/dialogs/desktop-properties.c:280
+#: src/dialogs/desktop-properties.c:281
 msgid "Border on top of drawing"
 msgstr "Ивица на врху цртежа"
 
-#: src/dialogs/desktop-properties.c:543
+#: src/dialogs/desktop-properties.c:544
 msgid "Close"
 msgstr "Затвори"
 

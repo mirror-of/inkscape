@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
-"POT-Creation-Date: 2003-11-02 19:50-0800\n"
+"POT-Creation-Date: 2003-11-07 21:48-0500\n"
 "PO-Revision-Date: 2003-03-03 14:59+0100\n"
 "Last-Translator: Alessio Frusciante <algol@firenze.linux.it>\n"
 "Language-Team: Italiano <tp@lists.linux.it>\n"
@@ -42,7 +42,7 @@ msgstr "Il documento %s ha dei cambiamenti non salvati, salvarli?"
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
 #: src/dialogs/export.c:135 src/verbs.c:484
 msgid "Page"
 msgstr "Pagina"
@@ -217,63 +217,63 @@ msgstr "Spaziatura X:"
 msgid "Spacing Y:"
 msgstr "Spaziatura"
 
-#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
 msgid "Snap distance:"
 msgstr "Distanza del reticolo:"
 
-#: src/dialogs/desktop-properties.c:238
+#: src/dialogs/desktop-properties.c:239
 msgid "Grid color:"
 msgstr "Colore della griglia:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:240
 msgid "Grid color"
 msgstr "Colore della griglia"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:243
+#: src/dialogs/desktop-properties.c:244
 msgid "Guides"
 msgstr "Guide"
 
-#: src/dialogs/desktop-properties.c:252
+#: src/dialogs/desktop-properties.c:253
 msgid "Show guides"
 msgstr "Mostra le guide"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:254
 #, fuzzy
 msgid "Snap to guides"
 msgstr "Spostati con le guide"
 
-#: src/dialogs/desktop-properties.c:256
+#: src/dialogs/desktop-properties.c:257
 msgid "Snap units:"
 msgstr "Unità di spostamento:"
 
-#: src/dialogs/desktop-properties.c:261
+#: src/dialogs/desktop-properties.c:262
 msgid "Guides color:"
 msgstr "Colore delle guide:"
 
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:263
 msgid "Guideline color"
 msgstr "Colore delle guide"
 
-#: src/dialogs/desktop-properties.c:264
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlight color:"
 msgstr "Evidenzia con il colore:"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:266
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "Colore delle guide evidenziate"
 
-#: src/dialogs/desktop-properties.c:278
+#: src/dialogs/desktop-properties.c:279
 msgid "Show border"
 msgstr "Mostra bordo"
 
-#: src/dialogs/desktop-properties.c:280
+#: src/dialogs/desktop-properties.c:281
 #, fuzzy
 msgid "Border on top of drawing"
 msgstr "Adatta al disegno"
 
-#: src/dialogs/desktop-properties.c:543
+#: src/dialogs/desktop-properties.c:544
 #, fuzzy
 msgid "Close"
 msgstr "Chiudi finestra"

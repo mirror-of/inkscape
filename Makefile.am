@@ -29,4 +29,9 @@ EXTRA_DIST = \
 	inkscape.png \
 	inkscape.ico
 
+DISTCLEANFILES = inkscape.desktop \
+                 intltool-extract \
+                 intltool-merge \
+                 intltool-update
+
 #ACLOCAL_AMFLAGS = -I m4

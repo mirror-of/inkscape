@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.25\n"
-"POT-Creation-Date: 2003-11-02 19:50-0800\n"
+"POT-Creation-Date: 2003-11-07 21:48-0500\n"
 "PO-Revision-Date: 2003-01-25 00:49+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -42,7 +42,7 @@ msgstr "Dokument %s har ikke-lagrede endringer, lagre dem?"
 
 #. Page page
 #: src/desktop.c:1481 src/dialogs/align.c:286
-#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/desktop-properties.c:270 src/dialogs/document-properties.c:163
 #: src/dialogs/export.c:135 src/verbs.c:484
 msgid "Page"
 msgstr "Side"
@@ -215,60 +215,60 @@ msgstr "Mellomrom X:"
 msgid "Spacing Y:"
 msgstr "Mellomrom Y:"
 
-#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+#: src/dialogs/desktop-properties.c:236 src/dialogs/desktop-properties.c:259
 msgid "Snap distance:"
 msgstr "Festeavstand:"
 
-#: src/dialogs/desktop-properties.c:238
+#: src/dialogs/desktop-properties.c:239
 msgid "Grid color:"
 msgstr "Farge på rutenett:"
 
-#: src/dialogs/desktop-properties.c:239
+#: src/dialogs/desktop-properties.c:240
 msgid "Grid color"
 msgstr "Farge på rutenett"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.c:243
+#: src/dialogs/desktop-properties.c:244
 msgid "Guides"
 msgstr "Rettesnorer"
 
-#: src/dialogs/desktop-properties.c:252
+#: src/dialogs/desktop-properties.c:253
 msgid "Show guides"
 msgstr "Vis rutenett"
 
-#: src/dialogs/desktop-properties.c:253
+#: src/dialogs/desktop-properties.c:254
 msgid "Snap to guides"
 msgstr "Fest til guider"
 
-#: src/dialogs/desktop-properties.c:256
+#: src/dialogs/desktop-properties.c:257
 msgid "Snap units:"
 msgstr "Enheter for festing:"
 
-#: src/dialogs/desktop-properties.c:261
+#: src/dialogs/desktop-properties.c:262
 msgid "Guides color:"
 msgstr "Rutenettfarge:"
 
-#: src/dialogs/desktop-properties.c:262
+#: src/dialogs/desktop-properties.c:263
 msgid "Guideline color"
 msgstr "Farge på retningslinje"
 
-#: src/dialogs/desktop-properties.c:264
+#: src/dialogs/desktop-properties.c:265
 msgid "Highlight color:"
 msgstr "Merk farge:"
 
-#: src/dialogs/desktop-properties.c:265
+#: src/dialogs/desktop-properties.c:266
 msgid "Highlighted guideline color"
 msgstr "Uthevet farge for retningslinje"
 
-#: src/dialogs/desktop-properties.c:278
+#: src/dialogs/desktop-properties.c:279
 msgid "Show border"
 msgstr "Vis kant"
 
-#: src/dialogs/desktop-properties.c:280
+#: src/dialogs/desktop-properties.c:281
 msgid "Border on top of drawing"
 msgstr ""
 
-#: src/dialogs/desktop-properties.c:543
+#: src/dialogs/desktop-properties.c:544
 msgid "Close"
 msgstr "Lukk"
 

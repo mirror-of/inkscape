@@ -232,6 +232,7 @@ sp_desktop_dialog_new (void)
 
  	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
 	
+	g_assert(us != NULL);
 	spw_unit_selector(dialog, t, _("Snap distance:"), "gridtolerance", row++, us,
 			  G_CALLBACK (sp_dtw_grid_snap_distance_changed) );
 

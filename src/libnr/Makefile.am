@@ -19,6 +19,8 @@ endif
 
 BUILT_SOURCES = nr_config.h
 
+DISTCLEANFILES = nr_config.h
+
 nr_config.h: gen_nr_config
 	./gen_nr_config > nr_config.h
 
