@@ -15,11 +15,15 @@
 #ifndef SEEN_INKSCAPE_RENDER_STROKE_H
 #define SEEN_INKSCAPE_RENDER_STROKE_H
 
-#include "render/polygon.h"
+
+namespace Inkscape { namespace Util { template <typename T> class List; } }
+
 
 namespace Inkscape {
 
 namespace Render {
+
+class Polygon;
 
 enum JoinType {
     JOIN_MITER,
@@ -28,13 +32,15 @@ enum JoinType {
 };
 
 enum CapType {
-    CAP_FLUSH,
+    CAP_BUTT,
     CAP_ROUND,
     CAP_SQUARE
 };
 
-Polygon stroke(Polygon const &polygon, JoinType join, CapType cap,
-               double width, double miter_limit, double smoothness);
+Inkscape::Util::List<Polygon> *stroke(Polygon const &polygon,
+                                      JoinType join, CapType cap,
+                                      double width, double miter_limit,
+                                      double smoothness);
 
 }
 

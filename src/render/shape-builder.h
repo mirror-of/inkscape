@@ -48,11 +48,10 @@ public:
     void discard();
 
 private:
-    inline void _startSegment();
     inline void _endPolygon(bool close);
     
-    VertexList *_start;
-    VertexList *_vertices;
+    VertexList const *_start;
+    VertexList const *_vertices;
     PolygonList *_polygons;
 };
 

@@ -16,6 +16,7 @@
 #include "util/list.h"
 #include "render/polygon.h"
 #include "render/shape-builder.h"
+#include "render/bezier.h"
 
 namespace Inkscape {
 
@@ -33,33 +34,28 @@ void ShapeBuilder::moveTo(NR::Point const &pt) {
 }
 
 void ShapeBuilder::lineTo(NR::Point const &pt) {
-    _startSegment();
-    _vertices = cons_mutable(pt, _vertices);
+    _vertices = cons_mutable(pt, ( _vertices ? _vertices : _start ));
 }
 
 void ShapeBuilder::quadTo(NR::Point const &c, NR::Point const &pt,
                           double smoothness)
 {
-    _startSegment();
-    _vertices = cons_mutable(pt, cons_mutable(c, _vertices));
+    _vertices = approx_quad(pt, c, ( _vertices ? _vertices : _start ),
+                            smoothness);
 }
 
 void ShapeBuilder::curveTo(NR::Point const &c0, NR::Point const &c1,
                            NR::Point const &pt, double smoothness)
 {
-    _startSegment();
-    _vertices = cons_mutable(pt, cons_mutable(c1, cons_mutable(c0, _vertices)));
+    _vertices = approx_cubic(pt, c1, c0, ( _vertices ? _vertices : _start ),
+                             smoothness);
 }
 
 void ShapeBuilder::closePath() {
-    _startSegment();
+    if (!_vertices) {
+        _vertices = _start;
+    }
     _endPolygon(true);
-}
-
-ShapeBuilder::VertexList *ShapeBuilder::finishVertices() {
-    VertexList *vertices=_vertices;
-    discard();
-    return vertices;
 }
 
 ShapeBuilder::PolygonList *ShapeBuilder::finish() {
@@ -73,12 +69,6 @@ void ShapeBuilder::discard() {
     _start = NULL;
     _vertices = NULL;
     _polygons = NULL;
-}
-
-void ShapeBuilder::_startSegment() {
-    if (!_vertices) {
-        _vertices = _start;
-    }
 }
 
 void ShapeBuilder::_endPolygon(bool close) {

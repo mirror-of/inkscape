@@ -1,3 +1,12 @@
+2004-09-11  MenTaLguY <mental@rydia.net>
+
+	* src/render/bezier.cpp, src/render/bezier.h,
+	  src/render/shape-builder.cpp, src/render/shape-builder.h,
+	  src/render/stroke.cpp, src/render/stroke.h:
+
+	  further work on stroking; break out bezier approximation into
+	  public functions
+
 2004-09-10  MenTaLguY <mental@rydia.net>
 
 	* src/render/polygon.h, src/render/shape-builder.h,
