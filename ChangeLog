@@ -1,3 +1,35 @@
+2004-07-18  MenTaLguY  <mental@rydia.net>
+
+	* configure.in, src/Makefile.am, src/algorithms/Makefile_insert,
+	  src/algorithms/makefile.in, src/traits/Makefile_insert,
+	  src/traits/makefile.in, src/util/Makefile_insert, src/util/makefile.in:
+	  
+	  added src/algorithms, src/traits, and src/util subdirs
+	
+	* src/algorithms/longest-common-suffix.h:
+
+	  added generic "longest common suffix" algorithm
+
+	* src/traits/list.h: added traits class for lists
+
+	* src/traits/tree-iterator.h: added traits class for n-ary tree iterators
+
+	* src/util/list-iterator.h: STL iterator for lists
+
+	* src/util/parent-axis.h: parent "axis" of tree iterator as list
+
+	* src/util/sibling-axis.h: sibling "axis" of tree iterator as list
+
+	* src/xml/repr.h: specialize Traits::TreeIterator for SPRepr *
+
+	* src/sp-object.h: specialize Traits::TreeIterator for SPObject *
+	
+	* src/sp-object.cpp: use generic "longest common suffix" to find
+	                     nearest common ancestor
+	
+	* src/splivarot.cpp: use genric "longest common suffix" to find
+	                     nearest common ancestor here too
+
 2004-07-18  Kees Cook  <kees@outflux.net>
 
 	* Makefile.am, configure.in, autogen.sh, toolversions.sh:

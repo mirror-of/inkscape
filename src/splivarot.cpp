@@ -41,6 +41,9 @@
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 
+#include "util/parent-axis.h"
+#include "algorithms/longest-common-suffix.h"
+
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
@@ -1421,16 +1424,12 @@ Ancetre (SPRepr * a, SPRepr * who)
 SPRepr *
 LCA (SPRepr * a, SPRepr * b)
 {
-    if (a == NULL || b == NULL)
+    SPRepr *ancestor=Inkscape::Algorithms::longest_common_suffix<Inkscape::Util::ParentAxis<SPRepr *> >(a, b);
+    if ( ancestor && SP_REPR_TYPE(ancestor) != SP_XML_DOCUMENT_NODE ) {
+        return ancestor;
+    } else {
         return NULL;
-    if (Ancetre (a, b))
-        return b;
-    if (Ancetre (b, a))
-        return a;
-    SPRepr *t = sp_repr_parent (a);
-    while (t && !Ancetre (b, t))
-        t = sp_repr_parent (t);
-    return t;
+    }
 }
 
 Path *

@@ -29,6 +29,9 @@ include svg/Makefile_insert
 include utest/Makefile_insert
 include widgets/Makefile_insert
 include xml/Makefile_insert
+include traits/Makefile_insert
+include algorithms/Makefile_insert
+include util/Makefile_insert
 
 bin_PROGRAMS = inkscape inkview
 
@@ -74,7 +77,13 @@ EXTRA_DIST =	\
 	extension/internal/win32.cpp	\
 	extension/internal/win32.h	\
 	helper/sp-marshal.list	\
-	utest/utest.h
+	utest/utest.h \
+	algorithms/longest-common-suffix.h \
+	traits/list.h \
+	traits/tree-iterator.h \
+	util/parent-axis.h \
+	util/sibling-axis.h \
+	util/list-iterator.h
 
 EXTRA_PROGRAMS =	\
 	inkview 	\

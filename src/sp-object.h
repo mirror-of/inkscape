@@ -321,6 +321,34 @@ struct SPObjectClass {
 	SPRepr * (* write) (SPObject *object, SPRepr *repr, unsigned int flags);
 };
 
+namespace Inkscape {
+namespace Traits {
+
+template <typename T> struct TreeIterator;
+
+template <>
+struct TreeIterator<SPObject *> {
+	typedef SPObject *Node;
+
+	static bool is_null(SPObject *o) { return o == NULL; }
+	static SPObject *null() { return NULL; }
+
+	static Node node(SPObject *o) { return o; }
+
+	static SPObject *first_child(SPObject *o) {
+		return o->firstChild();
+	}
+	static SPObject *parent(SPObject *o) {
+		return SP_OBJECT_PARENT(o);
+	}
+	static SPObject *next(SPObject *o) {
+		return SP_OBJECT_NEXT(o);
+	}
+};
+
+}
+}
+
 /*
  * Attaching/detaching
  *

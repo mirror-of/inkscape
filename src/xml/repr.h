@@ -227,6 +227,34 @@ SPRepr *sp_repr_parent(SPRepr const *repr);
 SPRepr *sp_repr_children(SPRepr *repr);
 SPRepr *sp_repr_next(SPRepr *repr);
 
+namespace Inkscape {
+namespace Traits {
+
+template <typename T> struct TreeIterator;
+
+template <>
+struct TreeIterator<SPRepr *> {
+	typedef SPRepr *Node;
+
+	static bool is_null(SPRepr *repr) { return repr == NULL; }
+	static SPRepr *null() { return NULL; }
+
+	static SPRepr *node(SPRepr *repr) { return repr; }
+
+	static SPRepr *first_child(SPRepr *repr) {
+		return sp_repr_children(repr);
+	}
+	static SPRepr *parent(SPRepr *repr) {
+		return sp_repr_parent(repr);
+	}
+	static SPRepr *next(SPRepr *repr) {
+		return sp_repr_next(repr);
+	}
+};
+
+}
+}
+
 unsigned int sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref);
 unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child);
 

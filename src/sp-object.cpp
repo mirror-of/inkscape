@@ -24,6 +24,8 @@
 #include "sp-root.h"
 
 #include "sp-object.h"
+#include "util/parent-axis.h"
+#include "algorithms/longest-common-suffix.h"
 
 #define noSP_OBJECT_DEBUG
 #define noSP_OBJECT_DEBUG_CASCADE
@@ -263,39 +265,7 @@ bool SPObject::isAncestorOf(SPObject *object) {
 SPObject *SPObject::nearestCommonAncestor(SPObject *object) {
 	g_return_val_if_fail(object != NULL, NULL);
 
-	if ( object == this ) {
-		return this;
-	}
-
-	SPObject *objects[2] = { this, object };
-	std::list<SPObject *> ancestors[2];
-
-	for ( int i = 0 ; i < 2 ; i++ ) {
-		for ( SPObject *iter=objects[i] ; iter ; iter = SP_OBJECT_PARENT(iter) )
-		{
-			if ( iter == objects[!i] ) {
-				return objects[!i];
-			}
-			ancestors[i].push_front(iter);
-		}
-	}
-
-	SPObject *nearest_common=NULL;
-
-	std::list<SPObject *>::iterator iters[2] = {
-		ancestors[0].begin(),
-		ancestors[1].begin()
-	};
-	while ( iters[0] != ancestors[0].end() &&
-		iters[1] != ancestors[1].end() &&
-		*iters[0] == *iters[1] )
-	{
-		nearest_common = *iters[0];
-		++iters[0];
-		++iters[1];
-	}
-
-	return nearest_common;
+	return Inkscape::Algorithms::longest_common_suffix<Inkscape::Util::ParentAxis<SPObject *> >(this, object);
 }
 
 SPObject *SPObject::appendChildRepr(SPRepr *repr) {
