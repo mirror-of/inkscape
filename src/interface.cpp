@@ -402,6 +402,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 		SP_VERB_EDIT_CUT, 
 		SP_VERB_EDIT_COPY, 
 		SP_VERB_EDIT_PASTE, 
+		SP_VERB_EDIT_PASTE_IN_PLACE, 
 		SP_VERB_EDIT_PASTE_STYLE,
 		SP_VERB_NONE,
 		SP_VERB_EDIT_DUPLICATE, 
