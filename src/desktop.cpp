@@ -310,6 +310,12 @@ SPObject *SPDesktop::layerForObject(SPObject *object) {
     return object;
 }
 
+bool SPDesktop::isLayer(SPObject *object) const {
+    return ( SP_IS_GROUP(object)
+             && ( SP_GROUP(object)->effectiveLayerMode(this->dkey)
+                  == SPGroup::LAYER ) );
+}
+
 bool SPDesktop::isWithinViewport(SPItem *item) const {
     NRRect viewport;
     NRRect bbox;

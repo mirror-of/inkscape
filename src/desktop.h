@@ -21,8 +21,8 @@
 #include <libnr/nr-matrix-fns.h>
 #include "display/display-forward.h"
 #include "helper/helper-forward.h"
+#include "xml/xml-forward.h"
 #include "forward.h"
-#include "style.h"
 #include "view.h"
 #include "verbs.h"
 namespace Inkscape { class ObjectHierarchy; }
@@ -120,9 +120,7 @@ struct SPDesktop : public SPView {
 		return _layer_changed_signal.connect(slot);
 	}
 	SPObject *layerForObject(SPObject *object);
-	bool isLayer(SPObject *object) const {
-		return SP_IS_GROUP(object) && SP_GROUP(object)->effectiveLayerMode(this->dkey) == SPGroup::LAYER;
-	}
+	bool isLayer(SPObject *object) const;
 	bool isWithinViewport(SPItem *item) const;
 
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
