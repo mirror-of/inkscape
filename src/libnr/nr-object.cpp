@@ -174,9 +174,7 @@ NRObject *NRObject::alloc(NRType type) {
 	}
 
 	NRObject *object = reinterpret_cast<NRObject *>(::operator new(klass->isize, Inkscape::GC::SCANNED));
-#ifdef USE_LIBGC
 	GC_register_finalizer_ignore_self(GC_base(object), perform_finalization, object, NULL, NULL);
-#endif
 	memset(object, 0xf0, klass->isize);
 
 	klass->cpp_ctor(object);
