@@ -342,9 +342,12 @@ sp_document_create (SPReprDoc *rdoc,
 	sp_document_set_undo_sensitive (document, TRUE);
 
 	// reset undo key when selection changes, so that same-key actions on different objects are not coalesced
-	g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_document_reset_key), document);
-	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_document_reset_key), document);
-
+	if (INKSCAPE != NULL) {
+		g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", 
+				G_CALLBACK (sp_document_reset_key), document);
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", 
+				G_CALLBACK (sp_document_reset_key), document);
+	}
 	inkscape_add_document (document);
 
 	return document;
