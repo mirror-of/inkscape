@@ -51,7 +51,8 @@ class LayerPropertiesDialog : public Gtk::Dialog {
     void close();
     void update();
 
-    SPSelection * getSelection();
+    void setLayerName(gchar const * name);
+    gchar const * getLayerName() const;
 };
 
 } // namespace

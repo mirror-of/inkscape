@@ -46,8 +46,12 @@ LayerPropertiesDialog::LayerPropertiesDialog()
 
     Gtk::VBox *mainVBox = get_vbox();
 
-    _layer_name_label.set_label(_("Layer Name:"));
+    gchar const * name = getLayerName();
+    if (name != NULL) {
+        _layer_name_entry.set_text(name);
+    }
     _layer_name_hbox.pack_end(_layer_name_entry, false, false, 4);
+    _layer_name_label.set_label(_("Layer Name:"));
     _layer_name_hbox.pack_end(_layer_name_label, false, false, 4);
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
@@ -70,13 +74,9 @@ LayerPropertiesDialog::apply()
     // Retrieve text from the dialog
     Glib::ustring name = _layer_name_entry.get_text();
 
-    SPSelection * const selection = getSelection();
-    if (selection && selection->isEmpty()) {
-        g_warning("Selection empty");
-    } else {
-        g_warning("Selection not empty");
-    }
-
+    setLayerName((gchar*)name.c_str());
+        
+    // Grey out the apply button
     _button_apply.set_sensitive(false);
 }
 
@@ -89,12 +89,15 @@ LayerPropertiesDialog::close()
 void
 LayerPropertiesDialog::update()
 {
-    SPSelection * const selection = getSelection();
-    if (selection && !selection->isEmpty()) {
-        // update based on the selection
+    // Get the current layer name
+    gchar const * name = getLayerName();
 
+    if (name != NULL) {
+        // update based on the currently selected layer
+        _layer_name_entry.set_text(name);
         _button_apply.set_sensitive( true );
     } else {
+        _layer_name_entry.set_text("");
         _button_apply.set_sensitive( false );
     }
 }
@@ -118,14 +121,34 @@ void LayerPropertiesDialog::showInstance()
     dlg->show();
 }
 
-SPSelection *
-LayerPropertiesDialog::getSelection()
+void
+LayerPropertiesDialog::setLayerName(gchar const * name)
 {
-    if (! SP_ACTIVE_DESKTOP) {
-        return NULL;
-    }
+    // Get the active desktop
+    SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
+    g_return_if_fail (desktop != NULL);
 
-    return SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+    // Retrieve current layer
+    SPObject * layer = desktop->currentLayer();
+    g_return_if_fail (layer != NULL);
+
+    // Set they layer's label to the retrieved text
+    layer->setLabel(name);
+}
+
+gchar const *
+LayerPropertiesDialog::getLayerName() const
+{
+    // Get the active desktop
+    SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
+    g_return_val_if_fail (desktop != NULL, NULL);
+
+    // Retrieve current layer
+    SPObject * layer = desktop->currentLayer();
+    g_return_val_if_fail (layer != NULL, NULL);
+
+    // Get the layer's name
+    return layer->label();
 }
 
 } // namespace
