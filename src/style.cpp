@@ -605,7 +605,9 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         SPS_READ_IFONTSIZE_IF_UNSET (&style->font_size, val);
         break;
     case SP_PROP_FONT_SIZE_ADJUST:
-        g_warning ("Unimplemented style property id SP_PROP_FONT_SIZE_ADJUST: %d value: %s", id, val);
+        if (strcmp(val, "none") != 0) {
+            g_warning("Unimplemented style property id SP_PROP_FONT_SIZE_ADJUST: value: %s", val);
+        }
         break;
     case SP_PROP_FONT_STYLE:
         SPS_READ_IENUM_IF_UNSET (&style->font_style, val, enum_font_style, TRUE);
@@ -644,7 +646,9 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         g_warning ("Unimplemented style property SP_PROP_UNICODE_BIDI: value: %s", val);
         break;
     case SP_PROP_WORD_SPACING:
-        g_warning ("Unimplemented style property SP_PROP_WORD_SPACING: value: %s", val);
+        if (strcmp(val, "normal") != 0) {
+            g_warning("Unimplemented style property SP_PROP_WORD_SPACING: value: %s", val);
+        }
         break;
     /* Misc */
     case SP_PROP_CLIP:
