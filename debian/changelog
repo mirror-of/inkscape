@@ -1,3 +1,9 @@
+inkscape (0.39cvs) unstable; urgency=low
+
+  * CVS package
+
+ -- Kees Cook <kees@outflux.net>  Thu, 15 Apr 2004 12:45:00 -0700
+
 inkscape (0.38) unstable; urgency=high
 
   *  Text and fonts: full kerning and spacing support, better installed font detection, better alternate font matching, better usability

@@ -1,3 +1,8 @@
+2004-04-15  Kees Cook <kees@outflux.net>
+
+	* debian/control, debian/changes: dropping (currently) unused
+	  dependancies.  Added "0.39cvs" tag.
+
 2004-04-15  Carl Hetherington <inkscape@carlh.net>
 
 	* src/seltrans.cpp, src/helper/sodipodi-ctrlrect.cpp,
