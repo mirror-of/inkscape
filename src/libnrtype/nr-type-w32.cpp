@@ -39,7 +39,7 @@ static void nr_typeface_w32_glyph_outline_unref (NRTypeFace *tf, unsigned int gl
 static NR::Point nr_typeface_w32_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static unsigned int nr_typeface_w32_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
-static NRFont *nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
+static NRFont *nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform);
 static void nr_typeface_w32_font_free (NRFont *font);
 
 static NRTypeFaceClass *parent_class;
@@ -568,7 +568,7 @@ nr_typeface_w32_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 
 
 static NRFont *
-nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
+nr_typeface_w32_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
 	NRTypeFaceW32 *tfw32;
 	NRFont *font;

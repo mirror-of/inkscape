@@ -134,7 +134,7 @@ struct _NRRFGlyphSlot {
 static NRRFGlyphSlot *nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned int flags);
 
 NRRasterFont *
-nr_rasterfont_generic_new (NRFont *font, NRMatrix *transform)
+nr_rasterfont_generic_new (NRFont *font, NR::Matrix transform)
 {
 	NRRasterFont *rf;
 
@@ -143,7 +143,7 @@ nr_rasterfont_generic_new (NRFont *font, NRMatrix *transform)
 	rf->refcount = 1;
 	rf->next = NULL;
 	rf->font = nr_font_ref (font);
-	rf->transform = *transform;
+	rf->transform = transform;
 	/* fixme: How about subpixel positioning */
 	rf->transform.c[4] = 0.0;
 	rf->transform.c[5] = 0.0;
@@ -182,7 +182,7 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
 
 NR::Point nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph)
 {
-	return NR::Matrix(&rf->transform) * nr_font_glyph_advance_get (rf->font, glyph);
+	return rf->transform * nr_font_glyph_advance_get (rf->font, glyph);
 }
 
 NRRFGlyphSlot *
@@ -305,7 +305,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 
 	if ((flags & NR_RASTERFONT_ADVANCE_FLAG) && !slot->has_advance) {
 		NR::Point a = nr_font_glyph_advance_get (rf->font, glyph);
-		NR::Point tp = NR::Matrix(&rf->transform) * a;
+		NR::Point tp = rf->transform * a;
 		NRPointL ip;
 		ip.x = static_cast<NR::ICoord>(tp[NR::X]);
 		ip.y = static_cast<NR::ICoord>(tp[NR::Y]);

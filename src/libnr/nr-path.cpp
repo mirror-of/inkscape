@@ -112,6 +112,11 @@ NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *tra
 	return d;
 }
 
+NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NR::Matrix const transform) {
+	NRMatrix tr = transform;
+	return nr_path_duplicate_transform(d, s, &tr);
+}
+
 static void
 nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NRPoint *pt, int *wind, float *best)
 {

@@ -29,7 +29,7 @@ static void nr_typeface_gnome_glyph_outline_unref (NRTypeFace *tf, unsigned int 
 static NRPoint *nr_typeface_gnome_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
 static unsigned int nr_typeface_gnome_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
-static NRFont *nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
+static NRFont *nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform);
 static void nr_typeface_gnome_font_free (NRFont *font);
 
 static NRTypeFaceClass *parent_class;
@@ -364,7 +364,7 @@ nr_typeface_gnome_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival
 }
 
 static NRFont *
-nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
+nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
 	NRTypeFaceGnome *tfg;
 	NRFont *font;

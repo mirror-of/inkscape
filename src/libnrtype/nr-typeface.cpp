@@ -143,11 +143,9 @@ nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival)
 NRFont *
 nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 {
-	NRMatrix scale;
+	NR::Matrix scale = NR::scale (NR::Point(size, size));
 
-	nr_matrix_set_scale (&scale, size, size);
-
-	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->font_new (tf, metrics, &scale);
+	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->font_new (tf, metrics, scale);
 }
 
 /* NRTypeFaceEmpty */
@@ -177,7 +175,7 @@ static void nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int 
 static NR::Point nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static unsigned int nr_typeface_empty_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
-static NRFont *nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
+static NRFont *nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform);
 static void nr_typeface_empty_font_free (NRFont *font);
 
 static NRTypeFaceClass *empty_parent_class;
@@ -313,14 +311,11 @@ nr_typeface_empty_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival
 }
 
 static NRFont *
-nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
+nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
-	NRFont *font;
-	float size;
+	double size = NR::expansion(transform);
 
-	size = (float) NR_MATRIX_DF_EXPANSION (transform);
-
-	font = empty_fonts;
+	NRFont *font = empty_fonts;
 	while (font != NULL) {
 		if (NR_DF_TEST_CLOSE (size, font->size, 0.001 * size) && (font->metrics == metrics)) {
 			return nr_font_ref (font);

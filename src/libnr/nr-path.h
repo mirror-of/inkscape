@@ -66,6 +66,8 @@ struct _NRBPath {
 
 NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *transform);
 
+NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NR::Matrix const transform);
+
 void nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, NRPoint *pt,
 						  NRRect *bbox, int *wind, float *dist,
 						  float tolerance);

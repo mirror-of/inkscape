@@ -36,7 +36,7 @@ static void nr_typeface_ft2_glyph_outline_unref (NRTypeFace *tf, unsigned int gl
 static NR::Point nr_typeface_ft2_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
 static unsigned int nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
-static NRFont *nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
+static NRFont *nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform);
 static void nr_typeface_ft2_font_free (NRFont *font);
 
 static FT_Library ft_library = NULL;
@@ -353,8 +353,7 @@ nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 			   intention; I don't know much about this code.  -- pjrm */
 			return MIN (idx, tf->nglyphs - 1);
 		} else if (!tff->unimap || (tff->freelo && (unival >= 0xe000) && (unival <= 0xf8ff))) {
-			unsigned int idx;
-			idx = CLAMP (unival, 0xe000, 0xf8ff) - 0xe000;
+			unsigned int idx = CLAMP (unival, 0xe000, 0xf8ff) - 0xe000;
 			return MIN (idx, tf->nglyphs - 1);
 		} else {
 			return FT_Get_Char_Index (tff->ft_face, unival);
@@ -365,14 +364,14 @@ nr_typeface_ft2_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 }
 
 static NRFont *
-nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
+nr_typeface_ft2_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
 	NRTypeFaceFT2 *tff;
 	NRFont *font;
 	float size;
 
 	tff = (NRTypeFaceFT2 *) tf;
-	size = NR_MATRIX_DF_EXPANSION (transform);
+	size = NR::expansion(transform);
 
 	font = tff->fonts;
 	while (font != NULL) {

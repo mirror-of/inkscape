@@ -64,7 +64,7 @@ nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 }
 
 NRRasterFont *
-nr_rasterfont_new (NRFont *font, NRMatrix *transform)
+nr_rasterfont_new (NRFont *font, NR::Matrix transform)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->rasterfont_new (font, transform);
 }
@@ -82,17 +82,15 @@ struct _NRFontGeneric {
 };
 
 NRFont *
-nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
+nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
-	NRFontGeneric *fg;
-
-	fg = nr_new (NRFontGeneric, 1);
+	NRFontGeneric *fg = nr_new (NRFontGeneric, 1);
 
 	fg->font.refcount = 1;
 	fg->font.next = NULL;
 	fg->font.face = nr_typeface_ref (tf);
 	fg->font.metrics = metrics;
-	fg->font.size = NR_MATRIX_DF_EXPANSION (transform);
+	fg->font.size = NR::expansion(transform);
 
 	fg->rfonts = NULL;
 	fg->outlines = NULL;
@@ -103,13 +101,10 @@ nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
 void
 nr_font_generic_free (NRFont *font)
 {
-	NRFontGeneric *fg;
-	unsigned int i;
-
-	fg = (NRFontGeneric *) font;
+	NRFontGeneric *fg = (NRFontGeneric *) font;
 
 	if (fg->outlines) {
-		for (i = 0; i < font->face->nglyphs; i++) {
+		for (unsigned int i = 0; i < font->face->nglyphs; i++) {
 			if (fg->outlines[i].path) nr_free (fg->outlines[i].path);
 		}
 		nr_free (fg->outlines);
@@ -122,9 +117,7 @@ nr_font_generic_free (NRFont *font)
 NRBPath *
 nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d, unsigned int ref)
 {
-	NRFontGeneric *fg;
-
-	fg = (NRFontGeneric *) font;
+	NRFontGeneric *fg = (NRFontGeneric *) font;
 
 	if (!fg->outlines) {
 		fg->outlines = nr_new (NRBPath, font->face->nglyphs);
@@ -134,9 +127,8 @@ nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d,
 	if (!fg->outlines[glyph].path) {
 		NRBPath tfgol;
 		if (nr_typeface_glyph_outline_get (font->face, glyph, font->metrics, &tfgol, 0)) {
-			NRMatrix scale;
-			nr_matrix_set_scale (&scale, font->size / 1000.0, font->size / 1000.0);
-			nr_path_duplicate_transform (&fg->outlines[glyph], &tfgol, &scale);
+			NR::Matrix scale = NR::scale(NR::Point(font->size / 1000.0, font->size / 1000.0));
+			nr_path_duplicate_transform (&fg->outlines[glyph], &tfgol, scale);
 		}
 	}
 
@@ -170,27 +162,22 @@ nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 }
 
 NRRasterFont *
-nr_font_generic_rasterfont_new (NRFont *font, NRMatrix *transform)
+nr_font_generic_rasterfont_new (NRFont *font, NR::Matrix const transform)
 {
-	NRFontGeneric *fg;
-	NRRasterFont *rf;
-	double mexp;
+	NRFontGeneric *fg = (NRFontGeneric *) font;
 
-	fg = (NRFontGeneric *) font;
-
-	mexp = NR_MATRIX_DF_EXPANSION (transform);
-	rf = fg->rfonts;
+	double mexp = NR::expansion(transform);
+	NRRasterFont *rf = fg->rfonts;
 	while (rf != NULL) {
-		double fmexp;
-		fmexp = NR_MATRIX_DF_EXPANSION (&rf->transform);
+		double fmexp = NR::expansion(rf->transform);
 		if (NR_DF_TEST_CLOSE (mexp, fmexp, 0.001 * mexp)) {
-			double rmexp;
-			if (NR_DF_TEST_CLOSE (mexp, 0.0, 0.0001)) return nr_rasterfont_ref (rf);
-			rmexp = mexp * 0.001;
-			if (NR_DF_TEST_CLOSE (transform->c[0], rf->transform.c[0], rmexp) &&
-			    NR_DF_TEST_CLOSE (transform->c[1], rf->transform.c[1], rmexp) &&
-			    NR_DF_TEST_CLOSE (transform->c[2], rf->transform.c[2], rmexp) &&
-			    NR_DF_TEST_CLOSE (transform->c[3], rf->transform.c[3], rmexp)) {
+			if (NR_DF_TEST_CLOSE (mexp, 0.0, 0.0001))
+				return nr_rasterfont_ref (rf);
+			double rmexp = mexp * 0.001;
+			if (NR_DF_TEST_CLOSE (transform.c[0], rf->transform.c[0], rmexp) &&
+			    NR_DF_TEST_CLOSE (transform.c[1], rf->transform.c[1], rmexp) &&
+			    NR_DF_TEST_CLOSE (transform.c[2], rf->transform.c[2], rmexp) &&
+			    NR_DF_TEST_CLOSE (transform.c[3], rf->transform.c[3], rmexp)) {
 				return nr_rasterfont_ref (rf);
 			}
 		}
@@ -208,16 +195,14 @@ nr_font_generic_rasterfont_new (NRFont *font, NRMatrix *transform)
 void
 nr_font_generic_rasterfont_free (NRRasterFont *rf)
 {
-	NRFontGeneric *fg;
-
-	fg = (NRFontGeneric *) rf->font;
+	NRFontGeneric *fg = (NRFontGeneric *) rf->font;
 
 	if (fg->rfonts == rf) {
 		fg->rfonts = rf->next;
 	} else {
-		NRRasterFont *ref;
-		ref = fg->rfonts;
-		while (ref->next != rf) ref = ref->next;
+		NRRasterFont *ref = fg->rfonts;
+		while (ref->next != rf)
+			ref = ref->next;
 		ref->next = rf->next;
 	}
 
