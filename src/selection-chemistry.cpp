@@ -754,10 +754,10 @@ void sp_selection_paste(bool in_place)
 
         /* Snap the offset of the new item(s) to the grid */
         /* FIXME: this gridsnap fiddling is a hack. */
-        gdouble const curr_gridsnap = desktop->gridsnap;
-        desktop->gridsnap = 1e18;
+        gdouble const curr_gridsnap = desktop->grid_snapper.getDistance();
+        desktop->grid_snapper.setDistance(NR_HUGE);
         sp_desktop_free_snap(desktop, m);
-        desktop->gridsnap = curr_gridsnap;
+        desktop->grid_snapper.setDistance(curr_gridsnap);
         sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
     }
 
