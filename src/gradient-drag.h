@@ -38,6 +38,8 @@ struct GrDraggable {
 	guint point_num;
 	bool fill_or_stroke;
 
+	bool mayMerge (GrDraggable *da2);
+
     inline int equals (GrDraggable *other) {
 		return ((item == other->item) && (point_num == other->point_num) && (fill_or_stroke == other->fill_or_stroke));
     }
@@ -69,16 +71,21 @@ struct GrDragger {
 	GSList *draggables;
 
 	void addDraggable(GrDraggable *draggable);
+
 	void updateKnotShape();
+	void updateTip();
 
 	void moveThisToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr);
 	void moveOtherToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr);
 	void updateDependencies (bool write_repr);
 
+	bool mayMerge (GrDragger *other);
+	bool mayMerge (GrDraggable *da2);
+
 	bool isA (guint point_num);
 	bool isA (SPItem *item, guint point_num, bool fill_or_stroke);
 
-	void updateTip();
+	void fireDraggables (bool write_repr);
 };
 
 /**

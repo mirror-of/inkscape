@@ -196,27 +196,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         // without Shift; see if we need to snap to another dragger
         for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
             GrDragger *d_new = (GrDragger *) di->data;
-            if (d_new == dragger)
-                continue;
-            if (NR::L2 (d_new->point - p) < snap_dist) {
-
-                bool incest = false;
-                for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
-                    GrDraggable *d1 = (GrDraggable *) i->data;
-                    for (GSList const* j = d_new->draggables; j != NULL; j = j->next) { // for all draggables of dragger
-                        GrDraggable *d2 = (GrDraggable *) j->data;
-                        if ((d1->item == d2->item) && (d1->fill_or_stroke == d2->fill_or_stroke)) {
-                            // we must not snap together the points of the same gradient!
-                            if (!((d1->point_num == POINT_RG_FOCUS && d2->point_num == POINT_RG_CENTER) ||
-                                  (d1->point_num == POINT_RG_CENTER && d2->point_num == POINT_RG_FOCUS))) {
-                                  // except that we can snap center and focus together
-                                incest = true;
-                            }
-                        }
-                    }
-                }
-                if (incest)
-                    continue;
+            if (dragger->mayMerge(d_new) && NR::L2 (d_new->point - p) < snap_dist) {
 
                 // Now actually snap:
                 for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
@@ -297,7 +277,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
             }
         }
 
-        // Move by the smallest of vectors:
+        // Move by the smallest of snap vectors:
         NR::Point move(9999, 9999);
         for (GSList const *i = snap_vectors; i != NULL; i = i->next) {
             NR::Point *snap_vector = (NR::Point *) i->data;
@@ -327,11 +307,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
 
     dragger->point = p;
 
-    for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
-        GrDraggable *draggable = (GrDraggable *) i->data;
-        dragger->parent->local_change = true;
-        sp_item_gradient_set_coords (draggable->item, draggable->point_num, p, draggable->fill_or_stroke, false);
-    }
+    dragger->fireDraggables (false);
 
     dragger->updateDependencies(false);
 }
@@ -344,16 +320,9 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
 
-    dragger->point_original = dragger->point;
+    dragger->point_original = dragger->point = knot->pos;
 
-    // Act upon all draggables of the dragger:
-    for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
-        GrDraggable *draggable = (GrDraggable *) i->data;
-        // set local_change flag so that selection_changed callback does not regenerate draggers
-        dragger->parent->local_change = true;
-        // change gradient, writing to repr
-        sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, draggable->fill_or_stroke, true);
-    }
+    dragger->fireDraggables (true);
 
     // make this dragger selected
     dragger->parent->setSelected (dragger);
@@ -375,6 +344,24 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
    dragger->point_original = dragger->point;
 
    dragger->parent->setSelected (dragger);
+}
+
+/**  
+Act upon all draggables of the dragger, setting them to the dragger's point
+*/
+void
+GrDragger::fireDraggables (bool write_repr)
+{
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
+
+        // set local_change flag so that selection_changed callback does not regenerate draggers
+        this->parent->local_change = true;
+
+        // change gradient, optionally writing to repr; prevent focus from moving if it's snapped to the center
+        if (!(draggable->point_num == POINT_RG_FOCUS && this->isA(draggable->item, POINT_RG_CENTER, draggable->fill_or_stroke)))
+            sp_item_gradient_set_coords (draggable->item, draggable->point_num, this->point, draggable->fill_or_stroke, write_repr);
+    }
 }
 
 /**
@@ -405,6 +392,48 @@ GrDragger::isA (SPItem *item, guint point_num, bool fill_or_stroke)
         }
     }
     return false;
+}
+
+bool
+GrDraggable::mayMerge (GrDraggable *da2)
+{
+    if ((this->item == da2->item) && (this->fill_or_stroke == da2->fill_or_stroke)) {
+        // we must not merge the points of the same gradient!
+        if (!((this->point_num == POINT_RG_FOCUS && da2->point_num == POINT_RG_CENTER) ||
+              (this->point_num == POINT_RG_CENTER && da2->point_num == POINT_RG_FOCUS))) {
+            // except that we can snap center and focus together
+            return false;
+        }
+    }
+    return true;
+}
+
+bool
+GrDragger::mayMerge (GrDragger *other)
+{
+    if (this == other)
+        return false;
+
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) { // for all draggables of this
+        GrDraggable *da1 = (GrDraggable *) i->data;
+        for (GSList const* j = other->draggables; j != NULL; j = j->next) { // for all draggables of other
+            GrDraggable *da2 = (GrDraggable *) j->data;
+            if (!da1->mayMerge(da2))
+                return false;
+        }
+    }
+    return true;
+}
+
+bool
+GrDragger::mayMerge (GrDraggable *da2)
+{
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) { // for all draggables of this
+        GrDraggable *da1 = (GrDraggable *) i->data;
+        if (!da1->mayMerge(da2))
+            return false;
+    }
+    return true;
 }
 
 /**
@@ -636,7 +665,7 @@ GrDrag::addDragger (GrDraggable *draggable)
 
     for (GSList *i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
-        if (NR::L2 (dragger->point - p) < MERGE_DIST) {
+        if (dragger->mayMerge (draggable) && NR::L2 (dragger->point - p) < MERGE_DIST) {
             // distance is small, merge this draggable into dragger, no need to create new dragger
             dragger->addDraggable (draggable);
             dragger->updateKnotShape();
