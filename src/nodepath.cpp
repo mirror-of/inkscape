@@ -399,9 +399,9 @@ static void update_object(Path::Path *np)
 
 static void update_repr_internal(Path::Path *np)
 {
-    SPRepr *repr = SP_OBJECT(np->path)->repr;
-
     g_assert(np);
+
+    SPRepr *repr = SP_OBJECT(np->path)->repr;
 
     SPCurve *curve = create_curve(np);
     gchar *typestr = create_typestr(np);
