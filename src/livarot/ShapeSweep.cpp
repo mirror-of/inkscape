@@ -83,7 +83,7 @@ Shape::Reoriente (Shape * a)
   if (nbAr > maxAr)
     {
       maxAr = nbAr;
-      aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
+      aretes.reserve(maxAr);
       if (HasEdgesData ())
 	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
@@ -98,7 +98,7 @@ Shape::Reoriente (Shape * a)
 	swrData =
 	  (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
     }
-  memcpy (aretes, a->aretes, nbAr * sizeof (dg_arete));
+  aretes = a->aretes;
 
   MakePointData (true);
   MakeEdgeData (true);

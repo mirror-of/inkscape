@@ -1,3 +1,14 @@
+2004-08-03  MenTaLguY  <mental@rydia.net>
+
+	* src/dialogs/rdf.cpp, src/xml/repr-util.cpp, src/xml/repr.h:
+	  removed sp_repr_recursive_drop() which is unneeded and
+	  creates unnecessary thrash in the undo logs
+
+	* src/livarot/Shape.h, src/livarot/Shape.cpp,
+	  src/livarot/ShapeSweep.cpp, src/livarot/ShapeMisc.cpp:
+	  
+	  experiment to replace ad-hoc realloc() arrays with std::vector
+
 2004-08-02  MenTaLguY  <mental@rydia.net>
 
 	* configure.in: sigc++ 2.0.2 (and before?) has a bug that

@@ -146,10 +146,9 @@ A: Use "sp_repr_new*".  Then attach it to a parent somewhere with
    "sp_repr_append_child" and finally called "sp_repr_unref".
 
 Q: How do I destroy an SPRepr?
-A: If it is a leaf repr, just called "sp_repr_unparent".  If you want
-   to take out everything under the repr with it, then call 
-   "sp_repr_recursive_drop" which will take care of the unparenting for
-   you.
+A: Just call "sp_repr_unparent" on it and release any references
+   you may be retaining to it.  Any attached SPObjects will
+   clean themselves up automatically, as will any children.
 
 Q: What about listeners?
 A: I have no idea yet...
@@ -308,8 +307,6 @@ unsigned int sp_repr_set_double_default(SPRepr *repr, gchar const *key, double v
 double sp_repr_get_double_attribute(SPRepr *repr, gchar const *key, double def);
 int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
 /* End Deprecated? */
-
-void sp_repr_recursive_drop(SPRepr *repr);
 
 int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 

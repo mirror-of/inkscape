@@ -552,7 +552,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     if (nbAr > maxAr)
     {
       maxAr = nbAr;
-      aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
+      aretes.reserve(maxAr);
       if (HasEdgesData ())
         eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
@@ -570,7 +570,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
         ebData =
           (back_data *) realloc (ebData, maxAr * sizeof (back_data));
     }
-    memcpy (aretes, a->aretes, nbAr * sizeof (dg_arete));
+    aretes = a->aretes;
     return 0;
   }
   if (a->nbPt <= 1 || a->nbAr <= 1 || a->type != shape_polygon)

@@ -575,22 +575,6 @@ sp_repr_lookup_name ( SPRepr *repr, gchar const *name )
 }
 
 /**
- *  \brief   Recursively remove a tree of SPRepr
- *  \param   repr    The SPRepr to start from
- *  
- */
-void
-sp_repr_recursive_drop( SPRepr * repr )
-{
-    g_assert (repr != NULL);
-
-    while (repr->children) {
-        sp_repr_recursive_drop (repr->children);
-    }
-    sp_repr_unparent (repr);
-}
-
-/**
 Parses the boolean value of an attribute "key" in repr and sets val accordingly, or to FALSE if the attr is not set. Returns TRUE if the attr was set, FALSE otherwise.
  */
 unsigned int

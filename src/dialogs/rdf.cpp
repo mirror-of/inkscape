@@ -812,7 +812,7 @@ rdf_set_license(SPDocument * document, struct rdf_license_t * license)
 {
     // drop old license section
     SPRepr * repr = rdf_get_xml_repr ( document, XML_TAG_NAME_LICENSE, FALSE );
-    if (repr) sp_repr_recursive_drop( repr );
+    if (repr) sp_repr_unparent(repr);
 
     if (!license) return;
 

@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
+#include <vector>
 //#include <iostream.h>
 
 #include "ShapeUtils.h"
@@ -70,28 +71,26 @@ public:
   double leftX, topY, rightX, bottomY;
 
   // topological information: who links who?
-  typedef struct dg_point
+  struct dg_point
   {
     NR::Point x;			// position
     int dI, dO;			// indegree and outdegree
     int firstA, lastA;		// first and last incident edge
     int oldDegree;
-  }
-  dg_point;
-  typedef struct dg_arete
+  };
+  struct dg_arete
   {
     NR::Point dx;		// edge vector
     int st, en;			// start and end points of the edge
     int nextS, prevS;		// next and previous edge in the double-linked list at the start point
     int nextE, prevE;		// next and previous edge in the double-linked list at the end point
-  }
-  dg_arete;
+  };
 
   // lists of the nodes and edges
   int nbPt, maxPt;
   dg_point *pts;
   int nbAr, maxAr;
-  dg_arete *aretes;
+  std::vector<dg_arete> aretes;
 
   // flags
   int type;
@@ -99,16 +98,15 @@ public:
 
 private:
   // temporary data for the various algorithms
-  typedef struct edge_data
+  struct edge_data
   {
     int weight;			// weight of the edge (to handle multiple edges)
     NR::Point rdx;		// rounded edge vector
     double length, sqlength, ilength, isqlength;	// length^2, length, 1/length^2, 1/length
     double siEd, coEd;		// siEd=abs(rdy/length) and coEd=rdx/length
     // used to determine the "most horizontal" edge between 2 edges
-  }
-  edge_data;
-  typedef struct sweep_src_data
+  };
+  struct sweep_src_data
   {
     void *misc;			// pointer to the SweepTree* in the sweepline
     int firstLinkedPoint;	// not used
@@ -122,17 +120,15 @@ private:
     // the current sweep position
     int curPoint, doneTo;
     double curT;
-  }
-  sweep_src_data;
-  typedef struct sweep_dest_data
+  };
+  struct sweep_dest_data
   {
     void *misc;			// used to check if an edge has already been seen during the depth-first search
     int suivParc, precParc;	// previous and current next edge in the depth-first search
     int leW, riW;		// left and right winding numbers for this edge
     int ind;			// order of the edges during the depth-first search
-  }
-  sweep_dest_data;
-  typedef struct raster_data
+  };
+  struct raster_data
   {
     SweepTree *misc;		// pointer to the associated SweepTree* in the sweepline
     double lastX, lastY, curX, curY;	// curX;curY is the current intersection of the edge with the sweepline
@@ -142,17 +138,15 @@ private:
     // previous sweepline
     double dxdy, dydx;		// horizontal change per unit vertical move of the intersection with the sweepline
     int guess;
-  }
-  raster_data;
-  typedef struct quick_raster_data
+  };
+  struct quick_raster_data
   {
     double x;			    // x-position on the sweepline
     int    bord;			// index of the edge
     int    ind;       // index of qrsData elem for edge (ie inverse of the bord)
     int    next,prev; // dbl linkage
-  }
-  quick_raster_data;
-  typedef struct point_data
+  };
+  struct point_data
   {
     int oldInd, newInd;		// back and forth indices used when sorting the points, to know where they have
     // been relocated in the array
@@ -162,16 +156,14 @@ private:
     Shape *askForWindingS;
     int askForWindingB;
     NR::Point  rx;		// rounded coordinates of the point
-  }
-  point_data;
-  typedef struct incidenceData
+  };
+  struct incidenceData
   {
     int nextInc;		// next incidence in the linked list
     int pt;			// point incident to the edge (there is one list per edge)
     double theta;		// coordinate of the incidence on the edge
-  }
-  incidenceData;
-  typedef struct sTreeChange
+  };
+  struct sTreeChange
   {
     int type;			// type of modification to the sweepline:
     // 0=edge inserted
@@ -187,28 +179,24 @@ private:
     int lBrd;
     Shape *rSrc;		// edge directly on the right
     int rBrd;
-  }
-  sTreeChange;
-  typedef struct back_data
+  };
+  struct back_data
   {
     int pathID, pieceID;
     double tSt, tEn;
-  }
-  back_data;
-  typedef struct voronoi_point
+  };
+  struct voronoi_point
   {				// info for points treated as points of a voronoi diagram (obtained by MakeShape())
     double value;		// distance to source
     int winding;		// winding relatively to source
-  }
-  voronoi_point;
-  typedef struct voronoi_edge
+  };
+  struct voronoi_edge
   {				// info for edges, treated as approximation of edges of the voronoi diagram
     int leF, riF;		// left and right site
     double leStX, leStY, riStX, riStY;	// on the left side: (leStX,leStY) is the smallest vector from the source to st
     // etc...
     double leEnX, leEnY, riEnX, riEnY;
-  }
-  voronoi_edge;
+  };
 
   // the arrays of temporary data
   // these ones are dynamically kept at a length of maxPt or maxAr
@@ -479,13 +467,12 @@ private:
   void CleanupSweep (void);	// deallocates them
 //public:
 private:
-  typedef struct edge_list
+  struct edge_list
   {				// temporary array of edges for easier sorting
     int no;
     bool starting;
     NR::Point x;
-  }
-  edge_list;
+  };
   void SortEdgesList (edge_list * edges, int s, int e);	// edge sorting function
   static int CmpToVert (const NR::Point ax, const NR::Point bx,bool as,bool bs);	// edge direction comparison function
 

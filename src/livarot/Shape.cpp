@@ -23,7 +23,6 @@ Shape::Shape (void)
   nbPt = maxPt = 0;
   pts = NULL;
   nbAr = maxAr = 0;
-  aretes = NULL;
 
   flags = 0;
   type = shape_polygon;
@@ -46,12 +45,7 @@ Shape::~Shape (void)
     }
   nbPt = maxPt = 0;
   pts = NULL;
-  if (maxAr > 0)
-    {
-      free (aretes);
-    }
   nbAr = maxAr = 0;
-  aretes = NULL;
   if (eData)
     free (eData);
   if (ebData)
@@ -384,7 +378,7 @@ Shape::Copy (Shape * who)
   flags = who->flags & (need_points_sorting + need_edges_sorting);
 
   memcpy (pts, who->pts, nbPt * sizeof (dg_point));
-  memcpy (aretes, who->aretes, nbAr * sizeof (dg_arete));
+  aretes = who->aretes;
 }
 
 void
@@ -407,7 +401,7 @@ Shape::Reset (int n, int m)
   if (m > maxAr)
     {
       maxAr = m;
-      aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
+      aretes.reserve(maxAr);
       if (HasEdgesData ())
 	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
       if (HasSweepDestData ())
@@ -424,6 +418,7 @@ Shape::Reset (int n, int m)
 	voreData =
 	  (voronoi_edge *) realloc (voreData, maxAr * sizeof (voronoi_edge));
     }
+  aretes.resize(m);
   SetFlag (need_points_sorting, false);
   SetFlag (need_edges_sorting, false);
 }
@@ -1234,7 +1229,7 @@ Shape::AddEdge (int st, int en)
   if (nbAr >= maxAr)
     {
       maxAr = 2 * nbAr + 1;
-      aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
+      aretes.reserve(maxAr);
       if (HasEdgesData ())
 	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
@@ -1255,6 +1250,7 @@ Shape::AddEdge (int st, int en)
 	  (voronoi_edge *) realloc (voreData, maxAr * sizeof (voronoi_edge));
     }
   int n = nbAr++;
+  aretes.resize(nbAr);
   aretes[n].st = aretes[n].en = -1;
   aretes[n].prevS = aretes[n].nextS = -1;
   aretes[n].prevE = aretes[n].nextE = -1;
@@ -1318,7 +1314,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
   if (nbAr >= maxAr)
     {
       maxAr = 2 * nbAr + 1;
-      aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
+      aretes.reserve(maxAr);
       if (HasEdgesData ())
 	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
@@ -1339,6 +1335,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
 	  (voronoi_edge *) realloc (voreData, maxAr * sizeof (voronoi_edge));
     }
   int n = nbAr++;
+  aretes.resize(nbAr);
   aretes[n].st = aretes[n].en = -1;
   aretes[n].prevS = aretes[n].nextS = -1;
   aretes[n].prevE = aretes[n].nextE = -1;
