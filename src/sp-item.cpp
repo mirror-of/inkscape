@@ -54,7 +54,7 @@ static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view)
 
 static SPObjectClass *parent_class;
 
-static void clip_ref_changed(SPObject *clip, SPItem *item);
+static void clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
 GType
 sp_item_get_type (void)
@@ -110,7 +110,6 @@ sp_item_init (SPItem *item)
 
 	item->display = NULL;
 
-	item->clip = NULL;
 	item->clip_ref = NULL;
 	item->mask = NULL;
 
@@ -138,27 +137,18 @@ sp_item_release (SPObject * object)
 
 	item = (SPItem *) object;
 
+	if (item->clip_ref) {
+		delete item->clip_ref;
+		item->clip_ref = NULL;
+	}
+
 	while (item->display) {
-		if (item->clip) {
-			sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
-			nr_arena_item_set_clip (item->display->arenaitem, NULL);
-		}
 		if (item->mask) {
 			sp_mask_hide (SP_MASK (item->mask), NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
 			nr_arena_item_set_mask (item->display->arenaitem, NULL);
 		}
 		nr_arena_item_unparent (item->display->arenaitem);
 		item->display = sp_item_view_list_remove (item->display, item->display);
-	}
-
-	if (item->clip_ref) {
-		delete item->clip_ref;
-		item->clip_ref = NULL;
-	}
-
-	if (item->clip) {
-		sp_signal_disconnect_by_data (item->clip, object);
-		item->clip = NULL;
 	}
 
 	if (item->mask) {
@@ -168,31 +158,6 @@ sp_item_release (SPObject * object)
 
 	if (((SPObjectClass *) (parent_class))->release)
 		((SPObjectClass *) parent_class)->release (object);
-}
-
-static void
-sp_item_clip_release (SPClipPath *cp, SPItem *item)
-{
-	if (item->clip) {
-		SPItemView *v;
-		/* Hide clippath */
-		for (v = item->display; v != NULL; v = v->next) {
-			sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-			nr_arena_item_set_clip (v->arenaitem, NULL);
-		}
-		/* Detach clippath */
-		sp_signal_disconnect_by_data (item->clip, item);
-		delete item->clip_ref;
-		item->clip_ref = NULL;
-		item->clip = NULL;
-	}
-}
-
-static void
-sp_item_clip_modified (SPClipPath *cp, guint flags, SPItem *item)
-{
-	/* I think cliPath does update automagically */
-	/* g_warning ("Item %s clip path %s modified", SP_OBJECT_ID (item), SP_OBJECT_ID (cp)); */
 }
 
 static void
@@ -241,6 +206,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		SPObject *cp;
 		if (item->clip_ref) {
 			delete item->clip_ref;
+			item->clip_ref = NULL;
 		}
 		if (value) {
 			try {
@@ -255,7 +221,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			cp = NULL;
 		}
-		clip_ref_changed(cp, item);
+		clip_ref_changed(NULL, cp, item);
 		break;
 	}
 	case SP_PROP_MASK: {
@@ -326,35 +292,27 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 static void
-clip_ref_changed(SPObject *clip, SPItem *item)
+clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
 {
-	if (clip != item->clip) {
-		if (item->clip) {
-			SPItemView *v;
-			/* Detach clippath */
-			sp_signal_disconnect_by_data (item->clip, item);
-			/* Hide clippath */
-			for (v = item->display; v != NULL; v = v->next) {
-				sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-				nr_arena_item_set_clip (v->arenaitem, NULL);
-			}
-			item->clip = NULL;
+	if (old_clip) {
+		SPItemView *v;
+		/* Hide clippath */
+		for (v = item->display; v != NULL; v = v->next) {
+			sp_clippath_hide (SP_CLIPPATH (old_clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
+			nr_arena_item_set_clip (v->arenaitem, NULL);
 		}
-		if (SP_IS_CLIPPATH (clip)) {
-			NRRect bbox;
-			SPItemView *v;
-			item->clip = clip;
-			g_signal_connect (G_OBJECT (item->clip), "release", G_CALLBACK (sp_item_clip_release), item);
-			g_signal_connect (G_OBJECT (item->clip), "modified", G_CALLBACK (sp_item_clip_modified), item);
-			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
-			for (v = item->display; v != NULL; v = v->next) {
-				NRArenaItem *ai;
-				if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
-				ai = sp_clippath_show (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_ARENA (v->arenaitem), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-				nr_arena_item_set_clip (v->arenaitem, ai);
-				nr_arena_item_unref (ai);
-				sp_clippath_set_bbox (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
-			}
+	}
+	if (SP_IS_CLIPPATH (clip)) {
+		NRRect bbox;
+		SPItemView *v;
+		sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
+		for (v = item->display; v != NULL; v = v->next) {
+			NRArenaItem *ai;
+			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
+			ai = sp_clippath_show (SP_CLIPPATH (clip), NR_ARENA_ITEM_ARENA (v->arenaitem), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
+			nr_arena_item_set_clip (v->arenaitem, ai);
+			nr_arena_item_unref (ai);
+			sp_clippath_set_bbox (SP_CLIPPATH (clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
 		}
 	}
 }
@@ -376,12 +334,15 @@ sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
 				nr_arena_item_set_transform (v->arenaitem, &item->transform);
 			}
 		}
-		if ((item->clip) || (item->mask)) {
+
+		SPObject *clip=( item->clip_ref ? item->clip_ref->getObject() : NULL );
+
+		if ( clip || item->mask ) {
 			NRRect bbox;
 			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
-			if (item->clip) {
+			if (clip) {
 				for (v = item->display; v != NULL; v = v->next) {
-					sp_clippath_set_bbox (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
+					sp_clippath_set_bbox (SP_CLIPPATH (clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
 				}
 			}
 			if (item->mask) {
@@ -390,6 +351,7 @@ sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
 				}
 			}
 		}
+
 		if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
 			for (v = item->display; v != NULL; v = v->next) {
 				nr_arena_item_set_opacity (v->arenaitem, SP_SCALE24_TO_FLOAT (object->style->opacity.value));
@@ -573,10 +535,10 @@ sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned in
 		if (flags & SP_ITEM_SHOW_PRINT) {
 			nr_arena_item_set_visible (ai, item->printable);
 		}
-		if (item->clip) {
+		if ( item->clip_ref && item->clip_ref->getObject() ) {
 			NRArenaItem *ac;
 			if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY (item->display->arenaitem, sp_item_display_key_new (3));
-			ac = sp_clippath_show (SP_CLIPPATH (item->clip), arena, NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
+			ac = sp_clippath_show (SP_CLIPPATH (item->clip_ref->getObject()), arena, NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
 			nr_arena_item_set_clip (ai, ac);
 			nr_arena_item_unref (ac);
 		}
@@ -609,8 +571,8 @@ sp_item_invoke_hide (SPItem *item, unsigned int key)
 	while (v != NULL) {
 		next = v->next;
 		if (v->key == key) {
-			if (item->clip) {
-				sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
+			if ( item->clip_ref && item->clip_ref->getObject() ) {
+				sp_clippath_hide (SP_CLIPPATH (item->clip_ref->getObject()), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
 				nr_arena_item_set_clip (v->arenaitem, NULL);
 			}
 			if (item->mask) {

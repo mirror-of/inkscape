@@ -46,10 +46,7 @@ URIReference::~URIReference() {
 	 * changes.
 	 */
 	_connection.disconnect();
-	if (_obj) {
-		sp_object_hunref(_obj, NULL);
-		_obj = NULL;
-	}
+	_setObject(NULL);
 }
 
 void URIReference::_setObject(SPObject *obj) {
@@ -61,12 +58,23 @@ void URIReference::_setObject(SPObject *obj) {
 
 	if (_obj) {
 		sp_object_href(_obj, NULL);
+		g_signal_connect(G_OBJECT(_obj), "release", G_CALLBACK(&URIReference::_release), reinterpret_cast<gpointer>(this));
 	}
-	_changed_signal.emit(_obj);
+	_changed_signal.emit(old_obj, _obj);
 	if (old_obj) {
-		/* unref the old object _after_ the signal emission */
+		/* release the old object _after_ the signal emission */
+		g_signal_handlers_disconnect_by_func(G_OBJECT(old_obj), (void *)&URIReference::_release, reinterpret_cast<gpointer>(this));
 		sp_object_hunref(old_obj, NULL);
 	}
+}
+
+/* If an object is deleted, current semantics require that we release
+ * it on its "release" signal, rather than later, when its ID is actually
+ * unregistered from the document.
+ */
+void URIReference::_release(SPObject *obj, URIReference *reference) {
+	g_assert( reference->_obj == obj );
+	reference->_setObject(NULL);
 }
 
 }; /* namespace Inkscape */

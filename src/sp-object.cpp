@@ -351,12 +351,7 @@ sp_object_invoke_release (SPObject *object)
 
 	g_signal_emit (G_OBJECT (object), object_signals[RELEASE], 0);
 
-	/* href holders HAVE to release it in signal handler */
 	g_assert (object->hrefcount == 0);
-
-	if (object->style) {
-		object->style = sp_style_unref (object->style);
-	}
 
 	if (!SP_OBJECT_IS_CLONED (object)) {
 		g_assert (object->id);
@@ -365,6 +360,10 @@ sp_object_invoke_release (SPObject *object)
 		object->id = NULL;
 	} else {
 		g_assert (!object->id);
+	}
+
+	if (object->style) {
+		object->style = sp_style_unref (object->style);
 	}
 
 	sp_repr_remove_listener_by_data (object->repr, object);

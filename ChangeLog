@@ -18,6 +18,9 @@
 
 	* src/sp-item.cpp: fixed double hunref problem
 
+	* src/sp-item.cpp, src/uri-references.h, src/uri-references.cpp:
+	reworked Inkscape::URIReference a little
+
 2004-01-02  MenTaLguY <mental@rydia.net>
 
 	* src/shortcuts.cpp: zoom in shortcut fix for german and other

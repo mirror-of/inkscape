@@ -57,35 +57,34 @@ public:
 
 	/**
 	 * Accessor for the reference's change notification signal.
-	 * The signal has one parameter: the new SPObject that the
-	 * URIReference references.  It has already been hreffed,
-	 * and the old one will not be hunreffed until the signal
-	 * emission has completed.
+	 * The signal has two parameters: the formerly referenced
+	 * SPObject and the newly refrenced SPObject.
 	 * @returns a signal
 	 */
-	inline SigC::Signal1<void, SPObject *> changedSignal();
+	SigC::Signal2<void, SPObject *, SPObject *> changedSignal();
 
 	/**
 	 * Returns a pointer to the SPObject the reference currently
 	 * refers to (if any).
 	 * @return a pointer to the referenced SPObject or NULL
 	 */
-	inline SPObject *getObject();
+	SPObject *getObject();
 
 private:
 	SigC::Connection _connection;
 	SPObject *_obj;
 
-	SigC::Signal1<void, SPObject *> _changed_signal;
+	SigC::Signal2<void, SPObject *, SPObject *> _changed_signal;
 
 	void _setObject(SPObject *object);
+	static void _release(SPObject *object, URIReference *reference);
 };
 
-SigC::Signal1<void, SPObject *> URIReference::changedSignal() {
+inline SigC::Signal2<void, SPObject *, SPObject *> URIReference::changedSignal(){
 	return _changed_signal;
 }
 
-SPObject *URIReference::getObject() {
+inline SPObject *URIReference::getObject() {
 	return _obj;
 }
 
