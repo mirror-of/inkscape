@@ -286,6 +286,13 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPDesktop
     }
 }
 
+static void sp_desktop_set_namedview (SPDesktop *desktop, SPNamedView* namedview)
+{
+    desktop->namedview = namedview;
+    g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), desktop);
+    desktop->number = sp_namedview_viewcount (namedview);
+}
+
 /* Constructor */
 
 static SPView *
@@ -301,9 +308,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     /* Connect document */
     sp_view_set_document (SP_VIEW (desktop), document);
 
-    desktop->namedview = namedview;
-    g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), desktop);
-    desktop->number = sp_namedview_viewcount (namedview);
+    sp_desktop_set_namedview (desktop, namedview);
 
     /* Setup Canvas */
     g_object_set_data (G_OBJECT (canvas), "SPDesktop", desktop);
@@ -383,7 +388,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 static void
 sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
 {
-    if (flags && SP_OBJECT_MODIFIED_FLAG) {
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
         /* Recalculate snap distances */
         sp_dt_update_snap_distances (desktop);
         /* Show/hide page border */
@@ -456,7 +461,7 @@ sp_desktop_set_document (SPView *view, SPDocument *doc)
     if (desktop->drawing) {
         NRArenaItem *ai;
 
-        desktop->namedview = sp_document_namedview (doc, NULL);
+        sp_desktop_set_namedview (desktop, sp_document_namedview (doc, NULL));
 
         ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), SP_CANVAS_ARENA (desktop->drawing)->arena,
                                   desktop->dkey, SP_ITEM_SHOW_DISPLAY);
