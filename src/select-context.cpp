@@ -451,7 +451,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
     SPSelTrans *seltrans = sc->_seltrans;
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    gdouble const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
+    gdouble const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2, 0, 1000); // in px
     gdouble const offset = prefs_get_double_attribute_limited("options.defaultscale", "value", 2, 0, 1000);
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
     int const snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);

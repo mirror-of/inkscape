@@ -1010,8 +1010,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("Arrow keys move by:"), 
-            _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in points)"), tt,
-            _("pt"),
+            _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in SVG pixels)"), tt,
+            _("px"),
             vb,
             0.0, 3000.0, 0.01, 1.0, 1.0,
             "options.nudgedistance", "value", 2.0,
@@ -1021,8 +1021,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("> and < scale by:"), 
-            _("Pressing > or < scales selection up or down by this increment (in points)"), tt,
-            _("pt"),
+            _("Pressing > or < scales selection up or down by this increment (in SVG pixels)"), tt,
+            _("px"),
             vb,
             0.0, 3000.0, 0.01, 1.0, 1.0,
             "options.defaultscale", "value", 2.0,
@@ -1032,8 +1032,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("Inset/Outset by:"), 
-            _("Inset and Outset commands displace the path by this distance (in points)"), tt,
-            _("pt"),
+            _("Inset and Outset commands displace the path by this distance (in SVG pixels)"), tt,
+            _("px"),
             vb,
             0.0, 3000.0, 0.01, 1.0, 1.0,
             "options.defaultoffsetwidth", "value", 2.0,
