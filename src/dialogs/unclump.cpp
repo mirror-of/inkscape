@@ -51,10 +51,29 @@ unclump_center (SPItem *item)
     return c; 
 }
 
+double
+unclump_radius (SPItem *item)
+{
+    double w;
+    double h;
+    std::map<const gchar *, NR::Point>::iterator i = wh_cache.find(SP_OBJECT_ID(item));
+    if ( i != wh_cache.end() ) {
+        w = i->second[NR::X];
+        h = i->second[NR::Y];
+    } else {
+        NRRect r;
+        sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
+        w = fabs (r.x1 - r.x0);
+        h = fabs (r.y1 - r.y0);
+        wh_cache[SP_OBJECT_ID(item)] = NR::Point(w, h);
+    }
+
+    return sqrt (w * h / M_PI); // the radius of the equal-area circle
+}
 
 /**
-Distance from item1 to the "edge" of item2. "Edge" is defined as that of an equal-area circle with
-the same center. May be negative if the center of item1 is between the center and the edge of
+Distance between "edges" of item1 and item2. "Edge" is defined as that of an equal-area circle with
+the same center. May be negative if the edge of item1 is between the center and the edge of
 item2.
 */
 double
@@ -63,23 +82,10 @@ unclump_dist (SPItem *item1, SPItem *item2)
     NR::Point c1 = unclump_center (item1);
     NR::Point c2 = unclump_center (item2);
 
-    double w;
-    double h;
-    std::map<const gchar *, NR::Point>::iterator i = wh_cache.find(SP_OBJECT_ID(item2));
-    if ( i != wh_cache.end() ) {
-        w = i->second[NR::X];
-        h = i->second[NR::Y];
-    } else {
-        NRRect r2;
-        sp_item_invoke_bbox(item2, &r2, sp_item_i2d_affine(item2), TRUE);
-        w = fabs (r2.x1 - r2.x0);
-        h = fabs (r2.y1 - r2.y0);
-        wh_cache[SP_OBJECT_ID(item2)] = NR::Point(w, h);
-    }
+    double r1 = unclump_radius (item1);
+    double r2 = unclump_radius (item2);
 
-    double r = sqrt (w * h / M_PI); // the radius of the equal-area circle
-
-    return (NR::L2 (c2 - c1) - r);
+    return (NR::L2 (c2 - c1) - r1 - r2);
 }
 
 /**
