@@ -40,6 +40,8 @@
 #include "../sp-item.h"
 #include "../sp-text.h"
 #include "../sp-root.h"
+#include "../sp-gradient.h"
+#include "../sp-defs.h"
 #include "in-dt-coordsys.h"
 
 #include "../xml/repr-private.h"
@@ -736,21 +738,18 @@ set_dt_select (SPRepr *repr)
     }
 
     blocked++;
-    if ( object && in_dt_coordsys(*object) ) {
-        if (!(SP_IS_TSPAN (object) || 
-             SP_IS_STRING (object) || 
-             SP_IS_ROOT (object))) 
-        {
+    if ( object && in_dt_coordsys(*object) &&
+         !(SP_IS_TSPAN (object) || 
+           SP_IS_STRING (object) || 
+           SP_IS_ROOT (object) 
+        )) 
+    {
             /* We cannot set selection to tspan, string, or root; failures and 
              * crashes will occur. */
             /* TODO: when a tspan is highlighted, set selection to its parent 
              * text
              */
             sp_selection_set_item (selection, SP_ITEM (object));
-        }
-    } else {
-        if (object) // this prevents crash with an empty text node
-            sp_selection_empty (selection);
     }
     blocked--;
     
