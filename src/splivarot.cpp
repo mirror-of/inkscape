@@ -42,7 +42,7 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
-Path   *Path_for_item (SPItem * item,bool doTransformation);
+Path   *Path_for_item (SPItem * item,bool doTransformation, bool transformFull = true);
 gchar  *liv_svg_dump_path (Path * path);
 SPRepr *LCA (SPRepr * a, SPRepr * b);
 bool   Ancetre (SPRepr * a, SPRepr * who);
@@ -197,7 +197,7 @@ sp_selected_path_boolop (bool_op bop)
                 origWind[curOrig]= fill_nonZero;
             }
 
-            originaux[curOrig] = Path_for_item ((SPItem *) l->data,true);
+            originaux[curOrig] = Path_for_item ((SPItem *) l->data, true, false);
             if (originaux[curOrig] == NULL || originaux[curOrig]->descr_nb <= 1)
             {
                 for (int i = curOrig; i >= 0; i--) delete originaux[i];
@@ -1398,7 +1398,7 @@ LCA (SPRepr * a, SPRepr * b)
 }
 
 Path *
-Path_for_item (SPItem * item, bool doTransformation)
+Path_for_item (SPItem * item, bool doTransformation, bool transformFull)
 {
     SPCurve *curve;
   
@@ -1425,7 +1425,10 @@ Path_for_item (SPItem * item, bool doTransformation)
         return NULL;
   
     if ( doTransformation ) {
-        bpath = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (item));
+        if (transformFull)
+            bpath = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (item));
+        else 
+            bpath = nr_artpath_affine (curve->bpath, NR::Matrix (item->transform));
         sp_curve_unref (curve);
         curve=NULL;
     } else {
