@@ -64,6 +64,7 @@
 #include "helper/sodipodi-ctrl.h"
 #include "helper/bezier-utils.h"
 
+#include "macros.h"
 #include "enums.h"
 #include "inkscape.h"
 #include "document.h"
@@ -649,7 +650,8 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 		case GDK_Up: 
 		case GDK_Down: 
 			// prevent the zoom field from activation
-			ret = TRUE;
+			if (!MOD__CTRL_ONLY)
+				ret = TRUE;
 			break;
 		default:
 			break;

@@ -18,6 +18,7 @@
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "macros.h"
 #include "helper/sp-canvas.h"
 #include "inkscape.h"
 #include "sp-ellipse.h"
@@ -171,7 +172,8 @@ sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		case GDK_Up: 
 		case GDK_Down: 
 			// prevent the zoom field from activation
-			ret = TRUE;
+			if (!MOD__CTRL_ONLY)
+				ret = TRUE;
 			break;
 		default:
 			break;

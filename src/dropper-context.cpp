@@ -16,6 +16,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 
+#include "macros.h"
 #include "helper/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "enums.h"
@@ -214,7 +215,8 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		case GDK_Up: 
 		case GDK_Down: 
 			// prevent the zoom field from activation
-			ret = TRUE;
+			if (!MOD__CTRL_ONLY)
+				ret = TRUE;
 			break;
 		default:
 			break;

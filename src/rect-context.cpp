@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "macros.h"
 #include "helper/sp-canvas.h"
 #include "sp-rect.h"
 #include "inkscape.h"
@@ -215,7 +216,8 @@ sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		case GDK_Up: 
 		case GDK_Down: 
 			// prevent the zoom field from activation
-			ret = TRUE;
+			if (!MOD__CTRL_ONLY)
+				ret = TRUE;
 			break;
 		default:
 			break;

@@ -19,6 +19,7 @@
 #include <gtk/gtkeditable.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "macros.h"
 #include "rubberband.h"
 #include "inkscape.h"
 #include "document.h"
@@ -193,7 +194,8 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		case GDK_Up: 
 		case GDK_Down: 
 			// prevent the zoom field from activation
-			ret = TRUE;
+			if (!MOD__CTRL_ONLY)
+				ret = TRUE;
 			break;
 		default:
 			break;
