@@ -383,13 +383,19 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 
     char *nlist=NULL;
     if ( (nlist=text->contents.GetX()) ) {
-        sp_repr_set_attr(repr,"x",nlist);
+        if (text->x.set)
+            sp_repr_set_attr (repr, "x", nlist); 
+        else 
+            sp_repr_set_attr (repr, "x", NULL);
         g_free(nlist);
     } else {
         if ( text->x.set ) sp_repr_set_double (repr, "x", text->x.computed); else sp_repr_set_attr (repr, "x", NULL);
     }
-    if ( (nlist=text->contents.GetY()) ) {
-        sp_repr_set_attr(repr,"y",nlist);
+    if ( text->y.set && (nlist=text->contents.GetY()) ) {
+        if (text->y.set)
+            sp_repr_set_attr (repr, "y", nlist);
+        else 
+            sp_repr_set_attr (repr, "y", NULL);
         g_free(nlist);
     } else {
         if ( text->y.set ) sp_repr_set_double (repr, "y", text->y.computed); else sp_repr_set_attr (repr, "y", NULL);
