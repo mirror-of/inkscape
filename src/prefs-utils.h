@@ -12,3 +12,6 @@
 void prefs_set_int_attribute (gchar *path, gchar *attr, gint value);
 gint prefs_get_int_attribute (gchar *path, gchar* attr, gint def);
 
+void prefs_set_double_attribute (gchar *path, gchar *attr, double value);
+double prefs_get_double_attribute (gchar *path, gchar* attr, double def);
+

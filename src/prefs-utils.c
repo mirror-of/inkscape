@@ -56,3 +56,24 @@ prefs_get_int_attribute (gchar *path, gchar *attr, gint def)
 		return def;
 }
 
+void
+prefs_set_double_attribute (gchar *path, gchar *attr, double value)
+{
+	SPRepr *repr;
+	repr = inkscape_get_repr (INKSCAPE, path);
+	if (repr) {
+		sp_repr_set_double_attribute (repr, attr, value);
+	}
+}
+
+double
+prefs_get_double_attribute (gchar *path, gchar *attr, double def)
+{
+	SPRepr *repr;
+	repr = inkscape_get_repr (INKSCAPE, path);
+	if (repr) {
+		return sp_repr_get_double_attribute (repr, attr, def);
+	} else 
+		return def;
+}
+
