@@ -1332,6 +1332,14 @@ sp_style_write_string (SPStyle *style, guint flags)
 
     p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &style->visibility, NULL, flags);
 
+    /* Get rid of trailing `;'. */
+    if (p != c) {
+        --p;
+        if (*p == ';') {
+            *p = '\0';
+        }
+    }
+
     return g_strdup (c);
 }
 
@@ -1421,6 +1429,14 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
     /* The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
      * flag is mainly only for attributes that don't handle explicit unset well.
      * We may need to revisit the behaviour of this routine. */
+
+    /* Get rid of trailing `;'. */
+    if (p != c) {
+        --p;
+        if (*p == ';') {
+            *p = '\0';
+        }
+    }
 
     return g_strdup (c);
 }
