@@ -175,8 +175,15 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 
 #define EQ(a,b) (fabs ((a) - (b)) < 1e-9)
 
-unsigned int
-sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform)
+unsigned
+sp_svg_transform_write(gchar str[], unsigned const size, NR::Matrix const &transform)
+{
+	NRMatrix const t(transform);
+	return sp_svg_transform_write(str, size, &t);
+}
+
+unsigned
+sp_svg_transform_write(gchar str[], unsigned const size, NRMatrix const *transform)
 {
 	double e;
 

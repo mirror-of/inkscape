@@ -1,3 +1,8 @@
+2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/svg/svg-affine.cpp (sp_svg_transform_write), src/svg/svg.h:
+	  Add NR::Matrix version.
+
 2004-08-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/bezier-utils.cpp: Misc. minor changes.
