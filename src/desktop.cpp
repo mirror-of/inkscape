@@ -517,7 +517,7 @@ sp_desktop_change_document (SPDesktop *desktop, SPDocument *document)
     g_return_if_fail (SP_IS_DOCUMENT (document));
 
     /* unselect everything before switching documents */
-    sp_selection_empty (SP_DT_SELECTION (desktop));
+    SP_DT_SELECTION (desktop)->clear();
 
     sp_view_set_document (SP_VIEW (desktop), document);
 }
