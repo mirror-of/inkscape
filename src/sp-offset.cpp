@@ -43,6 +43,25 @@
 
 #define noOFFSET_VERBOSE
 
+/*
+ * sp-offset is a derivative of SPShape, much like the sp-spiral or sp-rect
+ * the goal is to have a source shape (= originalPath), an offset (= radius) and
+ * cmpute the offset of the source by the radius. to get it to work, one needs to know
+ * what the source is and what the radius is, and how it's stored in the xml
+ * the object itself is a "path" element, to get lots of shape functionnality for free
+ * the source is the easy part: it's stored in a "inkscape:original" attribute in the 
+ * path. in case of "linked" offset, as they've been dubbed, there is an additional
+ * "inkscape:href" that contains the id of an element of the svg. when built, the object will
+ * attach a listener vector to that object and rebuild the "inkscape:original" whenever the href'd 
+ * object changes. this is of course grossly inefficient, and also does not react to changes 
+ * to the href'd during context stuff (like changing the shape of a star by dragging control points)
+ * unless the path of that object is change during the context (seems to be the case for
+ * sp-ellipse). the computation of the offset is done in sp_offset_set_shape(), a function that is 
+ * called whenever a change occurs to the offset (change of source or change of radius).
+ * just like the sp-star and other, this path derivative can make control points, or
+ * more precisely one control point, that's enough to define the radius. look in object-edit
+ */
+
 static void sp_offset_class_init (SPOffsetClass * klass);
 static void sp_offset_init (SPOffset * offset);
 
@@ -72,6 +91,7 @@ static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *r
 static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
 static void sp_offset_source_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
 
+// the regular listener vector
 SPReprEventVector offset_source_event_vector = {
   sp_offset_source_destroy,
   NULL,				/* Add child */
@@ -86,6 +106,14 @@ SPReprEventVector offset_source_event_vector = {
   NULL
 };
 
+// listener vector for sons of source object
+// it is intended to deal with text elements
+// indeed, text is mostly stored in tspans (or text itself), so we need to listen to these
+// the text object has listener attached that will track adding and removal of children,
+// and add this listener vector to them
+// theoritically, children should get the same listener vector as their parents, but that would require us to
+// track in the sp-offset what is the source and what is the childrens. having only one object with the
+// offset_source_event_vector makes that easy
 SPReprEventVector offset_source_child_event_vector = {
   sp_offset_source_destroy,
   NULL,				/* Add child */
@@ -100,8 +128,15 @@ SPReprEventVector offset_source_child_event_vector = {
   NULL
 };
 
+// slow= source path->polygon->offset of polygon->polygon->path
+// fast= source path->offset of source path->polygon->path
+// fast is not mathematically correct, because computing the offset of a single
+// cubic bezier patch is not trivial; in particular, there are problems with holes 
+// reappearing in offset when the radius becomes too large
 static bool   use_slow_but_correct_offset_method=false;
 
+
+// nothing special here, same for every class in sodipodi/inkscape
 static SPShapeClass *parent_class;
 
 GType
@@ -261,6 +296,7 @@ sp_offset_release (SPObject * object)
   
 }
 
+// the function that is called whenever a change is made to the description of the object
 static void
 sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 {
@@ -304,7 +340,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 	if (!sp_svg_length_read_computed_absolute (value, &offset->rad)) {
         if (fabs (offset->rad) < 0.01)
           offset->rad = (offset->rad < 0) ? -0.01 : 0.01;
-        offset->knotSet = false;
+        offset->knotSet = false; // knotset=false because it's not set from the context
       }
       sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
       break;
@@ -378,6 +414,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
   }
 }
 
+// the object has changed, recompute its shape
 static void
 sp_offset_update (SPObject * object, SPCtx * ctx, guint flags)
 {
@@ -412,7 +449,8 @@ sp_offset_description (SPItem * item)
   return g_strdup ("Offset by 0pt = original path");
 }
 
-// duplique de splivarot
+// duplicate of splivarot
+// loads a ArtBpath (like the one stored in a SPCurve) into a livarot Path 
 Path *
 bpath_to_liv_path (ArtBpath * bpath)
 {
@@ -478,6 +516,7 @@ bpath_to_liv_path (ArtBpath * bpath)
   return dest;
 }
 
+// write the livarot Path into a "d" element to be placed in the xml
 gchar *
 liv_svg_dump_path2 (Path * path)
 {
@@ -554,6 +593,8 @@ sp_offset_set_shape (SPShape * shape)
   
   if ( fabs(offset->rad) < 0.01 ) {
     // grosso modo: 0
+    // just put the source shape as the offseted one, no one will notice
+    // it's also useless to compute the offset with a 0 radius
     
     const char *res_d = sp_repr_attr(SP_OBJECT(shape)->repr,"inkscape:original");
     if ( res_d ) {
@@ -565,6 +606,7 @@ sp_offset_set_shape (SPShape * shape)
     return;
   }
   
+  // extra paraniac careful check. the preceding if () should take care of this case
   if (fabs (offset->rad) < 0.01)
     offset->rad = (offset->rad < 0) ? -0.01 : 0.01;
   
@@ -824,7 +866,13 @@ static int sp_offset_snappoints(SPItem *item, NR::Point p[], int size)
 
 
 // utilitaires pour les poignees
-
+// used to get the distance to the shape: distance to polygon give the fabs(radius), we still need
+// the sign. for edges, it's easy to determine which side the point is on, for points of the polygon
+// it's trickier: we need to identify which angle the point is in; to that effect, we take each 
+// successive clockwise angle (A,C) and check if the vector B given by the point is in the angle or
+// outside.
+// another method would be to use the Winding() function to test whether the point is inside or outside 
+// the polygon (it would be wiser to do so, in fact, but i like being stupid)
 bool
 vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
 /* FIXME: This can be done using linear operations, more stably and
@@ -869,7 +917,10 @@ vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
     return true;
   return false;
 }
-
+// distance to the original path; that funciton is called from object-edit to set the radius
+// when the control knot moves.
+// the sign of the result is the radius we're going to offset the shape with, so result > 0 ==outset
+// and result < 0 ==inset. thus result<0 means 'px inside source'
 double
 sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 {
@@ -880,6 +931,12 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
   Shape *theShape = new Shape;
   Shape *theRes = new Shape;
   
+  // awfully damn stupid method: uncross the source path EACH TIME you need to compute the distance
+  // the good way to do this would be to store the uncrossed source path somewhere, and delete it when the 
+  // context is finished.
+  // hopefully this part is much faster than actually computing the offset (which happen just after), so the
+  // time spent in this function should end up being negligible with respect to the delay of one context
+  // move
   ((Path *) offset->originalPath)->Convert (1.0);
   ((Path *) offset->originalPath)->Fill (theShape, 0);
   theRes->ConvertToShape (theShape, fill_oddEven);
@@ -894,6 +951,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     bool ptSet = false;
     double arDist = -1.0;
     bool arSet = false;
+    // first get the minimum distance to the points
     for (int i = 0; i < theRes->nbPt; i++)
     {
       if (theRes->pts[i].dI + theRes->pts[i].dO > 0)
@@ -903,7 +961,8 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 	      double ndist = sqrt (dot(nxpx,nxpx));
 	      if (ptSet == false || fabs (ndist) < fabs (ptDist))
         {
-          
+          // we have a new minimum distance
+          // now we need to wheck if px is inside or outside (for the sign)
           nx = px - theRes->pts[i].x;
           double nlen = sqrt (dot(nx , nx));
           nx /= nlen;
@@ -913,6 +972,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
           cb = theRes->pts[i].firstA;
           do
           {
+            // one angle
             NR::Point prx, nex;
             prx = theRes->aretes[pb].dx;
             nlen = sqrt (dot(prx, prx));
@@ -931,6 +991,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
             
             if (vectors_are_clockwise (nex, nx, prx))
             {
+              // we're in that angle. set the sign, and exit that loop
               if (theRes->aretes[cb].st == i)
               {
                 ptDist = -ndist;
@@ -950,6 +1011,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
         }
 	    }
     }
+    // loop over the edges to try to improve the distance
     for (int i = 0; i < theRes->nbAr; i++)
     {
       NR::Point sx = theRes->pts[theRes->aretes[i].st].x;
@@ -962,6 +1024,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 	      double ab = dot(nx,pxsx);
 	      if (ab > 0 && ab < len * len)
         {
+          // we're in the zone of influence of the segment
           double ndist = (cross(pxsx,nx)) / len;
           if (arSet == false || fabs (ndist) < fabs (arDist))
           {
@@ -990,6 +1053,9 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
   return dist;
 }
 
+// computes a point on the offset
+// used to set a "seed" position for the control knot
+// return the topmost point on the offset
 void
 sp_offset_top_point (SPOffset * offset, NR::Point *px)
 {
@@ -1035,6 +1101,7 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
   sp_curve_unref (curve);
 }
 
+// the listening functions
 static void
 sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
                                const gchar * /*oldval*/, const gchar * newval,

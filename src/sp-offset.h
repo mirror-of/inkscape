@@ -36,11 +36,11 @@ struct _SPOffset
    * the original curve is kept as a path in a sodipodi:original attribute
    * it's not possible to change the original curve
    */
-  void *originalPath;
-  char *original;
+  void *originalPath; // will be a livarot Path, just don't declare it here to please the gcc linker
+  char *original;     // SVG description of the source path
   float rad;			/* offset radius */
-  char *sourceObject;
-  SPRepr *sourceRepr;
+  char *sourceObject; // id of the source object for linked offsets
+  SPRepr *sourceRepr; // the repr associated with that id
   bool   sourceDirty;
 
   bool knotSet;

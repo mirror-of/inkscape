@@ -86,6 +86,8 @@ sp_selected_path_slice ()
   sp_selected_path_boolop (bool_op_slice);
 }
 
+// boolean operations
+// take the source paths from the file, do the operation, delete the originals and add the results
 void
 sp_selected_path_boolop (bool_op bop)
 {
@@ -118,11 +120,14 @@ sp_selected_path_boolop (bool_op bop)
     }
   }
   
-  
+  // reverseOrderForOp marks whether the order of the list is the top->down order 
+  // it's only used when there are 2 objects, and for operations who need to know the
+  // topmost object (differences, cuts)
   bool reverseOrderForOp = false;
   // mettre les elements de la liste dans l'ordre pour ces operations
   if (bop == bool_op_diff || bop == bool_op_symdiff|| bop == bool_op_cut || bop == bool_op_slice)
   {
+    // ugly check in the tree to find which element of the selection list is topmost (only 2 elements)
     SPRepr *a = SP_OBJECT_REPR (il->data);
     SPRepr *b = SP_OBJECT_REPR (il->next->data);
     if (a == NULL || b == NULL)
@@ -164,6 +169,8 @@ sp_selected_path_boolop (bool_op bop)
   
   il = g_slist_copy (il);
   
+  // first check if all the input objects have shapes
+  // otherwise bail out
   for (l = il; l != NULL; l = l->next)
   {
     item = (SPItem *) l->data;
@@ -175,7 +182,8 @@ sp_selected_path_boolop (bool_op bop)
     }
   }
   
-  // choper les originaux pour faire l'operation demandÂŽe
+  // extract the livarot Paths from the source objects
+  // also get the winding rule specified in the style
   int nbOriginaux = g_slist_length (il);
   Path *originaux[nbOriginaux];
   FillRule  origWind[nbOriginaux];
@@ -206,12 +214,15 @@ sp_selected_path_boolop (bool_op bop)
       curOrig++;
     }
   }
-  
+  // reverse if needed
+  // note that the selection list keeps its order
   if ( reverseOrderForOp ) {
     Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
     FillRule swai=origWind[0]; origWind[0]=origWind[1]; origWind[1]=swai;
   }
   
+  // and work
+  // some temporary instances, first
   Shape *theShapeA = new Shape;
   Shape *theShapeB = new Shape;
   Shape *theShape = new Shape;
@@ -221,6 +232,8 @@ sp_selected_path_boolop (bool_op bop)
   int                  nbToCut=0;
   
   if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
+    // true boolean op
+    // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
     originaux[0]->ConvertWithBackData (1.0);
      
     originaux[0]->Fill (theShape, 0);
@@ -251,7 +264,17 @@ sp_selected_path_boolop (bool_op bop)
       theShapeA = swap;
     }
   } else if ( bop == bool_op_cut ) {
-    // inversion pour l'opŽration
+    // cuts= sort of a bastard boolean operation, thus not the axact same modus operandi
+    // technically, the cut path is not necessarily a polygon (thus has no winding rule)
+    // it is just uncrossed, and cleaned from duplicate edges and points
+    // then it's fed to Booleen() which will uncross it against the other path
+    // then comes the trick: each edge of the cut path is duplicated (one in each direction),
+    // thus making a polygon. the weight of the edges of the cut are all 0, but 
+    // the Booleen need to invert the ones inside the source polygon (for the subsequent 
+    // ConvertToForme)
+    
+    // the cut path needs to have the highest pathID in the back data
+    // that's how the Booleen() function knows it's an edge of the cut
   {
     Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
     int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
@@ -264,14 +287,20 @@ sp_selected_path_boolop (bool_op bop)
 
     originaux[1]->ConvertWithBackData (1.0);
     
-    originaux[1]->Fill (theShape, 1,false,false,false); // c'est la coupe-> doit avoir le + gd pathID
+    originaux[1]->Fill (theShape, 1,false,false,false); //do not closeIfNeeded
     
-    theShapeB->ConvertToShape (theShape, fill_justDont);
+    theShapeB->ConvertToShape (theShape, fill_justDont); // fill_justDont doesn't computes winding numbers
     
     // les elements arrivent en ordre inverse dans la liste
     theShape->Booleen (theShapeB, theShapeA, bool_op_cut,1);
     
   } else if ( bop == bool_op_slice ) {
+    // slice is not really a boolean operation
+    // you just put the 2 shapes in a single polygon, uncross it
+    // the points where the degree is > 2 are intersections
+    // just check it's an intersection on the path you want to cut, and keep it
+    // the intersections you have found are then fed to ConvertPositionsToMoveTo() which will
+    // make new subpath at each one of these positions
     // inversion pour l'opŽration
   {
     Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
@@ -279,18 +308,22 @@ sp_selected_path_boolop (bool_op bop)
   }
     originaux[0]->ConvertWithBackData (1.0);
     
-    originaux[0]->Fill (theShapeA, 0,false,false,false); 
+    originaux[0]->Fill (theShapeA, 0,false,false,false); // don't closeIfNeeded
         
     originaux[1]->ConvertWithBackData (1.0);
     
-    originaux[1]->Fill (theShapeA, 1,true,false,false);// c'est la coupe-> doit avoir le + gd pathID
+    originaux[1]->Fill (theShapeA, 1,true,false,false);// don't closeIfNeeded and just dump in the shape, don't reset it
     
     theShape->ConvertToShape (theShapeA, fill_justDont);
   
     if ( theShape->HasBackData() ) {
+      // should always be the case, but ya never know
       {
         for (int i=0;i<theShape->nbPt;i++) {
-          if ( theShape->pts[i].dI+theShape->pts[i].dO > 2 ) {
+          if ( theShape->pts[i].dI+theShape->pts[i].dO > 2 ) { 
+            // possibly an intersection
+            // we need to check that at least one edge from the source path is incident to it
+            // before we declare it's an intersection
             int   cb=theShape->pts[i].firstA;
             int   nbOrig=0;
             int   nbOther=0;
@@ -298,6 +331,7 @@ sp_selected_path_boolop (bool_op bop)
             float t=0.0;
             while ( cb >= 0 && cb < theShape->nbAr ) {
               if ( theShape->ebData[cb].pathID == 0 ) {
+                // the source has an edge incident to the point, get its position on the path
                 piece=theShape->ebData[cb].pieceID;
                 if ( theShape->aretes[cb].st == i ) {
                   t=theShape->ebData[cb].tSt;
@@ -306,10 +340,13 @@ sp_selected_path_boolop (bool_op bop)
                 }
                 nbOrig++;
               }
-              if ( theShape->ebData[cb].pathID == 1 ) nbOther++;
+              if ( theShape->ebData[cb].pathID == 1 ) nbOther++; // the cut is incident to this point
               cb=theShape->NextAt(i,cb);
             }
             if ( nbOrig > 0 && nbOther > 0 ) {
+              // point incident to both path and cut: an intersection
+              // note that you only keep one position on the source; you could have degenerate
+              // cases where the source crosses itself at this point, and you wouyld miss an intersection
               toCut=(Path::cut_position*)realloc(toCut,(nbToCut+1)*sizeof(Path::cut_position));
               toCut[nbToCut].piece=piece;
               toCut[nbToCut].t=t;
@@ -319,6 +356,7 @@ sp_selected_path_boolop (bool_op bop)
         }
       }
       {
+        // i think it's useless now
         int i=theShape->nbAr-1;
         for (;i>=0;i--) {
           if ( theShape->ebData[i].pathID == 1 ) {
@@ -338,10 +376,14 @@ sp_selected_path_boolop (bool_op bop)
 //    theShape->ConvertToForme (res, nbOriginaux, originaux,true);
 //    res->ConvertForcedToMoveTo();
     res->Copy(originaux[0]);
-    res->ConvertPositionsToMoveTo(nbToCut,toCut);
+    res->ConvertPositionsToMoveTo(nbToCut,toCut); // cut where you found intersections
     free(toCut);
   } else if ( bop == bool_op_cut ) {
     // il faut appeler pour desallouer PointData (pas vital, mais bon)
+    // the Booleen() function did not deallocated the point_data array in theShape, because this 
+    // function needs it.
+    // this function uses the point_data to get the winding number of each path (ie: is a hole or not)
+    // for later reconstruction in objects, you also need to extract which path is parent of holes (nesting info)
     theShape->ConvertToFormeNested (res,nbOriginaux, originaux, 1,nbNest,nesting,conts);
   } else {
     theShape->ConvertToForme (res, nbOriginaux, originaux);
@@ -354,8 +396,7 @@ sp_selected_path_boolop (bool_op bop)
   
   if (res->descr_nb <= 1)
   {
-    // pas vraiment de points sur le resultat               
-    // donc il ne reste rien
+    // only one command, presumably a moveto: it isn't a path
     for (l = il; l != NULL; l = l->next)
     {
       sp_repr_unparent (SP_OBJECT_REPR (l->data));
@@ -368,6 +409,7 @@ sp_selected_path_boolop (bool_op bop)
     return;
   }
   
+  // now that we have the result, add it on the canvas
   if ( bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice ) {
     if (reverseOrderForOp)
     {
@@ -395,11 +437,19 @@ sp_selected_path_boolop (bool_op bop)
     int    nbRP=0;
     Path** resPath;
     if ( bop == bool_op_slice ) {
+      // there are moveto's at each intersection, but it's still one unique path
+      // so break it down and add each subpath independently
+      // we could call break_apart to do this, but while we have the description...
       resPath=res->SubPaths(nbRP,false);
     } else {
+      // cut operation is a bit wicked: you need to keep holes
+      // that's why you needed the nesting
+      // ConvertToFormeNested() dumped all the subpath in a single Path "res", so we need
+      // to get the path for each part of the polygon. that's why you need the nesting info:
+      // to know in wich subpath to add a subpath
       resPath=res->SubPathsWithNesting(nbRP,true,nbNest,nesting,conts);
       
-      // pas oublier
+      // cleaning
       if ( conts ) free(conts);
       if ( nesting ) free(nesting);
     }
