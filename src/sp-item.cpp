@@ -1001,15 +1001,8 @@ sp_item_get_arenaitem(SPItem *item, unsigned key)
 int
 sp_item_repr_compare_position(SPItem *first, SPItem *second)
 {
-    SPRepr *parent = sp_repr_parent(SP_OBJECT_REPR(first));
-    g_assert(parent == sp_repr_parent(SP_OBJECT_REPR(second)));
-
-    int const p1 = sp_repr_position(SP_OBJECT_REPR(first));
-    int const p2 = sp_repr_position(SP_OBJECT_REPR(second));
-
-    if (p1 > p2) return 1;
-    if (p1 < p2) return -1;
-    return 0;
+    return sp_repr_compare_position(SP_OBJECT_REPR(first),
+                                    SP_OBJECT_REPR(second));
 }
 
 

@@ -1,5 +1,8 @@
 2004-06-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item.cpp (sp_item_repr_compare_position):
+	  Implement as shallow wrapper around sp_repr_compare_position.
+
 	* src/helper/units.h, src/helper/units.cpp:
 	  SPUnitId: new enum, to allow replacing string lookups.
 	  Get rid of handling for unused SP_UNIT_USERSPACE.
