@@ -279,6 +279,7 @@ sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, flo
 			if (e[1] && g_ascii_isalnum (e[1])) return 0;
 			if (unit) *unit = SP_SVG_UNIT_PERCENT;
 			if (val) *val = v * 0.01;
+			if (computed) *computed = v * 0.01;
 			if (next) *next = (char *) e + 1; 
 			return 1;
 		} else {
