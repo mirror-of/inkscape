@@ -20,8 +20,11 @@ check_compile () {
 }
 
 if [ $# = 0 ]; then
-	for i in `find "$srcdir" -name bonobo -prune \
+	for i in `find "$srcdir"	\
+		   -name bonobo -prune	\
 		-o -name ecma -prune	\
+		-o -name render -prune	\
+		-o -name xpath -prune	\
 		-o -path '*/extension/script/js' -prune	\
 		-o -name '*.h' \
 		   \! -name gnome.h \! -name win32.h \! -name nr-type-gnome.h \! -name nr-type-w32.h \! -name Livarot.h \! -name radial.h \
