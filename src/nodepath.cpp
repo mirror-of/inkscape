@@ -1321,7 +1321,7 @@ sp_node_selected_delete (void)
 		//The nodepath does not need to be deleted here
 		//It is done later when the context is changed
 		//sp_nodepath_destroy (nodepath);
-		sp_selection_delete (NULL, NULL);
+		//sp_selection_delete (NULL, NULL);
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
@@ -1411,7 +1411,7 @@ sp_node_selected_delete_segment (void)
 		//The nodepath does not need to be deleted here
 		//It is done later when the context is changed
 		//sp_nodepath_destroy (nodepath);
-		sp_selection_delete (NULL, NULL);
+		//sp_selection_delete (NULL, NULL);
 	}
 
 	sp_nodepath_update_statusbar (nodepath);
