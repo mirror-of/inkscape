@@ -11,7 +11,9 @@
 #ifndef EXTENSION_INTERNAL_EPS_OUT_H
 #define EXTENSION_INTERNAL_EPS_OUT_H
 
-#include <gtk/gtk.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtkwidget.h>
+
 #include <extension/implementation/implementation.h>
 
 namespace Inkscape {
@@ -19,20 +21,24 @@ namespace Extension {
 namespace Internal {
 
 class EpsOutput : Inkscape::Extension::Implementation::Implementation {
-	GtkDialog * dialog;
-	static void pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod);
+    GtkDialog *dialog;
+    static void pageBoxToggle(GtkWidget *widget, Inkscape::Extension::Output *omod);
     static void textToPathToggle(GtkWidget *widget, Inkscape::Extension::Output *omod);
 
 public:
-	EpsOutput();
-	virtual ~EpsOutput();
-	bool check (Inkscape::Extension::Extension * module);
-    GtkDialog *   prefs (Inkscape::Extension::Output * module);
-	void          save  (Inkscape::Extension::Output *mod,
-	                     SPDocument *doc,
-	                     const gchar *uri);
-	static void   init  (void);
+    EpsOutput();
 
+    virtual ~EpsOutput();
+
+    bool check(Inkscape::Extension::Extension *module);
+
+    GtkDialog *prefs(Inkscape::Extension::Output *module);
+
+    void save(Inkscape::Extension::Output *mod,
+              SPDocument *doc,
+              gchar const *uri);
+
+    static void init(void);
 };
 
 };};}; /* namespace Inkscape, Extension, Implementation */
@@ -43,10 +49,9 @@ public:
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++;expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
-
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
