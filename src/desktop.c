@@ -963,9 +963,10 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
 			gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_YES);
 
-			//position it right under the cursor
-			gdk_window_get_pointer (NULL, &x, &y, NULL);
-			gtk_window_move((GtkWindow *) dlg, MAX(x-300, 0), MAX(y-100, 0));
+			//position its bottom right curner under the cursor
+			gdk_window_get_pointer (NULL, &x, &y, NULL); // NULL means relative to the root window
+			gtk_window_get_size ((GtkWindow *) dlg, &x1, &y1);
+			gtk_window_move((GtkWindow *) dlg, MAX(x-x1, 0), MAX(y-y1, 0));
 
 			b = gtk_dialog_run (GTK_DIALOG(dlg));
 			gtk_widget_destroy(dlg);
@@ -977,7 +978,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 				break;
 			case GTK_RESPONSE_NO:
 				break;
-			case GTK_RESPONSE_CANCEL:
+			default: // cancel pressed, or dialog was closed
 				return TRUE;
 				break;
 			}
