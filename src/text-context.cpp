@@ -357,11 +357,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 
 			/* Cursor */
 			sp_canvas_item_show (tc->cursor);
-			// the cursor right after click has height == 0.8 * 12px (corresponds to the default 12 px font in preferences-skeleton)
-			// It needs to be set articifically, for the text object does not exist yet.
-			// Properly, we need to look up the current default font size in tools.text, but this may be more trouble than it's worth
-			// (parsing, units conversion, etc...)
-			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp, dtp + NR::Point(0, 9.6)); 
+			// Cursor height is defined by the new text object's font size; it needs to be set
+			// articifically here, for the text object does not exist yet:
+			double cursor_height = 0.8 * sp_desktop_get_font_size_tool (ec->desktop);
+			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp, dtp + NR::Point(0, cursor_height)); 
 
 			/* Processed */
 			return TRUE;
