@@ -409,13 +409,13 @@ sp_selected_path_boolop (bool_op bop)
       sp_repr_set_attr (repr, "d", d);
       g_free (d);
       item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-      sp_document_done (SP_DT_DOCUMENT (desktop));
       sp_repr_unref (repr);
       
       sp_selection_add_item (selection, item);
       
       delete resPath[i];
     }
+    sp_document_done (SP_DT_DOCUMENT (desktop));
     if ( resPath ) free(resPath);
     g_free (style);
   } else {
