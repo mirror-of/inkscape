@@ -114,7 +114,7 @@ build_module_from_dir (const gchar * dirname)
 		}
 
 		filename = g_strdup_printf("%s/%s", INKSCAPE_MODULESDIR, dentry->d_name);
-		build_from_file (filename, NULL);
+		build_from_file(filename);
 		g_free(filename);
 	}
 

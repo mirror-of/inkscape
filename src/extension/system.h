@@ -22,21 +22,13 @@
 namespace Inkscape {
 namespace Extension {
 
-SPDocument *  open                (Extension * key,
-                                   const gchar *  filename);
-void          save                (Extension * key,
-                                   SPDocument *   doc,
-                                   const gchar *  filename,
-                                   bool setextension,
-                                   bool check_overwrite,
-                                   bool official);
-void          filter              (GtkObject * object,
-                                   const gchar *  key);
-Print *       get_print           (const gchar * key);
-Extension *   build_from_file     (const gchar  * filename,
-                                   Implementation::Implementation * in_imp);
-Extension *   build_from_mem      (const gchar *  buffer,
-                                   Implementation::Implementation * in_imp);
+SPDocument *open(Extension *key, gchar const *filename);
+void save(Extension *key, SPDocument *doc, gchar const *filename,
+          bool setextension, bool check_overwrite, bool official);
+void filter(GtkObject *object, gchar const *key);
+Print *get_print(gchar const *key);
+Extension *build_from_file(gchar const *filename);
+Extension *build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp);
 
 }; }; /* namespace Inkscape::Extension */
 
@@ -46,9 +38,9 @@ Extension *   build_from_mem      (const gchar *  buffer,
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
