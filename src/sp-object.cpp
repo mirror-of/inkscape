@@ -1020,6 +1020,8 @@ SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 void
 SPObject::requestModified(unsigned int flags)
 {
+	g_return_if_fail( this->document != NULL );
+
 	/* PARENT_MODIFIED is computed later on and is not intended to be
 	 * "manually" queued */
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
