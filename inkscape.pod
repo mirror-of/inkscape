@@ -34,7 +34,7 @@ shapes, paths, text, alpha blending, transforms, gradients, node
 editing, svg-to-png export, grouping, and more.  .  The interface is
 designed to be comfortable and efficient for skilled users, while
 remaining conformant to B<GNOME> standards so that users familiar with
-other GNOME applications can learn it's interface rapidly.
+other GNOME applications can learn its interface rapidly.
 
 B<SVG> is a W3C standard XML format for 2D vector drawing, that allows
 defining objects in the drawing using points, paths, and primitive
@@ -268,11 +268,17 @@ Open can handle only svg graphics
 
 =head1 BUGS
 
+Many bugs are known; please refer to the website for reviewing the
+reported ones and to report newly found issues.  For bugs that cannot be
+easily fixed, here are the workarounds:
+
 When importing svg generated with ill2svg, all paths are usually grouped.
 Ungroup these manually.
 
-Many bugs are known; please refer to the website for reviewing the
-reported ones and to report newly found issues.
+If you use gradients and stretch the icon of the saved file in Nautilus,
+you'll notice that the gradients don't render right.  This is a
+well-known problem in Nautilus/rsvg and can be worked around by
+specifying the gradient as 'userspaceinuse' in the gradient editor.
 
 =head1 AUTHORS
 
