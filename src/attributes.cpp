@@ -261,7 +261,7 @@ sp_attribute_lookup (const gchar *key)
 		unsigned int i;
 		propdict = g_hash_table_new (g_str_hash, g_str_equal);
 		for (i = 1; i < n_attrs; i++) {
-			g_assert (props[i].code == INK_STATIC_CAST(gint, i) );
+			g_assert (props[i].code == static_cast< gint >(i) );
 			g_hash_table_insert (propdict, props[i].name, GINT_TO_POINTER (props[i].code));
 		}
 	}

@@ -54,8 +54,8 @@ sp_help_about (void)
 		w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_title (GTK_WINDOW (w), _("About Inkscape"));
 
-		width = INK_STATIC_CAST( gint, CLAMP( sp_document_width(doc), WINDOW_MIN, WINDOW_MAX ) );
-		height = INK_STATIC_CAST( gint, CLAMP( sp_document_height(doc), WINDOW_MIN, WINDOW_MAX ) );
+		width  = static_cast< gint > (CLAMP( sp_document_width(doc), WINDOW_MIN, WINDOW_MAX ));
+		height = static_cast< gint > (CLAMP( sp_document_height(doc), WINDOW_MIN, WINDOW_MAX ));
 		gtk_window_set_default_size (GTK_WINDOW (w), width, height );
 		gtk_window_set_position(GTK_WINDOW(w), GTK_WIN_POS_CENTER);
 

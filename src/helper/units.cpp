@@ -93,7 +93,7 @@ sp_unit_get_by_name (const gchar *name)
 
 	g_return_val_if_fail (name != NULL, NULL);
 
-	for (i = 0; i < INK_STATIC_CAST(gint, sp_num_units); i++) {
+	for (i = 0 ; i < static_cast< gint > sp_num_units ; i++) {
 		if (!g_strcasecmp (name, sp_units[i].name)) return &sp_units[i];
 		if (!g_strcasecmp (name, sp_units[i].plural)) return &sp_units[i];
 	}
@@ -108,7 +108,7 @@ sp_unit_get_by_abbreviation (const gchar *abbreviation)
 
 	g_return_val_if_fail (abbreviation != NULL, NULL);
 
-	for (i = 0; i < INK_STATIC_CAST(gint, sp_num_units); i++) {
+	for (i = 0 ; i < static_cast< gint > sp_num_units ; i++) {
 		if (!g_strcasecmp (abbreviation, sp_units[i].abbr)) return &sp_units[i];
 		if (!g_strcasecmp (abbreviation, sp_units[i].abbr_plural)) return &sp_units[i];
 	}
@@ -126,7 +126,7 @@ sp_unit_get_list (guint bases)
 
 	units = NULL;
 
-	for (i = 0; i < INK_STATIC_CAST(gint, sp_num_units); i++) {
+	for (i = 0; i < static_cast< gint > sp_num_units ; i++) {
 		if (bases & sp_units[i].base) {
 			units = g_slist_prepend (units, (gpointer) &sp_units[i]);
 		}

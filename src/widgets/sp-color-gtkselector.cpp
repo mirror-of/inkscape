@@ -48,7 +48,7 @@ sp_color_gtkselector_get_type (void)
 		type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,
 									   "SPColorGtkselector",
 									   &info,
-									   INK_STATIC_CAST( GTypeFlags, 0));
+									   static_cast< GTypeFlags > (0) );
 	}
 	return type;
 }
@@ -149,9 +149,9 @@ void ColorGtkselector::_colorChanged( const SPColor& color, gfloat alpha )
 
     sp_color_get_rgb_floatv( &color, rgb );
     gcolor.pixel = 0;
-    gcolor.red = INK_STATIC_CAST (guint16, rgb[0] * 65535);
-    gcolor.green = INK_STATIC_CAST (guint16, rgb[1] * 65535);
-    gcolor.blue = INK_STATIC_CAST (guint16, rgb[2] * 65535);
+    gcolor.red   = static_cast< guint16 > (rgb[0] * 65535);
+    gcolor.green = static_cast< guint16 > (rgb[1] * 65535);
+    gcolor.blue  = static_cast< guint16 > (rgb[2] * 65535);
 
 //     g_message( "*****  _colorChanged %04x %04x %04x", gcolor.red, gcolor.green, gcolor.blue );
     g_signal_handler_block( _gtkThing, _sigId );
@@ -174,5 +174,5 @@ void ColorGtkselector::_gtkChanged( GtkColorSelection *colorselection, SPColorGt
 
 //     g_message( "*****  _gtkChanged   %04x %04x %04x", color.red, color.green, color.blue );
 
-    gtkInst->_updateInternals( ourColor, INK_STATIC_CAST(gfloat, alpha / 65535.0), FALSE );
+    gtkInst->_updateInternals( ourColor, static_cast< gfloat > (alpha) / 65535.0, FALSE );
 }

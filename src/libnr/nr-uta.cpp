@@ -45,10 +45,10 @@ nr_uta_mark_area (NRUTA *uta, int x0, int y0, int x1, int y1)
 			cy0 = MAX (cy0, 0);
 			cx1 = MIN (cx1, NR_UTILE_SIZE);
 			cy1 = MIN (cy1, NR_UTILE_SIZE);
-			cx0 = MIN (cx0, INK_STATIC_CAST(int, NR_UTILE_X0(u)));
-			cy0 = MIN (cy0, INK_STATIC_CAST(int, NR_UTILE_Y0(u)));
-			cx1 = MAX (cx1, INK_STATIC_CAST(int, NR_UTILE_X1(u)));
-			cy1 = MAX (cy1, INK_STATIC_CAST(int, NR_UTILE_Y1(u)));
+			cx0 = MIN (cx0, static_cast< int > NR_UTILE_X0(u));
+			cy0 = MIN (cy0, static_cast< int > NR_UTILE_Y0(u));
+			cx1 = MAX (cx1, static_cast< int > NR_UTILE_X1(u));
+			cy1 = MAX (cy1, static_cast< int > NR_UTILE_Y1(u));
 			NR_UTILE_SET (u, cx0, cy0, cx1, cy1);
 		}
 	}

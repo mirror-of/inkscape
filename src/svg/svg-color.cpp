@@ -324,7 +324,7 @@ sp_svg_create_color_hash (void)
 
 	colors = g_hash_table_new (g_str_hash, g_str_equal);
 
-	for (i = 0; i < INK_STATIC_CAST(int, SP_SVG_NUMCOLORS); i++)
+	for (i = 0 ; i < static_cast< int > SP_SVG_NUMCOLORS ; i++)
 	{
 		name = sp_svg_color_named[i].name;
 		val = &(sp_svg_color_named[i].rgb);

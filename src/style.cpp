@@ -1756,7 +1756,7 @@ sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *d
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && (val->computed != base->computed))) {
 		unsigned int i;
 		for (i = 0; dict[i].key; i++) {
-			if (dict[i].value == INK_STATIC_CAST(gint, val->value)) {
+			if (dict[i].value == static_cast< gint > (val->value) ) {
 				return g_snprintf (p, len, "%s:%s;", key, dict[i].key);
 			}
 		}
@@ -1901,7 +1901,7 @@ sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val
 		} else if (val->type == SP_FONT_SIZE_LITERAL) {
 			unsigned int i;
 			for (i = 0; enum_font_size[i].key; i++) {
-				if (enum_font_size[i].value == INK_STATIC_CAST(gint, val->value)) {
+				if (enum_font_size[i].value == static_cast< gint > (val->value) ) {
 					return g_snprintf (p, len, "%s:%s;", key, enum_font_size[i].key);
 				}
 			}

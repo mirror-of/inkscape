@@ -20,8 +20,6 @@ dist:
 	copy $(GTKDOS)\bin\libatkmm-1.0-1.dll inkscape
 	copy $(GTKDOS)\bin\libpangomm-1.0-1.dll inkscape
 	copy $(GTKDOS)\bin\freetype-6.dll inkscape
-	copy $(GTKDOS)\bin\iconv.dll inkscape
-	copy $(GTKDOS)\bin\intl.dll inkscape
 	copy $(GTKDOS)\bin\libart_lgpl_2-2.dll inkscape
 	copy $(GTKDOS)\bin\libatk-1.0-0.dll inkscape
 	copy $(GTKDOS)\bin\libgdk-win32-2.0-0.dll inkscape
@@ -37,6 +35,10 @@ dist:
 	copy $(GTKDOS)\bin\msvcr70.dll inkscape
 	copy $(GTKDOS)\bin\zlib-1.dll inkscape
 	copy $(GTKDOS)\bin\zlib.dll inkscape
+	strip -g inkscape/*.dll
+#These two don't like 'strip'
+	copy $(GTKDOS)\bin\iconv.dll inkscape
+	copy $(GTKDOS)\bin\intl.dll inkscape
 	xcopy /e /i $(GTKDOS)\etc inkscape\etc
 	mkdir inkscape\lib
 	xcopy /e /i $(GTKDOS)\lib\gtk-2.0 inkscape\lib\gtk-2.0

@@ -266,7 +266,7 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 	}
 	gtk_clist_clear (GTK_CLIST (fsel->style));
 
-	if ( INK_STATIC_CAST(unsigned int, fsel->familyidx) < fsel->families.length) {
+	if ( static_cast< unsigned int > (fsel->familyidx) < fsel->families.length ) {
 		const gchar *family;
 		family = fsel->families.names[fsel->familyidx];
 		if (nr_type_directory_style_list_get (family, &fsel->styles)) {
@@ -280,7 +280,7 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 				if (!*p) p = "Normal";
 
 				gtk_clist_append (GTK_CLIST (fsel->style), (gchar **) &p);
-				gtk_clist_set_row_data (GTK_CLIST (fsel->style), INK_STATIC_CAST(gint, i), GUINT_TO_POINTER (i));
+				gtk_clist_set_row_data (GTK_CLIST (fsel->style), static_cast< gint > (i), GUINT_TO_POINTER (i));
 			}
 			gtk_clist_thaw (GTK_CLIST (fsel->style));
 			gtk_clist_select_row (GTK_CLIST (fsel->style), 0, 0);
@@ -315,7 +315,7 @@ sp_font_selector_emit_set (SPFontSelector *fsel)
 	NRTypeFace *tf;
 	NRFont *font;
 
-	if (INK_STATIC_CAST(unsigned int, fsel->styleidx) < fsel->styles.length) {
+	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length) {
 		tf = nr_type_directory_lookup (fsel->styles.names[fsel->styleidx]);
 		font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_DEFAULT, fsel->fontsize);
 		nr_typeface_unref (tf);

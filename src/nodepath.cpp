@@ -733,7 +733,7 @@ sp_nodepath_set_line_type (SPPathNode * end, ArtPathcode code)
 	g_assert (end->subpath);
 	g_assert (end->p.other);
 
-	if (end->code == INK_STATIC_CAST(guint, code) )
+	if (end->code == static_cast< guint > ( code ) )
 		return;
 
 	start = end->p.other;
@@ -768,7 +768,7 @@ sp_nodepath_set_node_type (SPPathNode * node, SPPathNodeType type)
 	g_assert (node);
 	g_assert (node->subpath);
 
-	if (type == INK_STATIC_CAST(SPPathNodeType, INK_STATIC_CAST(guint, node->type) ) )
+	if (type == static_cast< SPPathNodeType> (static_cast< guint > (node->type) ) )
 		return node;
 
 	if ((node->p.other != NULL) && (node->n.other != NULL)) {

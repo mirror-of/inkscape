@@ -2116,7 +2116,7 @@ sp_text_up (SPText *text, gint pos)
 	up = text->children;
 	while (up->next != child) up = up->next;
 	string = SP_TEXT_CHILD_STRING (up);
-	col = MIN (col, INK_STATIC_CAST(gint, string->length));
+	col = MIN (col, static_cast< gint > (string->length) );
 
 	return string->start + col;
 }
@@ -2135,7 +2135,7 @@ sp_text_down (SPText *text, gint pos)
 
 	child = child->next;
 	string = SP_TEXT_CHILD_STRING (child);
-	col = MIN (col, INK_STATIC_CAST(gint, string->length));
+	col = MIN (col, static_cast< gint > (string->length) );
 
 	return string->start + col;
 }
@@ -2209,7 +2209,7 @@ sp_text_get_child_by_position (SPText *text, gint pos)
 		} else {
 			string = SP_TSPAN_STRING (child);
 		}
-		if (pos <= INK_STATIC_CAST(gint, (string->start + string->length)))
+		if (pos <= static_cast< gint > (string->start + string->length))
 		{
 			return child;
 		}

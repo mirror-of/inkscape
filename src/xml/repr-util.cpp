@@ -497,7 +497,7 @@ sp_repr_lookup_child (SPRepr       *repr,
 	
 	for (child = repr->children; child != NULL; child = child->next) {
 		for (attr = child->attributes; attr != NULL; attr = attr->next) {
-			if ( (INK_STATIC_CAST(unsigned int, attr->key) == quark) && !strcmp (attr->value, value))
+			if ( (static_cast< unsigned int > (attr->key) == quark) && !strcmp (attr->value, value))
 				return child;
 		}
 	}

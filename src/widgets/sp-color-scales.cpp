@@ -69,7 +69,7 @@ sp_color_scales_get_type (void)
 		type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,
 									   "SPColorScales",
 									   &info,
-									   INK_STATIC_CAST( GTypeFlags, 0));
+									   static_cast< GTypeFlags > (0) );
 	}
 	return type;
 }
@@ -148,7 +148,7 @@ void ColorScales::init()
 	gtk_box_pack_start (GTK_BOX (_csel), t, TRUE, TRUE, 0);
 
 	/* Create components */
-	for (i = 0; i < INK_STATIC_CAST(gint, G_N_ELEMENTS(_a)); i++) {
+	for (i = 0; i < static_cast< gint > (G_N_ELEMENTS(_a)) ; i++) {
 		/* Label */
 		_l[i] = gtk_label_new ("");
 		gtk_misc_set_alignment (GTK_MISC (_l[i]), 1.0, 0.5);

@@ -285,8 +285,8 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 
 	x0 = MAX (area->x, widget->allocation.x + padx);
 	y0 = MAX (area->y, widget->allocation.y + pady);
-	x1 = MIN (area->x + area->width, widget->allocation.x + padx + INK_STATIC_CAST(int, icon->size));
-	y1 = MIN (area->y + area->height, widget->allocation.y + pady + INK_STATIC_CAST(int, icon->size));
+	x1 = MIN (area->x + area->width,  widget->allocation.x + padx + static_cast< int > (icon->size) );
+	y1 = MIN (area->y + area->height, widget->allocation.y + pady + static_cast< int > (icon->size) );
 
 	for (y = y0; y < y1; y += 64) {
 		for (x = x0; x < x1; x += 64) {
@@ -366,8 +366,8 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 		unsigned int y;
 		if (!gdk_pixbuf_get_has_alpha (pb))
 			gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
-		if ((INK_STATIC_CAST(unsigned int, gdk_pixbuf_get_width(pb)) != size)
-			||(INK_STATIC_CAST(unsigned int, gdk_pixbuf_get_height(pb)) != size)) {
+		if (  (static_cast< unsigned int > (gdk_pixbuf_get_width(pb))  != size)
+			||(static_cast< unsigned int > (gdk_pixbuf_get_height(pb)) != size)) {
 			GdkPixbuf *spb;
 			spb = gdk_pixbuf_scale_simple (pb, size, size, GDK_INTERP_HYPER);
 			g_object_unref (G_OBJECT (pb));

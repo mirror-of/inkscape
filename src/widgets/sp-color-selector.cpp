@@ -54,7 +54,7 @@ sp_color_selector_get_type (void)
 		type = g_type_register_static (GTK_TYPE_VBOX,
 									   "SPColorSelector",
 									   &info,
-									   INK_STATIC_CAST(GTypeFlags, 0));
+									   static_cast< GTypeFlags > (0) );
 	}
 	return type;
 }

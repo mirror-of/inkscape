@@ -5,9 +5,8 @@
 #define WIN32
 #endif
  
-#define VERSION "0.37cvs"
+#define VERSION "0.37cvs20031230"
 
-#define INK_STATIC_CAST( type, ptr )static_cast< type >((ptr))
 #define INK_REINTERPRET_CAST( type, ptr ) reinterpret_cast< type >((ptr))
 
 #define INKSCAPE_VERSION      VERSION

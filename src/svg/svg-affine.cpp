@@ -196,7 +196,7 @@ sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform)
 				c[p++] = ',';
 				p += sp_svg_number_write_de (c + p, transform->c[3], 6, FALSE);
 				c[p++] = ')';
-				p = MIN (p, INK_STATIC_CAST(int, size - 1));
+				p = MIN (p, static_cast< int > (size - 1) );
 				memcpy (str, c, p);
 				str[p] = 0;
 				return p;
@@ -210,7 +210,7 @@ sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform)
 				c[p++] = ',';
 				p += sp_svg_number_write_de (c + p, transform->c[5], 6, FALSE);
 				c[p++] = ')';
-				p = MIN (p, INK_STATIC_CAST(int, size - 1));
+				p = MIN (p, static_cast< int > (size - 1) );
 				memcpy (str, c, p);
 				str[p] = 0;
 				return p;
@@ -229,7 +229,7 @@ sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform)
 				c[p++] = ',';
 				p += sp_svg_number_write_de (c + p, transform->c[5], 6, FALSE);
 				c[p++] = ')';
-				p = MIN (p, INK_STATIC_CAST(int, size - 1));
+				p = MIN (p, static_cast< int > (size - 1) );
 				memcpy (str, c, p);
 				str[p] = 0;
 				return p;
@@ -250,7 +250,7 @@ sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform)
 		c[p++] = ',';
 		p += sp_svg_number_write_de (c + p, transform->c[5], 6, FALSE);
 		c[p++] = ')';
-		p = MIN (p, INK_STATIC_CAST(int, size - 1));
+		p = MIN (p, static_cast< int > (size - 1) );
 		memcpy (str, c, p);
 		str[p] = 0;
 		return p;
