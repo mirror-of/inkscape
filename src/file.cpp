@@ -36,6 +36,7 @@
 #include "helper/sp-intl.h"
 #include "inkscape.h"
 #include "desktop.h"
+#include "selection.h"
 #include "sp-image.h"
 #include "interface.h"
 #include "print.h"
@@ -130,6 +131,11 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
         SPDocument *existing = SP_DT_DOCUMENT (desktop);
         if (existing->virgin) {
             sp_desktop_change_document (desktop, doc);
+            /* in situations where the document is marked virgin, but there
+             * are things in it (like for a "revert"), unselect everything
+             * after we load
+             */
+            sp_selection_empty(SP_DT_SELECTION(desktop));
         }
         else {
             SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
@@ -154,26 +160,35 @@ sp_file_revert_dialog ()
 {
     SPDesktop  *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
+    SPRepr     *repr = sp_document_repr_root (doc);
 
-    if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL &&
-            1/* doc has original file and type, see below ... */) {
+    if (sp_repr_attr (repr, "sodipodi:modified") != NULL) {
         GtkWidget *dialog;
+	gchar * text;
+        const gchar * uri = doc->uri;
+
+	text = g_strdup_printf(_("Changes will be lost!  Are you sure you want to reload document %s?"), uri);
 
         dialog = gtk_message_dialog_new(
                 GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(desktop->owner))),
                 GTK_DIALOG_DESTROY_WITH_PARENT,
                 GTK_MESSAGE_WARNING,
                 GTK_BUTTONS_YES_NO,
-                "Changes will be lost!  Revert document?");
-        gint response;
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+                text);
+        gint response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
+        g_free(text);
+
         if (response == GTK_RESPONSE_YES) {
+            // allow overwriting of current document
             doc->virgin=TRUE;
-            /* FIXME: reload document here.  Looks like SPDocument
-             * will require both the original URI and "filetype"
-             * from the "sp_file_open" call */
+            sp_file_open(uri,NULL);
         }
+
+        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document reverted."));
+    }
+    else {
+        sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not modified.  No need to revert."));
     }
 }
 
@@ -255,12 +270,14 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 		text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
 		sp_ui_error_dialog (text);
+                g_free (text);
 		return FALSE;
 	} catch (Inkscape::Extension::Output::save_failed &e) {
 		gchar * text;
 		text = g_strdup_printf(_("File %s could not be saved."), uri);
 		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
 		sp_ui_error_dialog (text);
+                g_free (text);
 		return FALSE;
 	} catch (Inkscape::Extension::Output::no_overwrite &e) {
 		return sp_file_save_dialog(doc);

@@ -434,12 +434,11 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
     static const sp_verb_t file_verbs_one[] = {
         SP_VERB_FILE_NEW,
 	SP_VERB_FILE_OPEN,
-        /* commented out until implemented */
-	// SP_VERB_FILE_REVERT,
 	SP_VERB_LAST
     };
 
     static const sp_verb_t file_verbs_two[] = {
+	SP_VERB_FILE_REVERT,
         SP_VERB_FILE_SAVE,
         SP_VERB_FILE_SAVE_AS,
         SP_VERB_NONE,

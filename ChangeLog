@@ -6,6 +6,9 @@
 	* src/draw-context.cpp: Investigated patch 934351 from cth103.  Applied a
 	  slight variation to conform to the function calling styles of that code.
 	* configure.in: Implemented gcc version test for >= 3.0.0
+	* src/file.cpp, src/interface.cpp, share/icons/icons.svg, src/verbs.cbb:
+	  finished "File / Revert" implementation.  Found a memory leak in
+      "file_save".
 
 2004-04-13  Kees Cook <kees@outflux.net>
 
