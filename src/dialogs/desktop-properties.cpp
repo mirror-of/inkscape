@@ -91,6 +91,38 @@ struct PaperSize {
 };
 
 static PaperSize const inkscape_papers[] = {
+    /*
+     * N.B. the ISO page sizes in the table below differ from ghostscript's idea of page sizes (by
+     * less than 1pt).  Being off by <1pt should be OK for most purposes, but may cause fuzziness
+     * (antialiasing) problems when printing to 72dpi or 144dpi printers or bitmap files due to
+     * postscript's different coordinate system (y=0 meaning bottom of page in postscript and top
+     * of page in SVG).  I haven't looked into whether this does in fact cause fuzziness, I merely
+     * note the possibility.  Rounding done by extension/internal/ps.cpp (e.g. floor/ceil calls)
+     * will also affect whether fuzziness occurs.
+     *
+     * The remainder of this comment discusses the origin of the numbers used for ISO page sizes in
+     * this table and in ghostscript.
+     *
+     * The versions here, in mm, are the official sizes according to
+     * http://en.wikipedia.org/wiki/Paper_sizes at 2005-01-25.  (The ISO entries in the below table
+     * were produced mechanically from the table on that page.)
+     *
+     * (The rule seems to be that A0, B0, ..., D0. sizes are rounded to the nearest number of mm
+     * from the "theoretical size" (i.e. 1000 * sqrt(2) or pow(2.0, .25) or the like), whereas
+     * going from e.g. A0 to A1 always take the floor of halving -- which by chance coincides
+     * exactly with flooring the "theoretical size" for n != 0 instead of the rounding to nearest
+     * done for n==0.)
+     *
+     * Ghostscript paper sizes are given in gs_statd.ps according to gs(1).  gs_statd.ps always
+     * uses an integer number of pt: sometimes gs_statd.ps rounds to nearest (e.g. a1), sometimes
+     * floors (e.g. a10), sometimes ceils (e.g. a8).
+     *
+     * I'm not sure how ghostscript's gs_statd.ps was calculated: it isn't just rounding the
+     * "theoretical size" of each page to pt (see a0), nor is it rounding the a0 size times an
+     * appropriate power of two (see a1).  Possibly it was prepared manually, with a human applying
+     * inconsistent rounding rules when converting from mm to pt.
+     */
+
     { "A4", 210, 297, SP_UNIT_MM },
     { "US Letter", 8.5, 11, SP_UNIT_IN },
     { "US Legal", 8.5, 14, SP_UNIT_IN },
@@ -116,6 +148,15 @@ static PaperSize const inkscape_papers[] = {
     { "B8", 62, 88, SP_UNIT_MM },
     { "B9", 44, 62, SP_UNIT_MM },
     { "B10", 31, 44, SP_UNIT_MM },
+
+    /* Should we include the JIS B series (used in Japan) ?  (JIS B0 is sometimes called JB0, and
+     * similarly for JB1 etc.)
+     *
+     * Should we exclude B7..B10 and A7..10 to make the list smaller ?
+     *
+     * Should we include any of the ISO C, D and E series (see below) ?
+     */
+
 #if 0 /* Whether to include or exclude these depends on how big we mind our page size menu
          becoming.  C series is used for envelopes; don't know what D and E series are used for. */
     { "C0", 917, 1297, SP_UNIT_MM },
@@ -141,12 +182,19 @@ static PaperSize const inkscape_papers[] = {
     { "E5", 200, 280, SP_UNIT_MM },
     { "E6", 140, 200, SP_UNIT_MM },
 #endif
+
     { "CSE", 462, 649, SP_UNIT_PT },
     { "US #10 Commercial Envelope", 4.125, 9.5, SP_UNIT_IN },
     /* See http://www.hbp.com/content/PCR_envelopes.cfm for a much larger list of US envelope
        sizes. */
     { "DLE", 312, 624, SP_UNIT_PT },
     { "Ledger/Tabloid", 11, 17, SP_UNIT_IN },
+    /* Note that `Folio' (used in QPrinter/KPrinter) is deliberately absent from this list, as it
+       means different sizes to different people: different people may expect the width to be
+       either 8, 8.25 or 8.5 inches, and the height to be either 13 or 13.5 inches, even
+       restricting our interpretation to foolscap folio.  If you wish to introduce a folio-like
+       page size to the list, then please consider using a name more specific than just `Folio' or
+       `Foolscap Folio'. */
     { "Banner 468x60", 60, 468, SP_UNIT_PX },  // TODO: Select landscape by default.
     { "Icon 16x16", 16, 16, SP_UNIT_PX },
     { "Icon 32x32", 32, 32, SP_UNIT_PX },
