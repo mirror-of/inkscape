@@ -633,14 +633,27 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 	g_return_if_fail (repr != NULL);
 
 	// calculate the relative transform, if not given by the adv attribute, and send it as a _transformed_signal
-	NR::Matrix advertized_move;
+	NR::Matrix advertized_transform;
 	if (adv != NULL) {
-		advertized_move = *adv;
+		advertized_transform = *adv;
 	} else {
-		advertized_move = sp_item_transform_delta (item, transform);
+		advertized_transform = sp_item_transform_delta (item, transform);
 	}
 	NR::Matrix xform(transform);
 
+	if (prefs_get_int_attribute("tools.select", "scale_line_width", 1) == 0) {
+	  float expansion = NR::expansion(advertized_transform.inverse());
+	  
+	  if (SP_IS_GROUP (item)) {
+	    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+	      SP_OBJECT_STYLE(o)->stroke_width.computed *= expansion;
+	    }
+	  }
+	  else {
+	    SP_OBJECT_STYLE(item)->stroke_width.computed *= expansion;
+	  }
+	}
+	  
 	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
 
 	if (!transform) {
@@ -652,7 +665,7 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 		sp_item_set_item_transform(item, xform);
 	}
 
-	item->_transformed_signal.emit (&advertized_move, item);
+	item->_transformed_signal.emit (&advertized_transform, item);
 
 	sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
 }
