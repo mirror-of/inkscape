@@ -1076,7 +1076,6 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 
     /* Color */
     if (!style->color.set || style->color.inherit) {
-        /* We can use paint merge here because parent is guaranteed to be color */
         sp_style_merge_ipaint (style, &style->color, &parent->color);
     }
     if (!style->fill.set || style->fill.inherit || style->fill.currentcolor) {
@@ -1264,10 +1263,8 @@ sp_style_write_string (SPStyle *style, guint flags)
     p += sp_style_write_ienum (p, c + BMAX - p, "font-weight", enum_font_weight, &style->font_weight, NULL, flags);
     p += sp_style_write_ienum (p, c + BMAX - p, "font-stretch", enum_font_stretch, &style->font_stretch, NULL, flags);
 
-    /* fixme: Per type methods need default flag too */
-    if (style->opacity.set && style->opacity.value != SP_SCALE24_MAX) {
-        p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &style->opacity, NULL, flags);
-    }
+    /* fixme: Per type methods need default flag too (lauris)*/
+    p += sp_style_write_iscale24 (p, c + BMAX - p, "opacity", &style->opacity, NULL, flags);
     p += sp_style_write_ipaint (p, c + BMAX - p, "color", &style->color, NULL, flags);
     p += sp_style_write_ipaint (p, c + BMAX - p, "fill", &style->fill, NULL, flags);
     p += sp_style_write_iscale24 (p, c + BMAX - p, "fill-opacity", &style->fill_opacity, NULL, flags);
@@ -2422,6 +2419,30 @@ sp_css_attr_from_style (SPObject *object, guint flags)
     SPCSSAttr *css = sp_repr_css_attr_new ();
     sp_repr_css_attr_add_from_string (css, style_str);
     g_free (style_str);
+    return css;
+}
+
+SPCSSAttr *
+sp_css_attr_unset_text (SPCSSAttr *css)
+{
+    sp_repr_css_set_property (css, "font", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "font-size", NULL);
+    sp_repr_css_set_property (css, "font-size-adjust", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "font-style", NULL);
+    sp_repr_css_set_property (css, "font-variant", NULL);
+    sp_repr_css_set_property (css, "font-weight", NULL);
+    sp_repr_css_set_property (css, "font-stretch", NULL);
+    sp_repr_css_set_property (css, "font-family", NULL);
+    sp_repr_css_set_property (css, "letter-spacing", NULL);
+    sp_repr_css_set_property (css, "word-spacing", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "kerning", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "text-decoration", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "text-anchor", NULL);
+    sp_repr_css_set_property (css, "dominant-baseline", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "alignment-baseline", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "baseline-shift", NULL); // not implemented yet
+    sp_repr_css_set_property (css, "writing-mode", NULL);
+
     return css;
 }
 

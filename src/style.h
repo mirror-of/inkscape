@@ -401,5 +401,6 @@ struct SPTextStyle {
 };
 
 SPCSSAttr * sp_css_attr_from_style (SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
+SPCSSAttr * sp_css_attr_unset_text (SPCSSAttr *css);
 
 #endif

@@ -662,7 +662,7 @@ void sp_copy_stuff_used_by_item (SPItem *item)
 
     // recurse
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o))
+        if (SP_IS_ITEM(o) && !SP_IS_STRING(o) && !SP_IS_TSPAN(o))
             sp_copy_stuff_used_by_item (SP_ITEM (o));
     }
 }
@@ -706,9 +706,13 @@ void sp_selection_copy()
         (SP_IS_TEXT (item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its first child
-        SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_ALWAYS);
+        SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_IFSET);
         sp_repr_css_merge (style_clipboard, temp);
         sp_repr_css_attr_unref (temp);
+    }
+    if (!(SP_IS_TEXT (item) || SP_IS_TSPAN (item) || SP_IS_STRING (item))) {
+        // do not copy text properties from non-text objects, it's confusing
+        style_clipboard = sp_css_attr_unset_text (style_clipboard);
     }
     //sp_repr_css_print (style_clipboard);
 
