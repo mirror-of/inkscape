@@ -208,6 +208,7 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     xmlSubstituteEntitiesDefault(1);
 
     g_return_val_if_fail (filename != NULL, NULL);
+    g_return_val_if_fail (Inkscape::IO::file_test( filename, G_FILE_TEST_EXISTS ), NULL);
 
     // TODO: bulia, please look over
     gsize bytesRead = 0;
@@ -216,6 +217,7 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     // TODO: need to replace with our own fopen and reading
     gchar* localFilename = g_filename_from_utf8 ( filename,
                                  -1,  &bytesRead,  &bytesWritten, &error);
+    g_return_val_if_fail( localFilename != NULL, NULL );
 
     Inkscape::IO::dump_fopen_call( filename, "N" );
 
