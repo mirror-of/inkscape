@@ -86,7 +86,7 @@ libinkscape.a: $(OBJ)
 ###################################
 
 .o.dll:
-	$(DLLWRAP) --def=inkscape.def --driver-name=g++ \
+	$(DLLWRAP) --def=plugin.def --driver-name=g++ \
 	-o $@ $< $(LIBS)
 
 PLUGS = extension/plugin/gimpgrad.dll
