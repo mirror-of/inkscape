@@ -423,6 +423,7 @@ sp_selected_path_boolop (bool_op bop)
     } else {
         // find out the bottom object
         GSList *sorted = 	g_slist_copy ((GSList *) selection->reprList());
+
         sorted = g_slist_sort (sorted, (GCompareFunc) sp_repr_compare_position);
         repr_source = ((SPRepr *) sorted->data);
         g_slist_free (sorted);

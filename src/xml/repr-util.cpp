@@ -58,6 +58,12 @@
 static void sp_xml_ns_register_defaults ();
 static char *sp_xml_ns_auto_prefix (const char *uri);
 
+// The following are in splivarot.cpp but probably should be moved
+// here...
+SPRepr *LCA (SPRepr * a, SPRepr * b);
+bool   Ancetre (SPRepr * a, SPRepr * who);
+SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
+
 /*#####################
 # UTILITY
 #####################*/
@@ -350,28 +356,65 @@ int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
     return atoi (result);
 }
 
+/** 
+ * Precondition:
+ *    Both first and second must belong to the same parent, otherwise
+ *    this function will assert.
+ * 
+ * Return value:
+ *    0    positions are equivalent
+ *    1    first object's position is greater than the second
+ *   -1    first object's position is less than the second
+ */
 int
 sp_repr_compare_position(SPRepr *first, SPRepr *second)
 {
-    g_assert( sp_repr_parent(first) == sp_repr_parent(second) );
+    int p1, p2;
+    if (sp_repr_parent(first) == sp_repr_parent(second)) {
+        /* Basic case - first and second have same parent */
+        p1 = sp_repr_position(first);
+        p2 = sp_repr_position(second);
+    } else {
+        /* Special case - the two objects have different parents.  They
+           could be in different groups or on different layers for
+           instance. */
 
-    int const p1 = sp_repr_position(first);
-    int const p2 = sp_repr_position(second);
+        // Find the lowest common ancestor (LCA)
+        SPRepr *ancestor = LCA(first, second);
+        g_assert(ancestor != NULL);
+
+        if (ancestor == first) {
+            return TRUE;
+        } else if (ancestor == second) {
+            return FALSE;
+        } else {
+            SPRepr const *to_first = AncetreFils(first, ancestor);
+            SPRepr const *to_second = AncetreFils(second, ancestor);
+            g_assert(sp_repr_parent(to_second) == sp_repr_parent(to_first));
+            p1 = sp_repr_position(to_first);
+            p2 = sp_repr_position(to_second);
+        }
+    }
 
     if (p1 > p2) return 1;
     if (p1 < p2) return -1;
     return 0;
 
-    /* effic: Assuming that the parent--child relationship is consistent (i.e. that the parent
-       really does contain first and second among its list of children), it should be equivalent to
-       walk along the children and see which we encounter first (returning 0 iff first == second).
-
-       Given that this function is used solely for sorting, we can use a similar approach to do the
-       sort: gather the things to be sorted, into an STL vector (to allow random access and faster
-       traversals).  Do a single pass of the parent's children; for each child, do a pass on
-       whatever items in the vector we haven't yet encountered.  If the child is found, then swap
-       it to the beginning of the yet-unencountered elements of the vector.  Continue until no more
-       than one remains unencountered.  -- pjrm */
+    /* effic: Assuming that the parent--child relationship is consistent
+       (i.e. that the parent really does contain first and second among
+       its list of children), it should be equivalent to walk along the
+       children and see which we encounter first (returning 0 iff first
+       == second).
+       
+       Given that this function is used solely for sorting, we can use a
+       similar approach to do the sort: gather the things to be sorted,
+       into an STL vector (to allow random access and faster
+       traversals).  Do a single pass of the parent's children; for each
+       child, do a pass on whatever items in the vector we haven't yet
+       encountered.  If the child is found, then swap it to the
+       beginning of the yet-unencountered elements of the vector.
+       Continue until no more than one remains unencountered.  --
+       pjrm */
 }
 
 
@@ -627,13 +670,14 @@ sp_repr_set_double_default (SPRepr *repr, const gchar *key, double val, double d
 }
 
 
+
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
   c-file-offsets:((innamespace . 0)(inline-open . 0))
   indent-tabs-mode:nil
-  fill-column:99
+  fill-column:72
   End:
 */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -299,6 +299,16 @@ const SPObject *AncestorSon (SPObject const *obj, SPObject const *ancestor) {
     return AncestorSon (SP_OBJECT_PARENT (obj), ancestor);
 }
 
+
+/** Return value:
+ *     0   positions are equivalent
+ *     0   first object is ancestor of the second (normally shouldn't happen)
+ *     0   no common ancestor between the two objects
+ *     1   second object is ancestor of itself (??)
+ *     1   first object's position is greater than the second
+ *    -1   first object's position is less than the second
+ *     
+ */
 int
 sp_object_compare_position(SPObject const *first, SPObject const *second)
 {
