@@ -74,7 +74,7 @@ CP = copy
 #are we on WinNt and beyond?
 ifeq ($(DOSSHELL),CMD_EXE)
 RMDIR = rmdir /s /q
-RM    = rm
+RM    = del
 else
 RMDIR = deltree /y
 RM    = del
