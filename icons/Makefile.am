@@ -1,7 +1,7 @@
 
 iconsdir = $(datadir)/inkscape
 
-images = about.svg icons.svg
+images = about.svg icons.svg tutorial.svg
 
 pixmaps = \
     add.xpm \
