@@ -281,6 +281,9 @@ void Tracer::traceThread()
 
     engine = NULL;
 
+    char *msg = _("Trace: Done");
+    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+
 }
 
 /**

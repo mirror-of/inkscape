@@ -34,6 +34,7 @@
 #include <svg/stringstream.h>
 #include <xml/repr.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <glibmm/i18n.h>
 
 #include <gtkmm.h>
 
@@ -531,13 +532,22 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
     double delta   = (high - low ) / ((double)multiScanNrColors);
     
     brightnessFloor = 0.0; //Set bottom to black
-
+    
+    int traceCount = 0;
+    
     TracingEngineResult *results = NULL;
     for ( brightnessThreshold = low ;
           brightnessThreshold <= high ;
           brightnessThreshold += delta)
     
         {
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop)
+            {
+            gchar *msg = g_strdup_printf(_("Trace: %d"), traceCount++);
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+            g_free(msg);
+            }
         
         GrayMap *grayMap = filter(*this, thePixbuf);
         if (!grayMap)
@@ -614,7 +624,15 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
     
     for (int colorIndex=0 ; colorIndex<iMap->nrColors ; colorIndex++)
         {
-        
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop)
+            {
+            gchar *msg = g_strdup_printf(_("Trace: %d"), colorIndex);
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+            g_free(msg);
+            }
+
+
         /*Make a gray map for each color index */
         for (int row=0 ; row<iMap->height ; row++)
             {
