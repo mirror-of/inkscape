@@ -39,10 +39,11 @@ WINDRES = i686-pc-mingw32-windres
 S = $(FSLASH)
 
 # file manipulation programs
-CP    = cp
-RMDIR = rm -rf 
-MKDIR = mkdir
-CPDIR = cp -rf 
+CP     = cp
+RMDIR  = rm -rf 
+MKDIR  = mkdir
+CPDIR  = cp -rf 
+MSGFMT = msgfmt
 
 # Where is your GTK directory?
 GTK=$(HOME)/xmingw32/gtk
@@ -87,10 +88,10 @@ GTK=c:/gtk
 #Same thing, DOS style
 GTKDOS=c:\gtk
 
+MSGFMT = $(GTKDOS)\bin\msgfmt
 
 endif
 
-MSGFMT = $(GTK)$(S)bin$(S)msgfmt
 
 #VERSION = \"0.37\"
 VERSION = \"0.39cvs-${DTG}\"
