@@ -48,10 +48,10 @@ typedef struct one_break {
   int          start_ind,end_ind;
   box_solution pos;
   bool         no_justification;
-  
+
   int          prev;
   double       score_to_prev;
-  
+
   int          next_for_ind;
 } one_break;
 
@@ -59,10 +59,10 @@ class break_holder {
 public:
   int              nb_brk,max_brk;
   one_break*       brks;
-  
+
   int              nb_pot;
   int*             pot_first;
-  
+
   break_holder(int nb_potential) {
     nb_brk=max_brk=0;
     brks=NULL;
@@ -74,7 +74,7 @@ public:
     if ( brks ) free(brks);
     if ( pot_first ) free(pot_first);
   };
-  
+
   double           Score(int of);
   int              PrevLine(int of);
   int              AddBrk(int st,int en,const box_solution &pos,int after,double delta,bool noJust);
@@ -145,7 +145,7 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
     nb_brk++;
     return n;
   }
-} 
+}
 
 class pending_holder {
 public:
@@ -154,13 +154,13 @@ public:
     double       nAsc,nDesc;
     bool         jump;
   } pooled;
-  
+
   int            nb_pending,max_pending;
   pooled*        pending;
-  
+
   pending_holder(void);
   ~pending_holder(void);
-  
+
   void           AddPending(int after,double nA,double nD,bool jump);
   bool           Pop(int &after,double &nA,double &nD,bool &jump);
 };
@@ -192,7 +192,8 @@ void           pending_holder::AddPending(int after,double nA,double nD,bool jum
 bool           pending_holder::Pop(int &after,double &nA,double &nD,bool &jump)
 {
   if ( nb_pending <= 0 ) return false;
-  int i=random()%nb_pending;
+  // rand() is more portable than random()
+  int i=rand()%nb_pending;
   if ( i < 0 ) i=-i;
   after=pending[i].brk;
   nA=pending[i].nAsc;
@@ -213,7 +214,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
 {
   if ( typeset == NULL || typeset->layoutDirty == false ) return;
   typeset->layoutDirty=false;
-  
+
   if ( typeset->theDst ) delete typeset->theDst;
   typeset->theDst=NULL;
   if ( typeset->dstType == has_shape_dest ) {
@@ -268,8 +269,8 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
       typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,true);
     }
   }
-  
-  
+
+
   // kill children
   {
     GSList *l=NULL;
@@ -288,7 +289,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
   int           nb_step=0;
 
   if ( typeset->theSrc && typeset->theDst ) {
-    // dumb layout: stuff 'til it's too big    
+    // dumb layout: stuff 'til it's too big
     double nAscent=0.0,nDescent=0.0;
     typeset->theSrc->InitialMetricsAt(0,nAscent,nDescent);
     int           maxIndex=typeset->theSrc->MaxIndex();
@@ -298,24 +299,24 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
       box_solution    cur_box;
       break_holder*   brk_list=new break_holder(maxIndex);
       pending_holder* pen_list=new pending_holder();
-      
+
       cur_box=typeset->theDst->VeryFirst();
       int           cur_brk=brk_list->AddBrk(-1,-1,cur_box,-1,0,true);
       pen_list->AddPending(cur_brk,nAscent,nDescent,false);
-      
+
       int      best_brk=-1;
       double   best_score=0;
-      
+
       do {
         bool          sameLine=false;
         bool          jump_to_next_line=false;
         if ( pen_list->Pop(cur_brk,nAscent,nDescent,jump_to_next_line) == false ) {
           break;
         }
-        
+
         int    cur_pos=brk_list->brks[cur_brk].end_ind+1;
 //        printf("traite: %i: %i %f %f %i: s=%f\n",cur_brk,cur_pos,nAscent,nDescent,(jump_to_next_line)?1:0,brk_list->Score(cur_brk));
-        
+
         if ( cur_pos >= maxIndex ) {
           if ( brk_list->brks[cur_brk].end_ind >= 0 ) {
             double  ns=brk_list->Score(cur_brk)/(1+brk_list->brks[cur_brk].end_ind);
@@ -326,7 +327,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
           }
           continue;
         }
-        
+
         if ( jump_to_next_line ) {
 //          printf("it's just a jump to the left\n");
           cur_box=typeset->theDst->NextLine(brk_list->brks[cur_brk].pos,nAscent,nDescent,0.0);
@@ -343,7 +344,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
           }
           continue;
         }
-        
+
         double nLen=cur_box.x_end-cur_box.x_start;
         text_chunk_solution* sol=typeset->theSrc->StuffThatBox(cur_pos,0.8*nLen,nLen,1.2*nLen,false);
 
@@ -368,7 +369,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
           }
           continue;
         }
-        
+
         for (int i=0;sol[i].end_of_array==false;i++) {
           if ( sol[i].end_ind >= sol[i].start_ind ) {
             if ( sol[i].ascent > nAscent || sol[i].descent > nDescent ) {
@@ -412,10 +413,10 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
             }
           }
         }
-                
+
         free(sol);
       } while ( 1 );
-      
+
       if ( best_brk >= 0 ) {
         for (cur_brk=best_brk;cur_brk>=0;cur_brk=brk_list->brks[cur_brk].prev) {
           if ( brk_list->brks[cur_brk].start_ind <= brk_list->brks[cur_brk].end_ind ) {
@@ -431,7 +432,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
           }
         }
       }
-      
+
       delete brk_list;
       delete pen_list;
     }
@@ -445,7 +446,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     if (!style) {
 	    style = "font-family:Sans;font-size:12;";
     }
-    
+
     SPRepr* text_repr = sp_repr_new ("text");
     sp_repr_set_attr (text_repr, "style", style);
     sp_repr_append_child (parent, text_repr);
@@ -473,24 +474,24 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
         } else {
           spacing=0;
         }
-        
+
         for (int k=0;k<nbS;k++) {
           SPRepr* span_repr = sp_repr_new ("tspan");
-          
+
           if ( span_info[k].style[0] != 0 ) {
             sp_repr_set_attr (span_repr, "style", span_info[k].style);
           }
-          
+
           if ( span_info[k].g_pos && span_info[k].g_start && span_info[k].g_end && span_info[k].nbG > 0 ) {
             NR::Point   textPos(steps[i].box.x_start,steps[i].box.y);
             textPos+=span_info[k].g_pos[0];
             int nbPrevChar=span_info[k].g_start[0]-span_info[0].g_start[0];
             sp_repr_set_double (span_repr, "x", textPos[0]+spacing*((double)(nbPrevChar)));
             sp_repr_set_double (span_repr, "y", textPos[1]);
-            
+
             {
               SPCSSAttr *ocss;
-              ocss = sp_repr_css_attr (span_repr, "style");              
+              ocss = sp_repr_css_attr (span_repr, "style");
               sp_repr_set_double ((SPRepr*)ocss, "letter-spacing", spacing);
               sp_repr_css_change (span_repr, ocss, "style");
               sp_repr_css_attr_unref (ocss);
@@ -526,7 +527,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
             sp_repr_set_double (span_repr, "x", steps[i].box.x_start);
             sp_repr_set_double (span_repr, "y", steps[i].box.y);
           }
-          
+
           int   content_length=0;
           char* temp_content=NULL;
           for (int j = 0; j < span_info[k].nbG ; j ++) {
@@ -544,7 +545,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
           sp_repr_append_child (span_repr, rstr);
           sp_repr_unref (rstr);
           free(temp_content);
-          
+
           sp_repr_append_child (text_repr, span_repr);
           sp_repr_unref (span_repr);
         }
@@ -557,7 +558,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
       }
     }
     free(steps);
-    
+
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     sp_document_done (SP_DT_DOCUMENT (desktop));
   }
