@@ -1,5 +1,7 @@
 2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/extension/extension.cpp (Extension): Address warning.
+
 	* src/dialogs/stroke-style.cpp: #include prefix.h.
 
 	* src/Makefile.am (EXTRA_DIST): Add */makefile.in.

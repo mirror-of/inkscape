@@ -67,15 +67,11 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 
 //  printf("Extension Constructor: ");
     if (repr != NULL) {
-        const gchar *val;
-        gchar c[256];
-        SPRepr * child_repr;
-
-        child_repr = sp_repr_children(repr);
+        SPRepr *child_repr = sp_repr_children(repr);
         /* TODO: Handle what happens if we don't have these two */
         while (child_repr != NULL) {
             if (!strcmp(sp_repr_name(child_repr), "id")) {
-                val = sp_repr_content (sp_repr_children(child_repr));
+                gchar const *val = sp_repr_content(sp_repr_children(child_repr));
                 id = g_strdup (val);
             } /* id */
             if (!strcmp(sp_repr_name(child_repr), "name")) {
