@@ -127,7 +127,7 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
     // real paths are outside the flowtext and thus editable as usual.
     if (SP_IS_FLOWTEXT(item)) {
         for (SPObject *child = sp_object_first_child(SP_OBJECT(item)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            //if SP_IS_FLOWREGION(child) { // stupid! we can't include sp-flowregion.h because it has a Path class too
+            //if SP_IS_FLOWREGION(child) { // stupid! we can't include sp-flowregion.h because it has a Path class too; restore this line when this is renamed
             SPObject *grandchild = sp_object_first_child(SP_OBJECT(child));
             if (grandchild && SP_IS_PATH(grandchild)) {
                 item = SP_ITEM(grandchild);
