@@ -479,5 +479,5 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
   indent-tabs-mode:t
   fill-column:99
   End:
-  vim: filetype=c++:noexpandtab :
+  vim: noexpandtab :
 */
