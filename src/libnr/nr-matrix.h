@@ -27,37 +27,37 @@
 #include <libnr/nr-translate.h>
 
 struct NRMatrix {
-	NR::Coord c[6];
+    NR::Coord c[6];
 
-	NR::Coord &operator[](int i) { return c[i]; }
-	NR::Coord operator[](int i) const { return c[i]; }
+    NR::Coord &operator[](int i) { return c[i]; }
+    NR::Coord operator[](int i) const { return c[i]; }
 };
 
 #define nr_matrix_set_identity(m) (*(m) = NR_MATRIX_IDENTITY)
 
-#define nr_matrix_test_identity(m,e) (!(m) || NR_MATRIX_DF_TEST_CLOSE (m, &NR_MATRIX_IDENTITY, e))
+#define nr_matrix_test_identity(m,e) (!(m) || NR_MATRIX_DF_TEST_CLOSE(m, &NR_MATRIX_IDENTITY, e))
 
-#define nr_matrix_test_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_CLOSE (m0, m1, e)))
-#define nr_matrix_test_transform_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (m0, m1, e)))
-#define nr_matrix_test_translate_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (m0, m1, e)))
+#define nr_matrix_test_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_CLOSE(m0, m1, e)))
+#define nr_matrix_test_transform_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSFORM_CLOSE(m0, m1, e)))
+#define nr_matrix_test_translate_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSLATE_CLOSE(m0, m1, e)))
 
-NRMatrix *nr_matrix_invert (NRMatrix *d, const NRMatrix *m);
+NRMatrix *nr_matrix_invert(NRMatrix *d, NRMatrix const *m);
 
 /* d,m0,m1 needn't be distinct in any of these multiply routines. */
 
-NRMatrix *nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
+NRMatrix *nr_matrix_multiply(NRMatrix *d, NRMatrix const *m0, NRMatrix const *m1);
 
-NRMatrix *nr_matrix_set_translate (NRMatrix *m, const NR::Coord x, const NR::Coord y);
+NRMatrix *nr_matrix_set_translate(NRMatrix *m, NR::Coord const x, NR::Coord const y);
 
-NRMatrix *nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord sy);
+NRMatrix *nr_matrix_set_scale(NRMatrix *m, NR::Coord const sx, NR::Coord const sy);
 
-NRMatrix *nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta);
+NRMatrix *nr_matrix_set_rotate(NRMatrix *m, NR::Coord const theta);
 
 #define NR_MATRIX_DF_TRANSFORM_X(m,x,y) ((*(m))[0] * (x) + (*(m))[2] * (y) + (*(m))[4])
 #define NR_MATRIX_DF_TRANSFORM_Y(m,x,y) ((*(m))[1] * (x) + (*(m))[3] * (y) + (*(m))[5])
 
-#define NR_MATRIX_DF_EXPANSION2(m) (fabs ((*(m))[0] * (*(m))[3] - (*(m))[1] * (*(m))[2]))
-#define NR_MATRIX_DF_EXPANSION(m) (sqrt (NR_MATRIX_DF_EXPANSION2 (m)))
+#define NR_MATRIX_DF_EXPANSION2(m) (fabs((*(m))[0] * (*(m))[3] - (*(m))[1] * (*(m))[2]))
+#define NR_MATRIX_DF_EXPANSION(m) (sqrt(NR_MATRIX_DF_EXPANSION2(m)))
 
 namespace NR {
 
@@ -77,113 +77,113 @@ namespace NR {
  */
 class Matrix {
 public:
-	explicit Matrix() { }
+    explicit Matrix() { }
 
-	Matrix(Matrix const &m) {
-		for ( int i = 0 ; i < 6 ; i++ ) {
-			_c[i] = m._c[i];
-		}
-	}
+    Matrix(Matrix const &m) {
+        for ( int i = 0 ; i < 6 ; i++ ) {
+            _c[i] = m._c[i];
+        }
+    }
 
-	Matrix(NRMatrix const &m) {
-		for ( int i = 0 ; i < 6 ; i++ ) {
-			_c[i] = m.c[i];
-		}
-	}
+    Matrix(NRMatrix const &m) {
+        for ( int i = 0 ; i < 6 ; i++ ) {
+            _c[i] = m.c[i];
+        }
+    }
 
-	Matrix(double c0, double c1,
-	       double c2, double c3,
-	       double c4, double c5)
-	{
-		_c[0] = c0; _c[1] = c1;
-		_c[2] = c2; _c[3] = c3;
-		_c[4] = c4; _c[5] = c5;
-	}
+    Matrix(double c0, double c1,
+           double c2, double c3,
+           double c4, double c5)
+    {
+        _c[0] = c0; _c[1] = c1;
+        _c[2] = c2; _c[3] = c3;
+        _c[4] = c4; _c[5] = c5;
+    }
 
-	Matrix &operator=(Matrix const &m) {
-		for (unsigned i = 0 ; i < 6 ; ++i) {
-			_c[i] = m._c[i];
-		}
-		return *this;
-	}
+    Matrix &operator=(Matrix const &m) {
+        for (unsigned i = 0 ; i < 6 ; ++i) {
+            _c[i] = m._c[i];
+        }
+        return *this;
+    }
 
-	explicit Matrix(scale const &sm) {
-		_c[0] = sm[X]; _c[1] = 0;
-		_c[2] = 0;     _c[3] =  sm[Y];
-		_c[4] = 0;     _c[5] = 0;
-	}
+    explicit Matrix(scale const &sm) {
+        _c[0] = sm[X]; _c[1] = 0;
+        _c[2] = 0;     _c[3] =  sm[Y];
+        _c[4] = 0;     _c[5] = 0;
+    }
 
-	explicit Matrix(rotate const &r) {
-		_c[0] =  r.vec[X]; _c[1] = r.vec[Y];
-		_c[2] = -r.vec[Y]; _c[3] = r.vec[X];
-		_c[4] = 0;         _c[5] = 0;
-	}
+    explicit Matrix(rotate const &r) {
+        _c[0] =  r.vec[X]; _c[1] = r.vec[Y];
+        _c[2] = -r.vec[Y]; _c[3] = r.vec[X];
+        _c[4] = 0;         _c[5] = 0;
+    }
 
-	explicit Matrix(translate const &tm) {
-		_c[0] = 1;     _c[1] = 0;
-		_c[2] = 0;     _c[3] = 1;
-		_c[4] = tm[X]; _c[5] = tm[Y];
-	}
+    explicit Matrix(translate const &tm) {
+        _c[0] = 1;     _c[1] = 0;
+        _c[2] = 0;     _c[3] = 1;
+        _c[4] = tm[X]; _c[5] = tm[Y];
+    }
 
-	Matrix(NRMatrix const *nr);
+    Matrix(NRMatrix const *nr);
 
-	bool test_identity() const;
-	bool is_translation(const Coord eps=0.01) const;
+    bool test_identity() const;
+    bool is_translation(Coord const eps = 0.01) const;
 
-	Matrix inverse() const;
+    Matrix inverse() const;
 
-	Matrix &operator*=(Matrix const &o);
+    Matrix &operator*=(Matrix const &o);
 
-	Matrix &operator*=(scale const &o);
+    Matrix &operator*=(scale const &o);
 
-	Matrix &operator*=(translate const &o) {
-		_c[4] += o[X];
-		_c[5] += o[Y];
-		return *this;
-	}
+    Matrix &operator*=(translate const &o) {
+        _c[4] += o[X];
+        _c[5] += o[Y];
+        return *this;
+    }
 
-	inline Coord &operator[](int const i) {
-		return _c[i];
-	}
+    inline Coord &operator[](int const i) {
+        return _c[i];
+    }
 
-	inline Coord operator[](int const i) const {
-		return _c[i];
-	}
+    inline Coord operator[](int const i) const {
+        return _c[i];
+    }
 
-	void set_identity();
+    void set_identity();
 	
-	// What do these do?  some kind of norm?
-	Coord det() const;
-	Coord descrim2() const;
-	Coord descrim() const;
-	double expansion() const;
-	double expansionX() const;
-	double expansionY() const;
+    // What do these do?  some kind of norm?
+    Coord det() const;
+    Coord descrim2() const;
+    Coord descrim() const;
+    double expansion() const;
+    double expansionX() const;
+    double expansionY() const;
 	
-	// legacy
-	Matrix &assign(const Coord *array);
-	NRMatrix *copyto(NRMatrix* nrm) const;
-	Coord *copyto(Coord *array) const;
+    // legacy
+    Matrix &assign(Coord const *array);
+    NRMatrix *copyto(NRMatrix* nrm) const;
+    Coord *copyto(Coord *array) const;
 
-	operator NRMatrix&() {
-		g_assert(sizeof(_c) == sizeof(NRMatrix));
-		return *reinterpret_cast<NRMatrix *>(_c);
-	}
-	operator const NRMatrix&() const {
-		g_assert(sizeof(_c) == sizeof(NRMatrix));
-		return *reinterpret_cast<const NRMatrix *>(_c);
-	}
-	operator NRMatrix*() {
-		g_assert(sizeof(_c) == sizeof(NRMatrix));
-		return reinterpret_cast<NRMatrix *>(_c);
-	}
-	operator const NRMatrix*() const {
-		g_assert(sizeof(_c) == sizeof(NRMatrix));
-		return reinterpret_cast<const NRMatrix *>(_c);
-	}
+    operator NRMatrix&() {
+        g_assert(sizeof(_c) == sizeof(NRMatrix));
+        return *reinterpret_cast<NRMatrix *>(_c);
+    }
+    operator NRMatrix const&() const {
+        g_assert(sizeof(_c) == sizeof(NRMatrix));
+        return *reinterpret_cast<const NRMatrix *>(_c);
+    }
+    operator NRMatrix*() {
+        g_assert(sizeof(_c) == sizeof(NRMatrix));
+        return reinterpret_cast<NRMatrix *>(_c);
+    }
+    operator NRMatrix const*() const {
+        g_assert(sizeof(_c) == sizeof(NRMatrix));
+        return reinterpret_cast<NRMatrix const *>(_c);
+    }
 
 private:
-	NR::Coord _c[6];
+    NR::Coord _c[6];
 };
 
 
@@ -217,10 +217,10 @@ extern void assert_close(Matrix const &a, Matrix const &b);
 /*
   Local Variables:
   mode:c++
-  c-file-style:"bsd"
-  c-file-offsets:((innamespace . 0) (inline-open . 0))
-  indent-tabs-mode:t
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
   fill-column:99
   End:
-  vim: filetype=c++:noexpandtab :
 */
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
