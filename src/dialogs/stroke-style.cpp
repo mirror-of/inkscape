@@ -2164,7 +2164,7 @@ static gchar*
 ink_extract_marker_name(gchar const *n)
 {
     gchar const *p = n;
-    while (*p != '\0' && *p != '\#') {
+    while (*p != '\0' && *p != '#') {
         p++;
     }
 
