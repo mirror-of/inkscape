@@ -131,4 +131,5 @@
 
 void inkscape_gtk_stock_init(void);
 
+/*@}*/
 #endif /* _INKSCAPE_STOCK_H_ */

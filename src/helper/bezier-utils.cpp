@@ -368,9 +368,10 @@ GenerateBezier (NRPoint *bezier, NRPoint const *data, gdouble const *uPrime, gin
  *   a better parameterization.
  *
  *  \param d	Array of digitized points.
- *  \param first,last	Indices defining region.  Inclusive.
  *  \param u	Current parameter values.
  *  \param bezCurve	Current fitted curve.
+ *  \param len  Number of values in both d and u arrays.
+ *              Also the size of the array that is allocated for return.
  */
 static gdouble *
 Reparameterize(NRPoint const  *d,
@@ -446,6 +447,9 @@ NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u)
 
 /** Evaluate a Bezier curve at parameter value \a t.
  * \param Q Point on curve at parameter t.
+ * \param degree Undocumented
+ * \param V Undocumented
+ * \param t Undocumented
  *
  * V is expected to have (degree+1) elements.
  *
