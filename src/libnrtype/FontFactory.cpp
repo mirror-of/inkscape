@@ -480,6 +480,10 @@ NRNameList* font_factory::Families(NRNameList *flist)
 	flist->destructor = font_factory_name_list_destructor;
 	
 	for (int i=0;i<nbFam;i++) {
+// Note: on Windows, pango_font_family_get_name always returns lowercase name.
+// As a result the list of fonts in the dialog is lowercase.
+// We could work around by loading the font and taking pango_font_description_get_family from its descr (that gives correct case),
+// but this is slow, and it's better to fix Pango instead.
 		flist->names[i]=(guchar*)strdup(pango_font_family_get_name(fams[i]));
 	}
 	
