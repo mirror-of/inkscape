@@ -454,6 +454,7 @@ void convert_to_text(void)
     if (!group->layout.outputExists()) return;
 
     Inkscape::XML::Node *repr = sp_repr_new("svg:text");
+    repr->setAttribute("xml:space", "preserve");
     repr->setAttribute("style", SP_OBJECT_REPR(group)->attribute("style"));
 
     for (Inkscape::Text::Layout::iterator it = group->layout.begin() ; it != group->layout.end() ; ) {
@@ -463,6 +464,7 @@ void convert_to_text(void)
         NR::Point anchor_point = group->layout.characterAnchorPoint(it);
         sp_repr_set_double(line_tspan, "x", anchor_point[0]);
         sp_repr_set_double(line_tspan, "y", anchor_point[1]);
+        line_tspan->setAttribute("xml:space", "preserve");
 
         Inkscape::Text::Layout::iterator it_line_end = it;
         it_line_end.nextStartOfLine();
@@ -478,6 +480,7 @@ void convert_to_text(void)
             Glib::ustring::iterator span_text_start_iter;
             group->layout.getSourceOfCharacter(it, (void**)&source_obj, &span_text_start_iter);
             span_tspan->setAttribute("style", sp_style_write_difference((SP_IS_STRING(source_obj) ? source_obj->parent : source_obj)->style, group->style));
+            span_tspan->setAttribute("xml:space", "preserve");
 
             it.nextStartOfSpan();
             if (SP_IS_STRING(source_obj)) {
