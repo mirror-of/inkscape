@@ -25,6 +25,7 @@
 #include "desktop-events.h"
 #include "desktop.h"
 #include "inkscape-private.h"
+#include "prefs-utils.h"
 
 #include "dialog-events.h"
 
@@ -115,18 +116,27 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 void
 sp_transientize (GtkWidget *dialog)
 {
+	gint transient_policy = prefs_get_int_attribute_limited ("options.transientpolicy", "value", 1, 0, 2);
+
+	if (transient_policy) {
 	// transientzing does not work on windows; when you minimize a document and then open it back, 
 	// only its transient emerges and you cannot access the document window 
 #ifndef WIN32
 	// if there's an active document window, attach dialog to it as a transient:
-	if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
-		gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
+			gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
 #endif
+	}
 }
 
 void
 sp_transientize_callback (Inkscape::Application *inkscape, SPDesktop *desktop, win_data *wd)
 {
+	gint transient_policy = prefs_get_int_attribute_limited ("options.transientpolicy", "value", 1, 0, 2);
+
+	if (!transient_policy) 
+		return;
+
 #ifndef WIN32
 	if (wd->stop) { // if retransientizing of this dialog is still forbidden after previous call
 		// warning turned off because it was confusingly fired when loading many files from command line
@@ -140,12 +150,12 @@ sp_transientize_callback (Inkscape::Application *inkscape, SPDesktop *desktop, w
 		wd->stop = 1; // disallow other attempts to retranzientize this dialog
 		gtk_window_set_transient_for ((GtkWindow *) wd->win, w);
 
-		/* Uncomment the following line if you want "aggressive" transientization,
+		/* This enables "aggressive" transientization,
 		i.e. dialogs always emerging on top when you switch documents. Note however
 		that this breaks "click to raise" policy of a window manager because the switched-to
-		document will be raised at once (so that its transients also could raise) 
-             FIXME: make this settable in preferences */
-		//gtk_window_present (w); // without this, a transient window not always emerges on top
+		document will be raised at once (so that its transients also could raise) */
+		if (transient_policy == 2)
+			gtk_window_present (w); // without this, a transient window not always emerges on top
 	}
 	// we're done, allow next retransientizing not sooner than after 6 msec
 	gtk_timeout_add (6, (GtkFunction) sp_allow_again, (gpointer) wd);  
