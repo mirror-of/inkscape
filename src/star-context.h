@@ -34,6 +34,8 @@ struct _SPStarContext {
 	gint magnitude;
 	/* Outer/inner radius ratio */
 	gdouble proportion;
+	/* flat sides or not? */
+	bool isflatsided;
 };
 
 struct _SPStarContextClass {
@@ -41,5 +43,8 @@ struct _SPStarContextClass {
 };
 
 GtkType sp_star_context_get_type (void);
+
+
+ GtkWidget *sp_star_context_config_widget (SPDesktop *desktop);
 
 #endif

@@ -58,6 +58,12 @@
 #include "dialogs/dialog-events.h"
 
 #include "select-toolbar.h"
+#include "star-context.h"
+#include "spiral-context.h"
+#include "sp-rect.h"
+#include "sp-star.h"
+#include "sp-spiral.h"
+#include "selection.h"
 
 #include "toolbox.h"
 
@@ -66,6 +72,9 @@ typedef void (*UpdateFunction)(SPDesktop *desktop, SPEventContext *eventcontext,
 
 static GtkWidget * sp_node_toolbox_new (SPDesktop *desktop);
 static GtkWidget * sp_zoom_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_star_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_rect_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_spiral_toolbox_new (SPDesktop *desktop);
 
 static const struct {
 	const gchar *type_name;
@@ -95,6 +104,9 @@ static const struct {
 	{ "SPSelectContext", "select_toolbox", sp_select_toolbox_new },
 	{ "SPNodeContext", "node_toolbox", sp_node_toolbox_new },
 	{ "SPZoomContext", "zoom_toolbox", sp_zoom_toolbox_new },
+    { "SPStarContext", "star_toolbox", sp_star_toolbox_new },
+    { "SPRectContext", "rect_toolbox", sp_rect_toolbox_new },
+    { "SPSpiralContext", "spiral_toolbox", sp_spiral_toolbox_new },
 	{ NULL, NULL, NULL }
 };
 
@@ -477,3 +489,400 @@ aux_toolbox_space (GtkWidget *tb, gint space)
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, space);
 }
 
+//########################
+//##       Star         ##
+//########################
+
+static void
+sp_stb_magnitude_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+   prefs_set_int_attribute ("tools.shapes.star", "magnitude", (gint)adj->value);
+   bool modmade=FALSE;
+   const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+   for (; items != NULL; items = items->next)
+      {
+       if (SP_IS_STAR ((SPItem *) items->data))
+          {
+           SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+           sp_repr_set_int(repr,"sodipodi:sides",(gint)adj->value);
+           sp_repr_set_double(repr,"sodipodi:arg2",sp_repr_get_double_attribute (repr, "sodipodi:arg1", 0.5) + M_PI / (gint)adj->value);
+           sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+           modmade = true;
+          }
+       }
+ if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+static void
+sp_stb_proportion_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+   prefs_set_double_attribute ("tools.shapes.star", "proportion", adj->value);
+   bool modmade=FALSE;
+   const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+   for (; items != NULL; items = items->next)
+       {if (SP_IS_STAR ((SPItem *) items->data))
+            { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+              sp_repr_set_double(repr,"sodipodi:r2" ,sp_repr_get_double_attribute (repr, "sodipodi:r1", 0.5)*adj->value);
+              sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+              modmade = true;
+            }
+      }
+ if (modmade) sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+
+static void
+sp_stb_sides_flat_state_changed (GtkWidget *widget, SPDesktop *desktop)
+{
+   const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+   bool modmade=FALSE;
+   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+        {prefs_set_string_attribute ("tools.shapes.star", "isflatsided", "true");
+        /* gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), FALSE) ;   - Fix Me */
+         for (; items != NULL; items = items->next)
+             {if (SP_IS_STAR ((SPItem *) items->data))
+                  { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                    sp_repr_set_attr(repr,"inkscape:flatsided" ,"true");
+                    sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                    modmade = true;
+                  }
+             }
+         }
+   else { prefs_set_string_attribute ("tools.shapes.star", "isflatsided", "false");
+        /* gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), TRUE);     - Fix Me */
+                  for (; items != NULL; items = items->next)
+                      {if (SP_IS_STAR ((SPItem *) items->data))
+                           { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                             sp_repr_set_attr(repr,"inkscape:flatsided" ,"false");
+                             sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                             modmade = true;
+                           }
+                      }
+         }
+ if (modmade) sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+
+static void
+sp_stb_defaults (GtkWidget *widget, GtkObject *obj)
+{
+    GtkAdjustment *adj;
+
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "magnitude");
+    gtk_adjustment_set_value (adj, 3);
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "proportion");
+    gtk_adjustment_set_value (adj, 0.5);
+}
+
+static GtkWidget *
+sp_star_toolbox_new (SPDesktop *desktop)
+{
+
+    const gchar *flatsidedstr;
+    GtkWidget *tbl,*hb,*sb1,*sb2,*fscb,*l,*b;
+    GtkObject *mag_adj,*proportion_adj;
+
+
+    tbl = gtk_hbox_new (FALSE, 0);
+
+    /* Magnitude */
+
+    hb = gtk_hbox_new (FALSE, 0);
+    l = gtk_label_new (_("Corners:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+    mag_adj = gtk_adjustment_new (prefs_get_int_attribute ("tools.shapes.star", "magnitude", 3), 3, 32, 1, 1, 1);
+    gtk_object_set_data (GTK_OBJECT (tbl), "magnitude", mag_adj);
+
+    sb1 = gtk_spin_button_new (GTK_ADJUSTMENT (mag_adj), 1, 0);
+    gtk_widget_set_size_request (sb1, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+    gtk_widget_show (sb1);
+    gtk_container_add (GTK_CONTAINER (hb), sb1);
+    gtk_signal_connect (GTK_OBJECT (mag_adj), "value_changed", GTK_SIGNAL_FUNC (sp_stb_magnitude_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    gtk_object_set_data (GTK_OBJECT (sb1), "altx", sb1);
+
+    /* Proportion */
+
+    hb = gtk_hbox_new (FALSE, 1);
+    l = gtk_label_new (_("Sharpness:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+
+    proportion_adj = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.star", "proportion", .5), 0.01, 1.0, 0.01, 0.1, 0.1);
+    gtk_object_set_data (GTK_OBJECT (tbl), "proportion", proportion_adj);
+
+    sb2 = gtk_spin_button_new (GTK_ADJUSTMENT (proportion_adj), 0.1, 2);
+    gtk_widget_set_size_request (sb2, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+    gtk_widget_show (sb2);
+    flatsidedstr = prefs_get_string_attribute ("tools.shapes.star", "isflatsided");
+   /* if (flatsidedstr && !strcmp (flatsidedstr,"false" ))    - Fix Me  */
+            gtk_widget_set_sensitive (GTK_WIDGET (sb2), TRUE);
+    /*else gtk_widget_set_sensitive (GTK_WIDGET (sb2), FALSE);   - Fix Me  */
+    gtk_container_add (GTK_CONTAINER (hb), sb2);
+    gtk_signal_connect (GTK_OBJECT (proportion_adj), "value_changed", GTK_SIGNAL_FUNC (sp_stb_proportion_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    gtk_object_set_data (GTK_OBJECT (sb2), "altx", sb2);
+
+    /* Flatsided checkbox */
+    hb = gtk_hbox_new (FALSE, 1);
+    fscb = gtk_check_button_new_with_label (_("Flat Sided"));
+    gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
+
+    if (flatsidedstr && !strcmp (flatsidedstr,"false" ))
+            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
+    else gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
+    gtk_widget_show (fscb);
+    gtk_container_add (GTK_CONTAINER (hb), fscb);
+    g_signal_connect (G_OBJECT(fscb), "toggled", GTK_SIGNAL_FUNC (sp_stb_sides_flat_state_changed ), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* Reset*/
+    hb = gtk_hbox_new (FALSE, 1);
+    b = gtk_button_new_with_label (_("Reset to Defaults"));
+    gtk_widget_show (b);
+    gtk_container_add (GTK_CONTAINER (hb), b);
+    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_stb_defaults), tbl);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    gtk_widget_show_all (tbl);
+
+    return tbl;
+}
+
+
+//########################
+//##       Rect         ##
+//########################
+
+
+static void
+sp_rtb_rx_ratio_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+     prefs_set_double_attribute ("tools.shapes.rect", "rx_ratio", adj->value);
+     bool modmade=FALSE;
+     const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+     for (; items != NULL; items = items->next)
+         {if (SP_IS_RECT ((SPItem *) items->data))
+              { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                sp_repr_set_double(repr,"rx" ,adj->value * 0.5 * sp_repr_get_double_attribute (repr, "height", 1));
+                sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                modmade = true;
+              }
+        }
+ if (modmade) sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+static void
+sp_rtb_ry_ratio_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+     prefs_set_double_attribute ("tools.shapes.rect", "ry_ratio", adj->value);
+     bool modmade=FALSE;
+     const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+     for (; items != NULL; items = items->next)
+          {if (SP_IS_RECT ((SPItem *) items->data))
+               { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                 sp_repr_set_double(repr,"ry" ,adj->value * 0.5 * sp_repr_get_double_attribute (repr, "width", 1) );
+                 sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                 modmade = true;
+               }
+         }
+ if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+static void
+sp_rtb_defaults ( GtkWidget *widget, GtkObject *obj)
+{
+    GtkAdjustment *adj;
+
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "rx_ratio");
+    gtk_adjustment_set_value (adj, 0.0);
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "ry_ratio");
+    gtk_adjustment_set_value (adj, 0.0);
+}
+
+static GtkWidget *
+sp_rect_toolbox_new (SPDesktop *desktop)
+{
+
+    GtkWidget *tbl, *l, *sb, *b, *hb;
+    GtkObject *a;
+
+
+
+    tbl = gtk_hbox_new (FALSE, 0);
+
+    /* rx_ratio */
+    hb = gtk_hbox_new (FALSE, 1);
+    l = gtk_label_new (_("Roundness ratio for x:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+    a = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.rect", "rx_ratio", 0.0), 0.0, 1.0, 0.01, 0.1, 0.1);
+    gtk_object_set_data (GTK_OBJECT (tbl), "rx_ratio", a);
+    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+    gtk_widget_show (sb);
+    gtk_container_add (GTK_CONTAINER (hb), sb);
+    gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_rtb_rx_ratio_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* ry_ratio */
+    hb = gtk_hbox_new (FALSE, 1);
+    l = gtk_label_new (_("Roundness ratio for y:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+    a = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.rect", "ry_ratio", 0.0), 0.0, 1.0, 0.01, 0.1, 0.1);
+    gtk_object_set_data (GTK_OBJECT (tbl), "ry_ratio", a);
+    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+    gtk_widget_show (sb);
+    gtk_container_add (GTK_CONTAINER (hb), sb);
+    gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_rtb_ry_ratio_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* Reset */
+    hb = gtk_hbox_new (FALSE, 1);
+    b = gtk_button_new_with_label (_("Defaults"));
+    gtk_widget_show (b);
+    gtk_container_add (GTK_CONTAINER (hb), b);
+    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_rtb_defaults), tbl);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    gtk_widget_show_all (tbl);
+
+    return tbl;
+}
+
+//########################
+//##       Spiral       ##
+//########################
+
+static void
+sp_spl_tb_revolution_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+     prefs_set_double_attribute ("tools.shapes.spiral", "revolution", adj->value);
+     bool modmade=FALSE;
+     const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+     for (; items != NULL; items = items->next)
+          {if (SP_IS_SPIRAL ((SPItem *) items->data))
+               { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                 sp_repr_set_double(repr,"sodipodi:revolution" ,adj->value );
+                 sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                 modmade = true;
+               }
+         }
+ if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+static void
+sp_spl_tb_expansion_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+     prefs_set_double_attribute ("tools.shapes.spiral", "expansion", adj->value);
+     bool modmade=FALSE;
+     const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+     for (; items != NULL; items = items->next)
+          {if (SP_IS_SPIRAL ((SPItem *) items->data))
+               { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                 sp_repr_set_double(repr,"sodipodi:expansion" ,adj->value );
+                 sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                 modmade = true;
+               }
+         }
+ if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+static void
+sp_spl_tb_t0_value_changed (GtkAdjustment *adj, SPDesktop *desktop)
+{
+     prefs_set_double_attribute ("tools.shapes.spiral", "t0", adj->value);
+     bool modmade=FALSE;
+     const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+     for (; items != NULL; items = items->next)
+          {if (SP_IS_SPIRAL ((SPItem *) items->data))
+               { SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
+                 sp_repr_set_double(repr,"sodipodi:t0" ,adj->value  );
+                 sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
+                 modmade = true;
+               }
+         }
+ if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+static void
+sp_spl_tb_defaults (GtkWidget *widget, GtkObject *obj)
+{
+    GtkAdjustment *adj;
+
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "revolution");
+    gtk_adjustment_set_value (adj, 3.0);
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "expansion");
+    gtk_adjustment_set_value (adj, 1.0);
+    adj = (GtkAdjustment*)gtk_object_get_data (obj, "t0");
+    gtk_adjustment_set_value (adj, 0.0);
+}
+
+static GtkWidget *
+sp_spiral_toolbox_new (SPDesktop *desktop)
+{
+
+    GtkWidget *tbl, *l, *sb, *b,*hb;
+    GtkObject *a;
+
+    tbl = gtk_hbox_new (FALSE, 0);
+
+    /* Revolution */
+    hb = gtk_hbox_new (FALSE, 1);
+    l = gtk_label_new (_("Revolution:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+    a = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.spiral", "revolution", 3.0), 0.05, 20.0, 1.0, 1.0, 1.0);
+    gtk_object_set_data (GTK_OBJECT (tbl), "revolution", a);
+    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1, 2);
+    gtk_widget_show (sb);
+    gtk_container_add (GTK_CONTAINER (hb), sb);
+    gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_spl_tb_revolution_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* Expansion */
+    hb = gtk_hbox_new (FALSE, 1);
+    l = gtk_label_new (_("Expansion:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+    a = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.spiral", "expansion", 1.0), 0.0, 1000.0, 0.1, 1.0, 1.0);
+    gtk_object_set_data (GTK_OBJECT (tbl), "expansion", a);
+    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+    gtk_widget_show (sb);
+    gtk_container_add (GTK_CONTAINER (hb), sb);
+    gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_spl_tb_expansion_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* T0 */
+    hb = gtk_hbox_new (FALSE, 1);
+    l = gtk_label_new (_("Inner radius:"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (hb), l);
+    a = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.spiral", "t0", 0.0), 0.0, 0.999, 0.1, 1.0, 1.0);
+    gtk_object_set_data (GTK_OBJECT (tbl), "t0", a);
+    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+    gtk_widget_show (sb);
+    gtk_container_add (GTK_CONTAINER (hb), sb);
+    gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_spl_tb_t0_value_changed), desktop);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    /* Reset */
+    hb = gtk_hbox_new (FALSE, 1);
+    b = gtk_button_new_with_label (_("Defaults"));
+    gtk_widget_show (b);
+    gtk_container_add (GTK_CONTAINER (hb), b);
+    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_spl_tb_defaults), tbl);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    gtk_widget_show_all (tbl);
+
+    return tbl;
+}

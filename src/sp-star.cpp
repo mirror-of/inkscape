@@ -100,6 +100,7 @@ sp_star_init (SPStar * star)
 	star->r[0] = 1.0;
 	star->r[1] = 0.001;
 	star->arg[0] = star->arg[1] = 0.0;
+	star->flatsided=0;
 }
 
 static void
@@ -115,6 +116,7 @@ sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "sodipodi:r2");
 	sp_object_read_attr (object, "sodipodi:arg1");
 	sp_object_read_attr (object, "sodipodi:arg2");
+	sp_object_read_attr (object, "inkscape:flatsided");
 }
 
 static SPRepr *
@@ -135,6 +137,7 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "sodipodi:r2", star->r[1]);
 		sp_repr_set_double (repr, "sodipodi:arg1", star->arg[0]);
 		sp_repr_set_double (repr, "sodipodi:arg2", star->arg[1]);
+		sp_repr_set_boolean (repr, "inkscape:flatsided", star->flatsided);
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)
@@ -214,6 +217,12 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
+	case SP_ATTR_INKSCAPE_FLATSIDED:
+		if (value && !strcmp (value, "true"))
+			star->flatsided = true;
+        else star->flatsided = false;
+		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
 			((SPObjectClass *) parent_class)->set (object, key, value);
@@ -239,7 +248,9 @@ sp_star_description (SPItem *item)
 {
 	SPStar *star = SP_STAR (item);
 
+	if (star->flatsided == false )
 	return g_strdup_printf ("Star of %d sides", star->sides);
+	else return g_strdup_printf ("Polygon of %d sides", star->sides);
 }
 
 static void
@@ -252,13 +263,14 @@ sp_star_set_shape (SPShape *shape)
 	gint sides = star->sides;
 
 	sp_curve_moveto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+	if (star->flatsided == false)
 	sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
 	
-	for (gint i = 1; i < sides; i++) {
-		sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 
-						    i));
-		sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 
-						    i));
+	for (gint i = 1; i < sides; i++)
+	    {
+		sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i));
+		if (star->flatsided == false)
+		    sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i));
 	}
 	
 	sp_curve_closepath (c);
@@ -267,7 +279,7 @@ sp_star_set_shape (SPShape *shape)
 }
 
 void
-sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2)
+sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat)
 {
 	g_return_if_fail (star != NULL);
 	g_return_if_fail (SP_IS_STAR (star));
@@ -275,10 +287,14 @@ sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gd
 	star->sides = CLAMP (sides, 3, 32);
 	star->center = center;
 	star->r[0] = MAX (r1, 0.001);
+	if (isflat == false)
 	star->r[1] = CLAMP (r2, 0.0, star->r[0]);
+	else {
+		              star->r[1] =CLAMP ( r1*cos(M_PI/sides) ,0.0, star->r[0] );
+	      }
 	star->arg[0] = arg1;
 	star->arg[1] = arg2;
-	
+	star->flatsided = isflat;
 	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
 }
 

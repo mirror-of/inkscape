@@ -23,6 +23,7 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtklabel.h>
 #include <gdk/gdkkeysyms.h>
+#include <gtk/gtkcheckbutton.h>
 
 #include "macros.h"
 #include "helper/sp-canvas.h"
@@ -104,6 +105,7 @@ sp_star_context_init (SPStarContext * star_context)
 
     star_context->magnitude = 5;
     star_context->proportion = 0.5;
+    star_context->isflatsided = false;
 }
 
 static void
@@ -125,19 +127,23 @@ sp_star_context_setup (SPEventContext *ec)
 
     sp_event_context_read (ec, "magnitude");
     sp_event_context_read (ec, "proportion");
+    sp_event_context_read (ec, "isflatsided");
 }
 
 static void
 sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
     SPStarContext *sc = SP_STAR_CONTEXT (ec);
-
     if (!strcmp (key, "magnitude")) {
         sc->magnitude = (val) ? atoi (val) : 5;
         sc->magnitude = CLAMP (sc->magnitude, 3, 32);
     } else if (!strcmp (key, "proportion")) {
         sc->proportion = (val) ? atof (val) : 0.5;
         sc->proportion = CLAMP (sc->proportion, 0.01, 1.0);
+    } else if (!strcmp (key, "isflatsided")) {
+       if (val && !strcmp (val, "true"))
+            sc->isflatsided = true;
+       else sc->isflatsided = false;
     }
 }
 
@@ -236,18 +242,19 @@ sp_star_drag (SPStarContext * sc, NR::Point p, guint state)
     NR::Point d = p1 - p0;
     gdouble r1 = NR::L2 (d);
     gdouble arg1 = atan2 (d);
-
     if (state & GDK_CONTROL_MASK) { 
         arg1 = round (arg1/(M_PI/snaps))*(M_PI/snaps);
     } 
-    
-    sp_star_position_set (star, sc->magnitude, p0, r1, r1 * sc->proportion, arg1, arg1 + M_PI / sides);
+	bool isflat = sc->isflatsided;
+	sp_star_position_set (star, sc->magnitude, p0, r1, r1 * sc->proportion, arg1, arg1 + M_PI / sides, isflat);
 
     /* status text */
     gchar status[80];
     GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-    sprintf (status, "Draw star at (%s,%s)", xs->str, ys->str);
+    if (isflat)
+         sprintf (status, "Draw poly at (%s,%s)", xs->str, ys->str);
+    else sprintf (status, "Draw star at (%s,%s)", xs->str, ys->str);
     sp_view_set_status (SP_VIEW (desktop), status, FALSE);
     g_string_free (xs, FALSE);
     g_string_free (ys, FALSE);
@@ -288,18 +295,12 @@ sp_sc_proportion_value_changed (GtkAdjustment *adj, SPStarContext *sc)
     sp_repr_set_double (SP_EVENT_CONTEXT_REPR (sc), "proportion", adj->value);
 }
 
+
 static void
-sp_sc_make_sides_flat_clicked(GtkWidget *widget, GtkObject *obj)
+sp_sc_sides_flat_state_changed (GtkWidget *widget, SPStarContext *sc)
 {
-    GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (obj, "magnitude");
-    gint n = (gint)adj->value;
+sp_repr_set_boolean (SP_EVENT_CONTEXT_REPR (sc), "isflatsided", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
     
-    gdouble k = sin(M_PI/n);
-    k = (1 - k) * (1 + k);
-    gdouble proportion = (gfloat)sqrt((double)k);
-    
-    adj = (GtkAdjustment*)gtk_object_get_data (obj, "proportion");
-    gtk_adjustment_set_value (adj, proportion);
 }
 
 static void
@@ -357,17 +358,19 @@ sp_star_context_config_widget (SPEventContext *ec)
     gtk_signal_connect (GTK_OBJECT (proportion_adj), "value_changed", GTK_SIGNAL_FUNC (sp_sc_proportion_value_changed), sc);
     
 
-    /* Making sides flat */
-    GtkWidget *b = gtk_button_new_with_label (_("Make sides flat"));
-    gtk_widget_show (b);
-    gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 2, 3, 
+    /* Flat Sides checkbox */
+    GtkWidget *fscb = gtk_check_button_new_with_label (_("Flat Sided"));
+    gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
+    gtk_widget_show (fscb);
+    gtk_table_attach (GTK_TABLE (tbl), fscb, 0, 2, 2, 3,
                       (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
                       (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
                       0, 0);
-    gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_sc_make_sides_flat_clicked), tbl);
+
+    g_signal_connect (G_OBJECT(fscb), "toggled", GTK_SIGNAL_FUNC (sp_sc_sides_flat_state_changed ), sc);
     
     /* Reset */
-    b = gtk_button_new_with_label (_("Defaults"));
+    GtkWidget *b = gtk_button_new_with_label (_("Defaults"));
     gtk_widget_show (b);
     gtk_table_attach (GTK_TABLE (tbl), b, 0, 2, 3, 4, 
                       (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 

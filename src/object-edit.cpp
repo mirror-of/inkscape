@@ -218,6 +218,7 @@ sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPStar *star = SP_STAR (item);
 
+
 	NR::Point d = p - star->center;
 
         double arg1 = atan2(d);
@@ -237,17 +238,19 @@ static void
 sp_star_knot2_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPStar *star = SP_STAR (item);
-
+    if (star->flatsided == false) {
 	NR::Point d = p - star->center;
 
-	if (state & GDK_CONTROL_MASK) {
+	    if (state & GDK_CONTROL_MASK)
+	        {
 		star->r[1]   = L2(d);
 		star->arg[1] = star->arg[0] + M_PI / star->sides;
-	} else {
+	        }
+	    else {
 		star->r[1]   = L2(d);
 		star->arg[1] = atan2 (d);
 	}
-	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
+	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);}
 }
 
 static NR::Point sp_star_knot1_get (SPItem *item)
@@ -257,6 +260,7 @@ static NR::Point sp_star_knot1_get (SPItem *item)
 	SPStar *star = SP_STAR(item);
 
 	return sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0);
+
 }
 
 static NR::Point sp_star_knot2_get (SPItem *item)
@@ -273,13 +277,15 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	/* we don't need to get parent knot_holder */
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
+	g_assert (item != NULL);
 
-	sp_knot_holder_add (knot_holder,
-			    sp_star_knot1_set,
-			    sp_star_knot1_get);
-	sp_knot_holder_add (knot_holder,
-			    sp_star_knot2_set,
-			    sp_star_knot2_get);
+	SPStar *star = SP_STAR(item);
+
+
+	sp_knot_holder_add (knot_holder, sp_star_knot1_set, sp_star_knot1_get);
+
+	if (star->flatsided == false)
+	    sp_knot_holder_add (knot_holder, sp_star_knot2_set, sp_star_knot2_get);
 
 	return knot_holder;
 }

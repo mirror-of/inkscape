@@ -47,6 +47,7 @@ static const SPAttrDesc star_desc[] = {
     { N_("R2:"), "sodipodi:r2"},
     { N_("ARG1:"), "sodipodi:arg1"},
     { N_("ARG2:"), "sodipodi:arg2"},
+    { N_("Flatsides:"), "inkscape:flatsided"},
     { NULL, NULL}
 };
 
