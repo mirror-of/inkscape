@@ -107,23 +107,27 @@ GtkWidget *spw_vbox_checkbutton(GtkWidget *dialog, GtkWidget *vbox,
 GtkWidget *
 spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
 		const gchar * label, gchar * key, int col, int row,
-		int sensitive, GCallback cb)
+		int insensitive, GCallback cb)
 {
   GtkWidget *b;
 
   g_assert(dialog != NULL);
   g_assert(table  != NULL);
 
-  b = gtk_check_button_new_with_label (label);
-  g_assert(b != NULL);
+	GtkWidget *l = gtk_label_new (label);
+	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+	gtk_widget_show (l);
+  gtk_table_attach (GTK_TABLE (table), l, 0, 1, row, row+1,
+		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+
+  b = gtk_check_button_new ();
   gtk_widget_show (b);
-  gtk_table_attach (GTK_TABLE (table), b, col, col+1, row, row+1,
+  gtk_table_attach (GTK_TABLE (table), b, 1, 2, row, row+1,
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
   gtk_object_set_data (GTK_OBJECT (b), "key", key);
   gtk_object_set_data (GTK_OBJECT (dialog), key, b);
-  g_signal_connect (G_OBJECT (b), "toggled",
-		    cb, dialog);
-  if (sensitive == 1) {
+  g_signal_connect (G_OBJECT (b), "toggled", cb, dialog);
+  if (insensitive == 1) {
     gtk_widget_set_sensitive (b, FALSE);
   }
   return b;

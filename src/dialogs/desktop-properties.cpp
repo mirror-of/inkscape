@@ -921,14 +921,15 @@ sp_desktop_dialog(void)
         /* Page page */
         l = gtk_label_new(_("Page"));
         gtk_widget_show(l);
-        t = gtk_table_new(1, 5, FALSE);
+        t = gtk_table_new(1, 2, FALSE);
         gtk_widget_show(t);
         gtk_container_set_border_width(GTK_CONTAINER(t), 6);
         gtk_table_set_row_spacings(GTK_TABLE(t), 6);
+        gtk_table_set_col_spacings(GTK_TABLE(t), 6);
         gtk_notebook_prepend_page(GTK_NOTEBOOK(nb), t, l);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), 0);
 
-        sp_color_picker_button(dlg, t, _("Background (also for export):"),
+        sp_color_picker_button(dlg, t, _("Background (also for export)"),
                                "pagecolor", _("Background color"),
                                "inkscape:pageopacity", 0);
 
@@ -936,17 +937,11 @@ sp_desktop_dialog(void)
         spw_checkbutton(dlg, t, _("Show canvas border"),
                         "showborder", 0, 1, 0, cb);
 
-        GtkWidget *b = gtk_check_button_new_with_label(_("Border on top of drawing"));
-        gtk_widget_show(b);
-        gtk_table_attach(GTK_TABLE(t), b, 0, 2, 2, 3,
-                         (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
-                         (GtkAttachOptions)0, 0, 0);
+        cb = G_CALLBACK(sp_dtw_border_layer_toggled);
+        spw_checkbutton(dlg, t, _("Border on top of drawing"),
+                        "borderlayer", 0, 2, 0, cb);
 
-        gtk_object_set_data(GTK_OBJECT(dlg), "borderlayer", b);
-        g_signal_connect(G_OBJECT(b), "toggled",
-                         G_CALLBACK(sp_dtw_border_layer_toggled), dlg);
-
-        sp_color_picker_button(dlg, t, _("Border color:"),
+        sp_color_picker_button(dlg, t, _("Border color"),
                                "bordercolor", _("Canvas border color"),
                                "borderopacity", 4);
 
@@ -963,7 +958,7 @@ sp_desktop_dialog(void)
         gtk_widget_show(hb);
         gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
 
-        l = gtk_label_new(_("Paper size:"));
+        l = gtk_label_new(_("Canvas size:"));
         gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
         gtk_widget_show(l);
         gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
@@ -998,7 +993,7 @@ sp_desktop_dialog(void)
         gtk_widget_show(hb);
         gtk_box_pack_start(GTK_BOX(vb), hb, FALSE, FALSE, 0);
 
-        l = gtk_label_new(_("Paper orientation:"));
+        l = gtk_label_new(_("Canvas orientation:"));
         gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
         gtk_widget_show(l);
         gtk_box_pack_start(GTK_BOX(hb), l, FALSE, FALSE, 0);
@@ -1025,7 +1020,7 @@ sp_desktop_dialog(void)
         gtk_option_menu_set_menu(GTK_OPTION_MENU(om), m);
 
         /* Custom paper frame */
-        GtkWidget *f = gtk_frame_new(_("Custom paper"));
+        GtkWidget *f = gtk_frame_new(_("Custom canvas"));
         gtk_widget_show(f);
         gtk_box_pack_start(GTK_BOX(vb), f, FALSE, FALSE, 0);
 
