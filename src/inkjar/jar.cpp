@@ -334,6 +334,7 @@ int JarFile::read(guint8 *buf, int count)
     return nbytes;
 }
 
+/* FIXME: this could probably use ZlibBuffer */
 guint8 *JarFile::get_compressed_file(guint32 compressed_size, 
 				     unsigned int& file_length,
 				     guint32 oldcrc, guint16 flags)
@@ -348,7 +349,7 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
     GByteArray *gba = g_byte_array_new();
     
     _zs.avail_in = 0;
-    guint32 crc = crc32(crc, Z_NULL, 0);
+    guint32 crc = crc32(0, Z_NULL, 0);
     
     do {
 		
