@@ -276,13 +276,13 @@ spdc_set_attach (SPDrawContext *dc, gboolean attach)
 	if (attach) {
 		dc->attach = TRUE;
 		spdc_attach_selection (dc, dc->selection);
-		sp_view_set_status (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)),
-				    _("Appending to selection. Press 'a' to toggle Append/New."), FALSE);
+		sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)),
+				    _("Appending to selection"));
 	} else {
 		dc->attach = FALSE;
 		spdc_detach_selection (dc, dc->selection);
-		sp_view_set_status (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)),
-				    _("Creating new curve. Press 'a' to toggle Append/New."), FALSE);
+		sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)),
+				    _("Creating new curve"), FALSE);
 	}
 }
 
@@ -293,7 +293,7 @@ spdc_set_attach (SPDrawContext *dc, gboolean attach)
 static void
 spdc_selection_changed (SPSelection *sel, SPDrawContext *dc)
 {
-	g_print ("Selection changed in draw context\n");
+	//	g_print ("Selection changed in draw context\n");
 	if (dc->attach) {
 		spdc_attach_selection (dc, sel);
 	}
@@ -304,7 +304,7 @@ spdc_selection_changed (SPSelection *sel, SPDrawContext *dc)
 static void
 spdc_selection_modified (SPSelection *sel, guint flags, SPDrawContext *dc)
 {
-	g_print ("Selection modified in draw context\n");
+	//g_print ("Selection modified in draw context\n");
 	if (dc->attach) {
 		spdc_attach_selection (dc, sel);
 	}
@@ -443,7 +443,8 @@ spdc_concat_colors_and_flush (SPDrawContext *dc, gboolean forceclosed)
 
 	/* Step A - test, whether we ended on green anchor */
 	if (forceclosed || (dc->green_anchor && dc->green_anchor->active)) {
-		g_print ("We hit green anchor, closing Green-Blue-Red\n");
+		//g_print ("We hit green anchor, closing Green-Blue-Red\n");
+		sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)), "Path is closed.");
 		sp_curve_closepath_current (c);
 		/* Closed path, just flush */
 		spdc_flush_white (dc, c);
@@ -453,10 +454,11 @@ spdc_concat_colors_and_flush (SPDrawContext *dc, gboolean forceclosed)
 
 	/* Step B - both start and end anchored to same curve */
 	if (dc->sa && dc->ea && (dc->sa->curve == dc->ea->curve)) {
-		g_print ("We hit bot start and end of single curve, closing paths\n");
+		//		g_print ("We hit bot start and end of single curve, closing paths\n");
+		sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT_DESKTOP (dc)), "Closing path.");
 		if (dc->sa->start) {
 			SPCurve *r;
-			g_print ("Reversing curve\n");
+			//g_print ("Reversing curve\n");
 			r = sp_curve_reverse (c);
 			sp_curve_unref (c);
 			c = r;
@@ -753,7 +755,7 @@ sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble d
 	SPDrawAnchor *a;
 	SPDesktop *dt=SP_EVENT_CONTEXT_DESKTOP (SP_EVENT_CONTEXT (dc));
 
-	sp_view_set_statusf(SP_VIEW (dt), "Creating anchor at %g %g", dx, dy);
+	sp_view_set_statusf_flash (SP_VIEW (dt), "Creating anchor at %g %g", dx, dy);
 
 	a = g_new (SPDrawAnchor, 1);
 
@@ -1003,7 +1005,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				dc->ea = anchor;
 				/* Write curves to object */
 
-				sp_view_set_statusf(SP_VIEW (dt), "Finishing freehand");
+				sp_view_set_statusf_flash (SP_VIEW (dt), "Finishing freehand");
 
 				spdc_concat_colors_and_flush (dc, FALSE);
 				dc->sa = NULL;
