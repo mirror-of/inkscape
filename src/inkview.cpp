@@ -441,7 +441,7 @@ static void usage()
 
 Inkscape::Application *inkscape;
 
-#ifndef WIN32
+#ifdef XXX
 /* TODO !!! make this temporary stub unnecessary */
 Inkscape::Application *inkscape_get_instance() { return NULL; }
 void inkscape_ref (void) {}

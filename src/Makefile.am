@@ -1,14 +1,11 @@
 ## Process this file with automake to produce Makefile.in
 
-if PLATFORM_WIN32
-win32_sources = winmain.cpp
-win32ldflags = -lcomdlg32
-endif 
 
-if INKJAR
-inkjar_dir = inkjar
-inkjar_libs = inkjar/libinkjar.a
-endif
+# ################################################
+#
+#  G L O B A L
+#
+# ################################################
 
 SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display extension utest $(inkjar_dir)
 
@@ -35,143 +32,145 @@ check-recursive: all-recursive
 # longer; and the dependency won't have any effect if someone does `make check'
 # from a subdirectory.
 
+# ################################################
+#
+#  E X T R A 
+#
+# ################################################
+
+if PLATFORM_WIN32
+win32_sources = winmain.cpp
+win32ldflags = -lcomdlg32
+endif 
+
+if INKJAR
+inkjar_dir = inkjar
+inkjar_libs = inkjar/libinkjar.a
+endif
+
+
+# ################################################
+#
+#  I N K S C A P E
+#
+# ################################################
+
 bin_PROGRAMS = inkscape 
 
-inkscapelib_src = \
-	macros.h \
-	forward.h \
-	enums.h \
-	attributes.cpp attributes.h \
-	sp-object.cpp sp-object.h \
-	sp-object-repr.cpp sp-object-repr.h \
-	sp-object-group.cpp sp-object-group.h \
-	sp-defs.cpp sp-defs.h \
-	sp-item-rm-unsatisfied-cns.cpp sp-item-rm-unsatisfied-cns.h	\
-	sp-item.cpp sp-item.h \
-	sp-item-group.cpp sp-item-group.h \
-	sp-symbol.cpp sp-symbol.h \
-	sp-marker.cpp sp-marker.h \
-	sp-use.cpp sp-use.h \
-	sp-anchor.cpp sp-anchor.h \
-	sp-root.cpp sp-root.h \
-	sp-image.cpp sp-image.h \
-	brokenimage.xpm \
-	sp-path.cpp sp-path.h \
-	sp-shape.cpp sp-shape.h \
-	sp-rect.cpp sp-rect.h \
-	sp-ellipse.cpp sp-ellipse.h \
-	sp-star.cpp sp-star.h \
-	sp-spiral.cpp sp-spiral.h \
-	sp-offset.cpp sp-offset.h \
-	sp-line.cpp sp-line.h \
-	sp-polyline.cpp sp-polyline.h \
-	sp-polygon.cpp sp-polygon.h \
-	sp-chars.cpp sp-chars.h \
-	sp-text.cpp sp-text.h \
-	sp-paint-server.cpp sp-paint-server.h \
-	sp-gradient.cpp sp-gradient.h \
-	sp-pattern.cpp sp-pattern.h \
-	sp-clippath.cpp sp-clippath.h \
-	sp-mask.cpp sp-mask.h \
-	sp-animation.cpp sp-animation.h \
-	\
-	color.cpp color.h \
-	marker-status.cpp marker-status.h	\
-	extract-uri.cpp extract-uri.h \
-	style.cpp style.h \
-	\
-	document.cpp document.h document-private.h \
-	document-undo.cpp \
-	uri-references.cpp uri-references.h \
-	uri.cpp uri.h \
-	version.cpp version.h \
-	\
-	streams-handles.h streams-handles.cpp \
-	streams-zlib.h streams-zlib.cpp \
-	streams-gzip.h streams-gzip.cpp \
-	\
-	approx-equal.h remove-last.h
-
 noinst_LIBRARIES = libinkscape.a
-libinkscape_a_SOURCES = $(inkscapelib_src)
-spproglibs = libinkscape.a
 
-inkscape_SOURCES = \
-	$(spprogsrc) \
-	\
-	inkscape.cpp inkscape.h inkscape-private.h \
-	\
-	inkscape-stock.cpp inkscape-stock.h\
-	\
-	sp-namedview.cpp sp-namedview.h \
-	sp-guide.cpp sp-guide.h \
-	\
-	geom.cpp geom.h \
-	view.cpp view.h \
-	svg-view.cpp svg-view.h \
-	selection.cpp selection.h \
+libinkscape_a_SOURCES = \
+	approx-equal.h remove-last.h \
+	arc-context.cpp arc-context.h \
+	attributes.cpp attributes.h \
+	brokenimage.xpm \
+	color.cpp color.h \
+	desktop-affine.cpp desktop-affine.h \
 	desktop.cpp desktop.h \
-	sp-guide-attachment.h	\
-	sp-item-notify-moveto.cpp sp-item-notify-moveto.h	\
-	sp-guide-constraint.h	\
-	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
-	sp-item-update-cns.cpp sp-item-update-cns.h	\
-	desktop-units.h \
 	desktop-events.cpp desktop-events.h \
 	desktop-handles.cpp desktop-handles.h \
-	desktop-affine.cpp desktop-affine.h \
 	desktop-snap.cpp desktop-snap.h \
-	sp-metrics.cpp sp-metrics.h \
-	toolbox.cpp toolbox.h \
-	select-toolbar.cpp select-toolbar.h\
-	\
-	verbs.cpp verbs.h \
-	shortcuts.cpp shortcuts.h \
+	desktop-units.h \
+	dir-util.cpp dir-util.h \
+	document.cpp document.h document-private.h \
+	document-undo.cpp \
+	draw-context.cpp draw-context.h \
+	dropper-context.cpp dropper-context.h \
+	dyna-draw-context.cpp dyna-draw-context.h \
+	enums.h \
 	event-context.cpp event-context.h \
-	seltrans-handles.cpp seltrans-handles.h \
-	seltrans.cpp seltrans.h \
-	select-context.cpp select-context.h \
+	extract-uri.cpp extract-uri.h \
+	file.cpp file.h \
+	forward.h \
+	geom.cpp geom.h \
+	gradient-chemistry.cpp gradient-chemistry.h \
+	help.cpp help.h \
+	inkscape.cpp inkscape.h inkscape-private.h \
+	inkscape-stock.cpp inkscape-stock.h\
+	interface.cpp interface.h \
+	knot.cpp knot.h \
+	knotholder.cpp knotholder.h \
+	macros.h \
+	marker-status.cpp marker-status.h	\
 	node-context.cpp node-context.h \
 	nodepath.cpp nodepath.h \
-	knotholder.cpp knotholder.h \
 	object-edit.cpp object-edit.h \
-	rect-context.cpp rect-context.h \
-	arc-context.cpp arc-context.h \
-	star-context.cpp star-context.h \
-	spiral-context.cpp spiral-context.h \
-	draw-context.cpp draw-context.h \
-	dyna-draw-context.cpp dyna-draw-context.h \
-	text-context.cpp text-context.h \
-	zoom-context.cpp zoom-context.h \
-	dropper-context.cpp dropper-context.h \
-	tools-switch.cpp tools-switch.h\
-	prefs-utils.cpp prefs-utils.h\
-	\
-	knot.cpp knot.h \
-	\
-	$(win32_sources) \
-	main.cpp \
-	help.cpp help.h \
-	sp-cursor.cpp sp-cursor.h \
-	dir-util.cpp dir-util.h \
-	rubberband.cpp rubberband.h \
-	path-chemistry.cpp path-chemistry.h \
-	selection-chemistry.cpp selection-chemistry.h \
-	gradient-chemistry.cpp gradient-chemistry.h \
-	sp-item-transform.cpp sp-item-transform.h \
-	\
-	splivarot.cpp splivarot.h \
-	\
-	file.cpp file.h \
-	print.cpp print.h \
-	interface.cpp interface.h \
 	object-ui.cpp object-ui.h \
+	path-chemistry.cpp path-chemistry.h \
+	preferences-skeleton.h \
+	prefs-utils.cpp prefs-utils.h\
+	print.cpp print.h \
+	rect-context.cpp rect-context.h \
+	rubberband.cpp rubberband.h \
+	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
+	select-context.cpp select-context.h \
+	selection-chemistry.cpp selection-chemistry.h \
+	selection.cpp selection.h \
+	select-toolbar.cpp select-toolbar.h\
+	seltrans.cpp seltrans.h \
+	seltrans-handles.cpp seltrans-handles.h \
+	shortcuts.cpp shortcuts.h \
 	slideshow.cpp slideshow.h \
-	\
-	preferences-skeleton.h
+	sp-anchor.cpp sp-anchor.h \
+	sp-animation.cpp sp-animation.h \
+	sp-chars.cpp sp-chars.h \
+	sp-clippath.cpp sp-clippath.h \
+	sp-cursor.cpp sp-cursor.h \
+	sp-defs.cpp sp-defs.h \
+	sp-ellipse.cpp sp-ellipse.h \
+	sp-gradient.cpp sp-gradient.h \
+	sp-guide-attachment.h	\
+	sp-guide-constraint.h	\
+	sp-guide.cpp sp-guide.h \
+	sp-image.cpp sp-image.h \
+	spiral-context.cpp spiral-context.h \
+	sp-item.cpp sp-item.h \
+	sp-item-group.cpp sp-item-group.h \
+	sp-item-notify-moveto.cpp sp-item-notify-moveto.h \
+	sp-item-rm-unsatisfied-cns.cpp sp-item-rm-unsatisfied-cns.h	\
+	sp-item-transform.cpp sp-item-transform.h \
+	sp-item-update-cns.cpp sp-item-update-cns.h	\
+	sp-line.cpp sp-line.h \
+	splivarot.cpp splivarot.h \
+	sp-marker.cpp sp-marker.h \
+	sp-mask.cpp sp-mask.h \
+	sp-metrics.cpp sp-metrics.h \
+	sp-namedview.cpp sp-namedview.h \
+	sp-object.cpp sp-object.h \
+	sp-object-group.cpp sp-object-group.h \
+	sp-object-repr.cpp sp-object-repr.h \
+	sp-offset.cpp sp-offset.h \
+	sp-paint-server.cpp sp-paint-server.h \
+	sp-path.cpp sp-path.h \
+	sp-pattern.cpp sp-pattern.h \
+	sp-polygon.cpp sp-polygon.h \
+	sp-polyline.cpp sp-polyline.h \
+	sp-rect.cpp sp-rect.h \
+	sp-root.cpp sp-root.h \
+	sp-shape.cpp sp-shape.h \
+	sp-spiral.cpp sp-spiral.h \
+	sp-star.cpp sp-star.h \
+	sp-symbol.cpp sp-symbol.h \
+	sp-text.cpp sp-text.h \
+	sp-use.cpp sp-use.h \
+	star-context.cpp star-context.h \
+	streams-gzip.h streams-gzip.cpp \
+	streams-handles.h streams-handles.cpp \
+	streams-zlib.h streams-zlib.cpp \
+	style.cpp style.h \
+	svg-view.cpp svg-view.h \
+	text-context.cpp text-context.h \
+	toolbox.cpp toolbox.h \
+	tools-switch.cpp tools-switch.h\
+	uri.cpp uri.h \
+	uri-references.cpp uri-references.h \
+	verbs.cpp verbs.h \
+	version.cpp version.h \
+	view.cpp view.h \
+	$(win32_sources) \
+	zoom-context.cpp zoom-context.h
 
 inkscape_private_libs = \
-	$(spproglibs) \
 	dialogs/libspdialogs.a \
 	xml/libspxml.a \
 	svg/libspsvg.a \
@@ -187,8 +186,7 @@ inkscape_private_libs = \
 	extension/internal/libinternal.a \
 	$(inkjar_libs)
 
-
-inkscape_LDADD = \
+all_libs = \
 	$(inkscape_private_libs) \
 	$(INKSCAPE_LIBS) \
 	$(GNOME_PRINT_LIBS) \
@@ -197,42 +195,56 @@ inkscape_LDADD = \
 	$(kdeldadd) \
 	$(win32ldflags)
 
+
+inkscape_SOURCES = \
+	$(libinkscape_a_SOURCES) = \
+	main.cpp
+
+inkscape_LDADD = \
+	$(all_libs)
+
 inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
+
+
+
+# ################################################
+#
+#  I N K V I E W
+#
+# ################################################
+
 
 EXTRA_PROGRAMS = inkview
 
+
 inkview_SOURCES = \
-	inkview.cpp \
-	view.cpp view.h \
-	svg-view.cpp svg-view.h \
-	dir-util.cpp dir-util.h \
-	print.cpp print.h \
-	prefs-utils.cpp prefs-utils.h
+	$(libinkscape_a_SOURCES) = \
+	inkview.cpp
+
 
 inkview_LDADD = \
-	$(spproglibs) \
-	extension/libextension.a \
-	extension/implementation/libimplementation.a \
-	extension/internal/libinternal.a \
-	xml/libspxml.a \
-	svg/libspsvg.a \
-	display/libspdisplay.a \
-	helper/libspchelp.a \
-	libnrtype/libnrtype.a \
-	libnr/libnr.a \
-	libarikkei/libarikkei.a \
-	livarot/libvarot.a \
-	$(INKSCAPE_LIBS) \
-	$(GNOME_PRINT_LIBS) \
-	$(XFT_LIBS) \
-	$(FREETYPE_LIBS) \
-	$(kdeldadd) \
-	$(win32ldflags) \
+	$(all_libs)
 	$(inkjar_libs)
+
+
+
+# ################################################
+#
+#  D I S T
+#
+# ################################################
 
 dist-hook:
 	mkdir $(distdir)/pixmaps
 	cp $(srcdir)/pixmaps/*xpm $(distdir)/pixmaps
+
+
+
+# ################################################
+#
+#  T E S T S
+#
+# ################################################
 
 TESTS = extract-uri-test$(EXEEXT)
 # automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
