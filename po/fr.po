@@ -1,4 +1,4 @@
-# translation of fr.po to Français
+﻿# translation of fr.po to Français
 # French translation of Inkscape.
 # Copyright (C) 2000-2003 Free Software Foundation, Inc.
 # Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.
@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-15 21:48-0700\n"
-"PO-Revision-Date: 2004-11-14 10:31+0100\n"
+"POT-Creation-Date: 2004-11-18 12:48-0700\n"
+"PO-Revision-Date: 2004-11-18 12:31+0100\n"
 "Last-Translator: Matiphas <matiphas _a_ free _point_ fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -332,7 +332,7 @@ msgstr "Afficher la grille"
 
 #: src/dialogs/desktop-properties.cpp:822
 msgid "Snap bounding boxes to grid"
-msgstr "Faire coller les boites à la grille"
+msgstr "Faire coller les boîtes à la grille"
 
 #: src/dialogs/desktop-properties.cpp:823
 msgid "Snap points to grid"
@@ -405,7 +405,7 @@ msgstr "Afficher les guides"
 
 #: src/dialogs/desktop-properties.cpp:904
 msgid "Snap bounding boxes to guides"
-msgstr "Faire coller les boites de contour aux guides"
+msgstr "Faire coller les boîtes de contour aux guides"
 
 #: src/dialogs/desktop-properties.cpp:905
 msgid "Snap points to guides"
@@ -531,12 +531,12 @@ msgstr "Afficher les objets lors des déplacements ou des transformations"
 
 #: src/dialogs/display-settings.cpp:239
 msgid "Box outline"
-msgstr "Boite de contour"
+msgstr "Boîte de contour"
 
 #: src/dialogs/display-settings.cpp:240
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr ""
-"N'afficher que les boites de contours des objets lors de leurs déplacements "
+"N'afficher que les boîtes de contours des objets lors de leurs déplacements "
 "ou transformations"
 
 #: src/dialogs/display-settings.cpp:246
@@ -566,11 +566,11 @@ msgstr ""
 
 #: src/dialogs/display-settings.cpp:272
 msgid "Box"
-msgstr "Boite"
+msgstr "Boîte"
 
 #: src/dialogs/display-settings.cpp:273
 msgid "Each selected object displays its bounding box"
-msgstr "Tous les objets sélectionnés affichent leurs boites de contour"
+msgstr "Tous les objets sélectionnés affichent leurs boîtes de contour"
 
 #: src/dialogs/display-settings.cpp:278
 msgid "Default scale origin:"
@@ -578,12 +578,12 @@ msgstr "Origine par défaut de mise à l'échelle :"
 
 #: src/dialogs/display-settings.cpp:289
 msgid "Opposite bounding box edge"
-msgstr "Arrête opposée de la boite de contour"
+msgstr "Arrête opposée de la boîte de contour"
 
 #: src/dialogs/display-settings.cpp:290
 msgid "Default scale origin will be on the bounding box of the item"
 msgstr ""
-"L'origine par défaut de mise à l'échelle sera sur la boite de contour de "
+"L'origine par défaut de mise à l'échelle sera sur la boîte de contour de "
 "l'item"
 
 #: src/dialogs/display-settings.cpp:296
@@ -593,7 +593,7 @@ msgstr "Le nœud opposé le plus éloigné"
 #: src/dialogs/display-settings.cpp:297
 msgid "Default scale origin will be on the bounding box of the item's points"
 msgstr ""
-"L'origine par défaut de mise à l'échelle sera sur la boite de contour des "
+"L'origine par défaut de mise à l'échelle sera sur la boîte de contour des "
 "points de l'item"
 
 #: src/dialogs/display-settings.cpp:349
@@ -982,7 +982,7 @@ msgstr "Les dialogues sont cachés dans la barre des taches"
 #: src/dialogs/display-settings.cpp:1197
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
-"Les boites de dialogues sont cachées dans la barre des taches du "
+"Les bo�tes de dialogues sont cachées dans la barre des taches du "
 "gestionnaire de fenêtre"
 
 #: src/dialogs/display-settings.cpp:1204
@@ -1141,7 +1141,7 @@ msgstr "Résolution d'exportation par défaut :"
 
 #: src/dialogs/display-settings.cpp:1360
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
-msgstr "Résolution par défaut (point par pouce) dans la boite d'exportation"
+msgstr "Résolution par défaut (point par pouce) dans la bo�te d'exportation"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
 #: src/dialogs/display-settings.cpp:1361 src/dialogs/export.cpp:418
@@ -1566,7 +1566,6 @@ msgstr "Description"
 
 #. Hide
 #: src/dialogs/item-properties.cpp:230
-#, fuzzy
 msgid "Hide"
 msgstr "Masquer :"
 
@@ -1689,7 +1688,6 @@ msgid "Expansion:"
 msgstr "Expansion :"
 
 #: src/dialogs/object-attributes.cpp:64
-#, fuzzy
 msgid "Revolutions:"
 msgstr "Tours :"
 
@@ -1854,7 +1852,6 @@ msgstr ""
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
 #: src/dialogs/rdf.cpp:265
-#, fuzzy
 msgid "Coverage"
 msgstr "Couverture"
 
@@ -2112,7 +2109,6 @@ msgstr ""
 "déplacer."
 
 #: src/dialogs/xml-tree.cpp:183
-#, fuzzy
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>Cliquer</b> sur les attributs pour pouvoir les éditer."
 
@@ -2177,7 +2173,6 @@ msgstr "Définir l'attribut"
 
 #. TRANSLATORS: "Set" is a verb here
 #: src/dialogs/xml-tree.cpp:531
-#, fuzzy
 msgid "Set"
 msgstr "Définir"
 
@@ -2294,7 +2289,7 @@ msgstr "Paramètres de la sortie EPS"
 
 #: src/extension/internal/eps-out.cpp:84
 msgid "Make bounding box around full page"
-msgstr "Faire une boite tout autour de la page"
+msgstr "Faire une boîte tout autour de la page"
 
 #: src/extension/internal/eps-out.cpp:91
 msgid "Convert text to path"
@@ -2749,11 +2744,11 @@ msgstr "Afficher ou masquer les paneaux d'outils de contrôles"
 
 #: src/interface.cpp:912
 msgid "_Toolbox"
-msgstr "Boi_te à outils"
+msgstr "Boî_te à outils"
 
 #: src/interface.cpp:912
 msgid "Show or hide the main toolbox (on the left)"
-msgstr "Afficher ou masquer la boite à outils principale (à gauche)"
+msgstr "Afficher ou masquer la boîte à outils principale (à gauche)"
 
 #: src/interface.cpp:918
 msgid "_Statusbar"
@@ -3825,7 +3820,8 @@ msgstr ""
 msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
-msgstr ""
+msgstr "Vous ne pouvez pas directement mettre le texte sur un rectangle dans "
+"cette version. Convertir le rectangle en chemin avant"
 
 #: src/text-chemistry.cpp:153
 msgid "Select <b>a text on path</b> to remove it from path."
@@ -3904,7 +3900,7 @@ msgstr "Convertir les segments sélectionnés en courbes"
 #: src/toolbox.cpp:1442 src/toolbox.cpp:1648 src/toolbox.cpp:1684
 #: src/toolbox.cpp:2139 src/toolbox.cpp:2175
 msgid "<b>New:</b>"
-msgstr "<b>Nouveau :</b>"
+msgstr "<b>Créer :</b>"
 
 #. FIXME: implement averaging of all parameters for multiple selected stars
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
@@ -3914,7 +3910,7 @@ msgstr "<b>Nouveau :</b>"
 #: src/toolbox.cpp:1427 src/toolbox.cpp:1650 src/toolbox.cpp:1668
 #: src/toolbox.cpp:2141 src/toolbox.cpp:2160
 msgid "<b>Change:</b>"
-msgstr "<b>Changement :</b>"
+msgstr "<b>Modifier :</b>"
 
 #: src/toolbox.cpp:1169
 msgid "Corners:"
@@ -4173,7 +4169,9 @@ msgstr ""
 msgid ""
 "<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow "
 "keys adjust width, <b>up</b>/<b>down</b> adjust angle."
-msgstr ""
+msgstr "<b>Cliquer-déplacer</b> pour calligraphier. Les flèches <b>gauche<b>"
+"/<b>droite</b> permettent d'ajuster la largeur de la plume, <b>haut</b>/"
+"<b>bas</b> son angle."
 
 #: src/tools-switch.cpp:177
 msgid "<b>Click</b> to select or create text object, then type."
@@ -4209,7 +4207,7 @@ msgstr "Vectoriser : pas de document actif"
 
 #: src/trace/trace.cpp:160
 msgid "Trace: Image has no bitmap data"
-msgstr "Vectoriser : l'image ce contient pas de données bitmap"
+msgstr "Vectoriser : l'image ne contient pas de données bitmap"
 
 #: src/verbs.cpp:878
 msgid "New layer created."
@@ -4237,7 +4235,7 @@ msgstr "Pas de calque courant."
 
 #: src/verbs.cpp:943
 msgid "Raised layer."
-msgstr "Calque redimentioné."
+msgstr "Calque redimentionné."
 
 #: src/verbs.cpp:947
 msgid "Lowered layer."
@@ -4245,7 +4243,7 @@ msgstr "Calque descendu."
 
 #: src/verbs.cpp:953
 msgid "Can't move layer any further."
-msgstr "Le calque ne peut plus bouger."
+msgstr "Impossible de déplacer le calque plus loin."
 
 #: src/verbs.cpp:976
 msgid "Deleted layer."
@@ -4277,7 +4275,7 @@ msgstr ""
 
 #: src/verbs.cpp:1425
 msgid "Does nothing"
-msgstr "Ne fais rien"
+msgstr "Ne fait rien"
 
 #. File
 #: src/verbs.cpp:1428
@@ -4286,7 +4284,7 @@ msgstr "Défaut"
 
 #: src/verbs.cpp:1428
 msgid "Create new document from default template"
-msgstr "Créé un nouveau document depuis un modèle"
+msgstr "Créer un nouveau document depuis un modèle"
 
 #: src/verbs.cpp:1430
 msgid "_Open..."
@@ -4312,7 +4310,7 @@ msgstr "Enregi_strer"
 
 #: src/verbs.cpp:1434
 msgid "Save document"
-msgstr "Enregistre le document"
+msgstr "Enregistrer le document"
 
 #: src/verbs.cpp:1436
 msgid "Save _As..."
@@ -4320,7 +4318,7 @@ msgstr "Enregistrer sous... (_A)"
 
 #: src/verbs.cpp:1437
 msgid "Save document under new name"
-msgstr "Enregistre le document sous un nouveau nom"
+msgstr "Enregistrer le document sous un nouveau nom"
 
 #: src/verbs.cpp:1438
 msgid "_Print..."
@@ -4328,7 +4326,7 @@ msgstr "Im_primer..."
 
 #: src/verbs.cpp:1438
 msgid "Print document"
-msgstr "Imprime le document"
+msgstr "Imprimer le document"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
 #: src/verbs.cpp:1441
@@ -4337,7 +4335,7 @@ msgstr "Nettoyer les Defs (_u)"
 
 #: src/verbs.cpp:1441
 msgid "Remove unused stuff from the &lt;defs&gt; of the document"
-msgstr "Enlève les choses inutiles au document de &lt;defs&gt;"
+msgstr "Enlèver les choses inutiles au document de &lt;defs&gt;"
 
 #: src/verbs.cpp:1443
 msgid "Print _Direct"
@@ -4349,11 +4347,11 @@ msgstr "Imprimer directement vers un fichier ou un tube"
 
 #: src/verbs.cpp:1445
 msgid "Print Previe_w"
-msgstr "A_perçu avant impression"
+msgstr "Visualiser avant impression"
 
 #: src/verbs.cpp:1446
 msgid "Preview document printout"
-msgstr "Aperçu avant impression"
+msgstr "Visualiser avant impression"
 
 #: src/verbs.cpp:1447
 msgid "_Import..."
@@ -4418,7 +4416,7 @@ msgstr "_Refaire"
 
 #: src/verbs.cpp:1463
 msgid "Do again last undone action"
-msgstr "Refaire l'action annulée"
+msgstr "Refaire la dernière action annulée"
 
 #: src/verbs.cpp:1464
 msgid "Cu_t"
@@ -4807,7 +4805,7 @@ msgstr "Nouveau calque"
 
 #: src/verbs.cpp:1579
 msgid "Create a new layer"
-msgstr "Créé un nouveau calque"
+msgstr "Créer un nouveau calque"
 
 #: src/verbs.cpp:1580
 msgid "Rename Layer"
@@ -4943,7 +4941,7 @@ msgstr "Sélectionner et transformer des objets"
 
 #: src/verbs.cpp:1618
 msgid "Node Edit"
-msgstr "Édition de nœud"
+msgstr "Éditer les nœuds"
 
 #: src/verbs.cpp:1619
 msgid "Edit path nodes or control handles"
@@ -5255,7 +5253,7 @@ msgstr "Remplissage et Contour... (_F)"
 
 #: src/verbs.cpp:1707
 msgid "Fill and Stroke dialog"
-msgstr "Boite de dialogue : remplissage et contour"
+msgstr "Boîte de dialogue : remplissage et contour"
 
 #: src/verbs.cpp:1708
 msgid "Transfor_m..."
@@ -5263,7 +5261,7 @@ msgstr "Transfor_mation..."
 
 #: src/verbs.cpp:1709
 msgid "Transform dialog"
-msgstr "Boite de dialogue : Transformations"
+msgstr "Boîte de dialogue : Transformations"
 
 #: src/verbs.cpp:1710
 msgid "_Align and Distribute..."
@@ -5271,7 +5269,7 @@ msgstr "_Aligner et Distribuer..."
 
 #: src/verbs.cpp:1711
 msgid "Align and Distribute dialog"
-msgstr "Boite de dialogue : Aligner et Distribuer"
+msgstr "Boîte de dialogue : Aligner et Distribuer"
 
 #: src/verbs.cpp:1712
 msgid "_Text and Font..."
@@ -5279,7 +5277,7 @@ msgstr "_Texte et Fonte..."
 
 #: src/verbs.cpp:1713
 msgid "Text and Font dialog"
-msgstr "Boite de dialogue : Texte et Polices"
+msgstr "Boîte de dialogue : Texte et Polices"
 
 #: src/verbs.cpp:1714
 msgid "_XML Editor..."
@@ -5307,11 +5305,11 @@ msgstr "Voir les messages de débuggage"
 
 #: src/verbs.cpp:1720
 msgid "Show/_Hide Dialogs"
-msgstr "Afficher/Cac_her les boites dialogues"
+msgstr "Afficher/Cac_her les boîtes dialogues"
 
 #: src/verbs.cpp:1721
 msgid "Show or hide all active dialogs"
-msgstr "Afficher/Masquer les boites de dialogue actives"
+msgstr "Afficher/Masquer les boîtes de dialogue actives"
 
 #: src/verbs.cpp:1722
 msgid "_Object Properties..."
@@ -5319,7 +5317,7 @@ msgstr "Propriétés de l'_objet..."
 
 #: src/verbs.cpp:1723
 msgid "Object Properties dialog"
-msgstr "Boite de dialogue : Propriétés de l'objet"
+msgstr "Boîte de dialogue : Propriétés de l'objet"
 
 #. Help
 #: src/verbs.cpp:1726
@@ -5368,7 +5366,7 @@ msgstr "Rudiments de d_esign"
 
 #: src/verbs.cpp:1739
 msgid "Elements of Design tutorial"
-msgstr "Tutorial : rudiments de design"
+msgstr "Tutoriel : rudiments de design"
 
 #. "tutorial_design"
 #: src/verbs.cpp:1740
@@ -5734,9 +5732,8 @@ msgstr "Valeur"
 #~ msgid "Switched to previous layer."
 #~ msgstr "Déplacé au calque précédant."
 
-#, fuzzy
 #~ msgid "Set Label"
-#~ msgstr "Attribuer le label"
+#~ msgstr "Définir le label"
 
 #~ msgid "Select layer"
 #~ msgstr "Sélectionner un calque"
@@ -5763,7 +5760,7 @@ msgstr "Valeur"
 #~ msgstr ""
 #~ "De quelle façon le vecteur de dégradé est défini, dans l'espace des "
 #~ "coordonnées utilisateur (gradientUnits=\"userSpaceOnUse\") ou "
-#~ "relativement à la boite de l'objet (gradientUnits=\"objectBoundingBox\")"
+#~ "relativement à la boîte de l'objet (gradientUnits=\"objectBoundingBox\")"
 
 #~ msgid "object"
 #~ msgstr "Objet"
@@ -5800,9 +5797,8 @@ msgstr "Valeur"
 #~ msgid "Selected objects"
 #~ msgstr "Objets sélectionnés"
 
-#, fuzzy
 #~ msgid "All shape tools"
-#~ msgstr "Toutes les formes"
+#~ msgstr "Toutes les outils de forme"
 
 #~ msgid "Rectangle tool"
 #~ msgstr "Outil rectangle"
