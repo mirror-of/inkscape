@@ -58,8 +58,8 @@ sp_selection_delete (gpointer object, gpointer data)
 	sp_selection_empty (selection);
 
 	while (selected) {
-		SPRepr *repr = (SPRepr *) selected->data;                               
-		if (sp_repr_parent (repr)) sp_repr_unparent (repr);             
+		SPRepr *repr = (SPRepr *) selected->data;
+		if (sp_repr_parent (repr)) sp_repr_unparent (repr);
 		selected = g_slist_remove (selected, selected->data);
 	}
 
@@ -163,7 +163,7 @@ sp_edit_select_all (gpointer object, gpointer data)
 	items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
 	
 	while (items) {
-		repr  = SP_OBJECT_REPR (items->data);
+		repr = SP_OBJECT_REPR (items->data);
 		if (!sp_selection_repr_selected (selection, repr))
 			sp_selection_add_repr (selection, repr);
 		items = g_slist_remove (items, items->data);
@@ -299,7 +299,7 @@ sp_selection_ungroup (gpointer object, gpointer data)
 {
 	SPDesktop *desktop;
 	SPItem *group;
-	GSList  *children, *items;
+	GSList *children, *items;
 	GSList *new_select = NULL;
 	int ungrouped = 0;
 
@@ -314,7 +314,7 @@ sp_selection_ungroup (gpointer object, gpointer data)
 	// get a copy of current selection
 	items = g_slist_copy ((GSList *) sp_selection_item_list (SP_DT_SELECTION (desktop)));
 
-	for ( ; items;  items = items->next) {
+	for ( ; items ; items = items->next) {
 		group = ((SPItem *) items->data);
 
 		/* We do not allow ungrouping <svg> etc. (lauris) */
@@ -709,7 +709,6 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 
 	g_assert (SP_IS_SELECTION (selection));
 
-    
 	for (l = selection->items; l != NULL; l = l-> next) {
 		NRMatrix curaff, newaff;
 
@@ -755,7 +754,7 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 	NRRect bbox;
 	NRMatrix p2o, o2n, scale, final, s;
 	double dx, dy, nx, ny;
-  
+
 	g_assert (SP_IS_SELECTION (selection));
 
 	sp_selection_bbox (selection, &bbox);
@@ -797,7 +796,7 @@ void
 sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle)
 {
 	NRMatrix rotate, n2d, d2n, final, s;
-  
+
 	nr_matrix_set_translate (&n2d, -center->x, -center->y);
 	nr_matrix_invert (&d2n, &n2d);
 	sp_matrix_d_set_rotate (&rotate, angle);
@@ -813,7 +812,7 @@ void
 sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, double dy)
 {
 	NRMatrix skew, n2d, d2n, final, s;
-  
+
 	nr_matrix_set_translate (&n2d, -align->x, -align->y);
 	nr_matrix_invert (&d2n, &n2d);
 
@@ -835,7 +834,7 @@ void
 sp_selection_move_relative (SPSelection * selection, double dx, double dy)
 {
 	NRMatrix move;
-  
+
 	nr_matrix_set_translate (&move, dx, dy);
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&move));
@@ -853,7 +852,7 @@ sp_selection_rotate_90 (void)
 	if (!SP_IS_DESKTOP(desktop)) return;
 	selection = SP_DT_SELECTION(desktop);
 	if sp_selection_is_empty(selection) return;
-	l = selection->items;  
+	l = selection->items;
 	for (l2 = l; l2 != NULL; l2 = l2-> next) {
 		item = SP_ITEM (l2->data);
 		sp_item_rotate_rel (item,-90);
@@ -866,54 +865,64 @@ sp_selection_rotate_90 (void)
 void
 sp_selection_move (gdouble dx, gdouble dy)
 {
-  SPDesktop * desktop;
-  SPSelection * selection;
+	SPDesktop *desktop;
+	SPSelection *selection;
 
-  desktop = SP_ACTIVE_DESKTOP;
-  g_return_if_fail(SP_IS_DESKTOP (desktop));
-  selection = SP_DT_SELECTION (desktop);
-  if (!SP_IS_SELECTION (selection)) return;
-  if sp_selection_is_empty(selection) return;
+	desktop = SP_ACTIVE_DESKTOP;
+	g_return_if_fail(SP_IS_DESKTOP (desktop));
+	selection = SP_DT_SELECTION (desktop);
+	if (!SP_IS_SELECTION(selection)) {
+		return;
+	}
+	if (sp_selection_is_empty(selection)) {
+		return;
+	}
 
-  sp_selection_move_relative (selection, dx, dy);
+	sp_selection_move_relative (selection, dx, dy);
 
-  sp_selection_changed (selection);
+	sp_selection_changed (selection);
 
 	if (dx == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
 	} else if (dy == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:horizontal");
-	} else 
+	} else {
 		sp_document_done (SP_DT_DOCUMENT (desktop));
+	}
 }
 
 void
 sp_selection_move_screen (gdouble dx, gdouble dy)
 {
-  SPDesktop * desktop;
-  SPSelection * selection;
-  gdouble zdx, zdy, zoom;
+	SPDesktop *desktop;
+	SPSelection *selection;
+	gdouble zdx, zdy, zoom;
 
-  desktop = SP_ACTIVE_DESKTOP;
-  g_return_if_fail(SP_IS_DESKTOP (desktop));
-  selection = SP_DT_SELECTION (desktop);
-  if (!SP_IS_SELECTION (selection)) return;
-  if sp_selection_is_empty(selection) return;
+	desktop = SP_ACTIVE_DESKTOP;
+	g_return_if_fail(SP_IS_DESKTOP (desktop));
+	selection = SP_DT_SELECTION (desktop);
+	if (!SP_IS_SELECTION(selection)) {
+		return;
+	}
+	if (sp_selection_is_empty(selection)) {
+		return;
+	}
 
-  // same as sp_selection_move but divide deltas by zoom factor
-  zoom = SP_DESKTOP_ZOOM (desktop);
-  zdx = dx / zoom;
-  zdy = dy / zoom;
-  sp_selection_move_relative (selection, zdx, zdy);
+	// same as sp_selection_move but divide deltas by zoom factor
+	zoom = SP_DESKTOP_ZOOM (desktop);
+	zdx = dx / zoom;
+	zdy = dy / zoom;
+	sp_selection_move_relative (selection, zdx, zdy);
 
-  sp_selection_changed (selection);
+	sp_selection_changed (selection);
 
-	if (dx == 0)
+	if (dx == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
-	else if (dy == 0)
+	} else if (dy == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:horizontal");
-	else 
+	} else {
 		sp_document_done (SP_DT_DOCUMENT (desktop));
+	}
 }
 
 void
@@ -932,9 +941,11 @@ sp_selection_item_next (void)
 	desktop = SP_ACTIVE_DESKTOP;
 	g_return_if_fail(document != NULL);
 	g_return_if_fail(desktop != NULL);
-	if (!SP_IS_DESKTOP (desktop)) return;
+	if (!SP_IS_DESKTOP(desktop)) {
+		return;
+	}
 	selection = SP_DT_SELECTION(desktop);
-	g_return_if_fail(selection!=NULL);
+	g_return_if_fail( selection != NULL );
 
 	// get item list
 	if (SP_CYCLING == SP_CYCLE_VISIBLE) {
@@ -945,21 +956,23 @@ sp_selection_item_next (void)
 	}
 
 	// compute next item
-	if (children == NULL) return;
-	if sp_selection_is_empty(selection) {
-		item = (SPItem*)children->data;
+	if (children == NULL) {
+		return;
+	}
+	if (sp_selection_is_empty(selection)) {
+		item = SP_ITEM(children->data);
 	} else {
-		l = g_slist_find(children,selection->items->data);
-		if ((l == NULL) || (l->next == NULL)) {
-			item = SP_ITEM (children->data);
+		l = g_slist_find(children, selection->items->data);
+		if ( ( l == NULL ) || ( l->next == NULL ) ) {
+			item = SP_ITEM(children->data);
 		} else {
-			item = SP_ITEM (l->next->data);
+			item = SP_ITEM(l->next->data);
 		}
 	}
 
 	// set selection to item
 	if (item != NULL) {
-		sp_selection_set_item (selection, item);
+		sp_selection_set_item(selection, item);
 	} else {
 		return;
 	}
@@ -970,7 +983,11 @@ sp_selection_item_next (void)
 	if (SP_CYCLING == SP_CYCLE_FOCUS) {
 		sp_desktop_get_display_area (desktop, &dbox);
 		sp_item_bbox_desktop (item, &sbox);
-		if (dbox.x0 > sbox.x0 || dbox.y0 > sbox.y0 || dbox.x1 < sbox.x1 || dbox.y1 < sbox.y1 ) {
+		if ( dbox.x0 > sbox.x0  ||
+		     dbox.y0 > sbox.y0  ||
+		     dbox.x1 < sbox.x1  ||
+		     dbox.y1 < sbox.y1 )
+		{
 			double x, y;
 			x = (sbox.x0 + sbox.x1) / 2;
 			y = (sbox.y0 + sbox.y1) / 2;
@@ -993,71 +1010,84 @@ sp_selection_item_next (void)
 void
 sp_selection_item_prev (void)
 {
-  SPDocument * document;
-  SPDesktop * desktop;
-  SPSelection * selection;
-  SPItem * item = NULL;
-  GSList * children = NULL, * l = NULL;
-  NRRect dbox;
-  NRRect sbox;
-  gint dx=0, dy=0;
+	SPDocument *document;
+	SPDesktop *desktop;
+	SPSelection *selection;
+	SPItem *item = NULL;
+	GSList *children = NULL, *l = NULL;
+	NRRect dbox;
+	NRRect sbox;
+	gint dx=0, dy=0;
 
-  document = SP_ACTIVE_DOCUMENT;
-  desktop = SP_ACTIVE_DESKTOP;
-  g_return_if_fail(document != NULL);
-  g_return_if_fail(desktop != NULL);
-  if (!SP_IS_DESKTOP (desktop)) return;
-  selection = SP_DT_SELECTION(desktop);
-  g_return_if_fail(selection!=NULL);
-  
-  // get item list
-  if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-	  sp_desktop_get_display_area (desktop, &dbox);
-	  children = sp_document_items_in_box(document, &dbox);
-  } else {
-    children = sp_item_group_item_list (SP_GROUP(sp_document_root(document)));
-  }
+	document = SP_ACTIVE_DOCUMENT;
+	desktop = SP_ACTIVE_DESKTOP;
+	g_return_if_fail(document != NULL);
+	g_return_if_fail(desktop != NULL);
+	if (!SP_IS_DESKTOP(desktop)) {
+		return;
+	}
+	selection = SP_DT_SELECTION(desktop);
+	g_return_if_fail( selection != NULL );
 
-  // compute prev item
-  if (children == NULL) return;
-  if sp_selection_is_empty(selection) item = SP_ITEM (g_slist_last (children)->data);
-  else {
-    l = children;
-    if (l->next == NULL) item = SP_ITEM (l->data);
-    while ((l->next != NULL) && (l->next->data != selection->items->data)) {
-      l = l->next;
-    }
-    item = SP_ITEM (l->data);
-  }
+	// get item list
+	if (SP_CYCLING == SP_CYCLE_VISIBLE) {
+		sp_desktop_get_display_area (desktop, &dbox);
+		children = sp_document_items_in_box(document, &dbox);
+	} else {
+		children = sp_item_group_item_list (SP_GROUP(sp_document_root(document)));
+	}
 
-  // set selection to item
-  if (item != NULL) sp_selection_set_item (selection, item);
-  else return;
-  
-  g_slist_free (children);
+	// compute prev item
+	if (children == NULL) {
+		return;
+	}
+	if (sp_selection_is_empty(selection)) {
+		item = SP_ITEM(g_slist_last(children)->data);
+	} else {
+		l = children;
+		if (l->next == NULL) {
+			item = SP_ITEM(l->data);
+		}
+		while ((l->next != NULL) && (l->next->data != selection->items->data)) {
+			l = l->next;
+		}
+		item = SP_ITEM (l->data);
+	}
 
-  // adjust visible area to see whole new selection
-  if (SP_CYCLING == SP_CYCLE_FOCUS) {
-    sp_desktop_get_display_area (desktop, &dbox);
-    sp_item_bbox_desktop (item, &sbox);
-    if (dbox.x0>sbox.x0 || dbox.y0>sbox.y0 || dbox.x1<sbox.x1 || dbox.y1<sbox.y1 ) {
-	    double x, y;
-	    x = (sbox.x0 + sbox.x1) / 2;
-	    y = (sbox.y0 + sbox.y1) / 2;
-	    ArtPoint s;
-	    s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-	    s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-	    x = (dbox.x0 + dbox.x1) / 2;
-	    y = (dbox.y0 + dbox.y1) / 2;
-	    ArtPoint d;
-	    d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-	    d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-	    dx = (gint) (d.x - s.x);
-	    dy = (gint) (d.y - s.y);
-	    sp_desktop_scroll_world (desktop, dx, dy);
-    }
-  }
+	// set selection to item
+	if (item != NULL) {
+		sp_selection_set_item(selection, item);
+	} else {
+		return;
+	}
 
+	g_slist_free (children);
+
+	// adjust visible area to see whole new selection
+	if (SP_CYCLING == SP_CYCLE_FOCUS) {
+		sp_desktop_get_display_area (desktop, &dbox);
+		sp_item_bbox_desktop (item, &sbox);
+		if ( dbox.x0 > sbox.x0  ||
+		     dbox.y0 > sbox.y0  ||
+		     dbox.x1 < sbox.x1  ||
+		     dbox.y1 < sbox.y1 )
+		{
+			double x, y;
+			x = (sbox.x0 + sbox.x1) / 2;
+			y = (sbox.y0 + sbox.y1) / 2;
+			ArtPoint s;
+			s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+			s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+			x = (dbox.x0 + dbox.x1) / 2;
+			y = (dbox.y0 + dbox.y1) / 2;
+			ArtPoint d;
+			d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+			d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+			dx = (gint) (d.x - s.x);
+			dy = (gint) (d.y - s.y);
+			sp_desktop_scroll_world (desktop, dx, dy);
+		}
+	}
 }
 
 static void
