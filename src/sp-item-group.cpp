@@ -16,9 +16,9 @@
 #include <string.h>
 
 #include "display/nr-arena-group.h"
-#include "xml/repr-private.h"
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <xml/repr-get-children.h>
 #include "sp-object-repr.h"
 #include "svg/svg.h"
 #include "document.h"
@@ -457,30 +457,28 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 		}
 	}
 
-	items = g_slist_reverse (items);
-	objects = g_slist_reverse (objects);
-
 	/* Step 2 - clear group */
 	// remember the position of the group
-	gint pos = sp_repr_position (SP_OBJECT_REPR (group));
+	SPRepr *g_prev_sibling = sp_repr_prev_sibling(SP_OBJECT_REPR(group));
+
 	// the group is leaving forever, no heir, clones should take note; its children however are going to reemerge
 	SP_OBJECT (group)->deleteObject(true, false);
 
 	/* Step 3 - add nonitems */
-	while (objects) {
-		sp_repr_append_child (SP_OBJECT_REPR (defs), (SPRepr *) objects->data);
+	if (objects) {
+	    SPRepr *last_def = sp_repr_last_child(SP_OBJECT_REPR(defs));
+	    while (objects) {
+		sp_repr_add_child(SP_OBJECT_REPR(defs), (SPRepr *) objects->data, last_def);
 		sp_repr_unref ((SPRepr *) objects->data);
 		objects = g_slist_remove (objects, objects->data);
+	    }
 	}
 
 	/* Step 4 - add items */
 	while (items) {
-
 		SPRepr *repr = (SPRepr *) items->data;
 		// add item
-		sp_repr_append_child (prepr, repr);
-		// move to the saved position 
-		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+		sp_repr_add_child(prepr, repr, g_prev_sibling);
 
 		// fill in the children list if non-null
 		SPItem *nitem = (SPItem *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));

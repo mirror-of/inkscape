@@ -1,5 +1,8 @@
 2004-05-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item-group.cpp (sp_item_group_ungroup): Fix bug #956334:
+	  ungrouping was reversing the order of the group members.
+
 	* src/xml/repr-get-children.h, src/xml/repr-get-children.cpp: New files.
 	* src/xml/Makefile_insert (xml_libspxml_a_SOURCES): Add the new files.
 
