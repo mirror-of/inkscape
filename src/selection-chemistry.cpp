@@ -26,6 +26,7 @@
 #include "sp-item-transform.h" 
 #include "sp-item-group.h"
 #include "sp-path.h"
+#include "helper/sp-intl.h"
 #include "path-chemistry.h"
 
 #include "selection-chemistry.h"
@@ -210,7 +211,8 @@ sp_selection_group (gpointer object, gpointer data)
 	SPRepr * group;
 	SPItem * spnew;
 	const GSList * l;
-	GSList * p;
+	GSList *p, *i, *reprs;
+	SPRepr *parent;
 
 	desktop = SP_ACTIVE_DESKTOP;
 
@@ -218,11 +220,29 @@ sp_selection_group (gpointer object, gpointer data)
 
 	selection = SP_DT_SELECTION (desktop);
 
-	if (sp_selection_is_empty (selection)) return;
+	// check if something is selected
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select two or more objects to group."));
+		return;
+	}
 
 	l = sp_selection_repr_list (selection);
 
-	if (l->next == NULL) return;
+	// check if at least two objects are selected
+	if (l->next == NULL) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select at least two objects to group."));
+		return;
+	}
+
+	// check if all selected objects have common parent
+	reprs = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	parent = ((SPRepr *) reprs->data)->parent;
+	for (i = reprs->next; i; i = i->next) {
+		if ((((SPRepr *) i->data)->parent) != parent) {
+			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot group objects from different groups or layers."));
+			return;
+		}
+	}
 
 	p = g_slist_copy ((GSList *) l);
 
@@ -242,7 +262,8 @@ sp_selection_group (gpointer object, gpointer data)
 		p = g_slist_remove (p, current);
 	}
 
-	spnew = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), group);
+	// add the new group to the group members' common parent
+	sp_repr_append_child (parent, group);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
 	sp_selection_set_repr (selection, group);
@@ -252,23 +273,49 @@ sp_selection_group (gpointer object, gpointer data)
 void
 sp_selection_ungroup (gpointer object, gpointer data)
 {
-	SPDesktop *dt;
+	SPDesktop *desktop;
 	SPItem *group;
-	GSList *children;
+	GSList  *children, *items;
+	GSList *new_select = NULL;
+	int ungrouped = 0;
 
-	dt = SP_ACTIVE_DESKTOP;
-	if (!dt) return;
-	group = sp_selection_item (SP_DT_SELECTION (dt));
-	if (!group) return;
-	/* We do not allow ungrouping <svg> etc. */
-	if (strcmp (sp_repr_name (SP_OBJECT_REPR (group)), "g")) return;
+	desktop = SP_ACTIVE_DESKTOP;
+	if (!desktop) return;
 
-	children = NULL;
-	/* This is not strictly required, but is nicer to rely on group ::destroy */
-	sp_selection_empty (SP_DT_SELECTION (dt));
-	sp_item_group_ungroup (SP_GROUP (group), &children);
-	sp_selection_set_item_list (SP_DT_SELECTION (dt), children);
-	g_slist_free (children);
+	if (sp_selection_is_empty (SP_DT_SELECTION(desktop))) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select a group to ungroup."));
+		return;
+	}
+
+	// get a copy of current selection
+	items = g_slist_copy ((GSList *) sp_selection_item_list (SP_DT_SELECTION (desktop)));
+
+	for ( ; items;  items = items->next) {
+		group = ((SPItem *) items->data);
+
+		/* We do not allow ungrouping <svg> etc. (lauris) */
+		if (strcmp (sp_repr_name (SP_OBJECT_REPR (group)), "g")) {
+			// keep the non-group item in the new selection
+			new_select = g_slist_prepend (new_select, group);
+			continue;
+		}
+
+		children = NULL;
+		/* This is not strictly required, but is nicer to rely on group ::destroy (lauris) */
+		sp_item_group_ungroup (SP_GROUP (group), &children);
+		ungrouped = 1;
+		// add ungrouped items to the new selection
+		new_select = g_slist_concat (new_select, children);
+	}
+
+	if (new_select) { // set new selection
+		sp_selection_empty (SP_DT_SELECTION (desktop));
+		sp_selection_set_item_list (SP_DT_SELECTION (desktop), new_select);
+		g_slist_free (new_select);
+	}
+	if (!ungrouped) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("No groups to ungroup in the selection."));
+	}
 }
 
 static SPGroup *
@@ -277,7 +324,7 @@ sp_item_list_common_parent_group (const GSList *items)
 	SPObject *parent;
 
 	if (!items) return NULL;
-	parent = SP_OBJECT_PARENT (items->data);
+	parent = SP_OBJECT_PARENT (items->data); 
 	/* Strictly speaking this CAN happen, if user selects <svg> from XML editor */
 	if (!SP_IS_GROUP (parent)) return NULL;
 	for (items = items->next; items; items = items->next) {
