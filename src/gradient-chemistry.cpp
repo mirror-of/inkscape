@@ -409,6 +409,30 @@ sp_gradient_transform_multiply(SPGradient *gradient, NR::Matrix postmul, bool se
     }
 }
 
+SPGradient *
+sp_item_gradient (SPItem *item, bool fill_or_stroke)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+    SPGradient *gradient = NULL;
+
+    if (fill_or_stroke) {
+        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = SP_GRADIENT (server);
+            }
+        }
+    } else {
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = SP_GRADIENT (server);
+            }
+        }
+    }
+ 
+   return gradient;
+}
 
 /**
 Set the position of point point_num of the gradient applied to item (either fill_or_stroke) to
@@ -417,30 +441,15 @@ p_w (in desktop coordinates). Write_repr if you want the change to become perman
 void
 sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool fill_or_stroke, bool write_repr, bool scale)
 {
-    SPStyle *style = SP_OBJECT_STYLE (item);
-    NR::Matrix i2d = sp_item_i2d_affine (item);
-    NR::Point p = p_w * i2d.inverse();
-    SPGradient *gradient = NULL;
-
-    if (fill_or_stroke) {
-        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
-            }
-        }
-    } else {
-        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "stroke");
-            }
-        }
-    }
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
 
     if (!gradient || !SP_IS_GRADIENT(gradient))
         return;
 
+    gradient = sp_gradient_convert_to_userspace (gradient, item, fill_or_stroke? "fill" : "stroke");
+
+    NR::Matrix i2d = sp_item_i2d_affine (item);
+    NR::Point p = p_w * i2d.inverse();
     p *= (gradient->gradientTransform).inverse();
     // now p is in gradient's original coordinates
 
@@ -582,33 +591,6 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 	}
 }
 
-
-SPGradient *
-sp_item_gradient (SPItem *item, bool fill_or_stroke)
-{
-    SPStyle *style = SP_OBJECT_STYLE (item);
-    SPGradient *gradient = NULL;
-
-    if (fill_or_stroke) {
-        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                gradient = SP_GRADIENT (server);
-            }
-        }
-    } else {
-        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                gradient = SP_GRADIENT (server);
-            }
-        }
-    }
- 
-   return gradient;
-}
-
-
 SPGradient *
 sp_item_gradient_get_vector (SPItem *item, bool fill_or_stroke)
 {
@@ -636,24 +618,7 @@ in desktop coordinates.
 NR::Point
 sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke)
 {
-    SPStyle *style = SP_OBJECT_STYLE (item);
-    SPGradient *gradient = NULL;
-
-    if (fill_or_stroke) {
-        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                gradient = SP_GRADIENT (server);
-            }
-        }
-    } else {
-        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                gradient = SP_GRADIENT (server);
-            }
-        }
-    }
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
 
     NR::Point p (0, 0);
 
