@@ -115,185 +115,213 @@ void Shape::EndQuickRaster()
 }
 
 // 2 versions of the Scan() series to move the scanline to a given position withou actually computing coverages
-void              Shape::Scan(float &pos,int &curP,float to,float step)
+void Shape::Scan(float &pos, int &curP, float to, float step)
 {
-  if ( numberOfEdges() <= 1 ) return;
-	if ( pos == to ) return;
-	if ( pos < to ) {
-    // we're moving downwards
-    // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
-    // until we reach the wanted position to.
-    // don't forget to update curP and pos when we're done
-		int    curPt=curP;
-		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
-			int           nPt=-1;
-			nPt=curPt++;
-      
-      // treat a new point: remove and add edges incident to it
-			int nbUp;
-                        int nbDn;
-			int upNo;
-                        int dnNo;
-                        _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+    if ( numberOfEdges() <= 1 ) {
+        return;
+    }
 
-			if ( nbDn <= 0 ) {
-				upNo=-1;
-			}
-			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
-				upNo=-1;
-			}
+    if ( pos == to ) {
+        return;
+    }
+
+    if ( pos < to ) {
+
+        // we're moving downwards
+        // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
+        // until we reach the wanted position to.
+        // don't forget to update curP and pos when we're done
+        int curPt = curP;
+        while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
+            int nPt = curPt++;
       
-			if ( nbUp > 0 ) {
-        // first remove edges coming from above
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != upNo ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
-                                // but the other edge don't have this chance
-							SweepTree* node=swrData[cb].misc;
-							if ( node ) {
-								swrData[cb].misc=NULL;
-								node->Remove(*sTree,*sEvts,true);
-								DestroyEdge(cb,to,step);
-							}
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
+            // treat a new point: remove and add edges incident to it
+            int nbUp;
+            int nbDn;
+            int upNo;
+            int dnNo;
+            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+
+            if ( nbDn <= 0 ) {
+                upNo = -1;
+            }
+            if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+                upNo = -1;
+            }
       
-			// if there is one edge going down and one edge coming from above, we don't Insert() the new edge,
-      // but replace the upNo edge by the new one (faster)
-			SweepTree* insertionNode=NULL;
-			if ( dnNo >= 0 ) {
-				if ( upNo >= 0 ) {
-					SweepTree* node=swrData[upNo].misc;
-					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo,to,step);
+            if ( nbUp > 0 ) {
+                // first remove edges coming from above
+                int cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
+                        if ( cb != upNo ) {
+                            // we salvage the edge upNo to plug the edges we'll be addingat its place
+                            // but the other edge don't have this chance
+                            SweepTree *node = swrData[cb].misc;
+                            if ( node ) {
+                                swrData[cb].misc = NULL;
+                                node->Remove(*sTree, *sEvts, true);
+                                DestroyEdge(cb, to, step);
+                            }
+                        }
+                    }
+                    cb = NextAt(nPt,cb);
+                }
+            }
+      
+            // if there is one edge going down and one edge coming from above, we don't Insert() the new edge,
+            // but replace the upNo edge by the new one (faster)
+            SweepTree* insertionNode = NULL;
+            if ( dnNo >= 0 ) {
+                if ( upNo >= 0 ) {
+                    SweepTree* node = swrData[upNo].misc;
+                    swrData[upNo].misc = NULL;
+                    DestroyEdge(upNo, to, step);
           
-					node->ConvertTo(this,dnNo,1,nPt);
+                    node->ConvertTo(this, dnNo, 1, nPt);
           
-					swrData[dnNo].misc=node;
-					insertionNode=node;
-					CreateEdge(dnNo,to,step);
-				} else {
-					SweepTree* node = sTree->add(this, dnNo, 1, nPt, this);
-					swrData[dnNo].misc=node;
-					node->Insert(*sTree,*sEvts,this,nPt,true);
-					insertionNode=node;
-					CreateEdge(dnNo,to,step);
-				}
-			}
+                    swrData[dnNo].misc = node;
+                    insertionNode = node;
+                    CreateEdge(dnNo, to, step);
+                } else {
+                    SweepTree* node = sTree->add(this, dnNo, 1, nPt, this);
+                    swrData[dnNo].misc = node;
+                    node->Insert(*sTree, *sEvts, this, nPt, true);
+                    insertionNode = node;
+                    CreateEdge(dnNo,to,step);
+                }
+            }
       
-      // add the remaining edges
-			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != dnNo ) {
-							SweepTree *node = sTree->add(this, cb, 1, nPt, this);
-							swrData[cb].misc=node;
-							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true);
-							CreateEdge(cb,to,step);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-		}
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	} else {
-    // same thing, but going up. so the sweepSens is inverted for the Find() function
-		int    curPt=curP;
-		while ( curPt > 0 && getPoint(curPt-1).x[1] >= to ) {
-			int           nPt=-1;
-			nPt=--curPt;
+            // add the remaining edges
+            if ( nbDn > 1 ) {
+                // si nbDn == 1 , alors dnNo a deja ete traite
+                int cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
+                        if ( cb != dnNo ) {
+                            SweepTree *node = sTree->add(this, cb, 1, nPt, this);
+                            swrData[cb].misc = node;
+                            node->InsertAt(*sTree, *sEvts, this, insertionNode, nPt, true);
+                            CreateEdge(cb,to,step);
+                        }
+                    }
+                    cb = NextAt(nPt,cb);
+                }
+            }
+        }
+        
+        curP = curPt;
+        if ( curPt > 0 ) {
+            pos=getPoint(curPt-1).x[1];
+        } else {
+            pos=to;
+        }
+        
+    } else {
+        
+        // same thing, but going up. so the sweepSens is inverted for the Find() function
+        int curPt = curP;
+        while ( curPt > 0 && getPoint(curPt-1).x[1] >= to ) {
+            int nPt = -1;
+            nPt = --curPt;
       
-			int nbUp;
-                        int nbDn;
-			int upNo;
-                        int dnNo;
-                        _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
+            int nbUp;
+            int nbDn;
+            int upNo;
+            int dnNo;
+            _countUpDown(nPt, &nbUp, &nbDn, &upNo, &dnNo);
       
-			if ( nbDn <= 0 ) {
-				upNo=-1;
-			}
-			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
-				upNo=-1;
-			}
+            if ( nbDn <= 0 ) {
+                upNo = -1;
+            }
+            if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+                upNo = -1;
+            }
       
-			if ( nbUp > 0 ) {
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != upNo ) {
-							SweepTree* node=swrData[cb].misc;
-							if ( node ) {
-								swrData[cb].misc=NULL;
-								node->Remove(*sTree,*sEvts,true);
-								DestroyEdge(cb,to,step);
-							}
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
+            if ( nbUp > 0 ) {
+                int cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
+                        if ( cb != upNo ) {
+                            SweepTree* node = swrData[cb].misc;
+                            if ( node ) {
+                                swrData[cb].misc=NULL;
+                                node->Remove(*sTree, *sEvts, true);
+                                DestroyEdge(cb, to, step);
+                            }
+                        }
+                    }
+                    cb = NextAt(nPt,cb);
+                }
+            }
       
-			// traitement du "upNo devient dnNo"
-			SweepTree* insertionNode=NULL;
-			if ( dnNo >= 0 ) {
-				if ( upNo >= 0 ) {
-					SweepTree* node=swrData[upNo].misc;
-					swrData[upNo].misc=NULL;
-					DestroyEdge(upNo,to,step);
+            // traitement du "upNo devient dnNo"
+            SweepTree* insertionNode = NULL;
+            if ( dnNo >= 0 ) {
+                if ( upNo >= 0 ) {
+                    SweepTree* node = swrData[upNo].misc;
+                    swrData[upNo].misc = NULL;
+                    DestroyEdge(upNo, to, step);
           
-					node->ConvertTo(this,dnNo,1,Other(nPt,dnNo));
+                    node->ConvertTo(this, dnNo, 1, Other(nPt,dnNo));
           
-					swrData[dnNo].misc=node;
-					insertionNode=node;
-					CreateEdge(dnNo,to,step);
-				} else {
-					SweepTree* node =  sTree->add(this, dnNo, 1, nPt, this);
-					swrData[dnNo].misc=node;
-					node->Insert(*sTree,*sEvts,this,nPt,true,false);
-					node->startPoint=Other(nPt,dnNo);
-					insertionNode=node;
-					CreateEdge(dnNo,to,step);
-				}
-			}
-      
-			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				int cb = getPoint(nPt).incidentEdge[FIRST];
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != dnNo ) {
-							SweepTree* node = sTree->add(this,cb,1,nPt,this);
-							swrData[cb].misc=node;
-							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true,false);
-							node->startPoint=Other(nPt,cb);
-							CreateEdge(cb,to,step);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-		}
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
+                    swrData[dnNo].misc = node;
+                    insertionNode = node;
+                    CreateEdge(dnNo, to, step);
+                } else {
+                    SweepTree* node = sTree->add(this, dnNo, 1, nPt, this);
+                    swrData[dnNo].misc = node;
+                    node->Insert(*sTree, *sEvts, this, nPt, true, false);
+                    node->startPoint = Other(nPt, dnNo);
+                    insertionNode = node;
+                    CreateEdge(dnNo, to, step);
+                }
+            }
+
+            if ( nbDn > 1 ) {
+                // si nbDn == 1 , alors dnNo a deja ete traite
+                int cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const& e = getEdge(cb);
+                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
+                        if ( cb != dnNo ) {
+                            SweepTree* node = sTree->add(this,cb,1,nPt,this);
+                            swrData[cb].misc = node;
+                            node->InsertAt(*sTree, *sEvts, this, insertionNode, nPt, true, false);
+                            node->startPoint=Other(nPt,cb);
+                            CreateEdge(cb,to,step);
+                        }
+                    }
+                    cb = NextAt(nPt,cb);
+                }
+            }
+        }
+        
+        curP = curPt;
+        if ( curPt > 0 ) {
+            pos = getPoint(curPt-1).x[1];
+        } else {
+            pos=to;
 	}
-  // the final touch: edges intersecting the sweepline must be update so that their intersection with
-  // said sweepline is correct.
-  pos=to;
+        
+        // the final touch: edges intersecting the sweepline must be update so that their intersection with
+        // said sweepline is correct.
+        pos = to;
 	if ( sTree->racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
-		while ( curS ) {
-			int    cb=curS->bord;
-			AvanceEdge(cb,to,true,step);
-			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
-		}
+            SweepTree* curS = static_cast<SweepTree*>(sTree->racine->Leftmost());
+            while ( curS ) {
+                int cb = curS->bord;
+                AvanceEdge(cb, to, true, step);
+                curS = static_cast<SweepTree*>(curS->elem[RIGHT]);
+            }
 	}
+    }
 }
+
+    
 
 void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,float step)
 {
