@@ -495,7 +495,7 @@ file_import (SPDocument * in_doc, const gchar *uri, Inkscape::Extension::Extensi
 
 
 /**
- *  Display an Open dialog, import a resource of OK pressed.
+ *  Display an Open dialog, import a resource if OK pressed.
  */
 void
 sp_file_import (GtkWidget * widget)
