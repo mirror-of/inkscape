@@ -1,3 +1,14 @@
+2004-06-17  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/helper/stock-items.cpp: fix a compiler warning.  Minor
+	coding style cleanups.
+
+	* src/arc-context.cpp, src/desktop-snap.cpp, src-desktop-snap.h,
+	src/rect-context.cpp, src/spiral-context.cpp,
+	src/star-context.cpp: Replace desktop.h include with forward
+	references in desktop-snap.h, and add desktop.h includes in
+	files which require them.
+
 2004-06-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/units.h, src/helper/units.cpp:
