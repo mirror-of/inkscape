@@ -21,7 +21,7 @@ public:
     ~SweepEvent();  // not used.
 
     /// Initialize a SweepEvent structure.
-    void MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &iPt,
+    void MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point const &iPt,
                   double itl, double itr);
 
     /// Void a SweepEvent structure.
