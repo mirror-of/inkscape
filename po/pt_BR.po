@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-13 12:11+0200\n"
+"POT-Creation-Date: 2004-06-14 20:51+0200\n"
 "PO-Revision-Date: 2000-08-21 11:55+00:00\n"
 "Last-Translator: Ricardo Soares Guimarães <ricardo@conectiva.com>\n"
 "Language-Team: Brazillian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -41,37 +41,37 @@ msgstr ""
 msgid "Move %s"
 msgstr ""
 
-#: src/desktop.cpp:785
+#: src/desktop.cpp:793
 msgid "Zoom drawing if window size changes"
 msgstr ""
 
-#: src/desktop.cpp:807 src/dialogs/display-settings.cpp:925 src/verbs.cpp:969
+#: src/desktop.cpp:815 src/dialogs/display-settings.cpp:925 src/verbs.cpp:969
 msgid "Zoom"
 msgstr ""
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:830
+#: src/desktop.cpp:838
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:840
+#: src/desktop.cpp:848
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:879
+#: src/desktop.cpp:887
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:881
+#: src/desktop.cpp:889
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1018
+#: src/desktop.cpp:1026
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -80,11 +80,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1032 src/desktop.cpp:1091
+#: src/desktop.cpp:1040 src/desktop.cpp:1099
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1076
+#: src/desktop.cpp:1084
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -93,25 +93,25 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1449
+#: src/desktop.cpp:1457
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1478
+#: src/desktop.cpp:1486
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1875 src/dialogs/align.cpp:445
+#: src/desktop.cpp:1883 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:600 src/dialogs/export.cpp:276
 msgid "Page"
 msgstr ""
 
-#: src/desktop.cpp:1879 src/dialogs/align.cpp:448 src/dialogs/export.cpp:283
+#: src/desktop.cpp:1887 src/dialogs/align.cpp:448 src/dialogs/export.cpp:283
 msgid "Drawing"
 msgstr ""
 
-#: src/desktop.cpp:1883 src/dialogs/align.cpp:451 src/dialogs/export.cpp:290
+#: src/desktop.cpp:1891 src/dialogs/align.cpp:451 src/dialogs/export.cpp:290
 msgid "Selection"
 msgstr ""
 
@@ -1052,6 +1052,7 @@ msgstr ""
 msgid "Fill:"
 msgstr "Bitmap colorido"
 
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: src/dialogs/fill-style.cpp:182
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
@@ -1570,28 +1571,28 @@ msgid "End Markers:"
 msgstr ""
 
 #. Layout
-#: src/dialogs/text-edit.cpp:250
+#: src/dialogs/text-edit.cpp:243
 msgid "Layout"
 msgstr ""
 
-#: src/dialogs/text-edit.cpp:259
+#: src/dialogs/text-edit.cpp:252
 #, fuzzy
 msgid "Alignment:"
 msgstr "Alinhar"
 
-#: src/dialogs/text-edit.cpp:294
+#: src/dialogs/text-edit.cpp:287
 msgid "Orientation:"
 msgstr ""
 
-#: src/dialogs/text-edit.cpp:319
+#: src/dialogs/text-edit.cpp:312
 msgid "Line spacing:"
 msgstr ""
 
-#: src/dialogs/text-edit.cpp:350
+#: src/dialogs/text-edit.cpp:343
 msgid "Text and font"
 msgstr ""
 
-#: src/dialogs/text-edit.cpp:361
+#: src/dialogs/text-edit.cpp:354
 msgid "Set as default"
 msgstr ""
 
@@ -1844,81 +1845,81 @@ msgstr ""
 msgid "write error occurred"
 msgstr ""
 
-#: src/file.cpp:156 src/file.cpp:563
+#: src/file.cpp:154 src/file.cpp:556
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
 
-#: src/file.cpp:180
+#: src/file.cpp:178
 #, fuzzy
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Opções Oaf"
 
-#: src/file.cpp:189
+#: src/file.cpp:185
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 
-#: src/file.cpp:208
+#: src/file.cpp:204
 #, fuzzy
 msgid "Document reverted."
 msgstr "Último selecionado"
 
-#: src/file.cpp:211
+#: src/file.cpp:207
 #, fuzzy
 msgid "Document not reverted."
 msgstr "Opções Oaf"
 
-#: src/file.cpp:215
+#: src/file.cpp:211
 msgid "Document not modified.  No need to revert."
 msgstr ""
 
-#: src/file.cpp:230
+#: src/file.cpp:226
 msgid "Select file to open"
 msgstr "Selecionar arquivo para abrir"
 
-#: src/file.cpp:295
+#: src/file.cpp:294
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:296 src/file.cpp:303
+#: src/file.cpp:295 src/file.cpp:301
 #, fuzzy
 msgid "Document not saved."
 msgstr "Opções Oaf"
 
-#: src/file.cpp:302
+#: src/file.cpp:300
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
 
-#: src/file.cpp:311
+#: src/file.cpp:309
 #, fuzzy
 msgid "Document saved."
 msgstr "Último selecionado"
 
-#: src/file.cpp:346
+#: src/file.cpp:344
 #, c-format
 msgid "drawing%s"
 msgstr ""
 
-#: src/file.cpp:352
+#: src/file.cpp:350
 #, c-format
 msgid "drawing-%d%s"
 msgstr ""
 
-#: src/file.cpp:364
+#: src/file.cpp:362
 #, fuzzy
 msgid "Select file to save"
 msgstr "Selecionar arquivo para abrir"
 
-#: src/file.cpp:446
+#: src/file.cpp:442
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:587
+#: src/file.cpp:579
 msgid "Select file to import"
 msgstr "Selecione arquivo a importar"
 
@@ -2334,7 +2335,7 @@ msgstr ""
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr ""
 
-#: src/main.cpp:254 src/main.cpp:338
+#: src/main.cpp:255 src/main.cpp:339
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -2575,105 +2576,105 @@ msgstr ""
 msgid "Height of selection"
 msgstr ""
 
-#: src/selection-chemistry.cpp:66
+#: src/selection-chemistry.cpp:67
 msgid "Nothing was deleted."
 msgstr ""
 
-#: src/selection-chemistry.cpp:98
+#: src/selection-chemistry.cpp:99
 #, fuzzy
 msgid "Select some objects to duplicate."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:237
+#: src/selection-chemistry.cpp:235
 #, fuzzy
 msgid "Select two or more objects to group."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:245
+#: src/selection-chemistry.cpp:243
 #, fuzzy
 msgid "Select at least two objects to group."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:254
+#: src/selection-chemistry.cpp:252
 msgid "You cannot group objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:302
+#: src/selection-chemistry.cpp:300
 msgid "Select a group to ungroup."
 msgstr ""
 
-#: src/selection-chemistry.cpp:336
+#: src/selection-chemistry.cpp:334
 msgid "No groups to ungroup in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:403
+#: src/selection-chemistry.cpp:401
 #, fuzzy
 msgid "Select some objects to raise."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:409 src/selection-chemistry.cpp:487
+#: src/selection-chemistry.cpp:407 src/selection-chemistry.cpp:485
 msgid "You cannot raise/lower objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:453
+#: src/selection-chemistry.cpp:451
 #, fuzzy
 msgid "Select some objects to raise to top."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:481
+#: src/selection-chemistry.cpp:479
 #, fuzzy
 msgid "Select some objects to lower."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:537
+#: src/selection-chemistry.cpp:535
 #, fuzzy
 msgid "Select some objects to lower to bottom."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:571
+#: src/selection-chemistry.cpp:569
 msgid "Nothing to undo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:580
+#: src/selection-chemistry.cpp:578
 msgid "Nothing to redo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:656
+#: src/selection-chemistry.cpp:654
 msgid "Nothing was copied."
 msgstr ""
 
-#: src/selection-chemistry.cpp:718 src/selection-chemistry.cpp:779
+#: src/selection-chemistry.cpp:716 src/selection-chemistry.cpp:777
 msgid "Nothing in the clipboard."
 msgstr ""
 
-#: src/selection-chemistry.cpp:785
+#: src/selection-chemistry.cpp:783
 #, fuzzy
 msgid "Select objects to paste style to."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:1266
+#: src/selection-chemistry.cpp:1264
 #, fuzzy
 msgid "Select an object to clone."
 msgstr "Objeto texto"
 
-#: src/selection-chemistry.cpp:1272
+#: src/selection-chemistry.cpp:1270
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1304
+#: src/selection-chemistry.cpp:1301
 #, fuzzy
 msgid "Select a clone to unlink."
 msgstr "Selecionar arquivo para abrir"
 
-#: src/selection-chemistry.cpp:1335
+#: src/selection-chemistry.cpp:1332
 msgid "No clones to unlink in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1352
+#: src/selection-chemistry.cpp:1349
 msgid "Select a single clone to go to its original."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1380
+#: src/selection-chemistry.cpp:1377
 #, fuzzy
 msgid "Select an object to tile."
 msgstr "Objeto texto"
@@ -2770,7 +2771,7 @@ msgstr "Grupo de %d ítems"
 msgid "Object"
 msgstr ""
 
-#: src/sp-path.cpp:116
+#: src/sp-path.cpp:111
 #, c-format
 msgid "Path (%i nodes)"
 msgstr ""
@@ -2790,7 +2791,7 @@ msgstr ""
 msgid "Polygon of %d sides"
 msgstr ""
 
-#: src/sp-text.cpp:1981
+#: src/sp-text.cpp:2051
 #, c-format
 msgid "Text (%s, %.5gpt)"
 msgstr ""
@@ -2800,6 +2801,18 @@ msgstr ""
 #, fuzzy
 msgid "typeset object"
 msgstr "Objeto texto"
+
+#: src/sp-typeset.cpp:1121
+msgid "Select at least 1 text and 1 shape to build a typeset object."
+msgstr ""
+
+#: src/sp-typeset.cpp:1128
+msgid "You cannot build a typeset from objects of different groups or layers."
+msgstr ""
+
+#: src/sp-typeset.cpp:1169
+msgid "You cannot build a typeset without some actual text."
+msgstr ""
 
 #: src/sp-use.cpp:303
 #, c-format
@@ -4094,20 +4107,20 @@ msgid "Pattern offset"
 msgstr "Objeto texto"
 
 #. Family frame
-#: src/widgets/font-selector.cpp:150
+#: src/widgets/font-selector.cpp:153
 msgid "Font family"
 msgstr ""
 
 #. Style frame
-#: src/widgets/font-selector.cpp:178
+#: src/widgets/font-selector.cpp:181
 msgid "Style"
 msgstr ""
 
-#: src/widgets/font-selector.cpp:213
+#: src/widgets/font-selector.cpp:216
 msgid "Font size:"
 msgstr ""
 
-#: src/widgets/font-selector.cpp:510
+#: src/widgets/font-selector.cpp:546
 msgid "AaBbCcIiPpQq12368.;/()"
 msgstr ""
 
@@ -4119,6 +4132,7 @@ msgstr ""
 msgid "Add"
 msgstr "Adicionar"
 
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
 #: src/widgets/gradient-selector.cpp:166
 msgid ""
 "Whether the gradient vector is defined in the user space coordinates "
@@ -4140,6 +4154,7 @@ msgstr ""
 msgid "Coordinates:"
 msgstr "Bitmap colorido"
 
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: src/widgets/gradient-selector.cpp:196
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
