@@ -508,6 +508,8 @@ set_tree_select (SPRepr * repr)
 				gtk_ctree_expand (GTK_CTREE (tree), parent);
 				parent = GTK_CTREE_ROW (parent)->parent;
 			}
+
+			gtk_ctree_node_moveto (GTK_CTREE (tree), node, 0, 0.66, 0.0);
 		}
 	} else {
 		gtk_clist_unselect_all (GTK_CLIST (tree));

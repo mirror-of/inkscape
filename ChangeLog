@@ -1,10 +1,13 @@
+2004-01-19 MenTaLguY <mental@rydia.net>
+
+	* src/dialogs/xml-tree.cpp: automatically scroll tree view to show selected item
+
 2004-01-19 Jon Phillips <jon@protofunk.org>
 
         * src/desktop.cpp: Changed the document shadow to be an option. It is 
           option.pageshadow. I also made some wrapper code so that if the value
           is set to 0, then the constructor for page shadow is not 
           initialized.
-
 
 2004-01-18  bulia byak <bulia@users.sourceforge.net>
 
