@@ -479,7 +479,7 @@ sp_transformation_page_move_new (GObject *obj)
     GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
     g_object_set_data (obj, "move_units", us);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && sp_desktop_get_default_unit (desktop))
+    if (desktop)
         sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit (desktop));
     
     /* Horizontal */

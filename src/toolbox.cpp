@@ -1444,8 +1444,7 @@ sp_rect_toolbox_new (SPDesktop *desktop)
     // rx/ry units menu: create
     GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize (us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
-    if (sp_desktop_get_default_unit (desktop))
-        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit (desktop));
+    sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit (desktop));
     // fixme: add % meaning per cent of the width/height
 
     /* rx */
