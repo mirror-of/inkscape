@@ -79,7 +79,7 @@ nr_arena_item_init (NRArenaItem *item)
 	/* fixme: Initialize bbox */
 	item->transform = NULL;
 	item->opacity = 255;
-  
+
 #ifdef arena_item_tile_cache
   item->activity=0.0;
   item->skipCaching=false;
@@ -101,7 +101,7 @@ nr_arena_item_private_finalize (NRObject *object)
 #ifdef arena_item_tile_cache
   remove_caches(item);
 #endif
-  
+
 	if (item->clip) {
 		nr_arena_item_detach_unref (item, item->clip);
 	}
@@ -235,7 +235,7 @@ nr_arena_item_invoke_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigne
 #ifdef arena_item_tile_cache
   remove_caches(item);
 #endif
-  
+
 	/* Set up local gc */
 	childgc = *gc;
 	if (item->transform) {
@@ -284,11 +284,11 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
 #ifdef NR_ARENA_ITEM_VERBOSE
 	printf ("Invoke render %p: %d %d - %d %d\n", item, area->x0, area->y0, area->x1, area->y1);
 #endif
-  
+
 #ifdef arena_item_tile_cache
   item->activity*=0.5;
 #endif
-  
+
 	/* If we are outside bbox just return successfully */
 	if (!item->visible) return item->state | NR_ARENA_ITEM_STATE_RENDER;
 	nr_rect_l_intersect (&carea, area, &item->bbox);
@@ -317,7 +317,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
 	    (carea.x0 <= item->bbox.x0) && (carea.y0 <= item->bbox.y0) &&
 	    (carea.x1 >= item->bbox.x1) && (carea.y1 >= item->bbox.y1) &&
 	    (((item->bbox.x1 - item->bbox.x0) * (item->bbox.y1 - item->bbox.y0)) <= 4096)) {
-		// Item bbox is fully in renderable area and size is acceptable 
+		// Item bbox is fully in renderable area and size is acceptable
 		carea.x0 = item->bbox.x0;
 		carea.y0 = item->bbox.y0;
 		carea.x1 = item->bbox.x1;
@@ -327,7 +327,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
                               carea.x0, carea.y0, carea.x1, carea.y1,
                               item->px, 4 * (carea.x1 - carea.x0), TRUE, TRUE);
 		dpb = &cpb;
-		// Set nocache flag for downstream rendering 
+		// Set nocache flag for downstream rendering
 		flags |= NR_ARENA_ITEM_RENDER_NO_CACHE;
 	} else {
 #ifdef arena_item_tile_cache
@@ -355,7 +355,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
 #ifdef arena_item_tile_cache
   item->activity+=1.0;
 #endif
-  
+
 #ifdef arena_item_tile_cache
   if ( checkCache ) {
     NRPixBlock ipb, mpb;
@@ -378,11 +378,13 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
 #ifdef arena_item_tile_cache
     // nota: exclusif de dpb != pb, donc pas de cas particulier a la fin
     NRPixBlock ipb, mpb;
-    
-    struct timeval start_time,end_time;
-    gettimeofday(&start_time,NULL);
+
+    // struct timeval start_time,end_time;
+    // gettimeofday(&start_time,NULL);
+    GTimeVal start_time,end_time;
+    g_get_current_time (&start_time);
     int    duration=0;
-    
+
     /* Setup and render item buffer */
     nr_pixblock_setup_fast (&ipb, NR_PIXBLOCK_MODE_R8G8B8A8P, carea.x0, carea.y0, carea.x1, carea.y1, TRUE);
     state = NR_ARENA_ITEM_VIRTUAL (item, render) (item, &carea, &ipb, flags);
@@ -394,7 +396,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
       return item->state;
     }
     ipb.empty = FALSE;
-    
+
     if (item->clip || item->mask) {
       /* Setup mask pixblock */
       nr_pixblock_setup_fast (&mpb, NR_PIXBLOCK_MODE_A8, carea.x0, carea.y0, carea.x1, carea.y1, TRUE);
@@ -474,7 +476,8 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
         }
       }
       /* Compose rendering pixblock int destination */
-      gettimeofday(&end_time,NULL);
+      // gettimeofday(&end_time,NULL);
+      g_get_current_time (&end_time);
       duration=(end_time.tv_sec-start_time.tv_sec)*1000+(end_time.tv_usec-start_time.tv_usec)/1000;
       if ( !(ipb.empty) ) {
         nr_blit_pixblock_pixblock_mask (dpb, &ipb, &mpb);
@@ -489,7 +492,8 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
       }
     } else if ( ((item->opacity != 255) && !item->render_opacity) ) {
       /* Opacity only */
-      gettimeofday(&end_time,NULL);
+      // gettimeofday(&end_time,NULL);
+      g_get_current_time (&end_time);
       duration=(end_time.tv_sec-start_time.tv_sec)*1000+(end_time.tv_usec-start_time.tv_usec)/1000;
       if ( !(ipb.empty) ) {
         nr_blit_pixblock_pixblock_alpha (dpb, &ipb, item->opacity);
@@ -502,7 +506,8 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
         nr_pixblock_release (&ipb);
       }
     } else {
-      gettimeofday(&end_time,NULL);
+      // gettimeofday(&end_time,NULL);
+      g_get_current_time (&end_time);
       duration=(end_time.tv_sec-start_time.tv_sec)*1000+(end_time.tv_usec-start_time.tv_usec)/1000;
       if ( !(ipb.empty) ) {
         nr_blit_pixblock_pixblock (dpb, &ipb);
@@ -520,7 +525,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
     /* Determine, whether we need temporary buffer */
     if (item->clip || item->mask || ((item->opacity != 255) && !item->render_opacity)) {
       NRPixBlock ipb, mpb;
-      
+
       /* Setup and render item buffer */
       nr_pixblock_setup_fast (&ipb, NR_PIXBLOCK_MODE_R8G8B8A8P, carea.x0, carea.y0, carea.x1, carea.y1, TRUE);
       state = NR_ARENA_ITEM_VIRTUAL (item, render) (item, &carea, &ipb, flags);
@@ -532,7 +537,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
         return item->state;
       }
       ipb.empty = FALSE;
-      
+
       if (item->clip || item->mask) {
         /* Setup mask pixblock */
         nr_pixblock_setup_fast (&mpb, NR_PIXBLOCK_MODE_A8, carea.x0, carea.y0, carea.x1, carea.y1, TRUE);
@@ -631,7 +636,7 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
       }
       dpb->empty = FALSE;
     }
-    
+
     if (dpb != pb) {
       /* Have to blit from cache */
       nr_blit_pixblock_pixblock (pb, dpb);
@@ -952,7 +957,7 @@ nr_arena_item_detach_unref (NRArenaItem *parent, NRArenaItem *child)
 
 /*
  *
- * caches 
+ * caches
  *
  */
 
@@ -1031,15 +1036,15 @@ bool  test_cache(NRArenaItem* owner,int th,int tv,NRPixBlock &ipb,NRPixBlock &mp
 void  remove_one_cache(int no)
 {
   if ( no < 0 || no >= nbEnt ) return;
-  
+
   nr_pixblock_release(&entries[no].ipb);
   if ( entries[no].hasMask ) nr_pixblock_release(&entries[no].mpb);
-  
+
   if ( entries[no].prev >= 0 ) entries[entries[no].prev].next=entries[no].next;
   if ( entries[no].next >= 0 ) entries[entries[no].next].prev=entries[no].prev;
   if ( entries[no].prev < 0 ) keys[entries[no].key]=entries[no].next;
   entries[no].prev=entries[no].next=entries[no].key=-1;
-  
+
   if ( no == nbEnt-1 ) {
     nbEnt--;
     return;
@@ -1087,7 +1092,7 @@ bool  insert_cache(NRArenaItem* owner,int th,int tv,NRPixBlock *ipb,NRPixBlock *
 #endif
   int    key=hash_that(owner,th,tv);
   double nScore=/*activity**/duration;
-  
+
   if ( keys[key] >= 0 ) {
     int cur=keys[key];
     while ( cur >= 0 && cur < nbEnt ) {
@@ -1098,7 +1103,7 @@ bool  insert_cache(NRArenaItem* owner,int th,int tv,NRPixBlock *ipb,NRPixBlock *
       cur=entries[cur].next;
     }
   }
-  
+
   bool doAdd=false;
   if ( nbEnt < hash_fill ) {
     doAdd=true;
@@ -1137,7 +1142,7 @@ bool  insert_cache(NRArenaItem* owner,int th,int tv,NRPixBlock *ipb,NRPixBlock *
   entries[nbEnt].next=keys[key];
   if ( entries[nbEnt].next >= 0 ) entries[entries[nbEnt].next].prev=nbEnt;
   keys[key]=nbEnt;
-  
+
   nbEnt++;
   return true;
 }
