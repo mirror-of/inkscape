@@ -297,6 +297,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_KEY_PRESS:
+
+		if (event->key.keyval == GDK_KP_Add || event->key.keyval == GDK_KP_Subtract)
+			break; // pass on keypad +/- so they can zoom
+
 		if (!sp_selection_is_empty (SP_DT_SELECTION (ec->desktop)) || (tc->nascent_object)) {
 			// there is a selection, or a new object was just created
 
@@ -374,6 +378,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					/* Neither unimode nor IM consumed key */
 					switch (event->key.keyval) {
 					case GDK_Return:
+					case GDK_KP_Enter:
 						sp_text_insert_line (SP_TEXT (tc->text), tc->ipos);
 						tc->ipos += 1;
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
@@ -383,10 +388,13 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_Delete:
+					case GDK_KP_Delete:
 						tc->ipos = sp_text_delete (SP_TEXT (tc->text), tc->ipos, MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text))));
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_Left:
+					case GDK_KP_Left:
+					case GDK_KP_4:
 						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 							tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
 						} else {
@@ -395,6 +403,8 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Right:
+					case GDK_KP_Right:
+					case GDK_KP_6:
 						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 							tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
 						} else {
@@ -403,6 +413,8 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Up:
+					case GDK_KP_Up:
+					case GDK_KP_8:
 						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 							tc->ipos = MAX (tc->ipos - 1, 0);
 						} else {
@@ -411,6 +423,8 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Down:
+					case GDK_KP_Down:
+					case GDK_KP_2:
 						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 							tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
 						} else {
@@ -419,10 +433,12 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Home:
+					case GDK_KP_Home:
 						tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_End:
+					case GDK_KP_End:
 						tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
 						sp_text_context_update_cursor (tc);
 						return TRUE;
