@@ -19,7 +19,6 @@ arc-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -65,6 +64,7 @@ arc-context.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -130,7 +130,6 @@ desktop-events.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/guideline.h \
 	helper/helper-forward.h \
@@ -170,6 +169,7 @@ desktop-events.o: \
 	version.h \
 	view.h \
 	widgets/icon.h \
+	widgets/menu.h \
 	xml/repr.h
 
 desktop-handles.o: \
@@ -248,11 +248,11 @@ desktop.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	helper/action.h \
@@ -310,6 +310,7 @@ desktop.o: \
 	view.h \
 	widgets/button.h \
 	widgets/icon.h \
+	widgets/menu.h \
 	widgets/ruler.h \
 	widgets/spinbutton-events.h \
 	widgets/spw-utilities.h \
@@ -378,7 +379,6 @@ dialogs/desktop-properties.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/action.h \
 	helper/helper-forward.h \
@@ -413,11 +413,13 @@ dialogs/desktop-properties.o: \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	svg/ftos.h \
 	svg/stringstream.h \
 	verbs.h \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	widgets/sp-color-notebook.h \
 	widgets/sp-color-preview.h \
 	widgets/sp-color-selector.h \
@@ -469,20 +471,36 @@ dialogs/dialog-events.o: \
 
 dialogs/display-settings.o: \
 	dialogs/display-settings.cpp \
+	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/display-settings.h \
 	forward.h \
 	helper/action.h \
+	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/window.h \
 	inkscape.h \
 	interface.h \
+	knot.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
 	macros.h \
 	prefs-utils.h \
+	seltrans.h \
 	verbs.h \
 	verbs.h \
 	view.h \
@@ -499,7 +517,6 @@ dialogs/export.o: \
 	document.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	helper/action.h \
@@ -542,6 +559,7 @@ dialogs/export.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	widgets/spw-utilities.h \
 	xml/repr.h
 
@@ -552,10 +570,10 @@ dialogs/filedialog-win32.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	widgets/menu.h \
 	xml/repr.h
 
 dialogs/fill-style.o: \
@@ -570,7 +588,6 @@ dialogs/fill-style.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
@@ -607,11 +624,14 @@ dialogs/fill-style.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	widgets/paint-selector.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
@@ -659,7 +679,6 @@ dialogs/item-properties.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/helper-forward.h \
@@ -690,11 +709,14 @@ dialogs/item-properties.o: \
 	sp-marker.h \
 	sp-object.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
 	xml/repr.h
@@ -793,16 +815,20 @@ dialogs/stroke-style.o: \
 	dialogs/stroke-style.cpp \
 	color.h \
 	desktop-handles.h \
+	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/stroke-style.h \
 	display/nr-arena-forward.h \
+	display/nr-arena-forward.h \
+	display/nr-arena-item.h \
+	display/nr-arena.h \
+	document-private.h \
 	document.h \
 	enums.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
@@ -817,6 +843,7 @@ dialogs/stroke-style.o: \
 	helper/units.h \
 	inkscape-stock.h \
 	inkscape.h \
+	inkscape.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -824,6 +851,7 @@ dialogs/stroke-style.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
@@ -837,24 +865,32 @@ dialogs/stroke-style.o: \
 	libnr/nr-values.h \
 	marker-status.h \
 	selection.h \
-	sp-gradient.h \
+	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
-	sp-item.h \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
 	sp-paint-server.h \
+	sp-root.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
 	widgets/dash-selector.h \
+	widgets/icon.h \
+	widgets/menu.h \
 	widgets/paint-selector.h \
 	widgets/sp-widget.h \
 	widgets/spw-utilities.h \
+	xml/repr-action.h \
+	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
 	xml/repr.h \
 	xml/repr.h
 
@@ -914,6 +950,8 @@ dialogs/text-edit.o: \
 	sp-object.h \
 	sp-text.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -1229,7 +1267,8 @@ display/nr-arena-item.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	prefs-utils.h
 
 display/nr-arena-shape.o: \
 	display/nr-arena-shape.cpp \
@@ -1433,7 +1472,6 @@ draw-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/bezier-utils.h \
 	helper/canvas-bpath.h \
@@ -1481,6 +1519,7 @@ draw-context.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 dropper-context.o: \
@@ -1543,7 +1582,6 @@ dyna-draw-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/bezier-utils.h \
 	helper/canvas-bpath.h \
@@ -1578,6 +1616,7 @@ dyna-draw-context.o: \
 	mod360.h \
 	selection.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 event-context.o: \
@@ -1590,7 +1629,6 @@ event-context.o: \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	helper/action.h \
@@ -1634,6 +1672,7 @@ event-context.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -1646,11 +1685,11 @@ extension/db.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/extension.o: \
@@ -1662,14 +1701,15 @@ extension/extension.o: \
 	extension/extension.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
 	inkscape.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	prefs-utils.h \
 	sp-object.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/implementation/implementation.o: \
@@ -1679,10 +1719,10 @@ extension/implementation/implementation.o: \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/implementation/script.o: \
@@ -1698,7 +1738,6 @@ extension/implementation/script.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/script.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	extension/system.h \
 	file.h \
 	forward.h \
@@ -1732,6 +1771,7 @@ extension/implementation/script.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -1749,17 +1789,37 @@ extension/init.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/implementation/script.h \
+	extension/internal/eps-out.h \
 	extension/internal/gnome.h \
 	extension/internal/ps-out.h \
 	extension/internal/ps.h \
 	extension/internal/svg.h \
 	extension/internal/win32.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	widgets/menu.h \
+	xml/repr.h
+
+extension/internal/eps-out.o: \
+	extension/internal/eps-out.cpp \
+	dialogs/dialog-events.h \
+	display/nr-arena-forward.h \
+	document.h \
+	extension/db.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/eps-out.h \
+	extension/system.h \
+	forward.h \
+	helper/sp-intl.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	print.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/internal/ps-out.o: \
@@ -1770,12 +1830,12 @@ extension/internal/ps-out.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/ps-out.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	print.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/internal/ps.o: \
@@ -1790,7 +1850,6 @@ extension/internal/ps.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/ps.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
 	helper/canvas-bpath.h \
@@ -1829,6 +1888,7 @@ extension/internal/ps.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/internal/svg.o: \
@@ -1840,7 +1900,6 @@ extension/internal/svg.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
@@ -1848,6 +1907,7 @@ extension/internal/svg.o: \
 	libnr/nr-path.h \
 	sp-object.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/internal/win32.o: \
@@ -1861,7 +1921,6 @@ extension/internal/win32.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/win32.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
 	libnr/nr-coord.h \
@@ -1883,6 +1942,7 @@ extension/internal/win32.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extension/system.o: \
@@ -1896,13 +1956,22 @@ extension/system.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/implementation/script.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
+	helper/action.h \
 	helper/helper-forward.h \
+	helper/sp-intl.h \
 	inkscape.h \
+	interface.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
+	libnr/nr-object.h \
 	libnr/nr-path.h \
+	libnr/nr-point.h \
+	verbs.h \
+	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 extract-uri-test.o: \
@@ -1929,7 +1998,6 @@ file.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	extension/system.h \
 	file.h \
 	forward.h \
@@ -1974,6 +2042,7 @@ file.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -2042,7 +2111,6 @@ help.o: \
 	document.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	help.h \
@@ -2081,6 +2149,7 @@ help.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 helper/action.o: \
@@ -2456,7 +2525,6 @@ inkscape.o: \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	helper/action.h \
@@ -2491,6 +2559,7 @@ inkscape.o: \
 	shortcuts.h \
 	verbs.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -2508,7 +2577,6 @@ interface.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	help.h \
@@ -2554,6 +2622,7 @@ interface.o: \
 	version.h \
 	view.h \
 	widgets/icon.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -3738,7 +3807,6 @@ node-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -3786,6 +3854,7 @@ node-context.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -3805,7 +3874,6 @@ nodepath.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -3856,6 +3924,7 @@ nodepath.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -3974,7 +4043,6 @@ path-chemistry.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -4022,6 +4090,7 @@ path-chemistry.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -4041,7 +4110,6 @@ prefs-utils.o: \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	helper/action.h \
@@ -4097,6 +4165,7 @@ prefs-utils.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h \
 	zoom-context.h
 
@@ -4116,7 +4185,6 @@ print.o: \
 	extension/internal/gnome.h \
 	extension/internal/ps.h \
 	extension/internal/win32.h \
-	extension/menu.h \
 	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
@@ -4152,6 +4220,7 @@ print.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 rect-context.o: \
@@ -4168,7 +4237,6 @@ rect-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -4215,6 +4283,7 @@ rect-context.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -4300,7 +4369,6 @@ select-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
@@ -4345,6 +4413,7 @@ select-context.o: \
 	sp-object.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	widgets/spw-utilities.h \
 	xml/repr.h
 
@@ -4357,7 +4426,6 @@ select-toolbar.o: \
 	document.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	forward.h \
@@ -4408,6 +4476,7 @@ select-toolbar.o: \
 	view.h \
 	widgets/button.h \
 	widgets/icon.h \
+	widgets/menu.h \
 	widgets/sp-widget.h \
 	widgets/spinbutton-events.h \
 	widgets/spw-utilities.h \
@@ -4432,7 +4501,6 @@ selection-chemistry.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -4484,6 +4552,7 @@ selection-chemistry.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
@@ -4570,7 +4639,6 @@ seltrans.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
@@ -4617,6 +4685,7 @@ seltrans.o: \
 	sp-object.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 shortcuts.o: \
@@ -4833,7 +4902,6 @@ sp-ellipse.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/sp-intl.h \
@@ -4864,11 +4932,14 @@ sp-ellipse.o: \
 	sp-object.h \
 	sp-shape.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-gradient.o: \
@@ -4883,7 +4954,6 @@ sp-gradient.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/nr-gradient-gpl.h \
 	helper/units.h \
@@ -4916,11 +4986,14 @@ sp-gradient.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	sp-root.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
@@ -4935,7 +5008,6 @@ sp-guide.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/guideline.h \
 	helper/helper-forward.h \
@@ -4967,6 +5039,7 @@ sp-guide.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-image.o: \
@@ -4985,7 +5058,6 @@ sp-image.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/action.h \
@@ -5029,6 +5101,7 @@ sp-image.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-item-group.o: \
@@ -5045,7 +5118,6 @@ sp-item-group.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -5080,6 +5152,7 @@ sp-item-group.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -5157,7 +5230,6 @@ sp-item-transform.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5183,6 +5255,7 @@ sp-item-transform.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-item-update-cns.o: \
@@ -5232,7 +5305,6 @@ sp-item.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -5277,6 +5349,7 @@ sp-item.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-line.o: \
@@ -5289,7 +5362,6 @@ sp-line.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/sp-intl.h \
@@ -5322,6 +5394,7 @@ sp-line.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-marker.o: \
@@ -5338,7 +5411,6 @@ sp-marker.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
@@ -5377,6 +5449,7 @@ sp-marker.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-mask.o: \
@@ -5426,11 +5499,13 @@ sp-metrics.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	sp-metrics.h \
+	svg/ftos.h \
+	svg/stringstream.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-namedview.o: \
@@ -5445,7 +5520,6 @@ sp-namedview.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/canvas-grid.h \
 	helper/helper-forward.h \
@@ -5479,6 +5553,7 @@ sp-namedview.o: \
 	sp-object.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-object-group.o: \
@@ -5620,7 +5695,6 @@ sp-offset.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/bezier-utils.h \
@@ -5665,11 +5739,14 @@ sp-offset.o: \
 	sp-offset.h \
 	sp-shape.h \
 	sp-text.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -5698,7 +5775,6 @@ sp-path.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/sp-intl.h \
@@ -5731,6 +5807,7 @@ sp-path.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-pattern.o: \
@@ -5746,7 +5823,6 @@ sp-pattern.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5776,6 +5852,7 @@ sp-pattern.o: \
 	sp-pattern.h \
 	svg/svg-types.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -5811,6 +5888,7 @@ sp-polygon.o: \
 	sp-object.h \
 	sp-polygon.h \
 	sp-shape.h \
+	svg/ftos.h \
 	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
@@ -5868,7 +5946,6 @@ sp-rect.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/curve.h \
@@ -5906,6 +5983,7 @@ sp-rect.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-root.o: \
@@ -5922,7 +6000,6 @@ sp-root.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
@@ -5958,6 +6035,7 @@ sp-root.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-shape.o: \
@@ -5976,7 +6054,6 @@ sp-shape.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/canvas-bpath.h \
 	helper/curve.h \
@@ -6017,20 +6094,25 @@ sp-shape.o: \
 	marker-status.h \
 	print.h \
 	selection.h \
+	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
 	sp-paint-server.h \
+	sp-path.h \
 	sp-root.h \
 	sp-shape.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-spiral.o: \
@@ -6043,7 +6125,6 @@ sp-spiral.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/bezier-utils.h \
@@ -6077,6 +6158,7 @@ sp-spiral.o: \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-star.o: \
@@ -6091,7 +6173,6 @@ sp-star.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/curve.h \
@@ -6129,6 +6210,7 @@ sp-star.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-symbol.o: \
@@ -6145,7 +6227,6 @@ sp-symbol.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
@@ -6181,6 +6262,7 @@ sp-symbol.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 sp-text.o: \
@@ -6200,7 +6282,6 @@ sp-text.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -6250,6 +6331,7 @@ sp-text.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -6269,7 +6351,6 @@ sp-use.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
@@ -6302,6 +6383,7 @@ sp-use.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 spiral-context.o: \
@@ -6318,7 +6400,6 @@ spiral-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -6365,6 +6446,7 @@ spiral-context.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -6382,7 +6464,6 @@ splivarot.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/canvas-bpath.h \
 	helper/curve.h \
@@ -6437,6 +6518,7 @@ splivarot.o: \
 	sp-text.h \
 	splivarot.h \
 	style.h \
+	svg/ftos.h \
 	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
@@ -6444,6 +6526,7 @@ splivarot.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -6463,7 +6546,6 @@ star-context.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -6511,6 +6593,7 @@ star-context.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -6556,7 +6639,6 @@ style.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	extract-uri.h \
 	forward.h \
 	helper/canvas-bpath.h \
@@ -6589,12 +6671,14 @@ style.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	style.h \
+	svg/ftos.h \
 	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
 	uri.h \
 	version.h \
+	widgets/menu.h \
 	xml/repr.h
 
 svg-view.o: \
@@ -6634,9 +6718,19 @@ svg-view.o: \
 	view.h \
 	xml/repr.h
 
+svg/ftos.o: \
+	svg/ftos.cpp \
+	svg/ftos.h
+
 svg/gnome-canvas-bpath-util.o: \
 	svg/gnome-canvas-bpath-util.cpp \
 	svg/gnome-canvas-bpath-util.h
+
+svg/itos.o: \
+	svg/itos.cpp
+
+svg/round.o: \
+	svg/round.cpp
 
 svg/svg-affine.o: \
 	svg/svg-affine.cpp \
@@ -6645,7 +6739,6 @@ svg/svg-affine.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -6663,6 +6756,7 @@ svg/svg-affine.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	widgets/menu.h \
 	xml/repr.h
 
 svg/svg-color.o: \
@@ -6672,10 +6766,10 @@ svg/svg-color.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	widgets/menu.h \
 	xml/repr.h
 
 svg/svg-length.o: \
@@ -6685,10 +6779,12 @@ svg/svg-length.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	svg/ftos.h \
+	svg/stringstream.h \
+	widgets/menu.h \
 	xml/repr.h
 
 svg/svg-path.o: \
@@ -6698,12 +6794,13 @@ svg/svg-path.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	svg/ftos.h \
 	svg/gnome-canvas-bpath-util.h \
 	svg/stringstream.h \
+	widgets/menu.h \
 	xml/repr.h
 
 text-context.o: \
@@ -6786,7 +6883,6 @@ toolbox.o: \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	forward.h \
@@ -6858,6 +6954,7 @@ toolbox.o: \
 	view.h \
 	widgets/button.h \
 	widgets/icon.h \
+	widgets/menu.h \
 	widgets/sp-widget.h \
 	widgets/spinbutton-events.h \
 	widgets/spw-utilities.h \
@@ -6883,7 +6980,6 @@ tools-switch.o: \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	helper/action.h \
@@ -6940,6 +7036,7 @@ tools-switch.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h \
 	zoom-context.h
 
@@ -6984,10 +7081,10 @@ verbs.o: \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
-	extension/menu.h \
 	file.h \
 	forward.h \
 	forward.h \
+	help.h \
 	helper/action.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -6995,6 +7092,7 @@ verbs.o: \
 	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \
+	interface.h \
 	knot.h \
 	knotholder.h \
 	libnr/nr-coord.h \
@@ -7047,6 +7145,7 @@ verbs.o: \
 	verbs.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
 	xml/repr.h \
 	zoom-context.h
 
@@ -7316,7 +7415,6 @@ widgets/gradient-vector.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
@@ -7357,6 +7455,7 @@ widgets/gradient-vector.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	sp-root.h \
+	svg/ftos.h \
 	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
@@ -7368,6 +7467,7 @@ widgets/gradient-vector.o: \
 	view.h \
 	widgets/gradient-image.h \
 	widgets/gradient-vector.h \
+	widgets/menu.h \
 	widgets/sp-color-notebook.h \
 	widgets/sp-color-preview.h \
 	widgets/sp-color-selector.h \
@@ -7418,17 +7518,14 @@ widgets/icon.o: \
 
 widgets/menu.o: \
 	widgets/menu.cpp \
-	extension/menu.h \
-	extension/menu.h \
-	helper/sp-marshal.h
+	helper/sp-marshal.h \
+	widgets/menu.h
 
 widgets/paint-selector.o: \
 	widgets/paint-selector.cpp \
 	color.h \
 	color.h \
 	display/nr-arena-forward.h \
-	extension/menu.h \
-	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/sp-intl.h \
@@ -7461,6 +7558,7 @@ widgets/paint-selector.o: \
 	uri.h \
 	version.h \
 	widgets/gradient-selector.h \
+	widgets/menu.h \
 	widgets/paint-selector.h \
 	widgets/sp-color-notebook.h \
 	widgets/sp-color-selector.h \
@@ -7473,11 +7571,11 @@ widgets/ruler.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	sp-metrics.h \
+	widgets/menu.h \
 	widgets/ruler.h \
 	widgets/widget-sizes.h \
 	xml/repr.h
@@ -7746,6 +7844,7 @@ xml/repr-io.o: \
 
 xml/repr-util.o: \
 	xml/repr-util.cpp \
+	svg/ftos.h \
 	svg/stringstream.h \
 	xml/repr-action.h \
 	xml/repr-private.h \

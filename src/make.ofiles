@@ -46,6 +46,7 @@ OBJECTS = \
 	extension/implementation/implementation.o \
 	extension/implementation/script.o \
 	extension/init.o \
+	extension/internal/eps-out.o \
 	extension/internal/ps-out.o \
 	extension/internal/ps.o \
 	extension/internal/svg.o \
@@ -225,7 +226,10 @@ OBJECTS = \
 	streams-zlib.o \
 	style.o \
 	svg-view.o \
+	svg/ftos.o \
 	svg/gnome-canvas-bpath-util.o \
+	svg/itos.o \
+	svg/round.o \
 	svg/svg-affine.o \
 	svg/svg-color.o \
 	svg/svg-length.o \
@@ -318,6 +322,7 @@ LINTS = \
 	extension/implementation/implementation.lint \
 	extension/implementation/script.lint \
 	extension/init.lint \
+	extension/internal/eps-out.lint \
 	extension/internal/ps-out.lint \
 	extension/internal/ps.lint \
 	extension/internal/svg.lint \
@@ -497,7 +502,10 @@ LINTS = \
 	streams-zlib.lint \
 	style.lint \
 	svg-view.lint \
+	svg/ftos.lint \
 	svg/gnome-canvas-bpath-util.lint \
+	svg/itos.lint \
+	svg/round.lint \
 	svg/svg-affine.lint \
 	svg/svg-color.lint \
 	svg/svg-length.lint \

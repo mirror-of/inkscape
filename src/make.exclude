@@ -28,9 +28,9 @@ bonobo/embeddable-drawing.h
 bonobo/sodipodi-bonobo.h
 bonobo/svg-doc-factory.h
 dialogs/filedialog.cpp
-dialogs/fxiledialog-win32.cpp
 display/nr-uta.cpp
 display/testnr.cpp
+extension/menu.h
 extension/menu.cpp
 helper/bezier-utils-test.cpp
 ink-snprintf.cpp
