@@ -1,3 +1,10 @@
+2004-10-30  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
+	  update when layers added/removed/reordered
+
+	* src/verbs.h, src/verbs.cpp: added "rename layer" verb
+
 2004-10-29  Kees Cook  <kees@outflux.net>
 
 	* src/Makefile_insert, src/trace/Makefile_insert,

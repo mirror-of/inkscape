@@ -39,16 +39,17 @@ public:
     SPDesktop *desktop() { return _desktop; }
     void setDesktop(SPDesktop *desktop);
 
+    void startRenameLayer();
+
 private:
     class LayerModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         Gtk::TreeModelColumn<unsigned> depth;
         Gtk::TreeModelColumn<SPObject *> object;
-        Gtk::TreeModelColumn<SPRepr *> repr;
-        Gtk::TreeModelColumn<sigc::slot<void> *> update_slot;
+        Gtk::TreeModelColumn<void *> callbacks;
 
         LayerModelColumns() {
-            add(depth); add(object); add(repr); add(update_slot);
+            add(depth); add(object); add(callbacks);
         }
     };
 

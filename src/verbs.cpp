@@ -872,6 +872,10 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
             break;
         }
+        case SP_VERB_RENAME_LAYER: {
+            dt->startRenameLayer();
+            break;
+        }
         case SP_VERB_LAYER_NEXT: {
             SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
             if (next) {
@@ -1549,6 +1553,8 @@ Verb * Verb::_base_verbs[] = {
     /* Layer */
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("New Layer"),
         N_("Create a new layer"), NULL),
+    new LayerVerb(SP_VERB_RENAME_LAYER, "RenameLayer", N_("Rename Layer"),
+        N_("Rename the current layer"), NULL),
     new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Move to Next Layer"),
         N_("Switch to the next layer in the document"), NULL),
     new LayerVerb(SP_VERB_LAYER_PREV, "LayerPrev", N_("Move to Previous Layer"),

@@ -61,6 +61,9 @@ LayerSelector::~LayerSelector() {
     _selection_changed_connection.disconnect();
 }
 
+void LayerSelector::startRenameLayer() {
+}
+
 namespace {
 
 /** Helper function - detaches desktop from selector 
@@ -146,14 +149,16 @@ void LayerSelector::_selectLayer(SPObject *layer) {
             reverse_list<SPObject::ParentIterator>(layer, root)
         ));
 
-        _selector.set_active(
+        Gtk::TreeIter row(
             std::find_if(
                 _layer_model->children().begin(),
                 _layer_model->children().end(),
                 column_matches_object(_model_columns.object, *layer)
             )
         );
-            
+        if ( row != _layer_model->children().end() ) {
+            _selector.set_active(row);
+        }
     }
 
     _selection_changed_connection.unblock();
@@ -225,12 +230,42 @@ void LayerSelector::_buildSiblingEntries(
 
 namespace {
 
+struct Callbacks {
+    sigc::slot<void> update_row;
+    sigc::slot<void> update_list;
+};
+
 void attribute_changed(SPRepr *repr, gchar const *name,
                        gchar const *old_value, gchar const *new_value,
                        bool is_interactive, void *data) 
 {
     if ( !std::strcmp(name, "id") || !std::strcmp(name, "inkscape:label") ) {
-        (*reinterpret_cast<sigc::slot<void> *>(data))();
+        reinterpret_cast<Callbacks *>(data)->update_row();
+    } else if ( !std::strcmp(name, "inkscape:groupmode") ) {
+        reinterpret_cast<Callbacks *>(data)->update_list();
+    }
+}
+
+void node_added(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
+    gchar const *mode=sp_repr_attr(child, "inkscape:groupmode");
+    if ( mode && !std::strcmp(mode, "layer") ) {
+        reinterpret_cast<Callbacks *>(data)->update_list();
+    }
+}
+
+void node_removed(SPRepr *parent, SPRepr *child, SPRepr *ref, void *data) {
+    gchar const *mode=sp_repr_attr(child, "inkscape:groupmode");
+    if ( mode && !std::strcmp(mode, "layer") ) {
+        reinterpret_cast<Callbacks *>(data)->update_list();
+    }
+}
+
+void node_reordered(SPRepr *parent, SPRepr *child,
+                    SPRepr *old_ref, SPRepr *new_ref, void *data)
+{
+    gchar const *mode=sp_repr_attr(child, "inkscape:groupmode");
+    if ( mode && !std::strcmp(mode, "layer") ) {
+        reinterpret_cast<Callbacks *>(data)->update_list();
     }
 }
 
@@ -245,7 +280,14 @@ void update_row_for_object(SPObject &object,
             column_matches_object(column, object)
         )
     );
-    model->row_changed(model->get_path(row), row);
+    if ( row != model->children().end() ) {
+        model->row_changed(model->get_path(row), row);
+    }
+}
+
+void rebuild_all_rows(sigc::slot<void, SPObject *> rebuild, SPDesktop *desktop)
+{
+    rebuild(desktop->currentLayer());
 }
 
 }
@@ -253,43 +295,67 @@ void update_row_for_object(SPObject &object,
 /** Builds and appends a row in the layer model object.
  */
 void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
-    static const SPReprEventVector events = {
-        NULL, NULL,
-        NULL, NULL,
-        NULL, &attribute_changed,
-        NULL, NULL,
-        NULL, NULL
-    };
+    SPReprEventVector *vector;
+
+    Callbacks *callbacks=new Callbacks();
+
+    callbacks->update_row = sigc::bind(
+        sigc::ptr_fun(&update_row_for_object),
+        object, _model_columns.object, _layer_model
+    );
+
+    SPObject *layer=_desktop->currentLayer();
+    if ( &object == layer || &object == SP_OBJECT_PARENT(layer) ) {
+        callbacks->update_list = sigc::bind(
+            sigc::ptr_fun(&rebuild_all_rows),
+            sigc::mem_fun(*this, &LayerSelector::_selectLayer),
+            _desktop
+        );
+
+        SPReprEventVector events = {
+            NULL, &node_added,
+            NULL, &node_removed,
+            NULL, &attribute_changed,
+            NULL, NULL,
+            NULL, &node_reordered
+        };
+
+        vector = new SPReprEventVector(events);
+    } else {
+        SPReprEventVector events = {
+            NULL, NULL,
+            NULL, NULL,
+            NULL, &attribute_changed,
+            NULL, NULL,
+            NULL, NULL
+        };
+
+        vector = new SPReprEventVector(events);
+    }
 
     Gtk::ListStore::iterator row(_layer_model->append());
 
-    SPRepr *repr=SP_OBJECT_REPR(&object);
-
-    sigc::slot<void> *update_slot = new sigc::slot<void>(
-        sigc::bind(
-            sigc::ptr_fun(&update_row_for_object),
-            object, _model_columns.object, _layer_model
-        )
-    );
+    sp_object_ref(&object, NULL);
 
     row->set_value(_model_columns.depth, depth);
     row->set_value(_model_columns.object, &object);
-    row->set_value(_model_columns.repr, repr);
-    row->set_value(_model_columns.update_slot, update_slot);
+    row->set_value(_model_columns.callbacks, reinterpret_cast<void *>(callbacks));
 
-    sp_repr_add_listener(repr, &events, reinterpret_cast<void *>(update_slot));
+    sp_repr_add_listener(SP_OBJECT_REPR(&object), vector, callbacks);
 }
 
 /** Removes a row from the _model_columns object, disconnecting listeners
  *  on the slot.
  */
 void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
-    SPRepr *repr=row->get_value(_model_columns.repr);
-    sigc::slot<void> *update_slot=row->get_value(_model_columns.update_slot);
-    if (repr) {
-        sp_repr_remove_listener_by_data(repr, reinterpret_cast<void *>(update_slot));
-        delete update_slot;
+    Callbacks *callbacks=reinterpret_cast<Callbacks *>(row->get_value(_model_columns.callbacks));
+    SPObject *object=row->get_value(_model_columns.object);
+    if (object) {
+        SPRepr *repr=SP_OBJECT_REPR(object);
+        sp_repr_remove_listener_by_data(repr, callbacks);
+        sp_object_unref(object, NULL);
     }
+    delete callbacks;
 }
 
 /** Formats the label for a given layer row 
