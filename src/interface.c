@@ -120,6 +120,9 @@ sp_create_window (SPViewWidget *vw, gboolean editable)
 			   G_CALLBACK (sp_ui_drag_data_received),
 			   NULL);
 	gtk_widget_show (w);
+
+	// needed because the first ACTIVATE_DESKTOP was sent when there was no window yet
+	inkscape_reactivate_desktop (SP_DESKTOP_WIDGET (vw)->desktop);
 }
 
 void
