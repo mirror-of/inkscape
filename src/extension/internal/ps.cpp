@@ -350,13 +350,13 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		// respective pages.
 		os << "%%Pages: 1\n";
 		
-		pageLandscape = (d.x1 > d.y1) ? true : false;
+		pageLandscape = (d.x1 - d.x0 > d.y1 - d.y0) ? true : false;
 
 		if (pageLandscape) {
 			os << "%%Orientation: Landscape\n";
-			os << "%%BoundingBox: " << (int) d.x0 << " "
-						<< (int) d.y0 << " "
-						<< (int) ceil (d.y1) << " "
+			os << "%%BoundingBox: " << (int) (_height - d.y1) << " "
+						<< (int) d.x0 << " "
+						<< (int) ceil (_height - d.y0) << " "
 						<< (int) ceil (d.x1) << "\n";
 			// According to Mike Sweet (the author of CUPS)
 			// HiResBoundingBox is only appropriate
@@ -365,9 +365,9 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 			// FIXME: I couldn't find HiResBoundingBox in the PS
 			// reference manual, so I guess we should skip
 			// it.
-			os << "%%HiResBoundingBox: " << d.x0 << " "
-						<< d.y0 << " "
-						<< d.y1 << " "
+			os << "%%HiResBoundingBox: " << (_height - d.y1) << " "
+						<< d.x0 << " "
+						<< (_height - d.y0) << " "
 						<< d.x1 << "\n";
 		}
 		else
@@ -389,25 +389,16 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		os << "%%Page: 1 1\n";
 		
 		if (pageLandscape) {
-			
 			os << 90 << " rotate\n";
-			
-			if (_bitmap)
-			{
+			if (_bitmap) {
 				os << "0 " << (int) -ceil (_height) << " translate\n";
 			}
-		}
-		else
-		{
-			if (!_bitmap)
-			{
-				os << "0.0 " << (int) ceil (_height) << " translate\n";
+		} else 
+			if (!_bitmap) {
+				os << "0 " << (int) ceil (_height) << " translate\n";
 			}
-
-		}
 		
-		if (!_bitmap) 
-		{
+		if (!_bitmap) {
 			os << "0.8 -0.8 scale\n";
 		}
 
