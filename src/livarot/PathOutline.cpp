@@ -31,7 +31,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
     if ( descr_flags & descr_doing_subpath ) {
         CloseSubpath();
     }
-    if ( descr_nb <= 1 ) {
+    if ( descr_cmd.size() <= 1 ) {
         return;
     }
     if ( dest == NULL ) {
@@ -56,17 +56,17 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
         int lastM = curP;
         do {
             curP++;
-            if (curP >= descr_nb) {
+            if (curP >= int(descr_cmd.size())) {
                 break;
             }
             int typ = descr_cmd[curP].flags & descr_type_mask;
             if (typ == descr_moveto) {
                 break;
             }
-        } while (curP < descr_nb);
+        } while (curP < int(descr_cmd.size()));
 
-        if (curP >= descr_nb) {
-            curP = descr_nb;
+        if (curP >= int(descr_cmd.size())) {
+            curP = descr_cmd.size();
         }
         
         if (curP > lastM + 1) {
@@ -148,14 +148,14 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                 // actual offseting is done in SubContractOutline()
                 if (needClose) {
                     rev->Close ();
-                    rev->SubContractOutline (rev->descr_cmd, rev->descr_nb,
+                    rev->SubContractOutline (0, rev->descr_cmd.size(),
                                              dest, calls, 0.0025 * width * width, width,
                                              join, butt, miter, true, false, endPos, endButt);
-                    SubContractOutline (descr_cmd + lastM, realP + 1 - lastM,
+                    SubContractOutline (lastM, realP + 1 - lastM,
                                         dest, calls, 0.0025 * width * width,
                                         width, join, butt, miter, true, false, endPos, endButt);
                 } else {
-                    rev->SubContractOutline (rev->descr_cmd, rev->descr_nb,
+                    rev->SubContractOutline (0, rev->descr_cmd.size(),
                                              dest, calls,  0.0025 * width * width, width,
                                              join, butt, miter, false, false, endPos, endButt);
                     NR::Point endNor=endButt.ccw();
@@ -171,7 +171,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                     } else {
                         dest->LineTo (endPos+width*endNor);
                     }
-                    SubContractOutline (descr_cmd + lastM, realP - lastM,
+                    SubContractOutline (lastM, realP - lastM,
                                         dest, calls, 0.0025 * width * width,  width, join, butt,
                                         miter, false, true, endPos, endButt);
                     
@@ -193,7 +193,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
             } // if (curD > lastM)
         } // if (curP > lastM + 1)
         
-    } while (curP < descr_nb);
+    } while (curP < int(descr_cmd.size()));
 
     delete rev;
 }
@@ -209,7 +209,7 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	if (descr_flags & descr_doing_subpath) {
 		CloseSubpath();
 	}
-	if (descr_nb <= 1) return;
+	if (int(descr_cmd.size()) <= 1) return;
 	if (dest == NULL) return;
 	dest->Reset ();
 	dest->SetBackData (false);
@@ -219,7 +219,7 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	calls.cubicto = StdCubicTo;
 	calls.bezierto = StdBezierTo;
 	calls.arcto = StdArcTo;
-	SubContractOutline (descr_cmd, descr_nb,
+	SubContractOutline (0, descr_cmd.size(),
                             dest, calls, 0.0025 * width * width, width, join, butt,
 			    miter, true, false, endPos, endButt);
 }
@@ -234,7 +234,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	if ( descr_flags & descr_doing_subpath ) {
 		CloseSubpath();
 	}
-	if (descr_nb <= 1) return;
+	if (int(descr_cmd.size()) <= 1) return;
 	if (dest == NULL) return;
 	dest->Reset ();
 	dest->SetBackData (false);
@@ -252,11 +252,11 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		int lastM = curP;
 		do {
 			curP++;
-			if (curP >= descr_nb) break;
+			if (curP >= int(descr_cmd.size())) break;
 			int typ = descr_cmd[curP].flags & descr_type_mask;
 			if (typ == descr_moveto) break;
-		} while (curP < descr_nb);
-		if (curP >= descr_nb)  curP = descr_nb;
+		} while (curP < int(descr_cmd.size()));
+		if (curP >= int(descr_cmd.size()))  curP = descr_cmd.size();
 		if (curP > lastM + 1) {
 			// Otherwise there's only one point.  (tr: or "only a point")
 			// [sinon il n'y a qu'un point]
@@ -323,13 +323,13 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 					}
 				}
 				rev->Close ();
-				rev->SubContractOutline (rev->descr_cmd, rev->descr_nb,
+				rev->SubContractOutline (0, rev->descr_cmd.size(),
                                                          dest, calls, 0.0025 * width * width,
 							 width, join, butt, miter, true, false,
 							 endPos, endButt);
 			}
 		}
-	}  while (curP < descr_nb);
+	}  while (curP < int(descr_cmd.size()));
   
 	delete rev;
 }
@@ -350,7 +350,7 @@ Path::DoInsideOutline (Path * dest, double width, JoinType join, ButtType butt, 
 // the bezier spline is split in a sequence of bezier curves, and these are transformed in cubic bezier (which is
 // not hard since they are quadratic bezier)
 // joins are put where needed
-void Path::SubContractOutline(path_descr* pd, int num_pd,
+void Path::SubContractOutline(int off, int num_pd,
                               Path *dest, outline_callbacks & calls,
                               double tolerance, double width, JoinType join,
                               ButtType butt, double miter, bool closeIfNeeded,
@@ -365,12 +365,12 @@ void Path::SubContractOutline(path_descr* pd, int num_pd,
     // le moveto
     NR::Point curX;
     {
-        int firstTyp = pd->flags & descr_type_mask;
+        int firstTyp = descr_cmd[off].flags & descr_type_mask;
         if ( firstTyp != descr_moveto ) {
             curX[0] = curX[1] = 0;
             curP = 0;
         } else {
-            path_descr_moveto* nData = (path_descr_moveto*) (descr_data + pd->dStart);
+            path_descr_moveto* nData = (path_descr_moveto*) (descr_data + descr_cmd[off].dStart);
             curX = nData->p;
         }
     }
@@ -383,7 +383,7 @@ void Path::SubContractOutline(path_descr* pd, int num_pd,
 	// et le reste, 1 par 1
 	while (curP < num_pd)
 	{
-		path_descr *curD = pd + curP;
+            path_descr *curD = &descr_cmd[off + curP];
 		int nType = curD->flags & descr_type_mask;
 		NR::Point nextX;
 		NR::Point stPos, enPos, stTgt, enTgt, stNor, enNor;
@@ -649,7 +649,7 @@ void Path::SubContractOutline(path_descr* pd, int num_pd,
       
 //      path_descr *bezStart = curD;
 			curP++;
-			curD = pd + curP;
+			curD = &descr_cmd[off + curP];
 			path_descr *intermPoints = curD;
 			path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
      

@@ -727,7 +727,7 @@ sp_offset_set_shape (SPShape * shape)
   } 
   {
     char *res_d = NULL;
-    if (orig->descr_nb <= 1)
+    if (orig->descr_cmd.size() <= 1)
     {
       // aie.... plus rien
       res_d = strdup ("M 0 0 L 0 0 z");
@@ -819,7 +819,7 @@ double
 sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 {
   if (offset == NULL || offset->originalPath == NULL
-      || ((Path *) offset->originalPath)->descr_nb <= 1)
+      || ((Path *) offset->originalPath)->descr_cmd.size() <= 1)
     return 1.0;
   double dist = 1.0;
   Shape *theShape = new Shape;

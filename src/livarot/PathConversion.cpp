@@ -30,8 +30,8 @@ void            Path::ConvertWithBackData(double treshhold)
 		CloseSubpath();
 	}
 	SetBackData(true);
-	ResetPoints(descr_nb);
-	if ( descr_nb <= 0 ) return;
+	ResetPoints(descr_cmd.size());
+	if ( descr_cmd.empty() ) return;
 	NR::Point curX;
 	int       curP=1;
 	int       lastMoveTo=-1;
@@ -48,8 +48,8 @@ void            Path::ConvertWithBackData(double treshhold)
     lastMoveTo=AddPoint(curX,0,0.0,true);
   }
 	// et le reste, 1 par 1
-	while ( curP < descr_nb ) {
-		path_descr*  curD=descr_cmd+curP;
+	while ( curP < int(descr_cmd.size()) ) {
+            path_descr*  curD=&descr_cmd[curP];
 		int          nType=curD->flags&descr_type_mask;
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -90,7 +90,7 @@ void            Path::ConvertWithBackData(double treshhold)
 			int   nbInterm=nBData->nb;
 			nextX=nBData->p;
 			
-			curD=descr_cmd+(curP+1);
+			curD=&descr_cmd[curP+1];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -167,8 +167,8 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 		CloseSubpath();
 	}
 	SetBackData(true);
-	ResetPoints(descr_nb);
-	if ( descr_nb <= 0 ) return;
+	ResetPoints(descr_cmd.size());
+	if ( descr_cmd.empty() ) return;
 	NR::Point curX;
 	int       curP=1;
 	int       lastMoveTo=-1;
@@ -190,8 +190,8 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 	off_data.off_dec=off_dec;
 	
 	// et le reste, 1 par 1
-	while ( curP < descr_nb ) {
-		path_descr*  curD=descr_cmd+curP;
+	while ( curP < int(descr_cmd.size()) ) {
+            path_descr*  curD=&descr_cmd[curP];
 		int          nType=curD->flags&descr_type_mask;
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -248,7 +248,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 			int   nbInterm=nBData->nb;
 			nextX=nBData->p;
 			
-			curD=descr_cmd+(curP+1);
+			curD=&descr_cmd[curP+1];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -341,8 +341,8 @@ void            Path::Convert(double treshhold)
 		CloseSubpath();
 	}
 	SetBackData(false);
-	ResetPoints(descr_nb);
-	if ( descr_nb <= 0 ) return;
+	ResetPoints(descr_cmd.size());
+	if ( descr_cmd.empty() ) return;
 	NR::Point curX;
 	int       curP=1;
 	int       lastMoveTo=0;
@@ -358,11 +358,11 @@ void            Path::Convert(double treshhold)
     }
     lastMoveTo=AddPoint(curX,true);
   }
-	(descr_cmd)->associated=lastMoveTo;
+	descr_cmd[0].associated=lastMoveTo;
 	
 	// et le reste, 1 par 1
-	while ( curP < descr_nb ) {
-		path_descr*  curD=descr_cmd+curP;
+	while ( curP < int(descr_cmd.size()) ) {
+            path_descr*  curD=&descr_cmd[curP];
 		int          nType=curD->flags&descr_type_mask;
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -435,7 +435,7 @@ void            Path::Convert(double treshhold)
 			path_descr* curBD=curD;
 			
 			curP++;
-			curD=descr_cmd+curP;
+			curD=&descr_cmd[curP];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -532,8 +532,8 @@ void            Path::ConvertEvenLines(double treshhold)
 		CloseSubpath();
 	}
 	SetBackData(false);
-	ResetPoints(descr_nb);
-	if ( descr_nb <= 0 ) return;
+	ResetPoints(descr_cmd.size());
+	if ( descr_cmd.empty() ) return;
 	NR::Point curX;
 	int      curP=1;
 	int      lastMoveTo=0;
@@ -549,11 +549,11 @@ void            Path::ConvertEvenLines(double treshhold)
     }
     lastMoveTo=AddPoint(curX,true);
   }
-	(descr_cmd)->associated=lastMoveTo;
+	descr_cmd[0].associated=lastMoveTo;
 	
 	// et le reste, 1 par 1
-	while ( curP < descr_nb ) {
-		path_descr*  curD=descr_cmd+curP;
+	while ( curP < int(descr_cmd.size()) ) {
+            path_descr*  curD=&descr_cmd[curP];
 		int          nType=curD->flags&descr_type_mask;
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -646,7 +646,7 @@ void            Path::ConvertEvenLines(double treshhold)
 			path_descr*  curBD=curD;
 			
 			curP++;
-			curD=descr_cmd+curP;
+			curD=&descr_cmd[curP];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			

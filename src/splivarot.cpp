@@ -205,7 +205,7 @@ sp_selected_path_boolop (bool_op bop)
             }
 
             originaux[curOrig] = Path_for_item ((SPItem *) l->data, true, false);
-            if (originaux[curOrig] == NULL || originaux[curOrig]->descr_nb <= 1)
+            if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
             {
                 for (int i = curOrig; i >= 0; i--) delete originaux[i];
                 g_slist_free (il);
@@ -396,7 +396,7 @@ sp_selected_path_boolop (bool_op bop)
     delete theShapeB;
     for (int i = 0; i < nbOriginaux; i++)  delete originaux[i];
  
-    if (res->descr_nb <= 1)
+    if (res->descr_cmd.size() <= 1)
     {
         // only one command, presumably a moveto: it isn't a path
         for (GSList *l = il; l != NULL; l = l->next)
@@ -679,7 +679,7 @@ sp_selected_path_outline ()
             delete theRes;
         }
 
-        if (orig->descr_nb <= 1) {
+        if (orig->descr_cmd.size() <= 1) {
             // ca a merd, ou bien le resultat est vide
             delete res;
             delete orig;
@@ -700,7 +700,7 @@ sp_selected_path_outline ()
         selection->removeItem (item);
         SP_OBJECT (item)->deleteObject(false);
 
-        if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
+        if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
             SPRepr *repr = sp_repr_new ("path");
 
@@ -944,7 +944,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
   
     sp_curve_unref (curve);
   
-    if (res->descr_nb <= 1)
+    if (res->descr_cmd.size() <= 1)
     {
         // pas vraiment de points sur le resultat
         // donc il ne reste rien
@@ -1231,7 +1231,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         selection->removeItem (item);
         SP_OBJECT (item)->deleteObject(false);
 
-        if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
+        if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
             gchar tstr[80];
 

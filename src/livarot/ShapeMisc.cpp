@@ -454,7 +454,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
               }
               nesting=(int*)g_realloc(nesting,(nbNest+1)*sizeof(int));
               contStart=(int*)g_realloc(contStart,(nbNest+1)*sizeof(int));
-              contStart[nbNest]=dest->descr_nb;
+              contStart[nbNest]=dest->descr_cmd.size();
               if ( escapePath ) {
                 nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
               } else {
@@ -494,7 +494,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
               }
               nesting=(int*)g_realloc(nesting,(nbNest+1)*sizeof(int));
               contStart=(int*)g_realloc(contStart,(nbNest+1)*sizeof(int));
-              contStart[nbNest]=dest->descr_nb;
+              contStart[nbNest]=dest->descr_cmd.size();
               if ( escapePath ) {
                 nesting[nbNest++]=-1; // contient des bouts de coupure -> a part
               } else {
@@ -681,7 +681,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
     else
     {
       Path *from = orig[nPath];
-      if (nPiece < 0 || nPiece >= from->descr_nb)
+      if (nPiece < 0 || nPiece >= int(from->descr_cmd.size()))
 	    {
 	      // segment batard
 	      dest->LineTo (getPoint(getEdge(bord).en).x);

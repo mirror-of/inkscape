@@ -9,6 +9,7 @@
 #ifndef my_path
 #define my_path
 
+#include <vector>
 #include "LivarotDefs.h"
 #include "livarot/livarot-forward.h"
 #include "libnr/nr-point.h"
@@ -119,9 +120,13 @@ public:
 
   struct path_descr
   {
+    path_descr() : flags(0), associated(-1), tSt(0), tEn(1), dStart(-1) {}
+    path_descr(int f, int d) : flags(f), associated(-1), tSt(0), tEn(1), dStart(d) {}
+
     int    flags;         // most notably contains the path command no
     int    associated;		// index in the polyline of the point that ends the path portion of this command
-    double tSt, tEn;
+    double tSt;
+    double tEn;
     int    dStart;        // commands' data is stored in a separate array; dStart is the index of the 
                           // start of the storage for this command
   };
@@ -144,8 +149,7 @@ public:
   int         pending_moveto_data;
   // the path description:
   // first the commands: an array of size descr_max containing descr_nb commands
-  int         descr_max, descr_nb;
-  path_descr  *descr_cmd;
+  std::vector<path_descr> descr_cmd;
   // and an array of NR::Points, of size ddata_max, of which ddata_nb are used
   // the choice of NR::Point is arbitrary, it could be anything, in fact
   int         ddata_max,ddata_nb;
@@ -294,9 +298,7 @@ public:
 
 private:
     // path storage primitives
-  void AlloueDCmd (int addNb);
   void AlloueDData (int addNb);
-  void ShiftDCmd(int at,int dec);
   void ShiftDData(int at,int dec);
   // utilitary functions for the path contruction
   void CancelBezier ();
@@ -392,7 +394,7 @@ private:
     outlineCallback *arcto;
   };
 
-  void SubContractOutline (path_descr* pd, int num_pd,
+  void SubContractOutline (int off, int num_pd,
 			   Path * dest, outline_callbacks & calls,
 			   double tolerance, double width, JoinType join,
 			   ButtType butt, double miter, bool closeIfNeeded,

@@ -1267,7 +1267,7 @@ Path::Coalesce (double tresh)
   if ( descr_flags & descr_doing_subpath ) {
     CloseSubpath();
   }
-  if (descr_nb <= 2) return;
+  if (descr_cmd.size() <= 2) return;
   
   SetBackData (false);
   Path*  tempDest=new Path();
@@ -1289,7 +1289,7 @@ Path::Coalesce (double tresh)
   path_descr_cubicto  pending_cubic;
   
   lastAddition.flags = descr_moveto;
-  for (int curP = 0; curP < descr_nb; curP++) {
+  for (int curP = 0; curP < int(descr_cmd.size()); curP++) {
     int typ = descr_cmd[curP].flags & descr_type_mask;
     int nextA = lastA;
     if (typ == descr_moveto) {

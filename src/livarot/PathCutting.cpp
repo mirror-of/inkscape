@@ -322,7 +322,7 @@ void* Path::MakeArtBPath(void)
 	
 	NR::Point   lastP,bezSt,bezEn,lastMP;
 	int         lastM=-1,bezNb=0;
-  for (int i=0;i<descr_nb;i++) {
+  for (int i=0;i<int(descr_cmd.size());i++) {
     int typ=descr_cmd[i].flags&descr_type_mask;
     switch ( typ ) {
       case descr_close:
@@ -598,12 +598,12 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
   Path**   res=NULL;
   Path*    curAdd=NULL;
   
-  for (int i=0;i<descr_nb;i++) {
+  for (int i=0;i<int(descr_cmd.size());i++) {
     int typ=descr_cmd[i].flags&descr_type_mask;
     switch ( typ ) {
       case descr_moveto:
         if ( curAdd ) {
-          if ( curAdd->descr_nb > 1 ) {
+          if ( curAdd->descr_cmd.size() > 1 ) {
             curAdd->Convert(1.0);
             double addSurf=curAdd->Surface();
             if ( fabs(addSurf) > 0.0001 || killNoSurf == false ) {
@@ -664,7 +664,7 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
     }
   }
   if ( curAdd ) {
-    if ( curAdd->descr_nb > 1 ) {
+    if ( curAdd->descr_cmd.size() > 1 ) {
       curAdd->Convert(1.0);
       double addSurf=curAdd->Surface();
       if ( fabs(addSurf) > 0.0001 || killNoSurf == false  ) {
@@ -689,13 +689,13 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
   Path*    curAdd=NULL;
   bool     increment=false;
   
-  for (int i=0;i<descr_nb;i++) {
+  for (int i=0;i<int(descr_cmd.size());i++) {
     int typ=descr_cmd[i].flags&descr_type_mask;
     switch ( typ ) {
       case descr_moveto:
       {
         if ( curAdd && increment == false ) {
-          if ( curAdd->descr_nb > 1 ) {
+          if ( curAdd->descr_cmd.size() > 1 ) {
             // sauvegarder descr_cmd[0].associated
             int savA=curAdd->descr_cmd[0].associated;
             curAdd->Convert(1.0);
@@ -717,7 +717,7 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
           if ( conts[j] == i && nesting[j] >= 0 ) {
             int  dadMvt=conts[nesting[j]];
             for (int k=0;k<nbRes;k++) {
-              if ( res[k] && res[k]->descr_nb > 0 && res[k]->descr_cmd[0].associated == dadMvt ) {
+              if ( res[k] && res[k]->descr_cmd.empty() == false && res[k]->descr_cmd[0].associated == dadMvt ) {
                 hasDad=res[k];
                 break;
               }
@@ -778,7 +778,7 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
     }
   }
   if ( curAdd && increment == false ) {
-    if ( curAdd->descr_nb > 1 ) {
+    if ( curAdd->descr_cmd.size() > 1 ) {
       curAdd->Convert(1.0);
       double addSurf=curAdd->Surface();
       if ( fabs(addSurf) > 0.0001 || killNoSurf == false  ) {
@@ -796,33 +796,19 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
   outNb=nbRes;
   return res;
 }
-void        Path::ConvertForcedToVoid(void)
+
+
+void Path::ConvertForcedToVoid()
 {  
-  for (int i=0;i<descr_nb;i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
-    switch ( typ ) {
-      case descr_forced:
-        ShiftDCmd(i,-1);
-        break;
-      case descr_moveto:
-        break;
-      case descr_close:
-        break;        
-      case descr_lineto:
-        break;
-      case descr_cubicto:
-        break;
-      case descr_arcto:
-        break;
-      case descr_bezierto:
-        break;
-      case descr_interm_bezier:
-        break;
-      default:
-        break;
+    for (int i=0; i < int(descr_cmd.size()); i++) {
+        int typ = descr_cmd[i].flags & descr_type_mask;
+        if ( typ == descr_forced) {
+            descr_cmd.erase(descr_cmd.begin() + i);
+        }
     }
-  }
 }
+
+
 void        Path::ConvertForcedToMoveTo(void)
 {  
   NR::Point  lastSeen;
@@ -834,7 +820,7 @@ void        Path::ConvertForcedToMoveTo(void)
     
   {
     int  lastPos=ddata_nb;
-    for (int i=descr_nb-1;i>=0;i--) {
+    for (int i=int(descr_cmd.size())-1;i>=0;i--) {
       int typ=descr_cmd[i].flags&descr_type_mask;
       switch ( typ ) {
         case descr_forced:
@@ -854,18 +840,18 @@ void        Path::ConvertForcedToMoveTo(void)
       }
     }
   }
-  for (int i=0;i<descr_nb;i++) {
+  for (int i=0;i<int(descr_cmd.size());i++) {
     int typ=descr_cmd[i].flags&descr_type_mask;
     switch ( typ ) {
       case descr_forced:
-      if ( i < descr_nb-1 && hasMoved ) { // sinon il termine le chemin
+      if ( i < int(descr_cmd.size())-1 && hasMoved ) { // sinon il termine le chemin
         // decale la suite d'un moveto
         int dataPos=descr_cmd[i+1].dStart;
         int  add=SizeForData(descr_moveto);
         AlloueDData(add);
         if ( dataPos < ddata_nb ) memmove(descr_data+(dataPos+add),descr_data+dataPos,(ddata_nb-dataPos)*sizeof(NR::Point));
         ddata_nb+=add;
-        for (int j=i+1;j<descr_nb;j++) descr_cmd[j].dStart+=add;
+        for (int j=i+1;j<int(descr_cmd.size());j++) descr_cmd[j].dStart+=add;
         descr_cmd[i].dStart=dataPos;
         descr_cmd[i].flags&=~descr_type_mask;
         descr_cmd[i].flags|=descr_moveto;
@@ -990,7 +976,7 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
 int         Path::DataPosForAfter(int cmd)
 {
   if ( cmd < 0 ) return 0;
-  if ( cmd >= descr_nb-1 ) return ddata_nb;
+  if ( cmd >= int(descr_cmd.size())-1 ) return ddata_nb;
   do {
     int ntyp=descr_cmd[cmd].flags&descr_type_mask;
     if ( ntyp == descr_moveto || ntyp == descr_lineto || ntyp == descr_cubicto || ntyp == descr_arcto 
@@ -998,7 +984,7 @@ int         Path::DataPosForAfter(int cmd)
       return descr_cmd[cmd].dStart;
     }
     cmd++;
-  } while ( cmd < descr_nb );
+  } while ( cmd < int(descr_cmd.size()) );
   return ddata_nb;
 }
 void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
@@ -1006,7 +992,7 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
   if ( nbPos <= 0 )  return;
   {
     int  lastPos=ddata_nb;
-    for (int i=descr_nb-1;i>=0;i--) {
+    for (int i=int(descr_cmd.size())-1;i>=0;i--) {
       int typ=descr_cmd[i].flags&descr_type_mask;
       switch ( typ ) {
         case descr_forced:
@@ -1061,7 +1047,7 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
   
   for (int curP=0;curP<nbPos;curP++) {
     int   cp=poss[curP].piece;
-    if ( cp < 0 || cp >= descr_nb ) break;
+    if ( cp < 0 || cp >= int(descr_cmd.size()) ) break;
     float ct=poss[curP].t;
     if ( ct < 0 ) continue;
     if ( ct > 1 ) continue;
@@ -1303,7 +1289,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
   Path*  res=new Path;
   
   NR::Point    lastP(0,0);
-  for (int i=0;i<descr_nb;i++) {
+  for (int i=0;i<int(descr_cmd.size());i++) {
     int typ=descr_cmd[i].flags&descr_type_mask;
     if ( typ == descr_moveto ) {
       NR::Point  np;
@@ -1316,7 +1302,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
       int        hasForced=-1;
       bool       doesClose=false;
       int        j=i+1;
-      for (;j<descr_nb;j++) {
+      for (;j<int(descr_cmd.size());j++) {
         int ntyp=descr_cmd[j].flags&descr_type_mask;
         if ( ntyp == descr_moveto ) {
           j--;
