@@ -2,12 +2,19 @@
 #define __NR_MATRIX_H__
 
 /*
- * Pixel buffer rendering library
+ * Definition of NRMatrix and NR::Matrix types.
  *
- * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
+ * Note: operator functions (e.g. Matrix * Matrix etc.) are mostly in
+ * libnr/nr-matrix-ops.h.  See end of file for discussion.
  *
- * This code is in public domain
+ * Main authors:
+ *   Lauris Kaplinski <lauris@kaplinski.com>:
+ *     Original NRMatrix definition and related macros.
+ *
+ *   Nathan Hurst <njh@mail.csse.monash.edu.au>:
+ *     NR::Matrix class version of the above.
+ *
+ * This code is in public domain.
  */
 
 #include <glib.h>
@@ -16,11 +23,8 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate.h>
-#include <libnr/nr-rotate-ops.h>
-#include <libnr/nr-translate.h>
-#include <libnr/nr-translate-ops.h>
 #include <libnr/nr-scale.h>
-#include <libnr/nr-scale-ops.h>
+#include <libnr/nr-translate.h>
 
 struct NRMatrix {
 	NR::Coord c[6];
@@ -103,26 +107,26 @@ public:
 		return *this;
 	}
 
-	Matrix(scale const &sm) {
+	explicit Matrix(scale const &sm) {
 		_c[0] = sm[X]; _c[1] = 0;
 		_c[2] = 0;     _c[3] =  sm[Y];
 		_c[4] = 0;     _c[5] = 0;
 	}
 
-	Matrix(rotate const &r) {
+	explicit Matrix(rotate const &r) {
 		_c[0] =  r.vec[X]; _c[1] = r.vec[Y];
 		_c[2] = -r.vec[Y]; _c[3] = r.vec[X];
 		_c[4] = 0;         _c[5] = 0;
 	}
 
-	Matrix(translate const &tm) {
+	explicit Matrix(translate const &tm) {
 		_c[0] = 1;     _c[1] = 0;
 		_c[2] = 0;     _c[3] = 1;
 		_c[4] = tm[X]; _c[5] = tm[Y];
 	}
 
 	Matrix(NRMatrix const *nr);
-	
+
 	bool test_identity() const;
 	Matrix inverse() const;
 
@@ -177,8 +181,35 @@ extern void assert_close(Matrix const &a, Matrix const &b);
 } /* namespace NR */
 
 
-/* fixme: get rid of these includes */
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-matrix-fns.h>
+/*
+ * Discussion of splitting up nr-matrix.h into lots of little files:
+ *
+ *   Advantages:
+ *
+ *    - Reducing amount of recompilation necessary when anything changes.
+ *
+ *    - Hopefully also reducing compilation time by reducing the number of inline
+ *      function definitions encountered by the compiler for a given .o file.
+ *      (No timing comparisons done yet.  On systems without much memory available
+ *      for caching, this may be outweighed by additional I/O costs.)
+ *
+ *   Disadvantages:
+ *
+ *    - More #include lines necessary per file.  If a compile fails due to
+ *      not having all the necessary #include lines, then the developer needs
+ *      to spend some time working out what #include to add.
+ */
 
-#endif
+#endif /* !__NR_MATRIX_H__ */
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"bsd"
+  c-file-offsets:((innamespace . 0) (inline-open . 0))
+  indent-tabs-mode:t
+  fill-column:99
+  End:
+  vim: filetype=c++:noexpandtab :
+*/

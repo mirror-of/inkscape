@@ -28,6 +28,11 @@
 
 2004-02-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix.h: Add `explicit' to Matrix constructors
+	from rotate/scale/translate, to reduce the number of mysterious
+	implicit conversions used in client code.
+	Don't #include nr-rotate-ops.h, nr-scale-ops.h, nr-translate-ops.h.
+
 	* src/selection-chemistry.cpp (sp_selection_apply_affine):
 	Change final argument from double[6] to NR::Matrix.
 	Update callers.
