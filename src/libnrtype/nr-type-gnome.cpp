@@ -13,6 +13,7 @@
 #include <libnr/nr-macros.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libart_lgpl/art_misc.h>
 
 #include "nr-type-directory.h"
