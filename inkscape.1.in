@@ -348,7 +348,7 @@ The codebase that would become Inkscape began life in 1999 as the
 program '\s-1GILL\s0', the \s-1GNOME\s0 Illustrator application, created by Raph
 Levien.  The stated objective for Gill was to eventually support all of
 \&\s-1SVG\s0.  Raph implemented the PostScript bezier imaging model, including
-stroking and filling, line cap style, line join style, text, etc.  A Bonobo
+stroking and filling, line cap style, line join style, text, etc.  
 Raph's Gill page is at http://www.levien.com/svg/.  Work on Gill appears
 to have slowed or ceased in 2000, perhaps in part due to frustrations
 dealing with implementing \s-1DOM\s0 and \s-1SVG\s0.
