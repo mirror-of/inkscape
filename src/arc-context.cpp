@@ -38,7 +38,7 @@ static void sp_arc_context_dispose (GObject *object);
 static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
-static void sp_arc_drag(SPArcContext *ec, double x, double y, guint state);
+static void sp_arc_drag(SPArcContext *ec, NR::Point pt, guint state);
 static void sp_arc_finish(SPArcContext *ec);
 
 static SPEventContextClass *parent_class;
@@ -124,12 +124,10 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPoint fp;
 			dragging = TRUE;
 			/* Position center */
-			sp_desktop_w2d_xy_point (event_context->desktop, &fp,
-									 (float) event->button.x, (float) event->button.y);
-			ac->center = fp;
+			ac->center = sp_desktop_w2d_xy_point (event_context->desktop, 
+													NR::Point(event->button.x, event->button.y));
 			/* Snap center to nearest magnetic point */
 			sp_desktop_free_snap (event_context->desktop, ac->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
@@ -140,10 +138,11 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dragging && event->motion.state && GDK_BUTTON1_MASK) {
-			NRPoint p;
-			sp_desktop_w2d_xy_point (event_context->desktop, &p,
-					(float) event->motion.x, (float) event->motion.y);
-			sp_arc_drag (ac, p.x, p.y, event->motion.state);
+			sp_arc_drag (ac, 
+						 sp_desktop_w2d_xy_point (event_context->desktop, 
+												  NR::Point(event->motion.x,
+															event->motion.y)), 
+						 event->motion.state);
 			ret = TRUE;
 		}
 		break;
@@ -180,10 +179,8 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 	return ret;
 }
 
-static void sp_arc_drag(SPArcContext *ac, double xx, double yy, guint state)
+static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 {
-	NR::Point const pt(xx, yy);
-
 	SPDesktop *desktop = SP_EVENT_CONTEXT(ac)->desktop;
 
 	if (!ac->item) {

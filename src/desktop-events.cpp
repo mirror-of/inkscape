@@ -56,13 +56,10 @@ sp_desktop_root_handler (SPCanvasItem * item, GdkEvent * event, SPDesktop * desk
 int
 sp_desktop_item_handler (SPCanvasItem * item, GdkEvent * event, gpointer data)
 {
-	gpointer ddata;
-	SPDesktop * desktop;
-
-	ddata = gtk_object_get_data (GTK_OBJECT (item->canvas), "SPDesktop");
+	gpointer ddata = gtk_object_get_data (GTK_OBJECT (item->canvas), "SPDesktop");
 	g_return_val_if_fail (ddata != NULL, FALSE);
 
-	desktop = SP_DESKTOP (ddata);
+	SPDesktop *desktop = SP_DESKTOP (ddata);
 
 	return sp_event_context_item_handler (desktop->event_context, SP_ITEM (data), event);
 }
@@ -81,11 +78,9 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 {
 	static gboolean dragging = FALSE;
 	static SPCanvasItem * guide = NULL;
-	SPDesktop *desktop;
-	double px, py;
 	int wx, wy;
 
-	desktop = dtw->desktop;
+	SPDesktop *desktop = dtw->desktop;
 	SPRepr *repr = SP_OBJECT_REPR (desktop->namedview);
 
 	gdk_window_get_pointer (GTK_WIDGET (dtw->canvas)->window, &wx, &wy, NULL);
@@ -94,15 +89,14 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
 			dragging = TRUE;
-			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
-			NRPoint p;
-			sp_desktop_w2d_xy_point (desktop, &p, px, py);
+			NR::Point mp = sp_canvas_window_to_world (dtw->canvas, NR::Point(wx, wy));
+			NR::Point p = sp_desktop_w2d_xy_point (desktop, mp);
 
 			// explicitly show guidelines; if I draw a guide, I want them on
 			sp_repr_set_boolean (repr, "showguides", TRUE);
 			sp_repr_set_boolean (repr, "snaptoguides", TRUE);
 
-			guide = sp_guideline_new (desktop->guides, (horiz) ? p.y : p.x, !horiz);
+			guide = sp_guideline_new (desktop->guides, (horiz) ? p[NR::Y] : p[NR::X], !horiz);
 			sp_guideline_set_color (SP_GUIDELINE (guide), desktop->namedview->guidehicolor);
 			gdk_pointer_grab (widget->window, FALSE,
 					  (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK),
@@ -112,24 +106,22 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dragging) {
-			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
-			NRPoint p;
-			sp_desktop_w2d_xy_point (desktop, &p, px, py);
-			sp_guideline_set_position (SP_GUIDELINE (guide), (horiz) ? p.y : p.x);
+			NR::Point mp = sp_canvas_window_to_world (dtw->canvas, NR::Point(wx, wy));
+			NR::Point p = sp_desktop_w2d_xy_point (desktop, mp);
+			sp_guideline_set_position (SP_GUIDELINE (guide), (horiz) ? p[NR::Y] : p[NR::X]);
 			if (horiz) {
-				sp_desktop_set_coordinate_status (desktop, p.x, p.y, SP_COORDINATES_UNDERLINE_Y);
+				sp_desktop_set_coordinate_status (desktop, p[NR::X], p[NR::Y], SP_COORDINATES_UNDERLINE_Y);
 			} else {
-				sp_desktop_set_coordinate_status (desktop, p.x, p.y, SP_COORDINATES_UNDERLINE_X);
+				sp_desktop_set_coordinate_status (desktop, p[NR::X], p[NR::Y], SP_COORDINATES_UNDERLINE_X);
 			}
-			sp_view_set_position (SP_VIEW (desktop), p.x, p.y);
+			sp_view_set_position (SP_VIEW (desktop), p[NR::X], p[NR::Y]);
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
 		if (dragging && event->button.button == 1) {
-			NRPoint p;
-		        gdk_pointer_ungrab (event->button.time);
-			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
-			sp_desktop_w2d_xy_point (desktop, &p, px, py);
+			gdk_pointer_ungrab (event->button.time);
+			NR::Point mp = sp_canvas_window_to_world (dtw->canvas, NR::Point(wx, wy));
+			NR::Point p = sp_desktop_w2d_xy_point (desktop, mp);
 			dragging = FALSE;
 			gtk_object_destroy (GTK_OBJECT (guide));
 			guide = NULL;
@@ -137,12 +129,12 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 				SPRepr *repr;
 				repr = sp_repr_new ("sodipodi:guide");
 				sp_repr_set_attr (repr, "orientation", (horiz) ? "horizontal" : "vertical");
-				sp_repr_set_double (repr, "position", horiz ? p.y : p.x);
+				sp_repr_set_double (repr, "position", horiz ? p[NR::Y] : p[NR::X]);
 				sp_repr_append_child (SP_OBJECT_REPR (desktop->namedview), repr);
 				sp_repr_unref (repr);
 				sp_document_done (SP_DT_DOCUMENT (desktop));
 			}
-			sp_desktop_set_coordinate_status (desktop, p.x, p.y, 0);
+			sp_desktop_set_coordinate_status (desktop, p[NR::X], p[NR::Y], 0);
 		}
 	default:
 		break;
@@ -313,9 +305,7 @@ guide_dialog_ok (GtkWidget * widget, gpointer g)
 static void
 guide_dialog_delete (GtkWidget *widget, SPGuide **guide)
 {
-	SPDocument *doc;
-  
-	doc = SP_OBJECT_DOCUMENT (*guide);
+	SPDocument *doc = SP_OBJECT_DOCUMENT (*guide);
 	sp_guide_remove (*guide);
 	sp_document_done (doc);
 	guide_dialog_close (NULL, GTK_DIALOG (widget));
