@@ -1,3 +1,14 @@
+2003-12-08  bulia byak <bulia@dr.com>
+
+	* src/sp-text.c: fixed typing non-ascii chars; copied (with fixes) treatment of
+	xml:space from sodipodi 0.33
+
+	* src/sp-text.h: small fix from sodipodi 0.33
+
+	* src/text-context.c: copied sp_text_context_preedit_reset and related code from
+	sodipodi 0.33; xml:space='preserve' is added to newly created text objects; esc
+	deselects; uncatched keys are passed on; misc fixes
+
 2003-12-08 MenTaLguY <mental@rydia.net>
 
 	* src/widgets/button.c: put errors to rest for now
