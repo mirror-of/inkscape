@@ -129,7 +129,7 @@ GTKLIB = -L$(GTK)/lib \
 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0
 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
--I$(GTK)/include/libart-2.0 -I$(GTK)/include/libxml2 \
+-I$(GTK)/include/libart-2.0 -DLIBXML_STATIC -I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2
 
 LIBS = $(GTKLIB) -lxml2 $(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
