@@ -953,7 +953,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
     NR::Point letterspacing_adv = sp_letterspacing_advance (style);
 
     /* fixme: Find a way how to manipulate these */
-    NR::Point pt = cp;
+//    NR::Point pt = cp;
 
     /* fixme: SPChars should do this upright instead */
     NR::scale const flip_y(size, -size);
