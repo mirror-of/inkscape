@@ -21,6 +21,13 @@ template <typename F> struct Function;
 template <typename R>
 struct Function<R (*)()> {
     typedef R Result;
+
+    typedef void Arg0;
+    typedef void Arg1;
+    typedef void Arg2;
+    typedef void Arg3;
+    typedef void Arg4;
+    typedef void Arg5;
 };
 
 template <typename R, typename A0>
@@ -28,6 +35,11 @@ struct Function<R (*)(A0)> {
     typedef R Result;
 
     typedef A0 Arg0;
+    typedef void Arg1;
+    typedef void Arg2;
+    typedef void Arg3;
+    typedef void Arg4;
+    typedef void Arg5;
 };
 
 template <typename R, typename A0, typename A1>
@@ -36,6 +48,10 @@ struct Function<R (*)(A0, A1)> {
 
     typedef A0 Arg0;
     typedef A1 Arg1;
+    typedef void Arg2;
+    typedef void Arg3;
+    typedef void Arg4;
+    typedef void Arg5;
 };
 
 template <typename R, typename A0, typename A1, typename A2>
@@ -45,6 +61,9 @@ struct Function<R (*)(A0, A1, A2)> {
     typedef A0 Arg0;
     typedef A1 Arg1;
     typedef A2 Arg2;
+    typedef void Arg3;
+    typedef void Arg4;
+    typedef void Arg5;
 };
 
 template <typename R, typename A0, typename A1, typename A2,
@@ -56,6 +75,8 @@ struct Function<R (*)(A0, A1, A2, A3)> {
     typedef A1 Arg1;
     typedef A2 Arg2;
     typedef A3 Arg3;
+    typedef void Arg4;
+    typedef void Arg5;
 };
 
 template <typename R, typename A0, typename A1, typename A2,
@@ -68,6 +89,7 @@ struct Function<R (*)(A0, A1, A2, A3, A4)> {
     typedef A2 Arg2;
     typedef A3 Arg3;
     typedef A4 Arg4;
+    typedef void Arg5;
 };
 
 template <typename R, typename A0, typename A1, typename A2,
