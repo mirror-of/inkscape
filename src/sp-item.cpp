@@ -164,6 +164,7 @@ bool SPItem::isLocked() const {
 void SPItem::setLocked(bool locked) {
     sp_repr_set_attr(SP_OBJECT_REPR(this), "sodipodi:insensitive",
                      ( locked ? "1" : NULL ));
+    updateRepr();
 }
 
 bool SPItem::isHidden() const {
