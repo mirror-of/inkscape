@@ -31,6 +31,7 @@
 #include "helper/sp-ctrlline.h"
 #include "helper/canvas-bpath.h"
 
+#include "prefs-utils.h"
 #include "enums.h"
 #include "inkscape.h"
 #include "document.h"
@@ -1171,6 +1172,10 @@ static void spdc_pen_finish_segment (SPPenContext *pc, NRPoint *p, guint state);
 
 static void spdc_pen_finish (SPPenContext *pc, gboolean closed);
 
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+static gboolean within_tolerance = FALSE;
+
 static SPDrawContextClass *pen_parent_class;
 
 GtkType
@@ -1321,9 +1326,17 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 
 	ret = FALSE;
 
+	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+			within_tolerance = TRUE;
+
 #if 0
 			/* Grab mouse, so release will not pass unnoticed */
 			dc->grab = SP_CANVAS_ITEM (dt->acetate);
@@ -1397,6 +1410,11 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
+
+		if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+			break; // do not drag if we're still within tolerance from origin
+		within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+
 #if 1
 		if ((event->motion.state & GDK_BUTTON1_MASK) && !dc->grab) {
 			/* Grab mouse, so release will not pass unnoticed */
@@ -1469,6 +1487,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
+		xp = yp = 0;
 		if (event->button.button == 1) {
 			/* Find desktop coordinates */
 			sp_desktop_w2d_xy_point (dt, &fp, event->motion.x, event->motion.y);
@@ -1745,7 +1764,7 @@ spdc_pen_finish (SPPenContext *pc, gboolean closed)
 
 	dc = SP_DRAW_CONTEXT (pc);
 
-	g_print ("Finishing pen\n");
+	sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT (dc)->desktop), "Finishing pen");
 
 	sp_curve_reset (dc->red_curve);
 	spdc_concat_colors_and_flush (dc, closed);
