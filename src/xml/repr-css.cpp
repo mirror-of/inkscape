@@ -8,16 +8,17 @@
 
 #include "xml/repr.h"
 #include "xml/sp-repr-attr.h"
+#include "xml/sp-css-attr.h"
 #include "xml/simple-node.h"
 
-struct SPCSSAttr : public Inkscape::XML::SimpleNode {
+struct SPCSSAttrImpl : public Inkscape::XML::SimpleNode, public SPCSSAttr {
 public:
-	SPCSSAttr() : SimpleNode(g_quark_from_static_string("css")) {}
+	SPCSSAttrImpl() : SimpleNode(g_quark_from_static_string("css")) {}
 
 	SPReprType type() const { return SP_XML_ELEMENT_NODE; }
 
 protected:
-	SimpleNode *_duplicate() const { return new SPCSSAttr(*this); }
+	SimpleNode *_duplicate() const { return new SPCSSAttrImpl(*this); }
 };
 
 static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr);
@@ -25,7 +26,7 @@ static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gc
 SPCSSAttr *
 sp_repr_css_attr_new (void)
 {
-	return new SPCSSAttr();
+	return new SPCSSAttrImpl();
 }
 
 void
@@ -132,7 +133,7 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 	c[0] = '\0';
 	p = c;
 
-	for (a = ((SPRepr *) css)->attributeList() ; a != NULL; a = a->next) {
+	for (a = css->attributeList() ; a != NULL; a = a->next) {
 		key = SP_REPR_ATTRIBUTE_KEY (a);
 		val = SP_REPR_ATTRIBUTE_VALUE (a);
 		p += g_snprintf (p, c + 4096 - p, "%s:%s;", key, val);
@@ -157,7 +158,7 @@ sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 	g_assert (dst != NULL);
 	g_assert (src != NULL);
 
-	for (attr = ((SPRepr *) src)->attributeList() ; attr != NULL; attr = attr->next) {
+	for (attr = src->attributeList() ; attr != NULL; attr = attr->next) {
 		key = SP_REPR_ATTRIBUTE_KEY (attr);
 		val = SP_REPR_ATTRIBUTE_VALUE (attr);
 		sp_repr_set_attr ((SPRepr *) dst, key, val);
@@ -194,7 +195,7 @@ void
 sp_repr_css_print (SPCSSAttr * css)
 {
 	g_print ("== SPCSSAttr:\n");
-	for (SPReprAttr const *attr = ((SPRepr *) css)->attributeList(); attr != NULL; attr = attr->next) {
+	for (SPReprAttr const *attr = css->attributeList(); attr != NULL; attr = attr->next) {
 		g_print("%s: %s\n", SP_REPR_ATTRIBUTE_KEY(attr), SP_REPR_ATTRIBUTE_VALUE(attr).cString());
 	}
 }

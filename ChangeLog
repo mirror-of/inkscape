@@ -1,3 +1,9 @@
+2005-02-01  Kees Cook  <kees@outflux.net>
+
+	* src/xml/sp-css-attr.h, src/desktop-style.cpp, src/xml/repr-css.cpp,
+	  src/xml/repr.h: Fixed SPCSSAttr to be a "real" class, at mental's
+	  direction.  Fixes my "default prefs don't show attrs" bug.
+
 2005-01-31  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp,
 	  src/dialogs/export.cpp, src/extension/init.cpp:
