@@ -569,9 +569,12 @@ inkscape_application_init (const gchar *argv0)
        if we could, or FALSE if we couldn't */
     inkscape->save_preferences = inkscape_load_preferences(inkscape);
 
-    /* Make this redirection dependent on preferences on linux, always on Win32 */
+    /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON */
 #ifdef WIN32
-    Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
+    if (prefs_get_int_attribute("dialogs.debug", "redirect", 1))
+        {
+        Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
+        }
 #else
     if (prefs_get_int_attribute("dialogs.debug", "redirect", 0))
         {
