@@ -270,7 +270,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 				// item has been moved
 				sp_sel_trans_ungrab (seltrans);
 				sc->moved = FALSE;
-				sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
+				sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
 			} else {
 				// item has not been moved -> do selecting
 				if (!sp_selection_is_empty (selection)) {
@@ -410,7 +410,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					// item has been moved
 					sp_sel_trans_ungrab (seltrans);
 					sc->moved = FALSE;
-					sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
+					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
 				} else {
 					// item has not been moved -> simply a click, do selecting
 					if (!sp_selection_is_empty (selection)) {
@@ -564,15 +564,16 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					sc->moved = FALSE;
 					sc->dragging = FALSE;
 					sc->item = NULL;
-					sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
 					sp_document_undo (SP_DT_DOCUMENT (desktop));
 					drag_escaped = 1;
+					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
 					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), "Move cancelled.");
 				}
 			} else {
 				if (sp_rubberband_rect (&b)) { // cancel rubberband
 					sp_rubberband_stop ();
 					rb_escaped = 1;
+					sp_selection_update_statusbar (SP_DT_SELECTION (desktop));
 					sp_view_set_statusf_flash (SP_VIEW(SP_EVENT_CONTEXT(sc)->desktop), "Selection cancelled.");
 				} else {
 					sp_selection_empty (selection); // deselect
