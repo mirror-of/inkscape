@@ -16,7 +16,7 @@
 
 #include "inkscape.h"
 #include "shortcuts.h"
-
+#include "view.h"
 #include "window.h"
 
 static gboolean

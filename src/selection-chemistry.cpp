@@ -33,6 +33,7 @@
 #include "desktop-handles.h"
 #include "sp-item-transform.h"
 #include "sp-item-group.h"
+#include "sp-marker.h"
 #include "sp-path.h"
 #include "sp-use.h"
 #include "sp-text.h"

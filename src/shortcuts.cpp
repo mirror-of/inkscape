@@ -10,14 +10,16 @@
  * This code is in public domain
  */
 
+#include <config.h>
+
 #include <glib.h>
 #include <gdk/gdkkeysyms.h>
 
-#include <config.h>
-/* ALWAYS include config.h before verbs.h */
-#include "verbs.h"
-
+#include "helper/action.h"
 #include "shortcuts.h"
+#include "verbs.h"
+#include "view.h"
+
 
 /* Returns true if action was performed */
 

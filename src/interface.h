@@ -14,6 +14,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtk/gtkstyle.h>
+
 #include "forward.h"
 #include <verbs.h>
 

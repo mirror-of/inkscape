@@ -10,6 +10,8 @@
  */
 
 #include "streams-handles.h"
+#include "uri.h"
+
 #include <glib.h>
 #include <cstdio>
 #include <iostream>

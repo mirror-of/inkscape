@@ -5,9 +5,7 @@
  * tspan and textpath, based on the flowtext routines
  */
 
-#include <glib.h>
-
-#include <sigc++/sigc++.h>
+#include <glib/gtypes.h>
 
 #define SP_TYPE_TSPAN (sp_tspan_get_type ())
 #define SP_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TSPAN, SPTSpan))
@@ -24,6 +22,7 @@
 #include <libnr/nr-point.h>
 #include "svg/svg-types.h"
 #include "libnrtype/FlowSrc.h"
+#include "sp-item.h"
 
 class SPUsePath;
 class Path;

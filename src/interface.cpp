@@ -42,10 +42,12 @@
 #include "zoom-context.h"
 #include "svg-view.h"
 #include "sp-desktop-widget.h"
+#include "sp-item-group.h"
 #include "sp-namedview.h"
 
 #include "dir-util.h"
 #include "xml/repr-private.h"
+#include "helper/action.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
 #include "helper/window.h"

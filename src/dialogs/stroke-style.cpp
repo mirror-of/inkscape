@@ -38,6 +38,7 @@
 #include "widgets/spw-utilities.h"
 #include "sp-gradient.h"
 #include <sp-use.h>
+#include "sp-marker.h"
 #include <sp-pattern.h>
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>

@@ -32,6 +32,7 @@
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
+#include "enums.h"
 #include "prefs-utils.h"
 #include "sp-text.h"
 #include "sp-shape.h"

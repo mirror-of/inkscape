@@ -52,6 +52,7 @@
 #include "enums.h"
 #include "document.h"
 #include "inkscape.h"
+#include "sp-item.h"
 #include "style.h"
 
 #include "ps.h"

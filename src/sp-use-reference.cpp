@@ -7,6 +7,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
+#include "enums.h"
 #include "forward.h"
 #include "sp-use-reference.h"
 #include "sp-object.h"
