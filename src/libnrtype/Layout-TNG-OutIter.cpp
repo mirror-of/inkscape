@@ -59,27 +59,45 @@ static Path::cut_position PointToCurvilignPosition(Path const &path, NR::Point c
     for (unsigned i = 1 ; i < path.pts.size() ; i++) {
         if (path.pts[i].isMoveTo == polyline_moveto) continue;
         NR::Point p1, p2, localPos;
-        // we rotate all our coordinates so we're always looking at a mostly vertical line.
-        if (fabs(path.pts[i - 1].p[0] - path.pts[i].p[0]) < fabs(path.pts[i - 1].p[1] - path.pts[i].p[1])) {
-            p1 = path.pts[i - 1].p;
-            p2 = path.pts[i].p;
-            localPos = pos;
-        } else {
-            p1 = NR::Point(path.pts[i - 1].p[1], path.pts[i - 1].p[0]);
-            p2 = NR::Point(path.pts[i].p[1], path.pts[i].p[0]);
-            localPos = NR::Point(pos[1], pos[0]);
-        }
-	// There is a proper line intersector already in the code which does this without issues around vertical.
-        double gradient = (p2[0] - p1[0]) / (p2[1] - p1[1]);
-        double intersection = p1[0] - gradient * p1[1];
-        double orthogonalGradient = -1.0 / gradient; // you are going to have numerical problems here.
-        double orthogonalIntersection = localPos[0] - orthogonalGradient * localPos[1];
-        double nearestY = (orthogonalIntersection - intersection) / (gradient - orthogonalGradient);
-        double t = (nearestY - p1[1]) / (p2[1] - p1[1]);
         double thisRangeSquared;
-        if (t <= 0.0) thisRangeSquared = square(p1[0] - localPos[0]) + square(p1[1] - localPos[1]);
-        else if (t >= 1.0) thisRangeSquared = square(p2[0] - localPos[0]) + square(p2[1] - localPos[1]);
-        else thisRangeSquared = square(nearestY * gradient + intersection - localPos[0]) + square(nearestY - localPos[1]);
+        double t;
+
+        if (path.pts[i - 1].p == path.pts[i].p) {
+            thisRangeSquared = square(path.pts[i].p[NR::X] - pos[NR::X]) + square(path.pts[i].p[NR::Y] - pos[NR::Y]);
+            t = 0.0;
+        } else {
+            // we rotate all our coordinates so we're always looking at a mostly vertical line.
+            if (fabs(path.pts[i - 1].p[NR::X] - path.pts[i].p[NR::X]) < fabs(path.pts[i - 1].p[NR::Y] - path.pts[i].p[NR::Y])) {
+                p1 = path.pts[i - 1].p;
+                p2 = path.pts[i].p;
+                localPos = pos;
+            } else {
+                p1 = path.pts[i - 1].p.cw();
+                p2 = path.pts[i].p.cw();
+                localPos = pos.cw();
+            }
+            double gradient = (p2[NR::X] - p1[NR::X]) / (p2[NR::Y] - p1[NR::Y]);
+            double intersection = p1[NR::X] - gradient * p1[NR::Y];
+            /*
+              orthogonalGradient = -1.0 / gradient; // you are going to have numerical problems here.
+              orthogonalIntersection = localPos[NR::X] - orthogonalGradient * localPos[NR::Y];
+              nearestY = (orthogonalIntersection - intersection) / (gradient - orthogonalGradient);
+
+              expand out nearestY fully :
+              nearestY = (localPos[NR::X] - (-1.0 / gradient) * localPos[NR::Y] - intersection) / (gradient - (-1.0 / gradient));
+
+              multiply top and bottom by gradient:
+              nearestY = (localPos[NR::X] * gradient - (-1.0) * localPos[NR::Y] - intersection * gradient) / (gradient * gradient - (-1.0));
+
+              and simplify to get:
+            */
+            double nearestY =  (localPos[NR::X] * gradient + localPos[NR::Y] - intersection * gradient)
+                             / (gradient * gradient + 1.0);
+            t = (nearestY - p1[NR::Y]) / (p2[NR::Y] - p1[NR::Y]);
+            if (t <= 0.0) thisRangeSquared = square(p1[NR::X] - localPos[NR::X]) + square(p1[NR::Y] - localPos[NR::Y]);
+            else if (t >= 1.0) thisRangeSquared = square(p2[NR::X] - localPos[NR::X]) + square(p2[NR::Y] - localPos[NR::Y]);
+            else thisRangeSquared = square(nearestY * gradient + intersection - localPos[NR::X]) + square(nearestY - localPos[NR::Y]);
+        }
 
         if (thisRangeSquared < bestRangeSquared) {
             bestSeg = i;
