@@ -1,5 +1,8 @@
 2004-10-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp:
+	  Change xp,yp file globals to NR::Point pen_draw_origin_w.
+
 	* src/draw-context.cpp (sp_pen_context_root_handler):
 	  Split into many routines.  Fix some illegal union member aliasing.
 	  (pen_handle_key_press): Minor code cleanups in backspace handling.

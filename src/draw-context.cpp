@@ -1211,8 +1211,8 @@ static void spdc_pen_finish_segment(SPPenContext *pc, NR::Point p, guint state);
 
 static void spdc_pen_finish(SPPenContext *pc, gboolean closed);
 
-static gint xp = 0, yp = 0; // where drag started
-static bool within_tolerance = false;
+static NR::Point pen_drag_origin_w(0, 0);
+static bool pen_within_tolerance = false;
 
 static SPDrawContextClass *pen_parent_class;
 
@@ -1404,17 +1404,15 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
 {
         gint ret = FALSE;
         if ( bevent.button == 1 ) {
+            NR::Point const event_w(bevent.x,
+                                    bevent.y);
+            pen_drag_origin_w = event_w;
+            pen_within_tolerance = true;
 
-            // save drag origin
-            xp = (gint) bevent.x; 
-            yp = (gint) bevent.y;
-            within_tolerance = true;
-
-            /* Find desktop coordinates */
-            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, NR::Point(bevent.x, bevent.y));
+            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, event_w);
 
             /* Test whether we hit any anchor. */
-            SPDrawAnchor *anchor = test_inside(pc, NR::Point(bevent.x, bevent.y));
+            SPDrawAnchor *anchor = test_inside(pc, event_w);
 
             switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1493,18 +1491,19 @@ static gint
 pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
 {
         gint ret = FALSE;
-        if (within_tolerance) {
+        NR::Point const event_w(mevent.x,
+                                mevent.y);
+        if (pen_within_tolerance) {
             gint const tolerance = prefs_get_int_attribute_limited("options.dragtolerance",
                                                                    "value", 0, 0, 100);
-            if ( ( abs( (gint) mevent.x - xp ) < tolerance ) &&
-                 ( abs( (gint) mevent.y - yp ) < tolerance )   ) {
+            if ( NR::LInfty( event_w - pen_drag_origin_w ) < tolerance ) {
                 return FALSE;   // Do not drag if we're within tolerance from origin.
             }
         }
         // Once the user has moved farther than tolerance from the original location 
         // (indicating they intend to move the object, not click), then always process the 
         // motion notify coordinates as given (no snapping back to origin)
-        within_tolerance = false; 
+        pen_within_tolerance = false; 
 
         SPDesktop *const dt = pc->desktop;
         if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
@@ -1514,10 +1513,10 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
         }
 
         /* Find desktop coordinates */
-        NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(mevent.x, mevent.y));
+        NR::Point p = sp_desktop_w2d_xy_point(dt, event_w);
 
         /* Test, whether we hit any anchor */
-        SPDrawAnchor *anchor = test_inside(pc, NR::Point(mevent.x, mevent.y));
+        SPDrawAnchor *anchor = test_inside(pc, event_w);
 
         switch (pc->mode) {
         case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1585,13 +1584,14 @@ static gint
 pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent)
 {
         gint ret = FALSE;
-        xp = yp = 0;
         if ( revent.button == 1 ) {
+            NR::Point const event_w(revent.x,
+                                    revent.y);
             /* Find desktop coordinates */
-            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, NR::Point(revent.x, revent.y));
+            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, event_w);
 
             /* Test whether we hit any anchor. */
-            SPDrawAnchor *anchor = test_inside(pc, NR::Point(revent.x, revent.y));
+            SPDrawAnchor *anchor = test_inside(pc, event_w);
 
             switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
