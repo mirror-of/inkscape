@@ -331,6 +331,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				ret = TRUE;
 			}
 			break;
+		// FIXME: make import a verb
 		case GDK_i: // Ctrl i - import file
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_file_import (NULL);
@@ -338,24 +339,32 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			}
 			break;
 		case GDK_Left: // Ctrl Left 
+		case GDK_KP_Left:
+		case GDK_KP_4:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_desktop_scroll_world (event_context->desktop, key_scroll, 0);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Up: // Ctrl Up
+		case GDK_KP_Up:
+		case GDK_KP_8:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_desktop_scroll_world (event_context->desktop, 0, key_scroll);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Right: // Ctrl Right
+		case GDK_KP_Right:
+		case GDK_KP_6:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_desktop_scroll_world (event_context->desktop, -key_scroll, 0);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Down: // Ctrl Down
+		case GDK_KP_Down:
+		case GDK_KP_2:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_desktop_scroll_world (event_context->desktop, 0, -key_scroll);
 				ret = TRUE;
