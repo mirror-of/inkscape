@@ -103,6 +103,7 @@ enum {
     SP_ARG_EXPORT_WIDTH,
     SP_ARG_EXPORT_HEIGHT,
     SP_ARG_EXPORT_ID,
+    SP_ARG_EXPORT_USE_HINTS,
     SP_ARG_EXPORT_BACKGROUND,
     SP_ARG_EXPORT_BACKGROUND_OPACITY,
     SP_ARG_EXPORT_SVG,
@@ -132,50 +133,96 @@ static gchar *sp_export_height = NULL;
 static gchar *sp_export_id = NULL;
 static gchar *sp_export_background = NULL;
 static gchar *sp_export_background_opacity = NULL;
+static gboolean sp_export_use_hints = FALSE;
 static gchar *sp_export_svg = NULL;
 
 static GSList *sp_process_args(poptContext ctx);
 struct poptOption options[] = {
-    {"version", 'V', POPT_ARG_NONE, NULL, SP_ARG_VERSION,
-     N_("Print the Inkscape version number"), NULL},
-    {"without-gui", 'z', POPT_ARG_NONE, NULL, SP_ARG_NOGUI,
+    {"version", 'V', 
+     POPT_ARG_NONE, NULL, SP_ARG_VERSION,
+     N_("Print the Inkscape version number"), 
+     NULL},
+
+    {"without-gui", 'z', 
+     POPT_ARG_NONE, NULL, SP_ARG_NOGUI,
      N_("Do not use X server (only process files from console)"),
      NULL},
-    {"with-gui", 'g', POPT_ARG_NONE, NULL, SP_ARG_GUI,
+
+    {"with-gui", 'g', 
+     POPT_ARG_NONE, NULL, SP_ARG_GUI,
      N_("Try to use X server (even if $DISPLAY is not set)"),
      NULL},
-    {"file", 'f', POPT_ARG_STRING, NULL, SP_ARG_FILE,
+
+    {"file", 'f', 
+     POPT_ARG_STRING, NULL, SP_ARG_FILE,
      N_("Open specified document(s) (option string may be excluded)"),
      N_("FILENAME")},
-    {"print", 'p', POPT_ARG_STRING, &sp_global_printer, SP_ARG_PRINT,
+
+    {"print", 'p', 
+     POPT_ARG_STRING, &sp_global_printer, SP_ARG_PRINT,
      N_("Print document(s) to specified output file (use '| program' for pipe)"),
      N_("FILENAME")},
-    {"export-png", 'e', POPT_ARG_STRING, &sp_export_png, SP_ARG_EXPORT_PNG,
+
+    {"export-png", 'e', 
+     POPT_ARG_STRING, &sp_export_png, SP_ARG_EXPORT_PNG,
      N_("Export document to a PNG file"),
      N_("FILENAME")},
-    {"export-dpi", 'd', POPT_ARG_STRING, &sp_export_dpi, SP_ARG_EXPORT_DPI,
-     N_("The resolution used for exporting SVG into bitmap (default 72.0)"),
+
+    {"export-dpi", 'd', 
+     POPT_ARG_STRING, &sp_export_dpi, SP_ARG_EXPORT_DPI,
+     N_("The resolution used for exporting SVG into bitmap (default 72)"),
      N_("DPI")},
-    {"export-area", 'a', POPT_ARG_STRING, &sp_export_area, SP_ARG_EXPORT_AREA,
-     N_("Exported area in millimeters (default is full document, 0,0 is lower-left corner)"),
+
+    {"export-area", 'a', 
+     POPT_ARG_STRING, &sp_export_area, SP_ARG_EXPORT_AREA,
+     N_("Exported area in SVG pixels (default is full document; 0,0 is lower-left corner)"),
      N_("x0:y0:x1:y1")},
-    {"export-width", 'w', POPT_ARG_STRING, &sp_export_width, SP_ARG_EXPORT_WIDTH,
-     N_("The width of exported bitmap in pixels (overrides export-dpi)"), N_("WIDTH")},
-    {"export-height", 'h', POPT_ARG_STRING, &sp_export_height, SP_ARG_EXPORT_HEIGHT,
-     N_("The height of exported bitmap in pixels (overrides export-dpi)"), N_("HEIGHT")},
-    {"export-id", 'i', POPT_ARG_STRING, &sp_export_id, SP_ARG_EXPORT_ID,
-     N_("The ID of the object to export (overrides export-area)"), N_("ID")},
-    {"export-background", 'b', POPT_ARG_STRING, &sp_export_background, SP_ARG_EXPORT_BACKGROUND,
-     N_("Background color of exported bitmap (any SVG-supported color string)"), N_("COLOR")},
-    {"export-background-opacity", 'y', POPT_ARG_STRING, &sp_export_background_opacity, SP_ARG_EXPORT_BACKGROUND_OPACITY,
-     N_("Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"), N_("VALUE")},
-    {"export-plain-svg", 'l', POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
-     N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"), N_("FILENAME")},
-    {"slideshow", 's', POPT_ARG_NONE, &sp_global_slideshow, SP_ARG_SLIDESHOW,
-     N_("Show given files one-by-one, switch to next on any key/mouse event"), NULL},
-    {"bitmap-icons", 'x', POPT_ARG_NONE, &sp_bitmap_icons, SP_ARG_BITMAP_ICONS,
+
+    {"export-width", 'w', 
+     POPT_ARG_STRING, &sp_export_width, SP_ARG_EXPORT_WIDTH,
+     N_("The width of exported bitmap in pixels (overrides export-dpi)"), 
+     N_("WIDTH")},
+
+    {"export-height", 'h', 
+     POPT_ARG_STRING, &sp_export_height, SP_ARG_EXPORT_HEIGHT,
+     N_("The height of exported bitmap in pixels (overrides export-dpi)"), 
+     N_("HEIGHT")},
+
+    {"export-id", 'i', 
+     POPT_ARG_STRING, &sp_export_id, SP_ARG_EXPORT_ID,
+     N_("The ID of the object to export (overrides export-area)"), 
+     N_("ID")},
+
+    {"export-use-hints", 't', 
+     POPT_ARG_NONE, &sp_export_use_hints, SP_ARG_EXPORT_USE_HINTS,
+     N_("Use stored filename and DPI hints when exporting (only with export-id)"), 
+     NULL},
+
+    {"export-background", 'b', 
+     POPT_ARG_STRING, &sp_export_background, SP_ARG_EXPORT_BACKGROUND,
+     N_("Background color of exported bitmap (any SVG-supported color string)"), 
+     N_("COLOR")},
+
+    {"export-background-opacity", 'y', 
+     POPT_ARG_STRING, &sp_export_background_opacity, SP_ARG_EXPORT_BACKGROUND_OPACITY,
+     N_("Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"), 
+     N_("VALUE")},
+
+    {"export-plain-svg", 'l', 
+     POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
+     N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"), 
+     N_("FILENAME")},
+
+    {"slideshow", 's', 
+     POPT_ARG_NONE, &sp_global_slideshow, SP_ARG_SLIDESHOW,
+     N_("Show given files one-by-one, switch to next on any key/mouse event"), 
+     NULL},
+
+    {"bitmap-icons", 'x', 
+     POPT_ARG_NONE, &sp_bitmap_icons, SP_ARG_BITMAP_ICONS,
      N_("Prefer bitmap (XPM) icons to SVG ones"),
      NULL},
+
     POPT_AUTOHELP POPT_TABLEEND
 };
 
@@ -234,7 +281,11 @@ main(int argc, char const **argv)
             || !strncmp(argv[i], "--print", 7)
             || !strcmp(argv[i], "-e")
             || !strncmp(argv[i], "--export-png", 12)
-            || !strncmp(argv[i], "--export-svg", 12))
+            || !strcmp(argv[i], "-l")
+            || !strncmp(argv[i], "--export-plain-svg", 12)
+            || !strcmp(argv[i], "-i")
+            || !strncmp(argv[i], "--export-id", 12)
+           )
         {
             /* main_console handles any exports -- not the gui */
             use_gui = FALSE;
@@ -411,7 +462,7 @@ sp_main_console(int argc, char const **argv)
             if (printer) {
                 sp_print_document_to_file(doc, printer);
             }
-            if (sp_export_png) {
+            if (sp_export_png || sp_export_id) {
                 sp_do_export_png(doc);
             }
             if (sp_export_svg) {
@@ -436,15 +487,11 @@ sp_main_console(int argc, char const **argv)
 static void
 sp_do_export_png(SPDocument *doc)
 {
+    const gchar *filename = NULL;
+    gdouble dpi = 0.0;
 
-    gdouble dpi = 72.0;
-    if (sp_export_dpi) {
-        dpi = atof(sp_export_dpi);
-        if ((dpi < 0.1) || (dpi > 10000.0)) {
-            g_warning("DPI value %s out of range [0.1 - 10000.0]", sp_export_dpi);
-            return;
-        }
-        g_print("DPI: %g\n", dpi);
+    if (sp_export_use_hints && !sp_export_id) {
+        g_warning ("--export-use-hints can only be used with --export-id; ignored.");
     }
 
     NRRect area;
@@ -452,28 +499,58 @@ sp_do_export_png(SPDocument *doc)
         SPObject *o = doc->getObjectById(sp_export_id);
         if (o) {
             if (!SP_IS_ITEM (o)) {
-                g_warning("Object with id=\"%s\" is not a visible item", sp_export_id);
+                g_warning("Object with id=\"%s\" is not a visible item. Nothing exported.", sp_export_id);
                 return;
             }
+            if (sp_export_area) {
+                g_warning ("Object with id=\"%s\" is being exported; --export-area is ignored.", sp_export_id);
+            }
+
+            if (sp_export_use_hints) {
+
+                // retrieve export filename hint
+                const gchar *fn_hint = sp_repr_attr (SP_OBJECT_REPR (o), "inkscape:export-filename");
+                if (fn_hint) {
+                    if (sp_export_png) {
+                        g_warning ("Using export filename from the command line (--export-png). Filename hint %s is ignored.", fn_hint);
+                        filename = sp_export_png;
+                    } else {
+                        filename = fn_hint;
+                    }
+                } else {
+                    g_warning ("Export filename hint not found for the object.");
+                    filename = sp_export_png;
+                }
+
+                // retrieve export dpi hints
+                const gchar *dpi_hint = sp_repr_attr (SP_OBJECT_REPR (o), "inkscape:export-xdpi"); // only xdpi, ydpi is always the same now
+                if (dpi_hint) {
+                    if (sp_export_dpi || sp_export_width || sp_export_height) {
+                        g_warning ("Using bitmap dimensions from the command line (--export-dpi, --export-width, or --export-height). DPI hint %s is ignored.", dpi_hint);
+                    } else {
+                        dpi = atof(dpi_hint);
+                    }
+                } else {
+                    g_warning ("Export DPI hint not found for the object.");
+                }
+
+            }
+
+            // write object bbox to area
             sp_document_ensure_up_to_date (doc);
             sp_item_bbox_desktop((SPItem *) o, &area);
         } else {
-            g_warning("Object with id=\"%s\" was not found in the document", sp_export_id);
+            g_warning("Object with id=\"%s\" was not found in the document. Nothing exported.", sp_export_id);
             return;
         }
     } else if (sp_export_area) {
-        /* Try to parse area (given in mm) */
-        if (sscanf(sp_export_area, "%lg:%lg:%lg:%lg", &area.x0, &area.y0, &area.x1, &area.y1) == 4) {
-            area.x0 *= (72.0 / 25.4);
-            area.y0 *= (72.0 / 25.4);
-            area.x1 *= (72.0 / 25.4);
-            area.y1 *= (72.0 / 25.4);
-        } else {
-            g_warning("Export area '%s' illegal (use 'x0:y0:x1:y1)", sp_export_area);
+        /* Try to parse area (given in SVG pixels) */
+        if (!sscanf(sp_export_area, "%lg:%lg:%lg:%lg", &area.x0, &area.y0, &area.x1, &area.y1) == 4) {
+            g_warning("Cannot parse export area '%s'; use 'x0:y0:x1:y1'. Nothing exported.", sp_export_area);
             return;
         }
         if ((area.x0 >= area.x1) || (area.y0 >= area.y1)) {
-            g_warning("Export area '%s' has invalid values", sp_export_area);
+            g_warning("Export area '%s' has negative width or height. Nothing exported.", sp_export_area);
             return;
         }
     } else {
@@ -484,13 +561,35 @@ sp_do_export_png(SPDocument *doc)
         area.y1 = sp_document_height(doc);
     }
 
+    // set filename and dpi from options, if not yet set from the hints
+    if (!filename) {
+        if (!sp_export_png) {
+            g_warning ("No export filename given and no filename hint. Nothing exported.");
+            return;
+        }
+        filename = sp_export_png;
+    }
+
+    if (sp_export_dpi && dpi == 0.0) {
+        dpi = atof(sp_export_dpi);
+        if ((dpi < 0.1) || (dpi > 10000.0)) {
+            g_warning("DPI value %s out of range [0.1 - 10000.0]. Nothing exported.", sp_export_dpi);
+            return;
+        }
+        g_print("DPI: %g\n", dpi);
+    } 
+
+    // default dpi
+    if (dpi == 0.0)
+        dpi = 72.0;
+
     gint width = 0;
     gint height = 0;
 
     if (sp_export_width) {
         width = atoi(sp_export_width);
         if ((width < 1) || (width > 65536)) {
-            g_warning("Export width %d out of range (1 - 65536)", width);
+            g_warning("Export width %d out of range (1 - 65536). Nothing exported.", width);
             return;
         }
         dpi = (gdouble) width * 72.0 / (area.x1 - area.x0);
@@ -499,7 +598,7 @@ sp_do_export_png(SPDocument *doc)
     if (sp_export_height) {
         height = atoi(sp_export_height);
         if ((height < 1) || (height > 65536)) {
-            g_warning("Export height %d out of range (1 - 65536)", width);
+            g_warning("Export height %d out of range (1 - 65536). Nothing exported.", width);
             return;
         }
         dpi = (gdouble) height * 72.0 / (area.y1 - area.y0);
@@ -545,12 +644,14 @@ sp_do_export_png(SPDocument *doc)
 
     g_print("Background RRGGBBAA: %08x\n", bgcolor);
 
-    g_print("Exporting: %g, %g - %g, %g to %d x %d pixels\n", area.x0, area.y0, area.x1, area.y1, width, height);
+    g_print("Area %g:%g:%g:%g exported to %d x %d pixels (%g dpi)\n", area.x0, area.y0, area.x1, area.y1, width, height, dpi);
+
+    g_print("Bitmap saved as: %s\n", filename);
 
     if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
-        sp_export_png_file(doc, sp_export_png, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true);
+        sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true);
     } else {
-        g_warning("Calculated bitmap dimensions %d %d are out of range (1 - 65535)", width, height);
+        g_warning("Calculated bitmap dimensions %d %d are out of range (1 - 65535). Nothing exported.", width, height);
     }
 }
 
