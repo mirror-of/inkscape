@@ -1,5 +1,14 @@
+2004-01-30  Johan Ceuppens  <jceuppen@easynet.be>
+	* src/verbs.cpp src/verbs.h: Added fullscreen verb. Fullscreen action
+	is in SP_VERB_IS_ZOOM.
+	* src/interface.cpp: Added fullscreen menuitem.
+	* src/shortcuts.cpp: Linked in fullscreen shortcut (untested)
+	* src/inkscape.cpp src/inkscape.h
+	* src/desktop.cpp src/desktop.h: Added is_fullscreen gboolean to
+	SPDesktop.
+	
 2004-01-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
+	
 	* src/libnr/nr-path.h, src/libnr/nr-path.cpp: Mark some functions
 	as not modifying the matrix passed to them.
 
