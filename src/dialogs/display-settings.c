@@ -24,8 +24,9 @@
 
 #include "helper/sp-intl.h"
 #include "helper/window.h"
-
 #include "../inkscape.h"
+#include "dialog-events.h"
+
 #include "display-settings.h"
 
 static GtkWidget *dialog = NULL;
@@ -47,6 +48,13 @@ sp_display_dialog (void)
 {
 	if (dialog == NULL) {
 		dialog = sp_display_dialog_new ();
+
+		// if there's an active canvas, attach dialog to it as a transient:
+		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
+			gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+		//now all uncatched keypresses from the window will be handled:
+		gtk_signal_connect (GTK_OBJECT (dialog), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dialog);
+
 		gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 				    GTK_SIGNAL_FUNC (sp_display_dialog_destroy), NULL);
 	}

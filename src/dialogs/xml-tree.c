@@ -45,6 +45,8 @@
 #include "../widgets/sp-xmlview-content.h"
 #include "../widgets/sp-xmlview-attr-list.h"
 
+#include "dialog-events.h"
+
 typedef struct _EditableDest {
 	GtkEditable * editable;
 	gchar * text;
@@ -141,6 +143,12 @@ sp_xml_tree_dialog (void)
 		gtk_tooltips_enable (tooltips);
 
 		dialog = sp_window_new ("", TRUE);
+		// if there's an active canvas, attach dialog to it as a transient:
+		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
+			gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+		//now all uncatched keypresses from the window will be handled:
+		gtk_signal_connect (GTK_OBJECT (dialog), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dialog);
+
 		gtk_container_set_border_width (GTK_CONTAINER (dialog), 0);
 		gtk_window_set_default_size (GTK_WINDOW (dialog), 640, 384);
 		g_signal_connect (G_OBJECT (dialog), "destroy", G_CALLBACK (on_destroy), NULL);
