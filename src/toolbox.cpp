@@ -771,7 +771,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
     fscb = gtk_check_button_new_with_label (_("Polygon"));
     gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
     flatsidedstr = prefs_get_string_attribute ("tools.shapes.star", "isflatsided");
-    if (flatsidedstr && !strcmp (flatsidedstr, "false"))
+    if (!flatsidedstr || (flatsidedstr && !strcmp (flatsidedstr, "false")))
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
     else 
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
@@ -795,7 +795,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
     gtk_widget_set_size_request (sb2, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
     gtk_widget_show (sb2);
     g_object_set_data (G_OBJECT (tbl), "prop_widget", sb2);
-    if (flatsidedstr && !strcmp (flatsidedstr, "false" ))
+    if (!flatsidedstr || (flatsidedstr && !strcmp (flatsidedstr, "false")))
         gtk_widget_set_sensitive (GTK_WIDGET (sb2), TRUE);
     else 
         gtk_widget_set_sensitive (GTK_WIDGET (sb2), FALSE);
