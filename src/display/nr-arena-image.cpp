@@ -192,7 +192,13 @@ nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	} else if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8P) {
 		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
 	} else if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8N) {
-		nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
+
+		//FIXME: The _N_N_N_ version gives a gray border around images, see bug 906376
+		// This mode is only used when exporting, screen rendering always has _P_P_P_, so I decided to simply replace it for now
+		// Feel free to propose a better fix
+
+		//nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
+		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
 	}
 
 	pb->empty = FALSE;
