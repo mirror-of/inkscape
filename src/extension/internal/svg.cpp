@@ -64,8 +64,8 @@ Svg::init(void)
 			"<output>\n"
 				"<extension>.svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
-				"<filetypename>SVG with extension namespaces</filetypename>\n"
-				"<filetypetooltip>Scalable Vector Graphics format with Inkscape extensions</filetypetooltip>\n"
+				"<filetypename>Inkscape SVG (*.svg)</filetypename>\n"
+				"<filetypetooltip>SVG format with Inkscape extensions</filetypetooltip>\n"
 			"</output>\n"
 		"</spmodule>", new Svg());
 
@@ -75,10 +75,10 @@ Svg::init(void)
 			"<name>SVG Output</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"
 			"<output>\n"
-				"<extension>.w3c.svg</extension>\n"
+				"<extension>.svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
-				"<filetypename>Plain SVG</filetypename>\n"
-				"<filetypetooltip>Scalable Vector Graphics format</filetypetooltip>\n"
+				"<filetypename>Plain SVG (*.svg)</filetypename>\n"
+				"<filetypetooltip>Scalable Vector Graphics format as defined by the W3C</filetypetooltip>\n"
 			"</output>\n"
 		"</spmodule>", new Svg());
 

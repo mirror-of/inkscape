@@ -4,8 +4,8 @@
     <input>
         <extension>.svgz</extension>
         <mimetype>image/x-svgz</mimetype>
-        <filetypename>Compressed SVG</filetypename>
-        <filetypetooltip>Sodipodi native file format compressed with GZip</filetypetooltip>
+        <filetypename>Compressed Inkscape SVG (*.svgz)</filetypename>
+        <filetypetooltip>Inkscape's native file format compressed with GZip</filetypetooltip>
     </input>
     <extension>
         <command reldir="path">gzip -cd</command>

@@ -435,7 +435,7 @@ PrintWin32::get_save_filename (unsigned char *dir, unsigned int *spns)
 		sizeof (OPENFILENAME),
 		NULL, /* hwndOwner */
 		NULL, /* hInstance */
-		"SVG with extension namespaces\0*\0Standard SVG\0*\0", /* lpstrFilter */
+		"Inkscape SVG (*.svg)\0*\0Plain SVG (*.svg)\0*\0", /* lpstrFilter */
 		NULL, /* lpstrCustomFilter */
 		0, /* nMaxCustFilter  */
 		1, /* nFilterIndex */

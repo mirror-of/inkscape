@@ -236,7 +236,7 @@ FileSaveDialog::FileSaveDialog(
 
     gchar *filter = "";
     if ( fileTypes == SVG_TYPES )
-        filter = "SVG with extension namespaces\0*\0Standard SVG\0*\0";
+        filter = "Inkscape SVG (*.svg)\0*\0Plain SVG (*.svg)\0*\0";
     else if ( fileTypes == EXPORT_TYPES )
         filter = "Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
                  "SVG files\0*.svg\0"
@@ -248,7 +248,7 @@ FileSaveDialog::FileSaveDialog(
         sizeof (OPENFILENAME),
         NULL,                       // hwndOwner
         NULL,                       // hInstance
-        "SVG with extension namespaces\0*\0Standard SVG\0*\0", // lpstrFilter
+        "Inkscape SVG (*.svg)\0*\0Plain SVG (*.svg)\0*\0", // lpstrFilter
         NULL,                       // lpstrCustomFilter
         0,                          // nMaxCustFilter
         1,                          // nFilterIndex
