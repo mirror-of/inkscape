@@ -6,6 +6,9 @@
     * src/helper/stock-items.cpp: removing redundant code.
     * src/libnr/nr-point.h, src/livarot/Shape.h: added initializations
 	  to keep valgrind happy.
+	* src/dir-util.cpp, src/sp-path.cpp, src/splivarot.cpp,
+	  src/svg/svg-length.cpp, src/widgets/icon.cpp: cleaning up memory
+	  leaks detected by valgrind.
 
 2005-01-31  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp,

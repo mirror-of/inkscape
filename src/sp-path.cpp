@@ -167,7 +167,7 @@ sp_path_build(SPObject *object, SPDocument *document, SPRepr *repr)
     /* d is a required attribute */
     gchar const *d = sp_object_getAttribute(object, "d", NULL);
     if (d == NULL) {
-        sp_object_set(object, sp_attribute_lookup("d"), strdup(""));
+        sp_object_set(object, sp_attribute_lookup("d"), "");
     }
 
     /* Are these calls actually necessary? */

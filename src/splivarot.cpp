@@ -1397,6 +1397,9 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
 
     sp_repr_unref (repr);
 
+    // clean up
+    if (orig) delete orig;
+
     return true;
 }
 

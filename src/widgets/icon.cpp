@@ -161,6 +161,8 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
 	if (pixels) {
+		// don't pass the nr_free because we're caching the pixel
+		// space loaded through sp_icon_image_load_gtk
 		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
 		icon->pb_faded = gdk_pixbuf_copy(icon->pb);
 
@@ -443,6 +445,8 @@ sp_icon_image_load_svg ( const gchar *name,
                          unsigned int size, 
                          unsigned int scale )
 {
+    // it would be nice to figure out how to attach "desctructors" to
+    // these maps to keep mem-watching tools like valgrind happy.
     static std::map<Glib::ustring, svg_doc_cache_t *> doc_cache;
     static std::map<Glib::ustring, guchar *> px_cache;
     SPDocument *doc = NULL;

@@ -270,6 +270,7 @@ prepend_current_dir_if_relative (char **result, const gchar *uri)
 	inkscape_rel2abs (uri, cwd_utf8, full_path, 1000);
 	*(result) = g_strdup (full_path);
 	g_free (full_path);
+	g_free (cwd);
 }
 
 
