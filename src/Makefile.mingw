@@ -17,7 +17,7 @@ include ../Makefile.mingw.common
 
 #Static version.  leave out inkview.  too large
 all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
-inkscape.exe
+inkscape.exe plugins
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
 	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
@@ -85,7 +85,7 @@ libinkscape.a: $(OBJ)
 # P L U G I N S
 ###################################
 
-.o.dll:
+.o.dll: $<
 	$(DLLWRAP) --def=plugin.def --driver-name=g++ \
 	-o $@ $< $(LIBS)
 
@@ -93,6 +93,9 @@ PLUGS = extension/plugin/gimpgrad.dll
 
 plugins: $(PLUGS)
 
+extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o libinkscape.a
+	$(DLLWRAP) --def=plugin.def --driver-name=g++ \
+	-o $@ $< libinkscape.a $(LIBS)
 
 
 
@@ -107,5 +110,7 @@ clean:
 	$(RM) *.a
 	$(RM) *.def
 	$(RM) *.dll
+	$(RM) extension$(S)plugin$(S)*.o
+	$(RM) extension$(S)plugin$(S)*.dll
 
 
