@@ -186,8 +186,13 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
 			dragging = TRUE;
-			sp_canvas_item_grab (item, GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-						NULL, event->button.time);
+			sp_canvas_item_grab(item,
+					    ( GDK_BUTTON_RELEASE_MASK  |
+					      GDK_BUTTON_PRESS_MASK    |
+					      GDK_POINTER_MOTION_MASK  |
+					      GDK_POINTER_MOTION_HINT_MASK ),
+					    NULL,
+					    event->button.time);
 			ret = TRUE;
 		}
 		break;

@@ -1,5 +1,8 @@
 2004-02-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop-events.cpp (sp_dt_guide_event): Get guide line dialog
+	working again: double-click on a guide to show the guide dialog.
+
 	* src/utest/utest.h (UTEST_NAMED_ASSERT):
 	Wrap this macro in static_cast<void>().
 
@@ -36,7 +39,7 @@
 2004-02-14  MenTaLguY <mental@rydia.net>
 
 	* src/svg/svg-path.cpp: switched to locale-safe iostreams-based path
-	serialization
+	  serialization.
 
 	* src/xml/repr-io.cpp, src/xml/repr.cpp, src/widgets/sp-xmlview-tree.cpp,
 	  src/widgets/sp-xmlview-content.cpp, src/dialogs/xml-tree.cpp:
@@ -56,7 +59,7 @@
 
 	* doc/keys.xml doc/keys-svg.xsl doc/keys-html.xsl doc/keys.html icons/keys.svg:
 	Updated middle and right buttons scroll/zoom, cosmetics
-   
+
 	* src/shortcuts.cpp: Menu shortcut fix 
 
 	* src/verbs.cpp,h: New verb: deselect 
@@ -281,8 +284,8 @@
 
 2004-02-08  MenTaLguY <mental@rydia.net>
 
-   * src/interface.cpp: added "Autoraise Dialogs" menu item to toggle
-	 the transient policy thing
+	* src/interface.cpp: added "Autoraise Dialogs" menu item to toggle
+	  the transient policy thing
 
 2004-02-08 Bryce Harrington <brycehar@bryceharrington.com>
 
