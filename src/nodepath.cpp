@@ -120,7 +120,8 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
         return NULL;
 	SPPath *path = SP_PATH(item);
 	SPCurve *curve = sp_shape_get_curve(SP_SHAPE(path));
-	g_return_val_if_fail (curve != NULL, NULL);
+	if (curve == NULL)
+		return NULL;
 
 	NArtBpath *bpath = sp_curve_first_bpath (curve);
 	gint length = curve->end;
@@ -244,7 +245,8 @@ sp_nodepath_cleanup(Path::Path *nodepath)
 
 /**
 \brief Returns true if the argument nodepath and the d attribute in its repr do not match. 
- This may happen if repr was changed in e.g. XML editor or by undo.
+ This may happen if repr was changed in e.g. XML editor or by undo. 
+ UGLY HACK, think how we can eliminate it.
 */
 gboolean nodepath_repr_d_changed(Path::Path *np, char const *newd)
 {
@@ -257,7 +259,12 @@ gboolean nodepath_repr_d_changed(Path::Path *np, char const *newd)
 	char const *attr_d = ( newd
 			       ? newd
 			       : sp_repr_attr(SP_OBJECT(np->path)->repr, "d") );
-	gboolean ret = strcmp(attr_d, svgpath);
+
+	gboolean ret;
+	if (attr_d && svgpath)
+		ret = strcmp(attr_d, svgpath);
+	else 
+		ret = TRUE;
 
 	g_free (svgpath);
 	sp_curve_unref (curve);
