@@ -503,9 +503,9 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						if (tc->text) {
 							if (MOD__ALT) { 
 								if (MOD__SHIFT)
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-10, 0));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(-10, 0));
 								else
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-1, 0));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(-1, 0));
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
@@ -524,9 +524,9 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						if (tc->text) {
 							if (MOD__ALT) { 
 								if (MOD__SHIFT)
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(10, 0));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(10, 0));
 								else
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(1, 0));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(1, 0));
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
@@ -545,9 +545,9 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						if (tc->text) {
 							if (MOD__ALT) { 
 								if (MOD__SHIFT)
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -10));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(0, -10));
 								else 
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -1));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(0, -1));
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
@@ -566,9 +566,9 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						if (tc->text) {
 							if (MOD__ALT) { 
 								if (MOD__SHIFT)
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 10));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(0, 10));
 								else 
-									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 1));
+									sp_te_adjust_kerning_screen (tc->text, tc->ipos, ec->desktop, NR::Point(0, 1));
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
 								SPStyle *style = SP_OBJECT_STYLE (tc->text);
@@ -604,14 +604,14 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							if (MOD__ALT) { 
 								if (MOD__CTRL) {
 									if (MOD__SHIFT)
-										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, -10);
+										sp_te_adjust_linespacing_screen (tc->text, ec->desktop, -10);
 									else 
-										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, -1);
+										sp_te_adjust_linespacing_screen (tc->text, ec->desktop, -1);
 								} else {
 									if (MOD__SHIFT)
-										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -10);
+										sp_te_adjust_tspan_letterspacing_screen (tc->text, tc->ipos, ec->desktop, -10);
 									else 
-										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -1);
+										sp_te_adjust_tspan_letterspacing_screen (tc->text, tc->ipos, ec->desktop, -1);
 								}
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 								sp_text_context_update_cursor (tc);
@@ -625,14 +625,14 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							if (MOD__ALT) { 
 								if (MOD__CTRL) {
 									if (MOD__SHIFT)
-										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, 10);
+										sp_te_adjust_linespacing_screen (tc->text, ec->desktop, 10);
 									else 
-										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, 1);
+										sp_te_adjust_linespacing_screen (tc->text, ec->desktop, 1);
 								} else {
 									if (MOD__SHIFT)
-										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 10);
+										sp_te_adjust_tspan_letterspacing_screen (tc->text, tc->ipos, ec->desktop, 10);
 									else 
-										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 1);
+										sp_te_adjust_tspan_letterspacing_screen (tc->text, tc->ipos, ec->desktop, 1);
 								}
 								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 								sp_text_context_update_cursor (tc);

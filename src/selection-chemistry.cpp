@@ -37,6 +37,8 @@
 #include "sp-use.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
+#include "sp-flowtext.h"
+#include "text-editing.h"
 #include "text-context.h"
 #include "dropper-context.h"
 #include <glibmm/i18n.h>
@@ -932,10 +934,12 @@ void sp_selection_copy()
     guint texts = 0;
     for (GSList *i = (GSList *) items; i; i = i->next) {
         SPItem *item = SP_ITEM (i->data);
-        if (SP_IS_TEXT (item)) {
+        if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             if (texts > 0) // if more than one text object is copied, separate them by spaces
                 text += " ";
-            text += sp_text_get_string_multiline (SP_TEXT (item));
+            gchar *this_text = sp_te_get_string_multiline (item);
+            text += this_text;
+            g_free(this_text);
             texts++;
         }
     }

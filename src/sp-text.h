@@ -144,14 +144,7 @@ struct SPTextClass {
 
 GType sp_text_get_type();
 
-gchar *sp_text_get_string_multiline(SPText *text);
-void sp_text_set_repr_text_multiline(SPText *text, gchar const *str);
-
 SPCurve *sp_text_normalized_bpath(SPText *text);
-
-void sp_adjust_kerning_screen(SPText *text, gint pos, SPDesktop *desktop, NR::Point by);
-void sp_adjust_tspan_letterspacing_screen(SPText *text, gint pos, SPDesktop *desktop, gdouble by);
-void sp_adjust_linespacing_screen(SPText *text, SPDesktop *desktop, gdouble by);
 
 #endif
 

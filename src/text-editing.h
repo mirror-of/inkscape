@@ -35,5 +35,10 @@ gint sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8);
 gint sp_te_delete (SPItem *item, gint i_start, gint i_end);
 bool sp_te_insert_line (SPItem *text, gint i_ucs4_pos);
 
+gchar *sp_te_get_string_multiline(SPItem *text);
+void sp_te_set_repr_text_multiline(SPItem *text, gchar const *str);
+void sp_te_adjust_kerning_screen(SPItem *text, gint pos, SPDesktop *desktop, NR::Point by);
+void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, gint pos, SPDesktop *desktop, gdouble by);
+void sp_te_adjust_linespacing_screen(SPItem *text, SPDesktop *desktop, gdouble by);
 
 #endif

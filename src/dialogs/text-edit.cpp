@@ -40,6 +40,7 @@ extern "C" {
 #include "../selection.h"
 #include "../style.h"
 #include "../sp-text.h"
+#include "../text-editing.h"
 #include "../inkscape-stock.h"
 #include <libnrtype/font-style-to-pos.h>
 
@@ -474,7 +475,7 @@ sp_text_edit_dialog_update_object_text ( SPText *text )
         if (gtk_text_buffer_get_modified (tb)) {
             gtk_text_buffer_get_bounds (tb, &start, &end);
             str = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
-            sp_text_set_repr_text_multiline (text, str);
+            sp_te_set_repr_text_multiline (text, str);
             g_free (str);    
             gtk_text_buffer_set_modified (tb, FALSE);
         }
@@ -667,7 +668,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
 
         if (docontent) {
             gchar *str;
-            str = sp_text_get_string_multiline (text);
+            str = sp_te_get_string_multiline (text);
 
             if (str) {
                 int pos;

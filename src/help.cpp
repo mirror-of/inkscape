@@ -21,6 +21,7 @@
 #include "inkscape.h"
 #include "document.h"
 #include "sp-text.h"
+#include "text-editing.h"
 #include "svg-view.h"
 #include "help.h"
 #include "file.h"
@@ -69,7 +70,7 @@ sp_help_about (void)
         version = doc->getObjectById("version");
         
         if (version && SP_IS_TEXT (version)) {
-            sp_text_set_repr_text_multiline ( SP_TEXT (version), 
+            sp_te_set_repr_text_multiline ( SP_TEXT (version), 
                                               INKSCAPE_VERSION);
         }
 
