@@ -383,6 +383,20 @@ sp_file_save_dialog(SPDocument *doc)
         save_loc = g_strdup(doc->uri); /* \todo should use a getter */
     }
 
+    { // convert save_lock from utf-8 to locale
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError* error = NULL;
+        gchar* save_loc_local = g_filename_from_utf8 ( save_loc, -1, &bytesRead, &bytesWritten, &error);
+
+        if ( save_loc_local != NULL ) {
+            g_free(save_loc);
+            save_loc = save_loc_local;
+        } else {
+            g_warning( "Error converting save filename stored in the file to locale encoding.");
+        }
+    }
+
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (char const *) save_loc,
@@ -416,15 +430,13 @@ sp_file_save_dialog(SPDocument *doc)
         }
         else
         {
-            // TODO: bulia, please look over
-            g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+            g_warning( "Error converting save filename to UTF-8." );
         }
-
 
         if ( !g_utf8_validate(fileName, -1, NULL) )
         {
             // TODO: bulia, please look over
-            g_warning( "INPUT FILENAME IS NOT UTF-8" );
+            g_warning( "The filename is not UTF-8." );
         }
 
         success = file_save(doc, fileName, selectionType, TRUE);
