@@ -62,7 +62,7 @@ void sp_extension(GtkWidget * widget)
         SPDesktop * desktop;
         SPRepr * repr;
         GSList * rl;
-	unsigned char *path;
+	gchar *path;
 /*        GSList * l; */
 
 	FILE * ppipe;
