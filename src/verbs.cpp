@@ -148,7 +148,7 @@ sp_action_get_title (const SPAction *action)
 	
 	s = g_new (gchar, 256);
 	
-	for (i = j = 0; i < strlen(action->name); i++)  {
+	for (i = j = 0; i < static_cast<gint>(strlen(action->name)); i++)  {
 		if ( action->name[i] != '_' && action->name[i] != '.' ) {
 			s[j] = action->name[i];
 			j++;
