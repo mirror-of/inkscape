@@ -288,16 +288,6 @@ void sp_selection_set_repr(SPSelection *selection, SPRepr *repr)
 	selection->setRepr(repr);
 }
 inline __attribute__ ((deprecated))
-void sp_selection_set_item_list(SPSelection *selection, GSList const *list)
-{
-	selection->setItemList(list);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_set_repr_list(SPSelection *selection, GSList const *list)
-{
-	selection->setReprList(list);
-}
-inline __attribute__ ((deprecated))
 void sp_selection_empty(SPSelection *selection)
 {
 	selection->clear();

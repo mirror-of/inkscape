@@ -124,7 +124,7 @@ void sp_selection_duplicate()
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
-	sp_selection_set_repr_list (SP_DT_SELECTION (desktop), newsel);
+        (SP_DT_SELECTION (desktop))->setReprList(newsel);
 
 	g_slist_free (newsel);
 }
@@ -1290,7 +1290,7 @@ sp_selection_unlink ()
 
 	if (new_select) { // set new selection
 		sp_selection_empty(SP_DT_SELECTION(desktop));
-		sp_selection_set_item_list(SP_DT_SELECTION(desktop), new_select);
+		(SP_DT_SELECTION(desktop))->setItemList(new_select);
 		g_slist_free(new_select);
 	}
 	if (!unlinked) {
