@@ -12,11 +12,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtk/gtkruler.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include "widget-sizes.h"
 #include "ruler.h"
+#include "unit-constants.h"
 
 #define MINIMUM_INCR          5
 #define MAXIMUM_SUBDIVIDE     5
@@ -606,6 +608,17 @@ sp_vruler_draw_pos (GtkRuler *ruler)
     }
 }
 
+/// Ruler metrics.
+static GtkRulerMetric const sp_ruler_metrics[] = {
+  // NOTE: the order of records in this struct must correspond to the SPMetric enum.
+  {"NONE",  "", 1, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"millimeters",  "mm", PT_PER_MM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"centimeters", "cm", PT_PER_CM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"inches",      "in", PT_PER_IN, { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 }, { 1, 2, 4, 8, 16 }},
+  {"points",      "pt", PT_PER_PT, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"pixels",      "px", PT_PER_PX, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+  {"meters",      "m", PT_PER_M, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
+};
 
 void
 sp_ruler_set_metric (GtkRuler *ruler,
