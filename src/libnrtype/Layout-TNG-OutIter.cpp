@@ -348,7 +348,7 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
     }
 
     double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].span(this).baseline_shift;
-    top_left[1] = baseline_y + _spans[_characters[char_index].in_span].line_height.ascent;
+    top_left[1] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
     bottom_right[1] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
 
     if (rotation) {
@@ -366,6 +366,9 @@ Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it
     Shape *selection_shape = new Shape;
     Shape *shape_temp = new Shape;    // Shape::Booleen() can't copy from itself so to makes things faster we flip from one to another
 
+    Shape rect_shape;
+    Shape rect_shape_tidy;
+
     for (iterator it = it_start ; it < it_end ; it.nextCharacter()) {
         NR::Rect box = characterBoundingBox(it, &rotation_angle);
         Path rect_path;
@@ -378,13 +381,14 @@ Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it
 			rect_path.LineTo(corner);
 	}
         rect_path.Close();
-        Shape rect_shape;
+        rect_path.Convert(0.25);
         rect_path.Fill(&rect_shape);
-        if (selection_shape->hasEdges())
-            shape_temp->Booleen(selection_shape, &rect_shape, bool_op_union);
-        else
-            shape_temp->Copy(&rect_shape);
-        std::swap(selection_shape, shape_temp);
+        if (selection_shape->hasEdges()) {
+            rect_shape_tidy.ConvertToShape(&rect_shape);
+            shape_temp->Booleen(selection_shape, &rect_shape_tidy, bool_op_union);
+            std::swap(shape_temp, selection_shape);
+        } else
+            selection_shape->ConvertToShape(&rect_shape);
     }
     delete shape_temp;
     return selection_shape;
