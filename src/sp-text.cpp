@@ -1042,6 +1042,10 @@ sp_text_append (SPText */*text*/, const gchar */*utf8*/)
 gint
 sp_text_insert (SPText *text, gint utf8_pos, const gchar *utf8)
 {
+	if ( g_utf8_validate(utf8,-1,NULL) != TRUE ) {
+		g_warning("Trying to insert invalid utf8");
+		return utf8_pos;
+	}
 	//printf("insert %s at %i\n",utf8,pos);
 	int  utf8_len=strlen(utf8);
 	int  ucs4_len=0;
@@ -1069,6 +1073,7 @@ sp_text_insert (SPText *text, gint utf8_pos, const gchar *utf8)
 	text->f_res->OffsetToLetter(utf8_pos,c_st,s_st,l_st,l_start_st,l_end_st);
 	if ( l_st < 0 ) return utf8_pos;
 	text->f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,utf8_pos);
+	utf8_pos=text->f_res->letters[l_st].utf8_offset;
 	int  ucs4_pos=text->f_res->letters[l_st].ucs4_offset;
 	
 	one_flow_src* cur=&text->contents;
@@ -1222,10 +1227,16 @@ sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point
 	}
 }
 static SPObject *
-sp_text_get_child_by_position (SPText */*text*/, gint /*pos*/)
+sp_text_get_child_by_position (SPText *text, gint utf8_pos)
 {
-
-    return  NULL;
+	if ( text->f_res == NULL ) return NULL;
+	int   ucs4_pos=0;
+	one_flow_src* into=text->contents.Locate(utf8_pos,ucs4_pos,true,false,true);
+	//printf("ucs4 at offset %i = %i -> txt=%x",utf8_pos,ucs4_pos,into);
+	if ( into->Type() == flw_text ) {
+		if ( into->dad ) return into->dad->me;
+	}
+	return NULL;
 }
 guint
 sp_text_get_position_by_coords (SPText *text, NR::Point &i_p)
@@ -1275,8 +1286,67 @@ sp_adjust_kerning_screen (SPText *text, gint position, SPDesktop *desktop, NR::P
 	SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 void
-sp_adjust_tspan_letterspacing_screen (SPText */*text*/, gint /*pos*/, SPDesktop */*desktop*/, gdouble /*by*/)
+sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop, gdouble by)
 {
+	gdouble val;
+	int     nb_let=0;
+	SPObject *child = sp_text_get_child_by_position (text, pos);
+	if (!child) return; //FIXME: we should be able to set lspacing on non-Inkscape text that has no tspans, too
+	{
+		int    c_p=-1,s_p=-1,l_p=-1;
+		bool   l_start=false,l_end=false;
+		//printf("letter at offset %i : ",pos);
+		text->f_res->OffsetToLetter(pos,c_p,s_p,l_p,l_start,l_end);
+		//printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
+		if ( c_p >= 0 ) {
+			nb_let=text->f_res->chunks[c_p].l_en-text->f_res->chunks[c_p].l_st;
+			// printf(" -> nblet %i \n",nb_let);
+		} else {
+			//printf("none\n");
+		}
+	}
+	SPStyle *style = SP_OBJECT_STYLE (child);
+	
+	// calculate real value
+	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
+		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
+			val = style->font_size.computed * style->text->letterspacing.value;
+		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
+			val = style->font_size.computed * style->text->letterspacing.value * 0.5;
+		} else { // unknown unit - should not happen
+			val = 0.0;
+		}
+	} else { // there's a real value in .computed, or it's zero
+		val = style->text->letterspacing.computed;
+	}
+	
+	// divide increment by zoom and by the number of characters in the line,
+	// so that the entire line is expanded by by pixels, no matter what its length
+	gdouble zoom = SP_DESKTOP_ZOOM (desktop);
+	gdouble zby = by / (zoom * (nb_let > 1 ? nb_let - 1 : 1));
+	
+	// divide increment by matrix expansion 
+	NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(child));
+	zby = zby / NR::expansion(t);
+	
+	val += zby;
+	
+	// set back value
+	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
+		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
+			style->text->letterspacing.value = val / style->font_size.computed;
+		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
+			style->text->letterspacing.value = val / style->font_size.computed * 2;
+		} 
+	} else { 
+		style->text->letterspacing.computed = val;
+	}
+	
+	style->text->letterspacing.set = TRUE;
+	
+	gchar *str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT (text)));
+	sp_repr_set_attr (SP_OBJECT_REPR (child), "style", str);
+	g_free (str);
 }
 void
 sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)

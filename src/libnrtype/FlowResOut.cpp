@@ -387,7 +387,7 @@ void               flow_res::OffsetToLetter(int offset,int &c,int &s,int &l,bool
 		// maybe an empty line
 	}
 }
-void               flow_res::LetterToOffset(int c,int /*s*/,int l,bool /*l_start*/,bool l_end,int &offset)
+void               flow_res::LetterToOffset(int /*c*/,int /*s*/,int l,bool /*l_start*/,bool l_end,int &offset)
 {
 	offset=0;
 	if ( l < 0 ) {
@@ -499,10 +499,19 @@ void               flow_res::LetterToPosition(int c,int s,int l,bool /*l_start*/
 		text_style*     curS=spans[s].c_style;
 		size=(curS)?curS->theSize:chunks[c].ascent; // just the ascent, it's nicer
 	}
-	if ( l_end ) {
-		px=letters[l].x_en;
+	if ( ChunkType(c) == txt_textpath ) {
+		if ( l_end ) {
+			px=letters[l].x_st+letters[l].x_en*cos(angle);
+			py=letters[l].y+letters[l].x_en*sin(angle);
+		} else {
+			px=letters[l].x_st;
+		}
 	} else {
-		px=letters[l].x_st;
+		if ( l_end ) {
+			px=letters[l].x_en;
+		} else {
+			px=letters[l].x_st;
+		}
 	}
 }
 

@@ -527,7 +527,7 @@ void              text_flow_src::Delete(int i_utf8_st,int i_utf8_en)
 void              text_flow_src::AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment)
 {
 	if ( utf8_pos >= utf8_st && utf8_pos < utf8_en ) {
-		int ucs4_pos=cleaned_up.UTF8_2_UCS4(utf8_pos-utf8_st);
+		int ucs4_pos=ucs4_st+cleaned_up.UTF8_2_UCS4(utf8_pos-utf8_st);
 		if ( dad ) (dynamic_cast<div_flow_src*>(dad))->DoAddValue(utf8_pos,ucs4_pos,val,v_type,increment);
 	}
 }
