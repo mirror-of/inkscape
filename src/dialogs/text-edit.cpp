@@ -40,6 +40,7 @@ extern "C" {
 #include "../selection.h"
 #include "../style.h"
 #include "../sp-text.h"
+#include "../sp-flowtext.h"
 #include "../text-editing.h"
 #include "../inkscape-stock.h"
 #include <libnrtype/font-style-to-pos.h>
@@ -70,7 +71,7 @@ static void sp_text_edit_dialog_font_changed (SPFontSelector *fontsel, font_inst
 static void sp_text_edit_dialog_any_toggled (GtkToggleButton *tb, GtkWidget *dlg);
 static void sp_text_edit_dialog_line_spacing_changed (GtkEditable *editable, GtkWidget *dlg);
 
-static SPText *sp_ted_get_selected_text_item (void);
+static SPItem *sp_ted_get_selected_text_item (void);
 static unsigned sp_ted_get_selected_text_count (void);
 
 
@@ -463,7 +464,7 @@ sp_text_edit_dialog_change_selection ( Inkscape::Application *inkscape,
 
 
 static void
-sp_text_edit_dialog_update_object_text ( SPText *text )
+sp_text_edit_dialog_update_object_text ( SPItem *text )
 {
         GtkTextBuffer *tb;
         GtkTextIter start, end;
@@ -601,8 +602,8 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
     } else if (items == 1) {
         /* exactly one text object; now set its text, too */
         SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
-        if (SP_IS_TEXT (item)) {
-            sp_text_edit_dialog_update_object_text (SP_TEXT(item));
+        if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
+            sp_text_edit_dialog_update_object_text (item);
         }
     } 
 
@@ -645,7 +646,7 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
 
     GtkTextBuffer *tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
 
-    SPText *text = sp_ted_get_selected_text_item ();
+    SPItem *text = sp_ted_get_selected_text_item ();
 
     Inkscape::XML::Node *repr;
     SPStyle *style;
@@ -750,14 +751,13 @@ static void
 sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg)
 {
     GtkWidget *textw, *preview, *apply, *def;
-    SPText *text;
     GtkTextIter start, end;
     gchar *str;
 
     if (g_object_get_data (G_OBJECT (dlg), "blocked")) 
         return;
 
-    text = sp_ted_get_selected_text_item ();
+    SPItem *text = sp_ted_get_selected_text_item ();
 
     textw = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "textw");
     preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
@@ -789,12 +789,11 @@ sp_text_edit_dialog_font_changed ( SPFontSelector *fsel,
                                    GtkWidget *dlg )
 {
     GtkWidget *preview, *apply, *def;
-    SPText *text;
 
     if (g_object_get_data (G_OBJECT (dlg), "blocked")) 
         return;
 
-    text = sp_ted_get_selected_text_item ();
+    SPItem *text = sp_ted_get_selected_text_item ();
 
     preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
     apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
@@ -815,12 +814,11 @@ static void
 sp_text_edit_dialog_any_toggled (GtkToggleButton *tb, GtkWidget *dlg)
 {
     GtkWidget *apply, *def;
-    SPText *text;
 
     if (g_object_get_data (G_OBJECT (dlg), "blocked"))
         return;
 
-    text = sp_ted_get_selected_text_item ();
+    SPItem *text = sp_ted_get_selected_text_item ();
 
     apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
     def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
@@ -837,12 +835,11 @@ static void
 sp_text_edit_dialog_line_spacing_changed (GtkEditable *editable, GtkWidget *dlg)
 {
     GtkWidget *apply, *def;
-    SPText *text;
 
     if (g_object_get_data ((GObject *) dlg, "blocked")) 
         return;
 
-    text = sp_ted_get_selected_text_item ();
+    SPItem *text = sp_ted_get_selected_text_item ();
 
     apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
     def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
@@ -855,7 +852,7 @@ sp_text_edit_dialog_line_spacing_changed (GtkEditable *editable, GtkWidget *dlg)
 
 
 
-static SPText *
+static SPItem *
 sp_ted_get_selected_text_item (void)
 {
     if (!SP_ACTIVE_DESKTOP)
@@ -865,8 +862,8 @@ sp_ted_get_selected_text_item (void)
          item != NULL;
          item = item->next)
     {
-        if (SP_IS_TEXT(item->data))
-            return SP_TEXT (item->data);
+        if (SP_IS_TEXT(item->data) || SP_IS_FLOWTEXT(item->data))
+            return SP_ITEM (item->data);
     }
 
     return NULL;
@@ -886,7 +883,7 @@ sp_ted_get_selected_text_count (void)
          item != NULL;
          item = item->next)
     {
-        if (SP_IS_TEXT(item->data))
+        if (SP_IS_TEXT(item->data) || SP_IS_FLOWTEXT(item->data))
             ++items;
     }
 
