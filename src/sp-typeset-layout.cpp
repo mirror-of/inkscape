@@ -465,19 +465,19 @@ public:
   PangoLogAttr  *pAttrs;
   int            pNAttr;
   
-  double         theAscent,theDescent;
+  int            baselineY;
   
-  pango_text_chunker(char* inText):text_chunker(inText){
+  pango_text_chunker(char* inText,char* font_family,double font_size):text_chunker(inText){
     theText=inText;
     pContext=gdk_pango_context_get();
     pLayout=pango_layout_new(pContext);
-    pango_layout_set_wrap(pLayout,PANGO_WRAP_WORD_CHAR);
+    pango_layout_set_wrap(pLayout,PANGO_WRAP_WORD);
     PangoFontDescription  *pfd;
     
-    pfd = pango_font_description_from_string ("Sans 14");
+    pfd = pango_font_description_from_string (font_family);
+    pango_font_description_set_size (pfd,(int)(PANGO_SCALE*font_size));
     pango_layout_set_font_description(pLayout, pfd);
-    theAscent=10;
-    theDescent=4;
+    pango_layout_set_spacing  (pLayout,0);
     pNAttr=0;
     pAttrs=NULL;
     textLength=0;
@@ -485,6 +485,10 @@ public:
       textLength=strlen(theText);
       pango_layout_set_text(pLayout, theText, -1);
       pango_layout_get_log_attrs(pLayout,&pAttrs,&pNAttr);
+      
+      PangoLayoutIter* pIter=pango_layout_get_iter(pLayout);
+      baselineY=pango_layout_iter_get_baseline(pIter);
+      pango_layout_iter_free (pIter);
     }
   };
   virtual ~pango_text_chunker(void) {
@@ -510,8 +514,16 @@ public:
   };
   
   virtual void                 InitialMetricsAt(int startPos,double &ascent,double &descent) {
-    ascent=theAscent;
-    descent=theDescent;
+    if ( startPos < 0 ) startPos=0;
+    if ( startPos >= textLength ) {
+      ascent=0;
+      descent=0;
+      return;
+    }
+    PangoRectangle  meas;
+    pango_layout_index_to_pos(pLayout,startPos,&meas);
+    ascent=0.001*((double)(baselineY-meas.y));
+    descent=0.001*((double)(meas.y+meas.height-baselineY));
   };
   virtual text_chunk_solution* StuffThatBox(int start_ind,double minLength,double nominalLength,double maxLength,bool strict) {
     if ( theText == NULL || pLayout == NULL || pAttrs == NULL ) return NULL;
@@ -531,15 +543,24 @@ public:
     int             firstAfterInd=-1;
     double          firstAfterLen=0.0;
     
+    double          curAscent=0;
+    double          curDescent=0;
+    double          lastBeforeAscent=0;
+    double          lastBeforeDescent=0;
+    
     for (int cur_ind=start_ind;cur_ind<textLength;cur_ind++) {
       pango_layout_index_to_pos(pLayout,cur_ind,&meas);
       int    endX=meas.x+meas.width;
       double lineLength=endX;
       lineLength-=startX;
       lineLength/=1000;
+      double nAscent=0.001*((double)(baselineY-meas.y));
+      double nDescent=0.001*((double)(meas.y+meas.height-baselineY));
+      if ( nAscent > curAscent ) curAscent=nAscent;
+      if ( nDescent > curDescent ) curDescent=nDescent;
       bool breaksAfter=false;
       if ( cur_ind < textLength-1 ) {
-        if ( pAttrs[cur_ind+1].is_char_break || pAttrs[cur_ind+1].is_white || pAttrs[cur_ind+1].is_mandatory_break ) {
+        if ( pAttrs[cur_ind+1].is_white || pAttrs[cur_ind].is_word_end ) {
           breaksAfter=true;
         }
       } else {
@@ -550,20 +571,34 @@ public:
         if ( breaksAfter ) {
           lastBeforeInd=cur_ind;
           lastBeforeLen=lineLength;
+          lastBeforeAscent=curAscent;
+          lastBeforeDescent=curDescent;
         }
       } else if ( lineLength > maxLength ) {
         if ( breaksAfter ) {
           firstAfterInd=cur_ind;
           firstAfterLen=lineLength;
           if ( strict == false || solSize <= 1 ) {
+            if ( lastBeforeInd > 0 ) {
+              sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
+              sol[solSize]=sol[solSize-1];
+              sol[solSize-1].end_of_array=false;
+              sol[solSize-1].start_ind=start_ind;
+              sol[solSize-1].end_ind=lastBeforeInd;
+              sol[solSize-1].length=lastBeforeLen;
+              sol[solSize-1].ascent=lastBeforeAscent;
+              sol[solSize-1].descent=lastBeforeDescent;
+              lastBeforeInd=-1;
+              solSize++;
+            }
             sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
             sol[solSize]=sol[solSize-1];
             sol[solSize-1].end_of_array=false;
             sol[solSize-1].start_ind=start_ind;
             sol[solSize-1].end_ind=firstAfterInd;
             sol[solSize-1].length=firstAfterLen;
-            sol[solSize-1].ascent=theAscent;
-            sol[solSize-1].descent=theDescent;
+            sol[solSize-1].ascent=curAscent;
+            sol[solSize-1].descent=curDescent;
             solSize++;
             lastBeforeInd=-1;
           }
@@ -580,8 +615,8 @@ public:
               sol[solSize-1].start_ind=start_ind;
               sol[solSize-1].end_ind=lastBeforeInd;
               sol[solSize-1].length=lastBeforeLen;
-              sol[solSize-1].ascent=theAscent;
-              sol[solSize-1].descent=theDescent;
+              sol[solSize-1].ascent=lastBeforeAscent;
+              sol[solSize-1].descent=lastBeforeDescent;
               lastBeforeInd=-1;
               solSize++;
             }
@@ -592,8 +627,8 @@ public:
           sol[solSize-1].start_ind=start_ind;
           sol[solSize-1].end_ind=cur_ind;
           sol[solSize-1].length=lineLength;
-          sol[solSize-1].ascent=theAscent;
-          sol[solSize-1].descent=theDescent;
+          sol[solSize-1].ascent=curAscent;
+          sol[solSize-1].descent=curDescent;
           solSize++;
         }
       }
@@ -606,8 +641,8 @@ public:
         sol[solSize-1].start_ind=start_ind;
         sol[solSize-1].end_ind=lastBeforeInd;
         sol[solSize-1].length=lastBeforeLen;
-        sol[solSize-1].ascent=theAscent;
-        sol[solSize-1].descent=theDescent;
+        sol[solSize-1].ascent=lastBeforeAscent;
+        sol[solSize-1].descent=lastBeforeDescent;
         lastBeforeInd=-1;
         solSize++;
       }
@@ -620,16 +655,20 @@ public:
     starts=NULL;
     if ( end_ind < start_ind ) return;
     nbG=end_ind-start_ind+1;
-    glyphs=(NR::Point*)malloc(nbG*sizeof(NR::Point));
+    glyphs=(NR::Point*)malloc((nbG+1)*sizeof(NR::Point));
     starts=(int*)malloc(nbG*sizeof(int));
     PangoRectangle meas;
     pango_layout_index_to_pos(pLayout,start_ind,&meas);
     int startX=meas.x;
+    int endX=meas.x+meas.width;
     for (int i=start_ind;i<=end_ind;i++) {
       pango_layout_index_to_pos(pLayout,i,&meas);
       glyphs[i-start_ind]=NR::Point(((double)(meas.x-startX))/1000,0);
       starts[i-start_ind]=i;
+      endX=meas.x+meas.width;
     }
+    glyphs[nbG]=NR::Point(((double)(endX-startX))/1000,0);
+    starts[nbG]=end_ind+1;
   };
 };
 
@@ -684,7 +723,18 @@ void   sp_typeset_relayout(SPTypeset *typeset)
   if ( typeset->theSrc ) delete typeset->theSrc;
   typeset->theSrc=NULL;
   if ( typeset->srcType == has_std_txt ) {
-    typeset->theSrc=new pango_text_chunker(typeset->srcText);
+    SPCSSAttr *css;
+    gchar *val=NULL;
+    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
+    val = sp_repr_css_property (css, "font-size", NULL);
+    double  fsize=12.0;
+    if ( val ) fsize=sp_repr_css_double_property (css, "font-size", NULL);
+    val = sp_repr_css_property (css, "font-family", NULL);
+    if ( val ) {
+      typeset->theSrc=new pango_text_chunker(typeset->srcText,val,fsize);
+    } else {
+      typeset->theSrc=new pango_text_chunker(typeset->srcText,"Luxi Sans",fsize);
+    }
   } else if ( typeset->srcType == has_pango_txt ) {
   }
   
@@ -732,7 +782,9 @@ void   sp_typeset_relayout(SPTypeset *typeset)
         if ( cur_box.finished ) break;
         double nLen=cur_box.x_end-cur_box.x_start;
         text_chunk_solution* sol=typeset->theSrc->StuffThatBox(cur_pos,0.8*nLen,nLen,1.2*nLen,false);
-        if ( sol == NULL ) break;
+        if ( sol == NULL ) {
+          break;
+        }
         if ( sol[0].end_of_array ) {
           free(sol);
           break;
@@ -744,6 +796,28 @@ void   sp_typeset_relayout(SPTypeset *typeset)
             best=i;
           }
         }
+/*        if ( sol[best].length > nLen ) {
+          // ouchie: doesn't fit in line
+          steps=(typeset_step*)realloc(steps,(nb_step+1)*sizeof(typeset_step));
+          steps[nb_step].box=cur_box;
+          steps[nb_step].start_ind=sol[best].start_ind;
+          steps[nb_step].end_ind=sol[best].start_ind-1;
+          steps[nb_step].nbGlyph=0;
+          steps[nb_step].glyphs=NULL;
+          steps[nb_step].starts=NULL;
+          nb_step++;
+          
+          last_step=nb_step-1;
+          if ( sameLine ) {
+          } else {
+            prev_line_step=last_step;
+          }
+          typeset->theSrc->InitialMetricsAt(steps[last_step].end_ind+1,nAscent,nDescent);
+          
+          free(sol);
+          if ( steps[last_step].end_ind+1 >= ((int)strlen(typeset->srcText)) ) break;
+          continue;
+        }*/
         if ( sol[best].ascent > nAscent || sol[best].descent > nDescent ) {
           nAscent=sol[best].ascent;
           nDescent=sol[best].descent;
@@ -756,6 +830,7 @@ void   sp_typeset_relayout(SPTypeset *typeset)
             nb_step=prev_line_step+1;
             last_step=prev_line_step;
           }
+          if ( steps[last_step].end_ind+1 >= ((int)strlen(typeset->srcText)) ) break;
           continue;
         }
         
@@ -790,58 +865,67 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     sp_repr_unref (text_repr);
 
     for (int i=1;i<nb_step;i++) {
-      SPRepr* span_repr = sp_repr_new ("tspan");
-      sp_repr_set_double (span_repr, "x", steps[i].box.x_start);
-      sp_repr_set_double (span_repr, "y", steps[i].box.y);
-      
-      int   nbG=0;
-      NR::Point* glyphs=NULL;
-      int*       starts=NULL;
-      typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nbG,starts,glyphs);
-      if ( glyphs && starts && nbG > 0 ) {
- /*       gchar c[32];
-        gchar *s = NULL;
+      if ( steps[i].end_ind >= steps[i].start_ind ) {
+        SPRepr* span_repr = sp_repr_new ("tspan");
         
-        for (int i = 0; i < nbG ; i ++) {
-          g_ascii_formatd (c, sizeof (c), "%.8g", steps[i].box.x_start+glyphs[i][0]);
-          if (i == 0) {
-            s = g_strdup (c);
-          }  else {
-            s = g_strjoin (" ", s, c, NULL);
-          }
-        }
-        sp_repr_set_attr (span_repr, "x", s);
-        g_free(s);
+        sp_repr_set_double (span_repr, "x", steps[i].box.x_start);
+        sp_repr_set_double (span_repr, "y", steps[i].box.y);
         
-        s=NULL;
-        for (int i = 0; i < nbG ; i ++) {
-          g_ascii_formatd (c, sizeof (c), "%.8g", steps[i].box.y+glyphs[i][1]);
-          if (i == 0) {
-            s = g_strdup (c);
-          }  else {
-            s = g_strjoin (" ", s, c, NULL);
-          }
+        int   nbG=0;
+        NR::Point* glyphs=NULL;
+        int*       starts=NULL;
+        typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nbG,starts,glyphs);
+        
+        if ( 1 ) {
+          sp_repr_set_double (span_repr, "textLength", glyphs[nbG][0]-glyphs[0][0]);
+        } else {
+          sp_repr_set_double (span_repr, "textLength", steps[i].box.x_end-steps[i].box.x_start);
         }
-        sp_repr_set_attr (span_repr, "y", s);
-        g_free(s);*/
-      } else {
+        
+        if ( glyphs && starts && nbG > 0 ) {
+          /*       gchar c[32];
+          gchar *s = NULL;
+          
+          for (int i = 0; i < nbG ; i ++) {
+            g_ascii_formatd (c, sizeof (c), "%.8g", steps[i].box.x_start+glyphs[i][0]);
+            if (i == 0) {
+              s = g_strdup (c);
+            }  else {
+              s = g_strjoin (" ", s, c, NULL);
+            }
+          }
+          sp_repr_set_attr (span_repr, "x", s);
+          g_free(s);
+          
+          s=NULL;
+          for (int i = 0; i < nbG ; i ++) {
+            g_ascii_formatd (c, sizeof (c), "%.8g", steps[i].box.y+glyphs[i][1]);
+            if (i == 0) {
+              s = g_strdup (c);
+            }  else {
+              s = g_strjoin (" ", s, c, NULL);
+            }
+          }
+          sp_repr_set_attr (span_repr, "y", s);
+          g_free(s);*/
+        } else {
+        }
+        if ( starts ) free(starts);
+        if ( glyphs ) free(glyphs);
+        
+        int   cur_pos=steps[i].start_ind,end_pos=steps[i].end_ind+1;
+        char* temp_content=(char*)malloc((end_pos+1-cur_pos)*sizeof(char));
+        memcpy(temp_content,typeset->srcText+cur_pos,(end_pos-cur_pos)*sizeof(char));
+        temp_content[end_pos-cur_pos]=0;
+        
+        SPRepr* rstr = sp_xml_document_createTextNode (sp_repr_document (parent), temp_content);
+        sp_repr_append_child (span_repr, rstr);
+        sp_repr_unref (rstr);
+        
+        free(temp_content);
+        sp_repr_append_child (text_repr, span_repr);
+        sp_repr_unref (span_repr);
       }
-      if ( starts ) free(starts);
-      if ( glyphs ) free(glyphs);
-      
-      int   cur_pos=steps[i].start_ind,end_pos=steps[i].end_ind+1;
-      char* temp_content=(char*)malloc((end_pos+1-cur_pos)*sizeof(char));
-      memcpy(temp_content,typeset->srcText+cur_pos,(end_pos-cur_pos)*sizeof(char));
-      temp_content[end_pos-cur_pos]=0;
-      
-      SPRepr* rstr = sp_xml_document_createTextNode (sp_repr_document (parent), temp_content);
-      sp_repr_append_child (span_repr, rstr);
-      sp_repr_unref (rstr);
-      
-      free(temp_content);
-      sp_repr_append_child (text_repr, span_repr);
-      sp_repr_unref (span_repr);
-      
       if ( steps[i].glyphs ) free(steps[i].glyphs);
       if ( steps[i].starts ) free(steps[i].starts);
     }

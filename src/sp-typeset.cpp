@@ -182,12 +182,12 @@ static void sp_typeset_build (SPObject *object, SPDocument * document, SPRepr * 
   
 	typeset = SP_TYPESET (object);
   
-	sp_object_read_attr (object, "srcNoMarkup");
-	sp_object_read_attr (object, "srcPango");
-	sp_object_read_attr (object, "dstShape");
-	sp_object_read_attr (object, "dstPath");
-	sp_object_read_attr (object, "dstBox");
-	sp_object_read_attr (object, "dstColumn");
+	sp_object_read_attr (object, "inkscape:srcNoMarkup");
+	sp_object_read_attr (object, "inkscape:srcPango");
+	sp_object_read_attr (object, "inkscape:dstShape");
+	sp_object_read_attr (object, "inkscape:dstPath");
+	sp_object_read_attr (object, "inkscape:dstBox");
+	sp_object_read_attr (object, "inkscape:dstColumn");
 
 	if (((SPObjectClass *) (parent_class))->build)
 		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
@@ -506,7 +506,7 @@ void sp_typeset_ditch_dest(SPTypeset *typeset)
       l=l->next;
     }
     while ( typeset->dstElems ) {
-      free(typeset->dstElems->data);
+//      free(typeset->dstElems->data);
       typeset->dstElems=g_slist_remove(typeset->dstElems,typeset->dstElems->data);
     }
   } else if ( typeset->dstType == has_path_dest ) {
@@ -519,12 +519,12 @@ void sp_typeset_ditch_dest(SPTypeset *typeset)
       l=l->next;
     }
     while ( typeset->dstElems ) {
-      free(typeset->dstElems->data);
+//      free(typeset->dstElems->data);
       typeset->dstElems=g_slist_remove(typeset->dstElems,typeset->dstElems->data);
     }
   } else if ( typeset->dstType != has_no_dest ) {
     while ( typeset->dstElems ) {
-      free(typeset->dstElems->data);
+//      free(typeset->dstElems->data);
       typeset->dstElems=g_slist_remove(typeset->dstElems,typeset->dstElems->data);
     }
   }
@@ -537,18 +537,19 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
                                const gchar * /*oldval*/, const gchar * newval,
                                bool is_interactive, void * data)
 {
+//  printf("attrchg %x tps=%x key=%s nv=%s\n",repr,data,key,newval);
   SPTypeset *typeset = (SPTypeset *) data;
   if ( typeset == NULL || repr == NULL ) return;
   
   if ( typeset->dstType == has_shape_dest ) {
     GSList *l=typeset->dstElems;
     while ( l ) {
-      shape_dest *cur=(shape_dest*)l->data;
+      shape_dest *cur=(shape_dest*)(l->data);
       if ( cur->originalObj == repr ) break;
       l=l->next;
     }
     if ( l ) {
-      shape_dest *cur=(shape_dest*)l->data;
+      shape_dest *cur=(shape_dest*)(l->data);
       refresh_typeset_source(typeset,cur);
     } else {
       // repr not used in this typeset
@@ -572,6 +573,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
 static void sp_typeset_source_destroy (SPRepr * repr, void *data)
 {
   SPTypeset *typeset = (SPTypeset *) data;
+//  printf("destroy %x tps=%x\n",repr,data);
   if ( typeset == NULL ) return;
   if ( repr == NULL ) return;
   if ( typeset->dstType == has_shape_dest ) {
@@ -585,8 +587,10 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       shape_dest *cur=(shape_dest*)l->data;
       if ( cur->theShape ) delete cur->theShape;
       if ( cur->originalID ) free(cur->originalID);
-      free(l->data);
+//      free(l->data);
       typeset->dstElems=g_slist_remove(typeset->dstElems,l->data);
+      typeset->layoutDirty=true;
+      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
     }
@@ -601,8 +605,10 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       path_dest *cur=(path_dest*)l->data;
       if ( cur->thePath) delete cur->thePath;
       if ( cur->originalID ) free(cur->originalID);
-      free(l->data);
+//      free(l->data);
       typeset->dstElems=g_slist_remove(typeset->dstElems,l->data);
+      typeset->layoutDirty=true;
+      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
     }
@@ -610,6 +616,7 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
 }
 static void sp_typeset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
 {
+//  printf("addchild %x tps=%x\n",repr,data);
   SPTypeset *typeset = (SPTypeset *) data;
   if (typeset == NULL) return;
   if ( child == NULL ) return;
@@ -617,13 +624,15 @@ static void sp_typeset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *
 }
 static void sp_typeset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
 {
+//  printf("remchild %x tps=%x\n",repr,data);
   SPTypeset *typeset = (SPTypeset *) data;
   if (typeset == NULL) return;
   if ( child == NULL ) return;
   if ( repr == NULL ) return; // juste le premier niveau.
 }
-static void sp_typeset_source_content_changed (SPRepr */*repr*/, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
+static void sp_typeset_source_content_changed (SPRepr *repr, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
 {
+//  printf("chgcont %x tps=%x\n",repr,data);
   SPTypeset *typeset = (SPTypeset *) data;
   if (typeset == NULL) return;
 }
@@ -682,6 +691,7 @@ void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst)
   delete orig;
   nDst->theShape->CalcBBox();
   nDst->bbox=NR::Rect(NR::Point(nDst->theShape->leftX,nDst->theShape->topY),NR::Point(nDst->theShape->rightX,nDst->theShape->bottomY));
+  typeset->layoutDirty=true;
   
   sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
 }
@@ -712,6 +722,7 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
   }
   sp_curve_unref (curve);
   nDst->length=nDst->thePath->Length();
+  typeset->layoutDirty=true;
 
   sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
 }

@@ -186,12 +186,12 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_XML_SPACE, "xml:space"},
 
   /* typeset */
-  {SP_ATTR_TEXT_NOMARKUP, "srcNoMarkup"},
-  {SP_ATTR_TEXT_PANGOMARKUP, "srcPango" },
-  {SP_ATTR_TEXT_INSHAPE, "dstShape"},
-  {SP_ATTR_TEXT_ONPATH, "dstPath"},
-  {SP_ATTR_TEXT_INBOX,"dstBox"},
-  {SP_ATTR_TEXT_INCOLUMN,"dstColumn"},
+  {SP_ATTR_TEXT_NOMARKUP, "inkscape:srcNoMarkup"},
+  {SP_ATTR_TEXT_PANGOMARKUP, "inkscape:srcPango" },
+  {SP_ATTR_TEXT_INSHAPE, "inkscape:dstShape"},
+  {SP_ATTR_TEXT_ONPATH, "inkscape:dstPath"},
+  {SP_ATTR_TEXT_INBOX,"inkscape:dstBox"},
+  {SP_ATTR_TEXT_INCOLUMN,"inkscape:dstColumn"},
     
 	/* CSS2 */
 	/* Font */
