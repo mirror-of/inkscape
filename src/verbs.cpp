@@ -185,7 +185,7 @@ sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
 {
     switch ((int) data) {
         case SP_VERB_FILE_NEW:
-            sp_file_new ();
+            sp_file_new_default ();
             break;
         case SP_VERB_FILE_OPEN:
             sp_file_open_dialog (NULL, NULL);

@@ -28,6 +28,7 @@ extern "C" {
 #  define INKSCAPE_PATTERNSDIR    BR_DATADIR( "/inkscape/patterns" )
 #  define INKSCAPE_SCREENSDIR     BR_DATADIR( "/inkscape/screens" )
 #  define INKSCAPE_TUTORIALSDIR   BR_DATADIR( "/inkscape/tutorials" )
+#  define INKSCAPE_TEMPLATESDIR   BR_DATADIR( "/inkscape/templates" )
 #else
 #  ifdef WIN32
 #    define INKSCAPE_APPICONDIR   "pixmaps"
@@ -38,6 +39,7 @@ extern "C" {
 #    define INKSCAPE_PATTERNSDIR  "share\\patterns"
 #    define INKSCAPE_SCREENSDIR   "share\\screens"
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
+#    define INKSCAPE_TEMPLATESDIR "share\\templates"
 #  else
 #    define INKSCAPE_APPICONDIR   INKSCAPE_DATADIR "/pixmaps"
 #    define INKSCAPE_EXTENSIONDIR INKSCAPE_DATADIR "/inkscape/extensions"
@@ -47,6 +49,7 @@ extern "C" {
 #    define INKSCAPE_PATTERNSDIR  INKSCAPE_DATADIR "/inkscape/patterns"
 #    define INKSCAPE_SCREENSDIR   INKSCAPE_DATADIR "/inkscape/screens"
 #    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"
+#    define INKSCAPE_TEMPLATESDIR INKSCAPE_DATADIR "/inkscape/templates"
 #  endif
 #endif
 

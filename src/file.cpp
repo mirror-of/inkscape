@@ -50,6 +50,7 @@
 
 #include "dialogs/filedialog.h"
 #include "prefs-utils.h"
+#include "path-prefix.h"
 
 #include "sp-namedview.h"
 #include "desktop-handles.h"
@@ -77,10 +78,9 @@ static gchar *import_path = NULL;
  * Create a blank document and add it to the desktop
  */
 void
-sp_file_new()
+sp_file_new(const gchar *templ)
 {
-
-    SPDocument *doc = sp_document_new(NULL, TRUE, TRUE);
+    SPDocument *doc = sp_document_new(templ, TRUE, TRUE);
     g_return_if_fail(doc != NULL);
 
     SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
@@ -89,6 +89,17 @@ sp_file_new()
 
     sp_create_window(dtw, TRUE);
     sp_namedview_window_from_document(SP_DESKTOP(dtw->view));
+}
+
+void
+sp_file_new_default ()
+{
+    char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, "/default.svg", NULL);
+    if (g_file_test (default_template, G_FILE_TEST_IS_REGULAR)) {
+        sp_file_new (default_template);
+    } else {
+        sp_file_new (NULL);
+    }
 }
 
 

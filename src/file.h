@@ -24,7 +24,8 @@
 /**
  * Creates a new Inkscape document and window
  */
-void sp_file_new (void);
+void sp_file_new (const gchar *templ);
+void sp_file_new_default (void);
 
 /*######################
 ## D E L E T E

@@ -298,7 +298,7 @@ sp_main_gui(int argc, char const **argv)
             fl = g_slist_remove(fl, fl->data);
         }
         if (create_new) {
-            sp_file_new();
+            sp_file_new_default();
         }
         inkscape_unref();
     } else {
