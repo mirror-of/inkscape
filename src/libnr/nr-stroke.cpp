@@ -245,6 +245,7 @@ nr_bpath_stroke (const NRBPath *path, NRMatrix *transform,
 	svlb.join = join;
 	svlb.curve = FALSE;
 	svlb.cosml = MIN (cos (miterlimit), 0.9998477);
+	/* cos of about 1 degree */
 	svlb.npoints = 0;
 
 	svlb.left.svl = &svlb.svl;
