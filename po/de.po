@@ -3630,7 +3630,7 @@ msgstr "Objekt"
 msgid ""
 "<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"
 msgstr ""
-"<b>Verbundener Versatz</b>, %s bei %fpt. <b>Umsch+D</b> findet das Original"
+"<b>Verbundener Versatz</b>, %s um %fpt. <b>Umsch+D</b> findet das Original"
 
 #: src/sp-offset.cpp:396 src/sp-offset.cpp:400
 msgid "outset"
@@ -3638,7 +3638,7 @@ msgstr "Ausweiten"
 
 #: src/sp-offset.cpp:396 src/sp-offset.cpp:400
 msgid "inset"
-msgstr "Schrum_pfen"
+msgstr "Schrumpfen"
 
 #. TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
 #: src/sp-offset.cpp:399
@@ -5468,7 +5468,7 @@ msgstr "Mehrfachstile"
 #. that the currently selected object is a clone.
 #: src/widgets/paint-selector.cpp:663
 msgid "Clone Selected"
-msgstr "Gewählte Objekte klonen"
+msgstr "Gewähltes Objekt ist ein Klon"
 
 #: src/widgets/paint-selector.cpp:869
 msgid "No patterns in document"
