@@ -169,7 +169,7 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&omod;
-		sp_module_db_foreach(save_internal, (gpointer)&omod);
+		sp_module_db_foreach(save_internal, (gpointer)&parray);
 	} else {
 		omod = SP_MODULE_OUTPUT(sp_module_db_get(key));
 	}

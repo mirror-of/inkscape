@@ -1,4 +1,9 @@
 2003-11-18 Ted Gould <ted@gould.cx>
+	
+	* src/modules/system.c: Passed the wrong pointer.  Fix is by
+	Robert Crosbie.
+
+2003-11-18 Ted Gould <ted@gould.cx>
 
 	* src/widgets/sp-toolbox.c: Adding in an include for gtkimage.h
 	to get the stock functions.  This fixes the build under g++.
