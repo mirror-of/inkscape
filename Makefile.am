@@ -27,6 +27,7 @@ EXTRA_DIST = \
 	intltool-update.in	\
 	mkinstalldirs		\
 	$(Graphics_in_files)	\
+	inkscape.1		\
 	inkscape.spec.in	\
 	inkscape.spec		\
 	README HACKING		\
@@ -44,3 +45,18 @@ DISTCLEANFILES = inkscape.desktop \
                  intltool-update
 
 #ACLOCAL_AMFLAGS = -I m4
+
+# We want the built inkscape.1 to go in the distributed .tar.gz so
+# that .tar.gz users don't need a full perl distribution to get a man
+# page.
+# I'm not sure whether doing so requires placing inkscape.1 in
+# $(srcdir).
+inkscape.1: inkscape.pod fix-roff-punct Makefile.am
+	set -e; \
+	d=`sed -n 's,/,-,g;s/.*\$$Date: \(..........\).*/\1/p' $(srcdir)/inkscape.pod`; \
+	pod2man $(srcdir)/inkscape.pod \
+	  | sed 's/^\.TH .*/.TH INKSCAPE 1 "'"$$d"'" "Inkscape-$(VERSION)" "User Commands"/' \
+	  | perl -pe 'if (/^\[\% .*INCLUDE.*AUTHORS.* \%\]/) { open(FOO, "$(srcdir)/AUTHORS");$$_ = join(",\n", map { chomp; $$_ } <FOO>) . "\n"; }' \
+	  | perl $(srcdir)/fix-roff-punct \
+	  > tmp.$$$$ \
+	 && mv tmp.$$$$ inkscape.1
