@@ -12,6 +12,7 @@ libvarot_a_SOURCES = \
 	PathConversion.cpp Path.h \
 	PathOutline.cpp Path.h \
 	PathStroke.cpp Path.h \
+	PathSimplify.cpp Path.h \
 	Shape.cpp Shape.h \
 	ShapeMisc.cpp Shape.h \
 	ShapeDraw.cpp Shape.h \

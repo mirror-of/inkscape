@@ -3,7 +3,6 @@
  *  nlivarot
  *
  *  Created by fred on Mon Nov 03 2003.
- *  public domain
  *
  */
 
@@ -220,7 +219,7 @@ void            Path::Convert(float treshhold)
 		curW=1;
 	}
 	if ( weighted ) lastMoveTo=AddPoint(curX,curY,curW,true); else lastMoveTo=AddPoint(curX,curY,true);
-
+	
 		// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
 		path_descr*  curD=descr_data+curP;
@@ -366,7 +365,7 @@ void            Path::Convert(float treshhold)
 					float  stx=(bx+cx)/2;
 					float  sty=(by+cy)/2;
 					float  stw=(bw+cw)/2;
-	
+					
 					if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
 					
 					if ( weighted ) {
@@ -383,6 +382,230 @@ void            Path::Convert(float treshhold)
 		}
 		curX=nextX;
 		curY=nextY;
+		curW=nextW;
+	}
+}
+void            Path::ConvertEvenLines(float treshhold)
+{
+	if ( descr_flags&descr_adding_bezier ) CancelBezier();
+	
+	SetBackData(false);
+	ResetPoints(descr_nb);
+	if ( descr_nb <= 0 ) return;
+	float    curX,curY,curW;
+	int      curP=1;
+	int      lastMoveTo=0;
+	
+	// le moveto
+	curX=(descr_data)->d.m.x;
+	curY=(descr_data)->d.m.y;
+	if ( (descr_data)->flags&descr_weighted ) {
+		curW=(descr_data)->d.m.w;
+	} else {
+		curW=1;
+	}
+	if ( weighted ) lastMoveTo=AddPoint(curX,curY,curW,true); else lastMoveTo=AddPoint(curX,curY,true);
+	
+		// et le reste, 1 par 1
+	while ( curP < descr_nb ) {
+		path_descr*  curD=descr_data+curP;
+		int          nType=curD->flags&descr_type_mask;
+		bool         nWeight=curD->flags&descr_weighted;
+		float        nextX,nextY,nextW;
+		if ( nType == descr_moveto ) {
+			nextX=curD->d.m.x;
+			nextY=curD->d.m.y;
+			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;
+			if ( weighted ) lastMoveTo=AddPoint(nextX,nextY,nextW,true); else lastMoveTo=AddPoint(nextX,nextY,true);
+			// et on avance
+			curP++;
+		} else if ( nType == descr_close ) {
+			if ( weighted ) {
+				nextX=((path_lineto_w*)pts)[lastMoveTo].x;
+				nextY=((path_lineto_w*)pts)[lastMoveTo].y;
+				nextW=((path_lineto_w*)pts)[lastMoveTo].w;
+				{
+					float segL=sqrt((nextX-curX)*(nextX-curX)+(nextY-curY)*(nextY-curY));
+					if ( segL > 4*treshhold ) {
+						for (float i=4*treshhold;i<segL;i+=4*treshhold) {
+							AddPoint(((segL-i)*curX+i*nextX)/segL,((segL-i)*curY+i*nextY)/segL,((segL-i)*curW+i*nextW)/segL);
+						}
+					}
+				}
+				AddPoint(nextX,nextY,nextW,false);
+			} else {
+				nextX=((path_lineto*)pts)[lastMoveTo].x;
+				nextY=((path_lineto*)pts)[lastMoveTo].y;
+				{
+					float segL=sqrt((nextX-curX)*(nextX-curX)+(nextY-curY)*(nextY-curY));
+					if ( segL > 4*treshhold ) {
+						for (float i=4*treshhold;i<segL;i+=4*treshhold) {
+							AddPoint(((segL-i)*curX+i*nextX)/segL,((segL-i)*curY+i*nextY)/segL);
+						}
+					}
+				}
+				AddPoint(nextX,nextY,false);
+			}
+			curP++;
+		} else if ( nType == descr_lineto ) {
+			nextX=curD->d.l.x;
+			nextY=curD->d.l.y;
+			if ( nWeight ) nextW=curD->d.l.w; else nextW=1;
+			if ( weighted ) {
+			{
+				float segL=sqrt((nextX-curX)*(nextX-curX)+(nextY-curY)*(nextY-curY));
+				if ( segL > 4*treshhold ) {
+					for (float i=4*treshhold;i<segL;i+=4*treshhold) {
+						AddPoint(((segL-i)*curX+i*nextX)/segL,((segL-i)*curY+i*nextY)/segL,((segL-i)*curW+i*nextW)/segL);
+					}
+				}
+			}
+				AddPoint(nextX,nextY,nextW,false);
+			} else {
+			{
+				float segL=sqrt((nextX-curX)*(nextX-curX)+(nextY-curY)*(nextY-curY));
+				if ( segL > 4*treshhold ) {
+					for (float i=4*treshhold;i<segL;i+=4*treshhold) {
+						AddPoint(((segL-i)*curX+i*nextX)/segL,((segL-i)*curY+i*nextY)/segL);
+					}
+				}
+			}
+				AddPoint(nextX,nextY,false);
+			}
+			// et on avance
+			curP++;
+		} else if ( nType == descr_cubicto ) {
+			nextX=curD->d.c.x;
+			nextY=curD->d.c.y;
+			if ( nWeight ) nextW=curD->d.c.w; else nextW=1;
+			if ( weighted ) {
+				RecCubicTo(curX,curY,curW,curD->d.c.stDx,curD->d.c.stDy,nextX,nextY,nextW,curD->d.c.enDx,curD->d.c.enDy,treshhold,8,4*treshhold);
+				AddPoint(nextX,nextY,nextW,false);
+			} else {
+				RecCubicTo(curX,curY,curD->d.c.stDx,curD->d.c.stDy,nextX,nextY,curD->d.c.enDx,curD->d.c.enDy,treshhold,8,4*treshhold);
+				AddPoint(nextX,nextY,false);
+			}
+			// et on avance
+			curP++;
+		} else if ( nType == descr_arcto ) {
+			nextX=curD->d.a.x;
+			nextY=curD->d.a.y;
+			if ( nWeight ) nextW=curD->d.a.w; else nextW=1;
+			if ( weighted ) {
+				DoArc(curX,curY,curW,nextX,nextY,nextW,curD->d.a.rx,curD->d.a.ry,curD->d.a.angle,curD->d.a.large,curD->d.a.clockwise,treshhold);
+				AddPoint(nextX,nextY,nextW,false);
+			} else {
+				DoArc(curX,curY,nextX,nextY,curD->d.a.rx,curD->d.a.ry,curD->d.a.angle,curD->d.a.large,curD->d.a.clockwise,treshhold);
+				AddPoint(nextX,nextY,false);
+			}
+			// et on avance
+			curP++;
+		} else if ( nType == descr_bezierto ) {
+			int   nbInterm=curD->d.b.nb;
+			nextX=curD->d.b.x;
+			nextY=curD->d.b.y;
+			if ( nWeight ) nextW=curD->d.b.w; else nextW=1;
+			
+			curP++;
+			curD=descr_data+curP;
+			path_descr* intermPoints=curD;
+			
+			if ( nbInterm <= 0 ) {
+			} else if ( nbInterm == 1 ) {
+				float midX,midY,midW;
+				midX=intermPoints->d.i.x;
+				midY=intermPoints->d.i.y;
+				if ( nWeight ) {
+					midW=intermPoints->d.i.w;
+				} else {
+					midW=1;
+				}
+				if ( weighted ) {
+					RecBezierTo(midX,midY,midW,curX,curY,curW,nextX,nextY,nextW,treshhold,8,4*treshhold);
+				} else {
+					RecBezierTo(midX,midY,curX,curY,nextX,nextY,treshhold,8,4*treshhold);
+				}
+			} else if ( nbInterm > 1 ) {
+				float   bx=curX,by=curY,bw=curW;
+				float   cx=curX,cy=curY,cw=curW;
+				float   dx=curX,dy=curY,dw=curW;
+								
+				dx=intermPoints->d.i.x;
+				dy=intermPoints->d.i.y;
+				if ( nWeight ) {
+					dw=intermPoints->d.i.w;
+				} else {
+					dw=1;
+				}
+				intermPoints++;
+				
+				cx=2*bx-dx;
+				cy=2*by-dy;
+				cw=2*bw-dw;
+				
+				for (int k=0;k<nbInterm-1;k++) {
+					bx=cx;by=cy;bw=cw;
+					cx=dx;cy=dy;cw=dw;
+					
+					dx=intermPoints->d.i.x;
+					dy=intermPoints->d.i.y;
+					if ( nWeight ) {
+						dw=intermPoints->d.i.w;
+					} else {
+						dw=1;
+					}
+					intermPoints++;
+					
+					float  stx=(bx+cx)/2;
+					float  sty=(by+cy)/2;
+					float  stw=(bw+cw)/2;
+					if ( k > 0 ) {
+						if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
+					}
+					
+					if ( weighted ) {
+						RecBezierTo(cx,cy,cw,stx,sty,stw,(cx+dx)/2,(cy+dy)/2,(cw+dw)/2,treshhold,8,4*treshhold);
+					} else {
+						RecBezierTo(cx,cy,stx,sty,(cx+dx)/2,(cy+dy)/2,treshhold,8,4*treshhold);
+					}
+				}
+				{
+					bx=cx;by=cy;bw=cw;
+					cx=dx;cy=dy;cw=dw;
+					
+					dx=nextX;
+					dy=nextY;
+					if ( nWeight ) {
+						dw=nextW;
+					} else {
+						dw=1;
+					}
+					dx=2*dx-cx;
+					dy=2*dy-cy;
+					dw=2*dw-cw;
+					
+					float  stx=(bx+cx)/2;
+					float  sty=(by+cy)/2;
+					float  stw=(bw+cw)/2;
+					
+					if ( weighted ) AddPoint(stx,sty,stw,false); else AddPoint(stx,sty,false);
+					
+					if ( weighted ) {
+						RecBezierTo(cx,cy,cw,stx,sty,stw,(cx+dx)/2,(cy+dy)/2,(cw+dw)/2,treshhold,8,4*treshhold);
+					} else {
+						RecBezierTo(cx,cy,stx,sty,(cx+dx)/2,(cy+dy)/2,treshhold,8,4*treshhold);
+					}
+				}
+			}
+			if ( weighted ) AddPoint(nextX,nextY,nextW,false); else AddPoint(nextX,nextY,false);
+			
+			// et on avance
+			curP+=nbInterm;
+		}
+		if ( fabsf(curX-nextX) > 0.00001 || fabsf(curY-nextY) > 0.00001 ) {
+			curX=nextX;
+			curY=nextY;
+		}
 		curW=nextW;
 	}
 }
@@ -655,7 +878,7 @@ void            Path::DoArc(float sx,float sy,float sw,float ex,float ey,float e
 		}
 	}
 }
-void            Path::RecCubicTo(float sx,float sy,float sdx,float sdy,float ex,float ey,float edx,float edy,float tresh,int lev)
+void            Path::RecCubicTo(float sx,float sy,float sdx,float sdy,float ex,float ey,float edx,float edy,float tresh,int lev,float maxL)
 {
 	float dC=sqrt((ex-sx)*(ex-sx)+(ey-sy)*(ey-sy));
 	if ( dC < 0.01 ) {
@@ -669,21 +892,38 @@ void            Path::RecCubicTo(float sx,float sy,float sdx,float sdy,float ex,
 		if ( eC < 0 ) eC=-eC;
 		sC/=dC;
 		eC/=dC;
-		if ( sC < tresh && eC < tresh ) return;
+		if ( sC < tresh && eC < tresh ) {
+			// presque tt droit -> attention si on nous demande de bien subdiviser les petits segments
+			if ( maxL > 0 && dC > maxL ) {
+				if ( lev <= 0 ) return;
+				float   mx,my,mdx,mdy;
+				mx=(sx+ex)/2+(sdx-edx)/8;
+				my=(sy+ey)/2+(sdy-edy)/8;
+				mdx=3*(ex-sx)/4-(sdx+edx)/8;
+				mdy=3*(ey-sy)/4-(sdy+edy)/8;
+				
+				RecCubicTo(sx,sy,sdx/2,sdy/2,mx,my,mdx,mdy,tresh,lev-1,maxL);
+				AddPoint(mx,my);
+				RecCubicTo(mx,my,mdx,mdy,ex,ey,edx/2,edy/2,tresh,lev-1,maxL);
+			}
+			return;
+		}
 	}
 	
 	if ( lev <= 0 ) return;
-	float   mx,my,mdx,mdy;
-	mx=(sx+ex)/2+(sdx-edx)/8;
-	my=(sy+ey)/2+(sdy-edy)/8;
-	mdx=3*(ex-sx)/4-(sdx+edx)/8;
-	mdy=3*(ey-sy)/4-(sdy+edy)/8;
-
-	RecCubicTo(sx,sy,sdx/2,sdy/2,mx,my,mdx,mdy,tresh,lev-1);
-	AddPoint(mx,my);
-	RecCubicTo(mx,my,mdx,mdy,ex,ey,edx/2,edy/2,tresh,lev-1);
+	{
+		float   mx,my,mdx,mdy;
+		mx=(sx+ex)/2+(sdx-edx)/8;
+		my=(sy+ey)/2+(sdy-edy)/8;
+		mdx=3*(ex-sx)/4-(sdx+edx)/8;
+		mdy=3*(ey-sy)/4-(sdy+edy)/8;
+		
+		RecCubicTo(sx,sy,sdx/2,sdy/2,mx,my,mdx,mdy,tresh,lev-1,maxL);
+		AddPoint(mx,my);
+		RecCubicTo(mx,my,mdx,mdy,ex,ey,edx/2,edy/2,tresh,lev-1,maxL);
+	}
 }
-void            Path::RecCubicTo(float sx,float sy,float sw,float sdx,float sdy,float ex,float ey,float ew,float edx,float edy,float tresh,int lev)
+void            Path::RecCubicTo(float sx,float sy,float sw,float sdx,float sdy,float ex,float ey,float ew,float edx,float edy,float tresh,int lev,float maxL)
 {
 	float dC=sqrt((ex-sx)*(ex-sx)+(ey-sy)*(ey-sy));
 	if ( dC < 0.01 ) {
@@ -697,7 +937,23 @@ void            Path::RecCubicTo(float sx,float sy,float sw,float sdx,float sdy,
 		if ( eC < 0 ) eC=-eC;
 		sC/=dC;
 		eC/=dC;
-		if ( sC < tresh && eC < tresh ) return;
+		if ( sC < tresh && eC < tresh ) {
+			// presque tt droit -> attention si on nous demande de bien subdiviser les petits segments
+			if ( maxL > 0 && dC > maxL ) {
+				if ( lev <= 0 ) return;
+				float   mx,my,mw,mdx,mdy;
+				mw=(sw+ew)/2;
+				mx=(sx+ex)/2+(sdx-edx)/8;
+				my=(sy+ey)/2+(sdy-edy)/8;
+				mdx=3*(ex-sx)/4-(sdx+edx)/8;
+				mdy=3*(ey-sy)/4-(sdy+edy)/8;
+				
+				RecCubicTo(sx,sy,sw,sdx/2,sdy/2,mx,my,mw,mdx,mdy,tresh,lev-1,maxL);
+				AddPoint(mx,my,mw);
+				RecCubicTo(mx,my,mw,mdx,mdy,ex,ey,ew,edx/2,edy/2,tresh,lev-1,maxL);
+			}
+			return;
+		}
 	}
 		
 	if ( lev <= 0 ) return;
@@ -708,35 +964,69 @@ void            Path::RecCubicTo(float sx,float sy,float sw,float sdx,float sdy,
 	mdx=3*(ex-sx)/4-(sdx+edx)/8;
 	mdy=3*(ey-sy)/4-(sdy+edy)/8;
 
-	RecCubicTo(sx,sy,sw,sdx/2,sdy/2,mx,my,mw,mdx,mdy,tresh,lev-1);
+	RecCubicTo(sx,sy,sw,sdx/2,sdy/2,mx,my,mw,mdx,mdy,tresh,lev-1,maxL);
 	AddPoint(mx,my,mw);
-	RecCubicTo(mx,my,mw,mdx,mdy,ex,ey,ew,edx/2,edy/2,tresh,lev-1);
+	RecCubicTo(mx,my,mw,mdx,mdy,ex,ey,ew,edx/2,edy/2,tresh,lev-1,maxL);
 }
-void            Path::RecBezierTo(float px,float py,float sx,float sy,float ex,float ey,float tresh,int lev)
+void            Path::RecBezierTo(float px,float py,float sx,float sy,float ex,float ey,float tresh,int lev,float maxL)
 {
 	if ( lev <= 0 ) return;
 	float s=(sx-px)*(ey-py)-(sy-py)*(ex-px);
 	if ( s < 0 ) s=-s;
-	if ( s < tresh ) return;
+	if ( s < tresh ) {
+		float l=sqrt((ex-sx)*(ex-sx)+(ey-sy)*(ey-sy));
+		if ( maxL > 0 && l > maxL ) {
+			float   mx,my,mdx,mdy;
+			mx=(sx+ex+2*px)/4;
+			my=(sy+ey+2*py)/4;
+			mdx=(sx+px)/2;
+			mdy=(sy+py)/2;
+			RecBezierTo(mdx,mdy,sx,sy,mx,my,tresh,lev-1,maxL);
+			AddPoint(mx,my);
+			mdx=(ex+px)/2;
+			mdy=(ey+py)/2;
+			RecBezierTo(mdx,mdy,mx,my,ex,ey,tresh,lev-1,maxL);	
+		}
+		return;
+	}
+	{
+		float   mx,my,mdx,mdy;
+		mx=(sx+ex+2*px)/4;
+		my=(sy+ey+2*py)/4;
+		mdx=(sx+px)/2;
+		mdy=(sy+py)/2;
+		RecBezierTo(mdx,mdy,sx,sy,mx,my,tresh,lev-1,maxL);
+		AddPoint(mx,my);
+		mdx=(ex+px)/2;
+		mdy=(ey+py)/2;
+		RecBezierTo(mdx,mdy,mx,my,ex,ey,tresh,lev-1,maxL);	
+	}
+}
+void            Path::RecBezierTo(float px,float py,float pw,float sx,float sy,float sw,float ex,float ey,float ew,float tresh,int lev,float maxL)
+{
+	if ( lev <= 0 ) return;
+	float s=(sx-px)*(ey-py)-(sy-py)*(ex-px);
+	if ( s < 0 ) s=-s;
+	if ( s < tresh ) {
+		float l=sqrt((ex-sx)*(ex-sx)+(ey-sy)*(ey-sy));
+		if ( maxL > 0 && l > maxL ) {
+			float   mx,my,mw,mdx,mdy,mdw;
+			mx=(sx+ex+2*px)/4;
+			my=(sy+ey+2*py)/4;
+			mw=(sw+ew+2*pw)/4;
+			mdx=(sx+px)/2;
+			mdy=(sy+py)/2;
+			mdw=(sw+pw)/2;
+			RecBezierTo(mdx,mdy,mdw,sx,sy,sw,mx,my,mw,tresh,lev-1,maxL);
+			AddPoint(mx,my,mw);
+			mdx=(ex+px)/2;
+			mdy=(ey+py)/2;
+			mdw=(ew+pw)/2;
+			RecBezierTo(mdx,mdy,mdw,mx,my,mw,ex,ey,ew,tresh,lev-1,maxL);
+		}
+		return;
+	}
 	
-	float   mx,my,mdx,mdy;
-	mx=(sx+ex+2*px)/4;
-	my=(sy+ey+2*py)/4;
-	mdx=(sx+px)/2;
-	mdy=(sy+py)/2;
-	RecBezierTo(mdx,mdy,sx,sy,mx,my,tresh,lev-1);
-	AddPoint(mx,my);
-	mdx=(ex+px)/2;
-	mdy=(ey+py)/2;
-	RecBezierTo(mdx,mdy,mx,my,ex,ey,tresh,lev-1);	
-}
-void            Path::RecBezierTo(float px,float py,float pw,float sx,float sy,float sw,float ex,float ey,float ew,float tresh,int lev)
-{
-	if ( lev <= 0 ) return;
-	float s=(sx-px)*(ey-py)-(sy-py)*(ex-px);
-	if ( s < 0 ) s=-s;
-	if ( s < tresh ) return;
-
 	float   mx,my,mw,mdx,mdy,mdw;
 	mx=(sx+ex+2*px)/4;
 	my=(sy+ey+2*py)/4;
@@ -744,12 +1034,12 @@ void            Path::RecBezierTo(float px,float py,float pw,float sx,float sy,f
 	mdx=(sx+px)/2;
 	mdy=(sy+py)/2;
 	mdw=(sw+pw)/2;
-	RecBezierTo(mdx,mdy,mdw,sx,sy,sw,mx,my,mw,tresh,lev-1);
+	RecBezierTo(mdx,mdy,mdw,sx,sy,sw,mx,my,mw,tresh,lev-1,maxL);
 	AddPoint(mx,my,mw);
 	mdx=(ex+px)/2;
 	mdy=(ey+py)/2;
 	mdw=(ew+pw)/2;
-	RecBezierTo(mdx,mdy,mdw,mx,my,mw,ex,ey,ew,tresh,lev-1);
+	RecBezierTo(mdx,mdy,mdw,mx,my,mw,ex,ey,ew,tresh,lev-1,maxL);
 }
 
 void            Path::DoArc(float sx,float sy,float ex,float ey,float rx,float ry,float angle,bool large,bool wise,float tresh,int piece)

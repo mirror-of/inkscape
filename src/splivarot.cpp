@@ -13,6 +13,7 @@
  */
 
 // comment out the extern "C" if compiling with g++
+extern "C" {
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
 #include "xml/repr.h"
@@ -28,6 +29,7 @@
 #include "desktop.h"
 #include "splivarot.h"
 #include "helper/canvas-bpath.h"
+}
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -332,7 +334,7 @@ void sp_selected_path_outline(void)
 	curve = sp_shape_get_curve (SP_SHAPE (path));
 	if (curve == NULL) return;
 	
-Shape::round_power=3;
+Shape::round_power=4;
 	
 	sp_item_i2root_affine (item, &i2root);
 	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
@@ -382,7 +384,12 @@ Shape::round_power=3;
 	sp_repr_unparent (SP_OBJECT_REPR (item));
 	
 	{
+
 		orig->Outline(res,0.5*o_width,o_join,o_butt,o_miter);
+	
+		res->ConvertEvenLines(0.25);
+		res->Simplify(0.01*o_width);
+
 		Shape*  theShape=new Shape;
 		res->ConvertWithBackData(1.0);
 		res->Fill(theShape,0);
@@ -396,6 +403,7 @@ Shape::round_power=3;
 		
 		delete theShape;
 		delete theRes;
+		
 	}
 	
 	{
@@ -560,6 +568,9 @@ void        sp_selected_path_do_offset(bool expand)
 		
 		delete theShape;
 		delete theRes;
+
+		res->ConvertEvenLines(1.0);
+		res->Simplify(0.5);
 	}
 	
 	sp_curve_unref (curve);
@@ -614,4 +625,76 @@ void        sp_selected_path_do_offset(bool expand)
 	g_free (style);
 }
 
+void sp_selected_path_simplify(void)
+{
+		SPSelection * selection;
+	SPRepr * repr;
+	SPItem * item;
+	SPPath * path;
+	SPCurve * curve;
+	gchar * style, * str;
+	SPDesktop    *desktop;
+	NRMatrixF    i2root;
+	
+	desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP(desktop)) return;
+	
+	selection = SP_DT_SELECTION (desktop);
+	
+	item = sp_selection_item (selection);
+	
+	if (item == NULL) return;
+	if (!SP_IS_PATH (item)) return;
+	path = SP_PATH (item);
+	curve = sp_shape_get_curve (SP_SHAPE (path));
+	if (curve == NULL) return;
+		
+	sp_item_i2root_affine (item, &i2root);
+	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
+		
+	Path* orig=Path_for_item(item);
+	if ( orig == NULL ) {
+		g_free (style);
+		sp_curve_unref (curve);
+		return;
+	}
+			
+	sp_curve_unref (curve);
+	sp_repr_unparent (SP_OBJECT_REPR (item));
+	
+	{
+		orig->ConvertEvenLines(1.0);
+		orig->Simplify(0.5);
+	}
+	
+	{
+		gchar tstr[80];
+		
+		tstr[79] = '\0';
+		
+		repr = sp_repr_new ("path");
+		if (sp_svg_transform_write (tstr, 80, &i2root)) {
+			sp_repr_set_attr (repr, "transform", tstr);
+		} else {
+			sp_repr_set_attr (repr, "transform", NULL);
+		}
+		
+		sp_repr_set_attr (repr, "style", style);
+		
+		str = liv_svg_dump_path (orig);
+		sp_repr_set_attr (repr, "d", str);
+		g_free (str);
+		item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+		sp_repr_unref (repr);
+		sp_selection_add_item (selection, item);
+		
+	}
+	
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+	
+	delete orig;
+	
+	g_free (style);
+	
+}
 

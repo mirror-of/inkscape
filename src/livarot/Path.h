@@ -187,6 +187,7 @@ public:
 	// transforms a description in a polyline (for stroking and filling)
 	// treshhold is the max length^2 (sort of)
 	void            Convert(float treshhold);
+	void            ConvertEvenLines(float treshhold); // decomposes line segments too, for later recomposition
 	// same function for use when you want to later recompose the curves from the polyline
 	void            ConvertWithBackData(float treshhold);
 
@@ -221,6 +222,8 @@ public:
 	// half outline with edges having the opposite direction as the original
 	void            InsideOutline(Path* dest,float width,JoinType join,ButtType butt,float miter);
 	
+	// polyline to cubic bezier
+	void            Simplify(float treshhold);
 
 	void						PrevPoint(int i,float &x,float &y);
 private:
@@ -233,10 +236,10 @@ private:
 	// fonctions utilisees par la conversion
 	void            DoArc(float sx,float sy,float ex,float ey,float rx,float ry,float angle,bool large,bool wise,float tresh);
 	void            DoArc(float sx,float sy,float sw,float ex,float ey,float ew,float rx,float ry,float angle,bool large,bool wise,float tresh);
-	void            RecCubicTo(float sx,float sy,float sdx,float sdy,float ex,float ey,float edx,float edy,float tresh,int lev);
-	void            RecCubicTo(float sx,float sy,float sw,float sdx,float sdy,float ex,float ey,float ew,float edx,float edy,float tresh,int lev);
-	void            RecBezierTo(float px,float py,float sx,float sy,float ex,float ey,float treshhold,int lev);
-	void            RecBezierTo(float px,float py,float pw,float sx,float sy,float sw,float ex,float ey,float ew,float treshhold,int lev);
+	void            RecCubicTo(float sx,float sy,float sdx,float sdy,float ex,float ey,float edx,float edy,float tresh,int lev,float maxL=-1.0);
+	void            RecCubicTo(float sx,float sy,float sw,float sdx,float sdy,float ex,float ey,float ew,float edx,float edy,float tresh,int lev,float maxL=-1.0);
+	void            RecBezierTo(float px,float py,float sx,float sy,float ex,float ey,float treshhold,int lev,float maxL=-1.0);
+	void            RecBezierTo(float px,float py,float pw,float sx,float sy,float sw,float ex,float ey,float ew,float treshhold,int lev,float maxL=-1.0);
 	
 	void            DoArc(float sx,float sy,float ex,float ey,float rx,float ry,float angle,bool large,bool wise,float tresh,int piece);
 	void            DoArc(float sx,float sy,float sw,float ex,float ey,float ew,float rx,float ry,float angle,bool large,bool wise,float tresh,int piece);
@@ -307,5 +310,9 @@ private:
 	static void            DoRightJoin(Shape* dest,float width,JoinType join,vec2 pos,vec2 prev,vec2 next,float miter,float prevL,float nextL,int &rightStNo,int &rightEnNo);
 	static void            RecRound(Shape* dest,int sNo,int eNo,float px,float py,float sx,float sy,float ex,float ey,float tresh,int lev);
 	static void            DashTo(Shape* dest,dashTo_info *dTo,float &dashAbs,int& dashNo,float& dashPos,bool& inGap,int& lastLeft,int& lastRight,int nbDash,one_dash* dashs);
+
+	void                   DoSimplify(float treshhold);
+	bool                   AttemptSimplify(float treshhold,path_descr_cubicto &res);
+	float                  RaffineTk(vec2 pt,vec2 p0,vec2 p1,vec2 p2,vec2 p3,float it);
 };
 #endif
