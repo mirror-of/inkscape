@@ -106,12 +106,6 @@ sp_unit_selector_init (SPUnitSelector *us)
 
 	us->menu = gtk_option_menu_new ();
 
-	// fixme
-	PangoFontDescription* pan = pango_font_description_new ();
-	pango_font_description_set_size (pan, 8000);
-	gtk_widget_modify_font (us->menu, pan);
-	pango_font_description_free (pan);
-
 	gtk_widget_show (us->menu);
 	gtk_box_pack_start (GTK_BOX (us), us->menu, TRUE, TRUE, 0);
 }
@@ -222,9 +216,6 @@ spus_rebuild_menu (SPUnitSelector *us)
 
 	m = gtk_menu_new ();
 
-	//fixme
-	gtk_widget_modify_font (m, pan);
-
 	gtk_widget_show (m);
 
 	pos = p = 0;
@@ -236,12 +227,12 @@ spus_rebuild_menu (SPUnitSelector *us)
 		//		i = gtk_menu_item_new_with_label ((us->abbr) ? (us->plural) ? u->abbr_plural : u->abbr : (us->plural) ? u->plural : u->name);
 		i = gtk_menu_item_new_with_label ( u->abbr );
 
-		//fixme
-		gtk_widget_modify_font (i, pan);
-
 		gtk_object_set_data (GTK_OBJECT (i), "unit", (gpointer) u);
 		gtk_signal_connect (GTK_OBJECT (i), "activate", GTK_SIGNAL_FUNC (spus_unit_activate), us);
 		gtk_widget_show (i);
+
+		//fixme
+		gtk_widget_modify_font (i, pan);
 
 		gtk_menu_shell_append (GTK_MENU_SHELL (m), i);
 		if (u == us->unit) pos = p;
