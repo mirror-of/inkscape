@@ -10,11 +10,6 @@
 # include <ft2build.h>
 # include FT_FREETYPE_H
 
-#ifdef WIN32
-# include <windows.h>
-# include <windowsx.h>
-#endif
-
 #include <libnr/nr-forward.h>
 #include <libnrtype/nrtype-forward.h>
 #include <libnrtype/font-style.h>
