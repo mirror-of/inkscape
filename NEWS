@@ -5,231 +5,318 @@ or the ChangeLog for further details about releases. This file contains
 the release notes for the current release.
 
 
-  Inkscape 0.38
+
+  Inkscape 0.39
 
 
     In brief
 
-The focus of this release has been our Bug Hunt. Of the 57 open bug
-reports at the time of our last release, only 12 remain; of the 107 bugs
-submitted during this bughunt, all but 17 are now closed; the ratio of
-open to total bugs went down from 33% to 10%. Of the 285 bugs reported
-since the inception of the project, fewer than 30 remain. In total, over
-135 bug reports were closed during the Bug Hunt. Countless other bugs
-were discovered by the developers and exterminated on the spot without
-ever going into the tracker. We are especially appreciative of the many
-users who have helped us identify the various bugs and verify the
-solutions.
+Inkscape 0.39 is a Development Release, which means we focused on
+architecture changes and adding new features. The official goal for the
+release was switching to the Pango library for text and font handling.
+But in addition to that, we've got loads of new and exciting stuff -
+here are only a few highlights:
 
-Aside from bugfixes, a good deal of new features and usability
-enhancements went into this release:
-
-    * Text and fonts: full kerning and spacing support, better installed
-      font detection, better alternate font matching, better usability
-    * Path operations: new commands to cut paths, less distortions,
-      better usability
-    * Gradients: full support for multi-stop gradients, bugfixes
-    * Shape tools: polygons, dramatically better usability with the top
-      panel, bugfixes
-    * Libinkjar: a library for compound document support of packaged SVG
-      and PNG files
-    * Pure usability: canvas autoscrolling, accelerated scrolling,
-      inversion for visibility, more intuitive cut-and-paste, per-object
-      selection indication, save dialog, new icons
-    * Paraphernalia: new and expanded tutorials, clipart, translation
-      updates 
+    * Pango: smoother text display, auto kerning, better i18n (automatic
+      font substitution, right-to-left text, bi-directional text), less
+      platform dependence
+    * New SVG features: markers (aka arrowheads), clones (svg:use),
+      pattern tiles, RDF metadata; many SVG compliance bugfixes
+    * New dialogs: Preferences, Find, Metadata
+    * Pure convenience: usable dropper, scale switches, Commands bar,
+      more tool controls (including rounded stars), more import formats,
+      more paper sizes, Revert command, edit inside group, better
+      selection cues, spell checking, window layout configurable,
+      streamlined Fill & Stroke, snapping improvements, better rounded
+      corners in rects, path reversing, persistent rotation crosshair,
+      per-object export hints, and much more
+    * Internals: speedups, more C++ification, garbage collection, SigC++
+      signals, wider use of new data structures, extensive cleanup
+    * Plus: new documentation, new translations, lots of assorted bugfixes 
 
 
     New functionality
 
-    * There's a complete support for horizontal and vertical kerning in
-      text objects (the dx and dy attributes in SVG). Text objects with
-      kerns remain fully editable.
-    * New boolean operations: Division (Ctrl+/), when applied to two
-      objects, cuts the bottom object into pieces along the edges of the
-      top object; Cut Path (Ctrl+Alt+/) is similar, but only cuts the
-      stroke of the bottom object (convenient for cutting paths without
-      fill).
-    * Multi-stop gradients are now fully supported: the redesigned
-      gradient editor can add, delete, move, and set color/alpha for an
-      arbitrary number of stops in a gradient.
-    * The star tool now has a polygon mode which generates true polygons
-      instead of stars with flat points, so that you don't get extra
-      points when you convert to path.
-    * There is a new library, libinkjar, which can read OpenOffice
-      .sxw (and some .jar) files. This allows you to bundle a bunch of SVGs 
-      and embedded files like .png for viewing in inkscape or inkview. 
-      This is work in progress. 
+    * Thanks to the Pango library, Inkscape 0.39 supports:
+          o Auto kerning: kerning pairs stored in the font now work;
+          o Automatic font substitution: you can type in any language
+            using any font, and any glyphs will be displayed
+            automatically, fetched from a substitute font if missing on
+            the current font;
+          o Correct editing and display of right-to-left (Hebrew,
+            Arabic) and mixed bidirectional text;
+          o Smoother text display: no ugly autohinting gaps, no jumps
+            when adjusting letterspacing or converting to paths. 
+    * The new Inkscape Preferences dialog (Shift+Ctrl+P) gives access to
+      lots of previously "hidden" options to configure various aspects
+      of the program's behavior.
+    * You can now use the drawing tools within existing groups by
+      selecting "Edit group" from the group's context (right click)
+      menu. "Edit root" takes you back out to the top level.
+    * Path markers are fully supported. This is an SVG feature that
+      allows to you to attach arbitrary shapes (arrowheads, bullets,
+      faces, whatever) to the start, end, or middle nodes of a path.
+      Inkscape comes with a library of several dozen predefined markers,
+      and you can create your own.
+    * The dashed strokes feature is fixed to support arbitrary dash
+      lengths. There are many new dash patterns added to the Stroke
+      Style tab of the Fill & Stroke dialog.
+    * The stroke-miterlimit CSS property, setting the maximum length of
+      the miter, is now supported; it can also be adjusted on the Stroke
+      Style tab.
+    * The "Scale stroke width" preference is implemented (see the
+      Transforms tab of the Inkscape Preferences dialog). When it's off,
+      scaling objects preserves their stroke widths unchanged; when it's
+      on (the default), stroke widths are scaled by the same proportion.
+    * The new Clone command (Alt+D) creates a copy of an object which
+      can be moved, scaled, rotated, or skewed independently, but which
+      updates its shape, fill, stroke, and other properties from the
+      original object when that is changed. The Unlink Clone command
+      (Shift+Alt+D) cuts the link between the clone and its original,
+      while Select Original (Shift+D) lets you find out which object
+      this clone is linked to. Via Inkscape Preferences, you can control
+      the behavior of clones when their original is moved or deleted.
+    * The new Tile command (Alt+I) creates a rectangle with tiled
+      pattern fill out of the selection. After that you can resize or
+      reshape the rect, or you can Paste Style (including the pattern)
+      from it to any other object. The Fill and Stroke dialog also lets
+      you select one of the document's patterns for any object. This is
+      an easy way to change the shape of the imported bitmap: Tile it
+      and reshape it using the node tool (also you can set a user
+      preference to always import bitmaps as pattern fills). To extract
+      the tile from a pattern fill, use Untile (Shift+Alt+I).
+    * The new Find dialog (Ctrl+F) selects objects by their text
+      content, ID, style, attribute name, or object type (shapes, texts,
+      groups, etc.). The search terms can be combined. You can search
+      either in the entire document or in the current selection (search
+      descends into groups). An exact match is attempted first; if it
+      fails, partial matches are selected if found (e.g. searching for
+      "ff0000" in Style will select all objects that have this color
+      anywhere in their style attribute).
+    * The Import command supports all of the bitmap formats that are
+      covered with GdkPixbuf (PNG, JPEG, TIFF, TGA, BMP and more), as
+      well as Skencil/Sketch and Dia (you'll need these programs to be
+      installed for import to work). AI, PS and EPS import has been
+      improved in this version. Still more formats, both bitmap and
+      vector, can be added using the scripting system.
+    * The new Revert command in the File menu reloads a document from
+      its last saved copy.
+    * In the Document Preferences dialog, you can now select one of the
+      many standard paper sizes in Portrait or Landscape orientations.
+    * The text editing box in the Text and Font dialog performs
+      as-you-type spell checking (requires GtkSpell,
+      http://gtkspell.sourceforge.net/).
+    * Gradients, patterns, and markers are culled from the document
+      automatically when no longer needed (but hand-created objects will
+      be spared). This results in leaner, cleaner SVG.
+    * You can reverse the direction of selected path(s) either via Path
+      > Reverse or by pressing 'r' in node tool (useful for markers and
+      combining paths).
+    * A wild variety of central-symmetric curvilinear shapes, including
+      softly rounded stars and polygons, can be created using the new
+      Roundedness control on the Tool Controls bar for the star tool.
+    * Viewing and editing of an SVG image's metadata (Title, Author,
+      License, etc) is possible through the Document properties dialog.
+      This is done via embedded Dublin Core RDF within the SVG. 
 
 
-    Important bugfixes
+    Interface, usability, bugfixes
 
-    * Inkscape's font support is cleaned up and improved. More installed
-      fonts than before are now seen, displayed, and correctly applied.
-      Font matcher is more intelligent yet faster and supports generic
-      families and multiple family specifications, so bad font
-      substitutions are now rare. Besides, Inkscape will warn you
-      whenever it cannot find the exact match for the family or style
-      requested by the document.
-    * The new polygon intersector code fixed a number of ugly rendering
-      screw-ups and lock-ups.
-    * Previously, Inkscape canvas tended to "stick" after mouse release
-      when you were panning a complex document by middle mouse button.
-      This is now fixed.
-    * Non-ASCII filenames (e.g. Cyrillic) are fully supported for all
-      file operations (opening, saving, importing, exporting).
-    * Problems on localized Windows systems caused by the wrong numeric
-      format (comma as decimal separator in SVG) are resolved.
-    * The show/hide guidelines toggle (the | key) is restored and fully
-      functional.
-    * The Inset and Outset commands create paths with much smaller
-      distortions than before.
-    * A newly created group, or a combined path, now remains at the
-      level of its topmost member, instead of jumping to the top as
-      before. Several other commands are also fixed to preserve the
-      z-order and the parent of the object(s) they work on.
-    * Copy/paste of objects with gradients now works between documents.
-    * The bounding box of an object now includes stroke width (this
-      fixes the truncated bitmap export and some other problems).
-    * Several bugfixes were ported from Sodipodi; notably, the font size
-      mismatch between Windows and Unix is now gone. 
-
-
-    Interface and usability
-
-    * Complete spacing/kerning control via keyboard in the text tool:
-      when editing, Alt+< and Alt+> adjust letter spacing in the current
-      line, Ctrl+Alt+< and Ctrl+Alt+> adjust spacing between lines, and
-      Alt+arrows shift any character horizontally or vertically.
-    * In text tool, clicking on a text object positions the cursor
-      closest to the click, instead of at the end of the text object as
-      before.
-    * Node tool, text tool, and all shape tools now select objects
-      regardless of grouping. This means you don't need to switch to
-      selector for a Ctrl+click if you want to edit a grouped text
-      object, path, or shape.
-    * The shape tools (Rectangle, Ellipse, Star, and Spiral) are vastly
-      more convenient to use:
-          o All controls, such as the number of sides of a polygon, are
-            moved from the "Tool Options" dialog to the editing window's
-            top panel and are immediately accessible.
-          o The top panel controls affect (any number of) the selected
-            object(s) of the relevant type, not only the next created
-            object as was the case with "Tool Options".
-          o When you have any of the shape tools activated, the selected
-            object now displays editing handles on the canvas, just like
-            it did in the node tool before. This means you can draw a
-            shape and edit it immediately, without switching to node tool.
-          o You can now select objects by clicking (regardless of
-            grouping), or deselect by Esc, while in a shape tool.
-          o There's a two-way connection between the selected object and
-            the top panel: dragging handles updates the relevant top
-            panel controls, and editing the controls moves the handles. 
-    * The Paste command (Ctrl+V) now places the pasted objects(s) right
-      under the mouse cursor. The old behavior - pasting to the original
-      location - is available as the Paste In Place command (Crtl+Alt+V).
-    * The Raise and Lower commands reorder the selected objects only
-      relative to those objects that overlap them, instead of all
-      objects in the document.
-    * Autoscrolling: The canvas now scrolls automatically when you drag
-      an object or node, or do a rubberband selection, and go near or
-      beyond the edge of the canvas. Similarly, autoscrolling keeps the
-      text cursor always visible.
-    * Accelerated scrolling: if you press and hold Ctrl+arrow to scroll
-      canvas, Inkscape will gradually speed up scrolling. This makes
-      navigating in complex documents much faster, without losing
-      precision.
-    * Accelerated Simplify: similar to scrolling, a single Simplify
-      (Ctrl+L) does a slight simplification, but invoking it several
-      times in quick succession makes it act more and more aggressively
-      on the selected objects. It is thus easy to apply the exact amount
-      of simplification you need for each case.
-    * Scale/selection handles and the rubberband selection rectangle now
-      use inversion and are therefore visible on any background. (Even
-      50% gray... our inversion is smart :-) Path nodes and node/shape
-      controls also use inverted elements for better visibility. Text
-      editing cursor is also inverse.
-    * In multi-object selections, every selected object now displays a
-      small inverse diamond mark in the top left corner of its bounding
-      box. This lets you see at once what objects are selected and what
-      are not.
-    * In the linear and radial gradient panes of the Fill and Stroke
-      dialog:
-          o You can press Ctrl while dragging handles to snap the linear
-            gradient angle to 15 degrees increments (makes it easy to
-            create strictly horizontal/vertical gradients).
-          o The handles, bounding box, and gradient axes use inversion
-            for better visibility.
-          o The default linear gradient goes through the center of the
-            object.
-          o The radial gradient displays a radius handle for adjusting
-            the gradient radius. 
-    * The save dialog now remembers output format, can append file
-      extension automatically, and warns when overwriting files. You can
-      now save a file in Postscript format.
-    * Many new icons are added, and many old icons are redrawn to be
-      crisper, more informative, and more laconic. 
+    * The per-object selection cues can now be displayed in any tool, so
+      that you can see what is selected at all times. You can switch
+      these cues on or off for each tool separately in the Preferences
+      dialog (the default is on for all tools). Also, the cues can now
+      be displayed either as dashed bounding boxes or as inverse diamond
+      marks in the object's top left corner.
+    * The dropper tool now works always (previously it only worked in
+      conjunction with the Fill and Stroke dialog). Click to set the
+      fill color of selection, Shift+click to set the stroke color.
+      Also, dropper can pick either the visible color (without
+      transparency) or the actual object color (including transparency),
+      depending on a preference setting. It also displays the color
+      under cursor in the status bar.
+    * A newly opened document is placed in the same window, if the
+      window contains an unchanged empty document.
+    * The new Commands bar, between the menu and the Tool Controls bar,
+      has buttons for most frequently used non-tool-specific commands
+      such as Open, Undo, Group, opening dialogs, etc. (It can be hidden
+      if you don't want it, see the next item.)
+    * The document window layout is completely configurable. Via the
+      View menu commands, you can show or hide the menu, Commands bar,
+      Tool Controls bar, toolbox, rulers, scrollbars, and the statusbar.
+      These settings are saved across sessions, separately for normal
+      and fullscreen modes.
+    * In the selector controls, the W and H fields can now be
+      interlocked so that the selection preserves its height/width ratio
+      when resized. Also, percent (%) is added to the unit menu, so you
+      can easily resize or move your selection by a relative value.
+    * The calligraphic and ellipse/arc tools have all their controls in
+      the tool controls bar.
+    * The rectangle controls now allow you to set the horizontal and
+      vertical rounded corner radii in absolute units (pt, mm, etc)
+      instead of the radius/halfwidth and radius/halfheight ratios as
+      before. By default, these radii are preserved when you transform
+      the rectangle (controlled by a user preference). In rectangle
+      tool, the selected rectangle has a new handle in the bottom right
+      corner which allows you to resize the selected rectangle without
+      switching to selector. The handles for rounding corners are moved
+      to the top right corner.
+    * For a more task oriented menu structure, the Dialogs menu commands
+      are distributed to other menus, and the Dialogs menu is removed.
+    * All menu items display their explanations in the statusbar when
+      selected.
+    * The Fill and Stroke dialog is made simpler and more usable by
+      removing some obsolete options, shortening labels, using smaller
+      and more descriptive icons, and adding mnemonic hotkeys and tooltips.
+          o The dialog now remembers and reactivates the color selector
+            tab you were using last.
+          o The channel entry fields are switched from the 0..1 range to
+            0..255 range for increased precision (but you still can type
+            in a value between 0 and 1 exclusive, and it will be
+            converted to the 0..255 range when you press Enter).
+          o Stroke Width can also use the % unit for relative stroke
+            width changes. When several objects are selected, using the
+            percent unit changes the stroke width of each one relative
+            to its previous value (unlike absolute units which assign an
+            average width to all objects). 
+    * Various improvements to snapping behaviour:
+          o When grid snapping is on:
+                + The bezier tool's initial point will now snap to the
+                  grid as expected.
+                + Pasting from clipboard places selection at the same
+                  offset relative to the grid as that of the copied
+                  object(s).
+                + You can drag objects and nodes with Shift pressed to
+                  temporarily avoid snapping. 
+          o You can now snap to either an object's nodes or its bounding
+            box (or both).
+          o The origin to use for scaling can be set to either object
+            nodes or bounding box.
+          o Various other fixes to snapping behaviour. 
+    * Improvements in file open/save dialog:
+          o Unique filename is proposed for a file's first save.
+          o The "Autodetect" format on save disables the "Append
+            filename extension" checkbox.
+          o When switching formats on save, the filenames will change
+            automatically.
+          o Save/open paths are saved in preferences. Will default to
+            user's home directory. 
+    * Export dialog improvements:
+          o Each object exported separately (via Selection export)
+            remembers the output filename and resolution, and these
+            hints are filled in when you export it next time. In the
+            absence of the saved hints, default output filename is
+            constructed from the object's id attribute.
+          o A new option, Custom, is added to the dialog allowing you to
+            specify arbitrary export area. 
+    * The initial value of the sticky zoom in a new window can now be
+      set in Preferences. The sticky zoom button is moved above the
+      right scrollbar.
+    * The zoom field (in the lower left corner of the window) can now be
+      activated by Alt+Z.
+    * Input/output extensions can now save their preferences. Thus, the
+      printer command you used last time in the Print dialog is remembered.
+    * The rotation/skew axis crosshair in selector remains where you put
+      it for as long as you have the object(s) selected; to reset it to
+      the center, deselect and reselect. Also the crosshair is only
+      displayed in rotate mode, not in scale mode - this makes it easier
+      to drag small objects.
+    * In node tool, the first Escape or empty-space click deselects any
+      selected nodes, the second one deselects the selected object
+      removing the node display.
+    * Three handles have been added to allow on-canvas translation,
+      rotation and scaling of pattern fills.
+    * Object handles no longer accidentally "snag" on the mouse.
+    * In Document Preferences, grid units are correctly recalculated
+      with the unit base changes.
+    * The infamous "freeze when dragging outside of window" bug on
+      Windows is gone. 
 
 
     Clipart, documentation, translations
 
-    * Inkscape now ships with a small collection of clipart (when it
-      grows big enough we may separate it into a package of its own).
-    * The Inkscape tutorial is split into two parts, Basic and Advanced,
-      and significantly expanded (new sections on offsets,
-      simplification, compound paths, text tool, and more).
-    * Two new tutorials,"Elements of design" and "Tips and Tricks," are
-      added.
-    * The Basic tutorial is available in Russian translation.
-    * French, Hungarian, Japanese, Russian, and Spanish interface
-      translations are updated. 
+    * The small clipart collection that was shipped with Inkscape 0.38
+      is removed; instead you are encouraged to use (and contribute to)
+      the much larger collection of vector clipart at
+      http://www.openclipart.org.
+    * Localizations of the interface now work on the Windows platform.
+    * There's a small tutorial at share/tutorials/making_markers.svg
+      which will guide you through creating your own markers.
+    * Updated Brazilian Portuguese, Catalan, German, Serbian, Serbian in
+      Latin script, Slovenian and Spanish interface translations.
+    * Added French translation of "Basic Tutorial" and "Advanced Tutorial".
+    * Added Slovenian translation of "Keys and Mouse", "Basic Tutorial",
+      "Advanced Tutorial", "Elements and Principles of Design" and "Tips
+      and Tricks". 
 
 
-    Build requirements
+    Internal progress
 
-Based on RH/FC-1/SuSE rpm builds:
-
-    * XFree86-devel >= 4.0
-    * libgnomeprintui-devel >= 2.2.0
-    * libpng-devel
-    * desktop-file-utils
-    * gettext
-    * libart_lgpl-devel >= 2.3.10
-    * freetype2-devel
-    * libxml2-devel >= 2.4.24
-    * gtk2-devel
-    * pango-devel
-    * atk-devel
-    * pkgconfig
-    * libsigc++2 >= 1.2.5
-    * perl-XML-Parser 
-
-Note: SuSE 9.0 users need libsigc2++, which is available at :
-http://guru.unixtech.be/rpm/packages/Development/libsigc++/
+    * 133 KB of old, messy, platform-tied C code in libnrtype/ were
+      replaced by 80 KB of much cleaner C++ code using Pango.
+    * The preserve/optimize transformation switch, formerly in selector
+      tool options, is made global. Now all object transformations honor
+      this setting, regardless of command or tool that caused them. This
+      setting controls whether object transforms are only stored in
+      |transform=| attributes in SVG or they can affect other attributes
+      too.
+    * Internal support for layers is essentially complete (and is
+      utilized by the "Edit group" feature)
+    * Many of the signals are changed from GObject signals to SigC++
+      signals.
+    * The 7 or more different flavours of Rect are being condensed into
+      NR::Rect and NR::IRect, similarly for Points.
+    * Delibartation: All references to libart have been removed in
+      preparation for switching entirely to the livarot rendering system.
+    * The medicinal maggots have excised copious quantities of senescent
+      code.
+    * All the display code has migrated into display/, away from helper/.
+    * Orphans (those objects having no URI references pointing to them
+      or their descendants) will be automatically culled if they have
+      inkscape:collect="always" set.
+    * SPObjects now track the total hrefcount of their descendants, for
+      orphan collection purposes. 
 
 
     Known issues
 
-    * Saving as (or printing via) Postscript does not support gradients
-      or transparency. The workaround is to export to bitmap (or print
-      as bitmap).
-    * Pasting text from another application into a text object on the
-      canvas does not work. Workaround: open the Text dialog
-      (Shift+Ctrl+T) and paste into the text editing area there, then
-      click Apply.
-    * Windows builds do not fully support SVGZ (gzipped SVG) format -
-      they can read it but not write.
-    * Windows builds may stop responding to mouse when you drag outside
-      of the canvas. Workaround: press any tool switching key (e.g. F3)
-      to unfreeze.
-    * Windows builds still cannot handle non-ASCII characters in
-      filenames or in text tool. 
+    * Stroke, patterns, gradients, and rect corners are always shown as
+      scaled when you transform them by mouse drag in selector with
+      "Show objects" mode, regardless of the status of the corresponding
+      switches. The proper display is restored, however, as soon as you
+      release mouse.
+    * Support for inkscape:groupmode has been temporarily removed, as
+      part of the layers work; it will be re-introduced in 0.40.
+    * Orphan objects that were created or edited by the user are
+      currently not garbage-collected (only automatically added helper
+      objects are). In a future version we'll add an explicit Cleanup
+      command to remove any unused objects. Also, garbage collection is
+      not immediate (usually it happens upon the next change of the
+      document) because NRArenaShape holds on to an SPStyle for too long
+      (it should not use SPStyle directly at all).
+    * The preferences file of version 0.39 is not compatible with 0.38
+      due to a bug in 0.38. If you ever want to downgrade to 0.38 or an
+      earlier version (why?!) you'll need to delete your
+      ~/.inkscape/preferences.xml to avoid crashes.
+    * Due to a bug in earlier versions, linked offsets with added
+      transform could be rendered incorrectly (displaced) in third-party
+      SVG renderers. To fix that using 0.39, do some no-op change to the
+      linked offset (e.g. nudge it forth and back) and save.
+    * The direction of end markers was incorrect in 0.38. If you used
+      that version to create drawings with end markers, you will have to
+      flip them now.
+    * Windows builds have limited import/export capabilities compared to
+      Linux builds. 
 
 
     Previous releases
 
-    * ReleaseNotes037 
+    * ReleaseNotes038 <wiki.pl?ReleaseNotes038>
+      (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes038)
+    * ReleaseNotes037 <wiki.pl?ReleaseNotes037>
       (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes037)
-    * ReleaseNotes036 
-      (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes036) 
+    * ReleaseNotes036 <wiki.pl?ReleaseNotes036>
+      (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes036)
+    * ReleaseNotes035 <wiki.pl?ReleaseNotes035>
+      (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes035) 
 
