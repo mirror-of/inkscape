@@ -1,9 +1,15 @@
+2004-10-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnr/nr-matrix.cpp (nr_matrix_invert):
+	  Fix for last commit to this file, which broke src==dest case.
+	* src/libnr/nr-matrix-test.cpp: Add test cases for nr_matrix_invert.
+
 2004-10-30  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
-	  update when layers added/removed/reordered
+	  update when layers added/removed/reordered.
 
-	* src/verbs.h, src/verbs.cpp: added "rename layer" verb
+	* src/verbs.h, src/verbs.cpp: added "rename layer" verb.
 
 2004-10-29  Kees Cook  <kees@outflux.net>
 
@@ -115,7 +121,7 @@
 	  Adding an error dialog for when this occurs.  Fixes bug 1038932. 
 
 	* extension/system.cpp:  Changing sp_ui_error_dialog to g_warning
- 	  so won't crash when running from commandline.  Fixes bug
+	  so won't crash when running from commandline.  Fixes bug
 	  1000350. 
 
 	* inkscape.cpp, inkscape.h, main.cpp, dialogs/filedialog.cpp:
@@ -130,8 +136,8 @@
 
 2004-10-25  Kees Cook  <kees@outflux.net>
 
-    * src/sp-object.cpp: nasty hack to not export metadata on "Plain SVG".
-      I promise I'll fix this with a proper SPObject soon.
+	* src/sp-object.cpp: nasty hack to not export metadata on "Plain SVG".
+	  I promise I'll fix this with a proper SPObject soon.
 
 2004-10-25  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/file.h, src/inkscape.cpp, src/sp-image.cpp,

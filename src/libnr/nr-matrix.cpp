@@ -71,12 +71,16 @@ nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
 			NR::Coord idet  = 1.0 / det;
                         NR::Coord *dest = d->c;
 
+			/* Cache m->c[0] and m->c[4] in case d == m. */
+			NR::Coord const m_c0(m->c[0]);
+			NR::Coord const m_c4(m->c[4]);
+
 			/*0*/ *dest++ =  m->c[3] * idet;
 			/*1*/ *dest++ = -m->c[1] * idet;
 			/*2*/ *dest++ = -m->c[2] * idet;
-			/*3*/ *dest++ =  m->c[0] * idet;
-			/*4*/ *dest++ = -m->c[4] * d->c[0] - m->c[5] * d->c[2];
-			/*5*/ *dest   = -m->c[4] * d->c[1] - m->c[5] * d->c[3];
+			/*3*/ *dest++ =   m_c0   * idet;
+			/*4*/ *dest++ = -m_c4 * d->c[0] - m->c[5] * d->c[2];
+			/*5*/ *dest   = -m_c4 * d->c[1] - m->c[5] * d->c[3];
 
 		} else {
 			nr_matrix_set_identity (d);
