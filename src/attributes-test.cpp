@@ -294,6 +294,7 @@ static struct {char const *attr; bool supported;} const all_attrs[] = {
     /* Extra attributes. */
     {"id", true},
     {"inkscape:collect", true},
+    {"inkscape:document-units", true},
     {"inkscape:label", true},
     {"sodipodi:insensitive", true},
     {"sodipodi:nonprintable", true},
@@ -407,6 +408,30 @@ test_attributes()
             }
         }
 
+        /* Test for any attributes that this test program doesn't know about.
+         *
+         * If any are found, then:
+         *
+         *   If it is in the `inkscape:' namespace then simply add it to all_attrs with
+         *   `true' as the second field (`supported').
+         *
+         *   If it is in the `sodipodi:' namespace then check the spelling against sodipodi
+         *   sources.  If you don't have sodipodi sources, then don't add it: leave to someone
+         *   else.
+         *
+         *   Otherwise, it's probably a bug: ~all SVG 1.1 attributes should already be
+         *   in the all_attrs table.  However, the comment above all_attrs does mention
+         *   some things missing from attindex.html, so there may be more.  Check the SVG
+         *   spec.  Another possibility is that the attribute is new in SVG 1.2.  In this case,
+         *   check the spelling against the [draft] SVG 1.2 spec before adding to all_attrs.
+         *   (If you can't be bothered checking the spec, then don't update all_attrs.)
+         *
+         *   If the attribute isn't in either SVG 1.1 or 1.2 then it's probably a mistake
+         *   for it not to be in the inkscape namespace.  (Not sure about attributes used only
+         *   on elements in the inkscape namespace though.)
+         *
+         *   In any case, make sure that the attribute's source is documented accordingly.
+         */
         bool found = false;
         unsigned const n_ids = ids.size();
         for (unsigned id = 1; id < n_ids; ++id) {
