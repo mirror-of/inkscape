@@ -1,5 +1,8 @@
 2004-04-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/bezier-utils.cpp:
+	Greater CodingStyle conformance, mainly whitespace changes.
+
 	* src/helper/bezier-utils.cpp (sp_bezier_fit_cubic_full):
 	Always reparameterize between generate_bezier and calc_max_error.
 	Switch from discouraged alloca (see man page) to g_new, at cost of
