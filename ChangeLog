@@ -3,6 +3,9 @@
 	* src/extension/output.cpp: don't reset modified flag until after
 	save has happened, in case it fails.  Fixes 1004134.
 
+	* src/livarot/ShapeSweep.cpp: fix a typo in my cleanups.  Fixes
+	1048151.
+
 2004-10-25  Bryce Harringotn <bryce@bryceharrington.org>
 
 	* file.cpp, file.h, dialogs/export.cpp: Adding error return logic
