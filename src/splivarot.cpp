@@ -27,6 +27,7 @@
 #include "desktop.h"
 #include "splivarot.h"
 #include "helper/canvas-bpath.h"
+#include "helper/sp-intl.h"
 #include "view.h"
 #include "prefs-utils.h"
 
@@ -91,7 +92,7 @@ sp_selected_path_boolop (bool_op bop)
   il = (GSList *) sp_selection_item_list (selection);
 
   if (g_slist_length (il) < 2) {
-    sp_view_set_statusf_error(SP_VIEW(desktop),"Select at least 2 path before you make a boolean operation");
+    sp_view_set_statusf_error(SP_VIEW(desktop), _("Select at least 2 paths to perform a boolean operation."));
    return;
   }
 
@@ -99,7 +100,7 @@ sp_selected_path_boolop (bool_op bop)
     {
       if (bop == bool_op_diff || bop == bool_op_symdiff)
 	{
-	  sp_view_set_statusf_error(SP_VIEW(desktop),"Difference and symetric difference need exactly 2 path");
+	  sp_view_set_statusf_error(SP_VIEW(desktop), _("Select exactly 2 paths to perform difference or XOR."));
 	  return;
 	}
     }
@@ -113,7 +114,7 @@ sp_selected_path_boolop (bool_op bop)
       SPRepr *b = SP_OBJECT_REPR (il->next->data);
       if (a == NULL || b == NULL)
 	{
-	  sp_view_set_statusf_error(SP_VIEW(desktop),"unable to determine z-order of the objects involved in the difference");
+	  sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
 	  return;
 	}
       if (Ancetre (a, b))
@@ -129,7 +130,7 @@ sp_selected_path_boolop (bool_op bop)
 	  SPRepr *dad = LCA (a, b);
 	  if (dad == NULL)
 	    {
-	  sp_view_set_statusf_error(SP_VIEW(desktop),"unable to determine z-order of the objects involved in the difference");
+	  sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
 	      return;
 	    }
 	  SPRepr *as = AncetreFils (a, dad);
@@ -155,7 +156,7 @@ sp_selected_path_boolop (bool_op bop)
       item = (SPItem *) l->data;
       if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
 	{
-	  sp_view_set_statusf_error(SP_VIEW(desktop),"Boolean operation impossible: one of the objects is not a path");
+	  sp_view_set_statusf_error(SP_VIEW(desktop), _("One of the objects is not a path, cannot perform boolean operation."));
 	  g_slist_free (il);
 	  return;
 	}
@@ -369,7 +370,7 @@ sp_selected_path_outline ()
   item = sp_selection_item (selection);
 
   if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
-    sp_view_set_statusf_error(SP_VIEW(desktop),"Outline impossible: selected object is not a path");
+    sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot outline."));
     return;
   }
   if (SP_IS_SHAPE (item))
@@ -641,7 +642,7 @@ sp_selected_path_create_offset_object (bool expand,bool updating)
   item = sp_selection_item (selection);
 
   if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
-    sp_view_set_statusf_error(SP_VIEW(desktop),"Offset impossible: selected object is not a path");
+    sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot inset/outset."));
     return;
   }
   if (SP_IS_SHAPE (item))
@@ -848,7 +849,7 @@ sp_selected_path_do_offset (bool expand)
   item = sp_selection_item (selection);
 
   if (item == NULL || (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))) {
-    sp_view_set_statusf_error(SP_VIEW(desktop),"Offset impossible: selected object is not a path");
+    sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot inset/outset."));
     return;
   }
   if (SP_IS_SHAPE (item))
