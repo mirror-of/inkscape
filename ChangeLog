@@ -1,3 +1,8 @@
+2004-02-14  MenTaLguY <mental@rydia.net>
+
+	* src/libnr/nr-types.h: added intersects() and contains() tests
+	  for points and rects
+
 2004-02-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/selection.cpp (sp_selection_snappoints):

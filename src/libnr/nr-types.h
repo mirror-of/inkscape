@@ -277,6 +277,16 @@ public:
 		return ( ( _min[0] > _max[0] ) || ( _min[1] > _max[1] ) );
 	}
 
+	bool intersects(const Rect &r) const {
+		return intersects<NR::X>(r) && intersects<NR::Y>(r);
+	}
+	bool contains(const Rect &r) const {
+		return contains<NR::X>(r) && contains<NR::Y>(r);
+	}
+	bool contains(const Point &p) const {
+		return contains<NR::X>(p) && contains<NR::Y>(p);
+	}
+
 	/** Translates the rectangle by p. */
 	void offset(Point p);
 	
@@ -290,6 +300,25 @@ public:
 	static Rect least_bound(const Rect &a, const Rect &b);
 
 private:
+	template <Dim2 axis>
+	bool intersects(const Rect &r) const {
+		return r._min[axis] < _max[axis] &&
+		       r._min[axis] < r._max[axis] &&
+		       _min[axis] < r._max[axis];
+	}
+
+	template <Dim2 axis>
+	bool contains(const Rect &r) const {
+		return _min[axis] <= r._min[axis] &&
+		       r._min[axis] < r._max[axis] &&
+		       r._max[axis] <= _max[axis];
+	}
+
+	template <int axis>
+	bool contains(const Point &p) const {
+		return p[axis] >= _min[axis] && p[axis] < _max[axis];
+	}
+
 	Point _min, _max;
 };
 
