@@ -184,6 +184,10 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     //##### Get the tracer and engine
     Inkscape::Trace::Potrace::PotraceTracingEngine pte;
 
+    /* inversion */
+    bool invert = potraceInvertButton.get_active();
+    pte.setInvert(invert);
+
     //##### Get the single-scan settings
     /* which one? */
     if (potraceBrightnessRadioButton.get_active())
@@ -214,10 +218,6 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     /* quantization */
     int quantNrColors = potraceQuantNrColorSpinner.get_value_as_int();
     pte.setQuantizationNrColors(quantNrColors);
-
-    /* inversion */
-    bool invert = potraceInvertButton.get_active();
-    pte.setInvert(invert);
 
     //##### Get multiple-scan settings
     int quantScanNrColors = potraceQuantScanNrColorSpinner.get_value_as_int();
@@ -449,6 +449,31 @@ TraceDialogImpl::TraceDialogImpl()
     //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceQuantFrame.add(potraceQuantVBox);
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
+  
+    /*#### quantization for multiple scanning####*/
+    potraceQuantScanColorRadioButton.set_label(_("Color"));
+    potraceQuantScanColorRadioButton.set_group(potraceGroup);
+    potraceQuantScanBox.pack_start(potraceQuantScanColorRadioButton, false, false, MARGIN);
+
+    potraceQuantScanMonoRadioButton.set_label(_("Monochrome"));
+    potraceQuantScanMonoRadioButton.set_group(potraceGroup);
+    potraceQuantScanBox.pack_start(potraceQuantScanMonoRadioButton, false, false, MARGIN);
+
+    potraceQuantScanNrColorSpinner.set_digits(2);
+    potraceQuantScanNrColorSpinner.set_increments(1.0, 4.0);
+    potraceQuantScanNrColorSpinner.set_range(2.0, 64.0);
+    potraceQuantScanNrColorSpinner.set_value(8.0);
+    potraceQuantScanBox.pack_end(potraceQuantScanNrColorSpinner, false, false, MARGIN);
+
+    potraceQuantScanNrColorLabel.set_label(_("Colors:"));
+    potraceQuantScanBox.pack_end(potraceQuantScanNrColorLabel, false, false, MARGIN);
+
+    potraceQuantScanVBox.pack_start(potraceQuantScanBox, false, false, MARGIN);
+
+    potraceQuantScanFrame.set_label(_("Quantization & Scanning"));
+    //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    potraceQuantScanFrame.add(potraceQuantScanVBox);
+    potraceBox.pack_start(potraceQuantScanFrame, false, false, 0);
   
     /*#### Preview ####*/
     potracePreviewButton.set_label(_("Preview"));
