@@ -16,6 +16,7 @@
 #include <config.h>
 
 #include <string.h>
+#include <gtk/gtk.h>
 #include "svg/svg.h"
 #include "xml/repr-private.h"
 #include "document.h"
@@ -27,7 +28,9 @@
 #include "sp-item-group.h"
 #include "sp-path.h"
 #include "helper/sp-intl.h"
+#include "helper/sp-canvas.h"
 #include "path-chemistry.h"
+#include "desktop-affine.h"
 
 #include "selection-chemistry.h"
 
@@ -528,7 +531,7 @@ void sp_selection_copy(GtkWidget *widget)
 	clipboard = g_slist_reverse (clipboard);
 }
 
-void sp_selection_paste(GtkWidget *widget)
+void sp_selection_paste (GtkWidget *widget, bool in_place)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
@@ -552,6 +555,17 @@ void sp_selection_paste(GtkWidget *widget)
 		sp_document_add_repr (SP_DT_DOCUMENT (desktop), copy);
 		sp_selection_add_repr (selection, copy);
 		sp_repr_unref (copy);
+	}
+
+	if (!in_place) {
+		sp_document_ensure_up_to_date (SP_DT_DOCUMENT (desktop));
+
+		NRRect bbox;
+		sp_selection_bbox (selection, &bbox);
+
+		NR::Point m = sp_desktop_point (desktop);
+
+		sp_selection_move_relative (selection, m[NR::X] - (bbox.x0 + bbox.x1)*0.5, m[NR::Y] - (bbox.y0 + bbox.y1)*0.5);
 	}
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -622,7 +636,6 @@ void sp_selection_remove_transform()
 		l = l->next;
 	}
 
-	//	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
@@ -724,7 +737,6 @@ void sp_selection_rotate_90()
 		sp_item_rotate_rel (item,-90);
 	}
 
-	//	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
@@ -743,7 +755,6 @@ sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 
 	sp_selection_rotate_relative (selection, &center, angle_degrees);
 
-	//	sp_selection_changed (selection);
 	if ( angle_degrees > 0 )
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
 	else
@@ -773,7 +784,6 @@ sp_selection_rotate_screen (SPSelection *selection,  gdouble angle)
 
 	sp_selection_rotate_relative (selection, &center, zangle);
 
-	//	sp_selection_changed (selection);
 	if (angle > 0)
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
 	else
@@ -801,7 +811,6 @@ sp_selection_scale (SPSelection *selection, gdouble grow)
 
 	sp_selection_scale_relative (selection, &center, times, times);
 
-	//	sp_selection_changed (selection);
 	if (grow > 0)
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
 	else
@@ -831,7 +840,6 @@ sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 
 	sp_selection_scale_relative (selection, &center, times, times);
 
-	//	sp_selection_changed (selection);
 	if (grow_pixels > 0)
 		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
 	else
@@ -851,7 +859,6 @@ sp_selection_scale_times (SPSelection *selection, gdouble times)
 
 	sp_selection_scale_relative (selection, &center, times, times);
 
-	//	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
 }
 
@@ -869,8 +876,6 @@ sp_selection_move (gdouble dx, gdouble dy)
 	}
 
 	sp_selection_move_relative (selection, dx, dy);
-
-	//	sp_selection_changed (selection);
 
 	if (dx == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
@@ -903,8 +908,6 @@ sp_selection_move_screen (gdouble dx, gdouble dy)
 	zdx = dx / zoom;
 	zdy = dy / zoom;
 	sp_selection_move_relative (selection, zdx, zdy);
-
-	//	sp_selection_changed (selection);
 
 	if (dx == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
