@@ -487,8 +487,9 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             for ( temp = sp_repr_children(temp) ;
                   temp ;
                   temp = sp_repr_next(temp) ) {
-                if (!strcmp(sp_repr_name(temp),"rdf:li")) {
-                    gchar * str = (gchar *)sp_repr_content(temp);
+                if (!strcmp(sp_repr_name(temp),"rdf:li") &&
+                    temp->firstChild()) {
+                    const gchar * str = temp->firstChild()->content();
                     if (bag) {
                         holder = bag;
                         bag = g_strconcat(holder, ", ", str, NULL);

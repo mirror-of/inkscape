@@ -16,6 +16,7 @@
       src/dialogs/display-settings.cpp, src/extension/internal/ps.cpp:
       Added printout comments for print debugging.  Fixed dash output
 	  bug #1104050.
+	* src/dialogs/rdf.cpp: fixed rdf:bag displays.  Closes bug #1113316.
 
 2005-01-30  Jon A. Cruz  <jon@joncruz.org>
 	* src/io/sys.h, src/io/sys.cpp: added utility routine to cleanup
