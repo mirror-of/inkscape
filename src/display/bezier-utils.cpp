@@ -50,7 +50,7 @@ static void reparameterize(NR::Point const d[], unsigned len, double u[], Bezier
 static gdouble NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble u);
 static NR::Point bezier_pt(unsigned degree, NR::Point const V[], gdouble t);
 static NR::Point sp_darray_left_tangent(NR::Point const d[], unsigned length);
-static NR::Point sp_darray_right_tangent(NR::Point const d[], unsigned length);
+static NR::Point sp_darray_right_tangent(NR::Point const d[], unsigned length, double tolerance_sq);
 static NR::Point sp_darray_center_tangent(NR::Point const d[], unsigned center, unsigned length);
 static unsigned copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len, NR::Point dest[]);
 static void chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned len);
@@ -120,7 +120,7 @@ sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len
     }
 
     NR::Point tHat1 = sp_darray_left_tangent(uniqued_data, uniqued_len);
-    NR::Point tHat2 = sp_darray_right_tangent(uniqued_data, uniqued_len);
+    NR::Point tHat2 = sp_darray_right_tangent(uniqued_data, uniqued_len, error);
 
     /* Call fit-cubic function with recursion. */
     gint const ret = sp_bezier_fit_cubic_full(bezier, uniqued_data, uniqued_len,
@@ -544,6 +544,9 @@ bezier_pt(unsigned const degree, NR::Point const V[], gdouble const t)
 static NR::Point
 sp_darray_left_tangent(NR::Point const d[], unsigned const len)
 {
+    /* Note: The reason we don't use the tolerance approach of right_tangent is that the current
+       implementation of fit_and_split in pencil-context.cpp uses the first two datapoints to
+       indicate the required tangent. */
     g_assert( len >= 2 );
     g_assert( d[0] != d[1] );
     return unit_vector( d[1] - d[0] );
@@ -554,7 +557,9 @@ sp_darray_left_tangent(NR::Point const d[], unsigned const len)
     N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
     increasing index.
 
-    \pre (2 \<= len) and (d[len - 1] != d[len - 2]).
+    \pre 2 \<= len.
+    \pre d[len - 1] != d[len - 2].
+    \pre all[p in d] in_svg_plane(p).
 */
 static NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len)
@@ -564,6 +569,36 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len)
     unsigned const prev = last - 1;
     g_assert( d[last] != d[prev] );
     return unit_vector( d[prev] - d[last] );
+}
+
+/** Estimates the (backward) tangent at d[last].
+
+    N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
+    increasing index.
+
+    \pre 2 \<= len.
+    \pre d[len - 1] != d[len - 2].
+    \pre all[p in d] in_svg_plane(p).
+*/
+static NR::Point
+sp_darray_right_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq)
+{
+    g_assert( len >= 2 );
+    g_assert( 0 <= tolerance_sq );
+    unsigned const last = len - 1;
+    for (unsigned i = last;; i--) {
+        NR::Point const pi(d[i]);
+        NR::Point const t(pi - d[last]);
+        double const distsq = dot(t, t);
+        if ( tolerance_sq < distsq ) {
+            return unit_vector(t);
+        }
+        if (i == 0) {
+            return ( distsq == 0
+                     ? sp_darray_right_tangent(d, len)
+                     : unit_vector(t) );
+        }
+    }
 }
 
 /** Estimates the (backward) tangent at d[center], by averaging the two segments connected to
