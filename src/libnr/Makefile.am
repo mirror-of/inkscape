@@ -68,7 +68,6 @@ libnr_a_SOURCES = \
 	nr-path.cpp nr-path.h \
 	nr-svp.cpp nr-svp.h nr-svp-private.h \
 	nr-svp-render.cpp nr-svp-render.h \
-	nr-uta.cpp nr-uta.h \
 	nr-object.cpp nr-object.h \
 	nr-maybe.h \
 	$(mmx_sources)

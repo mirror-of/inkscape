@@ -14,8 +14,6 @@
 
 
 
-typedef struct _NRRGradientRenderer NRRGradientRenderer;
-
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-render.h>
 
@@ -29,7 +27,7 @@ enum {
 
 /* Radial */
 
-struct _NRRGradientRenderer {
+struct NRRGradientRenderer {
 	NRRenderer renderer;
 	const unsigned char *vector;
 	unsigned int spread;

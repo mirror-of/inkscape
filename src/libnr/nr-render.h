@@ -10,13 +10,13 @@
  * This code is in public domain
  */
 
-typedef struct _NRRenderer NRRenderer;
-
 #include <libnr/nr-pixblock.h>
+
+struct NRRenderer;
 
 typedef void (* NRRenderFunc) (NRRenderer *r, NRPixBlock *pb, NRPixBlock *m);
 
-struct _NRRenderer {
+struct NRRenderer {
 	NRRenderFunc render;
 };
 

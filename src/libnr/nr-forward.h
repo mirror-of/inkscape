@@ -10,8 +10,6 @@
  * This code is in public domain
  */
 
-typedef struct _NRPixBlock NRPixBlock;
-
 namespace NR {
 class Matrix;
 class Point;
@@ -21,6 +19,7 @@ class scale;
 class translate;
 }
 
+struct NRPixBlock;
 struct NRMatrix;
 struct NRPoint;
 struct NRRect;

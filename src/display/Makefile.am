@@ -11,7 +11,6 @@
 
 #if WITH_NEW_RENDER
 #nr_sources = \
-#	nr-uta.cpp nr-uta.h \
 #	nr-svp.c nr-svp.h \
 #	nr-svp-uncross.c nr-svp-uncross.h \
 #	nr-svp-render.c nr-svp-render.h

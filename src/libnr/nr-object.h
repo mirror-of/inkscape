@@ -18,19 +18,16 @@
 
 typedef guint32 NRType;
 
+struct NRObject;
+struct NRObjectClass;
+
 #define NR_TYPE_OBJECT (nr_object_get_type ())
 #define NR_OBJECT(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_OBJECT, NRObject))
 #define NR_IS_OBJECT(o) (NR_CHECK_INSTANCE_TYPE ((o), NR_TYPE_OBJECT))
 
-typedef struct _NRObject NRObject;
-typedef struct _NRObjectClass NRObjectClass;
-
 #define NR_TYPE_ACTIVE_OBJECT (nr_active_object_get_type ())
 #define NR_ACTIVE_OBJECT(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_ACTIVE_OBJECT, NRActiveObject))
 #define NR_IS_ACTIVE_OBJECT(o) (NR_CHECK_INSTANCE_TYPE ((o), NR_TYPE_ACTIVE_OBJECT))
-
-typedef struct _NRActiveObject NRActiveObject;
-typedef struct _NRActiveObjectClass NRActiveObjectClass;
 
 #define nr_return_if_fail(expr) if (!(expr) && nr_emit_fail_warning (__FILE__, __LINE__, "?", #expr)) return
 #define nr_return_val_if_fail(expr,val) if (!(expr) && nr_emit_fail_warning (__FILE__, __LINE__, "?", #expr)) return (val)
@@ -60,12 +57,12 @@ NRType nr_object_register_type (NRType parent,
 
 /* NRObject */
 
-struct _NRObject {
+struct NRObject {
 	NRObjectClass *klass;
 	unsigned int refcount;
 };
 
-struct _NRObjectClass {
+struct NRObjectClass {
 	NRType type;
 	NRObjectClass *parent;
 
@@ -95,32 +92,28 @@ NRObject *nr_object_release (NRObject *object);
 
 /* NRActiveObject */
 
-typedef struct _NRObjectListener NRObjectListener;
-typedef struct _NRObjectCallbackBlock NRObjectCallbackBlock;
-typedef struct _NRObjectEventVector NRObjectEventVector;
-
-struct _NRObjectEventVector {
+struct NRObjectEventVector {
 	void (* dispose) (NRObject *object, void *data);
 };
 
-struct _NRObjectListener {
+struct NRObjectListener {
 	const NRObjectEventVector *vector;
 	unsigned int size;
 	void *data;
 };
 
-struct _NRObjectCallbackBlock {
+struct NRObjectCallbackBlock {
 	unsigned int size;
 	unsigned int length;
 	NRObjectListener listeners[1];
 };
 
-struct _NRActiveObject {
+struct NRActiveObject {
 	NRObject object;
 	NRObjectCallbackBlock *callbacks;
 };
 
-struct _NRActiveObjectClass {
+struct NRActiveObjectClass {
 	NRObjectClass parent_class;
 };
 

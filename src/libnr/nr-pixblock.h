@@ -29,7 +29,7 @@ enum {
 	NR_PIXBLOCK_MODE_R8G8B8A8P /* Premultiplied 8 bit RGBA */
 };
 
-struct _NRPixBlock {
+struct NRPixBlock {
 	unsigned int size : 3;
 	unsigned int mode : 2;
 	unsigned int empty : 1;

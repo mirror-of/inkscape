@@ -13,8 +13,6 @@
 #include <libnr/nr-forward.h>
 #include <libnr/nr-coord.h>
 
-typedef struct _NRBPath NRBPath;
-
 typedef enum {
   ART_MOVETO,
   ART_MOVETO_OPEN,
@@ -34,7 +32,7 @@ class NArtBpath {
 
 NArtBpath* nr_artpath_affine(NArtBpath *s, NR::Matrix const &transform);
 
-struct _NRBPath {
+struct NRBPath {
 	NArtBpath *path;
 };
 

@@ -12,10 +12,6 @@
 
 /* Sorted vector paths */
 
-typedef struct _NRSVPSegment NRSVPSegment;
-typedef struct _NRSVPFlat NRSVPFlat;
-typedef struct _NRSVP NRSVP;
-
 #include <libnr/nr-coord.h>
 #include <libnr/nr-forward.h>
 #include <libnr/nr-rect.h>
@@ -23,21 +19,21 @@ typedef struct _NRSVP NRSVP;
 
 #include <glib.h>
 
-struct _NRSVPSegment {
+struct NRSVPSegment {
     gint16 wind;
     guint16 length;
     guint32 start;
     float x0, x1;
 };
 
-struct _NRSVPFlat {
+struct NRSVPFlat {
     gint16 wind;
     guint16 length;
     float y;
     float x0, x1;
 };
 
-struct _NRSVP {
+struct NRSVP {
     unsigned int length;
     NRPoint *points;
     NRSVPSegment segments[1];
@@ -51,9 +47,7 @@ void nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear);
 
 /* Sorted vertex lists */
 
-typedef struct _NRVertex NRVertex;
-
-struct _NRVertex {
+struct NRVertex {
     NRVertex *next;
     NR::Coord x, y;
 };
