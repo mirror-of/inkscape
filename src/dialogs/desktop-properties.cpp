@@ -493,10 +493,11 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
 
     GtkWidget *const ww = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "widthsb");
     GtkWidget *const hw = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "heightsb");
-    gtk_widget_set_sensitive(ww, FALSE);
-    gtk_widget_set_sensitive(hw, FALSE);
 
     if (paper) {
+        gtk_widget_set_sensitive(ww, FALSE);
+        gtk_widget_set_sensitive(hw, FALSE);
+
         GtkWidget *const om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
         bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
 
