@@ -1,7 +1,9 @@
 #include <glib/gmacros.h>
 #include <cmath>
+
 #include "libnr/in-svg-plane.h"
 #include "utest/utest.h"
+#include "isnan.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,8 +19,8 @@ int main(int argc, char *argv[])
     NR::Point const small_n3_4(-3.0 * small, 4.0 * small);
     NR::Point const part_nan(3., nan);
 
-    assert(isnan(nan));
-    assert(!isnan(small));
+    assert(isNaN(nan));
+    assert(!isNaN(small));
 
     UTEST_TEST("in_svg_plane") {
         UTEST_ASSERT(in_svg_plane(p3n4));
