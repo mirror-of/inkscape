@@ -1,5 +1,8 @@
 2004-06-21  Carl Hetherington  <inkscape@carlh.net>
 
+	* src/file.cpp: don't call g_file_test with a NULL path.  Fixes
+	#976703.
+	
 	* src/desktop-snap.cpp: default to snapping to bounding boxes when
 	snapping is first enabled.
 
