@@ -1136,7 +1136,9 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
             sp_display_dialog ();
             break;
         case SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS:
-            // no prefs for this tool
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_CALLIGRAPHY);
+            sp_display_dialog ();
             break;
         case SP_VERB_CONTEXT_TEXT_PREFS:
             prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);

@@ -1150,6 +1150,13 @@ sp_display_dialog (void)
             selcue_checkbox (vb_tool, tt, "tools.freehand.pen");
         }
 
+        // Calligraphy
+        {
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Calligraphy"));
+
+            new_objects_style (vb_tool, tt, "tools.calligraphic");
+        }
+
         // Text
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Text"));

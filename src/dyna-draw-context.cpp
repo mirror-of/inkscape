@@ -20,9 +20,7 @@
 /*
  * TODO: Tue Oct  2 22:57:15 2001
  *  - Decide control point behavior when use_calligraphic==1.
- *  - Option dialog box support if it is availabe.
  *  - Decide to use NORMALIZED_COORDINATE or not.
- *  - Remove hard coded style attributes and move to customizable style.
  *  - Bug fix.
  */
 
@@ -52,6 +50,7 @@
 #include "desktop-events.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
+#include "desktop-style.h"
 #include "snap.h"
 #include "sp-desktop-widget.h"
 #include "dyna-draw-context.h"
@@ -639,16 +638,10 @@ set_to_accumulated(SPDynaDrawContext *dc)
         if (!dc->repr) {
             /* Create object */
             SPRepr *repr = sp_repr_new("path");
+
             /* Set style */
-            SPRepr *style = inkscape_get_repr(INKSCAPE,
-                                              ( dc->use_calligraphic
-                                                ? "tools.calligraphic"
-                                                : "tools.freehand" ));
-            if (style) {
-                SPCSSAttr *css = sp_repr_css_attr_inherited(style, "style");
-                sp_repr_css_set(repr, css, "style");
-                sp_repr_css_attr_unref(css);
-            }
+            sp_desktop_apply_style_tool (desktop, repr, "tools.calligraphic", false);
+
             dc->repr = repr;
 
             SPItem *item=SP_ITEM(desktop->currentLayer()->appendChildRepr(dc->repr));
