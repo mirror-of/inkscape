@@ -87,12 +87,11 @@ FileOpenDialog::~FileOpenDialog() {
     if ( nativeData ) {
         g_free(nativeData->dir);
         g_free(nativeData->title);
-        g_free( nativeData );
+        g_free(nativeData);
     }
 
-	if (filename != NULL)
-		g_free(filename);
-	extension = NULL;
+    g_free(filename);
+    extension = NULL;
 }
 
 
@@ -219,6 +218,7 @@ FileOpenDialog::show() {
 
 struct FileSaveNativeData_def {
     OPENFILENAME ofn;
+    gchar filter[UNSAFE_SCRATCH_BUFFER_SIZE];
     gchar fnbuf[4096];
 };
 
@@ -234,24 +234,62 @@ FileSaveDialog::FileSaveDialog(
         return;
         }
 
-    gchar *filter = "";
-    if ( fileTypes == SVG_TYPES )
-        filter = "Inkscape SVG (*.svg)\0*\0Plain SVG (*.svg)\0*\0";
-    else if ( fileTypes == EXPORT_TYPES )
-        filter = "Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
-                 "SVG files\0*.svg\0"
-                 "All files\0*\0";
+    extension = NULL;
+    filename = NULL;
+
+    int default_item = 0;
+
+    GSList* extension_list = Inkscape::Extension::db.get_output_list();
+    g_assert (extension_list != NULL);
+
+    /* Make up the filter string for the save dialogue using the list
+    ** of available output types.
+    */
+    
+    gchar *p = nativeData->filter;
+    int N = UNSAFE_SCRATCH_BUFFER_SIZE;
+
+    int n = 1;
+    for (GSList* i = g_slist_next (extension_list); i != NULL; i = g_slist_next(i)) {
+
+      Inkscape::Extension::DB::IOExtensionDescription* d =
+	reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription*>(i->data);
+
+      int w = snprintf (p, N, "%s", d->name);
+      N -= w + 1;
+      p += w + 1;
+
+      w = snprintf (p, N, "*");
+      N -= w + 1;
+      p += w + 1;
+
+      g_assert (N < UNSAFE_SCRATCH_BUFFER_SIZE);
+
+      /* Look to see if this extension is the default */
+      if (default_key &&
+	  d->extension->get_id() &&
+	  strcmp (default_key, d->extension->get_id()) == 0) {
+	default_item = n;
+	extension = d->extension;
+      }
+
+      n++;
+    }
+
+    *p = '\0';
 
     nativeData->fnbuf[0] = '\0';
+    if (dir)
+      strncpy(nativeData->fnbuf, dir, sizeof(nativeData->fnbuf));
 
     OPENFILENAME ofn = {
         sizeof (OPENFILENAME),
         NULL,                       // hwndOwner
         NULL,                       // hInstance
-        "Inkscape SVG (*.svg)\0*\0Plain SVG (*.svg)\0*\0", // lpstrFilter
+        nativeData->filter,         // lpstrFilter
         NULL,                       // lpstrCustomFilter
         0,                          // nMaxCustFilter
-        1,                          // nFilterIndex
+        default_item,               // nFilterIndex
         nativeData->fnbuf,          // lpstrFile
         sizeof (nativeData->fnbuf), // nMaxFile
         NULL,                       // lpstrFileTitle
@@ -266,20 +304,16 @@ FileSaveDialog::FileSaveDialog(
         NULL,                       // lpfnHook
         NULL                        // lpTemplateName
         };
+    
     nativeData->ofn = ofn;
-
-	extension = NULL;
-	filename = NULL;
 }
 
 FileSaveDialog::~FileSaveDialog() {
 
-    //do any cleanup here
-    if ( nativeData )
-        g_free( nativeData );
-	if ( filename != NULL)
-		g_free(filename);
-	extension = NULL;
+  //do any cleanup here
+  g_free(nativeData);
+  g_free(filename);
+  extension = NULL;
 }
 
 bool
@@ -293,10 +327,24 @@ FileSaveDialog::show() {
         return FALSE;
         }
 
-    if (nativeData->ofn.nFilterIndex != 2)
-        extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
-    else
-        extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG);
+    GSList* extension_list = Inkscape::Extension::db.get_output_list();
+    g_assert (extension_list != NULL);
+
+    /* Work out which extension corresponds to the user's choice of
+    ** file type.
+    */
+    int n = nativeData->ofn.nFilterIndex - 1;
+    GSList* i = g_slist_next (extension_list);
+
+    while (n > 0 && i) {
+      n--;
+      i = g_slist_next(i);
+    }
+
+    Inkscape::Extension::DB::IOExtensionDescription* d =
+      reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription*>(i->data);
+    
+    extension = d->extension;
 
     filename = g_strdup (nativeData->fnbuf);
 	return TRUE;
