@@ -36,12 +36,400 @@ typedef struct
 
 
 /*#########################################################################
+## I M P L E M E N T A T I O N    C L A S S    D E C L A R A T I O N S
+#########################################################################*/
+
+class DOMImplementationImpl : public DOMImplementation
+{
+    public:
+
+    bool hasFeature(DOMString& feature, DOMString& version);
+
+    DocumentType *createDocumentType( DOMString& qualifiedName, 
+                                     DOMString& publicId, 
+                                     DOMString& systemId)
+                                     throw(DOMException);
+
+    Document *createDocument(DOMString& namespaceURI, 
+                             DOMString& qualifiedName, 
+                             DocumentType *doctype)
+                             throw(DOMException);
+
+};
+
+
+class NodeImpl : public Node
+{
+    public:
+
+    DOMString getNodeName();
+
+    DOMString getNodeValue() throw (DOMException);
+
+    void setNodeValue(DOMString& val) throw (DOMException);
+
+
+    unsigned short getNodeType();
+
+
+    Node *getParentNode();
+
+    NodeList *getChildNodes();
+
+    Node *getFirstChild();
+
+    Node *getLastChild();
+
+
+    Node *getPreviousSibling();
+
+    Node *getNextSibling();
+
+
+    NamedNodeMap *getAttributes();
+
+
+
+    Document *getOwnerDocument();
+
+
+    Node *insertBefore(Node *newChild, 
+                       Node *refChild)
+                       throw(DOMException);
+
+
+    Node *replaceChild(Node *newChild, 
+                       Node *oldChild)
+                       throw(DOMException);
+
+
+    Node *removeChild(Node *oldChild)
+                      throw(DOMException);
+
+
+    Node *appendChild(Node *newChild)
+                      throw(DOMException);
+
+
+    bool hasChildNodes();
+
+    Node *cloneNode(bool deep);
+
+    void normalize();
+
+    bool isSupported(DOMString& feature, 
+                     DOMString& version);
+
+    DOMString getNamespaceURI();
+
+    DOMString getPrefix();
+
+    void setPrefix(DOMString& val) throw(DOMException);
+
+    DOMString getLocalName();
+
+    bool hasAttributes();
+
+};
+
+
+class NodeListImpl : public NodeList
+{
+    public:
+
+    Node *item(unsigned long index);
+
+    unsigned long getLength();
+
+};
+
+
+class NamedNodeMapImpl : public NamedNodeMap
+{
+    public:
+
+    Node *getNamedItem(DOMString& name);
+
+    Node *setNamedItem(Node *arg) throw(DOMException);
+
+    Node *removeNamedItem(DOMString& name) throw(DOMException);
+
+    Node *item(unsigned long index);
+
+    unsigned long getLength();
+
+    Node *getNamedItemNS(DOMString& namespaceURI, 
+                         DOMString& localName);
+
+    Node *setNamedItemNS(Node *arg) throw(DOMException);
+
+    Node *removeNamedItemNS(DOMString& namespaceURI, 
+                            DOMString& localName)
+                            throw(DOMException);
+};
+
+
+class CharacterDataImpl : public CharacterData
+{
+    public:
+
+    DOMString getData() throw(DOMException);
+
+    void setData(DOMString& val) throw(DOMException);
+
+    unsigned long getLength();
+
+    DOMString substringData(unsigned long offset, 
+                            unsigned long count)
+                            throw(DOMException);
+
+    void appendData(DOMString& arg) throw(DOMException);
+
+    void insertData(unsigned long offset, 
+                    DOMString& arg)
+                    throw(DOMException);
+
+    void deleteData(unsigned long offset, 
+                    unsigned long count)
+                    throw(DOMException);
+
+    void  replaceData(unsigned long offset, 
+                      unsigned long count, 
+                      DOMString& arg)
+                      throw(DOMException);
+
+};
+
+
+
+class AttrImpl : public Attr
+{
+    public:
+
+    DOMString getName();
+
+    bool getSpecified();
+
+    DOMString getValue();
+
+    void setValue(DOMString& val) throw(DOMException);
+
+    Element *getOwnerElement();
+
+};
+
+
+class ElementImpl : public Element
+{
+    public:
+
+    DOMString getTagName();
+
+    DOMString getAttribute(DOMString& name);
+
+    void setAttribute(DOMString& name, 
+                      DOMString& value)
+                      throw(DOMException);
+
+    void removeAttribute(DOMString& name)
+                         throw(DOMException);
+
+    Attr *getAttributeNode(DOMString& name);
+
+    Attr *setAttributeNode(Attr *newAttr)
+                          throw(DOMException);
+
+    Attr *removeAttributeNode(Attr *oldAttr)
+                             throw(DOMException);
+
+    NodeList *getElementsByTagName(DOMString& name);
+
+
+    DOMString getAttributeNS(DOMString& namespaceURI, 
+                             DOMString& localName);
+
+    void setAttributeNS(DOMString& namespaceURI, 
+                        DOMString& qualifiedName, 
+                        DOMString& value)
+                        throw(DOMException);
+
+
+    void removeAttributeNS(DOMString& namespaceURI, 
+                           DOMString& localName)
+                           throw(DOMException);
+ 
+
+    Attr *getAttributeNodeNS(DOMString& namespaceURI, 
+                            DOMString& localName);
+
+    Attr *setAttributeNodeNS(Attr *newAttr)
+                            throw(DOMException);
+
+    NodeList *getElementsByTagNameNS(DOMString& namespaceURI, 
+                                    DOMString& localName);
+
+
+    bool hasAttribute(DOMString& name);
+
+    bool hasAttributeNS(DOMString& namespaceURI, 
+                        DOMString& localName);
+};
+
+
+
+class TextImpl : public Text
+{
+    public:
+
+    Text *splitText(unsigned long offset) throw(DOMException);
+};
+
+
+class CommentImpl : public Comment
+{
+};
+
+
+class CDATASectionImpl : public CDATASection
+{
+};
+
+class DocumentTypeImpl : public DocumentType
+{
+    public:
+
+    DocumentTypeImpl(DOMString& qualifiedName, 
+                     DOMString& publicId, DOMString& systemId);
+
+    DOMString getName();
+
+
+    NamedNodeMap *getEntities();
+
+
+    NamedNodeMap *getNotations();
+
+
+    DOMString getPublicId();
+
+
+    DOMString getSystemId();
+
+    DOMString getInternalSubset();
+
+};
+
+
+class NotationImpl : public Notation
+{
+    public:
+
+    DOMString getPublicId();
+
+    DOMString getSystemId();
+
+};
+
+class EntityImpl : public Entity
+{
+    public:
+
+    DOMString getPublicId();
+
+    DOMString getSystemId();
+
+    DOMString getNotationName();
+
+};
+
+
+class EntityReferenceImpl : public EntityReference
+{
+};
+
+
+class ProcessingInstructionImpl : public ProcessingInstruction
+{
+    public:
+
+    DOMString getTarget();
+
+    DOMString getData();
+
+    void setData(DOMString& val) throw(DOMException);
+};
+
+
+
+class DocumentFragmentImpl : public DocumentFragment
+{
+};
+
+
+
+class DocumentImpl : public Document
+{
+    public:
+
+    DocumentType *DocumentImpl::getDoctype();
+
+    DOMImplementation *DocumentImpl::getImplementation();
+
+    Element *DocumentImpl::getDocumentElement();
+
+    Element *DocumentImpl::createElement(DOMString& tagName) throw(DOMException);
+
+    DocumentFragment *DocumentImpl::createDocumentFragment();
+
+    Text *DocumentImpl::createTextNode(DOMString& data);
+
+    Comment  *DocumentImpl::createComment(DOMString& data);
+
+    CDATASection *DocumentImpl::createCDATASection(DOMString& data)
+                                     throw(DOMException);
+
+    ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& target, 
+                                                       DOMString& data)
+                                                       throw(DOMException);
+
+
+    Attr *DocumentImpl::createAttribute(DOMString& name)
+                          throw(DOMException);
+
+
+    EntityReference *DocumentImpl::createEntityReference(DOMString& name)
+                                           throw(DOMException);
+
+
+    NodeList *DocumentImpl::getElementsByTagName(DOMString& tagname);
+
+    Node *DocumentImpl::importNode(Node *importedNode, bool deep)
+                                 throw(DOMException);
+
+    Element *DocumentImpl::createElementNS(DOMString& namespaceURI, 
+                             DOMString& qualifiedName)
+                             throw(DOMException);
+
+    Attr *DocumentImpl::createAttributeNS(DOMString& namespaceURI, 
+                            DOMString& qualifiedName)
+                            throw(DOMException);
+
+    NodeList *DocumentImpl::getElementsByTagNameNS(DOMString& namespaceURI, 
+                                     DOMString& localName);
+
+    Element *DocumentImpl::getElementById(DOMString& elementId);
+
+};
+
+
+
+/*#########################################################################
 ## DOMException
 #########################################################################*/
 static SymTableEntry exceptionCodes[] =
 {
 
-    { "INDEX_SIZE_ERR",              INDEX_SIZE_ERR
+    { "INDEX_SIZE_ERR",              INDEX_SIZE_ERR              },
     { "DOMSTRING_SIZE_ERR",          DOMSTRING_SIZE_ERR          },
     { "HIERARCHY_REQUEST_ERR",       HIERARCHY_REQUEST_ERR       },
     { "WRONG_DOCUMENT_ERR",          WRONG_DOCUMENT_ERR          },
@@ -60,7 +448,7 @@ static SymTableEntry exceptionCodes[] =
 };
 
 
-const char *DomException::what const throw()
+const char *DOMException::what() const throw()
 {
     SymTableEntry *entry;
     for (entry = exceptionCodes; entry->sval ; entry++)
@@ -80,12 +468,6 @@ const char *DomException::what const throw()
 ## DOMImplementation
 #########################################################################*/
 
-class DOMImplementationImpl : public DOMImplementation
-{
-
-
-};
-
 /**
  *
  */
@@ -104,7 +486,7 @@ bool DOMImplementationImpl::hasFeature(DOMString& feature,
 /**
  * L2
  */
-DocumentType *DOMImplementationImpl::*createDocumentType(
+DocumentType *DOMImplementationImpl::createDocumentType(
                                      DOMString& qualifiedName, 
                                      DOMString& publicId, 
                                      DOMString& systemId)
@@ -122,7 +504,7 @@ DocumentType *DOMImplementationImpl::*createDocumentType(
  */
 Document *DOMImplementationImpl::createDocument(DOMString& namespaceURI, 
                              DOMString& qualifiedName, 
-                             DocumentType &doctype)
+                             DocumentType *doctype)
                              throw(DOMException)
 {
     DocumentImpl *doc = new DocumentImpl(namespaceURI, qualifiedName,
@@ -268,8 +650,8 @@ Document *NodeImpl::getOwnerDocument()
 /**
  *
  */
-Node *NodeImpl::insertBefore(Node& newChild, 
-                         Node& refChild)
+Node *NodeImpl::insertBefore(Node *newChild, 
+                         Node *refChild)
                          throw(DOMException)
 {
 
@@ -279,8 +661,8 @@ Node *NodeImpl::insertBefore(Node& newChild,
 /**
  *
  */
-Node *NodeImpl::replaceChild(Node newChild, 
-                         Node oldChild)
+Node *NodeImpl::replaceChild(Node *newChild, 
+                         Node *oldChild)
                          throw(DOMException)
 {
 
@@ -290,7 +672,7 @@ Node *NodeImpl::replaceChild(Node newChild,
 /**
  *
  */
-Node *NodeImpl::removeChild(Node oldChild)
+Node *NodeImpl::removeChild(Node *oldChild)
                         throw(DOMException)
 {
 
@@ -300,7 +682,7 @@ Node *NodeImpl::removeChild(Node oldChild)
 /**
  *
  */
-Node *NodeImpl::appendChild(Node newChild)
+Node *NodeImpl::appendChild(Node *newChild)
                         throw(DOMException)
 {
 
@@ -431,7 +813,7 @@ Node *NamedNodeMapImpl::getNamedItem(DOMString& name)
 /**
  *
  */
-Node *NamedNodeMapImpl::setNamedItem(Node &arg) throw(DOMException)
+Node *NamedNodeMapImpl::setNamedItem(Node *arg) throw(DOMException)
 {
 
 }
@@ -478,7 +860,7 @@ Node *NamedNodeMapImpl::getNamedItemNS(DOMString& namespaceURI,
 /**
  * L2
  */
-Node *NamedNodeMapImpl::setNamedItemNS(Node arg) throw(DOMException)
+Node *NamedNodeMapImpl::setNamedItemNS(Node *arg) throw(DOMException)
 {
 
 }
@@ -700,7 +1082,7 @@ Attr *ElementImpl::getAttributeNode(DOMString& name)
 /**
  *
  */
-Attr *ElementImpl::setAttributeNode(Attr& newAttr)
+Attr *ElementImpl::setAttributeNode(Attr *newAttr)
                           throw(DOMException)
 {
 
@@ -710,7 +1092,7 @@ Attr *ElementImpl::setAttributeNode(Attr& newAttr)
 /**
  *
  */
-Attr *ElementImpl::removeAttributeNode(Attr& oldAttr)
+Attr *ElementImpl::removeAttributeNode(Attr *oldAttr)
                              throw(DOMException)
 {
 
@@ -772,7 +1154,7 @@ Attr *ElementImpl::getAttributeNodeNS(DOMString& namespaceURI,
 /**
  * L2
  */
-Attr *ElementImpl::setAttributeNodeNS(Attr& newAttr)
+Attr *ElementImpl::setAttributeNodeNS(Attr *newAttr)
                             throw(DOMException)
 {
 
@@ -1025,6 +1407,19 @@ void ProcessingInstructionImpl::setData(DOMString& val) throw(DOMException)
 ## Document
 #########################################################################*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  *
  */
@@ -1143,7 +1538,7 @@ NodeList *DocumentImpl::getElementsByTagName(DOMString& tagname)
 /**
  * L2
  */
-Node *DocumentImpl::importNode(Node& importedNode, 
+Node *DocumentImpl::importNode(Node *importedNode, 
                  bool deep)
                  throw(DOMException)
 {

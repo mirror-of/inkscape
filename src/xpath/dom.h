@@ -54,12 +54,12 @@ class DOMException : public std::exception
 
     public:
 
-    DomException(short theCode)
+    DOMException(short theCode)
         {
         code = theCode;
         }
 
-    ~DomException
+    ~DOMException() throw()
        {}
 
     /**
@@ -116,6 +116,7 @@ enum
  */
 class DOMImplementation
 {
+    public:
 
     /**
      *
@@ -136,7 +137,7 @@ class DOMImplementation
      */
     virtual Document *createDocument(DOMString& namespaceURI, 
                              DOMString& qualifiedName, 
-                             DocumentType &doctype)
+                             DocumentType *doctype)
                              throw(DOMException) = 0;
 
 
@@ -154,6 +155,7 @@ class DOMImplementation
  */
 class Node
 {
+    public:
 
     // NodeType
     enum
@@ -237,27 +239,27 @@ class Node
     /**
      *
      */
-    virtual Node *insertBefore(Node& newChild, 
+    virtual Node *insertBefore(Node *newChild, 
                        Node& refChild)
                        throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Node *replaceChild(Node newChild, 
-                       Node oldChild)
+    virtual Node *replaceChild(Node *newChild, 
+                       Node *oldChild)
                        throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Node *removeChild(Node oldChild)
+    virtual Node *removeChild(Node *oldChild)
                       throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Node *appendChild(Node newChild)
+    virtual Node *appendChild(Node *newChild)
                       throw(DOMException) = 0;
 
     /**
@@ -319,11 +321,12 @@ class Node
  */
 class NodeList
 {
+    public:
 
     /**
      *
      */
-    virtual Node item(unsigned long index) = 0;
+    virtual Node *item(unsigned long index) = 0;
 
     /**
      *
@@ -343,6 +346,7 @@ class NodeList
  */
 class NamedNodeMap
 {
+    public:
 
     /**
      *
@@ -352,7 +356,7 @@ class NamedNodeMap
     /**
      *
      */
-    virtual Node *setNamedItem(Node &arg) throw(DOMException) = 0;
+    virtual Node *setNamedItem(Node *arg) throw(DOMException) = 0;
 
 
     /**
@@ -379,7 +383,7 @@ class NamedNodeMap
     /**
      * L2
      */
-    virtual Node *setNamedItemNS(Node arg) throw(DOMException) = 0;
+    virtual Node *setNamedItemNS(Node *arg) throw(DOMException) = 0;
 
     /**
      * L2
@@ -399,8 +403,9 @@ class NamedNodeMap
 /**
  *
  */
-class CharacterData : Node
+class CharacterData : public Node
 {
+    public:
 
     /**
      *
@@ -465,8 +470,9 @@ class CharacterData : Node
 /**
  *
  */
-class Attr : Node
+class Attr : public Node
 {
+    public:
 
     /**
      *
@@ -508,8 +514,9 @@ class Attr : Node
 /**
  *
  */
-class Element : Node
+class Element : public Node
 {
+    public:
 
     /**
      *
@@ -542,13 +549,13 @@ class Element : Node
     /**
      *
      */
-    virtual Attr *setAttributeNode(Attr& newAttr)
+    virtual Attr *setAttributeNode(Attr *newAttr)
                           throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Attr *removeAttributeNode(Attr& oldAttr)
+    virtual Attr *removeAttributeNode(Attr *oldAttr)
                              throw(DOMException) = 0;
 
     /**
@@ -586,7 +593,7 @@ class Element : Node
     /**
      * L2
      */
-    virtual Attr *setAttributeNodeNS(Attr& newAttr)
+    virtual Attr *setAttributeNodeNS(Attr *newAttr)
                             throw(DOMException) = 0;
 
     /**
@@ -618,8 +625,9 @@ class Element : Node
 /**
  *
  */
-class Text : CharacterData
+class Text : public CharacterData
 {
+    public:
 
     /**
      *
@@ -638,7 +646,7 @@ class Text : CharacterData
 /**
  *
  */
-class Comment : CharacterData
+class Comment : public CharacterData
 {
 };//class Comment
 
@@ -652,7 +660,7 @@ class Comment : CharacterData
 /**
  *
  */
-class CDATASection : Text
+class CDATASection : public Text
 {
 };//class CDATASection
 
@@ -666,8 +674,9 @@ class CDATASection : Text
 /**
  *
  */
-class DocumentType : Node
+class DocumentType : public Node
 {
+    public:
 
     /**
      *
@@ -712,8 +721,9 @@ class DocumentType : Node
 /**
  *
  */
-class Notation : Node
+class Notation : public Node
 {
+    public:
 
     /**
      *
@@ -739,8 +749,9 @@ class Notation : Node
 /**
  *
  */
-class Entity : Node
+class Entity : public Node
 {
+    public:
 
     /**
      *
@@ -769,7 +780,7 @@ class Entity : Node
 /**
  *
  */
-class EntityReference : Node
+class EntityReference : public Node
 {
 };//class EntityReference
 
@@ -784,8 +795,9 @@ class EntityReference : Node
 /**
  *
  */
-class ProcessingInstruction : Node
+class ProcessingInstruction : public Node
 {
+    public:
 
     /**
      *
@@ -814,7 +826,7 @@ class ProcessingInstruction : Node
 /**
  *
  */
-class DocumentFragment : Node
+class DocumentFragment : public Node
 {
 };//class DocumentFragment
 
@@ -830,8 +842,9 @@ class DocumentFragment : Node
 /**
  *
  */
-class Document : Node
+class Document : public Node
 {
+    public:
 
     /**
      *
@@ -903,7 +916,7 @@ class Document : Node
     /**
      * L2
      */
-    virtual Node *importNode(Node& importedNode, 
+    virtual Node *importNode(Node *importedNode, 
                      bool deep)
                      throw(DOMException) = 0;
 
