@@ -5,13 +5,14 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 #include "FontFactory.h"
 #include <libnrtype/font-instance.h>
 
 #include <pango/pango.h>
+
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #ifdef WITH_XFT
 #include <pango/pangoft2.h>
@@ -24,7 +25,8 @@
 size_t  font_descr_hash::operator()( PangoFontDescription* const&x) const {
 	int    h=0;
 	h*=1128467;
-	h+=(pango_font_description_get_family(x))?g_str_hash(pango_font_description_get_family(x)):0;
+	const char* theF=pango_font_description_get_family(x);
+	h+=(theF)?g_str_hash(theF):0;
 	h*=1128467;
 	h+=(int)pango_font_description_get_style(x);
 	h*=1128467;
@@ -252,8 +254,8 @@ family_name_compare (const void *a, const void *b)
 }
 
 void noop (...) {}
-//#define PANGO_DEBUG g_print
-#define PANGO_DEBUG noop
+#define PANGO_DEBUG g_print
+//#define PANGO_DEBUG noop
 
 
 
@@ -270,6 +272,9 @@ font_factory*  font_factory::Default(void)
 font_factory::font_factory(void)
 {
 	fontSize=512;
+	nbEnt=0;
+	maxEnt=32;
+	ents=(font_entry*)malloc(maxEnt*sizeof(font_entry));
 #ifdef WITH_XFT
 	fontServer=pango_ft2_font_map_new();
 	pango_ft2_font_map_set_resolution((PangoFT2FontMap*)fontServer, 72, 72);
@@ -288,6 +293,8 @@ font_factory::font_factory(void)
 
 font_factory::~font_factory(void)
 {
+	for (int i=0;i<nbEnt;i++) ents[i].f->Unref();
+	if ( ents ) free(ents);
 #ifdef WITH_XFT
 	g_object_unref(fontServer);
 //	pango_ft2_shutdown_display();
@@ -316,15 +323,12 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
         // not yet loaded
         PangoFont* nFace=pango_font_map_load_font(fontServer,fontContext,descr);
         if ( nFace ) {
-            // duplicate FcPattern, the hard way
-            res=new font_instance();
-
-            { // store the description returned by Pango for the found font, not the one we fed it
-                PangoFontDescription *temp = pango_font_describe (nFace);
-                res->descr = pango_font_description_copy(temp);
-                pango_font_description_free(temp);
-            }
-
+					// duplicate FcPattern, the hard way
+					res=new font_instance();
+					// store the descr of the font we asked for, since this is the key where we intend to put the font_instance at
+					// in the hash_map.  the descr of the returned pangofont may differ from what was asked, so we don't know (at this 
+					// point) whether loadedFaces[that_descr] is free or not (and overwriting an entry will bring deallocation problems)
+						res->descr = pango_font_description_copy(descr);
             res->daddy=this;
             res->InstallFace(nFace);
             if ( res->pFont == NULL ) {
@@ -340,6 +344,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
             } else {
                 loadedFaces[res->descr]=res;
                 res->Ref();
+								AddInCache(res);
             }
         } else {
             // no match
@@ -353,6 +358,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
         // already here
         res=loadedFaces[descr];
         res->Ref();
+				AddInCache(res);
     }
     return res;
 }
@@ -430,7 +436,9 @@ void font_factory::UnrefFace(font_instance* who)
     if ( who == NULL ) return;
     if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
         // not found
-			printf("unrefFace %x: failed\n",who);
+			char* tc=pango_font_description_to_string(who->descr);
+			printf("unrefFace %x=%s: failed\n",who,tc);
+			free(tc);
     } else {
         loadedFaces.erase(loadedFaces.find(who->descr));
 //			printf("unrefFace %x: success\n",who);
@@ -503,14 +511,16 @@ NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
                 // no unnamed faces
                 if (pango_font_face_get_face_name (faces[i]) == NULL)
                     continue;
-                if (pango_font_face_describe(faces[i]) == NULL)
+		PangoFontDescription *nd=pango_font_face_describe(faces[i]);
+                if (nd == NULL)
                     continue;
                 if (pango_font_description_to_string (pango_font_face_describe(faces[i])) == NULL)
                     continue;
 
                 const char *name = g_strdup (pango_font_face_get_face_name (faces[i]));
-                const char *descr = g_strdup (pango_font_description_to_string (pango_font_face_describe(faces[i])));
-
+                const char *descr = /*g_strdup (*/pango_font_description_to_string (nd)/*)*/;
+								pango_font_description_free(nd);
+								
                 // no duplicates
                 for (int j = 0; j < nr; j ++) {
  			 if (!strcmp ((const char *) ((slist->records)[j].name), (const char *) name)) {
@@ -531,6 +541,39 @@ NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
 	
 	return slist;
 }
+
+void                  font_factory::AddInCache(font_instance* who)
+{
+	if ( who == NULL ) return;
+	for (int i=0;i<nbEnt;i++) ents[i].age*=0.9;
+	for (int i=0;i<nbEnt;i++) {
+		if ( ents[i].f == who ) {
+			ents[i].age+=1.0;
+			return;
+		}
+	}
+	if ( nbEnt > maxEnt ) {
+		printf("cache sur-plein?\n");
+		return;
+	}
+	who->Ref();
+	if ( nbEnt == maxEnt ) {
+		int    bi=0;
+		double ba=ents[bi].age;
+		for (int i=1;i<nbEnt;i++) {
+			if ( ents[i].age < ba ) {
+				bi=i;
+				ba=ents[bi].age;
+			}
+		}
+		ents[bi].f->Unref();
+		ents[bi]=ents[--nbEnt];
+	}
+	ents[nbEnt].f=who;
+	ents[nbEnt].age=1.0;
+	nbEnt++;
+}
+
 
 /*
   Local Variables:

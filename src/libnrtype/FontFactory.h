@@ -11,6 +11,10 @@
 #include <algorithm>
 #include <ext/hash_map>
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include <pango/pango.h>
 #include "nr-type-primitives.h"
 #include "nr-type-pos-def.h"
@@ -37,7 +41,14 @@ struct font_descr_equal : public std::binary_function<PangoFontDescription*,Pang
 class font_factory {
 public:
 	static font_factory*  lUsine;
-  
+	
+	typedef struct font_entry {
+		font_instance*    f;
+		double            age;
+	} font_entry;
+	int                   nbEnt,maxEnt;
+  font_entry*           ents;
+	
 	PangoFontMap*					fontServer;
 	PangoContext*         fontContext;
 	double                fontSize;
@@ -62,6 +73,8 @@ public:
 	
 	NRNameList*           Families(NRNameList *flist);
 	NRStyleList*           Styles(const gchar *family, NRStyleList *slist);
+	
+	void                  AddInCache(font_instance* who);
 };
 
 
