@@ -251,42 +251,56 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			ret = TRUE;
 			break;
 		case GDK_C:
+		case GDK_c:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_type (SP_PATHNODE_CUSP);
 				ret = TRUE;
 			}
 			break;
 		case GDK_S:
+		case GDK_s:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_type (SP_PATHNODE_SMOOTH);
 				ret = TRUE;
 			}
 			break;
 		case GDK_Y:
+		case GDK_y:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_type (SP_PATHNODE_SYMM);
 				ret = TRUE;
 			}
 			break;
 		case GDK_B:
+		case GDK_b:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_break ();
 				ret = TRUE;
 			}
 			break;
 		case GDK_J:
+		case GDK_j:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_join ();
 				ret = TRUE;
 			}
 			break;
+		case GDK_D:
+		case GDK_d:
+			if (MOD__SHIFT_ONLY) {
+				sp_node_selected_duplicate ();
+				ret = TRUE;
+			}
+			break;
 		case GDK_L:
+		case GDK_l:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_line_type (ART_LINETO);
 				ret = TRUE;
 			}
 			break;
 		case GDK_K:
+		case GDK_k:
 			if (MOD__SHIFT_ONLY) {
 				sp_node_selected_set_line_type (ART_CURVETO);
 				ret = TRUE;
