@@ -17,6 +17,7 @@
 #include <config.h>
 
 #include <math.h>
+#include <string.h>
 
 #include <glib.h>
 
@@ -47,6 +48,7 @@
 #include "interface.h"
 #include "dialogs/dialog-events.h"
 #include "toolbox.h"
+
 
 /* fixme: Lauris */
 #include "file.h"
@@ -325,9 +327,19 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	/* Push select tool to the bottom of stack */
 	sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
-	/* fixme: Setup display rectangle */
-	dw = sp_document_width (document);
-	dh = sp_document_height (document);
+// looks like display rect and zoom are now handled in sp_desktop_widget_realize(), 
+// so they are commented out here and may be removed if no problems are discovered
+#if 0
+ 	/* fixme: Setup display rectangle */
+ 	dw = sp_document_width (document);
+ 	dh = sp_document_height (document);
+
+ 	/* Fixme: Setup initial zooming */
+ 	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), 1.0, -1.0);
+ 	desktop->d2w[5] = dh;
+ 	nr_matrix_invert (NR_MATRIX_D_FROM_DOUBLE (desktop->w2d), NR_MATRIX_D_FROM_DOUBLE (desktop->d2w));
+ 	sp_canvas_item_affine_absolute ((SPCanvasItem *) desktop->main, desktop->d2w);
+#endif
 
 	/* desktop->page = sp_canvas_item_new (page, SP_TYPE_CTRLRECT, NULL); */
 	sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
@@ -336,12 +348,6 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	/* Connect event for page resize */
 	desktop->doc2dt[5] = sp_document_height (document);
 	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
-
-	/* Fixme: Setup initial zooming */
-	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), 1.0, -1.0);
-	desktop->d2w[5] = dh;
-	nr_matrix_invert (NR_MATRIX_D_FROM_DOUBLE (desktop->w2d), NR_MATRIX_D_FROM_DOUBLE (desktop->d2w));
-	sp_canvas_item_affine_absolute ((SPCanvasItem *) desktop->main, desktop->d2w);
 
 	g_signal_connect (G_OBJECT (desktop->selection), "modified", G_CALLBACK (sp_desktop_selection_modified), desktop);
 
@@ -944,13 +950,10 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
 #endif
 }
 
-// static gint x = 0, y = 0; // the position of the save confirmation dialog
-
 static gboolean
 sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 {
 	SPDocument *doc;
-	// gint x1 = 0, y1 = 0;
 	doc = SP_VIEW_DOCUMENT (view);
 
 	if (doc && (((GObject *) doc)->ref_count == 1)) {
@@ -1025,20 +1028,12 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
 			gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_YES);
-
 			
 			gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dlg)->vbox), hbox1);
 			gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dlg)->vbox), 12);
 					  
 			gtk_widget_show_all (GTK_DIALOG (dlg)->vbox);
-			
-			/* if (x == 0 && y == 0) { // if no previous position remembered,
-				//position its bottom right curner under the cursor
-				gdk_window_get_pointer (NULL, &x, &y, NULL); // NULL means relative to the root window
-			} // otherwise put this dialog where the previous one was
-			gtk_window_get_size ((GtkWindow *) dlg, &x1, &y1);
-			gtk_window_move((GtkWindow *) dlg, MAX(x-x1, 0), MAX(y-y1, 0)); */
-			
+	
 			sp_transientize (dlg);
 
 			b = gtk_dialog_run (GTK_DIALOG(dlg));
@@ -1056,7 +1051,6 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			case GTK_RESPONSE_NO:
 				break;
 			default: // cancel pressed, or dialog was closed
-				// x = y = 0; // forget the position of the dialog
 				return TRUE;
 				break;
 			}
@@ -1069,7 +1063,6 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 }
 
 /* Constructor */
-
 
 static void
 sp_desktop_uri_set (SPView *view, const gchar *uri, SPDesktopWidget *dtw)
