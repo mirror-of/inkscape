@@ -323,7 +323,9 @@ sp_find_dialog_reset (GObject *, GObject *dlg)
     sp_find_reset_searchfield (dlg, "attr");
 
     GtkWidget *types = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "types"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (types), "all")), TRUE);
+    GtkToggleButton *tb = GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (types), "all"));
+    gtk_toggle_button_toggled (tb);
+    gtk_toggle_button_set_active (tb, TRUE);
 }
 
 
@@ -368,8 +370,8 @@ toggle_alltypes (GtkToggleButton *tb, gpointer data)
     } else {
         gtk_widget_show_all (alltypes_pane);
         
-        // double setting to make sure its toggle gets called, no matter what is the original state
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")), FALSE);
+        // excplicit toggle to make sure its handler gets called, no matter what was the original state
+        gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")), TRUE);
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "paths")), TRUE);
@@ -625,8 +627,10 @@ sp_find_dialog (void)
         }
     }
 
-    sp_find_squeeze_window();
+
     gtk_window_present ((GtkWindow *) dlg);
+    sp_find_dialog_reset (NULL, G_OBJECT (dlg));
+    
     return dlg;
 }
 
