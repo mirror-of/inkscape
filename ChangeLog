@@ -10,6 +10,9 @@
 	you modified the first file you loaded and then closed it, you
 	would not be asked to confirm the close.
 
+	* src/preferences-skeleton.h: add \n to the end of each line to
+	fix bug 938368.
+
 2004-04-19  MenTaLguY <mental@rydia.net>
 
     * src/arc-context.cpp, src/desktop-handles.h, src/desktop.h,
