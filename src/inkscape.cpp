@@ -801,9 +801,8 @@ inkscape_reactivate_desktop (SPDesktop * desktop)
 {
 	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (desktop != NULL);
-	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	if (DESKTOP_IS_ACTIVE (desktop))
+	if (SP_IS_DESKTOP (desktop) && DESKTOP_IS_ACTIVE (desktop))
 		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
 }
 
