@@ -125,7 +125,7 @@ struct poptOption options[] = {
 	 N_("Do not use X server (only process files from console)"),
 	 NULL},
 	{"with-gui", 'x', POPT_ARG_NONE, NULL, SP_ARG_GUI,
-	 N_("Try to use X server even if $DISPLAY is not set)"),
+	 N_("Try to use X server (even if $DISPLAY is not set)"),
 	 NULL},
 	{"file", 'f', POPT_ARG_STRING, NULL, SP_ARG_FILE,
 	 N_("Open specified document(s) (option string may be excluded)"),

@@ -633,7 +633,7 @@ inkscape_load_preferences (Inkscape::Application *inkscape)
                 "Although inkscape will run, you can\n"
                 "neither load nor save preferences\n"),
                   _("%s either is not valid xml file or\n"
-                "you do not have read premissions on it.\n"
+                "you do not have read permissions on it.\n"
                 "Although inkscape will run, you\n"
                 "are neither able to load nor save\n"
                 "preferences."),

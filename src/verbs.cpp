@@ -814,7 +814,7 @@ static const SPVerbActionDef props[] = {
         N_("Break selected path to subpaths"), "selection_break"},
 
     /* Object */
-    {SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate 90 _Degrees"),
+    {SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate _90 deg CW"),
         N_("Rotate selection 90 degrees clockwise"), "object_rotate"},
     {SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove _Transformations"),
         N_("Remove transformations from object"), "object_reset"},

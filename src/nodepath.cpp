@@ -983,7 +983,7 @@ void sp_node_selected_join()
 	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
 	if (g_list_length (nodepath->selected) != 2) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
 		return;
 	}
 
@@ -995,7 +995,7 @@ void sp_node_selected_join()
 	g_assert (b->p.other || b->n.other);
 
 	if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
 		return;
 	}
 
@@ -1075,7 +1075,7 @@ void sp_node_selected_join_segment()
 	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
 	if (g_list_length (nodepath->selected) != 2) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
 		return;
 	}
 
@@ -1087,7 +1087,7 @@ void sp_node_selected_join_segment()
 	g_assert (b->p.other || b->n.other);
 
 	if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
 		return;
 	}
 
@@ -1212,7 +1212,7 @@ sp_node_selected_delete_segment (void)
 
 	if (g_list_length (nodepath->selected) != 2) {
 		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-                "You must select two non-endpoint nodes on a path between which to delete segments.");
+                _("You must select two non-endpoint nodes on a path between which to delete segments."));
 		return;
 	}
 	
@@ -1226,7 +1226,7 @@ sp_node_selected_delete_segment (void)
              (!b->p.other || !b->n.other) )    //one of b's sides does not have a segment
 		{
 		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-		"You must select two non-endpoint nodes on a path between which to delete segments.");
+		_("You must select two non-endpoint nodes on a path between which to delete segments."));
 		return;
 		}
 
@@ -1322,7 +1322,7 @@ sp_node_selected_delete_segment (void)
 		}
 		if (!start) {
 			sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-			"Cannot find path between nodes.");
+			_("Cannot find path between nodes."));
 			return;
 		}
 

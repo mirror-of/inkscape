@@ -131,16 +131,16 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	mod->get_param("bitmap", &p2bm);
 	rb = gtk_radio_button_new_with_label (NULL, _("Print using PostScript operators"));
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
-						  _("Use PostScript vector operators, resulting image will be (usually) smaller "
+						  _("Use PostScript vector operators. The resulting image will be (usually) smaller "
 						    "and can be arbitrarily scaled, but alpha transparency, "
 							"gradients, markers, and patterns will be lost"), NULL);
 	if (!p2bm) gtk_toggle_button_set_active ((GtkToggleButton *) rb, TRUE);
 	gtk_box_pack_start (GTK_BOX (vb), rb, FALSE, FALSE, 0);
 	rb = gtk_radio_button_new_with_label (gtk_radio_button_get_group ((GtkRadioButton *) rb), _("Print as bitmap"));
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
-						  _("Print everything as bitmap, resulting image will be (usualy) larger "
-						    "and it quality depends on zoom factor, but all graphics "
-							"will be rendered identical to display"), NULL);
+						  _("Print everything as bitmap. The resulting image will be (usually) larger "
+						    "and cannot be arbitrarily scaled without quality loss, but all objects "
+							"will be rendered exactly as displayed"), NULL);
 	if (p2bm) gtk_toggle_button_set_active ((GtkToggleButton *) rb, TRUE);
 	gtk_box_pack_start (GTK_BOX (vb), rb, FALSE, FALSE, 0);
 	/* Resolution */
@@ -799,7 +799,7 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 #if 0
 	if (ferror (ofp))
 	{
-		g_message (_("write error occured"));
+		g_message (_("write error occurred"));
 		return (FALSE);
 	}
 #endif

@@ -335,7 +335,7 @@ sp_node_toolbox_new (SPDesktop *desktop)
         GTK_SIGNAL_FUNC (sp_node_path_edit_join_segment), tt, _("Join paths at selected nodes with new segment"));
 
     sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_delete_segment",
-        GTK_SIGNAL_FUNC (sp_node_path_edit_delete_segment), tt, _("Split path between two or more nodes"));
+        GTK_SIGNAL_FUNC (sp_node_path_edit_delete_segment), tt, _("Split path between two non-endpoint nodes"));
 
     sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_break",
         GTK_SIGNAL_FUNC (sp_node_path_edit_break), tt, _("Break path at selected nodes"));
