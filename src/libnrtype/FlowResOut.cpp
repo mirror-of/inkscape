@@ -378,6 +378,7 @@ void flow_res::Print(SPPrintContext *ctx,
 		for (int no=0;no<nbChunk;no++) {
 			for (int i=chunks[no].s_st;i<chunks[no].s_en;i++) {
 				text_style*     curS=spans[i].c_style;
+                         if (!curS) continue;
 				font_instance*  curF=curS->theFont;
 				const char*     curFam=pango_font_description_get_family(curF->descr);
 				char*           savFam=curS->with_style->text->font_family.value;
