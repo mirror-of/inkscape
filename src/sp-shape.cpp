@@ -164,9 +164,6 @@ sp_shape_release (SPObject *object)
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
 
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_release:  Releasing markers");
-#endif
 	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
 	  if (shape->marker[i]) {
 	    sp_signal_disconnect_by_data (shape->marker[i], object);
@@ -204,12 +201,8 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	 * sets it.
 	 */
 	/* TODO:  It would be nice if this could be done at an earlier level */
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_update:  Creating markers (if necessary)");
-#endif
 	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
 	  if (shape->marker[i] == NULL) {
-	    /* g_message("Setting marker[%d] to '%s'", i, object->style->marker[i].value); */
 	    sp_shape_set_marker (object, i, object->style->marker[i].value);
 	  }
 	} 
@@ -247,9 +240,6 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	/* Note, we're ignoring 'marker' settings, which technically should apply for
 	   all three settings.  This should be fixed later such that if 'marker' is
 	   specified, then all three should appear. */
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_update:  Updating markers");
-#endif
 	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] 
 			     || shape->marker[SP_MARKER_LOC_MID] 
 			     || shape->marker[SP_MARKER_LOC_END])) {
@@ -581,9 +571,6 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
 
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_set_marker:  Setting marker '%d' to '%s'", key, value);
-#endif
         if (key < SP_MARKER_LOC_START || key > SP_MARKER_LOC_END) {
 	  return;
 	}

@@ -659,13 +659,13 @@ sp_stroke_style_line_widget_new (void)
 	g_assert(hb != NULL);
 	
 	tb = NULL;
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_NONE,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_NONE,
 			       INKSCAPE_GLADEDIR "/marker_none_start.xpm",
 			       hb, spw, "start_marker", "none");
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_FILLED_ARROW,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
 			       INKSCAPE_GLADEDIR "/marker_triangle_start.xpm",
 			       hb, spw, "start_marker", "mTriangle");
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_HOLLOW_ARROW,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
 			       INKSCAPE_GLADEDIR "/marker_arrow_start.xpm",
 			       hb, spw, "start_marker", "mArrow");
 	i++;
@@ -676,13 +676,13 @@ sp_stroke_style_line_widget_new (void)
 	g_assert(hb != NULL);
 	
 	tb = NULL;
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_NONE,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_NONE,
 			       INKSCAPE_GLADEDIR "/marker_none_end.xpm",
 			       hb, spw, "mid_marker", "none");
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_FILLED_ARROW,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
 			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
 			       hb, spw, "mid_marker", "mTriangle");
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_HOLLOW_ARROW,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
 			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
 			       hb, spw, "mid_marker", "mArrow");
 	i++;
@@ -693,13 +693,13 @@ sp_stroke_style_line_widget_new (void)
 	g_assert(hb != NULL);
 	
 	tb = NULL;
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_NONE,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_NONE,
 			       INKSCAPE_GLADEDIR "/marker_none_end.xpm",
 			       hb, spw, "end_marker", "none");
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_FILLED_ARROW,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
 			       INKSCAPE_GLADEDIR "/marker_triangle_end.xpm",
 			       hb, spw, "end_marker", "mTriangle");
-	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_HOLLOW_ARROW,
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
 			       INKSCAPE_GLADEDIR "/marker_arrow_end.xpm",
 			       hb, spw, "end_marker", "mArrow");
 	i++;
@@ -987,13 +987,13 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	/* Toggle buttons for markers - marker-start, marker-mid, and marker-end */
 	/* TODO:  There's also a generic 'marker' that applies to all, but we'll leave that for later */
 	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_start.value));
-	sp_stroke_style_set_marker_buttons (spw, tb);
-	  
+	sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_START_MARKER);
+
 	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_mid.value));
-	sp_stroke_style_set_marker_buttons (spw, tb);
-	
+	sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_MID_MARKER);
+
 	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_end.value));
-	sp_stroke_style_set_marker_buttons (spw, tb);
+	sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_END_MARKER);
 #endif
 	/* Dash */
 	if (style->stroke_dash.n_dash > 0) {
@@ -1326,21 +1326,27 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
  * active - the currently selected button.
  */
 static void
-sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active)
+sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, guchar *marker_type)
 {
   /* A toggle button */
   GtkWidget *tb;
-  
-  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_NONE));
-  g_assert(tb != NULL);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 
-  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_FILLED_ARROW));
-  g_assert(tb != NULL);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+  /* Set up the various xpm's as an array so that new kinds of markers can be added
+   * without having to cut and paste the code itself.
+   */
+  gchar *marker_xpm[INKSCAPE_STOCK_MARKER_QTY];
+  marker_xpm[0] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_NONE, NULL);
+  marker_xpm[1] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL);
+  marker_xpm[2] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL);
 
-  tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_HOLLOW_ARROW));
-  g_assert(tb != NULL);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+  for (int i=0; i<INKSCAPE_STOCK_MARKER_QTY; i++) {
+    g_message("Setting marker button %s\n", marker_xpm[i]);
+    tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), marker_xpm[i]));
+    g_assert(tb != NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+    
+  }
+  g_strfreev(marker_xpm);
+
 }
 #endif

@@ -37,15 +37,14 @@
 #define INKSCAPE_STOCK_CAP_BUTT              "cap_butt"
 #define INKSCAPE_STOCK_CAP_ROUND             "cap_round"
 #define INKSCAPE_STOCK_CAP_SQUARE            "cap_square"
-#define INKSCAPE_STOCK_START_NONE            "start_marker-none"
-#define INKSCAPE_STOCK_START_FILLED_ARROW    "start_marker-filled_arrow"
-#define INKSCAPE_STOCK_START_HOLLOW_ARROW    "start_marker-hollow_arrow"
-#define INKSCAPE_STOCK_MID_NONE              "start_marker-none"
-#define INKSCAPE_STOCK_MID_FILLED_ARROW      "mid_marker-filled_arrow"
-#define INKSCAPE_STOCK_MID_HOLLOW_ARROW      "mid_marker-hollow_arrow"
-#define INKSCAPE_STOCK_END_NONE              "end_marker-none"
-#define INKSCAPE_STOCK_END_FILLED_ARROW      "end_marker-filled_arrow"
-#define INKSCAPE_STOCK_END_HOLLOW_ARROW      "end_marker-hollow_arrow"
+#define INKSCAPE_STOCK_START_MARKER          "start_marker"
+#define INKSCAPE_STOCK_MID_MARKER            "mid_marker"
+#define INKSCAPE_STOCK_END_MARKER            "end_marker"
+#define INKSCAPE_STOCK_MARKER_NONE           "-none"
+#define INKSCAPE_STOCK_MARKER_FILLED_ARROW   "-filled_arrow"
+#define INKSCAPE_STOCK_MARKER_HOLLOW_ARROW   "-hollow_arrow"
+#define INKSCAPE_STOCK_MARKER_QTY            (3)
+
 /*object properties*/
 #define INKSCAPE_STOCK_ROTATE_LEFT           "rotate_left"
 #define INKSCAPE_STOCK_SCALE_HOR             "scale_hor"
