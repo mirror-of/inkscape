@@ -1452,7 +1452,7 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
 
     /* Revolution */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Turns:"), _("Number of corners of a polygon or star"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Turns:"), _("Number of revolutions"), 
                                           "tools.shapes.spiral", "revolution", 3.0,
                                           NULL, (SPWidget *) tbl, TRUE, "altx-spiral",
                                           0.01, 20.0, 0.1, 1.0, 
