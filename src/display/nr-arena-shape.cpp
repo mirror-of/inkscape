@@ -849,7 +849,7 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
 	int wind = 0;
 	nr_path_matrix_point_bbox_wind_distance(&bp, shape->ctm, p, NULL, &wind, &dist, NR_EPSILON);
 	if (shape->_fill.paint.type() != NRArenaShape::Paint::NONE) {
-	    if (!shape->style->fill_rule.value) {
+	    if (!shape->style->fill_rule.computed) {
 		if (wind != 0) return item;
 	    } else {
 		if (wind & 0x1) return item;
@@ -990,7 +990,7 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
         }
     }
     shape->setFillOpacity(SP_SCALE24_TO_FLOAT(style->fill_opacity.value));
-    switch (style->fill_rule.value) {
+    switch (style->fill_rule.computed) {
         case SP_WIND_RULE_EVENODD: {
             shape->setFillRule(NRArenaShape::EVEN_ODD);
             break;
@@ -1023,7 +1023,7 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
     }
     shape->setStrokeWidth(style->stroke_width.computed);
     shape->setStrokeOpacity(SP_SCALE24_TO_FLOAT(style->stroke_opacity.value));
-    switch (style->stroke_linecap.value) {
+    switch (style->stroke_linecap.computed) {
         case SP_STROKE_LINECAP_ROUND: {
             shape->setLineCap(NRArenaShape::ROUND_CAP);
             break;
@@ -1040,7 +1040,7 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
             g_assert_not_reached();
         }
     }
-    switch (style->stroke_linejoin.value) {
+    switch (style->stroke_linejoin.computed) {
         case SP_STROKE_LINEJOIN_ROUND: {
             shape->setLineJoin(NRArenaShape::ROUND_JOIN);
             break;
