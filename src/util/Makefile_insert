@@ -18,3 +18,6 @@ util_libinkutil_a_SOURCES = \
 	util/units.cpp \
 	util/units.h
 
+util_list_container_test_SOURCES = util/list-container-test.cpp
+util_list_container_test_LDADD = gc.o $(INKSCAPE_LIBS)
+

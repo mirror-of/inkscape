@@ -1,5 +1,12 @@
 2005-03-01  MenTaLguY  <mental@rydia.net>
 
+	* src/Makefile.am, src/util/Makefile_insert,
+	  src/util/list-container-test.cpp, src/util/list-container.h:
+
+	  tests and fixes for Util::ListContainer
+
+2005-03-01  MenTaLguY  <mental@rydia.net>
+
 	* src/Makefile.am, src/libnr/Makefile_insert, src/xml/Makefile_insert:
 	  use in-tree copy of cxxtest
 

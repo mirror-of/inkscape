@@ -186,6 +186,7 @@ check_PROGRAMS =	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
 	libnr/test-nr	\
+	util/list-container-test	\
 	xml/test-xml	\
 	xml/quote-test	\
 	xml/repr-action-test

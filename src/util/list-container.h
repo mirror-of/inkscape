@@ -43,7 +43,10 @@ public:
     bool operator==(ListContainer const &other) const {
         const_iterator iter = _head;
         const_iterator other_iter = other._head;
-        while ( iter && other_iter && *iter == *other_iter ) {
+        while ( iter && other_iter ) {
+            if (!( *iter == *other_iter )) {
+                return false;
+            }
             ++iter;
             ++other_iter;
         }
@@ -57,11 +60,16 @@ public:
     bool operator<(ListContainer const &other) const {
         const_iterator iter = _head;
         const_iterator other_iter = other._head;
-        while ( iter && other_iter && *iter < *other_iter ) {
+        while ( iter && other_iter ) {
+            if ( *iter < *other_iter ) {
+                return true;
+            } else if ( *other_iter < *iter ) {
+                return false;
+            }
             ++iter;
             ++other_iter;
         }
-        return !iter && !other_iter;
+        return false;
     }
     bool operator>=(ListContainer const &other) const {
         return !operator<(other);
@@ -92,15 +100,15 @@ public:
     bool empty() const { return !_head; }
 
     /* sequence */
-    ListContainer(const_reference value, size_type count) {
+    ListContainer(size_type count, const_reference value) {
         for ( ; count ; --count ) {
             push_back(value);
         }
     }
     ListContainer(size_type count) {
-        value_type default;
+        value_type default_value;
         for ( ; count ; --count ) {
-            push_back(default);
+            push_back(default_value);
         }
     }
     template <typename ForwardIterator>
@@ -109,10 +117,11 @@ public:
             push_back(*i);
         }
     }
+
     reference front() { return *_head; }
     const_reference front() const { return *_head; }
+
     iterator insert(const_iterator position, const_reference value) {
-        ListContainer temp(1, value);
         if (position) {
             if ( position != _head ) {
                 MutableList<T> added(value);
@@ -142,14 +151,14 @@ public:
     }
     void erase(const_iterator i, const_iterator j) {
         if ( i == _head ) {
-            _head = j;
+            _head = static_cast<MutableList<T> &>(j);
             if ( !j || !rest(j) ) {
                 _tail = _head;
             }
         } else {
             MutableList<T> before=_before(i);
             if (j) {
-                set_rest(before, j);
+                set_rest(before, static_cast<MutableList<T> &>(j));
             } else {
                 set_rest(before, MutableList<T>());
                 _tail = before;
@@ -161,7 +170,8 @@ public:
     }
     void resize(size_type size, const_reference fill) {
         MutableList<T> before;
-        for ( MutableList<T> iter = _head ; iter && size ; ++iter ) {
+        MutableList<T> iter;
+        for ( iter = _head ; iter && size ; ++iter ) {
             before = iter;
             size--;
         }
@@ -222,38 +232,97 @@ public:
         _head = _tail = MutableList<T>();
         return list;
     }
+    iterator insert_after(const_iterator pos, const_reference value) {
+        MutableList<T> added(value);
+        if (pos) {
+            MutableList<T> before=static_cast<MutableList<T> &>(pos);
+            set_rest(added, rest(before));
+            set_rest(before, added);
+            if ( _tail == before ) {
+                _tail = added;
+            }
+        } else {
+            push_front(value);
+        }
+    }
+    void insert_after(const_iterator position, size_type count,
+                      const_reference value)
+    {
+        _insert_after_from_temp(position, ListContainer(count, value));
+    }
+    template <typename ForwardIterator>
+    void insert_after(const_iterator position,
+                      ForwardIterator i, ForwardIterator j)
+    {
+        _insert_after_from_temp(position, ListContainer(i, j));
+    }
+    void erase_after(const_iterator position) {
+        if (!position) {
+            pop_front();
+        } else {
+            MutableList<T> before=static_cast<MutableList<T> &>(position);
+            MutableList<T> removed=rest(before);
+            set_rest(before, rest(removed));
+            if ( removed == _tail ) {
+                _tail = before;
+            }
+        }
+    }
 
 private:
     MutableList<T> _head;
     MutableList<T> _tail;
 
     MutableList<T> _before(const_iterator position) {
-        for ( iterator iter = _head ; iter ; ++iter ) {
+        for ( MutableList<T> iter = _head ; iter ; ++iter ) {
             if ( rest(iter) == position ) {
                 return iter;
             }
         }
         return MutableList<T>();
     }
-    void _insert_from_temp(const_iterator position, ListContainer &temp) {
+    void _insert_from_temp(const_iterator pos, ListContainer const &temp) {
         if (temp.empty()) {
             return;
         }
         if (empty()) { /* if empty, just take the whole thing */
             _head = temp._head;
             _tail = temp._tail;
-        } else if (position) {
-            if ( position == _head ) { /* prepend */
-                set_rest(temp._tail, _head)
+        } else if (pos) {
+            if ( pos == _head ) { /* prepend */
+                set_rest(temp._tail, _head);
                 _head = temp._head;
             } else { /* insert somewhere in the middle */
-                MutableList<T> before=_before(position);
-                set_rest(temp._tail, position);
+                MutableList<T> before=_before(pos);
+                set_rest(temp._tail, static_cast<MutableList<T> &>(pos));
                 set_rest(before, temp._head);
             }
         } else { /* append */
             set_rest(_tail, temp._head);
             _tail = temp._tail;
+        }
+    }
+    void _insert_after_from_temp(const_iterator pos,
+                                 ListContainer const &temp)
+    {
+        if (temp.empty()) {
+            return;
+        }
+        if (empty()) { /* if empty, just take the whole thing */
+            _head = temp._head;
+            _tail = temp._tail;
+        } else if (pos) {
+            if ( pos == _tail ) { /* append */
+                set_rest(_tail, temp._head);
+                _tail = temp._tail;
+            } else { /* insert somewhere in the middle */
+                MutableList<T> before=static_cast<MutableList<T> &>(pos);
+                set_rest(temp._tail, rest(before));
+                set_rest(before, temp._head);
+            }
+        } else { /* prepend */
+            set_rest(temp._tail, _head);
+            _head = temp._head;
         }
     }
 };
