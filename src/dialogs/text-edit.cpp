@@ -33,6 +33,12 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkcombo.h>
 
+#ifdef WITH_GTKSPELL
+extern "C" {
+#include <gtkspell/gtkspell.h>
+}
+#endif
+
 #include "macros.h"
 #include "helper/sp-intl.h"
 #include "helper/window.h"
@@ -208,6 +214,17 @@ sp_text_edit_dialog (void)
         gtk_frame_set_shadow_type (GTK_FRAME (f), GTK_SHADOW_IN);
         tb = gtk_text_buffer_new (NULL);
         txt = gtk_text_view_new_with_buffer (tb);
+#ifdef WITH_GTKSPELL
+        GError *error = NULL;
+        char *errortext = NULL;
+        if (gtkspell_new_attach(GTK_TEXT_VIEW(txt), NULL, &error) == NULL) {
+            g_print("gtkspell error: %s\n", error->message);
+            errortext = g_strdup_printf("GtkSpell was unable to initialize.\n"
+                                        "%s", error->message);
+            g_error_free(error);
+        }
+#endif
+
         gtk_widget_set_size_request (txt, -1, 64);
         gtk_text_view_set_editable (GTK_TEXT_VIEW (txt), TRUE);
         gtk_container_add (GTK_CONTAINER (f), txt);
