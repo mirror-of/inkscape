@@ -83,7 +83,7 @@ sp_canvas_arena_class_init (SPCanvasArenaClass *klass)
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
 
-	parent_class = gtk_type_class (SP_TYPE_CANVAS_ITEM);
+	parent_class = (SPCanvasItemClass*)gtk_type_class (SP_TYPE_CANVAS_ITEM);
 
 	signals[ARENA_EVENT] = gtk_signal_new ("arena_event",
 					       GTK_RUN_LAST,
@@ -184,10 +184,10 @@ sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	item->y2 = arena->root->bbox.y1 + 1;
 
 	if (arena->cursor) {
-		NRArenaItem *new;
+		NRArenaItem *new_arena;
 		/* Mess with enter/leave notifiers */
-		new = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
-		if (new != arena->active) {
+		new_arena = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
+		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = GTK_WIDGET (item->canvas)->window;
 			ec.send_event = TRUE;
@@ -202,7 +202,7 @@ sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags)
 			}
 			/* fixme: This is not optimal - better track ::destroy (Lauris) */
 			if (arena->active) nr_object_unref ((NRObject *) arena->active);
-			arena->active = new;
+			arena->active = new_arena;
 			if (arena->active) nr_object_ref ((NRObject *) arena->active);
 			if (arena->active) {
 				ec.type = GDK_ENTER_NOTIFY;
@@ -322,7 +322,7 @@ static gint
 sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 {
 	SPCanvasArena *arena;
-	NRArenaItem *new;
+	NRArenaItem *new_arena;
 	gint ret;
 	/* fixme: This sucks, we have to handle enter/leave notifiers */
 
@@ -368,8 +368,8 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 #endif
 		/* fixme: Not sure abut this, but seems the right thing (Lauris) */
 		nr_arena_item_invoke_update (arena->root, NULL, &arena->gc, NR_ARENA_ITEM_STATE_PICK, NR_ARENA_ITEM_STATE_NONE);
-		new = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
-		if (new != arena->active) {
+		new_arena = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
+		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = event->motion.window;
 			ec.send_event = event->motion.send_event;
@@ -383,7 +383,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 				ret = sp_canvas_arena_send_event (arena, (GdkEvent *) &ec);
 			}
 			if (arena->active) nr_object_unref ((NRObject *) arena->active);
-			arena->active = new;
+			arena->active = new_arena;
 			if (arena->active) nr_object_ref ((NRObject *) arena->active);
 			if (arena->active) {
 				ec.type = GDK_ENTER_NOTIFY;

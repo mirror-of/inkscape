@@ -217,8 +217,8 @@ nr_arena_image_pick (NRArenaItem *item, double x, double y, double delta, unsign
 	width = image->pxw;
 	height = image->pxh;
 	rowstride = image->pxrs;
-	ix = x * image->grid2px.c[0] + y * image->grid2px.c[2] + image->grid2px.c[4];
-	iy = x * image->grid2px.c[1] + y * image->grid2px.c[3] + image->grid2px.c[5];
+	ix = (int)(x * image->grid2px.c[0] + y * image->grid2px.c[2] + image->grid2px.c[4]);
+	iy = (int)(x * image->grid2px.c[1] + y * image->grid2px.c[3] + image->grid2px.c[5]);
 
 	if ((ix < 0) || (iy < 0) || (ix >= width) || (iy >= height)) return NULL;
 

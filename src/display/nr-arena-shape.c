@@ -231,10 +231,10 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				nr_matrix_f_from_d (&ctm, &gc->transform);
 				bp.path = shape->curve->bpath;
 				nr_path_matrix_f_bbox_f_union (&bp, &ctm, &bbox, 1.0);
-				item->bbox.x0 = bbox.x0 - 1.0F;
-				item->bbox.y0 = bbox.y0 - 1.0F;
-				item->bbox.x1 = bbox.x1 + 1.9999F;
-				item->bbox.y1 = bbox.y1 + 1.9999F;
+				item->bbox.x0 = (NRLong)(bbox.x0 - 1.0F);
+				item->bbox.y0 = (NRLong)(bbox.y0 - 1.0F);
+				item->bbox.x1 = (NRLong)(bbox.x1 + 1.9999F);
+				item->bbox.y1 = (NRLong)(bbox.y1 + 1.9999F);
 			}
 			if (beststate & NR_ARENA_ITEM_STATE_BBOX) {
 				for (child = shape->markers; child != NULL; child = child->next) {
@@ -344,8 +344,8 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				g_free (dash.dash);
 			}
 			asvp = art_svp_vpath_stroke (pvp,
-						     shape->style->stroke_linejoin.value,
-						     shape->style->stroke_linecap.value,
+						     (ArtPathStrokeJoinType)shape->style->stroke_linejoin.value,
+						     (ArtPathStrokeCapType)shape->style->stroke_linecap.value,
 						     width,
 						     shape->style->stroke_miterlimit.value, 0.25);
 			art_free (pvp);
@@ -366,10 +366,10 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	}
 	if (nr_rect_f_test_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
-	item->bbox.x0 = bbox.x0 - 1.0F;
-	item->bbox.y0 = bbox.y0 - 1.0F;
-	item->bbox.x1 = bbox.x1 + 1.0F;
-	item->bbox.y1 = bbox.y1 + 1.0F;
+	item->bbox.x0 = (NRLong)(bbox.x0 - 1.0F);
+	item->bbox.y0 = (NRLong)(bbox.y0 - 1.0F);
+	item->bbox.x1 = (NRLong)(bbox.x1 + 1.0F);
+	item->bbox.y1 = (NRLong)(bbox.y1 + 1.0F);
 	nr_arena_request_render_rect (item->arena, &item->bbox);
 
 	item->render_opacity = TRUE;
@@ -576,7 +576,7 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 }
 
 void
-nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int private, const double *affine)
+nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int lieutenant, const double *affine)
 {
 	g_return_if_fail (shape != NULL);
 	g_return_if_fail (NR_IS_ARENA_SHAPE (shape));

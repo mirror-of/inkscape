@@ -46,7 +46,7 @@ struct _NRArenaShapeClass {
 
 NRType nr_arena_shape_get_type (void);
 
-void nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int private, const double *affine);
+void nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int lieutenant, const double *affine);
 void nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style);
 void nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRectF *pbox);
 

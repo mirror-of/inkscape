@@ -49,7 +49,7 @@ struct _NRArenaGlyphsClass {
 NRType nr_arena_glyphs_get_type (void);
 
 void nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs,
-			       SPCurve *curve, unsigned int private,
+			       SPCurve *curve, unsigned int lieutenant,
 			       NRFont *font, int glyph,
 			       const NRMatrixF *transform);
 void nr_arena_glyphs_set_style (NRArenaGlyphs *glyphs, SPStyle *style);

@@ -176,8 +176,8 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 			width = glyphs->style->stroke_width.computed * NR_MATRIX_DF_EXPANSION (&gc->transform);
 			width = MAX (0.125, width);
 			glyphs->stroke_svp = art_svp_vpath_stroke (pvp,
-								   glyphs->style->stroke_linejoin.value,
-								   glyphs->style->stroke_linecap.value,
+								   (ArtPathStrokeJoinType)glyphs->style->stroke_linejoin.value,
+								   (ArtPathStrokeCapType)glyphs->style->stroke_linecap.value,
 								   width,
 								   glyphs->style->stroke_miterlimit.value, 0.25);
 		}
@@ -188,10 +188,10 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 	if (glyphs->stroke_svp) art_drect_svp_union (&bbox, glyphs->stroke_svp);
 	if (art_drect_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
-	item->bbox.x0 = bbox.x0 - 1.0;
-	item->bbox.y0 = bbox.y0 - 1.0;
-	item->bbox.x1 = bbox.x1 + 1.0;
-	item->bbox.y1 = bbox.y1 + 1.0;
+	item->bbox.x0 = (NRLong)(bbox.x0 - 1.0);
+	item->bbox.y0 = (NRLong)(bbox.y0 - 1.0);
+	item->bbox.x1 = (NRLong)(bbox.x1 + 1.0);
+	item->bbox.y1 = (NRLong)(bbox.y1 + 1.0);
 	nr_arena_request_render_rect (item->arena, &item->bbox);
 
 	return NR_ARENA_ITEM_STATE_ALL;
@@ -243,7 +243,7 @@ nr_arena_glyphs_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, un
 }
 
 void
-nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int private, NRFont *font, gint glyph, const NRMatrixF *transform)
+nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int lieutenant, NRFont *font, gint glyph, const NRMatrixF *transform)
 {
 	nr_return_if_fail (glyphs != NULL);
 	nr_return_if_fail (NR_IS_ARENA_GLYPHS (glyphs));
@@ -629,12 +629,12 @@ nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *sg, NRFont *font, int g
 
 		curve = sp_curve_new_from_foreign_bpath (bpath.path);
 		if (curve) {
-			NRArenaItem *new;
-			new = nr_arena_item_new (NR_ARENA_ITEM (group)->arena, NR_TYPE_ARENA_GLYPHS);
-			nr_arena_item_append_child (NR_ARENA_ITEM (group), new);
-			nr_arena_item_unref (new);
-			nr_arena_glyphs_set_path (NR_ARENA_GLYPHS (new), curve, FALSE, font, glyph, transform);
-			nr_arena_glyphs_set_style (NR_ARENA_GLYPHS (new), sg->style);
+			NRArenaItem *new_arena;
+			new_arena = nr_arena_item_new (NR_ARENA_ITEM (group)->arena, NR_TYPE_ARENA_GLYPHS);
+			nr_arena_item_append_child (NR_ARENA_ITEM (group), new_arena);
+			nr_arena_item_unref (new_arena);
+			nr_arena_glyphs_set_path (NR_ARENA_GLYPHS (new_arena), curve, FALSE, font, glyph, transform);
+			nr_arena_glyphs_set_style (NR_ARENA_GLYPHS (new_arena), sg->style);
 			sp_curve_unref (curve);
 		}
 	}
