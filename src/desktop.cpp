@@ -5,7 +5,9 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   MenTaLguY <mental@rydia.net>
  *
+ * Copyright (C) 2004 MenTaLguY
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
@@ -915,7 +917,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), coord_box, FALSE, FALSE, 1);
 
     dtw->layer_selector = gtk_option_menu_new();
-    gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Current layer"), NULL);
+    gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Active group"), NULL);
     gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), dtw->layer_selector, FALSE, FALSE, 1);
 
@@ -2270,6 +2272,7 @@ void SPDesktopWidget::_update_layer_display(SPObject *layer,
     unsigned offset=build_layer_menu_items(desktop, GTK_MENU(menu), layer);
     gtk_option_menu_set_menu(selector, menu);
     gtk_option_menu_set_history(selector, offset);
+    gtk_widget_set_sensitive(GTK_WIDGET(selector), offset != 0);
 }
 
 }

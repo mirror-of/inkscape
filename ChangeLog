@@ -1,3 +1,9 @@
+2004-07-07  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop.cpp, src/interface.cpp: remove the word "layer"
+	  for now, and disable the layer selector when the user is not
+	  inside a group
+
 2004-07-07  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/desktop-properties.cpp: added a few g_asserts, and

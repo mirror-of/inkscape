@@ -928,10 +928,37 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DUPLICATE, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DELETE, view);
 
+	/* Item menu */
+	if (item) {
+		sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
+		sp_object_menu ((SPObject *) item, dt, GTK_MENU (m));
+	}
+
+        /* layer menu */
+        SPGroup *group;
+        if (SP_IS_GROUP(item)) {
+            group = SP_GROUP(item);
+        } else if ( item != dt->currentRoot() && SP_IS_GROUP(SP_OBJECT_PARENT(item)) ) {
+            group = SP_GROUP(SP_OBJECT_PARENT(item));
+        } else {
+            group = NULL;
+        }
+
+        if ( group && group != dt->currentLayer() ) {
+            sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
+            gchar *label=g_strdup_printf(_("Edit group #%s"), SP_OBJECT_ID(group));
+            GtkWidget *w = gtk_menu_item_new_with_label(label);
+            g_free(label);
+            g_object_set_data(G_OBJECT(w), "group", group);
+            g_signal_connect(G_OBJECT(w), "activate", GCallback(enter_group), dt);
+            gtk_widget_show(w);
+            gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
+        }
+
         if ( dt->currentLayer() != dt->currentRoot() ) {
             sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
             if ( SP_OBJECT_PARENT(dt->currentLayer()) != dt->currentRoot() ) {
-                GtkWidget *w = gtk_menu_item_new_with_label(_("Edit parent layer"));
+                GtkWidget *w = gtk_menu_item_new_with_label(_("Edit parent group"));
                 g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_group), dt);
                 gtk_widget_show(w);
                 gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
@@ -942,21 +969,6 @@ sp_ui_context_menu (SPView *view, SPItem *item)
             gtk_widget_show(w);
             gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
         }
-        if ( SP_IS_GROUP(item) && item != dt->currentLayer() ) {
-            sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
-            gchar *label=g_strdup_printf(_("Edit group #%s as layer"), SP_OBJECT_ID(item));
-            GtkWidget *w = gtk_menu_item_new_with_label(label);
-            g_free(label);
-            g_object_set_data(G_OBJECT(w), "group", item);
-            g_signal_connect(G_OBJECT(w), "activate", GCallback(enter_group), dt);
-            gtk_widget_show(w);
-            gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
-        }
-	/* Item menu */
-	if (item) {
-		sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
-		sp_object_menu ((SPObject *) item, dt, GTK_MENU (m));
-	}
 
 	return m;
 }
