@@ -9,20 +9,27 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <functional>
 #include "widgets/layer-selector.h"
 #include "widgets/document-tree-model.h"
+#include "util/list.h"
+#include "util/reverse-list.h"
+#include "util/filter-list.h"
+#include "sp-object.h"
 #include "desktop.h"
 
 namespace Inkscape {
 namespace Widgets {
 
 LayerSelector::LayerSelector(SPDesktop *desktop)
-: _layer_model(Gtk::ListStore::create(LayerModelColumns())), _desktop(NULL)
+: _desktop(NULL)
 {
     pack_start(_lock_button, Gtk::PACK_SHRINK);
     pack_start(_hide_button, Gtk::PACK_SHRINK);
     pack_start(_selector, Gtk::PACK_EXPAND_WIDGET);
 
+    LayerModelColumns column_specification;
+    _layer_model = Gtk::ListStore::create(column_specification);
     _selector.set_model(_layer_model);
 
     setDesktop(desktop);
@@ -59,7 +66,6 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
 }
 
 void LayerSelector::_updateLayer(SPObject *layer) {
-    
 }
 
 }

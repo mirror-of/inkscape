@@ -5,6 +5,7 @@ traits/clean:
 	rm -f util/libinkutil.a $(util_libinkutil_a_OBJECTS)
 
 util_libinkutil_a_SOURCES = \
+	util/filter-list.h \
 	util/forward-pointer-iterator.h \
 	util/list.h \
 	util/map-list.h \

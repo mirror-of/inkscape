@@ -11,6 +11,9 @@
 	* src/widgets/layer-selector.h, src/widgets/layer-selector.cpp:
 	  more layer selector work
 
+	* src/util/filter-list.h, src/util/Makefile_insert: 
+	  added filter_list()
+
 2004-10-15  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/livarot/PathSimplify.cpp: remove #ifdef
