@@ -243,7 +243,9 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 	nc->knot_holder = NULL;
 	if (item) {
 		nc->nodepath = sp_nodepath_new (desktop, item);
-		if (! nc->nodepath) {
+		if (nc->nodepath) {
+			nc->nodepath->nodeContext = nc;
+		} else {
 			nc->knot_holder = sp_item_knot_holder (item, desktop);
 		}
 		// setting new listener
