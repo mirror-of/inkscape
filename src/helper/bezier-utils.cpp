@@ -30,12 +30,12 @@ typedef NRPoint * BezierCurve;
 
 /* Forward declarations */
 static void GenerateBezier (NRPoint *b, NRPoint const *d, gdouble const *uPrime, gint len, NRPoint const *tHat1, NRPoint const *tHat2);
-static gdouble * Reparameterize(NRPoint const *d, unsigned len, gdouble const *u, BezierCurve bezCurve);
+static gdouble * Reparameterize(NRPoint const d[], unsigned len, gdouble const u[], BezierCurve bezCurve);
 static gdouble NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u);
-static void BezierII (gint degree, NRPoint * V, gdouble t, NRPoint *result);
-static void sp_darray_left_tangent (const NRPoint *d, int first, int length, NRPoint *tHat1);
-static void sp_darray_right_tangent (const NRPoint *d, int last, int length, NRPoint *tHat2);
-static void sp_darray_center_tangent (const NRPoint *d, gint center, NRPoint *tHatCenter);
+static void BezierII (unsigned degree, NRPoint const V[], gdouble t, NRPoint *result);
+static void sp_darray_left_tangent (NRPoint const d[], unsigned length, NRPoint *tHat1);
+static void sp_darray_right_tangent (NRPoint const d[], unsigned length, NRPoint *tHat2);
+static void sp_darray_center_tangent (NRPoint const d[], unsigned center, unsigned length, NRPoint *tHatCenter);
 
 /*
  *  B0, B1, B2, B3 : Bezier multipliers
@@ -46,8 +46,9 @@ static void sp_darray_center_tangent (const NRPoint *d, gint center, NRPoint *tH
 #define B2(u) (3 * u * u * (1.0 - u))
 #define B3(u) (u * u * u)
 
-static void ChordLengthParameterize(const NRPoint *d, gdouble *u, gint len);
-static gdouble ComputeMaxError (const NRPoint *d, gdouble *u, gint len, const BezierCurve bezCurve, gint *splitPoint);
+static unsigned copy_without_adjacent_duplicates (NRPoint const *src, unsigned src_len, NRPoint *dest);
+static void ChordLengthParameterize(NRPoint const d[], gdouble u[], gint len);
+static double ComputeMaxError (NRPoint const d[], double const u[], gint len, BezierCurve const bezCurve, gint *splitPoint);
 
 /* Vector operations */
 
@@ -56,6 +57,8 @@ static void sp_vector_sub (const NRPoint *a, const NRPoint *b, NRPoint *result);
 static void sp_vector_scale (const NRPoint *v, gdouble s, NRPoint *result);
 static void sp_vector_normalize (NRPoint *v);
 static void sp_vector_negate (NRPoint *v);
+static void sp_rotate_90 (NRPoint const *src, NRPoint *dest);
+static gboolean sp_vector_equal (NRPoint const *a, NRPoint const *b);
 
 #define V2Dot(a,b) ((a)->x * (b)->x + (a)->y * (b)->y)
 
@@ -111,18 +114,45 @@ sp_bezier_fit_cubic_r (NRPoint *bezier, const NRPoint *data, gint len, gdouble e
 	g_return_val_if_fail (len > 0, -1);
 	g_return_val_if_fail (max_depth >= 0, -1);
 
-	if (len < 2) return 0;
+	NRPoint *uniqued_data = g_new (NRPoint, len);
+	unsigned uniqued_len = copy_without_adjacent_duplicates (data, len, uniqued_data);
 
-	sp_darray_left_tangent (data, 0, len, &tHat1);
-	sp_darray_right_tangent (data, len - 1, len, &tHat2);
+	if (uniqued_len < 2) {
+		g_free (uniqued_data);
+		return 0;
+	}
+
+	sp_darray_left_tangent (uniqued_data, uniqued_len, &tHat1);
+	sp_darray_right_tangent (uniqued_data, uniqued_len, &tHat2);
 	
 	/* call fit-cubic function with recursion */
-	return sp_bezier_fit_cubic_full (bezier, data, len, &tHat1, &tHat2, error, max_depth);
+	gint ret = sp_bezier_fit_cubic_full (bezier, uniqued_data, uniqued_len, &tHat1, &tHat2, error, max_depth);
+	g_free (uniqued_data);
+	return ret;
+}
+
+static unsigned
+copy_without_adjacent_duplicates (NRPoint const *src, unsigned src_len, NRPoint *dest)
+{
+	if (src_len == 0) {
+		return 0;
+	}
+	dest[0] = src[0];
+	unsigned di = 0;
+	for (unsigned si = 1; si < src_len; ++si) {
+		if(!sp_vector_equal(&src[si], &dest[di])) {
+			dest[++di] = src[si];
+		}
+	}
+	unsigned dest_len = di + 1;
+	g_assert (dest_len <= src_len);
+	return dest_len;
 }
 
 gint
-sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
-			  NRPoint const *tHat1, NRPoint const *tHat2, gdouble error, gint max_depth)
+sp_bezier_fit_cubic_full (NRPoint *bezier, NRPoint const *data, gint len,
+			  NRPoint const *tHat1, NRPoint const *tHat2,
+			  double const error, gint max_depth)
 {
 	double *u;		/* Parameter values for point */
 	double *u_alloca;	/* Just for memory management */
@@ -131,8 +161,6 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
 	int splitPoint;		/* Point to split point set at */
 	double iterationError;  /* Error below which you try iterating (squared) */
 	int maxIterations = 4;	/* Max times to try iterating */
-	
-	int i;
 	
 	g_return_val_if_fail (bezier != NULL, -1);
 	g_return_val_if_fail (data != NULL, -1);
@@ -148,7 +176,8 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
 	if (len == 2) {
 		double dist;
 		/* We have 2 points, so just draw straight segment */
-		dist = hypot (data[len - 1].x - data[0].x, data[len - 1].y - data[0].y) / 3.0;
+		dist = hypot (data[len - 1].x - data[0].x,
+			      data[len - 1].y - data[0].y) / 3.0;
 		bezier[0] = data[0];
 		bezier[3] = data[len - 1];
 		bezier[1].x = tHat1->x * dist + bezier[0].x;
@@ -180,7 +209,7 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
 	/*  and iteration */
 	u_alloca = u;
 	if (maxError < iterationError) {
-		for (i = 0; i < maxIterations; i++) {
+		for (int i = 0; i < maxIterations; i++) {
 			uPrime = Reparameterize(data, len, u, bezier);
 			GenerateBezier (bezier, data, uPrime, len, tHat1, tHat2);
 			maxError = ComputeMaxError(data, uPrime, len, bezier, &splitPoint);
@@ -207,7 +236,7 @@ sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
 		
 		max_depth--;
 		
-		sp_darray_center_tangent (data, splitPoint, &tHatCenter);
+		sp_darray_center_tangent (data, splitPoint, len, &tHatCenter);
 		depth1 = sp_bezier_fit_cubic_full (bezier, data, splitPoint + 1, tHat1, &tHatCenter, error, max_depth);
 		if (depth1 == -1)
 		{
@@ -372,33 +401,35 @@ static gdouble
 NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u)
 {
 	double 		numerator, denominator;
-	NRPoint 		Q1[3], Q2[2];	/*  Q' and Q''			*/
-	NRPoint		Q_u, Q1_u, Q2_u; /*u evaluated at Q, Q', & Q''	*/
 	double 		uPrime;		/*  Improved u			*/
 	int 		i;
 
 	DOUBLE_ASSERT (u);
 	
-	/* Compute Q(u)	*/
-	BezierII(3, Q, u, &Q_u);
-	
 	/* Generate control vertices for Q'	*/
+	NRPoint Q1[3];
 	for (i = 0; i <= 2; i++) {
 		Q1[i].x = (Q[i+1].x - Q[i].x) * 3.0;
 		Q1[i].y = (Q[i+1].y - Q[i].y) * 3.0;
 	}
 	
 	/* Generate control vertices for Q'' */
+	NRPoint Q2[2];
 	for (i = 0; i <= 1; i++) {
 		Q2[i].x = (Q1[i+1].x - Q1[i].x) * 2.0;
 		Q2[i].y = (Q1[i+1].y - Q1[i].y) * 2.0;
 	}
 	
-	/* Compute Q'(u) and Q''(u)	*/
+	/* Compute Q(u), Q'(u) and Q''(u)	*/
+	NRPoint Q_u, Q1_u, Q2_u;
+	BezierII(3, Q, u, &Q_u);
 	BezierII(2, Q1, u, &Q1_u);
 	BezierII(1, Q2, u, &Q2_u);
 	
-	/* Compute f(u)/f'(u) */
+	/* Compute f(u)/f'(u), where f is the derivative wrt u of distsq(u) = 0.5 * the square of
+	   the distance from P to Q(u).  Here we're using Newton-Raphson to find a stationary point
+	   in the distsq(u), hopefully corresponding to a local minimum in distsq (and hence a
+	   local minimum distance from P to Q(u)). */
 	numerator = (Q_u.x - P.x) * (Q1_u.x) + (Q_u.y - P.y) * (Q1_u.y);
 	denominator = (Q1_u.x) * (Q1_u.x) + (Q1_u.y) * (Q1_u.y) +
 		(Q_u.x - P.x) * (Q2_u.x) + (Q_u.y - P.y) * (Q2_u.y);
@@ -413,57 +444,72 @@ NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u)
 	return (uPrime);
 }
 
-/*
- *  Bezier :
- *  	Evaluate a Bezier curve at a particular parameter value
- * 
+/** Evaluate a Bezier curve at parameter value \a t.
+ * \param Q Point on curve at parameter t.
+ *
+ * V is expected to have (degree+1) elements.
+ *
+ * Let s = 1 - t.
+ * BezierII(1, V) gives (s, t) * V, i.e. t of the way
+ * from V[0] to V[1].
+ * BezierII(2, V) gives (s**2, 2*s*t, t**2) * V.
+ * BezierII(3, V) gives (s**3, 3 s**2 t, 3s t**2, t**3) * V.
+ *
+ * The derivative of BezierII(i, V) with respect to t
+ * is i * BezierII(i-1, V'), where for all j, V'[j] =
+ * V[j + 1] - V[j].
  */
+/* todo: Rename this as bezier or bezier_pt, and consider making it return a point instead of
+   taking an NRPoint* parameter. */
 static void
-BezierII (gint degree, NRPoint * V, gdouble t, NRPoint *Q)
+BezierII (unsigned degree, NRPoint const V[], gdouble t, NRPoint *Q)
 {
-	/* NRPoint 	Q;	        Point on curve at parameter t	*/
-	int 	i, j;		
-	NRPoint 	*Vtemp;	/* Local copy of control points		*/
-	
-	/* Copy array	*/
-	Vtemp = g_new (NRPoint, degree + 1);
-	
-	for (i = 0; i <= degree; i++) {
-		Vtemp[i] = V[i];
-	}
-	
-	/* Triangle computation	*/
-	for (i = 1; i <= degree; i++) {	
-		for (j = 0; j <= degree-i; j++) {
-			Vtemp[j].x = (1.0 - t) * Vtemp[j].x + t * Vtemp[j+1].x;
-			Vtemp[j].y = (1.0 - t) * Vtemp[j].y + t * Vtemp[j+1].y;
-		}
+	/** Pascal's triangle. */
+	static int const pascal[4][4] = {{1},
+					 {1, 1},
+					 {1, 2, 1},
+					 {1, 3, 3, 1}};
+	g_assert (degree < sizeof(pascal)/sizeof(pascal[0]));
+	gdouble const s = 1.0 - t;
+
+	/* Calculate powers of t and s. */
+	double spow[4];
+	double tpow[4];
+	spow[0] = 1.0; spow[1] = s;
+	tpow[0] = 1.0; tpow[1] = t;
+	for(unsigned i = 1; i < degree; ++i) {
+		spow[i + 1] = spow[i] * s;
+		tpow[i + 1] = tpow[i] * t;
 	}
 
-	*Q = Vtemp[0];
-	g_free (Vtemp);
+	Q->x = spow[degree] * V[0].x;
+	Q->y = spow[degree] * V[0].y;
+	for(unsigned i = 1; i <= degree; ++i) {
+		Q->x += pascal[degree][i] * spow[degree - i] * tpow[i] * V[i].x;
+		Q->y += pascal[degree][i] * spow[degree - i] * tpow[i] * V[i].y;
+	}
 }
 
 /*
  * ComputeLeftTangent, ComputeRightTangent, ComputeCenterTangent :
  *Approximate unit tangents at endpoints and "center" of digitized curve
  */
+
 /** Estimate the (forward) tangent at point d[first + 0.5].
 
     Unlike the center and right versions, this calculates the tangent in the way one might expect,
     i.e. wrt increasing index into d.
 **/
 static void
-sp_darray_left_tangent (const NRPoint *d, int first, int len, NRPoint *tHat)
+sp_darray_left_tangent (NRPoint const d[], unsigned len, NRPoint *tHat)
 {
-	int second, l2, i;
-	second = first + 1;
-	l2 = len / 2;
-	tHat->x = (d[second].x - d[first].x) * l2;
-	tHat->y = (d[second].y - d[first].y) * l2;
-	for (i = 1; i < l2; i++) {
-		tHat->x += (d[second + i].x - d[first].x) * (l2 - i);
-		tHat->y += (d[second + i].y - d[first].y) * (l2 - i);
+	g_return_if_fail (len >= 2);
+	unsigned const l2 = len / 2;
+	tHat->x = (d[1].x - d[0].x) * l2;
+	tHat->y = (d[1].y - d[0].y) * l2;
+	for (unsigned i = 1; i < l2; i++) {
+		tHat->x += (d[1 + i].x - d[0].x) * (l2 - i);
+		tHat->y += (d[1 + i].y - d[0].y) * (l2 - i);
 	}
 	sp_vector_normalize (tHat);
 }
@@ -477,15 +523,14 @@ sp_darray_left_tangent (const NRPoint *d, int first, int len, NRPoint *tHat)
 			d[last - 1]).
 */
 static void
-sp_darray_right_tangent (const NRPoint *d, int last, int len, NRPoint *tHat)
+sp_darray_right_tangent (NRPoint const d[], unsigned len, NRPoint *tHat)
 {
-	int prev, l2, i;
-
-	prev = last - 1;
-	l2 = len / 2;
+	unsigned const last = len - 1;
+	unsigned const prev = last - 1;
+	unsigned const l2 = len / 2;
 	tHat->x = (d[prev].x - d[last].x) * l2;
 	tHat->y = (d[prev].y - d[last].y) * l2;
-	for (i = 1; i < l2; i++) {
+	for (unsigned i = 1; i < l2; i++) {
 		tHat->x += (d[prev - i].x - d[last].x) * (l2 - i);
 		tHat->y += (d[prev - i].y - d[last].y) * (l2 - i);
 	}
@@ -502,18 +547,53 @@ sp_darray_right_tangent (const NRPoint *d, int last, int len, NRPoint *tHat)
 			d[center + 1]).
 */
 static void
-sp_darray_center_tangent (const NRPoint *d,
-			  gint            center,
+sp_darray_center_tangent (NRPoint const d[],
+			  unsigned center,
+			  unsigned len,
 			  NRPoint       *tHatCenter)
 {
-	NRPoint	V1, V2;
-	g_return_if_fail (center >= 1);
+	g_return_if_fail (center < len);
+	g_return_if_fail (2 <= len);
 
-	sp_vector_sub (&d[center-1], &d[center], &V1);
-	sp_vector_sub(&d[center], &d[center+1], &V2);
-	tHatCenter->x = (V1.x + V2.x)/2.0;
-	tHatCenter->y = (V1.y + V2.y)/2.0;
-	sp_vector_normalize(tHatCenter);
+	/* effic: Offhand, I'm not sure if either of these two cases can occur. */
+	if (center == 0) {
+		sp_darray_left_tangent (d, len, tHatCenter);
+		sp_vector_negate (tHatCenter);
+	} else if (center == len - 1) {
+		sp_darray_right_tangent (d, len, tHatCenter);
+	} else {
+#if 0 /* sophisticated but slow (\Omega(n)). */
+		NRPoint tHatA, tHatB;
+		sp_darray_right_tangent (d, center + 1, &tHatA);
+		sp_darray_left_tangent (d + center, len - center, &tHatB);
+		if (sp_vector_equal (&tHatA, &tHatB)) {
+			/* Rotate 90 degrees in an arbitrary direction.  We could do better. */
+			sp_rotate_90 (&tHatA, tHatCenter);
+		} else {
+			sp_vector_sub (&tHatA, &tHatB, tHatCenter);
+			sp_vector_normalize (tHatCenter);
+		}
+#else /* Look at just one segment: O(1) */
+		if (sp_vector_equal (&d[center + 1], &d[center - 1])) {
+			/* Rotate 90 degrees in an arbitrary direction. */
+			NRPoint diff;
+			sp_vector_sub (&d[center], &d[center - 1], &diff);
+			sp_rotate_90 (&diff, tHatCenter);
+		} else {
+			sp_vector_sub (&d[center + 1], &d[center - 1], tHatCenter);
+		}
+		sp_vector_normalize(tHatCenter);
+#endif
+	}
+}
+
+static void
+sp_rotate_90 (NRPoint const *src, NRPoint *dest)
+{
+	g_assert (src != const_cast<NRPoint const *>(dest));
+
+	dest->x = -src->y;
+	dest->y = src->x;
 }
 
 /*
@@ -524,7 +604,7 @@ sp_darray_center_tangent (const NRPoint *d,
  * Parameter array u has to be allocated with the same length as data
  */
 static void
-ChordLengthParameterize(const NRPoint *d, gdouble *u, gint len)
+ChordLengthParameterize(NRPoint const d[], gdouble u[], gint len)
 {
 	g_return_if_fail (2 <= len);
 	gint i;	
@@ -558,11 +638,10 @@ ChordLengthParameterize(const NRPoint *d, gdouble *u, gint len)
  *	to fitted curve.
 */
 static gdouble
-ComputeMaxError (const NRPoint *d, gdouble *u, gint len, const BezierCurve bezCurve, gint *splitPoint)
+ComputeMaxError (NRPoint const d[], double const u[], gint len, BezierCurve const bezCurve, gint *splitPoint)
 {
 	int i;
 	double maxDist; /* Maximum error */
-	double dist; /* Current error */
 	NRPoint P; /* Point on curve */
 	NRPoint v; /* Vector from point to curve */
 
@@ -572,7 +651,8 @@ ComputeMaxError (const NRPoint *d, gdouble *u, gint len, const BezierCurve bezCu
 	for (i = 1; i < len; i++) {
 		BezierII (3, bezCurve, u[i], &P);
 		sp_vector_sub (&P, &d[i], &v);
-		dist = v.x * v.x + v.y * v.y;
+		double dist = (v.x * v.x  +
+			       v.y * v.y);
 		if (dist >= maxDist) {
 			maxDist = dist;
 			*splitPoint = i;
@@ -619,4 +699,10 @@ sp_vector_negate (NRPoint *v)
 {
 	v->x = -v->x;
 	v->y = -v->y;
+}
+
+static gboolean
+sp_vector_equal (NRPoint const *a, NRPoint const *b)
+{
+	return (a->x == b->x) && (a->y == b->y);
 }

@@ -1,3 +1,7 @@
+2003-12-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/helper/bezier-utils.cpp: Simplifications & documentation.
+
 2003-12-26  bulia byak <bulia@dr.com>
 
 	* src/document.cpp: added rel2abs to sp_document_set_uri, simplified
