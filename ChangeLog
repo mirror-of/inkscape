@@ -1,5 +1,8 @@
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-point-fns.h, src/libnr/nr-point-fns.cpp (unit_vector):
+	New function.
+
 	* src/livarot/LivarotDefs.h: #include <stdint.h> (moved from Path.h).
 
 	* src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,

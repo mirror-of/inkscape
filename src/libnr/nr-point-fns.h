@@ -21,6 +21,8 @@ inline Point Lerp(double t, Point const a, Point const b) {
 	return (1-t)*a + t*b;
 }
 
+Point unit_vector(Point const &a);
+
 } /* namespace NR */
 
 #endif /* !__NR_POINT_OPS_H__ */

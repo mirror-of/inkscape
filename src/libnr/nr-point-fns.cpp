@@ -31,3 +31,9 @@ NR::Coord NR::atan2(Point const p) {
 	return std::atan2(p[NR::Y], p[NR::X]);
 }
 
+Point NR::unit_vector(Point const &a)
+{
+	Point ret(a);
+	ret.normalize();
+	return ret;
+}
