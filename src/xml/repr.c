@@ -562,12 +562,16 @@ sp_repr_remove_child (SPRepr *repr, SPRepr *child)
 	ref = NULL;
 	if (child != repr->children) {
 		ref = repr->children;
-		while (ref->next != child) ref = ref->next;
+		while (ref->next != child) {
+		  ref = ref->next;
+		}
 	}
 
 	allowed = TRUE;
 	for (rl = repr->listeners; rl != NULL; rl = rl->next) {
-		if (rl->vector->remove_child) allowed = (* rl->vector->remove_child) (repr, child, ref, rl->data);
+		if (rl->vector->remove_child) {
+		  allowed = (* rl->vector->remove_child) (repr, child, ref, rl->data);
+		}
 	}
 
 	if (allowed) {
@@ -584,7 +588,9 @@ sp_repr_remove_child (SPRepr *repr, SPRepr *child)
 		}
 
 		for (rl = repr->listeners; rl != NULL; rl = rl->next) {
-			if (rl->vector->child_removed) (* rl->vector->child_removed) (repr, child, ref, rl->data);
+			if (rl->vector->child_removed) {
+			  (* rl->vector->child_removed) (repr, child, ref, rl->data);
+			}
 		}
 
 #ifdef REPR_VERBOSE
