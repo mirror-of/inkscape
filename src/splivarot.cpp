@@ -408,7 +408,7 @@ void sp_selected_path_outline(void)
 		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
 		val = sp_repr_css_property (css, "stroke", NULL);
 		
-		if ( strcmp(val,"none") == 0 ) {
+		if ( val == NULL || strcmp(val,"none") == 0 ) {
 			// pas de stroke pas de chocolat
 			sp_curve_unref (curve);
 			return;
@@ -599,7 +599,7 @@ void        sp_selected_path_do_offset(bool expand)
 		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
 		val = sp_repr_css_property (css, "stroke", NULL);
 		
-		if ( strcmp(val,"none") == 0 ) {
+		if ( val == NULL || strcmp(val,"none") == 0 ) {
 			// pas de stroke pas de chocolat
 			sp_curve_unref (curve);
 			return;
