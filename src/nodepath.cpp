@@ -2190,8 +2190,9 @@ static void node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer d
 		rnew.r = me->origin.r;
 	} 
 
-	if ((state & GDK_SHIFT_MASK) && rme.a != HUGE_VAL && rnew.a != HUGE_VAL) { 
-		// rotate the other handle correspondingly, if both old and new angles exist
+	if (( n->type != Path::NODE_CUSP || (state & GDK_SHIFT_MASK)) 
+             && rme.a != HUGE_VAL && rnew.a != HUGE_VAL && fabs (rme.a - rnew.a) > 0.001) { 
+		// rotate the other handle correspondingly, if both old and new angles exist and are not the same
 		rother.a += rnew.a - rme.a;
 		other->pos = NR::Point(rother) + n->pos;
 		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos, other->pos);
