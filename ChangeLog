@@ -41,6 +41,18 @@
 	references in desktop-snap.h, and add desktop.h includes in
 	files which require them.
 
+	* src/widgets/spw-utilities.cpp, src/widgets/spw-utilities.h:
+	add spw_vbox_checkbutton.
+
+	* src/attributes.cpp, src/attributes.h, src/sp-namedview.cpp,
+	src/sp-namedview.h, src/desktop-snap.cpp, src/desktop-snap.h,
+	src/desktop.cpp, src/desktop.h,
+	src/dialogs/desktop-properties.cpp, src/seltrans.cpp,
+	src/seltrans.h, src/selection.cpp, src/selection.h,
+	src/select-context.cpp, src/selection-chemistry.cpp:
+
+	Start of new and hopefully improved snapping code.
+
 2004-06-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/units.h, src/helper/units.cpp:
