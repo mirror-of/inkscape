@@ -1214,7 +1214,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
 
     /* Roundedness */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Roundedness:"), _("How much rounded are the corners (0 for sharp)"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Rounded:"), _("How much rounded are the corners (0 for sharp)"), 
                                           "tools.shapes.star", "rounded", 0.0,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           -100.0, 100.0, 0.01, 0.1,
@@ -1224,7 +1224,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
 
     /* Randomization */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Randomization:"), _("Scatter randomly the corners and angles"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Randomized:"), _("Scatter randomly the corners and angles"), 
                                           "tools.shapes.star", "randomized", 0.0,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           -10.0, 10.0, 0.001, 0.01,
