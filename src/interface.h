@@ -60,6 +60,7 @@ void sp_ui_dialog_title_string (sp_verb_t verb, gchar* c);
  *
  */
 void sp_ui_error_dialog (const gchar * message);
+bool sp_ui_overwrite_file (const gchar * filename);
 
 #endif
 

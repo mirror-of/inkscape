@@ -999,3 +999,54 @@ sp_ui_error_dialog (const gchar * message)
 	gtk_dialog_run (GTK_DIALOG (dlg));
 	gtk_widget_destroy (dlg);
 }
+
+bool
+sp_ui_overwrite_file (const gchar * filename)
+{
+	bool return_value = FALSE;
+	GtkWidget * dialog;
+	GtkWidget * hbox;
+	GtkWidget * boxdata;
+	gchar * title;
+	gchar * text;
+
+	if (g_file_test(filename, G_FILE_TEST_EXISTS)) {
+
+		title = g_strdup_printf(_("Overwrite %s"), filename);
+		dialog = gtk_dialog_new_with_buttons (title,
+											  NULL,
+											  (GtkDialogFlags)(GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
+											  GTK_STOCK_NO,
+											  GTK_RESPONSE_NO,
+											  GTK_STOCK_YES,
+											  GTK_RESPONSE_YES,
+											  NULL);
+		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+
+		hbox = gtk_hbox_new(FALSE, 5);
+		boxdata = gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
+		gtk_widget_show(boxdata);
+		gtk_box_pack_start(GTK_BOX(hbox), boxdata, TRUE, TRUE, 5);
+		text = g_strdup_printf(_("The file %s already exists.  Do you want to overwrite that file with the current document?"), filename);
+		boxdata = gtk_label_new(text);
+		gtk_label_set_line_wrap(GTK_LABEL(boxdata), TRUE);
+		gtk_widget_show(boxdata);
+		gtk_box_pack_start(GTK_BOX(hbox), boxdata, FALSE, FALSE, 5);
+		gtk_widget_show(hbox);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 5);
+
+		if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES) {
+			return_value = TRUE;
+		} else {
+			return_value = FALSE;
+		}
+
+		gtk_widget_destroy(dialog);
+		g_free(title);
+		g_free(text);
+	} else {
+		return_value = TRUE;
+	}
+
+	return return_value;
+}

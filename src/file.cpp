@@ -252,6 +252,11 @@ sp_file_save_dialog (SPDocument *doc)
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
 
+		if (!sp_ui_overwrite_file(fileName)) {
+			g_free(save_path);
+			g_free(fileName);
+			return sp_file_save_dialog(doc);
+		}
 
         sucess = file_save (doc, fileName, selectionType);
         g_free (save_path);
@@ -260,7 +265,7 @@ sp_file_save_dialog (SPDocument *doc)
         g_free (fileName);
         return sucess;
     } else {
-        return sucess;
+        return FALSE;
     }
 }
 
@@ -615,6 +620,7 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
     g_return_if_fail (filename != NULL);
     g_return_if_fail (width >= 1);
     g_return_if_fail (height >= 1);
+	if (!sp_ui_overwrite_file(filename)) return;
 
     sp_document_ensure_up_to_date (doc);
 

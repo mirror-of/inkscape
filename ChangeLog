@@ -1,3 +1,9 @@
+2004-03-31  Ted Gould <ted@gould.cx>
+
+	* src/interface.cpp, src/interface.h, src/file.cpp:
+	  Adding a cute little dialog to tell you if you are about to
+	  overwrite a file you want to keep.  This fixes bug #911237
+
 2004-03-30  Jon Phillips <kidproto@users.sf.net>
 
     * share/icons/icons.svg src/interface.cpp src/verbs.cpp src/verbs.h: 
