@@ -85,7 +85,7 @@ static const struct {
 	{ "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC },
 	{ "SPTextContext", "text_tool", SP_VERB_CONTEXT_TEXT },
 	{ "SPDropperContext", "dropper_tool", SP_VERB_CONTEXT_DROPPER },
-	{ NULL, 0 }
+	{ NULL, NULL, 0 }
 };
 
 static const struct {

@@ -673,7 +673,7 @@ sp_canvas_group_get_type (void)
 			sizeof (SPCanvasGroupClass),
 			(GtkClassInitFunc) sp_canvas_group_class_init,
 			(GtkObjectInitFunc) sp_canvas_group_init,
-			NULL, NULL
+			NULL, NULL, NULL
 		};
 
 		group_type = gtk_type_unique (sp_canvas_item_get_type (), &group_info);
@@ -921,7 +921,7 @@ sp_canvas_get_type (void)
 			sizeof (SPCanvasClass),
 			(GtkClassInitFunc) sp_canvas_class_init,
 			(GtkObjectInitFunc) sp_canvas_init,
-			NULL, NULL
+			NULL, NULL, NULL
 		};
 
 		canvas_type = gtk_type_unique (GTK_TYPE_WIDGET, &canvas_info);

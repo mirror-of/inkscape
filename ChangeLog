@@ -6,6 +6,9 @@
 	* Too many files to list (58 .cpp files, phew!): Address `missing
 	  initializer for member _GTypeInfo::value_table' warnings.
 
+	* src/toolbox.cpp, src/helper/sp-canvas.cpp: Address miscellaneous
+	  other `missing initializer' warnings.
+
 	* src/libnr/nr-values.h, src/libnr/nr-values.cpp: Add `Point
 	  component_vectors[2]' global constant (moved from desktop-snap.cpp).
 
