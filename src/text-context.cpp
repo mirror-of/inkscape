@@ -70,8 +70,6 @@ static void sp_text_context_forget_text (SPTextContext *tc);
 static gint sptc_focus_in (GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static gint sptc_focus_out (GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static void sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc);
-static void sptc_preedit_changed (GtkIMContext *imc, SPTextContext *tc);
-static void sp_text_context_preedit_reset (SPTextContext *tc);
 
 static SPEventContextClass * parent_class;
 
@@ -135,8 +133,6 @@ sp_text_context_init (SPTextContext *tc)
 	tc->phase = 0;
 	tc->nascent_object = 0;
 
-	tc->preedit_string = NULL;
-
 	new (&tc->sel_changed_connection) sigc::connection();
 	new (&tc->sel_modified_connection) sigc::connection();
 }
@@ -179,7 +175,6 @@ sp_text_context_setup (SPEventContext *ec)
 		 * We need to let the IM handle the preediting, and
 		 * just take in the characters when they're finished being
 		 * entered.
-		gtk_im_context_set_use_preedit (tc->imc, TRUE);
 		*/
 		gtk_im_context_set_use_preedit (tc->imc, FALSE);
 		gtk_im_context_set_client_window (tc->imc, canvas->window);
@@ -187,7 +182,6 @@ sp_text_context_setup (SPEventContext *ec)
 		g_signal_connect (G_OBJECT (canvas), "focus_in_event", G_CALLBACK (sptc_focus_in), tc);
 		g_signal_connect (G_OBJECT (canvas), "focus_out_event", G_CALLBACK (sptc_focus_out), tc);
 		g_signal_connect (G_OBJECT (tc->imc), "commit", G_CALLBACK (sptc_commit), tc);
-		g_signal_connect (G_OBJECT (tc->imc), "preedit_changed", G_CALLBACK (sptc_preedit_changed), tc);
 
 		if (GTK_WIDGET_HAS_FOCUS (canvas)) {
 			sptc_focus_in (canvas, NULL, tc);
@@ -403,9 +397,6 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 
 			if (tc->unimode || !tc->imc || !gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
 				//IM did not consume the key, or we're in unimode
-
-				if (tc->text) 
-					sp_text_context_preedit_reset (tc);
 
 				if (MOD__CTRL_ONLY) {
 					switch (event->key.keyval) {
@@ -807,7 +798,6 @@ static void
 sp_text_context_forget_text (SPTextContext *tc)
 {
 	if (! tc->text) return;
-	if( tc->preedit_string ) sp_text_context_preedit_reset (tc);
 	SPItem *ti = tc->text;
 	/* We have to set it to zero,
 	 * or selection changed signal messes everything up */
@@ -846,36 +836,7 @@ sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 		tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
 	}
 
-	if (!tc->preedit_string ) sp_text_context_preedit_reset (tc);
-
 	tc->ipos = sp_te_insert (tc->text, tc->ipos, string);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
-}
-
-void
-sptc_preedit_changed (GtkIMContext *imc, SPTextContext *tc)
-{
-	gint cursor_pos;
-
-	sp_text_context_preedit_reset (tc);
-
-	gtk_im_context_get_preedit_string (tc->imc,
-					   &tc->preedit_string, NULL,
-					   &cursor_pos);
-	if(tc->preedit_string != NULL) {
-		sp_te_insert (tc->text, tc->ipos, tc->preedit_string);
-	}
-	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
-}
-
-static void
-sp_text_context_preedit_reset (SPTextContext *tc)
-{
-       if( tc->preedit_string != NULL ) {
-               sp_te_delete (tc->text, tc->ipos, tc->ipos + g_utf8_strlen(tc->preedit_string, -1));
-
-               g_free(tc->preedit_string);
-               tc->preedit_string = NULL;
-       }
 }
