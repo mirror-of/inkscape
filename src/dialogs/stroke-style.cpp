@@ -934,10 +934,20 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     return pb;
 }
 
+
+
+
 #define MARKER_ITEM_MARGIN 0
 
+
+
+
 /**
-      Pick up all markers from source, except those that are in current_doc (if non-NULL), and add items to the m menu
+ * sp_marker_list_from_doc()
+ *
+ * \brief Pick up all markers from source, except those that are in 
+ * current_doc (if non-NULL), and add items to the m menu
+ *
  */
 static void
 sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *source, SPDocument *markers_doc, SPDocument *sandbox, gchar *menu_id)
