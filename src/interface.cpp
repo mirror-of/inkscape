@@ -60,6 +60,9 @@
 
 #include "message-context.h"
 
+/* Define this to have an Effects menu in the menu bar. */
+//#define WITH_EFFECT_MENU 1
+
 /* forward declaration */
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 
@@ -948,11 +951,11 @@ sp_ui_text_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     sp_ui_menu_append (menu, text_verbs, view);
 }
 
-/** \breif  This function creates the effects menu
-    \param  menu  The menu to append to
-    \param  doc   Document being used
-    \param  view  The view of the document this is being attached to
-
+#ifdef WITH_EFFECT_MENU
+/** Creates the effects menu.
+    \param  menu  The menu to append to.
+    \param  doc   Document being used.
+    \param  view  The view of the document this is being attached to.
 */
 static void
 sp_ui_effect_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
@@ -983,6 +986,7 @@ sp_ui_effect_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
     return;
 }
+#endif /* WITH_EFFECT_MENU */
 
 static void
 sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
@@ -1083,13 +1087,13 @@ sp_ui_main_menubar (SPView *view)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
-        #if 0
+#ifdef WITH_EFFECT_MENU
 	mitem = gtk_menu_item_new_with_mnemonic (_("Effects"));
 	menu = gtk_menu_new ();
 	sp_ui_effect_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-        #endif
+#endif
 
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Help"));
 	menu = gtk_menu_new ();
