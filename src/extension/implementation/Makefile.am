@@ -16,5 +16,5 @@ INCLUDES = \
 noinst_LIBRARIES = libimplementation.a
 
 libimplementation_a_SOURCES = \
-		script.cpp
+		script.cpp script.h
 

@@ -81,7 +81,9 @@ inkscapelib_src = \
 	document-undo.cpp \
 	uri-references.cpp uri-references.h \
 	uri.cpp uri.h \
-	version.cpp version.h
+	version.cpp version.h \
+	\
+	approx-equal.h remove-last.h
 
 noinst_LTLIBRARIES = libinkscape.la
 libinkscape_la_SOURCES = $(inkscapelib_src)

@@ -17,6 +17,7 @@ noinst_LIBRARIES = libextension.a
 
 libextension_a_SOURCES = \
 		extension.cpp \
+		extension.h \
 		\
 		db.cpp \
 		db.h \

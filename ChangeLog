@@ -1,5 +1,13 @@
 2004-02-22  Ted Gould <ted@gould.cx>
 
+	* src/extension/Makefile.am, src/extension/implementation/Makefile.am,
+	src/Makefile.am, po/POTFILES.in, po/*.po (because of previous change):
+	Okay, I screwed up.  Here are some distcheck fixes for various
+	things.  Still not entirely clean.  But these are much closer
+	than we were.
+
+2004-02-22  Ted Gould <ted@gould.cx>
+
 	* src/modules -> src/extensions:
 	Changing the directory name so that it fits the new naming
 	conventions that we're working with.
