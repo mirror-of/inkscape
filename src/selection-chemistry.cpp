@@ -80,6 +80,113 @@ GSList *clipboard = NULL;
 GSList *defs_clipboard = NULL;
 SPCSSAttr *style_clipboard = NULL;
 
+static void sp_copy_stuff_used_by_item(GSList **defs_clip, SPItem *item, const GSList *items);
+
+void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_clip, SPCSSAttr **style_clip)
+{
+
+    // Copy stuff referenced by all items to defs_clip:
+    if (defs_clip) {
+        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+            sp_copy_stuff_used_by_item (defs_clip, SP_ITEM (i->data), items);
+        }
+        *defs_clip = g_slist_reverse(*defs_clip);
+    }
+
+    // Store style:
+    if (style_clip) {
+        SPItem *item = SP_ITEM (items->data); // take from the first selected item
+        *style_clip = take_style_from_item (item);
+    }
+
+    if (clip) {
+        // Sort items:
+        items = g_slist_sort((GSList *) items, (GCompareFunc) sp_object_compare_position);
+
+        // Copy item reprs:
+        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+
+            Inkscape::XML::Node *repr = SP_OBJECT_REPR (i->data);
+
+            Inkscape::XML::Node *copy = repr->duplicate();
+
+            // copy complete inherited style
+            SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
+            sp_repr_css_set(copy, css, "style");
+            sp_repr_css_attr_unref(css);
+
+            // copy complete accummulated transform
+            NR::Matrix full_t = sp_item_i2doc_affine(SP_ITEM(i->data));
+            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+            gchar affinestr[80]; 
+            if (sp_svg_transform_write(affinestr, 79, full_t)) {
+                sp_repr_set_attr (copy, "transform", affinestr);
+            } else {
+                sp_repr_set_attr (copy, "transform", NULL);
+            }
+
+            *clip = g_slist_prepend(*clip, copy);
+        }
+
+        *clip = g_slist_reverse(*clip);
+    }
+}
+
+/**
+Add gradients/patterns/markers referenced by copied objects to defs
+*/
+void 
+paste_defs (GSList **defs_clip, SPDocument *doc)
+{
+    if (!defs_clip)
+        return;
+
+    for (GSList *gl = *defs_clip; gl != NULL; gl = gl->next) {
+        SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) gl->data;
+        gchar const *id = repr->attribute("id");
+        if (!id || !doc->getObjectById(id)) {
+            Inkscape::XML::Node *copy = repr->duplicate();
+            sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
+            sp_repr_unref(copy);
+        }
+    }
+}
+
+GSList *sp_selection_paste_impl (SPDocument *document, SPObject *parent, GSList **clip, GSList **defs_clip)
+{
+    paste_defs (defs_clip, document);
+
+    GSList *copied = NULL;
+    // add objects to document
+    for (GSList *l = *clip; l != NULL; l = l->next) {
+        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) l->data;
+        Inkscape::XML::Node *copy = repr->duplicate();
+
+        // premultiply the item transform by the accumulated parent transform in the paste layer
+        NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(parent));
+        if (!local.test_identity()) {
+            gchar const *t_str = copy->attribute("transform");
+            NR::Matrix item_t (NR::identity());
+            if (t_str)
+                sp_svg_transform_read(t_str, &item_t);
+            item_t *= local.inverse();
+            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+            gchar affinestr[80];
+            if (sp_svg_transform_write(affinestr, 79, item_t)) {
+                sp_repr_set_attr (copy, "transform", affinestr);
+            } else {
+                sp_repr_set_attr (copy, "transform", NULL);
+            }
+        }
+
+        parent->appendChildRepr(copy);
+        copied = g_slist_prepend(copied, copy);
+        sp_repr_unref(copy);
+    }
+    return copied;
+}
+
 void sp_selection_delete_impl(const GSList *items)
 {
     for (const GSList *i = items ; i ; i = i->next ) {
@@ -350,6 +457,8 @@ void sp_selection_group()
     if (desktop == NULL)
         return;
 
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     // Check if something is selected.
@@ -366,43 +475,58 @@ void sp_selection_group()
         return;
     }
 
-    // Check if all selected objects have common parent.
-    GSList *reprs = g_slist_copy((GSList *) selection->reprList());
-    Inkscape::XML::Node *parent = ((Inkscape::XML::Node *) reprs->data)->parent();
-    for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((Inkscape::XML::Node *) i->data)->parent()) != parent) {
-            desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot group objects from <b>different groups</b> or <b>layers</b>."));
-            return;
-        }
-    }
-
     GSList *p = g_slist_copy((GSList *) l);
 
     selection->clear();
 
     p = g_slist_sort(p, (GCompareFunc) sp_repr_compare_position);
 
-    // Remember the position of the topmost object.
+    // Remember the position and parent of the topmost object.
     gint topmost = ((Inkscape::XML::Node *) g_slist_last(p)->data)->position();
+    Inkscape::XML::Node *topmost_parent = ((Inkscape::XML::Node *) g_slist_last(p)->data)->parent();
 
     Inkscape::XML::Node *group = sp_repr_new("svg:g");
 
     while (p) {
-        Inkscape::XML::Node *spnew;
         Inkscape::XML::Node *current = (Inkscape::XML::Node *) p->data;
-        spnew = current->duplicate();
-        sp_repr_unparent(current);
-        group->appendChild(spnew);
-        sp_repr_unref(spnew);
-        topmost --;
+        if (current->parent() == topmost_parent) {
+            Inkscape::XML::Node *spnew = current->duplicate();
+            sp_repr_unparent(current);
+            group->appendChild(spnew);
+            sp_repr_unref(spnew);
+            topmost --; // only reduce count for those items deleted from topmost_parent
+        } else { // move it to topmost_parent first
+                GSList *temp_clip = NULL;
+                // create temporary list with that one item
+                GSList *one_item = g_slist_prepend (NULL, document->getObjectByRepr(current));
+                // copy
+                sp_selection_copy_impl (one_item, &temp_clip, NULL, NULL); // we're in the same doc, so no need to copy defs
+                // delete
+                sp_selection_delete_impl (one_item);
+                // paste into topmost_parent (temporarily)
+                GSList *copied = sp_selection_paste_impl (document, document->getObjectByRepr(topmost_parent), &temp_clip, NULL);
+                if (temp_clip) g_slist_free (temp_clip);
+                if (copied) { // if success,
+                    // take pasted object (now in topmost_parent)
+                    Inkscape::XML::Node *in_topmost = (Inkscape::XML::Node *) copied->data;
+                    // make a copy
+                    Inkscape::XML::Node *spnew = in_topmost->duplicate();
+                    // remove pasted
+                    sp_repr_unparent(in_topmost);
+                    // put its copy into group
+                    group->appendChild(spnew);
+                    sp_repr_unref(spnew);
+                    g_slist_free (copied);
+                }
+        }
         p = g_slist_remove(p, current);
     }
 
-    // Add the new group to the group members' common parent.
-    parent->appendChild(group);
+    // Add the new group to the topmost members' parent
+    topmost_parent->appendChild(group);
 
-    // Move to the position of the topmost, reduced by the number of deleted items.
-    group->setPosition(topmost > 0 ? topmost + 1 : 0);
+    // Move to the position of the topmost, reduced by the number of items deleted from topmost_parent
+    group->setPosition(topmost + 1);
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
@@ -723,8 +847,6 @@ void sp_selection_cut()
     sp_selection_delete();
 }
 
-static void sp_copy_stuff_used_by_item(GSList **defs_clip, SPItem *item, const GSList *items);
-
 void sp_copy_gradient (GSList **defs_clip, SPGradient *gradient)
 {
     SPGradient *ref = gradient;
@@ -856,55 +978,6 @@ take_style_from_item (SPItem *item)
     return css;
 }
 
-void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_clip, SPCSSAttr **style_clip)
-{
-
-    // Copy stuff referenced by all items to defs_clip:
-    if (defs_clip) {
-        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
-            sp_copy_stuff_used_by_item (defs_clip, SP_ITEM (i->data), items);
-        }
-        *defs_clip = g_slist_reverse(*defs_clip);
-    }
-
-    // Store style:
-    if (style_clip) {
-        SPItem *item = SP_ITEM (items->data); // take from the first selected item
-        *style_clip = take_style_from_item (item);
-    }
-
-    if (clip) {
-        // Sort items:
-        items = g_slist_sort((GSList *) items, (GCompareFunc) sp_object_compare_position);
-
-        // Copy item reprs:
-        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
-
-            Inkscape::XML::Node *repr = SP_OBJECT_REPR (i->data);
-
-            Inkscape::XML::Node *copy = repr->duplicate();
-
-            // copy complete inherited style
-            SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
-            sp_repr_css_set(copy, css, "style");
-            sp_repr_css_attr_unref(css);
-
-            // copy complete accummulated transform
-            NR::Matrix full_t = sp_item_i2doc_affine(SP_ITEM(i->data));
-            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-            gchar affinestr[80]; 
-            if (sp_svg_transform_write(affinestr, 79, full_t)) {
-                sp_repr_set_attr (copy, "transform", affinestr);
-            } else {
-                sp_repr_set_attr (copy, "transform", NULL);
-            }
-
-            *clip = g_slist_prepend(*clip, copy);
-        }
-
-        *clip = g_slist_reverse(*clip);
-    }
-}
 
 void sp_selection_copy()
 {
@@ -968,62 +1041,6 @@ void sp_selection_copy()
     sp_selection_copy_impl (items, &clipboard, &defs_clipboard, &style_clipboard);
 
     g_slist_free ((GSList *) items);
-}
-
-
-/**
-Add gradients/patterns/markers referenced by copied objects to defs
-*/
-void 
-paste_defs (GSList **defs_clip, SPDocument *doc)
-{
-    if (!defs_clip)
-        return;
-
-    for (GSList *gl = *defs_clip; gl != NULL; gl = gl->next) {
-        SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
-        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) gl->data;
-        gchar const *id = repr->attribute("id");
-        if (!id || !doc->getObjectById(id)) {
-            Inkscape::XML::Node *copy = repr->duplicate();
-            sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
-            sp_repr_unref(copy);
-        }
-    }
-}
-
-GSList *sp_selection_paste_impl (SPDocument *document, SPObject *parent, GSList **clip, GSList **defs_clip)
-{
-    paste_defs (defs_clip, document);
-
-    GSList *copied = NULL;
-    // add objects to document
-    for (GSList *l = *clip; l != NULL; l = l->next) {
-        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) l->data;
-        Inkscape::XML::Node *copy = repr->duplicate();
-
-        // premultiply the item transform by the accumulated parent transform in the paste layer
-        NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(parent));
-        if (!local.test_identity()) {
-            gchar const *t_str = copy->attribute("transform");
-            NR::Matrix item_t (NR::identity());
-            if (t_str)
-                sp_svg_transform_read(t_str, &item_t);
-            item_t *= local.inverse();
-            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-            gchar affinestr[80];
-            if (sp_svg_transform_write(affinestr, 79, item_t)) {
-                sp_repr_set_attr (copy, "transform", affinestr);
-            } else {
-                sp_repr_set_attr (copy, "transform", NULL);
-            }
-        }
-
-        parent->appendChildRepr(copy);
-        copied = g_slist_prepend(copied, copy);
-        sp_repr_unref(copy);
-    }
-    return copied;
 }
 
 void sp_selection_paste(bool in_place)
@@ -1121,11 +1138,12 @@ void sp_selection_to_next_layer ()
     SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
     if (next) {
         GSList *temp_clip = NULL;
-        sp_selection_copy_impl (items, &temp_clip, NULL, NULL);
+        sp_selection_copy_impl (items, &temp_clip, NULL, NULL); // we're in the same doc, so no need to copy defs
         sp_selection_delete_impl (items);
         GSList *copied = sp_selection_paste_impl (SP_DT_DOCUMENT (dt), next, &temp_clip, NULL);
         selection->setReprList((GSList const *) copied);
         g_slist_free (copied);
+        if (temp_clip) g_slist_free (temp_clip);
         dt->setCurrentLayer(next);
         sp_document_done(SP_DT_DOCUMENT (dt));
     } else {
@@ -1152,11 +1170,12 @@ void sp_selection_to_prev_layer ()
     SPObject *next=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
     if (next) {
         GSList *temp_clip = NULL;
-        sp_selection_copy_impl (items, &temp_clip, NULL, NULL);
+        sp_selection_copy_impl (items, &temp_clip, NULL, NULL); // we're in the same doc, so no need to copy defs
         sp_selection_delete_impl (items); 
         GSList *copied = sp_selection_paste_impl (SP_DT_DOCUMENT (dt), next, &temp_clip, NULL);
         selection->setReprList((GSList const *) copied);
         g_slist_free (copied);
+        if (temp_clip) g_slist_free (temp_clip);
         dt->setCurrentLayer(next);
         sp_document_done(SP_DT_DOCUMENT (dt));
     } else {
