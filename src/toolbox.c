@@ -259,7 +259,7 @@ toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, void (*update_func)
 	old_desktop = SP_DESKTOP (g_object_get_data (G_OBJECT (toolbox), "desktop"));
 
 	if (old_desktop) {
-		g_signal_handlers_disconnect_by_func (G_OBJECT (old_desktop), G_CALLBACK (update_func), (gpointer)toolbox);
+		g_signal_handlers_disconnect_by_func (G_OBJECT (old_desktop), (void*)G_CALLBACK (update_func), (gpointer)toolbox);
 	}
 
 	g_object_set_data (G_OBJECT (toolbox), "desktop", (gpointer)desktop);
