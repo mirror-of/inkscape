@@ -339,7 +339,9 @@ GSList *fixupFilenameEncoding( GSList* fl )
                 }
                 newFileName = 0;
             } else {
-                g_warning( "input filename conversion failed for #%d", count );
+                gchar const *charset;
+                g_get_charset(&charset);
+                g_warning( "input filename conversion failed for #%d with locale charset '%s'", count, charset );
             }
         }
         newFl = g_slist_append( newFl, fn );
@@ -455,6 +457,9 @@ sp_main_console(int argc, char const **argv)
      * http://mail.gnome.org/archives/gtk-list/2003-December/msg00063.html
      */
     g_type_init();
+    char **argv2 = const_cast<char **>(argv);
+    gtk_init_check( &argc, &argv2 );
+    //setlocale(LC_ALL, "");
 
     GSList *fl = NULL;
     int retVal = sp_common_main( argc, argv, &fl );
