@@ -27,6 +27,7 @@ class SPGradientContext;
 class SPGradientContextClass;
 
 struct SPGradientContext : public SPEventContext {
+    Inkscape::XML::Node *repr;
 
     SPKnotHolder *knot_holder;
 
