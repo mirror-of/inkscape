@@ -82,19 +82,31 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     Gtk::Notebook   notebook;
 
-    // Potrace items
-    Gtk::VBox       potraceBox;
+    //########## Potrace items
+    Gtk::VBox        potraceBox;
     Gtk::RadioButtonGroup potraceGroup;
 
+    //brightness
+    Gtk::Frame       potraceBrightnessFrame;
     Gtk::HBox        potraceBrightnessBox;
     Gtk::RadioButton potraceBrightnessRadioButton;
     Gtk::SpinButton  potraceBrightnessSpinner;
+
+    //edge detection
+    Gtk::Frame       potraceCannyFrame;
     Gtk::HBox        potraceCannyBox;
     Gtk::RadioButton potraceCannyRadioButton;
+
+    //preview
     Gtk::Frame       potracePreviewFrame;
+    Gtk::HBox        potracePreviewBox;
     Gtk::Image       potracePreviewImage;
 
-    // Other items
+    //credits
+    Gtk::Frame       potraceCreditsFrame;
+    Gtk::Label       potraceCreditsLabel;
+
+    //########## Other items
     Gtk::VBox       otherBox;
 
 
@@ -124,12 +136,38 @@ void TraceDialogImpl::responseCallback(int response_id)
 
     if (panelNr == 0)
         {
+        //##### Get the tracer and engine
         Inkscape::Trace tracer;
         Inkscape::Potrace::PotraceTracingEngine pte;
+
+        //##### Get the settings
         pte.setUseBrightness(potraceBrightnessRadioButton.get_active());
         pte.setUseCanny(potraceCannyRadioButton.get_active());
         double threshold = potraceBrightnessSpinner.get_value();
         pte.setBrightnessThreshold(threshold);
+
+        //##### Get intermediate bitmap image
+        GdkPixbuf *pixbuf = tracer.getSelectedImage();
+        if (pixbuf)
+             {
+             GdkPixbuf *preview = pte.preview(pixbuf);
+             if (preview)
+                 {
+                 Glib::RefPtr<Gdk::Pixbuf> thePreview = Glib::wrap(preview);
+                 int width  = thePreview->get_width();
+                 int height = thePreview->get_height();
+                 double scaleFactor = 100.0 / (double)height;
+                 int newWidth  = (int) (((double)width)  * scaleFactor);
+                 int newHeight = (int) (((double)height) * scaleFactor);
+                 Glib::RefPtr<Gdk::Pixbuf> scaledPreview =
+                        thePreview->scale_simple(newWidth, newHeight,
+                           Gdk::INTERP_NEAREST);
+                 //g_object_unref(preview);
+                 potracePreviewImage.set(scaledPreview);
+                 }
+             }
+
+        //##### Convert
         tracer.convertImageToPath(&pte);
         }
 
@@ -147,12 +185,13 @@ TraceDialogImpl::TraceDialogImpl()
 {
 
     set_title(_("Bitmap Tracing"));
-    set_size_request(250, 150);
+    set_size_request(350, 350);
 
     Gtk::VBox *mainVBox = get_vbox();
 
 
     //##Set up the Potrace panel
+
     /* brightness */
     potraceBrightnessRadioButton.set_label(_("Brightness Threshold"));
     potraceGroup = potraceBrightnessRadioButton.get_group();
@@ -162,13 +201,33 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.5);
     potraceBrightnessBox.pack_start(potraceBrightnessSpinner);
-    potraceBox.pack_start(potraceBrightnessBox);
+    potraceBrightnessFrame.set_label(_("Brightness"));
+    potraceBrightnessFrame.add(potraceBrightnessBox);
+    potraceBox.pack_start(potraceBrightnessFrame);
 
     /* canny edge detection */
     potraceCannyRadioButton.set_label(_("Canny Edge Detection"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton);
-    potraceBox.pack_start(potraceCannyBox);
+    potraceCannyFrame.set_label(_("Edge Detection"));
+    potraceCannyFrame.add(potraceCannyBox);
+    potraceBox.pack_start(potraceCannyFrame);
+
+    /* Preview */
+    potracePreviewImage.set_size_request(100,100);
+    //potracePreviewImage.set_alignment (Gtk::ALIGN_CENTER, Gtk::ALIGN_CENTER);
+    potracePreviewBox.pack_start(potracePreviewImage);
+    potracePreviewFrame.set_label(_("Intermediate Bitmap"));
+    potracePreviewFrame.add(potracePreviewBox);
+    potraceBox.pack_start(potracePreviewFrame);
+
+    /* Credits */
+    potraceCreditsLabel.set_text(
+         "Thanks to Peter Selinger, http://potrace.sourceforge.net"
+                         );
+    potraceCreditsFrame.set_label(_("Credits"));
+    potraceCreditsFrame.add(potraceCreditsLabel);
+    potraceBox.pack_start(potraceCreditsFrame);
 
     /*done */
     notebook.append_page(potraceBox, _("Potrace"));
