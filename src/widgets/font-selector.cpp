@@ -376,21 +376,26 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 			fsel->block_emit = FALSE;
 		}
 		
-		{ // select style in the list
+		{ // select best-matching style in the list
 			gchar descr[256];
 			font->Name (descr, 256);
-			
-			unsigned int i;
-			for (i = 0; i < fsel->styles.length; i++) {
-				if (!strcmp(descr, (gchar *) (fsel->styles.records)[i].descr)) {
-					break;
+			PangoFontDescription *descr_ = pango_font_description_from_string (descr);
+
+			PangoFontDescription *best_ = pango_font_description_from_string ((fsel->styles.records)[0].descr);
+			uint best_i = 0;
+
+			for (uint i = 0; i < fsel->styles.length; i++) {
+				PangoFontDescription *try_ = pango_font_description_from_string ((fsel->styles.records)[i].descr);
+				if (pango_font_description_better_match (descr_, best_, try_)) {
+					pango_font_description_free (best_);
+					best_ = pango_font_description_from_string ((fsel->styles.records)[i].descr);
+					best_i = i;
 				}
+				pango_font_description_free (try_);
 			}
 			
-			if (i < fsel->styles.length) { // a matching style found
-				gtk_clist_select_row (scl, i, 0);
-				gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
-			}
+			gtk_clist_select_row (scl, best_i, 0);
+			gtk_clist_moveto (scl, best_i, 0, 0.66, 0.0);
 		}
 		
 		gchar s[8];

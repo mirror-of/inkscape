@@ -28,8 +28,8 @@ struct NRNameList {
 };
 
 struct NRStyleRecord {
-	guchar *name;
-      guchar *descr;
+	const char *name;
+      const char *descr;
 };
 
 struct NRStyleList {

@@ -229,8 +229,8 @@ static void font_factory_name_list_destructor (NRNameList *list)
 static void font_factory_style_list_destructor (NRStyleList *list) 
 {
        for (unsigned int i=0; i<list->length; i++) {
-           free((list->records)[i].name);
-           free((list->records)[i].descr);
+           free((void *) (list->records)[i].name);
+           free((void *) (list->records)[i].descr);
        }
        if ( list->records ) nr_free (list->records);
 }
@@ -305,52 +305,53 @@ font_instance* font_factory::FaceFromDescr(const char* descr)
 
 font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 {
-	pango_font_description_set_size (descr, (int) (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
+    pango_font_description_set_size (descr, (int) (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
 
-//	char* tc=pango_font_description_to_string(descr);
-//	printf("asked: %s (family=%s)\n",tc,pango_font_description_get_family(descr));
-//	free(tc);
-	// besides we only do outline fonts
-  font_instance*  res=NULL;
-  if ( loadedFaces.find(descr) == loadedFaces.end() ) {
-    // not yet loaded
-		PangoFont* nFace=pango_font_map_load_font(fontServer,fontContext,descr);
-		if ( nFace ) {
-			// duplicate FcPattern, the hard way
-			res=new font_instance();
-			res->descr=pango_font_description_copy(descr);
-			res->daddy=this;
-			res->InstallFace(nFace);
-			if ( res->pFont == NULL ) {
-				// failed to install face -> bitmap font
-//				printf("face failed\n");
-				delete res;
-				res=NULL;
-				if ( canFail ) {
-					PANGO_DEBUG ("falling back to Sans\n");
-					pango_font_description_set_family(descr,"Sans");
-					res=Face(descr,false);
-				}
-			} else {
-				loadedFaces[res->descr]=res;
-//				printf("font_factory::Face ");
-				res->Ref();
-			}
-		} else {
-			// no match
-			if ( canFail ) {
-				PANGO_DEBUG ("falling back to Sans\n");
-				pango_font_description_set_family(descr,"Sans");
-				res=Face(descr,false);
-			}
-		}
-	} else {
-    // already here
-    res=loadedFaces[descr];
-//		printf("font_factory::Face ");
-    res->Ref();
-  }
-  return res;
+    font_instance* res = NULL;
+
+    if ( loadedFaces.find(descr) == loadedFaces.end() ) {
+        // not yet loaded
+        PangoFont* nFace=pango_font_map_load_font(fontServer,fontContext,descr);
+        if ( nFace ) {
+            // duplicate FcPattern, the hard way
+            res=new font_instance();
+
+            { // store the description returned by Pango for the found font, not the one we fed it
+                PangoFontDescription *temp = pango_font_describe (nFace);
+                res->descr = pango_font_description_copy(temp);
+                pango_font_description_free(temp);
+            }
+
+            res->daddy=this;
+            res->InstallFace(nFace);
+            if ( res->pFont == NULL ) {
+                // failed to install face -> bitmap font
+                // printf("face failed\n");
+                delete res;
+                res=NULL;
+                if ( canFail ) {
+                    PANGO_DEBUG ("falling back to Sans\n");
+                    pango_font_description_set_family(descr,"Sans");
+                    res=Face(descr,false);
+                }
+            } else {
+                loadedFaces[res->descr]=res;
+                res->Ref();
+            }
+        } else {
+            // no match
+            if ( canFail ) {
+                PANGO_DEBUG ("falling back to Sans\n");
+                pango_font_description_set_family(descr,"Sans");
+                res=Face(descr,false);
+            }
+        }
+    } else {
+        // already here
+        res=loadedFaces[descr];
+        res->Ref();
+    }
+    return res;
 }
 
 font_instance* font_factory::Face(const char* family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
@@ -504,8 +505,8 @@ NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
                 if (pango_font_description_to_string (pango_font_face_describe(faces[i])) == NULL)
                     continue;
 
-                guchar *name = (guchar *) g_strdup (pango_font_face_get_face_name (faces[i]));
-                guchar *descr = (guchar *) g_strdup (pango_font_description_to_string (pango_font_face_describe(faces[i])));
+                const char *name = g_strdup (pango_font_face_get_face_name (faces[i]));
+                const char *descr = g_strdup (pango_font_description_to_string (pango_font_face_describe(faces[i])));
 
                 // no duplicates
                 for (int j = 0; j < nr; j ++) {
