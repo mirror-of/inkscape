@@ -5,6 +5,20 @@
 
 2003-12-22  bulia byak <bulia@dr.com>
 
+	* src/nodepath.cpp: Ctrl + Alt + click node: toggle smooth/cusp/symmetric.
+
+	* src/select-context.cpp: No more snapping back to the origin because of drag
+	tolerance (once you trespass the drag tolerance limit once, it does not affect you
+	anymore).
+
+	* src/knot.cpp: Used global drag tolerance, no snapping to the origin.
+
+	* src/node-context.cpp: Click outside of nodepath deselects. Added drag tolerance for
+	selecting non-selected paths by click. Removed drag_escaped - there's no dragging to
+	escape in node context (only in knot).
+
+2003-12-22  bulia byak <bulia@dr.com>
+
 	* src/nodepath.cpp src/nodepath.h>: restrict control handle movement with ctrl, alt,
 	shift; utility functions for radial coordinates; fixed several crashes when nodepath
 	operations are called but there's no nodepath
