@@ -60,7 +60,7 @@ enum {
 	NEW_DESKTOP,
 	DESTROY_DESKTOP,
 	ACTIVATE_DESKTOP,
-	DESACTIVATE_DESKTOP,
+	DEACTIVATE_DESKTOP,
 	NEW_DOCUMENT,
 	DESTROY_DOCUMENT,
 	COLOR_SET,
@@ -74,7 +74,7 @@ static void inkscape_init (SPObject *object);
 static void inkscape_dispose (GObject *object);
 
 static void inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
-static void inkscape_desactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
+static void inkscape_deactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
 
 static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
 				  const gchar *e_mkdir,
@@ -105,7 +105,7 @@ struct _InkscapeClass {
 	void (* new_desktop) (Inkscape * inkscape, SPDesktop * desktop);
 	void (* destroy_desktop) (Inkscape * inkscape, SPDesktop * desktop);
 	void (* activate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
-	void (* desactivate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
+	void (* deactivate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
 	void (* new_document) (Inkscape *inkscape, SPDocument *doc);
 	void (* destroy_document) (Inkscape *inkscape, SPDocument *doc);
 
@@ -203,10 +203,10 @@ inkscape_class_init (InkscapeClass * klass)
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	inkscape_signals[DESACTIVATE_DESKTOP] = g_signal_new ("desactivate_desktop",
+	inkscape_signals[DEACTIVATE_DESKTOP] = g_signal_new ("deactivate_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (InkscapeClass, desactivate_desktop),
+							   G_STRUCT_OFFSET (InkscapeClass, deactivate_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
@@ -239,7 +239,7 @@ inkscape_class_init (InkscapeClass * klass)
 	object_class->dispose = inkscape_dispose;
 
 	klass->activate_desktop = inkscape_activate_desktop_private;
-	klass->desactivate_desktop = inkscape_desactivate_desktop_private;
+	klass->deactivate_desktop = inkscape_deactivate_desktop_private;
 }
 
 static void
@@ -311,7 +311,7 @@ inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
 }
 
 static void
-inkscape_desactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
+inkscape_deactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
 {
 	sp_desktop_set_active (desktop, FALSE);
 }
@@ -729,7 +729,7 @@ inkscape_remove_desktop (SPDesktop * desktop)
 	g_assert (g_slist_find (inkscape->desktops, desktop));
 
 	if (DESKTOP_IS_ACTIVE (desktop)) {
-		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESACTIVATE_DESKTOP], 0, desktop);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, desktop);
 		if (inkscape->desktops->next != NULL) {
 			SPDesktop * new_desktop;
 			new_desktop = (SPDesktop *) inkscape->desktops->next->data;
@@ -770,7 +770,7 @@ inkscape_activate_desktop (SPDesktop * desktop)
 
 	current = (SPDesktop *) inkscape->desktops->data;
 
-	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESACTIVATE_DESKTOP], 0, current);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, current);
 
 	inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
 	inkscape->desktops = g_slist_prepend (inkscape->desktops, desktop);

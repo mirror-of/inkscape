@@ -22,11 +22,11 @@
  * "new_desktop"
  * "destroy_desktop"
  * "desktop_activate"
- * "desktop_desactivate"
+ * "desktop_deactivate"
  * "new_document"
  * "destroy_document"
  * "document_activate"
- * "document_desactivate"
+ * "document_deactivate"
  * "color_set"
  *
  */

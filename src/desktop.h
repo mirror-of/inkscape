@@ -68,7 +68,7 @@ struct _SPDesktopClass {
 	SPViewClass parent_class;
 
 	void (* activate) (SPDesktop *desktop);
-	void (* desactivate) (SPDesktop *desktop);
+	void (* deactivate) (SPDesktop *desktop);
 	void (* modified) (SPDesktop *desktop, guint flags);
 };
 

@@ -487,7 +487,7 @@ sp_event_context_activate (SPEventContext *ec)
 }
 
 void
-sp_event_context_desactivate (SPEventContext *ec)
+sp_event_context_deactivate (SPEventContext *ec)
 {
 	g_return_if_fail (ec != NULL);
 	g_return_if_fail (SP_IS_EVENT_CONTEXT (ec));

@@ -40,7 +40,7 @@ struct _SPEventContextClass {
 	void (* finish) (SPEventContext *ec);
 	void (* set) (SPEventContext *ec, const gchar *key, const gchar *val);
 	void (* activate) (SPEventContext *ec);
-	void (* desactivate) (SPEventContext *ec);
+	void (* deactivate) (SPEventContext *ec);
 	gint (* root_handler) (SPEventContext *ec, GdkEvent *event);
 	gint (* item_handler) (SPEventContext *ec, SPItem *item, GdkEvent *event);
 	/* fixme: I do not like Gtk+ stuff here (Lauris) */
@@ -56,7 +56,7 @@ SPEventContext *sp_event_context_new (GType type, SPDesktop *desktop, SPRepr *re
 void sp_event_context_finish (SPEventContext *ec);
 void sp_event_context_read (SPEventContext *ec, const gchar *key);
 void sp_event_context_activate (SPEventContext *ec);
-void sp_event_context_desactivate (SPEventContext *ec);
+void sp_event_context_deactivate (SPEventContext *ec);
 
 gint sp_event_context_root_handler (SPEventContext *ec, GdkEvent *event);
 gint sp_event_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event);

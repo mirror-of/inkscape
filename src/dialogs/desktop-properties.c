@@ -43,7 +43,7 @@
 static GtkWidget *sp_desktop_dialog_new (void);
 
 static void sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
-static void sp_dtw_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_dtw_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop);
 
 static GtkWidget *sp_color_picker_new (gchar *colorkey, gchar *alphakey, gchar *title, guint32 rgba);
@@ -293,7 +293,7 @@ sp_desktop_dialog_new (void)
 
 	/* fixme: We should listen namedview changes here as well */
 	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_dtw_activate_desktop), dialog);
-	g_signal_connect (G_OBJECT (INKSCAPE), "desactivate_desktop", G_CALLBACK (sp_dtw_desactivate_desktop), dialog);
+	g_signal_connect (G_OBJECT (INKSCAPE), "deactivate_desktop", G_CALLBACK (sp_dtw_deactivate_desktop), dialog);
 	sp_dtw_update (dialog, SP_ACTIVE_DESKTOP);
 
 	return dialog;
@@ -306,7 +306,7 @@ sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dial
 }
 
 static void
-sp_dtw_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+sp_dtw_deactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_dtw_update (dialog, NULL);
 }

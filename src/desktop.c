@@ -52,7 +52,7 @@
 
 enum {
 	ACTIVATE,
-	DESACTIVATE,
+	DEACTIVATE,
 	MODIFIED,
 	LAST_SIGNAL
 };
@@ -133,10 +133,10 @@ sp_desktop_class_init (SPDesktopClass *klass)
 					  NULL, NULL,
 					  sp_marshal_NONE__NONE,
 					  G_TYPE_NONE, 0);
-	signals[DESACTIVATE] = g_signal_new ("desactivate",
+	signals[DEACTIVATE] = g_signal_new ("deactivate",
 					  G_TYPE_FROM_CLASS(klass),
 					  G_SIGNAL_RUN_FIRST,
-					  G_STRUCT_OFFSET (SPDesktopClass, desactivate),
+					  G_STRUCT_OFFSET (SPDesktopClass, deactivate),
 					  NULL, NULL,
 					  sp_marshal_NONE__NONE,
 					  G_TYPE_NONE, 0);
@@ -242,7 +242,7 @@ sp_desktop_set_active (SPDesktop *desktop, gboolean active)
 		if (active) {
 			g_signal_emit (G_OBJECT (desktop), signals[ACTIVATE], 0);
 		} else {
-			g_signal_emit (G_OBJECT (desktop), signals[DESACTIVATE], 0);
+			g_signal_emit (G_OBJECT (desktop), signals[DEACTIVATE], 0);
 		}
 	}
 }
@@ -496,7 +496,7 @@ sp_desktop_set_event_context (SPDesktop *dt, GtkType type, const gchar *config)
 
 	while (dt->event_context) {
 		ec = dt->event_context;
-		sp_event_context_desactivate (ec);
+		sp_event_context_deactivate (ec);
 		dt->event_context = ec->next;
 		sp_event_context_finish (ec);
 		g_object_unref (G_OBJECT (ec));
@@ -525,7 +525,7 @@ sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const gchar *config,
 		g_object_unref (G_OBJECT (ec));
 	}
 
-	if (dt->event_context) sp_event_context_desactivate (dt->event_context);
+	if (dt->event_context) sp_event_context_deactivate (dt->event_context);
 	repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
 	ec = sp_event_context_new (type, dt, repr, key);
 	ec->next = dt->event_context;
@@ -542,7 +542,7 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 		g_return_if_fail (dt->event_context);
 		g_return_if_fail (dt->event_context->next);
 		ec = dt->event_context;
-		sp_event_context_desactivate (ec);
+		sp_event_context_deactivate (ec);
 		dt->event_context = ec->next;
 		sp_event_context_activate (dt->event_context);
 	}
@@ -624,7 +624,7 @@ static void sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdoubl
 static void sp_desktop_widget_view_status_set (SPView *view, const gchar *status, gboolean isdefault, SPDesktopWidget *dtw);
 
 static void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
-static void sp_dtw_desktop_desactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
+static void sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
 
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 static void sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWidget *dtw);
@@ -935,7 +935,7 @@ sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw)
 }
 
 void
-sp_dtw_desktop_desactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
+sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
 {
 #if 0
 	gtk_widget_set_sensitive (dtw->hruler, FALSE);
@@ -1024,7 +1024,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 
 	/* Connect activation signals to update indicator */
 	g_signal_connect (G_OBJECT (dtw->desktop), "activate", G_CALLBACK (sp_dtw_desktop_activate), dtw);
-	g_signal_connect (G_OBJECT (dtw->desktop), "desactivate", G_CALLBACK (sp_dtw_desktop_desactivate), dtw);
+	g_signal_connect (G_OBJECT (dtw->desktop), "deactivate", G_CALLBACK (sp_dtw_desktop_deactivate), dtw);
 
 	g_signal_connect (G_OBJECT (dtw->desktop), "shutdown", G_CALLBACK (sp_dtw_desktop_shutdown), dtw);
 
