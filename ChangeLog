@@ -1,3 +1,10 @@
+2004-03-04  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/file.cpp, src/interface.cpp, src/inkscape-stock.cpp,
+	src/sp-image.cpp, src/helper/png-write.cpp,
+	src/widgets/icon.cpp:
+	Fixed filename/URI translation to keep UTF-8 internally.
+
 2004-03-03  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp (sign):
