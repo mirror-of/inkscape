@@ -3,6 +3,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>        /* identity, matrix_equalp */
+#include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-rotate-fns.h>
 #include <libnr/nr-rotate-ops.h>
@@ -45,6 +46,10 @@ int main(int argc, char *argv[])
         UTEST_ASSERT( b * r_id == b );
         UTEST_ASSERT( b * rot180 == -b );
         UTEST_ASSERT( b * rot234 == b * NR::Matrix(rot234) );
+        UTEST_ASSERT(point_equalp(b * NR::rotate(M_PI / 2),
+                                  NR::rot90(b),
+                                  1e-14));
+        UTEST_ASSERT( b * rotate_degrees(90.) == NR::rot90(b) );
     }
 
     UTEST_TEST("operator*(rotate, rotate)") {
