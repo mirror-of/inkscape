@@ -311,26 +311,39 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 	/*
 	 * s = (-b +/- sqrt (b * b - 4 * a * c)) / 2 * a;
 	 */
-
-	D = b * b - 4 * a * c;
-
-	if (D >= 0.0) {
-		NR::Coord d, s, t, xttt;
-		/* Have solution */
-		d = sqrt (D);
-		s = (-b + d) / (2 * a);
-		if ((s > 0.0) && (s < 1.0)) {
-			t = 1.0 - s;
-			xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
-			bbox->x0 = (NR::Coord) MIN (bbox->x0, xttt);
-			bbox->x1 = (NR::Coord) MAX (bbox->x1, xttt);
+	if (fabs (a) < NR_EPSILON) {
+		/* s = -c / b */
+		if (fabs (b) > NR_EPSILON) {
+			double s, t, xttt;
+			s = -c / b;
+			if ((s > 0.0) && (s < 1.0)) {
+				t = 1.0 - s;
+				xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
+				bbox->x0 = (float) MIN (bbox->x0, xttt);
+				bbox->x1 = (float) MAX (bbox->x1, xttt);
+			}
 		}
-		s = (-b - d) / (2 * a);
-		if ((s > 0.0) && (s < 1.0)) {
-			t = 1.0 - s;
-			xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
-			bbox->x0 = (NR::Coord) MIN (bbox->x0, xttt);
-			bbox->x1 = (NR::Coord) MAX (bbox->x1, xttt);
+	} else {
+		/* s = (-b +/- sqrt (b * b - 4 * a * c)) / 2 * a; */
+		D = b * b - 4 * a * c;
+		if (D >= 0.0) {
+			NR::Coord d, s, t, xttt;
+			/* Have solution */
+			d = sqrt (D);
+			s = (-b + d) / (2 * a);
+			if ((s > 0.0) && (s < 1.0)) {
+				t = 1.0 - s;
+				xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
+				bbox->x0 = (NR::Coord) MIN (bbox->x0, xttt);
+				bbox->x1 = (NR::Coord) MAX (bbox->x1, xttt);
+			}
+			s = (-b - d) / (2 * a);
+			if ((s > 0.0) && (s < 1.0)) {
+				t = 1.0 - s;
+				xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
+				bbox->x0 = (NR::Coord) MIN (bbox->x0, xttt);
+				bbox->x1 = (NR::Coord) MAX (bbox->x1, xttt);
+			}
 		}
 	}
 
@@ -338,25 +351,39 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 	b = 6 * y001 - 12 * y011 + 6 * y111;
 	c = 3 * y011 - 3 * y111;
 
-	D = b * b - 4 * a * c;
-
-	if (D >= 0.0) {
-		NR::Coord d, s, t, yttt;
-		/* Have solution */
-		d = sqrt (D);
-		s = (-b + d) / (2 * a);
-		if ((s > 0.0) && (s < 1.0)) {
-			t = 1.0 - s;
-			yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
-			bbox->y0 = (NR::Coord) MIN (bbox->y0, yttt);
-			bbox->y1 = (NR::Coord) MAX (bbox->y1, yttt);
+	if (fabs (a) < NR_EPSILON) {
+		/* s = -c / b */
+		if (fabs (b) > NR_EPSILON) {
+			double s, t, yttt;
+			s = -c / b;
+			if ((s > 0.0) && (s < 1.0)) {
+				t = 1.0 - s;
+				yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
+				bbox->y0 = (float) MIN (bbox->y0, yttt);
+				bbox->y1 = (float) MAX (bbox->y1, yttt);
+			}
 		}
-		s = (-b - d) / (2 * a);
-		if ((s > 0.0) && (s < 1.0)) {
-			t = 1.0 - s;
-			yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
-			bbox->y0 = (NR::Coord) MIN (bbox->y0, yttt);
-			bbox->y1 = (NR::Coord) MAX (bbox->y1, yttt);
+	} else {
+		/* s = (-b +/- sqrt (b * b - 4 * a * c)) / 2 * a; */
+		D = b * b - 4 * a * c;
+		if (D >= 0.0) {
+			NR::Coord d, s, t, yttt;
+			/* Have solution */
+			d = sqrt (D);
+			s = (-b + d) / (2 * a);
+			if ((s > 0.0) && (s < 1.0)) {
+				t = 1.0 - s;
+				yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
+				bbox->y0 = (NR::Coord) MIN (bbox->y0, yttt);
+				bbox->y1 = (NR::Coord) MAX (bbox->y1, yttt);
+			}
+			s = (-b - d) / (2 * a);
+			if ((s > 0.0) && (s < 1.0)) {
+				t = 1.0 - s;
+				yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
+				bbox->y0 = (NR::Coord) MIN (bbox->y0, yttt);
+				bbox->y1 = (NR::Coord) MAX (bbox->y1, yttt);
+			}
 		}
 	}
 }
