@@ -28,7 +28,8 @@ sp-star.o sp-symbol.o sp-text.o sp-use.o star-context.o style.o \
 svg-view.o text-context.o toolbox.o tools-switch.o uri-references.o \
 verbs.o version.o view.o zoom-context.o
 
-all: helper/sp-marshal.h libnr/nr_config.h inkscape.exe
+#Check for 'generated' files
+all: libnr/nr_config.h helper/sp-marshal.h inkscape.exe
 
 helper/sp-marshal.h:
 	make -C helper     -f Makefile.mingw

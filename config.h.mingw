@@ -12,7 +12,7 @@
 
 #define INKSCAPE_VERSION      VERSION
 #define PACKAGE_LOCALE_DIR    "locale"
-#define INKSCAPE_DATADIR      "data"
+#define INKSCAPE_DATADIR      "."
 #define INKSCAPE_PIXMAPDIR    "pixmaps"
 #define INKSCAPE_EXTENSIONDIR "extensions"
 #define INKSCAPE_MODULESDIR   "modules"
