@@ -2012,6 +2012,9 @@ sp_selection_create_bitmap_copy ()
     // List of the items to show; all others will be hidden
     GSList *items = g_slist_copy ((GSList *) selection->itemList());
 
+    // Sort items so that the topmost comes last
+    items = g_slist_sort(items, (GCompareFunc) sp_item_repr_compare_position);
+
     // Generate a random value from the current time (you may create bitmap from the same object(s)
     // multiple times, and this is done so that they don't clash)
     GTimeVal cu;
@@ -2032,6 +2035,11 @@ sp_selection_create_bitmap_copy ()
     NRRect bbox;
     sp_document_ensure_up_to_date (document);
     selection->bounds(&bbox);
+
+    // Remember parent and z-order of the topmost one
+    gint pos = sp_repr_position (SP_OBJECT_REPR(g_slist_last(items)->data));
+    SPObject *parent_object = SP_OBJECT_PARENT(g_slist_last(items)->data);
+    SPRepr *parent = SP_OBJECT_REPR(parent_object);
 
     // Calculate resolution
     double res;
@@ -2075,7 +2083,7 @@ sp_selection_create_bitmap_copy ()
 
 
     // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
-    NR::Matrix eek = NR::scale(1, -1) * NR::translate(0, sp_document_height(document));
+    NR::Matrix eek = sp_item_i2doc_affine (SP_ITEM(parent_object)) * NR::Matrix (NR::scale(1, -1)) * NR::translate(0, sp_document_height(document));
     NR::Matrix t = NR::scale (1/res, -1/res) * NR::translate (bbox.x0, bbox.y1) * eek.inverse(); 
 
     // Do the export
@@ -2111,8 +2119,11 @@ sp_selection_create_bitmap_copy ()
             sp_repr_set_attr(repr, "transform", c);
         } 
 
-        // Add it to the current layer
-        desktop->currentLayer()->appendChildRepr(repr);
+        // add the new repr to the parent
+        sp_repr_append_child (parent, repr);
+
+        // move to the saved position 
+        sp_repr_set_position_absolute (repr, pos > 0 ? pos + 1 : 1);
 
         // Set selection to the new image
         selection->clear();
