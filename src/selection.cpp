@@ -234,7 +234,9 @@ gboolean sp_selection_item_selected(SPSelection *selection, SPItem *item)
 	g_return_val_if_fail (selection != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), FALSE);
 	g_return_val_if_fail (item != NULL, FALSE);
-	g_return_val_if_fail (SP_IS_ITEM (item), FALSE);
+
+	if (!SP_IS_ITEM (item))
+		return NULL; // this may be legitimate
 
 	return (g_slist_find (selection->items, item) != NULL);
 }
@@ -427,7 +429,9 @@ void sp_selection_empty(SPSelection *selection)
 
 GSList const *sp_selection_item_list(SPSelection *selection)
 {
-	g_return_val_if_fail (selection != NULL, NULL);
+	if (!selection)
+		return NULL; // this may be legitimate
+
 	g_return_val_if_fail (SP_IS_SELECTION (selection), NULL);
 
 	return selection->items;
