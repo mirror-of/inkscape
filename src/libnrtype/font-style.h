@@ -5,19 +5,21 @@
 #include <livarot/LivarotDefs.h>
 #include <livarot/livarot-forward.h>
 
+// structure that holds data describing how to render glyphs of a font
 
 // Different raster styles.
 struct font_style {
-    NR::Matrix    transform;
-    bool          vertical;
-    double        stroke_width;
+    NR::Matrix    transform; // the ctm. contains the font-size
+    bool          vertical;  // should be rendered vertically or not? 
+		                // good font support would take the glyph alternates for vertical mode, when present
+    double        stroke_width; // if 0, the glyph is filled; otherwise stroked
     JoinType      stroke_join;
     ButtType      stroke_cap;
     int           nbDash;
     double        dash_offset;
     double*       dashes;
 
-    void          Apply(Path *src, Shape *dst);
+    void          Apply(Path *src, Shape *dst); // utility: applies the style to the path and stores the result in the shape
 };
 
 

@@ -16,6 +16,7 @@
 
 text_wrapper::text_wrapper(void)
 {
+	// voids everything
 	utf8_text=NULL;
 	uni32_text=NULL;
 	glyph_text=NULL;
@@ -33,7 +34,7 @@ text_wrapper::text_wrapper(void)
 	nbPara=maxPara=0;
 	kern_x=kern_y=NULL;
 	last_addition=-1;
-	
+	// inits the pangolayout with default params
 	font_factory* font_src=font_factory::Default();
 	pLayout=pango_layout_new(font_src->fontContext);
 	pango_layout_set_single_paragraph_mode(pLayout,true);
@@ -41,6 +42,7 @@ text_wrapper::text_wrapper(void)
 }
 text_wrapper::~text_wrapper(void)
 {
+	// frees everything
 	if ( utf8_text ) free(utf8_text);
 	if ( uni32_text ) free(uni32_text);
 	if ( glyph_text ) free(glyph_text);
@@ -65,13 +67,17 @@ text_wrapper::~text_wrapper(void)
 
 void            text_wrapper::SetDefaultFont(font_instance* iFont)
 {
+	// refcounts the font for our internal uses
 	if ( iFont ) iFont->Ref();
 	if ( default_font ) default_font->Unref();
 	default_font=iFont;
 }
 void            text_wrapper::AppendUTF8(char* text,int len)
 {
+	// appends text to what needs to be handled
 	if ( utf8_length <= 0 ) {
+		// a first check to prevent the text from containing a leading line return (which
+		// is probably a bug anyway)
 		if ( text[0] == '\n' || text[0] == '\r' ) {
 			//printf("string starts with a return: gonna eat it\n");
 			if ( len > 0 ) {
@@ -87,54 +93,68 @@ void            text_wrapper::AppendUTF8(char* text,int len)
 		printf("invalid utf8\n");
 		return;
 	}
+	// compute the length
 	int nlen=len;
 	if ( nlen < 0 ) {
 		char* cur=text;
 		nlen=0;
 		while ( cur[nlen] != 0 ) nlen++;		
 	}
-	
+	// prepare to store the additional text
 	utf8_text=(char*)realloc(utf8_text,(utf8_length+nlen+1)*sizeof(char));
 	uni32_codepoint=(int*)realloc(uni32_codepoint,(utf8_length+nlen+1)*sizeof(int));
+	// copy the source text in the newly lengthened array
 	memcpy(utf8_text+utf8_length,text,nlen*sizeof(char));
 	utf8_length+=nlen;
 	utf8_text[utf8_length]=0;
-	
+	// remember where the text ended, before we recompute it, for the dx/dy we'll add after that (if any)
 	last_addition=uni32_length;
-	
+	// free old uni32 structures (instead of incrementally putting the text)
 	if ( uni32_text ) free(uni32_text);
 	if ( utf8_codepoint ) free(utf8_codepoint);
 	uni32_text=NULL;
 	utf8_codepoint=NULL;
 	uni32_length=0;
 	{
+		// recompute length of uni32 text
 		char*  p=utf8_text;
 		while ( *p ) {
-			p=g_utf8_next_char(p);
+			p=g_utf8_next_char(p); // since we validated the input text, we can use this 'fast' macro
 			uni32_length++;
 		}
 	}
+	// realloc the arrays
 	uni32_text=(gunichar*)malloc((uni32_length+1)*sizeof(gunichar));
 	utf8_codepoint=(int*)malloc((uni32_length+1)*sizeof(int));
 	{
+		// read the utf8 string and compute codepoints positions
 		char*  p=utf8_text;
 		int    i=0;
 		int    l_o=0;
 		while ( *p ) {
+			// get the new codepoint
 			uni32_text[i]=g_utf8_get_char(p);
+			// compute the offset in the utf8_string
 			int n_o=((int)p)-((int)utf8_text);
+			// record the codepoint's start
 			utf8_codepoint[i]=n_o;
+			// record the codepoint's correspondance in the utf8 string
 			for (int j=l_o;j<n_o;j++) uni32_codepoint[j]=i-1;
+			// and move on
 			l_o=n_o;
 			p=g_utf8_next_char(p);
 			i++;
 		}
+		// the termination of the loop
 		for (int j=l_o;j<utf8_length;j++) uni32_codepoint[j]=uni32_length-1;
-		
 		uni32_codepoint[utf8_length]=uni32_length;
 		uni32_text[uni32_length]=0;	
 		utf8_codepoint[uni32_length]=utf8_length;	
 	}
+	// if needed, fill the dx/dy arrays with 0 for the newly created part
+	// these will be filled by a KernXForLastAddition() right after this function
+	// note that the SVG spec doesn't require you to give a dx for each codepoint,
+	// so setting the dx to 0 is mandatory
 	if ( uni32_length > last_addition ) {
 		if ( kern_x ) {
 			kern_x=(double*)realloc(kern_x,(uni32_length+1)*sizeof(double));
@@ -149,47 +169,55 @@ void            text_wrapper::AppendUTF8(char* text,int len)
 
 void            text_wrapper::DoLayout(void)
 {	
+	// THE function
+	// first some sanity checks
 	if ( default_font == NULL ) return;
 	if ( uni32_length <= 0 || utf8_length <= 0 ) return;
-	
+	// prepare the pangolayout object
 	pango_layout_set_font_description(pLayout,default_font->descr);
 	pango_layout_set_text(pLayout,utf8_text,utf8_length);
-	
+	// reset the glyph string
 	if ( glyph_text ) free(glyph_text);
 	glyph_text=NULL;
 	glyph_length=0;
 	
-	double pango_to_ink=(1.0/((double)PANGO_SCALE));
+	double pango_to_ink=(1.0/((double)PANGO_SCALE)); // utility
 	int max_g=0;
-	PangoLayoutIter* pIter=pango_layout_get_iter(pLayout);
+	PangoLayoutIter* pIter=pango_layout_get_iter(pLayout); // and go!
 	do {
 		PangoLayoutLine* pLine=pango_layout_iter_get_line(pIter); // no need for unref
-		int              plOffset=pLine->start_index;
+		int              plOffset=pLine->start_index; // start of the line in the uni32_text
 		PangoRectangle   ink_r,log_r;
 		pango_layout_iter_get_line_extents(pIter,&ink_r,&log_r);
-		double           plY=(1.0/((double)PANGO_SCALE))*((double)log_r.y);
+		double           plY=(1.0/((double)PANGO_SCALE))*((double)log_r.y); // start position of this line of the layout
 		double           plX=(1.0/((double)PANGO_SCALE))*((double)log_r.x);
-		GSList* curR=pLine->runs;
+		GSList* curR=pLine->runs; // get ready to iterate over the runs of this line
 		while ( curR ) {
 			PangoLayoutRun* pRun=(PangoLayoutRun*)curR->data;
-			int             prOffset=pRun->item->offset;
+			int             prOffset=pRun->item->offset; // start of the run in the line
 			if ( pRun ) {
-				int o_g_l=glyph_length;
-				for (int i=0;i<pRun->glyphs->num_glyphs;i++) {
+				// a run has uniform font/directionality/etc...
+				int o_g_l=glyph_length; // save the index of the first glyph we'll add
+				for (int i=0;i<pRun->glyphs->num_glyphs;i++) { // add glyph sequentially, reading them from the run
+					// realloc the structures
 					if ( glyph_length >= max_g ) {
 						max_g=2*glyph_length+1;
 						glyph_text=(one_glyph*)realloc(glyph_text,(max_g+1)*sizeof(one_glyph));
 					}
+					// fill the glyph info
 					glyph_text[glyph_length].font=pRun->item->analysis.font;
 					glyph_text[glyph_length].gl=pRun->glyphs->glyphs[i].glyph;
 					glyph_text[glyph_length].uni_st=plOffset+prOffset+pRun->glyphs->log_clusters[i];
+					// depending on the directionality, the last uni32 codepoint for this glyph is the first of the next char
+					// or the first of the previous
 					if ( pRun->item->analysis.level == 1 ) {
 						// rtl
 						if ( i < pRun->glyphs->num_glyphs-1 ) {
 							glyph_text[glyph_length+1].uni_en=glyph_text[glyph_length].uni_st;
 						}
 						glyph_text[glyph_length].uni_dir=1;
-						glyph_text[glyph_length+1].uni_dir=1;
+						glyph_text[glyph_length+1].uni_dir=1; // set the directionality for the next too, so that the last glyph in
+						// the array has the correct direction
 					} else {
 						// ltr
 						if ( i > 0 ) {
@@ -198,20 +226,29 @@ void            text_wrapper::DoLayout(void)
 						glyph_text[glyph_length].uni_dir=0;
 						glyph_text[glyph_length+1].uni_dir=0;
 					}
+					// set the position
+					// the layout is an infinite line
 					glyph_text[glyph_length].x=plX+pango_to_ink*((double)pRun->glyphs->glyphs[i].geometry.x_offset);
 					glyph_text[glyph_length].y=plY+pango_to_ink*((double)pRun->glyphs->glyphs[i].geometry.y_offset);
+					// advance to the next glyph
 					plX+=pango_to_ink*((double)pRun->glyphs->glyphs[i].geometry.width);
+					// and set the next glyph's position, in case it's the terminating glyph
 					glyph_text[glyph_length+1].x=plX;
 					glyph_text[glyph_length+1].y=plY;
 					glyph_length++;
 				}
+				// and finish filling the info
+				// notably, the uni_en of the last char in ltr text and the uni_en of the first in rtl are still not set
 				if ( pRun->item->analysis.level == 1 ) {
 					// rtl
 					if ( glyph_length > o_g_l ) glyph_text[o_g_l].uni_en=plOffset+prOffset+pRun->item->length;
 				} else {
 					if ( glyph_length > 0 ) glyph_text[glyph_length-1].uni_en=plOffset+prOffset+pRun->item->length;
 				}
+				// the terminating glyph has glyph_id=0 because it means 'no glyph'
 				glyph_text[glyph_length].gl=0;
+				// and is associated with no text (but you cannot set uni_st=uni_en=0, because the termination
+				// is expected to be the glyph for the termination of the uni32_text)
 				glyph_text[glyph_length].uni_st=glyph_text[glyph_length].uni_en=plOffset+prOffset+pRun->item->length;
 			}
 			curR=curR->next;
@@ -220,18 +257,26 @@ void            text_wrapper::DoLayout(void)
 	} while ( pango_layout_iter_next_line(pIter) );
 	pango_layout_iter_free(pIter);
 	
+	// grunt work done. now some additional info for layout: computing letters, mostly (one letter=several glyphs sometimes)
 	PangoLogAttr*  pAttrs=NULL;
 	int            nbAttr=0;
+	// get the layout attrs, they hold the boundaries pango computed
 	pango_layout_get_log_attrs(pLayout,&pAttrs,&nbAttr);
+	// feed to MakeTextBoundaries which knows what to do with these
 	MakeTextBoundaries(pAttrs,nbAttr);
+	// the array of boundaries is full, but out-of-order
 	SortBoundaries();
+	// boundary array is ready to be used, call chunktext to fill the *_start fields of the glyphs, and compute
+	// the boxed version of the text for sp-typeset
 	ChunkText();
+	// get rid of the attributes
 	if ( pAttrs ) g_free(pAttrs);
 	
+	// cleaning up
 	for (int i=0;i<glyph_length;i++) {
 		glyph_text[i].uni_st=uni32_codepoint[glyph_text[i].uni_st];
 		glyph_text[i].uni_en=uni32_codepoint[glyph_text[i].uni_en];
-		glyph_text[i].x/=512;
+		glyph_text[i].x/=512; // why is this not default_font->daddy->fontsize?
 		glyph_text[i].y/=512;
 	}
 	if ( glyph_length > 0 ) {
@@ -247,8 +292,13 @@ void            text_wrapper::ChunkText(void)
 		glyph_text[i].char_start=false;
 		glyph_text[i].word_start=false;
 		glyph_text[i].para_start=false;
+		// boundaries depend on the directionality
+		// letter boundaries correspond to the glyphs starting one letter when you read them left to right (always)
+		// because that's the order they are stored into in the glyph_text array
 		if ( glyph_text[i].uni_dir == 0 ) {
-			if ( IsBound(bnd_char,g_st,c_st) ) {
+			if ( IsBound(bnd_char,g_st,c_st) ) { // check if there is a charcater (=letter in pango speak) at this position
+																					 // can be a 'start' boundary or a 'end' boundary, doesn't matter, as long
+				                                   // as you get from one letter to the next at this position
 				if ( g_st == bounds[c_st].uni_pos ) glyph_text[i].char_start=true;
 			}
 			if ( IsBound(bnd_word,g_st,c_st) ) {
@@ -331,6 +381,7 @@ void            text_wrapper::MakeVertical(void)
 	if ( glyph_length <= 0 ) return;
 	font_factory* font_src=font_factory::Default();
 
+	// explanation: when laying out text vertically, you must keep the glyphs of a single letter together
 	double   baseY=glyph_text[0].y;
 	double   lastY=baseY;
 	int      g_st=0,g_en=0;
@@ -338,15 +389,21 @@ void            text_wrapper::MakeVertical(void)
 	PangoFont*     curPF=NULL;
 	font_instance* curF=NULL;
 	do {
+		// move to the next letter boundary
 		g_st=g_en;
 		do {
 			g_en++;
 		} while ( g_en < glyph_length && glyph_text[g_en].char_start == false );
+		// got a letter
 		if ( g_st < g_en && g_en <= glyph_length ) {
+			// we need to compute the letter's width (in case sometimes we implement the flushleft and flushright)
+			// and the total height for this letter. for example accents usually have 0 width, so this is not 
+			// stupid
 			double n_adv=0;
 			double  minX=glyph_text[g_st].x,maxX=glyph_text[g_st].x;
 			for (int i=g_st;i<g_en;i++) {
-				if ( glyph_text[i].font != curPF ) {
+				if ( glyph_text[i].font != curPF ) { // font is not the same as the one of the previous glyph
+					       // so we need to update curF
 					if ( curF ) curF->Unref();
 					curF=NULL;
 					curPF=glyph_text[i].font;
@@ -362,6 +419,7 @@ void            text_wrapper::MakeVertical(void)
 				if ( glyph_text[i].x > maxX ) maxX=glyph_text[i].x;
 			}
 			lastY+=n_adv;
+			// and put the glyphs of this letter at their new position
 			for (int i=g_st;i<g_en;i++) {
 				glyph_text[i].x-=minX;
 				glyph_text[i].y+=lastY;
@@ -375,23 +433,27 @@ void            text_wrapper::MakeVertical(void)
 void            text_wrapper::MergeWhiteSpace(void)
 {
 	if ( glyph_length <= 0 ) return;
-	
+	// scans the glyphs and shifts them accordingly
 	double      delta_x=0,delta_y=0;
 	bool        inWhite=true;
-	int         wpos=0,rpos=0;
+	int         wpos=0,rpos=0; // wpos is the position where we read glyphs, rpos is the position where we write them back
+	              // since we only eat whitespace, wpos<=rpos
 	for (rpos=0;rpos<glyph_length;rpos++) {
+		// copy the glyph at its new position
 		glyph_text[wpos].gl=glyph_text[rpos].gl;
 		glyph_text[wpos].uni_st=glyph_text[rpos].uni_st;
 		glyph_text[wpos].uni_en=glyph_text[rpos].uni_en;
 		glyph_text[wpos].font=glyph_text[rpos].font;
 		glyph_text[wpos].x=glyph_text[rpos].x-delta_x;
 		glyph_text[wpos].y=glyph_text[rpos].y-delta_y;
-		wpos++;
+		wpos++; // move the write position
 		if ( g_unichar_isspace(uni32_text[glyph_text[rpos].uni_st]) ) {
 			if ( inWhite ) { 
-				// eat me
+				// eat me: 2 steps: first add the shift in position to the cumulated shift
 				delta_x+=glyph_text[rpos+1].x-glyph_text[rpos].x;
 				delta_y+=glyph_text[rpos+1].y-glyph_text[rpos].y;
+				// then move the write position back. this way, we'll overwrite the previous whitespace with the new glyph
+				// since this is only done after the first whitespace, we only keep the first whitespace
 				wpos--;
 			}
 			inWhite=true;
@@ -399,10 +461,13 @@ void            text_wrapper::MergeWhiteSpace(void)
 			inWhite=false;
 		}
 	}
+	// and the terminating glyph (we should probably copy the rest of the glyph's info, too)
 	glyph_text[wpos].x=glyph_text[rpos].x-delta_x;
 	glyph_text[wpos].y=glyph_text[rpos].y-delta_y;
+	// sets the new length
 	glyph_length=wpos;
 }
+// utility: computes the number of letters in the layout
 int             text_wrapper::NbLetter(int g_st,int g_en)
 {
 	if ( glyph_length <= 0 ) return 0;
@@ -425,6 +490,8 @@ void            text_wrapper::AddLetterSpacing(double dx,double dy,int g_st,int 
 	}
 	int   nbLetter=0;
 
+	// letterspacing means: add 'dx*(nbLetter-1)' to the x position
+	// so we just scan the glyph string
 	for (int i=g_st;i<g_en;i++) {
 		if ( i > g_st && glyph_text[i].char_start ) nbLetter++;
 		glyph_text[i].x+=dx*nbLetter;
@@ -434,6 +501,8 @@ void            text_wrapper::AddLetterSpacing(double dx,double dy,int g_st,int 
 	glyph_text[g_en].x+=dx*nbLetter;
 	glyph_text[g_en].y+=dy*nbLetter;
 }
+
+// misc  functions for moving one letter further in the layout (move is ltr)
 bool            text_wrapper::NextChar(int &st,int &en)
 {
 	if ( st < 0 || en < 0 ) {st=0;en=0;}
@@ -501,15 +570,17 @@ static int    CmpBound(const void* a,const void* b) {
 }
 void            text_wrapper::SortBoundaries(void)
 {
+	// the 'other' field needs to be updated after sorting by qsort, so we build the inverse permutation
+	// by means of the ind field
 	for (int i=0;i<nbBound;i++) {
 		bounds[i].ind=i;
 		bounds[i].inv_ind=i;
 	}
 	qsort(bounds,nbBound,sizeof(text_boundary),CmpBound);
-	for (int i=0;i<nbBound;i++) {
+	for (int i=0;i<nbBound;i++) { // compute inverse permutation
 		bounds[bounds[i].ind].inv_ind=i;
 	}
-	for (int i=0;i<nbBound;i++) {
+	for (int i=0;i<nbBound;i++) { // update 'other'
 		if ( bounds[i].other >= 0 ) {
 			bounds[i].other=bounds[bounds[i].other].inv_ind;
 		}
@@ -523,6 +594,8 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 	int   last_w_st=-1;
 	int   last_s_st=-1;
 	int   last_p_st=0;
+	// reads the text and adds a pair of boundaries each time we encounter a stop
+	// last_* are used to keep track of the start of new text chunk
 	for (int i=0;i<=nAttr;i++) {
 		text_boundary nbs;
 		text_boundary nbe;
