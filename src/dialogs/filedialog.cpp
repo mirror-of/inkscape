@@ -20,6 +20,8 @@
 #include <extension/db.h>
 
 #define IO_STORAGE_NAME "IOExtension"
+#define EXTENSION_VAR   "VarExtension"
+#define FILE_EXT_CHECK  "FileExtensionCheckbox"
 
 namespace Inkscape
 {
@@ -31,12 +33,85 @@ namespace Dialogs
 /*#################################
 # U T I L I T Y
 #################################*/
+static int
+num_bytes_rec (const gchar * string, int count) {
+	if (string[0] == '\0')
+		return count;
+	return num_bytes_rec(string++, count++);
+}
 
+static int
+num_bytes (const gchar * string) {
+	return num_bytes_rec(string, 0);
+}
 
 static void
-menu_switch (GtkWidget * widget, const Inkscape::Extension::Extension ** extension)
+save_menu_switch (GtkWidget * widget, GtkWidget * filesel)
 {
 	Inkscape::Extension::DB::IOExtensionDescription * desc;
+	Inkscape::Extension::Extension ** extension;
+	GtkWidget * checkbox;
+	const gchar * old_extension = NULL;
+	const gchar * filename;
+
+	extension = reinterpret_cast<Inkscape::Extension::Extension **>(g_object_get_data(G_OBJECT(filesel), EXTENSION_VAR));
+	checkbox = reinterpret_cast<GtkWidget *>(g_object_get_data(G_OBJECT(filesel), FILE_EXT_CHECK));
+
+	if (extension != NULL && *extension != NULL) {
+		Inkscape::Extension::Output * oext;
+
+		oext = dynamic_cast<Inkscape::Extension::Output *>(*extension);
+		old_extension = oext->get_extension();
+	} else {
+		old_extension = ".svg";
+	}
+
+	desc = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(g_object_get_data(G_OBJECT(widget), IO_STORAGE_NAME));
+	// printf("The menu has changed to: %s\n", desc->name);
+	*extension = desc->extension;
+
+	if (desc->extension == NULL) {
+		gtk_widget_set_sensitive(checkbox, FALSE);
+	} else {
+		gtk_widget_set_sensitive(checkbox, TRUE);
+	}
+	
+	/* Change file name here */
+	filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION(filesel));
+	if (extension != NULL &&
+			old_extension != NULL &&
+			g_str_has_suffix(filename, old_extension)) {
+		gchar * work0_filename;
+		gchar * work1_filename;
+		gchar * work2_filename;
+		gchar * work3_filename;
+		Inkscape::Extension::Output * oext;
+
+		oext = dynamic_cast<Inkscape::Extension::Output *>(*extension);
+
+		work0_filename = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
+		work1_filename = g_strndup(work0_filename, num_bytes(work0_filename) - num_bytes(old_extension));
+		work2_filename = g_strconcat(work1_filename, oext->get_extension(), NULL);
+		work3_filename = g_filename_from_utf8(work2_filename, -1, NULL, NULL, NULL);
+
+		gtk_file_selection_set_filename(GTK_FILE_SELECTION(filesel), work3_filename);
+
+		g_free(work0_filename);
+		g_free(work1_filename);
+		g_free(work2_filename);
+		g_free(work3_filename);
+	}
+
+	return;
+}
+
+static void
+open_menu_switch (GtkWidget * widget, GtkWidget * filesel)
+{
+	Inkscape::Extension::DB::IOExtensionDescription * desc;
+	const Inkscape::Extension::Extension ** extension;
+
+	extension = reinterpret_cast<const Inkscape::Extension::Extension **>(g_object_get_data(G_OBJECT(filesel), EXTENSION_VAR));
 
 	desc = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(g_object_get_data(G_OBJECT(widget), IO_STORAGE_NAME));
 	// printf("The menu has changed to: %s\n", desc->name);
@@ -92,6 +167,9 @@ FileOpenDialog::FileOpenDialog(const char *dir,
     */
     GtkWidget *dlg = gtk_file_selection_new (title);
 
+	/* Setting the extension variable */
+	g_object_set_data(G_OBJECT(dlg), EXTENSION_VAR, (gpointer)&extension);
+
 	/* Set the pwd and/or the filename */
     if (dir != NULL)
 		gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
@@ -107,7 +185,7 @@ FileOpenDialog::FileOpenDialog(const char *dir,
 
     menu = gtk_menu_new();
     item = gtk_menu_item_new_with_label(_("Autodetect"));
-	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(open_menu_switch), (gpointer)(dlg));
 	g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, extension_list->data);
     gtk_menu_append(GTK_MENU(menu), item);
 
@@ -123,7 +201,7 @@ FileOpenDialog::FileOpenDialog(const char *dir,
 		Inkscape::Extension::DB::IOExtensionDescription * ioext = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
 		item = gtk_menu_item_new_with_label(ioext->name);
-		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(open_menu_switch), (gpointer)(dlg));
 		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
 		gtk_widget_set_sensitive(item, ioext->sensitive);
 		gtk_widget_show(item);
@@ -229,6 +307,9 @@ FileSaveDialog::FileSaveDialog(
     */
     GtkWidget *dlg = gtk_file_selection_new (title);
 
+	/* Setting the extension variable */
+	g_object_set_data(G_OBJECT(dlg), EXTENSION_VAR, (gpointer)&extension);
+
 	/* Set the pwd and/or the filename */
     if (dir != NULL)
 		gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
@@ -244,7 +325,7 @@ FileSaveDialog::FileSaveDialog(
 
     menu = gtk_menu_new();
     item = gtk_menu_item_new_with_label(_("Autodetect"));
-	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(save_menu_switch), (gpointer)(dlg));
 	g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, extension_list->data);
 	extension = NULL;
 	default_item = 0;
@@ -264,7 +345,7 @@ FileSaveDialog::FileSaveDialog(
 		currentIO = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
 		item = gtk_menu_item_new_with_label(currentIO->name);
-		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
+		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(save_menu_switch), (gpointer)(dlg));
 		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
 		gtk_widget_show(item);
 		gtk_widget_set_sensitive(item, currentIO->sensitive);
@@ -292,6 +373,12 @@ FileSaveDialog::FileSaveDialog(
 	gtk_widget_show(checkbox);
     gtk_box_pack_end (GTK_BOX (GTK_FILE_SELECTION(dlg)->main_vbox),
         checkbox, FALSE, FALSE, 0);
+
+	if (extension == NULL) {
+		gtk_widget_set_sensitive(checkbox, FALSE);
+	}
+
+	g_object_set_data(G_OBJECT(dlg), FILE_EXT_CHECK, (gpointer)checkbox);
 
     nativeData->dlg      = dlg;
 	Inkscape::Extension::db.free_list(extension_list);

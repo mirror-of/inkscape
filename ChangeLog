@@ -1,3 +1,17 @@
+2004-06-03  Ted Gould  <ted@gould.cx>
+
+	* src/file.cpp, src/dialog/filedialog.cpp:
+
+	Making the whole file dialog alot more fun.  Basically, now the
+	first filename will always be unique on files that don't have a
+	filename already.  And, if you've selected a different default
+	extension, that extension's filename extension will be placed
+	on the file.  Also, when you change the extension to save with
+	in the dialog, the filename extension will change with you (assuming
+	that you were using filename extensions previously ofcourse).
+	Finally, the checkbox to autoappend extensions is no insensitive
+	when "Autodetect" is selected.
+
 2004-06-03  MenTaLguY  <mental@rydia.net>
 
 	* src/file.cpp, src/extension/internal/ps.cpp,

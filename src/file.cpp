@@ -316,22 +316,43 @@ gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
     SPRepr *repr = sp_document_repr_root (doc);
-	const gchar * default_extension = NULL;
-	gchar * save_loc;
+    const gchar * default_extension = NULL;
+    gchar * save_loc;
+    Inkscape::Extension::Output * extension;
 
-	default_extension = sp_repr_attr(repr, "inkscape:output_extension");
-	if (default_extension == NULL) {
-		default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
-	}
-	// printf("Extension: %s\n", default_extension);
+    default_extension = sp_repr_attr(repr, "inkscape:output_extension");
+    if (default_extension == NULL) {
+            default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
+    }
+    // printf("Extension: %s\n", default_extension);
 
-	if (doc->uri == NULL)
-            if (save_path != NULL)
-                save_loc = g_build_filename(save_path, _("untitled.svg"), NULL);
-            else
-                save_loc = g_build_filename(g_get_home_dir(), _("untitled.svg"), NULL);
-        else
-            save_loc = g_strdup(doc->uri); /* \todo should use a getter */
+    if (doc->uri == NULL) {
+        int i = 1;
+        const char * filename_extension;
+        char * temp_filename;
+
+        extension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(default_extension));
+        if (extension == NULL) {
+            filename_extension = ".svg";
+        } else {
+            filename_extension = extension->get_extension();
+        }
+
+        if (save_path == NULL)
+            save_path = g_strdup(g_get_home_dir());
+        temp_filename = g_strdup_printf(_("drawing%s"), filename_extension);
+        save_loc = g_build_filename(save_path, temp_filename, NULL);
+        g_free(temp_filename);
+
+        while (g_file_test(save_loc, G_FILE_TEST_EXISTS)) {
+            g_free(save_loc);
+            temp_filename = g_strdup_printf(_("drawing-%d%s"), i++, filename_extension);
+            save_loc = g_build_filename(save_path, temp_filename, NULL);
+            g_free(temp_filename);
+        }
+    } else {
+        save_loc = g_strdup(doc->uri); /* \todo should use a getter */
+    }
 
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
@@ -340,13 +361,13 @@ sp_file_save_dialog (SPDocument *doc)
                  (const char *)_("Select file to save"),
 				 default_extension
 				 );
-	bool sucess = dlg->show();
+    bool sucess = dlg->show();
     char *fileName = sucess ? g_strdup(dlg->getFilename()) : NULL;
-	Inkscape::Extension::Extension * selectionType = dlg->getSelectionType();
+    Inkscape::Extension::Extension * selectionType = dlg->getSelectionType();
 
-        delete dlg;
-        g_free(save_loc);
-	if (!sucess) return sucess;
+    delete dlg;
+    g_free(save_loc);
+    if (!sucess) return sucess;
 
     if (fileName && *fileName) {
         gsize bytesRead = 0;
