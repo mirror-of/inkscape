@@ -184,7 +184,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 //  if (Eulerian (true) == false)
 //    return;
   
-  if (HasBackData () == false)
+  if (_has_back_data == false)
   {
     ConvertToForme (dest);
     return;
@@ -337,7 +337,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   //  if (Eulerian (true) == false)
   //    return;
   
-  if (HasBackData () == false)
+  if (_has_back_data == false)
   {
     ConvertToForme (dest);
     return;
@@ -534,14 +534,15 @@ int
 Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
 {
   Reset (0, 0);
-  if ( a->HasBackData() ) MakeBackData(true); else MakeBackData (false);
+  MakeBackData(a->_has_back_data);
+  
   if (dec == 0)
   {
     nbPt = a->nbPt;
     if (nbPt > maxPt)
     {
       maxPt = nbPt;
-      if (HasPointsData ())
+      if (_has_points_data)
         pData =
           (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
@@ -552,20 +553,20 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     {
       maxAr = nbAr;
       aretes.reserve(maxAr);
-      if (HasEdgesData ())
+      if (_has_edges_data)
         eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
-      if (HasSweepSrcData ())
+      if (_has_sweep_src_data)
         swsData =
           (sweep_src_data *) g_realloc(swsData,
                                       maxAr * sizeof (sweep_src_data));
-      if (HasSweepDestData ())
+      if (_has_sweep_dest_data)
         swdData =
           (sweep_dest_data *) g_realloc(swdData,
                                        maxAr * sizeof (sweep_dest_data));
-      if (HasRasterData ())
+      if (_has_raster_data)
         swrData =
           (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
-      if (HasBackData ())
+      if (_has_back_data)
         ebData =
           (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
     }
@@ -614,7 +615,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     int   usePathID=-1;
     int   usePieceID=0;
     double useT=0.0;
-    if ( a->HasBackData() ) {
+    if ( a->_has_back_data ) {
       if ( a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
            && a->ebData[stB].tEn == a->ebData[i].tSt ) {
         usePathID=a->ebData[i].pathID;
@@ -646,7 +647,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     for (int i = 0; i < nbAr; i++)
       Inverse (i);
   }
-  if ( HasBackData() ) {
+  if ( _has_back_data ) {
     for (int i = 0; i < a->nbAr; i++)
     {
       int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
@@ -747,7 +748,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
             // pour les coupures
             dest->ForcePoint ();
          } else {
-            if ( HasBackData() ) {
+            if ( _has_back_data ) {
               int   prevEdge=pts[aretes[bord].st].firstA;
               int   nextEdge=pts[aretes[bord].st].lastA;
               if ( aretes[prevEdge].en != aretes[bord].st ) {

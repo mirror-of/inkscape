@@ -32,11 +32,11 @@ void              Shape::BeginRaster(float &pos,int &curPt,float /*step*/)
 	MakeRasterData(true);
 	MakePointData(true);
 	MakeEdgeData(true);
-	if ( GetFlag(has_sweep_data) ) {
+	if ( _has_sweep_data ) {
 	} else {
 SweepTree::CreateList(sTree,nbAr);
 SweepEvent::CreateQueue(sEvts,nbAr);
-		SetFlag(has_sweep_data,true);
+_has_sweep_data = true;
 	}
 
 	SortPoints();
@@ -58,10 +58,10 @@ SweepEvent::CreateQueue(sEvts,nbAr);
 }
 void              Shape::EndRaster(void)
 {
-	if ( GetFlag(has_sweep_data) ) {
-SweepTree::DestroyList(sTree);
-SweepEvent::DestroyQueue(sEvts);
-		SetFlag(has_sweep_data,false);
+	if ( _has_sweep_data ) {
+	  SweepTree::DestroyList(sTree);
+	  SweepEvent::DestroyQueue(sEvts);
+	  _has_sweep_data = false;
 	}
 	MakePointData(false);
 	MakeEdgeData(false);

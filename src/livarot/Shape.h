@@ -37,27 +37,6 @@ enum
   shape_polypatch = 2		// a graph without intersection; each face is a polygon (not yet used)
 };
 
-// possible flags for the "flags" field in the Shape class
-// they record which structure is currently allocated, or if the graph is "dirty"
-// notice how much junk is needed to run that intersector...
-enum
-{
-  need_points_sorting = 1,	// points have been added or removed: we need to sort the points again
-  need_edges_sorting = 2,	// edges have been added: maybe they are not ordered clockwise
-  // nota: if you remove an edge, the clockwise order still holds
-  has_points_data = 4,		// the pData array is allocated
-  has_edges_data = 8,		// the eData array is allocated
-  has_sweep_src_data = 16,	// the swsData array is allocated
-  has_sweep_dest_data = 32,	// the swdData array is allocated
-  has_sweep_data = 64,		// the sTree and sEvts structures are allocated
-  // nota: the size of these structures is determined when they are allocated, and don't
-  // change after that
-  has_raster_data = 128,	// the swrData array is allocated
-  has_quick_raster_data = 256,	// the swrData array is allocated
-  has_back_data = 512,		// the ebData array is allocated
-  has_voronoi_data = 1024
-};
-
 class IntLigne;
 class BitLigne;
 class AlphaLigne;
@@ -100,14 +79,29 @@ public:
   int numberOfEdges() const { return nbAr; }
   bool hasEdges() const { return (nbAr != 0); }
 
-  void needPointsSorting() { flags |= need_points_sorting; }
-  void needEdgesSorting()  { flags |= need_edges_sorting; }
+  void needPointsSorting() { _need_points_sorting = true; }
+  void needEdgesSorting()  { _need_edges_sorting = true; }
+
+  bool hasBackData() const { return _has_back_data; }
 
 private:
 
   int nbPt; ///< number of points [FIXME: remove this in favour of pts.size()]
   int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
-  int flags;
+  bool _need_points_sorting;  ///< points have been added or removed: we need to sort the points again
+  bool _need_edges_sorting;   ///< edges have been added: maybe they are not ordered clockwise
+                              ///< nota: if you remove an edge, the clockwise order still holds
+  bool _has_points_data;      ///< the pData array is allocated
+  bool _has_edges_data;       ///< the eData array is allocated
+  bool _has_sweep_src_data;   ///< the swsData array is allocated
+  bool _has_sweep_dest_data;  ///< the swdData array is allocated
+  bool _has_sweep_data;       ///< the sTree and sEvts structures are allocated
+                              ///< nota: the size of these structures is determined when they are allocated, and don't
+                              ///< change after that
+  bool _has_raster_data;      ///< the swrData array is allocated
+  bool _has_quick_raster_data;///< the swrData array is allocated
+  bool _has_back_data;        //< the ebData array is allocated
+  bool _has_voronoi_data;
   
   // temporary data for the various algorithms
   struct edge_data
@@ -424,10 +418,6 @@ public:
   void              QuickScan(float &pos,int &curP,float to,AlphaLigne* line,bool exact,float step);
 
 private:
-  // coz' i'm lazy
-  bool SetFlag (int nFlag, bool nval);
-  bool GetFlag (int nFlag);
-
   // activation/deactivation of the temporary data arrays
   void MakePointData (bool nVal);
   void MakeEdgeData (bool nVal);
@@ -435,41 +425,6 @@ private:
   void MakeSweepDestData (bool nVal);
   void MakeRasterData (bool nVal);
   void MakeQuickRasterData (bool nVal);
-
-  bool HasPointsData (void)
-  {
-    return (flags & has_points_data);
-  };
-  bool HasEdgesData (void)
-  {
-    return (flags & has_edges_data);
-  };
-  bool HasSweepSrcData (void)
-  {
-    return (flags & has_sweep_src_data);
-  };
-  bool HasSweepDestData (void)
-  {
-    return (flags & has_sweep_dest_data);
-  };
-  bool HasRasterData (void)
-  {
-    return (flags & has_raster_data);
-  };
-  bool HasQuickRasterData (void)
-  {
-    return (flags & has_quick_raster_data);
-  };
-  public:
-  bool HasBackData (void)
-  {
-    return (flags & has_back_data);
-  };
-  private:
-  bool HasVoronoiData (void)
-  {
-    return (flags & has_voronoi_data);
-  };
 
   void SortPoints (int s, int e);
   void SortPointsByOldInd (int s, int e);

@@ -74,7 +74,7 @@ Shape::Reoriente (Shape * a)
   if (nbPt > maxPt)
     {
       maxPt = nbPt;
-      if (HasPointsData ())
+      if (_has_points_data)
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
   pts = a->pts;
@@ -84,17 +84,17 @@ Shape::Reoriente (Shape * a)
     {
       maxAr = nbAr;
       aretes.reserve(maxAr);
-      if (HasEdgesData ())
+      if (_has_edges_data)
 	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
-      if (HasSweepSrcData ())
+      if (_has_sweep_src_data)
 	swsData =
 	  (sweep_src_data *) g_realloc(swsData,
 				      maxAr * sizeof (sweep_src_data));
-      if (HasSweepDestData ())
+      if (_has_sweep_dest_data)
 	swdData =
 	  (sweep_dest_data *) g_realloc(swdData,
 				       maxAr * sizeof (sweep_dest_data));
-      if (HasRasterData ())
+      if (_has_raster_data)
 	swrData =
 	  (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
     }
@@ -126,7 +126,7 @@ Shape::Reoriente (Shape * a)
 
   SortPointsRounded ();
 
-  SetFlag (need_edges_sorting, true);
+  _need_edges_sorting = true;
   GetWindings (this, NULL, bool_op_union, true);
 
 //      Plot(341,56,8,400,400,true,true,false,true);
@@ -184,27 +184,17 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   
   a->ResetSweep ();
 
-  if (GetFlag (has_sweep_data))
-    {
-    }
-  else
+  if (_has_sweep_data == false)
     {
       SweepTree::CreateList (sTree, a->nbAr);
       SweepEvent::CreateQueue (sEvts, a->nbAr);
-      SetFlag (has_sweep_data, true);
+      _has_sweep_data = true;
     }
   MakePointData (true);
   MakeEdgeData (true);
   MakeSweepSrcData (true);
   MakeSweepDestData (true);
-  if (a->HasBackData ())
-    {
-      MakeBackData (true);
-    }
-  else
-    {
-      MakeBackData (false);
-    }
+  MakeBackData(a->_has_back_data);
 
   for (int i = 0; i < a->nbPt; i++)
     {
@@ -708,8 +698,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     shapeHead = NULL;
   }
 
-  if (chgts)
-    g_free(chgts);
+  g_free(chgts);
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
@@ -721,8 +710,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 //      GetAdjacencies(a);
 
 //      MakeAretes(a);
-  if (iData)
-    g_free(iData);
+  g_free(iData);
   iData = NULL;
   nbInc = maxInc = 0;
 
@@ -736,7 +724,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     }
 //      Validate();
 
-  SetFlag (need_edges_sorting, true);
+  _need_edges_sorting = true;
   if ( directed == fill_justDont ) {
     SortEdges();
   } else {
@@ -895,11 +883,11 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   
 //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
-  if (GetFlag (has_sweep_data))
+  if (_has_sweep_data)
     {
       SweepTree::DestroyList (sTree);
       SweepEvent::DestroyQueue (sEvts);
-      SetFlag (has_sweep_data, false);
+      _has_sweep_data = false;
     }
   if ( directed == fill_justDont ) {
   } else {
@@ -950,20 +938,17 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   a->ResetSweep ();
   b->ResetSweep ();
 
-  if (GetFlag (has_sweep_data))
-    {
-    }
-  else
+  if (_has_sweep_data == false)
     {
       SweepTree::CreateList (sTree, a->nbAr + b->nbAr);
       SweepEvent::CreateQueue (sEvts, a->nbAr + b->nbAr);
-      SetFlag (has_sweep_data, true);
+      _has_sweep_data = true;
     }
   MakePointData (true);
   MakeEdgeData (true);
   MakeSweepSrcData (true);
   MakeSweepDestData (true);
-  if (a->HasBackData () && b->HasBackData ())
+  if (a->hasBackData () && b->hasBackData ())
     {
       MakeBackData (true);
     }
@@ -1615,8 +1600,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     shapeHead = NULL;
   }
 
-  if (chgts)
-    g_free(chgts);
+  g_free(chgts);
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
@@ -1628,8 +1612,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		MakeAretes(b,true);
 	}*/
 
-  if (iData)
-    g_free(iData);
+  g_free(iData);
   iData = NULL;
   nbInc = maxInc = 0;
 
@@ -1670,7 +1653,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       pts[i].oldDegree = pts[i].dI + pts[i].dO;
     }
 
-  SetFlag (need_edges_sorting, true);
+  _need_edges_sorting = true;
   if ( mod == bool_op_slice ) {
   } else {
     GetWindings (a, b, mod, false);
@@ -1801,11 +1784,11 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     }
   }
   
-  if (GetFlag (has_sweep_data))
+  if (_has_sweep_data)
     {
       SweepTree::DestroyList (sTree);
       SweepEvent::DestroyQueue (sEvts);
-      SetFlag (has_sweep_data, false);
+      _has_sweep_data = false;
     }
   if ( mod == bool_op_cut ) {
     // on garde le askForWinding
@@ -2364,7 +2347,9 @@ Shape::AssemblePoints (Shape * a)
 void
 Shape::AssembleAretes (FillRule directed)
 {
-  if ( directed == fill_justDont && HasBackData() == false ) directed=fill_nonZero;
+  if ( directed == fill_justDont && _has_back_data == false ) {
+    directed=fill_nonZero;
+  }
   
   for (int i = 0; i < nbPt; i++) {
     if (pts[i].dI + pts[i].dO == 2) {
@@ -3484,7 +3469,7 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
       else
 	ne = AddEdge (lp, iTo);
     }
-  if (ne >= 0 && HasBackData ())
+  if (ne >= 0 && _has_back_data)
     {
       ebData[ne].pathID = iS->ebData[iB].pathID;
       ebData[ne].pieceID = iS->ebData[iB].pieceID;

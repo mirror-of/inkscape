@@ -561,7 +561,7 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			leftStNo = dest->AddPoint (pos + width * pnor);
 			leftEnNo = dest->AddPoint (pos - width * pnor);
 			int nEdge=dest->AddEdge (leftEnNo, leftStNo);
-			if ( dest->HasBackData() ) {
+			if ( dest->hasBackData() ) {
 				dest->ebData[nEdge].pathID=pathID;
 				dest->ebData[nEdge].pieceID=pieceID;
 				dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -588,13 +588,13 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 		leftEnNo = dest->AddPoint (pos + width * nnor);
 		int midNo = dest->AddPoint (pos);
 		int nEdge=dest->AddEdge (leftEnNo, midNo);
-		if ( dest->HasBackData() ) {
+		if ( dest->hasBackData() ) {
 			dest->ebData[nEdge].pathID=pathID;
 			dest->ebData[nEdge].pieceID=pieceID;
 			dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 		}
 		nEdge=dest->AddEdge (midNo, leftStNo);
-		if ( dest->HasBackData() ) {
+		if ( dest->hasBackData() ) {
 			dest->ebData[nEdge].pathID=pathID;
 			dest->ebData[nEdge].pieceID=pieceID;
 			dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -618,13 +618,13 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			{
 				int nleftStNo = dest->AddPoint (pos + l * biss);
 				int nEdge=dest->AddEdge (leftEnNo, nleftStNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 				}
 				nEdge=dest->AddEdge (nleftStNo, leftStNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -639,19 +639,19 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 				int nleftStNo = dest->AddPoint (pos + emiter * biss + dec * tbiss);
 				int nleftEnNo = dest->AddPoint (pos + emiter * biss - dec * tbiss);
 				int nEdge=dest->AddEdge (nleftEnNo, nleftStNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 				}
 				nEdge=dest->AddEdge (leftEnNo, nleftEnNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 				}
 				nEdge=dest->AddEdge (nleftStNo, leftStNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -695,7 +695,7 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			leftStNo = dest->AddPoint (pos + width * pnor);
 			leftEnNo = dest->AddPoint (pos + width * nnor);
 			int nEdge=dest->AddEdge (leftEnNo, leftStNo);
-			if ( dest->HasBackData() ) {
+			if ( dest->hasBackData() ) {
 				dest->ebData[nEdge].pathID=pathID;
 				dest->ebData[nEdge].pieceID=pieceID;
 				dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -725,7 +725,7 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			rightEnNo = dest->AddPoint (pos + width*pnor);
 			rightStNo = dest->AddPoint (pos - width*pnor);
 			int nEdge=dest->AddEdge (rightStNo, rightEnNo);
-			if ( dest->HasBackData() ) {
+			if ( dest->hasBackData() ) {
 				dest->ebData[nEdge].pathID=pathID;
 				dest->ebData[nEdge].pieceID=pieceID;
 				dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -750,13 +750,13 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			{
 				int nrightStNo = dest->AddPoint (pos - l * biss);
 				int nEdge=dest->AddEdge (rightStNo, nrightStNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 				}
 				nEdge=dest->AddEdge (nrightStNo, rightEnNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -771,19 +771,19 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 				int nrightStNo = dest->AddPoint (pos - emiter*biss - dec*tbiss);
 				int nrightEnNo = dest->AddPoint (pos - emiter*biss + dec*tbiss);
 				int nEdge=dest->AddEdge (rightStNo, nrightStNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 				}
 				nEdge=dest->AddEdge (nrightStNo, nrightEnNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 				}
 				nEdge=dest->AddEdge (nrightEnNo, rightEnNo);
-				if ( dest->HasBackData() ) {
+				if ( dest->hasBackData() ) {
 					dest->ebData[nEdge].pathID=pathID;
 					dest->ebData[nEdge].pieceID=pieceID;
 					dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -827,7 +827,7 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			rightStNo = dest->AddPoint (pos - width * pnor);
 			rightEnNo = dest->AddPoint (pos - width * nnor);
 			int nEdge=dest->AddEdge (rightStNo, rightEnNo);
-			if ( dest->HasBackData() ) {
+			if ( dest->hasBackData() ) {
 				dest->ebData[nEdge].pathID=pathID;
 				dest->ebData[nEdge].pieceID=pieceID;
 				dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
@@ -853,13 +853,13 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 		rightEnNo = dest->AddPoint (pos - width*nnor);
 		int midNo = dest->AddPoint (pos);
 		int nEdge=dest->AddEdge (rightStNo, midNo);
-		if ( dest->HasBackData() ) {
+		if ( dest->hasBackData() ) {
 			dest->ebData[nEdge].pathID=pathID;
 			dest->ebData[nEdge].pieceID=pieceID;
 			dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;
 		}
 		nEdge=dest->AddEdge (midNo, rightEnNo);
-		if ( dest->HasBackData() ) {
+		if ( dest->hasBackData() ) {
 			dest->ebData[nEdge].pathID=pathID;
 			dest->ebData[nEdge].pieceID=pieceID;
 			dest->ebData[nEdge].tSt=dest->ebData[nEdge].tEn=tID;

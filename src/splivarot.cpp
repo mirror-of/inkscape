@@ -318,7 +318,7 @@ sp_selected_path_boolop (bool_op bop)
     
         theShape->ConvertToShape (theShapeA, fill_justDont);
   
-        if ( theShape->HasBackData() ) {
+        if ( theShape->hasBackData() ) {
             // should always be the case, but ya never know
             {
                 for (int i = 0; i < theShape->numberOfPoints(); i++) {
