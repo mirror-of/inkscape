@@ -247,6 +247,10 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
     if ( utf8name ) {
         gchar *filename = NULL;
         if (utf8name && !g_utf8_validate(utf8name, -1, NULL)) {
+            /* FIXME: Trying to guess whether or not a filename is already in utf8 is unreliable.
+               If any callers pass non-utf8 data (e.g. using g_get_home_dir), then change caller to
+               use simple g_file_test.  Then add g_return_val_if_fail(g_utf_validate(...), false)
+               to beginning of this function. */
             filename = g_strdup(utf8name);
             // Looks like g_get_home_dir isn't safe.
             //g_warning("invalid UTF-8 detected internally. HUNT IT DOWN AND KILL IT!!!");
@@ -258,7 +262,7 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
             g_free(filename);
             filename = NULL;
         } else {
-            g_warning( "Unable to convert filename in I:O:file_test" );
+            g_warning( "Unable to convert filename in IO:file_test" );
         }
     }
 
