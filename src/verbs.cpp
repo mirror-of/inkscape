@@ -190,6 +190,12 @@ sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
 	case SP_VERB_FILE_EXPORT:
 		sp_file_export_dialog (NULL);
 		break;
+	case SP_VERB_FILE_NEXT_DESKTOP:
+		inkscape_switch_desktops_next();
+		break;
+	case SP_VERB_FILE_PREV_DESKTOP:
+		inkscape_switch_desktops_prev();
+		break;
 	case SP_VERB_FILE_QUIT:
 		sp_file_exit ();
 		break;
@@ -565,6 +571,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Previe_w"), N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
 	{SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."), N_("Import bitmap or SVG image into document"), "file_import"},
 	{SP_VERB_FILE_EXPORT, "FileExport", N_("_Export Bitmap..."), N_("Export document as PNG bitmap"), "file_export"},
+	{SP_VERB_FILE_NEXT_DESKTOP, "FileNextDesktop", N_("_Next window"), N_("Switch to the next document window"), NULL},
+	{SP_VERB_FILE_PREV_DESKTOP, "FilePrevDesktop", N_("_Prev window"), N_("Switch to the previous document window"), NULL},
 	{SP_VERB_FILE_QUIT, "FileQuit", N_("_Quit"), N_("Quit"), GTK_STOCK_QUIT},
 	/* Edit */
 	{SP_VERB_EDIT_UNDO, "EditUndo", N_("_Undo"), N_("Undo last action"), GTK_STOCK_UNDO},
