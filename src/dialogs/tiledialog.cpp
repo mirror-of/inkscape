@@ -190,15 +190,12 @@ void TileDialogImpl::Grid_Arrange ()
             SPRepr *repr = SP_OBJECT_REPR((SPItem *) rev->data);
             SPItem *item=SP_ITEM(rev->data);
             NRRect b;
-            // FIXME: In changing from setting x&y on images to using transforms, I've somehow changed the
-            // order that rows are being oput on the page. They should go down, but the go up. wierd.
-
             sp_item_bbox_desktop((SPItem *) rev->data, &b);
             width = b.x1 - b.x0;
             height = b.y1 - b.y0;
             new_x = grid_left + ((widest - width)/2) + (( widest + paddingx ) * (cnt % noPerRow));
             new_y =grid_top + ((tallest - height)/2) +(( tallest + paddingy ) * (cnt / noPerRow));
-            NR::Point move = NR::Point(new_x-b.x0, new_y-b.y0);
+            NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y);
             NR::Matrix const &affine = NR::Matrix(NR::translate(move));
             sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
             sp_item_write_transform(item, repr, item->transform,  NULL);
