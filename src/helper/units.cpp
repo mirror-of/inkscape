@@ -139,8 +139,7 @@ sp_convert_distance(gdouble *distance, SPUnit const *from, SPUnit const *to)
 /** @param devicetransform for device units. */
 /* TODO: Remove the ctmscale parameter given that we no longer have SP_UNIT_USERSPACE. */
 gdouble
-sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to,
-                         gdouble const devicescale)
+sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to)
 {
     if (&from == &to) {
         return from_dist;

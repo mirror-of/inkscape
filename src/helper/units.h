@@ -95,11 +95,6 @@ struct SPUnit {
 	gchar const *abbr_plural;
 };
 
-// 72 points per inch divided by the SVG-recommended value of 90 pixels per inch for computer screen
-// For now it is constant throughout Inkscape, later we may make it changeable 
-// (though this define is far from the only place to change it!)
-#define DEVICESCALE 0.8    
-
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 const gchar *sp_unit_get_abbreviation (const SPUnit *unit);
 gchar const *sp_unit_get_plural (SPUnit const *unit);
@@ -133,10 +128,9 @@ void sp_unit_free_list (GSList *units);
 /* Return TRUE if conversion is possible, FALSE if unit bases differ */
 gboolean sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUnit *to);
 
-/* devicescale is device->absolute */
 /* If either one is NULL, transconverting to/from that base fails */
 /* Generic conversion between volatile units would be useless anyways */
-gdouble sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to, gdouble const devicescale);
+gdouble sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to);
 
 /* Some more convenience */
 /* Be careful to not mix bases */

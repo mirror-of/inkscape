@@ -540,16 +540,12 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 
     SPNamedView &nv = *desktop->namedview;
 
-    // Fixme: expansion?
-    gdouble const px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
     nv.grid_snapper.setDistance(sp_convert_distance_full(nv.gridtolerance,
                                                          *nv.gridtoleranceunit,
-                                                         px,
-                                                         px2doc));
+                                                         px));
     nv.guide_snapper.setDistance(sp_convert_distance_full(nv.guidetolerance,
                                                           *nv.guidetoleranceunit,
-                                                          px,
-                                                          px2doc));
+                                                          px));
 }
 
 void

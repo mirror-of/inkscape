@@ -195,7 +195,7 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
 #ifdef UNIT_SELECTOR_VERBOSE
             g_print ("Old val %g ... ", val);
 #endif
-            val = sp_convert_distance_full(val, *old, *unit, DEVICESCALE);
+            val = sp_convert_distance_full(val, *old, *unit);
 #ifdef UNIT_SELECTOR_VERBOSE
             g_print ("new val %g\n", val);
 #endif
@@ -315,7 +315,7 @@ sp_unit_selector_set_unit (SPUnitSelector *us, const SPUnit *unit)
     /* Recalculate adjustments */
     for (l = us->adjustments; l != NULL; l = l->next) {
         GtkAdjustment *adj = GTK_ADJUSTMENT(l->data);
-        gdouble const val = sp_convert_distance_full(adj->value, *old, *unit, DEVICESCALE);
+        gdouble const val = sp_convert_distance_full(adj->value, *old, *unit);
         gtk_adjustment_set_value (adj, val);
     }
 }
