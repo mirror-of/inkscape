@@ -17,7 +17,7 @@
 #include <libnr/nr-compose.h>
 #include "nr-plain-stuff.h"
 
-#define NR_DEFAULT_CHECKERSIZEP2 4
+#define NR_DEFAULT_CHECKERSIZEP2 2
 #define NR_DEFAULT_CHECKERCOLOR0 0xbfbfbfff
 #define NR_DEFAULT_CHECKERCOLOR1 0x808080ff
 
