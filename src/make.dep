@@ -43,12 +43,12 @@ arc-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	object-edit.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -108,10 +108,10 @@ desktop-affine.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-object.h \
@@ -164,10 +164,10 @@ desktop-events.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	sp-guide.h \
@@ -208,47 +208,33 @@ desktop-handles.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	view.h
 
 desktop-snap.o: \
 	desktop-snap.cpp \
 	desktop-snap.h \
-	desktop.h \
 	forward.h \
 	geom.h \
 	helper/helper-forward.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix-fns.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
-	message-context.h \
-	message-stack.h \
-	message.h \
 	sp-guide.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
 	version.h \
-	view.h \
 	xml/xml-forward.h
 
 desktop.o: \
@@ -311,11 +297,11 @@ desktop.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	select-context.h \
@@ -380,11 +366,11 @@ dialogs/align.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-item-transform.h \
@@ -407,6 +393,7 @@ dialogs/desktop-properties.o: \
 	desktop.h \
 	dialogs/desktop-properties.h \
 	dialogs/dialog-events.h \
+	dialogs/rdf.h \
 	document.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
@@ -439,11 +426,11 @@ dialogs/desktop-properties.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	sp-namedview.h \
 	sp-object-group.h \
@@ -496,11 +483,11 @@ dialogs/dialog-events.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	view.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
@@ -539,11 +526,11 @@ dialogs/display-settings.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selcue.h \
@@ -596,11 +583,11 @@ dialogs/export.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-item.h \
@@ -675,7 +662,7 @@ dialogs/fill-style.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-defs.h \
@@ -743,11 +730,11 @@ dialogs/find.o: \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection-chemistry.h \
 	selection-chemistry.h \
@@ -851,11 +838,11 @@ dialogs/item-properties.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-item-group.h \
@@ -951,11 +938,11 @@ dialogs/object-properties.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	verbs.h \
 	view.h \
@@ -963,6 +950,12 @@ dialogs/object-properties.o: \
 	widgets/sp-widget.h \
 	xml/repr.h \
 	xml/xml-forward.h
+
+dialogs/rdf.o: \
+	dialogs/rdf.cpp \
+	dialogs/rdf.h \
+	helper/sp-intl.h \
+	require-config.h
 
 dialogs/sp-attribute-widget.o: \
 	dialogs/sp-attribute-widget.cpp \
@@ -1031,11 +1024,13 @@ dialogs/stroke-style.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
+	libnrtype/nrtype-forward.h \
 	marker-status.h \
 	prefix.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
+	sp-chars.h \
 	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
@@ -1045,6 +1040,7 @@ dialogs/stroke-style.o: \
 	sp-paint-server.h \
 	sp-pattern.h \
 	sp-root.h \
+	sp-text.h \
 	style.h \
 	svg/ftos.h \
 	svg/stringstream.h \
@@ -1114,11 +1110,11 @@ dialogs/text-edit.o: \
 	livarot/LivarotDefs.h \
 	livarot/livarot-forward.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-chars.h \
@@ -1179,11 +1175,11 @@ dialogs/transformation.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
@@ -1235,11 +1231,11 @@ dialogs/xml-tree.o: \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-chars.h \
@@ -1906,7 +1902,7 @@ document-undo.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
+	refcounted.h \
 	selection.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -1965,10 +1961,10 @@ document.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	sp-defs.h \
 	sp-item-group.h \
@@ -2033,11 +2029,11 @@ draw-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -2108,11 +2104,11 @@ dropper-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -2170,11 +2166,11 @@ dyna-draw-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	mod360.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -2202,11 +2198,13 @@ ecma/EcmaBinding.o: \
 	forward.h \
 	inkscape.h \
 	libnr/nr-forward.h \
+	xml/repr.h \
 	xml/xml-forward.h
 
 ecma/SVGViewer.o: \
 	ecma/SVGViewer.cpp \
 	document.h \
+	ecma/EcmaBinding.h \
 	ecma/SVGViewer.h \
 	forward.h \
 	helper/helper-forward.h \
@@ -2215,10 +2213,10 @@ ecma/SVGViewer.o: \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
 	libnr/nr-point.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	svg-view.h \
 	uri.h \
 	uri.h \
@@ -2265,11 +2263,11 @@ event-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	select-context.h \
@@ -2286,6 +2284,7 @@ event-context.o: \
 	version.h \
 	view.h \
 	widgets/menu.h \
+	widgets/spw-utilities.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -2390,10 +2389,10 @@ extension/implementation/script.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-item.h \
@@ -4027,10 +4026,10 @@ extension/system.o: \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-point.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	verbs.h \
 	view.h \
@@ -4099,12 +4098,12 @@ file.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
 	print.h \
+	refcounted.h \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
@@ -4221,11 +4220,11 @@ help.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefix.h \
+	refcounted.h \
 	require-config.h \
 	sp-chars.h \
 	sp-item.h \
@@ -4248,10 +4247,10 @@ helper/action.o: \
 	libnr/nr-macros.h \
 	libnr/nr-object.h \
 	libnr/nr-point.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	view.h
 
 helper/gnome-utils.o: \
@@ -4346,10 +4345,10 @@ helper/window.o: \
 	libnr/nr-dim2.h \
 	libnr/nr-object.h \
 	libnr/nr-point.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	shortcuts.h \
 	verbs.h \
@@ -4403,12 +4402,12 @@ inkscape.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	preferences-skeleton.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -4468,13 +4467,13 @@ interface.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	object-ui.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection-chemistry.h \
@@ -4531,11 +4530,11 @@ knot.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	sp-guide.h \
 	sp-object.h \
@@ -4573,10 +4572,10 @@ knotholder.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -5156,48 +5155,6 @@ libnrtype/TextWrapper.o: \
 	livarot/livarot-forward.h \
 	require-config.h
 
-libnrtype/cp1250.o: \
-	libnrtype/cp1250.cpp
-
-libnrtype/cp1251.o: \
-	libnrtype/cp1251.cpp
-
-libnrtype/cp1252.o: \
-	libnrtype/cp1252.cpp
-
-libnrtype/cp1253.o: \
-	libnrtype/cp1253.cpp
-
-libnrtype/cp1254.o: \
-	libnrtype/cp1254.cpp
-
-libnrtype/cp1255.o: \
-	libnrtype/cp1255.cpp
-
-libnrtype/cp1256.o: \
-	libnrtype/cp1256.cpp
-
-libnrtype/cp1257.o: \
-	libnrtype/cp1257.cpp
-
-libnrtype/cp1258.o: \
-	libnrtype/cp1258.cpp
-
-libnrtype/cp874.o: \
-	libnrtype/cp874.cpp
-
-libnrtype/cp932.o: \
-	libnrtype/cp932.cpp
-
-libnrtype/cp936.o: \
-	libnrtype/cp936.cpp
-
-libnrtype/cp949.o: \
-	libnrtype/cp949.cpp
-
-libnrtype/cp950.o: \
-	libnrtype/cp950.cpp
-
 libnrtype/font-style-to-pos.o: \
 	libnrtype/font-style-to-pos.cpp \
 	color.h \
@@ -5501,16 +5458,16 @@ marker-status.o: \
 
 message-context.o: \
 	message-context.cpp \
-	managed.h \
 	message-context.h \
 	message-stack.h \
-	message.h
+	message.h \
+	refcounted.h
 
 message-stack.o: \
 	message-stack.cpp \
-	managed.h \
 	message-stack.h \
-	message.h
+	message.h \
+	refcounted.h
 
 mod360-test.o: \
 	mod360-test.cpp \
@@ -5561,7 +5518,6 @@ node-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
@@ -5570,6 +5526,7 @@ node-context.o: \
 	object-edit.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	refcounted.h \
 	rubberband.h \
 	selcue.h \
 	selection.h \
@@ -5637,7 +5594,6 @@ nodepath.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
@@ -5645,6 +5601,7 @@ nodepath.o: \
 	nodepath.h \
 	object-edit.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection-chemistry.h \
@@ -5711,6 +5668,7 @@ object-edit.o: \
 	sp-object.h \
 	sp-offset.h \
 	sp-paint-server.h \
+	sp-path.h \
 	sp-pattern.h \
 	sp-polygon.h \
 	sp-rect.h \
@@ -5759,11 +5717,11 @@ object-ui.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	object-ui.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-anchor.h \
@@ -5821,11 +5779,11 @@ path-chemistry.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	path-chemistry.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-chars.h \
@@ -5963,13 +5921,13 @@ rect-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	object-edit.h \
 	prefs-utils.h \
 	rect-context.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -6021,10 +5979,10 @@ rubberband.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	rubberband.h \
 	view.h
 
@@ -6052,10 +6010,10 @@ satisfied-guide-cns.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	satisfied-guide-cns.h \
 	sp-guide-attachment.h \
 	sp-guide-constraint.h \
@@ -6097,11 +6055,11 @@ selcue.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	selcue.h \
 	selection.h \
 	sp-item.h \
@@ -6152,12 +6110,12 @@ select-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	rubberband.h \
 	selcue.h \
@@ -6221,12 +6179,12 @@ select-toolbar.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	select-toolbar.h \
 	selection-chemistry.h \
@@ -6296,11 +6254,11 @@ selection-chemistry.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	path-chemistry.h \
+	refcounted.h \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
@@ -6353,10 +6311,10 @@ selection-describer.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	selection-describer.h \
 	selection.h \
@@ -6395,10 +6353,10 @@ selection.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-item-group.h \
@@ -6485,11 +6443,11 @@ seltrans.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	select-context.h \
@@ -6520,10 +6478,10 @@ shortcuts.o: \
 	libnr/nr-dim2.h \
 	libnr/nr-object.h \
 	libnr/nr-point.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	shortcuts.h \
 	verbs.h \
@@ -6554,10 +6512,10 @@ slideshow.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	sp-chars.h \
 	sp-item.h \
@@ -6596,10 +6554,10 @@ sp-anchor.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	sp-anchor.h \
 	sp-item-group.h \
@@ -6932,11 +6890,11 @@ sp-image.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	print.h \
+	refcounted.h \
 	require-config.h \
 	sp-image.h \
 	sp-item-group.h \
@@ -7177,9 +7135,9 @@ sp-item.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	prefs-utils.h \
 	print.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-anchor.h \
@@ -7292,11 +7250,11 @@ sp-marker.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	print.h \
+	refcounted.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7402,11 +7360,11 @@ sp-namedview.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	sp-guide.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7904,11 +7862,11 @@ sp-root.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	print.h \
+	refcounted.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7974,12 +7932,12 @@ sp-shape.o: \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
 	macros.h \
-	managed.h \
 	marker-status.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	print.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-defs.h \
@@ -8077,6 +8035,7 @@ sp-star.o: \
 	libnr/nr-maybe.h \
 	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
+	libnr/nr-point-l.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
 	libnr/nr-rect.h \
@@ -8084,10 +8043,10 @@ sp-star.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8145,11 +8104,11 @@ sp-symbol.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	print.h \
+	refcounted.h \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8221,11 +8180,11 @@ sp-text.o: \
 	libnrtype/nrtype-forward.h \
 	livarot/LivarotDefs.h \
 	livarot/livarot-forward.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	print.h \
+	refcounted.h \
 	require-config.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -8516,10 +8475,10 @@ sp-typeset.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-chars.h \
@@ -8596,11 +8555,11 @@ sp-use.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	sp-item.h \
 	sp-object-repr.h \
@@ -8661,12 +8620,12 @@ spiral-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	object-edit.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -8738,12 +8697,12 @@ splivarot.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-chars.h \
@@ -8812,12 +8771,12 @@ star-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	object-edit.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -8953,10 +8912,10 @@ svg-view.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	sp-item.h \
 	sp-object.h \
 	svg-view.h \
@@ -9072,11 +9031,11 @@ text-context.o: \
 	libnr/nr-values.h \
 	libnrtype/nrtype-forward.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	selection.h \
@@ -9156,7 +9115,6 @@ toolbox.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
@@ -9164,6 +9122,7 @@ toolbox.o: \
 	nodepath.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	select-toolbar.h \
@@ -9252,7 +9211,6 @@ tools-switch.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
@@ -9260,6 +9218,7 @@ tools-switch.o: \
 	nodepath.h \
 	path-chemistry.h \
 	rect-context.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	select-context.h \
@@ -9364,7 +9323,6 @@ verbs.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
@@ -9373,6 +9331,7 @@ verbs.o: \
 	path-chemistry.h \
 	prefs-utils.h \
 	rect-context.h \
+	refcounted.h \
 	require-config.h \
 	selcue.h \
 	select-context.h \
@@ -9422,10 +9381,10 @@ view.o: \
 	libnr/nr-forward.h \
 	libnr/nr-point.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	view.h \
 	xml/xml-forward.h
 
@@ -9455,10 +9414,10 @@ widgets/button.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	shortcuts.h \
 	verbs.h \
@@ -9730,11 +9689,11 @@ widgets/gradient-vector.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-defs.h \
@@ -9846,7 +9805,7 @@ widgets/paint-selector.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-defs.h \
@@ -10017,10 +9976,10 @@ widgets/sp-widget.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	selection.h \
 	sp-item.h \
 	sp-object.h \
@@ -10136,10 +10095,10 @@ widgets/spw-utilities.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	refcounted.h \
 	require-config.h \
 	selection.h \
 	sp-item.h \
@@ -10232,11 +10191,11 @@ zoom-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
-	managed.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	refcounted.h \
 	rubberband.h \
 	selcue.h \
 	selection.h \

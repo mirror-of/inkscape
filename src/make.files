@@ -40,6 +40,8 @@ dialogs/object-attributes.cpp
 dialogs/object-attributes.h
 dialogs/object-properties.cpp
 dialogs/object-properties.h
+dialogs/rdf.cpp
+dialogs/rdf.h
 dialogs/sp-attribute-widget.cpp
 dialogs/sp-attribute-widget.h
 dialogs/stroke-style.cpp
@@ -427,21 +429,6 @@ libnrtype/RasterFont.cpp
 libnrtype/RasterFont.h
 libnrtype/TextWrapper.cpp
 libnrtype/TextWrapper.h
-libnrtype/codepages.h
-libnrtype/cp1250.cpp
-libnrtype/cp1251.cpp
-libnrtype/cp1252.cpp
-libnrtype/cp1253.cpp
-libnrtype/cp1254.cpp
-libnrtype/cp1255.cpp
-libnrtype/cp1256.cpp
-libnrtype/cp1257.cpp
-libnrtype/cp1258.cpp
-libnrtype/cp874.cpp
-libnrtype/cp932.cpp
-libnrtype/cp936.cpp
-libnrtype/cp949.cpp
-libnrtype/cp950.cpp
 libnrtype/font-glyph.h
 libnrtype/font-instance.h
 libnrtype/font-style-to-pos.cpp
@@ -486,7 +473,6 @@ livarot/ShapeSweepUtils.cpp
 livarot/ShapeUtils.h
 livarot/livarot-forward.h
 macros.h
-managed.h
 marker-status.cpp
 marker-status.h
 message-context.cpp
@@ -516,6 +502,7 @@ print.cpp
 print.h
 rect-context.cpp
 rect-context.h
+refcounted.h
 remove-last.h
 require-config.h
 rubberband.cpp

@@ -21,6 +21,7 @@ OBJECTS = \
 	dialogs/item-properties.o \
 	dialogs/object-attributes.o \
 	dialogs/object-properties.o \
+	dialogs/rdf.o \
 	dialogs/sp-attribute-widget.o \
 	dialogs/stroke-style.o \
 	dialogs/text-edit.o \
@@ -240,20 +241,6 @@ OBJECTS = \
 	libnrtype/FontInstance.o \
 	libnrtype/RasterFont.o \
 	libnrtype/TextWrapper.o \
-	libnrtype/cp1250.o \
-	libnrtype/cp1251.o \
-	libnrtype/cp1252.o \
-	libnrtype/cp1253.o \
-	libnrtype/cp1254.o \
-	libnrtype/cp1255.o \
-	libnrtype/cp1256.o \
-	libnrtype/cp1257.o \
-	libnrtype/cp1258.o \
-	libnrtype/cp874.o \
-	libnrtype/cp932.o \
-	libnrtype/cp936.o \
-	libnrtype/cp949.o \
-	libnrtype/cp950.o \
 	libnrtype/font-style-to-pos.o \
 	libnrtype/nr-type-pos-def.o \
 	libnrtype/nr-type-primitives.o \
@@ -424,6 +411,7 @@ LINTS = \
 	dialogs/item-properties.lint \
 	dialogs/object-attributes.lint \
 	dialogs/object-properties.lint \
+	dialogs/rdf.lint \
 	dialogs/sp-attribute-widget.lint \
 	dialogs/stroke-style.lint \
 	dialogs/text-edit.lint \
@@ -643,20 +631,6 @@ LINTS = \
 	libnrtype/FontInstance.lint \
 	libnrtype/RasterFont.lint \
 	libnrtype/TextWrapper.lint \
-	libnrtype/cp1250.lint \
-	libnrtype/cp1251.lint \
-	libnrtype/cp1252.lint \
-	libnrtype/cp1253.lint \
-	libnrtype/cp1254.lint \
-	libnrtype/cp1255.lint \
-	libnrtype/cp1256.lint \
-	libnrtype/cp1257.lint \
-	libnrtype/cp1258.lint \
-	libnrtype/cp874.lint \
-	libnrtype/cp932.lint \
-	libnrtype/cp936.lint \
-	libnrtype/cp949.lint \
-	libnrtype/cp950.lint \
 	libnrtype/font-style-to-pos.lint \
 	libnrtype/nr-type-pos-def.lint \
 	libnrtype/nr-type-primitives.lint \
