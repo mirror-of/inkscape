@@ -19,6 +19,7 @@
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-fns.h>
 
 #include "svg/svg.h"
 #include "attributes.h"
@@ -474,14 +475,33 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 void
 sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform)
 {
-	if (rect->rx.computed != 0) {
-		rect->rx.computed = CLAMP (rect->rx.computed / xform.expansionX(), 0, 0.5 * rect->width.computed);
+       // test unit vectors to find out compensation:
+	NR::Point c(rect->x.computed, rect->y.computed);
+	NR::Point cx = c + NR::Point (1, 0); 
+	NR::Point cy = c + NR::Point (0, 1);
+
+       // apply previous transform if any
+	c *= SP_ITEM (rect)->transform;
+	cx *= SP_ITEM (rect)->transform;
+	cy *= SP_ITEM (rect)->transform;
+
+      // find out stretches that we need to compensate
+	gdouble eX = NR::distance (cx * xform, c * xform) / NR::distance (cx, c);
+	gdouble eY = NR::distance (cy * xform, c * xform) / NR::distance (cy, c);
+
+	if (rect->rx.set) {
+		rect->rx.computed = CLAMP (rect->rx.computed / eX, 0, 0.5 * rect->width.computed);
 	}
-      if (rect->ry.computed != 0) {
-		if (rect->rx.computed == 0) {
-			rect->ry.computed = CLAMP (rect->ry.computed / xform.expansionY(), 0, 0.5 * MIN (rect->height.computed, rect->width.computed));
+      if (rect->ry.set) {
+		if (!rect->rx.set) {
+			if (fabs (eX - eY) > 1e-6) {
+				// break one-handleness if non-uniform scaling; necessary for store transforms = preserve
+				rect->rx.computed = CLAMP (rect->ry.computed / eX, 0, 0.5 * MIN (rect->height.computed, rect->width.computed));
+				rect->rx.set = TRUE;
+			}
+			rect->ry.computed = CLAMP (rect->ry.computed / eY, 0, 0.5 * MIN (rect->height.computed, rect->width.computed));
 		} else {
-			rect->ry.computed = CLAMP (rect->ry.computed / xform.expansionY(), 0, 0.5 * rect->height.computed);
+			rect->ry.computed = CLAMP (rect->ry.computed / eY, 0, 0.5 * rect->height.computed);
 		}
       }
 }

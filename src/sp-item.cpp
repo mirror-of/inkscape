@@ -681,6 +681,11 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
         sp_item_adjust_stroke_width_recursive(item, expansion);
     }
 
+    // reset rx/ry of a rect if possible
+    if (SP_IS_RECT (item)) {
+        sp_rect_compensate_rxry (SP_RECT(item), advertized_transform);
+    }
+
     // run the object's set_transform if transforms are stored optimized
     gint preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
     if (!transform) {
@@ -691,11 +696,6 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
             transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
         }
         sp_item_set_item_transform(item, transform_attr);
-    }
-
-    // reset rx/ry of a rect if possible
-    if (SP_IS_RECT (item)) {
-        sp_rect_compensate_rxry (SP_RECT(item), xform);
     }
 
     // send the relative transform with a _transformed_signal
