@@ -38,6 +38,7 @@
 #include "seltrans.h"
 #include "sp-metrics.h"
 #include "helper/sp-ctrlline.h"
+#include "helper/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
 
 static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
@@ -53,6 +54,8 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *p, guint st
 
 static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data);
 static void sp_sel_trans_sel_modified(SPSelection *selection, guint flags, gpointer data);
+
+static void sp_sel_trans_update_item_bboxes (SPSelTrans *seltrans);
 
 extern GdkPixbuf *handles[];
 
@@ -144,6 +147,9 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 	}
 
 	seltrans->stamp_cache = NULL;
+
+	seltrans->item_bboxes = NULL;
+	sp_sel_trans_update_item_bboxes (seltrans);
 }
 
 void
@@ -189,6 +195,12 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 			sp_object_unref (SP_OBJECT (seltrans->items[i].first), NULL);
 	
 	seltrans->items.clear();
+
+	for (GSList *l = seltrans->item_bboxes; l != NULL; l = l->next) {
+		gtk_object_destroy( GTK_OBJECT (l->data));
+	}
+	g_slist_free (seltrans->item_bboxes);
+	seltrans->item_bboxes = NULL;
 }
 
 void sp_sel_trans_reset_state(SPSelTrans *seltrans)
@@ -205,6 +217,7 @@ void sp_sel_trans_increase_state(SPSelTrans *seltrans)
 	}
 
 	sp_sel_trans_update_handles(*seltrans);
+	sp_sel_trans_update_item_bboxes (seltrans);
 }
 
 void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
@@ -212,6 +225,7 @@ void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
 	seltrans->center = p;
 	
 	sp_sel_trans_update_handles(*seltrans);
+	sp_sel_trans_update_item_bboxes (seltrans);
 }
 
 void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles)
@@ -289,6 +303,7 @@ void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, 
 	seltrans->changed = TRUE;
 
 	sp_sel_trans_update_handles(*seltrans);
+	sp_sel_trans_update_item_bboxes (seltrans);
 }
 
 void sp_sel_trans_ungrab(SPSelTrans *seltrans)
@@ -633,6 +648,7 @@ static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data)
 		sp_sel_trans_update_volatile_state(*seltrans);
 		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
+		sp_sel_trans_update_item_bboxes (seltrans);
 	}
 
 }
@@ -648,6 +664,7 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 		sp_sel_trans_update_volatile_state(*seltrans);
 		seltrans->center = seltrans->box.midpoint();
 		sp_sel_trans_update_handles(*seltrans);
+		sp_sel_trans_update_item_bboxes (seltrans);
 	}
 
 }
@@ -1054,3 +1071,41 @@ void sp_sel_trans_center(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Poi
 	sp_sel_trans_set_center (seltrans, pt);
 }
 
+static void
+sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
+{
+       g_return_if_fail (seltrans != NULL);
+
+       GSList* l;
+       for (l = seltrans->item_bboxes; l != NULL; l = l->next) {
+               gtk_object_destroy( GTK_OBJECT (l->data));
+       }
+       g_slist_free (seltrans->item_bboxes);
+       seltrans->item_bboxes = NULL;
+
+       g_return_if_fail (seltrans->selection != NULL);
+
+       NRRect b;
+       SPCanvasItem* box;
+       for (l = seltrans->selection->items; l != NULL; l = l->next) {
+
+		 box = sp_canvas_item_new (SP_DT_CONTROLS (seltrans->desktop),
+								 SP_TYPE_CTRL,
+								 "mode", SP_CTRL_MODE_XOR,
+								 "shape", SP_CTRL_SHAPE_DIAMOND,
+								 "size", 5.0,
+								 "filled", TRUE,
+								 "fill_color", 0x000000ff,
+								 "stroked", FALSE,
+								 "stroke_color", 0x000000ff,
+								 NULL);
+		 sp_canvas_item_show (box);
+
+		 //						 gdouble shift = 0; //3/SP_DESKTOP_ZOOM(seltrans->desktop);
+
+		 sp_item_bbox_desktop ((SPItem *) l->data, &b);
+		 sp_ctrl_moveto (SP_CTRL(box), b.x0, b.y1);
+
+		 seltrans->item_bboxes = g_slist_append (seltrans->item_bboxes, box);
+       }
+}

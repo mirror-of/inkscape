@@ -71,6 +71,8 @@ struct _SPSelTrans {
 	guint sel_changed_id;
 	guint sel_modified_id;
 	GSList *stamp_cache;
+
+	GSList *item_bboxes;
 };
 
 /*
