@@ -45,12 +45,16 @@ msgstr "<b>Maj</b> : dessiner autour du point de départ"
 #: src/spiral-context.cpp:425 src/star-context.cpp:437
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
 msgstr ""
+"<b>Le calque courant est caché</b>. Le rendre visible pour pouvoir y "
+"dessiner."
 
 #: src/arc-context.cpp:433 src/dyna-draw-context.cpp:461
 #: src/pen-context.cpp:276 src/pencil-context.cpp:184 src/rect-context.cpp:469
 #: src/spiral-context.cpp:429 src/star-context.cpp:441
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
 msgstr ""
+"<b>Le calque courant est verrouillé</b>. Le déverrouiller pour pouvoir y "
+"dessiner."
 
 #: src/arc-context.cpp:512
 #, c-format
@@ -548,7 +552,7 @@ msgstr "Boîte de contour"
 #: src/dialogs/display-settings.cpp:240
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr ""
-"N'afficher que les boîtes de contours des objets lors de leurs déplacements "
+"N'afficher que les boîtes de contour des objets lors de leurs déplacements "
 "ou transformations"
 
 #: src/dialogs/display-settings.cpp:246
@@ -955,7 +959,7 @@ msgstr ""
 
 #: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1639
 msgid "Pen"
-msgstr "Plume"
+msgstr "Stylo"
 
 #: src/dialogs/display-settings.cpp:1155 src/verbs.cpp:1641
 msgid "Calligraphy"
@@ -1084,7 +1088,7 @@ msgstr "Mettre à l'échelle la largeur du contour"
 #: src/dialogs/display-settings.cpp:1293 src/select-toolbar.cpp:456
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
-"Lors de la mise à l'échelle des objets, redimentionner les largeurs des "
+"Lors de la mise à l'échelle des objets, redimensionner les largeurs des "
 "contours selon les mêmes proportions"
 
 #: src/dialogs/display-settings.cpp:1300
@@ -1094,7 +1098,7 @@ msgstr "Mettre à l'échelle les coins arrondis des rectangles"
 #: src/dialogs/display-settings.cpp:1301 src/select-toolbar.cpp:468
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
-"Lors de la mise à l'échelle des rectangles, redimentionner les rayons des "
+"Lors de la mise à l'échelle des rectangles, redimensionner les rayons des "
 "coins selon les mêmes proportions"
 
 #: src/dialogs/display-settings.cpp:1308
@@ -1240,7 +1244,7 @@ msgid ""
 "several times in quick succession, it will act more and more aggressively; "
 "invoking it again after a pause restores the default threshold."
 msgstr ""
-"Force par défaut de la commande Simplifier. Si vous faites appel à cette "
+"Force par défaut de la commande Simplifier. En faisant appel à cette "
 "commande plusieurs fois de suite, elle agira de façon de plus en plus "
 "agressive; un appel après une pause restaurera la valeur par défaut."
 
@@ -1696,14 +1700,12 @@ msgid "Layer Name:"
 msgstr "Nom du calque :"
 
 #: src/dialogs/layer-properties.cpp:130
-#, fuzzy
 msgid "Rename Layer"
-msgstr "Calque renommé"
+msgstr "Renommer le calque"
 
 #: src/dialogs/layer-properties.cpp:133
-#, fuzzy
 msgid "_Rename"
-msgstr "Nom du fichier"
+msgstr "_Renommer"
 
 #. TRANSLATORS: This means "The layer has been renamed"
 #: src/dialogs/layer-properties.cpp:144
@@ -1711,14 +1713,12 @@ msgid "Renamed layer"
 msgstr "Calque renommé"
 
 #: src/dialogs/layer-properties.cpp:148
-#, fuzzy
 msgid "Create Layer"
-msgstr "Créer un nouveau calque"
+msgstr "Créer un calque"
 
 #: src/dialogs/layer-properties.cpp:150
-#, fuzzy
 msgid "C_reate"
-msgstr "Créer"
+msgstr "C_réer"
 
 #: src/dialogs/layer-properties.cpp:164
 msgid "New layer created."
@@ -2745,7 +2745,7 @@ msgid ""
 "%s"
 msgstr ""
 "%s n'est pas un fichier XML valide, ou\n"
-"vous n'avez pas les droites pour le lire.\n"
+"vous n'avez pas les droits pour le lire.\n"
 "%s"
 
 #: src/inkscape.cpp:670
@@ -2827,14 +2827,14 @@ msgstr "Ouvrir un des documents récemment ouverts"
 
 #: src/interface.cpp:905
 msgid "_Show/Hide"
-msgstr "Afficher/Cacher (_s)"
+msgstr "Afficher/cacher (_s)"
 
 #: src/interface.cpp:905
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
 msgstr ""
-"Afficher ou cacher des parties de la fenêtre du document (différent pour les "
+"Afficher ou non des parties de la fenêtre du document (différent pour les "
 "modes normal et plein écran)"
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
@@ -3107,7 +3107,7 @@ msgid ""
 "segments."
 msgstr ""
 "Vous devez sélectionner <b>deux nœuds non-terminaux</b> d'un chemin pour "
-"supprimer un segment."
+"supprimer un segment entre eux."
 
 #: src/nodepath.cpp:1464
 msgid "Cannot find path between nodes."
@@ -3374,7 +3374,7 @@ msgstr "Sélectionner <b>au moins 2 objets</b> pour les combiner."
 
 #: src/path-chemistry.cpp:65
 msgid "At least one of the objects is <b>not a path</b>, cannot combine."
-msgstr "Un des objets <b>n'est pas un chemin</b>, impossible de les combiner."
+msgstr "Un des objets n'est <b>pas un chemin</b>, impossible de les combiner."
 
 #: src/path-chemistry.cpp:73
 msgid ""
@@ -3409,7 +3409,7 @@ msgstr "<b>Pas de chemin</b> à inverser dans la sélection."
 
 #: src/pen-context.cpp:758
 msgid "Finishing pen"
-msgstr "Tracé à la plume terminé"
+msgstr "Tracé au stylo terminé"
 
 #. Write curves to object
 #: src/pencil-context.cpp:322
@@ -3555,19 +3555,22 @@ msgstr "Rien n'a été copié."
 #: src/selection-chemistry.cpp:929
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
+"<b>Le calque courant est caché</b>. Le rendre visible pour pouvoir y coller."
 
 #: src/selection-chemistry.cpp:933
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
+"<b>Le calque courant est verrouillé</b>. Le déverrouiller pour pouvoir y "
+"coller."
 
 #: src/selection-chemistry.cpp:946 src/selection-chemistry.cpp:997
 msgid "Nothing on the clipboard."
-msgstr "Rien dans le presse-papiers."
+msgstr "Rien dans le presse-papier."
 
 #: src/selection-chemistry.cpp:1003
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr ""
-"Sélectionner des <b>objet(s)</b> pour pouvoir y coller un style dessus."
+"Sélectionner des <b>objet(s)</b> pour pouvoir leur coller un style dessus."
 
 #: src/selection-chemistry.cpp:1570
 msgid "Select an <b>object</b> to clone."
@@ -3583,11 +3586,11 @@ msgstr ""
 
 #: src/selection-chemistry.cpp:1607
 msgid "Select a <b>clone</b> to unlink."
-msgstr "Sélectionner un <b>clone</b> à détacher."
+msgstr "Sélectionner un <b>clone</b> à délier."
 
 #: src/selection-chemistry.cpp:1638
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr "<b>Pas de clone à détacher</b> dans la sélection."
+msgstr "<b>Pas de clone à délier</b> dans la sélection."
 
 #: src/selection-chemistry.cpp:1655
 msgid ""
@@ -3595,8 +3598,8 @@ msgid ""
 "to go to its source. Select a <b>text on path</b> to go to the path."
 msgstr ""
 "Sélectionner un <b>clone</b> pour aller à son original. Sélectionner un "
-"<b>offset lié</b> pour aller à sa source. Sélectionner un <b>texte sur "
-"chemin</b> pour aller à son chemin."
+"<b>offset lié</b> pour aller à sa source. Sélectionner un <b>texte suivant "
+"un chemin</b> pour aller à son chemin."
 
 #: src/selection-chemistry.cpp:1676
 msgid ""
@@ -3658,7 +3661,7 @@ msgid ""
 "Shift also uses this center"
 msgstr ""
 "<b>Centre</b> de la rotation et de l'inclinaison : déplacer pour "
-"positionner; la mise à l'échelle avec <b>Maj</b> utilise aussi ce centre"
+"repositionner; la mise à l'échelle avec <b>Maj</b> utilise aussi ce centre"
 
 #: src/seltrans.cpp:484
 msgid ""
@@ -3969,15 +3972,19 @@ msgstr "<b>Pas de texte suivant un chemin</b> dans la sélection."
 
 #: src/text-chemistry.cpp:203 src/text-chemistry.cpp:222
 msgid "Select <b>text(s)</b> to remove kerns from."
-msgstr "Sélectionner des <b>texte(s)</b> pour en retirer les ajustements."
+msgstr "Sélectionner des <b>texte(s)</b> pour en retirer les crénages."
 
 #: src/text-context.cpp:353
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
 msgstr ""
+"<b>Le calque courant est caché</b>. Le rendre visible pour pouvoir y ajouter "
+"du texte."
 
 #: src/text-context.cpp:357
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
 msgstr ""
+"<b>Le calque courant est verrouillé</b>. Le déverrouiller pour pouvoir y "
+"ajouter du texte."
 
 #: src/text-context.cpp:409
 msgid "No-break space"
@@ -4306,8 +4313,8 @@ msgid ""
 "node. Press <b>a</b> to toggle Append/New."
 msgstr ""
 "<b>Cliquer</b> pour créer un nœud, <b>cliquer-déplacer</b> pour créer un "
-"nœud adouci. Appuyer sur <b>a</b> pour alterner entre les modes créer "
-"nouveau/prolonger sélectionné."
+"nœud doux. Appuyer sur <b>a</b> pour alterner entre les modes créer nouveau/"
+"prolonger sélectionné."
 
 #: src/tools-switch.cpp:171
 msgid ""
@@ -4364,7 +4371,7 @@ msgstr "Impossible de déplacer le calque à l'arrière plan."
 
 #: src/verbs.cpp:899
 msgid "Moved to previous layer."
-msgstr "Déplacé au calque précédant."
+msgstr "Déplacé au calque précédent."
 
 #: src/verbs.cpp:901
 msgid "Can't move past first layer."
@@ -4375,14 +4382,14 @@ msgid "No current layer."
 msgstr "Pas de calque courant."
 
 #: src/verbs.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid "Raised layer <b>%s</b>."
-msgstr "Calque monté."
+msgstr "Calque <b>%s</b> monté."
 
 #: src/verbs.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Lowered layer <b>%s</b>."
-msgstr "Calque descendu."
+msgstr "Calque <b>%s</b> descendu."
 
 #: src/verbs.cpp:952
 msgid "Can't move layer any further."
@@ -4410,9 +4417,8 @@ msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.fr.svg"
 
 #: src/verbs.cpp:1341
-#, fuzzy
 msgid "tutorial-tracing.svg"
-msgstr "tutorial-basic.fr.svg"
+msgstr ""
 
 #: src/verbs.cpp:1344
 #, fuzzy
@@ -4533,7 +4539,7 @@ msgstr "Aller à la fenêtre (document) suivante"
 
 #: src/verbs.cpp:1459
 msgid "P_revious Window"
-msgstr "Fenêtre p_récédante"
+msgstr "Fenêtre p_récédente"
 
 #: src/verbs.cpp:1460
 msgid "Switch to the previous document window"
@@ -4578,7 +4584,7 @@ msgstr "Couper (_t)"
 
 #: src/verbs.cpp:1471
 msgid "Cut selection to clipboard"
-msgstr "Couper la sélection vers le presse-papiers"
+msgstr "Couper la sélection vers le presse-papier"
 
 #: src/verbs.cpp:1472
 msgid "_Copy"
@@ -4586,7 +4592,7 @@ msgstr "_Copier"
 
 #: src/verbs.cpp:1473
 msgid "Copy selection to clipboard"
-msgstr "Copier la sélection vers le presse-papiers"
+msgstr "Copier la sélection vers le presse-papier"
 
 #: src/verbs.cpp:1474
 msgid "_Paste"
@@ -4594,8 +4600,7 @@ msgstr "Coller (_p)"
 
 #: src/verbs.cpp:1475
 msgid "Paste object(s) from clipboard to mouse point"
-msgstr ""
-"Coller les objet(s) depuis le presse-papiers vers le pointeur de souris"
+msgstr "Coller les objet(s) depuis le presse-papier vers le pointeur de souris"
 
 #: src/verbs.cpp:1476
 msgid "Paste _Style"
@@ -4612,7 +4617,7 @@ msgstr "Coller sur place (_i)"
 #: src/verbs.cpp:1479
 msgid "Paste object(s) from clipboard to the original location"
 msgstr ""
-"Coller les objet(s) depuis le presse-papiers à leur emplacement d'origine"
+"Coller les objet(s) depuis le presse-papier à leur emplacement d'origine"
 
 #: src/verbs.cpp:1480
 msgid "_Delete"
@@ -4641,7 +4646,7 @@ msgstr "Créer un clone de l'objet sélectionné (une copie liée à l'original)
 
 #: src/verbs.cpp:1486
 msgid "Unlin_k Clone"
-msgstr "Libérer le Clone (_k)"
+msgstr "Délier le clone (_k)"
 
 #: src/verbs.cpp:1487
 msgid "Cut the clone's link to its original"
@@ -4760,11 +4765,11 @@ msgstr "Retirer le texte du chemin"
 
 #: src/verbs.cpp:1521
 msgid "Remove Manual _Kerns"
-msgstr "Retirer les ajustements manuels (_K)"
+msgstr "Retirer les crénages manuels (_K)"
 
 #: src/verbs.cpp:1522
 msgid "Remove all manual kerns from a text object"
-msgstr "Retirer les ajustements manuels d'un texte"
+msgstr "Retirer les crénages manuels d'un texte"
 
 #: src/verbs.cpp:1524
 msgid "_Union"
@@ -4889,7 +4894,7 @@ msgstr "Créer un objet offset dynamique lié avec le chemin original"
 
 #: src/verbs.cpp:1566
 msgid "_Stroke to Path"
-msgstr "Contour ver_s Chemin"
+msgstr "Contour en chemin (_s)"
 
 #: src/verbs.cpp:1567
 msgid "Convert selected stroke(s) to path(s)"
@@ -4932,7 +4937,7 @@ msgstr "Convertir un objet bitmap en chemins"
 
 #: src/verbs.cpp:1577
 msgid "_Make a Bitmap Copy"
-msgstr "Faire un copie en bit_map"
+msgstr "Faire une copie en bit_map"
 
 #: src/verbs.cpp:1578
 msgid "Export selection to a bitmap and insert it into document"
@@ -4983,7 +4988,7 @@ msgstr "Déplacer dans le calque suivant du document"
 
 #: src/verbs.cpp:1593
 msgid "Move to Previous Layer"
-msgstr "Déplacer dans le calque précédant"
+msgstr "Déplacer dans le calque précédent"
 
 #: src/verbs.cpp:1594
 msgid "Switch to the previous layer in the document"
@@ -5056,7 +5061,7 @@ msgstr "Supprimer les transformations de l'objet"
 
 #: src/verbs.cpp:1613
 msgid "_Object to Path"
-msgstr "_Objet en Chemin"
+msgstr "_Objet en chemin"
 
 #: src/verbs.cpp:1614
 msgid "Convert selected object(s) to path(s)"
@@ -5072,7 +5077,7 @@ msgstr "Convertir le texte (inséré dans une forme) sélectionné en texte"
 
 #: src/verbs.cpp:1618
 msgid "Flip _Horizontally"
-msgstr "Retourner _Horizontalement"
+msgstr "Retourner _horizontalement"
 
 #: src/verbs.cpp:1618
 msgid "Flip selection horizontally"
@@ -5080,7 +5085,7 @@ msgstr "Retourner les objets sélectionnés horizontalement"
 
 #: src/verbs.cpp:1621
 msgid "Flip _Vertically"
-msgstr "Retourner _Verticalement"
+msgstr "Retourner _verticalement"
 
 #: src/verbs.cpp:1621
 msgid "Flip selection vertically"
@@ -5202,11 +5207,11 @@ msgstr "Ouvrir les préférences de l'outil crayon d'Inkscape"
 
 #: src/verbs.cpp:1665
 msgid "Pen Preferences"
-msgstr "Préférences de la plume"
+msgstr "Préférences du stylo"
 
 #: src/verbs.cpp:1666
 msgid "Open Inkscape Preferences for the Pen tool"
-msgstr "Ouvrir les préférences de l'outil plume d'Inkscape"
+msgstr "Ouvrir les préférences de l'outil stylo d'Inkscape"
 
 #: src/verbs.cpp:1667
 msgid "Calligraphic Preferences"
@@ -5405,7 +5410,7 @@ msgstr "Préférences enregistrées avec le document"
 
 #: src/verbs.cpp:1715
 msgid "_Fill and Stroke..."
-msgstr "Remplissage et Contour... (_f)"
+msgstr "Remplissage et contour... (_f)"
 
 #: src/verbs.cpp:1716
 msgid "Fill and Stroke dialog"
@@ -5465,7 +5470,7 @@ msgstr "Affic_her/cac_her les boîtes dialogues"
 
 #: src/verbs.cpp:1730
 msgid "Show or hide all active dialogs"
-msgstr "Afficher/cacher les boîtes de dialogue actives"
+msgstr "Afficher ou cacher les boîtes de dialogue actives"
 
 #: src/verbs.cpp:1731
 msgid "_Object Properties..."
@@ -5486,13 +5491,13 @@ msgstr "Liste des raccourcis clavier et souris"
 
 #: src/verbs.cpp:1737
 msgid "_About Inkscape"
-msgstr "_À propos Inkscape"
+msgstr "_À propos d'Inkscape"
 
 #. "help_about"
 #. Tutorials
 #: src/verbs.cpp:1741
 msgid "Inkscape: _Basic"
-msgstr "Inkscape: _basique"
+msgstr "Inkscape : _basique"
 
 #: src/verbs.cpp:1742
 msgid "Getting started with Inkscape"
@@ -5509,7 +5514,7 @@ msgstr "Utilisation des outils de formes pour créer et éditer des formes"
 
 #: src/verbs.cpp:1745
 msgid "Inkscape: _Advanced"
-msgstr "Inkscape: _avancé"
+msgstr "Inkscape : _avancé"
 
 #: src/verbs.cpp:1746
 msgid "Advanced Inkscape topics"
@@ -5518,9 +5523,8 @@ msgstr "Sujets avancés d'Inkscape"
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: src/verbs.cpp:1748
-#, fuzzy
 msgid "Inkscape: T_racing"
-msgstr "Inkscape: _basique"
+msgstr "Inkscape : vecto_risation"
 
 #: src/verbs.cpp:1749
 #, fuzzy
@@ -5531,12 +5535,12 @@ msgstr "Vectorisation de bitmap"
 #: src/verbs.cpp:1750
 #, fuzzy
 msgid "Inkscape: _Calligraphy"
-msgstr "Inkscape: _basique"
+msgstr "Inkscape : calligraphie"
 
 #: src/verbs.cpp:1751
 #, fuzzy
 msgid "Using the Calligraphy pen tool"
-msgstr "Afficher la version d'Inkscape"
+msgstr "Utilisation de l'outil de vectorisation d'Inkscape"
 
 #: src/verbs.cpp:1752
 msgid "_Elements of Design"
@@ -5667,11 +5671,11 @@ msgstr "Éditeur de dégradé"
 
 #: src/widgets/layer-selector.cpp:118
 msgid "Toggle current layer visibility"
-msgstr "Rend le calque courant visible ou non"
+msgstr "Rendre (in)visible le calque courant"
 
 #: src/widgets/layer-selector.cpp:138
 msgid "Lock or unlock current layer"
-msgstr "Verrouille ou déverrouille le calque courant"
+msgstr "(Dé)verrouiller le calque courant"
 
 #: src/widgets/layer-selector.cpp:141
 msgid "Current layer"
@@ -5930,7 +5934,7 @@ msgstr "Valeur"
 #~ msgstr "Déplacé au calque suivant."
 
 #~ msgid "Switched to previous layer."
-#~ msgstr "Déplacé au calque précédant."
+#~ msgstr "Déplacé au calque précédent."
 
 #~ msgid "Set Label"
 #~ msgstr "Définir le label"
@@ -5989,7 +5993,7 @@ msgstr "Valeur"
 #~ msgstr "Dessiner un arc : %s x %s"
 
 #~ msgid "All shape tools"
-#~ msgstr "Toutes les outils de forme"
+#~ msgstr "Tous les outils de forme"
 
 #~ msgid "Rectangle tool"
 #~ msgstr "Outil rectangle"
@@ -6004,7 +6008,7 @@ msgstr "Valeur"
 #~ msgstr "Outil spirale"
 
 #~ msgid "Freehand and pen"
-#~ msgstr "Plume et dessin à main levée"
+#~ msgstr "Stylo et dessin à main levée"
 
 #~ msgid "Draw rectangle: %s x %s"
 #~ msgstr "Dessiner un rectangle : %s x %s"
