@@ -4,8 +4,9 @@
 .libs
 Makefile
 Makefile.in
+check-header-compile
+doxygen-log
 inkscape
 inkscape_version.h
 inkview
 spsvgview
-check-header-compile
