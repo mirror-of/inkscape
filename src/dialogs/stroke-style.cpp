@@ -51,6 +51,7 @@
 #include "document.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
+#include "desktop.h"
 #include "marker-status.h"
 #include "selection.h"
 #include "sp-item.h"
@@ -1290,7 +1291,7 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
 
     GSList const *objects = selection->itemList();
 
-    if ((old->base == SP_UNIT_ABSOLUTE) &&
+    if ((old->base == SP_UNIT_ABSOLUTE || old->base == SP_UNIT_DEVICE) &&
        (new_units->base == SP_UNIT_DIMENSIONLESS)) {
 
         /* Absolute to percentage */
@@ -1310,7 +1311,7 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
         return TRUE;
 
     } else if ((old->base == SP_UNIT_DIMENSIONLESS) &&
-              (new_units->base == SP_UNIT_ABSOLUTE)) {
+              (new_units->base == SP_UNIT_ABSOLUTE || new_units->base == SP_UNIT_DEVICE)) {
 
         /* Percentage to absolute */
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
@@ -1370,7 +1371,10 @@ sp_stroke_style_line_widget_new(void)
     sp_dialog_defocus_on_enter(sb);
 
     gtk_box_pack_start(GTK_BOX(hb), sb, FALSE, FALSE, 0);
-    us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
+    us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop && sp_desktop_get_default_unit (desktop))
+        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit (desktop));
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
     g_signal_connect ( G_OBJECT (us), "set_unit", G_CALLBACK (stroke_width_set_unit), spw );
     gtk_widget_show(us);
@@ -1557,7 +1561,6 @@ sp_stroke_style_line_widget_new(void)
                         GTK_SIGNAL_FUNC(sp_stroke_style_line_attr_changed),
                         NULL );
 
-    SPDesktop *desktop = inkscape_active_desktop();
     sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? SP_DT_SELECTION(desktop) : NULL);
 
     return spw;
@@ -1727,7 +1730,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
     } else {
         // only one object; no sense to keep percent, switch to absolute
-        if (unit->base != SP_UNIT_ABSOLUTE) {
+        if (unit->base != SP_UNIT_ABSOLUTE && unit->base != SP_UNIT_DEVICE) {
             // FIXME: use some other default absolute unit
             sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PT));
         }
@@ -1735,7 +1738,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
 
     unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
-    if (unit->base == SP_UNIT_ABSOLUTE) {
+    if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
         sp_convert_distance(&avgwidth, SP_PS_UNIT, sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us)));
         gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
     } else {
@@ -1919,7 +1922,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
         for (GSList const *i = items; i != NULL; i = i->next) {
             /* Set stroke width */
             double width;
-            if (unit->base == SP_UNIT_ABSOLUTE) {
+            if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
                 sp_convert_distance( &width_typed, sp_unit_selector_get_unit(us), SP_PS_UNIT );
                 NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(i->data));
                 width = width_typed / expansion(i2d);
@@ -1948,7 +1951,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
 
         g_free(dash);
 
-        if (unit->base != SP_UNIT_ABSOLUTE) {
+        if (unit->base != SP_UNIT_ABSOLUTE && unit->base != SP_UNIT_DEVICE) {
             // reset to 100 percent
             gtk_adjustment_set_value (wadj, 100.0);
         }

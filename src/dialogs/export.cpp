@@ -256,7 +256,10 @@ sp_export_dialog_area_frame (GtkWidget * dlg)
     /* gets added to the vbox later, but the unit selector is needed
        earlier than that */
 
-    us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+    us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop && sp_desktop_get_default_unit (desktop))
+        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit (desktop));
     gtk_box_pack_end (GTK_BOX (unitbox), us, FALSE, FALSE, 0);
     l = gtk_label_new (_("Units:"));
     gtk_box_pack_end (GTK_BOX (unitbox), l, FALSE, FALSE, 3);
