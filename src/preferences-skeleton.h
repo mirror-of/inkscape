@@ -61,6 +61,7 @@ static char const preferences_skeleton[] =
 "    <eventcontext id=\"text\"  usecurrent=\"0\" gradientdrag=\"1\"\n"
 "                  style=\"fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:12px;\" selcue=\"1\"/>\n"
 "    <eventcontext id=\"nodes\" selcue=\"1\" gradientdrag=\"1\"/>\n"
+"    <eventcontext id=\"gradient\" selcue=\"1\"/>\n"
 "    <eventcontext id=\"zoom\" selcue=\"1\" gradientdrag=\"0\"/>\n"
 "    <eventcontext id=\"dropper\" selcue=\"1\" gradientdrag=\"1\"/>\n"
 "    <eventcontext id=\"select\" selcue=\"1\" gradientdrag=\"0\"/>\n"
