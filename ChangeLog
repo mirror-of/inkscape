@@ -1,5 +1,14 @@
 2003-12-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-spiral.cpp (sp_spiral_set): Fix clamping of t0 value: change
+	min from -1.0 to 0.0 as per all other t0 clamps and as required in some
+	circumstances by sp_spiral_get_xy.
+	(sp_spiral_fit_and_draw): Avoid useless adjacent dups in point sampling.
+
+	(sp_spiral_fit_and_draw, sp_spiral_set_shape): Call proper tangent
+	routine instead of trying to estimate from samples.
+	(sp_spiral_get_tangent): New function.
+
 	* src/helper/bezier-utils.cpp (sp_bezier_fit_cubic): Implement as a call
 	to sp_bezier_fit_cubic_r.
 	(sp_bezier_fit_cubic_full): Mark *tHat1 and *tHat2 as const.

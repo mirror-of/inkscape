@@ -195,6 +195,10 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_SODIPODI_EXPANSION:
 		if (value) {
+			/* FIXME: check that value looks like a (finite) number.  todo: Create a
+			   routine that uses strtod, and accepts a default value (if strtod finds
+			   an error).  N.B. atof/sscanf/strtod consider "nan" and "inf" to be valid
+			   numbers. */
 			spiral->exp = atof (value);
 			spiral->exp = CLAMP (spiral->exp, 0.0, 1000.0);
 		} else {
@@ -223,6 +227,12 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_SODIPODI_ARGUMENT:
 		if (value) {
 			spiral->arg = atof (value);
+			/* FIXME: We still need some bounds on arg, for numerical reasons.
+			   E.g. we don't want inf or NaN, nor near-infinite numbers.
+			   I'm inclined to take modulo 2*pi.  If so, then change the knot
+			   editors, which use atan2 - revo*2*pi, which typically results in
+			   very negative arg.
+			*/
 		} else {
 			spiral->arg = 0.0;
 		}
@@ -231,7 +241,10 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_SODIPODI_T0:
 		if (value) {
 			spiral->t0 = atof (value);
-			spiral->t0 = CLAMP (spiral->t0, -1.0, 0.999);
+			spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
+			/* TODO: Have shared constants for the allowable bounds for attributes.
+			   There was a bug here where we used -1.0 as the minimum (which leads to
+			   NaN via e.g. pow(-1.0, 0.5); see sp_spiral_get_xy for requirements. */
 		} else {
 			spiral->t0 = 0.0;
 		}
@@ -261,29 +274,94 @@ sp_spiral_description (SPItem * item)
 	return g_strdup ("Spiral");
 }
 
+
+/* FIXME: Move these into the point library (once it exists; currently spread between libnr and
+ * geom.h); and get rid of the sp_vector_normalize copy in helper/bezier-utils.cpp. */
+
+static bool
+is_unit_vector (NRPoint const &p)
+{
+	return fabs(1.0 - hypot(p.x, p.y)) <= 1e-4;
+	/* The tolerance of 1e-4 is somewhat arbitrary.  sp_vector_normalize is believed to return
+	   points well within this tolerance.  I'm not aware of any callers that want a small
+	   tolerance; most callers would be ok with a tolerance of 0.25. */
+}
+
+
+/** Scales *v to make it a unit vector.
+ *
+ *  Requires: *v != (0, 0).  (See also bug.)
+ *  Ensures: is_unit_vector(*v).
+ *
+ *  Minor bug: Won't work if hypot(v->x, v->y) is inf, i.e. either if |v->x| and |v->y| are both
+ *  near-infinite (i.e. within a factor of about sqrt(2) of +/-DBL_MAX) or if one coordinate is
+ *  +/-inf.
+ */
 static void
-sp_spiral_fit_and_draw (SPSpiral *spiral,
+sp_vector_normalize (NRPoint *v)
+{
+	double const len = hypot (v->x, v->y);
+	g_return_if_fail (len != 0);
+	v->x /= len;
+	v->y /= len;
+	g_assert (is_unit_vector (*v));
+}
+
+
+/** Requires: dstep > 0.
+	is_unit_vector(*hat1).
+
+    Ensures: is_unit_vector(*hat2).
+**/
+static void
+sp_spiral_fit_and_draw (SPSpiral const *spiral,
 			SPCurve	 *c,
 			double dstep,
 			NRPoint *darray,
-			NRPoint *hat1,
+			NRPoint const *hat1,
 			NRPoint *hat2,
-			double    t)
+			double *t)
 {
 #define BEZIER_SIZE   4
 #define FITTING_DEPTH 3
 #define BEZIER_LENGTH (BEZIER_SIZE * (2 << (FITTING_DEPTH - 1)))
+	g_assert (dstep > 0);
+	g_assert (is_unit_vector (*hat1));
 
 	NRPoint bezier[BEZIER_LENGTH];
 	double d;
 	int depth, i;
-	
-	for (d = t, i = 0; i <= SAMPLE_SIZE; d += dstep, i++) {
+
+	for (d = *t, i = 0; i <= SAMPLE_SIZE; d += dstep, i++) {
 		sp_spiral_get_xy (spiral, d, &darray[i]);
+
+		/* Avoid useless adjacent dups.  (Otherwise we can have all of darray filled with
+		   the same value, which upsets ChordLengthParameterize.) */
+		if ((i != 0)
+		    && (darray[i].x == darray[i - 1].x)
+		    && (darray[i].y == darray[i - 1].y)
+		    && (d < 1.0)) {
+			i--;
+			d += dstep;
+			/* We mustn't increase dstep for subsequent values of i: for large
+			   spiral.exp values, rate of growth increases very rapidly.  TODO: Get the
+			   function itself to decide what value of d to use next: ensure that we
+			   move at least 0.25 * stroke width, for example.  The derivative (as used
+			   for get_tangent before normalization) would be useful for estimatimating
+			   the appropriate d value.  Or perhaps just start with a small dstep and
+			   scale by some small number until we move >= 0.25 * stroke_width.  Must
+			   revert to the original dstep value for next iteration to avoid the
+			   problem mentioned above. */
+		}
 	}
-	
-	sp_darray_center_tangent (darray, SAMPLE_SIZE - 1, hat2);
-	
+
+	double const next_t = d - 2 * dstep;
+	/* == t + (SAMPLE_SIZE - 1) * dstep, in absence of dups. */
+
+	sp_spiral_get_tangent (spiral, next_t, hat2);
+	hat2->x = -hat2->x;
+	hat2->y = -hat2->y;
+
 	/* Fixme:
 	   we should use better algorithm to specify maximum error.
 	*/
@@ -292,9 +370,9 @@ sp_spiral_fit_and_draw (SPSpiral *spiral,
 					  SPIRAL_TOLERANCE*SPIRAL_TOLERANCE,
 					  FITTING_DEPTH);
 #ifdef SPIRAL_DEBUG
-	if (t==spiral->t0 || t==1.0)
+	if (*t == spiral->t0 || *t == 1.0)
 		g_print ("[%s] depth=%d, dstep=%g, t0=%g, t=%g, arg=%g\n",
-			 debug_state, depth, dstep, spiral->t0, t, spiral->arg);
+			 debug_state, depth, dstep, spiral->t0, *t, spiral->arg);
 #endif
 	if (depth != -1) {
 		for (i = 0; i < 4*depth; i += 4) {
@@ -308,11 +386,13 @@ sp_spiral_fit_and_draw (SPSpiral *spiral,
 		}
 	} else {
 #ifdef SPIRAL_VERBOSE
-		g_print ("cant_fit_cubic: t=%g\n", t);
+		g_print ("cant_fit_cubic: t=%g\n", *t);
 #endif
 		for (i = 1; i < SAMPLE_SIZE; i++)
 			sp_curve_lineto (c, darray[i].x, darray[i].y);
 	}
+	*t = next_t;
+	g_assert (is_unit_vector (*hat2));
 }
 
 static void
@@ -321,9 +401,7 @@ sp_spiral_set_shape (SPShape *shape)
 	SPSpiral *spiral;
 	NRPoint darray[SAMPLE_SIZE + 1];
 	NRPoint hat1, hat2;
-	int i;
-	double tstep, t;
-	double dstep, d;
+	double t;
 	SPCurve *c;
 
 	spiral = SP_SPIRAL(shape);
@@ -346,37 +424,29 @@ sp_spiral_set_shape (SPShape *shape)
 		 spiral->arg,
 		 spiral->t0);
 #endif
-	
-	tstep = SAMPLE_STEP/spiral->revo;
-	dstep = tstep/(SAMPLE_SIZE - 1.0);
 
-	if (spiral->t0 - dstep >= 0.0) {
-		for (d = spiral->t0 - dstep, i = 0; i <= 2; d += dstep, i++)
-			sp_spiral_get_xy (spiral, d, &darray[i]);
-
-		sp_darray_center_tangent (darray, 1, &hat1);
-		hat1.x = - hat1.x;
-		hat1.y = - hat1.y;
-	} else {
-		for (d = spiral->t0, i = 1; i <= 2; d += dstep, i++)
-			sp_spiral_get_xy (spiral, d, &darray[i]);
-
-		sp_darray_left_tangent (darray, 1, 2, &hat1);
+	/* Initial moveto. */
+	{
+		NRPoint t0_pt;
+		sp_spiral_get_xy (spiral, spiral->t0, &t0_pt);
+		sp_curve_moveto (c, t0_pt.x, t0_pt.y);
 	}
 
-	sp_curve_moveto (c, darray[1].x, darray[1].y);
+	double const tstep = SAMPLE_STEP / spiral->revo;
+	double const dstep = tstep / (SAMPLE_SIZE - 1);
 
-	for (t = spiral->t0; t < (1.0-tstep); t += tstep)
-	{
-		sp_spiral_fit_and_draw (spiral, c, dstep, darray, &hat1, &hat2, t);
+	sp_spiral_get_tangent (spiral, spiral->t0, &hat1);
 
-		hat1.x = - hat2.x;
-		hat1.y = - hat2.y;
+	for (t = spiral->t0; t < (1.0 - tstep);) {
+		sp_spiral_fit_and_draw (spiral, c, dstep, darray, &hat1, &hat2, &t);
+
+		hat1.x = -hat2.x;
+		hat1.y = -hat2.y;
 	}
 	if ((1.0 - t) > SP_EPSILON)
 		sp_spiral_fit_and_draw (spiral, c, (1.0 - t)/(SAMPLE_SIZE - 1.0),
-					darray, &hat1, &hat2, t);
-  
+					darray, &hat1, &hat2, &t);
+
 	sp_shape_set_curve_insync ((SPShape *) spiral, c, TRUE);
 	sp_curve_unref (c);
 }
@@ -393,7 +463,9 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 {
 	g_return_if_fail (spiral != NULL);
 	g_return_if_fail (SP_IS_SPIRAL (spiral));
-	
+
+	/* TODO: Consider applying CLAMP or adding in-bounds assertions for some of these
+	 * parameters. */
 	spiral->cx         = cx;
 	spiral->cy         = cy;
 	spiral->exp        = exp;
@@ -441,24 +513,99 @@ sp_spiral_snappoints (SPItem *item, NRPoint *p, int size)
 	return 0;
 }
 
+/** Set *p to one of the points on the spiral; t specifies how far along the spiral.
+ *
+ *  Requires: t \in [0.0, 2.03].  (It doesn't make sense for t to be much more than 1.0,
+ *	though some callers go slightly beyond 1.0 for curve-fitting purposes.)
+ */
 void
-sp_spiral_get_xy (SPSpiral *spiral, gdouble t, NRPoint *p)
+sp_spiral_get_xy (SPSpiral const *spiral, gdouble t, NRPoint *p)
 {
-	gdouble rad, arg;
-
 	g_return_if_fail (spiral != NULL);
 	g_return_if_fail (SP_IS_SPIRAL(spiral));
 	g_return_if_fail (p != NULL);
+	g_assert (spiral->exp >= 0.0);
+	/* Otherwise we get NaN for t==0. */
+	g_assert (spiral->exp <= 1000.0);
+	/* Anything much more results in infinities.  Even allowing 1000 is somewhat overkill. */
+	g_assert (t >= 0.0);
+	/* Any callers passing -ve t will have a bug for non-integral values of exp. */
 
-	rad = spiral->rad * pow(t, spiral->exp);
-	arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
-	
+	double const rad = spiral->rad * pow(t, spiral->exp);
+	double const arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
+
 	p->x = rad * cos (arg) + spiral->cx;
 	p->y = rad * sin (arg) + spiral->cy;
 }
 
+
+/** Returns the derivative of sp_spiral_get_xy with respect to t,
+ *  scaled to a unit vector.
+ *
+ *  Requires: spiral != 0.
+ *	t >= 0.
+ *	p != NULL.
+ *  Ensures: is_unit_vector(*p).
+ */
 void
-sp_spiral_get_polar (SPSpiral *spiral, gdouble t, gdouble *rad, gdouble *arg)
+sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p)
+{
+	g_return_if_fail (spiral != NULL);
+	g_return_if_fail (SP_IS_SPIRAL(spiral));
+	g_return_if_fail (p != NULL);
+	g_assert (t >= 0.0);
+	g_assert (spiral->exp >= 0.0);
+	/* See above for comments on these assertions. */
+
+	double const t_scaled = 2.0 * M_PI * spiral->revo * t;
+	double const arg = t_scaled + spiral->arg;
+	double const s = sin (arg);
+	double const c = cos (arg);
+
+	if (spiral->exp == 0.0) {
+		p->x = -s;
+		p->y = c;
+	} else if (t_scaled == 0.0) {
+		p->x = c;
+		p->y = s;
+	} else {
+		double unrotated[2] = {spiral->exp, t_scaled};
+		double const s_len = hypot (unrotated[0], unrotated[1]);
+		g_assert (s_len != 0);
+		/* todo: Check that this isn't being too hopeful of
+		   the hypot function.  E.g. test with numbers around
+		   2**-1070 (denormalized numbers), preferably on a
+		   few different platforms.  However, njh says that
+		   the usual implementation does handle both very big
+		   and very small numbers. */
+		for(unsigned i = 0; i < 2; ++i) {
+			unrotated[i] /= s_len;
+		}
+
+		/* p = spiral->exp * (c, s) + t_scaled * (-s, c);
+		   alternatively p = (spiral->exp, t_scaled) * (( c, s),
+								(-s, c)).*/
+		p->x = unrotated[0] * c - unrotated[1] * s;
+		p->y = unrotated[0] * s + unrotated[1] * c;
+		/* p should already be approximately normalized: the
+		   matrix ((c, -s), (s, c)) is orthogonal (it just
+		   rotates by arg), and unrotated has been normalized,
+		   so p is already of unit length other than numerical
+		   error in the above matrix multiplication.
+
+		   I haven't checked how important it is for p to be
+		   very near unit length; we could get rid of the
+		   below. */
+
+		sp_vector_normalize(p);
+		/* Proof that p length is non-zero: see above.  (Should be near 1.) */
+	}
+
+	g_assert (is_unit_vector (*p));
+}
+
+void
+sp_spiral_get_polar (SPSpiral const *spiral, gdouble t, gdouble *rad, gdouble *arg)
 {
 	g_return_if_fail (spiral != NULL);
 	g_return_if_fail (SP_IS_SPIRAL(spiral));
@@ -470,7 +617,7 @@ sp_spiral_get_polar (SPSpiral *spiral, gdouble t, gdouble *rad, gdouble *arg)
 }
 
 gboolean
-sp_spiral_is_invalid (SPSpiral *spiral)
+sp_spiral_is_invalid (SPSpiral const *spiral)
 {
 	gdouble rad;
 

@@ -64,14 +64,20 @@ void    sp_spiral_position_set		(SPSpiral      *spiral,
 				 gdouble	arg,
 				 gdouble	t0);
 
-void    sp_spiral_get_xy	(SPSpiral      *spiral,
+void    sp_spiral_get_xy	(SPSpiral const *spiral,
 				 gdouble	t,
-				 NRPoint      *p);
-void    sp_spiral_get_polar	(SPSpiral      *spiral,
+				 NRPoint	*p);
+
+void	sp_spiral_get_tangent	(SPSpiral const *spiral,
+				 gdouble	t,
+				 NRPoint	*p);
+
+void    sp_spiral_get_polar	(SPSpiral const *spiral,
 				 gdouble	t,
 				 gdouble       *rad,
 				 gdouble       *arg);
-gboolean sp_spiral_is_invalid   (SPSpiral      *spiral);
+
+gboolean sp_spiral_is_invalid   (SPSpiral const *spiral);
 
 
 G_END_DECLS
