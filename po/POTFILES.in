@@ -229,17 +229,13 @@ src/widgets/sp-color-scales.cpp
 src/widgets/sp-color-selector.cpp
 src/widgets/sp-color-slider.cpp
 src/widgets/sp-color-wheel-selector.cpp
-src/widgets/sp-hwrap-box.cpp
-src/widgets/sp-vwrap-box.cpp
 src/widgets/sp-widget.cpp
-src/widgets/sp-wrap-box.cpp
 src/widgets/sp-xmlview-attr-list.cpp
 src/widgets/sp-xmlview-content.cpp
 src/widgets/sp-xmlview-tree.cpp
 src/widgets/spinbutton-events.cpp
 src/widgets/spw-utilities.cpp
 src/widgets/test-widgets.cpp
-src/widgets/test-wrapbox.cpp
 src/winmain.cpp
 src/xml/repr-action-test.cpp
 src/xml/repr-action.cpp
