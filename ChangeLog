@@ -1,3 +1,7 @@
+2003-12-26  MenTaLguY <mental@rydia.net>
+
+	* configure.in: added Gtkmm dependency
+
 2003-12-25  MenTaLguY <mental@rydia.net>
 
 	* src/desktop.cpp: changed g_sprintf to g_strdup_printf

@@ -56,6 +56,11 @@ FREETYPE_LIBS=`$FREETYPE_CONFIG --libs`
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
 
+dnl Gtkmm check
+PKG_CHECK_MODULES(GTKMM, gtkmm-2.0)
+CXXFLAGS="$CXXFLAGS $GTKMM_CFLAGS"
+LIBS="$LIBS $GTKMM_LIBS"
+
 dnl ******************************
 dnl Popt checking
 dnl ******************************
