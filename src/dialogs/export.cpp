@@ -91,6 +91,7 @@ static float sp_export_value_get_pt ( GtkObject *base, const gchar *key );
 
 static void sp_export_filename_modified (GtkObject * object, gpointer data);
 static inline void sp_export_find_default_selection(GtkWidget * dlg);
+static void sp_export_detect_size(GtkObject * base);
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -567,19 +568,12 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               SPDesktop *desktop, 
                               GtkObject *base )
 {
-    // std::cout << "Selection Changed" << std::endl;
-    if (inkscape && SP_IS_INKSCAPE (inkscape) && desktop) {
-        int i;
-
-        for (i = 0; i < SELECTION_NUMBER_OF; i ++) {
-            GtkWidget * button;
-            button = (GtkWidget *)gtk_object_get_data(base, selection_names[i]);
-
-            if ( gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ) {
-                sp_export_area_toggled (GTK_TOGGLE_BUTTON (button), base);
-                break;
-            }
-        }
+//    std::cout << "Selection Changed" << std::endl;
+    if (inkscape &&
+            SP_IS_INKSCAPE (inkscape) &&
+            desktop &&
+            SELECTION_CUSTOM != (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"))) {
+        sp_export_detect_size(base);
     } // end of if()
 
     return;
@@ -960,7 +954,7 @@ sp_export_browse_clicked (GtkButton *button, gpointer userdata)
     filename = gtk_entry_get_text (GTK_ENTRY (fe));
 
     if(strlen(filename) == 0) {
-        filename = g_build_filename (g_get_home_dir(), "/", NULL);
+        filename = g_build_filename (g_get_home_dir(), G_DIR_SEPARATOR_S, NULL);
     }
 
     gtk_file_selection_set_filename (GTK_FILE_SELECTION (fs), filename);
