@@ -1,4 +1,7 @@
-2004-08-12  Peter Moulder  <pmoulder@river>
+2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/algorithms/longest-common-suffix.h: Fix bug I introduced three
+	  days ago.
 
 	* src/attributes.h, src/attributes.cpp: New attributes
 	  SP_ATTR_CONNECTION_START, SP_ATTR_CONNECTION_END.
@@ -8,8 +11,6 @@
 	* src/Makefile_insert (libinkpre_a_SOURCES): Add the new files.
 
 	* src/sp-path.cpp, src/sp-path.h: Call the new connector stuff.
-
-2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/curve.h, src/display/curve.cpp
 	  (sp_curve_first_point, sp_curve_last_point): New functions.

@@ -40,8 +40,14 @@ List longest_common_suffix(List a, List b) {
         return ListT::null();
     }
 
-    /* Handle in O(1) time the common case of equal tails. */
+    /* Handle in O(1) time the common cases of equal lists or equal tails. */
     {
+        if ( a == b ) {
+            return a;
+            /* This check is redundant except that we don't want the below check to return rest(a)
+               if a == b. */
+        }
+
         List const tail = ListT::rest(a);
         if ( tail == ListT::rest(b) ) {
             return tail;
