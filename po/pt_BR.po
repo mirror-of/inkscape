@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-04 21:41+1100\n"
+"POT-Creation-Date: 2004-11-06 12:45+0100\n"
 "PO-Revision-Date: 2004-07-12 11:55+00:00\n"
 "Last-Translator: Juarez Rudsatz <juarez@correio.com>\n"
 "Language-Team: Brazillian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -493,7 +493,7 @@ msgstr "Unidades:"
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1815
+#: src/toolbox.cpp:1831
 msgid "Width:"
 msgstr "Largura:"
 
@@ -819,7 +819,7 @@ msgstr ""
 "desligar a rolagem)"
 
 #: src/dialogs/display-settings.cpp:997 src/dialogs/tracedialog.cpp:367
-#: src/dialogs/tracedialog.cpp:397
+#: src/dialogs/tracedialog.cpp:398
 msgid "Threshold:"
 msgstr "Limiar:"
 
@@ -1534,12 +1534,12 @@ msgid "Update Properties"
 msgstr "_Propriedades do Item"
 
 #. Create the label for the object title
-#: src/dialogs/item-properties.cpp:154 src/dialogs/rdf.cpp:208
+#: src/dialogs/item-properties.cpp:154 src/dialogs/rdf.cpp:225
 msgid "Title"
 msgstr "Título"
 
 #. Create the frame for the object description
-#: src/dialogs/item-properties.cpp:174 src/dialogs/rdf.cpp:252
+#: src/dialogs/item-properties.cpp:174 src/dialogs/rdf.cpp:269
 msgid "Description"
 msgstr "Descrição"
 
@@ -1706,124 +1706,127 @@ msgstr "Estilo de contorno"
 msgid "Master opacity"
 msgstr "Alfa (transparência)"
 
-#: src/dialogs/rdf.cpp:209
+#: src/dialogs/rdf.cpp:226
 msgid "Name by which this document is formally known."
 msgstr "O nome pelo qual este desenho será formalmente conhecido."
 
-#: src/dialogs/rdf.cpp:211
+#: src/dialogs/rdf.cpp:228
 msgid "Date"
 msgstr "Data"
 
-#: src/dialogs/rdf.cpp:212
+#: src/dialogs/rdf.cpp:229
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr "Data associada com a criação deste desenho (AAAA-MM-DD)."
 
-#: src/dialogs/rdf.cpp:214
+#: src/dialogs/rdf.cpp:231
 msgid "Format"
 msgstr "Formato"
 
-#: src/dialogs/rdf.cpp:215
+#: src/dialogs/rdf.cpp:232
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr "A manifestação física ou digital deste desenho (tipo MIME)."
 
-#: src/dialogs/rdf.cpp:217
+#: src/dialogs/rdf.cpp:234
 msgid "Type"
 msgstr "Tipo"
 
-#: src/dialogs/rdf.cpp:218
+#: src/dialogs/rdf.cpp:235
 msgid "Type of document (DCMI Type)."
 msgstr "Tipo do desenho (tipo DCMI)."
 
-#: src/dialogs/rdf.cpp:221
+#: src/dialogs/rdf.cpp:238
 msgid "Creator"
 msgstr "Criador"
 
-#: src/dialogs/rdf.cpp:222
+#: src/dialogs/rdf.cpp:239
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr ""
 "Nome da entidade responsável pela elaboração do conteúdo deste desenho."
 
-#: src/dialogs/rdf.cpp:224
+#: src/dialogs/rdf.cpp:241
 msgid "Rights"
 msgstr "Direitos"
 
-#: src/dialogs/rdf.cpp:225
+#: src/dialogs/rdf.cpp:242
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr ""
 "Nome da entidade com os direitos de Propriedade Intelectual deste documento."
 
-#: src/dialogs/rdf.cpp:227
+#: src/dialogs/rdf.cpp:244
 msgid "Publisher"
 msgstr "Publicador"
 
-#: src/dialogs/rdf.cpp:228
+#: src/dialogs/rdf.cpp:245
 msgid "Name of entity responsible for making this document available."
 msgstr "Nome da entidade responsável por fazer este desenho disponível."
 
-#: src/dialogs/rdf.cpp:231
+#: src/dialogs/rdf.cpp:248
 msgid "Identifier"
 msgstr "Identificador"
 
-#: src/dialogs/rdf.cpp:232
+#: src/dialogs/rdf.cpp:249
 msgid "Unique URI to reference this document."
 msgstr "URL única para referenciar este desenho."
 
-#: src/dialogs/rdf.cpp:234
+#: src/dialogs/rdf.cpp:251
 msgid "Source"
 msgstr "Fonte"
 
-#: src/dialogs/rdf.cpp:235
+#: src/dialogs/rdf.cpp:252
 msgid "Unique URI to reference the source of this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:237
+#: src/dialogs/rdf.cpp:254
 msgid "Relation"
 msgstr "Relação"
 
-#: src/dialogs/rdf.cpp:238
+#: src/dialogs/rdf.cpp:255
 msgid "Unique URI to a related document."
 msgstr "URL única para um desenho relacionado."
 
-#: src/dialogs/rdf.cpp:240
+#: src/dialogs/rdf.cpp:257
 msgid "Language"
 msgstr "Linguagem"
 
-#: src/dialogs/rdf.cpp:241
+#: src/dialogs/rdf.cpp:258
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
 msgstr "Etiqueta de linguagem para a linguagem deste desenho. (ex: pt-BR)"
 
-#: src/dialogs/rdf.cpp:243
+#: src/dialogs/rdf.cpp:260
 msgid "Keywords"
 msgstr "Palavras chave"
 
-#: src/dialogs/rdf.cpp:244
-msgid "The topic of this document as key words, phrases, or classification."
+#: src/dialogs/rdf.cpp:261
+#, fuzzy
+msgid ""
+"The topic of this document as comma-separated key words, phrases, or "
+"classifications."
 msgstr "O tópico deste desenho como palavras chaves, frases ou classificação."
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: src/dialogs/rdf.cpp:248
+#: src/dialogs/rdf.cpp:265
 msgid "Coverage"
 msgstr "Cobertura"
 
-#: src/dialogs/rdf.cpp:249
+#: src/dialogs/rdf.cpp:266
 msgid "Extent or scope of this document."
 msgstr "Extensão ou escopo deste documento."
 
-#: src/dialogs/rdf.cpp:253
+#: src/dialogs/rdf.cpp:270
 msgid "A short account of the content of this document."
 msgstr "Uma esplicação curta para o conteúdo deste desenho."
 
 #. FIXME: need to handle 1 agent per line of input
-#: src/dialogs/rdf.cpp:257
+#: src/dialogs/rdf.cpp:274
 msgid "Contributors"
 msgstr "Contribuidores"
 
-#: src/dialogs/rdf.cpp:258
+#: src/dialogs/rdf.cpp:275
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
@@ -1831,21 +1834,21 @@ msgstr ""
 "Nome das entidades responsáveis por contribuições ao conteúdo deste desenho."
 
 #. TRANSLATORS: URL to a page that defines the license for the document
-#: src/dialogs/rdf.cpp:262
+#: src/dialogs/rdf.cpp:279
 msgid "URI"
 msgstr "URL"
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: src/dialogs/rdf.cpp:264
+#: src/dialogs/rdf.cpp:281
 msgid "URI to this document's license's namespace definition."
 msgstr "URL da definição de espaço de nome da licensa deste desenho."
 
 #. TRANSLATORS: fragment of XML representing the license of the document
-#: src/dialogs/rdf.cpp:268
+#: src/dialogs/rdf.cpp:285
 msgid "Fragment"
 msgstr "Fragmento"
 
-#: src/dialogs/rdf.cpp:269
+#: src/dialogs/rdf.cpp:286
 msgid "XML fragment for the RDF 'License' section."
 msgstr "Fragmento XML para a seção 'Licensa' RDF."
 
@@ -1995,11 +1998,11 @@ msgstr "Valor (brilho)"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:378
+#: src/dialogs/tracedialog.cpp:379
 msgid "Optimal Edge Detection (Canny)"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:402
+#: src/dialogs/tracedialog.cpp:403
 #, fuzzy
 msgid "Edge Detection"
 msgstr "Seleção"
@@ -2008,33 +2011,33 @@ msgstr "Seleção"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:410
+#: src/dialogs/tracedialog.cpp:412
 #, fuzzy
 msgid "Color Quantization"
 msgstr "Pintura de cor"
 
-#: src/dialogs/tracedialog.cpp:420
+#: src/dialogs/tracedialog.cpp:422
 #, fuzzy
 msgid "Colors:"
 msgstr "Fechar"
 
-#: src/dialogs/tracedialog.cpp:425
+#: src/dialogs/tracedialog.cpp:427
 msgid "Quantization / Reduction"
 msgstr ""
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:430 src/dialogs/tracedialog.cpp:437
+#: src/dialogs/tracedialog.cpp:433 src/dialogs/tracedialog.cpp:440
 #, fuzzy
 msgid "Preview"
 msgstr "Nova visualização"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:442
+#: src/dialogs/tracedialog.cpp:446
 #, fuzzy
 msgid "Invert"
 msgstr "Ava_nçar"
 
-#: src/dialogs/tracedialog.cpp:452
+#: src/dialogs/tracedialog.cpp:456
 #, fuzzy
 msgid "Credits"
 msgstr "Coordenadas:"
@@ -2042,7 +2045,7 @@ msgstr "Coordenadas:"
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:459
+#: src/dialogs/tracedialog.cpp:464
 #, fuzzy
 msgid "Potrace"
 msgstr "Traçar"
@@ -2071,67 +2074,71 @@ msgstr "Movimento relativo"
 msgid "deg"
 msgstr "grau"
 
-#: src/dialogs/xml-tree.cpp:220
+#: src/dialogs/xml-tree.cpp:249
 msgid "Drag to reorder nodes"
 msgstr "Arraste para reordenar os nós"
 
-#: src/dialogs/xml-tree.cpp:241
+#: src/dialogs/xml-tree.cpp:270
 msgid "New element node"
 msgstr "Novo nó de elemento"
 
-#: src/dialogs/xml-tree.cpp:263
+#: src/dialogs/xml-tree.cpp:292
 msgid "New text node"
 msgstr "Novo nó de texto"
 
-#: src/dialogs/xml-tree.cpp:284
+#: src/dialogs/xml-tree.cpp:313
 msgid "Duplicate node"
 msgstr "Duplicar nó"
 
-#: src/dialogs/xml-tree.cpp:305
+#: src/dialogs/xml-tree.cpp:334
 msgid "Delete node"
 msgstr "Apagar nó"
 
-#: src/dialogs/xml-tree.cpp:321
+#: src/dialogs/xml-tree.cpp:350
 msgid "Unindent node"
 msgstr "Desedentar nó"
 
-#: src/dialogs/xml-tree.cpp:336
+#: src/dialogs/xml-tree.cpp:365
 msgid "Indent node"
 msgstr "Edentar nó"
 
-#: src/dialogs/xml-tree.cpp:348
+#: src/dialogs/xml-tree.cpp:377
 msgid "Raise node"
 msgstr "Levantar nó"
 
-#: src/dialogs/xml-tree.cpp:360
+#: src/dialogs/xml-tree.cpp:389
 msgid "Lower node"
 msgstr "Abaixar nó"
 
-#: src/dialogs/xml-tree.cpp:403
+#: src/dialogs/xml-tree.cpp:434
 msgid "Delete attribute"
 msgstr "Apagar atributo"
 
-#: src/dialogs/xml-tree.cpp:447
+#: src/dialogs/xml-tree.cpp:478
 msgid "Attribute name"
 msgstr "Nome do atributo"
 
-#: src/dialogs/xml-tree.cpp:466
+#: src/dialogs/xml-tree.cpp:497
 msgid "Set attribute"
 msgstr "Ajustar atributo"
 
-#: src/dialogs/xml-tree.cpp:487
+#: src/dialogs/xml-tree.cpp:518
 msgid "Attribute value"
 msgstr "Valor do atributo"
 
-#: src/dialogs/xml-tree.cpp:1197
+#: src/dialogs/xml-tree.cpp:581
+msgid "<b>XML Editor</b> Select attributes and edit them."
+msgstr ""
+
+#: src/dialogs/xml-tree.cpp:1284
 msgid "New element node..."
 msgstr "Novo nó de elemento..."
 
-#: src/dialogs/xml-tree.cpp:1218
+#: src/dialogs/xml-tree.cpp:1305
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/dialogs/xml-tree.cpp:1224
+#: src/dialogs/xml-tree.cpp:1311
 msgid "Create"
 msgstr "Criar"
 
@@ -2296,7 +2303,7 @@ msgstr ""
 "Use '> nomedearquivo.ext' para imprimir para um arquivo.\n"
 "Use '| programa argumentos...' para direcionar para um programa."
 
-#: src/extension/internal/ps.cpp:979
+#: src/extension/internal/ps.cpp:970
 msgid "write error occurred"
 msgstr "Ocorreu um erro de escrita (qual eu não sei)"
 
@@ -3559,7 +3566,7 @@ msgstr "URI da Imagem:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "Grupo de %d objetos"
 
-#: src/sp-item.cpp:598
+#: src/sp-item.cpp:617
 msgid "Object"
 msgstr "Objeto"
 
@@ -3820,7 +3827,7 @@ msgstr "Converter segmentos selecionados em curvas"
 
 #: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
 #: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2095 src/toolbox.cpp:2135
+#: src/toolbox.cpp:2131 src/toolbox.cpp:2171
 msgid "<b>New:</b>"
 msgstr ""
 
@@ -3830,7 +3837,7 @@ msgstr ""
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
 #: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2097 src/toolbox.cpp:2116
+#: src/toolbox.cpp:2133 src/toolbox.cpp:2152
 msgid "<b>Change:</b>"
 msgstr ""
 
@@ -3877,11 +3884,11 @@ msgstr ""
 msgid "Scatter randomly the corners and angles"
 msgstr "Ampliar canto arredondados em retângulos"
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1858
+#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1894
 msgid "Defaults"
 msgstr "Padrões"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1859
+#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1895
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3939,67 +3946,90 @@ msgstr "Raio interno:"
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Raio da revolução mais interna (relativo ao tamanho da espiral)"
 
-#: src/toolbox.cpp:1815
-msgid "The width of the calligraphic pen"
+#: src/toolbox.cpp:1831
+#, fuzzy
+msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "A largura da caneta caligráfica"
 
-#: src/toolbox.cpp:1825
+#: src/toolbox.cpp:1841
+#, fuzzy
+msgid "Thinning:"
+msgstr "sinuoso"
+
+#: src/toolbox.cpp:1841
+msgid ""
+"How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
+"makes them broader, 0 makes width independent of velocity)"
+msgstr ""
+
+#: src/toolbox.cpp:1851
+#, fuzzy
+msgid "Flatness:"
+msgstr "Lados lisos:"
+
+#: src/toolbox.cpp:1851
+msgid "How flat is the pen's nib (0 = round, 1 = flat)"
+msgstr ""
+
+#: src/toolbox.cpp:1861
 msgid "Angle:"
 msgstr "Ângulo:"
 
-#: src/toolbox.cpp:1825
-msgid "The angle of the calligraphic pen (in degrees)"
-msgstr "O ângulo da caneta caligráfica (em graus)"
+#: src/toolbox.cpp:1861
+msgid ""
+"The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
+"flatness = 0)"
+msgstr ""
 
-#: src/toolbox.cpp:1835
+#: src/toolbox.cpp:1871
 msgid "Mass:"
 msgstr "Massa:"
 
-#: src/toolbox.cpp:1835
+#: src/toolbox.cpp:1871
 msgid "How much inertia affects the movement of the pen"
 msgstr "Quanto a inércia afeta o movimento da caneta"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1846
+#: src/toolbox.cpp:1882
 msgid "Drag:"
 msgstr "Arrasto:"
 
-#: src/toolbox.cpp:1846
+#: src/toolbox.cpp:1882
 msgid "How much resistance affects the movement of the pen"
 msgstr "Quanto a resistência afeta o movimento da caneta"
 
-#: src/toolbox.cpp:2143
+#: src/toolbox.cpp:2179
 msgid "Start:"
 msgstr "Início:"
 
-#: src/toolbox.cpp:2143
+#: src/toolbox.cpp:2179
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "O ângulo (em graus) do do horizontal para o ponto inicial do arco."
 
-#: src/toolbox.cpp:2153
+#: src/toolbox.cpp:2189
 msgid "End:"
 msgstr "Fim:"
 
-#: src/toolbox.cpp:2153
+#: src/toolbox.cpp:2189
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "O ângulo (em graus) do do horizontal para o ponto final do arco."
 
-#: src/toolbox.cpp:2164
+#: src/toolbox.cpp:2200
 msgid "Open arc"
 msgstr "Abrir arco"
 
-#: src/toolbox.cpp:2165
+#: src/toolbox.cpp:2201
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Trocar entre arco (forma não fechada) e segmento (forma fechada com dois "
 "raios)"
 
-#: src/toolbox.cpp:2192
+#: src/toolbox.cpp:2228
 msgid "Make whole"
 msgstr "Tornar inteiro"
 
-#: src/toolbox.cpp:2193
+#: src/toolbox.cpp:2229
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Tornar a forma uma elipse inteira e não um arco ou segmento"
 
@@ -4515,12 +4545,12 @@ msgid "Remove text from path"
 msgstr "Converter texto para caminho"
 
 #: src/verbs.cpp:1506
-msgid "Remove All _Kerns"
+msgid "Remove Manual _Kerning"
 msgstr ""
 
 #: src/verbs.cpp:1507
 #, fuzzy
-msgid "Remove all kerns from a text object"
+msgid "Remove all manual kerning from a text object"
 msgstr "Remover transformações do objeto selecionado"
 
 #: src/verbs.cpp:1509
@@ -5443,6 +5473,21 @@ msgstr "Cor da Parada"
 msgid "Gradient editor"
 msgstr "Editor de Gradiente"
 
+#: src/widgets/layer-selector.cpp:118
+#, fuzzy
+msgid "Toggle current layer visibility"
+msgstr "Desenho salvo."
+
+#: src/widgets/layer-selector.cpp:138
+#, fuzzy
+msgid "Lock or unlock current layer"
+msgstr "Limitar a busca na seleção atual"
+
+#: src/widgets/layer-selector.cpp:141
+#, fuzzy
+msgid "Current layer"
+msgstr "Desenho salvo."
+
 #: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:687
 msgid "No paint"
 msgstr "Nenhuma pintura"
@@ -5609,13 +5654,16 @@ msgstr "Não nomeado"
 msgid "Wheel"
 msgstr "Roda"
 
-#: src/widgets/sp-xmlview-attr-list.cpp:57
+#: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Attribute"
 msgstr "Atributo"
 
-#: src/widgets/sp-xmlview-attr-list.cpp:58
+#: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "Valor"
+
+#~ msgid "The angle of the calligraphic pen (in degrees)"
+#~ msgstr "O ângulo da caneta caligráfica (em graus)"
 
 #, fuzzy
 #~ msgid "Threshold"

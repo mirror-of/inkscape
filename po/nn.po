@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-04 21:41+1100\n"
+"POT-Creation-Date: 2004-11-06 12:45+0100\n"
 "PO-Revision-Date: 2004-10-30 19:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -488,7 +488,7 @@ msgstr "Eining:"
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
-#: src/toolbox.cpp:1815
+#: src/toolbox.cpp:1831
 msgid "Width:"
 msgstr "Breidd:"
 
@@ -813,7 +813,7 @@ msgstr ""
 "slå av automatisk rulling)."
 
 #: src/dialogs/display-settings.cpp:997 src/dialogs/tracedialog.cpp:367
-#: src/dialogs/tracedialog.cpp:397
+#: src/dialogs/tracedialog.cpp:398
 msgid "Threshold:"
 msgstr "Terskel:"
 
@@ -1521,12 +1521,12 @@ msgid "Update Properties"
 msgstr "Oppdater eigenskapar"
 
 #. Create the label for the object title
-#: src/dialogs/item-properties.cpp:154 src/dialogs/rdf.cpp:208
+#: src/dialogs/item-properties.cpp:154 src/dialogs/rdf.cpp:225
 msgid "Title"
 msgstr "Tittel"
 
 #. Create the frame for the object description
-#: src/dialogs/item-properties.cpp:174 src/dialogs/rdf.cpp:252
+#: src/dialogs/item-properties.cpp:174 src/dialogs/rdf.cpp:269
 msgid "Description"
 msgstr "Beskriving"
 
@@ -1691,91 +1691,91 @@ msgstr "Strekstil"
 msgid "Master opacity"
 msgstr "Hovudgjennomsikt"
 
-#: src/dialogs/rdf.cpp:209
+#: src/dialogs/rdf.cpp:226
 msgid "Name by which this document is formally known."
 msgstr "Namnet som dokumentet formelt er kjend under."
 
-#: src/dialogs/rdf.cpp:211
+#: src/dialogs/rdf.cpp:228
 msgid "Date"
 msgstr "Dato"
 
-#: src/dialogs/rdf.cpp:212
+#: src/dialogs/rdf.cpp:229
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr ""
 "Datoen knytta til tidspunktet dokumentet vart oppretta (format: ÅÅÅÅ-MM-DD)."
 
-#: src/dialogs/rdf.cpp:214
+#: src/dialogs/rdf.cpp:231
 msgid "Format"
 msgstr "Format"
 
-#: src/dialogs/rdf.cpp:215
+#: src/dialogs/rdf.cpp:232
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr "Det fysiske eller digitale formatet til dokumentet (MIME-type)."
 
-#: src/dialogs/rdf.cpp:217
+#: src/dialogs/rdf.cpp:234
 msgid "Type"
 msgstr "Type"
 
-#: src/dialogs/rdf.cpp:218
+#: src/dialogs/rdf.cpp:235
 msgid "Type of document (DCMI Type)."
 msgstr "Dokumenttype (DCMI-type)."
 
-#: src/dialogs/rdf.cpp:221
+#: src/dialogs/rdf.cpp:238
 msgid "Creator"
 msgstr "Opphavsmann"
 
-#: src/dialogs/rdf.cpp:222
+#: src/dialogs/rdf.cpp:239
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr "Namnet på eininga som er hovudansvarleg for utforminga av dokumentet."
 
-#: src/dialogs/rdf.cpp:224
+#: src/dialogs/rdf.cpp:241
 msgid "Rights"
 msgstr "Rettar"
 
-#: src/dialogs/rdf.cpp:225
+#: src/dialogs/rdf.cpp:242
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr "Namnet på eininga med rettar til dokumentet."
 
-#: src/dialogs/rdf.cpp:227
+#: src/dialogs/rdf.cpp:244
 msgid "Publisher"
 msgstr "Utgjevar"
 
-#: src/dialogs/rdf.cpp:228
+#: src/dialogs/rdf.cpp:245
 msgid "Name of entity responsible for making this document available."
 msgstr ""
 "Namnet på eininga som er ansvarleg for å ha gjort dokumentet tilgjengeleg."
 
-#: src/dialogs/rdf.cpp:231
+#: src/dialogs/rdf.cpp:248
 msgid "Identifier"
 msgstr "Identifikator"
 
-#: src/dialogs/rdf.cpp:232
+#: src/dialogs/rdf.cpp:249
 msgid "Unique URI to reference this document."
 msgstr "Ein eintydig URI til dokumentet."
 
-#: src/dialogs/rdf.cpp:234
+#: src/dialogs/rdf.cpp:251
 msgid "Source"
 msgstr "Kjelde"
 
-#: src/dialogs/rdf.cpp:235
+#: src/dialogs/rdf.cpp:252
 msgid "Unique URI to reference the source of this document."
 msgstr "Ein eintydig URI til kjelda til dokumentet."
 
-#: src/dialogs/rdf.cpp:237
+#: src/dialogs/rdf.cpp:254
 msgid "Relation"
 msgstr "Relasjon"
 
-#: src/dialogs/rdf.cpp:238
+#: src/dialogs/rdf.cpp:255
 msgid "Unique URI to a related document."
 msgstr "Ein eintydig URI til eit nærskyld dokument."
 
-#: src/dialogs/rdf.cpp:240
+#: src/dialogs/rdf.cpp:257
 msgid "Language"
 msgstr "Språk"
 
-#: src/dialogs/rdf.cpp:241
+#: src/dialogs/rdf.cpp:258
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
@@ -1783,57 +1783,60 @@ msgstr ""
 "Ein RFC 3066-basert språkkode, eksempelvis «nn» for nynorsk, «nb» for bokmål "
 "og «en-GB» for britisk."
 
-#: src/dialogs/rdf.cpp:243
+#: src/dialogs/rdf.cpp:260
 msgid "Keywords"
 msgstr "Stikkord"
 
-#: src/dialogs/rdf.cpp:244
-msgid "The topic of this document as key words, phrases, or classification."
+#: src/dialogs/rdf.cpp:261
+#, fuzzy
+msgid ""
+"The topic of this document as comma-separated key words, phrases, or "
+"classifications."
 msgstr ""
 "Emnet til dokumentet, uttrykt ved hjelp av stikkord eller "
 "klassifikasjonskode."
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: src/dialogs/rdf.cpp:248
+#: src/dialogs/rdf.cpp:265
 msgid "Coverage"
 msgstr "Omfang"
 
-#: src/dialogs/rdf.cpp:249
+#: src/dialogs/rdf.cpp:266
 msgid "Extent or scope of this document."
 msgstr "Omfanget til dokumentet."
 
-#: src/dialogs/rdf.cpp:253
+#: src/dialogs/rdf.cpp:270
 msgid "A short account of the content of this document."
 msgstr "Ei kort beskriving av innhaldet i dokumentet."
 
 #. FIXME: need to handle 1 agent per line of input
-#: src/dialogs/rdf.cpp:257
+#: src/dialogs/rdf.cpp:274
 msgid "Contributors"
 msgstr "Bidragsytarar"
 
-#: src/dialogs/rdf.cpp:258
+#: src/dialogs/rdf.cpp:275
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
 msgstr "Namnet på einingar som har bidratt med å utvikla dokumentet."
 
 #. TRANSLATORS: URL to a page that defines the license for the document
-#: src/dialogs/rdf.cpp:262
+#: src/dialogs/rdf.cpp:279
 msgid "URI"
 msgstr "URI"
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: src/dialogs/rdf.cpp:264
+#: src/dialogs/rdf.cpp:281
 msgid "URI to this document's license's namespace definition."
 msgstr "Ein URI til namneromdefinisjonen til lisensvilkåra til dokumentet."
 
 #. TRANSLATORS: fragment of XML representing the license of the document
-#: src/dialogs/rdf.cpp:268
+#: src/dialogs/rdf.cpp:285
 msgid "Fragment"
 msgstr "Fragment"
 
-#: src/dialogs/rdf.cpp:269
+#: src/dialogs/rdf.cpp:286
 msgid "XML fragment for the RDF 'License' section."
 msgstr "XML-fragment for den RDF-baserte «License»-blokka."
 
@@ -1977,11 +1980,11 @@ msgstr "Lysstyrke"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:378
+#: src/dialogs/tracedialog.cpp:379
 msgid "Optimal Edge Detection (Canny)"
 msgstr "Optimal kantattkjenning"
 
-#: src/dialogs/tracedialog.cpp:402
+#: src/dialogs/tracedialog.cpp:403
 msgid "Edge Detection"
 msgstr "Kantattkjenning"
 
@@ -1989,37 +1992,37 @@ msgstr "Kantattkjenning"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:410
+#: src/dialogs/tracedialog.cpp:412
 msgid "Color Quantization"
 msgstr "Fargeredusering"
 
-#: src/dialogs/tracedialog.cpp:420
+#: src/dialogs/tracedialog.cpp:422
 #, fuzzy
 msgid "Colors:"
 msgstr "Fargar"
 
-#: src/dialogs/tracedialog.cpp:425
+#: src/dialogs/tracedialog.cpp:427
 msgid "Quantization / Reduction"
 msgstr "Fargeredusering"
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:430 src/dialogs/tracedialog.cpp:437
+#: src/dialogs/tracedialog.cpp:433 src/dialogs/tracedialog.cpp:440
 msgid "Preview"
 msgstr "Førehandsvising"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:442
+#: src/dialogs/tracedialog.cpp:446
 msgid "Invert"
 msgstr "Inverter"
 
-#: src/dialogs/tracedialog.cpp:452
+#: src/dialogs/tracedialog.cpp:456
 msgid "Credits"
 msgstr "Bidragsytarar"
 
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:459
+#: src/dialogs/tracedialog.cpp:464
 msgid "Potrace"
 msgstr "Potrace"
 
@@ -2047,67 +2050,71 @@ msgstr "Relativ flytting"
 msgid "deg"
 msgstr "gradar"
 
-#: src/dialogs/xml-tree.cpp:220
+#: src/dialogs/xml-tree.cpp:249
 msgid "Drag to reorder nodes"
 msgstr "Dra for å endra rekkjefølgja på nodane"
 
-#: src/dialogs/xml-tree.cpp:241
+#: src/dialogs/xml-tree.cpp:270
 msgid "New element node"
 msgstr "Ny elementnode"
 
-#: src/dialogs/xml-tree.cpp:263
+#: src/dialogs/xml-tree.cpp:292
 msgid "New text node"
 msgstr "Ny tekstnode"
 
-#: src/dialogs/xml-tree.cpp:284
+#: src/dialogs/xml-tree.cpp:313
 msgid "Duplicate node"
 msgstr "Lag kopi av node"
 
-#: src/dialogs/xml-tree.cpp:305
+#: src/dialogs/xml-tree.cpp:334
 msgid "Delete node"
 msgstr "Slett node"
 
-#: src/dialogs/xml-tree.cpp:321
+#: src/dialogs/xml-tree.cpp:350
 msgid "Unindent node"
 msgstr "Rykk ut node"
 
-#: src/dialogs/xml-tree.cpp:336
+#: src/dialogs/xml-tree.cpp:365
 msgid "Indent node"
 msgstr "Rykk inn node"
 
-#: src/dialogs/xml-tree.cpp:348
+#: src/dialogs/xml-tree.cpp:377
 msgid "Raise node"
 msgstr "Hev node"
 
-#: src/dialogs/xml-tree.cpp:360
+#: src/dialogs/xml-tree.cpp:389
 msgid "Lower node"
 msgstr "Senk node"
 
-#: src/dialogs/xml-tree.cpp:403
+#: src/dialogs/xml-tree.cpp:434
 msgid "Delete attribute"
 msgstr "Slett attributt"
 
-#: src/dialogs/xml-tree.cpp:447
+#: src/dialogs/xml-tree.cpp:478
 msgid "Attribute name"
 msgstr "Attributtnamn"
 
-#: src/dialogs/xml-tree.cpp:466
+#: src/dialogs/xml-tree.cpp:497
 msgid "Set attribute"
 msgstr "Set attributt"
 
-#: src/dialogs/xml-tree.cpp:487
+#: src/dialogs/xml-tree.cpp:518
 msgid "Attribute value"
 msgstr "Attributtverdi"
 
-#: src/dialogs/xml-tree.cpp:1197
+#: src/dialogs/xml-tree.cpp:581
+msgid "<b>XML Editor</b> Select attributes and edit them."
+msgstr ""
+
+#: src/dialogs/xml-tree.cpp:1284
 msgid "New element node..."
 msgstr "Ny elementnode ..."
 
-#: src/dialogs/xml-tree.cpp:1218
+#: src/dialogs/xml-tree.cpp:1305
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/dialogs/xml-tree.cpp:1224
+#: src/dialogs/xml-tree.cpp:1311
 msgid "Create"
 msgstr "Lag"
 
@@ -2269,7 +2276,7 @@ msgstr ""
 "Bruk «> filnamn» for å lagra utskrifta i ei fil.\n"
 "Bruk «| prog arg ...» for å senda ho vidare til eit program."
 
-#: src/extension/internal/ps.cpp:979
+#: src/extension/internal/ps.cpp:970
 msgid "write error occurred"
 msgstr "Det oppstod ein skrivefeil."
 
@@ -3541,7 +3548,7 @@ msgstr "Biletadresse:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "<b>Gruppe</b> på <b>%d</b> objekt."
 
-#: src/sp-item.cpp:598
+#: src/sp-item.cpp:617
 msgid "Object"
 msgstr "Objekt"
 
@@ -3793,7 +3800,7 @@ msgstr "Gjer merkte stykke om til kurver."
 
 #: src/toolbox.cpp:1077 src/toolbox.cpp:1155 src/toolbox.cpp:1401
 #: src/toolbox.cpp:1440 src/toolbox.cpp:1650 src/toolbox.cpp:1690
-#: src/toolbox.cpp:2095 src/toolbox.cpp:2135
+#: src/toolbox.cpp:2131 src/toolbox.cpp:2171
 msgid "<b>New:</b>"
 msgstr "<b>Ny:</b>"
 
@@ -3803,7 +3810,7 @@ msgstr "<b>Ny:</b>"
 #. gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: src/toolbox.cpp:1079 src/toolbox.cpp:1097 src/toolbox.cpp:1403
 #: src/toolbox.cpp:1421 src/toolbox.cpp:1652 src/toolbox.cpp:1670
-#: src/toolbox.cpp:2097 src/toolbox.cpp:2116
+#: src/toolbox.cpp:2133 src/toolbox.cpp:2152
 msgid "<b>Change:</b>"
 msgstr "<b>Endra:</b>"
 
@@ -3849,11 +3856,11 @@ msgstr "Slumpverdi:"
 msgid "Scatter randomly the corners and angles"
 msgstr "Sprei hjørna og vinklane tilfeldig."
 
-#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1858
+#: src/toolbox.cpp:1232 src/toolbox.cpp:1729 src/toolbox.cpp:1894
 msgid "Defaults"
 msgstr "Standard"
 
-#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1859
+#: src/toolbox.cpp:1235 src/toolbox.cpp:1730 src/toolbox.cpp:1895
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3911,66 +3918,89 @@ msgstr "Indre radius:"
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radius til indre runding (relativt til spiralstorleiken)."
 
-#: src/toolbox.cpp:1815
-msgid "The width of the calligraphic pen"
+#: src/toolbox.cpp:1831
+#, fuzzy
+msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "Breidda på den kalligrafiske pennen."
 
-#: src/toolbox.cpp:1825
+#: src/toolbox.cpp:1841
+#, fuzzy
+msgid "Thinning:"
+msgstr "heildekkjande"
+
+#: src/toolbox.cpp:1841
+msgid ""
+"How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
+"makes them broader, 0 makes width independent of velocity)"
+msgstr ""
+
+#: src/toolbox.cpp:1851
+#, fuzzy
+msgid "Flatness:"
+msgstr "Flatsider:"
+
+#: src/toolbox.cpp:1851
+msgid "How flat is the pen's nib (0 = round, 1 = flat)"
+msgstr ""
+
+#: src/toolbox.cpp:1861
 msgid "Angle:"
 msgstr "Vinkel:"
 
-#: src/toolbox.cpp:1825
-msgid "The angle of the calligraphic pen (in degrees)"
-msgstr "Vinkelen på den kalligrafiske pennen (i gradar)."
+#: src/toolbox.cpp:1861
+msgid ""
+"The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
+"flatness = 0)"
+msgstr ""
 
-#: src/toolbox.cpp:1835
+#: src/toolbox.cpp:1871
 msgid "Mass:"
 msgstr "Masse:"
 
-#: src/toolbox.cpp:1835
+#: src/toolbox.cpp:1871
 msgid "How much inertia affects the movement of the pen"
 msgstr "Kor mykje tregleiken påverkar rørsla av pennen."
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1846
+#: src/toolbox.cpp:1882
 msgid "Drag:"
 msgstr "Motstand:"
 
-#: src/toolbox.cpp:1846
+#: src/toolbox.cpp:1882
 msgid "How much resistance affects the movement of the pen"
 msgstr "Kor mykje motstanden påverkar rørsla av pennen."
 
-#: src/toolbox.cpp:2143
+#: src/toolbox.cpp:2179
 msgid "Start:"
 msgstr "Start:"
 
-#: src/toolbox.cpp:2143
+#: src/toolbox.cpp:2179
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Vinkelen (i gradar) frå vassrett til startpunktet til bogen."
 
-#: src/toolbox.cpp:2153
+#: src/toolbox.cpp:2189
 msgid "End:"
 msgstr "Slutt:"
 
-#: src/toolbox.cpp:2153
+#: src/toolbox.cpp:2189
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Vinkelen (i gradar) frå vassrett til sluttpunktet til bogen."
 
-#: src/toolbox.cpp:2164
+#: src/toolbox.cpp:2200
 msgid "Open arc"
 msgstr "Open boge"
 
-#: src/toolbox.cpp:2165
+#: src/toolbox.cpp:2201
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Byt mellom bogar (opne former) og kakestykke (lukka former med to radiar)."
 
-#: src/toolbox.cpp:2192
+#: src/toolbox.cpp:2228
 msgid "Make whole"
 msgstr "Gjer til heilellipse"
 
-#: src/toolbox.cpp:2193
+#: src/toolbox.cpp:2229
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 "Gjer om figuren til ein heil ellipse – ikkje ein boge eller eit kakestykke."
@@ -4466,11 +4496,13 @@ msgid "Remove text from path"
 msgstr "Fjern teksten frå bana."
 
 #: src/verbs.cpp:1506
-msgid "Remove All _Kerns"
+#, fuzzy
+msgid "Remove Manual _Kerning"
 msgstr "Fjern alle _knipingar"
 
 #: src/verbs.cpp:1507
-msgid "Remove all kerns from a text object"
+#, fuzzy
+msgid "Remove all manual kerning from a text object"
 msgstr "Fjern alle knipingar frå tekstobjekt"
 
 #: src/verbs.cpp:1509
@@ -5347,6 +5379,21 @@ msgstr "Stoppfarge"
 msgid "Gradient editor"
 msgstr "Fargeovergangredigering"
 
+#: src/widgets/layer-selector.cpp:118
+#, fuzzy
+msgid "Toggle current layer visibility"
+msgstr "Inga gjeldande lag."
+
+#: src/widgets/layer-selector.cpp:138
+#, fuzzy
+msgid "Lock or unlock current layer"
+msgstr "Senk laget."
+
+#: src/widgets/layer-selector.cpp:141
+#, fuzzy
+msgid "Current layer"
+msgstr "Inga gjeldande lag."
+
 #: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:687
 msgid "No paint"
 msgstr "Ingen farge"
@@ -5512,13 +5559,16 @@ msgstr "Namnlaus"
 msgid "Wheel"
 msgstr "Hjul"
 
-#: src/widgets/sp-xmlview-attr-list.cpp:57
+#: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Attribute"
 msgstr "Attributt"
 
-#: src/widgets/sp-xmlview-attr-list.cpp:58
+#: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "Verdi"
+
+#~ msgid "The angle of the calligraphic pen (in degrees)"
+#~ msgstr "Vinkelen på den kalligrafiske pennen (i gradar)."
 
 #~ msgid "Threshold"
 #~ msgstr "Terskel"
