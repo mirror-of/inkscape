@@ -554,8 +554,9 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
             }
             
         int grayVal = (int)(256.0 * brightnessThreshold);
-        char style[13];
-        sprintf(style, "fill:#%02x%02x%02x", grayVal, grayVal, grayVal);
+        char style[31];
+        sprintf(style, "fill-opacity;1.0;fill:#%02x%02x%02x",
+                    grayVal, grayVal, grayVal);
     
         //g_message("### GOT '%s' \n", d);
         TracingEngineResult *result = new TracingEngineResult(style, d);
