@@ -574,25 +574,23 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 
     GtkWidget *apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
     GtkWidget *def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
-    const GSList *item_list = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
-    bool text_changed = false, style_changed = false;
+    const GSList *item_list = SP_DT_SELECTION(desktop)->itemList();
 
     SPCSSAttr *css = sp_get_text_dialog_style ();
+
+    sp_desktop_set_style(desktop, css, true);
 
     for (; item_list != NULL; item_list = item_list->next) { 
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (item_list->data)) {
-            SPText *text = SP_TEXT(item_list->data);
 
-        // FIXME: use sp_desktop_set_style instead!
-        sp_desktop_apply_css_recursive (SP_OBJECT(text), css, true);
-        // backwards compatibility:
-        sp_repr_set_attr (SP_OBJECT_REPR(text), "sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
+            // backwards compatibility:
+            sp_repr_set_attr (SP_OBJECT_REPR(item_list->data), "sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
 
             ++items;
-            style_changed = true;
         }
     }
     
@@ -605,14 +603,11 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
         SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
         if (SP_IS_TEXT (item)) {
             sp_text_edit_dialog_update_object_text (SP_TEXT(item));
-            text_changed = true;
         }
     } 
 
     // complete the transaction
-    if (style_changed || text_changed) {
-        sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
-    }
+    sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
 
     gtk_widget_set_sensitive (apply, FALSE);
 
