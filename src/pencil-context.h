@@ -12,7 +12,7 @@
 #define SP_IS_PENCIL_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_PENCIL_CONTEXT))
 #define SP_IS_PENCIL_CONTEXT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_PENCIL_CONTEXT))
 
-enum {
+enum PencilState {
     SP_PENCIL_CONTEXT_IDLE,
     SP_PENCIL_CONTEXT_ADDLINE,
     SP_PENCIL_CONTEXT_FREEHAND
@@ -21,7 +21,7 @@ enum {
 struct SPPencilContext : public SPDrawContext {
     NR::Point p[16];
     gint npoints;
-    guint state : 2;
+    PencilState state;
 };
 
 struct SPPencilContextClass : public SPEventContextClass { };
