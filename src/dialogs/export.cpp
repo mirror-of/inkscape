@@ -26,6 +26,7 @@
 #include <glibmm/i18n.h>
 #include "helper/unit-menu.h"
 #include "helper/units.h"
+#include "unit-constants.h"
 #include "helper/window.h"
 #include "widgets/spw-utilities.h"
 #include "inkscape.h"
@@ -53,7 +54,7 @@
 
 #define SP_EXPORT_MIN_SIZE 1.0
 
-#define DPI_BASE 90.0
+#define DPI_BASE PX_PER_IN
 
 static void sp_export_area_toggled   ( GtkToggleButton *tb, GtkObject *base );
 static void sp_export_export_clicked ( GtkButton *button, GtkObject *base );

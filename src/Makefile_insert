@@ -46,7 +46,6 @@ libinkpre_a_SOURCES =	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\
 	desktop-style.cpp desktop-style.h	\
-	desktop-units.h	\
 	desktop.cpp desktop.h	\
 	dir-util.cpp dir-util.h	\
 	document-undo.cpp	\

@@ -39,8 +39,6 @@
 
 #include "isnan.h" //temp fox for isnan().  include last
 
-#define PTPERMM (72.0 / 25.4)
-
 #define DEFAULTTOLERANCE 5.0
 #define DEFAULTGRIDCOLOR 0x3f3fff2f
 #define DEFAULTGRIDEMPCOLOR 0x3f3fff52

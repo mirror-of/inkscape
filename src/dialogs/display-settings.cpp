@@ -33,6 +33,7 @@
 #include "../selection-chemistry.h"
 #include "../style.h"
 #include "../desktop.h"
+#include "../unit-constants.h"
 #include "xml/repr-private.h"
 
 #include "display-settings.h"
@@ -1396,7 +1397,7 @@ options_checkbox (
             _("dpi"),
             vb,
             0.0, 6000.0, 1.0, 1.0, 1.0,
-            "dialogs.export.defaultxdpi", "value", 72.0,
+            "dialogs.export.defaultxdpi", "value", PX_PER_IN,
             true, false,
             options_changed_int
             );
