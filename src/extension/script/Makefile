@@ -1,0 +1,80 @@
+#############################################
+# Makefile for testing embedding
+#
+# This temporary makefile is for designing
+# and testing a generic structure for embedding
+# interpreters in Inkscape, and binding back
+# from them into the Inkscape internals.  This
+# would allow users to automate some Inkscape
+# functionality.
+#############################################
+
+CXX = g++
+
+
+OBJ = InkscapeBinding.o \
+InkscapePython.o inkscape_py_wrap.o \
+InkscapePerl.o inkscape_perl_wrap.o
+
+#########################################################
+# NOTE that we are using the interpreters themselves, to
+# discover the settings for compiling and linking
+#########################################################
+
+PERL_CFLAGS  := $(shell perl -MExtUtils::Embed -e ccopts )
+PERL_LDFLAGS := $(shell perl -MExtUtils::Embed -e ldopts )
+
+#INCLUDEPY, LIBPL, LIBRARY
+PYTHON_CFLAGS := -I$(shell python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')" )
+PYTHON_LDPATH := $(shell python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')" )
+PYTHON_LIB    := $(shell python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')" )
+PYTHON_LDFLAGS = $(PYTHON_LDPATH)/$(PYTHON_LIB)
+#PYTHON_LDFLAGS = $(PYTHON_LDPATH)
+
+
+CFLAGS = -g $(PYTHON_CFLAGS) $(PERL_CFLAGS)
+CXXFLAGS = $(CFLAGS)
+
+LIBS = $(PYTHON_LDFLAGS) $(PERL_LDFLAGS)
+
+all: bindtest cpptest _inkscape_py.so
+
+bindtest: bindtest.o  $(OBJ)
+	$(CXX) -o $@ bindtest.o $(OBJ) $(LIBS)
+
+cpptest: cpptest.o $(OBJ)
+	$(CXX) -o $@ cpptest.o $(OBJ) $(LIBS)
+
+
+_inkscape_py.so : inkscape_py_wrap.o $(OBJ)
+	$(CXX) -shared -o _inkscape_py.so $(OBJ)
+	
+inkscape_py_wrap.cpp: InkscapeBinding.h inkscape_py.i
+	swig -c++ -python -o inkscape_py_wrap.cpp inkscape_py.i
+	sh wrap_swig_module.sh inkscape_py.py inkscape_py.py.h
+	
+InkscapePython.o: InkscapePython.cpp InkscapePython.h inkscape_py_wrap.o
+	$(CXX) $(CXXFLAGS) $(PYINC) -o $@ -c InkscapePython.cpp
+
+inkscape_perl_wrap.cpp: InkscapeBinding.h inkscape_perl.i
+	swig -c++ -perl5 -static -o inkscape_perl_wrap.cpp inkscape_perl.i 
+	sh wrap_swig_module.sh inkscape_perl.pm inkscape_perl.pm.h
+	
+InkscapePerl.o: InkscapePerl.cpp InkscapePerl.h inkscape_perl_wrap.o
+	$(CXX) $(CXXFLAGS) $(PERLINC) -o $@ -c InkscapePerl.cpp
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INC) -o $@ -c $<
+
+clean:
+	-$(RM) bindtest
+	-$(RM) cpptest
+	-$(RM) inkscape_py_wrap*
+	-$(RM) *.o
+	-$(RM) *.so
+	-$(RM) InkscapeBinding.py
+	-$(RM) *.pyc
+	-$(RM) inkscape_py_wrap.cpp inkscape_py.py inkscape_py.py.h
+	-$(RM) inkscape_perl_wrap.cpp inkscape_perl.pm inkscape_perl.pm.h
+
+	
