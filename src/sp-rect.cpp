@@ -475,6 +475,9 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 void
 sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform)
 {
+	if (rect->rx.computed == 0 && rect->ry.computed == 0)
+		return; // nothing to compensate
+
        // test unit vectors to find out compensation:
 	NR::Point c(rect->x.computed, rect->y.computed);
 	NR::Point cx = c + NR::Point (1, 0); 
@@ -489,21 +492,22 @@ sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform)
 	gdouble eX = NR::distance (cx * xform, c * xform) / NR::distance (cx, c);
 	gdouble eY = NR::distance (cy * xform, c * xform) / NR::distance (cy, c);
 
-	if (rect->rx.set) {
-		rect->rx.computed = CLAMP (rect->rx.computed / eX, 0, 0.5 * rect->width.computed);
+       // If only one of the radii is set, set both radii so they have the same visible length
+       // This is needed because if we just set them the same length in SVG, they might end up unequal because of transform
+	if ((rect->rx.set && !rect->ry.set) || (rect->ry.set && !rect->rx.set)) {
+		gdouble r = MAX (rect->rx.computed, rect->ry.computed);
+		rect->rx.computed = r / eX;
+		rect->ry.computed = r / eY;
+	} else {
+		rect->rx.computed = rect->rx.computed / eX;
+		rect->ry.computed = rect->ry.computed / eY;
 	}
-      if (rect->ry.set) {
-		if (!rect->rx.set) {
-			if (fabs (eX - eY) > 1e-6) {
-				// break one-handleness if non-uniform scaling; necessary for store transforms = preserve
-				rect->rx.computed = CLAMP (rect->ry.computed / eX, 0, 0.5 * MIN (rect->height.computed, rect->width.computed));
-				rect->rx.set = TRUE;
-			}
-			rect->ry.computed = CLAMP (rect->ry.computed / eY, 0, 0.5 * MIN (rect->height.computed, rect->width.computed));
-		} else {
-			rect->ry.computed = CLAMP (rect->ry.computed / eY, 0, 0.5 * rect->height.computed);
-		}
-      }
+
+       // Note that a radius may end up larger than half-side if the rect is scaled down; 
+       // that's ok because this preserves the intended radii in case the rect is enlarged again,
+       // and set_shape will take care of trimming too large radii when generating d=
+
+	rect->rx.set = rect->ry.set = TRUE;
 }
 
 /*
