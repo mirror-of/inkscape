@@ -63,8 +63,6 @@ GtkType sp_widget_get_type (void);
 /* Generic constructor for global widget */
 GtkWidget *sp_widget_new_global (Inkscape::Application *inkscape);
 GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape);
-/* Generic constructor for global widget */
-GtkWidget *sp_widget_new_repr (SPRepr *repr);
 GtkWidget *sp_widget_construct_repr (SPWidget *spw, SPRepr *repr);
 
 void sp_widget_set_dirty (SPWidget *spw, gboolean dirty);

@@ -297,23 +297,6 @@ sp_widget_new_global (Inkscape::Application *inkscape)
 }
 
 GtkWidget *
-sp_widget_new_repr (SPRepr *repr)
-{
-	SPWidget *spw;
-
-	g_return_val_if_fail (repr != NULL, NULL);
-
-	spw = (SPWidget*)gtk_type_new (SP_TYPE_WIDGET);
-
-	if (!sp_widget_construct_repr (spw, repr)) {
-		gtk_object_unref (GTK_OBJECT (spw));
-		return NULL;
-	}
-
-	return (GtkWidget *) spw;
-}
-
-GtkWidget *
 sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape)
 {
 	g_return_val_if_fail (!spw->inkscape, NULL);
