@@ -9,15 +9,6 @@ guint32 objects_get_common_rgb(GSList const *objects, FillOrStroke is_fill);
 
 guint32 const NO_COLOR = 0, DIFFERENT_COLORS = 1;
 
-inline bool
-objects_have_same_color(GSList const *objects, FillOrStroke is_fill)
-{
-    return objects_get_common_rgb(objects, is_fill) != DIFFERENT_COLORS;
-}
-
-/* (We'll probably remove this wrapper very soon.) */
-#define items_have_same_color(_os, _if) objects_have_same_color(_os, (_if ? FILL : STROKE))
-
 
 #endif /* !SEEN_COMMON_STYLE_H */
 
