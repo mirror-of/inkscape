@@ -56,7 +56,7 @@ sp_svg_number_read_f (const gchar *str, float *val)
 	float v;
 
 	if (!str) return 0;
-	v = strtod (str, &e);
+	v = g_ascii_strtod (str, &e);
 	if ((const gchar *) e == str) return 0;
 	*val = v;
 	return 1;
@@ -69,7 +69,7 @@ sp_svg_number_read_d (const gchar *str, double *val)
 	double v;
 
 	if (!str) return 0;
-	v = strtod (str, &e);
+	v = g_ascii_strtod (str, &e);
 	if ((const gchar *) e == str) return 0;
 	*val = v;
 	return 1;
@@ -261,7 +261,7 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 	float v;
 
 	if (!str) return 0;
-	v = strtod (str, (char **) &e);
+	v = g_ascii_strtod (str, (char **) &e);
 	if (e == str) {
 		return 0;
 	}
@@ -384,7 +384,7 @@ sp_svg_read_percentage (const char * str, double def)
 
 	if (str == NULL) return def;
 
-	v = strtod (str, &u);
+	v = g_ascii_strtod (str, &u);
 	while (isspace (*u)) {
 		if (*u == '\0') return v;
 		u++;

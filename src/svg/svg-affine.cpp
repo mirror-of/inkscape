@@ -84,7 +84,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			c = str[idx];
 			if (isdigit (c) || c == '+' || c == '-' || c == '.') {
 				if (n_args == sizeof (args) / sizeof (args[0])) return 0; /* Too many args */
-				args[n_args] = strtod (str + idx, &end_ptr);
+				args[n_args] = g_ascii_strtod (str + idx, &end_ptr);
 				idx = end_ptr - (char *) str;
 
 				while (isspace (str[idx])) idx++;

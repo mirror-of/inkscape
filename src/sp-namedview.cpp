@@ -765,7 +765,7 @@ sp_nv_read_length (const gchar *str, guint base, gdouble *val, const SPUnit **un
 
 	if (!str) return FALSE;
 
-	v = strtod (str, &u);
+	v = g_ascii_strtod (str, &u);
 	if (!u) return FALSE;
 	while (isspace (*u)) u += 1;
 

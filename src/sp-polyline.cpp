@@ -112,12 +112,12 @@ sp_polyline_set (SPObject *object, unsigned int key, const gchar *value)
 		while (TRUE) {
 			gdouble x, y;
 
-			x = strtod (cptr, &eptr);
+			x = g_ascii_strtod (cptr, &eptr);
 			if (eptr == cptr) break;
 			cptr = strchr (eptr, ',');
 			if (!cptr) break;
 			cptr++;
-			y = strtod (cptr, &eptr);
+			y = g_ascii_strtod (cptr, &eptr);
 			if (eptr == cptr) break;
 			cptr = eptr;
 			if (hascpt) {

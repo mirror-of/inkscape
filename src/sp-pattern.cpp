@@ -241,13 +241,13 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 
 		if (value) {
 			eptr = (gchar *) value;
-			x = strtod (eptr, &eptr);
+			x = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
-			y = strtod (eptr, &eptr);
+			y = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
-			width = strtod (eptr, &eptr);
+			width = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
-			height = strtod (eptr, &eptr);
+			height = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
 			if ((width > 0) && (height > 0)) {
 				pat->viewBox.x0 = x;

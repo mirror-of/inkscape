@@ -40,8 +40,6 @@ static void sp_zoom_context_dispose (GObject * object);
 static gint sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_zoom_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
-void sp_zoom_string (const gchar * zoom_str);
-
 static SPEventContextClass * parent_class;
 
 static gint xp = 0, yp = 0; // where drag started
@@ -202,25 +200,5 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
 	}
 
 	return ret;
-}
-
-void
-sp_zoom_string (const gchar * zoom_str) {
-	SPDesktop * desktop;
-	gchar * zoom_str2;
-	NRRect d;
-	gdouble any;
-	
-	desktop = SP_ACTIVE_DESKTOP;
-	if (desktop == NULL) return;
-	
-	zoom_str2 = g_strndup(zoom_str, 5); /* g_new'ed 5+1 gchar */
-	zoom_str2[5] = '\0';
-	any = strtod(zoom_str2,NULL) /100;
-	g_free (zoom_str2);
-	if (any < 0.001) return;
-	
-	sp_desktop_get_display_area (SP_ACTIVE_DESKTOP, &d);
-	sp_desktop_zoom_absolute (SP_ACTIVE_DESKTOP, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, any);
 }
 

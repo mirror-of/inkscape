@@ -240,7 +240,7 @@ sp_svg_read_color (const gchar *str, guint32 def)
 		hasp = FALSE;
 		hasd = FALSE;
 
-		r = strtod (s, &e);
+		r = g_ascii_strtod (s, &e);
 		if (s == e) return def;
 		s = e;
 		if (*s == '%') {
@@ -253,7 +253,7 @@ sp_svg_read_color (const gchar *str, guint32 def)
 		if (*s != ',') return def;
 		s += 1;
 		while (*s && isspace (*s)) s += 1;
-		g = strtod (s, &e);
+		g = g_ascii_strtod (s, &e);
 		if (s == e) return def;
 		s = e;
 		if (*s == '%') {
@@ -266,7 +266,7 @@ sp_svg_read_color (const gchar *str, guint32 def)
 		if (*s != ',') return def;
 		s += 1;
 		while (*s && isspace (*s)) s += 1;
-		b = strtod (s, &e);
+		b = g_ascii_strtod (s, &e);
 		if (s == e) return def;
 		s = e;
 		if (*s == '%') {

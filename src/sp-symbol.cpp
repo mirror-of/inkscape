@@ -139,13 +139,13 @@ sp_symbol_set (SPObject *object, unsigned int key, const gchar *value)
 			/* fixme: We have to take original item affine into account */
 			/* fixme: Think (Lauris) */
 			eptr = (gchar *) value;
-			x = strtod (eptr, &eptr);
+			x = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
-			y = strtod (eptr, &eptr);
+			y = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
-			width = strtod (eptr, &eptr);
+			width = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
-			height = strtod (eptr, &eptr);
+			height = g_ascii_strtod (eptr, &eptr);
 			while (*eptr && ((*eptr == ',') || (*eptr == ' '))) eptr++;
 			if ((width > 0) && (height > 0)) {
 				/* Set viewbox */

@@ -1497,7 +1497,7 @@ sp_style_read_dash (NRVpathDash *dash, const gchar *str)
     e = NULL;
 
     while (e != str && n_dash < 64) {
-        d[n_dash] = strtod (str, (char **) &e);
+        d[n_dash] = g_ascii_strtod (str, (char **) &e);
         if (e != str) {
             n_dash += 1;
             str = e;
@@ -1789,7 +1789,7 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
         gdouble value;
         gchar *e;
         /* fixme: Move this to standard place (Lauris) */
-        value = strtod (str, &e);
+        value = g_ascii_strtod (str, &e);
         if ((const gchar *) e != str) {
             if (!*e) {
                 /* Userspace */
@@ -1960,7 +1960,7 @@ sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
         gdouble value;
         gchar *e;
         /* fixme: Move this to standard place (Lauris) */
-        value = strtod (str, &e);
+        value = g_ascii_strtod (str, &e);
         if ((const gchar *) e != str) {
             if (!*e) {
                 /* Userspace */
@@ -2327,16 +2327,16 @@ sp_style_read_color_cmyk (SPColor *color, const gchar *str)
 
     c = m = y = k = 0.0;
     cptr = (gchar *) str + 1;
-    c = strtod (cptr, &eptr);
+    c = g_ascii_strtod (cptr, &eptr);
     if (eptr && (eptr != cptr)) {
         cptr = eptr;
-        m = strtod (cptr, &eptr);
+        m = g_ascii_strtod (cptr, &eptr);
         if (eptr && (eptr != cptr)) {
             cptr = eptr;
-            y = strtod (cptr, &eptr);
+            y = g_ascii_strtod (cptr, &eptr);
             if (eptr && (eptr != cptr)) {
                 cptr = eptr;
-                k = strtod (cptr, &eptr);
+                k = g_ascii_strtod (cptr, &eptr);
                 if (eptr && (eptr != cptr)) {
                     sp_color_set_cmyk_float (color, c, m, y, k);
                     return color;
