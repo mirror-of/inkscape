@@ -1,3 +1,10 @@
+2005-03-23  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/ui/previewable.h, src/ui/Makefile_insert,
+	  src/dialogs/swatches.h, src/dialogs/swatches.cpp:
+	  Preliminary work for 'Previewable' interface.
+
+
 2005-03-22  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/desktop-handles.cpp,

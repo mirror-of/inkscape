@@ -14,6 +14,9 @@
 
 #include <gtkmm.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/scrolledwindow.h>
+
+#include <vector>
 
 #include "sp-object.h"
 #include "ui/widget/panel.h"
@@ -23,6 +26,8 @@ namespace UI {
 namespace Dialogs {
 
 
+class ColorItem;
+
 /**
  * A panel that displays color swatches.
  */
@@ -30,6 +35,7 @@ class SwatchesPanel : public Inkscape::UI::Widget::Panel
 {
 public:
     SwatchesPanel();
+    virtual ~SwatchesPanel();
 
     static SwatchesPanel& getInstance();
 
@@ -37,9 +43,16 @@ private:
     SwatchesPanel(SwatchesPanel const &); // no copy
     SwatchesPanel &operator=(SwatchesPanel const &); // no assign
 
+    void changeItTo(int val);
+    void rebuildUI();
+
     static SwatchesPanel* instance;
 
-    void buttonClicked(int which);
+    Gtk::ScrolledWindow* _scroller;
+    std::vector<ColorItem> colors;
+
+    Gtk::BuiltinIconSize _baseSize;
+    bool _isList;
 };
 
 } //namespace Dialogs
