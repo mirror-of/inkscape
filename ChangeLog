@@ -1,3 +1,7 @@
+2003-12-06 MenTaLguY <mental@rydia.net>
+
+	* src/desktop.c: permit the canvas widget to take keyboard focus
+
 2003-12-05 MenTaLguY <mental@rydia.net>
 
 	* src/widgets/icon.c, src/widgets/button.c, src/widgets/button.h, src/toolbox.c:

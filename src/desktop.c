@@ -731,6 +731,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_frame_set_shadow_type (GTK_FRAME (w), GTK_SHADOW_IN);
 	gtk_table_attach (GTK_TABLE (tbl), w, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
 	dtw->canvas = SP_CANVAS (sp_canvas_new_aa ());
+	GTK_WIDGET_SET_FLAGS (GTK_WIDGET (dtw->canvas), GTK_CAN_FOCUS);
 	style = gtk_style_copy (GTK_WIDGET (dtw->canvas)->style);
 	style->bg[GTK_STATE_NORMAL] = style->white;
 	gtk_widget_set_style (GTK_WIDGET (dtw->canvas), style);
