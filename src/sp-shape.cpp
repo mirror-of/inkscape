@@ -866,6 +866,9 @@ sp_shape_adjust_stroke (SPItem *item, gdouble ex)
                 }
                 style->stroke_dash.offset *= ex;
             }
+            gchar *str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));
+            sp_repr_set_attr (SP_OBJECT_REPR (item), "style", str);
+            g_free (str);
         }
     }
 }
