@@ -12,7 +12,7 @@
  */
 
 #include <string.h>
-#include <malloc.h>
+#include <unistd.h>
 
 #include <libnr/nr-macros.h>
 

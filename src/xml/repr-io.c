@@ -11,7 +11,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <malloc.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>

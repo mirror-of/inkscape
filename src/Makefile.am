@@ -159,7 +159,7 @@ inkscape_LDADD = \
 	$(FREETYPE_LIBS) \
 	$(kdeldadd)
 
-inkscape_LDFLAGS = -Wl,--export-dynamic $(kdeldflags)
+inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 
 EXTRA_PROGRAMS = spsvgview
 

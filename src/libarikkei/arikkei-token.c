@@ -11,8 +11,7 @@
  * This code is in public domain
  *
  */
-
-#include <malloc.h>
+#include <unistd.h>
 #include <string.h>
 
 #include "arikkei-token.h"
