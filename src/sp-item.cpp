@@ -157,7 +157,11 @@ bool SPItem::isVisibleAndUnlocked(unsigned display_key) const {
 }
 
 bool SPItem::isLocked() const {
-    return !sensitive;
+    for (SPObject *o = SP_OBJECT(this); o != NULL; o = SP_OBJECT_PARENT(o)) {
+        if (SP_IS_ITEM(o) && !(SP_ITEM(o)->sensitive))
+            return true;
+    }
+    return false;
 }
 
 void SPItem::setLocked(bool locked) {
