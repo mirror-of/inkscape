@@ -62,7 +62,7 @@ using NR::Y;
 
 /* fixme: find a better place */
 GSList *clipboard = NULL;
-GSList *gradient_clipboard = NULL;
+GSList *defs_clipboard = NULL;
 SPCSSAttr *style_clipboard = NULL;
 
 void sp_selection_delete()
@@ -612,34 +612,32 @@ void sp_copy_gradient (SPGradient *gradient)
     while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
 
         grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(gradient));
-        gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
+        defs_clipboard = g_slist_prepend(defs_clipboard, grad_repr);
 
         gradient = ref;
         ref = gradient->ref->getObject();
     }
 
     grad_repr = sp_repr_duplicate(SP_OBJECT_REPR(gradient));
-    gradient_clipboard = g_slist_prepend(gradient_clipboard, grad_repr);
+    defs_clipboard = g_slist_prepend(defs_clipboard, grad_repr);
 }
 
 void sp_copy_pattern (SPPattern *pattern)
 {
     SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(pattern));
-    gradient_clipboard = g_slist_prepend(gradient_clipboard, pattern_repr);
+    defs_clipboard = g_slist_prepend(defs_clipboard, pattern_repr);
 }
 
 void sp_copy_marker (SPMarker *marker)
 {
     SPRepr *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
-    gradient_clipboard = g_slist_prepend(gradient_clipboard, marker_repr);
+    defs_clipboard = g_slist_prepend(defs_clipboard, marker_repr);
 }
 
 
 void sp_copy_stuff_used_by_item (SPItem *item)
 {
-    SPRepr *repr = SP_OBJECT_REPR(item);
-    SPStyle *style = sp_style_new();
-    sp_style_read_from_repr (style, repr);
+    SPStyle *style = SP_OBJECT_STYLE (item); 
 
     if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
@@ -714,12 +712,12 @@ void sp_selection_copy()
     }
 
     // 1.  Store referenced stuff:
-    // clear old gradient clipboard
-    while (gradient_clipboard) {
-        sp_repr_unref((SPRepr *) gradient_clipboard->data);
-        gradient_clipboard = g_slist_remove (gradient_clipboard, gradient_clipboard->data);
+    // clear old defs clipboard
+    while (defs_clipboard) {
+        sp_repr_unref((SPRepr *) defs_clipboard->data);
+        defs_clipboard = g_slist_remove (defs_clipboard, defs_clipboard->data);
     }
-    // copy stuff referenced by all items to gradient_clipboard
+    // copy stuff referenced by all items to defs_clipboard
     for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
         sp_copy_stuff_used_by_item (SP_ITEM (i->data));
     }
@@ -779,16 +777,16 @@ void sp_selection_copy()
     }
 
     clipboard = g_slist_reverse(clipboard);
-    gradient_clipboard = g_slist_reverse(gradient_clipboard);
+    defs_clipboard = g_slist_reverse(defs_clipboard);
 }
 
 /**
 Add gradients/patterns/markers referenced by copied objects to defs
 */
 void 
-paste_gradients (SPDocument *doc)
+paste_defs (SPDocument *doc)
 {
-    for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
+    for (GSList *gl = defs_clipboard; gl != NULL; gl = gl->next) {
         SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
         SPRepr *repr = (SPRepr *) gl->data;
         SPObject *exists = doc->getObjectByRepr(repr);
@@ -821,7 +819,7 @@ void sp_selection_paste(bool in_place)
 
     selection->clear();
 
-    paste_gradients (SP_DT_DOCUMENT(desktop));
+    paste_defs (SP_DT_DOCUMENT(desktop));
 
     GSList *copied = NULL;
     // add objects to document
@@ -876,7 +874,7 @@ void sp_selection_paste_style()
         return;
     }
 
-    paste_gradients (SP_DT_DOCUMENT(desktop));
+    paste_defs (SP_DT_DOCUMENT(desktop));
 
     sp_desktop_set_style (desktop, style_clipboard);
 
