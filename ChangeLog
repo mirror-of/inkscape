@@ -4,6 +4,10 @@
 
 	  introduced a GC-aware STL allocator
 
+	* src/document-private.h, src/document.h, src/document.cpp:
+
+	  switch to using STL map for "id changed" signals
+
 2004-08-21  MenTaLguY <mental@rydia.net>
 
 	* src/Makefile_insert, src/util/Makefile_insert: get libinkutil

@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef SEEN_INKSCAPE_GC_MANAGED_H
-#define SEEN_INKSCAPE_GC_MANAGED_H
+#ifndef SEEN_INKSCAPE_GC_ALLOC_H
+#define SEEN_INKSCAPE_GC_ALLOC_H
 
 #include <limits>
 #include "gc-core.h"

@@ -13,6 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <map>
 #include <sigc++/sigc++.h>
 #include "xml/sp-repr-action-fns.h"
 #include "sp-defs.h"
@@ -24,8 +25,10 @@
 class SPReprAction;
 
 struct SPDocumentPrivate {
+	typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
 	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
-	GHashTable *idsignals; /**< Dictionary of signals for id changes */
+	/** Dictionary of signals for id changes */
+	IDChangedSignalMap id_changed_signals;
 
 	/* Resources */
 	/* It is GHashTable of GSLists */

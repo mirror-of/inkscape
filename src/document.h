@@ -26,6 +26,8 @@
 class SPDocumentPrivate;
 
 struct SPDocument {
+	typedef sigc::signal<void, SPObject *> IDChangedSignal;
+
 	GObject object;
 
 	unsigned int advertize : 1;
@@ -95,7 +97,7 @@ gdouble sp_document_height (SPDocument * document);
  */
 
 void sp_document_def_id(SPDocument *document, const gchar *id, SPObject *object);
-sigc::connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, sigc::slot<void, SPObject *>);
+sigc::connection sp_document_id_changed_connect(SPDocument *document, const gchar *id, SPDocument::IDChangedSignal::slot_type slot);
 
 
 

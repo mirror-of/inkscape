@@ -123,16 +123,6 @@ sp_document_class_init(SPDocumentClass *klass)
 }
 
 static void
-free_id_signal(gpointer p)
-{
-	sigc::signal<void, SPObject *> *signal = reinterpret_cast<sigc::signal<void, SPObject *> *>(p);
-	if (!signal->empty()) {
-		g_warning("Lingering document id observers");
-	}
-	delete signal;
-}
-
-static void
 sp_document_init (SPDocument *doc)
 {
 	SPDocumentPrivate *p;
@@ -153,10 +143,9 @@ sp_document_init (SPDocument *doc)
 
 	doc->_collection_queue = NULL;
 
-	p = g_new (SPDocumentPrivate, 1);
+	p = new SPDocumentPrivate();
 
 	p->iddef = g_hash_table_new (g_direct_hash, g_direct_equal);
-	p->idsignals = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, free_id_signal);
 
 	p->resources = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -221,7 +210,6 @@ sp_document_dispose (GObject *object)
 		}
 
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
-		if (priv->idsignals) g_hash_table_destroy (priv->idsignals);
 
 		if (doc->rdoc) sp_repr_document_unref (doc->rdoc);
 
@@ -229,7 +217,7 @@ sp_document_dispose (GObject *object)
 		g_hash_table_foreach_remove (priv->resources, sp_document_resource_list_free, doc);
 		g_hash_table_destroy (priv->resources);
 
-		g_free (priv);
+		delete priv;
 		doc->priv = NULL;
 	}
 
@@ -574,9 +562,6 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)
 {
 	GQuark idq = g_quark_from_string(id);
-	sigc::signal<void, SPObject *> *signal
-	  = reinterpret_cast<sigc::signal<void, SPObject *> *>(g_hash_table_lookup(document->priv->idsignals,
-										    GINT_TO_POINTER(idq)));
 
 	if (object) {
 		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) == NULL);
@@ -586,32 +571,24 @@ void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)
 		g_hash_table_remove(document->priv->iddef, GINT_TO_POINTER(idq));
 	}
 
-	if (signal) {
-		if (!signal->empty()) {
-			signal->emit(object);
-		} else {
-			/* dispose of unused signal */
-			g_hash_table_remove(document->priv->idsignals, GINT_TO_POINTER(idq));
-			signal = NULL;
+	SPDocumentPrivate::IDChangedSignalMap &id_changed_signals = document->priv->id_changed_signals;
+	SPDocumentPrivate::IDChangedSignalMap::iterator pos;
+
+	pos = id_changed_signals.find(idq);
+	if ( pos != id_changed_signals.end() ) {
+		if (!(*pos).second.empty()) {
+			(*pos).second.emit(object);
+		} else { // discard unused signal
+			id_changed_signals.erase(pos);
 		}
 	}
 }
 
 SigC::Connection
 sp_document_id_changed_connect(SPDocument *doc, const gchar *id,
-                               sigc::slot<void, SPObject *> slot)
+                               SPDocument::IDChangedSignal::slot_type slot)
 {
-	sigc::signal<void, SPObject *> *signal;
-	GQuark idq;
-
-	idq = g_quark_from_string(id);
-	signal = reinterpret_cast<sigc::signal<void, SPObject *> *>(g_hash_table_lookup(doc->priv->idsignals, GINT_TO_POINTER(idq)));
-	if (!signal) {
-		signal = new sigc::signal<void, SPObject *>();
-		g_hash_table_insert(doc->priv->idsignals, GINT_TO_POINTER(idq), reinterpret_cast<gpointer>(signal));
-	}
-
-	return signal->connect(slot);
+	return doc->priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
 SPObject *SPDocument::getObjectById(const gchar *id)
