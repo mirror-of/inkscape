@@ -152,24 +152,43 @@ sp_group_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XM
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
-	SPObject *ochild = sp_object_get_child_by_repr(object, child);
-	if ( ochild && SP_IS_ITEM(ochild) ) {
-		/* TODO: this should be moved into SPItem somehow */
-		SPItemView *v;
-		NRArenaItem *ac;
+    SPObject *last_child = object->lastChild();
+    if (last_child && SP_OBJECT_REPR(last_child) == child) {
+	    SPObject *ochild = last_child;
+	    if ( SP_IS_ITEM(ochild) ) {
+		    /* TODO: this should be moved into SPItem somehow */
+		    SPItemView *v;
+		    NRArenaItem *ac;
 
-		unsigned position = sp_item_pos_in_parent(SP_ITEM(ochild));
+		    for (v = item->display; v != NULL; v = v->next) {
+			    ac = sp_item_invoke_show (SP_ITEM (ochild), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
 
-		for (v = item->display; v != NULL; v = v->next) {
-			ac = sp_item_invoke_show (SP_ITEM (ochild), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
+			    if (ac) {
+				    nr_arena_item_append_child (v->arenaitem, ac);
+				    nr_arena_item_unref (ac);
+			    }
+		    }
+	    }
+    } else {
+	    SPObject *ochild = sp_object_get_child_by_repr(object, child);
+	    if ( ochild && SP_IS_ITEM(ochild) ) {
+		    /* TODO: this should be moved into SPItem somehow */
+		    SPItemView *v;
+		    NRArenaItem *ac;
 
-			if (ac) {
-				nr_arena_item_add_child (v->arenaitem, ac, NULL);
-				nr_arena_item_set_order (ac, position);
-				nr_arena_item_unref (ac);
-			}
-		}
-	}
+		    unsigned position = sp_item_pos_in_parent(SP_ITEM(ochild));
+
+		    for (v = item->display; v != NULL; v = v->next) {
+			    ac = sp_item_invoke_show (SP_ITEM (ochild), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
+
+			    if (ac) {
+				    nr_arena_item_add_child (v->arenaitem, ac, NULL);
+				    nr_arena_item_set_order (ac, position);
+				    nr_arena_item_unref (ac);
+			    }
+		    }
+	    }
+    }
 
 	object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
