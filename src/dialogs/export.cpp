@@ -31,6 +31,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "helper/unit-menu.h"
+#include "widgets/spw-utilities.h"
 #include "inkscape.h"
 #include "dir-util.h"
 #include "document.h"
@@ -60,12 +61,22 @@ static void sp_export_area_width_value_changed (GtkAdjustment *adj, GtkObject *b
 static void sp_export_area_height_value_changed (GtkAdjustment *adj, GtkObject *base);
 static void sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject *base);
 static void sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base);
+static void sp_export_selection_changed (Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base);
 
 static void sp_export_set_area (GtkObject *base, float x0, float y0, float x1, float y1);
 static void sp_export_value_set (GtkObject *base, const gchar *key, float val);
 static void sp_export_value_set_pt (GtkObject *base, const gchar *key, float val);
 static float sp_export_value_get (GtkObject *base, const gchar *key);
 static float sp_export_value_get_pt (GtkObject *base, const gchar *key);
+
+typedef struct {
+  GtkToggleButton *tb;
+  GtkObject *base;
+  SPSelection* selection;
+  guint changedId;
+} ActiveSelection;
+
+static ActiveSelection activeSelection={0,0,0,0};
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -203,6 +214,9 @@ sp_export_dialog (void)
 		gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 		gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_export_area_toggled), dlg);
 
+		g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_export_selection_changed), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_export_selection_changed), dlg);
+
 		us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
 		gtk_box_pack_end (GTK_BOX (hb), us, FALSE, FALSE, 0);
 		l = gtk_label_new (_("Units:"));
@@ -316,6 +330,14 @@ sp_export_dialog (void)
 	}
 
 	gtk_window_present ((GtkWindow *) dlg);
+}
+
+static void
+sp_export_selection_changed (Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base)
+{
+	GtkWidget *button = sp_search_by_value_recursive ((GtkWidget *) base, "key", "selection");
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button), base);
 }
 
 static void
