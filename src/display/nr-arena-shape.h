@@ -102,13 +102,6 @@ struct NRArenaShape : public NRArenaItem {
 	/* State data */
 	NR::Matrix ctm;
 	
-	struct {
-		Paint paint;
-	} fill;
-	struct {
-		Paint paint;
-	} stroke;
-
 	SPPainter *fill_painter;
 	SPPainter *stroke_painter;
 	// the 2 cached polygons, for rasterizations uses
@@ -141,6 +134,25 @@ struct NRArenaShape : public NRArenaItem {
 		obj->init(arena);
 		return obj;
 	}
+
+	void setFill(SPPaintServer *server);
+	void setFill(SPColor const &color);
+	void setFillOpacity(double opacity);
+
+	void setStroke(SPPaintServer *server);
+	void setStroke(SPColor const &color);
+	void setStrokeOpacity(double opacity);
+	void setStrokeWidth(double width);
+
+	struct Style {
+		Style() : opacity(0.0) {}
+		Paint paint;
+		double opacity;
+	} _fill;
+	struct StrokeStyle : public Style {
+		StrokeStyle() : width(0.0) {}
+		double width;
+	} _stroke;
 };
 
 struct NRArenaShapeClass {
