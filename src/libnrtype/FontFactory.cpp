@@ -314,6 +314,10 @@ font_factory::~font_factory(void)
 font_instance* font_factory::FaceFromDescr(const char* descr)
 {
 	PangoFontDescription* temp_descr=pango_font_description_from_string(descr);
+        // workaround for bug #1025565.
+        if (pango_font_description_get_family(temp_descr)==NULL) {
+            pango_font_description_set_family(temp_descr,descr);
+        }
 	font_instance *res=Face(temp_descr);
 	pango_font_description_free(temp_descr);
 	return res;
@@ -335,7 +339,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 		    nFace=pango_font_map_load_font(fontServer,fontContext,descr);
                 }
                 else {
-                    g_warning(_("Ignoring font that may crash Pango"));
+                    g_warning(_("Ignoring font without family that will crash Pango"));
                 }
 
 		if ( nFace ) {
