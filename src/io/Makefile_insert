@@ -23,5 +23,5 @@ io_libio_a_SOURCES = \
 	io/xsltstream.cpp \
 	io/xsltstream.h
 
-io_streamtest_SOURCES = io/streamtest.cpp
-io_streamtest_LDADD =   $(all_libs)
+#io_streamtest_SOURCES = io/streamtest.cpp
+#io_streamtest_LDADD =   $(all_libs)

@@ -33,6 +33,11 @@ EXTRA_DIST = \
 	inkscape.pod		\
 	inkscape.spec.in	\
 	inkscape.spec		\
+	inkscape.nsi.in	\
+	inkscape.nsi		\
+	Makefile.mingw	\
+	Makefile.mingw.common.in	\
+	Makefile.mingw.common	\
 	README HACKING		\
 	inkscape.png \
 	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico \

@@ -26,3 +26,4 @@ GNOME_Sodipodi.oaf
 autom4te*cache
 toru
 inkscape-*.tar.gz
+builddir

@@ -72,6 +72,12 @@ DISTCLEANFILES =	\
 	inkscape_version.h
 
 EXTRA_DIST =	\
+	mkdep.pl	\
+	mkfiles.pl	\
+	make.exclude	\
+	make.dep	\
+	make.files	\
+	make.ofiles	\
 	Doxyfile	\
 	algorithms/makefile.in	\
 	dialogs/makefile.in	\

@@ -1,3 +1,10 @@
+2005-02-10  Kees Cook  <kees@outflux.net>
+
+	* configure.ac, Makefile.am, src/Makefile.am, Makefile.mingw.common.in,
+	  inkscape.nsi.in: setting up "configure" to build the other files that
+	  expect version numbers to get updated.  Including mingw files in dist
+	  package.
+
 2005-02-10  Jon A. Cruz  <jon@joncruz.org>
 	* src/io/uristream.h, src/io/uristream.cpp,
 	  src/extension/internal/svg.h, src/extension/internal/svg.cpp,
@@ -6,7 +13,6 @@
 	  src/extension/internal/init.cpp:
 	  Adding internal .svgz load and save extension.
 	  Probable fix for bugs #1074996, #1050361, #925033, #1052307
-
 
 2005-02-08  Kees Cook  <kees@outflux.net>
 
