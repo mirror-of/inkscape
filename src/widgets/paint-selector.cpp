@@ -74,11 +74,11 @@ static void sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaint
 
 static void sp_paint_selector_set_mode_empty (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_multiple (SPPaintSelector *psel);
-static void sp_paint_selector_set_mode_clone (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_none (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mode);
 static void sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode mode);
 static void sp_paint_selector_set_mode_pattern (SPPaintSelector *psel, SPPaintSelectorMode mode);
+static void sp_paint_selector_set_mode_unset (SPPaintSelector *psel);
 
 
 static void sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active);
@@ -176,6 +176,8 @@ sp_paint_selector_init (SPPaintSelector *psel)
 							 SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, GTK_RADIO_BUTTON (psel->gradient), tt, _("Radial gradient")),
 	psel->pattern = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_PATTERN,
                                SP_PAINT_SELECTOR_MODE_PATTERN, GTK_RADIO_BUTTON (psel->radial), tt, _("Pattern"));
+	psel->unset = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_UNSET,
+                               SP_PAINT_SELECTOR_MODE_UNSET, GTK_RADIO_BUTTON (psel->pattern), tt, _("Make paint undefined (so it may be inherited)"));
 
 	/* Frame */
 	psel->frame = gtk_frame_new ("");
@@ -273,8 +275,8 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
 		case SP_PAINT_SELECTOR_MODE_PATTERN:
 			sp_paint_selector_set_mode_pattern (psel, mode);
 			break;
-		case SP_PAINT_SELECTOR_MODE_CLONE:
-			sp_paint_selector_set_mode_clone (psel);
+		case SP_PAINT_SELECTOR_MODE_UNSET:
+			sp_paint_selector_set_mode_unset (psel);
 			break;
 		default:
 			g_warning ("file %s: line %d: Unknown paint mode %d", __FILE__, __LINE__, mode);
@@ -458,19 +460,14 @@ sp_paint_selector_set_mode_multiple (SPPaintSelector *psel)
 }
 
 static void
-sp_paint_selector_set_mode_clone (SPPaintSelector *psel)
+sp_paint_selector_set_mode_unset (SPPaintSelector *psel)
 {
-    sp_paint_selector_set_style_buttons (psel, NULL);
-    gtk_widget_set_sensitive (psel->style, FALSE);
+    sp_paint_selector_set_style_buttons (psel, psel->unset);
+    gtk_widget_set_sensitive (psel->style, TRUE);
 
     sp_paint_selector_clear_frame(psel);
 
-    // TRANSLATORS: "Clone" is a noun here. This message is to notify the user
-    // that the currently selected object is a clone.
-    gtk_frame_set_label (GTK_FRAME (psel->frame), _("Clone selected"));
-
-    // FIXME: we must enable it to edit the style of clone, so that it's inherited into
-    // the clone object for those properties that are not set in the original
+    gtk_frame_set_label (GTK_FRAME (psel->frame), _("Paint is undefined"));
 }
 
 static void
@@ -634,6 +631,7 @@ sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->gradient), (active == psel->gradient));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->radial), (active == psel->radial));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->pattern), (active == psel->pattern));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->unset), (active == psel->unset));
 }
 
 static void
