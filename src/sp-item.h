@@ -65,13 +65,11 @@ struct SPItemView {
 #define SP_ITEM_BBOX_VISUAL 1
 
 #define SP_ITEM_SHOW_DISPLAY (1 << 0)
-#define SP_ITEM_SHOW_PRINT (1 << 1)
 
 /*
- * We do not differentiate referenced views (i.e. clippaths, maks and patterns)
- * by display/print targets (they are non-editable anyways)
+ * Flag for referenced views (i.e. clippaths, masks and patterns); always display
  */
-#define SP_ITEM_REFERENCE_FLAGS SP_ITEM_SHOW_PRINT
+#define SP_ITEM_REFERENCE_FLAGS SP_ITEM_SHOW_DISPLAY
 
 class SPItemCtx;
 
@@ -88,7 +86,6 @@ struct SPItemCtx {
 /** Abstract base class for all visible shapes. */
 struct SPItem : public SPObject {
 	unsigned int sensitive : 1;
-	unsigned int printable : 1;
 	unsigned int stop_paint: 1;
 
 	NR::Matrix transform;

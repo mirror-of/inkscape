@@ -124,7 +124,6 @@ sp_item_init(SPItem *item)
     SPObject *object = SP_OBJECT(item);
 
     item->sensitive = TRUE;
-    item->printable = TRUE;
 
     item->transform = NR::identity();
 
@@ -383,14 +382,6 @@ sp_item_set(SPObject *object, unsigned key, gchar const *value)
                 nr_arena_item_set_sensitive(v->arenaitem, item->sensitive);
             }
             break;
-        case SP_ATTR_SODIPODI_NONPRINTABLE:
-            item->printable = !value;
-            for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                if (v->flags & SP_ITEM_SHOW_PRINT) {
-                    nr_arena_item_set_visible(v->arenaitem, item->printable);
-                }
-            }
-            break;
         case SP_ATTR_STYLE:
             sp_style_read_from_object(object->style, object);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
@@ -633,7 +624,7 @@ void sp_item_snappoints(SPItem const *item, SnapPointsIter p)
 void
 sp_item_invoke_print(SPItem *item, SPPrintContext *ctx)
 {
-    if (item->printable) {
+    if (!item->isHidden()) {
         if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->print) {
             if (!item->transform.test_identity()
                 || SP_OBJECT_STYLE(item)->opacity.value != SP_SCALE24_MAX)
@@ -703,9 +694,6 @@ sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags)
         nr_arena_item_set_opacity(ai, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
         nr_arena_item_set_visible(ai, !item->isHidden());
         nr_arena_item_set_sensitive(ai, item->sensitive);
-        if (flags & SP_ITEM_SHOW_PRINT) {
-            nr_arena_item_set_visible(ai, item->printable);
-        }
         if (item->clip_ref->getObject()) {
             NRArenaItem *ac;
             if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY(item->display->arenaitem, sp_item_display_key_new(3));

@@ -944,7 +944,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
     NRArena const *arena = NRArena::create();
     /* Create ArenaItem and set transform */
     unsigned const visionkey = sp_item_display_key_new(1);
-    NRArenaItem *root =  sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), (NRArena *) arena, visionkey, SP_ITEM_SHOW_PRINT );
+    NRArenaItem *root =  sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), (NRArena *) arena, visionkey, SP_ITEM_SHOW_DISPLAY );
 
     for (; ml != NULL; ml = ml->next) {
 

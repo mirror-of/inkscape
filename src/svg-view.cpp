@@ -157,7 +157,7 @@ sp_svg_view_set_document (SPView *view, SPDocument *doc)
 
 	if (doc) {
 		NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), SP_CANVAS_ARENA (svgview->drawing)->arena,
-					  svgview->dkey, SP_ITEM_SHOW_PRINT);
+					  svgview->dkey, SP_ITEM_SHOW_DISPLAY);
 		if (ai) {
 			nr_arena_item_add_child (SP_CANVAS_ARENA (svgview->drawing)->root, ai, NULL);
 			nr_arena_item_unref (ai);

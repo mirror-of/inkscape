@@ -114,7 +114,7 @@ sp_print_preview_document (SPDocument *doc)
 		mod->base = SP_ITEM (sp_document_root (doc));
 		mod->arena = NRArena::create();
 		mod->dkey = sp_item_display_key_new (1);
-		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
+		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
 		/* Print document */
 		ret = mod->begin (doc);
 		sp_item_invoke_print (mod->base, &context);
@@ -156,7 +156,7 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 		mod->base = SP_ITEM (sp_document_root (doc));
 		mod->arena = NRArena::create();
 		mod->dkey = sp_item_display_key_new (1);
-		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
+		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
 		/* Print document */
 		ret = mod->begin (doc);
 		sp_item_invoke_print (mod->base, &context);
@@ -196,7 +196,7 @@ sp_print_document_to_file (SPDocument *doc, const gchar *filename)
 	mod->base = SP_ITEM (sp_document_root (doc));
 	mod->arena = NRArena::create();
 	mod->dkey = sp_item_display_key_new (1);
-	mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
+	mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
 	/* Print document */
 	ret = mod->begin (doc);
 	sp_item_invoke_print (mod->base, &context);
