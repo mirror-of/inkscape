@@ -45,7 +45,6 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "interface.h"
-#include "toolbox.h"
 #include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
@@ -58,14 +57,13 @@
 #include "dialogs/node-edit.h"
 #include "dialogs/dialog-events.h"
 
-#define TOOL_BUTTON_SIZE 28
-#define AUX_BUTTON_SIZE 20
-#define AUX_BETWEEN_BUTTON_GROUPS 5
+#include "select-toolbar.h"
+
+#include "toolbox.h"
 
 typedef void (*SetupFunction)(GtkWidget *toolbox, SPDesktop *desktop);
 typedef void (*UpdateFunction)(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
-static GtkWidget * sp_select_toolbox_new (SPDesktop *desktop);
 static GtkWidget * sp_node_toolbox_new (SPDesktop *desktop);
 static GtkWidget * sp_zoom_toolbox_new (SPDesktop *desktop);
 
@@ -120,7 +118,7 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 	return b;
 }
 
-static GtkWidget *
+GtkWidget *
 sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, SPView *view, GtkTooltips *tt)
 {
 	SPAction *action;
@@ -134,6 +132,11 @@ sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType t
 	gtk_widget_show (b);
 	gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
 	return b;
+}
+
+GtkWidget * sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int size, sp_verb_t verb, SPView *view, GtkTooltips *tt)
+{
+	return sp_toolbox_button_new_from_verb (t, size, SP_BUTTON_TYPE_NORMAL, verb, view, tt);
 }
 
 GtkWidget *
@@ -169,6 +172,7 @@ aux_toolbox_size_request (GtkWidget *widget,
 	if ( requisition->height < AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS) {
 		requisition->height = AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS;
 	}
+	requisition->width = 0; // allow aux toolbar to be cut
 }
 
 GtkWidget *
@@ -177,6 +181,7 @@ sp_aux_toolbox_new ()
 	GtkWidget *tb, *tb_s, *tb_e, *hb;
 
 	tb = gtk_vbox_new (FALSE, 0);
+
 	tb_s = gtk_vbox_new (FALSE, 0);
 	tb_e = gtk_vbox_new (FALSE, 0);
 	gtk_box_set_spacing (GTK_BOX (tb), AUX_BETWEEN_BUTTON_GROUPS);
@@ -200,38 +205,6 @@ sp_aux_toolbox_new ()
 	return hb;
 }
 
-static GtkWidget *
-sp_select_toolbox_new (SPDesktop *desktop)
-{
-	GtkWidget *tb;
-	GtkTooltips *tt;
-	SPView *view=SP_VIEW (desktop);
-
-	tt = gtk_tooltips_new ();
-	tb = gtk_hbox_new (FALSE, 0);
-
-	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_GROUP, view, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_UNGROUP, view, tt);
-
-	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_FRONT, view, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_BACK, view, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_RAISE, view, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_LOWER, view, tt);
-
-	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_ROTATE_90, view, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_HORIZONTAL, view, tt);
-	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLIP_VERTICAL, view, tt);
-
-	gtk_widget_show_all (tb);
-
-	return tb;
-}
 
 static GtkWidget *
 sp_node_toolbox_new (SPDesktop *desktop)
