@@ -45,6 +45,8 @@
 #include "../widgets/sp-xmlview-content.h"
 #include "../widgets/sp-xmlview-attr-list.h"
 
+#include "../inkscape-stock.h"
+
 #include "dialog-events.h"
 
 typedef struct _EditableDest {
@@ -175,7 +177,7 @@ sp_xml_tree_dialog (void)
 						  NULL,
 						  _("New element node"),
 						  NULL,
-						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/add_xml_element_node.xpm"),
+						  gtk_image_new_from_stock (INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE, GTK_ICON_SIZE_LARGE_TOOLBAR),
 						  G_CALLBACK (cmd_new_element_node),
 						  NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree),
@@ -192,7 +194,7 @@ sp_xml_tree_dialog (void)
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 						  NULL, _("New text node"), NULL,
-						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/add_xml_text_node.xpm"),
+						  gtk_image_new_from_stock (INKSCAPE_STOCK_ADD_XML_TEXT_NODE, GTK_ICON_SIZE_LARGE_TOOLBAR),
 						  G_CALLBACK (cmd_new_text_node),
 						  NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree),
@@ -209,7 +211,7 @@ sp_xml_tree_dialog (void)
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 						  NULL, _("Duplicate node"), NULL,
-						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/duplicate_xml_node.xpm"),
+						  gtk_image_new_from_stock (INKSCAPE_STOCK_DUPLICATE_XML_NODE, GTK_ICON_SIZE_LARGE_TOOLBAR),
 						  G_CALLBACK (cmd_duplicate_node),
 						  NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree),
@@ -225,7 +227,7 @@ sp_xml_tree_dialog (void)
 		gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), NULL, _("Delete node"), NULL,
-						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/delete_xml_node.xpm"),
+						  gtk_image_new_from_stock (INKSCAPE_STOCK_DELETE_XML_NODE, GTK_ICON_SIZE_LARGE_TOOLBAR),
 						  G_CALLBACK (cmd_delete_node), NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_select_row",
 						G_CALLBACK (on_tree_select_row_enable_if_non_root),
@@ -307,7 +309,7 @@ sp_xml_tree_dialog (void)
 		gtk_container_set_border_width (GTK_CONTAINER (toolbar), 0);
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), NULL, _("Delete attribute"), NULL,
-						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/delete_xml_attribute.xpm"),
+						  gtk_image_new_from_stock (INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE, GTK_ICON_SIZE_LARGE_TOOLBAR),
 						  (GCallback) cmd_delete_attr, NULL);
 
 		gtk_signal_connect_while_alive (GTK_OBJECT (attributes), "select_row",
@@ -344,7 +346,7 @@ sp_xml_tree_dialog (void)
 
 		set_attr = gtk_button_new ();
 		gtk_tooltips_set_tip (tooltips, GTK_WIDGET (set_attr), _("Set attribute"), NULL);
-		gtk_container_add (GTK_CONTAINER (set_attr), gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/set.xpm"));
+		gtk_container_add (GTK_CONTAINER (set_attr), gtk_image_new_from_stock (INKSCAPE_STOCK_SET, GTK_ICON_SIZE_LARGE_TOOLBAR));
 		gtk_signal_connect (GTK_OBJECT (set_attr), "clicked", (GCallback) cmd_set_attr, NULL);
 		gtk_signal_connect (GTK_OBJECT (attr_name), "changed", (GCallback) on_editable_changed_enable_if_valid_xml_name, set_attr);
 		gtk_widget_set_sensitive (GTK_WIDGET (set_attr), FALSE);

@@ -39,7 +39,28 @@ static struct StockIcon
 	{ INKSCAPE_STOCK_JOIN_BEVEL, INKSCAPE_PIXMAPDIR, "join_bevel.xpm"},
 	{ INKSCAPE_STOCK_CAP_BUTT, INKSCAPE_PIXMAPDIR, "cap_butt.xpm"},
 	{ INKSCAPE_STOCK_CAP_ROUND, INKSCAPE_PIXMAPDIR, "cap_round.xpm"},
-	{ INKSCAPE_STOCK_CAP_SQUARE, INKSCAPE_PIXMAPDIR, "cap_square.xpm"}
+	{ INKSCAPE_STOCK_CAP_SQUARE, INKSCAPE_PIXMAPDIR, "cap_square.xpm"},
+  /*object properties*/
+	{ INKSCAPE_STOCK_ARROWS_HOR, INKSCAPE_PIXMAPDIR, "arrows_hor.xpm"},
+	{ INKSCAPE_STOCK_ARROWS_VER, INKSCAPE_PIXMAPDIR, "arrows_ver.xpm"},
+	{ INKSCAPE_STOCK_DIMENSION_HOR, INKSCAPE_PIXMAPDIR, "dimension_hor.xpm"},
+
+  { INKSCAPE_STOCK_WRITING_MODE_LR, INKSCAPE_PIXMAPDIR, "writing_mode_lr.xpm"},
+  { INKSCAPE_STOCK_WRITING_MODE_TB, INKSCAPE_PIXMAPDIR, "writing_mode_tb.xpm"},
+  /*xml-tree*/
+  { INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE, INKSCAPE_PIXMAPDIR, "add_xml_element_node.xpm"},
+  { INKSCAPE_STOCK_ADD_XML_TEXT_NODE, INKSCAPE_PIXMAPDIR, "add_xml_text_node.xpm"},
+  { INKSCAPE_STOCK_DUPLICATE_XML_NODE, INKSCAPE_PIXMAPDIR, "duplicate_xml_node.xpm"},
+  { INKSCAPE_STOCK_DELETE_XML_NODE, INKSCAPE_PIXMAPDIR, "delete_xml_node.xpm"},
+  { INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE, INKSCAPE_PIXMAPDIR, "delete_xml_attribute.xpm"},
+  { INKSCAPE_STOCK_SET, INKSCAPE_PIXMAPDIR, "set.xpm"},
+
+  { INKSCAPE_STOCK_FILL_NONE, INKSCAPE_PIXMAPDIR, "fill_none.xpm"},
+  { INKSCAPE_STOCK_FILL_SOLID, INKSCAPE_PIXMAPDIR, "fill_solid.xpm"},
+  { INKSCAPE_STOCK_FILL_GRADIENT, INKSCAPE_PIXMAPDIR, "fill_gradient.xpm"},
+  { INKSCAPE_STOCK_FILL_RADIAL, INKSCAPE_PIXMAPDIR, "fill_radial.xpm"},
+  { INKSCAPE_STOCK_FILL_PATTERN, INKSCAPE_PIXMAPDIR, "fill_pattern.xpm"},
+  { INKSCAPE_STOCK_FILL_FRACTAL, INKSCAPE_PIXMAPDIR, "fill_fractal.xpm"},
 };
 
 static gint stock_icon_count = sizeof(stock_icons) / sizeof(*stock_icons);
@@ -62,6 +83,11 @@ inkscape_gtk_stock_init(void)
     gchar *filename;
 
     filename = (gchar *) g_strdup_printf ("%s/%s", stock_icons[i].dir, stock_icons[i].filename);
+    if (!g_file_test(filename, G_FILE_TEST_EXISTS)) {
+      g_critical("Unable to load stock pixmap %s\n", filename);
+      g_free(filename);
+      return;
+    }
 
     pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
 

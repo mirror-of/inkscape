@@ -28,6 +28,8 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtkiconfactory.h>
+
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "widgets/sp-widget.h"
@@ -39,6 +41,7 @@
 #include "verbs.h"
 #include "interface.h"
 #include "object-properties.h"
+#include "inkscape-stock.h"
 
 static GtkWidget *dlg = NULL;
 
@@ -343,7 +346,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), us, 2, 3, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "units", us);
 
-	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/arrows_hor.xpm");
+	px = gtk_image_new_from_stock (INKSCAPE_STOCK_ARROWS_HOR, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("X:"));
@@ -358,7 +361,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
-	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/arrows_ver.xpm");
+	px = gtk_image_new_from_stock (INKSCAPE_STOCK_ARROWS_VER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 2, 3, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("Y:"));
@@ -373,7 +376,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
-	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/dimension_hor.xpm");
+	px = gtk_image_new_from_stock (INKSCAPE_STOCK_DIMENSION_HOR, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 3, 4, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("Width:"));
@@ -388,7 +391,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 3, 4, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
-	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/dimension_ver.xpm");
+	px = gtk_image_new_from_stock (INKSCAPE_STOCK_DIMENSION_VER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 4, 5, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("Height:"));

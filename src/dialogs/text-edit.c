@@ -44,6 +44,8 @@
 #include "../selection.h"
 #include "../style.h"
 #include "../sp-text.h"
+#include "../inkscape-stock.h"
+
 
 #include "text-edit.h"
 
@@ -167,14 +169,14 @@ sp_text_edit_dialog (void)
 		l = gtk_label_new (_("Orientation:"));
 		gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 4, 0);
-		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/writing_mode_lr.xpm");
+		px = gtk_image_new_from_stock (INKSCAPE_STOCK_WRITING_MODE_LR, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		b = gtk_radio_button_new (NULL);
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
 		gtk_table_attach (GTK_TABLE (tbl), b, 1, 2, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "writing_mode_lr", b);
-		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/writing_mode_tb.xpm");
+		px = gtk_image_new_from_stock (INKSCAPE_STOCK_WRITING_MODE_TB, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
