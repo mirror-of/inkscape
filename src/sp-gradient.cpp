@@ -124,6 +124,11 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
              *        build (Lauris) */
             /* fixme: We need presentation attributes etc. */
 
+           // FIXME: remove the hackish "style reading" from here, instead add stop-color and
+           // stop-opacity to SPStyle and use them from there. After that remove the ugly
+           // sp_object_get_style_property, it's used only here. With the current code e.g. a
+           // currentColor specification does not work on a stop.
+
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-color", "black");
                 guint32 color = sp_svg_read_color(p, sp_color_get_rgba32_ualpha(&stop->color, 0x00));
