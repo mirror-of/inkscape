@@ -26,13 +26,46 @@ public:
 	const char *what() const { return "Unsupported or malformed URI"; }
 };
 
+/**
+ * A class encapsulating a reference to a particular URI; observers can
+ * be notified when the URI comes to reference a different SPObject.
+ *
+ * The URIReference increments and decrements the SPObject's hrefcount
+ * automatically.
+ */
 class URIReference : public SigC::Object {
 public:
+	/**
+	 * Constructs a reference object given an SPDocument *
+	 * and a uri which is resolved relative to that document.
+	 *
+	 * Throws an UnsupportedURIException if the uri is unsupported
+	 * or malformed.
+	 *
+	 * @param rel_document document to resolve references relative to
+	 * @param uri a CSS url() specification
+	 *
+	 * @see SPObject
+	 * @see sp_object_href
+	 * @see sp_object_hunref
+	 */
 	URIReference(SPDocument *rel_document, const gchar *uri);
+	/**
+	 * Destructor.
+	 */
 	~URIReference();
 
+	/**
+	 * Accessor for the reference's change notification signal.
+	 * @returns a signal; its parameter is a newly referenced SPObject or NULL
+	 */
 	SigC::Signal1<void, SPObject *> changedSignal();
 
+	/**
+	 * Returns a pointer to the SPObject the reference currently
+	 * refers to (if any).
+	 * @return a pointer to the referenced SPObject or NULL
+	 */
 	SPObject *getObject();
 
 private:

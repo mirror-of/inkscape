@@ -3,6 +3,8 @@
 	* src/inkscape.cpp, src/inkscape.h, src/main.cpp:
 	  fixes to preference loading
 
+	* src/uri-reference.h: documented Inkscape::URIReference
+
 2004-01-02  MenTaLguY <mental@rydia.net>
 
 	* src/shortcuts.cpp: zoom in shortcut fix for german and other
