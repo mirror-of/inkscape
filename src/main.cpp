@@ -150,7 +150,7 @@ struct poptOption options[] = {
 	{"export-background", 'b', POPT_ARG_STRING, &sp_export_background, SP_ARG_EXPORT_HEIGHT,
 	 N_("Background color of exported bitmap (any SVG supported color string)"), N_("COLOR")},
 	{"export-svg", 0, POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
-	 N_("Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"), N_("FILENAME")},
+	 N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"), N_("FILENAME")},
 	{"slideshow", 's', POPT_ARG_NONE, &sp_global_slideshow, SP_ARG_SLIDESHOW,
 	 N_("Show given files one-by-one, switch to next on any key/mouse event"), NULL},
 	{"bitmap-icons", 'i', POPT_ARG_NONE, &sp_bitmap_icons, SP_ARG_BITMAP_ICONS,
