@@ -191,9 +191,14 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Clipboard</title>
-<keys><key><ctrl/>X</key>	 <action>cut selection</action></keys>
 <keys><key><ctrl/>C</key>	 <action>copy selection</action></keys>
+<note>This places a copy of the selection to the Inkscape clipboard (not the system clipboard).</note>
+<keys><key><ctrl/>X</key>	 <action>cut selection</action></keys>
+<note>This places a copy of the selection to the Inkscape clipboard and deletes the selection.</note>
 <keys><key><ctrl/>V</key>	 <action>paste clipboard</action></keys>
+<note>This places the clipboard objects at the mouse cursor, or at the center of the window if mouse is outside the canvas.</note>
+<keys><key><ctrl/><alt/>V</key>	 <action>paste in place</action></keys>
+<note>This places the clipboard objects to the original location from which they were copied.</note>
 <keys><key><shift/><ctrl/>V</key>  <action>paste style</action></keys> 
 <note>This applies the style of the (first of the) coped object(s) to the current selection.</note>
 </group>
@@ -209,6 +214,7 @@ can leave your ideas and requests there.</p>
 <keys> <key><shift/><ctrl/>U</key>  <key><ctrl/>G</key> <action>group selected objects</action></keys>
 <note>Use Ctrl+click to select objects within group.</note>
 <keys><key><shift/><ctrl/>G</key> <key><ctrl/>U</key>  <action>ungroup selected group(s)</action></keys>
+<note>This removes only one level of grouping; press Ctrl+U repeatedly to ungroup nested groups.</note>
 </group>
 
 <group>
