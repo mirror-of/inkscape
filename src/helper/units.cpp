@@ -91,6 +91,14 @@ sp_unit_get_by_abbreviation (const gchar *abbreviation)
 	return NULL;
 }
 
+const gchar *
+sp_unit_get_abbreviation (const SPUnit *unit)
+{
+	g_return_val_if_fail (unit != NULL, NULL);
+
+	return unit->abbr;
+}
+
 GSList *
 sp_unit_get_list (guint bases)
 {
@@ -126,8 +134,19 @@ sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUnit *to)
 		*distance = *distance * from->unittobase / to->unittobase;
 		return TRUE;
 	}
-	if (from->base != to->base) return FALSE;
 	if ((from->base == SP_UNIT_VOLATILE) || (to->base == SP_UNIT_VOLATILE)) return FALSE;
+
+	if ((from->base == SP_UNIT_DEVICE) && (to->base == SP_UNIT_ABSOLUTE)) {
+		*distance = *distance * (from->unittobase * DEVICESCALE) / to->unittobase;
+		return TRUE;
+	}
+
+	if ((from->base == SP_UNIT_ABSOLUTE) && (to->base == SP_UNIT_DEVICE)) {
+		*distance = *distance * from->unittobase / (to->unittobase * DEVICESCALE);
+		return TRUE;
+	}
+
+	if (from->base != to->base) return FALSE;
 
 	*distance = *distance * from->unittobase / to->unittobase;
 

@@ -102,6 +102,7 @@ struct SPUnit {
 
 const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
+const gchar *sp_unit_get_abbreviation (const SPUnit *unit);
 
 extern SPUnit const sp_units[];
 
