@@ -43,6 +43,7 @@
 #include "dialogs/dialog-events.h"
 
 #include "dialogs/filedialog.h"
+#include "prefs-utils.h"
 
 #include "sp-namedview.h"
 
@@ -227,12 +228,20 @@ static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
     SPRepr *repr = sp_document_repr_root (doc);
+	const gchar * default_extension = NULL;
+
+	default_extension = sp_repr_attr(repr, "inkscape:output_extension");
+	if (default_extension == NULL) {
+		default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
+	}
+	// printf("Extension: %s\n", default_extension);
+
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (const char *)save_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (const char *)_("Select file to save"),
-				 sp_repr_attr(repr, "inkscape:output_extension")
+				 default_extension
 				 );
 	bool sucess = dlg->show();
     char *fileName = sucess ? g_strdup(dlg->getFilename()) : NULL;
@@ -302,10 +311,8 @@ sp_file_save_document (SPDocument *doc)
 		if (doc->uri == NULL) {
 			return sp_file_save_dialog (doc);
 		} else {
-			/* TODO: This currently requires a recognizable extension to
-				 be on the file name - odd stuff won't work */
 			fn = g_strdup (doc->uri);
-			success = file_save(doc, fn, Inkscape::Extension::db.get(sp_repr_attr(repr, "inkscape:output_extension")));
+			success = file_save (doc, fn, Inkscape::Extension::db.get(sp_repr_attr(repr, "inkscape:output_extension")));
 			g_free ((void *) fn);
 			save_status(success);
 		}
