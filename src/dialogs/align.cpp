@@ -72,7 +72,7 @@ public :
         _id(id),         
         _parent(parent)
     {
-        Gtk::Image*  pImage = Gtk::manage( new Gtk::Image(PixBufFactory::get().getIcon(_id)));
+        Gtk::Image*  pImage = Gtk::manage( new Gtk::Image(PixBufFactory::get().getIcon(_id, GTK_ICON_SIZE_LARGE_TOOLBAR)));
 	Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
 	pImage->show();
