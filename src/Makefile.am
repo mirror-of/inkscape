@@ -66,15 +66,17 @@ noinst_LIBRARIES =	\
 	util/libinkutil.a \
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
-	libnr/libtest-nr.a	\
 	libnrtype/libnrtype.a	\
 	livarot/libvarot.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
 	trace/libtrace.a  \
 	xml/libspxml.a	\
-	xml/libtest-xml.a	\
 	libinkpost.a
+
+check_LIBRARIES =	\
+	libnr/libtest-nr.a	\
+	xml/libtest-xml.a
 
 DISTCLEANFILES =	\
 	helper/sp-marshal.cpp	\
