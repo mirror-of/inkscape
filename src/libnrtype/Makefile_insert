@@ -44,5 +44,14 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/FlowEater.h	\
 	libnrtype/FlowDefs.h	\
 	libnrtype/TextWrapper.cpp \
-	libnrtype/TextWrapper.h 
+	libnrtype/TextWrapper.h \
+	libnrtype/Layout-TNG-Compute.cpp \
+	libnrtype/Layout-TNG-Input.cpp \
+	libnrtype/Layout-TNG-OutIter.cpp \
+	libnrtype/Layout-TNG-Output.cpp \
+	libnrtype/Layout-TNG-Scanline-Maker.h \
+	libnrtype/Layout-TNG-Scanline-Makers.cpp \
+	libnrtype/Layout-TNG.cpp \
+	libnrtype/Layout-TNG.h
+	
 
