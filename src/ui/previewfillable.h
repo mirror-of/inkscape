@@ -1,6 +1,6 @@
 
-#ifndef SEEN_PREVIEWABLE_H
-#define SEEN_PREVIEWABLE_H
+#ifndef SEEN_PREVIEWFILLABLE_H
+#define SEEN_PREVIEWFILLABLE_H
 /*
  * A simple interface for previewing representations.
  *
@@ -13,33 +13,18 @@
  */
 
 
-#include <gtkmm/widget.h>
+#include "previewable.h"
 
 
 namespace Inkscape {
 namespace UI {
 
-typedef enum {
-    PREVIEW_STYLE_ICON,
-    PREVIEW_STYLE_PREVIEW,
-    PREVIEW_STYLE_NAME,
-    PREVIEW_STYLE_BLURB,
-    PREVIEW_STYLE_ICON_NAME,
-    PREVIEW_STYLE_ICON_BLURB,
-    PREVIEW_STYLE_PREVIEW_NAME,
-    PREVIEW_STYLE_PREVIEW_BLURB
-} PreviewStyle;
-
-typedef enum {
-    VIEW_TYPE_LIST,
-    VIEW_TYPE_GRID
-} ViewType;
-
-class Previewable
+class PreviewFillable
 {
 public:
-// TODO need to add some nice parameters
-    virtual Gtk::Widget* getPreview( PreviewStyle style, Gtk::BuiltinIconSize size ) = 0;
+    virtual void clear() = 0;
+    virtual void addPreview( Previewable* preview ) = 0;
+    virtual void setStyle(Gtk::BuiltinIconSize size, ViewType type) = 0;
 };
 
 
@@ -47,7 +32,7 @@ public:
 } //namespace Inkscape
 
 
-#endif // SEEN_PREVIEWABLE_H
+#endif // SEEN_PREVIEWFILLABLE_H
 
 /*
   Local Variables:
