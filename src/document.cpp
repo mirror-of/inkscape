@@ -136,7 +136,8 @@ sp_document_init (SPDocument *doc)
 
 	p = g_new (SPDocumentPrivate, 1);
 
-	p->iddef = g_hash_table_new (g_str_hash, g_str_equal);
+	p->iddef = g_hash_table_new (g_direct_hash, g_direct_equal);
+	p->idcallbacks = g_hash_table_new (g_direct_hash, g_direct_equal);
 
 	p->resources = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -176,6 +177,7 @@ sp_document_dispose (GObject *object)
 		}
 
 		if (priv->iddef) g_hash_table_destroy (priv->iddef);
+		if (priv->idcallbacks) g_hash_table_destroy (priv->idcallbacks);
 
 		if (doc->rdoc) sp_repr_document_unref (doc->rdoc);
 
@@ -514,27 +516,74 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 void
 sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object)
 {
-	g_assert (g_hash_table_lookup (document->priv->iddef, id) == NULL);
+	GSList *callbacks, *iter;
+	GQuark idq;
 
-	g_hash_table_insert (document->priv->iddef, (gchar *) id, object);
+	idq = g_quark_from_string(id);
+
+	if (object) {
+		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) == NULL);
+		g_hash_table_insert(document->priv->iddef, GINT_TO_POINTER(idq), object);
+	} else {
+		g_assert(g_hash_table_lookup(document->priv->iddef, GINT_TO_POINTER(idq)) != NULL);
+		g_hash_table_remove(document->priv->iddef, GINT_TO_POINTER(idq));
+	}
+
+	callbacks = (GSList *)g_hash_table_lookup(document->priv->idcallbacks, GINT_TO_POINTER(idq));
+
+	for ( iter = callbacks ; iter ; iter = iter->next ) {
+		SPDocumentIDCallback *callback;
+		callback = (SPDocumentIDCallback *)iter->data;
+		callback->func(document, id, object, callback->data);
+	}
+}
+
+SPDocumentIDCallback *
+sp_document_add_id_callback (SPDocument *document, const gchar *id, SPDocumentIDCallbackFunc func, gpointer data)
+{
+	GSList *callbacks;
+	SPDocumentIDCallback *callback;
+	GQuark idq;
+
+	idq = g_quark_from_string(id);
+
+	callback = g_new(SPDocumentIDCallback, 1);
+	callback->idq = idq;
+	callback->func = func;
+	callback->data = data;
+
+	callbacks = (GSList *)g_hash_table_lookup(document->priv->idcallbacks, GINT_TO_POINTER(idq));
+	callbacks = g_slist_prepend(callbacks, (gpointer)callback);
+	g_hash_table_insert(document->priv->idcallbacks, GINT_TO_POINTER(idq), (gpointer)callbacks);
+
+	return callback;
 }
 
 void
-sp_document_undef_id (SPDocument * document, const gchar * id)
+sp_document_remove_id_callback (SPDocument *document, SPDocumentIDCallback *callback)
 {
-	g_assert (g_hash_table_lookup (document->priv->iddef, id) != NULL);
+	GSList *callbacks;
 
-	g_hash_table_remove (document->priv->iddef, id);
+	g_return_if_fail(callback != NULL);
+
+	callbacks = (GSList *)g_hash_table_lookup(document->priv->idcallbacks, GINT_TO_POINTER(callback->idq));
+	callbacks = g_slist_remove(callbacks, (gconstpointer)callback);
+	g_hash_table_insert(document->priv->idcallbacks, GINT_TO_POINTER(callback->idq), (gpointer)callbacks);
+	g_free(callback);
 }
 
 SPObject *
 sp_document_lookup_id (SPDocument *doc, const gchar *id)
 {
+	GQuark idq;
+
 	g_return_val_if_fail (doc != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 	g_return_val_if_fail (id != NULL, NULL);
 
-	return (SPObject*)g_hash_table_lookup (doc->priv->iddef, id);
+	idq = g_quark_from_string(id);
+
+	return (SPObject*)g_hash_table_lookup (doc->priv->iddef, GINT_TO_POINTER(idq));
 }
 
 /* Object modification root handler */

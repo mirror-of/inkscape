@@ -18,7 +18,7 @@
 #include "xml/repr.h"
 #include "forward.h"
 
-
+typedef struct _SPDocumentIDCallback SPDocumentIDCallback;
 
 typedef struct _SPDocumentPrivate SPDocumentPrivate;
 
@@ -84,8 +84,12 @@ gdouble sp_document_height (SPDocument * document);
  */
 
 void sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object);
-void sp_document_undef_id (SPDocument * document, const gchar * id);
 SPObject * sp_document_lookup_id (SPDocument * document, const gchar * id);
+
+typedef void (*SPDocumentIDCallbackFunc)(SPDocument *document, const gchar *id, SPObject *obj, gpointer data);
+
+SPDocumentIDCallback *sp_document_add_id_callback(SPDocument *document, const gchar *id, SPDocumentIDCallbackFunc func, gpointer data);
+void sp_document_remove_id_callback(SPDocument *document, SPDocumentIDCallback *callback);
 
 /*
  * Undo & redo

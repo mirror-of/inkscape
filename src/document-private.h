@@ -21,7 +21,8 @@
 #define SP_DOCUMENT_DEFS(d) ((SPObject *) SP_ROOT (SP_DOCUMENT_ROOT (d))->defs)
 
 struct _SPDocumentPrivate {
-	GHashTable * iddef;	/* id dictionary */
+	GHashTable * iddef;	/**< Dictionary of id -> SPObject mappings */
+	GHashTable *idcallbacks; /**< Callbacks for id changes */
 
 	/* Resources */
 	/* It is GHashTable of GSLists */
@@ -33,6 +34,12 @@ struct _SPDocumentPrivate {
 	int history_size;
 	GSList * undo; /* Undo stack of reprs */
 	GSList * redo; /* Redo stack of reprs */
+};
+
+struct _SPDocumentIDCallback {
+	GQuark idq;
+	SPDocumentIDCallbackFunc func;
+	gpointer data;
 };
 
 #endif

@@ -19,6 +19,7 @@
 #include "display/nr-arena-forward.h"
 
 #include "forward.h"
+#include "uri-references.h"
 
 #include "sp-object.h"
 
@@ -90,6 +91,7 @@ struct _SPItem {
 	NRMatrix transform;
 
 	SPObject *clip;
+	SPURICallback *clip_uri_callback;
 	SPObject *mask;
 
 	SPItemView *display;

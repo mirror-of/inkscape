@@ -54,6 +54,8 @@ static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view)
 
 static SPObjectClass *parent_class;
 
+static void clip_obj_changed(SPObject *obj, gpointer data);
+
 GType
 sp_item_get_type (void)
 {
@@ -109,6 +111,7 @@ sp_item_init (SPItem *item)
 	item->display = NULL;
 
 	item->clip = NULL;
+	item->clip_uri_callback = NULL;
 	item->mask = NULL;
 
 	if (!object->style) object->style = sp_style_new_from_object (SP_OBJECT (item));
@@ -146,6 +149,11 @@ sp_item_release (SPObject * object)
 		}
 		nr_arena_item_unparent (item->display->arenaitem);
 		item->display = sp_item_view_list_remove (item->display, item->display);
+	}
+
+	if (item->clip_uri_callback) {
+		sp_uri_remove_callback(item->clip_uri_callback);
+		item->clip_uri_callback = NULL;
 	}
 
 	if (item->clip) {
@@ -229,38 +237,16 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 	case SP_PROP_CLIP_PATH: {
 		SPObject *cp;
-		cp = sp_uri_reference_resolve (SP_OBJECT_DOCUMENT (object), value);
-		if (cp != item->clip) {
-			if (item->clip) {
-				SPItemView *v;
-				/* Detach clippath */
-				sp_signal_disconnect_by_data (item->clip, item);
-				/* Hide clippath */
-				for (v = item->display; v != NULL; v = v->next) {
-					sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-					nr_arena_item_set_clip (v->arenaitem, NULL);
-				}
-				item->clip = sp_object_hunref (item->clip, object);
-			}
-			if (SP_IS_CLIPPATH (cp)) {
-				NRRect bbox;
-				SPItemView *v;
-				item->clip = sp_object_href (cp, object);
-				g_signal_connect (G_OBJECT (item->clip), "release", G_CALLBACK (sp_item_clip_release), item);
-				g_signal_connect (G_OBJECT (item->clip), "modified", G_CALLBACK (sp_item_clip_modified), item);
-				sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
-				for (v = item->display; v != NULL; v = v->next) {
-					NRArenaItem *ai;
-					if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
-					ai = sp_clippath_show (SP_CLIPPATH (item->clip),
-							       NR_ARENA_ITEM_ARENA (v->arenaitem),
-							       NR_ARENA_ITEM_GET_KEY (v->arenaitem));
-					nr_arena_item_set_clip (v->arenaitem, ai);
-					nr_arena_item_unref (ai);
-					sp_clippath_set_bbox (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
-				}
-			}
+		if (item->clip_uri_callback) {
+			sp_uri_remove_callback(item->clip_uri_callback);
 		}
+		if (value) {
+			item->clip_uri_callback = sp_uri_add_callback(SP_OBJECT_DOCUMENT(object), value, clip_obj_changed, (gpointer)item);
+			cp = sp_uri_reference_resolve(SP_OBJECT_DOCUMENT(object), value);
+		} else {
+			cp = NULL;
+		}
+		clip_obj_changed(cp, (gpointer)object);
 		break;
 	}
 	case SP_PROP_MASK: {
@@ -327,6 +313,41 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		  }
 		}
 		break;
+	}
+}
+
+static void
+clip_obj_changed(SPObject *object, gpointer data)
+{
+	SPItem *item=SP_ITEM(data);
+	if (object != item->clip) {
+		if (item->clip) {
+			SPItemView *v;
+			/* Detach clippath */
+			sp_signal_disconnect_by_data (item->clip, item);
+			/* Hide clippath */
+			for (v = item->display; v != NULL; v = v->next) {
+				sp_clippath_hide (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
+				nr_arena_item_set_clip (v->arenaitem, NULL);
+			}
+			item->clip = sp_object_hunref (item->clip, SP_OBJECT(item));
+		}
+		if (SP_IS_CLIPPATH (object)) {
+			NRRect bbox;
+			SPItemView *v;
+			item->clip = sp_object_href (object, SP_OBJECT(item));
+			g_signal_connect (G_OBJECT (item->clip), "release", G_CALLBACK (sp_item_clip_release), item);
+			g_signal_connect (G_OBJECT (item->clip), "modified", G_CALLBACK (sp_item_clip_modified), item);
+			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
+			for (v = item->display; v != NULL; v = v->next) {
+				NRArenaItem *ai;
+				if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
+				ai = sp_clippath_show (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_ARENA (v->arenaitem), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
+				nr_arena_item_set_clip (v->arenaitem, ai);
+				nr_arena_item_unref (ai);
+				sp_clippath_set_bbox (SP_CLIPPATH (item->clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
+			}
+		}
 	}
 }
 

@@ -360,7 +360,7 @@ sp_object_invoke_release (SPObject *object)
 
 	if (!SP_OBJECT_IS_CLONED (object)) {
 		g_assert (object->id);
-		sp_document_undef_id (object->document, object->id);
+		sp_document_def_id (object->document, object->id, NULL);
 		g_free (object->id);
 		object->id = NULL;
 	} else {
@@ -427,7 +427,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			g_assert (value != NULL);
 			g_assert (strcmp ((const char*)value, object->id));
 			g_assert (!sp_document_lookup_id (object->document, (const char*)value));
-			sp_document_undef_id (object->document, object->id);
+			sp_document_def_id (object->document, object->id, NULL);
 			g_free (object->id);
 			object->id = g_strdup ((const char*)value);
 			sp_document_def_id (object->document, object->id, object);

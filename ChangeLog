@@ -1,5 +1,11 @@
 2004-01-01  MenTaLguY <mental@rydia.net>
 
+	* src/document-private.h, src/document.h, src/document.cpp,
+	  src/sp-item.h, src/sp-item.cpp, src/uri-reference.h,
+	  src/uri-reference.cpp:
+	  added code to handle notifications when uri/id mappings
+	  changed
+
 	* src/desktop.cpp, src/style.cpp: compilation cleanups
 
 	* src/libnr/nr-types.h: documented NR::Coord and NR::ICoord
