@@ -1,5 +1,5 @@
 /*
- * A simple integration of Potrace into Inkscape.
+ * This is the C++ glue between Inkscape and Potrace
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
@@ -7,6 +7,10 @@
  * Copyright (C) 2004 Bob Jamison
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
+ * 
+ * Potrace, the wonderful tracer located at http://potrace.sourceforge.net,
+ * is provided by the generosity of Peter Selinger, to whom we are grateful.
+ *
  */
 
 #ifndef __INKSCAPE_POTRACE_H__

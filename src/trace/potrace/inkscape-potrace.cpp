@@ -1,3 +1,17 @@
+/*
+ * This is the C++ glue between Inkscape and Potrace
+ *
+ * Authors:
+ *   Bob Jamison <rjamison@titan.com>
+ *
+ * Copyright (C) 2004 Bob Jamison
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ * 
+ * Potrace, the wonderful tracer located at http://potrace.sourceforge.net,
+ * is provided by the generosity of Peter Selinger, to whom we are grateful.
+ *
+ */
 
 #include "inkscape-potrace.h"
 
@@ -124,9 +138,39 @@ PotraceTracingEngine::PotraceTracingEngine()
 
 
 
+
+typedef struct
+{
+    double x;
+    double y;
+} Point;
+
+
+/**
+ * Check a point against a list of points to see if it
+ * has already occurred.
+ */
+static bool
+hasPoint(std::vector<Point> &points, double x, double y)
+{
+    for (unsigned int i=0; i<points.size() ; i++)
+        {
+        Point p = points[i];
+        if (p.x == x && p.y == y)
+            return true;
+        }
+    return false;
+}
+
+
+/**
+ *  Recursively descend the path_t node tree, writing paths in SVG
+ *  format into the output stream.  The Point vector is used to prevent
+ *  redundant paths.
+ */
 static void
 writePaths(PotraceTracingEngine *engine, path_t *plist,
-            Inkscape::SVGOStringStream& data)
+            Inkscape::SVGOStringStream& data, std::vector<Point> &points)
 {
 
     path_t *node;
@@ -142,6 +186,18 @@ writePaths(PotraceTracingEngine *engine, path_t *plist,
         double y1 = 0.0;
         double x2 = pt[2].x;
         double y2 = pt[2].y;
+        //Have we been here already?
+        if (hasPoint(points, x2, y2))
+            {
+            //g_message("duplicate point: (%f,%f)\n", x2, y2);
+            continue;
+            }
+        else
+            {
+            Point p;
+            p.x = x2; p.y = y2;
+            points.push_back(p);
+            }
         data << "M " << x2 << " " << y2 << " ";
         for (int i=0 ; i<node->fm ; i++)
             {
@@ -174,7 +230,7 @@ writePaths(PotraceTracingEngine *engine, path_t *plist,
 
         for (path_t *child=node->childlist; child ; child=child->sibling)
             {
-            writePaths(engine, child, data);
+            writePaths(engine, child, data, points);
             }
         }
 }
@@ -355,7 +411,8 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
     data << "";
 
     //## copy the path information into our d="" attribute string
-    writePaths(this, plist, data);
+    std::vector<Point> points;
+    writePaths(this, plist, data, points);
 
     //# we are done with the pathlist
     pathlist_free(plist);
