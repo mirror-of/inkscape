@@ -204,17 +204,17 @@ sp_selection_update_statusbar (SPSelection * selection)
 	gchar * message;
 	gint len;
 
+	const char* when_selected = "Click selection to toggle scale/rotation handles";
+
 	len = g_slist_length (selection->items);
 
-	if (len == 1) {
-		message = sp_item_description (SP_ITEM (selection->items->data));
+	if (len == 0) {
+		sp_view_set_statusf (SP_VIEW (selection->desktop), "No objects selected. Click, Shift+click, drag around objects to select.");
+	} else if (len == 1) {
+		sp_view_set_statusf (SP_VIEW (selection->desktop), "%s. %s.", sp_item_description (SP_ITEM (selection->items->data)), when_selected);
 	} else {
-		message = g_strdup_printf ("%i objects", len);
+		sp_view_set_statusf (SP_VIEW (selection->desktop), "%i objects selected. %s.", len, when_selected);
 	}
-
-	sp_view_set_status (SP_VIEW (selection->desktop), message, TRUE);
-	
-	g_free (message);
 }
 
 void
