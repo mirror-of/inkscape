@@ -609,12 +609,13 @@ Verb::get_search (unsigned int code)
 void
 FileVerb::perform (SPAction *action, void * data, void *pdata)
 {
+#if 0
     /* These aren't used, but are here to remind people not to use
        the CURRENT_DOCUMENT macros unless they really have to. */
     SPView * current_view = sp_action_get_view(action);
     SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
+#endif
 
-    // std::cout << "FileVerb::perform" << data << std::endl;
     switch ((int) data) {
         case SP_VERB_FILE_NEW:
             sp_file_new_default ();
