@@ -115,9 +115,7 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Changing values</title>
-<keys><key><up/></key> <key><down/></key> <action>change value by 0.1</action></keys>
-</group>
-<group>
+<mouse><key><up/></key> <key><down/></key> <action>change value by 0.1</action></mouse>
 <keys><key><misc f="PgUp"/></key><key><misc f="PgDn"/></key> <action>change value by 5.0</action></keys>
 </group>
  
@@ -138,13 +136,9 @@ can leave your ideas and requests there.</p>
 <keys><key>=</key> <key>+</key> 	 <action>zoom in</action></keys>
 <keys><key>-</key>	 <action>zoom out</action></keys>
 <note>The keypad +/- keys do zooming even when you are editing a text object.</note>
-<keys><key><mid-click/></key>  <action>zoom in</action></keys>
-</group>
-<group> <!-- this frenetic grouping is just a way to expand spacing to accommodate taller mouse images -->
-<keys><key><shift/><mid-click/></key>  <action>zoom out</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><wheel/></key> <action>zoom in or out</action></keys>
+<mouse><key><mid-click/></key>  <action>zoom in</action></mouse>
+<mouse><key><shift/><mid-click/></key>  <action>zoom out</action></mouse>
+<mouse><key><ctrl/><wheel/></key> <action>zoom in or out</action></mouse>
 </group>
 
 <group>
@@ -166,19 +160,11 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Scrolling (panning)</title>
-<keys><key><ctrl/><arrows/></key>  <action>scroll canvas</action></keys>
-</group>
-<group>
-<keys><key><mid-drag/></key>  <action>scroll canvas</action></keys>
-</group>
-<group>
-<keys><key><shift/><right-drag/></key>  <action>scroll canvas</action></keys>
-</group>
-<group>
-<keys><key><wheel/></key> <action>scroll canvas vertically</action></keys>
-</group>
-<group>
-<keys><key><shift/><wheel/></key> <action>scroll canvas horizontally</action></keys>
+<mouse><key><ctrl/><arrows/></key>  <action>scroll canvas</action></mouse>
+<mouse><key><mid-drag/></key>  <action>scroll canvas</action></mouse>
+<mouse><key><shift/><right-drag/></key>  <action>scroll canvas</action></mouse>
+<mouse><key><wheel/></key> <action>scroll canvas vertically</action></mouse>
+<mouse><key><shift/><wheel/></key> <action>scroll canvas horizontally</action></mouse>
 </group>
 
 <group>
@@ -289,21 +275,11 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Keyboard move</title>
-<keys><key><arrows/></key>  <action>move selection by the nudge distance</action></keys>
-</group>
-<group>
-<keys><key><shift/><arrows/></key>  <action>move selection by 10x nudge distance</action></keys>
-</group>
-<group>
+<mouse><key><arrows/></key>  <action>move selection by the nudge distance</action></mouse>
+<mouse><key><shift/><arrows/></key>  <action>move selection by 10x nudge distance</action></mouse>
 <note>The default nudge distance is 1mm.</note>
-</group>
-<group>
-<keys><key><alt/><arrows/></key>  <action>move selection by 1 pixel</action></keys>
-</group>
-<group>
-<keys><key><alt/><shift/><arrows/></key>  <action>move selection by 10 pixels</action></keys>
-</group>
-<group>
+<mouse><key><alt/><arrows/></key>  <action>move selection by 1 pixel</action></mouse>
+<mouse><key><alt/><shift/><arrows/></key>  <action>move selection by 10 pixels</action></mouse>
 <note>The actual distance for pixel movements depends on zoom level. Zoom in for finer movement.</note>
 </group>
 
@@ -336,99 +312,59 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Mouse select</title>
-<keys><key><left-click/></key> <action>select an object</action> </keys>
-</group>
-<group>
+<mouse><key><left-click/></key> <action>select an object</action></mouse>
 <note>When you left-click on an object, previous selection is deselected.</note>
-</group>
-<group>
-<keys><key><shift/><left-click/></key> <action>toggle selection </action></keys>
-</group>
-<group>
+<mouse><key><shift/><left-click/></key> <action>toggle selection </action></mouse>
 <note>Shift-click adds an object to the current selection if it was not selected, or deselects it otherwise.</note>
 </group>
 
 <group>
 <title>Selecting within group</title>
-<keys><key><ctrl/><left-click/></key> <action>select within group</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><shift/><left-click/></key> <action>toggle selection within group</action></keys>
+<mouse><key><ctrl/><left-click/></key> <action>select within group</action></mouse>
+<mouse><key><ctrl/><shift/><left-click/></key> <action>toggle selection within group</action></mouse>
 </group>
 
 <group>
 <title>Rubberband</title>
-<keys><key><left-drag/></key> <action>select multiple objects</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>select multiple objects</action></mouse>
 <note>Dragging around objects does "rubberband" selection; previous selection is deselected.</note>
-</group>
-<group>
-<keys><key><shift/><left-drag/></key> <action>add objects to selection</action></keys>
-</group>
-<group>
+<mouse><key><shift/><left-drag/></key> <action>add objects to selection</action></mouse>
 <note>Normally, you need to start from an empty space to initiate a rubberband.</note> 
 <note>However, if you press Shift before dragging, Inkscape will do rubberband selection even if you start from an object.</note>
 </group>
 
 <group>
 <title>Mouse move</title>
-<keys><key><left-drag/></key> <action>move selected objects</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>move selected objects</action></mouse>
 <note>Dragging an object selects it if it was not selected, then moves selection.</note>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></keys>
-</group>
-<group>
-<keys><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
+<mouse><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></mouse>
 <note>When dragging or transforming with mouse, each Space leaves a copy of the selected object.</note> 
 <note>You can press and hold Space while dragging for a nice "trail."</note>
 </group>
 
 <group>
 <title>Mouse transform</title>
-<keys><key><left-click/></key> <action>toggle scale/rotation handles</action></keys>
-</group>
-<group>
-<keys><key><left-drag/></key> <action>scale (scale handles)</action></keys>
-</group>
-<group>
-<keys><key><left-drag/></key> <action>rotate or skew (rotation handles)</action></keys>
+<mouse><key><left-click/></key> <action>toggle scale/rotation handles</action></mouse>
+<mouse><key><left-drag/></key> <action>scale (scale handles)</action></mouse>
+<mouse><key><left-drag/></key> <action>rotate or skew (rotation handles)</action></mouse>
 </group>
 
 <group>
 <title>Scale handles</title>
-<keys><key><ctrl/><left-drag/></key> <action>scale preserving aspect ratio</action></keys>
-</group>
-<!--<keys><key><ctrl/><left-drag/></key> only smaller, keep aspect ratio--> <!-- TO BE REMOVED -->
-<group>
-<keys><key><shift/><left-drag/></key> <action>symmetric transformation</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>scale preserving aspect ratio</action></mouse>
+<!--<mouse><key><ctrl/><left-drag/></key> only smaller, keep aspect ratio--> <!-- TO BE REMOVED -->
+<mouse><key><shift/><left-drag/></key> <action>symmetric transformation</action></mouse>
 <note>Holding Shift while transforming makes transformation symmetric around the center of the selection.</note>
-</group>
-<group>
-<keys><key><alt/><left-drag/></key> <action>slow movement</action></keys>
-</group>
-<group>
+<mouse><key><alt/><left-drag/></key> <action>slow movement</action></mouse>
 <note>Holding Alt while transforming makes transformation lag behind mouse movement, allowing finer changes.</note>
 </group>
 
 <group>
 <title>Rotation handles</title>
-<keys><key><ctrl/><left-drag/></key> <action>skew and stretch</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>skew and stretch</action></mouse>
 <note>Holding Ctrl when dragging a skew (non-corner) handle enables stretching in addition to skewing.</note> <!-- FIXME! -->
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key> <action>snap rotation to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>snap rotation to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
 
@@ -456,21 +392,11 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Keyboard move</title>
-<keys><key><arrows/></key>  <action>move selected node(s) by the nudge distance</action></keys>
-</group>
-<group>
-<keys><key><shift/><arrows/></key>  <action>move selected node(s) by 10x nudge distance</action></keys>
-</group>
-<group>
+<mouse><key><arrows/></key>  <action>move selected node(s) by the nudge distance</action></mouse>
+<mouse><key><shift/><arrows/></key>  <action>move selected node(s) by 10x nudge distance</action></mouse>
 <note>The default nudge distance is 1mm.</note>
-</group>
-<group>
-<keys><key><alt/><arrows/></key>  <action>move selected node(s) by 1 pixel</action></keys>
-</group>
-<group>
-<keys><key><alt/><shift/><arrows/></key>  <action>move selected node(s) by 10 pixels</action></keys>
-</group>
-<group>
+<mouse><key><alt/><arrows/></key>  <action>move selected node(s) by 1 pixel</action></mouse>
+<mouse><key><alt/><shift/><arrows/></key>  <action>move selected node(s) by 10 pixels</action></mouse>
 <note>The actual distance for pixel movements depends on zoom level. Zoom in for finer movement.</note>
 </group>
 
@@ -524,7 +450,7 @@ can leave your ideas and requests there.</p>
 <keys><key><shift/>C</key>  <action>make cusp</action></keys>
 <keys><key><shift/>S</key>  <action>make smooth</action></keys>
 <keys><key><shift/>Y</key>  <action>make symmetric</action></keys>
-<keys><key><ctrl/><left-click/></key> <action>toggle smooth/cusp/symmetric</action></keys>
+<mouse><key><ctrl/><left-click/></key> <action>toggle smooth/cusp/symmetric</action></mouse>
 </group>
 
 <group>
@@ -538,11 +464,7 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Delete, create, duplicate</title>
 <keys><key><misc f="Del"/></key> <action>delete selected node(s)</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><alt/><left-click/></key> <action>delete node</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><alt/><left-click/></key> <action>delete node</action></mouse>
 <keys><key><misc f="Ins"/></key> <action>insert new node(s)</action></keys>
 <note>This adds new node(s) in the middle(s) of selected segment(s), so it requires that more than two adjacent nodes be selected.</note>
 <keys><key><shift/>D</key> <action>duplicate selected node(s)</action></keys>
@@ -563,113 +485,67 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Mouse select</title>
-<keys><key><left-click/></key> <action>select an object</action></keys> 
-</group>
-<group>
+<mouse><key><left-click/></key> <action>select an object</action></mouse> 
 <note>Clicking on an object selects it.</note> 
 <note>The nodes or controls of the newly selected object become editable (this saves you a switch to selector).</note>
-</group>
-<group>
-<keys><key><left-click/></key> <action>select a node</action></keys> 
-</group>
-<group>
+<mouse><key><left-click/></key> <action>select a node</action></mouse> 
 <note>Clicking on a node selects it.</note>
-</group>
-<group>
-<keys><key><shift/><left-click/></key> <action>toggle selection of a node</action></keys>
-</group>
-<group>
-<keys><key><left-click/></key> <action>deselect</action></keys> 
-</group>
-<group>
+<mouse><key><shift/><left-click/></key> <action>toggle selection of a node</action></mouse>
+<mouse><key><left-click/></key> <action>deselect</action></mouse> 
 <note>Clicking in an empty space deselects all selected nodes.</note>
 </group>
 
 <group>
 <title>Rubberband</title>
-<keys><key><left-drag/></key> <action>select multiple nodes</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>select multiple nodes</action></mouse>
 <note>Dragging around nodes does "rubberband" selection; previous node selection is deselected.</note>
-</group>
-<group>
-<keys><key><shift/><left-drag/></key> <action>add nodes to selection</action></keys>
+<mouse><key><shift/><left-drag/></key> <action>add nodes to selection</action></mouse>
 </group>
 
 <group>
 <title>Mouse move</title>
-<keys><key><left-drag/></key> <action>move selected nodes</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><alt/><left-drag/></key> <action>move along handles</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>move selected nodes</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
+<mouse><key><ctrl/><alt/><left-drag/></key> <action>move along handles</action></mouse>
 <note>This restricts movement to the directions of the node's control handles, their continuations and perpendiculars (total 8 snaps).</note>
-</group>
-<group>
-<keys><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></mouse>
 <note>When dragging nodes with mouse, each Space leaves a copy of the selected object.</note> 
 <note>You can press and hold Space while dragging for a nice "trail."</note>
 </group>
 
 <group>
 <title>Mouse handle move</title>
-<keys><key><left-drag/></key> <action>move a node handle</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>move a node handle</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></mouse>
 <note>The default angle step is 15 degrees. This also snaps to the handle's original angle, its continuation and perpendiculars.</note>
-</group>
-<group>
-<keys><key><shift/><left-drag/></key> <action>rotate both handles</action></keys> 
-</group>
-<group>
-<keys><key><alt/><left-drag/></key> <action>lock the handle length</action></keys>
-</group>
-<group>
+<mouse><key><shift/><left-drag/></key> <action>rotate both handles</action></mouse> 
+<mouse><key><alt/><left-drag/></key> <action>lock the handle length</action></mouse>
 <note>Ctrl, Shift, Alt can be combined when dragging handles.</note>
 </group>
 
 <group>
 <title>Editing ellipse</title>
-<keys><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
 
 <group>
 <title>Editing rectangle</title>
-<keys><key><ctrl/><left-drag/></key> <action>lock the rounded corner circular</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>lock the rounded corner circular</action></mouse>
 <note>When rounding corners of a rectangle, dragging only one control will ensure the corner is always circular.</note>
 <note>You can drag both controls for an elliptic rounded corner, or drag one with Ctrl to make sure the other one is synchronized.</note>
 </group>
 
 <group>
 <title>Editing star</title>
-<keys><key><ctrl/><left-drag/></key> <action>keep star rays radial (no skew)</action></keys>
+<mouse><key><ctrl/><left-drag/></key> <action>keep star rays radial (no skew)</action></mouse>
 </group>
 
 <group>
 <title>Editing spiral</title>
-<keys><key><ctrl/><left-drag/></key> <action>snap controls to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>snap controls to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
-</group>
-<group>
-<keys><key><alt/><left-drag/></key> <action>lock spiral radius</action></keys>
-</group>
-<group>
+<mouse><key><alt/><left-drag/></key> <action>lock spiral radius</action></mouse>
 <note>This has effect when dragging the outer control of the spiral.</note>
 </group>
 
@@ -686,81 +562,51 @@ can leave your ideas and requests there.</p>
 
 *<section title="Zoom tool" color="f3e3be">
 <group>
-<keys><key><left-click/></key> <action>zoom in</action></keys>
-</group>
-<group>
-<keys><key><shift/><left-click/></key> <action>zoom out</action></keys>  
-</group>
-<group>
-<keys><key><left-drag/></key> <action>zoom into the area</action></keys>
+<mouse><key><left-click/></key> <action>zoom in</action></mouse>
+<mouse><key><shift/><left-click/></key> <action>zoom out</action></mouse>  
+<mouse><key><left-drag/></key> <action>zoom into the area</action></mouse>
 </group>
 </section>
 
 *<section title="Rectangle tool" color="dae2f1">
 <group>
-<keys><key><left-drag/></key> <action>draw a rectangle</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key>	<action>make square or integer-ratio rectangle</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>draw a rectangle</action></mouse>
+<mouse><key><ctrl/><left-drag/></key>	<action>make square or integer-ratio rectangle</action></mouse>
 <note>This restricts rectangle so its height/width ratio  is  a  whole  number.</note>
-</group>
-<group>
-<keys><key><shift/><left-drag/></key> <action>draw around the starting point</action></keys>
-</group>
-<group>
+<mouse><key><shift/><left-drag/></key> <action>draw around the starting point</action></mouse>
 <note>This creates a rectangle symmetric around the starting point of the mouse drag.</note>
 </group>
 </section>
 
 *<section title="Ellipse tool" color="f7d2cc">
 <group>
-<keys><key><left-drag/></key> <action>draw an ellipse</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key>	<action>make circle or integer-ratio ellipse</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>draw an ellipse</action></mouse>
+<mouse><key><ctrl/><left-drag/></key>	<action>make circle or integer-ratio ellipse</action></mouse>
 <note>This restricts ellipse so its height/width ratio  is  a  whole  number.</note>
-</group>
-<group>
-<keys><key><shift/><left-drag/></key> <action>draw around the starting point</action></keys>
-</group>
-<group>
+<mouse><key><shift/><left-drag/></key> <action>draw around the starting point</action></mouse>
 <note>This creates an ellipse symmetric around the starting point of the mouse drag.</note>
 </group>
 </section>
 
 *<section title="Spiral tool" color="dedad4">
 <group>
-<keys><key><left-drag/></key> <action>draw a spiral</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key>	<action>snap spiral to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>draw a spiral</action></mouse>
+<mouse><key><ctrl/><left-drag/></key>	<action>snap spiral to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
 </section>
 
 *<section title="Star tool" color="f2f1d0">
 <group>
-<keys><key><left-drag/></key> <action>draw a star</action></keys>
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key> <action>snap star to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>draw a star</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>snap star to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
 </section>
 
 *<section title="Freehand tool" color="efdbc5">
 <group>
-<keys><key><left-drag/></key> <action>draw a freehand line</action></keys>
-</group>
-<group>
+<mouse><key><left-drag/></key> <action>draw a freehand line</action></mouse>
 <keys><key>a</key>    <action>toggle new/append</action></keys>
 <note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
 </group>
@@ -770,21 +616,11 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Create nodes</title>
-<keys><key><left-click/></key> <action>create a sharp node</action></keys>
-</group>
-<group>
-<keys><key><left-drag/></key> <action>create a bezier node with two handles</action></keys>
-</group>
-<group>
-<keys><key><shift/><left-drag/></key> <action>move only one handle</action></keys>
-</group>
-<group>
+<mouse><key><left-click/></key> <action>create a sharp node</action></mouse>
+<mouse><key><left-drag/></key> <action>create a bezier node with two handles</action></mouse>
+<mouse><key><shift/><left-drag/></key> <action>move only one handle</action></mouse>
 <note>This moves only one handle (instead of both) to create a cusp node.</note> 
-</group>
-<group>
-<keys><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></keys>
-</group>
-<group>
+<mouse><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
 </group>
 
@@ -808,16 +644,12 @@ can leave your ideas and requests there.</p>
 *<section title="Text tool" color="e5edf3">
 
 <group>
-<keys><key><left-click/></key> <action>create/activate a text object</action></keys>
-</group>
-<group>
+<mouse><key><left-click/></key> <action>create/activate a text object</action></mouse>
 <!--<keys><key>letters, digits, space, ...</key> <action>type text in a text object</action></keys>-->
 <note>Clicking in an empty space or on a non-text object displays a text cursor; now you can type your text.</note>
 <note>Clicking on a text object activates it; cursor is placed at the end of the text.</note>
 <note>To type + and - characters, use the main keyboard; keypad + and - are reserved for zoom.</note> 
-<keys><key><arrows/></key> <action>navigate in a text object</action></keys>
-</group>
-<group>
+<mouse><key><arrows/></key> <action>navigate in a text object</action></mouse>
 <keys><key><misc f="Home"/></key> <key><misc f="End"/></key> <action>go to beginning/end of line</action></keys>
 <keys><key><misc-wide f="Enter"/></key> <action>start a new line</action></keys>
 <keys><key><misc f="Esc"/></key> <action>deselect the text object</action></keys>
@@ -841,7 +673,7 @@ can leave your ideas and requests there.</p>
 <keys><key><shift/><alt/>&gt;</key> <action>expand the line by 10 pixels</action></keys>
 <keys><key><alt/>&lt;</key> <action>contract the line by 1 pixel</action></keys>
 <keys><key><shift/><alt/>&lt;</key> <action>contract the line by 10 pixels</action></keys>
-<note>These commands only affect the current line of a text object.</note>
+<note>These commands affect the current line of a text object.</note>
 <note>The actual adjustment for pixel movements depends on zoom level. Zoom in for finer adjustment.</note>
 </group>
 </section>
