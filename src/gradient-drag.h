@@ -75,6 +75,9 @@ struct GrDrag {
 	void updateDraggers ();
 	void updateLines ();
 
+	GrDragger *selected;
+	void setSelected (GrDragger *dragger);
+
 	bool local_change;
 
 	SPDesktop *desktop;

@@ -31,6 +31,9 @@
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 
+#define GR_KNOT_COLOR_NORMAL 0xffffff00
+#define GR_KNOT_COLOR_SELECTED 0x0000ff00
+
 static void 
 gr_drag_sel_changed(SPSelection *selection, gpointer data)
 {
@@ -54,29 +57,30 @@ gr_drag_sel_modified (SPSelection *selection, guint flags, gpointer data)
 
 GrDrag::GrDrag(SPDesktop *desktop) {
 
-	this->desktop = desktop;
+    this->desktop = desktop;
 
-	this->selection = SP_DT_SELECTION(desktop);
+    this->selection = SP_DT_SELECTION(desktop);
 
-        this->draggers = NULL;
-        this->lines = NULL;
+    this->draggers = NULL;
+    this->lines = NULL;
+    this->selected = NULL;
 
-        this->local_change = false;
+    this->local_change = false;
 
-	this->sel_changed_connection = this->selection->connectChanged(
-            sigc::bind (
-                sigc::ptr_fun(&gr_drag_sel_changed), 
-                (gpointer)this )
+    this->sel_changed_connection = this->selection->connectChanged(
+        sigc::bind (
+            sigc::ptr_fun(&gr_drag_sel_changed), 
+            (gpointer)this )
 
-	);
-	this->sel_modified_connection = this->selection->connectModified(
-            sigc::bind(
-                sigc::ptr_fun(&gr_drag_sel_modified),
-                (gpointer)this )
-	);
+        );
+    this->sel_modified_connection = this->selection->connectModified(
+        sigc::bind(
+            sigc::ptr_fun(&gr_drag_sel_modified),
+            (gpointer)this )
+        );
 
-	this->updateDraggers ();
-	this->updateLines ();
+    this->updateDraggers ();
+    this->updateLines ();
 }
 
 GrDrag::~GrDrag() {
@@ -124,12 +128,12 @@ GrDraggable::GrDraggable (SPItem *item, guint point_num, bool fill_or_stroke)
     this->point_num = point_num;
     this->fill_or_stroke = fill_or_stroke;
 
-	g_object_ref (G_OBJECT (this->item));
+    g_object_ref (G_OBJECT (this->item));
 }
 
 GrDraggable::~GrDraggable ()
 {
-	g_object_unref (G_OBJECT (this->item));
+    g_object_unref (G_OBJECT (this->item));
 }
 
 static void
@@ -154,6 +158,16 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
         dragger->parent->local_change = true;
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, true);
     }
+
+    dragger->parent->setSelected (dragger);
+}
+
+static void
+gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
+{
+   GrDragger *dragger = (GrDragger *) data;
+
+   dragger->parent->setSelected (dragger);
 }
 
 
@@ -163,19 +177,20 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable
 
     this->parent = parent;
 
-	this->knot = sp_knot_new (parent->desktop, tip);
-	g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_SQUARE, NULL);
-	g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
+    this->knot = sp_knot_new (parent->desktop, tip);
+    g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_SQUARE, NULL);
+    g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
+    this->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
 
-	/* Move to current point. */
-	sp_knot_set_position (this->knot, &p, SP_KNOT_STATE_NORMAL);
-	sp_knot_show (this->knot);
+    /* Move to current point. */
+    sp_knot_set_position (this->knot, &p, SP_KNOT_STATE_NORMAL);
+    sp_knot_show (this->knot);
 
-	this->handler_id = g_signal_connect (G_OBJECT (this->knot), "moved", G_CALLBACK (gr_knot_moved_handler), this);
+    this->handler_id = g_signal_connect (G_OBJECT (this->knot), "moved", G_CALLBACK (gr_knot_moved_handler), this);
+    g_signal_connect (G_OBJECT (this->knot), "clicked", G_CALLBACK (gr_knot_clicked_handler), this);
+    g_signal_connect (G_OBJECT (this->knot), "ungrabbed", G_CALLBACK (gr_knot_ungrabbed_handler), this);
 
-	g_signal_connect (G_OBJECT (this->knot), "ungrabbed", G_CALLBACK (gr_knot_ungrabbed_handler), this);
-
-      this->draggables = g_slist_prepend (this->draggables, draggable);
+    this->draggables = g_slist_prepend (this->draggables, draggable);
 }
 
 GrDragger::~GrDragger ()
@@ -188,6 +203,17 @@ GrDragger::~GrDragger ()
     }
     g_slist_free (this->draggables);
     this->draggables = NULL;
+}
+
+void
+GrDrag::setSelected (GrDragger *dragger) 
+{
+    if (this->selected) {
+       this->selected->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
+       g_object_set (G_OBJECT (this->selected->knot->item), "fill_color", GR_KNOT_COLOR_NORMAL, NULL);
+    }
+    dragger->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_SELECTED;
+    this->selected = dragger;
 }
 
 void
@@ -210,6 +236,7 @@ GrDrag::updateDraggers ()
     }
     g_slist_free (this->draggers);
     this->draggers = NULL;
+    this->selected = NULL;
 
     g_return_if_fail (this->selection != NULL);
 
