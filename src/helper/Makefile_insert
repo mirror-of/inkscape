@@ -11,10 +11,6 @@ helper/all: helper/libspchelp.a
 helper/clean:
 	rm -f helper/libspchelp.a $(helper_libspchelp_a_OBJECTS)
 
-helper_libspchelp_a_CPPFLAGS = \
-	$(cflags) \
-	$(INKSCAPE_CFLAGS)
-
 helper_libspchelp_a-unit-menu.$(OBJEXT): helper/sp-marshal.h
 
 helper_libspchelp_a_SOURCES =	\
@@ -46,4 +42,4 @@ helper/sp-marshal.cpp: helper/sp-marshal.list helper/sp-marshal.h
 	 > helper/tmp.$$$$	\
 	 && mv helper/tmp.$$$$ helper/sp-marshal.cpp
 
-helper/sp-marshal.c helper/sp-marshal.h: Makefile
+helper/sp-marshal.cpp helper/sp-marshal.h: Makefile

@@ -14,7 +14,6 @@ xml/clean:
 	rm -f xml/libspxml.a $(xml_libspxml_a_OBJECTS)
 
 xml_libspxml_a_CPPFLAGS =	\
-	$(INKSCAPE_CFLAGS)	\
 	-I$(includedir)
 
 xml_libspxml_a_SOURCES =	\

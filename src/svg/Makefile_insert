@@ -15,7 +15,6 @@ svg/clean:
 
 svg_libspsvg_a_CPPFLAGS =	\
 	-I$(srcdir)/svg	\
-	$(INKSCAPE_CFLAGS)	\
 	-I$(includedir)
 
 svg_libspsvg_a_SOURCES =	\

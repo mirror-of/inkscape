@@ -40,7 +40,6 @@ endif
 
 libnrtype_libnrtype_a_CPPFLAGS =	\
 	$(FREETYPE_CFLAGS)	\
-	$(INKSCAPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)	\
 	$(XFT_CFLAGS)
 

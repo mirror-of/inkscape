@@ -11,7 +11,6 @@ extension_internal_libinternal_a_CPPFLAGS = \
 	-DINKSCAPE_EXTENSIONDIR=\""$(extdir)"\" 	\
 	-DINKSCAPE_EXTENSIONDATADIR=\""$(extdatadir)"\"	\
 	-DINKSCAPE_MODULESDIR=\""$(moduledir)"\"	\
-	$(INKSCAPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)
 
 if USE_GNOME_PRINT

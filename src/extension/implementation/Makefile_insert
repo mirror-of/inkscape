@@ -12,7 +12,6 @@ extension_implementation_libimplementation_a_CPPFLAGS = \
 	-DINKSCAPE_EXTENSIONDIR=\""$(extdir)"\" 	\
 	-DINKSCAPE_EXTENSIONDATADIR=\""$(extdatadir)"\"	\
 	-DINKSCAPE_MODULESDIR=\""$(moduledir)"\"	\
-	$(INKSCAPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)
 
 extension_implementation_libimplementation_a_SOURCES =	\

@@ -5,9 +5,6 @@ livarot/all: livarot/libvarot.a
 livarot/clean:
 	rm -f livarot/libvarot.a $(livarot_libvarot_a_OBJECTS)
 
-livarot_libvarot_a_CPPFLAGS =	\
-	$(INKSCAPE_CFLAGS)
-
 livarot_libvarot_a_SOURCES =	\
 	livarot/AVL.cpp	\
 	livarot/AVL.h	\

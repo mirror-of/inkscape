@@ -34,8 +34,7 @@ display/clean:
 
 display_libspdisplay_a_CPPFLAGS = \
 	-Idisplay	\
-	-I$(srcdir)/display	\
-	$(INKSCAPE_CFLAGS)
+	-I$(srcdir)/display
 
 display_libspdisplay_a-canvas-arena.$(OBJEXT): helper/sp-marshal.h
 display_libspdisplay_a-sp-canvas.$(OBJEXT): helper/sp-marshal.h

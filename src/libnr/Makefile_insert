@@ -5,10 +5,6 @@ libnr/all: libnr/libnr.a
 libnr/clean:
 	rm -f libnr/libnr.a $(libnr_libnr_a_OBJECTS)
 
-libnr_libnr_a_CPPFLAGS =	\
-	$(cflags)	\
-	$(INKSCAPE_CFLAGS)
-
 if USE_MMX
 libnr_mmx_sources =	\
 	libnr/have_mmx.S	\
