@@ -471,7 +471,8 @@ static void gr_disconnect_sigc (GObject *obj, sigc::connection *connection) {
 }
 
 static void gr_disconnect_gsignal (GObject *widget, gpointer defs) {
-    sp_signal_disconnect_by_data (defs, widget);
+    if (defs && G_IS_OBJECT(defs))
+        sp_signal_disconnect_by_data (defs, widget);
 }
 
 
