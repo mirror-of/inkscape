@@ -278,7 +278,7 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_PRESERVEASPECTRATIO:
 		/* Do setup before, so we can use break to escape */
 		root->aspect_set = FALSE;
-		root->aspect_align = SP_ASPECT_NONE;
+		root->aspect_align = SP_ASPECT_XMID_YMID;
 		root->aspect_clip = SP_ASPECT_MEET;
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		if (value) {
