@@ -101,8 +101,9 @@ void sp_desktop_set_event_context (SPDesktop *desktop, GtkType type, const gchar
 void sp_desktop_push_event_context (SPDesktop *desktop, GtkType type, const gchar *config, unsigned int key);
 void sp_desktop_pop_event_context (SPDesktop *desktop, unsigned int key);
 
-#define SP_COORDINATES_UNDERLINE_X (1 << 0)
-#define SP_COORDINATES_UNDERLINE_Y (1 << 1)
+#define SP_COORDINATES_UNDERLINE_NONE (0)
+#define SP_COORDINATES_UNDERLINE_X (1 << NR::X)
+#define SP_COORDINATES_UNDERLINE_Y (1 << NR::Y)
 
 void sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline);
 SPItem *sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y, gboolean into_groups);

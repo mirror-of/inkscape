@@ -596,9 +596,14 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 /* set the coordinate statusbar underline single coordinates with undeline-mask 
  * x and y are document coordinates
  * underline :
- *   0 - don't underline, 1 - underlines x, 2 - underlines y
- *   3 - underline both, 4 - underline none  */
-
+ *   0 - don't underline;
+ *   1 - underlines x;  (i.e. 1 << NR::X)
+ *   2 - underlines y;  (i.e. 1 << NR::Y)
+ *   3 - underline both
+ * Currently this is unimplemented and most callers don't use it.
+ * It doesn't work well with non-axis-aligned guideline moving.
+ * Thus we may just get rid of it.
+ */
 void
 sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline)
 {
