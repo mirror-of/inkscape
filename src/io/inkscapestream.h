@@ -54,6 +54,16 @@ class InputStream
 public:
 
     /**
+     * Constructor.
+     */
+    InputStream() {}
+
+    /**
+     * Destructor
+     */
+    virtual ~InputStream() {}
+
+    /**
      * Return the number of bytes that are currently available
      * to be read
      */
@@ -154,6 +164,16 @@ class OutputStream
 public:
 
     /**
+     * Constructor.
+     */
+    OutputStream() {}
+
+    /**
+     * Destructor
+     */
+    virtual ~OutputStream() {}
+
+    /**
      * This call should
      *  1.  flush itself
      *  2.  close itself
@@ -241,6 +261,17 @@ class Reader
 {
 
 public:
+
+    /**
+     * Constructor.
+     */
+    Reader() {}
+
+    /**
+     * Destructor
+     */
+    virtual ~Reader() {}
+
 
     virtual int available() = 0;
     
@@ -426,6 +457,16 @@ class Writer
 {
 
 public:
+
+    /**
+     * Constructor.
+     */
+    Writer() {}
+
+    /**
+     * Destructor
+     */
+    virtual ~Writer() {}
 
     virtual void close() = 0;
     
