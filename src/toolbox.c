@@ -106,6 +106,8 @@ static void sp_maintoolbox_open_one_file_with_check(gpointer filename, gpointer 
 
 static GtkWidget *window = NULL;
 
+static win_data wd;
+
 static void
 sp_maintoolbox_destroy (GtkObject *object, gpointer data)
 {
@@ -122,8 +124,11 @@ sp_maintoolbox_create_toplevel (void)
 		/* Create window */
 		window = sp_window_new (_("Inkscape"), FALSE);
 		sp_transientize (window);
-		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), window);
+		wd.win = window;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
 		gtk_signal_connect (GTK_OBJECT (window), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), window);
+
 		gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (sp_maintoolbox_destroy), window);
 
 		toolbox = sp_maintoolbox_new ();

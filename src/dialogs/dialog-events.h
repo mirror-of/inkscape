@@ -12,8 +12,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+// event callback can only accept one argument, but we need two,
+// hence this struct.
+// each dialog has a local static copy:
+//   win is the dialog window 
+//   stop is the transientize semaphore: when 0, retransientizing this dialog is allowed
+
+typedef struct { 
+  GtkWidget *win;
+  guint stop;
+} win_data;
+
 gboolean sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data);
 void sp_transientize (GtkWidget *win);
-void sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+void sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd);
 
 #endif

@@ -16,6 +16,7 @@
 #include <glib.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
+#include <time.h>
 #include "helper/window.h"
 #include "widgets/sp-widget.h"
 #include "macros.h"
@@ -25,6 +26,14 @@
 #include "desktop.h"
 
 #include "dialog-events.h"
+
+// this function is called to zero the transientize semaphore by a timeout
+gboolean 
+sp_allow_again (gpointer *wd) 
+{
+	((win_data *) wd)->stop = 0;
+	return FALSE; // so that it is only called once
+}
 
 gboolean
 sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
@@ -37,13 +46,22 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 	case GDK_KEY_PRESS:
 		switch (event->key.keyval) {
 		case GDK_Escape: 
-			//gtk_widget_destroy ((GtkWidget *) win);
+			// send focus to the canvas
 			if (w = gtk_window_get_transient_for ((GtkWindow *) win)) {
 				gtk_window_present (w);
 			}
 			ret = TRUE; 
 			break;
-		default: 
+		case GDK_F4:
+		case GDK_w:
+		case GDK_W:
+			// close dialog
+			if (MOD__CTRL_ONLY) {
+				gtk_widget_destroy ((GtkWidget *) win);
+				ret = TRUE; 
+			}
+			break;
+		default: // pass keypress to the canvas
 			if (w = gtk_window_get_transient_for ((GtkWindow *) win)) {
 				dtw = g_object_get_data (G_OBJECT (w), "desktopwidget");
 				inkscape_activate_desktop (dtw->desktop);
@@ -65,16 +83,22 @@ sp_transientize (GtkWidget *dialog)
 }
 
 void
-sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
+sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd)
 {
-	GtkWindow *w;
-	gboolean has_focus;
-
-	//	g_warning (gtk_window_get_title (g_object_get_data (G_OBJECT (desktop), "window")));
-	w = (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"); 
-	//	if (w) g_object_get (G_OBJECT (w), "has-toplevel-focus", &has_focus, NULL);
-	if (w) {
-		gtk_window_set_transient_for ((GtkWindow *) dialog, w);
-		gtk_window_present (w);
+	if (wd->stop) { // if retransientizing of this dialog is still forbidden after previous call
+		// warning turned off because it was confusingly fired when loading many files from command line
+		//		g_warning("Retranzientize aborted! You're switching windows too fast!"); 
+		return;
 	}
+	GtkWindow *w;
+
+	w = (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"); 
+	if (w && wd->win) {
+		wd->stop = 1; // disallow other attempts to retranzientize this dialog
+		gtk_window_set_transient_for ((GtkWindow *) wd->win, w);
+		gtk_window_present (w); // without this, a transient window not always emerges on top
+	}
+	// we're done, allow next retransientizing not sooner than after 10 msec
+	gtk_timeout_add (20, (GtkFunction) sp_allow_again, (gpointer) wd);  
 }
+

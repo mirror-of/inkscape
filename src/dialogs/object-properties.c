@@ -41,6 +41,8 @@
 
 static GtkWidget *dlg = NULL;
 
+static win_data wd;
+
 static void
 sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
 {
@@ -112,9 +114,9 @@ sp_object_properties_dialog (void)
 		dlg = sp_window_new (_("Object style"), TRUE);
 
 		sp_transientize (dlg);
-		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), dlg);
-
-		//now all uncatched keypresses from the window will be handled:
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_object_properties_dialog_destroy), dlg);
