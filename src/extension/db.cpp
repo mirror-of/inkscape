@@ -34,7 +34,6 @@ DB db;
 /* Types */
 
 DB::DB (void) {
-	return;
 }
 
 /**
@@ -48,8 +47,6 @@ DB::register_ext (Extension *module)
 
 	// printf("Registering: %s\n", module->get_id());
 	moduledict[module->get_id()] = module;
-
-	return;
 }
 
 /**
@@ -108,8 +105,6 @@ DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in
 	for (cur = moduledict.begin(); cur != moduledict.end(); cur++) {
 		in_func((*cur).second, in_data);
 	}
-
-	return;
 }
 
 /**
@@ -147,8 +142,6 @@ DB::input_internal (Extension * in_plug, gpointer data)
 		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
 		g_slist_append((GSList *)data, (gpointer)desc);
 	}
-
-	return;
 }
 
 void
@@ -176,8 +169,6 @@ DB::output_internal (Extension * in_plug, gpointer data)
 		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
 		g_slist_append((GSList *)data, (gpointer)desc);
 	}
-
-	return;
 }
 
 GSList *
@@ -209,22 +200,40 @@ DB::get_output_list (void)
 void
 DB::free_list (GSList * in_list)
 {
-	return;
 }
 
 DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, Extension * in_extension, bool in_sensitive)
 {
-	name = in_name;
-	file_extension = in_file_extension;
-	mimetype = in_mime;
-	extension = in_extension;
-	sensitive = in_sensitive;
-	return;
+    name = in_name;
+    file_extension = in_file_extension;
+    mimetype = in_mime;
+    extension = in_extension;
+    sensitive = in_sensitive;
+    pattern.clear();
+    if ( in_extension )
+    {
+        Glib::ustring tmp(in_file_extension);
+        for ( guint i = 0; i < tmp.length(); i++ )
+        {
+            Glib::ustring::value_type ch = tmp.at(i);
+            if ( Glib::Unicode::isalpha(ch) )
+            {
+                pattern += '[';
+                pattern += Glib::Unicode::toupper(ch);
+                pattern += Glib::Unicode::tolower(ch);
+                pattern += ']';
+            }
+            else
+            {
+                pattern += ch;
+            }
+        }
+        //g_message(" processed glob from '%s' to be '%s'", tmp.c_str(), pattern.c_str() );
+    }
 }
 
 DB::IOExtensionDescription::~IOExtensionDescription(void)
 {
-	return;
 }
 
 }; }; /* namespace Extension, Inkscape */

@@ -796,7 +796,7 @@ void FileOpenDialogImpl::createFilterMenu()
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
         Glib::ustring upattern("*");
-        upattern += ioext->file_extension;
+        upattern += ioext->pattern;
         if (!( strcmp(".svg",  ioext->file_extension)==0 ||
                strcmp(".svgz", ioext->file_extension)==0   ))
             {
