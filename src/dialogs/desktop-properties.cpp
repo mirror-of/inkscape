@@ -363,7 +363,8 @@ sp_desktop_dialog (void)
 		gtk_container_set_border_width (GTK_CONTAINER (t), 4);
 		gtk_table_set_row_spacings (GTK_TABLE (t), 4);
 		gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-		gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+		gtk_notebook_prepend_page (GTK_NOTEBOOK (nb), t, l);
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (nb), 0);
 
 		cb = G_CALLBACK(sp_dtw_whatever_toggled);
 		spw_checkbutton(dlg, t, _("Show border"), "showborder", 0, row, 0, cb);
