@@ -10,7 +10,9 @@ INCLUDES = \
 	$(INKSCAPE_CFLAGS) \
 	-I$(includedir)
 
-TESTS = repr-action-test
+TESTS = repr-action-test$(EXEEXT)
+# automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
+# TESTS items can be scripts etc.
 
 check_PROGRAMS = repr-action-test
 
