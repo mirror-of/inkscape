@@ -1,3 +1,8 @@
+2004-10-15  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-item.cpp, src/sp-style.cpp: basic support for visibility CSS
+	  property
+
 2004-10-14  Ted Gould  <ted@gould.cx>
 
 	* share/extension/*.inkmod -> *.inx

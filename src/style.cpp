@@ -1334,6 +1334,12 @@ sp_style_write_string (SPStyle *style, guint flags)
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, flags);
 
+    if (!style->visibility) {
+        p += g_snprintf(p, c + BMAX - p, "visibility:hidden;");
+    } else if ( flags == SP_STYLE_FLAG_ALWAYS ) {
+        p += g_snprintf(p, c + BMAX - p, "visibility:visible;");
+    }
+
     return g_strdup (c);
 }
 
@@ -1419,6 +1425,9 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
 
+    if (!from->visibility) {
+        p += g_snprintf(p, c + BMAX - p, "visibility:hidden;");
+    }
 
     return g_strdup (c);
 }
