@@ -204,27 +204,6 @@ sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     } 
 }
 
-/**
-Returns item at point p in desktop; if state includes alt key mask, cyclically selects under; honors into_groups
-*/
-SPItem *
-sp_select_context_find_item (SPDesktop *desktop, NR::Point const p, int state, gboolean into_groups)
-{
-    SPItem *item;
-
-    if (state & GDK_MOD1_MASK) { // select under
-        SPItem *selected_at_point = sp_desktop_item_from_list_at_point_bottom (desktop,
-                                                                               SP_DT_SELECTION(desktop)->itemList(), p);
-        item = sp_desktop_item_at_point(desktop, p, into_groups, selected_at_point);
-        if (item == NULL) { // we may have reached bottom, flip over to the top
-            item = sp_desktop_item_at_point(desktop, p, into_groups, NULL);
-        }
-    } else 
-        item = sp_desktop_item_at_point(desktop, p, into_groups, NULL);
-
-    return item;
-}
-
 static void
 sp_select_context_abort(SPEventContext *event_context)
 {
@@ -315,11 +294,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     sc->moved = FALSE;
 
                     // remember the clicked item in sc->item:
-                    if (event->button.state & GDK_MOD1_MASK) { // alt-click
-                        sc->item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
-                    } else { // simple click
-                        sc->item = item;
-                    }
+                    sc->item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                     sp_object_ref(sc->item, NULL);
 
                     rb_escaped = drag_escaped = 0;
@@ -635,12 +610,12 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                             if (sc->button_press_ctrl) {
                                 // go into groups
-                                item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                                item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
                                 group = sp_desktop_group_at_point(desktop, NR::Point(event->button.x, event->button.y));
                                 sc->button_press_ctrl = FALSE;
                             } else {
                                 // don't go into groups
-                                item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
+                                item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                             }
 
                             // if there's both a group and an item at point, deselect group to
@@ -667,7 +642,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                             sc->button_press_ctrl = FALSE;
 
-                            item = sp_select_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                            item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
                             if (item) {
                                 if (selection->includesItem(item)) {

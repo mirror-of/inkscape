@@ -29,6 +29,9 @@ class Node;
 }
 }
 
+namespace NR {
+class Point;
+}
 
 struct GrDrag;
 
@@ -100,6 +103,8 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEv
                                 gchar const *ctrl_tip, gchar const *shift_tip, gchar const *alt_tip);
 
 guint get_group0_keyval(GdkEventKey *event);
+
+SPItem *sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, int state, gboolean into_groups);
 
 #endif
 

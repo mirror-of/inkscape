@@ -797,6 +797,26 @@ get_group0_keyval(GdkEventKey *event)
     return keyval;
 }
 
+/**
+Returns item at point p in desktop; if state includes alt key mask, cyclically selects under; honors into_groups
+*/
+SPItem *
+sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, int state, gboolean into_groups)
+{
+    SPItem *item;
+
+    if (state & GDK_MOD1_MASK) { // select under
+        SPItem *selected_at_point = sp_desktop_item_from_list_at_point_bottom (desktop,
+                                                                               SP_DT_SELECTION(desktop)->itemList(), p);
+        item = sp_desktop_item_at_point(desktop, p, into_groups, selected_at_point);
+        if (item == NULL) { // we may have reached bottom, flip over to the top
+            item = sp_desktop_item_at_point(desktop, p, into_groups, NULL);
+        }
+    } else 
+        item = sp_desktop_item_at_point(desktop, p, into_groups, NULL);
+
+    return item;
+}
 
 /*
   Local Variables:
