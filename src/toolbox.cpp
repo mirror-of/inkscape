@@ -67,7 +67,7 @@ static GtkWidget * sp_zoom_toolbox_new (void);
 static const struct {
 	const gchar *type_name;
 	const gchar *data_name;
-	unsigned int verb;
+	sp_verb_t verb;
 } tools[] = {
 	{ "SPSelectContext", "select_tool", SP_VERB_CONTEXT_SELECT },
 	{ "SPNodeContext", "node_tool", SP_VERB_CONTEXT_NODE },
@@ -113,7 +113,7 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 }
 
 static GtkWidget *
-sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, unsigned int verb, GtkTooltips *tt)
+sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, GtkTooltips *tt)
 {
 	SPAction *action;
 	GtkWidget *b;

@@ -12,9 +12,7 @@
 
 #include "helper/action.h"
 
-SPAction *sp_verb_get_action (unsigned int verb);
-
-enum {
+typedef enum {
 	/* Header */
 	SP_VERB_INVALID,
 	SP_VERB_NONE,
@@ -103,6 +101,10 @@ enum {
 	SP_VERB_DIALOG_ITEM,
 	/* Footer */
 	SP_VERB_LAST
-};
+} sp_verb_t;
+
+SPAction * sp_verb_get_action (sp_verb_t verb);
+sp_verb_t  sp_verb_make_from_action (SPAction * action);
+void sp_verb_action_set_shortcut (SPAction *action, unsigned int shortcut, void * data);
 
 #endif

@@ -15,6 +15,7 @@
  */
 
 #include "view.h"
+#include <verbs.h>
 
 void sp_create_window (SPViewWidget *vw, gboolean editable);
 
@@ -31,6 +32,6 @@ GtkWidget *sp_ui_context_menu (SPView *v, SPItem *item);
 
 void sp_menu_append_recent_documents (GtkWidget *menu);
 
-void sp_ui_dialog_title_string (unsigned int verb, gchar* c);
+void sp_ui_dialog_title_string (sp_verb_t verb, gchar* c);
 
 #endif

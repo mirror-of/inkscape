@@ -1,10 +1,18 @@
 #define __SP_VERBS_C__
+/**
+	\file verbs.cpp
+
+	All of the code to use verbs, a front end to actions.  Basically you
+	need to use a verb to get an action.  So call a verb and make something
+	happen!
+*/
 
 /*
  * Actions for inkscape
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ted Gould <ted@gould.cx>
  *
  * This code is in public domain
  */
@@ -59,28 +67,96 @@
 
 static void sp_verbs_init (void);
 
+/**
+	\var verb_actions
+
+	This is the verbs when they are created from the static defintions.
+*/
 static SPAction *verb_actions = NULL;
+/**
+	\var verb_action_hash
 
+	A hash table to store all of the verbs that have been dynamically
+	defined.
+*/
+static GHashTable *verb_action_hash;
+
+/**
+	\return  The action for the passed in verb
+	\breif   A way to determine the action required with this verb
+	\param   verb  The verb that the action needs to be found for
+
+	This function locates an action from a verb.  The first time that
+	one of the external functions is called sp_verbs_init is executed.
+	That sets up the global variables for the next couple calls.
+
+	If the verb is from the enum'd values it should be less than
+	SP_VERB_LAST.  If that's the case then the action is pulled from
+	verb_actions else the action is grabbed from the hash table.
+*/
 SPAction *
-sp_verb_get_action (unsigned int verb)
+sp_verb_get_action (sp_verb_t verb)
 {
-	if (!verb_actions) sp_verbs_init ();
-	return &verb_actions[verb];
+	if (verb_actions == NULL) sp_verbs_init ();
+	if (verb < SP_VERB_LAST) {
+		return &verb_actions[verb];
+	} else {
+		SPAction * action;
+		action = (SPAction *)g_hash_table_lookup(verb_action_hash, (gpointer)verb);
+		return action;
+	}
 }
 
-static void
-sp_verb_action_set_shortcut (SPAction *action, unsigned int shortcut, void *data)
+/**
+	\return  A verb created dynamically
+	\breif   This function creates a verb from an action
+	\param   action  The action that should be used with the created
+	                 verb from this function.
+
+	This function locates an action from a verb.  The first time that
+	one of the external functions is called sp_verbs_init is executed.
+	That sets up the global variables for the next couple calls.
+
+	There is an internal static variable that counts up for everytime
+	the function is called.  It is initialized to SP_VERB_LAST so that
+	all dynamically created verbs are greater than those in the enummerated
+	type.  That number is used as the index for the hashtable containing
+	the action passed into this function.  The verb_count is then returned.
+*/
+sp_verb_t
+sp_verb_make_from_action (SPAction * action)
 {
-	unsigned int verb, ex;
-	verb = (unsigned int) data;
+	static int verb_count = SP_VERB_LAST;
+	if (verb_actions == NULL) sp_verbs_init ();
+	verb_count++;
+	g_hash_table_insert(verb_action_hash, (gpointer)verb_count, (gpointer)action);
+	return (sp_verb_t)verb_count;
+}
+
+/**
+	\return   None
+	\breif    This function associates a shortcut with a verb and is a
+	          callback in the SPActionEventVector.
+	\param    action    Prototype satisfier
+	\param    shortcut  The shortcut to activate verb
+	\param    verb    The verb that should be associated with the shortcut
+
+	This function just checks to make sure the shortcut isn't already
+	associated with this verb.  If it isn't, then it calls shortcut_set_verb
+	to do the real heavy lifting.
+*/
+void
+sp_verb_action_set_shortcut (SPAction *action, unsigned int shortcut, void * data)
+{
+	sp_verb_t verb, ex;
+	verb = (sp_verb_t)((int)data);
 	ex = sp_shortcut_get_verb (shortcut);
-	if (verb != ex) sp_shortcut_set_verb (shortcut, verb, FALSE);
+	if (verb != ex)sp_shortcut_set_verb (shortcut, verb, FALSE);
 }
 
 static void
-sp_verb_action_file_perform (SPAction *action, void *data)
+sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
 {
-
 	switch ((int) data) {
 	case SP_VERB_FILE_NEW:
 		sp_file_new ();
@@ -118,7 +194,7 @@ sp_verb_action_file_perform (SPAction *action, void *data)
 }
 
 static void
-sp_verb_action_edit_perform (SPAction *action, void *data)
+sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 	SPEventContext *ec;
@@ -169,7 +245,7 @@ sp_verb_action_edit_perform (SPAction *action, void *data)
 }
 
 static void
-sp_verb_action_selection_perform (SPAction *action, void *data)
+sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 
@@ -234,7 +310,7 @@ sp_verb_action_selection_perform (SPAction *action, void *data)
 }
 
 static void
-sp_verb_action_object_perform (SPAction *action, void *data)
+sp_verb_action_object_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 	SPSelection *sel;
@@ -275,7 +351,7 @@ sp_verb_action_object_perform (SPAction *action, void *data)
 }
 
 static void
-sp_verb_action_ctx_perform (SPAction *action, void *data)
+sp_verb_action_ctx_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 	unsigned int verb;
@@ -332,7 +408,7 @@ sp_verb_action_ctx_perform (SPAction *action, void *data)
 }
 
 static void
-sp_verb_action_zoom_perform (SPAction *action, void *data)
+sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 	NRRectF d;
@@ -390,7 +466,7 @@ sp_verb_action_zoom_perform (SPAction *action, void *data)
 }
 
 static void
-sp_verb_action_dialog_perform (SPAction *action, void *data)
+sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 {
 	switch ((int) data) {
 	case SP_VERB_DIALOG_DISPLAY:
@@ -434,12 +510,19 @@ sp_verb_action_dialog_perform (SPAction *action, void *data)
 	}
 }
 
+/** Action vector to define functions called if a staticly defined file verb is called */
 static SPActionEventVector action_file_vector = {{NULL}, sp_verb_action_file_perform, NULL, NULL, sp_verb_action_set_shortcut};
+/** Action vector to define functions called if a staticly defined edit verb is called */
 static SPActionEventVector action_edit_vector = {{NULL}, sp_verb_action_edit_perform, NULL, NULL, sp_verb_action_set_shortcut};
+/** Action vector to define functions called if a staticly defined selection verb is called */
 static SPActionEventVector action_selection_vector = {{NULL}, sp_verb_action_selection_perform, NULL, NULL, sp_verb_action_set_shortcut};
+/** Action vector to define functions called if a staticly defined object editing verb is called */
 static SPActionEventVector action_object_vector = {{NULL}, sp_verb_action_object_perform, NULL, NULL, sp_verb_action_set_shortcut};
+/** Action vector to define functions called if a staticly defined context verb is called */
 static SPActionEventVector action_ctx_vector = {{NULL}, sp_verb_action_ctx_perform, NULL, NULL, sp_verb_action_set_shortcut};
+/** Action vector to define functions called if a staticly defined zoom verb is called */
 static SPActionEventVector action_zoom_vector = {{NULL}, sp_verb_action_zoom_perform, NULL, NULL, sp_verb_action_set_shortcut};
+/** Action vector to define functions called if a staticly defined dialog verb is called */
 static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog_perform, NULL, NULL, sp_verb_action_set_shortcut};
 
 #define SP_VERB_IS_FILE(v) ((v >= SP_VERB_FILE_NEW) && (v <= SP_VERB_FILE_QUIT))
@@ -450,12 +533,13 @@ static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog
 #define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_ZOOM_SELECTION))
 #define SP_VERB_IS_DIALOG(v) ((v >= SP_VERB_DIALOG_DISPLAY) && (v <= SP_VERB_DIALOG_ITEM))
 
+/**  A structure to hold information about a verb */
 typedef struct {
-	unsigned int code;
-	const gchar *id;
-	const gchar *name;
-	const gchar *tip;
-	const gchar *image;
+	unsigned int code;   /**< Verb number (staticly from enum) */
+	const gchar *id;     /**< Textual identifier for the verb */
+	const gchar *name;   /**< Name of the verb */
+	const gchar *tip;    /**< Tooltip to print on hover */
+	const gchar *image;  /**< Image to describe the verb */
 } SPVerbActionDef;
 
 static const SPVerbActionDef props[] = {
@@ -551,6 +635,25 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_LAST, NULL, NULL, NULL, NULL}
 };
 
+/**
+	\return  None
+	\breif   This function goes through and initializes all of the
+	         verbs that are created statically and creates a hash
+	         table for the dynamically created ones.
+
+	This function is basically a big for loop that goes to SP_VERB_LAST
+	and initializes the actions.  Before it does that it allocates the
+	memory for the actions using the nr_new command (a macro to malloc).
+
+	For each verb the action is initialized using the verb's name and
+	description information as stored in the props data structure.  Then
+	the event vector for the set that this verb is in is connected as
+	a nr listener to the verb.  Thes functions come from the different
+	roles that the verb can play.
+
+	Lastly, this function initializes the hash table for the dynamically
+	created verbs.
+*/
 static void
 sp_verbs_init (void)
 {
@@ -597,4 +700,6 @@ sp_verbs_init (void)
 						       (void *) v);
 		}
 	}
+
+	verb_action_hash = g_hash_table_new (NULL, NULL);
 }

@@ -21,13 +21,13 @@
 unsigned int
 sp_shortcut_run (unsigned int shortcut)
 {
-	unsigned int verb;
+	sp_verb_t verb;
 	verb = sp_shortcut_get_verb (shortcut);
 	if (verb) {
 		SPAction *action;
 		action = sp_verb_get_action (verb);
 		if (action) {
-			sp_action_perform (action);
+			sp_action_perform (action, NULL);
 			return TRUE;
 		}
 	}
@@ -271,12 +271,12 @@ sp_shortcut_table_load (const unsigned char *name)
 static GHashTable *scdict = NULL;
 
 void
-sp_shortcut_set_verb (unsigned int shortcut, unsigned int verb, unsigned int primary)
+sp_shortcut_set_verb (unsigned int shortcut, sp_verb_t verb, unsigned int primary)
 {
-	unsigned int ex;
+	sp_verb_t ex;
 	if (!scdict) scdict = g_hash_table_new (NULL, NULL);
-	ex = (unsigned int) g_hash_table_lookup (scdict, (void *) shortcut);
-	if (ex != verb) g_hash_table_insert (scdict, (void *) shortcut, (void *) verb);
+	ex = (sp_verb_t)((int)g_hash_table_lookup (scdict, (gpointer) shortcut));
+	if (ex != verb) g_hash_table_insert (scdict, (gpointer) shortcut, (gpointer) verb);
 	if (primary) {
 		SPAction *action;
 		action = sp_verb_get_action (verb);
@@ -289,9 +289,9 @@ sp_shortcut_set_verb (unsigned int shortcut, unsigned int verb, unsigned int pri
 void
 sp_shortcut_remove_verb (unsigned int shortcut)
 {
-	unsigned int ex;
+	sp_verb_t ex;
 	if (!scdict) return;
-	ex = (unsigned int) g_hash_table_lookup (scdict, (void *) shortcut);
+	ex = (sp_verb_t)((int)g_hash_table_lookup (scdict, (void *) shortcut));
 	if (ex) {
 		SPAction *action;
 		g_hash_table_insert (scdict, (void *) shortcut, (void *) 0);
@@ -302,10 +302,10 @@ sp_shortcut_remove_verb (unsigned int shortcut)
 	}
 }
 
-unsigned int
+sp_verb_t
 sp_shortcut_get_verb (unsigned int shortcut)
 {
-	if (!scdict) return 0;
-	return (unsigned int) g_hash_table_lookup (scdict, (void *) shortcut);;
+	if (!scdict) return (sp_verb_t)0;
+	return (sp_verb_t) ((int)g_hash_table_lookup (scdict, (void *) shortcut));
 }
 

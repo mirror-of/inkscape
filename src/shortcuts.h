@@ -10,6 +10,8 @@
  * This code is in public domain
  */
 
+#include <verbs.h>
+
 /* We define high-bit mask for packing into single int */
 
 #define SP_SHORTCUT_SHIFT_MASK (1 << 24)
@@ -30,8 +32,8 @@ unsigned int sp_shortcut_run (unsigned int shortcut);
 
 void sp_shortcut_table_load (const unsigned char *name);
 
-void sp_shortcut_set_verb (unsigned int shortcut, unsigned int verb, unsigned int primary);
+void sp_shortcut_set_verb (unsigned int shortcut, sp_verb_t verb, unsigned int primary);
 void sp_shortcut_remove_verb (unsigned int shortcut);
-unsigned int sp_shortcut_get_verb (unsigned int shortcut);
+sp_verb_t sp_shortcut_get_verb (unsigned int shortcut);
 
 #endif

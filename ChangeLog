@@ -1,3 +1,13 @@
+2003-12-14  Ted Gould <ted@gould.cx>
+
+	* src/widgets/button.cpp, src/helper/action.h, src/helper/action.cpp,
+	  src/verbs.h, src/verbs.cpp, src/toolbox.cpp, src/shortcuts.h,
+	  src/shortcuts.cpp, src/interface.h, src/interface.cpp:
+	  Adding in a sp_verb_t to identify verbs to make later conversions
+	  easier.  Also adding an arguement to the perform function of
+	  SPActionEventVector so that data can be passed to modules (when
+	  they're converted to action/verb).
+
 2003-12-14  MenTaLguY <mental@rydia.net>
 
 	* src/view.h, src/view.c: added new utility things for setting status

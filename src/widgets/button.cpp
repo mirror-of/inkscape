@@ -157,7 +157,7 @@ static void
 sp_button_perform_action (SPButton *button, gpointer data)
 {
 	if (button->action) {
-		sp_action_perform (button->action);
+		sp_action_perform (button->action, NULL);
 	}
 }
 

@@ -22,6 +22,7 @@
 #include "inkscape.h"
 #include "inkscape-private.h"
 #include "modules/menu.h"
+#include "modules/db.h"
 #include "widgets/icon.h"
 
 #include "verbs.h"
@@ -203,19 +204,21 @@ sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, G
 static void
 sp_ui_menu_activate (void *object, SPAction *action)
 {
-	sp_action_perform (action);
+	sp_action_perform (action, NULL);
 }
 
 static void
 sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 {
 	if (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
-		unsigned int shortcut, verb;
+		unsigned int shortcut;
+		sp_verb_t verb;
+
 		shortcut = event->keyval;
 		if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
 		if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
 		if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-		verb = (unsigned int) data;
+		verb = (sp_verb_t)((int)data);
 		sp_shortcut_set_verb (shortcut, verb, TRUE);
 	}
 }
@@ -252,7 +255,7 @@ sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 }
 
 void
-sp_ui_dialog_title_string (unsigned int verb, gchar* c)
+sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 {
 	SPAction *action;
 	gchar *s; 
@@ -270,7 +273,7 @@ sp_ui_dialog_title_string (unsigned int verb, gchar* c)
 }
 
 static GtkWidget *
-sp_ui_menu_append_item_from_verb (GtkMenu *menu, unsigned int verb)
+sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb)
 {
 	SPAction *action;
 	GtkWidget *item, *icon;
@@ -313,10 +316,10 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, unsigned int verb)
 }
 
 static void
-sp_ui_menu_append (GtkMenu *menu, const unsigned int *verbs)
+sp_ui_menu_append (GtkMenu *menu, const sp_verb_t *verbs)
 {
 	int i;
-	for (i = 0; verbs[i] < SP_VERB_LAST; i++) {
+	for (i = 0; verbs[i] != SP_VERB_LAST; i++) {
 		sp_ui_menu_append_item_from_verb (menu, verbs[i]);
 	}
 }
@@ -325,12 +328,12 @@ static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 {
  	GtkWidget *item_recent, *menu_recent;
-	static const unsigned int file_verbs_one[] = {
+	static const sp_verb_t file_verbs_one[] = {
 		SP_VERB_FILE_NEW, SP_VERB_FILE_OPEN, SP_VERB_LAST
         };
 
-	static const unsigned int file_verbs_two[] = {
-		SP_VERB_FILE_SAVE, 
+	static const sp_verb_t file_verbs_two[] = {
+		SP_VERB_FILE_SAVE,
 		SP_VERB_FILE_SAVE_AS,
 		SP_VERB_NONE,
 		SP_VERB_FILE_IMPORT, 
@@ -367,7 +370,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 static void
 sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc)
 {
-	static const unsigned int edit_verbs[] = {
+	static const sp_verb_t edit_verbs[] = {
 		SP_VERB_EDIT_UNDO, 
 		SP_VERB_EDIT_REDO,
 		SP_VERB_NONE,
@@ -389,7 +392,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc)
 static void
 sp_ui_object_menu (GtkMenu *menu, SPDocument *doc)
 {
-	static const unsigned int selection[] = {
+	static const sp_verb_t selection[] = {
 		SP_VERB_SELECTION_GROUP, 
 		SP_VERB_SELECTION_UNGROUP,
 
@@ -434,7 +437,7 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc)
 static void
 sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
 {
-        static const unsigned int dialog_verbs[] = {
+        static const sp_verb_t dialog_verbs[] = {
                 SP_VERB_DIALOG_FILL_STROKE,
                 SP_VERB_DIALOG_TEXT,
                 SP_VERB_DIALOG_SIZE_POSITION,
@@ -465,7 +468,9 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
 	sp_ui_menu_append_item (menu, NULL, _("New Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 
-        sp_ui_menu_append (menu, dialog_verbs);
+	sp_ui_menu_append (menu, dialog_verbs);
+
+	return;
 }
 
 /* Menus */

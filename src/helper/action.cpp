@@ -89,24 +89,40 @@ sp_action_setup (SPAction *action,
 	return action;
 }
 
+/**
+	\return   None
+	\breif    Executes an action
+	\param    action   The action to be executed
+	\param    data     Data that is passed into the action.  This depends
+	                   on the situation that the action is used in.
+
+	This function implements the 'action' in SPActions.  It first validates
+	its parameters, making sure it got an action passed in.  Then it
+	turns that action into its parent class of NRActiveObject.  The
+	NRActiveObject allows for listeners to be attached to it.  This
+	function goes through those listeners and calls them with the
+	vector that was attached to the listener.
+*/
 void
-sp_action_perform (SPAction *action)
+sp_action_perform (SPAction *action, void * data)
 {
 	NRActiveObject *aobject;
 
 	nr_return_if_fail (action != NULL);
 	nr_return_if_fail (SP_IS_ACTION (action));
 
-	aobject = (NRActiveObject *) action;
+	aobject = NR_ACTIVE_OBJECT(action);
 	if (aobject->callbacks) {
 		unsigned int i;
 		for (i = 0; i < aobject->callbacks->length; i++) {
 			NRObjectListener *listener;
 			SPActionEventVector *avector;
-			listener = aobject->callbacks->listeners + i;
+
+			listener = &aobject->callbacks->listeners[i];
 			avector = (SPActionEventVector *) listener->vector;
-			if ((listener->size >= sizeof (SPActionEventVector)) && avector->perform) {
-				avector->perform (action, listener->data);
+
+			if ((listener->size >= sizeof (SPActionEventVector)) && avector != NULL && avector->perform != NULL) {
+				avector->perform (action, listener->data, data);
 			}
 		}
 	}
