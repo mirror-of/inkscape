@@ -668,7 +668,7 @@ void             FloatLigne::Booleen(FloatLigne* a,FloatLigne* b,BooleanOp mod)
 	}
 
 	int     curA=0,curB=0;
-	float   curPos=(a->runs[0].st<b->runs[0].st)?a->runs[0].st:b->runs[0].st;
+	float   curPos=(a->runs[0].st<b->runs[0].st) ? a->runs[0].st : b->runs[0].st;
 	float   nextPos=curPos;
 	bool    inA=false,inB=false;
 	float   valA=0,valB=0;
@@ -678,143 +678,68 @@ void             FloatLigne::Booleen(FloatLigne* a,FloatLigne* b,BooleanOp mod)
 	while ( curA < a->nbRun && curB < b->nbRun ) {
 		float_ligne_run  runA=a->runs[curA];
 		float_ligne_run  runB=b->runs[curB];
-		if ( curPos >= runA.st && curPos < runA.en ) {
-			inA=true;
-		} else {
-			inA=false;
-		}
-		if ( curPos >= runB.st && curPos < runB.en ) {
-			inB=true;
-		} else {
-			inB=false;
-		}
+		inA = ( curPos >= runA.st && curPos < runA.en );
+		inB = ( curPos >= runB.st && curPos < runB.en );
 
 		bool  startA=false,startB=false,endA=false,endB=false;
 		if ( curPos < runA.st ) {
 			if ( curPos < runB.st ) {
-				if ( runA.st < runB.st ) {
-					nextPos=runA.st;
-					startA=true;
-				} else if ( runA.st == runB.st ) {
-					nextPos=runA.st;
-					startA=true;
-					startB=true;
-				} else {
-					nextPos=runB.st;
-					startB=true;
-				}
+				startA = runA.st <= runB.st;
+				startB = runA.st >= runB.st;
+				nextPos = startA ? runA.st : runB.st;
 			} else if ( curPos >= runB.st ) {
-				if ( runA.st < runB.en ) {
-					nextPos=runA.st;
-					startA=true;
-				} else if ( runA.st == runB.en ) {
-					nextPos=runA.st;
-					startA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				startA = runA.st <= runB.en;
+				endB = runA.st >= runB.en;
+				nextPos = startA ? runA.st : runB.en;
 			}
 		} else if ( curPos == runA.st ) {
 			if ( curPos < runB.st ) {
-				if ( runA.en < runB.st ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.st ) {
-					nextPos=runB.st;
-					endA=true;
-					startB=true;
-				} else {
-					nextPos=runB.st;
-					startB=true;
-				}
+				endA = runA.en <= runB.st;
+				startB = runA.en >= runB.st;
+				nextPos = endA ? runA.en : runB.st;
 			} else if ( curPos == runB.st ) {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA? runA.en : runB.en;
 			} else {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA ? runA.en : runB.en;
 			}
 		} else {
 			if ( curPos < runB.st ) {
-				if ( runA.en < runB.st ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.st ) {
-					nextPos=runB.st;
-					endA=true;
-					startB=true;
-				} else {
-					nextPos=runB.st;
-					startB=true;
-				}
+				endA = runA.en <= runB.st;
+				startB = runA.en >= runB.st;
+				nextPos = startB ? runB.st : runA.en;
 			} else if ( curPos == runB.st ) {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA ? runA.en : runB.en;
 			} else {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA ? runA.en : runB.en;
 			}
 		}
 
 		float  oValA=valA,oValB=valB;
-		if ( inA ) {
-			valA=ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven);
-		} else {
-			valA=0;
-		}
-		if ( inB ) {
-			valB=ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven);
-		} else {
-			valB=0;
-		}
+		valA = inA ? ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven) : 0;
+		valB = inB ? ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven) : 0;
 		
 		if ( mod == bool_op_union ) {
-			if ( inA || inB ) AddRun(curPos,nextPos,oValA+oValB,valA+valB);
+			if ( inA || inB )
+					AddRun(curPos,nextPos,oValA+oValB,valA+valB);
 		} else if ( mod == bool_op_inters ) {
-			if ( inA && inB ) AddRun(curPos,nextPos,oValA*oValB,valA*valB);
+			if ( inA && inB )
+					AddRun(curPos,nextPos,oValA*oValB,valA*valB);
 		} else if ( mod == bool_op_diff ) {
-			if ( inA ) AddRun(curPos,nextPos,oValA-oValB,valA-valB);
+			if ( inA )
+					AddRun(curPos,nextPos,oValA-oValB,valA-valB);
 		} else if ( mod == bool_op_symdiff ) {
-			if ( inA && !(inB) ) AddRun(curPos,nextPos,oValA-oValB,valA-valB);
-			if ( !(inA) && inB ) AddRun(curPos,nextPos,oValB-oValA,valB-valA);
+			if ( inA && !(inB) )
+					AddRun(curPos,nextPos,oValA-oValB,valA-valB);
+			if ( !(inA) && inB )
+					AddRun(curPos,nextPos,oValB-oValA,valB-valA);
 		}
 
 		curPos=nextPos;
@@ -830,22 +755,20 @@ void             FloatLigne::Booleen(FloatLigne* a,FloatLigne* b,BooleanOp mod)
 			inA=false;
 			valA=0;
 			curA++;
-			if ( curA < a->nbRun && a->runs[curA].st == curPos ) valA=a->runs[curA].vst;
+			if ( curA < a->nbRun && a->runs[curA].st == curPos )
+					valA=a->runs[curA].vst;
 		}
 		if ( endB ) {
 			inB=false;
 			valB=0;
 			curB++;
-			if ( curB < b->nbRun && b->runs[curB].st == curPos ) valB=b->runs[curB].vst;
+			if ( curB < b->nbRun && b->runs[curB].st == curPos )
+					valB=b->runs[curB].vst;
 		}
 	}
 	while ( curA < a->nbRun ) {
 		float_ligne_run  runA=a->runs[curA];
-		if ( curPos >= runA.st && curPos < runA.en ) {
-			inA=true;
-		} else {
-			inA=false;
-		}
+		inA = (curPos >= runA.st && curPos < runA.en );
 		inB=false;
 
 		bool  startA=false,endA=false;
@@ -858,61 +781,55 @@ void             FloatLigne::Booleen(FloatLigne* a,FloatLigne* b,BooleanOp mod)
 		}
 
 		float  oValA=valA,oValB=valB;
-		if ( inA ) {
-			valA=ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven);
-		} else {
-			valA=0;
-		}
-		valB=0;
+		valA = inA ? ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven) : 0;
+		valB = 0;
 
 		if ( mod == bool_op_union ) {
-			if ( inA || inB ) AddRun(curPos,nextPos,oValA+oValB,valA+valB);
+			if ( inA || inB )
+					AddRun(curPos,nextPos,oValA+oValB,valA+valB);
 		} else if ( mod == bool_op_inters ) {
-			if ( inA && inB ) AddRun(curPos,nextPos,oValA*oValB,valA*valB);
+			if ( inA && inB )
+					AddRun(curPos,nextPos,oValA*oValB,valA*valB);
 		} else if ( mod == bool_op_diff ) {
-			if ( inA ) AddRun(curPos,nextPos,oValA-oValB,valA-valB);
+			if ( inA )
+					AddRun(curPos,nextPos,oValA-oValB,valA-valB);
 		} else if ( mod == bool_op_symdiff ) {
-			if ( inA && !(inB) ) AddRun(curPos,nextPos,oValA-oValB,valA-valB);
-			if ( !(inA) && inB ) AddRun(curPos,nextPos,oValB-oValA,valB-valA);
+			if ( inA && !(inB) )
+					AddRun(curPos,nextPos,oValA-oValB,valA-valB);
+			if ( !(inA) && inB )
+					AddRun(curPos,nextPos,oValB-oValA,valB-valA);
 		}
 
-		curPos=nextPos;
+		curPos = nextPos;
 		if ( startA ) {
-			inA=true;
-			valA=runA.vst;
+			inA = true;
+			valA = runA.vst;
 		}
 		if ( endA ) {
-			inA=false;
-			valA=0;
+			inA = false;
+			valA = 0;
 			curA++;
-			if ( curA < a->nbRun && a->runs[curA].st == curPos ) valA=a->runs[curA].vst;
+			if ( curA < a->nbRun && a->runs[curA].st == curPos )
+					valA=a->runs[curA].vst;
 		}
 	}
 	while ( curB < b->nbRun ) {
 		float_ligne_run  runB=b->runs[curB];
-		if ( curPos >= runB.st && curPos < runB.en ) {
-			inB=true;
-		} else {
-			inB=false;
-		}
+		inB = ( curPos >= runB.st && curPos < runB.en );
 		inA=false;
 
 		bool  startB=false,endB=false;
 		if ( curPos < runB.st ) {
 			nextPos=runB.st;
 			startB=true;
-		} else if ( curPos >= runB.st ) {
+		} else if ( curPos >= runB.st ) { // trivially true?
 			nextPos=runB.en;
 			endB=true;
 		}
 
 		float  oValA=valA,oValB=valB;
-		if ( inB ) {
-			valB=ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven);
-		} else {
-			valB=0;
-		}
-		valA=0;
+		valB = inB ? ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven) : 0;
+		valA = 0;
 
 		if ( mod == bool_op_union ) {
 			if ( inA || inB ) AddRun(curPos,nextPos,oValA+oValB,valA+valB);
@@ -1266,12 +1183,12 @@ void             IntLigne::Flatten(void)
 		float  leftV=0,rightV=0,midV=0;
 		while ( i < nbBord && bords[i].pos == cur && bords[i].start == false ) {
 			Dequeue(i);
-			leftV+=bords[i].val;
+			leftV += bords[i].val;
 			i++;
 		}
 		midV=RemainingValAt(cur);
 		while ( i < nbBord && bords[i].pos == cur && bords[i].start == true ) {
-			rightV+=bords[i].val;
+			rightV += bords[i].val;
 			Enqueue(bords[i].other);
 			i++;
 		}
@@ -1291,7 +1208,8 @@ void             IntLigne::Flatten(void)
 void             IntLigne::Affiche(void)
 {
 	printf("%i : \n",nbRun);
-	for (int i=0;i<nbRun;i++) printf("(%i %f -> %i %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven);
+	for (int i=0;i<nbRun;i++)
+		printf("(%i %f -> %i %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven);
 	printf("\n");
 }
 
@@ -1327,7 +1245,6 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 	int     curA=0,curB=0;
 	int     curPos=(a->runs[0].st<b->runs[0].st)?a->runs[0].st:b->runs[0].st;
 	int     nextPos=curPos;
-	bool    inA=false,inB=false;
 	float   valA=0,valB=0;
 	if ( curPos == a->runs[0].st ) valA=a->runs[0].vst;
 	if ( curPos == b->runs[0].st ) valB=b->runs[0].vst;
@@ -1335,133 +1252,53 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 	while ( curA < a->nbRun && curB < b->nbRun ) {
 		int_ligne_run  runA=a->runs[curA];
 		int_ligne_run  runB=b->runs[curB];
-		if ( curPos >= runA.st && curPos < runA.en ) {
-			inA=true;
-		} else {
-			inA=false;
-		}
-		if ( curPos >= runB.st && curPos < runB.en ) {
-			inB=true;
-		} else {
-			inB=false;
-		}
+		const bool inA = ( curPos >= runA.st && curPos < runA.en );
+		const bool inB = ( curPos >= runB.st && curPos < runB.en );
 
 		bool  startA=false,startB=false,endA=false,endB=false;
 		if ( curPos < runA.st ) {
 			if ( curPos < runB.st ) {
-				if ( runA.st < runB.st ) {
-					nextPos=runA.st;
-					startA=true;
-				} else if ( runA.st == runB.st ) {
-					nextPos=runA.st;
-					startA=true;
-					startB=true;
-				} else {
-					nextPos=runB.st;
-					startB=true;
-				}
+				startA = runA.st <= runB.st;
+				startB = runA.st >= runB.st;
+				nextPos = startA ? runA.st : runB.st;
 			} else if ( curPos >= runB.st ) {
-				if ( runA.st < runB.en ) {
-					nextPos=runA.st;
-					startA=true;
-				} else if ( runA.st == runB.en ) {
-					nextPos=runA.st;
-					startA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				startA = runA.st <= runB.en;
+				endB = runA.st >= runB.en;
+				nextPos = startA ? runA.st : runB.en;
 			}
 		} else if ( curPos == runA.st ) {
 			if ( curPos < runB.st ) {
-				if ( runA.en < runB.st ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.st ) {
-					nextPos=runB.st;
-					endA=true;
-					startB=true;
-				} else {
-					nextPos=runB.st;
-					startB=true;
-				}
+				endA = runA.en <= runB.st;
+				startB = runA.en >= runB.st;
+				nextPos = startB ? runB.en : runA.st;
 			} else if ( curPos == runB.st ) {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA? runA.en : runB.en;
 			} else {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA ? runA.en : runB.en;
 			}
 		} else {
 			if ( curPos < runB.st ) {
-				if ( runA.en < runB.st ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.st ) {
-					nextPos=runB.st;
-					endA=true;
-					startB=true;
-				} else {
-					nextPos=runB.st;
-					startB=true;
-				}
+				endA = runA.en <= runB.st;
+				startB = runA.en >= runB.st;
+				nextPos = startB ? runB.st : runA.en;
 			} else if ( curPos == runB.st ) {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA ? runA.en : runB.en;
 			} else {
-				if ( runA.en < runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-				} else if ( runA.en == runB.en ) {
-					nextPos=runA.en;
-					endA=true;
-					endB=true;
-				} else {
-					nextPos=runB.en;
-					endB=true;
-				}
+				endA = runA.en <= runB.en;
+				endB = runA.en >= runB.en;
+				nextPos = endA ? runA.en : runB.en;
 			}
 		}
 
 		float  oValA=valA,oValB=valB;
-		if ( inA ) {
-			valA=ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven);
-		} else {
-			valA=0;
-		}
-		if ( inB ) {
-			valB=ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven);
-		} else {
-			valB=0;
-		}
+		valA = inA ? ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven) : 0;
+		valB = inB ? ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven) : 0;
 		
 		if ( mod == bool_op_union ) {
 			if ( inA || inB ) AddRun(curPos,nextPos,oValA+oValB,valA+valB);
@@ -1476,34 +1313,32 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 
 		curPos=nextPos;
 		if ( startA ) {
-			inA=true;
+				// inA=true; these are never used
 			valA=runA.vst;
 		}
 		if ( startB ) {
-			inB=true;
+				//inB=true;
 			valB=runB.vst;
 		}
 		if ( endA ) {
-			inA=false;
+				//inA=false;
 			valA=0;
 			curA++;
-			if ( curA < a->nbRun && a->runs[curA].st == curPos ) valA=a->runs[curA].vst;
+			if ( curA < a->nbRun && a->runs[curA].st == curPos )
+					valA=a->runs[curA].vst;
 		}
 		if ( endB ) {
-			inB=false;
+				//inB=false;
 			valB=0;
 			curB++;
-			if ( curB < b->nbRun && b->runs[curB].st == curPos ) valB=b->runs[curB].vst;
+			if ( curB < b->nbRun && b->runs[curB].st == curPos )
+					valB=b->runs[curB].vst;
 		}
 	}
 	while ( curA < a->nbRun ) {
 		int_ligne_run  runA=a->runs[curA];
-		if ( curPos >= runA.st && curPos < runA.en ) {
-			inA=true;
-		} else {
-			inA=false;
-		}
-		inB=false;
+		const bool inA = ( curPos >= runA.st && curPos < runA.en );
+		const bool inB = false;
 
 		bool  startA=false,endA=false;
 		if ( curPos < runA.st ) {
@@ -1515,12 +1350,8 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 		}
 
 		float  oValA=valA,oValB=valB;
-		if ( inA ) {
-			valA=ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven);
-		} else {
-			valA=0;
-		}
-		valB=0;
+		valA = inA ? ValAt(nextPos,runA.st,runA.en,runA.vst,runA.ven) : 0;
+		valB = 0;
 
 		if ( mod == bool_op_union ) {
 			if ( inA || inB ) AddRun(curPos,nextPos,oValA+oValB,valA+valB);
@@ -1535,11 +1366,11 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 
 		curPos=nextPos;
 		if ( startA ) {
-			inA=true;
+				//inA=true;
 			valA=runA.vst;
 		}
 		if ( endA ) {
-			inA=false;
+				//inA=false;
 			valA=0;
 			curA++;
 			if ( curA < a->nbRun && a->runs[curA].st == curPos ) valA=a->runs[curA].vst;
@@ -1547,12 +1378,8 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 	}
 	while ( curB < b->nbRun ) {
 		int_ligne_run  runB=b->runs[curB];
-		if ( curPos >= runB.st && curPos < runB.en ) {
-			inB=true;
-		} else {
-			inB=false;
-		}
-		inA=false;
+		const bool inB = ( curPos >= runB.st && curPos < runB.en );
+		const bool inA = false;
 
 		bool  startB=false,endB=false;
 		if ( curPos < runB.st ) {
@@ -1564,12 +1391,8 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 		}
 
 		float  oValA=valA,oValB=valB;
-		if ( inB ) {
-			valB=ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven);
-		} else {
-			valB=0;
-		}
-		valA=0;
+		valB = inB ? ValAt(nextPos,runB.st,runB.en,runB.vst,runB.ven) : 0;
+		valA = 0;
 
 		if ( mod == bool_op_union ) {
 			if ( inA || inB ) AddRun(curPos,nextPos,oValA+oValB,valA+valB);
@@ -1584,11 +1407,11 @@ void             IntLigne::Booleen(IntLigne* a,IntLigne* b,BooleanOp mod)
 
 		curPos=nextPos;
 		if ( startB ) {
-			inB=true;
+				//inB=true;
 			valB=runB.vst;
 		}
 		if ( endB ) {
-			inB=false;
+				//inB=false;
 			valB=0;
 			curB++;
 			if ( curB < b->nbRun && b->runs[curB].st == curPos ) valB=b->runs[curB].vst;
