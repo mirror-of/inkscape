@@ -16,7 +16,9 @@
 #endif
 
 #include <glib.h>
-#include "refcounted.h"
+#include "gc-managed.h"
+#include "gc-finalized.h"
+#include "gc-anchored.h"
 
 typedef guint32 NRType;
 
@@ -59,7 +61,10 @@ NRType nr_object_register_type (NRType parent,
 
 /* NRObject */
 
-class NRObject : public Inkscape::Refcounted {
+class NRObject : public Inkscape::GC::Managed<>,
+                 public Inkscape::GC::Finalized,
+                 public Inkscape::GC::Anchored
+{
 public:
 	NRObject() : klass(NULL) {}
 
@@ -74,10 +79,10 @@ public:
 
 	/* these can go away eventually */
 	NRObject *reference() {
-		return claim(this);
+		return Inkscape::GC::anchor(this);
 	}
 	NRObject *unreference() {
-		release(this);
+		Inkscape::GC::release(this);
 		return NULL;
 	}
 

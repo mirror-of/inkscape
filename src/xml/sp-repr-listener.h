@@ -16,11 +16,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "gc-object.h"
+#include "gc-managed.h"
 
 struct SPReprEventVector;
 
-struct SPReprListener : public Inkscape::GC::Object<> {
+struct SPReprListener : public Inkscape::GC::Managed<> {
 	SPReprListener(SPReprEventVector const *v, void *d,
 	               SPReprListener *n=NULL)
 	: next(n), vector(v), data(d) {}

@@ -14,8 +14,9 @@ xml/clean:
 	rm -f xml/libspxml.a $(xml_libspxml_a_OBJECTS)
 
 xml_libspxml_a_SOURCES =	\
-	xml/repr-action.cpp	\
-	xml/repr-action.h	\
+	xml/sp-repr-action.cpp	\
+	xml/sp-repr-action.h	\
+	xml/sp-repr-action-fns.h	\
 	xml/repr-css.cpp	\
 	xml/repr-get-children.cpp	\
 	xml/repr-get-children.h	\

@@ -1,3 +1,73 @@
+2004-08-21  MenTaLguY <mental@rydia.net>
+
+	* src/Makefile_insert, src/util/Makefile_insert: get libinkutil
+	  deps straightened out
+
+	* src/document-private.h, src/document-undo.cpp, src/document.cpp:
+
+	  adapt for new APIs, header cleanups/refactorings
+
+	* src/gc-core.h, src/gc-anchored.h, src/gc-finalized.h, src/gc-managed.h:
+
+	  rewrote interface to Boehm GC for increased flexibility; there are now
+	  three main classes:
+	  
+	   - Inkscape::GC::Managed: objects managed by the GC; replaces
+	                            Inkscape::GC::Object
+
+	   - Inkscape::GC::Finalized: objects for which the GC will call
+	                              destructors automatically; replaces
+								  Inkscape::GC::FinalizedObject
+
+	   - Inkscape::GC::Anchored: managed objects which can be 'anchored'
+	                             to prevent collection while non-gc-aware
+								 objects are holding references; replaces
+								 Inkscape::Refcounted
+
+	* src/gc-object.h, src/refcounted.h: removed
+
+	* src/message-context.cpp, src/message-stack.h, src/selection.h,
+	  src/view.cpp, src/libnr/nr-object.h, src/util/list.h,
+	  src/xml/sp-repr-attr.h, src/xml/sp-repr-listener.h, src/desktop.cpp:
+
+	  adopt new GC API and header refatorings
+
+	* src/Makefile.am, src/util/Makefile_insert:
+	
+	  list util/* files in util's Makefile_insert now.
+
+	* src/util/reverse.h: revive anx fix Inkscape::Util::reverse
+
+	* src/util/share-c-string.cpp, src/util/share-c-string.h: removed
+
+	* src/util/shared-c-string.cpp, src/util/shared-c-string.h:
+
+	  employ the type system to make shared strings a little safer to use;
+	  you can still shoot yourself in the foot, but at least now you need
+	  to aim and pull the trigger first
+
+	* src/xml/Makefile_insert, src/xml/repr-action-test.cpp,
+	  src/xml/sp-repr-action-fns.h, src/xml/sp-repr-action.h:
+
+	  reorganize transaction logging files
+
+	* src/xml/repr-action-test.cpp: updated headers
+
+	* src/xml/repr-action.cpp, src/xml/repr-action.h: removed
+
+	* src/xml/repr-private.h, src/xml/repr.cpp, src/xml/repr.h:
+
+	  update for new GC API and shared strings
+
+	* src/xml/sp-repr-action-fns.h, src/xml/sp-repr-action.cpp,
+	  src/xml/sp-repr-action.h:
+
+	  header refactoring and new GC API
+
+	* src/xml/sp-repr-attr.h, src/xml/sp-repr-listener.h:
+
+	  new GC API
+
 2004-08-20  Carl Hetherington <inkscape@carlh.net>
 
 	* src/zoom-context.cpp, src/view.cpp, src/version.cpp: coding

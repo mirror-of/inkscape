@@ -24,7 +24,7 @@
 #endif
 
 #include "xml/repr-private.h"
-#include "xml/repr-action.h"
+#include "xml/sp-repr-action-fns.h"
 #include "sp-object.h"
 #include "sp-item.h"
 #include "document-private.h"

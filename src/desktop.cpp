@@ -267,7 +267,7 @@ sp_desktop_dispose (GObject *object)
     }
 
     if (dt->selection) {
-	Inkscape::Refcounted::release(dt->selection);
+	Inkscape::GC::release(dt->selection);
         dt->selection = NULL;
     }
 

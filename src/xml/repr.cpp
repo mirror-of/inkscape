@@ -30,9 +30,10 @@
 #include "xml/sp-repr-listener.h"
 #include "xml/sp-repr-event-vector.h"
 #include "xml/sp-repr-attr.h"
-#include "util/share-c-string.h"
+#include "xml/sp-repr-action.h"
+#include "xml/sp-repr-action-fns.h"
 
-using Inkscape::Util::share_c_string;
+using Inkscape::Util::SharedCString;
 
 static void bind_document(SPReprDoc *doc, SPRepr *repr);
 
@@ -70,7 +71,7 @@ sp_repr_new_text(gchar const *content)
 {
     g_return_val_if_fail(content != NULL, NULL);
     SPRepr *repr = sp_repr_new_from_code(SP_XML_TEXT_NODE, g_quark_from_static_string("text"));
-    repr->content = share_c_string(content);
+    repr->content = SharedCString::copy(content);
     return repr;
 }
 
@@ -79,7 +80,7 @@ sp_repr_new_comment(gchar const *comment)
 {
     g_return_val_if_fail(comment != NULL, NULL);
     SPRepr *repr = sp_repr_new_from_code(SP_XML_COMMENT_NODE, g_quark_from_static_string("comment"));
-    repr->content = share_c_string(comment);
+    repr->content = SharedCString::copy(comment);
     return repr;
 }
 
@@ -88,7 +89,6 @@ SPRepr::SPRepr(SPReprType t, int code) : type(t), name(code) {
     this->parent = this->next = this->children = NULL;
     this->attributes = NULL;
     this->last_listener = this->listeners = NULL;
-    this->content = NULL;
 }
 
 SPReprDoc::SPReprDoc(int code) : SPRepr(SP_XML_DOCUMENT_NODE, code) {
@@ -102,11 +102,11 @@ SPReprDoc::~SPReprDoc() {
 }
 
 SPRepr *sp_repr_ref(SPRepr *repr) {
-    return Inkscape::Refcounted::claim(repr);
+    return Inkscape::GC::anchor(repr);
 }
 
 SPRepr *sp_repr_unref(SPRepr *repr) {
-    Inkscape::Refcounted::release(repr);
+    Inkscape::GC::release(repr);
     return NULL;
 }
 
@@ -131,7 +131,7 @@ sp_repr_duplicate(SPRepr const *repr)
 }
 
 SPRepr::SPRepr(SPRepr const &repr)
-: Refcounted(), type(repr.type), name(repr.name), content(repr.content)
+: Anchored(), type(repr.type), name(repr.name), content(repr.content)
 {
     SPRepr *lastchild = NULL;
     for (SPRepr *child = repr.children; child != NULL; child = child->next) {
@@ -152,7 +152,7 @@ SPRepr::SPRepr(SPRepr const &repr)
     }
 }
 
-SPReprDoc::SPReprDoc(SPReprDoc const &doc) : SPRepr(doc) {
+SPReprDoc::SPReprDoc(SPReprDoc const &doc) : SPRepr(doc), Finalized() {
     this->log = NULL;
     this->is_logging = false;
 }
@@ -228,15 +228,15 @@ sp_repr_set_content(SPRepr *repr, gchar const *newcontent)
     }
 
     if (allowed) {
-        gchar const *oldcontent = repr->content;
+        SharedCString oldcontent = repr->content;
 
         if (newcontent) {
-            repr->content = share_c_string(newcontent);
+            repr->content = SharedCString::copy(newcontent);
         } else {
-            repr->content = NULL;
+            repr->content = SharedCString();
         }
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_chgcontent(repr->doc->log, repr, oldcontent, repr->content);
+            repr->doc->log = (new SPReprActionChgContent(repr, oldcontent, repr->content, repr->doc->log))->optimizeOne();
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
@@ -279,7 +279,7 @@ sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
                 repr->attributes = attr->next;
             }
             if ( repr->doc && repr->doc->is_logging ) {
-                repr->doc->log = sp_repr_log_chgattr(repr->doc->log, repr, q, attr->value, NULL);
+                repr->doc->log = (new SPReprActionChgAttr(repr, q, attr->value, SharedCString(), repr->doc->log))->optimizeOne();
             }
 
             for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
@@ -314,17 +314,17 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
     unsigned allowed = TRUE;
     for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next) {
         if (rl->vector->change_attr) {
-            allowed = (* rl->vector->change_attr)(repr, key, ( attr ? attr->value : NULL ), value, rl->data);
+            allowed = (* rl->vector->change_attr)(repr, key, ( attr ? attr->value : SharedCString() ), value, rl->data);
         }
     }
 
     if (allowed) {
-        gchar const *oldval = ( attr ? attr->value : NULL );
+        SharedCString oldval = ( attr ? attr->value : SharedCString() );
 
         if (attr) {
-            attr->value = share_c_string(value);
+            attr->value = SharedCString::copy(value);
         } else {
-            attr = new SPReprAttr(q, share_c_string(value));
+            attr = new SPReprAttr(q, SharedCString::copy(value));
             if (prev) {
                 prev->next = attr;
             } else {
@@ -332,7 +332,7 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
             }
         }
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_chgattr(repr->doc->log, repr, q, oldval, attr->value);
+            repr->doc->log = (new SPReprActionChgAttr(repr, q, oldval, attr->value))->optimizeOne();
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
@@ -409,7 +409,7 @@ sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
         if (child->doc == NULL) bind_document(repr->doc, child);
 
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_add(repr->doc->log, repr, child, ref);
+            repr->doc->log = (new SPReprActionAdd(repr, child, ref, repr->doc->log))->optimizeOne();
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
@@ -483,7 +483,7 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
         child->next = NULL;
 
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_remove(repr->doc->log, repr, child, ref);
+            repr->doc->log = (new SPReprActionDel(repr, child, ref, repr->doc->log))->optimizeOne();
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
@@ -534,7 +534,7 @@ sp_repr_change_order(SPRepr *repr, SPRepr *child, SPRepr *ref)
         }
 
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_chgorder(repr->doc->log, repr, child, prev, ref);
+            repr->doc->log = (new SPReprActionChgOrder(repr, child, prev, ref, repr->doc->log))->optimizeOne();
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {

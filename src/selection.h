@@ -20,8 +20,10 @@
 
 #include "libnr/nr-rect.h"
 #include "forward.h"
-#include "refcounted.h"
 #include "sp-item.h"
+#include "gc-managed.h"
+#include "gc-finalized.h"
+#include "gc-anchored.h"
 #include "xml/xml-forward.h"
 
 #include <list>
@@ -37,7 +39,10 @@
  * its children which might have been selected.
  *
  */
-class SPSelection : public Inkscape::Refcounted {
+class SPSelection : public Inkscape::GC::Managed<>,
+                    public Inkscape::GC::Finalized,
+                    public Inkscape::GC::Anchored
+{
 public:
 	/**
 	 * Constructs an selection object, bound to a particular
@@ -177,7 +182,7 @@ public:
 	 */
 	SPRepr *singleRepr();
 
-	/** @breif Returns the list of selected objects */
+	/** @brief Returns the list of selected objects */
 	GSList const *list();
 	/** @brief Returns the list of selected SPItems */
 	GSList const *itemList();

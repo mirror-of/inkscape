@@ -153,7 +153,7 @@ void SPView::init(SPView *view)
 
     view->_message_changed_connection = view->_message_stack->connectChanged(
         sigc::bind(sigc::ptr_fun(&SPView::_set_status_message), view)
-        );
+    );
 }
 
 void SPView::dispose(GObject *object)
@@ -168,7 +168,7 @@ void SPView::dispose(GObject *object)
     delete view->_legacy_message_context;
     view->_legacy_message_context = NULL;
 
-    Inkscape::Refcounted::release(view->_message_stack);
+    Inkscape::GC::release(view->_message_stack);
     view->_message_stack = NULL;
 
     if (view->doc) {

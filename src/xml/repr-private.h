@@ -17,15 +17,18 @@
 #include <glib/gslist.h>
 
 #include "repr.h"
-#include "repr-action.h"
-#include "gc-object.h"
-#include "refcounted.h"
+#include "gc-managed.h"
+#include "gc-finalized.h"
+#include "gc-anchored.h"
 #include "xml/xml-forward.h"
+#include "util/shared-c-string.h"
 
 struct SPReprClass;
 struct SPReprAttr;
 struct SPReprListener;
 struct SPReprEventVector;
+
+class SPReprAction;
 
 enum SPReprType {
 	SP_XML_DOCUMENT_NODE,
@@ -34,7 +37,7 @@ enum SPReprType {
 	SP_XML_COMMENT_NODE
 };
 
-struct SPRepr : public Inkscape::Refcounted {
+struct SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
 	SPReprType type;
 
 	int name;
@@ -47,7 +50,7 @@ struct SPRepr : public Inkscape::Refcounted {
 	SPReprAttr *attributes;
 	SPReprListener *listeners;
 	SPReprListener *last_listener;
-	gchar const *content;
+	Inkscape::Util::SharedCString content;
 
 	SPRepr *duplicate() const { return _duplicate(); }
 
@@ -82,7 +85,7 @@ protected:
 	SPRepr *_duplicate() const { return new SPReprComment(*this); }
 };
 
-struct SPReprDoc : public SPRepr {
+struct SPReprDoc : public SPRepr, public Inkscape::GC::Finalized {
 	explicit SPReprDoc(int code);
 	~SPReprDoc();
 

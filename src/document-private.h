@@ -14,12 +14,14 @@
  */
 
 #include <sigc++/sigc++.h>
-#include "xml/repr-action.h"
+#include "xml/sp-repr-action-fns.h"
 #include "sp-defs.h"
 #include "sp-root.h"
 #include "document.h"
 
 #define SP_DOCUMENT_DEFS(d) ((SPObject *) SP_ROOT (SP_DOCUMENT_ROOT (d))->defs)
+
+class SPReprAction;
 
 struct SPDocumentPrivate {
 	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */

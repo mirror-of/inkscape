@@ -4,7 +4,7 @@
 
 #include "repr.h"
 #include "repr-private.h"
-#include "repr-action.h"
+#include "sp-repr-action-fns.h"
 
 int main(int argc, char *argv[]) {
 	SPReprDoc *document;

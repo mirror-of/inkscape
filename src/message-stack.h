@@ -15,7 +15,9 @@
 #include <sigc++/sigc++.h>
 #include <glib/gtypes.h>
 #include <stdarg.h>
-#include "refcounted.h"
+#include "gc-managed.h"
+#include "gc-finalized.h"
+#include "gc-anchored.h"
 #include "message.h"
 
 namespace Inkscape {
@@ -37,7 +39,10 @@ namespace Inkscape {
  * assuming that the message you pushed is still on top is an
  * invalid and unsafe assumption.
  */
-class MessageStack : public Refcounted {
+class MessageStack : public GC::Managed<>,
+                     public GC::Finalized,
+                     public GC::Anchored
+{
 public:
     MessageStack();
     ~MessageStack();

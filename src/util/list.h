@@ -12,7 +12,7 @@
 #ifndef SEEN_INKSCAPE_UTIL_LIST_H
 #define SEEN_INKSCAPE_UTIL_LIST_H
 
-#include "gc-object.h"
+#include "gc-managed.h"
 #include "traits/reference.h"
 
 namespace Inkscape {
@@ -22,7 +22,7 @@ namespace Traits { template <typename T> struct List; }
 namespace Util {
 
 template <typename T>
-class List : public GC::Object<> {
+class List : public GC::Managed<> {
 public:
     typedef T Data;
 

@@ -14,7 +14,7 @@
 
 #include <new>
 #include <cstdlib>
-#include <gc/gc_cpp.h>
+#include <gc/gc.h>
 #include <glib/gmain.h>
 
 namespace Inkscape {
@@ -38,26 +38,11 @@ enum CollectionPolicy {
     MANUAL
 };
 
-inline ::GCPlacement to_placement(ScanPolicy scan, CollectionPolicy collect) {
-    if ( scan == SCANNED ) {
-        if ( collect == AUTO ) {
-            return ::UseGC;
-        } else {
-            return ::NoGC;
-        }
-    } else {
-        if ( collect == AUTO ) {
-            return ::PointerFreeGC;
-        } else {
-            // g++ doesn't like inlining g_assert()s for some reason
-            //g_assert_not_reached();
-            std::abort();
-            return ::NoGC;
-        }
-    }
-}
+enum Delete {
+    GC
+};
 
-typedef ::GCCleanUpFunc CleanupFunc;
+typedef void (*CleanupFunc)(void *mem, void *data);
 
 }
 
@@ -70,9 +55,25 @@ inline void *operator new(size_t size,
                           void *data=NULL)
 throw(std::bad_alloc)
 {
-    void *mem=::operator new(size, Inkscape::GC::to_placement(scan, collect), cleanup, data);
+    void *mem;
+    if ( collect == Inkscape::GC::AUTO ) {
+        if ( scan == Inkscape::GC::SCANNED ) {
+            mem = GC_MALLOC(size);
+        } else {
+            mem = GC_MALLOC_ATOMIC(size);
+        }
+    } else {
+        if ( scan == Inkscape::GC::SCANNED ) {
+            mem = GC_MALLOC_UNCOLLECTABLE(size);
+        } else {
+            abort(); // can't use g_assert as g++ doesn't like to inline it
+        }
+    }
     if (!mem) {
         throw std::bad_alloc();
+    }
+    if ( collect == Inkscape::GC::AUTO && cleanup ) {
+        GC_REGISTER_FINALIZER_IGNORE_SELF(mem, cleanup, data, NULL, NULL);
     }
     return mem;
 }
@@ -83,11 +84,7 @@ inline void *operator new(size_t size,
                           void *data=NULL)
 throw(std::bad_alloc)
 {
-    void *mem=::operator new(size, Inkscape::GC::to_placement(scan, Inkscape::GC::AUTO), cleanup, data);
-    if (!mem) {
-        throw std::bad_alloc();
-    }
-    return mem;
+    return operator new(size, scan, Inkscape::GC::AUTO, cleanup, data);
 }
 
 inline void *operator new[](size_t size,
@@ -97,11 +94,7 @@ inline void *operator new[](size_t size,
                             void *data=NULL)
 throw(std::bad_alloc)
 {
-    void *mem=::operator new[](size, Inkscape::GC::to_placement(scan, collect), cleanup, data);
-    if (!mem) {
-        throw std::bad_alloc();
-    }
-    return mem;
+    return operator new(size, scan, collect, cleanup, data);
 }
 
 inline void *operator new[](size_t size,
@@ -110,12 +103,11 @@ inline void *operator new[](size_t size,
                             void *data=NULL)
 throw(std::bad_alloc)
 {
-    void *mem=::operator new[](size, Inkscape::GC::to_placement(scan, Inkscape::GC::AUTO), cleanup, data);
-    if (!mem) {
-        throw std::bad_alloc();
-    }
-    return mem;
+    return operator new[](size, scan, Inkscape::GC::AUTO, cleanup, data);
 }
+
+inline void operator delete(void *mem, Inkscape::GC::Delete) { GC_FREE(mem); }
+inline void operator delete[](void *mem, Inkscape::GC::Delete) { GC_FREE(mem); }
 
 #endif
 /*

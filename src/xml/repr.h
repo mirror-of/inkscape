@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <glib/gtypes.h>
-#include "refcounted.h"
+#include "gc-anchored.h"
 
 #include <xml/xml-forward.h>
 

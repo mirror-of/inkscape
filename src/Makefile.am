@@ -83,12 +83,7 @@ EXTRA_DIST =	\
 	traits/function.h \
 	traits/list.h \
 	traits/reference.h \
-	traits/tree-iterator.h \
-	util/list.h \
-	util/map.h \
-	util/parent-axis.h \
-	util/sibling-axis.h \
-	util/tuple.h
+	traits/tree-iterator.h
 
 EXTRA_PROGRAMS =	\
 	inkview 	\

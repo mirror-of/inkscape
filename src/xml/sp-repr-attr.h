@@ -3,16 +3,19 @@
 
 #include <glib/gquark.h>
 #include <glib/gtypes.h>
-#include "gc-object.h"
-#include <xml/xml-forward.h>
+#include "gc-managed.h"
+#include "xml/xml-forward.h"
+#include "util/shared-c-string.h"
 
 
 #define SP_REPR_ATTRIBUTE_KEY(a) g_quark_to_string((a)->key)
 #define SP_REPR_ATTRIBUTE_VALUE(a) ((a)->value)
 
 
-struct SPReprAttr : public Inkscape::GC::Object<> {
-    SPReprAttr(GQuark k, gchar const *v, SPReprAttr *n=NULL)
+struct SPReprAttr : public Inkscape::GC::Managed<> {
+    SPReprAttr(GQuark k,
+               Inkscape::Util::SharedCString v,
+               SPReprAttr *n=NULL)
     : next(n), key(k), value(v) {}
 
     SPReprAttr(SPReprAttr const &attr, SPReprAttr *n=NULL)
@@ -20,7 +23,7 @@ struct SPReprAttr : public Inkscape::GC::Object<> {
 
     SPReprAttr *next;
     GQuark key;
-    gchar const *value;
+    Inkscape::Util::SharedCString value;
 };
 
 
