@@ -512,9 +512,6 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 	case SP_VERB_DIALOG_DISPLAY:
 		sp_display_dialog ();
 		break;
-	case SP_VERB_DIALOG_DOCUMENT:
-		sp_document_dialog ();
-		break;
 	case SP_VERB_DIALOG_NAMEDVIEW:
 		sp_desktop_dialog ();
 		break;
@@ -672,8 +669,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Fit selection in window"), "zoom_select"},
 	/* Dialogs */
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"), N_("Global Inkscape options"), NULL},
-	{SP_VERB_DIALOG_DOCUMENT, "DialogDocument", N_("Docum_ent Settings"), N_("Settings for the current document"), NULL},
-	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("E_diting Window"), N_("Editing window properties"), NULL},
+	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"), N_("Options saved with the document"), NULL},
 	{SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Tool Optio_ns"), N_("Tool options"), NULL},
 	{SP_VERB_DIALOG_TOOL_ATTRIBUTES, "DialogToolAttributes", N_("Tool Attributes"), N_("Tool attributes"), NULL},
 	{SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke"), N_("Fill and stroke settings"), NULL},
