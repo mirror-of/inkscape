@@ -38,6 +38,11 @@
 #include "dialog-events.h"
 #include "macros.h"
 
+#include "dialog-events.h"
+#include "../prefs-utils.h"
+#include "../verbs.h"
+#include "../interface.h"
+
 #include "align.h"
 
 /*
@@ -124,6 +129,9 @@ static void set_base (GtkMenuItem * menuitem, gpointer data);
 static SPItem * sp_quick_align_find_master (const GSList * slist, gboolean horizontal);
 
 static GtkWidget *dlg = NULL;
+static win_data wd;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.align";
 
 static unsigned int base = SP_ALIGN_LAST;
 
@@ -131,7 +139,22 @@ static void
 sp_quick_align_dialog_destroy (void)
 {
 	sp_signal_disconnect_by_data (INKSCAPE, dlg);
-	dlg = NULL;
+	wd.win = dlg = NULL;
+	wd.stop = 0;
+}
+
+static gboolean
+sp_align_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
+{
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
+
+	return FALSE; // which means, go ahead and destroy it
 }
 
 static void
@@ -153,13 +176,31 @@ sp_quick_align_dialog (void)
 		GtkWidget *nb, *vb, *om, *t, *l;
 		GtkTooltips * tt = gtk_tooltips_new ();
 
-		dlg = sp_window_new (_("Align objects"), FALSE);
+		gchar title[500];
+		sp_ui_dialog_title_string (SP_VERB_DIALOG_ALIGN_DISTRIBUTE, title);
 
+		dlg = sp_window_new (title, TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
 		sp_transientize (dlg);
-		//now all uncatched keypresses from the window will be handled:
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
-
-		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_quick_align_dialog_destroy), NULL);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_quick_align_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_align_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_align_dialog_delete), dlg);
 
 		nb = gtk_notebook_new ();
 		gtk_container_add (GTK_CONTAINER (dlg), nb);
@@ -258,7 +299,7 @@ sp_quick_align_dialog (void)
 		gtk_widget_show_all (nb);
 	}
 
-	if (!GTK_WIDGET_VISIBLE (dlg)) gtk_widget_show (dlg);
+	gtk_window_present ((GtkWindow *) dlg);
 }
 
 void

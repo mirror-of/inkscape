@@ -48,13 +48,20 @@
 #include "../inkscape-stock.h"
 
 #include "dialog-events.h"
+#include "../prefs-utils.h"
+#include "../verbs.h"
+#include "../interface.h"
 
 typedef struct _EditableDest {
 	GtkEditable * editable;
 	gchar * text;
 } EditableDest;
 
-static GtkWidget * dialog = NULL;
+static GtkWidget * dlg = NULL;
+static win_data wd;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.xml";
+
 static GtkTooltips * tooltips = NULL;
 static GtkEditable * attr_name = NULL;
 static GtkTextView *attr_value = NULL;
@@ -82,6 +89,7 @@ static void on_tree_select_row (GtkCTree * tree, GtkCTreeNode * node, gint colum
 static void on_tree_unselect_row (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
 static void after_tree_move (GtkCTree * tree, GtkCTreeNode * node, GtkCTreeNode * new_parent, GtkCTreeNode * new_sibling, gpointer data);
 static void on_destroy (GtkObject * object, gpointer data);
+static gboolean on_delete (GtkObject *object, GdkEvent *event, gpointer data);
 
 static void on_tree_select_row_enable_if_element (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
 static void on_tree_select_row_enable_if_non_root (GtkCTree * tree, GtkCTreeNode * node, gint column, gpointer data);
@@ -136,7 +144,7 @@ sp_xml_tree_dialog (void)
 	if (!desktop) return;
 	g_assert (SP_IS_DESKTOP (desktop));
 
-	if (dialog == NULL) {
+	if (dlg == NULL) {
 		GtkWidget *box, *sw, *paned, *toolbar, *button;
 		GtkWidget *text_container, *attr_container, *attr_subpaned_container, *box2;
 		GtkWidget *set_attr;
@@ -144,17 +152,35 @@ sp_xml_tree_dialog (void)
 		tooltips = gtk_tooltips_new ();
 		gtk_tooltips_enable (tooltips);
 
-		dialog = sp_window_new ("", TRUE);
+		dlg = sp_window_new ("", TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
+		sp_transientize (dlg);
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (on_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (on_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (on_delete), dlg);
 
-		sp_transientize (dialog);
-
-		gtk_container_set_border_width (GTK_CONTAINER (dialog), 0);
-		gtk_window_set_default_size (GTK_WINDOW (dialog), 640, 384);
-		g_signal_connect (G_OBJECT (dialog), "destroy", G_CALLBACK (on_destroy), NULL);
+		gtk_container_set_border_width (GTK_CONTAINER (dlg), 0);
+		gtk_window_set_default_size (GTK_WINDOW (dlg), 640, 384);
 
 		paned = gtk_hpaned_new ();
 		gtk_paned_set_position (GTK_PANED (paned), 256);
-		gtk_container_add (GTK_CONTAINER (dialog), paned);
+		gtk_container_add (GTK_CONTAINER (dlg), paned);
 
 		/* tree view */
 
@@ -380,7 +406,7 @@ sp_xml_tree_dialog (void)
 
 		/* initial show/hide */
 
-		gtk_widget_show_all (GTK_WIDGET (dialog));
+		gtk_widget_show_all (GTK_WIDGET (dlg));
 
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_select_row",
 						(GCallback) on_tree_select_row_show_if_element, attr_container, GTK_OBJECT (attr_container));
@@ -393,9 +419,8 @@ sp_xml_tree_dialog (void)
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_unselect_row",
 						(GCallback) on_tree_unselect_row_hide, text_container, GTK_OBJECT (text_container));
 		gtk_widget_hide (text_container);
-	} else {
-		gdk_window_raise (GTK_WIDGET (dialog)->window);
-	}
+	} 
+	gtk_window_present ((GtkWindow *) dlg);
 
 	g_assert (desktop != NULL);
 	set_tree_desktop (desktop);
@@ -407,14 +432,14 @@ set_tree_desktop (SPDesktop * desktop)
 	if ( desktop == current_desktop ) return;
 	if (current_desktop) {
 		if (SP_DT_SELECTION (current_desktop)) {
-			sp_signal_disconnect_by_data (SP_DT_SELECTION (current_desktop), dialog);
+			sp_signal_disconnect_by_data (SP_DT_SELECTION (current_desktop), dlg);
 		}
-		sp_signal_disconnect_by_data (current_desktop, dialog);
+		sp_signal_disconnect_by_data (current_desktop, dlg);
 	}
 	current_desktop = desktop;
 	if (desktop) {
-		g_signal_connect (G_OBJECT (desktop), "shutdown", G_CALLBACK (on_desktop_shutdown), dialog);
-		g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)), "changed", G_CALLBACK (on_desktop_selection_changed), dialog);
+		g_signal_connect (G_OBJECT (desktop), "shutdown", G_CALLBACK (on_desktop_shutdown), dlg);
+		g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)), "changed", G_CALLBACK (on_desktop_selection_changed), dlg);
 		set_tree_document (SP_DT_DOCUMENT (desktop));
 	} else {
 		set_tree_document (NULL);
@@ -426,12 +451,12 @@ set_tree_document (SPDocument * document)
 {
 	if ( document == current_document ) return;
 	if (current_document) {
-		sp_signal_disconnect_by_data (current_document, dialog);
+		sp_signal_disconnect_by_data (current_document, dlg);
 	}
 	current_document = document;
 	if (current_document) {
-		g_signal_connect (G_OBJECT (current_document), "uri_set", G_CALLBACK (on_document_uri_set), dialog);
-		on_document_uri_set (current_document, SP_DOCUMENT_URI (current_document), dialog);
+		g_signal_connect (G_OBJECT (current_document), "uri_set", G_CALLBACK (on_document_uri_set), dlg);
+		on_document_uri_set (current_document, SP_DOCUMENT_URI (current_document), dlg);
 		set_tree_repr (sp_document_repr_root (current_document));
 	} else {
 		set_tree_repr (NULL);
@@ -595,7 +620,23 @@ on_destroy (GtkObject * object, gpointer data)
 {
 	set_tree_desktop (NULL);
 	gtk_object_destroy (GTK_OBJECT (tooltips));
-	dialog = NULL;
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
+	wd.win = dlg = NULL;
+	wd.stop = 0;
+}
+
+static gboolean
+on_delete (GtkObject *object, GdkEvent *event, gpointer data)
+{
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
+
+	return FALSE; // which means, go ahead and destroy it
 }
 
 void
@@ -820,8 +861,8 @@ on_desktop_selection_changed (SPSelection * selection)
 gboolean
 on_desktop_shutdown (SPDesktop * desktop, gpointer data)
 {
-	g_assert (dialog != NULL);
-	gtk_widget_destroy (dialog);
+	g_assert (dlg != NULL);
+	gtk_widget_destroy (dlg);
 
 	return FALSE;
 }
@@ -829,10 +870,13 @@ on_desktop_shutdown (SPDesktop * desktop, gpointer data)
 void
 on_document_uri_set (SPDocument * document, const gchar * uri, gpointer data)
 {
-	gchar * title;
-	title = g_strdup_printf (_("Inkscape: %s : XML View"), SP_DOCUMENT_NAME (document));
-	gtk_window_set_title (GTK_WINDOW (dialog), title);
-	g_free (title);
+	gchar *t;
+	gchar title[500];
+
+	sp_ui_dialog_title_string (SP_VERB_DIALOG_XML_EDITOR, title);
+	t = g_strdup_printf ("%s: %s", SP_DOCUMENT_NAME (document), title);
+	gtk_window_set_title (GTK_WINDOW (dlg), t);
+	g_free (t);
 }
 
 void
@@ -855,7 +899,7 @@ cmd_new_element_node (GtkObject * object, gpointer data)
 	gtk_container_set_border_width (GTK_CONTAINER (window), 4);
 	gtk_window_set_title (GTK_WINDOW (window), _("New element node..."));
 	gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, TRUE);
-	gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (dialog));
+	gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (dlg));
 	gtk_window_set_modal (GTK_WINDOW (window), TRUE);
 	gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
 

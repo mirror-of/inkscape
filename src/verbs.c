@@ -484,7 +484,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("Selection"), N_("Fit the whole selection into window"), "zoom_select"},
 	/* Dialogs */
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Display"), N_("Global display settings"), NULL},
-	{SP_VERB_DIALOG_DOCUMENT, "DialogDocument", N_("Document"), N_("Page layout"), NULL},
+	{SP_VERB_DIALOG_DOCUMENT, "DialogDocument", N_("Document Settings"), N_("Page layout"), NULL},
 	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("Editing Window"), N_("Editing window properties"), NULL},
 	{SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Tool Options"), N_("Tool options"), NULL},
 	{SP_VERB_DIALOG_TOOL_ATTRIBUTES, "DialogToolAttributes", N_("Tool Attributes"), N_("Tool attributes"), NULL},

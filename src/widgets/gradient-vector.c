@@ -30,6 +30,12 @@
 #include "../sp-gradient.h"
 #include "../gradient-chemistry.h"
 #include "gradient-vector.h"
+#include "../helper/window.h"
+
+#include "../dialogs/dialog-events.h"
+#include "../prefs-utils.h"
+#include "../verbs.h"
+#include "../interface.h"
 
 enum {
 	VECTOR_SET,
@@ -49,6 +55,11 @@ static void sp_gvs_gradient_activate (GtkMenuItem *mi, SPGradientVectorSelector 
 
 static GtkVBoxClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
+
+static GtkWidget *dlg = NULL;
+static win_data wd;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.gradienteditor";
 
 GtkType
 sp_gradient_vector_selector_get_type (void)
@@ -385,6 +396,7 @@ static GtkWidget *sp_gradient_vector_widget_new (SPGradient *gradient);
 static void sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient);
 static void sp_gradient_vector_dialog_close (GtkWidget *widget, GtkWidget *dialog);
 static gint sp_gradient_vector_dialog_delete (GtkWidget *widget, GdkEvent *event, GtkWidget *dialog);
+static void sp_gradient_vector_dialog_destroy (GtkObject *object, gpointer data);
 
 static void sp_gradient_vector_widget_destroy (GtkObject *object, gpointer data);
 static void sp_gradient_vector_gradient_release (SPGradient *gradient, GtkWidget *widget);
@@ -439,26 +451,49 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 GtkWidget *
 sp_gradient_vector_editor_new (SPGradient *gradient)
 {
-	static GtkWidget *dialog = NULL;
+	GtkWidget *wid;
 
-	if (dialog == NULL) {
-		GtkWidget *w;
-		dialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_title (GTK_WINDOW (dialog), _("Gradient vector"));
-		gtk_container_set_border_width (GTK_CONTAINER (dialog), PAD);
-		g_signal_connect (G_OBJECT (dialog), "delete_event", G_CALLBACK (sp_gradient_vector_dialog_delete), dialog);
-		w = (GtkWidget*)sp_gradient_vector_widget_new (gradient);
-		g_object_set_data (G_OBJECT (dialog), "gradient-vector-widget", w);
+	if (dlg == NULL) {
+
+		dlg = sp_window_new ("Gradient editor", TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
+		sp_transientize (dlg);
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_gradient_vector_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_gradient_vector_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_gradient_vector_dialog_delete), dlg);
+
+		//		dlg = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+		//		gtk_window_set_title (GTK_WINDOW (dlg), _("Gradient vector"));
+		gtk_container_set_border_width (GTK_CONTAINER (dlg), PAD);
+		//		g_signal_connect (G_OBJECT (dlg), "delete_event", G_CALLBACK (sp_gradient_vector_dialog_delete), dlg);
+		wid = (GtkWidget*)sp_gradient_vector_widget_new (gradient);
+		g_object_set_data (G_OBJECT (dlg), "gradient-vector-widget", wid);
 		/* Connect signals */
-		gtk_widget_show (w);
-		gtk_container_add (GTK_CONTAINER (dialog), w);
+		gtk_widget_show (wid);
+		gtk_container_add (GTK_CONTAINER (dlg), wid);
 	} else {
-		GtkWidget *w;
-		w = (GtkWidget*)g_object_get_data (G_OBJECT (dialog), "gradient-vector-widget");
-		sp_gradient_vector_widget_load_gradient (w, gradient);
+		gtk_window_present ((GtkWindow *) dlg);
+		wid = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "gradient-vector-widget");
+		sp_gradient_vector_widget_load_gradient (wid, gradient);
 	}
 
-	return dialog;
+	return dlg;
 }
 
 static void
@@ -506,12 +541,28 @@ sp_gradient_vector_dialog_close (GtkWidget *widget, GtkWidget *dialog)
 	gtk_widget_hide (dialog);
 }
 
-static gint
+static void
+sp_gradient_vector_dialog_destroy (GtkObject *object, gpointer data)
+{
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
+	wd.win = dlg = NULL;
+	wd.stop = 0;
+}
+
+static gboolean
 sp_gradient_vector_dialog_delete (GtkWidget *widget, GdkEvent *event, GtkWidget *dialog)
 {
-	sp_gradient_vector_dialog_close (widget, dialog);
+	//	sp_gradient_vector_dialog_close (widget, dialog);
+	//	return TRUE;
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
 
-	return TRUE;
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
+
+	return FALSE; // which means, go ahead and destroy it
 }
 
 /* Widget destroy handler */

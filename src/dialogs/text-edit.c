@@ -46,6 +46,10 @@
 #include "../sp-text.h"
 #include "../inkscape-stock.h"
 
+#include "dialog-events.h"
+#include "../prefs-utils.h"
+#include "../verbs.h"
+#include "../interface.h"
 
 #include "text-edit.h"
 
@@ -70,19 +74,30 @@ static unsigned sp_ted_get_selected_text_count (void);
 static const gchar *spacings[] = {"90%", "100%", "110%", "120%", "133%", "150%", "200%", NULL};
 
 static GtkWidget *dlg = NULL;
+static win_data wd;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.textandfont";
 
 static void
 sp_text_edit_dialog_destroy (GtkObject *object, gpointer data)
 {
 	sp_signal_disconnect_by_data (INKSCAPE, dlg);
-	dlg = NULL;
+	wd.win = dlg = NULL;
+	wd.stop = 0;
 }
 
-static gint
-sp_text_edit_dialog_delete (GtkWidget *dlg, GdkEvent *event, gpointer data)
+static gboolean
+sp_text_edit_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 {
-	gtk_widget_destroy (GTK_WIDGET (dlg));
-	return TRUE;
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
+
+	return FALSE; // which means, go ahead and destroy it
 }
 
 void
@@ -94,10 +109,33 @@ sp_text_edit_dialog (void)
 		GList *sl;
 		int i;
 
-		dlg = sp_window_new (_("Text properties"), TRUE);
+		gchar title[500];
+		sp_ui_dialog_title_string (SP_VERB_DIALOG_TEXT, title);
+
+		dlg = sp_window_new (title, TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
+		sp_transientize (dlg);
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_text_edit_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_text_edit_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_text_edit_dialog_delete), dlg);
+
 		gtk_window_set_policy (GTK_WINDOW (dlg), TRUE, TRUE, FALSE);
-		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_text_edit_dialog_destroy), dlg);
-		g_signal_connect (G_OBJECT (dlg), "delete_event", G_CALLBACK (sp_text_edit_dialog_delete), dlg);
 
 		mainvb = gtk_vbox_new (FALSE, 0);
 		gtk_container_add (GTK_CONTAINER (dlg), mainvb);

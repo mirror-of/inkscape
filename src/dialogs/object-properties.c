@@ -153,10 +153,10 @@ sp_object_properties_dialog (void)
 	if (!dlg) {
 		GtkWidget *vb, *nb, *hb, *l, *page, *hs, *om, *m, *mi;
 
-		gchar c[500];
-		sp_ui_dialog_title_string (SP_VERB_DIALOG_FILL_STROKE, c);
+		gchar title[500];
+		sp_ui_dialog_title_string (SP_VERB_DIALOG_FILL_STROKE, title);
 
-		dlg = sp_window_new (c, TRUE);
+		dlg = sp_window_new (title, TRUE);
 		if (x == -1000 || y == -1000) {
 			x = prefs_get_int_attribute (prefs_path, "x", 0);
 			y = prefs_get_int_attribute (prefs_path, "y", 0);
@@ -165,7 +165,10 @@ sp_object_properties_dialog (void)
 			w = prefs_get_int_attribute (prefs_path, "w", 0);
 			h = prefs_get_int_attribute (prefs_path, "h", 0);
 		}
-		gtk_window_move ((GtkWindow *) dlg, x, y);
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
 		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
 		sp_transientize (dlg);
 		wd.win = dlg;

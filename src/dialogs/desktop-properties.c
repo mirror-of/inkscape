@@ -38,6 +38,11 @@
 #include "widgets/spw-utilities.h"
 #include "dialog-events.h"
 
+#include "dialog-events.h"
+#include "../prefs-utils.h"
+#include "../verbs.h"
+#include "../interface.h"
+
 #include "desktop-properties.h"
 
 static GtkWidget *sp_desktop_dialog_new (void);
@@ -52,30 +57,30 @@ static void sp_color_picker_clicked (GObject *cp, void *data);
 void sp_color_picker_button(GtkWidget * dialog, GtkWidget * t, const gchar * label, gchar * key, gchar * color_dialog_label, gchar * opacity_key, int row);
 
 static GtkWidget *dlg = NULL;
+static win_data wd;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.documentoptions";
 
 static void
 sp_dtw_dialog_destroy (GtkObject *object, gpointer data)
 {
 	sp_signal_disconnect_by_data (INKSCAPE, dlg);
-
-	dlg = NULL;
+	wd.win = dlg = NULL;
+	wd.stop = 0;
 }
 
-void
-sp_desktop_dialog (void)
+static gboolean
+sp_dtw_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 {
-	if (!dlg) {
-		dlg = sp_desktop_dialog_new ();
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
 
-		sp_transientize (dlg);
-		//now all uncatched keypresses from the window will be handled:
-		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
 
-		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_dtw_dialog_destroy), NULL);
-		gtk_widget_show (dlg);
-	}
-
-	gtk_window_present (GTK_WINDOW (dlg));
+	return FALSE; // which means, go ahead and destroy it
 }
 
 static void
@@ -185,119 +190,144 @@ sp_dtw_guides_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialo
 	sp_repr_set_attr (repr, "guidetolerance", c);
 }
 
-static GtkWidget *
-sp_desktop_dialog_new (void)
+void
+sp_desktop_dialog (void)
 {
-	GtkWidget *dialog, *nb, *l, *t, *b, *us;
+	GtkWidget *nb, *l, *t, *b, *us;
 	GCallback cb;
 	int row;
+	if (!dlg) {
 
-	dialog = sp_window_new (_("Desktop settings"), FALSE);
+		gchar title[500];
+		sp_ui_dialog_title_string (SP_VERB_DIALOG_NAMEDVIEW, title);
 
-	nb = gtk_notebook_new ();
-	gtk_widget_show (nb);
-	gtk_container_add (GTK_CONTAINER (dialog), nb);
+		dlg = sp_window_new (title, TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
+		sp_transientize (dlg);
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_dtw_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_dtw_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dtw_dialog_delete), dlg);
 
-	/* Grid settings */
+		nb = gtk_notebook_new ();
+		gtk_widget_show (nb);
+		gtk_container_add (GTK_CONTAINER (dlg), nb);
 
-	/* Notebook tab */
-	l = gtk_label_new (_("Grid"));
-	gtk_widget_show (l);
-	t = gtk_table_new (9, 2, FALSE);
-	gtk_widget_show (t);
-	gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-	gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-	gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+		/* Grid settings */
 
-	/* Checkbuttons */
-	row = 0;
-	cb = G_CALLBACK(sp_dtw_whatever_toggled);
-	spw_checkbutton(dialog, t, _("Show grid"), "showgrid", 0, row, 0, cb);
-	spw_checkbutton(dialog, t, _("Snap to grid"), "snaptogrid", 1, row++, 0, cb);
+		/* Notebook tab */
+		l = gtk_label_new (_("Grid"));
+		gtk_widget_show (l);
+		t = gtk_table_new (9, 2, FALSE);
+		gtk_widget_show (t);
+		gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+		gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+		gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+		gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
-	spw_checkbutton(dialog, t, _("Horizontal lines"), "vertgrid", 0, row, 0, cb);
-	spw_checkbutton(dialog, t, _("Vertical lines"), "horizgrid", 1, row++, 0, cb);
+		/* Checkbuttons */
+		row = 0;
+		cb = G_CALLBACK(sp_dtw_whatever_toggled);
+		spw_checkbutton(dlg, t, _("Show grid"), "showgrid", 0, row, 0, cb);
+		spw_checkbutton(dlg, t, _("Snap to grid"), "snaptogrid", 1, row++, 0, cb);
 
-	/*
-	  Commenting out until Nathan implements the grids -- bryce
-	spw_checkbutton(dialog, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
-	spw_checkbutton(dialog, t, _("Hex grid"), "hexgrid", 1, row++, 0, cb);
-	*/
-	cb = G_CALLBACK(sp_dtw_whatever_changed);
+		spw_checkbutton(dlg, t, _("Horizontal lines"), "vertgrid", 0, row, 0, cb);
+		spw_checkbutton(dlg, t, _("Vertical lines"), "horizgrid", 1, row++, 0, cb);
 
-	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
-	spw_dropdown(dialog, t, _("Grid units:"), "grid_units", row++, us);
+		/*
+			Commenting out until Nathan implements the grids -- bryce
+			spw_checkbutton(dlg, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
+			spw_checkbutton(dlg, t, _("Hex grid"), "hexgrid", 1, row++, 0, cb);
+		*/
+		cb = G_CALLBACK(sp_dtw_whatever_changed);
 
-	spw_unit_selector(dialog, t, _("Origin X:"), "gridoriginx", row++, us, cb);
-	spw_unit_selector(dialog, t, _("Origin Y:"), "gridoriginy", row++, us, cb);
+		us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+		spw_dropdown(dlg, t, _("Grid units:"), "grid_units", row++, us);
+
+		spw_unit_selector(dlg, t, _("Origin X:"), "gridoriginx", row++, us, cb);
+		spw_unit_selector(dlg, t, _("Origin Y:"), "gridoriginy", row++, us, cb);
 	
-	spw_unit_selector(dialog, t, _("Spacing X:"), "gridspacingx", row++, us, cb);
-	spw_unit_selector(dialog, t, _("Spacing Y:"), "gridspacingy", row++, us, cb);
+		spw_unit_selector(dlg, t, _("Spacing X:"), "gridspacingx", row++, us, cb);
+		spw_unit_selector(dlg, t, _("Spacing Y:"), "gridspacingy", row++, us, cb);
 
- 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        spw_dropdown(dialog, t, _("Snap units:"), "grid_snap_units", row++, us);
+		us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+		spw_dropdown(dlg, t, _("Snap units:"), "grid_snap_units", row++, us);
 
-	spw_unit_selector(dialog, t, _("Snap distance:"), "gridtolerance", row++, us,
-			  G_CALLBACK (sp_dtw_grid_snap_distance_changed) );
+		spw_unit_selector(dlg, t, _("Snap distance:"), "gridtolerance", row++, us,
+											G_CALLBACK (sp_dtw_grid_snap_distance_changed) );
 
-	sp_color_picker_button(dialog, t, _("Grid color:"), "gridcolor",
-			       _("Grid color"), "gridhicolor", row++);
+		sp_color_picker_button(dlg, t, _("Grid color:"), "gridcolor",
+													 _("Grid color"), "gridhicolor", row++);
 	
-	row=0;
- 	/* Guidelines page */
-	l = gtk_label_new (_("Guides"));
-	gtk_widget_show (l);
-	t = gtk_table_new (5, 2, FALSE);
-	gtk_widget_show (t);
-	gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-	gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-	gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+		row=0;
+		/* Guidelines page */
+		l = gtk_label_new (_("Guides"));
+		gtk_widget_show (l);
+		t = gtk_table_new (5, 2, FALSE);
+		gtk_widget_show (t);
+		gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+		gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+		gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+		gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
-	cb = G_CALLBACK(sp_dtw_whatever_toggled);
-	spw_checkbutton(dialog, t, _("Show guides"), "showguides", 0, row, 1, cb);
-	spw_checkbutton(dialog, t, _("Snap to guides"), "snaptoguides", 1, row++, 0, cb);
+		cb = G_CALLBACK(sp_dtw_whatever_toggled);
+		spw_checkbutton(dlg, t, _("Show guides"), "showguides", 0, row, 1, cb);
+		spw_checkbutton(dlg, t, _("Snap to guides"), "snaptoguides", 1, row++, 0, cb);
 
-	cb = G_CALLBACK(sp_dtw_whatever_toggled);
-	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-	spw_dropdown(dialog, t, _("Snap units:"), "guide_snap_units", row++, us);
+		cb = G_CALLBACK(sp_dtw_whatever_toggled);
+		us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+		spw_dropdown(dlg, t, _("Snap units:"), "guide_snap_units", row++, us);
 
-	spw_unit_selector(dialog, t, _("Snap distance:"), "guidetolerance", row++, us,
-			  G_CALLBACK (sp_dtw_guides_snap_distance_changed) );
+		spw_unit_selector(dlg, t, _("Snap distance:"), "guidetolerance", row++, us,
+											G_CALLBACK (sp_dtw_guides_snap_distance_changed) );
 
-	sp_color_picker_button(dialog, t, _("Guides color:"), "guidecolor",
-			       _("Guideline color"), "guideopacity", row++);
+		sp_color_picker_button(dlg, t, _("Guides color:"), "guidecolor",
+													 _("Guideline color"), "guideopacity", row++);
 
-	sp_color_picker_button(dialog, t, _("Highlight color:"), "guidehicolor",
-			       _("Highlighted guideline color"), "guidehiopacity", row++);
+		sp_color_picker_button(dlg, t, _("Highlight color:"), "guidehicolor",
+													 _("Highlighted guideline color"), "guidehiopacity", row++);
 
-	row=0;
-	/* Page page */
-	l = gtk_label_new (_("Page"));
-	gtk_widget_show (l);
-	t = gtk_table_new (2, 1, FALSE);
-	gtk_widget_show (t);
-	gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-	gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-	gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+		row=0;
+		/* Page page */
+		l = gtk_label_new (_("Page"));
+		gtk_widget_show (l);
+		t = gtk_table_new (2, 1, FALSE);
+		gtk_widget_show (t);
+		gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+		gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+		gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+		gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
-	cb = G_CALLBACK(sp_dtw_whatever_toggled);
-	spw_checkbutton(dialog, t, _("Show border"), "showborder", 0, row, 0, cb);
+		cb = G_CALLBACK(sp_dtw_whatever_toggled);
+		spw_checkbutton(dlg, t, _("Show border"), "showborder", 0, row, 0, cb);
 
-	b = gtk_check_button_new_with_label (_("Border on top of drawing"));
-	gtk_widget_show (b);
-	gtk_table_attach (GTK_TABLE (t), b, 0, 1, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
-	gtk_object_set_data (GTK_OBJECT (dialog), "borderlayer", b);
-	g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_dtw_border_layer_toggled), dialog);
+		b = gtk_check_button_new_with_label (_("Border on top of drawing"));
+		gtk_widget_show (b);
+		gtk_table_attach (GTK_TABLE (t), b, 0, 1, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+		gtk_object_set_data (GTK_OBJECT (dlg), "borderlayer", b);
+		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_dtw_border_layer_toggled), dlg);
 
-	/* fixme: We should listen namedview changes here as well */
-	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_dtw_activate_desktop), dialog);
-	g_signal_connect (G_OBJECT (INKSCAPE), "deactivate_desktop", G_CALLBACK (sp_dtw_deactivate_desktop), dialog);
-	sp_dtw_update (dialog, SP_ACTIVE_DESKTOP);
-
-	return dialog;
+		/* fixme: We should listen namedview changes here as well */
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_dtw_activate_desktop), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "deactivate_desktop", G_CALLBACK (sp_dtw_deactivate_desktop), dlg);
+		sp_dtw_update (dlg, SP_ACTIVE_DESKTOP);
+	}
+	gtk_window_present ((GtkWindow *) dlg);
 }
 
 static void
