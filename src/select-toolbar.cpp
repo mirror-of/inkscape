@@ -337,7 +337,23 @@ static gboolean aux_set_unit(SPUnitSelector *,
     return FALSE;
 }
 
+// toggle button callbacks and updaters
 
+static void toggle_stroke (GtkWidget *button, gpointer data) {
+    prefs_set_int_attribute ("options.transform", "stroke", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+}
+
+static void toggle_corners (GtkWidget *button, gpointer data) {
+    prefs_set_int_attribute ("options.transform", "rectcorners", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+}
+
+static void toggle_gradient (GtkWidget *button, gpointer data) {
+    prefs_set_int_attribute ("options.transform", "gradient", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+}
+
+static void toggle_pattern (GtkWidget *button, gpointer data) {
+    prefs_set_int_attribute ("options.transform", "pattern", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+}
 
 GtkWidget *
 sp_select_toolbox_new(SPDesktop *desktop)
@@ -423,6 +439,64 @@ sp_select_toolbox_new(SPDesktop *desktop)
 
     // Insert spw into the toolbar.
     gtk_box_pack_start(GTK_BOX(tb), spw, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
+
+    // "Transform with object" buttons
+
+    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
+
+    {
+    GtkWidget *button = sp_button_new_from_data(9,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "transform_stroke",
+                                              _("When scaling objects, scale the stroke width by the same proportion"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_stroke), NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "stroke", 1));
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    {
+    GtkWidget *button = sp_button_new_from_data(9,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "transform_corners",
+                                              _("When scaling rectangles, scale the radii of rounded corners"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_corners), NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "rectcorners", 1));
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    {
+    GtkWidget *button = sp_button_new_from_data(9,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "transform_gradient",
+                                              _("Transform gradients (in fill or stroke) along with the objects"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_gradient), NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "gradient", 1));
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    {
+    GtkWidget *button = sp_button_new_from_data(9,
+                                              SP_BUTTON_TYPE_TOGGLE,
+                                              NULL,
+                                              "transform_pattern",
+                                              _("Transform patterns (in fill or stroke) along with the objects"),
+                                              tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (toggle_pattern), NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("options.transform", "pattern", 1));
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(tb), cvbox, FALSE, FALSE, 0);
 
     gtk_widget_show_all(tb);
 

@@ -1112,20 +1112,21 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Transform pattern fill"), 
-    _("Apply the transform of an object to its pattern fill"), tt,
+    _("Transform gradients"), 
+    _("Transform gradients (in fill or stroke) along with the objects"), tt,
+    vb,
+    "options.transform", "gradient", 1,
+    options_changed_boolean
+    );
+
+options_checkbox (
+    _("Transform patterns"), 
+    _("Transform patterns (in fill or stroke) along with the objects"), tt,
     vb,
     "options.transform", "pattern", 1,
     options_changed_boolean
     );
 
-options_checkbox (
-    _("Transform gradient fill"), 
-    _("Apply the transform of an object to its gradient fill"), tt,
-    vb,
-    "options.transform", "gradient", 1,
-    options_changed_boolean
-    );
 
      // Store transformation (global)
         {
