@@ -7,6 +7,14 @@
 
 	  renamed header files
 
+	* src/xml/Makefile_insert, src/xml/invalid-operation-exception.h:
+
+	  added Inkscape::XML::InvalidOperationException
+
+	* src/xml/simple-node.h:
+
+	  avoid a second indirect function call from SimpleNode::appendChild
+
 2005-02-20 SwinginCelt  <swinginceltgmail.com>
 
 	* Replaced all sp_repr_attr calls with direct call to

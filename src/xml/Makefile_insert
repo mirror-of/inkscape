@@ -45,7 +45,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/node-listener.h \
 	xml/sp-css-attr.h \
 	xml/text-node.h \
-	xml/transaction-logger.h
+	xml/transaction-logger.h \
+	xml/invalid-operation-exception.h
 
 xml/test-xml-main.cpp: xml/test-xml.cpp $(xml_test_xml_includes)
 	cxxtestgen.pl --error-printer -root -o xml/test-xml-main.cpp $(xml_test_xml_includes)

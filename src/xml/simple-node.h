@@ -69,7 +69,9 @@ public:
     }
 
     void addChild(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-    void appendChild(Inkscape::XML::Node *child) { addChild(child, _last_child); }
+    void appendChild(Inkscape::XML::Node *child) {
+        SimpleNode::addChild(child, _last_child);
+    }
     void removeChild(Inkscape::XML::Node *child);
     void changeOrder(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 
