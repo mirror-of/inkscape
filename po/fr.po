@@ -4124,7 +4124,7 @@ msgstr "Nouveau calque crée."
 
 #: src/verbs.cpp:886
 msgid "Moved to next layer."
-msgstr "Déplacé dans le calque suivant."
+msgstr "Déplacé au calque suivant."
 
 #: src/verbs.cpp:888
 msgid "Can't move past last layer."
@@ -4132,7 +4132,7 @@ msgstr ""
 
 #: src/verbs.cpp:898
 msgid "Moved to previous layer."
-msgstr "Déplacé dans le calque précédant."
+msgstr "Déplacé au calque précédant."
 
 #: src/verbs.cpp:900
 msgid "Can't move past first layer."
