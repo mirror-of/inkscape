@@ -105,6 +105,7 @@ TESTS =	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
 	livarot/Path-test$(EXEEXT)	\
+	xml/quote-test$(EXEEXT)	\
 	xml/repr-action-test$(EXEEXT)
 
 # automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
@@ -124,6 +125,7 @@ check_PROGRAMS =	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
 	livarot/Path-test	\
+	xml/quote-test	\
 	xml/repr-action-test
 
 # todo: consider consolidating some of the foo_CPPFLAGS into AM_CPPFLAGS / INCLUDES.
