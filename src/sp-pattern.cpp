@@ -27,6 +27,9 @@
 #include "document.h"
 #include "sp-object-repr.h"
 #include "sp-item.h"
+#include "document.h"
+#include "document-private.h"
+
 #include "sp-pattern.h"
 
 /*
@@ -117,13 +120,20 @@ sp_pattern_init (SPPattern *pat)
 	pat->ref->changedSignal().connect(SigC::bind(SigC::slot(pattern_ref_changed), pat));
 
 	pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
+	pat->patternUnits_set = FALSE;
+
+	pat->patternContentUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
+	pat->patternContentUnits_set = FALSE;
 
 	nr_matrix_set_identity (&pat->patternTransform);
+	pat->patternTransform_set = FALSE;
 
 	sp_svg_length_unset (&pat->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&pat->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&pat->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&pat->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+
+	pat->viewBox_set = FALSE;
 }
 
 static void
@@ -418,6 +428,106 @@ pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern)
 	sp_object_request_modified (SP_OBJECT (pattern), SP_OBJECT_MODIFIED_FLAG);
 }
 
+guint
+pattern_users (SPPattern *pattern)
+{
+	return SP_OBJECT (pattern)->hrefcount;
+}
+
+SPPattern *
+pattern_chain (SPPattern *pattern)
+{
+	SPDocument *document = SP_OBJECT_DOCUMENT (pattern);
+	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
+
+	SPRepr *repr = sp_repr_new ("pattern");
+	gchar *parent_ref = g_strconcat ("#", sp_repr_attr(SP_OBJECT_REPR(pattern), "id"), NULL);
+	sp_repr_set_attr (repr, "xlink:href",  parent_ref);
+	g_free (parent_ref);
+
+	sp_repr_add_child (defsrepr, repr, NULL);
+	const gchar *child_id = sp_repr_attr(repr, "id");
+	SPObject *child = sp_document_lookup_id (document, child_id);
+	g_assert (SP_IS_PATTERN (child));
+
+	return SP_PATTERN (child);
+}
+
+// Access functions that look up fields up the chain of referenced patterns and return the first one which is set
+
+guint pattern_patternUnits (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->patternUnits_set)
+			return pat_i->patternUnits;
+	}
+	return pat->patternUnits;
+}
+
+guint pattern_patternContentUnits (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->patternContentUnits_set)
+			return pat_i->patternContentUnits;
+	}
+	return pat->patternContentUnits;
+}
+
+NRMatrix *pattern_patternTransform (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->patternTransform_set)
+			return &(pat_i->patternTransform);
+	}
+	return &(pat->patternTransform);
+}
+
+gdouble pattern_x (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->x.set)
+			return pat_i->x.computed;
+	}
+	return 0;
+}
+
+gdouble pattern_y (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->y.set)
+			return pat_i->y.computed;
+	}
+	return 0;
+}
+
+gdouble pattern_width (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->width.set)
+			return pat_i->width.computed;
+	}
+	return 0;
+}
+
+gdouble pattern_height (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->height.set)
+			return pat_i->height.computed;
+	}
+	return 0;
+}
+
+NRRect *pattern_viewBox (SPPattern *pat)
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (pat_i->viewBox_set)
+			return &(pat_i->viewBox);
+	}
+	return &(pat->viewBox);
+}
+
+
 /* Painter */
 
 static void sp_pat_fill (SPPainter *painter, NRPixBlock *pb);
@@ -439,12 +549,12 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 
 	pp->pat = pat;
 
-	if (pat->patternUnits == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+	if (pattern_patternUnits (pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
 		/* BBox to user coordinate system */
 		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0.0, 0.0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
 		// the final patternTransform, taking into account bbox
-		NR::Matrix ps2user = NR::Matrix (&pat->patternTransform) * bbox2user;
+		NR::Matrix ps2user = NR::Matrix (pattern_patternTransform (pat)) * bbox2user;
 
 		// see (*) comment below
 		NR::Matrix ps2px = ps2user * full_transform;
@@ -467,8 +577,8 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		// So here I comply with the majority opinion, but leave my interpretation commented out below.
 		// (To get item_transform, I subtract parent from full.)
 
-		//NR::Matrix ps2px = (full_transform * parent_transform.inverse()) * NR::Matrix (&pat->patternTransform) * parent_transform;
-		NR::Matrix ps2px = NR::Matrix (&pat->patternTransform) * full_transform;
+		//NR::Matrix ps2px = (full_transform * parent_transform.inverse()) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
+		NR::Matrix ps2px = NR::Matrix (pattern_patternTransform (pat)) * full_transform;
 
 		ps2px.copyto (&pp->ps2px);
 	}
@@ -477,15 +587,15 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 
 	if (pat->viewBox_set) {
 		/* Forget content units at all (lauris) */
-		gdouble tmp_x = pat->width.computed / (pat->viewBox.x1 - pat->viewBox.x0);
-		gdouble tmp_y = pat->height.computed / (pat->viewBox.y1 - pat->viewBox.y0);
+		gdouble tmp_x = pattern_width (pat) / (pattern_viewBox(pat)->x1 - pattern_viewBox(pat)->x0);
+		gdouble tmp_y = pattern_height (pat) / (pattern_viewBox(pat)->y1 - pattern_viewBox(pat)->y0);
 
-		NR::Matrix vb2ps (tmp_x, 0.0, 0.0, tmp_y, -pat->viewBox.x0 * tmp_x, -pat->viewBox.y0 * tmp_y);
+		NR::Matrix vb2ps (tmp_x, 0.0, 0.0, tmp_y, -pattern_viewBox(pat)->x0 * tmp_x, -pattern_viewBox(pat)->y0 * tmp_y);
 
 		/* Problem: What to do, if we have mixed lengths and percentages? (Lauris) */
 		/* Currently we do ignore percentages at all, but that is not good (Lauris) */
 
-		NR::Matrix vb2us = vb2ps * NR::Matrix (&pat->patternTransform);
+		NR::Matrix vb2us = vb2ps * NR::Matrix (pattern_patternTransform (pat));
 
 		// see (*)
 		NR::Matrix pcs2px = vb2us * full_transform;
@@ -495,37 +605,35 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		NR::Matrix pcs2px;
 
 		/* No viewbox, have to parse units */
-		if (pat->patternContentUnits == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
+		if (pattern_patternContentUnits (pat) == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
 			/* BBox to user coordinate system */
 			NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0.0, 0.0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-			NR::Matrix pcs2user = NR::Matrix (&pat->patternTransform) * bbox2user;
+			NR::Matrix pcs2user = NR::Matrix (pattern_patternTransform (pat)) * bbox2user;
 
 			// see (*)
 			pcs2px = pcs2user * full_transform;
 		} else {
 			// see (*)
-			//pcs2px = (full_transform * parent_transform.inverse()) * NR::Matrix (&pat->patternTransform) * parent_transform;
-			pcs2px = NR::Matrix (&pat->patternTransform) * full_transform;
+			//pcs2px = (full_transform * parent_transform.inverse()) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
+			pcs2px = NR::Matrix (pattern_patternTransform (pat)) * full_transform;
 		}
 
-		pcs2px = NR::translate (pat->x.computed, pat->y.computed) * pcs2px; 
+		pcs2px = NR::translate (pattern_x (pat), pattern_y (pat)) * pcs2px; 
 
 		pcs2px.copyto (&pp->pcs2px);
 	}
 
-	/* fixme: Create arena */
-	/* fixme: Actually we need some kind of constructor function */
-	/* fixme: But to do that, we need actual arena implementaion */
+	/* Create arena */
 	pp->arena = NRArena::create();
 
 	pp->dkey = sp_item_display_key_new (1);
 
-	/* fixme: Create group */
+	/* Create group */
 	pp->root = NRArenaGroup::create(pp->arena);
 
-	/* fixme: Show items */
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref->getObject()) {
+	/* Show items */
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
 		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			if (SP_IS_ITEM (child)) {
 				NRArenaItem *cai;
@@ -553,7 +661,7 @@ sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter)
 	pp = (SPPatPainter *) painter;
 	pat = pp->pat;
 
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref->getObject()) {
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
 		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			if (SP_IS_ITEM (child)) {
 				sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
@@ -582,8 +690,8 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 
 	pp = (SPPatPainter *) painter;
 
-	if (pp->pat->width.computed < NR_EPSILON) return;
-	if (pp->pat->height.computed < NR_EPSILON) return;
+	if (pattern_width (pp->pat) < NR_EPSILON) return;
+	if (pattern_height (pp->pat) < NR_EPSILON) return;
 
 	/* Find buffer area in gradient space */
 	/* fixme: This is suboptimal (Lauris) */
@@ -594,18 +702,18 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 	ba.y1 = pb->area.y1;
 	nr_rect_d_matrix_transform (&psa, &ba, &pp->px2ps);
 
-	psa.x0 = floor ((psa.x0 - pp->pat->x.computed) / pp->pat->width.computed);
-	psa.y0 = floor ((psa.y0 - pp->pat->y.computed) / pp->pat->height.computed);
-	psa.x1 = ceil ((psa.x1 - pp->pat->x.computed) / pp->pat->width.computed);
-	psa.y1 = ceil ((psa.y1 - pp->pat->y.computed) / pp->pat->height.computed);
+	psa.x0 = floor ((psa.x0 - pattern_x (pp->pat)) / pattern_width (pp->pat));
+	psa.y0 = floor ((psa.y0 - pattern_y (pp->pat)) / pattern_height (pp->pat));
+	psa.x1 = ceil ((psa.x1 - pattern_x (pp->pat)) / pattern_width (pp->pat));
+	psa.y1 = ceil ((psa.y1 - pattern_y (pp->pat)) / pattern_height (pp->pat));
 
 	for (y = psa.y0; y < psa.y1; y++) {
 		for (x = psa.x0; x < psa.x1; x++) {
 			NRPixBlock ppb;
 			double psx, psy;
 
-			psx = x * pp->pat->width.computed;
-			psy = y * pp->pat->height.computed;
+			psx = x * pattern_width (pp->pat);
+			psy = y * pattern_height (pp->pat);
 
 			area.x0 = (gint32)(pb->area.x0 - (pp->ps2px.c[0] * psx + pp->ps2px.c[2] * psy));
 			area.y0 = (gint32)(pb->area.y0 - (pp->ps2px.c[1] * psx + pp->ps2px.c[3] * psy));

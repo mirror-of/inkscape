@@ -76,4 +76,17 @@ struct SPPatternClass {
 	SPPaintServerClass parent_class;
 };
 
+guint pattern_users (SPPattern *pattern);
+SPPattern *pattern_chain (SPPattern *pattern);
+
+guint pattern_patternUnits (SPPattern *pat);
+guint pattern_patternContentUnits (SPPattern *pat);
+NRMatrix *pattern_patternTransform (SPPattern *pat);
+gdouble pattern_x (SPPattern *pat);
+gdouble pattern_y (SPPattern *pat);
+gdouble pattern_width (SPPattern *pat);
+gdouble pattern_height (SPPattern *pat);
+NRRect *pattern_viewBox (SPPattern *pat);
+
+
 #endif

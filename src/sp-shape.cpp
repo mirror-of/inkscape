@@ -819,18 +819,32 @@ sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix cons
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_PATTERN (server)) {
 
+            SPPattern *pattern;
+
+            if (pattern_users(SP_PATTERN (server)) > 1) {
+                pattern = pattern_chain (SP_PATTERN (server));
+                gchar *href = g_strconcat ("url(#", sp_repr_attr (SP_OBJECT_REPR (pattern), "id"), ")", NULL);
+
+                SPCSSAttr *css = sp_repr_css_attr_new ();
+                sp_repr_css_set_property (css, "fill", href);
+                sp_repr_css_change_recursive (SP_OBJECT_REPR (item), css, "style");
+            } else {
+                pattern = SP_PATTERN (server);
+            }
+
             // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
             // for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
-            //SP_PATTERN (server)->patternTransform = premul * NR::Matrix(item->transform) * NR::Matrix(SP_PATTERN (server)->patternTransform) * NR::Matrix(item->transform).inverse() * postmul;
+            //pattern->patternTransform = premul * NR::Matrix(item->transform) * NR::Matrix(pattern->patternTransform) * NR::Matrix(item->transform).inverse() * postmul;
 
             // otherwise the formula is much simpler
-            SP_PATTERN (server)->patternTransform = NR::Matrix(SP_PATTERN (server)->patternTransform) * postmul;
+            pattern->patternTransform = NR::Matrix(pattern_patternTransform(pattern)) * postmul;
+            pattern->patternTransform_set = TRUE;
 
             gchar c[256];
-            if (sp_svg_transform_write(c, 256, &(SP_PATTERN (server)->patternTransform))) {
-                sp_repr_set_attr(SP_OBJECT_REPR(server), "patternTransform", c);
+            if (sp_svg_transform_write(c, 256, &(pattern->patternTransform))) {
+                sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
             } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(server), "patternTransform", NULL);
+                sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
             }
         }
     } 
