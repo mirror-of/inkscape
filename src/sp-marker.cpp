@@ -415,7 +415,6 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	nr_matrix_set_translate (&q, -marker->refX.computed, -marker->refY.computed);
 	nr_matrix_multiply (&marker->c2p, &q, &marker->c2p);
 
-
 	nr_matrix_multiply (&rctx.i2doc, &marker->c2p, &rctx.i2doc);
 
 	/* If viewBox is set reinitialize child viewport */
@@ -528,6 +527,13 @@ sp_marker_print (SPItem *item, SPPrintContext *ctx)
 
 /* fixme: Remove link if zero-sized (Lauris) */
 
+/**
+* First of all, removes any SPMarkerViews that a marker has with a specific key.   
+* Set up the NRArenaItem array's size in the specified SPMarker's SPMarkerView.
+* \param marker Marker to create views in.
+* \param key Key to give each SPMarkerView.
+* \param size Number of NRArenaItems to put in the SPMarkerView.
+*/
 void
 sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 {
@@ -594,6 +600,7 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 					m.c[2] *= linewidth;
 					m.c[3] *= linewidth;
 				}
+
 				nr_arena_item_set_transform (v->items[pos], &m);
 			}
 			return v->items[pos];
@@ -605,6 +612,9 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 
 /* This replaces SPItem implementation because we have own views */
 
+/**
+* \param key SPMarkerView key to hide.
+*/
 void
 sp_marker_hide (SPMarker *marker, unsigned int key)
 {

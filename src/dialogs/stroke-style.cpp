@@ -9,11 +9,18 @@
  *
  * Copyright (C) 2001-2002 authors
  * Copyright (C) 2001 Ximian, Inc.
+ * Copyright (C) 2004 John Cliff
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #define noSP_SS_VERBOSE
+
+/* TODO:  This is a kludge to get the code to compile; for some
+ *        reason, on Linux INKSCAPE_MARKERSDIR isn't getting
+ *        defined properly...  This needs to be fixed.
+ */
+#define INKSCAPE_MARKERSDIR "/usr/share/inkscape/markers"
 
 #include <config.h>
 
@@ -22,6 +29,7 @@
 
 #include <libnr/nr-values.h>
 #include <libnr/nr-matrix.h>
+
 
 #include <gtk/gtksignal.h>
 #include <gtk/gtkstock.h>
@@ -35,30 +43,38 @@
 #include <gtk/gtkradiobutton.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkiconfactory.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkmenuitem.h>
 
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
-#include "../svg/svg.h"
-#include "../svg/stringstream.h"
-#include "../widgets/sp-widget.h"
-#include "../widgets/spw-utilities.h"
-#include "../sp-gradient.h"
+#include "svg/svg.h"
+#include "svg/stringstream.h"
+#include "widgets/sp-widget.h"
+#include "widgets/spw-utilities.h"
+#include "sp-gradient.h"
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>
 #include "enums.h"
 #include "style.h"
-#include "../gradient-chemistry.h"
-#include "../document.h"
-#include "../desktop-handles.h"
-#include "../marker-status.h"
-#include "../selection.h"
-#include "../sp-item.h"
-#include "../inkscape.h"
-#include "../inkscape-stock.h"
-#include "dialog-events.h"
+#include "gradient-chemistry.h"
+#include "document.h"
+#include "desktop-handles.h"
+#include "marker-status.h"
+#include "selection.h"
+#include "sp-item.h"
+#include "inkscape.h"
+#include "inkscape-stock.h"
+#include "dialogs/dialog-events.h"
+#include "sp-root.h"
+#include "sp-defs.h"
+#include "document-private.h"
+#include "xml/repr-private.h"
+#include "display/nr-arena.h"
+#include "display/nr-arena-item.h"
+#include "widgets/icon.h"
 
-
-#include "stroke-style.h"
+#include "dialogs/stroke-style.h"
 
 /* Paint */
 
@@ -752,12 +768,13 @@ static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed ( SPDashSelector *dsel, 
                                                 SPWidget *spw );
-#ifdef WITH_MARKER_GUI
 static void sp_stroke_style_update_marker_buttons( SPWidget *spw, 
                                                    const GSList *objects, 
                                                    unsigned int loc, 
                                                    const gchar *stock_type );
-#endif
+
+static void sp_stroke_style_ensure_marker (const gchar* n);
+static gchar* ink_extract_marker_name(const gchar *n);
 
                                                    
 /**
@@ -797,6 +814,379 @@ sp_stroke_radio_button ( GtkWidget* tb, const char* n, const char* xpm,
 
 } // end of sp_stroke_radio_button()
 
+static bool
+marker_not_in_doc (SPRepr *repr, GSList *ml)
+{
+    for (; ml != NULL; ml = ml->next){
+        SPRepr *item_repr = SP_OBJECT_REPR((SPItem *) ml->data);
+        if (sp_repr_attr(repr,"id")==sp_repr_attr(item_repr,"id")) return FALSE;
+    }
+    return TRUE;
+}
+
+static guchar *
+sp_marker_preview_from_svg( const gchar *name,
+                         unsigned int size,
+                         unsigned int scale )
+{
+    static SPDocument *doc = NULL;
+    static NRArena *arena = NULL;
+    static NRArenaItem *root = NULL;
+    static unsigned int edoc = FALSE;
+    guchar *px;
+    /* Try to load from document */
+    if (!edoc && !doc) {
+        if (g_file_test(INKSCAPE_MARKERSDIR "/markers.svg", G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new (INKSCAPE_MARKERSDIR "/markers.svg", FALSE, FALSE);
+        }
+        if ( !doc && g_file_test( INKSCAPE_MARKERSDIR "/markers.svg",
+                                  G_FILE_TEST_IS_REGULAR) )
+        {
+            doc = sp_document_new ( INKSCAPE_MARKERSDIR "/markers.svg",
+                                    FALSE, FALSE );
+        }
+        if (doc) {
+            unsigned int visionkey;
+            sp_document_ensure_up_to_date (doc);
+            /* Create new arena */
+            arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+            /* Create ArenaItem and set transform */
+            visionkey = sp_item_display_key_new (1);
+            /* fixme: Memory manage root if needed (Lauris) */
+            root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)),
+                                         arena, visionkey, SP_ITEM_SHOW_PRINT );
+        } else {
+            edoc = TRUE;
+        }
+    }
+
+    if (!edoc && doc) {
+        SPObject *object;
+        object = sp_document_lookup_id (doc, name);
+        if (object && SP_IS_ITEM (object)) {
+            /* Find bbox in document */
+            NRMatrix i2doc;
+            sp_item_i2doc_affine(SP_ITEM(object), &i2doc);
+            NRRect dbox;
+            sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
+            /* This is in document coordinates, i.e. pixels */
+            if (!nr_rect_f_test_empty (&dbox))
+            {
+                NRRectL ibox, area, ua;
+                NRMatrix t;
+                NRPixBlock B;
+                NRGC gc;
+                double sf;
+                int width, height, dx, dy;
+                /* Update to renderable state */
+                sf = 0.8 * size / scale;
+                nr_matrix_set_scale (&t, sf, sf);
+                nr_arena_item_set_transform (root, &t);
+                nr_matrix_set_identity (&gc.transform);
+                nr_arena_item_invoke_update ( root, NULL, &gc,
+                                              NR_ARENA_ITEM_STATE_ALL,
+                                              NR_ARENA_ITEM_STATE_NONE );
+                /* Item integer bbox in points */
+                ibox.x0 = (int) floor (sf * dbox.x0 + 0.5);
+                ibox.y0 = (int) floor (sf * dbox.y0 + 0.5);
+                ibox.x1 = (int) floor (sf * dbox.x1 + 0.5);
+                ibox.y1 = (int) floor (sf * dbox.y1 + 0.5);
+                /* Find button visible area */
+                width = ibox.x1 - ibox.x0;
+                height = ibox.y1 - ibox.y0;
+                //dx = (size - width) / 2;
+                //dy = (size - height) / 2;
+                dx=dy=size;
+                dx=(dx-width)/2; // watch out for size, since 'unsigned'-'signed' can cause problems if the result is negative
+                dy=(dy-height)/2;
+                area.x0 = ibox.x0 - dx;
+                area.y0 = ibox.y0 - dy;
+                area.x1 = area.x0 + size;
+                area.y1 = area.y0 + size;
+                /* Actual renderable area */
+                ua.x0 = MAX (ibox.x0, area.x0);
+                ua.y0 = MAX (ibox.y0, area.y0);
+                ua.x1 = MIN (ibox.x1, area.x1);
+                ua.y1 = MIN (ibox.y1, area.y1);
+                /* Set up pixblock */
+                px = nr_new (guchar, 4 * size * size);
+                memset (px, 0x00, 4 * size * size);
+                /* Render */
+                nr_pixblock_setup_extern ( &B, NR_PIXBLOCK_MODE_R8G8B8A8N,
+                                           ua.x0, ua.y0, ua.x1, ua.y1,
+                                           px + 4 * size * (ua.y0 - area.y0) +
+                                           4 * (ua.x0 - area.x0),
+                                           4 * size, FALSE, FALSE );
+                nr_arena_item_invoke_render ( root, &ua, &B,
+                                              NR_ARENA_ITEM_RENDER_NO_CACHE );
+                nr_pixblock_release (&B);
+                return px;
+            }
+        }
+    }
+    return NULL;
+
+} // end of sp_marker_preview_from_svg()
+
+
+GtkWidget *
+sp_marker_prev_new (unsigned int size, const gchar *name)
+{
+    guchar *pixels;
+
+    gchar *prevname = g_strconcat ( name , "_prev",NULL);
+    pixels = sp_marker_preview_from_svg (prevname, size, 1);
+    /* TODO: If pixels == NULL then write to stderr that we couldn't find NAME.xpm,
+       and suggest doing `make install'. */
+    GtkWidget *pb = gtk_image_new_from_pixbuf(gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, size, size, size * 4, (GdkPixbufDestroyNotify)nr_free, NULL));
+
+    return  pb;
+}
+
+
+static bool
+sp_marker_load_from_svg ( const gchar *name, SPDocument *current_doc )
+{
+    static SPDocument *doc = NULL;
+    static unsigned int edoc = FALSE;
+    if (!current_doc) return FALSE;
+    /* Try to load from document */
+    if (!edoc && !doc) {
+        if (g_file_test(INKSCAPE_MARKERSDIR "/markers.svg", G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new (INKSCAPE_MARKERSDIR "/markers.svg", FALSE, FALSE);
+        }
+        if ( !doc && g_file_test( INKSCAPE_MARKERSDIR "/markers.svg",
+                                  G_FILE_TEST_IS_REGULAR) )
+        {
+            doc = sp_document_new ( INKSCAPE_MARKERSDIR "/markers.svg",
+                                    FALSE, FALSE );
+        }
+        if (doc) {
+            sp_document_ensure_up_to_date (doc);
+            } else {
+            edoc = TRUE;
+        }
+    }
+    if (!edoc && doc) {
+        /* Get the marker we want */
+        SPObject *object;
+        object = sp_document_lookup_id (doc, name);
+        if (object && SP_IS_MARKER (object)) {
+             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS (current_doc);
+             SPRepr *mark_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
+             sp_repr_add_child (SP_OBJECT_REPR (defs), mark_repr, NULL);
+             sp_repr_unref (mark_repr);
+             return TRUE;
+         }
+   }
+   return FALSE;
+}
+
+static bool
+sp_marker_defaultlist_from_svg ( GtkWidget *m, SPDocument *current_doc )
+{
+    static SPDocument *doc = NULL;
+    static unsigned int edoc = FALSE;
+
+    if (!current_doc) return FALSE;
+    /* Try to load from document */
+    if (!edoc && !doc) {
+        if (g_file_test(INKSCAPE_MARKERSDIR "/markers.svg", G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new (INKSCAPE_MARKERSDIR "/markers.svg", FALSE, FALSE);
+        }
+        if ( !doc && g_file_test( INKSCAPE_MARKERSDIR "/markers.svg",
+                                  G_FILE_TEST_IS_REGULAR) )
+        {
+            doc = sp_document_new ( INKSCAPE_MARKERSDIR "/markers.svg",
+                                    FALSE, FALSE );
+        }
+        if (doc) {
+            sp_document_ensure_up_to_date (doc);
+            } else {
+            edoc = TRUE;
+        }
+    }
+    if (!edoc && doc) {
+        /* Pick up all markers ad add items to menu*/
+        GSList *ml = NULL;
+        SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS (doc);
+
+        for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(defs)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+                if (SP_IS_MARKER (ochild)) {
+                    ml = g_slist_prepend (ml, ochild);
+                }
+        }
+        for (; ml != NULL; ml = ml->next){
+                        if (SP_IS_MARKER(ml->data)){
+                            SPRepr *repr = SP_OBJECT_REPR((SPItem *) ml->data);
+                            if (!sp_document_lookup_id (current_doc, sp_repr_attr(repr,"id"))){
+                                GtkWidget *i = gtk_menu_item_new ();
+                                gtk_widget_show (i);
+                                gchar *markid = (gchar *)sp_repr_attr(repr,"id");
+                                g_object_set_data (G_OBJECT (i), "marker", markid);
+                                GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+                                gtk_widget_show (hb);
+                                GtkWidget *prv = sp_marker_prev_new (32, markid);
+                                gtk_widget_show (prv);
+                                gtk_box_pack_start (GTK_BOX (hb), prv, FALSE, FALSE, 0);
+                                GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+                                gtk_widget_show (l);
+                                gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
+                                gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+                                gtk_widget_show (hb);
+                                gtk_container_add (GTK_CONTAINER (i), hb);
+                                gtk_menu_append (GTK_MENU (m), i);
+                             }
+                        }
+        }
+
+   }
+   return FALSE;
+}
+
+
+
+static GtkWidget*
+ink_marker_menu ( GtkWidget *tbl, gchar *menu_id)
+{
+
+        SPDesktop *desktop = inkscape_active_desktop();
+        SPDocument *doc = SP_DT_DOCUMENT (desktop);
+        GtkWidget *mnu = gtk_option_menu_new ();
+
+
+       /* Create new menu widget */
+        GtkWidget *m = gtk_menu_new ();
+        gtk_widget_show (m);
+        SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS (doc);
+
+        /* Pick up all markers  */
+        GSList *ml = NULL;
+
+        for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(defs)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+                if (SP_IS_MARKER (ochild)) {
+                    ml = g_slist_prepend (ml, ochild);
+                }
+        }
+
+        bool *updating= FALSE;
+        g_object_set_data (G_OBJECT (mnu), "updating", updating);
+
+
+       ml = g_slist_reverse (ml);
+
+       if (!doc) {
+        GtkWidget *i;
+        i = gtk_menu_item_new_with_label (_("No document selected"));
+        gtk_widget_show (i);
+        gtk_menu_append (GTK_MENU (m), i);
+        gtk_widget_set_sensitive (mnu, FALSE);
+    } else if (!ml) {
+             GtkWidget *i;
+             i = gtk_menu_item_new ();
+             gtk_widget_show (i);
+             gchar *markid = "none";
+             g_object_set_data (G_OBJECT (i), "marker", markid);
+              GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+             gtk_widget_show (hb);
+             GtkWidget *l = gtk_label_new ("None");
+             gtk_widget_show (l);
+             gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
+             gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+             gtk_widget_show (hb);
+             gtk_container_add (GTK_CONTAINER (i), hb);
+             gtk_menu_append (GTK_MENU (m), i);
+             sp_marker_defaultlist_from_svg ( m, doc );
+    } else {
+             SPMarker *mark = NULL;
+             GtkWidget *i;
+             i = gtk_menu_item_new ();
+             gtk_widget_show (i);
+             gchar *markid = "none";
+             g_object_set_data (G_OBJECT (i), "marker", markid);
+             GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+             gtk_widget_show (hb);
+             GtkWidget *l = gtk_label_new ("None");
+             gtk_widget_show (l);
+             gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
+             gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+             gtk_widget_show (hb);
+             gtk_container_add (GTK_CONTAINER (i), hb);
+             gtk_menu_append (GTK_MENU (m), i);
+
+
+             for (; ml != NULL; ml = ml->next){
+                if (SP_IS_MARKER(ml->data)){
+                    mark = SP_MARKER (ml->data);
+
+                    i = gtk_menu_item_new ();
+                    gtk_widget_show (i);
+                    SPRepr *repr = SP_OBJECT_REPR((SPItem *) ml->data);
+                    gchar *markid = (gchar *)sp_repr_attr(repr,"id");
+                    g_object_set_data (G_OBJECT (i), "marker", markid);
+                    GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+                    gtk_widget_show (hb);
+                    GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+                    gtk_widget_show (l);
+                    gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
+                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+                    gtk_widget_show (hb);
+                    gtk_container_add (GTK_CONTAINER (i), hb);
+                    gtk_menu_append (GTK_MENU (m), i);
+                 }
+
+             }
+            sp_marker_defaultlist_from_svg ( m, doc );
+            gtk_widget_set_sensitive (mnu, TRUE);
+      }
+    gtk_object_set_data (GTK_OBJECT (mnu), "menu_id", menu_id);
+    gtk_option_menu_set_menu (GTK_OPTION_MENU (mnu), m);
+    /* Set history */
+    gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+
+return mnu;
+}
+
+
+/*user selected existing marker from list*/
+static void
+sp_marker_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
+{
+    if (gtk_object_get_data (GTK_OBJECT (mnu), "update"))  return;
+    SPDesktop *desktop = inkscape_active_desktop();
+    SPDocument *doc = SP_DT_DOCUMENT (desktop);
+    if (!SP_IS_DOCUMENT(doc)) return;
+    /* Get Marker */
+    if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "marker")) return;
+    gchar *markid = (gchar *) g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "marker");
+    gchar *marker ="";
+    if (strcmp(markid, "none") != 0){
+        if (!sp_document_lookup_id (doc, markid) && !SP_IS_MARKER(sp_document_lookup_id (doc, markid))) sp_marker_load_from_svg ( markid, doc );
+        SPMarker *mark = SP_MARKER(sp_document_lookup_id (doc, markid));
+        if (mark){
+            SPRepr *repr = SP_OBJECT_REPR(mark);
+            marker = g_strconcat ("url(#", sp_repr_attr(repr,"id"), ")",NULL);
+        }
+    }else {
+        marker = markid;
+    }
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    gchar *menu_id = (gchar *) g_object_get_data (G_OBJECT(mnu), "menu_id");
+    sp_repr_css_set_property (css, menu_id, marker);
+    const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+    for (; items != NULL; items = items->next){
+          SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
+          if (selrepr) sp_repr_css_change_recursive (selrepr, css, "style");
+          sp_object_request_modified(SP_OBJECT(items->data), SP_OBJECT_MODIFIED_FLAG);
+          sp_object_request_update (SP_OBJECT(items->data), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+        }
+    sp_repr_css_attr_unref (css);
+    g_free (marker);
+    g_free (menu_id);
+
+
+}
 
 /**
 * \brief  Creates a new widget for the line stroke style.
@@ -900,7 +1290,6 @@ sp_stroke_style_line_widget_new (void)
                          spw );
     i++;
 
-#ifdef WITH_MARKER_GUI
     /* Start Marker */
     spw_label(t, _("Start Markers:"), 0, i);
     hb = spw_hbox(t, 3, 1, i);
@@ -960,7 +1349,42 @@ sp_stroke_style_line_widget_new (void)
                 INKSCAPE_ICONS_DIR "/marker_arrow_end.xpm",
                 hb, spw, "end_marker", "url(#mArrow)" );
     i++;
-#endif
+
+    /* Drop down marker selectors*/
+    spw_label(t, _("Start Markers:"), 0, i);
+    GtkWidget *mnu  = ink_marker_menu ( spw ,"marker-start");
+    gtk_signal_connect ( GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_marker_select), spw );
+    gtk_widget_show (mnu);
+    gtk_table_attach ( GTK_TABLE (t), mnu, 1, 4, i, i+1,
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                       (GtkAttachOptions)0, 0, 0 );
+    gtk_object_set_data (GTK_OBJECT (spw), "start_mark_menu", mnu);
+
+    i++;
+    spw_label(t, _("Mid Markers:"), 0, i);
+    mnu = NULL;
+    mnu  = ink_marker_menu ( spw ,"marker-mid");
+    gtk_signal_connect ( GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_marker_select), spw );
+    gtk_widget_show (mnu);
+    gtk_table_attach ( GTK_TABLE (t), mnu, 1, 4, i, i+1,
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                       (GtkAttachOptions)0, 0, 0 );
+    gtk_object_set_data (GTK_OBJECT (spw), "mid_mark_menu", mnu);
+
+    i++;
+    spw_label(t, _("End Markers:"), 0, i);
+    mnu = NULL;
+    mnu  = ink_marker_menu ( spw ,"marker-end");
+    gtk_signal_connect ( GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_marker_select), spw );
+    gtk_widget_show (mnu);
+    gtk_table_attach ( GTK_TABLE (t), mnu, 1, 4, i, i+1,
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
+                       (GtkAttachOptions)0, 0, 0 );
+    gtk_object_set_data (GTK_OBJECT (spw), "end_mark_menu", mnu);
+
+    i++;
+
+
 
     /* General (I think) style dialog signals */
     gtk_signal_connect ( GTK_OBJECT (spw), "construct", 
@@ -1185,7 +1609,6 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
     
     sp_stroke_style_set_cap_buttons (spw, tb);
 
-#ifdef WITH_MARKER_GUI
     /* Markers */
     sp_stroke_style_update_marker_buttons ( spw, objects, 
                                             SP_MARKER_LOC_START, 
@@ -1196,7 +1619,6 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
     sp_stroke_style_update_marker_buttons ( spw, objects, 
                                             SP_MARKER_LOC_END, 
                                             INKSCAPE_STOCK_END_MARKER );
-#endif
 
     /* Dash */
     if (style->stroke_dash.n_dash > 0) {
@@ -1311,7 +1733,6 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
     
     sp_stroke_style_set_cap_buttons (spw, tb);
 
-#ifdef WITH_MARKER_GUI
     /* Toggle buttons for markers - marker-start, marker-mid, and marker-end */
     /* TODO:  There's also a generic 'marker' that applies to all, but we'll 
      * leave that for later 
@@ -1331,7 +1752,8 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
     tb = (GtkWidget*)gtk_object_get_data ( GTK_OBJECT (spw), 
                                            INKSCAPE_STOCK_END_MARKER );
     sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_END_MARKER);
-#endif
+
+
 
     /* Dash */
     if (style->stroke_dash.n_dash > 0) {
@@ -1556,6 +1978,10 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
             * the widget 
             */
                 
+            if (start_marker[0] != '\0') {
+                sp_stroke_style_ensure_marker (start_marker);
+            }
+
             sp_repr_css_set_property (css, "marker-start", start_marker);
             
             for (r = reprs; r != NULL; r = r->next) {
@@ -1564,9 +1990,6 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
             }
             sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), 
                                                  INKSCAPE_STOCK_START_MARKER);
-            /* TODO:  Add <def> for the relevant marker type if it isn't 
-             * already there 
-             */
         
         } else if (mid_marker) {
                 sp_repr_css_set_property (css, "marker-mid", mid_marker);
@@ -1576,6 +1999,11 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
             }
             sp_stroke_style_set_marker_buttons ( spw, GTK_WIDGET (tb), 
                                                  INKSCAPE_STOCK_MID_MARKER );
+
+            if (mid_marker[0] != '\0') {
+                sp_stroke_style_ensure_marker (mid_marker);
+            }
+
         } else if (end_marker) {
             
             sp_repr_css_set_property (css, "marker-end", end_marker);
@@ -1586,6 +2014,10 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
             }
             sp_stroke_style_set_marker_buttons ( spw, GTK_WIDGET (tb), 
                                                  INKSCAPE_STOCK_END_MARKER );
+
+            if (end_marker[0] != '\0') {
+                sp_stroke_style_ensure_marker (end_marker);
+            }
         }
 
         sp_repr_css_attr_unref (css);
@@ -1766,7 +2198,6 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 static void
 sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gchar *marker_name)
 {
-#ifdef WITH_MARKER_GUI
     /* Set up the various xpm's as an array so that new kinds of markers 
      * can be added without having to cut and paste the code itself.
      */
@@ -1785,11 +2216,88 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gcha
         }
         g_free(marker_xpm);
     }
-#endif
+}
+
+static void
+sp_stroke_style_update_marker_menus ( SPWidget *spw,
+                                        const GSList *objects)
+{
+      SPObject *object = SP_OBJECT(objects->data);
+    if (object->style->marker[SP_MARKER_LOC_START].value != NULL){
+        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "start_mark_menu");
+
+        if (gtk_object_get_data (GTK_OBJECT (mnu), "update"))  return;
+        gtk_object_set_data (GTK_OBJECT (mnu), "update", GINT_TO_POINTER (TRUE));
+
+        GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu (mnu));
+        gchar *markname = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_START].value);
+
+        int markpos = 0;
+        GList *kids = GTK_MENU_SHELL(m)->children;
+        int i=0;
+        for (; kids != NULL; kids = kids->next){
+             gchar *mark = (gchar *) g_object_get_data (G_OBJECT(kids->data), "marker");
+             if (strcmp(mark,markname)==0) markpos =i;
+             i++;
+        }
+
+        gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), markpos);
+        gtk_object_set_data (GTK_OBJECT (mnu), "update", GINT_TO_POINTER (FALSE));
+    }else {
+         GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "start_mark_menu");
+         gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+    }
+    if (object->style->marker[SP_MARKER_LOC_MID].value != NULL){
+        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "mid_mark_menu");
+
+        if (gtk_object_get_data (GTK_OBJECT (mnu), "update"))  return;
+        gtk_object_set_data (GTK_OBJECT (mnu), "update", GINT_TO_POINTER (TRUE));
+
+        GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu (mnu));
+        gchar *markname = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_MID].value);
+        int markpos = 0;
+        GList *kids = GTK_MENU_SHELL(m)->children;
+         int i=0;
+        for (; kids != NULL; kids = kids->next){
+             gchar *mark = (gchar *) g_object_get_data (G_OBJECT(kids->data), "marker");
+             if (strcmp(mark,markname)==0) markpos =i;
+             i++;
+        }
+
+        gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), markpos);
+        gtk_object_set_data (GTK_OBJECT (mnu), "update", GINT_TO_POINTER (FALSE));
+        }else {
+         GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "mid_mark_menu");
+         gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+    }
+    if (object->style->marker[SP_MARKER_LOC_END].value != NULL){
+        GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "end_mark_menu");
+
+        if (gtk_object_get_data (GTK_OBJECT (mnu), "update"))  return;
+        gtk_object_set_data (GTK_OBJECT (mnu), "update", GINT_TO_POINTER (TRUE));
+
+        GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu (mnu));
+        gchar *markname = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_END].value);
+        int markpos = 0;
+        GList *kids = GTK_MENU_SHELL(m)->children;
+        int i=0;
+        for (; kids != NULL; kids = kids->next){
+             gchar *mark = (gchar *) g_object_get_data (G_OBJECT(kids->data), "marker");
+             if (strcmp(mark,markname)==0) markpos =i;
+             i++;
+        }
+
+        gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), markpos);
+        gtk_object_set_data (GTK_OBJECT (mnu), "update", GINT_TO_POINTER (FALSE));
+        }else {
+         GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "end_mark_menu");
+         gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+    }
+
+
 }
 
 
-#ifdef WITH_MARKER_GUI
 /**
 * Checks the marker style settings for the selected objects and updates the
 * toggle buttons accordingly.
@@ -1801,34 +2309,148 @@ sp_stroke_style_update_marker_buttons ( SPWidget *spw,
                                         const gchar *stock_type) 
 {
     SPObject *object = SP_OBJECT(objects->data);
+    unsigned int marker_type_set = object->style->marker[loc].set;
     gchar const *marker_type = object->style->marker[loc].value;
-    if (!marker_type) {
-        return;
-    }
 
     /* Iterate through the objects and check the styles */
     bool marker_valid = true;
     for (GSList *l = objects->next; l != NULL; l = l->next) {
         SPObject *o = SP_OBJECT(l->data);
-        if (! g_ascii_strcasecmp(o->style->marker[loc].value, marker_type)) {
+
+        if (marker_type_set != object->style->marker[loc].set) {
+            marker_valid = false;
+        } else if (marker_type_set && object->style->marker[loc].set) {
+            if (g_ascii_strcasecmp (o->style->marker[loc].value, marker_type)) {
             marker_valid = false;
         }
     }
+    }
+
+    /* Work out the widget name that would have been used for this typ
+    ** of marker.  This doesn't seem very neat, but I suppose this code
+    ** will be ripped out when we have a more generic marker system.
+    */
+    gchar* widget_name = NULL;
+    if (marker_type && ! g_ascii_strcasecmp (marker_type, "url(#mTriangle)" ))
+        widget_name = g_strconcat (stock_type, INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL);
+    else if (marker_type && ! g_ascii_strcasecmp (marker_type, "url(#mArrow)" ))
+        widget_name = g_strconcat (stock_type, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL );
+    else
+        widget_name = g_strconcat (stock_type, INKSCAPE_STOCK_MARKER_NONE, NULL);
 
     GtkWidget *tb;
     if (marker_valid) {
-        gchar *widget_name = g_strconcat(stock_type, ":", marker_type, NULL);
         marker_status("Widget name is '%s'", widget_name);
         tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name));
-        g_free(widget_name);
     } else {
         tb = NULL;
     }
+
+    sp_stroke_style_update_marker_menus ( spw, objects);
+
+    g_free(widget_name);
     sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), stock_type);
 
 } // end of sp_stroke_style_update_marker_buttons()
-#endif
 
+
+/**
+* Ensure that the a given marker type is present in the <def> section.
+* \param n Marker type (e.g. url(#mTriangle))
+*/
+static void
+sp_stroke_style_ensure_marker (const gchar* n)
+{
+    /* Extract the actual name of the link
+    ** e.g. get mTriangle from url(#mTriangle).
+    */
+    gchar* buffer = g_strdup (n);
+    buffer[strlen(buffer) - 1] = '\0';
+
+    gchar* name = buffer;
+    while (*name != '\0' && *name != '#')
+        name++;
+
+    if (*name == '\0')
+        return;
+
+    name++;
+
+    if (*name == '\0')
+        return;
+
+    /* Read the defs to see if one of these markers is already there */
+    SPRepr* defs = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (SP_WIDGET_DOCUMENT (spw)));
+    SPRepr* r = defs->children;
+    while (r && strcmp( sp_repr_attr(r, "id"), name)) {
+        r = r->next;
+    }
+
+    if (r == NULL) {
+        if (!sp_marker_load_from_svg (name, SP_WIDGET_DOCUMENT (spw) ) ){
+
+            SPRepr* repr = sp_repr_new ("marker");
+            sp_repr_add_child (defs, repr, NULL);
+            sp_repr_unref (repr);
+
+            sp_repr_set_attr(repr, "id", name);
+            sp_repr_set_attr(repr, "markerWidth", "12.5");
+            sp_repr_set_attr(repr, "markerHeight", "12.5");
+            sp_repr_set_attr(repr, "refX", "6.25");
+            sp_repr_set_attr(repr, "refY", "6.25");
+            sp_repr_set_attr(repr, "orient", "auto");
+
+            SPRepr* path_repr = sp_repr_new ("path");
+            sp_repr_add_child (repr, path_repr, NULL);
+            sp_repr_unref (path_repr);
+
+            if (strcmp (name, "mArrow") == 0) {
+                sp_repr_set_attr (
+                    path_repr,
+                    "d",
+                    "M 0.0068092 6.28628 "
+                    "L 12.4563 12.5487 "
+                    "C 8.66061 8.58881 8.89012 4.05564 12.2688 0.0725591 "
+                    "L 0.0068092 6.28628 z"
+                    );
+            } else {
+                sp_repr_set_attr (
+                    path_repr,
+                    "d",
+                    "M 0.0068092 6.28628 "
+                    "L 12.4563 12.5487 "
+                    "L 12.2688 0.0725591 "
+                    "L 0.0068092 6.28628 z"
+                    );
+            }
+        }
+        sp_document_done (SP_WIDGET_DOCUMENT (spw));
+    }
+
+    free (buffer);
+}
+
+
+    /* Extract the actual name of the link
+    ** e.g. get mTriangle from url(#mTriangle).
+    */
+
+static gchar*
+ink_extract_marker_name(const gchar *n)
+{
+    gchar* buffer = g_strdup (n);
+    buffer[strlen(buffer) - 1] = '\0';
+
+    gchar* name = buffer;
+    while (*name != '\0' && *name != '#')
+        name++;
+
+    name++;
+    if (*name != '\0' ) return name;
+
+    free(buffer);
+    return name;
+}
 
 /*
   Local Variables:

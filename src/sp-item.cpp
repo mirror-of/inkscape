@@ -509,6 +509,12 @@ sp_item_description (SPItem * item)
 	return NULL;
 }
 
+/**
+* Allocates unique integer keys.
+* \param numkeys Number of keys required.
+* \return First allocated key; hence if the returned key is n
+* you can use n, n + 1, ..., n + (numkeys - 1)
+*/
 unsigned int
 sp_item_display_key_new (unsigned int numkeys)
 {
@@ -664,18 +670,27 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 
 	NR::Matrix ret(NR::identity());
 	g_assert(ret.test_identity());
-	while ( NULL != SP_OBJECT_PARENT(item) )
+
+	/* Note that this routine may be called for items that are not members of
+	** the root.  For example, markers are members of a <def> object.  Hence
+	** we terminate either when reaching the top of the tree, or when a
+	** non-item object is reached.
+	*/
+	while ( NULL != SP_OBJECT_PARENT(item) && SP_IS_ITEM (SP_OBJECT_PARENT(item)))
 	{
 		ret *= NR::Matrix(&item->transform);
 		item = SP_ITEM(SP_OBJECT_PARENT(item));
 	}
-	g_assert(SP_IS_ROOT(item));
+
+	/* Then we only do root-related stuff if we found a root item */
+	if (SP_IS_ROOT(item)) {
 	SPRoot const *root = SP_ROOT(item);
 
 	/* Viewbox is relative to root's transform
 	   (http://www.w3.org/TR/SVG11/coords.html#ViewBoxAttributeEffectOnSiblingAttributes). */
 	ret *= root->c2p;
 	ret *= NR::Matrix(&item->transform);
+	}
 
 	return ret;
 }

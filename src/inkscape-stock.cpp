@@ -39,6 +39,15 @@ static struct StockIcon
     {INKSCAPE_STOCK_CAP_BUTT,                      "cap_butt.xpm"            },
     {INKSCAPE_STOCK_CAP_ROUND,                     "cap_round.xpm"           },
     {INKSCAPE_STOCK_CAP_SQUARE,                    "cap_square.xpm"          },
+    {INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_NONE, "marker_none_start.xpm" },
+    {INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW, "marker_triangle_start.xpm" },
+    {INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, "marker_arrow_start.xpm" },
+    {INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_NONE, "marker_none_start.xpm" },
+    {INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW, "marker_triangle_end.xpm" },
+    {INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, "marker_arrow_end.xpm" },
+    {INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_NONE, "marker_none_end.xpm" },
+    {INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW, "marker_triangle_end.xpm" },
+    {INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, "marker_arrow_end.xpm" },
 
     /*object properties */
     {INKSCAPE_STOCK_ROTATE_LEFT,                   "rotate_left.xpm"         },

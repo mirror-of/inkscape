@@ -3,7 +3,7 @@
 Name "Inkscape"
 Caption "Inkscape -- Open Source Scalable Vector Graphics Editor"
 Icon "inkscape32x16col.ico"
-OutFile "inkscape-0.37-2.win32.exe"
+OutFile "inkscape-0.38-1.win32.exe"
 
 ; The default installation directory
 InstallDir "c:\Inkscape"

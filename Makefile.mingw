@@ -78,4 +78,10 @@ clean:
 	-$(RM) inkscape*.zip
 	$(MAKE) -C src -f Makefile.mingw clean
 
+minimal:
+	$(MAKE) -C src -f Makefile.mingw
+	$(RM) inkscape$(S)inkscape.exe
+	$(CP) src$(S)inkscape.exe inkscape
+	@echo "##################### D O N E ####################"
+
 

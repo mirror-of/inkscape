@@ -228,8 +228,6 @@ struct _SPStyle {
 	/** Writing mode */
 	SPIEnum writing_mode;
 
-    /* markers */
-    // GQuark marker[SP_MARKER_LOC_QTY];
 	/** Marker list */
 	SPIString marker[SP_MARKER_LOC_QTY];
 };
