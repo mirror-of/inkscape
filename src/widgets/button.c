@@ -100,6 +100,9 @@ sp_button_init (SPButton *button)
 	button->toggling = 0;
 
 	gtk_container_set_border_width (GTK_CONTAINER (button), 0);
+
+	GTK_WIDGET_UNSET_FLAGS (GTK_WIDGET (button), GTK_CAN_FOCUS);
+	GTK_WIDGET_UNSET_FLAGS (GTK_WIDGET (button), GTK_CAN_DEFAULT);
 }
 
 static void
