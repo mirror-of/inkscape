@@ -3,14 +3,6 @@ if USE_GNOME_PRINT
 gnome_print_sources = gnome.c gnome.h
 endif
 
-if USE_KDE
-kdeincludes = $(all_includes)
-kdesources = kde-private.h kde.cpp kde.h
-kdeprivsources = kde-private.cpp
-kde-private.cpp: kde-private.h
-	$(MOC) kde-private.h -o kde-private.cpp
-endif
-
 extdir = $(libdir)/inkscape/extensions
 extdatadir = $(datadir)/inkscape/extensions
 
@@ -20,8 +12,7 @@ INCLUDES = \
 	-DINKSCAPE_EXTENSIONDIR=\""$(extdir)"\" \
 	-DINKSCAPE_EXTENSIONDATADIR=\""$(extdatadir)"\" \
 	$(INKSCAPE_CFLAGS) \
-	$(GNOME_PRINT_CFLAGS) \
-	$(kdeincludes)
+	$(GNOME_PRINT_CFLAGS)
 
 noinst_LIBRARIES = libspmodules.a
 
@@ -37,11 +28,9 @@ libspmodules_a_SOURCES = \
 	sp-module-sys.c \
 	sp-module-sys.h \
 	ps.c ps.h \
-	$(gnome_print_sources) \
-	$(kdesources)
+	$(gnome_print_sources)
 
 EXTRA_DIST = \
 	$(gnome_print_sources) \
-	$(kdesources) \
 	win32.c win32.h
 

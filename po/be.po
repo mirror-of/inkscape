@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: be\n"
-"POT-Creation-Date: 2003-11-07 21:48-0500\n"
+"POT-Creation-Date: 2003-11-08 12:29-0800\n"
 "PO-Revision-Date: 2003-07-20 16:00+0300\n"
 "Last-Translator: Vital Khilko <dojlid@mova.org>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -58,11 +58,11 @@ msgstr "Рысаваньне"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
 msgid "Selection"
 msgstr "Вылучэньне"
 
-#: src/dialogs/align.c:153 src/toolbox.c:451
+#: src/dialogs/align.c:153 src/toolbox.c:445
 msgid "Align objects"
 msgstr "Раўнае аб'екты"
 
@@ -643,7 +643,7 @@ msgstr "Памер і пазыцыя аб'екта"
 msgid "Size and Position"
 msgstr "Памер і пазыцыя"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
 msgid "Stroke settings"
 msgstr "Наладкі штрыхоўкі"
 
@@ -886,28 +886,28 @@ msgstr "Кут:"
 msgid "Defaults"
 msgstr "Дапомнае"
 
-#: src/file.c:150 src/file.c:161 src/file.c:173
+#: src/file.c:145 src/file.c:157
 msgid "Select file to open"
 msgstr "Выбярыце файл для адкрыцьця"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 msgid "Scalable Vector Graphic (SVG)"
 msgstr "Здольная маштабавацца вэктарная графіка (SVG)"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 #, fuzzy
 msgid "Inkscape native file format and W3C standard"
 msgstr "Уласны фармат файлаў Sodipodi й стандарт W3C"
 
-#: src/file.c:196 src/file.c:309
+#: src/file.c:180 src/file.c:280
 msgid "File type:"
 msgstr "Тып файла:"
 
-#: src/file.c:294
+#: src/file.c:265
 msgid "Save file"
 msgstr "Захаваць файл"
 
-#: src/file.c:470 src/file.c:480 src/file.c:486
+#: src/file.c:436 src/file.c:442
 msgid "Select file to import"
 msgstr "Выбярыце файл для імпартаваньня"
 
@@ -1054,133 +1054,133 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "X-квадрат"
 
-#: src/interface.c:304 src/interface.c:481
+#: src/interface.c:304 src/interface.c:478
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:324
+#: src/interface.c:321
 msgid "Close View"
 msgstr "Закрыць прагляд"
 
-#: src/interface.c:325 src/interface.c:496
+#: src/interface.c:322 src/interface.c:493
 msgid "Exit Program"
 msgstr "Выйсьці з праграмы"
 
-#: src/interface.c:327 src/interface.c:488
+#: src/interface.c:324 src/interface.c:485
 msgid "About Inkscape"
 msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:330 src/interface.c:491
+#: src/interface.c:327 src/interface.c:488
 msgid "About Modules"
 msgstr "Пра модулі"
 
-#: src/interface.c:348
+#: src/interface.c:345
 msgid "Cleanup"
 msgstr "Ачысьціць"
 
 #. View:Zoom
-#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
 msgid "Zoom"
 msgstr "Маштабаваньне"
 
 #. View:New View
-#: src/interface.c:430
+#: src/interface.c:427
 msgid "New View"
 msgstr "Стварыць новае акно рэдагаваньня"
 
 #. View:New Preview
-#: src/interface.c:432
+#: src/interface.c:429
 msgid "New Preview"
 msgstr "Стварыць папярэдні прагляд"
 
-#: src/interface.c:434
+#: src/interface.c:431
 msgid "New Toplevel Toolbox"
 msgstr "Стварыць верхнюю панэлю інструмэнтаў"
 
-#: src/interface.c:435
+#: src/interface.c:432
 msgid "New Docked Toolbox"
 msgstr "Стварыць прычэпленую панэлю інструмэнтаў"
 
-#: src/interface.c:436
+#: src/interface.c:433
 msgid "Remove Docked Toolbox"
 msgstr "Выдаліць прычэпленую панэлю інструмэнта"
 
 #. File
-#: src/interface.c:478 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:429
 msgid "New"
 msgstr "Стварыць"
 
-#: src/interface.c:479
+#: src/interface.c:476
 msgid "Open"
 msgstr "Адкрыць"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:559 src/toolbox.c:354
+#: src/interface.c:556 src/toolbox.c:354
 msgid "File"
 msgstr "Файл"
 
 #. Edit submenu
-#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
+#: src/interface.c:562 src/toolbox.c:405 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "Рэдагаваньне"
 
 #. View submenu
-#: src/interface.c:577
+#: src/interface.c:574
 msgid "View"
 msgstr "Выгляд"
 
 #. Drawing mode submenu
-#: src/interface.c:583
+#: src/interface.c:580
 msgid "Drawing Mode"
 msgstr "Рэжым рысаваньня"
 
 #. Dialog submenu
-#: src/interface.c:589
+#: src/interface.c:586
 msgid "Dialogs"
 msgstr "Дыялёгі"
 
-#: src/interface.c:596
+#: src/interface.c:593
 msgid "Filters"
 msgstr "Фільтары"
 
-#: src/main.c:126
+#: src/main.c:123
 msgid "Do not use X server (only process files from console)"
 msgstr "Не выкарыстоўваць паслужнік Х (толькі апрацоўваць файл з кансолі)"
 
-#: src/main.c:129
+#: src/main.c:126
 msgid "Try to use X server even if $DISPLAY is not set)"
 msgstr ""
 "Працягваць спрабаваць выкарыстоўваць паслужнік Х калі $DISPLAY не ўсталявана)"
 
-#: src/main.c:132
+#: src/main.c:129
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Адкрывае пазначаныя дакумэнты (выбар радка можа быць выключаны)"
 
-#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+#: src/main.c:130 src/main.c:133 src/main.c:136 src/main.c:150
 msgid "FILENAME"
 msgstr "Назва файла"
 
-#: src/main.c:135
+#: src/main.c:132
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Друкуе дакумэнт(ы) у пазначаны выходны файл (выкарыстоўвайце '| праграма' "
 "для стварэньня канала)"
 
-#: src/main.c:138
+#: src/main.c:135
 msgid "Export document to png file"
 msgstr "Экспартаваць дакумэнт у файл png"
 
-#: src/main.c:141
+#: src/main.c:138
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr "Разрозьненьне для канвэртацыі SVG у растар (дапомна 72,0)"
 
-#: src/main.c:142
+#: src/main.c:139
 msgid "DPI"
 msgstr "DPI"
 
-#: src/main.c:144
+#: src/main.c:141
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
@@ -1188,48 +1188,48 @@ msgstr ""
 "Прастора экспартаваньня ў мілімэтрах (дапомна выбіраецца ўвесь дакумэнт, 0,0 "
 "- левы ніжні кут)"
 
-#: src/main.c:145
+#: src/main.c:142
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr "Шырыня генераванага растра ў піксэлях (перазапіс dpi)"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "WIDTH"
 msgstr "ШЫРЫНЯ"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr "Вышыня генераванага растра ў піксэлях (перазапіс dpi)"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "HEIGHT"
 msgstr "ВЫШЫНЯ"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr ""
 "Колер тла экспартаванага растра (толькі радок колера, які падтрымлівае SVG)"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "COLOR"
 msgstr "КОЛЕР"
 
-#: src/main.c:153
+#: src/main.c:150
 msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
 msgstr ""
 "Экспартаваньне дакумэнта ў звычайны файл SVG (без прасторы імёнаў \"xmlns:"
 "sodipodi\")"
 
-#: src/main.c:155
+#: src/main.c:152
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Паказываць заданыя файлы адзін за адным, пераключацца на наступны па любой "
 "падзеі мышы/клявіятуры"
 
-#: src/main.c:157
+#: src/main.c:154
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr ""
 
@@ -1258,24 +1258,6 @@ msgstr "Выбярыце друкарку"
 #, fuzzy, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (дакумэнт з назвай %s..): Папярэдні прагляд друку"
-
-#: src/modules/kde.cpp:159
-msgid "Document variant:"
-msgstr "Варыянт дакумэнта:"
-
-#: src/modules/kde.cpp:169
-msgid ""
-"*.svg *.svgz|SVG files\n"
-"*.xml|XML files\n"
-"*|All files"
-msgstr ""
-"*.svg *.svgz|SVG файлы\n"
-"*.xml|XML файлы\n"
-"*|Усе файлы"
-
-#: src/modules/kde.cpp:171
-msgid "Save document as"
-msgstr "Захаваць дакумэнт як"
 
 #. Print destination frame
 #: src/modules/ps.c:159 src/modules/ps.c:220
@@ -1420,7 +1402,7 @@ msgid "Shape"
 msgstr "Фармаваньне"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:448
+#: src/object-ui.c:460 src/toolbox.c:442
 msgid "Fill settings"
 msgstr "Наладкі запаўненьня"
 
@@ -1464,27 +1446,27 @@ msgstr "Каэфіцэнт акругленьня для х:"
 msgid "Roundness ratio for y:"
 msgstr "Каэфіцэнт акругленьня для y:"
 
-#: src/select-context.c:564
+#: src/select-context.c:592
 msgid "Visual transformation"
 msgstr "Візуальная трансфармацыя"
 
-#: src/select-context.c:572
+#: src/select-context.c:600
 msgid "Show content"
 msgstr "Паказаць зьмест"
 
-#: src/select-context.c:579
+#: src/select-context.c:607
 msgid "Show outline"
 msgstr "Паказаць контур"
 
-#: src/select-context.c:586
+#: src/select-context.c:614
 msgid "Object transformation"
 msgstr "Трансфармаваньне аб'екта"
 
-#: src/select-context.c:594
+#: src/select-context.c:622
 msgid "Optimize"
 msgstr "Аптымізаваць"
 
-#: src/select-context.c:601
+#: src/select-context.c:629
 msgid "Preserve"
 msgstr "Зьберагчы"
 
@@ -1755,68 +1737,68 @@ msgstr "Рабіць бакі плоскімі"
 msgid "Inkscape"
 msgstr ""
 
-#: src/toolbox.c:445
+#: src/toolbox.c:439
 msgid "Object"
 msgstr "Аб'ект"
 
-#: src/toolbox.c:449 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:494
 msgid "Object size and position"
 msgstr "Памер і пазыцыя аб'екта"
 
-#: src/toolbox.c:450
+#: src/toolbox.c:444
 msgid "Text and font settings"
 msgstr "Усталёўкі тэкста й шрыфта"
 
-#: src/toolbox.c:452 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:495
 msgid "Object transformations"
 msgstr "Трансфармуе аб'ект"
 
-#: src/toolbox.c:528
+#: src/toolbox.c:522
 msgid "Draw"
 msgstr "Рысаваньне"
 
-#: src/toolbox.c:589
+#: src/toolbox.c:583
 msgid "Extension"
 msgstr "Пашырэньне"
 
-#: src/toolbox.c:666
+#: src/toolbox.c:660
 msgid "Nodes"
 msgstr "Вузлы"
 
-#: src/toolbox.c:668
+#: src/toolbox.c:662
 msgid "Insert new nodes into selected segments"
 msgstr "Устаўляе новыя вузлы ў вылучаныя сэгмэнты"
 
-#: src/toolbox.c:669
+#: src/toolbox.c:663
 msgid "Break line at selected nodes"
 msgstr "Абрывае рысу на вылучаным вузьле"
 
-#: src/toolbox.c:670
+#: src/toolbox.c:664
 msgid "Make selected nodes corner"
 msgstr "Робіць вылучаныя вузлы кутамі"
 
-#: src/toolbox.c:671
+#: src/toolbox.c:665
 msgid "Make selected segments lines"
 msgstr "Робіць вылучаныя сэгмэнты рысамі"
 
-#: src/toolbox.c:672
+#: src/toolbox.c:666
 msgid "Delete selected nodes"
 msgstr "Выдаляе вылучаныя вузлы"
 
-#: src/toolbox.c:673
+#: src/toolbox.c:667
 msgid "Join lines at selected nodes"
 msgstr "Далучае рысы да вылучаных вузлоў"
 
-#: src/toolbox.c:674
+#: src/toolbox.c:668
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "Далучае рысы да вылучаных вузлоў"
 
-#: src/toolbox.c:675
+#: src/toolbox.c:669
 msgid "Make selected nodes smooth"
 msgstr "Робіць вылучаныя вузлы згладжанымі"
 
-#: src/toolbox.c:676
+#: src/toolbox.c:670
 msgid "Make selected segments curves"
 msgstr "Робіць вылучаныя сэгмэнты дугамі"
 
@@ -2444,6 +2426,21 @@ msgstr "Атрыбут"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "Значэньне"
+
+#~ msgid "Document variant:"
+#~ msgstr "Варыянт дакумэнта:"
+
+#~ msgid ""
+#~ "*.svg *.svgz|SVG files\n"
+#~ "*.xml|XML files\n"
+#~ "*|All files"
+#~ msgstr ""
+#~ "*.svg *.svgz|SVG файлы\n"
+#~ "*.xml|XML файлы\n"
+#~ "*|Усе файлы"
+
+#~ msgid "Save document as"
+#~ msgstr "Захаваць дакумэнт як"
 
 #~ msgid "About sodipodi"
 #~ msgstr "Пра sodipodi"

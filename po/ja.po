@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.33\n"
-"POT-Creation-Date: 2003-11-07 21:48-0500\n"
+"POT-Creation-Date: 2003-11-08 12:29-0800\n"
 "PO-Revision-Date: 2003-07-09 17:08+0900\n"
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japan GNOME Users Group <translation@gnome.gr.jp>\n"
@@ -57,11 +57,11 @@ msgstr "描画"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
 msgid "Selection"
 msgstr "選択"
 
-#: src/dialogs/align.c:153 src/toolbox.c:451
+#: src/dialogs/align.c:153 src/toolbox.c:445
 msgid "Align objects"
 msgstr "オブジェクトの配置"
 
@@ -641,7 +641,7 @@ msgstr "オブジェクトの位置と大きさ"
 msgid "Size and Position"
 msgstr "位置と大きさ"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
 msgid "Stroke settings"
 msgstr "ストローク設定"
 
@@ -877,28 +877,28 @@ msgstr "角度:"
 msgid "Defaults"
 msgstr "既定値"
 
-#: src/file.c:150 src/file.c:161 src/file.c:173
+#: src/file.c:145 src/file.c:157
 msgid "Select file to open"
 msgstr "開くファイルを選択"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 msgid "Scalable Vector Graphic (SVG)"
 msgstr "スケーラブル・ベクター・グラフィック(SVG)"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 #, fuzzy
 msgid "Inkscape native file format and W3C standard"
 msgstr "SodipodiのネイティブファイルフォーマットでW3Cスタンダード"
 
-#: src/file.c:196 src/file.c:309
+#: src/file.c:180 src/file.c:280
 msgid "File type:"
 msgstr "ファイルタイプ:"
 
-#: src/file.c:294
+#: src/file.c:265
 msgid "Save file"
 msgstr "ファイルを保存"
 
-#: src/file.c:470 src/file.c:480 src/file.c:486
+#: src/file.c:436 src/file.c:442
 msgid "Select file to import"
 msgstr "読み込むファイルを選択"
 
@@ -1045,177 +1045,177 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "EX スクエア"
 
-#: src/interface.c:304 src/interface.c:481
+#: src/interface.c:304 src/interface.c:478
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:324
+#: src/interface.c:321
 msgid "Close View"
 msgstr "ビューを閉じる"
 
-#: src/interface.c:325 src/interface.c:496
+#: src/interface.c:322 src/interface.c:493
 msgid "Exit Program"
 msgstr "プログラムを終了"
 
-#: src/interface.c:327 src/interface.c:488
+#: src/interface.c:324 src/interface.c:485
 msgid "About Inkscape"
 msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:330 src/interface.c:491
+#: src/interface.c:327 src/interface.c:488
 msgid "About Modules"
 msgstr "モジュールについて"
 
-#: src/interface.c:348
+#: src/interface.c:345
 msgid "Cleanup"
 msgstr "掃除する"
 
 #. View:Zoom
-#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
 msgid "Zoom"
 msgstr "ズーム"
 
 #. View:New View
-#: src/interface.c:430
+#: src/interface.c:427
 msgid "New View"
 msgstr "新規のビュー"
 
 #. View:New Preview
-#: src/interface.c:432
+#: src/interface.c:429
 msgid "New Preview"
 msgstr "新規のプレビュー"
 
-#: src/interface.c:434
+#: src/interface.c:431
 msgid "New Toplevel Toolbox"
 msgstr "新規トップレベルツールボックス"
 
-#: src/interface.c:435
+#: src/interface.c:432
 msgid "New Docked Toolbox"
 msgstr "新規ドックツールボックス"
 
-#: src/interface.c:436
+#: src/interface.c:433
 msgid "Remove Docked Toolbox"
 msgstr "ドックツールボックスの削除"
 
 #. File
-#: src/interface.c:478 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:429
 msgid "New"
 msgstr "新規"
 
-#: src/interface.c:479
+#: src/interface.c:476
 msgid "Open"
 msgstr "開く"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:559 src/toolbox.c:354
+#: src/interface.c:556 src/toolbox.c:354
 msgid "File"
 msgstr "ファイル"
 
 #. Edit submenu
-#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
+#: src/interface.c:562 src/toolbox.c:405 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "編集"
 
 #. View submenu
-#: src/interface.c:577
+#: src/interface.c:574
 msgid "View"
 msgstr "ビュー"
 
 #. Drawing mode submenu
-#: src/interface.c:583
+#: src/interface.c:580
 msgid "Drawing Mode"
 msgstr "描画モード"
 
 #. Dialog submenu
-#: src/interface.c:589
+#: src/interface.c:586
 msgid "Dialogs"
 msgstr "ダイアログ"
 
-#: src/interface.c:596
+#: src/interface.c:593
 msgid "Filters"
 msgstr "フィルタ"
 
-#: src/main.c:126
+#: src/main.c:123
 msgid "Do not use X server (only process files from console)"
 msgstr "X サーバを使用しません (コンソールでファイルの処理だけを行います)"
 
-#: src/main.c:129
+#: src/main.c:126
 msgid "Try to use X server even if $DISPLAY is not set)"
 msgstr "$DISPLAY 変数が設定されなくても X サーバの利用を試みます"
 
-#: src/main.c:132
+#: src/main.c:129
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "指定したドキュメントを開く (オプション文字列は無視されるでしょう)"
 
-#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+#: src/main.c:130 src/main.c:133 src/main.c:136 src/main.c:150
 msgid "FILENAME"
 msgstr "FILENAME"
 
-#: src/main.c:135
+#: src/main.c:132
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "指定された出力ファイルにドキュメントを印刷 (パイプは '| program' で指定)"
 
-#: src/main.c:138
+#: src/main.c:135
 msgid "Export document to png file"
 msgstr "ドキュメントを PNG ファイルに出力"
 
-#: src/main.c:141
+#: src/main.c:138
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr "SVGをビットマップに変換するために使用する解像度 (既定値 72.0)"
 
-#: src/main.c:142
+#: src/main.c:139
 msgid "DPI"
 msgstr "DPI"
 
-#: src/main.c:144
+#: src/main.c:141
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
 msgstr ""
 "出力エリアをミリメートルで指定 (既定値はドキュメント全体, 0,0 は左下端)"
 
-#: src/main.c:145
+#: src/main.c:142
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr "生成されるビットマップ幅をピクセル値で指定 (dpi を上書き)"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "WIDTH"
 msgstr "幅"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr "生成されるビットマップの高さをピクセル値で指定 (dpi を上書き)"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "HEIGHT"
 msgstr "高さ"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr ""
 "出力ビットマップの背景の色を指定 (SVG でサポートされる任意のカラー指定文字列)"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "COLOR"
 msgstr "色"
 
-#: src/main.c:153
+#: src/main.c:150
 msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
 msgstr ""
 "ドキュメントを標準 SVG ファイルへ出力 (\"xmlns:sodipodi\" ネームスペースを使"
 "用しない)"
 
-#: src/main.c:155
+#: src/main.c:152
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr "一つずつ与えられたファイルを表示。任意のキー/マウスで次にスイッチ"
 
-#: src/main.c:157
+#: src/main.c:154
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr "ビットマップ(xpm)アイコンをSVGアイコンより優先する"
 
@@ -1244,24 +1244,6 @@ msgstr "プリンタの選択"
 #, fuzzy, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (ドキュメント名 %s..): 印刷プレビュー"
-
-#: src/modules/kde.cpp:159
-msgid "Document variant:"
-msgstr "ドキュメントの種類:"
-
-#: src/modules/kde.cpp:169
-msgid ""
-"*.svg *.svgz|SVG files\n"
-"*.xml|XML files\n"
-"*|All files"
-msgstr ""
-"*.svg *.svgz|SVGファイル\n"
-"*.xml|XMLファイル\n"
-"*|すべてのファイル"
-
-#: src/modules/kde.cpp:171
-msgid "Save document as"
-msgstr "名前を変えて保存"
 
 #. Print destination frame
 #: src/modules/ps.c:159 src/modules/ps.c:220
@@ -1410,7 +1392,7 @@ msgid "Shape"
 msgstr "シェイプ"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:448
+#: src/object-ui.c:460 src/toolbox.c:442
 msgid "Fill settings"
 msgstr "フィルの設定"
 
@@ -1454,27 +1436,27 @@ msgstr "x の真円率:"
 msgid "Roundness ratio for y:"
 msgstr "y の真円率:"
 
-#: src/select-context.c:564
+#: src/select-context.c:592
 msgid "Visual transformation"
 msgstr "ビジュアル変形"
 
-#: src/select-context.c:572
+#: src/select-context.c:600
 msgid "Show content"
 msgstr "内容を表示"
 
-#: src/select-context.c:579
+#: src/select-context.c:607
 msgid "Show outline"
 msgstr "アウトラインの表示"
 
-#: src/select-context.c:586
+#: src/select-context.c:614
 msgid "Object transformation"
 msgstr "オブジェクトの変形"
 
-#: src/select-context.c:594
+#: src/select-context.c:622
 msgid "Optimize"
 msgstr "最適化"
 
-#: src/select-context.c:601
+#: src/select-context.c:629
 msgid "Preserve"
 msgstr "保護"
 
@@ -1736,68 +1718,68 @@ msgstr "正多角形にする"
 msgid "Inkscape"
 msgstr ""
 
-#: src/toolbox.c:445
+#: src/toolbox.c:439
 msgid "Object"
 msgstr "オブジェクト"
 
-#: src/toolbox.c:449 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:494
 msgid "Object size and position"
 msgstr "オブジェクトの位置と大きさ"
 
-#: src/toolbox.c:450
+#: src/toolbox.c:444
 msgid "Text and font settings"
 msgstr "テキストとフォント設定"
 
-#: src/toolbox.c:452 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:495
 msgid "Object transformations"
 msgstr "オブジェクトの変形"
 
-#: src/toolbox.c:528
+#: src/toolbox.c:522
 msgid "Draw"
 msgstr "描画"
 
-#: src/toolbox.c:589
+#: src/toolbox.c:583
 msgid "Extension"
 msgstr "拡張"
 
-#: src/toolbox.c:666
+#: src/toolbox.c:660
 msgid "Nodes"
 msgstr "ノード"
 
-#: src/toolbox.c:668
+#: src/toolbox.c:662
 msgid "Insert new nodes into selected segments"
 msgstr "ノードを選択セグメントに挿入する"
 
-#: src/toolbox.c:669
+#: src/toolbox.c:663
 msgid "Break line at selected nodes"
 msgstr "選択ノードので線を分割"
 
-#: src/toolbox.c:670
+#: src/toolbox.c:664
 msgid "Make selected nodes corner"
 msgstr "選択ノードに先端をつける"
 
-#: src/toolbox.c:671
+#: src/toolbox.c:665
 msgid "Make selected segments lines"
 msgstr "選択セグメントを折線にする"
 
-#: src/toolbox.c:672
+#: src/toolbox.c:666
 msgid "Delete selected nodes"
 msgstr "選択したノードの削除"
 
-#: src/toolbox.c:673
+#: src/toolbox.c:667
 msgid "Join lines at selected nodes"
 msgstr "選択ノードで線を結合"
 
-#: src/toolbox.c:674
+#: src/toolbox.c:668
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "選択ノードで線を結合"
 
-#: src/toolbox.c:675
+#: src/toolbox.c:669
 msgid "Make selected nodes smooth"
 msgstr "選択ノードを滑かにする"
 
-#: src/toolbox.c:676
+#: src/toolbox.c:670
 msgid "Make selected segments curves"
 msgstr "選択セグメントを曲線にする"
 
@@ -2405,6 +2387,21 @@ msgstr "属性"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "値"
+
+#~ msgid "Document variant:"
+#~ msgstr "ドキュメントの種類:"
+
+#~ msgid ""
+#~ "*.svg *.svgz|SVG files\n"
+#~ "*.xml|XML files\n"
+#~ "*|All files"
+#~ msgstr ""
+#~ "*.svg *.svgz|SVGファイル\n"
+#~ "*.xml|XMLファイル\n"
+#~ "*|すべてのファイル"
+
+#~ msgid "Save document as"
+#~ msgstr "名前を変えて保存"
 
 #~ msgid "About sodipodi"
 #~ msgstr "Sodipodiについて"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi VERSION\n"
-"POT-Creation-Date: 2003-11-07 21:48-0500\n"
+"POT-Creation-Date: 2003-11-08 12:29-0800\n"
 "PO-Revision-Date: 2001-08-11 22:32+0200\n"
 "Last-Translator: Emese Kovacs <emese@gnome.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
@@ -54,11 +54,11 @@ msgstr "Rajz"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
 msgid "Selection"
 msgstr "Kijelölés"
 
-#: src/dialogs/align.c:153 src/toolbox.c:451
+#: src/dialogs/align.c:153 src/toolbox.c:445
 #, fuzzy
 msgid "Align objects"
 msgstr "Objektum"
@@ -680,7 +680,7 @@ msgstr "Egyel feljebb"
 msgid "Size and Position"
 msgstr "Egyel feljebb"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
 #, fuzzy
 msgid "Stroke settings"
 msgstr "Munkafelület beállításai"
@@ -945,28 +945,28 @@ msgstr "szög"
 msgid "Defaults"
 msgstr ""
 
-#: src/file.c:150 src/file.c:161 src/file.c:173
+#: src/file.c:145 src/file.c:157
 msgid "Select file to open"
 msgstr "Válaszd ki a megnyitandó fájlt"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 msgid "Scalable Vector Graphic (SVG)"
 msgstr ""
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 msgid "Inkscape native file format and W3C standard"
 msgstr ""
 
-#: src/file.c:196 src/file.c:309
+#: src/file.c:180 src/file.c:280
 #, fuzzy
 msgid "File type:"
 msgstr "Betûkészlet beállításai"
 
-#: src/file.c:294
+#: src/file.c:265
 msgid "Save file"
 msgstr "Fájl mentése"
 
-#: src/file.c:470 src/file.c:480 src/file.c:486
+#: src/file.c:436 src/file.c:442
 msgid "Select file to import"
 msgstr "Importálandó fájl kiválasztása"
 
@@ -1122,179 +1122,179 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "négyzet-ex"
 
-#: src/interface.c:304 src/interface.c:481
+#: src/interface.c:304 src/interface.c:478
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:324
+#: src/interface.c:321
 #, fuzzy
 msgid "Close View"
 msgstr "Új nézet"
 
-#: src/interface.c:325 src/interface.c:496
+#: src/interface.c:322 src/interface.c:493
 msgid "Exit Program"
 msgstr ""
 
-#: src/interface.c:327 src/interface.c:488
+#: src/interface.c:324 src/interface.c:485
 msgid "About Inkscape"
 msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:330 src/interface.c:491
+#: src/interface.c:327 src/interface.c:488
 msgid "About Modules"
 msgstr ""
 
-#: src/interface.c:348
+#: src/interface.c:345
 msgid "Cleanup"
 msgstr ""
 
 #. View:Zoom
-#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
 msgid "Zoom"
 msgstr "Nagyítás"
 
 #. View:New View
-#: src/interface.c:430
+#: src/interface.c:427
 msgid "New View"
 msgstr "Új nézet"
 
 #. View:New Preview
-#: src/interface.c:432
+#: src/interface.c:429
 #, fuzzy
 msgid "New Preview"
 msgstr "Új nézet"
 
-#: src/interface.c:434
+#: src/interface.c:431
 msgid "New Toplevel Toolbox"
 msgstr ""
 
-#: src/interface.c:435
+#: src/interface.c:432
 #, fuzzy
 msgid "New Docked Toolbox"
 msgstr "Eszköztár mutatása"
 
-#: src/interface.c:436
+#: src/interface.c:433
 msgid "Remove Docked Toolbox"
 msgstr ""
 
 #. File
-#: src/interface.c:478 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:429
 msgid "New"
 msgstr "Új"
 
-#: src/interface.c:479
+#: src/interface.c:476
 msgid "Open"
 msgstr "Megnyitás"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:559 src/toolbox.c:354
+#: src/interface.c:556 src/toolbox.c:354
 msgid "File"
 msgstr "Fájl"
 
 #. Edit submenu
-#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
+#: src/interface.c:562 src/toolbox.c:405 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "Szerkesztés"
 
 #. View submenu
-#: src/interface.c:577
+#: src/interface.c:574
 #, fuzzy
 msgid "View"
 msgstr "Új nézet"
 
 #. Drawing mode submenu
-#: src/interface.c:583
+#: src/interface.c:580
 #, fuzzy
 msgid "Drawing Mode"
 msgstr "Rajzkörnyezet"
 
 #. Dialog submenu
-#: src/interface.c:589
+#: src/interface.c:586
 msgid "Dialogs"
 msgstr ""
 
-#: src/interface.c:596
+#: src/interface.c:593
 #, fuzzy
 msgid "Filters"
 msgstr "Fájl"
 
-#: src/main.c:126
+#: src/main.c:123
 msgid "Do not use X server (only process files from console)"
 msgstr ""
 
-#: src/main.c:129
+#: src/main.c:126
 msgid "Try to use X server even if $DISPLAY is not set)"
 msgstr ""
 
-#: src/main.c:132
+#: src/main.c:129
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 
-#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+#: src/main.c:130 src/main.c:133 src/main.c:136 src/main.c:150
 msgid "FILENAME"
 msgstr ""
 
-#: src/main.c:135
+#: src/main.c:132
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 
-#: src/main.c:138
+#: src/main.c:135
 #, fuzzy
 msgid "Export document to png file"
 msgstr "Kép exportálása PNG formátumba"
 
-#: src/main.c:141
+#: src/main.c:138
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr ""
 
-#: src/main.c:142
+#: src/main.c:139
 msgid "DPI"
 msgstr ""
 
-#: src/main.c:144
+#: src/main.c:141
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
 msgstr ""
 
-#: src/main.c:145
+#: src/main.c:142
 msgid "x0:y0:x1:y1"
 msgstr ""
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr ""
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "WIDTH"
 msgstr ""
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr ""
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "HEIGHT"
 msgstr ""
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr ""
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "COLOR"
 msgstr ""
 
-#: src/main.c:153
+#: src/main.c:150
 msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
 msgstr ""
 
-#: src/main.c:155
+#: src/main.c:152
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 
-#: src/main.c:157
+#: src/main.c:154
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr ""
 
@@ -1323,23 +1323,6 @@ msgstr "Kijelölés"
 #, fuzzy, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (dokumentumnév: %s..): Nyomtatási kép"
-
-#: src/modules/kde.cpp:159
-#, fuzzy
-msgid "Document variant:"
-msgstr "Dokumentum"
-
-#: src/modules/kde.cpp:169
-msgid ""
-"*.svg *.svgz|SVG files\n"
-"*.xml|XML files\n"
-"*|All files"
-msgstr ""
-
-#: src/modules/kde.cpp:171
-#, fuzzy
-msgid "Save document as"
-msgstr "Dokumentum"
 
 #. Print destination frame
 #: src/modules/ps.c:159 src/modules/ps.c:220
@@ -1491,7 +1474,7 @@ msgid "Shape"
 msgstr "Mentés\t"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:448
+#: src/object-ui.c:460 src/toolbox.c:442
 #, fuzzy
 msgid "Fill settings"
 msgstr "Betûkészlet beállításai"
@@ -1541,31 +1524,31 @@ msgstr ""
 msgid "Roundness ratio for y:"
 msgstr ""
 
-#: src/select-context.c:564
+#: src/select-context.c:592
 #, fuzzy
 msgid "Visual transformation"
 msgstr "Átalakítás"
 
-#: src/select-context.c:572
+#: src/select-context.c:600
 #, fuzzy
 msgid "Show content"
 msgstr "Tartalom"
 
-#: src/select-context.c:579
+#: src/select-context.c:607
 #, fuzzy
 msgid "Show outline"
 msgstr "Segédvonalak mutatása"
 
-#: src/select-context.c:586
+#: src/select-context.c:614
 #, fuzzy
 msgid "Object transformation"
 msgstr "Átalakítás törlése"
 
-#: src/select-context.c:594
+#: src/select-context.c:622
 msgid "Optimize"
 msgstr ""
 
-#: src/select-context.c:601
+#: src/select-context.c:629
 msgid "Preserve"
 msgstr ""
 
@@ -1786,78 +1769,78 @@ msgstr ""
 msgid "Inkscape"
 msgstr ""
 
-#: src/toolbox.c:445
+#: src/toolbox.c:439
 msgid "Object"
 msgstr "Objektum"
 
-#: src/toolbox.c:449 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:494
 #, fuzzy
 msgid "Object size and position"
 msgstr "Egyel feljebb"
 
-#: src/toolbox.c:450
+#: src/toolbox.c:444
 #, fuzzy
 msgid "Text and font settings"
 msgstr "Munkafelület beállításai"
 
-#: src/toolbox.c:452 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:495
 #, fuzzy
 msgid "Object transformations"
 msgstr "Átalakítás törlése"
 
-#: src/toolbox.c:528
+#: src/toolbox.c:522
 msgid "Draw"
 msgstr "Rajzolás"
 
-#: src/toolbox.c:589
+#: src/toolbox.c:583
 #, fuzzy
 msgid "Extension"
 msgstr "Méret"
 
-#: src/toolbox.c:666
+#: src/toolbox.c:660
 msgid "Nodes"
 msgstr "Csomópontok"
 
-#: src/toolbox.c:668
+#: src/toolbox.c:662
 #, fuzzy
 msgid "Insert new nodes into selected segments"
 msgstr "A kijelölt szakaszokat vonallá alakítja"
 
-#: src/toolbox.c:669
+#: src/toolbox.c:663
 #, fuzzy
 msgid "Break line at selected nodes"
 msgstr "Vonal simítása a kijelölt csomópontoknál"
 
-#: src/toolbox.c:670
+#: src/toolbox.c:664
 #, fuzzy
 msgid "Make selected nodes corner"
 msgstr "Törli a kijelölt csomópontokat"
 
-#: src/toolbox.c:671
+#: src/toolbox.c:665
 #, fuzzy
 msgid "Make selected segments lines"
 msgstr "A kijelölt szakaszokat vonallá alakítja"
 
-#: src/toolbox.c:672
+#: src/toolbox.c:666
 msgid "Delete selected nodes"
 msgstr "Törli a kijelölt csomópontokat"
 
-#: src/toolbox.c:673
+#: src/toolbox.c:667
 #, fuzzy
 msgid "Join lines at selected nodes"
 msgstr "Vonal simítása a kijelölt csomópontoknál"
 
-#: src/toolbox.c:674
+#: src/toolbox.c:668
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "Vonal simítása a kijelölt csomópontoknál"
 
-#: src/toolbox.c:675
+#: src/toolbox.c:669
 #, fuzzy
 msgid "Make selected nodes smooth"
 msgstr "Törli a kijelölt csomópontokat"
 
-#: src/toolbox.c:676
+#: src/toolbox.c:670
 #, fuzzy
 msgid "Make selected segments curves"
 msgstr "A kijelölt szakaszokat görbévé alakítja"
@@ -2544,6 +2527,14 @@ msgstr "Attribútum"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "Érték"
+
+#, fuzzy
+#~ msgid "Document variant:"
+#~ msgstr "Dokumentum"
+
+#, fuzzy
+#~ msgid "Save document as"
+#~ msgstr "Dokumentum"
 
 #, fuzzy
 #~ msgid "About sodipodi"

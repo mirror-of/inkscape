@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Sodipodi\n"
-"POT-Creation-Date: 2003-11-07 21:48-0500\n"
+"POT-Creation-Date: 2003-11-08 12:29-0800\n"
 "PO-Revision-Date: 2003-08-17 14:01+0200\n"
 "Last-Translator: Danilo Segan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -56,11 +56,11 @@ msgstr "Crtež"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
 msgid "Selection"
 msgstr "Izbor"
 
-#: src/dialogs/align.c:153 src/toolbox.c:451
+#: src/dialogs/align.c:153 src/toolbox.c:445
 msgid "Align objects"
 msgstr "Poravnavanje objekata"
 
@@ -641,7 +641,7 @@ msgstr "Veličina i pozicija objekta"
 msgid "Size and Position"
 msgstr "Veličina i pozicija"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
 msgid "Stroke settings"
 msgstr "Podešavanja poteza"
 
@@ -881,28 +881,28 @@ msgstr "Ugao:"
 msgid "Defaults"
 msgstr "Podrazumevano"
 
-#: src/file.c:150 src/file.c:161 src/file.c:173
+#: src/file.c:145 src/file.c:157
 msgid "Select file to open"
 msgstr "Izaberite koju datoteku da otvorite"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 msgid "Scalable Vector Graphic (SVG)"
 msgstr "Skalabilna vektorska grafika (SVG)"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 #, fuzzy
 msgid "Inkscape native file format and W3C standard"
 msgstr "Matičan zapis Sodipodija i W3C standard"
 
-#: src/file.c:196 src/file.c:309
+#: src/file.c:180 src/file.c:280
 msgid "File type:"
 msgstr "Vrsta datoteke:"
 
-#: src/file.c:294
+#: src/file.c:265
 msgid "Save file"
 msgstr "Sačuvaj datoteku"
 
-#: src/file.c:470 src/file.c:480 src/file.c:486
+#: src/file.c:436 src/file.c:442
 msgid "Select file to import"
 msgstr "Odaberite datoteku za uvoz"
 
@@ -1049,137 +1049,137 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "eks kvadrati"
 
-#: src/interface.c:304 src/interface.c:481
+#: src/interface.c:304 src/interface.c:478
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:324
+#: src/interface.c:321
 msgid "Close View"
 msgstr "Zatvori pregled"
 
-#: src/interface.c:325 src/interface.c:496
+#: src/interface.c:322 src/interface.c:493
 msgid "Exit Program"
 msgstr "Izađi iz programa"
 
-#: src/interface.c:327 src/interface.c:488
+#: src/interface.c:324 src/interface.c:485
 msgid "About Inkscape"
 msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:330 src/interface.c:491
+#: src/interface.c:327 src/interface.c:488
 msgid "About Modules"
 msgstr "O dodacima"
 
-#: src/interface.c:348
+#: src/interface.c:345
 msgid "Cleanup"
 msgstr "Očisti"
 
 #. View:Zoom
-#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
 msgid "Zoom"
 msgstr "Uvećaj"
 
 #. View:New View
-#: src/interface.c:430
+#: src/interface.c:427
 msgid "New View"
 msgstr "Novi pogled"
 
 #. View:New Preview
-#: src/interface.c:432
+#: src/interface.c:429
 msgid "New Preview"
 msgstr "Novi pregled"
 
-#: src/interface.c:434
+#: src/interface.c:431
 msgid "New Toplevel Toolbox"
 msgstr "Novi skup alata prvog nivoa"
 
-#: src/interface.c:435
+#: src/interface.c:432
 msgid "New Docked Toolbox"
 msgstr "Novi privezani skup alata"
 
-#: src/interface.c:436
+#: src/interface.c:433
 msgid "Remove Docked Toolbox"
 msgstr "Ukloni privezani skup alata"
 
 #. File
-#: src/interface.c:478 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:429
 msgid "New"
 msgstr "Nova"
 
-#: src/interface.c:479
+#: src/interface.c:476
 msgid "Open"
 msgstr "Otvori"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:559 src/toolbox.c:354
+#: src/interface.c:556 src/toolbox.c:354
 msgid "File"
 msgstr "Datoteka"
 
 #. Edit submenu
-#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
+#: src/interface.c:562 src/toolbox.c:405 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "Uređivanje"
 
 # Pregled
 #. View submenu
-#: src/interface.c:577
+#: src/interface.c:574
 msgid "View"
 msgstr "Pogledaj"
 
 #. Drawing mode submenu
-#: src/interface.c:583
+#: src/interface.c:580
 msgid "Drawing Mode"
 msgstr "Režim crtanja"
 
 #. Dialog submenu
-#: src/interface.c:589
+#: src/interface.c:586
 msgid "Dialogs"
 msgstr "Prozorčići"
 
-#: src/interface.c:596
+#: src/interface.c:593
 msgid "Filters"
 msgstr "Filteri"
 
-#: src/main.c:126
+#: src/main.c:123
 msgid "Do not use X server (only process files from console)"
 msgstr "Ne koristi X server (samo obrađuj datoteke preko konzole)"
 
 # bug: unmatched parenthesis??
-#: src/main.c:129
+#: src/main.c:126
 msgid "Try to use X server even if $DISPLAY is not set)"
 msgstr ""
 "Pokušaj da koristiš X server čak iako promenljiva $DISPLAY nije postavljena)"
 
-#: src/main.c:132
+#: src/main.c:129
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Otvori navedene dokumente (niska sa opcija se može preskočiti)"
 
-#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+#: src/main.c:130 src/main.c:133 src/main.c:136 src/main.c:150
 msgid "FILENAME"
 msgstr "NAZIV DATOTEKE"
 
-#: src/main.c:135
+#: src/main.c:132
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Štampaj dokumente u navedenu izlaznu datoteku (koristite „| program“ za "
 "cevku)"
 
-#: src/main.c:138
+#: src/main.c:135
 msgid "Export document to png file"
 msgstr "Izvezi dokument u PNG datoteku"
 
-#: src/main.c:141
+#: src/main.c:138
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr ""
 "Rezolucija koja se koristi za pretvaranje SVG-a u bitmapu (podrazumevano "
 "72,0)"
 
-#: src/main.c:142
+#: src/main.c:139
 msgid "DPI"
 msgstr "TPI"
 
-#: src/main.c:144
+#: src/main.c:141
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
@@ -1187,47 +1187,47 @@ msgstr ""
 "Izvezena površina u milimetrima (uobičajeno je pun dokument, 0,0 je donji-"
 "levi ugao)"
 
-#: src/main.c:145
+#: src/main.c:142
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr "Širina obrazovane bitmape u tačkama (prepisuje TPI)"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "WIDTH"
 msgstr "ŠIRINA"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr "Visina obrazovane bitmape u tačkama (prepisuje TPI)"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "HEIGHT"
 msgstr "VISINA"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr ""
 "Boja pozadine izvezene bitmape (bilo koja oznaka boje koju podržava SVG)"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "COLOR"
 msgstr "BOJA"
 
-#: src/main.c:153
+#: src/main.c:150
 msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
 msgstr ""
 "Izvezi dokument u običnu SVG datoteku (bez prostora imena „xmlns:sodipodi“)"
 
-#: src/main.c:155
+#: src/main.c:152
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Prikaži date datoteke jednu po jednu, prebaci na sledeću nakon bilo kakvog "
 "događaja sa tasterima ili mišem"
 
-#: src/main.c:157
+#: src/main.c:154
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr "Daj prvenstvo bitmapiranim (XPM) ikonama u odnosu na SVG ikone"
 
@@ -1256,24 +1256,6 @@ msgstr "Izaberite štampač"
 #, fuzzy, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (ime dokumenta %s..): Pregled pred štampu"
-
-#: src/modules/kde.cpp:159
-msgid "Document variant:"
-msgstr "Varijanta dokumenta:"
-
-#: src/modules/kde.cpp:169
-msgid ""
-"*.svg *.svgz|SVG files\n"
-"*.xml|XML files\n"
-"*|All files"
-msgstr ""
-"*.svg *.svgz|SVG datoteke\n"
-"*.xml|XML datoteke\n"
-"*|Sve datoteke"
-
-#: src/modules/kde.cpp:171
-msgid "Save document as"
-msgstr "Sačuvaj dokument kao"
 
 #. Print destination frame
 #: src/modules/ps.c:159 src/modules/ps.c:220
@@ -1423,7 +1405,7 @@ msgid "Shape"
 msgstr "Oblik"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:448
+#: src/object-ui.c:460 src/toolbox.c:442
 msgid "Fill settings"
 msgstr "Podešavanja ispunjavanja"
 
@@ -1469,27 +1451,27 @@ msgstr "Odnos zaokruženosti za x:"
 msgid "Roundness ratio for y:"
 msgstr "Odnos zaokruženosti za y:"
 
-#: src/select-context.c:564
+#: src/select-context.c:592
 msgid "Visual transformation"
 msgstr "Vizuelna transformacija"
 
-#: src/select-context.c:572
+#: src/select-context.c:600
 msgid "Show content"
 msgstr "Prikaži sadržaj"
 
-#: src/select-context.c:579
+#: src/select-context.c:607
 msgid "Show outline"
 msgstr "Prikaži obrise"
 
-#: src/select-context.c:586
+#: src/select-context.c:614
 msgid "Object transformation"
 msgstr "Transformacija objekta"
 
-#: src/select-context.c:594
+#: src/select-context.c:622
 msgid "Optimize"
 msgstr "Optimizuj"
 
-#: src/select-context.c:601
+#: src/select-context.c:629
 msgid "Preserve"
 msgstr "Sačuvaj"
 
@@ -1762,69 +1744,69 @@ msgstr "Učini stranice ravnim"
 msgid "Inkscape"
 msgstr "_Popreko"
 
-#: src/toolbox.c:445
+#: src/toolbox.c:439
 msgid "Object"
 msgstr "Objekat"
 
-#: src/toolbox.c:449 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:494
 msgid "Object size and position"
 msgstr "Veličina i pozicija objekta"
 
-#: src/toolbox.c:450
+#: src/toolbox.c:444
 msgid "Text and font settings"
 msgstr "Podešavanja teksta i fonta"
 
-#: src/toolbox.c:452 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:495
 msgid "Object transformations"
 msgstr "Transformacije objekta"
 
-#: src/toolbox.c:528
+#: src/toolbox.c:522
 msgid "Draw"
 msgstr "Crtaj"
 
-#: src/toolbox.c:589
+#: src/toolbox.c:583
 msgid "Extension"
 msgstr "Proširenje"
 
-#: src/toolbox.c:666
+#: src/toolbox.c:660
 msgid "Nodes"
 msgstr "Čvorovi"
 
-#: src/toolbox.c:668
+#: src/toolbox.c:662
 msgid "Insert new nodes into selected segments"
 msgstr "Ubaci nove čvorove u izabrane delove"
 
-#: src/toolbox.c:669
+#: src/toolbox.c:663
 msgid "Break line at selected nodes"
 msgstr "Prelomi liniju na izabranim čvorovima"
 
-#: src/toolbox.c:670
+#: src/toolbox.c:664
 msgid "Make selected nodes corner"
 msgstr "Napravi ćoškove od izabranih čvorova"
 
-#: src/toolbox.c:671
+#: src/toolbox.c:665
 msgid "Make selected segments lines"
 msgstr "Napravi linije od izabranih delova"
 
-#: src/toolbox.c:672
+#: src/toolbox.c:666
 msgid "Delete selected nodes"
 msgstr "Obriši odabrane čvorove"
 
-#: src/toolbox.c:673
+#: src/toolbox.c:667
 msgid "Join lines at selected nodes"
 msgstr "Spoji linije na izabranim čvorovima"
 
-#: src/toolbox.c:674
+#: src/toolbox.c:668
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "Spoji linije na izabranim čvorovima"
 
 # glatka kriva se precizno matematički definiše, i upravo deluje kao „glatka“
-#: src/toolbox.c:675
+#: src/toolbox.c:669
 msgid "Make selected nodes smooth"
 msgstr "Napravi glatku krivu od izabranih čvorova"
 
-#: src/toolbox.c:676
+#: src/toolbox.c:670
 msgid "Make selected segments curves"
 msgstr "Napravi krivu od izabranih delova"
 
@@ -2431,6 +2413,21 @@ msgstr "Osobine"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "Vrednost"
+
+#~ msgid "Document variant:"
+#~ msgstr "Varijanta dokumenta:"
+
+#~ msgid ""
+#~ "*.svg *.svgz|SVG files\n"
+#~ "*.xml|XML files\n"
+#~ "*|All files"
+#~ msgstr ""
+#~ "*.svg *.svgz|SVG datoteke\n"
+#~ "*.xml|XML datoteke\n"
+#~ "*|Sve datoteke"
+
+#~ msgid "Save document as"
+#~ msgstr "Sačuvaj dokument kao"
 
 #~ msgid "About sodipodi"
 #~ msgstr "O sodipodiju"

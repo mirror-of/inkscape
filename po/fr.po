@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.33pre\n"
-"POT-Creation-Date: 2003-11-07 21:48-0500\n"
+"POT-Creation-Date: 2003-11-08 12:29-0800\n"
 "PO-Revision-Date: 2003-08-14 00:01+0200\n"
 "Last-Translator: Didier Conchaudron <conchaudron@free.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -56,11 +56,11 @@ msgstr "Dessin"
 
 #. Selection submenu
 #: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
-#: src/interface.c:571 src/toolbox.c:494 src/verbs.c:486
+#: src/interface.c:568 src/toolbox.c:488 src/verbs.c:486
 msgid "Selection"
 msgstr "Sélection"
 
-#: src/dialogs/align.c:153 src/toolbox.c:451
+#: src/dialogs/align.c:153 src/toolbox.c:445
 msgid "Align objects"
 msgstr "Aligner les objets"
 
@@ -641,7 +641,7 @@ msgstr "Taille et Position de l'objet"
 msgid "Size and Position"
 msgstr "Taille et Position"
 
-#: src/dialogs/stroke-style.c:543 src/toolbox.c:447
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
 msgid "Stroke settings"
 msgstr "Paramètres du tracé"
 
@@ -878,28 +878,28 @@ msgstr "Angle :"
 msgid "Defaults"
 msgstr "Défauts"
 
-#: src/file.c:150 src/file.c:161 src/file.c:173
+#: src/file.c:145 src/file.c:157
 msgid "Select file to open"
 msgstr "Sélectionnez un fichier à ouvrir"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 msgid "Scalable Vector Graphic (SVG)"
 msgstr "Scalable Vector Graphic (SVG)"
 
-#: src/file.c:190 src/module.c:548
+#: src/file.c:174 src/module.c:548
 #, fuzzy
 msgid "Inkscape native file format and W3C standard"
 msgstr "Format natif de Sodipodi et standard du W3C"
 
-#: src/file.c:196 src/file.c:309
+#: src/file.c:180 src/file.c:280
 msgid "File type:"
 msgstr "Type de fichier :"
 
-#: src/file.c:294
+#: src/file.c:265
 msgid "Save file"
 msgstr "Enregistrer le fichier"
 
-#: src/file.c:470 src/file.c:480 src/file.c:486
+#: src/file.c:436 src/file.c:442
 msgid "Select file to import"
 msgstr "Sélectionnez un fichier à importer"
 
@@ -1046,135 +1046,135 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Ex carrés"
 
-#: src/interface.c:304 src/interface.c:481
+#: src/interface.c:304 src/interface.c:478
 msgid "Open Recent"
 msgstr ""
 
-#: src/interface.c:324
+#: src/interface.c:321
 msgid "Close View"
 msgstr "Fermer la vue"
 
-#: src/interface.c:325 src/interface.c:496
+#: src/interface.c:322 src/interface.c:493
 msgid "Exit Program"
 msgstr "Quitter le programme"
 
-#: src/interface.c:327 src/interface.c:488
+#: src/interface.c:324 src/interface.c:485
 msgid "About Inkscape"
 msgstr ""
 
 #. Modules need abouts too
-#: src/interface.c:330 src/interface.c:491
+#: src/interface.c:327 src/interface.c:488
 msgid "About Modules"
 msgstr "À propos des Modules"
 
-#: src/interface.c:348
+#: src/interface.c:345
 msgid "Cleanup"
 msgstr "Nettoyage"
 
 #. View:Zoom
-#: src/interface.c:418 src/toolbox.c:632 src/verbs.c:476
+#: src/interface.c:415 src/toolbox.c:626 src/verbs.c:476
 msgid "Zoom"
 msgstr "Zoom"
 
 #. View:New View
-#: src/interface.c:430
+#: src/interface.c:427
 msgid "New View"
 msgstr "Nouvelle vue"
 
 #. View:New Preview
-#: src/interface.c:432
+#: src/interface.c:429
 msgid "New Preview"
 msgstr "Nouvel aperçu"
 
-#: src/interface.c:434
+#: src/interface.c:431
 msgid "New Toplevel Toolbox"
 msgstr "Nouvelle boîte à outils"
 
-#: src/interface.c:435
+#: src/interface.c:432
 msgid "New Docked Toolbox"
 msgstr "Nouvelle boite à outils accrochée"
 
-#: src/interface.c:436
+#: src/interface.c:433
 msgid "Remove Docked Toolbox"
 msgstr "Enlever la boite à outils accrochée"
 
 #. File
-#: src/interface.c:478 src/verbs.c:429
+#: src/interface.c:475 src/verbs.c:429
 msgid "New"
 msgstr "Nouveau"
 
-#: src/interface.c:479
+#: src/interface.c:476
 msgid "Open"
 msgstr "Ouvrir"
 
 #. Generic menu
 #. File submenu
-#: src/interface.c:559 src/toolbox.c:354
+#: src/interface.c:556 src/toolbox.c:354
 msgid "File"
 msgstr "Fichier"
 
 #. Edit submenu
-#: src/interface.c:565 src/toolbox.c:411 src/widgets/gradient-selector.c:135
+#: src/interface.c:562 src/toolbox.c:405 src/widgets/gradient-selector.c:135
 msgid "Edit"
 msgstr "Édition"
 
 #. View submenu
-#: src/interface.c:577
+#: src/interface.c:574
 msgid "View"
 msgstr "Vue"
 
 #. Drawing mode submenu
-#: src/interface.c:583
+#: src/interface.c:580
 msgid "Drawing Mode"
 msgstr "Mode de dessin"
 
 #. Dialog submenu
-#: src/interface.c:589
+#: src/interface.c:586
 msgid "Dialogs"
 msgstr "Dialogues"
 
-#: src/interface.c:596
+#: src/interface.c:593
 msgid "Filters"
 msgstr "Filtres"
 
-#: src/main.c:126
+#: src/main.c:123
 msgid "Do not use X server (only process files from console)"
 msgstr ""
 "Ne pas utiliser le serveur X (traiter les fichiers seulement depuis la "
 "console)"
 
-#: src/main.c:129
+#: src/main.c:126
 msgid "Try to use X server even if $DISPLAY is not set)"
 msgstr "Essayez d'utiliser le serveur X (même si $DISPLAY n'est pas réglé)"
 
-#: src/main.c:132
+#: src/main.c:129
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Ouvre le(s) fichier(s) spécifié(s) (la chaîne d'option peut être exclue)"
 
-#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+#: src/main.c:130 src/main.c:133 src/main.c:136 src/main.c:150
 msgid "FILENAME"
 msgstr "NOMFICHIER"
 
-#: src/main.c:135
+#: src/main.c:132
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Imprime le(s) fichier(s) dans le fichier de sortie spécifié (utilisez '| "
 "programme ' pour relier à un programme)"
 
-#: src/main.c:138
+#: src/main.c:135
 msgid "Export document to png file"
 msgstr "Exporter l'image en PNG"
 
-#: src/main.c:141
+#: src/main.c:138
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr "La résolution utilisée pour convertir SVG en bitmap (défaut 72.0)"
 
-#: src/main.c:142
+#: src/main.c:139
 msgid "DPI"
 msgstr "PPP"
 
-#: src/main.c:144
+#: src/main.c:141
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
@@ -1182,48 +1182,48 @@ msgstr ""
 "Zone exportée en millimètres (document entier par défaut, 0.0 est le coin en "
 "bas à gauche)"
 
-#: src/main.c:145
+#: src/main.c:142
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr "La largeur en pixels du bitmap généré (écrase ppp)"
 
-#: src/main.c:147
+#: src/main.c:144
 msgid "WIDTH"
 msgstr "LARGEUR"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr "La hauteur en pixels du bitmap généré (écrase ppp)"
 
-#: src/main.c:149
+#: src/main.c:146
 msgid "HEIGHT"
 msgstr "HAUTEUR"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr ""
 "Couleur de fond du bitmap exporté (n'importe quelle chaîne de caractère "
 "couleur compatible SVG)"
 
-#: src/main.c:151
+#: src/main.c:148
 msgid "COLOR"
 msgstr "COULEUR"
 
-#: src/main.c:153
+#: src/main.c:150
 msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
 msgstr ""
 "Exporter le document en SVG plein (pas de d'espace de nom \"xmlns:sodipodi\")"
 
-#: src/main.c:155
+#: src/main.c:152
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Affiche les fichiers donnés un par un, passe au suivant pour n'importe quel "
 "événement clavier/souris"
 
-#: src/main.c:157
+#: src/main.c:154
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr "Préférer les icônes bitmap (xpm) aux SVG"
 
@@ -1252,24 +1252,6 @@ msgstr "Sélectionner l'imprimante"
 #, fuzzy, c-format
 msgid "Inkscape (doc name %s..): Print Preview"
 msgstr "Sodipodi (nom du doc %s..) : Aperçu avant impression"
-
-#: src/modules/kde.cpp:159
-msgid "Document variant:"
-msgstr "Document variant :"
-
-#: src/modules/kde.cpp:169
-msgid ""
-"*.svg *.svgz|SVG files\n"
-"*.xml|XML files\n"
-"*|All files"
-msgstr ""
-"*.svg *.svgz|fichiers SVG\n"
-"*.xml|fichiers XML\n"
-"*|Tous les fichiers"
-
-#: src/modules/kde.cpp:171
-msgid "Save document as"
-msgstr "Enregistrer le document sous"
 
 #. Print destination frame
 #: src/modules/ps.c:159 src/modules/ps.c:220
@@ -1419,7 +1401,7 @@ msgid "Shape"
 msgstr "Profil"
 
 #. Item dialog
-#: src/object-ui.c:460 src/toolbox.c:448
+#: src/object-ui.c:460 src/toolbox.c:442
 msgid "Fill settings"
 msgstr "Réglages du remplissage"
 
@@ -1463,27 +1445,27 @@ msgstr "Ratio d'arrondi pour x :"
 msgid "Roundness ratio for y:"
 msgstr "Ratio d'arrondi pour y :"
 
-#: src/select-context.c:564
+#: src/select-context.c:592
 msgid "Visual transformation"
 msgstr "Transformation visuelle"
 
-#: src/select-context.c:572
+#: src/select-context.c:600
 msgid "Show content"
 msgstr "Afficher le contenu"
 
-#: src/select-context.c:579
+#: src/select-context.c:607
 msgid "Show outline"
 msgstr "Afficher le contour"
 
-#: src/select-context.c:586
+#: src/select-context.c:614
 msgid "Object transformation"
 msgstr "Transformation d'objet"
 
-#: src/select-context.c:594
+#: src/select-context.c:622
 msgid "Optimize"
 msgstr "Optimiser"
 
-#: src/select-context.c:601
+#: src/select-context.c:629
 msgid "Preserve"
 msgstr "Préserver"
 
@@ -1748,68 +1730,68 @@ msgstr "Rendre les cotés plats"
 msgid "Inkscape"
 msgstr ""
 
-#: src/toolbox.c:445
+#: src/toolbox.c:439
 msgid "Object"
 msgstr "Objet"
 
-#: src/toolbox.c:449 src/verbs.c:494
+#: src/toolbox.c:443 src/verbs.c:494
 msgid "Object size and position"
 msgstr "Taille et Position de l'objet"
 
-#: src/toolbox.c:450
+#: src/toolbox.c:444
 msgid "Text and font settings"
 msgstr "Réglages des textes et polices"
 
-#: src/toolbox.c:452 src/verbs.c:495
+#: src/toolbox.c:446 src/verbs.c:495
 msgid "Object transformations"
 msgstr "Transformations d'objet"
 
-#: src/toolbox.c:528
+#: src/toolbox.c:522
 msgid "Draw"
 msgstr "Dessiner"
 
-#: src/toolbox.c:589
+#: src/toolbox.c:583
 msgid "Extension"
 msgstr "Extension"
 
-#: src/toolbox.c:666
+#: src/toolbox.c:660
 msgid "Nodes"
 msgstr "Noeuds"
 
-#: src/toolbox.c:668
+#: src/toolbox.c:662
 msgid "Insert new nodes into selected segments"
 msgstr "Insérer de nouveaux noeuds dans les segments sélectionnés"
 
-#: src/toolbox.c:669
+#: src/toolbox.c:663
 msgid "Break line at selected nodes"
 msgstr "Briser la ligne aux noeuds sélectionnés"
 
-#: src/toolbox.c:670
+#: src/toolbox.c:664
 msgid "Make selected nodes corner"
 msgstr "Convertir les noeuds sélectionnés en coins"
 
-#: src/toolbox.c:671
+#: src/toolbox.c:665
 msgid "Make selected segments lines"
 msgstr "Convertir les segments sélectionnés en lignes"
 
-#: src/toolbox.c:672
+#: src/toolbox.c:666
 msgid "Delete selected nodes"
 msgstr "Supprimer les noeuds sélectionnés"
 
-#: src/toolbox.c:673
+#: src/toolbox.c:667
 msgid "Join lines at selected nodes"
 msgstr "Joindre les lignes aux noeuds sélectionnés"
 
-#: src/toolbox.c:674
+#: src/toolbox.c:668
 #, fuzzy
 msgid "Join lines at selected nodes with new segment"
 msgstr "Joindre les lignes aux noeuds sélectionnés"
 
-#: src/toolbox.c:675
+#: src/toolbox.c:669
 msgid "Make selected nodes smooth"
 msgstr "Adoucir les noeuds sélectionnés"
 
-#: src/toolbox.c:676
+#: src/toolbox.c:670
 msgid "Make selected segments curves"
 msgstr "Convertir les segments sélectionnés en courbes"
 
@@ -2416,6 +2398,21 @@ msgstr "Attribut"
 #: src/widgets/sp-xmlview-attr-list.c:56
 msgid "Value"
 msgstr "Valeur"
+
+#~ msgid "Document variant:"
+#~ msgstr "Document variant :"
+
+#~ msgid ""
+#~ "*.svg *.svgz|SVG files\n"
+#~ "*.xml|XML files\n"
+#~ "*|All files"
+#~ msgstr ""
+#~ "*.svg *.svgz|fichiers SVG\n"
+#~ "*.xml|fichiers XML\n"
+#~ "*|Tous les fichiers"
+
+#~ msgid "Save document as"
+#~ msgstr "Enregistrer le document sous"
 
 #~ msgid "About sodipodi"
 #~ msgstr "À propos de Sodipodi"

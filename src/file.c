@@ -51,9 +51,6 @@
 #include "modules/sp-module-doc.h"
 #endif /* WITH_MODULES */
 
-#ifdef WITH_KDE
-#include "modules/kde.h"
-#endif
 #ifdef WIN32
 #include "modules/win32.h"
 #endif
@@ -97,7 +94,6 @@ sp_file_open (const gchar *uri, const gchar *key)
 	}
 }
 
-#ifndef WITH_KDE
 static void
 file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
 {
@@ -141,21 +137,9 @@ sp_file_open_dialog_type_selected (SPMenu *menu, gpointer itemdata, GObject *fse
 {
 	g_object_set_data (fsel, "type-key", itemdata);
 }
-#endif
 
 void sp_file_open_dialog (gpointer object, gpointer data)
 {
-#ifdef WITH_KDE
-	char *filename;
-	filename = sp_kde_get_open_filename (open_path, "*.svg *.svgz|SVG files\n*.*|All files", _("Select file to open"));
-	if (filename) {
-		if (open_path) g_free (open_path);
-		open_path = g_dirname (filename);
-		if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
-		sp_file_open (filename, NULL);
-		g_free (filename);
-	}
-#else
 #ifdef WIN32
 	char *filename;
 	filename = sp_win32_get_open_filename (open_path, "SVG files\0*.svg;*.svgz\0All files\0*\0", _("Select file to open"));
@@ -198,7 +182,6 @@ void sp_file_open_dialog (gpointer object, gpointer data)
 	gtk_widget_show_all (hb);
 
 	gtk_widget_show ((GtkWidget *) fsel);
-#endif
 #endif
 }
 
@@ -263,18 +246,6 @@ sp_file_do_save (SPDocument *doc, const gchar *uri, const gchar *key)
 static void
 sp_file_save_dialog (SPDocument *doc)
 {
-#ifdef WITH_KDE
-	char *filename;
-	unsigned int spns;
-	filename = sp_kde_get_save_filename (save_path, &spns);
-	if (filename && *filename) {
-		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
-		if (save_path) g_free (save_path);
-		save_path = g_dirname (filename);
-		save_path = g_strdup (save_path);
-		g_free (filename);
-	}
-#else
 #ifdef WIN32
 	char *filename;
 	unsigned int spns;
@@ -324,7 +295,6 @@ sp_file_save_dialog (SPDocument *doc)
 	}
 
 	gtk_widget_destroy (dlg);
-#endif
 #endif
 }
 
@@ -449,30 +419,16 @@ sp_file_do_import (SPDocument *doc, const gchar *filename)
 void sp_file_import (GtkWidget * widget)
 {
         SPDocument *doc;
-#ifdef WITH_KDE
-	char *filename;
-#else
 #ifdef WIN32
 	char *filename;
 #else
 	GtkWidget *w;
 	int b;
 #endif
-#endif
 
         doc = SP_ACTIVE_DOCUMENT;
 	if (!SP_IS_DOCUMENT(doc)) return;
 
-#ifdef WITH_KDE
-	filename = sp_kde_get_open_filename (import_path,
-					     "*.png *.jpg *.jpeg *.bmp *.gif *.tiff *.xpm|Image files\n"
-					     "*.svg|SVG files\n"
-					     "*.*|All files", _("Select file to import"));
-	if (filename) {
-		sp_file_do_import (doc, filename);
-		g_free (filename);
-	}
-#else
 #ifdef WIN32
 	filename = sp_win32_get_open_filename (import_path,
 					     "Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
@@ -497,7 +453,6 @@ void sp_file_import (GtkWidget * widget)
 	}
 
 	gtk_widget_destroy (w);
-#endif
 #endif
 }
 

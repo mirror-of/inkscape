@@ -360,9 +360,6 @@ sp_toolbox_file_create (void)
 #ifdef WIN32
 #define PDIRECT
 #endif
-#ifdef WITH_KDE
-#define PDIRECT
-#endif
 #ifdef WITH_GNOME_PRINT
 #define PDIRECT
 #endif
@@ -379,9 +376,6 @@ sp_toolbox_file_create (void)
 #endif
 	b = sp_toolbox_button_new_from_verb (t, 6, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_PRINT_PREVIEW, tt);
 	gtk_widget_set_sensitive (b, FALSE);
-#ifdef WITH_KDE
-	gtk_widget_set_sensitive (b, TRUE);
-#endif
 	sp_toolbox_button_new_from_verb (t, 3, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_IMPORT, tt);
 	sp_toolbox_button_new_from_verb (t, 7, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_EXPORT, tt);
 

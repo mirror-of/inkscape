@@ -37,10 +37,6 @@
 #include <modules/gnome.h>
 #endif
 
-#ifdef WITH_KDE
-#include <modules/kde.h>
-#endif
-
 /* Identity typedef */
 
 struct _SPPrintContext {
@@ -114,14 +110,10 @@ sp_print_preview_document (SPDocument *doc)
 	mod = g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
 #else
 // Some unix probably
-#ifdef WITH_KDE
-	mod = sp_kde_get_module_print ();
-#else
 #ifdef WITH_GNOME_PRINT
 	mod = (SPModulePrint *) sp_module_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);
 #else
 	mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
-#endif
 #endif
 #endif
 
@@ -166,9 +158,6 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 	if (direct) mod = (SPModulePrint *) sp_module_new_from_path (SP_TYPE_MODULE_PRINT_PLAIN, "printing.ps");
 #ifdef WIN32
 	if (!direct) mod = g_object_new (SP_TYPE_MODULE_PRINT_WIN32, NULL);
-#endif
-#ifdef WITH_KDE
-	if (!direct) mod = sp_kde_get_module_print ();
 #endif
 #ifdef WITH_GNOME_PRINT
 	if (!direct) mod = g_object_new (SP_TYPE_MODULE_PRINT_GNOME, NULL);

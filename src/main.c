@@ -66,9 +66,6 @@
 #include "modules/sp-module-sys.h"
 #endif /* WITH_MODULES */
 
-#ifdef WITH_KDE
-#include "modules/kde.h"
-#endif
 #ifdef WIN32
 #include "modules/win32.h"
 #endif
@@ -240,9 +237,6 @@ sp_main_gui (int argc, const char **argv)
 	poptFreeContext (ctx);
 #endif
 
-#ifdef WITH_KDE
-	sp_kde_init (argc, (char **) argv, "Inkscape");
-#endif
 #ifdef WIN32
 	sp_win32_init (0, NULL, "Inkscape");
 #endif
@@ -291,9 +285,6 @@ sp_main_gui (int argc, const char **argv)
 
 	gtk_main ();
 
-#ifdef WITH_KDE
-	sp_kde_finish ();
-#endif
 #ifdef WIN32
 	sp_win32_finish ();
 #endif
