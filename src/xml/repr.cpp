@@ -28,6 +28,7 @@
 
 #include <glib.h>
 
+#include "xml/repr-get-children.h"
 #include "xml/repr-private.h"
 #include "xml/sp-repr-listener.h"
 #include "xml/sp-repr-event-vector.h"
@@ -521,14 +522,19 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
 }
 
 unsigned
-sp_repr_change_order(SPRepr *repr, SPRepr *child, SPRepr *ref)
+sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
 {
-    SPRepr *prev = NULL;
-    if (child != repr->children) {
-        for (SPRepr *cur = repr->children; cur != child; cur = cur->next) {
-            prev = cur;
-        }
-    }
+    g_return_val_if_fail(( child
+                           && ( child->parent == repr )
+                           && ( child != ref )
+                           && ( !ref || ( ref->parent == repr ) ) ),
+                         FALSE);
+    /* TODO: Decide whether to allow parentless reprs to have siblings.  If disallowed, then
+       require (repr || !ref).  If allowed, then note that sp_repr_prev will wrongly return NULL
+       for siblings other than the first, so undo information will be wrong.  One fix would be to
+       add an invisible root repr to act as a parent for these otherwise-parentless nodes. */
+
+    SPRepr *const prev = sp_repr_prev(child);
 
     if (prev == ref) {
         return TRUE;
@@ -574,10 +580,10 @@ sp_repr_change_order(SPRepr *repr, SPRepr *child, SPRepr *ref)
     return allowed;
 }
 
-/** Note: Many if not all existing callers would be better off calling sp_repr_get_prev_sibling in
+/** Note: Many if not all existing callers would be better off calling sp_repr_prev in
  *  place of sp_repr_position, and passing that prev sibling to sp_repr_add_child or
  *  sp_repr_change_order.  The main thing to watch for is if that prev sibling gets removed between
- *  the sp_repr_get_prev_sibling / sp_repr_position call and the sp_repr_add_child /
+ *  the sp_repr_prev / sp_repr_position call and the sp_repr_add_child /
  *  sp_repr_change_order call; though of course this presumably already needs handling for the
  *  sp_repr_position-based code (decrementing the position number), unless that removed prev
  *  sibling were replaced with a different SPRepr object.

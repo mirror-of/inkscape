@@ -1,5 +1,10 @@
 2004-10-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/xml/repr.cpp (sp_repr_change_order):
+	  Add g_return_if_fail for some conditions that would break structural
+	  integrity, and add a TODO comment indicating incompleteness.
+	  Use sp_repr_prev function.
+
 	* src/xml/repr-get-children.h, src/xml/repr-get-children.cpp
 	  (sp_repr_prev_sibling): Rename to sp_repr_prev for consistency
 	  with sp_repr_next.  Don't consider it an error for child to be
