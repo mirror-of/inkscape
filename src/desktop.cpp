@@ -1518,8 +1518,7 @@ sp_desktop_zoom_drawing (SPDesktop *dt)
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
 
-void
-sp_desktop_scroll_world (SPDesktop *dt, double dx, double dy)
+void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
 {
     NRRect viewbox;
 
