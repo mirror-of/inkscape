@@ -598,7 +598,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 
             } else {
             
-                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty())
+                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false)
                 {
                     (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
                 
