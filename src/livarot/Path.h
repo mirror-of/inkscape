@@ -294,8 +294,8 @@ public:
   void             ConvertPositionsToMoveTo(int nbPos,cut_position* poss);
   void             ConvertPositionsToForced(int nbPos,cut_position* poss);
 
-private:
     void  Affiche(void);
+private:
     // path storage primitives
   void AlloueDCmd (int addNb);
   void AlloueDData (int addNb);

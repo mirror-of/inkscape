@@ -303,6 +303,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
         bbox.y1+=width;
       }      
     }
+  } else {
   }
   shape->approx_bbox.x0 = (gint32)(bbox.x0 - 1.0F);
   shape->approx_bbox.y0 = (gint32)(bbox.y0 - 1.0F);
@@ -433,7 +434,6 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
             oMat=oMat.inverse();
             NR::Matrix   p=oMat*nMat;
             cached_to_new=p;
-//            printf("%f %f %f %f %f %f\n",cached_to_new[0],cached_to_new[1],cached_to_new[2],cached_to_new[3],cached_to_new[4],cached_to_new[5]);
             NR::Matrix   tp;
             // trasnposition
             tp[0]=p[0];
@@ -451,7 +451,6 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
             }
           }
           if ( isometry == 0 ) {
-//            printf("rf\n");
             if ( shape->cached_fill == NULL ) shape->cached_fill=new Shape;
             shape->cached_fill->Reset();
             
@@ -498,7 +497,7 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 #else
       }
 #endif
-			shape->ctm = gc->transform;
+//			shape->ctm = gc->transform;
 		}
   }
 }
@@ -573,7 +572,6 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
         oMat=oMat.inverse();
         NR::Matrix   p=oMat*nMat;
         cached_to_new=p;
-//        printf("%f %f %f %f %f %f\n",cached_to_new[0],cached_to_new[1],cached_to_new[2],cached_to_new[3],cached_to_new[4],cached_to_new[5]);
         NR::Matrix   tp;
         // trasnposition
         tp[0]=p[0];
@@ -591,7 +589,6 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
         }
       }
       if ( isometry == 0 ) {
-        //printf("rs\n");
         if ( shape->cached_stroke == NULL ) shape->cached_stroke=new Shape;
         shape->cached_stroke->Reset();
         Path*  thePath=new Path;
@@ -744,8 +741,7 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
   
 #ifdef test_liv
   if ( shape->delayed_shp ) {
-    if ( nr_rect_l_test_intersect (area, &shape->approx_bbox) ) {
-      shape->delayed_shp=false;
+    if ( nr_rect_l_test_intersect (area, &item->bbox) ) {
       NRGC   tempGC;
       tempGC.transform=shape->ctm;
       nr_arena_shape_update_stroke(shape,&tempGC);
@@ -772,7 +768,6 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 		guint32 rgba;
 
 		nr_pixblock_setup_fast (&m, NR_PIXBLOCK_MODE_A8, area->x0, area->y0, area->x1, area->y1, TRUE);
-//    printf("bbox %i %i %i %i\n",area->x0,area->y0,area->x1,area->y1);
 #ifndef test_liv
 		nr_pixblock_render_svp_mask_or (&m, shape->fill_svp);
 #else
@@ -879,8 +874,7 @@ nr_arena_shape_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 
 #ifdef test_liv
   if ( shape->delayed_shp ) {
-    if ( nr_rect_l_test_intersect (area, &shape->approx_bbox) ) {
-      shape->delayed_shp=false;
+    if ( nr_rect_l_test_intersect (area, &item->bbox) ) {
       NRGC   tempGC;
       tempGC.transform=shape->ctm;
       nr_arena_shape_update_stroke(shape,&tempGC);
@@ -959,8 +953,7 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
     area.x1+=1;
     area.y0-=1;
     area.y1+=1;
-    if ( nr_rect_l_test_intersect (&area, &shape->approx_bbox) ) {
-      shape->delayed_shp=false;
+    if ( nr_rect_l_test_intersect (&area, &item->bbox) ) {
       NRGC   tempGC;
       tempGC.transform=shape->ctm;
       nr_arena_shape_update_stroke(shape,&tempGC);
@@ -1131,7 +1124,6 @@ nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRect *pbox)
 static void
 shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven)
 {
-  //	printf("%i %f -> %i %f\n",st,vst,en,ven);
   if ( st >= en ) return;
   if ( vst < 0 ) vst=0;
   if ( vst > 1 ) vst=1;
@@ -1198,7 +1190,6 @@ shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float 
 
 void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
 {
-//  printf("bbox %i %i %i %i \n",m.area.x0,m.area.y0,m.area.x1,m.area.y1);
 
   theS->CalcBBox();
   float  l=theS->leftX,r=theS->rightX,t=theS->topY,b=theS->bottomY;
@@ -1230,9 +1221,6 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   for (int y=it;y<ib;y++) {
     theI->Reset();
 //    theIL->Reset();
-/*    if ( y == -1661 && il == 5424 ) {
-      printf("o");
-    }*/
     if ( y&0x00000003 ) {
       theS->Scan(curY,curPt,((float)(y+1)),theI,false,1.0);
     } else {
