@@ -44,16 +44,24 @@ static SPXMLNs *namespaces=NULL;
 void
 sp_xml_ns_register_defaults ()
 {
-	static SPXMLNs defaults[3];
+	static SPXMLNs defaults[4];
+
 	defaults[0].uri = g_quark_from_static_string (SP_SODIPODI_NS_URI);
 	defaults[0].prefix = g_quark_from_static_string ("sodipodi");
 	defaults[0].next = &defaults[1];
+
 	defaults[1].uri = g_quark_from_static_string (SP_XLINK_NS_URI);
 	defaults[1].prefix = g_quark_from_static_string ("xlink");
 	defaults[1].next = &defaults[2];
+
 	defaults[2].uri = g_quark_from_static_string (SP_SVG_NS_URI);
 	defaults[2].prefix = g_quark_from_static_string ("svg");
-	defaults[2].next = NULL;
+	defaults[2].next = &defaults[3];
+
+	defaults[3].uri = g_quark_from_static_string (SP_INKSCAPE_NS_URI);
+	defaults[3].prefix = g_quark_from_static_string ("inkscape");
+	defaults[3].next = NULL;
+
 	namespaces = &defaults[0];
 }
 

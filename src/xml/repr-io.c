@@ -120,8 +120,9 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 			sp_repr_set_attr (repr, "xmlns", default_ns);
 		}
 		g_hash_table_foreach (prefix_map, (GHFunc)sp_repr_set_xmlns_attr, repr);
-		/* always include Sodipodi namespace */
+		/* always include Sodipodi and Inkscape namespaces */
 		sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SODIPODI_NS_URI, "sodipodi"), SP_SODIPODI_NS_URI, repr);
+		sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_INKSCAPE_NS_URI, "inkscape"), SP_INKSCAPE_NS_URI, repr);
 
 		if (!strcmp (sp_repr_name (repr), "svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
 			

@@ -20,6 +20,7 @@
 #include "document.h"
 #include "style.h"
 #include "sp-object-repr.h"
+#include "sp-root.h"
 
 #include "sp-object.h"
 
@@ -847,3 +848,17 @@ sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *d
 	return def;
 }
 
+SPVersion
+sp_object_get_sodipodi_version (SPObject *object)
+{
+	static const SPVersion zero_version = { 0, 0 };
+
+	while (object) {
+		if (SP_IS_ROOT (object)) {
+			return SP_ROOT (object)->version.sodipodi;
+		}
+		object = SP_OBJECT_PARENT (object);
+	}
+	
+	return zero_version;
+}

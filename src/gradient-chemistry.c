@@ -75,7 +75,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		g_print ("GVECTORNORM: Gradient %s IS NOT in <defs>\n", SP_OBJECT_ID (gr));
 		/* Step 1 - flatten original EXCEPT vector */
 		sp_object_invoke_write ((SPObject *) gr, ((SPObject *) gr)->repr,
-					SP_OBJECT_WRITE_INKSCAPE | SP_OBJECT_WRITE_ALL);
+					SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 		g_print ("GVECTORNORM: Gradient %s attributes flattened\n", SP_OBJECT_ID (gr));
 		/* Step 2 - create new empty gradient and prepend it to <defs> */
 		repr = sp_repr_new ("linearGradient");
@@ -114,7 +114,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		if (gr->href) {
 			/* We are hrefing someone, so require flattening */
 			sp_object_invoke_write ((SPObject *) gr, ((SPObject *) gr)->repr,
-						SP_OBJECT_WRITE_INKSCAPE | SP_OBJECT_WRITE_ALL);
+						SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 			g_print ("GVECTORNORM: Gradient %s attributes flattened\n", SP_OBJECT_ID (gr));
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), NULL);
 		}

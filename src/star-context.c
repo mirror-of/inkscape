@@ -284,7 +284,7 @@ sp_star_finish (SPStarContext * sc)
 		
                 sp_shape_set_shape (SP_SHAPE (sc->item));
 
-		sp_object_invoke_write (object, NULL, SP_OBJECT_WRITE_INKSCAPE);
+		sp_object_invoke_write (object, NULL, SP_OBJECT_WRITE_EXT);
 
 		sp_selection_set_item (SP_DT_SELECTION (desktop), sc->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));

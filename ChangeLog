@@ -1,3 +1,14 @@
+2003-11-16  MenTaLguY <mental@rydia.net>
+
+	* New version code (version.c/version.h)
+	* Introduced inkscape namespace in parallel with sodipodi namespace
+	* Fixed a lot of attribute enum names to reflect sodipodi versus inkscape namespaces
+	* src/document.c: new version processing, plus namespace fixes
+	* SP_OBJECT_WRITE_INKSCAPE is now SP_OBJECT_WRITE_EXT
+	* Inkscape and Sodipodi versions are tracked separately
+	* First crack at layers!  set inkscape:groupmode to "layer" or "group" depending on how you want a group to behave
+	* A little dead code removal
+
 2003-11-15  MenTaLguY <mental@rydia.net>
 
 	* Mege Jon's improved src/help.c patch from the mailing list (with some temporary cruft of my own that I hope he'll forgive me for)

@@ -41,7 +41,7 @@
 
 /* Write flags */
 #define SP_OBJECT_WRITE_BUILD (1 << 0)
-#define SP_OBJECT_WRITE_INKSCAPE (1 << 1)
+#define SP_OBJECT_WRITE_EXT (1 << 1)
 #define SP_OBJECT_WRITE_ALL (1 << 2)
 
 /* Convenience stuff */
@@ -58,6 +58,7 @@
 #include <glib-object.h>
 #include "xml/repr.h"
 #include "forward.h"
+#include "version.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -209,6 +210,8 @@ void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException 
 /* Style */
 
 const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
+
+SPVersion sp_object_get_sodipodi_version (SPObject *object);
 
 #ifdef __cplusplus
 };

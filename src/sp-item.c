@@ -299,13 +299,13 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		break;
 	}
-	case SP_ATTR_INKSCAPE_INSENSITIVE:
+	case SP_ATTR_SODIPODI_INSENSITIVE:
 		item->sensitive = !value;
 		for (v = item->display; v != NULL; v = v->next) {
 			nr_arena_item_set_sensitive (v->arenaitem, item->sensitive);
 		}
 		break;
-	case SP_ATTR_INKSCAPE_NONPRINTABLE:
+	case SP_ATTR_SODIPODI_NONPRINTABLE:
 		item->printable = !value;
 		for (v = item->display; v != NULL; v = v->next) {
 			if (v->flags & SP_ITEM_SHOW_PRINT) {
@@ -391,7 +391,7 @@ sp_item_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_attr (repr, "style", NULL);
 	}
 
-	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
+	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:insensitive", item->sensitive ? NULL : "true");
 	}
 

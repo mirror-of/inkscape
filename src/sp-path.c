@@ -15,11 +15,14 @@
 #include <string.h>
 
 #include <libnr/nr-path.h>
+#include <libnr/nr-values.h>
+#include <libnr/nr-macros.h>
+#include <libnr/nr-matrix.h>
 
 #include "svg/svg.h"
 #include "attributes.h"
 #include "style.h"
-#include "sp-root.h"
+#include "version.h"
 
 #include "sp-path.h"
 
@@ -80,32 +83,17 @@ sp_path_init (SPPath *path)
 	/* Nothing here */
 }
 
-/* fixme: Better place (Lauris) */
-
-static guint
-sp_path_find_version (SPObject *object)
-{
-	while (object) {
-		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->inkscape;
-		}
-		object = SP_OBJECT_PARENT (object);
-	}
-
-	return 0;
-}
-
 static void
 sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
 	SPPath *path;
-	guint version;
+	SPVersion version;
 
 	path = SP_PATH (object);
 
-	version = sp_path_find_version (object);
+	version = sp_object_get_sodipodi_version (object);
 
-	if ((version > 0) && (version < 25)) {
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		const gchar *str;
 		str = sp_repr_attr (repr, "INKSCAPE-PATH-NODE-TYPES");
 		sp_repr_set_attr (repr, "sodipodi:nodetypes", str);
@@ -118,7 +106,7 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "marker-mid");
 	sp_object_read_attr (object, "marker-end");
 
-	if ((version > 0) && (version < 25)) {
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		SPShape *shape;
 		SPCSSAttr *css;
 		const gchar *val;

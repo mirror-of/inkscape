@@ -348,7 +348,7 @@ sp_rect_finish (SPRectContext *rc)
 
 		dt = SP_EVENT_CONTEXT_DESKTOP (rc);
 
-		sp_object_invoke_write (SP_OBJECT (rc->item), SP_OBJECT_REPR (rc->item), SP_OBJECT_WRITE_INKSCAPE);
+		sp_object_invoke_write (SP_OBJECT (rc->item), SP_OBJECT_REPR (rc->item), SP_OBJECT_WRITE_EXT);
 
 		sp_selection_set_item (SP_DT_SELECTION (dt), rc->item);
 		sp_document_done (SP_DT_DOCUMENT (dt));

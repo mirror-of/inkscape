@@ -28,10 +28,7 @@
 #include "sp-namedview.h"
 #include "document-private.h"
 #include "desktop.h"
-
-#define SP_NAMESPACE_SVG "http://www.w3.org/2000/svg"
-#define SP_NAMESPACE_INKSCAPE "http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
-#define SP_NAMESPACE_XLINK "http://www.w3.org/1999/xlink"
+#include "version.h"
 
 #define A4_WIDTH_STR "210mm"
 #define A4_HEIGHT_STR "297mm"
@@ -223,7 +220,7 @@ sp_document_create (SPReprDoc *rdoc,
 {
 	SPDocument *document;
 	SPRepr *rroot;
-	guint version;
+	SPVersion sodipodi_version;
 
 	rroot = sp_repr_document_root (rdoc);
 
@@ -241,21 +238,20 @@ sp_document_create (SPReprDoc *rdoc,
 
 	document->root = sp_object_repr_build_tree (document, rroot);
 
-#if 0
-	/* fixme: Is this correct here? (Lauris) */
-	sp_document_ensure_up_to_date (document);
-#endif
-
-	version = SP_ROOT (document->root)->inkscape;
+	sodipodi_version = SP_ROOT (document->root)->version.sodipodi;
 
 	/* fixme: Not sure about this, but lets assume ::build updates */
-	sp_repr_set_attr (rroot, "sodipodi:version", VERSION);
+	sp_repr_set_attr (rroot, "sodipodi:version", SODIPODI_VERSION);
+	sp_repr_set_attr (rroot, "inkscape:version", VERSION);
 	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
+
 	/* A quick hack to get namespaces into doc */
-	sp_repr_set_attr (rroot, "xmlns", SP_NAMESPACE_SVG);
-	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_NAMESPACE_INKSCAPE);
-	sp_repr_set_attr (rroot, "xmlns:xlink", SP_NAMESPACE_XLINK);
+	sp_repr_set_attr (rroot, "xmlns", SP_SVG_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_SODIPODI_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:inkscape", SP_INKSCAPE_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:xlink", SP_XLINK_NS_URI);
 	/* End of quick hack */
+
 	/* Quick hack 2 - get default image size into document */
 	if (!sp_repr_attr (rroot, "width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
 	if (!sp_repr_attr (rroot, "height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
@@ -267,7 +263,8 @@ sp_document_create (SPReprDoc *rdoc,
 		sp_repr_set_attr (rroot, "sodipodi:docbase", document->base);
 	}
 	/* End of quick hack 3 */
-	if ((version > 0) && (version < 25)) {
+	/* between 0 and 0.25 */
+	if (sp_version_inside_range (sodipodi_version, 0, 0, 0, 25)) {
 		/* Clear ancient spec violating attributes */
 		sp_repr_set_attr (rroot, "SP-DOCNAME", NULL);
 		sp_repr_set_attr (rroot, "SP-DOCBASE", NULL);

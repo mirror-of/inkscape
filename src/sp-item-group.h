@@ -21,10 +21,15 @@
 #define SP_IS_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GROUP))
 #define SP_IS_GROUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GROUP))
 
+typedef enum _SPGroupMode {
+	SP_GROUP_MODE_GROUP,
+	SP_GROUP_MODE_LAYER
+} SPGroupMode;
+
 struct _SPGroup {
 	SPItem item;
 	SPObject *children;
-	gboolean transparent;
+	SPGroupMode mode;
 };
 
 struct _SPGroupClass {
@@ -35,8 +40,10 @@ GType sp_group_get_type (void);
 
 void sp_item_group_ungroup (SPGroup *group, GSList **children);
 
-GSList *sp_item_group_item_list (SPGroup *group);
+SPGroupMode sp_item_group_get_mode (SPGroup *group);
+void sp_item_group_set_mode (SPGroup *group, SPGroupMode mode);
 
+GSList *sp_item_group_item_list (SPGroup *group);
 SPObject *sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *name);
 
 #endif

@@ -18,11 +18,11 @@
 #include <math.h>
 #include <string.h>
 
+#include "libnr/nr-matrix.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "style.h"
-/* For versioning */
-#include "sp-root.h"
+#include "version.h"
 
 #include "sp-ellipse.h"
 
@@ -641,33 +641,18 @@ sp_arc_init (SPArc *arc)
 	/* Nothing special */
 }
 
-/* fixme: Better place (Lauris) */
-
-static guint
-sp_arc_find_version (SPObject *object)
-{
-
-	while (object) {
-		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->inkscape;
-		}
-		object = SP_OBJECT_PARENT (object);
-	}
-
-	return 0;
-}
 
 static void
 sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	guint version;
+	SPVersion version;
 
 	if (((SPObjectClass *) arc_parent_class)->build)
 		(* ((SPObjectClass *) arc_parent_class)->build) (object, document, repr);
 
-	version = sp_arc_find_version (object);
+	version = sp_object_get_sodipodi_version (object);
 
-	if (version < 25) {
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		/* Old spec violating arc attributes */
 		sp_object_read_attr (object, "cx");
 		sp_object_read_attr (object, "cy");
@@ -685,9 +670,9 @@ sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "sodipodi:end");
 	sp_object_read_attr (object, "sodipodi:open");
 
-	if (version < 25) {
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		/* fixme: I am 99.9% sure we can do this here safely, but check nevertheless (Lauris) */
-		sp_arc_write (object, repr, SP_OBJECT_WRITE_INKSCAPE);
+		sp_arc_write (object, repr, SP_OBJECT_WRITE_EXT);
 		sp_repr_set_attr (repr, "cx", NULL);
 		sp_repr_set_attr (repr, "cy", NULL);
 		sp_repr_set_attr (repr, "rx", NULL);
@@ -764,7 +749,7 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 	ge = SP_GENERICELLIPSE (object);
 	arc = SP_ARC (object);
 
-	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
+	if (flags & SP_OBJECT_WRITE_EXT) {
 		if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 			repr = sp_repr_new ("path");
 		}
@@ -808,63 +793,63 @@ static void
 sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGenericEllipse *ge;
-	guint version;
+	SPVersion version;
 
 	ge = SP_GENERICELLIPSE (object);
 	
-	version = sp_arc_find_version (object);
+	version = sp_object_get_sodipodi_version (object);
 
-	if (version < 25) {
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		switch (key) {
 		case SP_ATTR_CX:
-			key = SP_ATTR_INKSCAPE_CX;
+			key = SP_ATTR_SODIPODI_CX;
 			break;
 		case SP_ATTR_CY:
-			key = SP_ATTR_INKSCAPE_CY;
+			key = SP_ATTR_SODIPODI_CY;
 			break;
 		case SP_ATTR_RX:
-			key = SP_ATTR_INKSCAPE_RX;
+			key = SP_ATTR_SODIPODI_RX;
 			break;
 		case SP_ATTR_RY:
-			key = SP_ATTR_INKSCAPE_RY;
+			key = SP_ATTR_SODIPODI_RY;
 			break;
 		}
 	}
 
 	switch (key) {
-	case SP_ATTR_INKSCAPE_CX:
+	case SP_ATTR_SODIPODI_CX:
 		if (!sp_svg_length_read (value, &ge->cx)) {
 			sp_svg_length_unset (&ge->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_CY:
+	case SP_ATTR_SODIPODI_CY:
 		if (!sp_svg_length_read (value, &ge->cy)) {
 			sp_svg_length_unset (&ge->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_RX:
+	case SP_ATTR_SODIPODI_RX:
 		if (!sp_svg_length_read (value, &ge->rx) || (ge->rx.computed <= 0.0)) {
 			sp_svg_length_unset (&ge->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_RY:
+	case SP_ATTR_SODIPODI_RY:
 		if (!sp_svg_length_read (value, &ge->ry) || (ge->ry.computed <= 0.0)) {
 			sp_svg_length_unset (&ge->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_START:
+	case SP_ATTR_SODIPODI_START:
 		sp_svg_number_read_d (value, &ge->start);
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_END:
+	case SP_ATTR_SODIPODI_END:
 		sp_svg_number_read_d (value, &ge->end);
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_INKSCAPE_OPEN:
+	case SP_ATTR_SODIPODI_OPEN:
 		ge->closed = (!value);
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;

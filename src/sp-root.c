@@ -90,13 +90,14 @@ sp_root_class_init (SPRootClass *klass)
 static void
 sp_root_init (SPRoot *root)
 {
-	root->group.transparent = TRUE;
+	static const SPVersion zero_version = { 0, 0 };
 
-	root->version = 1.0;
+	sp_version_from_string (SVG_VERSION, &root->original.svg);
+	root->version.svg = root->original.svg;
+	root->version.inkscape = root->original.inkscape =
+	  root->version.sodipodi = root->original.sodipodi = zero_version;
 
-	root->svg = 100;
-	root->inkscape = 0;
-	root->original = 0;
+	root->group.mode = SP_GROUP_MODE_LAYER;
 
 	sp_svg_length_unset (&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&root->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
@@ -123,11 +124,13 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	root = (SPRoot *) object;
 
 	if (sp_repr_attr (repr, "sodipodi:docname") || sp_repr_attr (repr, "SP-DOCNAME")) {
-		/* This is ugly, but works */
-		root->original = 1;
+		/* so we have a nonzero initial version */
+		root->original.sodipodi.major = 0;
+		root->original.sodipodi.minor = 1;
 	}
 	sp_object_read_attr (object, "version");
 	sp_object_read_attr (object, "sodipodi:version");
+	sp_object_read_attr (object, "inkscape:version");
 	/* It is important to parse these here, so objects will have viewport build-time */
 	sp_object_read_attr (object, "x");
 	sp_object_read_attr (object, "y");
@@ -139,15 +142,7 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	if (((SPObjectClass *) parent_class)->build)
 		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
 
-#if 0
-	/* Collect all our namedviews */
-	for (o = group->children; o != NULL; o = o->next) {
-		if (SP_IS_NAMEDVIEW (o)) {
-			root->namedviews = g_slist_prepend (root->namedviews, o);
-		}
-	}
-	root->namedviews = g_slist_reverse (root->namedviews);
-#endif
+	group->mode = SP_GROUP_MODE_LAYER;
 
 	/* Search for first <defs> node */
 	for (o = group->children; o != NULL; o = o->next) {
@@ -187,17 +182,17 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_VERSION:
-		if (value) {
-			root->version = atof (value);
-		} else {
-			root->version = 1.0;
+		if (!sp_version_from_string (value, &root->version.svg)) {
+			root->version.svg = root->original.svg;
 		}
 		break;
+	case SP_ATTR_SODIPODI_VERSION:
+		if (!sp_version_from_string (value, &root->version.sodipodi)) {
+			root->version.sodipodi = root->original.sodipodi;
+		}
 	case SP_ATTR_INKSCAPE_VERSION:
-		if (value) {
-			root->inkscape = (guint) (atof (value) * 100.0 + 0.5);
-		} else {
-			root->inkscape = root->original;
+		if (!sp_version_from_string (value, &root->version.inkscape)) {
+			root->version.inkscape = root->original.inkscape;
 		}
 		break;
 	case SP_ATTR_X:
@@ -611,12 +606,21 @@ sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_attr (repr, "xmlns", "http://www.w3.org/2000/svg");
 	sp_repr_set_attr (repr, "xmlns:xlink", "http://www.w3.org/1999/xlink");
 
-	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
-		sp_repr_set_attr (repr, "xmlns:sodipodi", "http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd");
-		sp_repr_set_double (repr, "sodipodi:version", (double) root->inkscape / 100.0);
+	if (flags & SP_OBJECT_WRITE_EXT) {
+		gchar *version;
+
+		sp_repr_set_attr (repr, "xmlns:sodipodi", SP_SODIPODI_NS_URI);
+		sp_repr_set_attr (repr, "xmlns:inkscape", SP_INKSCAPE_NS_URI);
+
+		sp_repr_set_attr (repr, "sodipodi:version", SODIPODI_VERSION);
+
+		version = sp_version_to_string (root->version.inkscape);
+		sp_repr_set_attr (repr, "inkscape:version", version);
+		g_free(version);
 	}
 
-	sp_repr_set_attr (repr, "version", "1.0");
+	sp_repr_set_attr (repr, "version", SVG_VERSION);
+
 	sp_repr_set_double (repr, "x", root->x.computed);
 	sp_repr_set_double (repr, "y", root->y.computed);
 	sp_repr_set_double (repr, "width", root->width.computed);
@@ -683,3 +687,4 @@ sp_root_print (SPItem *item, SPPrintContext *ctx)
 
 	sp_print_release (ctx);
 }
+

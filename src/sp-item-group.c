@@ -21,6 +21,7 @@
 #include "svg/svg.h"
 #include "document.h"
 #include "style.h"
+#include "attributes.h"
 
 #include "sp-root.h"
 #include "sp-item-group.h"
@@ -35,6 +36,7 @@ static void sp_group_child_added (SPObject * object, SPRepr * child, SPRepr * re
 static void sp_group_remove_child (SPObject * object, SPRepr * child);
 static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
 static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
+static void sp_group_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_group_modified (SPObject *object, guint flags);
 static gint sp_group_sequence (SPObject *object, gint seq);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
@@ -86,6 +88,7 @@ sp_group_class_init (SPGroupClass *klass)
 	sp_object_class->child_added = sp_group_child_added;
 	sp_object_class->remove_child = sp_group_remove_child;
 	sp_object_class->order_changed = sp_group_order_changed;
+	sp_object_class->set = sp_group_set;
 	sp_object_class->update = sp_group_update;
 	sp_object_class->modified = sp_group_modified;
 	sp_object_class->sequence = sp_group_sequence;
@@ -102,7 +105,7 @@ static void
 sp_group_init (SPGroup *group)
 {
 	group->children = NULL;
-	group->transparent = FALSE;
+	group->mode = SP_GROUP_MODE_GROUP;
 }
 
 static void sp_group_build (SPObject *object, SPDocument * document, SPRepr * repr)
@@ -110,11 +113,14 @@ static void sp_group_build (SPObject *object, SPDocument * document, SPRepr * re
 	SPGroup * group;
 	SPObject * last;
 	SPRepr * rchild;
+	const gchar *mode;
 
 	group = SP_GROUP (object);
 
 	if (((SPObjectClass *) (parent_class))->build)
 		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
+
+	sp_object_read_attr (object, "inkscape:groupmode");
 
 	last = NULL;
 	for (rchild = repr->children; rchild != NULL; rchild = rchild->next) {
@@ -399,6 +405,22 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 		}
 	}
 
+	if (flags & SP_OBJECT_WRITE_EXT) {
+		const gchar *old_mode;
+		switch (group->mode) {
+		case SP_GROUP_MODE_GROUP:
+			old_mode = sp_repr_attr (repr, "inkscape:groupmode");
+			if (old_mode && strcmp(old_mode, "group") || flags & SP_OBJECT_WRITE_ALL) {
+				sp_repr_set_attr (repr, "inkscape:groupmode", "group");
+			}
+			break;
+		case SP_GROUP_MODE_LAYER:
+			sp_repr_set_attr (repr, "inkscape:groupmode", "layer");
+			break;
+		}
+		
+	}
+
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
 
@@ -469,7 +491,8 @@ sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	group = (SPGroup *) item;
 
 	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
-	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), group->transparent);
+	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai),
+	                                group->mode != SP_GROUP_MODE_GROUP);
 
 	ar = NULL;
 	for (o = group->children; o != NULL; o = o->next) {
@@ -624,5 +647,51 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 	child = (ref) ? ref->next : group->children;
 	while (child && strcmp (sp_repr_name (child->repr), name)) child = child->next;
 	return child;
+}
+
+void
+sp_group_set (SPObject *object, unsigned int key, const gchar *value)
+{
+	SPGroup *group = SP_GROUP (object);
+
+	if ( key == SP_ATTR_INKSCAPE_GROUPMODE ) {
+		if (value && !strcmp(value, "layer")) {
+			sp_item_group_set_mode (group, SP_GROUP_MODE_LAYER);
+		} else {
+			sp_item_group_set_mode (group, SP_GROUP_MODE_GROUP);
+		}
+	} else {
+		if (((SPObjectClass *) parent_class)->set)
+			((SPObjectClass *) parent_class)->set (object, key, value);
+	}
+}
+
+SPGroupMode
+sp_item_group_get_mode (SPGroup *group)
+{
+	return group->mode;
+}
+
+void
+sp_item_group_set_mode (SPGroup *group, SPGroupMode mode)
+{
+	SPItemView *view;
+
+	if (group->mode == mode) return;
+
+	group->mode = mode;
+
+	/* FIXME !!! this probably dips a little too deeply into
+	             SPItem's internals... */
+	for ( view = group->item.display ; view ; view = view->next ) {
+		NRArenaGroup *arena_group=NR_ARENA_GROUP (view->arenaitem);
+		if (!arena_group) {
+			g_warning ("SPGroup has a non-NRArenaGroup attached to an SPItemView");
+			continue;
+		}
+		nr_arena_group_set_transparent (arena_group,
+			                        group->mode !=
+			                          SP_GROUP_MODE_GROUP);
+	}
 }
 

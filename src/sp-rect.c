@@ -107,27 +107,11 @@ sp_rect_init (SPRect * rect)
 	/* sp_svg_length_unset (&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0); */
 }
 
-/* fixme: Better place (Lauris) */
-
-static guint
-sp_rect_find_version (SPObject *object)
-{
-
-	while (object) {
-		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->inkscape;
-		}
-		object = SP_OBJECT_PARENT (object);
-	}
-
-	return 0;
-}
-
 static void
 sp_rect_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
 	SPRect *rect;
-	guint version;
+	SPVersion version;
 
 	rect = SP_RECT (object);
 
@@ -141,9 +125,9 @@ sp_rect_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "rx");
 	sp_object_read_attr (object, "ry");
 
-	version = sp_rect_find_version (object);
+	version = sp_object_get_sodipodi_version (object);
 
-	if (version == 29) {
+	if ( version.major == 0 && version.minor == 29 ) {
 		if (rect->rx.set && rect->ry.set) {
 			/* 0.29 treated 0.0 radius as missing value */
 			if ((rect->rx.value != 0.0) && (rect->ry.value == 0.0)) {

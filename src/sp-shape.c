@@ -104,30 +104,14 @@ sp_shape_init (SPShape *shape)
 	/* Nothing here */
 }
 
-/* fixme: Better place (Lauris) */
-
-static guint
-sp_shape_find_version (SPObject *object)
-{
-
-	while (object) {
-		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->inkscape;
-		}
-		object = SP_OBJECT_PARENT (object);
-	}
-
-	return 0;
-}
-
 static void
 sp_shape_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	guint version;
+	SPVersion version;
 
-	version = sp_shape_find_version (object);
+	version = sp_object_get_sodipodi_version (object);
 
-	if ((version > 0) && (version < 25)) {
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		SPCSSAttr *css;
 		const gchar *val;
 		gdouble dval;

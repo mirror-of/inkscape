@@ -42,8 +42,7 @@
 #include "attributes.h"
 #include "document.h"
 #include "style.h"
-/* For versioning */
-#include "sp-root.h"
+#include "version.h"
 
 #include "sp-text.h"
 
@@ -557,7 +556,7 @@ sp_tspan_set (SPObject *object, unsigned int key, const gchar *value)
 		tspan->ly.rotate_set = (value != NULL);
 		/* fixme: Re-layout it */
 		break;
-	case SP_ATTR_INKSCAPE_ROLE:
+	case SP_ATTR_SODIPODI_ROLE:
 		if (value && (!strcmp (value, "line") || !strcmp (value, "paragraph"))) {
 			tspan->role = SP_TSPAN_ROLE_LINE;
 		} else {
@@ -676,7 +675,7 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 	if (tspan->ly.dx.set) sp_repr_set_double_attribute (repr, "dx", tspan->ly.dx.computed);
 	if (tspan->ly.dy.set) sp_repr_set_double_attribute (repr, "dy", tspan->ly.dy.computed);
 	if (tspan->ly.rotate_set) sp_repr_set_double_attribute (repr, "rotate", tspan->ly.rotate);
-	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
+	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:role", (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED) ? "line" : NULL);
 	}
 
@@ -847,39 +846,22 @@ sp_text_init (SPText *text)
 	text->children = NULL;
 }
 
-/* fixme: Better place (Lauris) */
-
-static guint
-sp_text_find_version (SPObject *object)
-{
-
-	while (object) {
-		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->inkscape;
-		}
-		object = SP_OBJECT_PARENT (object);
-	}
-
-	return 0;
-}
-
 static void
 sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 {
 	SPText *text;
 	SPObject *ref;
 	SPRepr *rch;
-	guint version;
+	SPVersion version;
 
 	text = SP_TEXT (object);
 
 	if (((SPObjectClass *) text_parent_class)->build)
 		((SPObjectClass *) text_parent_class)->build (object, doc, repr);
 
-	version = sp_text_find_version (object);
-	if ((version > 0) && (version < 25)) {
+	version = sp_object_get_sodipodi_version (object);
+	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		const gchar *content;
-		/* Old inkscape */
 		for (rch = repr->children; rch != NULL; rch = rch->next) {
 			if (rch->type == SP_XML_TEXT_NODE) {
 				content = sp_repr_content (rch);
@@ -983,7 +965,7 @@ sp_text_set (SPObject *object, unsigned int key, const gchar *value)
 		text->ly.rotate_set = (value != NULL);
 		/* fixme: Re-layout it */
 		break;
-	case SP_ATTR_INKSCAPE_LINESPACING:
+	case SP_ATTR_SODIPODI_LINESPACING:
 		text->ly.linespacing = 1.0;
 		if (value) {
 			text->ly.linespacing = sp_svg_read_percentage (value, 1.0);

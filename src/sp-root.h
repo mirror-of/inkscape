@@ -23,15 +23,14 @@
 #include "svg/svg-types.h"
 #include "enums.h"
 #include "sp-item-group.h"
+#include "version.h"
 
 struct _SPRoot {
 	SPGroup group;
 
-	float version;
-
-	guint svg : 8;
-	guint inkscape : 8;
-	guint original : 8;
+	struct {
+		SPVersion svg, sodipodi, inkscape;
+	} version, original;
 
 	SPSVGLength x;
 	SPSVGLength y;

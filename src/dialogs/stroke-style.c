@@ -481,7 +481,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 					SPGradient *lg;
 					lg = sp_item_force_stroke_lineargradient_vector (SP_ITEM (i->data), vector);
 					sp_paint_selector_write_lineargradient (psel, SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
-					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_INKSCAPE);
+					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_EXT);
 				}
 			}
 			sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -502,7 +502,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 					SPGradient *lg;
 					lg = sp_item_force_stroke_radialgradient_vector (SP_ITEM (i->data), vector);
 					sp_paint_selector_write_radialgradient (psel, SP_RADIALGRADIENT (lg), SP_ITEM (i->data));
-					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_INKSCAPE);
+					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_EXT);
 				}
 			}
 			sp_document_done (SP_WIDGET_DOCUMENT (spw));
