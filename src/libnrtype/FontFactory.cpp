@@ -17,6 +17,34 @@
 #include <pango/pangowin32.h>
 #endif
 
+// need to avoid using the size field
+size_t  font_descr_hash::operator()( PangoFontDescription* const&x) const {
+	int    h=0;
+	h*=1128467;
+	h+=(pango_font_description_get_family(x))?g_str_hash(pango_font_description_get_family(x)):0;
+	h*=1128467;
+	h+=(int)pango_font_description_get_style(x);
+	h*=1128467;
+	h+=(int)pango_font_description_get_variant(x);
+	h*=1128467;
+	h+=(int)pango_font_description_get_weight(x);
+	h*=1128467;
+	h+=(int)pango_font_description_get_stretch(x);
+	return h;
+}
+bool  font_descr_equal::operator()( PangoFontDescription* const&a, PangoFontDescription* const&b) {
+//		if ( pango_font_description_equal(a,b) ) return true;
+	const char* fa=pango_font_description_get_family(a);
+	const char* fb=pango_font_description_get_family(b);
+	if ( ( fa && fb == NULL ) || ( fb && fa == NULL ) ) return false;
+	if ( fa && fb && strcmp(fa,fb) != 0 ) return false;
+	if ( pango_font_description_get_style(a) != pango_font_description_get_style(b) ) return false;
+	if ( pango_font_description_get_variant(a) != pango_font_description_get_variant(b) ) return false;
+	if ( pango_font_description_get_weight(a) != pango_font_description_get_weight(b) ) return false;
+	if ( pango_font_description_get_stretch(a) != pango_font_description_get_stretch(b) ) return false;
+	return true;
+}
+
 /////////////////// helper functions
 
 /**
@@ -295,6 +323,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 			res->InstallFace(nFace);
 			if ( res->pFont == NULL ) {
 				// failed to install face -> bitmap font
+//				printf("face failed\n");
 				delete res;
 				res=NULL;
 				if ( canFail ) {
@@ -304,6 +333,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 				}
 			} else {
 				loadedFaces[res->descr]=res;
+//				printf("font_factory::Face ");
 				res->Ref();
 			}
 		} else {
@@ -317,6 +347,7 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 	} else {
     // already here
     res=loadedFaces[descr];
+//		printf("font_factory::Face ");
     res->Ref();
   }
   return res;
@@ -395,8 +426,10 @@ void font_factory::UnrefFace(font_instance* who)
     if ( who == NULL ) return;
     if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
         // not found
+			printf("unrefFace %x: failed\n",who);
     } else {
         loadedFaces.erase(loadedFaces.find(who->descr));
+//			printf("unrefFace %x: success\n",who);
     }
 }
 

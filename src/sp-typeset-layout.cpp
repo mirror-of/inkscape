@@ -38,9 +38,10 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
+#include "libnrtype/TextWrapper.h"
+
 #include <pango/pango.h>
 //#include <pango/pangoxft.h>
-#include <gdk/gdk.h>
 
 void   sp_typeset_relayout(SPTypeset *typeset);
 
@@ -103,46 +104,26 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     }
   }
   
-  text_with_info*   combined_src=new text_with_info(NULL);
+  text_wrapper*   combined_src=new text_wrapper();
   {
     // gather source text
     if ( typeset->srcText ) {
       if ( typeset->srcType == has_std_txt ) {
-        combined_src->AppendStdText(typeset->srcText);
+        combined_src->AppendUTF8(typeset->srcText,-1);
       } else if ( typeset->srcType == has_pango_txt ) {
-        combined_src->AppendPangoText(typeset->srcText);
+        combined_src->AppendUTF8(typeset->srcText,-1);
       }
       const char* val_delta_x=sp_repr_attr((SP_OBJECT(typeset))->repr,"dx");
       if ( val_delta_x ) {
         GList *  the_delta_x=sp_svg_length_list_read (val_delta_x);
-        int      nbD=g_list_length(the_delta_x);
-        double*  delta_x_array=(double*)malloc(nbD*sizeof(double));
-        GList* cur=the_delta_x;
-        for (int i=0;i<nbD;i++) {
-          SPSVGLength* nl=(SPSVGLength*)cur->data;
-          delta_x_array[i]=nl->value;
-          free(nl);
-          cur=cur->next;
-        }
+        combined_src->KernXForLastAddition(the_delta_x,1.0);
         g_list_free(the_delta_x);
-        combined_src->KernXForLastAddition(delta_x_array,nbD);
-        free(delta_x_array);
       }
       const char* val_delta_y=sp_repr_attr((SP_OBJECT(typeset))->repr,"dy");
       if ( val_delta_y ) {
         GList *  the_delta_y=sp_svg_length_list_read (val_delta_y);
-        int      nbD=g_list_length(the_delta_y);
-        double*  delta_y_array=(double*)malloc(nbD*sizeof(double));
-        GList* cur=the_delta_y;
-        for (int i=0;i<nbD;i++) {
-          SPSVGLength* nl=(SPSVGLength*)cur->data;
-          delta_y_array[i]=nl->value;
-          free(nl);
-          cur=cur->next;
-        }
+        combined_src->KernYForLastAddition(the_delta_y,1.0);
         g_list_free(the_delta_y);
-        combined_src->KernYForLastAddition(delta_y_array,nbD);
-        free(delta_y_array);
       }
     }
     for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
@@ -150,43 +131,23 @@ void   sp_typeset_relayout(SPTypeset *typeset)
         SPTypeset*  child_t=SP_TYPESET(child);
         if ( child_t->srcText ) {
           if ( child_t->srcType == has_std_txt ) {
-            if ( combined_src->UTF8Length() > 0 ) combined_src->AppendStdText("\n");
-            combined_src->AppendStdText(child_t->srcText);
+            if ( combined_src->utf8_length > 0 ) combined_src->AppendUTF8("\n",-1);
+            combined_src->AppendUTF8(child_t->srcText,-1);
           } else if ( child_t->srcType == has_pango_txt ) {
-            if ( combined_src->UTF8Length() > 0 ) combined_src->AppendPangoText("\n");
-            combined_src->AppendPangoText(child_t->srcText);
+            if ( combined_src->utf8_length > 0 ) combined_src->AppendUTF8("\n",-1);
+            combined_src->AppendUTF8(child_t->srcText,-1);
           }
           const char* val_delta_x=sp_repr_attr((SP_OBJECT(child_t))->repr,"dx");
           if ( val_delta_x ) {
-            GList *  the_delta_x=sp_svg_length_list_read (val_delta_x);
-            int      nbD=g_list_length(the_delta_x);
-            double*  delta_x_array=(double*)malloc(nbD*sizeof(double));
-            GList* cur=the_delta_x;
-            for (int i=0;i<nbD;i++) {
-              SPSVGLength* nl=(SPSVGLength*)cur->data;
-              delta_x_array[i]=nl->value;
-              free(nl);
-              cur=cur->next;
-            }
-            g_list_free(the_delta_x);
-            combined_src->KernXForLastAddition(delta_x_array,nbD);
-            free(delta_x_array);
+						GList *  the_delta_x=sp_svg_length_list_read (val_delta_x);
+						combined_src->KernXForLastAddition(the_delta_x,1.0);
+						g_list_free(the_delta_x);
           }
           const char* val_delta_y=sp_repr_attr((SP_OBJECT(child_t))->repr,"dy");
           if ( val_delta_y ) {
-            GList *  the_delta_y=sp_svg_length_list_read (val_delta_y);
-            int      nbD=g_list_length(the_delta_y);
-            double*  delta_y_array=(double*)malloc(nbD*sizeof(double));
-            GList* cur=the_delta_y;
-            for (int i=0;i<nbD;i++) {
-              SPSVGLength* nl=(SPSVGLength*)cur->data;
-              delta_y_array[i]=nl->value;
-              free(nl);
-              cur=cur->next;
-            }
-            g_list_free(the_delta_y);
-            combined_src->KernYForLastAddition(delta_y_array,nbD);
-            free(delta_y_array);
+						GList *  the_delta_y=sp_svg_length_list_read (val_delta_y);
+						combined_src->KernYForLastAddition(the_delta_y,1.0);
+						g_list_free(the_delta_y);
           }
         }
       }

@@ -23,45 +23,7 @@
 #include <pango/pango.h>
 #include <glib.h>
 
-class text_with_info {
-public:
-  char*        utf8_text;
-  int          last_st,last_len;
-  
-  int          utf8_length;
-  int          unicode_length;
-  
-  gunichar*    uni_text;
-  int*         char_offset; // size unicode_length+1 (for safety)
-  
-  double*      kern_x;
-  double*      kern_y;
-  
-  char*        stripped; // in case there is a markup
-  int          markupType;
-  void*        markup;
-  
-  text_with_info(char* inText);
-  ~text_with_info(void);
-
-  char*        UTF8Text(void);
-  gunichar*    UnicodeText(void);
-  int          UTF8Length(void);
-  int          UnicodeLength(void);
-  
-  void         Kill(void);
-  
-  void         SetStdText(char* inText);
-  void         AppendStdText(char* inText);
-  
-  void         SetPangoText(char* inText);
-  void         AppendPangoText(char* inText);
-  
-  void         KernXForLastAddition(double *i_kern_x,int i_len);
-  void         KernYForLastAddition(double *i_kern_y,int i_len);
-};
-
-
+class text_wrapper;
 
 class dest_col_chunker : public dest_chunker  {
 public:
@@ -168,15 +130,9 @@ public:
     int          t_first,t_last;
     bool         is_white,is_return,end_of_word;
   } elem_box;
-  typedef struct glyph_box {
-    double       x_pos,y_pos;
-    double       x_dpos,y_dpos;
-    double       x_adv;
-    int          code_point;
-  } glyph_box;
 
   // source data
-  text_with_info* theText;
+  text_wrapper* theText;
   bool            own_text;
   char*           theFace;
   double          theSize;
@@ -186,13 +142,10 @@ public:
   double          baselineY;
   PangoAttrList*  theAttrs;
     
-  
   elem_box*       words;
   int             nbWord,maxWord;
-  
-  glyph_box*      charas;
-  
-  pango_text_chunker(text_with_info* inText,char* font_family,double font_size,int flags);
+    
+  pango_text_chunker(text_wrapper* inText,char* font_family,double font_size,int flags);
   virtual ~pango_text_chunker(void);
   
   virtual void                 SetText(char* inText,int flags);
@@ -204,10 +157,8 @@ public:
   virtual void                 GlyphsAndPositions(int start_ind,int end_ind,to_SVG_context *hungry);
   virtual void                 GlyphsInfo(int start_ind,int end_ind,int &nbG,double &totLength);
 
-  void                         AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,font_instance* inkFont,NR::Point &cumul);
-  void                         SetTextWithAttrs(text_with_info* inText,int flags);
+  void                         SetTextWithAttrs(text_wrapper* inText,int flags);
   void                         AddDullGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en);
-  void                         AddAttributedGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en,PangoAttrIterator *theIt);
 };
 
 
@@ -223,9 +174,8 @@ public:
   double           *xs;
   double           *ys;
   double           letter_spacing;
-  char             *text;
+  text_wrapper		 *text;
   int              st,en,orig_st;
-  int              st_g,en_g,orig_st_g,n_g;
   
   SPRepr           *text_repr;
   
@@ -245,12 +195,12 @@ public:
   virtual void            AddFontWeight(int n_wei);
   virtual void            AddLetterSpacing(double n_spc);
   
-  virtual void            SetText(char*  n_txt,int n_len);
+  virtual void            SetText(text_wrapper*  n_txt,int n_len);
   virtual void            SetLetterSpacing(double n_spc);
   
-  void            Flush(void);
+  void                    Flush(void);
   virtual void            AddGlyph(int a_g,int f_c,int l_c,const NR::Point &at,double advance);
-  void            SetY(int a_g,int f_c,int l_c,double to);
+  void                    SetY(int a_g,int f_c,int l_c,double to);
 };
 
 class path_to_SVG_context : public to_SVG_context{
@@ -262,9 +212,8 @@ public:
   double           cur_x;
   
   double           letter_spacing;
-  char             *text;
+  text_wrapper		 *text;
   int              st,en,orig_st;
-  int              st_g,en_g,orig_st_g,n_g;
   
   SPRepr           *text_repr;
   
@@ -284,7 +233,7 @@ public:
   virtual void            AddFontWeight(int n_wei);
   virtual void            AddLetterSpacing(double n_spc);
   
-  virtual void            SetText(char*  n_txt,int n_len);
+  virtual void            SetText(text_wrapper*  n_txt,int n_len);
   virtual void            SetLetterSpacing(double n_spc);
   
   virtual void            AddGlyph(int a_g,int f_c,int l_c,const NR::Point &at,double advance);

@@ -99,6 +99,7 @@ public:
 	Path*                Outline(int glyph_id,Path* copyInto=NULL);
 	void*                ArtBPath(int glyph_id);
 	double               Advance(int glyph_id,bool vertical);
+	bool								 FontMetrics(double &ascent,double &descent,double &leading);
 	NR::Rect             BBox(int glyph_id);
 	
 	raster_font*         RasterFont(const NR::Matrix &trs,double stroke_width,bool vertical=false,JoinType stroke_join=join_straight,ButtType stroke_cap=butt_straight);

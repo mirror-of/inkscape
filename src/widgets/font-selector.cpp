@@ -239,6 +239,8 @@ sp_font_selector_destroy (GtkObject *object)
 	SPFontSelector *fsel;
 
 	fsel = SP_FONT_SELECTOR (object);
+	
+//	printf("sp_font_selector_destroy ");
 
 	if (fsel->font) {
 		fsel->font->Unref();
@@ -316,26 +318,24 @@ sp_font_selector_size_changed (GtkEditable *editable, SPFontSelector *fsel)
 static void
 sp_font_selector_emit_set (SPFontSelector *fsel)
 {
-	font_instance *tf;
 	font_instance *font;
 
 	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length) {
-		tf = (font_factory::Default())->FaceFromDescr ((gchar *) ((fsel->styles.records)[fsel->styleidx].descr));
-		font = tf;
-		font->Ref();
-		tf->Unref ();
-		tf=NULL;
+		font = (font_factory::Default())->FaceFromDescr ((gchar *) ((fsel->styles.records)[fsel->styleidx].descr));
 	} else {
 		font = NULL;
 	}
+	
 
 	if (font != fsel->font || ( font && fsel->fontsize_dirty ) ) {
+//		printf("sp_font_selector_emit_set (1) ");
 		if ( font ) font->Ref();
 		if ( fsel->font ) fsel->font->Unref();
 		fsel->font = font;
 		gtk_signal_emit (GTK_OBJECT (fsel), fs_signals[FONT_SET], fsel->font);
 	}
 	fsel->fontsize_dirty=false;
+//	printf("sp_font_selector_emit_set (2) ");
 	if ( font ) font->Unref();
 	font=NULL;
 }
@@ -405,6 +405,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 font_instance*
 sp_font_selector_get_font (SPFontSelector *fsel)
 {
+//	printf("sp_font_selector_get_font ");
 	if (fsel->font) fsel->font->Ref();
 
 	return fsel->font;
@@ -490,11 +491,13 @@ sp_font_preview_destroy (GtkObject *object)
 	fprev = SP_FONT_PREVIEW (object);
 
 	if (fprev->rfont) {
+//		printf("sp_font_preview_destroy (1) ");
 		fprev->rfont ->Unref();
 		fprev->rfont=NULL;
 	}
 
 	if (fprev->font) {
+//		printf("sp_font_preview_destroy (2) ");
 		fprev->font->Unref();
 		fprev->font=NULL;
 	}
@@ -526,6 +529,8 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		if (fprev->rfont) {
+
+//			printf("sp_font_preview_expose ");
 
 			int glyphs[SPFP_MAX_LEN];
 			double hpos[SPFP_MAX_LEN];
@@ -656,11 +661,14 @@ sp_font_preview_new (void)
 void
 sp_font_preview_set_font (SPFontPreview *fprev, font_instance *font, SPFontSelector *fsel)
 {
+//	printf("sp_font_preview_set_font (1) ");
+	
 	if (font)  font->Ref();
 	if (fprev->font) fprev->font->Unref();
 	fprev->font = font;
 
 	if (fprev->rfont) {
+//		printf("sp_font_preview_set_font (2) ");
 		fprev->rfont->Unref();
 		fprev->rfont=NULL;
 	}

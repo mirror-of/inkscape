@@ -28,15 +28,10 @@ class font_instance;
 
 // for the hashmap
 struct font_descr_hash : public unary_function<PangoFontDescription*,size_t> {
-	size_t  operator()( PangoFontDescription* const&x) const {
-		return pango_font_description_hash (x);
-	}
+	size_t  operator()( PangoFontDescription* const&x) const;
 };
 struct font_descr_equal : public binary_function<PangoFontDescription*,PangoFontDescription*,bool> {
-  bool  operator()( PangoFontDescription* const&a, PangoFontDescription* const&b) {
-		if ( pango_font_description_equal(a,b) ) return true;
-		return false;
-	}
+  bool  operator()( PangoFontDescription* const&a, PangoFontDescription* const&b);
 };
 
 class font_factory {

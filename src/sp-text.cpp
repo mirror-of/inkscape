@@ -836,13 +836,7 @@ sp_string_calculate_dimensions (SPString *string)
     } else {
         metrics = 0/*NR_TYPEFACE_METRICS_HORIZONTAL*/;
     }
-		font_instance *font=NULL;
-		if ( face ) {
-			face->Ref();
-			font=face;
-		} else {
-			font=NULL;
-		}
+		font_instance *font=face;
 
     // calculating letterspacing advance
     NR::Point letterspacing_adv = sp_letterspacing_advance (style);
@@ -850,23 +844,24 @@ sp_string_calculate_dimensions (SPString *string)
     gboolean preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
     if (string->text) {
 			text_wrapper*   str_text=new text_wrapper();
-			int             space_offset=0;
 			str_text->SetDefaultFont((font_instance*)font);
 			str_text->AppendUTF8(string->text,-1);
+			if ( dx ) str_text->KernXForLastAddition(g_list_nth(dx,dx_offset),1.0/size);
+			if ( dy ) str_text->KernYForLastAddition(g_list_nth(dy,dy_offset),1.0/size);
 			if ( str_text->uni32_length > 0 ) {
 				str_text->DoLayout();
 				if ( str_text->glyph_length > 0 ) {
 					if ( preserve == false ) str_text->MergeWhiteSpace();
 					if ( NR::LInfty(letterspacing_adv) > 0.001 ) str_text->AddLetterSpacing(letterspacing_adv[0]/size,letterspacing_adv[1]/size);
 					if ( metrics == 1/*NR_TYPEFACE_METRICS_VERTICAL*/ ) str_text->MakeVertical();
+					str_text->AddDxDy();
 					
-					int         last_dx_pos=-1;
-					NR::Point		offset_sum(0,0);
 					PangoFont*       curPF=NULL;
 					font_instance*	 curF=NULL;
 					for (int i=0;i<str_text->glyph_length;i++) {
 						if ( str_text->glyph_text[i].font != curPF ) {
 							curPF=str_text->glyph_text[i].font;
+						//	printf("sp_string_calculate_dimensions (1) ");
 							if ( curF ) curF->Unref();
 							curF=NULL;
 							if ( curPF ) {
@@ -877,21 +872,8 @@ sp_string_calculate_dimensions (SPString *string)
 						}
 						
 						NR::Point     base_pt(str_text->glyph_text[i].x,str_text->glyph_text[i].y);
-						
-						int      n_dx_pos=str_text->glyph_text[i].uni_st;
-						if ( last_dx_pos < n_dx_pos ) {
-							for (int j=last_dx_pos+1;j<=n_dx_pos;j++) {
-								offset_sum+=NR::Point(sp_char_dx (dx, dx_offset + space_offset + j), sp_char_dy (dy, dy_offset + space_offset + j));
-							}
-						} else if ( last_dx_pos > n_dx_pos ) {
-							for (int j=last_dx_pos;j>n_dx_pos;j--) {
-								offset_sum-=NR::Point(sp_char_dx (dx, dx_offset + space_offset + j), sp_char_dy (dy, dy_offset + space_offset + j));
-							}
-						}
-						last_dx_pos=n_dx_pos;
-						
+												
 						base_pt*=size;
-						base_pt+=offset_sum;
 						if (curF ) {
 							NR::Rect bbox=curF->BBox(str_text->glyph_text[i].gl);
 							string->bbox.x0 = MIN (string->bbox.x0, base_pt[NR::X] + size * (bbox.min())[0]);
@@ -900,16 +882,10 @@ sp_string_calculate_dimensions (SPString *string)
 							string->bbox.y1 = MAX (string->bbox.y1, base_pt[NR::Y] - size * (bbox.min())[1]);
 						}
 					}
+				//	printf("sp_string_calculate_dimensions (2) ");
 					if ( curF ) curF->Unref();
 					string->advance=NR::Point(str_text->glyph_text[str_text->glyph_length].x,str_text->glyph_text[str_text->glyph_length].y);
 					string->advance*=size;
-					{
-						offset_sum=NR::Point(0,0);
-						for (int j=0;j<str_text->uni32_length;j++) {
-							offset_sum+=NR::Point(sp_char_dx (dx, dx_offset + space_offset + j), sp_char_dy (dy, dy_offset + space_offset + j));
-						}
-						string->advance+=offset_sum;
-					}
 				}
 			}
 			// set inspace
@@ -928,7 +904,7 @@ sp_string_calculate_dimensions (SPString *string)
 			delete str_text;
     }
 
-		if (font) font->Unref();
+	//	printf("sp_string_calculate_dimensions (3) ");
     if (face) face->Unref();
 		
     if (nr_rect_d_test_empty (&string->bbox)) {
@@ -974,11 +950,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
     } else {
         metrics = 0/*NR_TYPEFACE_METRICS_HORIZONTAL*/;
     }
-    font_instance *font = NULL;
-		if ( face ) {
-			face->Ref();
-			font=face;
-		}
+    font_instance *font = face;
 
     // calculating letterspacing advance
     NR::Point letterspacing_adv = sp_letterspacing_advance (style);
@@ -998,19 +970,22 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			int             space_offset=0;
 			str_text->SetDefaultFont((font_instance*)font);
 			str_text->AppendUTF8(string->text,-1);
+			if ( dx ) str_text->KernXForLastAddition(g_list_nth(dx,dx_offset),1.0/size);
+			if ( dy ) str_text->KernYForLastAddition(g_list_nth(dy,dy_offset),1.0/size);
 			if ( str_text->uni32_length > 0 ) {
 				str_text->DoLayout();
 				if ( str_text->glyph_length > 0 ) {
 					if ( preserve == false ) str_text->MergeWhiteSpace();
 					if ( NR::LInfty(letterspacing_adv) > 0.001 ) str_text->AddLetterSpacing(letterspacing_adv[0]/size,letterspacing_adv[1]/size);
 					if ( metrics == 1/*NR_TYPEFACE_METRICS_VERTICAL*/ ) str_text->MakeVertical();
-					int            last_dx_pos=-1;
-					NR::Point		   offset_sum(0,0);
+					str_text->AddDxDy();
+
 					PangoFont*	   curPF=NULL;
 					font_instance* curF=NULL;
 					for (int i=0;i<str_text->glyph_length;i++) {
 						if ( str_text->glyph_text[i].font != curPF ) {
 							curPF=str_text->glyph_text[i].font;
+						//	printf("sp_string_set_shape (1) ");
 							if ( curF ) curF->Unref();
 							curF=NULL;
 							if ( curPF ) {
@@ -1020,21 +995,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 							}
 						}
 						NR::Point     base_pt(str_text->glyph_text[i].x,str_text->glyph_text[i].y);
-						
-						int      n_dx_pos=str_text->glyph_text[i].uni_st;
-						if ( last_dx_pos < n_dx_pos ) {
-							for (int j=last_dx_pos+1;j<=n_dx_pos;j++) {
-								offset_sum+=NR::Point(sp_char_dx (dx, dx_offset + space_offset + j), sp_char_dy (dy, dy_offset + space_offset + j));
-							}
-						} else if ( last_dx_pos > n_dx_pos ) {
-							for (int j=last_dx_pos;j>n_dx_pos;j--) {
-								offset_sum-=NR::Point(sp_char_dx (dx, dx_offset + space_offset + j), sp_char_dy (dy, dy_offset + space_offset + j));
-							}
-						}
-						last_dx_pos=n_dx_pos;
-						
+												
 						base_pt*=size;
-						base_pt+=offset_sum;
 						base_pt+=cp;
 						
 						string->p[i]=base_pt;
@@ -1045,15 +1007,11 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 						if ( curF ) sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
 						
 					}
+				//	printf("sp_string_set_shape (2) ");
 					if ( curF ) curF->Unref();
 				// get total advance
 					NR::Point     base_pt(str_text->glyph_text[str_text->glyph_length].x,str_text->glyph_text[str_text->glyph_length].y);
-					offset_sum=NR::Point(0,0);
-					for (int j=0;j<str_text->uni32_length;j++) {
-						offset_sum+=NR::Point(sp_char_dx (dx, dx_offset + space_offset + j), sp_char_dy (dy, dy_offset + space_offset + j));
-					}
 					base_pt*=size;
-					base_pt+=offset_sum;
 					base_pt+=cp;
 					cp=string->p[str_text->glyph_length]=base_pt;
 				}
@@ -1074,7 +1032,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			delete str_text;
 		}
 
-    if (font) font->Unref();
+	//	printf("sp_string_set_shape (3) ");
     if (face) face->Unref();
 
 //    cp = string->p[pos] = pt;
@@ -2046,6 +2004,7 @@ sp_text_description (SPItem * item)
     font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value,
                             font_style_to_pos(*style));
 		if ( tf ) tf->Name( n, 256);
+	//	printf("sp_text_description  ");
     if ( tf ) tf->Unref();
 
     return g_strdup_printf (_("Text (%s, %.5gpt)"), n, style->font_size.computed );

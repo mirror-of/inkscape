@@ -65,6 +65,7 @@ enum {
 
 class Path;
 class Shape;
+class text_wrapper;
 
 // structs used by the typeset element to hold the info about destination
 typedef struct column_dest {
@@ -132,7 +133,7 @@ public:
   virtual void            AddFontWeight(int /*n_wei*/) {};
   virtual void            AddLetterSpacing(double /*n_spc*/) {};
   
-  virtual void            SetText(char*  /*n_txt*/,int /*n_len*/) {};
+  virtual void            SetText(text_wrapper*  /*n_txt*/,int /*n_len*/) {};
   virtual void            SetLetterSpacing(double /*n_spc*/) {};
   
   virtual void            AddGlyph(int /*a_g*/,int /*f_c*/,int /*l_c*/,const NR::Point &/*at*/,double /*advance*/) {};

@@ -153,7 +153,7 @@ static int ft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector *
 	
 font_instance::font_instance(void)
 {
-//  printf("font instance born\n");
+ // printf("font instance born\n");
 	descr=NULL;
 	pFont=NULL;
 	refCount=0;
@@ -172,7 +172,7 @@ font_instance::font_instance(void)
 font_instance::~font_instance(void)
 {
   if ( daddy ) daddy->UnrefFace(this);
-	//  printf("font instance death\n");
+	 // printf("font instance death\n");
   if ( pFont ) g_object_unref(pFont);
   pFont=NULL;
   if ( descr ) pango_font_description_free(descr);
@@ -200,13 +200,19 @@ font_instance::~font_instance(void)
 void font_instance::Ref(void)
 {
 	refCount++;
-//  printf("font %x ref'd %i\n",this,refCount);
+ // printf("font %x ref'd %i\n",this,refCount);
+//	if ( refCount > 1000 || refCount < 0 ) {
+//		printf("o");
+//	}
 }
 
 void font_instance::Unref(void)
 {
 	refCount--;
-//  printf("font %x unref'd %i\n",this,refCount);
+ // printf("font %x unref'd %i\n",this,refCount);
+//	if ( refCount > 1000 || refCount < 0 ) {
+//		printf("o");
+//	}
   if ( refCount <= 0 ) {
 		if ( daddy ) daddy->UnrefFace(this);
 		daddy=NULL;
@@ -484,7 +490,11 @@ void font_instance::LoadGlyph(int glyph_id)
 			
 			SelectFont (wDev,wFont);
 
+<<<<<<< FontInstance.cpp
+			g_scale=1.0/512;
+=======
 			g_scale=1.0/512/*((double)otm.otmEMSquare)*/;
+>>>>>>> 1.4
 			
 			int   outl_size=GetGlyphOutline(wDev,glyph_id,GGO_NATIVE | GGO_GLYPH_INDEX,&gmetrics,0,NULL,&mat);
 			char* buffer=(char*)malloc(outl_size*sizeof(char));
@@ -556,6 +566,44 @@ void font_instance::LoadGlyph(int glyph_id)
   }
 }
 
+bool								 font_instance::FontMetrics(double &ascent,double &descent,double &leading)
+{
+#ifdef WITH_XFT
+	theFace=pango_ft2_font_get_face(pFont);
+  if ( theFace->units_per_EM == 0 ) return false; // bitmap font
+#endif
+#ifdef WIN32
+	HDC  wDev=NULL;
+	if ( daddy ) {
+		wDev=daddy->wDevice;
+		if ( theLogFont == NULL ) {
+			theLogFont=pango_win32_font_logfont(pFont);
+			wFont=pango_win32_font_cache_load(daddy->wCache,theLogFont);
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+#endif
+
+	if ( pFont == NULL ) return false;
+	
+#ifdef WITH_XFT
+	if ( theFace == NULL ) return false;
+	ascent=fabs(((double)theFace->ascender)/((double)theFace->units_per_EM));
+	descent=fabs(((double)theFace->descender)/((double)theFace->units_per_EM));
+	leading=fabs(((double)theFace->height)/((double)theFace->units_per_EM));
+	leading-=ascent+descent;
+#endif
+#ifdef WIN32
+	if ( wFont == NULL ) return false;
+	ascent=fabs(((double)otm.otmAscent)/((double)otm.otmEMSquare));
+	descent=fabs(((double)otm.otmDescent)/((double)otm.otmEMSquare));
+	leading=fabs(((double)otm.otmLineGap)/((double)otm.otmEMSquare));
+#endif
+	return true;
+}
 NR::Rect font_instance::BBox(int glyph_id)
 {
   int no=-1;
@@ -683,6 +731,7 @@ void font_instance::RemoveRasterFont(raster_font* who)
     // not found
   } else {
     loadedStyles.erase(loadedStyles.find(who->style));
+	//	printf("RemoveRasterFont ");
     Unref();
   }
 }
