@@ -201,6 +201,13 @@ sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data)
 			val = g_strstrip (val);
 			if (*val == '\0') break;
 
+			/* fixme: CSS specifies that later declarations override earlier ones with
+			   the same key.  (Reference:
+			   http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order point 4.)
+			   Either add a precondition that there are no duplicates in the string, or
+			   get rid of the below condition (documenting the change that data[] will
+			   override existing values in *css), or process the list in reverse
+			   order. */
 			if (!css->attribute(key))
 				sp_repr_set_attr ((Node *) css, key, val);
 		}
