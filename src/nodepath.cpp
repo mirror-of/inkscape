@@ -796,7 +796,7 @@ void sp_nodepath_convert_node_type (Path::Node *node, Path::NodeType type)
                 delta = node->n.other->pos - node->p.other->pos;
             else 
                 delta = node->pos - node->p.other->pos;
-            node->p.pos = node->pos - delta / 3;
+            node->p.pos = node->pos - delta / 4;
             sp_node_ensure_ctrls(node);
         }
 
@@ -808,7 +808,7 @@ void sp_nodepath_convert_node_type (Path::Node *node, Path::NodeType type)
                 delta = node->p.other->pos - node->n.other->pos;
             else 
                 delta = node->pos - node->n.other->pos;
-            node->n.pos = node->pos - delta / 3;
+            node->n.pos = node->pos - delta / 4;
             sp_node_ensure_ctrls(node);
         }
     }
