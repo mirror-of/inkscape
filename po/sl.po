@@ -3854,29 +3854,29 @@ msgstr "Za urejanje črte: <b>pritisk miške</b>, <b>Shift+miška</b> ali <b>pot
 msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
 "resize. <b>Click</b> to select."
-msgstr "<b>Povlecite</b> in ustvarite pravokotnik. Povlecite vozlišča</b>, da zaobljte kote ali spremenite velikost. <b>Pritisk miške</b> za izbiro.<b>"
+msgstr "<b>Povlecite</b> in ustvarite pravokotnik. Povlecite vozlišča</b>, da zaobljte kote ali spremenite velikost. <b>Pritisk miške</b> za izbiro."
 
 #: src/tools-switch.cpp:141
 msgid ""
 "<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or "
 "segment. <b>Click</b> to select."
-msgstr "<b>Povlecite</b> in narišite elipso. <b>Povlecite vozlišča</b>, da naredite lok ali odsek. <b>Pritisk miške</b> za izbiro.<b>"
+msgstr "<b>Povlecite</b> in narišite elipso. <b>Povlecite vozlišča</b>, da naredite lok ali odsek. <b>Pritisk miške</b> za izbiro."
 
 #: src/tools-switch.cpp:147
 msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
 "<b>Click</b> to select."
-msgstr "<b>Povlecite</b> da narišete zvezdo.  <b>Povlecite vozlišča</b>, da ji spremenite obliko. <b>Pritisk miške</b> za izbiro.<b>"
+msgstr "<b>Povlecite</b> da narišete zvezdo.  <b>Povlecite vozlišča</b>, da ji spremenite obliko. <b>Pritisk miške</b> za izbiro."
 
 #: src/tools-switch.cpp:153
 msgid ""
 "<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral "
 "shape. <b>Click</b> to select."
-msgstr "<b>Povlecite</b> da narišete spiralo.  <b>Povlecite vozlišča</b>, da ji spremenite obliko. <b>Pritisk miške</b> za izbiro.<b>"
+msgstr "<b>Povlecite</b> da narišete spiralo.  <b>Povlecite vozlišča</b>, da ji spremenite obliko. <b>Pritisk miške</b> za izbiro."
 
 #: src/tools-switch.cpp:159
 msgid "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
-msgstr "<b>Povlecite</b> in narišite prostoročno črto. Pritisnite <b>a<b> a izbiro med Dodaj in Ustvari"
+msgstr "<b>Povlecite</b> in narišite prostoročno črto. Pritisnite <b>a</b> a izbiro med Dodaj in Ustvari"
 
 #: src/tools-switch.cpp:165
 msgid ""
