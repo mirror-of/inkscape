@@ -68,6 +68,10 @@ private:
 
     sigc::connection _layer_changed_connection;
     sigc::connection _selection_changed_connection;
+    sigc::connection _hide_toggled_connection;
+    sigc::connection _lock_toggled_connection;
+
+    SPObject *_layer;
 
     void _selectLayer(SPObject *layer);
     void _setDesktopLayer();
@@ -79,6 +83,8 @@ private:
                               SPObject &parent,
                               Inkscape::Util::List<SPObject &> hierarchy);
     void _destroyEntry(Gtk::ListStore::iterator const &row);
+    void _hideLayer(bool hide);
+    void _lockLayer(bool lock);
 
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 };

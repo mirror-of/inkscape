@@ -103,6 +103,11 @@ struct SPItem : public SPObject {
 	sigc::signal<void, NR::Matrix const *, SPItem *> _transformed_signal;
 
 	bool isLocked() const;
+	void setLocked(bool lock);
+
+	bool isHidden() const;
+	void setHidden(bool hidden);
+
 	bool isHidden(unsigned display_key) const;
 
 	NR::Matrix getRelativeTransform(SPObject const *obj) const;

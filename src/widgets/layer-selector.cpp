@@ -32,6 +32,7 @@
 #include "sp-object.h"
 #include "sp-item.h"
 #include "desktop.h"
+#include "document.h"
 
 #include "xml/repr.h"
 #include "xml/sp-repr-event-vector.h"
@@ -93,7 +94,7 @@ private:
  *  selector is changed.
  */ 
 LayerSelector::LayerSelector(SPDesktop *desktop)
-: _desktop(NULL)
+: _desktop(NULL), _layer(NULL)
 {
     AlternateIcons *label;
 
@@ -103,6 +104,12 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
         sigc::compose(
             sigc::mem_fun(*label, &AlternateIcons::setState),
             sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
+        )
+    );
+    _hide_toggled_connection = _visibility_toggle.signal_toggled().connect(
+        sigc::compose(
+            sigc::mem_fun(*this, &LayerSelector::_hideLayer),
+            sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
         )
     );
 
@@ -116,6 +123,12 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     _lock_toggle.signal_toggled().connect(
         sigc::compose(
             sigc::mem_fun(*label, &AlternateIcons::setState),
+            sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
+        )
+    );
+    _lock_toggled_connection = _lock_toggle.signal_toggled().connect(
+        sigc::compose(
+            sigc::mem_fun(*this, &LayerSelector::_lockLayer),
             sigc::mem_fun(_lock_toggle, &Gtk::ToggleButton::get_active)
         )
     );
@@ -232,6 +245,11 @@ void LayerSelector::_selectLayer(SPObject *layer) {
 
     SPObject *root(_desktop->currentRoot());
 
+    if (_layer) {
+        sp_object_unref(_layer, NULL);
+        _layer = NULL;
+    }
+
     if (layer) {
         _buildEntries(0, cons(*root,
             reverse_list<SPObject::ParentIterator>(layer, root)
@@ -247,6 +265,9 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         if ( row != _layer_model->children().end() ) {
             _selector.set_active(row);
         }
+
+        _layer = layer;
+        sp_object_ref(_layer, NULL);
     }
 
     if ( !layer || layer == root ) {
@@ -256,11 +277,9 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         _lock_toggle.set_active(false);
     } else {
         _visibility_toggle.set_sensitive(true);
-        _visibility_toggle.set_active(false);
-        //_visibility_toggle.set_active(( SP_IS_ITEM(layer) ? !SP_ITEM(layer)->isVisible() : false ));
+        _visibility_toggle.set_active(( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isHidden() : false ));
         _lock_toggle.set_sensitive(true);
-        _lock_toggle.set_active(false);
-        //_lock_toggle.set_active(( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false ));
+        _lock_toggle.set_active(( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false ));
     }
 
     _selection_changed_connection.unblock();
@@ -519,6 +538,20 @@ void LayerSelector::_prepareLabelRenderer(
     _label_renderer.property_style() = ( label_defaulted ?
                                          Pango::STYLE_ITALIC :
                                          Pango::STYLE_NORMAL );
+}
+
+void LayerSelector::_lockLayer(bool lock) {
+    if ( _layer && SP_IS_ITEM(_layer) ) {
+        SP_ITEM(_layer)->setLocked(lock);
+        sp_document_maybe_done(SP_DT_DOCUMENT(_desktop), "LayerSelector:lock");
+    }
+}
+
+void LayerSelector::_hideLayer(bool hide) {
+    if ( _layer && SP_IS_ITEM(_layer) ) {
+        SP_ITEM(_layer)->setHidden(hide);
+        sp_document_maybe_done(SP_DT_DOCUMENT(_desktop), "LayerSelector:hide");
+    }
 }
 
 }

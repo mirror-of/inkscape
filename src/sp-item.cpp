@@ -150,6 +150,20 @@ bool SPItem::isLocked() const {
     return !sensitive;
 }
 
+void SPItem::setLocked(bool locked) {
+    sp_repr_set_attr(SP_OBJECT_REPR(this), "sodipodi:insensitive",
+                     ( locked ? "1" : NULL ));
+}
+
+bool SPItem::isHidden() const {
+    return !style->visibility;
+}
+
+void SPItem::setHidden(bool hidden) {
+    style->visibility = !hidden;
+    updateRepr();
+}
+
 bool SPItem::isHidden(unsigned display_key) const {
     for ( SPItemView *view(display) ; view ; view = view->next ) {
         if ( view->key == display_key ) {

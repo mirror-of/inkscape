@@ -1,3 +1,10 @@
+2004-11-05  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/layer-selector.cpp: more work on making the lock/hide
+	  buttons actually do something
+
+	* src/sp-item.cpp, src/sp-item.h: implement lock/hide related methods
+
 2004-11-04  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/rdf.h, src/dialogs/rdf.cpp: added rdf:Bag for the
@@ -12,6 +19,8 @@
 
 	* src/widgets/layer-selector.cpp: togglable images and formatting
 	  changes (make current layer bold)
+
+	* src/uri.h, src/uri.cpp: added assignment operator
 
 2004-11-03  MenTaLguY  <mental@rydia.net>
 
