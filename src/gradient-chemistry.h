@@ -62,7 +62,8 @@ SPGradient *sp_item_gradient_get_vector (SPItem *item, bool fill_or_stroke);
 SPGradientSpread sp_item_gradient_get_spread (SPItem *item, bool fill_or_stroke);
 
 struct SPCSSAttr;
-void sp_item_gradient_set_stop (SPItem *item, guint point_num, bool fill_or_stroke, SPCSSAttr *stop);
+void sp_item_gradient_stop_set_style (SPItem *item, guint point_num, bool fill_or_stroke, SPCSSAttr *stop);
+guint32 sp_item_gradient_stop_query_style (SPItem *item, guint point_num, bool fill_or_stroke);
 void sp_item_gradient_edit_stop (SPItem *item, guint point_num, bool fill_or_stroke);
 
 #endif
