@@ -381,8 +381,8 @@ sp_desktop_dialog (void)
 		gtk_object_set_data (GTK_OBJECT (dlg), "borderlayer", b);
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_dtw_border_layer_toggled), dlg);
 
-		sp_color_picker_button (dlg, t, _("Border color:"), "bordercolor", _("Page border color"), "borderopacity", 2);
-		sp_color_picker_button (dlg, t, _("Page color:"), "pagecolor", _("Page color"), NULL, 3);
+		sp_color_picker_button (dlg, t, _("Page background:"), "pagecolor", _("Page background color"), "inkscape:pageopacity", 2);
+		sp_color_picker_button (dlg, t, _("Page border:"), "bordercolor", _("Page border color"), "borderopacity", 3);
 
 		// The following comes from the former "document settings" dialog
 
