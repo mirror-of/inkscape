@@ -192,7 +192,7 @@ void       Path::ShiftDData(int at,int dec)
       if ( at < ddata_nb+dec ) memmove(descr_data+at,descr_data+(at-dec),(ddata_nb-at+dec)*sizeof(NR::Point));
       ddata_nb+=dec;      
       for (int i=0;i<descr_nb;i++) {
-        if ( descr_cmd[i].dStart >= at-dec ) descr_cmd[i].dStart+=dec;
+        if ( descr_cmd[i].dStart >= at ) descr_cmd[i].dStart+=dec;
       }
     }
   }
@@ -267,6 +267,35 @@ Path::ForcePoint (void)
 	nElem->flags = descr_forced;
 	nElem->dStart = ddata_nb;
 	return descr_nb - 1;
+}
+void
+Path::InsertForcePoint (int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    ForcePoint();
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+//	ShiftDData(dataPos,SizeForData(descr_moveto));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+  
+	nElem->dStart = dataPos;
+  
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_forced;
 }
 
 int
@@ -343,10 +372,10 @@ Path::InsertMoveTo (NR::Point const &iPt,int at)
 	ShiftDCmd (at,1);
   
 	path_descr *nElem = descr_cmd + at;
-
+  
 	nElem->dStart = dataPos;
 	path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + dataPos );
-
+  
 	nElem->associated = -1;
 	nElem->tSt = 0.0;
 	nElem->tEn = 1.0;
@@ -640,6 +669,37 @@ Path::IntermBezierTo (NR::Point const &iPt)
 	}
 	return -1;
 }
+void
+Path::InsertIntermBezierTo (NR::Point const &iPt,int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    IntermBezierTo(iPt);
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+	ShiftDData(dataPos,SizeForData(descr_interm_bezier));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+  
+	nElem->dStart = dataPos;
+	path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + dataPos );
+  
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_interm_bezier;
+	nData->p = iPt;
+}
 
 int
 Path::BezierTo (NR::Point const &iPt)
@@ -670,6 +730,38 @@ Path::BezierTo (NR::Point const &iPt)
 	return descr_nb - 1;
 }
 
+void
+Path::InsertBezierTo (NR::Point const &iPt,int iNb,int at)
+{
+  if ( at < 0 || at > descr_nb ) return;
+  if ( at == descr_nb ) {
+    BezierTo(iPt);
+    return;
+  }
+  int  dataPos=ddata_nb;
+  for (int i=at;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
+         typ == descr_interm_bezier ) {
+      dataPos=descr_cmd[i].dStart;
+      break;
+    }
+  }
+	ShiftDData(dataPos,SizeForData(descr_bezierto));
+	ShiftDCmd (at,1);
+  
+	path_descr *nElem = descr_cmd + at;
+  
+	nElem->dStart = dataPos;
+	path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + dataPos );
+  
+	nElem->associated = -1;
+	nElem->tSt = 0.0;
+	nElem->tEn = 1.0;
+	nElem->flags = descr_bezierto;
+	nData->p = iPt;
+	nData->nb = iNb;
+}
 
 /*
  * points de la polyligne

@@ -369,6 +369,36 @@ void  Path::LoadArtBPath(void *iV,NR::Matrix &trans,bool doTransformation)
     if (closed) Close ();
   }
 }
+double      Path::Length(void)
+{
+  double   len=0;
+  if ( nbPt <= 0 ) return 0;
+  NR::Point  lastM;
+  NR::Point  lastP;
+  if ( back ) {
+    lastM=((path_lineto_b *) pts)[0].p;
+  } else {
+    lastM=((path_lineto *) pts)[0].p;
+  }
+  lastP=lastM;
+  for (int i=0;i<nbPt;i++) {
+    path_lineto  cur;
+    if ( back ) {
+      cur.p=((path_lineto_b *) pts)[i].p;
+      cur.isMoveTo=((path_lineto_b *) pts)[i].isMoveTo;
+    } else {
+      cur.p=((path_lineto *) pts)[i].p;
+      cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
+    }
+    if ( cur.isMoveTo == polyline_moveto ) {
+      lastP=lastM=cur.p;
+    } else {
+      len+=NR::L2(cur.p-lastP);
+      lastP=cur.p;
+    }
+  }
+  return len;
+}
 double      Path::Surface(void)
 {
   double   surf=0;
@@ -605,6 +635,33 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
   outNb=nbRes;
   return res;
 }
+void        Path::ConvertForcedToVoid(void)
+{  
+  for (int i=0;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    switch ( typ ) {
+      case descr_forced:
+        ShiftDCmd(i,-1);
+        break;
+      case descr_moveto:
+        break;
+      case descr_close:
+        break;        
+      case descr_lineto:
+        break;
+      case descr_cubicto:
+        break;
+      case descr_arcto:
+        break;
+      case descr_bezierto:
+        break;
+      case descr_interm_bezier:
+        break;
+      default:
+        break;
+    }
+  }
+}
 void        Path::ConvertForcedToMoveTo(void)
 {  
   NR::Point  lastSeen;
@@ -713,8 +770,60 @@ static int       CmpPosition(const void * p1, const void * p2) {
   if ( cp1->t > cp2->t ) return 1;
   return 0;
 }
+static int       CmpCurv(const void * p1, const void * p2) {
+  double *cp1=(double*)p1;
+  double *cp2=(double*)p2;
+  if ( *cp1 < *cp2 ) return -1;
+  if ( *cp1 > *cp2 ) return 1;
+  return 0;
+}
+Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut)
+{
+  if ( nbCv <= 0 ) return NULL;
+  if ( nbPt <= 0 ) return NULL;
+  if ( back == false ) return NULL;
+  
+  qsort(cvAbs, nbCv, sizeof(double), CmpCurv);
+  
+  cut_position *res=NULL;
+  nbCut=0;
+  int      curCv=0;
+  
+  double   len=0;
+  NR::Point  lastM;
+  NR::Point  lastP;
+  double     lastT;
+  lastM=((path_lineto_b *) pts)[0].p;
+  
+  lastP=lastM;
+  for (int i=0;i<nbPt;i++) {
+    path_lineto_b  cur;
+    cur=((path_lineto_b *) pts)[i];
+    if ( cur.isMoveTo == polyline_moveto ) {
+      lastP=lastM=cur.p;
+      lastT=cur.t;
+    } else {
+      double add=NR::L2(cur.p-lastP);
+      double curPos=len,curAdd=add;
+      while ( curAdd > 0.0001 && curCv < nbCv && curPos+curAdd >= cvAbs[curCv] ) {
+        double theta=(cvAbs[curCv]-len)/add;
+        res=(cut_position*)realloc(res,(nbCut+1)*sizeof(cut_position));
+        res[nbCut].piece=cur.piece;
+        res[nbCut].t=theta*cur.t+(1-theta)*lastT;
+        nbCut++;
+        curAdd-=cvAbs[curCv]-curPos;
+        curPos=cvAbs[curCv];
+        curCv++;
+      }
+      len+=add;
+      lastP=cur.p;
+      lastT=cur.t;
+    }
+  }
+  return res;
+}
 
-void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
+void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
 {
   if ( nbPos <= 0 )  return;
   {
@@ -749,7 +858,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
           if ( nData->nb == 0 ) {
             int  add=SizeForData(descr_lineto)-SizeForData(descr_bezierto);
             ShiftDData(lastPos,add);
-                        
+            
             path_descr_lineto *nDatal = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
             nDatal->p=theP;
             lastPos=descr_cmd[i].dStart;
@@ -769,7 +878,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
     }
   }
   
-
+  
   qsort(poss, nbPos, sizeof(cut_position), CmpPosition);
   
   for (int curP=0;curP<nbPos;curP++) {
@@ -783,7 +892,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
     if ( typ == descr_moveto || typ == descr_forced || typ == descr_close ) {
       // ponctuel= rien a faire
     } else if ( typ == descr_lineto || typ == descr_arcto || typ == descr_cubicto ) {
-      // facile: creation d'un morceau et d'un moveto -> 2 commandes
+      // facile: creation d'un morceau et d'un forced -> 2 commandes
       NR::Point        theP;
       NR::Point        theT;
       NR::Point        startP;
@@ -802,13 +911,14 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
         theT*=len;
         
         InsertCubicTo(endP,(1-ct)*theT,(1-ct)*enD,cp+1);
-        InsertMoveTo(theP,cp+1);
+        InsertForcePoint(cp+1);
         {
           path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[cp].dStart );
           nData->stD=ct*stD;
           nData->enD=ct*theT;
           nData->p=theP;
         }
+        // decalages dans le tableau des positions de coupe
         for (int j=curP+1;j<nbPos;j++) {
           if ( poss[j].piece == cp ) {
             poss[j].piece+=2;
@@ -827,12 +937,13 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
         theP=ct*endP+(1-ct)*startP;
         
         InsertLineTo(endP,cp+1);
-        InsertMoveTo(theP,cp+1);
+        InsertForcePoint(cp+1);
         {
           path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[cp].dStart );
           nData->p=theP;
         }
-        for (int j=curP+1;j<nbPos;j++) {
+        // decalages dans le tableau des positions de coupe
+       for (int j=curP+1;j<nbPos;j++) {
           if ( poss[j].piece == cp ) {
             poss[j].piece+=2;
             poss[j].t=(poss[j].t-ct)/(1-ct);
@@ -876,7 +987,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
         } else {
           InsertArcTo(endP,rx,ry,angle,false,clockw,cp+1);
         }
-        InsertMoveTo(theP,cp+1);
+        InsertForcePoint(cp+1);
         {
           path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[cp].dStart );
           nData->p=theP;
@@ -886,6 +997,7 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
             nData->clockwise=false;
           }
         }
+        // decalages dans le tableau des positions de coupe
         for (int j=curP+1;j<nbPos;j++) {
           if ( poss[j].piece == cp ) {
             poss[j].piece+=2;
@@ -894,14 +1006,121 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
             poss[j].piece+=2;
           }
         }
-        
       }
-      
-      
     } else if ( typ == descr_bezierto || typ == descr_interm_bezier ) {
       // dur
+      int theBDI=cp;
+      while ( theBDI >= 0 && (descr_cmd[theBDI].flags&descr_type_mask) != descr_bezierto ) theBDI--;
+      if ( (descr_cmd[theBDI].flags&descr_type_mask) == descr_bezierto ) {
+        path_descr_bezierto theBD=*(reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[theBDI].dStart ));
+        if ( cp >= theBDI && cp < theBDI+theBD.nb ) {
+          if ( theBD.nb == 1 ) {
+            NR::Point        endP=theBD.p;
+            NR::Point        midP;
+            NR::Point        startP;
+            startP=PrevPoint(theBDI-1);
+            {
+              path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[theBDI+1].dStart );
+              midP=nData->p;
+            }
+            NR::Point       aP=ct*midP+(1-ct)*startP;
+            NR::Point       bP=ct*endP+(1-ct)*midP;
+            NR::Point       knotP=ct*bP+(1-ct)*aP;
+                        
+            InsertIntermBezierTo(bP,theBDI+2);
+            InsertBezierTo(knotP,1,theBDI+2);
+            InsertForcePoint(theBDI+2);
+            {
+              path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[theBDI+1].dStart );
+              nData->p=aP;
+            }
+            {
+              path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[theBDI].dStart );
+              nData->p=knotP;
+            }
+            // decalages dans le tableau des positions de coupe
+            for (int j=curP+1;j<nbPos;j++) {
+              if ( poss[j].piece == cp ) {
+                poss[j].piece+=3;
+                poss[j].t=(poss[j].t-ct)/(1-ct);
+              } else {
+                poss[j].piece+=3;
+              }
+            }
+            
+          } else {
+            // decouper puis repasser
+            if ( cp > theBDI ) {
+              NR::Point   pcP,ncP;
+              {
+                path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[cp].dStart );
+                pcP=nData->p;
+              }
+              {
+                path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[cp+1].dStart );
+                ncP=nData->p;
+              }
+              NR::Point knotP=0.5*(pcP+ncP);
+              
+              InsertBezierTo(knotP,theBD.nb-(cp-theBDI),cp+1);
+              {
+                path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[theBDI].dStart );
+                nData->nb=cp-theBDI;
+              }
+              
+              // decalages dans le tableau des positions de coupe
+              for (int j=curP;j<nbPos;j++) {
+                if ( poss[j].piece == cp ) {
+                  poss[j].piece+=1;
+                } else {
+                  poss[j].piece+=1;
+                }
+              }
+              curP--;
+            } else {
+              NR::Point   pcP,ncP;
+              {
+                path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[cp+1].dStart );
+                pcP=nData->p;
+              }
+              {
+                path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[cp+2].dStart );
+                ncP=nData->p;
+              }
+              NR::Point knotP=0.5*(pcP+ncP);
+              
+              InsertBezierTo(knotP,theBD.nb-1,cp+2);
+              {
+                path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[theBDI].dStart );
+                nData->nb=1;
+              }
+              
+              // decalages dans le tableau des positions de coupe
+              for (int j=curP;j<nbPos;j++) {
+                if ( poss[j].piece == cp ) {
+//                  poss[j].piece+=1;
+                } else {
+                  poss[j].piece+=1;
+                }
+              }
+              curP--;
+            }
+          }
+        } else {
+          // on laisse aussi tomber
+        }
+      } else {
+        // on laisse tomber
+      }
     }
   }
+}
+
+void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
+{
+  ConvertPositionsToForced(nbPos,poss);
+  ConvertForcedToMoveTo();
+  return;
 }
 
 

@@ -279,13 +279,20 @@ public:
   // surface du chemin (considéré comme fermé)
   double      Surface(void);
   void        PolylineBoundingBox(double &l,double &t,double &r,double &b);
+  // longueur (totale des sous-chemins)
+  double      Length(void);
   
-  void        ConvertForcedToMoveTo(void);
+  void             ConvertForcedToMoveTo(void);
+  void             ConvertForcedToVoid(void);
   typedef struct cut_position {
     int          piece;
     float        t;
   } cut_position;
-  void        ConvertPositionsToMoveTo(int nbPos,cut_position* poss);
+  cut_position*    CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut);
+  
+  // caution: not tested on quadratic b-splines, most certainly buggy
+  void             ConvertPositionsToMoveTo(int nbPos,cut_position* poss);
+  void             ConvertPositionsToForced(int nbPos,cut_position* poss);
 
 private:
     void  Affiche(void);
@@ -298,6 +305,7 @@ private:
   void CancelBezier (void);
   void CloseSubpath();
   void InsertMoveTo (NR::Point const &iPt,int at);
+  void InsertForcePoint (int at);
   void InsertLineTo (NR::Point const &iPt,int at);
   void InsertArcTo (NR::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise,int at);
   void InsertCubicTo (NR::Point const &ip,  NR::Point const &iStD,  NR::Point const &iEnD,int at);
