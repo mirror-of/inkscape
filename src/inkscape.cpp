@@ -1260,4 +1260,4 @@ profile_path(const char *filename)
 }
 
 
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
