@@ -52,9 +52,8 @@ class PrintWin32 : public Inkscape::Extension::Implementation::Implementation {
 	/* Platform detection */
 	gboolean is_os_wide();
 
-	void gdk_event_handler (GdkEvent *event);
 	VOID CALLBACK timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
-	UINT_PTR CALLBACK print_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
+
 
 public:
 	PrintWin32 (void);
