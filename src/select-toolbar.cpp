@@ -142,7 +142,7 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	GtkAdjustment *a;
 	const SPUnit *unit;
 	NRRect bbox;
-	gdouble x0, y0, x1, y1;
+	gdouble x0, y0, x1, y1, dx0, dy0, dx1, dy1;
 	SPSelection *sel;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
@@ -171,7 +171,12 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
 	y1 = y0 + sp_units_get_points (a->value, unit);
 
-	if ((fabs (x0 - bbox.x0) > 1e-6) || (fabs (y0 - bbox.y0) > 1e-6) || (fabs (x1 - bbox.x1) > 1e-6) || (fabs (y1 - bbox.y1) > 1e-6)) {
+	dx0 = fabs (x0 - bbox.x0) > 1e-6 ? fabs (x0 - bbox.x0) : 0;
+	dx1 = fabs (x1 - bbox.x1) > 1e-6 ? fabs (x1 - bbox.x1) : 0;
+	dy0 = fabs (y0 - bbox.y0) > 1e-6 ? fabs (y0 - bbox.y0) : 0;
+	dy1 = fabs (y1 - bbox.y1) > 1e-6 ? fabs (y1 - bbox.y1) : 0;
+
+	if (dx0 || dx1 || dy0 || dy1) {
 		gdouble p2o[6], o2n[6], scale[6], s[6], t[6];
 
 		art_affine_translate (p2o, -bbox.x0, -bbox.y0);
@@ -186,7 +191,15 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 		art_affine_multiply (t , s, o2n);
 		sp_selection_apply_affine (sel, t);
 
-		sp_document_done (SP_WIDGET_DOCUMENT (spw));
+ 		if (dx0) 
+ 			sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "selector:toolbar:move:horizontal");
+ 		else if (dx1)
+ 			sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "selector:toolbar:scale:horizontal");
+ 		else if (dy0)
+ 			sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "selector:toolbar:move:vertical");
+ 		else if (dy1)
+ 			sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "selector:toolbar:scale:vertical");
+		else sp_document_done (SP_WIDGET_DOCUMENT (spw));
 
 		// defocus spinbuttons by moving focus to the canvas, unless "stay" is on
 		spinbutton_defocus (GTK_OBJECT (spw));
