@@ -19,6 +19,7 @@
         src/livarot/PathStroke.cpp src/livarot/Shape.cpp
 	src/livarot/ShapeMisc.cpp src/display/nr-arena-glyphs.cpp
 	src/helper/sodipodi-ctrlrect.cpp src/helper/sp-canvas.cpp
+	src/extension/internal/win32.cpp
 	Fix compiler warnings, mostly about unused variables.
 
 	* src/helper/sp-canvas-util.cpp
