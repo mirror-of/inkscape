@@ -62,6 +62,7 @@
 #include "svg/stringstream.h"
 #include "message-stack.h"
 #include "message-context.h"
+#include "object-hierarchy.h"
 
 #include "file.h"
 
@@ -207,12 +208,21 @@ sp_desktop_init (SPDesktop *desktop)
     desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());
 
     desktop->current = sp_repr_css_attr_inherited (inkscape_get_repr (INKSCAPE, "desktop"), "style");
+
+    desktop->_layer_hierarchy = NULL;
 }
 
 static void
 sp_desktop_dispose (GObject *object)
 {
     SPDesktop *dt = SP_DESKTOP (object);
+
+    dt->sel_modified_connection.disconnect();
+    dt->sel_modified_connection.~Connection();
+
+    if (dt->_layer_hierarchy) {
+        delete dt->_layer_hierarchy;
+    }
 
     if (dt->inkscape) {
         inkscape_remove_desktop (dt);
@@ -243,17 +253,20 @@ sp_desktop_dispose (GObject *object)
 
     g_list_free (dt->zooms_past);
     g_list_free (dt->zooms_future);
-
-    dt->sel_modified_connection.disconnect();
-    dt->sel_modified_connection.~Connection();
 }
 
 SPObject *SPDesktop::currentRoot() {
-    return SP_DOCUMENT_ROOT(SP_VIEW_DOCUMENT(this));
+    return SP_DOCUMENT_ROOT(SP_DT_DOCUMENT(this));
 }
 
 SPObject *SPDesktop::currentLayer() {
-    return currentRoot();
+    return _layer_hierarchy ? _layer_hierarchy->bottom() : NULL;
+}
+
+void SPDesktop::setCurrentLayer(SPObject *object) {
+    g_return_if_fail(SP_IS_GROUP(object));
+    g_return_if_fail( currentRoot() == object || currentRoot()->isAncestorOf(object));
+    _layer_hierarchy->setBottom(object);
 }
 
 static void
@@ -478,6 +491,11 @@ sp_desktop_set_document (SPView *view, SPDocument *doc)
         sp_namedview_hide (desktop->namedview, desktop);
         sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))), desktop->dkey);
     }
+
+    if (desktop->_layer_hierarchy) {
+        delete desktop->_layer_hierarchy;
+    }
+    desktop->_layer_hierarchy = new Inkscape::ObjectHierarchy(SP_DOCUMENT_ROOT(doc));
 
     /* fixme: */
     if (desktop->drawing) {

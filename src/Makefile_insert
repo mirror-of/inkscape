@@ -73,6 +73,7 @@ libinkpre_a_SOURCES =	\
 	node-context.cpp node-context.h	\
 	nodepath.cpp nodepath.h	\
 	object-edit.cpp object-edit.h	\
+	object-hierarchy.cpp object-hierarchy.h \
 	object-ui.cpp object-ui.h	\
 	path-chemistry.cpp path-chemistry.h	\
 	preferences-skeleton.h	\

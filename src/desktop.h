@@ -33,6 +33,8 @@ class SPDesktopWidgetClass;
 #include "view.h"
 #include "style.h"
 
+namespace Inkscape { class ObjectHierarchy; }
+
 enum ColorComponent {
   COMPONENT_R,
   COMPONENT_G,
@@ -132,6 +134,7 @@ struct SPDesktop : public SPView {
 
 	SPObject *currentRoot();
 	SPObject *currentLayer();
+	void setCurrentLayer(SPObject *object);
 
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
 
@@ -139,6 +142,8 @@ struct SPDesktop : public SPView {
 	SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue> _set_style_signal;
 
 	Inkscape::MessageContext *_guides_message_context;
+
+	Inkscape::ObjectHierarchy *_layer_hierarchy;
 };
 
 struct SPDesktopClass {

@@ -5,6 +5,14 @@
 	  sp_object_request_modified, and sp_object_invoke_write, which have been
 	  deprecated and are now completely unused
 
+	* src/Makefile_insert, src/desktop.cpp, src/desktop.h,
+	  src/object-hierarchy.cpp, src/object-hierarchy.h, src/sp-object.cpp,
+	  src/sp-object.h:
+
+	  Implemented SPDesktop::setCurrentLayer(), introducing
+	  Inkscape::ObjectHierarchy to permit falling back to parents if
+	  the current layer is removed.
+
 2004-06-26  MenTaLguY  <mental@rydia.net>
 
 	* src/refcounted.h: allow reffing/unreffing const objects

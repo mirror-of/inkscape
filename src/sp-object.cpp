@@ -245,6 +245,18 @@ void SPObject::_updateTotalHRefCount(int increment) {
 	}
 }
 
+bool SPObject::isAncestorOf(SPObject *object) {
+	g_return_val_if_fail(object != NULL, false);
+	object = SP_OBJECT_PARENT(object);
+	while (object) {
+		if ( object == this ) {
+			return true;
+		}
+		object = SP_OBJECT_PARENT(object);
+	}
+	return false;
+}
+
 SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
 		sp_repr_append_child(SP_OBJECT_REPR(this), repr);
@@ -704,12 +716,14 @@ sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval,
 	SPObject *object = SP_OBJECT (data);
 	g_assert(SP_OBJECT_REPR(object) == repr);
 
+	if (SP_OBJECT_IS_CLONED(object)) {
+		// in general clones should not concern themselves with
+		// validating repr changes; that should be left to the
+		// "original" SPObject
+		return TRUE;
+	}
+
 	if (strcmp ((const char*)key, "id") == 0) {
-		if (SP_OBJECT_IS_CLONED(object)) {
-			// hmm, should cloned objects be attached to reprs?
-			// I need to check...
-			return TRUE;
-		}
 		if (!newval) {
 			g_critical("Attempt to clear id of bound SPRepr (%p)", repr);
 			return FALSE;
