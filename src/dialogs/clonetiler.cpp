@@ -1,14 +1,14 @@
 #define __SP_CLONE_TILER_C__
 
 /*
-* Clone tiling dialog
-*
-* Authors:
-*   bulia byak
-*
-* Copyright (C) 2004 Authors
-*
-*/
+ * Clone tiling dialog
+ *
+ * Authors:
+ *   bulia byak
+ *
+ * Copyright (C) 2004 Authors
+ *
+ */
 
 #include <config.h>
 #include <glib.h>
@@ -104,258 +104,291 @@ clonetiler_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 
 
 enum {
-	TILE_P1,
-	TILE_P2,
-	TILE_PM,
-	TILE_PG,
-	TILE_CM,
-	TILE_PMM,
-	TILE_PMG,
-	TILE_PGG,
-	TILE_CMM,
-	TILE_P4,
-	TILE_P4M,
-	TILE_P4G,
-	TILE_P3,
-	TILE_P31M,
-	TILE_P3M1,
-	TILE_P6,
-	TILE_P6M
+    TILE_P1,
+    TILE_P2,
+    TILE_PM,
+    TILE_PG,
+    TILE_CM,
+    TILE_PMM,
+    TILE_PMG,
+    TILE_PGG,
+    TILE_CMM,
+    TILE_P4,
+    TILE_P4M,
+    TILE_P4G,
+    TILE_P3,
+    TILE_P31M,
+    TILE_P3M1,
+    TILE_P6,
+    TILE_P6M
 };
 
 
 NR::Matrix 
 clonetiler_get_transform ( 
-								// symmetry group
-								int type,
-								// row, column
-								int x, int y,
-								// center, width, height of the tile
-								double cx, double cy,
-								double w, double h,
+    // symmetry group
+    int type,
+    // row, column
+    int x, int y,
+    // center, width, height of the tile
+    double cx, double cy,
+    double w, double h,
 
-								// values from the dialog:
-								double d_x_per_x, double d_y_per_x, double d_x_per_y, double d_y_per_y, double rand_xy,
-								double d_rot_per_x, double d_rot_per_y, double rand_rot,
-								double d_scalex_per_x, double d_scaley_per_x, double d_scalex_per_y, double d_scaley_per_y, double rand_scale
-)
+    // values from the dialog:
+    double d_x_per_x, double d_y_per_x, double d_x_per_y, double d_y_per_y, double rand_xy,
+    double d_rot_per_x, double d_rot_per_y, double rand_rot,
+    double d_scalex_per_x, double d_scaley_per_x, double d_scalex_per_y, double d_scaley_per_y, double rand_scale
+    )
 {
 
-	// in abs units
-	double dx = d_x_per_x * w * x + d_x_per_y  * w * y + rand_xy * w * g_random_double_range (-1, 1);
-	double dy = d_y_per_x * h * x + d_y_per_y  * h * y + rand_xy * h * g_random_double_range (-1, 1);
+    // in abs units
+    double dx = d_x_per_x * w * x + d_x_per_y  * w * y + rand_xy * w * g_random_double_range (-1, 1);
+    double dy = d_y_per_x * h * x + d_y_per_y  * h * y + rand_xy * h * g_random_double_range (-1, 1);
 
-	// in deg
-	double drot = d_rot_per_x * x + d_rot_per_y * y + rand_rot * 180 * g_random_double_range (-1, 1);
+    // in deg
+    double drot = d_rot_per_x * x + d_rot_per_y * y + rand_rot * 180 * g_random_double_range (-1, 1);
 
-	// times the original
-	double dscalex = 1 + d_scalex_per_x * x + d_scalex_per_y * y + rand_scale * 1 * g_random_double_range (-1, 1);
-	double dscaley = 1 + d_scaley_per_x * x + d_scaley_per_y * y + rand_scale * 1 * g_random_double_range (-1, 1);
+    // times the original
+    double dscalex = 1 + d_scalex_per_x * x + d_scalex_per_y * y + rand_scale * 1 * g_random_double_range (-1, 1);
+    double dscaley = 1 + d_scaley_per_x * x + d_scaley_per_y * y + rand_scale * 1 * g_random_double_range (-1, 1);
 
-	NR::Matrix rect_translate (NR::translate (w * x + dx, h * y + dy));
+    NR::Matrix rect_translate (NR::translate (w * x + dx, h * y + dy));
 
-	NR::Matrix drot_c = NR::translate(-cx, -cy) * NR::rotate (M_PI*drot/180) * NR::translate(cx, cy);
+    NR::Matrix drot_c = NR::translate(-cx, -cy) * NR::rotate (M_PI*drot/180) * NR::translate(cx, cy);
 
-	NR::Matrix dscale_c = NR::translate(-cx, -cy) * NR::scale (dscalex, dscaley) * NR::translate(cx, cy);
+    NR::Matrix dscale_c = NR::translate(-cx, -cy) * NR::scale (dscalex, dscaley) * NR::translate(cx, cy);
 
-	NR::Matrix d_s_r = dscale_c * drot_c;
+    NR::Matrix d_s_r = dscale_c * drot_c;
 
-	NR::Matrix rotate_180_c = NR::translate(-cx, -cy) * NR::rotate (M_PI) * NR::translate(cx, cy);
-	NR::Matrix rotate_90_c = NR::translate(-cx, -cy) * NR::rotate (-M_PI/2) * NR::translate(cx, cy);
-	NR::Matrix rotate_m90_c = NR::translate(-cx, -cy) * NR::rotate (M_PI/2) * NR::translate(cx, cy);
-	NR::Matrix flip_x = NR::translate(-cx, -cy) * NR::scale (-1, 1) * NR::translate(cx, cy);
-	NR::Matrix flip_y = NR::translate(-cx, -cy) * NR::scale (1, -1) * NR::translate(cx, cy);
+    NR::Matrix rotate_180_c = NR::translate(-cx, -cy) * NR::rotate (M_PI) * NR::translate(cx, cy);
 
-	switch (type) {
-	case TILE_P1:
-		return d_s_r * rect_translate;
-		break;
-	case TILE_P2:
-		if (x % 2 == 0) {
-			return d_s_r * rect_translate;
-		} else {
-			return d_s_r * rotate_180_c * rect_translate;
-		}
-		break;
-	case TILE_PM:
-		if (x % 2 == 0) {
-			return d_s_r * rect_translate;
-		} else {
-			return d_s_r * flip_x * rect_translate;
-		}
-		break;
-	case TILE_PG:
-		if (y % 2 == 0) {
-			return d_s_r * rect_translate;
-		} else {
-			return d_s_r * flip_x * rect_translate;
-		}
-		break;
-	case TILE_CM:
-		if ((x + y) % 2 == 0) {
-			return d_s_r * rect_translate;
-		} else {
-			return d_s_r * flip_x * rect_translate;
-		}
-		break;
-	case TILE_PMM:
-		if (y % 2 == 0) {
-			if (x % 2 == 0) {
-				return rect_translate;
-			} else {
-				return d_s_r * flip_x * rect_translate;
-			}
-		} else {
-			if (x % 2 == 0) {
-				return d_s_r * flip_y * rect_translate;
-			} else {
-				return d_s_r * flip_x * flip_y * rect_translate;
-			}
-		}
-		break;
-	case TILE_PMG:
-		if (y % 4 == 0) {
-			return d_s_r * rect_translate;
-		} else if (y % 4 == 1) {
-			return d_s_r * flip_y * rect_translate;
-		} else if (y % 4 == 2) {
-			return d_s_r * flip_x * rect_translate;
-		} else if (y % 4 == 3) {
-			return d_s_r * flip_x * flip_y * rect_translate;
-		}
-		break;
-	case TILE_PGG:
-		if (y % 2 == 0) {
-			if (x % 2 == 0) {
-				return d_s_r * rect_translate;
-			} else {
-				return d_s_r * flip_y * rect_translate;
-			}
-		} else {
-			if (x % 2 == 0) {
-				return d_s_r * rotate_180_c * rect_translate;
-			} else {
-				return d_s_r * rotate_180_c * flip_y * rect_translate;
-			}
-		}
-		break;
-	case TILE_CMM:
-		if (y % 4 == 0) {
-			if (x % 2 == 0) {
-				return d_s_r * rect_translate;
-			} else {
-				return d_s_r * flip_x * rect_translate;
-			}
-		} else if (y % 4 == 1) {
-			if (x % 2 == 0) {
-				return d_s_r * flip_y * rect_translate;
-			} else {
-				return d_s_r * flip_x * flip_y * rect_translate;
-			}
-		} else if (y % 4 == 2) {
-			if (x % 2 == 1) {
-				return d_s_r * rect_translate;
-			} else {
-				return d_s_r * flip_x * rect_translate;
-			}
-		} else {
-			if (x % 2 == 1) {
-				return d_s_r * flip_y * rect_translate;
-			} else {
-				return d_s_r * flip_x * flip_y * rect_translate;
-			}
-		}
-		break;
-	case TILE_P4:
-  {
-      NR::Matrix ori (NR::translate ((w + h) * (x/2) + dx,  (h + w) * (y/2) + dy));
-      NR::Matrix dia1 (NR::translate (w/2 + h/2, -h/2 + w/2));
-      NR::Matrix dia2 (NR::translate (-w/2 + h/2, h/2 + w/2));
-		if (y % 2 == 0) {
-			if (x % 2 == 0) {
-				return d_s_r * ori;
-			} else {
-				return d_s_r * rotate_m90_c * dia1 * ori;
-			}
-		} else {
-			if (x % 2 == 0) {
-				return d_s_r * rotate_90_c * dia2 * ori;
-			} else {
-				return d_s_r * rotate_180_c * dia1 * dia2 * ori;
-			}
-		}
-  }
-		break;
-	case TILE_P4M:
-  {
-      double max = MAX(w, h);
-      NR::Matrix ori (NR::translate ((max + max) * (x/4) + dx,  (max + max) * (y/2) + dy));
-      NR::Matrix dia1 (NR::translate (w/2 - h/2, h/2 - w/2));
-      NR::Matrix dia2 (NR::translate (-h/2 + w/2, w/2 - h/2));
-		if (y % 2 == 0) {
-			if (x % 4 == 0) {
-				return d_s_r * ori;
-			} else if (x % 4 == 1) {
-				return d_s_r * flip_y * rotate_m90_c * dia1 * ori;
-			} else if (x % 4 == 2) {
-				return d_s_r * rotate_m90_c * dia1 * NR::translate (h, 0) * ori;
-			} else if (x % 4 == 3) {
-				return d_s_r * flip_x * NR::translate (w, 0) * ori;
-			}
-		} else {
-			if (x % 4 == 0) {
-				return d_s_r * flip_y * NR::translate(0, h) * ori;
-			} else if (x % 4 == 1) {
-				return d_s_r * rotate_90_c * dia2 * NR::translate(0, h) * ori;
-			} else if (x % 4 == 2) {
-				return d_s_r * flip_y * rotate_90_c * dia2 * NR::translate(h, 0) * NR::translate(0, h) * ori;
-			} else if (x % 4 == 3) {
-				return d_s_r * flip_y * flip_x * NR::translate(w, 0) * NR::translate(0, h) * ori;
-			}
-		}
-  }
-		break;
-	case TILE_P4G:
-  {
-      double max = MAX(w, h);
-      NR::Matrix ori (NR::translate ((max + max) * (x/4) + dx,  (max + max) * y + dy));
-      NR::Matrix dia1 (NR::translate (w/2 + h/2, h/2 - w/2));
-      NR::Matrix dia2 (NR::translate (-h/2 + w/2, w/2 + h/2));
-		if (((x/4) + y) % 2 == 0) {
-			if (x % 4 == 0) {
-				return d_s_r * ori;
-			} else if (x % 4 == 1) {
-				return d_s_r * rotate_m90_c * dia1 * ori;
-			} else if (x % 4 == 2) {
-				return d_s_r * rotate_90_c * dia2 * ori;
-			} else if (x % 4 == 3) {
-				return d_s_r * rotate_180_c * dia1 * dia2 * ori;
-			}
-		} else {
-			if (x % 4 == 0) {
-				return d_s_r * flip_y * NR::translate (0, h) * ori;
-			} else if (x % 4 == 1) {
-				return d_s_r * flip_y * rotate_m90_c * dia1 * NR::translate (-h, 0) * ori;
-			} else if (x % 4 == 2) {
-				return d_s_r * flip_y * rotate_90_c * dia2 * NR::translate (h, 0) * ori;
-			} else if (x % 4 == 3) {
-				return d_s_r * flip_x * NR::translate (w, 0) * ori;
-			}
-		}
-  }
-		break;
-		/*
-	case TILE_P3:
-	case TILE_P31M:
-	case TILE_P3M1:
-	case TILE_P6:
-	case TILE_P6M:
+    NR::Matrix rotate_90_c = NR::translate(-cx, -cy) * NR::rotate (-M_PI/2) * NR::translate(cx, cy);
+    NR::Matrix rotate_m90_c = NR::translate(-cx, -cy) * NR::rotate (M_PI/2) * NR::translate(cx, cy);
+
+    NR::Matrix rotate_120_c = NR::translate(-cx, -cy) * NR::rotate (-2*M_PI/3) * NR::translate(cx, cy);
+    NR::Matrix rotate_m120_c = NR::translate(-cx, -cy) * NR::rotate (2*M_PI/3) * NR::translate(cx, cy);
+
+    NR::Matrix flip_x = NR::translate(-cx, -cy) * NR::scale (-1, 1) * NR::translate(cx, cy);
+    NR::Matrix flip_y = NR::translate(-cx, -cy) * NR::scale (1, -1) * NR::translate(cx, cy);
+
+    switch (type) {
+    case TILE_P1:
+        return d_s_r * rect_translate;
+        break;
+    case TILE_P2:
+        if (x % 2 == 0) {
+            return d_s_r * rect_translate;
+        } else {
+            return d_s_r * rotate_180_c * rect_translate;
+        }
+        break;
+    case TILE_PM:
+        if (x % 2 == 0) {
+            return d_s_r * rect_translate;
+        } else {
+            return d_s_r * flip_x * rect_translate;
+        }
+        break;
+    case TILE_PG:
+        if (y % 2 == 0) {
+            return d_s_r * rect_translate;
+        } else {
+            return d_s_r * flip_x * rect_translate;
+        }
+        break;
+    case TILE_CM:
+        if ((x + y) % 2 == 0) {
+            return d_s_r * rect_translate;
+        } else {
+            return d_s_r * flip_x * rect_translate;
+        }
+        break;
+    case TILE_PMM:
+        if (y % 2 == 0) {
+            if (x % 2 == 0) {
+                return rect_translate;
+            } else {
+                return d_s_r * flip_x * rect_translate;
+            }
+        } else {
+            if (x % 2 == 0) {
+                return d_s_r * flip_y * rect_translate;
+            } else {
+                return d_s_r * flip_x * flip_y * rect_translate;
+            }
+        }
+        break;
+    case TILE_PMG:
+        if (y % 4 == 0) {
+            return d_s_r * rect_translate;
+        } else if (y % 4 == 1) {
+            return d_s_r * flip_y * rect_translate;
+        } else if (y % 4 == 2) {
+            return d_s_r * flip_x * rect_translate;
+        } else if (y % 4 == 3) {
+            return d_s_r * flip_x * flip_y * rect_translate;
+        }
+        break;
+    case TILE_PGG:
+        if (y % 2 == 0) {
+            if (x % 2 == 0) {
+                return d_s_r * rect_translate;
+            } else {
+                return d_s_r * flip_y * rect_translate;
+            }
+        } else {
+            if (x % 2 == 0) {
+                return d_s_r * rotate_180_c * rect_translate;
+            } else {
+                return d_s_r * rotate_180_c * flip_y * rect_translate;
+            }
+        }
+        break;
+    case TILE_CMM:
+        if (y % 4 == 0) {
+            if (x % 2 == 0) {
+                return d_s_r * rect_translate;
+            } else {
+                return d_s_r * flip_x * rect_translate;
+            }
+        } else if (y % 4 == 1) {
+            if (x % 2 == 0) {
+                return d_s_r * flip_y * rect_translate;
+            } else {
+                return d_s_r * flip_x * flip_y * rect_translate;
+            }
+        } else if (y % 4 == 2) {
+            if (x % 2 == 1) {
+                return d_s_r * rect_translate;
+            } else {
+                return d_s_r * flip_x * rect_translate;
+            }
+        } else {
+            if (x % 2 == 1) {
+                return d_s_r * flip_y * rect_translate;
+            } else {
+                return d_s_r * flip_x * flip_y * rect_translate;
+            }
+        }
+        break;
+    case TILE_P4:
+    {
+        NR::Matrix ori (NR::translate ((w + h) * (x/2) + dx,  (h + w) * (y/2) + dy));
+        NR::Matrix dia1 (NR::translate (w/2 + h/2, -h/2 + w/2));
+        NR::Matrix dia2 (NR::translate (-w/2 + h/2, h/2 + w/2));
+        if (y % 2 == 0) {
+            if (x % 2 == 0) {
+                return d_s_r * ori;
+            } else {
+                return d_s_r * rotate_m90_c * dia1 * ori;
+            }
+        } else {
+            if (x % 2 == 0) {
+                return d_s_r * rotate_90_c * dia2 * ori;
+            } else {
+                return d_s_r * rotate_180_c * dia1 * dia2 * ori;
+            }
+        }
+    }
+    break;
+    case TILE_P4M:
+    {
+        double max = MAX(w, h);
+        NR::Matrix ori (NR::translate ((max + max) * (x/4) + dx,  (max + max) * (y/2) + dy));
+        NR::Matrix dia1 (NR::translate (w/2 - h/2, h/2 - w/2));
+        NR::Matrix dia2 (NR::translate (-h/2 + w/2, w/2 - h/2));
+        if (y % 2 == 0) {
+            if (x % 4 == 0) {
+                return d_s_r * ori;
+            } else if (x % 4 == 1) {
+                return d_s_r * flip_y * rotate_m90_c * dia1 * ori;
+            } else if (x % 4 == 2) {
+                return d_s_r * rotate_m90_c * dia1 * NR::translate (h, 0) * ori;
+            } else if (x % 4 == 3) {
+                return d_s_r * flip_x * NR::translate (w, 0) * ori;
+            }
+        } else {
+            if (x % 4 == 0) {
+                return d_s_r * flip_y * NR::translate(0, h) * ori;
+            } else if (x % 4 == 1) {
+                return d_s_r * rotate_90_c * dia2 * NR::translate(0, h) * ori;
+            } else if (x % 4 == 2) {
+                return d_s_r * flip_y * rotate_90_c * dia2 * NR::translate(h, 0) * NR::translate(0, h) * ori;
+            } else if (x % 4 == 3) {
+                return d_s_r * flip_y * flip_x * NR::translate(w, 0) * NR::translate(0, h) * ori;
+            }
+        }
+    }
+    break;
+    case TILE_P4G:
+    {
+        double max = MAX(w, h);
+        NR::Matrix ori (NR::translate ((max + max) * (x/4) + dx,  (max + max) * y + dy));
+        NR::Matrix dia1 (NR::translate (w/2 + h/2, h/2 - w/2));
+        NR::Matrix dia2 (NR::translate (-h/2 + w/2, w/2 + h/2));
+        if (((x/4) + y) % 2 == 0) {
+            if (x % 4 == 0) {
+                return d_s_r * ori;
+            } else if (x % 4 == 1) {
+                return d_s_r * rotate_m90_c * dia1 * ori;
+            } else if (x % 4 == 2) {
+                return d_s_r * rotate_90_c * dia2 * ori;
+            } else if (x % 4 == 3) {
+                return d_s_r * rotate_180_c * dia1 * dia2 * ori;
+            }
+        } else {
+            if (x % 4 == 0) {
+                return d_s_r * flip_y * NR::translate (0, h) * ori;
+            } else if (x % 4 == 1) {
+                return d_s_r * flip_y * rotate_m90_c * dia1 * NR::translate (-h, 0) * ori;
+            } else if (x % 4 == 2) {
+                return d_s_r * flip_y * rotate_90_c * dia2 * NR::translate (h, 0) * ori;
+            } else if (x % 4 == 3) {
+                return d_s_r * flip_x * NR::translate (w, 0) * ori;
+            }
+        }
+    }
+    break;
+    case TILE_P3:
+    {
+        double width;
+        double height;
+        NR::Matrix dia1;
+        NR::Matrix dia2;
+        if (w > h) {
+            width = w + w * cos(M_PI/3);
+            height = 2 * w * sin(M_PI/3);
+            dia1 = NR::Matrix (NR::translate (w/2 + w/2 * cos(M_PI/3), -(w/2 * sin(M_PI/3))));
+            dia2  = NR::Matrix (NR::translate (0, 2 * (w/2 * sin(M_PI/3))));
+        } else {
+            width = h * cos (M_PI/6);
+            height = h;
+            dia1 = NR::Matrix (NR::translate (h/2 * cos(M_PI/6), -(h/2 * sin(M_PI/6))));
+            dia2 = NR::Matrix (NR::translate (0, h/2));
+        }
+        NR::Matrix ori (NR::translate (width * (2*(x/3) + y%2) + dx,  (height/2) * y + dy));
+        if (x % 3 == 0) {
+            return d_s_r * ori; 
+        } else if (x % 3 == 1) {
+            return d_s_r * rotate_m120_c * dia1 * ori; 
+        } else if (x % 3 == 2) {
+            return d_s_r * rotate_120_c * dia1 * dia2 * ori; 
+        }
+    }
+    break;
+
+
+/*
+      case TILE_P31M:
+      case TILE_P3M1:
+      case TILE_P6:
+      case TILE_P6M:
 		*/
-      	default: 
-		break;
-	}
+    default: 
+        break;
+    }
 
-	return NR::identity();
+    return NR::identity();
 }
 
 static void
@@ -509,11 +542,11 @@ clonetiler_apply (GtkWidget *widget, void *)
 GtkWidget *
 clonetiler_new_tab (GtkWidget *nb, const gchar *label)
 {
-     GtkWidget *l = gtk_label_new (label);
-     GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
-     gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-     gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-     return vb;
+    GtkWidget *l = gtk_label_new (label);
+    GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
+    gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+    gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+    return vb;
 }
 
 static void
@@ -590,160 +623,160 @@ clonetiler_dialog (void)
         gtk_box_pack_start (GTK_BOX (mainbox), nb, FALSE, FALSE, 0);
 
         {
-        GtkWidget *vb = clonetiler_new_tab (nb, _("Symmetry"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Symmetry"));
 
-        GtkWidget *om = gtk_option_menu_new ();
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select one of the 17 symmetry groups for the tiling"), NULL);
-        gtk_box_pack_end (GTK_BOX (vb), om, FALSE, FALSE, SB_MARGIN);
+            GtkWidget *om = gtk_option_menu_new ();
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select one of the 17 symmetry groups for the tiling"), NULL);
+            gtk_box_pack_end (GTK_BOX (vb), om, FALSE, FALSE, SB_MARGIN);
 
-        GtkWidget *m = gtk_menu_new ();
-        int current = prefs_get_int_attribute ("dialogs.clonetiler", "symmetrygroup", 0);
+            GtkWidget *m = gtk_menu_new ();
+            int current = prefs_get_int_attribute ("dialogs.clonetiler", "symmetrygroup", 0);
 
-        struct SymGroups {
-            int group;
-            gchar const *label;
-        } const sym_groups[] = {
-            {TILE_P1, _("P1: simple translate")},
-            {TILE_P2, _("P2: 180&#176; rotation")},
-            {TILE_PM, _("PM: reflection")},
-            {TILE_PG, _("PG: glide reflection")},
-            {TILE_CM, _("CM: reflection + glide reflection")},
-            {TILE_PMM, _("PMM: reflection + reflection")},
-            {TILE_PMG, _("PMG: reflection + 180&#176; rotation")},
-            {TILE_PGG, _("PGG: glide reflection + 180&#176; rotation")},
-            {TILE_CMM, _("CMM: reflection + reflection + 180&#176; rotation")},
-            {TILE_P4, _("P4: 90&#176; rotation")},
-            {TILE_P4M, _("P4M: 90&#176; rotation + 45&#176; reflection")},
-            {TILE_P4G, _("P4G: 90&#176; rotation + 90&#176; reflection")},
-            {TILE_P3, _("P3: 120&#176; rotation")},
-            {TILE_P31M, _("P31M: reflection + 120&#176; rotation, dense")},
-            {TILE_P3M1, _("P3M1: reflection + 120&#176; rotation, sparse")},
-            {TILE_P6, _("P6: 60&#176; rotation")},
-            {TILE_P6M, _("P6M: reflection + 60&#176; rotation")},
-        };
+            struct SymGroups {
+                int group;
+                gchar const *label;
+            } const sym_groups[] = {
+                {TILE_P1, _("P1: simple translate")},
+                {TILE_P2, _("P2: 180&#176; rotation")},
+                {TILE_PM, _("PM: reflection")},
+                {TILE_PG, _("PG: glide reflection")},
+                {TILE_CM, _("CM: reflection + glide reflection")},
+                {TILE_PMM, _("PMM: reflection + reflection")},
+                {TILE_PMG, _("PMG: reflection + 180&#176; rotation")},
+                {TILE_PGG, _("PGG: glide reflection + 180&#176; rotation")},
+                {TILE_CMM, _("CMM: reflection + reflection + 180&#176; rotation")},
+                {TILE_P4, _("P4: 90&#176; rotation")},
+                {TILE_P4M, _("P4M: 90&#176; rotation + 45&#176; reflection")},
+                {TILE_P4G, _("P4G: 90&#176; rotation + 90&#176; reflection")},
+                {TILE_P3, _("P3: 120&#176; rotation")},
+                {TILE_P31M, _("P31M: reflection + 120&#176; rotation, dense")},
+                {TILE_P3M1, _("P3M1: reflection + 120&#176; rotation, sparse")},
+                {TILE_P6, _("P6: 60&#176; rotation")},
+                {TILE_P6M, _("P6M: reflection + 60&#176; rotation")},
+            };
 
-        for (unsigned j = 0; j < G_N_ELEMENTS(sym_groups); ++j) {
-            SymGroups const &sg = sym_groups[j];
+            for (unsigned j = 0; j < G_N_ELEMENTS(sym_groups); ++j) {
+                SymGroups const &sg = sym_groups[j];
 
-            GtkWidget *l = gtk_label_new ("");
-            gtk_label_set_markup (GTK_LABEL(l), sg.label);
-            gtk_misc_set_alignment (GTK_MISC(l), 0, 0.5);
+                GtkWidget *l = gtk_label_new ("");
+                gtk_label_set_markup (GTK_LABEL(l), sg.label);
+                gtk_misc_set_alignment (GTK_MISC(l), 0, 0.5);
 
-            GtkWidget *item = gtk_menu_item_new ();
-            gtk_container_add (GTK_CONTAINER (item), l);
+                GtkWidget *item = gtk_menu_item_new ();
+                gtk_container_add (GTK_CONTAINER (item), l);
 
-            gtk_signal_connect ( GTK_OBJECT (item), "activate", 
-                                 GTK_SIGNAL_FUNC (clonetiler_symgroup_changed),
-                                 GINT_TO_POINTER (sg.group) );
+                gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+                                     GTK_SIGNAL_FUNC (clonetiler_symgroup_changed),
+                                     GINT_TO_POINTER (sg.group) );
 
-            gtk_menu_append (GTK_MENU (m), item);
+                gtk_menu_append (GTK_MENU (m), item);
+            }
+
+            gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+            gtk_option_menu_set_history ( GTK_OPTION_MENU (om), current);
         }
 
-        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
-        gtk_option_menu_set_history ( GTK_OPTION_MENU (om), current);
-        }
-
-
-    {
-        GtkWidget *table = gtk_table_new (1, 2, FALSE);
-    gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, VB_SKIP);
-
-    {
-        GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
-
-    {
-        GtkWidget *l = gtk_label_new (_("Rows:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
-    }
-
-    {
-        GtkObject *a = gtk_adjustment_new(0.0, 1, 500, 1, 10, 10);
-        int value = prefs_get_int_attribute ("dialogs.clonetiler", "ymax", 2);
-        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
-        GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many rows in the tiling"), NULL);
-        gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-        gtk_widget_set_usize (sb, SB_WIDTH, -1);
-        gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
-
-        gtk_signal_connect(GTK_OBJECT(a), "value_changed",
-                           GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "ymax");
-    }
-
-    gtk_table_attach (GTK_TABLE (table), hb, 1, 2, 1, 2, 
-		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-    }
-
-    {
-        GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
-
-    {
-        GtkWidget *l = gtk_label_new (_("Columns:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
-    }
-
-    {
-        GtkObject *a = gtk_adjustment_new(0.0, 1, 500, 1, 10, 10);
-        int value = prefs_get_int_attribute ("dialogs.clonetiler", "xmax", 2);
-        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
-        GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many columns in the tiling"), NULL);
-        gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-        gtk_widget_set_usize (sb, SB_WIDTH, -1);
-        gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
-
-        gtk_signal_connect(GTK_OBJECT(a), "value_changed",
-                           GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "xmax");
-    }
-
-    gtk_table_attach (GTK_TABLE (table), hb, 2, 3, 1, 2, 
-		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-    }
-    }
-
-    {
-        GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
-        gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
-
-        GtkWidget *b  = gtk_check_button_new ();
-        gint keepbbox = prefs_get_int_attribute ("dialogs.clonetiler", "keepbbox", 1);
-        gtk_toggle_button_set_active ((GtkToggleButton *) b, keepbbox != 0);
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Use the tile bounding box of the previous tiling (if any), instead of the actual bounding box of selection"), NULL);
-        gtk_widget_set_usize (b, SB_WIDTH, -1);
-        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
-
-        gtk_signal_connect(GTK_OBJECT(b), "toggled",
-                           GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
-
-    {
-        GtkWidget *l = gtk_label_new (_("Keep previous bbox"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_widget_show (l);
-        gtk_box_pack_end (GTK_BOX (hb), l, TRUE, TRUE, SB_MARGIN);
-    }
-
-    }
-
-    {
-        GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
-        gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
         {
-        GtkWidget *b = gtk_button_new_with_label (_("Create"));
-        gtk_tooltips_set_tip (tt, b, _("Create and tile the clones of the selection"), NULL);
-        gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
-        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+            GtkWidget *table = gtk_table_new (1, 2, FALSE);
+            gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, VB_SKIP);
+
+            {
+                GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+
+                {
+                    GtkWidget *l = gtk_label_new (_("Rows:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+                }
+
+                {
+                    GtkObject *a = gtk_adjustment_new(0.0, 1, 500, 1, 10, 10);
+                    int value = prefs_get_int_attribute ("dialogs.clonetiler", "ymax", 2);
+                    gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
+                    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
+                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many rows in the tiling"), NULL);
+                    gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
+                    gtk_widget_set_usize (sb, SB_WIDTH, -1);
+                    gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
+
+                    gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                                       GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "ymax");
+                }
+
+                gtk_table_attach (GTK_TABLE (table), hb, 1, 2, 1, 2, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+
+                {
+                    GtkWidget *l = gtk_label_new (_("Columns:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+                }
+
+                {
+                    GtkObject *a = gtk_adjustment_new(0.0, 1, 500, 1, 10, 10);
+                    int value = prefs_get_int_attribute ("dialogs.clonetiler", "xmax", 2);
+                    gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
+                    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
+                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many columns in the tiling"), NULL);
+                    gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
+                    gtk_widget_set_usize (sb, SB_WIDTH, -1);
+                    gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
+
+                    gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                                       GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "xmax");
+                }
+
+                gtk_table_attach (GTK_TABLE (table), hb, 2, 3, 1, 2, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
         }
 
         {
-        GtkWidget *b = gtk_button_new_with_label (_("Remove"));
-        gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
-        gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
-        gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+            GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+            gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
+
+            GtkWidget *b  = gtk_check_button_new ();
+            gint keepbbox = prefs_get_int_attribute ("dialogs.clonetiler", "keepbbox", 1);
+            gtk_toggle_button_set_active ((GtkToggleButton *) b, keepbbox != 0);
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Use the tile bounding box of the previous tiling (if any), instead of the actual bounding box of selection"), NULL);
+            gtk_widget_set_usize (b, SB_WIDTH, -1);
+            gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
+
+            gtk_signal_connect(GTK_OBJECT(b), "toggled",
+                               GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
+
+            {
+                GtkWidget *l = gtk_label_new (_("Keep previous bbox"));
+                gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                gtk_widget_show (l);
+                gtk_box_pack_end (GTK_BOX (hb), l, TRUE, TRUE, SB_MARGIN);
+            }
+
         }
-    }
+
+        {
+            GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+            gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
+
+            {
+                GtkWidget *b = gtk_button_new_with_label (_("Create"));
+                gtk_tooltips_set_tip (tt, b, _("Create and tile the clones of the selection"), NULL);
+                gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
+                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+            }
+
+            {
+                GtkWidget *b = gtk_button_new_with_label (_("Remove"));
+                gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
+                gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
+                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+            }
+        }
 
         gtk_widget_show_all (mainbox);
 
