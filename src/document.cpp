@@ -689,7 +689,13 @@ sp_document_idle_handler (gpointer data)
 		ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
 		ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
 		nr_matrix_set_identity (&ctx.i2vp);
+
+		gboolean saved = sp_document_get_undo_sensitive(doc);
+		sp_document_set_undo_sensitive (doc, FALSE);
+
 		doc->root->updateDisplay((SPCtx *)&ctx, 0);
+
+		sp_document_set_undo_sensitive (doc, saved);
 		/* if (doc->root->uflags & SP_OBJECT_MODIFIED_FLAG) return TRUE; */
 	}
 

@@ -1,3 +1,8 @@
+2004-11-13  Kees Cook  <kees@outflux.net>
+
+	* src/document.cpp: wrapped updateDisplay call in undo insensitivity.
+	  Closes bug #1030436.
+
 2004-11-12  MenTaLguY  <mental@rydia.net>
 
 	* src/main.cpp: fpresetsticky -> fpsetsticky
