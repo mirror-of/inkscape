@@ -1,3 +1,9 @@
+Please note that the behavior documented here (from Sodipodi) should be considered a bug.
+
+Inkscape should switch to the native SVG coordinate system.
+
+-mental
+
 Coordinate systems used by sodipodi
 
 1. Desktop coordinates
