@@ -256,8 +256,8 @@ sp_guide_position_from_pt (SPGuide const *guide, NR::Point const &pt)
 	return dot(guide->normal, pt);
 }
 
-void
-sp_guide_moveto (SPGuide const *guide, gdouble position)
+/** Temporary moveto in response to motion event while dragging (desktop-events.cpp). */
+void sp_guide_moveto(SPGuide const *guide, gdouble position)
 {
 	g_assert (guide != NULL);
 	g_assert (SP_IS_GUIDE (guide));
@@ -268,8 +268,9 @@ sp_guide_moveto (SPGuide const *guide, gdouble position)
 	}
 }
 
-void
-sp_guide_position_set (SPGuide *guide, double position)
+/** Permanent (committing) version of sp_guide_moveto, in response to button release event after
+    dragging a guideline, or clicking OK in guide editing dialog (both in desktop-events.cpp). */
+void sp_guide_position_set(SPGuide *guide, double position)
 {
 	g_assert (SP_IS_GUIDE (guide));
 
