@@ -32,6 +32,7 @@
 #include "seltrans.h"
 #include "sp-metrics.h"
 #include "helper/sp-ctrlline.h"
+#include "prefs-utils.h"
 
 static void sp_sel_trans_update_handles (SPSelTrans * seltrans);
 static void sp_sel_trans_update_volatile_state (SPSelTrans * seltrans);
@@ -992,6 +993,8 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	double dx1, dx2, dy1, dy2, angle;
 	SPDesktop * desktop;
 
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 	desktop = seltrans->desktop;
 
 	sp_sel_trans_point_desktop (seltrans, &point);
@@ -1019,7 +1022,7 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 		sint = q1.x * q2.y - q1.y * q2.x;                               
 		cost = CLAMP (cost, -1.0, 1.0);                                 
 		theta = acos (cost);                                            
-		theta = (M_PI / 12.0) * floor (12.0 * theta / M_PI + M_PI / 24.0);
+		theta = (M_PI / snaps) * floor (snaps * theta / M_PI + M_PI / (2 * snaps));
 		if (sint < 0.0) theta = -theta;                                 
 		q1.x = 1.0;                                                     
 		q1.y = 0.0;                                                     

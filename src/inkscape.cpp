@@ -54,6 +54,7 @@
 #include "event-context.h"
 #include "inkscape.h"
 #include "inkscape-private.h"
+#include "prefs-utils.h"
 
 #ifdef WIN32
 #define mkdir(d,m) _mkdir((d))
@@ -944,9 +945,6 @@ inkscape_add_document (SPDocument *document)
 	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[NEW_DOCUMENT], 0, document);
 }
 
-//TODO: make settable in preferences
-#define MAX_RECENT_DOCUMENTS 15
-
 void
 inkscape_remove_document (SPDocument *document)
 {
@@ -961,6 +959,8 @@ inkscape_remove_document (SPDocument *document)
 
 	inkscape->documents = g_slist_remove (inkscape->documents, document);
 
+	int max_documents = prefs_get_int_attribute ("options.maxrecentdocuments", "value", 20);
+
 	if (document->advertize && SP_DOCUMENT_URI (document)) {
 		SPRepr *recent;
 		recent = inkscape_get_repr (INKSCAPE, "documents.recent");
@@ -970,10 +970,10 @@ inkscape_remove_document (SPDocument *document)
 			if (child) {
 				sp_repr_change_order (recent, child, NULL);
 			} else {
-				if (sp_repr_n_children (recent) >= MAX_RECENT_DOCUMENTS) {
+				if (sp_repr_n_children (recent) >= max_documents) {
 					child = recent->children;
 					// count to the last
-					for (i = 0; i < MAX_RECENT_DOCUMENTS - 2; i ++) child = child->next;
+					for (i = 0; i < max_documents - 2; i ++) child = child->next;
 					// remove all after the last
 					while (child->next) sp_repr_unparent (child->next);
 				}

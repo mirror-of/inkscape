@@ -366,11 +366,8 @@ spdc_detach_selection (SPDrawContext *dc, SPSelection *sel)
 	dc->ea = NULL;
 }
 
-// FIXME: to preferences!
-#define NUMBER_OF_TURNS 12
-
 /**
-\brief  Snaps node or handle to 15 degree increments
+\brief  Snaps node or handle to PI/rotationsnapsperpi degree increments
 \param dc  draw context
 \param p  cursor point (to be changed by snapping)
 \param o  origin point 
@@ -381,18 +378,21 @@ spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint st
 {
 	if (state & GDK_CONTROL_MASK) {
 		/* Constrained motion */
+
+		int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 		/* mirrored by fabs, so this corresponds to 15 degrees */
 		double bx = 0, by = 0; /* best solution */
 		double bn = 1e18; /* best normal */
 		double bdot = 0;
 		double vx = 0, vy = 1;
-		double const r00 = cos (M_PI / NUMBER_OF_TURNS), r01 = sin (M_PI / NUMBER_OF_TURNS);
+		double const r00 = cos (M_PI / snaps), r01 = sin (M_PI / snaps);
 		double const r10 = -r01, r11 = r00;
 
 		double const dx = p->x - o->x;
 		double const dy = p->y - o->y;
 
-		for(unsigned i = 0; i < NUMBER_OF_TURNS; i++) {
+		for(unsigned i = 0; i < snaps; i++) {
 			double const ndot = fabs(vy*dx - vx*dy);
 			double const tx = r00*vx + r01*vy;
 			double const ty = r10*vx + r11*vy;

@@ -34,6 +34,7 @@
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "object-edit.h"
+#include "prefs-utils.h"
 
 /* fixme: Implement these via preferences */
 
@@ -1966,39 +1967,6 @@ radial_to_xy (radial const *r, NRPoint const *origin, NRPoint *p)
 	}
 }
 
-/** Returns the closest of a,b,...,f to x.
-
-    In case of equidistance, chooses a in preference to b ... in
-    preference to f.
-
-    The current implementation aborts if any argument is NaN.
-*/
-static double
-closest_of_six (double x, double a, double b, double c, double d, double e, double f)
-{
-	/* Let's hope that the compiler does common subexpression elimination and knows that fabs is a pure function... */
-	double result;
-
-	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c) && fabs(x-a) <= fabs(x-d) && fabs(x-a) <= fabs(x-e) && fabs(x-a) <= fabs(x-f))
-		result = a;
-	else if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c) && fabs(x-b) <= fabs(x-d) && fabs(x-b) <= fabs(x-e) && fabs(x-b) <= fabs(x-f))
-		result = b;
-	else if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b) && fabs(x-c) <= fabs(x-d) && fabs(x-c) <= fabs(x-e) && fabs(x-c) <= fabs(x-f))
-		result = c;
-	else if (fabs(x-d) <= fabs(x-a) && fabs(x-d) <= fabs(x-b) && fabs(x-d) <= fabs(x-c) && fabs(x-d) <= fabs(x-e) && fabs(x-d) <= fabs(x-f))
-		result = d;
-	else if (fabs(x-e) <= fabs(x-a) && fabs(x-e) <= fabs(x-b) && fabs(x-e) <= fabs(x-c) && fabs(x-e) <= fabs(x-d) && fabs(x-e) <= fabs(x-f))
-		result = e;
-	else if (fabs(x-f) <= fabs(x-a) && fabs(x-f) <= fabs(x-b) && fabs(x-f) <= fabs(x-c) && fabs(x-f) <= fabs(x-d) && fabs(x-f) <= fabs(x-e))
-		result = f;
-	else {
-		g_assert_not_reached ();
-		result = a;
-	}
-
-	return result;
-}
-
 static double
 angle_normalize (double a)
 {
@@ -2265,39 +2233,20 @@ node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 	xy_to_radial (p->x - n->pos.x, p->y - n->pos.y, &rnew);
 
 	if (state & GDK_CONTROL_MASK && rnew.a != HUGE_VAL) { 
-		/* FIXME: This code is inefficient, and probably buggy if rnew.a is near (or outside of) +/-M_PI.
-		   Suggested untested replacement:
-		   double origin_diff = rnew.a - me->origin.a;
-		   double rounded_origin_diff = ceil( origin_diff / (M_PI/2) - .5 ) * (M_PI/2);
-		   double origin_snapped = me->origin.a + rounded_origin_diff;
-		   double rounded_rnewa = floor( rnew.a / (M_PI/12) + .5 ) * (M_PI/12);
-		   if(fabs(rnew.a - rounded_rnewa) < fabs(rnew.a - origin_snapped)) {
-			rnew.a = rounded_rnewa;
-		   } else {
-			rnew.a = origin_snapped;
-		   }
-		   rnew.a = angle_normalize (rnew.a);
+		double a_snapped, a_ortho;
 
-		   Caveats before using this suggested replacement:
-		   - Ties are broken in a slightly different order for origin_snapped.
-		   - The differences in behaviour (bug-looking things) may be intentional
-		     for all I know, I haven't looked at the surrounding code.
-		*/
-		// restrict to 15 degree steps
-		double opposite, plus90, minus90;
-		double r_down, r_up;
+		int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-		// the two closest 15 degree steps
-		r_down = floor(rnew.a/(M_PI/12))*M_PI/12;
-		r_up = r_down + M_PI/12;
+		// the closest PI/snaps angle, starting from zero
+		a_snapped = floor (rnew.a/(M_PI/snaps) + 0.5) * (M_PI/snaps);
+		// the closest PI/2 angle, starting from original angle (i.e. snapping to original, its opposite and perpendiculars)
+		a_ortho = me->origin.a + floor ((rnew.a - me->origin.a)/(M_PI/2) + 0.5) * (M_PI/2);
 
-		// the 90 degree steps starting from origin angle
-		opposite = angle_normalize (me->origin.a + M_PI); 
-		plus90 = angle_normalize (me->origin.a + M_PI/2); 
-		minus90 = angle_normalize (me->origin.a - M_PI/2); 
-
-		// snap to closest
-		rnew.a = closest_of_six (rnew.a, me->origin.a, opposite, plus90, minus90, r_down, r_up); 
+		// snap to the closest
+		if (fabs (a_snapped - rnew.a) < fabs (a_ortho - rnew.a))
+			rnew.a = a_snapped;
+		else 
+			rnew.a = a_ortho;
 	} 
 
 	if (state & GDK_MOD1_MASK) { 
