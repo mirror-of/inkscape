@@ -271,6 +271,22 @@ sub make_dep {
 # Builds the object files.
 #
 
+sub uniq (@) {
+    if ($#_ <= 0) {
+	return @_;
+    }
+    my $prev = shift(@_);
+    my @ret = ($prev);
+    while(@_) {
+	my $curr = shift(@_);
+	if ($curr ne $prev) {
+	    push @ret, $curr;
+	    $prev = $curr;
+	}
+    }
+    return @ret;
+}
+
 sub BuildObj {
     my($obj,$src) = @_;
     my(@objv,$srcv,$i,$s,$o,$d,$c,$comp,$cimp);
@@ -327,7 +343,7 @@ sub BuildObj {
                 push @incpath, $full_path{$_};
             }
         }
-        @incpath = sort @incpath;
+        @incpath = uniq sort @incpath;
         for ( @incpath ) {
             $text .= " ${linebreak}\n\t" . $_;
         }
