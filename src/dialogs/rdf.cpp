@@ -836,7 +836,6 @@ struct rdf_entity_default_t {
     gchar const * text;
 };
 struct rdf_entity_default_t rdf_defaults[] = {
-    { "description", "Created with Inkscape\nhttp://www.inkscape.org/", },
     { "format",      "image/svg+xml", },
     { "type",        "http://purl.org/dc/dcmitype/StillImage", },
     { NULL,          NULL, }

@@ -1,5 +1,7 @@
 2004-07-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/rdf.cpp: Don't add dc:description entry to SVG files.
+
 	* src/utest/utest.h: Add include guard.
 
 2004-07-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
@@ -24,15 +26,15 @@
 	  small section that validates preferences for valid extension names.
 	* src/dialogs/filedialog-win32.cpp: corrected an assert test, and
 	  changed dialog to take the passed window title.
-	* autogen.sh, config.h.mingw, configure.in, src/Makefile_insert, 
-      src/help.cpp, src/inkscape-stock.cpp, src/inkscape.cpp, src/main.cpp, 
-	  src/make.dep, src/make.files, src/path-prefix.h, src/prefix.cpp, 
-	  src/prefix.h, src/dialogs/stroke-style.cpp, 
-	  src/extension/Makefile_insert, src/extension/init.cpp, 
-	  src/extension/implementation/Makefile_insert, 
-	  src/extension/implementation/script.cpp, 
-	  src/extension/internal/Makefile_insert, src/helper/stock-items.cpp, 
-      src/widgets/icon.cpp:
+	* autogen.sh, config.h.mingw, configure.in, src/Makefile_insert,
+	  src/help.cpp, src/inkscape-stock.cpp, src/inkscape.cpp, src/main.cpp,
+	  src/make.dep, src/make.files, src/path-prefix.h, src/prefix.cpp,
+	  src/prefix.h, src/dialogs/stroke-style.cpp,
+	  src/extension/Makefile_insert, src/extension/init.cpp,
+	  src/extension/implementation/Makefile_insert,
+	  src/extension/implementation/script.cpp,
+	  src/extension/internal/Makefile_insert, src/helper/stock-items.cpp,
+	  src/widgets/icon.cpp:
 	Cleaned up all the path #define's and usage.  In the process found at
 	least 3 separate bugs associated with file locations.  This should
 	hopefully work for Win32 as well.  Bottom line in this change: don't use
@@ -295,13 +297,13 @@
 
 2004-07-02  Carl Hetherington  <inkscape@carlh.net>
 
-	* src/desktop-snap.cpp, src/desktop-snap.h, src/snap.cpp,
-	src/snap.h, src/Makefile_insert src/arc-context.cpp src/draw-context.cpp
-        src/dyna-draw-context.cpp src/make.dep src/make.files src/make.ofiles
-        src/makefile.msc src/nodepath.cpp src/rect-context.cpp src/select-context.cpp
-        src/selection-chemistry.cpp src/seltrans.cpp src/sp-namedview.h
-        src/spiral-context.cpp src/star-context.cpp: renamed
-	desktop-snap.* to snap.* since it has nothing to do with the
+	* src/desktop-snap.cpp, src/desktop-snap.h, src/snap.cpp, src/snap.h,
+	src/Makefile_insert src/arc-context.cpp src/draw-context.cpp
+	src/dyna-draw-context.cpp src/make.dep src/make.files src/make.ofiles
+	src/makefile.msc src/nodepath.cpp src/rect-context.cpp
+	src/select-context.cpp src/selection-chemistry.cpp src/seltrans.cpp
+	src/sp-namedview.h src/spiral-context.cpp src/star-context.cpp:
+	renamed desktop-snap.* to snap.* since it has nothing to do with the
 	desktop any more.
 
 	* src/draw-context.cpp: Temporary hack to prevent snapping
@@ -403,12 +405,12 @@
 2004-06-25  MenTaLguY  <mental@rydia.net>
 
 	* src/display/sp-canvas.cpp: enabled win32 current item workaround on
-  	  all platforms
+	  all platforms
 
 2004-06-25  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/rdf.h, src/dialogs/rdf.cpp, src/dialogs/Makefile_insert,
-      src/dialogs/desktop-properties.cpp:
+	  src/dialogs/desktop-properties.cpp:
 
 	  Added data entry widgets for document metadata, including a rough
 	  license selector, and debug rdf generator.  Corrected whitespace,
@@ -2441,7 +2443,7 @@
 	  datadir path) without forcing a recompile, which could break the
 	  compiled paths.
 
-2004-04-13  John Cliff	<simarilius@yahoo.com>
+2004-04-13  John Cliff <simarilius@yahoo.com>
 	* src/sp-shape.cpp, src/dialogs/stroke-style.cpp:
 	Couple of changes to marker related code, mid and end markers now point in correct 
 	direction, turning off start markers behaves correctly.
