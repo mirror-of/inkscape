@@ -17,6 +17,7 @@ private:
 public:
     explicit rotate(Coord theta);
     explicit rotate(Point const &p) : vec(p) {}
+    explicit rotate(Coord const x, Coord const y) : vec(x, y) {}
 
     bool operator==(rotate const &o) const {
         return vec == o.vec;
@@ -25,6 +26,9 @@ public:
     bool operator!=(rotate const &o) const {
         return vec != o.vec;
     }
+
+    inline rotate &operator*=(rotate const &b);
+    /* Defined in nr-rotate-ops.h. */
 
     rotate inverse() const {
         /* TODO: In the usual case that vec is a unit vector (within rounding error),
