@@ -111,8 +111,10 @@ sp_item_init (SPItem *item)
 
 	item->display = NULL;
 
-	item->clip_ref = NULL;
-	item->mask_ref = NULL;
+	item->clip_ref = new Inkscape::URIReference();
+	item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
+	item->mask_ref = new Inkscape::URIReference();
+	item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
 
 	if (!object->style) object->style = sp_style_new_from_object (SP_OBJECT (item));
 }
@@ -139,11 +141,13 @@ sp_item_release (SPObject * object)
 	item = (SPItem *) object;
 
 	if (item->clip_ref) {
+		item->clip_ref->detach();
 		delete item->clip_ref;
 		item->clip_ref = NULL;
 	}
 
 	if (item->mask_ref) {
+		item->mask_ref->detach();
 		delete item->mask_ref;
 		item->mask_ref = NULL;
 	}
@@ -177,51 +181,31 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	}
 	case SP_PROP_CLIP_PATH: {
-		if (item->clip_ref) {
-			delete item->clip_ref;
-			item->clip_ref = NULL;
-		}
-
-		gchar *uri=( value ? Inkscape::parse_css_url(value) : NULL );
-		SPObject *cp=NULL;
-
+		gchar *uri=Inkscape::parse_css_url(value);
 		if (uri) {
 			try {
-				item->clip_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), Inkscape::URI(uri));
-				item->clip_ref->changedSignal().connect(SigC::bind(SigC::slot(clip_ref_changed), item));
-				cp = item->clip_ref->getObject();
+				item->clip_ref->attach(SP_OBJECT_DOCUMENT(object), Inkscape::URI(uri));
 			} catch (Inkscape::BadURIException &e) {
 				g_warning("%s", e.what());
-				item->clip_ref = NULL;
+				item->clip_ref->detach();
 			}
 			g_free(uri);
 		}
 
-		clip_ref_changed(NULL, cp, item);
 		break;
 	}
 	case SP_PROP_MASK: {
-		if (item->mask_ref) {
-			delete item->mask_ref;
-			item->mask_ref = NULL;
-		}
-
-		gchar *uri=( value ? Inkscape::parse_css_url(value) : NULL );
-		SPObject *m=NULL;
-
+		gchar *uri=Inkscape::parse_css_url(value);
 		if (uri) {
 			try {
-				item->mask_ref = new Inkscape::URIReference(SP_OBJECT_DOCUMENT(object), Inkscape::URI(uri));
-				item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
-				m = item->mask_ref->getObject();
+				item->mask_ref->attach(SP_OBJECT_DOCUMENT(object), Inkscape::URI(uri));
 			} catch (Inkscape::BadURIException &e) {
 				g_warning("%s", e.what());
-				item->mask_ref = NULL;
+				item->mask_ref->detach();
 			}
 			g_free(uri);
 		}
 
-		mask_ref_changed(NULL, m, item);
 		break;
 	}
 	case SP_ATTR_SODIPODI_INSENSITIVE:

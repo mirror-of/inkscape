@@ -28,25 +28,18 @@ namespace Inkscape {
  *
  * The URIReference increments and decrements the SPObject's hrefcount
  * automatically.
+ *
+ * @see SPObject
+ * @see sp_object_href
+ * @see sp_object_hunref
  */
 class URIReference : public SigC::Object {
 public:
 	/**
-	 * Constructs a reference object given an SPDocument *
-	 * and a uri.
+	 * Constructor.
 	 *
-	 * Throws a BadURIException if the URI is unsupported,
-	 * or the fragment identifier is xpointer and malformed.
-	 *
-	 * @param rel_document document for relative URIs
-	 * @param uri the URI to watch
-	 *
-	 * @see SPObject
-	 * @see sp_object_href
-	 * @see sp_object_hunref
 	 */
-	URIReference(SPDocument *rel_document, const URI &uri)
-	  throw(BadURIException);
+	URIReference();
 
 	/**
 	 * Destructor.  Calls shutdown() if the reference has not been
@@ -55,25 +48,42 @@ public:
 	virtual ~URIReference();
 
 	/**
-	 * Shuts down the reference, reporting the current object
-	 * as NULL.  No further changes will be reported.
+	 * Attaches to a URI, relative to the specified document.
+	 *
+	 * Throws a BadURIException if the URI is unsupported,
+	 * or the fragment identifier is xpointer and malformed.
+	 *
+	 * @param rel_document document for relative URIs
+	 * @param uri the URI to watch
 	 */
-	void shutdown();
+	void attach(SPDocument *document, const URI &uri)
+	  throw(BadURIException);
 
 	/**
-	 * Accessor for the reference's change notification signal.
-	 * The signal has two parameters: the formerly referenced
-	 * SPObject and the newly refrenced SPObject.
-	 * @returns a signal
+	 * Detaches from the currently attached URI target, if any;
+	 * the current referrent is signaled as NULL.
 	 */
-	SigC::Signal2<void, SPObject *, SPObject *> changedSignal();
+	void detach();
 
 	/**
-	 * Returns a pointer to the SPObject the reference currently
-	 * refers to (if any).
+	 * Returns a pointer to the current referrent of the attached
+	 * URI, or NULL.
+	 *
 	 * @return a pointer to the referenced SPObject or NULL
 	 */
 	SPObject *getObject();
+
+	/**
+	 * Accessor for the referrent change notification signal;
+	 * this signal is emitted whenever the URIReference's
+	 * referrent changes.
+	 *
+	 * Signal handlers take two parameters: the old and new
+	 * referrents.
+	 *
+	 * @returns a signal
+	 */
+	SigC::Signal2<void, SPObject *, SPObject *> changedSignal();
 
 private:
 	SigC::Connection _connection;
@@ -83,6 +93,7 @@ private:
 
 	void _setObject(SPObject *object);
 	static void _release(SPObject *object, URIReference *reference);
+	void operator=(const URIReference &ref) {}
 };
 
 inline SigC::Signal2<void, SPObject *, SPObject *> URIReference::changedSignal(){

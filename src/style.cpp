@@ -44,6 +44,8 @@ gchar *parse_css_url(const gchar *string) {
 	gchar end_char;
 	GString *temp;
 
+	if (!string) return NULL;
+
 	iter = string;
 
 	for ( ; g_ascii_isspace(*iter) ; iter = g_utf8_next_char(iter) );

@@ -23,9 +23,14 @@ static gchar *uri_to_id(SPDocument *document, const gchar *uri);
 
 namespace Inkscape {
 
-URIReference::URIReference(SPDocument *rel_document, const URI &uri)
+URIReference::URIReference() : _obj(NULL) {}
+
+URIReference::~URIReference() {
+	detach();
+}
+
+void URIReference::attach(SPDocument *rel_document, const URI &uri)
   throw(BadURIException)
-: _obj(NULL)
 {
 	const gchar *fragment;
 	gchar *id;
@@ -57,18 +62,14 @@ URIReference::URIReference(SPDocument *rel_document, const URI &uri)
 
 	/* FIXME !!! validate id somewhere */
 
+	_connection.disconnect(); /* is this needed? */
 	_setObject(sp_document_lookup_id(rel_document, id));
-
 	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_setObject));
 
 	g_free(id);
 }
 
-URIReference::~URIReference() {
-	shutdown();
-}
-
-void URIReference::shutdown() {
+void URIReference::detach() {
 	_connection.disconnect();
 	_setObject(NULL);
 }
