@@ -520,6 +520,7 @@ static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inks
     optional_attrs_base.rotate = NULL;
 
     div_flow_src const *div_src = NULL;
+    bool use_xy = false;
     if (SP_IS_TEXT(root)) {
         AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, &SP_TEXT(root)->x, 1);
         AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, &SP_TEXT(root)->y, 1);
@@ -530,18 +531,24 @@ static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inks
     else if (SP_IS_TSPAN(root)) {
         SPTSpan *tspan = SP_TSPAN(root);
         div_src = &tspan->contents;
-        if (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED && div_src->nb_x <= 1 && div_src->nb_y <= 1 && div_src->nb_dx == 0 && div_src->nb_dy == 0 && div_src->nb_rot == 0)
-            div_src = NULL;
+        if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || div_src->nb_x > 1 || div_src->nb_y > 1)
+            use_xy = true;
     }
     else if (SP_IS_TEXTPATH(root)) div_src = &SP_TEXTPATH(root)->contents;
 
     if (div_src) {
-        AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, div_src->x_s, div_src->nb_x);
-        AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, div_src->y_s, div_src->nb_y);
+        if (use_xy) {
+            AccumulateAttributeLists(&optional_attrs_base.x, parent_optional_attrs.x, div_src->x_s, div_src->nb_x);
+            AccumulateAttributeLists(&optional_attrs_base.y, parent_optional_attrs.y, div_src->y_s, div_src->nb_y);
+        }
         AccumulateAttributeLists(&optional_attrs_base.dx, parent_optional_attrs.dx, div_src->dx_s, div_src->nb_dx);
         AccumulateAttributeLists(&optional_attrs_base.dy, parent_optional_attrs.dy, div_src->dy_s, div_src->nb_dy);
         AccumulateAttributeLists(&optional_attrs_base.rotate, parent_optional_attrs.rotate, div_src->rot_s, div_src->nb_rot);
         optional_attrs = optional_attrs_base;
+        if (!use_xy) {
+            optional_attrs.x = parent_optional_attrs.x;
+            optional_attrs.y = parent_optional_attrs.y;
+        }
     } else if (!SP_IS_TEXT(root)) {
         optional_attrs = parent_optional_attrs;
     }
@@ -596,8 +603,8 @@ sp_text_set_shape (SPText *text)
     text->layout.clear();
     BuildLayoutInput(text, &text->layout, optional_attrs);
     text->layout.calculateFlow();
-    for (SPObject *child = sp_object_first_child(text) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        if (SP_IS_TEXTPATH (child) && SP_TEXTPATH(child)->originalPath != NULL) {
+    for (SPObject *child = text->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if (SP_IS_TEXTPATH(child) && SP_TEXTPATH(child)->originalPath != NULL) {
             SPSVGLength offset;
             offset = 0.0;
             //g_print(text->layout.dumpAsText().c_str());
@@ -605,7 +612,21 @@ sp_text_set_shape (SPText *text)
         }
     }
     //g_print(text->layout.dumpAsText().c_str());
-    // todo: set the x,y attributes on role:line spans
+
+    // set the x,y attributes on role:line spans
+    for (SPObject *child = text->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if (!SP_IS_TSPAN(child)) continue;
+        SPTSpan *tspan = SP_TSPAN(child);
+        if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED) continue;
+        if (tspan->contents.nb_x > 1 || tspan->contents.nb_y > 1) continue;
+        Inkscape::Text::Layout::iterator iter = text->layout.sourceToIterator(tspan);
+        if (iter == text->layout.end()) continue;
+        if (iter.nextCharacter()) {   // line breaks live at the end of their preceding line
+            NR::Point anchor_point = text->layout.characterAnchorPoint(iter);
+            sp_repr_set_double(SP_OBJECT_REPR(tspan), "x", anchor_point[NR::X]);
+            sp_repr_set_double(SP_OBJECT_REPR(tspan), "y", anchor_point[NR::Y]);
+        }
+    }
 
     NRRect paintbox;
     sp_item_invoke_bbox(SP_ITEM(text), &paintbox, NR::identity(), TRUE);

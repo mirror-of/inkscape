@@ -229,10 +229,6 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
 Layout::iterator Layout::getLetterAt(double x, double y) const
 {
     NR::Point point(x, y);
-    if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
-        point[0] = y;
-        point[1] = x;
-    }
 
     double rotation;
     for (iterator it = begin() ; it != end() ; it.nextCharacter()) {
@@ -243,32 +239,36 @@ Layout::iterator Layout::getLetterAt(double x, double y) const
     return end();
 }
 
-Layout::iterator Layout::sourceToGlyph(void *source_cookie, Glib::ustring::const_iterator text_iterator) const
+Layout::iterator Layout::sourceToIterator(void *source_cookie, Glib::ustring::const_iterator text_iterator) const
 {
     unsigned source_index;
     for (source_index = 0 ; source_index < _input_stream.size() ; source_index++)
         if (_input_stream[source_index]->source_cookie == source_cookie) break;
     if (source_index == _input_stream.size()) return end();
 
-    if (_input_stream[source_index]->Type() != TEXT_SOURCE) {
-        // this will have no associated glyphs, so we'll just return the glyph after
-        for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
-            if (_spans[span_index].in_input_stream_item > source_index)
-                return iterator(this, _spanToCharacter(span_index));
-        }
-        return end();
-    }
+    unsigned char_index = _sourceToCharacter(source_index);
+    
+    if (_input_stream[source_index]->Type() != TEXT_SOURCE)
+        return iterator(this, char_index);
 
     InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[source_index]);
-    if (text_iterator <= text_source->text_begin) return iterator(this, _sourceToCharacter(source_index));
-    if (text_iterator >= text_source->text_end) return iterator(this, _sourceToCharacter(source_index + 1));
+    if (text_iterator <= text_source->text_begin) return iterator(this, char_index);
+    if (text_iterator >= text_source->text_end) {
+        if (source_index == _input_stream.size() - 1) return end();
+        return iterator(this, _sourceToCharacter(source_index + 1));
+    }
     Glib::ustring::const_iterator iter_text = text_source->text_begin;
-    for (unsigned char_index = _sourceToCharacter(source_index) ; char_index < _characters.size() ; char_index++) {
+    for ( ; char_index < _characters.size() ; char_index++) {
         if (iter_text == text_iterator)
             return iterator(this, char_index);
         iter_text++;
     }
     return end(); // never happens
+}
+
+Layout::iterator Layout::sourceToIterator(void *source_cookie) const
+{
+    return sourceToIterator(source_cookie, Glib::ustring::const_iterator(std::string::const_iterator(NULL)));
 }
 
 NR::Rect Layout::glyphBoundingBox(iterator const &it, double *rotation) const
