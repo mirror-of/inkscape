@@ -220,6 +220,27 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 	}
 }
 
+/**
+\brief  a wrapper around gdk_keyval_name producing (when possible) characters, not names
+ */
+gchar *
+sp_key_name (guint keyval)
+{
+	gchar *n;
+	n = gdk_keyval_name (keyval);
+	if (!strcmp (n, "asciicircum")) return "^";
+	else if (!strcmp (n, "parenleft")) return "(";
+	else if (!strcmp (n, "parenright")) return ")";
+	else if (!strcmp (n, "plus")) return "+";
+	else if (!strcmp (n, "minus")) return "-";
+	else if (!strcmp (n, "asterisk")) return "*";
+	else if (!strcmp (n, "KP_Multiply")) return "*";
+	else if (!strcmp (n, "Delete")) return "Del";
+	else if (!strcmp (n, "Page_Up")) return "PgUp";
+	else if (!strcmp (n, "Page_Down")) return "PgDn";
+	else return n;
+}
+
 void
 sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 {
@@ -227,7 +248,7 @@ sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 	as = (shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
 	cs = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
 	ss = (shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
-	g_snprintf (c, 256, "%s%s%s%s", as, cs, ss, gdk_keyval_name (shortcut & 0xffffff));
+	g_snprintf (c, 256, "%s%s%s%s", as, cs, ss, sp_key_name (shortcut & 0xffffff));
 }
 
 void
