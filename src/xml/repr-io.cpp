@@ -189,32 +189,28 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 	gchar c[256];
 
 #ifdef SP_REPR_IO_VERBOSE
-	g_print ("Node %d %s contains %s\n", node->type, node->name, node->content);
+	g_print ("Node type %d, name %s, contains |%s|\n", node->type, node->name, node->content);
 #endif
 
-	if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE)
-	{
+	if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE) {
+
+		if (node->content == NULL || *(node->content) == '\0')
+			return NULL; // empty text node
+
+		bool preserve = (xmlNodeGetSpacePreserve (node) == 1);
+
 		xmlChar *p;
-		gboolean preserve;
+		for (p = node->content; *p && g_ascii_isspace (*p) && !preserve; p++)
+			; // skip all whitespace
 
-		preserve = (xmlNodeGetSpacePreserve (node) == 1);
-
-		for (p = node->content; p && *p; p++) {
-			if (!isspace (*p) || preserve) {
-				xmlChar *e;
-				gchar *s;
-				SPRepr *rdoc;
-				e = p + strlen ((gchar*)p) - 1;
-				while (*e && isspace (*e)) e -= 1;
-				s = g_new (gchar, e - p + 2);
-				memcpy (s, p, e - p + 1);
-				s[e - p + 1] = '\0';
-				rdoc = sp_xml_document_createTextNode (doc, s);
-				g_free (s);
-				return rdoc;
-			}
+		if (!(*p)) { // this is an all-whitespace node, and preserve == default
+			return NULL; // we do not preserve all-whitespace nodes unless we are asked to
 		}
-		return NULL;
+
+		gchar *s = g_strdup ((const gchar*) node->content); // otherwise, use the node verbatim
+		SPRepr *rdoc = sp_xml_document_createTextNode (doc, s);
+		g_free (s);
+		return rdoc;
 	}
 
 	if (node->type == XML_COMMENT_NODE) {
