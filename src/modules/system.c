@@ -417,6 +417,8 @@ while_end:
 SPModule *
 sp_module_system_build_from_file (const gchar * filename)
 {
+	/* TODO: Need to define namespace here, need to write the
+	         DTD in general for this stuff */
 	return build_from_reprdoc (sp_repr_read_file(filename, NULL));
 }
 
