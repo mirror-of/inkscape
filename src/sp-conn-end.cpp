@@ -178,6 +178,9 @@ SPConnEnd::setAttacherHref(gchar const *value)
             try {
                 ref.attach(Inkscape::URI(value));
             } catch (Inkscape::BadURIException &e) {
+                /* TODO: Proper error handling as per
+                 * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing.  (Also needed for
+                 * sp-use.) */
                 g_warning("%s", e.what());
                 ref.detach();
             }
