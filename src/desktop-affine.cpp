@@ -102,11 +102,9 @@ sp_desktop_doc2w_affine (SPDesktop * desktop, NRMatrix *doc2w)
 NRMatrix *
 sp_desktop_root2dt_affine (SPDesktop *dt, NRMatrix *root2dt)
 {
-	SPRoot *root;
+	SPRoot *root = SP_ROOT (SP_DOCUMENT_ROOT (SP_VIEW_DOCUMENT (dt)));
 
-	root = SP_ROOT (SP_DOCUMENT_ROOT (SP_VIEW_DOCUMENT (dt)));
-
-	nr_matrix_multiply (root2dt, &root->c2p, (NRMatrix *) dt->doc2dt);
+	nr_matrix_multiply (root2dt, root->c2p, (NRMatrix *) dt->doc2dt);
 
 	return root2dt;
 }

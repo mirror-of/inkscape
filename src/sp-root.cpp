@@ -124,7 +124,7 @@ sp_root_init (SPRoot *root)
 	/* nr_matrix_set_identity (&root->viewbox); */
 	root->viewBox_set = FALSE;
 
-	nr_matrix_set_identity (&root->c2p);
+	root->c2p.set_identity();
 
 	root->defs = NULL;
 }
@@ -491,7 +491,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 	rctx = *ictx;
 
 	/* Calculate child to parent transformation */
-	nr_matrix_set_identity (&root->c2p);
+	root->c2p.set_identity();
 
 	if (object->parent) {
 		/*
@@ -501,12 +501,11 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		 * fixme: height seems natural, as this makes the inner svg element
 		 * fixme: self-contained. The spec is vague here.
 		 */
-		nr_matrix_set_translate (&root->c2p, root->x.computed, root->y.computed);
+		root->c2p = NR::translate(NR::Point(root->x.computed, root->y.computed));
 	}
 
 	if (root->viewBox_set) {
 		double x, y, width, height;
-		NRMatrix q;
 		/* Determine actual viewbox in viewport coordinates */
 		if (root->aspect_align == SP_ASPECT_NONE) {
 			x = 0.0;
@@ -566,6 +565,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 			}
 		}
 		/* Compose additional transformation from scale and position */
+		NR::Matrix q;
 		q.c[0] = width / (root->viewBox.x1 - root->viewBox.x0);
 		q.c[1] = 0.0;
 		q.c[2] = 0.0;
@@ -573,10 +573,10 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		q.c[4] = -root->viewBox.x0 * q.c[0] + x;
 		q.c[5] = -root->viewBox.y0 * q.c[3] + y;
 		/* Append viewbox transformation */
-		nr_matrix_multiply (&root->c2p, &q, &root->c2p);
+		root->c2p = q * root->c2p;
 	}
 
-	nr_matrix_multiply (&rctx.i2doc, &root->c2p, &rctx.i2doc);
+	nr_matrix_multiply (&rctx.i2doc, root->c2p, &rctx.i2doc);
 
 	/* Initialize child viewport */
 	if (root->viewBox_set) {
@@ -605,9 +605,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	/* As last step set additional transform of arena group */
 	for (v = item->display; v != NULL; v = v->next) {
-		NRMatrix vbf;
-		nr_matrix_f_from_d (&vbf, &root->c2p);
-		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &vbf);
+		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), root->c2p);
 	}
 }
 
@@ -685,17 +683,14 @@ sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 static NRArenaItem *
 sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 {
-	SPRoot *root;
 	NRArenaItem *ai;
 
-	root = SP_ROOT (item);
+	SPRoot *root = SP_ROOT (item);
 
 	if (((SPItemClass *) (parent_class))->show) {
 		ai = ((SPItemClass *) (parent_class))->show (item, arena, key, flags);
 		if (ai) {
-			NRMatrix vbf;
-			nr_matrix_f_from_d (&vbf, &root->c2p);
-			nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &vbf);
+			nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), root->c2p);
 		}
 	} else {
 		ai = NULL;
@@ -707,15 +702,12 @@ sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags
 static void
 sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
-	SPRoot *root;
-	NRMatrix a;
-
-	root = SP_ROOT (item);
-
-	nr_matrix_multiply (&a, &root->c2p, transform);
+	SPRoot *root = SP_ROOT (item);
 
 	if (((SPItemClass *) (parent_class))->bbox) {
-		((SPItemClass *) (parent_class))->bbox (item, bbox, &a, flags);
+		((SPItemClass *) (parent_class))->bbox (item, bbox, 
+												root->c2p*NR::Matrix(transform),
+												flags);
 	}
 }
 
@@ -727,13 +719,9 @@ sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 static void
 sp_root_print (SPItem *item, SPPrintContext *ctx)
 {
-	SPRoot *root;
-	NRMatrix t;
+	SPRoot *root = SP_ROOT (item);
 
-	root = SP_ROOT (item);
-
-	nr_matrix_f_from_d (&t, &root->c2p);
-	sp_print_bind (ctx, &t, 1.0);
+	sp_print_bind (ctx, root->c2p, 1.0);
 
 	if (((SPItemClass *) (parent_class))->print) {
 		((SPItemClass *) (parent_class))->print (item, ctx);

@@ -46,9 +46,7 @@ namespace NR {
 
 class scale : public Point {
 public:
-	Point operator*(const Point v) const {
-		return Point((*this)[0]*v[0], (*this)[1]*v[1]);
-	}
+	scale(const Point &p) : Point(p) {}
 };
  
 class rotate : public Point {
@@ -57,10 +55,17 @@ public:
 	rotate(const Point &p) : Point(p) {}
 };
 
-class translate : public Point {};
+class translate : public Point {
+public:
+	translate(const Point &p) : Point(p) {}
+};
+
+inline Point operator*(const scale s, const Point v) {
+	return Point(s[X]*v[X], s[Y]*v[Y]);
+}
 
 inline Point operator *(const rotate r, const Point v) {
-	return Point(r[0]* v[0] - r[1]*v[1], r[1]*v[0] + r[0]*v[1]);
+	return Point(r[X]* v[X] - r[Y]*v[Y], r[Y]*v[X] + r[X]*v[Y]);
 }
 
 inline Point operator *(const translate t, const Point v) {
@@ -89,23 +94,17 @@ public:
 	}
 
 	Matrix(const scale &sm) {
-		for ( int i = 0 ; i < 6 ; i++ ) {
-			c[i] = 0;
-		}
-		c[0] = sm[0];
-		c[3] = sm[1];
+		c[0] = sm[X]; c[2] = 0;      c[4] = 0;
+		c[1] = 0;     c[3] =  sm[Y]; c[5] = 0;
 	}
 
 	Matrix(const rotate &rm) {
-		c[0] = rm[0]; c[2] = -rm[1]; c[4] = 0;
-		c[1] = rm[1]; c[3] =  rm[0]; c[5] = 0;
+		c[0] = rm[X]; c[2] = -rm[Y]; c[4] = 0;
+		c[1] = rm[Y]; c[3] =  rm[X]; c[5] = 0;
 	}
 	Matrix(const translate &tm) {
-		for ( int i = 0 ; i < 4 ; i++ ) {
-			c[i] = 0;
-		}
-		c[4] = tm[0];
-		c[5] = tm[1];
+		c[0] = 1; c[2] = 0; c[4] = tm[X];
+		c[1] = 0; c[3] = 1; c[5] = tm[Y];
 	}
 	Matrix(NRMatrix const *nr);
 	
@@ -115,14 +114,14 @@ public:
 	Point operator*(const Point v) const {
 		// perhaps this should be done with a loop?  It's more
 		// readable this way though.
-		return Point(c[0]*v[0] + c[2]*v[1] + c[4],
-			     c[1]*v[0] + c[3]*v[1] + c[5]);
+		return Point(c[0]*v[X] + c[2]*v[Y] + c[4],
+			     c[1]*v[X] + c[3]*v[Y] + c[5]);
 	}
 
 	void set_identity();
 	
 	// What do these do?  some kind of norm?
-	NR::Coord Matrix::det() const;
+	NR::Coord det() const;
 	NR::Coord descrim2() const;
 	NR::Coord descrim() const;
 	
@@ -139,14 +138,16 @@ Matrix identity();
 //Matrix scale(const Point s);
 //Matrix rotate(const NR::Coord angle);
 
+double expansion(Matrix const & m);
+
 Matrix operator*(const Matrix a, const Matrix b);
 
 bool transform_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
 bool translate_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
 
 inline Point operator*(const NRMatrix& nrm, const Point &p) {
-	 return Point(NR_MATRIX_DF_TRANSFORM_X(&nrm, p[0], p[1]),
-		      NR_MATRIX_DF_TRANSFORM_Y(&nrm, p[0], p[1]));
+	 return Point(NR_MATRIX_DF_TRANSFORM_X(&nrm, p[X], p[Y]),
+		      NR_MATRIX_DF_TRANSFORM_Y(&nrm, p[X], p[Y]));
 }
 
 };

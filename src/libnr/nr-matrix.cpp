@@ -271,4 +271,19 @@ void Matrix::copyto(NRMatrix* nrm) {
 		nrm->c[i] = c[i];
 }
 
+double expansion(Matrix const & m) {
+        return sqrt(fabs(m.det()));
+}
+                                                                                
+bool Matrix::test_identity() const {
+        return NR_MATRIX_DF_TEST_CLOSE (this, &NR_MATRIX_IDENTITY, NR_EPSILON);
+}
+
+bool transform_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon) {
+        return NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (&m0, &m1, epsilon);
+                                                                                
+}
+bool translate_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon) {
+        return NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&m0, &m1, epsilon);
+}
 };

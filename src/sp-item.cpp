@@ -653,7 +653,7 @@ sp_item_i2doc_affine_d (SPItem const *item, NRMatrix *affine_d)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply (affine_d, affine_d, &root->c2p);
+	nr_matrix_multiply (affine_d, affine_d, root->c2p);
 	nr_matrix_multiply (affine_d, affine_d, &item->transform);
 
 	return affine_d;
@@ -690,7 +690,7 @@ sp_item_i2root_affine (SPItem const *item, NRMatrix *affine)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply (&td, &td, &root->c2p);
+	nr_matrix_multiply (&td, &td, root->c2p);
 	nr_matrix_multiply (&td, &td, &item->transform);
 	/* fixme: The above line looks strange to me (pjrm).  I'd have thought
 	   it should either be removed or moved to before the c2p multiply.
@@ -728,7 +728,7 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply (&td, &td, &root->c2p);
+	nr_matrix_multiply (&td, &td, root->c2p);
 
 	td.c[0] /= root->width.computed;
 	td.c[1] /= root->height.computed;
