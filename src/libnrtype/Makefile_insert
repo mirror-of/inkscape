@@ -23,26 +23,6 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/RasterFont.h \
 	libnrtype/raster-glyph.h	\
 	libnrtype/raster-position.h	\
-	libnrtype/FlowSrcText.cpp	\
-	libnrtype/FlowSrcText.h	\
-	libnrtype/FlowSrc.cpp	\
-	libnrtype/FlowSrc.h	\
-	libnrtype/FlowDest.cpp	\
-	libnrtype/FlowDest.h	\
-	libnrtype/FlowRes.cpp	\
-	libnrtype/FlowResOut.cpp	\
-	libnrtype/FlowRes.h	\
-	libnrtype/FlowBoxes.cpp	\
-	libnrtype/FlowBoxes.h	\
-	libnrtype/FlowStyle.cpp	\
-	libnrtype/FlowStyle.h	\
-	libnrtype/FlowUtils.cpp	\
-	libnrtype/FlowUtils.h	\
-	libnrtype/FlowSols.cpp	\
-	libnrtype/FlowSols.h	\
-	libnrtype/FlowEater.cpp	\
-	libnrtype/FlowEater.h	\
-	libnrtype/FlowDefs.h	\
 	libnrtype/TextWrapper.cpp \
 	libnrtype/TextWrapper.h \
 	libnrtype/Layout-TNG-Compute.cpp \
