@@ -56,8 +56,14 @@ struct SPUse {
 	// the reference to the original object
 	SPUseReference *ref;
 
-	// the bbox of the original, for sensing its movements and adjusting
+	// the bbox of the original, for sensing its movements and compensation
 	NR::Rect original;
+
+	// original's repr changed, so compensation may write to repr too
+	bool original_repr_changed;
+
+	// original's repr that we are listening to
+	SPRepr *repr;
 };
 
 struct SPUseClass {

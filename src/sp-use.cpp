@@ -56,8 +56,8 @@ static void sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use);
 
 static SPItemClass * parent_class;
 
-void mm_print (gchar *say, NR::Matrix m)
-{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
+//void mm_print (gchar *say, NR::Matrix m)
+//{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
 GType
 sp_use_get_type (void)
@@ -119,6 +119,7 @@ sp_use_init (SPUse * use)
 	sp_svg_length_unset (&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	use->href = NULL;
+	use->original_repr_changed = false;
 }
 
 static void
@@ -428,13 +429,19 @@ static void sp_use_move_compensation (SPUse *use)
 
 	SPItem *ref = use->ref->getObject();
 
-	// this is not a real use, but a clone of another use; 
+	// the clone is orphaned; or this is not a real use, but a clone of another use; 
 	// we skip it, otherwise duplicate compensation will occur
-	if (SP_OBJECT_IS_CLONED (use))
+	if (!ref || SP_OBJECT_IS_CLONED (use)) {
 		return;
+	}
 
-	// 	g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
-	// 	g_print ("%s: %s/%s\n", name, old_value, new_value);
+	//	g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
+
+	// parent's update was not accompanied by writing to its repr (e.g. selector drag before mouse release).
+	// in this case, we do not want any compensation yet.
+	if (!use->original_repr_changed) {
+		return;
+	}
 
 	// find out the current bbox of the original
 	NRRect bbox;
@@ -454,16 +461,18 @@ static void sp_use_move_compensation (SPUse *use)
 	// 	mm_print ("mid diff", NR::Matrix (NR::translate (n.midpoint() - o.midpoint())));
 
 	// if dimensions changed, this is not pure move, so quit
-	if (!point_equalp (n.dimensions(), o.dimensions())) 
+	if (!point_equalp (n.dimensions(), o.dimensions())) {
 		return;
+	}
 
 	// find out midpoints
 	NR::Point np = (n.midpoint());
 	NR::Point op = (o.midpoint());
 
-	// if midpoint is the same, no need to adjust, so quit
-	if (point_equalp (op, np))
+	// if midpoint is the same, no need to compensate, so quit
+	if (point_equalp (op, np)) {
 		return;
+	}
 
 	// 	mm_print ("par", NR::Matrix (NR::translate (op - np)));
 
@@ -481,11 +490,46 @@ static void sp_use_move_compensation (SPUse *use)
 	else 
 		clone_move = NR::Matrix (NR::translate (op - np));
 
-	// do the compensation
+	// commit the compensation
 	SPItem *item = SP_ITEM(use);
 	nr_matrix_multiply (&item->transform, &item->transform, &clone_move);
 	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+
+	// ugly hack: with chained <use>s, the transform= may not change at all, 
+	// therefore the above write_transform may fail to change the repr 
+	// and the parent_repr_changed flag on its clones will not be set. 
+	// So we set and remove a dummy attr to assert that we did indeed change the repr.
+	sp_repr_set_attr (SP_OBJECT_REPR (item), "inkscape:dummy", "1");
+	sp_repr_set_attr (SP_OBJECT_REPR (item), "inkscape:dummy", NULL);
+
+	// having changed the repr, we need to finish transaction.
+	// FIXME: we should really try to sneak under the previous transaction, not create a new one.
+	sp_document_done(SP_OBJECT_DOCUMENT (item));
+
+	// no more compensation until parent's repr changes again
+	use->original_repr_changed = false;
 }
+
+static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
+{
+	SPUse *use = SP_USE (data);
+	// set the flag telling the _compensation function that the original's repr changed
+	use->original_repr_changed = true;
+}
+
+static SPReprEventVector use_repr_events = { 	 
+         NULL, /* destroy */ 	 
+         NULL, /* add_child */ 	 
+         NULL, /* child_added */ 	 
+         NULL, /* remove_child */ 	 
+         NULL, /* child_removed */ 	 
+         NULL, /* change_attr */ 	 
+         sp_use_original_attr_changed, 	 
+         NULL, /* change_list */ 	 
+         NULL, /* content_changed */ 	 
+         NULL, /* change_order */ 	 
+         NULL  /* order_changed */ 	 
+ };
 
 static void
 sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
@@ -520,8 +564,21 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 			}
 		}
 	}
-}
 
+        // connect signal callback for setting the original_repr_changed flag, used by _compensation
+         if (old_ref && use->repr) { 	 
+                 sp_repr_remove_listener_by_data (use->repr, use); 	 
+                 sp_repr_unref (use->repr); 	 
+                 use->repr = NULL; 	 
+         } 	 
+         SPItem *refobj = use->ref->getObject(); 	 
+         if (SP_IS_ITEM (refobj) && SP_OBJECT_REPR (refobj)) { 	 
+                 use->repr = SP_OBJECT_REPR (refobj); 	 
+                 sp_repr_ref (use->repr); 	 
+                 sp_repr_add_listener (use->repr, &use_repr_events, use); 	 
+                 sp_repr_synthesize_events (use->repr, &use_repr_events, use); 	 
+         }
+}
 
 static void
 sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
@@ -595,6 +652,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
 	}
 
+	// see if any move compensation is needed, and if so, do it
 	sp_use_move_compensation (use);
 }
 
