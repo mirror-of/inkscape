@@ -752,6 +752,7 @@ sp_display_dialog (void)
         vb = new_tab (nb, _("Mouse"));
 
         options_sb (
+            // TRANSLATORS: "Grab" is a noun here
             _("Grab sensitivity:"), 
             _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
             _("px"),

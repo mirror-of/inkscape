@@ -741,6 +741,7 @@ sp_find_dialog_old (void)
             gtk_widget_show (hb);
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
+            // TRANSLATORS: "Clear" is a verb here
             sp_find_new_button (dlg, hb, _("_Clear"), tt, _("Clear values"), sp_find_dialog_reset);
             sp_find_new_button (dlg, hb, _("_Find"), tt, _("Select objects matching all of the fields you filled in"), sp_find_dialog_find);
         }
