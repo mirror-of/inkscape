@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-23 19:33+0200\n"
+"POT-Creation-Date: 2004-06-24 00:12+0200\n"
 "PO-Revision-Date: 2004-05-31 19:27+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -384,7 +384,7 @@ msgstr "Enote:"
 #: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
-#: src/toolbox.cpp:1625
+#: src/toolbox.cpp:1626
 msgid "Width:"
 msgstr "Širina:"
 
@@ -3013,30 +3013,30 @@ msgstr "Poligon"
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Običajen poligon (z eno ročico) namesto zvezde"
 
-#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
-#. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:998
+#: src/toolbox.cpp:996
 #, fuzzy
 msgid "Spoke ratio:"
 msgstr "Shrani preoblikovanje"
 
-#: src/toolbox.cpp:998
+#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+#. Base radius is the same for the closest handle.
+#: src/toolbox.cpp:999
 msgid "Base radius to tip radius ratio"
 msgstr "Razmerje med bližnjo in oddaljeno točko"
 
-#: src/toolbox.cpp:1013
+#: src/toolbox.cpp:1014
 msgid "Roundedness:"
 msgstr ""
 
-#: src/toolbox.cpp:1013
+#: src/toolbox.cpp:1014
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: src/toolbox.cpp:1026 src/toolbox.cpp:1539 src/toolbox.cpp:1667
+#: src/toolbox.cpp:1027 src/toolbox.cpp:1540 src/toolbox.cpp:1669
 msgid "Defaults"
 msgstr "Privzeto"
 
-#: src/toolbox.cpp:1029 src/toolbox.cpp:1540 src/toolbox.cpp:1668
+#: src/toolbox.cpp:1030 src/toolbox.cpp:1541 src/toolbox.cpp:1670
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3044,117 +3044,118 @@ msgstr ""
 "Povrni lastnosti oblike na privzete (uporabite Nastavitve Inkscapea >Orodja "
 "za nastavitev privzetih vrednosti)"
 
-#: src/toolbox.cpp:1264
+#: src/toolbox.cpp:1265
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1264
+#: src/toolbox.cpp:1265
 #, fuzzy
 msgid "Horizontal radius of rounded corner"
 msgstr "Vodoravna koordinata izbire"
 
-#: src/toolbox.cpp:1274
+#: src/toolbox.cpp:1275
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1274
+#: src/toolbox.cpp:1275
 #, fuzzy
 msgid "Vertical radius of rounded corner"
 msgstr "Navpična koordinata izbire"
 
-#: src/toolbox.cpp:1290
+#: src/toolbox.cpp:1291
 msgid "Not rounded"
 msgstr "Nezaobljeno"
 
-#: src/toolbox.cpp:1291
+#: src/toolbox.cpp:1292
 msgid "Make corners sharp"
 msgstr "Naj bodo koti ostri"
 
-#: src/toolbox.cpp:1508
+#: src/toolbox.cpp:1509
 msgid "Turns:"
 msgstr "Obrati:"
 
-#: src/toolbox.cpp:1508
+#: src/toolbox.cpp:1509
 msgid "Number of revolutions"
 msgstr "Število obhodov"
 
-#: src/toolbox.cpp:1518
+#: src/toolbox.cpp:1519
 msgid "Divergence:"
 msgstr "Divergenca:"
 
-#: src/toolbox.cpp:1518
+#: src/toolbox.cpp:1519
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Zgoščevanje ali zredčevanje obhodov navzven; 1 = enakomerno"
 
-#: src/toolbox.cpp:1528
+#: src/toolbox.cpp:1529
 msgid "Inner radius:"
 msgstr "Notranji radij:"
 
-#: src/toolbox.cpp:1528
+#: src/toolbox.cpp:1529
 #, fuzzy
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Polmer najmanjšega obhoda"
 
-#: src/toolbox.cpp:1625
+#: src/toolbox.cpp:1626
 msgid "The width of the calligraphic pen"
 msgstr "Debelina kaligrafskega peresa"
 
-#: src/toolbox.cpp:1635
+#: src/toolbox.cpp:1636
 msgid "Angle:"
 msgstr "Kot:"
 
-#: src/toolbox.cpp:1635
+#: src/toolbox.cpp:1636
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "Kot kaligrafskega peresa (v stopinjah)"
 
-#: src/toolbox.cpp:1645
+#: src/toolbox.cpp:1646
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1645
+#: src/toolbox.cpp:1646
 msgid "How much inertia affects the movement of the pen"
 msgstr "Koliko vztrajnost vpliva na gibanje peresa"
 
-#: src/toolbox.cpp:1655
+#. TRANSLATORS: "drag" means "resistance" here
+#: src/toolbox.cpp:1657
 msgid "Drag:"
 msgstr "Upor:"
 
-#: src/toolbox.cpp:1655
+#: src/toolbox.cpp:1657
 msgid "How much resistance affects the movement of the pen"
 msgstr "Koliko upor vpliva na gibanje peresa"
 
-#: src/toolbox.cpp:1967
+#: src/toolbox.cpp:1969
 msgid "Start:"
 msgstr "Začetek:"
 
-#: src/toolbox.cpp:1967
+#: src/toolbox.cpp:1969
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Kot med vodoravnico in začetno točko loka."
 
-#: src/toolbox.cpp:1977
+#: src/toolbox.cpp:1979
 msgid "End:"
 msgstr "Konec:"
 
-#: src/toolbox.cpp:1977
+#: src/toolbox.cpp:1979
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Kot med vodoravnico in končno točko loka."
 
-#: src/toolbox.cpp:1988
+#: src/toolbox.cpp:1990
 msgid "Open arc"
 msgstr "Odpri krog"
 
-#: src/toolbox.cpp:1989
+#: src/toolbox.cpp:1991
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Izberi med lokom (nezaključena oblika) in odsekom (zaprta oblika z dvema "
 "polmeroma)"
 
-#: src/toolbox.cpp:2016
+#: src/toolbox.cpp:2018
 msgid "Make whole"
 msgstr "Celota"
 
-#: src/toolbox.cpp:2017
+#: src/toolbox.cpp:2019
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Naj bo predmet cela elipsa in ne le odsek ali lok"
 

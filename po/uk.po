@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-23 19:33+0200\n"
+"POT-Creation-Date: 2004-06-24 00:12+0200\n"
 "PO-Revision-Date: 2003-04-10 11:59--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -392,7 +392,7 @@ msgstr "Одиниці:"
 #: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
-#: src/toolbox.cpp:1625
+#: src/toolbox.cpp:1626
 msgid "Width:"
 msgstr "Ширина:"
 
@@ -3032,147 +3032,148 @@ msgstr ""
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr ""
 
-#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
-#. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:998
+#: src/toolbox.cpp:996
 #, fuzzy
 msgid "Spoke ratio:"
 msgstr "Пропорція:"
 
-#: src/toolbox.cpp:998
+#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+#. Base radius is the same for the closest handle.
+#: src/toolbox.cpp:999
 msgid "Base radius to tip radius ratio"
 msgstr ""
 
-#: src/toolbox.cpp:1013
+#: src/toolbox.cpp:1014
 msgid "Roundedness:"
 msgstr ""
 
-#: src/toolbox.cpp:1013
+#: src/toolbox.cpp:1014
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: src/toolbox.cpp:1026 src/toolbox.cpp:1539 src/toolbox.cpp:1667
+#: src/toolbox.cpp:1027 src/toolbox.cpp:1540 src/toolbox.cpp:1669
 msgid "Defaults"
 msgstr ""
 
-#: src/toolbox.cpp:1029 src/toolbox.cpp:1540 src/toolbox.cpp:1668
+#: src/toolbox.cpp:1030 src/toolbox.cpp:1541 src/toolbox.cpp:1670
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
 
-#: src/toolbox.cpp:1264
+#: src/toolbox.cpp:1265
 #, fuzzy
 msgid "Rx:"
 msgstr "x0:"
 
-#: src/toolbox.cpp:1264
+#: src/toolbox.cpp:1265
 msgid "Horizontal radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1274
+#: src/toolbox.cpp:1275
 #, fuzzy
 msgid "Ry:"
 msgstr "y0:"
 
-#: src/toolbox.cpp:1274
+#: src/toolbox.cpp:1275
 msgid "Vertical radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1290
+#: src/toolbox.cpp:1291
 msgid "Not rounded"
 msgstr ""
 
-#: src/toolbox.cpp:1291
+#: src/toolbox.cpp:1292
 msgid "Make corners sharp"
 msgstr ""
 
-#: src/toolbox.cpp:1508
+#: src/toolbox.cpp:1509
 #, fuzzy
 msgid "Turns:"
 msgstr "Трансформація:"
 
-#: src/toolbox.cpp:1508
+#: src/toolbox.cpp:1509
 msgid "Number of revolutions"
 msgstr ""
 
-#: src/toolbox.cpp:1518
+#: src/toolbox.cpp:1519
 msgid "Divergence:"
 msgstr ""
 
-#: src/toolbox.cpp:1518
+#: src/toolbox.cpp:1519
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 
-#: src/toolbox.cpp:1528
+#: src/toolbox.cpp:1529
 msgid "Inner radius:"
 msgstr "Внутрішній радіус:"
 
-#: src/toolbox.cpp:1528
+#: src/toolbox.cpp:1529
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 
-#: src/toolbox.cpp:1625
+#: src/toolbox.cpp:1626
 msgid "The width of the calligraphic pen"
 msgstr ""
 
-#: src/toolbox.cpp:1635
+#: src/toolbox.cpp:1636
 msgid "Angle:"
 msgstr "Кут:"
 
-#: src/toolbox.cpp:1635
+#: src/toolbox.cpp:1636
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr ""
 
-#: src/toolbox.cpp:1645
+#: src/toolbox.cpp:1646
 msgid "Mass:"
 msgstr ""
 
-#: src/toolbox.cpp:1645
+#: src/toolbox.cpp:1646
 msgid "How much inertia affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:1655
+#. TRANSLATORS: "drag" means "resistance" here
+#: src/toolbox.cpp:1657
 #, fuzzy
 msgid "Drag:"
 msgstr "Малюнок"
 
-#: src/toolbox.cpp:1655
+#: src/toolbox.cpp:1657
 msgid "How much resistance affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:1967
+#: src/toolbox.cpp:1969
 #, fuzzy
 msgid "Start:"
 msgstr "Зірка"
 
-#: src/toolbox.cpp:1967
+#: src/toolbox.cpp:1969
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 
-#: src/toolbox.cpp:1977
+#: src/toolbox.cpp:1979
 msgid "End:"
 msgstr ""
 
-#: src/toolbox.cpp:1977
+#: src/toolbox.cpp:1979
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 
-#: src/toolbox.cpp:1988
+#: src/toolbox.cpp:1990
 #, fuzzy
 msgid "Open arc"
 msgstr "Відкрити"
 
-#: src/toolbox.cpp:1989
+#: src/toolbox.cpp:1991
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 
-#: src/toolbox.cpp:2016
+#: src/toolbox.cpp:2018
 msgid "Make whole"
 msgstr ""
 
-#: src/toolbox.cpp:2017
+#: src/toolbox.cpp:2019
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 

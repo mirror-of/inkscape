@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-23 19:33+0200\n"
+"POT-Creation-Date: 2004-06-24 00:12+0200\n"
 "PO-Revision-Date: 2004-06-23 18:17+0200\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
@@ -377,7 +377,7 @@ msgstr "Unidades:"
 #: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
-#: src/toolbox.cpp:1625
+#: src/toolbox.cpp:1626
 msgid "Width:"
 msgstr "Ancho:"
 
@@ -3008,30 +3008,30 @@ msgstr "Polígono"
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Crear polígonos (con un manejador) en vez de estrellas"
 
-#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
-#. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:998
+#: src/toolbox.cpp:996
 #, fuzzy
 msgid "Spoke ratio:"
 msgstr "ProporciÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚ÂƒÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚Â³n:"
 
-#: src/toolbox.cpp:998
+#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+#. Base radius is the same for the closest handle.
+#: src/toolbox.cpp:999
 msgid "Base radius to tip radius ratio"
 msgstr "Relación entre el radio base y el radio de la punta"
 
-#: src/toolbox.cpp:1013
+#: src/toolbox.cpp:1014
 msgid "Roundedness:"
 msgstr ""
 
-#: src/toolbox.cpp:1013
+#: src/toolbox.cpp:1014
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: src/toolbox.cpp:1026 src/toolbox.cpp:1539 src/toolbox.cpp:1667
+#: src/toolbox.cpp:1027 src/toolbox.cpp:1540 src/toolbox.cpp:1669
 msgid "Defaults"
 msgstr "Predeterminados"
 
-#: src/toolbox.cpp:1029 src/toolbox.cpp:1540 src/toolbox.cpp:1668
+#: src/toolbox.cpp:1030 src/toolbox.cpp:1541 src/toolbox.cpp:1670
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3039,115 +3039,116 @@ msgstr ""
 "Reiniciar los parámetros de las formas a predeterminados (use «Preferencias "
 "> Herramientas» para cambiar los predeterminados)"
 
-#: src/toolbox.cpp:1264
+#: src/toolbox.cpp:1265
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1264
+#: src/toolbox.cpp:1265
 msgid "Horizontal radius of rounded corner"
 msgstr "Radio horizontal de la esquina redondeada"
 
-#: src/toolbox.cpp:1274
+#: src/toolbox.cpp:1275
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1274
+#: src/toolbox.cpp:1275
 msgid "Vertical radius of rounded corner"
 msgstr "Radio vertical de la esquina redondeada"
 
-#: src/toolbox.cpp:1290
+#: src/toolbox.cpp:1291
 msgid "Not rounded"
 msgstr "No redondeado"
 
-#: src/toolbox.cpp:1291
+#: src/toolbox.cpp:1292
 msgid "Make corners sharp"
 msgstr "Afilar las esquinas"
 
-#: src/toolbox.cpp:1508
+#: src/toolbox.cpp:1509
 msgid "Turns:"
 msgstr "Vueltas:"
 
-#: src/toolbox.cpp:1508
+#: src/toolbox.cpp:1509
 msgid "Number of revolutions"
 msgstr "Número de revoluciones"
 
-#: src/toolbox.cpp:1518
+#: src/toolbox.cpp:1519
 msgid "Divergence:"
 msgstr "Divergencia:"
 
-#: src/toolbox.cpp:1518
+#: src/toolbox.cpp:1519
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 "Cuánto más densas/difusas son las revoluciones exteriores; 1 = uniforme"
 
-#: src/toolbox.cpp:1528
+#: src/toolbox.cpp:1529
 msgid "Inner radius:"
 msgstr "Radio interior:"
 
-#: src/toolbox.cpp:1528
+#: src/toolbox.cpp:1529
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radio de la revolución más interior (relativa al tamaño de la espiral)"
 
-#: src/toolbox.cpp:1625
+#: src/toolbox.cpp:1626
 msgid "The width of the calligraphic pen"
 msgstr "El ancho de la pluma caligráfica"
 
-#: src/toolbox.cpp:1635
+#: src/toolbox.cpp:1636
 msgid "Angle:"
 msgstr "Ángulo:"
 
-#: src/toolbox.cpp:1635
+#: src/toolbox.cpp:1636
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "El ángulo de la pluma caligráfica (en grados)"
 
-#: src/toolbox.cpp:1645
+#: src/toolbox.cpp:1646
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1645
+#: src/toolbox.cpp:1646
 msgid "How much inertia affects the movement of the pen"
 msgstr "Cuánta inercia afecta al movimiento de la pluma"
 
-#: src/toolbox.cpp:1655
+#. TRANSLATORS: "drag" means "resistance" here
+#: src/toolbox.cpp:1657
 msgid "Drag:"
 msgstr "Arrastrar:"
 
-#: src/toolbox.cpp:1655
+#: src/toolbox.cpp:1657
 msgid "How much resistance affects the movement of the pen"
 msgstr "Cuánta resistencia afecta al movimiento de la pluma"
 
-#: src/toolbox.cpp:1967
+#: src/toolbox.cpp:1969
 msgid "Start:"
 msgstr "Inicio:"
 
-#: src/toolbox.cpp:1967
+#: src/toolbox.cpp:1969
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "El ángulo (en grados) desde la horizontal al punto inicial del arco"
 
-#: src/toolbox.cpp:1977
+#: src/toolbox.cpp:1979
 msgid "End:"
 msgstr "Fin:"
 
-#: src/toolbox.cpp:1977
+#: src/toolbox.cpp:1979
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 "El ángulo (en grados) desde la horizontal hasta el punto final del arco"
 
-#: src/toolbox.cpp:1988
+#: src/toolbox.cpp:1990
 msgid "Open arc"
 msgstr "Arco abierto"
 
-#: src/toolbox.cpp:1989
+#: src/toolbox.cpp:1991
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Cambiar entre arco (forma abierta) y segmento (forma cerrada con dos radios)"
 
-#: src/toolbox.cpp:2016
+#: src/toolbox.cpp:2018
 msgid "Make whole"
 msgstr "Completar"
 
-#: src/toolbox.cpp:2017
+#: src/toolbox.cpp:2019
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Hacer una elipse completa, no un arco o segmento"
 
