@@ -7,6 +7,10 @@
 #
 # ################################################
 
+# Should work in either automake1.7 or 1.8, but 1.6 doesn't
+# handle foo/libfoo_a_CPPFLAGS properly.
+AUTOMAKE_OPTIONS = 1.7
+
 include Makefile_insert
 include dialogs/Makefile_insert
 include display/Makefile_insert
