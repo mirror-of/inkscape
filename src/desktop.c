@@ -548,7 +548,8 @@ sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const gchar *config,
 void
 sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 {
-	SPEventContext *ref, *ec;
+	SPEventContext *ref;
+	SPEventContext *ec = NULL;
 
 	if (dt->event_context && dt->event_context->key == key) {
 		g_return_if_fail (dt->event_context);
@@ -567,8 +568,10 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 		ref->next = ec->next;
 	}
 
-	sp_event_context_finish (ec);
-	g_object_unref (G_OBJECT (ec));
+	if (ec) {
+		sp_event_context_finish (ec);
+		g_object_unref (G_OBJECT (ec));
+	}
 }
 
 /* Private helpers */
