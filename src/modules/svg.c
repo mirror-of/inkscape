@@ -154,7 +154,7 @@ svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 	} else {
 		rdoc = sp_repr_document_new ("svg");
 		repr = sp_repr_document_root (rdoc);
-		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
+		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD | SP_OBJECT_WRITE_EXT);
 	}
 
 	images = sp_document_get_resource_list (doc, "image");
