@@ -19,6 +19,7 @@
 #include <sigc++/sigc++.h>
 
 #include "libnr/nr-rect.h"
+#include "libnr/nr-convex-hull.h"
 #include "forward.h"
 #include "sp-item.h"
 #include "gc-managed.h"
@@ -228,6 +229,12 @@ public:
      * @return Selection's snap points
      */
     std::vector<NR::Point> getSnapPoints() const;
+
+	/**
+	 * @brief Gets the snap points of a selection that form a convex hull.
+	 * @return Selection's convex hull points
+	 */
+	std::vector<NR::Point> getSnapPointsConvexHull() const;
 
     /**
      * @return A vector containing the top-left and bottom-right

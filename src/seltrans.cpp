@@ -262,8 +262,8 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 
     seltrans->point = p;
 
-    seltrans->snap_points = selection->getSnapPoints();
-    seltrans->bbox_points = selection->getBBoxPoints();
+    seltrans->snap_points = selection->getSnapPointsConvexHull ();
+    seltrans->bbox_points = selection->getBBoxPoints ();
 
     gchar const *scale_origin = prefs_get_string_attribute("tools.select", "scale_origin");
     bool const origin_on_bbox = (scale_origin == NULL || !strcmp(scale_origin, "bbox"));
