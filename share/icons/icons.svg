@@ -464,7 +464,7 @@
      snaptogrid="false"
      gridtolerance="1.02pt"
      inkscape:zoom="5.9909429"
-     inkscape:cx="585.09244"
+     inkscape:cx="610.79790"
      inkscape:cy="103.39756"
      inkscape:window-width="1268"
      inkscape:window-height="998"
@@ -5862,12 +5862,12 @@ http://www.inkscape.org/</dc:description>
      x="726.87500"
      y="188.75000" />
   <path
-     style="font-size:12.000000;fill:#fff700;fill-opacity:1.0000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
+     style="font-size:12.000000;fill:#6acbe1;fill-opacity:1.0000000;fill-rule:evenodd;stroke-width:1.0000000pt;"
      d="M 722.50000,186.87500 L 722.50000,201.25000 L 728.12503,201.25000 C 728.12503,196.45834 728.12503,191.66666 728.12503,186.87500 L 722.50000,186.87500 z "
      id="rect1966"
      sodipodi:nodetypes="ccccc" />
   <rect
-     style="font-size:12.000000;fill:#fff700;fill-opacity:1.0000000;fill-rule:evenodd;stroke-width:1.0000000pt;opacity:1.0000000;color:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1.0000000;"
+     style="font-size:12.000000;fill:#6acbe1;fill-opacity:1.0000000;fill-rule:evenodd;stroke-width:1.0000000pt;opacity:1.0000000;color:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1.0000000;"
      id="rect2632"
      width="5.6250286"
      height="4.3750000"
@@ -5882,7 +5882,7 @@ http://www.inkscape.org/</dc:description>
      y="-760.94812"
      transform="matrix(2.424359e-2,0.999706,-1.000000,3.483218e-4,0.000000,0.000000)" />
   <rect
-     style="font-size:12.000000;fill:#fff700;fill-opacity:1.0000000;fill-rule:evenodd;stroke-width:1.0000000pt;opacity:1.0000000;color:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1.0000000;"
+     style="font-size:12.000000;fill:#6acbe1;fill-opacity:1.0000000;fill-rule:evenodd;stroke-width:1.0000000pt;opacity:1.0000000;color:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4.0000000;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1.0000000;"
      id="rect1979"
      width="5.6250286"
      height="4.3750000"
