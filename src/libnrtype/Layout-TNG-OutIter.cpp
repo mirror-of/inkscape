@@ -303,6 +303,8 @@ NR::Rect Layout::glyphBoundingBox(iterator const &it, double *rotation) const
 NR::Point Layout::characterAnchorPoint(iterator const &it) const
 {
     if (it._char_index == _characters.size()) {
+	if (_chunks.size() == 0 || _spans.size() == 0 || _lines.size() == 0)
+		return NR::Point (0, 0);
         return NR::Point(_chunks.back().left_x + _spans.back().x_end, _lines.back().baseline_y + _spans.back().baseline_shift);
     } else {
         return NR::Point(_characters[it._char_index].chunk(this).left_x

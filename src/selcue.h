@@ -34,6 +34,7 @@ struct SPSelCue {
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;
 	GSList *item_bboxes;
+	GSList *text_baselines;
 };
 
 void sp_sel_cue_update_item_bboxes (SPSelCue * selcue);
