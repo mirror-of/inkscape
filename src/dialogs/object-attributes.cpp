@@ -64,6 +64,7 @@ static const SPAttrDesc ellipse_desc[] = {
     { N_("Radius Y:"), "sodipodi:ry"},
     { N_("Start Angle:"), "sodipodi:start"},
     { N_("End Angle:"), "sodipodi:end"},
+    // TRANSLATORS: "Open" is an adjective here (is the ellipse open or not)
     { N_("Open:"), "sodipodi:open"},
     { NULL, NULL}
 };
