@@ -197,8 +197,8 @@ aux_toolbox_size_request (GtkWidget *widget,
                         GtkRequisition *requisition,
                         gpointer user_data)
 {
-	if ( requisition->height < AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS) {
-		requisition->height = AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS;
+	if ( requisition->height < AUX_BUTTON_SIZE + 6 + 2 * AUX_SPACING) {
+		requisition->height = AUX_BUTTON_SIZE + 6 + 2 * AUX_SPACING;
     }
     if (!g_object_get_data(G_OBJECT(widget), "is_detached")) {
         requisition->width = 0; // allow aux toolbar to be cut
@@ -226,7 +226,7 @@ sp_aux_toolbox_new ()
 
     GtkWidget *tb_s = gtk_vbox_new (FALSE, 0);
     GtkWidget *tb_e = gtk_vbox_new (FALSE, 0);
-    gtk_box_set_spacing (GTK_BOX (tb), AUX_BETWEEN_BUTTON_GROUPS);
+    gtk_box_set_spacing (GTK_BOX (tb), AUX_SPACING);
     gtk_box_pack_start (GTK_BOX (tb), GTK_WIDGET (tb_s), FALSE, FALSE, 0);
     gtk_box_pack_end (GTK_BOX (tb), GTK_WIDGET (tb_e), FALSE, FALSE, 0);
 
