@@ -528,11 +528,11 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					SP_KNOT_DRAGGING,
 					TRUE);
 			}
-			NR::Point const motion_w(event->motion.x,
-						 event->motion.y);
+			NR::Point const motion_w(event->motion.x, event->motion.y);
 			NR::Point const motion_dt = sp_desktop_w2d_xy_point(knot->desktop, motion_w);
 			NR::Point p = motion_dt - knot->grabbed_rel_pos;
 			sp_knot_request_position (knot, &p, event->motion.state);
+			sp_desktop_scroll_to_point (knot->desktop, &motion_dt);
 			moved = TRUE;
 		}
 		break;
