@@ -1,4 +1,4 @@
-/* Ultraminimal unit testing framework */
+/* Ultra-minimal unit testing framework */
 /* This file is in the public domain */
 
 #ifdef __cplusplus
@@ -33,14 +33,29 @@ void utest__pass(void) {
 	fprintf(stderr, "OK\n");
 }
 
-int utest__fail(const char *a, const char *b) {
+
+/** \brief Write \a a, \a b, \a c, and exit the current block of tests.
+ *
+ *  In the current implementation, any of \a a, \a b, \a c may be NULL, considered equivalent to
+ *  empty string; but don't rely on that unless you also change this documentation string.  (No
+ *  callers use this functionality at the time of writing.)
+ *
+ *  No newline needed in the arguments.
+ */
+int
+utest__fail(const char *a, const char *b, const char *c)
+{
 	utest__running = 0;
-	fprintf(stderr, "%s%s\n", a?a:"", b?b:"");
+	fprintf (stderr, "%s%s%s\n",
+		 (a ? a : ""),
+		 (b ? b : ""),
+		 (c ? c : ""));
 	longjmp(utest__jmp_buf, 0);
 	return 0;
 }
 
-/** \breif Marks a C block constituting a single test.
+
+/** \brief Marks a C block constituting a single test.
   * \param name A descriptive name for this test.
   *
   * The block effectively becomes a try statement; if code within the
@@ -52,15 +67,15 @@ int utest__fail(const char *a, const char *b) {
 /** \brief Terminates the current test if \a cond evaluates to nonzero.
   * \param cond The condition to test.
   */
-#define UTEST_ASSERT(cond) UTEST_ASSERT_LABELED( #cond, (cond))
+#define UTEST_ASSERT(cond) UTEST_NAMED_ASSERT( #cond, (cond))
 
-/** \brief Terminates the current tests if \a cond evaluates to nonzero,
-  *        and prints a descriptive \a label instead of the condition
+/** \brief Terminates the current tests if \a _cond evaluates to nonzero,
+  *        and prints a descriptive \a _name instead of the condition
   *        that caused it to fail.
-  * \param label The descriptive label to use.
-  * \param cond The condition to test.
+  * \param _name The descriptive label to use.
+  * \param _cond The condition to test.
   */
-#define UTEST_ASSERT_LABELED(label, cond) ((cond)||utest__fail("Assertion failed: ", (label) ))
+#define UTEST_NAMED_ASSERT(_name, _cond) ((_cond) || utest__fail("Assertion `", (_name), "' failed"))
 
 int utest__test(const char *name) {
 	utest__tests++;
@@ -93,3 +108,12 @@ int utest_end(void) {
 	}
 }
 
+
+/*
+  Local Variables:
+  mode:c
+  c-file-style:"linux"
+  fill-column:99
+  End:
+  vim: set filetype=c :
+*/
