@@ -42,7 +42,6 @@ xml_libspxml_a_SOURCES =	\
 	xml/document.h \
 	xml/node-event-vector.h \
 	xml/node-iterators.h	\
-	xml/node-listener.h \
 	xml/sp-css-attr.h \
 	xml/text-node.h \
 	xml/transaction-logger.h \

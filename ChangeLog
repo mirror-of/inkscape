@@ -1,5 +1,14 @@
 2005-03-01  MenTaLguY  <mental@rydia.net>
 
+	* src/xml/Makefile_insert, src/xml/node-listener.h, src/xml/repr.cpp,
+	  src/xml/simple-node.cpp, src/xml/simple-node.h:
+
+	  reworked listener list to use Util::ListContainer
+
+	* src/xml/node-observer.h: minor name cleanups
+
+2005-03-01  MenTaLguY  <mental@rydia.net>
+
 	* src/Makefile.am, src/algorithms/find-if-before.h:
 
 	  added new generic algorithm

@@ -31,20 +31,18 @@ namespace XML {
 
 class NodeObserver {
 public:
-    virtual void notifyChildAdded(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
-                                  Inkscape::XML::Node *prev)=0;
+    virtual void notifyChildAdded(Node &node, Node &child, Node *prev)=0;
 
-    virtual void notifyChildRemoved(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
-                                    Inkscape::XML::Node *prev)=0;
+    virtual void notifyChildRemoved(Node &node, Node &child, Node *prev)=0;
 
-    virtual void notifyChildOrderChanged(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
-                                         Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev)=0;
+    virtual void notifyChildOrderChanged(Node &node, Node &child,
+                                         Node *old_prev, Node *new_prev)=0;
 
-    virtual void notifyContentChanged(Inkscape::XML::Node &node,
+    virtual void notifyContentChanged(Node &node,
                                       Util::SharedCStringPtr old_content,
                                       Util::SharedCStringPtr new_content)=0;
 
-    virtual void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
+    virtual void notifyAttributeChanged(Node &node, GQuark name,
                                         Util::SharedCStringPtr old_value,
                                         Util::SharedCStringPtr new_value)=0;
 };

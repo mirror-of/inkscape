@@ -18,6 +18,7 @@
 #include <glib/gquark.h>
 #include <glib/gmessages.h>
 #include <cstring>
+#include "algorithms/find-if-before.h"
 #include "xml/simple-node.h"
 #include "xml/node-event-vector.h"
 #include "xml/node-fns-tree.h"
@@ -42,7 +43,6 @@ SimpleNode::SimpleNode(int code)
     this->_document = NULL;
     this->_parent = this->_next = NULL;
     this->_first_child = this->_last_child = NULL;
-    this->_last_listener = this->_listeners = NULL;
 }
 
 SimpleNode::SimpleNode(SimpleNode const &node)
@@ -56,7 +56,6 @@ SimpleNode::SimpleNode(SimpleNode const &node)
     _document = NULL;
     _parent = _next = NULL;
     _first_child = _last_child = NULL;
-    _last_listener = _listeners = NULL;
 
     for ( Node *child = node._first_child ;
           child != NULL ; child = child->next() )
@@ -156,11 +155,9 @@ void SimpleNode::setContent(gchar const *new_content) {
             _logger->notifyContentChanged(*this, old_content, _content);
         }
 
-        for ( NodeListener *listener = _listeners ;
-              listener ; listener = listener->next )
-        {
-            if (listener->vector->content_changed) {
-                listener->vector->content_changed(this, old_content, _content, listener->data);
+        for ( Listeners::iterator iter = _listeners.begin() ; iter ; ++iter ) {
+            if (iter->vector.content_changed) {
+                iter->vector.content_changed(this, old_content, _content, iter->data);
             }
         }
     }
@@ -208,11 +205,9 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
             _logger->notifyAttributeChanged(*this, key, old_value, new_value);
         }
 
-        for ( NodeListener *listener = _listeners ;
-              listener ; listener = listener->next )
-        {
-            if (listener->vector->attr_changed) {
-                listener->vector->attr_changed(this, name, old_value, new_value, is_interactive, listener->data);
+        for ( Listeners::iterator iter = _listeners.begin() ; iter ; ++iter ) {
+            if (iter->vector.attr_changed) {
+                iter->vector.attr_changed(this, name, old_value, new_value, is_interactive, iter->data);
             }
         }
     }
@@ -258,11 +253,9 @@ void SimpleNode::addChild(Node *child, Node *ref) {
         _logger->notifyChildAdded(*this, *child, ref);
     }
 
-    for ( NodeListener *listener = _listeners ;
-          listener ; listener = listener->next )
-    {
-        if (listener->vector->child_added) {
-            listener->vector->child_added(this, child, ref, listener->data);
+    for ( Listeners::iterator iter = _listeners.begin() ; iter ; ++iter ) {
+        if (iter->vector.child_added) {
+            iter->vector.child_added(this, child, ref, iter->data);
         }
     }
 }
@@ -318,11 +311,9 @@ void SimpleNode::removeChild(Node *child) {
         _logger->notifyChildRemoved(*this, *child, ref);
     }
 
-    for ( NodeListener *listener = _listeners ;
-          listener ; listener = listener->next )
-    {
-        if (listener->vector->child_removed) {
-            listener->vector->child_removed(this, child, ref, listener->data);
+    for ( Listeners::iterator iter = _listeners.begin() ; iter ; ++iter ) {
+        if (iter->vector.child_removed) {
+            iter->vector.child_removed(this, child, ref, iter->data);
         }
     }
 }
@@ -369,11 +360,9 @@ void SimpleNode::changeOrder(Node *child, Node *ref) {
         _logger->notifyChildOrderChanged(*this, *child, prev, ref);
     }
 
-    for ( NodeListener *listener = _listeners ;
-          listener ; listener = listener->next )
-    {
-        if (listener->vector->order_changed) {
-            listener->vector->order_changed(this, child, prev, ref, listener->data);
+    for ( Listeners::iterator iter = _listeners.begin() ; iter ; ++iter ) {
+        if (iter->vector.order_changed) {
+            iter->vector.order_changed(this, child, prev, ref, iter->data);
         }
     }
 }
@@ -421,32 +410,35 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
 
 void SimpleNode::addListener(NodeEventVector const *vector, void *data) {
     g_assert(vector);
+    _listeners.push_back(Listener(*vector, data));
+}
 
-    NodeListener *listener = new NodeListener(vector, data);
+namespace {
 
-    if (_last_listener) {
-        _last_listener->next = listener;
-    } else {
-        _listeners = listener;
+struct listener_data_matches {
+    listener_data_matches(void *d) : data(d) {}
+    bool operator()(SimpleNode::Listener const &listener) {
+        return listener.data == data;
     }
-    _last_listener = listener;
+    void * const data;
+};
+
 }
 
 void SimpleNode::removeListenerByData(void *data) {
-    NodeListener *prev = NULL;
-    for (NodeListener *rl = _listeners; rl != NULL; rl = rl->next) {
-        if (rl->data == data) {
-            if (prev) {
-                prev->next = rl->next;
-            } else {
-                _listeners = rl->next;
-            }
-            if (!rl->next) {
-                _last_listener = prev;
-            }
-            return;
+    using Inkscape::Algorithms::find_if_before;
+
+    if (_listeners.empty()) {
+        return;
+    }
+
+    if ( _listeners.front().data == data ) {
+        _listeners.pop_front();
+    } else {
+        Listeners::iterator pos=find_if_before(_listeners.begin(), _listeners.end(), listener_data_matches(data));
+        if (pos) {
+            _listeners.erase_after(pos);
         }
-        prev = rl;
     }
 }
 

@@ -17,8 +17,8 @@
 
 #include "xml/node.h"
 #include "xml/attribute-record.h"
-#include "xml/node-listener.h"
 #include "xml/transaction-logger.h"
+#include "util/list-container.h"
 
 namespace Inkscape {
 
@@ -28,6 +28,17 @@ class SimpleNode
 : virtual public Node, public Inkscape::GC::Managed<>
 {
 public:
+    struct Listener {
+        Listener(NodeEventVector const &v, void *d)
+        : vector(v), data(d) {}
+
+        NodeEventVector const &vector;
+        void * const data;
+
+        // default copy
+        // default assign
+    };
+
     Session *session() {
         return ( _logger ? &_logger->session() : NULL );
     }
@@ -35,7 +46,7 @@ public:
     gchar const *name() const;
     int code() const { return _name; }
     void setCodeUnsafe(int code) {
-        g_assert(!_logger && !_listeners);
+        g_assert(!_logger && _listeners.empty());
         _name = code;
     }
 
@@ -116,6 +127,8 @@ public: // ideally these should be protected somehow...
 private:
     void operator=(Node const &); // no assign
 
+    typedef Inkscape::Util::ListContainer<Listener> Listeners;
+
     Node *_parent;
     Node *_next;
     Document *_document;
@@ -133,8 +146,7 @@ private:
     Node *_first_child;
     Node *_last_child;
 
-    NodeListener *_listeners;
-    NodeListener *_last_listener;
+    Listeners _listeners;
 };
 
 }
