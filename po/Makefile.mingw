@@ -12,6 +12,7 @@ clean:
 
 
 dist: $(LOBJ)
+	$(foreach a, $(LANG), $(shell $(MKDIR) ..$(S)inkscape$(S)locale$(S)$(a)))
 	$(foreach a, $(LANG), $(shell $(MKDIR) ..$(S)inkscape$(S)locale$(S)$(a)$(S)LC_MESSAGES))
 	$(foreach a, $(LANG), $(shell $(CP) $(a).mo ..$(S)inkscape$(S)locale$(S)$(a)$(S)LC_MESSAGES$(S)inkscape.mo ))
 

@@ -72,6 +72,7 @@ dist:
 # REJON: this following is now included the share folder
 #	$(MKDIR) inkscape$(S)extensions
 	$(MKDIR) inkscape$(S)locale
+	$(MAKE) -C po -f Makefile.mingw dist
 	$(MKDIR) inkscape$(S)modules
 	@echo "##################### D O N E ####################"
 
@@ -79,6 +80,7 @@ clean:
 	-$(RMDIR) inkscape
 	-$(RM) inkscape*.zip
 	$(MAKE) -C src -f Makefile.mingw clean
+	$(MAKE) -C po  -f Makefile.mingw clean
 
 minimal:
 	$(MAKE) -C src -f Makefile.mingw
