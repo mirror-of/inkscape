@@ -6,7 +6,7 @@
 	  Added data entry widgets for document metadata, including a rough
 	  license selector, and debug rdf generator.  Corrected whitespace,
 	  added table for RDF entity lookup, tag, and title mapping.  Added
-	  initial loading framework.
+	  initial loading framework.  Cleaned up rdf_work_entity_t usage.
 
 2004-06-25  Carl Hetherington  <inkscape@carlh.net>
 

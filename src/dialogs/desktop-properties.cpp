@@ -277,6 +277,12 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
     sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
 }
 
+/**
+ *  \brief   Handles a dialog entry box changing and updates the XML
+ *  \param   widget  The GtkEntry widget that changed
+ *  \param   data    The pointer to the entity
+ *
+ */
 static void
 sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
 {
@@ -284,16 +290,13 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
         return;
     }
 
-    char * name = (char*)data;
-
-    GtkWidget *e = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), name));
-    struct rdf_work_entity_t * entity = rdf_find_entity (name);
+    struct rdf_work_entity_t * entity = (struct rdf_work_entity_t *)data;
     g_assert ( entity != NULL );
 
-    printf("changed '%s' (%s) to '%s'\n",
-            entity->title,
-            entity->tag,
-            gtk_entry_get_text ( GTK_ENTRY(e) ));
+    GtkWidget *e = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg),
+                                                    entity->name));
+
+    rdf_set_work_entity( entity, (gchar*)gtk_entry_get_text ( GTK_ENTRY(e) ) );
 }
 
 
@@ -503,17 +506,13 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 }
 
 static void
-sp_doc_dialog_add_work_entity( char * name,
+sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
                          GtkWidget * t, int row )
 {
+    g_assert ( entity != NULL );
     g_assert ( t != NULL );
-    g_assert ( name != NULL );
 
     if (dlg) {
-        struct rdf_work_entity_t * entity = rdf_find_entity(name);
-
-        g_assert ( entity != NULL );
-
         /* translation code for including a ":" 
         gchar * sep = _(":"); // label separator, the colon in "title:"
         gint label_length=strlen(entity->title)+strlen(sep)+1;
@@ -533,12 +532,12 @@ sp_doc_dialog_add_work_entity( char * name,
         gtk_widget_show (e);
         g_signal_connect ( G_OBJECT (e), "changed",
                            G_CALLBACK (sp_doc_dialog_work_entity_changed),
-                           (gpointer)(name));
+                           (gpointer)(entity));
         //gtk_box_pack_start (GTK_BOX (hb), e, TRUE, TRUE, 0);
         gtk_table_attach( GTK_TABLE(t), e, 1, 2, row, row+1,
                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                           (GtkAttachOptions)0, 0, 0 );
-        gtk_object_set_data (GTK_OBJECT (dlg), name, e);
+        gtk_object_set_data (GTK_OBJECT (dlg), entity->name, e);
     }
 }
 
@@ -866,16 +865,11 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
         row=0;
-        sp_doc_dialog_add_work_entity( "title", t, row++ );
-        sp_doc_dialog_add_work_entity( "date", t, row++ );
-        sp_doc_dialog_add_work_entity( "creator", t, row++ );
-        sp_doc_dialog_add_work_entity( "owner", t, row++ );
-        sp_doc_dialog_add_work_entity( "publisher", t, row++ );
-        sp_doc_dialog_add_work_entity( "source", t, row++ );
-        sp_doc_dialog_add_work_entity( "keywords", t, row++ );
-
-        /* this needs to be multi-line text entry */
-        sp_doc_dialog_add_work_entity( "description", t, row++ );
+        for (struct rdf_work_entity_t * entity = rdf_work_entities;
+             entity && entity->name; entity++) {
+            sp_doc_dialog_add_work_entity( entity, t, row++ );
+        }
+        /* TODO: load the license info */
 
         vb = gtk_vbox_new (FALSE, 4);
         gtk_widget_show (vb);
@@ -961,12 +955,15 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
 }
 
 static void
-sp_doc_dialog_update_work_entity( char * name )
+sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
 {
    if (dlg) {
-        GtkWidget *e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), name);
+       g_assert ( entity != NULL );
 
-        gtk_entry_set_text ( GTK_ENTRY (e), rdf_get_work_string( name ) );
+       GtkWidget *e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
+                                                      entity->name);
+
+       gtk_entry_set_text ( GTK_ENTRY (e), rdf_get_work_entity( entity  ) );
    } 
 }
 
@@ -1163,14 +1160,12 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 
         // end of "document settings" stuff
 
-        sp_doc_dialog_update_work_entity( "title" );
-        sp_doc_dialog_update_work_entity( "date" );
-        sp_doc_dialog_update_work_entity( "creator" );
-        sp_doc_dialog_update_work_entity( "owner" );
-        sp_doc_dialog_update_work_entity( "publisher" );
-        sp_doc_dialog_update_work_entity( "source" );
-        sp_doc_dialog_update_work_entity( "keywords" );
-        sp_doc_dialog_update_work_entity( "description" );
+        /* load the RDF entities */
+        for (struct rdf_work_entity_t * entity = rdf_work_entities;
+             entity && entity->name; entity++) {
+            sp_doc_dialog_update_work_entity( entity );
+        }
+        /* TODO: load the license info */
 
         gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(FALSE));
     }

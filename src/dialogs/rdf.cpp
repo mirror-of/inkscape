@@ -11,11 +11,15 @@
 
 #include <config.h>
 
+#include <stdio.h>
+
 #include <string.h>
 #include <glib.h>
 #include "rdf.h"
 
 /*
+
+   Example RDF XML from various places...
  
 <rdf:RDF xmlns="http://web.resource.org/cc/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -35,6 +39,7 @@
    <license rdf:resource="http://creativecommons.org/licenses/by/2.0/" 
 />
 </Work>
+
 
   <rdf:RDF xmlns="http://web.resource.org/cc/"
       xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -143,13 +148,14 @@ struct rdf_license_t rdf_licenses [] = {
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title"), "dc:title" },
     { "date", N_("Date"), "dc:date" },
-    { "source", N_("Source"), "dc:source" },
-    { "keywords", N_("Keywords"), "dc:subject" },
 
     /* these are "agent" tags actually... */
     { "creator", N_("Creator"), "dc:creator" },
     { "owner", N_("Owner"), "dc:owner" },
     { "publisher", N_("Publisher"), "dc:publisher" },
+
+    { "source", N_("Source"), "dc:source" },
+    { "keywords", N_("Keywords"), "dc:subject" },
 
     /* this is a multi-line tag */
     { "description", N_("Description"), "dc:description" },
@@ -160,6 +166,12 @@ struct rdf_work_entity_t rdf_work_entities [] = {
     { NULL, NULL, NULL }
 };
 
+/**
+ *  \brief   Retrieves a known RDF/Work entity by name
+ *  \return  A pointer to an RDF/Work entity
+ *  \param   name  The desired RDF/Work entity
+ *  
+ */
 struct rdf_work_entity_t *
 rdf_find_entity(char * name)
 {
@@ -178,7 +190,9 @@ rdf_find_entity(char * name)
  */
 /*
 
-printf_escaped doesn't exist for most people...
+   Since g_markup_printf_escaped doesn't exist for most people's glib
+   right now, this function will remain commented out since it's only
+   for generic debug anyway.  --Kees
 
 gchar *
 rdf_string(struct rdf_t * rdf)
@@ -287,23 +301,58 @@ rdf_string(struct rdf_t * rdf)
 }
 */
 
+/**
+ *  \brief   Retrieves a known RDF/Work entity's contents from the document XML by name
+ *  \return  A pointer to the entity's static contents as a string
+ *  \param   entity  The desired RDF/Work entity
+ *  
+ */
 gchar *
-rdf_get_work_string(char * name)
+rdf_get_work_entity(struct rdf_work_entity_t * entity)
 {
+    /* TODO: obviously, we need to also pass the document and then extract
+     * the desired RDF entity from the XML */
     return "";
 }
 
+/**
+ *  \brief   Stores a string into a named RDF/Work entity in the document XML
+ *  \param   entity The desired RDF/Work entity to replace
+ *  \param   string The string to replace the entity contents with
+ *  
+ */
 void
-rdf_set_work_string(char * name, gchar * string)
+rdf_set_work_entity(struct rdf_work_entity_t * entity, gchar * string)
 {
+    g_assert ( entity != NULL );
+    g_assert ( string != NULL );
+
+    printf("need to change '%s' (%s) to '%s'\n",
+        entity->title,
+        entity->tag,
+        string);
+
+    /* TODO: update the XML */
 }
 
+/**
+ *  \brief   Attempts to match and retrieve a known RDF/License from the document XML
+ *  \return  A pointer to the static RDF license structure
+ *  
+ */
 struct rdf_license_t *
 rdf_get_license()
 {
+    /* obviously, we need to also pass the document and then extract the
+     * desired RDF entity from the XML */
     return NULL;
 }
 
+/**
+ *  \brief   Stores an RDF/License XML in the document XML
+ *  \param   license   The desired RDF/License structure to store
+ *  
+ */
 void
 rdf_set_license(struct rdf_license_t * license)
 {

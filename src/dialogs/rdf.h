@@ -6,22 +6,31 @@
 
 #include "helper/sp-intl.h"
 
+/**
+ * \brief Holds license name and RDF information
+ */
 struct rdf_license_t {
-    gchar *name;
-    gchar *work_rdf;
-    gchar *license_rdf;
+    gchar *name;        /* localized name of this license */
+    gchar *work_rdf;    /* URL for the RDF/Work/license element */
+    gchar *license_rdf; /* XML contents for the RDF/License tag */
 };
 
 extern rdf_license_t rdf_licenses [];
 
+/**
+ * \brief Holds known RDF/Work tags
+ */
 struct rdf_work_entity_t {
-    char  *name;
-    gchar *title;
-    gchar *tag;
+    char  *name;       /* unique name of this entity for internal reference */
+    gchar *title;      /* localized name of this entity for data entry labels */
+    gchar *tag;        /* namespace tag for the RDF/Work element */
 };
 
 extern rdf_work_entity_t rdf_work_entities [];
 
+/**
+ * \brief Generic collection of RDF information for the RDF debug function
+ */
 struct rdf_t {
     gchar*                work_title;
     gchar*                work_date;
@@ -37,8 +46,8 @@ struct rdf_t {
 
 struct rdf_work_entity_t * rdf_find_entity(char * name);
 
-gchar * rdf_get_work_string(char * name);
-void    rdf_set_work_string(char * name, gchar * string);
+gchar * rdf_get_work_entity(struct rdf_work_entity_t * entity);
+void    rdf_set_work_entity(struct rdf_work_entity_t * entity, gchar * string);
 
 struct rdf_license_t * rdf_get_license();
 void                   rdf_set_license(struct rdf_license_t * license);
