@@ -196,15 +196,15 @@ EcmaBinding::EcmaBinding(Inkscape::Application *theParent) throw (EcmaException)
 EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent) 
                                             throw (EcmaException)
 {
-
+    //Create an EcmaObject
+    EcmaObject *obj = new EcmaObject(this, parent);
+    
+/*Temp fix
     char *name = (char *) sp_repr_name(node);
     if (!name)
         throw EcmaException("processNode: unnamed node");
 
     g_message("node:<%s>\n", name);
-
-    //Create an EcmaObject
-    EcmaObject *obj = new EcmaObject(this, parent);
 
     if (strcmp("script", name)==0)
         {
@@ -258,7 +258,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
         if (!processNode(child, obj))
             return NULL;
         }
-
+*/
     return obj;
 }
 
