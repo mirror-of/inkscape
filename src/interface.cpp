@@ -666,10 +666,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         SP_VERB_NONE,
 	SP_VERB_DIALOG_TOGGLE,
-        SP_VERB_LAST
-	};
 
-    static const sp_verb_t view_verbs2[] = {
         SP_VERB_NONE,
 	SP_VERB_FILE_NEXT_DESKTOP,
 	SP_VERB_FILE_PREV_DESKTOP,
@@ -680,28 +677,6 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     };
 
     sp_ui_menu_append (menu, view_verbs1, view);
-
-#ifndef WIN32
-    // FIXME: make a function for checkbox menu items
-    GtkWidget *window_policy_check = 
-        gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
-
-    gtk_widget_show(window_policy_check);
-
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
-
-    g_signal_connect( G_OBJECT(window_policy_check), "toggled",
-                      (GCallback)window_policy_toggled, NULL );
-
-    g_signal_connect( G_OBJECT(window_policy_check), "expose_event",
-                      (GCallback)window_policy_update, NULL);
-
-    g_object_set_data (G_OBJECT (window_policy_check), "view", (gpointer) view);
-    g_signal_connect ( G_OBJECT (window_policy_check), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) _("Whether dialog windows are always on top of document window") );
-    g_signal_connect ( G_OBJECT (window_policy_check), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL);
-#endif
-
-    sp_ui_menu_append (menu, view_verbs2, view);
 
 } // end of sp_ui_view_menu()
 
