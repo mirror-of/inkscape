@@ -35,7 +35,6 @@ libspdialogs_a_SOURCES = \
 	fill-style.cpp fill-style.h \
 	stroke-style.cpp stroke-style.h \
 	transformation.cpp transformation.h \
-	node-edit.cpp node-edit.h\
 	dialog-events.cpp dialog-events.h
 
 #	sp-widget.c sp-widget.h \
