@@ -35,8 +35,6 @@
 #include "xml/repr-private.h"
 #include "object-edit.h"
 
-#define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
-
 /* fixme: Implement these via preferences */
 
 #define NODE_FILL 0xbfbfbf7f

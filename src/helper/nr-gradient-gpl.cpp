@@ -22,10 +22,6 @@
 
 #define noNR_USE_GENERIC_RENDERER
 
-#ifndef hypot
-#define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
-#endif
-
 #define NRG_MASK (NR_GRADIENT_VECTOR_LENGTH - 1)
 #define NRG_2MASK ((NR_GRADIENT_VECTOR_LENGTH << 1) - 1)
 

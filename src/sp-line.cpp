@@ -19,8 +19,6 @@
 #include "sp-line.h"
 #include "helper/sp-intl.h"
 
-#define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
-
 static void sp_line_class_init (SPLineClass *klass);
 static void sp_line_init (SPLine *line);
 
