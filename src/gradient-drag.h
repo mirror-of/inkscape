@@ -35,7 +35,7 @@ struct GrDraggable {
 struct GrDrag;
 
 struct GrDragger {
-	GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable *draggable);
+	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable);
 	~GrDragger();
 
     SPKnot *knot;
@@ -50,6 +50,8 @@ struct GrDragger {
 	GrDrag *parent;
 
 	void addDraggable(GrDraggable *draggable);
+
+	void updateTip();
 
     /**
      * Called solely from knot_moved_handler.
@@ -77,7 +79,7 @@ struct GrDrag {
 	void updateDraggers ();
 	void updateLines ();
 
-	void addDragger (NR::Point p, const gchar *tip, GrDraggable *draggable);
+	void addDragger (NR::Point p, GrDraggable *draggable);
 
 	GrDragger *selected;
 	void setSelected (GrDragger *dragger);
