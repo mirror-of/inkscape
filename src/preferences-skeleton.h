@@ -67,7 +67,8 @@ static const char preferences_skeleton[] =
 "  <group id=\"options\">"
 "    <group id=\"nudgedistance\" value=\"2.8346457\"/>"
 "    <group id=\"rotationstep\" value=\"15\"/>"
-"    <group id=\"cursortolerance\" value=\"2.0\"/>"
+"    <group id=\"cursortolerance\" value=\"8.0\"/>"
+"    <group id=\"dragtolerance\" value=\"4.0\"/>"
 "  </group>"
 
 "</inkscape>";

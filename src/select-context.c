@@ -184,6 +184,9 @@ sp_select_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 	}
 }
 
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
+
 static gint
 sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
@@ -200,6 +203,8 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 	seltrans = &sc->seltrans;
 	selection = SP_DT_SELECTION (desktop);
 
+	tolerance = prefs_get_int_attribute ("options.dragtolerance", "value", 0);
+
 	switch (event->type) {
 	case GDK_2BUTTON_PRESS:
 		if (event->button.button == 1) {
@@ -208,6 +213,11 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 		break;
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
+
+			// save drag origin
+			xp = (gint) event->button.x; 
+			yp = (gint) event->button.y;
+
 			/* Left mousebutton */
 			sc->dragging = TRUE;
 			sc->moved = FALSE;
@@ -224,6 +234,10 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 		if (event->motion.state & GDK_BUTTON1_MASK) {
 			/* Left mousebutton */
 			if (sc->dragging) {
+
+				if (abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+					break; // do not drag if we're within tolerance from origin
+
 				sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 				if (!sc->moved) {
 					if (!sp_selection_item_selected (selection, sc->item)) {
@@ -240,6 +254,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
+		xp = yp = 0; 
 		if (event->button.button == 1) {
 			if (sc->moved) {
 				// item has been moved
@@ -326,6 +341,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	seltrans = &sc->seltrans;
 	selection = SP_DT_SELECTION (desktop);
 	nudge = prefs_get_double_attribute ("options.nudgedistance", "value", 2.8346457); // default is 1 mm
+	tolerance = prefs_get_int_attribute ("options.dragtolerance", "value", 0);
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -347,6 +363,10 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		if (event->motion.state & GDK_BUTTON1_MASK) {
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 			if (sc->dragging) {
+
+				if (abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+					break; // do not drag if we're within tolerance from origin
+
 				/* User has dragged fast, so we get events on root */
 				if (!sc->moved) {
 					if (!sp_selection_item_selected (selection, sc->item)) {
@@ -365,6 +385,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
+		xp = yp = 0; 
 		if ((event->button.button == 1) && (sc->grabbed)) {
 			if (sc->dragging) {
 				if (sc->moved) {
