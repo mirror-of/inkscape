@@ -286,7 +286,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                                 selection->addItem(sc->item);
                             }
                         } else {
-                            if (selection->includesItem(sc->item)) {
+                            if (selection->includesItem(sc->item)) {   /* FIXME: sc->item can be NULL */
                                 sp_sel_trans_increase_state(seltrans);
                             } else {
                                 sp_sel_trans_reset_state(seltrans);
