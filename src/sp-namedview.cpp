@@ -205,7 +205,7 @@ sp_namedview_release (SPObject * object)
 	}
 
 	while (namedview->gridviews) {
-		gtk_object_destroy (GTK_OBJECT (namedview->gridviews->data));
+		gtk_object_unref (GTK_OBJECT (namedview->gridviews->data));
 		namedview->gridviews = g_slist_remove (namedview->gridviews, namedview->gridviews->data);
 	}
 
@@ -563,6 +563,8 @@ sp_namedview_show (SPNamedView * nv, gpointer desktop)
 	nv->views = g_slist_prepend (nv->views, desktop);
 
 	item = sp_canvas_item_new (SP_DT_GRID (dt), SP_TYPE_CGRID, NULL);
+	// since we're keeping a copy, we need to bump up the ref count
+	gtk_object_ref (GTK_OBJECT(item));
 	nv->gridviews = g_slist_prepend (nv->gridviews, item);
 	sp_namedview_setup_grid_item (nv, item);
 }
@@ -684,7 +686,7 @@ sp_namedview_hide (SPNamedView * nv, gpointer desktop)
 
 	g_assert (l);
 
-	gtk_object_destroy (GTK_OBJECT (l->data));
+	gtk_object_unref (GTK_OBJECT (l->data));
 	nv->gridviews = g_slist_remove (nv->gridviews, l->data);
 }
 

@@ -3,6 +3,7 @@
 	* src/dialogs/export.cpp: moved function-based static state variable
 	  into the dialog state variables.  Closes bug #993447.
 	* src/display/curve.cpp: fixed compile warning.
+	* src/sp-namedview.cpp: wasn't ref counting correctly.  Closes #955020.
 
 2004-10-29  Jon A. Cruz  <jon@joncruz.org>
 
