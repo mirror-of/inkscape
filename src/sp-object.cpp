@@ -1198,14 +1198,22 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 const gchar *
 sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def)
 {
+	/* fixme: Use proper CSS parsing.  The current version is buggy in a number of
+	   situations where key is a substring of the style string other than as a property
+	   name (including where key is a substring of a property name), and is
+	   also buggy in its handling of inheritance for properties that aren't inherited
+	   by default. */
 	g_return_val_if_fail (object != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 
 	const gchar *style = sp_repr_attr (object->repr, "style");
 	if (style) {
-		gint len = strlen (key);
-		for (gchar *p = strstr (style, key); p; p = strstr (style, key)) {
+		size_t const len = strlen(key);
+		char const *p;
+		while ( (p = strstr(style, key))
+		        != NULL )
+		{
 			p += len;
 			while ((*p <= ' ') && *p) p++;
 			if (*p++ != ':') break;
