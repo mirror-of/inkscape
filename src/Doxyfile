@@ -30,6 +30,8 @@ INPUT = \
 	sp-item.cpp	\
 	sp-item.h	\
 	sp-spiral.cpp	\
+	uri.cpp	\
+	uri.h	\
 	verbs.cpp	\
 	widgets/paint-selector.cpp	\
 	xml/repr-private.h	\
