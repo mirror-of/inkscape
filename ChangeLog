@@ -10,6 +10,10 @@
 	  fix update of layer selector widget, and eliminate leak of dialog
 	  objects.
 
+2004-11-24  Kees Cook  <kees@outflux.net>
+
+	* inkscape.spec: added SMP flags, added static library link capability.
+
 2004-11-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/draw-context.cpp (spdc_concat_colors_and_flush):

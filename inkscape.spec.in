@@ -1,3 +1,7 @@
+# If you want to build an executable that uses static libraries,
+# build your libraries in a separate root directory, and then run
+# the rpmbuild using "--define 'ink_static_root /your/static/rootdir'"
+
 Name:		inkscape
 Summary:	A Vector Drawing Application
 Version:	@VERSION@
@@ -27,12 +31,25 @@ Inkscape is an SVG-based generic vector-drawing program for Linux/Unix/Windows/M
 ### Needed for snapshot releases.
 MYCFLAGS="$RPM_OPT_FLAGS"
 
+# Deal with static builds
+if [ ! -z "%{?ink_static_root}" ]; then
+	PATH=/extra/static/bin:$PATH
+	if [ -z "$PKG_CONFIG_PATH" ]; then
+		PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
+	fi
+	PKG_CONFIG_PATH=%{ink_static_root}/lib/pkgconfig:$PKG_CONFIG_PATH
+	CPPFLAGS="-I%{ink_static_root}/include $CPPFLAGS"
+	LDFLAGS="-L%{ink_static_root}/lib $LDFLAGS"
+
+	export PATH PKG_CONFIG_PATH CPPFLAGS LDFLAGS
+fi
+
 if [ ! -x configure ]; then
   CFLAGS="$MYCFLAGS" ./autogen.sh $MYARCH_FLAGS --prefix=%{_prefix} --localstatedir=%{_localstatedir} --sysconfdir=%{_sysconfdir}
 else
   %configure 
 fi
-make
+make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
@@ -53,6 +70,10 @@ rm -rf %{buildroot}
 %{_mandir}/man1/*
 
 %changelog
+* Wed Nov 24 2004 Kees Cook <kees@outflux.net>
+- Added SMP flags so I can build faster
+- Added static build capability
+
 * Sat Jul 17 2004 Bryce W. Harrington <bryce@bryceharrington.com>
 - Removing _libdir and TODO, updating description
 
