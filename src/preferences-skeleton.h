@@ -39,7 +39,7 @@ static const char preferences_skeleton[] =
 "    </group>"
 "    <group id=\"freehand\""
 "         style=\"fill:none;fill-rule:evenodd;stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;\">"
-"      <eventcontext id=\"pencil\"/>"
+"      <eventcontext id=\"pencil\" tolerance=\"10.0\"/>"
 "      <eventcontext id=\"pen\" mode=\"drag\"/>"
 "    </group>"
 "    <eventcontext id=\"calligraphic\" style=\"fill:black;fill-rule:nonzero;stroke:none;\""
