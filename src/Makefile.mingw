@@ -47,6 +47,9 @@ inkscape.exe: libinkscape.a main.o winmain.o $(RES)
 	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o $(RES) libinkscape.a $(LIBS)
 	strip inkscape.exe
 
+inkscape_s.exe: libinkscape.a main.o winmain.o inkres.o
+	$(CXX) -o inkscape_s.exe  main.o winmain.o inkscape.o inkres.o libinkscape.a $(GTKSLIB)
+
 inkres.o: inkscape.rc
 	$(WINDRES) inkscape.rc $(RES)
 

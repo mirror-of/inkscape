@@ -1,6 +1,7 @@
 
 CC = gcc
 CXX = g++
+WINDRES = windres
 
 ###### DYNAMIC LINKING
 GTK=c:/gtk
@@ -67,6 +68,12 @@ GTKSLIB = \
 #-DINKSCAPE_GLADEDIR=\""pixmaps"\"
 
 CFLAGS = -O3  -Wall -mms-bitfields
+
+BSLASH := \\#
+FSLASH := /
+S = $(BSLASH)
+
+CP = copy
 
 .cpp.o:
 	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
