@@ -228,7 +228,7 @@ Export document to plain \s-1SVG\s0 file (no \*(L"xmlns:sodipodi\*(R" namespace)
 Display brief usage message
 .SH "KEYBINDINGS"
 .IX Header "KEYBINDINGS"
-See keybindings.txt for a listing of keybindings.
+See the "Keys and Mouse" item in the Help-Menu for a listing of keybindings.
 .SH "DIAGNOSTICS"
 .IX Header "DIAGNOSTICS"
 The program returns zero on success or non-zero on failure.
