@@ -75,6 +75,8 @@ libinkpre_a_SOURCES =	\
 	interface.cpp interface.h	\
 	isnan.h \
 	knot.cpp knot.h	\
+	knot-enums.h	\
+	knot-holder-entity.h	\
 	knotholder.cpp knotholder.h	\
 	layer-fns.cpp layer-fns.h	\
 	macros.h	\
