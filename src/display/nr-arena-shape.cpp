@@ -93,7 +93,7 @@ nr_arena_shape_class_init (NRArenaShapeClass *klass)
 static void
 nr_arena_shape_init (NRArenaShape *shape)
 {
-    new (&shape->_fill) NRArenaShape::Style();
+    new (&shape->_fill) NRArenaShape::FillStyle();
     new (&shape->_stroke) NRArenaShape::StrokeStyle();
 
     shape->curve = NULL;
@@ -130,7 +130,7 @@ nr_arena_shape_finalize (NRObject *object)
     if (shape->style) sp_style_unref (shape->style);
     if (shape->curve) sp_curve_unref (shape->curve);
 
-    shape->_fill.~Style();
+    shape->_fill.~FillStyle();
     shape->_stroke.~StrokeStyle();
 
     ((NRObjectClass *) shape_parent_class)->finalize (object);
@@ -272,7 +272,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 		bbox.y1+=width;
 	    }      
 	    // those pesky miters, now
-	    float miterMax=width*shape->style->stroke_miterlimit.value;
+	    float miterMax=width*shape->_stroke.mitre_limit;
 	    if ( miterMax > 0.01 ) {
 		// grunt mode. we should compute the various miters instead (one for each point on the curve)
 		bbox.x0-=miterMax;
@@ -401,7 +401,6 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
     if (shape->_fill.paint.type() != NRArenaShape::Paint::NONE) {
 	if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == NR_CURVETO)) {
 	    if (TRUE || !shape->fill_shp) {
-		//unsigned int windrule = (shape->style->fill_rule.value == SP_WIND_RULE_EVENODD) ? NR_WIND_RULE_EVENODD : NR_WIND_RULE_NONZERO;
 		NR::Matrix  cached_to_new;
 		int isometry = 0;
 		if ( shape->cached_fill ) {
@@ -420,7 +419,7 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 		    }
 		    thePath->Convert(1.0);
 		    thePath->Fill(theShape,0);
-		    if ( shape->style->fill_rule.value == SP_WIND_RULE_EVENODD ) {
+		    if ( shape->_fill.rule == NRArenaShape::EVEN_ODD ) {
 			if ( shape->cached_fill->ConvertToShape(theShape,fill_oddEven) ) {
 			}
 		    } else {
@@ -512,31 +511,31 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 		    }
 		}
 		ButtType butt=butt_straight;
-		switch(shape->style->stroke_linecap.value) {
-		case SP_STROKE_LINECAP_BUTT:
+		switch(shape->_stroke.cap) {
+		case NRArenaShape::BUTT_CAP:
 		    butt = butt_straight;
 		    break;
-		case SP_STROKE_LINECAP_ROUND:
+		case NRArenaShape::ROUND_CAP:
 		    butt = butt_round;
 		    break;
-		case SP_STROKE_LINECAP_SQUARE:
+		case NRArenaShape::SQUARE_CAP:
 		    butt = butt_square;
 		    break;
 		}
 		JoinType join=join_straight;
-		switch(shape->style->stroke_linejoin.value) {
-		case SP_STROKE_LINEJOIN_MITER:
+		switch(shape->_stroke.join) {
+		case NRArenaShape::MITRE_JOIN:
 		    join = join_pointy;
 		    break;
-		case SP_STROKE_LINEJOIN_ROUND:
+		case NRArenaShape::ROUND_JOIN:
 		    join = join_round;
 		    break;
-		case SP_STROKE_LINEJOIN_BEVEL:
+		case NRArenaShape::BEVEL_JOIN:
 		    join = join_straight;
 		    break;
 		}
 		thePath->Stroke(theShape, false, 0.5*width, join, butt, 
-				0.5*width*shape->style->stroke_miterlimit.value );
+				0.5*width*shape->_stroke.mitre_limit);
 		
 		if ( shape->cached_stroke->ConvertToShape(theShape,fill_nonZero) ) {
 		}
@@ -903,58 +902,57 @@ void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve,bool justTrans)
 
 void NRArenaShape::setFill(SPPaintServer *server) {
     _fill.paint.set(server);
-    if (cached_fill) {
-        delete cached_fill;
-        cached_fill = NULL;
-    }
+    _invalidateCachedFill();
 }
 
 void NRArenaShape::setFill(SPColor const &color) {
     _fill.paint.set(color);
-    if (cached_fill) {
-        delete cached_fill;
-        cached_fill = NULL;
-    }
+    _invalidateCachedFill();
 }
 
 void NRArenaShape::setFillOpacity(double opacity) {
     _fill.opacity = opacity;
-    if (cached_fill) {
-        delete cached_fill;
-        cached_fill = NULL;
-    }
+    _invalidateCachedFill();
+}
+
+void NRArenaShape::setFillRule(NRArenaShape::FillRule rule) {
+    _fill.rule = rule;
+    _invalidateCachedFill();
 }
 
 void NRArenaShape::setStroke(SPPaintServer *server) {
     _stroke.paint.set(server);
-    if (cached_stroke) {
-        delete cached_stroke;
-        cached_stroke = NULL;
-    }
+    _invalidateCachedStroke();
 }
 
 void NRArenaShape::setStroke(SPColor const &color) {
     _stroke.paint.set(color);
-    if (cached_stroke) {
-        delete cached_stroke;
-        cached_stroke = NULL;
-    }
+    _invalidateCachedStroke();
 }
 
 void NRArenaShape::setStrokeOpacity(double opacity) {
     _stroke.opacity = opacity;
-    if (cached_stroke) {
-        delete cached_stroke;
-        cached_stroke = NULL;
-    }
+    _invalidateCachedStroke();
 }
 
 void NRArenaShape::setStrokeWidth(double width) {
     _stroke.width = width;
-    if (cached_stroke) {
-        delete cached_stroke;
-        cached_stroke = NULL;
-    }
+    _invalidateCachedStroke();
+}
+
+void NRArenaShape::setMitreLimit(double limit) {
+    _stroke.mitre_limit = limit;
+    _invalidateCachedStroke();
+}
+
+void NRArenaShape::setLineCap(NRArenaShape::CapType cap) {
+    _stroke.cap = cap;
+    _invalidateCachedStroke();
+}
+
+void NRArenaShape::setLineJoin(NRArenaShape::JoinType join) {
+    _stroke.join = join;
+    _invalidateCachedStroke();
 }
 
 /** nr_arena_shape_set_style
@@ -989,6 +987,19 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
         }
     }
     shape->setFillOpacity(SP_SCALE24_TO_FLOAT(style->fill_opacity.value));
+    switch (style->fill_rule.value) {
+        case SP_WIND_RULE_EVENODD: {
+            shape->setFillRule(NRArenaShape::EVEN_ODD);
+            break;
+        }
+        case SP_WIND_RULE_NONZERO: {
+            shape->setFillRule(NRArenaShape::NONZERO);
+            break;
+        }
+        default: {
+            g_assert_not_reached();
+        }
+    }
 
     switch (style->stroke.type) {
         case SP_PAINT_TYPE_NONE: {
@@ -1009,6 +1020,41 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
     }
     shape->setStrokeWidth(style->stroke_width.computed);
     shape->setStrokeOpacity(SP_SCALE24_TO_FLOAT(style->stroke_opacity.value));
+    switch (style->stroke_linecap.value) {
+        case SP_STROKE_LINECAP_ROUND: {
+            shape->setLineCap(NRArenaShape::ROUND_CAP);
+            break;
+        }
+        case SP_STROKE_LINECAP_SQUARE: {
+            shape->setLineCap(NRArenaShape::SQUARE_CAP);
+            break;
+        }
+        case SP_STROKE_LINECAP_BUTT: {
+            shape->setLineCap(NRArenaShape::BUTT_CAP);
+            break;
+        }
+        default: {
+            g_assert_not_reached();
+        }
+    }
+    switch (style->stroke_linejoin.value) {
+        case SP_STROKE_LINEJOIN_ROUND: {
+            shape->setLineJoin(NRArenaShape::ROUND_JOIN);
+            break;
+        }
+        case SP_STROKE_LINEJOIN_BEVEL: {
+            shape->setLineJoin(NRArenaShape::BEVEL_JOIN);
+            break;
+        }
+        case SP_STROKE_LINEJOIN_MITER: {
+            shape->setLineJoin(NRArenaShape::MITRE_JOIN);
+            break;
+        }
+        default: {
+            g_assert_not_reached();
+        }
+    }
+    shape->setMitreLimit(style->stroke_miterlimit.value);
 
     nr_arena_item_request_update(shape, NR_ARENA_ITEM_STATE_ALL, FALSE);
 }

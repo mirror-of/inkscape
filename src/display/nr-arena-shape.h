@@ -95,6 +95,23 @@ struct NRArenaShape : public NRArenaItem {
 		}
 	};
 
+	enum FillRule {
+		EVEN_ODD,
+		NONZERO
+	};
+
+	enum CapType {
+		ROUND_CAP,
+		SQUARE_CAP,
+		BUTT_CAP
+	};
+
+	enum JoinType {
+		ROUND_JOIN,
+		BEVEL_JOIN,
+		MITRE_JOIN
+	};
+
 	/* Shape data */
 	SPCurve *curve;
 	SPStyle *style;
@@ -138,20 +155,48 @@ struct NRArenaShape : public NRArenaItem {
 	void setFill(SPPaintServer *server);
 	void setFill(SPColor const &color);
 	void setFillOpacity(double opacity);
+	void setFillRule(FillRule rule);
 
 	void setStroke(SPPaintServer *server);
 	void setStroke(SPColor const &color);
 	void setStrokeOpacity(double opacity);
 	void setStrokeWidth(double width);
+	void setLineCap(CapType cap);
+	void setLineJoin(JoinType join);
+	void setMitreLimit(double limit);
+
+	void _invalidateCachedFill() {
+		if (cached_fill) {
+			delete cached_fill;
+			cached_fill = NULL;
+		}
+	}
+	void _invalidateCachedStroke() {
+		if (cached_stroke) {
+			delete cached_stroke;
+			cached_stroke = NULL;
+		}
+	}
 
 	struct Style {
 		Style() : opacity(0.0) {}
 		Paint paint;
 		double opacity;
+	};
+	struct FillStyle : public Style {
+		FillStyle() : rule(EVEN_ODD) {}
+		FillRule rule;
 	} _fill;
 	struct StrokeStyle : public Style {
-		StrokeStyle() : width(0.0) {}
+		StrokeStyle()
+		: cap(ROUND_CAP), join(ROUND_JOIN),
+		  width(0.0), mitre_limit(0.0)
+		{}
+
+		CapType cap;
+		JoinType join;
 		double width;
+		double mitre_limit;
 	} _stroke;
 };
 
