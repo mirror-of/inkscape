@@ -386,7 +386,8 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 {
 	SPDocument *doc;
 	SPReprDoc *rdoc;
-	gchar *base, *name;
+	gchar *base = NULL;
+        gchar *name = NULL;
 
 	if (uri) {
 		SPRepr *rroot;
@@ -418,6 +419,10 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 		base = NULL;
 		name = g_strdup_printf (_("New document %d"), ++doc_count);
 	}
+
+        //# These should be set by now
+        g_assert (base);
+        g_assert (name);
 
 	doc = sp_document_create (rdoc, uri, base, name, advertize, keepalive);
 
