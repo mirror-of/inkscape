@@ -33,6 +33,7 @@
 #include "desktop.h"
 #include "version.h"
 #include "dir-util.h"
+#include "unit-constants.h"
 
 #include "display/nr-arena-item.h"
 #include "display/nr-arena.h"
@@ -645,8 +646,8 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 			/* Set up viewport in case svg has it defined as percentages */
 			ctx.vp.x0 = 0.0;
 			ctx.vp.y0 = 0.0;
-			ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
-			ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
+			ctx.vp.x1 = 21.0 * PX_PER_CM; 
+			ctx.vp.y1 = 29.7 * PX_PER_CM;
 			nr_matrix_set_identity (&ctx.i2vp);
 			doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		}
@@ -684,8 +685,8 @@ sp_document_idle_handler (gpointer data)
 		/* Set up viewport in case svg has it defined as percentages */
 		ctx.vp.x0 = 0.0;
 		ctx.vp.y0 = 0.0;
-		ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
-		ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
+		ctx.vp.x1 = 21.0 * PX_PER_CM;
+		ctx.vp.y1 = 29.7 * PX_PER_CM;
 		nr_matrix_set_identity (&ctx.i2vp);
 
 		gboolean saved = sp_document_get_undo_sensitive(doc);

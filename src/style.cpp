@@ -39,6 +39,7 @@
 #include "style.h"
 #include "svg/stringstream.h"
 #include "xml/repr.h"
+#include "unit-constants.h"
 
 namespace Inkscape {
 
@@ -2006,25 +2007,22 @@ sp_style_read_ilength (SPILength *val, const gchar *str)
                 val->unit = SP_CSS_UNIT_PX;
                 val->computed = value;
             } else if (!strcmp (e, "pt")) {
-                /* Userspace * 1.25 */
+                /* Userspace / DEVICESCALE */
                 val->unit = SP_CSS_UNIT_PT;
-                val->computed = value * 1.25;
+                val->computed = value * PX_PER_PT;
             } else if (!strcmp (e, "pc")) {
-                /* Userspace * 15 */
+                /* 1 pica = 12pt; FIXME: add it to SPUnit */
                 val->unit = SP_CSS_UNIT_PC;
-                val->computed = value * 15.0;
+                val->computed = value * PX_PER_PT * 12;
             } else if (!strcmp (e, "mm")) {
-                /* Userspace * 3.543307 */
                 val->unit = SP_CSS_UNIT_MM;
-                val->computed = value * 3.543307;
+                val->computed = value * PX_PER_MM;
             } else if (!strcmp (e, "cm")) {
-                /* Userspace * 35.43307 */
                 val->unit = SP_CSS_UNIT_CM;
-                val->computed = value * 35.43307;
+                val->computed = value * PX_PER_CM;
             } else if (!strcmp (e, "in")) {
-                /* Userspace * 90 */
                 val->unit = SP_CSS_UNIT_IN;
-                val->computed = value * 90.0;
+                val->computed = value * PX_PER_IN;
             } else if (!strcmp (e, "em")) {
                 /* EM square */
                 val->unit = SP_CSS_UNIT_EM;
@@ -2175,20 +2173,17 @@ sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
             } else if (!strcmp (e, "px")) {
                 /* Userspace */
             } else if (!strcmp (e, "pt")) {
-                /* Userspace * 1.25 */
-                value *= 1.25;
+                /* Userspace * DEVICESCALE */
+                value *= PX_PER_PT;
             } else if (!strcmp (e, "pc")) {
-                /* Userspace * 15 */
-                value *= 15.0;
+                /* 12pt */
+                value *= PX_PER_PT * 12.0;
             } else if (!strcmp (e, "mm")) {
-                /* Userspace * 3.543307 */
-                value *= 3.543307;
+                value *= PX_PER_MM;
             } else if (!strcmp (e, "cm")) {
-                /* Userspace * 35.43307 */
-                value *= 35.43307;
+                value *= PX_PER_CM;
             } else if (!strcmp (e, "in")) {
-                /* Userspace * 90 */
-                value *= 90;
+                value *= PX_PER_IN;
             } else if (!strcmp (e, "%")) {
                 /* Percentage */
                 val->set = TRUE;
@@ -2395,23 +2390,23 @@ sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PT:
-                os << key << ":" << val->computed / 1.25 << "pt;";
+                os << key << ":" << val->computed * PT_PER_PX << "pt;";
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PC:
-                os << key << ":" << val->computed / 15.0 << "pc;";
+                os << key << ":" << val->computed * PT_PER_PX / 12.0 << "pc;";
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_MM:
-                os << key << ":" << val->computed / 3.543307 << "mm;";
+                os << key << ":" << val->computed * MM_PER_PX << "mm;";
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_CM:
-                os << key << ":" << val->computed / 35.43307 << "cm;";
+                os << key << ":" << val->computed * CM_PER_PX << "cm;";
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_IN:
-                os << key << ":" << val->computed / 90 << "in;";
+                os << key << ":" << val->computed * IN_PER_PX << "in;";
 				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_EM:
