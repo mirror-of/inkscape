@@ -7,10 +7,14 @@
 include ../Makefile.mingw.common
 
 
-
+#DLL stuff
 #Check for 'generated' files
+#all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
+#inkscape.exe inkview.exe
+
+#Static version.  leave out inkview.  too large
 all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
-inkscape.exe inkview.exe
+inkscape.exe
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
 	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
@@ -30,9 +34,14 @@ OBJ = $(OBJECTS)
 
 RES=inkres.o
 
-inkscape.exe: inkscape.dll main.o winmain.o $(RES) 
-	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscapedll.a $(LIBS)
+inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
+	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscape.a $(LIBS)
 	strip inkscape.exe
+
+# DLL version.  we need to make this work
+#inkscape.exe: inkscape.dll main.o winmain.o $(RES) 
+#	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscapedll.a $(LIBS)
+#	strip inkscape.exe
 
 inkview.exe: inkscape.dll inkview.o $(RES) 
 	$(CXX) -o inkview.exe inkview.o $(RES) libinkscapedll.a $(LIBS)

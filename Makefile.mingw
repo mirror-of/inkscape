@@ -15,8 +15,8 @@ dist:
 	-$(RMDIR) inkscape
 	$(MKDIR) inkscape
 	$(CP) src$(S)inkscape.exe inkscape
-	$(CP) src$(S)inkview.exe inkscape
-	$(CP) src$(S)inkscape.dll inkscape
+#	$(CP) src$(S)inkview.exe inkscape
+#	$(CP) src$(S)inkscape.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgtkmm-2.4-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdkmm-2.4-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libglibmm-2.4-1.dll inkscape
@@ -32,7 +32,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)libgobject-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgtk-win32-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgthread-2.0-0.dll inkscape
-	# $(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
+#	$(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpango-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpangowin32-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libxml2-2.dll inkscape
