@@ -22,13 +22,13 @@ unsigned int sp_print_stroke (SPPrintContext *ctx, const NRBPath *bpath, const N
 			      const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
 
 unsigned int sp_print_image_R8G8B8A8_N (SPPrintContext *ctx,
-					unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+					guchar *px, unsigned int w, unsigned int h, unsigned int rs,
 					const NRMatrixF *transform, const SPStyle *style);
 
 
 /* UI */
 void sp_print_preview_document (SPDocument *doc);
 void sp_print_document (SPDocument *doc, unsigned int direct);
-void sp_print_document_to_file (SPDocument *doc, const unsigned char *filename);
+void sp_print_document_to_file (SPDocument *doc, const gchar *filename);
 
 #endif
