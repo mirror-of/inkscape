@@ -72,6 +72,7 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_BORDERCOLOR, "bordercolor"},
 	{SP_ATTR_BORDEROPACITY, "borderopacity"},
 	{SP_ATTR_PAGECOLOR, "pagecolor"},
+	{SP_ATTR_INKSCAPE_PAGEOPACITY, "inkscape:pageopacity"},
 	{SP_ATTR_INKSCAPE_PAGESHADOW, "inkscape:pageshadow"},
 	{SP_ATTR_INKSCAPE_ZOOM, "inkscape:zoom"},
 	{SP_ATTR_INKSCAPE_CX, "inkscape:cx"},

@@ -148,6 +148,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "bordercolor");
 	sp_object_read_attr (object, "borderopacity");
 	sp_object_read_attr (object, "pagecolor");
+	sp_object_read_attr (object, "inkscape:pageopacity");
 	sp_object_read_attr (object, "inkscape:pageshadow");
 	sp_object_read_attr (object, "inkscape:zoom");
 	sp_object_read_attr (object, "inkscape:cx");
@@ -349,6 +350,11 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			nv->pagecolor = (nv->pagecolor & 0xff) | sp_svg_read_color (value, nv->pagecolor);
 		}
+		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_INKSCAPE_PAGEOPACITY:
+		nv->pagecolor = (nv->pagecolor & 0xffffff00) | (DEFAULTPAGECOLOR & 0xff);
+		sp_nv_read_opacity (value, &nv->pagecolor);
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_PAGESHADOW:
