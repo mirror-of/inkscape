@@ -444,7 +444,7 @@ inkscape_segv_handler (int signum)
                         while (isdigit (*d) || (*d == '.') || (*d == '_')) d += 1;
                         if (*d) {
                             memcpy (n, docname, MIN (d0 - docname - 1, 64));
-                            n[64] = '\0';
+                            n[63] = '\0';
                             docname = n;
                         }
                     }
