@@ -24,6 +24,7 @@
 
 #include <config.h>
 
+#include "helper/action.h"
 #include "helper/sp-intl.h"
 
 #include "dialogs/text-edit.h"
