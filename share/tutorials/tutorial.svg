@@ -7,13 +7,13 @@
    inkscape:version="0.38cvs"
    width="256pt"
    height="3798pt"
-   sodipodi:docname="tutorial.svg"
+   sodipodi:docname="/home/d/ink/inkscape/share/tutorials/tutorial.svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xml="http://www.w3.org/XML/1998/namespace"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="/home/d/ink/inkscape/share/screens">
+   sodipodi:docbase="/home/d/ink/inkscape/share/tutorials">
   <defs
      id="defs3">
     <linearGradient
@@ -323,12 +323,12 @@
   <sodipodi:namedview
      id="base"
      inkscape:zoom="2.15000005"
-     inkscape:cx="128.75733897"
-     inkscape:cy="3713.97883805"
-     inkscape:window-width="640"
-     inkscape:window-height="501"
-     inkscape:window-x="0"
-     inkscape:window-y="0" />
+     inkscape:cx="134.33873773"
+     inkscape:cy="2508.39747073"
+     inkscape:window-width="894"
+     inkscape:window-height="721"
+     inkscape:window-x="115"
+     inkscape:window-y="116" />
   <polygon
      sodipodi:type="star"
      style="font-size:12;fill:url(#radialGradient1670);fill-opacity:0.75;fill-rule:evenodd;stroke:none;stroke-width:1pt;"
@@ -3462,7 +3462,7 @@
        sodipodi:role="line"
        id="tspan1393"
        x="6.34433603"
-       y="1611.63831401">such recursive groups may go down to arbotrary depth. However,</tspan><tspan
+       y="1611.63831401">such recursive groups may go down to arbitrary depth. However,</tspan><tspan
        sodipodi:role="line"
        id="tspan1395"
        x="6.34433603"
