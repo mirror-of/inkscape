@@ -168,6 +168,8 @@ sp_object_finalize (GObject * object)
 
 	g_free(spobject->_label);
 	g_free(spobject->_default_label);
+	spobject->_label = NULL;
+	spobject->_default_label = NULL;
 
 	if (spobject->_successor) {
 		sp_object_unref(spobject->_successor, NULL);
@@ -293,14 +295,14 @@ SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 }
 
 /** Gets the label property for the object or a default if no label 
- *  is defined 
+ *  is defined.
  */
 gchar const *
 SPObject::label() const {
     return _label;
 }
 
-/** Returns a default label property for the object */
+/** Returns a default label property for the object. */
 gchar const *
 SPObject::defaultLabel() const {
 	if (_label) {
@@ -673,7 +675,9 @@ sp_object_invoke_release (SPObject *object)
 		g_assert (object->id);
 		sp_document_def_id (object->document, object->id, NULL);
 		g_free (object->id);
+		g_free (object->_default_label);
 		object->id = NULL;
+		object->_default_label = NULL;
 	} else {
 		g_assert (!object->id);
 	}
