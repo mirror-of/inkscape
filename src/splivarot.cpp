@@ -1023,8 +1023,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
   g_free (style);
 }
 
-
-
+                  
 void
 sp_selected_path_do_offset (bool expand, double prefOffset)
 {
@@ -1155,33 +1154,27 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
 			// et maintenant: offset
 			// methode inexacte
-			/*      if (expand)
-							{
-							res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
-							}
-							else
-							{
-							res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
-							}
+/*			if (expand) {
+				res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
+			} else {
+				res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
+			}
     
-							orig->ConvertWithBackData (1.0);
-							orig->Fill (theShape, 0);
-							theRes->ConvertToShape (theShape, fill_positive);
-							originaux[0] = orig;
-							theRes->ConvertToForme (res, 1, originaux);
+			orig->ConvertWithBackData (1.0);
+			orig->Fill (theShape, 0);
+			theRes->ConvertToShape (theShape, fill_positive);
+			originaux[0] = orig;
+			theRes->ConvertToForme (res, 1, originaux);
     
-							if (o_width >= 0.5)
-							{
-							//     res->Coalesce (1.0);
-							res->ConvertEvenLines (1.0);
-							res->Simplify (1.0);
-							}
-							else
-							{
-							//      res->Coalesce (o_width);
-							res->ConvertEvenLines (1.0*o_width);
-							res->Simplify (1.0 * o_width);
-							}*/
+			if (o_width >= 0.5) {
+				//     res->Coalesce (1.0);
+				res->ConvertEvenLines (1.0);
+				res->Simplify (1.0);
+			} else {
+				//      res->Coalesce (o_width);
+				res->ConvertEvenLines (1.0*o_width);
+				res->Simplify (1.0 * o_width);
+			}    */
 			// methode par makeoffset
 			if (expand)
 				{
@@ -1192,10 +1185,10 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 					theShape->MakeOffset(theRes, -o_width, o_join, o_miter);
 				}
 			theRes->ConvertToShape(theShape,fill_positive);
-
+                        
 			res->Reset();
 			theRes->ConvertToForme (res);
-    
+
 			if (o_width >= 1.0)
 				{
 					res->ConvertEvenLines (1.0);
@@ -1205,11 +1198,11 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 				{
 					res->ConvertEvenLines (1.0*o_width);
 					res->Simplify (1.0 * o_width);
-				}
+				}      
 
 			delete theShape;
 			delete theRes;
-		}
+		}           
 
 		did = true;
 

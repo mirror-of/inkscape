@@ -244,6 +244,8 @@ public:
   void MakeBackData (bool nVal);
   void MakeVoronoiData (bool nVal);
 
+  void  Affiche(void);
+
   // insertion/deletion/movement of elements in the graph
   void Copy (Shape * a);
   // -reset the graph, and ensure there's room for n points and m edges
@@ -346,7 +348,7 @@ public:
 
   // debug function: plots the graph (mac only)
   void Plot (double ix, double iy, double ir, double mx, double my, bool doPoint,
-	     bool edgesNo, bool pointNo, bool doDir);
+	     bool edgesNo, bool pointNo, bool doDir,char* fileName);
 
   // transforms a polygon in a "forme" structure, ie a set of contours, which can be holes (see ShapeUtils.h)
   // return NULL in case it's not possible

@@ -72,6 +72,17 @@ Shape::~Shape (void)
     free (voreData);
 }
 
+void Shape::Affiche(void)
+{
+  printf("sh=%x nbPt=%i nbAr=%i\n",this,nbPt,nbAr);
+  for (int i=0;i<nbPt;i++) {
+    printf("pt %i : x=(%f %f) dI=%i dO=%i\n",i,pts[i].x[0],pts[i].x[1],pts[i].dI,pts[i].dO);
+  }
+  for (int i=0;i<nbAr;i++) {
+    printf("ar %i : dx=(%f %f) st=%i en=%i\n",i,aretes[i].dx[0],aretes[i].dx[1],aretes[i].st,aretes[i].en);
+  }
+}
+
 void
 Shape::MakePointData (bool nVal)
 {

@@ -12,6 +12,8 @@
 
 #include "../libnr/nr-matrix.h"
 
+//int   doDebug=0;
+
 /*
  * El Intersector.
  * algorithm: 1) benley ottman to get intersections of all the polygon's edges
@@ -324,18 +326,6 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	{
 	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
-	  for (int i = lastChgtPt; i < lastI; i++)
-	    {
-	      if (pData[i].askForWindingS)
-		{
-		  Shape *windS = pData[i].askForWindingS;
-		  int windB = pData[i].askForWindingB;
-		  pData[i].nextLinkedPoint =
-		    windS->swsData[windB].firstLinkedPoint;
-		  windS->swsData[windB].firstLinkedPoint = i;
-		}
-	    }
-
 	  Shape *curSh = shapeHead;
 	  int curBo = edgeHead;
 	  while (curSh)
@@ -387,11 +377,19 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  CheckEdges (lastI, lastChgtPt, a, NULL, bool_op_union);
 
-	  if (lastI < lastPointNo)
-	    {
-	      pts[lastI] = pts[lastPointNo];
-	      pData[lastI] = pData[lastPointNo];
-	    }
+	  for (int i = lastChgtPt; i < lastI; i++) {
+	    if (pData[i].askForWindingS) {
+		    Shape *windS = pData[i].askForWindingS;
+		    int windB = pData[i].askForWindingB;
+		    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
+		    windS->swsData[windB].firstLinkedPoint = i;
+		  }
+	   }
+
+    if (lastI < lastPointNo) {
+	   pts[lastI] = pts[lastPointNo];
+	   pData[lastI] = pData[lastPointNo];
+	  }
 	  lastPointNo = lastI;
 	  nbPt = lastI + 1;
 
@@ -645,16 +643,6 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   {
     int lastI = AssemblePoints (lastChgtPt, nbPt);
 
-    for (int i = lastChgtPt; i < lastI; i++)
-      {
-	if (pData[i].askForWindingS)
-	  {
-	    Shape *windS = pData[i].askForWindingS;
-	    int windB = pData[i].askForWindingB;
-	    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
-	    windS->swsData[windB].firstLinkedPoint = i;
-	  }
-      }
 
     Shape *curSh = shapeHead;
     int curBo = edgeHead;
@@ -703,6 +691,17 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
     CheckEdges (lastI, lastChgtPt, a, NULL, bool_op_union);
 
+    for (int i = lastChgtPt; i < lastI; i++)
+      {
+	if (pData[i].askForWindingS)
+	  {
+	    Shape *windS = pData[i].askForWindingS;
+	    int windB = pData[i].askForWindingB;
+	    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
+	    windS->swsData[windB].firstLinkedPoint = i;
+	  }
+      }
+
     nbPt = lastI;
 
     edgeHead = -1;
@@ -744,8 +743,11 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     GetWindings (a);
   }
 //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
-//      Plot(225.0,215.0,32.0,400.0,400.0,true,true,true,true);
-
+//   if ( doDebug ) {
+//   a->CalcBBox();
+//     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
+//     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
+//   }
   if (directed == fill_positive)
   {
     if (invert)
@@ -784,7 +786,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
         }
 	      else
         {
-          eData[i].weight = 0;
+           eData[i].weight = 0;
           SubEdge (i);
           i--;
         }
@@ -1214,17 +1216,6 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	{
 	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
-	  for (int i = lastChgtPt; i < lastI; i++)
-	    {
-	      if (pData[i].askForWindingS)
-		{
-		  Shape *windS = pData[i].askForWindingS;
-		  int windB = pData[i].askForWindingB;
-		  pData[i].nextLinkedPoint =
-		    windS->swsData[windB].firstLinkedPoint;
-		  windS->swsData[windB].firstLinkedPoint = i;
-		}
-	    }
 
 	  Shape *curSh = shapeHead;
 	  int curBo = edgeHead;
@@ -1277,7 +1268,19 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  CheckEdges (lastI, lastChgtPt, a, b, mod);
 
-	  if (lastI < lastPointNo)
+	  for (int i = lastChgtPt; i < lastI; i++)
+	    {
+	      if (pData[i].askForWindingS)
+		{
+		  Shape *windS = pData[i].askForWindingS;
+		  int windB = pData[i].askForWindingB;
+		  pData[i].nextLinkedPoint =
+		    windS->swsData[windB].firstLinkedPoint;
+		  windS->swsData[windB].firstLinkedPoint = i;
+		}
+	    }
+
+    if (lastI < lastPointNo)
 	    {
 	      pts[lastI] = pts[lastPointNo];
 	      pData[lastI] = pData[lastPointNo];
@@ -1547,16 +1550,6 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   {
     int lastI = AssemblePoints (lastChgtPt, nbPt);
 
-    for (int i = lastChgtPt; i < lastI; i++)
-      {
-	if (pData[i].askForWindingS)
-	  {
-	    Shape *windS = pData[i].askForWindingS;
-	    int windB = pData[i].askForWindingB;
-	    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
-	    windS->swsData[windB].firstLinkedPoint = i;
-	  }
-      }
 
     Shape *curSh = shapeHead;
     int curBo = edgeHead;
@@ -1604,6 +1597,17 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     CheckAdjacencies (lastI, lastChgtPt, shapeHead, edgeHead);
 
     CheckEdges (lastI, lastChgtPt, a, b, mod);
+
+    for (int i = lastChgtPt; i < lastI; i++)
+      {
+	if (pData[i].askForWindingS)
+	  {
+	    Shape *windS = pData[i].askForWindingS;
+	    int windB = pData[i].askForWindingB;
+	    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
+	    windS->swsData[windB].firstLinkedPoint = i;
+	  }
+      }
 
     nbPt = lastI;
 
@@ -2294,69 +2298,48 @@ Shape::Winding (const NR::Point px) const
 int
 Shape::AssemblePoints (int st, int en)
 {
-  if (en > st)
-    {
-      for (int i = st; i < en; i++)
-	pData[i].oldInd = i;
+  if (en > st) {
+   for (int i = st; i < en; i++) pData[i].oldInd = i;
 //              SortPoints(st,en-1);
-      SortPointsByOldInd (st, en - 1); // SortPointsByOldInd() is required here, because of the edges we have
+    SortPointsByOldInd (st, en - 1); // SortPointsByOldInd() is required here, because of the edges we have
                                        // associated with the point for later computation of winding numbers.
                                        // specifically, we need the first point we treated, it's the only one with a valid
                                        // associated edge (man, that was a nice bug).
-      for (int i = st; i < en; i++)
-	pData[pData[i].oldInd].newInd = i;
+     for (int i = st; i < en; i++) pData[pData[i].oldInd].newInd = i;
 
-      int lastI = st;
-      for (int i = st; i < en; i++)
-	{
-	  pData[i].pending = lastI++;
-	  if (i > st && pts[i - 1].x[0] == pts[i].x[0] && pts[i - 1].x[1] == pts[i].x[1])
-	    {
-	      pData[i].pending = pData[i - 1].pending;
-	      if (pData[pData[i].pending].askForWindingS == NULL)
-		{
-		  pData[pData[i].pending].askForWindingS =
-		    pData[i].askForWindingS;
-		  pData[pData[i].pending].askForWindingB =
-		    pData[i].askForWindingB;
-		}
-	      else
-		{
-		  if (pData[pData[i].pending].askForWindingS ==
-		      pData[i].askForWindingS
-		      && pData[pData[i].pending].askForWindingB ==
-		      pData[i].askForWindingB)
-		    {
+     int lastI = st;
+     for (int i = st; i < en; i++) {
+	      pData[i].pending = lastI++;
+	      if (i > st && pts[i - 1].x[0] == pts[i].x[0] && pts[i - 1].x[1] == pts[i].x[1]) {
+	        pData[i].pending = pData[i - 1].pending;
+	        if (pData[pData[i].pending].askForWindingS == NULL) {
+		        pData[pData[i].pending].askForWindingS = pData[i].askForWindingS;
+		        pData[pData[i].pending].askForWindingB = pData[i].askForWindingB;
+		      } else {
+		        if (pData[pData[i].pending].askForWindingS == pData[i].askForWindingS
+		      && pData[pData[i].pending].askForWindingB == pData[i].askForWindingB) {
 		      // meme bord, c bon
-		    }
-		  else
-		    {
+		        } else {
 		      // meme point, mais pas le meme bord: ouille!
 		      // il faut prendre le bord le plus a gauche
 		      // en pratique, n'arrive que si 2 maxima sont dans la meme case -> le mauvais choix prend une arete incidente 
 		      // au bon choix
 //                                              printf("doh");
-		    }
-		}
-	      lastI--;
+		        }
+		      }
+	        lastI--;
+	      } else {
+	        if (i > pData[i].pending) {
+		        pts[pData[i].pending].x = pts[i].x;
+		        pData[pData[i].pending].rx = pts[i].x;
+		        pData[pData[i].pending].askForWindingS = pData[i].askForWindingS;
+		        pData[pData[i].pending].askForWindingB = pData[i].askForWindingB;
+		      }
+	      }
 	    }
-	  else
-	    {
-	      if (i > pData[i].pending)
-		{
-		  pts[pData[i].pending].x = pts[i].x;
-		  pData[pData[i].pending].rx = pts[i].x;
-		  pData[pData[i].pending].askForWindingS =
-		    pData[i].askForWindingS;
-		  pData[pData[i].pending].askForWindingB =
-		    pData[i].askForWindingB;
-		}
-	    }
-	}
-      for (int i = st; i < en; i++)
-	pData[i].newInd = pData[pData[i].newInd].pending;
+      for (int i = st; i < en; i++) pData[i].newInd = pData[pData[i].newInd].pending;
       return lastI;
-    }
+  }
   return en;
 }
 
@@ -2622,7 +2605,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	  swdData[startBord].misc = (void *) 1;
 	  swdData[startBord].leW = outsideW;
 	  swdData[startBord].riW = outsideW - eData[startBord].weight;
-//                                              printf("part de %d\n",startBord);
+//    if ( doDebug ) printf("part de %d\n",startBord);
 	  int curBord = startBord;
 	  bool curDir = true;
 	  swdData[curBord].precParc = -1;
@@ -2635,7 +2618,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	      else
 		cPt = aretes[curBord].st;
 	      int nb = curBord;
-//                                                              printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
+//        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
 	      do
 		{
 		  int nnb = -1;
@@ -2667,7 +2650,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		  else
 		    oPt = aretes[curBord].en;
 		  curBord = swdData[curBord].precParc;
-//                                                                              printf("retour vers %d\n",curBord);
+//    if ( doDebug ) printf("retour vers %d\n",curBord);
 		  if (curBord < 0)
 		    break;
 		  if (oPt == aretes[curBord].en)
@@ -2692,7 +2675,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		  swdData[nb].precParc = curBord;
 		  swdData[curBord].suivParc = nb;
 		  curBord = nb;
-		  //                                                                      printf("suite %d\n",curBord);
+//		  if ( doDebug ) printf("suite %d\n",curBord);
 		  if (cPt == aretes[nb].en)
 		    curDir = false;
 		  else
