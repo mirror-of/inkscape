@@ -149,8 +149,11 @@ clonetiler_get_transform (
     double drot = d_rot_per_x * x + d_rot_per_y * y + rand_rot * 180 * g_random_double_range (-1, 1);
 
     // times the original
-    double dscalex = 1 + d_scalex_per_x * x + d_scalex_per_y * y + rand_scale * 1 * g_random_double_range (-1, 1);
-    double dscaley = 1 + d_scaley_per_x * x + d_scaley_per_y * y + rand_scale * 1 * g_random_double_range (-1, 1);
+    double rand_scale_both = rand_scale * 1 * g_random_double_range (-1, 1);
+    double dscalex = 1 + d_scalex_per_x * x + d_scalex_per_y * y + rand_scale_both;
+    if (dscalex < 0) dscalex = 0;
+    double dscaley = 1 + d_scaley_per_x * x + d_scaley_per_y * y + rand_scale_both;
+    if (dscaley < 0) dscaley = 0;
 
     NR::Matrix rect_translate (NR::translate (w * x + dx, h * y + dy));
 
@@ -167,6 +170,14 @@ clonetiler_get_transform (
 
     NR::Matrix rotate_120_c = NR::translate(-cx, -cy) * NR::rotate (-2*M_PI/3) * NR::translate(cx, cy);
     NR::Matrix rotate_m120_c = NR::translate(-cx, -cy) * NR::rotate (2*M_PI/3) * NR::translate(cx, cy);
+
+    NR::Matrix rotate_60_c = NR::translate(-cx, -cy) * NR::rotate (-M_PI/3) * NR::translate(cx, cy);
+    NR::Matrix rotate_m60_c = NR::translate(-cx, -cy) * NR::rotate (M_PI/3) * NR::translate(cx, cy);
+
+    double cos60 = cos(M_PI/3);
+    double sin60 = sin(M_PI/3);
+    double cos30 = cos(M_PI/6);
+    double sin30 = sin(M_PI/6);
 
     NR::Matrix flip_x = NR::translate(-cx, -cy) * NR::scale (-1, 1) * NR::translate(cx, cy);
     NR::Matrix flip_y = NR::translate(-cx, -cy) * NR::scale (1, -1) * NR::translate(cx, cy);
@@ -369,15 +380,15 @@ clonetiler_get_transform (
         NR::Matrix dia1;
         NR::Matrix dia2;
         if (w > h) {
-            width = w + w * cos(M_PI/3);
-            height = 2 * w * sin(M_PI/3);
-            dia1 = NR::Matrix (NR::translate (w/2 + w/2 * cos(M_PI/3), -(w/2 * sin(M_PI/3))));
-            dia2  = NR::Matrix (NR::translate (0, 2 * (w/2 * sin(M_PI/3))));
+            width = w + w * cos60;
+            height = 2 * w * sin60;
+            dia1 = NR::Matrix (NR::translate (w/2 + w/2 * cos60, -(w/2 * sin60)));
+            dia2 = dia1 * NR::Matrix (NR::translate (0, 2 * (w/2 * sin60)));
         } else {
             width = h * cos (M_PI/6);
             height = h;
-            dia1 = NR::Matrix (NR::translate (h/2 * cos(M_PI/6), -(h/2 * sin(M_PI/6))));
-            dia2 = NR::Matrix (NR::translate (0, h/2));
+            dia1 = NR::Matrix (NR::translate (h/2 * cos30, -(h/2 * sin30)));
+            dia2 = dia1 * NR::Matrix (NR::translate (0, h/2));
         }
         NR::Matrix ori (NR::translate (width * (2*(x/3) + y%2) + dx,  (height/2) * y + dy));
         if (x % 3 == 0) {
@@ -385,7 +396,7 @@ clonetiler_get_transform (
         } else if (x % 3 == 1) {
             return d_s_r * rotate_m120_c * dia1 * ori; 
         } else if (x % 3 == 2) {
-            return d_s_r * rotate_120_c * dia1 * dia2 * ori; 
+            return d_s_r * rotate_120_c * dia2 * ori; 
         }
     }
     break;
@@ -398,31 +409,31 @@ clonetiler_get_transform (
         NR::Matrix dia3;
         NR::Matrix dia4;
         if (w > h) {
-            ori = NR::Matrix(NR::translate (w * (x/6) + w/2 * (y%2) + dx,  (w * cos(M_PI/6)) * y + dy));
-            dia1= NR::Matrix (NR::translate (0, h/2) * NR::translate (w/2, 0) * NR::translate (w/2 * cos(M_PI/3), -w/2 * sin(M_PI/3)) * NR::translate (-h/2 * cos(M_PI/6), -h/2 * sin(M_PI/6)) );
-            dia2= NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
-            dia3= NR::Matrix (NR::translate (0, 2 * (w/2 * sin(M_PI/3) - h/2 * sin(M_PI/6))));
-            dia4= NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+            ori = NR::Matrix(NR::translate (w * (x/6) + w/2 * (y%2) + dx,  (w * cos30) * y + dy));
+            dia1 = NR::Matrix (NR::translate (0, h/2) * NR::translate (w/2, 0) * NR::translate (w/2 * cos60, -w/2 * sin60) * NR::translate (-h/2 * cos30, -h/2 * sin30) );
+            dia2 = dia1 * NR::Matrix (NR::translate (h * cos30, h * sin30));
+            dia3 = dia2 * NR::Matrix (NR::translate (0, 2 * (w/2 * sin60 - h/2 * sin30)));
+            dia4 = dia3 * NR::Matrix (NR::translate (-h * cos30, h * sin30));
         } else {
-            ori  = NR::Matrix (NR::translate (2*h * cos(M_PI/6)  * (x/6 + 0.5*(y%2)) + dx,  (2*h - h * sin(M_PI/6)) * y + dy));
-            dia1 = NR::Matrix (NR::translate (0, -h/2) * NR::translate (h/2 * cos(M_PI/6), h/2 * sin(M_PI/6)));
-            dia2 = NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
-            dia3 = NR::Matrix (NR::translate (0, h/2));
-            dia4 = NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+            ori  = NR::Matrix (NR::translate (2*h * cos30  * (x/6 + 0.5*(y%2)) + dx,  (2*h - h * sin30) * y + dy));
+            dia1 = NR::Matrix (NR::translate (0, -h/2) * NR::translate (h/2 * cos30, h/2 * sin30));
+            dia2 = dia1 * NR::Matrix (NR::translate (h * cos30, h * sin30));
+            dia3 = dia2 * NR::Matrix (NR::translate (0, h/2));
+            dia4 = dia3 * NR::Matrix (NR::translate (-h * cos30, h * sin30));
         }
-            if (x % 6 == 0) {
-                return d_s_r * ori;
-            } else if (x % 6 == 1) {
-                return d_s_r * flip_y * rotate_m120_c * dia1 * ori;
-            } else if (x % 6 == 2) {
-                return d_s_r * rotate_m120_c * dia1 * dia2 * ori;
-            } else if (x % 6 == 3) {
-                return d_s_r * flip_y * rotate_120_c * dia1 * dia2 * dia3 * ori;
-            } else if (x % 6 == 4) {
-                return d_s_r * rotate_120_c * dia1 * dia2 * dia3 * dia4 * ori;
-            } else if (x % 6 == 5) {
-                return d_s_r * flip_y * NR::translate(0, h) * ori;
-            }
+        if (x % 6 == 0) {
+            return d_s_r * ori;
+        } else if (x % 6 == 1) {
+            return d_s_r * flip_y * rotate_m120_c * dia1 * ori;
+        } else if (x % 6 == 2) {
+            return d_s_r * rotate_m120_c * dia2 * ori;
+        } else if (x % 6 == 3) {
+            return d_s_r * flip_y * rotate_120_c * dia3 * ori;
+        } else if (x % 6 == 4) {
+            return d_s_r * rotate_120_c * dia4 * ori;
+        } else if (x % 6 == 5) {
+            return d_s_r * flip_y * NR::translate(0, h) * ori;
+        }
     }
     break;
 
@@ -435,45 +446,134 @@ clonetiler_get_transform (
         NR::Matrix dia3;
         NR::Matrix dia4;
         if (w > h) {
-            width = w + w * cos(M_PI/3);
-            height = 2 * w * sin(M_PI/3);
-            dia1= NR::Matrix (NR::translate (0, h/2) * NR::translate (w/2, 0) * NR::translate (w/2 * cos(M_PI/3), -w/2 * sin(M_PI/3)) * NR::translate (-h/2 * cos(M_PI/6), -h/2 * sin(M_PI/6)) );
-            dia2= NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
-            dia3= NR::Matrix (NR::translate (0, 2 * (w/2 * sin(M_PI/3) - h/2 * sin(M_PI/6))));
-            dia4= NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+            width = w + w * cos60;
+            height = 2 * w * sin60;
+            dia1 = NR::Matrix (NR::translate (0, h/2) * NR::translate (w/2, 0) * NR::translate (w/2 * cos60, -w/2 * sin60) * NR::translate (-h/2 * cos30, -h/2 * sin30) );
+            dia2 = dia1 * NR::Matrix (NR::translate (h * cos30, h * sin30));
+            dia3 = dia2 * NR::Matrix (NR::translate (0, 2 * (w/2 * sin60 - h/2 * sin30)));
+            dia4 = dia3 * NR::Matrix (NR::translate (-h * cos30, h * sin30));
         } else {
             width = 2 * h * cos (M_PI/6);
             height = 2 * h;
-            dia1 = NR::Matrix (NR::translate (0, -h/2) * NR::translate (h/2 * cos(M_PI/6), h/2 * sin(M_PI/6)));
-            dia2 = NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
-            dia3 = NR::Matrix (NR::translate (0, h/2));
-            dia4 = NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+            dia1 = NR::Matrix (NR::translate (0, -h/2) * NR::translate (h/2 * cos30, h/2 * sin30));
+            dia2 = dia1 * NR::Matrix (NR::translate (h * cos30, h * sin30));
+            dia3 = dia2 * NR::Matrix (NR::translate (0, h/2));
+            dia4 = dia3 * NR::Matrix (NR::translate (-h * cos30, h * sin30));
         }
         NR::Matrix ori (NR::translate (width * (2*(x/6) + y%2) + dx,  (height/2) * y + dy));
-            if (x % 6 == 0) {
-                return d_s_r * ori;
-            } else if (x % 6 == 1) {
-                return d_s_r * flip_y * rotate_m120_c * dia1 * ori;
-            } else if (x % 6 == 2) {
-                return d_s_r * rotate_m120_c * dia1 * dia2 * ori;
-            } else if (x % 6 == 3) {
-                return d_s_r * flip_y * rotate_120_c * dia1 * dia2 * dia3 * ori;
-            } else if (x % 6 == 4) {
-                return d_s_r * rotate_120_c * dia1 * dia2 * dia3 * dia4 * ori;
-            } else if (x % 6 == 5) {
-                return d_s_r * flip_y * NR::translate(0, h) * ori;
-            }
+        if (x % 6 == 0) {
+            return d_s_r * ori;
+        } else if (x % 6 == 1) {
+            return d_s_r * flip_y * rotate_m120_c * dia1 * ori;
+        } else if (x % 6 == 2) {
+            return d_s_r * rotate_m120_c * dia2 * ori;
+        } else if (x % 6 == 3) {
+            return d_s_r * flip_y * rotate_120_c * dia3 * ori;
+        } else if (x % 6 == 4) {
+            return d_s_r * rotate_120_c * dia4 * ori;
+        } else if (x % 6 == 5) {
+            return d_s_r * flip_y * NR::translate(0, h) * ori;
+        }
     }
     break;
 
+    case TILE_P6:
+    {
+        NR::Matrix ori;
+        NR::Matrix dia1;
+        NR::Matrix dia2;
+        NR::Matrix dia3;
+        NR::Matrix dia4;
+        NR::Matrix dia5;
+        if (w > h) {
+            ori = NR::Matrix(NR::translate (2*w * (x/6) + w * (y%2) + dx,  (2*w * sin60) * y + dy));
+            dia1 = NR::Matrix (NR::translate (w/2 * cos60, -w/2 * sin60));
+            dia2 = dia1 * NR::Matrix (NR::translate (w/2, 0));
+            dia3 = dia2 * NR::Matrix (NR::translate (w/2 * cos60, w/2 * sin60));
+            dia4 = dia3 * NR::Matrix (NR::translate (-w/2 * cos60, w/2 * sin60));
+            dia5 = dia4 * NR::Matrix (NR::translate (-w/2, 0));
+        } else {
+            ori = NR::Matrix(NR::translate (2*h * cos30 * (x/6 + 0.5*(y%2)) + dx,  (h + h * sin30) * y + dy));
+            dia1 = NR::Matrix (NR::translate (-w/2, -h/2) * NR::translate (h/2 * cos30, -h/2 * sin30) * NR::translate (w/2 * cos60, w/2 * sin60));
+            dia2 = dia1 * NR::Matrix (NR::translate (-w/2 * cos60, -w/2 * sin60) * NR::translate (h/2 * cos30, -h/2 * sin30) * NR::translate (h/2 * cos30, h/2 * sin30) * NR::translate (-w/2 * cos60, w/2 * sin60));
+            dia3 = dia2 * NR::Matrix (NR::translate (w/2 * cos60, -w/2 * sin60) * NR::translate (h/2 * cos30, h/2 * sin30) * NR::translate (-w/2, h/2));
+            dia4 = dia3 * dia1.inverse();
+            dia5 = dia3 * dia2.inverse();
+        }
+        if (x % 6 == 0) {
+            return d_s_r * ori;
+        } else if (x % 6 == 1) {
+            return d_s_r * rotate_m60_c * dia1 * ori;
+        } else if (x % 6 == 2) {
+            return d_s_r * rotate_m120_c * dia2 * ori;
+        } else if (x % 6 == 3) {
+            return d_s_r * rotate_180_c * dia3 * ori;
+        } else if (x % 6 == 4) {
+            return d_s_r * rotate_120_c * dia4 * ori;
+        } else if (x % 6 == 5) {
+            return d_s_r * rotate_60_c * dia5 * ori;
+        }
+    }
+    break;
 
+    case TILE_P6M:
+    {
 
+        NR::Matrix ori;
+        NR::Matrix dia1, dia2, dia3, dia4, dia5, dia6, dia7, dia8, dia9, dia10;
+        if (w > h) {
+            ori = NR::Matrix(NR::translate (2*w * (x/12) + w * (y%2) + dx,  (2*w * sin60) * y + dy));
+            dia1 = NR::Matrix (NR::translate (w/2, h/2) * NR::translate (-w/2 * cos60, -w/2 * sin60) * NR::translate (-h/2 * cos30, h/2 * sin30));
+            dia2 = dia1 * NR::Matrix (NR::translate (h * cos30, -h * sin30));
+            dia3 = dia2 * NR::Matrix (NR::translate (-h/2 * cos30, h/2 * sin30) * NR::translate (w * cos60, 0) * NR::translate (-h/2 * cos30, -h/2 * sin30));
+            dia4 = dia3 * NR::Matrix (NR::translate (h * cos30, h * sin30));
+            dia5 = dia4 * NR::Matrix (NR::translate (-h/2 * cos30, -h/2 * sin30) * NR::translate (-w/2 * cos60, w/2 * sin60) * NR::translate (w/2, -h/2));
+            dia6 = dia5 * NR::Matrix (NR::translate (0, h));
+            dia7 = dia6 * dia1.inverse();
+            dia8 = dia6 * dia2.inverse();
+            dia9 = dia6 * dia3.inverse();
+            dia10 = dia6 * dia4.inverse();
+        } else {
+            ori = NR::Matrix(NR::translate (4*h * cos30 * (x/12 + 0.5*(y%2)) + dx,  (2*h  + 2*h * sin30) * y + dy));
+            dia1 = NR::Matrix (NR::translate (-w/2, -h/2) * NR::translate (h/2 * cos30, -h/2 * sin30) * NR::translate (w/2 * cos60, w/2 * sin60));
+            dia2 = dia1 * NR::Matrix (NR::translate (h * cos30, -h * sin30));
+            dia3 = dia2 * NR::Matrix (NR::translate (-w/2 * cos60, -w/2 * sin60) * NR::translate (h * cos30, 0) * NR::translate (-w/2 * cos60, w/2 * sin60));
+            dia4 = dia3 * NR::Matrix (NR::translate (h * cos30, h * sin30));
+            dia5 = dia4 * NR::Matrix (NR::translate (w/2 * cos60, -w/2 * sin60) * NR::translate (h/2 * cos30, h/2 * sin30) * NR::translate (-w/2, h/2));
+            dia6 = dia5 * NR::Matrix (NR::translate (0, h));
+            dia7 = dia6 * dia1.inverse();
+            dia8 = dia6 * dia2.inverse();
+            dia9 = dia6 * dia3.inverse();
+            dia10 = dia6 * dia4.inverse();
+        }
+        if (x % 12 == 0) {
+            return d_s_r * ori;
+        } else if (x % 12 == 1) {
+            return d_s_r * flip_y * rotate_m60_c * dia1 * ori;
+        } else if (x % 12 == 2) {
+            return d_s_r * rotate_m60_c * dia2 * ori;
+        } else if (x % 12 == 3) {
+            return d_s_r * flip_y * rotate_m120_c * dia3 * ori;
+        } else if (x % 12 == 4) {
+            return d_s_r * rotate_m120_c * dia4 * ori;
+        } else if (x % 12 == 5) {
+            return d_s_r * flip_x * dia5 * ori;
+        } else if (x % 12 == 6) {
+            return d_s_r * flip_x * flip_y * dia6 * ori;
+        } else if (x % 12 == 7) {
+            return d_s_r * flip_y * rotate_120_c * dia7 * ori;
+        } else if (x % 12 == 8) {
+            return d_s_r * rotate_120_c * dia8 * ori;
+        } else if (x % 12 == 9) {
+            return d_s_r * flip_y * rotate_60_c * dia9 * ori;
+        } else if (x % 12 == 10) {
+            return d_s_r * rotate_60_c * dia10 * ori;
+        } else if (x % 12 == 11) {
+            return d_s_r * flip_y * NR::translate (0, h) * ori;
+        }
+    }
+    break;
 
-
-/*
-      case TILE_P6:
-      case TILE_P6M:
-		*/
     default: 
         break;
     }
@@ -640,6 +740,52 @@ clonetiler_new_tab (GtkWidget *nb, const gchar *label)
 }
 
 static void
+clonetiler_percent_changed (GtkAdjustment *adj, gpointer data)
+{
+    const gchar *pref = (const gchar *) data;
+    prefs_set_double_attribute ("dialogs.clonetiler", pref, 0.01 * adj->value);
+}
+
+GtkWidget *
+clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr, bool onlypos = false)
+{
+                GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+
+                {
+                    GtkWidget *l = gtk_label_new (label);
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+                }
+
+                {
+                    GtkWidget *l = gtk_label_new ("%");
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0);
+                    gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+                }
+
+                {
+                    GtkObject *a;
+                    if (onlypos)
+                        a = gtk_adjustment_new(0.0, 0, 100, 1, 10, 10);
+                    else 
+                        a = gtk_adjustment_new(0.0, -100, 100, 1, 10, 10);
+
+                    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
+                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tip, NULL);
+                    gtk_entry_set_width_chars (GTK_ENTRY (sb), 3);
+                    gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
+
+                    double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, -1, 1);
+                    gtk_adjustment_set_value (GTK_ADJUSTMENT (a), (value * 100));
+
+                    gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                                       GTK_SIGNAL_FUNC(clonetiler_percent_changed), (gpointer) attr);
+                }
+
+                return hb;
+}
+
+static void
 clonetiler_symgroup_changed (GtkMenuItem *item, gpointer data)
 {
     gint group_new = GPOINTER_TO_INT (data);
@@ -706,7 +852,7 @@ clonetiler_dialog (void)
 
         GtkTooltips *tt = gtk_tooltips_new();
 
-        GtkWidget *mainbox = gtk_vbox_new(FALSE, VB_MARGIN);
+        GtkWidget *mainbox = gtk_vbox_new(FALSE, 4);
         gtk_container_add (GTK_CONTAINER (dlg), mainbox);
                             
         GtkWidget *nb = gtk_notebook_new ();
@@ -717,7 +863,7 @@ clonetiler_dialog (void)
 
             GtkWidget *om = gtk_option_menu_new ();
             gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select one of the 17 symmetry groups for the tiling"), NULL);
-            gtk_box_pack_end (GTK_BOX (vb), om, FALSE, FALSE, SB_MARGIN);
+            gtk_box_pack_start (GTK_BOX (vb), om, FALSE, FALSE, SB_MARGIN);
 
             GtkWidget *m = gtk_menu_new ();
             int current = prefs_get_int_attribute ("dialogs.clonetiler", "symmetrygroup", 0);
@@ -765,6 +911,112 @@ clonetiler_dialog (void)
             gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
             gtk_option_menu_set_history ( GTK_OPTION_MENU (om), current);
         }
+
+       {
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Shift"));
+
+            GtkWidget *table = gtk_table_new (5, 2, FALSE);
+            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, VB_SKIP);
+
+            {
+                    GtkWidget *l = gtk_label_new (_("Per row:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 1, 2, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                    GtkWidget *l = gtk_label_new (_("Per column:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 1, 2, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each column"), "d_x_per_x");
+                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 2, 3, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each row"), "d_x_per_y");
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 2, 3, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each column"), "d_y_per_x");
+                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 3, 4, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each row"), "d_y_per_y");
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 3, 4, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile positions"),"rand_xy", true);
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 4, 5, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+       }
+
+       {
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Scale"));
+
+            GtkWidget *table = gtk_table_new (4, 2, FALSE);
+            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, VB_SKIP);
+
+            {
+                    GtkWidget *l = gtk_label_new (_("Per row:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 1, 2, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                    GtkWidget *l = gtk_label_new (_("Per column:"));
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 1, 2, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each column"), "d_scalex_per_x");
+                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 2, 3, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each row"), "d_scalex_per_y");
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 2, 3, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each column"), "d_scaley_per_x");
+                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 3, 4, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each row"), "d_scaley_per_y");
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 3, 4, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile sizes"),"rand_scale", true);
+                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 4, 5, 
+                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            }
+       }
+
+
+
+
 
 
         {
@@ -834,17 +1086,16 @@ clonetiler_dialog (void)
             gint keepbbox = prefs_get_int_attribute ("dialogs.clonetiler", "keepbbox", 1);
             gtk_toggle_button_set_active ((GtkToggleButton *) b, keepbbox != 0);
             gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Use the tile bounding box of the previous tiling (if any), instead of the actual bounding box of selection"), NULL);
-            gtk_widget_set_usize (b, SB_WIDTH, -1);
-            gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
+            gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
 
             gtk_signal_connect(GTK_OBJECT(b), "toggled",
                                GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
 
             {
-                GtkWidget *l = gtk_label_new (_("Keep previous bbox"));
+                GtkWidget *l = gtk_label_new (_("Use saved tile bbox"));
                 gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
                 gtk_widget_show (l);
-                gtk_box_pack_end (GTK_BOX (hb), l, TRUE, TRUE, SB_MARGIN);
+                gtk_box_pack_end (GTK_BOX (hb), l, TRUE, TRUE, VB_MARGIN);
             }
 
         }
@@ -854,17 +1105,17 @@ clonetiler_dialog (void)
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
             {
-                GtkWidget *b = gtk_button_new_with_label (_("Create"));
+                GtkWidget *b = gtk_button_new_with_label (_(" Create "));
                 gtk_tooltips_set_tip (tt, b, _("Create and tile the clones of the selection"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_apply), NULL);
-                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
 
             {
-                GtkWidget *b = gtk_button_new_with_label (_("Remove"));
+                GtkWidget *b = gtk_button_new_with_label (_(" Remove "));
                 gtk_tooltips_set_tip (tt, b, _("Remove existing tiled clones of the selected object (siblings only)"), NULL);
                 gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_remove), NULL);
-                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, VB_MARGIN);
+                gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
             }
         }
 
