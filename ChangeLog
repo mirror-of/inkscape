@@ -1,3 +1,9 @@
+2004-10-29  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/layer-selector.cpp: default labels in italic
+
+	* src/sp-object.h, src/sp-object.cpp: inkscape:label fixes
+
 2004-10-29  Bryce Harrington <bryce@bryceharrington.org>
 
 	* layer-fns.cpp:  documenting
@@ -26,8 +32,6 @@
 	  #1029755
 
 2004-10-29  MenTaLguY  <mental@rydia.net>
-
-	* src/sp-object.h, src/sp-object.cpp: more inkscape:label stuff
 
 	* src/widgets/layer-selector.cpp, src/verbs.cpp:
 	  unselect objects when layer is manually switched

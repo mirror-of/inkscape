@@ -299,6 +299,7 @@ void LayerSelector::_prepareLabelRenderer(
 ) {
     unsigned depth=(*row)[_model_columns.depth];
     SPObject *object=(*row)[_model_columns.object];
+    bool label_defaulted(false);
 
     // TODO: when the currently selected row is removed,
     //       (or before one has been selected) something appears to
@@ -320,8 +321,12 @@ void LayerSelector::_prepareLabelRenderer(
         gchar const *label;
         if (depth) {
             label = object->label();
+            if (!label) {
+                label = object->defaultLabel();
+                label_defaulted = true;
+            }
         } else {
-            label = "<root>";
+            label = "(root)";
         }
 
         gchar *text=g_markup_printf_escaped(format, depth*3, "", label);
@@ -333,6 +338,9 @@ void LayerSelector::_prepareLabelRenderer(
 
     _label_renderer.property_ypad() = 1;
     _label_renderer.property_yalign() = 0.25;
+    _label_renderer.property_style() = ( label_defaulted ?
+                                         Pango::STYLE_ITALIC :
+                                         Pango::STYLE_NORMAL );
 }
 
 }

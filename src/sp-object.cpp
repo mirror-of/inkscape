@@ -306,10 +306,10 @@ SPObject::defaultLabel() const {
 	if (_label) {
 		return _label;
 	} else {
-		if (_default_label) {
+		if (!_default_label) {
 			gchar const *id=SP_OBJECT_ID(this);
 			if (id) {
-				_default_label = g_strdup_printf("#%s", SP_OBJECT_ID(this));
+				_default_label = g_strdup_printf("#%s", id);
 			} else {
 				_default_label = g_strdup_printf("<%s>", sp_repr_name(SP_OBJECT_REPR(this)));
 			}
