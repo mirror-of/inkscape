@@ -26,6 +26,12 @@
 	  otherwise the small icons were too small (but the large icons are
 	  now smaller than they could be... darn it... ><)
 
+2003-12-05 Bryce W. Harrington <brycehar@bryceharrington.com>
+
+	* style.*, sp-path.*, sp-shape.*, more:  Hooking up preliminary
+	  support for path markers (arrowheads).  Also adding
+	  documentation, fixing if statement style, etc.
+	
 2003-12-05 MenTaLguY <mental@rydia.net>
 
 	* src/widgets/icon.c, src/widgets/button.c, src/widgets/button.h, src/toolbox.c:
