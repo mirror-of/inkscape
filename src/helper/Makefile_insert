@@ -3,7 +3,7 @@
 #
 # Miscellaneous unsystematized and temporary helper utilities
 #
-# libspchelp - canvas utilities, specific canvas items, libart add-ons
+# libspchelp - canvas utilities, specific canvas items
 #
 
 helper/all: helper/libspchelp.a

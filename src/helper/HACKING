@@ -8,10 +8,6 @@ Here you find:
 
 Useful add-ons to gnome-canvas, such as:
   gnome_canvas_item_i2p_affine
-to libart:
-  art_rgb_svp_rgba
-  art_affine_is_identity
-etc.
 
 Canvas items useful for editing:
 Ctrl - a small rectangle, which do no scale when parent is scaled
