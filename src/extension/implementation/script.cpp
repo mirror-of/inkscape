@@ -316,11 +316,6 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 
 	unlink(tempfilename_in);
 
-	/* reset the name to the actual filename we want */
-	/* TODO: Need to put the directory in too */
-	sp_repr_set_attr(sp_document_repr_root(doc), "sodipodi:docname", filename);
-	sp_document_set_uri (doc, filename);
-
 	return;
 }
 

@@ -142,8 +142,6 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 	if (spns) {
 		rdoc = NULL;
 		repr = sp_document_repr_root (doc);
-		sp_repr_set_attr (repr, "sodipodi:docbase", save_path);
-		sp_repr_set_attr (repr, "sodipodi:docname", uri);
 	} else {
 		rdoc = sp_repr_document_new ("svg");
 		repr = sp_repr_document_root (rdoc);
@@ -165,9 +163,7 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 		}
 	}
 
-	/* TODO: */
 	sp_repr_save_file (sp_repr_document (repr), uri);
-	sp_document_set_uri (doc, uri);
 
 	if (!spns) sp_repr_document_unref (rdoc);
 
