@@ -1,3 +1,9 @@
+2004-02-07  Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+    * src/widgets/gradient-position.*: modified the gradient knot
+      editor to manipulate the knots, rather than rebuilding a gradient
+      from scratch each time.
+
 2004-02-07  MenTaLguY <mental@rydia.net>
 
     * src/xml/repr.h, src/xml/repr-util.cpp:

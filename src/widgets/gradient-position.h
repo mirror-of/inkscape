@@ -36,18 +36,22 @@ enum {
 	SP_GRADIENT_POSITION_MODE_RADIAL
 };
 
-struct _SPGPLGData {
-	float x1, y1, x2, y2;
+class SPGPLGData {
+ public:
+	NR::Point start, end;
 };
 
-struct _SPGPRGData {
-	float cx, cy, fx, fy, r;
+class SPGPRGData {
+ public:
+	NR::Point center, f;
+	double r;
 };
 
 struct _SPGradientPosition {
 	GtkWidget widget;
 	guint need_update : 1;
-	guint dragging : 1;
+	guint dragging; /* 0 for no dragging, or the index of the node
+			 * being dragged. */
 	guint position : 2;
 	guint mode : 1;
 	guint changed : 1;
@@ -67,10 +71,8 @@ struct _SPGradientPosition {
 
 	NRMatrix gs2d;
 
-	union {
-		struct _SPGPLGData linear;
-		struct _SPGPRGData radial;
-	} gdata;
+	SPGPLGData linear;
+	SPGPRGData radial;
 
 	/* Gradiented bbox in document coordinates */
 	NRRect bbox;
