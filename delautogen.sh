@@ -7,6 +7,7 @@
 set -e
 mydir=`dirname "$0"`
 cd "$mydir"
+rm -rf autom4te.cache
 for d in `find -name .cvsignore -printf '%h '`; do
-	(cd "$d" && rm -rf .deps && grep -v / .cvsignore | tr \\n \\0 | xargs -0r rm -f)
+	(cd "$d" && rm -f *~ && rm -rf .deps && rm -f $(grep '^[][a-zA-Z0-9_.*?-]*$' .cvsignore) )
 done
