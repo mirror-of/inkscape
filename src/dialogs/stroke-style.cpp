@@ -1276,7 +1276,7 @@ stroke_average_miterlimit (GSList const *objects)
 static gboolean stroke_width_set_unit(SPUnitSelector *,
                                                  SPUnit const *old,
                                                  SPUnit const *new_units,
-                                                 GObject *dlg)
+                                                 GObject *spw)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -1295,9 +1295,9 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
        (new_units->base == SP_UNIT_DIMENSIONLESS)) {
 
         /* Absolute to percentage */
-        g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
+        g_object_set_data (spw, "update", GUINT_TO_POINTER (TRUE));
 
-        GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
+        GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (spw, "width"));
         float w = sp_units_get_pixels (a->value, *old);
 
         gdouble average = stroke_average_width (objects);
@@ -1307,22 +1307,22 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
 
         gtk_adjustment_set_value (a, 100.0 * w / average);
 
-        g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
+        g_object_set_data (spw, "update", GUINT_TO_POINTER (FALSE));
         return TRUE;
 
     } else if ((old->base == SP_UNIT_DIMENSIONLESS) &&
               (new_units->base == SP_UNIT_ABSOLUTE || new_units->base == SP_UNIT_DEVICE)) {
 
         /* Percentage to absolute */
-        g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
+        g_object_set_data (spw, "update", GUINT_TO_POINTER (TRUE));
 
-        GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
+        GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (spw, "width"));
 
         gdouble average = stroke_average_width (objects);
 
         gtk_adjustment_set_value (a, sp_pixels_get_units (0.01 * a->value * average, *new_units));
 
-        g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
+        g_object_set_data (spw, "update", GUINT_TO_POINTER (FALSE));
         return TRUE;
     }
 
@@ -1909,9 +1909,9 @@ sp_stroke_style_scale_line(SPWidget *spw)
             /* Set stroke width */
             double width;
             if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
-                width_typed = sp_units_get_pixels (width_typed, *sp_unit_selector_get_unit(us));
+                width = sp_units_get_pixels (width_typed, *unit);
                 NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(i->data));
-                width = width_typed / expansion(i2d);
+                width = width / expansion(i2d);
             } else { // percentage
                 gdouble old_w = SP_OBJECT_STYLE (i->data)->stroke_width.computed;
                 width = old_w * width_typed / 100;
