@@ -162,4 +162,9 @@ enum Side {
     RIGHT = 1
 };
 
+enum FirstOrLast {
+    FIRST = 0,
+    LAST = 1
+};
+
 #endif
