@@ -108,12 +108,14 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     //########## Potrace items
     Gtk::VBox             potraceBox;
     Gtk::RadioButtonGroup potraceGroup;
-    Gtk::ToggleButton     potraceInvertButton;
+    Gtk::CheckButton     potraceInvertButton;
+    Gtk::HBox               potraceInvertBox;
     Gtk::Button           *potraceOkButton;
     Gtk::Button           *potraceCancelButton;
 
     //brightness
     Gtk::Frame            potraceBrightnessFrame;
+    Gtk::VBox             potraceBrightnessVBox;
     Gtk::HBox             potraceBrightnessBox;
     Gtk::RadioButton      potraceBrightnessRadioButton;
     Gtk::Label            potraceBrightnessSpinnerLabel;
@@ -122,6 +124,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     //edge detection
     Gtk::Frame            potraceCannyFrame;
     Gtk::HBox             potraceCannyBox;
+    Gtk::VBox             potraceCannyVBox;
     Gtk::RadioButton      potraceCannyRadioButton;
     //Gtk::HSeparator     potraceCannySeparator;
     //Gtk::Label          potraceCannyLoSpinnerLabel;
@@ -132,6 +135,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     //quantization
     Gtk::Frame            potraceQuantFrame;
     Gtk::HBox             potraceQuantBox;
+    Gtk::VBox             potraceQuantVBox;
     Gtk::RadioButton      potraceQuantRadioButton;
     Gtk::Label            potraceQuantNrColorLabel;
     Gtk::SpinButton       potraceQuantNrColorSpinner;
@@ -144,6 +148,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     //credits
     Gtk::Frame            potraceCreditsFrame;
+    Gtk::VBox             potraceCreditsVBox;
     Gtk::Label            potraceCreditsLabel;
 
     //########## Other items
@@ -321,28 +326,35 @@ TraceDialogImpl::TraceDialogImpl()
 
     Gtk::VBox *mainVBox = get_vbox();
 
+#define MARGIN 4
+
     //##Set up the Potrace panel
 
     /*#### brightness ####*/
     potraceBrightnessRadioButton.set_label(_("Brightness"));
     potraceGroup = potraceBrightnessRadioButton.get_group();
-    potraceBrightnessBox.pack_start(potraceBrightnessRadioButton);
-    potraceBrightnessSpinnerLabel.set_label(_("Threshold"));
-    potraceBrightnessBox.pack_start(potraceBrightnessSpinnerLabel);
-    potraceBrightnessSpinner.set_digits(5);
+    potraceBrightnessBox.pack_start(potraceBrightnessRadioButton, false, false, MARGIN);
+
+    potraceBrightnessSpinner.set_digits(3);
     potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.5);
-    potraceBrightnessBox.pack_start(potraceBrightnessSpinner);
+    potraceBrightnessBox.pack_end(potraceBrightnessSpinner, false, false, MARGIN);
+
+    potraceBrightnessSpinnerLabel.set_label(_("Threshold:"));
+    potraceBrightnessBox.pack_end(potraceBrightnessSpinnerLabel, false, false, MARGIN);
+
+    potraceBrightnessVBox.pack_start(potraceBrightnessBox, false, false, MARGIN);
+
     potraceBrightnessFrame.set_label(_("Image Brightness"));
-    potraceBrightnessFrame.add(potraceBrightnessBox);
-    potraceBox.pack_start(potraceBrightnessFrame);
+    potraceBrightnessFrame.add(potraceBrightnessVBox);
+    potraceBox.pack_start(potraceBrightnessFrame, false, false, 0);
 
     /*#### canny edge detection ####*/
     // TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
     potraceCannyRadioButton.set_label(_("Optimal Edge Detection (Canny)"));
     potraceCannyRadioButton.set_group(potraceGroup);
-    potraceCannyBox.pack_start(potraceCannyRadioButton);
+    potraceCannyBox.pack_start(potraceCannyRadioButton, false, false, MARGIN);
     /*
     potraceCannyBox.pack_start(potraceCannySeparator);
     potraceCannyLoSpinnerLabel.set_label(_("Low"));
@@ -353,16 +365,20 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyLoSpinner.set_value(0.1);
     potraceCannyBox.pack_start(potraceCannyLoSpinner);
     */
-    potraceCannyHiSpinnerLabel.set_label(_("Threshold"));
-    potraceCannyBox.pack_start(potraceCannyHiSpinnerLabel);
-    potraceCannyHiSpinner.set_digits(5);
+    potraceCannyHiSpinner.set_digits(3);
     potraceCannyHiSpinner.set_increments(0.01, 0.1);
     potraceCannyHiSpinner.set_range(0.0, 1.0);
     potraceCannyHiSpinner.set_value(0.65);
-    potraceCannyBox.pack_start(potraceCannyHiSpinner);
+    potraceCannyBox.pack_end(potraceCannyHiSpinner, false, false, MARGIN);
+
+    potraceCannyHiSpinnerLabel.set_label(_("Threshold:"));
+    potraceCannyBox.pack_end(potraceCannyHiSpinnerLabel, false, false, MARGIN);
+
+    potraceCannyVBox.pack_start(potraceCannyBox, false, false, MARGIN);
+
     potraceCannyFrame.set_label(_("Edge Detection"));
-    potraceCannyFrame.add(potraceCannyBox);
-    potraceBox.pack_start(potraceCannyFrame);
+    potraceCannyFrame.add(potraceCannyVBox);
+    potraceBox.pack_start(potraceCannyFrame, false, false, 0);
 
     /*#### quantization ####*/
     // TRANSLATORS: Color Quantization: the process of reducing the number of colors
@@ -370,43 +386,49 @@ TraceDialogImpl::TraceDialogImpl()
     //  re-applying this reduced set to the original image.
     potraceQuantRadioButton.set_label(_("Color Quantization"));
     potraceQuantRadioButton.set_group(potraceGroup);
-    potraceQuantBox.pack_start(potraceQuantRadioButton);
-    potraceQuantNrColorLabel.set_label(_("Colors"));
-    potraceQuantBox.pack_start(potraceQuantNrColorLabel);
+    potraceQuantBox.pack_start(potraceQuantRadioButton, false, false, MARGIN);
+
     potraceQuantNrColorSpinner.set_digits(2);
     potraceQuantNrColorSpinner.set_increments(1.0, 4.0);
     potraceQuantNrColorSpinner.set_range(4.0, 64.0);
     potraceQuantNrColorSpinner.set_value(8.0);
-    potraceQuantBox.pack_start(potraceQuantNrColorSpinner);
+    potraceQuantBox.pack_end(potraceQuantNrColorSpinner, false, false, MARGIN);
+
+    potraceQuantNrColorLabel.set_label(_("Colors:"));
+    potraceQuantBox.pack_end(potraceQuantNrColorLabel, false, false, MARGIN);
+
+    potraceQuantVBox.pack_start(potraceQuantBox, false, false, MARGIN);
+
     potraceQuantFrame.set_label(_("Quantization / Reduction"));
-    potraceQuantFrame.add(potraceQuantBox);
-    potraceBox.pack_start(potraceQuantFrame);
-
-    /*#### quantization ####*/
-    potraceInvertButton.set_label(_("Invert"));
-    potraceInvertButton.set_active(false);
-    potraceBox.pack_start(potraceInvertButton);
-
-    
+    potraceQuantFrame.add(potraceQuantVBox);
+    potraceBox.pack_start(potraceQuantFrame, false, false, 0);
+  
     /*#### Preview ####*/
     potracePreviewButton.set_label(_("Preview"));
     potracePreviewButton.signal_clicked().connect( 
          sigc::mem_fun(*this, &TraceDialogImpl::potracePreviewCallback) );
-    potracePreviewBox.pack_start(potracePreviewButton, false, true, 0);//do not expand
+    potracePreviewBox.pack_end(potracePreviewButton, false, false, 0);//do not expand
     potracePreviewImage.set_size_request(100,100);
     //potracePreviewImage.set_alignment (Gtk::ALIGN_CENTER, Gtk::ALIGN_CENTER);
-    potracePreviewBox.pack_start(potracePreviewImage);
-    potracePreviewFrame.set_label(_("Intermediate Bitmap"));
+    potracePreviewBox.pack_start(potracePreviewImage, true, true, 0);
+    potracePreviewFrame.set_label(_("Preview")); // I guess it's correct to call the "intermediate bitmap" a preview of the trace
     potracePreviewFrame.add(potracePreviewBox);
-    potraceBox.pack_start(potracePreviewFrame);
+    potraceBox.pack_start(potracePreviewFrame, true, true, 0);
+
+    /*#### quantization ####*/
+    potraceInvertButton.set_label(_("Invert"));
+    potraceInvertButton.set_active(false);
+    potraceInvertBox.pack_end(potraceInvertButton, false, false, MARGIN);
+    potraceBox.pack_start(potraceInvertBox, false, false, MARGIN);
 
     /*#### Credits ####*/
     potraceCreditsLabel.set_text(
          "Thanks to Peter Selinger, http://potrace.sourceforge.net"
                          );
+    potraceCreditsVBox.pack_start(potraceCreditsLabel, false, false, MARGIN);
     potraceCreditsFrame.set_label(_("Credits"));
-    potraceCreditsFrame.add(potraceCreditsLabel);
-    potraceBox.pack_start(potraceCreditsFrame);
+    potraceCreditsFrame.add(potraceCreditsVBox);
+    potraceBox.pack_start(potraceCreditsFrame, false, false, 0);
 
     /*done */
     // TRANSLATORS: Potrace is an application for transforming bitmaps into
