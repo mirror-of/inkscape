@@ -42,16 +42,19 @@ while(<>) {
 	}
 
 	s/"\n"//g;
-	if (!m{\A${com}*msgid[^\n]*\n${com}*msgstr[^\n]*\n${com}*\Z}) {
+	if (!m{\A${com}*msgid[^\n]*\n${com}*msgstr[^\n]*\n${com}*\Z} &&
+	    !m{\A${com}*msgid[^\n]*\n${com}*msgid_plural[^\n]*\n${com}*(msgstr\[[^\n]*\n${com}*)+\Z}) {
 	    po_error('Not in msg format');
 	}
-	elsif (!m{\A${com}*msgid ${str}\s*\n${com}*msgstr ${str}\s*\n${com}*\Z}) {
+	elsif (!m{\A${com}*msgid ${str}\s*\n${com}*msgstr ${str}\s*\n${com}*\Z} &&
+	       !m{\A${com}*msgid ${str}\s*\n${com}*msgid_plural ${str}\s*\n${com}*(msgstr\[\d+\] ${str}\s*\n${com}*)+\Z}) {
 	    po_error('Mismatched quotes');
 	}
-	elsif (!m{\A${com}*msgid ${str}\n${com}*msgstr ${str}\n${com}*\Z}) {
+	elsif (!m{\A${com}*msgid ${str}\n${com}*msgstr ${str}\n${com}*\Z} &&
+	       !m{\A${com}*msgid ${str}\n${com}*msgid_plural ${str}\n${com}*(msgstr\[\d+\] ${str}\n${com}*)+\Z}) {
 	    po_error('Trailing whitespace');
 	}
-	elsif (m{<([bisu]|big|su[bp]|small|span|tt)${attrs}>(?![^<>]*</\1>)}) {
+	elsif (m{<([bisu]|big|su[bp]|small|span|tt)${attrs}>(?!.*</\1>)}) {
 	    po_error("unclosed <$1>");
 	}
 	elsif (m{<([bisu]|big|su[bp]|small|tt)\b(?! *>)}) {
