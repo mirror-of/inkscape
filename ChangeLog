@@ -1,3 +1,13 @@
+2005-02-10  Jon A. Cruz  <jon@joncruz.org>
+	* src/io/uristream.h, src/io/uristream.cpp,
+	  src/extension/internal/svg.h, src/extension/internal/svg.cpp,
+	  src/extension/internal/Makefile_insert,
+	  src/extension/internal/extension.h,
+	  src/extension/internal/init.cpp:
+	  Adding internal .svgz load and save extension.
+	  Probable fix for bugs #1074996, #1050361, #925033, #1052307
+
+
 2005-02-08  Kees Cook  <kees@outflux.net>
 
 	* src/extension/implementation/script.cpp: proper /tmp handling.
@@ -1830,116 +1840,7 @@
 
 	* src/sp-offset.cpp, src/splivarot.cpp, src/livarot/Shape.cpp,
 	src/livarot/ShapeMisc.cpp, src/ShapeSweep.cpp: lastA/firstA in
-	Shape::dg_point -> incidentEdge[2].
-
-	* src/livarot/LivarotDefs.h: add FirstOrLast enum.
-
-	* src/livarot/ShapeRaster.cpp: coding style cleanups and refactoring.
-
-2004-09-17  Carl Hetherington <inkscape@carlh.net>
-
-	* src/livarot/Shape.h: use a std::vector for Shape::chgts.  Add
-	clearIncidenceData();
-
-	* src/livarot/Shape.cpp: Add clearIncidenceData().  Initialise
-	iData in the constructor.
-
-	* src/livarot/ShapeSweep.cpp: coding style cleanups.  Use a
-	std::vector for Shape::chgts.  Use clearIncidenceData().
-
-2004-09-16  Carl Hetherington <inkscape@carlh.net>
-
-	* src/livarot/ShapeUtils.h, src/livarot/ShapeSweepUtils.cpp,
-	src/livarot/sweep-tree.cpp, src/livarot/sweep-tree.h,
-	src/livarot/sweep-event.cpp, src/livarot/sweep-event.h,
-	src/livarot/Shape.h: split up ShapeUtils.h and ShapeSweepUtils.cpp
-	into two separate files.
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp,
-	src/livarot/sweep-event.cpp, src/livarot/sweep-event.h:
-	Make SweepEventQueue into a proper class, and move some static
-	methods from SweepEvent into it.
-
-	* src/livarot/ShapeSweep.cpp, src/livarot/sweep-event.cpp,
-	src/livarot/sweep-event.h, src/livarot/sweep-tree.cpp: make member
-	variables of SweepEventQueue private.
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/sweep-tree.cpp, src/livarot/sweep-tree.h,
-	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: make
-	SweepTreeList into a proper class.
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: remove
-	unnecessary Shape::_has_sweep_data.
-
-	* src/livarot/Shape.h, src/livarot/Shape.cpp,
-	src/livarot/ShapeSweep.cpp: use an enum rather than an int.
-
-2004-09-16  MenTaLguY <mental@rydia.net>
-
-	* src/render/stroke.cpp: a little more work on the stroking code
-
-	* src/widgets/document-tree-model.cpp, src/widgets/document-tree-model.h,
-	  src/widgets/layer-selector.cpp, src/widgets/layer-selector.h,
-	  src/desktop.cpp, src/sp-desktop-widget.h:
-
-	  work on new gtkmm-ified layer selector
-
-2004-09-15  Carl Hetherington <inkscape@carlh.net>
-
-	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp
-	src/display/sp-ctrlline.cpp, src/libnrtype/FlowDest.cpp,
-	src/libnrtype/RasterFont.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeRaster.cpp Remove unused parameters in
-	Shape::{Begin,End}{,Quick}Raster
-
-	* src/livarot/ShapeRaster.cpp: coding style cleanups.
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: Factor
-	out initialisePointData() and initialiseEdgeData()
-
-2004-09-14  Carl Hetherington <inkscape@carlh.net>
-
-	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp,
-	src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeMisc.cpp, src/livarot/ShapeSweep.cpp: move some
-	functions out of Shape that don't need to be members.
-
-	* src/livarot/Shape.h: reduce public: and private: sections to
-	just one of each.  Coding style cleanups.  No code changes.
-
-	* src/livarot/Shape.h: remove some unused code; const fixes.
-
-2004-09-10  Carl Hetherington <inkscape@carlh.net>
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
-	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: excise
-	Shape::nbPt.
-
-	* src/sp-offset.cpp, src/splivarot.cpp,
-	src/display/nr-arena-shape.cpp, src/livarot/Shape.h: Make
-	Shape::aretes private and offer a read-only accessor.
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
-	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp,
-	src/livarot/ShapeSweepUtils.cpp: use getEdge() more and excise
-	Shape::nbAr.
-
-	* src/livarot/Shape.cpp, src/livarot/Shape.h,
-	src/livarot/ShapeMisc.cpp, src/livarot/ShapeRaster.cpp,
-	src/livarot/ShapeSweep.cpp, src/livarot/ShapeSweepUtils.cpp: use
-	std::vector for most of the temporary arrays in Shape.
-
-2004-09-11  MenTaLguY <mental@rydia.net>
-
-	* src/render/bezier.cpp, src/render/bezier.h,
-	  src/render/shape-builder.cpp, src/render/shape-builder.h,
-	  src/render/stroke.cpp, src/render/stroke.h:
+	Shape::dg_point ->
 
 	  further work on stroking; break out bezier approximation into
 	  public functions
@@ -2301,123 +2202,7 @@
 	  Indicate that adv won't get written to.
 
 	* src/sp-rect.cpp (sp_rect_set_transform): Call sp_rect_set_shape,
-	  so that bbox is up-to-date.
-
-2004-08-15  Carl Hetherington  <inkscape@carlh.net>
-
-	* src/object-edit.cpp: fix a regression in my cleanups from yesterday.
-
-2004-08-15  MenTaLguY  <mental@rydia.net>
-
-	* src/Makefile.am, src/Makefile_insert, src/util/Makefile_insert:
-
-	  added libinkutil for util/ directory
-
-	* src/arc-context.cpp, src/desktop.cpp, src/event-context.cpp,
-	  src/node-context.cpp, src/rect-context.cpp, src/sp-object.cpp,
-	  src/sp-text.cpp, src/spiral-context.cpp, src/star-context.cpp,
-	  src/toolbox.cpp, src/dialogs/desktop-properties.cpp,
-	  src/widgets/gradient-vector.cpp, src/widgets/sp-widget.cpp,
-	  src/widgets/sp-xmlview-attr-list.cpp,
-	  src/widgets/sp-xmlview-content.cpp, src/widgets/sp-xmlview-tree.cpp,
-	  src/xml/sp-repr-event-vector.h, src/xml/sp-repr-listener.h:
-
-	  moved SPReprListener and SPReprEventVector into their own header
-	  files, and remove "destroy" callback
-
-	* src/util/share-c-string.cpp, src/util/share-c-string.h:
-
-	  add Inksape::Util::share_c_string, a function to make an
-	  immutable and garbage-collected copy of a string which can
-	  safely be shared
-	
-	* src/xml/Makefile_insert, src/xml/repr-action.cpp, src/xml/repr-css.cpp,
-	  src/xml/repr-private.h, src/xml/repr.cpp, src/xml/sp-repr-attr.h:
-
-	  start sharing rather than copying strings, and taking advantage
-	  of garbage collection
-
-2004-08-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
-	* src/sp-flowtext.cpp: CodingStyle changes.
-
-2004-08-14  Carl Hetherington  <inkscape@carlh.net>
-
-	* src/sp-use-reference.cpp, src/sp-use-reference.h: use sigc 2.0
-	API rather than the old one.
-
-	* src/spiral-context.cpp: Use new message API.  Some
-	declaration-to-first-use and const fixes.
-
-	* src/star-context.cpp: Use new message API.  Remove the unused
-	sp_star_context_item_handler().
-
-	* src/spiral-context.h, src/star-context.h: Inherit
-	from SPEventContext to get access to the new message API.
-
-	* src/streams-zlib.cpp: fix a compiler warning.
-
-	* src/extension/internal/gdkpixbuf-input.cpp: Fix a compiler
-	warning and a memory leak.  Minor cleanups.
-
-	* src/libnrtype/FlowRes.cpp, src/libnrtype/FlowResOut.cpp,
-	src/libnrtype/FlowSrc.cpp: fix some compiler warnings.
-
-	* src/inkjar/jar.cpp: fixed a compiler warning and added a FIXME.
-
-	* src/object-edit.cpp: make use of sp_pattern_extract_trans.
-
-2004-08-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
-	* src/sp-rect.cpp (sp_rect_set_shape): Change rounded-rect
-	  behaviour to be closer to [opinion on www-svg as to the
-	  interpretation of] the SVG 1.1 specification.
-
-2004-08-13  MenTaLguY  <mental@rydia.net>
-
-	* src/xml/repr-action.h, src/xml/repr-action.cpp:
-
-	  simplified code now that we can take advantage of garbage collection
-
-2004-08-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
-	* src/dialogs/xml-tree.cpp (set_dt_select):
-	  Address warning introduced in r1.21.
-	  Minor other cleanups.
-
-2004-08-12  MenTaLguY  <mental@rydia.net>
-
-	* src/xml/repr-css.cpp, src/xml/repr-private.h,
-	  src/xml/repr.cpp, src/xml/repr.h:
-
-	  make SPRepr gc-aware
-
-2004-08-12  Carl Hetherington  <inkscape@carlh.net>
-
-	* src/sp-chars.cpp src/sp-ellipse.cpp src/sp-flowtext.cpp
-	src/sp-image.cpp src/sp-item-group.cpp src/sp-item.cpp
-	src/sp-item.h src/sp-marker.cpp src/sp-offset.cpp src/sp-root.cpp
-	src/sp-shape.cpp src/sp-spiral.cpp src/sp-star.cpp
-	src/sp-symbol.cpp src/sp-text.cpp src/sp-use.cpp:
-	const fixes to snappoints and bbox methods
-
-	*  selection.cpp sp-ellipse.cpp sp-image.cpp sp-item-group.cpp
-	sp-item-notify-moveto.cpp sp-item-rm-unsatisfied-cns.cpp
-	sp-item-update-cns.cpp sp-item.cpp sp-item.h sp-offset.cpp
-	sp-shape.cpp sp-spiral.cpp sp-star.cpp sp-text.cpp:
-	use more efficient API for collecting snap points, suggested by Peter.
-
-	* src/dialogs/desktop-properties.cpp: fix a cast warning.
-
-	* src/dialogs/docker.cpp: fix an unused variable warning.
-
-	* src/dialogs/stroke-style.cpp: add a static qualifier to a function.
-	
-2004-08-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
-	* src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-offset.cpp,
-	src/splivarot.cpp, src/display/nr-arena-shape.cpp,
-	src/livarot/PathConversion.cpp, src/livarot/Shape.cpp,
+	  so that bbox is up-to-	src/livarot/PathConversion.cpp, src/livarot/Shape.cpp,
 	src/livarot/Shape.h, src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
 	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp,
 	src/livarot/ShapeSweepUtils.cpp:
