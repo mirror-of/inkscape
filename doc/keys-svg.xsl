@@ -900,6 +900,93 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
   </g>
 
 
+  <g
+     id="left-arrow">
+    <rect
+       style="font-size:12.000000;fill:url(#linearGradient615);fill-rule:evenodd;stroke-width:0.062500000pt;"
+       id="rect4608"
+       width="7.0072136"
+       height="6.5789270"
+       x="-0.0074096299"
+       y="0.11458590"
+       ry="0.97501397"
+       rx="0.97501397" />
+    <rect
+       style="font-size:12.000000;fill:url(#linearGradient613);fill-rule:evenodd;stroke-width:0.15625000;"
+       id="rect4609"
+       width="5.0788813"
+       height="5.0500112"
+       x="0.92021960"
+       y="0.81310272"
+       ry="0.48707163"
+       rx="0.35459363" />
+    <path
+       style="font-size:12.000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.24442799;"
+       d="M 1.6924937,3.3980186 L 5.1247978,3.3980185"
+       id="path4610"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="font-size:12.000000;fill-rule:evenodd;stroke-width:0.0000000;"
+       d="M 2.5292733,2.3701144 L 1.5241435,3.4172024 L 2.5292733,4.4418646 L 2.5292733,2.3701144 z "
+       id="path4611"
+       sodipodi:nodetypes="cccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:1.2000000;font-weight:normal;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="1.0412997"
+       y="6.2968392"
+       id="text4612"
+       sodipodi:linespacing="100%"
+       transform="matrix(1.288158,0.000000,0.000000,1.288158,0.717169,2.842171e-14)"><tspan
+         x="1.0412997"
+         y="6.2968392"
+         sodipodi:role="line"
+         id="tspan4613">left</tspan></text>
+  </g>
+  <g
+     id="right-arrow">
+    <rect
+       style="font-size:12.000000;fill:url(#linearGradient615);fill-rule:evenodd;stroke-width:0.062500000pt;"
+       id="rect4598"
+       width="7.0072136"
+       height="6.5789270"
+       x="-0.0074096299"
+       y="0.11458590"
+       ry="0.97501397"
+       rx="0.97501397" />
+    <rect
+       style="font-size:12.000000;fill:url(#linearGradient613);fill-rule:evenodd;stroke-width:0.15625000;"
+       id="rect4599"
+       width="5.0788813"
+       height="5.0500112"
+       x="0.92021960"
+       y="0.81310272"
+       ry="0.48707163"
+       rx="0.35459363" />
+    <path
+       style="font-size:12.000000;fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.24442799;"
+       d="M 5.1234847,3.4139604 L 1.6911806,3.4139605"
+       id="path4600"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="font-size:12.000000;fill-rule:evenodd;stroke-width:0.0000000;"
+       d="M 4.2867051,4.4418646 L 5.2918349,3.3947766 L 4.2867051,2.3701144 L 4.2867051,4.4418646 z "
+       id="path4601"
+       sodipodi:nodetypes="cccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:1.2000000;font-weight:normal;stroke-width:1.0000000pt;font-family:Bitstream Vera Sans;"
+       x="1.0412997"
+       y="6.2968392"
+       id="text4602"
+       sodipodi:linespacing="100%"
+       transform="scale(1.288158,1.288158)"><tspan
+         x="1.0412997"
+         y="6.2968392"
+         sodipodi:role="line"
+         id="tspan4603">right</tspan></text>
+  </g>
+
 <xsl:apply-templates/>
 </svg>
 </xsl:template>
@@ -1202,7 +1289,7 @@ transform="translate({$xx},{$y})"/>
 transform="translate({$xx},{$y})"/>
 </xsl:template>
 
-<xsl:template match="k:up | k:down">
+<xsl:template match="k:up | k:down | k:left-arrow | k:right-arrow">
 <xsl:param name="x"/>
 <xsl:param name="y"/>
 <xsl:variable name="xx" select="
