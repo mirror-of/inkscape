@@ -93,10 +93,12 @@ struct _SPXMLNs {
 extern SPReprClass _sp_repr_xml_document_class;
 extern SPReprClass _sp_repr_xml_element_class;
 extern SPReprClass _sp_repr_xml_text_class;
+extern SPReprClass _sp_repr_xml_comment_class;
 
 #define SP_XML_DOCUMENT_NODE &_sp_repr_xml_document_class
 #define SP_XML_ELEMENT_NODE &_sp_repr_xml_element_class
 #define SP_XML_TEXT_NODE &_sp_repr_xml_text_class
+#define SP_XML_COMMENT_NODE &_sp_repr_xml_comment_class
 
 SPRepr *sp_repr_nth_child (const SPRepr *repr, int n);
 

@@ -1,5 +1,8 @@
 2003-12-31  MenTaLguY <mental@rydia.net>
 
+	* src/xml/repr.h, src/xml/repr-private.h, src/xml/repr-io.cpp,
+	  src/xml/repr.cpp: very preliminary comment support
+
 	* configure.in, src/desktop.cpp, src/main.cpp: removed gtkmm
 	  dependency for now
 

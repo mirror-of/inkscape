@@ -308,33 +308,50 @@ repr_quote_write (FILE * file, const gchar * val)
 }
 
 void
-sp_repr_write_stream (SPRepr * repr, FILE * file, gint level, gboolean whitespace)
+sp_repr_write_stream (SPRepr * repr, FILE * file, gint indent_level,
+                      gboolean add_whitespace)
 {
 	SPReprAttr *attr;
 	SPRepr *child;
-	const gchar *key, *val;
 	gboolean loose;
 	gint i;
 
 	g_return_if_fail (repr != NULL);
 	g_return_if_fail (file != NULL);
 
-	if (level > 16) level = 16;
-	if (whitespace) for (i = 0; i < level; i++) fputs ("  ", file);
+	if ( indent_level > 16 ) {
+		indent_level = 16;
+	}
+
+	if (add_whitespace) {
+		for ( i = 0 ; i < indent_level ; i++ ) {
+			fputs ("  ", file);
+		}
+	}
+
 	fprintf (file, "<%s", sp_repr_name (repr));
 
-	// if this is text element, suppress formatting whitespace for its content and children:
-	if (!strcmp (sp_repr_name (repr), "text")) whitespace = FALSE; 
+	// if this is a <text> element, suppress formatting whitespace
+	// for its content and children:
 
-	for (attr = repr->attributes; attr != NULL; attr = attr->next) {
+	if (!strcmp (sp_repr_name (repr), "text")) {
+		add_whitespace = FALSE; 
+	}
+
+	for ( attr = repr->attributes ; attr != NULL ; attr = attr->next ) {
+		const gchar *key, *val;
+
 		key = SP_REPR_ATTRIBUTE_KEY (attr);
 		val = SP_REPR_ATTRIBUTE_VALUE (attr);
 		fputs ("\n", file);
-		for (i = 0; i < level + 1; i++) fputs ("  ", file);
+		for ( i = 0 ; i < indent_level + 1 ; i++ ) {
+			fputs ("  ", file);
+		}
 		fprintf (file, " %s=\"", key);
 		repr_quote_write (file, val);
 		putc ('"', file);
 	}
+
 	loose = TRUE;
 	for (child = repr->children; child != NULL; child = child->next) {
 		if (child->type == SP_XML_TEXT_NODE) {
@@ -342,192 +359,36 @@ sp_repr_write_stream (SPRepr * repr, FILE * file, gint level, gboolean whitespac
 			break;
 		}
 	}
-	if (repr->children /* || sp_repr_content (repr) */ ) {
+	if (repr->children) {
 		fputs (">", file);
-		if (loose && whitespace) fputs ("\n", file);
+		if (loose && add_whitespace) {
+			fputs ("\n", file);
+		}
 		for (child = repr->children; child != NULL; child = child->next) {
 			if (child->type == SP_XML_TEXT_NODE) {
 				repr_quote_write (file, sp_repr_content (child));
+			} else if (child->type == SP_XML_COMMENT_NODE) {
+				fprintf (file, "<!--%s-->", sp_repr_content (child));
 			} else {
-				// output children, incrementing level and passing the whitespace flag to them
-				sp_repr_write_stream (child, file, (loose) ? (level + 1) : 0, whitespace); 
+				sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace); 
 			}
 		}
 		
-		if (loose && whitespace) {
-			for (i = 0; i < level; i++) fputs ("  ", file);
+		if (loose && add_whitespace) {
+			for (i = 0; i < indent_level; i++) {
+				fputs ("  ", file);
+			}
 		}
 		fprintf (file, "</%s>", sp_repr_name (repr));
 	} else {
 		fputs (" />", file);
 	}
-	// text elements cannot nest, so we can output newline after closing text
-	if (whitespace || !strcmp (sp_repr_name (repr), "text")) fputs ("\n", file); 
+
+	// text elements cannot nest, so we can output newline
+	// after closing text
+
+	if (add_whitespace || !strcmp (sp_repr_name (repr), "text")) {
+		fputs ("\n", file); 
+	}
 }
 
-#ifdef HAVE_LIBWMF
-
-#include <math.h>
-
-#include <libwmf/api.h>
-#include <libwmf/svg.h>
-
-#define SP_WMF_MAXWIDTH  (596)
-#define SP_WMF_MAXHEIGHT (812)
-
-typedef struct _SPImageContext SPImageContext;
-
-struct _SPImageContext
-{	wmfAPI* API;
-
-	int number;
-
-	char* prefix;
-};
-
-static xmlDocPtr
-sp_wmf_convert (const char * file_name)
-{
-	float wmf_width;
-	float wmf_height;
-
-	float ratio_wmf;
-	float ratio_bounds;
-
-	unsigned long flags;
-	unsigned long max_flags;
-	unsigned long length;
-
-	char * buffer = 0;
-
-	static char * Default_Description = "inkscape";
-
-	SPImageContext IC;
-
-	wmf_error_t err;
-
-	wmf_svg_t * ddata = 0;
-
-	wmfAPI * API = 0;
-
-	wmfAPI_Options api_options;
-
-	wmfD_Rect bbox;
-
-	xmlDocPtr doc = 0;
-
-	flags = WMF_OPT_IGNORE_NONFATAL;
-
-	flags |= WMF_OPT_FUNCTION;
-	api_options.function = wmf_svg_function;
-
-	err = wmf_api_create (&API, flags, &api_options);
-
-	if (err != wmf_E_None) {
-		if (API) wmf_api_destroy (API);
-		return (0);
-	}
-
-	err = wmf_file_open (API, (char *) file_name);
-
-	if (err != wmf_E_None) {
-		wmf_api_destroy (API);
-		return (0);
-	}
-
-	err = wmf_scan (API, 0, &bbox);
-
-	if (err != wmf_E_None) {
-		wmf_api_destroy (API);
-		return (0);
-	}
-
-/* Okay, got this far, everything seems cool.
- */
-	ddata = WMF_SVG_GetData (API);
-
-	ddata->out = wmf_stream_create (API, 0);
-
-	ddata->Description = Default_Description;
-
-	ddata->bbox = bbox;
-
-	wmf_width  = ddata->bbox.BR.x - ddata->bbox.TL.x;
-	wmf_height = ddata->bbox.BR.y - ddata->bbox.TL.y;
-
-	if ((wmf_width <= 0) || (wmf_height <= 0)) { /* Bad image size - but this error shouldn't occur... */
-		wmf_api_destroy (API);
-		return (0);
-	}
-
-	max_flags = 0;
-
-	if ((wmf_width > (float) SP_WMF_MAXWIDTH) || (wmf_height > (float) SP_WMF_MAXHEIGHT)) {
-		if (max_flags == 0)
-			max_flags = 1;
-	}
-
-	if (max_flags) { /* scale the image */
-		ratio_wmf = wmf_height / wmf_width;
-		ratio_bounds = (float) SP_WMF_MAXHEIGHT / (float) SP_WMF_MAXWIDTH;
-
-		if (ratio_wmf > ratio_bounds) {
-			ddata->height = SP_WMF_MAXHEIGHT;
-			ddata->width  = (unsigned int) ((float) ddata->height / ratio_wmf);
-		}
-		else {
-			ddata->width  = SP_WMF_MAXWIDTH;
-			ddata->height = (unsigned int) ((float) ddata->width  * ratio_wmf);
-		}
-	}
-	else {
-		ddata->width  = (unsigned int) ceil ((double) wmf_width );
-		ddata->height = (unsigned int) ceil ((double) wmf_height);
-	}
-
-	IC.API = API;
-	IC.number = 0;
-	IC.prefix = (char *) wmf_malloc (API, strlen (file_name) + 1);
-	if (IC.prefix) {
-		strcpy (IC.prefix, file_name);
-		IC.prefix[strlen (file_name) - 4] = 0;
-		ddata->image.context = (void *) (&IC);
-		ddata->image.name = sp_wmf_image_name;
-	}
-
-	err = wmf_play (API, 0, &bbox);
-
-	if (err == wmf_E_None) {
-		wmf_stream_destroy (API, ddata->out, &buffer, &length);
-
-		doc = xmlParseMemory (buffer, (int) length);
-	}
-
-	wmf_api_destroy (API);
-
-	return (doc);
-}
-
-static char *
-sp_wmf_image_name (void * context)
-{
-	SPImageContext * IC = (SPImageContext *) context;
-
-	int length;
-
-	char * name = 0;
-
-	length = strlen (IC->prefix) + 16;
-
-	name = wmf_malloc (IC->API, length);
-
-	if (name == 0) return (0);
-
-	IC->number++;
-
-	sprintf (name,"%s-%d.png", IC->prefix, IC->number);
-
-	return (name);
-}
-
-#endif /* HAVE_LIBWMF */

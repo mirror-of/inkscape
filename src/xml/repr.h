@@ -151,6 +151,7 @@ typedef struct _SPRepr SPRepr;
 
 SPRepr *sp_repr_new (const gchar *name);
 SPRepr *sp_repr_new_text (const gchar *content);
+SPRepr *sp_repr_new_comment (const gchar *comment);
 SPRepr *sp_repr_ref (SPRepr *repr);
 SPRepr *sp_repr_unref (SPRepr *repr);
 SPRepr *sp_repr_duplicate (const SPRepr *repr);

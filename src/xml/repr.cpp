@@ -65,6 +65,14 @@ SPReprClass _sp_repr_xml_text_class = {
 	repr_finalize
 };
 
+SPReprClass _sp_repr_xml_comment_class = {
+	sizeof (SPRepr),
+	NULL,
+	repr_init,
+	repr_copy,
+	repr_finalize
+};
+
 static SPRepr *sp_repr_new_from_code (SPReprClass *type, int code);
 static void sp_repr_remove_attribute (SPRepr *repr, SPReprAttr *attr);
 static void sp_repr_remove_listener (SPRepr *repr, SPListener *listener);
@@ -107,7 +115,16 @@ sp_repr_new_text (const gchar *content)
 	g_return_val_if_fail (content != NULL, NULL);
 	repr = sp_repr_new_from_code (SP_XML_TEXT_NODE, g_quark_from_static_string ("text"));
 	repr->content = g_strdup (content);
-	repr->type = SP_XML_TEXT_NODE;
+	return repr;
+}
+
+SPRepr *
+sp_repr_new_comment (const gchar *comment)
+{
+	SPRepr * repr;
+	g_return_val_if_fail (comment != NULL, NULL);
+	repr = sp_repr_new_from_code (SP_XML_COMMENT_NODE, g_quark_from_static_string ("comment"));
+	repr->content = g_strdup (comment);
 	return repr;
 }
 
