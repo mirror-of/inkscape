@@ -380,7 +380,7 @@ TraceDialogImpl::TraceDialogImpl()
     mainVBox->pack_start(notebook);
 
     //## The OK button
-    add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
+    //add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
     add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
 
     show_all_children();
