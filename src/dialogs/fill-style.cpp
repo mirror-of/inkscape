@@ -41,6 +41,7 @@
 #include <widgets/sp-widget.h>
 #include <sp-gradient.h>
 #include <sp-pattern.h>
+#include <sp-use.h>
 #include <widgets/paint-selector.h>
 #include <style.h>
 #include <gradient-chemistry.h>
@@ -317,6 +318,15 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
 
     const GSList *objects = sel->itemList();
     SPObject *object = SP_OBJECT (objects->data);
+    // prevent change of style on clones.
+    for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
+      if (SP_IS_USE(l->data)) {
+            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_CLONE);
+            gtk_object_set_data( GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE) );
+            return;
+        }
+    }
+    // prevent trying to modify objects with multiple fill modes
     SPPaintSelectorMode pselmode =
         sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object));
 

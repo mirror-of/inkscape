@@ -35,6 +35,7 @@
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
 #include "sp-gradient.h"
+#include <sp-use.h>
 #include <sp-pattern.h>
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>
@@ -203,6 +204,15 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 
     GSList const *objects = sel->itemList();
     SPObject *object = SP_OBJECT(objects->data);
+    // prevent change of style on clones.
+    for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
+      if (SP_IS_USE(l->data)) {
+            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_CLONE);
+            gtk_object_set_data( GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE) );
+            return;
+        }
+    }
+    // prevent trying to modify objects with multiple fill modes
     SPPaintSelectorMode pselmode =
         sp_stroke_style_determine_paint_selector_mode(SP_OBJECT_STYLE(object));
 
@@ -722,6 +732,10 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
             break;
 
+        case SP_PAINT_SELECTOR_MODE_CLONE:
+            g_warning( "file %s: line %d: Paint %d should not emit 'changed'",
+                       __FILE__, __LINE__, psel->mode);
+            break;
 
         default:
             g_warning( "file %s: line %d: Paint selector should not be in "
@@ -929,7 +943,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
 /**
  * sp_marker_list_from_doc()
  *
- * \brief Pick up all markers from source, except those that are in 
+ * \brief Pick up all markers from source, except those that are in
  * current_doc (if non-NULL), and add items to the m menu
  *
  */
@@ -979,7 +993,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 
         if (sp_repr_attr(repr, "inkscape:stockid"))
             g_object_set_data (G_OBJECT(i), "stockid", (void *) "true");
-        else 
+        else
             g_object_set_data (G_OBJECT(i), "stockid", (void *) "false");
 
         const gchar *markid = sp_repr_attr (repr, "id");
@@ -1729,7 +1743,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
 
     if (stroke_width_varying (objects)) {
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
-    } else { 
+    } else {
         // only one object; no sense to keep percent, switch to absolute
         if (unit->base != SP_UNIT_ABSOLUTE) {
             // FIXME: use some other default absolute unit
@@ -2179,6 +2193,14 @@ sp_stroke_style_get_average_color_cmyka(GSList const *objects, gfloat c[5])
 static SPPaintSelectorMode
 sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
 {
+    SPSelection *sel = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+    // prevent change of style on clones.
+    for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
+          if (SP_IS_USE(l->data)) {
+               return SP_PAINT_SELECTOR_MODE_CLONE;
+          }
+    }
+
     switch (style->stroke.type) {
         case SP_PAINT_TYPE_NONE:
             return SP_PAINT_SELECTOR_MODE_NONE;
@@ -2266,7 +2288,7 @@ ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
     GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu(mnu));
     if (marker != NULL) {
         bool mark_is_stock = false;
-        if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid")) 
+        if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid"))
             mark_is_stock = true;
 
         gchar *markname;
