@@ -174,5 +174,5 @@ void ColorGtkselector::_gtkChanged( GtkColorSelection *colorselection, SPColorGt
 
 //     g_message( "*****  _gtkChanged   %04x %04x %04x", color.red, color.green, color.blue );
 
-    gtkInst->_updateInternals( ourColor, static_cast< gfloat > (alpha) / 65535.0, FALSE );
+    gtkInst->_updateInternals( ourColor, static_cast< gfloat > (alpha) / 65535.0, gtk_color_selection_is_adjusting(colorselection) );
 }
