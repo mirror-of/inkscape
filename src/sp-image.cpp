@@ -888,7 +888,7 @@ handle_msg(at_string msg, at_msg_type msg_type, at_address client_data)
 	guchar * target = client_data;
 	
 	if (msg_type == AT_MSG_FATAL) {
-		long_msg = g_strdup_printf(_("Error to write %s: %s"), 
+		long_msg = g_strdup_printf(_("Error writing %s: %s"), 
 					   target, msg);	
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 						 GTK_MESSAGE_ERROR,

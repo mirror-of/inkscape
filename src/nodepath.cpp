@@ -2741,7 +2741,7 @@ sp_nodepath_update_statusbar (Path::Path *nodepath)
 			 _("Select one path object with selector first, then switch back to node tool."));
 	    } else {
 		nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
-			 _("0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."), total);
+			 _("0 out of %i nodes selected. Click, Shift+click, or drag around nodes to select."), total);
 	    }
 	} else if (selected == 1) {
 	    nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 

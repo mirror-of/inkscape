@@ -39,7 +39,7 @@ SPUnit const sp_units[] = {
 	{SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
 	{SP_UNIT_MM, SP_UNIT_ABSOLUTE, (720. / 254.), N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
 	{SP_UNIT_CM, SP_UNIT_ABSOLUTE, (7200. / 254.), N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
-	{SP_UNIT_M, SP_UNIT_ABSOLUTE, (720000. / 254.), N_("Meter"), N_("m"), N_("meters"), N_("m")},
+	{SP_UNIT_M, SP_UNIT_ABSOLUTE, (720000. / 254.), N_("Meter"), N_("m"), N_("Meters"), N_("m")},
 	{SP_UNIT_IN, SP_UNIT_ABSOLUTE, (72.0), N_("Inch"), N_("in"), N_("Inches"), N_("in")},
 	// TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
 	{SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},

@@ -114,7 +114,7 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_set_event_context (dt, SP_TYPE_NODE_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, TRUE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("To edit a path, click, Shift+click, drag around nodes to select. To edit a shape, drag its controls."));
+		dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("To edit a path, click, Shift+click, or drag around nodes to select. To edit a shape, drag its controls."));
 		break; 
 	case TOOLS_SHAPES_RECT:
 		sp_desktop_set_event_context (dt, SP_TYPE_RECT_CONTEXT, tool_names[num]);
@@ -168,7 +168,7 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_set_event_context (dt, SP_TYPE_ZOOM_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."));
+		dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Click or drag around an area to zoom in, Shift+click to zoom out."));
 		break;
 	case TOOLS_DROPPER:
 		sp_desktop_set_event_context (dt, SP_TYPE_DROPPER_CONTEXT, tool_names[num]);

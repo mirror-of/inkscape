@@ -121,7 +121,7 @@ PrintGNOME::set_preview (Inkscape::Extension::Print *mod)
     gnome_print_showpage (gpc);
     gnome_print_context_close (gpc);
 
-    title = g_strdup_printf (_("Inkscape (doc name %s..): Print Preview"),"");
+    title = g_strdup_printf (_("Inkscape: Print Preview"));
     gpmp = gnome_print_master_preview_new (gpm, title);
 
     gtk_widget_show (GTK_WIDGET(gpmp));

@@ -61,7 +61,7 @@ static const SPAttrDesc spiral_desc[] = {
     { N_("Center X:"), "sodipodi:cx"},
     { N_("Center Y:"), "sodipodi:cy"},
     { N_("Expansion:"), "sodipodi:expansion"},
-    { N_("Revolution:"), "sodipodi:revolution"},
+    { N_("Revolutions:"), "sodipodi:revolution"},
     { N_("Radius:"), "sodipodi:radius"},
     { N_("Argument:"), "sodipodi:argument"},
     // TRANSLATORS: this is "T-zero", not "to"

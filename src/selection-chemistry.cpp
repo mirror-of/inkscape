@@ -714,7 +714,7 @@ void sp_selection_paste(bool in_place)
 
     // check if something is in the clipboard
     if (clipboard == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing in the clipboard."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing on the clipboard."));
         return;
     }
 
@@ -775,7 +775,7 @@ void sp_selection_paste_style()
 
     // check if something is in the clipboard
     if (clipboard == NULL) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing in the clipboard."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing on the clipboard."));
         return;
     }
 
@@ -1449,7 +1449,7 @@ sp_selection_untile()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an object with pattern fill to to untile."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an object with pattern fill to untile."));
         return;
     }
 

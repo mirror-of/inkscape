@@ -515,7 +515,7 @@ sp_find_types ()
             }
 
             {
-                GtkWidget *c = sp_find_types_checkbox (vb, "rects", FALSE, tt, _("Search rectangles"), _("Rects"), NULL);
+                GtkWidget *c = sp_find_types_checkbox (vb, "rects", FALSE, tt, _("Search rectangles"), _("Rectangles"), NULL);
                 gtk_box_pack_start (GTK_BOX (hb), c, FALSE, FALSE, 0);
             }
 

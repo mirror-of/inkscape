@@ -597,7 +597,7 @@ sp_desktop_dialog(void)
                           row++, us,
                           G_CALLBACK(sp_dtw_guides_snap_distance_changed));
 
-        sp_color_picker_button(dlg, t, _("Guides color:"), "guidecolor",
+        sp_color_picker_button(dlg, t, _("Guide color:"), "guidecolor",
                                _("Guideline color"), "guideopacity", row++);
 
         sp_color_picker_button(dlg, t, _("Highlight color:"), "guidehicolor",

@@ -387,7 +387,7 @@ sp_file_save_dialog(SPDocument *doc)
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (char const *) save_loc,
                  Inkscape::UI::Dialogs::SVG_TYPES,
-                 (char const *) _("Select file to save"),
+                 (char const *) _("Select file to save to"),
                  default_extension
             );
     bool success = dlg->show();

@@ -935,7 +935,7 @@ sp_display_dialog (void)
             gtk_container_add (GTK_CONTAINER (vb_shapes), nb_shapes);
 
             // Rect
-            new_tab(nb_shapes, _("Rect"));
+            new_tab(nb_shapes, _("Rectangle"));
 
             // Ellipse
             new_tab(nb_shapes, _("Ellipse"));
@@ -1103,7 +1103,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Scale rounded corners in rects"), 
+    _("Scale rounded corners in rectangles"), 
     _("When scaling rectangles, scale the radii of rounded corners"), tt,
     vb,
     "options.transform", "rectcorners", 0,
@@ -1160,7 +1160,7 @@ options_checkbox (
 
 options_checkbox (
     _("Import bitmap as <image>"), 
-    _("When on, an imported bitmap creates an <image> element; otherwise it is a rect with bitmap fill"), tt,
+    _("When on, an imported bitmap creates an <image> element; otherwise it is a rectangle with bitmap fill"), tt,
     vb,
     "options.importbitmapsasimages", "value", 1,
     options_changed_boolean

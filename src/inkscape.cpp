@@ -494,7 +494,7 @@ inkscape_segv_handler (int signum)
 
     char const *istr = N_("Inkscape encountered an internal error and will close now.\n");
     char const *sstr = N_("Automatic backups of unsaved documents were done to following locations:\n");
-    char const *fstr = N_("Automatic backup of following documents failed:\n");
+    char const *fstr = N_("Automatic backup of the following documents failed:\n");
     nllen = strlen ("\n");
     len = strlen (istr) + strlen (sstr) + strlen (fstr);
     for (l = savednames; l != NULL; l = l->next) {
@@ -659,7 +659,7 @@ inkscape_load_preferences (Inkscape::Application *inkscape)
 				 _("%s is not a regular file.\n%s"),
 				 _("%s not a valid XML file, or\n"
 				   "you don't have read permissions on it.\n%s"),
-				 _("%s is not valid preferences file.\n%s"),
+				 _("%s is not a valid preferences file.\n%s"),
 				 _("Inkscape will run with default settings.\n"
                              "New settings will not be saved."));
 }
