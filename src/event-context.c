@@ -265,16 +265,11 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				ret = TRUE;
 			}
 			break;
-		case GDK_Alt_L: //was GDK_space: // Space - root menu
-		case GDK_Alt_R: 
-			sp_event_root_menu_popup (desktop, NULL, event);
-			ret= TRUE;
-			break;
 		case GDK_F10:
 			if (event->key.state & GDK_SHIFT_MASK) {
 				sp_event_root_menu_popup (desktop, NULL, event);
 				ret= TRUE;
-			}
+			} 
 			break;
 		}
 #if 0
