@@ -11,6 +11,7 @@ options:
 
     -?, --help		
         --usage       
+    -V, --version
 
     -f, --file=FILENAME               
     -s, --slideshow                   
@@ -67,6 +68,10 @@ available in the Open Source community.
 =item B<-?>, B<--help>
 
 Show help message
+
+=item B<-V>, B<--version>
+
+Show Inkscape version and build date.
 
 =item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
 
