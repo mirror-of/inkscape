@@ -38,7 +38,7 @@ static const char preferences_skeleton[] =
 "                 stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;\">"
 "    <group id=\"shapes\" style=\"fill-rule:evenodd;\">"
 "      <eventcontext id=\"rect\" style=\"fill:blue;\"/>"
-"      <eventcontext id=\"arc\" style=\"fill:red;\"end=\"0.0\"; start=\"0.0\"/>"
+"      <eventcontext id=\"arc\" style=\"fill:red;\" end=\"0.0;\" start=\"0.0;\"/>"
 "      <eventcontext id=\"star\" magnitude=\"5\" style=\"fill:yellow;\"/>"
 "      <eventcontext id=\"spiral\" style=\"fill:none;stroke:black;\"/>"
 "    </group>"
