@@ -74,7 +74,10 @@ void GzipInputStream::close()
     if (closed)
         return;
     if (outputBuf)
+    {
         free(outputBuf);
+        outputBuf = 0;
+    }
     closed = true;
 }
     
@@ -99,6 +102,12 @@ int GzipInputStream::get()
     int ch = (int) outputBuf[outputBufPos++];
     return ch;
 }
+
+#define FTEXT 0x01
+#define FHCRC 0x02
+#define FEXTRA 0x04
+#define FNAME 0x08
+#define FCOMMENT 0x10
 
 bool GzipInputStream::load()
 {
@@ -131,6 +140,8 @@ bool GzipInputStream::load()
     for (iter=inputBuf.begin() ; iter != inputBuf.end() ; iter++)
         *p++ = *iter;
 
+    int headerLen = 10;
+
     //Magic
     int val = (int)srcBuf[0];
     printf("val:%x\n", val);
@@ -141,18 +152,35 @@ bool GzipInputStream::load()
     val = (int)srcBuf[2];
     printf("val:%x\n", val);
 
+    //flags
+    int flags = (int)srcBuf[3];
+
     //time
-    val = (int)srcBuf[3];
     val = (int)srcBuf[4];
     val = (int)srcBuf[5];
     val = (int)srcBuf[6];
-
-    //flags
     val = (int)srcBuf[7];
+
     //xflags
     val = (int)srcBuf[8];
     //OS
     val = (int)srcBuf[9];
+
+    int cur = 10;
+//     if ( flags & FEXTRA ) {
+//         headerLen += 2;
+//         int xlen = 
+//         TODO deal with optional header parts
+//     }
+    if ( flags & FNAME ) {
+        while ( srcBuf[cur] )
+        {
+            cur++;
+            headerLen++;
+        }
+        headerLen++;
+    }
+
     
     unsigned long crc0   = (unsigned long )srcBuf[srcLen-8];
     unsigned long crc1   = (unsigned long )srcBuf[srcLen-7];
@@ -181,8 +209,8 @@ bool GzipInputStream::load()
         return false;
         }
     
-    unsigned char *data = srcBuf+10;
-    unsigned long dataLen = srcLen - 18;
+    unsigned char *data = srcBuf + headerLen;
+    unsigned long dataLen = srcLen - (headerLen + 8);
     //printf("%x %x\n", data[0], data[dataLen-1]);
     
     z_stream d_stream;
