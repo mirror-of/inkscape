@@ -69,7 +69,7 @@ GType sp_textpath_get_type();
 
 #include "sp-text.h"
 #include "sp-object.h"
-#define SP_IS_TEXT_TEXTPATH(obj) (SP_IS_TEXT(obj) && SP_IS_TEXTPATH(sp_object_first_child(obj)))
+#define SP_IS_TEXT_TEXTPATH(obj) (SP_IS_TEXT(obj) && sp_object_first_child(obj) && SP_IS_TEXTPATH(sp_object_first_child(obj)))
 
 SPItem *sp_textpath_get_path_item (SPTextPath *tp);
 void sp_textpath_to_text (SPObject *tp);
