@@ -1,3 +1,14 @@
+2005-02-15  MenTaLguY  <mental@rydia.net>
+
+	* src/document.cpp, src/document.h, src/file.cpp, src/help.cpp,
+	  src/inkscape.cpp, src/inkview.cpp, src/slideshow.cpp,
+	  src/dialogs/filedialog.cpp, src/dialogs/stroke-style.cpp,
+	  src/extension/internal/gdkpixbuf-input.cpp,
+	  src/extension/internal/svg.cpp, src/extension/plugin/gimpgrad.cpp,
+	  src/helper/stock-items.cpp, src/widgets/icon.cpp:
+
+	  removed unused SPDocument::advertize
+
 2005-02-14  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp: remove redundant assignment that appears to confuse

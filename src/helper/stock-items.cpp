@@ -62,7 +62,7 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
     if (!edoc && !doc) {
         gchar *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
         if (Inkscape::IO::file_test(markers, G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(markers, FALSE, FALSE);
+            doc = sp_document_new(markers, FALSE);
         }
         g_free(markers);
         if (doc) {
@@ -99,7 +99,7 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
     if (!edoc && !doc) {
         gchar *patterns = g_build_filename(INKSCAPE_PATTERNSDIR, "/patterns.svg", NULL);
         if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(patterns, FALSE, FALSE);
+            doc = sp_document_new(patterns, FALSE);
         }
         g_free(patterns);
         if (doc) {
@@ -135,7 +135,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
     if (!edoc && !doc) {
         gchar *gradients = g_build_filename(INKSCAPE_GRADIENTSDIR, "/gradients.svg", NULL);
         if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(gradients, FALSE, FALSE);
+            doc = sp_document_new(gradients, FALSE);
         }
         g_free(gradients);
         if (doc) {

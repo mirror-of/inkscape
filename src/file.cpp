@@ -96,7 +96,7 @@ void dump_ustr(Glib::ustring const &ustr);
 void
 sp_file_new(gchar const *templ)
 {
-    SPDocument *doc = sp_document_new(templ, TRUE, TRUE, true);
+    SPDocument *doc = sp_document_new(templ, TRUE, true);
     g_return_if_fail(doc != NULL);
 
     SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));

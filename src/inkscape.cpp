@@ -333,6 +333,8 @@ inkscape_dispose (GObject *object)
     Inkscape::Application *inkscape = (Inkscape::Application *) object;
 
     while (inkscape->documents) {
+        // TODO this is wrong now, as SPDocument is not an SPObject
+        // also, we don't otherwise unref, so why here?
         g_object_unref (G_OBJECT (inkscape->documents->data));
     }
 

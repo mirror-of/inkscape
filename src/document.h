@@ -46,7 +46,6 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	SPDocument();
 	~SPDocument();
 
-	unsigned int advertize : 1;
 	unsigned int keepalive : 1;
 	unsigned int virgin    : 1; /* Has the document never been touched? */
 
@@ -92,8 +91,8 @@ private:
  * Public document appear in document list
  */
 
-SPDocument *sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepalive, bool make_new = false);
-SPDocument *sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int advertize, unsigned int keepalive);
+SPDocument *sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new = false);
+SPDocument *sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int keepalive);
 SPDocument *sp_document_new_dummy(); 
 
 SPDocument *sp_document_ref (SPDocument *doc);

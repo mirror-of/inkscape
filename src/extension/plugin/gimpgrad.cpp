@@ -214,7 +214,7 @@ GimpGrad::open (Inkscape::Extension::Input *module, gchar const *filename)
 
     fclose(gradient);
 
-    return sp_document_new_from_mem(outsvg.c_str(), outsvg.length(), TRUE, TRUE);
+    return sp_document_new_from_mem(outsvg.c_str(), outsvg.length(), TRUE);
 }
 
 } } }  /* namespace Plugin; Extension; Inkscape */

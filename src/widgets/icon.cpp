@@ -485,7 +485,7 @@ sp_icon_image_load_svg ( const gchar *name,
         /* Try to load from document */
         if (!info && 
             Inkscape::IO::file_test( doc_filename, G_FILE_TEST_IS_REGULAR ) &&
-            (doc = sp_document_new ( doc_filename, FALSE, FALSE )) ) {
+            (doc = sp_document_new ( doc_filename, FALSE )) ) {
 
             // prep the document
             sp_document_ensure_up_to_date (doc);

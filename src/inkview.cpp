@@ -226,7 +226,6 @@ main (int argc, const char **argv)
 			
 			ss.doc = sp_document_new_from_mem ((const gchar *)gba->data, 
 							   gba->len,
-							   TRUE, 
 							   TRUE);
 			gchar *last_filename = jar_file_reader.get_last_filename();
 			if (ss.doc) {
@@ -249,7 +248,7 @@ main (int argc, const char **argv)
 		}
 		
 		ss.slides[ss.length++] = strdup (argv[i]);
-		ss.doc = sp_document_new (ss.slides[ss.current], TRUE, TRUE, false);
+		ss.doc = sp_document_new (ss.slides[ss.current], TRUE, false);
 		
 		if (!ss.doc && ++ss.current >= ss.length) {
 		    /* No loadable documents */
@@ -372,7 +371,7 @@ sp_svgview_show_next (struct SPSlideShow *ss)
     doc = NULL;
     current = ss->current;
     while (!doc && (current < ss->length - 1)) {
-	doc = sp_document_new (ss->slides[++current], TRUE, TRUE, false);
+	doc = sp_document_new (ss->slides[++current], TRUE, false);
     }
     if (doc) {
 	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
@@ -390,7 +389,7 @@ sp_svgview_show_prev (struct SPSlideShow *ss)
     doc = NULL;
     current = ss->current;
     while (!doc && (current > 0)) {
-	doc = sp_document_new (ss->slides[--current], TRUE, TRUE, false);
+	doc = sp_document_new (ss->slides[--current], TRUE, false);
     }
     if (doc) {
 	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
@@ -406,7 +405,7 @@ sp_svgview_goto_first (struct SPSlideShow *ss)
     SPDocument *doc = NULL;
     int current = 0;
     for ( ; !doc && (current < ss->length); current++) {
-	doc = sp_document_new (ss->slides[current], TRUE, TRUE, false);
+	doc = sp_document_new (ss->slides[current], TRUE, false);
     }
     if (doc) {
 	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
@@ -422,7 +421,7 @@ sp_svgview_goto_last (struct SPSlideShow *ss)
     SPDocument *doc = NULL;
     int current = ss->length - 1;
     for ( ; !doc && (current >= 0); current--) {
-	doc = sp_document_new (ss->slides[current], TRUE, TRUE, false);
+	doc = sp_document_new (ss->slides[current], TRUE, false);
     }
     if (doc) {
 	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);

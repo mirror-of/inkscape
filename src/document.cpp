@@ -61,7 +61,6 @@ static gint doc_count = 0;
 SPDocument::SPDocument() {
 	SPDocumentPrivate *p;
 
-	advertize = FALSE;
 	keepalive = FALSE;
 	virgin    = TRUE;
 
@@ -176,7 +175,6 @@ sp_document_create (SPReprDoc *rdoc,
 		    const gchar *uri,
 		    const gchar *base,
 		    const gchar *name,
-		    unsigned int advertize,
 		    unsigned int keepalive)
 {
 	SPDocument *document;
@@ -187,7 +185,6 @@ sp_document_create (SPReprDoc *rdoc,
 
 	document = new SPDocument();
 
-	document->advertize = advertize;
 	document->keepalive = keepalive;
 
 	document->rdoc = rdoc;
@@ -292,7 +289,7 @@ sp_document_create (SPReprDoc *rdoc,
 }
 
 SPDocument *
-sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepalive, bool make_new)
+sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new)
 {
 	SPDocument *doc;
 	SPReprDoc *rdoc;
@@ -334,7 +331,7 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
         //# These should be set by now
         g_assert (name);
 
-	doc = sp_document_create (rdoc, uri, base, name, advertize, keepalive);
+	doc = sp_document_create (rdoc, uri, base, name, keepalive);
 
 	g_free (base);
 	g_free (name);
@@ -343,7 +340,7 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 }
 
 SPDocument *
-sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int advertize, unsigned int keepalive)
+sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int keepalive)
 {
 	SPDocument *doc;
 	SPReprDoc *rdoc;
@@ -362,7 +359,7 @@ sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int adverti
 
 	name = g_strdup_printf (_("Memory document %d"), ++doc_count);
 
-	doc = sp_document_create (rdoc, NULL, NULL, name, advertize, keepalive);
+	doc = sp_document_create (rdoc, NULL, NULL, name, keepalive);
 
 	return doc;
 }

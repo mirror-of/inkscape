@@ -63,7 +63,7 @@ sp_help_about (void)
            If we do so, then add an item to release-checklist saying that the
            string here should be changed.) */
 	char *about = g_build_filename(INKSCAPE_SCREENSDIR, _("about.svg"), NULL);
-        doc = sp_document_new (about, FALSE, TRUE);
+        doc = sp_document_new (about, TRUE);
         g_free(about);
         g_return_if_fail (doc != NULL);
         version = doc->getObjectById("version");

@@ -1033,7 +1033,7 @@ gchar const *buffer = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=
 
 "</svg>";
 
-    return sp_document_new_from_mem (buffer, strlen(buffer), FALSE, FALSE);
+    return sp_document_new_from_mem (buffer, strlen(buffer), FALSE);
 }
 
 
@@ -1084,7 +1084,7 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
         static SPDocument *markers_doc = NULL;
         char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
         if (Inkscape::IO::file_test (markers_source, G_FILE_TEST_IS_REGULAR)) {
-            markers_doc = sp_document_new(markers_source, FALSE, FALSE);
+            markers_doc = sp_document_new(markers_source, FALSE);
         }
         g_free(markers_source);
 

@@ -21,7 +21,7 @@ namespace Internal {
 SPDocument *
 GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 {
-    SPDocument * doc = sp_document_new(NULL, TRUE, TRUE, TRUE);
+    SPDocument * doc = sp_document_new(NULL, TRUE, TRUE);
     sp_document_set_undo_sensitive (doc, FALSE); // no need to undo in this temporary document
     GdkPixbuf* pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
     SPRepr *rdoc = sp_document_repr_root (doc);

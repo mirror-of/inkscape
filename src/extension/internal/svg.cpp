@@ -104,7 +104,7 @@ Svg::init(void)
 SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
-	return sp_document_new (uri, TRUE, TRUE);
+	return sp_document_new (uri, TRUE);
 }
 
 /**
