@@ -224,6 +224,8 @@ struct rdf_work_entity_t rdf_work_entities [] = {
     { "subject", N_("Keywords"), "dc:subject", RDF_CONTENT,
       N_("The topic of this document as key words, phrases, or classification."), TRUE,
     },
+    // TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
+    // For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
     { "coverage", N_("Coverage"), "dc:coverage", RDF_CONTENT,
       N_("Extent or scope of this document."), TRUE,
     },
@@ -235,6 +237,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
 
     /* this uses an element */
     { "license", N_("License"), "cc:license", RDF_RESOURCE,
+      // TRANSLATORS: this is where you put a URL to a page that defines the license
       N_("URI to this document's license's namespace definition."), FALSE,
     },
     
