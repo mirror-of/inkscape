@@ -1309,7 +1309,7 @@
        sodipodi:role="line"
        id="tspan2032"
        x="6.34433365"
-       y="1397.65236601">ctrl+&lt; scale up or down to 200% or 50% of the original, respectively.</tspan><tspan
+       y="1397.65236601">Ctrl+&lt; scale up or down to 200% or 50% of the original, respectively.</tspan><tspan
        sodipodi:role="line"
        id="tspan2034"
        x="6.34433365"
@@ -1325,7 +1325,7 @@
        sodipodi:role="line"
        id="tspan2040"
        x="6.34433365"
-       y="1442.34036543">activated by pressing Alt with the transform keys. For example, </tspan><tspan
+       y="1442.34036543">invoked by pressing Alt with the transform keys. For example, </tspan><tspan
        sodipodi:role="line"
        id="tspan2042"
        x="6.34433365"
@@ -1341,7 +1341,7 @@
        sodipodi:role="line"
        id="tspan1475"
        x="6.34433365"
-       y="1487.02836484">screen. Similarly, Alt+&gt; and Alt+&lt; scale selecton so that its visible</tspan><tspan
+       y="1487.02836484">screen. Similarly, Alt+&gt; and Alt+&lt; scale selection so that its visible</tspan><tspan
        sodipodi:role="line"
        id="tspan1477"
        x="6.34433365"
@@ -2498,7 +2498,7 @@
        sodipodi:role="line"
        id="tspan1484"
        x="6.29921865"
-       y="3343.65979839">Shift-Tab works in reverse, starting from the topmost object and </tspan><tspan
+       y="3343.65979839">Shift+Tab works in reverse, starting from the topmost object and </tspan><tspan
        sodipodi:role="line"
        id="tspan1486"
        x="6.29921865"
@@ -2506,7 +2506,7 @@
        sodipodi:role="line"
        id="tspan1488"
        x="6.29921865"
-       y="3366.00379809">the top of the stack, pressing Shift-Tab with nothing selected will </tspan><tspan
+       y="3366.00379809">the top of the stack, pressing Shift+Tab with nothing selected will </tspan><tspan
        sodipodi:role="line"
        id="tspan1490"
        x="6.29921865"
