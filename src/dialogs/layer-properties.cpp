@@ -27,6 +27,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "desktop-handles.h"
+#include "layer-fns.h"
 
 #include "layer-properties.h"
 
@@ -43,13 +44,14 @@ static void hideCallback(GtkObject *object, gpointer dlgPtr)
 static void unhideCallback(GtkObject *object, gpointer dlgPtr)
 {
     LayerPropertiesDialog *dlg = (LayerPropertiesDialog *) dlgPtr;
-    if (! dlg->userHidden()) {
+    if (!dlg->userHidden()) {
         dlg->show();
         dlg->raise();
     }
 }
 
 LayerPropertiesDialog::LayerPropertiesDialog()
+: _strategy(NULL)
 {
     GtkWidget *dlg = GTK_WIDGET(gobj());
     g_assert(dlg);
@@ -57,10 +59,6 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     Gtk::VBox *mainVBox = get_vbox();
 
     // Rename Layer widgets
-    gchar const * name = getLayerName();
-    if (name != NULL) {
-        _layer_name_entry.set_text(name);
-    }
     _layer_name_entry.signal_activate()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::_apply));
     _layer_name_entry.set_activates_default(true);
@@ -70,6 +68,10 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
     // Buttons
+    _close_button.set_use_stock(true);
+    _close_button.set_label(Gtk::Stock::CANCEL.id);
+
+    _apply_button.set_use_underline(true);
     _apply_button.set_flags(Gtk::CAN_DEFAULT);
 
     _close_button.signal_clicked()
@@ -94,104 +96,73 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     show_all_children();
 }
 
-LayerPropertiesDialog::~LayerPropertiesDialog()
+void LayerPropertiesDialog::_showDialog(LayerPropertiesDialog::Strategy &strategy,
+                                        SPDesktop *desktop)
 {
+    _strategy = &strategy;
+
+    _strategy->setup(*this);
+
+    show();
+    present();
+    _userHidden = false;
 }
 
 void
 LayerPropertiesDialog::_apply()
 {
-    setLayerName((gchar*)_layer_name_entry.get_text().c_str());
-    userHidden(true);
+    g_assert(_strategy != NULL);
+
+    _strategy->perform(*this);
+    sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
+    _userHidden = true;
     hide();
 }
 
 void
 LayerPropertiesDialog::_close()
 {
-    userHidden(true);
+    g_assert(_strategy != NULL);
+
+    _userHidden = true;
     hide();
 }
 
-void
-LayerPropertiesDialog::update()
-{
-    // Get the current layer name
-    gchar const * name = getLayerName();
-
-    if (name != NULL) {
-        // update based on the currently selected layer
-        _layer_name_entry.set_text(name);
-        _apply_button.set_sensitive(true);
-    } else {
-        _layer_name_entry.set_text("");
-        _apply_button.set_sensitive(false);
-    }
+void LayerPropertiesDialog::Rename::setup(LayerPropertiesDialog &dialog) {
+    SPDesktop *desktop=SP_ACTIVE_DESKTOP;
+    dialog.set_title(_("Rename Layer"));
+    gchar const *name=desktop->currentLayer()->label();
+    dialog._layer_name_entry.set_text(( name ? name : "" ));
+    dialog._apply_button.set_label(_("_Rename"));
 }
 
-/* static instance, like done in DebugDialog */
-static LayerPropertiesDialog *layerPropertiesDialogInstance = NULL;
-
-LayerPropertiesDialog *LayerPropertiesDialog::getInstance()
-{
-    if ( !layerPropertiesDialogInstance )
-    {
-        layerPropertiesDialogInstance = new LayerPropertiesDialog();
-    }
-    return layerPropertiesDialogInstance;
-}
-
-void LayerPropertiesDialog::showInstance()
-{
-    LayerPropertiesDialog *dlg = getInstance();
-    g_assert(dlg);
-    dlg->show();
-    dlg->present();
-    dlg->userHidden(false);
-
-    dlg->set_title(_("Rename Layer"));
-
-    dlg->_close_button.set_use_stock(true);
-    dlg->_close_button.set_label(Gtk::Stock::CANCEL.id);
-
-    dlg->_apply_button.set_use_stock(false);
-    dlg->_apply_button.set_use_underline(true);
-    dlg->_apply_button.set_label(_("_Rename"));
-}
-
-void
-LayerPropertiesDialog::setLayerName(gchar const * name)
-{
-    // Get the active desktop
-    SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
-    g_return_if_fail (desktop != NULL);
-
-    // Retrieve current layer
-    SPObject * layer = desktop->currentLayer();
-    g_return_if_fail (layer != NULL);
-
-    // Set they layer's label to the retrieved text
-    layer->setLabel(name);
-
-    // Notify that we've made a change
+void LayerPropertiesDialog::Rename::perform(LayerPropertiesDialog &dialog) {
+    SPDesktop *desktop=SP_ACTIVE_DESKTOP;
+    Glib::ustring name(dialog._layer_name_entry.get_text());
+    desktop->currentLayer()->setLabel(
+        ( name.empty() ? NULL : (gchar *)name.c_str() )
+    );
     sp_document_done(SP_DT_DOCUMENT(desktop));
     // TRANSLATORS: This means "The layer has been renamed"
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Renamed layer"));
 }
 
-gchar const *
-LayerPropertiesDialog::getLayerName() const
-{
-    // Get the active desktop
-    SPDesktop * const desktop = SP_ACTIVE_DESKTOP;
-    g_return_val_if_fail (desktop != NULL, NULL);
+void LayerPropertiesDialog::Create::setup(LayerPropertiesDialog &dialog) {
+    dialog.set_title(_("Create Layer"));
+    dialog._layer_name_entry.set_text("");
+    dialog._apply_button.set_label(_("C_reate"));
+}
 
-    // Retrieve current layer
-    SPObject * layer = desktop->currentLayer();
-    g_return_val_if_fail (layer != NULL, NULL);
-
-    // Get the layer's name
-    return layer->label();
+void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
+    SPDesktop *desktop=SP_ACTIVE_DESKTOP;
+    SPObject *layer=Inkscape::create_layer(desktop->currentRoot(), desktop->currentLayer());
+    desktop->setCurrentLayer(layer);
+    SP_DT_SELECTION(desktop)->clear();
+    Glib::ustring name(dialog._layer_name_entry.get_text());
+    if (!name.empty()) {
+        desktop->currentLayer()->setLabel((gchar *)name.c_str());
+    }
+    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
 }
 
 } // namespace

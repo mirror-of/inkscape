@@ -162,9 +162,6 @@ LayerSelector::~LayerSelector() {
     _selection_changed_connection.disconnect();
 }
 
-void LayerSelector::startRenameLayer() {
-}
-
 namespace {
 
 /** Helper function - detaches desktop from selector 

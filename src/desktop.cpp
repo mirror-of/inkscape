@@ -328,10 +328,6 @@ bool SPDesktop::itemIsHidden(SPItem const *item) const {
     return item->isHidden(this->dkey);
 }
 
-void SPDesktop::startRenameLayer() {
-    owner->startRenameLayer();
-}
-
 static void
 sp_desktop_request_redraw (SPView *view)
 {
@@ -1453,10 +1449,6 @@ void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *messag
 {
     GtkLabel *sb=GTK_LABEL(this->select_status);
     gtk_label_set_markup (sb, message ? message : "");
-}
-
-void SPDesktopWidget::startRenameLayer() {
-    layer_selector->startRenameLayer();
 }
 
 static void

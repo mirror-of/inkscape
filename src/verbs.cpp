@@ -871,16 +871,11 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
 
     switch (verb) {
         case SP_VERB_LAYER_NEW: {
-            SPObject *layer=Inkscape::create_layer(dt->currentRoot(), dt->currentLayer());
-            dt->setCurrentLayer(layer);
-            SP_DT_SELECTION(dt)->clear();
-            sp_document_done(SP_DT_DOCUMENT(dt));
-            dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showCreate(dt);
             break;
         }
         case SP_VERB_LAYER_RENAME: {
-            dt->startRenameLayer();
-            Inkscape::UI::Dialogs::LayerPropertiesDialog::showInstance();
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showRename(dt);
             break;
         }
         case SP_VERB_LAYER_NEXT: {

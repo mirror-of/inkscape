@@ -40,8 +40,6 @@ public:
     SPDesktop *desktop() { return _desktop; }
     void setDesktop(SPDesktop *desktop);
 
-    void startRenameLayer();
-
 private:
     class LayerModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:

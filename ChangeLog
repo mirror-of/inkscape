@@ -5,6 +5,16 @@
 	* src/widgets/layer-properties.h, src/widgets/layer-properties.cpp:
 	  slight HIG-ification
 
+	* src/desktop.cpp, src/desktop.h, src/widgets/layer-selector.cpp,
+	  src/widgets/layer-selector.h, src/verbs.cpp, src/sp-desktop-widget.h
+
+	  removed vestigal layer renaming thing
+
+	* src/verbs.cpp, src/dialogs/layer-properties.cpp,
+	  src/dialogs/layer-properties.h:
+
+	  reuse dialog for creating layers as well as for renaming them
+
 2004-11-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/bezier-utils.cpp (generate_bezier): For the sake of

@@ -30,19 +30,38 @@ namespace Dialogs {
 class LayerPropertiesDialog : public Gtk::Dialog {
  public:
     LayerPropertiesDialog();
-    virtual ~LayerPropertiesDialog();
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 
-    static LayerPropertiesDialog *getInstance();
-    static void showInstance();
+    static void showRename(SPDesktop *desktop) {
+        _instance()._showDialog(Rename::instance(), desktop);
+    }
+    static void showCreate(SPDesktop *desktop) {
+        _instance()._showDialog(Create::instance(), desktop);
+    }
 
     bool       userHidden() { return _userHidden; }
-    void       userHidden(bool val) { _userHidden = val; }
 
- protected:
-    LayerPropertiesDialog(const LayerPropertiesDialog&);
-    LayerPropertiesDialog& operator=(const LayerPropertiesDialog&);
+protected:
+    struct Strategy {
+        virtual void setup(LayerPropertiesDialog &)=0;
+        virtual void perform(LayerPropertiesDialog &)=0;
+    };
+    struct Rename : public Strategy {
+        static Rename &instance() { static Rename instance; return instance; }
+        void setup(LayerPropertiesDialog &dialog);
+        void perform(LayerPropertiesDialog &dialog);
+    };
+    struct Create : public Strategy {
+        static Create &instance() { static Create instance; return instance; }
+        void setup(LayerPropertiesDialog &dialog);
+        void perform(LayerPropertiesDialog &dialog);
+    };
+
+    friend class Rename;
+    friend class Create;
+
+    Strategy *_strategy;
 
     bool              _userHidden;
     Gtk::HBox         _layer_name_hbox;
@@ -52,12 +71,18 @@ class LayerPropertiesDialog : public Gtk::Dialog {
     Gtk::Button       _close_button;
     Gtk::Button       _apply_button;
 
+    static LayerPropertiesDialog &_instance() {
+        static LayerPropertiesDialog instance;
+        return instance;
+    }
+
+    void _showDialog(Strategy &strategy, SPDesktop *desktop);
     void _apply();
     void _close();
-    void update();
 
-    void setLayerName(gchar const * name);
-    gchar const * getLayerName() const;
+private:
+    LayerPropertiesDialog(LayerPropertiesDialog const &); // no copy
+    LayerPropertiesDialog &operator=(LayerPropertiesDialog const &); // no assign
 };
 
 } // namespace
