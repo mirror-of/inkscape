@@ -21,12 +21,17 @@
 
 #include "svg/svg.h"
 #include "attributes.h"
+#include "document.h"
 #include "helper/bezier-utils.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
+#include "xml/repr-private.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
+
+#include "sp-text.h"
+#include "sp-shape.h"
 
 #include "sp-offset.h"
 
@@ -52,6 +57,28 @@ static void sp_offset_get_tangent (SPOffset const *offset, gdouble t,
 				   NRPoint * p);
 
 Path *bpath_to_liv_path (ArtBpath * bpath);
+
+// pour recevoir les changements de l'objet source
+void sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
+				    const gchar * oldval,
+				    const gchar * newval, void *data);
+void sp_offset_source_destroy (SPRepr * repr, void *data);
+
+SPReprEventVector offset_source_event_vector = {
+  sp_offset_source_destroy,
+  NULL,				/* Add child */
+  NULL,
+  NULL,
+  NULL,				/* Child removed */
+  NULL,
+  sp_offset_source_attr_changed,
+  NULL,				/* Change content */
+  NULL,
+  NULL,				/* change_order */
+  NULL
+};
+
+
 
 static SPShapeClass *parent_class;
 
@@ -114,6 +141,8 @@ sp_offset_init (SPOffset * offset)
   offset->original = NULL;
   offset->originalPath = NULL;
   offset->knotSet = false;
+  offset->sourceObject = NULL;
+  offset->sourceRepr = NULL;
 }
 
 static void
@@ -124,6 +153,7 @@ sp_offset_build (SPObject * object, SPDocument * document, SPRepr * repr)
 
   sp_object_read_attr (object, "sodipodi:radius");
   sp_object_read_attr (object, "sodipodi:original");
+  sp_object_read_attr (object, "xlink:href");
 }
 
 static SPRepr *
@@ -147,6 +177,7 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
       sp_repr_set_attr (repr, "sodipodi:type", "offset");
       sp_repr_set_double_attribute (repr, "sodipodi:radius", offset->rad);
       sp_repr_set_attr (repr, "sodipodi:original", offset->original);
+      sp_repr_set_attr (repr, "xlink:href", offset->sourceObject);
     }
 
   d = sp_svg_write_path (((SPShape *) offset)->curve->bpath);
@@ -175,10 +206,25 @@ sp_offset_release (SPObject * object)
   if (offset->originalPath)
     delete ((Path *) offset->originalPath);
 
+  offset->original = NULL;
+  offset->originalPath = NULL;
+
+
+  if (offset->sourceObject)
+    free (offset->sourceObject);
+  offset->sourceObject = NULL;
+
+  if (offset->sourceRepr)
+    {
+      sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
+    }
+  offset->sourceRepr = NULL;
+
   if (((SPObjectClass *) parent_class)->release)
     {
       ((SPObjectClass *) parent_class)->release (object);
     }
+
 }
 
 static void
@@ -231,6 +277,66 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
 	  offset->knotSet = false;
 	}
       sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+      break;
+    case SP_ATTR_XLINK_HREF:
+      if (value)
+	{
+	  if (offset->sourceObject)
+	    {
+	      if (strcmp (value, offset->sourceObject) == 0)
+		return;
+	      free (offset->sourceObject);
+	      offset->sourceObject = strdup (value);
+	    }
+	  else
+	    {
+	      offset->sourceObject = strdup (value);
+	    }
+	  if (offset->sourceRepr)
+	    {
+	      sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
+	    }
+	  offset->sourceRepr = NULL;
+	  SPObject *refobj;
+	  refobj =
+	    sp_document_lookup_id (SP_OBJECT (offset)->document,
+				   offset->sourceObject);
+	  if (refobj)
+	    offset->sourceRepr = refobj->repr;
+	  if (offset->sourceRepr)
+	    {
+	      sp_repr_add_listener (offset->sourceRepr,
+				    &offset_source_event_vector, offset);
+	    }
+	  else
+	    {
+	      free (offset->sourceObject);
+	      offset->sourceObject = NULL;
+	    }
+	  if (offset->sourceRepr)
+	    {
+	      const char *npath = sp_repr_attr (offset->sourceRepr, "d");
+	      if (npath)
+		{
+		  sp_repr_set_attr (SP_OBJECT (offset)->repr,
+				    "sodipodi:original", npath);
+		}
+	    }
+	}
+      else
+	{
+	  if (offset->sourceObject)
+	    {
+	      free (offset->sourceObject);
+	      offset->sourceObject = NULL;
+	      if (offset->sourceRepr)
+		{
+		  sp_repr_remove_listener_by_data (offset->sourceRepr,
+						   offset);
+		}
+	      offset->sourceRepr = NULL;
+	    }
+	}
       break;
     default:
       if (((SPObjectClass *) parent_class)->set)
@@ -425,11 +531,13 @@ sp_offset_set_shape (SPShape * shape)
 
     if (o_width >= 1.0)
       {
-	res->ConvertForOffset (1.0, orig, offset->rad);
+//      res->ConvertForOffset (1.0, orig, offset->rad);
+	res->ConvertWithBackData (1.0);
       }
     else
       {
-	res->ConvertForOffset (o_width, orig, offset->rad);
+//      res->ConvertForOffset (o_width, orig, offset->rad);
+	res->ConvertWithBackData (o_width);
       }
     res->Fill (theShape, 0);
     theRes->ConvertToShape (theShape, fill_positive);
@@ -439,11 +547,15 @@ sp_offset_set_shape (SPShape * shape)
 
     if (o_width >= 1.0)
       {
-	orig->Coalesce (1.0);
+//        orig->Coalesce (1.0);
+	orig->ConvertEvenLines (1.0);
+	orig->Simplify (0.5);
       }
     else
       {
-	orig->Coalesce (o_width);
+//      orig->Coalesce (o_width);
+	orig->ConvertEvenLines (o_width);
+	orig->Simplify (0.5 * o_width);
       }
 
     delete theShape;
@@ -451,8 +563,18 @@ sp_offset_set_shape (SPShape * shape)
     delete res;
   }
 
-  char *res_d = liv_svg_dump_path2 (orig);
-  delete orig;
+  char *res_d = NULL;
+  if (orig->descr_nb <= 1)
+    {
+      // aie.... plus rien
+      res_d = strdup ("M 0 0 L 0 0 z");
+    }
+  else
+    {
+
+      res_d = liv_svg_dump_path2 (orig);
+      delete orig;
+    }
 
   ArtBpath *bpath = sp_svg_read_path (res_d);
   c = sp_curve_new_from_bpath (bpath);
@@ -691,4 +813,126 @@ sp_offset_top_point (SPOffset * offset, double *px, double *py)
   delete theShape;
   delete finalPath;
   sp_curve_unref (curve);
+}
+
+void
+sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
+			       const gchar * oldval, const gchar * newval,
+			       void *data)
+{
+  SPOffset *offset = (SPOffset *) data;
+  if (repr == NULL || offset == NULL || repr != offset->sourceRepr)
+    return;
+
+  // deux dans lesquels on ne fera rien
+  if (strcmp ((const char *) key, "style") == 0)
+    return;
+  if (strcmp ((const char *) key, "id") == 0)
+    return;
+
+  Path *orig = NULL;
+  // le bon cas: il y a un attribut d
+  if (strcmp ((const char *) key, "d") == 0)
+    {
+      if (!newval)
+	return;
+//    sp_repr_set_attr (SP_OBJECT(offset)->repr, "sodipodi:original", newval);
+
+
+      ArtBpath *bpath;
+      SPCurve *curve;
+
+      bpath = sp_svg_read_path (newval);
+      curve = sp_curve_new_from_bpath (bpath);	// curve se chargera de detruire bpath
+      orig = bpath_to_liv_path (curve->bpath);
+      sp_curve_unref (curve);
+    }
+  else
+    {
+      // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
+      SPObject *refobj;
+      refobj =
+	sp_document_lookup_id (SP_OBJECT (offset)->document,
+			       offset->sourceObject);
+      SPItem *item = SP_ITEM (refobj);
+
+      SPCurve *curve;
+      if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
+	return;
+      if (SP_IS_SHAPE (item))
+	{
+	  curve = sp_shape_get_curve (SP_SHAPE (item));
+	  if (curve == NULL)
+	    return;
+	}
+      if (SP_IS_TEXT (item))
+	{
+	  curve = sp_text_normalized_bpath (SP_TEXT (item));
+	  if (curve == NULL)
+	    return;
+	}
+      orig = bpath_to_liv_path (curve->bpath);
+      sp_curve_unref (curve);
+    }
+
+  // finalisons
+  {
+    SPCSSAttr *css;
+    const gchar *val;
+    Shape *theShape = new Shape;
+    Shape *theRes = new Shape;
+
+    orig->ConvertWithBackData (1.0);
+    orig->Fill (theShape, 0);
+
+    css = sp_repr_css_attr (repr /*SP_OBJECT_REPR (repr) */ , "style");
+    val = sp_repr_css_property (css, "fill-rule", NULL);
+    if (val && strcmp (val, "nonzero") == 0)
+      {
+	theRes->ConvertToShape (theShape, fill_nonZero);
+      }
+    else if (val && strcmp (val, "evenodd") == 0)
+      {
+	theRes->ConvertToShape (theShape, fill_oddEven);
+      }
+    else
+      {
+	theRes->ConvertToShape (theShape, fill_nonZero);
+      }
+
+    Path *originaux[1];
+    originaux[0] = orig;
+    Path *res = new Path;
+    theRes->ConvertToForme (res, 1, originaux);
+
+    delete theShape;
+    delete theRes;
+
+    char *res_d = liv_svg_dump_path2 (res);
+    delete res;
+    delete orig;
+
+    sp_repr_set_attr (SP_OBJECT (offset)->repr, "sodipodi:original", res_d);
+
+    free (res_d);
+  }
+
+}
+
+void
+sp_offset_source_destroy (SPRepr * repr, void *data)
+{
+  SPOffset *offset = (SPOffset *) data;
+  if (offset == NULL)
+    return;
+  if (offset->sourceObject)
+    {
+      free (offset->sourceObject);
+      offset->sourceObject = NULL;
+    }
+  if (offset->sourceRepr)
+    {
+      offset->sourceRepr = NULL;
+      // pas besoin d'enlever le listener
+    }
 }

@@ -39,6 +39,8 @@ struct _SPOffset
   void *originalPath;
   char *original;
   float rad;			/* offset radius */
+  char *sourceObject;
+  SPRepr *sourceRepr;
 
   bool knotSet;
   double knotx, knoty;
@@ -56,5 +58,6 @@ GType sp_offset_get_type (void);
 double sp_offset_distance_to_original (SPOffset * offset, double px,
 				       double py);
 void sp_offset_top_point (SPOffset * offset, double *px, double *py);
+
 
 #endif

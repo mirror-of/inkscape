@@ -857,7 +857,7 @@ sp_selected_path_create_offset_object (bool expand)
   }
 
   sp_curve_unref (curve);
-  sp_repr_unparent (SP_OBJECT_REPR (item));
+ // sp_repr_unparent (SP_OBJECT_REPR (item));
 
   if (res->descr_nb <= 1)
     {
@@ -892,6 +892,8 @@ sp_selected_path_create_offset_object (bool expand)
     str = liv_svg_dump_path (res);
     sp_repr_set_attr (repr, "sodipodi:original", str);
     g_free (str);
+    
+    sp_repr_set_attr (repr, "xlink:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
 
     if (sp_svg_transform_write (tstr, 80, &i2root))
       {
@@ -903,9 +905,9 @@ sp_selected_path_create_offset_object (bool expand)
       }
 
     sp_repr_set_attr (repr, "style", style);
-    item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+    SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
-    sp_selection_add_item (selection, item);
+    sp_selection_add_item (selection, nitem);
 
   }
 

@@ -173,9 +173,10 @@ Path::DoSimplify (float treshhold)
 	}
 
       path_descr_cubicto res;
+      bool kissGoodbye = false;
       do
 	{
-	  bool kissGoodbye = false;
+	  kissGoodbye = false;
 	  if (back)
 	    {
 	      if (weighted)
@@ -208,10 +209,12 @@ Path::DoSimplify (float treshhold)
 	    }
 	  lastP++;
 	  nbPt++;
-	  if (kissGoodbye)
-	    break;
+//        if (kissGoodbye)
+//          break;
 	}
-      while (lastP < savNbPt && AttemptSimplify (treshhold, res));
+      while (lastP < savNbPt
+	     && AttemptSimplify ((kissGoodbye) ? 0.1 * treshhold : treshhold,
+				 res));
 
       if (lastP >= savNbPt)
 	{
@@ -276,20 +279,30 @@ Path::DoSimplify (float treshhold)
   nbPt = savNbPt;
 }
 
-bool
-Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
+bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 {
-  vec2 start, end;
+  vec2
+    start,
+    end;
   // pour une coordonnee
-  double *Xk;			// la coordonnee traitee (x puis y)
-  double *Yk;			// la coordonnee traitee (x puis y)
-  double *tk;			// les tk
-  double *Qk;			// les Qk
-  mat2d M;			// la matrice tNN
-  vec2d P;
-  vec2d Q;
+  double *
+    Xk;				// la coordonnee traitee (x puis y)
+  double *
+    Yk;				// la coordonnee traitee (x puis y)
+  double *
+    tk;				// les tk
+  double *
+    Qk;				// les Qk
+  mat2d
+    M;				// la matrice tNN
+  vec2d
+    P;
+  vec2d
+    Q;
 
-  vec2 cp1, cp2;
+  vec2
+    cp1,
+    cp2;
 
   if (nbPt == 2)
     return true;
@@ -298,7 +311,9 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
     {
       if (weighted)
 	{
-	  path_lineto_wb *tp = (path_lineto_wb *) pts;
+	  path_lineto_wb *
+	    tp = (path_lineto_wb *)
+	    pts;
 	  start.x = tp[0].x;
 	  start.y = tp[0].y;
 	  cp1.x = tp[1].x;
@@ -308,7 +323,9 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	}
       else
 	{
-	  path_lineto_b *tp = (path_lineto_b *) pts;
+	  path_lineto_b *
+	    tp = (path_lineto_b *)
+	    pts;
 	  start.x = tp[0].x;
 	  start.y = tp[0].y;
 	  cp1.x = tp[1].x;
@@ -321,7 +338,9 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
     {
       if (weighted)
 	{
-	  path_lineto_w *tp = (path_lineto_w *) pts;
+	  path_lineto_w *
+	    tp = (path_lineto_w *)
+	    pts;
 	  start.x = tp[0].x;
 	  start.y = tp[0].y;
 	  cp1.x = tp[1].x;
@@ -331,7 +350,9 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	}
       else
 	{
-	  path_lineto *tp = (path_lineto *) pts;
+	  path_lineto *
+	    tp = (path_lineto *)
+	    pts;
 	  start.x = tp[0].x;
 	  start.y = tp[0].y;
 	  cp1.x = tp[1].x;
@@ -362,20 +383,26 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
   // chord length method
   tk[0] = 0.0;
   {
-    vec2 prevP = start;
+    vec2
+      prevP =
+      start;
     for (int i = 1; i < nbPt; i++)
       {
 	if (back)
 	  {
 	    if (weighted)
 	      {
-		path_lineto_wb *tp = (path_lineto_wb *) pts;
+		path_lineto_wb *
+		  tp = (path_lineto_wb *)
+		  pts;
 		Xk[i] = tp[i].x;
 		Yk[i] = tp[i].y;
 	      }
 	    else
 	      {
-		path_lineto_b *tp = (path_lineto_b *) pts;
+		path_lineto_b *
+		  tp = (path_lineto_b *)
+		  pts;
 		Xk[i] = tp[i].x;
 		Yk[i] = tp[i].y;
 	      }
@@ -384,23 +411,30 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	  {
 	    if (weighted)
 	      {
-		path_lineto_w *tp = (path_lineto_w *) pts;
+		path_lineto_w *
+		  tp = (path_lineto_w *)
+		  pts;
 		Xk[i] = tp[i].x;
 		Yk[i] = tp[i].y;
 	      }
 	    else
 	      {
-		path_lineto *tp = (path_lineto *) pts;
+		path_lineto *
+		  tp = (path_lineto *)
+		  pts;
 		Xk[i] = tp[i].x;
 		Yk[i] = tp[i].y;
 	      }
 	  }
-	vec2 diff;
+	vec2
+	  diff;
 	diff.x = Xk[i] - prevP.x;
 	diff.y = Yk[i] - prevP.y;
 	prevP.x = Xk[i];
 	prevP.y = Yk[i];
-	float l = sqrt (diff.x * diff.x + diff.y * diff.y);
+	float
+	  l =
+	  sqrt (diff.x * diff.x + diff.y * diff.y);
 	tk[i] = tk[i - 1] + l;
       }
   }
@@ -426,7 +460,8 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       M.yy += N23 (tk[i]) * N23 (tk[i]);
     }
 
-  double det;
+  double
+    det;
   L_MAT_Det (M, det);
   if (fabs (det) < 0.000001)
     {
@@ -479,10 +514,13 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
   cp1.y = P.x;
   cp2.y = P.y;
 
-  float delta = 0;
+  float
+    delta =
+    0;
   for (int i = 1; i < nbPt - 1; i++)
     {
-      vec2 appP;
+      vec2
+	appP;
       appP.x = N13 (tk[i]) * cp1.x + N23 (tk[i]) * cp2.x;
       appP.y = N13 (tk[i]) * cp1.y + N23 (tk[i]) * cp2.y;
       appP.x -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
@@ -504,7 +542,8 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       // on raffine un peu
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  vec2 pt;
+	  vec2
+	    pt;
 	  pt.x = Xk[i];
 	  pt.y = Yk[i];
 	  tk[i] = RaffineTk (pt, start, cp1, cp2, end, tk[i]);
@@ -577,10 +616,13 @@ Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       cp1.y = P.x;
       cp2.y = P.y;
 
-      float ndelta = 0;
+      float
+	ndelta =
+	0;
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  vec2 appP;
+	  vec2
+	    appP;
 	  appP.x = N13 (tk[i]) * cp1.x + N23 (tk[i]) * cp2.x;
 	  appP.y = N13 (tk[i]) * cp1.y + N23 (tk[i]) * cp2.y;
 	  appP.x -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
