@@ -35,7 +35,6 @@
 #include "xml/repr-private.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
-#include "radial.h"
 
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
