@@ -769,11 +769,15 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
 {
 	for (GSList const *l = selection->itemList(); l != NULL; l = l-> next) {
 		SPItem *item = SP_ITEM(l->data);
-		sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
-		/* update repr -  needed for undo */
-		sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
-		/* fixme: Check, whether anything changed */
-		sp_object_read_attr (SP_OBJECT (item), "transform");
+
+		// see comment in seltrans.cpp/sp_sel_trans_ungrab
+		if (SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject())) {
+			; //do nothing
+		} else {
+			sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
+			/* update repr -  needed for undo */
+			sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+		}
 	}
 }
 
