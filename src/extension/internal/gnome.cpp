@@ -382,3 +382,33 @@ PrintGNOME::init (void)
 }; /* namespace Internal */
 }; /* namespace Extension */
 }; /* namespace Inkscape */
+
+ArtBpath* nr_artpath_to_art_bpath(NArtBpath *s) { // remember to free the result!
+	int i;
+	if (!s) {
+		return NULL;
+	}
+
+	i = 0;
+	while (s[i].code != ART_END) i += 1;
+
+	ArtBpath* d = nr_new (ArtBpath, i + 1);
+
+	i = 0;
+	while (s[i].code != ART_END) {
+		d[i].code = s[i].code;
+		if (s[i].code == ART_CURVETO) {
+			d[i].x1 = s[i].x1;
+			d[i].y1 = s[i].y1;
+			d[i].x2 = s[i].x2;
+			d[i].y2 = s[i].y2;
+		}
+		d[i].x3 = s[i].x3;
+		d[i].y3 = s[i].y3;
+		i += 1;
+	}
+	d[i].code = ART_END;
+
+	return d;
+}
+
