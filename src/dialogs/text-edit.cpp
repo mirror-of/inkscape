@@ -480,11 +480,8 @@ sp_text_edit_dialog_update_object_text ( SPText *text )
         }
 }
 
-/**
-If text is non-null, modify it; otherwise assign style to the repr (used for prefs changing)
-*/
-static void
-sp_text_edit_dialog_update_object_style ( SPText *text, SPRepr *repr )
+SPCSSAttr *
+sp_get_text_dialog_style ()
 {
         GtkWidget *fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
 
@@ -541,44 +538,28 @@ sp_text_edit_dialog_update_object_style ( SPText *text, SPRepr *repr )
             sp_repr_css_set_property (css, "writing-mode", "tb");
         }
 
+        // Note that CSS 1.1 does not support line-height; we set it for consistency, but also set
+        // sodipodi:linespacing for backwards compatibility; in 1.2 we use line-height for flowtext
         GtkWidget *combo = (GtkWidget*)g_object_get_data ((GObject *) dlg, "line_spacing");
         const char *sstr = gtk_entry_get_text ((GtkEntry *) ((GtkCombo *) (combo))->entry);
+        sp_repr_css_set_property (css, "line-height", sstr);
 
-        // now do the changing
-        SPRepr *text_repr;
-        if (text)
-            text_repr = SP_OBJECT_REPR (text);
-        else // assume repr is not NULL
-            text_repr = repr;
-
-        // note that linespacing is not recursed - it makes sense only for texts, not tspans
-        sp_repr_set_attr (text_repr, "sodipodi:linespacing", sstr);
-
-        if (text) {
-            // for object, do recursive style change
-            sp_desktop_apply_css_recursive (SP_OBJECT(text), css, true);
-        } else {
-            // for repr, do simple style change (prefs repr won't have children anyway)
-            sp_repr_css_change (text_repr, css, "style");
-        }
-
-        sp_repr_css_attr_unref (css);
+        return css;
 }
 
 
 static void
 sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg)
 {
-    GtkWidget *def;
-    SPRepr *repr;
+    GtkWidget *def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
-    def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
-
-    repr = inkscape_get_repr (INKSCAPE, "tools.text");
+    SPCSSAttr *css = sp_get_text_dialog_style ();
 
     g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
-    sp_text_edit_dialog_update_object_style (NULL, repr);
+    sp_repr_css_change (inkscape_get_repr (INKSCAPE, "tools.text"), css, "style");
     g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (FALSE));
+
+    sp_repr_css_attr_unref (css);
 
     gtk_widget_set_sensitive (def, FALSE);
 }
@@ -597,11 +578,18 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
     const GSList *item_list = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
     bool text_changed = false, style_changed = false;
 
+    SPCSSAttr *css = sp_get_text_dialog_style ();
+
     for (; item_list != NULL; item_list = item_list->next) { 
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (item_list->data)) {
             SPText *text = SP_TEXT(item_list->data);
-            sp_text_edit_dialog_update_object_style (text, NULL);
+
+        // FIXME: use sp_desktop_set_style instead!
+        sp_desktop_apply_css_recursive (SP_OBJECT(text), css, true);
+        // backwards compatibility:
+        sp_repr_set_attr (SP_OBJECT_REPR(text), "sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
+
             ++items;
             style_changed = true;
         }
@@ -609,8 +597,7 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
     
     if (items == 0) { 
         // no text objects; apply style to prefs for new objects
-        SPRepr *repr = inkscape_get_repr (INKSCAPE, "tools.text");
-        sp_text_edit_dialog_update_object_style (NULL, repr);
+        sp_repr_css_change (inkscape_get_repr (INKSCAPE, "tools.text"), css, "style");
         gtk_widget_set_sensitive (def, FALSE);
     } else if (items == 1) {
         /* exactly one text object; now set its text, too */
@@ -627,6 +614,8 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
     }
 
     gtk_widget_set_sensitive (apply, FALSE);
+
+    sp_repr_css_attr_unref (css);
 
     g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (FALSE));
 }
