@@ -12,15 +12,7 @@
 
 #include <config.h>
 #include <glib.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkspinbutton.h>
+#include <gtk/gtk.h>
 
 #include "helper/sp-intl.h"
 #include "helper/window.h"
@@ -33,6 +25,7 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
+#include "../seltrans.h"
 
 #include "display-settings.h"
 
@@ -111,6 +104,166 @@ sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
 
 
 
+
+
+
+
+
+
+
+static void
+options_selector_show_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const gchar *val;
+		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
+		prefs_set_string_attribute ("tools.select", "show", val);
+	}
+}
+
+static void
+options_selector_transform_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const gchar *val;
+		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
+		prefs_set_string_attribute ("tools.select", "transform", val);
+	}
+}
+
+static void
+options_selector_cue_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const gchar *val;
+		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
+		prefs_set_string_attribute ("tools.select", "cue", val);
+	}
+}
+
+/**
+* Small helper function to make options_selector a little less
+* verbose.
+*
+* \param b Another radio button in the group, or NULL for the first.
+* \param fb Box to add the button to.
+* \param n Name for the button.
+* \param v Key for the button's value.
+* \param s Initial state of the button.
+* \param h Toggled handler function.
+*/
+static GtkWidget* sp_select_context_add_radio (
+    GtkWidget* b,
+    GtkWidget* fb,
+    GtkTooltips* tt,
+    const gchar* n,
+    const gchar* tip,
+    const char* v,
+    gboolean s,
+    void (*h)(GtkToggleButton*)
+    )
+{
+	GtkWidget* r = gtk_radio_button_new_with_label (
+            b ? gtk_radio_button_group (GTK_RADIO_BUTTON (b)) : NULL, n
+            );
+	gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), r, tip, NULL);
+	gtk_widget_show (r);
+	gtk_object_set_data (GTK_OBJECT (r), "value", (void*) v);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
+	gtk_box_pack_start (GTK_BOX (fb), r, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (r), "toggled", GTK_SIGNAL_FUNC (h), NULL);
+
+       return r;
+}
+
+static GtkWidget *
+options_selector ()
+{
+    GtkWidget *vb, *f, *fb, *b;
+
+    GtkTooltips *tt = gtk_tooltips_new();
+
+    vb = gtk_vbox_new (FALSE, 4);
+    gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+
+    f = gtk_frame_new (_("When transforming, show:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    gchar const *show = prefs_get_string_attribute ("tools.select", "show");
+
+    b = sp_select_context_add_radio (
+        NULL, fb, tt, _("Objects"), _("Show the actual objects when moving or transforming"), "content",
+        (show == NULL) || !strcmp (show, "content"),
+        options_selector_show_toggled
+        );
+
+    sp_select_context_add_radio(
+        b, fb, tt, _("Box outline"), _("Show only a box outline of the objects when moving or transforming"), "outline",
+        show && !strcmp (show, "outline"),
+        options_selector_show_toggled
+        );
+
+    f = gtk_frame_new (_("Store transformation:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    gchar const *transform = prefs_get_string_attribute ("tools.select", "transform");
+
+    b = sp_select_context_add_radio (
+        NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), "optimize",
+        (transform == NULL) || !strcmp (transform, "optimize"),
+        options_selector_transform_toggled
+        );
+
+    sp_select_context_add_radio (
+        b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), "keep",
+        transform && !strcmp (transform, "keep"),
+        options_selector_transform_toggled
+        );
+        
+    f = gtk_frame_new (_("Per-object selection cue:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    gchar const *cue = prefs_get_string_attribute ("tools.select", "cue");
+
+    b = sp_select_context_add_radio (
+        NULL, fb, tt, _("None"), _("No per-object selection indication"), "none",
+        cue && !strcmp (cue, "none"),
+        options_selector_cue_toggled
+        );
+
+    b = sp_select_context_add_radio (
+        b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), "mark",
+        (cue == NULL) || !strcmp (cue, "mark"),
+        options_selector_cue_toggled
+        );
+
+    sp_select_context_add_radio (
+        b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox",
+        cue && !strcmp (cue, "bbox"),
+        options_selector_cue_toggled
+        );        
+
+    return vb;
+}
+
+
+
+
 void
 sp_display_dialog (void)
 {
@@ -172,23 +325,21 @@ sp_display_dialog (void)
         g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", 
                              G_CALLBACK (sp_dialog_unhide), dlg);
 
+	GtkTooltips *tt = gtk_tooltips_new();
                              
         nb = gtk_notebook_new ();
         gtk_widget_show (nb);
         gtk_container_add (GTK_CONTAINER (dlg), nb);
 
-        
-        /* Rendering settings */
-        /* Notebook tab */
-        l = gtk_label_new (_("Rendering"));
+// Display        
+        l = gtk_label_new (_("Display"));
         gtk_widget_show (l);
         vb = gtk_vbox_new (FALSE, 4);
         gtk_widget_show (vb);
         gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-
-        
-        /* Oversampling menu */
+     
+        /* Oversample */
         hb = gtk_hbox_new (FALSE, 4);
         gtk_widget_show (hb);
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
@@ -240,10 +391,9 @@ sp_display_dialog (void)
         gtk_option_menu_set_history ( GTK_OPTION_MENU (om), 
                                       nr_arena_image_x_sample);
 
-                                      
-        /* Input settings */
-        /* Notebook tab */
-        l = gtk_label_new (_("Input"));
+
+// Mouse                                      
+        l = gtk_label_new (_("Mouse"));
         gtk_widget_show (l);
         vb = gtk_vbox_new (FALSE, 4);
         gtk_widget_show (vb);
@@ -254,7 +404,7 @@ sp_display_dialog (void)
         gtk_widget_show (hb);
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-        l = gtk_label_new (_("Default cursor tolerance:"));
+        l = gtk_label_new (_("Grab sensitivity:"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
         gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -262,6 +412,7 @@ sp_display_dialog (void)
         a = gtk_adjustment_new (0.0, 0.0, 10.0, 0.1, 1.0, 1.0);
         gtk_adjustment_set_value (GTK_ADJUSTMENT (a), nr_arena_global_delta);
         sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 1);
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), NULL);
         gtk_widget_show (sb);
         gtk_box_pack_start (GTK_BOX (hb), sb, TRUE, TRUE, 0);
 
@@ -269,6 +420,31 @@ sp_display_dialog (void)
                              GTK_SIGNAL_FUNC 
                                 (sp_display_dialog_cursor_tolerance_changed), 
                              NULL);
+
+
+// Tools
+        l = gtk_label_new (_("Tools"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+        GtkWidget *nb_tools = gtk_notebook_new ();
+        gtk_widget_show (nb_tools);
+        gtk_container_add (GTK_CONTAINER (vb), nb_tools);
+
+        // Selector        
+        l = gtk_label_new (_("Selector"));
+        gtk_widget_show (l);
+        GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb_sel);
+        gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
+
+        GtkWidget *selector_page = options_selector ();
+        gtk_widget_show (selector_page);
+        gtk_container_add (GTK_CONTAINER (vb_sel), selector_page);
                              
     } // end of if (!dlg)
     
