@@ -1,3 +1,7 @@
+2004-11-21  MenTaLguY <mental@rydia.net>
+
+	* src/verbs.cpp: add accels for layer menu items
+
 2004-11-21  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/dialogs/layer-properties.cpp, src/verbs.cpp,
