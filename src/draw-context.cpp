@@ -40,6 +40,7 @@
 #include "desktop-events.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
+#include "desktop-style.h"
 #include "snap.h"
 #include "style.h"
 #include "draw-context.h"
@@ -582,43 +583,36 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
                             ? sp_item_dt2i_affine(dc->white_item, SP_EVENT_CONTEXT_DESKTOP(dc))
                             : sp_desktop_dt2root_affine(SP_EVENT_CONTEXT_DESKTOP(dc)) ));
 
-    if ( c && !sp_curve_empty(c) ) {
-        SPDesktop *dt;
-        SPDocument *doc;
-        SPRepr *repr;
-        gchar *str;
+    SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+    SPDocument *doc = SP_DT_DOCUMENT(desktop);
 
+    if ( c && !sp_curve_empty(c) ) {
         /* We actually have something to write */
 
-        dt = SP_EVENT_CONTEXT_DESKTOP(dc);
-        doc = SP_DT_DOCUMENT(dt);
-
+        SPRepr *repr;
         if (dc->white_item) {
             repr = SP_OBJECT_REPR(dc->white_item);
         } else {
-            SPRepr *style;
             repr = sp_repr_new("path");
-            /* fixme: Pen and pencil need separate style (Lauris) */
-            style = inkscape_get_repr(INKSCAPE, "tools.freehand");
-            if (style) {
-                SPCSSAttr *css;
-                css = sp_repr_css_attr_inherited(style, "style");
-                sp_repr_css_set(repr, css, "style");
-                sp_repr_css_attr_unref(css);
+		/* Set style */
+            if (SP_IS_PEN_CONTEXT(dc)) {
+                sp_desktop_apply_style_tool (desktop, repr, "tools.freehand.pen", false);
+            } else {
+                sp_desktop_apply_style_tool (desktop, repr, "tools.freehand.pencil", false);
             }
         }
 
-        str = sp_svg_write_path(SP_CURVE_BPATH(c));
+        gchar *str = sp_svg_write_path(SP_CURVE_BPATH(c));
         g_assert( str != NULL );
         sp_repr_set_attr(repr, "d", str);
         g_free(str);
 
         if (!dc->white_item) {
             /* Attach repr */
-            SPItem *item = SP_ITEM(dt->currentLayer()->appendChildRepr(repr));
+            SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             dc->selection->setRepr(repr);
             sp_repr_unref(repr);
-            item->transform = i2i_affine(dt->currentRoot(), dt->currentLayer());
+            item->transform = i2i_affine(desktop->currentRoot(), desktop->currentLayer());
             item->updateRepr();
         }
 
@@ -628,7 +622,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
     sp_curve_unref(c);
 
     /* Flush pending updates */
-    sp_document_ensure_up_to_date(SP_DT_DOCUMENT(SP_EVENT_CONTEXT_DESKTOP(dc)));
+    sp_document_ensure_up_to_date(doc);
 }
 
 /*
