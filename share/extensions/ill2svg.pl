@@ -2,6 +2,7 @@
 
 # convert an illustrator file (on stdin) to svg (on stdout)
 use Getopt::Std;
+use Image::Magick;
 
 my %args;
 
@@ -12,8 +13,75 @@ my $NL_UNX = "\012";
 
 getopts('h:', \%args);
 
+my $pagesize=1052.36218;
+my @ImageData;
+my $pagesize=1052.36218;
+my $imagewidth = 128;
+my $imageheight = 88;
+my $imagex = 0;
+my $imagey = 0;
+my $imagenum = 0;
+my $image;
+my $color = 0;
+my $weareinimage=0;
+my $weareintext=0;
+my($red,$green,$blue);
+
 if ($args{h}) { usage() && exit }
+
 $color = "#000";
+
+sub addImageLine {
+ my ($data) = @_;
+ chomp($data);
+ #push (@ImageData, $data);
+  
+ $len = length( $data );
+ $count = 0;
+ 
+ #printf("%s %d\r\n",$data,$len);
+ #for( $loop=1; $loop < ($len - 2); $loop += 2){
+ for( $loop=1; $loop < $len; $loop += 2){
+ 	$value = substr( $data, $loop, 2);
+	
+	#printf("[%d:%s]",$loop,$value);
+         
+        if( $color == 0 ){
+          #$red = hex($value);
+          $red = $value;
+	  $color ++;
+          #printf("Color: RED: %s,",$red);
+	} elsif ( $color == 1 ) {
+          #$green = hex($value);
+          $green = $value;
+	  $color ++;
+          #printf("Color: GREEN %s,",$green);
+
+        } else {
+	  $blue = $value;
+	  $pixel="pixel[${imagex},${imagey}]";
+	  $rbg=sprintf("#%s%s%s",$red,$green,$blue);
+	  #$image->Set($pixel=>$rgb);                    
+	  $image->Set("pixel[${imagex},${imagey}]"=>"#${red}${green}${blue}");
+	  #printf("PIXX: %d ",$image->Get($pixel));
+	  $color = 0;
+          $imagex++;
+
+          #printf("Color:BLUE: %s, X: %d Y: %d %dx%d  %s [%s]\r\n",$blue,$imagex,$imagey,$imagewidth,$imageheight,$rbg,$pixel); 
+
+         if( $imagex == $imagewidth ){
+          $imagex = 0;
+          $imagey ++; 
+         } # if
+
+
+        } #else
+
+ }
+
+ #printf("len: %d %dx%d\r\n",$len,$imagewidth,$imageheight);
+
+}
 
 sub cmyk_to_css {
     my ($c, $m, $y, $k) = @_;
@@ -40,11 +108,11 @@ sub nice_float {
 sub xform_xy {
     my ($x, $y) = @_;
     my @result = ();
-
+    
     for my $i (0..$#_) {
 	if ($i & 1) {
 	    #push @result, 1000 - $_[$i];
-	    push @result, 1052.36218 - $_[$i];
+	    push @result, $pagesize - $_[$i];
 	} else {
 	    #push @result, $_[$i] - 100;
 	    push @result, $_[$i];
@@ -69,8 +137,9 @@ options:
 }
 
 sub process_line {
-	chomp;
-	next if /^%_/;
+      chomp;
+      next if /^%_/;
+      
     if (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) k$/) {
 	$fillcolor = cmyk_to_css ($1, $2, $3, $4);
     } elsif (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) K$/) {
@@ -134,26 +203,38 @@ sub process_line {
 	print " </g>\n";
 	$path = '';
     } elsif (/^1 XR$/) {
-       #printf( "\nbegin\r\n" );
-
+       
        if( $firstChar != 0){
          print ("</tspan>\n</text>\n");
        }
+      
+       $weareintext=0;
 
        $firstChar = 0;	
     } elsif (/^TP$/) {
        #Something do with the text;)
+      $weareintext=1;
     } elsif (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) Tp$/i) {
  
        # Text position etc;
        $cpx=$5;
-       $cpy=1052.36218 - $6;         
+       $cpy=$pagesize - $6;         
        ## print ("x:$5 y:$6\r\n");
        
+    } elsif (/^TO$/) {
+      #one text ends       
+    } elsif (/^LB$/) {
+      #Everything ends??
+      ## Sometimes ain't working
+      #printf("LB!\r\n");
+      if( $weareintext != 0){
+         print ("</tspan>\n</text>\n");
+      } 
+    
     } elsif (/^\/_([\S\s]+) ([\d\.]+) Tf$/) {
        $FontName = $1;
        $FontSize = $2;
-
+      
        ## When we know font name we can render this.
        if( $firstChar != 1){
 	 print ("<text x=\"$cpx\" y=\"$cpy\"");  
@@ -170,22 +251,73 @@ sub process_line {
        }
 
     } elsif (/^\(([\S\s]+)\) Tx$/) {
-	# Normal text
-        	print ("$1");
+        # Normal text
+ 	$text = $1;
+        $text =~ s/ä/Ã¤/;
+        $text =~ s/ö/Ã¶/;
+        $text =~ s/å/Ã¥/;
+	
+	print ("$text");
+   
+   } elsif (/([\d\.]+) w$/) {
+	        $strokewidth = $1;
+    } elsif (/^%%BeginData: ([\d\.]+)/) {
+          #How much we got image data
+    } elsif(/^%%EndData/) {
+	  #and the data ends
+    } elsif (/^XI/) {
+          #actual image starts
+          $weareinimage=1;
+    } elsif (/^XH/) {
+          #it ends like they allways do.
+	  #we just save it after this..
+          $weareinimage=0;
+	  $imagename="${imagenum}.png";
+	  $image->Write($imagename);
+          $imagenum++;       
+    } elsif (/\[(.*)\](.*)Xh/) {
+	   my @imagepos = split(/ /, $1);
+	   my @imageinfo = split(/ /, $2);
+	   $imagewidth = @imageinfo[1];
+	   $imageheight = @imageinfo[2];
+	   $imageposx = @imagepos[4];
+	   $imageposy = $pagesize - @imagepos[5];
+	   
+	   #printf("%s %d %d Position x: %f 9y: %f\r\n",$1,@imagepos[4],@imagepos[5],$imageposx,$imageposy);
+	   printf("<image");
+	   printf(" xlink:href=\"%d.png\"",$imagenum);
+           printf(" width=\"%d\"",$imagewidth);
+	   printf(" height=\"%d\"",$imageheight);
+           printf(" x=\"%f\"",$imageposx);
+           printf(" y=\"%f\"",$imageposy);  
+	   printf("/>\r\n");
+	   
+	   $size = "${imagewidth}x${imageheight}";
 
-    } elsif (/([\d\.]+) w$/) {
-	$strokewidth = $1;
+           $image = Image::Magick->new(size=>$size);
+	   $image->Set('density'=>'72');
+	   $image->Read("xc:white");
+	   $imagex=0;
+	   $imagey=0;
+    
     } else {
-	chomp;
-#	print " <!--$_-->\n";
+         if( $weareinimage == 1 ){
+            addImageLine( $_ );
+         }  
+ 
+         chomp;
+
+         #print "$_\r\n";
     }
+}
     if( $firstChar != 0){
        print ("</tspan>\n</text>\n");
     }
-}
 
+print "<svg";
+print " xmlns=\"http://www.w3.org/2000/svg\"";
+print " xmlns:xlink=\"http://www.w3.org/1999/xlink\">\r\n";
 
-print "<svg>\n";
 while (<>) {
     if (m/$NL_DOS$/) { 
 	$/ = $NL_DOS; 
@@ -203,3 +335,4 @@ while (<>) {
     }
 }
 print "</svg>\n";
+
