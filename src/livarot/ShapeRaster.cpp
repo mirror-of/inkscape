@@ -117,19 +117,19 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
     // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
-		int    curPt=curP;
+		unsigned curPt=curP;
 		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
       
       // treat a new point: remove and add edges incident to it
-			int    cb;
+			unsigned    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
       // count the number of edge coming in nPt from above if nbUp, and the number of edge exiting nPt to go below in nbDn
       // upNo and dnNo are one of these edges, if any exist
-			while ( cb >= 0 && cb < aretes.size() ) {
+			while ( cb < aretes.size() ) {
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -151,9 +151,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			if ( nbUp > 0 ) {
         // first remove edges coming from above
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb < aretes.size() ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != upNo ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
+						if ( cb != unsigned(upNo) ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
                                 // but the other edge don't have this chance
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
@@ -193,9 +193,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       // add the remaining edges
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb < aretes.size() ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != dnNo ) {
+						if ( cb != unsigned(dnNo) ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
 							swrData[cb].misc=node;
 							node->InsertAt(sTree,sEvts,this,insertionNode,nPt,true);
@@ -215,11 +215,11 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			int           nPt=-1;
 			nPt=--curPt;
       
-			int    cb;
+			unsigned    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
-			while ( cb >= 0 && cb < aretes.size() ) {
+			while ( cb < aretes.size() ) {
 				if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -240,9 +240,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb < aretes.size() ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != upNo ) {
+						if ( cb != unsigned(upNo) ) {
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
 								swrData[cb].misc=NULL;
@@ -280,9 +280,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb < aretes.size() ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != dnNo ) {
+						if ( cb != unsigned(dnNo) ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
 							swrData[cb].misc=node;
 							node->InsertAt(sTree,sEvts,this,insertionNode,nPt,true,false);
@@ -315,7 +315,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
   if ( aretes.size() <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
-		int    curPt=curP;
+		unsigned    curPt=curP;
 		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
@@ -383,6 +383,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 		}
 		curP=curPt;
+		g_assert(curPt <= pts.size());
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	} else {
 		int    curPt=curP;
@@ -662,7 +663,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) curPt++;
+		while ( unsigned(curPt) < pts.size() && pts[curPt].x[1] <= to ) curPt++;
     for (unsigned i=0;i<aretes.size();i++) {
       if ( swrData[i].misc ) {
         SweepTree* node=swrData[i].misc;
@@ -734,7 +735,7 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) curPt++;
+		while ( unsigned(curPt) < pts.size() && pts[curPt].x[1] <= to ) curPt++;
     for (unsigned i=0;i<aretes.size();i++) {
       if ( qrsData[i].ind < 0 ) {
         QuickRasterSubEdge(i);

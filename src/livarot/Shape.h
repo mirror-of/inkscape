@@ -15,7 +15,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <vector>
-//#include <iostream.h>
+#include <glib/gmessages.h>
 
 #include "ShapeUtils.h"
 #include "libnr/nr-point.h"
@@ -73,7 +73,7 @@ public:
   // topological information: who links who?
   struct dg_point
   {
-    dg_point(NR::Point const &pt=NR::Point(0,0))
+    explicit dg_point(NR::Point const &pt=NR::Point(0,0))
     : x(pt), dI(0), dO(0), firstA(-1), lastA(-1), oldDegree(0) {}
 
     NR::Point x;			// position
@@ -83,7 +83,7 @@ public:
   };
   struct dg_arete
   {
-    dg_arete(NR::Point const &vec=NR::Point(0,0))
+    explicit dg_arete(NR::Point const &vec=NR::Point(0,0))
     : dx(vec), st(-1), en(-1), nextS(-1), prevS(-1), nextE(-1), prevE(-1) {}
 
     NR::Point dx;		// edge vector
@@ -104,7 +104,7 @@ private:
   // temporary data for the various algorithms
   struct edge_data
   {
-    edge_data(NR::Point const &rvec=NR::Point(0, 0))
+    explicit edge_data(NR::Point const &rvec=NR::Point(0, 0))
     : weight(1), rdx(rvec),
       length(0), sqlength(0), ilength(0), isqlength(0),
       siEd(0), coEd(0) {}
@@ -117,7 +117,7 @@ private:
   };
   struct sweep_src_data
   {
-    sweep_src_data()
+    explicit sweep_src_data()
     : misc(NULL), firstLinkedPoint(-1) {}
 
     void *misc;			// pointer to the SweepTree* in the sweepline
@@ -135,7 +135,7 @@ private:
   };
   struct sweep_dest_data
   {
-    sweep_dest_data()
+    explicit sweep_dest_data()
     : misc(NULL), suivParc(-1), precParc(-1), leW(0), riW(0), ind(0) {}
 
     void *misc;			// used to check if an edge has already been seen during the depth-first search
@@ -156,7 +156,7 @@ private:
   };
   struct quick_raster_data
   {
-    quick_raster_data(double pos=0)
+    explicit quick_raster_data(double pos=0)
     : x(pos), bord(-1), ind(-1), next(-1), prev(-1) {}
 
     double x;			    // x-position on the sweepline
@@ -166,7 +166,7 @@ private:
   };
   struct point_data
   {
-    point_data(NR::Point const &p=NR::Point(0,0))
+    explicit point_data(NR::Point const &p=NR::Point(0,0))
     : oldInd(-1), newInd(-1), pending(0),
       edgeOnLeft(-1), nextLinkedPoint(-1), 
       askForWindingS(NULL), askForWindingB(-1), rx(p) {}
@@ -205,7 +205,7 @@ private:
   };
   struct back_data
   {
-    back_data()
+    explicit back_data()
     : pathID(-1), pieceID(-1), tSt(0), tEn(0) {}
 
     int pathID, pieceID;
@@ -213,7 +213,7 @@ private:
   };
   struct voronoi_point
   {				// info for points treated as points of a voronoi diagram (obtained by MakeShape())
-    voronoi_point()
+    explicit voronoi_point()
     : value(0.0), winding(-2) {}
 
     double value;		// distance to source
@@ -221,7 +221,7 @@ private:
   };
   struct voronoi_edge
   {				// info for edges, treated as approximation of edges of the voronoi diagram
-    voronoi_edge(int left=-1, int right=-1)
+    explicit voronoi_edge(int left=-1, int right=-1)
     : leF(left), riF(right),
       leStX(0), leStY(0), riStX(0), riStY(0),
       leEnX(0), leEnY(0), riEnX(0), riEnY(0) {}
@@ -296,8 +296,9 @@ public:
       return aretes[b].en;
     return aretes[b].st;
   };
-  inline int NextAt (int p, int b)	// next edge (after edge b) in the double-linked list at point p
+  inline int NextAt (int const p, unsigned const b)	// next edge (after edge b) in the double-linked list at point p
   {
+    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	return aretes[b].nextS;
@@ -308,8 +309,9 @@ public:
       }
     return -1;
   };
-  inline int PrevAt (int p, int b)	// previous edge
+  inline int PrevAt (int const p, unsigned const b)	// previous edge
   {
+    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	return aretes[b].prevS;
@@ -320,8 +322,9 @@ public:
       }
     return -1;
   };
-  inline int CycleNextAt (int p, int b)	// same as NextAt, but the list is considered circular
+  inline int CycleNextAt (int const p, unsigned const b)	// same as NextAt, but the list is considered circular
   {
+    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	if (aretes[b].nextS < 0)
@@ -336,8 +339,9 @@ public:
       }
     return -1;
   };
-  inline int CyclePrevAt (int p, int b)	// same as PrevAt, but the list is considered circular
+  inline int CyclePrevAt (int const p, unsigned const b)	// same as PrevAt, but the list is considered circular
   {
+    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	if (aretes[b].prevS < 0)

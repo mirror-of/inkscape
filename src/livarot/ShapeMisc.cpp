@@ -71,7 +71,7 @@ Shape::ConvertToForme (Path * dest)
   
   int searchInd = 0;
   
-  int lastPtUsed = 0;
+  unsigned lastPtUsed = 0;
   do
   {
     // first get a starting point, and a starting edge
@@ -79,7 +79,7 @@ Shape::ConvertToForme (Path * dest)
     // points traversed have swdData[].misc != 0, so it's easy
     int startBord = -1;
     {
-      int fi = 0;
+      unsigned fi;
       for (fi = lastPtUsed; fi < pts.size(); fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
@@ -89,7 +89,7 @@ Shape::ConvertToForme (Path * dest)
       if (fi < pts.size())
       {
         int bestB = pts[fi].firstA;
-        while (bestB >= 0 && aretes[bestB].st != fi)
+        while (bestB >= 0 && unsigned(aretes[bestB].st) != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
 	      {
@@ -216,12 +216,12 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   
   int searchInd = 0;
   
-  int lastPtUsed = 0;
+  unsigned lastPtUsed = 0;
   do
   {
     int startBord = -1;
     {
-      int fi = 0;
+      unsigned fi = 0;
       for (fi = lastPtUsed; fi < pts.size(); fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
@@ -231,12 +231,12 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       if (fi < pts.size())
       {
         int bestB = pts[fi].firstA;
-        while (bestB >= 0 && aretes[bestB].st != fi)
+        while (bestB >= 0 && unsigned(aretes[bestB].st) != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
-	      {
-          startBord = bestB;
-	      }
+          {
+	    startBord = bestB;
+          }
       }
     }
     if (startBord >= 0)
@@ -369,13 +369,13 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   
   int searchInd = 0;
   
-  int lastPtUsed = 0;
+  unsigned lastPtUsed = 0;
   do
   {
     int dadContour=-1;
     int startBord = -1;
     {
-      int fi = 0;
+      unsigned fi;
       for (fi = lastPtUsed; fi < pts.size(); fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
@@ -394,12 +394,12 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       if (fi < pts.size())
       {
         int bestB = pts[fi].firstA;
-        while (bestB >= 0 && aretes[bestB].st != fi)
+        while (bestB >= 0 && unsigned(aretes[bestB].st) != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
-	      {
-          startBord = bestB;
-	      }
+          {
+            startBord = bestB;
+          }
       }
     }
     if (startBord >= 0)

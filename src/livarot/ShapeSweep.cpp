@@ -181,7 +181,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     {
       a->eData[i].rdx =
 	a->pData[a->aretes[i].en].rx - a->pData[a->aretes[i].st].rx;
-    a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
+	a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
       a->eData[i].ilength = 1 / a->eData[i].length;
       a->eData[i].sqlength = sqrt (a->eData[i].length);
       a->eData[i].isqlength = 1 / a->eData[i].sqlength;
@@ -263,16 +263,14 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	    continue;
 	}
 
-      NR::Point rPtX;
-      rPtX[0]= Round (ptX[0]);
-      rPtX[1]= Round (ptX[1]);
-      int lastPointNo = -1;
-      lastPointNo = AddPoint (rPtX);
+      NR::Point rPtX(Round(ptX[0]),
+		     Round(ptX[1]));
+      int lastPointNo = AddPoint (rPtX);
       pData[lastPointNo].rx = rPtX;
 
       if (rPtX[1] > lastChange)
 	{
-	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
+	  int const lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
 	  Shape *curSh = shapeHead;
 	  int curBo = edgeHead;
@@ -1717,8 +1715,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     }
   } else if ( mod == bool_op_slice ) {
     // supprimer les aretes de la coupe
-    unsigned i=aretes.size()-1;
-    for (;i>=0;i--) {
+    for (unsigned i = aretes.size(); i--;) {
       if ( ebData[i].pathID == cutPathID || aretes[i].st < 0 || aretes[i].en < 0 ) {
         SubEdge(i);
       }
@@ -2239,9 +2236,13 @@ Shape::Winding (const NR::Point px) const
   return lr + (ll + rr) / 2;
 }
 
-// merging duplicate points and edges
+/**
+ * Merging duplicate points and edges.
+ *
+ * Ensures: st <= ret || en == ret
+ */
 int
-Shape::AssemblePoints (int st, int en)
+Shape::AssemblePoints (int const st, int const en)
 {
   if (en > st) {
    for (int i = st; i < en; i++) pData[i].oldInd = i;
@@ -2283,6 +2284,7 @@ Shape::AssemblePoints (int st, int en)
 	      }
 	    }
       for (int i = st; i < en; i++) pData[i].newInd = pData[pData[i].newInd].pending;
+      g_assert(st <= lastI);
       return lastI;
   }
   return en;

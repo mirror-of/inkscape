@@ -1,3 +1,14 @@
+2004-08-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/splivarot.cpp, src/livarot/Shape.cpp, src/livarot/ShapeMisc.cpp,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp:
+	  Hurriedly fix some problems caused by overly-hurried changes.
+	  Address some signed/unsigned warnings.
+	  Add some assertions.
+	  (Haven't checked the performance cost of the assertions.)
+
+	* src/livarot/Shape.h: Make constructors explicit.
+
 2004-08-08  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-offset.cpp,
@@ -12,7 +23,7 @@
 
 	* libgc.supp: valgrind suppression profile for libgc, which necessarily
 	  reads and runs comparisons on a lot of uninitalized data; the present
-      form of this file is probably too broad however
+	  form of this file is probably too broad however
 
 2004-08-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 

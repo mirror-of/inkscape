@@ -329,11 +329,11 @@ sp_selected_path_boolop (bool_op bop)
                         int   nbOther=0;
                         int   piece=-1;
                         float t=0.0;
-                        while ( cb >= 0 && cb < theShape->aretes.size() ) {
+                        while ( unsigned(cb) < theShape->aretes.size() ) {
                             if ( theShape->ebData[cb].pathID == 0 ) {
                                 // the source has an edge incident to the point, get its position on the path
                                 piece=theShape->ebData[cb].pieceID;
-                                if ( theShape->aretes[cb].st == i ) {
+                                if ( unsigned(theShape->aretes[cb].st) == i ) {
                                     t=theShape->ebData[cb].tSt;
                                 } else {
                                     t=theShape->ebData[cb].tEn;
@@ -357,8 +357,7 @@ sp_selected_path_boolop (bool_op bop)
             }
             {
                 // i think it's useless now
-                unsigned i=theShape->aretes.size()-1;
-                for (;i>=0;i--) {
+                for (unsigned i = theShape->aretes.size(); i--;) {
                     if ( theShape->ebData[i].pathID == 1 ) {
                         theShape->SubEdge(i);
                     }
