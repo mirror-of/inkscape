@@ -1,3 +1,40 @@
+2004-01-15  bulia byak <bulia@users.sourceforge.net>
+
+	* src/preferences-skeleton.h: Added: tools.freehand.perncil tolerance,
+	options.zoomincrement, rotationsnapsperpi, maxrecentdocuments
+
+	* src/seltrans.cpp src/draw-context.cpp src/nodepath.cpp: Rotation snaps taken from
+	preferences
+
+	* src/inkscape.cpp: Max recent documents from prefs
+
+	* src/desktop.cpp,h: New _keep_point zoom functions
+
+	* src/event-context.cpp: Zoom in/out on (shift+)middle click, use
+	options.dragtolerance, use options.zoomincrement, use _keep_point zoom functions
+
+	* src/verbs.cpp: Use options.zoomincrement
+
+	* src/zoom-context.cpp: Use options.zoomincrement, use _keep_point zoom functions
+
+	* src/tools-switch.cpp: Fix for 865740
+
+	* src/draw-context.cpp: Fix for 877188
+
+	* src/nodepath.cpp: Swapped ctrl-click and ctrl-alt-click
+
+	* src/knot.cpp src/knotholder.cpp src/nodepath.cpp: Knot colors, using XOR paint mode
+
+	* src/widgets/widget-sizes.h src/desktop.cpp: Coord skip taken from define, limited
+	height of the bottom bar
+
+	* src/splivarot.h src/splivarot.cpp src/verbs.cpp src/verbs.h src/interface.cpp: Added
+	dynamic and linked offsets to menu
+
+	* src/knot.cpp src/select-context.cpp src/zoom-context.cpp src/draw-context.cpp:
+	Unified within_tolerance handling; take curve fitting tolerance from preferences in
+	freehand tool (default 10)
+
 2004-01-15  MenTaLguY <mental@rydia.net>
 
 	* glade/about.svg, glade/about_svg.tmpl, samples/inkscape.logo.svg:
