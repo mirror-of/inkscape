@@ -277,6 +277,8 @@ Known issues
      * To save in SVGZ format on windows, gzip executable must be locatable
        in the path. Download it e.g. from www.gzip.org. The extension
        dependancy is gzip, not gzip.exe, so the file will need renaming.
+     * The Export Bitmap dialog cannot save to paths with non-Latin
+       characters in it.
 
 Previous releases
 

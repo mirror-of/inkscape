@@ -7,7 +7,7 @@
 ; DEFINES
 ; #######################################
 !define PRODUCT_NAME "Inkscape"
-!define PRODUCT_VERSION "0.41pre2"
+!define PRODUCT_VERSION "0.41pre3"
 !define PRODUCT_PUBLISHER "Inkscape Organization"
 !define PRODUCT_WEB_SITE "http://www.inkscape.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe"
@@ -48,6 +48,8 @@
 
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+Caption "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
+Icon "inkscape\inkscape32x16col.ico"
 OutFile "Inkscape-${PRODUCT_VERSION}-1.win32.exe"
 InstallDir "$PROGRAMFILES\Inkscape"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
