@@ -26,19 +26,18 @@ public:
 	double        cur_length,word_length,next_length;
 	bool          first_letter;
 	double        line_st_x,line_st_y,line_spc;
+	double        letter_length;
 	
 	flow_res*     the_flow;
 	
 	flow_eater(void);
 	~flow_eater(void);
 	
-	void          StartLine(bool rtl,double x,double y,double l_spc);
+	void          StartLine(bool rtl,double x,double ox,double y,double l_spc);
 	void          StartWord(bool rtl,int nb_letter,double length);
-	void          StartLetter(void);
-	void          Eat(int g_id,text_style* g_font,double g_x,double g_y,double g_w);
-	
-	void          StartBox(bool rtl,int nb_letter,double length);
-	void          Eat(char* iText,int iLen,double i_w,int i_l,text_style* i_style,double* k_x,double* k_y);
+	void          EndWord(void);
+	void          StartLetter(text_style* g_style,double k_x,double k_y,int utf8_offset);
+	void          Eat(int g_id,double g_x,double g_y,double g_w,char* iText,int iLen);
 };
 
 class flow_maker {
@@ -76,6 +75,7 @@ public:
 	~flow_maker(void);
 	
 	flow_res*          Work(void);
+	flow_res*          TextWork(void);
 	
 	flow_res*					 StdAlgo(void);
 	flow_res*          KPAlgo(void);

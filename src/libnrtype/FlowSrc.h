@@ -11,92 +11,152 @@
 #include <stdint.h>
 
 #include "FlowDefs.h"
+#include "FlowSrcText.h"
+
+#include <glib.h>
+#include "../svg/svg.h"
+
+#include "FlowStyle.h"
 
 class text_holder;
 class flow_styles;
 class text_style;
 class flow_eater;
+class line_solutions;
+class SPStyle;
+class flow_src;
 
-enum {
-	flw_none     = 0,
-	flw_text     = 1,
-	flw_line_brk = 2,
-	flw_rgn_brk  = 3
-};
+class SPObject;
 
-class line_solutions {
+
+class div_flow_src;
+// lightweight class to be included in those filling the flow source
+class one_flow_src {
 public:
-	int            elem_st,pos_st;
+	SPObject*        me;
+	// the text interval held by this object
+	int              ucs4_st,ucs4_en;
+	int              utf8_st,utf8_en;
+	// linking in the flow; prev=NULL means it's a flow start, a paragraph or a sodipodi:role=line tspan
+	one_flow_src     *next,*prev;
+	one_flow_src		 *dad,*chunk;
 	
-	typedef struct one_sol {
-		int          elem_no;
-		int          pos;
-		box_sizes    meas;
-		bool         para_end;
-		bool         rgn_end;
-	} one_sol;
-	int						 nbSol,maxSol;
-	one_sol*       sols;
+	one_flow_src(SPObject* i_me);
+	virtual ~one_flow_src(void);
 	
-	one_sol				 style_end_sol;
-	bool           style_end_set;
-	int						 style_end_no,style_end_pos;
-	double         style_end_ascent,style_end_descent,style_end_leading;
-	bool           style_ending,no_style_ending;
+	void              Link(one_flow_src* after,one_flow_src* inside);
+	void              DoPositions(bool for_text);
+	void              DoFill(flow_src* what);
+	one_flow_src*     Locate(int utf8_pos,int &ucs4_pos,bool src_start,bool src_end,bool must_be_text);
 	
-	double         min_length,max_length,typ_length;
-	bool           noBefore,noAfter;
-	double         l_ascent,l_descent,l_leading;
+	virtual int       Type(void) {return flw_none;};
+	virtual void      PushInfo(int st,int en,int offset,text_holder* into);
+	virtual void      DeleteInfo(int i_utf8_st,int i_utf8_en,int i_ucs4_st,int i_ucs4_en);
+	virtual text_style*  GetStyle(void);
+	virtual void      Fill(flow_src* what);
+	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white); // computes the ucs4_st and ucs4_en vals, and does the linking of chunk
+	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
+	virtual void      Delete(int i_utf8_st,int i_utf8_en);
+	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
+};
+// text variant
+class text_flow_src : public one_flow_src {
+public:
+	partial_text      cleaned_up;
+	correspondance    string_to_me;
 	
-	box_sizes			 cur_line,last_line,last_word;
-	int            before_state,after_state;
-	bool           in_leading_white;
-	int            min_line_no,min_line_pos;
+	text_flow_src(SPObject* i_me);
+	virtual ~text_flow_src(void);
 	
+	void              SetStringText(partial_text* iTxt);
+			
+	virtual int       Type(void) {return flw_text;};
+	virtual void      Fill(flow_src* what);
+	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
+	virtual void      Delete(int i_utf8_st,int i_utf8_en);
+	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
+};
+// control stuff in the flow, like line and region breaks
+class control_flow_src : public one_flow_src {
+public:
+	int               type;
 	
-	line_solutions(void);
-	~line_solutions(void);
+	control_flow_src(SPObject* i_me,int i_type);
+	virtual ~control_flow_src(void);
 	
-	void            NewLine(double min,double max,double typ,bool strict_bef,bool strict_aft);
-	void						SetLineSizes(double ascent,double descent,double leading);
-	void            StartLine(int at_elem,int at_pos);
-	void            EndLine(void);
+	virtual int       Type(void) {return type;};
+	virtual void      Fill(flow_src* what);
+	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+};
+// object variant, to hold placement info
+class div_flow_src : public one_flow_src {
+public:
+	int 							type;
+	bool              is_chunk_start;
+	bool              is_chunk_end;
+	bool              vertical_layout;
+	SPStyle           *style; // only for simplicity
+	                          // this has to last as long as the flow_res we're going to derive from it
+	                          // hence the style_holder class
+	int               nb_x,nb_y,nb_rot,nb_dx,nb_dy;
+	SPSVGLength       *x_s,*y_s,*rot_s,*dx_s,*dy_s;
 	
-	void            StartWord(void);
-	bool						PushBox(box_sizes &s,int end_no,int end_pos,bool is_white,bool last_in_para,bool last_in_rgn,bool is_word);
-	void            ForceSol(int end_no,int end_pos,bool last_in_para,bool last_in_rgn);
+	div_flow_src(SPObject* i_me,int i_type);
+	virtual ~div_flow_src(void);
 	
-	void            Affiche(void);
+	static void       ReadArray(int &nb,SPSVGLength* &array,const char* from);
+	static char*      WriteArray(int nb,SPSVGLength* array);
+	static void       InsertArray(int l,int at,int &nb,SPSVGLength* &array,bool is_delta);
+	static void       SuppressArray(int l,int at,int &nb,SPSVGLength* &array);
+	static void       ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLength* &array,bool increment);
+	static void       UpdateArray(double size,double scale,int &nb,SPSVGLength* &array);
+	void              UpdateLength(double size,double scale);
+	void              SetStyle(SPStyle* i_style);
+	void							SetX(const char* val);
+	void							SetY(const char* val);
+	void							SetDX(const char* val);
+	void							SetDY(const char* val);
+	void							SetRot(const char* val);
+	char*							GetX(int st=-1,int en=-1);
+	char*							GetY(int st=-1,int en=-1);
+	char*							GetDX(int st=-1,int en=-1);
+	char*							GetDY(int st=-1,int en=-1);
+	char*							GetRot(int st=-1,int en=-1);
+	void              DoAddValue(int utf8_pos,int ucs4_pos,SPSVGLength &val,int v_type,bool increment);
+	
+	int               UCS4Pos(int i_utf8_pos);
+	
+	virtual int       Type(void) {return type;};
+	virtual void      PushInfo(int st,int en,int offset,text_holder* into);
+	virtual void      DeleteInfo(int i_utf8_st,int i_utf8_en,int i_ucs4_st,int i_ucs4_en);
+	virtual text_style*  GetStyle(void);
+	virtual void      Fill(flow_src* what);
+	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
+	virtual void      Delete(int i_utf8_st,int i_utf8_en);
 };
 
-class flow_src {
+class flow_src : public flow_styles {
 public:
 	typedef struct one_elem {
 		int               type;
 		text_holder*      text;
+		one_flow_src*     obj;
 	} one_elem;
 	int                 nbElem,maxElem;
 	one_elem*           elems;
 	
-	typedef struct stack_elem {
-		int               elem;
-		int               ucs4_st,ucs4_en;
-		text_style*       style;
-		int               nb_kern_x,nb_kern_y;
-		double            *kern_x,*kern_y;
-	} stack_elem;
-	flow_styles*        styles;
-	int                 nbStack,maxStack;
-	stack_elem*         stacks;
+	text_holder*        cur_holder;
 	
+	bool                min_mode;
+
 	flow_src(void);
 	~flow_src(void);
-	
-	void                Push(text_style* i_style);
-	void                SetKern(double *i_kern,int i_nb,bool is_x);
-	void                Pop(void);
-	void                AddUTF8(char* iText,int iLen,bool force=false);
-	void                AddControl(int type);
+		
+	void                AddElement(int i_type,text_holder* i_text,one_flow_src* i_obj);
+
+	char*               Summary(void);
 	
 	void                Clean(int &no,int &pos);
 	
@@ -105,7 +165,7 @@ public:
 	void                MetricsAt(int from_no,int from_pos,double &ascent,double &descent,double &leading,bool &flow_rtl);
 	void                ComputeSol(int from_no,int from_pos,line_solutions *sols,bool &flow_rtl);
 	void                Feed(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby);
-	void                Construct(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby);
+	text_holder*        ParagraphBetween(int st_no,int st_pos,int en_no,int en_pos);
 
 	void                Affiche(void);
 };

@@ -4,18 +4,22 @@
 
 #include "FlowEater.h"
 
-//#include <config.h>
-//#include <libnrtype/font-instance.h>
+#include <config.h>
+#include "font-instance.h"
 
 #include "FlowSrc.h"
-#include "text_holder.h"
-#include "text_style.h"
+#include "FlowSols.h"
+#include "FlowRes.h"
+#include "FlowBoxes.h"
+#include "FlowStyle.h"
+#include "FlowDest.h"
 
-#include "../sp-flowdiv.h"
-#include "../sp-flowregion.h"
-#include "../sp-flowtext.h"
+//#include "../sp-flowdiv.h"
+//#include "../sp-flowregion.h"
+//#include "../sp-flowtext.h"
 
 #define nflow_maker_verbose
+#define ntext_maker_verbose
 
 flow_eater::flow_eater(void)
 {
@@ -26,19 +30,23 @@ flow_eater::~flow_eater(void)
 {
 }
 
-void          flow_eater::StartLine(bool rtl,double x,double y,double l_spacing)
+void          flow_eater::StartLine(bool rtl,double x,double ox,double y,double l_spacing)
 {
 	//printf("start line rtl=%i at=%f %f spc=%f\n",(rtl)?1:0,x,y,l_spacing);
 	line_rtl=rtl;
 	cur_length=word_length=next_length=0;
 	cur_letter=word_letter=next_letter=0;
+	letter_length=0;
 	line_st_x=x;
 	line_st_y=y;
 	line_spc=l_spacing;
 	first_letter=true;
 	if ( the_flow ) {
-		the_flow->cur_spacing=line_spc;
-		the_flow->last_c_style=NULL;
+		if ( rtl ) {
+			the_flow->StartChunk(ox,x,y,rtl,l_spacing);
+		} else {
+			the_flow->StartChunk(x,ox,y,rtl,l_spacing);
+		}
 	}
 }
 void          flow_eater::StartWord(bool rtl,int nb_letter,double length)
@@ -57,12 +65,27 @@ void          flow_eater::StartWord(bool rtl,int nb_letter,double length)
 		word_letter=next_letter;
 		word_length=next_length;
 	}
+	letter_length=0;
 	//printf("start word rtl=%i nb_l=%i l=%f\n",(rtl)?1:0,nb_letter,length);
 	//printf("  -> word=%f %i  next=%f %i\n",word_length,word_letter,next_length,next_letter);
 }
-void          flow_eater::StartLetter(void)
+void          flow_eater::StartLetter(text_style* g_style,double k_x,double k_y,int utf8_offset)
 {
 //	printf("start letter\n");
+	if ( word_rtl == line_rtl ) {
+		if ( word_rtl ) {
+			word_length-=letter_length;
+		} else {
+			word_length+=letter_length;
+		}
+	} else {
+		if ( word_rtl ) {
+			word_length+=letter_length;
+		} else {
+			word_length-=letter_length;
+		}
+	}
+	int  n_letter=word_letter;
 	if ( word_rtl == line_rtl ) {
 		word_letter++;
 		if ( first_letter == false ) word_length+=line_spc;
@@ -71,72 +94,32 @@ void          flow_eater::StartLetter(void)
 		word_length-=line_spc; // reverse, so always linespacing
 	}
 	first_letter=false;
-}
-void          flow_eater::Eat(int g_id,text_style* g_s,double g_x,double g_y,double g_w)
-{
+	
 	double   px=line_st_x;
 	if ( line_rtl ) {
 		px-=word_length;
 	} else {
 		px+=word_length;
 	}
-	if ( word_rtl ) px-=g_w;
-	if ( the_flow ) the_flow->AddGlyph(g_id,px+g_x,line_st_y+g_y,g_s);
-//	printf("glyph %i at %f %f  w=%f -> p=%f\n",g_id,g_x,g_y,g_w,px);
-	if ( word_rtl == line_rtl ) {
-		word_length+=g_w;
-	} else {
-		word_length-=g_w;
-	}
-}
-void          flow_eater::StartBox(bool rtl,int nb_letter,double length)
-{
-	cur_length=next_length;
-	cur_letter=next_letter;
-	next_length+=length+nb_letter*line_spc;
-	next_letter+=nb_letter;
-	if ( first_letter ) next_length-=line_spc;
-	word_rtl=rtl;
-	if ( word_rtl == line_rtl ) {
-		word_letter=cur_letter;
-		word_length=cur_length;
-	} else {
-		if ( the_flow ) the_flow->last_c_style=NULL;
-		word_letter=next_letter;
-		word_length=next_length;
-	}
-	//printf("start box rtl=%i nb_l=%i l=%f\n",(rtl)?1:0,nb_letter,length);
-	//printf("  -> word=%f %i  next=%f %i\n",word_length,word_letter,next_length,next_letter);
-}
-void          flow_eater::Eat(char* iText,int iLen,double i_w,int i_l,text_style* i_style,double* k_x,double* k_y)
-{
-	if ( i_l <= 0 ) return;
-	double  n_w=i_w+((double)i_l)*line_spc;
-	if ( first_letter ) n_w-=line_spc;
-	first_letter=false;
-
-	double   px=line_st_x;
-	if ( line_rtl ) {
-		px-=word_length;
-	} else {
-		px+=word_length;
-	}
-	if ( word_rtl ) { // because the tspan are always ltr
-		px-=n_w;
-	}
-
-	//printf("eat box tLen=%i w=%f l=%i\n",iLen,i_w,i_l);
+	letter_length=k_x;
 	if ( the_flow ) {
-		the_flow->AddChunk(iText,iLen,i_style,px,line_st_y,word_rtl);
-		if ( k_x ) the_flow->KernLastAddition(k_x,true);
-		if ( k_y ) the_flow->KernLastAddition(k_y,false);
+		the_flow->StartLetter(g_style,word_rtl,k_x,k_y,px,line_st_y+k_y,0,n_letter,utf8_offset);
 	}
-	if ( word_rtl == line_rtl ) {
-		word_letter+=i_l;
-		word_length+=n_w;
+}
+void          flow_eater::Eat(int g_id,double g_x,double g_y,double g_w,char* iText,int iLen)
+{
+	if ( word_rtl ) {
+		letter_length-=g_w;
 	} else {
-		word_letter-=i_l;
-		word_length-=n_w;
+	}
+	if ( the_flow ) {
+		the_flow->AddGlyph(g_id,g_x,g_y,g_w);
+		the_flow->AddText(iText,iLen);
+	}
+//	printf("glyph %i at %f %f  w=%f -> p=%f\n",g_id,g_x,g_y,g_w,px);
+	if ( word_rtl ) {
+	} else {
+		letter_length+=g_w;
 	}
 }
 
@@ -194,6 +177,222 @@ int                flow_maker::AddBrk(box_sol& i_box,int i_no,int i_pos)
 	return nbBrk-1;
 }
 
+flow_res*          flow_maker::TextWork(void)
+{
+	flow_res*        f_res=new flow_res;
+	line_solutions*  sols=new line_solutions;
+	
+	f_src->min_mode=false;
+
+	{
+		// initialization
+		box_sol          st_box;
+		st_box.frame=f_dst;
+		st_box.before_rgn=true;
+		st_box.ascent=st_box.descent=st_box.leading=0;
+		st_box.y=st_box.x_start=st_box.x_end=0;
+		flow_requirement st_req;
+		st_req.next_line=true;
+		st_req.min_elem_no=st_req.min_elem_pos=-1;
+		st_req.ascent=st_req.descent=st_req.leading=0;
+		f_src->MetricsAt(0,0,st_req.ascent,st_req.descent,st_req.leading,st_req.rtl);
+		if ( fabs(st_req.ascent+st_req.descent) < 0.01 ) {
+			printf("null height line\n");
+			delete sols;
+			delete f_res;
+			return NULL;
+		}
+		int   st_brk=AddBrk(st_box,0,0);
+		brks[st_brk].rtl=st_req.rtl;
+		brks[st_brk].para_end=true;
+		pending->Push(st_brk,st_req);
+	}
+	
+	flow_requirement   cur_req;
+	int                cur_brk=-1;
+	int                final_brk=-1;
+	int                cur_id=-1;
+	while ( pending->Pop(cur_brk,cur_req,cur_id) ) {
+		box_sol  cur_end,cur_box;
+		brks[cur_brk].FillBox(cur_end,cur_req.rtl);
+		int      cur_elem_no=brks[cur_brk].elem_no;
+		int      cur_elem_pos=brks[cur_brk].elem_pos;
+		f_src->Clean(cur_elem_no,cur_elem_pos);
+		if ( cur_elem_no >= f_src->nbElem ) {
+			final_brk=cur_brk;
+			break;
+		}
+#ifdef text_maker_verbose
+		printf("curbrk=%i (%i %i)\n",cur_brk,cur_elem_no,cur_elem_pos);
+#endif
+		cur_box.y=0;
+		cur_box.x_start=0;
+		cur_box.x_end=1000000;
+		cur_box.ascent=1000000;
+		cur_box.descent=1000000;
+		cur_box.leading=1000000;
+		cur_box.frame=NULL;
+		cur_box.before_rgn=false;
+		cur_box.after_rgn=false;
+		
+		double   typ_length=cur_box.x_end-cur_box.x_start;
+		sols->StartLine(cur_elem_no,cur_elem_pos);
+		sols->SetLineSizes(cur_box.ascent,cur_box.descent,cur_box.leading);
+		sols->NewLine(0.0,1000000.0,1000000.0,false,false);
+		f_src->ComputeSol(cur_elem_no,cur_elem_pos,sols,cur_req.rtl);
+		sols->EndLine();
+		
+		//sols->Affiche();
+	
+		if ( sols->nbSol <= 0 ) {
+			// no sols-> ouch. skip to next box (there should be a penalty)
+			int n_brk=AddBrk(cur_box,cur_elem_no,cur_elem_pos);
+			brks[n_brk].rtl=cur_req.rtl;
+			brks[n_brk].LinkAfter(cur_brk,false);
+			pending->Push(n_brk,cur_req);
+			continue;				
+		}
+		
+		int      best_sol=sols->nbSol-1;
+/*		for (int i=0;i<sols->nbSol;i++) {
+			double sol_length=sols->sols[i].meas.width;
+			if ( fabs(sol_length) < 0.01 ) {
+				// special case: line break or rgn break
+				// do not create chunks for these
+				if ( sols->sols[i].para_end ) {
+					best_sol=-1;
+					cur_req.next_line=false;
+					cur_req.min_elem_no=cur_req.min_elem_pos=-1;
+					bool   old_rtl=cur_req.rtl;
+					f_src->MetricsAt(cur_elem_no+1,0,cur_req.ascent,cur_req.descent,cur_req.leading,cur_req.rtl);
+					if ( cur_req.rtl ) {
+						cur_box.x_start=cur_box.x_end;
+					} else {
+						cur_box.x_end=cur_box.x_start;
+					}
+					int n_brk=AddBrk(cur_box,cur_elem_no+1,0);
+					brks[n_brk].rtl=old_rtl;
+					brks[n_brk].LinkAfter(cur_brk,false);
+					brks[n_brk].para_end=true;
+					brks[n_brk].SetContent(cur_elem_no,cur_elem_pos,cur_elem_no,cur_elem_pos);
+					pending->Push(n_brk,cur_req);
+					break;
+				} else if ( sols->sols[i].rgn_end ) {
+					best_sol=-1;
+					cur_req.next_line=false;
+					cur_req.min_elem_no=cur_req.min_elem_pos=-1;
+					bool   old_rtl=cur_req.rtl;
+					f_src->MetricsAt(cur_elem_no+1,0,cur_req.ascent,cur_req.descent,cur_req.leading,cur_req.rtl);
+					if ( cur_req.rtl ) {
+						cur_box.x_start=cur_box.x_end;
+					} else {
+						cur_box.x_end=cur_box.x_start;
+					}
+					cur_box.frame=cur_box.frame->next_in_flow;
+					cur_box.before_rgn=true;
+					cur_box.after_rgn=false;
+					int n_brk=AddBrk(cur_box,cur_elem_no+1,0);
+					brks[n_brk].rtl=old_rtl;
+					brks[n_brk].LinkAfter(cur_brk,false);
+					brks[n_brk].para_end=true;
+					brks[n_brk].SetContent(cur_elem_no,cur_elem_pos,cur_elem_no,cur_elem_pos);
+					pending->Push(n_brk,cur_req);
+					break;
+				} else {
+					printf("oversmall solution?\n");
+					break;
+				}
+			} else {
+				best_sol=i;
+			}
+		}*/
+		if ( best_sol >= 0 ) {
+			line_solutions::one_sol  the_sol=sols->sols[best_sol];
+			double sol_length=the_sol.meas.width;
+#ifdef text_maker_verbose
+			printf("best= %i %i -> %i %i\n",sols->min_line_no,sols->min_line_pos,the_sol.elem_no,the_sol.pos);
+#endif
+			cur_box.x_start=0;
+			cur_box.x_end=the_sol.meas.width;
+			cur_box.ascent=the_sol.meas.ascent;
+			cur_box.descent=the_sol.meas.descent;
+			cur_box.leading=the_sol.meas.leading;
+			if ( the_sol.meas.width < 0.01 && fabs(cur_box.ascent+cur_box.descent+cur_box.leading) < 0.01 ) {
+				// empty line, and no sizes set. go get the sizes directly in the style
+				text_holder* line_mommy=f_src->ParagraphBetween(cur_elem_no,cur_elem_pos,the_sol.elem_no,the_sol.pos);
+				if ( line_mommy && line_mommy->source_start ) {
+					text_style* t_style=line_mommy->source_start->GetStyle();
+					if ( t_style ) {
+						t_style->theFont->FontMetrics(cur_box.ascent,cur_box.descent,cur_box.leading);
+						cur_box.ascent*=t_style->theSize;
+						cur_box.descent*=t_style->theSize;
+						cur_box.leading*=t_style->theSize;						
+						delete t_style;
+					}
+				}
+			}
+			int n_brk=AddBrk(cur_box,the_sol.elem_no,the_sol.pos);
+			brks[n_brk].sol_box=the_sol.meas;
+			brks[n_brk].rtl=cur_req.rtl;
+			brks[n_brk].SetContent(sols->min_line_no,sols->min_line_pos,the_sol.elem_no,the_sol.pos);
+			brks[n_brk].LinkAfter(cur_brk,false);
+			f_src->MetricsAt(the_sol.elem_no,the_sol.pos,cur_req.ascent,cur_req.descent,cur_req.leading,cur_req.rtl);
+			pending->Push(n_brk,cur_req);
+		}
+	}
+		
+	flow_eater*      baby=new flow_eater;
+	baby->the_flow=f_res;
+	int     brk_start=-1;
+	for (int c_b=final_brk;c_b>=0;c_b=brks[c_b].prev_box_brk) {
+		brk_start=c_b;
+		if ( brks[c_b].prev_box_brk >= 0 ) brks[brks[c_b].prev_box_brk].next=c_b;
+	}
+#ifdef text_maker_verbose
+	printf("final:\n");
+#endif
+	for (int i=brk_start;i >= 0 && i < nbBrk;i=brks[i].next) {
+		bool    line_rtl=brks[i].rtl;
+		double  line_y=brks[i].used_box.y;
+		double  used_length=brks[i].used_box.x_end-brks[i].used_box.x_start;
+		double  sol_length=brks[i].sol_box.width;
+		double  delta=used_length-sol_length;
+#ifdef text_maker_verbose
+		printf("b=%i e_no=%i e_pos=%i (%i %i %i %i) x=%f y=%f\n",i,brks[i].elem_no,brks[i].elem_pos,
+					 brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,brks[i].used_box.x_end,brks[i].used_box.y);
+#endif
+		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
+		if ( justify == false ) delta=0;
+		text_holder* line_mommy=f_src->ParagraphBetween(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos);
+		if ( baby->the_flow ) baby->the_flow->SetChunkInfo(brks[i].used_box.ascent,brks[i].used_box.descent,brks[i].used_box.leading,line_mommy);
+		if ( line_rtl ) {
+			baby->StartLine(line_rtl,brks[i].used_box.x_end,brks[i].used_box.x_start,line_y,delta);
+		} else {
+			baby->StartLine(line_rtl,brks[i].used_box.x_start,brks[i].used_box.x_end,line_y,delta);
+		}
+		f_src->Feed(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
+		if ( line_mommy && line_mommy->source_end && line_mommy->source_end->utf8_en == line_mommy->source_end->utf8_st+1 ) {
+			int end_type=line_mommy->source_end->Type();
+			if ( end_type == txt_tline || end_type == txt_textpath || end_type == txt_span ) {
+				// add a decoy letter for the ghost return
+				baby->StartWord(line_rtl,0,0.0);
+				if ( baby->the_flow ) baby->the_flow->SetSourcePos(line_mommy->utf8_length);
+				baby->StartLetter(NULL,0.0,0.0,0);
+				baby->the_flow->AddText("\n",1);
+			}
+		} else if ( line_mommy && line_mommy->source_end == NULL && line_mommy->utf8_length == 0 ) {
+			// end of the text, and it's an empty line-> add a dummy letter to make things easier for sp-text
+			baby->StartWord(line_rtl,0,0.0);
+			if ( baby->the_flow ) baby->the_flow->SetSourcePos(line_mommy->utf8_length);
+			baby->StartLetter(NULL,0.0,0.0,0);
+			//baby->the_flow->AddText("\n",1);
+		}
+	}
+	
+	delete baby;
+	delete sols;
+	return f_res;
+}
 flow_res*          flow_maker::Work(void)
 {
 	if ( algo == 0 ) return StdAlgo();
@@ -215,6 +414,7 @@ flow_res*          flow_maker::StdAlgo(void)
 		flow_requirement st_req;
 		st_req.next_line=true;
 		st_req.min_elem_no=st_req.min_elem_pos=-1;
+		st_req.ascent=st_req.descent=st_req.leading=0;
 		f_src->MetricsAt(0,0,st_req.ascent,st_req.descent,st_req.leading,st_req.rtl);
 		if ( fabs(st_req.ascent+st_req.descent) < 0.01 ) {
 			printf("null height line\n");
@@ -251,6 +451,11 @@ flow_res*          flow_maker::StdAlgo(void)
 			if ( f_src->elems[cur_elem_no].type == flw_text ) bare_min_length+=par_indent;
 		}
 		if ( f_src->elems[cur_elem_no].type == flw_text ) bare_min_length+=(cur_req.ascent+cur_req.descent)*3;
+		if ( fabs(cur_req.ascent+cur_req.descent) < 0.01 ) {
+			// null height line, that's going to put the region into loops
+			final_brk=cur_brk;
+			break;
+		}
 		if ( cur_req.rtl ) {
 			cur_box=f_dst->TxenBox(cur_end,cur_req.ascent,cur_req.descent,cur_req.leading,cur_req.next_line,stillSameLine,bare_min_length);
 			if ( brks[cur_brk].para_end ) {
@@ -292,10 +497,10 @@ flow_res*          flow_maker::StdAlgo(void)
 		}
 		
 		double   typ_length=cur_box.x_end-cur_box.x_start;
-		sols->StartLine(brks[cur_brk].elem_no,brks[cur_brk].elem_pos);
+		sols->StartLine(cur_elem_no,cur_elem_pos);
 		sols->SetLineSizes(cur_box.ascent,cur_box.descent,cur_box.leading);
 		sols->NewLine(min_scale*typ_length,max_scale*typ_length,typ_length,strictBefore,strictAfter);
-		f_src->ComputeSol(brks[cur_brk].elem_no,brks[cur_brk].elem_pos,sols,cur_req.rtl);
+		f_src->ComputeSol(cur_elem_no,cur_elem_pos,sols,cur_req.rtl);
 		sols->EndLine();
 		
 		//sols->Affiche();
@@ -484,27 +689,11 @@ flow_res*          flow_maker::StdAlgo(void)
 		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
 		if ( justify == false ) delta=0;
 		if ( line_rtl ) {
-			baby->StartLine(line_rtl,brks[i].used_box.x_end,line_y,delta);
+			baby->StartLine(line_rtl,brks[i].used_box.x_end,brks[i].used_box.x_start,line_y,delta);
 		} else {
-			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
+			baby->StartLine(line_rtl,brks[i].used_box.x_start,brks[i].used_box.x_end,line_y,delta);
 		}
 		f_src->Feed(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
-	}
-	for (int i=brk_start;i >= 0 && i < nbBrk;i=brks[i].next) {
-		bool    line_rtl=brks[i].rtl;
-		double  line_y=brks[i].used_box.y;
-		double  used_length=brks[i].used_box.x_end-brks[i].used_box.x_start;
-		double  sol_length=brks[i].sol_box.width;
-		double  delta=used_length-sol_length;
-
-		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
-		if ( justify == false ) delta=0;
-		if ( line_rtl ) {
-			baby->StartLine(line_rtl,brks[i].used_box.x_end,line_y,delta);
-		} else {
-			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
-		}
-		f_src->Construct(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
 	}
 	
 	delete baby;
@@ -527,6 +716,7 @@ flow_res*          flow_maker::KPAlgo(void)
 		flow_requirement st_req;
 		st_req.next_line=true;
 		st_req.min_elem_no=st_req.min_elem_pos=-1;
+		st_req.ascent=st_req.descent=st_req.leading=0;
 		f_src->MetricsAt(0,0,st_req.ascent,st_req.descent,st_req.leading,st_req.rtl);
 		if ( fabs(st_req.ascent+st_req.descent) < 0.01 ) {
 			printf("null height line\n");
@@ -658,26 +848,11 @@ flow_res*          flow_maker::KPAlgo(void)
 		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
 		if ( justify == false ) delta=0;
 		if ( line_rtl ) {
-			baby->StartLine(line_rtl,brks[i].used_box.x_end,line_y,delta);
+			baby->StartLine(line_rtl,brks[i].used_box.x_end,brks[i].used_box.x_start,line_y,delta);
 		} else {
-			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
+			baby->StartLine(line_rtl,brks[i].used_box.x_start,brks[i].used_box.x_end,line_y,delta);
 		}
 		f_src->Feed(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
-	}
-	for (int i=brk_start;i >= 0 && i < nbBrk;i=brks[i].next) {
-		bool    line_rtl=brks[i].rtl;
-		double  line_y=brks[i].used_box.y;
-		double  used_length=brks[i].used_box.x_end-brks[i].used_box.x_start;
-		double  sol_length=brks[i].sol_box.width;
-		double  delta=used_length-sol_length;
-		if ( brks[i].sol_box.nb_letter > 0 ) delta/=(brks[i].sol_box.nb_letter-1); else delta=0;
-		if ( justify == false ) delta=0;
-		if ( line_rtl ) {
-			baby->StartLine(line_rtl,brks[i].used_box.x_end,line_y,delta);
-		} else {
-			baby->StartLine(line_rtl,brks[i].used_box.x_start,line_y,delta);
-		}
-		f_src->Construct(brks[i].u_st_no,brks[i].u_st_pos,brks[i].u_en_no,brks[i].u_en_pos,line_rtl,baby);
 	}
 	
 	delete baby;
@@ -840,10 +1015,10 @@ void               flow_maker::KPDoPara(int &st_brk,flow_requirement &st_req,lin
 		}
 		
 		double   typ_length=cur_box.x_end-cur_box.x_start;
-		sols->StartLine(brks[cur_brk].elem_no,brks[cur_brk].elem_pos);
+		sols->StartLine(cur_elem_no,cur_elem_pos);
 		sols->SetLineSizes(cur_box.ascent,cur_box.descent,cur_box.leading);
 		sols->NewLine(min_scale*typ_length,max_scale*typ_length,typ_length,strictBefore,strictAfter);
-		f_src->ComputeSol(brks[cur_brk].elem_no,brks[cur_brk].elem_pos,sols,cur_req.rtl);
+		f_src->ComputeSol(cur_elem_no,cur_elem_pos,sols,cur_req.rtl);
 		sols->EndLine();
 		
 		//sols->Affiche();

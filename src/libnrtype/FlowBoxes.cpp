@@ -2,9 +2,11 @@
  *  text_holder.cpp
  */
 
-#include "text_holder.h"
-#include "text_style.h"
+#include "FlowBoxes.h"
+#include "FlowStyle.h"
 #include "FlowSrc.h"
+#include "FlowRes.h"
+#include "FlowSols.h"
 #include "FlowEater.h"
 
 #include <config.h>
@@ -16,8 +18,9 @@
 
 #define ntext_holder_verbose
 
-text_holder::text_holder(void)
+text_holder::text_holder(void):raw_text(),flow_to_me()
 {
+	raw_text.t_owner=this;
 	utf8_length=0;
 	utf8_text=NULL;
 	ucs4_length=0;
@@ -27,13 +30,14 @@ text_holder::text_holder(void)
 	boxes=NULL;
 	kern_x=kern_y=NULL;
 	nb_kern_x=nb_kern_y=0;
+	source_start=source_end=NULL;
+	paragraph_rtl=false;
 }
 text_holder::~text_holder(void)
 {
 	if ( kern_x ) free(kern_x);
 	if ( kern_y ) free(kern_y);
 	if ( boxes ) free(boxes);
-	if ( utf8_text ) free(utf8_text);
 	if ( ctrls ) free(ctrls);
 	utf8_length=0;
 	utf8_text=NULL;
@@ -45,104 +49,59 @@ text_holder::~text_holder(void)
 	nb_kern_x=nb_kern_y=0;
 }
 
-int          text_holder::AppendUTF8(char* iText,int iLen,int &rLen,bool preserve,bool eat_leading)
+void         text_holder::AppendUTF8(partial_text* iTxt)
 {
-	if ( iLen < 0 ) iLen=strlen(iText);
-	int   add_len=0;
-	int   add_st=utf8_length;
-	bool  initial_white=(eat_leading)?true:false;
-	if ( utf8_length > 0 ) {
-		if ( utf8_text[utf8_length-1] == ' ' ) initial_white=true;
+	flow_to_me.AddSource(iTxt);
+	DoText();
+}
+void           text_holder::LastAddition(int &d_utf8_st,int &d_ucs4_st,int &d_utf8_en,int &d_ucs4_en)
+{
+	if ( flow_to_me.nbSrc <= 0 ) {
+		d_utf8_st=d_utf8_en=0;
+		d_ucs4_st=d_ucs4_en=0;
+		return;
 	}
-	{
-		//printf("add utf8 eat %i str %s\n",(eat_leading)?1:0,iText);
-		bool in_white=initial_white;
-		for (int curLen=0;curLen<iLen;) {
-			char*    p=iText+curLen;
-			char*    np=g_utf8_next_char(p);
-			int      ncl=((int)np)-((int)p);
-			if ( ncl <= 0 ) {
-				printf("zero length char?\n");
-				rLen=0;
-				return add_st;
-			}
+	correspondance::corresp_src* last=flow_to_me.src+(flow_to_me.nbSrc-1);
+	flow_to_me.SourceToDest(0,0,last->txt,d_utf8_st,d_ucs4_st,false);
+	flow_to_me.SourceToDest(last->txt->utf8_length,last->txt->ucs4_length,last->txt,d_utf8_en,d_ucs4_en,true);
+}
+void					 text_holder::DoText(void)
+{
+	// we should only be passed the 'true' text, so no need to worry with xml-space
+	// we can eat soft hyphen at will, if this is in a sp-text, they have been already stripped out
+	//nbCtrl=0;
+	flow_to_me.SetDestination(&raw_text);
+	flow_to_me.StartAdding();
+	for (int i=0;i<flow_to_me.nbSrc;i++) {
+		char* src_text=flow_to_me.src[i].txt->utf8_text;
+		int   src_length=flow_to_me.src[i].txt->utf8_length;
+		int   src_offset=flow_to_me.src[i].utf8_offset;
+		for (char* p=src_text;p&&*p;p=g_utf8_next_char(p)) {
+			int     d=((int)p)-((int)src_text);
 			gunichar nc=g_utf8_get_char(p);
-			if ( *p == '\n' || *p == '\r' ||  *p == '\t' ) {
-			} else if ( nc == 0x00AD ) {
-			} else {
-				if ( preserve ) {
-					add_len+=ncl;
-				} else {
-					if ( g_unichar_isspace(nc) ) {
-						if ( in_white ) {
-						} else {
-							add_len+=ncl;
-						}
-						in_white=true;
-					} else {
-						add_len+=ncl;
-						in_white=false;
-					}
-				}
-			}
-			curLen+=ncl;
-		}
-	}
-	utf8_text=(char*)realloc(utf8_text,(add_st+add_len+1)*sizeof(char));
-	int    add_pos=0;
-	{
-		bool in_white=initial_white;
-		for (int curLen=0;curLen<iLen;) {
-			char*    p=iText+curLen;
-			char*    np=g_utf8_next_char(p);
-			int      ncl=((int)np)-((int)p);
-			gunichar nc=g_utf8_get_char(p);
-			char*    q=utf8_text+(add_st+add_pos); // dest
 			if ( *p == '\n' ) {
-				AddCtrl(add_pos+add_st,ctrl_return);
+				AddCtrl(raw_text.utf8_length,ctrl_return); // nooo, not a newline!
+				flow_to_me.TreatChar(src_offset+d,false,i);
 			} else if ( *p == '\r' ) {
-				AddCtrl(add_pos+add_st,ctrl_return);
+				AddCtrl(raw_text.utf8_length,ctrl_return); // nooo, not a newline!
+				flow_to_me.TreatChar(src_offset+d,false,i);
 			} else if ( *p == '\t' ) {			
-				AddCtrl(add_pos+add_st,ctrl_tab);
+				AddCtrl(raw_text.utf8_length,ctrl_tab); // nooo, not a tab!
+				flow_to_me.TreatChar(src_offset+d,false,i);
 			} else if ( nc == 0x00AD ) {
-				AddCtrl(add_pos+add_st,ctrl_soft_hyph);
+				AddCtrl(raw_text.utf8_length,ctrl_soft_hyph); // soft hyphen-> we can break 'after' it
+				flow_to_me.TreatChar(src_offset+d,false,i);
 			} else {
-				if ( preserve ) {
-					for (int i=0;i<ncl;i++) *q++=*p++;
-					add_pos+=ncl;
-				} else {
-					if ( g_unichar_isspace(nc) ) {
-						if ( in_white ) {
-						} else {
-							for (int i=0;i<ncl;i++) *q++=*p++;
-							add_pos+=ncl;
-						}
-						in_white=true;
-					} else {
-						for (int i=0;i<ncl;i++) *q++=*p++;
-						add_pos+=ncl;
-						in_white=false;
-					}
-				}
+				flow_to_me.TreatChar(src_offset+d,true,i);
 			}
-			curLen+=ncl;
 		}
+		flow_to_me.FlushAdding(src_offset+src_length,i);
 	}
-	utf8_length+=add_len;
-	utf8_text[utf8_length]=0;
-	
-	rLen=add_len;
-	
-//	ucs4_length=0;
-	{
-		char*  p=utf8_text+add_st;
-		while ( *p != 0 ) {
-			ucs4_length++;
-			p=g_utf8_next_char(p);
-		}
-	}
-	
-	return add_st;
+	flow_to_me.EndAdding();
+
+	utf8_length=raw_text.utf8_length;
+	utf8_text=raw_text.utf8_text;
+	ucs4_length=raw_text.ucs4_length;
 }
 void           text_holder::SubCtrl(int no)
 {
@@ -407,7 +366,7 @@ void           text_holder::AfficheBoxes(void)
 {
 	printf("%i boites\n",nbBox);
 	for (int i=0;i<nbBox;i++) {
-		printf("%i: [%i -> %i] = [%f %f %f / %f] %i ; n=%i p=%i h=%i l=%i\n trl=%i",i,boxes[i].st,boxes[i].en,boxes[i].meas.ascent,boxes[i].meas.descent
+		printf("%i: [%i -> %i] = [%f %f %f / %f] %i ; n=%i p=%i h=%i l=%i rtl=%i\n",i,boxes[i].st,boxes[i].en,boxes[i].meas.ascent,boxes[i].meas.descent
 					 ,boxes[i].meas.leading,boxes[i].meas.width,boxes[i].meas.nb_letter,boxes[i].next,boxes[i].prev,boxes[i].first,boxes[i].link
 					 ,(boxes[i].rtl)?1:0);
 	}
@@ -417,6 +376,7 @@ void           text_holder::AfficheBoxes(void)
  */
 void           text_holder::DoChunking(flow_styles* style_holder)
 {
+	//DoText();
 #ifdef text_holder_verbose
 	printf("chunk %s\n",utf8_text);
 #endif
@@ -603,39 +563,41 @@ void           text_holder::DoChunking(flow_styles* style_holder)
 	for (int i=0;i<nbCtrl;i++) ctrls[i].ucs4_offset=UCS4Offset(ctrls[i].pos);
 }
 
-void           text_holder::UpdatePangoAnalysis(int from,int p_st,int p_en,PangoAnalysis &pan)
+void           text_holder::UpdatePangoAnalysis(int from,int p_st,int p_en,void *i_pan)
 {
+	PangoAnalysis* pan=(PangoAnalysis*)i_pan;
 	for (int i=from;i<nbCtrl;i++) {
 		if ( ctrls[i].pos > p_st && ctrls[i].is_start ) break;
 		
 		if ( ctrls[i].typ == ctrl_lang && ctrls[i].is_start ) {
 			int j=ctrls[i].other;
 			if ( ctrls[i].pos <= p_st && ctrls[j].pos >= p_en ) {
-				pan.language=(PangoLanguage*)ctrls[i].data.v;
+				pan->language=(PangoLanguage*)ctrls[i].data.v;
 			}
 		}
 		if ( ctrls[i].typ == ctrl_bidi && ctrls[i].is_start ) {
 			int j=ctrls[i].other;
 			if ( ctrls[i].pos <= p_st && ctrls[j].pos >= p_en ) {
-				pan.level=ctrls[i].data.i;
+				pan->level=ctrls[i].data.i;
 			}
 		}
 		if ( ctrls[i].typ == ctrl_shp_eng && ctrls[i].is_start ) {
 			int j=ctrls[i].other;
 			if ( ctrls[i].pos <= p_st && ctrls[j].pos >= p_en ) {
-				pan.shape_engine=(PangoEngineShape*)ctrls[i].data.v;
+				pan->shape_engine=(PangoEngineShape*)ctrls[i].data.v;
 			}
 		}
 		if ( ctrls[i].typ == ctrl_lang_eng && ctrls[i].is_start ) {
 			int j=ctrls[i].other;
 			if ( ctrls[i].pos <= p_st && ctrls[j].pos >= p_en ) {
-				pan.lang_engine=(PangoEngineLang*)ctrls[i].data.v;
+				pan->lang_engine=(PangoEngineLang*)ctrls[i].data.v;
 			}
 		}
 	}
 }
-void           text_holder::MeasureText(int p_st,int p_en,box_sizes &n_a,PangoAnalysis &b_pan,int b_offset,int with_hyphen)
+void           text_holder::MeasureText(int p_st,int p_en,box_sizes &n_a,void *i_pan,int b_offset,int with_hyphen)
 {
+	PangoAnalysis* b_pan=(PangoAnalysis*)i_pan;
 	n_a.ascent=n_a.descent=n_a.leading=0;
 	n_a.width=0;
 	n_a.nb_letter=0;
@@ -666,7 +628,7 @@ void           text_holder::ComputeBoxes(void)
 {
 	if ( utf8_length <= 0 ) return;
 	
-	// flatten the dy kerning for simpler use
+	// flatten the kerning for simpler use
 	if ( kern_x ) {
 		if ( nb_kern_x < ucs4_length ) {
 			kern_x=(double*)realloc(kern_x,ucs4_length*sizeof(double));
@@ -711,7 +673,7 @@ void           text_holder::ComputeBoxes(void)
 			int    cur_b_st=b_st;
 			do {
 				int    cur_p_st=ctrls[cur_b_st].pos;
-				UpdatePangoAnalysis(0,cur_p_st,p_en,b_pan);
+				UpdatePangoAnalysis(0,cur_p_st,p_en,&b_pan);
 				// go through the successive styles of this box
 				one_flow_box  n_a;
 				n_a.st=cur_p_st;
@@ -720,7 +682,7 @@ void           text_holder::ComputeBoxes(void)
 				n_a.rtl=(b_pan.level==1);
 				if ( nbBox <= 0 ) needed=n_a.rtl;
 				n_a.ucs4_offset=ctrls[cur_b_st].ucs4_offset;
-				MeasureText(cur_p_st,p_en,n_a.meas,b_pan,n_a.ucs4_offset,0);
+				MeasureText(cur_p_st,p_en,n_a.meas,&b_pan,n_a.ucs4_offset,0);
 				n_a.hyphenated=false;
 				n_a.next=-1;
 				n_a.first=-1;
@@ -736,7 +698,7 @@ void           text_holder::ComputeBoxes(void)
 						if ( cur_p_en >= p_en ) break;
 						
 						n_a.en=cur_p_en;
-						MeasureText(cur_p_st,cur_p_en,n_a.meas,b_pan,n_a.ucs4_offset,1);
+						MeasureText(cur_p_st,cur_p_en,n_a.meas,&b_pan,n_a.ucs4_offset,1);
 						int  c_cur=AddBox(n_a);
 						if ( boxes[c_first].first < 0 ) boxes[c_first].first=c_cur;
 						if ( c_last >= 0 ) boxes[c_last].link=c_cur;
@@ -765,8 +727,10 @@ void           text_holder::ComputeBoxes(void)
 		}
 	}
 	// reorder to get a unique bidi direction (ok since we ensured counterdirectional boxes are not hyphenated)
+	paragraph_rtl=false; // ltr prefered
 	if ( nbBox > 0 ) {
-		bool   needed=boxes[0].rtl;
+		paragraph_rtl=boxes[0].rtl;
+		bool   needed=paragraph_rtl;
 		for (int i=0;i>=0&&i<nbBox;) {
 			if ( boxes[i].rtl != needed ) {
 				int j=i;
@@ -817,7 +781,7 @@ int            text_holder::UCS4Offset(int pos)
 bool           text_holder::MetricsAt(int i_from_box,double &ascent,double &descent,double &leading,bool flow_rtl)
 {
 	if ( nbBox <= 0 ) return false;
-	if ( flow_rtl == boxes[0].rtl ) {
+	if ( flow_rtl == paragraph_rtl ) {
 		int  from_box=i_from_box;
 		if ( from_box < 0 ) from_box=0;
 		if ( from_box >= nbBox ) from_box=nbBox-1;
@@ -837,8 +801,9 @@ bool           text_holder::MetricsAt(int i_from_box,double &ascent,double &desc
 bool           text_holder::ComputeSols(int i_from_box,line_solutions* sols,int with_no,bool last_in_para,bool last_in_rgn,bool flow_rtl)
 {
 	if ( nbBox <= 0 ) return false;
-	if ( flow_rtl == boxes[0].rtl ) {
+	if ( flow_rtl == paragraph_rtl ) {
 		int  from_box=i_from_box;
+		if ( from_box < 0 ) from_box=0;
 		if ( from_box >= nbBox ) return false;
 		for (int i=from_box;i>=0 && i<nbBox;i=boxes[i].next) {
 			sols->StartWord();
@@ -857,7 +822,8 @@ bool           text_holder::ComputeSols(int i_from_box,line_solutions* sols,int 
 		}
 	} else {
 		int  from_box=nbBox-1-i_from_box;
-		if ( from_box >= nbBox ) return false;
+		if ( from_box >= nbBox ) from_box=nbBox-1;
+		if ( from_box < 0 ) return false;
 		for (int i=from_box;i>=0&&i<nbBox;i=boxes[i].prev) {
 			sols->StartWord();
 			int   end_pos=boxes[i].prev;
@@ -871,11 +837,13 @@ bool           text_holder::ComputeSols(int i_from_box,line_solutions* sols,int 
 }
 void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* baby)
 {
+	if ( baby && baby->the_flow ) baby->the_flow->SetSourcePos(0);
 	if ( nbBox <= 0 ) return;
-	if ( flow_rtl == boxes[0].rtl ) {
+	if ( flow_rtl == paragraph_rtl ) {
 		int st_pos=i_st_pos;
 		int en_pos=i_en_pos;
 		if ( st_pos >= nbBox ) return;
+		if ( en_pos > nbBox ) en_pos=nbBox;
 		PangoAnalysis b_pan;
 		b_pan.language=NULL;
 		b_pan.level=0;
@@ -884,7 +852,7 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 		b_pan.extra_attrs=NULL;
 		b_pan.font=NULL;
 		int        utf8_end=(en_pos<nbBox)?boxes[en_pos].st:utf8_length;
-		for (int i=st_pos;i>=0&&i<en_pos;i=boxes[i].next) {
+		for (int i=st_pos;i>=0&&i<en_pos&&i<nbBox;i=boxes[i].next) {
 			int    p_st=boxes[i].st;
 			int    p_en=boxes[i].en;
 			//printf("feed box %i (%i -> %i)\n",i,p_st,p_en);
@@ -905,7 +873,7 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 				}
 				baby->StartWord(boxes[i].rtl,boxes[i].meas.nb_letter,boxes[i].meas.width);
 				// collect shaper info
-				UpdatePangoAnalysis(0,p_st,p_en,b_pan);
+				UpdatePangoAnalysis(0,p_st,p_en,&b_pan);
 				// go through the successive styles of this box
 				int    s_st=-1,s_en=0;
 				int    s_p_st=p_st,s_p_en=p_st;
@@ -920,20 +888,24 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 						if ( i_p_st < i_p_en ) {
 							text_style* c_style=ctrls[s_st].data.s;
 							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
-							c_style->Feed(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
+							if ( baby->the_flow ) baby->the_flow->SetSourcePos(i_p_st);
+							c_style->Feed(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,&b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
 						}
 					} else {
 						break;
 					}
 					s_p_st=s_p_en;
 				} while ( s_p_st < p_en );
+				if ( baby->the_flow ) baby->the_flow->EndWord();
 			}
 		}
 	} else {
 		// no hyphenation in this backward case
 		int st_pos=nbBox-1-i_st_pos;
 		int en_pos=nbBox-1-i_en_pos;
+		if ( st_pos >= nbBox ) st_pos=nbBox-1;
 		if ( st_pos < 0 ) return;
+		if ( en_pos >= nbBox ) return;
 		PangoAnalysis b_pan;
 		b_pan.language=NULL;
 		b_pan.level=0;
@@ -941,13 +913,13 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 		b_pan.lang_engine=NULL;
 		b_pan.extra_attrs=NULL;
 		b_pan.font=NULL;
-		for (int i=st_pos;i>=0&&i>en_pos;i=boxes[i].prev) {
+		for (int i=st_pos;i>=0&&i>en_pos&&i<nbBox;i=boxes[i].prev) {
 			int    p_st=boxes[i].st;
 			int    p_en=boxes[i].en;
 			if ( p_st < p_en ) {
 				baby->StartWord(boxes[i].rtl,boxes[i].meas.nb_letter,boxes[i].meas.width);
 				// collect shaper info
-				UpdatePangoAnalysis(0,p_st,p_en,b_pan);
+				UpdatePangoAnalysis(0,p_st,p_en,&b_pan);
 				// go through the successive styles of this box
 				int    s_st=-1,s_en=0;
 				int    s_p_st=p_st,s_p_en=p_st;
@@ -961,115 +933,15 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 						if ( i_p_st < i_p_en ) {
 							text_style* c_style=ctrls[s_st].data.s;
 							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
-							c_style->Feed(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
+							if ( baby->the_flow ) baby->the_flow->SetSourcePos(i_p_st);
+							c_style->Feed(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,&b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
 						}
 					} else {
 						break;
 					}
 					s_p_st=s_p_en;
 				} while ( s_p_st < p_en );
-			}
-		}
-	}
-}
-void					 text_holder::Construct(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* baby)
-{
-	if ( nbBox <= 0 ) return;
-	if ( flow_rtl == boxes[0].rtl ) {
-		int st_pos=i_st_pos;
-		int en_pos=i_en_pos;
-		if ( st_pos >= nbBox ) return;
-		PangoAnalysis b_pan;
-		b_pan.language=NULL;
-		b_pan.level=0;
-		b_pan.shape_engine=NULL;
-		b_pan.lang_engine=NULL;
-		b_pan.extra_attrs=NULL;
-		b_pan.font=NULL;
-		int        utf8_end=(en_pos<nbBox)?boxes[en_pos].st:utf8_length;
-		for (int i=st_pos;i>=0&&i<en_pos;i=boxes[i].next) {
-			int    p_st=boxes[i].st;
-			int    p_en=boxes[i].en;
-			//printf("construct box %i (%i -> %i)\n",i,p_st,p_en);
-			if ( p_st < p_en ) {
-				if ( boxes[i].rtl == flow_rtl ) {
-					if ( p_en > utf8_end ) {
-						i=boxes[i].first;
-						for (;i>=0&&i<nbBox;i=boxes[i].link) {
-							if ( flow_rtl == true && boxes[i].st == utf8_end ) break;
-							if ( flow_rtl == false && boxes[i].en == utf8_end ) break;
-						}
-						if ( i < 0 || i >= nbBox ) break;
-						p_st=boxes[i].st;
-						p_en=boxes[i].en;
-					}
-				} else {
-					// do not hyphenate counterdiractional boxes
-				}
-				baby->StartBox(boxes[i].rtl,boxes[i].meas.nb_letter,boxes[i].meas.width);
-				// collect shaper info
-				UpdatePangoAnalysis(0,p_st,p_en,b_pan);
-				// go through the successive styles of this box
-				int    s_st=-1,s_en=0;
-				int    s_p_st=p_st,s_p_en=p_st;
-				do {
-					NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
-					if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
-						s_p_st=ctrls[s_st].pos;
-						s_p_en=ctrls[s_en].pos;
-						int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
-						int   i_p_en=(p_en<s_p_en)?p_en:s_p_en;
-						if ( i_p_st < i_p_en ) {
-							text_style* c_style=ctrls[s_st].data.s;
-							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
-							c_style->Construct(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
-						}
-					} else {
-						break;
-					}
-					s_p_st=s_p_en;
-				} while ( s_p_st < p_en );
-			}
-		}
-	} else {
-		// no hyphenation in this backward case
-		int st_pos=nbBox-1-i_st_pos;
-		int en_pos=nbBox-1-i_en_pos;
-		if ( st_pos < 0 ) return;
-		PangoAnalysis b_pan;
-		b_pan.language=NULL;
-		b_pan.level=0;
-		b_pan.shape_engine=NULL;
-		b_pan.lang_engine=NULL;
-		b_pan.extra_attrs=NULL;
-		b_pan.font=NULL;
-		for (int i=st_pos;i>=0&&i>en_pos;i=boxes[i].prev) {
-			int    p_st=boxes[i].st;
-			int    p_en=boxes[i].en;
-			if ( p_st < p_en ) {
-				baby->StartBox(boxes[i].rtl,boxes[i].meas.nb_letter,boxes[i].meas.width);
-				// collect shaper info
-				UpdatePangoAnalysis(0,p_st,p_en,b_pan);
-				// go through the successive styles of this box
-				int    s_st=-1,s_en=0;
-				int    s_p_st=p_st,s_p_en=p_st;
-				do {
-					NextSpanOfTyp(ctrl_style,s_p_st,s_st,s_en);
-					if ( s_st < nbCtrl && ( ctrls[s_st].pos < p_en && ctrls[s_en].pos > p_st ) ) {
-						s_p_st=ctrls[s_st].pos;
-						s_p_en=ctrls[s_en].pos;
-						int   i_p_st=(p_st>s_p_st)?p_st:s_p_st;
-						int   i_p_en=(p_en<s_p_en)?p_en:s_p_en;
-						if ( i_p_st < i_p_en ) {
-							text_style* c_style=ctrls[s_st].data.s;
-							int         offset=(boxes[i].st>ctrls[s_st].pos)?boxes[i].ucs4_offset:ctrls[s_st].ucs4_offset;
-							c_style->Construct(utf8_text+i_p_st,i_p_en-i_p_st,(boxes[i].hyphenated)?1:0,b_pan,baby,(kern_x)?kern_x+offset:NULL,(kern_y)?kern_y+offset:NULL);
-						}
-					} else {
-						break;
-					}
-					s_p_st=s_p_en;
-				} while ( s_p_st < p_en );
+				if ( baby->the_flow ) baby->the_flow->EndWord();
 			}
 		}
 	}
