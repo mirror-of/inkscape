@@ -1,3 +1,8 @@
+2004-08-25  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/sp-cursor.cpp, src/sp-cursor.h, src/sp-guide.cpp:
+	coding style cleanups.
+
 2004-08-24  MenTaLguY <mental@rydia.net>
 
 	* src/gc-anchor.h: fix to always use the GC base address, since
@@ -106,8 +111,8 @@
 
 2004-08-20  Carl Hetherington <inkscape@carlh.net>
 
-	* src/zoom-context.cpp, src/view.cpp, src/version.cpp: coding
-	style cleanups.
+	* src/zoom-context.cpp, src/view.cpp, src/version.cpp,
+	src/sp-defs.cpp: coding style cleanups.
 
 	* src/sp-polygon.cpp: coding style and a few other small cleanups.
 
