@@ -231,7 +231,7 @@ extension_filter_prefs (SPModule * module)
 	\param   filename File to open.
 
 	First things first, this function needs a temporary file name.  To
-	create on of those the function mkstemp is used, with a filename with
+	create on of those the function g_mkstemp is used, with a filename with
 	the header of sp_ext_.
 
 	The extension is then executed using the 'extension_execute' function
@@ -252,7 +252,7 @@ extension_open (SPModule * module, const gchar * filename)
 
 	tempfilename_out = (gchar *)tempfilename_out_x;
 
-	if (mkstemp((char *)tempfilename_out) == -1) {
+	if (g_mkstemp((char *)tempfilename_out) == -1) {
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -293,7 +293,7 @@ extension_open (SPModule * module, const gchar * filename)
 	do that eh?
 
 	First things first, the document is saved to a temporary file that
-	is an SVG file.  To get the temporary filename mkstemp is used with
+	is an SVG file.  To get the temporary filename g_mkstemp is used with
 	sp_ext_ as a prefix.  Don't worry, this file gets deleted at the
 	end of the function.
 
@@ -310,7 +310,7 @@ extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 
 	tempfilename_in = tempfilename_in_x;
 
-	if (mkstemp(tempfilename_in) == -1) {
+	if (g_mkstemp(tempfilename_in) == -1) {
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -343,7 +343,7 @@ extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 
 	This function is a little bit trickier than the previous two.  It
 	needs two temporary files to get it's work done.  Both of these
-	files have random names created for them using the mkstemp function
+	files have random names created for them using the g_mkstemp function
 	with the sp_ext_ prefix in the temporary directory.  Like the other
 	functions, the temporary files are deleted at the end.
 
@@ -376,7 +376,7 @@ extension_filter (SPModule * module, SPDocument * doc)
 
 	tempfilename_in = (char *)tempfilename_in_x;
 
-	if (mkstemp(tempfilename_in) == -1) {
+	if (g_mkstemp(tempfilename_in) == -1) {
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
@@ -394,7 +394,7 @@ extension_filter (SPModule * module, SPDocument * doc)
 
 	tempfilename_out = (char *)tempfilename_out_x;
 
-	if (mkstemp(tempfilename_out) == -1) {
+	if (g_mkstemp(tempfilename_out) == -1) {
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
