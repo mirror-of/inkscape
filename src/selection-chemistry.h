@@ -52,6 +52,9 @@ void sp_selection_copy();
 void sp_selection_paste(bool in_place);
 void sp_selection_paste_style();
 
+void sp_selection_to_next_layer ();
+void sp_selection_to_prev_layer ();
+
 void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine, bool set_i2d = true);
 void sp_selection_remove_transform (void);
 void sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, double y0, double y1);

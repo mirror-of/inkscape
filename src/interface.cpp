@@ -816,6 +816,11 @@ sp_ui_layer_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         Inkscape::Verb::get(SP_VERB_NONE),
 
+        Inkscape::Verb::get(SP_VERB_LAYER_MOVE_TO_NEXT),
+        Inkscape::Verb::get(SP_VERB_LAYER_MOVE_TO_PREV),
+
+        Inkscape::Verb::get(SP_VERB_NONE),
+
         Inkscape::Verb::get(SP_VERB_LAYER_RAISE),
         Inkscape::Verb::get(SP_VERB_LAYER_LOWER),
         Inkscape::Verb::get(SP_VERB_LAYER_TO_TOP),

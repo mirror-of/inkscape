@@ -251,12 +251,10 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_End, Inkscape::Verb::get(SP_VERB_LAYER_TO_BOTTOM), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_SHIFT_MASK | GDK_KP_End, Inkscape::Verb::get(SP_VERB_LAYER_TO_BOTTOM), false);
 
-	/*   // These will be used for moving _selection_ across layers. Currently they just switch current layer, so no shortcuts for them.
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_Page_Up, Inkscape::Verb::get(SP_VERB_LAYER_NEXT), true);
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Up, Inkscape::Verb::get(SP_VERB_LAYER_NEXT), false);
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_Page_Down, Inkscape::Verb::get(SP_VERB_LAYER_PREV), true);
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Down, Inkscape::Verb::get(SP_VERB_LAYER_PREV), false);
-	*/
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_Page_Up, Inkscape::Verb::get(SP_VERB_LAYER_MOVE_TO_NEXT), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Up, Inkscape::Verb::get(SP_VERB_LAYER_MOVE_TO_NEXT), false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_Page_Down, Inkscape::Verb::get(SP_VERB_LAYER_MOVE_TO_PREV), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | GDK_KP_Page_Down, Inkscape::Verb::get(SP_VERB_LAYER_MOVE_TO_PREV), false);
 
 	/* Selection */
 	sp_shortcut_set (GDK_Home, Inkscape::Verb::get(SP_VERB_SELECTION_TO_FRONT), true);

@@ -912,7 +912,6 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
             if (next) {
                 dt->setCurrentLayer(next);
-                // TODO move selected objects to top of next
                 sp_document_done(SP_DT_DOCUMENT(dt));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Moved to next layer."));
             } else {
@@ -924,12 +923,19 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             SPObject *prev=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
             if (prev) {
                 dt->setCurrentLayer(prev);
-                // TODO move selected objects to top of prev
                 sp_document_done(SP_DT_DOCUMENT(dt));
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Moved to previous layer."));
             } else {
                 dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Can't move past first layer."));
             }
+            break;
+        }
+        case SP_VERB_LAYER_MOVE_TO_NEXT: {
+            sp_selection_to_next_layer ();
+            break;
+        }
+        case SP_VERB_LAYER_MOVE_TO_PREV: {
+            sp_selection_to_prev_layer ();
             break;
         }
         case SP_VERB_LAYER_TO_TOP:
@@ -1696,10 +1702,14 @@ Verb * Verb::_base_verbs[] = {
         N_("Create a new layer"), NULL),
     new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Ren_ame Layer..."),
         N_("Rename the current layer"), NULL),
-    new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Next Layer"),
-        N_("Switch to the next layer in the document"), NULL),
-    new LayerVerb(SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Previous Layer"),
-        N_("Switch to the previous layer in the document"), NULL),
+    new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Layer Above"),
+        N_("Switch to the layer above the current"), NULL),
+    new LayerVerb(SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Layer Below"),
+        N_("Switch to the layer below the current"), NULL),
+    new LayerVerb(SP_VERB_LAYER_MOVE_TO_NEXT, "LayerMoveToNext", N_("Move Selection to Layer Above"),
+        N_("Move selection to the layer above the current"), NULL),
+    new LayerVerb(SP_VERB_LAYER_MOVE_TO_PREV, "LayerMoveToPrev", N_("Move Selection to Layer Below"),
+        N_("Move selection to the layer below the current"), NULL),
     new LayerVerb(SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Layer to _Top"),
         N_("Raise the current layer to the top"), NULL),
     new LayerVerb(SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Layer to _Bottom"),
