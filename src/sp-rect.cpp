@@ -43,7 +43,6 @@ static void sp_rect_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_rect_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_rect_description (SPItem * item);
-static std::vector<NR::Point> sp_rect_snappoints(SPItem *item);
 static NR::Matrix sp_rect_set_transform (SPItem *item, NR::Matrix const &xform);
 
 static void sp_rect_set_shape (SPShape *shape);
@@ -94,7 +93,6 @@ sp_rect_class_init (SPRectClass *klass)
 	sp_object_class->update = sp_rect_update;
 
 	item_class->description = sp_rect_description;
-	item_class->snappoints = sp_rect_snappoints;
 	item_class->set_transform = sp_rect_set_transform;
 
 	shape_class->set_shape = sp_rect_set_shape;
@@ -362,29 +360,6 @@ sp_rect_set_ry (SPRect * rect, gboolean set, gdouble value)
 	if (set) rect->ry.computed = value;
 
 	SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-}
-
-static std::vector<NR::Point> sp_rect_snappoints(SPItem *item)
-{
-	SPRect *rect = SP_RECT(item);
-
-	/* We use corners of rect only. */
-	NR::Coord const x0 = rect->x.computed;
-	NR::Coord const y0 = rect->y.computed;
-	NR::Coord const x1 = x0 + rect->width.computed;
-	NR::Coord const y1 = y0 + rect->height.computed;
-
-	NR::Matrix const i2d(sp_item_i2d_affine(item));
-
-	/* Note: these are the transformed corner points, not the corners of the bounding box of
-	   the transformed rect. */
-	std::vector<NR::Point> p;
-	p.push_back(NR::Point(x0, y0) * i2d);
-	p.push_back(NR::Point(x1, y0) * i2d);
-	p.push_back(NR::Point(x1, y1) * i2d);
-	p.push_back(NR::Point(x0, y1) * i2d);
-
-	return p;
 }
 
 /*
