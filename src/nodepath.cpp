@@ -451,7 +451,7 @@ static void stamp_repr(Path::Path *np)
     // add the new repr to the parent
     parent->appendChild(new_repr);
     // move to the saved position
-    sp_repr_set_position_absolute(new_repr, pos > 0 ? pos : 0);
+    new_repr->setPosition(pos > 0 ? pos : 0);
 
     sp_document_done(SP_DT_DOCUMENT(np->desktop));
 

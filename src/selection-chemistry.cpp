@@ -400,7 +400,7 @@ void sp_selection_group()
     parent->appendChild(group);
 
     // Move to the position of the topmost, reduced by the number of deleted items.
-    sp_repr_set_position_absolute(group, topmost > 0 ? topmost + 1 : 0);
+    group->setPosition(topmost > 0 ? topmost + 1 : 0);
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
@@ -585,7 +585,7 @@ void sp_selection_raise_to_top()
 
     for (GSList *l = rl; l != NULL; l = l->next) {
         SPRepr *repr = (SPRepr *) l->data;
-        sp_repr_set_position_absolute(repr, -1);
+        repr->setPosition(-1);
     }
 
     g_slist_free(rl);
@@ -638,7 +638,7 @@ sp_selection_lower()
                     if (put_after)
                         sp_repr_change_order(grepr, SP_OBJECT_REPR(child), SP_OBJECT_REPR(put_after));
                     else
-                        sp_repr_set_position_absolute(SP_OBJECT_REPR(child), 0);
+                        SP_OBJECT_REPR(child)->setPosition(0);
                 }
                 break;
             }
@@ -689,7 +689,7 @@ void sp_selection_lower_to_bottom()
             minpos += 1;
             pc = pc->next;
         }
-        sp_repr_set_position_absolute(repr, minpos);
+        repr->setPosition(minpos);
     }
 
     g_slist_free(rl);
@@ -1915,7 +1915,7 @@ sp_selection_tile(bool apply)
 
         // restore parent and position
         SP_OBJECT_REPR (parent)->appendChild(rect);
-        sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
+        rect->setPosition(pos > 0 ? pos : 0);
         SPItem *rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
 
         sp_repr_unref (rect);
@@ -2133,7 +2133,7 @@ sp_selection_create_bitmap_copy ()
         parent->appendChild(repr);
 
         // move to the saved position 
-        sp_repr_set_position_absolute (repr, pos > 0 ? pos + 1 : 1);
+        repr->setPosition(pos > 0 ? pos + 1 : 1);
 
         // Set selection to the new image
         selection->clear();

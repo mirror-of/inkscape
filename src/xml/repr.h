@@ -278,10 +278,6 @@ int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
 
 int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 
-inline void sp_repr_set_position_absolute(SPRepr *repr, int pos) {
-	repr->setPosition(pos);
-}
-
 /* Searching */
 SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
 		                     gchar const        *name,

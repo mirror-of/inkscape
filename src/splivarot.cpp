@@ -506,7 +506,7 @@ sp_selected_path_boolop (bool_op bop)
             parent->appendChild(repr);
 
             // move to the saved position 
-            sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+            repr->setPosition(pos > 0 ? pos : 0);
   
             selection->addRepr(repr);
             sp_repr_unref (repr);
@@ -528,7 +528,7 @@ sp_selected_path_boolop (bool_op bop)
 
         sp_repr_set_attr (repr, "id", id);
         parent->appendChild(repr);
-        sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+        repr->setPosition(pos > 0 ? pos : 0);
      
         selection->addRepr(repr);
         sp_repr_unref (repr);
@@ -730,7 +730,7 @@ sp_selected_path_outline ()
             parent->appendChild(repr);
 
             // move to the saved position 
-            sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+            repr->setPosition(pos > 0 ? pos : 0);
 
             sp_repr_set_attr (repr, "id", id);
 
@@ -1008,7 +1008,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
         parent->appendChild(repr);
 
         // move to the saved position 
-        sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+        repr->setPosition(pos > 0 ? pos : 0);
 
         SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
 
@@ -1259,7 +1259,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             parent->appendChild(repr);
 
             // move to the saved position 
-            sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+            repr->setPosition(pos > 0 ? pos : 0);
 
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
 
@@ -1380,7 +1380,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     parent->appendChild(repr);
 
     // move to the saved position 
-    sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+    repr->setPosition(pos > 0 ? pos : 0);
 
     SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
 

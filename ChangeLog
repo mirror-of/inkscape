@@ -1,3 +1,8 @@
+2005-02-14  Rob    <swingincelt@gmail.com>
+
+    * Replaced inline function sp_repr_set_position_absolute with
+	  direct call.
+
 2005-02-13  Bryce  <bryce@bryceharrington.org>
 
 	* src/main.cpp, src/application/application.cpp, src/inkscape.h,

@@ -134,7 +134,7 @@ sp_selected_path_combine (void)
 	parent->appendChild(repr);
 
 	// move to the position of the topmost, reduced by the number of deleted items
-	sp_repr_set_position_absolute (repr, topmost > 0 ? topmost + 1 : 0);
+	repr->setPosition(topmost > 0 ? topmost + 1 : 0);
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
@@ -210,7 +210,7 @@ sp_selected_path_break_apart (void)
 			parent->appendChild(repr);
 
 			// move to the saved position 
-			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+			repr->setPosition(pos > 0 ? pos : 0);
 
 			// if it's the first one, restore id
 			if (l == list)
@@ -287,7 +287,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// add the new repr to the parent
 		parent->appendChild(repr);
 		// move to the saved position 
-		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+		repr->setPosition(pos > 0 ? pos : 0);
 
 		selection->addRepr(repr);
 		sp_repr_unref(repr);

@@ -406,7 +406,7 @@ void sp_sel_trans_stamp(SPSelTrans *seltrans)
             // add the new repr to the parent
             parent->appendChild(copy_repr);
             // move to the saved position
-            sp_repr_set_position_absolute(copy_repr, pos > 0 ? pos : 0);
+            copy_repr->setPosition(pos > 0 ? pos : 0);
 
             SPItem *copy_item = (SPItem *) SP_DT_DOCUMENT(seltrans->desktop)->getObjectByRepr(copy_repr);
 
