@@ -374,7 +374,7 @@ public:
   // the coordinate rounding function
   static double Round (double x)
   {
-    return ldexp (round (ldexp (x, 5)), -5);
+    return ldexp (rint (ldexp (x, 5)), -5);
   };
   // 2 miscannellous variations on it, to scale to and back the rounding grid
   static double HalfRound (double x)
