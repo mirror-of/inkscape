@@ -1316,12 +1316,15 @@ profile_path(const char *filename)
                 }
 
 
+                /* not compiling yet...
+
                 // Remember to free the list pointer
                 IMalloc * imalloc = 0;
                 if ( SHGetMalloc(&imalloc) == NOERROR) {
                     imalloc->lpVtbl->Free( imalloc, pidl );
                     imalloc->lpVtbl->Release( imalloc );
                 }
+                */
             }
         }
 #endif
