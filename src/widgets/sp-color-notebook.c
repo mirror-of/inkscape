@@ -65,8 +65,10 @@ static void sp_color_notebook_show_all (GtkWidget *widget);
 static void sp_color_notebook_hide_all (GtkWidget *widget);
 
 static void sp_color_notebook_rgba_entry_changed (GtkEntry *entry, SPColorNotebook *colorbook);
-static void sp_color_notebook_entry_changed (SPColorSelector *csel, SPColorNotebook *colorbook);
+static void sp_color_notebook_entry_grabbed (SPColorSelector *csel, SPColorNotebook *colorbook);
 static void sp_color_notebook_entry_dragged (SPColorSelector *csel, SPColorNotebook *colorbook);
+static void sp_color_notebook_entry_released (SPColorSelector *csel, SPColorNotebook *colorbook);
+static void sp_color_notebook_entry_changed (SPColorSelector *csel, SPColorNotebook *colorbook);
 static void sp_color_notebook_entry_modified (SPColorSelector *csel, SPColorNotebook *colorbook);
 
 static GtkWidget *sp_color_notebook_add_page (SPColorNotebook *colorbook, GType page_type, guint submode);
@@ -419,7 +421,7 @@ void sp_color_notebook_set_color_alpha (SPColorSelector *csel, const SPColor *co
 	if ( sp_color_is_close (&csel->color, color, 1e-4)
 		 && (fabs ((alpha) - (csel->alpha)) < 1e-4) )
 	{
-		return;
+/* 		return; */
 	}
 
 	sp_color_copy (&csel->color, color);
@@ -490,16 +492,9 @@ sp_color_notebook_rgba_entry_changed (GtkEntry *entry, SPColorNotebook *colorboo
 }
 
 static void
-sp_color_notebook_entry_changed (SPColorSelector *csel, SPColorNotebook *colorbook)
+sp_color_notebook_entry_grabbed (SPColorSelector *csel, SPColorNotebook *colorbook)
 {
-	gboolean oldState;
-
-	oldState = colorbook->dragging;
-
-	colorbook->dragging = FALSE;
-	sp_color_notebook_entry_modified (csel, colorbook);
-
-	colorbook->dragging = oldState;
+	gtk_signal_emit (GTK_OBJECT (colorbook), csel_signals[GRABBED]);
 }
 
 static void
@@ -510,6 +505,25 @@ sp_color_notebook_entry_dragged (SPColorSelector *csel, SPColorNotebook *colorbo
 	oldState = colorbook->dragging;
 
 	colorbook->dragging = TRUE;
+	sp_color_notebook_entry_modified (csel, colorbook);
+
+	colorbook->dragging = oldState;
+}
+
+static void
+sp_color_notebook_entry_released (SPColorSelector *csel, SPColorNotebook *colorbook)
+{
+	gtk_signal_emit (GTK_OBJECT (colorbook), csel_signals[RELEASED]);
+}
+
+static void
+sp_color_notebook_entry_changed (SPColorSelector *csel, SPColorNotebook *colorbook)
+{
+	gboolean oldState;
+
+	oldState = colorbook->dragging;
+
+	colorbook->dragging = FALSE;
 	sp_color_notebook_entry_modified (csel, colorbook);
 
 	colorbook->dragging = oldState;
@@ -549,8 +563,10 @@ static GtkWidget *sp_color_notebook_add_page (SPColorNotebook *colorbook, GType 
 		gtk_widget_show (page);
 		tab_label = gtk_label_new (SP_COLOR_SELECTOR_GET_CLASS (csel)->name[sp_color_selector_get_submode (csel)]);
 		gtk_notebook_append_page( GTK_NOTEBOOK (colorbook->book), page, tab_label );
-		gtk_signal_connect (GTK_OBJECT (page), "changed", GTK_SIGNAL_FUNC (sp_color_notebook_entry_changed), colorbook);
+		gtk_signal_connect (GTK_OBJECT (page), "grabbed", GTK_SIGNAL_FUNC (sp_color_notebook_entry_grabbed), colorbook);
 		gtk_signal_connect (GTK_OBJECT (page), "dragged", GTK_SIGNAL_FUNC (sp_color_notebook_entry_dragged), colorbook);
+		gtk_signal_connect (GTK_OBJECT (page), "released", GTK_SIGNAL_FUNC (sp_color_notebook_entry_released), colorbook);
+		gtk_signal_connect (GTK_OBJECT (page), "changed", GTK_SIGNAL_FUNC (sp_color_notebook_entry_changed), colorbook);
 	}
 
 	return page;
