@@ -151,7 +151,6 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	gulong unit;
 
-	SPShape *shape = SP_SHAPE (object);
 	SPStar *star = SP_STAR (object);
 
 	/* fixme: we should really collect updates */
@@ -228,8 +227,6 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_star_update (SPObject *object, SPCtx *ctx, guint flags)
 {
-	SPStar *star = (SPStar *) object;
-
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | 
 		     SP_OBJECT_STYLE_MODIFIED_FLAG | 
 		     SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
