@@ -7,6 +7,8 @@
 #include "sp-object.h"
 #include "sp-item.h"
 
+#include "libnrtype/FlowSrc.h"
+
 #define SP_TYPE_FLOWDIV            (sp_flowdiv_get_type ())
 #define SP_FLOWDIV(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWDIV, SPFlowdiv))
 #define SP_FLOWDIV_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWDIV, SPFlowdivClass))
@@ -41,24 +43,26 @@ class flow_src;
 
 // these 3 are derivatives of SPItem to get the automatic style handling
 struct SPFlowdiv : public SPItem {
-	void                CollectFlow(flow_src* collector);
+	div_flow_src      contents;
+	control_flow_src	fin;
 };
 
 struct SPFlowtspan : public SPItem {
-	void                CollectFlow(flow_src* collector);
+	div_flow_src   contents;
 };
 
 struct SPFlowpara : public SPItem {
-	void                CollectFlow(flow_src* collector);
+	div_flow_src      contents;
+	control_flow_src	fin;
 };
 
 // these do not need any style
 struct SPFlowline : public SPObject {
-	void                CollectFlow(flow_src* collector);
+	control_flow_src   contents;
 };
 
 struct SPFlowregionbreak : public SPObject {
-	void                CollectFlow(flow_src* collector);
+	control_flow_src   contents;
 };
 
 

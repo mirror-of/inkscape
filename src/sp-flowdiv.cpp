@@ -7,20 +7,19 @@
 #include <string.h>
 
 #include "xml/repr.h"
-#include "svg/svg.h"
+//#include "svg/svg.h"
 
+#include "attributes.h"
 #include "sp-object.h"
 #include "sp-item.h"
-#include "style.h"
+//#include "style.h"
 
-#include "libnr/nr-matrix-ops.h"
-
-#include "libnrtype/font-instance.h"
-#include "libnrtype/FontFactory.h"
-#include "libnrtype/font-style-to-pos.h"
+//#include "libnrtype/font-instance.h"
+//#include "libnrtype/FontFactory.h"
+//#include "libnrtype/font-style-to-pos.h"
 
 #include "libnrtype/FlowSrc.h"
-#include "libnrtype/text_style.h"
+//#include "libnrtype/FlowStyle.h"
 
 #include "sp-flowregion.h"
 #include "sp-flowdiv.h"
@@ -28,28 +27,39 @@
 
 static void sp_flowdiv_class_init (SPFlowdivClass *klass);
 static void sp_flowdiv_init (SPFlowdiv *group);
+static void sp_flowdiv_release (SPObject *object);
 static SPRepr *sp_flowdiv_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_flowdiv_modified (SPObject *object, guint flags);
+static void sp_flowdiv_build (SPObject *object, SPDocument *doc, SPRepr *repr);
+static void sp_flowdiv_set (SPObject *object, unsigned int key, const gchar *value);
 
 static void sp_flowtspan_class_init (SPFlowtspanClass *klass);
 static void sp_flowtspan_init (SPFlowtspan *group);
+static void sp_flowtspan_release (SPObject *object);
 static SPRepr *sp_flowtspan_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_flowtspan_modified (SPObject *object, guint flags);
+static void sp_flowtspan_build (SPObject *object, SPDocument *doc, SPRepr *repr);
+static void sp_flowtspan_set (SPObject *object, unsigned int key, const gchar *value);
 
 static void sp_flowpara_class_init (SPFlowparaClass *klass);
 static void sp_flowpara_init (SPFlowpara *group);
+static void sp_flowpara_release (SPObject *object);
 static SPRepr *sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_flowpara_modified (SPObject *object, guint flags);
+static void sp_flowpara_build (SPObject *object, SPDocument *doc, SPRepr *repr);
+static void sp_flowpara_set (SPObject *object, unsigned int key, const gchar *value);
 
 static void sp_flowline_class_init (SPFlowlineClass *klass);
+static void sp_flowline_release (SPObject *object);
 static void sp_flowline_init (SPFlowline *group);
 static SPRepr *sp_flowline_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_flowline_modified (SPObject *object, guint flags);
 
 static void sp_flowregionbreak_class_init (SPFlowregionbreakClass *klass);
+static void sp_flowregionbreak_release (SPObject *object);
 static void sp_flowregionbreak_init (SPFlowregionbreak *group);
 static SPRepr *sp_flowregionbreak_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_flowregionbreak_modified (SPObject *object, guint flags);
@@ -93,16 +103,31 @@ sp_flowdiv_class_init (SPFlowdivClass *klass)
 	
 	flowdiv_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
+	sp_object_class->build = sp_flowdiv_build;
+	sp_object_class->set = sp_flowdiv_set;
+	sp_object_class->release = sp_flowdiv_release;
 	sp_object_class->write = sp_flowdiv_write;
 	sp_object_class->update = sp_flowdiv_update;
 	sp_object_class->modified = sp_flowdiv_modified;
 }
 
 static void
-sp_flowdiv_init (SPFlowdiv */*group*/)
+sp_flowdiv_init (SPFlowdiv *group)
 {
+	new (&group->contents) div_flow_src(SP_OBJECT(group),flw_div);
+	new (&group->fin) control_flow_src(SP_OBJECT(group),flw_line_brk);
 }
 
+static void
+sp_flowdiv_release (SPObject *object)
+{
+	SPFlowdiv *group = SP_FLOWDIV (object);
+	group->contents.~div_flow_src();
+	group->fin.~control_flow_src();
+	
+	if (((SPObjectClass *) flowdiv_parent_class)->release)
+		((SPObjectClass *) flowdiv_parent_class)->release (object);
+}
 static void
 sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
@@ -127,9 +152,14 @@ sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem const &chi = *SP_ITEM(child);
-				cctx.i2doc = chi.transform * ictx->i2doc;
-				cctx.i2vp = chi.transform * ictx->i2vp;
+				SPItem *chi;
+				chi = SP_ITEM (child);
+
+				NRMatrix chitransform; // FIXME!!! we need to make everything NR::Matrix
+				(chi->transform).copyto (&chitransform);
+
+				nr_matrix_multiply (&cctx.i2doc, &chitransform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chitransform, &ictx->i2vp);
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -166,6 +196,51 @@ sp_flowdiv_modified (SPObject *object, guint flags)
 			child->emitModified(flags);
 		}
 		g_object_unref (G_OBJECT (child));
+	}
+}
+static void
+sp_flowdiv_build (SPObject *object, SPDocument *doc, SPRepr *repr)
+{
+	//sp_object_read_attr (object, "x");
+	//sp_object_read_attr (object, "y");
+	sp_object_read_attr (object, "dx");
+	sp_object_read_attr (object, "dy");
+	sp_object_read_attr (object, "rotate");
+	
+	if (((SPObjectClass *) flowdiv_parent_class)->build)
+		((SPObjectClass *) flowdiv_parent_class)->build (object, doc, repr);
+}
+static void
+sp_flowdiv_set (SPObject *object, unsigned int key, const gchar *value)
+{
+	SPFlowdiv *group = SP_FLOWDIV (object);	
+	
+	/* fixme: Vectors */
+	switch (key) {
+/*    case SP_ATTR_X:
+			group->contents.SetX(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_Y:
+			group->contents.SetY(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;*/
+    case SP_ATTR_DX:
+			group->contents.SetDX(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_DY:
+			group->contents.SetDY(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_ROTATE:
+			group->contents.SetRot(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    default:
+			if (((SPObjectClass *) flowdiv_parent_class)->set)
+				(((SPObjectClass *) flowdiv_parent_class)->set) (object, key, value);
+			break;
 	}
 }
 static SPRepr *
@@ -248,16 +323,29 @@ sp_flowtspan_class_init (SPFlowtspanClass *klass)
 
 	flowtspan_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
+	sp_object_class->build = sp_flowtspan_build;
+	sp_object_class->set = sp_flowtspan_set;
+	sp_object_class->release = sp_flowtspan_release;
 	sp_object_class->write = sp_flowtspan_write;
 	sp_object_class->update = sp_flowtspan_update;
 	sp_object_class->modified = sp_flowtspan_modified;
 }
 
 static void
-sp_flowtspan_init (SPFlowtspan */*group*/)
+sp_flowtspan_init (SPFlowtspan *group)
 {
+	new (&group->contents) div_flow_src(SP_OBJECT(group),flw_span);
 }
 
+static void
+sp_flowtspan_release (SPObject *object)
+{
+	SPFlowtspan *group = SP_FLOWTSPAN (object);
+	group->contents.~div_flow_src();
+	
+	if (((SPObjectClass *) flowtspan_parent_class)->release)
+		((SPObjectClass *) flowtspan_parent_class)->release (object);
+}
 static void
 sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
@@ -282,9 +370,14 @@ sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem const &chi = *SP_ITEM(child);
-				cctx.i2doc = chi.transform * ictx->i2doc;
-				cctx.i2vp = chi.transform * ictx->i2vp;
+				SPItem *chi;
+				chi = SP_ITEM (child);
+
+				NRMatrix chitransform; // FIXME!!! we need to make everything NR::Matrix
+				(chi->transform).copyto (&chitransform);
+
+				nr_matrix_multiply (&cctx.i2doc, &chitransform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chitransform, &ictx->i2vp);
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -321,6 +414,51 @@ sp_flowtspan_modified (SPObject *object, guint flags)
 			child->emitModified(flags);
 		}
 		g_object_unref (G_OBJECT (child));
+	}
+}
+static void
+sp_flowtspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
+{
+	//sp_object_read_attr (object, "x");
+	//sp_object_read_attr (object, "y");
+	sp_object_read_attr (object, "dx");
+	sp_object_read_attr (object, "dy");
+	sp_object_read_attr (object, "rotate");
+	
+	if (((SPObjectClass *) flowtspan_parent_class)->build)
+		((SPObjectClass *) flowtspan_parent_class)->build (object, doc, repr);
+}
+static void
+sp_flowtspan_set (SPObject *object, unsigned int key, const gchar *value)
+{
+	SPFlowtspan *group = SP_FLOWTSPAN (object);	
+	
+	/* fixme: Vectors */
+	switch (key) {
+/*    case SP_ATTR_X:
+			group->contents.SetX(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_Y:
+			group->contents.SetY(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;*/
+    case SP_ATTR_DX:
+			group->contents.SetDX(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_DY:
+			group->contents.SetDY(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_ROTATE:
+			group->contents.SetRot(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    default:
+			if (((SPObjectClass *) flowtspan_parent_class)->set)
+				(((SPObjectClass *) flowtspan_parent_class)->set) (object, key, value);
+			break;
 	}
 }
 static SPRepr *
@@ -404,14 +542,29 @@ sp_flowpara_class_init (SPFlowparaClass *klass)
 	
 	flowpara_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
+	sp_object_class->build = sp_flowpara_build;
+	sp_object_class->set = sp_flowpara_set;
+	sp_object_class->release = sp_flowpara_release;
 	sp_object_class->write = sp_flowpara_write;
 	sp_object_class->update = sp_flowpara_update;
 	sp_object_class->modified = sp_flowpara_modified;
 }
 
 static void
-sp_flowpara_init (SPFlowpara */*group*/)
+sp_flowpara_init (SPFlowpara *group)
 {
+	new (&group->contents) div_flow_src(SP_OBJECT(group),flw_para);
+	new (&group->fin) control_flow_src(SP_OBJECT(group),flw_line_brk);
+}
+static void
+sp_flowpara_release (SPObject *object)
+{
+	SPFlowpara *group = SP_FLOWPARA (object);
+	group->contents.~div_flow_src();
+	group->fin.~control_flow_src();
+	
+	if (((SPObjectClass *) flowpara_parent_class)->release)
+		((SPObjectClass *) flowpara_parent_class)->release (object);
 }
 
 static void
@@ -438,9 +591,14 @@ sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem const &chi = *SP_ITEM(child);
-				cctx.i2doc = chi.transform * ictx->i2doc;
-				cctx.i2vp = chi.transform * ictx->i2vp;
+				SPItem *chi;
+				chi = SP_ITEM (child);
+
+				NRMatrix chitransform; // FIXME!!! we need to make everything NR::Matrix
+				(chi->transform).copyto (&chitransform);
+
+				nr_matrix_multiply (&cctx.i2doc, &chitransform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chitransform, &ictx->i2vp);
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -477,6 +635,51 @@ sp_flowpara_modified (SPObject *object, guint flags)
 			child->emitModified(flags);
 		}
 		g_object_unref (G_OBJECT (child));
+	}
+}
+static void
+sp_flowpara_build (SPObject *object, SPDocument *doc, SPRepr *repr)
+{
+	//sp_object_read_attr (object, "x");
+	//sp_object_read_attr (object, "y");
+	sp_object_read_attr (object, "dx");
+	sp_object_read_attr (object, "dy");
+	sp_object_read_attr (object, "rotate");
+	
+	if (((SPObjectClass *) flowpara_parent_class)->build)
+		((SPObjectClass *) flowpara_parent_class)->build (object, doc, repr);
+}
+static void
+sp_flowpara_set (SPObject *object, unsigned int key, const gchar *value)
+{
+	SPFlowpara *group = SP_FLOWPARA (object);	
+	
+	/* fixme: Vectors */
+	switch (key) {
+/*    case SP_ATTR_X:
+			group->contents.SetX(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_Y:
+			group->contents.SetY(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;*/
+    case SP_ATTR_DX:
+			group->contents.SetDX(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_DY:
+			group->contents.SetDY(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    case SP_ATTR_ROTATE:
+			group->contents.SetRot(value);
+			object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+			break;
+    default:
+			if (((SPObjectClass *) flowpara_parent_class)->set)
+				(((SPObjectClass *) flowpara_parent_class)->set) (object, key, value);
+			break;
 	}
 }
 static SPRepr *
@@ -558,13 +761,24 @@ sp_flowline_class_init (SPFlowlineClass *klass)
 	
 	flowline_parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 	
+	sp_object_class->release = sp_flowline_release;
 	sp_object_class->write = sp_flowline_write;
 	sp_object_class->modified = sp_flowline_modified;
 }
 
 static void
-sp_flowline_init (SPFlowline */*group*/)
+sp_flowline_init (SPFlowline *group)
 {
+	new (&group->contents) control_flow_src(SP_OBJECT(group),flw_line_brk);
+}
+static void
+sp_flowline_release (SPObject *object)
+{
+	SPFlowline *group = SP_FLOWLINE (object);
+	group->contents.~control_flow_src();
+	
+	if (((SPObjectClass *) flowline_parent_class)->release)
+		((SPObjectClass *) flowline_parent_class)->release (object);
 }
 
 static void
@@ -633,13 +847,24 @@ sp_flowregionbreak_class_init (SPFlowregionbreakClass *klass)
 	
 	flowregionbreak_parent_class = (SPObjectClass *)g_type_class_ref (SP_TYPE_OBJECT);
 	
+	sp_object_class->release = sp_flowregionbreak_release;
 	sp_object_class->write = sp_flowregionbreak_write;
 	sp_object_class->modified = sp_flowregionbreak_modified;
 }
 
 static void
-sp_flowregionbreak_init (SPFlowregionbreak */*group*/)
+sp_flowregionbreak_init (SPFlowregionbreak *group)
 {
+	new (&group->contents) control_flow_src(SP_OBJECT(group),flw_rgn_brk);
+}
+static void
+sp_flowregionbreak_release (SPObject *object)
+{
+	SPFlowregionbreak *group = SP_FLOWREGIONBREAK (object);
+	group->contents.~control_flow_src();
+	
+	if (((SPObjectClass *) flowregionbreak_parent_class)->release)
+		((SPObjectClass *) flowregionbreak_parent_class)->release (object);
 }
 
 static void
@@ -669,113 +894,5 @@ sp_flowregionbreak_write (SPObject *object, SPRepr *repr, guint flags)
 		((SPObjectClass *) (flowregionbreak_parent_class))->write (object, repr, flags);
 	
 	return repr;
-}
-
-
-/*
- *
- * flow preparation
- *
- */
-
-static void DoCollectFlow(SPObject* object,flow_src* collector,bool add_line_brk,bool add_rgn_brk);
-
-void                SPFlowdiv::CollectFlow(flow_src* collector)
-{
-	DoCollectFlow(SP_OBJECT(this),collector,true,false);
-}
-void                SPFlowtspan::CollectFlow(flow_src* collector)
-{
-	DoCollectFlow(SP_OBJECT(this),collector,false,false);
-}
-void                SPFlowpara::CollectFlow(flow_src* collector)
-{
-	DoCollectFlow(SP_OBJECT(this),collector,true,false);
-}
-void                SPFlowline::CollectFlow(flow_src* collector)
-{
-	collector->AddControl(flw_line_brk);
-}
-void                SPFlowregionbreak::CollectFlow(flow_src* collector)
-{
-	collector->AddControl(flw_rgn_brk);
-}
-
-static void DoCollectFlow(SPObject* object,flow_src* collector,bool add_line_brk,bool add_rgn_brk)
-{
-	text_style*      n_style=new text_style;
-	n_style->SetStyle(SP_OBJECT_STYLE (object));
-	bool             do_preserve=(object->xml_space.value == SP_XML_SPACE_PRESERVE);
-	SPRepr*          o_repr=SP_OBJECT_REPR(object);
-	const char*      kern_val=NULL;
-	double*          kern_x=NULL;
-	double*          kern_y=NULL;
-	int              nb_kern_x=0;
-	int              nb_kern_y=0;
-	
-	collector->Push(n_style);
-	kern_val=sp_repr_attr(o_repr,"dx");
-	if ( kern_val ) {
-		GList* kern_list=sp_svg_length_list_read (kern_val);
-		if ( kern_list ) {
-			int      kern_length=0;
-			for (GList* l=kern_list;l;l=l->next) kern_length++;
-			kern_x=(double*)malloc(kern_length*sizeof(double));
-			kern_length=0;
-			for (GList* l=kern_list;l;l=l->next) {
-				SPSVGLength* nl=(SPSVGLength*)l->data;
-				kern_x[kern_length]=nl->computed;
-				kern_length++;
-			}
-			nb_kern_x=kern_length;
-			for (GList* l=kern_list;l;l=l->next) if ( l->data ) g_free(l->data);
-			g_list_free(kern_list);
-			collector->SetKern(kern_x,nb_kern_x,true);
-		}
-	}
-	kern_val=sp_repr_attr(o_repr,"dy");
-	if ( kern_val ) {
-		GList*   kern_list=sp_svg_length_list_read (kern_val);
-		if ( kern_list ) {
-			int      kern_length=0;
-			for (GList* l=kern_list;l;l=l->next) kern_length++;
-			kern_y=(double*)malloc(kern_length*sizeof(double));
-			kern_length=0;
-			for (GList* l=kern_list;l;l=l->next) {
-				SPSVGLength* nl=(SPSVGLength*)l->data;
-				kern_y[kern_length]=nl->computed;
-				kern_length++;
-			}
-			nb_kern_y=kern_length;
-			for (GList* l=kern_list;l;l=l->next) if ( l->data ) g_free(l->data);
-			g_list_free(kern_list);
-			collector->SetKern(kern_y,nb_kern_y,false);
-		}
-	}
-	
-	for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		if ( SP_IS_FLOWTSPAN (child) ) {
-			SPFlowtspan*      c_child=SP_FLOWTSPAN(child);
-			c_child->CollectFlow(collector);
-		} else if ( SP_IS_FLOWPARA (child) ) {
-			SPFlowpara*       c_child=SP_FLOWPARA(child);
-			c_child->CollectFlow(collector);
-		} else if ( SP_IS_FLOWLINE (child) ) {
-			SPFlowline*       c_child=SP_FLOWLINE(child);
-			c_child->CollectFlow(collector);
-		} else if ( SP_IS_FLOWREGIONBREAK (child) ) {
-			SPFlowregionbreak*       c_child=SP_FLOWREGIONBREAK(child);
-			c_child->CollectFlow(collector);
-		} else if ( SP_IS_STRING(child) ) {
-			SPString*         c_child=SP_STRING(child);
-			collector->AddUTF8(SP_STRING_TEXT(c_child),-1,do_preserve);
-		}
-	}
-	if ( add_line_brk ) collector->AddControl(flw_line_brk);
-	if ( add_rgn_brk ) collector->AddControl(flw_rgn_brk);
-	
-	collector->Pop();
-	if ( kern_x ) free(kern_x);
-	if ( kern_y ) free(kern_y);
 }
 

@@ -8,6 +8,8 @@
 
 #include "display/nr-arena-forward.h"
 
+#include "libnrtype/FlowSrc.h"
+
 #define SP_TYPE_FLOWTEXT            (sp_flowtext_get_type ())
 #define SP_FLOWTEXT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWTEXT, SPFlowtext))
 #define SP_FLOWTEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWTEXT, SPFlowtextClass))
@@ -20,61 +22,13 @@ class flow_res;
 class font_instance;
 class text_style;
 
-class flow_res {
-public:
-	typedef struct flow_glyph_group {
-		int            st,en;
-		text_style*    style;
-		NRArenaGlyphsGroup*  g_gr;
-	} flow_glyph_group;
-	typedef struct flow_glyph {
-		int            g_id;
-		double         g_x,g_y;
-		font_instance* g_font;
-		NRArenaGlyphs*  g_gl;
-		int            g_st,g_en;
-	} flow_glyph;
-	typedef struct flow_styled_chunk {
-		int            c_len;
-		char*          c_txt;
-		int            c_ucs4_l,last_add;
-		double*        kern_x;
-		double*        kern_y;
-		text_style*    c_style;
-		double         x,y,spc;
-	} flow_styled_chunk;
-	
-	int                nbGroup,maxGroup;
-	flow_glyph_group*  groups;
-	int                nbGlyph,maxGlyph;
-	flow_glyph*        glyphs;
-	
-	int                nbChar,maxChar;
-	char*              chars;
-	
-	int                nbChunk,maxChunk;
-	flow_styled_chunk* chunks;
-	text_style*        last_c_style;
-	double             cur_spacing;
-	
-	flow_res(void);
-	~flow_res(void);
-	
-	void               Reset(void);
-	void               AddGroup(text_style* g_s);
-	void               AddGlyph(int g_id,double g_x,double g_y,text_style* g_s);
-	
-	void							 SetLastText(char* iText,int iLen);
-	void							 AddChunk(char* iText,int iLen,text_style* i_style,double x,double y,bool rtl);
-	void               KernLastAddition(double* with,bool is_x);
-	void               AfficheChunks(void);
-};
-
 struct SPFlowtext : public SPItem {
 	flow_dest*        f_dst;
 	flow_dest*        f_excl;
 	flow_src*					f_src;
 	flow_res*         f_res;
+	
+	div_flow_src      contents;
 	
 	// layout options
 	bool              justify;
