@@ -23,6 +23,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-scale-matrix-ops.h>
 
 #include <xml/repr.h>
 
