@@ -9,6 +9,7 @@ struct SPCanvasItem;
 struct SPCanvasItemClass;
 struct SPCanvasGroup;
 struct SPCanvasGroupClass;
+struct SPCurve;
 
 
 #define SP_TYPE_CANVAS_ITEM (sp_canvas_item_get_type())
