@@ -21,12 +21,8 @@ namespace Inkscape {
 
 namespace Util {
 
-template <typename T> class MutableList;
-
-template <typename T> class List;
-
 template <typename T>
-class List<T const> {
+class ListBase {
 public:
     typedef std::forward_iterator_tag iterator_category;
     typedef T const value_type;
@@ -35,40 +31,24 @@ public:
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() : _cell(NULL) {}
-    explicit List(const_reference value,
-                  List<T const> const &next=List<T const>())
-    : _cell(new Cell(value, next._cell)) {}
-
     reference operator*() const { return _cell->value; }
     pointer operator->() const { return &_cell->value; }
 
-    bool operator==(List<T const> const &other) const {
-        return _cell == other._cell;
-    }
-    bool operator!=(List<T const> const &other) const {
-        return _cell != other._cell;
-    }
-
-    List<T const> &operator++() {
-        _cell = _cell->next;
-        return *this;
-    }
-    List<T const> operator++(int) {
-        List<T const> old(*this);
-        _cell = _cell->next;
-        return old;
-    }
-
     operator bool() const { return _cell != NULL; }
 
-    List<T const> next() const {
-        return List<T const>(_cell->next);
+protected:
+    ListBase() : _cell(NULL) {}
+    ListBase(const_reference value, ListBase const &next)
+    : _cell(new Cell(value, next._cell)) {}
+
+    bool is_equal(ListBase const &other) const {
+        return _cell == other._cell;
     }
 
-protected:
-    List<value_type> setNext(List<value_type> const &next) {
-        _cell = next._cell;
+    ListBase next() const { return ListBase(_cell->next); }
+    ListBase setNext(ListBase const &next) {
+        _cell->next = next._cell;
+        return next;
     }
 
 private:
@@ -80,9 +60,46 @@ private:
         Cell *next;
     };
 
-    explicit List(Cell *cell) : _cell(cell) {}
-
     Cell *_cell;
+
+    explicit ListBase(Cell *cell) : _cell(cell) {}
+};
+
+template <typename T> class List;
+
+template <typename T>
+class List<T const> : public ListBase<T const> {
+public:
+
+    typedef T const value_type;
+    typedef typename Traits::Reference<value_type>::LValue reference;
+    typedef typename Traits::Reference<value_type>::RValue const_reference;
+    typedef typename Traits::Reference<value_type>::Pointer pointer;
+
+    List() : ListBase<T const>() {}
+    explicit List(const_reference value, List const &next=List())
+    : ListBase<T const>(value, next) {}
+
+    bool operator==(List const &other) const {
+        return is_equal(other);
+    }
+    bool operator!=(List const &other) const {
+        return !is_equal(other);
+    }
+
+    List next() const { return List(ListBase<T const>::next()); }
+
+    List &operator++() {
+        return *this = next();
+    }
+    List operator++(int) {
+        List old(*this);
+        *this = next();
+        return old;
+    }
+
+private:
+    explicit List(ListBase<T const> const &list) : ListBase<T const>(list) {}
 };
 
 template <typename T>
@@ -94,8 +111,7 @@ public:
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
     List() : List<T const>() {}
-    explicit List(const_reference value,
-                  List<T> const &next=List<T>())
+    explicit List(const_reference value, List const &next=List())
     : List<T const>(value, next) {}
 
     reference operator*() const {
@@ -105,22 +121,53 @@ public:
         return const_cast<pointer>(List<T const>::operator->());
     }
 
-    List<T> &operator++() {
-        List<T const>::operator++();
-        return *this;
-    }
-    List<T> operator++(int) {
-        List<T> old(*this);
-        List<T const>::operator++();
-        return old;
-    }
+    List next() const { return List(List<T const>::next()); }
 
-    List<T> next() const {
-        return List<T>(List<T const>::next());
+    List &operator++() {
+        return *this = next();
+    }
+    List operator++(int) {
+        List old(*this);
+        *this = next();
+        return old;
     }
 
 private:
     explicit List(List<T const> const &list) : List<T const>(list) {}
+};
+
+template <typename T>
+class List<T &> : public ListBase<T &> {
+public:
+    typedef T &value_type;
+    typedef typename Traits::Reference<value_type>::LValue reference;
+    typedef typename Traits::Reference<value_type>::RValue const_reference;
+    typedef typename Traits::Reference<value_type>::Pointer pointer;
+
+    List() : ListBase<T &>() {}
+    List(const_reference value, List const &next=List())
+    : ListBase<T &>(value, next) {}
+
+    bool operator==(List const &other) const {
+        return is_equal(other);
+    }
+    bool operator!=(List const &other) const {
+        return !is_equal(other);
+    }
+
+    List next() const { return List(ListBase<T &>::next()); }
+
+    List &operator++() {
+        return *this = next();
+    }
+    List operator++(int) {
+        List old(*this);
+        *this = next();
+        return old;
+    }
+
+private:
+    explicit List(ListBase<T &> const &list) : ListBase<T &>(list) {}
 };
 
 template <typename T>

@@ -1,3 +1,7 @@
+2004-10-14  MenTaLguY  <mental@rydia.net>
+
+	* src/util/list.h: more 3.4 fixes
+
 2004-10-13  MenTaLguY  <mental@rydia.net>
 
 	* src/util/list.h, src/util/forward-pointer-iterator.h:
