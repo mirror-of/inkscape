@@ -196,7 +196,7 @@ sp_view_set_position (SPView *view, gdouble x, gdouble y)
 }
 
 void
-sp_view_set_status (SPView *view, const guchar *status, gboolean isdefault)
+sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault)
 {
 	g_return_if_fail (view != NULL);
 	g_return_if_fail (SP_IS_VIEW (view));
