@@ -154,6 +154,7 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change)
 // 3. If nobody has intercepted the signal, apply the style to the selection
     if (!intercepted) {
         for (GSList const *i = desktop->selection->itemList(); i != NULL; i = i->next) {
+            // todo: if the style is text-only, apply only to texts?
             sp_desktop_apply_css_recursive(SP_OBJECT(i->data), css, true);
         }
     }
