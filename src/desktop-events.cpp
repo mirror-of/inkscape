@@ -35,6 +35,7 @@
 #include "sp-item.h"
 #include "desktop-events.h"
 #include "helper/sp-intl.h"
+#include "dialogs/dialog-events.h"
 
 static void sp_dt_simple_guide_dialog (SPGuide * guide, SPDesktop * desktop);
 
@@ -355,6 +356,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 						 GTK_STOCK_CLOSE,
 						 GTK_RESPONSE_CLOSE,
 						 NULL);
+		sp_transientize (d);
 		gtk_widget_hide (d);
     
 		b1 = gtk_hbox_new (FALSE,4);
