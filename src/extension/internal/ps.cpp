@@ -531,6 +531,8 @@ PrintPS::release(Inkscape::Extension::Print *mod)
 void
 PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
 {
+    g_return_if_fail(style->fill.type == SP_PAINT_TYPE_COLOR);
+
     float rgb[3];
     sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
 
