@@ -15,8 +15,6 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/button.h	\
 	widgets/dash-selector.cpp	\
 	widgets/dash-selector.h	\
-	widgets/document-tree-model.cpp	\
-	widgets/document-tree-model.h	\
 	widgets/font-selector.cpp	\
 	widgets/font-selector.h	\
 	widgets/gradient-image.cpp	\

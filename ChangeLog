@@ -1,3 +1,10 @@
+2004-11-16  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/document-tree-model.cpp, src/widgets/document-tree-model.h,
+	  src/widgets/Makefile_insert:
+
+	  removed because unused
+
 2004-11-15  MenTaLguY  <mental@rydia.net>
 
 	* src/gc.cpp: add initial stubs that print an informative error
