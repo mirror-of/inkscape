@@ -20,12 +20,27 @@
 #define SP_IS_PATTERN(o) (GTK_CHECK_TYPE ((o), SP_TYPE_PATTERN))
 #define SP_IS_PATTERN_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_PATTERN))
 
+GType sp_pattern_get_type (void);
+
 class SPPatternClass;
 
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include "svg/svg-types.h"
 #include "sp-paint-server.h"
+#include "uri-references.h"
+
+class SPPatternReference : public Inkscape::URIReference {
+public:
+        SPPatternReference (SPObject *obj) : URIReference(obj) {}
+        SPPattern *getObject() const {
+                return (SPPattern *)URIReference::getObject();
+        }
+protected:
+        bool _acceptObject(SPObject *obj) const {
+                return SP_IS_PATTERN (obj);
+        }
+};
 
 enum {
 	SP_PATTERN_UNITS_USERSPACEONUSE,
@@ -36,7 +51,9 @@ struct SPPattern {
 	SPPaintServer paint_server;
 
 	/* Reference (href) */
-	SPPattern *href;
+	gchar *href;
+	SPPatternReference *ref;
+
 	/* patternUnits and patternContentUnits attribute */
 	guint patternUnits : 1;
 	guint patternUnits_set : 1;
@@ -58,7 +75,5 @@ struct SPPattern {
 struct SPPatternClass {
 	SPPaintServerClass parent_class;
 };
-
-GType sp_pattern_get_type (void);
 
 #endif

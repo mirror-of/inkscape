@@ -58,8 +58,8 @@ static void sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref
 static void sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_pattern_modified (SPObject *object, unsigned int flags);
 
-static void sp_pattern_href_destroy (SPObject *href, SPPattern *pattern);
-static void sp_pattern_href_modified (SPObject *href, guint flags, SPPattern *pattern);
+static void pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat);
+static void pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern);
 
 static SPPainter *sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR::Matrix const &parent_transform, const NRRect *bbox);
 static void sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter);
@@ -113,6 +113,9 @@ sp_pattern_class_init (SPPatternClass *klass)
 static void
 sp_pattern_init (SPPattern *pat)
 {
+	pat->ref = new SPPatternReference(SP_OBJECT(pat));
+	pat->ref->changedSignal().connect(SigC::bind(SigC::slot(pattern_ref_changed), pat));
+
 	pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
 
 	nr_matrix_set_identity (&pat->patternTransform);
@@ -155,9 +158,12 @@ sp_pattern_release (SPObject *object)
 		sp_document_remove_resource (SP_OBJECT_DOCUMENT (object), "pattern", SP_OBJECT (object));
 	}
 
-	if (pat->href) {
-		sp_signal_disconnect_by_data (pat->href, pat);
-		sp_object_hunref (SP_OBJECT (pat->href), object);
+	if (pat->ref) {
+		if (pat->ref->getObject())
+			sp_signal_disconnect_by_data(pat->ref->getObject(), pat);
+		pat->ref->detach();
+		delete pat->ref;
+		pat->ref = NULL;
 	}
 
 	if (((SPObjectClass *) pattern_parent_class)->release)
@@ -167,9 +173,7 @@ sp_pattern_release (SPObject *object)
 static void
 sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPPattern *pat;
-
-	pat = SP_PATTERN (object);
+	SPPattern *pat = SP_PATTERN (object);
 
 	/* fixme: We should unset properties, if val == NULL */
 	switch (key) {
@@ -267,20 +271,27 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	}
 	case SP_ATTR_XLINK_HREF:
-		if (pat->href) {
-			sp_signal_disconnect_by_data (pat->href, pat);
-			pat->href = (SPPattern *) sp_object_hunref (SP_OBJECT (pat->href), object);
-		}
-		if (value && *value == '#') {
-			SPObject *href;
-			href = sp_document_lookup_id (object->document, value + 1);
-			if (SP_IS_PATTERN (href)) {
-				pat->href = (SPPattern *) sp_object_href (href, object);
-				//g_signal_connect (G_OBJECT (href), "destroy", G_CALLBACK (sp_pattern_href_destroy), pat);
-				g_signal_connect (G_OBJECT (href), "modified", G_CALLBACK (sp_pattern_href_modified), pat);
+		if ( value && pat->href && ( strcmp(value, pat->href) == 0 ) ) {
+			/* Href unchanged, do nothing. */
+		} else {
+			g_free(pat->href);
+			pat->href = NULL;
+			if (value) {
+				// First, set the href field; it's only used in the "unchanged" check above.
+				pat->href = g_strdup(value);
+				// Now do the attaching, which emits the changed signal.
+				if (value) {
+					try {
+						pat->ref->attach(Inkscape::URI(value));
+					} catch (Inkscape::BadURIException &e) {
+						g_warning("%s", e.what());
+						pat->ref->detach();
+					}
+				} else {
+					pat->ref->detach();
+				}
 			}
 		}
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) pattern_parent_class)->set)
@@ -382,15 +393,27 @@ sp_pattern_modified (SPObject *object, guint flags)
 	}
 }
 
+/**
+Gets called when the pattern is reattached to another <pattern>
+*/
 static void
-sp_pattern_href_destroy (SPObject *href, SPPattern *pattern)
+pattern_ref_changed(SPObject *old_ref, SPObject *ref, SPPattern *pat)
 {
-	pattern->href = (SPPattern *) sp_object_hunref (href, pattern);
-	sp_object_request_modified (SP_OBJECT (pattern), SP_OBJECT_MODIFIED_FLAG);
+	if (old_ref) {
+		sp_signal_disconnect_by_data(old_ref, pat);
+	}
+	if (SP_IS_PATTERN (ref)) {
+		g_signal_connect(G_OBJECT (ref), "modified", G_CALLBACK (pattern_ref_modified), pat);
+	}
+
+	pattern_ref_modified (ref, 0, pat);
 }
 
+/**
+Gets called when the referenced <pattern> is changed
+*/
 static void
-sp_pattern_href_modified (SPObject *href, guint flags, SPPattern *pattern)
+pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern)
 {
 	sp_object_request_modified (SP_OBJECT (pattern), SP_OBJECT_MODIFIED_FLAG);
 }
@@ -502,7 +525,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 	pp->root = NRArenaGroup::create(pp->arena);
 
 	/* fixme: Show items */
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->href) {
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref->getObject()) {
 		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			if (SP_IS_ITEM (child)) {
 				NRArenaItem *cai;
@@ -530,10 +553,9 @@ sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter)
 	pp = (SPPatPainter *) painter;
 	pat = pp->pat;
 
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->href) {
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref->getObject()) {
 		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			if (SP_IS_ITEM (child)) {
-				g_print ("item %p\n", child);
 				sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
 			}
 		}
