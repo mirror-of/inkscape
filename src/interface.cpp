@@ -38,6 +38,7 @@
 #include "toolbox.h"
 #include "desktop.h"
 #include "object-ui.h"
+#include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "zoom-context.h"
@@ -1059,6 +1060,7 @@ static void leave_all_groups(GtkMenuItem *, SPDesktop *desktop) {
 
 static void enter_group(GtkMenuItem *mi, SPDesktop *desktop) {
     desktop->setCurrentLayer(reinterpret_cast<SPObject *>(g_object_get_data(G_OBJECT(mi), "group")));
+    SP_DT_SELECTION(desktop)->clear();
 }
 
 GtkWidget *
@@ -1104,10 +1106,14 @@ sp_ui_context_menu (SPView *view, SPItem *item)
             }
         }
 
-        if ( group && group != dt->currentLayer() ) {
+        if (( group && group != dt->currentLayer() ) ||
+            ( dt->currentLayer() != dt->currentRoot() ) ) {
             sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
+        }
+
+        if ( group && group != dt->currentLayer() ) {
             /* TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number. */
-            gchar *label=g_strdup_printf(_("Edit group #%s"), SP_OBJECT_ID(group));
+            gchar *label=g_strdup_printf(_("Enter group #%s"), SP_OBJECT_ID(group));
             GtkWidget *w = gtk_menu_item_new_with_label(label);
             g_free(label);
             g_object_set_data(G_OBJECT(w), "group", group);
@@ -1117,15 +1123,14 @@ sp_ui_context_menu (SPView *view, SPItem *item)
         }
 
         if ( dt->currentLayer() != dt->currentRoot() ) {
-            sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
             if ( SP_OBJECT_PARENT(dt->currentLayer()) != dt->currentRoot() ) {
-                GtkWidget *w = gtk_menu_item_new_with_label(_("Edit parent group"));
+                GtkWidget *w = gtk_menu_item_new_with_label(_("Go to parent"));
                 g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_group), dt);
                 gtk_widget_show(w);
                 gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
 
             }
-            GtkWidget *w = gtk_menu_item_new_with_label(_("Edit root"));
+            GtkWidget *w = gtk_menu_item_new_with_label(_("Go to root"));
             g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_all_groups), dt);
             gtk_widget_show(w);
             gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
