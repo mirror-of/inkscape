@@ -240,7 +240,7 @@ sp_flowtext_update(SPObject *object, SPCtx *ctx, unsigned flags)
     BuildLayoutInput(group, &group->layout, exclusion_shape, &shapes);
     delete exclusion_shape;
     group->layout.calculateFlow();
-    g_print(group->layout.dumpAsText().c_str());
+    //g_print(group->layout.dumpAsText().c_str());
 
     // pass the bbox of the flowtext object as paintbox (used for paintserver fills)	
     NRRect paintbox;
