@@ -922,7 +922,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_SELECTION_CLEANUP, "SelectionCleanup", N_("Cl_eanup"),
         N_("Clean up selected path(s)"), "selection_cleanup"},
     {SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
-        N_("Reverse direction of selected path(s)"), NULL},
+        N_("Reverses the direction (start to end of the path) of selected path(s). Use for changing the direction of markers (e.g. arrowheads)."), NULL},
     {SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"},
     {SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
