@@ -776,6 +776,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_widget_set_usize (dtw->zoom_status, 64, -1);
 	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 5);
 	gtk_editable_set_editable (GTK_EDITABLE (dtw->zoom_status), FALSE);
+	g_object_set (G_OBJECT (dtw->zoom_status), "can-focus", (gboolean) FALSE, NULL);
 	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
 	gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
 	g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
