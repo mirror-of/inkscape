@@ -1,5 +1,10 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-rotate-fns.h, src/libnr/nr-rotate-fns.cpp: New files.
+	* src/libnr/nr-rotate-fns-test.cpp: New unit test.
+	* src/libnr/Makefile_insert, src/Makefile.am: Reference new files,
+	  add to unit tests.
+
 	* src/libnr/nr-point-fns.h (point_equalp): New function.
 
 	* src/radial.h: Remove this unused header.

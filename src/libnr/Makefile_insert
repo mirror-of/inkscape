@@ -58,6 +58,8 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-rect.cpp	\
 	libnr/nr-rect.h	\
 	libnr/nr-render.h	\
+	libnr/nr-rotate-fns.cpp	\
+	libnr/nr-rotate-fns.h	\
 	libnr/nr-rotate-ops.h	\
 	libnr/nr-rotate.h	\
 	libnr/nr-scale-ops.h	\
@@ -93,6 +95,9 @@ libnr_nr_matrix_test_LDADD = libnr/libnr.a -lglib-2.0
 
 libnr_nr_rotate_test_SOURCES = libnr/nr-rotate-test.cpp
 libnr_nr_rotate_test_LDADD = libnr/libnr.a -lglib-2.0
+
+libnr_nr_rotate_fns_test_SOURCES = libnr/nr-rotate-fns-test.cpp
+libnr_nr_rotate_fns_test_LDADD = libnr/libnr.a -lglib-2.0
 
 libnr_nr_scale_test_SOURCES = libnr/nr-scale-test.cpp
 libnr_nr_scale_test_LDADD = libnr/libnr.a -lglib-2.0

@@ -94,6 +94,7 @@ TESTS =	\
 	libnr/nr-matrix-test$(EXEEXT)	\
 	libnr/nr-point-fns-test$(EXEEXT)	\
 	libnr/nr-rotate-test$(EXEEXT)	\
+	libnr/nr-rotate-fns-test$(EXEEXT)	\
 	libnr/nr-scale-test$(EXEEXT)	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
@@ -110,6 +111,7 @@ check_PROGRAMS =	\
 	libnr/nr-matrix-test	\
 	libnr/nr-point-fns-test	\
 	libnr/nr-rotate-test	\
+	libnr/nr-rotate-fns-test	\
 	libnr/nr-scale-test	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
