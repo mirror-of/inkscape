@@ -35,20 +35,26 @@
 /** Which output module should be used? */
 #define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 
+/** Defines the key for Postscript printing */
 #define SP_MODULE_KEY_PRINT_PS    "modules.print.ps"
+/** Defines the key for printing with GNOME Print */
 #define SP_MODULE_KEY_PRINT_GNOME "modules.print.gnome"
+/** Defines the key for printing under Win32 */
 #define SP_MODULE_KEY_PRINT_WIN32 "modules.print.win32"
 #ifdef WIN32
+/** Defines the default printing to use */
 #define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_WIN32
 #else
 #ifdef WITH_GNOME_PRINT
+/** Defines the default printing to use */
 #define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_GNOME
 #else
+/** Defines the default printing to use */
 #define SP_MODULE_KEY_PRINT_DEFAULT  SP_MODULE_KEY_PRINT_PS
 #endif
 #endif
 
-/* New C++ Stuff */
+/** Mime type for SVG */
 #define MIME_SVG "image/svg+xml"
 
 namespace Inkscape {
@@ -61,107 +67,128 @@ class Filter;
 
 /** The object that is the basis for the Extension system.  This object
     contains all of the information that all Extension have.  The
-	individual items are detailed within. */
+    individual items are detailed within. This is the interface that
+    those who want to _use_ the extensions system should use.  This
+    is most likely to be those who are inside the Inkscape program. */
 class Extension {
 public:
-	/** An enumeration to identify if the Extension has been loaded or not. */
-	typedef enum {
-		STATE_LOADED,
-		STATE_UNLOADED
-	} state_t;
+    /** An enumeration to identify if the Extension has been loaded or not. */
+    typedef enum {
+        STATE_LOADED,  /**< The extension has been loaded successfully */
+        STATE_UNLOADED /**< The extension has not been loaded */
+    } state_t;
 
 private:
-	gchar *id;                          /**< The unique identifier for the Extension */
-	gchar *name;                        /**< A user friendly name for the Extension */
-	state_t state;                      /**< Which state the Extension is currently in */
+    gchar *id;                            /**< The unique identifier for the Extension */
+    gchar *name;                          /**< A user friendly name for the Extension */
+    state_t state;                        /**< Which state the Extension is currently in */
 
 protected:
-	SPRepr *repr;                       /**< The XML description of the Extension */
-	Implementation::Implementation * imp;         /**< An object that holds all the functions for making this work */
+    SPRepr *repr;                         /**< The XML description of the Extension */
+    Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
 
 public:
-	Extension(SPRepr * in_repr, Implementation::Implementation * in_imp);
-	virtual ~Extension(void);
+              Extension    (SPRepr * in_repr,
+                            Implementation::Implementation * in_imp);
+    virtual  ~Extension    (void);
 
-	void set_state (state_t in_state);
-	state_t get_state (void);
-	bool loaded (void);
-	SPRepr * get_repr (void);
-	gchar * get_id (void);
-	gchar * get_name (void);
+    void      set_state    (state_t in_state);
+    state_t   get_state    (void);
+    bool      loaded       (void);
+    SPRepr *  get_repr     (void);
+    gchar *   get_id       (void);
+    gchar *   get_name     (void);
 };
 
 class Input : public Extension {
-	gchar *mimetype;             /**< What is the mime type this inputs? */
-	gchar *extension;            /**< The extension of the input files */
-	gchar *filetypename;         /**< A userfriendly name for the file type */
-	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
+    gchar *mimetype;             /**< What is the mime type this inputs? */
+    gchar *extension;            /**< The extension of the input files */
+    gchar *filetypename;         /**< A userfriendly name for the file type */
+    gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public:
-    Input (SPRepr * in_repr, Implementation::Implementation * in_imp);
-	virtual ~Input (void);
-	SPDocument * open (const gchar *uri);
-	gchar * get_extension(void);
-	gchar * get_filetypename(void);
-	gchar * get_filetypetooltip(void);
-	GtkDialog * prefs (const gchar *uri);
+                  Input                (SPRepr * in_repr,
+                                        Implementation::Implementation * in_imp);
+    virtual      ~Input                (void);
+    SPDocument *  open                 (const gchar *uri);
+    gchar *       get_extension        (void);
+    gchar *       get_filetypename     (void);
+    gchar *       get_filetypetooltip  (void);
+    GtkDialog *   prefs                (const gchar *uri);
 };
 
 class Output : public Extension {
-	gchar *mimetype;             /**< What is the mime type this inputs? */
-	gchar *extension;            /**< The extension of the input files */
-	gchar *filetypename;         /**< A userfriendly name for the file type */
-	gchar *filetypetooltip;      /**< A more detailed description of the filetype */
+    gchar *mimetype;             /**< What is the mime type this inputs? */
+    gchar *extension;            /**< The extension of the input files */
+    gchar *filetypename;         /**< A userfriendly name for the file type */
+    gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public:
-	Output (SPRepr * in_repr, Implementation::Implementation * in_imp);
-	virtual ~Output (void);
+                 Output (SPRepr * in_repr,
+                         Implementation::Implementation * in_imp);
+    virtual     ~Output (void);
 
-	void save (SPDocument *doc, const gchar *uri);
-	GtkDialog * prefs (void);
-	gchar * get_extension();
-	gchar * get_filetypename();
-	gchar * get_filetypetooltip();
+    void         save (SPDocument *doc,
+                       const gchar *uri);
+    GtkDialog *  prefs (void);
+    gchar *      get_extension(void);
+    gchar *      get_filetypename(void);
+    gchar *      get_filetypetooltip(void);
 };
 
 class Filter : public Extension {
 
 public:
-	Filter (SPRepr * in_repr, Implementation::Implementation * in_imp);
-	virtual ~Filter (void);
+                 Filter  (SPRepr * in_repr,
+                          Implementation::Implementation * in_imp);
+    virtual     ~Filter  (void);
 
-	GtkDialog * prefs (void);
-	void filter (SPDocument * doc);
+    GtkDialog *  prefs   (void);
+    void         filter  (SPDocument * doc);
 };
 
 class Print : public Extension {
 
 public: /* TODO: These are public for the short term, but this should be fixed */
-	SPItem *base;
-	NRArena *arena;
-	NRArenaItem *root;
-	unsigned int dkey;
+    SPItem *base;            /**< TODO: Document these */
+    NRArena *arena;          /**< TODO: Document these */
+    NRArenaItem *root;       /**< TODO: Document these */
+    unsigned int dkey;       /**< TODO: Document these */
 
 public:
-	Print (SPRepr * in_repr, Implementation::Implementation * in_imp);
-	~Print (void);
+                  Print       (SPRepr * in_repr,
+                               Implementation::Implementation * in_imp);
+                 ~Print       (void);
 
-	/* FALSE means user hit cancel */
-	unsigned int setup (void);
-	unsigned int set_preview (void);
+    /* FALSE means user hit cancel */
+    unsigned int  setup       (void);
+    unsigned int  set_preview (void);
 
-	unsigned int begin (SPDocument *doc);
-	unsigned int finish (void);
+    unsigned int  begin       (SPDocument *doc);
+    unsigned int  finish      (void);
 
-	/* Rendering methods */
-	unsigned int bind (const NRMatrix *transform, float opacity);
-	unsigned int release (void);
-	unsigned int fill (const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-	unsigned int stroke (const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
-				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
-	unsigned int image (unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-				const NRMatrix *transform, const SPStyle *style);
+    /* Rendering methods */
+    unsigned int  bind        (const NRMatrix *transform,
+                               float opacity);
+    unsigned int  release     (void);
+    unsigned int  fill        (const NRBPath *bpath,
+                               const NRMatrix *ctm,
+                               const SPStyle *style,
+                               const NRRect *pbox,
+                               const NRRect *dbox,
+                               const NRRect *bbox);
+    unsigned int  stroke      (const NRBPath *bpath,
+                               const NRMatrix *transform,
+                               const SPStyle *style,
+                               const NRRect *pbox,
+                               const NRRect *dbox,
+                               const NRRect *bbox);
+    unsigned int  image       (unsigned char *px,
+                               unsigned int w,
+                               unsigned int h,
+                               unsigned int rs,
+                               const NRMatrix *transform,
+                               const SPStyle *style);
 };
 
 }; /* namespace Extension */
