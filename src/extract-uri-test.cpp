@@ -3,11 +3,28 @@
 #include <string.h>
 #include <glib.h>
 
+struct Case {
+    char const *input;
+    char const *exp;
+};
+
+static void test_extract_uri_case(Case const &c)
+{
+    char * const p = extract_uri(c.input);
+    UTEST_TEST(c.input) {
+        UTEST_ASSERT( ( p == NULL ) == ( c.exp == NULL ) );
+        if (p) {
+            UTEST_ASSERT( strcmp(p, c.exp) == 0 );
+        }
+    }
+    g_free(p);
+}
+
 int main(int argc, char *argv[])
 {
     utest_start("extract_uri");
 
-    struct Case { char const *input; char const *exp; } const cases[] = {
+    Case const cases[] = {
         { "url(#foo)", "#foo" },
         { "url  foo  ", "foo" },
         { "url", NULL },
@@ -19,15 +36,7 @@ int main(int argc, char *argv[])
 
     for(unsigned i = 0; i < G_N_ELEMENTS(cases); ++i) {
         Case const &c = cases[i];
-        char *p = NULL;
-        UTEST_TEST(c.input) {
-            p = extract_uri(c.input);
-            UTEST_ASSERT( ( p == NULL ) == ( c.exp == NULL ) );
-            if (p) {
-                UTEST_ASSERT( strcmp(p, c.exp) == 0 );
-            }
-        }
-        g_free(p);
+        test_extract_uri_case(c);
     }
 
     return ( utest_end()
