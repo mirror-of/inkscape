@@ -15,12 +15,14 @@
 #endif
 
 
-#include <gtkmm.h>
 #include <gtkmm/box.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/stock.h>
 #include <gdkmm/pixbuf.h>
 
 //Temporary ugly hack
