@@ -117,7 +117,6 @@ sp_shape_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		SPCSSAttr *css;
 		const gchar *val;
-		gdouble dval;
 		gboolean changed;
 		/* Have to check for percentage opacities */
 		css = sp_repr_css_attr (repr, "style");

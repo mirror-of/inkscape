@@ -3,6 +3,13 @@
 	* src/xml/repr.cpp: adjusted the advertising comment in the default
 	  document template (we need a real default document template, btw)
 
+	* src/svg/ftos.cpp, src/svg/itos.cpp, src/svg/round.cpp,
+	  src/svg/ftos.h, src/svg/stringstream.h: incorporated Bryce's number
+	  serializing code (disabled for now, due to the impending release)
+
+	* src/dialogs/stroke-style.cpp, src/dialogs/sp-shape.cpp:
+	  nuked unused variables
+
 2004-04-07  bulia byak <bulia@users.sourceforge.net>
 
 	* icons.svg: Alignment fix

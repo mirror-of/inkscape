@@ -1,4 +1,8 @@
+#ifndef INKSCAPE_STRINGSTREAM_H
+#define INKSCAPE_STRINGSTREAM_H
+
 #include <sstream>
+#include "src/svg/ftos.h"
 
 namespace Inkscape {
 	class SVGOStringStream : public std::ostringstream {
@@ -15,4 +19,14 @@ namespace Inkscape {
 		}
 
 	};
+
 }
+
+#ifdef BRYCE_FLOATS
+Inkscape::SVGOStringStream &operator<<(Inkscape::SVGOStringStream &os, double d)
+{
+	return os << ftos(d, 'g', -1, -1, 0);
+}
+#endif
+
+#endif

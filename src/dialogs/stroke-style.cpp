@@ -557,7 +557,6 @@ sp_stroke_style_paint_changed ( SPPaintSelector *psel, SPWidget *spw )
     gfloat alpha;
     SPGradient *vector;
     gchar b[64];
-    gchar *p;
 	Inkscape::SVGOStringStream osalpha, oscolour;
             
     if (gtk_object_get_data (GTK_OBJECT (spw), "update"))

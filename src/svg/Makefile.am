@@ -23,4 +23,6 @@ libspsvg_a_SOURCES = \
 	svg-affine.cpp \
 	svg-path.cpp \
 	stringstream.h \
-	gnome-canvas-bpath-util.cpp gnome-canvas-bpath-util.h
+	gnome-canvas-bpath-util.cpp gnome-canvas-bpath-util.h \
+	round.cpp itos.cpp ftos.cpp ftos.h
+
