@@ -5,6 +5,7 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Bryce Harrington <brycehar@bryceharrington.com>
  *
  * Copyright (C) 2001-2002 authors
  * Copyright (C) 2001 Ximian, Inc.

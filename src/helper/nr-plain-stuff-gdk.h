@@ -14,8 +14,16 @@
 
 #include <gdk/gdk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void nr_gdk_draw_rgba32_solid (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, gint w, gint h, guint32 rgba);
 
 void nr_gdk_draw_gray_garbage (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, gint w, gint h);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
