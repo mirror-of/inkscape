@@ -9,6 +9,9 @@
 
 	* src/sp-object.h: added SPObject::hasChildren() predicate
 
+	* src/sp-object.cpp: revert to old behavior of breaking parent
+	  link before emitting "release" signal
+
 	* src/selection-chemistry.cpp: rewrote sp_selection_item_next()
 	  and sp_selection_item_prev() to work with layers
 

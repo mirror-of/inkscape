@@ -422,12 +422,10 @@ void sp_object_detach (SPObject *parent, SPObject *object) {
 
 	*ref = object->next;
 	object->next = NULL;
+	object->parent = NULL;
 
 	sp_object_invoke_release (object);
 	parent->_updateTotalHRefCount(-object->_total_hrefcount);
-
-	// we've left the parent link in place during "release" emission
-	object->parent = NULL;
 }
 
 void sp_object_detach_unref (SPObject *parent, SPObject *object)
