@@ -1404,6 +1404,7 @@ sp_color_picker_destroy(GtkObject *cp, gpointer data)
     GtkObject *w = (GtkObject *) g_object_get_data(G_OBJECT(cp), "window");
 
     if (w) {
+        g_assert ( G_IS_OBJECT (w) );
         gtk_object_destroy(w);
     }
 
@@ -1446,12 +1447,17 @@ sp_color_picker_new(gchar *colorkey, gchar *alphakey,
 static void
 sp_color_picker_set_rgba32(GtkWidget *cp, guint32 rgba)
 {
+    g_assert ( G_IS_OBJECT (cp) );
+
     SPColorPreview *cpv = (SPColorPreview *)g_object_get_data(G_OBJECT(cp), "preview");
+    g_assert ( G_IS_OBJECT (cpv) );
     sp_color_preview_set_rgba32(cpv, rgba);
 
     SPColorSelector *csel = (SPColorSelector *)g_object_get_data(G_OBJECT(cp), "selector");
 
     if (csel) {
+        g_assert ( G_IS_OBJECT (csel) );
+
         SPColor color;
         sp_color_set_rgb_rgba32(&color, rgba);
         csel->base->setColorAlpha(color, SP_RGBA32_A_F(rgba));
@@ -1469,6 +1475,7 @@ sp_color_picker_window_destroy(GtkObject *object, GObject *cp)
     /* remove window object */
     GtkWidget *w = (GtkWidget*) g_object_get_data(G_OBJECT(cp), "window");
     if (w) {
+        sp_signal_disconnect_by_data(INKSCAPE, w);
         gtk_widget_destroy(GTK_WIDGET(w));
     }
 

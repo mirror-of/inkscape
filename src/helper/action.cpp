@@ -98,7 +98,7 @@ sp_action_new(SPView *view,
 
 /**
 	\return   None
-	\breif    Executes an action
+	\brief    Executes an action
 	\param    action   The action to be executed
 	\param    data     Data that is passed into the action.  This depends
 	                   on the situation that the action is used in.

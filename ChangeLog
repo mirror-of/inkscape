@@ -1,3 +1,12 @@
+2004-07-07  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/desktop-properties.cpp: added a few g_asserts, and
+	  added a missing sp_signal_disconnect_by_data for the color picker,
+	  which closes bug #975864.
+	* src/dialogs/dialog-events.cpp, src/helper/action.cpp:
+	  whitespace changes, typo fixes, added a few g_asserts.
+
+
 2004-07-06  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop.cpp: minor tweaks to make the existing layers

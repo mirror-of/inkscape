@@ -262,7 +262,7 @@ gboolean
 sp_dialog_unhide (GtkObject *object, gpointer data)
 {
     GtkWidget *dlg = (GtkWidget *) data;
-    
+
     if (dlg)
         gtk_widget_show (dlg);
     
