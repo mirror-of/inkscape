@@ -1,3 +1,4 @@
+ResourceManager.h
 application.cpp
 application.h
 approx-equal.h
@@ -156,12 +157,15 @@ helper/png-write.h
 helper/sp-intl.h
 helper/sp-marshal.cpp
 helper/sp-marshal.h
+helper/stock-items.cpp
+helper/stock-items.h
 helper/unit-menu.cpp
 helper/unit-menu.h
 helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
+ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -433,7 +437,10 @@ sp-symbol.cpp
 sp-symbol.h
 sp-text.cpp
 sp-text.h
+sp-typeset-kplayout.cpp
 sp-typeset-layout.cpp
+sp-typeset-utils.cpp
+sp-typeset-utils.h
 sp-typeset.cpp
 sp-typeset.h
 sp-use.cpp
