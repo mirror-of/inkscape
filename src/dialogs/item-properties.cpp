@@ -143,7 +143,7 @@ sp_item_widget_new (void)
                        (GtkAttachOptions)0, 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "id", tf);
 
-    /* Create the button for setting the object label */
+    /* Button for setting the object's label, title and description. */
     pb = gtk_button_new_with_label (_("Update Properties"));
     gtk_table_attach ( GTK_TABLE (t), pb, 2, 3, 0, 1, 
                        (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
