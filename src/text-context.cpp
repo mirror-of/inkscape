@@ -386,7 +386,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
 						}
 						tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240");
-						sp_view_set_statusf_flash (SP_VIEW(ec->desktop), _("No-break space"));
+						ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_U:
@@ -397,7 +397,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						} else {
 							tc->unimode = TRUE;
 							tc->unipos = 0;
-							sp_view_set_statusf (SP_VIEW(ec->desktop), _("Unicode: "));
+							ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
 						}
 						if (tc->imc) {
 							gtk_im_context_reset (tc->imc);
@@ -410,7 +410,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					if (tc->unimode) {
 						if (isxdigit ((guchar) event->key.keyval)) {
 							tc->uni[tc->unipos] = event->key.keyval;
-							sp_view_set_statusf (SP_VIEW(ec->desktop), 
+							ec->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
                                                         _("Unicode: %c%c%c%c"), 
                                                         tc->uni[0], 
                                                         tc->unipos > 0 ? tc->uni[1] : ' ', 
@@ -424,7 +424,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								u[len] = '\0';
 								tc->unipos = 0;
 								if (!g_unichar_isprint ((gunichar) uv)) {
-									sp_view_set_statusf_error (SP_VIEW(ec->desktop), _("Non-printable character")); // this may be due to bad input, so it goes to statusbar
+								    ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Non-printable character")); // this may be due to bad input, so it goes to statusbar
 								} else {
 									if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
 										sp_text_context_setup_text (tc);                                                 

@@ -52,23 +52,23 @@ sp_selected_path_combine (void)
 	GSList *items = (GSList *) selection->itemList();
 
 	if (g_slist_length (items) < 2) {
-		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select at least 2 objects to combine."));
+	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select at least 2 objects to combine."));
 		return;
 	}
 
 	for (GSList *i = items; i != NULL; i = i->next) {
 		SPItem *item = (SPItem *) i->data;
 		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT(item)) {
-			sp_view_set_statusf_flash (SP_VIEW (desktop), _("One of the objects is not a path, cannot combine."));
-			return;
+		    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("One of the objects is not a path, cannot combine."));
+		    return;
 		}
 	}
 
 	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent;
 	for (GSList *i = items; i != NULL; i = i->next) {
 		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent != parent ) {
-			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot combine objects from different groups or layers."));
-			return;
+		    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot combine objects from different groups or layers."));
+		    return;
 		}
 	}
 
@@ -151,7 +151,7 @@ sp_selected_path_break_apart (void)
 	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	if (selection->isEmpty()) {
-		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some path(s) to break apart."));
+	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some path(s) to break apart."));
 		return;
 	}
 
@@ -227,8 +227,8 @@ sp_selected_path_break_apart (void)
  	if (did) {
 		sp_document_done (SP_DT_DOCUMENT (desktop));
 	} else {
-		sp_view_set_statusf_flash (SP_VIEW(desktop), _("No paths to break apart in the selection."));
-		return;
+	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No paths to break apart in the selection."));
+	    return;
 	} 
 }
 
@@ -250,7 +250,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 
 	if (selection->isEmpty()) {
 		if (interactive)
-			sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some object(s) to convert to path."));
+		    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select some object(s) to convert to path."));
 		return;
 	}
 
@@ -295,8 +295,8 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		if (did) {
 			sp_document_done (SP_DT_DOCUMENT (desktop));
 		} else {
-			sp_view_set_statusf_flash (SP_VIEW(desktop), _("No objects to convert to path in the selection."));
-			return;
+		    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No objects to convert to path in the selection."));
+		    return;
 		}
 	}
 }
@@ -396,8 +396,8 @@ sp_selected_path_reverse ()
 	GSList *items = (GSList *) selection->itemList();
 
 	if (g_slist_length (items) == 0) {
-		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select one or more paths to reverse."));
-		return;
+	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select one or more paths to reverse."));
+	    return;
 	}
 
 
@@ -421,6 +421,6 @@ sp_selected_path_reverse ()
  	if (did) {
 		sp_document_done (SP_DT_DOCUMENT (desktop));
 	} else {
-		sp_view_set_statusf_flash (SP_VIEW(desktop), _("No paths to reverse in the selection."));
+	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No paths to reverse in the selection."));
 	} 
 }

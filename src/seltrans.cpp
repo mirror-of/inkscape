@@ -741,10 +741,7 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 	pt = ( point - norm ) * s + norm;
 
 	// status text
-	gchar *status;
-	status = g_strdup_printf(_("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
-	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
-	g_free(status);
+        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
 
 	return TRUE;
 }
@@ -804,10 +801,7 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 	}
 
 	// status text
-	gchar *status;
-	status = g_strdup_printf(_("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
-	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
-	g_free(status);
+        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
 
 	return TRUE;
 }
@@ -871,9 +865,8 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 	}
 
 	// status text
-        gchar status[80];
-	sprintf (status, _("Skew %0.2f%c %0.2f%c"), 100 * fabs(skew[2]), '%', 100 * fabs(skew[1]), '%');
-	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
+        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+            _("Skew %0.2f%c %0.2f%c"), 100 * fabs(skew[2]), '%', 100 * fabs(skew[1]), '%');
 
 	return TRUE;
 }
@@ -919,7 +912,8 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
 
-	sp_view_set_statusf (SP_VIEW (seltrans->desktop), _("Rotate by %0.2f deg"), angle);
+        seltrans->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+            _("Rotate by %0.2f deg"), angle);
 
 	return TRUE;
 }
@@ -948,9 +942,7 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	// status text
 	GString *xs = SP_PT_TO_METRIC_STRING(pt[X], SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING(pt[Y], SP_DEFAULT_METRIC);
-	gchar *status = g_strdup_printf(_("Center at (%s,%s)"), xs->str, ys->str);
-	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
-	g_free(status);
+        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Center at (%s,%s)"), xs->str, ys->str);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
 

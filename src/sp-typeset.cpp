@@ -1118,15 +1118,15 @@ void        sp_typeset_build_one(bool on_path)
 		}
 	}
 	if ( has_src == false || has_dest == false ) {
-		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select at least 1 text and 1 shape to build a typeset object."));
-		return;
+	    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select at least 1 text and 1 shape to build a typeset object."));
+	    return;
 	}
 	
 	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent;
 	for (GSList *i = items; i != NULL; i = i->next) {
 		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent != parent ) {
-			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot build a typeset from objects of different groups or layers."));
-			return;
+		    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot build a typeset from objects of different groups or layers."));
+		    return;
 		}
 	}
 
@@ -1166,7 +1166,7 @@ void        sp_typeset_build_one(bool on_path)
 		if ( style_css ) sp_repr_css_attr_unref(style_css);
 		g_slist_free (text_elems);
 		g_slist_free (dest_elems);
-		sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot build a typeset without some actual text."));
+		desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot build a typeset without some actual text."));
 		return;
 	}
 	for (GSList* i=text_elems;i!=NULL;i=i->next) {

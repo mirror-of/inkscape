@@ -311,16 +311,17 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
     }
 
     if (n != NULL) {
-        sp_view_set_statusf_flash(SP_VIEW(desktop), 
-                                  // TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-                                  _("%d object(s) found (out of %d), %s match."), 
-                                  g_slist_length (n), all, exact? _("exact") : _("partial"));
+        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
+                                        // TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
+                                        _("%d object(s) found (out of %d), %s match."),
+                                        g_slist_length (n), all, exact? _("exact") : _("partial"));
+
         SPSelection *selection = SP_DT_SELECTION (desktop);
         selection->clear();
         selection->setItemList(n);
         scroll_to_show_item (desktop, SP_ITEM(n->data));
     } else {
-        sp_view_set_statusf_flash(SP_VIEW(desktop), _("No objects found."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No objects found"));
     }
 }
 

@@ -998,8 +998,8 @@ void sp_node_selected_join()
 	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
 	if (g_list_length (nodepath->selected) != 2) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
-		return;
+	    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+	    return;
 	}
 
 	Path::Node *a = (Path::Node *) nodepath->selected->data;
@@ -1010,8 +1010,8 @@ void sp_node_selected_join()
 	g_assert (b->p.other || b->n.other);
 
 	if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
-		return;
+	    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+	    return;
 	}
 
 	/* a and b are endpoints */
@@ -1090,8 +1090,8 @@ void sp_node_selected_join_segment()
 	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
 	if (g_list_length (nodepath->selected) != 2) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
-		return;
+	    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+	    return;
 	}
 
 	Path::Node *a = (Path::Node *) nodepath->selected->data;
@@ -1102,8 +1102,8 @@ void sp_node_selected_join_segment()
 	g_assert (b->p.other || b->n.other);
 
 	if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), _("To join, you must have two endnodes selected."));
-		return;
+	    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("To join, you must have two endnodes selected."));
+	    return;
 	}
 
 	if (a->subpath == b->subpath) {
@@ -1226,23 +1226,23 @@ sp_node_selected_delete_segment (void)
 	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
 
 	if (g_list_length (nodepath->selected) != 2) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
+	    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, 
                 _("You must select two non-endpoint nodes on a path between which to delete segments."));
-		return;
+	    return;
 	}
 	
     //Selected nodes, not inclusive
 	Path::Node *a = (Path::Node *) nodepath->selected->data;
 	Path::Node *b = (Path::Node *) nodepath->selected->next->data;
 
-	if (     ( a==b)                       ||  //same node
+	if ( ( a==b)                       ||  //same node
              (a->subpath  != b->subpath )  ||  //not the same path
              (!a->p.other || !a->n.other)  ||  //one of a's sides does not have a segment
              (!b->p.other || !b->n.other) )    //one of b's sides does not have a segment
 		{
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-		_("You must select two non-endpoint nodes on a path between which to delete segments."));
-		return;
+		    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, 
+		        _("You must select two non-endpoint nodes on a path between which to delete segments."));
+		    return;
 		}
 
 	//###########################################
@@ -1336,9 +1336,9 @@ sp_node_selected_delete_segment (void)
 			}
 		}
 		if (!start) {
-			sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
+		    nodepath->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, 
 			_("Cannot find path between nodes."));
-			return;
+		    return;
 		}
 
 
@@ -2735,14 +2735,19 @@ sp_nodepath_update_statusbar (Path::Path *nodepath)
 	gint selected = g_list_length (nodepath->selected);
 
 	if (selected == 0) {
-		SPSelection *sel = nodepath->desktop->selection;
-		if (!sel || sel->isEmpty())
-			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("Select one path object with selector first, then switch back to node tool."));
-		else 
-			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."), total);
+	    SPSelection *sel = nodepath->desktop->selection;
+	    if (!sel || sel->isEmpty()) {
+		nodepath->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, 
+			 _("Select one path object with selector first, then switch back to node tool."));
+	    } else {
+		nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+			 _("0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."), total);
+	    }
 	} else if (selected == 1) {
-		sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("%i of %i nodes selected; %s. %s."), selected, total, sp_node_type_description ((Path::Node *) nodepath->selected->data), when_selected);
+	    nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+		     _("%i of %i nodes selected; %s. %s."), selected, total, sp_node_type_description ((Path::Node *) nodepath->selected->data), when_selected);
 	} else {
-		sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("%i of %i nodes selected. %s."), selected, total, when_selected);
+	    nodepath->desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
+		    _("%i of %i nodes selected. %s."), selected, total, when_selected);
 	}
 }
