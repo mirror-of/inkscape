@@ -506,4 +506,6 @@ const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, c
 
 SPVersion sp_object_get_sodipodi_version (SPObject *object);
 
+int sp_object_compare_position(SPObject const *first, SPObject const *second);
+
 #endif

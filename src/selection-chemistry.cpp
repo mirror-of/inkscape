@@ -881,9 +881,7 @@ void sp_selection_copy()
     style_clipboard = take_style_from_item (item);
 
     // 3.  Sort items:
-    // We can copy items from different parents, but we cannot do sorting in this case
-    if (items_are_siblings (items))
-        items = g_slist_sort((GSList *) items, (GCompareFunc) sp_item_repr_compare_position);
+    items = g_slist_sort((GSList *) items, (GCompareFunc) sp_object_compare_position);
 
     // 4.  Copy item reprs:
     //clear old clipboard 

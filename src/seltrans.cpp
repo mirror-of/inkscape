@@ -382,12 +382,6 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 /* fixme: This is really bad, as we compare positions for each stamp (Lauris) */
 /* fixme: IMHO the best way to keep sort cache would be to implement timestamping at last */
 
-static int
-sp_object_compare_position (SPObject *a, SPObject *b)
-{
-	return sp_repr_compare_position (a->repr, b->repr);
-}
-
 void sp_sel_trans_stamp (SPSelTrans *seltrans)
 {
 	SPSelection *selection = SP_DT_SELECTION (seltrans->desktop);

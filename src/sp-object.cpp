@@ -297,6 +297,35 @@ SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
 	return longest_common_suffix<SPObject::ConstParentIterator>(this, object, NULL, &same_objects);
 }
 
+const SPObject *AncestorSon (SPObject const *obj, SPObject const *ancestor) {
+    if (obj == NULL || ancestor == NULL)
+        return NULL;
+    if (SP_OBJECT_PARENT (obj) == ancestor)
+        return obj;
+    return AncestorSon (SP_OBJECT_PARENT (obj), ancestor);
+}
+
+int
+sp_object_compare_position(SPObject const *first, SPObject const *second)
+{
+	SPObject const *ancestor = first->nearestCommonAncestor(second);
+	if (ancestor == NULL) return FALSE;
+
+	// we have an object and its ancestor (should not happen when sorting selection)
+	if (ancestor == first)
+		return TRUE;
+	if (ancestor == second)
+		return FALSE;
+
+	SPObject const *to_first = AncestorSon (first, ancestor);
+	SPObject const *to_second = AncestorSon (second, ancestor);
+
+	g_assert (SP_OBJECT_PARENT(to_second) == SP_OBJECT_PARENT(to_first));
+
+	return sp_repr_compare_position(SP_OBJECT_REPR(to_first), SP_OBJECT_REPR(to_second));
+}
+
+
 SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
 		sp_repr_append_child(SP_OBJECT_REPR(this), repr);
