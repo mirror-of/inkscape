@@ -277,12 +277,29 @@ all_items (SPObject *r, GSList *l)
     return l;
 }
 
+GSList *
+all_selection_items (SPSelection *s, GSList *l)
+{
+   for (GSList *i = (GSList *) s->itemList(); i != NULL; i = i->next) {
+        if (SP_IS_ITEM (i->data) && !SP_OBJECT_IS_CLONED (i->data)) {
+            l = g_slist_prepend (l, i->data);
+        }
+        l = all_items (SP_OBJECT (i->data), l);
+    }
+    return l;
+}
+
+
 void sp_find_dialog_find(GObject *, GObject *dlg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     GSList *l = NULL;
-    l = all_items (SP_DOCUMENT_ROOT (SP_DT_DOCUMENT (desktop)), l);
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (dlg), "inselection")))) {
+        l = all_selection_items (desktop->selection, l);
+    } else {
+        l = all_items (SP_DOCUMENT_ROOT (SP_DT_DOCUMENT (desktop)), l);
+    }
     guint all = g_slist_length (l);
 
     bool exact = true;
@@ -616,6 +633,19 @@ sp_find_dialog (void)
         GtkWidget *types = sp_find_types ();
         gtk_object_set_data (GTK_OBJECT (dlg), "types", types);
         gtk_box_pack_start (GTK_BOX (vb), types, FALSE, FALSE, 0);
+
+        {
+            GtkWidget *w = gtk_hseparator_new (); 
+            gtk_widget_show (w);
+            gtk_box_pack_start (GTK_BOX (vb), w, FALSE, FALSE, 3);
+
+            GtkWidget *b  = gtk_check_button_new_with_mnemonic (_("Search in s_election"));
+            gtk_widget_show (b);
+            gtk_toggle_button_set_active ((GtkToggleButton *) b, FALSE);
+            gtk_object_set_data (GTK_OBJECT (dlg), "inselection", b);
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Limit search to the current selection"), NULL);
+            gtk_box_pack_start (GTK_BOX (vb), b, FALSE, FALSE, 0);
+        }
 
         {
             GtkWidget *hb = gtk_hbox_new (FALSE, 0);
