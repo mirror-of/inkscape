@@ -632,8 +632,15 @@ sp_text_context_forget_text (SPTextContext *tc)
 	/* We have to set it to zero,
 	 * or selection changed signal messes everything up */
 	tc->text = NULL;
-	if (sp_text_is_empty (SP_TEXT (ti))) {
-		sp_repr_unparent (SP_OBJECT_REPR (ti));
+	if (sp_text_is_empty(SP_TEXT (ti))) {
+		SPRepr *text_repr=SP_OBJECT_REPR(ti);
+		// the repr may already have been unparented
+		// if we were called e.g. as the result of
+		// an undo or the element being removed from
+		// the XML editor
+		if ( text_repr && sp_repr_parent(text_repr) ) {
+			sp_repr_unparent(text_repr);
+		}
 	}
 }
 

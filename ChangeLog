@@ -55,6 +55,9 @@
 	* src/sp-object.cpp: SPObject::remove_child is now invoked after
 	  the repr has been removed (fixes bug #916188)
 
+	* src/text-context.cpp: don't unparent the repr if it's already
+	  been unparented (fixes bug #915435)
+
 2004-03-14  rejon <jon@protofunk.org>
 
     * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 
