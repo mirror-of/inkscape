@@ -92,8 +92,9 @@ struct SPDesktop : public SPView {
 	SPCanvasGroup *sketch;
 	SPCanvasGroup *controls;
 
-	SPCanvasItem *page; // background
-	SPCanvasItem *page_border; // border
+	SPCanvasItem *table; // outside-of-page background
+	SPCanvasItem *page; // page background
+	SPCanvasItem *page_border; // page border
 
 	NR::Matrix d2w, w2d, doc2dt;
 

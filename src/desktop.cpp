@@ -418,7 +418,13 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     desktop->main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
     g_signal_connect (G_OBJECT (desktop->main), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
 
+    desktop->table = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->table), -15000.0, -15000.0, 15000.0, 15000.0);
+    sp_ctrlrect_set_color (SP_CTRLRECT (desktop->table), 0x00000000, TRUE, 0x00000000);
+    sp_canvas_item_move_to_z (desktop->table, 0);
+
     desktop->page = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page, 0x00000000, FALSE, 0x00000000);
     desktop->page_border = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
 
     desktop->drawing = sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_ARENA, NULL);
@@ -502,11 +508,11 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
 
         /* Show/hide page background */
         if (nv->pagecolor & 0xff) {
-            sp_canvas_item_show (desktop->page);
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page, 0x00000000, TRUE, nv->pagecolor);
-            sp_canvas_item_move_to_z (desktop->page, 0);
+            sp_canvas_item_show (desktop->table);
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000, TRUE, nv->pagecolor);
+            sp_canvas_item_move_to_z (desktop->table, 0);
         } else {
-            sp_canvas_item_hide (desktop->page);
+            sp_canvas_item_hide (desktop->table);
         }
 
         /* Show/hide page border */
@@ -519,7 +525,7 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
                 sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, nv->pageshadow, nv->bordercolor);
             // place in the z-order stack
             if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
-                 sp_canvas_item_move_to_z (desktop->page_border, 0);
+                 sp_canvas_item_move_to_z (desktop->page_border, 2);
             } else {
                 int order = sp_canvas_item_order (desktop->page_border);
                 int morder = sp_canvas_item_order (desktop->drawing);
