@@ -78,7 +78,7 @@ sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
 			/* stamping mode: both mode(show content and outline) operation with knot */
 			if (!SP_KNOT_IS_GRABBED (knot)) return FALSE;
 			SPDesktop *desktop = knot->desktop;
-			SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
+			SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 			sp_sel_trans_stamp(seltrans);
 			return TRUE;
 		}
@@ -90,34 +90,36 @@ sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
 	return FALSE;
 }
 
-void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
+SPSelTrans::SPSelTrans(SPDesktop *desktop)
+: box(NR::Point(0,0), NR::Point(0,0)),
+  selcue(desktop)
 {
 	gint i;
 
-	g_return_if_fail (seltrans != NULL);
+	g_return_if_fail (this != NULL);
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	seltrans->desktop = desktop;
+	this->desktop = desktop;
 
-	seltrans->state = SP_SELTRANS_STATE_SCALE;
-	seltrans->show = SP_SELTRANS_SHOW_CONTENT;
+	this->state = SP_SELTRANS_STATE_SCALE;
+	this->show = SP_SELTRANS_SHOW_CONTENT;
 
-	seltrans->grabbed = FALSE;
-	seltrans->show_handles = TRUE;
-	for (i = 0; i < 8; i++) seltrans->shandle[i] = NULL;
-	for (i = 0; i < 8; i++) seltrans->rhandle[i] = NULL;
-	seltrans->chandle = NULL;
+	this->grabbed = FALSE;
+	this->show_handles = TRUE;
+	for (i = 0; i < 8; i++) this->shandle[i] = NULL;
+	for (i = 0; i < 8; i++) this->rhandle[i] = NULL;
+	this->chandle = NULL;
 
-	sp_sel_trans_update_volatile_state(*seltrans);
+	sp_sel_trans_update_volatile_state(*this);
 	
-	seltrans->center = seltrans->box.midpoint();
+	this->center = this->box.midpoint();
 
-	sp_sel_trans_update_handles(*seltrans);
+	sp_sel_trans_update_handles(*this);
 
-	seltrans->selection = SP_DT_SELECTION(desktop);
+	this->selection = SP_DT_SELECTION(desktop);
 
-	seltrans->norm = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
+	this->norm = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
 		SP_TYPE_CTRL,
 		"anchor", GTK_ANCHOR_CENTER,
 		"mode", SP_CTRL_MODE_COLOR,
@@ -129,7 +131,7 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 		"stroke_color", 0x000000a0,
 		"pixbuf", handles[12],
 		NULL);
-	seltrans->grip = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
+	this->grip = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
 		SP_TYPE_CTRL,
 		"anchor", GTK_ANCHOR_CENTER,
 		"mode", SP_CTRL_MODE_XOR,
@@ -141,84 +143,69 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 		"stroke_color", 0xffffffff,
 		"pixbuf", handles[12],
 		NULL);
-	sp_canvas_item_hide (seltrans->grip);
-	sp_canvas_item_hide (seltrans->norm);
+	sp_canvas_item_hide (this->grip);
+	sp_canvas_item_hide (this->norm);
 	
 	for(int i = 0;  i < 4; i++) {
-		seltrans->l[i] = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
-		sp_canvas_item_hide (seltrans->l[i]);
+		this->l[i] = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
+		sp_canvas_item_hide (this->l[i]);
 	}
 
-	seltrans->stamp_cache = NULL;
+	this->stamp_cache = NULL;
 
-	/* we must call the constructors ourselves */
-	new (&seltrans->sel_changed_connection) SigC::Connection(
-		seltrans->selection->connectChanged(
-			SigC::bind(
-				SigC::slot(&sp_sel_trans_sel_changed),
-				(gpointer)seltrans
-			)
-		)
+        _sel_changed_connection = this->selection->connectChanged(
+            SigC::bind(
+                SigC::slot(&sp_sel_trans_sel_changed),
+                (gpointer)this
+            )
 	);
-	new (&seltrans->sel_modified_connection) SigC::Connection(
-		seltrans->selection->connectModified(
-			SigC::bind(
-				SigC::slot(&sp_sel_trans_sel_modified),
-				(gpointer)seltrans
-			)
-		)
+	_sel_modified_connection = this->selection->connectModified(
+            SigC::bind(
+                SigC::slot(&sp_sel_trans_sel_modified),
+                (gpointer)this
+            )
 	);
-
-	sp_sel_cue_init (&seltrans->selcue, desktop);
 }
 
-void
-sp_sel_trans_shutdown (SPSelTrans *seltrans)
-{
-	seltrans->sel_changed_connection.disconnect();
-	seltrans->sel_modified_connection.disconnect();
-
-	/* destructors are not called automatically */
-	seltrans->sel_changed_connection.~Connection();
-	seltrans->sel_modified_connection.~Connection();
-	seltrans->snap_points.~vector();
+SPSelTrans::~SPSelTrans() {
+	this->_sel_changed_connection.disconnect();
+	this->_sel_modified_connection.disconnect();
 
 	for (unsigned i = 0; i < 8; i++) {
-		if (seltrans->shandle[i]) {
-			g_object_unref (G_OBJECT (seltrans->shandle[i]));
-			seltrans->shandle[i] = NULL;
+		if (this->shandle[i]) {
+			g_object_unref (G_OBJECT (this->shandle[i]));
+			this->shandle[i] = NULL;
 		}
-		if (seltrans->rhandle[i]) {
-			g_object_unref (G_OBJECT (seltrans->rhandle[i]));
-			seltrans->rhandle[i] = NULL;
+		if (this->rhandle[i]) {
+			g_object_unref (G_OBJECT (this->rhandle[i]));
+			this->rhandle[i] = NULL;
 		}
 	}
-	if (seltrans->chandle) {
-		g_object_unref (G_OBJECT (seltrans->chandle));
-		seltrans->chandle = NULL;
+	if (this->chandle) {
+		g_object_unref (G_OBJECT (this->chandle));
+		this->chandle = NULL;
 	}
 
-	if (seltrans->norm) {
-		gtk_object_destroy (GTK_OBJECT (seltrans->norm));
-		seltrans->norm = NULL;
+	if (this->norm) {
+		gtk_object_destroy (GTK_OBJECT (this->norm));
+		this->norm = NULL;
 	}
-	if (seltrans->grip) {
-		gtk_object_destroy (GTK_OBJECT (seltrans->grip));
-		seltrans->grip = NULL;
+	if (this->grip) {
+		gtk_object_destroy (GTK_OBJECT (this->grip));
+		this->grip = NULL;
 	}
 	for(int i = 0; i < 4; i++) {
-		if (seltrans->l[i]) {
-			gtk_object_destroy (GTK_OBJECT (seltrans->l[i]));
-			seltrans->l[i] = NULL;
+		if (this->l[i]) {
+			gtk_object_destroy (GTK_OBJECT (this->l[i]));
+			this->l[i] = NULL;
 		}
 	}
 
-	for (unsigned i = 0; i < seltrans->items.size(); i++)
-			sp_object_unref (SP_OBJECT (seltrans->items[i].first), NULL);
+	for (unsigned i = 0; i < this->items.size(); i++) {
+            sp_object_unref (SP_OBJECT (this->items[i].first), NULL);
+        }
 	
-	seltrans->items.clear();
-
-	sp_sel_cue_shutdown(&seltrans->selcue);
+	this->items.clear();
 }
 
 void sp_sel_trans_reset_state(SPSelTrans *seltrans)
@@ -584,7 +571,7 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data)
 {
 	SPDesktop *desktop = knot->desktop;
-	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
+	SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 	SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 
 	switch(handle.anchor) {
@@ -612,7 +599,7 @@ static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data)
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
 {
 	SPDesktop *desktop = knot->desktop;
-	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
+	SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 
 	sp_sel_trans_ungrab(seltrans);
 }
@@ -624,11 +611,9 @@ static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, gui
 	}
 
 	SPDesktop *desktop = knot->desktop;
-	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
+	SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 	SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 	handle.action(seltrans, handle, *position, state);
-
-	//sp_desktop_coordinate_status (desktop, position, 4);
 }
 
 /* fixme: Highly experimental test :) */
@@ -641,7 +626,7 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, g
 	if (!SP_KNOT_IS_GRABBED (knot)) return TRUE;
 
 	SPDesktop *desktop = knot->desktop;
-	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
+	SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
 	SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 
 	sp_desktop_set_coordinate_status(desktop, *position, 0);

@@ -111,6 +111,7 @@ sp_event_context_init (SPEventContext *event_context)
 	event_context->desktop = NULL;
 	event_context->cursor = NULL;
 	event_context->_message_context = NULL;
+	event_context->_selcue = NULL;
 }
 
 static void
@@ -637,12 +638,27 @@ sp_event_context_finish (SPEventContext *ec)
 	g_return_if_fail (ec != NULL);
 	g_return_if_fail (SP_IS_EVENT_CONTEXT (ec));
 
+	ec->enableSelectionCue(false);
+
 	if (ec->next) {
 		g_warning ("Finishing event context with active link\n");
 	}
 
 	if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->finish)
 		((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->finish (ec);
+}
+
+void SPEventContext::enableSelectionCue(bool enable) {
+	if (enable) {
+		if (!_selcue) {
+			_selcue = new SPSelCue(desktop);
+		}
+	} else {
+		if (_selcue) {
+			delete _selcue;
+			_selcue = NULL;
+		}
+	}
 }
 
 void

@@ -24,6 +24,9 @@ enum {
 };
 
 struct SPSelCue {
+	SPSelCue(SPDesktop *desktop);
+	~SPSelCue();
+
 	SPDesktop *desktop;
 	SPSelection *selection;
 	SigC::Connection sel_changed_connection;
@@ -31,8 +34,6 @@ struct SPSelCue {
 	GSList *item_bboxes;
 };
 
-void sp_sel_cue_init(SPSelCue *selcue, SPDesktop *desktop);
-void sp_sel_cue_shutdown(SPSelCue *selcue);
 void sp_sel_cue_update_item_bboxes (SPSelCue * selcue);
 
 #endif

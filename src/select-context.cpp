@@ -31,6 +31,7 @@
 #include "pixmaps/handles.xpm"
 #include "helper/sp-intl.h"
 #include "widgets/spw-utilities.h"
+#include "message-context.h"
 
 #include "select-context.h"
 #include "selection-chemistry.h"
@@ -53,7 +54,7 @@ static void sp_select_context_set(SPEventContext *ec, gchar const *key, gchar co
 static gint sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
-static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state);
+static void sp_selection_moveto(SPSelTrans *seltrans, Inkscape::MessageContext &message_context, NR::Point const &xy, guint state);
 
 static SPEventContextClass *parent_class;
 
@@ -129,7 +130,9 @@ sp_select_context_init(SPSelectContext *sc)
     sc->dragging = FALSE;
     sc->moved = FALSE;
     sc->button_press_shift = FALSE;
+    sc->_seltrans = NULL;
     sc->_describer = NULL;
+    sc->_message_context = NULL;
 }
 
 static void
@@ -142,10 +145,12 @@ sp_select_context_dispose(GObject *object)
         sc->grabbed = NULL;
     }
 
-    sp_sel_trans_shutdown(&sc->seltrans);
-
+    delete sc->_seltrans;
+    sc->_seltrans = NULL;
     delete sc->_describer;
     sc->_describer = NULL;
+    delete sc->_message_context;
+    sc->_message_context = NULL;
 
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
@@ -162,8 +167,9 @@ sp_select_context_setup(SPEventContext *ec)
     SPDesktop *desktop = ec->desktop;
 
     select_context->_describer = new Inkscape::SelectionDescriber(desktop->selection, desktop->messageStack());
+    select_context->_message_context = new Inkscape::MessageContext(desktop->messageStack());
 
-    sp_sel_trans_init(&select_context->seltrans, desktop);
+    select_context->_seltrans = new SPSelTrans(desktop);
 
     sp_event_context_read(ec, "show");
     sp_event_context_read(ec, "transform");
@@ -176,9 +182,9 @@ sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 
     if (!strcmp(key, "show")) {
         if (val && !strcmp(val, "outline")) {
-            sc->seltrans.show = SP_SELTRANS_SHOW_OUTLINE;
+            sc->_seltrans->show = SP_SELTRANS_SHOW_OUTLINE;
         } else {
-            sc->seltrans.show = SP_SELTRANS_SHOW_CONTENT;
+            sc->_seltrans->show = SP_SELTRANS_SHOW_CONTENT;
         }
     } 
 }
@@ -190,7 +196,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
 
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
-    SPSelTrans *seltrans = &sc->seltrans;
+    SPSelTrans *seltrans = sc->_seltrans;
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
@@ -265,7 +271,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                         sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
                         sc->moved = TRUE;
                     }
-                    sp_selection_moveto(seltrans, p, event->button.state);
+                    sp_selection_moveto(seltrans, *sc->_message_context, p, event->button.state);
                     if (sp_desktop_scroll_to_point(desktop, &p)) {
                         // unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
                         ; //gobble_motion_events (GDK_BUTTON1_MASK);
@@ -276,6 +282,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
         case GDK_BUTTON_RELEASE:
             xp = yp = 0;
             if (event->button.button == 1) {
+                sc->_message_context->clear();
                 if (sc->moved) {
                     // item has been moved
                     sp_sel_trans_ungrab(seltrans);
@@ -358,7 +365,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
-    SPSelTrans *seltrans = &sc->seltrans;
+    SPSelTrans *seltrans = sc->_seltrans;
     SPSelection *selection = SP_DT_SELECTION(desktop);
     gdouble const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
     gdouble const offset = prefs_get_double_attribute_limited("options.defaultscale", "value", 2, 0, 1000);
@@ -434,7 +441,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
                             sc->moved = TRUE;
                         }
-                        sp_selection_moveto(seltrans, p, event->button.state);
+                        sp_selection_moveto(seltrans, *sc->_message_context, p, event->button.state);
                         if (sp_desktop_scroll_to_point(desktop, &p))
                             // unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
                             ; //gobble_motion_events(GDK_BUTTON1_MASK);
@@ -752,7 +759,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     return ret;
 }
 
-static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state)
+static void sp_selection_moveto(SPSelTrans *seltrans, Inkscape::MessageContext &message_context, NR::Point const &xy, guint state)
 {
     using NR::X;
     using NR::Y;
@@ -798,11 +805,9 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     // status text
     GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING(dxy[Y], SP_DEFAULT_METRIC);
-    gchar *status = g_strdup_printf(_("Move by %s, %s"), xs->str, ys->str);
+    message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move by %s, %s"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);
-    sp_view_set_status(SP_VIEW(seltrans->desktop), status, FALSE);
-    g_free(status);
 }
 
 /*

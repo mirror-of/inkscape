@@ -37,47 +37,35 @@ sp_sel_cue_sel_modified (SPSelection *selection, guint flags, gpointer data)
 }
 
 
-void 
-sp_sel_cue_init(SPSelCue *selcue, SPDesktop *desktop)
-{
-	selcue->desktop = desktop;
-	selcue->selection = SP_DT_SELECTION(desktop);
+SPSelCue::SPSelCue(SPDesktop *desktop) {
+	this->desktop = desktop;
+	this->selection = SP_DT_SELECTION(desktop);
+        this->item_bboxes = NULL;
 
-	/* we must call the constructors ourselves */
-	new (&selcue->sel_changed_connection) SigC::Connection(
-		selcue->selection->connectChanged(
-			SigC::bind(
-				SigC::slot(&sp_sel_cue_sel_changed),
-				(gpointer)selcue
-			)
-		)
+	this->sel_changed_connection = this->selection->connectChanged(
+            SigC::bind(
+                SigC::slot(&sp_sel_cue_sel_changed),
+                (gpointer)this
+            )
 	);
-	new (&selcue->sel_modified_connection) SigC::Connection(
-		selcue->selection->connectModified(
-			SigC::bind(
-				SigC::slot(&sp_sel_cue_sel_modified),
-				(gpointer)selcue
-			)
-		)
+	this->sel_modified_connection = this->selection->connectModified(
+            SigC::bind(
+                SigC::slot(&sp_sel_cue_sel_modified),
+                (gpointer)this
+            )
 	);
-	sp_sel_cue_update_item_bboxes (selcue);
+	sp_sel_cue_update_item_bboxes (this);
 }
 
-void 
-sp_sel_cue_shutdown(SPSelCue *selcue)
-{
-	selcue->sel_changed_connection.disconnect();
-	selcue->sel_modified_connection.disconnect();
+SPSelCue::~SPSelCue() {
+	this->sel_changed_connection.disconnect();
+	this->sel_modified_connection.disconnect();
 
-	/* destructors are not called automatically */
-	selcue->sel_changed_connection.~Connection();
-	selcue->sel_modified_connection.~Connection();
-
-	for (GSList *l = selcue->item_bboxes; l != NULL; l = l->next) {
+	for (GSList *l = this->item_bboxes; l != NULL; l = l->next) {
 		gtk_object_destroy( GTK_OBJECT (l->data));
 	}
-	g_slist_free (selcue->item_bboxes);
-	selcue->item_bboxes = NULL;
+	g_slist_free (this->item_bboxes);
+	this->item_bboxes = NULL;
 }
 
 void

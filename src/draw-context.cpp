@@ -924,8 +924,9 @@ sp_pencil_context_init(SPPencilContext *pc)
 static void
 sp_pencil_context_setup (SPEventContext *ec)
 {
-	if (prefs_get_int_attribute("tools.freehand.pencil", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+    if (prefs_get_int_attribute("tools.freehand.pencil", "selcue", 0) != 0) {
+        ec->enableSelectionCue();
+    }
 
     if (((SPEventContextClass *) pencil_parent_class)->setup) {
         ((SPEventContextClass *) pencil_parent_class)->setup(ec);
@@ -939,8 +940,6 @@ sp_pencil_context_dispose(GObject *object)
     SPEventContext *ec = SP_EVENT_CONTEXT(object);
 
     G_OBJECT_CLASS(pencil_parent_class)->dispose(object);
-
-    sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 gint
@@ -1345,16 +1344,15 @@ sp_pen_context_setup(SPEventContext *ec)
 
     sp_event_context_read(ec, "mode");
 
-   if (prefs_get_int_attribute("tools.freehand.pen", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+    if (prefs_get_int_attribute("tools.freehand.pen", "selcue", 0) != 0) {
+        ec->enableSelectionCue();
+    }
 }
 
 static void
 sp_pen_context_finish(SPEventContext *ec)
 {
     spdc_pen_finish(SP_PEN_CONTEXT(ec), FALSE);
-
-    sp_sel_cue_shutdown(&(ec->selcue));
 
     if (((SPEventContextClass *) pen_parent_class)->finish) {
         ((SPEventContextClass *) pen_parent_class)->finish(ec);

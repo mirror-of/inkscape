@@ -25,6 +25,8 @@
 class SPSelectContext;
 class SPSelectContextClass;
 
+namespace Inkscape { class MessageContext; }
+
 struct SPSelectContext : public SPEventContext {
 	guint dragging : 1;
 	guint moved : 1;
@@ -32,8 +34,9 @@ struct SPSelectContext : public SPEventContext {
 	guint button_press_ctrl : 1;
 	SPItem *item;
 	SPCanvasItem *grabbed;
-	SPSelTrans seltrans;
+	SPSelTrans *_seltrans;
 	Inkscape::SelectionDescriber *_describer;
+	Inkscape::MessageContext *_message_context;
 };
 
 struct SPSelectContextClass {

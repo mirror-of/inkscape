@@ -36,7 +36,6 @@
 
 static void sp_zoom_context_class_init (SPZoomContextClass * klass);
 static void sp_zoom_context_init (SPZoomContext * zoom_context);
-static void sp_zoom_context_dispose (GObject * object);
 static void sp_zoom_context_setup (SPEventContext *ec);
 
 static gint sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event);
@@ -79,7 +78,6 @@ sp_zoom_context_class_init (SPZoomContextClass * klass)
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
-	object_class->dispose = sp_zoom_context_dispose;
 	event_context_class->setup = sp_zoom_context_setup;
 
 	event_context_class->root_handler = sp_zoom_context_root_handler;
@@ -101,22 +99,13 @@ sp_zoom_context_init (SPZoomContext * zoom_context)
 static void
 sp_zoom_context_setup (SPEventContext *ec)
 {
-	if (prefs_get_int_attribute("tools.zoom", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+    if (prefs_get_int_attribute("tools.zoom", "selcue", 0) != 0) {
+	    ec->enableSelectionCue();
+    }
 
     if (((SPEventContextClass *) parent_class)->setup) {
         ((SPEventContextClass *) parent_class)->setup(ec);
     }
-}
-
-static void
-sp_zoom_context_dispose (GObject *object)
-{
-	SPEventContext *ec = SP_EVENT_CONTEXT (object);
-
-	sp_sel_cue_shutdown(&(ec->selcue));
-
-	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static gint

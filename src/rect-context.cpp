@@ -140,8 +140,6 @@ static void sp_rect_context_dispose(GObject *object)
         rc->repr = 0;
     }
 
-    sp_sel_cue_shutdown(&(ec->selcue));
-
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
@@ -241,8 +239,9 @@ static void sp_rect_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "rx");
     sp_event_context_read(ec, "ry");
 
-    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
+        ec->enableSelectionCue();
+    }
 }
 
 static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar const *val)

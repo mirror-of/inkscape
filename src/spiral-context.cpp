@@ -142,8 +142,6 @@ sp_spiral_context_dispose (GObject *object)
         sc->repr = 0;
     }
 
-    sp_sel_cue_shutdown(&(ec->selcue));
-
     G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -250,8 +248,9 @@ sp_spiral_context_setup (SPEventContext *ec)
 	sc->sel_changed_connection.disconnect();
 	sc->sel_changed_connection = selection->connectChanged(SigC::bind(SigC::slot(&sp_spiral_context_selection_changed), (gpointer)sc));
 
-	if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+	if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
+		ec->enableSelectionCue();
+	}
 }
 
 static void

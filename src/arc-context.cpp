@@ -135,8 +135,6 @@ static void sp_arc_context_dispose(GObject *object)
 	/* fixme: This is necessary because we do not grab */
 	if (ac->item) sp_arc_finish (ac);
 
-	sp_sel_cue_shutdown(&(ec->selcue));
-
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -233,8 +231,9 @@ sp_arc_context_setup (SPEventContext *ec)
     ac->sel_changed_connection.disconnect();
     ac->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_arc_context_selection_changed), (gpointer)ac));
 
-    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0) {
+	    ec->enableSelectionCue();
+    }
 }
 
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)

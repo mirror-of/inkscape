@@ -26,6 +26,8 @@
 namespace Inkscape { class MessageContext; }
 
 struct SPEventContext : public GObject {
+	void enableSelectionCue(bool enable=true);
+
 	/* Desktop eventcontext stack */
 	SPEventContext *next;
 	unsigned int key;
@@ -41,13 +43,13 @@ struct SPEventContext : public GObject {
 
 	SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
 
-	SPSelCue selcue;
-
 	Inkscape::MessageContext *defaultMessageContext() {
 		return _message_context;
 	}
 
 	Inkscape::MessageContext *_message_context;
+
+	SPSelCue *_selcue;
 };
 
 struct SPEventContextClass : public GObjectClass {

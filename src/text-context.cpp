@@ -193,8 +193,9 @@ sp_text_context_setup (SPEventContext *ec)
 
 	sp_text_context_selection_changed (SP_DT_SELECTION (desktop), tc);
 
-	if (prefs_get_int_attribute("tools.text", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+	if (prefs_get_int_attribute("tools.text", "selcue", 0) != 0) {
+		ec->enableSelectionCue();
+	}
 }
 
 static void
@@ -230,8 +231,6 @@ sp_text_context_finish (SPEventContext *ec)
 	if (ec->desktop) {
   		sp_signal_disconnect_by_data (SP_DT_CANVAS (ec->desktop), tc);
 	}
-
-	sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 static gint

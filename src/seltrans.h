@@ -35,12 +35,12 @@ enum {
 };
 
 struct SPSelTrans {
+	SPSelTrans(SPDesktop *desktop);
+	~SPSelTrans();
+
 	SPDesktop *desktop;
 
 	SPSelection *selection;
-	SigC::Connection sel_changed_connection;
-	SigC::Connection sel_modified_connection;
-
 	guint state : 1;
 	guint show : 1;
 
@@ -71,6 +71,9 @@ struct SPSelTrans {
 	GSList *stamp_cache;
 
 	SPSelCue selcue;
+
+	SigC::Connection _sel_changed_connection;
+	SigC::Connection _sel_modified_connection;
 };
 
 /*
@@ -82,9 +85,6 @@ struct SPSelTrans {
  * if changed or sel changed during grabbing, sets state to scale
  *
  */ 
-
-void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop);
-void sp_sel_trans_shutdown(SPSelTrans *seltrans);
 
 void sp_sel_trans_reset_state(SPSelTrans *seltrans);
 void sp_sel_trans_increase_state(SPSelTrans *seltrans);

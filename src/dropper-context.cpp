@@ -122,8 +122,9 @@ sp_dropper_context_setup (SPEventContext *ec)
 	sp_canvas_bpath_set_stroke (SP_CANVAS_BPATH (dc->area), 0x0000007f, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 	sp_canvas_item_hide (dc->area);
 
-	if (prefs_get_int_attribute("tools.dropper", "selcue", 0) != 0)
-		sp_sel_cue_init(&(ec->selcue), ec->desktop);
+	if (prefs_get_int_attribute("tools.dropper", "selcue", 0) != 0) {
+		ec->enableSelectionCue();
+	}
 }
 
 static void
@@ -135,8 +136,6 @@ sp_dropper_context_finish (SPEventContext *ec)
 		gtk_object_destroy (GTK_OBJECT (dc->area));
 		dc->area = NULL;
 	}
-
-	sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 static gint

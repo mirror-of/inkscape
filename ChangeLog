@@ -2,6 +2,15 @@
 
 	* src/refcounted.h: allow reffing/unreffing const objects
 
+	* src/arc-context.cpp, src/draw-context.cpp, src/dropper-context.cpp,
+	  src/event-context.cpp, src/event-context.h, src/node-context.cpp,
+	  src/rect-context.cpp, src/selcue.cpp, src/selcue.h,
+	  src/select-context.cpp, src/select-context.h, src/seltrans.cpp,
+	  src/seltrans.h, src/spiral-context.cpp, src/star-context.cpp,
+	  src/text-context.cpp, src/zoom-context.cpp:
+
+	  Make SPSelTrans and SPSelCue proper C++ classes with constructors.
+
 2004-06-26  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/node-context.cpp: make sure nodepath->nodeContext is set up
