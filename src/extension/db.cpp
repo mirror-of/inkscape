@@ -231,7 +231,7 @@ DB::free_list (GSList * in_list)
 	return;
 }
 
-DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, const Extension * in_extension)
+DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, Extension * in_extension)
 {
 	name = in_name;
 	file_extension = in_file_extension;

@@ -189,6 +189,19 @@ sp_file_open_dialog (gpointer object, gpointer data)
 ## S A V E
 ######################*/
 
+static bool
+save_status (bool sucess) {
+	if (sucess == TRUE) {
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
+	} else {
+		gchar * text;
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+		text = g_strdup_printf(_("File %s unable to be saved."), SP_ACTIVE_DOCUMENT->uri);
+		sp_ui_error_dialog (text);
+	}
+	return sucess;
+}
+
 /**
  * This 'save' function called by the others below
  */
@@ -213,13 +226,16 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
+    SPRepr *repr = sp_document_repr_root (doc);
     Inkscape::UI::Dialogs::FileSaveDialog *dlg =
         new Inkscape::UI::Dialogs::FileSaveDialog(
                  (const char *)save_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
-                 (const char *)_("Select file to save"), NULL);
+                 (const char *)_("Select file to save"),
+				 sp_repr_attr(repr, "inkscape:output_extension")
+				 );
 	bool sucess = dlg->show();
-    char *fileName = g_strdup(dlg->getFilename());
+    char *fileName = sucess ? g_strdup(dlg->getFilename()) : NULL;
 	Inkscape::Extension::Extension * selectionType = dlg->getSelectionType();
 
 	if (!sucess) return sucess;
@@ -263,9 +279,9 @@ sp_file_save_dialog (SPDocument *doc)
         save_path = g_dirname (fileName);
         save_path = g_strdup (save_path);
         g_free (fileName);
-        return sucess;
+        return save_status(sucess);
     } else {
-        return FALSE;
+        return save_status(FALSE);
     }
 }
 
@@ -284,22 +300,14 @@ sp_file_save_document (SPDocument *doc)
     gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
     if (fn != NULL) {
 		if (doc->uri == NULL) {
-			success = sp_file_save_dialog (doc);
+			return sp_file_save_dialog (doc);
 		} else {
 			/* TODO: This currently requires a recognizable extension to
 				 be on the file name - odd stuff won't work */
 			fn = g_strdup (doc->uri);
-			success = file_save(doc, fn, NULL);
+			success = file_save(doc, fn, Inkscape::Extension::db.get(sp_repr_attr(repr, "inkscape:output_extension")));
 			g_free ((void *) fn);
-		}
-
-        if (success)
-            sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
-        else {
-			gchar * text;
-            sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
-			text = g_strdup_printf(_("File %s unable to be saved."), doc->uri);
-			sp_ui_error_dialog (text);
+			save_status(success);
 		}
 
     } else {
@@ -331,23 +339,10 @@ sp_file_save (gpointer object, gpointer data)
 bool
 sp_file_save_as (gpointer object, gpointer data)
 {
-	bool sucess = FALSE;
-
     if (!SP_ACTIVE_DOCUMENT)
         return FALSE;
     sp_namedview_document_from_window (SP_ACTIVE_DESKTOP);
-    sucess = sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
-    //TODO: make this dependent on the success of the save operation
-	if (sucess == TRUE) {
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
-	} else {
-		gchar * text;
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
-		text = g_strdup_printf(_("File %s unable to be saved."), SP_ACTIVE_DOCUMENT->uri);
-		sp_ui_error_dialog (text);
-	}
-
-	return sucess;
+    return sp_file_save_dialog (SP_ACTIVE_DOCUMENT);
 }
 
 

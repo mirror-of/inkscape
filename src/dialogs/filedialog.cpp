@@ -29,6 +29,8 @@ namespace Dialogs
 # U T I L I T Y
 #################################*/
 
+static bool append_extension = TRUE;
+
 static void
 menu_switch (GtkWidget * widget, const Inkscape::Extension::Extension ** extension)
 {
@@ -37,6 +39,14 @@ menu_switch (GtkWidget * widget, const Inkscape::Extension::Extension ** extensi
 	desc = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(g_object_get_data(G_OBJECT(widget), IO_STORAGE_NAME));
 	// printf("The menu has changed to: %s\n", desc->name);
 	*extension = desc->extension;
+	return;
+}
+
+static void
+checkbox_toggle (GtkWidget * widget, gpointer data)
+{
+	append_extension = !append_extension;
+	// printf("Toggled Checkbox\n");
 	return;
 }
 
@@ -182,6 +192,9 @@ FileSaveDialog::FileSaveDialog(
 	GSList *    current_item;
     GtkWidget * menu;
     GtkWidget * item;
+	GtkWidget * checkbox;
+	guint       default_item;
+	guint       i;
 
     nativeData = (FileSaveNativeData *) g_malloc( sizeof(FileSaveNativeData));
     if ( !nativeData ) {
@@ -209,9 +222,8 @@ FileSaveDialog::FileSaveDialog(
 
 	/* This doesn't seem to do anything useful, so I'm dropping it */
 	/*
-    if ( !dir )
-        dir = "*.svg";
-	gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
+    if (dir != NULL)
+		gtk_file_selection_set_filename(GTK_FILE_SELECTION(dlg), dir);
 	*/
 
     /*
@@ -227,6 +239,8 @@ FileSaveDialog::FileSaveDialog(
     item = gtk_menu_item_new_with_label(_("Autodetect"));
 	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
 	g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, extension_list->data);
+	extension = NULL;
+	default_item = 0;
     gtk_menu_append(GTK_MENU(menu), item);
 
 	/* Seperator for looks */
@@ -235,21 +249,41 @@ FileSaveDialog::FileSaveDialog(
 
 	/* First one gets skipped, it is the autodetect one that is handled
 	   above. */
-	for (current_item = g_slist_next(extension_list);
+	for (current_item = g_slist_next(extension_list), i = 2;
             current_item != NULL;
-            current_item = g_slist_next(current_item)) {
-		item = gtk_menu_item_new_with_label((reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data))->name);
+            current_item = g_slist_next(current_item), i++) {
+        Inkscape::Extension::DB::IOExtensionDescription * currentIO;
+
+		currentIO = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
+
+		item = gtk_menu_item_new_with_label(currentIO->name);
 		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
 		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
 		gtk_widget_show(item);
 		gtk_menu_append(GTK_MENU(menu), item);
+
+		if (default_key != NULL &&
+			currentIO->extension->get_id() != NULL &&
+			!strcmp(default_key, currentIO->extension->get_id())) {
+			default_item = i;
+			/* gtk_menu_item_select(GTK_MENU_ITEM(item)); */
+			extension = currentIO->extension;
+		}
 	}
 
 
     gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
+	gtk_option_menu_set_history(GTK_OPTION_MENU (om), default_item);
     GtkWidget *l = gtk_label_new (_("File type:"));
     gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     gtk_widget_show_all (hb);
+
+	checkbox = gtk_check_button_new_with_label(_("Automatically append filename extension"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), append_extension);
+	g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(checkbox_toggle), NULL);
+	gtk_widget_show(checkbox);
+    gtk_box_pack_end (GTK_BOX (GTK_FILE_SELECTION(dlg)->main_vbox),
+        checkbox, FALSE, FALSE, 0);
 
     nativeData->dlg      = dlg;
 	Inkscape::Extension::db.free_list(extension_list);
@@ -278,24 +312,30 @@ FileSaveDialog::show() {
     GtkWidget *dlg = nativeData->dlg;
 
 	/* Reset the default back to autodetect */
-	extension = NULL;
     gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
     gint b = gtk_dialog_run (GTK_DIALOG (dlg));
 	gtk_widget_hide(GTK_WIDGET(dlg));
 
-    if (b == GTK_RESPONSE_OK)
-        {
+    if (b == GTK_RESPONSE_OK) {
         gchar * dialog_filename =
             (gchar *)gtk_file_selection_get_filename (GTK_FILE_SELECTION(dlg));
 		g_free(filename);
 	    filename = g_strdup(dialog_filename);
-		return TRUE;
-        }
-    else
-        {
-	    return FALSE;
-	    }
 
+		if (append_extension == TRUE && extension != NULL) {
+			Inkscape::Extension::Output * omod = dynamic_cast<Inkscape::Extension::Output *>(extension);
+			if (!g_str_has_suffix(filename, omod->get_extension())) {
+				gchar * newfilename;
+				newfilename = g_strdup_printf("%s%s", filename, omod->get_extension());
+				g_free(filename);
+				filename = newfilename;
+			}
+		}
+
+		return TRUE;
+	} else {
+	    return FALSE;
+	}
 }
 
 

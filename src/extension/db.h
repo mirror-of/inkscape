@@ -46,12 +46,12 @@ public:
         const gchar *     name;           /**< Name of the extension */
         const gchar *     file_extension; /**< Extension of file for this extension */
         const gchar *     mimetype;       /**< MIME type of file */
-        const Extension * extension;      /**< Key used to pass back to the extension system */
+        Extension *       extension;      /**< Key used to pass back to the extension system */
 
         IOExtensionDescription   (const gchar *      in_name,
                                   const gchar *      in_file_extension,
                                   const gchar *      in_mime,
-                                  const Extension *  in_extension);
+                                  Extension *        in_extension);
         ~IOExtensionDescription(void);
     };
 

@@ -1,4 +1,14 @@
 2004-03-31  Ted Gould <ted@gould.cx>
+	* src/file.cpp, src/dialogs/filedialog.cpp, src/extension/db.cpp,
+      src/extension/db.h, src/extension/system.cpp:
+	  A bunch of changes for Bulia's bug 925875.  Basically now the
+	  save dialog remembers which extension you've used.  This also
+	  means that save works with non-standard extensions.  Also, it
+	  will add extensions for you if you didn't put them on.  Finally,
+	  the error dialog doesn't come up if you hit cancel in the
+	  'Save As...' dialog.  Whew!
+
+2004-03-31  Ted Gould <ted@gould.cx>
 
 	* src/interface.cpp, src/interface.h, src/file.cpp:
 	  Adding a cute little dialog to tell you if you are about to
