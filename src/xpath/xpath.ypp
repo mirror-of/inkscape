@@ -1,0 +1,345 @@
+/*
+ * XPath yacc grammar
+ * 
+ * 
+ */
+
+%{
+
+/*#########################################################################
+###  D E C L A R A T I O N S    S E C T I O N
+#########################################################################*/
+#include <stdio.h>
+#include <string.h>
+
+#include "xpath.h"
+#include "xpathimpl.h"
+#include "dom.h"
+
+int yylex(void *, XPathImpl *);
+void yyerror(char *);
+
+#define YYPARSE_PARAM parm
+#define YYLEX_PARAM (XPathImpl *)parm
+
+%}
+
+
+%pure_parser
+
+%token AND
+%token OR
+%token QNAME
+%token NAME_COLON_STAR
+%token DOT
+%token DOT_DOT
+%token COMMENT
+%token PI
+%token TEXT
+%token NODE
+%token LITERAL
+%token NUMBER
+%token COLON_COLON
+%token DOLLAR_QNAME
+%token SLASH
+%token SLASH_SLASH
+%token QUO
+%token DIV
+%token MOD
+
+/*###### axis names ####### */
+%token ANCESTOR
+%token ANCESTOR_OR_SELF
+%token ATTRIBUTE
+%token CHILD
+%token DESCENDANT
+%token DESCENDANT_OR_SELF
+%token FOLLOWING
+%token FOLLOWING_SIBLING
+%token NAMESPACE
+%token PARENT
+%token PRECEDING
+%token PRECEDING_SIBLING
+%token SELF
+
+/*###### function names ####### */
+%token LAST
+%token POSITION
+%token COUNT
+%token ID
+%token LOCAL_NAME
+%token NAMESPACE_URI
+%token NAME
+%token STRING
+%token CONCAT
+%token STARTS_WITH
+%token CONTAINS
+%token SUBSTRING_BEFORE
+%token SUBSTRING_AFTER
+%token SUBSTRING
+%token STRING_LENGTH
+%token NORMALIZE_SPACE
+%token TRANSLATE
+%token BOOLEAN
+%token NOT
+%token TRUE
+%token FALSE
+%token LANG
+%token NUMBER
+%token SUM
+%token FLOOR
+%token CEILING
+%token ROUND
+
+/* For NodeTest */
+%token PROCESSING_INSTRUCTION
+
+
+/*#########################################################################
+###  G R A M M A R    R U L E S    S E C T I O N
+#########################################################################*/
+
+
+%%
+
+Input :
+  Expr { /*do something*/ }
+  ;
+
+Expr :
+  OrExpr
+  ;
+
+OrExpr :
+  AndExpr
+  | OrExpr OR AndExpr
+  ;
+
+AndExpr :
+  EqualityExpr
+  | AndExpr AND EqualityExpr
+  ;
+
+EqualityExpr :
+  RelationalExpr
+  | EqualityExpr '='     RelationalExpr
+  | EqualityExpr '!' '=' RelationalExpr
+  ;
+
+RelationalExpr :
+  AdditiveExpr
+  | RelationalExpr '<'     AdditiveExpr
+  | RelationalExpr '>'     AdditiveExpr
+  | RelationalExpr '<' '=' AdditiveExpr
+  | RelationalExpr '>' '=' AdditiveExpr
+  ;
+
+AdditiveExpr :
+  MultiplicativeExpr
+  | AdditiveExpr '+' MultiplicativeExpr
+  | AdditiveExpr '-' MultiplicativeExpr
+  ;
+
+MultiplicativeExpr :
+  UnaryExpr
+  | MultiplicativeExpr '*' UnaryExpr
+  | MultiplicativeExpr DIV UnaryExpr
+  | MultiplicativeExpr MOD UnaryExpr
+  ;
+
+UnaryExpr :
+  UnionExpr
+  | '-' UnaryExpr
+  ;
+
+UnionExpr :
+  PathExpr
+  | UnionExpr '|' PathExpr
+  ;
+
+PathExpr :
+  LocationPath
+  | PrimaryExpr Predicates Segment
+  ;
+
+Segment :
+  /* empty */
+  | SLASH RelativeLocationPath
+  | SLASH_SLASH RelativeLocationPath
+  ;
+
+/*
+ * Location Paths.
+ */
+
+LocationPath :
+  RelativeLocationPath
+  | AbsoluteLocationPath
+  ;
+
+AbsoluteLocationPath :
+  SLASH
+  | SLASH RelativeLocationPath
+  | SLASH_SLASH RelativeLocationPath
+  ;
+
+RelativeLocationPath :
+  Step
+  | RelativeLocationPath SLASH Step
+  | RelativeLocationPath SLASH_SLASH Step
+  ;
+
+Step :
+  Axis NodeTest Predicates
+  | DOT
+  | DOT_DOT
+  ;
+
+Axis:
+  /* empty */
+  | ANCESTOR           COLON_COLON
+  | ANCESTOR_OR_SELF   COLON_COLON
+  | ATTRIBUTE          COLON_COLON
+  | CHILD              COLON_COLON
+  | DESCENDANT         COLON_COLON
+  | DESCENDANT_OR_SELF COLON_COLON
+  | FOLLOWING          COLON_COLON
+  | FOLLOWING_SIBLING  COLON_COLON
+  | NAMESPACE          COLON_COLON
+  | PARENT             COLON_COLON
+  | PRECEDING          COLON_COLON
+  | PRECEDING_SIBLING  COLON_COLON
+  | SELF               COLON_COLON
+  | '@'
+  ;
+
+Predicates :
+  /* empty */
+  | Predicates '[' Expr ']' /* XX [4] */
+  ;
+
+PrimaryExpr :
+  DOLLAR_QNAME
+  | '(' Expr ')'
+  | LITERAL
+  | NUMBER
+  | FunctionCall
+  ;
+
+FunctionCall :
+     LAST '(' ')'
+  |  POSITION '(' ')'
+  |  COUNT '(' OptArgs ')'
+  |  ID '(' ')'
+  |  LOCAL_NAME '(' ')'
+  |  NAMESPACE_URI '(' ')'
+  |  NAME '(' ')'
+  |  STRING '(' ')'
+  |  CONCAT '(' ')'
+  |  STARTS_WITH '(' ')'
+  |  CONTAINS '(' ')'
+  |  SUBSTRING_BEFORE '(' ')'
+  |  SUBSTRING_AFTER '(' ')'
+  |  SUBSTRING '(' ')'
+  |  STRING_LENGTH '(' ')'
+  |  NORMALIZE_SPACE '(' ')'
+  |  TRANSLATE '(' ')'
+  |  BOOLEAN '(' ')'
+  |  NOT '(' ')'
+  |  TRUE '(' ')'
+  |  FALSE '(' ')'
+  |  LANG '(' ')'
+  |  NUMBER '(' ')'
+  |  SUM '(' ')'
+  |  FLOOR '(' ')'
+  |  CEILING '(' ')'
+  |  ROUND '(' ')'
+  ;
+
+OptArgs :
+  /* empty */
+  | Args
+  ;
+
+Args :
+  Expr
+  | Args ',' Expr
+  ;
+  
+NodeTest :
+  QNAME
+  | '*'
+  | NAME_COLON_STAR
+  | PI '(' OptLiteral ')'
+  | COMMENT '(' ')'
+  | TEXT '(' ')'
+  | NODE '(' ')'
+  | PROCESSING_INSTRUCTION '(' LITERAL ')'
+  ;
+
+OptLiteral :
+  /* empty */
+  | LITERAL
+  ;
+
+
+
+
+%%
+
+
+/*#########################################################################
+###  C O D E    S E C T I O N
+#########################################################################*/
+
+XPathImpl::XPathImpl()
+{
+    parseBuf = NULL;
+    parseLen = 0;
+}
+
+XPathImpl::~XPathImpl()
+{
+
+}
+
+
+//Forward decl.. is at bottom of Lex file
+void lexSetup(char *buf);
+
+bool XPathImpl::parse(const char *inputStr)
+{
+    if (!inputStr || !(*inputStr))
+        return false;
+    parseBuf = (char *)inputStr;
+    parseLen = strlen(parseBuf);
+    parsePos = 0;  
+ 
+    yydebug=1;
+    printf("##### Parsing:%s\n", parseBuf);
+
+    lexSetup(parseBuf);
+    yyparse((void *)this);
+
+    return true;
+}
+
+XPath *XPath::create()
+{
+    XPath *xp = new XPathImpl();
+    return xp;
+}
+
+
+void yyerror(char *msg)
+{
+  printf("parse error %s\n", msg);
+
+}
+
+
+
+
+
+
+
