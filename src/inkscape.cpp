@@ -58,6 +58,8 @@
 #include "inkscape-private.h"
 #include "prefs-utils.h"
 
+#include "extension/init.h"
+
 #ifdef WIN32
 #define mkdir(d,m) _mkdir((d))
 #endif
@@ -563,6 +565,11 @@ inkscape_application_init (const gchar *argv0)
     /* Attempt to load the preferences, and set the save_preferences flag to TRUE
        if we could, or FALSE if we couldn't */
     inkscape->save_preferences = inkscape_load_preferences(inkscape);
+
+    /* Initialize the extensions */
+    Inkscape::Extension::init();
+
+    return;
 }
 
 /**

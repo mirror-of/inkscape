@@ -1,3 +1,14 @@
+2004-06-07  Ted Gould  <ted@gould.cx>
+
+	* src/inkscape.cpp, src/main.cpp:
+
+	Moving the initialization of the extensions into the Inkscape application
+	init.  I have mixed feelings on this.  One one hand, basically extension
+	init gets called directly after applicaiton init and extensions init has
+	nothing to do with anything else in main.  On the other hand I'm not sure
+	that it is directly related to the structure of the application itself.
+	Comments are welcome.
+
 2004-06-06  MenTaLguY  <mental@rydia.net>
 
 	* src/attributes.cpp, src/attributes.h: added inkscape:collect attribute

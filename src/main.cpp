@@ -298,8 +298,6 @@ sp_main_gui (int argc, const char **argv)
 		}
 	}
 
-	Inkscape::Extension::init();
-
 	gtk_main();
 
 #ifdef WIN32
@@ -372,8 +370,6 @@ sp_main_console (int argc, const char **argv)
 	/* Start up g type system, without requiring X */
 	g_type_init();
 	inkscape_application_init (argv[0]);
-
-	Inkscape::Extension::init();
 
 	while (fl) {
 		SPDocument *doc;
