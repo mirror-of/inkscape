@@ -1,4 +1,8 @@
-2003-11-29  Bryce Harrington <brycehar@bryceharrington.com>
+2003-11-29  bulia byak <bulia@dr.com>
+
+	* shortening tooltips, new verb and menu command for zoom to page width 
+
+2003-11-29 Bryce Harrington <brycehar@bryceharrington.com>
 
 	* README:  Updating "Sodipodi" to "Inkscape", removing some
 	  obviously obsolete bits.
