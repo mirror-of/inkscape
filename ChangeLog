@@ -1,3 +1,8 @@
+2004-04-30 njh <njh@mail.csse.monash.edu.au>
+
+	* main.cpp: replaced gtk_init with g_type_init for console mode.
+	Closes 944969.
+	
 2004-04-29  MenTaLguY <mental@rydia.net>
 
 	* src/sp-image.cpp, src/sp-item.cpp, src/sp-item.h, src/sp-line.cpp,
