@@ -7,7 +7,8 @@ extension/script/clean:
 	rm -f $(extension_script_libscript_a_OBJECTS)
         
 extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
-extension_script_libscript_a_LIBADD = $(PERL_LIBS) $(PYTHON_LIBS)
+extension_script_libscript_a_LIBADD = $(PYTHON_LIBS)
+
 
 if WITH_PERL
 perl_sources = \
@@ -36,5 +37,4 @@ extension_script_libscript_a_SOURCES =	\
 	extension/script/InkscapeScript.cpp \
 	$(perl_sources)	\
 	$(python_sources)
-
 

@@ -227,17 +227,29 @@ if test "x$with_perl" = "xyes"; then
     if test "$?" -gt "0"; then
         with_perl="no"
     else
-        PERL_LIBS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
+        PERL_LDFLAGS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
         if test "$?" -gt "0"; then
             with_perl="no"
         else
-            AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
-            AC_SUBST(PERL_CFLAGS)
-            AC_SUBST(PERL_LIBS)
+            with_perl="yes"
         fi
     fi
 fi
 AC_MSG_RESULT([$with_perl])
+if test "x$with_perl" = "xyes"; then
+    # Test that we actually have the perl libraries installed
+    oldLDFLAGS="$LDFLAGS"
+    oldCFLAGS="$CFLAGS"
+    LDFLAGS="$LDFLAGS $PERL_LDFLAGS"
+    CFLAGS="$CFLAGS $PERL_CFLAGS"
+    AC_CHECK_FUNC([perl_run],[
+        AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
+        AC_SUBST(PERL_CFLAGS)
+        AC_SUBST(PERL_LDFLAGS)
+        ],[with_perl="no"])
+    LDFLAGS="$oldLDFLAGS"
+    CFLAGS="$oldCFLAGS"
+fi
 AM_CONDITIONAL(WITH_PERL, test "x$with_perl" = "xyes")
 
 dnl ******************************
