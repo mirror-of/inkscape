@@ -1,7 +1,9 @@
 #include "dialogs/docker.h"
 #include  "dialogs/dockable.h"
 #include "dialogs/align.h"
-
+#include "inkscape.h"
+#include "desktop.h"
+#include "display/sp-canvas.h"
 
 #include <iostream> // TODO : delete
 //Docker class
@@ -12,7 +14,6 @@ Docker::Docker( Gtk::Window &desktopWindow) :
   _menu(*this)
 {
   init();
-  _window.set_transient_for(desktopWindow);
 };
 
 Docker::Docker( ) 
@@ -56,9 +57,17 @@ void Docker::init()
   _window.set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);	
   _window.set_skip_taskbar_hint(true);
   _window.set_skip_pager_hint(true);
+  SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+  //Looks like this does not work.
+//   if (desktop)
+//     {
+//       Gtk::Window * w = Glib::wrap((GtkWindow *) &(desktop->owner->canvas->widget));
+//       _window.set_transient_for(*w);
+//     }
   _window.add(_notebook);
   _notebook.show();
   _notebook.signal_button_press_event().connect(sigc::mem_fun(*this, &Docker::on_click));        
+  _notebook.set_border_width(4);
   
 }
 bool Docker::on_click(GdkEventButton* e)

@@ -14,48 +14,74 @@
 #include <gtkmm/container.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/image.h>
-
+#include <gtkmm/entry.h>
+#include <gtkmm/tooltips.h>
+#include <gtkmm/table.h>
 
 #include "dialogs/dockable.h"
 #include "dialogs/find.h"
 #include "widgets/icon.h"
 #include "dialogs/docker.h"
 
+#include "verbs.h"
 
-
+//TODO  : delete this
+GtkWidget * sp_find_dialog_old (void);
 
 class DialogFind : public Dockable
 {
 public :
     static DialogFind & get();
-    void present();
     virtual Gtk::Container & get_main_widget() {return _widget;}
 
 private :
     DialogFind();    
     virtual ~DialogFind(){};
-    Gtk::VBox _widget;
+    void addSearchField(Glib::ustring label, Glib::ustring tiptext, int line);
+    Gtk::VBox _widget; 
+    Gtk::Table _fieldsTable;
     Docker *_pDocker;
-
+    Gtk::Tooltips _tooltips;
+    static int FIND_LABEL_WIDTH;
+    static int FIND_FIED_WIDTH;
 };
 
+int DialogFind::FIND_LABEL_WIDTH = 80;
+int DialogFind::FIND_FIED_WIDTH = 64;
 
+void DialogFind::addSearchField(Glib::ustring label, Glib::ustring tiptext, int line)
+{
+    Gtk::Label *l = Gtk::manage(new Gtk::Label(label, 0.9, 0.5, true));
+    Gtk::Entry *tf = Gtk::manage(new Gtk::Entry);
+    l->set_mnemonic_widget(*tf);
+    _tooltips.set_tip(*tf, tiptext);
+    _fieldsTable.attach(*l, 0, 1, line, line+1, Gtk::FILL, Gtk::FILL);
+    _fieldsTable.attach(*tf, 1, 4, line, line+1);
+}
 
 GtkWidget *sp_find_dialog(){
     DialogFind::get().present();
-    return NULL;
+    return sp_find_dialog_old ();
 }
 
 DialogFind::DialogFind():
     Dockable("Find", "dialogs.find"),
+    _fieldsTable(5, 4, true),
     _pDocker(0)
 {
-    PixBufFactory::ID id ("inkscape_options", 60, 60);
+    PixBufFactory::ID id ("inkscape_options", 60, 20);
     Gtk::Image*  pImage = 
         Gtk::manage( new Gtk::Image(
                          PixBufFactory::get().
                          getFromSVG(id)));
     _widget.pack_start(*pImage);
+    _widget.pack_start(_fieldsTable);
+    addSearchField("_Text", _("Find objects by their text content (exact or partial match)"), 0);
+    addSearchField("_ID", _("Find objects by the value of the id attribute (exact or partial match)"), 1);
+    addSearchField("_Style", _("Find objects by the value of the style attribute (exact or partial match)"), 2);
+    addSearchField("_Attributes", _("Find objects by the name of an attribute (exact or partial match)"), 3);
+
+
     _widget.show_all();
 }
 
@@ -64,16 +90,8 @@ DialogFind & DialogFind::get()
     static DialogFind &da = *(new DialogFind());    
     return da;
 }
-void DialogFind::present()
-{
-    if ( !_pDocker)
-    {
-        _pDocker = new Docker();
-        _pDocker->dock(*this);
-    }
-    _pDocker->present(*this);
-}
-#if 0
+
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -648,7 +666,7 @@ sp_find_types ()
 
 
 GtkWidget *
-sp_find_dialog (void)
+sp_find_dialog_old (void)
 {
     if  (!dlg)
     {
@@ -697,7 +715,7 @@ sp_find_dialog (void)
         sp_find_new_searchfield (dlg, vb, _("_Text: "), "text", tt, _("Find objects by their text content (exact or partial match)"));
         sp_find_new_searchfield (dlg, vb, _("_ID: "), "id", tt, _("Find objects by the value of the id attribute (exact or partial match)"));
         sp_find_new_searchfield (dlg, vb, _("_Style: "), "style", tt, _("Find objects by the value of the style attribute (exact or partial match)"));
-        sp_find_new_searchfield (dlg, vb, _("_Attribute: "), "attr", tt, _("Find objects by the name of an attribute (exact or partial match)"));
+        sp_find_new_searchfield (dlg, vb, _("_Attribute: "), "attr", tt ,_("Find objects by the name of an attribute (exact or partial match)"));
 
         gtk_widget_show_all (vb);
 
@@ -747,4 +765,4 @@ sp_find_dialog (void)
   End:
 */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
-#endif
+
