@@ -94,6 +94,8 @@ extension/implementation/script.h
 extension/init.cpp
 extension/init.h
 extension/internal/gnome.h
+extension/internal/ps-out.cpp
+extension/internal/ps-out.h
 extension/internal/ps.cpp
 extension/internal/ps.h
 extension/internal/svg.cpp
@@ -159,6 +161,7 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
+ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h

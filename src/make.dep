@@ -25,6 +25,7 @@ arc-context.o: \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
 	helper/sp-canvas.h \
+	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
 	knot.h \
@@ -546,7 +547,16 @@ dialogs/export.o: \
 
 dialogs/filedialog-win32.o: \
 	dialogs/filedialog-win32.cpp \
-	dialogs/filedialog.h
+	dialogs/filedialog.h \
+	display/nr-arena-forward.h \
+	extension/db.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	xml/repr.h
 
 dialogs/fill-style.o: \
 	dialogs/fill-style.cpp \
@@ -975,6 +985,7 @@ dialogs/transformation.o: \
 
 dialogs/xml-tree.o: \
 	dialogs/xml-tree.cpp \
+	color.h \
 	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/in-dt-coordsys.h \
@@ -1017,13 +1028,19 @@ dialogs/xml-tree.o: \
 	prefs-utils.h \
 	selection.h \
 	sp-chars.h \
+	sp-defs.h \
+	sp-gradient.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-item.h \
 	sp-object.h \
+	sp-paint-server.h \
 	sp-root.h \
 	sp-text.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -1674,7 +1691,7 @@ extension/implementation/script.o: \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
-	extension/extension.h \
+	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
@@ -1733,6 +1750,7 @@ extension/init.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/script.h \
 	extension/internal/gnome.h \
+	extension/internal/ps-out.h \
 	extension/internal/ps.h \
 	extension/internal/svg.h \
 	extension/internal/win32.h \
@@ -1742,6 +1760,22 @@ extension/init.o: \
 	helper/sp-intl.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
+	xml/repr.h
+
+extension/internal/ps-out.o: \
+	extension/internal/ps-out.cpp \
+	display/nr-arena-forward.h \
+	document.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/ps-out.h \
+	extension/menu.h \
+	extension/system.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	print.h \
 	xml/repr.h
 
 extension/internal/ps.o: \
@@ -1892,6 +1926,7 @@ file.o: \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
 	document.h \
+	extension/db.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/menu.h \
@@ -1928,6 +1963,7 @@ file.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	prefs-utils.h \
 	print.h \
 	sp-image.h \
 	sp-item.h \
@@ -2537,6 +2573,7 @@ knot.o: \
 	helper/sodipodi-ctrl.h \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
+	helper/sp-intl.h \
 	helper/sp-marshal.h \
 	helper/units.h \
 	inkscape.h \
@@ -4541,6 +4578,7 @@ seltrans.o: \
 	helper/sodipodi-ctrlrect.h \
 	helper/sp-canvas.h \
 	helper/sp-ctrlline.h \
+	helper/sp-intl.h \
 	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \
@@ -4798,6 +4836,7 @@ sp-ellipse.o: \
 	extension/menu.h \
 	forward.h \
 	helper/curve.h \
+	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -5662,6 +5701,7 @@ sp-path.o: \
 	extension/menu.h \
 	forward.h \
 	helper/curve.h \
+	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
