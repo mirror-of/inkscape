@@ -48,9 +48,11 @@ GString * sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src
 #define SP_METRIC_TO_PT(l,m) sp_absolute_metric_to_metric(l,m,SP_PT);
 #define SP_PT_TO_METRIC(l,m) sp_absolute_metric_to_metric(l,SP_PT,m);
 
-#define SP_PT_TO_METRIC_STRING(l,m) sp_metric_to_metric_string(l,SP_PT,m,TRUE)
-#define SP_PT_TO_STRING(l,m) sp_metric_to_metric_string(l,SP_PT,m,FALSE)
+#define SP_PT_TO_METRIC_STRING(l,m) sp_metric_to_metric_string(l, SP_PT, m, TRUE)
+#define SP_PT_TO_STRING(l,m) sp_metric_to_metric_string(l, SP_PT, m, FALSE)
 
+#define SP_PX_TO_METRIC_STRING(l,m) sp_metric_to_metric_string(l, SP_PX, m, TRUE)
+#define SP_PX_TO_STRING(l,m) sp_metric_to_metric_string(l, SP_PX, m, FALSE)
 
 // ruler metrics
 static const GtkRulerMetric sp_ruler_metrics[] =
