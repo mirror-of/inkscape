@@ -187,7 +187,7 @@ static GtkWidget *
 sp_transformation_dialog_new (void)
 {
 	GtkWidget *dlg;
-	GtkWidget *hb, *vb, *nbook, *page, *img, *hs, *bb, *b;
+	GtkWidget *hb, *vb, *nbook, *page, *img, *hs, *bb, *b, *l;
 	SPSelection *sel;
 
 	dlg = sp_window_new (_("Transform selection"), FALSE);
@@ -226,27 +226,27 @@ sp_transformation_dialog_new (void)
 	g_signal_connect (G_OBJECT (b), "clicked", G_CALLBACK (sp_transformation_dialog_close), dlg);
 
 	/* Move page */
-	img = sp_icon_new (SP_ICON_SIZE_NOTEBOOK, "move");
-	gtk_widget_show (img);
+	l = gtk_label_new (_("Move"));
+	gtk_widget_show( l );
 	page = sp_transformation_page_move_new (G_OBJECT (dlg));
 	gtk_widget_show (page);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, img);
+	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
 	g_object_set_data (G_OBJECT (dlg), "move", page);
 
 	/* Scale page */
-	img = sp_icon_new (SP_ICON_SIZE_NOTEBOOK, "scale");
-	gtk_widget_show (img);
+	l = gtk_label_new (_("Scale"));
+	gtk_widget_show( l );
 	page = sp_transformation_page_scale_new (G_OBJECT (dlg));
 	gtk_widget_show (page);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, img);
+	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
 	g_object_set_data (G_OBJECT (dlg), "scale", page);
 
 	/* Rotate page */
-	img = sp_icon_new (SP_ICON_SIZE_NOTEBOOK, "rotate");
-	gtk_widget_show (img);
+	l = gtk_label_new (_("Rotate"));
+	gtk_widget_show( l );
 	page = sp_transformation_page_rotate_new (G_OBJECT (dlg));
 	gtk_widget_show (page);
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, img);
+	gtk_notebook_append_page (GTK_NOTEBOOK (nbook), page, l);
 	g_object_set_data (G_OBJECT (dlg), "rotate", page);
 
 	/* Connect signals */

@@ -1,3 +1,10 @@
+2003-11-11  magnethead <magnethead@mindspring.com>
+
+	* src/dialogs/transformation.c (sp_transformation_dialog_new):
+	  Removed images from tabs
+	* src/dialogs/object-properties.c (sp_object_properties_dialog):
+	  Removed images from tabs
+
 2003-11-11  Ted Gould <ted@gould.cx>
 
 	* Starting 0.36 development

@@ -124,7 +124,7 @@ void
 sp_object_properties_dialog (void)
 {
 	if (!dlg) {
-		GtkWidget *vb, *nb, *hb, *l, *px, *page, *hs, *om, *m, *mi;
+		GtkWidget *vb, *nb, *hb, *l, *page, *hs, *om, *m, *mi;
 
 		dlg = sp_window_new (_("Object style"), TRUE);
 		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"))
@@ -147,9 +147,6 @@ sp_object_properties_dialog (void)
 		l = gtk_label_new (_("Fill"));
 		gtk_widget_show (l);
 		gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/properties_fill.xpm");
-		gtk_widget_show (px);
-		gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 		page = sp_fill_style_widget_new ();
 		gtk_widget_show (page);
 		gtk_notebook_append_page (GTK_NOTEBOOK (nb), page, hb);
@@ -161,9 +158,6 @@ sp_object_properties_dialog (void)
 		l = gtk_label_new (_("Stroke paint"));
 		gtk_widget_show (l);
 		gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/properties_stroke.xpm");
-		gtk_widget_show (px);
-		gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 		page = sp_stroke_style_paint_widget_new ();
 		gtk_widget_show (page);
 		gtk_notebook_append_page (GTK_NOTEBOOK (nb), page, hb);
@@ -175,9 +169,6 @@ sp_object_properties_dialog (void)
 		l = gtk_label_new (_("Stroke style"));
 		gtk_widget_show (l);
 		gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/properties_stroke.xpm");
-		gtk_widget_show (px);
-		gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 		page = sp_stroke_style_line_widget_new ();
 		gtk_widget_show (page);
 		gtk_notebook_append_page (GTK_NOTEBOOK (nb), page, hb);
