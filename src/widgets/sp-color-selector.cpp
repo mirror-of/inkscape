@@ -21,6 +21,8 @@ enum {
 	LAST_SIGNAL
 };
 
+#define noDUMP_CHANGE_INFO
+#define FOO_NAME(x) g_type_name( G_TYPE_FROM_INSTANCE(x) )
 
 static void sp_color_selector_class_init (SPColorSelectorClass *klass);
 static void sp_color_selector_init (SPColorSelector *csel);
@@ -97,13 +99,6 @@ sp_color_selector_class_init (SPColorSelectorClass *klass)
 	klass->name = nameset;
 	klass->submode_count = 1;
 
-	klass->set_submode = 0;
-	klass->get_submode = 0;
-
-	klass->set_color_alpha = 0;
-	klass->get_color_alpha = 0;
-
-
 	object_class->destroy = sp_color_selector_destroy;
 
 	widget_class->show_all = sp_color_selector_show_all;
@@ -113,7 +108,11 @@ sp_color_selector_class_init (SPColorSelectorClass *klass)
 
 void sp_color_selector_init (SPColorSelector *csel)
 {
-/*	   gtk_signal_connect (GTK_OBJECT (csel->rgbae), "changed", GTK_SIGNAL_FUNC (sp_color_selector_rgba_entry_changed), csel); */
+    if ( csel->base )
+    {
+        csel->base->init();
+    }
+/*   gtk_signal_connect (GTK_OBJECT (csel->rgbae), "changed", GTK_SIGNAL_FUNC (sp_color_selector_rgba_entry_changed), csel); */
 }
 
 static void
@@ -122,6 +121,11 @@ sp_color_selector_destroy (GtkObject *object)
 	SPColorSelector *csel;
 
 	csel = SP_COLOR_SELECTOR (object);
+    if ( csel->base )
+    {
+        delete csel->base;
+        csel->base = 0;
+    }
 
 	if (((GtkObjectClass *) (parent_class))->destroy)
 		(* ((GtkObjectClass *) (parent_class))->destroy) (object);
@@ -143,107 +147,200 @@ GtkWidget *
 sp_color_selector_new (GType selector_type, SPColorSpaceType colorspace)
 {
 	SPColorSelector *csel;
-	SPColor color;
 	g_return_val_if_fail (g_type_is_a (selector_type, SP_TYPE_COLOR_SELECTOR), NULL);
 
 	csel = SP_COLOR_SELECTOR (g_object_new (selector_type, NULL));
 
-	sp_color_set_rgb_rgba32 (&color, 0);
-	sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR(csel), &color, 1.0);
-
 	return GTK_WIDGET (csel);
 }
 
+double ColorSelector::_epsilon = 1e-4;
 
-void sp_color_selector_set_submode (SPColorSelector* csel, guint submode)
+void ColorSelector::setSubmode( guint submode )
 {
-	if ( csel && SP_IS_COLOR_SELECTOR (csel) )
-	{
-		SPColorSelectorClass* selector_class = SP_COLOR_SELECTOR_GET_CLASS (csel);
-		if ( selector_class->set_submode )
-		{
-			(selector_class->set_submode)(csel, submode);
-		}
-	}
 }
 
-guint sp_color_selector_get_submode (SPColorSelector* csel)
+guint ColorSelector::getSubmode() const
 {
-	guint mode = 0;
-	if ( csel && SP_IS_COLOR_SELECTOR (csel) )
-	{
-		SPColorSelectorClass* selector_class = SP_COLOR_SELECTOR_GET_CLASS (csel);
-		if ( selector_class->get_submode )
-		{
-			mode = (selector_class->get_submode)(csel);
-		}
-	}
-	return mode;
+    guint mode = 0;
+    return mode;
 }
 
-void sp_color_selector_set_color_alpha (SPColorSelector *csel, const SPColor *color, gfloat alpha)
+SPColorSpaceType ColorSelector::getColorspace() const
 {
-	if ( csel && SP_IS_COLOR_SELECTOR (csel) )
-	{
-		SPColorSelectorClass* selector_class = SP_COLOR_SELECTOR_GET_CLASS (csel);
-		if ( selector_class->set_color_alpha )
-		{
-			(selector_class->set_color_alpha)(csel, color, alpha);
-		}
-		else
-		{
-			if ( !sp_color_is_close (color, &csel->color, 1e-4)
-				 || (fabs ((csel->alpha) - (alpha)) >= 1e-4) )
-			{
-				sp_color_copy (&csel->color, color);
-				csel->alpha = alpha;
-				g_warning ("file %s: line %d: About to signal CHANGED to color %08x", __FILE__, __LINE__, sp_color_get_rgba32_falpha(color,alpha));
-				gtk_signal_emit (GTK_OBJECT (csel), csel_signals[CHANGED]);
-			}
-		}
-	}
+    SPColorSpaceType type = SP_COLORSPACE_TYPE_UNKNOWN;
+
+    return type;
 }
 
-void sp_color_selector_get_color_alpha (SPColorSelector *csel, SPColor *color, gfloat *alpha)
+gboolean ColorSelector::setColorspace( SPColorSpaceType colorspace )
 {
-	gint i = 0;
-	if ( csel && SP_IS_COLOR_SELECTOR (csel) )
-	{
-		SPColorSelectorClass* selector_class = SP_COLOR_SELECTOR_GET_CLASS (csel);
-		if ( selector_class->get_color_alpha )
-		{
-			(selector_class->get_color_alpha)(csel, color, alpha);
-		}
-		else
-		{
-			sp_color_copy (color, &csel->color);
-			*alpha = csel->alpha;
-		}
-		// Try to catch uninitialized value usage
-		if ( color->colorspace )
-		{
-			i++;
-		}
-		if ( color->v.c[0] )
-		{
-			i++;
-		}
-		if ( color->v.c[1] )
-		{
-			i++;
-		}
-		if ( color->v.c[2] )
-		{
-			i++;
-		}
-		if ( color->v.c[3] )
-		{
-			i++;
-		}
-		if ( alpha && *alpha )
-		{
-			i++;
-		}
-	}
+    return false;
 }
 
+ColorSelector::ColorSelector( SPColorSelector* csel )
+    : _csel(csel),
+      _alpha(1.0),
+      _held(FALSE)
+{
+    sp_color_set_rgb_rgba32( &_color, 0 );
+}
+
+ColorSelector::~ColorSelector()
+{
+}
+
+void ColorSelector::init()
+{
+    _csel->base = new ColorSelector( _csel );
+}
+
+void ColorSelector::setColor( const SPColor& color )
+{
+    setColorAlpha( color, _alpha );
+}
+
+SPColor ColorSelector::getColor() const
+{
+    return _color;
+}
+
+void ColorSelector::setAlpha( gfloat alpha )
+{
+    setColorAlpha( _color, alpha );
+}
+
+gfloat ColorSelector::getAlpha() const
+{
+    return _alpha;
+}
+
+// Called from the outside to set the color
+void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha )
+{
+    if ( !sp_color_is_close( &color, &_color, _epsilon )
+         || (fabs ((_alpha) - (alpha)) >= _epsilon ) )
+    {
+        sp_color_copy (&_color, &color);
+        _alpha = alpha;
+        _colorChanged( color, alpha );
+
+#ifdef DUMP_CHANGE_INFO
+        g_message ("%s:%d: About to signal %s to color %08x in %s", __FILE__, __LINE__,
+                   (_held ? "CHANGED" : "DRAGGED" ),
+                   sp_color_get_rgba32_falpha(&color,alpha), FOO_NAME(_csel));
+#endif
+        gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[_held ? CHANGED : DRAGGED]);
+    }
+}
+
+void ColorSelector::_grabbed()
+{
+    _held = TRUE;
+#ifdef DUMP_CHANGE_INFO
+    g_message ("%s:%d: About to signal %s in %s", __FILE__, __LINE__,
+               "GRABBED",
+               FOO_NAME(_csel));
+#endif
+    gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[GRABBED]);
+}
+
+void ColorSelector::_released()
+{
+    _held = false;
+#ifdef DUMP_CHANGE_INFO
+    g_message ("%s:%d: About to signal %s in %s", __FILE__, __LINE__,
+               "RELEASED",
+               FOO_NAME(_csel));
+#endif
+    gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[RELEASED]);
+    gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[CHANGED]);
+}
+
+// Called from subclasses to update color and broadcast if needed
+void ColorSelector::_updateInternals( const SPColor& color, gfloat alpha, gboolean held )
+{
+    gboolean colorDifferent = ( !sp_color_is_close( &color, &_color, _epsilon )
+                                || ( fabs((_alpha) - (alpha)) >= _epsilon ) );
+
+    gboolean grabbed = held && !_held;
+    gboolean released = !held && _held;
+
+    // Store these before emmiting any signals
+    _held = held;
+    if ( colorDifferent )
+    {
+        sp_color_copy (&_color, &color);
+        _alpha = alpha;
+    }
+
+    if ( grabbed )
+    {
+#ifdef DUMP_CHANGE_INFO
+        g_message ("%s:%d: About to signal %s to color %08x in %s", __FILE__, __LINE__,
+                   "GRABBED",
+                   sp_color_get_rgba32_falpha(&color,alpha), FOO_NAME(_csel));
+#endif
+        gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[GRABBED]);
+    }
+    else if ( released )
+    {
+#ifdef DUMP_CHANGE_INFO
+        g_message ("%s:%d: About to signal %s to color %08x in %s", __FILE__, __LINE__,
+                   "RELEASED",
+                   sp_color_get_rgba32_falpha(&color,alpha), FOO_NAME(_csel));
+#endif
+        gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[RELEASED]);
+    }
+
+    if ( colorDifferent || released )
+    {
+#ifdef DUMP_CHANGE_INFO
+        g_message ("%s:%d: About to signal %s to color %08x in %s", __FILE__, __LINE__,
+                   (_held ? "CHANGED" : "DRAGGED" ),
+                   sp_color_get_rgba32_falpha(&color,alpha), FOO_NAME(_csel));
+#endif
+        gtk_signal_emit (GTK_OBJECT (_csel), csel_signals[_held ? CHANGED : DRAGGED]);
+    }
+}
+
+void ColorSelector::_colorChanged( const SPColor& color, gfloat alpha )
+{
+}
+
+void ColorSelector::getColorAlpha( SPColor& color, gfloat* alpha ) const
+{
+    gint i = 0;
+
+    sp_color_copy (&color, &_color);
+    if ( alpha )
+    {
+        *alpha = _alpha;
+    }
+
+    // Try to catch uninitialized value usage
+    if ( color.colorspace )
+    {
+        i++;
+    }
+    if ( color.v.c[0] )
+    {
+        i++;
+    }
+    if ( color.v.c[1] )
+    {
+        i++;
+    }
+    if ( color.v.c[2] )
+    {
+        i++;
+    }
+    if ( color.v.c[3] )
+    {
+        i++;
+    }
+    if ( alpha && *alpha )
+    {
+        i++;
+    }
+}

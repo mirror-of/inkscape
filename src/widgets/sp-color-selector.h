@@ -6,10 +6,60 @@
 
 #include <glib.h>
 
+
 G_BEGIN_DECLS
 
 typedef struct _SPColorSelector SPColorSelector;
 typedef struct _SPColorSelectorClass SPColorSelectorClass;
+
+G_END_DECLS
+
+class ColorSelector
+{
+public:
+    ColorSelector( SPColorSelector* csel );
+    virtual ~ColorSelector();
+
+    virtual void init();
+
+    void setColor( const SPColor& color );
+    SPColor getColor() const;
+
+    void setAlpha( gfloat alpha );
+    gfloat getAlpha() const;
+
+    void setColorAlpha( const SPColor& color, gfloat alpha );
+    void getColorAlpha( SPColor& color, gfloat* alpha ) const;
+
+    virtual void setSubmode( guint submode );
+    virtual guint getSubmode() const;
+
+    virtual SPColorSpaceType getColorspace() const;
+    virtual gboolean setColorspace( SPColorSpaceType colorspace );
+
+protected:
+    void _grabbed();
+    void _released();
+    void _updateInternals( const SPColor& color, gfloat alpha, gboolean held );
+    gboolean _isHeld() const { return _held; }
+
+    virtual void _colorChanged( const SPColor& color, gfloat alpha );
+
+    static double _epsilon;
+
+    SPColorSelector* _csel;
+    SPColor _color;
+    gfloat _alpha;
+
+private:
+    // By default, disallow copy constructor and assignment operator
+    ColorSelector( const ColorSelector& obj );
+    ColorSelector& operator=( const ColorSelector& obj );
+
+    gboolean _held;
+};
+
+G_BEGIN_DECLS
 
 #define SP_TYPE_COLOR_SELECTOR (sp_color_selector_get_type ())
 #define SP_COLOR_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_SELECTOR, SPColorSelector))
@@ -19,10 +69,9 @@ typedef struct _SPColorSelectorClass SPColorSelectorClass;
 #define SP_COLOR_SELECTOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SP_TYPE_COLOR_SELECTOR, SPColorSelectorClass))
 
 struct _SPColorSelector {
-	GtkVBox vbox;
+    GtkVBox vbox;
 
-	SPColor color;
-	gfloat alpha;
+    ColorSelector* base;
 };
 
 struct _SPColorSelectorClass {
@@ -36,26 +85,11 @@ struct _SPColorSelectorClass {
 	void (* released) (SPColorSelector *rgbsel);
 	void (* changed) (SPColorSelector *rgbsel);
 
-	/* virtual functions */
-	void (* set_submode) (SPColorSelector *csel, guint rgba);
-	guint (* get_submode) (SPColorSelector *csel);
-
-	void (* set_color_alpha) (SPColorSelector *csel, const SPColor *color, gfloat alpha);
-	void (* get_color_alpha) (SPColorSelector *csel, SPColor *color, gfloat *alpha);
 };
 
 GType sp_color_selector_get_type (void);
 
 GtkWidget *sp_color_selector_new (GType selector_type, SPColorSpaceType colorspace);
-
-void sp_color_selector_set_submode (SPColorSelector* csel, guint submode);
-guint sp_color_selector_get_submode (SPColorSelector* csel);
-
-SPColorSpaceType sp_color_selector_get_colorspace (SPColorSelector* csel);
-gboolean sp_color_selector_set_colorspace (SPColorSelector* csel, SPColorSpaceType colorspace);
-
-void sp_color_selector_set_color_alpha (SPColorSelector *csel, const SPColor *color, gfloat alpha);
-void sp_color_selector_get_color_alpha (SPColorSelector *csel, SPColor *color, gfloat *alpha);
 
 G_END_DECLS
 

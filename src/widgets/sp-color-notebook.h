@@ -13,6 +13,8 @@
  */
 
 #include <gtk/gtkvbox.h>
+#include <gtk/gtknotebook.h>
+#include <gtk/gtkentry.h>
 #include "../color.h"
 #include "sp-color-selector.h"
 
@@ -24,6 +26,56 @@ typedef struct _SPColorNotebook SPColorNotebook;
 typedef struct _SPColorNotebookClass SPColorNotebookClass;
 typedef struct _SPColorNotebookTracker SPColorNotebookTracker;
 
+G_END_DECLS
+
+class ColorNotebook: public ColorSelector
+{
+public:
+    ColorNotebook( SPColorSelector* csel );
+    virtual ~ColorNotebook();
+
+    virtual void init();
+
+    SPColorSelector* ColorNotebook::getCurrentSelector();
+    void switchPage( GtkNotebook *notebook, GtkNotebookPage *page, guint page_num );
+
+    GtkWidget* addPage( GType page_type, guint submode );
+    void removePage( GType page_type, guint submode );
+    GtkWidget* getPage( GType page_type, guint submode );
+
+    gint menuHandler( GdkEvent* event );
+
+protected:
+    static void _rgbaEntryChangedHook( GtkEntry* entry, SPColorNotebook *colorbook );
+    static void _entryGrabbed( SPColorSelector *csel, SPColorNotebook *colorbook );
+    static void _entryDragged( SPColorSelector *csel, SPColorNotebook *colorbook );
+    static void _entryReleased( SPColorSelector *csel, SPColorNotebook *colorbook );
+    static void _entryChanged( SPColorSelector *csel, SPColorNotebook *colorbook );
+    static void _entryModified( SPColorSelector *csel, SPColorNotebook *colorbook );
+
+    virtual void _colorChanged( const SPColor& color, gfloat alpha );
+
+    void _rgbaEntryChanged( GtkEntry* entry );
+    void _updateRgbaEntry( const SPColor& color, gfloat alpha );
+
+    gboolean _updating : 1;
+    gboolean _updatingrgba : 1;
+    gboolean _dragging : 1;
+    gulong _id;
+    GtkWidget *_book;
+    GtkWidget *_rgbal, *_rgbae; /* RGBA entry */
+    GtkWidget *_p; /* Color preview */
+    GtkWidget *_btn;
+    GtkWidget *_popup;
+    GPtrArray *_trackerList;
+
+private:
+    // By default, disallow copy constructor and assignment operator
+    ColorNotebook( const ColorNotebook& obj );
+    ColorNotebook& operator=( const ColorNotebook& obj );
+};
+
+G_BEGIN_DECLS
 
 #define SP_TYPE_COLOR_NOTEBOOK (sp_color_notebook_get_type ())
 #define SP_COLOR_NOTEBOOK(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_NOTEBOOK, SPColorNotebook))
@@ -33,16 +85,6 @@ typedef struct _SPColorNotebookTracker SPColorNotebookTracker;
 
 struct _SPColorNotebook {
 	SPColorSelector parent;    /* Parent */
-	gboolean updating : 1;
-	gboolean updatingrgba : 1;
-	gboolean dragging : 1;
-	gulong id;
-	GtkWidget *book;
-	GtkWidget *rgbal, *rgbae; /* RGBA entry */
-	GtkWidget *p; /* Color preview */
-	GtkWidget *btn;
-	GtkWidget *popup;
-	GPtrArray *trackerList;
 };
 
 struct _SPColorNotebookClass {
@@ -60,32 +102,6 @@ GtkWidget *sp_color_notebook_new (void);
 
 /* void sp_color_notebook_set_mode (SPColorNotebook *csel, SPColorNotebookMode mode); */
 /* SPColorNotebookMode sp_color_notebook_get_mode (SPColorNotebook *csel); */
-
-/* Syntax is: ..._set_[colorspace]_valuetype */
-/* Missing colorspace means, that selector mode will be adjusted */
-/* Any means, that selector colorspace remains unchanged */
-
-void sp_color_notebook_set_any_color_alpha (SPColorSelector *csel, const SPColor *color, gfloat alpha);
-void sp_color_notebook_set_color_alpha (SPColorSelector *csel, const SPColor *color, gfloat alpha);
-void sp_color_notebook_get_color_alpha (SPColorSelector *csel, SPColor *color, gfloat *alpha);
-
-void sp_color_notebook_set_any_rgba_float (SPColorSelector *csel, gfloat r, gfloat g, gfloat b, gfloat a);
-void sp_color_notebook_set_any_cmyka_float (SPColorSelector *csel, gfloat c, gfloat m, gfloat y, gfloat k, gfloat a);
-void sp_color_notebook_set_any_rgba32 (SPColorSelector *csel, guint32 rgba);
-
-void sp_color_notebook_set_rgba_float (SPColorSelector *csel, gfloat r, gfloat g, gfloat b, gfloat a);
-void sp_color_notebook_set_cmyka_float (SPColorSelector *csel, gfloat c, gfloat m, gfloat y, gfloat k, gfloat a);
-void sp_color_notebook_set_rgba32 (SPColorSelector *csel, guint32 rgba);
-
-void sp_color_notebook_get_rgba_floatv (SPColorSelector *csel, gfloat *rgba);
-void sp_color_notebook_get_cmyka_floatv (SPColorSelector *csel, gfloat *cmyka);
-
-gfloat sp_color_notebook_get_r (SPColorSelector *csel);
-gfloat sp_color_notebook_get_g (SPColorSelector *csel);
-gfloat sp_color_notebook_get_b (SPColorSelector *csel);
-gfloat sp_color_notebook_get_a (SPColorSelector *csel);
-
-guint32 sp_color_notebook_get_rgba32 (SPColorSelector *csel);
 
 G_END_DECLS
 

@@ -295,7 +295,7 @@ sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, 
 
 	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
-	sp_color_selector_set_color_alpha (csel, color, alpha);
+	csel->base->setColorAlpha( *color, alpha );
 }
 
 void
@@ -432,7 +432,7 @@ sp_paint_selector_get_color_alpha (SPPaintSelector *psel, SPColor *color, gfloat
 
 	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
 
-	sp_color_selector_get_color_alpha (csel, color, alpha);
+	csel->base->getColorAlpha( *color, alpha );
 }
 
 SPGradient *
@@ -645,7 +645,7 @@ sp_paint_selector_color_released (SPColorSelector *csel, SPPaintSelector *psel)
 static void
 sp_paint_selector_color_changed (SPColorSelector *csel, SPPaintSelector *psel)
 {
-	sp_color_selector_get_color_alpha (csel, &psel->color, &psel->alpha);
+	csel->base->getColorAlpha( psel->color, &psel->alpha );
 
 	gtk_signal_emit (GTK_OBJECT (psel), psel_signals[CHANGED]);
 }
@@ -721,7 +721,7 @@ sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mod
 		psel->selector = vb;
 
 		/* Set color */
-		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (csel), &psel->color, psel->alpha);
+		SP_COLOR_SELECTOR( csel )->base->setColorAlpha( psel->color, psel->alpha );
 
 /*
 		if (mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB) {

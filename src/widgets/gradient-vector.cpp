@@ -524,9 +524,9 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 
 		/* Set color selector values */
 		w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "start");
-		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (w), &gradient->vector->stops[0].color, gradient->vector->stops[0].opacity);
+		SP_COLOR_SELECTOR( w )->base->setColorAlpha( gradient->vector->stops[0].color, gradient->vector->stops[0].opacity );
 		w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "end");
-		sp_color_selector_set_color_alpha (SP_COLOR_SELECTOR (w), &gradient->vector->stops[1].color, gradient->vector->stops[1].opacity);
+		SP_COLOR_SELECTOR( w )->base->setColorAlpha( gradient->vector->stops[1].color, gradient->vector->stops[1].opacity );
 
 		/* Fixme: Sensitivity */
 	}
@@ -631,11 +631,11 @@ sp_gradient_vector_color_dragged (SPColorSelector *csel, GtkObject *object)
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "start");
 	vector->stops[0].offset = 0.0;
-	sp_color_selector_get_color_alpha (csel, &vector->stops[0].color, &vector->stops[0].opacity);
+	csel->base->getColorAlpha( vector->stops[0].color, &vector->stops[0].opacity );
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "end");
 	vector->stops[1].offset = 1.0;
-	sp_color_selector_get_color_alpha (csel, &vector->stops[1].color, &vector->stops[1].opacity);
+	csel->base->getColorAlpha( vector->stops[1].color, &vector->stops[1].opacity );
 
 	sp_gradient_set_vector (ngr, vector);
 
@@ -679,7 +679,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	g_return_if_fail (child != NULL);
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "start");
-	sp_color_selector_get_color_alpha (csel, &color, &alpha);
+	csel->base->getColorAlpha( color, &alpha );
 	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
 	sp_repr_set_double_attribute (SP_OBJECT_REPR (child), "offset", start);
@@ -692,7 +692,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	g_return_if_fail (child != NULL);
 
 	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "end");
-	sp_color_selector_get_color_alpha (csel, &color, &alpha);
+	csel->base->getColorAlpha( color, &alpha );
 	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
 	sp_repr_set_double_attribute (SP_OBJECT_REPR (child), "offset", end);

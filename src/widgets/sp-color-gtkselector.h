@@ -12,6 +12,25 @@ G_BEGIN_DECLS
 typedef struct _SPColorGtkselector SPColorGtkselector;
 typedef struct _SPColorGtkselectorClass SPColorGtkselectorClass;
 
+G_END_DECLS
+
+class ColorGtkselector: public ColorSelector
+{
+public:
+    ColorGtkselector( SPColorSelector* csel );
+    virtual ~ColorGtkselector();
+
+    virtual void init();
+
+protected:
+    static void _gtkChanged( GtkColorSelection *colorselection, SPColorGtkselector *gtksel );
+
+    virtual void _colorChanged( const SPColor& color, gfloat alpha );
+
+    GtkColorSelection* _gtkThing;
+};
+
+G_BEGIN_DECLS
 
 #define SP_TYPE_COLOR_GTKSELECTOR (sp_color_gtkselector_get_type ())
 #define SP_COLOR_GTKSELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_GTKSELECTOR, SPColorGtkselector))
@@ -21,7 +40,6 @@ typedef struct _SPColorGtkselectorClass SPColorGtkselectorClass;
 
 struct _SPColorGtkselector {
 	SPColorSelector base;
-	GtkColorSelection* gtk_thing;
 };
 
 struct _SPColorGtkselectorClass {
