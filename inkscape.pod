@@ -177,6 +177,27 @@ the latest released version of the program, and more.
 gimp(1), autotrace, frontline, ill2svg, rsvg(1), xfig(1), sodipodi,
 karbon14, dia(1X), batik.
 
+SVG compliance test suite:  http://www.w3.org/Graphics/SVG/Test/
+
+SVG validator:  http://jiggles.w3.org/svgvalidator/
+
+I<Scalable Vector Graphics (SVG) 1.1 Specification>
+I<W3C Recommendation 14 January 2003>
+L<http://www.w3.org/TR/SVG11/>
+
+I<Scalable Vector Graphics (SVG) 1.2 Specification>
+I<W3C Working Draft 13 November 2003>
+L<http://www.w3.org/TR/SVG12/>
+
+I<SVG 1.1/1.2/2.0 Requirements>
+I<W3C Working Draft 22 April 2002>
+L<http://www.w3.org/TR/SVG2Reqs/>
+
+I<Document Object Model (DOM): Level 2 Core>
+I<Arnaud Le Hors et al editors, W3C>
+L<http://www.w3.org/TR/DOM-Level-2-Core/>
+
+
 =head1 NOTES
 
 Ctrl & Shift modify dragging behaviour in some modes
