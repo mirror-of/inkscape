@@ -245,10 +245,6 @@ void SPObject::_updateTotalHRefCount(int increment) {
 	}
 }
 
-void SPObject::setId(gchar const *id) {
-	sp_object_set(this, SP_ATTR_ID, id);
-}
-
 SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
 		sp_repr_append_child(SP_OBJECT_REPR(this), repr);
@@ -523,7 +519,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 		if ((id == NULL) || (strcmp (id, realid) != 0)) {
 			int ret = sp_repr_set_attr (object->repr, "id", realid);
 			if (!ret) {
-				g_error ("Cannot change id %s -> %s - probably there is stale ref", id, realid);
+				g_error ("Update id %s to unique id %s has been vetoed; cannot maintain SPObject <-> SPRepr binding", id, realid);
 			}
 		}
 	} else {
@@ -696,21 +692,31 @@ static unsigned int
 sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
 	SPObject *object = SP_OBJECT (data);
+	g_assert(SP_OBJECT_REPR(object) == repr);
 
 	if (strcmp ((const char*)key, "id") == 0) {
-		if (!newval) {
-			return FALSE;
-		}
-		gpointer defid = object->document->getObjectById(newval);
-		if (defid == object) {
+		if (SP_OBJECT_IS_CLONED(object)) {
+			// hmm, should cloned objects be attached to reprs?
+			// I need to check...
 			return TRUE;
 		}
-		if (defid) {
+		if (!newval) {
+			g_critical("Attempt to clear id of bound SPRepr (%p)", repr);
 			return FALSE;
 		}
+		SPObject *defid = object->document->getObjectById(newval);
+		if (!defid) {
+			g_critical("Attempt to set id of bound SPRepr (%p) without having registered the SPObject in the document's id table", repr);
+			return FALSE;
+		} else if ( defid != object ) {
+			g_critical("The id '%s' is already claimed by SPObject %p", newval, defid);
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+	} else {
+		return TRUE;
 	}
-
-	return TRUE;
 }
 
 static void

@@ -145,8 +145,6 @@ struct SPObject : public GObject {
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
-	void setId(gchar const *id);
-
 	SPObject *firstChild() { return children; }
 
 	SPObject *appendChildRepr(SPRepr *repr);
