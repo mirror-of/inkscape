@@ -630,7 +630,7 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 	SPPatPainter *pp;
 	NRRect ba, psa;
 	NRRectL area;
-	float x, y;
+	double x, y;
 
 	pp = (SPPatPainter *) painter;
 
@@ -654,7 +654,7 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 	for (y = psa.y0; y < psa.y1; y++) {
 		for (x = psa.x0; x < psa.x1; x++) {
 			NRPixBlock ppb;
-			float psx, psy;
+			double psx, psy;
 
 			psx = x * pp->pat->width.computed;
 			psy = y * pp->pat->height.computed;

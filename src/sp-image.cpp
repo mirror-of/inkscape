@@ -296,8 +296,8 @@ sp_image_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned i
 	image = SP_IMAGE (item);
 
 	if ((image->width.computed > 0.0) && (image->height.computed > 0.0)) {
-		float x0, y0, x1, y1;
-		float x, y;
+		double x0, y0, x1, y1;
+		double x, y;
 
 		x0 = image->x.computed;
 		y0 = image->y.computed;
@@ -511,7 +511,7 @@ sp_image_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	SPImage *image;
 	NRMatrix i2d;
-	float x0, y0, x1, y1;
+	double x0, y0, x1, y1;
 	int i;
 
 	image = SP_IMAGE (item);
