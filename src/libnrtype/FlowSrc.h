@@ -18,7 +18,6 @@
 #include "FlowStyle.h"
 
 class text_holder;
-class flow_styles;
 class text_style;
 class flow_eater;
 class line_solutions;
@@ -185,9 +184,9 @@ public:
 
 /*
  * source of the flow
- * it derives from flow_styles and thus holds an array of all the text_styles used in the source text
+ * it has a flow_styles and thus holds an array of all the text_styles used in the source text
  */
-class flow_src : public flow_styles {
+class flow_src {
 public:
 	typedef struct one_elem {
 		int               type;
@@ -196,6 +195,8 @@ public:
 	} one_elem;
 	int                 nbElem, maxElem;
 	one_elem*           elems;
+	
+    flow_styles styles;
 	
 	text_holder*        cur_holder;
 	
@@ -206,7 +207,11 @@ public:
 		
 	void                AddElement(int i_type,text_holder* i_text,one_flow_src* i_obj);
 
-	char*               Summary(void);
+	/** extracts just the raw text from the #cur_holder element. Line
+    breaks are correctly processed and returned as linefeeds. The caller
+    is responsible for free()ing the return value. *FIXME many callers
+    don't* */
+    char*               Summary(void) const;
 	
 	void                Clean(int &no,int &pos);
 	
@@ -219,7 +224,9 @@ public:
 	// finds the text_holder in the specified input span in the one_elem array
 	text_holder*        ParagraphBetween(int st_no,int st_pos,int en_no,int en_pos);
 
-	void                Affiche(void);
+	/** debug method. Dumps a textual representation of the contents of this
+    class to stdout. */
+    void                Affiche(void) const;
 };
 
 

@@ -115,7 +115,7 @@ void           text_holder::SubCtrl(int no)
 	ctrls[no]=ctrls[--nbCtrl];
 	if ( ctrls[no].other >= 0 ) ctrls[ctrls[no].other].other=no;
 }
-void           text_holder::AddCtrl(int pos,int typ)
+void           text_holder::AddCtrl(int pos,control_type typ)
 {
 	if ( nbCtrl >= maxCtrl ) {
 		maxCtrl=2*nbCtrl+1;
@@ -129,7 +129,7 @@ void           text_holder::AddCtrl(int pos,int typ)
 	ctrls[nbCtrl].ucs4_offset=0;
 	nbCtrl++;
 }
-void           text_holder::AddSpan(int st,int en,int typ)
+void           text_holder::AddSpan(int st,int en,control_type typ)
 {
 	if ( nbCtrl+1 >= maxCtrl ) {
 		maxCtrl=2*nbCtrl+2;
@@ -194,7 +194,7 @@ void           text_holder::AddBidiSpan(int st,int en,bool rtl)
 	ctrls[nbCtrl].data.i=(rtl)?1:0;
 	nbCtrl++;
 }
-void           text_holder::AddVoidSpan(int st,int en,int typ,void* i_l)
+void           text_holder::AddVoidSpan(int st,int en,control_type typ,void* i_l)
 {
 	if ( nbCtrl+1 >= maxCtrl ) {
 		maxCtrl=2*nbCtrl+2;
@@ -215,28 +215,28 @@ void           text_holder::AddVoidSpan(int st,int en,int typ,void* i_l)
 	ctrls[nbCtrl].data.v=i_l;
 	nbCtrl++;
 }
-bool           text_holder::NextStop(int typ,int &n_st)
+bool           text_holder::NextStop(control_type typ,int &n_st)
 {
 	do {
 		n_st++;
 	} while ( n_st < nbCtrl && ctrls[n_st].typ != typ );
 	return ( n_st < nbCtrl );
 }
-bool           text_holder::NextStart(int typ,int &n_st)
+bool           text_holder::NextStart(control_type typ,int &n_st)
 {
 	do {
 		NextStop(typ,n_st);
 	} while ( n_st < nbCtrl && ctrls[n_st].is_start == false );
 	return ( n_st < nbCtrl );
 }
-bool           text_holder::NextEnd(int typ,int &n_st)
+bool           text_holder::NextEnd(control_type typ,int &n_st)
 {
 	do {
 		NextStop(typ,n_st);
 	} while ( n_st < nbCtrl && ctrls[n_st].is_end == false );
 	return ( n_st < nbCtrl );
 }
-void           text_holder::NextSpanOfTyp(int typ,int &s_st,int &s_en)
+void           text_holder::NextSpanOfTyp(control_type typ,int &s_st,int &s_en)
 {
 	if ( NextStart(typ,s_st) ) {
 		if ( s_st < nbCtrl ) {
@@ -246,7 +246,7 @@ void           text_holder::NextSpanOfTyp(int typ,int &s_st,int &s_en)
 		}
 	}
 }
-void           text_holder::NextSpanOfTyp(int typ,int pos,int &s_st,int &s_en)
+void           text_holder::NextSpanOfTyp(control_type typ,int pos,int &s_st,int &s_en)
 {
 	do {
 		NextSpanOfTyp(typ,s_st,s_en);
@@ -259,7 +259,7 @@ void           text_holder::NextSpanOfTyp(int typ,int pos,int &s_st,int &s_en)
 		}
 	} while ( s_st < nbCtrl );
 }
-void           text_holder::SplitSpan(int a_t,int b_t)
+void           text_holder::SplitSpan(control_type a_t,control_type b_t)
 {
 	int   cur_pos=0;
 	do {
@@ -346,11 +346,11 @@ void           text_holder::SortCtrl(void)
 }
 void           text_holder::AfficheCtrl(void)
 {
-	printf("%i ctrls:\n",nbCtrl);
+	g_print("%i ctrls:\n",nbCtrl);
 	for (int i=0;i<nbCtrl;i++) {
-		printf("  %i: typ=%i pos=%i s=%i e=%i ot=%i\n",i,ctrls[i].typ,ctrls[i].pos,(ctrls[i].is_start)?1:0,(ctrls[i].is_end)?1:0,ctrls[i].other);
+		g_print("  %i: typ=%i pos=%i s=%i e=%i ot=%i\n",i,ctrls[i].typ,ctrls[i].pos,(ctrls[i].is_start)?1:0,(ctrls[i].is_end)?1:0,ctrls[i].other);
 	}
-	printf("\n");
+	g_print("\n");
 }
 
 int            text_holder::AddBox(one_flow_box &i_b)
@@ -480,7 +480,7 @@ void           text_holder::DoChunking(flow_styles* style_holder)
 				if ( t_font != c_style->theFont ) {
 					n_style=new text_style(c_style);
 					n_style->SetFont(t_font,c_style->theSize,c_style->baseline_shift);
-					style_holder->AddStyle(n_style);
+                    style_holder->push_back(n_style);
 					if ( ctrl_changed == false ) {
 						SubCtrl(c_st);
 						if ( item->offset > old_offset ) AddStyleSpan(old_offset,item->offset,c_style);
@@ -595,7 +595,7 @@ void           text_holder::UpdatePangoAnalysis(int from,int p_st,int p_en,void 
 		}
 	}
 }
-void           text_holder::MeasureText(int p_st,int p_en,box_sizes &n_a,void *i_pan,int b_offset,int with_hyphen)
+void           text_holder::MeasureText(int p_st,int p_en,box_sizes &n_a,void *i_pan,int b_offset,bool with_hyphen)
 {
 	PangoAnalysis* b_pan=(PangoAnalysis*)i_pan;
 	n_a.ascent=n_a.descent=n_a.leading=0;
@@ -947,7 +947,7 @@ void					 text_holder::Feed(int i_st_pos,int i_en_pos,bool flow_rtl,flow_eater* 
 	}
 }
 
-void             text_holder::AddKerning(double* i_kern,int i_st,int i_en,bool is_x)
+void             text_holder::AddKerning(double *i_kern,int i_st,int i_en,bool is_x)
 {
 	if ( i_st >= i_en ) return;
 	if ( is_x ) {

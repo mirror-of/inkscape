@@ -25,7 +25,7 @@ text_style::text_style(void)
 	with_style=NULL;
 	vertical_layout=false;
 }
-text_style::text_style(text_style* modele)
+text_style::text_style(text_style const * modele)
 {
 	theFont=NULL;
 	theSize=modele->theSize;
@@ -44,7 +44,7 @@ text_style::~text_style(void)
 	with_style=NULL;
 }
 
-void             text_style::SetStyle(SPStyle* i_style)
+void             text_style::SetStyle(SPStyle * i_style)
 {
 	if ( with_style ) sp_style_unref(with_style);
 	with_style=i_style;
@@ -68,7 +68,7 @@ void             text_style::SetFont(font_instance* iFont,double iSize,double iS
 	baseline_shift=iShift;
 }
 
-void             text_style::Measure(char* iText,int iLen,box_sizes *sizes,int hyphen,void *i_pan,double *kern_x,double *kern_y)
+void             text_style::Measure(char* iText,int iLen,box_sizes *sizes,bool hyphen,void *i_pan,double const *kern_x,double const *kern_y)
 {
 	PangoAnalysis* pan=(PangoAnalysis*)i_pan;
 	sizes->ascent=sizes->descent=sizes->leading=0.0;
@@ -151,7 +151,7 @@ void             text_style::Measure(char* iText,int iLen,box_sizes *sizes,int h
 	
 	if ( hyphen ) iText[iLen]=savC;
 }
-void             text_style::Feed(char* iText,int iLen,int hyphen,void *i_pan,flow_eater* baby,double *kern_x,double *kern_y)
+void             text_style::Feed(char* iText,int iLen,bool hyphen,void *i_pan,flow_eater* baby,double const *kern_x,double const *kern_y)
 {
 	PangoAnalysis* pan=(PangoAnalysis*)i_pan;
 	if ( iLen < 0 ) iLen=strlen(iText);
@@ -354,30 +354,3 @@ void             text_style::Feed(char* iText,int iLen,int hyphen,void *i_pan,fl
 	
 	if ( hyphen ) iText[iLen]=savC;
 }
-/*
- *
- */
-
-flow_styles::flow_styles(void)
-{
-	nbStyle=maxStyle=0;
-	styles=NULL;
-}
-flow_styles::~flow_styles(void)
-{
-	for (int i=0;i<nbStyle;i++) delete styles[i];
-	if ( styles ) free(styles);
-	nbStyle=maxStyle=0;
-	styles=NULL;
-}
-
-void             flow_styles::AddStyle(text_style* who)
-{
-	if ( nbStyle >= maxStyle ) {
-		maxStyle=2*nbStyle+1;
-		styles=(text_style**)realloc(styles,maxStyle*sizeof(text_style*));
-	}
-	styles[nbStyle]=who;
-	nbStyle++;
-}
-

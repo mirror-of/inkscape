@@ -36,7 +36,7 @@ flow_src::~flow_src(void)
 	elems=NULL;
 }
 
-char*               flow_src::Summary(void)
+char*               flow_src::Summary(void) const
 {
 	int               nb=0,max=0;
 	char*             res=(char*)malloc(sizeof(char));
@@ -114,14 +114,14 @@ void                flow_src::Prepare(void)
 	}
 	for (int i=0;i<nbElem;i++) {
 		if ( elems[i].type == flw_text ) {
-			elems[i].text->DoChunking(this);
+			elems[i].text->DoChunking(&styles);
 			elems[i].text->SortCtrl();
 			elems[i].text->ComputeBoxes();
 		}
 	}
 	//Affiche();
 }
-void                flow_src::Affiche(void)
+void                flow_src::Affiche(void) const
 {
 	printf("%i elements\n",nbElem);
 	for (int i=0;i<nbElem;i++) {
@@ -499,7 +499,7 @@ void              text_flow_src::Fill(flow_src* what)
 		text_style*  n_sp_style=dad->GetStyle();
 		if ( n_sp_style ) {
 			// we could reuse the text_style, maybe
-			what->AddStyle(n_sp_style);
+			what->styles.push_back(n_sp_style);
 			th->AddStyleSpan(added_utf8_st,added_utf8_en,n_sp_style);
 		}
 	}

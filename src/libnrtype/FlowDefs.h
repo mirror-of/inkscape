@@ -11,13 +11,26 @@
 
 class flow_dest;
 
-// dimensions of a box in the flow
+/** \brief stores the outer dimensions of a set of characters
+
+  internal to libnrtype. Holds all the information necessary to specify
+  the bounding region of a complete line of text.
+
+  Notice that a complete line of text (even across gaps) should have a
+  common baseline. From there you then have an ascender, descender and
+  leading, as normal, which are the maxima across all the fonts used on
+  that line. The width is simply the cumulative width of all the
+  characters.
+*/
 typedef struct box_sizes {
 	double        ascent,descent,leading;
 	double        width;
+    /** number of letters in the box */
 	int           nb_letter;
 	
-	void          Add(box_sizes &x) {
+    /** append another box to this one to create a box large enough to
+    completely enclose all the characters */
+	void          Add(box_sizes const &x) {
 		if ( x.ascent > ascent ) ascent=x.ascent;
 		if ( x.descent > descent ) descent=x.descent;
 		if ( x.ascent+x.leading > ascent+leading ) leading=x.ascent+x.leading-ascent;

@@ -255,7 +255,7 @@ void             correspondance::PrepareForMerge(void)
 	EndAdding();
 }
 
-void             correspondance::SourceToDest(int i_8_pos,int i_4_pos,partial_text* i_txt,int &o_8_pos,int &o_4_pos,bool is_end)
+void             correspondance::SourceToDest(int i_8_pos,int i_4_pos,partial_text const * i_txt,int &o_8_pos,int &o_4_pos,bool is_end) const
 {
 	//printf("source_to_dest %i %i %x ->",i_8_pos,i_4_pos,i_txt);
 	int  s_no=-1;
@@ -295,7 +295,7 @@ void             correspondance::SourceToDest(int i_8_pos,int i_4_pos,partial_te
 	o_8_pos=o_4_pos=-1;
 	//printf(" none\n");
 }
-void             correspondance::DestToSource(int i_8_pos,int i_4_pos,int &o_8_pos,int &o_4_pos,partial_text* &o_txt,bool is_end)
+void             correspondance::DestToSource(int i_8_pos,int i_4_pos,int &o_8_pos,int &o_4_pos,partial_text* &o_txt,bool is_end) const
 {
 	//printf("dest_to_source %i %i ->",i_8_pos,i_4_pos);
 	o_8_pos=i_8_pos;

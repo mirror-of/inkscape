@@ -20,7 +20,6 @@
 #include "../display/curve.h"
 
 class text_holder;
-class flow_styles;
 class text_style;
 class flow_eater;
 class font_instance;
@@ -138,16 +137,48 @@ public:
 	
 	// utility functions to fill the arrays
 	void               Reset(void);
-	void               AddGroup(text_style* g_s); // starts new glyph group; called automatically in StartSpan() and friends
-	void               AddGlyph(int g_id, double g_x, double g_y, double g_w); // adds glyph in the last letter
+
+    /** Adds a new group to the end of the #groups array. It is
+    initialised to contain no glyphs. */
+	void               AddGroup(text_style* g_s);
+
+    /** Adds the specified glyph to the end of the #glyphs array and
+    extends the last letter and last group to include this new glyph.
+    Neither #spans nor #chunks are altered. Called by flow_eater
+    only. */
+	void               AddGlyph(int g_id, double g_x, double g_y, double g_w);
 	
 	void               SetSourcePos(int i_pos);
+
+    /** Begins a new chunk by creating a new entry at the end of the #chunks
+    array. It is initialised with the given values and contains no spans or
+    letters. TODO: Why are x_st and x_en initialised to different values? */
 	void               StartChunk(double x_st, double x_en, double y, bool rtl, double spacing);
+
 	void               SetChunkInfo(double ascent, double descent, double leading, text_holder* mommy);
+
+    /** Begins a new span by creating a new entry at the end of the #spans
+    array. It is initialised with the given style and direction and contains
+    no letters. The current chunk is extended to contain the new span. */
 	void               StartSpan(text_style* i_style, bool rtl);
+
+    /** empty function */
 	void               EndWord(void);
+
+    /** Starts a new, empty letter at the end of the #letters array. If
+    i_style and i_rtl match the current span, it is extended to include
+    this new letter, otherwise StartSpan() is called to begin a new span.
+    Either AddGlyph() and AddText(), or flow_eater::Eat() should be used
+    to fill the letter.
+    
+    k_x, k_y, p_x, p_y, rot and i_no are all copied directly to the
+    appropriate fields in the new letter. The value set using SetSourcePos()
+    is added to i_utf8_offset before that, too, is copied. */
 	void               StartLetter(text_style* i_style,bool i_rtl, double k_x, double k_y, double p_x, double p_y, double rot, int i_no, int i_offset);
-	void               AddText(char* iText, int iLen); // adds text in the last letter
+
+    /** Appends the given character(s) to the end of the #chars array and
+    extends the last letter to include the new text. iLen is in bytes. */
+	void               AddText(char* iText, int iLen);
 		
 	// polishing of the arrays:
 	//  - offsets given during the construction are offset inside a paragraph; this functions translates to offset in the global text

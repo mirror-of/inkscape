@@ -77,7 +77,7 @@ void            line_solutions::StartWord(void)
 	cur_line=last_word;
 	//printf("sols startword %f\n",cur_line.width);
 }
-bool						line_solutions::PushBox(box_sizes &s,int end_no,int end_pos,bool is_white,bool last_in_para,bool last_in_rgn,bool is_word)
+bool						line_solutions::PushBox(box_sizes const &s,int end_no,int end_pos,bool is_white,bool last_in_para,bool last_in_rgn,bool is_word)
 {
 	if ( nbSol+1 >= maxSol ) { // may add 2 boxes in this function
 		maxSol=2*nbSol+2;

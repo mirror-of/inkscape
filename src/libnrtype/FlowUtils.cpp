@@ -104,7 +104,7 @@ void              flow_tasks::Thaw(int t_id)
 		}
 	}
 }
-int 							flow_tasks::Push(int i_brk,flow_requirement &i_req,bool freezed,bool force)
+int 							flow_tasks::Push(int i_brk,flow_requirement const &i_req,bool freezed,bool force)
 {
 	for (int i=0;i<nbTask;i++) {
 		if ( tasks[i].brk == i_brk && i_req.Equals(tasks[i].req) ) {
