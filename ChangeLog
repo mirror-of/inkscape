@@ -1,6 +1,8 @@
 2004-06-06  Bryce Harrington <bryce@bryceharrington.com>
 
-	* libnrtype/nr-type-xft.cpp, libnrtype/nr-font.cpp:  
+	* libnrtype/nr-type-xft.cpp, libnrtype/nr-font.cpp,
+  	  libnrtype/nr-rasterfont.cpp:   
+
 	Documenting the routines
 
 2004-06-06  Ted Gould  <ted@gould.cx>

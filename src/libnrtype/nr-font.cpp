@@ -66,7 +66,8 @@ nr_font_glyph_outline_unref (NRFont *font, unsigned int glyph)
 }
 
 /**
- * Retrieves the NR::Point object for the given font and glyph
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
  */
 NR::Point nr_font_glyph_advance_get (NRFont *font, unsigned int glyph)
 {

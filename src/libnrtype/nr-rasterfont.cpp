@@ -34,6 +34,9 @@ void nrrf_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
 
 #include "nr-rasterfont.h"
 
+/**
+ * Increments the reference count for the given raster font and returns it
+ */
 NRRasterFont *
 nr_rasterfont_ref (NRRasterFont *rf)
 {
@@ -42,6 +45,11 @@ nr_rasterfont_ref (NRRasterFont *rf)
     return rf;
 }
 
+/**
+ * Decrements the reference count for the given raster font.
+ * If no references remain, frees it.  
+ * Always returns NULL.
+ */
 NRRasterFont *
 nr_rasterfont_unref (NRRasterFont *rf)
 {
@@ -54,17 +62,27 @@ nr_rasterfont_unref (NRRasterFont *rf)
     return NULL;
 }
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 NR::Point nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph)
 {
     return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_advance_get (rf, glyph);
 }
 
+/**
+ * Retrieves the NRRect area for the given font and glyph
+ */
 NRRect *
 nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRect *area)
 {
     return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_area_get (rf, glyph, area);
 }
 
+/**
+ * Hmm, dunno what this does
+ */
 void
 nr_rasterfont_glyph_mask_render (NRRasterFont *rf, int glyph, NRPixBlock *mask, float x, float y)
 {
@@ -102,6 +120,13 @@ enum {
     NRRF_TYPE_LIV
 };
 
+/**
+ * A structure containing the point advance for the glyph, its bounding 
+ * box, and 16-char image
+ * 
+ * Q:  What does the px element represent?
+ * Q:  Why is this structure needed?  Is it for small font optimization?
+ */
 struct NRRFGlyphTiny {
     /* 26.6 fixed point */
     NRPointL advance;
@@ -111,6 +136,12 @@ struct NRRFGlyphTiny {
     unsigned char px[16];
 };
 
+/**
+ * A structure containing the point advance for the glyph, its bounding 
+ * box, and multi-char image
+ * 
+ * Q:  Why does this use an unsigned char* for px?  What is the data used for?
+ */
 struct NRRFGlyphImage {
     /* 26.6 fixed point */
     NRPointL advance;
@@ -120,6 +151,12 @@ struct NRRFGlyphImage {
     unsigned char *px;
 };
 
+/**
+ * A structure containing the point advance for the glyph, its bounding 
+ * box, and image as an SVP object
+ *
+ * Q:  What is an NRSVP object?  How does it define the glyph's image?
+ */
 struct NRRFGlyphSVP {
     /* 26.6 fixed point */
     NRPointL advance;
@@ -129,6 +166,17 @@ struct NRRFGlyphSVP {
     NRSVP *svp;
 };
 
+/**
+ * A structure containing the point advance for the glyph and its bounding 
+ * box, and represents its image as a list of Shapes, list of delayed Paths, 
+ * and a rectangular shbbox.
+ * 
+ * Q:  Is *shp a list or just a pointer to a single object?
+ * Q:  What is a Shape?
+ * Q:  Is *delayed a single Path object or a list?
+ * Q:  Why is the Path *delayed object called delayed?  What does it represent?
+ * Q:  What is shbbox?  What does it define?
+ */
 struct NRRFGlyphLIV {
     /* 26.6 fixed point */
     NRPointL advance;
@@ -140,6 +188,14 @@ struct NRRFGlyphLIV {
     NRRect shbbox;
 };
 
+/**
+ * Structure for describing a Glyph Slot, which consists of
+ * a type, one of the above NRRFGlyph structures, and flags for
+ * whether it has advancement, bounding box, or gmap info.
+ *
+ * Q:  Why is it called GlyphSlot?  What is it a Slot in?
+ * Q:  What is a gmap?  None of the RFGlyph structs seem to use it?
+ */
 struct NRRFGlyphSlot {
     unsigned int type : 3;
     unsigned int has_advance : 1;
@@ -156,6 +212,9 @@ struct NRRFGlyphSlot {
 
 static NRRFGlyphSlot *nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned int flags);
 
+/**
+ * Creates a new raster font object for the given font and transformation matrix
+ */
 NRRasterFont *
 nr_rasterfont_generic_new (NRFont *font, NR::Matrix transform)
 {
@@ -176,6 +235,10 @@ nr_rasterfont_generic_new (NRFont *font, NR::Matrix transform)
     return rf;
 }
 
+/**
+ * Frees the given raster font object, along with any associated
+ * shapes, svp's, etc.
+ */
 void
 nr_rasterfont_generic_free (NRRasterFont *rf)
 {
@@ -206,11 +269,18 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
     nr_free (rf);
 }
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 NR::Point nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph)
 {
     return nr_font_glyph_advance_get(rf->font, glyph) * rf->transform;
 }
 
+/**
+ * Retrieves the NRRect area for the given font and glyph
+ */
 NRRect *
 nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRect *area)
 {
@@ -251,6 +321,11 @@ nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRe
     return area;
 }
 
+/**
+ * Gets the glyph slot for the glyph in the given raster font, including
+ * the bounding box and gmap, calculates its coordinate areas, and 
+ * adjusts if there is an intersection detected.
+ */
 void
 nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, NRPixBlock *m, float x, float y)
 {
@@ -298,7 +373,7 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
     case NRRF_TYPE_LIV:
         // rasterization is position independent? wtf?
         // maybe translating/transforming the shape prior rendering would be more clever
-        // or are each glyph given a slot? (very inefficient)
+        // or is each glyph given a slot? (very inefficient)
         if (slot->glyph.lg.delayed ) {
             Shape* theShape=new Shape;
             slot->glyph.lg.delayed->Convert(0.25);
@@ -342,6 +417,12 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
     if (!spb.empty) nr_pixblock_release (&spb);
 }
 
+/**
+ * Creates new pages for the glyphs and allocates space in them.
+ * Then gets the slot, applies any advancements and transforms if
+ * appropriate, and calculates the bounding box or path.  It returns
+ * the glyph slot created.
+ */
 static NRRFGlyphSlot *
 nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned int flags)
 {
@@ -489,6 +570,9 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 
 // duplicate of the one in nr-arena-shape.cpp
 
+/**
+ * Dunno what this does
+ */
 static void
 shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float ven)
 {
@@ -557,6 +641,10 @@ shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float 
     }
 }
 
+/**
+ * Calculates the bounding box of the shape.  Creates appropriate Ligne's, then
+ * resets and flattens them, and finally rasterizes them.
+ */
 void nrrf_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
 {
     //  printf("bbox %i %i %i %i \n",m.area.x0,m.area.y0,m.area.x1,m.area.y1);
