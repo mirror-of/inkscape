@@ -49,7 +49,7 @@ bool   Ancetre (SPRepr * a, SPRepr * who);
 SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
 
 void sp_selected_path_boolop (bool_op bop);
-void sp_selected_path_do_offset (bool expand);
+void sp_selected_path_do_offset (bool expand, double prefOffset);
 void sp_selected_path_create_offset_object (int expand,bool updating);
 
 void
@@ -755,13 +755,30 @@ sp_selected_path_outline ()
 void
 sp_selected_path_offset ()
 {
-  sp_selected_path_do_offset (true);
+	double prefOffset = prefs_get_double_attribute ("options.defaultoffsetwidth", "value", 1.0);
+
+	sp_selected_path_do_offset (true, prefOffset);
 }
 void
 sp_selected_path_inset ()
 {
-  sp_selected_path_do_offset (false);
+	double prefOffset = prefs_get_double_attribute ("options.defaultoffsetwidth", "value", 1.0);
+
+	sp_selected_path_do_offset (false, prefOffset);
 }
+
+void
+sp_selected_path_offset_screen (double pixels)
+{
+	sp_selected_path_do_offset (true,  pixels / SP_DESKTOP_ZOOM (SP_ACTIVE_DESKTOP));
+}
+
+void
+sp_selected_path_inset_screen (double pixels)
+{
+	sp_selected_path_do_offset (false,  pixels / SP_DESKTOP_ZOOM (SP_ACTIVE_DESKTOP));
+}
+
 
 void sp_selected_path_create_offset_object_zero ()
 {
@@ -1008,7 +1025,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
 
 
 void
-sp_selected_path_do_offset (bool expand)
+sp_selected_path_do_offset (bool expand, double prefOffset)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!SP_IS_DESKTOP (desktop))
@@ -1089,12 +1106,7 @@ sp_selected_path_do_offset (bool expand)
 				break;
 			}
 
-			// recuperer l'offset dans les preferences
-			{
-				double prefOffset = 1.0;
-				prefOffset = prefs_get_double_attribute ("options.defaultoffsetwidth", "value", prefOffset);
-				o_width = prefOffset;
-			}
+			o_width = prefOffset;
 
 			if (o_width < 0.1)
 				o_width = 0.1;

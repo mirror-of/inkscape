@@ -341,8 +341,20 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_SELECTION_OFFSET:
             sp_selected_path_offset ();
             break;
+        case SP_VERB_SELECTION_OFFSET_SCREEN:
+            sp_selected_path_offset_screen (1);
+            break;
+        case SP_VERB_SELECTION_OFFSET_SCREEN_10:
+            sp_selected_path_offset_screen (10);
+            break;
         case SP_VERB_SELECTION_INSET:
             sp_selected_path_inset ();
+            break;
+        case SP_VERB_SELECTION_INSET_SCREEN:
+            sp_selected_path_inset_screen (1);
+            break;
+        case SP_VERB_SELECTION_INSET_SCREEN_10:
+            sp_selected_path_inset_screen (10);
             break;
         case SP_VERB_SELECTION_DYNAMIC_OFFSET:
             sp_selected_path_create_offset_object_zero ();
@@ -777,8 +789,16 @@ static const SPVerbActionDef props[] = {
         N_("Cut the bottom path into pieces"), NULL},
     {SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("O_utset Path"),
         N_("Outset selected paths"), NULL},
+    {SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen", N_("O_utset Path by 1px"),
+        N_("Outset selected paths by 1px"), NULL},
+    {SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10", N_("O_utset Path by 10px"),
+        N_("Outset selected paths by 10px"), NULL},
     {SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset Path"),
         N_("Inset selected paths"), NULL},
+    {SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen", N_("I_nset Path by 1px"),
+        N_("Inset selected paths by 1px"), NULL},
+    {SP_VERB_SELECTION_INSET_SCREEN_10, "SelectionInsetScreen", N_("I_nset Path by 10px"),
+        N_("Inset selected paths by 10px"), NULL},
     {SP_VERB_SELECTION_DYNAMIC_OFFSET, "SelectionDynOffset",
         N_("D_ynamic Offset"), N_("Create a dynamic offset object"), NULL},
     {SP_VERB_SELECTION_LINKED_OFFSET, "SelectionLinkedOffset",

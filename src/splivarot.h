@@ -23,7 +23,9 @@ void sp_selected_path_slice ();
 // takes the fill-rule in consideration
 // offset amount is the stroke-width of the curve
 void sp_selected_path_offset ();
+void sp_selected_path_offset_screen (double pixels);
 void sp_selected_path_inset ();
+void sp_selected_path_inset_screen (double pixels);
 void sp_selected_path_create_offset ();
 void sp_selected_path_create_inset ();
 void sp_selected_path_create_updating_offset ();
