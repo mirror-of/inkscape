@@ -44,6 +44,7 @@ svg/gill-svg-path.cpp
 svg/tst.cpp
 test.c
 test.cpp
+utest
 widgets/sp-hwrap-box.cpp
 widgets/sp-vwrap-box.cpp
 widgets/sp-toolbox.cpp
