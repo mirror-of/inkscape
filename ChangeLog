@@ -1,3 +1,15 @@
+2003-11-29  Bryce Harrington <brycehar@bryceharrington.com>
+
+	* README:  Updating "Sodipodi" to "Inkscape", removing some
+	  obviously obsolete bits.
+
+	* inkscape.1.in, inkscape.pod:  Totally rewriting manpage from
+	  scratch.  The old one appeared to be for some other application,
+	  because it was just a list of options, 90% of which aren't
+	  implemented.  I chose to do it in POD for convenience, but hand
+	  edited the 1.in file to remove bits about "Perl Documentation",
+	  etc.
+	
 2003-11-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/utest/Makefile.am, src/utest/utest.c, src/utest/utest.inc,
