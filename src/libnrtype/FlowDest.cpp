@@ -46,7 +46,7 @@ flow_dest::~flow_dest(void)
   delete tempLine2;
 }
 	
-box_sol   flow_dest::NextBox(box_sol& after,double asc,double desc,double lead,bool skip,bool &stillSameLine,double min_length)
+box_sol   flow_dest::NextBox(box_sol const & after,double asc,double desc,double lead,bool skip,bool &stillSameLine,double min_length)
 {
 	box_sol  n_res;
 	n_res.ascent=n_res.descent=n_res.leading=0;
@@ -139,7 +139,7 @@ box_sol   flow_dest::NextBox(box_sol& after,double asc,double desc,double lead,b
   n_res.ascent=n_res.descent=n_res.leading=0;
   return next_in_flow->NextBox(n_res,asc,desc,lead,skip,stillSameLine,min_length);
 }
-box_sol   flow_dest::TxenBox(box_sol& after,double asc,double desc,double lead,bool skip,bool &stillSameLine,double min_length)
+box_sol   flow_dest::TxenBox(box_sol const & after,double asc,double desc,double lead,bool skip,bool &stillSameLine,double min_length)
 {
 	box_sol  n_res;
 	n_res.ascent=n_res.descent=n_res.leading=0;
@@ -232,7 +232,7 @@ box_sol   flow_dest::TxenBox(box_sol& after,double asc,double desc,double lead,b
   n_res.ascent=n_res.descent=n_res.leading=0;
   return next_in_flow->TxenBox(n_res,asc,desc,lead,skip,stillSameLine,min_length);
 }
-double         flow_dest::RemainingOnLine(box_sol& after)
+double         flow_dest::RemainingOnLine(box_sol const & after)
 {
   if ( after.frame != this ) {
 		if ( next_in_flow ) return next_in_flow->RemainingOnLine(after);
@@ -254,7 +254,7 @@ double         flow_dest::RemainingOnLine(box_sol& after)
   }
   return left;
 }
-double         flow_dest::RemainingOnEnil(box_sol& after)
+double         flow_dest::RemainingOnEnil(box_sol const & after)
 {
   if ( after.frame != this ) {
 		if ( next_in_flow ) return next_in_flow->RemainingOnEnil(after);
@@ -283,14 +283,14 @@ void           flow_dest::Reset(void)
 	delete rgn_flow;
 	rgn_flow=new Shape;
 }
-void           flow_dest::AddShape(Shape* i_shape)
+void           flow_dest::AddShape(Shape const * i_shape)
 {
 	if ( rgn_dest->hasEdges() == false ) {
-		rgn_dest->Copy(i_shape);
+		rgn_dest->Copy(const_cast<Shape*>(i_shape));
 	} else if ( i_shape->hasEdges() == false ) {
 	} else {
 		Shape* temp=new Shape;
-		temp->Booleen(i_shape,rgn_dest,bool_op_union);
+		temp->Booleen(const_cast<Shape*>(i_shape),rgn_dest,bool_op_union);
 		delete rgn_dest;
 		rgn_dest=temp;
 	}
