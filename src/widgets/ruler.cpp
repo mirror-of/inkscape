@@ -614,6 +614,9 @@ sp_ruler_set_metric (GtkRuler *ruler,
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
+  if (metric == 0) 
+	return;
+
   ruler->metric = (GtkRulerMetric *) &sp_ruler_metrics[metric];
 
   if (GTK_WIDGET_DRAWABLE (ruler))
