@@ -42,6 +42,9 @@ public:
 
     gchar *toNativeFilename() const throw(BadURIException);
     gchar *toString() const { return _impl->toString(); }
+
+    URI &operator=(URI const &uri);
+
 private:
     class Impl {
     public:

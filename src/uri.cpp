@@ -41,6 +41,13 @@ URI::~URI() {
     _impl->unreference();
 }
 
+URI &URI::operator=(URI const &uri) {
+    uri._impl->reference();
+    _impl->unreference();
+    _impl = uri._impl;
+    return *this;
+}
+
 URI::Impl *URI::Impl::create(xmlURIPtr uri) {
     return new Impl(uri);
 }
