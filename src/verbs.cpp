@@ -669,7 +669,9 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"), N_("Fit page width in window"), NULL},
 	{SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("_Drawing"), N_("Fit drawing in window"), "zoom_draw"},
 	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Fit selection in window"), "zoom_select"},
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	{SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Fullscreen"), NULL},
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 	/* Dialogs */
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"), N_("Global Inkscape options"), NULL},
 	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"), N_("Options saved with the document"), NULL},
