@@ -45,7 +45,7 @@ static SPKnotHolder *sp_star_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop);
 static SPKnotHolder *sp_offset_knot_holder (SPItem * item, SPDesktop *desktop);
 static SPKnotHolder *sp_path_knot_holder (SPItem * item, SPDesktop *desktop);
-static SPKnotHolder *sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder);
+static void sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder);
 
 SPKnotHolder *
 sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
@@ -183,7 +183,6 @@ static NR::Point sp_pattern_scale_get (SPItem *item)
 
     gdouble x = 0;
     gdouble y = (pattern_width(pat)*0.25);
-    g_print("\n pat width = %f", y);
     NR::Point delta = NR::Point(x,y);
     NR::Matrix a = pat->patternTransform;
     a[4] = 0;
@@ -624,7 +623,7 @@ sp_path_knot_holder (SPItem * item, SPDesktop *desktop)
    return NULL;
 }
 
-static SPKnotHolder *
+static void
 sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder)
 {
 
