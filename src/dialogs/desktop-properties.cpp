@@ -1055,7 +1055,7 @@ sp_desktop_dialog(void)
 
 	/* Page Shadow toggle */
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_checkbutton(dlg, t, _("Show Page Shadow"),
+        spw_checkbutton(dlg, t, _("Show page shadow"),
 		                  "showpageshadow", 0, 5, 0, cb);
 
 	
