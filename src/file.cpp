@@ -190,19 +190,6 @@ sp_file_open_dialog (gpointer object, gpointer data)
 ## S A V E
 ######################*/
 
-static bool
-save_status (bool sucess) {
-	if (sucess == TRUE) {
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
-	} else {
-		gchar * text;
-		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
-		text = g_strdup_printf(_("File %s unable to be saved."), SP_ACTIVE_DOCUMENT->uri);
-		sp_ui_error_dialog (text);
-	}
-	return sucess;
-}
-
 /**
  * This 'save' function called by the others below
  */
@@ -214,10 +201,19 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 	try {
 		sp_module_system_save (key, doc, uri);
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
+		gchar * text;
+		text = g_strdup_printf(_("Extension to save document (%s) was not found.  This may have been caused by an unknown file extension."), uri);
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+		sp_ui_error_dialog (text);
 		return FALSE;
 	} catch (Inkscape::Extension::Output::save_failed &e) {
+		gchar * text;
+		text = g_strdup_printf(_("File %s unable to be saved."), uri);
+		sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document not saved."));
+		sp_ui_error_dialog (text);
 		return FALSE;
 	}
+	sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), _("Document saved."));
 	return TRUE;
 }
 
@@ -288,9 +284,9 @@ sp_file_save_dialog (SPDocument *doc)
         save_path = g_dirname (fileName);
         save_path = g_strdup (save_path);
         g_free (fileName);
-        return save_status(sucess);
+        return sucess;
     } else {
-        return save_status(FALSE);
+        return FALSE;
     }
 }
 
@@ -314,7 +310,6 @@ sp_file_save_document (SPDocument *doc)
 			fn = g_strdup (doc->uri);
 			success = file_save (doc, fn, Inkscape::Extension::db.get(sp_repr_attr(repr, "inkscape:output_extension")));
 			g_free ((void *) fn);
-			save_status(success);
 		}
 
     } else {
