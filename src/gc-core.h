@@ -57,7 +57,7 @@ struct Ops {
                                            CleanupFunc *old_func,
                                            void **old_data);
     int (*general_register_disappearing_link)(void **p_ptr,
-                                                void *base);
+                                              void *base);
     int (*unregister_disappearing_link)(void **p_ptr);
     void (*free)(void *ptr);
 };
