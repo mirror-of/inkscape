@@ -52,25 +52,41 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 
 	g_return_val_if_fail (filename != NULL, NULL);
 
+	// TODO: bulia, please look over
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* localFilename = g_filename_from_utf8 ( filename,
+												  -1,
+												  &bytesRead,
+												  &bytesWritten,
+												  &error);
+
 #ifdef HAVE_LIBWMF
-	if (strlen (filename) > 4) {
-		if ( (strcmp (filename + strlen (filename) - 4,".wmf") == 0)
-		  || (strcmp (filename + strlen (filename) - 4,".WMF") == 0))
-			doc = sp_wmf_convert (filename);
+	if (strlen (localFilename) > 4) {
+		if ( (strcmp (localFilename + strlen (localFilename) - 4,".wmf") == 0)
+		  || (strcmp (localFilename + strlen (localFilename) - 4,".WMF") == 0))
+			doc = sp_wmf_convert (localFilename);
 		else
-			doc = xmlParseFile (filename);
+			doc = xmlParseFile (localFilename);
 	}
 	else {
-		doc = xmlParseFile (filename);
+		doc = xmlParseFile (localFilename);
 	}
 #else /* HAVE_LIBWMF */
-	doc = xmlParseFile (filename);
+	doc = xmlParseFile (localFilename);
 #endif /* HAVE_LIBWMF */
 
 	rdoc = sp_repr_do_read (doc, default_ns);
 	if (doc) {
 		xmlFreeDoc (doc);
 	}
+
+	if ( localFilename != NULL )
+	{
+		g_free (localFilename);
+	}
+
 	return rdoc;
 }
 
@@ -268,12 +284,29 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
 {
 	FILE * file;
 
-	file = fopen (filename, "w");
+	g_return_if_fail (filename != NULL);
+
+	// TODO: bulia, please look over
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* localFilename = g_filename_from_utf8 ( filename,
+												  -1,
+												  &bytesRead,
+												  &bytesWritten,
+												  &error);
+
+	file = fopen (localFilename, "w");
 	g_return_if_fail (file != NULL);
 
 	sp_repr_save_stream (doc, file);
 
 	fclose (file);
+
+	if ( localFilename != NULL )
+	{
+		g_free (localFilename);
+	}
 
 	return;
 }

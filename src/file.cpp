@@ -142,9 +142,36 @@ sp_file_open_dialog (gpointer object, gpointer data)
                  (const char *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (const char *)_("Select file to open"));
-    char *fileName = dlg->show();
+    gchar *fileName = dlg->show();
     delete dlg;
     if (fileName) {
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError *error;
+        gchar *newFileName = g_filename_to_utf8( fileName,
+                                                 -1,
+                                                 &bytesRead,
+                                                 &bytesWritten,
+                                                 &error);
+        if ( newFileName != NULL )
+        {
+            g_free (fileName);
+            fileName = newFileName;
+        }
+        else
+        {
+            // TODO: bulia, please look over
+            g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+        }
+
+
+        if ( !g_utf8_validate(fileName, -1, NULL) )
+        {
+            // TODO: bulia, please look over
+            g_warning( "INPUT FILENAME IS NOT UTF-8" );
+        }
+
+
         g_free (open_path);
         open_path = g_dirname (fileName);
         if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
@@ -200,6 +227,34 @@ sp_file_save_dialog (SPDocument *doc)
             fileName = g_strconcat (oldFileName, ".svg", NULL);
             g_free (oldFileName);
         }
+
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError *error;
+        gchar *newFileName = g_filename_to_utf8( fileName,
+                                                 -1,
+                                                 &bytesRead,
+                                                 &bytesWritten,
+                                                 &error);
+        if ( newFileName != NULL )
+        {
+            g_free (fileName);
+            fileName = newFileName;
+        }
+        else
+        {
+            // TODO: bulia, please look over
+            g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+        }
+
+
+        if ( !g_utf8_validate(fileName, -1, NULL) )
+        {
+            // TODO: bulia, please look over
+            g_warning( "INPUT FILENAME IS NOT UTF-8" );
+        }
+
+
         file_save (doc, fileName, oldSelectionType);
         g_free (save_path);
         save_path = g_dirname (fileName);
