@@ -65,9 +65,9 @@ sp_module_system_open (const gchar * key, const gchar * filename)
 	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&imod;
-		sp_module_db_foreach(open_internal, (gpointer)&parray);
+		Inkscape::Extension::db.foreach(open_internal, (gpointer)&parray);
 	} else {
-		imod = dynamic_cast<Inkscape::Extension::Input *>(sp_module_db_get(key));
+		imod = dynamic_cast<Inkscape::Extension::Input *>(Inkscape::Extension::db.get(key));
 	}
 
 	if (imod == NULL) {
@@ -194,9 +194,9 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&omod;
 		omod = NULL;
-		sp_module_db_foreach(save_internal, (gpointer)&parray);
+		Inkscape::Extension::db.foreach(save_internal, (gpointer)&parray);
 	} else {
-		omod = dynamic_cast<Inkscape::Extension::Output *>(sp_module_db_get(key));
+		omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(key));
 	}
 
 	if (!dynamic_cast<Inkscape::Extension::Output *>(omod)) {
@@ -297,7 +297,7 @@ sp_module_system_filter (GtkObject * object, const gchar * key)
 
 	g_return_if_fail(key != NULL);
 
-	fmod = dynamic_cast<Inkscape::Extension::Effect *>(sp_module_db_get(key));
+	fmod = dynamic_cast<Inkscape::Extension::Effect *>(Inkscape::Extension::db.get(key));
 	g_return_if_fail(fmod != NULL);
 
 	fmod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
@@ -312,7 +312,7 @@ sp_module_system_filter (GtkObject * object, const gchar * key)
 Inkscape::Extension::Print *
 sp_module_system_get_print (const gchar * key)
 {
-	return dynamic_cast<Inkscape::Extension::Print *>(sp_module_db_get(key));
+	return dynamic_cast<Inkscape::Extension::Print *>(Inkscape::Extension::db.get(key));
 }
 /**
 	\return   The built module

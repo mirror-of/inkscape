@@ -1,3 +1,10 @@
+2004-03-17  Ted Gould <ted@gould.cx>
+
+	* src/extension/db.h, src/extension/db.cpp, src/extension/extension.cpp,
+	  src/extension/system.cpp: Changing the database stuff to be C++
+	  object oriented (actually it wasn't OO before).  But this helps
+	  as we start to connect to the File dialogs.
+
 2004-03-16  Ted Gould <ted@gould.cx>
 
     * src/file.cpp,

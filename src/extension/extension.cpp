@@ -74,7 +74,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
         while (child_repr != NULL) {
             if (!strcmp(sp_repr_name(child_repr), "id")) {
                 val = sp_repr_content (sp_repr_children(child_repr));
-                val = sp_module_db_get_unique_id (c, 256, val);
+                val = db.get_unique_id (c, 256, val);
                 id = g_strdup (val);
             } /* id */
             if (!strcmp(sp_repr_name(child_repr), "name")) {
@@ -86,7 +86,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
             child_repr = sp_repr_next(child_repr);
         }
 
-        sp_module_db_register (this);
+        db.register_ext (this);
     }
 //  printf("%s\n", name);
 
@@ -104,6 +104,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 */
 Extension::~Extension (void)
 {
+	db.unregister_ext(this);
     sp_repr_unref(repr);
     g_free(id);
     g_free(name);

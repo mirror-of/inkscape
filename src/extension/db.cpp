@@ -15,6 +15,16 @@
 #include <glib.h>
 #include "db.h"
 
+/* Globals */
+
+/* Namespaces */
+
+namespace Inkscape {
+namespace Extension {
+
+/** This is the actual database object.  There is only one of these */
+DB db;
+
 /* Types */
 
 /** Holds the callback and user-supplied data used by sp_module_db_foreach_internal()
@@ -24,24 +34,20 @@ struct ModuleDBForeachClosure {
 	gpointer in_data;
 };
 
-/* Globals */
-
-/** This is the actual database.  It has all of the modules in it,
-    indexed by their ids.  It's a hash table for faster lookups */
-static GHashTable *moduledict = NULL;
-
-/* Prototypes */
-static void sp_module_db_foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data);
+DB::DB (void) {
+	moduledict = g_hash_table_new (g_str_hash, g_str_equal);
+}
 
 /**
 	\brief     Add a module to the module database
 	\param     module  The module to be registered.
 */
 void
-sp_module_db_register (Inkscape::Extension::Extension *module)
+DB::register_ext (Extension *module)
 {
 	g_return_if_fail(module->get_id() != NULL);
 
+	/* printf("Registering: %s\n", module->get_name()); */
 	g_hash_table_insert (moduledict, module->get_id(), module);
 }
 
@@ -50,7 +56,7 @@ sp_module_db_register (Inkscape::Extension::Extension *module)
 	\param     module  The module to be removed.
 */
 void
-sp_module_db_unregister (Inkscape::Extension::Extension * module)
+DB::unregister_ext (Extension * module)
 {
 	g_return_if_fail(module->get_id() != NULL);
 
@@ -67,14 +73,10 @@ sp_module_db_unregister (Inkscape::Extension::Extension * module)
   	module; the caller is responsible for releasing that reference
 	when it is no longer needed.
 */
-	Inkscape::Extension::Extension *
-sp_module_db_get (const gchar *key)
+Extension *
+DB::get (const gchar *key)
 {
-	Inkscape::Extension::Extension *mod;
-
-	if (moduledict == NULL) {
-		moduledict = g_hash_table_new (g_str_hash, g_str_equal);
-	}
+	Extension *mod;
 
 	mod = (Inkscape::Extension::Extension *)g_hash_table_lookup (moduledict, key);
 
@@ -82,12 +84,10 @@ sp_module_db_get (const gchar *key)
 }
 
 const gchar *
-sp_module_db_get_unique_id (gchar *c, int len, const gchar *val)
+DB::get_unique_id (gchar *c, int len, const gchar *val)
 {
 	static int mnumber = 0;
-	if (moduledict == NULL) {
-		moduledict = g_hash_table_new (g_str_hash, g_str_equal);
-	}
+
 	while (!val || g_hash_table_lookup (moduledict, val)) {
 		g_snprintf (c, len, "Module_%d", ++mnumber);
 		val = c;
@@ -106,13 +106,13 @@ sp_module_db_get_unique_id (gchar *c, int len, const gchar *val)
 	callback for each one.
 */
 void
-sp_module_db_foreach (void (*in_func)(Inkscape::Extension::Extension * in_plug, gpointer in_data), gpointer in_data)
+DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data)
 {
 	g_return_if_fail(moduledict != NULL);
 
 	ModuleDBForeachClosure closure = { in_func, in_data };
 
-	g_hash_table_foreach(moduledict, (GHFunc)sp_module_db_foreach_internal, &closure);
+	g_hash_table_foreach(moduledict, (GHFunc)DB::foreach_internal, &closure);
 	return;
 }
 
@@ -127,10 +127,11 @@ sp_module_db_foreach (void (*in_func)(Inkscape::Extension::Extension * in_plug, 
 	This function serves as an adaptor to use sp_module_db_foreach()'s
 	callbacks with g_hash_table_foreach().
 */
-static void
-sp_module_db_foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data)
+void
+DB::foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data)
 {
 	ModuleDBForeachClosure *closure=reinterpret_cast<ModuleDBForeachClosure *>(in_data);
 	closure->in_func(reinterpret_cast<Inkscape::Extension::Extension *>(in_value), closure->in_data);
 }
 
+}; }; /* namespace Extension, Inkscape */

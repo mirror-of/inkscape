@@ -15,13 +15,32 @@
 #ifndef __MODULES_DB_H__
 #define __MODULES_DB_H__
 
+#include <glib.h>
 #include <extension/extension.h>
 
-Inkscape::Extension::Extension * sp_module_db_get (const gchar *key);
-void sp_module_db_register (Inkscape::Extension::Extension *module);
-void sp_module_db_unregister (Inkscape::Extension::Extension *module);
-const gchar *sp_module_db_get_unique_id (gchar *c, int len, const gchar *val);
-void sp_module_db_foreach (void (*in_func)(Inkscape::Extension::Extension * in_plug, gpointer in_data), gpointer in_data);
+namespace Inkscape {
+namespace Extension {
+
+class DB {
+private:
+	/** This is the actual database.  It has all of the modules in it,
+		indexed by their ids.  It's a hash table for faster lookups */
+    GHashTable *moduledict;
+
+	static void foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data);
+
+public:
+	DB (void);
+	Extension * get (const gchar *key);
+    void register_ext (Extension *module);
+    void unregister_ext (Extension *module);
+    const gchar * get_unique_id (gchar *c, int len, const gchar *val);
+    void foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data);
+};
+
+extern DB db;
+
+}; }; /* namespace Extension, Inkscape */
 
 #endif /* __MODULES_DB_H__ */
 
