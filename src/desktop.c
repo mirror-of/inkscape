@@ -44,6 +44,7 @@
 #include "sp-namedview.h"
 #include "sp-item.h"
 #include "sp-root.h"
+#include "dialogs/dialog-events.h"
 
 /* fixme: Lauris */
 #include "file.h"

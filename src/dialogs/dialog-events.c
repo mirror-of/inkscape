@@ -81,7 +81,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 			}
 			break;
 		}
-	default:
+
 	}
 	return ret; 
 }
