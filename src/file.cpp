@@ -49,6 +49,8 @@
 #include "file.h"
 #include "dialogs/dialog-events.h"
 
+#include "dialogs/filedialog.h"
+
 #include "sp-namedview.h"
 
 #include "module.h"
@@ -197,16 +199,19 @@ void
 sp_file_open_dialog (gpointer object, gpointer data)
 {
 #ifdef WIN32
-    char *filename =
-        sp_win32_get_open_filename ((unsigned char *)open_path,
-                 (unsigned char *)"SVG files\0*.svg;*.svgz\0All files\0*\0",
-                 (unsigned char *)_("Select file to open"));
-    if (filename) {
+    Inkscape::UI::Dialogs::FileOpenDialog *dlg =
+        new Inkscape::UI::Dialogs::FileOpenDialog(
+                 (const char *)open_path,
+                 Inkscape::UI::Dialogs::SVG_TYPES,
+                 (const char *)_("Select file to open"));
+    char *fileName = dlg->show();
+    delete dlg;
+    if (fileName) {
         g_free (open_path);
-        open_path = g_dirname (filename);
+        open_path = g_dirname (fileName);
         if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
-        sp_file_open (filename, NULL);
-        g_free (filename);
+        sp_file_open (fileName, NULL);
+        g_free (fileName);
     }
 
 #else
@@ -270,16 +275,30 @@ static gboolean
 sp_file_save_dialog (SPDocument *doc)
 {
 #ifdef WIN32
-
-    unsigned int spns;
-    char *filename = sp_win32_get_save_filename ((unsigned char *)save_path, &spns);
-    if (filename && *filename) {
-        file_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
+    Inkscape::UI::Dialogs::FileSaveDialog *dlg =
+        new Inkscape::UI::Dialogs::FileSaveDialog(
+                 (const char *)save_path,
+                 Inkscape::UI::Dialogs::SVG_TYPES,
+                 (const char *)_("Select file to save"));
+    char *fileName = dlg->show();
+    gint selectionType = dlg->getSelectionType();
+    //Convert to old types
+    gchar *oldSelectionType = SP_MODULE_KEY_OUTPUT_SVG;
+    if (selectionType == Inkscape::UI::Dialogs::SVG_NAMESPACE_WITH_EXTENSIONS)
+        oldSelectionType = SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE;
+    delete dlg;
+    if (fileName && *fileName) {
+        gchar *ext = (gchar *)sp_extension_from_path ((const gchar *)fileName);
+        if (!ext || (strcmp(ext, "svg") && strcmp(ext, "xml"))) {
+            gchar *oldFileName = fileName;
+            fileName = g_strconcat (oldFileName, ".svg", NULL);
+            g_free (oldFileName);
+        }
+        file_save (doc, fileName, oldSelectionType);
         g_free (save_path);
-        save_path = g_dirname (filename);
+        save_path = g_dirname (fileName);
         save_path = g_strdup (save_path);
-        g_free (filename);
-        
+        g_free (fileName);
         return TRUE;
     } else {
         return FALSE;
@@ -329,6 +348,12 @@ sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
     GtkFileSelection *fs = GTK_FILE_SELECTION (save_dialog);
 
     const gchar *filename = gtk_file_selection_get_filename (fs);
+    gchar *ext = (gchar *)sp_extension_from_path ((const gchar *)filename);
+    if (!ext || (strcmp(ext, "svg") && strcmp(ext, "xml"))) {
+        gchar *oldFileName = filename;
+        filename = g_strconcat (oldFileName, ".svg", NULL);
+        g_free (oldFileName);
+    }
     const gchar *raw_filename = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
 
     g_assert (filename && raw_filename);
@@ -542,13 +567,16 @@ sp_file_import (GtkWidget * widget)
         return;
 
 #ifdef WIN32
-    char *filename = sp_win32_get_open_filename ((unsigned char *)import_path,
-                                     (unsigned char *)"Image files\0*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.xpm\0"
-                         "SVG files\0*.svg\0"
-                         "All files\0*\0", (unsigned char *)_("Select file to import"));
-    if (filename) {
-        file_import (doc, filename);
-        g_free (filename);
+    Inkscape::UI::Dialogs::FileOpenDialog *dlg =
+        new Inkscape::UI::Dialogs::FileOpenDialog(
+                 (const char *)import_path,
+                 Inkscape::UI::Dialogs::IMPORT_TYPES,
+                 (const char *)_("Select file to import"));
+    char *fileName = dlg->show();
+    delete dlg;
+    if (fileName) {
+        file_import (doc, fileName);
+        g_free (fileName);
     }
 #else
     GtkWidget *w = gtk_file_selection_new (
