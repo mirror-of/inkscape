@@ -451,28 +451,30 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         /* font */
         font_instance *font = sp_font_selector_get_font (SP_FONT_SELECTOR (fontsel));
 
-        gchar c[256];
-        font->Family(c, 256);
-        sp_repr_css_set_property (css, "font-family", c);
-
-        font->Attribute( "weight", c, 256);
-        sp_repr_css_set_property (css, "font-weight", c);
-
-        font->Attribute("style", c, 256);
-        sp_repr_css_set_property (css, "font-style", c);
-
-        font->Attribute("stretch", c, 256);
-        sp_repr_css_set_property (css, "font-stretch", c);
-
-        font->Attribute("variant", c, 256);
-        sp_repr_css_set_property (css, "font-variant", c);
-
-        Inkscape::SVGOStringStream os;
-        os << sp_font_selector_get_size (SP_FONT_SELECTOR (fontsel));
-        sp_repr_css_set_property (css, "font-size", os.str().c_str());
-
-        font->Unref();
-        font=NULL;
+				if ( font ) {
+					gchar c[256];
+					font->Family(c, 256);
+					sp_repr_css_set_property (css, "font-family", c);
+					
+					font->Attribute( "weight", c, 256);
+					sp_repr_css_set_property (css, "font-weight", c);
+					
+					font->Attribute("style", c, 256);
+					sp_repr_css_set_property (css, "font-style", c);
+					
+					font->Attribute("stretch", c, 256);
+					sp_repr_css_set_property (css, "font-stretch", c);
+					
+					font->Attribute("variant", c, 256);
+					sp_repr_css_set_property (css, "font-variant", c);
+					
+					Inkscape::SVGOStringStream os;
+					os << sp_font_selector_get_size (SP_FONT_SELECTOR (fontsel));
+					sp_repr_css_set_property (css, "font-size", os.str().c_str());
+					
+					font->Unref();
+					font=NULL;
+				}
 				
         /* Layout */
         GtkWidget *b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
@@ -673,9 +675,9 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
             // the font is oversized, so we need to pass the true size separately
             sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font, style->font_size.computed);
             sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font, SP_FONT_SELECTOR(fontsel));
-// crashed preview!
-//						font->Unref();
-//						font=NULL;
+
+						font->Unref();
+						font=NULL;
         }
 
         if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {

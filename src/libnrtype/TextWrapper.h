@@ -89,6 +89,7 @@ public:
 	void            SortBoundaries(void);
 	void            MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr);
 	bool            Contains(int type,int g_st,int g_en,int &c_st,int &c_en);
+	bool            IsBound(int type,int g_st,int &c_st);
 };
 
 #endif

@@ -238,6 +238,7 @@ font_factory*  font_factory::Default(void)
 
 font_factory::font_factory(void)
 {
+	fontSize=512;
 #ifdef WITH_XFT
 	fontServer=pango_ft2_font_map_new();
 	pango_ft2_font_map_set_resolution((PangoFT2FontMap*)fontServer, 72, 72);
@@ -249,6 +250,8 @@ font_factory::font_factory(void)
 	wCache=pango_win32_font_map_get_font_cache(fontServer);
 	wDevice = CreateDC ("DISPLAY", NULL, NULL, NULL);
 //	wDevice=pango_win32_get_dc();
+	fontSize*= 67.55223 ;
+	fontSize/= ((double)GetDeviceCaps (screen, LOGPIXELSY));
 #endif
 }
 
@@ -274,18 +277,7 @@ font_instance* font_factory::FaceFromDescr(const char* descr)
 
 font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 {
-#ifdef WITH_XFT
-	pango_font_description_set_size (descr, 512*PANGO_SCALE); // mandatory huge size (hinting workaround)
-#endif
-#ifdef WIN32
-	// Pango on Windows used to give some weird font sizes, bigger than necessary and depending on resolution.
-	// Here we compensate for that so that Linux and Windows display the same font sizes.
-	// The nature of the magic number 67.55223 (obtained experimentally) is a subject of debate; 
-	// if you can offer any insight, it will be much appreciated.
-	HDC screen = GetDC(0);
-	double resolution = GetDeviceCaps (screen, LOGPIXELSY);
-	pango_font_description_set_size (descr, (int) (512 * PANGO_SCALE * 67.55223 / resolution));
-#endif
+	pango_font_description_set_size (descr, (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
 
 //	char* tc=pango_font_description_to_string(descr);
 //	printf("asked: %s (family=%s)\n",tc,pango_font_description_get_family(descr));

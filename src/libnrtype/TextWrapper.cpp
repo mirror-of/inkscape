@@ -201,10 +201,12 @@ void            text_wrapper::DoLayout(void)
 		for (int i=0;i<glyph_length;i++) {
 			int   g_st=glyph_text[i].uni_st,g_en=glyph_text[i].uni_en;
 			glyph_text[i].char_start=false;
-			if ( Contains(bnd_char,g_st,g_en,c_st,c_en) ) {
-				if ( glyph_text[i].uni_dir == 0 ) {
+			if ( glyph_text[i].uni_dir == 0 ) {
+				if ( IsBound(bnd_char,g_st,c_st) ) {
 					if ( g_st == bounds[c_st].uni_pos ) glyph_text[i].char_start=true;
-				} else {
+				}
+			} else {
+				if ( IsBound(bnd_char,g_en,c_en) ) {
 					if ( g_en == bounds[c_en].uni_pos ) glyph_text[i].char_start=true;
 				}
 			}
@@ -237,9 +239,12 @@ void            text_wrapper::MakeVertical(void)
 	int      nbLetter=0;
 	PangoFont*     curPF=NULL;
 	font_instance* curF=NULL;
-	while ( NextCharacter(g_st,g_en) ) {
+	do {
+		g_st=g_en;
+		do {
+			g_en++;
+		} while ( g_en < glyph_length && glyph_text[g_en].char_start == false );
 		if ( g_st < g_en && g_en <= glyph_length ) {
-//			printf("letter %i :  %i -> %i\n",nbLetter,g_st,g_en);
 			double n_adv=0;
 			double  minX=glyph_text[g_st].x,maxX=glyph_text[g_st].x;
 			for (int i=g_st;i<g_en;i++) {
@@ -266,7 +271,7 @@ void            text_wrapper::MakeVertical(void)
 			g_st=g_en;
 		}
 		nbLetter++;
-	}
+	} while ( g_st < glyph_length );
 	if ( curF ) curF->Unref();
 }
 void            text_wrapper::MergeWhiteSpace(void)
@@ -396,7 +401,7 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 		nbe.uni_pos=i;
 		nbe.start=false;
 		// letters
-		if ( pAttrs[i].is_cursor_position ) {
+		if ( pAttrs[i].is_cursor_position || i == nAttr ) {
 			if ( last_c_st >= 0 ) {
 				nbs.type=nbe.type=bnd_char;
 				nbs.uni_pos=last_c_st;
@@ -406,7 +411,7 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 			last_c_st=i;
 		}
 		// words
-		if ( pAttrs[i].is_word_start ) {
+		if ( pAttrs[i].is_word_start || i == nAttr ) {
 			if ( last_w_st >= 0 ) {
 				nbs.type=nbe.type=bnd_word;
 				nbs.uni_pos=last_w_st;
@@ -427,7 +432,7 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 			last_w_st=i;
 		}
 		// sentences
-		if ( pAttrs[i].is_sentence_boundary ) {
+		if ( pAttrs[i].is_sentence_boundary || i == nAttr ) {
 			if ( last_s_st >= 0 ) {
 				nbs.type=nbe.type=bnd_sent;
 				nbs.uni_pos=last_s_st;
@@ -437,7 +442,7 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 			last_s_st=i;
 		}
 		// paragraphs
-		if ( uni32_text[i] == '\n' || uni32_text[i] == '\r' ) { // too simple to be true?
+		if ( uni32_text[i] == '\n' || uni32_text[i] == '\r' || i == nAttr ) { // too simple to be true?
 			nbs.type=nbe.type=bnd_para;
 			nbs.uni_pos=last_p_st;
 			nbe.uni_pos=i+1;
@@ -445,6 +450,39 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 			last_p_st=i+1;
 		}
 	}
+}
+bool            text_wrapper::IsBound(int bnd_type,int g_st,int &c_st)
+{
+	if ( c_st < 0 ) c_st=0;
+	int  scan_dir=0;
+	while ( c_st >= 0 && c_st < nbBound ) {
+		if ( bounds[c_st].uni_pos == g_st && bounds[c_st].type == bnd_type ) {
+			return true;
+		}
+		if ( bounds[c_st].uni_pos < g_st ) {
+			if ( scan_dir < 0 ) break;
+			c_st++;
+			scan_dir=1; 
+		} else if ( bounds[c_st].uni_pos > g_st ) {
+			if ( scan_dir > 0 ) break;
+			c_st--;
+			scan_dir=-1; 
+		} else {
+			// good pos, wrong type
+			while ( c_st > 0 && bounds[c_st].uni_pos == g_st ) {
+				c_st--;
+			}
+			if ( bounds[c_st].uni_pos < g_st ) c_st++;
+			while ( c_st < nbBound && bounds[c_st].uni_pos == g_st ) {
+				if ( bounds[c_st].type == bnd_type ) {
+					return true;
+				}
+				c_st++;
+			}
+			break;
+		}
+	}
+	return false;
 }
 bool            text_wrapper::Contains(int bnd_type,int g_st,int g_en,int &c_st,int &c_en)
 {
@@ -474,6 +512,27 @@ bool            text_wrapper::Contains(int bnd_type,int g_st,int g_en,int &c_st,
 			c_st--;
 			scan_dir=-1; 
 		} else {
+			// good pos, wrong type
+			while ( c_st > 0 && bounds[c_st].uni_pos == g_st ) {
+				c_st--;
+			}
+			if ( bounds[c_st].uni_pos < g_st ) c_st++;
+			while ( c_st < nbBound && bounds[c_st].uni_pos == g_st ) {
+				if ( bounds[c_st].type == bnd_type ) {
+					if ( bounds[c_st].start ) {
+						c_en=bounds[c_st].other;
+					} else {
+					}
+				}
+				if ( bounds[c_st].type == bnd_type && c_en == bounds[c_st].other ) {
+					if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
+						// character found
+						return true;
+					}
+				}
+				c_st++;
+			}
+			
 			break;
 		}
 	}

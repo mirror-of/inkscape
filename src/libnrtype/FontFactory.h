@@ -45,7 +45,7 @@ public:
   
 	PangoFontMap*					fontServer;
 	PangoContext*         fontContext;
-	
+	double                fontSize;
 #ifdef WIN32
 	HDC                   wDevice;
 	PangoWin32FontCache*  wCache;
