@@ -7,8 +7,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <iostream>  // Work-around for sys/cdefs.h not defining __const for libintl.h.
 #include <stdlib.h>
-#include <stream.h>
 
 // #include <glibmm/ustring.h>
 #include <glibmm/i18n.h>
