@@ -329,12 +329,18 @@ void sp_selected_path_outline(void)
 	item = sp_selection_item (selection);
 	
 	if (item == NULL) return;
-	if (!SP_IS_PATH (item)) return;
-	path = SP_PATH (item);
-	curve = sp_shape_get_curve (SP_SHAPE (path));
-	if (curve == NULL) return;
+	if ( !SP_IS_PATH (item) && !SP_IS_TEXT (item) ) return;
+	if ( SP_IS_PATH(item) ) {
+		path = SP_PATH (item);
+		curve = sp_shape_get_curve (SP_SHAPE (path));
+		if (curve == NULL) return;
+	}
+	if ( SP_IS_TEXT(item) ) {
+		curve = sp_text_normalized_bpath (SP_TEXT (item));
+		if (curve == NULL) return;
+	}
 	
-Shape::round_power=4;
+Shape::round_power=3;
 	
 	sp_item_i2root_affine (item, &i2root);
 	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
@@ -381,14 +387,13 @@ Shape::round_power=4;
 	res->SetBackData(false);
 	
 	sp_curve_unref (curve);
-	sp_repr_unparent (SP_OBJECT_REPR (item));
 	
 	{
 
 		orig->Outline(res,0.5*o_width,o_join,o_butt,o_miter);
 	
-		res->ConvertEvenLines(0.25);
-		res->Simplify(0.01*o_width);
+		res->ConvertEvenLines(0.25*o_width);
+		res->Simplify(0.05*o_width);
 
 		Shape*  theShape=new Shape;
 		res->ConvertWithBackData(1.0);
@@ -406,6 +411,17 @@ Shape::round_power=4;
 		
 	}
 	
+	if ( orig->descr_nb <= 1 ) {
+		// ca a merdŽ, ou bien le resultat est vide
+		delete res;
+		delete orig;
+		g_free (style);
+
+		return;
+	}
+	
+	sp_repr_unparent (SP_OBJECT_REPR (item));
+
 	{
 		gchar tstr[80];
 		

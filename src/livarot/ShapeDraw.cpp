@@ -3,7 +3,6 @@
  *  nlivarot
  *
  *  Created by fred on Mon Jun 16 2003.
- *  public domain
  *
  */
 

@@ -9,6 +9,7 @@
 
 #include "Path.h"
 #include "MyMath.h"
+#include <math.h>
 
 void						Path::Outline(Path* dest,float width,JoinType join,ButtType butt,float miter)
 {

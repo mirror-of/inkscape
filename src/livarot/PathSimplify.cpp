@@ -8,6 +8,7 @@
 
 #include "Path.h"
 #include "MyMath.h"
+#include <math.h>
 
 // algo d'origine: http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
 

@@ -3,7 +3,6 @@
  *  nlivarot
  *
  *  Created by fred on Mon Jun 16 2003.
- *  public domain
  *
  */
 
@@ -14,6 +13,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+//#include <iostream.h>
 
 class DblLinked {
 public:

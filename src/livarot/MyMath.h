@@ -3,7 +3,6 @@
  *  nlivarot
  *
  *  Created by fred on Wed Jun 18 2003.
- *  public domain
  *
  */
 
@@ -14,7 +13,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <iostream.h>
+//#include <iostream.h>
 
 typedef struct vec2 {
 	float    x,y;

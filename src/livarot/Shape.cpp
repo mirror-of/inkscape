@@ -3,14 +3,13 @@
  *  nlivarot
  *
  *  Created by fred on Thu Jun 12 2003.
- *  public domain
  *
  */
 
 #include "Shape.h"
 #include "MyMath.h"
 
-int Shape::round_power=5;
+int      Shape::round_power=5;
 
 Shape::Shape(void)
 {

@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <iostream.h>
+//#include <iostream.h>
 
 #include "LivarotDefs.h"
 #include "MyMath.h"
@@ -33,7 +33,6 @@ enum {
 };
 
 class Shape;
-class Region;
 
 typedef struct dashTo_info {
 		float nDashAbs;
@@ -209,8 +208,6 @@ public:
 	// - stroke the path; usual parameters: type of cap=butt, type of join=join and miter (see LivarotDefs.h)
 	// doClose treat the path as closed (ie a loop)
 	void            Stroke(Shape* dest,bool doClose,float width,JoinType join,ButtType butt,float miter,bool justAdd=false);
-	// strokes the Path in a region (ready to rasterize)
-	void            Stroke(Region* dest,bool doClose,float width,JoinType join,ButtType butt,float miter);
 	// stroke with dashes
 	void            Stroke(Shape* dest,bool doClose,float width,JoinType join,ButtType butt,float miter,int nbDash,one_dash* dashs,bool justAdd=false);
 	// build a Path that is the outline of the Path instance's description (the result is stored in dest)
@@ -282,7 +279,6 @@ private:
 	void            DoOutsideOutline(Path* dest,float width,JoinType join,ButtType butt,float miter,int &stNo,int &enNo);
 	void            DoInsideOutline(Path* dest,float width,JoinType join,ButtType butt,float miter,int &stNo,int &enNo);
 	void            DoStroke(Shape* dest,bool doClose,float width,JoinType join,ButtType butt,float miter,bool justAdd=false);
-	void            DoStroke(Region* dest,bool doClose,float width,JoinType join,ButtType butt,float miter);
 	void            DoStroke(Shape* dest,bool doClose,float width,JoinType join,ButtType butt,float miter,int nbDash,one_dash* dashs,bool justAdd=false);
 	
 	static void     TangentOnSegAt(float at,float sx,float sy,path_descr_lineto& fin,vec2& pos,vec2& tgt,float &len);
@@ -301,9 +297,6 @@ private:
 
 
 	// fonctions annexes pour le stroke
-	static void            DoSeg(Region* dest,float stW,vec2 stPos,float enW,vec2 enPos,vec2 dir);
-	static void            DoButt(Region* dest,float width,ButtType butt,vec2 pos,vec2 dir);
-	static void            DoJoin(Region* dest,float width,JoinType join,vec2 pos,vec2 prev,vec2 next,float miter,float prevL,float nextL);
 	static void            DoButt(Shape* dest,float width,ButtType butt,vec2 pos,vec2 dir,int &leftNo,int &rightNo);
 	static void            DoJoin(Shape* dest,float width,JoinType join,vec2 pos,vec2 prev,vec2 next,float miter,float prevL,float nextL,int &leftStNo,int &leftEnNo,int &rightStNo,int &rightEnNo);
 	static void            DoLeftJoin(Shape* dest,float width,JoinType join,vec2 pos,vec2 prev,vec2 next,float miter,float prevL,float nextL,int &leftStNo,int &leftEnNo);

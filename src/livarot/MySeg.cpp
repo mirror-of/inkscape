@@ -3,12 +3,13 @@
  *  nlivarot
  *
  *  Created by fred on Wed Nov 12 2003.
- *  public domain
+ *  Copyright (c) 2003 __MyCompanyName__. All rights reserved.
  *
  */
 
 #include "MyMath.h"
 #include "MySeg.h"
+#include <math.h>
 
 void             L_SEG::Distance(L_SEG &is,double &di,int mode)
 {

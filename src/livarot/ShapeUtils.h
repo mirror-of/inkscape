@@ -3,7 +3,6 @@
  *  nlivarot
  *
  *  Created by fred on Sun Jul 20 2003.
- *  public domain
  *
  */
 
@@ -14,6 +13,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+//#include <iostream.h>
 
 #include "LivarotDefs.h"
 #include "AVL.h"

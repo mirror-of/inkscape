@@ -3,7 +3,6 @@
  *  nlivarot
  *
  *  Created by fred on Thu Jun 12 2003.
- *  public domain
  *
  */
 
@@ -15,6 +14,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+//#include <iostream.h>
 
 #include "ShapeUtils.h"
 
@@ -50,7 +50,7 @@ class Shape  {
 	friend class SweepTree;
 	friend class SweepEvent;
 public:
-		static int  round_power;
+		static int       round_power;
 	// bounding box stuff
 	float            leftX,topY,rightX,bottomY;
 
@@ -291,6 +291,7 @@ public:
 	void							ConvertToForme(Path* dest);
 	// version to use when conversion was done with ConvertWithBackData(): will attempt to merge segment belonging to 
 	// the same curve
+	// nota: apparently the function doesn't like very small segments of arc
 	void							ConvertToForme(Path* dest,int nbP,Path* *orig);
 	
 	// sweeping a digraph to produce a intersection-free polygon
@@ -317,6 +318,7 @@ public:
 	// boolean operation types are defined in LivarotDefs.h
 	// same return code as ConvertToShape
 	int               Booleen(Shape* a,Shape* b,BooleanOp mod);
+
 
 	
 	// create a graph that is an offseted version of the graph "of"
