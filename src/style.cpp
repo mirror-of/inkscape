@@ -1253,15 +1253,20 @@ flags. Used with Always for copying an object's complete cascaded style to style
 you need a CSS string for an object in the document tree, you normally call
 sp_style_write_difference instead to take into account the object's parent.
 FIXME: merge with write_difference, much duplicate code!
+
+\pre flags in {IFSET, ALWAYS}.
 */
 gchar *
 sp_style_write_string(SPStyle const *const style, guint const flags)
 {
-    gchar c[BMAX], *p;
-
+    /* TODO: Merge with write_difference, much duplicate code! */
     g_return_val_if_fail (style != NULL, NULL);
+    g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
+                          (flags == SP_STYLE_FLAG_ALWAYS)  ),
+                         NULL);
 
-    p = c;
+    gchar c[BMAX];
+    gchar *p = c;
     *p = '\0';
 
     p += sp_style_write_ifontsize (p, c + BMAX - p, "font-size", &style->font_size, NULL, flags);
@@ -2495,10 +2500,14 @@ sp_style_unset_property_attrs (SPObject *o)
 
 /**
  * \pre object != NULL
+ * \pre flags in {IFSET, ALWAYS}.
  */
 SPCSSAttr *
 sp_css_attr_from_style (SPObject *object, guint flags)
 {
+    g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
+                          (flags == SP_STYLE_FLAG_ALWAYS)  ),
+                         NULL);
     gchar *style_str = sp_style_write_string (SP_OBJECT_STYLE (object), flags);
     SPCSSAttr *css = sp_repr_css_attr_new ();
     sp_repr_css_attr_add_from_string (css, style_str);
