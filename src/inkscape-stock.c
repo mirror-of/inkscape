@@ -138,33 +138,32 @@ inkscape_gtk_stock_init (void)
 
   icon_factory = gtk_icon_factory_new ();
 
-  for (i = 0; i < stock_icon_count; i++)
-    {
-      GtkIconSet *icon_set;
-      GdkPixbuf *pixbuf;
-      gchar *filename;
+  for (i = 0; i < stock_icon_count; i++) {
+    GtkIconSet *icon_set;
+    GdkPixbuf *pixbuf;
+    gchar *filename;
 
-      filename =
-	(gchar *) g_strdup_printf ("%s/%s", stock_icons[i].dir,
-				   stock_icons[i].filename);
-      if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-	{
-	  g_critical ("Unable to load stock pixmap %s\n", filename);
-	  g_free (filename);
-	  continue;
-	}
-
-      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-
+    filename =
+      (gchar *) g_build_filename (stock_icons[i].dir,
+				stock_icons[i].filename, NULL);
+    if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+      g_critical ("Unable to load stock pixmap %s\n", filename);
       g_free (filename);
-
-      icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
-
-      gtk_icon_factory_add (icon_factory, stock_icons[i].name, icon_set);
-
-      gtk_icon_set_unref (icon_set);
-      g_object_unref (pixbuf);
+      continue;
     }
+
+    pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+
+    g_free (filename);
+
+    icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
+
+    if (icon_set)
+	    gtk_icon_factory_add (icon_factory, stock_icons[i].name, icon_set);
+
+    gtk_icon_set_unref (icon_set);
+    g_object_unref (pixbuf);
+  }
 
   gtk_icon_factory_add_default (icon_factory);
 
