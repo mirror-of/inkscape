@@ -44,7 +44,7 @@ struct _SPCharsClass {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_chars_get_type (void);
 
 void sp_chars_clear (SPChars *chars);
@@ -59,7 +59,7 @@ void sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrixF *ct
 void sp_chars_set_paintbox (SPChars *chars, NRRectF *paintbox);
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif
 

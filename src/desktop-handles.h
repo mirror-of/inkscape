@@ -32,7 +32,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 SPEventContext * sp_desktop_event_context (SPDesktop * desktop);
 SPSelection * sp_desktop_selection (SPDesktop * desktop);
 SPDocument * sp_desktop_document (SPDesktop * desktop);
@@ -46,6 +46,6 @@ SPCanvasGroup * sp_desktop_sketch (SPDesktop * desktop);
 SPCanvasGroup * sp_desktop_controls (SPDesktop * desktop);
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

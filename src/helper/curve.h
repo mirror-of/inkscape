@@ -40,7 +40,7 @@ struct _SPCurve {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 SPCurve * sp_curve_new (void);
 SPCurve * sp_curve_new_sized (gint length);
 SPCurve * sp_curve_new_from_bpath (ArtBpath * bpath);
@@ -81,6 +81,6 @@ void sp_curve_backspace (SPCurve *curve);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

@@ -23,7 +23,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 /*
  * NB! Unless explicitly stated all methods are noref/nostrcpy
@@ -48,7 +48,7 @@ SPXMLElement *sp_xml_document_createElement (SPXMLDocument *doc, const gchar *na
 SPXMLElement *sp_xml_document_createElementNS (SPXMLDocument *doc, const gchar *ns, const  char *qname);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 /* SPXMLNode */
 
 SPXMLDocument *sp_xml_node_get_Document (SPXMLNode *node);
@@ -67,7 +67,7 @@ typedef struct _SPRepr SPRepr;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 SPRepr *sp_repr_new (const gchar *name);
 SPRepr *sp_repr_new_text (const gchar *content);
 SPRepr *sp_repr_ref (SPRepr *repr);
@@ -207,6 +207,6 @@ unsigned int   p_repr_overwrite     (SPRepr             *repr,
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

@@ -38,7 +38,7 @@ struct _SPXMLViewTreeClass
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 GtkType sp_xmlview_tree_get_type (void);
 GtkWidget * sp_xmlview_tree_new (SPRepr * repr, void * factory, void * data);
@@ -52,6 +52,6 @@ GtkCTreeNode * sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * rep
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

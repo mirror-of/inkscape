@@ -51,7 +51,7 @@ struct _SPColorSliderClass {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 GtkType sp_color_slider_get_type (void);
 
@@ -64,6 +64,6 @@ void sp_color_slider_set_background (SPColorSlider *slider, guint dark, guint li
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

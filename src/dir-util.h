@@ -19,6 +19,6 @@ const char *sp_extension_from_path (const char * path);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

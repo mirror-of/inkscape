@@ -31,11 +31,11 @@ typedef struct _SPDesktopClass SPDesktopClass;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_desktop_get_type (void);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef struct _SPSelection SPSelection;
 typedef struct _SPSelectionClass SPSelectionClass;
@@ -46,11 +46,11 @@ typedef struct _SPSelectionClass SPSelectionClass;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_selection_get_type (void);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef struct _SPEventContext SPEventContext;
 typedef struct _SPEventContextClass SPEventContextClass;
@@ -61,11 +61,11 @@ typedef struct _SPEventContextClass SPEventContextClass;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_event_context_get_type (void);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 /* Document tree */
 
@@ -78,11 +78,11 @@ typedef struct _SPDocumentClass SPDocumentClass;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_document_get_type (void);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 /* Objects */
 
@@ -95,11 +95,11 @@ typedef struct _SPObjectClass SPObjectClass;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_object_get_type (void);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef struct _SPItem SPItem;
 typedef struct _SPItemClass SPItemClass;
@@ -110,11 +110,11 @@ typedef struct _SPItemClass SPItemClass;
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 GType sp_item_get_type (void);
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef struct _SPGroup SPGroup;
 typedef struct _SPGroupClass SPGroupClass;

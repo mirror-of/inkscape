@@ -62,7 +62,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
 
@@ -215,6 +215,6 @@ SPVersion sp_object_get_sodipodi_version (SPObject *object);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 #endif

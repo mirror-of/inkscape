@@ -18,7 +18,7 @@
 #ifdef WITH_MMX
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 /* fixme: */
 int nr_have_mmx (void);
 void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_0 (unsigned char *px, int w, int h, int rs,

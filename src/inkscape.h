@@ -42,7 +42,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 Inkscape * inkscape_application_new (void);
 
@@ -65,7 +65,7 @@ SPDesktop * inkscape_active_desktop (void);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif /* __cplusplus */
 
 /*
  * fixme: This has to be rethought
