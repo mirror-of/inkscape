@@ -1047,6 +1047,10 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Po
 	case GDK_BOTTOM_SIDE:
 		dim = Y;
 		break;
+	default:
+		g_assert_not_reached();
+		abort();		
+		break;
 	}
 	
 	NR::Point s(1, 1);
@@ -1104,6 +1108,10 @@ void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point
 		break;
 	case GDK_SB_V_DOUBLE_ARROW:
 		dim = NR::X;
+		break;
+	default:
+		g_assert_not_reached();
+		abort();
 		break;
 	}
 	if (fabs (offset[dim]) < 1e-15)
