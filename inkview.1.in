@@ -22,7 +22,7 @@ files supplied on the command line in the given order.
 
 .SH EXAMPLES
 On the Debian Distribution you can use the command
-.B inkview /usr/share/doc/inkscape/examples/*.svg{,.gz}
+.B inkview /usr/share/inkscape/examples/*.svg{,.gz}
 to browse throug the examples inkcluded in the inkscape package
 
 .SH OPTIONS
