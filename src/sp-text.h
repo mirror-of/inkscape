@@ -76,8 +76,8 @@ struct _SPString {
 	guint start;
 	guint length;
 	/* Using current direction and style */
-	ArtDRect bbox;
-	ArtPoint advance;
+	NRRectF bbox;
+	NRPointF advance;
 };
 
 struct _SPStringClass {
