@@ -517,12 +517,16 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	case GDK_MOTION_NOTIFY:
 		if (grabbed) {
 			consumed = TRUE;
+
 			if ( within_tolerance
 			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
 			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
 				break; // do not drag if we're within tolerance from origin
 			}
-			within_tolerance = false; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+			// Once the user has moved farther than tolerance from the original location 
+			// (indicating they intend to move the object, not click), then always process the 
+			// motion notify coordinates as given (no snapping back to origin)
+			within_tolerance = false; 
 
 			if (!moved) {
 				g_signal_emit (G_OBJECT (knot),

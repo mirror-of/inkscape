@@ -66,7 +66,7 @@ gint drag_escaped = 0; // if non-zero, drag was canceled by esc
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
-static gboolean within_tolerance = FALSE;
+static bool within_tolerance = false;
 
 GtkType
 sp_select_context_get_type (void)
@@ -222,7 +222,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
-			within_tolerance = TRUE;
+			within_tolerance = true;
 	
 			if (!(event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
 				// if shift or ctrl was pressed, do not move objects; 
@@ -246,10 +246,17 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 		if (event->motion.state & GDK_BUTTON1_MASK) {
 			/* Left mousebutton */
 			if (sc->dragging) {
+				ret = TRUE;
 
-				if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+				if ( within_tolerance
+				     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+				     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
 					break; // do not drag if we're within tolerance from origin
-				within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+				}
+				// Once the user has moved farther than tolerance from the original location 
+				// (indicating they intend to move the object, not click), then always process the 
+				// motion notify coordinates as given (no snapping back to origin)
+				within_tolerance = false; 
 
 				sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 				if (!sc->moved) {
@@ -267,7 +274,6 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 					sc->moved = TRUE;
 				}
 				sp_selection_moveto (seltrans, p.x, p.y, event->button.state);
-				ret = TRUE;
 			}
 		}
 		break;

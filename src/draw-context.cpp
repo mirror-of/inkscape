@@ -44,8 +44,6 @@
 #include "style.h"
 #include "draw-context.h"
 
-#define TOLERANCE 1.0
-
 #define SPDC_EVENT_MASK (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK)
 
 /* Drawing anchors */
@@ -664,7 +662,7 @@ fit_and_split (SPDrawContext * dc)
 
 	g_assert (dc->npoints > 1);
 
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE;
+	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * prefs_get_double_attribute_limited ("tools.freehand.pencil", "tolerance", 10.0, 1.0, 100.0);
 	tolerance = tolerance * tolerance;
 
 	if (sp_bezier_fit_cubic (b, dc->p, dc->npoints, tolerance) > 0 && dc->npoints < SP_DRAW_POINTS_MAX) {
@@ -1206,7 +1204,7 @@ static void spdc_pen_finish (SPPenContext *pc, gboolean closed);
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
-static gboolean within_tolerance = FALSE;
+static bool within_tolerance = false;
 
 static SPDrawContextClass *pen_parent_class;
 
@@ -1365,7 +1363,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
-			within_tolerance = TRUE;
+			within_tolerance = true;
 
 #if 0
 			/* Grab mouse, so release will not pass unnoticed */
@@ -1445,9 +1443,15 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		break;
 	case GDK_MOTION_NOTIFY:
 	{
-		if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
-			break; // do not drag if we're still within tolerance from origin
-		within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+		if ( within_tolerance
+		     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+		     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+			break; // do not drag if we're within tolerance from origin
+		}
+		// Once the user has moved farther than tolerance from the original location 
+		// (indicating they intend to move the object, not click), then always process the 
+		// motion notify coordinates as given (no snapping back to origin)
+		within_tolerance = false; 
 
 #if 1
 		if ((event->motion.state & GDK_BUTTON1_MASK) && !dc->grab) {
