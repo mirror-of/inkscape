@@ -1,5 +1,8 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/uri-references.h (operator=): Remove definition, forcing link
+	errors for accidental usage.
+
 	* src/sp-chars.h, src/sp-chars.cpp (sp_chars_add_element):
 	Add NR::Matrix version.
 

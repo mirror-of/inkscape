@@ -117,7 +117,9 @@ private:
 
 	void _setObject(SPObject *object);
 	static void _release(SPObject *object, URIReference *reference);
-	void operator=(const URIReference &ref) {}
+
+	void operator=(const URIReference &ref);
+	/* Private and definition-less to prevent accidental use. */
 };
 
 }
