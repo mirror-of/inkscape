@@ -258,6 +258,13 @@ static const SPStyleEnum enum_writing_mode[] = {
     {NULL, -1}
 };
 
+static SPStyleEnum const enum_visibility[] = {
+    {"hidden", SP_CSS_VISIBILITY_HIDDEN},
+    {"collapse", SP_CSS_VISIBILITY_COLLAPSE},
+    {"visible", SP_CSS_VISIBILITY_VISIBLE},
+    {NULL, -1}
+};
+    
 
 /**
  *
@@ -414,6 +421,8 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     SPS_READ_PENUM_IF_UNSET (&style->font_variant, repr, "font-variant", enum_font_variant, TRUE);
     SPS_READ_PENUM_IF_UNSET (&style->font_weight, repr, "font-weight", enum_font_weight, TRUE);
     SPS_READ_PENUM_IF_UNSET (&style->font_stretch, repr, "font-stretch", enum_font_stretch, TRUE);
+    SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "visibility", enum_visibility, TRUE);
+
     /* opacity */
     if (!style->opacity.set) {
         val = sp_repr_attr (repr, "opacity");
@@ -677,11 +686,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         //g_warning ("Unimplemented style property SP_PROP_OVERFLOW: %d value: %s", id, val);
         break;
     case SP_PROP_VISIBILITY:
-        if (!style->visibility_set) {
-            /* fixme: */
-            style->visibility = !strncmp (val, "visible", 7);
-            style->visibility_set = TRUE;
-        }
+        SPS_READ_IENUM_IF_UNSET(&style->visibility, val, enum_visibility, TRUE);
         break;
     /* SVG */
     /* Clip/Mask */
@@ -1325,11 +1330,7 @@ sp_style_write_string (SPStyle *style, guint flags)
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, flags);
 
-    if (!style->visibility) {
-        p += g_snprintf(p, c + BMAX - p, "visibility:hidden;");
-    } else if ( flags == SP_STYLE_FLAG_ALWAYS ) {
-        p += g_snprintf(p, c + BMAX - p, "visibility:visible;");
-    }
+    p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &style->visibility, NULL, flags);
 
     return g_strdup (c);
 }
@@ -1416,9 +1417,10 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
 
-    if (!from->visibility && from->visibility_set) {
-        p += g_snprintf(p, c + BMAX - p, "visibility:hidden;");
-    }
+    p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &from->visibility, &to->visibility, SP_STYLE_FLAG_IFSET);
+    /* The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
+     * flag is mainly only for attributes that don't handle explicit unset well.
+     * We may need to revisit the behaviour of this routine. */
 
     return g_strdup (c);
 }
@@ -1478,7 +1480,8 @@ sp_style_clear (SPStyle *style)
 
     style->opacity.value = SP_SCALE24_MAX;
     style->display = TRUE;
-    style->visibility = TRUE;
+    style->visibility.set = FALSE;
+    style->visibility.value = style->visibility.computed = SP_CSS_VISIBILITY_VISIBLE;
 
     style->color.type = SP_PAINT_TYPE_COLOR;
     sp_color_set_rgb_float (&style->color.value.color, 0.0, 0.0, 0.0);

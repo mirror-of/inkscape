@@ -328,15 +328,20 @@ void SPObject::setLabel(gchar const *label) {
 /** Returns true if the object is visible */
 bool
 SPObject::visible() const {
-    return style->visibility;
+	return style->visibility.computed == SP_CSS_VISIBILITY_VISIBLE;
 }
 
 /** Sets the object state to visible if \a val is true, hidden otherwise */
 void
 SPObject::setVisible(bool val) {
-    style->visibility = val;
-    style->visibility_set = TRUE;
-    this->updateRepr();
+	style->visibility.value
+		= style->visibility.computed
+		= ( val
+		    ? SP_CSS_VISIBILITY_VISIBLE
+		    : SP_CSS_VISIBILITY_HIDDEN );
+	style->visibility.set = TRUE;
+	style->visibility.inherit = FALSE;
+	this->updateRepr();
 }
 
 

@@ -164,12 +164,15 @@ void SPItem::setLocked(bool locked) {
 }
 
 bool SPItem::isHidden() const {
-    return !style->visibility;
+    return style->visibility.computed == SP_CSS_VISIBILITY_VISIBLE;
 }
 
 void SPItem::setHidden(bool hide) {
-    style->visibility_set = TRUE;
-    style->visibility = !hide;
+    style->visibility.set = TRUE;
+    style->visibility.computed = style->visibility.value = ( hide
+                                                             ? SP_CSS_VISIBILITY_HIDDEN
+                                                             : SP_CSS_VISIBILITY_VISIBLE );
+    style->visibility.inherit = FALSE;
     updateRepr();
 }
 
@@ -473,7 +476,7 @@ sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
                 nr_arena_item_set_opacity(v->arenaitem, SP_SCALE24_TO_FLOAT(object->style->opacity.value));
-                nr_arena_item_set_visible(v->arenaitem, object->style->visibility);
+                nr_arena_item_set_visible(v->arenaitem, object->visible());
             }
         }
     }
@@ -675,7 +678,7 @@ sp_item_invoke_show(SPItem *item, NRArena *arena, unsigned key, unsigned flags)
         item->display = sp_item_view_new_prepend(item->display, item, flags, key, ai);
         nr_arena_item_set_transform(ai, item->transform);
         nr_arena_item_set_opacity(ai, SP_SCALE24_TO_FLOAT(SP_OBJECT_STYLE(item)->opacity.value));
-        nr_arena_item_set_visible(ai, SP_OBJECT_STYLE(item)->visibility);
+        nr_arena_item_set_visible(ai, item->visible());
         nr_arena_item_set_sensitive(ai, item->sensitive);
         if (flags & SP_ITEM_SHOW_PRINT) {
             nr_arena_item_set_visible(ai, item->printable);

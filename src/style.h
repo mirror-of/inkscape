@@ -190,18 +190,18 @@ struct SPStyle {
 	unsigned int cursor_set : 1;
 	unsigned int display_set : 1;
 	unsigned int overflow_set : 1;
-	unsigned int visibility_set : 1;
 	unsigned int clip_path_set : 1;
 	unsigned int clip_rule_set : 1;
 	unsigned int mask_set : 1;
 
-	/** opacity */
-	SPIScale24 opacity;
-
 	/** display */
 	unsigned int display : 1;
-	/** visibility */
-	unsigned int visibility : 1;
+
+	/* visibility */
+	SPIEnum visibility;
+
+	/** opacity */
+	SPIScale24 opacity;
 
 	/** color */
 	SPIPaint color;
@@ -373,6 +373,12 @@ typedef enum {
 	SP_CSS_WRITING_MODE_RL,
 	SP_CSS_WRITING_MODE_TB
 } SPWritingMode;
+
+enum SPVisibility {
+	SP_CSS_VISIBILITY_HIDDEN,
+	SP_CSS_VISIBILITY_COLLAPSE,
+	SP_CSS_VISIBILITY_VISIBLE
+};
 
 struct SPTextStyle {
 	int refcount;
