@@ -84,9 +84,15 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     // Potrace items
     Gtk::VBox       potraceBox;
-    Gtk::HBox       potraceBrightnessBox;
-    Gtk::SpinButton potraceBrightnessSpinner;
-    Gtk::Label      potraceBrightnessLabel;
+    Gtk::RadioButtonGroup potraceGroup;
+
+    Gtk::HBox        potraceBrightnessBox;
+    Gtk::RadioButton potraceBrightnessRadioButton;
+    Gtk::SpinButton  potraceBrightnessSpinner;
+    Gtk::HBox        potraceCannyBox;
+    Gtk::RadioButton potraceCannyRadioButton;
+    Gtk::Frame       potracePreviewFrame;
+    Gtk::Image       potracePreviewImage;
 
     // Other items
     Gtk::VBox       otherBox;
@@ -120,6 +126,8 @@ void TraceDialogImpl::responseCallback(int response_id)
         {
         Inkscape::Trace tracer;
         Inkscape::Potrace::PotraceTracingEngine pte;
+        pte.setUseBrightness(potraceBrightnessRadioButton.get_active());
+        pte.setUseCanny(potraceCannyRadioButton.get_active());
         double threshold = potraceBrightnessSpinner.get_value();
         pte.setBrightnessThreshold(threshold);
         tracer.convertImageToPath(&pte);
@@ -145,14 +153,24 @@ TraceDialogImpl::TraceDialogImpl()
 
 
     //##Set up the Potrace panel
-    potraceBrightnessLabel.set_text(_("Brightness Threshold"));
-    potraceBrightnessBox.pack_start(potraceBrightnessLabel);
+    /* brightness */
+    potraceBrightnessRadioButton.set_label(_("Brightness Threshold"));
+    potraceGroup = potraceBrightnessRadioButton.get_group();
+    potraceBrightnessBox.pack_start(potraceBrightnessRadioButton);
     potraceBrightnessSpinner.set_digits(5);
     potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.5);
     potraceBrightnessBox.pack_start(potraceBrightnessSpinner);
     potraceBox.pack_start(potraceBrightnessBox);
+
+    /* canny edge detection */
+    potraceCannyRadioButton.set_label(_("Canny Edge Detection"));
+    potraceCannyRadioButton.set_group(potraceGroup);
+    potraceCannyBox.pack_start(potraceCannyRadioButton);
+    potraceBox.pack_start(potraceCannyBox);
+
+    /*done */
     notebook.append_page(potraceBox, _("Potrace"));
 
     //##Set up the Other panel

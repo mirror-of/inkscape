@@ -198,8 +198,8 @@ static GrayMap *canny(GrayMap *gm)
                     sum = 0;
                 else
                     {
-                    unsigned long highThreshold = 200;
-                    unsigned long lowThreshold  = 20;
+                    unsigned long highThreshold = 400;
+                    unsigned long lowThreshold  = 60;
                     if (sum >= highThreshold)
                         sum = 765; /* EDGE.  3*255 this needs to be settable */
                     else if (sum < lowThreshold)

@@ -93,17 +93,18 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
                 {
                 double brightness = (double)gm->getPixel(gm, x, y);
                 if (brightness > cutoff)
-                    newGm->setPixel(newGm, x, y, 255);
+                    newGm->setPixel(newGm, x, y, 765);
                 else
                     newGm->setPixel(newGm, x, y, 0);
                 }
             }
 
+        newGm->writePPM(newGm, "brightness.ppm");
         }
-
-    if (useCanny)
+    else if (useCanny)
         {
         newGm = grayMapCanny(gm);
+        newGm->writePPM(newGm, "canny.ppm");
         }
 
     gm->destroy(gm);
