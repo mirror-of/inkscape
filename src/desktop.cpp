@@ -734,7 +734,7 @@ sp_desktop_get_default_unit (SPDesktop *dt)
     return dt->namedview->doc_units;
 }
 
-guint
+SPMetric
 sp_desktop_get_default_metric (SPDesktop *dt)
 {
     if (sp_desktop_get_default_unit (dt))
@@ -1473,8 +1473,8 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
 
         dtw->ruler_origin = nv->gridorigin;
 
-        sp_ruler_set_metric (GTK_RULER (dtw->vruler), (SPMetric) sp_desktop_get_default_metric (dtw->desktop));
-        sp_ruler_set_metric (GTK_RULER (dtw->hruler), (SPMetric) sp_desktop_get_default_metric (dtw->desktop));
+        sp_ruler_set_metric (GTK_RULER (dtw->vruler), sp_desktop_get_default_metric(dtw->desktop));
+        sp_ruler_set_metric (GTK_RULER (dtw->hruler), sp_desktop_get_default_metric(dtw->desktop));
 
         sp_desktop_widget_update_rulers (dtw);
     }
