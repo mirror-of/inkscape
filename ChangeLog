@@ -28,6 +28,9 @@
 
 	* src/libnrtype/nr-rasterfont.cpp
 	Fix a warning wrt a cast from NR::Matrix to NRMatrix.
+
+	* src/sp-shape.cpp
+	Fix bug #935758.
 	
 
 2004-04-14  Ted Gould <ted@gould.cx>

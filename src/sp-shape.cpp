@@ -570,16 +570,18 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 	sp_item_bbox_desktop (item, &bbox);
 	sp_item_i2d_affine (item, &i2d);
 
-	if (SP_OBJECT_STYLE (item)->fill.type != SP_PAINT_TYPE_NONE) {
+        SPStyle* style = SP_OBJECT_STYLE (item);
+
+	if (style->fill.type != SP_PAINT_TYPE_NONE) {
 		NRBPath bp;
 		bp.path = shape->curve->bpath;
-		sp_print_fill (ctx, &bp, &i2d, SP_OBJECT_STYLE (item), &pbox, &dbox, &bbox);
+		sp_print_fill (ctx, &bp, &i2d, style, &pbox, &dbox, &bbox);
 	}
 
-	if (SP_OBJECT_STYLE (item)->stroke.type != SP_PAINT_TYPE_NONE) {
+	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		NRBPath bp;
 		bp.path = shape->curve->bpath;
-		sp_print_stroke (ctx, &bp, &i2d, SP_OBJECT_STYLE (item), &pbox, &dbox, &bbox);
+		sp_print_stroke (ctx, &bp, &i2d, style, &pbox, &dbox, &bbox);
 	}
 
         for (ArtBpath* bp = shape->curve->bpath; bp->code != ART_END; bp++) {
@@ -590,6 +592,13 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                     SPItem* marker_path = SP_ITEM (shape->marker[m]->children);
 
                     NRMatrix tr = sp_shape_marker_get_transform (shape, m, bp);
+
+                    if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
+                        for (int i = 0; i < 4; i++) {
+                            tr.c[i] *= style->stroke_width.computed;
+                        }
+                    }
+
                     nr_matrix_multiply (&tr, &marker->c2p, &tr);
 
                     NRMatrix old_tr = marker_path->transform;
