@@ -301,6 +301,7 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 				/* fixme: We support only plain-color themes */
 				/* fixme: But who needs other ones anyways? (Lauris) */
 
+				/* buttons with relief = none don't paint their background */
 				if (GTK_IS_BUTTON (widget->parent) && gtk_button_get_relief (GTK_BUTTON (widget->parent)) == GTK_RELIEF_NONE) {
 					style = widget->style;
 				} else {
