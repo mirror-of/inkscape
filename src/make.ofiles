@@ -55,8 +55,6 @@ OBJECTS = \
 	dyna-draw-context.o \
 	ecma/EcmaBinding.o \
 	ecma/SVGViewer.o \
-	ecma/ecmatest.o \
-	ecma/svgview.o \
 	event-context.o \
 	extension/db.o \
 	extension/extension.o \
@@ -460,8 +458,6 @@ LINTS = \
 	dyna-draw-context.lint \
 	ecma/EcmaBinding.lint \
 	ecma/SVGViewer.lint \
-	ecma/ecmatest.lint \
-	ecma/svgview.lint \
 	event-context.lint \
 	extension/db.lint \
 	extension/extension.lint \

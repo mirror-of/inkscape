@@ -2225,24 +2225,6 @@ ecma/SVGViewer.o: \
 	view.h \
 	xml/xml-forward.h
 
-ecma/ecmatest.o: \
-	ecma/ecmatest.cpp \
-	ecma/EcmaBinding.h \
-	forward.h \
-	inkscape.h \
-	xml/xml-forward.h
-
-ecma/svgview.o: \
-	ecma/svgview.cpp \
-	document.h \
-	ecma/SVGViewer.h \
-	forward.h \
-	helper/window.h \
-	libnr/nr-forward.h \
-	uri.h \
-	uri.h \
-	xml/xml-forward.h
-
 event-context.o: \
 	event-context.cpp \
 	desktop-affine.h \

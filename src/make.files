@@ -109,8 +109,6 @@ ecma/EcmaBinding.cpp
 ecma/EcmaBinding.h
 ecma/SVGViewer.cpp
 ecma/SVGViewer.h
-ecma/ecmatest.cpp
-ecma/svgview.cpp
 enums.h
 event-context.cpp
 event-context.h
