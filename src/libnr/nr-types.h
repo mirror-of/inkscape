@@ -16,6 +16,7 @@
 #endif
 
 #include <glib.h>
+#include <stdexcept>
 
 namespace NR {
 
@@ -39,9 +40,9 @@ struct NRPoint {
 
 namespace NR {
 
-enum dimT { X=0, Y };
+enum Dim2 { X=0, Y };
 
-class Point{
+class Point {
 public:
 	Point() {
 	}
@@ -56,15 +57,21 @@ public:
 		_pt[Y] = p.y;
 	}
 
-	double operator[](unsigned i) const {
-		g_assert(i <= 1);
+	Coord operator[](unsigned i) const throw(std::out_of_range) {
+		if ( i > Y ) {
+			throw std::out_of_range("index out of range");
+		}
+		return _pt[i];
+	}
+	Coord &operator[](unsigned i) throw(std::out_of_range) {
+		if ( i > Y ) {
+			throw std::out_of_range("index out of range");
+		}
 		return _pt[i];
 	}
 
-	double &operator[](unsigned i) {
-		g_assert(i <= 1);
-		return _pt[i];
-	}
+	Coord operator[](Dim2 d) const throw() { return _pt[d]; }
+	Coord &operator[](Dim2 d) throw() { return _pt[d]; }
 
 	/** Return a point like this point but rotated -90 degrees.
 	    (If the y axis grows downwards and the x axis grows to the
@@ -86,41 +93,41 @@ public:
 	
 	operator NRPoint() const {
 		NRPoint nrp;
-		nrp.x = _pt[0];
-		nrp.y = _pt[1];
+		nrp.x = _pt[X];
+		nrp.y = _pt[Y];
 		return nrp;
 	}
 
 	Point &operator+=(Point const &o) {
-		for(unsigned i = 0; i < 2; ++i) {
+		for (unsigned i = 0; i < 2; ++i) {
 			_pt[i] += o._pt[i];
 		}
 		return *this;
 	}
   
 	Point &operator-=(Point const &o) {
-		for(unsigned i = 0; i < 2; ++i) {
+		for ( unsigned i = 0 ; i < 2 ; ++i ) {
 			_pt[i] -= o._pt[i];
 		}
 		return *this;
 	}
   
 	Point &operator/=(double s) {
-		for(unsigned i = 0; i < 2; ++i) {
+		for ( unsigned i = 0 ; i < 2 ; ++i ) {
 			_pt[i] /= s;
 		}
 		return *this;
 	}
 
 	Point &operator*=(double s) {
-		for(unsigned i = 0; i < 2; ++i) {
+		for ( unsigned i = 0 ; i < 2 ; ++i ) {
 			_pt[i] *= s;
 		}
 		return *this;
 	}
   
 	Point &operator*=(Point const &s) {
-		for(unsigned i = 0; i < 2; ++i) {
+		for ( unsigned i = 0 ; i < 2 ; ++i ) {
 			_pt[i] *= s[i];
 		}
 		return *this;
