@@ -494,9 +494,11 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 		sp_repr_get_boolean (repr, "showgrid", &v);
 		sp_repr_set_boolean (repr, "showgrid", !(v));
 		break;
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	case SP_VERB_FULLSCREEN:
-		sp_fullscreen (dt);
+		fullscreen (dt);
 		break;
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 	default:
 		break;
 	}
@@ -565,7 +567,12 @@ static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
 #define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
 #define SP_VERB_IS_CONTEXT(v) ((v >= SP_VERB_CONTEXT_SELECT) && (v <= SP_VERB_CONTEXT_DROPPER))
+#if HAVE_GTK_WINDOW_FULLSCREEN
 #define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_FULLSCREEN))
+#else
+#define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_ZOOM_SELECTION))
+#endif /* HAVE_GTK_FULLSCREEN */
+
 #define SP_VERB_IS_DIALOG(v) ((v >= SP_VERB_DIALOG_DISPLAY) && (v <= SP_VERB_DIALOG_ITEM))
 
 /**  A structure to hold information about a verb */
@@ -732,17 +739,3 @@ sp_verb_register (SPVerbActionFactory *factory)
 	return verb;
 }
 
-void
-sp_fullscreen(SPDesktop *sv)
-{
-	GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(sv->owner->canvas)));
-	if (GTK_IS_WINDOW(topw)) {
-		if (sv->is_fullscreen) {
-			sv->is_fullscreen = FALSE;
-			gtk_window_unfullscreen(topw);	
-		} else {
-			sv->is_fullscreen = TRUE;
-			gtk_window_fullscreen(topw);
-		}
-	}
-}

@@ -65,7 +65,9 @@ struct _SPDesktop {
 	GList *zooms_future;
 	gboolean can_go_forward;
 
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	gboolean is_fullscreen;
+#endif /* HAVE_GTK_FULLSCREEN */
 };
 
 struct _SPDesktopClass {
@@ -176,5 +178,9 @@ SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
 gint sp_desktop_widget_set_focus (GtkWidget *widget, GdkEvent *event, SPDesktopWidget  *dtw);
 
 void sp_desktop_widget_show_decorations (SPDesktopWidget *dtw, gboolean show);
+
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+void fullscreen(SPDesktop *dt);
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 
 #endif

@@ -198,8 +198,9 @@ sp_desktop_init (SPDesktop *desktop)
 	desktop->zooms_past = NULL;
 	desktop->zooms_future = NULL;
 	desktop->can_go_forward = FALSE;
-
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	desktop->is_fullscreen = FALSE;
+#endif
 }
 
 static void
@@ -1785,3 +1786,20 @@ sp_dtw_zoom_selection (GtkMenuItem *item, gpointer data)
 {
 	sp_desktop_zoom_selection (SP_DESKTOP (data));
 }
+
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+void
+fullscreen(SPDesktop *dt)
+{
+	GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dt->owner->canvas)));
+	if (GTK_IS_WINDOW(topw)) {
+		if (dt->is_fullscreen) {
+			dt->is_fullscreen = FALSE;
+			gtk_window_unfullscreen(topw);	
+		} else {
+			dt->is_fullscreen = TRUE;
+			gtk_window_fullscreen(topw);
+		}
+	}
+}
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */

@@ -95,7 +95,9 @@ enum {
 	SP_VERB_ZOOM_PAGE_WIDTH,
 	SP_VERB_ZOOM_DRAWING,
 	SP_VERB_ZOOM_SELECTION,
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	SP_VERB_FULLSCREEN,
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 	/* Dialogs */
 	SP_VERB_DIALOG_DISPLAY,
 	SP_VERB_DIALOG_NAMEDVIEW,
@@ -122,7 +124,5 @@ SPAction *sp_verb_get_action (sp_verb_t verb, SPView *view);
 sp_verb_t sp_verb_register (SPVerbActionFactory *factory);
 
 gchar *sp_action_get_title (const SPAction *action);
-
-void sp_fullscreen(SPDesktop *sv); /* fixme: put somewhere appropriate */
 
 #endif

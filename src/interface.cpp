@@ -484,9 +484,11 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_RULERS, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_SCROLLBARS, view);
 
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FULLSCREEN, view);
-
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+	
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_NEXT_DESKTOP, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_PREV_DESKTOP, view);
