@@ -68,6 +68,8 @@ public:
 				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
 	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 				const NRMatrix *transform, const SPStyle *style);
+        virtual unsigned int text (Inkscape::Extension::Print *module, const char *text,
+				   NR::Point p, const SPStyle *style);
 
 	static void init (void);
 };
