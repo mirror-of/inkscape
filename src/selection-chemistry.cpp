@@ -78,17 +78,17 @@ GSList *clipboard = NULL;
 GSList *defs_clipboard = NULL;
 SPCSSAttr *style_clipboard = NULL;
 
-bool
+static bool
 items_are_siblings (const GSList *list)
 {
-    SPObject *parent = SP_OBJECT_PARENT (list->data);
+    SPObject const *parent = SP_OBJECT_PARENT (list->data);
     bool sort = true;
-    for (GSList *i = (GSList *) list->next; i; i = i->next) {
+    for (GSList const *i = list->next; i; i = i->next) {
         if (SP_OBJECT_PARENT(i->data) != parent) {
-            sort = false;
+            return false;
         }
     }
-    return sort;
+    return true;
 }
 
 void sp_selection_delete()
