@@ -104,6 +104,16 @@ sp_repr_set_length_list (SPRepr *repr, const gchar *key, GList *l)
     return sp_repr_set_attr (repr, key, s);
 }
 
+bool
+sp_length_list_notallzeroes (GList *l)
+{
+	for (GList *i = l; i != NULL; i = i->next) {
+		if (((SPSVGLength *) i->data)->computed != 0.0) {
+			return true;
+		}
+	}
+	return false;
+}
 
 
 
@@ -268,8 +278,17 @@ sp_set_dxdy (SPObject *o, GList *dx, GList *dy)
         SP_TSPAN(o)->ly.dy = dy;
     }
 
-    sp_repr_set_length_list (SP_OBJECT_REPR(o), "dx", dx);
-    sp_repr_set_length_list (SP_OBJECT_REPR(o), "dy", dy);
+    if (dy && sp_length_list_notallzeroes (dy)) {
+		sp_repr_set_length_list (SP_OBJECT_REPR(o), "dy", dy);
+    } else {
+		sp_repr_set_attr (SP_OBJECT_REPR(o), "dy", NULL);
+    }
+
+    if (dx && sp_length_list_notallzeroes (dx)) {
+		sp_repr_set_length_list (SP_OBJECT_REPR(o), "dx", dx);
+    } else {
+		sp_repr_set_attr (SP_OBJECT_REPR(o), "dx", NULL);
+    }
 
     sp_object_request_update (o, SP_OBJECT_MODIFIED_FLAG);
 }
@@ -1336,8 +1355,17 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
     if (tspan->ly.x.set) sp_repr_set_double (repr, "x", tspan->ly.x.computed);
     if (tspan->ly.y.set) sp_repr_set_double (repr, "y", tspan->ly.y.computed);
 
-    if (tspan->ly.dx) sp_repr_set_length_list (repr, "dx", tspan->ly.dx);
-    if (tspan->ly.dy) sp_repr_set_length_list (repr, "dy", tspan->ly.dy);
+    if (tspan->ly.dx && sp_length_list_notallzeroes (tspan->ly.dx)) {
+		sp_repr_set_length_list (repr, "dx", tspan->ly.dx);
+    } else {
+		sp_repr_set_attr (repr, "dx", NULL);
+    }
+    if (tspan->ly.dy && sp_length_list_notallzeroes (tspan->ly.dy)) {
+		sp_repr_set_length_list (repr, "dy", tspan->ly.dy);
+    } else {
+		sp_repr_set_attr (repr, "dy", NULL);
+    }
+
 
     if (tspan->ly.rotate_set) sp_repr_set_double (repr, "rotate", tspan->ly.rotate);
     if (flags & SP_OBJECT_WRITE_EXT) {
@@ -1845,8 +1873,16 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
     if (text->ly.y.set)
         sp_repr_set_double (repr, "y", text->ly.y.computed);
 
-    if (text->ly.dx) sp_repr_set_length_list (repr, "dx", text->ly.dx);
-    if (text->ly.dy) sp_repr_set_length_list (repr, "dy", text->ly.dy);
+    if (text->ly.dx && sp_length_list_notallzeroes (text->ly.dx)) {
+		sp_repr_set_length_list (repr, "dx", text->ly.dx);
+    } else {
+		sp_repr_set_attr (repr, "dx", NULL);
+    }
+    if (text->ly.dy && sp_length_list_notallzeroes (text->ly.dy)) {
+		sp_repr_set_length_list (repr, "dy", text->ly.dy);
+    } else {
+		sp_repr_set_attr (repr, "dy", NULL);
+    }
 
     if (text->ly.rotate_set)
         sp_repr_set_double (repr, "rotate", text->ly.rotate);
