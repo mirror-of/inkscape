@@ -9,6 +9,9 @@
 
 	* src/sp-object.h, src/sp-object.cpp: inkscape:label fixes
 
+	* src/layer-fns.cpp: make ordering of layers complete; not just among
+	                     siblings
+
 2004-10-29  Bryce Harrington <bryce@bryceharrington.org>
 
 	* layer-fns.cpp:  documenting
