@@ -31,7 +31,7 @@
 #include "util/shared-c-string-ptr.h"
 
 #include "xml/repr.h"
-#include "xml/repr-get-children.h"
+#include "xml/node-fns-tree.h"
 #include "xml/node-listener.h"
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"

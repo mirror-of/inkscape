@@ -20,8 +20,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/quote.cpp	\
 	xml/quote.h	\
 	xml/repr-css.cpp	\
-	xml/repr-get-children.cpp	\
-	xml/repr-get-children.h	\
+	xml/node-fns-tree.cpp	\
+	xml/node-fns-tree.h	\
 	xml/repr-io.cpp	\
 	xml/repr-sorting.cpp    \
 	xml/repr-sorting.h      \

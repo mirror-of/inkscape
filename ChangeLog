@@ -1,3 +1,12 @@
+2005-02-21  MenTaLguY  <mental@rydia.net>
+
+	* src/file.cpp, src/sp-item-group.cpp, src/xml/Makefile_insert,
+	  src/xml/node-fns-tree.cpp, src/xml/node-fns-tree.h,
+	  src/xml/repr-get-children.cpp, src/xml/repr-get-children.h,
+	  src/xml/repr.cpp, src/xml/simple-node.cpp:
+
+	  renamed header files
+
 2005-02-20 SwinginCelt  <swinginceltgmail.com>
 
 	* Replaced all sp_repr_attr calls with direct call to

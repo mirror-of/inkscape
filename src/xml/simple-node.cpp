@@ -20,7 +20,7 @@
 #include <cstring>
 #include "xml/simple-node.h"
 #include "xml/node-event-vector.h"
-#include "xml/repr-get-children.h"
+#include "xml/node-fns-tree.h"
 #include "xml/repr.h"
 
 namespace Inkscape {

@@ -19,7 +19,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include <xml/repr.h>
-#include <xml/repr-get-children.h>
+#include <xml/node-fns-tree.h>
 #include "sp-object-repr.h"
 #include "svg/svg.h"
 #include "document.h"

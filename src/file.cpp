@@ -30,7 +30,7 @@
 #include <gtkmm.h>
 
 #include "macros.h"
-#include "xml/repr-get-children.h"
+#include "xml/node-fns-tree.h"
 #include "document.h"
 #include "document-private.h"
 #include "selection-chemistry.h"
