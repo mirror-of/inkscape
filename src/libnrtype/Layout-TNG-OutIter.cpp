@@ -381,8 +381,16 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
         }
 
         double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].span(this).baseline_shift;
-        top_left[NR::Y] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
-        bottom_right[NR::Y] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
+        if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
+            double span_height = _spans[_characters[char_index].in_span].line_height.ascent + _spans[_characters[char_index].in_span].line_height.descent;
+            top_left[NR::Y] = top_left[NR::X];
+            top_left[NR::X] = baseline_y - span_height * 0.5;
+            bottom_right[NR::Y] = bottom_right[NR::X];
+            bottom_right[NR::X] = baseline_y + span_height * 0.5;
+        } else {
+            top_left[NR::Y] = baseline_y - _spans[_characters[char_index].in_span].line_height.ascent;
+            bottom_right[NR::Y] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
+        }
 
         if (rotation) {
             if (it._glyph_index == -1)
@@ -436,8 +444,16 @@ std::vector<NR::Point> Layout::createSelectionShape(iterator const &it_start, it
                 bottom_right[NR::X] = span_x + _characters[char_index].x;
 
             double baseline_y = _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift;
-            top_left[NR::Y] = baseline_y - _spans[span_index].line_height.ascent;
-            bottom_right[NR::Y] = baseline_y + _spans[span_index].line_height.descent;
+            if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
+                double span_height = _spans[span_index].line_height.ascent + _spans[span_index].line_height.descent;
+                top_left[NR::Y] = top_left[NR::X];
+                top_left[NR::X] = baseline_y - span_height * 0.5;
+                bottom_right[NR::Y] = bottom_right[NR::X];
+                bottom_right[NR::X] = baseline_y + span_height * 0.5;
+            } else {
+                top_left[NR::Y] = baseline_y - _spans[span_index].line_height.ascent;
+                bottom_right[NR::Y] = baseline_y + _spans[span_index].line_height.descent;
+            }
         }
 
         NR::Rect char_box(top_left, bottom_right);
@@ -499,17 +515,17 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
             if (x > path_length )
                 point += (x - path_length) * tangent;
             *rotation = atan2(tangent);
-            (*position)[0] = point[0] - tangent[1] * span->baseline_shift;
-            (*position)[1] = point[1] + tangent[0] * span->baseline_shift;
+            (*position)[NR::X] = point[NR::X] - tangent[NR::Y] * span->baseline_shift;
+            (*position)[NR::Y] = point[NR::Y] + tangent[NR::X] * span->baseline_shift;
         } else {
             // text is not on a path
             if (it._char_index >= _characters.size()) {
                 span = &_spans.back();
-                (*position)[0] = _chunks[span->in_chunk].left_x + span->x_end;
+                (*position)[NR::X] = _chunks[span->in_chunk].left_x + span->x_end;
                 *rotation = _glyphs.empty() ? 0.0 : _glyphs.back().rotation;
             } else {
                 span = &_spans[_characters[it._char_index].in_span];
-                (*position)[0] = _chunks[span->in_chunk].left_x + span->x_start + _characters[it._char_index].x;
+                (*position)[NR::X] = _chunks[span->in_chunk].left_x + span->x_start + _characters[it._char_index].x;
                 if (it._glyph_index == -1) *rotation = 0.0;
                 else if(it._glyph_index == 0) *rotation = _glyphs[0].rotation;
                 else *rotation = _glyphs[it._glyph_index - 1].rotation;
@@ -517,17 +533,25 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
                 if (it._char_index != 0 && _characters[it._char_index - 1].chunk(this).in_line == _chunks[span->in_chunk].in_line)
                     span = &_spans[_characters[it._char_index - 1].in_span];
             }
-            (*position)[1] = span->line(this).baseline_y + span->baseline_shift;
+            (*position)[NR::Y] = span->line(this).baseline_y + span->baseline_shift;
         }
         // up to now *position is the baseline point, not the final point which will be the bottom of the descent
-        double caret_slope_run = 0.0, caret_slope_rise = 1.0;
-        if (span->font)
-            const_cast<font_instance*>(span->font)->FontSlope(caret_slope_run, caret_slope_rise);
-        double caret_slope = atan2(caret_slope_run, caret_slope_rise);
-        *height = (span->line_height.ascent + span->line_height.descent) / cos(caret_slope);
-        *rotation += caret_slope;
-        (*position)[0] -= sin(*rotation) * span->line_height.descent;
-        (*position)[1] += cos(*rotation) * span->line_height.descent;
+        if (_directions_are_orthogonal(_blockProgression(), TOP_TO_BOTTOM)) {
+            *height = span->line_height.ascent + span->line_height.descent;
+            *rotation += M_PI / 2;
+            std::swap((*position)[NR::X], (*position)[NR::Y]);
+            (*position)[NR::X] -= sin(*rotation) * *height * 0.5;
+            (*position)[NR::Y] += cos(*rotation) * *height * 0.5;
+        } else {
+            double caret_slope_run = 0.0, caret_slope_rise = 1.0;
+            if (span->font)
+                const_cast<font_instance*>(span->font)->FontSlope(caret_slope_run, caret_slope_rise);
+            double caret_slope = atan2(caret_slope_run, caret_slope_rise);
+            *height = (span->line_height.ascent + span->line_height.descent) / cos(caret_slope);
+            *rotation += caret_slope;
+            (*position)[NR::X] -= sin(*rotation) * span->line_height.descent;
+            (*position)[NR::Y] += cos(*rotation) * span->line_height.descent;
+        }
     }
 }
 
