@@ -12,14 +12,6 @@
 #ifndef SEEN_INKSCAPE_AST_C_ARRAY_H
 #define SEEN_INKSCAPE_AST_C_ARRAY_H
 
-#include <new>
-#include <gc/gc_cpp.h>
-#include <stdexcept>
-#include <cstdlib>
-#include <cstring>
-#include <glib/glib.h>
-#include <libxml/tree.h>
-
 namespace Inkscape {
 namespace AST {
 

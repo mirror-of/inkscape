@@ -13,7 +13,7 @@
 #define SEEN_INKSCAPE_AST_COPY_H
 
 // TODO: autoconf this
-#define HAS_TYPE_TRAITS_H
+#define HAS_TYPE_TRAITS_H 1
 
 #include <sys/types.h>
 #include <cstring>
