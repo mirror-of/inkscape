@@ -47,7 +47,9 @@ static SPEventContextClass * parent_class;
 GdkCursor * CursorNodeMouseover = NULL, * CursorNodeDragging = NULL;
 
 gint nodeedit_rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
-gint nodeedit_drag_escaped = 0; // if non-zero, drag was canceled by esc
+
+static gint xp = 0, yp = 0; // where drag started
+static gint tolerance = 0;
 
 GType
 sp_node_context_get_type (void)
@@ -170,7 +172,7 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 			if (event->button.button == 1) {
 				if (!nc->drag) {
 					sp_selection_set_item (SP_DT_SELECTION (desktop), item);
-					ret = TRUE;
+					ret = FALSE;
 				}
 				break;
 			}
@@ -186,9 +188,6 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 
 	return ret;
 }
-
-static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
 
 static gint
 sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
@@ -239,19 +238,19 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	case GDK_BUTTON_RELEASE:
 		if (event->button.button == 1) {
 			if (sp_rubberband_rect (&b)) {
-				sp_rubberband_stop ();
 				if (abs((gint) event->button.x - xp) < tolerance && abs((gint) event->button.y - yp) < tolerance) {
 					// consider it a click, we're within tolerance from origin
-					if (!(nodeedit_rb_escaped) && !(nodeedit_drag_escaped)) // unless something was cancelled
+					if (!(nodeedit_rb_escaped)) // unless something was cancelled
 						sp_nodepath_deselect (nc->nodepath); 
 				} else if (nc->nodepath) {
 					sp_nodepath_select_rect (nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
 				}
 				ret = TRUE;
 			} else {
-				if (!(nodeedit_rb_escaped) && !(nodeedit_drag_escaped)) // unless something was cancelled
+				if (!(nodeedit_rb_escaped)) // unless something was cancelled
 					sp_nodepath_deselect (nc->nodepath); 
 			}
+			sp_rubberband_stop ();
 			xp = yp = 0;
 			nodeedit_rb_escaped = 0;
 			nc->drag = FALSE;
