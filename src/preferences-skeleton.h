@@ -128,6 +128,7 @@ static char const preferences_skeleton[] =
 "    </group>\n"
 "    <group id=\"save_as\" default=\"\" append_extension=\"1\" path=\"\"/>\n"
 "    <group id=\"open\" path=\"\"/>\n"
+"    <group id=\"debug\" redirect=\"0\"/>\n"
 "  </group>\n"
 "  <group id=\"printing\">\n"
 "    <settings id=\"ps\"/>\n"

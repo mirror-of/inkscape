@@ -48,6 +48,7 @@
 #include "helper/sp-intl.h"
 #include "helper/sp-marshal.h"
 #include "xml/repr-private.h"
+#include "dialogs/debugdialog.h"
 
 #include "shortcuts.h"
 
@@ -567,6 +568,16 @@ inkscape_application_init (const gchar *argv0)
     /* Attempt to load the preferences, and set the save_preferences flag to TRUE
        if we could, or FALSE if we couldn't */
     inkscape->save_preferences = inkscape_load_preferences(inkscape);
+
+    /* Make this redirection dependent on preferences on linux, always on Win32 */
+#ifdef WIN32
+    Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
+#else
+    if (prefs_get_int_attribute("dialogs.debug", "redirect", 0))
+        {
+        Inkscape::UI::Dialogs::DebugDialog::getInstance()->captureLogMessages();
+        }
+#endif
 
     /* Initialize the extensions */
     Inkscape::Extension::init();
