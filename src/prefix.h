@@ -112,12 +112,20 @@ char *br_prepend_prefix	(void *symbol, char *path);
 #  define INKSCAPE_TUTORIALSDIR BR_DATADIR( "/inkscape/tutorials" )
 #  define INKSCAPE_MARKERSDIR BR_DATADIR("/inkscape/markers")
 #else
-#  ifndef INKSCAPE_PIXMAPDIR	
-#    define INKSCAPE_PIXMAPDIR INKSCAPE_DATADIR "/inkscape/icons"
-#  endif	
-#  define INKSCAPE_SCREENSDIR INKSCAPE_DATADIR "/inkscape/screens"    
-#  define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"    
-#  define INKSCAPE_MARKERSDIR INKSCAPE_DATADIR "/inkscape/markers"
+#  ifdef WIN32
+#    define INKSCAPE_DATADIR "."  
+#    define INKSCAPE_PIXMAPDIR "share\\icons"
+#    define INKSCAPE_SCREENSDIR "share\\screens"
+#    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
+#    define INKSCAPE_MARKERSDIR "share\\markers"
+#  else      
+#    ifndef INKSCAPE_PIXMAPDIR	
+#      define INKSCAPE_PIXMAPDIR INKSCAPE_DATADIR "/inkscape/icons"
+#    endif	
+#    define INKSCAPE_SCREENSDIR INKSCAPE_DATADIR "/inkscape/screens"    
+#    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"    
+#    define INKSCAPE_MARKERSDIR INKSCAPE_DATADIR "/inkscape/markers"
+#  endif
 #endif
 
 
