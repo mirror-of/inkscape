@@ -472,12 +472,12 @@ verify_grad(SPGradient *gradient)
 
 		SPRepr *child;
 
-		child = sp_repr_new ("stop");
+		child = sp_repr_new ("svg:stop");
 		sp_repr_set_double (child, "offset", 0.0);
 		sp_repr_set_attr (child, "style", os.str().c_str());
 		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
 
-		child = sp_repr_new ("stop");
+		child = sp_repr_new ("svg:stop");
 		sp_repr_set_double (child, "offset", 1.0);
 		sp_repr_set_attr (child, "style", os.str().c_str());
 		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);

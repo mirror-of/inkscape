@@ -416,13 +416,13 @@ sp_gradient_selector_add_vector_clicked (GtkWidget *w, SPGradientSelector *sel)
 		repr = sp_repr_duplicate (SP_OBJECT_REPR (gr));
 	} else {
 		SPRepr *stop;
-		repr = sp_repr_new ("linearGradient");
-		stop = sp_repr_new ("stop");
+		repr = sp_repr_new ("svg:linearGradient");
+		stop = sp_repr_new ("svg:stop");
 		sp_repr_set_attr (stop, "offset", "0");
 		sp_repr_set_attr (stop, "style", "stop-color:#000;stop-opacity:1;");
 		sp_repr_append_child (repr, stop);
 		sp_repr_unref (stop);
-		stop = sp_repr_new ("stop");
+		stop = sp_repr_new ("svg:stop");
 		sp_repr_set_attr (stop, "offset", "1");
 		sp_repr_set_attr (stop, "style", "stop-color:#fff;stop-opacity:1;");
 		sp_repr_append_child (repr, stop);

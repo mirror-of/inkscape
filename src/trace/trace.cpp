@@ -173,7 +173,7 @@ void Trace::convertImageToPathThread()
         }
 
 
-    SPRepr *pathRepr    = sp_repr_new("path");
+    SPRepr *pathRepr    = sp_repr_new("svg:path");
     SPRepr *imgRepr     = SP_OBJECT(img)->repr;
     sp_repr_set_attr(pathRepr, "d", d);
     sp_repr_set_attr(pathRepr, "d", d);

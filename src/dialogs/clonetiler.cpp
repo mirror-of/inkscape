@@ -718,7 +718,7 @@ clonetiler_apply (GtkWidget *widget, void *)
             if (y == 0 && x == 0) // original
                 continue;
 
-            SPRepr *clone = sp_repr_new("use");
+            SPRepr *clone = sp_repr_new("svg:use");
             sp_repr_set_attr(clone, "x", "0");
             sp_repr_set_attr(clone, "y", "0");
             sp_repr_set_attr(clone, "inkscape:tiled-clone-of", id_href);
