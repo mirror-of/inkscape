@@ -1,9 +1,3 @@
-2004-08-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
-	* src/sp-rect.cpp (sp_rect_set_shape): Change rounded-rect
-	  behaviour to be closer to [opinion on www-svg as to the
-	  interpretation of] the SVG 1.1 specification.
-
 2004-08-14  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/sp-use-reference.cpp, src/sp-use-reference.h: use sigc 2.0
@@ -29,8 +23,13 @@
 	* src/inkjar/jar.cpp: fixed a compiler warning and added a FIXME.
 
 	* src/object-edit.cpp: make use of sp_pattern_extract_trans.
-	
-	
+
+2004-08-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-rect.cpp (sp_rect_set_shape): Change rounded-rect
+	  behaviour to be closer to [opinion on www-svg as to the
+	  interpretation of] the SVG 1.1 specification.
+
 2004-08-13  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-action.h, src/xml/repr-action.cpp:
