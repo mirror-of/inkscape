@@ -33,10 +33,12 @@
 #include "inkscape.h"
 #include "document.h"
 #include "desktop-handles.h"
+#include <sp-item.h>
 #include "sp-item-transform.h"
 #include "selection.h"
 #include "dialog-events.h"
 #include "macros.h"
+#include <libnr/nr-point-fns.h>
 
 #include "dialog-events.h"
 #include "../prefs-utils.h"
@@ -489,7 +491,7 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
         return;
     }
 
-    NRPoint mp;
+    NR::Point mp;
     switch (base) {
     
         case SP_ALIGN_LAST:
@@ -508,15 +510,15 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
             slist = g_slist_remove (slist, master);
 	    NRRect b;
             sp_item_bbox_desktop (master, &b);
-            mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
-            mp.y = a.my0 * b.y0 + a.my1 * b.y1;
+            mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
+                           a.my0 * b.y0 + a.my1 * b.y1);
             break;
 	}
             
         case SP_ALIGN_PAGE:
             slist = g_slist_copy (slist);
-            mp.x = a.mx1 * sp_document_width (SP_DT_DOCUMENT (desktop));
-            mp.y = a.my1 * sp_document_height (SP_DT_DOCUMENT (desktop));
+            mp = NR::Point(a.mx1 * sp_document_width(SP_DT_DOCUMENT(desktop)),
+                           a.my1 * sp_document_height(SP_DT_DOCUMENT(desktop)));
             break;
         
         case SP_ALIGN_DRAWING:
@@ -525,21 +527,21 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
 	    NRRect b;
             sp_item_bbox_desktop 
                 ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)), &b );
-            mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
-            mp.y = a.my0 * b.y0 + a.my1 * b.y1;
+            mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
+                           a.my0 * b.y0 + a.my1 * b.y1);
             break;
 	}
-        
+
         case SP_ALIGN_SELECTION:
 	{
             slist = g_slist_copy (slist);
 	    NRRect b;
             sp_selection_bbox (selection, &b);
-            mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
-            mp.y = a.my0 * b.y0 + a.my1 * b.y1;
+            mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
+                           a.my0 * b.y0 + a.my1 * b.y1);
             break;
 	}
-        
+
         default:
             g_assert_not_reached ();
             break;
@@ -550,14 +552,11 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
         SPItem *item = (SPItem *) l->data;
 	NRRect b;
         sp_item_bbox_desktop (item, &b);
-	NRPoint sp;
-        sp.x = a.sx0 * b.x0 + a.sx1 * b.x1;
-        sp.y = a.sy0 * b.y0 + a.sy1 * b.y1;
-
-        if ( (fabs (mp.x - sp.x) > 1e-9) || 
-             (fabs (mp.y - sp.y) > 1e-9)) {
-        
-            sp_item_move_rel (item, mp.x - sp.x, mp.y - sp.y);
+	NR::Point const sp(a.sx0 * b.x0 + a.sx1 * b.x1,
+                           a.sy0 * b.y0 + a.sy1 * b.y1);
+        NR::Point const mp_rel( mp - sp );
+        if (LInfty(mp_rel) > 1e-9) {
+            sp_item_move_rel(item, NR::translate(mp_rel));
             changed = true;
         }
     }
@@ -724,7 +723,8 @@ sp_align_distribute_h_clicked ( GtkWidget *widget, const gchar *layout )
             float pos;
             pos = bbs[0].anchor + i * step;
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].anchor, 1e-6)) {
-                sp_item_move_rel (bbs[i].item, pos - bbs[i].anchor, 0.0);
+                sp_item_move_rel(bbs[i].item, NR::translate(pos - bbs[i].anchor,
+                                                            0.0));
                 changed = TRUE;
             }
         }
@@ -739,7 +739,8 @@ sp_align_distribute_h_clicked ( GtkWidget *widget, const gchar *layout )
         pos = bbs[0].bbox.x0;
         for (i = 0; i < len; i++) {
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].bbox.x0, 1e-6)) {
-                sp_item_move_rel (bbs[i].item, pos - bbs[i].bbox.x0, 0.0);
+                sp_item_move_rel(bbs[i].item, NR::translate(pos - bbs[i].bbox.x0,
+                                                            0.0));
                 changed = TRUE;
             }
             pos += (bbs[i].bbox.x1 - bbs[i].bbox.x0);
@@ -815,7 +816,8 @@ sp_align_distribute_v_clicked ( GtkWidget *widget, const gchar *layout )
             float pos;
             pos = bbs[0].anchor + i * step;
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].anchor, 1e-6)) {
-                sp_item_move_rel (bbs[i].item, 0.0, pos - bbs[i].anchor);
+                sp_item_move_rel(bbs[i].item, NR::translate(0.0,
+                                                            pos - bbs[i].anchor));
                 changed = TRUE;
             }
         }
@@ -832,7 +834,8 @@ sp_align_distribute_v_clicked ( GtkWidget *widget, const gchar *layout )
         
         for (i = 0; i < len; i++) {
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].bbox.y0, 1e-6)) {
-                sp_item_move_rel (bbs[i].item, 0.0, pos - bbs[i].bbox.y0);
+                sp_item_move_rel(bbs[i].item, NR::translate(0.0,
+                                                            pos - bbs[i].bbox.y0));
                 changed = TRUE;
             }
             pos += (bbs[i].bbox.y1 - bbs[i].bbox.y0);
