@@ -76,7 +76,7 @@ static struct StockIcon
   {INKSCAPE_STOCK_TOOLBOX_SELECT, INKSCAPE_PIXMAPDIR, "toolbox_select.xpm"},
   {INKSCAPE_STOCK_TOOLBOX_DRAW, INKSCAPE_PIXMAPDIR, "toolbox_draw.xpm"},
   {INKSCAPE_STOCK_TOOLBOX_ZOOM, INKSCAPE_PIXMAPDIR, "toolbox_zoom.xpm"},
-  {INKSCAPE_STOCK_TOOLBOX_NODE, INKSCAPE_PIXMAPDIR, "toolbox_file.xpm"},
+  {INKSCAPE_STOCK_TOOLBOX_NODE, INKSCAPE_PIXMAPDIR, "toolbox_node.xpm"},
 //  {INKSCAPE_STOCK_SEPARATE_TOOL, INKSCAPE_PIXMAPDIR, "separate_tool.xpm"},
 
   {INKSCAPE_STOCK_EDIT_DUPLICATE, INKSCAPE_PIXMAPDIR, "edit_duplicate.xpm"},
@@ -151,7 +151,7 @@ inkscape_gtk_stock_init (void)
 	{
 	  g_critical ("Unable to load stock pixmap %s\n", filename);
 	  g_free (filename);
-	  return;
+	  continue;
 	}
 
       pixbuf = gdk_pixbuf_new_from_file (filename, NULL);

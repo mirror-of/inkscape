@@ -71,7 +71,7 @@
 #define INKSCAPE_STOCK_TOOLBOX_SELECT      "toolbox_select"
 #define INKSCAPE_STOCK_TOOLBOX_DRAW      "toolbox_draw"
 #define INKSCAPE_STOCK_TOOLBOX_ZOOM      "toolbox_zoom"
-#define INKSCAPE_STOCK_TOOLBOX_NODE      "toolbox_file"
+#define INKSCAPE_STOCK_TOOLBOX_NODE      "toolbox_node"
 #define INKSCAPE_STOCK_SEPARATE_TOOL      "separate_tool"
 
 #define INKSCAPE_STOCK_EDIT_DUPLICATE      "edit_duplicate"
