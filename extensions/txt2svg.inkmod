@@ -5,7 +5,7 @@
         <extension>.txt</extension>
         <mimetype>text/html</mimetype>
         <filetypename>Text File</filetypename>
-        <filetypetooltip>Just some text, nothign special</filetypetooltip>
+        <filetypetooltip>ASCII Text</filetypetooltip>
     </input>
     <extension>
         <command reldir="extensions">txt2svg.pl</command>
