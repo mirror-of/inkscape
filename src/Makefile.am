@@ -3,7 +3,7 @@
 module_libs = modules/libspmodules.a
 module_src = module.c module.h
 
-SUBDIRS = libarikkei libnr libnrtype xml svg helper widgets dialogs display modules utest
+SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display modules utest
 
 AM_CPPFLAGS = \
 	-DINKSCAPE_VERSION=\""$(VERSION)"\"
@@ -124,6 +124,8 @@ inkscape_SOURCES = \
 	gradient-chemistry.c gradient-chemistry.h \
 	sp-item-transform.c sp-item-transform.h \
 	\
+	splivarot.cpp splivarot.h \
+	\
 	file.c file.h \
 	print.c print.h \
 	interface.c interface.h \
@@ -144,6 +146,7 @@ inkscape_private_libs = \
 	libnrtype/libnrtype.a \
 	libnr/libnr.a \
 	libarikkei/libarikkei.a \
+	livarot/libvarot.a \
 	$(module_libs)
 
 

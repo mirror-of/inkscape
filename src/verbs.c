@@ -53,6 +53,8 @@
 #include "shortcuts.h"
 #include "toolbox.h"
 
+#include "splivarot.h"
+
 #include "verbs.h"
 
 static void sp_verbs_init (void);
@@ -193,6 +195,30 @@ sp_verb_action_selection_perform (SPAction *action, void *data)
 	case SP_VERB_SELECTION_UNGROUP:
 		sp_selection_ungroup (NULL, NULL);
 		break;
+
+	case SP_VERB_SELECTION_UNION:
+		sp_selected_path_union ();
+		break;
+	case SP_VERB_SELECTION_INTERSECT:
+		sp_selected_path_intersect ();
+		break;
+	case SP_VERB_SELECTION_DIFF:
+		sp_selected_path_diff ();
+		break;
+	case SP_VERB_SELECTION_SYMDIFF:
+		sp_selected_path_symdiff ();
+		break;
+	case SP_VERB_SELECTION_OFFSET:
+		sp_selected_path_offset ();
+		break;
+	case SP_VERB_SELECTION_INSET:
+		sp_selected_path_inset ();
+		break;
+	case SP_VERB_SELECTION_OUTLINE:
+		sp_selected_path_outline ();
+		break;
+
+
 	case SP_VERB_SELECTION_COMBINE:
 		sp_selected_path_combine ();
 		break;
@@ -462,6 +488,13 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_LOWER, "SelectionLower", N_("Lower"), N_("Lower selected objects one position"), "selection_down"},
 	{SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("Group"), N_("Group selected objects"), "selection_group"},
 	{SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("Ungroup"), N_("Ungroup selected group"), "selection_ungroup"},
+	{SP_VERB_SELECTION_UNION, "SelectionUnion", N_("Union"), N_("Union of selected objects"), NULL},
+	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("Intersect"), N_("Intersection of selected objects"), NULL},
+	{SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("Difference"), N_("Difference of selected objects"), NULL},
+	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("SymDifference"), N_("SymDifference of selected objects"), NULL},
+	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Offset"), N_("Offset selected path"), NULL},
+	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("Inset"), N_("Inset selected path"), NULL},
+	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("Outline"), N_("Convert selected stroke to shape"), NULL},
 	{SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("Combine"), N_("Combine multiple paths"), "selection_combine"},
 	{SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break Apart"), N_("Break selected path to subpaths"), "selection_break"},
 	/* Object */

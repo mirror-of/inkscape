@@ -314,6 +314,7 @@ src/Makefile
 src/libarikkei/Makefile
 src/libnr/Makefile
 src/libnrtype/Makefile
+src/livarot/Makefile
 src/xml/Makefile
 src/svg/Makefile
 src/utest/Makefile
