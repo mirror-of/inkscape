@@ -40,18 +40,18 @@
 
 /* fixme: Implement these via preferences */
 
-#define NODE_FILL 0xbfbfbfff
-#define NODE_STROKE 0x3f3f3f7f
-#define NODE_FILL_HI 0xff7f7fff
-#define NODE_STROKE_HI 0xff3f3f7f
-#define NODE_FILL_SEL 0x3333ffff
-#define NODE_STROKE_SEL 0x0000ff7f
-#define NODE_FILL_SEL_HI 0x3f3fffff
+#define NODE_FILL          0xbfbfbfff
+#define NODE_STROKE        0x3f3f3f7f
+#define NODE_FILL_HI       0xff7f7fff
+#define NODE_STROKE_HI     0xff3f3f7f
+#define NODE_FILL_SEL      0x3333ffff
+#define NODE_STROKE_SEL    0x0000ff7f
+#define NODE_FILL_SEL_HI   0x3f3fffff
 #define NODE_STROKE_SEL_HI 0x3f3fff7f
-#define KNOT_FILL 0xffffffff
-#define KNOT_STROKE 0xffffff00
-#define KNOT_FILL_HI 0xff7f7fff
-#define KNOT_STROKE_HI 0xff3f3f00
+#define KNOT_FILL          0xffffffff
+#define KNOT_STROKE        0xffffff00
+#define KNOT_FILL_HI       0xff7f7fff
+#define KNOT_STROKE_HI     0xff3f3f00
 
 static GMemChunk *nodechunk = NULL;
 
@@ -115,14 +115,16 @@ SPNodePath *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 {
 	SPRepr *repr = SP_OBJECT (item)->repr;
 
-	if (!SP_IS_PATH (item)) return NULL;
+	if (!SP_IS_PATH (item))
+        return NULL;
 	SPPath *path = SP_PATH(item);
 	SPCurve *curve = sp_shape_get_curve(SP_SHAPE(path));
 	g_return_val_if_fail (curve != NULL, NULL);
 
 	ArtBpath *bpath = sp_curve_first_bpath (curve);
 	gint length = curve->end;
-	if (length == 0) return NULL; // prevent crash for one-node paths
+	if (length == 0)
+        return NULL; // prevent crash for one-node paths
 
 	const gchar *nodetypes = sp_repr_attr(repr, "sodipodi:nodetypes");
 	gchar *typestr = parse_nodetypes(nodetypes, length);
@@ -140,12 +142,12 @@ SPNodePath *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 	np->nodeContext = NULL; //Let the context that makes this set it
 
 	// we need to update item's transform from the repr here,
-	// because they may be out of sinc when we respond 
+	// because they may be out of sync when we respond 
 	// to a change in repr by regenerating nodepath     --bb
 	sp_object_read_attr (SP_OBJECT (item), "transform");
 
-	np->i2d = sp_item_i2d_affine(SP_ITEM(path));
-	np->d2i = np->i2d.inverse();
+	np->i2d  = sp_item_i2d_affine(SP_ITEM(path));
+	np->d2i  = np->i2d.inverse();
 	np->repr = repr;
 
 	/* Now the bitchy part (lauris) */
@@ -162,8 +164,8 @@ SPNodePath *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 	return np;
 }
 
-void sp_nodepath_destroy(SPNodePath *np)
-{
+void sp_nodepath_destroy(SPNodePath *np) {
+
 	if (!np)  //soft fail, like delete
 		return;
 
@@ -186,10 +188,10 @@ void sp_nodepath_destroy(SPNodePath *np)
  */
 gint sp_nodepath_subpath_get_node_count(SPNodeSubPath *subpath)
 {
-  if (!subpath)
-    return 0;
-  gint nodeCount = g_list_length(subpath->nodes);
-  return nodeCount;
+    if (!subpath)
+        return 0;
+    gint nodeCount = g_list_length(subpath->nodes);
+    return nodeCount;
 }
 
 /**
@@ -197,15 +199,14 @@ gint sp_nodepath_subpath_get_node_count(SPNodeSubPath *subpath)
  */
 gint sp_nodepath_get_node_count(SPNodePath *np)
 {
-  if (!np)
-    return 0;
-  gint nodeCount = 0;
-  for (GList *item = np->subpaths ; item ; item=item->next)
-    {
-    SPNodeSubPath *subpath = (SPNodeSubPath *)item->data;
-    nodeCount += g_list_length(subpath->nodes);
+    if (!np)
+        return 0;
+    gint nodeCount = 0;
+    for (GList *item = np->subpaths ; item ; item=item->next) {
+        SPNodeSubPath *subpath = (SPNodeSubPath *)item->data;
+        nodeCount += g_list_length(subpath->nodes);
     }
-  return nodeCount;
+    return nodeCount;
 }
 
 
@@ -298,7 +299,7 @@ static ArtBpath *subpath_from_bpath(SPNodePath *np, ArtBpath *b, gchar const *t)
 	SPPathNode *n;
 	n = sp_nodepath_node_new(sp, NULL, (SPPathNodeType) *t, ART_MOVETO, &pos, &pos, &npos);
 	g_assert (sp->first == n);
-	g_assert (sp->last == n);
+	g_assert (sp->last  == n);
 
 	b++;
 	t++;
@@ -376,7 +377,6 @@ static void update_repr_internal(SPNodePath *np)
 
 	SPCurve *curve = create_curve(np);
 	gchar *typestr = create_typestr(np);
-
 	gchar *svgpath = sp_svg_write_path(curve->bpath);
 
 	sp_repr_set_attr (repr, "d", svgpath);
@@ -544,7 +544,7 @@ static SPNodePath *sp_nodepath_current()
 static void sp_nodepath_line_midpoint(SPPathNode *new_path, SPPathNode *end, gdouble t)
 {
 	g_assert (new_path != NULL);
-	g_assert (end != NULL);
+	g_assert (end      != NULL);
 
 	g_assert (end->p.other == new_path);
 	SPPathNode *start = new_path->p.other;
@@ -553,11 +553,11 @@ static void sp_nodepath_line_midpoint(SPPathNode *new_path, SPPathNode *end, gdo
 	if (end->code == ART_LINETO) {
 		new_path->type = SP_PATHNODE_CUSP;
 		new_path->code = ART_LINETO;
-		new_path->pos = (t * start->pos + (1 - t) * end->pos);
+		new_path->pos  = (t * start->pos + (1 - t) * end->pos);
 	} else {
 		new_path->type = SP_PATHNODE_SMOOTH;
 		new_path->code = ART_CURVETO;
-		gdouble s = 1 - t;
+		gdouble s      = 1 - t;
 		for(int dim = 0; dim < 2; dim++) {
 			const NR::Coord f000 = start->pos[dim];
 			const NR::Coord f001 = start->n.pos[dim];
@@ -569,11 +569,11 @@ static void sp_nodepath_line_midpoint(SPPathNode *new_path, SPPathNode *end, gdo
 			const NR::Coord f0tt = s * f00t + t * f01t;
 			const NR::Coord f1tt = s * f01t + t * f11t;
 			const NR::Coord fttt = s * f0tt + t * f1tt;
-			start->n.pos[dim] = f00t;
+			start->n.pos[dim]    = f00t;
 			new_path->p.pos[dim] = f0tt;
-			new_path->pos[dim] = fttt;
+			new_path->pos[dim]   = fttt;
 			new_path->n.pos[dim] = f1tt;
-			end->p.pos[dim] = f11t;
+			end->p.pos[dim]      = f11t;
 		}
 	}
 }
@@ -610,16 +610,15 @@ static SPPathNode *sp_nodepath_node_break(SPPathNode *node)
 	g_assert (g_list_find (node->subpath->nodes, node));
 
 	SPNodeSubPath *sp = node->subpath;
-	SPNodePath *np = sp->nodepath;
+	SPNodePath *np    = sp->nodepath;
 
 	if (sp->closed) {
 		sp_nodepath_subpath_open (sp, node);
-
 		return sp->first;
 	} else {
 		// no break for end nodes
 		if (node == sp->first) return NULL;
-		if (node == sp->last) return NULL;
+		if (node == sp->last ) return NULL;
 
 		// create a new subpath
 		SPNodeSubPath *newsubpath = sp_nodepath_subpath_new(np);
@@ -628,7 +627,7 @@ static SPPathNode *sp_nodepath_node_break(SPPathNode *node)
 		SPPathNode *newnode = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
 
 		while (node->n.other) { // copy the remaining nodes into the new subpath
-			SPPathNode *n = node->n.other;
+			SPPathNode *n  = node->n.other;
 			SPPathNode *nn = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
 			if (n->selected) {
 				sp_nodepath_node_select (nn, TRUE, TRUE); //preserve selection
@@ -918,6 +917,9 @@ sp_node_selected_add_node (void)
 	sp_nodepath_update_statusbar (nodepath);
 }
 
+
+
+
 void sp_node_selected_break()
 {
 	SPNodePath *nodepath = sp_nodepath_current ();
@@ -940,6 +942,9 @@ void sp_node_selected_break()
 
 	update_repr (nodepath);
 }
+
+
+
 
 /**
 \brief duplicate selected nodes
@@ -966,6 +971,8 @@ void sp_node_selected_duplicate()
 
 	update_repr (nodepath);
 }
+
+
 
 void sp_node_selected_join()
 {
@@ -1057,6 +1064,8 @@ void sp_node_selected_join()
 	sp_nodepath_update_statusbar (nodepath);
 }
 
+
+
 void sp_node_selected_join_segment()
 {
 	SPNodePath *nodepath = sp_nodepath_current ();
@@ -1086,13 +1095,13 @@ void sp_node_selected_join_segment()
 		sp->closed = TRUE;
 
 		sp->first->p.other = sp->last;
-		sp->last->n.other = sp->first;
+		sp->last->n.other  = sp->first;
 		
 		sp_node_control_mirror_p_to_n (sp->last);
 		sp_node_control_mirror_n_to_p (sp->first);
 
 		sp->first->code = sp->last->code;
-		sp->first = sp->last;
+		sp->first       = sp->last;
 
 		sp_nodepath_ensure_ctrls (sp->nodepath);
 
@@ -1184,6 +1193,11 @@ void sp_node_selected_delete()
 	sp_nodepath_update_statusbar (nodepath);
 }
 
+
+
+/**
+ * This is the code for 'split'
+ */
 void
 sp_node_selected_delete_segment (void)
 {
@@ -1203,7 +1217,7 @@ sp_node_selected_delete_segment (void)
 	SPPathNode *a = (SPPathNode *) nodepath->selected->data;
 	SPPathNode *b = (SPPathNode *) nodepath->selected->next->data;
 
-	if ( ( a==b)                       ||  //same node
+	if (     ( a==b)                       ||  //same node
              (a->subpath  != b->subpath )  ||  //not the same path
              (!a->p.other || !a->n.other)  ||  //one of a's sides does not have a segment
              (!b->p.other || !b->n.other) )    //one of b's sides does not have a segment
@@ -1221,6 +1235,8 @@ sp_node_selected_delete_segment (void)
 	//##################################
 	if (a->subpath->closed) {
 
+
+        gboolean reversed = FALSE;
 
 		//Since we can go in a circle, we need to find the shorter distance.
 		//  a->b or b->a
@@ -1245,8 +1261,9 @@ sp_node_selected_delete_segment (void)
 			if (curr==a) {
 				//printf("b to a:%d\n", distance);
 				if (distance < minDistance) {
-					start = b;  //we go from b to a
-					end   = a;
+					start    = b;  //we go from b to a
+					end      = a;
+                    reversed = TRUE;
 					//printf("B to A\n");
 				}
 				break;
@@ -1258,8 +1275,12 @@ sp_node_selected_delete_segment (void)
 		//Copy everything from 'end' to 'start' to a new subpath
 		SPNodeSubPath *t = sp_nodepath_subpath_new (nodepath);
 		for (curr=end ; curr ; curr=curr->n.other) {
-			sp_nodepath_node_new (t, NULL, (SPPathNodeType)curr->type, (ArtPathcode)curr->code,
-				&curr->p.pos, &curr->pos, &curr->n.pos);
+            ArtPathcode code = (ArtPathcode) curr->code;
+            if (curr == end)
+                code = ART_MOVETO;
+			sp_nodepath_node_new (t, NULL, 
+                (SPPathNodeType)curr->type, code,
+			    &curr->p.pos, &curr->pos, &curr->n.pos);
 			if (curr == start)
 				break;
 		}
@@ -2437,12 +2458,13 @@ static void sp_nodepath_subpath_close(SPNodeSubPath *sp)
 
 	sp->closed = TRUE;
 
+    //Link the head to the tail
 	sp->first->p.other = sp->last;
-	sp->last->n.other = sp->first;
-	sp->last->n.pos = sp->first->n.pos;
+	sp->last->n.other  = sp->first;
+	sp->last->n.pos    = sp->first->n.pos;
+	sp->first          = sp->last;
 
-	sp->first = sp->last;
-
+    //Remove the extra end node
 	sp_nodepath_node_destroy (sp->last->n.other);
 }
 
@@ -2457,11 +2479,13 @@ static void sp_nodepath_subpath_open(SPNodeSubPath *sp, SPPathNode *n)
 	SPPathNode *new_path = sp_nodepath_node_new(sp, n->n.other, SP_PATHNODE_CUSP, ART_MOVETO,
 						    &n->pos, &n->pos, &n->n.pos);
 
-	sp->closed = FALSE;
 
-	sp->first = new_path;
-	sp->last = n;
-	n->n.other = NULL;
+	sp->closed        = FALSE;
+
+    //Unlink to make a head and tail
+	sp->first         = new_path;
+	sp->last          = n;
+	n->n.other        = NULL;
 	new_path->p.other = NULL;
 }
 
@@ -2473,19 +2497,18 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	g_assert (sp->nodepath);
 	g_assert (sp->nodepath->desktop);
 
-	if (nodechunk == NULL) {
+	if (nodechunk == NULL)
 		nodechunk = g_mem_chunk_create (SPPathNode, 32, G_ALLOC_AND_FREE);
-	}
 
 	SPPathNode *n = (SPPathNode*)g_mem_chunk_alloc (nodechunk);
 
-	n->subpath = sp;
-	n->type = type;
-	n->code = code;
+	n->subpath  = sp;
+	n->type     = type;
+	n->code     = code;
 	n->selected = FALSE;
-	n->pos = *pos;
-	n->p.pos = *ppos;
-	n->n.pos = *npos;
+	n->pos      = *pos;
+	n->p.pos    = *ppos;
+	n->n.pos    = *npos;
 
 	SPPathNode *prev;
 	if (next) {
@@ -2495,17 +2518,15 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 		prev = sp->last;
 	}
 
-	if (prev) {
+	if (prev)
 		prev->n.other = n;
-	} else {
+	else
 		sp->first = n;
-	}
 
-	if (next) {
+	if (next)
 		next->p.other = n;
-	} else {
+	else
 		sp->last = n;
-	}
 
 	n->p.other = prev;
 	n->n.other = next;
@@ -2519,11 +2540,11 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 		      "stroke", NODE_STROKE,
 		      "stroke_mouseover", NODE_STROKE_HI,
 		      NULL);
-	if (n->type == SP_PATHNODE_CUSP) {
+	if (n->type == SP_PATHNODE_CUSP)
 		g_object_set (G_OBJECT (n->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
-	} else {
+	else
 		g_object_set (G_OBJECT (n->knot), "shape", SP_KNOT_SHAPE_SQUARE, "size", 7, NULL);
-	}
+
 	g_signal_connect (G_OBJECT (n->knot), "event", G_CALLBACK (node_event), n);
 	g_signal_connect (G_OBJECT (n->knot), "clicked", G_CALLBACK (node_clicked), n);
 	g_signal_connect (G_OBJECT (n->knot), "grabbed", G_CALLBACK (node_grabbed), n);
