@@ -21,6 +21,7 @@
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-scale-ops.h>
+#include <libnr/nr-translate-matrix-ops.h>
 #include <libnr/nr-translate-ops.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>

@@ -50,6 +50,7 @@
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rotate-fns.h"
 #include "libnr/nr-scale-ops.h"
+#include "libnr/nr-translate-matrix-ops.h"
 #include "style.h"
 #include "document-private.h"
 #include "sp-gradient.h"
@@ -690,6 +691,9 @@ void sp_copy_stuff_used_by_item (SPItem *item)
     }
 }
 
+/**
+ * \pre item != NULL
+ */
 SPCSSAttr *
 take_style_from_item (SPItem *item)
 {

@@ -18,6 +18,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-translate-matrix-ops.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
 #include "xml/repr-private.h"
