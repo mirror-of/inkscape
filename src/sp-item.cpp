@@ -40,6 +40,7 @@
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rect.h"
+#include "svg/stringstream.h"
 
 #define noSP_ITEM_DEBUG_IDLE
 
@@ -626,6 +627,32 @@ sp_item_transform_delta (SPItem *item, NRMatrix *transform)
 }
 
 void
+sp_item_adjust_stroke_width (SPItem *item, double expansion)
+{
+	if (!SP_OBJECT_STYLE(item))
+		return;
+
+	SP_OBJECT_STYLE(item)->stroke_width.computed *= expansion;
+
+	SPCSSAttr *css = sp_repr_css_attr_new();
+	Inkscape::SVGOStringStream os_width;
+	os_width << SP_OBJECT_STYLE(item)->stroke_width.computed;
+	sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
+	sp_repr_css_change (SP_OBJECT_REPR(item), css, "style");
+}
+
+void
+sp_item_adjust_stroke_width_recursive (SPItem *item, double expansion)
+{
+	sp_item_adjust_stroke_width (item, expansion);
+
+	for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
+		if (SP_IS_ITEM(o))
+			sp_item_adjust_stroke_width_recursive (SP_ITEM (o), expansion);
+	}
+}
+
+void
 sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
 {
 	g_return_if_fail (item != NULL);
@@ -641,19 +668,11 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 	}
 	NR::Matrix xform(transform);
 
-	if (prefs_get_int_attribute("tools.select", "scale_line_width", 1) == 0) {
-	  float expansion = NR::expansion(advertized_transform.inverse());
-	  
-	  if (SP_IS_GROUP (item)) {
-	    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
-	      SP_OBJECT_STYLE(o)->stroke_width.computed *= expansion;
-	    }
-	  }
-	  else {
-	    SP_OBJECT_STYLE(item)->stroke_width.computed *= expansion;
-	  }
+	if (prefs_get_int_attribute("options.scalestroke", "value", 1) == 0) {
+		double expansion = NR::expansion(advertized_transform.inverse());
+		sp_item_adjust_stroke_width_recursive (item, expansion);
 	}
-	  
+ 
 	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
 
 	if (!transform) {
