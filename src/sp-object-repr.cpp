@@ -31,6 +31,7 @@
 #include "sp-polyline.h"
 #include "sp-polygon.h"
 #include "sp-text.h" 
+#include "sp-tspan.h" 
 #include "sp-gradient.h"
 #include "sp-pattern.h"
 #include "sp-clippath.h"

@@ -11,6 +11,7 @@
 
 #include <forward.h>
 #include <uri-references.h>
+#include <sigc++/sigc++.h>
 
 
 class SPUseReference : public Inkscape::URIReference {
@@ -26,6 +27,33 @@ protected:
 
 };
 
+class Path;
+struct SPRepr;
+
+class SPUsePath : public SPUseReference {
+public:	
+	Path           *originalPath;	
+	bool           sourceDirty;
+	
+	SPObject       *owner;
+	gchar					 *sourceHref;
+  SPRepr         *sourceRepr;
+	SPObject			 *sourceObject;
+	
+	gulong           _modified_connection;
+	SigC::Connection _delete_connection;
+	SigC::Connection _changed_connection;
+	SigC::Connection _transformed_connection;
+
+	SPUsePath(SPObject* i_owner);
+	~SPUsePath(void);
+	
+	void            link(char* to);
+	void            unlink(void);
+	void            start_listening(SPObject* to);
+	void            quit_listening(void);
+	void            refresh_source(void);
+};
 
 #endif /* !SEEN_SP_USE_REFERENCE_H */
 
