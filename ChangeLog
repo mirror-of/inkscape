@@ -1,4 +1,7 @@
 2005-03-02  Jon A. Cruz  <jon@joncruz.org>
+	* src/toolbox.cpp: Added preference to make the top toolbox 'small'.
+
+2005-03-02  Jon A. Cruz  <jon@joncruz.org>
 	* src/desktop-events.cpp, src/desktop.cpp, src/gradient-toolbar.cpp,
 	  src/interface.cpp, src/select-toolbar.cpp, src/toolbox.cpp,
 	  src/toolbox.h, src/dialogs/find.cpp,
