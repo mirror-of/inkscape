@@ -30,7 +30,7 @@ Print *get_print(gchar const *key);
 Extension *build_from_file(gchar const *filename);
 Extension *build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp);
 
-}; }; /* namespace Inkscape::Extension */
+} } /* namespace Inkscape::Extension */
 
 #endif /* INKSCAPE_EXTENSION_SYSTEM_H__ */
 

@@ -16,12 +16,9 @@
 
 
 
-namespace Inkscape
-{
-namespace UI
-{
-namespace Dialogs
-{
+namespace Inkscape {
+namespace UI {
+namespace Dialogs {
 
 
 /**
@@ -96,9 +93,9 @@ class DebugDialog
 };
 
 
-}; //namespace Dialogs
-}; //namespace UI
-}; //namespace Inkscape
+} //namespace Dialogs
+} //namespace UI
+} //namespace Inkscape
 
 
 

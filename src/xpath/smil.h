@@ -22,14 +22,10 @@
 
 
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
-namespace smil
-{
+namespace w3c {
+namespace org {
+namespace dom {
+namespace smil {
 
 
 
@@ -1352,10 +1348,10 @@ class SMILSwitchElement : virtual public SMILElement
 
 
 
-};//namespace smil
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace smil
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 #endif // __SMIL_H__

@@ -101,9 +101,9 @@ public:
                           SPStyle const *style);
 };
 
-}; /* namespace Implementation */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Implementation */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 #endif /* __INKSCAPE_EXTENSION_IMPLEMENTATION_H__ */
 

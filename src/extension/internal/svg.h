@@ -33,7 +33,7 @@ public:
 
 };
 
-};};}; /* namespace Inkscape, Extension, Implementation */
+} } }  /* namespace Inkscape, Extension, Implementation */
 #endif /* __SVG_H__ */
 
 /*

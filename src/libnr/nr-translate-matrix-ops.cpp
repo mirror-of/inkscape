@@ -14,7 +14,7 @@ operator*(translate const &t, Matrix const &m)
     return ret;
 }
 
-}; /* namespace NR */
+}  /* namespace NR */
 
 
 /*

@@ -271,7 +271,7 @@ public:
 };
 
 
-}; /* namespace Inkscape */
+}  /* namespace Inkscape */
 
 #endif /* __INK_SVG_PROFILE_H__ */
 

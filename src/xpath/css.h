@@ -22,14 +22,10 @@
 
 
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
-namespace css
-{
+namespace w3c {
+namespace org {
+namespace dom {
+namespace css {
 
 
 
@@ -2023,10 +2019,10 @@ class DOMImplementationCSS : virtual public DOMImplementation
 
 
 
-};//namespace css
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace css
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 #endif // __CSS_H__

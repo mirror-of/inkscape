@@ -9,7 +9,7 @@ struct NRPointL {
     NR::ICoord x, y;
 };
 
-namespace NR{
+namespace NR {
 
 class IPoint {
 public:
@@ -86,7 +86,7 @@ private:
 };
 
 
-};
+}  // namespace NR
 
 #endif /* !SEEN_NR_POINT_L_H */
 

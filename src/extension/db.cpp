@@ -236,4 +236,4 @@ DB::IOExtensionDescription::~IOExtensionDescription(void)
 {
 }
 
-}; }; /* namespace Extension, Inkscape */
+} } /* namespace Extension, Inkscape */

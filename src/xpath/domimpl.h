@@ -20,12 +20,9 @@
 
 
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
+namespace w3c {
+namespace org {
+namespace dom {
 
 
 /*#########################################################################
@@ -599,9 +596,9 @@ class DocumentImpl : public Document, public NodeImpl
 
 
 
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 #endif // __DOMIMPL_H__

@@ -592,7 +592,7 @@ void assert_close(Matrix const &a, Matrix const &b)
 
 
 
-};//namespace NR
+}  //namespace NR
 
 
 

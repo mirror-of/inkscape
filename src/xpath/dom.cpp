@@ -15,12 +15,9 @@
 #include "domimpl.h"
 
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
+namespace w3c {
+namespace org {
+namespace dom {
 
 
 
@@ -1407,9 +1404,9 @@ Element *DocumentImpl::getElementById(const DOMString& elementId)
 
 
 
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 

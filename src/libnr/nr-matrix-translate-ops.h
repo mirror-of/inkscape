@@ -7,9 +7,10 @@
 #include "libnr/nr-translate.h"
 
 //NR::Matrix operator*(NR::Matrix const &m, NR::translate const &t);
+
 namespace NR {
 Matrix operator*(Matrix const &m, translate const &t);
-};
+}
 
 inline NR::Matrix
 operator/(NR::Matrix const &numer, NR::translate const &denom)

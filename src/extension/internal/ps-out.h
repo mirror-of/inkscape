@@ -30,7 +30,7 @@ public:
 
 };
 
-};};}; /* namespace Inkscape, Extension, Implementation */
+} } }  /* namespace Inkscape, Extension, Implementation */
 
 #endif /* EXTENSION_INTERNAL_PS_OUT_H */
 

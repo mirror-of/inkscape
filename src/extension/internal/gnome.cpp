@@ -392,9 +392,9 @@ PrintGNOME::init (void)
 	return;
 }
 
-}; /* namespace Internal */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Internal */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 
 // Remember to free the result!

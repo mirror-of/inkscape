@@ -105,7 +105,7 @@ Print::textToPath (void)
 	return imp->textToPath(this);
 }
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 
 /*
   Local Variables:

@@ -220,7 +220,7 @@ Rect Rect::union_bounds(const Rect &a, const Rect &b) {
 	return r;
 }
 
-};
+}  // namespace NR
 
 
 /*

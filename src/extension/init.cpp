@@ -199,4 +199,4 @@ check_extensions (void)
 	return;
 }
 
-}; }; /* namespace Inkscape::Extension */
+} } /* namespace Inkscape::Extension */

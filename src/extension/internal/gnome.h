@@ -50,8 +50,8 @@ public:
 	static void init (void);
 };
 
-}; /* namespace Internal */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Internal */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 #endif /* __INKSCAPE_EXTENSION_INTERNAL_PRINT_GNOME_H__ */

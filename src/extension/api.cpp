@@ -89,4 +89,4 @@ set_param (gchar * name, int data) { }
 set_param (gchar * name, gchar * data) { }
 
 
-}; }; }; /* namespaces Inkscape::Extension::API */
+} } } /* namespaces Inkscape::Extension::API */

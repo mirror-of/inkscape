@@ -222,7 +222,7 @@ Output::save (SPDocument * doc, const gchar * uri)
 	return;
 }
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 
 /*
   Local Variables:

@@ -16,7 +16,7 @@ round(double const x)
     return std::floor( x + .5 );
 }
 
-};
+}
 
 #endif /* !SEEN_ROUND_H */
 

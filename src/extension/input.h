@@ -45,7 +45,7 @@ public:
     GtkDialog *   prefs                (gchar const *uri);
 };
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 #endif /* INKSCAPE_EXTENSION_INPUT_H__ */
 
 /*

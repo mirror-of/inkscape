@@ -28,7 +28,7 @@ decimal_round(double const x, int const nplaces)
     return Inkscape::round( x * multiplier ) / multiplier;
 }
 
-};
+}
 
 #endif /* !SEEN_DECIMAL_ROUND_H */
 

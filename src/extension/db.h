@@ -79,7 +79,7 @@ public:
 
 extern DB db;
 
-}; }; /* namespace Extension, Inkscape */
+} } /* namespace Extension, Inkscape */
 
 #endif /* __MODULES_DB_H__ */
 

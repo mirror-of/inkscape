@@ -168,7 +168,7 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 	return;
 }
 
-};};}; /* namespace inkscape, module, implementation */
+} } }  /* namespace inkscape, module, implementation */
 
 /*
   Local Variables:

@@ -17,7 +17,7 @@ public:
     char const *what() const throw() { return "Malformed URI"; }
 };
 
-};
+}
 
 
 #endif /* !SEEN_BAD_URI_EXCEPTION_H */

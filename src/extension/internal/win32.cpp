@@ -491,6 +491,6 @@ PrintWin32::init (void)
 	return;
 }
 
-}; /* namespace Internal */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Internal */
+}  /* namespace Extension */
+}  /* namespace Inkscape */

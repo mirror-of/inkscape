@@ -41,7 +41,7 @@ public:
     static void init(void);
 };
 
-};};}; /* namespace Inkscape, Extension, Implementation */
+} } }  /* namespace Inkscape, Extension, Implementation */
 
 #endif /* EXTENSION_INTERNAL_EPS_OUT_H */
 

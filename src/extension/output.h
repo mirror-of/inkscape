@@ -43,7 +43,7 @@ public:
     gchar *      get_filetypetooltip(void);
 };
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 #endif /* INKSCAPE_EXTENSION_OUTPUT_H__ */
 
 /*

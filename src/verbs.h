@@ -207,7 +207,7 @@ public:
 };
 
 #if defined(__GNUG__) && (__GNUG__ >= 3)
-}; /* namespace __gnu_cxx */
+}  /* namespace __gnu_cxx */
 #endif
 
 namespace Inkscape {
@@ -313,7 +313,7 @@ public:
 }; /* Verb class */
 
 
-}; /* Inkscape namespace */
+}  /* Inkscape namespace */
 
 #endif
 

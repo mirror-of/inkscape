@@ -25,14 +25,10 @@
 
 
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
-namespace svg
-{
+namespace w3c {
+namespace org {
+namespace dom {
+namespace svg {
 
 
 
@@ -6711,10 +6707,10 @@ class SVGForeignObjectElement :
 
 
 
-};//namespace svg
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace svg
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 #endif // __SVG_H__
 /*#########################################################################

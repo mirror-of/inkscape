@@ -163,7 +163,7 @@ GdkpixbufInput::init (void)
     return;
 }
 
-};};}; /* namespace Inkscape, Extension, Implementation */
+} } }  /* namespace Inkscape, Extension, Implementation */
 
 /*
   Local Variables:

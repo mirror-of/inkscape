@@ -58,9 +58,9 @@ public:
 
 };
 
-}; /* Inkscape  */
-}; /* Extension  */
-}; /* Implementation  */
+}  /* Inkscape  */
+}  /* Extension  */
+}  /* Implementation  */
 #endif /* __INKSCAPE_EXTENSION_IMPEMENTATION_SCRIPT_H__ */
 
 /*

@@ -18,14 +18,10 @@
 #include "dom.h"
 #include "views.h"
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
-namespace events
-{
+namespace w3c {
+namespace org {
+namespace dom {
+namespace events {
 
 //Make local definitions
 typedef dom::DOMString DOMString;
@@ -408,10 +404,10 @@ class MutationEvent : virtual public Event
 
 
 
-};//namespace events
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace events
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 #endif // __EVENTS_H__
 /*#########################################################################

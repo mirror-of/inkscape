@@ -18,12 +18,9 @@
 #include <string>
 #include <exception>
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
+namespace w3c {
+namespace org {
+namespace dom {
 
 /**
  *
@@ -962,9 +959,9 @@ class Document : virtual public Node
 
 
 
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 #endif // __DOM_H__

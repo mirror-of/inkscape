@@ -21,7 +21,7 @@ struct SPItem;
 struct SPKnot;
 namespace NR {
 class Point;
-};
+}
 
 
 struct SPKnotHolderEntity {

@@ -423,10 +423,6 @@ PovOutput::init (void)
 
 
 
-}; //namespace Internal
-}; //namespace Extension
-}; //namespace Inkscape
-
-
-
-
+}  //namespace Internal
+}  //namespace Extension
+}  //namespace Inkscape

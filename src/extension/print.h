@@ -68,7 +68,7 @@ public:
     bool          textToPath  (void);
 };
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 #endif /* INKSCAPE_EXTENSION_PRINT_H__ */
 
 /*

@@ -298,9 +298,9 @@ Plugin::text(Inkscape::Extension::Print *module, char const *text, NR::Point p, 
     return Inkscape::Extension::Implementation::Implementation::text(module, text, p, style);
 }
 
-}; /* namespace Implementation */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Implementation */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 /*
   Local Variables:

@@ -28,12 +28,9 @@
 
 #include <glib.h>
 
-namespace Inkscape
-{
-namespace UI
-{
-namespace Dialogs
-{
+namespace Inkscape {
+namespace UI {
+namespace Dialogs {
 
 
 //#########################################################################
@@ -342,9 +339,9 @@ void DebugDialogImpl::releaseLogMessages()
 
 
 
-}; //namespace Dialogs
-}; //namespace UI
-}; //namespace Inkscape
+} //namespace Dialogs
+} //namespace UI
+} //namespace Inkscape
 
 //#########################################################################
 //## E N D    O F    F I L E

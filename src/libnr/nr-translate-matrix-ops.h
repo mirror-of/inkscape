@@ -5,7 +5,7 @@
 
 namespace NR {
 Matrix operator*(translate const &t, Matrix const &m);
-};
+}
 
 
 #endif /* !SEEN_LIBNR_NR_TRANSLATE_MATRIX_OPS_H */

@@ -238,7 +238,7 @@ operator<< (std::ostream &out_file, const Dependency & in_dep)
     return out_file;
 }
 
-};}; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 
 /*
   Local Variables:

@@ -73,10 +73,8 @@ static int potraceStatus(char *msg, void *userData)
 //required by potrace
 struct info info;
 
-namespace Inkscape
-{
-namespace Potrace
-{
+namespace Inkscape {
+namespace Potrace {
 
 
 /**
@@ -440,6 +438,6 @@ PotraceTracingEngine::abort()
 
 
 
-};//namespace Potrace
-};//namespace Inkscape
+}  //namespace Potrace
+}  //namespace Inkscape
 

@@ -101,7 +101,7 @@ gchar *parse_css_url(const gchar *string) {
     return result;
 }
 
-};
+}
 
 #define BMAX 8192
 

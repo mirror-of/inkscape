@@ -17,14 +17,10 @@
 
 #include "dom.h"
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
-namespace views
-{
+namespace w3c {
+namespace org {
+namespace dom {
+namespace views {
 
 
 //Forward declaration
@@ -66,10 +62,10 @@ class DocumentView
 
 
 
-};//namespace views
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace views
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 #endif // __VIEWS_H__

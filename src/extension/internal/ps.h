@@ -83,8 +83,8 @@ public:
 	static void init (void);
 };
 
-}; /* namespace Internal */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Internal */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 #endif /* __EXTENSION_INTERNAL_PS_H__ */

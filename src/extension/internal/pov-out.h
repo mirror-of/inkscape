@@ -18,12 +18,9 @@
 
 #include <extension/implementation/implementation.h>
 
-namespace Inkscape
-{
-namespace Extension
-{
-namespace Internal
-{
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
 
 class PovOutput : public Inkscape::Extension::Implementation::Implementation
 {
@@ -43,9 +40,9 @@ class PovOutput : public Inkscape::Extension::Implementation::Implementation
 
 
 
-}; //namespace Internal
-}; //namespace Extension
-}; //namespace Inkscape
+}  //namespace Internal
+}  //namespace Extension
+}  //namespace Inkscape
 
 
 

@@ -20,10 +20,8 @@
 #include <trace/trace.h>
 
 
-namespace Inkscape
-{
-namespace Potrace
-{
+namespace Inkscape {
+namespace Potrace {
 
 
 class PotraceTracingEngine : public TracingEngine
@@ -189,8 +187,8 @@ class PotraceTracingEngine : public TracingEngine
 
 
 
-};//namespace Potrace
-};//namespace Inkscape
+}  //namespace Potrace
+}  //namespace Inkscape
 
 
 #endif  //__INKSCAPE_POTRACE_H__

@@ -650,6 +650,6 @@ Extension::set_param_string (const gchar * name, const gchar * value, SPReprDoc 
     return value;
 }
 
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 

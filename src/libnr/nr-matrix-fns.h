@@ -3,7 +3,7 @@
 
 #include "nr-matrix.h"
 
-namespace NR{
+namespace NR {
 
 /** Given a matrix m such that unit_circle = m*x, this returns the
  * quadratic form x*A*x = 1. */
@@ -32,7 +32,7 @@ bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 Matrix transform(Matrix const &m);
 translate get_translation(Matrix const &m);
 
-};
+}  // namespace NR
 
 #endif /* !SEEN_NR_MATRIX_FNS_H */
 

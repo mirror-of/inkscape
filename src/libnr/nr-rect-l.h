@@ -10,7 +10,7 @@ struct NRRectL {
 #include <libnr/nr-rect.h>
 #include <libnr/nr-point-l.h>
 
-namespace NR{
+namespace NR {
 
 
 class IRect {
@@ -115,7 +115,7 @@ private:
 
 
 
-};
+}  // namespace NR
 
 #endif /* !SEEN_NR_RECT_L_H */
 

@@ -17,14 +17,10 @@
 
 #include "dom.h"
 
-namespace w3c
-{
-namespace org
-{
-namespace dom
-{
-namespace stylesheets
-{
+namespace w3c {
+namespace org {
+namespace dom {
+namespace stylesheets {
 
 
 
@@ -200,10 +196,10 @@ class DocumentStyle
 
 
 
-};//namespace stylesheets
-};//namespace dom
-};//namespace org
-};//namespace w3c
+}  //namespace stylesheets
+}  //namespace dom
+}  //namespace org
+}  //namespace w3c
 
 
 #endif // __STYLESHEETS_H__

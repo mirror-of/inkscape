@@ -28,7 +28,7 @@ namespace Inkscape {
  */
 gchar *parse_css_url(const gchar *string);
 
-};
+}  // namespace Inkscape
 
 class SPIFloat;
 class SPIScale24;

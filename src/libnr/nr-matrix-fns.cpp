@@ -1,7 +1,7 @@
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-matrix-fns.h>
 
-namespace NR{
+namespace NR {
 
 Matrix elliptic_quadratic_form(Matrix const &m) {
     double const od = m[0] * m[1]  +  m[2] * m[3];
@@ -35,7 +35,7 @@ translate get_translation(Matrix const &m) {
     return translate(m[4], m[5]);
 }
 
-};
+}  // namespace NR
 
 
 /*

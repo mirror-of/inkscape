@@ -18,7 +18,7 @@ public:
 
 };
 
-};};}; /* namespace Inkscape, Extension, Implementation */
+} } }  /* namespace Inkscape, Extension, Implementation */
 
 #endif /* INKSCAPE_EXTENSION_INTERNAL_GDKPIXBUF_INPUT_H__ */
 

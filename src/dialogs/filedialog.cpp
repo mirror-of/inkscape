@@ -1429,9 +1429,9 @@ FileSaveDialogImpl::getFilename()
 
 
 
-}; //namespace Dialogs
-}; //namespace UI
-}; //namespace Inkscape
+} //namespace Dialogs
+} //namespace UI
+} //namespace Inkscape
 
 
 /*

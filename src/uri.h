@@ -75,7 +75,7 @@ private:
     Impl *_impl;
 };
 
-}; /* namespace Inkscape */
+}  /* namespace Inkscape */
 
 #endif
 

@@ -216,7 +216,7 @@ Input::prefs (const gchar *uri)
     return imp->prefs_input(this, uri);
 }
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 
 /*
   Local Variables:

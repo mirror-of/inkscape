@@ -1765,7 +1765,7 @@ Verb * Verb::_base_verbs[] = {
 };
 
 
-}; /* namespace Inkscape */
+}  /* namespace Inkscape */
 
 /*
   Local Variables:

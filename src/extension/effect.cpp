@@ -43,7 +43,7 @@ Effect::effect (SPDocument * doc)
     return imp->effect(this, doc);
 }
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 
 /*
   Local Variables:

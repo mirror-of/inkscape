@@ -860,9 +860,9 @@ size_t pipe_t::write(const void* buffer, size_t size) {
 
 #endif // (Non-)Win32
 
-}; /* Inkscape  */
-}; /* module  */
-}; /* Implementation  */
+}  /* Inkscape  */
+}  /* module  */
+}  /* Implementation  */
 
 /*
   Local Variables:

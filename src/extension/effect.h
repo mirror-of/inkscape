@@ -29,7 +29,7 @@ public:
     void         effect  (SPDocument * doc);
 };
 
-}; }; /* namespace Inkscape, Extension */
+} }  /* namespace Inkscape, Extension */
 #endif /* INKSCAPE_EXTENSION_EFFECT_H__ */
 
 /*

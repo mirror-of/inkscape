@@ -213,7 +213,7 @@ GimpGrad::open (Inkscape::Extension::Input *module, gchar const *filename)
 	return sp_document_new_from_mem(outsvg.c_str(), outsvg.length(), TRUE, TRUE);
 }
 
-}; }; }; /* namespace Plugin; Extension; Inkscape */
+} } }  /* namespace Plugin; Extension; Inkscape */
 
 #include <extension/implementation/plugin-link.h>
 

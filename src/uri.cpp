@@ -245,7 +245,7 @@ gchar *URI::Impl::toString() const {
     }
 }
 
-};
+}
 
 
 /*

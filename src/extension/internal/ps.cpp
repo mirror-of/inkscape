@@ -1069,9 +1069,9 @@ PrintPS::init(void)
 }
 
 
-}; /* namespace Internal */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Internal */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 /* End of GNU GPL code */
 

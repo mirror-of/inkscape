@@ -15,9 +15,9 @@ class Parameter;
 
 namespace Implementation {
 class Implementation;
-};
+}
 
-};};
+} }
 
 #endif /* !SEEN_EXTENSION_FORWARD_H */
 

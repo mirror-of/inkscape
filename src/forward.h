@@ -24,7 +24,7 @@
 namespace Inkscape {
 struct Application;
 struct ApplicationClass;
-};
+}
 
 /* Editing window */
 
@@ -185,7 +185,7 @@ class StopOnTrue;
 namespace Inkscape {
 class URI;
 class URIReference;
-};
+}
 
 struct box_solution;
 

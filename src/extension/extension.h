@@ -184,8 +184,8 @@ public:
 };
 */
 
-}; /* namespace Extension */
-}; /* namespace Inkscape */
+}  /* namespace Extension */
+}  /* namespace Inkscape */
 
 #endif /* __INK_EXTENSION_H__ */
 

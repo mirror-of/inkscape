@@ -496,8 +496,8 @@ build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp)
     return ext;
 }
 
-}; }; /* namespace Inkscape::Extension */
 
+} } /* namespace Inkscape::Extension */
 
 /*
   Local Variables:

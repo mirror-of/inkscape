@@ -66,7 +66,7 @@ class SPNodeContext;
 
 
 
-namespace Path{
+namespace Path {
 
 /**
  * In the following data model.   Nodepaths are made up of subpaths which
@@ -210,7 +210,7 @@ class Node {
 	NodeSide p;
 };
 
-};
+}  // namespace Path
 
 /**
  *

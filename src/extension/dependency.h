@@ -65,7 +65,7 @@ public:
 
 std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);
 
-};}; /* namespace Extension, Inkscape */
+} }  /* namespace Extension, Inkscape */
 
 #endif /* INKSCAPE_EXTENSION_DEPENDENCY_H__ */
 

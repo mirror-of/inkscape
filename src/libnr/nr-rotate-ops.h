@@ -26,7 +26,7 @@ inline rotate operator/(rotate const &numer, rotate const &denom)
     return numer * denom.inverse();
 }
 
-}; /* namespace NR */
+}  /* namespace NR */
 
 
 #endif /* !SEEN_NR_ROTATE_OPS_H */
