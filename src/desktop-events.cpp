@@ -422,7 +422,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 
 		// unitmenu
 		/* fixme: We should allow percents here too, as percents of the canvas size */
-		u = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+		u = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), sp_desktop_get_default_unit (desktop));
     
 		// spinbutton
