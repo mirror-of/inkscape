@@ -6,6 +6,7 @@
     * src/dialogs/sp-attribute-widget.cpp: went hunting for other static
       l18n strings.  Fixed some here too.
 	* autogen.sh: cleanups and more debugging.
+	* share/extensions/sk2svg.sh: tempfile cleanups from pjrm (patch #990009)
 
 2004-07-18  MenTaLguY  <mental@rydia.net>
 
