@@ -66,12 +66,14 @@ noinst_LIBRARIES =	\
 	util/libinkutil.a \
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
+	libnr/libtest-nr.a	\
 	libnrtype/libnrtype.a	\
 	livarot/libvarot.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
 	trace/libtrace.a  \
 	xml/libspxml.a	\
+	xml/libtest-xml.a	\
 	libinkpost.a
 
 DISTCLEANFILES =	\
@@ -131,6 +133,7 @@ EXTRA_PROGRAMS =	\
 	libnr/testnr
 
 TESTS =	\
+	test-all$(EXEEXT)	\
 	attributes-test$(EXEEXT)	\
 	dir-util-test$(EXEEXT)	\
 	extract-uri-test$(EXEEXT)	\
@@ -149,6 +152,7 @@ TESTS =	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
 	libnr/test-nr$(EXEEXT)	\
+	xml/test-xml$(EXEEXT)	\
 	xml/quote-test$(EXEEXT)	\
 	xml/repr-action-test$(EXEEXT)
 
@@ -160,6 +164,7 @@ TESTS =	\
 # TESTS items can be scripts etc.
 
 check_PROGRAMS =	\
+	test-all	\
 	attributes-test	\
 	dir-util-test	\
 	extract-uri-test	\
@@ -178,11 +183,22 @@ check_PROGRAMS =	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
 	libnr/test-nr	\
+	xml/test-xml	\
 	xml/quote-test	\
 	xml/repr-action-test
 
 #	io/streamtest
 
+
+test-all.cpp: $(libnr_test_nr_a_SOURCES) $(xml_test_xml_a_SOURCES) $(libnr_test_nr_includes)  $(xml_test_xml_includes)
+	cxxtestgen.pl --error-printer -root -o test-all.cpp $(libnr_test_nr_includes)  $(xml_test_xml_includes)
+
+test_all_SOURCES = \
+	test-all.cpp
+
+test_all_LDADD =	\
+	$(libnr_test_nr_LDADD)	\
+	$(xml_test_xml_LDADD)
 
 
 # ################################################
