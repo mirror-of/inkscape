@@ -23,9 +23,11 @@
 #include "desktop-snap.h"
 #include "geom.h"
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-scale.h>
+#include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
 
-/* minimal distance to norm before point is considered for snap */
+/* Minimal distance to norm before point is considered for snap. */
 #define MIN_DIST_NORM 1.0
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))

@@ -12,6 +12,8 @@
 
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-rotate-ops.h>
+#include <libnr/nr-scale-ops.h>
 
 void            Path::ConvertWithBackData(double treshhold)
 {

@@ -24,6 +24,8 @@
 #include "object-edit.h"
 
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-scale.h>
+#include <libnr/nr-scale-ops.h>
 
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 

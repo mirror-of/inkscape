@@ -22,6 +22,9 @@
 #include "sp-defs.h"
 /* #include "sp-namedview.h" */
 #include "sp-root.h"
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-scale-ops.h>
 
 static void sp_root_class_init (SPRootClass *klass);
 static void sp_root_init (SPRoot *root);
@@ -439,7 +442,8 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		 * fixme: height seems natural, as this makes the inner svg element
 		 * fixme: self-contained. The spec is vague here.
 		 */
-		root->c2p = NR::translate(NR::Point(root->x.computed, root->y.computed));
+		root->c2p = NR::Matrix(NR::translate(root->x.computed,
+						     root->y.computed));
 	}
 
 	if (root->viewBox_set) {

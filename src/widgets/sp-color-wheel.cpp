@@ -24,6 +24,7 @@
 #include "gtk/gtkwindow.h"
 
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-rotate-ops.h"
 
 #define WHEEL_SIZE 96
 

@@ -26,6 +26,7 @@ typedef struct _SPDesktopWidgetClass SPDesktopWidgetClass;
 
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include "helper/helper-forward.h"
 #include "helper/units.h"
 #include "forward.h"

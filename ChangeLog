@@ -8,6 +8,11 @@
 	* src/inkview.cpp: Address compiler warning: declare is_jar iff it is
 	defined, i.e. #ifdef WITH_INKJAR.
 
+	* src/desktop-snap.cpp, src/desktop.h, src/object-edit.cpp,
+	src/sp-root.cpp, src/livarot/PathConversion.cpp,
+	src/widgets/sp-color-wheel.cpp:
+	Add some #include's to reduce how much nr-matrix.h must pull in.
+
 	* src/desktop-affine.cpp, src/knotholder.cpp,
 	src/desktop-events.cpp, src/nodepath.cpp, src/sp-ellipse.cpp,
 	src/sp-image.cpp, src/sp-item-notify-moveto.cpp, src/sp-rect.cpp,
