@@ -23,9 +23,16 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
 
+#include <gtk/gtk.h>
+
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include "helper/sp-intl.h"
+#include "interface.h"
+#include "verbs.h"
+#include "prefs-utils.h"
+#include "inkscape.h"
+#include "macros.h"
 
 #include <glib.h>
 
@@ -53,7 +60,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     /**
      * Constructor
      */
-    TraceDialogImpl();
+	TraceDialogImpl();
 
     /**
      * Destructor
@@ -75,7 +82,6 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
      * Callback from OK or Cancel
      */
     void responseCallback(int response_id);
-
 
     private:
 
@@ -290,12 +296,30 @@ void TraceDialogImpl::responseCallback(int response_id)
  */
 TraceDialogImpl::TraceDialogImpl()
 {
+	
+    { 
+// This block is a much simplified version of the code used in all other dialogs for
+// saving/restoring geometry, transientising, passing events to the aplication, and
+// hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
+// mutilated somewhat. This block should be removed when the same functionality is made
+// available to all gtkmm dialogs via a base class.
+	GtkWidget *dlg = GTK_WIDGET(gobj());
 
-    set_title(_("Bitmap Tracing"));
-    set_size_request(380, 400);
+	gchar title[500];
+	sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
+	set_title(title);
+
+      gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+
+      sp_transientize (dlg);
+                           
+      gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
+                        
+      g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
+      g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
+   }
 
     Gtk::VBox *mainVBox = get_vbox();
-
 
     //##Set up the Potrace panel
 
@@ -390,7 +414,8 @@ TraceDialogImpl::TraceDialogImpl()
     notebook.append_page(potraceBox, _("Potrace"));
 
     //##Set up the Other panel
-    notebook.append_page(otherBox, _("Other"));
+    // This may be reenabled when we have another tracer; now an empty tab is confusing so I'm disabling it
+    //    notebook.append_page(otherBox, _("Other"));
 
     //##Put the notebook on the dialog
     mainVBox->pack_start(notebook);
