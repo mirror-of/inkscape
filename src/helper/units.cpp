@@ -117,16 +117,15 @@ sp_convert_distance(gdouble *distance, SPUnit const *from, SPUnit const *to)
     }
     if ((from->base == SP_UNIT_VOLATILE) || (to->base == SP_UNIT_VOLATILE)) return FALSE;
 
-    if ((from->base == SP_UNIT_DEVICE) && (to->base == SP_UNIT_ABSOLUTE) ||
-        (from->base == SP_UNIT_ABSOLUTE) && (to->base == SP_UNIT_DEVICE)) {
+    if ((from->base == to->base)
+        || (from->base == SP_UNIT_DEVICE) && (to->base == SP_UNIT_ABSOLUTE)
+        || (from->base == SP_UNIT_ABSOLUTE) && (to->base == SP_UNIT_DEVICE))
+    {
         *distance = *distance * from->unittobase / to->unittobase;
         return TRUE;
     }
 
-    if (from->base != to->base) return FALSE;
-
-    *distance = *distance * from->unittobase / to->unittobase;
-    return TRUE;
+    return FALSE;
 }
 
 /** @param devicetransform for device units. */
