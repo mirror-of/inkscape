@@ -49,7 +49,7 @@ Path::Affiche()
 {
   printf("path: %i cmds, %i data (%i max)\n",descr_cmd.size(),ddata_nb,ddata_max);
   for (int i=0;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     printf("cmd %i : t=%i s=%i ",i,typ,descr_cmd[i].dStart);
     switch ( typ ) {
       case descr_lineto:
@@ -234,7 +234,7 @@ Path::InsertForcePoint (int at)
   }
   int  dataPos=ddata_nb;
   for (int i=at;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
          typ == descr_interm_bezier ) {
       dataPos=descr_cmd[i].dStart;
@@ -301,7 +301,7 @@ Path::InsertMoveTo (NR::Point const &iPt,int at)
   }
   int  dataPos=ddata_nb;
   for (int i=at;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
          typ == descr_interm_bezier ) {
       dataPos=descr_cmd[i].dStart;
@@ -350,7 +350,7 @@ void Path::InsertLineTo(NR::Point const &iPt, int at)
     int dataPos = ddata_nb;
     
     for (int i = at; i < int(descr_cmd.size()); i++) {
-        int const typ = descr_cmd[i].flags & descr_type_mask;
+        int const typ = descr_cmd[i].getType();
         if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto ||
              typ == descr_cubicto || typ == descr_bezierto || typ == descr_interm_bezier ) {
             
@@ -397,7 +397,7 @@ Path::InsertCubicTo (NR::Point const &iPt, NR::Point const &iStD, NR::Point cons
   }
   int  dataPos=ddata_nb;
   for (int i=at;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
          typ == descr_interm_bezier ) {
       dataPos=descr_cmd[i].dStart;
@@ -449,7 +449,7 @@ Path::InsertArcTo (NR::Point const &iPt, double iRx, double iRy, double angle,
   }
   int  dataPos=ddata_nb;
   for (int i=at;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
          typ == descr_interm_bezier ) {
       dataPos=descr_cmd[i].dStart;
@@ -577,7 +577,7 @@ Path::InsertIntermBezierTo (NR::Point const &iPt,int at)
   }
   int  dataPos=ddata_nb;
   for (int i=at;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
          typ == descr_interm_bezier ) {
       dataPos=descr_cmd[i].dStart;
@@ -627,7 +627,7 @@ Path::InsertBezierTo (NR::Point const &iPt,int iNb,int at)
   }
   int  dataPos=ddata_nb;
   for (int i=at;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     if ( typ == descr_lineto || typ == descr_moveto || typ == descr_arcto || typ == descr_cubicto || typ == descr_bezierto ||
          typ == descr_interm_bezier ) {
       dataPos=descr_cmd[i].dStart;
@@ -829,7 +829,7 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 		return;
 	}
 	path_descr theD = descr_cmd[piece];
-	int typ = theD.flags & descr_type_mask;
+	int typ = theD.getType();
 	NR::Point tgt;
 	double len, rad;
 	if (typ == descr_moveto) {
@@ -848,7 +848,7 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 	} else if (typ == descr_bezierto || typ == descr_interm_bezier) {
 		int bez_st = piece;
 		while (bez_st >= 0) {
-			int nt = descr_cmd[bez_st].flags & descr_type_mask;
+			int nt = descr_cmd[bez_st].getType();
 			if (nt == descr_bezierto)
 				break;
 			bez_st--;
@@ -908,13 +908,13 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 		return;
 	}
 	path_descr theD = descr_cmd[piece];
-	int typ = theD.flags & descr_type_mask;
+	int typ = theD.getType();
 	double len, rad;
 	if (typ == descr_moveto) {
 		return PointAndTangentAt (piece + 1, 0.0, pos,tgt);
 	} else if (typ == descr_close ) {
     int cp=piece-1;
-    while ( cp >= 0 && (descr_cmd[cp].flags&descr_type_mask) != descr_moveto ) cp--;
+    while ( cp >= 0 && (descr_cmd[cp].getType()) != descr_moveto ) cp--;
     if ( cp < 0 ) {
     } else {
       path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[cp].dStart );
@@ -936,7 +936,7 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 	} else if (typ == descr_bezierto || typ == descr_interm_bezier) {
 		int bez_st = piece;
 		while (bez_st >= 0) {
-			int nt = descr_cmd[bez_st].flags & descr_type_mask;
+			int nt = descr_cmd[bez_st].getType();
 			if (nt == descr_bezierto) break;
 			bez_st--;
 		}
@@ -996,7 +996,7 @@ void Path::Transform(const NR::Matrix &trans)
         g_assert(descr_cmd[i].dStart < ddata_max);
         NR::Point *p = descr_data + descr_cmd[i].dStart;
         
-        switch ( descr_cmd[i].flags & descr_type_mask ) {
+        switch ( descr_cmd[i].getType() ) {
       
             case descr_lineto:
             {
@@ -1051,7 +1051,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
 	bool empty=true;
 	NR::Point   lastP(0,0);
   for (int i=0;i<int(descr_cmd.size());i++) {
-    int typ=descr_cmd[i].flags&descr_type_mask;
+    int const typ = descr_cmd[i].getType();
     switch ( typ ) {
       case descr_lineto:
       {
@@ -1170,7 +1170,7 @@ Path::svg_dump_path ()
 	for (int i = 0; i < int(descr_cmd.size()); i++) {
 
 		Path::path_descr theD = descr_cmd[i];
-		int typ = theD.flags & descr_type_mask;
+		int typ = theD.getType();
 
 		if (typ == descr_moveto) {
 			Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(descr_data+theD.dStart);

@@ -123,6 +123,12 @@ public:
     path_descr() : flags(0), associated(-1), tSt(0), tEn(1), dStart(-1) {}
     path_descr(int f, int d) : flags(f), associated(-1), tSt(0), tEn(1), dStart(d) {}
 
+    int getType() const { return flags & descr_type_mask; }
+    void setType(int t) {
+      flags &= ~descr_type_mask;
+      flags |= t;
+    }
+    
     int    flags;         // most notably contains the path command no
     int    associated;		// index in the polyline of the point that ends the path portion of this command
     double tSt;

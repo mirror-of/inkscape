@@ -38,7 +38,7 @@ void            Path::ConvertWithBackData(double treshhold)
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].flags&descr_type_mask;
+    int firstTyp=descr_cmd[0].getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -50,7 +50,7 @@ void            Path::ConvertWithBackData(double treshhold)
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
             path_descr*  curD=&descr_cmd[curP];
-		int          nType=curD->flags&descr_type_mask;
+		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
 			AddForcedPoint(curX,curP,1.0);
@@ -175,7 +175,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].flags&descr_type_mask;
+    int firstTyp=descr_cmd[0].getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -192,7 +192,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
             path_descr*  curD=&descr_cmd[curP];
-		int          nType=curD->flags&descr_type_mask;
+		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
 			AddForcedPoint(curX,curP,1.0);
@@ -349,7 +349,7 @@ void            Path::Convert(double treshhold)
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].flags&descr_type_mask;
+    int firstTyp=descr_cmd[0].getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -363,7 +363,7 @@ void            Path::Convert(double treshhold)
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
             path_descr*  curD=&descr_cmd[curP];
-		int          nType=curD->flags&descr_type_mask;
+		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
 			(curD)->associated=AddForcedPoint(curX);
@@ -540,7 +540,7 @@ void            Path::ConvertEvenLines(double treshhold)
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].flags&descr_type_mask;
+    int firstTyp=descr_cmd[0].getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -554,7 +554,7 @@ void            Path::ConvertEvenLines(double treshhold)
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
             path_descr*  curD=&descr_cmd[curP];
-		int          nType=curD->flags&descr_type_mask;
+		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
 			(curD)->associated=AddForcedPoint(curX);
@@ -735,7 +735,7 @@ const NR::Point Path::PrevPoint(int i) const
 	/* TODO: I suspect this should assert `(unsigned) i < descr_nb'.  We can probably change
 	   the argument to unsigned.  descr_nb should probably be changed to unsigned too. */
 	g_assert( i >= 0 );
-	switch ( descr_cmd[i].flags & descr_type_mask ) {
+	switch ( descr_cmd[i].getType() ) {
 		case descr_moveto: {
 			path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[i].dStart);
 			return nData->p;

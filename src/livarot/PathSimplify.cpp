@@ -1290,7 +1290,7 @@ Path::Coalesce (double tresh)
   
   lastAddition.flags = descr_moveto;
   for (int curP = 0; curP < int(descr_cmd.size()); curP++) {
-    int typ = descr_cmd[curP].flags & descr_type_mask;
+    int typ = descr_cmd[curP].getType();
     int nextA = lastA;
     if (typ == descr_moveto) {
       if (lastAddition.flags != descr_moveto) {
@@ -1464,7 +1464,7 @@ Path::DoCoalesce (Path * /*dest*/, double /*tresh*/)
 }
 void   Path::FlushPendingAddition(Path* dest,path_descr &lastAddition,path_descr_cubicto &lastCubic,int lastAP)
 {
-  int   typ=lastAddition.flags&descr_type_mask;
+  int const typ = lastAddition.getType();
   if ( typ == descr_moveto ) {
     if ( lastAP >= 0 ) {
       path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd[lastAP].dStart);

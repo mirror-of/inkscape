@@ -59,7 +59,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
             if (curP >= int(descr_cmd.size())) {
                 break;
             }
-            int typ = descr_cmd[curP].flags & descr_type_mask;
+            int typ = descr_cmd[curP].getType();
             if (typ == descr_moveto) {
                 break;
             }
@@ -76,9 +76,9 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
             int curD = curP - 1;
             NR::Point curX;
             NR::Point nextX;
-            int firstTyp = descr_cmd[curD].flags & descr_type_mask;
+            int firstTyp = descr_cmd[curD].getType();
             bool const needClose = (firstTyp == descr_close);
-            while (curD > lastM && (descr_cmd[curD].flags & descr_type_mask) == descr_close) {
+            while (curD > lastM && descr_cmd[curD].getType() == descr_close) {
                 curD--;
             }
             
@@ -88,7 +88,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                 rev->Reset ();
                 rev->MoveTo(curX);
                 while (curD > lastM) {
-                    int const typ = descr_cmd[curD].flags & descr_type_mask;
+                    int const typ = descr_cmd[curD].getType();
                     if (typ == descr_moveto) {
                         //                                              rev->Close();
                         curD--;
@@ -121,8 +121,8 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                         curD--;
                     }  else if (typ == descr_interm_bezier) {
                         int nD = curD - 1;
-                        while (nD > lastM && (descr_cmd[nD].flags & descr_type_mask) != descr_bezierto) nD--;
-                        if ((descr_cmd[nD].flags & descr_type_mask) !=  descr_bezierto)  {
+                        while (nD > lastM && descr_cmd[nD].getType() != descr_bezierto) nD--;
+                        if ((descr_cmd[nD].getType()) !=  descr_bezierto)  {
                             // pas trouve le debut!?
                             // Not find the start?!
                             nextX = PrevPoint (nD);
@@ -253,7 +253,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		do {
 			curP++;
 			if (curP >= int(descr_cmd.size())) break;
-			int typ = descr_cmd[curP].flags & descr_type_mask;
+			int typ = descr_cmd[curP].getType();
 			if (typ == descr_moveto) break;
 		} while (curP < int(descr_cmd.size()));
 		if (curP >= int(descr_cmd.size()))  curP = descr_cmd.size();
@@ -263,13 +263,13 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 			int curD = curP - 1;
 			NR::Point curX;
 			NR::Point nextX;
-			while (curD > lastM && (descr_cmd[curD].flags & descr_type_mask) == descr_close) curD--;
+			while (curD > lastM && (descr_cmd[curD].getType()) == descr_close) curD--;
 			if (curD > lastM) {
 				curX = PrevPoint (curD);
 				rev->Reset ();
 				rev->MoveTo (curX);
 				while (curD > lastM) {
-					int typ = descr_cmd[curD].flags & descr_type_mask;
+					int typ = descr_cmd[curD].getType();
 					if (typ == descr_moveto) {
 						rev->Close ();
 						curD--;
@@ -301,8 +301,8 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 						curD--;
 					} else if (typ == descr_interm_bezier) {
 						int nD = curD - 1;
-						while (nD > lastM && (descr_cmd[nD].flags & descr_type_mask) != descr_bezierto) nD--;
-						if (descr_cmd[nD].flags & descr_type_mask != descr_bezierto) {
+						while (nD > lastM && (descr_cmd[nD].getType()) != descr_bezierto) nD--;
+						if (descr_cmd[nD].getType() != descr_bezierto) {
 							// pas trouve le debut!?
 							nextX = PrevPoint (nD);
 							rev->LineTo (nextX);
@@ -365,7 +365,7 @@ void Path::SubContractOutline(int off, int num_pd,
     // le moveto
     NR::Point curX;
     {
-        int firstTyp = descr_cmd[off].flags & descr_type_mask;
+        int firstTyp = descr_cmd[off].getType();
         if ( firstTyp != descr_moveto ) {
             curX[0] = curX[1] = 0;
             curP = 0;
@@ -384,7 +384,7 @@ void Path::SubContractOutline(int off, int num_pd,
 	while (curP < num_pd)
 	{
             path_descr *curD = &descr_cmd[off + curP];
-		int nType = curD->flags & descr_type_mask;
+		int nType = curD->getType();
 		NR::Point nextX;
 		NR::Point stPos, enPos, stTgt, enTgt, stNor, enNor;
 		double stRad, enRad, stTle, enTle;
@@ -843,7 +843,7 @@ void Path::SubContractOutline(int off, int num_pd,
 bool
 Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddata)
 {
-	switch(curD->flags & descr_type_mask) {
+	switch(curD->getType()) {
     case descr_lineto:
     {
 		path_descr_lineto* nData=(path_descr_lineto*)(ddata+curD->dStart);

@@ -689,7 +689,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
 	    }
       else
 	    {
-	      int nType = from->descr_cmd[nPiece].flags & descr_type_mask;
+	      int nType = from->descr_cmd[nPiece].getType();
 	      if (nType == descr_close || nType == descr_moveto
             || nType == descr_forced)
         {
@@ -932,7 +932,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   NR::Point nx = getPoint(getEdge(bord).en).x;
   int inBezier = -1, nbInterm = -1;
   int typ;
-  typ = from->descr_cmd[nPiece].flags & descr_type_mask;
+  typ = from->descr_cmd[nPiece].getType();
   Path::path_descr_bezierto *nBData = NULL;
   if (typ == descr_bezierto)
   {
@@ -945,7 +945,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
     int n = nPiece - 1;
     while (n > 0)
     {
-      typ = from->descr_cmd[n].flags & descr_type_mask;
+      typ = from->descr_cmd[n].getType();
       if (typ == descr_bezierto)
       {
         inBezier = n;
