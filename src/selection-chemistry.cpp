@@ -790,7 +790,7 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
 		SPItem *item = SP_ITEM(l->data);
 
 		// see comment in seltrans.cpp/sp_sel_trans_ungrab
-		if (SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject())) {
+		if (affine.is_translation() && SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject())) {
 			; //do nothing
 		} else {
 			sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
