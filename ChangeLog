@@ -1,3 +1,9 @@
+2004-09-28  Ted Gould  <ted@gould.cx>
+
+	* src/verbs.cpp, src/verbs.h, src/view.cpp:
+
+	Making it so that actions get deleted as views get destroyed.
+
 2004-09-27  Ted Gould  <ted@gould.cx>
 
 	* src/desktop.h, src/forward.h, src/interface.cpp, src/interface.h,

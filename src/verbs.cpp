@@ -109,13 +109,13 @@ namespace Inkscape {
 class FileVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     FileVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -128,13 +128,13 @@ public:
 class EditVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     EditVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -147,13 +147,13 @@ public:
 class SelectionVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     SelectionVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -166,13 +166,13 @@ public:
 class LayerVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     LayerVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -185,13 +185,13 @@ public:
 class ObjectVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     ObjectVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -204,13 +204,13 @@ public:
 class ContextVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     ContextVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -223,13 +223,13 @@ public:
 class ZoomVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     ZoomVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -242,13 +242,13 @@ public:
 class DialogVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     DialogVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -261,13 +261,13 @@ public:
 class HelpVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     HelpVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -280,13 +280,13 @@ public:
 class TutorialVerb : public Verb {
 private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
-	static SPActionEventVector vector;
+    static SPActionEventVector vector;
 protected:
-	virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (SPView * view);
 public:
-	/** \brief Use the Verb initializer with the same parameters. */
+    /** \brief Use the Verb initializer with the same parameters. */
     TutorialVerb(const unsigned int code,
-			 gchar const * id,
+             gchar const * id,
              gchar const * name,
              gchar const * tip,
              gchar const * image) :
@@ -299,12 +299,12 @@ Verb::VerbTable Verb::_verbs;
 
 /** \brief  Create a verb without a code.
 
-	This function calls the other constructor for all of the parameters,
-	but generates the code.  It is important to READ THE OTHER DOCUMENTATION
-	it has important details in it.  To generate the code a static is
-	used which starts at the last static value: \c SP_VERB_LAST.  For
-	each call it is incremented.  The list of allocated verbs is kept
-	in the \c _verbs hashtable which is indexed by the \c code.
+    This function calls the other constructor for all of the parameters,
+    but generates the code.  It is important to READ THE OTHER DOCUMENTATION
+    it has important details in it.  To generate the code a static is
+    used which starts at the last static value: \c SP_VERB_LAST.  For
+    each call it is incremented.  The list of allocated verbs is kept
+    in the \c _verbs hashtable which is indexed by the \c code.
 */
 Verb::Verb(gchar const * id, gchar const * name, gchar const * tip, gchar const * image)
 {
@@ -317,12 +317,12 @@ Verb::Verb(gchar const * id, gchar const * name, gchar const * tip, gchar const 
 
 /** \brief  Destroy a verb.
 
-  	The only allocated variable is the _actions variable.  If it has
-	been allocated it is deleted.
+      The only allocated variable is the _actions variable.  If it has
+    been allocated it is deleted.
 */
 Verb::~Verb (void)
 {
-	/** \todo all the actions need to be cleaned up first */
+    /** \todo all the actions need to be cleaned up first */
     if (_actions != NULL) {
         delete _actions;
     }
@@ -332,9 +332,9 @@ Verb::~Verb (void)
 
 /** \brief  Verbs are no good without actions.  This is a place holder
             for a function that every subclass should write.  Most
-			can be written using \c make_action_helper.
-	\param  view  Which view the action should be created for.
-	\return NULL to represent error (this function shouldn't ever be called)
+            can be written using \c make_action_helper.
+    \param  view  Which view the action should be created for.
+    \return NULL to represent error (this function shouldn't ever be called)
 */
 SPAction *
 Verb::make_action (SPView * view)
@@ -344,10 +344,10 @@ Verb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c FileVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 FileVerb::make_action (SPView * view)
@@ -357,10 +357,10 @@ FileVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c EditVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 EditVerb::make_action (SPView * view)
@@ -370,10 +370,10 @@ EditVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c SelectionVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 SelectionVerb::make_action (SPView * view)
@@ -382,10 +382,10 @@ SelectionVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c LayerVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 LayerVerb::make_action (SPView * view)
@@ -394,10 +394,10 @@ LayerVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c ObjectVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 ObjectVerb::make_action (SPView * view)
@@ -406,10 +406,10 @@ ObjectVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c ContextVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 ContextVerb::make_action (SPView * view)
@@ -418,10 +418,10 @@ ContextVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c ZoomVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 ZoomVerb::make_action (SPView * view)
@@ -430,10 +430,10 @@ ZoomVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c DialogVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 DialogVerb::make_action (SPView * view)
@@ -442,10 +442,10 @@ DialogVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c HelpVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 HelpVerb::make_action (SPView * view)
@@ -454,10 +454,10 @@ HelpVerb::make_action (SPView * view)
 }
 
 /** \brief  Create an action for a \c TutorialVerb
-	\param  view  Which view the action should be created for
-	\return The built action.
+    \param  view  Which view the action should be created for
+    \return The built action.
 
-	Calls \c make_action_helper with the \c vector.
+    Calls \c make_action_helper with the \c vector.
 */
 SPAction *
 TutorialVerb::make_action (SPView * view)
@@ -468,15 +468,15 @@ TutorialVerb::make_action (SPView * view)
 /** \brief A quick little convience function to make building actions
            a little bit easier.
     \param  view    Which view the action should be created for.
-	\param  vector  The function vector for the verb.
-	\return The created action.
+    \param  vector  The function vector for the verb.
+    \return The created action.
 
-	This function does a couple of things.  The most obvious is that
-	it allocates and creates the action.  When it does this it
-	translates the \c _name and \c _tip variables.  This allows them
-	to be staticly allocated easily, and get translated in the end.  Then,
-	if the action gets crated, a listener is added to the action with
-	the vector that is passed in.
+    This function does a couple of things.  The most obvious is that
+    it allocates and creates the action.  When it does this it
+    translates the \c _name and \c _tip variables.  This allows them
+    to be staticly allocated easily, and get translated in the end.  Then,
+    if the action gets crated, a listener is added to the action with
+    the vector that is passed in.
 */
 SPAction *
 Verb::make_action_helper (SPView * view, SPActionEventVector * vector)
@@ -487,24 +487,24 @@ Verb::make_action_helper (SPView * view, SPActionEventVector * vector)
     action = sp_action_new(view, _id, _(_name),
                            _(_tip), _image, this);
 
-	if (action != NULL)
-		nr_active_object_add_listener ((NRActiveObject *) action,
-						(NRObjectEventVector *) vector,
-						sizeof (SPActionEventVector),
-						(void *) _code);
+    if (action != NULL)
+        nr_active_object_add_listener ((NRActiveObject *) action,
+                        (NRObjectEventVector *) vector,
+                        sizeof (SPActionEventVector),
+                        (void *) _code);
 
     return action;
 }
 
 /** \brief  A function to get an action if it exists, or otherwise to
             build it.
-	\param  view  The view which this action would relate to
-	\return The action, or NULL if there is an error.
+    \param  view  The view which this action would relate to
+    \return The action, or NULL if there is an error.
 
-	This function will get the action for a given view for this verb.  It
-	will create the verb if it can't be found in the ActionTable.  Also,
-	if the \c ActionTable has not been created, it gets created by this
-	function.
+    This function will get the action for a given view for this verb.  It
+    will create the verb if it can't be found in the ActionTable.  Also,
+    if the \c ActionTable has not been created, it gets created by this
+    function.
 */
 SPAction *
 Verb::get_action (SPView * view)
@@ -527,13 +527,70 @@ Verb::get_action (SPView * view)
     return action;
 }
 
+/** \brief  A function to remove the action associated with a view.
+    \param  view  Which view's actions should be removed.
+    \return None
+
+    This function looks for the action in \c _actions.  If it is
+    found then it is unreferenced and the entry in the action
+    table is erased.
+*/
+void
+Verb::delete_view (SPView * view)
+{
+    if (_actions == NULL) return;
+
+#if 0
+    static int count = 0;
+    std::cout << count++ << std::endl;
+#endif
+
+    ActionTable::iterator action_found = _actions->find(view);
+
+    if (action_found != _actions->end()) {
+        SPAction * action = action_found->second;
+        nr_object_unref(NR_OBJECT(action));
+        _actions->erase(action_found);
+    }
+
+    return;
+}
+
+/** \brief  A function to delete a view from all verbs
+    \param  view  Which view's actions should be removed.
+    \return None
+
+    This function first looks through _base_verbs and deteles
+    the view from all of those views.  If \c _verbs is not empty
+    then all of the entries in that table have all of the views
+    deleted also.
+*/
+void
+Verb::delete_all_view (SPView * view)
+{
+    for (int i = 0; i <= SP_VERB_LAST; i++) {
+        _base_verbs[i]->delete_view(view);
+    }
+
+    if (!_verbs.empty()) {
+        for (VerbTable::iterator thisverb = _verbs.begin();
+             thisverb != _verbs.end();
+             thisverb = thisverb++) {
+            Inkscape::Verb * verbpntr = thisverb->second;
+            verbpntr->delete_view(view);
+        }
+    }
+
+    return;
+}
+
 /** \brief  A function to turn a \c code into a Verb for dynamically
             created Verbs.
-	\param  code  What code is being looked for
-	\return The found Verb of NULL if none is found.
+    \param  code  What code is being looked for
+    \return The found Verb of NULL if none is found.
 
-	This function basically just looks through the \c _verbs hash
-	table.  STL does all the work.
+    This function basically just looks through the \c _verbs hash
+    table.  STL does all the work.
 */
 Verb *
 Verb::get_search (unsigned int code)
@@ -552,10 +609,10 @@ Verb::get_search (unsigned int code)
 void
 FileVerb::perform (SPAction *action, void * data, void *pdata)
 {
-	/* These aren't used, but are here to remind people not to use
-	   the CURRENT_DOCUMENT macros unless they really have to. */
-	SPView * current_view = sp_action_get_view(action);
-	SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
+    /* These aren't used, but are here to remind people not to use
+       the CURRENT_DOCUMENT macros unless they really have to. */
+    SPView * current_view = sp_action_get_view(action);
+    SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
 
     // std::cout << "FileVerb::perform" << data << std::endl;
     switch ((int) data) {
@@ -1558,3 +1615,13 @@ Verb * Verb::_base_verbs[] = {
 
 }; /* namespace Inkscape */
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -12,6 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
 #include <time.h>
 #include <gtk/gtk.h>
 #include "macros.h"
@@ -21,6 +22,7 @@
 #include "inkscape.h"
 #include "message-stack.h"
 #include "message-context.h"
+#include "verbs.h"
 
 enum {
     SHUTDOWN,
@@ -177,6 +179,8 @@ void SPView::dispose(GObject *object)
     }
     
     view->_message_changed_connection.~connection();
+
+    Inkscape::Verb::delete_all_view(view);
     
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
