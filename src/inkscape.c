@@ -64,6 +64,7 @@ enum {
 	NEW_DOCUMENT,
 	DESTROY_DOCUMENT,
 	COLOR_SET,
+	SHUTDOWN_SIGNAL,
 	LAST_SIGNAL
 };
 
@@ -108,8 +109,8 @@ struct _InkscapeClass {
 	void (* deactivate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
 	void (* new_document) (Inkscape *inkscape, SPDocument *doc);
 	void (* destroy_document) (Inkscape *inkscape, SPDocument *doc);
-
 	void (* color_set) (Inkscape *inkscape, SPColor *color, double opacity);
+	void (* shut_down) (Inkscape *inkscape);
 };
 
 static GObjectClass * parent_class;
@@ -238,6 +239,13 @@ inkscape_class_init (InkscapeClass * klass)
 							   sp_marshal_NONE__POINTER_DOUBLE,
 							   G_TYPE_NONE, 2,
 							   G_TYPE_POINTER, G_TYPE_DOUBLE);
+	inkscape_signals[SHUTDOWN_SIGNAL] =        g_signal_new ("shut_down",
+							   G_TYPE_FROM_CLASS (klass),
+							   G_SIGNAL_RUN_FIRST,
+							   G_STRUCT_OFFSET (InkscapeClass, shut_down),
+							   NULL, NULL,
+							   g_cclosure_marshal_VOID__VOID,
+							   G_TYPE_NONE, 0);
 
 	object_class->dispose = inkscape_dispose;
 
@@ -1007,7 +1015,8 @@ inkscape_refresh_display (Inkscape *inkscape)
 void
 inkscape_exit (Inkscape *inkscape)
 {
-	//FIXME: emit here shutdown signal so that dialogs could remember layout
+	//emit shutdown signal so that dialogs could remember layout
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SHUTDOWN_SIGNAL], 0);
 
 	if (inkscape->preferences) {
 		inkscape_save_preferences (inkscape);
