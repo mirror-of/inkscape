@@ -1018,19 +1018,13 @@ sp_rtb_rx_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         if (SP_IS_RECT ((SPItem *) items->data)) {
-
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
-
-            if (adj->value != 0)
-                sp_repr_set_double(repr, "rx", sp_units_get_points (adj->value, unit));
-            else
-                sp_repr_set_attr (repr, "rx", NULL);
-
+            sp_rect_set_visible_rx (SP_RECT (items->data), sp_units_get_points (adj->value, unit));
             modmade = true;
         }
     }
 
-    if (modmade) sp_document_done (SP_DT_DOCUMENT (desktop));
+    if (modmade) 
+        sp_document_done (SP_DT_DOCUMENT (desktop));
 
     g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
 
@@ -1057,23 +1051,17 @@ sp_rtb_ry_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
     bool modmade = FALSE;
-    for (const GSList *items = SP_DT_SELECTION(desktop)->itemList();
-         items != NULL;
-         items = items->next)
-    {
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    const GSList *items = selection->itemList();
+    for (; items != NULL; items = items->next) {
         if (SP_IS_RECT ((SPItem *) items->data)) {
-            SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
-
-            if (adj->value != 0)
-                sp_repr_set_double(repr, "ry", sp_units_get_points (adj->value, unit));
-            else
-                sp_repr_set_attr (repr, "ry", NULL);
-
+            sp_rect_set_visible_ry (SP_RECT (items->data), sp_units_get_points (adj->value, unit));
             modmade = true;
         }
     }
 
-    if (modmade)  sp_document_done (SP_DT_DOCUMENT (desktop));
+    if (modmade)  
+        sp_document_done (SP_DT_DOCUMENT (desktop));
 
     g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
 
@@ -1128,16 +1116,19 @@ static void rect_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
     // in turn, prevent callbacks from responding
     g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (TRUE));
 
-    {
-        GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rx");
-        double rx = sp_repr_get_double_attribute (repr, "rx", 0);
-        gtk_adjustment_set_value (adj, rx);
-    }
+    SPItem *item = SP_ITEM(g_object_get_data (G_OBJECT (tbl), "item"));
+    if (SP_IS_RECT (item)) {
+        {
+            GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rx");
+            gdouble rx = sp_rect_get_visible_rx (SP_RECT (item));
+            gtk_adjustment_set_value (adj, rx);
+        }
 
-    {
-        GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "ry");
-        double ry = sp_repr_get_double_attribute (repr, "ry", 0);
-        gtk_adjustment_set_value (adj, ry);
+        {
+            GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "ry");
+            gdouble ry = sp_rect_get_visible_ry (SP_RECT (item));
+            gtk_adjustment_set_value (adj, ry);
+        }
     }
 
     g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
@@ -1164,32 +1155,34 @@ static SPReprEventVector rect_tb_repr_events = {
 static void
 sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-  g_assert(selection != NULL);
+    g_assert(selection != NULL);
   
-  SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
-  int no_rects_selected = 0;
-  SPRepr *repr = NULL;
-  SPRepr *oldrepr = NULL;
+    SPDesktop *desktop = (SPDesktop *) gtk_object_get_data (GTK_OBJECT (tbl), "desktop");
+    int rects_selected = 0;
+    SPRepr *repr = NULL;
+    SPItem *item = NULL;
+    SPRepr *oldrepr = NULL;
   
-  for (const GSList *items = SP_DT_SELECTION(desktop)->itemList();
-       items != NULL;
-       items = items->next)
-  {
-            if (SP_IS_RECT ((SPItem *) items->data))
-            { no_rects_selected++;
-              repr = SP_OBJECT_REPR((SPItem *) items->data);
-            }
-  }
-  
-  if (no_rects_selected == 1) {
-      oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
-    if (oldrepr) { // remove old listener
-        sp_repr_remove_listener_by_data (oldrepr, tbl);
-        sp_repr_unref (oldrepr);
-        oldrepr = 0;
+    for (const GSList *items = SP_DT_SELECTION(desktop)->itemList();
+         items != NULL;
+         items = items->next) {
+        if (SP_IS_RECT ((SPItem *) items->data)) {
+            rects_selected++;
+            item = (SPItem *) items->data;
+            repr = SP_OBJECT_REPR(item);
+        }
     }
-     if (repr) {
+  
+    if (rects_selected == 1) {
+        oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
+        if (oldrepr) { // remove old listener
+            sp_repr_remove_listener_by_data (oldrepr, tbl);
+            sp_repr_unref (oldrepr);
+            oldrepr = 0;
+        }
+        if (repr) {
             g_object_set_data (G_OBJECT (tbl), "repr", repr);
+            g_object_set_data (G_OBJECT (tbl), "item", item);
             sp_repr_ref (repr);
             sp_repr_add_listener (repr, &rect_tb_repr_events, tbl);
             sp_repr_synthesize_events (repr, &rect_tb_repr_events, tbl);

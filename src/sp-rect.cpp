@@ -472,6 +472,72 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	return remaining;
 }
 
+
+/**
+Returns the ratio in which the vector from p0 to p1 is stretched by transform
+ */
+gdouble
+vector_stretch (NR::Point p0, NR::Point p1, NR::Matrix xform)
+{
+	if (p0 == p1)
+		return 0;
+	return (NR::distance (p0 * xform, p1 * xform) / NR::distance (p0, p1));
+}
+
+void
+sp_rect_set_visible_rx (SPRect *rect, gdouble rx)
+{
+	if (rx == 0) {
+		rect->rx.computed = 0;
+		rect->rx.set = FALSE;
+	} else {
+		rect->rx.computed = rx / vector_stretch (
+					NR::Point(rect->x.computed + 1, rect->y.computed),
+					NR::Point(rect->x.computed, rect->y.computed),
+					SP_ITEM(rect)->transform);
+		rect->rx.set = TRUE;
+	}
+	sp_object_invoke_write(SP_OBJECT(rect), SP_OBJECT_REPR(rect), SP_OBJECT_WRITE_EXT);
+}
+
+void
+sp_rect_set_visible_ry (SPRect *rect, gdouble ry)
+{
+	if (ry == 0) {
+		rect->ry.computed = 0;
+		rect->ry.set = FALSE;
+	} else {
+		rect->ry.computed = ry / vector_stretch (
+					NR::Point(rect->x.computed, rect->y.computed + 1),
+					NR::Point(rect->x.computed, rect->y.computed),
+					SP_ITEM(rect)->transform);
+		rect->ry.set = TRUE;
+	}
+	sp_object_invoke_write(SP_OBJECT(rect), SP_OBJECT_REPR(rect), SP_OBJECT_WRITE_EXT);
+}
+
+gdouble
+sp_rect_get_visible_rx (SPRect *rect)
+{
+	if (!rect->rx.set)
+		return 0;
+	return rect->rx.computed * vector_stretch (
+					NR::Point(rect->x.computed + 1, rect->y.computed),
+					NR::Point(rect->x.computed, rect->y.computed),
+					SP_ITEM(rect)->transform);
+}
+
+gdouble
+sp_rect_get_visible_ry (SPRect *rect)
+{
+	if (!rect->ry.set)
+		return 0;
+	return rect->ry.computed * vector_stretch (
+					NR::Point(rect->x.computed, rect->y.computed + 1),
+					NR::Point(rect->x.computed, rect->y.computed),
+					SP_ITEM(rect)->transform);
+}
+
 void
 sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform)
 {
@@ -489,8 +555,8 @@ sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform)
 	cy *= SP_ITEM (rect)->transform;
 
       // find out stretches that we need to compensate
-	gdouble eX = NR::distance (cx * xform, c * xform) / NR::distance (cx, c);
-	gdouble eY = NR::distance (cy * xform, c * xform) / NR::distance (cy, c);
+	gdouble eX = vector_stretch (cx, c, xform);
+	gdouble eY = vector_stretch (cy, c, xform);
 
        // If only one of the radii is set, set both radii so they have the same visible length
        // This is needed because if we just set them the same length in SVG, they might end up unequal because of transform
