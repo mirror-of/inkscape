@@ -81,8 +81,9 @@ void sp_paint_selector_set_rgradient_position (SPPaintSelector *psel, gdouble cx
 
 void sp_paint_selector_set_gradient_bbox (SPPaintSelector *psel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 
-void sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrix *gs2d);
-void sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrix *gs2d);
+void sp_paint_selector_set_gradient_gs2d_matrix(SPPaintSelector *psel, NR::Matrix const &gs2d);
+void sp_paint_selector_set_gradient_gs2d_matrix_f(SPPaintSelector *psel, NRMatrix const *gs2d);
+void sp_paint_selector_get_gradient_gs2d_matrix_f(SPPaintSelector const *psel, NRMatrix *gs2d);
 
 void sp_paint_selector_set_gradient_properties (SPPaintSelector *psel, SPGradientUnits units, SPGradientSpread spread);
 void sp_paint_selector_get_gradient_properties (SPPaintSelector *psel, SPGradientUnits *units, SPGradientSpread *spread);

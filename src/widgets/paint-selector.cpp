@@ -385,22 +385,27 @@ sp_paint_selector_set_gradient_bbox (SPPaintSelector *psel, gdouble x0, gdouble 
 }
 
 void
-sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrix *gs2d)
+sp_paint_selector_set_gradient_gs2d_matrix_f(SPPaintSelector *psel, NRMatrix const *gs2d)
 {
-	SPGradientSelector *gsel;
+	sp_paint_selector_set_gradient_gs2d_matrix(psel, *gs2d);
+}
 
+void
+sp_paint_selector_set_gradient_gs2d_matrix(SPPaintSelector *psel, NR::Matrix const &gs2d)
+{
 	g_return_if_fail (psel != NULL);
 	g_return_if_fail (SP_IS_PAINT_SELECTOR (psel));
 	g_return_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR) ||
 			  (psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL));
 
-	gsel = (SPGradientSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "gradient-selector");
+	SPGradientSelector *gsel = (SPGradientSelector*) gtk_object_get_data(GTK_OBJECT(psel->selector),
+									     "gradient-selector");
 
 	sp_gradient_selector_set_gs2d_matrix_f (gsel, gs2d);
 }
 
 void
-sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrix *gs2d)
+sp_paint_selector_get_gradient_gs2d_matrix_f(SPPaintSelector const *psel, NRMatrix *gs2d)
 {
 	SPGradientSelector *gsel;
 

@@ -514,7 +514,18 @@ sp_gradient_position_set_bbox (SPGradientPosition *pos, gdouble x0, gdouble y0, 
 }
 
 void
-sp_gradient_position_set_gs2d_matrix_f (SPGradientPosition *pos, NRMatrix *gs2d)
+sp_gradient_position_set_gs2d_matrix(SPGradientPosition *pos, NR::Matrix const &gs2d)
+{
+    pos->gs2d = gs2d;
+
+    pos->need_update = TRUE;
+    if (GTK_WIDGET_DRAWABLE (pos)) {
+        gtk_widget_queue_draw(GTK_WIDGET(pos));
+    }
+}
+
+void
+sp_gradient_position_set_gs2d_matrix_f(SPGradientPosition *pos, NRMatrix const *gs2d)
 {
     pos->gs2d = *gs2d;
 
@@ -1030,3 +1041,15 @@ spgp_draw_rect (guchar *px, int w, int h, int rs, int x0, int y0, int x1, int y1
 	}
     }
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

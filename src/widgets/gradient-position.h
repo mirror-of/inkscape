@@ -102,7 +102,8 @@ void sp_gradient_position_set_gradient (SPGradientPosition *pos, SPGradient *gra
 void sp_gradient_position_set_mode (SPGradientPosition *pos, guint mode);
 void sp_gradient_position_set_bbox (SPGradientPosition *pos, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 
-void sp_gradient_position_set_gs2d_matrix_f (SPGradientPosition *pos, NRMatrix *gs2d);
+void sp_gradient_position_set_gs2d_matrix(SPGradientPosition *pos, NR::Matrix const &gs2d);
+void sp_gradient_position_set_gs2d_matrix_f(SPGradientPosition *pos, NRMatrix const *gs2d);
 void sp_gradient_position_get_gs2d_matrix_f (SPGradientPosition *pos, NRMatrix *gs2d);
 
 void sp_gradient_position_set_linear_position (SPGradientPosition *pos, float x1, float y1, float x2, float y2);
