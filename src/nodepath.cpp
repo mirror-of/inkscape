@@ -1496,6 +1496,8 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 	SPNodeSubPath * subpath, *subpath_next;
 	GList * spl, * nl = NULL;
 
+	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
+
 	if (nodepath->selected) {
 		for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
 			subpath = (SPNodeSubPath *) spl->data;
@@ -1553,6 +1555,8 @@ sp_nodepath_select_prev (SPNodePath *nodepath)
 	SPNodeSubPath * subpath, *subpath_prev;
 	GList * spl, * nl = NULL;
 
+	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
+
 	if (nodepath->selected) {
 		for (spl = g_list_last (nodepath->subpaths); spl != NULL; spl = spl->prev) {
 			subpath = (SPNodeSubPath *) spl->data;
@@ -1592,7 +1596,7 @@ sp_nodepath_select_prev (SPNodePath *nodepath)
 		sp_nodepath_deselect (nodepath);
 	}
 
-	if (last) { // there's at least one more node after selected
+	if (last) { // there's at least one more node before selected
 		sp_nodepath_node_select ((SPPathNode *) last, TRUE, TRUE);
 	} else { // no more nodes, select the last one in last subpath
 		spl = g_list_last (nodepath->subpaths);
@@ -1634,7 +1638,7 @@ sp_nodepath_select_rect (SPNodePath *nodepath, NRRect *b, gboolean incremental)
 }
 
 /**
-\brief saves selected nodes in a nodepath into a list containing integer positions of all selected nodes
+\brief  Saves selected nodes in a nodepath into a list containing integer positions of all selected nodes
 */
 GList *save_nodepath_selection (SPNodePath *nodepath)
 {
@@ -1660,7 +1664,7 @@ GList *save_nodepath_selection (SPNodePath *nodepath)
 }
 
 /**
-\brief restores selection by selecting nodes whose positions are in the list
+\brief  Restores selection by selecting nodes whose positions are in the list
 */
 void restore_nodepath_selection (SPNodePath *nodepath, GList *r)
 {
@@ -2728,7 +2732,7 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 
 	if (selected == 0) {
 		sel = nodepath->desktop->selection;
-// 		GSList *i = sel->items;
+
 		if (g_slist_length (sel->items) == 0)
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
 		else 
