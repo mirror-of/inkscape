@@ -19,6 +19,12 @@
 	* src/widgets/icon.h, src/widgets/icon.cpp:
 	  icon greys out when insensitive
 
+	* src/gc-anchored.h, src/gc-finalized.h, src/gc-managed.h:
+	  documentation
+
+	* src/verbs.cpp: changed cast to reinterpret_cast to hopefully
+	  avoid compiler warning
+
 2004-11-11  Kees Cook  <kees@outflux.net>
 
     * src/seltrans.cpp, src/select-context.cpp: ref counting SPObjects

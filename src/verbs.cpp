@@ -478,11 +478,14 @@ Verb::make_action_helper (SPView * view, SPActionEventVector * vector)
     action = sp_action_new(view, _id, _(_name),
                            _(_tip), _image, this);
 
-    if (action != NULL)
-        nr_active_object_add_listener ((NRActiveObject *) action,
-                        (NRObjectEventVector *) vector,
-                        sizeof (SPActionEventVector),
-                        (void *) _code);
+    if (action != NULL) {
+        nr_active_object_add_listener (
+            (NRActiveObject *) action,
+            (NRObjectEventVector *) vector,
+            sizeof (SPActionEventVector),
+            reinterpret_cast<void *>(_code)
+        );
+    }
 
     return action;
 }
