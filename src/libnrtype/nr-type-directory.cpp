@@ -123,6 +123,9 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 
 	for (tdef = bestfdef->faces; tdef; tdef = tdef->next) {
 		double dist = nr_type_distance_position (&apos, tdef->pdef);
+
+		//		g_print ("Comparing to  %s/%s,   dist %g\n", tdef->family, tdef->name, dist);
+
 		if (dist < best) {
 			best = dist;
 			besttdef = tdef;
@@ -209,34 +212,34 @@ nr_type_directory_style_list_destructor (NRNameList *list)
 bool
 is_regular (const char *s)
 {
-	if (strstr(s, " Regular")) return true;
-	if (strstr(s, " Roman")) return true;
-	if (strstr(s, " Normal")) return true;
-	if (strstr(s, " Plain")) return true;
+	if (strstr(s, "Regular")) return true;
+	if (strstr(s, "Roman")) return true;
+	if (strstr(s, "Normal")) return true;
+	if (strstr(s, "Plain")) return true;
 	return false;
 }
 
 bool
 is_nonbold (const char *s)
 {
-	if (strstr(s, " Medium")) return true;
-	if (strstr(s, " Book")) return true;
+	if (strstr(s, "Medium")) return true;
+	if (strstr(s, "Book")) return true;
 	return false;
 }
 
 bool
 is_italic (const char *s)
 {
-	if (strstr(s, " Italic")) return true;
-	if (strstr(s, " Oblique")) return true;
-	if (strstr(s, " Slanted")) return true;
+	if (strstr(s, "Italic")) return true;
+	if (strstr(s, "Oblique")) return true;
+	if (strstr(s, "Slanted")) return true;
 	return false;
 }
 
 bool
 is_bold (const char *s)
 {
-	if (strstr(s, " Bold")) return true;
+	if (strstr(s, "Bold")) return true;
 	return false;
 }
 
@@ -397,6 +400,8 @@ nr_type_distance_family (const gchar *ask, const gchar *bid)
 	}
 }
 
+// These weights are defined inverse proportionally to the range of the corresponding parameters,
+// so that all parameters get the same weight
 #define NR_TYPE_ITALIC_SCALE 10000.0F
 #define NR_TYPE_OBLIQUE_SCALE 1000.0F
 #define NR_TYPE_WEIGHT_SCALE 100.0F
@@ -405,13 +410,20 @@ nr_type_distance_family (const gchar *ask, const gchar *bid)
 static double
 nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 {
-	double ditalic, doblique, dweight, dstretch;
+	double ditalic = 0, doblique = 0, dweight = 0, dstretch = 0;
 	double dist;
 
-	ditalic = NR_TYPE_ITALIC_SCALE * ((int) ask->italic - (int) bid->italic);
-	doblique = NR_TYPE_OBLIQUE_SCALE * ((int) ask->oblique - (int) bid->oblique);
-	dweight = NR_TYPE_WEIGHT_SCALE * ((int) ask->weight - (int) bid->weight);
-	dstretch = NR_TYPE_STRETCH_SCALE * ((int) ask->stretch - (int) bid->stretch);
+	//	g_print ("Ask: %d %d %d %d   Bid: %d %d %d %d\n", ask->italic, ask->oblique, ask->weight, ask->stretch,     bid->italic, bid->oblique, bid->weight, bid->stretch);
+
+	// For oblique, match italic if oblique not found, and vice versa
+      if (ask->italic || bid->italic)
+				ditalic = NR_TYPE_ITALIC_SCALE * ((int) ask->italic - (int) bid->italic - 0.5 * bid->oblique);
+      if (ask->oblique || bid->oblique)
+				doblique = NR_TYPE_OBLIQUE_SCALE * ((int) ask->oblique - (int) bid->oblique - 0.5 * bid->italic);
+      if (ask->weight || bid->weight)
+				dweight = NR_TYPE_WEIGHT_SCALE * ((int) ask->weight - (int) bid->weight);
+      if (ask->stretch || bid->stretch)
+				dstretch = NR_TYPE_STRETCH_SCALE * ((int) ask->stretch - (int) bid->stretch);
 
 	dist = sqrt (ditalic * ditalic  +
 		     doblique * doblique  +
