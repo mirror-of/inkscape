@@ -434,18 +434,28 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
 static void
 sp_dt_update_snap_distances (SPDesktop *desktop)
 {
-    static const SPUnit *px = NULL;
+    static SPUnit const *px = NULL;
 
     if (!px) {
-	px = sp_unit_get_by_abbreviation("px");
+	px = &sp_unit_get_by_id(SP_UNIT_PX);
     }
 
     // Fixme: expansion?
     gdouble const px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
-    desktop->gridsnap = (desktop->namedview->snaptogrid) ? desktop->namedview->gridtolerance : 0.0;
-    sp_convert_distance_full (&desktop->gridsnap, desktop->namedview->gridtoleranceunit, px, 1.0, px2doc);
-    desktop->guidesnap = (desktop->namedview->snaptoguides) ? desktop->namedview->guidetolerance : 0.0;
-    sp_convert_distance_full (&desktop->guidesnap, desktop->namedview->guidetoleranceunit, px, 1.0, px2doc);
+    gdouble const grid_tolerance_val = ( desktop->namedview->snaptogrid
+                                         ? desktop->namedview->gridtolerance
+                                         : 0.0 );
+    desktop->gridsnap = sp_convert_distance_full(grid_tolerance_val,
+                                                 *desktop->namedview->gridtoleranceunit,
+                                                 *px,
+                                                 px2doc);
+    gdouble const guide_tolerance_val = ( desktop->namedview->snaptoguides
+                                          ? desktop->namedview->guidetolerance
+                                          : 0.0 );
+    desktop->guidesnap = sp_convert_distance_full(guide_tolerance_val,
+                                                  *desktop->namedview->guidetoleranceunit,
+                                                  *px,
+                                                  px2doc);
 }
 
 void

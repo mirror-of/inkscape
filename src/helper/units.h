@@ -104,6 +104,7 @@ const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_default (void);
 const SPUnit *sp_unit_get_by_name (const gchar *name);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
+SPUnit const &sp_unit_get_by_id(SPUnitId const id);
 
 /** Used solely by units-test.cpp. */
 bool sp_units_table_sane();
@@ -117,10 +118,10 @@ void sp_unit_free_list (GSList *units);
 /* Return TRUE if conversion is possible, FALSE if unit bases differ */
 gboolean sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUnit *to);
 
-/* ctmscale is userspace->absolute, devicescale is device->absolute */
+/* devicescale is device->absolute */
 /* If either one is NULL, transconverting to/from that base fails */
 /* Generic conversion between volatile units would be useless anyways */
-gboolean sp_convert_distance_full (gdouble *distance, const SPUnit *from, const SPUnit *to, gdouble ctmscale, gdouble devicescale);
+gdouble sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to, gdouble const devicescale);
 
 /* Some more convenience */
 /* Be careful to not mix bases */

@@ -167,36 +167,30 @@ sp_unit_selector_get_unit (SPUnitSelector *us)
 static void
 spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
 {
-    const SPUnit *unit, *old;
-    gboolean consumed;
-    GSList *l;
-
-    unit = (SPUnit*)gtk_object_get_data (GTK_OBJECT (widget), "unit");
+    SPUnit const *unit = (SPUnit const *) gtk_object_get_data(GTK_OBJECT(widget), "unit");
     g_return_if_fail (unit != NULL);
 
 #ifdef UNIT_SELECTOR_VERBOSE
     g_print ("Old unit %s new unit %s\n", us->unit->name, unit->name);
 #endif
 
-    old = us->unit;
+    SPUnit const *old = us->unit;
     us->unit = unit;
 
     us->update = TRUE;
 
-    consumed = FALSE;
+    gboolean consumed = FALSE;
     g_signal_emit (G_OBJECT (us), signals[SET_UNIT], 0, old, unit, &consumed);
 
     if (!consumed && (unit->base == old->base)) {
         /* Recalculate adjustments. */
-        for (l = us->adjustments; l != NULL; l = g_slist_next(l)) {
-            GtkAdjustment *adj;
-            gdouble val;
-            adj = GTK_ADJUSTMENT (l->data);
-            val = adj->value;
+        for (GSList *l = us->adjustments; l != NULL; l = g_slist_next(l)) {
+            GtkAdjustment *adj = GTK_ADJUSTMENT(l->data);
+            gdouble val = adj->value;
 #ifdef UNIT_SELECTOR_VERBOSE
             g_print ("Old val %g ... ", val);
 #endif
-            sp_convert_distance_full (&val, old, unit, us->ctmscale, us->devicescale);
+            val = sp_convert_distance_full(val, *old, *unit, us->devicescale);
 #ifdef UNIT_SELECTOR_VERBOSE
             g_print ("new val %g\n", val);
 #endif
@@ -204,14 +198,14 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
         }
         /* need to separate the value changing from the notification
         * or else the unit changes can break the calculations */
-        for (l = us->adjustments; l != NULL; l = g_slist_next(l)) {
+        for (GSList *l = us->adjustments; l != NULL; l = g_slist_next(l)) {
             gtk_adjustment_value_changed (GTK_ADJUSTMENT (l->data));
         }
     }
     else if (!consumed && unit->base != old->base) {
         /* when the base changes, signal all the adjustments to get them
         * to recalculate */
-        for (l = us->adjustments; l != NULL; l = g_slist_next(l)) {
+        for (GSList *l = us->adjustments; l != NULL; l = g_slist_next(l)) {
             gtk_signal_emit_by_name (GTK_OBJECT (l->data), "value_changed");
         }
     }
@@ -313,11 +307,8 @@ sp_unit_selector_set_unit (SPUnitSelector *us, const SPUnit *unit)
 
     /* Recalculate adjustments */
     for (l = us->adjustments; l != NULL; l = l->next) {
-        GtkAdjustment *adj;
-        gdouble val;
-        adj = GTK_ADJUSTMENT (l->data);
-        val = adj->value;
-        sp_convert_distance_full (&val, old, unit, us->ctmscale, us->devicescale);
+        GtkAdjustment *adj = GTK_ADJUSTMENT(l->data);
+        gdouble const val = sp_convert_distance_full(adj->value, *old, *unit, us->devicescale);
         gtk_adjustment_set_value (adj, val);
     }
 }

@@ -289,17 +289,12 @@ guide_dialog_close (GtkWidget * widget, gpointer data)
 
 static void guide_dialog_apply(SPGuide &guide)
 {
-	gdouble distance = gtk_spin_button_get_value_as_float(GTK_SPIN_BUTTON(e));
-	sp_convert_distance_full(&distance,
-				 sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u)),
-				 sp_unit_get_identity(SP_UNIT_ABSOLUTE),
-				 1.0, 1.0);
-	gdouble newpos;
-	if (mode) {
-		newpos = distance;
-	} else {
-		newpos = guide.position + distance;
-	}
+	gdouble const raw_dist = gtk_spin_button_get_value_as_float(GTK_SPIN_BUTTON(e));
+	SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
+	gdouble const points = sp_convert_distance_full(raw_dist, unit, sp_unit_get_by_id(SP_UNIT_PT), 1.0);
+	gdouble const newpos = ( mode
+				 ? points
+				 : guide.position + points );
 	sp_guide_moveto(guide, newpos, true);
 	sp_document_done(SP_OBJECT_DOCUMENT(&guide));
 }
@@ -350,9 +345,7 @@ guide_dialog_response (GtkDialog *dialog, gint response, gpointer data)
 static void
 sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 {
-	gdouble val = 0;
 	GtkWidget * pix, * b1, * b2, * b3, * b4,* but;
-	const SPUnit *unit;
 
 	if (!GTK_IS_WIDGET (d)) {
 		GtkObject *a;
@@ -447,9 +440,8 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		g_free(label);
 	}
 
-	val = oldpos;
-	unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (u));
-	sp_convert_distance_full (&val, sp_unit_get_identity (SP_UNIT_ABSOLUTE), unit, 1.0, 1.0);
+	SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
+	gdouble const val = sp_convert_distance_full(oldpos, sp_unit_get_by_id(SP_UNIT_PT), unit, 1.0);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (e), val);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (e), val);
 	gtk_widget_grab_focus (e);

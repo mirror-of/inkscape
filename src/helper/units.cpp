@@ -44,6 +44,15 @@ static const SPUnit sp_units[] = {
 
 #define sp_num_units G_N_ELEMENTS(sp_units)
 
+SPUnit const &
+sp_unit_get_by_id(SPUnitId const id)
+{
+	unsigned const ix = unsigned(id);
+	g_return_val_if_fail(ix < sp_num_units, sp_units[SP_UNIT_PX]);
+	return sp_units[ix];
+}
+
+
 /* Base units are the ones used by gnome-print and paper descriptions */
 
 /* todo: Change param to SPUnitBase. */
@@ -150,66 +159,71 @@ sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUnit *to)
 
 /** @param devicetransform for device units. */
 /* TODO: Remove the ctmscale parameter given that we no longer have SP_UNIT_USERSPACE. */
-gboolean
-sp_convert_distance_full (gdouble *distance, const SPUnit *from, const SPUnit *to,
-				   gdouble /*ctmscale*/, gdouble devicescale)
+gdouble
+sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit const &to,
+			 gdouble const devicescale)
 {
-	g_return_val_if_fail (distance != NULL, FALSE);
-	g_return_val_if_fail (from != NULL, FALSE);
-	g_return_val_if_fail (to != NULL, FALSE);
-
-	if (from == to) return TRUE;
-	if (from->base == to->base) return sp_convert_distance (distance, from, to);
-	if ((from->base == SP_UNIT_DIMENSIONLESS) || (to->base == SP_UNIT_DIMENSIONLESS)) {
-		*distance = *distance * from->unittobase / to->unittobase;
-		return TRUE;
+	if (&from == &to) {
+		return from_dist;
 	}
-	if ((from->base == SP_UNIT_VOLATILE) || (to->base == SP_UNIT_VOLATILE)) return FALSE;
+	if (from.base == to.base) {
+		gdouble ret = from_dist;
+		bool const succ = sp_convert_distance(&ret, &from, &to);
+		g_assert(succ);
+		return ret;
+	}
+	if ((from.base == SP_UNIT_DIMENSIONLESS)
+	    || (to.base == SP_UNIT_DIMENSIONLESS))
+	{
+		return from_dist * from.unittobase / to.unittobase;
+	}
+	g_return_val_if_fail(((from.base != SP_UNIT_VOLATILE)
+			      && (to.base != SP_UNIT_VOLATILE)),
+			     from_dist);
 
 	gdouble absolute;
-	switch (from->base) {
+	switch (from.base) {
 	case SP_UNIT_ABSOLUTE:
-		absolute = *distance * from->unittobase;
+		absolute = from_dist * from.unittobase;
 		break;
 	case SP_UNIT_DEVICE:
-		if (devicescale) {
-			absolute = *distance * from->unittobase * devicescale;
-		} else {
-			return FALSE;
+		if (!(devicescale > 0)) {
+			g_error("conversion from device units requested but devicescale=%g",
+				devicescale);
 		}
+		absolute = from_dist * from.unittobase * devicescale;
 		break;
 	default:
-		g_warning ("file %s: line %d: Illegal unit (base %d)", __FILE__, __LINE__, from->base);
-		return FALSE;
+		g_warning("file %s: line %d: Illegal unit (base 0x%x)", __FILE__, __LINE__, from.base);
+		return from_dist;
+	}
+
+	gdouble ret;
+	switch (to.base) {
+	default:
+		g_warning("file %s: line %d: Illegal unit (base 0x%x)", __FILE__, __LINE__, to.base);
+		/* FALL-THROUGH */
+	case SP_UNIT_ABSOLUTE:
+		ret = absolute / to.unittobase;
+		break;
+
+	case SP_UNIT_DEVICE:
+		if (!(devicescale > 0)) {
+			g_error("conversion from device units requested but devicescale=%g",
+				devicescale);
+		}
+		ret = absolute / (to.unittobase * devicescale);
 		break;
 	}
 
-	switch (to->base) {
-	case SP_UNIT_DIMENSIONLESS:
-	case SP_UNIT_ABSOLUTE:
-		*distance = absolute / to->unittobase;
-		break;
-	case SP_UNIT_DEVICE:
-		if (devicescale) {
-			*distance = absolute / (to->unittobase * devicescale);
-		} else {
-			return FALSE;
-		}
-		break;
-	default:
-		g_warning ("file %s: line %d: Illegal unit (base %d)", __FILE__, __LINE__, to->base);
-		return FALSE;
-		break;
-	}
-
-	return TRUE;
+	return ret;
 }
 
 /* Some more convenience */
 /* Be careful to not mix bases */
 
 gdouble
-sp_distance_get_units (SPDistance *distance, const SPUnit *unit)
+sp_distance_get_units(SPDistance *distance, SPUnit const *unit)
 {
 	gdouble val;
 
