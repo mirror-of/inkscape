@@ -82,7 +82,7 @@ private:
     gchar *id;                            /**< The unique identifier for the Extension */
     gchar *name;                          /**< A user friendly name for the Extension */
     state_t state;                        /**< Which state the Extension is currently in */
-	bool   _deactivated;                   /**< If the extension still exists, but shouldn't be used */
+    bool   _deactivated;                   /**< If the extension still exists, but shouldn't be used */
 
 protected:
     SPRepr *repr;                         /**< The XML description of the Extension */
@@ -96,12 +96,12 @@ public:
     void          set_state    (state_t in_state);
     state_t       get_state    (void);
     bool          loaded       (void);
-	virtual bool  check        (void);
+    virtual bool  check        (void);
     SPRepr *      get_repr     (void);
     gchar *       get_id       (void);
     gchar *       get_name     (void);
-	void          deactivate   (void);
-	bool          deactivated  (void);
+    void          deactivate   (void);
+    bool          deactivated  (void);
 
 
 /* Parameter Stuff */
@@ -146,11 +146,11 @@ public:
                                     looked for that just simply doesn't exist */
     class no_overwrite {};     /**< An error class for when a filename
                                     already exists, but the user doesn't
-									want to overwrite it */
+                                    want to overwrite it */
 private:
     void             make_param       (SPRepr * paramrepr);
     inline param_t * param_shared     (gchar * name,
-			                           GSList * list);
+                                       GSList * list);
 public:
     void             get_param        (gchar * name,
                                        bool * value);
@@ -173,16 +173,16 @@ class Input : public Extension {
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
 
 public: /* this is a hack for this release, this will be private shortly */
-	gchar *output_extension;     /**< Setting of what output extension should be used */
+    gchar *output_extension;     /**< Setting of what output extension should be used */
 
 public:
-	class open_failed {};        /**< Generic failure for an undescribed reason */
-	class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
+    class open_failed {};        /**< Generic failure for an undescribed reason */
+    class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
 
                   Input                (SPRepr * in_repr,
                                         Implementation::Implementation * in_imp);
     virtual      ~Input                (void);
-	virtual bool  check                (void);
+    virtual bool  check                (void);
     SPDocument *  open                 (const gchar *uri);
     gchar *       get_extension        (void);
     gchar *       get_filetypename     (void);
@@ -195,16 +195,16 @@ class Output : public Extension {
     gchar *extension;            /**< The extension of the input files */
     gchar *filetypename;         /**< A userfriendly name for the file type */
     gchar *filetypetooltip;      /**< A more detailed description of the filetype */
-	bool   dataloss;             /**< The extension causes data loss on save */
+    bool   dataloss;             /**< The extension causes data loss on save */
 
 public:
-	class save_failed {};        /**< Generic failure for an undescribed reason */
-	class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
+    class save_failed {};        /**< Generic failure for an undescribed reason */
+    class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
 
                  Output (SPRepr * in_repr,
                          Implementation::Implementation * in_imp);
     virtual     ~Output (void);
-	virtual bool check                (void);
+    virtual bool check                (void);
     void         save (SPDocument *doc,
                        const gchar *uri);
     GtkDialog *  prefs (void);
@@ -219,7 +219,7 @@ public:
                  Effect  (SPRepr * in_repr,
                           Implementation::Implementation * in_imp);
     virtual     ~Effect  (void);
-	virtual bool check                (void);
+    virtual bool check                (void);
     GtkDialog *  prefs   (void);
     void         effect  (SPDocument * doc);
 };
@@ -236,7 +236,7 @@ public:
                   Print       (SPRepr * in_repr,
                                Implementation::Implementation * in_imp);
                  ~Print       (void);
-	virtual bool  check       (void);
+    virtual bool  check       (void);
 
     /* FALSE means user hit cancel */
     unsigned int  setup       (void);
@@ -281,9 +281,9 @@ public:
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
