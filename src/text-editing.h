@@ -12,6 +12,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib/gtypes.h>
+struct SPItem;
+namespace NR { class Point; }
+
 
 bool sp_te_is_empty (SPItem *item);
 gint sp_te_get_length (SPItem *item);
