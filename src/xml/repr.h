@@ -49,28 +49,29 @@ used to specify callbacks when something changes.
 
 Here are the current callbacks in an event vector (they may be NULL):
 
-        void (* child_added) (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref,
-void *data);
+    void (* child_added)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref,
+                         void *data);
 
 Called once a child has been added.
 
-        void (* child_removed) (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node
-	*ref, void *data);
+    void (* child_removed)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref,
+                           void *data);
 
 Called after a child is removed; ref is the child that used to precede
 the removed child.
 
-        void (* attr_changed) (Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval, void *data);
+    void (* attr_changed)(Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval,
+                          void *data);
 
 Called after an attribute has been changed.
 
-        void (* content_changed) (Inkscape::XML::Node *repr, gchar const *oldcontent,
-gchar const *newcontent, void *data);
+    void (* content_changed)(Inkscape::XML::Node *repr, gchar const *oldcontent,
+                             gchar const *newcontent, void *data);
 
 Called after an element's content has been changed.
 
-        void (* order_changed) (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node
-	*oldref, Inkscape::XML::Node *newref, void *data);
+    void (* order_changed)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child,
+                           Inkscape::XML::Node *oldref, Inkscape::XML::Node *newref, void *data);
 
 Called once the child has been moved to its new position in the child
 order.
@@ -131,83 +132,86 @@ A: The current hack is in document.cpp:sp_document_create
 
 /* SPXMLNs */
 
-const  char *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
-const  char *sp_xml_ns_prefix_uri(gchar const *prefix);
+char const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
+char const *sp_xml_ns_prefix_uri(gchar const *prefix);
 
 Inkscape::XML::Node *sp_repr_new(gchar const *name);
 Inkscape::XML::Node *sp_repr_new_text(gchar const *content);
 Inkscape::XML::Node *sp_repr_new_comment(gchar const *comment);
 
 inline Inkscape::XML::Node *sp_repr_ref(Inkscape::XML::Node *repr) {
-	return Inkscape::GC::anchor(repr);
+    return Inkscape::GC::anchor(repr);
 }
 inline Inkscape::XML::Node *sp_repr_unref(Inkscape::XML::Node *repr) {
-	Inkscape::GC::release(repr);
-	return NULL;
+    Inkscape::GC::release(repr);
+    return NULL;
 }
 /*inline Inkscape::XML::Node *sp_repr_duplicate(Inkscape::XML::Node const *repr) {
-	return repr->duplicate();
+    return repr->duplicate();
 }*/
 
 Inkscape::XML::Document *sp_repr_document_new(gchar const *rootname);
+
 /*inline void sp_repr_document_ref(Inkscape::XML::Document *doc) {
-	Inkscape::GC::anchor(doc);
+    Inkscape::GC::anchor(doc);
 }
 inline void sp_repr_document_unref(Inkscape::XML::Document *doc) {
-	Inkscape::GC::release(doc);
+    Inkscape::GC::release(doc);
 }*/
 
 inline Inkscape::XML::Node *sp_repr_document_root(Inkscape::XML::Document const *doc) {
-	return const_cast<Inkscape::XML::Node *>(doc->root());
+    return const_cast<Inkscape::XML::Node *>(doc->root());
 }
+
 inline Inkscape::XML::Document *sp_repr_document(Inkscape::XML::Node const *repr) {
-	return const_cast<Inkscape::XML::Document *>(repr->document());
+    return const_cast<Inkscape::XML::Document *>(repr->document());
 }
 
 
-inline unsigned int sp_repr_document_merge(Inkscape::XML::Document *doc,
-		                           Inkscape::XML::Document const *src,
-					   char const *key)
+inline unsigned sp_repr_document_merge(Inkscape::XML::Document *doc,
+                                       Inkscape::XML::Document const *src,
+                                       char const *key)
 {
-	doc->root()->mergeFrom(src->root(), key);
-	return true;
+    doc->root()->mergeFrom(src->root(), key);
+    return true;
 }
 
-inline unsigned int sp_repr_merge(Inkscape::XML::Node *repr, Inkscape::XML::Node const *src, gchar const *key) {
-	repr->mergeFrom(src, key);
-	return true;
+inline unsigned sp_repr_merge(Inkscape::XML::Node *repr, Inkscape::XML::Node const *src, gchar const *key) {
+    repr->mergeFrom(src, key);
+    return true;
 }
 
 /* Contents */
-inline unsigned int sp_repr_set_content(Inkscape::XML::Node *repr, gchar const *content) {
-	repr->setContent(content);
-	return true;
+inline unsigned sp_repr_set_content(Inkscape::XML::Node *repr, gchar const *content) {
+    repr->setContent(content);
+    return true;
 }
 
-inline unsigned int sp_repr_set_attr(Inkscape::XML::Node *repr, gchar const *key, gchar const *value, bool is_interactive=false) {
-	repr->setAttribute(key, value, is_interactive);
-	return true;
+inline unsigned sp_repr_set_attr(Inkscape::XML::Node *repr, gchar const *key, gchar const *value,
+                                 bool is_interactive = false) {
+    repr->setAttribute(key, value, is_interactive);
+    return true;
 }
 
 /* Tree */
 inline Inkscape::XML::Node *sp_repr_parent(Inkscape::XML::Node const *repr) {
-	return const_cast<Inkscape::XML::Node *>(repr->parent());
+    return const_cast<Inkscape::XML::Node *>(repr->parent());
 }
 inline Inkscape::XML::Node *sp_repr_children(Inkscape::XML::Node *repr) {
-	return ( repr ? repr->firstChild() : NULL );
+    return ( repr ? repr->firstChild() : NULL );
 }
 inline Inkscape::XML::Node *sp_repr_next(Inkscape::XML::Node *repr) {
-	return ( repr ? repr->next() : NULL );
+    return ( repr ? repr->next() : NULL );
 }
 
-inline unsigned int sp_repr_add_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
+inline unsigned sp_repr_add_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
-	repr->addChild(child, ref);
-	return true;
+    repr->addChild(child, ref);
+    return true;
 }
-inline unsigned int sp_repr_remove_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child) {
-	repr->removeChild(child);
-	return true;
+inline unsigned sp_repr_remove_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child) {
+    repr->removeChild(child);
+    return true;
 }
 
 /* IO */
@@ -231,31 +235,31 @@ void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *va
 double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval);
 
 void sp_repr_css_set(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
-void sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src);
-void sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data);
+void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src);
+void sp_repr_css_attr_add_from_string(SPCSSAttr *css, const gchar *data);
 void sp_repr_css_change(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
 void sp_repr_css_change_recursive(Inkscape::XML::Node *repr, SPCSSAttr *css, gchar const *key);
 
-void sp_repr_css_print (SPCSSAttr * css);
+void sp_repr_css_print(SPCSSAttr *css);
 
 /* Utility finctions */
 
 inline void sp_repr_unparent(Inkscape::XML::Node *repr) {
-	Inkscape::XML::Node *parent=repr->parent();
-	if (parent) {
-		parent->removeChild(repr);
-	}
+    Inkscape::XML::Node *parent=repr->parent();
+    if (parent) {
+        parent->removeChild(repr);
+    }
 }
 
 /* Convenience */
-unsigned int sp_repr_get_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int *val);
-unsigned int sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *val);
-unsigned int sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, double *val);
-unsigned int sp_repr_set_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int val);
-unsigned int sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int val);
-unsigned int sp_repr_set_double(Inkscape::XML::Node *repr, gchar const *key, double val);
+unsigned sp_repr_get_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned *val);
+unsigned sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *val);
+unsigned sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, double *val);
+unsigned sp_repr_set_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned val);
+unsigned sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int val);
+unsigned sp_repr_set_double(Inkscape::XML::Node *repr, gchar const *key, double val);
 /* Defaults */
-unsigned int sp_repr_set_double_default(Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e);
+unsigned sp_repr_set_double_default(Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e);
 
 /* Deprecated */
 double sp_repr_get_double_attribute(Inkscape::XML::Node *repr, gchar const *key, double def);
@@ -265,21 +269,36 @@ int sp_repr_get_int_attribute(Inkscape::XML::Node *repr, gchar const *key, int d
 int sp_repr_compare_position(Inkscape::XML::Node *first, Inkscape::XML::Node *second);
 
 /* Searching */
-Inkscape::XML::Node       *sp_repr_lookup_name   (Inkscape::XML::Node             *repr,
-		                     gchar const        *name,
-				     gint               maxdepth = -1 );
-Inkscape::XML::Node       *sp_repr_lookup_child  (Inkscape::XML::Node    	        *repr,
-				     gchar const        *key,
-				     gchar const        *value);
+Inkscape::XML::Node *sp_repr_lookup_name(Inkscape::XML::Node *repr,
+                                         gchar const *name,
+                                         gint maxdepth = -1);
+Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
+                                          gchar const *key,
+                                          gchar const *value);
 
-inline unsigned int sp_repr_change_order (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
-	repr->changeOrder(child, ref);
-	return true;
+inline unsigned sp_repr_change_order(Inkscape::XML::Node *repr,
+                                     Inkscape::XML::Node *child,
+                                     Inkscape::XML::Node *ref) {
+    repr->changeOrder(child, ref);
+    return true;
 }
-                                                                                
-Inkscape::XML::Document *sp_repr_document_new_list (GSList *reprs);
+
+Inkscape::XML::Document *sp_repr_document_new_list(GSList *reprs);
+
 inline Inkscape::XML::Node *sp_repr_document_first_child(Inkscape::XML::Document const *doc) {
-	return const_cast<Inkscape::XML::Node *>(doc->firstChild());
+    return const_cast<Inkscape::XML::Node *>(doc->firstChild());
 }
 
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
