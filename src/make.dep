@@ -211,6 +211,9 @@ desktop.o: \
 	widgets/button.h \
 	widgets/icon.h \
 	widgets/ruler.h \
+	widgets/spinbutton-events.h \
+	widgets/spw-utilities.h \
+	widgets/widget-sizes.h \
 	xml/repr.h
 
 dialogs/align.o: \
@@ -2673,6 +2676,7 @@ select-context.o: \
 	sp-object.h \
 	version.h \
 	view.h \
+	widgets/spw-utilities.h \
 	xml/repr.h
 
 select-toolbar.o: \
@@ -2723,6 +2727,7 @@ select-toolbar.o: \
 	widgets/button.h \
 	widgets/icon.h \
 	widgets/sp-widget.h \
+	widgets/spinbutton-events.h \
 	widgets/spw-utilities.h \
 	widgets/widget-sizes.h \
 	xml/repr-action.h \
@@ -4094,6 +4099,9 @@ svg/svg-path.o: \
 	modules/svg.h \
 	svg/gnome-canvas-bpath-util.h
 
+test.o: \
+	test.c
+
 text-context.o: \
 	text-context.cpp \
 	color.h \
@@ -4627,7 +4635,8 @@ widgets/ruler.o: \
 	widgets/ruler.cpp \
 	modules/svg.h \
 	sp-metrics.h \
-	widgets/ruler.h
+	widgets/ruler.h \
+	widgets/widget-sizes.h
 
 widgets/sp-color-gtkselector.o: \
 	widgets/sp-color-gtkselector.cpp \
@@ -4735,6 +4744,19 @@ widgets/sp-xmlview-tree.o: \
 	xml/repr.h \
 	xml/repr.h
 
+widgets/spinbutton-events.o: \
+	widgets/spinbutton-events.cpp \
+	desktop-handles.h \
+	forward.h \
+	forward.h \
+	helper/helper-forward.h \
+	inkscape.h \
+	widgets/sp-widget.h \
+	widgets/spinbutton-events.h \
+	widgets/widget-sizes.h \
+	xml/repr.h \
+	xml/repr.h
+
 widgets/spw-utilities.o: \
 	widgets/spw-utilities.cpp \
 	desktop-handles.h \
@@ -4825,6 +4847,7 @@ zoom-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	prefs-utils.h \
 	rubberband.h \
 	selection.h \
 	sp-item.h \

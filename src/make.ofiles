@@ -206,6 +206,7 @@ OBJECTS = \
 	svg/svg-color.o \
 	svg/svg-length.o \
 	svg/svg-path.o \
+	test.o \
 	text-context.o \
 	toolbox.o \
 	tools-switch.o \
@@ -235,6 +236,7 @@ OBJECTS = \
 	widgets/sp-xmlview-attr-list.o \
 	widgets/sp-xmlview-content.o \
 	widgets/sp-xmlview-tree.o \
+	widgets/spinbutton-events.o \
 	widgets/spw-utilities.o \
 	widgets/test-wrapbox.o \
 	winmain.o \
@@ -452,6 +454,7 @@ LINTS = \
 	svg/svg-color.lint \
 	svg/svg-length.lint \
 	svg/svg-path.lint \
+	test.lint \
 	text-context.lint \
 	toolbox.lint \
 	tools-switch.lint \
@@ -481,6 +484,7 @@ LINTS = \
 	widgets/sp-xmlview-attr-list.lint \
 	widgets/sp-xmlview-content.lint \
 	widgets/sp-xmlview-tree.lint \
+	widgets/spinbutton-events.lint \
 	widgets/spw-utilities.lint \
 	widgets/test-wrapbox.lint \
 	winmain.lint \

@@ -400,6 +400,7 @@ svg/svg-length.cpp
 svg/svg-path.cpp
 svg/svg-types.h
 svg/svg.h
+test.c
 text-context.cpp
 text-context.h
 toolbox.cpp
@@ -462,6 +463,8 @@ widgets/sp-xmlview-content.cpp
 widgets/sp-xmlview-content.h
 widgets/sp-xmlview-tree.cpp
 widgets/sp-xmlview-tree.h
+widgets/spinbutton-events.cpp
+widgets/spinbutton-events.h
 widgets/spw-utilities.cpp
 widgets/spw-utilities.h
 widgets/test-wrapbox.cpp
