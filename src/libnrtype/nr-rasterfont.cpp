@@ -409,7 +409,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
                 bbox.x0 = bbox.y0 = NR_HUGE;
                 bbox.x1 = bbox.y1 = -NR_HUGE;
                 bp.path = gbp.path;
-                nr_path_matrix_bbox_union(&bp, a, &bbox, 1.0);
+                nr_path_matrix_bbox_union(&bp, a, &bbox);
             }
       
             if (!nr_rect_d_test_empty (&bbox)) {

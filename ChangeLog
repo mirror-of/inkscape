@@ -1,5 +1,8 @@
 2004-05-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-path.cpp, src/libnr/nr-path.h (nr_path_matrix_bbox_union):
+	  Get rid of no-longer-needed tolerance arg.  Update callers.
+
 	* src/selection.cpp, src/sp-chars.cpp, src/sp-image.cpp,
 	  src/sp-item-group.cpp, src/sp-item.cpp, src/sp-item.h,
 	  src/sp-marker.cpp, src/sp-root.cpp, src/sp-shape.cpp,

@@ -156,7 +156,7 @@ nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 	if (!nr_font_glyph_outline_get (font, glyph, &bpath, 0)) return NULL;
 	area->x0 = area->y0 = NR_HUGE;
 	area->x1 = area->y1 = -NR_HUGE;
-	nr_path_matrix_bbox_union(&bpath, NR::identity(), area, 0.25);
+	nr_path_matrix_bbox_union(&bpath, NR::identity(), area);
 
 	return !nr_rect_d_test_empty (area) ? area : NULL;
 }

@@ -409,12 +409,9 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 }
 
 void
-nr_path_matrix_bbox_union(NRBPath *bpath, NR::Matrix const &m,
-			  NRRect *bbox,
-			  NR::Coord const tolerance)
+nr_path_matrix_bbox_union(NRBPath const *bpath, NR::Matrix const &m,
+			  NRRect *bbox)
 {
-    /* TODO: tolerance is unused.  Consider removing this argument. */
-
     using NR::X;
     using NR::Y;
 
