@@ -243,27 +243,27 @@ class Node
     /**
      *
      */
-    virtual Node *insertBefore(Node *newChild, 
-                       Node *refChild)
+    virtual Node *insertBefore(const Node *newChild, 
+                       const Node *refChild)
                        throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Node *replaceChild(Node *newChild, 
-                       Node *oldChild)
+    virtual Node *replaceChild(const Node *newChild, 
+                       const Node *oldChild)
                        throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Node *removeChild(Node *oldChild)
+    virtual Node *removeChild(const Node *oldChild)
                       throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Node *appendChild(Node *newChild)
+    virtual Node *appendChild(const Node *newChild)
                       throw(DOMException) = 0;
 
     /**
@@ -360,7 +360,7 @@ class NamedNodeMap
     /**
      *
      */
-    virtual Node *setNamedItem(Node *arg) throw(DOMException) = 0;
+    virtual Node *setNamedItem(const Node *arg) throw(DOMException) = 0;
 
 
     /**
@@ -387,7 +387,7 @@ class NamedNodeMap
     /**
      * L2
      */
-    virtual Node *setNamedItemNS(Node *arg) throw(DOMException) = 0;
+    virtual Node *setNamedItemNS(const Node *arg) throw(DOMException) = 0;
 
     /**
      * L2
@@ -920,7 +920,7 @@ class Document : virtual public Node
     /**
      * L2
      */
-    virtual Node *importNode(Node *importedNode, 
+    virtual Node *importNode(const Node *importedNode, 
                      bool deep)
                      throw(DOMException) = 0;
 

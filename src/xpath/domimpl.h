@@ -96,21 +96,21 @@ class NodeImpl : virtual public Node
     Document *getOwnerDocument();
 
 
-    Node *insertBefore(Node *newChild, 
-                       Node *refChild)
+    Node *insertBefore(const Node *newChild, 
+                       const Node *refChild)
                        throw(DOMException);
 
 
-    Node *replaceChild(Node *newChild, 
-                       Node *oldChild)
+    Node *replaceChild(const Node *newChild, 
+                       const Node *oldChild)
                        throw(DOMException);
 
 
-    Node *removeChild(Node *oldChild)
+    Node *removeChild(const Node *oldChild)
                       throw(DOMException);
 
 
-    Node *appendChild(Node *newChild)
+    Node *appendChild(const Node *newChild)
                       throw(DOMException);
 
 
@@ -181,15 +181,15 @@ class NodeListImpl : public NodeList
     /*
     not part of the api.  visible to other default Impls
     */
-    bool insert(int position, Node *newNode);
+    bool insert(int position, const Node *newNode);
 
-    bool insert(Node *current, Node *newNode);
+    bool insert(const Node *current, const Node *newNode);
 
-    bool replace(Node *current, Node *newNode);
+    bool replace(const Node *current, const Node *newNode);
 
-    bool remove(Node *node);
+    bool remove(const Node *node);
 
-    void append(Node *newNode);
+    void append(const Node *newNode);
 
     private:
 
@@ -210,7 +210,7 @@ class NamedNodeMapImpl : public NamedNodeMap
 
     Node *getNamedItem(const DOMString& name);
 
-    Node *setNamedItem(Node *arg) throw(DOMException);
+    Node *setNamedItem(const Node *arg) throw(DOMException);
 
     Node *removeNamedItem(const DOMString& name) throw(DOMException);
 
@@ -221,7 +221,7 @@ class NamedNodeMapImpl : public NamedNodeMap
     Node *getNamedItemNS(const DOMString& namespaceURI, 
                          const DOMString& localName);
 
-    Node *setNamedItemNS(Node *arg) throw(DOMException);
+    Node *setNamedItemNS(const Node *arg) throw(DOMException);
 
     Node *removeNamedItemNS(const DOMString& namespaceURI, 
                             const DOMString& localName)
@@ -364,7 +364,6 @@ class ElementImpl : public Element, public NodeImpl
     NodeList *getElementsByTagNameNS(const DOMString& namespaceURI, 
                                     const DOMString& localName);
 
-
     bool hasAttribute(const DOMString& name);
 
     bool hasAttributeNS(const DOMString& namespaceURI, 
@@ -423,7 +422,8 @@ class DocumentTypeImpl : public NodeImpl, public DocumentType
         {}
 
     DocumentTypeImpl(const DOMString& qualifiedName, 
-                     const DOMString& publicId, const DOMString& systemId);
+                     const DOMString& publicId,
+                     const DOMString& systemId);
 
     DOMString getName();
 
@@ -538,8 +538,9 @@ class DocumentImpl : public Document, public NodeImpl
     DocumentImpl()
         {}
 
-    DocumentImpl(const DOMString& namespaceURI, const DOMString& qualifiedName,
-                   DocumentType *doctype);
+    DocumentImpl(const DOMString &namespaceURI,
+                 const DOMString &qualifiedName,
+                 const DocumentType *doctype);
 
     virtual ~DocumentImpl()
         {}
@@ -576,7 +577,7 @@ class DocumentImpl : public Document, public NodeImpl
 
     NodeList *DocumentImpl::getElementsByTagName(const DOMString& tagname);
 
-    Node *DocumentImpl::importNode(Node *importedNode, bool deep)
+    Node *DocumentImpl::importNode(const Node *importedNode, bool deep)
                                  throw(DOMException);
 
     Element *DocumentImpl::createElementNS(const DOMString& namespaceURI, 

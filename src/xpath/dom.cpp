@@ -285,8 +285,8 @@ Document *NodeImpl::getOwnerDocument()
 /**
  *
  */
-Node *NodeImpl::insertBefore(Node *newChild, 
-                         Node *refChild)
+Node *NodeImpl::insertBefore(const Node *newChild, 
+                         const Node *refChild)
                          throw(DOMException)
 {
     NodeListImpl *nl = (NodeListImpl *)childNodes;
@@ -294,15 +294,15 @@ Node *NodeImpl::insertBefore(Node *newChild,
         {
         throw (DOMException(NOT_FOUND_ERR));
         }
-    return newChild;
+    return (Node *)newChild;
 } 
 
 
 /**
  *
  */
-Node *NodeImpl::replaceChild(Node *newChild, 
-                         Node *oldChild)
+Node *NodeImpl::replaceChild(const Node *newChild, 
+                         const Node *oldChild)
                          throw(DOMException)
 {
     NodeListImpl *nl = (NodeListImpl *)childNodes;
@@ -310,14 +310,14 @@ Node *NodeImpl::replaceChild(Node *newChild,
         {
         throw (DOMException(NOT_FOUND_ERR));
         }
-    return newChild;
+    return (Node *)newChild;
 }
 
 
 /**
  *
  */
-Node *NodeImpl::removeChild(Node *oldChild)
+Node *NodeImpl::removeChild(const Node *oldChild)
                         throw(DOMException)
 {
     NodeListImpl *nl = (NodeListImpl *)childNodes;
@@ -325,19 +325,19 @@ Node *NodeImpl::removeChild(Node *oldChild)
         {
         throw DOMException(NOT_FOUND_ERR);
         }
-    return oldChild;
+    return (Node *)oldChild;
 }
 
 
 /**
  *
  */
-Node *NodeImpl::appendChild(Node *newChild)
+Node *NodeImpl::appendChild(const Node *newChild)
                         throw(DOMException)
 {
     NodeListImpl *nl = (NodeListImpl *)childNodes;
     nl->append(newChild);
-    return newChild;
+    return (Node *)newChild;
 }
 
 
@@ -467,16 +467,16 @@ unsigned long NodeListImpl::getLength()
 /*
 not part of the api
 */
-bool NodeListImpl::insert(int position, Node *newNode)
+bool NodeListImpl::insert(int position, const Node *newNode)
 {
     if (position < 0 || position >= (int)nodes.size())
         return false;
     std::vector<Node *>::iterator iter = nodes.begin() + position;
-    nodes.insert(iter, newNode);
+    nodes.insert(iter, (Node *)newNode);
     return true;
 }
 
-bool NodeListImpl::insert(Node *current, Node *newNode)
+bool NodeListImpl::insert(const Node *current, const Node *newNode)
 {
     bool retVal=false;
     std::vector<Node *>::iterator iter;
@@ -484,14 +484,14 @@ bool NodeListImpl::insert(Node *current, Node *newNode)
         {
         if (current == *iter)
             {
-            nodes.insert(iter, newNode);
+            nodes.insert(iter, (Node *)newNode);
             retVal = true;
             }
         }
     return retVal;
 }
 
-bool NodeListImpl::replace(Node *current, Node *newNode)
+bool NodeListImpl::replace(const Node *current, const Node *newNode)
 {
     bool retVal=false;
     std::vector<Node *>::iterator iter;
@@ -499,7 +499,7 @@ bool NodeListImpl::replace(Node *current, Node *newNode)
         {
         if (current == *iter)
             {
-            *iter = newNode;
+            *iter = (Node *)newNode;
             retVal = true;
             }
         }
@@ -508,7 +508,7 @@ bool NodeListImpl::replace(Node *current, Node *newNode)
 }
 
 
-bool NodeListImpl::remove(Node *node)
+bool NodeListImpl::remove(const Node *node)
 {
     bool retVal=false;
     std::vector<Node *>::iterator iter;
@@ -524,9 +524,9 @@ bool NodeListImpl::remove(Node *node)
 }
 
 
-void NodeListImpl::append(Node *newNode)
+void NodeListImpl::append(const Node *newNode)
 {
-    nodes.push_back(newNode);
+    nodes.push_back((Node *)newNode);
 
 }
 
@@ -549,10 +549,11 @@ Node *NamedNodeMapImpl::getNamedItem(const DOMString& name)
 /**
  *
  */
-Node *NamedNodeMapImpl::setNamedItem(Node *node) throw(DOMException)
+Node *NamedNodeMapImpl::setNamedItem(const Node *node) throw(DOMException)
 {
-    table[node->getNodeName()] = node;
-    return node;
+    Node *theNode = (Node *)node;
+    table[theNode->getNodeName()] = theNode;
+    return theNode;
 }
 
 
@@ -604,10 +605,11 @@ Node *NamedNodeMapImpl::getNamedItemNS(const DOMString& namespaceURI,
 /**
  * L2
  */
-Node *NamedNodeMapImpl::setNamedItemNS(Node *node) throw(DOMException)
+Node *NamedNodeMapImpl::setNamedItemNS(const Node *node) throw(DOMException)
 {
-    table[node->getNodeName()] = node;
-    return node;
+    Node *theNode = (Node *)node;
+    table[theNode->getNodeName()] = theNode;
+    return theNode;
     
 }
 
@@ -849,7 +851,7 @@ Attr *ElementImpl::setAttributeNode(Attr *newAttr)
 {
     removeAttributeNode(newAttr);
     attributes->setNamedItem(newAttr);
-    return newAttr;
+    return (Attr *)newAttr;
 }
 
 
@@ -1184,8 +1186,9 @@ void ProcessingInstructionImpl::setData(const DOMString& val) throw(DOMException
 
 
 
-DocumentImpl::DocumentImpl(DOMString &namespaceURI,DOMString &qualifiedName,
-                   DocumentType *doctype)
+DocumentImpl::DocumentImpl(const DOMString &namespaceURI,
+                           const DOMString &qualifiedName,
+                           DocumentType *doctype)
 {
 
     this->namespaceURI  = namespaceURI;
@@ -1276,9 +1279,10 @@ CDATASection *DocumentImpl::createCDATASection(const DOMString& data)
 /**
  *
  */
-ProcessingInstruction *DocumentImpl::createProcessingInstruction(const DOMString& target, 
-                                                       const DOMString& data)
-                                                       throw(DOMException)
+ProcessingInstruction *
+      DocumentImpl::createProcessingInstruction(const DOMString& target, 
+                                                const DOMString& data)
+                                                throw(DOMException)
 {
     ProcessingInstruction *pi = new ProcessingInstructionImpl();
     return pi;
