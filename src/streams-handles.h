@@ -26,7 +26,7 @@ namespace Inkscape {
 class URIHandle
 {
 public:
-
+    virtual ~URIHandle() {}
     virtual int read (void *buf, int buflen) = 0;
     virtual int write (void const *buf, int buflen) = 0;
     virtual void close() = 0;
