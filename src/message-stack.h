@@ -23,6 +23,7 @@ namespace Inkscape {
 class MessageStack : public Managed {
 public:
     MessageStack();
+    ~MessageStack();
 
     MessageType currentMessageType() {
         return _messages ? _messages->type : NORMAL_MESSAGE;
@@ -57,7 +58,6 @@ private:
     };
 
     MessageStack(MessageStack const &); // no copy
-    ~MessageStack();
 
     void operator=(MessageStack const &); // no assign
 
