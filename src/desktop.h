@@ -144,6 +144,11 @@ struct SPDesktop : public SPView {
 		return _set_style_signal.connect(slot);
 	}
 
+	sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
+	sigc::connection connectQueryStyle(const sigc::slot<int, SPStyle *, int> & slot) {
+		return _query_style_signal.connect(slot);
+	}
+
 	sigc::signal<void, SPObject *> _layer_changed_signal;
 
 	sigc::signal<void, sp_verb_t> _tool_changed;
@@ -153,7 +158,7 @@ struct SPDesktop : public SPView {
 	sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot) {
 		return _tool_subselection_changed.connect(slot);
 	}
-	void emitToolSubselectionChanged(gpointer data) {_tool_subselection_changed.emit(data);}
+	void emitToolSubselectionChanged(gpointer data); 
 
 	Inkscape::MessageContext *_guides_message_context;
 

@@ -1491,6 +1491,11 @@ void SPDesktop::_selection_changed(Inkscape::Selection *selection, SPDesktop *de
     }
 }
 
+void SPDesktop::emitToolSubselectionChanged(gpointer data) {
+	_tool_subselection_changed.emit(data);
+	inkscape_subselection_changed (this);
+}
+
 void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)
 {
     GtkLabel *sb=GTK_LABEL(this->select_status);
