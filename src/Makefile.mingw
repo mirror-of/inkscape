@@ -28,14 +28,21 @@ sp-star.o sp-symbol.o sp-text.o sp-use.o star-context.o style.o \
 svg-view.o text-context.o toolbox.o tools-switch.o uri-references.o \
 verbs.o version.o view.o zoom-context.o
 
-all: inkscape.exe
+all: helper/sp-marshal.h libnr/nr_config.h inkscape.exe
+
+helper/sp-marshal.h:
+	make -C helper     -f Makefile.mingw
+
+libnr/nr_config.h:
+	make -C libnr      -f Makefile.mingw
+
 
 #INKLIBS = libinkscape.a dialogs/libdialogs.a display/libdisplay.a  helper/libhelper.a \
 #libnr/libnr.a libnrtype/libnrtype.a livarot/libvarot.a modules/libinkmodules.a libarikkei/libarikkei.a \
 #svg/libinksvg.a widgets/libinkwidgets.a xml/libinkxml.a
 
 
-inkscape.exe: main.o inkres.o libinkscape.a
+inkscape.exe: libinkscape.a main.o inkres.o 
 	$(CXX) -o inkscape.exe main.o inkscape.o libinkscape.a $(LIBS)
 	strip inkscape.exe
 
@@ -106,11 +113,6 @@ xml/libinkxml.a:
 	make -C xml        -f Makefile.mingw
 
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
 
 
 clean:

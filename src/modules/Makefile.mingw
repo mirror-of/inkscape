@@ -14,12 +14,6 @@ db.o extension.o init.o menu.o ps.o svg.o system.o win32.o
 
 all: $(OBJ)
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
 
 clean:
 	$(RM) *.o

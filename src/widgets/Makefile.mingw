@@ -22,11 +22,6 @@ sp-xmlview-content.o sp-xmlview-tree.o
 
 all: $(OBJ)
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
 
 
 clean:

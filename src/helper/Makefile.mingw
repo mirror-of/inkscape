@@ -15,14 +15,14 @@ nr-plain-stuff-gdk.o nr-plain-stuff.o png-write.o sodipodi-ctrl.o \
 sodipodi-ctrlrect.o sp-canvas.o sp-canvas-util.o sp-ctrlline.o \
 sp-marshal.o unit-menu.o units.o window.o
 
-all: $(OBJ)
+all: sp-marshal.h $(OBJ)
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+sp-marshal.h: sp-marshal.h.mingw
+	copy sp-marshal.h.mingw sp-marshal.h
 
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
+sp-marshal.o: sp-marshal.cpp.mingw
+	copy sp-marshal.cpp.mingw sp-marshal.cpp
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ sp-marshal.cpp
 
 clean:
 	$(RM) *.o

@@ -15,12 +15,6 @@ nr-arena-item.o nr-arena.o nr-arena-shape.o
 
 all: $(OBJ)
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
 
 clean:
 	$(RM) *.o

@@ -14,12 +14,6 @@ arikkei-dict.o arikkei-token.o
 
 all: $(OBJ)
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
 
 clean:
 	$(RM) *.o

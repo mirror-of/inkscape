@@ -1,27 +1,30 @@
 
+
 include ./Makefile.mingw.common
 
 
-all:
+all:	config.h
 	$(MAKE) -C src -f Makefile.mingw
 
+config.h: config.h.mingw
+	copy config.h.mingw config.h
 
 dist:
-	rm -rf inkscape
+	deltree /y inkscape
 	mkdir inkscape
-	cp src/inkscape.exe inkscape
-	#copy $(GTK)\bin\*.dll inkscape
-	mkdir inkscape/pixmaps
-	cp glade/*.xpm inkscape/pixmaps
-	cp glade/*.png inkscape/pixmaps
-	cp glade/*.svg inkscape/pixmaps
-	mkdir inkscape/data
-	mkdir inkscape/extensions
-	mkdir inkscape/locale
-	mkdir inkscape/modules
-	mkdir inkscape/samples
-	cp samples/*.svg inkscape/samples
-	cp samples/*.png inkscape/samples
+	copy src\inkscape.exe inkscape
+	copy $(GTK)\bin\*.dll inkscape
+	mkdir inkscape\pixmaps
+	copy glade\*.xpm inkscape\pixmaps
+	copy glade\*.png inkscape\pixmaps
+	copy glade\*.svg inkscape\pixmaps
+	mkdir inkscape\data
+	mkdir inkscape\extensions
+	mkdir inkscape\locale
+	mkdir inkscape\modules
+	mkdir inkscape\samples
+	copy samples\*.svg inkscape\samples
+	copy samples\*.png inkscape\samples
 	jar cMf inkscape-$(VERSION).zip inkscape
 
 clean:

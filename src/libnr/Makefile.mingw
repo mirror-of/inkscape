@@ -19,14 +19,10 @@ nr-pixblock-line.o nr-pixblock.o nr-pixblock-pattern.o \
 nr-pixblock-pixel.o nr-rect.o nr-stroke.o nr-svp.o nr-svp-render.o \
 nr-svp-uncross.o nr-uta.o nr-values.o testnr.o
 
-all: $(OBJ)
+all: nr_config.h $(OBJ)
 
-.cpp.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
-.c.o:
-	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
-
+nr_config.h: nr_config.h.mingw
+	copy nr_config.h.mingw nr_config.h
 
 clean:
 	$(RM) *.o

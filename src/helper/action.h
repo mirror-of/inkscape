@@ -23,7 +23,7 @@ typedef struct _SPAction SPAction;
 typedef struct _SPActionClass SPActionClass;
 
 #include <libnr/nr-object.h>
-#include <../view.h>
+#include <view.h>
 
 typedef struct _SPActionEventVector SPActionEventVector;
 
