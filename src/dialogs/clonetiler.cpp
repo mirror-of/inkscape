@@ -16,6 +16,8 @@
 
 #include <glibmm/i18n.h>
 #include "helper/window.h"
+#include "helper/unit-menu.h"
+#include "helper/units.h"
 #include "../inkscape.h"
 #include "../prefs-utils.h"
 #include "dialog-events.h"
@@ -828,12 +830,16 @@ clonetiler_apply (GtkWidget *widget, void *)
     int alternate_color_y = prefs_get_int_attribute (prefs_path, "alternate_color_y", 0);
     int alternate_color_x = prefs_get_int_attribute (prefs_path, "alternate_color_x", 0);
 
-    int xmax = prefs_get_int_attribute (prefs_path, "xmax", 2);
-    int ymax = prefs_get_int_attribute (prefs_path, "ymax", 2);
-
     int type = prefs_get_int_attribute (prefs_path, "symmetrygroup", 0);
 
     int keepbbox = prefs_get_int_attribute (prefs_path, "keepbbox", 1);
+
+    int xmax = prefs_get_int_attribute (prefs_path, "xmax", 2);
+    int ymax = prefs_get_int_attribute (prefs_path, "ymax", 2);
+
+    int fillrect = prefs_get_int_attribute (prefs_path, "fillrect", 0);
+    double fillwidth = prefs_get_double_attribute_limited (prefs_path, "fillwidth", 50, 0, 6000);
+    double fillheight = prefs_get_double_attribute_limited (prefs_path, "fillheight", 50, 0, 6000);
 
     NR::Point c;
     double w;
@@ -865,8 +871,18 @@ clonetiler_apply (GtkWidget *widget, void *)
         sp_repr_set_double (obj_repr, "inkscape:tile-cy", c[NR::Y]);
     }
 
-    for (int x = 0; x < xmax; x ++) {
-        for (int y = 0; y < ymax; y ++) {
+    NR::Point cur = NR::Point (0, 0);
+
+    for (int x = 0; 
+         fillrect? 
+             (fabs(cur[NR::X]) < fillwidth && x < 200) // prevent freezing with too many cols, arbitrarily limit 
+             : (x < xmax); 
+         x ++) {
+        for (int y = 0; 
+             fillrect?
+                 (fabs(cur[NR::Y]) < fillheight && y < 200) // prevent freezing with too many cols, arbitrarily limit 
+                 : (y < ymax);
+             y ++) {
 
             // We create a clone at 0,0 too, right over the original, in case our clones are colored
 
@@ -876,6 +892,13 @@ clonetiler_apply (GtkWidget *widget, void *)
                                                      d_rot_per_x, d_rot_per_y, alternate_rotx, alternate_roty, rand_rot,
                                                      d_scalex_per_x, d_scaley_per_x, d_scalex_per_y, d_scaley_per_y, 
                                                      alternate_scalex, alternate_scaley, rand_scalex, rand_scaley);
+
+            cur = c * t - c;
+            if (fillrect) {
+                if ((cur[NR::X] > fillwidth) || (cur[NR::Y] > fillheight)) { // off limits
+                    continue;
+                }
+            }
 
             if (fabs(t[0]) + fabs (t[1]) + fabs(t[2]) + fabs(t[3]) < 1e-6) { // too small 
                     continue;
@@ -932,6 +955,7 @@ clonetiler_apply (GtkWidget *widget, void *)
             SP_OBJECT_REPR(parent)->appendChild(clone);
             sp_repr_unref (clone);
         }
+        cur[NR::Y] = 0;
     }
 
     clonetiler_change_selection (NULL, selection, dlg);
@@ -1019,15 +1043,15 @@ clonetiler_spinbox (const char *label, GtkTooltips *tt, const char *tip, const c
         gtk_entry_set_width_chars (GTK_ENTRY (sb), 4);
         gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
-            double value = prefs_get_double_attribute_limited (prefs_path, attr, 0, lower, upper);
-            gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
-            gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+        double value = prefs_get_double_attribute_limited (prefs_path, attr, exponent? 1 : 0, lower, upper);
+        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
+        gtk_signal_connect(GTK_OBJECT(a), "value_changed",
                            GTK_SIGNAL_FUNC(clonetiler_value_changed), (gpointer) attr);
 
-            if (exponent)
-                g_object_set_data (G_OBJECT(sb), "oneable", GINT_TO_POINTER(TRUE));
-            else 
-                g_object_set_data (G_OBJECT(sb), "zeroable", GINT_TO_POINTER(TRUE));
+        if (exponent)
+            g_object_set_data (G_OBJECT(sb), "oneable", GINT_TO_POINTER(TRUE));
+        else 
+            g_object_set_data (G_OBJECT(sb), "zeroable", GINT_TO_POINTER(TRUE));
     }
 
     return hb;
@@ -1130,6 +1154,63 @@ clonetiler_table_x_y_rand (int values)
 
     return table;
 }
+
+static void
+clonetiler_switch_to_create (GtkToggleButton *tb, GtkWidget *dlg)
+{
+    GtkWidget *rowscols = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "rowscols");
+    GtkWidget *widthheight = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "widthheight");
+
+    if (rowscols) {
+        gtk_widget_set_sensitive (rowscols, TRUE);
+    }
+    if (widthheight) {
+        gtk_widget_set_sensitive (widthheight, FALSE);
+    }
+
+    prefs_set_int_attribute (prefs_path, "fillrect", 0);
+}
+
+static void
+clonetiler_switch_to_fill (GtkToggleButton *tb, GtkWidget *dlg)
+{
+    GtkWidget *rowscols = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "rowscols");
+    GtkWidget *widthheight = (GtkWidget *) g_object_get_data (G_OBJECT(dlg), "widthheight");
+
+    if (rowscols) {
+        gtk_widget_set_sensitive (rowscols, FALSE);
+    }
+    if (widthheight) {
+        gtk_widget_set_sensitive (widthheight, TRUE);
+    }
+
+    prefs_set_int_attribute (prefs_path, "fillrect", 1);
+}
+
+
+
+
+static void
+clonetiler_fill_width_changed (GtkAdjustment *adj, GtkWidget *u)
+{
+    gdouble const raw_dist = adj->value;
+    SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
+    gdouble const pixels = sp_units_get_pixels (raw_dist, unit);
+
+    prefs_set_double_attribute (prefs_path, "fillwidth", pixels);
+}
+
+static void
+clonetiler_fill_height_changed (GtkAdjustment *adj, GtkWidget *u)
+{
+    gdouble const raw_dist = adj->value;
+    SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
+    gdouble const pixels = sp_units_get_pixels (raw_dist, unit);
+
+    prefs_set_double_attribute (prefs_path, "fillheight", pixels);
+}
+
+
 
 void
 clonetiler_dialog (void)
@@ -1682,21 +1763,18 @@ clonetiler_dialog (void)
 
 
 
-// Rows, columns
+// Rows/columns, width/height
         {
-            GtkWidget *table = gtk_hbox_new (TRUE, 4);
-            gtk_container_set_border_width (GTK_CONTAINER (table), 4);
+            GtkWidget *table = gtk_table_new (2, 2, FALSE);
+            gtk_container_set_border_width (GTK_CONTAINER (table), VB_MARGIN);
+            gtk_table_set_row_spacings (GTK_TABLE (table), 4);
+            gtk_table_set_col_spacings (GTK_TABLE (table), 6);
             gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, VB_SKIP);
+
 
             {
                 GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
-
-                {
-                    GtkWidget *l = gtk_label_new ("");
-                    gtk_label_set_markup (GTK_LABEL(l), _("<b>Rows</b>:"));
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
-                }
+                g_object_set_data (G_OBJECT(dlg), "rowscols", (gpointer) hb);
 
                 {
                     GtkObject *a = gtk_adjustment_new(0.0, 1, 500, 1, 10, 10);
@@ -1705,21 +1783,15 @@ clonetiler_dialog (void)
                     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
                     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many rows in the tiling"), NULL);
                     gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-                    gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
+                    gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
                     gtk_signal_connect(GTK_OBJECT(a), "value_changed",
                                        GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "ymax");
                 }
 
-                gtk_box_pack_start (GTK_BOX (table), hb, FALSE, FALSE, 0);
-            }
-
-            {
-                GtkWidget *hb = gtk_hbox_new(FALSE, 4);
-
                 {
                     GtkWidget *l = gtk_label_new ("");
-                    gtk_label_set_markup (GTK_LABEL(l), _("<b>Columns</b>:"));
+                    gtk_label_set_markup (GTK_LABEL(l), "x");
                     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
                     gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
                 }
@@ -1737,11 +1809,92 @@ clonetiler_dialog (void)
                                        GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "xmax");
                 }
 
-                gtk_box_pack_start (GTK_BOX (table), hb, FALSE, FALSE, 0);
+                clonetiler_table_attach (table, hb, 0.0, 1, 2);
+            }
+
+            {
+                GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+                g_object_set_data (G_OBJECT(dlg), "widthheight", (gpointer) hb);
+
+                // unitmenu
+                GtkWidget *u = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+                sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), sp_desktop_get_default_unit (SP_ACTIVE_DESKTOP));
+    
+                {
+                    // Width spinbutton 
+                    GtkObject *a = gtk_adjustment_new (0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);
+                    sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (u), GTK_ADJUSTMENT (a));
+
+                    double value = prefs_get_double_attribute (prefs_path, "fillwidth", 50);
+                    SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
+                    gdouble const units = sp_pixels_get_units (value, unit);
+                    gtk_adjustment_set_value (GTK_ADJUSTMENT (a), units);
+
+                    GtkWidget *e = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0 , 2);
+                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, _("The width of the rectangle to be filled"), NULL);
+                    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (e), TRUE);
+                    gtk_box_pack_start (GTK_BOX (hb), e, TRUE, TRUE, 0);
+                    gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                                       GTK_SIGNAL_FUNC(clonetiler_fill_width_changed), u);
+                }
+                {
+                    GtkWidget *l = gtk_label_new ("");
+                    gtk_label_set_markup (GTK_LABEL(l), "x");
+                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+                }
+
+                {
+                    // Height spinbutton 
+                    GtkObject *a = gtk_adjustment_new (0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);
+                    sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (u), GTK_ADJUSTMENT (a));
+
+                    double value = prefs_get_double_attribute (prefs_path, "fillheight", 50);
+                    SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
+                    gdouble const units = sp_pixels_get_units (value, unit);
+                    gtk_adjustment_set_value (GTK_ADJUSTMENT (a), units);
+
+
+                    GtkWidget *e = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0 , 2);
+                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, _("The height of the rectangle to be filled"), NULL);
+                    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (e), TRUE);
+                    gtk_box_pack_start (GTK_BOX (hb), e, TRUE, TRUE, 0);
+                    gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                                       GTK_SIGNAL_FUNC(clonetiler_fill_height_changed), u);
+                }
+
+                gtk_box_pack_start (GTK_BOX (hb), u, TRUE, TRUE, 0);
+                clonetiler_table_attach (table, hb, 0.0, 2, 2);
+
+            }
+
+            // Switch 
+            GtkWidget* radio;
+            {
+                radio = gtk_radio_button_new_with_label (NULL, _("Rows, columns: "));
+                gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), radio, _("Create the specified number of rows and columns"), NULL);
+                clonetiler_table_attach (table, radio, 0.0, 1, 1);
+                gtk_signal_connect (GTK_OBJECT (radio), "toggled", GTK_SIGNAL_FUNC (clonetiler_switch_to_create), (gpointer) dlg);
+            }
+            if (prefs_get_int_attribute(prefs_path, "fillrect", 0) == 0) {
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
+                gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (radio));
+            }
+            {
+                radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), _("Width, height: "));
+                gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), radio, _("Fill the specified width and height with the tiling"), NULL);
+                clonetiler_table_attach (table, radio, 0.0, 2, 1);
+                gtk_signal_connect (GTK_OBJECT (radio), "toggled", GTK_SIGNAL_FUNC (clonetiler_switch_to_fill), (gpointer) dlg);
+            }
+            if (prefs_get_int_attribute(prefs_path, "fillrect", 0) == 1) {
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), TRUE);
+                gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (radio));
             }
         }
 
-        {
+
+// Use saved pos
+        { 
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
@@ -1755,6 +1908,7 @@ clonetiler_dialog (void)
                                GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
         }
 
+// Statusbar
         {
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
             gtk_box_pack_end (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
@@ -1763,6 +1917,7 @@ clonetiler_dialog (void)
             gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
         }
 
+// Buttons
         {
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
