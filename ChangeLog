@@ -1,3 +1,24 @@
+2003-12-04  bulia byak <bulia@dr.com>
+
+	* src/toolbox.c: added convert to curves button, cosmetic changes in aux toolbar
+
+	* src/text-context.c: made text editing via xml editor undoable
+
+	* src/nodepath.c: new functions to duplicate node, fixes to node_break and selection
+	functions, new (presently unused) functions for saving/restoring node selection
+
+	* src/node-context.c: shift-d to duplicate node, all keys now work regardless of capslock
+
+	* src/document-undo.c: temp fix: undo emits selection_changed signal for node editor
+	to update display
+
+	* src/selection.c: new function without arguments to emit change_selection signal
+
+	* src/selection.h: new function without arguments to emit change_selection signal
+
+	* src/nodepath.h: new functions to duplicate node, new (presently unused) functions
+	for saving/restoring node selection
+
 2003-12-04  MenTaLguY <mental@rydia.net>
 
 	* src/desktop.c: rearranged toolbars so aux toolbar is topmost
