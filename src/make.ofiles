@@ -99,11 +99,11 @@ OBJECTS = \
 	libnr/nr-pixblock-pixel.o \
 	libnr/nr-pixblock.o \
 	libnr/nr-point-fns.o \
+	libnr/nr-rect-l.o \
 	libnr/nr-rect.o \
 	libnr/nr-rotate-test.o \
 	libnr/nr-scale-test.o \
 	libnr/nr-svp-render.o \
-	libnr/nr-svp-uncross.o \
 	libnr/nr-svp.o \
 	libnr/nr-translate-test.o \
 	libnr/nr-types.o \
@@ -372,11 +372,11 @@ LINTS = \
 	libnr/nr-pixblock-pixel.lint \
 	libnr/nr-pixblock.lint \
 	libnr/nr-point-fns.lint \
+	libnr/nr-rect-l.lint \
 	libnr/nr-rect.lint \
 	libnr/nr-rotate-test.lint \
 	libnr/nr-scale-test.lint \
 	libnr/nr-svp-render.lint \
-	libnr/nr-svp-uncross.lint \
 	libnr/nr-svp.lint \
 	libnr/nr-translate-test.lint \
 	libnr/nr-types.lint \

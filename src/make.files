@@ -215,6 +215,7 @@ libnr/nr-point-fns.h
 libnr/nr-point-l.h
 libnr/nr-point-ops.h
 libnr/nr-point.h
+libnr/nr-rect-l.cpp
 libnr/nr-rect-l.h
 libnr/nr-rect-ops.h
 libnr/nr-rect.cpp
@@ -229,8 +230,6 @@ libnr/nr-scale.h
 libnr/nr-svp-private.h
 libnr/nr-svp-render.cpp
 libnr/nr-svp-render.h
-libnr/nr-svp-uncross.cpp
-libnr/nr-svp-uncross.h
 libnr/nr-svp.cpp
 libnr/nr-svp.h
 libnr/nr-translate-ops.h
