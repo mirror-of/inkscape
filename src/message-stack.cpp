@@ -63,12 +63,19 @@ void MessageStack::cancel(MessageId id) {
 
 MessageId MessageStack::flash(MessageType type, gchar const *message) {
     switch (type) {
-    case ERROR_MESSAGE:
-    case WARNING_MESSAGE:
-        return _push(type, 5000, message);
+    case INFORMATION_MESSAGE: // stay rather long so as to seem permanent, but eventually disappear
+        return _push(type, 8000 + 100*strlen(message), message);
         break;
+    case ERROR_MESSAGE: // pretty important stuff, but temporary
+        return _push(type, 4000 + 60*strlen(message), message);
+        break;
+    case WARNING_MESSAGE: // a bit less important than error
+        return _push(type, 2000 + 40*strlen(message), message);
+        break;
+    case NORMAL_MESSAGE: // something ephemeral
     default:
-        return _push(type, 2000, message);
+        return _push(type, 1000 + 20*strlen(message), message);
+        break;
     }
 }
 
