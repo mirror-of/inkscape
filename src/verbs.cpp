@@ -1516,6 +1516,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Exclusive OR of selected objects"), "exclusion"),
     new SelectionVerb(SP_VERB_SELECTION_CUT, "SelectionDivide", N_("Di_vision"),
         N_("Cut the bottom object into pieces"), "division"),
+    // TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
+    // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_SLICE, "SelectionCutPath", N_("Cut _Path"),
         N_("Cut the bottom object's stroke into pieces, removing fill"), "cut_path"),
     // TRANSLATORS: "outset": expand a shape by offsetting the object's path,
@@ -1560,6 +1562,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Export selection to a bitmap and insert it into document"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"),
+    // TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
+    // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
         N_("Break selected path(s) into subpaths"), "selection_break"),
 
