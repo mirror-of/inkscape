@@ -1,3 +1,9 @@
+2004-08-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/algorithms/longest-common-suffix.h:
+	  Handle in O(1) time the common case of equal tails.
+	  Documentation.
+
 2004-08-08  Ted Gould  <ted@gould.cx>
 
 	* src/svg-profile.h, src/Makefile_insert:
