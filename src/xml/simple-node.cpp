@@ -377,6 +377,9 @@ void SimpleNode::changeOrder(SPRepr *child, SPRepr *ref) {
 void SimpleNode::setPosition(int pos) {
     g_return_if_fail(_parent != NULL);
 
+    // a position beyond the end of the list means the end of the list;
+    // a negative position is the same as an infinitely large position
+
     SPRepr *ref=NULL;
     for ( SPRepr *sibling = _parent->firstChild() ;
           sibling && pos ; sibling = sibling->next() )
