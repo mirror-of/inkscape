@@ -119,6 +119,8 @@ sp_object_type_lookup (const gchar * name)
 		g_hash_table_insert (dtable, (void *)"flowRegion", GINT_TO_POINTER (SP_TYPE_FLOWREGION));
 		g_hash_table_insert (dtable, (void *)"flowRegionExclude", GINT_TO_POINTER (SP_TYPE_FLOWREGIONEXCLUDE));
 		g_hash_table_insert (dtable, (void *)"flowRoot", GINT_TO_POINTER (SP_TYPE_FLOWTEXT));
+		g_hash_table_insert (dtable, (void *)"flowLine", GINT_TO_POINTER (SP_TYPE_FLOWLINE));		
+		g_hash_table_insert (dtable, (void *)"flowRegionBreak", GINT_TO_POINTER (SP_TYPE_FLOWREGIONBREAK));		
 	}
 
 	gpointer const data = g_hash_table_lookup(dtable, name);

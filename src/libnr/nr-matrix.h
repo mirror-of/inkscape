@@ -136,12 +136,12 @@ public:
 	Matrix &operator*=(Matrix const &o);
 
 	Coord &operator[](int const i) {
-		g_assert( unsigned(i) < 6 );
+//		g_assert( unsigned(i) < 6 );
 		return _c[i];
 	}
 
 	Coord operator[](int const i) const {
-		g_assert( unsigned(i) < 6 );
+//		g_assert( unsigned(i) < 6 );
 		return _c[i];
 	}
 

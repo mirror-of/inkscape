@@ -50,9 +50,13 @@ int          text_holder::AppendUTF8(char* iText,int iLen,int &rLen,bool preserv
 	if ( iLen < 0 ) iLen=strlen(iText);
 	int   add_len=0;
 	int   add_st=utf8_length;
+	bool  initial_white=(eat_leading)?true:false;
+	if ( utf8_length > 0 ) {
+		if ( utf8_text[utf8_length-1] == ' ' ) initial_white=true;
+	}
 	{
 		//printf("add utf8 eat %i str %s\n",(eat_leading)?1:0,iText);
-		bool  in_white=(eat_leading)?true:false;
+		bool in_white=initial_white;
 		for (int curLen=0;curLen<iLen;) {
 			char*    p=iText+curLen;
 			char*    np=g_utf8_next_char(p);
@@ -87,7 +91,7 @@ int          text_holder::AppendUTF8(char* iText,int iLen,int &rLen,bool preserv
 	utf8_text=(char*)realloc(utf8_text,(add_st+add_len+1)*sizeof(char));
 	int    add_pos=0;
 	{
-		bool in_white=(eat_leading)?true:false;
+		bool in_white=initial_white;
 		for (int curLen=0;curLen<iLen;) {
 			char*    p=iText+curLen;
 			char*    np=g_utf8_next_char(p);

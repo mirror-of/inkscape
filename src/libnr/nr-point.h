@@ -47,17 +47,17 @@ public:
         return *this;
     }
 
-    Coord operator[](unsigned i) const throw(std::out_of_range) {
-        if ( i > Y ) {
-            throw std::out_of_range("index out of range");
-        }
+    inline Coord operator[](unsigned i) const /*throw(std::out_of_range)*/ {
+//        if ( i > Y ) {
+//            throw std::out_of_range("index out of range");
+//        }
         return _pt[i];
     }
 
-    Coord &operator[](unsigned i) throw(std::out_of_range) {
-        if ( i > Y ) {
-            throw std::out_of_range("index out of range");
-        }
+    inline Coord &operator[](unsigned i) /*throw(std::out_of_range)*/ {
+//        if ( i > Y ) {
+//            throw std::out_of_range("index out of range");
+//        }
         return _pt[i];
     }
 

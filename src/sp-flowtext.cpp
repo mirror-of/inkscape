@@ -340,7 +340,7 @@ sp_flowtext_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsign
 	flow_res*  comp=group->f_res;
 	if ( comp && comp->nbGroup > 0 && comp->nbGlyph > 0 ) {
 		for (int i=0;i<comp->nbGroup;i++) {
-			NR::Matrix  f_tr(NR::scale(comp->groups[i].style->with_style->font_size.computed,comp->groups[i].style->with_style->font_size.computed));
+			NR::Matrix  f_tr(NR::scale(comp->groups[i].style->with_style->font_size.computed, -comp->groups[i].style->with_style->font_size.computed));
 			font_instance*  curF=comp->groups[i].style->theFont;
 			if ( curF ) {
 				for (int j=comp->groups[i].st;j<comp->groups[i].en;j++) {
@@ -526,8 +526,14 @@ void							 flow_res::AddChunk(char* iText,int iLen,text_style* i_style,double x
 		return;
 	}
 	if ( iLen <= 0 ) return;
+	gunichar  nc=g_utf8_get_char(iText);
+	bool      is_white=g_unichar_isspace(nc);
 	double the_x=x;
 	if ( last_c_style != i_style ) {
+		if ( is_white ) {
+                     // will be eaten at the start of a tspan, so we skip it
+			return;
+		}
 		if ( nbChunk >= maxChunk ) {
 			maxChunk=2*nbChunk+1;
 			chunks=(flow_styled_chunk*)realloc(chunks,maxChunk*sizeof(flow_styled_chunk));
