@@ -1,7 +1,9 @@
 #define __PREFERENCES_SKELETON_H__
 
 static const char preferences_skeleton[] =
-"<inkscape version=\"" VERSION "\" xmlns:sodipodi=\"http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd\">"
+"<inkscape version=\"" VERSION "\""
+"  xmlns:sodipodi=\"http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd\""
+"  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\">"
 "  <interface id=\"toolboxes\">"
 "    <interface id=\"file\" state=\"1\"/>"
 "    <interface id=\"edit\" state=\"1\"/>"
@@ -17,7 +19,13 @@ static const char preferences_skeleton[] =
 "  </group>"
 
 "  <group id=\"template\">"
-"    <sodipodi:namedview id=\"base\"/>"
+"    <sodipodi:namedview"
+"       id=\"base\""
+"       inkscape:zoom=\"0.43415836\""
+"       inkscape:cx=\"305.259528\""
+"       inkscape:cy=\"417.849475\""
+"       inkscape:window-width=\"640\""
+"       inkscape:window-height=\"480\" />"
 "  </group>"
 
 "  <group id=\"tools\""
