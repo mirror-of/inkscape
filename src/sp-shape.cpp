@@ -568,6 +568,7 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                     }
 
                     nr_matrix_multiply (&tr, &marker->c2p, &tr);
+                    nr_matrix_multiply (&tr, &marker_path->transform, &tr);
 
                     NRMatrix old_tr = marker_path->transform;
                     marker_path->transform = tr;
