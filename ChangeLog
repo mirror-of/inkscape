@@ -1,3 +1,78 @@
+2004-06-02  bulia byak <bulia@users.sourceforge.net>
+
+	* src/selection.h, src/selection.cpp:
+
+	* preferences-skeleton.h dialogs/display-settings.cpp sp-item.cpp: New settings
+	for various compensations
+
+	* sp-shape.cpp sp-shape.h sp-rect.cpp sp-path.cpp: Factored out adjustments
+	(stroke and pattern so far) from optimizing items into sp-shape.
+
+	* libnr: Added distance function for a couple of points. Added expansions for X and Y.
+
+	* object-edit.cpp sp-rect.cpp sp-item.cpp toolbox.cpp: Made rect use absolute
+	radii, added recursive compensation on item_transform. Added new knot for
+	rect, moved corner knots to the top right corner. Rect toolbar shows visible
+	rx/ry.
+
+	* toolbox.cpp: Finally got the freeze semaphores right (prevent loops for
+	changes both from the repr and from toolbar UI).
+
+	* sp-namedview.cpp: Guarding against nan in zoom, cx, cy
+
+	* select-toolbar.cpp helper/unit-menu.cpp helper/unit-menu.h: Fix units menu size
+
+	* node-context.cpp: Second Esc or empty-click deselects object
+
+	* desktop.cpp desktop.h: Restored sticky zoom 
+
+	* preferences-skeleton.h extension/internal/gdkpixbuf-input.cpp file.cpp: Do not
+	group import if only one item; move its defs to our defs; select and move
+	under cursor the imported item/group. Optionally import bitmaps as filled
+	rects.
+
+	* many -context files: Decoupled seltrans and selcue so that the latter can be
+	used outside of selector; enabled optional selcue in all tools
+
+	* many files: New set_color signals on desktop, switching the dropper to them;
+	needs to be redone for style. Excise the old inkscape::color_set signal.
+
+	* dialogs/stroke-style.cpp: Fix the "all clubs" marker preview bug. In markers
+	menu, skip document markers with stockid only if the same stockid is in
+	markers.svg; add separator.
+
+	* many fill and stroke files: Remove old mode selector, remove dropper checkbox
+	(now always on). Remember active colorselector page. Remove redundant checks
+	in setting color (fixes at least one bug). Cosmetics, cleanup, b/w icons,
+	shortened labels, added mnemonics and tooltips, removed the drop-down modes
+	list. Switched color spinbuttons to 0..255 enabling 0..1 floats to be typed as
+	well.
+
+	* dialogs/find.* et al: Find dialog, command 
+
+	* selection-chemistry.cpp: Fix copying objects from different parents; fix and
+	reorganize copying gradients, recurse into groups
+
+	* dialogs/xml-tree.cpp: Removed unused desktop shutdown signal, fixes problem
+	with saving window settings on exit
+
+	* select-toolbar.cpp: Percentage unit, lock toggle, NR::Rectification
+
+	* sp-object.cpp path-chemistry.cpp splivarot.cpp et al: Sending _delete_signal
+	recursively for descendants; switched to deleteObject where appropriate to
+	notify clones
+
+	* preferences-skeleton.h desktop.cpp desktop.h interface.cpp: Window layout
+	fully configurable, commands in the View menu
+
+	* path-chemistry.cpp: Fixed transform when combining inside group
+
+	* preferences-skeleton.h sp-item.cpp dialogs/display-settings.cpp: Fixes in
+	scalestroke (coded by Carl): arbitrary depth recusion, setting stroke-width
+	via repr, pref in the transforms tab
+
+	* widgets/sp-xmlview-attr-list.cpp: More robust listener 
+
 2004-06-01  Ted Gould  <ted@gould.cx>
 
 	* src/extension/internal/gdkpixbuf-input.cpp:
