@@ -1,3 +1,36 @@
+2004-02-09  bulia byak <bulia@users.sourceforge.net>
+
+    * doc/keys.xml doc/keys-svg.xsl: Keys and Mouse Reference: source, SVG stylesheet
+ 
+    * icons/keys.svg: Keys SVG chart (generated, do not edit)
+ 
+    * icons/Makefile.am: Added keys.svg
+ 
+    * src/help.cpp src/help.h src/interface.cpp: Added Keys and Mouse command
+ 
+    * doc/keyboard-shortcuts.txt Obsoleted, removed
+
+    * doc/keys-html.xsl doc/keys.html: Keys reference in HTML, stylesheet for HTML
+
+    * doc/Makefile.am: updated
+ 
+    * src/libnr/nr-pixblock.cpp: A better fix for 859364
+ 
+    * src/libnrtype/nr-rasterfont.cpp: Reverting my previous fix for 859364, a better
+    one is in nr-pixblock.cpp
+
+    * icons/tutorial.svg: Switched to Bitstream Vera, updated tutorial
+
+    * src/file.cpp: Fix for save bug 891852
+ 
+    * src/preferences-skeleton.h: transientpolicy=1 again
+ 
+    * src/nodepath.cpp: Ctrl-Alt-drag fix in point_line_closest()
+ 
+    * src/select-toolbar.cpp: Small space before unit selector
+ 
+    * src/widgets/paint-selector.cpp: Hidden buttons removed 
+
 2004-02-09  MenTaLguY <mental@rydia.net>
 
     * src/interface.cpp: disabled the autoraise checkbox on Windows
