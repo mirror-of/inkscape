@@ -56,9 +56,9 @@ struct SPSelTrans {
 
 	NR::Rect box;
 	NR::Matrix current;
-	NR::Point opposit;
-	NR::Point origin;
-	NR::Point point;
+	NR::Point opposite; ///< opposite point to where a scale is taking place
+	NR::Point origin; ///< position of origin for transforms
+	NR::Point point; ///< original position of the knot being used for the current transform
 	NR::Point center;
 	SPKnot *shandle[8];
 	SPKnot *rhandle[8];
