@@ -2,6 +2,10 @@
 
 	* src/radial.h: Remove this unused header.
 
+	* src/xml/xml-forward.h: New file.
+	* src/xml/Makefile_insert: Add it to xml_libspxml_a_SOURCES.
+	* src/xml/repr-private.h: Include it.
+
 2004-05-16  MenTaLguY  <mental@rydia.net>
 
 	* src/libnrtype/nr-type-directory.cpp, src/libnrtype/nr-type-ft2.cpp,
@@ -174,7 +178,7 @@
 2004-05-08  bulia byak <bulia@users.sourceforge.net>
 
 	* widgets/paint-selector.cpp: Tooltips, slight cosmetics
- 
+
 	* main.cpp: --help edit 
 
 	*  sp-use.h sp-use.cpp: Redid move compensation using _transformed_signal

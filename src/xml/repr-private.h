@@ -14,8 +14,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib/gslist.h>
+
 #include "repr.h"
 #include "repr-action.h"
+#include "xml/xml-forward.h"
 
 struct SPReprClass;
 struct SPReprAttr;
