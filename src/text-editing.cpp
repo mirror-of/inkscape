@@ -900,7 +900,7 @@ sp_te_adjust_linespacing_screen (SPItem *text, SPDesktop *desktop, gdouble by)
         style->line_height.inherit = FALSE;
         style->line_height.normal = FALSE;
         style->line_height.unit = SP_CSS_UNIT_PERCENT;
-        style->line_height.value = style->line_height.computed = 1.0;
+        style->line_height.value = style->line_height.computed = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
     }
 
     unsigned line_count = layout->lineIndex(layout->end());

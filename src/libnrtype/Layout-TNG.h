@@ -165,6 +165,10 @@ public:
         ARBITRARY_GAP       /// inserts an arbitrarily-sized hole in the flow in line with the current text.
     };
 
+    /** The CSS spec allows line-height:normal to be whatever the user agent
+    thinks will look good. This is our value, as a multiple of font-size. */
+    static const double LINE_HEIGHT_NORMAL;
+
     // ************************** describing the stuff to flow *************************
 
     /** \name Input

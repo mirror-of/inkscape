@@ -368,31 +368,33 @@ class Layout::Calculator
         font->FontMetrics(line_height->ascent, line_height->descent, line_height->leading);
         *line_height *= font_size;
 
-        *line_height_multiplier = 1.0;
         // yet another borked SPStyle member that we're going to have to fix ourselves
         for ( ; ; ) {
             if (style->line_height.set && !style->line_height.inherit) {
+                if (style->line_height.normal)
+                    break;
                 switch (style->line_height.unit) {
                     case SP_CSS_UNIT_NONE:
                         *line_height_multiplier = style->line_height.computed * font_size / line_height->total();
-                        break;
+                        return;
                     case SP_CSS_UNIT_EX:
                         *line_height_multiplier = style->line_height.value * 0.5 * font_size / line_height->total();
                                  // 0.5 is an approximation of the x-height. Fixme.
-                        break;
+                        return;
                     case SP_CSS_UNIT_EM: 
                     case SP_CSS_UNIT_PERCENT:
                         *line_height_multiplier = style->line_height.value * font_size / line_height->total();
-                        break;
+                        return;
                     default:  // absolute values
                         *line_height_multiplier = style->line_height.computed / line_height->total();
-                        break;
+                        return;
                 }
                 break;
             }
             if (style->object->parent == NULL) break;
             style = style->object->parent->style;
         }
+        *line_height_multiplier = LINE_HEIGHT_NORMAL * font_size / line_height->total();
     }
 
     /** split the paragraph into spans. Also calls pango_shape()  on them.

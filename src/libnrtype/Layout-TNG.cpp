@@ -14,6 +14,7 @@ namespace Inkscape {
 namespace Text {
 
 const gunichar Layout::UNICODE_SOFT_HYPHEN = 0x00AD;
+const double Layout::LINE_HEIGHT_NORMAL = 1.25;
 
 Layout::Layout()
 {
