@@ -1,5 +1,8 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* Lots of files: Refine #include's according to reorganization of
+	libnr/nr-types.h and libnr/nr-matrix.h.
+
 	* src/libnr/Makefile.am (libnr_a_SOURCES):
 	nr-coord.h nr-dim2.h nr-i-coord.h nr-matrix-ops.h nr-point-l.h
 	nr-point-ops.h nr-point.h nr-rect-l.h nr-rotate.h nr-rotate-ops.h

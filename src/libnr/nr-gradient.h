@@ -16,7 +16,7 @@
 
 typedef struct _NRRGradientRenderer NRRGradientRenderer;
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
 #include <libnr/nr-render.h>
 
 #define NR_GRADIENT_VECTOR_LENGTH 1024

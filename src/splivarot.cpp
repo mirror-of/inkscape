@@ -31,9 +31,10 @@
 #include "view.h"
 #include "prefs-utils.h"
 
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-point.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
-#include "libnr/nr-types.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"

@@ -13,8 +13,9 @@
  */
 
 
-#include <libnr/nr-types.h>
 #include "forward.h"
+#include <libnr/nr-forward.h>
+#include <libnr/nr-point.h>
 
 /* fixme: do multidocument safe */
 

@@ -54,7 +54,8 @@ typedef struct _NRGC NRGC;
 
 #define NR_ARENA_ITEM_RENDER_NO_CACHE (1 << 0)
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-rect-l.h>
 #include <libnr/nr-pixblock.h>
 #include <libnr/nr-object.h>
 #include "nr-arena-forward.h"

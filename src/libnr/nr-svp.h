@@ -16,7 +16,9 @@ typedef struct _NRSVPSegment NRSVPSegment;
 typedef struct _NRSVPFlat NRSVPFlat;
 typedef struct _NRSVP NRSVP;
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-coord.h>
+#include <libnr/nr-forward.h>
+#include <libnr/nr-rect.h>
 #include <libnr/nr-path.h>
 
 #include <glib.h>

@@ -19,7 +19,8 @@
 #endif
 #include <assert.h>
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-rect.h>
 
 #define nr_new(t,n) ((t *) malloc ((n) * sizeof (t)))
 #define nr_free free

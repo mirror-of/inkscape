@@ -39,7 +39,8 @@ enum {
 	SP_MARKER_LOC_QTY
 };
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-rect.h>
 #include "svg/svg-types.h"
 #include "enums.h"
 #include "sp-item-group.h"

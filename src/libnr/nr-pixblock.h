@@ -10,7 +10,7 @@
  * This code is in public domain
  */
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-rect-l.h>
 #include <libnr/nr-forward.h>
 
 enum {

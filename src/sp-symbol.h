@@ -24,7 +24,8 @@
 typedef struct _SPSymbol SPSymbol;
 typedef struct _SPSymbolClass SPSymbolClass;
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-rect.h>
 #include "svg/svg-types.h"
 #include "enums.h"
 #include "sp-item-group.h"
