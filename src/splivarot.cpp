@@ -322,11 +322,11 @@ sp_selected_path_boolop (bool_op bop)
             // should always be the case, but ya never know
             {
                 for (int i = 0; i < theShape->numberOfPoints(); i++) {
-                    if ( theShape->pts[i].dI+theShape->pts[i].dO > 2 ) { 
+                    if ( theShape->getPoint(i).dI + theShape->getPoint(i).dO > 2 ) { 
                         // possibly an intersection
                         // we need to check that at least one edge from the source path is incident to it
                         // before we declare it's an intersection
-                        int   cb=theShape->pts[i].firstA;
+                        int cb = theShape->getPoint(i).firstA;
                         int   nbOrig=0;
                         int   nbOther=0;
                         int   piece=-1;

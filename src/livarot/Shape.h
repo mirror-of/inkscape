@@ -67,7 +67,6 @@ public:
 
   // lists of the nodes and edges
   int maxPt; // [FIXME: remove this]
-  std::vector<dg_point> pts;
   int maxAr; // [FIXME: remove this]
   std::vector<dg_arete> aretes;
 
@@ -84,10 +83,15 @@ public:
 
   bool hasBackData() const { return _has_back_data; }
 
+  dg_point const &getPoint(int n) const { return pts[n]; }
+
 private:
 
+  std::vector<dg_point> pts; /* FIXME: rename to _pts */
+  
   int nbPt; ///< number of points [FIXME: remove this in favour of pts.size()]
   int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
+
   bool _need_points_sorting;  ///< points have been added or removed: we need to sort the points again
   bool _need_edges_sorting;   ///< edges have been added: maybe they are not ordered clockwise
                               ///< nota: if you remove an edge, the clockwise order still holds

@@ -850,22 +850,22 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     // first get the minimum distance to the points
     for (int i = 0; i < theRes->numberOfPoints(); i++)
     {
-      if (theRes->pts[i].dI + theRes->pts[i].dO > 0)
+      if (theRes->getPoint(i).dI + theRes->getPoint(i).dO > 0)
 	    {
-        NR::Point nx = theRes->pts[i].x;
+        NR::Point nx = theRes->getPoint(i).x;
         NR::Point nxpx = px-nx;
 	      double ndist = sqrt (dot(nxpx,nxpx));
 	      if (ptSet == false || fabs (ndist) < fabs (ptDist))
         {
           // we have a new minimum distance
           // now we need to wheck if px is inside or outside (for the sign)
-          nx = px - theRes->pts[i].x;
+          nx = px - theRes->getPoint(i).x;
           double nlen = sqrt (dot(nx , nx));
           nx /= nlen;
           int pb, cb, fb;
-          fb = theRes->pts[i].lastA;
-          pb = theRes->pts[i].lastA;
-          cb = theRes->pts[i].firstA;
+          fb = theRes->getPoint(i).lastA;
+          pb = theRes->getPoint(i).lastA;
+          cb = theRes->getPoint(i).firstA;
           do
           {
             // one angle
@@ -910,8 +910,8 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     // loop over the edges to try to improve the distance
     for (int i = 0; i < theRes->numberOfEdges(); i++)
     {
-      NR::Point sx = theRes->pts[theRes->aretes[i].st].x;
-      NR::Point ex = theRes->pts[theRes->aretes[i].en].x;
+      NR::Point sx = theRes->getPoint(theRes->aretes[i].st).x;
+      NR::Point ex = theRes->getPoint(theRes->aretes[i].en).x;
       NR::Point nx = ex - sx;
       double len = sqrt (dot(nx,nx));
       if (len > 0.0001)
@@ -989,7 +989,7 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
   if (theShape->hasPoints())
   {
     theShape->SortPoints ();
-    *px = theShape->pts[0].x;
+    *px = theShape->getPoint(0).x;
   }
   
   delete theShape;

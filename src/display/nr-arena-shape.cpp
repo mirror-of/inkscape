@@ -446,7 +446,7 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 		    shape->fill_shp->Reset(shape->cached_fill->numberOfPoints(),
 					   shape->cached_fill->numberOfEdges());
 		    for (int i = 0; i < shape->cached_fill->numberOfPoints(); i++)
-			shape->fill_shp->AddPoint(shape->cached_fill->pts[i].x * cached_to_new);
+			shape->fill_shp->AddPoint(shape->cached_fill->getPoint(i).x * cached_to_new);
 		    if ( isometry == 1 ) {
 			for (int i = 0; i < shape->cached_fill->numberOfEdges(); i++) 
 			    shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].st,
@@ -558,7 +558,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 		    shape->stroke_shp=new Shape;
 		shape->stroke_shp->Reset(shape->cached_stroke->numberOfPoints(), shape->cached_stroke->numberOfEdges());
 		for (int i = 0; i < shape->cached_stroke->numberOfPoints(); i++)
-		    shape->stroke_shp->AddPoint(shape->cached_stroke->pts[i].x*cached_to_new);
+		    shape->stroke_shp->AddPoint(shape->cached_stroke->getPoint(i).x * cached_to_new);
 		if ( isometry == 1 ) {
 		    for (int i = 0; i < shape->cached_stroke->numberOfEdges(); i++)
 			shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].st,
