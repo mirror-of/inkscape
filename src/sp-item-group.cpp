@@ -104,6 +104,7 @@ sp_group_class_init (SPGroupClass *klass)
 static void
 sp_group_init (SPGroup *group)
 {
+	group->_layer_mode = SPGroup::GROUP;
 	new (&group->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
 }
 
@@ -339,7 +340,8 @@ sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
 	ai = NRArenaGroup::create(arena);
 	nr_arena_group_set_transparent(NR_ARENA_GROUP (ai),
-	                               group->layerMode(key) != SPGroup::GROUP);
+	                               group->effectiveLayerMode(key) ==
+				         SPGroup::LAYER);
 
 	ar = NULL;
 
@@ -511,8 +513,15 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 	return child;
 }
 
-SPGroup::LayerMode SPGroup::layerMode(unsigned int dkey) {
-	std::map<unsigned int, LayerMode>::iterator iter;
+void SPGroup::setLayerMode(LayerMode mode) {
+	if ( _layer_mode != mode ) {
+		_layer_mode = mode;
+		_updateLayerMode();
+	}
+}
+
+SPGroup::LayerMode SPGroup::layerDisplayMode(unsigned int dkey) const {
+	std::map<unsigned int, LayerMode>::const_iterator iter;
 	iter = _display_modes.find(dkey);
 	if ( iter != _display_modes.end() ) {
 		return (*iter).second;
@@ -521,19 +530,20 @@ SPGroup::LayerMode SPGroup::layerMode(unsigned int dkey) {
 	}
 }
 
-void SPGroup::setLayerMode(unsigned int dkey, SPGroup::LayerMode mode) {
-	SPItemView *view;
-
-	if ( layerMode(dkey) == mode ) {
-		return;
+void SPGroup::setLayerDisplayMode(unsigned int dkey, SPGroup::LayerMode mode) {
+	if ( layerDisplayMode(dkey) != mode ) {
+		_display_modes[dkey] = mode;
+		_updateLayerMode(dkey);
 	}
-	_display_modes[dkey] = mode;
+}
 
+void SPGroup::_updateLayerMode(unsigned int display_key) {
+	SPItemView *view;
 	for ( view = this->display ; view ; view = view->next ) {
-		if ( view->key == dkey ) {
+		if ( !display_key || view->key == display_key ) {
 			NRArenaGroup *arena_group=NR_ARENA_GROUP(view->arenaitem);
 			if (arena_group) {
-				nr_arena_group_set_transparent(arena_group, mode != SPGroup::GROUP);
+				nr_arena_group_set_transparent(arena_group, effectiveLayerMode(view->key) == SPGroup::LAYER);
 			}
 		}
 	}

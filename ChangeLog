@@ -11,6 +11,12 @@
 	  change layers yet), and it is not always updated when it needs
 	  to be (yet).  It does also fix the crash though.
 
+	* src/desktop.cpp, src/desktop.h, src/document.cpp,
+	  src/sp-item-group.cpp, src/sp-item-group.h:
+
+	  additional layers work; backed off on promoting siblings to
+	  layers automatically and reintroduced "global" layer mode
+
 2004-07-05  Carl Hetherington <inkscape@carlh.net>
 
 	* src/desktop.cpp: prevent crash by adding a check for 

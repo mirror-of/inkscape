@@ -749,7 +749,7 @@ find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) &&
-		    SP_GROUP (o)->layerMode(dkey) == SPGroup::LAYER )
+		    SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER )
 		{
 			s = find_items_in_area(s, SP_GROUP(o), dkey, area, test);
 		} else {
@@ -774,7 +774,7 @@ find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboole
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && (SP_GROUP (o)->layerMode(dkey) == SPGroup::LAYER || into_groups))	{
+		if (SP_IS_GROUP (o) && (SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups))	{
 			// if nothing found yet, recurse into the group
 			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups);
 			if (newseen) {
@@ -802,7 +802,7 @@ find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
 
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && SP_GROUP (o)->layerMode(dkey) != SPGroup::LAYER ) {
+		if (SP_IS_GROUP (o) && SP_GROUP (o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
 			SPItem *child = SP_ITEM(o);
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 

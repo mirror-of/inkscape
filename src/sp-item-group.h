@@ -25,10 +25,25 @@
 struct SPGroup : public SPItem {
 	enum LayerMode { GROUP, LAYER };
 
+	LayerMode _layer_mode;
 	std::map<unsigned int, LayerMode> _display_modes;
 
-	LayerMode layerMode(unsigned int dkey);
-	void setLayerMode(unsigned int dkey, LayerMode mode);
+	LayerMode layerMode() const { return _layer_mode; }
+	void setLayerMode(LayerMode mode);
+
+	LayerMode effectiveLayerMode(unsigned int display_key) const {
+		if ( _layer_mode == LAYER ) {
+			return LAYER;
+		} else {
+			return layerDisplayMode(display_key);
+		}
+	}
+
+	LayerMode layerDisplayMode(unsigned int display_key) const;
+	void setLayerDisplayMode(unsigned int display_key, LayerMode mode);
+
+private:
+	void _updateLayerMode(unsigned int display_key=0);
 };
 
 struct SPGroupClass {

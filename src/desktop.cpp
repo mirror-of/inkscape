@@ -287,13 +287,10 @@ SPObject *SPDesktop::layerForObject(SPObject *object) {
 
     SPObject *root=currentRoot();
     object = SP_OBJECT_PARENT(object);
-    while ( object && object != root ) {
-        if ( SP_IS_GROUP(object) && SP_GROUP(object)->layerMode(this->dkey) == SPGroup::LAYER ) {
-            return object;
-        }
+    while ( object && object != root && !isLayer(object) ) {
         object = SP_OBJECT_PARENT(object);
     }
-    return NULL;
+    return object;
 }
 
 static void
@@ -1364,34 +1361,14 @@ void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, co
     }
 }
 
-namespace {
-
-void apply_layer_mode(unsigned int dkey, SPGroup *layer, SPGroup::LayerMode mode) {
-    // TODO - this mode needs to be settable on a per-desktop basis
-    //        (see comments in sp-item-group.h)
-    if (SP_OBJECT_PARENT(layer)) {
-        SPObject *iter=sp_object_first_child(SP_OBJECT_PARENT(layer));
-        while (iter) {
-            if (SP_IS_GROUP(iter)) {
-                SP_GROUP(iter)->setLayerMode(dkey, mode);
-            }
-            iter = SP_OBJECT_NEXT(iter);
-        }
-    } else {
-        SP_GROUP(layer)->setLayerMode(dkey, mode);
-    }
-}
-
 void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
-    apply_layer_mode(desktop->dkey, SP_GROUP(layer), SPGroup::LAYER);
+    SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::LAYER);
 }
 
 void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
-    apply_layer_mode(desktop->dkey, SP_GROUP(layer), SPGroup::GROUP);
-}
-
+    SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::GROUP);
 }
 
 void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
@@ -1403,6 +1380,8 @@ void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
 void SPDesktop::_selection_changed(SPSelection *selection, SPDesktop *desktop)
 {
     // TODO - only change the layer for single selections, or what?
+    // This seems reasonable -- for multiple selections there can be many
+    // different layers involved.
     SPItem *item=selection->singleItem();
     if (item) {
         SPObject *layer=desktop->layerForObject(item);
@@ -2143,8 +2122,10 @@ sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
 namespace {
 
 void select_layer(GtkMenuItem *item, SPObject *layer) {
-    SPDesktop *desktop=SP_DESKTOP(g_object_get_data(G_OBJECT(item), "desktop"));
-    desktop->setCurrentLayer(layer);
+    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(item))) {
+        SPDesktop *desktop=SP_DESKTOP(g_object_get_data(G_OBJECT(item), "desktop"));
+        desktop->setCurrentLayer(layer);
+    }
 }
 
 void build_item(SPDesktop *desktop, GSList *&items, SPObject *layer,
@@ -2156,15 +2137,18 @@ void build_item(SPDesktop *desktop, GSList *&items, SPObject *layer,
         item=gtk_radio_menu_item_new_with_label(items, label);
         g_free(label);
 
-        g_object_set_data(G_OBJECT(item), "desktop", desktop);
-        g_object_set_data(G_OBJECT(item), "layer", layer);
     } else {
+        layer = desktop->currentRoot();
         item=gtk_radio_menu_item_new_with_label(items, "        ");
     }
     items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+
     if (selected) {
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), selected);
     }
+
+    g_object_set_data(G_OBJECT(item), "desktop", desktop);
+    g_signal_connect(G_OBJECT(item), "activate", GCallback(select_layer), layer);
 
     sp_set_font_size(item, STATUS_LAYER_FONT_SIZE);
     gtk_widget_show(item);
@@ -2187,12 +2171,13 @@ unsigned build_sibling_items(SPDesktop *desktop, GSList *&items,
                              SPObject *layer, SPObject *parent,
                              unsigned indent)
 {
-    GSList *groups=NULL;
+    GSList *layers=NULL;
 
     SPObject *object=sp_object_first_child(parent);
     while (object) {
+        // later, desktop->isLayer(object)
         if (SP_IS_GROUP(object)) {
-            groups = g_slist_prepend(groups, object);
+            layers = g_slist_prepend(layers, object);
         }
         object = SP_OBJECT_NEXT(object);
     }
@@ -2200,19 +2185,19 @@ unsigned build_sibling_items(SPDesktop *desktop, GSList *&items,
     unsigned offset=0;
 
     bool found=false;
-    for ( GSList *iter=groups ; iter ; iter = iter->next ) {
-        SPGroup *group=SP_GROUP(iter->data);
-        if ( group == layer ) {
-            build_item(desktop, items, group, indent, true);
+    for ( GSList *iter=layers ; iter ; iter = iter->next ) {
+        object=SP_OBJECT(iter->data);
+        if ( object == layer ) {
+            build_item(desktop, items, object, indent, true);
             found = true;
         } else {
-            build_item(desktop, items, group, indent, false);
+            build_item(desktop, items, object, indent, false);
             if (!found) {
                 offset++;
             }
         }
     }
-    g_slist_free(groups);
+    g_slist_free(layers);
 
     return offset;
 }
