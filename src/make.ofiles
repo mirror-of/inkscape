@@ -49,7 +49,6 @@ OBJECTS = \
 	extension/internal/ps.o \
 	extension/internal/svg.o \
 	extension/internal/win32.o \
-	extension/menu.o \
 	extension/system.o \
 	extract-uri-test.o \
 	extract-uri.o \
