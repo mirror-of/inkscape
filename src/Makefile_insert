@@ -24,9 +24,6 @@ endif
 #
 # ################################################
 
-libinkpre_a_CPPFLAGS =	\
-	-DINKSCAPE_VERSION=\""$(VERSION)"\"
-
 # libinkpre.a: any object that's sharable between inkscape & inkview,
 # and isn't needed by object files in subdirectories (i.e. libinkpre.a
 # comes before subdirectory libraries on the link line).
@@ -187,6 +184,7 @@ libinkpre_a-knot.$(OBJEXT): helper/sp-marshal.h
 libinkpre_a-selection.$(OBJEXT): helper/sp-marshal.h
 libinkpre_a-sp-object.$(OBJEXT): helper/sp-marshal.h
 libinkpre_a-view.$(OBJEXT): helper/sp-marshal.h
+help.$(OBJEXT): inkscape_version.h
 
 
 # ################################################
@@ -209,6 +207,5 @@ mod360_test_LDADD = libinkscape.a -lglib-2.0
 extract_uri_test_SOURCES = extract-uri-test.cpp
 extract_uri_test_LDADD = libinkscape.a -lglib-2.0
 
-# Not yet used.  I intend to enable this very soon.
-#version.h: ../configure.in
-#	echo '#define INKSCAPE_VERSION "$(VERSION)"' > version.h
+inkscape_version.h: ../configure.in
+	echo '#define INKSCAPE_VERSION "$(VERSION)"' > inkscape_version.h

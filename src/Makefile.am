@@ -52,7 +52,9 @@ noinst_LIBRARIES =	\
 	libinkpost.a
 
 DISTCLEANFILES =	\
-	helper/sp-marshal.cpp helper/sp-marshal.h
+	helper/sp-marshal.cpp	\
+	helper/sp-marshal.h	\
+	inkscape_version.h
 
 EXTRA_DIST =	\
 	extension/internal/gnome.cpp	\

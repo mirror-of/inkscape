@@ -22,6 +22,7 @@
 #include "file.h"
 #include "helper/sp-intl.h"
 #include "libnr/nr-macros.h"
+#include "inkscape_version.h"
 
 static GtkWidget *w = NULL;
 
