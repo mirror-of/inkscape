@@ -378,6 +378,8 @@ GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
                 // do something
                 g_message("error loading pixbuf at close");
             }
+
+            g_object_unref(loader);
         }
         else
         {

@@ -3,6 +3,9 @@
 	* src/sp-item.cpp, src/sp-clippath.cpp, src/cp-mask.cpp:
 	  minor refcounting tweaks
 
+	* src/sp-image.cpp: fixed failure to release GdkPixbufLoader when
+	  done with it (fixes bug #1055034)
+
 2004-11-10  Kees Cook  <kees@outflux.net>
 
 	* configure.ac, src/gc-core.h: corrected gc.h path detection.
