@@ -6281,32 +6281,49 @@ http://www.inkscape.org/</dc:description>
        sodipodi:rx="1.7686265"
        sodipodi:ry="1.7686265"
        d="M 716.49989 247.59482 A 1.7686265 1.7686265 0 1 1  712.96264,247.59482 A 1.7686265 1.7686265 0 1 1  716.49989 247.59482 z"
-       transform="matrix(0.712436,0.000000,0.000000,1.236856,202.6848,-58.30167)" />
-    <path
-       style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-dasharray:none;"
-       d="M 707.08957,246.49716 L 707.71889,248.07298"
-       id="path2614"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-dasharray:none;"
-       d="M 708.85110,243.82818 L 709.32887,245.36377"
-       id="path2615"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-dasharray:none;"
-       d="M 712.00902,242.94006 L 712.00521,244.23174"
-       id="path2616"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-dasharray:none;"
-       d="M 716.80576,246.52836 L 716.06651,248.05137"
-       id="path2621"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-dasharray:none;"
-       d="M 715.17150,243.92698 L 714.60957,245.36376"
-       id="path2622"
-       sodipodi:nodetypes="cc" />
+       transform="matrix(0.877255,0.000000,0.000000,1.046012,84.93544,-11.09396)" />
+    <g
+       id="g2773">
+      <path
+         style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-dasharray:none;"
+         d="M 707.16467,244.22480 L 708.39861,246.46389"
+         id="path2614"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
+         d="M 708.66301,242.25229 L 709.61620,245.04523"
+         id="path2615"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="color:#000000;fill:#ffffff;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.79876900;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
+         d="M 710.72562,241.23025 L 711.12396,244.27926"
+         id="path2616"
+         sodipodi:nodetypes="cc" />
+      <use
+         x="0.0000000"
+         y="0.0000000"
+         xlink:href="#path2615"
+         id="use2770"
+         transform="matrix(-1.000000,0.000000,0.000000,1.000000,1423.901,3.603158e-6)"
+         width="957.50000"
+         height="320.00000" />
+      <use
+         x="0.0000000"
+         y="0.0000000"
+         xlink:href="#path2614"
+         id="use2771"
+         transform="matrix(-1.000000,0.000000,0.000000,1.000000,1423.874,0.000000)"
+         width="957.50000"
+         height="320.00000" />
+      <use
+         x="0.0000000"
+         y="0.0000000"
+         xlink:href="#path2616"
+         id="use2772"
+         transform="matrix(-1.000000,0.000000,0.000000,1.000000,1423.851,4.907326e-6)"
+         width="957.50000"
+         height="320.00000" />
+    </g>
   </g>
   <g
      id="lock_unlocked"
