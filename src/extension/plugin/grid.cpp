@@ -13,8 +13,12 @@
  */
 
 #include <glibmm/ustring.h>
+#include <gtkmm/enums.h>
 #include <gtkmm/plug.h>
 #include <gtkmm/label.h>
+#include <gtkmm/box.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/spinbutton.h>
 
 #include <view.h>
 #include <document.h>
@@ -26,6 +30,8 @@
 #include <extension/implementation/implementation.h>
 #include <extension/extension.h>
 #include <extension/effect.h>
+
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -155,21 +161,98 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
     return;
 }
 
+/** \brief  A class to make an adjustment that uses Extension params */
+class PrefAdjustment : public Gtk::Adjustment {
+    /** Extension that this relates to */
+    Inkscape::Extension::Extension * _ext;
+    /** The string which represents the parameter */
+    char * _pref;
+public:
+    /** \brief  Make the adjustment using an extension and the string
+                describing the parameter. */
+    PrefAdjustment(Inkscape::Extension::Extension * ext, char * pref) :
+            Gtk::Adjustment(0.0, 0.0, 10.0, 0.1), _ext(ext), _pref(pref) {
+        this->set_value(_ext->get_param_float(_pref)); 
+        this->signal_value_changed().connect(sigc::mem_fun(this, &PrefAdjustment::val_changed));
+        return;
+    };
+
+    void val_changed (void);
+}; /* class PrefAdjustment */
+
+/** \brief  A function to respond to the value_changed signal from the
+            adjustment.
+
+    This function just grabs the value from the adjustment and writes
+    it to the parameter.  Very simple, but yet beautiful.
+*/
+void
+PrefAdjustment::val_changed (void)
+{
+    // std::cout << "Value Changed to: " << this->get_value() << std::endl;
+    _ext->set_param_float(_pref, this->get_value());
+    return;
+}
+
+/** \brief  A function to get the prefences for the grid
+    \param  moudule  Module which holds the params
+    \param  view     Unused today - may get style information in the future.
+
+    This function builds a VBox, and puts it into a Gtk::Plug.  This way
+    the native window pointer can be pulled out and returned up to be
+    stuck in a Gtk::Socket further up the call stack.  In the Vbox there
+    are several Hboxes, each one being a spin button to adjust a particular
+    parameter.  The names of the parameters and the labels are all
+    stored in the arrays in the middle of the function.  This makes
+    the code very generic.  This will probably have to change if someone
+    wants to make this dialog look nicer.
+*/
 Gdk::NativeWindow
 Grid::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
 {
-    Gtk::Plug * socket;
+    Gtk::Plug * plug;
 
-    socket = new Gtk::Plug((unsigned int)0);
+    plug = new Gtk::Plug((unsigned int)0);
 
-    Gtk::Label * label;
-    label = new Gtk::Label("Ted was here!");
-    label->show();
+    Gtk::VBox * vbox;
+    vbox = new Gtk::VBox();
 
-    socket->add(*label);
-    socket->show();
+#define NUM_PREFERENCES  5
+    char * labels[NUM_PREFERENCES] = {N_("Line Width"),
+                       N_("Horizontal Spacing"),
+                       N_("Vertical Spacing"),
+                       N_("Horizontal Offset"),
+                       N_("Vertical Offset")};
+    char * prefs[NUM_PREFERENCES] =  {"lineWidth",
+                       "xspacing",
+                       "yspacing",
+                       "xoffset",
+                       "yoffset"};
 
-    return socket->get_id();
+    for (int i = 0; i < NUM_PREFERENCES; i++) {
+        Gtk::HBox * hbox = new Gtk::HBox();
+
+        Gtk::Label * label = new Gtk::Label(_(labels[i]), Gtk::ALIGN_LEFT);
+        label->show();
+        hbox->pack_start(*label, true, true);
+
+        PrefAdjustment * pref = new PrefAdjustment(module, prefs[i]);
+
+        Gtk::SpinButton * spin = new Gtk::SpinButton(*pref, 0.1, 1);
+        spin->show();
+        hbox->pack_start(*spin, false, false);
+
+        hbox->show();
+
+        vbox->pack_start(*hbox, true, true);
+    }
+#undef NUM_PREFERENCES
+
+    vbox->show();
+    plug->add(*vbox);
+    plug->show();
+
+    return plug->get_id();
 }
 
 
