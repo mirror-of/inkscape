@@ -136,18 +136,15 @@ sp_event_context_dispose (GObject *object)
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
-static void
-sp_event_context_private_setup (SPEventContext *ec)
+void
+sp_event_context_update_cursor (SPEventContext *ec)
 {
-	GtkWidget *w;
-	GdkBitmap *bitmap, * mask;
-
-	w = GTK_WIDGET (SP_DT_CANVAS (ec->desktop));
+	GtkWidget *w = GTK_WIDGET (SP_DT_CANVAS (ec->desktop));
 	if (w->window) {
 		/* fixme: */
 		if (ec->cursor_shape) {
-			bitmap = NULL;
-			mask = NULL;
+			GdkBitmap *bitmap = NULL;
+			GdkBitmap *mask = NULL;
 			sp_cursor_bitmap_and_mask_from_xpm (&bitmap, &mask, ec->cursor_shape);
 			if ((bitmap != NULL) && (mask != NULL)) {
 				ec->cursor = gdk_cursor_new_from_pixmap (bitmap, mask,
@@ -157,6 +154,12 @@ sp_event_context_private_setup (SPEventContext *ec)
 		}
 		gdk_window_set_cursor (w->window, ec->cursor);
 	}
+}
+
+static void
+sp_event_context_private_setup (SPEventContext *ec)
+{
+	sp_event_context_update_cursor (ec);
 }
 
 static void 

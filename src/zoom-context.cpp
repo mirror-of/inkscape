@@ -29,6 +29,7 @@
 #include "desktop-affine.h"
 #include "sp-item.h"
 #include "pixmaps/cursor-zoom.xpm"
+#include "pixmaps/cursor-zoom-out.xpm"
 #include "prefs-utils.h"
 
 #include "zoom-context.h"
@@ -204,9 +205,26 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
 			break;
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+			event_context->cursor_shape = cursor_zoom_out_xpm;
+			sp_event_context_update_cursor (event_context);
+			break;
 		default:
 			break;
 		}
+		break;
+	case GDK_KEY_RELEASE:
+		switch (event->key.keyval) {
+		case GDK_Shift_L:
+		case GDK_Shift_R:
+			event_context->cursor_shape = cursor_zoom_xpm;
+			sp_event_context_update_cursor (event_context);
+			break;
+		default:
+			break;
+		}
+		break;
 	default:
 		break;
 	}
