@@ -73,10 +73,10 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         SPObject *reprobj = SP_ACTIVE_DOCUMENT->getObjectByRepr(rpath);
         if (!reprobj)
             continue;
-        if (!SP_IS_PATH(reprobj))
+        if (!SP_IS_SHAPE(reprobj))//Bulia's suggestion.  Allow all shapes
             continue;
-        SPPath *opath = SP_PATH(reprobj);
-        SPCurve *curve = SP_SHAPE(opath)->curve; 
+        SPShape *shape = SP_SHAPE(reprobj);
+        SPCurve *curve = shape->curve; 
         if (sp_curve_empty(curve))
             continue;
 
