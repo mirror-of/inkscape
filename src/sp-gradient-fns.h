@@ -48,17 +48,6 @@ SPGradientSpread sp_gradient_get_spread (SPGradient *gradient);
 void sp_gradient_repr_write_vector(SPGradient *gr);
 void sp_gradient_repr_clear_vector(SPGradient *gr);
 
-/**
- * Renders gradient vector to buffer
- *
- * len, width, height, rowstride - buffer parameters (1 or 2 dimensional)
- * span - full integer width of requested gradient
- * pos - buffer starting position in span
- *
- * RGB buffer background should be set up before
- */
-void sp_gradient_render_vector_line_rgba(SPGradient *gr, guchar *px, gint len, gint pos, gint span);
-void sp_gradient_render_vector_line_rgb(SPGradient *gr, guchar *px, gint len, gint pos, gint span);
 void sp_gradient_render_vector_block_rgba(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, gboolean horizontal);
 void sp_gradient_render_vector_block_rgb(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, gboolean horizontal);
 

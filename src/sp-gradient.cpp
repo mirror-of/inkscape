@@ -861,18 +861,17 @@ sp_gradient_ensure_colors(SPGradient *gr)
     }
 }
 
-/*
- * Renders gradient vector to buffer
+/**
+ * Renders gradient vector to buffer.
+ * RGB buffer background should be set up beforehand.
  *
- * len, width, height, rowstride - buffer parameters (1 or 2 dimensional)
- * span - full integer width of requested gradient
- * pos - buffer starting position in span
- *
- * RGB buffer background should be set up before
+ * @param len,width,height,rowstride Buffer parameters (1 or 2 dimensional).
+ * @param span Full integer width of requested gradient.
+ * @param pos Buffer starting position in span.
  */
-
-void
-sp_gradient_render_vector_line_rgba(SPGradient *gradient, guchar *buf, gint len, gint pos, gint span)
+static void
+sp_gradient_render_vector_line_rgba(SPGradient *const gradient, guchar *buf,
+                                    gint const len, gint const pos, gint const span)
 {
     g_return_if_fail(gradient != NULL);
     g_return_if_fail(SP_IS_GRADIENT(gradient));
@@ -900,48 +899,9 @@ sp_gradient_render_vector_line_rgba(SPGradient *gradient, guchar *buf, gint len,
 }
 
 void
-sp_gradient_render_vector_line_rgb(SPGradient *gradient, guchar *buf,
-                                   gint len, gint pos, gint span)
-{
-    g_return_if_fail(gradient != NULL);
-    g_return_if_fail(SP_IS_GRADIENT(gradient));
-    g_return_if_fail(buf != NULL);
-    g_return_if_fail(len > 0);
-    g_return_if_fail(pos >= 0);
-    g_return_if_fail(pos + len <= span);
-    g_return_if_fail(span > 0);
-
-    if (!gradient->color) {
-        sp_gradient_ensure_colors(gradient);
-    }
-
-    gint idx = (pos * 1024 << 8) / span;
-    gint didx = (1024 << 8) / span;
-
-    for (gint x = 0; x < len; x++) {
-        gint r = gradient->color[4 * (idx >> 8)];
-        gint g = gradient->color[4 * (idx >> 8) + 1];
-        gint b = gradient->color[4 * (idx >> 8) + 2];
-        gint a = gradient->color[4 * (idx >> 8) + 3];
-
-        gint fc = (r - *buf) * a;
-        buf[0] = *buf + ((fc + (fc >> 8) + 0x80) >> 8);
-
-        fc = (g - *buf) * a;
-        buf[1] = *buf + ((fc + (fc >> 8) + 0x80) >> 8);
-
-        fc = (b - *buf) * a;
-        buf[2] = *buf + ((fc + (fc >> 8) + 0x80) >> 8);
-
-        buf += 3;
-        idx += didx;
-    }
-}
-
-void
-sp_gradient_render_vector_block_rgba(SPGradient *gradient, guchar *buf,
-                                     gint width, gint height, gint rowstride,
-                                     gint pos, gint span, gboolean horizontal)
+sp_gradient_render_vector_block_rgba(SPGradient *const gradient, guchar *buf,
+                                     gint const width, gint const height, gint const rowstride,
+                                     gint const pos, gint const span, gboolean const horizontal)
 {
     g_return_if_fail(gradient != NULL);
     g_return_if_fail(SP_IS_GRADIENT(gradient));
@@ -975,8 +935,8 @@ sp_gradient_render_vector_block_rgba(SPGradient *gradient, guchar *buf,
 
 void
 sp_gradient_render_vector_block_rgb(SPGradient *gradient, guchar *buf,
-                                    gint width, gint height, gint rowstride,
-                                    gint pos, gint span, gboolean horizontal)
+                                    gint const width, gint const height, gint const rowstride,
+                                    gint const pos, gint const span, gboolean const horizontal)
 {
     g_return_if_fail(gradient != NULL);
     g_return_if_fail(SP_IS_GRADIENT(gradient));
