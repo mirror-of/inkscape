@@ -18,6 +18,10 @@
 #include "forward.h"
 #include "sp-object.h"
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 typedef struct _SPPainter SPPainter;
 
 #define SP_TYPE_PAINT_SERVER (sp_paint_server_get_type ())
@@ -61,5 +65,7 @@ GType sp_paint_server_get_type (void);
 SPPainter *sp_paint_server_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRectF *bbox);
 
 SPPainter *sp_painter_free (SPPainter *painter);
+
+G_END_DECLS
 
 #endif

@@ -17,6 +17,10 @@
  * Here is GPL code, unlike other libnr wihich is public domain
  */
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 typedef struct _NRLGradientRenderer NRLGradientRenderer;
 
 #include <libnr/nr-gradient.h>
@@ -37,5 +41,7 @@ NRRenderer *nr_lgradient_renderer_setup (NRLGradientRenderer *lgr,
 					 const NRMatrixF *gs2px,
 					 float x0, float y0,
 					 float x1, float y1);
+
+G_END_DECLS
 
 #endif

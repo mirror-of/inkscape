@@ -16,6 +16,10 @@
 #include <gtk/gtkclist.h>
 #include "../xml/repr.h"
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 #define SP_TYPE_XMLVIEW_ATTR_LIST (sp_xmlview_attr_list_get_type ())
 #define SP_XMLVIEW_ATTR_LIST(o) (GTK_CHECK_CAST ((o), SP_TYPE_XMLVIEW_ATTR_LIST, SPXMLViewAttrList))
 #define SP_IS_XMLVIEW_ATTR_LIST(o) (GTK_CHECK_TYPE ((o), SP_TYPE_XMLVIEW_ATTR_LIST))
@@ -45,5 +49,7 @@ GtkWidget * sp_xmlview_attr_list_new (SPRepr * repr);
 #define sp_xmlview_attr_list_find_row_from_key(list, key) (gtk_clist_find_row_from_data ((list), GINT_TO_POINTER ((key))))
 
 void sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, SPRepr * repr);
+
+G_END_DECLS
 
 #endif

@@ -19,6 +19,10 @@
 #include <gtk/gtktextview.h>
 #include "../xml/repr.h"
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 #define SP_TYPE_XMLVIEW_CONTENT (sp_xmlview_content_get_type ())
 #define SP_XMLVIEW_CONTENT(o) (GTK_CHECK_CAST ((o), SP_TYPE_XMLVIEW_CONTENT, SPXMLViewContent))
 #define SP_IS_XMLVIEW_CONTENT(o) (GTK_CHECK_TYPE ((o), SP_TYPE_XMLVIEW_CONTENT))
@@ -46,5 +50,7 @@ GtkWidget * sp_xmlview_content_new (SPRepr * repr);
 #define SP_XMLVIEW_CONTENT_GET_REPR(text) (SP_XMLVIEW_CONTENT (text)->repr)
 
 void sp_xmlview_content_set_repr (SPXMLViewContent * text, SPRepr * repr);
+
+G_END_DECLS
 
 #endif

@@ -26,6 +26,11 @@ typedef struct _SPBChoiceData SPBChoiceData;
 
 #include <helper/action.h>
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+
 enum {
 	SP_BUTTON_TYPE_NORMAL,
 	SP_BUTTON_TYPE_TOGGLE
@@ -85,5 +90,7 @@ GtkWidget *sp_button_new_from_data (unsigned int size, unsigned int type,
 				    const gchar *name,
 				    const gchar *tip,
 				    GtkTooltips *tooltips);
+
+G_END_DECLS
 
 #endif

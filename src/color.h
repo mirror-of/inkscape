@@ -16,6 +16,10 @@
 #include <libnr/nr-types.h>
 #include "forward.h"
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Useful composition macros */
 
 #define SP_RGBA32_R_U(v) (((v) >> 24) & 0xff)
@@ -78,6 +82,8 @@ void sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b);
 void sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v);
 void sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b);
 void sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k);
+
+G_END_DECLS
 
 #endif
 

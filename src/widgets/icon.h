@@ -12,6 +12,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 typedef struct _SPIcon SPIcon;
 typedef struct _SPIconClass SPIconClass;
 
@@ -51,5 +55,7 @@ GtkWidget *sp_icon_new_from_data (unsigned int size, const guchar *px);
 
 guchar *sp_icon_image_load (const gchar *name, unsigned int size, unsigned int scale);
 guchar *sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size, unsigned int scale);
+
+G_END_DECLS
 
 #endif

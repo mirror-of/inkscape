@@ -15,6 +15,10 @@
 
 #include <glib-object.h>
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Generic containers */
 
 typedef struct _Inkscape Inkscape;
@@ -200,5 +204,7 @@ typedef struct _SPStyle SPStyle;
 typedef struct _SPEvent SPEvent;
 
 typedef struct _SPPrintContext SPPrintContext;
+
+G_END_DECLS
 
 #endif

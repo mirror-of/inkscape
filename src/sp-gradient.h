@@ -13,6 +13,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 #define SP_TYPE_STOP (sp_stop_get_type ())
 #define SP_STOP(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_STOP, SPStop))
 #define SP_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_STOP, SPStopClass))
@@ -226,5 +230,7 @@ void sp_radialgradient_set_position (SPRadialGradient *rg, gdouble cx, gdouble c
 /* Builds flattened repr tree of gradient - i.e. no href */
 
 SPRepr *sp_radialgradient_build_repr (SPRadialGradient *lg, gboolean vector);
+
+G_END_DECLS
 
 #endif

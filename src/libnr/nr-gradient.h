@@ -10,6 +10,10 @@
  * This code is in public domain
  */
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 typedef struct _NRRGradientRenderer NRRGradientRenderer;
 
 #include <libnr/nr-types.h>
@@ -43,5 +47,7 @@ NRRenderer *nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 					 float cx, float cy,
 					 float fx, float fy,
 					 float r);
+
+G_END_DECLS
 
 #endif

@@ -13,6 +13,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 #define SP_TYPE_GRADIENT_POSITION (sp_gradient_position_get_type ())
 #define SP_GRADIENT_POSITION(o) (GTK_CHECK_CAST ((o), SP_TYPE_GRADIENT_POSITION, SPGradientPosition))
 #define SP_GRADIENT_POSITION_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), SP_TYPE_GRADIENT_POSITION, SPGradientPositionClass))
@@ -109,5 +113,7 @@ void sp_gradient_position_set_spread (SPGradientPosition *pos, unsigned int spre
 void sp_gradient_position_get_linear_position_floatv (SPGradientPosition *gp, float *pos);
 void sp_gradient_position_get_radial_position_floatv (SPGradientPosition *gp, float *pos);
 
+
+G_END_DECLS
 
 #endif
