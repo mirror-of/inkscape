@@ -523,84 +523,103 @@ void            Path::Convert(double treshhold)
 		curX=nextX;
 	}
 }
-void            Path::ConvertEvenLines(double treshhold)
+
+
+
+void Path::ConvertEvenLines(double treshhold)
 {
-	if ( descr_flags & descr_adding_bezier ) {
-		CancelBezier();
-	}
-	if ( descr_flags & descr_doing_subpath ) {
-		CloseSubpath();
-	}
-	SetBackData(false);
-	ResetPoints(descr_cmd.size());
-	if ( descr_cmd.empty() ) return;
-	NR::Point curX;
-	int      curP=1;
-	int      lastMoveTo=0;
-	
-	// le moveto
-  {
-    int firstTyp=descr_cmd[0]->getType();
-    if ( firstTyp == descr_moveto ) {
-      curX=((path_descr_moveto*)(descr_data))->p;
-    } else {
-      curP=0;
-      curX[0]=curX[1]=0;
+    if ( descr_flags & descr_adding_bezier ) {
+        CancelBezier();
     }
-    lastMoveTo=AddPoint(curX,true);
-  }
-	descr_cmd[0]->associated=lastMoveTo;
+    
+    if ( descr_flags & descr_doing_subpath ) {
+        CloseSubpath();
+    }
+    
+    SetBackData(false);
+    ResetPoints(descr_cmd.size());
+    if ( descr_cmd.empty() ) {
+        return;
+    }
+    
+    NR::Point curX;
+    int curP = 1;
+    int lastMoveTo = 0;
 	
-	// et le reste, 1 par 1
-	while ( curP < int(descr_cmd.size()) ) {
-            path_descr*  curD=descr_cmd[curP];
-		int          nType=curD->getType();
-		NR::Point    nextX;
-		if ( nType == descr_forced ) {
-			(curD)->associated=AddForcedPoint(curX);
-			curP++;
-		} else if ( nType == descr_moveto ) {
-      path_descr_moveto*  nData=(path_descr_moveto*)(descr_data+curD->dStart);
-			nextX=nData->p;
-			lastMoveTo=AddPoint(nextX,true);
-			(curD)->associated=lastMoveTo;
-			// et on avance
-			curP++;
-		} else if ( nType == descr_close ) {
-      nextX=((path_lineto*)pts)[lastMoveTo].p;
-      {
-        NR::Point nexcur;
-        nexcur=nextX-curX;
-        const double segL=NR::L2(nexcur);
-        if ( segL > treshhold ) {
-          for (double i=treshhold;i<segL;i+=treshhold) {
-            NR::Point  nX;
-            nX=(segL-i)*curX+i*nextX;
-            nX/=segL;
-            AddPoint(nX);
-          }
-        }
-      }
-      curD->associated=AddPoint(nextX,false);
-      if ( curD->associated < 0 ) {
-        if ( curP == 0 ) {
-          curD->associated=0;
+    // le moveto
+    {
+        int firstTyp = descr_cmd[0]->getType();
+        if ( firstTyp == descr_moveto ) {
+            curX = ((path_descr_moveto *) (descr_data))->p;
         } else {
-          curD->associated=(curD-1)->associated;
+            curP = 0;
+            curX[0] = curX[1] = 0;
         }
-      }
-			curP++;
-		} else if ( nType == descr_lineto ) {
-      path_descr_lineto*  nData=(path_descr_lineto*)(descr_data+curD->dStart);
-			nextX=nData->p;
-      NR::Point nexcur = nextX-curX;
-      const double segL = L2(nexcur);
-      if ( segL > treshhold ) {
-        for (double i=treshhold;i<segL;i+=treshhold) {
-          NR::Point  nX=((segL-i)*curX+i*nextX)/segL;
-          AddPoint(nX);
-        }
-      }
+        lastMoveTo = AddPoint(curX, true);
+    }
+    descr_cmd[0]->associated = lastMoveTo;
+	
+    // et le reste, 1 par 1
+    while ( curP < int(descr_cmd.size()) ) {
+        path_descr* curD = descr_cmd[curP];
+        int const nType = curD->getType();
+        NR::Point nextX;
+        
+        if ( nType == descr_forced ) {
+            
+            curD->associated = AddForcedPoint(curX);
+            curP++;
+            
+        } else if ( nType == descr_moveto ) {
+            
+            path_descr_moveto* nData = (path_descr_moveto *) (descr_data + curD->dStart);
+            nextX = nData->p;
+            lastMoveTo = AddPoint(nextX,true);
+            curD->associated = lastMoveTo;
+            // et on avance
+            curP++;
+            
+        } else if ( nType == descr_close ) {
+            
+            nextX = ((path_lineto *) pts)[lastMoveTo].p;
+            {
+                NR::Point nexcur;
+                nexcur = nextX - curX;
+                const double segL = NR::L2(nexcur);
+                if ( segL > treshhold ) {
+                    for (double i = treshhold; i < segL; i += treshhold) {
+                        NR::Point nX;
+                        nX = (segL - i) * curX + i * nextX;
+                        nX /= segL;
+                        AddPoint(nX);
+                    }
+                }
+            }
+            
+            curD->associated = AddPoint(nextX,false);
+            if ( curD->associated < 0 ) {
+                if ( curP == 0 ) {
+                    curD->associated=0;
+                } else {
+                    curD->associated = (curD - 1)->associated;
+                }
+            }
+            
+            curP++;
+            
+        } else if ( nType == descr_lineto ) {
+
+            path_descr_lineto* nData = (path_descr_lineto *)(descr_data + curD->dStart);
+            nextX = nData->p;
+            NR::Point nexcur = nextX - curX;
+            const double segL = L2(nexcur);
+            if ( segL > treshhold ) {
+                for (double i = treshhold; i < segL; i += treshhold) {
+                    NR::Point nX = ((segL - i) * curX + i * nextX) / segL;
+                    AddPoint(nX);
+                }
+            }
+            
       curD->associated=AddPoint(nextX,false);
       if ( curD->associated < 0 ) {
         if ( curP == 0 ) {
@@ -1501,3 +1520,14 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 		}
 	}
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
