@@ -624,14 +624,14 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 	opens the output file with the output file handle.  Both of these
 	operations are checked extensively for errors.
 
-	After both are opened, then the data is coppied from the output
+	After both are opened, then the data is copied from the output
 	of the pipe into the file out using fread and fwrite.  These two
 	functions are used because of their primitive nature they make
 	no assumptions about the data.  A buffer is used in the transfer,
 	but the output of fread is stored so the exact number of bytes
 	is handled gracefully.
 
-	At the very end (after the data has been coppied) both of the files
+	At the very end (after the data has been copied) both of the files
 	are closed, and we return to what we were doing.
 */
 void
