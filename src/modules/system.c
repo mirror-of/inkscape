@@ -168,6 +168,7 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 	SPModuleOutput * omod;
 	gpointer parray[2];
 	GtkDialog * prefs;
+	SPRepr *repr;
 
 	if (!strcmp(key, SP_MODULE_KEY_AUTODETECT)) {
 		parray[0] = (gpointer)filename;
@@ -178,7 +179,11 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 		omod = SP_MODULE_OUTPUT(sp_module_db_get(key));
 	}
 
-	g_return_if_fail(SP_IS_MODULE_OUTPUT(omod));
+	if (!SP_IS_MODULE_OUTPUT(omod)) {
+		printf("Unable to find output module to handle file: %s\n", filename);
+		return;
+	}
+
 	load_module(SP_MODULE(omod));
 	g_return_if_fail(SP_MODULE(omod)->state != SP_MODULE_UNLOADED);
 
@@ -188,6 +193,11 @@ sp_module_system_save (const gchar * key, SPDocument * doc, const gchar * filena
 			gtk_dialog_run(prefs);
 		}
 	}
+
+	repr = sp_document_repr_root (doc);
+	sp_document_set_undo_sensitive (doc, FALSE);
+	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
+	sp_document_set_undo_sensitive (doc, TRUE);
 
 	return omod->save(SP_MODULE(omod), doc, filename);
 }

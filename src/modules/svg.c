@@ -50,7 +50,7 @@ svg_init(void)
 			"<name>SVG Input</name>\n"
 			"<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
 			"<input>\n"
-				"<extension>svg</extension>\n"
+				"<extension>.svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
@@ -65,7 +65,7 @@ svg_init(void)
 			"<name>SVG Output Inkscape</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>\n"
 			"<output>\n"
-				"<extension>svg</extension>\n"
+				"<extension>.svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>SVG with extension namespaces</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format with Inkscape extensions</filetypetooltip>\n"
@@ -80,7 +80,7 @@ svg_init(void)
 			"<name>SVG Output</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"
 			"<output>\n"
-				"<extension>svg</extension>\n"
+				"<extension>.w3c.svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>Plain SVG</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format</filetypetooltip>\n"
@@ -173,10 +173,6 @@ svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 	}
 
 	/* TODO: */
-	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
-	sp_document_set_undo_sensitive (doc, TRUE);
-
 	sp_repr_save_file (sp_repr_document (repr), uri);
 	sp_document_set_uri (doc, uri);
 

@@ -270,7 +270,7 @@ sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
 				gtk_file_selection_set_filename (fs, filename);
 			}
 		} else {
-			/* We may want to handle overwriting files differently */
+			/* TODO: Handle overwriting files differently - TJG */
 			gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
 			sp_file_do_save (doc, filename, key);
 			gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
@@ -295,11 +295,9 @@ sp_file_save_document (SPDocument *doc)
 	if (fn == NULL) {
 		sp_file_save_dialog (doc);
 	} else {
-		/* fixme: */
-		sp_document_set_undo_sensitive (doc, FALSE);
-		sp_repr_set_attr (repr, "sodipodi:modified", NULL);
-		sp_document_set_undo_sensitive (doc, TRUE);
-		sp_repr_save_file (sp_document_repr_doc (doc), fn);
+		/* TODO: This currently requires a recognizable extension to
+		         be on the file name - odd stuff won't work */
+		sp_file_do_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
 	}
 }
 
