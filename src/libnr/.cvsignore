@@ -5,3 +5,5 @@ Makefile.in
 nr_config.h
 testnr
 gen_nr_config
+makefile
+.dirstamp

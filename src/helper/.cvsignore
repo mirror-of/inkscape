@@ -3,3 +3,5 @@ Makefile.in
 .deps
 sp-marshal.cpp
 sp-marshal.h
+makefile
+.dirstamp
