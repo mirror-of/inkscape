@@ -921,7 +921,7 @@ static void sp_node_ensure_knot(Inkscape::NodePath::Node *node, gint which, gboo
    Inkscape::NodePath::NodeSide *side = sp_node_get_side(node, which);
     NRPathcode code = sp_node_path_code_from_side(node, side);
 
-    show_knot = show_knot && (code == NR_CURVETO);
+    show_knot = show_knot && (code == NR_CURVETO) && (NR::L2(side->pos - node->pos) > 1e-6);
 
     if (show_knot) {
         if (!SP_KNOT_IS_VISIBLE(side->knot)) {
@@ -2108,7 +2108,9 @@ static void node_ungrabbed(SPKnot *knot, guint state, gpointer data)
 {
    Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
 
-    update_repr(n->subpath->nodepath);
+   n->dragging_out = NULL;
+
+   update_repr(n->subpath->nodepath);
 }
 
 /**
@@ -2153,6 +2155,42 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
     NR::Point pr;
 
    Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) data;
+
+   // If either (Shift and some handle retracted), or (we're already dragging out a handle)
+   if (((state & GDK_SHIFT_MASK) && ((n->n.other && n->n.pos == n->pos) || (n->p.other && n->p.pos == n->pos))) || n->dragging_out) { 
+
+       NR::Point mouse = (*p);
+
+       if (!n->dragging_out) {
+           // This is the first drag-out event; find out which handle to drag out
+           double appr_n = (n->n.other ? NR::L2(n->n.other->pos - n->pos) - NR::L2(n->n.other->pos - (*p)) : -HUGE_VAL);
+           double appr_p = (n->p.other ? NR::L2(n->p.other->pos - n->pos) - NR::L2(n->p.other->pos - (*p)) : -HUGE_VAL);
+
+           if (appr_p == -HUGE_VAL && appr_n == -HUGE_VAL) // orphan node?
+               return FALSE;
+
+           Inkscape::NodePath::NodeSide *opposite;
+           if (appr_p > appr_n) {
+               n->dragging_out = &n->p;
+               opposite = &n->n;
+               n->code = NR_CURVETO;
+           } else {
+               n->dragging_out = &n->n;
+               opposite = &n->p;
+               n->n.other->code = NR_CURVETO;
+           } 
+
+           // if there's another handle, make sure the one we drag out starts parallel to it
+           if (opposite->pos != n->pos) {
+               mouse = n->pos - NR::L2(mouse - n->pos) * NR::unit_vector(opposite->pos - n->pos);
+           }
+       }
+
+       // pass this on to the handle-moved callback
+       node_ctrl_moved(n->dragging_out->knot, &mouse, state, (gpointer) n);
+       sp_node_ensure_ctrls(n);
+       return TRUE;
+   }
 
     if (state & GDK_CONTROL_MASK) { // constrained motion
 
@@ -2733,6 +2771,8 @@ sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *n
     n->pos      = *pos;
     n->p.pos    = *ppos;
     n->n.pos    = *npos;
+
+    n->dragging_out = NULL;
 
     Inkscape::NodePath::Node *prev;
     if (next) {

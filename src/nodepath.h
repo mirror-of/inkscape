@@ -215,6 +215,9 @@ class Node {
 	NodeSide n;
 /**  The NodeSide in the 'previous' direction */
 	NodeSide p;
+
+	/** The pointer to the nodeside which we are dragging out with Shift */
+	NodeSide *dragging_out;
 };
 
 }  // namespace NodePath
