@@ -130,7 +130,9 @@ sp_select_context_init(SPSelectContext *sc)
 {
     sc->dragging = FALSE;
     sc->moved = FALSE;
-    sc->button_press_shift = FALSE;
+    sc->button_press_shift = false;
+    sc->button_press_ctrl = false;
+    sc->button_press_alt = false;
     sc->_seltrans = NULL;
     sc->_describer = NULL;
 }
@@ -234,6 +236,11 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                 yp = (gint) event->button.y;
                 within_tolerance = true;
 
+                // remember what modifiers were on before button press
+                sc->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? true : false;
+                sc->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? true : false;
+                sc->button_press_alt = (event->button.state & GDK_MOD1_MASK) ? true : false;
+
                 if (event->button.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) {
                     // if shift or ctrl was pressed, do not move objects;
                     // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
@@ -284,14 +291,14 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                         SPItem *group_at_point = sp_desktop_group_at_point(desktop, button_pt);
                         // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item passed with the event
                         if ( ( !item_at_point || !selection->includesItem(item_at_point) )
-                             && ( !group_at_point || !selection->includesItem(group_at_point) ) )
-                        {
-                            // have to select here since selecting is done when releasing
+                             && ( !group_at_point || !selection->includesItem(group_at_point) ) 
+                             && !sc->button_press_alt) {
+                            // select what is under cursor
                             sp_sel_trans_reset_state(seltrans);
                             if (!selection->includesItem(sc->item)) {
                                 selection->setItem(sc->item);
                             }
-                        } // otherwise, do not change selection so that dragging selected-within-group items is possible
+                        } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
                         sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
                         sc->moved = TRUE;
                     }
@@ -342,6 +349,9 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                 }
                 ret = TRUE;
             }
+            sc->button_press_shift = false;
+            sc->button_press_ctrl = false;
+            sc->button_press_alt = false;
             break;
 
         case GDK_ENTER_NOTIFY:
@@ -413,10 +423,10 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                     NULL, event->button.time);
                 sc->grabbed = SP_CANVAS_ITEM(desktop->acetate);
 
-                // remember that shift or ctrl was on before button press
-                // (originally intended by lauris for partial selects and then abandoned)
-                sc->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? TRUE : FALSE;
-                sc->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? TRUE : FALSE;
+                // remember what modifiers were on before button press
+                sc->button_press_shift = (event->button.state & GDK_SHIFT_MASK) ? true : false;
+                sc->button_press_ctrl = (event->button.state & GDK_CONTROL_MASK) ? true : false;
+                sc->button_press_alt = (event->button.state & GDK_MOD1_MASK) ? true : false;
 
                 sc->moved = FALSE;
 
@@ -458,13 +468,14 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             group_at_point = sp_desktop_group_at_point(desktop, NR::Point(event->button.x, event->button.y));
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
                             if ((!item_in_group || !selection->includesItem(item_in_group)) &&
-                                (!group_at_point || !selection->includesItem(group_at_point))) {
-                                // have to select here since selecting is done when releasing
+                                (!group_at_point || !selection->includesItem(group_at_point))
+                                && !sc->button_press_alt) {
+                                // select what is under cursor
                                 sp_sel_trans_reset_state(seltrans);
                                 // when simply ctrl-dragging, we don't want to go into groups
                                 if (item_at_point && !selection->includesItem(item_at_point))
                                     selection->setItem(item_at_point);
-                            } // otherwise, do not change selection so that dragging selected-within-group items is possible
+                            } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
                             sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
                             sc->moved = TRUE;
                         }
@@ -546,7 +557,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         if (sc->button_press_shift && !rb_escaped && !drag_escaped) {
                             // this was a shift-click, select what was clicked upon
 
-                            sc->button_press_shift = FALSE;
+                            sc->button_press_shift = false;
 
                             if (sc->button_press_ctrl) {
                                 // go into groups
@@ -606,7 +617,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     sc->grabbed = NULL;
                 }
             }
-            sc->button_press_shift = FALSE;
+            sc->button_press_shift = false;
+            sc->button_press_ctrl = false;
+            sc->button_press_alt = false;
             break;
 
         case GDK_KEY_PRESS: // keybindings for select context

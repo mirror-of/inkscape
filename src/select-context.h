@@ -30,8 +30,9 @@ namespace Inkscape { class MessageContext; }
 struct SPSelectContext : public SPEventContext {
 	guint dragging : 1;
 	guint moved : 1;
-	guint button_press_shift : 1;
-	guint button_press_ctrl : 1;
+	bool button_press_shift;
+	bool button_press_ctrl;
+	bool button_press_alt;
 	SPItem *item;
 	SPCanvasItem *grabbed;
 	SPSelTrans *_seltrans;
