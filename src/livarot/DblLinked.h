@@ -14,6 +14,7 @@
 #include <inttypes.h>
 #include <string.h>
 //#include <iostream.h>
+#include "LivarotDefs.h"
 
 /*
  * doubly-linked list class created in a "every atomic piece is a class" frenzy
@@ -23,9 +24,8 @@
 class DblLinked
 {
 public:
-  // previous (left) and next (right) elements of the list
-  DblLinked * leftElem;
-  DblLinked *rightElem;
+    // previous (left) and next (right) elements of the list
+    DblLinked *elem[2];
 
     DblLinked (void);
    ~DblLinked (void);

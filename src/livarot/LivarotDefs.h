@@ -157,4 +157,9 @@ typedef struct raster_info {
 typedef void (*RasterInRunFunc) (raster_info &dest,void *data,int nst,float vst,int nen,float ven);	// init for position ph,pv; the last parameter is a pointer
 
 
+enum Side {
+    LEFT = 0,
+    RIGHT = 1
+};
+
 #endif

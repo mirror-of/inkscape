@@ -28,13 +28,9 @@ class AVLTree:public DblLinked
 {
 public:
   AVLTree * dad;
-  AVLTree *sonL;
-  AVLTree *sonR;
+  AVLTree *son[2];
 
   int balance;
-
-//      AVLTree*         leftElem;
-//      AVLTree*         rightElem;
 
     AVLTree (void);
    ~AVLTree (void);

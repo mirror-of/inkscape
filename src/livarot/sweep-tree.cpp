@@ -165,23 +165,23 @@ SweepTree::Find (NR::Point const &px, SweepTree * newOne, SweepTree * &insertL,
 	  if (y == 0)
 	    {
 	      insertL = this;
-	      insertR = static_cast < SweepTree * >(rightElem);
+	      insertR = static_cast < SweepTree * >(elem[RIGHT]);
 	      return found_exact;
 	    }
 	}
     }
   if (y < 0)
     {
-      if (sonL)
+      if (son[LEFT])
 	{
-	  return (static_cast < SweepTree * >(sonL))->Find (px, newOne,
+	  return (static_cast < SweepTree * >(son[LEFT]))->Find (px, newOne,
 							    insertL, insertR,
 							    sweepSens);
 	}
       else
 	{
 	  insertR = this;
-	  insertL = static_cast < SweepTree * >(leftElem);
+	  insertL = static_cast < SweepTree * >(elem[LEFT]);
 	  if (insertL)
 	    {
 	      return found_between;
@@ -194,16 +194,16 @@ SweepTree::Find (NR::Point const &px, SweepTree * newOne, SweepTree * &insertL,
     }
   else
     {
-      if (sonR)
+      if (son[RIGHT])
 	{
-	  return (static_cast < SweepTree * >(sonR))->Find (px, newOne,
+	  return (static_cast < SweepTree * >(son[RIGHT]))->Find (px, newOne,
 							    insertL, insertR,
 							    sweepSens);
 	}
       else
 	{
 	  insertL = this;
-	  insertR = static_cast < SweepTree * >(rightElem);
+	  insertR = static_cast < SweepTree * >(elem[RIGHT]);
 	  if (insertR)
 	    {
 	      return found_between;
@@ -239,20 +239,20 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
   if (y == 0)
     {
       insertL = this;
-      insertR = static_cast < SweepTree * >(rightElem);
+      insertR = static_cast < SweepTree * >(elem[RIGHT]);
       return found_exact;
     }
   if (y < 0)
     {
-      if (sonL)
+      if (son[LEFT])
 	{
-	  return (static_cast < SweepTree * >(sonL))->Find (px, insertL,
+	  return (static_cast < SweepTree * >(son[LEFT]))->Find (px, insertL,
 							    insertR);
 	}
       else
 	{
 	  insertR = this;
-	  insertL = static_cast < SweepTree * >(leftElem);
+	  insertL = static_cast < SweepTree * >(elem[LEFT]);
 	  if (insertL)
 	    {
 	      return found_between;
@@ -265,15 +265,15 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
     }
   else
     {
-      if (sonR)
+      if (son[RIGHT])
 	{
-	  return (static_cast < SweepTree * >(sonR))->Find (px, insertL,
+	  return (static_cast < SweepTree * >(son[RIGHT]))->Find (px, insertL,
 							    insertR);
 	}
       else
 	{
 	  insertL = this;
-	  insertR = static_cast < SweepTree * >(rightElem);
+	  insertR = static_cast < SweepTree * >(elem[RIGHT]);
 	  if (insertR)
 	    {
 	      return found_between;
@@ -430,12 +430,12 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
   if (ang == 0)
     {
       insertL = insNode;
-      insertR = static_cast < SweepTree * >(insNode->rightElem);
+      insertR = static_cast < SweepTree * >(insNode->elem[RIGHT]);
     }
   else if (ang > 0)
     {
       insertL = insNode;
-      insertR = static_cast < SweepTree * >(insNode->rightElem);
+      insertR = static_cast < SweepTree * >(insNode->elem[RIGHT]);
 
       while (insertL)
 	{
@@ -471,13 +471,13 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	      break;
 	    }
 	  insertR = insertL;
-	  insertL = static_cast < SweepTree * >(insertR->leftElem);
+	  insertL = static_cast < SweepTree * >(insertR->elem[LEFT]);
 	}
     }
   else if (ang < 0)
     {
       insertL = insNode;
-      insertR = static_cast < SweepTree * >(insNode->rightElem);
+      insertR = static_cast < SweepTree * >(insNode->elem[RIGHT]);
 
       while (insertR)
 	{
@@ -513,7 +513,7 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	      break;
 	    }
 	  insertL = insertR;
-	  insertR = static_cast < SweepTree * >(insertL->rightElem);
+	  insertR = static_cast < SweepTree * >(insertL->elem[RIGHT]);
 	}
     }
 
@@ -583,7 +583,7 @@ void
 SweepTree::SwapWithRight (SweepTreeList & list, SweepEventQueue & queue)
 {
   SweepTree *tL = this;
-  SweepTree *tR = static_cast < SweepTree * >(rightElem);
+  SweepTree *tR = static_cast < SweepTree * >(elem[RIGHT]);
 
   tL->src->swsData[tL->bord].misc = tR;
   tR->src->swsData[tR->bord].misc = tL;

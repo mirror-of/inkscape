@@ -312,7 +312,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,true,step);
-			curS=static_cast <SweepTree*> (curS->rightElem);
+			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 		}
 	}
 }
@@ -727,7 +727,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,true,step);
-			curS=static_cast <SweepTree*> (curS->rightElem);
+			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 		}
 	}
 }
@@ -815,8 +815,8 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 				int    lastGuess=-1;
 				int    cb=curS->bord;
 				//				printf("%i %i %f/ ",cb,(swrData[cb].sens)?1:0,swrData[cb].curX);
-				if ( swrData[cb].sens == false && curS->leftElem ) {
-					int  lb=(static_cast <SweepTree*> (curS->leftElem))->bord;
+				if ( swrData[cb].sens == false && curS->elem[LEFT] ) {
+					int  lb=(static_cast <SweepTree*> (curS->elem[LEFT]))->bord;
 					lastGuess=line->AppendBord(swrData[lb].curX,to-swrData[lb].curY,swrData[cb].curX,to-swrData[cb].curY,0.0);
 					swrData[lb].guess=lastGuess-1;
 					swrData[cb].guess=lastGuess;
@@ -824,7 +824,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 					int  lb=curS->bord;
 					swrData[lb].guess=-1;
         }
-				curS=static_cast <SweepTree*> (curS->rightElem);
+				curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 			}
 			//			printf("\n");
 		}
@@ -953,7 +953,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,line,exact,step);
-			curS=static_cast <SweepTree*> (curS->rightElem);
+			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 		}
 	}
 }
@@ -978,7 +978,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 					} else {
 						lastX=swrData[cb].curX;
 					}
-					curS=static_cast <SweepTree*> (curS->rightElem);
+					curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 				}
 			} else if ( directed == fill_positive ) {
 				// doesn't behave correctly; no way i know to do this without a ConvertToShape()
@@ -993,7 +993,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 					} else if ( curW > 0 && oW <= 0 ) {
 						lastX=swrData[cb].curX;
 					}
-					curS=static_cast <SweepTree*> (curS->rightElem);
+					curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 				}
 			} else if ( directed == fill_nonZero ) {
 				while ( curS ) {
@@ -1007,7 +1007,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 					} else if ( curW != 0 && oW == 0 ) {
 						lastX=swrData[cb].curX;
 					}
-					curS=static_cast <SweepTree*> (curS->rightElem);
+					curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 				}
 			}
 		}
@@ -1133,7 +1133,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,line,exact,step);
-			curS=static_cast <SweepTree*> (curS->rightElem);
+			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 		}
 	}
 }
@@ -1149,11 +1149,11 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 				int    lastGuess=-1;
 				int    cb=curS->bord;
 				//				printf("%i %i %f/ ",cb,(swrData[cb].sens)?1:0,swrData[cb].curX);
-				if ( swrData[cb].sens == false && curS->leftElem ) {
-					int  lb=(static_cast <SweepTree*> (curS->leftElem))->bord;
+				if ( swrData[cb].sens == false && curS->elem[LEFT] ) {
+					int  lb=(static_cast <SweepTree*> (curS->elem[LEFT]))->bord;
 					line->AddBord(swrData[lb].curX,to-swrData[lb].curY,swrData[cb].curX,to-swrData[cb].curY,0.0);
 				}
-				curS=static_cast <SweepTree*> (curS->rightElem);
+				curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 			}
 			//			printf("\n");
 		}*/
@@ -1280,7 +1280,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,line,exact,step);
-			curS=static_cast <SweepTree*> (curS->rightElem);
+			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
 		}
 	}
 }

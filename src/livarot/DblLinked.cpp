@@ -20,7 +20,7 @@ DblLinked::~DblLinked (void)
 void
 DblLinked::MakeNew (void)
 {
-  leftElem = rightElem = NULL;
+  elem[LEFT] = elem[RIGHT] = NULL;
 }
 
 void
@@ -32,52 +32,52 @@ DblLinked::MakeDelete (void)
 void
 DblLinked::InsertOnLeft (DblLinked * of)
 {
-  rightElem = of;
+  elem[RIGHT] = of;
   if (of)
-    of->leftElem = this;
+    of->elem[LEFT] = this;
 }
 
 void
 DblLinked::InsertOnRight (DblLinked * of)
 {
-  leftElem = of;
+  elem[LEFT] = of;
   if (of)
-    of->rightElem = this;
+    of->elem[RIGHT] = this;
 }
 
 void
 DblLinked::InsertBetween (DblLinked * l, DblLinked * r)
 {
   if (l)
-    l->rightElem = this;
+    l->elem[RIGHT] = this;
   if (r)
-    r->leftElem = this;
-  leftElem = l;
-  rightElem = r;
+    r->elem[LEFT] = this;
+  elem[LEFT] = l;
+  elem[RIGHT] = r;
 }
 
 void
 DblLinked::Extract (void)
 {
-  if (leftElem)
-    leftElem->rightElem = rightElem;
-  if (rightElem)
-    rightElem->leftElem = leftElem;
-  leftElem = rightElem = NULL;
+  if (elem[LEFT])
+    elem[LEFT]->elem[RIGHT] = elem[RIGHT];
+  if (elem[RIGHT])
+    elem[RIGHT]->elem[LEFT] = elem[LEFT];
+  elem[LEFT] = elem[RIGHT] = NULL;
 }
 
-// the only possible links to this element are in leftElem or rightElem
+// the only possible links to this element are in elem[LEFT] or elem[RIGHT]
 // the object retaining pointers to the list (like, say, first or last element) has to take care of the
 // relocation himself. in practice, only the sweep code has to deal with DblLinked lists
 void
 DblLinked::Relocate (DblLinked * to)
 {
-  if (leftElem)
-    leftElem->rightElem = to;
-  if (rightElem)
-    rightElem->leftElem = to;
-  to->leftElem = leftElem;
-  to->rightElem = rightElem;
+  if (elem[LEFT])
+    elem[LEFT]->elem[RIGHT] = to;
+  if (elem[RIGHT])
+    elem[RIGHT]->elem[LEFT] = to;
+  to->elem[LEFT] = elem[LEFT];
+  to->elem[RIGHT] = elem[RIGHT];
 }
 
 /*

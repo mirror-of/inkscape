@@ -17,7 +17,7 @@
 AVLTree::AVLTree (void):
 DblLinked ()
 {
-  dad = sonL = sonR = NULL;
+  dad = son[LEFT] = son[RIGHT] = NULL;
   balance = 0;
 }
 AVLTree::~AVLTree (void)
@@ -27,7 +27,7 @@ void
 AVLTree::MakeNew (void)
 {
   DblLinked::MakeNew ();
-  dad = sonL = sonR = NULL;
+  dad = son[LEFT] = son[RIGHT] = NULL;
   balance = 0;
 }
 
@@ -48,9 +48,9 @@ AVLTree::LeftLeaf (AVLTree * from, bool from_dad)
 {
   if (from_dad)
     {
-      if (sonL)
+      if (son[LEFT])
 	{
-	  return sonL->LeftLeaf (this, true);
+	  return son[LEFT]->LeftLeaf (this, true);
 	}
       else
 	{
@@ -59,11 +59,11 @@ AVLTree::LeftLeaf (AVLTree * from, bool from_dad)
     }
   else
     {
-      if (from == sonR)
+      if (from == son[RIGHT])
 	{
-	  if (sonL)
+	  if (son[LEFT])
 	    {
-	      return sonL->LeftLeaf (this, true);
+	      return son[LEFT]->LeftLeaf (this, true);
 	    }
 	  else if (dad)
 	    {
@@ -74,7 +74,7 @@ AVLTree::LeftLeaf (AVLTree * from, bool from_dad)
 	      return NULL;
 	    }
 	}
-      else if (from == sonL)
+      else if (from == son[LEFT])
 	{
 	  if (dad)
 	    {
@@ -98,9 +98,9 @@ AVLTree::RightLeaf (AVLTree * from, bool from_dad)
 {
   if (from_dad)
     {
-      if (sonR)
+      if (son[RIGHT])
 	{
-	  return sonR->RightLeaf (this, true);
+	  return son[RIGHT]->RightLeaf (this, true);
 	}
       else
 	{
@@ -109,11 +109,11 @@ AVLTree::RightLeaf (AVLTree * from, bool from_dad)
     }
   else
     {
-      if (from == sonL)
+      if (from == son[LEFT])
 	{
-	  if (sonR)
+	  if (son[RIGHT])
 	    {
-	      return sonR->RightLeaf (this, true);
+	      return son[RIGHT]->RightLeaf (this, true);
 	    }
 	  else if (dad)
 	    {
@@ -124,7 +124,7 @@ AVLTree::RightLeaf (AVLTree * from, bool from_dad)
 	      return NULL;
 	    }
 	}
-      else if (from == sonR)
+      else if (from == son[RIGHT])
 	{
 	  if (dad)
 	    {
@@ -155,9 +155,9 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
     {
       if (balance == 0)
 	{
-	  if (from == sonL)
+	  if (from == son[LEFT])
 	    balance = 1;
-	  if (from == sonR)
+	  if (from == son[RIGHT])
 	    balance = -1;
 	  if (dad)
 	    return dad->RestoreBalances (this, racine);
@@ -165,43 +165,43 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	}
       else if (balance > 0)
 	{
-	  if (from == sonR)
+	  if (from == son[RIGHT])
 	    {
 	      balance = 0;
 	      return avl_no_err;
 	    }
-	  if (sonL == NULL)
+	  if (son[LEFT] == NULL)
 	    {
 //                              cout << "mierda\n";
 	      return avl_bal_err;
 	    }
 	  AVLTree *a = this;
-	  AVLTree *b = sonL;
-	  AVLTree *e = sonR;
-	  AVLTree *c = sonL->sonL;
-	  AVLTree *d = sonL->sonR;
-	  if (sonL->balance > 0)
+	  AVLTree *b = son[LEFT];
+	  AVLTree *e = son[RIGHT];
+	  AVLTree *c = son[LEFT]->son[LEFT];
+	  AVLTree *d = son[LEFT]->son[RIGHT];
+	  if (son[LEFT]->balance > 0)
 	    {
 	      AVLTree *r = dad;
 
 	      a->dad = b;
-	      b->sonR = a;
-	      a->sonR = e;
+	      b->son[RIGHT] = a;
+	      a->son[RIGHT] = e;
 	      if (e)
 		e->dad = a;
-	      a->sonL = d;
+	      a->son[LEFT] = d;
 	      if (d)
 		d->dad = a;
-	      b->sonL = c;
+	      b->son[LEFT] = c;
 	      if (c)
 		c->dad = b;
 	      b->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = b;
-		  if (r->sonR == a)
-		    r->sonR = b;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = b;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = b;
 		}
 	      if (racine == a)
 		racine = b;
@@ -212,39 +212,39 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	    }
 	  else
 	    {
-	      if (sonL->sonR == NULL)
+	      if (son[LEFT]->son[RIGHT] == NULL)
 		{
 		  //                              cout << "mierda\n";
 		  return avl_bal_err;
 		}
-	      AVLTree *f = sonL->sonR->sonL;
-	      AVLTree *g = sonL->sonR->sonR;
+	      AVLTree *f = son[LEFT]->son[RIGHT]->son[LEFT];
+	      AVLTree *g = son[LEFT]->son[RIGHT]->son[RIGHT];
 	      AVLTree *r = dad;
 
 	      a->dad = d;
-	      d->sonR = a;
+	      d->son[RIGHT] = a;
 	      b->dad = d;
-	      d->sonL = b;
-	      a->sonL = g;
+	      d->son[LEFT] = b;
+	      a->son[LEFT] = g;
 	      if (g)
 		g->dad = a;
-	      a->sonR = e;
+	      a->son[RIGHT] = e;
 	      if (e)
 		e->dad = a;
-	      b->sonL = c;
+	      b->son[LEFT] = c;
 	      if (c)
 		c->dad = b;
-	      b->sonR = f;
+	      b->son[RIGHT] = f;
 	      if (f)
 		f->dad = b;
 
 	      d->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = d;
-		  if (r->sonR == a)
-		    r->sonR = d;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = d;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = d;
 		}
 	      if (racine == a)
 		racine = d;
@@ -271,43 +271,43 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	}
       else if (balance < 0)
 	{
-	  if (from == sonL)
+	  if (from == son[LEFT])
 	    {
 	      balance = 0;
 	      return avl_no_err;
 	    }
-	  if (sonR == NULL)
+	  if (son[RIGHT] == NULL)
 	    {
 //                              cout << "mierda\n";
 	      return avl_bal_err;
 	    }
 	  AVLTree *a = this;
-	  AVLTree *b = sonR;
-	  AVLTree *e = sonL;
-	  AVLTree *c = sonR->sonR;
-	  AVLTree *d = sonR->sonL;
+	  AVLTree *b = son[RIGHT];
+	  AVLTree *e = son[LEFT];
+	  AVLTree *c = son[RIGHT]->son[RIGHT];
+	  AVLTree *d = son[RIGHT]->son[LEFT];
 	  AVLTree *r = dad;
-	  if (sonR->balance < 0)
+	  if (son[RIGHT]->balance < 0)
 	    {
 
 	      a->dad = b;
-	      b->sonL = a;
-	      a->sonL = e;
+	      b->son[LEFT] = a;
+	      a->son[LEFT] = e;
 	      if (e)
 		e->dad = a;
-	      a->sonR = d;
+	      a->son[RIGHT] = d;
 	      if (d)
 		d->dad = a;
-	      b->sonR = c;
+	      b->son[RIGHT] = c;
 	      if (c)
 		c->dad = b;
 	      b->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = b;
-		  if (r->sonR == a)
-		    r->sonR = b;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = b;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = b;
 		}
 	      if (racine == a)
 		racine = b;
@@ -317,38 +317,38 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	    }
 	  else
 	    {
-	      if (sonR->sonL == NULL)
+	      if (son[RIGHT]->son[LEFT] == NULL)
 		{
 //                                      cout << "mierda\n";
 		  return avl_bal_err;
 		}
-	      AVLTree *f = sonR->sonL->sonR;
-	      AVLTree *g = sonR->sonL->sonL;
+	      AVLTree *f = son[RIGHT]->son[LEFT]->son[RIGHT];
+	      AVLTree *g = son[RIGHT]->son[LEFT]->son[LEFT];
 
 	      a->dad = d;
-	      d->sonL = a;
+	      d->son[LEFT] = a;
 	      b->dad = d;
-	      d->sonR = b;
-	      a->sonR = g;
+	      d->son[RIGHT] = b;
+	      a->son[RIGHT] = g;
 	      if (g)
 		g->dad = a;
-	      a->sonL = e;
+	      a->son[LEFT] = e;
 	      if (e)
 		e->dad = a;
-	      b->sonR = c;
+	      b->son[RIGHT] = c;
 	      if (c)
 		c->dad = b;
-	      b->sonL = f;
+	      b->son[LEFT] = f;
 	      if (f)
 		f->dad = b;
 
 	      d->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = d;
-		  if (r->sonR == a)
-		    r->sonR = d;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = d;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = d;
 		}
 	      if (racine == a)
 		racine = d;
@@ -386,9 +386,9 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	  balance = 0;
 	  if (dad)
 	    {
-	      if (this == dad->sonR)
+	      if (this == dad->son[RIGHT])
 		return dad->RestoreBalances (1, racine);
-	      if (this == dad->sonL)
+	      if (this == dad->son[LEFT])
 		return dad->RestoreBalances (-1, racine);
 	    }
 	  return avl_no_err;
@@ -398,23 +398,23 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	}
       else if (diff > 0)
 	{
-	  if (sonL == NULL)
+	  if (son[LEFT] == NULL)
 	    {
 //                              cout << "un probleme\n";
 	      return avl_bal_err;
 	    }
 	  AVLTree *r = dad;
 	  AVLTree *a = this;
-	  AVLTree *b = sonR;
-	  AVLTree *e = sonL;
-	  AVLTree *f = e->sonR;
-	  AVLTree *g = e->sonL;
+	  AVLTree *b = son[RIGHT];
+	  AVLTree *e = son[LEFT];
+	  AVLTree *f = e->son[RIGHT];
+	  AVLTree *g = e->son[LEFT];
 	  if (e->balance > 0)
 	    {
-	      e->sonR = a;
-	      e->sonL = g;
-	      a->sonR = b;
-	      a->sonL = f;
+	      e->son[RIGHT] = a;
+	      e->son[LEFT] = g;
+	      a->son[RIGHT] = b;
+	      a->son[LEFT] = f;
 	      if (a)
 		a->dad = e;
 	      if (g)
@@ -426,10 +426,10 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      e->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = e;
-		  if (r->sonR == a)
-		    r->sonR = e;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = e;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = e;
 		}
 	      if (racine == this)
 		racine = e;
@@ -437,19 +437,19 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      a->balance = 0;
 	      if (r)
 		{
-		  if (e == r->sonR)
+		  if (e == r->son[RIGHT])
 		    return r->RestoreBalances (1, racine);
-		  if (e == r->sonL)
+		  if (e == r->son[LEFT])
 		    return r->RestoreBalances (-1, racine);
 		}
 	      return avl_no_err;
 	    }
 	  else if (e->balance == 0)
 	    {
-	      e->sonR = a;
-	      e->sonL = g;
-	      a->sonR = b;
-	      a->sonL = f;
+	      e->son[RIGHT] = a;
+	      e->son[LEFT] = g;
+	      a->son[RIGHT] = b;
+	      a->son[LEFT] = f;
 	      if (a)
 		a->dad = e;
 	      if (g)
@@ -461,10 +461,10 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      e->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = e;
-		  if (r->sonR == a)
-		    r->sonR = e;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = e;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = e;
 		}
 	      if (racine == this)
 		racine = e;
@@ -474,20 +474,20 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	    }
 	  else if (e->balance < 0)
 	    {
-	      if (sonL->sonR == NULL)
+	      if (son[LEFT]->son[RIGHT] == NULL)
 		{
 //                                      cout << "un probleme\n";
 		  return avl_bal_err;
 		}
-	      AVLTree *i = sonL->sonR->sonR;
-	      AVLTree *j = sonL->sonR->sonL;
+	      AVLTree *i = son[LEFT]->son[RIGHT]->son[RIGHT];
+	      AVLTree *j = son[LEFT]->son[RIGHT]->son[LEFT];
 
-	      f->sonR = a;
-	      f->sonL = e;
-	      a->sonR = b;
-	      a->sonL = i;
-	      e->sonR = j;
-	      e->sonL = g;
+	      f->son[RIGHT] = a;
+	      f->son[LEFT] = e;
+	      a->son[RIGHT] = b;
+	      a->son[LEFT] = i;
+	      e->son[RIGHT] = j;
+	      e->son[LEFT] = g;
 	      if (b)
 		b->dad = a;
 	      if (i)
@@ -503,10 +503,10 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      f->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = f;
-		  if (r->sonR == a)
-		    r->sonR = f;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = f;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = f;
 		}
 	      if (racine == this)
 		racine = f;
@@ -529,9 +529,9 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 		}
 	      if (r)
 		{
-		  if (f == r->sonR)
+		  if (f == r->son[RIGHT])
 		    return r->RestoreBalances (1, racine);
-		  if (f == r->sonL)
+		  if (f == r->son[LEFT])
 		    return r->RestoreBalances (-1, racine);
 		}
 	      return avl_no_err;
@@ -557,23 +557,23 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
     {
       if (diff < 0)
 	{
-	  if (sonR == NULL)
+	  if (son[RIGHT] == NULL)
 	    {
 //                              cout << "un probleme\n";
 	      return avl_bal_err;
 	    }
 	  AVLTree *r = dad;
 	  AVLTree *a = this;
-	  AVLTree *b = sonL;
-	  AVLTree *e = sonR;
-	  AVLTree *f = e->sonL;
-	  AVLTree *g = e->sonR;
+	  AVLTree *b = son[LEFT];
+	  AVLTree *e = son[RIGHT];
+	  AVLTree *f = e->son[LEFT];
+	  AVLTree *g = e->son[RIGHT];
 	  if (e->balance < 0)
 	    {
-	      e->sonL = a;
-	      e->sonR = g;
-	      a->sonL = b;
-	      a->sonR = f;
+	      e->son[LEFT] = a;
+	      e->son[RIGHT] = g;
+	      a->son[LEFT] = b;
+	      a->son[RIGHT] = f;
 	      if (a)
 		a->dad = e;
 	      if (g)
@@ -585,10 +585,10 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      e->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = e;
-		  if (r->sonR == a)
-		    r->sonR = e;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = e;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = e;
 		}
 	      if (racine == this)
 		racine = e;
@@ -596,19 +596,19 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      a->balance = 0;
 	      if (r)
 		{
-		  if (e == r->sonR)
+		  if (e == r->son[RIGHT])
 		    return r->RestoreBalances (1, racine);
-		  if (e == r->sonL)
+		  if (e == r->son[LEFT])
 		    return r->RestoreBalances (-1, racine);
 		}
 	      return avl_no_err;
 	    }
 	  else if (e->balance == 0)
 	    {
-	      e->sonL = a;
-	      e->sonR = g;
-	      a->sonL = b;
-	      a->sonR = f;
+	      e->son[LEFT] = a;
+	      e->son[RIGHT] = g;
+	      a->son[LEFT] = b;
+	      a->son[RIGHT] = f;
 	      if (a)
 		a->dad = e;
 	      if (g)
@@ -620,10 +620,10 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      e->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = e;
-		  if (r->sonR == a)
-		    r->sonR = e;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = e;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = e;
 		}
 	      if (racine == this)
 		racine = e;
@@ -633,20 +633,20 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	    }
 	  else if (e->balance > 0)
 	    {
-	      if (sonR->sonL == NULL)
+	      if (son[RIGHT]->son[LEFT] == NULL)
 		{
 //                                      cout << "un probleme\n";
 		  return avl_bal_err;
 		}
-	      AVLTree *i = sonR->sonL->sonL;
-	      AVLTree *j = sonR->sonL->sonR;
+	      AVLTree *i = son[RIGHT]->son[LEFT]->son[LEFT];
+	      AVLTree *j = son[RIGHT]->son[LEFT]->son[RIGHT];
 
-	      f->sonL = a;
-	      f->sonR = e;
-	      a->sonL = b;
-	      a->sonR = i;
-	      e->sonL = j;
-	      e->sonR = g;
+	      f->son[LEFT] = a;
+	      f->son[RIGHT] = e;
+	      a->son[LEFT] = b;
+	      a->son[RIGHT] = i;
+	      e->son[LEFT] = j;
+	      e->son[RIGHT] = g;
 	      if (b)
 		b->dad = a;
 	      if (i)
@@ -662,10 +662,10 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	      f->dad = r;
 	      if (r)
 		{
-		  if (r->sonL == a)
-		    r->sonL = f;
-		  if (r->sonR == a)
-		    r->sonR = f;
+		  if (r->son[LEFT] == a)
+		    r->son[LEFT] = f;
+		  if (r->son[RIGHT] == a)
+		    r->son[RIGHT] = f;
 		}
 	      if (racine == this)
 		racine = f;
@@ -688,9 +688,9 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 		}
 	      if (r)
 		{
-		  if (f == r->sonR)
+		  if (f == r->son[RIGHT])
 		    return r->RestoreBalances (1, racine);
-		  if (f == r->sonL)
+		  if (f == r->son[LEFT])
 		    return r->RestoreBalances (-1, racine);
 		}
 	      return avl_no_err;
@@ -704,9 +704,9 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	  balance = 0;
 	  if (dad)
 	    {
-	      if (this == dad->sonR)
+	      if (this == dad->son[RIGHT])
 		return dad->RestoreBalances (1, racine);
-	      if (this == dad->sonL)
+	      if (this == dad->son[LEFT])
 		return dad->RestoreBalances (-1, racine);
 	    }
 	  return avl_no_err;
@@ -734,27 +734,27 @@ AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
 {
   DblLinked::Extract ();
 
-  if (sonL && sonR)
+  if (son[LEFT] && son[RIGHT])
     {
-      AVLTree *newMe = sonL->RightLeaf (this, true);
-      if (newMe == NULL || newMe->sonR)
+      AVLTree *newMe = son[LEFT]->RightLeaf (this, true);
+      if (newMe == NULL || newMe->son[RIGHT])
 	{
 //                      cout << "pas normal\n";
 	  return avl_rm_err;
 	}
-      if (newMe == sonL)
+      if (newMe == son[LEFT])
 	{
 	  startNode = newMe;
 	  diff = -1;
-	  newMe->sonR = sonR;
-	  sonR->dad = newMe;
+	  newMe->son[RIGHT] = son[RIGHT];
+	  son[RIGHT]->dad = newMe;
 	  newMe->dad = dad;
 	  if (dad)
 	    {
-	      if (dad->sonL == this)
-		dad->sonL = newMe;
-	      if (dad->sonR == this)
-		dad->sonR = newMe;
+	      if (dad->son[LEFT] == this)
+		dad->son[LEFT] = newMe;
+	      if (dad->son[RIGHT] == this)
+		dad->son[RIGHT] = newMe;
 	    }
 	}
       else
@@ -763,74 +763,74 @@ AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
 	  startNode = oDad;
 	  diff = 1;
 
-	  oDad->sonR = newMe->sonL;
-	  if (newMe->sonL)
-	    newMe->sonL->dad = oDad;
+	  oDad->son[RIGHT] = newMe->son[LEFT];
+	  if (newMe->son[LEFT])
+	    newMe->son[LEFT]->dad = oDad;
 
 	  newMe->dad = dad;
-	  newMe->sonL = sonL;
-	  newMe->sonR = sonR;
+	  newMe->son[LEFT] = son[LEFT];
+	  newMe->son[RIGHT] = son[RIGHT];
 	  if (dad)
 	    {
-	      if (dad->sonL == this)
-		dad->sonL = newMe;
-	      if (dad->sonR == this)
-		dad->sonR = newMe;
+	      if (dad->son[LEFT] == this)
+		dad->son[LEFT] = newMe;
+	      if (dad->son[RIGHT] == this)
+		dad->son[RIGHT] = newMe;
 	    }
-	  if (sonL)
-	    sonL->dad = newMe;
-	  if (sonR)
-	    sonR->dad = newMe;
+	  if (son[LEFT])
+	    son[LEFT]->dad = newMe;
+	  if (son[RIGHT])
+	    son[RIGHT]->dad = newMe;
 	}
       newMe->balance = balance;
       if (racine == this)
 	racine = newMe;
     }
-  else if (sonL)
+  else if (son[LEFT])
     {
       startNode = dad;
       diff = 0;
       if (dad)
 	{
-	  if (this == dad->sonL)
+	  if (this == dad->son[LEFT])
 	    diff = -1;
-	  if (this == dad->sonR)
+	  if (this == dad->son[RIGHT])
 	    diff = 1;
 	}
       if (dad)
 	{
-	  if (dad->sonL == this)
-	    dad->sonL = sonL;
-	  if (dad->sonR == this)
-	    dad->sonR = sonL;
+	  if (dad->son[LEFT] == this)
+	    dad->son[LEFT] = son[LEFT];
+	  if (dad->son[RIGHT] == this)
+	    dad->son[RIGHT] = son[LEFT];
 	}
-      if (sonL->dad == this)
-	sonL->dad = dad;
+      if (son[LEFT]->dad == this)
+	son[LEFT]->dad = dad;
       if (racine == this)
-	racine = sonL;
+	racine = son[LEFT];
     }
-  else if (sonR)
+  else if (son[RIGHT])
     {
       startNode = dad;
       diff = 0;
       if (dad)
 	{
-	  if (this == dad->sonL)
+	  if (this == dad->son[LEFT])
 	    diff = -1;
-	  if (this == dad->sonR)
+	  if (this == dad->son[RIGHT])
 	    diff = 1;
 	}
       if (dad)
 	{
-	  if (dad->sonL == this)
-	    dad->sonL = sonR;
-	  if (dad->sonR == this)
-	    dad->sonR = sonR;
+	  if (dad->son[LEFT] == this)
+	    dad->son[LEFT] = son[RIGHT];
+	  if (dad->son[RIGHT] == this)
+	    dad->son[RIGHT] = son[RIGHT];
 	}
-      if (sonR->dad == this)
-	sonR->dad = dad;
+      if (son[RIGHT]->dad == this)
+	son[RIGHT]->dad = dad;
       if (racine == this)
-	racine = sonR;
+	racine = son[RIGHT];
     }
   else
     {
@@ -838,22 +838,22 @@ AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
       diff = 0;
       if (dad)
 	{
-	  if (this == dad->sonL)
+	  if (this == dad->son[LEFT])
 	    diff = -1;
-	  if (this == dad->sonR)
+	  if (this == dad->son[RIGHT])
 	    diff = 1;
 	}
       if (dad)
 	{
-	  if (dad->sonL == this)
-	    dad->sonL = NULL;
-	  if (dad->sonR == this)
-	    dad->sonR = NULL;
+	  if (dad->son[LEFT] == this)
+	    dad->son[LEFT] = NULL;
+	  if (dad->son[RIGHT] == this)
+	    dad->son[RIGHT] = NULL;
 	}
       if (racine == this)
 	racine = NULL;
     }
-  dad = sonR = sonL = NULL;
+  dad = son[RIGHT] = son[LEFT] = NULL;
   balance = 0;
   return avl_no_err;
 }
@@ -889,42 +889,42 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	}
       else if (insertType == found_on_left)
 	{
-	  if (insertR == NULL || insertR->sonL)
+	  if (insertR == NULL || insertR->son[LEFT])
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;
 	    }
-	  insertR->sonL = this;
+	  insertR->son[LEFT] = this;
 	  dad = insertR;
 	  InsertOnLeft (insertR);
 	}
       else if (insertType == found_on_right)
 	{
-	  if (insertL == NULL || insertL->sonR)
+	  if (insertL == NULL || insertL->son[RIGHT])
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;
 	    }
-	  insertL->sonR = this;
+	  insertL->son[RIGHT] = this;
 	  dad = insertL;
 	  InsertOnRight (insertL);
 	}
       else if (insertType == found_between)
 	{
 	  if (insertR == NULL || insertL == NULL
-	      || (insertR->sonL != NULL && insertL->sonR != NULL))
+	      || (insertR->son[LEFT] != NULL && insertL->son[RIGHT] != NULL))
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;
 	    }
-	  if (insertR->sonL == NULL)
+	  if (insertR->son[LEFT] == NULL)
 	    {
-	      insertR->sonL = this;
+	      insertR->son[LEFT] = this;
 	      dad = insertR;
 	    }
-	  else if (insertL->sonR == NULL)
+	  else if (insertL->son[RIGHT] == NULL)
 	    {
-	      insertL->sonR = this;
+	      insertL->son[RIGHT] = this;
 	      dad = insertL;
 	    }
 	  InsertBetween (insertL, insertR);
@@ -938,23 +938,23 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	    }
 	  // et on insere
 
-	  if (insertL->sonR)
+	  if (insertL->son[RIGHT])
 	    {
-	      insertL = insertL->sonR->LeftLeaf (insertL, true);
-	      if (insertL->sonL)
+	      insertL = insertL->son[RIGHT]->LeftLeaf (insertL, true);
+	      if (insertL->son[LEFT])
 		{
 //                                      cout << "ngou?\n";
 		  return avl_ins_err;
 		}
-	      insertL->sonL = this;
+	      insertL->son[LEFT] = this;
 	      this->dad = insertL;
-	      InsertBetween (insertL->leftElem, insertL);
+	      InsertBetween (insertL->elem[LEFT], insertL);
 	    }
 	  else
 	    {
-	      insertL->sonR = this;
+	      insertL->son[RIGHT] = this;
 	      dad = insertL;
-	      InsertBetween (insertL, insertL->rightElem);
+	      InsertBetween (insertL, insertL->elem[RIGHT]);
 	    }
 	}
       else
@@ -972,20 +972,20 @@ AVLTree::Relocate (AVLTree * to)
   DblLinked::Relocate (to);
   if (dad)
     {
-      if (dad->sonL == this)
-	dad->sonL = to;
-      if (dad->sonR == this)
-	dad->sonR = to;
+      if (dad->son[LEFT] == this)
+	dad->son[LEFT] = to;
+      if (dad->son[RIGHT] == this)
+	dad->son[RIGHT] = to;
     }
-  if (sonR)
+  if (son[RIGHT])
     {
-      sonR->dad = to;
+      son[RIGHT]->dad = to;
     }
-  if (sonL)
+  if (son[LEFT])
     {
-      sonL->dad = to;
+      son[LEFT]->dad = to;
     }
   to->dad = dad;
-  to->sonR = sonR;
-  to->sonL = sonL;
+  to->son[RIGHT] = son[RIGHT];
+  to->son[LEFT] = son[LEFT];
 }

@@ -408,23 +408,23 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 			      int onLeftB = -1, onRightB = -1;
 			      Shape *onLeftS = NULL;
 			      Shape *onRightS = NULL;
-			      if (node->leftElem)
+			      if (node->elem[LEFT])
 				{
 				  onLeftB =
 				    (static_cast <
-				     SweepTree * >(node->leftElem))->bord;
+				     SweepTree * >(node->elem[LEFT]))->bord;
 				  onLeftS =
 				    (static_cast <
-				     SweepTree * >(node->leftElem))->src;
+				     SweepTree * >(node->elem[LEFT]))->src;
 				}
-			      if (node->rightElem)
+			      if (node->elem[RIGHT])
 				{
 				  onRightB =
 				    (static_cast <
-				     SweepTree * >(node->rightElem))->bord;
+				     SweepTree * >(node->elem[RIGHT]))->bord;
 				  onRightS =
 				    (static_cast <
-				     SweepTree * >(node->rightElem))->src;
+				     SweepTree * >(node->elem[RIGHT]))->src;
 				}
 
 			      node->Remove (*sTree, *sEvts, true);
@@ -494,7 +494,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 		  if (doWinding)
 		    {
 		      SweepTree *myLeft =
-			static_cast < SweepTree * >(node->leftElem);
+			static_cast < SweepTree * >(node->elem[LEFT]);
 		      if (myLeft)
 			{
 			  pData[lastPointNo].askForWindingS = myLeft->src;
@@ -535,7 +535,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 			  if (doWinding)
 			    {
 			      SweepTree *myLeft =
-				static_cast < SweepTree * >(node->leftElem);
+				static_cast < SweepTree * >(node->elem[LEFT]);
 			      if (myLeft)
 				{
 				  pData[lastPointNo].askForWindingS =
@@ -920,7 +920,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			SweepTree*  ct=static_cast <SweepTree*> (sTree.racine->Leftmost());
 			while ( ct ) {
 				printf("%i %i [%i\n",ct->bord,ct->startPoint,(ct->src==a)?1:0);
-				ct=static_cast <SweepTree*> (ct->rightElem);
+				ct=static_cast <SweepTree*> (ct->elem[RIGHT]);
 			}
 		}
 		printf("\n");*/
@@ -1234,23 +1234,23 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			      int onLeftB = -1, onRightB = -1;
 			      Shape *onLeftS = NULL;
 			      Shape *onRightS = NULL;
-			      if (node->leftElem)
+			      if (node->elem[LEFT])
 				{
 				  onLeftB =
 				    (static_cast <
-				     SweepTree * >(node->leftElem))->bord;
+				     SweepTree * >(node->elem[LEFT]))->bord;
 				  onLeftS =
 				    (static_cast <
-				     SweepTree * >(node->leftElem))->src;
+				     SweepTree * >(node->elem[LEFT]))->src;
 				}
-			      if (node->rightElem)
+			      if (node->elem[RIGHT])
 				{
 				  onRightB =
 				    (static_cast <
-				     SweepTree * >(node->rightElem))->bord;
+				     SweepTree * >(node->elem[RIGHT]))->bord;
 				  onRightS =
 				    (static_cast <
-				     SweepTree * >(node->rightElem))->src;
+				     SweepTree * >(node->elem[RIGHT]))->src;
 				}
 
 			      node->Remove (*sTree, *sEvts, true);
@@ -1323,7 +1323,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		  if (doWinding)
 		    {
 		      SweepTree *myLeft =
-			static_cast < SweepTree * >(node->leftElem);
+			static_cast < SweepTree * >(node->elem[LEFT]);
 		      if (myLeft)
 			{
 			  pData[lastPointNo].askForWindingS = myLeft->src;
@@ -1368,7 +1368,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			  if (doWinding)
 			    {
 			      SweepTree *myLeft =
-				static_cast < SweepTree * >(node->leftElem);
+				static_cast < SweepTree * >(node->elem[LEFT]);
 			      if (myLeft)
 				{
 				  pData[lastPointNo].askForWindingS =
@@ -1671,7 +1671,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
 {
   if (onLeft)
     {
-      SweepTree *tL = static_cast < SweepTree * >(t->leftElem);
+      SweepTree *tL = static_cast < SweepTree * >(t->elem[LEFT]);
       if (tL)
 	{
         NR::Point atx;
@@ -1684,7 +1684,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
     }
   else
     {
-      SweepTree *tR = static_cast < SweepTree * >(t->rightElem);
+      SweepTree *tR = static_cast < SweepTree * >(t->elem[RIGHT]);
       if (tR)
 	{
         NR::Point  atx;
@@ -2857,7 +2857,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
 			static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
 		      if (node == NULL)
 			break;
-		      node = static_cast < SweepTree * >(node->leftElem);
+		      node = static_cast < SweepTree * >(node->elem[LEFT]);
 		      if (node == NULL)
 			break;
 		      nSrc = node->src;
@@ -2925,7 +2925,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
 			static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
 		      if (node == NULL)
 			break;
-		      node = static_cast < SweepTree * >(node->rightElem);
+		      node = static_cast < SweepTree * >(node->elem[RIGHT]);
 		      if (node == NULL)
 			break;
 		      nSrc = node->src;
@@ -2959,8 +2959,8 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 
     if (lS) {
 	SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
-	if (lE && lE->leftElem) {
-	    SweepTree *llE = static_cast < SweepTree * >(lE->leftElem);
+	if (lE && lE->elem[LEFT]) {
+	    SweepTree *llE = static_cast < SweepTree * >(lE->elem[LEFT]);
 	    chgts[nCh].lSrc = llE->src;
 	    chgts[nCh].lBrd = llE->bord;
 	} else {
@@ -2991,8 +2991,8 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 
     if (rS) {
 	SweepTree *rE = static_cast < SweepTree * >(rS->swsData[rB].misc);
-	if (rE->rightElem) {
-	    SweepTree *rrE = static_cast < SweepTree * >(rE->rightElem);
+	if (rE->elem[RIGHT]) {
+	    SweepTree *rrE = static_cast < SweepTree * >(rE->elem[RIGHT]);
 	    chgts[nCh].rSrc = rrE->src;
 	    chgts[nCh].rBrd = rrE->bord;
 	} else {
@@ -3021,8 +3021,8 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 	}
     } else {
 	SweepTree *lE = static_cast < SweepTree * >(lS->swsData[lB].misc);
-	if (lE && lE->rightElem) {
-	    SweepTree *rlE = static_cast < SweepTree * >(lE->rightElem);
+	if (lE && lE->elem[RIGHT]) {
+	    SweepTree *rlE = static_cast < SweepTree * >(lE->elem[RIGHT]);
 	    chgts[nCh].rSrc = rlE->src;
 	    chgts[nCh].rBrd = rlE->bord;
 	} else {
@@ -3102,7 +3102,7 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 		static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
 	      if (node == NULL)
 		break;
-	      node = static_cast < SweepTree * >(node->leftElem);
+	      node = static_cast < SweepTree * >(node->elem[LEFT]);
 	      if (node == NULL)
 		break;
 	      nSrc = node->src;
@@ -3122,7 +3122,7 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 		static_cast < SweepTree * >(nSrc->swsData[nBrd].misc);
 	      if (node == NULL)
 		break;
-	      node = static_cast < SweepTree * >(node->rightElem);
+	      node = static_cast < SweepTree * >(node->elem[RIGHT]);
 	      if (node == NULL)
 		break;
 	      nSrc = node->src;
