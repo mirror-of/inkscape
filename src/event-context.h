@@ -20,6 +20,7 @@
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
 #include "xml/repr.h"
+#include "selcue.h"
 #include "forward.h"
 
 struct SPEventContext : public GObject{
@@ -37,6 +38,8 @@ struct SPEventContext : public GObject{
 	bool within_tolerance; // are we still within tolerance of origin
 
 	SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
+
+	SPSelCue selcue;
 };
 
 struct SPEventContextClass : public GObjectClass{

@@ -33,9 +33,12 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "pixmaps/cursor-text.xpm"
-#include "text-context.h"
 #include "view.h"
 #include "helper/sp-intl.h"
+#include "prefs-utils.h"
+
+#include "text-context.h"
+
 
 static void sp_text_context_class_init (SPTextContextClass * klass);
 static void sp_text_context_init (SPTextContext * text_context);
@@ -184,6 +187,9 @@ sp_text_context_setup (SPEventContext *ec)
 	);
 
 	sp_text_context_selection_changed (SP_DT_SELECTION (desktop), tc);
+
+	if (prefs_get_int_attribute("tools.text", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void
@@ -219,6 +225,8 @@ sp_text_context_finish (SPEventContext *ec)
 	if (ec->desktop) {
   		sp_signal_disconnect_by_data (SP_DT_CANVAS (ec->desktop), tc);
 	}
+
+	sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 static gint

@@ -232,7 +232,6 @@ void sp_sel_trans_increase_state(SPSelTrans *seltrans)
 	}
 
 	sp_sel_trans_update_handles(*seltrans);
-	sp_sel_cue_update_item_bboxes (&seltrans->selcue);
 }
 
 void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
@@ -240,7 +239,6 @@ void sp_sel_trans_set_center(SPSelTrans *seltrans, NR::Point p)
 	seltrans->center = p;
 	
 	sp_sel_trans_update_handles(*seltrans);
-	sp_sel_cue_update_item_bboxes (&seltrans->selcue);
 }
 
 void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles)
@@ -318,7 +316,6 @@ void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, 
 	seltrans->changed = TRUE;
 
 	sp_sel_trans_update_handles(*seltrans);
-	sp_sel_cue_update_item_bboxes (&seltrans->selcue);
 }
 
 void sp_sel_trans_ungrab(SPSelTrans *seltrans)

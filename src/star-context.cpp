@@ -143,6 +143,8 @@ sp_star_context_dispose (GObject *object)
     /* fixme: This is necessary because we do not grab */
     if (sc->item) sp_star_finish (sc);
 
+    sp_sel_cue_shutdown(&(ec->selcue));
+
     G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -246,6 +248,9 @@ sp_star_context_setup (SPEventContext *ec)
 
     sc->sel_changed_connection.disconnect();
     sc->sel_changed_connection = selection->connectChanged(SigC::bind(SigC::slot(&sp_star_context_selection_changed), (gpointer)sc));
+
+    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void

@@ -13,7 +13,16 @@
 
 #include <config.h>
 
-#include "select-context.h"
+#include "inkscape-private.h"
+#include "file.h"
+#include "document.h"
+#include "desktop.h"
+#include "selection.h"
+#include "selection-chemistry.h"
+#include "path-chemistry.h"
+#include "shortcuts.h"
+#include "verbs.h"
+
 #include "node-context.h"
 #include "rect-context.h"
 #include "arc-context.h"
@@ -24,16 +33,7 @@
 #include "text-context.h"
 #include "zoom-context.h"
 #include "dropper-context.h"
-
-#include "inkscape-private.h"
-#include "file.h"
-#include "document.h"
-#include "desktop.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "shortcuts.h"
-#include "verbs.h"
+#include "select-context.h"
 
 #include "tools-switch.h"
 

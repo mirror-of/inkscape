@@ -40,6 +40,7 @@
 #include "xml/repr-private.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
+#include "selcue.h"
 
 static void sp_rect_context_class_init(SPRectContextClass *klass);
 static void sp_rect_context_init(SPRectContext *rect_context);
@@ -137,6 +138,8 @@ static void sp_rect_context_dispose(GObject *object)
         sp_repr_unref(rc->repr);
         rc->repr = 0;
     }
+
+    sp_sel_cue_shutdown(&(ec->selcue));
 
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
@@ -236,6 +239,9 @@ static void sp_rect_context_setup(SPEventContext *ec)
 
     sp_event_context_read(ec, "rx_ratio");
     sp_event_context_read(ec, "ry_ratio");
+
+    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar const *val)

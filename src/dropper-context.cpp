@@ -112,7 +112,8 @@ sp_dropper_context_setup (SPEventContext *ec)
 	sp_canvas_bpath_set_stroke (SP_CANVAS_BPATH (dc->area), 0x0000007f, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 	sp_canvas_item_hide (dc->area);
 
-	sp_sel_cue_init(&dc->selcue, SP_EVENT_CONTEXT(dc)->desktop);
+	if (prefs_get_int_attribute("tools.dropper", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void
@@ -125,7 +126,7 @@ sp_dropper_context_finish (SPEventContext *ec)
 		dc->area = NULL;
 	}
 
-	sp_sel_cue_shutdown(&dc->selcue);
+	sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 static gint
@@ -298,6 +299,8 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
 			break;
+		case GDK_Escape:
+			SP_DT_SELECTION(ec->desktop)->clear();
 		default:
 			break;
 		}

@@ -210,6 +210,9 @@ sp_draw_context_setup(SPEventContext *ec)
     dc->green_anchor = NULL;
 
     spdc_set_attach(dc, FALSE);
+
+    if (prefs_get_int_attribute("tools.freehand.pencil", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void
@@ -229,6 +232,8 @@ sp_draw_context_finish(SPEventContext *ec)
     }
 
     spdc_free_colors(dc);
+
+    sp_sel_cue_shutdown(&(ec->selcue));
 }
 
 static void
@@ -1331,12 +1336,17 @@ sp_pen_context_setup(SPEventContext *ec)
     sp_canvas_item_hide(pc->cl1);
 
     sp_event_context_read(ec, "mode");
+
+   if (prefs_get_int_attribute("tools.freehand.pen", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void
 sp_pen_context_finish(SPEventContext *ec)
 {
     spdc_pen_finish(SP_PEN_CONTEXT(ec), FALSE);
+
+    sp_sel_cue_shutdown(&(ec->selcue));
 
     if (((SPEventContextClass *) pen_parent_class)->finish) {
         ((SPEventContextClass *) pen_parent_class)->finish(ec);

@@ -29,7 +29,6 @@
 #include "desktop-affine.h"
 #include "desktop-snap.h"
 #include "pixmaps/cursor-arc.xpm"
-#include "arc-context.h"
 #include "sp-metrics.h"
 #include "knotholder.h"
 #include "xml/repr.h"
@@ -37,6 +36,8 @@
 #include "object-edit.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
+
+#include "arc-context.h"
 
 static void sp_arc_context_class_init (SPArcContextClass *klass);
 static void sp_arc_context_init (SPArcContext *arc_context);
@@ -96,11 +97,11 @@ static void sp_arc_context_init(SPArcContext *arc_context)
 	event_context->cursor_shape = cursor_arc_xpm;
 	event_context->hot_x = 4;
 	event_context->hot_y = 4;
-    event_context->xp = 0;
-    event_context->yp = 0;
-    event_context->tolerance = 0;
-    event_context->within_tolerance = false;
-    event_context->item_to_select = NULL;
+	event_context->xp = 0;
+	event_context->yp = 0;
+	event_context->tolerance = 0;
+	event_context->within_tolerance = false;
+	event_context->item_to_select = NULL;
 
 	arc_context->item = NULL;
 
@@ -109,25 +110,27 @@ static void sp_arc_context_init(SPArcContext *arc_context)
 
 static void sp_arc_context_dispose(GObject *object)
 {
-    SPEventContext *ec = SP_EVENT_CONTEXT (object);
+	SPEventContext *ec = SP_EVENT_CONTEXT (object);
 	SPArcContext *ac = SP_ARC_CONTEXT(object);
 
-    ac->sel_changed_connection.disconnect();
-    ac->sel_changed_connection.~Connection();
+	ac->sel_changed_connection.disconnect();
+	ac->sel_changed_connection.~Connection();
 
-    if (ac->knot_holder) {
-        sp_knot_holder_destroy (ac->knot_holder);
-        ac->knot_holder = NULL;
-    }
+	if (ac->knot_holder) {
+		sp_knot_holder_destroy (ac->knot_holder);
+		ac->knot_holder = NULL;
+	}
 
-    if (ac->repr) { // remove old listener
-        sp_repr_remove_listener_by_data (ac->repr, ec);
-        sp_repr_unref (ac->repr);
-        ac->repr = 0;
-    }
+	if (ac->repr) { // remove old listener
+		sp_repr_remove_listener_by_data (ac->repr, ec);
+		sp_repr_unref (ac->repr);
+		ac->repr = 0;
+	}
 
 	/* fixme: This is necessary because we do not grab */
 	if (ac->item) sp_arc_finish (ac);
+
+	sp_sel_cue_shutdown(&(ec->selcue));
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -224,6 +227,9 @@ sp_arc_context_setup (SPEventContext *ec)
 
     ac->sel_changed_connection.disconnect();
     ac->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_arc_context_selection_changed), (gpointer)ac));
+
+    if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)

@@ -278,44 +278,6 @@ options_selector ()
 }
 
 
-static GtkWidget *
-options_dropper ()
-{
-    GtkWidget *vb, *f, *fb, *b;
-
-    GtkTooltips *tt = gtk_tooltips_new();
-
-    vb = gtk_vbox_new (FALSE, VB_MARGIN);
-//    gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-
-    f = gtk_frame_new (_("Picking colors:"));
-    gtk_widget_show (f);
-    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-    fb = gtk_vbox_new (FALSE, 0);
-    gtk_widget_show (fb);
-    gtk_container_add (GTK_CONTAINER (f), fb);
-
-    guint pick = prefs_get_int_attribute ("tools.dropper", "pick", 0);
-
-    b = sp_select_context_add_radio (
-        NULL, fb, tt, _("Pick visible color (no alpha)"), _("Pick the visible color under cursor, taking into account the page background and disregarding the transparency of objects"), 
-        NULL, SP_DROPPER_PICK_VISIBLE, true,
-        (pick == SP_DROPPER_PICK_VISIBLE),
-        options_dropper_pick_toggled
-        );
-
-    b = sp_select_context_add_radio (
-        b, fb, tt, _("Pick objects' color (including alpha)"), _("Pick the actual color of object(s) under cursor, including their accumulated transparency"), 
-        NULL, SP_DROPPER_PICK_ACTUAL, true,
-        (pick == SP_DROPPER_PICK_ACTUAL),
-        options_dropper_pick_toggled
-        );
-
-    return vb;
-}
-
-
 static void
 sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
 {
@@ -538,7 +500,8 @@ static void
 options_changed_boolean (GtkToggleButton *tb, gpointer data)
 {
     const gchar *prefs_path = (const gchar *) data;
-    prefs_set_int_attribute (prefs_path, "value", gtk_toggle_button_get_active (tb));
+    const gchar *prefs_attr = (const gchar *) g_object_get_data (G_OBJECT(tb), "attr");
+    prefs_set_int_attribute (prefs_path, prefs_attr, gtk_toggle_button_get_active (tb));
 }
 
 
@@ -629,7 +592,6 @@ options_checkbox (
         gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
 
-
     {
 
         GtkWidget *b  = gtk_check_button_new ();
@@ -644,6 +606,8 @@ options_checkbox (
         gtk_widget_show (b);
         gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
 
+        g_object_set_data (G_OBJECT(b), "attr", (void *) attr);
+
         gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
     }
 
@@ -653,6 +617,58 @@ options_checkbox (
         gtk_widget_show (l);
         gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
     }
+}
+
+void
+selcue_checkbox (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
+{
+    options_checkbox (
+        _("Show selection cue"), 
+        _("Whether selected objects display a selection cue (the same as in selector)"), tt,
+        vb,
+        path, "selcue", 1,
+        options_changed_boolean
+        );
+}
+
+static GtkWidget *
+options_dropper ()
+{
+    GtkWidget *vb, *f, *fb, *b;
+
+    GtkTooltips *tt = gtk_tooltips_new();
+
+    vb = gtk_vbox_new (FALSE, VB_MARGIN);
+
+    {
+        f = gtk_frame_new (_("Picking colors:"));
+        gtk_widget_show (f);
+        gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+        fb = gtk_vbox_new (FALSE, 0);
+        gtk_widget_show (fb);
+        gtk_container_add (GTK_CONTAINER (f), fb);
+
+        guint pick = prefs_get_int_attribute ("tools.dropper", "pick", 0);
+
+        b = sp_select_context_add_radio (
+            NULL, fb, tt, _("Pick visible color (no alpha)"), _("Pick the visible color under cursor, taking into account the page background and disregarding the transparency of objects"), 
+            NULL, SP_DROPPER_PICK_VISIBLE, true,
+            (pick == SP_DROPPER_PICK_VISIBLE),
+            options_dropper_pick_toggled
+            );
+
+        b = sp_select_context_add_radio (
+            b, fb, tt, _("Pick objects' color (including alpha)"), _("Pick the actual color of object(s) under cursor, including their accumulated transparency"), 
+            NULL, SP_DROPPER_PICK_ACTUAL, true,
+            (pick == SP_DROPPER_PICK_ACTUAL),
+            options_dropper_pick_toggled
+            );
+    }
+
+    selcue_checkbox (vb, tt, "tools.dropper");
+
+    return vb;
 }
 
 void
@@ -910,6 +926,87 @@ sp_display_dialog (void)
             gtk_container_add (GTK_CONTAINER (vb_tool), selector_page);
         }
 
+        // Node
+        {
+            l = gtk_label_new (_("Node"));
+            gtk_widget_show (l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+
+            selcue_checkbox (vb_tool, tt, "tools.nodes");
+
+        }
+
+        // Zoom
+        {
+            l = gtk_label_new (_("Zoom"));
+            gtk_widget_show (l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+
+            selcue_checkbox (vb_tool, tt, "tools.zoom");
+        }
+
+        { // The 4 shape tools
+            l = gtk_label_new (_("Shapes"));
+            gtk_widget_show (l);
+            GtkWidget *vb_shapes = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_widget_show (vb_shapes);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_shapes), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_shapes, l);
+
+            GtkWidget *nb_shapes = gtk_notebook_new ();
+            gtk_widget_show (nb_shapes);
+            gtk_container_add (GTK_CONTAINER (vb_shapes), nb_shapes);
+
+            // Rect
+            {
+                l = gtk_label_new (_("Rect"));
+                gtk_widget_show (l);
+                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+                gtk_widget_show (vb_tool);
+                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+            }
+
+            // Ellipse
+            {
+                l = gtk_label_new (_("Ellipse"));
+                gtk_widget_show (l);
+                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+                gtk_widget_show (vb_tool);
+                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+            }
+
+            // Star
+            {
+                l = gtk_label_new (_("Star"));
+                gtk_widget_show (l);
+                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+                gtk_widget_show (vb_tool);
+                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+            }
+
+            // Spiral
+            {
+                l = gtk_label_new (_("Spiral"));
+                gtk_widget_show (l);
+                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+                gtk_widget_show (vb_tool);
+                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+            }
+
+            // common for all shapes
+            selcue_checkbox (vb_shapes, tt, "tools.shapes");
+        }
+
         // Freehand
         {
             l = gtk_label_new (_("Pencil"));
@@ -929,6 +1026,32 @@ sp_display_dialog (void)
                 false, false,
                 options_freehand_tolerance_changed
                 );
+
+            selcue_checkbox (vb_tool, tt, "tools.freehand.pencil");
+        }
+
+        // Pen
+        {
+            l = gtk_label_new (_("Pen"));
+            gtk_widget_show (l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+
+            selcue_checkbox (vb_tool, tt, "tools.freehand.pen");
+        }
+
+        // Text
+        {
+            l = gtk_label_new (_("Text"));
+            gtk_widget_show (l);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
+            gtk_widget_show (vb_tool);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
+            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+
+            selcue_checkbox (vb_tool, tt, "tools.text");
         }
 
         // Dropper

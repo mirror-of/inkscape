@@ -141,7 +141,9 @@ sp_spiral_context_dispose (GObject *object)
         sc->repr = 0;
     }
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+    sp_sel_cue_shutdown(&(ec->selcue));
+
+    G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
@@ -232,8 +234,8 @@ sp_spiral_context_setup (SPEventContext *ec)
 
 	SPSelection *selection = SP_DT_SELECTION(ec->desktop);
 
-    SPItem *item = selection->singleItem();
-        if (item) {
+	SPItem *item = selection->singleItem();
+      if (item) {
             sc->knot_holder = sp_item_knot_holder (item, ec->desktop);
             SPRepr *repr = SP_OBJECT_REPR (item);
             if (repr) {
@@ -242,10 +244,13 @@ sp_spiral_context_setup (SPEventContext *ec)
                 sp_repr_add_listener (repr, &shape_repr_events, ec);
                 sp_repr_synthesize_events (repr, &shape_repr_events, ec);
             }
-        }
+      }
 
 	sc->sel_changed_connection.disconnect();
 	sc->sel_changed_connection = selection->connectChanged(SigC::bind(SigC::slot(&sp_spiral_context_selection_changed), (gpointer)sc));
+
+	if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 static void

@@ -154,6 +154,8 @@ sp_node_context_dispose (GObject *object)
 		nc->knot_holder = NULL;
 	}
 
+	sp_sel_cue_shutdown(&(ec->selcue));
+
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -198,6 +200,9 @@ sp_node_context_setup (SPEventContext *ec)
 	}
 
 	sp_nodepath_update_statusbar (nc->nodepath);
+
+	if (prefs_get_int_attribute("tools.nodes", "selcue", 0) != 0)
+		sp_sel_cue_init(&(ec->selcue), ec->desktop);
 }
 
 /**
