@@ -46,6 +46,11 @@
 	* src/desktop.h (sp_desktop_zoom_relative_keep_point,
 	sp_desktop_scroll_world): Add NR::Point version.
 
+2004-02-19  Johan Ceuppens <jceuppen@easynet.be>
+
+	* src/inkjar/jar.cpp, src/inkjar/jar.h src/inkview.cpp:
+	inkview accepts .jar archives of SVG files on the command line.
+
 2004-02-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/Makefile.am: sp-item-rm-unsatisfied-cns.cpp,
