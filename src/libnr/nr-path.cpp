@@ -52,19 +52,19 @@ nr_vpath_setup_from_art_vpath (NRVPath *d, const ArtVpath *avpath)
 			if (sidx > 0) d->elements[sidx].code.length = idx - sidx;
 			sidx = idx;
 			d->elements[idx++].code.closed = TRUE;
-			d->elements[idx++].value = (float) avp->x;
-			d->elements[idx++].value = (float) avp->y;
+			d->elements[idx++].value = avp->x;
+			d->elements[idx++].value = avp->y;
 			break;
 		case ART_MOVETO_OPEN:
 			if (sidx > 0) d->elements[sidx].code.length = idx - sidx;
 			sidx = idx;
 			d->elements[idx++].code.closed = FALSE;
-			d->elements[idx++].value = (float) avp->x;
-			d->elements[idx++].value = (float) avp->y;
+			d->elements[idx++].value = avp->x;
+			d->elements[idx++].value = avp->y;
 			break;
 		case ART_LINETO:
-			d->elements[idx++].value = (float) avp->x;
-			d->elements[idx++].value = (float) avp->y;
+			d->elements[idx++].value = avp->x;
+			d->elements[idx++].value = avp->y;
 			break;
 		default:
 			break;
@@ -119,7 +119,7 @@ NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NR::Matrix const tr
 }
 
 static void
-nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NR::Point &pt, int *wind, float *best)
+nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NR::Point &pt, int *wind, NR::Coord *best)
 {
 	NR::Coord Ax, Ay, Bx, By, Dx, Dy, s;
 	NR::Coord dist2;
@@ -147,7 +147,7 @@ nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, N
 			dist2 = (Px - Qx) * (Px - Qx) + (Py - Qy) * (Py - Qy);
 		}
 
-		if (dist2 < (*best * *best)) *best = (float) sqrt (dist2);
+		if (dist2 < (*best * *best)) *best = sqrt (dist2);
 	}
 
 	if (wind) {
@@ -180,8 +180,8 @@ nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
 			     NR::Coord x011, NR::Coord y011,
 			     NR::Coord x111, NR::Coord y111,
 			     NR::Point &pt,
-			     NRRect *bbox, int *wind, float *best,
-			     float tolerance)
+			     NRRect *bbox, int *wind, NR::Coord *best,
+			     NR::Coord tolerance)
 {
 	NR::Coord x0, y0, x1, y1, len2;
 	int needdist, needwind, needline;
@@ -211,9 +211,9 @@ nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
 	if (best) {
 		/* Quicly adjust to endpoints */
 		len2 = (x000 - Px) * (x000 - Px) + (y000 - Py) * (y000 - Py);
-		if (len2 < (*best * *best)) *best = (float) sqrt (len2);
+		if (len2 < (*best * *best)) *best = (NR::Coord) sqrt (len2);
 		len2 = (x111 - Px) * (x111 - Px) + (y111 - Py) * (y111 - Py);
-		if (len2 < (*best * *best)) *best = (float) sqrt (len2);
+		if (len2 < (*best * *best)) *best = (NR::Coord) sqrt (len2);
 
 		if (((x0 - Px) < *best) && ((y0 - Py) < *best) && ((Px - x1) < *best) && ((Py - y1) < *best)) {
 			/* Point is inside sloppy bbox */
@@ -270,8 +270,8 @@ nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
 
 void
 nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &m, NR::Point &pt,
-					     NRRect *bbox, int *wind, float *dist,
-					     float tolerance)
+					     NRRect *bbox, int *wind, NR::Coord *dist,
+					     NR::Coord tolerance)
 {
 	NR::Coord x0, y0, x3, y3;
 	const ArtBpath *p;
@@ -292,20 +292,20 @@ nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &m, NR
 			x0 = m[0] * p->x3 + m[2] * p->y3 + m[4];
 			y0 = m[1] * p->x3 + m[3] * p->y3 + m[5];
 			if (bbox) {
-				bbox->x0 = (float) MIN (bbox->x0, x0);
-				bbox->y0 = (float) MIN (bbox->y0, y0);
-				bbox->x1 = (float) MAX (bbox->x1, x0);
-				bbox->y1 = (float) MAX (bbox->y1, y0);
+				bbox->x0 = (NR::Coord) MIN (bbox->x0, x0);
+				bbox->y0 = (NR::Coord) MIN (bbox->y0, y0);
+				bbox->x1 = (NR::Coord) MAX (bbox->x1, x0);
+				bbox->y1 = (NR::Coord) MAX (bbox->y1, y0);
 			}
 			break;
 		case ART_LINETO:
 			x3 = m[0] * p->x3 + m[2] * p->y3 + m[4];
 			y3 = m[1] * p->x3 + m[3] * p->y3 + m[5];
 			if (bbox) {
-				bbox->x0 = (float) MIN (bbox->x0, x3);
-				bbox->y0 = (float) MIN (bbox->y0, y3);
-				bbox->x1 = (float) MAX (bbox->x1, x3);
-				bbox->y1 = (float) MAX (bbox->y1, y3);
+				bbox->x0 = (NR::Coord) MIN (bbox->x0, x3);
+				bbox->y0 = (NR::Coord) MIN (bbox->y0, y3);
+				bbox->x1 = (NR::Coord) MAX (bbox->x1, x3);
+				bbox->y1 = (NR::Coord) MAX (bbox->y1, y3);
 			}
 			if (dist || wind) {
 				nr_line_wind_distance (x0, y0, x3, y3, pt, wind, dist);
@@ -341,10 +341,10 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 {
 	NR::Coord a, b, c, D;
 
-	bbox->x0 = (float) MIN (bbox->x0, x111);
-	bbox->y0 = (float) MIN (bbox->y0, y111);
-	bbox->x1 = (float) MAX (bbox->x1, x111);
-	bbox->y1 = (float) MAX (bbox->y1, y111);
+	bbox->x0 = (NR::Coord) MIN (bbox->x0, x111);
+	bbox->y0 = (NR::Coord) MIN (bbox->y0, y111);
+	bbox->x1 = (NR::Coord) MAX (bbox->x1, x111);
+	bbox->y1 = (NR::Coord) MAX (bbox->y1, y111);
 
 	/*
 	 * xttt = s * (s * (s * x000 + t * x001) + t * (s * x001 + t * x011)) + t * (s * (s * x001 + t * x011) + t * (s * x011 + t * x111))
@@ -381,15 +381,15 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 		if ((s > 0.0) && (s < 1.0)) {
 			t = 1.0 - s;
 			xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
-			bbox->x0 = (float) MIN (bbox->x0, xttt);
-			bbox->x1 = (float) MAX (bbox->x1, xttt);
+			bbox->x0 = (NR::Coord) MIN (bbox->x0, xttt);
+			bbox->x1 = (NR::Coord) MAX (bbox->x1, xttt);
 		}
 		s = (-b - d) / (2 * a);
 		if ((s > 0.0) && (s < 1.0)) {
 			t = 1.0 - s;
 			xttt = s * s * s * x000 + 3 * s * s * t * x001 + 3 * s * t * t * x011 + t * t * t * x111;
-			bbox->x0 = (float) MIN (bbox->x0, xttt);
-			bbox->x1 = (float) MAX (bbox->x1, xttt);
+			bbox->x0 = (NR::Coord) MIN (bbox->x0, xttt);
+			bbox->x1 = (NR::Coord) MAX (bbox->x1, xttt);
 		}
 	}
 
@@ -407,15 +407,15 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 		if ((s > 0.0) && (s < 1.0)) {
 			t = 1.0 - s;
 			yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
-			bbox->y0 = (float) MIN (bbox->y0, yttt);
-			bbox->y1 = (float) MAX (bbox->y1, yttt);
+			bbox->y0 = (NR::Coord) MIN (bbox->y0, yttt);
+			bbox->y1 = (NR::Coord) MAX (bbox->y1, yttt);
 		}
 		s = (-b - d) / (2 * a);
 		if ((s > 0.0) && (s < 1.0)) {
 			t = 1.0 - s;
 			yttt = s * s * s * y000 + 3 * s * s * t * y001 + 3 * s * t * t * y011 + t * t * t * y111;
-			bbox->y0 = (float) MIN (bbox->y0, yttt);
-			bbox->y1 = (float) MAX (bbox->y1, yttt);
+			bbox->y0 = (NR::Coord) MIN (bbox->y0, yttt);
+			bbox->y1 = (NR::Coord) MAX (bbox->y1, yttt);
 		}
 	}
 }
@@ -423,7 +423,7 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 void
 nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m,
 			       NRRect *bbox,
-			       float tolerance)
+			       NR::Coord tolerance)
 {
 	NR::Coord x0, y0, x3, y3;
 	const ArtBpath *p;
@@ -441,18 +441,18 @@ nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m,
 		case ART_MOVETO:
 			x0 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
 			y0 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
-			bbox->x0 = (float) MIN (bbox->x0, x0);
-			bbox->y0 = (float) MIN (bbox->y0, y0);
-			bbox->x1 = (float) MAX (bbox->x1, x0);
-			bbox->y1 = (float) MAX (bbox->y1, y0);
+			bbox->x0 = (NR::Coord) MIN (bbox->x0, x0);
+			bbox->y0 = (NR::Coord) MIN (bbox->y0, y0);
+			bbox->x1 = (NR::Coord) MAX (bbox->x1, x0);
+			bbox->y1 = (NR::Coord) MAX (bbox->y1, y0);
 			break;
 		case ART_LINETO:
 			x3 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
 			y3 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
-			bbox->x0 = (float) MIN (bbox->x0, x3);
-			bbox->y0 = (float) MIN (bbox->y0, y3);
-			bbox->x1 = (float) MAX (bbox->x1, x3);
-			bbox->y1 = (float) MAX (bbox->y1, y3);
+			bbox->x0 = (NR::Coord) MIN (bbox->x0, x3);
+			bbox->y0 = (NR::Coord) MIN (bbox->y0, y3);
+			bbox->x1 = (NR::Coord) MAX (bbox->x1, x3);
+			bbox->y1 = (NR::Coord) MAX (bbox->y1, y3);
 			x0 = x3;
 			y0 = y3;
 			break;

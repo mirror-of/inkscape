@@ -11,6 +11,7 @@
  */
 
 #include <libnr/nr-forward.h>
+#include <libnr/nr-coord.h>
 
 typedef struct _NRVPath NRVPath;
 typedef struct _NRBPath NRBPath;
@@ -39,7 +40,7 @@ struct _NRPathCode {
 
 union _NRPathElement {
 	NRPathCode code;
-	float value;
+	NR::Coord value;
 };
 
 /*
@@ -69,9 +70,9 @@ NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *tra
 NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NR::Matrix const transform);
 
 void nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &m, NR::Point &pt,
-					      NRRect *bbox, int *wind, float *dist,
-					      float tolerance);
+					      NRRect *bbox, int *wind, NR::Coord *dist,
+					      NR::Coord tolerance);
 
-void nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m, NRRect *bbox, float tolerance);
+void nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m, NRRect *bbox, NR::Coord tolerance);
 
 #endif
