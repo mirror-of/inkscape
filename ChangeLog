@@ -1,5 +1,9 @@
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/Makefile_insert, src/libnrtype/FontInstance.h,
+	  src/make.files, src/make.ofiles, src/make.dep:
+	  Remove src/libnrtype/FontInstance.h (see change below).
+
 	* src/libnrtype/RasterFont.h, src/libnrtype/raster-glyph.h,
 	  src/libnrtype/raster-position.h:
 	  Move raster_glyph, raster_position from RasterFont.h to new files
