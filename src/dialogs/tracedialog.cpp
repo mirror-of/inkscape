@@ -315,6 +315,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBox.pack_start(potraceBrightnessFrame);
 
     /*#### canny edge detection ####*/
+    // TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
     potraceCannyRadioButton.set_label(_("Optimal Edge Detection (Canny)"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton);
