@@ -312,6 +312,29 @@ sp_repr_attr (const SPRepr *repr, const gchar *key)
 	return NULL;
 }
 
+/** 
+ * Returns true if the XML representation has attribute with
+ * the given name or including the given name as part
+ */
+bool
+sp_repr_has_attr (const SPRepr *repr, const gchar *partial_name)
+{
+	SPReprAttr *ra;
+	unsigned int q;
+
+	g_return_val_if_fail (repr != NULL, false);
+	g_return_val_if_fail (partial_name != NULL, false);
+
+	for (ra = repr->attributes; ra != NULL; ra = ra->next)
+	{
+            const gchar *attr_name = g_quark_to_string (ra->key);
+            if (strstr(attr_name, partial_name) != NULL) 
+                return true;
+	}
+
+	return false;
+}
+
 unsigned int
 sp_repr_set_content (SPRepr *repr, const gchar *newcontent)
 {

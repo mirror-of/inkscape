@@ -170,6 +170,7 @@ unsigned int sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key);
 const  char *sp_repr_name(SPRepr const *repr);
 const  char *sp_repr_content(SPRepr const *repr);
 const  char *sp_repr_attr(SPRepr const *repr, gchar const *key);
+bool sp_repr_has_attr(SPRepr const *repr, gchar const *partial_name);
 
 /*
  * NB! signal handler may decide, that change is not allowed
