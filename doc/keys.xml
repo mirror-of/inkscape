@@ -397,6 +397,8 @@ can leave your ideas and requests there.</p>
 <mouse><key><left-drag/></key> <action>move selected objects</action></mouse>
 <note>Dragging an object selects it if it was not selected, then moves selection.</note>
 <mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
+<mouse><key><shift/><left-drag/></key> <action>temporarily disable snapping</action></mouse>
+<note>This temporaily disables snapping to grid or guides when you are dragging with grid or guides on.</note>
 <mouse><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></mouse>
 <note>When dragging or transforming with mouse, each Space leaves a copy of the selected object.</note> 
 <note>You can press and hold Space while dragging for a nice "trail."</note>
@@ -415,6 +417,7 @@ can leave your ideas and requests there.</p>
 <!--<mouse><key><ctrl/><left-drag/></key> only smaller, keep aspect ratio--> <!-- TO BE REMOVED -->
 <mouse><key><shift/><left-drag/></key> <action>symmetric transformation</action></mouse>
 <note>Holding Shift while transforming makes transformation symmetric around the center of the selection.</note>
+<!-- FIXME: why not disable snapping? inconsistent! -->
 <mouse><key><alt/><left-drag/></key> <action>slow movement</action></mouse>
 <note>Holding Alt while transforming makes transformation lag behind mouse movement, allowing finer changes.</note>
 </group>
@@ -438,6 +441,8 @@ can leave your ideas and requests there.</p>
 *<section title="Freehand tool" color="e9efc5">
 <group>
 <mouse><key><left-drag/></key> <action>draw a freehand line</action></mouse>
+<mouse><key><shift/><left-drag/></key> <action>temporarily disable snapping</action></mouse>
+<note>This temporaily disables snapping to grid or guides when you are drawing with grid or guides on.</note>
 <keys><key>a</key>    <action>toggle new/append</action></keys>
 <note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
 </group>
@@ -450,6 +455,7 @@ can leave your ideas and requests there.</p>
 <mouse><key><left-click/></key> <action>create a sharp node</action></mouse>
 <mouse><key><left-drag/></key> <action>create a bezier node with two handles</action></mouse>
 <mouse><key><shift/><left-drag/></key> <action>move only one handle</action></mouse>
+<!-- FIXME: also disables snapping! another conflict -->
 <note>This moves only one handle (instead of both) to create a cusp node.</note> 
 <mouse><key><ctrl/><left-drag/></key> <action>snap the handle to angle steps</action></mouse>
 <note>The default angle step is 15 degrees.</note>
@@ -610,6 +616,8 @@ can leave your ideas and requests there.</p>
 <mouse><key><ctrl/><left-drag/></key> <action>restrict movement to horizontal or vertical</action></mouse>
 <mouse><key><ctrl/><alt/><left-drag/></key> <action>move along handles</action></mouse>
 <note>This restricts movement to the directions of the node's handles, their continuations and perpendiculars (total 8 snaps).</note>
+<mouse><key><shift/><left-drag/></key> <action>temporarily disable snapping</action></mouse>
+<note>Snapping nodes is enabled in Document Preferences. By default, only bounding box of objects snaps to grid/guides.</note>
 <mouse><key><left-drag/><misc-wide f="Space"/></key> <action>drop a copy</action></mouse>
 <note>When dragging nodes with mouse, each Space leaves a copy of the selected object.</note> 
 <note>You can press and hold Space while dragging for a nice "trail."</note>
