@@ -8,6 +8,23 @@
 
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/bezier-utils.cpp: Greater use of NR::Point instead of
+	  NRPoint.  (Readability improved as a result.)
+	  Get rid of now-unused sp_vector_add etc. functions.
+	  Get rid of MAXPOINTS fixed upper limit, in the process making more efficient.
+	  NewtonRaphsonFindRoot: handle the case where f'(u) <= 0. (Previously
+	  it would seek a local maximum instead of minimum in this case.)
+	  Rename lots of static functions according to our coding standards.
+	  Fix some documentation.
+	  Filter out any NaN points in the input.
+	  Change the iteration cutoff from the square of the requested error to
+	  3 * the requested error.  Change the "acceptable error" test from `<'
+	  to `<='.
+	* src/helper/bezier_utils.h (sp_bezier_fit_cubic_full): change
+	  arguments from NRPoint to NR::Point.
+	* src/sp-spiral.cpp: Adapt to sp_bezier_fit_cubic_full change.
+	  Greater use of NR::Point instead of NRPoint.
+
 	* src/helper/curve.h, src/helper/curve.cpp (sp_curve_moveto,
 	sp_curve_lineto, sp_curve_curveto): Add convenience wrappers that
 	take n NR::Point's instead of 2*n gdoubles.

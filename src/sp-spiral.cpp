@@ -26,6 +26,8 @@
 #include "helper/sp-intl.h"
 
 #include "sp-spiral.h"
+#include <libnr/nr-types.h>
+#include <libnr/nr-point-fns.h>
 
 #define noSPIRAL_VERBOSE
 
@@ -50,7 +52,7 @@ static gchar * sp_spiral_description (SPItem * item);
 static int sp_spiral_snappoints (SPItem *item, NRPoint *p, int size);
 static void sp_spiral_set_shape (SPShape *shape);
 
-static void sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p);
+static NR::Point sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t);
 
 static SPShapeClass *parent_class;
 
@@ -276,37 +278,13 @@ sp_spiral_description (SPItem * item)
 	return g_strdup ("Spiral");
 }
 
-
-/* FIXME: Move these into the point library (once it exists; currently spread between libnr and
- * geom.h); and get rid of the sp_vector_normalize copy in helper/bezier-utils.cpp. */
-
 static bool
-is_unit_vector (NRPoint const &p)
+is_unit_vector (NR::Point const &p)
 {
-	return fabs(1.0 - hypot(p.x, p.y)) <= 1e-4;
-	/* The tolerance of 1e-4 is somewhat arbitrary.  sp_vector_normalize is believed to return
+	return fabs(1.0 - L2(p)) <= 1e-4;
+	/* The tolerance of 1e-4 is somewhat arbitrary.  NR::Point::normalize is believed to return
 	   points well within this tolerance.  I'm not aware of any callers that want a small
 	   tolerance; most callers would be ok with a tolerance of 0.25. */
-}
-
-
-/** Scales *v to make it a unit vector.
- *
- *  Requires: *v != (0, 0).  (See also bug.)
- *  Ensures: is_unit_vector(*v).
- *
- *  Minor bug: Won't work if hypot(v->x, v->y) is inf, i.e. either if |v->x| and |v->y| are both
- *  near-infinite (i.e. within a factor of about sqrt(2) of +/-DBL_MAX) or if one coordinate is
- *  +/-inf.
- */
-static void
-sp_vector_normalize (NRPoint *v)
-{
-	double const len = hypot (v->x, v->y);
-	g_return_if_fail (len != 0);
-	v->x /= len;
-	v->y /= len;
-	g_assert (is_unit_vector (*v));
 }
 
 
@@ -319,29 +297,30 @@ static void
 sp_spiral_fit_and_draw (SPSpiral const *spiral,
 			SPCurve	 *c,
 			double dstep,
-			NRPoint *darray,
-			NRPoint const *hat1,
-			NRPoint *hat2,
+			NR::Point darray[],
+			NR::Point const &hat1,
+			NR::Point &hat2,
 			double *t)
 {
 #define BEZIER_SIZE   4
 #define FITTING_DEPTH 3
-#define BEZIER_LENGTH (BEZIER_SIZE * (2 << (FITTING_DEPTH - 1)))
+#define BEZIER_LENGTH (BEZIER_SIZE << (FITTING_DEPTH - 1))
 	g_assert (dstep > 0);
-	g_assert (is_unit_vector (*hat1));
+	g_assert (is_unit_vector (hat1));
 
-	NRPoint bezier[BEZIER_LENGTH];
+	NR::Point bezier[BEZIER_LENGTH];
 	double d;
 	int depth, i;
 
 	for (d = *t, i = 0; i <= SAMPLE_SIZE; d += dstep, i++) {
-		sp_spiral_get_xy (spiral, d, &darray[i]);
+		NRPoint tmp;
+		sp_spiral_get_xy (spiral, d, &tmp);
+		darray[i] = tmp;
 
 		/* Avoid useless adjacent dups.  (Otherwise we can have all of darray filled with
-		   the same value, which upsets ChordLengthParameterize.) */
+		   the same value, which upsets chord_length_parameterize.) */
 		if ((i != 0)
-		    && (darray[i].x == darray[i - 1].x)
-		    && (darray[i].y == darray[i - 1].y)
+		    && (darray[i] == darray[i - 1])
 		    && (d < 1.0)) {
 			i--;
 			d += dstep;
@@ -360,9 +339,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 	double const next_t = d - 2 * dstep;
 	/* == t + (SAMPLE_SIZE - 1) * dstep, in absence of dups. */
 
-	sp_spiral_get_tangent (spiral, next_t, hat2);
-	hat2->x = -hat2->x;
-	hat2->y = -hat2->y;
+	hat2 = -sp_spiral_get_tangent (spiral, next_t);
 
 	/* Fixme:
 	   we should use better algorithm to specify maximum error.
@@ -371,6 +348,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 					  hat1, hat2,
 					  SPIRAL_TOLERANCE*SPIRAL_TOLERANCE,
 					  FITTING_DEPTH);
+	g_assert(depth * BEZIER_SIZE <= gint(G_N_ELEMENTS(bezier)));
 #ifdef SPIRAL_DEBUG
 	if (*t == spiral->t0 || *t == 1.0)
 		g_print ("[%s] depth=%d, dstep=%g, t0=%g, t=%g, arg=%g\n",
@@ -378,31 +356,27 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 #endif
 	if (depth != -1) {
 		for (i = 0; i < 4*depth; i += 4) {
-			sp_curve_curveto (c, bezier[i + 1].x, bezier[i + 1].y,
-					  bezier[i + 2].x, bezier[i + 2].y,
-					  bezier[i + 3].x, bezier[i + 3].y);
-#ifdef SPIRAL_DEBUG
-			if (debug_fit_and_draw)
-				g_print("[(%g,%g)-(%g,%g)-(%g,%g)]\n", bezier[i+1].x, bezier[i+1].y, bezier[i+2].x, bezier[i+2].y, bezier[i+3].x, bezier[i+3].y);
-#endif
+			sp_curve_curveto (c,
+					  bezier[i + 1],
+					  bezier[i + 2],
+					  bezier[i + 3]);
 		}
 	} else {
 #ifdef SPIRAL_VERBOSE
 		g_print ("cant_fit_cubic: t=%g\n", *t);
 #endif
 		for (i = 1; i < SAMPLE_SIZE; i++)
-			sp_curve_lineto (c, darray[i].x, darray[i].y);
+			sp_curve_lineto (c, darray[i]);
 	}
 	*t = next_t;
-	g_assert (is_unit_vector (*hat2));
+	g_assert (is_unit_vector (hat2));
 }
 
 static void
 sp_spiral_set_shape (SPShape *shape)
 {
 	SPSpiral *spiral;
-	NRPoint darray[SAMPLE_SIZE + 1];
-	NRPoint hat1, hat2;
+	NR::Point darray[SAMPLE_SIZE + 1];
 	double t;
 	SPCurve *c;
 
@@ -437,17 +411,16 @@ sp_spiral_set_shape (SPShape *shape)
 	double const tstep = SAMPLE_STEP / spiral->revo;
 	double const dstep = tstep / (SAMPLE_SIZE - 1);
 
-	sp_spiral_get_tangent (spiral, spiral->t0, &hat1);
-
+	NR::Point hat1 = sp_spiral_get_tangent (spiral, spiral->t0);
+	NR::Point hat2;
 	for (t = spiral->t0; t < (1.0 - tstep);) {
-		sp_spiral_fit_and_draw (spiral, c, dstep, darray, &hat1, &hat2, &t);
+		sp_spiral_fit_and_draw (spiral, c, dstep, darray, hat1, hat2, &t);
 
-		hat1.x = -hat2.x;
-		hat1.y = -hat2.y;
+		hat1 = -hat2;
 	}
 	if ((1.0 - t) > SP_EPSILON)
 		sp_spiral_fit_and_draw (spiral, c, (1.0 - t)/(SAMPLE_SIZE - 1.0),
-					darray, &hat1, &hat2, &t);
+					darray, hat1, hat2, &t);
 
 	sp_shape_set_curve_insync ((SPShape *) spiral, c, TRUE);
 	sp_curve_unref (c);
@@ -549,12 +522,13 @@ sp_spiral_get_xy (SPSpiral const *spiral, gdouble t, NRPoint *p)
  *	p != NULL.
  *  Ensures: is_unit_vector(*p).
  */
-static void
-sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p)
+static NR::Point
+sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t)
 {
-	g_return_if_fail (spiral != NULL);
-	g_return_if_fail (SP_IS_SPIRAL(spiral));
-	g_return_if_fail (p != NULL);
+	NR::Point ret(1.0, 0.0);
+	g_return_val_if_fail (( ( spiral != NULL )
+				&& SP_IS_SPIRAL(spiral) ),
+			      ret);
 	g_assert (t >= 0.0);
 	g_assert (spiral->exp >= 0.0);
 	/* See above for comments on these assertions. */
@@ -565,14 +539,12 @@ sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p)
 	double const c = cos (arg);
 
 	if (spiral->exp == 0.0) {
-		p->x = -s;
-		p->y = c;
+		ret = NR::Point(-s, c);
 	} else if (t_scaled == 0.0) {
-		p->x = c;
-		p->y = s;
+		ret = NR::Point(c, s);
 	} else {
-		double unrotated[2] = {spiral->exp, t_scaled};
-		double const s_len = hypot (unrotated[0], unrotated[1]);
+		NR::Point unrotated(spiral->exp, t_scaled);
+		double const s_len = L2 (unrotated);
 		g_assert (s_len != 0);
 		/* todo: Check that this isn't being too hopeful of
 		   the hypot function.  E.g. test with numbers around
@@ -580,30 +552,29 @@ sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p)
 		   few different platforms.  However, njh says that
 		   the usual implementation does handle both very big
 		   and very small numbers. */
-		for(unsigned i = 0; i < 2; ++i) {
-			unrotated[i] /= s_len;
-		}
+		unrotated /= s_len;
 
-		/* p = spiral->exp * (c, s) + t_scaled * (-s, c);
-		   alternatively p = (spiral->exp, t_scaled) * (( c, s),
-								(-s, c)).*/
-		p->x = unrotated[0] * c - unrotated[1] * s;
-		p->y = unrotated[0] * s + unrotated[1] * c;
-		/* p should already be approximately normalized: the
+		/* ret = spiral->exp * (c, s) + t_scaled * (-s, c);
+		   alternatively ret = (spiral->exp, t_scaled) * (( c, s),
+								  (-s, c)).*/
+		ret = NR::Point(dot(unrotated, NR::Point(c, -s)),
+				dot(unrotated, NR::Point(s, c)));
+		/* ret should already be approximately normalized: the
 		   matrix ((c, -s), (s, c)) is orthogonal (it just
 		   rotates by arg), and unrotated has been normalized,
-		   so p is already of unit length other than numerical
+		   so ret is already of unit length other than numerical
 		   error in the above matrix multiplication.
 
-		   I haven't checked how important it is for p to be
+		   I haven't checked how important it is for ret to be
 		   very near unit length; we could get rid of the
 		   below. */
 
-		sp_vector_normalize(p);
-		/* Proof that p length is non-zero: see above.  (Should be near 1.) */
+		ret.normalize();
+		/* Proof that ret length is non-zero: see above.  (Should be near 1.) */
 	}
 
-	g_assert (is_unit_vector (*p));
+	g_assert (is_unit_vector (ret));
+	return ret;
 }
 
 void
