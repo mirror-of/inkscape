@@ -7,6 +7,7 @@ traits/clean:
 util_libinkutil_a_SOURCES = \
 	util/filter-list.h \
 	util/forward-pointer-iterator.h \
+	util/glib-list.h \
 	util/list.h \
 	util/map-list.h \
 	util/reverse-list.h \

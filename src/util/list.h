@@ -21,6 +21,16 @@ namespace Inkscape {
 
 namespace Util {
 
+template <typename T>
+struct ListCell : public GC::Managed<> {
+    ListCell() {}
+    ListCell(typename Traits::Reference<T>::RValue v, ListCell *n)
+    : value(v), next(n) {}
+
+    T value;
+    ListCell *next;
+};
+
 template <typename T> class List;
 template <typename T> class MutableList;
 
@@ -39,18 +49,6 @@ MutableList<T> &rest(MutableList<T> const &list);
 template <typename T>
 MutableList<T> const &set_rest(MutableList<T> const &list,
                                MutableList<T> const &rest);
-
-template <typename T>
-struct ListCell : public GC::Managed<> {
-    ListCell() {}
-    ListCell(typename Traits::Reference<T>::RValue v, ListCell *n)
-    : value(v), next(n) {}
-
-    T value;
-    ListCell *next;
-};
-
-template <typename T> class List;
 
 template <typename T>
 class List<T const> {
