@@ -89,7 +89,6 @@ libinkpre_a_SOURCES =	\
 	prefs-utils.cpp prefs-utils.h	\
 	print.cpp print.h	\
 	rect-context.cpp rect-context.h	\
-	refcounted.h \
 	require-config.h \
 	rubberband.cpp rubberband.h	\
 	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
