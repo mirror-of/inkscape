@@ -674,7 +674,7 @@ sp_knot_set_position (SPKnot * knot, NR::Point *p, guint state)
 	knot->pos = *p;
 
 	if (knot->item)
-		sp_ctrl_moveto (SP_CTRL (knot->item), *p);
+		SP_CTRL (knot->item)->moveto (*p);
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[MOVED], 0,

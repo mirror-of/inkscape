@@ -40,19 +40,13 @@ enum {
     SP_CANVAS_ITEM_NEED_AFFINE = 1 << 9
 };
 
-struct SPCanvasGroup {
-    SPCanvasItem item;
-
+struct SPCanvasGroup : public SPCanvasItem{
     GList *items, *last;
 };
 
-struct SPCanvasGroupClass {
-    SPCanvasItemClass parent_class;
-};
+struct SPCanvasGroupClass :public SPCanvasItemClass {};
 
-struct SPCanvasClass {
-    GtkWidgetClass parent_class;
-};
+struct SPCanvasClass : public GtkWidgetClass{};
 
 static void group_add (SPCanvasGroup *group, SPCanvasItem *item);
 static void group_remove (SPCanvasGroup *group, SPCanvasItem *item);
@@ -107,7 +101,7 @@ sp_canvas_item_class_init (SPCanvasItemClass *klass)
     item_signals[ITEM_EVENT] = g_signal_new ("event",
                                              G_TYPE_FROM_CLASS (klass),
                                              G_SIGNAL_RUN_LAST,
-                                             G_STRUCT_OFFSET (SPCanvasItemClass, event),
+                                             0,
                                              NULL, NULL,
                                              sp_marshal_BOOLEAN__POINTER,
                                              G_TYPE_BOOLEAN, 1,
@@ -119,7 +113,7 @@ sp_canvas_item_class_init (SPCanvasItemClass *klass)
 static void
 sp_canvas_item_init (SPCanvasItem *item)
 {
-    item->object.flags |= SP_CANVAS_ITEM_VISIBLE;
+    item->flags |= SP_CANVAS_ITEM_VISIBLE;
     item->xform = NR::Matrix(NR::identity());
 }
 
@@ -168,7 +162,7 @@ sp_canvas_item_construct (SPCanvasItem *item, SPCanvasGroup *parent, const gchar
 static void
 redraw_if_visible (SPCanvasItem *item)
 {
-    if (item->object.flags & SP_CANVAS_ITEM_VISIBLE) {
+    if (item->flags & SP_CANVAS_ITEM_VISIBLE) {
         sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
     }
 }
@@ -179,7 +173,7 @@ sp_canvas_item_dispose (GObject *object)
     SPCanvasItem *item = SP_CANVAS_ITEM (object);
 
     redraw_if_visible (item);
-    item->object.flags &= ~SP_CANVAS_ITEM_VISIBLE;
+    item->flags &= ~SP_CANVAS_ITEM_VISIBLE;
 
     if (item == item->canvas->current_item) {
         item->canvas->current_item = NULL;
@@ -217,10 +211,10 @@ sp_canvas_item_invoke_update (SPCanvasItem *item, NR::Matrix const &affine, unsi
     /* apply object flags to child flags */
     int child_flags = flags & ~SP_CANVAS_UPDATE_REQUESTED;
 
-    if (item->object.flags & SP_CANVAS_ITEM_NEED_UPDATE)
+    if (item->flags & SP_CANVAS_ITEM_NEED_UPDATE)
         child_flags |= SP_CANVAS_UPDATE_REQUESTED;
 
-    if (item->object.flags & SP_CANVAS_ITEM_NEED_AFFINE)
+    if (item->flags & SP_CANVAS_ITEM_NEED_AFFINE)
         child_flags |= SP_CANVAS_UPDATE_AFFINE;
 
     if (child_flags & (SP_CANVAS_UPDATE_REQUESTED | SP_CANVAS_UPDATE_AFFINE)) {
@@ -258,8 +252,8 @@ sp_canvas_item_affine_absolute (SPCanvasItem *item, NR::Matrix const& affine)
 {
     item->xform = affine;
 
-    if (!(item->object.flags & SP_CANVAS_ITEM_NEED_AFFINE)) {
-        item->object.flags |= SP_CANVAS_ITEM_NEED_AFFINE;
+    if (!(item->flags & SP_CANVAS_ITEM_NEED_AFFINE)) {
+        item->flags |= SP_CANVAS_ITEM_NEED_AFFINE;
         if (item->parent != NULL)
             sp_canvas_item_request_update (item->parent);
         else
@@ -401,10 +395,10 @@ sp_canvas_item_show (SPCanvasItem *item)
     g_return_if_fail (item != NULL);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
 
-    if (item->object.flags & SP_CANVAS_ITEM_VISIBLE)
+    if (item->flags & SP_CANVAS_ITEM_VISIBLE)
         return;
 
-    item->object.flags |= SP_CANVAS_ITEM_VISIBLE;
+    item->flags |= SP_CANVAS_ITEM_VISIBLE;
 
     sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
     item->canvas->need_repick = TRUE;
@@ -416,10 +410,10 @@ sp_canvas_item_hide (SPCanvasItem *item)
     g_return_if_fail (item != NULL);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
 
-    if (!(item->object.flags & SP_CANVAS_ITEM_VISIBLE))
+    if (!(item->flags & SP_CANVAS_ITEM_VISIBLE))
         return;
 
-    item->object.flags &= ~SP_CANVAS_ITEM_VISIBLE;
+    item->flags &= ~SP_CANVAS_ITEM_VISIBLE;
 
     sp_canvas_request_redraw (item->canvas, (int)item->x1, (int)item->y1, (int)(item->x2 + 1), (int)(item->y2 + 1));
     item->canvas->need_repick = TRUE;
@@ -435,7 +429,7 @@ sp_canvas_item_grab (SPCanvasItem *item, guint event_mask, GdkCursor *cursor, gu
     if (item->canvas->grabbed_item)
         return -1;
 
-    if (!(item->object.flags & SP_CANVAS_ITEM_VISIBLE))
+    if (!(item->flags & SP_CANVAS_ITEM_VISIBLE))
         return -1;
 
     /* fixme: Top hack (Lauris) */
@@ -542,10 +536,10 @@ sp_canvas_item_grab_focus (SPCanvasItem *item)
 void
 sp_canvas_item_request_update (SPCanvasItem *item)
 {
-    if (item->object.flags & SP_CANVAS_ITEM_NEED_UPDATE)
+    if (item->flags & SP_CANVAS_ITEM_NEED_UPDATE)
         return;
 
-    item->object.flags |= SP_CANVAS_ITEM_NEED_UPDATE;
+    item->flags |= SP_CANVAS_ITEM_NEED_UPDATE;
 
     if (item->parent != NULL) {
         /* Recurse up the tree */
@@ -691,7 +685,7 @@ sp_canvas_group_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_it
             SPCanvasItem *point_item = NULL; /* cater for incomplete item implementations */
 
             int has_point;
-            if ((child->object.flags & SP_CANVAS_ITEM_VISIBLE) && SP_CANVAS_ITEM_GET_CLASS (child)->point) {
+            if ((child->flags & SP_CANVAS_ITEM_VISIBLE) && SP_CANVAS_ITEM_GET_CLASS (child)->point) {
                 dist = sp_canvas_item_invoke_point (child, p, &point_item);
                 has_point = TRUE;
             } else
@@ -714,7 +708,7 @@ sp_canvas_group_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     for (GList *list = group->items; list; list = list->next) {
         SPCanvasItem *child = (SPCanvasItem *)list->data;
-        if (child->object.flags & SP_CANVAS_ITEM_VISIBLE) {
+        if (child->flags & SP_CANVAS_ITEM_VISIBLE) {
             if ((child->x1 < buf->rect.x1) &&
                 (child->y1 < buf->rect.y1) &&
                 (child->x2 > buf->rect.x0) &&
@@ -1241,7 +1235,7 @@ pick_current_item (SPCanvas *canvas, GdkEvent *event)
         y += canvas->y0;
 
         /* find the closest item */
-        if (canvas->root->object.flags & SP_CANVAS_ITEM_VISIBLE) {
+        if (canvas->root->flags & SP_CANVAS_ITEM_VISIBLE) {
             sp_canvas_item_invoke_point (canvas->root, NR::Point(x, y), &canvas->new_current_item);
         } else {
             canvas->new_current_item = NULL;
@@ -1468,7 +1462,7 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
             buf.is_bg = 1;
             buf.is_buf = 0;
       
-            if (canvas->root->object.flags & SP_CANVAS_ITEM_VISIBLE) {
+            if (canvas->root->flags & SP_CANVAS_ITEM_VISIBLE) {
                 SP_CANVAS_ITEM_GET_CLASS (canvas->root)->render (canvas->root, &buf);
             }
       

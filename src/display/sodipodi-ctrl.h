@@ -51,19 +51,15 @@ struct SPCtrl : public SPCanvasItem{
 	NRRectL box;			/* NB! x1 & y1 are included */
 	guchar *cache;
 	GdkPixbuf * pixbuf;
+	
+	void moveto(NR::Point const p);
 };
 
-struct SPCtrlClass {
-	SPCanvasItemClass parent_class;
+struct SPCtrlClass : public SPCanvasItemClass{
 };
 
 
 
 /* Standard Gtk function */
 GtkType sp_ctrl_get_type (void);
-
-void sp_ctrl_moveto (SPCtrl * ctrl, NR::Point const p);
-
-
-
 #endif

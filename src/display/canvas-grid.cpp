@@ -194,14 +194,12 @@ sp_cgrid_render (SPCanvasItem * item, SPCanvasBuf * buf)
 	const gdouble syg = floor ((buf->rect.y0 - grid->ow[NR::Y]) / grid->sw[NR::Y]) * grid->sw[NR::Y] + grid->ow[NR::Y];
 
 	for (gdouble y = syg; y < buf->rect.y1; y += grid->sw[NR::Y]) {
-		gint y0, y1;
-		y0 = (gint) floor (y + 0.5);
-		y1 = (gint) floor (y + grid->sw[NR::Y] + 0.5);
+		const gint y0 = (gint) floor (y + 0.5);
+		const gint y1 = (gint) floor (y + grid->sw[NR::Y] + 0.5);
 		sp_grid_hline (buf, y0, buf->rect.x0, buf->rect.x1 - 1, grid->color);
 
 		for (gdouble x = sxg; x < buf->rect.x1; x += grid->sw[NR::X]) {
-			gint ix;
-			ix = (gint) floor (x + 0.5);
+			const gint ix = (gint) floor (x + 0.5);
 			sp_grid_vline (buf, ix, y0 + 1, y1 - 1, grid->color);
 		}
 	}

@@ -828,7 +828,7 @@ sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point 
                                  "stroke_color", 0x000000ff,
                                  NULL);
 
-    sp_ctrl_moveto(SP_CTRL(a->ctrl), delta);
+    SP_CTRL(a->ctrl)->moveto(delta);
 
     return a;
 }
@@ -1761,7 +1761,7 @@ spdc_pen_set_ctrl(SPPenContext *pc, NR::Point const p, guint state)
         dc->p[1] = p;
         sp_canvas_item_hide(pc->c0);
         sp_canvas_item_hide(pc->cl0);
-        sp_ctrl_moveto(SP_CTRL(pc->c1), dc->p[1]);
+        SP_CTRL(pc->c1)->moveto(dc->p[1]);
         sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), dc->p[0], dc->p[1]);
     } else if ( dc->npoints == 5 ) {
         dc->p[4] = p;
@@ -1776,9 +1776,9 @@ spdc_pen_set_ctrl(SPPenContext *pc, NR::Point const p, guint state)
             sp_curve_curveto(dc->red_curve, dc->p[1], dc->p[2], dc->p[3]);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), dc->red_curve);
         }
-        sp_ctrl_moveto(SP_CTRL(pc->c0), dc->p[2]);
+        SP_CTRL(pc->c0)->moveto(dc->p[2]);
         sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl0), dc->p[3], dc->p[2]);
-        sp_ctrl_moveto(SP_CTRL(pc->c1), dc->p[4]);
+        SP_CTRL(pc->c1)->moveto(dc->p[4]);
         sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), dc->p[3], dc->p[4]);
     } else {
         g_warning("Something bad happened - npoints is %d", dc->npoints);

@@ -18,7 +18,6 @@
 #include "sp-canvas.h"
 
 
-
 #define SP_TYPE_CTRLRECT (sp_ctrlrect_get_type ())
 #define SP_CTRLRECT(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CTRLRECT, SPCtrlRect))
 #define SP_CTRLRECT_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_CTRLRECT, SPCtrlRectClass))
@@ -39,9 +38,7 @@ struct SPCtrlRect : public SPCanvasItem {
     guint32 shadow_color;
 };
 
-struct SPCtrlRectClass {
-    SPCanvasItemClass parent_class;
-};
+struct SPCtrlRectClass : public SPCanvasItemClass {};
 
 
 /* Standard Gtk function */

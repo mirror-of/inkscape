@@ -48,9 +48,7 @@ struct SPCanvasBuf{
 	unsigned int is_buf : 1;
 };
 
-struct SPCanvasItem {
-	GtkObject object;
-
+struct SPCanvasItem : public GtkObject{
 	SPCanvas *canvas;
 	SPCanvasItem *parent;
 
@@ -58,9 +56,7 @@ struct SPCanvasItem {
 	NR::Matrix xform;
 };
 
-struct SPCanvasItemClass {
-	GtkObjectClass parent_class;
-
+struct SPCanvasItemClass : public GtkObjectClass{
 	void (* update) (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
 
 	void (* render) (SPCanvasItem *item, SPCanvasBuf *buf);

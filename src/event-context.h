@@ -22,8 +22,7 @@
 #include "xml/repr.h"
 #include "forward.h"
 
-struct SPEventContext {
-	GObject object;
+struct SPEventContext : public GObject{
 	/* Desktop eventcontext stack */
 	SPEventContext *next;
 	unsigned int key;
@@ -40,8 +39,7 @@ struct SPEventContext {
 	SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
 };
 
-struct SPEventContextClass {
-	GObjectClass parent_class;
+struct SPEventContextClass : public GObjectClass{
 	void (* setup) (SPEventContext *ec);
 	void (* finish) (SPEventContext *ec);
 	void (* set) (SPEventContext *ec, const gchar *key, const gchar *val);

@@ -28,15 +28,11 @@ class SPSelection;
 #define SP_IS_DRAW_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_DRAW_CONTEXT))
 #define SP_IS_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_DRAW_CONTEXT))
 
-class SPDrawContext;
-class SPDrawContextClass;
 class SPDrawAnchor;
 
 #define SP_DRAW_POINTS_MAX 16
 
-struct SPDrawContext {
-    SPEventContext event_context;
-
+struct SPDrawContext : public SPEventContext{
     SPSelection *selection;
     SPCanvasItem *grab;
 
@@ -77,9 +73,7 @@ struct SPDrawContext {
     char red_curve_is_valid;
 };
 
-struct SPDrawContextClass {
-    SPEventContextClass parent_class;
-};
+struct SPDrawContextClass : public SPEventContextClass{};
 
 GtkType sp_draw_context_get_type(void);
 
@@ -91,24 +85,17 @@ GtkType sp_draw_context_get_type(void);
 #define SP_IS_PENCIL_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_PENCIL_CONTEXT))
 #define SP_IS_PENCIL_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_PENCIL_CONTEXT))
 
-class SPPencilContext;
-class SPPencilContextClass;
-
 enum {
     SP_PENCIL_CONTEXT_IDLE,
     SP_PENCIL_CONTEXT_ADDLINE,
     SP_PENCIL_CONTEXT_FREEHAND
 };
 
-struct SPPencilContext {
-    SPDrawContext draw_context;
-
+struct SPPencilContext : public SPDrawContext{
     guint state : 2;
 };
 
-struct SPPencilContextClass {
-    SPEventContextClass parent_class;
-};
+struct SPPencilContextClass : public SPEventContextClass{};
 
 GtkType sp_pencil_context_get_type(void);
 
@@ -119,9 +106,6 @@ GtkType sp_pencil_context_get_type(void);
 #define SP_PEN_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_CAST((k), SP_TYPE_PEN_CONTEXT, SPPenContextClass))
 #define SP_IS_PEN_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_PEN_CONTEXT))
 #define SP_IS_PEN_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_PEN_CONTEXT))
-
-class SPPenContext;
-class SPPenContextClass;
 
 enum {
     SP_PEN_CONTEXT_POINT,
@@ -135,9 +119,7 @@ enum {
     SP_PEN_CONTEXT_MODE_DRAG
 };
 
-struct SPPenContext {
-    SPDrawContext draw_context;
-
+struct SPPenContext : public SPDrawContext{
     unsigned int mode : 1;
     unsigned int state : 2;
     unsigned int onlycurves : 1;
@@ -145,9 +127,7 @@ struct SPPenContext {
     SPCanvasItem *c0, *c1, *cl0, *cl1;
 };
 
-struct SPPenContextClass {
-    SPEventContextClass parent_class;
-};
+struct SPPenContextClass : public SPEventContextClass{};
 
 GtkType sp_pen_context_get_type(void);
 

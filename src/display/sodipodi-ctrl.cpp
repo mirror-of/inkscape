@@ -492,8 +492,6 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 	ctrl->shown = TRUE;
 }
 
-void
-sp_ctrl_moveto (SPCtrl * ctrl, NR::Point const p)
-{
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (ctrl), NR::Matrix(NR::translate (p)));
+void SPCtrl::moveto (NR::Point const p) {
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (this), NR::Matrix(NR::translate (p)));
 }

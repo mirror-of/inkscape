@@ -38,15 +38,13 @@
 
 void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char* destBuf,int stride);
 
-struct SPCtrlLine :public SPCanvasItem{
+struct SPCtrlLine : public SPCanvasItem{
     guint32 rgba;
     NRPoint s, e;
     Shape* shp;
 };
 
-struct SPCtrlLineClass {
-    SPCanvasItemClass parent_class;
-};
+struct SPCtrlLineClass : public SPCanvasItemClass{};
 
 static void sp_ctrlline_class_init (SPCtrlLineClass *klass);
 static void sp_ctrlline_init (SPCtrlLine *ctrlline);
@@ -79,11 +77,8 @@ sp_ctrlline_get_type (void)
 static void
 sp_ctrlline_class_init (SPCtrlLineClass *klass)
 {
-    GtkObjectClass *object_class;
-    SPCanvasItemClass *item_class;
-
-    object_class = (GtkObjectClass *) klass;
-    item_class = (SPCanvasItemClass *) klass;
+    GtkObjectClass *object_class = (GtkObjectClass *) klass;
+    SPCanvasItemClass *item_class = (SPCanvasItemClass *) klass;
 
     parent_class = (SPCanvasItemClass*)gtk_type_class (SP_TYPE_CANVAS_ITEM);
 
@@ -104,12 +99,10 @@ sp_ctrlline_init (SPCtrlLine *ctrlline)
 static void
 sp_ctrlline_destroy (GtkObject *object)
 {
-    SPCtrlLine *ctrlline;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (SP_IS_CTRLLINE (object));
 
-    ctrlline = SP_CTRLLINE (object);
+    SPCtrlLine *ctrlline = SP_CTRLLINE (object);
 
     if (ctrlline->shp) {
         delete ctrlline->shp;
@@ -123,9 +116,7 @@ sp_ctrlline_destroy (GtkObject *object)
 static void
 sp_ctrlline_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
-    SPCtrlLine *ctrlline;
-
-    ctrlline = SP_CTRLLINE (item);
+    SPCtrlLine *ctrlline = SP_CTRLLINE (item);
 
     if (buf->is_bg) {
         sp_canvas_clear_buffer (buf);

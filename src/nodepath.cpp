@@ -2203,7 +2203,7 @@ static void node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer d
 
 	// this is what sp_knot_set_position does, but without emitting the signal:
 	// we cannot emit a "moved" signal because we're now processing it
-	if (me->knot->item) sp_ctrl_moveto (SP_CTRL (me->knot->item), me->pos);
+	if (me->knot->item) SP_CTRL (me->knot->item)->moveto (me->pos);
 
 	sp_desktop_set_coordinate_status (knot->desktop, me->pos, 0);
 

@@ -657,8 +657,8 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, g
 	}
 	if (handle.request(seltrans, handle, *position, state)) {
 		sp_knot_set_position(knot, position, state);
-		sp_ctrl_moveto(SP_CTRL(seltrans->grip), *position);
-		sp_ctrl_moveto(SP_CTRL(seltrans->norm), seltrans->origin);
+		SP_CTRL(seltrans->grip)->moveto(*position);
+		SP_CTRL(seltrans->norm)->moveto(seltrans->origin);
 	}
 
 	return TRUE;
@@ -1136,7 +1136,7 @@ sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
 					     NULL);
                      sp_canvas_item_show (box);
 
-                     sp_ctrl_moveto (SP_CTRL(box), NR::Point(b.x0, b.y1));
+                     SP_CTRL(box)->moveto (NR::Point(b.x0, b.y1));
 		 }
 		 else if (seltrans->cue == SP_SELTRANS_CUE_BBOX)
 		 {
