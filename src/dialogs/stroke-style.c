@@ -596,14 +596,9 @@ sp_stroke_style_line_widget_new (void)
 	i=0;
 
 	/* Stroke width */
-	l = gtk_label_new (_("Width:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	spw_label(t, _("Width:"), 0, i);
 
-	hb = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+	hb = spw_hbox(t, 3, 1, i);
 
 	a = gtk_adjustment_new (1.0, 0.0, 100.0, 0.1, 10.0, 10.0);
 	gtk_object_set_data (GTK_OBJECT (spw), "width", a);
@@ -623,14 +618,9 @@ sp_stroke_style_line_widget_new (void)
 	i++;
 
 	/* Join type */
-	l = gtk_label_new (_("Join:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	spw_label(t, _("Join:"), 0, i);
 
-	hb = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+	hb = spw_hbox(t, 3, 1, i);
 
 	tb = NULL;
 
@@ -646,14 +636,9 @@ sp_stroke_style_line_widget_new (void)
 	i++;  
 
 	/* Cap type */
-	l = gtk_label_new (_("Cap:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	spw_label(t, _("Cap:"), 0, i);
 
-	hb = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+	hb = spw_hbox(t, 3, 1, i);
 
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
@@ -669,10 +654,7 @@ sp_stroke_style_line_widget_new (void)
   
 
 	/* Dash */
-	l = gtk_label_new (_("Pattern:"));
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, i, i+1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
+	spw_label(t, _("Pattern:"), 0, i);
 
 	ds = sp_dash_selector_new (inkscape_get_repr (INKSCAPE, "palette.dashes"));
 	gtk_widget_show (ds);
