@@ -1329,7 +1329,7 @@ cmd_set_attr (GtkObject * object, gpointer data)
     value = gtk_text_buffer_get_text ( gtk_text_view_get_buffer (attr_value), 
                                        &start, &end, TRUE );
 
-    sp_repr_set_attr (selected_repr, name, value);
+    sp_repr_set_attr (selected_repr, name, value, true);
 
     g_free (name);
     g_free (value);

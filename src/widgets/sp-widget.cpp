@@ -57,7 +57,7 @@ spw_repr_destroy (SPRepr *repr, gpointer data)
 }
 
 static void
-spw_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
+spw_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
 	g_signal_emit (G_OBJECT (data), signals[ATTR_CHANGED], 0, key, oldval, newval);
 }

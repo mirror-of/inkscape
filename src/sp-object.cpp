@@ -44,7 +44,7 @@ static SPRepr *sp_object_private_write (SPObject *object, SPRepr *repr, guint fl
 /* Real handlers of repr signals */
 
 static unsigned int sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data);
-static void sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data);
+static void sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data);
 
 static void sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
 
@@ -631,13 +631,19 @@ sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval,
 }
 
 static void
-sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
+sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
 	SPObject * object;
 
 	object = SP_OBJECT (data);
 
 	sp_object_read_attr (object, key);
+
+	// manual changes to extension attributes require the normal
+	// attributes, which depend on them, to be updated immediately
+	if (is_interactive) {
+		sp_object_invoke_write (object, repr, 0);
+	}
 }
 
 static void

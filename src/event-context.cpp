@@ -559,7 +559,7 @@ sp_ec_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, con
 }
 
 static void
-sp_ec_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
+sp_ec_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
 	SPEventContext *ec;
 

@@ -295,15 +295,6 @@ sp_xml_node_get_Document (SPXMLNode *node)
 
 /* SPXMLElement */
 
-void
-sp_xml_element_setAttributeNS (SPXMLElement *element, const gchar *nr, const gchar *qname, const gchar *val)
-{
-    if (!strncmp (qname, "svg:", 4)) qname += 4;
-
-    /* fixme: return value (Exception?) */
-    sp_repr_set_attr (element, qname, val);
-}
-
 SPRepr *
 sp_repr_children (SPRepr *repr)
 {

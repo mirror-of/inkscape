@@ -42,7 +42,7 @@ static void node_data_free (gpointer data);
 static GtkCTreeNode * add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SPRepr * repr);
 
 static void element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer data);
-static void element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, gpointer data);
+static void element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 static void element_child_removed (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer data);
 static void element_order_changed (SPRepr * repr, SPRepr * child, SPRepr * oldref, SPRepr * newref, gpointer data);
 
@@ -226,7 +226,7 @@ add_node (SPXMLViewTree * tree, GtkCTreeNode * parent, GtkCTreeNode * before, SP
 		gtk_clist_freeze (GTK_CLIST (tree));
 		/* cheat a little to get the id upated properly */
 		if (SP_REPR_TYPE (repr) == SP_XML_ELEMENT_NODE) {
-			element_attr_changed (repr, "id", NULL, NULL, data);
+			element_attr_changed (repr, "id", NULL, NULL, false, data);
 		}
 		sp_repr_add_listener (repr, vec, data);
 		sp_repr_synthesize_events (repr, vec, data);
@@ -274,7 +274,7 @@ element_child_added (SPRepr * repr, SPRepr * child, SPRepr * ref, gpointer ptr)
 }
 
 void
-element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, gpointer ptr)
+element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer ptr)
 {
 	NodeData * data;
 	gchar *label;

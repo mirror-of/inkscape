@@ -45,7 +45,7 @@ static gint sp_node_context_item_handler (SPEventContext * event_context, SPItem
 
 static gboolean sp_node_context_stamp (SPNodeContext * node_context);
 
-static void nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data);
+static void nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 static SPReprEventVector nodepath_repr_events = {
 	NULL, /* destroy */
 	NULL, /* add_child */
@@ -290,7 +290,7 @@ sp_nodepath_update_from_item (SPNodeContext *nc, SPItem *item)
 \brief  Callback that is fired whenever an attribute of the selected item (which we have in the nodepath) changes
 */
 static void 
-nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
+nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
 	SPItem *item = NULL;
 	const char *newd = NULL, *newtypestr = NULL;

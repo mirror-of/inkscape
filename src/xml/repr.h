@@ -136,8 +136,6 @@ SPXMLDocument *sp_xml_node_get_Document (SPXMLNode *node);
 
 /* SPXMLElement */
 
-void sp_xml_element_setAttributeNS (SPXMLElement *element, const gchar *ns, const gchar *qname, const gchar *val);
-
 /*
  * SPRepr is opaque
  */
@@ -182,7 +180,7 @@ const  char *sp_repr_attr (const SPRepr *repr, const gchar *key);
  */
 
 unsigned int sp_repr_set_content (SPRepr *repr, const gchar *content);
-unsigned int sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value);
+unsigned int sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_interactive=false);
 
 /* Tree */
 SPRepr *sp_repr_parent (SPRepr *repr);

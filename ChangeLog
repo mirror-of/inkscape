@@ -8,6 +8,8 @@
 
 2004-03-14  MenTaLguY <mental@rydia.net>
 
+	* src/ast/*: more AST sketching
+
 	* src/xml/repr.cpp: existing listeners were getting dropped when new
 	  listeners were added; this fix makes the behavior documented in
 	  bug #896706 a little worse, but fixes bug #915913
@@ -20,6 +22,16 @@
 	  we are then always removing from the beginning of the listener
 	  list -- i.e. removing in roughly the order in which they were added)
 	  This should help bug #896706 a little more.
+
+    * src/event-context.cpp, src/node-context.cpp, src/rect-context.cpp,
+	  src/sp-object.cpp, src/sp-offset.cpp, src/dialogs/desktop-properties.cpp,
+	  src/dialogs/xml-tree.cpp, src/widgets/sp-widget.cpp,
+	  src/widgets/sp-xmlview-attr-list.cpp, src/widgets/sp-xmlview-tree.cpp,
+	  src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/repr.h:
+	  SPObjects now ::write() immediately on attribute changes, if those
+	  changes are "interactive" (i.e. from the XML editor); this fixes
+	  the problem with SPStar's points= attribute updating (bug #910142)
 
 2004-03-14  rejon <jon@protofunk.org>
 

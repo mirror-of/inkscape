@@ -27,7 +27,7 @@ static void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass);
 static void sp_xmlview_attr_list_init (SPXMLViewAttrList * list);
 static void sp_xmlview_attr_list_destroy (GtkObject * object);
 
-static void event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data);
+static void event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 
 static GtkCListClass * parent_class = NULL;
 
@@ -136,7 +136,7 @@ sp_xmlview_attr_list_destroy (GtkObject * object)
 }
 
 void
-event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
+event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
 	gint row;
 	SPXMLViewAttrList * list;

@@ -351,7 +351,7 @@ sp_repr_set_content (SPRepr *repr, const gchar *newcontent)
 }
 
 static unsigned int
-sp_repr_del_attr (SPRepr *repr, const gchar *key)
+sp_repr_del_attr (SPRepr *repr, const gchar *key, bool is_interactive)
 {
 	SPReprAttr *prev, *attr;
 	SPReprListener *rl;
@@ -391,7 +391,7 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key)
 				repr->doc->log = sp_repr_log_chgattr (repr->doc->log, repr, q, oldval, NULL);
 			}
 			for (rl = repr->listeners; rl != NULL; rl = rl->next) {
-				if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, oldval, NULL, rl->data);
+				if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, oldval, NULL, is_interactive, rl->data);
 			}
 			if ( repr->doc && repr->doc->is_logging ) {
 				attr->value = NULL;
@@ -405,7 +405,7 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key)
 }
 
 static unsigned int
-sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
+sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_interactive)
 {
 	SPReprAttr *prev, *attr;
 	SPReprListener *rl;
@@ -452,7 +452,7 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 		}
 
 		for (rl = repr->listeners; rl != NULL; rl = rl->next) {
-			if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, oldval, value, rl->data);
+			if (rl->vector->attr_changed) (* rl->vector->attr_changed) (repr, key, oldval, value, is_interactive, rl->data);
 		}
 
 		if ( oldval && ( !repr->doc || !repr->doc->is_logging ) ) {
@@ -464,17 +464,17 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 }
 
 unsigned int
-sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value)
+sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value, bool is_interactive)
 {
 	g_return_val_if_fail (repr != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (*key != '\0', FALSE);
 
 	if (!value) {
-		return sp_repr_del_attr (repr, key);
+		return sp_repr_del_attr (repr, key, is_interactive);
+	} else {
+		return sp_repr_chg_attr (repr, key, value, is_interactive);
 	}
-
-	return sp_repr_chg_attr (repr, key, value);
 }
 
 
@@ -713,7 +713,7 @@ sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, void *
 		SPReprAttr *attr;
 		attr = repr->attributes;
 		for ( ; attr ; attr = attr->next ) {
-			vector->attr_changed (repr, g_quark_to_string (attr->key), NULL, attr->value, data);
+			vector->attr_changed (repr, g_quark_to_string (attr->key), NULL, attr->value, false, data);
 		}
 	}
 	if (vector->child_added) {

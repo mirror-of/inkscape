@@ -85,7 +85,8 @@ void   refresh_offset_source(SPOffset* offset);
 // pour recevoir les changements de l'objet source
 static void sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
                                            const gchar * oldval,
-                                           const gchar * newval, void *data);
+                                           const gchar * newval,
+					   bool is_interactive, void * data);
 static void sp_offset_source_destroy (SPRepr * repr, void *data);
 static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
 static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
@@ -1105,7 +1106,7 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
 static void
 sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
                                const gchar * /*oldval*/, const gchar * newval,
-                               void *data)
+                               bool is_interactive, void * data)
 {
   SPOffset *offset = (SPOffset *) data;
   if ( offset == NULL ) return;

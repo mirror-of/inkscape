@@ -86,7 +86,7 @@ static gint x = -1000, y = -1000, w = 0, h = 0;
 static gchar *prefs_path = "dialogs.documentoptions";
 
 static void 
-docoptions_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, gpointer data)
+docoptions_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
     if (dlg) sp_dtw_update (dlg, SP_ACTIVE_DESKTOP);
 }
