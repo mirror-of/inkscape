@@ -238,7 +238,6 @@ sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 static void
 sp_rect_drag (SPRectContext * rc, double xx, double yy, guint state)
 {
-	NR::Point p0, p1;
 	const NR::Point pt(xx, yy);
 
 	SPDesktop * desktop = SP_EVENT_CONTEXT (rc)->desktop;
@@ -261,6 +260,7 @@ sp_rect_drag (SPRectContext * rc, double xx, double yy, guint state)
 
 	/* This is bit ugly, but so we are */
 
+	NR::Point p0, p1;
 	if (state & GDK_CONTROL_MASK) {
 		NR::Point delta = pt - rc->center;
 		/* fixme: Snapping */
@@ -289,21 +289,17 @@ sp_rect_drag (SPRectContext * rc, double xx, double yy, guint state)
 		/* Corner point movements are bound */
 		p1 = pt;
 		p0 = 2 * rc->center - p1;
-		const NR::Coord p0h = sp_desktop_horizontal_snap (desktop, &p0);
-		const NR::Coord p0v = sp_desktop_vertical_snap (desktop, &p0);
-		const NR::Coord p1h = sp_desktop_horizontal_snap (desktop, &p1);
-		const NR::Coord p1v = sp_desktop_vertical_snap (desktop, &p1);
-		if (p0h < p1h) {
-			/* Use Point 0 horizontal position */
-			p1[NR::X] = 2 * rc->center[NR::X] - p0[NR::X];
-		} else {
-			p0[NR::X] = 2 * rc->center[NR::X] - p1[NR::X];
-		}
-		if (p0v < p1v) {
-			/* Use Point 0 vertical position */
-			p1[NR::Y] = 2 * rc->center[NR::Y] - p0[NR::Y];
-		} else {
-			p0[NR::Y] = 2 * rc->center[NR::Y] - p1[NR::Y];
+		for (unsigned d = 0 ; d < 2 ; ++d) {
+			double snap_movement[2];
+			snap_movement[0] = sp_desktop_dim_snap(desktop, p0, d);
+			snap_movement[1] = sp_desktop_dim_snap(desktop, p1, d);
+			if ( snap_movement[0] <
+			     snap_movement[1] ) {
+				/* Use point 0 position. */
+				p1[d] = 2 * rc->center[d] - p0[d];
+			} else {
+				p0[d] = 2 * rc->center[d] - p1[d];
+			}
 		}
 	} else {
 		/* Free movement for corner point */
