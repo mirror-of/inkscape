@@ -20,7 +20,7 @@ PYTHON_CFLAGS := -I`python -c "import distutils.sysconfig ; print distutils.sysc
 
 extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
 
-if HAVE_PERL
+if WITH_PERL
 perl_sources = \
 	extension/script/InkscapePerl.h \
 	extension/script/InkscapePerl.cpp \
@@ -29,7 +29,7 @@ perl_sources = \
 	extension/script/inkscape_perl.pm.h
 endif
 
-if HAVE_PYTHON
+if WITH_PYTHON
 python_sources = \
 	extension/script/InkscapePython.h \
 	extension/script/InkscapePython.cpp \
