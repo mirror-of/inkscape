@@ -40,7 +40,7 @@ extern "C" {
 #    define INKSCAPE_PATTERNSDIR  "share\\patterns"
 #    define INKSCAPE_SCREENSDIR   "share\\screens"
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
-#    define INKSCAPE_PLUGINDIR    "lib\\plugins"
+#    define INKSCAPE_PLUGINDIR    "plugins"
 #    define INKSCAPE_TEMPLATESDIR "share\\templates"
 #  else
 #    define INKSCAPE_APPICONDIR   INKSCAPE_DATADIR "/pixmaps"
