@@ -214,14 +214,7 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 
     GSList const *objects = sel->itemList();
     SPObject *object = SP_OBJECT(objects->data);
-    // prevent change of style on clones.
-    for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
-      if (SP_IS_USE(l->data)) {
-            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_CLONE);
-            gtk_object_set_data( GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE) );
-            return;
-        }
-    }
+
     // prevent trying to modify objects with multiple fill modes
     SPPaintSelectorMode pselmode =
         sp_stroke_style_determine_paint_selector_mode(SP_OBJECT_STYLE(object));
@@ -342,6 +335,12 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
             sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN);
             SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_STROKE_SERVER (object)));
             sp_update_pattern_list ( psel, pat );
+            break;
+        }
+
+        case SP_PAINT_SELECTOR_MODE_UNSET:
+        {
+            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_UNSET );
             break;
         }
 
@@ -650,9 +649,15 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
             break;
 
-        case SP_PAINT_SELECTOR_MODE_CLONE:
-            g_warning( "file %s: line %d: Paint %d should not emit 'changed'",
-                       __FILE__, __LINE__, psel->mode);
+        case SP_PAINT_SELECTOR_MODE_UNSET:
+            if (items) {
+                    SPCSSAttr *css = sp_repr_css_attr_new ();
+                    sp_repr_css_unset_property (css, "stroke");
+                    for (GSList const *i = items; i != NULL; i = i->next) {
+                        sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
+                    }
+                    sp_document_done (SP_WIDGET_DOCUMENT (spw));
+            }
             break;
 
         default:
@@ -2076,15 +2081,10 @@ sp_stroke_style_get_average_color_cmyka(GSList const *objects, gfloat c[5])
 static SPPaintSelectorMode
 sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
 {
-    SPSelection *sel = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
-    // prevent change of style on clones.
-    for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
-          if (SP_IS_USE(l->data)) {
-               return SP_PAINT_SELECTOR_MODE_CLONE;
-          }
-    }
+    if (!style->stroke.set)
+        return SP_PAINT_SELECTOR_MODE_UNSET;
 
-    switch (style->stroke.type) {
+   switch (style->stroke.type) {
         case SP_PAINT_TYPE_NONE:
             return SP_PAINT_SELECTOR_MODE_NONE;
         case SP_PAINT_TYPE_COLOR:

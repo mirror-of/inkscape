@@ -91,27 +91,14 @@ static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                                       SPPaintSelectorMode mode,
                                                       SPWidget *spw );
 
-static void sp_fill_style_widget_paint_dragged      ( SPPaintSelector *psel,
-                                                      SPWidget *spw );
-
-static void sp_fill_style_widget_paint_changed      ( SPPaintSelector *psel,
-                                                      SPWidget *spw );
-
-static void sp_fill_style_widget_fill_rule_activate ( GtkWidget *w, SPWidget *spw);
-
-static void sp_fill_style_get_average_color_rgba    ( GSList const *objects,
-                                                      gfloat *c);
-
-static void sp_fill_style_get_average_color_cmyka   ( GSList const *objects,
-                                                      gfloat *c);
-
-static SPPaintSelectorMode
-           sp_fill_style_determine_paint_selector_mode ( SPStyle *style );
+static void sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw );
+static void sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw );
+static void sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw);
+static void sp_fill_style_get_average_color_rgba (GSList const *objects, gfloat *c);
+static void sp_fill_style_get_average_color_cmyka (GSList const *objects, gfloat *c);
+static SPPaintSelectorMode sp_fill_style_determine_paint_selector_mode ( SPStyle *style );
 
 static GtkWidget *dialog = NULL;
-
-
-
 
 static void
 sp_fill_style_dialog_destroy (GtkObject *object, gpointer data)
@@ -324,14 +311,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
 
     GSList const *objects = sel->itemList();
     SPObject *object = SP_OBJECT (objects->data);
-    // prevent change of style on clones.
-    for (GSList const *l = sel->itemList(); l != NULL; l = l->next) {
-      if (SP_IS_USE(l->data)) {
-            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_CLONE);
-            gtk_object_set_data( GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE) );
-            return;
-        }
-    }
+
     // prevent trying to modify objects with multiple fill modes
     SPPaintSelectorMode pselmode =
         sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object));
@@ -473,6 +453,12 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             break;
         }
 
+        case SP_PAINT_SELECTOR_MODE_UNSET:
+        {
+            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_UNSET );
+            break;
+        }
+
         default:
             sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_MULTIPLE );
             break;
@@ -573,7 +559,7 @@ sp_fill_style_widget_update_repr (SPWidget *spw, Inkscape::XML::Node *repr)
     g_print ("FillStyleWidget: Cleared update flag\n");
 #endif
 
-} // end of sp_fill_style_widget_update_repr()
+}
 
 
 
@@ -582,7 +568,6 @@ sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                           SPPaintSelectorMode mode,
                                           SPWidget *spw )
 {
-
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;
 
@@ -590,8 +575,7 @@ sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
     /* TODO: Not really, here we have to get old color back from object */
     /* Instead of relying on paint widget having meaningful colors set */
     sp_fill_style_widget_paint_changed (psel, spw);
-
-} // end of sp_fill_style_widget_paint_mode_changed()
+}
 
 
 /**
@@ -872,6 +856,17 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
             break;
 
+        case SP_PAINT_SELECTOR_MODE_UNSET:
+            if (items) {
+                    SPCSSAttr *css = sp_repr_css_attr_new ();
+                    sp_repr_css_unset_property (css, "fill");
+                    for (GSList const *i = items; i != NULL; i = i->next) {
+                        sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
+                    }
+                    sp_document_done (SP_WIDGET_DOCUMENT (spw));
+            }
+            break;
+
         default:
             g_warning ( "file %s: line %d: Paint selector should not be in "
                         "mode %d",
@@ -984,6 +979,9 @@ sp_fill_style_get_average_color_cmyka(GSList const *objects, gfloat *c)
 static SPPaintSelectorMode
 sp_fill_style_determine_paint_selector_mode (SPStyle *style)
 {
+    if (!style->fill.set)
+        return SP_PAINT_SELECTOR_MODE_UNSET;
+
     switch (style->fill.type) {
 
         case SP_PAINT_TYPE_NONE:
@@ -1032,7 +1030,7 @@ sp_fill_style_determine_paint_selector_mode (SPStyle *style)
 
     return SP_PAINT_SELECTOR_MODE_NONE;
 
-} // end of sp_fill_style_determine_paint_selector_mode()
+}
 
 
 /*
