@@ -861,16 +861,22 @@ sp_text_append_line(SPText *text)
 }
 
 
-SPTSpan *
+int
 sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 {
-	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
-	// no updateRepr in this function because SPRepr are handled directly
-	if ( text->f_src == NULL ) return NULL;
+    int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
+    // no updateRepr in this function because SPRepr are handled directly
+    if ( text->f_src == NULL ) return 0;
+
+    // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
+    // texpaths attached to the same path, with a vertical shift
+    if (SP_IS_TEXT_TEXTPATH (text)) 
+        return 0;
 	
     int  ucs4_pos=0;
     one_flow_src* into=text->contents.Locate(utf8_pos, ucs4_pos, true, false, false);
     //printf("pos=%i -> %i in %x\n",utf8_pos,ucs4_pos,into);
+
     if ( into == NULL ) {
         // it's a 'append line' in fact
         SPRepr*   rtspan = sp_repr_new ("tspan");
@@ -881,7 +887,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
         sp_repr_append_child (SP_OBJECT_REPR (text), rtspan);
         sp_repr_unref (rtspan);
         SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
+
+        return 1;
+
     } else if ( into && into->dad ) {
         if ( into->Type() == flw_text ) {
             text_flow_src* into_obj=dynamic_cast<text_flow_src*>(into);
@@ -968,10 +976,13 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                     }
                     g_list_free(templ);
                     SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                    return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
+
+                    return 1;
+
                 } else {
                     // since it's a string, there's always at least the sp-text for dad
                 }
+
             } else if ( into->dad->Type() == txt_text ) {
                 // special case
                 SPRepr*   firstspan = sp_repr_new ("tspan");
@@ -1002,7 +1013,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                 sp_repr_append_child (SP_OBJECT_REPR (into->dad->me), rtspan);
                 sp_repr_unref (rtspan);
                 SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
+
+                return 1;
+
             }
         } else if ( into->Type() == txt_text ) {
             // ???
@@ -1024,7 +1037,9 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                 sp_repr_add_child (SP_OBJECT_REPR (into->dad->me), rtspan,(prec)?SP_OBJECT_REPR(prec):NULL);
                 sp_repr_unref (rtspan);
                 SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
+
+                return 1;
+
             } else {
                 // since it's a tline, there's always at least the sp-text for dad
             }
@@ -1032,10 +1047,11 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
             // add a sodipodi:role=line and we're done
             sp_repr_set_attr (SP_OBJECT_REPR (into->me), "sodipodi:role", "line");
             SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            return SP_TSPAN(into->me);
+
+            return 1;
         }
     }
-    return NULL;
+    return 0;
 }
 
 gint

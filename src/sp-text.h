@@ -75,7 +75,7 @@ SPCurve *sp_text_normalized_bpath (SPText *text);
 /* fixme: Think about these (Lauris) */
 
 SPTSpan *sp_text_append_line (SPText *text);
-SPTSpan *sp_text_insert_line (SPText *text, gint pos);
+int sp_text_insert_line (SPText *text, gint pos);
 
 /* This gives us SUM (strlen (STRING)) + (LINES - 1) */
 gint sp_text_get_length (SPText *text);
