@@ -24,7 +24,6 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)libpangomm-1.4-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)freetype6.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libart_lgpl_2-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libatk-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdk-win32-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdk_pixbuf-2.0-0.dll inkscape

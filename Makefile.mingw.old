@@ -17,7 +17,6 @@ dist:
 	$(CP) src$(S)inkscape.exe inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-1.2-5.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)freetype-6.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libart_lgpl_2-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libatk-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdk-win32-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdk_pixbuf-2.0-0.dll inkscape

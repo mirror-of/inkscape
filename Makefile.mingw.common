@@ -144,11 +144,11 @@ GTKLIB = -L$(GTK)/lib \
 
 # remove -DLIBXML_STATIC 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
--I$(GTK)/include/libart-2.0 -I$(GTK)/include/libxml2 \
+-I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2
 
 LIBS = $(GTKLIB) -lxml2 \
-$(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
+$(GTK)/lib/iconv.lib	\
 -lfreetype -lpng -lpopt $(GTK)/lib/zdll.lib \
 -lgc -lgccpp -mwindows -lws2_32 -lintl
 

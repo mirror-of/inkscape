@@ -133,11 +133,11 @@ GTKLIB = -L$(GTK)/lib \
 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0
 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
--I$(GTK)/include/libart-2.0 -DLIBXML_STATIC -I$(GTK)/include/libxml2 \
+-DLIBXML_STATIC -I$(GTK)/include/libxml2	\
 -I$(GTK)/include/freetype2
 
 LIBS = $(GTKLIB) -lxml2 \
-$(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
+$(GTK)/lib/iconv.lib	\
 -lfreetype -lpng -lpopt $(GTK)/lib/libz.lib \
 -mwindows -lws2_32 -lintl
 
@@ -159,14 +159,13 @@ GTKSINC = \
 -I$(GTKS)/include/pango-1.0 \
 -I$(GTKS)/include/glib-2.0 \
 -I$(GTKS)/include/freetype2  \
--I$(GTKS)/include/libxml2 \
--I$(GTKS)/include/libart-2.0
+-I$(GTKS)/include/libxml2
 
 
 GTKSLIB = \
 -mwindows -L$(GTKS)/lib -lsigc++-1.2.4 \
 -lgtk-2.0 -lpango-1.0 -lglib-2.0 -latk-1.0 \
--lfreetype -lart_lgpl -ltiff -lpng -ljpeg -lz \
+-lfreetype -ltiff -lpng -ljpeg -lz \
 -lxml2 -lintl -liconv -lws2_32
 
 
