@@ -30,11 +30,19 @@ NRMatrixD *nr_matrix_d_from_f (NRMatrixD *d, const NRMatrixF *s);
 NRMatrixF *nr_matrix_f_from_d (NRMatrixF *d, const NRMatrixD *s);
 
 NRMatrixD *nr_matrix_d_invert (NRMatrixD *d, const NRMatrixD *m);
+
+/* Currently uses single-precision calculation. */
 NRMatrixF *nr_matrix_f_invert (NRMatrixF *d, const NRMatrixF *m);
 
+/* d,m0,m1 needn't be distinct in any of these multiply routines. */
+
 NRMatrixD *nr_matrix_multiply_ddd (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixD *m1);
+
+/* Currently uses single-precision intermediate results (depending on compiler,
+   optimization settings etc.). */
 NRMatrixF *nr_matrix_multiply_fff (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixF *m1);
 
+/* (_fdd and _fdf use double-precision calculations.) */
 NRMatrixF *nr_matrix_multiply_fdd (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixD *m1);
 NRMatrixF *nr_matrix_multiply_fdf (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixF *m1);
 NRMatrixF *nr_matrix_multiply_ffd (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixD *m1);
