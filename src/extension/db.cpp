@@ -13,6 +13,7 @@
  */
 
 #include <glib.h>
+#include <helper/sp-intl.h>
 #include "db.h"
 
 /* Globals */
@@ -132,6 +133,122 @@ DB::foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data)
 {
 	ModuleDBForeachClosure *closure=reinterpret_cast<ModuleDBForeachClosure *>(in_data);
 	closure->in_func(reinterpret_cast<Inkscape::Extension::Extension *>(in_value), closure->in_data);
+}
+
+/**
+	\return    none
+	\brief     The function to look at each module and see if it is
+	           an input module, then add it to the open menu.
+	\param     in_plug  Module to be examined
+	\param     data     The list to be attached to
+
+	The first thing that is checked is if this module is an input
+	module.  If it is, then it is turned into a...
+*/
+void
+DB::input_internal (Extension * in_plug, gpointer data)
+{
+	if (dynamic_cast<Input *>(in_plug)) {
+		const gchar * name              = NULL;
+		const gchar * tooltip           = NULL;
+		const gchar * extension         = NULL;
+		const gchar * mimetype          = NULL;
+		Input * imod                    = NULL;
+		IOExtensionDescription * desc   = NULL;
+
+		imod = dynamic_cast<Input *>(in_plug);
+
+		name = imod->get_filetypename();
+		if (name == NULL) {
+			name = in_plug->get_name();
+		}
+
+		tooltip = imod->get_filetypetooltip();
+
+		desc = new IOExtensionDescription(name, extension, mimetype, in_plug);
+		g_slist_append((GSList *)data, (gpointer)desc);
+	}
+
+	return;
+}
+
+void
+DB::output_internal (Extension * in_plug, gpointer data)
+{
+	if (dynamic_cast<Output *>(in_plug)) {
+		const gchar * name              = NULL;
+		const gchar * tooltip           = NULL;
+		const gchar * extension         = NULL;
+		const gchar * mimetype          = NULL;
+		Output * omod                   = NULL;
+		IOExtensionDescription * desc   = NULL;
+
+		omod = dynamic_cast<Output *>(in_plug);
+
+		name = omod->get_filetypename();
+		if (name == NULL) {
+			name = in_plug->get_name();
+		}
+
+		tooltip = omod->get_filetypetooltip();
+
+		desc = new IOExtensionDescription(name, extension, mimetype, in_plug);
+		g_slist_append((GSList *)data, (gpointer)desc);
+	}
+
+	return;
+}
+
+GSList *
+DB::get_input_list (void)
+{
+	GSList * retlist = NULL;
+	IOExtensionDescription * desc;
+
+	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL);
+	retlist = g_slist_append(retlist, (gpointer)desc);
+	foreach(input_internal, (gpointer)retlist);
+
+	return retlist;
+}
+
+GSList *
+DB::get_output_list (void)
+{
+	GSList * retlist = NULL;
+	IOExtensionDescription * desc;
+
+	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL);
+	retlist = g_slist_append(retlist, (gpointer)desc);
+	foreach(output_internal, (gpointer)retlist);
+
+	return retlist;
+}
+
+GSList *
+DB::get_output_list (void)
+{
+	return NULL;
+}
+
+void
+DB::free_list (GSList * in_list)
+{
+	return;
+}
+
+DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, const Extension * in_extension)
+{
+	name = in_name;
+	file_extension = in_file_extension;
+	mimetype = in_mime;
+	extension = in_extension;
+	return;
+}
+
+DB::IOExtensionDescription::~IOExtensionDescription(void)
+{
+	return;
 }
 
 }; }; /* namespace Extension, Inkscape */
