@@ -14,10 +14,10 @@
 
 #include "traits/function.h"
 #include "traits/reference.h"
+#include "traits/list.h"
+#include "util/list.h"
 
 namespace Inkscape {
-
-namespace Traits { template <typename T> struct List; }
 
 namespace Util {
 
