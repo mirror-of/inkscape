@@ -11,7 +11,7 @@
  */
 
 #include "helper/action.h"
-#include "view.h"
+#include "forward.h"	/* SPView */
 
 enum {
 	/* Header */
