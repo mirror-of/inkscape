@@ -993,9 +993,10 @@ sp_star_toolbox_new (SPDesktop *desktop)
 
     /* Spoke ratio */
     {
+        GtkWidget *hb = sp_tb_spinbutton (_("Spoke ratio:"),
         // TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
         // Base radius is the same for the closest handle.
-        GtkWidget *hb = sp_tb_spinbutton (_("Spoke ratio:"), _("Base radius to tip radius ratio"), 
+                                          _("Base radius to tip radius ratio"),
                                           "tools.shapes.star", "proportion", 0.5,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           0.01, 1.0, 0.01, 0.1,
