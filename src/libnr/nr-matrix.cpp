@@ -239,6 +239,12 @@ bool Matrix::is_translation(const Coord eps) const {
              fabs(_c[2]) < eps );
 }
 
+explicit Matrix::operator NR::translate() const {
+	g_assert(is_translation());
+	return NR::translate(_c[4], _c[5]);
+}
+
+
 bool Matrix::test_identity() const {
         return NR_MATRIX_DF_TEST_CLOSE (this, &NR_MATRIX_IDENTITY, NR_EPSILON);
 }
