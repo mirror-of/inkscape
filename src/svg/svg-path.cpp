@@ -67,9 +67,9 @@ struct _RSVGParsePathCtx {
 
 static void
 rsvg_path_arc_segment (RSVGParsePathCtx *ctx,
-		      double xc, double yc,
-		      double th0, double th1,
-		      double rx, double ry, double x_axis_rotation)
+              double xc, double yc,
+              double th0, double th1,
+              double rx, double ry, double x_axis_rotation)
 {
   double sin_th, cos_th;
   double a00, a01, a10, a11;
@@ -94,9 +94,9 @@ rsvg_path_arc_segment (RSVGParsePathCtx *ctx,
   x2 = x3 + t * sin (th1);
   y2 = y3 - t * cos (th1);
   rsvg_bpath_def_curveto (ctx->bpath,
-				  a00 * x1 + a01 * y1, a10 * x1 + a11 * y1,
-				  a00 * x2 + a01 * y2, a10 * x2 + a11 * y2,
-				  a00 * x3 + a01 * y3, a10 * x3 + a11 * y3);
+                  a00 * x1 + a01 * y1, a10 * x1 + a11 * y1,
+                  a00 * x2 + a01 * y2, a10 * x2 + a11 * y2,
+                  a00 * x3 + a01 * y3, a10 * x3 + a11 * y3);
 }
 
 /**
@@ -113,9 +113,9 @@ rsvg_path_arc_segment (RSVGParsePathCtx *ctx,
  **/
 static void
 rsvg_path_arc (RSVGParsePathCtx *ctx,
-	      double rx, double ry, double x_axis_rotation,
-	      int large_arc_flag, int sweep_flag,
-	      double x, double y)
+          double rx, double ry, double x_axis_rotation,
+          int large_arc_flag, int sweep_flag,
+          double x, double y)
 {
   double sin_th, cos_th;
   double a00, a01, a10, a11;
@@ -187,9 +187,9 @@ rsvg_path_arc (RSVGParsePathCtx *ctx,
 
   for (i = 0; i < n_segs; i++)
     rsvg_path_arc_segment (ctx, xc, yc,
-			  th0 + i * th_arc / n_segs,
-			  th0 + (i + 1) * th_arc / n_segs,
-			  rx, ry, x_axis_rotation);
+              th0 + i * th_arc / n_segs,
+              th0 + (i + 1) * th_arc / n_segs,
+              rx, ry, x_axis_rotation);
 
   ctx->cpx = x;
   ctx->cpy = y;
@@ -206,21 +206,21 @@ rsvg_parse_path_default_xy (RSVGParsePathCtx *ctx, int n_params)
   if (ctx->rel)
     {
       for (i = ctx->param; i < n_params; i++)
-	{
-	  if (i > 2)
-	    ctx->params[i] = ctx->params[i - 2];
-	  else if (i == 1)
-	    ctx->params[i] = ctx->cpy;
-	  else if (i == 0)
-	    /* we shouldn't get here (usually ctx->param > 0 as
+    {
+      if (i > 2)
+        ctx->params[i] = ctx->params[i - 2];
+      else if (i == 1)
+        ctx->params[i] = ctx->cpy;
+      else if (i == 0)
+        /* we shouldn't get here (usually ctx->param > 0 as
                precondition) */
-	    ctx->params[i] = ctx->cpx;
-	}
+        ctx->params[i] = ctx->cpx;
+    }
     }
   else
     {
       for (i = ctx->param; i < n_params; i++)
-	ctx->params[i] = 0.0;
+    ctx->params[i] = 0.0;
     }
 }
 
@@ -243,214 +243,214 @@ rsvg_parse_path_do_cmd (RSVGParsePathCtx *ctx, gboolean final)
     case 'm':
       /* moveto */
       if (ctx->param == 2 || final)
-	{
-	  rsvg_parse_path_default_xy (ctx, 2);
+    {
+      rsvg_parse_path_default_xy (ctx, 2);
 #ifdef VERBOSE
-	  g_print ("'m' moveto %g,%g\n",
-		   ctx->params[0], ctx->params[1]);
+      g_print ("'m' moveto %g,%g\n",
+           ctx->params[0], ctx->params[1]);
 #endif
-	  rsvg_bpath_def_moveto (ctx->bpath,
-					 ctx->params[0], ctx->params[1]);
-	  ctx->cpx = ctx->rpx = ctx->params[0];
-	  ctx->cpy = ctx->rpy = ctx->params[1];
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_moveto (ctx->bpath,
+                     ctx->params[0], ctx->params[1]);
+      ctx->cpx = ctx->rpx = ctx->params[0];
+      ctx->cpy = ctx->rpy = ctx->params[1];
+      ctx->param = 0;
+    }
       break;
     case 'l':
       /* lineto */
       if (ctx->param == 2 || final)
-	{
-	  rsvg_parse_path_default_xy (ctx, 2);
+    {
+      rsvg_parse_path_default_xy (ctx, 2);
 #ifdef VERBOSE
-	  g_print ("'l' lineto %g,%g\n",
-		   ctx->params[0], ctx->params[1]);
+      g_print ("'l' lineto %g,%g\n",
+           ctx->params[0], ctx->params[1]);
 #endif
-	  rsvg_bpath_def_lineto (ctx->bpath,
-					 ctx->params[0], ctx->params[1]);
-	  ctx->cpx = ctx->rpx = ctx->params[0];
-	  ctx->cpy = ctx->rpy = ctx->params[1];
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_lineto (ctx->bpath,
+                     ctx->params[0], ctx->params[1]);
+      ctx->cpx = ctx->rpx = ctx->params[0];
+      ctx->cpy = ctx->rpy = ctx->params[1];
+      ctx->param = 0;
+    }
       break;
     case 'c':
       /* curveto */
       if (ctx->param == 6 || final)
-	{
-	  rsvg_parse_path_default_xy (ctx, 6);
-	  x1 = ctx->params[0];
-	  y1 = ctx->params[1];
-	  x2 = ctx->params[2];
-	  y2 = ctx->params[3];
-	  x3 = ctx->params[4];
-	  y3 = ctx->params[5];
+    {
+      rsvg_parse_path_default_xy (ctx, 6);
+      x1 = ctx->params[0];
+      y1 = ctx->params[1];
+      x2 = ctx->params[2];
+      y2 = ctx->params[3];
+      x3 = ctx->params[4];
+      y3 = ctx->params[5];
 #ifdef VERBOSE
-	  g_print ("'c' curveto %g,%g %g,%g, %g,%g\n",
-		   x1, y1, x2, y2, x3, y3);
+      g_print ("'c' curveto %g,%g %g,%g, %g,%g\n",
+           x1, y1, x2, y2, x3, y3);
 #endif
-	  rsvg_bpath_def_curveto (ctx->bpath,
-					  x1, y1, x2, y2, x3, y3);
-	  ctx->rpx = x2;
-	  ctx->rpy = y2;
-	  ctx->cpx = x3;
-	  ctx->cpy = y3;
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_curveto (ctx->bpath,
+                      x1, y1, x2, y2, x3, y3);
+      ctx->rpx = x2;
+      ctx->rpy = y2;
+      ctx->cpx = x3;
+      ctx->cpy = y3;
+      ctx->param = 0;
+    }
       break;
     case 's':
       /* smooth curveto */
       if (ctx->param == 4 || final)
-	{
-	  rsvg_parse_path_default_xy (ctx, 4);
-	  x1 = 2 * ctx->cpx - ctx->rpx;
-	  y1 = 2 * ctx->cpy - ctx->rpy;
-	  x2 = ctx->params[0];
-	  y2 = ctx->params[1];
-	  x3 = ctx->params[2];
-	  y3 = ctx->params[3];
+    {
+      rsvg_parse_path_default_xy (ctx, 4);
+      x1 = 2 * ctx->cpx - ctx->rpx;
+      y1 = 2 * ctx->cpy - ctx->rpy;
+      x2 = ctx->params[0];
+      y2 = ctx->params[1];
+      x3 = ctx->params[2];
+      y3 = ctx->params[3];
 #ifdef VERBOSE
-	  g_print ("'s' curveto %g,%g %g,%g, %g,%g\n",
-		   x1, y1, x2, y2, x3, y3);
+      g_print ("'s' curveto %g,%g %g,%g, %g,%g\n",
+           x1, y1, x2, y2, x3, y3);
 #endif
-	  rsvg_bpath_def_curveto (ctx->bpath,
-					  x1, y1, x2, y2, x3, y3);
-	  ctx->rpx = x2;
-	  ctx->rpy = y2;
-	  ctx->cpx = x3;
-	  ctx->cpy = y3;
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_curveto (ctx->bpath,
+                      x1, y1, x2, y2, x3, y3);
+      ctx->rpx = x2;
+      ctx->rpy = y2;
+      ctx->cpx = x3;
+      ctx->cpy = y3;
+      ctx->param = 0;
+    }
       break;
     case 'h':
       /* horizontal lineto */
       if (ctx->param == 1)
-	{
+    {
 #ifdef VERBOSE
-	  g_print ("'h' lineto %g,%g\n",
-		   ctx->params[0], ctx->cpy);
+      g_print ("'h' lineto %g,%g\n",
+           ctx->params[0], ctx->cpy);
 #endif
-	  rsvg_bpath_def_lineto (ctx->bpath,
-					 ctx->params[0], ctx->cpy);
-	  ctx->cpx = ctx->rpx = ctx->params[0];
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_lineto (ctx->bpath,
+                     ctx->params[0], ctx->cpy);
+      ctx->cpx = ctx->rpx = ctx->params[0];
+      ctx->param = 0;
+    }
       break;
     case 'v':
       /* vertical lineto */
       if (ctx->param == 1)
-	{
+    {
 #ifdef VERBOSE
-	  g_print ("'v' lineto %g,%g\n",
-		   ctx->cpx, ctx->params[0]);
+      g_print ("'v' lineto %g,%g\n",
+           ctx->cpx, ctx->params[0]);
 #endif
-	  rsvg_bpath_def_lineto (ctx->bpath,
-					 ctx->cpx, ctx->params[0]);
-	  ctx->cpy = ctx->rpy = ctx->params[0];
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_lineto (ctx->bpath,
+                     ctx->cpx, ctx->params[0]);
+      ctx->cpy = ctx->rpy = ctx->params[0];
+      ctx->param = 0;
+    }
       break;
     case 'q':
       /* quadratic bezier curveto */
 
       /* non-normative reference:
-	 http://www.icce.rug.nl/erikjan/bluefuzz/beziers/beziers/beziers.html
+     http://www.icce.rug.nl/erikjan/bluefuzz/beziers/beziers/beziers.html
       */
       if (ctx->param == 4 || final)
-	{
-	  rsvg_parse_path_default_xy (ctx, 4);
-	  /* raise quadratic bezier to cubic */
-	  x1 = (ctx->cpx + 2 * ctx->params[0]) * (1.0 / 3.0);
-	  y1 = (ctx->cpy + 2 * ctx->params[1]) * (1.0 / 3.0);
-	  x3 = ctx->params[2];
-	  y3 = ctx->params[3];
-	  x2 = (x3 + 2 * ctx->params[0]) * (1.0 / 3.0);
-	  y2 = (y3 + 2 * ctx->params[1]) * (1.0 / 3.0);
+    {
+      rsvg_parse_path_default_xy (ctx, 4);
+      /* raise quadratic bezier to cubic */
+      x1 = (ctx->cpx + 2 * ctx->params[0]) * (1.0 / 3.0);
+      y1 = (ctx->cpy + 2 * ctx->params[1]) * (1.0 / 3.0);
+      x3 = ctx->params[2];
+      y3 = ctx->params[3];
+      x2 = (x3 + 2 * ctx->params[0]) * (1.0 / 3.0);
+      y2 = (y3 + 2 * ctx->params[1]) * (1.0 / 3.0);
 #ifdef VERBOSE
-	  g_print ("'q' curveto %g,%g %g,%g, %g,%g\n",
-		   x1, y1, x2, y2, x3, y3);
+      g_print ("'q' curveto %g,%g %g,%g, %g,%g\n",
+           x1, y1, x2, y2, x3, y3);
 #endif
-	  rsvg_bpath_def_curveto (ctx->bpath,
-					  x1, y1, x2, y2, x3, y3);
-	  ctx->rpx = x2;
-	  ctx->rpy = y2;
-	  ctx->cpx = x3;
-	  ctx->cpy = y3;
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_curveto (ctx->bpath,
+                      x1, y1, x2, y2, x3, y3);
+      ctx->rpx = x2;
+      ctx->rpy = y2;
+      ctx->cpx = x3;
+      ctx->cpy = y3;
+      ctx->param = 0;
+    }
       break;
     case 't':
       /* Truetype quadratic bezier curveto */
       if (ctx->param == 2 || final)
-	{
-	  double xc, yc; /* quadratic control point */
+    {
+      double xc, yc; /* quadratic control point */
 
-	  xc = 2 * ctx->cpx - ctx->rpx;
-	  yc = 2 * ctx->cpy - ctx->rpy;
-	  /* generate a quadratic bezier with control point = xc, yc */
-	  x1 = (ctx->cpx + 2 * xc) * (1.0 / 3.0);
-	  y1 = (ctx->cpy + 2 * yc) * (1.0 / 3.0);
-	  x3 = ctx->params[0];
-	  y3 = ctx->params[1];
-	  x2 = (x3 + 2 * xc) * (1.0 / 3.0);
-	  y2 = (y3 + 2 * yc) * (1.0 / 3.0);
+      xc = 2 * ctx->cpx - ctx->rpx;
+      yc = 2 * ctx->cpy - ctx->rpy;
+      /* generate a quadratic bezier with control point = xc, yc */
+      x1 = (ctx->cpx + 2 * xc) * (1.0 / 3.0);
+      y1 = (ctx->cpy + 2 * yc) * (1.0 / 3.0);
+      x3 = ctx->params[0];
+      y3 = ctx->params[1];
+      x2 = (x3 + 2 * xc) * (1.0 / 3.0);
+      y2 = (y3 + 2 * yc) * (1.0 / 3.0);
 #ifdef VERBOSE
-	  g_print ("'t' curveto %g,%g %g,%g, %g,%g\n",
-		   x1, y1, x2, y2, x3, y3);
+      g_print ("'t' curveto %g,%g %g,%g, %g,%g\n",
+           x1, y1, x2, y2, x3, y3);
 #endif
-	  rsvg_bpath_def_curveto (ctx->bpath,
-					  x1, y1, x2, y2, x3, y3);
-	  ctx->rpx = xc;
-	  ctx->rpy = yc;
-	  ctx->cpx = x3;
-	  ctx->cpy = y3;
-	  ctx->param = 0;
-	}
+      rsvg_bpath_def_curveto (ctx->bpath,
+                      x1, y1, x2, y2, x3, y3);
+      ctx->rpx = xc;
+      ctx->rpy = yc;
+      ctx->cpx = x3;
+      ctx->cpy = y3;
+      ctx->param = 0;
+    }
       else if (final)
-	{
-	  if (ctx->param > 2)
-	    {
-	      rsvg_parse_path_default_xy (ctx, 4);
-	      /* raise quadratic bezier to cubic */
-	      x1 = (ctx->cpx + 2 * ctx->params[0]) * (1.0 / 3.0);
-	      y1 = (ctx->cpy + 2 * ctx->params[1]) * (1.0 / 3.0);
-	      x3 = ctx->params[2];
-	      y3 = ctx->params[3];
-	      x2 = (x3 + 2 * ctx->params[0]) * (1.0 / 3.0);
-	      y2 = (y3 + 2 * ctx->params[1]) * (1.0 / 3.0);
+    {
+      if (ctx->param > 2)
+        {
+          rsvg_parse_path_default_xy (ctx, 4);
+          /* raise quadratic bezier to cubic */
+          x1 = (ctx->cpx + 2 * ctx->params[0]) * (1.0 / 3.0);
+          y1 = (ctx->cpy + 2 * ctx->params[1]) * (1.0 / 3.0);
+          x3 = ctx->params[2];
+          y3 = ctx->params[3];
+          x2 = (x3 + 2 * ctx->params[0]) * (1.0 / 3.0);
+          y2 = (y3 + 2 * ctx->params[1]) * (1.0 / 3.0);
 #ifdef VERBOSE
-	      g_print ("'t' curveto %g,%g %g,%g, %g,%g\n",
-		       x1, y1, x2, y2, x3, y3);
+          g_print ("'t' curveto %g,%g %g,%g, %g,%g\n",
+               x1, y1, x2, y2, x3, y3);
 #endif
-	      rsvg_bpath_def_curveto (ctx->bpath,
-					      x1, y1, x2, y2, x3, y3);
-	      ctx->rpx = x2;
-	      ctx->rpy = y2;
-	      ctx->cpx = x3;
-	      ctx->cpy = y3;
-	    }
-	  else
-	    {
-	      rsvg_parse_path_default_xy (ctx, 2);
+          rsvg_bpath_def_curveto (ctx->bpath,
+                          x1, y1, x2, y2, x3, y3);
+          ctx->rpx = x2;
+          ctx->rpy = y2;
+          ctx->cpx = x3;
+          ctx->cpy = y3;
+        }
+      else
+        {
+          rsvg_parse_path_default_xy (ctx, 2);
 #ifdef VERBOSE
-	      g_print ("'t' lineto %g,%g\n",
-		       ctx->params[0], ctx->params[1]);
+          g_print ("'t' lineto %g,%g\n",
+               ctx->params[0], ctx->params[1]);
 #endif
-	      rsvg_bpath_def_lineto (ctx->bpath,
-					     ctx->params[0], ctx->params[1]);
-	      ctx->cpx = ctx->rpx = ctx->params[0];
-	      ctx->cpy = ctx->rpy = ctx->params[1];
-	    }
-	  ctx->param = 0;
-	}
+          rsvg_bpath_def_lineto (ctx->bpath,
+                         ctx->params[0], ctx->params[1]);
+          ctx->cpx = ctx->rpx = ctx->params[0];
+          ctx->cpy = ctx->rpy = ctx->params[1];
+        }
+      ctx->param = 0;
+    }
       break;
     case 'a':
       if (ctx->param == 7 || final)
-	{
-	  rsvg_path_arc (ctx,
-			ctx->params[0], ctx->params[1], ctx->params[2],
-			(int) ctx->params[3], (int) ctx->params[4],
-			ctx->params[5], ctx->params[6]);
-	  ctx->param = 0;
-	}
+    {
+      rsvg_path_arc (ctx,
+            ctx->params[0], ctx->params[1], ctx->params[2],
+            (int) ctx->params[3], (int) ctx->params[4],
+            ctx->params[5], ctx->params[6]);
+      ctx->param = 0;
+    }
       break;
     default:
       ctx->param = 0;
@@ -477,147 +477,147 @@ rsvg_parse_path_data (RSVGParsePathCtx *ctx, const char *data)
     {
       c = data[i];
       if (c >= '0' && c <= '9')
-	{
-	  /* digit */
-	  if (in_num)
-	    {
-	      if (in_exp)
-		{
-		  exp = (exp * 10) + c - '0';
-		  exp_wait_sign = FALSE;
-		}
-	      else if (in_frac)
-		val += (frac *= 0.1) * (c - '0');
-	      else
-		val = (val * 10) + c - '0';
-	    }
-	  else
-	    {
-	      in_num = TRUE;
-	      in_frac = FALSE;
-	      in_exp = FALSE;
-	      exp = 0;
-	      exp_sign = 1;
-	      exp_wait_sign = FALSE;
-	      val = c - '0';
-	      sign = 1;
-	    }
-	}
+    {
+      /* digit */
+      if (in_num)
+        {
+          if (in_exp)
+        {
+          exp = (exp * 10) + c - '0';
+          exp_wait_sign = FALSE;
+        }
+          else if (in_frac)
+        val += (frac *= 0.1) * (c - '0');
+          else
+        val = (val * 10) + c - '0';
+        }
+      else
+        {
+          in_num = TRUE;
+          in_frac = FALSE;
+          in_exp = FALSE;
+          exp = 0;
+          exp_sign = 1;
+          exp_wait_sign = FALSE;
+          val = c - '0';
+          sign = 1;
+        }
+    }
       else if (c == '.')
-	{
-	  if (!in_num)
-	    {
-	      in_num = TRUE;
-	      val = 0;
-	    }
-	  in_frac = TRUE;
-	  frac = 1;
-	}
+    {
+      if (!in_num)
+        {
+          in_num = TRUE;
+          val = 0;
+        }
+      in_frac = TRUE;
+      frac = 1;
+    }
       else if ((c == 'E' || c == 'e') && in_num)
-	{
-	  in_exp = TRUE;
-	  exp_wait_sign = TRUE;
-	  exp = 0;
-	  exp_sign = 1;
-	}
+    {
+      in_exp = TRUE;
+      exp_wait_sign = TRUE;
+      exp = 0;
+      exp_sign = 1;
+    }
       else if ((c == '+' || c == '-') && in_exp)
-	{
-	  exp_sign = c == '+' ? 1 : -1;
-	}
+    {
+      exp_sign = c == '+' ? 1 : -1;
+    }
       else if (in_num)
-	{
-	  /* end of number */
+    {
+      /* end of number */
 
-	  val *= sign * pow (10, exp_sign * exp);
-	  if (ctx->rel)
-	    {
-	      /* Handle relative coordinates. This switch statement attempts
-		 to determine _what_ the coords are relative to. This is
-		 underspecified in the 12 Apr working draft. */
-	      switch (ctx->cmd)
-		{
-		case 'l':
-		case 'm':
-		case 'c':
-		case 's':
-		case 'q':
-		case 't':
+      val *= sign * pow (10, exp_sign * exp);
+      if (ctx->rel)
+        {
+          /* Handle relative coordinates. This switch statement attempts
+         to determine _what_ the coords are relative to. This is
+         underspecified in the 12 Apr working draft. */
+          switch (ctx->cmd)
+        {
+        case 'l':
+        case 'm':
+        case 'c':
+        case 's':
+        case 'q':
+        case 't':
 #ifndef RSVGV_RELATIVE
-		  /* rule: even-numbered params are x-relative, odd-numbered
-		     are y-relative */
-		  if ((ctx->param & 1) == 0)
-		    val += ctx->cpx;
-		  else if ((ctx->param & 1) == 1)
-		    val += ctx->cpy;
-		  break;
+          /* rule: even-numbered params are x-relative, odd-numbered
+             are y-relative */
+          if ((ctx->param & 1) == 0)
+            val += ctx->cpx;
+          else if ((ctx->param & 1) == 1)
+            val += ctx->cpy;
+          break;
 #else
-		  /* rule: even-numbered params are x-relative, odd-numbered
-		     are y-relative */
-		  if (ctx->param == 0 || (ctx->param % 2 ==0))
-		    val += ctx->cpx;
-		  else 
-		    val += ctx->cpy;
-		  break;
+          /* rule: even-numbered params are x-relative, odd-numbered
+             are y-relative */
+          if (ctx->param == 0 || (ctx->param % 2 ==0))
+            val += ctx->cpx;
+          else 
+            val += ctx->cpy;
+          break;
 #endif
-		case 'a':
-		  /* rule: sixth and seventh are x and y, rest are not
-		     relative */
-		  if (ctx->param == 5)
-		    val += ctx->cpx;
-		  else if (ctx->param == 6)
-		    val += ctx->cpy;
-		  break;
-		case 'h':
-		  /* rule: x-relative */
-		  val += ctx->cpx;
-		  break;
-		case 'v':
-		  /* rule: y-relative */
-		  val += ctx->cpy;
-		  break;
-		}
-	    }
-	  ctx->params[ctx->param++] = val;
-	  rsvg_parse_path_do_cmd (ctx, FALSE);
-	  in_num = FALSE;
-	}
+        case 'a':
+          /* rule: sixth and seventh are x and y, rest are not
+             relative */
+          if (ctx->param == 5)
+            val += ctx->cpx;
+          else if (ctx->param == 6)
+            val += ctx->cpy;
+          break;
+        case 'h':
+          /* rule: x-relative */
+          val += ctx->cpx;
+          break;
+        case 'v':
+          /* rule: y-relative */
+          val += ctx->cpy;
+          break;
+        }
+        }
+      ctx->params[ctx->param++] = val;
+      rsvg_parse_path_do_cmd (ctx, FALSE);
+      in_num = FALSE;
+    }
 
       if (c == '\0')
-	break;
+    break;
       else if ((c == '+' || c == '-') && !exp_wait_sign)
-	{
-	  sign = c == '+' ? 1 : -1;;
-	  val = 0;
-	  in_num = TRUE;
-	  in_frac = FALSE;
-	  in_exp = FALSE;
-	  exp = 0;
-	  exp_sign = 1;
-	  exp_wait_sign = FALSE;
-	}
+    {
+      sign = c == '+' ? 1 : -1;;
+      val = 0;
+      in_num = TRUE;
+      in_frac = FALSE;
+      in_exp = FALSE;
+      exp = 0;
+      exp_sign = 1;
+      exp_wait_sign = FALSE;
+    }
       else if (c == 'z' || c == 'Z')
-	{
-	  if (ctx->param)
-	    rsvg_parse_path_do_cmd (ctx, TRUE);
+    {
+      if (ctx->param)
+        rsvg_parse_path_do_cmd (ctx, TRUE);
 #ifdef VERBOSE
-	  g_print ("'z' closepath\n");
+      g_print ("'z' closepath\n");
 #endif
-	  rsvg_bpath_def_closepath (ctx->bpath);
-	}
+      rsvg_bpath_def_closepath (ctx->bpath);
+    }
       else if (c >= 'A' && c <= 'Z' && c != 'E')
-	{
-	  if (ctx->param)
-	    rsvg_parse_path_do_cmd (ctx, TRUE);
-	  ctx->cmd = c + 'a' - 'A';
-	  ctx->rel = FALSE;
-	}
+    {
+      if (ctx->param)
+        rsvg_parse_path_do_cmd (ctx, TRUE);
+      ctx->cmd = c + 'a' - 'A';
+      ctx->rel = FALSE;
+    }
       else if (c >= 'a' && c <= 'z' && c != 'e')
-	{
-	  if (ctx->param)
-	    rsvg_parse_path_do_cmd (ctx, TRUE);
-	  ctx->cmd = c;
-	  ctx->rel = TRUE;
-	}
+    {
+      if (ctx->param)
+        rsvg_parse_path_do_cmd (ctx, TRUE);
+      ctx->cmd = c;
+      ctx->rel = TRUE;
+    }
       /* else c _should_ be whitespace or , */
     }
 }
@@ -626,73 +626,114 @@ rsvg_parse_path_data (RSVGParsePathCtx *ctx, const char *data)
 ArtBpath *
 sp_svg_read_path (const gchar *str)
 {
-	RSVGParsePathCtx ctx;
-	ArtBpath *bpath;
+    RSVGParsePathCtx ctx;
+    ArtBpath *bpath;
 
-	ctx.bpath = gnome_canvas_bpath_def_new ();
-	ctx.cpx = 0.0;
-	ctx.cpy = 0.0;
-	ctx.cmd = 0;
-	ctx.param = 0;
+    ctx.bpath = gnome_canvas_bpath_def_new ();
+    ctx.cpx = 0.0;
+    ctx.cpy = 0.0;
+    ctx.cmd = 0;
+    ctx.param = 0;
 
-	rsvg_parse_path_data (&ctx, str);
+    rsvg_parse_path_data (&ctx, str);
 
-	if (ctx.param) {
-		rsvg_parse_path_do_cmd (&ctx, TRUE);
-	}
+    if (ctx.param) {
+        rsvg_parse_path_do_cmd (&ctx, TRUE);
+    }
 
-	gnome_canvas_bpath_def_art_finish (ctx.bpath);
+    gnome_canvas_bpath_def_art_finish (ctx.bpath);
 
-	bpath = art_new (ArtBpath, ctx.bpath->n_bpath);
-	memcpy (bpath, ctx.bpath->bpath, ctx.bpath->n_bpath * sizeof (ArtBpath));
-	g_assert ((bpath + ctx.bpath->n_bpath - 1)->code == ART_END);
-	gnome_canvas_bpath_def_unref (ctx.bpath);
+    bpath = art_new (ArtBpath, ctx.bpath->n_bpath);
+    memcpy (bpath, ctx.bpath->bpath, ctx.bpath->n_bpath * sizeof (ArtBpath));
+    g_assert ((bpath + ctx.bpath->n_bpath - 1)->code == ART_END);
+    gnome_canvas_bpath_def_unref (ctx.bpath);
 
-	return bpath;
+    return bpath;
 }
 
 gchar *
 sp_svg_write_path (const ArtBpath * bpath)
 {
-	GString *result;
-	int i;
-	int closed = 0;
-	char *res;
-	
-	g_return_val_if_fail (bpath != NULL, NULL);
+    GString *result;
+    int     i;
+    int     closed = 0;
+    char    *res;
+    gchar c[32];
+    
+    g_return_val_if_fail (bpath != NULL, NULL);
 
-	result = g_string_sized_new (40);
 
-	for (i = 0; bpath[i].code != ART_END; i++){
-		switch (bpath [i].code){
-		case ART_LINETO:
-			g_string_sprintfa (result, "L %.8g %.8g ", bpath [i].x3, bpath [i].y3);
-			break;
+    result = g_string_sized_new (40);
 
-		case ART_CURVETO:
-			g_string_sprintfa (
-				result, "C %.8g %.8g %.8g %.8g %.8g %.8g ",
-				bpath [i].x1, bpath [i].y1,
-				bpath [i].x2, bpath [i].y2,
-				bpath [i].x3, bpath [i].y3);
-			break;
+    for (i = 0; bpath[i].code != ART_END; i++){
+        switch (bpath [i].code){
+        case ART_LINETO:
+            //Change to Locale-independent form. sprintfa is
+            //deprecated.
+            //g_string_sprintfa (result, "L %.8g %.8g ",
+            //      bpath [i].x3, bpath [i].y3);
+            g_string_append(result, "L ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x3);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y3);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            break;
 
-		case ART_MOVETO_OPEN:
-		case ART_MOVETO:
-			if (closed)
-				g_string_append  (result, "z ");
-			closed = (bpath [i].code == ART_MOVETO);
-			g_string_sprintfa (result, "M %.8g %.8g ", bpath [i].x3, bpath [i].y3);
-			break;
-		default:
-			g_assert_not_reached ();
-		}
-	}
-	if (closed)
-		g_string_append (result, "z ");
-	res = result->str;
-	g_string_free (result, FALSE);
+        case ART_CURVETO:
+            //Change to Locale-independent.  Replaces the deprecated:
+            //g_string_sprintfa (
+            //    result, "C %.8g %.8g %.8g %.8g %.8g %.8g ",
+            //    bpath [i].x1, bpath [i].y1,
+            //    bpath [i].x2, bpath [i].y2,
+            //    bpath [i].x3, bpath [i].y3);
+            g_string_append(result, "C ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x1);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y1);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x2);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y2);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x3);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y3);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            break;
 
-	return res;
+        case ART_MOVETO_OPEN:
+        case ART_MOVETO:
+            if (closed)
+                g_string_append  (result, "z ");
+            closed = (bpath [i].code == ART_MOVETO);
+            //Change to Locale-independent.  Replaces the deprecated:
+            //g_string_sprintfa (result, "M %.8g %.8g ",
+            //         bpath [i].x3, bpath [i].y3);
+            g_string_append(result, "M ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].x3);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            g_ascii_formatd(c, sizeof (c), "%.8g", bpath[i].y3);
+            g_string_append(result, c);
+            g_string_append(result, " ");
+            break;
+        default:
+            g_assert_not_reached ();
+        }
+    }
+    if (closed)
+        g_string_append (result, "z ");
+    res = result->str;
+    g_string_free (result, FALSE);
+
+    return res;
 }
 
