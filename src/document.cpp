@@ -621,10 +621,10 @@ is_within (const NRRect *what, const NRRect *box)
 static int
 overlaps (const NRRect *what, const NRRect *box)
 {
-	return (((box->x0 > what->x0) && (box->x0 < what->x1)) ||
-	        ((box->x1 > what->x0) && (box->x1 < what->x1))) &&
-	       (((box->y0 > what->y0) && (box->y0 < what->y1)) ||
-	        ((box->y1 > what->y0) && (box->y1 < what->y1)));
+	return (((what->x0 > box->x0) && (what->x0 < box->x1)) ||
+	        ((what->x1 > box->x0) && (what->x1 < box->x1))) &&
+	       (((what->y0 > box->y0) && (what->y0 < box->y1)) ||
+	        ((what->y1 > box->y0) && (what->y1 < box->y1)));
 }
 
 static GSList *
