@@ -29,7 +29,7 @@ void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int
 							  const long *FFd2s, const long *FF_S, unsigned int alpha, int dbits);
 #define NR_PIXOPS_MMX (1 && nr_have_mmx ())
 #ifdef __cplusplus
-};
+}
 #endif //__cplusplus
 #endif
 

@@ -58,7 +58,7 @@ void sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrixF *ct
 			const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
 void sp_chars_set_paintbox (SPChars *chars, NRRectF *paintbox);
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

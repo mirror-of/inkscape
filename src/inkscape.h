@@ -64,7 +64,7 @@ SPDocument * inkscape_active_document (void);
 SPDesktop * inkscape_active_desktop (void);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 /*

@@ -32,7 +32,7 @@ gboolean sp_version_inside_range (SPVersion version,
                                   unsigned major_max, unsigned minor_max);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif

@@ -45,7 +45,7 @@ SPCanvasItem *sp_desktop_drawing (SPDesktop *desktop);
 SPCanvasGroup * sp_desktop_sketch (SPDesktop * desktop);
 SPCanvasGroup * sp_desktop_controls (SPDesktop * desktop);
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

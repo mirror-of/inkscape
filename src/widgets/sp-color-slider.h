@@ -63,7 +63,7 @@ void sp_color_slider_set_map (SPColorSlider *slider, const guchar *map);
 void sp_color_slider_set_background (SPColorSlider *slider, guint dark, guint light, guint size);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

@@ -80,7 +80,7 @@ SPCurve *sp_curve_reverse (SPCurve *curve);
 void sp_curve_backspace (SPCurve *curve);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

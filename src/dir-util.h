@@ -18,7 +18,7 @@ const char *sp_filename_from_path (const char * path);
 const char *sp_extension_from_path (const char * path);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

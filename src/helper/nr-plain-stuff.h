@@ -24,7 +24,7 @@ void nr_render_checkerboard_rgb_custom (guchar *px, gint w, gint h, gint rs, gin
 void nr_render_rgba32_rgb (guchar *px, gint w, gint h, gint rs, gint xoff, gint yoff, guint32 c);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif

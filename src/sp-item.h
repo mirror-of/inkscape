@@ -172,7 +172,7 @@ gdouble sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const 
 gdouble sp_item_distance_to_svg_bbox (SPItem *item, gdouble distance, const SPUnit *unit);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

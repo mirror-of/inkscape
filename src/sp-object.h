@@ -214,7 +214,7 @@ const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, c
 SPVersion sp_object_get_sodipodi_version (SPObject *object);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

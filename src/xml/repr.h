@@ -206,7 +206,7 @@ unsigned int   p_repr_overwrite     (SPRepr             *repr,
 				     const  gchar       *key);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif

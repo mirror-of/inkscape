@@ -51,7 +51,7 @@ SPRepr * sp_xmlview_tree_node_get_repr (SPXMLViewTree * tree, GtkCTreeNode * nod
 GtkCTreeNode * sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * repr);
 
 #ifdef __cplusplus
-};
+}
 #endif // __cplusplus
 
 #endif
