@@ -253,14 +253,15 @@ void sp_selection_group()
 		sp_repr_unparent (current);
 		sp_repr_append_child (group, spnew);
 		sp_repr_unref (spnew);
+		topmost --;
 		p = g_slist_remove (p, current);
 	}
 
 	// add the new group to the group members' common parent
 	sp_repr_append_child (parent, group);
 
-	// move to the position of the topmost
-	sp_repr_set_position_absolute (group, topmost > 1 ? topmost - 1 : 0);
+	// move to the position of the topmost, reduced by the number of deleted items
+	sp_repr_set_position_absolute (group, topmost > 0 ? topmost + 1 : 0);
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
