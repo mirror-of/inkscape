@@ -1,3 +1,10 @@
+2004-10-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/display/curve.cpp (sp_curve_reverse): Fix a bug where the
+	  reversed curve wrongly included a trailing moveto command.  (Bug
+	  introduced in my 2004-09-05 change: one of the callers I didn't
+	  know how to cause to run.)
+
 2004-10-12  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/ai_input.inkmod, share/extensions/ai_output.inkmod,
@@ -186,7 +193,7 @@
 	  move Inkscape::GC::init out-of-line, and funnel GC warnings through
 	  glib
 
-2004-09-21  Peter Moulder  <pmoulder@river>
+2004-09-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-marker.h, src/sp-marker.cpp (sp_marker_show_instance):
 	  Change to using NR::Matrix instead of NRMatrix.  Update caller.
@@ -201,7 +208,7 @@
 	* src/libnr/nr-matrix-scale-ops.h (operator/(Matrix,scale)):
 	  New function.
 
-2004-09-20  Peter Moulder  <pmoulder@bowman.csse.monash.edu.au>
+2004-09-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-gradient.h: Change gradientTransform from NRMatrix to
 	  NR::Matrix.  Users updated.

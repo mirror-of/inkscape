@@ -699,13 +699,16 @@ sp_curve_reverse(SPCurve const *curve)
     SPCurve  *new_curve = sp_curve_new_sized(curve->length);
     sp_curve_moveto(new_curve, be->c(3));
 
-    for (NArtBpath const *bp = be;;) {
+    for (NArtBpath const *bp = be; ; --bp) {
         switch (bp->code) {
             case NR_MOVETO:
                 g_assert(new_curve->bpath[new_curve->substart].code == NR_MOVETO_OPEN);
                 new_curve->bpath[new_curve->substart].code = NR_MOVETO;
                 /* FALL-THROUGH */
             case NR_MOVETO_OPEN:
+                if (bp == curve->bpath) {
+                    return new_curve;
+                }
                 sp_curve_moveto(new_curve, (bp-1)->c(3));
                 break;
 
@@ -717,17 +720,10 @@ sp_curve_reverse(SPCurve const *curve)
                 sp_curve_curveto(new_curve, bp->c(2), bp->c(1), (bp-1)->c(3));
                 break;
 
-            case NR_END:
+            default:
                 g_assert_not_reached();
         }
-
-        if (bp == curve->bpath) {
-            break;
-        }
-        --bp;
     }
-
-    return new_curve;
 }
 
 void
