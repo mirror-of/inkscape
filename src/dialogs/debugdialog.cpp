@@ -232,6 +232,9 @@ void DebugDialog::showInstance()
 }
 
 
+
+
+/*##### THIS IS THE IMPORTANT PART ##### */
 void dialogLoggingFunction(const gchar *log_domain,
                            GLogLevelFlags log_level,
                            const gchar *messageText,
@@ -246,6 +249,11 @@ void dialogLoggingFunction(const gchar *log_domain,
 
 void DebugDialogImpl::captureLogMessages()
 {
+    /*
+    This might likely need more code, to capture Gtkmm
+    and Glibmm warnings, or maybe just simply grab stdout/stderr
+    */
+
     if ( !dialogHandler )
         {
         dialogHandler = g_log_set_handler(NULL,
