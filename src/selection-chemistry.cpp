@@ -187,11 +187,9 @@ void sp_edit_select_all()
     if (!dt)
         return;
 
-    SPDocument *doc = SP_DT_DOCUMENT(dt);
-    SPSelection *selection = SP_DT_SELECTION(dt);
-
     g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
     GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
+    SPSelection *selection = SP_DT_SELECTION(dt);
     while (items) {
         SPRepr *repr = SP_OBJECT_REPR(items->data);
         if (!selection->includesRepr(repr))
