@@ -126,7 +126,6 @@ sp_root_init (SPRoot *root)
 
 	nr_matrix_set_identity (&root->c2p);
 
-	/* root->namedviews = NULL; */
 	root->defs = NULL;
 }
 
@@ -189,10 +188,6 @@ sp_root_release (SPObject *object)
 	root = (SPRoot *) object;
 
 	root->defs = NULL;
-#if 0
-	g_slist_free (root->namedviews);
-	root->namedviews = NULL;
-#endif
 
 	if (((SPObjectClass *) parent_class)->release)
 		((SPObjectClass *) parent_class)->release (object);
@@ -403,11 +398,6 @@ sp_root_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	co = sp_document_lookup_id (object->document, id);
 	g_assert (co != NULL);
 
-#if 0
-	if (SP_IS_NAMEDVIEW (co)) {
-		root->namedviews = g_slist_append (root->namedviews, co);
-	}
-#endif
 	if (SP_IS_DEFS (co)) {
 		SPObject *c;
 		/* We search for first <defs> node - it is not beautiful, but works */
@@ -437,11 +427,6 @@ sp_root_remove_child (SPObject * object, SPRepr * child)
 	co = sp_document_lookup_id (object->document, id);
 	g_assert (co != NULL);
 
-#if 0
-	if (SP_IS_NAMEDVIEW (co)) {
-		root->namedviews = g_slist_remove (root->namedviews, co);
-	}
-#endif
 	if (SP_IS_DEFS (co) && root->defs == (SPDefs *) co) {
 		SPObject *c;
 		/* We search for next <defs> node - it is not beautiful, but works */

@@ -49,9 +49,6 @@ struct _SPRoot {
 	/* Child to parent additional transform */
 	NRMatrix c2p;
 
-	/* List of namedviews */
-	/* fixme: use single container instead */
-	/* GSList *namedviews; */
 	/* Root-level <defs> node */
 	SPDefs *defs;
 };

@@ -385,10 +385,6 @@ sp_spiral_set_shape (SPShape *shape)
 
 	sp_object_request_modified (SP_OBJECT (spiral), SP_OBJECT_MODIFIED_FLAG);
 
-#if 0
-	if (spiral->rad < SP_EPSILON) return;
-#endif
-	
 	c = sp_curve_new ();
 	
 #ifdef SPIRAL_VERBOSE
@@ -456,35 +452,8 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 static int
 sp_spiral_snappoints (SPItem *item, NRPoint *p, int size)
 {
-#if 0
-	/* fixme: (Lauris) */
-	SPSpiral *spiral;
-	ArtPoint * p, p1, p2, p3;
-	gdouble affine[6];
-	
-	spiral = SP_SPIRAL(item);
-	
-	sp_spiral_get_xy (spiral, 0.0, &p1);
-	sp_spiral_get_xy (spiral, spiral->t0, &p2);
-	sp_spiral_get_xy (spiral, 1.0, &p3);
-	
-	sp_item_i2d_affine (item, affine);
-	
-	p = g_new (ArtPoint,1);
-	art_affine_point (p, &p1, affine);
-	points = g_slist_append (points, p);
-	
-	p = g_new (ArtPoint,1);
-	art_affine_point (p, &p2, affine);
-	points = g_slist_append (points, p);
-	
-	p = g_new (ArtPoint,1);
-	art_affine_point (p, &p3, affine);
-	points = g_slist_append (points, p);
-#else
 	if (((SPItemClass *) parent_class)->snappoints)
 		return ((SPItemClass *) parent_class)->snappoints (item, p, size);
-#endif
 	
 	return 0;
 }

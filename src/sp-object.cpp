@@ -716,17 +716,6 @@ sp_object_invoke_modified (SPObject *object, unsigned int flags)
 	g_object_ref (G_OBJECT (object));
 	g_signal_emit (G_OBJECT (object), object_signals[MODIFIED], 0, flags);
 	g_object_unref (G_OBJECT (object));
-
-#if 0
-	/* If style is modified, invoke style_modified virtual method */
-	/* It is pure convenience, and should be used with caution */
-	/* The cascade is created solely by modified method plus appropriate flag */
-	/* Also, it merely signals, that actual style object has changed */
-	if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-		if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->style_modified)
-			(*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->style_modified) (object, flags);
-	}
-#endif
 }
 
 /* Sequence */

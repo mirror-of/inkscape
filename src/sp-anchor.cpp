@@ -214,9 +214,6 @@ sp_anchor_event (SPItem *item, SPEvent *event)
 	case SP_EVENT_ACTIVATE:
 		if (anchor->href) {
 			g_print ("Activated xlink:href=\"%s\"\n", anchor->href);
-#if 0
-			gnome_url_show (anchor->href, NULL);
-#endif
 			return TRUE;
 		}
 		break;

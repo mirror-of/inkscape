@@ -125,9 +125,7 @@ static void sp_style_read_ilength (SPILength *val, const gchar *str);
 static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
 static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 
-#if 0
 static void sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key);
-#endif
 static void sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit);
 static void sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key);
 static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key);
@@ -900,12 +898,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 		}
 	} else if (style->font_size.type == SP_FONT_SIZE_PERCENTAGE) {
 		/* fixme: SVG and CSS do no specify clearly, whether we should use parent or viewport values here (Lauris) */
-#if 0
-		g_print ("Parent %g PC %g own %g\n",
-			 parent->font_size.computed,
-			 SP_F8_16_TO_FLOAT (style->font_size.value),
-			 style->font_size.computed);
-#endif
+		/* it says the parent's. --mental */
 		style->font_size.computed = parent->font_size.computed * SP_F8_16_TO_FLOAT (style->font_size.value);
 	}
 	/* 'font-style' */
@@ -1738,7 +1731,6 @@ sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
 	}
 }
 
-#if 0
 static void
 sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key)
 {
@@ -1748,7 +1740,6 @@ sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key)
 		sp_style_read_ifloat (val, str);
 	}
 }
-#endif
 
 static void
 sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit)

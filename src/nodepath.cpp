@@ -2509,10 +2509,6 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 		      "fill_mouseover", NODE_FILL_HI,
 		      "stroke", NODE_STROKE,
 		      "stroke_mouseover", NODE_STROKE_HI,
-#if 0
-		      "cursor_mouseover", CursorNodeMouseover,
-		      "cursor_dragging", CursorNodeDragging,
-#endif
 		      NULL);
 	if (n->type == SP_PATHNODE_CUSP) {
 		g_object_set (G_OBJECT (n->knot), "shape", SP_KNOT_SHAPE_DIAMOND, "size", 9, NULL);
@@ -2536,10 +2532,6 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 		      "fill_mouseover", KNOT_FILL_HI,
 		      "stroke", KNOT_STROKE,
 		      "stroke_mouseover", KNOT_STROKE_HI,
-#if 0
-		      "cursor_mouseover", CursorNodeMouseover,
-		      "cursor_dragging", CursorNodeDragging,
-#endif
 		      NULL);
 	g_signal_connect (G_OBJECT (n->p.knot), "clicked", G_CALLBACK (node_ctrl_clicked), n);
 	g_signal_connect (G_OBJECT (n->p.knot), "grabbed", G_CALLBACK (node_ctrl_grabbed), n);
@@ -2563,10 +2555,6 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 		      "fill_mouseover", KNOT_FILL_HI,
 		      "stroke", KNOT_STROKE,
 		      "stroke_mouseover", KNOT_STROKE_HI,
-#if 0
-		      "cursor_mouseover", CursorNodeMouseover,
-		      "cursor_dragging", CursorNodeDragging,
-#endif
 		      NULL);
 	g_signal_connect (G_OBJECT (n->n.knot), "clicked", G_CALLBACK (node_ctrl_clicked), n);
 	g_signal_connect (G_OBJECT (n->n.knot), "grabbed", G_CALLBACK (node_ctrl_grabbed), n);

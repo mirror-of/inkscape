@@ -32,9 +32,6 @@ static void sp_arc_context_class_init (SPArcContextClass *klass);
 static void sp_arc_context_init (SPArcContext *arc_context);
 static void sp_arc_context_dispose (GObject *object);
 
-#if 0
-static void sp_arc_context_setup (SPEventContext *ec);
-#endif
 static gint sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_arc_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
@@ -76,9 +73,6 @@ sp_arc_context_class_init (SPArcContextClass *klass)
 
 	object_class->dispose = sp_arc_context_dispose;
 
-#if 0
-	event_context_class->setup = sp_arc_context_setup;
-#endif
 	event_context_class->root_handler = sp_arc_context_root_handler;
 	event_context_class->item_handler = sp_arc_context_item_handler;
 }
@@ -109,15 +103,6 @@ sp_arc_context_dispose (GObject *object)
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
-
-#if 0
-static void
-sp_arc_context_setup (SPEventContext *ec)
-{
-	if (SP_EVENT_CONTEXT_CLASS (parent_class)->setup)
-		SP_EVENT_CONTEXT_CLASS (parent_class)->setup (event_context, desktop);
-}
-#endif
 
 static gint
 sp_arc_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event)

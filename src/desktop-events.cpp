@@ -421,10 +421,6 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		gtk_box_pack_start (GTK_BOX (b4), u, FALSE, FALSE, 0);
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (u), sp_unit_get_identity (SP_UNIT_ABSOLUTE));
 		sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (u), GTK_ADJUSTMENT (a));
-#if 0
-		gtk_signal_connect_while_alive (GTK_OBJECT (u), "set_unit", GTK_SIGNAL_FUNC (guide_dialog_unit_changed), 
-						guide , GTK_OBJECT(u));
-#endif
 		// dialog
 		gtk_dialog_set_default_response (GTK_DIALOG (d), GTK_RESPONSE_OK);
 		gtk_signal_connect (GTK_OBJECT(d), "response", GTK_SIGNAL_FUNC(guide_dialog_response), &g);

@@ -340,26 +340,17 @@ sp_svg_view_widget_init (SPSVGViewWidget *vw)
 	gtk_widget_push_visual (gdk_rgb_get_visual ());
 	gtk_widget_push_colormap (gdk_rgb_get_cmap ());
 	vw->canvas = sp_canvas_new_aa ();
-#if 0
-	sp_canvas_set_dither (SP_CANVAS (vw->canvas), GDK_RGB_DITHER_MAX);
-#endif
 	gtk_widget_pop_colormap ();
 	gtk_widget_pop_visual ();
 	style = gtk_style_copy (vw->canvas->style);
 	style->bg[GTK_STATE_NORMAL] = style->white;
 	gtk_widget_set_style (vw->canvas, style);
-#if 0
-	sp_canvas_set_scroll_region (SP_CANVAS (vw->canvas), 0, 0, 200, 200);
-#endif
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (vw->sw), vw->canvas);
 	gtk_widget_show (vw->canvas);
 
 	/* View */
 	parent = sp_canvas_item_new (sp_canvas_root (SP_CANVAS (vw->canvas)), SP_TYPE_CANVAS_GROUP, NULL);
 	view = sp_svg_view_new (SP_CANVAS_GROUP (parent));
-#if 0
-	sp_svg_view_set_rescale (SP_SVG_VIEW (view), TRUE, TRUE, 200.0, 200.0);
-#endif
 	sp_view_widget_set_view (SP_VIEW_WIDGET (vw), view);
 	g_object_unref (G_OBJECT (view));
 }
@@ -439,13 +430,6 @@ sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, 
 	SPSVGViewWidget *svgvw;
 
 	svgvw = SP_SVG_VIEW_WIDGET (vw);
-
-	if (svgvw->canvas) {
-#if 0
-		g_print ("set scroll %g %g\n", width, height);
-		sp_canvas_set_scroll_region (SP_CANVAS (svgvw->canvas), 0, 0, MAX (width, 1.0), MAX (height, 1.0));
-#endif
-	}
 
 	if (svgvw->resize) {
 		gtk_widget_set_usize (svgvw->canvas, (int)width, (int)height);

@@ -552,10 +552,6 @@ sp_sel_trans_update_handles (SPSelTrans * seltrans)
 			  //"stroke", 0xFFb0b0ff,
 			  //"stroke_mouseover", 0xffffffFF,
 			"pixbuf", handles[handle_center.control],
-#if 0
-			"cursor_mouseover", CursorSelectMouseover,
-			"cursor_dragging", CursorSelectDragging,
-#endif
 			NULL);
 	  g_signal_connect (G_OBJECT (seltrans->chandle), "request",
 			    G_CALLBACK (sp_sel_trans_handle_request), (gpointer) &handle_center);
@@ -635,10 +631,6 @@ sp_show_handles (SPSelTrans * seltrans, SPKnot * knot[], const SPSelTransHandle 
 					//"stroke", 0xFFFFFFff,
 					//"stroke_mouseover", 0xb0b0b0FF,
 					"pixbuf", handles[handle[i].control],
-#if 0
-					"cursor_mouseover", CursorSelectMouseover,
-					"cursor_dragging", CursorSelectDragging,
-#endif
 					NULL);
 
 			g_signal_connect (G_OBJECT (knot[i]), "request",

@@ -343,20 +343,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	/* Push select tool to the bottom of stack */
 	sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
-// looks like display rect and zoom are now handled in sp_desktop_widget_realize(), 
-// so they are commented out here and may be removed if no problems are discovered
-#if 0
- 	/* fixme: Setup display rectangle */
- 	dw = sp_document_width (document);
- 	dh = sp_document_height (document);
-
- 	/* Fixme: Setup initial zooming */
- 	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), 1.0, -1.0);
- 	desktop->d2w[5] = dh;
- 	nr_matrix_invert (NR_MATRIX_D_FROM_DOUBLE (desktop->w2d), NR_MATRIX_D_FROM_DOUBLE (desktop->d2w));
- 	sp_canvas_item_affine_absolute ((SPCanvasItem *) desktop->main, desktop->d2w);
-#endif
-
+	// display rect and zoom are now handled in sp_desktop_widget_realize(), 
 	/* desktop->page = sp_canvas_item_new (page, SP_TYPE_CTRLRECT, NULL); */
 	sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
 	sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page), 5, 0x3f3f3fff);
@@ -987,23 +974,13 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
 void
 sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw)
 {
-#if 0
-	gtk_widget_set_sensitive (dtw->hruler, TRUE);
-	gtk_widget_set_sensitive (dtw->vruler, TRUE);
-	gtk_widget_set_sensitive (dtw->hscrollbar, TRUE);
-	gtk_widget_set_sensitive (dtw->vscrollbar, TRUE);
-#endif
+	/* update active desktop indicator */
 }
 
 void
 sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
 {
-#if 0
-	gtk_widget_set_sensitive (dtw->hruler, FALSE);
-	gtk_widget_set_sensitive (dtw->vruler, FALSE);
-	gtk_widget_set_sensitive (dtw->hscrollbar, FALSE);
-	gtk_widget_set_sensitive (dtw->vscrollbar, FALSE);
-#endif
+	/* update inactive desktop indicator */
 }
 
 static gboolean
@@ -1214,9 +1191,6 @@ sp_desktop_widget_set_focus (GtkWidget *widget, GdkEvent *event, SPDesktopWidget
 
 	/* give focus to canvas widget */
 	gtk_widget_grab_focus (GTK_WIDGET (dtw->canvas));
-#if 0
-	sp_canvas_item_grab_focus ((SPCanvasItem *) dtw->desktop->main); 
-#endif
 
 	return FALSE;
 }

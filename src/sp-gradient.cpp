@@ -862,17 +862,11 @@ sp_gradient_ensure_colors (SPGradient *gr)
 			g = g0 << 16;
 			b = b0 << 16;
 			a = a0 << 16;
-#if 0
-			g_print ("from %d to %d: %x %x %x %x\n", o0, o1, dr, dg, db, da);
-#endif
 			for (j = o0; j < o1 + 1; j++) {
 				gr->color[4 * j] = r >> 16;
 				gr->color[4 * j + 1] = g >> 16;
 				gr->color[4 * j + 2] = b >> 16;
 				gr->color[4 * j + 3] = a >> 16;
-#if 0
-				g_print ("%x\n", gr->color[j]);
-#endif
 				r += dr;
 				g += dg;
 				b += db;

@@ -37,9 +37,6 @@
 
 static void sp_text_context_class_init (SPTextContextClass * klass);
 static void sp_text_context_init (SPTextContext * text_context);
-#if 0
-static void sp_text_context_dispose (GObject *object);
-#endif
 
 static void sp_text_context_setup (SPEventContext *ec);
 static void sp_text_context_finish (SPEventContext *ec);
@@ -92,11 +89,6 @@ sp_text_context_class_init (SPTextContextClass * klass)
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
-#if 0
-	/* If dispose is invoked before ::finish this is bug */
-	object_class->dispose = sp_text_context_dispose;
-#endif
-
 	event_context_class->setup = sp_text_context_setup;
 	event_context_class->finish = sp_text_context_finish;
 	event_context_class->root_handler = sp_text_context_root_handler;
@@ -132,15 +124,6 @@ sp_text_context_init (SPTextContext *tc)
 
 	tc->preedit_string = NULL;
 }
-
-#if 0
-static void
-sp_text_context_dispose (GObject *object)
-{
-	sp_text_context_finalize (SP_TEXT_CONTEXT (object));
-	G_OBJECT_CLASS (parent_class)->dispose (object);
-}
-#endif
 
 static void
 sp_text_context_setup (SPEventContext *ec)

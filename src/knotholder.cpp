@@ -116,6 +116,7 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 			  fabs(p1.y - p2.y) < KH_EPSILON);
 	}
 #endif
+
 	/* create new SPKnotHolderEntry */
 	e = g_new (SPKnotHolderEntity, 1);
 	e->knot = sp_knot_new (knot_holder->desktop);

@@ -315,11 +315,7 @@ sp_anchor_link_follow (GtkMenuItem *menuitem, SPAnchor *anchor)
 	g_return_if_fail (anchor != NULL);
 	g_return_if_fail (SP_IS_ANCHOR (anchor));
 
-#if 0
-	if (anchor->href) {
-		gnome_url_show (anchor->href, NULL);
-	}
-#endif
+	/* shell out to an external browser here */
 }
 
 static void
@@ -333,9 +329,6 @@ sp_anchor_link_remove (GtkMenuItem *menuitem, SPAnchor *anchor)
 	children = NULL;
 	sp_item_group_ungroup (SP_GROUP (anchor), &children);
 
-#if 0
-	sp_selection_set_item_list (SP_DT_SELECTION (desktop), children);
-#endif
 	g_slist_free (children);
 }
 

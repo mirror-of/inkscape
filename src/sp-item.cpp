@@ -310,20 +310,19 @@ sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
 			}
 		}
 
-		SPObject *clip=( item->clip_ref ? item->clip_ref->getObject() : NULL );
-		SPObject *mask=( item->mask_ref ? item->mask_ref->getObject() : NULL );
-
-		if ( clip || mask ) {
+		if ( item->clip_ref->getObject() ||
+		     item->mask_ref->getObject() )
+		{
 			NRRect bbox;
 			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
-			if (clip) {
+			if (item->clip_ref->getObject()) {
 				for (v = item->display; v != NULL; v = v->next) {
-					sp_clippath_set_bbox (SP_CLIPPATH (clip), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
+					sp_clippath_set_bbox (SP_CLIPPATH (item->clip_ref->getObject()), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
 				}
 			}
-			if (mask) {
+			if (item->mask_ref->getObject()) {
 				for (v = item->display; v != NULL; v = v->next) {
-					sp_mask_set_bbox (SP_MASK (mask), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
+					sp_mask_set_bbox (SP_MASK (item->mask_ref->getObject()), NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
 				}
 			}
 		}
@@ -511,14 +510,14 @@ sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned in
 		if (flags & SP_ITEM_SHOW_PRINT) {
 			nr_arena_item_set_visible (ai, item->printable);
 		}
-		if ( item->clip_ref && item->clip_ref->getObject() ) {
+		if (item->clip_ref->getObject()) {
 			NRArenaItem *ac;
 			if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY (item->display->arenaitem, sp_item_display_key_new (3));
 			ac = sp_clippath_show (SP_CLIPPATH (item->clip_ref->getObject()), arena, NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
 			nr_arena_item_set_clip (ai, ac);
 			nr_arena_item_unref (ac);
 		}
-		if ( item->mask_ref && item->mask_ref->getObject() ) {
+		if (item->mask_ref->getObject()) {
 			NRArenaItem *ac;
 			if (!item->display->arenaitem->key) NR_ARENA_ITEM_SET_KEY (item->display->arenaitem, sp_item_display_key_new (3));
 			ac = sp_mask_show (SP_MASK (item->mask_ref->getObject()), arena, NR_ARENA_ITEM_GET_KEY (item->display->arenaitem));
@@ -547,11 +546,11 @@ sp_item_invoke_hide (SPItem *item, unsigned int key)
 	while (v != NULL) {
 		next = v->next;
 		if (v->key == key) {
-			if ( item->clip_ref && item->clip_ref->getObject() ) {
+			if (item->clip_ref->getObject()) {
 				sp_clippath_hide (SP_CLIPPATH (item->clip_ref->getObject()), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
 				nr_arena_item_set_clip (v->arenaitem, NULL);
 			}
-			if ( item->mask_ref && item->mask_ref->getObject() ) {
+			if (item->mask_ref->getObject()) {
 				sp_mask_hide (SP_MASK (item->mask_ref->getObject()), NR_ARENA_ITEM_GET_KEY (v->arenaitem));
 				nr_arena_item_set_mask (v->arenaitem, NULL);
 			}

@@ -391,12 +391,9 @@ inkscape_segv_handler (int signum)
 			const gchar *docname, *d0, *d;
 			gchar n[64], c[1024];
 			FILE *file;
-#if 0
-			docname = sp_repr_attr (repr, "sodipodi:docname");
-			if (docname) {
-				docname = g_basename (docname);
-			}
-#else
+
+			/* originally, the document name was retrieved from
+			 * the sodipod:docname attribute */
 			docname = doc->name;
 			if (docname) {
 				/* fixme: Quick hack to remove emergency file suffix */
@@ -414,7 +411,7 @@ inkscape_segv_handler (int signum)
 					}
 				}
 			}
-#endif
+
 			if (!docname || !*docname) docname = "emergency";
 			g_snprintf (c, 1024, "%s/.inkscape/%.256s.%s.%d", home, docname, sptstr, count);
 			file = fopen (c, "w");
