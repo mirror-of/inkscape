@@ -21,7 +21,7 @@ public:
 	void replayOne() const { return _replayOne(); }
 
 protected:
-	SPReprAction(SPRepr *r, SPReprAction *n=NULL)
+	SPReprAction(SPRepr *r, SPReprAction *n)
 	: next(n), serial(_next_serial++), repr(r) {}
 
 	virtual SPReprAction *_optimizeOne()=0;
@@ -36,7 +36,7 @@ class SPReprActionAdd : public SPReprAction {
 public:
 	SPReprActionAdd(SPRepr *repr,
 			SPRepr *c, SPRepr *rr,
-			SPReprAction *next=NULL)
+			SPReprAction *next)
 	: SPReprAction(repr, next), child(c), ref(rr) {}
 
 	SPRepr *child;
@@ -53,7 +53,7 @@ class SPReprActionDel : public SPReprAction {
 public:
 	SPReprActionDel(SPRepr *repr,
 			SPRepr *c, SPRepr *rr,
-			SPReprAction *next=NULL)
+			SPReprAction *next)
 	: SPReprAction(repr, next), child(c), ref(rr) {}
 
 	SPRepr *child;
@@ -70,7 +70,7 @@ public:
 	SPReprActionChgAttr(SPRepr *repr, GQuark k,
 			    Inkscape::Util::SharedCString ov,
                             Inkscape::Util::SharedCString nv,
-                            SPReprAction *next=NULL)
+                            SPReprAction *next)
 	: SPReprAction(repr, next), key(k),
 	  oldval(ov), newval(nv) {}
 
@@ -89,7 +89,7 @@ public:
 	SPReprActionChgContent(SPRepr *repr,
                                Inkscape::Util::SharedCString ov,
                                Inkscape::Util::SharedCString nv,
-                               SPReprAction *next=NULL)
+                               SPReprAction *next)
 	: SPReprAction(repr, next), oldval(ov), newval(nv) {}
 
 	Inkscape::Util::SharedCString oldval;
@@ -105,7 +105,7 @@ class SPReprActionChgOrder : public SPReprAction {
 public:
 	SPReprActionChgOrder(SPRepr *repr, SPRepr *c,
 			     SPRepr *orr, SPRepr *nrr,
-			     SPReprAction *next=NULL)
+			     SPReprAction *next)
 	: SPReprAction(repr, next), child(c),
 	  oldref(orr), newref(nrr) {}
 

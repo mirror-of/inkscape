@@ -1,3 +1,11 @@
+2004-08-23  MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr.cpp, src/xml/sp-repr-action.h:
+
+	  removed stupid default 'next' constructor arguments and force them
+	  to be specified explicitly (and fix the omission of one, which
+	  fixes bug #1014541)
+
 2004-08-22  MenTaLguY <mental@rydia.net>
 
 	* src/Makefile_insert, src/gc-alloc.h:

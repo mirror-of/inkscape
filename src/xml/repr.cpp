@@ -332,7 +332,7 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
             }
         }
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = (new SPReprActionChgAttr(repr, q, oldval, attr->value))->optimizeOne();
+            repr->doc->log = (new SPReprActionChgAttr(repr, q, oldval, attr->value, repr->doc->log))->optimizeOne();
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
