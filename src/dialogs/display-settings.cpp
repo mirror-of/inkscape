@@ -935,24 +935,16 @@ sp_display_dialog (void)
             gtk_container_add (GTK_CONTAINER (vb_shapes), nb_shapes);
 
             // Rect
-            {
-                GtkWidget *vb_tool = new_tab (nb_shapes, _("Rect"));
-            }
+            new_tab(nb_shapes, _("Rect"));
 
             // Ellipse
-            {
-                GtkWidget *vb_tool = new_tab (nb_shapes, _("Ellipse"));
-            }
+            new_tab(nb_shapes, _("Ellipse"));
 
             // Star
-            {
-                GtkWidget *vb_tool = new_tab (nb_shapes, _("Star"));
-            }
+            new_tab(nb_shapes, _("Star"));
 
             // Spiral
-            {
-                GtkWidget *vb_tool = new_tab (nb_shapes, _("Spiral"));
-            }
+            new_tab(nb_shapes, _("Spiral"));
 
             // common for all shapes
             selcue_checkbox (vb_shapes, tt, "tools.shapes");
