@@ -13,7 +13,8 @@
  */
 
 
-#include "InkscapeStream.h"
+#include "inkscapestream.h"
+
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
 

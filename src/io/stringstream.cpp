@@ -11,7 +11,7 @@
  */
 
 
-#include "StringStream.h"
+#include "stringstream.h"
 
 namespace Inkscape
 {

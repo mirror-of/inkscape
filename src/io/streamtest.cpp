@@ -2,11 +2,11 @@
 
 #include <stdio.h>
 
-#include "InkscapeStream.h"
-#include "GzipStream.h"
-#include "StringStream.h"
-#include "UriStream.h"
-#include "XsltStream.h"
+#include "inkscapestream.h"
+#include "gzipstream.h"
+#include "stringstream.h"
+#include "uristream.h"
+#include "xsltstream.h"
 
 bool testUriStream()
 {
@@ -31,6 +31,17 @@ bool testWriter()
    writer << "Hello, world!  " << 123.45 << " times\n";
 
    writer.printf("There are %f quick brown foxes in %d states\n", 123.45, 88);
+   return true;
+}
+
+bool testWriter2()
+{
+   Inkscape::IO::StdWriter writer;
+   
+   writer << "Hello, world!  " << 123.45 << " times\n";
+
+   writer.printf("There are %f quick brown foxes in %d states\n", 123.45, 88);
+
    return true;
 }
 
@@ -100,12 +111,11 @@ bool testGzip()
 
 bool doTest()
 {
-   /*
    if (!testUriStream())
        {
        return false;
        }
-   if (!testWriter())
+   if (!testWriter2())
        {
        return false;
        }
@@ -113,7 +123,6 @@ bool doTest()
        {
        return false;
        }
-   */
    if (!testGzip())
        {
        return false;

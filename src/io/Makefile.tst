@@ -21,16 +21,17 @@ CFLAGS = -g $(GLIBMM_CFLAGS) $(XSLT_CFLAGS)
 LIBS   = $(GLIBMM_LIBS) $(XSLT_LIBS) ../uri.o -lz
 
 OBJ = \
-InkscapeStream.o \
-GzipStream.o \
-StringStream.o \
-UriStream.o \
-XsltStream.o \
+inkscapestream.o \
+base64stream.o \
+gzipstream.o \
+stringstream.o \
+uristream.o \
+xsltstream.o \
 ftos.o
 
 all: streamtest
 
-streamtest: InkscapeStream.h libstream.a streamtest.o 
+streamtest: inkscapestream.h libstream.a streamtest.o 
 	$(CXX) -o streamtest streamtest.o libstream.a $(LIBS)
 
 libstream.a: $(OBJ)

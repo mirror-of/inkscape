@@ -2,7 +2,8 @@
 #define __INKSCAPE_IO_STRINGSTREAM_H__
 
 #include <glibmm.h>
-#include "InkscapeStream.h"
+
+#include "inkscapestream.h"
 
 
 namespace Inkscape

@@ -434,7 +434,7 @@ public:
     virtual void put(gunichar ch) = 0;
     
     /* Formatted output */
-    virtual Writer &printf(char *fmt, ...) = 0;
+    virtual Writer& printf(char *fmt, ...) = 0;
 
     virtual Writer& writeChar(char val) = 0;
 

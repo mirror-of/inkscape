@@ -15,7 +15,7 @@
 
 #include <uri.h>
 
-#include "InkscapeStream.h"
+#include "inkscapestream.h"
 
 
 namespace Inkscape

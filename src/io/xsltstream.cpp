@@ -10,8 +10,8 @@
  */
 
 
-#include "XsltStream.h"
-#include "StringStream.h"
+#include "xsltstream.h"
+#include "stringstream.h"
 
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>

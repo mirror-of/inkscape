@@ -12,7 +12,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include "GzipStream.h"
+
+#include "gzipstream.h"
 
 #include  <zlib.h>
 

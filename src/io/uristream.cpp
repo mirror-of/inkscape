@@ -11,7 +11,8 @@
  */
 
 
-#include "UriStream.h"
+#include "uristream.h"
+
 
 namespace Inkscape
 {

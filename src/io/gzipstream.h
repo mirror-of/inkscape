@@ -3,8 +3,9 @@
 /**
  * Zlib-enabled input and output streams
  *
- * This is a thin wrapper of 'gzstreams', to
- * allow our customizations.
+ * This is a thin wrapper of libz calls, in order
+ * to provide a simple interface to our developers
+ * for gzip input and output.
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
@@ -15,7 +16,7 @@
  */
 
 
-#include "InkscapeStream.h"
+#include "inkscapestream.h"
 
 namespace Inkscape
 {

@@ -13,7 +13,7 @@
 
 #include <stdarg.h>
 
-#include "InkscapeStream.h"
+#include "inkscapestream.h"
 #include "ftos.h"
 
 namespace Inkscape
