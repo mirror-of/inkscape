@@ -73,7 +73,7 @@ void            text_wrapper::AppendUTF8(char* text,int len)
 {
 	if ( utf8_length <= 0 ) {
 		if ( text[0] == '\n' || text[0] == '\r' ) {
-			printf("string starts with a return: gonna eat it\n");
+			//printf("string starts with a return: gonna eat it\n");
 			if ( len > 0 ) {
 				while ( len > 0 && ( *text == '\n' || *text == '\r' ) ) {text++;len--;}
 			} else {
