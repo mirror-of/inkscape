@@ -27,6 +27,8 @@
 #include "desktop.h"
 #include "splivarot.h"
 #include "helper/canvas-bpath.h"
+#include "view.h"
+#include "prefs-utils.h"
 
 #include "xml/repr.h"
 #include "xml/repr-private.h"
@@ -36,14 +38,15 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
-Path *Path_for_item (SPItem * item);
-gchar *liv_svg_dump_path (Path * path);
+Path   *Path_for_item (SPItem * item);
+gchar  *liv_svg_dump_path (Path * path);
+SPRepr *LCA (SPRepr * a, SPRepr * b);
+bool   Ancetre (SPRepr * a, SPRepr * who);
+SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
+
 void sp_selected_path_boolop (bool_op bop);
 void sp_selected_path_do_offset (bool expand);
 void sp_selected_path_create_offset_object (bool expand,bool updating);
-SPRepr *LCA (SPRepr * a, SPRepr * b);
-bool Ancetre (SPRepr * a, SPRepr * who);
-SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
 
 void
 sp_selected_path_union ()
@@ -87,15 +90,16 @@ sp_selected_path_boolop (bool_op bop)
 
   il = (GSList *) sp_selection_item_list (selection);
 
-  if (g_slist_length (il) < 2)
-    return;
+  if (g_slist_length (il) < 2) {
+    sp_view_set_statusf_error(SP_VIEW(desktop),"Select at least 2 path before you make a boolean operation");
+   return;
+  }
 
   if (g_slist_length (il) > 2)
     {
       if (bop == bool_op_diff || bop == bool_op_symdiff)
 	{
-	  g_warning
-	    ("Difference and symetric difference need exactly 2 path");
+	  sp_view_set_statusf_error(SP_VIEW(desktop),"Difference and symetric difference need exactly 2 path");
 	  return;
 	}
     }
@@ -109,8 +113,7 @@ sp_selected_path_boolop (bool_op bop)
       SPRepr *b = SP_OBJECT_REPR (il->next->data);
       if (a == NULL || b == NULL)
 	{
-	  g_warning
-	    ("unable to determine z-order of the objects involved in the difference");
+	  sp_view_set_statusf_error(SP_VIEW(desktop),"unable to determine z-order of the objects involved in the difference");
 	  return;
 	}
       if (Ancetre (a, b))
@@ -126,8 +129,7 @@ sp_selected_path_boolop (bool_op bop)
 	  SPRepr *dad = LCA (a, b);
 	  if (dad == NULL)
 	    {
-	      g_warning
-		("unable to determine z-order of the objects involved in the difference");
+	  sp_view_set_statusf_error(SP_VIEW(desktop),"unable to determine z-order of the objects involved in the difference");
 	      return;
 	    }
 	  SPRepr *as = AncetreFils (a, dad);
@@ -153,7 +155,8 @@ sp_selected_path_boolop (bool_op bop)
       item = (SPItem *) l->data;
       if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
 	{
-	  g_warning ("one of the objects is not a path");
+	  sp_view_set_statusf_error(SP_VIEW(desktop),"Boolean operation impossible: one of the objects is not a path");
+	  g_slist_free (il);
 	  return;
 	}
     }
@@ -343,138 +346,6 @@ sp_selected_path_boolop (bool_op bop)
   sp_selection_set_item (selection, item);
 }
 
-
-Path *
-Path_for_item (SPItem * item)
-{
-  SPCurve *curve;
-
-  if (!item)
-    return NULL;
-
-  if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-    }
-  else if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-    }
-  else
-    {
-      curve = NULL;
-    }
-
-  if (!curve)
-    return NULL;
-  ArtBpath *bpath = curve->bpath;
-  if (bpath == NULL)
-    return NULL;
-
-  Path *dest = new Path;
-  dest->SetWeighted (false);
-  dest->SetBackData (false);
-  {
-    int i;
-    bool closed = false;
-    float lastX, lastY;
-
-    for (i = 0; bpath[i].code != ART_END; i++)
-      {
-	switch (bpath[i].code)
-	  {
-	  case ART_LINETO:
-	    lastX = bpath[i].x3;
-	    lastY = bpath[i].y3;
-	    dest->LineTo (lastX, lastY);
-	    break;
-
-	  case ART_CURVETO:
-	    dest->CubicTo (bpath[i].x3, bpath[i].y3,
-			   3 * (bpath[i].x1 - lastX),
-			   3 * (bpath[i].y1 - lastY),
-			   3 * (bpath[i].x3 - bpath[i].x2),
-			   3 * (bpath[i].y3 - bpath[i].y2));
-	    lastX = bpath[i].x3;
-	    lastY = bpath[i].y3;
-	    break;
-
-	  case ART_MOVETO_OPEN:
-	  case ART_MOVETO:
-	    if (closed)
-	      dest->Close ();
-	    closed = (bpath[i].code == ART_MOVETO);
-	    lastX = bpath[i].x3;
-	    lastY = bpath[i].y3;
-	    dest->MoveTo (lastX, lastY);
-	    break;
-	  default:
-	    break;
-	  }
-      }
-    if (closed)
-      dest->Close ();
-  }
-
-  sp_curve_unref (curve);
-
-  return dest;
-}
-
-gchar *
-liv_svg_dump_path (Path * path)
-{
-  GString *result;
-  result = g_string_sized_new (40);
-
-  for (int i = 0; i < path->descr_nb; i++)
-    {
-      Path::path_descr theD = path->descr_data[i];
-      int typ = theD.flags & descr_type_mask;
-      if (typ == descr_moveto)
-	{
-	  g_string_sprintfa (result, "M %lf %lf ", theD.d.m.x, theD.d.m.y);
-	}
-      else if (typ == descr_lineto)
-	{
-	  g_string_sprintfa (result, "L %lf %lf ", theD.d.l.x, theD.d.l.y);
-	}
-      else if (typ == descr_cubicto)
-	{
-	  float lastX, lastY;
-	  path->PrevPoint (i - 1, lastX, lastY);
-	  g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
-			     lastX + theD.d.c.stDx / 3,
-			     lastY + theD.d.c.stDy / 3,
-			     theD.d.c.x - theD.d.c.enDx / 3,
-			     theD.d.c.y - theD.d.c.enDy / 3, theD.d.c.x,
-			     theD.d.c.y);
-	}
-      else if (typ == descr_arcto)
-	{
-//                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
-	  g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", theD.d.a.rx,
-			     theD.d.a.ry, theD.d.a.angle,
-			     (theD.d.a.large) ? 1 : 0,
-			     (theD.d.a.clockwise) ? 0 : 1, theD.d.a.x,
-			     theD.d.a.y);
-	}
-      else if (typ == descr_close)
-	{
-	  g_string_sprintfa (result, "z ");
-	}
-      else
-	{
-	}
-    }
-
-  char *res;
-  res = result->str;
-  g_string_free (result, FALSE);
-
-  return res;
-}
-
 void
 sp_selected_path_outline ()
 {
@@ -497,10 +368,10 @@ sp_selected_path_outline ()
 
   item = sp_selection_item (selection);
 
-  if (item == NULL)
+  if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
+    sp_view_set_statusf_error(SP_VIEW(desktop),"Outline impossible: selected object is not a path");
     return;
-  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-    return;
+  }
   if (SP_IS_SHAPE (item))
     {
       curve = sp_shape_get_curve (SP_SHAPE (item));
@@ -721,14 +592,14 @@ sp_selected_path_outline ()
 void
 sp_selected_path_offset ()
 {
-//  sp_selected_path_do_offset (true);
-  sp_selected_path_create_offset();
+  sp_selected_path_do_offset (true);
+  //  sp_selected_path_create_offset();
 }
 void
 sp_selected_path_inset ()
 {
-//  sp_selected_path_do_offset (false);
-  sp_selected_path_create_inset();
+  sp_selected_path_do_offset (false);
+  //  sp_selected_path_create_inset();
 }
 void sp_selected_path_create_offset ()
 {
@@ -769,10 +640,10 @@ sp_selected_path_create_offset_object (bool expand,bool updating)
 
   item = sp_selection_item (selection);
 
-  if (item == NULL)
+  if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
+    sp_view_set_statusf_error(SP_VIEW(desktop),"Offset impossible: selected object is not a path");
     return;
-  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-    return;
+  }
   if (SP_IS_SHAPE (item))
     {
       curve = sp_shape_get_curve (SP_SHAPE (item));
@@ -825,6 +696,13 @@ sp_selected_path_create_offset_object (bool expand,bool updating)
       {
 	o_butt = butt_straight;
       }
+ 
+   {
+      double    prefOffset=1.0;
+      prefOffset=prefs_get_double_attribute("options.defaultoffsetwidth","value",prefOffset);
+      o_width=prefOffset;
+    }
+
     if (o_width < 0.25)
       o_width = 0.25;               
     o_miter = 4 * o_width;
@@ -969,10 +847,10 @@ sp_selected_path_do_offset (bool expand)
 
   item = sp_selection_item (selection);
 
-  if (item == NULL)
+  if (item == NULL || (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))) {
+    sp_view_set_statusf_error(SP_VIEW(desktop),"Offset impossible: selected object is not a path");
     return;
-  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-    return;
+  }
   if (SP_IS_SHAPE (item))
     {
       curve = sp_shape_get_curve (SP_SHAPE (item));
@@ -996,8 +874,7 @@ sp_selected_path_do_offset (bool expand)
     if (val == NULL || strcmp (val, "none") == 0)
       {
 	// pas de stroke pas de chocolat
-	g_warning
-	  ("the offset/inset operation uses the stroke width as offset value: give a stroke to the object");
+	  sp_view_set_statusf_error(SP_VIEW(desktop),"the offset/inset operation uses the stroke width as offset value: give a stroke to the object");
 	sp_curve_unref (curve);
 	return;
       }
@@ -1042,6 +919,14 @@ sp_selected_path_do_offset (bool expand)
       {
 	o_butt = butt_straight;
       }
+   
+    // recuperer l'offset dans les preferences
+    {
+      double    prefOffset=1.0;
+      prefOffset=prefs_get_double_attribute("options.defaultoffsetwidth","value",prefOffset);
+      o_width=prefOffset;
+    }
+
     if (o_width < 0.1)
       o_width = 0.1;
     o_miter = 4 * o_width;
@@ -1089,7 +974,8 @@ sp_selected_path_do_offset (bool expand)
     theRes->ConvertToForme (res, 1, originaux);
 
     // et maintenant: offset
-    if (expand)
+    // methode inexacte
+    /*   if (expand)
       {
 	res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
       }
@@ -1111,6 +997,28 @@ sp_selected_path_do_offset (bool expand)
     else
       {
 	res->Coalesce (o_width);
+	}*/
+    // methode par makeoffset
+    if (expand)
+      {
+	theShape->MakeOffset(theRes,0.5 * o_width, o_join, o_miter);
+      }
+    else
+      {
+	theShape->MakeOffset(theRes,-0.5 * o_width, o_join, o_miter);
+      }
+    theRes->ConvertToShape(theShape,fill_positive);
+    theRes->ConvertToForme (res);
+
+    if (o_width >= 1.0)
+      {
+	res->ConvertEvenLines (0.1);
+	res->Simplify (0.5);
+      }
+    else
+      {
+	res->ConvertEvenLines (0.1*o_width);
+	res->Simplify (0.5 * o_width);
       }
 
     delete theShape;
@@ -1159,23 +1067,6 @@ sp_selected_path_do_offset (bool expand)
      sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
 
-    // on laisse le style en place (peut-etre fill=none serait plus appropriŽ? ou changer l'epaisseur du trait?)
-/*		{
-			SPCSSAttr *ocss;
-			SPCSSAttr *css;
-			const gchar *val;
-			
-			ocss = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-			val = sp_repr_css_property (ocss, "stroke", NULL);
-			
-			css = sp_repr_css_attr_new ();
-			
-			sp_repr_css_set_property (css, "stroke", "none");
-			sp_repr_css_set_property (css, "fill", val);
-			sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
-			
-			sp_repr_css_attr_unref (css);
-		}*/
   }
 
   sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -1276,6 +1167,8 @@ sp_selected_path_simplify ()
 
 }
 
+
+// fonctions utilitaires
 SPRepr *
 AncetreFils (SPRepr * a, SPRepr * d)
 {
@@ -1309,4 +1202,134 @@ LCA (SPRepr * a, SPRepr * b)
   while (t && !Ancetre (b, t))
     t = sp_repr_parent (t);
   return t;
+}
+Path *
+Path_for_item (SPItem * item)
+{
+  SPCurve *curve;
+
+  if (!item)
+    return NULL;
+
+  if (SP_IS_SHAPE (item))
+    {
+      curve = sp_shape_get_curve (SP_SHAPE (item));
+    }
+  else if (SP_IS_TEXT (item))
+    {
+      curve = sp_text_normalized_bpath (SP_TEXT (item));
+    }
+  else
+    {
+      curve = NULL;
+    }
+
+  if (!curve)
+    return NULL;
+  ArtBpath *bpath = curve->bpath;
+  if (bpath == NULL)
+    return NULL;
+
+  Path *dest = new Path;
+  dest->SetWeighted (false);
+  dest->SetBackData (false);
+  {
+    int i;
+    bool closed = false;
+    float lastX, lastY;
+
+    for (i = 0; bpath[i].code != ART_END; i++)
+      {
+	switch (bpath[i].code)
+	  {
+	  case ART_LINETO:
+	    lastX = bpath[i].x3;
+	    lastY = bpath[i].y3;
+	    dest->LineTo (lastX, lastY);
+	    break;
+
+	  case ART_CURVETO:
+	    dest->CubicTo (bpath[i].x3, bpath[i].y3,
+			   3 * (bpath[i].x1 - lastX),
+			   3 * (bpath[i].y1 - lastY),
+			   3 * (bpath[i].x3 - bpath[i].x2),
+			   3 * (bpath[i].y3 - bpath[i].y2));
+	    lastX = bpath[i].x3;
+	    lastY = bpath[i].y3;
+	    break;
+
+	  case ART_MOVETO_OPEN:
+	  case ART_MOVETO:
+	    if (closed)
+	      dest->Close ();
+	    closed = (bpath[i].code == ART_MOVETO);
+	    lastX = bpath[i].x3;
+	    lastY = bpath[i].y3;
+	    dest->MoveTo (lastX, lastY);
+	    break;
+	  default:
+	    break;
+	  }
+      }
+    if (closed)
+      dest->Close ();
+  }
+
+  sp_curve_unref (curve);
+
+  return dest;
+}
+
+gchar *
+liv_svg_dump_path (Path * path)
+{
+  GString *result;
+  result = g_string_sized_new (40);
+
+  for (int i = 0; i < path->descr_nb; i++)
+    {
+      Path::path_descr theD = path->descr_data[i];
+      int typ = theD.flags & descr_type_mask;
+      if (typ == descr_moveto)
+	{
+	  g_string_sprintfa (result, "M %lf %lf ", theD.d.m.x, theD.d.m.y);
+	}
+      else if (typ == descr_lineto)
+	{
+	  g_string_sprintfa (result, "L %lf %lf ", theD.d.l.x, theD.d.l.y);
+	}
+      else if (typ == descr_cubicto)
+	{
+	  float lastX, lastY;
+	  path->PrevPoint (i - 1, lastX, lastY);
+	  g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
+			     lastX + theD.d.c.stDx / 3,
+			     lastY + theD.d.c.stDy / 3,
+			     theD.d.c.x - theD.d.c.enDx / 3,
+			     theD.d.c.y - theD.d.c.enDy / 3, theD.d.c.x,
+			     theD.d.c.y);
+	}
+      else if (typ == descr_arcto)
+	{
+//                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
+	  g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", theD.d.a.rx,
+			     theD.d.a.ry, theD.d.a.angle,
+			     (theD.d.a.large) ? 1 : 0,
+			     (theD.d.a.clockwise) ? 0 : 1, theD.d.a.x,
+			     theD.d.a.y);
+	}
+      else if (typ == descr_close)
+	{
+	  g_string_sprintfa (result, "z ");
+	}
+      else
+	{
+	}
+    }
+
+  char *res;
+  res = result->str;
+  g_string_free (result, FALSE);
+
+  return res;
 }
