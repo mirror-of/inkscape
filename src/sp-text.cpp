@@ -60,6 +60,7 @@
 #include "attributes.h"
 #include "document.h"
 #include "desktop.h"
+#include "fontsize-expansion.h"
 #include "style.h"
 #include "version.h"
 #include "inkscape.h"
@@ -773,11 +774,12 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
     if (SP_IS_TEXT_TEXTPATH (text))
         return xform;
 
-    /* This function takes care of scaling only, we return whatever parts we can't
+    /* This function takes care of scaling & translation only, we return whatever parts we can't
        handle. */
-    double ex = xform.expansion();
-    if (ex == 0)
+    double const ex = fontsize_expansion(xform);
+    if (ex == 0) {
         return xform;
+    }
 
     NR::Matrix ret(NR::transform(xform));
     ret[0] /= ex;

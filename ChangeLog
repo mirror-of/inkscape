@@ -1,3 +1,14 @@
+2005-01-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/fontsize-expansion.h, src/fontsize-expansion.cpp:
+	  New files.
+	* src/Makefile_insert: Add the new files to libinkpre_a_SOURCES.
+	* src/desktop-style.cpp (sp_desktop_apply_css_recursive):
+	  When calling sp_css_attr_scale, change the expansion calculation
+	  to use fontsize_expansion().
+	* src/sp-text.cpp (sp_text_set_transform): Similarly use
+	  fontsize_expansion() instead of generic m.expansion().
+
 2005-01-01  Kees Cook  <kees@outflux.net>
 
 	* src/extension/db.h, src/extension/db.cpp, src/extension/init.cpp:

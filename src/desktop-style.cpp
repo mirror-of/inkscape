@@ -20,6 +20,7 @@
 #include "xml/repr-private.h"
 #include "selection.h"
 #include "sp-tspan.h"
+#include "fontsize-expansion.h"
 #include "inkscape.h"
 #include "style.h"
 #include "prefs-utils.h"
@@ -93,10 +94,14 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
         SPCSSAttr *css_set = sp_repr_css_attr_new();
         sp_repr_css_merge(css_set, css);
 
-        // scale the style by the inverse of the accumulated parent transform in the paste context
-        NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(o));
-        if (!local.test_identity()) {
-            sp_css_attr_scale(css_set, 1/local.expansion());
+        // Scale the style by the inverse of the accumulated parent transform in the paste context.
+        {
+            NR::Matrix const local(sp_item_i2doc_affine(SP_ITEM(o)));
+            double const ex(fontsize_expansion(local));
+            if ( ( ex != 0. )
+                 && ( ex != 1. ) ) {
+                sp_css_attr_scale(css_set, 1/ex);
+            }
         }
 
         sp_repr_css_change(SP_OBJECT_REPR(o), css_set, "style");
