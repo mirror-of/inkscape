@@ -31,4 +31,4 @@ xml_libspxml_a_SOURCES =	\
 
 xml_repr_action_test_SOURCES = xml/repr-action-test.cpp
 
-xml_repr_action_test_LDADD = xml/libspxml.a libinkpost.a $(INKSCAPE_LIBS)
+xml_repr_action_test_LDADD = xml/libspxml.a util/libinkutil.a libinkpost.a $(INKSCAPE_LIBS)
