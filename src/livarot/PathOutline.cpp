@@ -365,12 +365,12 @@ void Path::SubContractOutline(path_descr* pd, int num_pd,
     // le moveto
     NR::Point curX;
     {
-        int firstTyp = descr_cmd->flags & descr_type_mask;
+        int firstTyp = pd->flags & descr_type_mask;
         if ( firstTyp != descr_moveto ) {
             curX[0] = curX[1] = 0;
             curP = 0;
         } else {
-            path_descr_moveto* nData = (path_descr_moveto*) (descr_data + descr_cmd->dStart);
+            path_descr_moveto* nData = (path_descr_moveto*) (descr_data + pd->dStart);
             curX = nData->p;
         }
     }
@@ -381,9 +381,9 @@ void Path::SubContractOutline(path_descr* pd, int num_pd,
     NR::Point firstT(0, 0);
   
 	// et le reste, 1 par 1
-	while (curP < descr_nb)
+	while (curP < num_pd)
 	{
-		path_descr *curD = descr_cmd + curP;
+		path_descr *curD = pd + curP;
 		int nType = curD->flags & descr_type_mask;
 		NR::Point nextX;
 		NR::Point stPos, enPos, stTgt, enTgt, stNor, enNor;
@@ -649,7 +649,7 @@ void Path::SubContractOutline(path_descr* pd, int num_pd,
       
 //      path_descr *bezStart = curD;
 			curP++;
-			curD = descr_cmd + curP;
+			curD = pd + curP;
 			path_descr *intermPoints = curD;
 			path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
      
