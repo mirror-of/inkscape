@@ -274,7 +274,7 @@ Rect Rect::intersection(const Rect &a, const Rect &b) {
 /** returns the smallest rectangle containing both rectangles */
 Rect Rect::union_bounds(const Rect &a, const Rect &b) {
 	Rect r;
-	for ( int i ; i < 2 ; i++ ) {
+	for ( int i=0; i < 2 ; i++ ) {
 		r._min[i] = MIN(a._min[i], b._min[i]);
 		r._max[i] = MAX(a._max[i], b._max[i]);
 	}
