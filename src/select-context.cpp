@@ -166,6 +166,9 @@ sp_select_context_setup (SPEventContext *ec)
 
 	sp_event_context_read (ec, "show");
 	sp_event_context_read (ec, "transform");
+	sp_event_context_read (ec, "cue");
+
+	sp_sel_trans_update_item_bboxes (&select_context->seltrans);
 }
 
 static void
@@ -187,6 +190,16 @@ sp_select_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 		} else {
 			sc->seltrans.transform = SP_SELTRANS_TRANSFORM_OPTIMIZE;
 		}
+	} else if (!strcmp (key, "cue")) {
+               if (val) {
+                   if (!strcmp (val, "none")) {
+                       sc->seltrans.cue = SP_SELTRANS_CUE_NONE;
+                   } else if (!strcmp (val, "bbox")) {
+                       sc->seltrans.cue = SP_SELTRANS_CUE_BBOX;
+                   } else {
+                       sc->seltrans.cue = SP_SELTRANS_CUE_MARK;
+                   }
+               }
 	}
 }
 
@@ -825,18 +838,68 @@ sp_select_context_transform_toggled (GtkToggleButton *button, SPSelectContext *s
 	}
 }
 
+static void
+sp_select_context_cue_toggled (GtkToggleButton *button, SPSelectContext *sc)
+{
+	if (gtk_toggle_button_get_active (button)) {
+		const gchar *val;
+		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
+		sp_repr_set_attr (SP_EVENT_CONTEXT_REPR (sc), "cue", val);
+	}
+}
+
+/**
+* Small helper function to make sp_select_context_config_widget a little less
+* verbose.
+*
+* \param SelectContext sc to connect signals with.
+* \param b Another radio button in the group, or NULL for the first.
+* \param fb Box to add the button to.
+* \param n Name for the button.
+* \param v Key for the button's value.
+* \param s Initial state of the button.
+* \param h Toggled handler function.
+*/
+static GtkWidget* sp_select_context_add_radio (
+    SPSelectContext* sc,
+    GtkWidget* b,
+    GtkWidget* fb,
+    GtkTooltips* tt,
+    const gchar* n,
+    const gchar* tip,
+    const char* v,
+    gboolean s,
+    void (*h)(GtkToggleButton*, SPSelectContext*)
+    )
+{
+	GtkWidget* r = gtk_radio_button_new_with_label (
+            b ? gtk_radio_button_group (GTK_RADIO_BUTTON (b)) : NULL, n
+            );
+	gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), r, tip, NULL);
+	gtk_widget_show (r);
+	gtk_object_set_data (GTK_OBJECT (r), "value", (void*) v);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
+	gtk_box_pack_start (GTK_BOX (fb), r, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (r), "toggled", GTK_SIGNAL_FUNC (h), sc);
+
+        return r;
+}
+
 static GtkWidget *
 sp_select_context_config_widget (SPEventContext *ec)
 {
 	SPSelectContext *sc;
 	GtkWidget *vb, *f, *fb, *b;
+	GtkTooltips *tt;
+
+	tt = gtk_tooltips_new();
 
 	sc = SP_SELECT_CONTEXT (ec);
 
 	vb = gtk_vbox_new (FALSE, 4);
 	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
 
-	f = gtk_frame_new (_("Visual transformation"));
+	f = gtk_frame_new (_("When transforming, show:"));
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
@@ -844,21 +907,19 @@ sp_select_context_config_widget (SPEventContext *ec)
 	gtk_widget_show (fb);
 	gtk_container_add (GTK_CONTAINER (f), fb);
 
-	b = gtk_radio_button_new_with_label (NULL, _("Show content"));
-	gtk_widget_show (b);
-	gtk_object_set_data (GTK_OBJECT (b),  "value", (void*)"content");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), sc->seltrans.show == SP_SELTRANS_SHOW_CONTENT);
-	gtk_box_pack_start (GTK_BOX (fb), b, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (sp_select_context_show_toggled), sc);
+        b = sp_select_context_add_radio (
+            sc, NULL, fb, tt, _("Objects"), _("Show the actual objects when moving or transforming"), "content",
+            sc->seltrans.show == SP_SELTRANS_SHOW_CONTENT,
+            sp_select_context_show_toggled
+            );
 
-	b = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (b)), _("Show outline"));
-	gtk_widget_show (b);
-	gtk_object_set_data (GTK_OBJECT (b), "value", (void*)"outline");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), sc->seltrans.show == SP_SELTRANS_SHOW_OUTLINE);
-	gtk_box_pack_start (GTK_BOX (fb), b, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (sp_select_context_show_toggled), sc);
+        sp_select_context_add_radio(
+            sc, b, fb, tt, _("Box outline"), _("Show only a box outline of the objects when moving or transforming"), "outline",
+            sc->seltrans.show == SP_SELTRANS_SHOW_OUTLINE,
+            sp_select_context_show_toggled
+            );
 
-	f = gtk_frame_new (_("Object transformation"));
+	f = gtk_frame_new (_("Store transformation:"));
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
@@ -866,19 +927,43 @@ sp_select_context_config_widget (SPEventContext *ec)
 	gtk_widget_show (fb);
 	gtk_container_add (GTK_CONTAINER (f), fb);
 
-	b = gtk_radio_button_new_with_label (NULL, _("Optimize"));
-	gtk_widget_show (b);
-	gtk_object_set_data (GTK_OBJECT (b), "value", (void*)"optimize");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), sc->seltrans.transform == SP_SELTRANS_TRANSFORM_OPTIMIZE);
-	gtk_box_pack_start (GTK_BOX (fb), b, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (sp_select_context_transform_toggled), sc);
+        b = sp_select_context_add_radio (
+            sc, NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), "optimize",
+            sc->seltrans.transform == SP_SELTRANS_TRANSFORM_OPTIMIZE,
+            sp_select_context_transform_toggled
+            );
 
-	b = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (b)), _("Preserve"));
-	gtk_widget_show (b);
-	gtk_object_set_data (GTK_OBJECT (b), "value", (void*)"keep");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), sc->seltrans.transform == SP_SELTRANS_TRANSFORM_KEEP);
-	gtk_box_pack_start (GTK_BOX (fb), b, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (b), "toggled", GTK_SIGNAL_FUNC (sp_select_context_transform_toggled), sc);
+        sp_select_context_add_radio (
+            sc, b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), "keep",
+            sc->seltrans.transform == SP_SELTRANS_TRANSFORM_KEEP,
+            sp_select_context_transform_toggled
+            );
+        
+	f = gtk_frame_new (_("Per-object selection cue:"));
+	gtk_widget_show (f);
+	gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
+	fb = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (fb);
+	gtk_container_add (GTK_CONTAINER (f), fb);
+
+        b = sp_select_context_add_radio (
+            sc, NULL, fb, tt, _("None"), _("No per-object selection indication"), "none",
+            sc->seltrans.cue == SP_SELTRANS_CUE_NONE,
+            sp_select_context_cue_toggled
+            );
+
+        b = sp_select_context_add_radio (
+            sc, b, fb, tt, _("Mark"), _("Each selected object has a diamond mark in the top left corner"), "mark",
+            sc->seltrans.cue == SP_SELTRANS_CUE_MARK,
+            sp_select_context_cue_toggled
+            );
+
+        sp_select_context_add_radio (
+            sc, b, fb, tt, _("Box"), _("Each selected object displays its bounding box"), "bbox",
+            sc->seltrans.cue == SP_SELTRANS_CUE_BBOX,
+            sp_select_context_cue_toggled
+            );        
+        
 	return vb;
 }

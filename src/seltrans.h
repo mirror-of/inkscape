@@ -32,6 +32,12 @@ enum {
 };
 
 enum {
+        SP_SELTRANS_CUE_NONE,
+        SP_SELTRANS_CUE_MARK,
+        SP_SELTRANS_CUE_BBOX
+};
+
+enum {
 	SP_SELTRANS_STATE_SCALE,
 	SP_SELTRANS_STATE_ROTATE
 };
@@ -45,6 +51,7 @@ struct _SPSelTrans {
 	guint state : 1;
 	guint show : 1;
 	guint transform : 1;
+        guint cue : 2;
 
 	unsigned int grabbed : 1;
 	unsigned int show_handles : 1;
@@ -91,6 +98,7 @@ void sp_sel_trans_shutdown(SPSelTrans *seltrans);
 void sp_sel_trans_reset_state(SPSelTrans *seltrans);
 void sp_sel_trans_increase_state(SPSelTrans *seltrans);
 void sp_sel_trans_set_center(SPSelTrans *seltrans, gdouble x, gdouble y);
+void sp_sel_trans_update_item_bboxes (SPSelTrans *seltrans);
 
 void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdouble y, gboolean show_handles);
 void sp_sel_trans_transform(SPSelTrans *seltrans, NR::Matrix const &rel_affine, NR::Point const &norm);
