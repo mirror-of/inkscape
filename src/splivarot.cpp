@@ -1562,7 +1562,7 @@ Path_for_item (SPItem * item, bool doTransformation, bool transformFull)
   
     if ( doTransformation ) {
         if (transformFull)
-            bpath = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (item));
+            bpath = nr_artpath_affine (curve->bpath, sp_item_i2doc_affine (item));
         else 
             bpath = nr_artpath_affine (curve->bpath, item->transform);
         sp_curve_unref (curve);
