@@ -825,7 +825,7 @@ static const SPVerbActionDef props[] = {
         N_("Delete selected objects"), GTK_STOCK_DELETE},
     {SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("D_uplicate"),
         N_("Duplicate selected objects"), "edit_duplicate"},
-    {SP_VERB_EDIT_CLONE, "EditClone", N_("C_lone"),
+    {SP_VERB_EDIT_CLONE, "EditClone", N_("Clo_ne"),
         N_("Clone selected objects"), NULL},
     {SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
         N_("Delete all objects from document"), NULL},
