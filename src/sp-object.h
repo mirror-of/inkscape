@@ -55,8 +55,11 @@
 #define SP_OBJECT_TITLE(o) sp_object_title_get ((SPObject *) (o))
 #define SP_OBJECT_DESCRIPTION(o) sp_object_description_get ((SPObject *) (o))
 
-#include <sigc++/sigc++.h>
+
 #include <glib-object.h>
+#include <sigc++/connection.h>
+#include <sigc++/functors/slot.h>
+#include <sigc++/signal.h>
 
 #include "forward.h"
 #include "version.h"
