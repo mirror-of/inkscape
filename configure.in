@@ -327,7 +327,7 @@ inkscape.spec
 inkscape.1
 ])
 
-AH_TOP([
+AH_BOTTOM([
 #ifdef __cplusplus
 #define INK_STATIC_CAST( type, ptr ) static_cast< type >(ptr)
 #define INK_CONST_CAST( type, ptr ) const_cast< type >(ptr)

@@ -39,6 +39,14 @@
 /**
  * Sets up the inkscape stock repository.
  */
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 void inkscape_gtk_stock_init(void);
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif /* _INKSCAPE_STOCK_H_ */

@@ -49,9 +49,6 @@ SPCurve * sp_curve_new_from_foreign_bpath (ArtBpath * bpath);
 
 SPCurve *sp_curve_ref (SPCurve *curve);
 SPCurve *sp_curve_unref (SPCurve *curve);
-#ifdef __cplusplus
-};
-#endif // __cplusplus
 
 void sp_curve_finish (SPCurve * curve);
 void sp_curve_ensure_space (SPCurve * curve, gint space);
@@ -81,5 +78,9 @@ ArtBpath *sp_curve_first_bpath (SPCurve *curve);
 void sp_curve_append (SPCurve *curve, SPCurve *curve2, gboolean use_lineto);
 SPCurve *sp_curve_reverse (SPCurve *curve);
 void sp_curve_backspace (SPCurve *curve);
+
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 #endif

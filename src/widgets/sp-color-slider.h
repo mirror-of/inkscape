@@ -49,6 +49,10 @@ struct _SPColorSliderClass {
 	void (* changed) (SPColorSlider *slider);
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 GtkType sp_color_slider_get_type (void);
 
 GtkWidget *sp_color_slider_new (GtkAdjustment *adjustment);
@@ -57,5 +61,9 @@ void sp_color_slider_set_adjustment (SPColorSlider *slider, GtkAdjustment *adjus
 void sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 end);
 void sp_color_slider_set_map (SPColorSlider *slider, const guchar *map);
 void sp_color_slider_set_background (SPColorSlider *slider, guint dark, guint light, guint size);
+
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 #endif

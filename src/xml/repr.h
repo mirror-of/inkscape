@@ -85,9 +85,6 @@ void sp_repr_document_unref (SPReprDoc * doc);
 SPRepr *sp_repr_document_root (const SPReprDoc *doc);
 SPReprDoc *sp_repr_document (const SPRepr *repr);
 
-#ifdef __cplusplus
-};
-#endif // __cplusplus
 
 /* Documents Utility */
 unsigned int sp_repr_document_merge (SPReprDoc *doc, const SPReprDoc *src, const  char *key);
@@ -126,9 +123,6 @@ SPRepr *sp_repr_parent (SPRepr *repr);
 SPRepr *sp_repr_children (SPRepr *repr);
 SPRepr *sp_repr_next (SPRepr *repr);
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
 unsigned int sp_repr_add_child (SPRepr * repr, SPRepr * child, SPRepr * ref);
 unsigned int sp_repr_remove_child (SPRepr * repr, SPRepr * child);
 void sp_repr_write_stream (SPRepr * repr, FILE * file, int level);

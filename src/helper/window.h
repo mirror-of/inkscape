@@ -12,7 +12,14 @@
 
 #include <gtk/gtkwidget.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 GtkWidget *sp_window_new (const gchar *title, unsigned int resizeable);
 
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif

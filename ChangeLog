@@ -9,6 +9,7 @@
 	* SF Patch #842958: updated inkscape.desktop.in slightly
 	* SF Patch #843170: freetype include corrections
 	* SF Patch #843326: fixups for g++ compilation from joncruz
+	* Adding some more missing "extern C" sections for g++ compiles
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 

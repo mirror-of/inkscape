@@ -15,9 +15,16 @@
 #ifndef __GNOME_UTILS_H__
 #define __GNOME_UTILS_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 GList *gnome_uri_list_extract_uris (const gchar* uri_list);
 
 GList *gnome_uri_list_extract_filenames (const gchar* uri_list);
 
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif /* __GNOME_UTILS_H__ */

@@ -36,6 +36,10 @@ struct _SPXMLViewTreeClass
 	GtkCTreeClass parent_class;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 GtkType sp_xmlview_tree_get_type (void);
 GtkWidget * sp_xmlview_tree_new (SPRepr * repr, void * factory, void * data);
 
@@ -45,5 +49,9 @@ void sp_xmlview_tree_set_repr (SPXMLViewTree * tree, SPRepr * repr);
 
 SPRepr * sp_xmlview_tree_node_get_repr (SPXMLViewTree * tree, GtkCTreeNode * node);
 GtkCTreeNode * sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * repr);
+
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 #endif

@@ -21,10 +21,18 @@ typedef struct _SPVersion {
 
 #define SP_VERSION_IS_ZERO (v) (!(v).major && !(v).minor)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean sp_version_from_string (const gchar *string, SPVersion *version);
 gchar *sp_version_to_string (SPVersion version);
 gboolean sp_version_inside_range (SPVersion version,
                                   unsigned major_min, unsigned minor_min,
                                   unsigned major_max, unsigned minor_max);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif
