@@ -19,7 +19,9 @@ cross(NR::Point const &a, NR::Point const &b) {
  * intersection; otherwise, \a result remains unchanged.
  */
 sp_intersector_kind
-sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::Point n1, const double d1, NR::Point& result)
+sp_intersector_line_intersection(NR::Point const &n0, double const d0,
+				 NR::Point const &n1, double const d1,
+				 NR::Point &result)
 /* This function finds the intersection of the two lines (infinite)
  * defined by n0.X = d0 and x1.X = d1.  The algorithm is as follows:
  * To compute the intersection point use kramer's rule:

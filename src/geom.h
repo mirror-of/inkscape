@@ -25,4 +25,6 @@ typedef enum sp_intersector_kind{
 
 /* intersectors */
 
-sp_intersector_kind sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::Point n1, const double d1, NR::Point& result);
+sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double const d0,
+						     NR::Point const &n1, double const d1,
+						     NR::Point &result);

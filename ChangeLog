@@ -1,5 +1,8 @@
 2004-01-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/geom.h, src/geom.cpp (sp_intersector_line_intersection):
+	  change arguments from `Point' to `Point const &'.
+
 	* src/libnr/nr-types.h: Move cross to its sole user, src/geom.cpp.
 
 2004-01-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
