@@ -1,5 +1,19 @@
 2004-06-22  Carl Hetherington  <inkscape@carlh.net>
 
+	* src/sp-shape.cpp: add sp_shape_snappoints.
+
+	* src/desktop-snap.cpp: minor cleanups.  Added a comment.
+
+	* src/sp-text.cpp: removed an old comment.
+
+	* src/sp-ellipse.cpp: fix snappoints method now that the parent
+	class method has changed.
+
+	* src/sp-rect.cpp: snappoints method is not required as it's now
+	handled by SPShape.
+
+	* src/sp-image.cpp: use SPItem's snappoints method.
+
 	* src/file.cpp: fix another call to g_file_test with a
 	possibly-NULL parameter.  Fixes #977413.
 
