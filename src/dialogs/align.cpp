@@ -50,6 +50,10 @@
 #include "desktop.h"
 #include "sp-item-transform.h"
 
+#include "sp-text.h"
+#include "sp-flowtext.h"
+#include "text-editing.h"
+
 #include "node-context.h" //For node align/distribute function
 #include "nodepath.h" //For node align/distribute function
 
@@ -94,7 +98,6 @@ private :
     Glib::ustring _id;
     Gtk::Table &_parent;
 };
-
 
 
 class ActionAlign : public Action {
@@ -228,7 +231,6 @@ ActionAlign::Coeffs const ActionAlign::_allCoeffs[10] = {
     {0., 0., 1., 0., 0., 0., 1., 0.},
     {0., 0., 1., 0., 0., 0., 0., 1.}
 };
-
 
 struct BBoxSort
 {
@@ -426,6 +428,118 @@ private :
     }
 };
 
+struct Baselines
+{
+    SPItem *_item;
+    NR::Point _base;
+    NR::Dim2 _orientation;
+    Baselines(SPItem *item, NR::Point base, NR::Dim2 orientation) :
+        _item (item),
+        _base (base),
+        _orientation (orientation)
+    {}
+};
+
+bool operator< (const Baselines &a, const Baselines &b)
+{
+    return (a._base[a._orientation] < b._base[b._orientation]);
+}
+
+class ActionBaseline : public Action {
+public :
+    ActionBaseline(const Glib::ustring &id,
+               const Glib::ustring &tiptext,
+               guint row,
+               guint column,
+               DialogAlign &dialog,
+               Gtk::Table &table,
+               NR::Dim2 orientation, bool distribute):
+        Action(id, tiptext, row, column,
+               table, dialog.tooltips()),
+        _orientation(orientation),
+        _distribute(distribute)
+    {}
+
+private :
+    NR::Dim2 _orientation;
+    bool _distribute;
+    virtual void on_button_click()
+    {
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (!desktop) return;
+
+        Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+        if (!selection) return;
+
+        std::list<SPItem *> selected;
+        selection->list(selected);
+        if (selected.empty()) return;
+
+        //Check 2 or more selected objects
+        if (selected.size() < 2) return;
+
+        NR::Point b_min = NR::Point (HUGE_VAL, HUGE_VAL);
+        NR::Point b_max = NR::Point (-HUGE_VAL, -HUGE_VAL);
+
+        std::vector<Baselines> sorted;
+
+        for (std::list<SPItem *>::iterator it(selected.begin());
+            it != selected.end();
+            ++it)
+        {
+            if (SP_IS_TEXT (*it) || SP_IS_FLOWTEXT (*it)) {
+                Inkscape::Text::Layout const *layout = te_get_layout(*it);
+                NR::Point base = layout->characterAnchorPoint(layout->begin()) * sp_item_i2d_affine(*it);
+                if (base[NR::X] < b_min[NR::X]) b_min[NR::X] = base[NR::X];
+                if (base[NR::Y] < b_min[NR::Y]) b_min[NR::Y] = base[NR::Y];
+                if (base[NR::X] > b_max[NR::X]) b_max[NR::X] = base[NR::X];
+                if (base[NR::Y] > b_max[NR::Y]) b_max[NR::Y] = base[NR::Y];
+
+                Baselines b (*it, base, _orientation);
+                sorted.push_back(b);
+            }
+        }
+
+        if (sorted.size() <= 1) return;
+
+        //sort baselines
+        std::sort(sorted.begin(), sorted.end());
+
+        bool changed = false;
+
+        if (_distribute) {
+            double step = (b_max[_orientation] - b_min[_orientation])/(sorted.size() - 1);
+            for (unsigned int i = 0; i < sorted.size(); i++) {
+                SPItem *item = sorted[i]._item;
+                NR::Point base = sorted[i]._base;
+                NR::Point t(0.0, 0.0);
+                t[_orientation] = b_min[_orientation] + step * i - base[_orientation];
+                sp_item_move_rel(item, NR::translate(t));
+                changed = true;
+            }
+
+        } else {
+            for (std::list<SPItem *>::iterator it(selected.begin());
+                 it != selected.end();
+                 ++it)
+            {
+                if (SP_IS_TEXT (*it) || SP_IS_FLOWTEXT (*it)) {
+                    Inkscape::Text::Layout const *layout = te_get_layout(*it);
+                    NR::Point base = layout->characterAnchorPoint(layout->begin()) * sp_item_i2d_affine(*it);
+                    NR::Point t(0.0, 0.0);
+                    t[_orientation] = b_min[_orientation] - base[_orientation];
+                    sp_item_move_rel(*it, NR::translate(t));
+                    changed = true;
+                }
+            }
+        }
+
+        if (changed) {
+            sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+        }
+    }
+};
+
 void DialogAlign::on_ref_change(){
 //Make blink the master
 }
@@ -491,14 +605,23 @@ void DialogAlign::addUnclumpButton(const Glib::ustring &id, const Glib::ustring 
         );
 }
 
+void DialogAlign::addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                                    guint row, guint col, Gtk::Table &table, NR::Dim2 orientation, bool distribute)
+{
+    _actionList.push_back(
+        new ActionBaseline(
+            id, tiptext, row, col, 
+            *this, table, orientation, distribute));
+}
+
 
 DialogAlign::DialogAlign():
     Dockable(_("Layout"), "dialogs.align"),
     _alignFrame(_("Align")),
     _distributeFrame(_("Distribute")),
     _nodesFrame(_("Nodes")),
-    _alignTable(2,5, true),
-    _distributeTable(3,4, true),
+    _alignTable(2, 6, true),
+    _distributeTable(3, 6, true),
     _nodesTable(1, 4, true),
     _anchorLabel(_("Relative to: "))
 {
@@ -534,7 +657,13 @@ DialogAlign::DialogAlign():
                    _("Align tops of objects to bottom of anchor"),
                    1, 4);
 
-
+    //Baseline aligns
+    addBaselineButton("al_baselines_vert",
+                   _("Align baseline anchors of texts vertically"),
+                      0, 5, this->align_table(), NR::X, false);
+    addBaselineButton("al_baselines_hor",
+                   _("Align baseline anchors of texts horizontally"),
+                     1, 5, this->align_table(), NR::Y, false);
 
     //The distribute buttons
     addDistributeButton("distribute_hdist",
@@ -565,6 +694,15 @@ DialogAlign::DialogAlign():
                         _("Distribute tops equidistantly"),
                         1, 3, false, NR::Y, 0, 1);
 
+    //Baseline distribs
+    addBaselineButton("distribute_baselines_hor",
+                   _("Distribute baseline anchors of texts horizontally"),
+                      0, 5, this->distribute_table(), NR::X, true);
+    addBaselineButton("distribute_baselines_vert",
+                   _("Distribute baseline anchors of texts vertically"),
+                     1, 5, this->distribute_table(), NR::Y, true);
+
+    //Unclump
     addUnclumpButton("unclump",
                         _("Unclump selected objects"),
                         2, 0);

@@ -65,6 +65,8 @@ private :
                         guint col, NR::Dim2 orientation, bool distribute);
     void addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext, 
                         guint row, guint col);
+    void addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                           guint row, guint col, Gtk::Table &table, NR::Dim2 orientation, bool distribute);
     
     virtual ~DialogAlign();
    
