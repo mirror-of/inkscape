@@ -347,7 +347,7 @@ extension_save (SPModule * module, SPDocument * doc, const gchar * filename)
 	\param     doc      Document to run through the filter.
 
 	This function is a little bit trickier than the previous two.  It
-	needs two temporary files to get it's work done.  Both of these
+	needs two temporary files to get its work done.  Both of these
 	files have random names created for them using the g_mkstemp function
 	with the sp_ext_ prefix in the temporary directory.  Like the other
 	functions, the temporary files are deleted at the end.
