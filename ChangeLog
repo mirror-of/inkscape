@@ -1,5 +1,11 @@
 2005-03-01  MenTaLguY  <mental@rydia.net>
 
+	* src/Makefile.am, src/algorithms/find-if-before.h:
+
+	  added new generic algorithm
+
+2005-03-01  MenTaLguY  <mental@rydia.net>
+
 	* src/Makefile.am, src/util/Makefile_insert,
 	  src/util/list-container-test.cpp, src/util/list-container.h:
 
