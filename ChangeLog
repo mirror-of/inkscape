@@ -161,6 +161,41 @@
 	* src/draw-context.cpp: Change red_curve_is_valid assignments from
 	  0x00/0x01 to false/true (using find & replace).
 
+2004-10-07  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/nr-object.cpp, src/nr-object.h: coding style and const
+	fixes.
+
+	* src/nr-rect.cpp: added a doxygen comment.  Some coding style
+	fixes.
+
+	* src/sp-paint-server.cpp: coding style fixes.
+
+	* src/nr-arena-item.cpp, src/nr-arena-item.h: move a comment to
+	the .cpp file and make it doxygen-style.
+
+	* src/livarot/Path.cpp: coding style cleanups.  Add an assert to
+	Path::Transform().
+
+	* src/livarot/Path.cpp, src/livarot/Path.h: fix some archaic
+	notation.
+
+	* src/livarot/Ligne.cpp: coding style cleanups.
+
+	* src/livarot/PathOutline.cpp, src/livarot/Path.h: fix a rather
+	nasty hack in the outlining code.
+
+	* src/livarot/Path.cpp, src/livarot/Path.h,
+	src/livarot/PathConversion.cpp, src/livarot/PathCutting.cpp,
+	src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,
+	src/livarot/ShapeMisc.cpp, src/splivarot.cpp, src/sp-offset.cpp:
+	use std::vector for Path::descr_cmd.
+
+	* src/livarot/Path.cpp, src/livarot/Path.h,
+	src/livarot/PathConversion.cpp, src/livarot/PathCutting.cpp,
+	src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,
+	src/livarot/ShapeMisc.cpp: getType() and setType() in Path::path_descr.
+	
 2004-10-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-object-repr.cpp (sp_repr_type_lookup): Distinguish between XML
