@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) helper/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) helper/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) extension/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) extension/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) libarikkei/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) libarikkei/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) xml/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) xml/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

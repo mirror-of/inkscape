@@ -14,6 +14,9 @@
 	* src/*/Makefile_insert: Get rid of now-redundant $(INKSCAPE_CFLAGS)
 	  from *_CPPFLAGS.
 
+	* src/*/makefile.in: `%' as a target doesn't behave as intended,
+	so replace with less general `clean %.a %.o' and add .SUFFIXES.
+
 2004-04-22  Ted Gould  <ted@gould.cx>
 
 	* src/draw-context.cpp, src/dropper-context.cpp,

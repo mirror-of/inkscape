@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) libnrtype/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) libnrtype/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

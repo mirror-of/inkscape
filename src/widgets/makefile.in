@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) widgets/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) widgets/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

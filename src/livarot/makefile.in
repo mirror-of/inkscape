@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) livarot/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) livarot/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)

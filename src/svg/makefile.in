@@ -6,7 +6,12 @@
 all:
 	cd .. && $(MAKE) svg/all
 
-%:
+clean %.a %.o:
 	cd .. && $(MAKE) svg/$@
 
 .PHONY: all clean
+
+OBJEXT = @OBJEXT@
+
+.SUFFIXES:
+.SUFFIXES: .a .$(OBJEXT)
