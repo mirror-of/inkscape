@@ -2,8 +2,14 @@
 # Sense whether we are on a DOS box or cross-compiling
 ifdef ComSpec
 BUILD=native
+DOSSHELL=CMD_EXE
+else
+ifdef COMSPEC
+BUILD=native
+DOSSHELL=COMMAND_COM
 else
 BUILD=cross
+endif
 endif
 
 
@@ -66,7 +72,7 @@ S = $(BSLASH)
 # file manipulation programs
 CP = copy
 #are we on WinNt and beyond?
-ifeq ($(notdir $(ComSpec)),cmd.exe)
+ifeq ($(DOSSHELL),CMD_EXE)
 RMDIR = rmdir /s /q
 else
 RMDIR = deltree /y

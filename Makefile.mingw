@@ -55,8 +55,8 @@ dist:
 	@echo "##################### D O N E ####################"
 
 clean:
-	$(RM) -rf inkscape
-	$(RM) -rf inkscape*.zip
+	-$(RMDIR) inkscape
+	-$(RM) inkscape*.zip
 	$(MAKE) -C src -f Makefile.mingw clean
 
 
