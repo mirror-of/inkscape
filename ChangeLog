@@ -1,3 +1,8 @@
+2004-11-20  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/dialogs/filedialog.cpp (isValidImageFile):
+	  Fixed previewing bug 1067551.
+
 2004-11-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/bezier-utils.cpp (sp_bezier_fit_cubic_full):
