@@ -514,6 +514,7 @@ Node *SimpleNode::root() {
 void SimpleNode::mergeFrom(Node const *src, gchar const *key) {
     g_return_if_fail(src != NULL);
     g_return_if_fail(key != NULL);
+    g_assert(src != this);
 
     setContent(src->content());
 

@@ -1,5 +1,10 @@
 2005-03-12  MenTaLguY  <mental@rydia.net>
 
+    * src/xml/simple-node.cpp: assert that src != this in
+	  SimpleNode::mergeFrom
+
+2005-03-12  MenTaLguY  <mental@rydia.net>
+
 	* src/gc-alloc.h: minor cosmetic adjustments
 
 	* src/util/list-container.h: pedantically correct implementation of
