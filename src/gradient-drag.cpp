@@ -234,12 +234,8 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                 d_new->parent->setSelected (d_new);
                 d_new->updateKnotShape ();
                 d_new->updateTip ();
+                d_new->updateDependencies(true);
                 sp_document_done (SP_DT_DOCUMENT (d_new->parent->desktop));
-                // do the same as on ungrabbing
-                if (d_new->isA(POINT_RG_R1) || d_new->isA(POINT_RG_R2) || d_new->isA(POINT_RG_CENTER)) {
-                    // only if this is center or one of the radii; focus does not affect other draggers
-                    d_new->parent->updateDraggersReselect();
-                }
                 return;
             }
         }
@@ -337,6 +333,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, p, draggable->fill_or_stroke, false);
     }
 
+    dragger->updateDependencies(false);
 }
 
 /**
@@ -361,19 +358,10 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     // make this dragger selected
     dragger->parent->setSelected (dragger);
 
+    dragger->updateDependencies(true);
+
     // we did an undoable action
     sp_document_done (SP_DT_DOCUMENT (dragger->parent->desktop));
-
-    // check if this draggable is attached to a radial gradient; if so, we need to regenerate all
-    // draggers because moving this one affects positions of others. BAD because 1) others will not
-    // be updated until mouse is released, 2) we'll need to clumsily save and restore selected
-    // dragger, 3) others will unsnap without warning; 4) the order of draggables may change which
-    // will affect knot shape of the dragger has different draggables. However, this is by far the
-    // simplest method.
-    if (dragger->isA(POINT_RG_R1) || dragger->isA(POINT_RG_R2) || dragger->isA(POINT_RG_CENTER)) {
-        // only if this is center or one of the radii; focus does not affect other draggers
-        dragger->parent->updateDraggersReselect();
-    }
 }
 
 /**
@@ -466,6 +454,67 @@ GrDragger::addDraggable (GrDraggable *draggable)
 }
 
 
+/**
+Moves this dragger to the point of the given draggable, acting upon all other draggables
+ */
+void
+GrDragger::moveToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr)
+{
+    this->point = sp_item_gradient_get_coords (item, point_num, fill_or_stroke);
+    this->point_original = this->point;
+
+    sp_knot_moveto (this->knot, &(this->point));
+
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) {
+        GrDraggable *da = (GrDraggable *) i->data;
+        if (da->item == item && da->point_num == point_num && da->fill_or_stroke == fill_or_stroke) {
+            continue;
+        }
+        sp_item_gradient_set_coords (da->item, da->point_num, this->point, da->fill_or_stroke, write_repr);
+    }
+    // FIXME: here we should also call this->updateDependencies(write_repr); to propagate updating, but how to prevent loops?
+}
+
+
+/**
+Moves all draggables that depend on this one
+ */
+void
+GrDragger::updateDependencies (bool write_repr)
+{
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
+        switch (draggable->point_num) {
+            case POINT_LG_P1:
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_LG_P2, draggable->fill_or_stroke, write_repr);
+                break;
+            case POINT_LG_P2:
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_LG_P1, draggable->fill_or_stroke, write_repr);
+                break;
+            case POINT_RG_R2:
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R1, draggable->fill_or_stroke, write_repr);
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
+                break;
+            case POINT_RG_R1:
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R2, draggable->fill_or_stroke, write_repr);
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
+                break;
+            case POINT_RG_CENTER:
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R1, draggable->fill_or_stroke, write_repr);
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_R2, draggable->fill_or_stroke, write_repr);
+                this->parent->moveDraggerToDraggable (draggable->item, POINT_RG_FOCUS, draggable->fill_or_stroke, write_repr);
+                break;
+            case POINT_RG_FOCUS:
+                // nothing can depend on that
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+
+
 GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable) 
 {
     this->draggables = NULL;
@@ -519,20 +568,33 @@ GrDragger::~GrDragger ()
 /**
 Select the dragger which has the given draggable.
 */
-void
-GrDrag::restoreSelected (GrDraggable *da1) 
+GrDragger *
+GrDrag::getDraggerFor (SPItem *item, guint point_num, bool fill_or_stroke)
 {
     for (GSList const* i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
         for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
             GrDraggable *da2 = (GrDraggable *) j->data;
-            if (da1->equals (da2)) {
-                setSelected (dragger);
-                return;
+            if (da2->item == item && da2->point_num == point_num && da2->fill_or_stroke == fill_or_stroke) {
+                return (dragger);
             }
         }
     }
+    return NULL;
 }
+
+
+void
+GrDrag::moveDraggerToDraggable (SPItem *item, guint point_num, bool fill_or_stroke, bool write_repr)
+{
+    GrDragger *d = getDraggerFor (item, point_num, fill_or_stroke);
+    if (d) {
+        d->moveToDraggable (item, point_num, fill_or_stroke, write_repr);
+    } else {
+        g_print ("cannot find dragger for %s %d %d\n", SP_OBJECT_ID(item), point_num, fill_or_stroke);
+    }
+}
+
 
 /**
 Set selected dragger
@@ -608,26 +670,6 @@ GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stro
 {
     addDragger (new GrDraggable (item, POINT_LG_P1, fill_or_stroke));
     addDragger (new GrDraggable (item, POINT_LG_P2, fill_or_stroke));
-}
-
-
-/**
-Same as updateDraggers, but also restores selection, if possible, to the same dragger
-*/
-void
-GrDrag::updateDraggersReselect ()
-{
-    if (selected) {
-        // remember the first draggable of the selected knot
-        GrDraggable *select = (GrDraggable *) selected->draggables->data;
-        GrDraggable *select_copy = new GrDraggable (select->item, select->point_num, select->fill_or_stroke);
-        // update all knots; this destroys dragger!
-        updateDraggers();
-        // restore selection
-        restoreSelected(select_copy);
-    } else {
-        updateDraggers();
-    }
 }
 
 /**
