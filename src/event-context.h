@@ -65,4 +65,7 @@ GtkWidget *sp_event_context_config_widget (SPEventContext *ec);
 
 void sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event);
 
+gint gobble_key_events (guint keyval, gint mask);
+gint gobble_motion_events (gint mask);
+
 #endif

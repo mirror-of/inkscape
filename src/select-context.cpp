@@ -447,6 +447,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				}
 			} else {
 				sp_rubberband_move(p);
+				gobble_motion_events (GDK_BUTTON1_MASK);
 			}
 		}
 		break;
