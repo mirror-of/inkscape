@@ -229,7 +229,7 @@ GSList *
 DB::get_output_list (void)
 {
 	return NULL;
-}
+}    
 
 void
 DB::free_list (GSList * in_list)

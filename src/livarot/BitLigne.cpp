@@ -98,6 +98,7 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
     // compute the vector of changed bits in the element
 		uint32_t  add=0xFFFFFFFF;
 		if ( lpRem < 32 ) {add>>=32-lpRem;add<<=32-lpRem; }
+    if ( lpRem <= 0 ) add=0;
 		if ( fpRem > 0) {add<<=fpRem;add>>=fpRem;}
     // and put it in the line
     fullB[fpPos]&=~(add); // partial is exclusive from full, so partial bits are removed from fullB
@@ -106,6 +107,7 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
       if ( ffBit <= lfBit ) {
         add=0xFFFFFFFF;
         if ( lfRem < 32 ) {add>>=32-lfRem;add<<=32-lfRem;}
+        if ( lfRem <= 0 ) add=0;
         if ( ffRem > 0 ) {add<<=ffRem;add>>=ffRem;}
         fullB[ffPos]|=add;
         partB[ffPos]&=~(add);
@@ -119,7 +121,8 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
     partB[fpPos]|=add;
 
 		add=0xFFFFFFFF;
-		if ( lpRem < 32 ) {add>>=32-lpRem;add<<=32-lpRem; }
+		if ( lpRem < 32 ) {add>>=32-lpRem;add<<=32-lpRem;}
+    if ( lpRem <= 0 ) add=0;
     fullB[lpPos]&=~(add);
     partB[lpPos]|=add;
 
@@ -132,6 +135,7 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
         if ( ffPos == lfPos ) {
           add=0xFFFFFFFF;
           if ( lfRem < 32 ) {add>>=32-lfRem;add<<=32-lfRem;}
+          if ( lfRem <= 0 ) add=0;
           if ( ffRem > 0 ) {add<<=ffRem;add>>=ffRem;}
           fullB[ffPos]|=add;
           partB[ffPos]&=~(add);
@@ -143,6 +147,7 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
           
           add=0xFFFFFFFF;
           if ( lfRem < 32 ) {add>>=32-lfRem;add<<=32-lfRem;}
+          if ( lfRem <= 0 ) add=0;
           fullB[lfPos]|=add;
           partB[lfPos]&=~add;
           

@@ -613,6 +613,8 @@ void nr_pixblock_render_bpath_rgba (Shape* theS,uint32_t color,NRRectL &area,cha
       theS->QuickScan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],true,0.25);
     }
     theIL->Copy(4,theI);
+ //   theI[0]->Affiche();
+ //   theIL->Affiche();
      
     raster_info  dest;
     dest.startPix=il;
