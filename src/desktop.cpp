@@ -58,6 +58,7 @@
 #include "sp-desktop-widget.h"
 #include "sp-namedview.h"
 #include "sp-text.h"
+#include "sp-tspan.h"
 #include "sp-item.h"
 #include "sp-item-group.h"
 #include "sp-root.h"

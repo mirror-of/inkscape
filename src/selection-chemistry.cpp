@@ -36,6 +36,7 @@
 #include "sp-path.h"
 #include "sp-use.h"
 #include "sp-text.h"
+#include "sp-tspan.h"
 #include "text-context.h"
 #include "dropper-context.h"
 #include "helper/sp-intl.h"

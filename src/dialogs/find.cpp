@@ -116,6 +116,7 @@ DialogFind & DialogFind::get()
 #include "../interface.h"
 #include "../sp-object.h"
 #include "../sp-text.h"
+#include "../sp-tspan.h"
 #include "../selection-chemistry.h"
 #include "../sp-defs.h"
 #include "../sp-rect.h"

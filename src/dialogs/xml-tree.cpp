@@ -41,6 +41,7 @@
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../sp-text.h"
+#include "../sp-tspan.h"
 #include "../sp-root.h"
 #include "../sp-gradient.h"
 #include "../sp-defs.h"
