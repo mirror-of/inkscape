@@ -38,6 +38,8 @@
 #include "libnr/nr-point.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-point-ops.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 
 #define noOFFSET_VERBOSE
 
@@ -300,8 +302,8 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
     case SP_ATTR_INKSCAPE_RADIUS:
     case SP_ATTR_SODIPODI_RADIUS:
 	if (!sp_svg_length_read_computed_absolute (value, &offset->rad)) {
-        if (fabs (offset->rad) < 0.25)
-          offset->rad = (offset->rad < 0) ? -0.25 : 0.25;
+        if (fabs (offset->rad) < 0.01)
+          offset->rad = (offset->rad < 0) ? -0.01 : 0.01;
         offset->knotSet = false;
       }
       sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
@@ -563,8 +565,8 @@ sp_offset_set_shape (SPShape * shape)
     return;
   }
   
-  if (fabs (offset->rad) < 0.25)
-    offset->rad = (offset->rad < 0) ? -0.25 : 0.25;
+  if (fabs (offset->rad) < 0.01)
+    offset->rad = (offset->rad < 0) ? -0.01 : 0.01;
   
   Path *orig = new Path;
   orig->Copy ((Path *) offset->originalPath);
@@ -605,20 +607,29 @@ sp_offset_set_shape (SPShape * shape)
   originaux[0] = res;
   
   theRes->ConvertToForme (orig, 1, originaux);
+
+		SPItem *item = &(shape->item);
+		NR::Rect bbox = sp_item_bbox_desktop (item);
+		gdouble size = L2(bbox.dimensions());
+		gdouble exp = NR::expansion(NR::Matrix(item->transform));
+		if (exp != 0)
+			size /= exp;
+  		orig->Coalesce (size * 0.001); 
+
   
-  if (o_width >= 1.0)
-  {
-    orig->Coalesce (0.1);  // small treshhold, since we only want to get rid of small segments
+			//  if (o_width >= 1.0)
+			//  {
+			//    orig->Coalesce (0.1);  // small treshhold, since we only want to get rid of small segments
                            // the curve should already be computed by the Outline() function
  //   orig->ConvertEvenLines (1.0);
  //   orig->Simplify (0.5);
-  }
-  else
-  {
-          orig->Coalesce (0.1*o_width);
+			//  }
+			//  else
+		//  {
+		//          orig->Coalesce (0.1*o_width);
  //   orig->ConvertEvenLines (o_width);
  //   orig->Simplify (0.5 * o_width);
-  }
+		//  }
   
   delete theShape;
   delete theRes;

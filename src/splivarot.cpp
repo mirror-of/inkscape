@@ -828,8 +828,8 @@ sp_selected_path_create_offset_object (int expand,bool updating)
       o_width=prefOffset;
     }
     
-    if (o_width < 0.25)
-      o_width = 0.25;               
+    if (o_width < 0.01)
+      o_width = 0.01;               
     o_miter = 4 * o_width;
   }
   
@@ -1211,8 +1211,8 @@ static gdouble simplify_multiply = 1;
 void
 sp_selected_path_simplify (void)
 {
-	gdouble simplify_threshold = prefs_get_double_attribute ("options.simplifythreshold","value", 0.02);
-	bool simplify_justcoalesce = (bool) prefs_get_int_attribute ("options.simplifyjustcoalesce","value", 1);
+	gdouble simplify_threshold = prefs_get_double_attribute ("options.simplifythreshold","value", 0.003);
+	bool simplify_justcoalesce = (bool) prefs_get_int_attribute ("options.simplifyjustcoalesce","value", 0);
 
 	GTimeVal cu;
 	g_get_current_time (&cu);
