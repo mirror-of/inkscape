@@ -25,18 +25,19 @@
 namespace Inkscape {
 namespace Extension {
 
+// These strings are for XML attribute comparisons and should not be translated
 gchar const * Dependency::_type_str[] = {
-    N_("executable"),
-    N_("file"),
-    N_("extension"),
-    N_("plugin")
+    "executable",
+    "file",
+    "extension",
+    "plugin",
 };
 
+// These strings are for XML attribute comparisons and should not be translated
 gchar const * Dependency::_location_str[] = {
-    // TRANSLATORS: "path" refers to "filesystem path" here
-    N_("path"),
-    N_("extensions"),
-    N_("absolute")
+    "path",
+    "extensions",
+    "absolute",
 };
 
 /**
