@@ -40,6 +40,7 @@ static const char preferences_skeleton[] =
 "                  style=\"fill:black;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;\"/>"
 "    <eventcontext id=\"nodes\"/>"
 "    <eventcontext id=\"zoom\"/>"
+"    <eventcontext id=\"dropper\"/>"
 "    <eventcontext id=\"select\"/>"
 "  </group>"
 "  <group id=\"palette\">"
