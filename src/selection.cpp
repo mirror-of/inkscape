@@ -15,6 +15,7 @@
 #include <gtk/gtkmain.h>
 #include "macros.h"
 #include "helper/sp-marshal.h"
+#include "helper/sp-intl.h"
 #include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-handles.h"
@@ -204,16 +205,16 @@ sp_selection_update_statusbar (SPSelection * selection)
 {
 	gint len;
 
-	const char* when_selected = "Click selection to toggle scale/rotation handles";
+	const char* when_selected = _("Click selection to toggle scale/rotation handles");
 
 	len = g_slist_length (selection->items);
 
 	if (len == 0) {
-		sp_view_set_statusf (SP_VIEW (selection->desktop), "No objects selected. Click, Shift+click, drag around objects to select.");
+		sp_view_set_statusf (SP_VIEW (selection->desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
 	} else if (len == 1) {
 		sp_view_set_statusf (SP_VIEW (selection->desktop), "%s. %s.", sp_item_description (SP_ITEM (selection->items->data)), when_selected);
 	} else {
-		sp_view_set_statusf (SP_VIEW (selection->desktop), "%i objects selected. %s.", len, when_selected);
+		sp_view_set_statusf (SP_VIEW (selection->desktop), _("%i objects selected. %s."), len, when_selected);
 	}
 }
 

@@ -18,6 +18,7 @@
 #include "helper/sp-canvas-util.h"
 #include "helper/sp-ctrlline.h"
 #include "helper/sodipodi-ctrl.h"
+#include "helper/sp-intl.h"
 #include "knot.h"
 #include "inkscape.h"
 #include "document.h"
@@ -2704,11 +2705,11 @@ sp_node_type_description (SPPathNode *n)
 {
 	switch (n->type) {
 	case SP_PATHNODE_CUSP:
-		return ("cusp");
+		return _("cusp");
 	case SP_PATHNODE_SMOOTH:
-		return ("smooth");
+		return _("smooth");
 	case SP_PATHNODE_SYMM:
-		return ("symmetric");
+		return _("symmetric");
 	}
 	return NULL;
 }
@@ -2720,7 +2721,7 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 
 	if (!nodepath) return;
 
-	const gchar* when_selected = "Drag nodes or control points to edit the path";
+	const gchar* when_selected = _("Drag nodes or control points to edit the path");
 
 	total = selected = 0;
 
@@ -2734,12 +2735,12 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 	if (selected == 0) {
 		SPSelection *sel = nodepath->desktop->selection;
 		if (sel->items == NULL)
-			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
+			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("Select one path object with selector first, then switch back to node tool."));
 		else 
-			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select.", total);
+			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."), total);
 	} else if (selected == 1) {
-		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "%i of %i nodes selected; %s. %s.", selected, total, sp_node_type_description ((SPPathNode *) nodepath->selected->data), when_selected);
+		sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("%i of %i nodes selected; %s. %s."), selected, total, sp_node_type_description ((SPPathNode *) nodepath->selected->data), when_selected);
 	} else {
-		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "%i of %i nodes selected. %s.", selected, total, when_selected);
+		sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("%i of %i nodes selected. %s."), selected, total, when_selected);
 	}
 }
