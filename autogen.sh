@@ -120,13 +120,6 @@ test $TEST_TYPE $FILE || {
 }
 
 
-if test -z "$*"; then
-    echo
-    echo "I am going to run ./configure with no arguments - if you wish "
-    echo "to pass any to it, please specify them on the $0 command line."
-    echo
-fi
-
 if test -z "$ACLOCAL_FLAGS"; then
 
     acdir=`$ACLOCAL --print-ac-dir`
@@ -163,12 +156,3 @@ glib-gettextize --copy --force
 intltoolize --copy --force --automake
 
 cd $ORIGDIR
-
-if $srcdir/configure --enable-maintainer-mode --enable-gtk-doc "$@"; then
-  echo
-  echo "Now type 'make' to compile $PROJECT."
-else
-  echo
-  echo "Configure failed or did not finish!"
-fi
-
