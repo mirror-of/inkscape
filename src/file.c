@@ -52,6 +52,8 @@
 #include "modules/win32.h"
 #endif
 
+static void sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key);
+
 gchar *open_path = NULL;
 gchar *save_path = NULL;
 gchar *import_path = NULL;
@@ -201,7 +203,7 @@ sp_file_save_dialog (SPDocument *doc)
 		g_free (filename);
 	}
 #else
-	GtkFileSelection *fsel;
+	GtkFileSelection *fs;
 	GtkWidget *dlg, *hb, *l, *om, *menu;
 	int b;
 
@@ -210,10 +212,10 @@ sp_file_save_dialog (SPDocument *doc)
 	/* fixme: Remove modality (Lauris) */
 	gtk_window_set_modal (GTK_WINDOW (dlg), TRUE);
 
-	fsel = GTK_FILE_SELECTION (dlg);
+	fs = GTK_FILE_SELECTION (dlg);
 
 	hb = gtk_hbox_new (FALSE, 4);
-	gtk_box_pack_start (GTK_BOX (fsel->main_vbox), hb, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (fs->main_vbox), hb, FALSE, FALSE, 0);
 	om = gtk_option_menu_new ();
 	gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
 
@@ -223,21 +225,49 @@ sp_file_save_dialog (SPDocument *doc)
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
 	gtk_widget_show_all (hb);
 
-	if (save_path) gtk_file_selection_set_filename (fsel, save_path);
-
 	b = gtk_dialog_run (GTK_DIALOG (dlg));
 
 	if (b == GTK_RESPONSE_OK) {
-		const gchar *filename;
-		filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dlg));
-		sp_file_do_save (doc, filename, (gchar*)((SPMenu *) menu)->activedata);
-		if (save_path) g_free (save_path);
-		save_path = g_dirname (filename);
-		save_path = g_strdup (save_path);
+		sp_file_save_ok (dlg, doc, (gchar*)((SPMenu *) menu)->activedata);
 	}
 
 	gtk_widget_destroy (dlg);
 #endif
+}
+
+static void
+sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key) {
+	GtkFileSelection *fs;
+	const gchar *filename;
+	const gchar      *raw_filename;
+
+	fs = GTK_FILE_SELECTION (save_dialog);
+
+	filename = gtk_file_selection_get_filename (fs);
+	raw_filename = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+
+	g_assert (filename && raw_filename);
+
+	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+		if (g_file_test (filename, G_FILE_TEST_IS_DIR)) {
+			if (filename[strlen (filename) - 1] != G_DIR_SEPARATOR) {
+				gchar *s = g_strconcat (filename, G_DIR_SEPARATOR_S, NULL);
+				gtk_file_selection_set_filename (fs, s);
+				g_free (s);
+			} else {
+				gtk_file_selection_set_filename (fs, filename);
+			}
+		} else {
+			/* We may want to handle overwriting files differently */
+			gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
+			sp_file_do_save (doc, filename, key);
+			gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
+		}
+	} else {
+		gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
+		sp_file_do_save (doc, filename, key);
+		gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
+	}
 }
 
 void
