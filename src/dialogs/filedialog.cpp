@@ -525,8 +525,9 @@ bool
 FileOpenDialogImpl::show()
 {
 
-    set_modal(true);
-    gint b = run();  //Dialog
+    set_modal (TRUE);                      //Window
+    sp_transientize((GtkWidget *)gobj());  //Make transient
+    gint b = run();                        //Dialog
     hide();
 
     if (b == GTK_RESPONSE_OK)
@@ -778,10 +779,9 @@ FileSaveDialogImpl::~FileSaveDialogImpl()
 bool
 FileSaveDialogImpl::show() {
 
-    /* Reset the default back to autodetect */
-    set_modal (TRUE); //Window
-    //sp_transientize (dlg);
-    gint b = run();  //Dialog
+    set_modal (TRUE);                      //Window
+    sp_transientize((GtkWidget *)gobj());  //Make transient
+    gint b = run();                        //Dialog
     hide();
 
     if (b == GTK_RESPONSE_OK) {
