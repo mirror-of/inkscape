@@ -406,17 +406,19 @@ sp_svgview_goto_last (struct _SPSlideShow *ss)
     }
 }
 
+#ifdef WITH_INKJAR
 static bool
 is_jar(const gchar *filename)
 {
     //fixme: mime check or something
     char *extension;
     if ((extension = strrchr(filename, '.')) != NULL) {
-	if (strcmp(extension, ".jar") == 0)
+	if (strcmp(extension, ".jar") == 0 || strcmp(extension, ".sxw") == 0)
 	    return true;
     }
     return false;
 }
+#endif /* WITH_INKJAR */
 
 static void usage()
 {
