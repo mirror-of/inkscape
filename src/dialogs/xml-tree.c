@@ -145,8 +145,6 @@ sp_xml_tree_dialog (void)
 		dialog = sp_window_new ("", TRUE);
 
 		sp_transientize (dialog);
-		//now all uncatched keypresses from the window will be handled:
-		gtk_signal_connect (GTK_OBJECT (dialog), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dialog);
 
 		gtk_container_set_border_width (GTK_CONTAINER (dialog), 0);
 		gtk_window_set_default_size (GTK_WINDOW (dialog), 640, 384);

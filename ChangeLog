@@ -5,6 +5,10 @@
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 
+	* dialogs/xml-tree.c: events should not be intercepted for the XML dialog
+
+2003-11-16  MenTaLguY <mental@rydia.net>
+
 	* src/version.c: ME R DUM.  Had the arguments to sscanf() reversed.
 
 2003-11-16  Ted Gould <ted@gould.cx>
