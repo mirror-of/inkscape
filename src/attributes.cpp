@@ -51,9 +51,7 @@ static const SPStyleProp props[] = {
 	/* SPNamedView */
 	{SP_ATTR_VIEWONLY, "viewonly"},
 	{SP_ATTR_SHOWGRID, "showgrid"},
-	{SP_ATTR_SNAPTOGRID, "snaptogrid"},
 	{SP_ATTR_SHOWGUIDES, "showguides"},
-	{SP_ATTR_SNAPTOGUIDES, "snaptoguides"},
 	{SP_ATTR_GRIDTOLERANCE, "gridtolerance"},
 	{SP_ATTR_GUIDETOLERANCE, "guidetolerance"},
 	{SP_ATTR_GRIDORIGINX, "gridoriginx"},
