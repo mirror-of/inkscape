@@ -105,26 +105,32 @@ char *br_prepend_prefix	(void *symbol, char *path);
 
 #ifdef ENABLE_BINRELOC
 #  undef INKSCAPE_DATADIR
-#  undef INKSCAPE_PIXMAPDIR	
+#  undef INKSCAPE_PIXMAPDIR
 #  define INKSCAPE_DATADIR DATADIR
 #  define INKSCAPE_PIXMAPDIR BR_DATADIR( "/inkscape/icons" )
 #  define INKSCAPE_SCREENSDIR BR_DATADIR( "/inkscape/screens" )
 #  define INKSCAPE_TUTORIALSDIR BR_DATADIR( "/inkscape/tutorials" )
+#  define INKSCAPE_PATTERNSDIR BR_DATADIR("/inkscape/patterns")
 #  define INKSCAPE_MARKERSDIR BR_DATADIR("/inkscape/markers")
+#  define INKSCAPE_GRADIENTSDIR BR_DATADIR("/inkscape/gradients")
 #else
 #  ifdef WIN32
-#    define INKSCAPE_DATADIR "."  
+#    define INKSCAPE_DATADIR "."
 #    define INKSCAPE_PIXMAPDIR "share\\icons"
 #    define INKSCAPE_SCREENSDIR "share\\screens"
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
+#    define INKSCAPE_PATTERNSDIR "share\\patterns"
 #    define INKSCAPE_MARKERSDIR "share\\markers"
-#  else      
-#    ifndef INKSCAPE_PIXMAPDIR	
+#    define INKSCAPE_GRADIENTSDIR "share\\gradients"
+#  else
+#    ifndef INKSCAPE_PIXMAPDIR
 #      define INKSCAPE_PIXMAPDIR INKSCAPE_DATADIR "/inkscape/icons"
-#    endif	
-#    define INKSCAPE_SCREENSDIR INKSCAPE_DATADIR "/inkscape/screens"    
-#    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"    
+#    endif
+#    define INKSCAPE_SCREENSDIR INKSCAPE_DATADIR "/inkscape/screens"
+#    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"
+#    define INKSCAPE_PATTERNSDIR "/inkscape/patterns"
 #    define INKSCAPE_MARKERSDIR INKSCAPE_DATADIR "/inkscape/markers"
+#    define INKSCAPE_GRADIENTSDIR "/inkscape/gradients"
 #  endif
 #endif
 
@@ -134,5 +140,5 @@ char *br_extract_dir	(const char *path);
 char *br_extract_prefix(const char *path);
 
 }
-	
+
 #endif /* _PREFIX_H_ */
