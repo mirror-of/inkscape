@@ -65,6 +65,13 @@ sp_document_done (SPDocument *doc)
 }
 
 void
+sp_document_reset_key (Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base)
+{
+	SPDocument *doc = (SPDocument *) base;
+	doc->actionkey = NULL;
+}
+
+void
 sp_document_maybe_done (SPDocument *doc, const gchar *key)
 {
 	SPReprAction *log;

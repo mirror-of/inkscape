@@ -15,6 +15,8 @@
 
 #include <libnr/nr-types.h>
 #include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtksignal.h>
 #include <sigc++/sigc++.h>
 #include "xml/repr.h"
 #include "forward.h"
@@ -107,6 +109,7 @@ gint sp_document_ensure_up_to_date (SPDocument *doc);
 /* Save all previous actions to stack, as one undo step */
 void sp_document_done (SPDocument *document);
 void sp_document_maybe_done (SPDocument *document, const gchar *key);
+void sp_document_reset_key (Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base);
 
 /* Cancel (and revert) current unsaved actions */
 void sp_document_cancel (SPDocument *document);
