@@ -3,13 +3,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-25 14:46+0100\n"
+"POT-Creation-Date: 2004-11-26 12:07+0100\n"
 "PO-Revision-Date: 2004-11-26 09:50+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -34,13 +34,17 @@ msgstr "<b>Mayús</b>: dibujar alrededor del punto inicial"
 #: src/pen-context.cpp:272 src/pencil-context.cpp:180 src/rect-context.cpp:465
 #: src/spiral-context.cpp:425 src/star-context.cpp:437
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr "<b>La capa actual está oculta</b>. Debe estar visible para poder dibujar en ella."
+msgstr ""
+"<b>La capa actual está oculta</b>. Debe estar visible para poder dibujar en "
+"ella."
 
 #: src/arc-context.cpp:433 src/dyna-draw-context.cpp:461
 #: src/pen-context.cpp:276 src/pencil-context.cpp:184 src/rect-context.cpp:469
 #: src/spiral-context.cpp:429 src/star-context.cpp:441
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr "<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder dibujar en ella."
+msgstr ""
+"<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder dibujar "
+"en ella."
 
 #: src/arc-context.cpp:512
 #, c-format
@@ -3545,11 +3549,15 @@ msgstr "No se ha copiado nada."
 
 #: src/selection-chemistry.cpp:929
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
-msgstr "<b>La capa actual está oculta</b>. Debe hacerla visible para poder pegar en ella."
+msgstr ""
+"<b>La capa actual está oculta</b>. Debe hacerla visible para poder pegar en "
+"ella."
 
 #: src/selection-chemistry.cpp:933
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
-msgstr "<b>La capa actual está bloqueada</b>. Debe desbloquearla antes de poder pegar en ella."
+msgstr ""
+"<b>La capa actual está bloqueada</b>. Debe desbloquearla antes de poder "
+"pegar en ella."
 
 #: src/selection-chemistry.cpp:946 src/selection-chemistry.cpp:997
 msgid "Nothing on the clipboard."
@@ -3583,17 +3591,17 @@ msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path."
 msgstr ""
-"Seleccione un <b>clon</b> para ir a su original. Seleccione <b>desplazamiento "
-"enlazado</b> para ir a su origen. Seleccione <b>texto en trayecto</b> para "
-"ir al trayecto."
+"Seleccione un <b>clon</b> para ir a su original. Seleccione "
+"<b>desplazamiento enlazado</b> para ir a su origen. Seleccione <b>texto en "
+"trayecto</b> para ir al trayecto."
 
 #: src/selection-chemistry.cpp:1676
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
 msgstr ""
-"<b>No se pudo encontrar</b> el objeto (¿clon huérfano, desplazamiento, o trayecto de "
-"un texto?)"
+"<b>No se pudo encontrar</b> el objeto (¿clon huérfano, desplazamiento, o "
+"trayecto de un texto?)"
 
 #: src/selection-chemistry.cpp:1682
 msgid ""
@@ -3608,7 +3616,8 @@ msgstr "Seleccione los <b>objetos</b> que desea convertir en patrón."
 
 #: src/selection-chemistry.cpp:1795
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr "Seleccione un <b>objeto con relleno de mosaico</b> del que extraer objetos."
+msgstr ""
+"Seleccione un <b>objeto con relleno de mosaico</b> del que extraer objetos."
 
 #: src/selection-chemistry.cpp:1848
 msgid "<b>No pattern fills</b> in the selection."
@@ -3762,8 +3771,8 @@ msgstr "Objeto"
 msgid ""
 "<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"
 msgstr ""
-"<b>Desplazamiento enlazado</b>, %s por %f pt. Utilice <b>Mayús+D</b> para buscar el "
-"original."
+"<b>Desplazamiento enlazado</b>, %s por %f pt. Utilice <b>Mayús+D</b> para "
+"buscar el original."
 
 #: src/sp-offset.cpp:396 src/sp-offset.cpp:400
 msgid "outset"
@@ -3959,11 +3968,15 @@ msgstr "Seleccione los <b>textos</b> de los que desea eliminar los kerns."
 
 #: src/text-context.cpp:353
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
-msgstr "<b>La capa actual está oculta</b>. Debe hacerla visible para poder añadr texto."
+msgstr ""
+"<b>La capa actual está oculta</b>. Debe hacerla visible para poder añadr "
+"texto."
 
 #: src/text-context.cpp:357
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
-msgstr "<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder añadir texto."
+msgstr ""
+"<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder añadir "
+"texto."
 
 #: src/text-context.cpp:409
 msgid "No-break space"
@@ -5697,8 +5710,8 @@ msgid ""
 "Use <b>Edit &gt; Object(s) to Pattern</b> to create a new pattern from "
 "selection."
 msgstr ""
-"Utilice <b>Edición &gt; Objeto(s) a patrón</b> para crear un patrón de mosaico desde la "
-"selección."
+"Utilice <b>Edición &gt; Objeto(s) a patrón</b> para crear un patrón de "
+"mosaico desde la selección."
 
 #: src/widgets/paint-selector.cpp:1013
 msgid "Pattern fill"
