@@ -383,15 +383,15 @@ void Path::SubContractOutline(int off, int num_pd,
 	// et le reste, 1 par 1
 	while (curP < num_pd)
 	{
-            path_descr *curD = descr_cmd[off + curP];
-		int nType = curD->getType();
+            int curD = off + curP;
+		int nType = descr_cmd[curD]->getType();
 		NR::Point nextX;
 		NR::Point stPos, enPos, stTgt, enTgt, stNor, enNor;
 		double stRad, enRad, stTle, enTle;
 		if (nType == descr_forced)  {
 			curP++;
 		} else if (nType == descr_moveto) {
-			path_descr_moveto* nData=(path_descr_moveto*)(descr_data+curD->dStart);
+			path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd[curD]->dStart);
 			nextX = nData->p;
 			// et on avance
 			if (doFirst) {
@@ -477,10 +477,10 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_lineto)
 		{
-			path_descr_lineto* nData=(path_descr_lineto*)(descr_data+curD->dStart);
+			path_descr_lineto* nData=(path_descr_lineto*)(descr_data+descr_cmd[curD]->dStart);
 			nextX = nData->p;
 			// test de nullité du segment
-			if (IsNulCurve (curD, curX,descr_data))
+			if (IsNulCurve (descr_cmd, curD, curX,descr_data))
 			{
 				curP++;
 				continue;
@@ -525,10 +525,10 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_cubicto)
 		{
-			path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+curD->dStart);
+			path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+descr_cmd[curD]->dStart);
 			nextX = nData->p;
 			// test de nullite du segment
-			if (IsNulCurve (curD, curX,descr_data))
+			if (IsNulCurve (descr_cmd, curD, curX,descr_data))
 			{
 				curP++;
 				continue;
@@ -581,10 +581,10 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_arcto)
 		{
-			path_descr_arcto* nData=(path_descr_arcto*)(descr_data+curD->dStart);
+			path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[curD]->dStart);
 			nextX = nData->p;
 			// test de nullité du segment
-			if (IsNulCurve (curD, curX,descr_data))
+			if (IsNulCurve (descr_cmd, curD, curX,descr_data))
 			{
 				curP++;
 				continue;
@@ -638,20 +638,20 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_bezierto)
 		{
-			path_descr_bezierto* nBData=(path_descr_bezierto*)(descr_data+curD->dStart);
+			path_descr_bezierto* nBData=(path_descr_bezierto*)(descr_data+descr_cmd[curD]->dStart);
 			int nbInterm = nBData->nb;
 			nextX = nBData->p;
       
-			if (IsNulCurve (curD, curX,descr_data)) {
+			if (IsNulCurve (descr_cmd, curD, curX,descr_data)) {
 				curP += nbInterm + 1;
 				continue;
 			}
       
 //      path_descr *bezStart = curD;
 			curP++;
-			curD = descr_cmd[off + curP];
-			path_descr *intermPoints = curD;
-			path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
+			curD = off + curP;
+                        int ip = curD;
+			path_descr_intermbezierto* nData = (path_descr_intermbezierto*)(descr_data+descr_cmd[ip]->dStart);
      
 			if (nbInterm <= 0) {
 				// et on avance
@@ -730,8 +730,8 @@ void Path::SubContractOutline(int off, int num_pd,
 				TangentOnBezAt (0.0, curX, *nData, *nBData, false, stPos, stTgt, stTle, stRad);
 				stNor=stTgt.cw();
         
-				intermPoints++;
-				nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);       
+				ip++;
+				nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[ip]->dStart);       
 				// et on avance
 				if (stTle > 0) {
 					if (doFirst) {
@@ -756,8 +756,8 @@ void Path::SubContractOutline(int off, int num_pd,
 					cx = dx;
           
 					dx = nData->p;
-					intermPoints++;
-					nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);         
+                                        ip++;
+					nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[ip]->dStart);         
 					NR::Point stx = (bx + cx) / 2;
 					//                                      double  stw=(bw+cw)/2;
           
@@ -831,6 +831,7 @@ void Path::SubContractOutline(int off, int num_pd,
 		{
 		}
 	}
+        
 }
 
 /*
@@ -841,12 +842,12 @@ void Path::SubContractOutline(int off, int num_pd,
 
 // like the name says: check whether the path command is actually more than a dumb point.
 bool
-Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddata)
+Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const &curX,NR::Point* ddata)
 {
-	switch(curD->getType()) {
+	switch(cmd[curD]->getType()) {
     case descr_lineto:
     {
-		path_descr_lineto* nData=(path_descr_lineto*)(ddata+curD->dStart);
+		path_descr_lineto* nData=(path_descr_lineto*)(ddata+cmd[curD]->dStart);
 		if (NR::LInfty(nData->p - curX) < 0.00001) {
 			return true;
 		}
@@ -854,7 +855,7 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
     }
 	case descr_cubicto:
     {
-		path_descr_cubicto* nData=(path_descr_cubicto*)(ddata+curD->dStart);
+		path_descr_cubicto* nData=(path_descr_cubicto*)(ddata+cmd[curD]->dStart);
 		NR::Point A = nData->stD + nData->enD + 2*(curX - nData->p);
 		NR::Point B = 3*(nData->p - curX) - 2*nData->stD - nData->enD;
 		NR::Point C = nData->stD;
@@ -867,7 +868,7 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
     }
     case descr_arcto:
     {
-		path_descr_arcto* nData=(path_descr_arcto*)(ddata+curD->dStart);
+		path_descr_arcto* nData=(path_descr_arcto*)(ddata+cmd[curD]->dStart);
 		if ( NR::LInfty(nData->p - curX) < 0.00001) {
 			if ((nData->large == false) 
 				|| (fabs (nData->rx) < 0.00001
@@ -879,7 +880,7 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
     }
     case descr_bezierto:
     {
-		path_descr_bezierto* nBData=(path_descr_bezierto*)(ddata+curD->dStart);
+		path_descr_bezierto* nBData=(path_descr_bezierto*)(ddata+cmd[curD]->dStart);
 		if (nBData->nb <= 0)
 		{
 			if (NR::LInfty(nBData->p - curX) < 0.00001) {
@@ -890,8 +891,8 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
 		else if (nBData->nb == 1)
 		{
 			if (NR::LInfty(nBData->p - curX) < 0.00001) {
-				path_descr const *interm = curD + 1;
-				path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(ddata+interm->dStart);
+				int ip = curD + 1;
+				path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(ddata+cmd[ip]->dStart);
 				if (NR::LInfty(nData->p - curX) < 0.00001) {
 					return true;
 				}
@@ -899,8 +900,8 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
 			return false;
 		} else if (NR::LInfty(nBData->p - curX) < 0.00001) {
 			for (int i = 1; i <= nBData->nb; i++) {
-				path_descr const *interm = curD + i;
-				path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(ddata+interm->dStart);
+				int ip = curD + i;
+				path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(ddata+cmd[ip]->dStart);
 				if (NR::LInfty(nData->p - curX) > 0.00001) {
 					return false;
 				}
