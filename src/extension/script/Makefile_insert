@@ -4,13 +4,13 @@ extension/script/all: extension/script/libscript.a
 
 extension/script/clean:
 	rm -f extension/script/libscript.a
-        rm -f $(extension_script_libscript_a_OBJECTS)
-        rm -f extension/script/inkscape_perl_wrap.cpp
-        rm -f extension/script/inkscape_perl.pm
-        rm -f extension/script/inkscape_perl.pm.h
-        rm -f extension/script/inkscape_py_wrap.cpp
-        rm -f extension/script/inkscape_py.py
-        rm -f extension/script/inkscape_py.py.h
+	rm -f $(extension_script_libscript_a_OBJECTS)
+	rm -f extension/script/inkscape_perl_wrap.cpp
+	rm -f extension/script/inkscape_perl.pm
+	rm -f extension/script/inkscape_perl.pm.h
+	rm -f extension/script/inkscape_py_wrap.cpp
+	rm -f extension/script/inkscape_py.py
+	rm -f extension/script/inkscape_py.py.h
 
 extension_script_libscript_a_SOURCES =	\
 	extension/script/InkscapeBinding.h \
@@ -28,6 +28,14 @@ extension_script_libscript_a_SOURCES =	\
 	extension/script/InkscapeScript.h \
 	extension/script/InkscapeScript.cpp
 
+#
+# Should only InkscapeBinding.h be the only 'master file,'
+# and be the only file in the repository, or should I do this
+# manually, and check in the 6 output files?  This would save
+# the rest of the developers a lot of headaches, but they will
+# get a lot of updates from cvs as InkscapeBinding is developed.
+#
+
 inkscape_py_wrap.cpp: InkscapeBinding.h inkscape_py.i
 	swig -c++ -python -o inkscape_py_wrap.cpp inkscape_py.i
 	perl quotefile.pl inkscape_py.py inkscape_py.py.h
@@ -35,3 +43,4 @@ inkscape_py_wrap.cpp: InkscapeBinding.h inkscape_py.i
 inkscape_perl_wrap.cpp: InkscapeBinding.h inkscape_perl.i
 	swig -c++ -perl5 -static -o inkscape_perl_wrap.cpp inkscape_perl.i 
 	perl quotefile.pl inkscape_perl.pm inkscape_perl.pm.h
+
