@@ -32,6 +32,7 @@
 #include "widgets/button.h"
 #include "widgets/sp-toolbox.h"
 
+#include "prefs-utils.h"
 #include "inkscape-stock.h"
 #include "verbs.h"
 #include "file.h"
@@ -102,10 +103,9 @@ static void sp_maintoolbox_open_files(gchar * buffer);
 static void sp_maintoolbox_open_one_file_with_check(gpointer filename, gpointer unused);
 
 static GtkWidget *dlg = NULL;
-
 static win_data wd;
-
-static gint x = 0, y = 0;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.toolbox";
 
 static void
 sp_maintoolbox_destroy (GtkObject *object, gpointer data)
@@ -119,6 +119,10 @@ static gboolean
 sp_maintoolbox_delete (GtkObject *object, gpointer data)
 {
 	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+
 	return FALSE; // which means, go ahead and destroy it
 }
 
@@ -130,15 +134,19 @@ sp_maintoolbox_create_toplevel (void)
 	if (!dlg) {
 		/* Create window */
 		dlg = sp_window_new (_("Inkscape"), FALSE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
 		gtk_window_move ((GtkWindow *) dlg, x, y);
 		sp_transientize (dlg);
 		wd.win = dlg;
 		wd.stop = 0;
 		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
-
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_maintoolbox_destroy), dlg);
-		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", GTK_SIGNAL_FUNC (sp_maintoolbox_delete), dlg);
+		g_signal_connect (G_OBJECT (dlg), "delete_event", G_CALLBACK (sp_maintoolbox_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_maintoolbox_delete), dlg);
 
 		toolbox = sp_maintoolbox_new ();
 		gtk_widget_show (toolbox);
