@@ -11,13 +11,17 @@
 
 CXX = g++
 
+WRAPS = \
+inkscape_py_wrap.o \
+inkscape_perl_wrap.o
 
 OBJ = \
 InkscapeScript.o \
 InkscapeInterpreter.o \
 InkscapeBinding.o \
-InkscapePython.o inkscape_py_wrap.o \
-InkscapePerl.o inkscape_perl_wrap.o
+InkscapePython.o  \
+InkscapePerl.o \
+$(WRAPS)
 
 #########################################################
 # NOTE that we are using the interpreters themselves, to
@@ -45,6 +49,8 @@ CXXFLAGS = $(CFLAGS)
 LIBS = $(PYTHON_LDFLAGS) $(PERL_LDFLAGS) $(GLIB_LIB)
 
 all: bindtest cpptest
+
+wraps: $(WRAPS)
 
 bindtest: bindtest.o  $(OBJ)
 	$(CXX) -o $@ bindtest.o $(OBJ) $(LIBS)
