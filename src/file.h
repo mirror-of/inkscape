@@ -111,7 +111,7 @@ void sp_export_png_file (SPDocument *doc, const gchar *filename,
 			 double x0, double y0, double x1, double y1,
 			 unsigned int width, unsigned int height,
 			 unsigned long bgcolor,
-			 unsigned int (*status) (float, void *), void *data);
+			 unsigned int (*status) (float, void *), void *data, bool force_overwrite = false);
 
 
 /*######################

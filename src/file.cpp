@@ -809,7 +809,7 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
                    unsigned width, unsigned height,
                    unsigned long bgcolor,
                    unsigned (*status)(float, void *),
-                   void *data)
+                   void *data, bool force_overwrite)
 {
     g_return_if_fail(doc != NULL);
     g_return_if_fail(SP_IS_DOCUMENT(doc));
@@ -817,7 +817,7 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     g_return_if_fail(width >= 1);
     g_return_if_fail(height >= 1);
 
-    if (!sp_ui_overwrite_file(filename)) {
+    if (!force_overwrite && !sp_ui_overwrite_file(filename)) {
         return;
     }
 

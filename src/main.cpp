@@ -57,6 +57,7 @@
 #include "interface.h"
 #include "print.h"
 #include "slideshow.h"
+#include "color.h"
 
 #include "svg/svg.h"
 
@@ -501,15 +502,24 @@ sp_do_export_png(SPDocument *doc)
 
     bgcolor = 0x00000000;
     if (sp_export_background) {
+        // override the page color
         bgcolor = sp_svg_read_color(sp_export_background, 0xffffff00);
-        bgcolor |= 0xff;
+        bgcolor |= 0xff; // fixme! allow for non-ff alphas; new parameter for alpha?
+    } else {
+        // read from namedview
+        SPRepr *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
+        if (nv && sp_repr_attr (nv, "pagecolor"))
+            bgcolor = sp_svg_read_color(sp_repr_attr (nv, "pagecolor"), 0xffffff00);
+        if (nv && sp_repr_attr (nv, "inkscape:pageopacity"))
+            bgcolor |= SP_COLOR_F_TO_U(sp_repr_get_double_attribute (nv, "inkscape:pageopacity", 1.0));
     }
+
     g_print("Background is %x\n", bgcolor);
 
     g_print("Exporting %g %g %g %g to %d x %d rectangle\n", area.x0, area.y0, area.x1, area.y1, width, height);
 
-    if ((width >= 1) || (height >= 1) || (width < 65536) || (height < 65536)) {
-        sp_export_png_file(doc, sp_export_png, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL);
+    if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
+        sp_export_png_file(doc, sp_export_png, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true);
     } else {
         g_warning("Calculated bitmap dimensions %d %d out of range (1 - 65535)", width, height);
     }
