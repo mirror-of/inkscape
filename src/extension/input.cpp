@@ -137,39 +137,28 @@ Input::check (void)
 SPDocument *
 Input::open (const gchar *uri)
 {
-        if (!loaded()) {
-            set_state(Extension::STATE_LOADED);
+    if (!loaded()) {
+        set_state(Extension::STATE_LOADED);
+    }
+    if (!loaded()) return NULL;
+    timer->touch();
+
+    SPDocument * doc = NULL;
+
+    // TODO fix this to work on WindowsXP (is this fixed now? -Kees)
+    if (Inkscape::IO::file_test(uri, G_FILE_TEST_EXISTS)) {
+        doc = imp->open(this, uri);
+
+        if (doc != NULL) {
+            Inkscape::XML::Node * repr = sp_document_repr_root(doc);
+            gboolean saved = sp_document_get_undo_sensitive(doc);
+            sp_document_set_undo_sensitive (doc, FALSE);
+            sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
+            sp_document_set_undo_sensitive (doc, saved);
         }
-        if (!loaded()) return NULL;
-        timer->touch();
+    }
 
-	SPDocument * doc;
-	Inkscape::XML::Node * repr;
-
-	gsize bytesRead = 0;
-	gsize bytesWritten = 0;
-	GError* error = NULL;
-	gchar* local_uri = g_filename_from_utf8 ( uri,
-                                 -1,  &bytesRead,  &bytesWritten, &error);
-
-        // TODO fix this to work on WindowsXP (is this fixed now? -Kees)
-	if (!Inkscape::IO::file_test(local_uri, G_FILE_TEST_EXISTS)) {
-		g_free(local_uri);
-		return NULL;
-	}
-	g_free(local_uri);
-
-	doc = imp->open(this, uri);
-
-	if (doc != NULL) {
-		repr = sp_document_repr_root(doc);
-                gboolean saved = sp_document_get_undo_sensitive(doc);
-		sp_document_set_undo_sensitive (doc, FALSE);
-		sp_repr_set_attr(repr, "inkscape:output_extension", output_extension);
-		sp_document_set_undo_sensitive (doc, saved);
-	}
-
-	return doc;
+    return doc;
 }
 
 /**
