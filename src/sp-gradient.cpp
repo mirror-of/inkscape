@@ -345,12 +345,10 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_GRADIENTTRANSFORM: 
-		NRMatrix t;
+	case SP_ATTR_GRADIENTTRANSFORM: {
+		NR::Matrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
-			int i;
-			for (i = 0; i < 6; i++) 
-				gr->gradientTransform[i] = t.c[i];
+			gr->gradientTransform = t;
 			gr->gradientTransform_set = TRUE;
 		} else {
 			nr_matrix_set_identity (&(gr->gradientTransform));
@@ -358,6 +356,7 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+	}
 	case SP_ATTR_SPREADMETHOD:
 		if (value) {
 			if (!strcmp (value, "reflect")) {

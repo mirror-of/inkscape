@@ -222,10 +222,9 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PATTERNTRANSFORM: {
-		NRMatrix t;
+		NR::Matrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
-			int i;
-			for (i = 0; i < 6; i++) pat->patternTransform.c[i] = t.c[i];
+			pat->patternTransform = t;
 			pat->patternTransform_set = TRUE;
 		} else {
 			nr_matrix_set_identity (&pat->patternTransform);

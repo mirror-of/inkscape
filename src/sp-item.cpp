@@ -182,7 +182,7 @@ sp_item_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_TRANSFORM: {
-            NRMatrix t;
+            NR::Matrix t;
             if (value && sp_svg_transform_read(value, &t)) {
                 sp_item_set_item_transform(item, t);
             } else {
@@ -609,7 +609,7 @@ sp_item_transform_repr (SPItem *item)
     NR::Matrix t_old(NR::identity());
     gchar const *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
     if (t_attr) {
-        NRMatrix t;
+        NR::Matrix t;
         if (sp_svg_transform_read(t_attr, &t)) {
             t_old = t;
         }
