@@ -376,10 +376,43 @@ clonetiler_get_transform (
         }
     }
     break;
-
+    case TILE_P31M:
+    {
+        NR::Matrix ori;
+        NR::Matrix dia1;
+        NR::Matrix dia2;
+        NR::Matrix dia3;
+        NR::Matrix dia4;
+        if (w > h) {
+            ori = NR::Matrix(NR::translate (w * (x/6) + w/2 * (y%2) + dx,  (w * cos(M_PI/6)) * y + dy));
+            dia1= NR::Matrix (NR::translate (0, h/2) * NR::translate (w/2, 0) * NR::translate (w/2 * cos(M_PI/3), -w/2 * sin(M_PI/3)) * NR::translate (-h/2 * cos(M_PI/6), -h/2 * sin(M_PI/6)) );
+            dia2= NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
+            dia3= NR::Matrix (NR::translate (0, 2 * (w/2 * sin(M_PI/3) - h/2 * sin(M_PI/6))));
+            dia4= NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+        } else {
+            ori  = NR::Matrix (NR::translate (2*h * cos(M_PI/6)  * (x/6 + 0.5*(y%2)) + dx,  (2*h - h * sin(M_PI/6)) * y + dy));
+            dia1 = NR::Matrix (NR::translate (0, -h/2) * NR::translate (h/2 * cos(M_PI/6), h/2 * sin(M_PI/6)));
+            dia2 = NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
+            dia3 = NR::Matrix (NR::translate (0, h/2));
+            dia4 = NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+        }
+            if (x % 6 == 0) {
+                return d_s_r * ori;
+            } else if (x % 6 == 1) {
+                return d_s_r * flip_y * rotate_m120_c * dia1 * ori;
+            } else if (x % 6 == 2) {
+                return d_s_r * rotate_m120_c * dia1 * dia2 * ori;
+            } else if (x % 6 == 3) {
+                return d_s_r * flip_y * rotate_120_c * dia1 * dia2 * dia3 * ori;
+            } else if (x % 6 == 4) {
+                return d_s_r * rotate_120_c * dia1 * dia2 * dia3 * dia4 * ori;
+            } else if (x % 6 == 5) {
+                return d_s_r * flip_y * NR::translate(0, h) * ori;
+            }
+    }
+    break;
 
 /*
-      case TILE_P31M:
       case TILE_P3M1:
       case TILE_P6:
       case TILE_P6M:
