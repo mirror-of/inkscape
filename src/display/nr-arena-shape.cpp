@@ -340,16 +340,20 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 
     item->render_opacity = TRUE;
     if ( shape->_fill.paint.type() == NRArenaShape::Paint::SERVER ) {
-	shape->fill_painter = sp_paint_server_painter_new (shape->_fill.paint.server(),
+        if (gc && gc->parent) {
+            shape->fill_painter = sp_paint_server_painter_new (shape->_fill.paint.server(),
 							   NR::Matrix (&gc->transform), NR::Matrix (&gc->parent->transform), 
 							   &shape->paintbox);
-	item->render_opacity = FALSE;
+        }
+        item->render_opacity = FALSE;
     }
     if ( shape->_stroke.paint.type() == NRArenaShape::Paint::SERVER ) {
-	shape->stroke_painter = sp_paint_server_painter_new (shape->_stroke.paint.server(),
+        if (gc && gc->parent) {
+            shape->stroke_painter = sp_paint_server_painter_new (shape->_stroke.paint.server(),
 							     NR::Matrix (&gc->transform), NR::Matrix (&gc->parent->transform), 
 							     &shape->paintbox);
-	item->render_opacity = FALSE;
+        }
+        item->render_opacity = FALSE;
     }
     if ( item->render_opacity == TRUE &&
          shape->_fill.paint.type()   != NRArenaShape::Paint::NONE &&
