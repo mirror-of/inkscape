@@ -1442,6 +1442,7 @@ display/nr-arena-item.o: \
 display/nr-arena-shape.o: \
 	display/nr-arena-shape.cpp \
 	color.h \
+	color.h \
 	display/canvas-bpath.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -2466,6 +2467,9 @@ file.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h
+
+fixes.o: \
+	fixes.cpp
 
 geom.o: \
 	geom.cpp \
@@ -5498,6 +5502,8 @@ sp-item.o: \
 	sp-object.h \
 	sp-root.h \
 	style.h \
+	svg/ftos.h \
+	svg/stringstream.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -5539,6 +5545,7 @@ sp-line.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	prefs-utils.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-line.h \
@@ -5793,6 +5800,7 @@ sp-object-repr.o: \
 	sp-star.h \
 	sp-symbol.h \
 	sp-text.h \
+	sp-typeset.h \
 	sp-use.h \
 	svg/svg-types.h \
 	uri-references.h \
@@ -5975,6 +5983,7 @@ sp-path.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	prefs-utils.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -6153,6 +6162,7 @@ sp-rect.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	prefs-utils.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -6225,6 +6235,7 @@ sp-root.o: \
 sp-shape.o: \
 	sp-shape.cpp \
 	attributes.h \
+	color.h \
 	color.h \
 	desktop-handles.h \
 	desktop.h \
@@ -6517,6 +6528,158 @@ sp-text.o: \
 	uri.h \
 	version.h \
 	view.h \
+	widgets/menu.h \
+	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
+	xml/repr.h
+
+sp-typeset-layout.o: \
+	sp-typeset-layout.cpp \
+	attributes.h \
+	color.h \
+	desktop-handles.h \
+	display/curve.h \
+	display/nr-arena-forward.h \
+	display/nr-arena-forward.h \
+	display/nr-arena-group.h \
+	display/nr-arena-item.h \
+	document.h \
+	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/svg.h \
+	forward.h \
+	helper/helper-forward.h \
+	helper/sp-intl.h \
+	helper/units.h \
+	inkscape.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-object.h \
+	libnr/nr-path.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-l.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	libnrtype/nr-font.h \
+	libnrtype/nr-rasterfont.h \
+	libnrtype/nr-typeface.h \
+	livarot/AVL.h \
+	livarot/DblLinked.h \
+	livarot/Ligne.h \
+	livarot/LivarotDefs.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h \
+	sp-chars.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
+	sp-object-repr.h \
+	sp-object.h \
+	sp-root.h \
+	sp-shape.h \
+	sp-text.h \
+	sp-typeset.h \
+	sp-use.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
+	version.h \
+	widgets/menu.h \
+	xml/repr-action.h \
+	xml/repr-private.h \
+	xml/repr.h \
+	xml/repr.h
+
+sp-typeset.o: \
+	sp-typeset.cpp \
+	attributes.h \
+	color.h \
+	display/curve.h \
+	display/nr-arena-forward.h \
+	display/nr-arena-forward.h \
+	display/nr-arena-group.h \
+	display/nr-arena-item.h \
+	document.h \
+	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/svg.h \
+	forward.h \
+	helper/sp-intl.h \
+	helper/units.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-object.h \
+	libnr/nr-path.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-l.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	libnrtype/nr-font.h \
+	libnrtype/nr-rasterfont.h \
+	libnrtype/nr-typeface.h \
+	livarot/AVL.h \
+	livarot/DblLinked.h \
+	livarot/LivarotDefs.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h \
+	sp-chars.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
+	sp-object-repr.h \
+	sp-object.h \
+	sp-root.h \
+	sp-shape.h \
+	sp-text.h \
+	sp-typeset.h \
+	sp-use.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
+	version.h \
 	widgets/menu.h \
 	xml/repr-action.h \
 	xml/repr-private.h \

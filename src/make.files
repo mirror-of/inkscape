@@ -1,4 +1,3 @@
-ResourceManager.h
 application.cpp
 application.h
 approx-equal.h
@@ -139,6 +138,7 @@ extract-uri.cpp
 extract-uri.h
 file.cpp
 file.h
+fixes.cpp
 forward.h
 geom.cpp
 geom.h
@@ -162,7 +162,6 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
-ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -434,6 +433,9 @@ sp-symbol.cpp
 sp-symbol.h
 sp-text.cpp
 sp-text.h
+sp-typeset-layout.cpp
+sp-typeset.cpp
+sp-typeset.h
 sp-use.cpp
 sp-use.h
 spiral-context.cpp

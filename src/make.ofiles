@@ -69,6 +69,7 @@ OBJECTS = \
 	extract-uri-test.o \
 	extract-uri.o \
 	file.o \
+	fixes.o \
 	geom.o \
 	gradient-chemistry.o \
 	help.o \
@@ -213,6 +214,8 @@ OBJECTS = \
 	sp-star.o \
 	sp-symbol.o \
 	sp-text.o \
+	sp-typeset-layout.o \
+	sp-typeset.o \
 	sp-use.o \
 	spiral-context.o \
 	splivarot.o \
@@ -341,6 +344,7 @@ LINTS = \
 	extract-uri-test.lint \
 	extract-uri.lint \
 	file.lint \
+	fixes.lint \
 	geom.lint \
 	gradient-chemistry.lint \
 	help.lint \
@@ -485,6 +489,8 @@ LINTS = \
 	sp-star.lint \
 	sp-symbol.lint \
 	sp-text.lint \
+	sp-typeset-layout.lint \
+	sp-typeset.lint \
 	sp-use.lint \
 	spiral-context.lint \
 	splivarot.lint \
