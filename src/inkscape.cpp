@@ -495,7 +495,7 @@ inkscape_segv_handler (int signum)
 
     g_print ("Emergency save completed. Inkscape will close now.\n");
     g_print ("If you can reproduce this crash, please file a bug at www.inkscape.org\n");
-          g_print ("with a detailed description of the steps leading to the crash, so we can fix it.\n");
+    g_print ("with a detailed description of the steps leading to the crash, so we can fix it.\n");
 
     /* Show nice dialog box */
 
@@ -662,7 +662,8 @@ inkscape_load_preferences (Inkscape::Application *inkscape)
 				 _("%s not a valid XML file, or\n"
 				   "you don't have read permissions on it.\n%s"),
 				 _("%s is not valid preferences file.\n%s"),
-				 _("Inkscape will run with default settings."));
+				 _("Inkscape will run with default settings.\n"
+                             "New settings will not be saved."));
 }
 
 
