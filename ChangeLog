@@ -1,3 +1,10 @@
+2004-02-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-guide.h, src/sp-guide.cpp (sp_guide_moveto,
+	sp_guide_position_set):
+	Combine into a single sp_guide_moveto routine accepting a `commit'
+	argument.  Update callers.
+
 2004-02-16  MenTaLguY <mental@rydia.net>
 
 	* src/libnr/nr-types.h, src/libnr/nr-rect.cpp, src/libnr/nr-maybe.h,
@@ -9547,7 +9554,7 @@ Sun Mar  3 03:40:07 2002  Mitsuru Oka  <oka326@parkcity.ne.jp>
 	Ellipse can be sliced
 
 # Local Variables:
-# tab-width:4
+# tab-width:8
 # indent-tabs-mode:t
 # End:
 # vim: tabstop=4:noexpandtab:shiftwidth=4

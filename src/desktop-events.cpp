@@ -196,7 +196,7 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 			NR::Point const motion_w(event->motion.x,
 						 event->motion.y);
 			NR::Point const motion_dt( motion_w * desktop->w2d );
-			sp_guide_moveto(guide, sp_guide_position_from_pt(guide, motion_dt));
+			sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, motion_dt), false);
 			moved = TRUE;
 			sp_desktop_set_coordinate_status(desktop, motion_dt, 0);
 			sp_view_set_position(SP_VIEW(desktop), motion_dt);
@@ -215,7 +215,7 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 				if ((winx >= 0) && (winy >= 0) &&
 				    (winx < w->allocation.width) &&
 				    (winy < w->allocation.height)) {
-					sp_guide_position_set(guide, sp_guide_position_from_pt(guide, event_dt));
+					sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, event_dt), true);
 				} else {
 					sp_guide_remove(guide);
 				}
@@ -280,33 +280,29 @@ guide_dialog_close (GtkWidget * widget, GtkDialog * d)
 	gtk_object_destroy (GTK_OBJECT(d));
 }
 
-static void
-guide_dialog_apply (GtkWidget * widget, SPGuide ** g)
+static void guide_dialog_apply(SPGuide &guide)
 {
-	gdouble distance;
-	const SPUnit *unit;
+	gdouble distance = gtk_spin_button_get_value_as_float(GTK_SPIN_BUTTON(e));
+	sp_convert_distance_full(&distance,
+				 sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u)),
+				 sp_unit_get_identity(SP_UNIT_ABSOLUTE),
+				 1.0, 1.0);
 	gdouble newpos;
-	SPGuide * guide;
-  
-	guide = *g;
-
-	distance = gtk_spin_button_get_value_as_float (GTK_SPIN_BUTTON (e));
-	unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (u));
-	sp_convert_distance_full (&distance, unit, sp_unit_get_identity (SP_UNIT_ABSOLUTE), 1.0, 1.0);
 	if (mode) {
 		newpos = distance;
 	} else {
-		newpos = guide->position + distance;
+		newpos = guide.position + distance;
 	}
-	sp_guide_position_set (guide, newpos);
-	sp_document_done (SP_OBJECT_DOCUMENT (guide));
+	sp_guide_moveto(guide, newpos, true);
+	sp_document_done(SP_OBJECT_DOCUMENT(&guide));
 }
 
 static void
 guide_dialog_ok (GtkWidget * widget, gpointer g)
 {
-	guide_dialog_apply (NULL, (SPGuide**)g);
-	guide_dialog_close (NULL, GTK_DIALOG(widget));
+	SPGuide &guide = **static_cast<SPGuide**>(g);
+	guide_dialog_apply(guide);
+	guide_dialog_close(NULL, GTK_DIALOG(widget));
 }
 
 static void

@@ -41,9 +41,8 @@ void sp_guide_hide (SPGuide * guide, SPCanvas * canvas);
 void sp_guide_sensitize (SPGuide * guide, SPCanvas * canvas, gboolean sensitive);
 
 double sp_guide_position_from_pt(SPGuide const *guide, NR::Point const &pt);
-void sp_guide_moveto (SPGuide const *guide, double position);
-void sp_guide_position_set (SPGuide *guide, double position);
-void sp_guide_remove (SPGuide * guide);
+void sp_guide_moveto(SPGuide const &guide, gdouble const position, bool const commit);
+void sp_guide_remove(SPGuide *guide);
 
 char *sp_guide_description(SPGuide const *guide);
 
