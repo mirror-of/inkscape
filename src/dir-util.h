@@ -10,11 +10,14 @@
  */
 
 #include <stdlib.h>
+#include <glib/gtypes.h>
+
 char const *sp_relative_path_from_path(char const *path, char const *base);
 char const *sp_extension_from_path(char const *path);
 char *inkscape_rel2abs(char const *path, char const *base, char *result, size_t const size);
 char *inkscape_abs2rel(char const *path, char const *base, char *result, size_t const size);
-void prepend_current_dir_if_relative (char **result, const gchar *uri);
+void prepend_current_dir_if_relative(char **result, gchar const *uri);
+
 
 #endif /* !SEEN_DIR_UTIL_H */
 
@@ -22,9 +25,9 @@ void prepend_current_dir_if_relative (char **result, const gchar *uri);
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
