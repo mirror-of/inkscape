@@ -44,6 +44,10 @@
 
 	* src/interface.cpp: removed Filters menu
 
+	* src/modules/win32.cpp: the Win32 GDI uses BRGx, rather than
+	  RGBA, so we reverse the B and R bytes before blitting (fix
+	  for bug #887428)
+
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp: Various cleanups, including addressing some

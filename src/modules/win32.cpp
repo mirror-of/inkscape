@@ -377,6 +377,7 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 		NRRectL bbox;
 		NRGC gc;
 		int num_rows;
+		guint32 *iter;
 		int i;
 
 		num_rows = sheight;
@@ -400,6 +401,15 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 		memset (px, 0xff, 4 * num_rows * width);
 		/* Render */
 		nr_arena_item_invoke_render (mod->root, &bbox, &pb, 0);
+
+		/* Swap red and blue channels; we use RGBA, whereas
+		 * the Win32 GDI uses BGRx.
+		 */
+		for ( i = 0 ; i < num_rows * width ; i++ ) {
+			unsigned char temp=px[i*4];
+			px[i*4] = px[i*4+2];
+			px[i*4+2] = temp;
+		}
 
 		SetStretchBltMode(w32mod->hDC, COLORONCOLOR);
 		res = StretchDIBits (w32mod->hDC,
