@@ -1,0 +1,117 @@
+Sodipodi coding style
+
+Not absolutely mandatory, but helps in getting your patches accepted,
+and keeps other developers constantly happy.
+I break these myself time to time because of laziness, or because
+after serious calculation, I find that breaking of rules gives
+prettier code in given case. But most of the time these stand
+rock solid.
+
+
+1. The rule of active maintainership
+
+* If you own file and maintain it actively, do whatever you like
+EXCEPTION - keep it compilable with normal unix/windows compilers
+EXCEPTION - do not use extra libraries unless made in configure options
+
+2. The unicode rulez rule
+
+* All files are UTF-8
+* UTF-8 is allowed in comment and string constants
+
+
+3. Line length rule
+
+* Lines are generally broken somewhere around column 140
+
+
+4. Anti alignement and tabulation rule
+
+* Tabs are 8 space
+* There is never tabs INSIDE one-line statement.
+EXCEPTION - aligning arguments is allowed while initializing
+            GObject signals in class constructor
+
+
+5. Spacing rule
+
+* There is single space around binary and assignement operators
+* There is no space between unary operator and argument
+* There is single space between function name and argument list
+* There is no space between array name and subscript
+* There is always single space after comma
+
+
+6. Function rule
+
+* Function declaration is one line
+* Function definition has return value and name on separate lines
+
+
+7. Curly braces inconstancy rule
+
+* Curly braces start at new line in function definition
+* Curly braces start at the same line for all other statements
+
+
+8. Illegality of naked block rule
+
+* All block statements (if, for, while) have to be either one-liners
+  or enclosed in curly braces
+EXCEPTION - invoking virtual method in GObject implementation may
+            be two-liner without curly braces
+
+
+9. Case consistency rule
+
+* All case statements end with break, even if they contain return
+EXCEPTION - if many case labels are collated, there can be single
+            break after the last one
+* All switch statements contain default label, even if empty
+* Default statement ends with break, even if empty
+
+
+10. Suppression of foreigners
+
+* Extern variables are allowed only for mathematical constants
+
+
+11. Variable initialization rule
+
+* Variables should be initialized in separate statement, not in
+  declaration
+
+
+12. General file readablity rule
+
+* Static helper and member functions have to be declared at the
+  beginning of file, and defined at the end of file
+
+
+13. Enumeration suppression
+
+* Avoid excessive enumerations, unless they are semantically ordered
+  integers, use #define instead
+* Do not typedef enumeration, use unsigned int instead
+
+
+14. Variable length
+
+* Always use floats for storage
+* Use doubles for calculation if that makes sense
+* Try to be compact in storage
+
+
+15. Glib insanity
+
+* Do not use double-sided signal connections (connect while alive)
+* Do not use GObject value system
+
+
+16. Generic brevity rule
+
+* If statement can be understood immediately, make it one-liner
+
+
+18/01/2002
+Lauris Kaplinski

@@ -1,0 +1,22 @@
+This is placeholder for DOM. It will replaced as soon as:
+
+1. RPM-s of gdome are available in standard GNOME distribution
+2. gdome support at least following events:
+   destroy (preprocess, not sure if this is necessary)
+   child_inserted (postprocess - args: parent, child...)
+   child_remove (preprocess - args: parent, child...)
+   attr_changed (postprocess)
+   content_changed (postprocess)
+If you have idea, how to implement xml backbone with different / differently
+   behaving events, things can change.
+
+As first step I will one day model reprs more like DOM. Something like:
+sp_repr_new -> sp_repr_doc_create_element
+sp_repr_add_child -> sp_repr_node_insertbefore
+sp_repr_copy -> sp_repr_node_clone
+etc.
+These declarations will probably go to repr-dom-test.h header
+
+Lauris Kaplinski
+<lauris@ariman.ee>
+

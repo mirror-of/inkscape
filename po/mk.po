@@ -1,0 +1,2393 @@
+# translation of sodipodi.HEAD.po to 
+# translation of sodipodi.HEAD.po to
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sodipodi.HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-06-13 21:04+0200\n"
+"PO-Revision-Date: 2003-06-15 09:44+0200\n"
+"Last-Translator: \n"
+"Language-Team:  <mk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0\n"
+
+#: sodipodi.desktop.in.h:1
+msgid "SVG Vector Illustrator"
+msgstr ""
+
+#. Create window
+#: sodipodi.desktop.in.h:2 src/toolbox.c:119 src/toolbox.c:140
+msgid "Sodipodi"
+msgstr ""
+
+#: src/bonobo/svg-doc-factory.c:35
+msgid "Could not create sodipodi-svg-doc factory"
+msgstr ""
+
+#: src/desktop.c:737
+msgid "Zoom drawing if window size changes"
+msgstr ""
+
+#: src/desktop.c:817
+#, c-format
+msgid "Sodipodi: %s: %s: %d"
+msgstr ""
+
+#: src/desktop.c:946
+#, c-format
+msgid "Document %s has unsaved changes, save them?"
+msgstr ""
+
+#. Page page
+#: src/desktop.c:1468 src/dialogs/align.c:265
+#: src/dialogs/desktop-properties.c:422 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:474
+#, fuzzy
+msgid "Page"
+msgstr "Страница"
+
+#: src/desktop.c:1472 src/dialogs/align.c:266 src/dialogs/export.c:140
+#: src/verbs.c:475
+#, fuzzy
+msgid "Drawing"
+msgstr "Цртеж"
+
+#. Selection submenu
+#: src/desktop.c:1476 src/dialogs/align.c:267 src/dialogs/export.c:145
+#: src/interface.c:557 src/toolbox.c:463 src/verbs.c:476
+#, fuzzy
+msgid "Selection"
+msgstr "Избор"
+
+#: src/dialogs/align.c:150 src/toolbox.c:424
+msgid "Align objects"
+msgstr ""
+
+#: src/dialogs/align.c:169
+msgid "Right side of aligned objects to left side of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:171
+msgid "Left side of aligned objects to left side of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:173
+msgid "Center horizontally"
+msgstr ""
+
+#: src/dialogs/align.c:175
+msgid "Right side of aligned objects to right side of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:177
+msgid "Left side of aligned objects to right side of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:180
+msgid "Bottom of aligned objects to top of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:182 src/dialogs/align.c:188
+msgid "Top of aligned objects to top of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:184
+msgid "Center vertically"
+msgstr ""
+
+#: src/dialogs/align.c:186
+msgid "Bottom of aligned objects to bottom of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:190
+#, fuzzy
+msgid "Align"
+msgstr "Порамни"
+
+#: src/dialogs/align.c:208
+msgid "Distribute left sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:210
+msgid "Distribute centres of objects at even distances horizontally"
+msgstr ""
+
+#: src/dialogs/align.c:212
+msgid "Distribute right sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:214
+msgid "Distribute horizontal distance between objects equally"
+msgstr ""
+
+#: src/dialogs/align.c:217
+msgid "Distribute top sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:219
+msgid "Distribute centres of objects at even distances vertically"
+msgstr ""
+
+#: src/dialogs/align.c:221
+msgid "Distribute bottom sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:223
+msgid "Distribute vertical distance between objects equally"
+msgstr ""
+
+#: src/dialogs/align.c:225
+#, fuzzy
+msgid "Distribute"
+msgstr "Дистрибуција"
+
+#: src/dialogs/align.c:261
+msgid "Last selected"
+msgstr ""
+
+#: src/dialogs/align.c:262
+msgid "First selected"
+msgstr ""
+
+#: src/dialogs/align.c:263
+msgid "Biggest item"
+msgstr ""
+
+#: src/dialogs/align.c:264
+msgid "Smallest item"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:222
+msgid "Desktop settings"
+msgstr ""
+
+#. Grid settings
+#. Notebook tab
+#: src/dialogs/desktop-properties.c:231
+#, fuzzy
+msgid "Grid"
+msgstr "Решетка"
+
+#. Checkbuttons
+#: src/dialogs/desktop-properties.c:241
+msgid "Show grid"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:248
+msgid "Snap to grid"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:255
+msgid "Grid units:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:264
+msgid "Origin X:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:278
+msgid "Origin Y:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:292
+msgid "Spacing X:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:306
+msgid "Spacing Y:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:320 src/dialogs/desktop-properties.c:379
+msgid "Snap units:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:332 src/dialogs/desktop-properties.c:391
+msgid "Snap distance:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:345
+#, fuzzy
+msgid "Grid color:"
+msgstr "Боја на мрежата:"
+
+#: src/dialogs/desktop-properties.c:349
+#, fuzzy
+msgid "Grid color"
+msgstr "Боја на решетка"
+
+#. Guidelines page
+#: src/dialogs/desktop-properties.c:355
+#, fuzzy
+msgid "Guides"
+msgstr "Водичи"
+
+#: src/dialogs/desktop-properties.c:364
+msgid "Show guides"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:372
+msgid "Snap to guides"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:403
+msgid "Guides color:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:407
+msgid "Guideline color"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:412
+#, fuzzy
+msgid "Highlight color:"
+msgstr "Боја на подвлекување"
+
+#: src/dialogs/desktop-properties.c:416
+msgid "Highlighted guideline color"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:431
+msgid "Show border"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:669
+#, fuzzy
+msgid "Close"
+msgstr "Затвори"
+
+#: src/dialogs/display-settings.c:85
+msgid "Display settings"
+msgstr ""
+
+#. Rendering settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:93
+msgid "Rendering"
+msgstr ""
+
+#: src/dialogs/display-settings.c:105
+msgid "Oversample bitmaps:"
+msgstr ""
+
+#: src/dialogs/display-settings.c:116 src/verbs.c:418
+#, fuzzy
+msgid "None"
+msgstr "Ништо"
+
+#: src/dialogs/display-settings.c:120
+msgid "2x2"
+msgstr ""
+
+#: src/dialogs/display-settings.c:124
+msgid "4x4"
+msgstr ""
+
+#: src/dialogs/display-settings.c:128
+msgid "8x8"
+msgstr ""
+
+#: src/dialogs/display-settings.c:132
+msgid "16x16"
+msgstr ""
+
+#. Input settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:143
+#, fuzzy
+msgid "Input"
+msgstr "Внеси"
+
+#: src/dialogs/display-settings.c:154
+msgid "Default cursor tolerance:"
+msgstr ""
+
+#: src/dialogs/document-properties.c:154
+msgid "Document settings"
+msgstr ""
+
+#: src/dialogs/document-properties.c:175
+msgid "Paper size:"
+msgstr ""
+
+#: src/dialogs/document-properties.c:196
+#, fuzzy
+msgid "Custom"
+msgstr "Сопствено"
+
+#. Custom paper frame
+#: src/dialogs/document-properties.c:203
+msgid "Custom paper"
+msgstr ""
+
+#. Unit selector
+#: src/dialogs/document-properties.c:214 src/dialogs/export.c:153
+#: src/dialogs/object-properties.c:316 src/dialogs/transformation.c:401
+#: src/dialogs/transformation.c:576
+msgid "Units:"
+msgstr ""
+
+#. Stroke width
+#: src/dialogs/document-properties.c:223 src/dialogs/export.c:163
+#: src/dialogs/export.c:187 src/dialogs/object-attributes.c:68
+#: src/dialogs/object-attributes.c:76 src/dialogs/object-properties.c:358
+#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:120
+#: src/dyna-draw-context.c:1079
+#, fuzzy
+msgid "Width:"
+msgstr "Ширина:"
+
+#: src/dialogs/document-properties.c:238 src/dialogs/export.c:172
+#: src/dialogs/export.c:195 src/dialogs/object-attributes.c:69
+#: src/dialogs/object-attributes.c:77 src/dialogs/object-properties.c:373
+#, fuzzy
+msgid "Height:"
+msgstr "Висина:"
+
+#: src/dialogs/export.c:115
+msgid "Export bitmap"
+msgstr ""
+
+#. Export area frame
+#: src/dialogs/export.c:124
+msgid "Export area"
+msgstr ""
+
+#: src/dialogs/export.c:157
+msgid "x0:"
+msgstr ""
+
+#: src/dialogs/export.c:160
+msgid "x1:"
+msgstr ""
+
+#: src/dialogs/export.c:166
+msgid "y0:"
+msgstr ""
+
+#: src/dialogs/export.c:169
+msgid "y1:"
+msgstr ""
+
+#. Bitmap size frame
+#: src/dialogs/export.c:178
+msgid "Bitmap size"
+msgstr ""
+
+#: src/dialogs/export.c:187 src/dialogs/export.c:195
+#, fuzzy
+msgid "pixels"
+msgstr "пиксели"
+
+#: src/dialogs/export.c:191 src/dialogs/export.c:199
+#, fuzzy
+msgid "dpi"
+msgstr "dpi"
+
+#: src/dialogs/export.c:206
+msgid "Export png file"
+msgstr ""
+
+#: src/dialogs/export.c:235 src/verbs.c:427
+#, fuzzy
+msgid "Export"
+msgstr "Извези"
+
+#: src/dialogs/fill-style.c:89
+msgid "Fill style"
+msgstr ""
+
+#: src/dialogs/fill-style.c:124
+msgid "Fill Rule"
+msgstr ""
+
+#: src/dialogs/fill-style.c:138
+msgid "nonzero"
+msgstr ""
+
+#: src/dialogs/fill-style.c:143
+msgid "evenodd"
+msgstr ""
+
+#: src/dialogs/item-properties.c:78
+msgid "Sensitive"
+msgstr ""
+
+#: src/dialogs/item-properties.c:83
+msgid "Visible"
+msgstr ""
+
+#: src/dialogs/item-properties.c:88
+#, fuzzy
+msgid "Active"
+msgstr "Активен"
+
+#: src/dialogs/item-properties.c:93
+msgid "Printable"
+msgstr ""
+
+#: src/dialogs/item-properties.c:104
+msgid "Opacity:"
+msgstr ""
+
+#: src/dialogs/item-properties.c:123
+msgid "Transformation matrix"
+msgstr ""
+
+#: src/dialogs/item-properties.c:245
+msgid "Item is reference"
+msgstr ""
+
+#: src/dialogs/item-properties.c:251 src/dialogs/item-properties.c:330
+msgid "The SVG ID of item"
+msgstr ""
+
+#: src/dialogs/item-properties.c:332
+msgid "The ID is not valid"
+msgstr ""
+
+#: src/dialogs/item-properties.c:334
+msgid "The ID is already defined"
+msgstr ""
+
+#: src/dialogs/item-properties.c:337
+msgid "The ID is valid"
+msgstr ""
+
+#: src/dialogs/item-properties.c:410 src/verbs.c:489
+msgid "Item properties"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:31
+msgid "Href:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:32
+msgid "Target:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:33
+#, fuzzy
+msgid "Type:"
+msgstr "Тип:"
+
+#: src/dialogs/object-attributes.c:34
+msgid "Role:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:35
+msgid "Arcrole:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:36
+#, fuzzy
+msgid "Title:"
+msgstr "Наслов:"
+
+#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:110
+msgid "Show:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:38
+msgid "Actuate:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:43
+msgid "Sides:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:44 src/dialogs/object-attributes.c:54
+msgid "Center X:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:45 src/dialogs/object-attributes.c:55
+msgid "Center Y:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:46
+msgid "R1:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:47
+msgid "R2:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:48
+msgid "ARG1:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:49
+msgid "ARG2:"
+msgstr ""
+
+#. Expansion
+#: src/dialogs/object-attributes.c:56 src/spiral-context.c:362
+msgid "Expansion:"
+msgstr ""
+
+#. Revolution
+#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:90
+#: src/spiral-context.c:350
+msgid "Revolution:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:58
+msgid "Radius:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:59
+#, fuzzy
+msgid "Argument:"
+msgstr "Аргумент:"
+
+#: src/dialogs/object-attributes.c:60
+msgid "T0:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:65
+#, fuzzy
+msgid "URL:"
+msgstr "URL:"
+
+#: src/dialogs/object-attributes.c:66 src/dialogs/object-attributes.c:74
+#: src/dialogs/object-properties.c:328
+msgid "X:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:67 src/dialogs/object-attributes.c:75
+#: src/dialogs/object-properties.c:343
+#, fuzzy
+msgid "Y:"
+msgstr "Y:"
+
+#: src/dialogs/object-attributes.c:78
+msgid "RX:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:79
+msgid "RY:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:114
+#, c-format
+msgid "%s attributes"
+msgstr ""
+
+#: src/dialogs/object-properties.c:108
+msgid "Object style"
+msgstr ""
+
+#: src/dialogs/object-properties.c:123
+#, fuzzy
+msgid "Fill"
+msgstr "Пополни"
+
+#: src/dialogs/object-properties.c:137
+msgid "Stroke paint"
+msgstr ""
+
+#: src/dialogs/object-properties.c:151
+msgid "Stroke style"
+msgstr ""
+
+#: src/dialogs/object-properties.c:171
+msgid "Apply to:"
+msgstr ""
+
+#: src/dialogs/object-properties.c:181
+msgid "Selected objects"
+msgstr ""
+
+#: src/dialogs/object-properties.c:184
+msgid "All shape tools"
+msgstr ""
+
+#: src/dialogs/object-properties.c:187
+msgid "Rectangle tool"
+msgstr ""
+
+#: src/dialogs/object-properties.c:190
+msgid "Arc tool"
+msgstr ""
+
+#: src/dialogs/object-properties.c:193
+msgid "Star tool"
+msgstr ""
+
+#: src/dialogs/object-properties.c:196
+msgid "Spiral tool"
+msgstr ""
+
+#: src/dialogs/object-properties.c:199
+msgid "Freehand and pen"
+msgstr ""
+
+#: src/dialogs/object-properties.c:202
+msgid "Calligraphic line"
+msgstr ""
+
+#: src/dialogs/object-properties.c:205 src/verbs.c:465
+#, fuzzy
+msgid "Text"
+msgstr "Текст"
+
+#: src/dialogs/object-properties.c:281
+msgid "Object position and size"
+msgstr ""
+
+#: src/dialogs/object-properties.c:303
+#, fuzzy
+msgid "Position and size"
+msgstr "Позиција и големина"
+
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:420
+msgid "Stroke settings"
+msgstr ""
+
+#. Join type
+#: src/dialogs/stroke-style.c:579
+msgid "Join:"
+msgstr ""
+
+#. Cap type
+#: src/dialogs/stroke-style.c:622
+msgid "Cap:"
+msgstr ""
+
+#. Dash
+#: src/dialogs/stroke-style.c:665
+msgid "Pattern:"
+msgstr ""
+
+#: src/dialogs/text-edit.c:87
+msgid "Text properties"
+msgstr ""
+
+#. Layout
+#: src/dialogs/text-edit.c:132
+#, fuzzy
+msgid "Layout"
+msgstr "Изглед"
+
+#: src/dialogs/text-edit.c:142
+msgid "Alignment:"
+msgstr ""
+
+#: src/dialogs/text-edit.c:174
+#, fuzzy
+msgid "Orientation:"
+msgstr "Ориентација:"
+
+#: src/dialogs/text-edit.c:202
+msgid "Text and font"
+msgstr ""
+
+#: src/dialogs/text-edit.c:216
+#, fuzzy
+msgid "Set as default"
+msgstr "Постави како основно"
+
+#: src/dialogs/tool-attributes.c:45 src/verbs.c:482
+msgid "Tool attributes"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Expansion"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Inner radius"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:94 src/dialogs/tool-attributes.c:104
+#: src/dialogs/tool-attributes.c:114 src/dialogs/tool-attributes.c:124
+msgid "Missing tool preferences"
+msgstr ""
+
+#. Magnitude
+#: src/dialogs/tool-attributes.c:100 src/star-context.c:355
+msgid "Corners:"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:100
+msgid "Proportion"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:110
+msgid "Transform:"
+msgstr ""
+
+#. Mass
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1043
+msgid "Mass:"
+msgstr ""
+
+#. Drag
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1055
+msgid "Drag:"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:120
+#, fuzzy
+msgid "Angle"
+msgstr "Агол"
+
+#: src/dialogs/tool-attributes.c:127
+msgid "Tool has no attributes"
+msgstr ""
+
+#: src/dialogs/tool-attributes.c:130 src/dialogs/tool-options.c:88
+msgid "No active tool"
+msgstr ""
+
+#: src/dialogs/tool-options.c:44 src/verbs.c:481
+msgid "Tool options"
+msgstr ""
+
+#: src/dialogs/tool-options.c:85
+msgid "Tool has no options"
+msgstr ""
+
+#: src/dialogs/transformation.c:193
+msgid "Transform selection"
+msgstr ""
+
+#: src/dialogs/transformation.c:365
+#, fuzzy
+msgid "Move"
+msgstr "Премести"
+
+#. Relative moves
+#: src/dialogs/transformation.c:407
+msgid "Relative move"
+msgstr ""
+
+#: src/dialogs/transformation.c:539 src/interface.c:415
+#, fuzzy
+msgid "Scale"
+msgstr "Промени големина"
+
+#: src/dialogs/transformation.c:666
+#, fuzzy
+msgid "Rotate"
+msgstr "Ротирај"
+
+#: src/dialogs/transformation.c:684
+msgid "deg"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:158
+msgid "Drag to reorder nodes"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:171
+msgid "New element node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:189
+msgid "New text node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:206
+msgid "Duplicate node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:222
+msgid "Delete node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:235
+msgid "Unindent node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:246
+msgid "Indent node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:256
+msgid "Raise node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:267
+msgid "Lower node"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:304
+msgid "Delete attribute"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:334
+msgid "Attribute name"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:341
+msgid "Set attribute"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:354
+msgid "Attribute value"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:826
+#, c-format
+msgid "Sodipodi: %s : XML View"
+msgstr ""
+
+#: src/dialogs/xml-tree.c:849
+msgid "New element node..."
+msgstr ""
+
+#: src/dialogs/xml-tree.c:869
+#, fuzzy
+msgid "Cancel"
+msgstr "Откажи"
+
+#: src/dialogs/xml-tree.c:873
+#, fuzzy
+msgid "Create"
+msgstr "Создади"
+
+#: src/document.c:340
+#, c-format
+msgid "New document %d"
+msgstr ""
+
+#: src/document.c:369
+#, c-format
+msgid "Memory document %d"
+msgstr ""
+
+#: src/document.c:455
+#, c-format
+msgid "Unnamed document %d"
+msgstr ""
+
+#: src/draw-context.c:280
+msgid "Appending to selection. Press 'a' to toggle Append/New."
+msgstr ""
+
+#: src/draw-context.c:285
+msgid "Creating new curve. Press 'a' to toggle Append/New."
+msgstr ""
+
+#. Angle
+#: src/dyna-draw-context.c:1067
+msgid "Angle:"
+msgstr ""
+
+#. Reset
+#: src/dyna-draw-context.c:1091 src/rect-context.c:420
+#: src/spiral-context.c:386 src/star-context.c:386
+#, fuzzy
+msgid "Defaults"
+msgstr "Номинални"
+
+#: src/file.c:147 src/file.c:158 src/file.c:170
+msgid "Select file to open"
+msgstr ""
+
+#: src/file.c:187 src/module.c:520
+msgid "Scalable Vector Graphic (SVG)"
+msgstr ""
+
+#: src/file.c:187 src/module.c:520
+msgid "Sodipodi native file format and W3C standard"
+msgstr ""
+
+#: src/file.c:193 src/file.c:306
+msgid "File type:"
+msgstr ""
+
+#: src/file.c:291
+msgid "Save file"
+msgstr ""
+
+#: src/file.c:467 src/file.c:477 src/file.c:483
+msgid "Select file to import"
+msgstr ""
+
+#: src/help.c:48
+msgid "About sodipodi"
+msgstr ""
+
+#. Do not insert any elements before/between first 4
+#: src/helper/units.c:40
+#, fuzzy
+msgid "Unit"
+msgstr "Единица"
+
+#: src/helper/units.c:40
+#, fuzzy
+msgid "Units"
+msgstr "Единици"
+
+#: src/helper/units.c:41
+#, fuzzy
+msgid "Point"
+msgstr "Точка"
+
+#: src/helper/units.c:41
+msgid "pt"
+msgstr ""
+
+#: src/helper/units.c:41
+#, fuzzy
+msgid "Points"
+msgstr "Точки"
+
+#: src/helper/units.c:41
+#, fuzzy
+msgid "Pt"
+msgstr "Pt"
+
+#: src/helper/units.c:42
+msgid "Pixel"
+msgstr ""
+
+#: src/helper/units.c:42
+#, fuzzy
+msgid "px"
+msgstr "px"
+
+#: src/helper/units.c:42
+#, fuzzy
+msgid "Pixels"
+msgstr "Пиксели"
+
+#: src/helper/units.c:42
+msgid "Px"
+msgstr ""
+
+#: src/helper/units.c:43
+msgid "Userspace unit"
+msgstr ""
+
+#: src/helper/units.c:43
+#, fuzzy
+msgid "User"
+msgstr "Корисник"
+
+#: src/helper/units.c:43
+msgid "Userspace units"
+msgstr ""
+
+#. Volatiles do not have default, so there are none here
+#. You can add new elements from this point forward
+#: src/helper/units.c:46
+#, fuzzy
+msgid "Percent"
+msgstr "Процент"
+
+#: src/helper/units.c:46
+#, fuzzy
+msgid "%"
+msgstr "%"
+
+#: src/helper/units.c:46
+msgid "Percents"
+msgstr ""
+
+#: src/helper/units.c:47
+#, fuzzy
+msgid "Millimeter"
+msgstr "Милиметар"
+
+#: src/helper/units.c:47
+#, fuzzy
+msgid "mm"
+msgstr "mm"
+
+#: src/helper/units.c:47
+#, fuzzy
+msgid "Millimeters"
+msgstr "Милиметри"
+
+#: src/helper/units.c:48
+#, fuzzy
+msgid "Centimeter"
+msgstr "Сантиметар"
+
+#: src/helper/units.c:48
+#, fuzzy
+msgid "cm"
+msgstr "см"
+
+#: src/helper/units.c:48
+#, fuzzy
+msgid "Centimeters"
+msgstr "Сантиметри"
+
+#: src/helper/units.c:49
+#, fuzzy
+msgid "Meter"
+msgstr "Метар"
+
+#: src/helper/units.c:49
+#, fuzzy
+msgid "m"
+msgstr "м"
+
+#: src/helper/units.c:49
+#, fuzzy
+msgid "meters"
+msgstr "метри"
+
+#: src/helper/units.c:50
+#, fuzzy
+msgid "Inch"
+msgstr "Инч"
+
+#: src/helper/units.c:50
+#, fuzzy
+msgid "in"
+msgstr "во"
+
+#: src/helper/units.c:50
+#, fuzzy
+msgid "Inches"
+msgstr "Инчи"
+
+#: src/helper/units.c:51
+msgid "Em square"
+msgstr ""
+
+#: src/helper/units.c:51
+msgid "em"
+msgstr ""
+
+#: src/helper/units.c:51
+msgid "Em squares"
+msgstr ""
+
+#: src/helper/units.c:52
+msgid "Ex square"
+msgstr ""
+
+#: src/helper/units.c:52
+msgid "ex"
+msgstr ""
+
+#: src/helper/units.c:52
+msgid "Ex squares"
+msgstr ""
+
+#: src/interface.c:302
+msgid "Close View"
+msgstr ""
+
+#: src/interface.c:303 src/interface.c:482
+msgid "Exit Program"
+msgstr ""
+
+#: src/interface.c:305 src/interface.c:475
+msgid "About Sodipodi"
+msgstr ""
+
+#. Modules need abouts too
+#: src/interface.c:308 src/interface.c:478
+msgid "About Modules"
+msgstr ""
+
+#: src/interface.c:325
+msgid "Cleanup"
+msgstr ""
+
+#. Selection:Order
+#: src/interface.c:348
+#, fuzzy
+msgid "Order"
+msgstr "Редослед"
+
+#. View:Zoom
+#: src/interface.c:407 src/toolbox.c:595 src/verbs.c:466
+#, fuzzy
+msgid "Zoom"
+msgstr "Зум"
+
+#. View:New View
+#: src/interface.c:423
+msgid "New View"
+msgstr ""
+
+#. View:New Preview
+#: src/interface.c:425
+msgid "New Preview"
+msgstr ""
+
+#: src/interface.c:427
+msgid "New Toplevel Toolbox"
+msgstr ""
+
+#: src/interface.c:428
+msgid "New Docked Toolbox"
+msgstr ""
+
+#: src/interface.c:429
+msgid "Remove Docked Toolbox"
+msgstr ""
+
+#. File
+#: src/interface.c:471 src/verbs.c:420
+#, fuzzy
+msgid "New"
+msgstr "Ново"
+
+#: src/interface.c:472
+#, fuzzy
+msgid "Open"
+msgstr "Отвори"
+
+#. Generic menu
+#. File submenu
+#: src/interface.c:545 src/toolbox.c:346
+#, fuzzy
+msgid "File"
+msgstr "Датотека"
+
+#. Edit submenu
+#: src/interface.c:551 src/toolbox.c:383 src/widgets/gradient-selector.c:135
+#, fuzzy
+msgid "Edit"
+msgstr "Уреди"
+
+#. View submenu
+#: src/interface.c:563
+#, fuzzy
+msgid "View"
+msgstr "Преглед"
+
+#. Drawing mode submenu
+#: src/interface.c:569
+msgid "Drawing Mode"
+msgstr ""
+
+#. Dialog submenu
+#: src/interface.c:575
+msgid "Dialogs"
+msgstr ""
+
+#: src/interface.c:582
+#, fuzzy
+msgid "Filters"
+msgstr "Филтри"
+
+#: src/main.c:123
+msgid "Do not use X server (only process files from console)"
+msgstr ""
+
+#: src/main.c:126
+msgid "Try to use X server even if $DISPLAY is not set)"
+msgstr ""
+
+#: src/main.c:129
+msgid "Open specified document(s) (option string may be excluded)"
+msgstr ""
+
+#: src/main.c:130 src/main.c:133 src/main.c:136 src/main.c:150
+#, fuzzy
+msgid "FILENAME"
+msgstr "ИМЕ НА ДАТОТЕКА"
+
+#: src/main.c:132
+msgid "Print document(s) to specified output file (use '| program' for pipe)"
+msgstr ""
+
+#: src/main.c:135
+msgid "Export document to png file"
+msgstr ""
+
+#: src/main.c:138
+msgid "The resolution used for converting SVG into bitmap (default 72.0)"
+msgstr ""
+
+#: src/main.c:139
+#, fuzzy
+msgid "DPI"
+msgstr "DPI"
+
+#: src/main.c:141
+msgid ""
+"Exported area in millimeters (default is full document, 0,0 is lower-left "
+"corner)"
+msgstr ""
+
+#: src/main.c:142
+msgid "x0:y0:x1:y1"
+msgstr ""
+
+#: src/main.c:144
+msgid "The width of generated bitmap in pixels (overwrites dpi)"
+msgstr ""
+
+#: src/main.c:144
+msgid "WIDTH"
+msgstr ""
+
+#: src/main.c:146
+msgid "The height of generated bitmap in pixels (overwrites dpi)"
+msgstr ""
+
+#: src/main.c:146
+msgid "HEIGHT"
+msgstr ""
+
+#: src/main.c:148
+msgid "Background color of exported bitmap (any SVG supported color string)"
+msgstr ""
+
+#: src/main.c:148
+msgid "COLOR"
+msgstr ""
+
+#: src/main.c:150
+msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
+msgstr ""
+
+#: src/main.c:152
+msgid "Show given files one-by-one, switch to next on any key/mouse event"
+msgstr ""
+
+#: src/main.c:154
+msgid "Prefer SVG icons (file icons.svg) to pixmap ones"
+msgstr ""
+
+#: src/module.c:528
+msgid "SVG with \"xmlns:sodipodi\" namespace"
+msgstr ""
+
+#: src/module.c:529
+msgid "Scalable Vector Graphics format with sodipodi extensions"
+msgstr ""
+
+#: src/module.c:532
+msgid "Plain SVG"
+msgstr ""
+
+#: src/module.c:533
+msgid "Scalable Vector Graphics format"
+msgstr ""
+
+#: src/modules/gnome.c:133
+msgid "Select printer"
+msgstr ""
+
+#: src/modules/gnome.c:187
+#, c-format
+msgid "Sodipodi (doc name %s..): Print Preview"
+msgstr ""
+
+#: src/modules/kde.cpp:159
+msgid "Document variant:"
+msgstr ""
+
+#: src/modules/kde.cpp:169
+msgid ""
+"*.svg *.svgz|SVG files\n"
+"*.xml|XML files\n"
+"*|All files"
+msgstr ""
+
+#: src/modules/kde.cpp:171
+msgid "Save document as"
+msgstr ""
+
+#: src/modules/ps.c:135 src/modules/ps.c:146
+msgid "Print destination"
+msgstr ""
+
+#: src/modules/ps.c:153
+msgid ""
+"Enter destination lpr queue.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to program"
+msgstr ""
+
+#: src/modules/ps.c:684
+msgid "write error occured"
+msgstr ""
+
+#. Create toplevel menuitem
+#: src/object-ui.c:105
+#, fuzzy
+msgid "Item"
+msgstr "Елемент"
+
+#. Item dialog
+#: src/object-ui.c:108 src/verbs.c:489
+msgid "Item Properties"
+msgstr ""
+
+#. Select item
+#: src/object-ui.c:118
+msgid "Select this"
+msgstr ""
+
+#. Reset transformations
+#: src/object-ui.c:128
+msgid "Reset transformation"
+msgstr ""
+
+#: src/object-ui.c:134
+msgid "Make sensitive"
+msgstr ""
+
+#: src/object-ui.c:134
+msgid "Make insensitive"
+msgstr ""
+
+#. Create link
+#: src/object-ui.c:139
+msgid "Create link"
+msgstr ""
+
+#: src/object-ui.c:251 src/verbs.c:443
+#, fuzzy
+msgid "Group"
+msgstr "Група"
+
+#. Group dialog
+#: src/object-ui.c:255
+msgid "Group Properties"
+msgstr ""
+
+#. "Ungroup"
+#: src/object-ui.c:268 src/verbs.c:444
+#, fuzzy
+msgid "Ungroup"
+msgstr "Одгрупирај"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:316
+#, fuzzy
+msgid "Link"
+msgstr "Линк"
+
+#. Link dialog
+#: src/object-ui.c:319
+msgid "Link Properties"
+msgstr ""
+
+#. Select item
+#: src/object-ui.c:329
+msgid "Follow link"
+msgstr ""
+
+#. Reset transformations
+#: src/object-ui.c:334
+msgid "Remove link"
+msgstr ""
+
+#. Create toplevel menuitem
+#: src/object-ui.c:397
+#, fuzzy
+msgid "Image"
+msgstr "Слика"
+
+#. Link dialog
+#: src/object-ui.c:400
+msgid "Image Properties"
+msgstr ""
+
+#. Autotrace dialog
+#: src/object-ui.c:408 src/sp-image.c:776
+msgid "Trace"
+msgstr ""
+
+#. Create toplevel menuitem
+#: src/object-ui.c:457
+#, fuzzy
+msgid "Shape"
+msgstr "Облик"
+
+#. Item dialog
+#: src/object-ui.c:460 src/toolbox.c:421
+msgid "Fill settings"
+msgstr ""
+
+#. Create toplevel menuitem
+#: src/object-ui.c:487
+msgid "Rect"
+msgstr ""
+
+#. Link dialog
+#: src/object-ui.c:490
+msgid "Rect Properties"
+msgstr ""
+
+#. Create toplevel menuitem
+#: src/object-ui.c:523 src/verbs.c:460
+msgid "Star"
+msgstr ""
+
+#. Link dialog
+#: src/object-ui.c:526
+msgid "Star Properties"
+msgstr ""
+
+#. Create toplevel menuitem
+#: src/object-ui.c:559 src/verbs.c:461
+#, fuzzy
+msgid "Spiral"
+msgstr "Спирала"
+
+#. Link dialog
+#: src/object-ui.c:562
+msgid "Spiral Properties"
+msgstr ""
+
+#. rx_ratio
+#: src/rect-context.c:396
+msgid "Roundness ratio for x:"
+msgstr ""
+
+#. ry_ratio
+#: src/rect-context.c:408
+msgid "Roundness ratio for y:"
+msgstr ""
+
+#: src/select-context.c:564
+msgid "Visual transformation"
+msgstr ""
+
+#: src/select-context.c:572
+msgid "Show content"
+msgstr ""
+
+#: src/select-context.c:579
+msgid "Show outline"
+msgstr ""
+
+#: src/select-context.c:586
+msgid "Object transformation"
+msgstr ""
+
+#: src/select-context.c:594
+#, fuzzy
+msgid "Optimize"
+msgstr "Оптимизирај"
+
+#: src/select-context.c:601
+msgid "Preserve"
+msgstr ""
+
+#: src/slideshow.c:88
+msgid "Sodipodi slideshow"
+msgstr ""
+
+#: src/sodipodi.c:398
+msgid "Untitled document"
+msgstr ""
+
+#. Show nice dialog box
+#: src/sodipodi.c:423
+msgid "Sodipodi encountered an internal error and will close now.\n"
+msgstr ""
+
+#: src/sodipodi.c:424
+msgid "Automatic backups of unsaved documents were done to following locations:\n"
+msgstr ""
+
+#: src/sodipodi.c:425
+msgid "Automatic backup of following documents failed:\n"
+msgstr ""
+
+#: src/sodipodi.c:564
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you can\n"
+"neither load nor save preferences\n"
+msgstr ""
+
+#: src/sodipodi.c:567
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:572
+#, c-format
+msgid ""
+"%s is not valid sodipodi preferences file.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:584
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:587
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:591
+#, c-format
+msgid ""
+"%s is not valid sodipodi extensions file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:930
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"%s."
+msgstr ""
+
+#: src/sodipodi.c:934
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:938
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:942
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:952
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:955
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:958
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:961
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sp-anchor.c:195
+#, c-format
+msgid "Link to %s"
+msgstr ""
+
+#: src/sp-image.c:367
+#, c-format
+msgid "Image with bad reference: %s"
+msgstr ""
+
+#: src/sp-image.c:369
+#, c-format
+msgid "Color image %d x %d: %s"
+msgstr ""
+
+#: src/sp-image.c:922
+#, c-format
+msgid "Error to write %s: %s"
+msgstr ""
+
+#: src/sp-image.c:956
+#, fuzzy
+msgid "Untitled"
+msgstr "Безимено"
+
+#: src/sp-image.c:961
+msgid "Document Name:"
+msgstr ""
+
+#: src/sp-image.c:974
+#, fuzzy
+msgid "Unknown"
+msgstr "Непознато"
+
+#: src/sp-image.c:980
+msgid "Image URI:"
+msgstr ""
+
+#: src/sp-item-group.c:456
+#, c-format
+msgid "Group of %d objects"
+msgstr ""
+
+#: src/sp-item.c:497
+msgid "Unknown item :-("
+msgstr ""
+
+#. fixme:
+#: src/sp-text.c:1296
+msgid "Text object"
+msgstr ""
+
+#. T0
+#: src/spiral-context.c:374
+msgid "Inner radius:"
+msgstr ""
+
+#. Proportion
+#: src/star-context.c:367
+msgid "Proportion:"
+msgstr ""
+
+#. Making sides flat
+#: src/star-context.c:380
+msgid "Make sides flat"
+msgstr ""
+
+#: src/toolbox.c:417
+#, fuzzy
+msgid "Object"
+msgstr "Објект"
+
+#: src/toolbox.c:422 src/verbs.c:484
+msgid "Object size and position"
+msgstr ""
+
+#: src/toolbox.c:423
+msgid "Text and font settings"
+msgstr ""
+
+#: src/toolbox.c:425 src/verbs.c:485
+msgid "Object transformations"
+msgstr ""
+
+#: src/toolbox.c:496
+#, fuzzy
+msgid "Draw"
+msgstr "Цртање"
+
+#. Todo:  Generalize all the toolbox routines to have general purpose
+#. routine for creating them
+#. Create the extension toolbox
+#. Todo: Make it able to create required boxes dynamically
+#: src/toolbox.c:552
+#, fuzzy
+msgid "Extension"
+msgstr "Наставка"
+
+#: src/toolbox.c:629
+msgid "Nodes"
+msgstr ""
+
+#: src/toolbox.c:632
+msgid "Insert new nodes into selected segments"
+msgstr ""
+
+#: src/toolbox.c:633
+msgid "Break line at selected nodes"
+msgstr ""
+
+#: src/toolbox.c:634
+msgid "Make selected nodes corner"
+msgstr ""
+
+#: src/toolbox.c:635
+msgid "Make selected segments lines"
+msgstr ""
+
+#: src/toolbox.c:636
+msgid "Delete selected nodes"
+msgstr ""
+
+#: src/toolbox.c:637
+msgid "Join lines at selected nodes"
+msgstr ""
+
+#: src/toolbox.c:638
+msgid "Make selected nodes smooth"
+msgstr ""
+
+#: src/toolbox.c:639
+msgid "Make selected segments curves"
+msgstr ""
+
+#: src/verbs.c:418
+msgid "Does nothing"
+msgstr ""
+
+#: src/verbs.c:420
+msgid "Create new SVG document"
+msgstr ""
+
+#: src/verbs.c:421
+#, fuzzy
+msgid "Open..."
+msgstr "Отвори..."
+
+#: src/verbs.c:421
+msgid "Open existing SVG document"
+msgstr ""
+
+#: src/verbs.c:422
+#, fuzzy
+msgid "Save"
+msgstr "Зачувај"
+
+#: src/verbs.c:422
+#, fuzzy
+msgid "Save document"
+msgstr "Зачувај документ"
+
+#: src/verbs.c:423
+#, fuzzy
+msgid "Save As..."
+msgstr "Зачувај како..."
+
+#: src/verbs.c:423
+msgid "Save document under new name"
+msgstr ""
+
+#: src/verbs.c:424
+#, fuzzy
+msgid "Print..."
+msgstr "Печати..."
+
+#: src/verbs.c:424
+msgid "Print document"
+msgstr ""
+
+#: src/verbs.c:425
+#, fuzzy
+msgid "Print Preview"
+msgstr "Печати на екран"
+
+#: src/verbs.c:425
+msgid "Preview document printout"
+msgstr ""
+
+#: src/verbs.c:426
+#, fuzzy
+msgid "Import"
+msgstr "Увези"
+
+#: src/verbs.c:426
+msgid "Import bitmap or SVG image into document"
+msgstr ""
+
+#: src/verbs.c:427
+msgid "Export document as PNG bitmap"
+msgstr ""
+
+#. Edit
+#: src/verbs.c:429
+#, fuzzy
+msgid "Undo"
+msgstr "Врати"
+
+#: src/verbs.c:429
+msgid "Revert last action"
+msgstr ""
+
+#: src/verbs.c:430
+#, fuzzy
+msgid "Redo"
+msgstr "Повтори"
+
+#: src/verbs.c:430
+msgid "Do again undone action"
+msgstr ""
+
+#: src/verbs.c:431
+#, fuzzy
+msgid "Cut"
+msgstr "Исечи"
+
+#: src/verbs.c:431
+msgid "Cut selected objects to clipboard"
+msgstr ""
+
+#: src/verbs.c:432
+#, fuzzy
+msgid "Copy"
+msgstr "Копирај"
+
+#: src/verbs.c:432
+msgid "Copy selected objects to clipboard"
+msgstr ""
+
+#: src/verbs.c:433
+#, fuzzy
+msgid "Paste"
+msgstr "Вметни"
+
+#: src/verbs.c:433
+msgid "Paste objects from clipboard"
+msgstr ""
+
+#: src/verbs.c:434
+#, fuzzy
+msgid "Delete"
+msgstr "Избриши"
+
+#: src/verbs.c:434
+msgid "Delete selected objects"
+msgstr ""
+
+#: src/verbs.c:435
+#, fuzzy
+msgid "Duplicate"
+msgstr "Дуплицирај"
+
+#: src/verbs.c:435
+msgid "Duplicate selected objects"
+msgstr ""
+
+#: src/verbs.c:436
+#, fuzzy
+msgid "Clear All"
+msgstr "Исчисти ги сите"
+
+#: src/verbs.c:436
+msgid "Delete all objects from document"
+msgstr ""
+
+#: src/verbs.c:437
+#, fuzzy
+msgid "Select All"
+msgstr "Избери ги сите"
+
+#: src/verbs.c:437
+msgid "Select all objects in document"
+msgstr ""
+
+#. Selection
+#: src/verbs.c:439
+#, fuzzy
+msgid "Bring to Front"
+msgstr "Донеси Напред"
+
+#: src/verbs.c:439
+msgid "Raise selected objects to top"
+msgstr ""
+
+#: src/verbs.c:440
+msgid "Send to Back"
+msgstr ""
+
+#: src/verbs.c:440
+msgid "Lower selected objects to bottom"
+msgstr ""
+
+#: src/verbs.c:441
+#, fuzzy
+msgid "Raise"
+msgstr "Крени"
+
+#: src/verbs.c:441
+msgid "Raise selected objects one position"
+msgstr ""
+
+#: src/verbs.c:442
+#, fuzzy
+msgid "Lower"
+msgstr "Долни"
+
+#: src/verbs.c:442
+msgid "Lower selected objects one position"
+msgstr ""
+
+#: src/verbs.c:443
+msgid "Group selected objects"
+msgstr ""
+
+#: src/verbs.c:444
+msgid "Ungroup selected group"
+msgstr ""
+
+#: src/verbs.c:445
+#, fuzzy
+msgid "Combine"
+msgstr "Комбинирај"
+
+#: src/verbs.c:445
+msgid "Combine multiple paths"
+msgstr ""
+
+#: src/verbs.c:446
+msgid "Break Apart"
+msgstr ""
+
+#: src/verbs.c:446
+msgid "Break selected path to subpaths"
+msgstr ""
+
+#. Object
+#: src/verbs.c:448
+#, fuzzy
+msgid "Rotate 90 degrees"
+msgstr "Ротирај за 90 степени"
+
+#: src/verbs.c:448
+msgid "Rotates object 90 degrees clockwise"
+msgstr ""
+
+#: src/verbs.c:449
+msgid "Flatten object"
+msgstr ""
+
+#: src/verbs.c:449
+msgid "Remove transformations from object"
+msgstr ""
+
+#: src/verbs.c:450
+msgid "Convert to Curves"
+msgstr ""
+
+#: src/verbs.c:450
+msgid "Convert selected object to path"
+msgstr ""
+
+#: src/verbs.c:451
+#, fuzzy
+msgid "Flip Horizontally"
+msgstr "Преврти хоризонтално"
+
+#: src/verbs.c:452
+msgid "Flip selected objects horizontally"
+msgstr ""
+
+#: src/verbs.c:453
+#, fuzzy
+msgid "Flip Vertically"
+msgstr "Преврти вертикално"
+
+#: src/verbs.c:454
+msgid "Flip selected objects vertically"
+msgstr ""
+
+#. Event contexts
+#: src/verbs.c:456
+#, fuzzy
+msgid "Select"
+msgstr "Избор"
+
+#: src/verbs.c:456
+msgid "Select and transform objects"
+msgstr ""
+
+#: src/verbs.c:457
+msgid "Node edit"
+msgstr ""
+
+#: src/verbs.c:457
+msgid "Modify existing objects by control nodes"
+msgstr ""
+
+#: src/verbs.c:458
+#, fuzzy
+msgid "Rectangle"
+msgstr "Правоаголник"
+
+#: src/verbs.c:458
+msgid "Create rectangles and squares with optional rounded corners"
+msgstr ""
+
+#: src/verbs.c:459
+#, fuzzy
+msgid "Ellipse"
+msgstr "Елипса"
+
+#: src/verbs.c:459
+msgid "Create circles, ellipses and arcs"
+msgstr ""
+
+#: src/verbs.c:460
+msgid "Create stars and polygons"
+msgstr ""
+
+#: src/verbs.c:461
+msgid "Create spirals"
+msgstr ""
+
+#: src/verbs.c:462
+msgid "Pencil"
+msgstr ""
+
+#: src/verbs.c:462
+msgid "Draw freehand curves and straight lines"
+msgstr ""
+
+#: src/verbs.c:463
+#, fuzzy
+msgid "Pen"
+msgstr "Пенкало"
+
+#: src/verbs.c:463
+msgid "Draw precisely positioned curved and straight lines"
+msgstr ""
+
+#: src/verbs.c:464
+msgid "Calligraphy"
+msgstr ""
+
+#: src/verbs.c:464
+msgid "Draw calligraphic lines"
+msgstr ""
+
+#: src/verbs.c:465
+msgid "Create and edit text objects"
+msgstr ""
+
+#: src/verbs.c:466
+msgid "Zoom into preciely selected area"
+msgstr ""
+
+#: src/verbs.c:467
+msgid "Dropper"
+msgstr ""
+
+#: src/verbs.c:467
+msgid "Pick averaged colors from image"
+msgstr ""
+
+#. Zooming
+#: src/verbs.c:469
+#, fuzzy
+msgid "In"
+msgstr "Во"
+
+#: src/verbs.c:469
+msgid "Zoom in drawing"
+msgstr ""
+
+#: src/verbs.c:470
+#, fuzzy
+msgid "Out"
+msgstr "Надвор"
+
+#: src/verbs.c:470
+msgid "Zoom out drawing"
+msgstr ""
+
+#: src/verbs.c:471
+#, fuzzy
+msgid "1:1"
+msgstr "1:1"
+
+#: src/verbs.c:471
+msgid "Set zoom factor to 1:1"
+msgstr ""
+
+#: src/verbs.c:472
+msgid "1:2"
+msgstr ""
+
+#: src/verbs.c:472
+msgid "Set zoom factor to 1:2"
+msgstr ""
+
+#: src/verbs.c:473
+msgid "2:1"
+msgstr ""
+
+#: src/verbs.c:473
+msgid "Set zoom factor to 2:1"
+msgstr ""
+
+#: src/verbs.c:474
+msgid "Fit the whole page into window"
+msgstr ""
+
+#: src/verbs.c:475
+msgid "Fit the whole drawing into window"
+msgstr ""
+
+#: src/verbs.c:476
+msgid "Fit the whole selection into window"
+msgstr ""
+
+#. Dialogs
+#: src/verbs.c:478
+#, fuzzy
+msgid "Display"
+msgstr "Прикажи"
+
+#: src/verbs.c:478
+msgid "Global display settings"
+msgstr ""
+
+#: src/verbs.c:479
+#, fuzzy
+msgid "Document"
+msgstr "Документ"
+
+#: src/verbs.c:479
+#, fuzzy
+msgid "Page layout"
+msgstr "Изглед на страницата"
+
+#: src/verbs.c:480
+msgid "Editing Window"
+msgstr ""
+
+#: src/verbs.c:480
+msgid "Editing window properties"
+msgstr ""
+
+#: src/verbs.c:481
+msgid "Tool Options"
+msgstr ""
+
+#: src/verbs.c:482
+msgid "Tool Attributes"
+msgstr ""
+
+#: src/verbs.c:483
+msgid "Fill and Stroke"
+msgstr ""
+
+#: src/verbs.c:483
+msgid "Fill and stroke settings"
+msgstr ""
+
+#: src/verbs.c:484
+#, fuzzy
+msgid "Size and Position"
+msgstr "Големина и позиција"
+
+#: src/verbs.c:485
+msgid "Transformations"
+msgstr ""
+
+#: src/verbs.c:486
+msgid "Align and Distribute"
+msgstr ""
+
+#: src/verbs.c:486
+msgid "Align and distribute"
+msgstr ""
+
+#: src/verbs.c:487
+msgid "Text and Font"
+msgstr ""
+
+#: src/verbs.c:487
+msgid "Text editing and font settings"
+msgstr ""
+
+#: src/verbs.c:488
+msgid "XML Editor"
+msgstr ""
+
+#. Family frame
+#: src/widgets/font-selector.c:144
+#, fuzzy
+msgid "Font family"
+msgstr "Група на фонтови"
+
+#. Style frame
+#: src/widgets/font-selector.c:172
+#, fuzzy
+msgid "Style"
+msgstr "Стил"
+
+#: src/widgets/font-selector.c:207
+#, fuzzy
+msgid "Font size:"
+msgstr "Големина на фонт:"
+
+#: src/widgets/font-selector.c:517
+msgid "AaBbCcIiPpQq12368.;/()"
+msgstr ""
+
+#: src/widgets/gradient-selector.c:140
+#, fuzzy
+msgid "Add"
+msgstr "Додај"
+
+#: src/widgets/gradient-selector.c:176
+msgid "gradientUnits"
+msgstr ""
+
+#: src/widgets/gradient-selector.c:205
+msgid "gradientSpread"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:245
+msgid "No document selected"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:251
+msgid "No gradients in document"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:257
+msgid "No gradient selected"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:412
+msgid "Start color"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:422
+msgid "End color"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:447
+msgid "Gradient vector"
+msgstr ""
+
+#: src/widgets/paint-selector.c:620
+msgid "No objects"
+msgstr ""
+
+#: src/widgets/paint-selector.c:634
+msgid "Multiple styles"
+msgstr ""
+
+#: src/widgets/paint-selector.c:648
+msgid "No paint"
+msgstr ""
+
+#. Label
+#: src/widgets/paint-selector.c:738
+msgid "Mode:"
+msgstr ""
+
+#: src/widgets/paint-selector.c:748
+#, fuzzy
+msgid "RGB"
+msgstr "RGB"
+
+#: src/widgets/paint-selector.c:748 src/widgets/paint-selector.c:749
+msgid "RGB Colorspace"
+msgstr ""
+
+#: src/widgets/paint-selector.c:749
+msgid "HSV"
+msgstr ""
+
+#: src/widgets/paint-selector.c:750
+#, fuzzy
+msgid "CMYK"
+msgstr "CMYK"
+
+#: src/widgets/paint-selector.c:750
+msgid "CMYK colospace"
+msgstr ""
+
+#. Use dropper
+#: src/widgets/paint-selector.c:757
+msgid "Get from dropper"
+msgstr ""
+
+#: src/widgets/paint-selector.c:788
+msgid "Color paint"
+msgstr ""
+
+#: src/widgets/paint-selector.c:858
+msgid "Linear gradient"
+msgstr ""
+
+#: src/widgets/paint-selector.c:861
+msgid "Radial gradient"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:620
+msgid "Red:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:621
+msgid "Green:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:622
+msgid "Blue:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:623 src/widgets/sp-color-selector.c:643
+#: src/widgets/sp-color-selector.c:665
+msgid "Alpha:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:640
+msgid "Hue:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:641
+msgid "Saturation:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:642
+#, fuzzy
+msgid "Value:"
+msgstr "Вредност:"
+
+#: src/widgets/sp-color-selector.c:661
+msgid "Cyan:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:662
+msgid "Magenta:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:663
+msgid "Yellow:"
+msgstr ""
+
+#: src/widgets/sp-color-selector.c:664
+msgid "Black:"
+msgstr ""
+
+#: src/widgets/sp-toolbox.c:301
+msgid "Toggle separate window and main toolbox placement"
+msgstr ""
+
+#: src/widgets/sp-xmlview-attr-list.c:55
+#, fuzzy
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: src/widgets/sp-xmlview-attr-list.c:56
+#, fuzzy
+msgid "Value"
+msgstr "Вредност"
+

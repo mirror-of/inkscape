@@ -1,0 +1,151 @@
+
+Sodipodi Release News
+---------------------
+Please see the Sodipodi website for the latest news about the project,
+or TODO and ChangeLog for details about specific releases.
+
+Old News
+--------
+25. Novemeber 2002
+Sodipodi version 0.28
+
+There is now a way to specify custom freetype2-readable fonts
+for sodipodi, bypassing gnome-print font database.
+The font description file is:
+
+  $HOME/.sodipodi/private-fonts
+
+And its syntax is really simple:
+
+  font_file_full_path[: face number in ttc], Font Full Name, Font Family Name
+
+# at the beginning of line introduces comment line. Empty lines
+are ignored. Whitespace around names is cut off.
+
+Most importantly, if you have font file with proper vertical metrics,
+using it directly aloows sodipodi to use correct metrics. Otherwise
+it synthesizes vertical metrics by centering visible glyph horizontally
+at baseline, what is not always correct.
+
+Also all fonts are now accessible from unicode private plane, in addition
+to proper unicode values. For certain fonts (like custom symbols without
+unicode mapping), this is the only way to access glyphs.
+
+Code points are assigned sequentially to glyphs:
+
+U+e000 - glyph 0
+U+e001 - glyph 1
+
+Starting from previous release there is also 'unicode mode' in text
+tool (although it has no visible indication).
+
+Press Ctrl-U to enter unicode mode
+
+type 4-digit code point value(s)
+
+Press Ctr-U to leave unicode mode
+
+
+
+2001/09/27 Version 0.24
+
+This experimental release. While many old bugs have actualy been fixed,
+most probably countless new have been introduced. GUI is somewhat
+messed up, with older and newer versions present at the same time.
+
+Linear gradients work now. OK - to some extent. Only objectBoundingBox
+unit system is supported, and there are known artefacts in printing
+and bitmap export. Still, if you follow some guidelines, you should
+be able to use them:
+- If opening non-sodipodi SVG, either leave old gradients intact
+  entirely, or create fresh new ones, if you want to edit them.
+- Always edit gradient of single object at a time. Do not try to
+  modify gradient of group of objects at the same time.
+- If you want to export or print gradiented text, better convert
+  it to curves before.
+
+There have been lot of work on internals. Not much visible, except
+numerous bugs. Still, there is now near-complete asynchronous
+notifiaction system, that has been used to build dynamic dialogs
+- look at new experimental fill/gradient dialog for example.
+Hopefully there will be more these in future.
+
+Mitsuru contributed dynadraw-filtered drawing tool. Although
+it does currently only simple lines, it should emerge into
+full-featured XInput (read Wacom tablets) calligraphic tool.
+
+Sodipodi now saves emergency backups on segfault. So it would
+be good idea, to check $HOME/.sodipodi, $HOME or $TMP time-to-time,
+or you will run out of disk space. Also - although it should
+save files 99.9% correctly, unless there is grave memory corruption,
+it does not mean these files do not cause the same segfault again,
+if opened. But it helps a lot for crashes in UI system.
+
+Frank contributed neat enhanced knots. I.e. these small handles,
+used for scaling, node editing etc. can now have all kinds
+of fancy shapes, and handle X cursor by thmselves as well.
+
+I re-borrowed Raph SVG path code from librsvg (the old one
+came from Gill). The new code parses SVG files exported from
+Illustrator the right way - so you can now open and edit
+most Nautilus SVG icons.
+
+UI-wise there are neat color slider widgets, that should give
+a little better user experience than plain Gtk sliders. Among
+composite widgets there is CMYK color selector, but it is mainly
+placeholder - both display and printing go through RGB anyways.
+
+Frank also did near-complete snappoints implementation, so
+guidelines and grid are quite useful now.
+
+Francis contributed several bugfixes and also Base64 inline image
+support.
+
+There is global opacity setting implemented. It can currently only
+be acessed from context menu. Same stands for object sensitivity.
+Hint - to select insensitive objects, use rubberband or Shift-click.
+
+Many other people have contributed to sodipodi. Big thanks to
+everybody!
+
+2001/09/27 Multiple skipped versions
+
+Hmm... Seems that I have omitted some versions
+
+2000/10/09 Version 0.20
+
+This release is intended to test the whole thing out before Gnome 1.4 release
+later this year.
+We have completely new interface, GnomeMDI is gnome, bonobo embeddable works in
+limited way, there are guidelines, grid and countless other improvements.
+
+2000/05/04 Version 0.18
+
+This is still development release. Many bugs, some of whose are very nasty
+memory corrupting ones are lurking around.
+Undo/Redo now basically work. Undo is unlimited, so you are encouraged to
+test, how long it takes to fill all memory...
+There are also some minor improvements, such as (preliminary) way to print
+semi-transparent pixmaps.
+
+2000/28/03 Version 0.17
+
+Sodipodi home is now http://sodipodi.sourceforge.net/
+Started building regular tarballs and RPMs
+Created icon & desktop entry
+etc. etc.
+
+2000/14/01 Version 0.16
+
+Started hacking with GnomeMDI. You can fire up fill & stroke dialogs again
+and these even update itself, if active view changes.
+
+2000/09/01 Version 0.16
+
+Imported to CVS.
+Added multiple files / multiple views support. As a result, most things
+do not work any more, but you can experiment with load/save/print/import,
+group/ungroup, delete/duplicate, transforming, node editing, drawing,
+rects, ellipses and text. Sometimes it does not crash.
+
+30.12.1999 Node editing now works!

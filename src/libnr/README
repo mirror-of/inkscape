@@ -1,0 +1,13 @@
+LibNR
+
+This is collection of RGB(A) rendering utilities.
+
+The code is in public domain, i.e. not copyrighted.
+You can do whatever you like with it.
+
+If you want your changes to be included in
+Sodipodi/LibNR, you have to put these in public
+domain as well.
+
+2003/06/22
+Lauris Kaplinski <lauris@kaplinski.com>

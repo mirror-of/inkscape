@@ -1,0 +1,2507 @@
+# translation of be.po to Belarusian
+# translation of sodipodi.HEAD.po to Belarusian
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Vital Khilko <dojlid@mova.org>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: be\n"
+"POT-Creation-Date: 2003-10-23 23:31-0700\n"
+"PO-Revision-Date: 2003-07-20 16:00+0300\n"
+"Last-Translator: Vital Khilko <dojlid@mova.org>\n"
+"Language-Team: Belarusian <i18n@mova.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
+"X-Generator: KBabel 1.0\n"
+
+#: sodipodi.desktop.in.h:1
+#, fuzzy
+msgid "SVG Vector Illustrator"
+msgstr "Рэдактар вэктарнае графікі"
+
+#. Create window
+#: sodipodi.desktop.in.h:2 src/toolbox.c:119 src/toolbox.c:140
+msgid "Sodipodi"
+msgstr "Sodipodi"
+
+#: src/bonobo/svg-doc-factory.c:35
+msgid "Could not create sodipodi-svg-doc factory"
+msgstr "Немагчыма стварыць вытворчасьць sodipodi-svg-doc"
+
+#: src/desktop.c:750
+msgid "Zoom drawing if window size changes"
+msgstr "Маштабаваць рысунак калі зьмяняецца памер акна"
+
+#: src/desktop.c:830
+#, c-format
+msgid "Sodipodi: %s: %s: %d"
+msgstr "Sodipodi: %s: %s: %d"
+
+#: src/desktop.c:959
+#, c-format
+msgid "Document %s has unsaved changes, save them?"
+msgstr "Дакумэнт %s мае незахаваныя зьмены, захаваць іх?"
+
+#. Page page
+#: src/desktop.c:1481 src/dialogs/align.c:286
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:484
+msgid "Page"
+msgstr "Аркуш"
+
+#: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
+#: src/verbs.c:485
+msgid "Drawing"
+msgstr "Рысаваньне"
+
+#. Selection submenu
+#: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
+#: src/interface.c:570 src/toolbox.c:485 src/verbs.c:486
+msgid "Selection"
+msgstr "Вылучэньне"
+
+#: src/dialogs/align.c:153 src/toolbox.c:445
+msgid "Align objects"
+msgstr "Раўнае аб'екты"
+
+#: src/dialogs/align.c:172
+msgid "Right side of aligned objects to left side of anchor"
+msgstr "Правы бок аб'екта ў левы бок якара"
+
+#: src/dialogs/align.c:175
+msgid "Left side of aligned objects to left side of anchor"
+msgstr "Левы бок аб'екта ў левы бок якара"
+
+#: src/dialogs/align.c:178
+msgid "Center horizontally"
+msgstr "Цэнтраваць па гарызанталі"
+
+#: src/dialogs/align.c:181
+msgid "Right side of aligned objects to right side of anchor"
+msgstr "Правы бок аб'екта ў правы бок якара"
+
+#: src/dialogs/align.c:184
+msgid "Left side of aligned objects to right side of anchor"
+msgstr "Левы бок аб'екта ў правы бок якара"
+
+#: src/dialogs/align.c:188
+msgid "Bottom of aligned objects to top of anchor"
+msgstr "Ніз аб'екта ў верх якара"
+
+#: src/dialogs/align.c:191 src/dialogs/align.c:200
+msgid "Top of aligned objects to top of anchor"
+msgstr "Верх аб'екта ў верх якара"
+
+#: src/dialogs/align.c:194
+msgid "Center vertically"
+msgstr "Цэнтраваць па вэртыкалі"
+
+#: src/dialogs/align.c:197
+msgid "Bottom of aligned objects to bottom of anchor"
+msgstr ""
+
+#: src/dialogs/align.c:203
+msgid "Align"
+msgstr "Раўнаньне"
+
+#: src/dialogs/align.c:221
+msgid "Distribute left sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:224
+msgid "Distribute centres of objects at even distances horizontally"
+msgstr ""
+
+#: src/dialogs/align.c:227
+msgid "Distribute right sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:230
+msgid "Distribute horizontal distance between objects equally"
+msgstr "Прадастаўляе гарызантальную адлегласьць між аднолькавымі аб'ектамі"
+
+#: src/dialogs/align.c:234
+msgid "Distribute top sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:237
+msgid "Distribute centres of objects at even distances vertically"
+msgstr ""
+
+#: src/dialogs/align.c:240
+msgid "Distribute bottom sides of objects at even distances"
+msgstr ""
+
+#: src/dialogs/align.c:243
+#, fuzzy
+msgid "Distribute vertical distance between objects equally"
+msgstr "Прадастаўляе гарызантальную адлегласьць між аднолькавымі аб'ектамі"
+
+#: src/dialogs/align.c:246
+msgid "Distribute"
+msgstr "Прадастаўленьне"
+
+#: src/dialogs/align.c:282
+msgid "Last selected"
+msgstr "Другі вылучаны"
+
+#: src/dialogs/align.c:283
+msgid "First selected"
+msgstr "Першы вылучаны"
+
+#: src/dialogs/align.c:284
+msgid "Biggest item"
+msgstr "Большы элемэнт"
+
+#: src/dialogs/align.c:285
+msgid "Smallest item"
+msgstr "Меншы элемэнт"
+
+#: src/dialogs/desktop-properties.c:191
+msgid "Desktop settings"
+msgstr "Акно рэдагаваньня"
+
+#. Grid settings
+#. Notebook tab
+#: src/dialogs/desktop-properties.c:200
+msgid "Grid"
+msgstr "Сетка"
+
+#: src/dialogs/desktop-properties.c:211
+msgid "Show grid"
+msgstr "Паказаць сетку"
+
+#: src/dialogs/desktop-properties.c:212
+msgid "Snap to grid"
+msgstr "Раўнаць па сетке"
+
+#: src/dialogs/desktop-properties.c:214
+#, fuzzy
+msgid "Horizontal lines"
+msgstr "Адлюстраваць гарызантальна"
+
+#: src/dialogs/desktop-properties.c:215
+#, fuzzy
+msgid "Vertical lines"
+msgstr "Адлюстраваць вэртыкальна"
+
+#: src/dialogs/desktop-properties.c:217
+#, fuzzy
+msgid "Iso grid"
+msgstr "Паказаць сетку"
+
+#: src/dialogs/desktop-properties.c:218
+msgid "Hex grid"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:221
+msgid "Grid units:"
+msgstr "Адзінкі сеткі:"
+
+#: src/dialogs/desktop-properties.c:223
+msgid "Origin X:"
+msgstr "Зрух па Х:"
+
+#: src/dialogs/desktop-properties.c:225
+msgid "Origin Y:"
+msgstr "Зрух па Y:"
+
+#: src/dialogs/desktop-properties.c:228
+msgid "Spacing X:"
+msgstr "Крок па Х:"
+
+#: src/dialogs/desktop-properties.c:230
+msgid "Spacing Y:"
+msgstr "Крок па Y:"
+
+#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+msgid "Snap distance:"
+msgstr "Памер крокаў:"
+
+#: src/dialogs/desktop-properties.c:238
+msgid "Grid color:"
+msgstr "Колер сеткі:"
+
+#: src/dialogs/desktop-properties.c:239
+msgid "Grid color"
+msgstr "Колер сеткі"
+
+#. Guidelines page
+#: src/dialogs/desktop-properties.c:243
+msgid "Guides"
+msgstr "Кіруючыя"
+
+#: src/dialogs/desktop-properties.c:252
+msgid "Show guides"
+msgstr "Паказаць кіруючыя"
+
+#: src/dialogs/desktop-properties.c:253
+msgid "Snap to guides"
+msgstr "Раўнаць па кіруючых"
+
+#: src/dialogs/desktop-properties.c:256
+msgid "Snap units:"
+msgstr "Адзінкі крокаў:"
+
+#: src/dialogs/desktop-properties.c:261
+msgid "Guides color:"
+msgstr "Колер кіруючых:"
+
+#: src/dialogs/desktop-properties.c:262
+msgid "Guideline color"
+msgstr "Колер кіруючых рысаў"
+
+#: src/dialogs/desktop-properties.c:264
+msgid "Highlight color:"
+msgstr "Колер падсьвятленьня:"
+
+#: src/dialogs/desktop-properties.c:265
+msgid "Highlighted guideline color"
+msgstr "Колер падсьвятленьня кіруючых рысаў"
+
+#: src/dialogs/desktop-properties.c:278
+msgid "Show border"
+msgstr "Паказаць межы"
+
+#: src/dialogs/desktop-properties.c:280
+msgid "Border on top of drawing"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:543
+msgid "Close"
+msgstr "Закрыць"
+
+#: src/dialogs/display-settings.c:85
+msgid "Display settings"
+msgstr "Уласьцівасьці дысплэя"
+
+#. Rendering settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:93
+msgid "Rendering"
+msgstr "Вывад"
+
+#: src/dialogs/display-settings.c:105
+msgid "Oversample bitmaps:"
+msgstr "Усярэджваць растр па кропках:"
+
+#: src/dialogs/display-settings.c:116 src/verbs.c:427
+msgid "None"
+msgstr "Няма"
+
+#: src/dialogs/display-settings.c:120
+msgid "2x2"
+msgstr "2x2"
+
+#: src/dialogs/display-settings.c:124
+msgid "4x4"
+msgstr "4x4"
+
+#: src/dialogs/display-settings.c:128
+msgid "8x8"
+msgstr "8x8"
+
+#: src/dialogs/display-settings.c:132
+msgid "16x16"
+msgstr "16x16"
+
+#. Input settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:143
+msgid "Input"
+msgstr "Увод"
+
+#: src/dialogs/display-settings.c:154
+msgid "Default cursor tolerance:"
+msgstr "Дапомны допуск курсора:"
+
+#: src/dialogs/document-properties.c:154
+msgid "Document settings"
+msgstr "Уласьцівасьці дакумэнта"
+
+#: src/dialogs/document-properties.c:175
+msgid "Paper size:"
+msgstr "Памер паперы:"
+
+#: src/dialogs/document-properties.c:196
+msgid "Custom"
+msgstr "Пазначае карыстальнік"
+
+#. Custom paper frame
+#: src/dialogs/document-properties.c:203
+msgid "Custom paper"
+msgstr "Папера карыстальніка"
+
+#. Unit selector
+#: src/dialogs/document-properties.c:214 src/dialogs/export.c:153
+#: src/dialogs/object-properties.c:318 src/dialogs/transformation.c:401
+#: src/dialogs/transformation.c:576
+msgid "Units:"
+msgstr "Адзінкі:"
+
+#. Stroke width
+#: src/dialogs/document-properties.c:223 src/dialogs/export.c:163
+#: src/dialogs/export.c:187 src/dialogs/object-attributes.c:68
+#: src/dialogs/object-attributes.c:76 src/dialogs/object-properties.c:360
+#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:120
+#: src/dyna-draw-context.c:1079
+msgid "Width:"
+msgstr "Шырыня:"
+
+#: src/dialogs/document-properties.c:238 src/dialogs/export.c:172
+#: src/dialogs/export.c:195 src/dialogs/object-attributes.c:69
+#: src/dialogs/object-attributes.c:77 src/dialogs/object-properties.c:375
+msgid "Height:"
+msgstr "Вышыня:"
+
+#: src/dialogs/export.c:115
+msgid "Export bitmap"
+msgstr "Экспартаваць кропкавы відарыс"
+
+#. Export area frame
+#: src/dialogs/export.c:124
+msgid "Export area"
+msgstr "Прастора экспартаваньня"
+
+#: src/dialogs/export.c:157
+msgid "x0:"
+msgstr "x0:"
+
+#: src/dialogs/export.c:160
+msgid "x1:"
+msgstr "x1:"
+
+#: src/dialogs/export.c:166
+msgid "y0:"
+msgstr "y0:"
+
+#: src/dialogs/export.c:169
+msgid "y1:"
+msgstr "y1:"
+
+#. Bitmap size frame
+#: src/dialogs/export.c:178
+msgid "Bitmap size"
+msgstr "Памер кропкавага відарыса"
+
+#: src/dialogs/export.c:187 src/dialogs/export.c:195
+msgid "pixels"
+msgstr "піксэлі"
+
+#: src/dialogs/export.c:191 src/dialogs/export.c:199
+msgid "dpi"
+msgstr "dpi"
+
+#: src/dialogs/export.c:206
+msgid "Export png file"
+msgstr "Экспартуе файл png"
+
+#: src/dialogs/export.c:235 src/verbs.c:437
+msgid "Export"
+msgstr "Экспартаваць"
+
+#: src/dialogs/fill-style.c:89
+msgid "Fill style"
+msgstr "Стыль запаўненьня"
+
+#: src/dialogs/fill-style.c:124
+msgid "Fill Rule"
+msgstr "Правіла запаўненьня"
+
+#: src/dialogs/fill-style.c:138
+msgid "nonzero"
+msgstr "ненулявы"
+
+#: src/dialogs/fill-style.c:143
+msgid "evenodd"
+msgstr "не запаўняць"
+
+#: src/dialogs/item-properties.c:77 src/dialogs/item-properties.c:274
+#: src/dialogs/item-properties.c:348 src/dialogs/item-properties.c:355
+msgid "ID"
+msgstr ""
+
+#: src/dialogs/item-properties.c:91
+msgid "Set ID"
+msgstr ""
+
+#: src/dialogs/item-properties.c:102
+msgid "Sensitive"
+msgstr "Чулы"
+
+#: src/dialogs/item-properties.c:107
+msgid "Visible"
+msgstr "Бачны"
+
+#: src/dialogs/item-properties.c:112
+msgid "Active"
+msgstr "Актыўны"
+
+#: src/dialogs/item-properties.c:117
+msgid "Printable"
+msgstr "Здольны друкавацца"
+
+#: src/dialogs/item-properties.c:128
+msgid "Opacity:"
+msgstr "Зацямненьне:"
+
+#: src/dialogs/item-properties.c:147
+msgid "Transformation matrix"
+msgstr "Матрыца трансфармаваньня"
+
+#: src/dialogs/item-properties.c:268
+msgid "Ref"
+msgstr ""
+
+#: src/dialogs/item-properties.c:350
+#, fuzzy
+msgid "ID invalid"
+msgstr "Правільны ID"
+
+#: src/dialogs/item-properties.c:352
+msgid "ID exists"
+msgstr ""
+
+#: src/dialogs/item-properties.c:428 src/verbs.c:499
+msgid "Item properties"
+msgstr "Уласьцівасьці элемэнта"
+
+#: src/dialogs/object-attributes.c:31
+msgid "Href:"
+msgstr "Href:"
+
+#: src/dialogs/object-attributes.c:32
+msgid "Target:"
+msgstr "Мэта:"
+
+#: src/dialogs/object-attributes.c:33
+msgid "Type:"
+msgstr "Тып:"
+
+#: src/dialogs/object-attributes.c:34
+msgid "Role:"
+msgstr "Роля:"
+
+#: src/dialogs/object-attributes.c:35
+msgid "Arcrole:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:36
+msgid "Title:"
+msgstr "Назва:"
+
+#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:110
+msgid "Show:"
+msgstr "Паказаць:"
+
+#: src/dialogs/object-attributes.c:38
+msgid "Actuate:"
+msgstr "Актывізаваць:"
+
+#: src/dialogs/object-attributes.c:43
+msgid "Sides:"
+msgstr "Бакі:"
+
+#: src/dialogs/object-attributes.c:44 src/dialogs/object-attributes.c:54
+msgid "Center X:"
+msgstr "Цэнтар X:"
+
+#: src/dialogs/object-attributes.c:45 src/dialogs/object-attributes.c:55
+msgid "Center Y:"
+msgstr "Цэнтар Y:"
+
+#: src/dialogs/object-attributes.c:46
+msgid "R1:"
+msgstr "R1:"
+
+#: src/dialogs/object-attributes.c:47
+msgid "R2:"
+msgstr "R2:"
+
+#: src/dialogs/object-attributes.c:48
+msgid "ARG1:"
+msgstr "АРГ1:"
+
+#: src/dialogs/object-attributes.c:49
+msgid "ARG2:"
+msgstr "АРГ2:"
+
+#. Expansion
+#: src/dialogs/object-attributes.c:56 src/spiral-context.c:362
+msgid "Expansion:"
+msgstr "Пашырэньне:"
+
+#. Revolution
+#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:90
+#: src/spiral-context.c:350
+msgid "Revolution:"
+msgstr "Абарот:"
+
+#: src/dialogs/object-attributes.c:58
+msgid "Radius:"
+msgstr "Радыюс:"
+
+#: src/dialogs/object-attributes.c:59
+msgid "Argument:"
+msgstr "Аргумэнт:"
+
+#: src/dialogs/object-attributes.c:60
+msgid "T0:"
+msgstr "T0:"
+
+#: src/dialogs/object-attributes.c:65
+msgid "URL:"
+msgstr "URL:"
+
+#: src/dialogs/object-attributes.c:66 src/dialogs/object-attributes.c:74
+#: src/dialogs/object-properties.c:330
+msgid "X:"
+msgstr "X:"
+
+#: src/dialogs/object-attributes.c:67 src/dialogs/object-attributes.c:75
+#: src/dialogs/object-properties.c:345
+msgid "Y:"
+msgstr "Y:"
+
+#: src/dialogs/object-attributes.c:78
+msgid "RX:"
+msgstr "RX:"
+
+#: src/dialogs/object-attributes.c:79
+msgid "RY:"
+msgstr "RY:"
+
+#: src/dialogs/object-attributes.c:114
+#, c-format
+msgid "%s attributes"
+msgstr "%s атрыбуты"
+
+#: src/dialogs/object-properties.c:110
+msgid "Object style"
+msgstr "Запаўненьне й штрыхоўка"
+
+#: src/dialogs/object-properties.c:125
+msgid "Fill"
+msgstr "Запаўненьне"
+
+#: src/dialogs/object-properties.c:139
+msgid "Stroke paint"
+msgstr "Рысаваньне штрыхоўкі"
+
+#: src/dialogs/object-properties.c:153
+msgid "Stroke style"
+msgstr "Стыль штрыхоўкі"
+
+#: src/dialogs/object-properties.c:173
+msgid "Apply to:"
+msgstr "Ужыць да:"
+
+#: src/dialogs/object-properties.c:183
+msgid "Selected objects"
+msgstr "Вылучаныя аб'екты"
+
+#: src/dialogs/object-properties.c:186
+msgid "All shape tools"
+msgstr "Усе інструмэнты формы"
+
+#: src/dialogs/object-properties.c:189
+msgid "Rectangle tool"
+msgstr "Інструмэнт прамакутніка"
+
+#: src/dialogs/object-properties.c:192
+msgid "Arc tool"
+msgstr "Інструмэнт дугі"
+
+#: src/dialogs/object-properties.c:195
+msgid "Star tool"
+msgstr "Інструмэнт зоркі"
+
+#: src/dialogs/object-properties.c:198
+msgid "Spiral tool"
+msgstr "Інструмэнт спіралі"
+
+#: src/dialogs/object-properties.c:201
+msgid "Freehand and pen"
+msgstr "Вольныя рысы й пяро"
+
+#: src/dialogs/object-properties.c:204
+msgid "Calligraphic line"
+msgstr "Каліграфічная рыса"
+
+#: src/dialogs/object-properties.c:207 src/verbs.c:475
+msgid "Text"
+msgstr "Тэкст"
+
+#: src/dialogs/object-properties.c:283
+#, fuzzy
+msgid "Object Size and Position"
+msgstr "Памер і пазыцыя аб'екта"
+
+#: src/dialogs/object-properties.c:305 src/verbs.c:494
+msgid "Size and Position"
+msgstr "Памер і пазыцыя"
+
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
+msgid "Stroke settings"
+msgstr "Наладкі штрыхоўкі"
+
+#. Join type
+#: src/dialogs/stroke-style.c:579
+msgid "Join:"
+msgstr "Далучэньне:"
+
+#. Cap type
+#: src/dialogs/stroke-style.c:622
+msgid "Cap:"
+msgstr "Краі:"
+
+#. Dash
+#: src/dialogs/stroke-style.c:665
+msgid "Pattern:"
+msgstr "Узор:"
+
+#: src/dialogs/text-edit.c:95
+msgid "Text properties"
+msgstr "Уласьцівасьці тэкста"
+
+#. Layout
+#: src/dialogs/text-edit.c:134
+msgid "Layout"
+msgstr "Арыентацыя"
+
+#: src/dialogs/text-edit.c:142
+msgid "Alignment:"
+msgstr "Раўнаньне:"
+
+#: src/dialogs/text-edit.c:167
+msgid "Orientation:"
+msgstr "Арыентацыя:"
+
+#: src/dialogs/text-edit.c:185
+#, fuzzy
+msgid "Line spacing:"
+msgstr "Крок па Х:"
+
+#: src/dialogs/text-edit.c:210
+msgid "Text and font"
+msgstr "Тэкст і шрыфт"
+
+#: src/dialogs/text-edit.c:221
+msgid "Set as default"
+msgstr "Усталяваць як дапомнае"
+
+#: src/dialogs/tool-attributes.c:45 src/verbs.c:492
+msgid "Tool attributes"
+msgstr "Атрыбуты інструмэнта"
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Expansion"
+msgstr "Пашырэньне"
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Inner radius"
+msgstr "Нутраны радыюс"
+
+#: src/dialogs/tool-attributes.c:94 src/dialogs/tool-attributes.c:104
+#: src/dialogs/tool-attributes.c:114 src/dialogs/tool-attributes.c:124
+msgid "Missing tool preferences"
+msgstr "Перавагі адсутнага інструмэнта"
+
+#. Magnitude
+#: src/dialogs/tool-attributes.c:100 src/star-context.c:355
+msgid "Corners:"
+msgstr "Куты:"
+
+#: src/dialogs/tool-attributes.c:100
+msgid "Proportion"
+msgstr "Прапорцыі"
+
+#: src/dialogs/tool-attributes.c:110
+msgid "Transform:"
+msgstr "Трансфармаваньне:"
+
+#. Mass
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1043
+msgid "Mass:"
+msgstr "Маса:"
+
+#. Drag
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1055
+msgid "Drag:"
+msgstr "Градусы:"
+
+#: src/dialogs/tool-attributes.c:120
+msgid "Angle"
+msgstr "Кут"
+
+#: src/dialogs/tool-attributes.c:127
+msgid "Tool has no attributes"
+msgstr "Інструмэет ня мае атрыбутаў"
+
+#: src/dialogs/tool-attributes.c:130 src/dialogs/tool-options.c:88
+msgid "No active tool"
+msgstr "Няма актыўных інструмэнтаў"
+
+#: src/dialogs/tool-options.c:44 src/verbs.c:491
+msgid "Tool options"
+msgstr "Выбары інструмэнта"
+
+#: src/dialogs/tool-options.c:85
+msgid "Tool has no options"
+msgstr "Інструмэнт ня мае выбараў"
+
+#: src/dialogs/transformation.c:193
+msgid "Transform selection"
+msgstr "Трансфармаваньне вылучэньня"
+
+#: src/dialogs/transformation.c:365
+msgid "Move"
+msgstr "Перанесьці"
+
+#. Relative moves
+#: src/dialogs/transformation.c:407
+msgid "Relative move"
+msgstr "Адноснае перамяшчэньне"
+
+#: src/dialogs/transformation.c:539
+msgid "Scale"
+msgstr "Маштаб"
+
+#: src/dialogs/transformation.c:666
+msgid "Rotate"
+msgstr "Павярнуць"
+
+#: src/dialogs/transformation.c:684
+msgid "deg"
+msgstr "град"
+
+#: src/dialogs/xml-tree.c:158
+msgid "Drag to reorder nodes"
+msgstr "Перамясьціце для зьмены парадка вузлоў"
+
+#: src/dialogs/xml-tree.c:171
+msgid "New element node"
+msgstr "Стварыць вузел элемэнта"
+
+#: src/dialogs/xml-tree.c:189
+msgid "New text node"
+msgstr "Стварыць вузел тэкста"
+
+#: src/dialogs/xml-tree.c:206
+msgid "Duplicate node"
+msgstr "Падвоіць вузел"
+
+#: src/dialogs/xml-tree.c:222
+msgid "Delete node"
+msgstr "Выдаліць вузел"
+
+#: src/dialogs/xml-tree.c:235
+msgid "Unindent node"
+msgstr "Прыбраць водступ вузла"
+
+#: src/dialogs/xml-tree.c:246
+msgid "Indent node"
+msgstr "Дадаць водступ вузла"
+
+#: src/dialogs/xml-tree.c:256
+msgid "Raise node"
+msgstr "Падняць вузел"
+
+#: src/dialogs/xml-tree.c:267
+msgid "Lower node"
+msgstr "Апусьціць вузел"
+
+#: src/dialogs/xml-tree.c:304
+msgid "Delete attribute"
+msgstr "Выдаліць атрыбут"
+
+#: src/dialogs/xml-tree.c:334
+msgid "Attribute name"
+msgstr "Назва атрыбута"
+
+#: src/dialogs/xml-tree.c:341
+msgid "Set attribute"
+msgstr "Усталяваць атрыбут"
+
+#: src/dialogs/xml-tree.c:354
+msgid "Attribute value"
+msgstr "Значэньне атрыбута"
+
+#: src/dialogs/xml-tree.c:826
+#, c-format
+msgid "Sodipodi: %s : XML View"
+msgstr "Sodipodi: %s : рэдактар XML"
+
+#: src/dialogs/xml-tree.c:849
+msgid "New element node..."
+msgstr "Стварыць вузел элемэнта..."
+
+#: src/dialogs/xml-tree.c:869
+msgid "Cancel"
+msgstr "Адмяніць"
+
+#: src/dialogs/xml-tree.c:873
+msgid "Create"
+msgstr "Стварыць"
+
+#: src/document.c:340
+#, c-format
+msgid "New document %d"
+msgstr "Новы дакумэнт %d"
+
+#: src/document.c:369
+#, c-format
+msgid "Memory document %d"
+msgstr "Запомніць дакумэнт %d"
+
+#: src/document.c:455
+#, c-format
+msgid "Unnamed document %d"
+msgstr "Дакумэнт бяз назвы %d"
+
+#: src/draw-context.c:280
+#, fuzzy
+msgid "Appending to selection. Press 'a' to toggle Append/New."
+msgstr ""
+"Дадае да вылучэньня. Націсьніце '+' каб пераключыцца паміж \"Дадаць\" і "
+"\"Стварыць\"."
+
+#: src/draw-context.c:285
+#, fuzzy
+msgid "Creating new curve. Press 'a' to toggle Append/New."
+msgstr ""
+"Стварае новую дугу. Націсьніце '+' каб пераключыцца паміж \"Дадаць\" і "
+"\"Стварыць\"."
+
+#. Angle
+#: src/dyna-draw-context.c:1067
+msgid "Angle:"
+msgstr "Кут:"
+
+#. Reset
+#: src/dyna-draw-context.c:1091 src/rect-context.c:421
+#: src/spiral-context.c:386 src/star-context.c:386
+msgid "Defaults"
+msgstr "Дапомнае"
+
+#: src/file.c:150 src/file.c:161 src/file.c:173
+msgid "Select file to open"
+msgstr "Выбярыце файл для адкрыцьця"
+
+#: src/file.c:190 src/module.c:548
+msgid "Scalable Vector Graphic (SVG)"
+msgstr "Здольная маштабавацца вэктарная графіка (SVG)"
+
+#: src/file.c:190 src/module.c:548
+msgid "Sodipodi native file format and W3C standard"
+msgstr "Уласны фармат файлаў Sodipodi й стандарт W3C"
+
+#: src/file.c:196 src/file.c:309
+msgid "File type:"
+msgstr "Тып файла:"
+
+#: src/file.c:294
+msgid "Save file"
+msgstr "Захаваць файл"
+
+#: src/file.c:470 src/file.c:480 src/file.c:486
+msgid "Select file to import"
+msgstr "Выбярыце файл для імпартаваньня"
+
+#: src/help.c:49
+msgid "About sodipodi"
+msgstr "Пра sodipodi"
+
+#. Do not insert any elements before/between first 4
+#: src/helper/units.c:40
+msgid "Unit"
+msgstr "Адзінка"
+
+#: src/helper/units.c:40
+msgid "Units"
+msgstr "Адзінкі"
+
+#: src/helper/units.c:41
+msgid "Point"
+msgstr "Пункт"
+
+#: src/helper/units.c:41
+msgid "pt"
+msgstr "pt"
+
+#: src/helper/units.c:41
+msgid "Points"
+msgstr "Пункты"
+
+#: src/helper/units.c:41
+msgid "Pt"
+msgstr "Pt"
+
+#: src/helper/units.c:42
+msgid "Pixel"
+msgstr "Піксэль"
+
+#: src/helper/units.c:42
+msgid "px"
+msgstr "px"
+
+#: src/helper/units.c:42
+msgid "Pixels"
+msgstr "Піксэлі"
+
+#: src/helper/units.c:42
+msgid "Px"
+msgstr "Px"
+
+#: src/helper/units.c:43
+msgid "Userspace unit"
+msgstr "Адзінка прасторы карыстальніка"
+
+#: src/helper/units.c:43
+msgid "User"
+msgstr "Карыстальнік"
+
+#: src/helper/units.c:43
+msgid "Userspace units"
+msgstr "Адзінкі прасторы карыстальніка"
+
+#. Volatiles do not have default, so there are none here
+#. You can add new elements from this point forward
+#: src/helper/units.c:46
+msgid "Percent"
+msgstr "Адсотка"
+
+#: src/helper/units.c:46
+msgid "%"
+msgstr "%"
+
+#: src/helper/units.c:46
+msgid "Percents"
+msgstr "Адсоткі"
+
+#: src/helper/units.c:47
+msgid "Millimeter"
+msgstr "Мілімэтар"
+
+#: src/helper/units.c:47
+msgid "mm"
+msgstr "mm"
+
+#: src/helper/units.c:47
+msgid "Millimeters"
+msgstr "Мілімэтры"
+
+#: src/helper/units.c:48
+msgid "Centimeter"
+msgstr "Санцімэтар"
+
+#: src/helper/units.c:48
+msgid "cm"
+msgstr "cm"
+
+#: src/helper/units.c:48
+msgid "Centimeters"
+msgstr "Сантымэтры"
+
+#: src/helper/units.c:49
+msgid "Meter"
+msgstr "Мэтар"
+
+#: src/helper/units.c:49
+msgid "m"
+msgstr "m"
+
+#: src/helper/units.c:49
+msgid "meters"
+msgstr "мэтры"
+
+#: src/helper/units.c:50
+msgid "Inch"
+msgstr "Цаля"
+
+#: src/helper/units.c:50
+msgid "in"
+msgstr "in"
+
+#: src/helper/units.c:50
+msgid "Inches"
+msgstr "Цалі"
+
+#: src/helper/units.c:51
+msgid "Em square"
+msgstr "М-квадрат"
+
+#: src/helper/units.c:51
+msgid "em"
+msgstr "em"
+
+#: src/helper/units.c:51
+msgid "Em squares"
+msgstr "М-квадрат"
+
+#: src/helper/units.c:52
+msgid "Ex square"
+msgstr "X-квадрат"
+
+#: src/helper/units.c:52
+msgid "ex"
+msgstr "ex"
+
+#: src/helper/units.c:52
+msgid "Ex squares"
+msgstr "X-квадрат"
+
+#: src/interface.c:303 src/interface.c:480
+msgid "Open Recent"
+msgstr ""
+
+#: src/interface.c:323
+msgid "Close View"
+msgstr "Закрыць прагляд"
+
+#: src/interface.c:324 src/interface.c:495
+msgid "Exit Program"
+msgstr "Выйсьці з праграмы"
+
+#: src/interface.c:326 src/interface.c:487
+msgid "About Sodipodi"
+msgstr "Пра Sodipodi"
+
+#. Modules need abouts too
+#: src/interface.c:329 src/interface.c:490
+msgid "About Modules"
+msgstr "Пра модулі"
+
+#: src/interface.c:347
+msgid "Cleanup"
+msgstr "Ачысьціць"
+
+#. View:Zoom
+#: src/interface.c:417 src/toolbox.c:617 src/verbs.c:476
+msgid "Zoom"
+msgstr "Маштабаваньне"
+
+#. View:New View
+#: src/interface.c:429
+msgid "New View"
+msgstr "Стварыць новае акно рэдагаваньня"
+
+#. View:New Preview
+#: src/interface.c:431
+msgid "New Preview"
+msgstr "Стварыць папярэдні прагляд"
+
+#: src/interface.c:433
+msgid "New Toplevel Toolbox"
+msgstr "Стварыць верхнюю панэлю інструмэнтаў"
+
+#: src/interface.c:434
+msgid "New Docked Toolbox"
+msgstr "Стварыць прычэпленую панэлю інструмэнтаў"
+
+#: src/interface.c:435
+msgid "Remove Docked Toolbox"
+msgstr "Выдаліць прычэпленую панэлю інструмэнта"
+
+#. File
+#: src/interface.c:477 src/verbs.c:429
+msgid "New"
+msgstr "Стварыць"
+
+#: src/interface.c:478
+msgid "Open"
+msgstr "Адкрыць"
+
+#. Generic menu
+#. File submenu
+#: src/interface.c:558 src/toolbox.c:348
+msgid "File"
+msgstr "Файл"
+
+#. Edit submenu
+#: src/interface.c:564 src/toolbox.c:405 src/widgets/gradient-selector.c:135
+msgid "Edit"
+msgstr "Рэдагаваньне"
+
+#. View submenu
+#: src/interface.c:576
+msgid "View"
+msgstr "Выгляд"
+
+#. Drawing mode submenu
+#: src/interface.c:582
+msgid "Drawing Mode"
+msgstr "Рэжым рысаваньня"
+
+#. Dialog submenu
+#: src/interface.c:588
+msgid "Dialogs"
+msgstr "Дыялёгі"
+
+#: src/interface.c:595
+msgid "Filters"
+msgstr "Фільтары"
+
+#: src/main.c:126
+msgid "Do not use X server (only process files from console)"
+msgstr "Не выкарыстоўваць паслужнік Х (толькі апрацоўваць файл з кансолі)"
+
+#: src/main.c:129
+msgid "Try to use X server even if $DISPLAY is not set)"
+msgstr ""
+"Працягваць спрабаваць выкарыстоўваць паслужнік Х калі $DISPLAY не ўсталявана)"
+
+#: src/main.c:132
+msgid "Open specified document(s) (option string may be excluded)"
+msgstr "Адкрывае пазначаныя дакумэнты (выбар радка можа быць выключаны)"
+
+#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+msgid "FILENAME"
+msgstr "Назва файла"
+
+#: src/main.c:135
+msgid "Print document(s) to specified output file (use '| program' for pipe)"
+msgstr ""
+"Друкуе дакумэнт(ы) у пазначаны выходны файл (выкарыстоўвайце '| праграма' "
+"для стварэньня канала)"
+
+#: src/main.c:138
+msgid "Export document to png file"
+msgstr "Экспартаваць дакумэнт у файл png"
+
+#: src/main.c:141
+msgid "The resolution used for converting SVG into bitmap (default 72.0)"
+msgstr "Разрозьненьне для канвэртацыі SVG у растар (дапомна 72,0)"
+
+#: src/main.c:142
+msgid "DPI"
+msgstr "DPI"
+
+#: src/main.c:144
+msgid ""
+"Exported area in millimeters (default is full document, 0,0 is lower-left "
+"corner)"
+msgstr ""
+"Прастора экспартаваньня ў мілімэтрах (дапомна выбіраецца ўвесь дакумэнт, 0,0 "
+"- левы ніжні кут)"
+
+#: src/main.c:145
+msgid "x0:y0:x1:y1"
+msgstr "x0:y0:x1:y1"
+
+#: src/main.c:147
+msgid "The width of generated bitmap in pixels (overwrites dpi)"
+msgstr "Шырыня генераванага растра ў піксэлях (перазапіс dpi)"
+
+#: src/main.c:147
+msgid "WIDTH"
+msgstr "ШЫРЫНЯ"
+
+#: src/main.c:149
+msgid "The height of generated bitmap in pixels (overwrites dpi)"
+msgstr "Вышыня генераванага растра ў піксэлях (перазапіс dpi)"
+
+#: src/main.c:149
+msgid "HEIGHT"
+msgstr "ВЫШЫНЯ"
+
+#: src/main.c:151
+msgid "Background color of exported bitmap (any SVG supported color string)"
+msgstr ""
+"Колер тла экспартаванага растра (толькі радок колера, які падтрымлівае SVG)"
+
+#: src/main.c:151
+msgid "COLOR"
+msgstr "КОЛЕР"
+
+#: src/main.c:153
+msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
+msgstr ""
+"Экспартаваньне дакумэнта ў звычайны файл SVG (без прасторы імёнаў \"xmlns:"
+"sodipodi\")"
+
+#: src/main.c:155
+msgid "Show given files one-by-one, switch to next on any key/mouse event"
+msgstr ""
+"Паказываць заданыя файлы адзін за адным, пераключацца на наступны па любой "
+"падзеі мышы/клявіятуры"
+
+#: src/main.c:157
+msgid "Prefer bitmap (xpm) icons to SVG ones"
+msgstr ""
+
+#: src/module.c:556
+msgid "SVG with \"xmlns:sodipodi\" namespace"
+msgstr "SVG з прасторай імёнаў \"xmlns:sodipodi\""
+
+#: src/module.c:557
+msgid "Scalable Vector Graphics format with sodipodi extensions"
+msgstr "Фармат здольнай маштабавацца вэктарнае графікі з пашырэньнямі sodipodi"
+
+#: src/module.c:560
+msgid "Plain SVG"
+msgstr "Звычайны SVG"
+
+#: src/module.c:561
+msgid "Scalable Vector Graphics format"
+msgstr "Фармат здольнай маштабавацца вэктарнай графікі"
+
+#: src/modules/gnome.c:133
+msgid "Select printer"
+msgstr "Выбярыце друкарку"
+
+#: src/modules/gnome.c:187
+#, c-format
+msgid "Sodipodi (doc name %s..): Print Preview"
+msgstr "Sodipodi (дакумэнт з назвай %s..): Папярэдні прагляд друку"
+
+#: src/modules/kde.cpp:159
+msgid "Document variant:"
+msgstr "Варыянт дакумэнта:"
+
+#: src/modules/kde.cpp:169
+msgid ""
+"*.svg *.svgz|SVG files\n"
+"*.xml|XML files\n"
+"*|All files"
+msgstr ""
+"*.svg *.svgz|SVG файлы\n"
+"*.xml|XML файлы\n"
+"*|Усе файлы"
+
+#: src/modules/kde.cpp:171
+msgid "Save document as"
+msgstr "Захаваць дакумэнт як"
+
+#. Print destination frame
+#: src/modules/ps.c:157 src/modules/ps.c:218
+msgid "Print destination"
+msgstr "Друк"
+
+#. Print properties frame
+#: src/modules/ps.c:168
+msgid "Print properties"
+msgstr "Уласьцівасьці друку"
+
+#: src/modules/ps.c:176
+msgid "Print using PostScript operators"
+msgstr "Дроукаваць карыстаючыся апэратарамі PostScript"
+
+#: src/modules/ps.c:178
+msgid ""
+"Use PostScript vector operators, resulting image will be (usually) smaller "
+"and can be arbitrarily scaled, but alpha transparency, markers and patterns "
+"will be lost"
+msgstr ""
+
+#: src/modules/ps.c:183
+msgid "Print as bitmap"
+msgstr "Друкаваць як кропкавы відарыс"
+
+#: src/modules/ps.c:185
+msgid ""
+"Print everything as bitmap, resulting image will be (usualy) larger and it "
+"quality depends on zoom factor, but all graphics will be rendered identical "
+"to display"
+msgstr ""
+
+#: src/modules/ps.c:199
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr ""
+
+#: src/modules/ps.c:214
+msgid "Resolution:"
+msgstr "Разрозьненьне:"
+
+#: src/modules/ps.c:224
+msgid ""
+"Enter destination lpr queue.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to program"
+msgstr ""
+"Пазначце чаргу lpr.\n"
+"Выкарыстоўвайце '> назва_файла' каб друкаваць у файл.\n"
+"Выкарыстоўвайце '| праграма аргумэнты...' каб накіраваць праз канал у "
+"праграму"
+
+#: src/modules/ps.c:837
+msgid "write error occured"
+msgstr "адбылася памылка запісу"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:105
+msgid "Item"
+msgstr "Элемэнт"
+
+#. Item dialog
+#: src/object-ui.c:108 src/verbs.c:499
+msgid "Item Properties"
+msgstr "Уласьцівасьці элемэнта"
+
+#. Select item
+#: src/object-ui.c:118
+msgid "Select this"
+msgstr "Вылучыць гэта"
+
+#. Reset transformations
+#: src/object-ui.c:128
+msgid "Reset transformation"
+msgstr "Скінуць трансфармацыю"
+
+#: src/object-ui.c:134
+msgid "Make sensitive"
+msgstr "Зрабіць чулым"
+
+#: src/object-ui.c:134
+msgid "Make insensitive"
+msgstr "Зрабіць нячулым"
+
+#. Create link
+#: src/object-ui.c:139
+msgid "Create link"
+msgstr "Стварыць лучыва"
+
+#: src/object-ui.c:251 src/verbs.c:453
+msgid "Group"
+msgstr "Згрупаваць"
+
+#. Group dialog
+#: src/object-ui.c:255
+msgid "Group Properties"
+msgstr "Уласьцівасьці групы"
+
+#. "Ungroup"
+#: src/object-ui.c:268 src/verbs.c:454
+msgid "Ungroup"
+msgstr "Разгрупаваць"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:316
+msgid "Link"
+msgstr "Злучыць"
+
+#. Link dialog
+#: src/object-ui.c:319
+msgid "Link Properties"
+msgstr "Уласьцівасьці лучыва"
+
+#. Select item
+#: src/object-ui.c:329
+msgid "Follow link"
+msgstr "Прасачыць лучыва"
+
+#. Reset transformations
+#: src/object-ui.c:334
+msgid "Remove link"
+msgstr "Выдаліць лучыва"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:397
+msgid "Image"
+msgstr "Відарыс"
+
+#. Link dialog
+#: src/object-ui.c:400
+msgid "Image Properties"
+msgstr "Уласьцівасьці відарыса"
+
+#. Autotrace dialog
+#: src/object-ui.c:408 src/sp-image.c:780
+msgid "Trace"
+msgstr "Трасыраваць"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:457
+msgid "Shape"
+msgstr "Фармаваньне"
+
+#. Item dialog
+#: src/object-ui.c:460 src/toolbox.c:442
+msgid "Fill settings"
+msgstr "Наладкі запаўненьня"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:487
+msgid "Rect"
+msgstr "Прамакутнік"
+
+#. Link dialog
+#: src/object-ui.c:490
+msgid "Rect Properties"
+msgstr "Уласьцівасьці прамакутніка"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:523 src/verbs.c:470
+msgid "Star"
+msgstr "Зорка"
+
+#. Link dialog
+#: src/object-ui.c:526
+msgid "Star Properties"
+msgstr "Уласьцівасьці зоркі"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:559 src/verbs.c:471
+msgid "Spiral"
+msgstr "Спіраль"
+
+#. Link dialog
+#: src/object-ui.c:562
+msgid "Spiral Properties"
+msgstr "Уласьцівасьці сьпіралі"
+
+#. rx_ratio
+#: src/rect-context.c:397
+msgid "Roundness ratio for x:"
+msgstr "Каэфіцэнт акругленьня для х:"
+
+#. ry_ratio
+#: src/rect-context.c:409
+msgid "Roundness ratio for y:"
+msgstr "Каэфіцэнт акругленьня для y:"
+
+#: src/select-context.c:564
+msgid "Visual transformation"
+msgstr "Візуальная трансфармацыя"
+
+#: src/select-context.c:572
+msgid "Show content"
+msgstr "Паказаць зьмест"
+
+#: src/select-context.c:579
+msgid "Show outline"
+msgstr "Паказаць контур"
+
+#: src/select-context.c:586
+msgid "Object transformation"
+msgstr "Трансфармаваньне аб'екта"
+
+#: src/select-context.c:594
+msgid "Optimize"
+msgstr "Аптымізаваць"
+
+#: src/select-context.c:601
+msgid "Preserve"
+msgstr "Зьберагчы"
+
+#: src/slideshow.c:88
+msgid "Sodipodi slideshow"
+msgstr "Слайдшоў Sodipodi"
+
+#: src/sodipodi.c:398
+msgid "Untitled document"
+msgstr "Дакумэнт бяз назвы"
+
+#. Show nice dialog box
+#: src/sodipodi.c:423
+msgid "Sodipodi encountered an internal error and will close now.\n"
+msgstr "Sodipodi сустрэла памылку й будзе зараз закрыта.\n"
+
+#: src/sodipodi.c:424
+msgid ""
+"Automatic backups of unsaved documents were done to following locations:\n"
+msgstr ""
+"Азтаматычнае рэзэрваваньне незахаваных дакумэнтаў выканана ў наступныя "
+"мейсцы:\n"
+
+#: src/sodipodi.c:425
+msgid "Automatic backup of following documents failed:\n"
+msgstr "Збой аўтаматычнага рэзэрваваньня наступных дакумэнтаў:\n"
+
+#: src/sodipodi.c:564
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you can\n"
+"neither load nor save preferences\n"
+msgstr ""
+"%s незвычайны файл.\n"
+"Хаця sodipodi працуе, вы не \n"
+"здольныя загрузіць ці захаваць\n"
+"перавагі\n"
+
+#: src/sodipodi.c:567
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"%s нерэчаісны файл xml ці вы\n"
+"не маеце правоў на чытаньне.\n"
+"Хаця sodipodi працуе, вы не \n"
+"здольныя загрузіць ці захаваць\n"
+"перавагі."
+
+#: src/sodipodi.c:572
+#, c-format
+msgid ""
+"%s is not valid sodipodi preferences file.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"%s нерэчаісны файл перавагаў\n"
+"sodipodi. Хаця sodipodi працуе,\n"
+"вы не здольныя загрузіць ці \n"
+"захаваць перавагі."
+
+#: src/sodipodi.c:584
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s не зьяўляецца звычайным файлам.\n"
+"Хаця sodipodi  і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sodipodi.c:587
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s нерэчаісны файл xml ці вы\n"
+"не маеце правоў на чытаньне.\n"
+"Хаця sodipodi і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sodipodi.c:591
+#, c-format
+msgid ""
+"%s is not valid sodipodi extensions file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s не зьяўляецца файлам пашырэньняў.\n"
+"Хаця sodipodi  і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sodipodi.c:930
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"%s."
+msgstr ""
+"Немагчыма стварыць тэчку %s.\n"
+"Хаця sodipodi працуе, вы не \n"
+"здольныя загрузіць ці захаваць\n"
+"%s."
+
+#: src/sodipodi.c:934
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"%s нерэчаісная тэчка.\n"
+"Хаця sodipodi працуе, вы не \n"
+"здольныя загрузіць ці захаваць\n"
+"перавагі."
+
+#: src/sodipodi.c:938
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"Немагчыма стварыць файл %s.\n"
+"Хаця sodipodi працуе, вы не \n"
+"здольныя загрузіць ці захаваць\n"
+"перавагі."
+
+#: src/sodipodi.c:942
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"Немагчыма захаваць файл %s.\n"
+"Хаця sodipodi працуе, вы не \n"
+"здольныя загрузіць ці захаваць\n"
+"перавагі."
+
+#: src/sodipodi.c:952
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"Немагчыма стварыць тэчку %s.\n"
+"Хаця sodipodi  і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sodipodi.c:955
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s нерэчаісная тэчка.\n"
+"Хаця sodipodi  і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sodipodi.c:958
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"Немагчыма стварыць файл %s.\n"
+"Хаця sodipodi  і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sodipodi.c:961
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"Немагчыма запісаць файл %s.\n"
+"Хаця sodipodi  і працуе, вы не\n"
+"можаце выкарыстоўваць дадаткі\n"
+
+#: src/sp-anchor.c:195
+#, c-format
+msgid "Link to %s"
+msgstr "Злучыць з %s"
+
+#: src/sp-image.c:370
+#, c-format
+msgid "Image with bad reference: %s"
+msgstr "Відарыс з кепскай спасылкай: %s"
+
+#: src/sp-image.c:372
+#, c-format
+msgid "Color image %d x %d: %s"
+msgstr "Каляровы відарыс %d x %d: %s"
+
+#: src/sp-image.c:926
+#, c-format
+msgid "Error to write %s: %s"
+msgstr "Памылка запісу %s: %s"
+
+#: src/sp-image.c:960
+msgid "Untitled"
+msgstr "Бяз назвы"
+
+#: src/sp-image.c:965
+msgid "Document Name:"
+msgstr "Назва дакумэнта:"
+
+#: src/sp-image.c:978
+msgid "Unknown"
+msgstr "Невядома"
+
+#: src/sp-image.c:984
+msgid "Image URI:"
+msgstr "URI відарыса:"
+
+#: src/sp-item-group.c:456
+#, c-format
+msgid "Group of %d objects"
+msgstr "Група з %d аб'ектаў"
+
+#: src/sp-item.c:497
+msgid "Unknown item :-("
+msgstr "Невядомы элемэнт :-("
+
+#. fixme:
+#: src/sp-text.c:1305
+msgid "Text object"
+msgstr "Аб'ект тэкста"
+
+#. T0
+#: src/spiral-context.c:374
+msgid "Inner radius:"
+msgstr "Нутраны радыюс:"
+
+#. Proportion
+#: src/star-context.c:367
+msgid "Proportion:"
+msgstr "Прапорцыі:"
+
+#. Making sides flat
+#: src/star-context.c:380
+msgid "Make sides flat"
+msgstr "Рабіць бакі плоскімі"
+
+#: src/toolbox.c:439
+msgid "Object"
+msgstr "Аб'ект"
+
+#: src/toolbox.c:443 src/verbs.c:494
+msgid "Object size and position"
+msgstr "Памер і пазыцыя аб'екта"
+
+#: src/toolbox.c:444
+msgid "Text and font settings"
+msgstr "Усталёўкі тэкста й шрыфта"
+
+#: src/toolbox.c:446 src/verbs.c:495
+msgid "Object transformations"
+msgstr "Трансфармуе аб'ект"
+
+#: src/toolbox.c:519
+msgid "Draw"
+msgstr "Рысаваньне"
+
+#: src/toolbox.c:574
+msgid "Extension"
+msgstr "Пашырэньне"
+
+#: src/toolbox.c:651
+msgid "Nodes"
+msgstr "Вузлы"
+
+#: src/toolbox.c:653
+msgid "Insert new nodes into selected segments"
+msgstr "Устаўляе новыя вузлы ў вылучаныя сэгмэнты"
+
+#: src/toolbox.c:654
+msgid "Break line at selected nodes"
+msgstr "Абрывае рысу на вылучаным вузьле"
+
+#: src/toolbox.c:655
+msgid "Make selected nodes corner"
+msgstr "Робіць вылучаныя вузлы кутамі"
+
+#: src/toolbox.c:656
+msgid "Make selected segments lines"
+msgstr "Робіць вылучаныя сэгмэнты рысамі"
+
+#: src/toolbox.c:657
+msgid "Delete selected nodes"
+msgstr "Выдаляе вылучаныя вузлы"
+
+#: src/toolbox.c:658
+msgid "Join lines at selected nodes"
+msgstr "Далучае рысы да вылучаных вузлоў"
+
+#: src/toolbox.c:659
+#, fuzzy
+msgid "Join lines at selected nodes with new segment"
+msgstr "Далучае рысы да вылучаных вузлоў"
+
+#: src/toolbox.c:660
+msgid "Make selected nodes smooth"
+msgstr "Робіць вылучаныя вузлы згладжанымі"
+
+#: src/toolbox.c:661
+msgid "Make selected segments curves"
+msgstr "Робіць вылучаныя сэгмэнты дугамі"
+
+#: src/verbs.c:427
+msgid "Does nothing"
+msgstr "Нічога"
+
+#: src/verbs.c:429
+msgid "Create new SVG document"
+msgstr "Стварае новы дакумэнт SVG"
+
+#: src/verbs.c:430
+msgid "Open..."
+msgstr "Адкрыць..."
+
+#: src/verbs.c:430
+msgid "Open existing SVG document"
+msgstr "Адкрывае існуючы дакумэнт SVG"
+
+#: src/verbs.c:431
+msgid "Save"
+msgstr "Захаваць"
+
+#: src/verbs.c:431
+msgid "Save document"
+msgstr "Захоўвае дакумэнт"
+
+#: src/verbs.c:432
+#, fuzzy
+msgid "Save As..."
+msgstr "Захаваць як"
+
+#: src/verbs.c:432
+msgid "Save document under new name"
+msgstr "Захоўвае дакумэнт пад новай назвай"
+
+#: src/verbs.c:433
+msgid "Print..."
+msgstr "Друк..."
+
+#: src/verbs.c:433
+msgid "Print document"
+msgstr "Друкуе дакумэнт"
+
+#: src/verbs.c:434
+msgid "Print Direct..."
+msgstr "Друк наўпрост..."
+
+#: src/verbs.c:434
+msgid "Print directly to file or pipe"
+msgstr "Друкуе наўпрост у файл ці канал"
+
+#: src/verbs.c:435
+msgid "Print Preview"
+msgstr "Перадпрагляд друку"
+
+#: src/verbs.c:435
+msgid "Preview document printout"
+msgstr "Папярэдні прагляд вываду дакумэнта на друк"
+
+#: src/verbs.c:436
+msgid "Import"
+msgstr "Імпартаваць"
+
+#: src/verbs.c:436
+msgid "Import bitmap or SVG image into document"
+msgstr "Імпартуе кропкавы ці SVG відарыс у дакумэнт"
+
+#: src/verbs.c:437
+msgid "Export document as PNG bitmap"
+msgstr "Экспартуе дакумэнт як PNG відарыс"
+
+#. Edit
+#: src/verbs.c:439
+msgid "Undo"
+msgstr "Адкаціцца"
+
+#: src/verbs.c:439
+msgid "Revert last action"
+msgstr "Адмяняе апошняе дзеяньне"
+
+#: src/verbs.c:440
+msgid "Redo"
+msgstr "Вярнуцца"
+
+#: src/verbs.c:440
+msgid "Do again undone action"
+msgstr "Паўтарае незавершанае дзеяньне"
+
+#: src/verbs.c:441
+msgid "Cut"
+msgstr "Выразаць"
+
+#: src/verbs.c:441
+msgid "Cut selected objects to clipboard"
+msgstr "Выразае вылучаныя аб'екты ў буфэр абмену"
+
+#: src/verbs.c:442
+msgid "Copy"
+msgstr "Капіяваць"
+
+#: src/verbs.c:442
+msgid "Copy selected objects to clipboard"
+msgstr "Капуе вылучаныя аб'екты ў буфэр абмену"
+
+#: src/verbs.c:443
+msgid "Paste"
+msgstr "Уставіць"
+
+#: src/verbs.c:443
+msgid "Paste objects from clipboard"
+msgstr "Устаўляе аб'екты з буфэра абмену"
+
+#: src/verbs.c:444
+msgid "Delete"
+msgstr "Выдаліць"
+
+#: src/verbs.c:444
+msgid "Delete selected objects"
+msgstr "Выдаляе вылучаныя аб'екты"
+
+#: src/verbs.c:445
+msgid "Duplicate"
+msgstr "Падвоіць"
+
+#: src/verbs.c:445
+msgid "Duplicate selected objects"
+msgstr "Падвойвае вылучаныя аб'екты"
+
+#: src/verbs.c:446
+#, fuzzy
+msgid "Clear All"
+msgstr "Ачысьціць усё"
+
+#: src/verbs.c:446
+msgid "Delete all objects from document"
+msgstr "Выдаляе ўсе аб'екты з дакумэнта"
+
+#: src/verbs.c:447
+msgid "Select All"
+msgstr "Вылучыць усё"
+
+#: src/verbs.c:447
+msgid "Select all objects in document"
+msgstr "Вылучае ўсе аб'екты ў дакумэнце"
+
+#. Selection
+#: src/verbs.c:449
+msgid "Bring to Front"
+msgstr "Даслаць угору"
+
+#: src/verbs.c:449
+msgid "Raise selected objects to top"
+msgstr "Падымае вылучаныя аб'екты на верхні слой"
+
+#: src/verbs.c:450
+msgid "Send to Back"
+msgstr "Даслаць долу"
+
+#: src/verbs.c:450
+msgid "Lower selected objects to bottom"
+msgstr "Апускае вылучаныя аб'екты на ніжні слой"
+
+#: src/verbs.c:451
+msgid "Raise"
+msgstr "Падняць"
+
+#: src/verbs.c:451
+#, fuzzy
+msgid "Raise selected objects one position"
+msgstr "Падымае вылучаныя аб'екты на верхні слой"
+
+#: src/verbs.c:452
+msgid "Lower"
+msgstr "Апусьціць"
+
+#: src/verbs.c:452
+#, fuzzy
+msgid "Lower selected objects one position"
+msgstr "Апускае вылучаныя аб'екты на ніжні слой"
+
+#: src/verbs.c:453
+msgid "Group selected objects"
+msgstr "Групуе вылучаныя аб'екты"
+
+#: src/verbs.c:454
+msgid "Ungroup selected group"
+msgstr "Разгрупоўвае вылучаныя аб'екты"
+
+#: src/verbs.c:455
+msgid "Combine"
+msgstr "Камбінаваць"
+
+#: src/verbs.c:455
+msgid "Combine multiple paths"
+msgstr "Камбінуе шмат шляхоў"
+
+#: src/verbs.c:456
+#, fuzzy
+msgid "Break Apart"
+msgstr "Адасобіць"
+
+#: src/verbs.c:456
+msgid "Break selected path to subpaths"
+msgstr "Разлучае вылучаны шлях на падшляхі"
+
+#. Object
+#: src/verbs.c:458
+msgid "Rotate 90 degrees"
+msgstr "Павярнуць на 90°"
+
+#: src/verbs.c:458
+#, fuzzy
+msgid "Rotates object 90 degrees clockwise"
+msgstr "Паварочвае аб'ект на 90° па сонцу"
+
+#: src/verbs.c:459
+msgid "Flatten object"
+msgstr "Раўнае аб'ект"
+
+#: src/verbs.c:459
+msgid "Remove transformations from object"
+msgstr "Выдаляе трансфармаваньне з аб'екта"
+
+#: src/verbs.c:460
+#, fuzzy
+msgid "Convert to Curves"
+msgstr "Канвэртуе аб'ект у дугу"
+
+#: src/verbs.c:460
+#, fuzzy
+msgid "Convert selected object to path"
+msgstr "Апускае вылучаныя аб'екты на ніжні слой"
+
+#: src/verbs.c:461
+msgid "Flip Horizontally"
+msgstr "Адлюстраваць гарызантальна"
+
+#: src/verbs.c:462
+msgid "Flip selected objects horizontally"
+msgstr "Адлюстроўвае вылучаны аб'ект гарызантальна"
+
+#: src/verbs.c:463
+msgid "Flip Vertically"
+msgstr "Адлюстраваць вэртыкальна"
+
+#: src/verbs.c:464
+msgid "Flip selected objects vertically"
+msgstr "Адлюстроўвае вылучаныя аб'екты вэртыкальна"
+
+#. Event contexts
+#: src/verbs.c:466
+msgid "Select"
+msgstr "Вылучэньне"
+
+#: src/verbs.c:466
+#, fuzzy
+msgid "Select and transform objects"
+msgstr "Інструмэнт вылучэньня - вылучае й трансфармуе аб'екты"
+
+#: src/verbs.c:467
+msgid "Node edit"
+msgstr "Рэдагаваць вузел"
+
+#: src/verbs.c:467
+msgid "Modify existing objects by control nodes"
+msgstr "Зьмяняе існуючыя аб'екты праз кіруючыя вузлы"
+
+#: src/verbs.c:468
+msgid "Rectangle"
+msgstr "Прамакутнік"
+
+#: src/verbs.c:468
+#, fuzzy
+msgid "Create rectangles and squares with optional rounded corners"
+msgstr ""
+"Інструмэнт прамакутніка - стварае прамакутнікі й квадраты з магчымымі "
+"закругленымі кутамі"
+
+#: src/verbs.c:469
+msgid "Ellipse"
+msgstr "Эліпс"
+
+#: src/verbs.c:469
+#, fuzzy
+msgid "Create circles, ellipses and arcs"
+msgstr "Інструмэнт дугі - стварае кругі, эліпсы й дугі"
+
+#: src/verbs.c:470
+#, fuzzy
+msgid "Create stars and polygons"
+msgstr "Інструмэнт зоркі - стварае зоркі й палігоны"
+
+#: src/verbs.c:471
+#, fuzzy
+msgid "Create spirals"
+msgstr "Стварыць лучыва"
+
+#: src/verbs.c:472
+msgid "Pencil"
+msgstr "Аловак"
+
+#: src/verbs.c:472
+#, fuzzy
+msgid "Draw freehand curves and straight lines"
+msgstr "Інструмэнт алоўка - рысуе вольныя дугі й простыя рысы"
+
+#: src/verbs.c:473
+msgid "Pen"
+msgstr "Пяро"
+
+#: src/verbs.c:473
+#, fuzzy
+msgid "Draw precisely positioned curved and straight lines"
+msgstr "Інструмэнт пера - рысуе дакладна спазыцыянаваныя дугі й прамыя рысы"
+
+#: src/verbs.c:474
+msgid "Calligraphy"
+msgstr "Каліграфія"
+
+#: src/verbs.c:474
+#, fuzzy
+msgid "Draw calligraphic lines"
+msgstr "Каліграфічная рыса"
+
+#: src/verbs.c:475
+#, fuzzy
+msgid "Create and edit text objects"
+msgstr "Інструмэнт тэкста - стварае і рэдагуе тэкставыя аб'екты"
+
+#: src/verbs.c:476
+#, fuzzy
+msgid "Zoom into precisely selected area"
+msgstr "Павялічвае маштаб дакладна вылучанае прасторы"
+
+#: src/verbs.c:477
+msgid "Dropper"
+msgstr "Піпетка"
+
+#: src/verbs.c:477
+#, fuzzy
+msgid "Pick averaged colors from image"
+msgstr "Інструмэнт піпеткі - бярэ колер з відарыса"
+
+#. Zooming
+#: src/verbs.c:479
+msgid "In"
+msgstr "+"
+
+#: src/verbs.c:479
+msgid "Zoom in drawing"
+msgstr "Павялічвае маштаб рысунка"
+
+#: src/verbs.c:480
+msgid "Out"
+msgstr "-"
+
+#: src/verbs.c:480
+msgid "Zoom out drawing"
+msgstr "Памяншае маштаб рысунка"
+
+#: src/verbs.c:481
+msgid "1:1"
+msgstr "1:1"
+
+#: src/verbs.c:481
+msgid "Set zoom factor to 1:1"
+msgstr "Усталёўвае маштаб 1:1"
+
+#: src/verbs.c:482
+msgid "1:2"
+msgstr "1:2"
+
+#: src/verbs.c:482
+msgid "Set zoom factor to 1:2"
+msgstr "Усталёўвае маштаб 2:1"
+
+#: src/verbs.c:483
+msgid "2:1"
+msgstr "2:1"
+
+#: src/verbs.c:483
+msgid "Set zoom factor to 2:1"
+msgstr "Усталёўвае маштаб 2:1"
+
+#: src/verbs.c:484
+msgid "Fit the whole page into window"
+msgstr "Запаўняе акно усёй старонкай"
+
+#: src/verbs.c:485
+msgid "Fit the whole drawing into window"
+msgstr "Запаўняе рысаваньнем усё акно"
+
+#: src/verbs.c:486
+msgid "Fit the whole selection into window"
+msgstr "Запаўняе вылучэньнем усё акно"
+
+#. Dialogs
+#: src/verbs.c:488
+msgid "Display"
+msgstr "Дысплэй"
+
+#: src/verbs.c:488
+msgid "Global display settings"
+msgstr "Глябальныя наладкі дысплэя"
+
+#: src/verbs.c:489
+msgid "Document"
+msgstr "Уласьцівасьці дакумэнта"
+
+#: src/verbs.c:489
+msgid "Page layout"
+msgstr "Арыентацыя аркуша"
+
+#: src/verbs.c:490
+msgid "Editing Window"
+msgstr "Акно рэдагаваньня"
+
+#: src/verbs.c:490
+msgid "Editing window properties"
+msgstr "Уласьцівасьці акна рэдагаваньня"
+
+#: src/verbs.c:491
+msgid "Tool Options"
+msgstr "Выбары інструмэнтаў"
+
+#: src/verbs.c:492
+msgid "Tool Attributes"
+msgstr "Атрыбуты інструмэнтаў"
+
+#: src/verbs.c:493
+msgid "Fill and Stroke"
+msgstr "Запаўненьне й штрыхоўка"
+
+#: src/verbs.c:493
+msgid "Fill and stroke settings"
+msgstr "Усталёўкі запаўненьня й штрыхоўкі"
+
+#: src/verbs.c:495
+msgid "Transformations"
+msgstr "Трансфармаваньне вылучэньня"
+
+#: src/verbs.c:496
+msgid "Align and Distribute"
+msgstr "Раўнаньне й прадстаўленьне"
+
+#: src/verbs.c:496
+msgid "Align and distribute"
+msgstr "Раўнаньне й прадстаўленьне"
+
+#: src/verbs.c:497
+msgid "Text and Font"
+msgstr "Тэкст і шрыфт"
+
+#: src/verbs.c:497
+msgid "Text editing and font settings"
+msgstr "Рэдагаваньне тэкста й наладкі шрыфта"
+
+#: src/verbs.c:498
+msgid "XML Editor"
+msgstr "Рэдактар XML"
+
+#. Family frame
+#: src/widgets/font-selector.c:144
+msgid "Font family"
+msgstr "Сямейства шрыфта"
+
+#. Style frame
+#: src/widgets/font-selector.c:172
+msgid "Style"
+msgstr "Стыль"
+
+#: src/widgets/font-selector.c:207
+msgid "Font size:"
+msgstr "Памер шрыфта:"
+
+#: src/widgets/font-selector.c:517
+msgid "AaBbCcIiPpQq12368.;/()"
+msgstr "ШшРрЫыФфТт1234568.;/(-)"
+
+#: src/widgets/gradient-selector.c:140
+msgid "Add"
+msgstr "Дадаць"
+
+#: src/widgets/gradient-selector.c:176
+msgid "gradientUnits"
+msgstr "Прастора градыента:"
+
+#: src/widgets/gradient-selector.c:205
+msgid "gradientSpread"
+msgstr "Распаўсюд градыента:"
+
+#: src/widgets/gradient-vector.c:245
+msgid "No document selected"
+msgstr "Дакумэнт ня вылучаны"
+
+#: src/widgets/gradient-vector.c:251
+msgid "No gradients in document"
+msgstr "Няма градыентнай заліўкі ў дакумэнце"
+
+#: src/widgets/gradient-vector.c:257
+msgid "No gradient selected"
+msgstr "Градыент не вылучаны"
+
+#: src/widgets/gradient-vector.c:412
+msgid "Start color"
+msgstr "Пачатковы колер"
+
+#: src/widgets/gradient-vector.c:422
+msgid "End color"
+msgstr "Канчатковы колер"
+
+#: src/widgets/gradient-vector.c:447
+msgid "Gradient vector"
+msgstr "Вэктар градыента"
+
+#: src/widgets/paint-selector.c:620
+msgid "No objects"
+msgstr "Няма аб'ектаў"
+
+#: src/widgets/paint-selector.c:634
+msgid "Multiple styles"
+msgstr "Шматлікія стылі"
+
+#: src/widgets/paint-selector.c:648
+msgid "No paint"
+msgstr "Няма рафарбоўкі"
+
+#. Label
+#: src/widgets/paint-selector.c:738
+msgid "Mode:"
+msgstr "Рэжым:"
+
+#: src/widgets/paint-selector.c:748
+msgid "RGB"
+msgstr "RGB"
+
+#: src/widgets/paint-selector.c:748 src/widgets/paint-selector.c:749
+msgid "RGB Colorspace"
+msgstr "Каляровая прастора RGB"
+
+#: src/widgets/paint-selector.c:749
+msgid "HSV"
+msgstr "HSV"
+
+#: src/widgets/paint-selector.c:750
+msgid "CMYK"
+msgstr "CMYK"
+
+#: src/widgets/paint-selector.c:750
+#, fuzzy
+msgid "CMYK Colorspace"
+msgstr "Каляровая прастора CMYK"
+
+#. Use dropper
+#: src/widgets/paint-selector.c:757
+msgid "Get from dropper"
+msgstr "Атрымаць праз піпетку"
+
+#: src/widgets/paint-selector.c:788
+msgid "Color paint"
+msgstr "Фарбаваць"
+
+#: src/widgets/paint-selector.c:858
+msgid "Linear gradient"
+msgstr "Лінэйны градыент"
+
+#: src/widgets/paint-selector.c:861
+msgid "Radial gradient"
+msgstr "Кругавы градыент"
+
+#: src/widgets/sp-color-selector.c:620
+msgid "Red:"
+msgstr "Чырвоны:"
+
+#: src/widgets/sp-color-selector.c:621
+msgid "Green:"
+msgstr "Зялёны:"
+
+#: src/widgets/sp-color-selector.c:622
+msgid "Blue:"
+msgstr "Сіні:"
+
+#: src/widgets/sp-color-selector.c:623 src/widgets/sp-color-selector.c:643
+#: src/widgets/sp-color-selector.c:665
+msgid "Alpha:"
+msgstr "Альфа:"
+
+#: src/widgets/sp-color-selector.c:640
+msgid "Hue:"
+msgstr "Тон:"
+
+#: src/widgets/sp-color-selector.c:641
+msgid "Saturation:"
+msgstr "Насычанасьць:"
+
+#: src/widgets/sp-color-selector.c:642
+msgid "Value:"
+msgstr "Значэньне:"
+
+#: src/widgets/sp-color-selector.c:661
+msgid "Cyan:"
+msgstr "Блакітны:"
+
+#: src/widgets/sp-color-selector.c:662
+msgid "Magenta:"
+msgstr "Малінавы:"
+
+#: src/widgets/sp-color-selector.c:663
+msgid "Yellow:"
+msgstr "Жоўты:"
+
+#: src/widgets/sp-color-selector.c:664
+msgid "Black:"
+msgstr "Чорны:"
+
+#: src/widgets/sp-toolbox.c:305
+msgid "Toggle separate window and main toolbox placement"
+msgstr "Пераключыць падзеленае акно й разьмяшчэньне панэлі інструмэнтаў"
+
+#: src/widgets/sp-xmlview-attr-list.c:55
+msgid "Attribute"
+msgstr "Атрыбут"
+
+#: src/widgets/sp-xmlview-attr-list.c:56
+msgid "Value"
+msgstr "Значэньне"
+
+#~ msgid "Item is reference"
+#~ msgstr "Элемэнт зьяўляецца спасылкай"
+
+#~ msgid "The SVG ID of item"
+#~ msgstr "SVG ID элемэнта"
+
+#~ msgid "The ID is not valid"
+#~ msgstr "Недапушчальны ID"
+
+#~ msgid "The ID is already defined"
+#~ msgstr "ID ужо вызначаны"
+
+#~ msgid "Object position and size"
+#~ msgstr "Пазыцыя й памер аб'екта"
+
+#~ msgid "Position and size"
+#~ msgstr "Пазыцыя й памер"
+
+#~ msgid "Save as:"
+#~ msgstr "Захаваць як:"
+
+#~ msgid "Print"
+#~ msgstr "Друкаваць"
+
+#~ msgid "Order"
+#~ msgstr "Парадак"
+
+#~ msgid "Node"
+#~ msgstr "Вузел"
+
+#~ msgid "Arc"
+#~ msgstr "Дуга"
+
+#~ msgid "Freehand"
+#~ msgstr "Вольная рыса"
+
+#~ msgid "Dynahand"
+#~ msgstr "Стужка"
+
+#~ msgid "Align Objects"
+#~ msgstr "Раўнаньне аб'ектаў"
+
+#~ msgid "Text Editing"
+#~ msgstr "Уласьцівасьці тэкста"
+
+#~ msgid "Display Properties"
+#~ msgstr "Уласьцівасьці дысплэя"
+
+#~ msgid "Remove transformations"
+#~ msgstr "Выдаляе трансфармаваньні"
+
+#~ msgid "Raise selected objects one level"
+#~ msgstr "Падымае вылучаныя аб'екты на адзін узровень"
+
+#~ msgid "Lower selected objects one level"
+#~ msgstr "Апускае вылучаныя аб'екты на адзін узровень"
+
+#~ msgid "Node tool - modify different aspects of existing objects"
+#~ msgstr "Інструмэнт вузла - зьмяняе розныя асьпекты існуючых аб'ектаў"
+
+#~ msgid "Spiral tool - create spirals"
+#~ msgstr "Інструмэнт сьпіралі - стварае сьпіралі"
+
+#~ msgid "Calligraphic tool - draw calligraphic lines"
+#~ msgstr "Інструмэнт каліграфіі - рысуе каліграфічныя рысы"
+
+#~ msgid "Zoom tool - zoom into choosen area"
+#~ msgstr "Інструмэнт маштабаваньня - маштабуе выбраную прастору"

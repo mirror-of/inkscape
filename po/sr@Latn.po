@@ -1,0 +1,4618 @@
+# Serbian translation of sodipodi
+# Courtesy of Prevod.org team (http://www.prevod.org/) -- 2003.
+# 
+# This file is distributed under the same license as the sodipodi package.
+# 
+# Maintainer: Danilo Šegan <dsegan@gmx.net>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Sodipodi\n"
+"POT-Creation-Date: 2003-10-23 23:31-0700\n"
+"PO-Revision-Date: 2003-08-17 14:01+0200\n"
+"Last-Translator: Danilo Segan <danilo@prevod.org>\n"
+"Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: sodipodi.desktop.in.h:1
+msgid "SVG Vector Illustrator"
+msgstr "SVG vektorsko crtanje"
+
+#. Create window
+#: sodipodi.desktop.in.h:2 src/toolbox.c:119 src/toolbox.c:140
+msgid "Sodipodi"
+msgstr "Sodipodi"
+
+#: src/bonobo/svg-doc-factory.c:35
+msgid "Could not create sodipodi-svg-doc factory"
+msgstr "Ne može da obrazuje proizvodnju za sodipodi-svg-doc"
+
+#: src/desktop.c:750
+msgid "Zoom drawing if window size changes"
+msgstr "Uvećaj crtež kada se promeni veličina prozora"
+
+#: src/desktop.c:830
+#, c-format
+msgid "Sodipodi: %s: %s: %d"
+msgstr "Sodipodi: %s: %s: %d"
+
+#: src/desktop.c:959
+#, c-format
+msgid "Document %s has unsaved changes, save them?"
+msgstr "Dokument %s sadrži nesačuvane izmene. Sačuvati ih?"
+
+#. Page page
+#: src/desktop.c:1481 src/dialogs/align.c:286
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:484
+msgid "Page"
+msgstr "Strana"
+
+#: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
+#: src/verbs.c:485
+msgid "Drawing"
+msgstr "Crtež"
+
+#. Selection submenu
+#: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
+#: src/interface.c:570 src/toolbox.c:485 src/verbs.c:486
+msgid "Selection"
+msgstr "Izbor"
+
+#: src/dialogs/align.c:153 src/toolbox.c:445
+msgid "Align objects"
+msgstr "Poravnavanje objekata"
+
+#: src/dialogs/align.c:172
+msgid "Right side of aligned objects to left side of anchor"
+msgstr "Desna strana poravnatih objekata uz levu stranu osnove"
+
+#: src/dialogs/align.c:175
+msgid "Left side of aligned objects to left side of anchor"
+msgstr "Leva strana poravnatih objekata uz desnu stranu osnove"
+
+#: src/dialogs/align.c:178
+msgid "Center horizontally"
+msgstr "Vodoravno centrirano"
+
+#: src/dialogs/align.c:181
+msgid "Right side of aligned objects to right side of anchor"
+msgstr "Desna strana poravnatih objekata uz desnu stranu osnove"
+
+#: src/dialogs/align.c:184
+msgid "Left side of aligned objects to right side of anchor"
+msgstr "Leva strana poravnatih objekata uz levu stranu osnove"
+
+#: src/dialogs/align.c:188
+msgid "Bottom of aligned objects to top of anchor"
+msgstr "Dno poravnatih objekata uz vrh osnove"
+
+#: src/dialogs/align.c:191 src/dialogs/align.c:200
+msgid "Top of aligned objects to top of anchor"
+msgstr "Vrh poravnatih objekata uz vrh osnove"
+
+#: src/dialogs/align.c:194
+msgid "Center vertically"
+msgstr "Uspravno centrirano"
+
+#: src/dialogs/align.c:197
+msgid "Bottom of aligned objects to bottom of anchor"
+msgstr "Dno poravnatih objekata uz dno osnove"
+
+#: src/dialogs/align.c:203
+msgid "Align"
+msgstr "Poravnaj"
+
+#: src/dialogs/align.c:221
+msgid "Distribute left sides of objects at even distances"
+msgstr "Rasporedi leve strane objekata na podjednaka rastojanja"
+
+#: src/dialogs/align.c:224
+msgid "Distribute centres of objects at even distances horizontally"
+msgstr "Rasporedi sredine objekata na podjednaka vodoravna rastojanja"
+
+#: src/dialogs/align.c:227
+msgid "Distribute right sides of objects at even distances"
+msgstr "Rasporedi desne strane objekata na podjednaka rastojanja"
+
+#: src/dialogs/align.c:230
+msgid "Distribute horizontal distance between objects equally"
+msgstr "Rasporedi vodoravni razmak podjednako između objekata"
+
+#: src/dialogs/align.c:234
+msgid "Distribute top sides of objects at even distances"
+msgstr "Rasporedi gornje strane objekata na podjednaka rastojanja"
+
+#: src/dialogs/align.c:237
+msgid "Distribute centres of objects at even distances vertically"
+msgstr "Rasporedi sredine objekata na podjednaka uspravna rastojanja"
+
+#: src/dialogs/align.c:240
+msgid "Distribute bottom sides of objects at even distances"
+msgstr "Rasporedi donje strane objekata na podjednaka rastojanja"
+
+#: src/dialogs/align.c:243
+msgid "Distribute vertical distance between objects equally"
+msgstr "Rasporedi uspravni razmak podjednako između objekata"
+
+#: src/dialogs/align.c:246
+msgid "Distribute"
+msgstr "Raspodeli"
+
+#: src/dialogs/align.c:282
+msgid "Last selected"
+msgstr "Poslednje izabrani"
+
+#: src/dialogs/align.c:283
+msgid "First selected"
+msgstr "Prvi izabrani"
+
+#: src/dialogs/align.c:284
+msgid "Biggest item"
+msgstr "Najveća stavka"
+
+#: src/dialogs/align.c:285
+msgid "Smallest item"
+msgstr "Najmanja stavka"
+
+#: src/dialogs/desktop-properties.c:191
+msgid "Desktop settings"
+msgstr "Postavke radne površine"
+
+#. Grid settings
+#. Notebook tab
+#: src/dialogs/desktop-properties.c:200
+msgid "Grid"
+msgstr "Mreža"
+
+#: src/dialogs/desktop-properties.c:211
+msgid "Show grid"
+msgstr "Prikaži mrežu"
+
+#: src/dialogs/desktop-properties.c:212
+msgid "Snap to grid"
+msgstr "Prijanjaj uz mrežu"
+
+#: src/dialogs/desktop-properties.c:214
+#, fuzzy
+msgid "Horizontal lines"
+msgstr "Obrni vodoravno"
+
+#: src/dialogs/desktop-properties.c:215
+#, fuzzy
+msgid "Vertical lines"
+msgstr "Obrni uspravno"
+
+#: src/dialogs/desktop-properties.c:217
+#, fuzzy
+msgid "Iso grid"
+msgstr "Prikaži mrežu"
+
+#: src/dialogs/desktop-properties.c:218
+msgid "Hex grid"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:221
+msgid "Grid units:"
+msgstr "Jedinice mreže:"
+
+#: src/dialogs/desktop-properties.c:223
+msgid "Origin X:"
+msgstr "Početak X:"
+
+#: src/dialogs/desktop-properties.c:225
+msgid "Origin Y:"
+msgstr "Početak Y:"
+
+#: src/dialogs/desktop-properties.c:228
+msgid "Spacing X:"
+msgstr "Vodoravni razmaci:"
+
+#: src/dialogs/desktop-properties.c:230
+msgid "Spacing Y:"
+msgstr "Uspravni razmaci:"
+
+#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+msgid "Snap distance:"
+msgstr "Udaljenost za prijanjanje:"
+
+#: src/dialogs/desktop-properties.c:238
+msgid "Grid color:"
+msgstr "Boja mreže:"
+
+#: src/dialogs/desktop-properties.c:239
+msgid "Grid color"
+msgstr "Boja mreže"
+
+#. Guidelines page
+#: src/dialogs/desktop-properties.c:243
+msgid "Guides"
+msgstr "Vođice"
+
+#: src/dialogs/desktop-properties.c:252
+msgid "Show guides"
+msgstr "Prikaži vođice"
+
+#: src/dialogs/desktop-properties.c:253
+msgid "Snap to guides"
+msgstr "Prijanjaj uz vođice"
+
+#: src/dialogs/desktop-properties.c:256
+msgid "Snap units:"
+msgstr "Jedinice prijanjanja:"
+
+#: src/dialogs/desktop-properties.c:261
+msgid "Guides color:"
+msgstr "Boja vođica:"
+
+#: src/dialogs/desktop-properties.c:262
+msgid "Guideline color"
+msgstr "Boja linije vodilje"
+
+#: src/dialogs/desktop-properties.c:264
+msgid "Highlight color:"
+msgstr "Boja isticanja:"
+
+#: src/dialogs/desktop-properties.c:265
+msgid "Highlighted guideline color"
+msgstr "Boja istaknutih vođica"
+
+#: src/dialogs/desktop-properties.c:278
+msgid "Show border"
+msgstr "Prikaži ivicu"
+
+#: src/dialogs/desktop-properties.c:280
+msgid "Border on top of drawing"
+msgstr "Ivica na vrhu crteža"
+
+#: src/dialogs/desktop-properties.c:543
+msgid "Close"
+msgstr "Zatvori"
+
+#: src/dialogs/display-settings.c:85
+msgid "Display settings"
+msgstr "Podešavanja prikaza"
+
+#. Rendering settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:93
+msgid "Rendering"
+msgstr "Iscrtavanje"
+
+#: src/dialogs/display-settings.c:105
+msgid "Oversample bitmaps:"
+msgstr "Previše uvećaj bitmapu:"
+
+#: src/dialogs/display-settings.c:116 src/verbs.c:427
+msgid "None"
+msgstr "Ništa"
+
+#: src/dialogs/display-settings.c:120
+msgid "2x2"
+msgstr "2x2"
+
+#: src/dialogs/display-settings.c:124
+msgid "4x4"
+msgstr "4x4"
+
+#: src/dialogs/display-settings.c:128
+msgid "8x8"
+msgstr "8x8"
+
+#: src/dialogs/display-settings.c:132
+msgid "16x16"
+msgstr "16x16"
+
+#. Input settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:143
+msgid "Input"
+msgstr "Unos"
+
+#: src/dialogs/display-settings.c:154
+msgid "Default cursor tolerance:"
+msgstr "Podrazumevana trpeljivost kurzora:"
+
+#: src/dialogs/document-properties.c:154
+msgid "Document settings"
+msgstr "Podešavanja dokumenta"
+
+#: src/dialogs/document-properties.c:175
+msgid "Paper size:"
+msgstr "Veličina papira:"
+
+#: src/dialogs/document-properties.c:196
+msgid "Custom"
+msgstr "Prilagođeno"
+
+#. Custom paper frame
+#: src/dialogs/document-properties.c:203
+msgid "Custom paper"
+msgstr "Prilagođeni papir"
+
+#. Unit selector
+#: src/dialogs/document-properties.c:214 src/dialogs/export.c:153
+#: src/dialogs/object-properties.c:318 src/dialogs/transformation.c:401
+#: src/dialogs/transformation.c:576
+msgid "Units:"
+msgstr "Jedinice: "
+
+#. Stroke width
+#: src/dialogs/document-properties.c:223 src/dialogs/export.c:163
+#: src/dialogs/export.c:187 src/dialogs/object-attributes.c:68
+#: src/dialogs/object-attributes.c:76 src/dialogs/object-properties.c:360
+#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:120
+#: src/dyna-draw-context.c:1079
+msgid "Width:"
+msgstr "Širina:"
+
+#: src/dialogs/document-properties.c:238 src/dialogs/export.c:172
+#: src/dialogs/export.c:195 src/dialogs/object-attributes.c:69
+#: src/dialogs/object-attributes.c:77 src/dialogs/object-properties.c:375
+msgid "Height:"
+msgstr "Visina:"
+
+#: src/dialogs/export.c:115
+msgid "Export bitmap"
+msgstr "Izvezi bitmapu:"
+
+#. Export area frame
+#: src/dialogs/export.c:124
+msgid "Export area"
+msgstr "Izvezi površ"
+
+#: src/dialogs/export.c:157
+msgid "x0:"
+msgstr "x0:"
+
+#: src/dialogs/export.c:160
+msgid "x1:"
+msgstr "x1:"
+
+#: src/dialogs/export.c:166
+msgid "y0:"
+msgstr "y0:"
+
+#: src/dialogs/export.c:169
+msgid "y1:"
+msgstr "y1:"
+
+#. Bitmap size frame
+#: src/dialogs/export.c:178
+msgid "Bitmap size"
+msgstr "Veličina bitmape"
+
+#: src/dialogs/export.c:187 src/dialogs/export.c:195
+msgid "pixels"
+msgstr "tačaka"
+
+#: src/dialogs/export.c:191 src/dialogs/export.c:199
+msgid "dpi"
+msgstr "tpi"
+
+#: src/dialogs/export.c:206
+msgid "Export png file"
+msgstr "Izvezi PNG datoteku"
+
+#: src/dialogs/export.c:235 src/verbs.c:437
+msgid "Export"
+msgstr "Izvezi"
+
+#: src/dialogs/fill-style.c:89
+msgid "Fill style"
+msgstr "Stil ispunjavanja"
+
+#: src/dialogs/fill-style.c:124
+msgid "Fill Rule"
+msgstr "Pravila ispunjavanja"
+
+#: src/dialogs/fill-style.c:138
+msgid "nonzero"
+msgstr "nenula"
+
+#: src/dialogs/fill-style.c:143
+msgid "evenodd"
+msgstr "paran-neparan"
+
+#: src/dialogs/item-properties.c:77 src/dialogs/item-properties.c:274
+#: src/dialogs/item-properties.c:348 src/dialogs/item-properties.c:355
+msgid "ID"
+msgstr ""
+
+#: src/dialogs/item-properties.c:91
+msgid "Set ID"
+msgstr ""
+
+#: src/dialogs/item-properties.c:102
+msgid "Sensitive"
+msgstr "Osetljiv"
+
+#: src/dialogs/item-properties.c:107
+msgid "Visible"
+msgstr "Vidljiv"
+
+#: src/dialogs/item-properties.c:112
+msgid "Active"
+msgstr "Aktivan"
+
+#: src/dialogs/item-properties.c:117
+msgid "Printable"
+msgstr "Dozvoljena štampa"
+
+#: src/dialogs/item-properties.c:128
+msgid "Opacity:"
+msgstr "Providnost:"
+
+#: src/dialogs/item-properties.c:147
+msgid "Transformation matrix"
+msgstr "Matrica transformacije"
+
+#: src/dialogs/item-properties.c:268
+msgid "Ref"
+msgstr ""
+
+#: src/dialogs/item-properties.c:350
+#, fuzzy
+msgid "ID invalid"
+msgstr "ID je ispravan"
+
+#: src/dialogs/item-properties.c:352
+msgid "ID exists"
+msgstr ""
+
+#: src/dialogs/item-properties.c:428 src/verbs.c:499
+msgid "Item properties"
+msgstr "Svojstva stavke"
+
+#: src/dialogs/object-attributes.c:31
+msgid "Href:"
+msgstr "Adresa:"
+
+#: src/dialogs/object-attributes.c:32
+msgid "Target:"
+msgstr "Odredište:"
+
+#: src/dialogs/object-attributes.c:33
+msgid "Type:"
+msgstr "Vrsta:"
+
+#: src/dialogs/object-attributes.c:34
+msgid "Role:"
+msgstr "Uloga:"
+
+#: src/dialogs/object-attributes.c:35
+msgid "Arcrole:"
+msgstr "Lučna uloga:"
+
+#: src/dialogs/object-attributes.c:36
+msgid "Title:"
+msgstr "Naslov:"
+
+#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:110
+msgid "Show:"
+msgstr "Prikaži:"
+
+#: src/dialogs/object-attributes.c:38
+msgid "Actuate:"
+msgstr "Pokreni:"
+
+#: src/dialogs/object-attributes.c:43
+msgid "Sides:"
+msgstr "Strane:"
+
+#: src/dialogs/object-attributes.c:44 src/dialogs/object-attributes.c:54
+msgid "Center X:"
+msgstr "Centriraj vodoravno:"
+
+#: src/dialogs/object-attributes.c:45 src/dialogs/object-attributes.c:55
+msgid "Center Y:"
+msgstr "Centriraj uspravno:"
+
+#: src/dialogs/object-attributes.c:46
+msgid "R1:"
+msgstr "R1:"
+
+#: src/dialogs/object-attributes.c:47
+msgid "R2:"
+msgstr "R2:"
+
+#: src/dialogs/object-attributes.c:48
+msgid "ARG1:"
+msgstr "ARG1:"
+
+#: src/dialogs/object-attributes.c:49
+msgid "ARG2:"
+msgstr "ARG2:"
+
+#. Expansion
+#: src/dialogs/object-attributes.c:56 src/spiral-context.c:362
+msgid "Expansion:"
+msgstr "Proširenje: "
+
+# kao u obrtanje oko svoje ose
+#. Revolution
+#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:90
+#: src/spiral-context.c:350
+msgid "Revolution:"
+msgstr "Revolucija:"
+
+#: src/dialogs/object-attributes.c:58
+msgid "Radius:"
+msgstr "Poluprečnik:"
+
+#: src/dialogs/object-attributes.c:59
+msgid "Argument:"
+msgstr "Argument:"
+
+#: src/dialogs/object-attributes.c:60
+msgid "T0:"
+msgstr "T0:"
+
+#: src/dialogs/object-attributes.c:65
+msgid "URL:"
+msgstr "Adresa:"
+
+#: src/dialogs/object-attributes.c:66 src/dialogs/object-attributes.c:74
+#: src/dialogs/object-properties.c:330
+msgid "X:"
+msgstr "X:"
+
+#: src/dialogs/object-attributes.c:67 src/dialogs/object-attributes.c:75
+#: src/dialogs/object-properties.c:345
+msgid "Y:"
+msgstr "Y:"
+
+#: src/dialogs/object-attributes.c:78
+msgid "RX:"
+msgstr "RX:"
+
+#: src/dialogs/object-attributes.c:79
+msgid "RY:"
+msgstr "RY:"
+
+#: src/dialogs/object-attributes.c:114
+#, c-format
+msgid "%s attributes"
+msgstr "Osobine za %s"
+
+#: src/dialogs/object-properties.c:110
+msgid "Object style"
+msgstr "Stil objekta"
+
+#: src/dialogs/object-properties.c:125
+msgid "Fill"
+msgstr "Ispuni"
+
+#: src/dialogs/object-properties.c:139
+msgid "Stroke paint"
+msgstr "Farba za potez"
+
+#: src/dialogs/object-properties.c:153
+msgid "Stroke style"
+msgstr "Stil poteza"
+
+#: src/dialogs/object-properties.c:173
+msgid "Apply to:"
+msgstr "Primeni na:"
+
+#: src/dialogs/object-properties.c:183
+msgid "Selected objects"
+msgstr "Izabrani objekti"
+
+#: src/dialogs/object-properties.c:186
+msgid "All shape tools"
+msgstr "Svi alati za oblike"
+
+#: src/dialogs/object-properties.c:189
+msgid "Rectangle tool"
+msgstr "Alat za pravougaonik"
+
+#: src/dialogs/object-properties.c:192
+msgid "Arc tool"
+msgstr "Alat za luk"
+
+#: src/dialogs/object-properties.c:195
+msgid "Star tool"
+msgstr "Alat za zvezdu"
+
+#: src/dialogs/object-properties.c:198
+msgid "Spiral tool"
+msgstr "Alat za spiralu"
+
+#: src/dialogs/object-properties.c:201
+msgid "Freehand and pen"
+msgstr "Slobodna ruka i olovka"
+
+#: src/dialogs/object-properties.c:204
+msgid "Calligraphic line"
+msgstr "Kaligrafska linija"
+
+#: src/dialogs/object-properties.c:207 src/verbs.c:475
+msgid "Text"
+msgstr "Tekst"
+
+#: src/dialogs/object-properties.c:283
+#, fuzzy
+msgid "Object Size and Position"
+msgstr "Veličina i pozicija objekta"
+
+#: src/dialogs/object-properties.c:305 src/verbs.c:494
+msgid "Size and Position"
+msgstr "Veličina i pozicija"
+
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
+msgid "Stroke settings"
+msgstr "Podešavanja poteza"
+
+#. Join type
+#: src/dialogs/stroke-style.c:579
+msgid "Join:"
+msgstr "Priključi:"
+
+#. Cap type
+#: src/dialogs/stroke-style.c:622
+msgid "Cap:"
+msgstr "Kapica:"
+
+#. Dash
+#: src/dialogs/stroke-style.c:665
+msgid "Pattern:"
+msgstr "Obrazac:"
+
+#: src/dialogs/text-edit.c:95
+msgid "Text properties"
+msgstr "Osobine teksta"
+
+#. Layout
+#: src/dialogs/text-edit.c:134
+msgid "Layout"
+msgstr "Izgled"
+
+#: src/dialogs/text-edit.c:142
+msgid "Alignment:"
+msgstr "Poravnanje:"
+
+#: src/dialogs/text-edit.c:167
+msgid "Orientation:"
+msgstr "Orijentacija:"
+
+#: src/dialogs/text-edit.c:185
+msgid "Line spacing:"
+msgstr "Razmak linija:"
+
+#: src/dialogs/text-edit.c:210
+msgid "Text and font"
+msgstr "Tekst i font"
+
+#: src/dialogs/text-edit.c:221
+msgid "Set as default"
+msgstr "Postavi kao podrazumevano"
+
+#: src/dialogs/tool-attributes.c:45 src/verbs.c:492
+msgid "Tool attributes"
+msgstr "Osobine alata"
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Expansion"
+msgstr "Proširenje"
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Inner radius"
+msgstr "Unutrašnji poluprečnik"
+
+#: src/dialogs/tool-attributes.c:94 src/dialogs/tool-attributes.c:104
+#: src/dialogs/tool-attributes.c:114 src/dialogs/tool-attributes.c:124
+msgid "Missing tool preferences"
+msgstr "Postavke nedostajućeg alata"
+
+#. Magnitude
+#: src/dialogs/tool-attributes.c:100 src/star-context.c:355
+msgid "Corners:"
+msgstr "Uglovi:"
+
+#: src/dialogs/tool-attributes.c:100
+msgid "Proportion"
+msgstr "Razmera"
+
+#: src/dialogs/tool-attributes.c:110
+msgid "Transform:"
+msgstr "Transformacija:"
+
+#. Mass
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1043
+msgid "Mass:"
+msgstr "Masa:"
+
+#. Drag
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1055
+msgid "Drag:"
+msgstr "Prevuci:"
+
+#: src/dialogs/tool-attributes.c:120
+msgid "Angle"
+msgstr "Ugao"
+
+#: src/dialogs/tool-attributes.c:127
+msgid "Tool has no attributes"
+msgstr "Alat nema osobine"
+
+#: src/dialogs/tool-attributes.c:130 src/dialogs/tool-options.c:88
+msgid "No active tool"
+msgstr "Nema aktivnog alata"
+
+#: src/dialogs/tool-options.c:44 src/verbs.c:491
+msgid "Tool options"
+msgstr "Opcije alata"
+
+#: src/dialogs/tool-options.c:85
+msgid "Tool has no options"
+msgstr "Alat nema opcija"
+
+#: src/dialogs/transformation.c:193
+msgid "Transform selection"
+msgstr "Transformiši izbor"
+
+#: src/dialogs/transformation.c:365
+msgid "Move"
+msgstr "Pomeri"
+
+#. Relative moves
+#: src/dialogs/transformation.c:407
+msgid "Relative move"
+msgstr "Relativno pomeranje"
+
+#: src/dialogs/transformation.c:539
+msgid "Scale"
+msgstr "Razmera"
+
+#: src/dialogs/transformation.c:666
+msgid "Rotate"
+msgstr "Rotiraj"
+
+#: src/dialogs/transformation.c:684
+msgid "deg"
+msgstr "stepeni"
+
+#: src/dialogs/xml-tree.c:158
+msgid "Drag to reorder nodes"
+msgstr "Prevucite da biste preraspodelili čvorove"
+
+#: src/dialogs/xml-tree.c:171
+msgid "New element node"
+msgstr "Čvor za novi elemenat"
+
+#: src/dialogs/xml-tree.c:189
+msgid "New text node"
+msgstr "Čvor za novi tekst"
+
+#: src/dialogs/xml-tree.c:206
+msgid "Duplicate node"
+msgstr "Udvostruči čvor"
+
+#: src/dialogs/xml-tree.c:222
+msgid "Delete node"
+msgstr "Ukloni čvor"
+
+#: src/dialogs/xml-tree.c:235
+msgid "Unindent node"
+msgstr "Izvuci čvor"
+
+#: src/dialogs/xml-tree.c:246
+msgid "Indent node"
+msgstr "Uvuci čvor"
+
+#: src/dialogs/xml-tree.c:256
+msgid "Raise node"
+msgstr "Izdigni čvor"
+
+#: src/dialogs/xml-tree.c:267
+msgid "Lower node"
+msgstr "Zakloni čvor"
+
+#: src/dialogs/xml-tree.c:304
+msgid "Delete attribute"
+msgstr "Obriši osobinu"
+
+#: src/dialogs/xml-tree.c:334
+msgid "Attribute name"
+msgstr "Naziv osobine"
+
+#: src/dialogs/xml-tree.c:341
+msgid "Set attribute"
+msgstr "Postavi osobinu"
+
+#: src/dialogs/xml-tree.c:354
+msgid "Attribute value"
+msgstr "Vrednost osobine"
+
+#: src/dialogs/xml-tree.c:826
+#, c-format
+msgid "Sodipodi: %s : XML View"
+msgstr "Sodipodi: %s : XML pregled"
+
+#: src/dialogs/xml-tree.c:849
+msgid "New element node..."
+msgstr "Čvor za novi element..."
+
+#: src/dialogs/xml-tree.c:869
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: src/dialogs/xml-tree.c:873
+msgid "Create"
+msgstr "Napravi"
+
+#: src/document.c:340
+#, c-format
+msgid "New document %d"
+msgstr "Novi dokument %d"
+
+#: src/document.c:369
+#, c-format
+msgid "Memory document %d"
+msgstr "Memorijski dokument %d"
+
+#: src/document.c:455
+#, c-format
+msgid "Unnamed document %d"
+msgstr "Neimenovani dokument %d"
+
+#: src/draw-context.c:280
+msgid "Appending to selection. Press 'a' to toggle Append/New."
+msgstr ""
+"Dopunjava tekući izbor. Pritisnite „a“ da izmenite da li se dopunjava ili "
+"započinje novi. "
+
+#: src/draw-context.c:285
+msgid "Creating new curve. Press 'a' to toggle Append/New."
+msgstr ""
+"Pravi novu krivu. Pritisnite „a“ da izmenite da li se dopunjava ili "
+"započinje nova. "
+
+#. Angle
+#: src/dyna-draw-context.c:1067
+msgid "Angle:"
+msgstr "Ugao:"
+
+#. Reset
+#: src/dyna-draw-context.c:1091 src/rect-context.c:421
+#: src/spiral-context.c:386 src/star-context.c:386
+msgid "Defaults"
+msgstr "Podrazumevano"
+
+#: src/file.c:150 src/file.c:161 src/file.c:173
+msgid "Select file to open"
+msgstr "Izaberite koju datoteku da otvorite"
+
+#: src/file.c:190 src/module.c:548
+msgid "Scalable Vector Graphic (SVG)"
+msgstr "Skalabilna vektorska grafika (SVG)"
+
+#: src/file.c:190 src/module.c:548
+msgid "Sodipodi native file format and W3C standard"
+msgstr "Matičan zapis Sodipodija i W3C standard"
+
+#: src/file.c:196 src/file.c:309
+msgid "File type:"
+msgstr "Vrsta datoteke:"
+
+#: src/file.c:294
+msgid "Save file"
+msgstr "Sačuvaj datoteku"
+
+#: src/file.c:470 src/file.c:480 src/file.c:486
+msgid "Select file to import"
+msgstr "Odaberite datoteku za uvoz"
+
+#: src/help.c:49
+msgid "About sodipodi"
+msgstr "O sodipodiju"
+
+#. Do not insert any elements before/between first 4
+#: src/helper/units.c:40
+msgid "Unit"
+msgstr "Jedinica"
+
+#: src/helper/units.c:40
+msgid "Units"
+msgstr "Jedinice"
+
+#: src/helper/units.c:41
+msgid "Point"
+msgstr "štamparska tačka"
+
+#: src/helper/units.c:41
+msgid "pt"
+msgstr "pt"
+
+#: src/helper/units.c:41
+msgid "Points"
+msgstr "štamparskih tačaka"
+
+#: src/helper/units.c:41
+msgid "Pt"
+msgstr "Pt"
+
+#: src/helper/units.c:42
+msgid "Pixel"
+msgstr "tačka"
+
+#: src/helper/units.c:42
+msgid "px"
+msgstr "px"
+
+#: src/helper/units.c:42
+msgid "Pixels"
+msgstr "tačke"
+
+#: src/helper/units.c:42
+msgid "Px"
+msgstr "Px"
+
+#: src/helper/units.c:43
+msgid "Userspace unit"
+msgstr "Jedinica korisničkog prostora"
+
+#: src/helper/units.c:43
+msgid "User"
+msgstr "Korisnik"
+
+#: src/helper/units.c:43
+msgid "Userspace units"
+msgstr "Jedinice korisničkog prostora"
+
+#. Volatiles do not have default, so there are none here
+#. You can add new elements from this point forward
+#: src/helper/units.c:46
+msgid "Percent"
+msgstr "procenat"
+
+#: src/helper/units.c:46
+msgid "%"
+msgstr "%"
+
+#: src/helper/units.c:46
+msgid "Percents"
+msgstr "procenata"
+
+#: src/helper/units.c:47
+msgid "Millimeter"
+msgstr "milimetar"
+
+#: src/helper/units.c:47
+msgid "mm"
+msgstr "mm"
+
+#: src/helper/units.c:47
+msgid "Millimeters"
+msgstr "milimetara"
+
+#: src/helper/units.c:48
+msgid "Centimeter"
+msgstr "centimetar"
+
+#: src/helper/units.c:48
+msgid "cm"
+msgstr "cm"
+
+#: src/helper/units.c:48
+msgid "Centimeters"
+msgstr "centimetara"
+
+#: src/helper/units.c:49
+msgid "Meter"
+msgstr "metar"
+
+#: src/helper/units.c:49
+msgid "m"
+msgstr "m"
+
+#: src/helper/units.c:49
+msgid "meters"
+msgstr "metara"
+
+#: src/helper/units.c:50
+msgid "Inch"
+msgstr "palac"
+
+#: src/helper/units.c:50
+msgid "in"
+msgstr "in"
+
+#: src/helper/units.c:50
+msgid "Inches"
+msgstr "palaca"
+
+#: src/helper/units.c:51
+msgid "Em square"
+msgstr "em kvadrat"
+
+#: src/helper/units.c:51
+msgid "em"
+msgstr "em"
+
+#: src/helper/units.c:51
+msgid "Em squares"
+msgstr "em kvadrati"
+
+#: src/helper/units.c:52
+msgid "Ex square"
+msgstr "eks kvadrat"
+
+#: src/helper/units.c:52
+msgid "ex"
+msgstr "ex"
+
+#: src/helper/units.c:52
+msgid "Ex squares"
+msgstr "eks kvadrati"
+
+#: src/interface.c:303 src/interface.c:480
+msgid "Open Recent"
+msgstr ""
+
+#: src/interface.c:323
+msgid "Close View"
+msgstr "Zatvori pregled"
+
+#: src/interface.c:324 src/interface.c:495
+msgid "Exit Program"
+msgstr "Izađi iz programa"
+
+#: src/interface.c:326 src/interface.c:487
+msgid "About Sodipodi"
+msgstr "O Sodipodiju"
+
+#. Modules need abouts too
+#: src/interface.c:329 src/interface.c:490
+msgid "About Modules"
+msgstr "O dodacima"
+
+#: src/interface.c:347
+msgid "Cleanup"
+msgstr "Očisti"
+
+#. View:Zoom
+#: src/interface.c:417 src/toolbox.c:617 src/verbs.c:476
+msgid "Zoom"
+msgstr "Uvećaj"
+
+#. View:New View
+#: src/interface.c:429
+msgid "New View"
+msgstr "Novi pogled"
+
+#. View:New Preview
+#: src/interface.c:431
+msgid "New Preview"
+msgstr "Novi pregled"
+
+#: src/interface.c:433
+msgid "New Toplevel Toolbox"
+msgstr "Novi skup alata prvog nivoa"
+
+#: src/interface.c:434
+msgid "New Docked Toolbox"
+msgstr "Novi privezani skup alata"
+
+#: src/interface.c:435
+msgid "Remove Docked Toolbox"
+msgstr "Ukloni privezani skup alata"
+
+#. File
+#: src/interface.c:477 src/verbs.c:429
+msgid "New"
+msgstr "Nova"
+
+#: src/interface.c:478
+msgid "Open"
+msgstr "Otvori"
+
+#. Generic menu
+#. File submenu
+#: src/interface.c:558 src/toolbox.c:348
+msgid "File"
+msgstr "Datoteka"
+
+#. Edit submenu
+#: src/interface.c:564 src/toolbox.c:405 src/widgets/gradient-selector.c:135
+msgid "Edit"
+msgstr "Uređivanje"
+
+# Pregled
+#. View submenu
+#: src/interface.c:576
+msgid "View"
+msgstr "Pogledaj"
+
+#. Drawing mode submenu
+#: src/interface.c:582
+msgid "Drawing Mode"
+msgstr "Režim crtanja"
+
+#. Dialog submenu
+#: src/interface.c:588
+msgid "Dialogs"
+msgstr "Prozorčići"
+
+#: src/interface.c:595
+msgid "Filters"
+msgstr "Filteri"
+
+#: src/main.c:126
+msgid "Do not use X server (only process files from console)"
+msgstr "Ne koristi X server (samo obrađuj datoteke preko konzole)"
+
+# bug: unmatched parenthesis??
+#: src/main.c:129
+msgid "Try to use X server even if $DISPLAY is not set)"
+msgstr ""
+"Pokušaj da koristiš X server čak iako promenljiva $DISPLAY nije postavljena)"
+
+#: src/main.c:132
+msgid "Open specified document(s) (option string may be excluded)"
+msgstr "Otvori navedene dokumente (niska sa opcija se može preskočiti)"
+
+#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+msgid "FILENAME"
+msgstr "NAZIV DATOTEKE"
+
+#: src/main.c:135
+msgid "Print document(s) to specified output file (use '| program' for pipe)"
+msgstr ""
+"Štampaj dokumente u navedenu izlaznu datoteku (koristite „| program“ za "
+"cevku)"
+
+#: src/main.c:138
+msgid "Export document to png file"
+msgstr "Izvezi dokument u PNG datoteku"
+
+#: src/main.c:141
+msgid "The resolution used for converting SVG into bitmap (default 72.0)"
+msgstr ""
+"Rezolucija koja se koristi za pretvaranje SVG-a u bitmapu (podrazumevano "
+"72,0)"
+
+#: src/main.c:142
+msgid "DPI"
+msgstr "TPI"
+
+#: src/main.c:144
+msgid ""
+"Exported area in millimeters (default is full document, 0,0 is lower-left "
+"corner)"
+msgstr ""
+"Izvezena površina u milimetrima (uobičajeno je pun dokument, 0,0 je donji-"
+"levi ugao)"
+
+#: src/main.c:145
+msgid "x0:y0:x1:y1"
+msgstr "x0:y0:x1:y1"
+
+#: src/main.c:147
+msgid "The width of generated bitmap in pixels (overwrites dpi)"
+msgstr "Širina obrazovane bitmape u tačkama (prepisuje TPI)"
+
+#: src/main.c:147
+msgid "WIDTH"
+msgstr "ŠIRINA"
+
+#: src/main.c:149
+msgid "The height of generated bitmap in pixels (overwrites dpi)"
+msgstr "Visina obrazovane bitmape u tačkama (prepisuje TPI)"
+
+#: src/main.c:149
+msgid "HEIGHT"
+msgstr "VISINA"
+
+#: src/main.c:151
+msgid "Background color of exported bitmap (any SVG supported color string)"
+msgstr ""
+"Boja pozadine izvezene bitmape (bilo koja oznaka boje koju podržava SVG)"
+
+#: src/main.c:151
+msgid "COLOR"
+msgstr "BOJA"
+
+#: src/main.c:153
+msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
+msgstr ""
+"Izvezi dokument u običnu SVG datoteku (bez prostora imena „xmlns:sodipodi“)"
+
+#: src/main.c:155
+msgid "Show given files one-by-one, switch to next on any key/mouse event"
+msgstr ""
+"Prikaži date datoteke jednu po jednu, prebaci na sledeću nakon bilo kakvog "
+"događaja sa tasterima ili mišem"
+
+#: src/main.c:157
+msgid "Prefer bitmap (xpm) icons to SVG ones"
+msgstr "Daj prvenstvo bitmapiranim (XPM) ikonama u odnosu na SVG ikone"
+
+#: src/module.c:556
+msgid "SVG with \"xmlns:sodipodi\" namespace"
+msgstr "SVG sa prostorom imena „xmlns:sodipodi“"
+
+#: src/module.c:557
+msgid "Scalable Vector Graphics format with sodipodi extensions"
+msgstr "Skalabilni vektorski grafički zapis za sodipodijevim proširenjima"
+
+#: src/module.c:560
+msgid "Plain SVG"
+msgstr "Običan SVG"
+
+#: src/module.c:561
+msgid "Scalable Vector Graphics format"
+msgstr "Skalabilni vektorski grafički zapis"
+
+#: src/modules/gnome.c:133
+msgid "Select printer"
+msgstr "Izaberite štampač"
+
+#: src/modules/gnome.c:187
+#, c-format
+msgid "Sodipodi (doc name %s..): Print Preview"
+msgstr "Sodipodi (ime dokumenta %s..): Pregled pred štampu"
+
+#: src/modules/kde.cpp:159
+msgid "Document variant:"
+msgstr "Varijanta dokumenta:"
+
+#: src/modules/kde.cpp:169
+msgid ""
+"*.svg *.svgz|SVG files\n"
+"*.xml|XML files\n"
+"*|All files"
+msgstr ""
+"*.svg *.svgz|SVG datoteke\n"
+"*.xml|XML datoteke\n"
+"*|Sve datoteke"
+
+#: src/modules/kde.cpp:171
+msgid "Save document as"
+msgstr "Sačuvaj dokument kao"
+
+#. Print destination frame
+#: src/modules/ps.c:157 src/modules/ps.c:218
+msgid "Print destination"
+msgstr "Odredište štampe"
+
+#. Print properties frame
+#: src/modules/ps.c:168
+msgid "Print properties"
+msgstr "Osobine štampe"
+
+#: src/modules/ps.c:176
+msgid "Print using PostScript operators"
+msgstr "Štampaj pomoću PostSkript operatora"
+
+#: src/modules/ps.c:178
+msgid ""
+"Use PostScript vector operators, resulting image will be (usually) smaller "
+"and can be arbitrarily scaled, but alpha transparency, markers and patterns "
+"will be lost"
+msgstr ""
+"Koristi vektorske operatore iz PostSkripta; dobijena slika će (obično) biti "
+"manja i moći će se proizvoljno uvećavati, ali providnost, obeležja i obrasci "
+"će biti izgubljeni"
+
+#: src/modules/ps.c:183
+msgid "Print as bitmap"
+msgstr "Štampaj kao bitmapu"
+
+#: src/modules/ps.c:185
+msgid ""
+"Print everything as bitmap, resulting image will be (usualy) larger and it "
+"quality depends on zoom factor, but all graphics will be rendered identical "
+"to display"
+msgstr ""
+"Štampaj sve kao bitmapu; dobijena slika će (obično) biti veća i kvalitet će "
+"zavisiti od razmere uvećanja, ali sva grafika će se iscrtati isto kao što je "
+"prikazana"
+
+#: src/modules/ps.c:199
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr "Željena rezolucija (tačaka po inču) bitmape"
+
+#: src/modules/ps.c:214
+msgid "Resolution:"
+msgstr "Rezolucija:"
+
+#: src/modules/ps.c:224
+msgid ""
+"Enter destination lpr queue.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to program"
+msgstr ""
+"Unesite odredišni lpr red.\n"
+"Koristite „> datoteka“ da štampate u datoteku.\n"
+"Koristite „| program argument...“ da prosledite u program"
+
+#: src/modules/ps.c:837
+msgid "write error occured"
+msgstr "greška pri pisanju"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:105
+msgid "Item"
+msgstr "Stavka"
+
+#. Item dialog
+#: src/object-ui.c:108 src/verbs.c:499
+msgid "Item Properties"
+msgstr "Osobine stavke"
+
+#. Select item
+#: src/object-ui.c:118
+msgid "Select this"
+msgstr "Izaberi ovo"
+
+#. Reset transformations
+#: src/object-ui.c:128
+msgid "Reset transformation"
+msgstr "Poništi transformaciju"
+
+#: src/object-ui.c:134
+msgid "Make sensitive"
+msgstr "Učini osetljivim"
+
+#: src/object-ui.c:134
+msgid "Make insensitive"
+msgstr "Učini neosetljivim"
+
+#. Create link
+#: src/object-ui.c:139
+msgid "Create link"
+msgstr "Napravi vezu"
+
+#: src/object-ui.c:251 src/verbs.c:453
+msgid "Group"
+msgstr "Grupiši"
+
+#. Group dialog
+#: src/object-ui.c:255
+msgid "Group Properties"
+msgstr "Osobine grupe"
+
+#. "Ungroup"
+#: src/object-ui.c:268 src/verbs.c:454
+msgid "Ungroup"
+msgstr "Razgrupiši"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:316
+msgid "Link"
+msgstr "Veza"
+
+#. Link dialog
+#: src/object-ui.c:319
+msgid "Link Properties"
+msgstr "Osobine veze"
+
+#. Select item
+#: src/object-ui.c:329
+msgid "Follow link"
+msgstr "Prati vezu"
+
+#. Reset transformations
+#: src/object-ui.c:334
+msgid "Remove link"
+msgstr "Ukloni vezu"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:397
+msgid "Image"
+msgstr "Slika"
+
+#. Link dialog
+#: src/object-ui.c:400
+msgid "Image Properties"
+msgstr "Osobine slike"
+
+#. Autotrace dialog
+#: src/object-ui.c:408 src/sp-image.c:780
+msgid "Trace"
+msgstr "Trag"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:457
+msgid "Shape"
+msgstr "Oblik"
+
+#. Item dialog
+#: src/object-ui.c:460 src/toolbox.c:442
+msgid "Fill settings"
+msgstr "Podešavanja ispunjavanja"
+
+# bug: cannot be easily translated; please use "rectangle"
+#. Create toplevel menuitem
+#: src/object-ui.c:487
+msgid "Rect"
+msgstr "Pravougaonik"
+
+# bug: rect -> rectangle
+#. Link dialog
+#: src/object-ui.c:490
+msgid "Rect Properties"
+msgstr "Osobine pravougaonika"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:523 src/verbs.c:470
+msgid "Star"
+msgstr "Zvezda"
+
+#. Link dialog
+#: src/object-ui.c:526
+msgid "Star Properties"
+msgstr "Osobine zvezde"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:559 src/verbs.c:471
+msgid "Spiral"
+msgstr "Spirala"
+
+#. Link dialog
+#: src/object-ui.c:562
+msgid "Spiral Properties"
+msgstr "Osobine spirale"
+
+#. rx_ratio
+#: src/rect-context.c:397
+msgid "Roundness ratio for x:"
+msgstr "Odnos zaokruženosti za x:"
+
+#. ry_ratio
+#: src/rect-context.c:409
+msgid "Roundness ratio for y:"
+msgstr "Odnos zaokruženosti za y:"
+
+#: src/select-context.c:564
+msgid "Visual transformation"
+msgstr "Vizuelna transformacija"
+
+#: src/select-context.c:572
+msgid "Show content"
+msgstr "Prikaži sadržaj"
+
+#: src/select-context.c:579
+msgid "Show outline"
+msgstr "Prikaži obrise"
+
+#: src/select-context.c:586
+msgid "Object transformation"
+msgstr "Transformacija objekta"
+
+#: src/select-context.c:594
+msgid "Optimize"
+msgstr "Optimizuj"
+
+#: src/select-context.c:601
+msgid "Preserve"
+msgstr "Sačuvaj"
+
+#: src/slideshow.c:88
+msgid "Sodipodi slideshow"
+msgstr "Sodipodi automatski prikaz"
+
+#: src/sodipodi.c:398
+msgid "Untitled document"
+msgstr "Neimenovani dokument"
+
+#. Show nice dialog box
+#: src/sodipodi.c:423
+msgid "Sodipodi encountered an internal error and will close now.\n"
+msgstr "Sodipodi je naišao na unutrašnju grešku i sada će se zatvoriti.\n"
+
+#: src/sodipodi.c:424
+msgid ""
+"Automatic backups of unsaved documents were done to following locations:\n"
+msgstr ""
+"Automatski rezervni primerci nesačuvanih dokumenata su smešteni u naredne "
+"putanje:\n"
+
+#: src/sodipodi.c:425
+msgid "Automatic backup of following documents failed:\n"
+msgstr "Nije uspelo automatsko snimanje rezervnih primeraka:\n"
+
+#: src/sodipodi.c:564
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you can\n"
+"neither load nor save preferences\n"
+msgstr ""
+"%s nije obična datoteka.\n"
+"Iako će se Sodipodi pokrenuti, nećete moći\n"
+"ni da učitate ni da sačuvate postavke\n"
+
+#: src/sodipodi.c:567
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"%s ili nije ispravna xml datoteka ili\n"
+"nemate ovlašćenja za njeno čitanje.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći ni da učitate ni da sačuvate\n"
+"postavke."
+
+#: src/sodipodi.c:572
+#, c-format
+msgid ""
+"%s is not valid sodipodi preferences file.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"%s nije ispravna datoteka za postavke Sodipodija.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći ni da učitate ni da sačuvate\n"
+"postavke."
+
+#: src/sodipodi.c:584
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s nije obična datoteka.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sodipodi.c:587
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s ili nije ispravna XML datoteka ili\n"
+"nemate ovlašćenja da je čitate.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sodipodi.c:591
+#, c-format
+msgid ""
+"%s is not valid sodipodi extensions file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s nije ispravna datoteka sa Sodipodi proširenjima.\n"
+"nemate ovlašćenja da je čitate.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sodipodi.c:930
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"%s."
+msgstr ""
+"Ne može da obrazuje direktorijum %s.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći ni da učitate ni da sačuvate\n"
+"%s."
+
+#: src/sodipodi.c:934
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"%s nije ispravan direktorijum.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći ni da učitate ni da sačuvate\n"
+"postavke."
+
+#: src/sodipodi.c:938
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"Ne može da napravi datoteku %s.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći ni da učitate ni da sačuvate\n"
+"postavke."
+
+#: src/sodipodi.c:942
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+"Ne može da upiše u datoteku %s.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći ni da učitate ni da sačuvate\n"
+"postavke."
+
+#: src/sodipodi.c:952
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"Ne može da obrazuje direktorijum %s.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sodipodi.c:955
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"%s nije ispravan direktorijum.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sodipodi.c:958
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"Ne može da napravi datoteku %s.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sodipodi.c:961
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+"Ne može da upiše u datoteku %s.\n"
+"Iako će se Sodipodi pokrenuti, nećete\n"
+"moći da koristite proširenja (dodatke)\n"
+
+#: src/sp-anchor.c:195
+#, c-format
+msgid "Link to %s"
+msgstr "Veza na %s"
+
+#: src/sp-image.c:370
+#, c-format
+msgid "Image with bad reference: %s"
+msgstr "Slika sa lošom referencom: %s"
+
+#: src/sp-image.c:372
+#, c-format
+msgid "Color image %d x %d: %s"
+msgstr "Slika u boji %d x %d: %s"
+
+#: src/sp-image.c:926
+#, c-format
+msgid "Error to write %s: %s"
+msgstr "Greška pri upisu %s: %s"
+
+#: src/sp-image.c:960
+msgid "Untitled"
+msgstr "Neimenovana"
+
+#: src/sp-image.c:965
+msgid "Document Name:"
+msgstr "Ime dokumenta:"
+
+#: src/sp-image.c:978
+msgid "Unknown"
+msgstr "Nepoznato"
+
+#: src/sp-image.c:984
+msgid "Image URI:"
+msgstr "Adresa slike:"
+
+# bug: plural-forms
+#: src/sp-item-group.c:456
+#, c-format
+msgid "Group of %d objects"
+msgstr "Grupa od %d objekata"
+
+#: src/sp-item.c:497
+msgid "Unknown item :-("
+msgstr "Nepoznata stavka :-("
+
+#. fixme:
+#: src/sp-text.c:1305
+msgid "Text object"
+msgstr "Objekat za tekst"
+
+#. T0
+#: src/spiral-context.c:374
+msgid "Inner radius:"
+msgstr "Unutrašnji poluprečnik:"
+
+#. Proportion
+#: src/star-context.c:367
+msgid "Proportion:"
+msgstr "Srazmera:"
+
+#. Making sides flat
+#: src/star-context.c:380
+msgid "Make sides flat"
+msgstr "Učini stranice ravnim"
+
+#: src/toolbox.c:439
+msgid "Object"
+msgstr "Objekat"
+
+#: src/toolbox.c:443 src/verbs.c:494
+msgid "Object size and position"
+msgstr "Veličina i pozicija objekta"
+
+#: src/toolbox.c:444
+msgid "Text and font settings"
+msgstr "Podešavanja teksta i fonta"
+
+#: src/toolbox.c:446 src/verbs.c:495
+msgid "Object transformations"
+msgstr "Transformacije objekta"
+
+#: src/toolbox.c:519
+msgid "Draw"
+msgstr "Crtaj"
+
+#: src/toolbox.c:574
+msgid "Extension"
+msgstr "Proširenje"
+
+#: src/toolbox.c:651
+msgid "Nodes"
+msgstr "Čvorovi"
+
+#: src/toolbox.c:653
+msgid "Insert new nodes into selected segments"
+msgstr "Ubaci nove čvorove u izabrane delove"
+
+#: src/toolbox.c:654
+msgid "Break line at selected nodes"
+msgstr "Prelomi liniju na izabranim čvorovima"
+
+#: src/toolbox.c:655
+msgid "Make selected nodes corner"
+msgstr "Napravi ćoškove od izabranih čvorova"
+
+#: src/toolbox.c:656
+msgid "Make selected segments lines"
+msgstr "Napravi linije od izabranih delova"
+
+#: src/toolbox.c:657
+msgid "Delete selected nodes"
+msgstr "Obriši odabrane čvorove"
+
+#: src/toolbox.c:658
+msgid "Join lines at selected nodes"
+msgstr "Spoji linije na izabranim čvorovima"
+
+#: src/toolbox.c:659
+#, fuzzy
+msgid "Join lines at selected nodes with new segment"
+msgstr "Spoji linije na izabranim čvorovima"
+
+# glatka kriva se precizno matematički definiše, i upravo deluje kao „glatka“
+#: src/toolbox.c:660
+msgid "Make selected nodes smooth"
+msgstr "Napravi glatku krivu od izabranih čvorova"
+
+#: src/toolbox.c:661
+msgid "Make selected segments curves"
+msgstr "Napravi krivu od izabranih delova"
+
+#: src/verbs.c:427
+msgid "Does nothing"
+msgstr "Ne čini ništa"
+
+#: src/verbs.c:429
+msgid "Create new SVG document"
+msgstr "Napravi novi SVG dokument"
+
+#: src/verbs.c:430
+msgid "Open..."
+msgstr "Otvori..."
+
+#: src/verbs.c:430
+msgid "Open existing SVG document"
+msgstr "Otvori postojeći SVG dokument"
+
+#: src/verbs.c:431
+msgid "Save"
+msgstr "Sačuvaj"
+
+#: src/verbs.c:431
+msgid "Save document"
+msgstr "Sačuvaj dokument"
+
+#: src/verbs.c:432
+msgid "Save As..."
+msgstr "Sačuvaj kao..."
+
+#: src/verbs.c:432
+msgid "Save document under new name"
+msgstr "Sačuvaj dokument pod novim imenom"
+
+#: src/verbs.c:433
+msgid "Print..."
+msgstr "Štampaj..."
+
+#: src/verbs.c:433
+msgid "Print document"
+msgstr "Štampaj dokument"
+
+#: src/verbs.c:434
+msgid "Print Direct..."
+msgstr "Štampaj neposredno..."
+
+#: src/verbs.c:434
+msgid "Print directly to file or pipe"
+msgstr "Štampaj neposredno u datoteku ili cev"
+
+#: src/verbs.c:435
+msgid "Print Preview"
+msgstr "Pregled pred štampu"
+
+#: src/verbs.c:435
+msgid "Preview document printout"
+msgstr "Pregledaj izlaz dokumenta sa štampe"
+
+#: src/verbs.c:436
+msgid "Import"
+msgstr "Uvezi"
+
+#: src/verbs.c:436
+msgid "Import bitmap or SVG image into document"
+msgstr "Uvezi bitmapu ili SVG sliku u dokument"
+
+#: src/verbs.c:437
+msgid "Export document as PNG bitmap"
+msgstr "Izvezi dokument kao PNG sliku"
+
+#. Edit
+#: src/verbs.c:439
+msgid "Undo"
+msgstr "Opozovi"
+
+#: src/verbs.c:439
+msgid "Revert last action"
+msgstr "Poništi poslednju akciju"
+
+#: src/verbs.c:440
+msgid "Redo"
+msgstr "Ponovi"
+
+#: src/verbs.c:440
+msgid "Do again undone action"
+msgstr "Ponovi opozvanu akciju"
+
+#: src/verbs.c:441
+msgid "Cut"
+msgstr "Iseci"
+
+#: src/verbs.c:441
+msgid "Cut selected objects to clipboard"
+msgstr "Iseci izabrane objekte i smesti među isečke"
+
+#: src/verbs.c:442
+msgid "Copy"
+msgstr "Umnoži"
+
+#: src/verbs.c:442
+msgid "Copy selected objects to clipboard"
+msgstr "Umnoži izabrane objekte u spisak isečaka"
+
+#: src/verbs.c:443
+msgid "Paste"
+msgstr "Ubaci"
+
+#: src/verbs.c:443
+msgid "Paste objects from clipboard"
+msgstr "Ubaci objekte iz spiska isečaka"
+
+#: src/verbs.c:444
+msgid "Delete"
+msgstr "Obriši"
+
+#: src/verbs.c:444
+msgid "Delete selected objects"
+msgstr "Obriši izabrane objekte"
+
+#: src/verbs.c:445
+msgid "Duplicate"
+msgstr "Udvostruči"
+
+#: src/verbs.c:445
+msgid "Duplicate selected objects"
+msgstr "Udvostruči izabrane objekte"
+
+#: src/verbs.c:446
+msgid "Clear All"
+msgstr "Očisti sve"
+
+#: src/verbs.c:446
+msgid "Delete all objects from document"
+msgstr "Obriši sve objekte iz dokumenta"
+
+#: src/verbs.c:447
+msgid "Select All"
+msgstr "Izaberi sve"
+
+#: src/verbs.c:447
+msgid "Select all objects in document"
+msgstr "Izaberi sve objekte iz dokumenta"
+
+#. Selection
+#: src/verbs.c:449
+msgid "Bring to Front"
+msgstr "Postavi ispred"
+
+#: src/verbs.c:449
+msgid "Raise selected objects to top"
+msgstr "Izdigni izabrane objekte ispred ostalih"
+
+#: src/verbs.c:450
+msgid "Send to Back"
+msgstr "Pošalji u pozadinu"
+
+#: src/verbs.c:450
+msgid "Lower selected objects to bottom"
+msgstr "Postavi izabrane objekte iza ostalih"
+
+#: src/verbs.c:451
+msgid "Raise"
+msgstr "Izdigni"
+
+#: src/verbs.c:451
+msgid "Raise selected objects one position"
+msgstr "Izdigni izabrane objekte za jedan nivo"
+
+#: src/verbs.c:452
+msgid "Lower"
+msgstr "Spusti"
+
+#: src/verbs.c:452
+msgid "Lower selected objects one position"
+msgstr "Spusti izabrane objekte za jedan nivo"
+
+#: src/verbs.c:453
+msgid "Group selected objects"
+msgstr "Grupiši izabrane objekte"
+
+#: src/verbs.c:454
+msgid "Ungroup selected group"
+msgstr "Razgrupiši izabrane objekte"
+
+#: src/verbs.c:455
+msgid "Combine"
+msgstr "Spoji"
+
+#: src/verbs.c:455
+msgid "Combine multiple paths"
+msgstr "Spoji više putanja"
+
+#: src/verbs.c:456
+msgid "Break Apart"
+msgstr "Razdvoj"
+
+#: src/verbs.c:456
+msgid "Break selected path to subpaths"
+msgstr "Razdvoj izabranu putanju na podputanje"
+
+#. Object
+#: src/verbs.c:458
+msgid "Rotate 90 degrees"
+msgstr "Rotiraj za 90 stepeni"
+
+#: src/verbs.c:458
+msgid "Rotates object 90 degrees clockwise"
+msgstr "Rotira za 90 stepeni u pravcu kazaljke na satu"
+
+#: src/verbs.c:459
+msgid "Flatten object"
+msgstr "Izravnaj objekat"
+
+#: src/verbs.c:459
+msgid "Remove transformations from object"
+msgstr "Ukloni transformacije objekta"
+
+#: src/verbs.c:460
+msgid "Convert to Curves"
+msgstr "Pretvori u krive"
+
+#: src/verbs.c:460
+msgid "Convert selected object to path"
+msgstr "Pretvori izabrani objekat u putanju"
+
+#: src/verbs.c:461
+msgid "Flip Horizontally"
+msgstr "Obrni vodoravno"
+
+#: src/verbs.c:462
+msgid "Flip selected objects horizontally"
+msgstr "Obrni izabrane objekte vodoravno"
+
+#: src/verbs.c:463
+msgid "Flip Vertically"
+msgstr "Obrni uspravno"
+
+#: src/verbs.c:464
+msgid "Flip selected objects vertically"
+msgstr "Obrni izabrane objekte uspravno"
+
+#. Event contexts
+#: src/verbs.c:466
+msgid "Select"
+msgstr "Izaberi"
+
+#: src/verbs.c:466
+msgid "Select and transform objects"
+msgstr "Izaberi i transformiši objekte"
+
+#: src/verbs.c:467
+msgid "Node edit"
+msgstr "Izmena čvora"
+
+#: src/verbs.c:467
+msgid "Modify existing objects by control nodes"
+msgstr "Izmeni postojeće objekte pomoću kontrolnih čvorova"
+
+#: src/verbs.c:468
+msgid "Rectangle"
+msgstr "Pravougaonik"
+
+#: src/verbs.c:468
+msgid "Create rectangles and squares with optional rounded corners"
+msgstr "Napravi pravougaonike i kvadrate sa (po izboru) zaobljenim ćoškovima"
+
+#: src/verbs.c:469
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: src/verbs.c:469
+msgid "Create circles, ellipses and arcs"
+msgstr "Napravi krugove, elipse i lukove"
+
+#: src/verbs.c:470
+msgid "Create stars and polygons"
+msgstr "Napravi zvezde i poligone"
+
+#: src/verbs.c:471
+msgid "Create spirals"
+msgstr "Napravi spirale"
+
+#: src/verbs.c:472
+msgid "Pencil"
+msgstr "Gruba olovka"
+
+#: src/verbs.c:472
+msgid "Draw freehand curves and straight lines"
+msgstr "Crtajte krive slobodnom rukom i prave linije"
+
+#: src/verbs.c:473
+msgid "Pen"
+msgstr "Olovka"
+
+#: src/verbs.c:473
+msgid "Draw precisely positioned curved and straight lines"
+msgstr "Crtajte precizno razmeštene krive i prave linije"
+
+#: src/verbs.c:474
+msgid "Calligraphy"
+msgstr "Kaligrafija"
+
+#: src/verbs.c:474
+msgid "Draw calligraphic lines"
+msgstr "Crtajte kaligrafske linie"
+
+#: src/verbs.c:475
+msgid "Create and edit text objects"
+msgstr "Napravite i izmenite objekte za tekst"
+
+#: src/verbs.c:476
+msgid "Zoom into precisely selected area"
+msgstr "Uvećajte tačno izabranu površinu"
+
+#: src/verbs.c:477
+msgid "Dropper"
+msgstr "Birač boja"
+
+#: src/verbs.c:477
+msgid "Pick averaged colors from image"
+msgstr "Izaberite usrednjene boje sa slike"
+
+#. Zooming
+#: src/verbs.c:479
+msgid "In"
+msgstr "Uvećaj"
+
+#: src/verbs.c:479
+msgid "Zoom in drawing"
+msgstr "Uvećaj crtež"
+
+#: src/verbs.c:480
+msgid "Out"
+msgstr "Umanji"
+
+#: src/verbs.c:480
+msgid "Zoom out drawing"
+msgstr "Umanji crtež"
+
+#: src/verbs.c:481
+msgid "1:1"
+msgstr "1:1"
+
+#: src/verbs.c:481
+msgid "Set zoom factor to 1:1"
+msgstr "Postavi razmeru na 1:1"
+
+#: src/verbs.c:482
+msgid "1:2"
+msgstr "1:2"
+
+#: src/verbs.c:482
+msgid "Set zoom factor to 1:2"
+msgstr "Postavi razmeru na 1:2"
+
+#: src/verbs.c:483
+msgid "2:1"
+msgstr "2:1"
+
+#: src/verbs.c:483
+msgid "Set zoom factor to 2:1"
+msgstr "Postavi razmeru na 2:1"
+
+#: src/verbs.c:484
+msgid "Fit the whole page into window"
+msgstr "Uklopi celu stranicu u prozor"
+
+#: src/verbs.c:485
+msgid "Fit the whole drawing into window"
+msgstr "Uklopi ceo crtež u prozor"
+
+#: src/verbs.c:486
+msgid "Fit the whole selection into window"
+msgstr "Uklopi ceo izbor u prozor"
+
+#. Dialogs
+#: src/verbs.c:488
+msgid "Display"
+msgstr "Prikaz"
+
+#: src/verbs.c:488
+msgid "Global display settings"
+msgstr "Opšta podešavanja prikaza"
+
+#: src/verbs.c:489
+msgid "Document"
+msgstr "Dokument"
+
+#: src/verbs.c:489
+msgid "Page layout"
+msgstr "Izgled strane"
+
+#: src/verbs.c:490
+msgid "Editing Window"
+msgstr "Prozor za uređivanje"
+
+#: src/verbs.c:490
+msgid "Editing window properties"
+msgstr "Osobine prozora za uređivanje"
+
+#: src/verbs.c:491
+msgid "Tool Options"
+msgstr "Opcije alata"
+
+#: src/verbs.c:492
+msgid "Tool Attributes"
+msgstr "Osobine alata"
+
+#: src/verbs.c:493
+msgid "Fill and Stroke"
+msgstr "Ispunjavanje i potezi"
+
+#: src/verbs.c:493
+msgid "Fill and stroke settings"
+msgstr "Podešavanja ispunjavanja i poteza"
+
+#: src/verbs.c:495
+msgid "Transformations"
+msgstr "Transformacije"
+
+#: src/verbs.c:496
+msgid "Align and Distribute"
+msgstr "Poravnaj i rasporedi"
+
+#: src/verbs.c:496
+msgid "Align and distribute"
+msgstr "Poravnaj i rasporedi"
+
+#: src/verbs.c:497
+msgid "Text and Font"
+msgstr "Tekst i font"
+
+#: src/verbs.c:497
+msgid "Text editing and font settings"
+msgstr "Podešavanja za uređivanje teksta i font"
+
+#: src/verbs.c:498
+msgid "XML Editor"
+msgstr "XML uređivač"
+
+#. Family frame
+#: src/widgets/font-selector.c:144
+msgid "Font family"
+msgstr "Porodica fonta"
+
+#. Style frame
+#: src/widgets/font-selector.c:172
+msgid "Style"
+msgstr "Stil"
+
+#: src/widgets/font-selector.c:207
+msgid "Font size:"
+msgstr "Veličina fonta:"
+
+#: src/widgets/font-selector.c:517
+msgid "AaBbCcIiPpQq12368.;/()"
+msgstr "AaBbVvDdĐđLjljČč12368.;/()„“"
+
+#: src/widgets/gradient-selector.c:140
+msgid "Add"
+msgstr "Dodaj"
+
+#: src/widgets/gradient-selector.c:176
+msgid "gradientUnits"
+msgstr "Jedinice preliva"
+
+#: src/widgets/gradient-selector.c:205
+msgid "gradientSpread"
+msgstr "Raširenje preliva"
+
+#: src/widgets/gradient-vector.c:245
+msgid "No document selected"
+msgstr "Dokument nije izabran"
+
+#: src/widgets/gradient-vector.c:251
+msgid "No gradients in document"
+msgstr "Nema preliva u dokumentu"
+
+#: src/widgets/gradient-vector.c:257
+msgid "No gradient selected"
+msgstr "Preliv nije izabran"
+
+#: src/widgets/gradient-vector.c:412
+msgid "Start color"
+msgstr "Početna boja"
+
+#: src/widgets/gradient-vector.c:422
+msgid "End color"
+msgstr "Završna boja"
+
+# da li baš mora „vektor“?
+#: src/widgets/gradient-vector.c:447
+msgid "Gradient vector"
+msgstr "Pravac preliva"
+
+#: src/widgets/paint-selector.c:620
+msgid "No objects"
+msgstr "Nema objekata"
+
+#: src/widgets/paint-selector.c:634
+msgid "Multiple styles"
+msgstr "Više stilova"
+
+#: src/widgets/paint-selector.c:648
+msgid "No paint"
+msgstr "Nema farbe"
+
+#. Label
+#: src/widgets/paint-selector.c:738
+msgid "Mode:"
+msgstr "Mod:"
+
+#: src/widgets/paint-selector.c:748
+msgid "RGB"
+msgstr "RGB"
+
+#: src/widgets/paint-selector.c:748 src/widgets/paint-selector.c:749
+msgid "RGB Colorspace"
+msgstr "RGB boje"
+
+#: src/widgets/paint-selector.c:749
+msgid "HSV"
+msgstr "HSV"
+
+#: src/widgets/paint-selector.c:750
+msgid "CMYK"
+msgstr "CMYK"
+
+#: src/widgets/paint-selector.c:750
+msgid "CMYK Colorspace"
+msgstr "CMYK boje"
+
+#. Use dropper
+#: src/widgets/paint-selector.c:757
+msgid "Get from dropper"
+msgstr "Uzmi iz birača boje"
+
+#: src/widgets/paint-selector.c:788
+msgid "Color paint"
+msgstr "Farba u boji"
+
+#: src/widgets/paint-selector.c:858
+msgid "Linear gradient"
+msgstr "Linijski preliv"
+
+#: src/widgets/paint-selector.c:861
+msgid "Radial gradient"
+msgstr "Kružni preliv"
+
+#: src/widgets/sp-color-selector.c:620
+msgid "Red:"
+msgstr "Crvena:"
+
+#: src/widgets/sp-color-selector.c:621
+msgid "Green:"
+msgstr "Zelena:"
+
+#: src/widgets/sp-color-selector.c:622
+msgid "Blue:"
+msgstr "Plava:"
+
+#: src/widgets/sp-color-selector.c:623 src/widgets/sp-color-selector.c:643
+#: src/widgets/sp-color-selector.c:665
+msgid "Alpha:"
+msgstr "Providnost:"
+
+#: src/widgets/sp-color-selector.c:640
+msgid "Hue:"
+msgstr "Nijansa:"
+
+#: src/widgets/sp-color-selector.c:641
+msgid "Saturation:"
+msgstr "Zasićenost:"
+
+#: src/widgets/sp-color-selector.c:642
+msgid "Value:"
+msgstr "Vrednost:"
+
+#: src/widgets/sp-color-selector.c:661
+msgid "Cyan:"
+msgstr "Cijan:"
+
+#: src/widgets/sp-color-selector.c:662
+msgid "Magenta:"
+msgstr "Magenta:"
+
+#: src/widgets/sp-color-selector.c:663
+msgid "Yellow:"
+msgstr "Žuta:"
+
+#: src/widgets/sp-color-selector.c:664
+msgid "Black:"
+msgstr "Crna"
+
+#: src/widgets/sp-toolbox.c:305
+msgid "Toggle separate window and main toolbox placement"
+msgstr "Izmeni položaj odvojenog prozora i glavnog skupa alata"
+
+#: src/widgets/sp-xmlview-attr-list.c:55
+msgid "Attribute"
+msgstr "Osobine"
+
+#: src/widgets/sp-xmlview-attr-list.c:56
+msgid "Value"
+msgstr "Vrednost"
+
+#~ msgid "Item is reference"
+#~ msgstr "Stavka je referenca"
+
+#~ msgid "The SVG ID of item"
+#~ msgstr "SVG ID za stavku"
+
+#~ msgid "The ID is not valid"
+#~ msgstr "Neispravan ID"
+
+#~ msgid "The ID is already defined"
+#~ msgstr "ID je već u upotrebi"
+
+#~ msgid "Object position and size"
+#~ msgstr "Pozicija i veličina objekta"
+
+#~ msgid "Position and size"
+#~ msgstr "Pozicija i veličina"
+
+#~ msgid "Epiphany automation"
+#~ msgstr "Automatizacija Spoznaje"
+
+#~ msgid "Epiphany Nautilus view"
+#~ msgstr "Nautilus pregled pomoću Spoznaje"
+
+#~ msgid "Epiphany Nautilus view factory"
+#~ msgstr "Fabrika pregleda za Nautilus pomoću Spoznaje"
+
+#~ msgid "Epiphany content view component"
+#~ msgstr "Deo Spoznaje za pregled sadržaja"
+
+#~ msgid "Epiphany content view component's factory"
+#~ msgstr "Fabrika za deo Spoznaje za pregled sadržaja"
+
+#~ msgid "View as Web Page"
+#~ msgstr "Gledaj kao veb stranicu"
+
+#~ msgid "Web Page"
+#~ msgstr "Veb stranica"
+
+#~ msgid "Web Page Viewer"
+#~ msgstr "Čitač veb stranica"
+
+#~ msgid "Browse and organize your bookmarks"
+#~ msgstr "Pregledanje i razvrstanje vaših obeleživača"
+
+#~ msgid "Web Bookmarks"
+#~ msgstr "Obeleživači"
+
+#~ msgid "Browse the web"
+#~ msgstr "Pregledaj veb"
+
+#~ msgid "Web Browser"
+#~ msgstr "Veb čitač"
+
+#~ msgid "Address of the user's home page."
+#~ msgstr "Adresa početne stranice korisnika."
+
+#~ msgid "Allow popups"
+#~ msgstr "Dozvoli iskačuće prozore"
+
+#~ msgid ""
+#~ "Allow sites to open new windows using JavaScript (if JavaScript is "
+#~ "enabled)."
+#~ msgstr ""
+#~ "Dozvoli stranicama da otvore nove prozore pomoću JavaSkripta (ukoliko je "
+#~ "JavaSkript omogućen)."
+
+#~ msgid "Ask for download destination"
+#~ msgstr "Pitaj za odretište preuzimanja"
+
+#~ msgid "Ask for download destination."
+#~ msgstr "Pitaj za odretište preuzimanja."
+
+#~ msgid "Autowrap for find in page"
+#~ msgstr "Traži i ispred za pretragu u stranici"
+
+#~ msgid "Cookie accept"
+#~ msgstr "Prihvati kolačić"
+
+#~ msgid "Default encoding"
+#~ msgstr "Uobičajeni zapis"
+
+#~ msgid ""
+#~ "Default encoding. Accepted values are: \"armscii-8\", \"Big5\", \"Big5-"
+#~ "HKSCS\", \"EUC-JP\", \"EUC-KR\", \"gb18030\", \"GB2312\", \"geostd8\", "
+#~ "\"HZ-GB-2312\", \"IBM850\", \"IBM852\", \"IBM855\", \"IBM857\", \"IBM862"
+#~ "\", \"IBM864\", \"IBM866\", \"ISO-2022-CN\", \"ISO-2022-JP\", \"ISO-2022-"
+#~ "KR\", \"ISO-8859-1\", \"ISO-8859-2\", \"ISO-8859-3\", \"ISO-8859-4\", "
+#~ "\"ISO-8859-5\", \"ISO-8859-6\", \"ISO-8859-7\", \"ISO-8859-8\", \"ISO-"
+#~ "8859-8-I\", \"ISO-8859-9\", \"ISO-8859-10\", \"ISO-8859-11\", \"ISO-8859-"
+#~ "13\", \"ISO-8859-14\", \"ISO-8859-15\", \"ISO-8859-16\", \"ISO-IR-111\", "
+#~ "\"KOI8-R\", \"KOI8-U\", \"Shift_JIS\", \"TIS-620\", \"UTF-7\", \"UTF-8\", "
+#~ "\"VISCII\", \"windows-874\", \"windows-1250\", \"windows-1251\", "
+#~ "\"windows-1252\", \"windows-1253\", \"windows-1254\", \"windows-1255\", "
+#~ "\"windows-1256\", \"windows-1257\", \"windows-1258\", \"x-euc-tw\", \"x-"
+#~ "gbk\", \"x-johab\", \"x-mac-arabic\", \"x-mac-ce\", \"x-mac-croatian\", "
+#~ "\"x-mac-cyrillic\", \"x-mac-devanagari\", \"x-mac-farsi\", \"x-mac-greek"
+#~ "\", \"x-mac-gujarati\", \"x-mac-gurmukhi\", \"x-mac-hebrew\", \"x-mac-"
+#~ "icelandic\", \"x-mac-roman\", \"x-mac-romanian\", \"x-mac-turkish\", \"x-"
+#~ "mac-ukrainian\", \"x-user-defined\", \"x-viet-tcvn5712\", \"x-viet-vps\" "
+#~ "and \"x-windows-949\"."
+#~ msgstr ""
+#~ "Uobičajeni zapis. Dozvoljene vrednosti su: „armscii-8“, „Big5“, „Big5-"
+#~ "HKSCS“, „EUC-JP“, „EUC-KR“, „gb18030“, „GB2312“, „geostd8“, „HZ-GB-2312“, "
+#~ "„IBM850“, „IBM852“, „IBM855“, „IBM857“, „IBM862“, „IBM864“, „IBM866“, "
+#~ "„ISO-2022-CN“, „ISO-2022-JP“, „ISO-2022-KR“, „ISO-8859-1“, „ISO-8859-2“, "
+#~ "„ISO-8859-3“, „ISO-8859-4“, „ISO-8859-5“, „ISO-8859-6“, „ISO-8859-7“, "
+#~ "„ISO-8859-8“, „ISO-8859-8-I“, „ISO-8859-9“, „ISO-8859-10“, „ISO-8859-11“, "
+#~ "„ISO-8859-13“, „ISO-8859-14“, „ISO-8859-15“, „ISO-8859-16“, „ISO-IR-111“, "
+#~ "„KOI8-R“, „KOI8-U“, „Shift_JIS“, „TIS-620“, „UTF-7“, „UTF-8“, „VISCII“, "
+#~ "„windows-874“, „windows-1250“, „windows-1251“, „windows-1252“, „windows-"
+#~ "1253“, „windows-1254“, „windows-1255“, „windows-1256“, „windows-1257“, "
+#~ "„windows-1258“, „x-euc-tw“, „x-gbk“, „x-johab“, „x-mac-arabic“, „x-mac-"
+#~ "ce“, „x-mac-croatian“, „x-mac-cyrillic“, „x-mac-devanagari“, „x-mac-"
+#~ "farsi“, „x-mac-greek“, „x-mac-gujarati“, „x-mac-gurmukhi“, „x-mac-"
+#~ "hebrew“, „x-mac-icelandic“, „x-mac-roman“, „x-mac-romanian“, „x-mac-"
+#~ "turkish“, „x-mac-ukrainian“, „x-user-defined“, „x-viet-tcvn5712“, „x-viet-"
+#~ "vps“ i „x-windows-949“."
+
+#~ msgid "Default font type"
+#~ msgstr "Uobičajena vrsta fonta"
+
+#~ msgid "Default font type. Possible values are \"serif\" and \"sans-serif\"."
+#~ msgstr "Uobičajena vrsta fonta. Moguće vrednosti su „serif“ i „sans-serif“."
+
+#~ msgid "Enable Java"
+#~ msgstr "Uključi Javu"
+
+#~ msgid "Enable Java."
+#~ msgstr "Uključi Javu."
+
+#~ msgid "Enable JavaScript"
+#~ msgstr "Uključi JavaSkript"
+
+#~ msgid "Enable JavaScript."
+#~ msgstr "Uključi JavaSkript."
+
+#~ msgid "Filename to print to"
+#~ msgstr "Ime datoteke u koju štampati"
+
+#~ msgid "Filename to print to."
+#~ msgstr "Ime datoteke u koju treba štampati."
+
+#~ msgid ""
+#~ "For find in page, whether to start again at the beginning after reaching "
+#~ "the end of the page."
+#~ msgstr ""
+#~ "Za pretragu u stranici, da li da traži od početka stranice kada stigne do "
+#~ "kraja."
+
+#~ msgid "Home page"
+#~ msgstr "Početna stranica"
+
+#~ msgid "ISO-8859-1"
+#~ msgstr "ISO-8859-1"
+
+#~ msgid "Languages"
+#~ msgstr "Jezici"
+
+#~ msgid "Match case for find in page"
+#~ msgstr "Poklapanje veličine slova pri pretrazi"
+
+#~ msgid "Match case for find in page."
+#~ msgstr "Poklapanje veličine slova pri pretrazi stranice."
+
+#~ msgid ""
+#~ "Middle click to open the web page pointed to by the currently selected "
+#~ "text"
+#~ msgstr ""
+#~ "Koristite srednji klik za otvaranje stranice na koju pokazuje trenutno "
+#~ "izabrani tekst"
+
+#~ msgid ""
+#~ "Middle clicking on the main view pane will open the web page pointed to "
+#~ "by the currently selected text."
+#~ msgstr ""
+#~ "Srednji klik na glavnu površ za pregled će otvariti stranicu na koju "
+#~ "pokazuje trenutno izabrani tekst."
+
+#~ msgid "Open in tabs by default."
+#~ msgstr "Uobičajeno otvori u listovima."
+
+#~ msgid "Paper type"
+#~ msgstr "Vrsta papira"
+
+#~ msgid ""
+#~ "Paper type. Supported values are \"A4\", \"Letter\", \"Legal\" and "
+#~ "\"Executive\"."
+#~ msgstr ""
+#~ "Vrsta papira. Podržane vrednosti su „A4“, „Letter“, „Legal“ i “Executive“."
+
+#~ msgid "Preferred languages, two letter codes."
+#~ msgstr "Željeni jezici, dvoslovne oznake."
+
+#~ msgid "Printer name"
+#~ msgstr "Ime štampača"
+
+#~ msgid "Printer name."
+#~ msgstr "Ime štampača."
+
+#~ msgid "Printing bottom margin"
+#~ msgstr "Donja margina pri štampi"
+
+#~ msgid "Printing bottom margin (in mm)."
+#~ msgstr "Donja margina pri štampi (u milimetrima)."
+
+#~ msgid "Printing left margin"
+#~ msgstr "Leva margina pri štampi"
+
+#~ msgid "Printing left margin (in mm)."
+#~ msgstr "Leva margina pri štampi (u milimetrima)."
+
+#~ msgid "Printing right margin"
+#~ msgstr "Desna margina pri štampi"
+
+#~ msgid "Printing right margin (in mm)."
+#~ msgstr "Desna margina pri štampi (u milimetrima)."
+
+#~ msgid "Printing top margin"
+#~ msgstr "Gornja margina pri štampi"
+
+#~ msgid "Printing top margin (in mm)."
+#~ msgstr "Gornja margina pri štampi (u milimetrima)."
+
+#~ msgid "Show bookmarks bar by default"
+#~ msgstr "Uobičajeno prikaži obeleživače"
+
+#~ msgid "Show bookmarks bar by default."
+#~ msgstr "Uobičajeno prikaži obeleživače."
+
+#~ msgid "Show download details"
+#~ msgstr "Prikaži detalje preuzimanja"
+
+#~ msgid "Show download details."
+#~ msgstr "Prikaži detalje preuzimanja."
+
+#~ msgid "Show statusbar by default"
+#~ msgstr "Uobičajeno prikaži liniju sa stanjem"
+
+#~ msgid "Show statusbar by default."
+#~ msgstr "Uobičajeno prikaži liniju sa stanjem."
+
+#~ msgid "Show toolbars by default"
+#~ msgstr "Uobičajeno prikaži alatke"
+
+#~ msgid "Show toolbars by default."
+#~ msgstr "Uobičajeno prikaži alatke."
+
+#~ msgid "Size of disk cache"
+#~ msgstr "Veličina odvojenog prostora na disku"
+
+#~ msgid "Size of disk cache, in MB."
+#~ msgstr "Veličina odvojenog prostora na disku, u MB."
+
+#~ msgid "The currently selected fonts language"
+#~ msgstr "Trenutno izabrani jezik za fontove"
+
+#~ msgid ""
+#~ "The currently selected fonts language. Valid values are \"ar\" (arabic), "
+#~ "\"x-baltic\" (baltic languages), \"x-central-euro\" (central european "
+#~ "languages), \"x-cyrillic\" (languages written with cyrillic alphabet), "
+#~ "\"el\" (greek), \"he\" (hebrew), \"ja\" (japanese), \"ko\" (korean), \"zh-"
+#~ "CN\" (simplified chinese), \"th\" (thai), \"zh-TW\" (traditional "
+#~ "chinese), \"tr\" (turkish), \"x-unicode\" (other languages), \"x-western"
+#~ "\" (languages written in latin script), \"x-tamil\" (tamil) and \"x-"
+#~ "devanagari\" (devanagari)."
+#~ msgstr ""
+#~ "Trenutno izabrani jezik za fontove. Dozvoljene vrednosti su "
+#~ "„ar“ (arapski), „x-baltic“ (baltički jezici), „x-central-"
+#~ "euro“ (centralnoevropski jezici), „x-cyrillic“ (jezici koji koriste "
+#~ "ćirilicu), „el“ (grčki), „he“ (jevrejski), „ja“ (japanski), "
+#~ "„ko“ (korejski), „zh-CN“ (pojednostavljeni kineski), „th“ (tai), „zh-"
+#~ "TW“ (tradicionalni kineski), „tr“ (turski), „x-unicode“ (ostali jezici), "
+#~ "„x-western“ (jezici koji koriste latinicu), „x-tamil“ (tamil) i „x-"
+#~ "devanagari“ (devanagari)."
+
+#~ msgid "The encoding autodetector. Empty string means autodetect is off"
+#~ msgstr ""
+#~ "Prepoznavanje kodiranja. Ako je prazno onda se ne vrši prepoznavanje."
+
+#~ msgid ""
+#~ "The encoding autodetector. Valid entries are \"\" (autodetectors off), "
+#~ "\"cjk_parallel_state_machine\" (autodetect east asian encodings), "
+#~ "\"ja_parallel_state_machine\" (autodetect japanese encodings), "
+#~ "\"ko_parallel_state_machine\" (autodetect korean encodings), \"ruprob"
+#~ "\" (autodetect russian encodings), \"ukprob\" (autodetect ukrainian "
+#~ "encodings), \"zh_parallel_state_machine\" (autodetect chinese encodings), "
+#~ "\"zhcn_parallel_state_machine\" (autodetect simplified chinese "
+#~ "encodings), \"zhtw_parallel_state_machine\" (autodetect traditional "
+#~ "chinese encodings) and \"universal_charset_detector\" (autodetect most "
+#~ "encodings)."
+#~ msgstr ""
+#~ "Prepoznavanje kodiranja. Dozvoljene vrednosti su: „“ (prepoznavanje "
+#~ "isključeno), „cjk_parallel_state_machine“ (prepoznavanje istočnoazijskog "
+#~ "kodiranja), „ja_parallel_state_machine“ (prepoznavanje japanskog "
+#~ "kodiranja), „ko_parallel_state_machine“ (prepoznavanje korejskog "
+#~ "kodiranja), „ruprob“ (prepoznavanje ruskog kodiranja), "
+#~ "„ukprob“ (prepoznavanje ukrajinskog kodiranja), "
+#~ "„zh_parallel_state_machine“ (prepoznavanje kineskog kodiranja), "
+#~ "„zhcn_parallel_state_machine“ (prepoznavanje pojednostavljenog kineskog "
+#~ "kodiranja), „zhtw_parallel_state_machine“ (prepoznavanje tradicionalnog "
+#~ "kineskog kodiranja) i „universal_charset_detector“ (prepoznavanje većine "
+#~ "kodiranja)."
+
+#~ msgid "Use own colors"
+#~ msgstr "Koristi izabrane boje"
+
+#~ msgid "Use own fonts"
+#~ msgstr "Koristi izabrane fontove"
+
+# Da li je ovo mozda "jezicke"?
+#~ msgid "Use tabs"
+#~ msgstr "Koristi listove"
+
+#~ msgid "Use your own colors instead of the colors the page requests."
+#~ msgstr ""
+#~ "Koristi boje koje ste vi izabrali umesto boja koje stranica zahteva."
+
+#~ msgid "Use your own fonts instead of the fonts the page requests."
+#~ msgstr ""
+#~ "Koristi fontove koje ste vi izabrali umesto fontove koje zahteva stranica."
+
+#~ msgid ""
+#~ "Where to accept cookies from. Possible values are \"anywhere\", \"current "
+#~ "site\" and \"nowhere\"."
+#~ msgstr ""
+#~ "Odakle da prihvata kolačiće. Dozvoljene vrednosti su „anywhere“, „current "
+#~ "site“ i „nowhere“."
+
+#~ msgid "Whether to print the date in the footer"
+#~ msgstr "Štampanje datuma u podnožju"
+
+#~ msgid "Whether to print the date in the footer."
+#~ msgstr "Štampanje datuma u podnožju."
+
+#~ msgid "Whether to print the page address in the header"
+#~ msgstr "Štampanje adrese stranice u zaglavlju"
+
+#~ msgid "Whether to print the page address in the header."
+#~ msgstr "Štampanje adrese stranice u zaglavlju."
+
+#~ msgid "Whether to print the page numbers (x of total) in the footer"
+#~ msgstr "Štampanje brojeva stranica (x od ukupno) u podnožju"
+
+#~ msgid "Whether to print the page numbers (x of total) in the footer."
+#~ msgstr "Štampanje brojeva stranica (x od ukupno) u podnožju."
+
+#~ msgid "Whether to print the page title in the header"
+#~ msgstr "Štampanje naslova stranice u zaglavlju"
+
+#~ msgid "Whether to print the page title in the header."
+#~ msgstr "Štampanje naslova stranice u zaglavlju."
+
+# bug: is this a default, or what?
+#~ msgid "x-western"
+#~ msgstr "x-cyrillic"
+
+#~ msgid "  "
+#~ msgstr "  "
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "<b>Address:</b>"
+#~ msgstr "<b>Adresa:</b>"
+
+#~ msgid "<b>Status:</b>"
+#~ msgstr "<b>Stanje:</b>"
+
+#~ msgid "<b>Time Elapsed:</b>"
+#~ msgstr "<b>Proteklo vreme:</b>"
+
+#~ msgid "<b>Time Remaining:</b>"
+#~ msgstr "<b>Preostalo vreme:</b>"
+
+#~ msgid ""
+#~ "<span weight=\"bold\" size=\"larger\">What do you want to do with this "
+#~ "file?\n"
+#~ "</span>\n"
+#~ "It's not possible to view this file type directly in the browser:"
+#~ msgstr ""
+#~ "<span weight=\"bold\" size=\"larger\">Šta želite da radite sa ovom "
+#~ "datotekom?\n"
+#~ "</span>\n"
+#~ "Ova vrsta datoteka se ne može neposredno pregledati u čitaču."
+
+#~ msgid "C_ase sensitive"
+#~ msgstr "Veličin_a slova je bitna"
+
+#~ msgid "Choose the file type action"
+#~ msgstr "Izaberi dejstvo za vrstu datoteka"
+
+#~ msgid "Cookies"
+#~ msgstr "Kolačići"
+
+#~ msgid "DYNAMIC"
+#~ msgstr "DINAMIČKI"
+
+#~ msgid "Download Manager"
+#~ msgstr "Preuzimanje"
+
+#~ msgid "Download _Details"
+#~ msgstr "_Detalji preuzimanja..."
+
+#~ msgid "Find"
+#~ msgstr "Pronađi"
+
+#~ msgid "Passwords"
+#~ msgstr "Lozinke"
+
+#~ msgid "Personal Data Manager"
+#~ msgstr "Upravljanje ličnim podacima"
+
+#~ msgid "You can open it with another application or save it on disk."
+#~ msgstr ""
+#~ "Možete je otvoriti pomoću nekog drugog programa ili je snimiti na disk."
+
+#~ msgid "_Find:"
+#~ msgstr "_Pronađi:"
+
+#~ msgid "_Next"
+#~ msgstr "_Sledeći"
+
+#~ msgid "_Pause"
+#~ msgstr "_Zaustavi"
+
+#~ msgid "_Previous"
+#~ msgstr "_Prethodni"
+
+#~ msgid "_Wrap around"
+#~ msgstr "Idi u _krug"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Cache</b>"
+#~ msgstr "<b>Privremeni smeštaj</b>"
+
+#~ msgid "<b>Colors</b>"
+#~ msgstr "<b>Boje</b>"
+
+#~ msgid "<b>Cookies</b>"
+#~ msgstr "<b>Kolačići</b>"
+
+#~ msgid "<b>Encodings</b>"
+#~ msgstr "<b>Kodiranja</b>"
+
+#~ msgid "<b>Fonts</b>"
+#~ msgstr "<b>Fontovi</b>"
+
+#~ msgid "<b>Home page</b>"
+#~ msgstr "<b>Početna stranica</b>"
+
+#~ msgid "<b>Languages</b>"
+#~ msgstr "<b>Jezici</b>"
+
+#~ msgid "<b>Tabs</b>"
+#~ msgstr "<b>Listovi</b>"
+
+#~ msgid "<b>Web Content</b>"
+#~ msgstr "<b>Sadržaj veba</b>"
+
+#~ msgid "Al_ways use the desktop theme colors"
+#~ msgstr "Uvek koristi boje iz teme _radne površine"
+
+#~ msgid "Allow _popup windows"
+#~ msgstr "Dozvoli i_skačuće prozore"
+
+#~ msgid "Always use _these fonts"
+#~ msgstr "Uvek koristi ove _fontove"
+
+#~ msgid "Autodetec_t:"
+#~ msgstr "Sam _prepoznaj:"
+
+#~ msgid "Cl_ear Cache"
+#~ msgstr "Očisti odvojeni prostor na _disku"
+
+#~ msgid "Enable Java_Script"
+#~ msgstr "Uključi Java_Skript"
+
+#~ msgid "Enable _Java"
+#~ msgstr "Uključi _Javu"
+
+#~ msgid "Fonts and Colors"
+#~ msgstr "Fontovi i boje"
+
+#~ msgid "General"
+#~ msgstr "Opšte"
+
+#~ msgid "Language"
+#~ msgstr "Jezik"
+
+#~ msgid "Language Editor"
+#~ msgstr "Uređivač jezika"
+
+#~ msgid "MB"
+#~ msgstr "MB"
+
+#~ msgid "Min_imum font size:"
+#~ msgstr "Naj_manja veličina fonta:"
+
+#~ msgid "Mo_re..."
+#~ msgstr "_Dalje..."
+
+#~ msgid "Only _from sites you visit"
+#~ msgstr "Samo sa str_anica koje posećujete"
+
+#~ msgid "Open in _tabs by default"
+#~ msgstr "Podrazumevaj otvaranje u _listovima"
+
+#~ msgid "Preferences"
+#~ msgstr "Postavke"
+
+#~ msgid "Privacy"
+#~ msgstr "Privatnost"
+
+#~ msgid "S_ans serif:"
+#~ msgstr "_Bezserifni:"
+
+#~ msgid "Sans Serif"
+#~ msgstr "Bezserifni"
+
+#~ msgid "Serif"
+#~ msgstr "Serifni"
+
+#~ msgid "Set to Current _Page"
+#~ msgstr "Postavi na _tekuću stranicu"
+
+#~ msgid "Set to _Blank Page"
+#~ msgstr "Postavi na _praznu stranicu"
+
+#~ msgid "Si_ze:"
+#~ msgstr "Ve_ličina:"
+
+#~ msgid "Siz_e:"
+#~ msgstr "Veli_čina:"
+
+#~ msgid "_Address:"
+#~ msgstr "_Adresa:"
+
+#~ msgid "_Always accept"
+#~ msgstr "_Uvek prihvati"
+
+#~ msgid "_Default:"
+#~ msgstr "_Uobičajeno:"
+
+#~ msgid "_Language encoding:"
+#~ msgstr "_Zapis jezika:"
+
+#~ msgid "_Language:"
+#~ msgstr "_Jezik:"
+
+#~ msgid "_Monospace:"
+#~ msgstr "_Utvrđene širine:"
+
+#~ msgid "_Never accept"
+#~ msgstr "_Nikad ne prihvataj"
+
+#~ msgid "_Serif:"
+#~ msgstr "_Serifno:"
+
+#~ msgid "<b>Footers</b>"
+#~ msgstr "<b>Podnožje</b>"
+
+#~ msgid "<b>Headers</b>"
+#~ msgstr "<b>Zaglavlje</b>"
+
+#~ msgid "<b>Margins (in mm)</b>"
+#~ msgstr "<b>Margine (u mm)</b>"
+
+#~ msgid "<b>Orientation</b>"
+#~ msgstr "<b>Orijentacija</b>"
+
+#~ msgid "<b>Page Range</b>"
+#~ msgstr "<b>Opseg stranica</b>"
+
+#~ msgid "<b>Print To</b>"
+#~ msgstr "<b>Štampaj na</b>"
+
+#~ msgid "<b>Size</b>"
+#~ msgstr "<b>Veličina</b>"
+
+#~ msgid "A_4"
+#~ msgstr "A_4"
+
+#~ msgid "Appearance"
+#~ msgstr "Izgled"
+
+#~ msgid "C_olor"
+#~ msgstr "_Boja"
+
+#~ msgid "Choose a file to print to"
+#~ msgstr "Izaberite datoteku u koju štampati"
+
+#~ msgid "E_xecutive"
+#~ msgstr "E_gzekjutiv"
+
+#~ msgid "L_egal"
+#~ msgstr "L_egal"
+
+#~ msgid "Lan_dscape"
+#~ msgstr "_Popreko"
+
+#~ msgid "P_age title"
+#~ msgstr "Naslov _stranice"
+
+# Mozda ipak "Portret"?
+#~ msgid "P_ortrait"
+#~ msgstr "_Uzduž"
+
+#~ msgid "P_rinter:"
+#~ msgstr "_Štampač:"
+
+#~ msgid "Pa_ges"
+#~ msgstr "S_tranice"
+
+#~ msgid "Page _numbers"
+#~ msgstr "_Brojevi stranica"
+
+#~ msgid "Page a_ddress"
+#~ msgstr "A_dresa stranice"
+
+#~ msgid "Paper"
+#~ msgstr "Papir"
+
+#~ msgid "Print"
+#~ msgstr "Štampaj"
+
+#~ msgid "_All pages"
+#~ msgstr "_Sve stranice"
+
+#~ msgid "_Bottom:"
+#~ msgstr "_Dno:"
+
+#~ msgid "_Date"
+#~ msgstr "_Datum"
+
+#~ msgid "_File:"
+#~ msgstr "_Datoteka:"
+
+#~ msgid "_Grayscale"
+#~ msgstr "_Sive nijanse"
+
+#~ msgid "_Left:"
+#~ msgstr "_Levo:"
+
+#~ msgid "_Letter"
+#~ msgstr "_Leter"
+
+#~ msgid "_Right:"
+#~ msgstr "_Desno:"
+
+#~ msgid "_Selection"
+#~ msgstr "_Izbor"
+
+#~ msgid "_Top:"
+#~ msgstr "_Vrh:"
+
+#~ msgid "_to:"
+#~ msgstr "_do:"
+
+#~ msgid "fr_om:"
+#~ msgstr "_od:"
+
+# bug: is this a command name, or what?
+#~ msgid "lpr"
+#~ msgstr "lpr"
+
+#~ msgid "Add Bookmark for Frame"
+#~ msgstr "Dodaj obeleživač za okvir"
+
+#~ msgid "Copy Email Address"
+#~ msgstr "Umnoži e-poštansku adresu"
+
+#~ msgid "Copy Image Address"
+#~ msgstr "Umnoži adresu slike"
+
+#~ msgid "Copy Link Address"
+#~ msgstr "Umnoži adresu veze"
+
+#~ msgid "Copy Page Address"
+#~ msgstr "Umnoži adresu stranice"
+
+#~ msgid "Copy the Selection"
+#~ msgstr "Umnoži izabrano"
+
+#~ msgid "Cut the Selection"
+#~ msgstr "Iseci izabrano"
+
+#~ msgid "Download Link"
+#~ msgstr "Preuzmi vezu"
+
+#~ msgid "First"
+#~ msgstr "Prvo"
+
+#~ msgid "Last"
+#~ msgstr "Poslednje"
+
+#~ msgid "Next"
+#~ msgstr "Sledeće"
+
+#~ msgid "Open Frame"
+#~ msgstr "Otvori okvir"
+
+#~ msgid "Open Frame in New Window"
+#~ msgstr "Otvori okvir u novom prozoru"
+
+#~ msgid "Open Image"
+#~ msgstr "Otvori sliku"
+
+#~ msgid "Open Image in New Window"
+#~ msgstr "Otvori sliku u novom prozoru"
+
+#~ msgid "Open in New Window"
+#~ msgstr "Otvori u novom prozoru"
+
+#~ msgid "Paste the Clipboard"
+#~ msgstr "Ubaci iz spiska isečaka"
+
+#~ msgid "Previous"
+#~ msgstr "Prethodno"
+
+#~ msgid "Print the Current File"
+#~ msgstr "Štampaj tekuću datoteku"
+
+#~ msgid "Save Background As..."
+#~ msgstr "Snimi pozadinu kao..."
+
+#~ msgid "Save Image As..."
+#~ msgstr "Snimi sliku kao..."
+
+#~ msgid "Save Page As..."
+#~ msgstr "Snimi stranicu kao..."
+
+#~ msgid "Search for a String"
+#~ msgstr "Pronađi tekst"
+
+#~ msgid "Select the Entire Document"
+#~ msgstr "Izaberi ceo dokument"
+
+#~ msgid "Use Image As Background"
+#~ msgstr "Upotrebi sliku za pozadinu"
+
+#~ msgid "_Edit"
+#~ msgstr "_Uredi"
+
+#~ msgid "_File"
+#~ msgstr "_Datoteka"
+
+#~ msgid "_Find..."
+#~ msgstr "_Pronađi..."
+
+#~ msgid "_Print..."
+#~ msgstr "_Štampaj..."
+
+#~ msgid "%u:%02u.%02u"
+#~ msgstr "%u:%02u:%02u"
+
+#~ msgid "%02u.%02u"
+#~ msgstr "%02u:%02u"
+
+#~ msgid "_Resume"
+#~ msgstr "_Nastavi"
+
+#~ msgid "%.1f of %.1f MB"
+#~ msgstr "%.1f od %.1f MB"
+
+#~ msgid "%d of %d KB"
+#~ msgstr "%d od %d KB"
+
+#~ msgid "%d KB"
+#~ msgstr "%d KB"
+
+#~ msgid "%s at %.1f KB/s"
+#~ msgstr "%s na %.1f KB/s"
+
+#~ msgid "00.00"
+#~ msgstr "00.00"
+
+#~ msgid "Filename"
+#~ msgstr "Ime datoteke"
+
+#~ msgid "Size"
+#~ msgstr "Veličina"
+
+#~ msgid "Remaining"
+#~ msgstr "Preostalo"
+
+#~ msgid "Cancel all pending downloads?"
+#~ msgstr "Otkaži svako zakazano preuzimanje?"
+
+#~ msgid "Save Image As"
+#~ msgstr "Snimi sliku kao"
+
+#~ msgid "Save Page As"
+#~ msgstr "Snimi stranicu kao"
+
+#~ msgid "Save Background As"
+#~ msgstr "Snimi pozadinu kao"
+
+#~ msgid "The file has not been saved."
+#~ msgstr "Ova datoteka nije sačuvana."
+
+#~ msgid "No available applications to open the specified file."
+#~ msgstr "Ne postoje programi za otvaranje navedene datoteke."
+
+#~ msgid "All"
+#~ msgstr "Sve"
+
+#~ msgid "Others"
+#~ msgstr "Ostali"
+
+#~ msgid "Local files"
+#~ msgstr "Lokalne datoteke"
+
+#~ msgid "Select the destination filename"
+#~ msgstr "Izaberi ciljno ime datoteke"
+
+#~ msgid ""
+#~ "Epiphany cannot handle this protocol,\n"
+#~ "and no GNOME default handler is set"
+#~ msgstr ""
+#~ "Spoznaja ne može da barata ovim protokolom,\n"
+#~ "niti je u Gnomu postavljen način njegove upotrebe"
+
+#~ msgid ""
+#~ "The protocol specified is not recognised.\n"
+#~ "\n"
+#~ "Would you like to try the GNOME default?"
+#~ msgstr ""
+#~ "Navedeni protokol nije prepoznat.\n"
+#~ "\n"
+#~ "Želite li da probate uobičajeni Gnom protokol?"
+
+#~ msgid "The specified path does not exist."
+#~ msgstr "Navedena putanja ne postoji."
+
+#~ msgid "A file was selected when a folder was expected."
+#~ msgstr "Izabrana je datoteka, a očekivan je direktorijum."
+
+#~ msgid "A folder was selected when a file was expected."
+#~ msgstr "Izabran je direktorijum, a očekivana je datoteka."
+
+#~ msgid "_Arabic"
+#~ msgstr "_Arapski"
+
+#~ msgid "_Baltic"
+#~ msgstr "_Baltički"
+
+#~ msgid "Central _European"
+#~ msgstr "Centralno_evropski"
+
+#~ msgid "Chi_nese"
+#~ msgstr "Ki_neski"
+
+#~ msgid "_Cyrillic"
+#~ msgstr "_Ćirilica"
+
+#~ msgid "_Greek"
+#~ msgstr "_Grčki"
+
+# ili je "Hebrejski"?
+#~ msgid "_Hebrew"
+#~ msgstr "_Jevrejski"
+
+#~ msgid "_Indian"
+#~ msgstr "_Indijanski"
+
+#~ msgid "_Japanese"
+#~ msgstr "_Japanski"
+
+#~ msgid "_Korean"
+#~ msgstr "_Korejski"
+
+#~ msgid "_Turkish"
+#~ msgstr "_Turski"
+
+#~ msgid "_Unicode"
+#~ msgstr "_Unikod"
+
+#~ msgid "_Vietnamese"
+#~ msgstr "_Vijetnamski"
+
+#~ msgid "_Western"
+#~ msgstr "_Zapadni"
+
+#~ msgid "_Other"
+#~ msgstr "_Ostali"
+
+#~ msgid "Arabic (_IBM-864)"
+#~ msgstr "Arapski (_IBM-864)"
+
+#~ msgid "Arabic (ISO-_8859-6)"
+#~ msgstr "Arapski (ISO-_8859-6)"
+
+#~ msgid "Arabic (_MacArabic)"
+#~ msgstr "Arapski (_MacArabic)"
+
+#~ msgid "Arabic (_Windows-1256)"
+#~ msgstr "Arapski (_Windows-1256)"
+
+#~ msgid "Baltic (_ISO-8859-13)"
+#~ msgstr "Baltički (_ISO-8859-13)"
+
+#~ msgid "Baltic (I_SO-8859-4)"
+#~ msgstr "Baltički (I_SO-8859-4)"
+
+#~ msgid "Baltic (_Windows-1257)"
+#~ msgstr "Baltički (_Windows-1257)"
+
+#~ msgid "Central European (_IBM-852)"
+#~ msgstr "Centralnoevropski (_IBM-852)"
+
+#~ msgid "Central European (I_SO-8859-2)"
+#~ msgstr "Centralnoevropski (I_SO-8859-2)"
+
+#~ msgid "Central European (_MacCE)"
+#~ msgstr "Centralnoevropski (_MacCE)"
+
+#~ msgid "Central European (_Windows-1250)"
+#~ msgstr "Centralnoevropski (_Windows-1250)"
+
+#~ msgid "Croatian (Mac_Croatian)"
+#~ msgstr "Hrvatski (Mac_Croatian)"
+
+#~ msgid "Chinese Simplified (_GB18030)"
+#~ msgstr "Kineski pojednostavljeni (_GB18030)"
+
+#~ msgid "Chinese Simplified (G_B2312)"
+#~ msgstr "Kineski pojednostavljeni (G_B2312)"
+
+#~ msgid "Chinese Simplified (GB_K)"
+#~ msgstr "Kineski pojednostavljeni (GB_K)"
+
+#~ msgid "Chinese Simplified (_HZ)"
+#~ msgstr "Kineski pojednostavljeni (_HZ)"
+
+#~ msgid "Chinese Simplified (_ISO-2022-CN)"
+#~ msgstr "Kineski pojednostavljeni (_ISO-2022-CN)"
+
+#~ msgid "Chinese Traditional (Big_5)"
+#~ msgstr "Kineski Tradicionalni (Big_5)"
+
+#~ msgid "Chinese Traditional (Big5-HK_SCS)"
+#~ msgstr "Kineski Tradicionalni (Big5-HK_SCS)"
+
+#~ msgid "Chinese Traditional (_EUC-TW)"
+#~ msgstr "Kineski Tradicionalni (_EUC-TW)"
+
+#~ msgid "Cyrillic (_IBM-855)"
+#~ msgstr "Ćirilica (_IBM-855)"
+
+#~ msgid "Cyrillic (I_SO-8859-5)"
+#~ msgstr "Ćirilica (I_SO-8859-5)"
+
+#~ msgid "Cyrillic (IS_O-IR-111)"
+#~ msgstr "Ćirilica (IS_O-IR-111)"
+
+#~ msgid "Cyrillic (_KOI8-R)"
+#~ msgstr "Ćirilica (_KOI8-R)"
+
+#~ msgid "Cyrillic (_MacCyrillic)"
+#~ msgstr "Ćirilica (_MacCyrillic)"
+
+#~ msgid "Cyrillic (_Windows-1251)"
+#~ msgstr "Ćirilica (_Windows-1251)"
+
+#~ msgid "Cyrillic/Russian (_CP-866)"
+#~ msgstr "Ćirilica/Ruski (_CP-866)"
+
+#~ msgid "Cyrillic/Ukrainian (_KOI8-U)"
+#~ msgstr "Ćirilica/Ukrajinski (_KOI8-U)"
+
+#~ msgid "Cyrillic/Ukrainian (Mac_Ukrainian)"
+#~ msgstr "Ćirilica/Ukrajinski (Mac_Ukrainian)"
+
+#~ msgid "Greek (_ISO-8859-7)"
+#~ msgstr "Grčki (_ISO-8859-7)"
+
+#~ msgid "Greek (_MacGreek)"
+#~ msgstr "Grčki (_MacGreek)"
+
+#~ msgid "Greek (_Windows-1253)"
+#~ msgstr "Grčki (_Windows-1253)"
+
+#~ msgid "Gujarati (_MacGujarati)"
+#~ msgstr "Gudžarati (_MacGujarati)"
+
+#~ msgid "Gurmukhi (Mac_Gurmukhi)"
+#~ msgstr "Gurmuki (Mac_Gurmukhi)"
+
+#~ msgid "Hindi (Mac_Devanagari)"
+#~ msgstr "Hindu (Mac_Devanagari)"
+
+#~ msgid "Hebrew (_IBM-862)"
+#~ msgstr "Hebrejski (_IBM-862)"
+
+#~ msgid "Hebrew (IS_O-8859-8-I)"
+#~ msgstr "Hebrejski (IS_O-8859-8-I)"
+
+#~ msgid "Hebrew (_MacHebrew)"
+#~ msgstr "Hebrejski (_MacHebrew)"
+
+#~ msgid "Hebrew (_Windows-1255)"
+#~ msgstr "Hebrejski (_Windows-1255)"
+
+#~ msgid "_Visual Hebrew (ISO-8859-8)"
+#~ msgstr "_Vizuelni Hebrejski (ISO-8859-8)"
+
+#~ msgid "Japanese (_EUC-JP)"
+#~ msgstr "Japanski (_EUC-JP)"
+
+#~ msgid "Japanese (_ISO-2022-JP)"
+#~ msgstr "Japanski (_ISO-2022-JP)"
+
+#~ msgid "Japanese (_Shift-JIS)"
+#~ msgstr "Japanski (_Shift_JIS)"
+
+#~ msgid "Korean (_EUC-KR)"
+#~ msgstr "Korejski (_EUC-KR)"
+
+#~ msgid "Korean (_ISO-2022-KR)"
+#~ msgstr "Korejski (_ISO-2022-KR)"
+
+#~ msgid "Korean (_JOHAB)"
+#~ msgstr "Korejski (_JOHAB)"
+
+#~ msgid "Korean (_UHC)"
+#~ msgstr "Korsejski (_UHC)"
+
+#~ msgid "Turkish (_IBM-857)"
+#~ msgstr "Turski (_IBM-857)"
+
+#~ msgid "Turkish (I_SO-8859-9)"
+#~ msgstr "Turski (I_SO-8859-9)"
+
+#~ msgid "Turkish (_MacTurkish)"
+#~ msgstr "Turski (_MacTurkish)"
+
+#~ msgid "Turkish (_Windows-1254)"
+#~ msgstr "Turski (_Windows-1254)"
+
+#~ msgid "Unicode (UTF-_7)"
+#~ msgstr "Unikod (UTF-_7)"
+
+#~ msgid "Unicode (UTF-_8)"
+#~ msgstr "Unikod (UTF-_8)"
+
+#~ msgid "Vietnamese (_TCVN)"
+#~ msgstr "Vijetnamski (_TCVN)"
+
+#~ msgid "Vietnamese (_VISCII)"
+#~ msgstr "Vijetnamski (_VISCII)"
+
+#~ msgid "Vietnamese (V_PS)"
+#~ msgstr "Vijetnamski (V_PS)"
+
+#~ msgid "Vietnamese (_Windows-1258)"
+#~ msgstr "Vijetnamski (_Windows-1258)"
+
+#~ msgid "Western (_IBM-850)"
+#~ msgstr "Zapadni (_IBM-850)"
+
+#~ msgid "Western (I_SO-8859-1)"
+#~ msgstr "Zapadni (I_SO-8859-1)"
+
+#~ msgid "Western (IS_O-8859-15)"
+#~ msgstr "Zapadni (IS_O-8859-15)"
+
+#~ msgid "Western (_MacRoman)"
+#~ msgstr "Zapadni (_MacRoman)"
+
+#~ msgid "Western (_Windows-1252)"
+#~ msgstr "Zapadni (_Windows-1252)"
+
+#~ msgid "_Armenian (ARMSCII-8)"
+#~ msgstr "_Jermenski (ARMSCII-8)"
+
+#~ msgid "_Celtic (ISO-8859-14)"
+#~ msgstr "_Keltski (ISO-8859-14)"
+
+#~ msgid "_Farsi (MacFarsi)"
+#~ msgstr "_Farsi (MacFarsi)"
+
+#~ msgid "_Georgian (GEOSTD8)"
+#~ msgstr "_Gruzijski (GEOSTD8)"
+
+#~ msgid "_Icelandic (MacIcelandic)"
+#~ msgstr "_Islandski (MacIcelandic)"
+
+#~ msgid "_Nordic (ISO-8859-10)"
+#~ msgstr "_Nordijski (ISO-8859-10)"
+
+#~ msgid "_Romanian (MacRomanian)"
+#~ msgstr "_Rumunski (MacRomanian)"
+
+#~ msgid "R_omanian (ISO-8859-16)"
+#~ msgstr "R_umunski (ISO-8859-16)"
+
+#~ msgid "South _European (ISO-8859-3)"
+#~ msgstr "Južno_evropski (ISO-8859-3)"
+
+#~ msgid "Thai (TIS-_620)"
+#~ msgstr "Tajlandski (TIS-_620)"
+
+#~ msgid "Thai (IS_O-8859-11)"
+#~ msgstr "Tajlandski (IS_O-8859-11)"
+
+#~ msgid "_Thai (Windows-874)"
+#~ msgstr "_Tajlandski (Windows-874)"
+
+#~ msgid "_User Defined"
+#~ msgstr "_Korisnik izabrao"
+
+#~ msgid "Yes"
+#~ msgstr "Da"
+
+#~ msgid "No"
+#~ msgstr "Ne"
+
+#~ msgid "End of current session"
+#~ msgstr "Kraj tekuće sesije"
+
+#~ msgid "system-language"
+#~ msgstr "sr-yu,sr"
+
+#~ msgid ""
+#~ "GConf error:\n"
+#~ "  %s"
+#~ msgstr ""
+#~ "GKonf greška:\n"
+#~ "  %s"
+
+#~ msgid "Separator"
+#~ msgstr "Razdvojnik"
+
+#~ msgid ""
+#~ "Drag an item onto the toolbars above to add it, from the toolbars in the "
+#~ "items table to remove it."
+#~ msgstr ""
+#~ "Prevucite stavku među alatke da je dodate, a odvucite je da je uklonite."
+
+#~ msgid "Failed to find %s"
+#~ msgstr "Ne može da pronađe %s"
+
+#~ msgid "%s exists, please move it out of the way."
+#~ msgstr "%s već postoji, uklonite ga."
+
+#~ msgid "Failed to create directory %s."
+#~ msgstr "Ne može da napravi direktorijum %s."
+
+#~ msgid ""
+#~ "File %s will be overwritten.\n"
+#~ "If you choose yes, the contents will be lost.\n"
+#~ "\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Datoteka %s će biti prepisana.\n"
+#~ "Ukoliko izaberete „da“, sav sadržaj će biti izgubljen.\n"
+#~ "\n"
+#~ "Želite li da nastavite?"
+
+#~ msgid "Could not display help: %s"
+#~ msgstr "Ne može da prikaže pomoć: %s"
+
+#~ msgid "Arabic"
+#~ msgstr "Arapski"
+
+#~ msgid "Baltic"
+#~ msgstr "Baltički"
+
+#~ msgid "Central European"
+#~ msgstr "Centralnoevropski"
+
+#~ msgid "Cyrillic"
+#~ msgstr "Ćirilica"
+
+#~ msgid "Devanagari"
+#~ msgstr "Devanagari"
+
+#~ msgid "Greek"
+#~ msgstr "Grčki"
+
+# ili je "Hebrejski"?
+#~ msgid "Hebrew"
+#~ msgstr "Jevrejski"
+
+#~ msgid "Japanese"
+#~ msgstr "Japanski"
+
+#~ msgid "Korean"
+#~ msgstr "Korejski"
+
+#~ msgid "Simplified Chinese"
+#~ msgstr "Pojednostaljeni kineski"
+
+#~ msgid "Tamil"
+#~ msgstr "Tamil"
+
+#~ msgid "Thai"
+#~ msgstr "Tajlandski"
+
+#~ msgid "Traditional Chinese"
+#~ msgstr "Tradicionalni kineski"
+
+#~ msgid "Turkish"
+#~ msgstr "Turski"
+
+#~ msgid "Unicode"
+#~ msgstr "Unikod"
+
+#~ msgid "Western"
+#~ msgstr "Zapadni"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "75%"
+#~ msgstr "75%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "125%"
+#~ msgstr "125%"
+
+#~ msgid "150%"
+#~ msgstr "150%"
+
+#~ msgid "175%"
+#~ msgstr "175%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "_Zoom"
+#~ msgstr "U_većaj"
+
+#~ msgid "%s:"
+#~ msgstr "%s:"
+
+#~ msgid "%s Properties"
+#~ msgstr "Osobine „%s“"
+
+#~ msgid "_Title:"
+#~ msgstr "_Naslov:"
+
+#~ msgid "To_pics:"
+#~ msgstr "_Teme:"
+
+#~ msgid "_Show in bookmarks bar"
+#~ msgstr "_Prikaži u liniji sa obeleživačima"
+
+#~ msgid "_View"
+#~ msgstr "_Pregled"
+
+#~ msgid "_Help"
+#~ msgstr "_Pomoć"
+
+#~ msgid "_New Topic"
+#~ msgstr "_Nova tema"
+
+#~ msgid "Create a new topic"
+#~ msgstr "Napravi novu temu"
+
+#~ msgid "_Open in New Window"
+#~ msgstr "_Otvori u novom prozoru"
+
+#~ msgid "Open the selected bookmark in a new window"
+#~ msgstr "Otvori izabrani obeleživač u novom prozoru"
+
+#~ msgid "Open in New _Tab"
+#~ msgstr "Otvoru u novom _listu"
+
+#~ msgid "Open the selected bookmark in a new tab"
+#~ msgstr "Otvori izabrani obeleživač u novom listu"
+
+#~ msgid "_Rename..."
+#~ msgstr "_Preimenuj..."
+
+#~ msgid "Rename the selected bookmark or topic"
+#~ msgstr "Preimenuj izabrani obeleživač ili temu"
+
+#~ msgid "_Delete"
+#~ msgstr "_Obriši"
+
+#~ msgid "Delete the selected bookmark or topic"
+#~ msgstr "Ukloni izabrani obeleživač ili temu"
+
+#~ msgid "_Show in Bookmarks Bar"
+#~ msgstr "_Prikaži u liniji sa obeleživačima"
+
+#~ msgid "Show the selected bookmark or topic in the bookmarks bar"
+#~ msgstr "Prikaži izabrani obeleživač ili temu u liniji sa obeleživačima"
+
+#~ msgid "_Properties"
+#~ msgstr "Osob_ine"
+
+#~ msgid "View or modify the properties of the selected bookmark"
+#~ msgstr "Pregledajte ili izmenite osobine izabranog obeleživača"
+
+#~ msgid "_Import Bookmarks..."
+#~ msgstr "U_vezite obeleživače..."
+
+#~ msgid "Import bookmarks from another browser or a bookmarks file"
+#~ msgstr ""
+#~ "Uvezite obeleživače iz nekog drugog veb čitača ili iz datoteke sa "
+#~ "obeleživačima"
+
+#~ msgid "_Close"
+#~ msgstr "_Zatvori"
+
+#~ msgid "Close the bookmarks window"
+#~ msgstr "Zatvori prozor sa obeleživačima"
+
+#~ msgid "Cu_t"
+#~ msgstr "I_seci"
+
+#~ msgid "Cut the selection"
+#~ msgstr "Iseci izabrano"
+
+#~ msgid "_Copy"
+#~ msgstr "_Umnoži"
+
+#~ msgid "Copy the selection"
+#~ msgstr "Umnoži izabrano"
+
+#~ msgid "_Paste"
+#~ msgstr "U_baci"
+
+#~ msgid "Paste the clipboard"
+#~ msgstr "Ubaci iz spiska isečaka"
+
+#~ msgid "Select _All"
+#~ msgstr "Izaberi _sve"
+
+#~ msgid "Select all bookmarks or text"
+#~ msgstr "Izaberi sve obeleživače ili sav tekst"
+
+#~ msgid "_Title"
+#~ msgstr "_Naslov"
+
+#~ msgid "Show only the title column"
+#~ msgstr "Prikaži samo naslovnu kolonu"
+
+#~ msgid "_Address"
+#~ msgstr "_Adresa"
+
+#~ msgid "Show only the address column"
+#~ msgstr "Prikaži samo kolonu sa adresom"
+
+#~ msgid "T_itle and Address"
+#~ msgstr "Nas_lov i adresa"
+
+#~ msgid "Show both the title and address columns"
+#~ msgstr "Prikaži kolone i za naslov i za adresu"
+
+#~ msgid "_Contents"
+#~ msgstr "_Sadržaj"
+
+#~ msgid "Display bookmarks help"
+#~ msgstr "Prikaži pomoć za obeleživače"
+
+#~ msgid "_About"
+#~ msgstr "_O programu"
+
+#~ msgid "Display credits for the web browser creators"
+#~ msgstr "Prikaži zasluge za tvorce ovog veb čitača"
+
+#~ msgid "Type a topic"
+#~ msgstr "Unesi temu"
+
+#~ msgid "Import Bookmarks"
+#~ msgstr "Uvezi obeleživače"
+
+#~ msgid "Choose the bookmarks source:"
+#~ msgstr "Izaberite izvor obeleživača:"
+
+#~ msgid "Mozilla bookmarks"
+#~ msgstr "Mozilini obeleživači"
+
+#~ msgid "Galeon bookmarks"
+#~ msgstr "Galeonovi obeleživači"
+
+#~ msgid "Konqueror bookmarks"
+#~ msgstr "Konkverorovi obeleživači"
+
+#~ msgid "_Open in New Windows"
+#~ msgstr "_Otvori u novim prozorima"
+
+#~ msgid "Open in New _Tabs"
+#~ msgstr "Otvori u novim _listovima"
+
+#~ msgid "_Copy Address"
+#~ msgstr "_Umnoži adresu"
+
+#~ msgid "_Search:"
+#~ msgstr "_Pretraga:"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Obeleživači"
+
+#~ msgid "Topics"
+#~ msgstr "Teme"
+
+#~ msgid "Title"
+#~ msgstr "Naslov"
+
+#~ msgid "Empty"
+#~ msgstr "Prazno"
+
+#~ msgid "Search the web"
+#~ msgstr "Pretraži veb"
+
+#~ msgid "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+#~ msgstr "http://www.google.com/search?q=%s&ie=UTF-8&oe=UTF-8"
+
+#~ msgid "Entertainment"
+#~ msgstr "Zabava"
+
+#~ msgid "News"
+#~ msgstr "Vesti"
+
+#~ msgid "Shopping"
+#~ msgstr "Kupovina"
+
+#~ msgid "Sports"
+#~ msgstr "Sport"
+
+#~ msgid "Travel"
+#~ msgstr "Putovanja"
+
+#~ msgid "Work"
+#~ msgstr "Posao"
+
+#~ msgid "Most Visited"
+#~ msgstr "Najposećenije"
+
+#~ msgid "Not Categorized"
+#~ msgstr "Nerazvrstano"
+
+#~ msgid "New Bookmark"
+#~ msgstr "Nov obeleživač"
+
+#~ msgid "Duplicated Bookmark"
+#~ msgstr "Ponovljeni obeleživač"
+
+#~ msgid "A bookmark titled %s already exists for this page."
+#~ msgstr "Već postoji obeleživač sa naslovom %s za ovu stranicu."
+
+#~ msgid "Go"
+#~ msgstr "Idi"
+
+#~ msgid "Open the selected history link in a new window"
+#~ msgstr "Otvori izabranu vezu iz istorijata u novom prozoru"
+
+#~ msgid "Open the selected history link in a new tab"
+#~ msgstr "Otvori izabranu vezu iz istorijata u novom listu"
+
+#~ msgid "Delete the selected history link"
+#~ msgstr "Ukloni izabranu vezu iz istorijata"
+
+#~ msgid "Boo_kmark Link..."
+#~ msgstr "_Obeleživač za vezu..."
+
+#~ msgid "Bookmark the selected history link"
+#~ msgstr "Postavi obeleživač za izabranu vezu iz istorijata"
+
+#~ msgid "Close the history window"
+#~ msgstr "Zatvori prozor istorijata"
+
+#~ msgid "Select all history links or text"
+#~ msgstr "Izaberi sve veze iz istorijata ili sav tekst"
+
+#~ msgid "C_lear History"
+#~ msgstr "O_čisti istorijat"
+
+#~ msgid "Clear your browsing history"
+#~ msgstr "Očisti zapise o pregledu stranica"
+
+#~ msgid "Display history help"
+#~ msgstr "Prikaži pomoć za istorijat"
+
+#~ msgid "Clear history"
+#~ msgstr "Očisti istorijat"
+
+#~ msgid "C_lear"
+#~ msgstr "O_čisti"
+
+#~ msgid "Clear browsing history?"
+#~ msgstr "Očisti zapise o pregledu stranica?"
+
+#~ msgid ""
+#~ "Clearing the browsing history will cause all history links to be "
+#~ "permanently deleted."
+#~ msgstr ""
+#~ "Čišćenje zapisa o pregledu stranica će trajno ukloniti sve stavke iz "
+#~ "istorijata."
+
+#~ msgid "History"
+#~ msgstr "Istorijat"
+
+#~ msgid "Sites"
+#~ msgstr "Stranice"
+
+#~ msgid "Address"
+#~ msgstr "Adresa"
+
+#~ msgid "Open a new tab in an existing Epiphany window"
+#~ msgstr "Otvori novi list u postojećem prozoru Spoznaje"
+
+#~ msgid "Open a new window in an existing Epiphany process"
+#~ msgstr "Otvori novi prozor u postojećem procesu Spoznaje"
+
+#~ msgid ""
+#~ "Do not raise the window when opening a page in an existing Epiphany "
+#~ "process"
+#~ msgstr ""
+#~ "Ne izdiži prozor pri otvaranju stranice u postojećem procesu Spoznaje"
+
+#~ msgid "Run Epiphany in full screen mode"
+#~ msgstr "Koristi Spoznaju preko celog ekrana"
+
+#~ msgid "Attempt to load URL in existing Epiphany window"
+#~ msgstr "Pokušaj da učitaš adresu u postojećem prozoru Spoznaje"
+
+#~ msgid "Load the given session file"
+#~ msgstr "Učitaj datu datoteku sesije"
+
+#~ msgid "FILE"
+#~ msgstr "DATOTEKA"
+
+#~ msgid ""
+#~ "Don't open any windows; instead act as a server for quick startup of new "
+#~ "Epiphany instances"
+#~ msgstr ""
+#~ "Ne otvaraj prozore; umesto toga, ponašaj se kao server za brzo pokretanje "
+#~ "novih Spoznaja"
+
+#~ msgid "Add a bookmark (don't open any window)"
+#~ msgstr "Dodaj obeleživač (ne otvaraj nikakav prozor)"
+
+#~ msgid "URL"
+#~ msgstr "Adresa"
+
+#~ msgid "Close all Epiphany windows"
+#~ msgstr "Zatvori sve prozore Spoznaje"
+
+#~ msgid "Same as --close, but exits server mode too"
+#~ msgstr "Isto kao „--close“, samo što gasi i servere"
+
+#~ msgid "Used internally by the nautilus view"
+#~ msgstr "Koristi se interno za nautilus pregled"
+
+#~ msgid "Launch the bookmarks editor"
+#~ msgstr "Pokreni uređivač obeleživača"
+
+#~ msgid "Epiphany Web Browser"
+#~ msgstr "Veb čitač Spoznaja"
+
+#~ msgid "Ephy"
+#~ msgstr "Spoznaja"
+
+#~ msgid ""
+#~ "Epiphany can't be used now. Running the command \"bonobo-slay\" from the "
+#~ "console may fix the problem. If not, you can try rebooting the computer "
+#~ "or installing Epiphany again.\n"
+#~ "\n"
+#~ "Bonobo couldn't locate the GNOME_Epiphany_Automation.server."
+#~ msgstr ""
+#~ "Spoznaja se ne može koristiti. Izvršavanje naredbe „bonobo-slay“ iz "
+#~ "konzole možda može pomoći. Ukoliko ne pomogne, pokušajte da resetujete "
+#~ "računar, ili da ponovo instalirate Spoznaju.\n"
+#~ "\n"
+#~ "Bonobo ne može da pronađe GNOME_Epiphany_Automation.server."
+
+#~ msgid ""
+#~ "Epiphany can't be used now. Mozilla initialization failed. Check your "
+#~ "MOZILLA_FIVE_HOME environmental variable."
+#~ msgstr ""
+#~ "Spoznaja se sada ne može koristiti. Neuspešno pokretanje Mozile. "
+#~ "Proverite promenljivu MOYILLA_FIVE_HOME u vašem okruženju."
+
+#~ msgid "Blank page"
+#~ msgstr "Prazna stranica"
+
+#~ msgid "site"
+#~ msgstr "stranice"
+
+#~ msgid "Redirecting to %s..."
+#~ msgstr "Preusmerava na %s..."
+
+#~ msgid "Transferring data from %s..."
+#~ msgstr "Prenosi podatke sa %s..."
+
+#~ msgid "Waiting for authorization from %s..."
+#~ msgstr "Očekuje ovlašćenje od %s..."
+
+#~ msgid "Loading %s..."
+#~ msgstr "Učitava %s..."
+
+#~ msgid "Done."
+#~ msgstr "Gotovo."
+
+#~ msgid "_Bookmarks"
+#~ msgstr "O_beleživači"
+
+#~ msgid "_Go"
+#~ msgstr "_Idi"
+
+#~ msgid "_Tabs"
+#~ msgstr "_Listovi"
+
+#~ msgid "_New Window"
+#~ msgstr "_Novi prozor"
+
+#~ msgid "Open a new window"
+#~ msgstr "Otvori novi prozor"
+
+#~ msgid "New _Tab"
+#~ msgstr "Novi _list"
+
+#~ msgid "Open a new tab"
+#~ msgstr "Otvori novi list"
+
+#~ msgid "_Open..."
+#~ msgstr "_Otvori..."
+
+#~ msgid "Open a file"
+#~ msgstr "Otvori datoteku"
+
+#~ msgid "Save _As..."
+#~ msgstr "Snimi _kao..."
+
+#~ msgid "Save the current page"
+#~ msgstr "Snimi tekuću stranicu"
+
+#~ msgid "Print the current page"
+#~ msgstr "Štampaj tekuću stranicu"
+
+#~ msgid "S_end To..."
+#~ msgstr "Po_šalji na..."
+
+#~ msgid "Send a link of the current page"
+#~ msgstr "Pošalji vezu na tekuću stranicu"
+
+#~ msgid "Close this window"
+#~ msgstr "Zatvori ovaj prozor"
+
+#~ msgid "Paste clipboard"
+#~ msgstr "Ubaci iz spiska isečaka"
+
+#~ msgid "Select the entire page"
+#~ msgstr "Izaberi celu stranicu"
+
+#~ msgid "Find a word or phrase in the page"
+#~ msgstr "Nađi reč ili izraz na stranici"
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "Pronađi _sledeće"
+
+#~ msgid "Find next occurrence of the word or phrase"
+#~ msgstr "Pronađi sledeću pojavu reči ili izraza"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Pronađi _prethodno"
+
+#~ msgid "Find previous occurrence of the word or phrase"
+#~ msgstr "Pronađi prethodnu pojavu reči ili izraza"
+
+#~ msgid "P_ersonal Data"
+#~ msgstr "_Lični podaci"
+
+#~ msgid "View and remove cookies and passwords"
+#~ msgstr "Gledaj i ukloni kolačiće i lozinke"
+
+#~ msgid "T_oolbars"
+#~ msgstr "_Alatke"
+
+#~ msgid "Customize toolbars"
+#~ msgstr "Prilagodi alatke"
+
+#~ msgid "P_references"
+#~ msgstr "P_ostavke"
+
+#~ msgid "Configure the web browser"
+#~ msgstr "Podesite veb čitač"
+
+#~ msgid "_Stop"
+#~ msgstr "_Zaustavi"
+
+#~ msgid "Stop current data transfer"
+#~ msgstr "Prekini trenutni prenos podataka"
+
+#~ msgid "_Reload"
+#~ msgstr "_Osveži"
+
+#~ msgid "Display the latest content of the current page"
+#~ msgstr "Prikaži najnoviji sadržaj tekuće stranice"
+
+#~ msgid "_Toolbar"
+#~ msgstr "_Alatke"
+
+#~ msgid "Show or hide toolbar"
+#~ msgstr "Prikaži ili sakrij alatke"
+
+#~ msgid "_Bookmarks Bar"
+#~ msgstr "_Linija sa obeleživačima"
+
+#~ msgid "Show or hide bookmarks bar"
+#~ msgstr "Prikaži ili sakrij liniju sa obeleživačima"
+
+#~ msgid "St_atusbar"
+#~ msgstr "Linija sa st_anjem"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "Prikaži ili sakrij liniju stanja"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_Ceo ekran"
+
+#~ msgid "Browse at full screen"
+#~ msgstr "Čitaj preko celog ekrana"
+
+#~ msgid "Zoom _In"
+#~ msgstr "U_većaj"
+
+#~ msgid "Increase the text size"
+#~ msgstr "Uvećaj veličinu teksta"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "U_manji"
+
+#~ msgid "Decrease the text size"
+#~ msgstr "Umanji veličinu teksta"
+
+#~ msgid "_Normal Size"
+#~ msgstr "_Obična veličina"
+
+#~ msgid "Use the normal text size"
+#~ msgstr "Koristi običnu veličinu teksta"
+
+#~ msgid "_Encoding"
+#~ msgstr "_Kodiranje"
+
+#~ msgid "_Page Source"
+#~ msgstr "_Izvorno izdanje stranice"
+
+#~ msgid "View the source code of the page"
+#~ msgstr "Pogledaj izvorni kod stranice"
+
+#~ msgid "_Add Bookmark..."
+#~ msgstr "_Dodaj obeleživač..."
+
+#~ msgid "Add a bookmark for the current page"
+#~ msgstr "Dodaj obeleživač za tekuću stranicu"
+
+#~ msgid "_Edit Bookmarks"
+#~ msgstr "U_redi obeleživače"
+
+#~ msgid "Open the bookmarks window"
+#~ msgstr "Otvori prozor sa obeleživačima"
+
+#~ msgid "_Back"
+#~ msgstr "_Nazad"
+
+#~ msgid "Go to the previous visited page"
+#~ msgstr "Idi na prethodno posećenu stranicu"
+
+#~ msgid "_Forward"
+#~ msgstr "Na_pred"
+
+#~ msgid "Go to the next visited page"
+#~ msgstr "Idi na sledeće posećenu stranicu"
+
+#~ msgid "_Up"
+#~ msgstr "_Iznad"
+
+#~ msgid "Go up one level"
+#~ msgstr "Idi jedan nivo iznad"
+
+#~ msgid "_Home"
+#~ msgstr "_Početak"
+
+#~ msgid "Go to the home page"
+#~ msgstr "Idi na početnu stranicu"
+
+#~ msgid "_Location..."
+#~ msgstr "_Adresa..."
+
+#~ msgid "Go to a specified location"
+#~ msgstr "Idi na navedenu adresu"
+
+#~ msgid "H_istory"
+#~ msgstr "_Istorijat"
+
+#~ msgid "Open the history window"
+#~ msgstr "Otvori prozor istorijata"
+
+#~ msgid "_Previous Tab"
+#~ msgstr "_Prethodni list"
+
+#~ msgid "Activate previous tab"
+#~ msgstr "Aktiviraj prethodni list"
+
+#~ msgid "_Next Tab"
+#~ msgstr "_Sledeći list"
+
+#~ msgid "Activate next tab"
+#~ msgstr "Aktiviraj sledeći list"
+
+#~ msgid "Move Tab _Left"
+#~ msgstr "Prebaci list _levo"
+
+#~ msgid "Move current tab to left"
+#~ msgstr "Prebaci tekući list levo"
+
+#~ msgid "Move Tab _Right"
+#~ msgstr "Prebaci list _desno"
+
+#~ msgid "Move current tab to right"
+#~ msgstr "Prebaci tekući list desno"
+
+#~ msgid "_Detach Tab"
+#~ msgstr "_Odvoj list"
+
+#~ msgid "Detach current tab"
+#~ msgstr "Odvoj tekući list"
+
+#~ msgid "Display web browser help"
+#~ msgstr "Prikaži pomoć za veb čitač"
+
+#~ msgid "_Save Background As..."
+#~ msgstr "_Snimi pozadinu kao..."
+
+#~ msgid "Add Boo_kmark..."
+#~ msgstr "Dodaj obele_živač..."
+
+#~ msgid "_Open Frame"
+#~ msgstr "_Otvori okvir"
+
+#~ msgid "Open Frame in _New Window"
+#~ msgstr "Otvori okvir u _novom prozoru"
+
+#~ msgid "Open Frame in New _Tab"
+#~ msgstr "Otvori okvir u novom _listu"
+
+#~ msgid "_Open Link"
+#~ msgstr "_Otvoru vezu"
+
+#~ msgid "Open Link in _New Window"
+#~ msgstr "Otvori vezu u _novom prozoru"
+
+#~ msgid "Open Link in New _Tab"
+#~ msgstr "Otvori vezu u novom _listu"
+
+#~ msgid "_Download Link..."
+#~ msgstr "_Preuzmi vezu..."
+
+#~ msgid "_Bookmark Link..."
+#~ msgstr "_Obeleži vezu..."
+
+#~ msgid "_Copy Link Address"
+#~ msgstr "_Umnoži adresu veze"
+
+#~ msgid "Open _Image"
+#~ msgstr "Otvori _sliku"
+
+#~ msgid "Open Image in New _Window"
+#~ msgstr "Otvori sliku u novom _prozoru"
+
+#~ msgid "Open Image in New T_ab"
+#~ msgstr "Otvori sliku u novom _listu"
+
+#~ msgid "_Save Image As..."
+#~ msgstr "_Sačuvaj sliku kao..."
+
+#~ msgid "_Use Image As Background"
+#~ msgstr "Upo_trebi sliku za pozadinu"
+
+#~ msgid "Copy I_mage Address"
+#~ msgstr "Umnoži adresu sli_ke"
+
+#~ msgid "Exit Fullscreen"
+#~ msgstr "Ne koristi ceo ekran"
+
+#~ msgid "Save As"
+#~ msgstr "Sačuvaj kao"
+
+#~ msgid "Bookmark"
+#~ msgstr "Obeleživač"
+
+#~ msgid "Insecure"
+#~ msgstr "Nebezbedno"
+
+#~ msgid "Broken"
+#~ msgstr "Razbijen"
+
+#~ msgid "Medium"
+#~ msgstr "Osrednji"
+
+#~ msgid "Low"
+#~ msgstr "Nizak"
+
+#~ msgid "High"
+#~ msgstr "Visok"
+
+#~ msgid ""
+#~ "Security level: %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Nivo bezbednosti: %s\n"
+#~ "%s"
+
+#~ msgid "Security level: %s"
+#~ msgstr "Nivo bezbednosti: %s"
+
+#~ msgid "Host"
+#~ msgstr "Server"
+
+#~ msgid "User Name"
+#~ msgstr "Korisničko ime"
+
+#~ msgid "Domain"
+#~ msgstr "Domen"
+
+#~ msgid "Name"
+#~ msgstr "Ime"
+
+#~ msgid "Cookie Properties"
+#~ msgstr "Osobine kolačića"
+
+#~ msgid "Path:"
+#~ msgstr "Putanja:"
+
+#~ msgid "Secure:"
+#~ msgstr "Bezbedan:"
+
+#~ msgid "Expire:"
+#~ msgstr "Ističe:"
+
+#~ msgid "Download link"
+#~ msgstr "Preuzmi vezu"
+
+#~ msgid "Go to the first page"
+#~ msgstr "Idi na prvu stranicu"
+
+#~ msgid "Go to the last page"
+#~ msgstr "Idi na poslednju stranicu"
+
+#~ msgid "Go to the previous page"
+#~ msgstr "Idi na prethodnu stranicu"
+
+#~ msgid "Go to next page"
+#~ msgstr "Idi na sledeću stranicu"
+
+#~ msgid "Close print preview"
+#~ msgstr "Zatvori pregled pred štampu"
+
+#~ msgid "System language"
+#~ msgstr "Jezik na sistemu"
+
+#~ msgid "Afrikaans"
+#~ msgstr "Afrički"
+
+#~ msgid "Albanian"
+#~ msgstr "Albanski"
+
+#~ msgid "Azerbaijani"
+#~ msgstr "Azerbejdžanski"
+
+#~ msgid "Basque"
+#~ msgstr "Baskijski"
+
+#~ msgid "Breton"
+#~ msgstr "Bretonski"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Bugarski"
+
+#~ msgid "Byelorussian"
+#~ msgstr "Beloruski"
+
+#~ msgid "Catalan"
+#~ msgstr "Katalonski"
+
+#~ msgid "Chinese"
+#~ msgstr "Kineski"
+
+#~ msgid "Croatian"
+#~ msgstr "Hrvatski"
+
+#~ msgid "Czech"
+#~ msgstr "Češki"
+
+#~ msgid "Danish"
+#~ msgstr "Danski"
+
+#~ msgid "Dutch"
+#~ msgstr "Holandski"
+
+#~ msgid "English"
+#~ msgstr "Engleski"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Estonian"
+#~ msgstr "Estonski"
+
+#~ msgid "Faeroese"
+#~ msgstr "Farski"
+
+#~ msgid "Finnish"
+#~ msgstr "Finski"
+
+#~ msgid "French"
+#~ msgstr "Francuski"
+
+#~ msgid "Galician"
+#~ msgstr "Galski"
+
+#~ msgid "German"
+#~ msgstr "Nemački"
+
+#~ msgid "Hungarian"
+#~ msgstr "Mađarski"
+
+#~ msgid "Icelandic"
+#~ msgstr "Islandski"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonežanski"
+
+#~ msgid "Irish"
+#~ msgstr "Irski"
+
+#~ msgid "Italian"
+#~ msgstr "Italijanski"
+
+#~ msgid "Latvian"
+#~ msgstr "Letonski"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Litvanski"
+
+#~ msgid "Macedonian"
+#~ msgstr "Makedonski"
+
+#~ msgid "Malay"
+#~ msgstr "Malajski"
+
+#~ msgid "Norwegian/Nynorsk"
+#~ msgstr "Norveški/Ninorsk"
+
+#~ msgid "Norwegian/Bokmal"
+#~ msgstr "Norveški/Bokmal"
+
+#~ msgid "Norwegian"
+#~ msgstr "Norveški"
+
+#~ msgid "Polish"
+#~ msgstr "Poljski"
+
+#~ msgid "Portuguese"
+#~ msgstr "Portugalski"
+
+#~ msgid "Portuguese of Brazil"
+#~ msgstr "Portugalski u Brazilu"
+
+#~ msgid "Romanian"
+#~ msgstr "Rumunski"
+
+#~ msgid "Russian"
+#~ msgstr "Ruski"
+
+#~ msgid "Scottish"
+#~ msgstr "Škotski"
+
+#~ msgid "Serbian"
+#~ msgstr "Srpski"
+
+#~ msgid "Slovak"
+#~ msgstr "Slovački"
+
+#~ msgid "Slovenian"
+#~ msgstr "Slovenski"
+
+#~ msgid "Spanish"
+#~ msgstr "Španski"
+
+#~ msgid "Swedish"
+#~ msgstr "Švedski"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Ukrajinski"
+
+#~ msgid "Vietnamese"
+#~ msgstr "Vijetnamski"
+
+#~ msgid "Walloon"
+#~ msgstr "Valun"
+
+#~ msgid "Off"
+#~ msgstr "Isključeno"
+
+#~ msgid "East Asian"
+#~ msgstr "Istočnoazijski"
+
+#~ msgid "Universal"
+#~ msgstr "Opšte"
+
+#~ msgid "Custom [%s]"
+#~ msgstr "Po izboru [%s]"
+
+#~ msgid "Crash Recovery"
+#~ msgstr "Oporavak nakon pada"
+
+#~ msgid "_Don't Recover"
+#~ msgstr "_Ne želite oporavak"
+
+#~ msgid "_Recover"
+#~ msgstr "_Oporavak"
+
+#~ msgid ""
+#~ "Epiphany appears to have crashed or been killed the last time it was run."
+#~ msgstr ""
+#~ "Izgleda da je Spoznaja pukla ili je bila ubijena u toku poslednjeg rada."
+
+#~ msgid "You can recover the opened tabs and windows."
+#~ msgstr "Možete povratiti otvorene listove i prozore."
+
+#~ msgid "Back"
+#~ msgstr "Nazad"
+
+#~ msgid "Go back"
+#~ msgstr "Idi nazad"
+
+#~ msgid "Forward"
+#~ msgstr "Napred"
+
+#~ msgid "Go forward"
+#~ msgstr "Idi napred"
+
+#~ msgid "Up"
+#~ msgstr "Gore"
+
+#~ msgid "Go up"
+#~ msgstr "Idi gore"
+
+#~ msgid "Spinner"
+#~ msgstr "Vrteška"
+
+#~ msgid "Address Entry"
+#~ msgstr "Polje za adresu"
+
+#~ msgid "Enter a web address to open, or a phrase to search for on the web"
+#~ msgstr ""
+#~ "Unesite veb adresu koju želite da otvorite, ili izraz koji želite da "
+#~ "pronađete na vebu"
+
+#~ msgid "Adjust the text size"
+#~ msgstr "Prilagodi veličinu teksta"
+
+#~ msgid "Favicon"
+#~ msgstr "Ikona za stranicu"
+
+#~ msgid "Go to the address entered in the address entry"
+#~ msgstr "Idi na adresu navedenu u polju za unos adrese."
+
+#~ msgid "Check this out!"
+#~ msgstr "Pogledajte ovo!"
+
+#~ msgid "Toolbar Editor"
+#~ msgstr "Uređivanje alatki"
+
+#~ msgid "_Add a New Toolbar"
+#~ msgstr "_Dodaj novu paletu alatki"
+
+#~ msgid "translator_credits"
+#~ msgstr ""
+#~ "Danilo Šegan <danilo@prevod.org>\n"
+#~ "\n"
+#~ "http://www.Prevod.org/"
+
+#~ msgid "A GNOME browser based on Mozilla"
+#~ msgstr "Gnom veb čitač zasnovan na Mozili"

@@ -1,0 +1,28 @@
+/*
+ * Empty config.h
+ */
+
+#ifndef WIN32
+#define WIN32
+#endif
+ 
+#undef GTK_ENABLE_BROKEN
+
+#define M_SQRT1_2 0.707
+#ifndef M_PI
+#define M_PI 3.1415927
+#endif
+#define M_PI_2 1.57
+#define M_PI_4 0.785
+
+#define VERSION "0.32win"
+#define SODIPODI_VERSION VERSION
+
+#define SODIPODI_GLADEDIR "./glade"
+#define SODIPODI_PIXMAPDIR SODIPODI_GLADEDIR
+#define SODIPODI_EXTENSIONDIR "./extensions"
+#define SODIPODI_EXTENSIONDATADIR SODIPODI_EXTENSIONDIR
+
+
+
+

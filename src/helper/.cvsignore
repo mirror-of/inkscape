@@ -1,0 +1,5 @@
+Makefile
+Makefile.in
+.deps
+sp-marshal.c
+sp-marshal.h

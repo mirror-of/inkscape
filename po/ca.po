@@ -1,0 +1,2463 @@
+# sodipodi translation to Catalan.
+# Copyright © 2000, 2003 Free Software Foundation, Inc.
+# Quico Llach <quico@softcatala.org>, 2000.
+# Francesc Dorca <f.dorca@filnet.es>, 2003.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sodipodi 0.33pre\n"
+"POT-Creation-Date: 2003-10-23 23:31-0700\n"
+"PO-Revision-Date: 2003-09-11 00:32+0200\n"
+"Last-Translator: Francesc Dorca <f.dorca@filnet.es>\n"
+"Language-Team: Catalan <tradgnome@softcatala.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
+
+#: sodipodi.desktop.in.h:1
+msgid "SVG Vector Illustrator"
+msgstr "Il·lustrador vectorial SVG"
+
+#. Create window
+#: sodipodi.desktop.in.h:2 src/toolbox.c:119 src/toolbox.c:140
+msgid "Sodipodi"
+msgstr "Sodipodi"
+
+#: src/bonobo/svg-doc-factory.c:35
+msgid "Could not create sodipodi-svg-doc factory"
+msgstr "No s'ha pogut crear un document de la factoria sodipodi-svg-doc"
+
+#: src/desktop.c:750
+msgid "Zoom drawing if window size changes"
+msgstr "Amplia/redueix el dibuix si canvia la mida de la finestra"
+
+#: src/desktop.c:830
+#, c-format
+msgid "Sodipodi: %s: %s: %d"
+msgstr "Sodipodi: %s: %s: %d"
+
+#: src/desktop.c:959
+#, c-format
+msgid "Document %s has unsaved changes, save them?"
+msgstr "El document %s te canvis que no han estat desats. Els voleu desar?"
+
+#. Page page
+#: src/desktop.c:1481 src/dialogs/align.c:286
+#: src/dialogs/desktop-properties.c:269 src/dialogs/document-properties.c:163
+#: src/dialogs/export.c:135 src/verbs.c:484
+msgid "Page"
+msgstr "Pàgina"
+
+#: src/desktop.c:1485 src/dialogs/align.c:287 src/dialogs/export.c:140
+#: src/verbs.c:485
+msgid "Drawing"
+msgstr "Dibuix"
+
+#. Selection submenu
+#: src/desktop.c:1489 src/dialogs/align.c:288 src/dialogs/export.c:145
+#: src/interface.c:570 src/toolbox.c:485 src/verbs.c:486
+msgid "Selection"
+msgstr "Selecció"
+
+#: src/dialogs/align.c:153 src/toolbox.c:445
+msgid "Align objects"
+msgstr "Alinea els objectes"
+
+#: src/dialogs/align.c:172
+#, fuzzy
+msgid "Right side of aligned objects to left side of anchor"
+msgstr "Alinea l'objecte interior amb el límit esquerra"
+
+#: src/dialogs/align.c:175
+msgid "Left side of aligned objects to left side of anchor"
+msgstr "La cara esquerra dels objectes alineats a la cara esquerra de l'àncora"
+
+#: src/dialogs/align.c:178
+#, fuzzy
+msgid "Center horizontally"
+msgstr "mou horitzontalment"
+
+#: src/dialogs/align.c:181
+#, fuzzy
+msgid "Right side of aligned objects to right side of anchor"
+msgstr "Alinea l'objecte interior amb el límit dret"
+
+#: src/dialogs/align.c:184
+msgid "Left side of aligned objects to right side of anchor"
+msgstr "La cara esquerra dels objectes alineats a la cara dreta de l'àncora"
+
+#: src/dialogs/align.c:188
+msgid "Bottom of aligned objects to top of anchor"
+msgstr "La cara inferior dels objectes alineats a la cara superior de l'àncora"
+
+#: src/dialogs/align.c:191 src/dialogs/align.c:200
+#, fuzzy
+msgid "Top of aligned objects to top of anchor"
+msgstr "Alinea l'objecte interior amb el límit superior"
+
+#: src/dialogs/align.c:194
+#, fuzzy
+msgid "Center vertically"
+msgstr "mou verticalment"
+
+#: src/dialogs/align.c:197
+#, fuzzy
+msgid "Bottom of aligned objects to bottom of anchor"
+msgstr "Alinea l'objecte interior amb el límit inferior"
+
+#: src/dialogs/align.c:203
+msgid "Align"
+msgstr "Alinea"
+
+#: src/dialogs/align.c:221
+msgid "Distribute left sides of objects at even distances"
+msgstr "Distribueix les cares esquerres dels objectes a distàncies iguals"
+
+#: src/dialogs/align.c:224
+msgid "Distribute centres of objects at even distances horizontally"
+msgstr ""
+"Distribueix els centres dels objectes horitzontalment a distàncies iguals"
+
+#: src/dialogs/align.c:227
+msgid "Distribute right sides of objects at even distances"
+msgstr "Distribueix les cares dretes dels objectes a distàncies iguals"
+
+#: src/dialogs/align.c:230
+msgid "Distribute horizontal distance between objects equally"
+msgstr ""
+"Distribueix la distància horitzontal entre objectes de forma equitativa"
+
+#: src/dialogs/align.c:234
+msgid "Distribute top sides of objects at even distances"
+msgstr "Distribueix les cares superiors dels objectes a distàncies iguals"
+
+#: src/dialogs/align.c:237
+msgid "Distribute centres of objects at even distances vertically"
+msgstr "Distribueix els centres dels objectes verticalment a distàncies iguals"
+
+#: src/dialogs/align.c:240
+msgid "Distribute bottom sides of objects at even distances"
+msgstr "Distribueix les cares inferiors dels objectes a distàncies iguals"
+
+#: src/dialogs/align.c:243
+msgid "Distribute vertical distance between objects equally"
+msgstr "Distribueix la distància vertical entre objectes de forma equitativa"
+
+#: src/dialogs/align.c:246
+#, fuzzy
+msgid "Distribute"
+msgstr "Atributs"
+
+#: src/dialogs/align.c:282
+msgid "Last selected"
+msgstr "Darrer seleccionat"
+
+#: src/dialogs/align.c:283
+msgid "First selected"
+msgstr "El primer seleccionat"
+
+#: src/dialogs/align.c:284
+msgid "Biggest item"
+msgstr "L'element més gran"
+
+#: src/dialogs/align.c:285
+msgid "Smallest item"
+msgstr "L'element més petit"
+
+#: src/dialogs/desktop-properties.c:191
+#, fuzzy
+msgid "Desktop settings"
+msgstr "Paràmetres del contorn"
+
+#. Grid settings
+#. Notebook tab
+#: src/dialogs/desktop-properties.c:200
+msgid "Grid"
+msgstr "Graella"
+
+#: src/dialogs/desktop-properties.c:211
+msgid "Show grid"
+msgstr "Mostra la graella"
+
+#: src/dialogs/desktop-properties.c:212
+#, fuzzy
+msgid "Snap to grid"
+msgstr "Alinea amb les guies"
+
+#: src/dialogs/desktop-properties.c:214
+#, fuzzy
+msgid "Horizontal lines"
+msgstr "Volteja horitzontalment"
+
+#: src/dialogs/desktop-properties.c:215
+#, fuzzy
+msgid "Vertical lines"
+msgstr "Volteja verticalment"
+
+#: src/dialogs/desktop-properties.c:217
+#, fuzzy
+msgid "Iso grid"
+msgstr "Mostra la graella"
+
+#: src/dialogs/desktop-properties.c:218
+msgid "Hex grid"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:221
+msgid "Grid units:"
+msgstr "Unitats de la graella:"
+
+#: src/dialogs/desktop-properties.c:223
+msgid "Origin X:"
+msgstr "Origen X:"
+
+#: src/dialogs/desktop-properties.c:225
+msgid "Origin Y:"
+msgstr "Origen Y:"
+
+#: src/dialogs/desktop-properties.c:228
+msgid "Spacing X:"
+msgstr "Espaiat X:"
+
+#: src/dialogs/desktop-properties.c:230
+msgid "Spacing Y:"
+msgstr "Espaiat Y:"
+
+#: src/dialogs/desktop-properties.c:235 src/dialogs/desktop-properties.c:258
+msgid "Snap distance:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:238
+#, fuzzy
+msgid "Grid color:"
+msgstr "Color del contorn"
+
+#: src/dialogs/desktop-properties.c:239
+#, fuzzy
+msgid "Grid color"
+msgstr "Color del contorn"
+
+#. Guidelines page
+#: src/dialogs/desktop-properties.c:243
+msgid "Guides"
+msgstr "Guies"
+
+#: src/dialogs/desktop-properties.c:252
+#, fuzzy
+msgid "Show guides"
+msgstr "Alinea amb les guies"
+
+#: src/dialogs/desktop-properties.c:253
+msgid "Snap to guides"
+msgstr "Alinea amb les guies"
+
+#: src/dialogs/desktop-properties.c:256
+#, fuzzy
+msgid "Snap units:"
+msgstr "Alinea amb les guies"
+
+#: src/dialogs/desktop-properties.c:261
+msgid "Guides color:"
+msgstr "Color de les guies:"
+
+#: src/dialogs/desktop-properties.c:262
+msgid "Guideline color"
+msgstr "Color de la línia guia"
+
+#: src/dialogs/desktop-properties.c:264
+msgid "Highlight color:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.c:265
+msgid "Highlighted guideline color"
+msgstr "Color de la línia guia onfiguració de les línies guia"
+
+#: src/dialogs/desktop-properties.c:278
+msgid "Show border"
+msgstr "Mostra les vores"
+
+#: src/dialogs/desktop-properties.c:280
+msgid "Border on top of drawing"
+msgstr "Les vores a dalt de tot del dibuix"
+
+#: src/dialogs/desktop-properties.c:543
+msgid "Close"
+msgstr "Tanca"
+
+#: src/dialogs/display-settings.c:85
+#, fuzzy
+msgid "Display settings"
+msgstr "Paràmetres d'emplenat"
+
+#. Rendering settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:93
+#, fuzzy
+msgid "Rendering"
+msgstr "Dibuix"
+
+#: src/dialogs/display-settings.c:105
+msgid "Oversample bitmaps:"
+msgstr "Sobremostreja els mapes de bits:"
+
+#: src/dialogs/display-settings.c:116 src/verbs.c:427
+msgid "None"
+msgstr "Cap"
+
+#: src/dialogs/display-settings.c:120
+msgid "2x2"
+msgstr "2x2"
+
+#: src/dialogs/display-settings.c:124
+msgid "4x4"
+msgstr "4x4"
+
+#: src/dialogs/display-settings.c:128
+msgid "8x8"
+msgstr "8x8"
+
+#: src/dialogs/display-settings.c:132
+msgid "16x16"
+msgstr "16x16"
+
+#. Input settings
+#. Notebook tab
+#: src/dialogs/display-settings.c:143
+msgid "Input"
+msgstr "Entrada"
+
+#: src/dialogs/display-settings.c:154
+msgid "Default cursor tolerance:"
+msgstr "Tolerància del cursor per defecte:"
+
+#: src/dialogs/document-properties.c:154
+msgid "Document settings"
+msgstr "Paràmetres del document"
+
+#: src/dialogs/document-properties.c:175
+msgid "Paper size:"
+msgstr "Mida del paper"
+
+#: src/dialogs/document-properties.c:196
+msgid "Custom"
+msgstr "A mida"
+
+#. Custom paper frame
+#: src/dialogs/document-properties.c:203
+msgid "Custom paper"
+msgstr "Paper a mida"
+
+#. Unit selector
+#: src/dialogs/document-properties.c:214 src/dialogs/export.c:153
+#: src/dialogs/object-properties.c:318 src/dialogs/transformation.c:401
+#: src/dialogs/transformation.c:576
+msgid "Units:"
+msgstr "Unitats:"
+
+#. Stroke width
+#: src/dialogs/document-properties.c:223 src/dialogs/export.c:163
+#: src/dialogs/export.c:187 src/dialogs/object-attributes.c:68
+#: src/dialogs/object-attributes.c:76 src/dialogs/object-properties.c:360
+#: src/dialogs/stroke-style.c:556 src/dialogs/tool-attributes.c:120
+#: src/dyna-draw-context.c:1079
+msgid "Width:"
+msgstr "Amplada:"
+
+#: src/dialogs/document-properties.c:238 src/dialogs/export.c:172
+#: src/dialogs/export.c:195 src/dialogs/object-attributes.c:69
+#: src/dialogs/object-attributes.c:77 src/dialogs/object-properties.c:375
+msgid "Height:"
+msgstr "Alçada:"
+
+#: src/dialogs/export.c:115
+msgid "Export bitmap"
+msgstr "Exporta el mapa de bits"
+
+#. Export area frame
+#: src/dialogs/export.c:124
+msgid "Export area"
+msgstr "Exporta l'àrea"
+
+#: src/dialogs/export.c:157
+msgid "x0:"
+msgstr "x0:"
+
+#: src/dialogs/export.c:160
+msgid "x1:"
+msgstr "x1:"
+
+#: src/dialogs/export.c:166
+msgid "y0:"
+msgstr "y0:"
+
+#: src/dialogs/export.c:169
+msgid "y1:"
+msgstr "y1:"
+
+#. Bitmap size frame
+#: src/dialogs/export.c:178
+msgid "Bitmap size"
+msgstr "Mida del mapa de bits"
+
+#: src/dialogs/export.c:187 src/dialogs/export.c:195
+msgid "pixels"
+msgstr "píxels"
+
+#: src/dialogs/export.c:191 src/dialogs/export.c:199
+msgid "dpi"
+msgstr "ppp"
+
+#: src/dialogs/export.c:206
+#, fuzzy
+msgid "Export png file"
+msgstr "Exporta el fitxer"
+
+#: src/dialogs/export.c:235 src/verbs.c:437
+msgid "Export"
+msgstr "Exporta"
+
+#: src/dialogs/fill-style.c:89
+#, fuzzy
+msgid "Fill style"
+msgstr "Tipus d'emplenat"
+
+#: src/dialogs/fill-style.c:124
+#, fuzzy
+msgid "Fill Rule"
+msgstr "Tipus d'emplenat"
+
+#: src/dialogs/fill-style.c:138
+#, fuzzy
+msgid "nonzero"
+msgstr "Cap"
+
+#: src/dialogs/fill-style.c:143
+msgid "evenodd"
+msgstr "parell/imparell"
+
+#: src/dialogs/item-properties.c:77 src/dialogs/item-properties.c:274
+#: src/dialogs/item-properties.c:348 src/dialogs/item-properties.c:355
+msgid "ID"
+msgstr ""
+
+#: src/dialogs/item-properties.c:91
+msgid "Set ID"
+msgstr ""
+
+#: src/dialogs/item-properties.c:102
+msgid "Sensitive"
+msgstr "Sensible"
+
+#: src/dialogs/item-properties.c:107
+msgid "Visible"
+msgstr "Visible"
+
+#: src/dialogs/item-properties.c:112
+msgid "Active"
+msgstr "Activa"
+
+#: src/dialogs/item-properties.c:117
+#, fuzzy
+msgid "Printable"
+msgstr "Imprimeix el fitxer"
+
+#: src/dialogs/item-properties.c:128
+msgid "Opacity:"
+msgstr "Opacitat:"
+
+#: src/dialogs/item-properties.c:147
+#, fuzzy
+msgid "Transformation matrix"
+msgstr "Transforma la selecció"
+
+#: src/dialogs/item-properties.c:268
+msgid "Ref"
+msgstr ""
+
+#: src/dialogs/item-properties.c:350
+#, fuzzy
+msgid "ID invalid"
+msgstr "L'identificador és vàlid"
+
+#: src/dialogs/item-properties.c:352
+msgid "ID exists"
+msgstr ""
+
+#: src/dialogs/item-properties.c:428 src/verbs.c:499
+#, fuzzy
+msgid "Item properties"
+msgstr "Objecte de text"
+
+#: src/dialogs/object-attributes.c:31
+#, fuzzy
+msgid "Href:"
+msgstr "Valor:"
+
+#: src/dialogs/object-attributes.c:32
+msgid "Target:"
+msgstr "Destí:"
+
+#: src/dialogs/object-attributes.c:33
+msgid "Type:"
+msgstr "Tipus:"
+
+#: src/dialogs/object-attributes.c:34
+#, fuzzy
+msgid "Role:"
+msgstr "Refés"
+
+#: src/dialogs/object-attributes.c:35
+msgid "Arcrole:"
+msgstr ""
+
+#: src/dialogs/object-attributes.c:36
+#, fuzzy
+msgid "Title:"
+msgstr "Omple"
+
+#: src/dialogs/object-attributes.c:37 src/dialogs/tool-attributes.c:110
+msgid "Show:"
+msgstr "Mostra:"
+
+#: src/dialogs/object-attributes.c:38
+#, fuzzy
+msgid "Actuate:"
+msgstr "Atributs:"
+
+#: src/dialogs/object-attributes.c:43
+msgid "Sides:"
+msgstr "Cares:"
+
+#: src/dialogs/object-attributes.c:44 src/dialogs/object-attributes.c:54
+#, fuzzy
+msgid "Center X:"
+msgstr "Contingut"
+
+#: src/dialogs/object-attributes.c:45 src/dialogs/object-attributes.c:55
+#, fuzzy
+msgid "Center Y:"
+msgstr "Contingut"
+
+#: src/dialogs/object-attributes.c:46
+#, fuzzy
+msgid "R1:"
+msgstr "1:1"
+
+#: src/dialogs/object-attributes.c:47
+#, fuzzy
+msgid "R2:"
+msgstr "2:1"
+
+#: src/dialogs/object-attributes.c:48
+msgid "ARG1:"
+msgstr "ARG1:"
+
+#: src/dialogs/object-attributes.c:49
+msgid "ARG2:"
+msgstr "ARG2:"
+
+#. Expansion
+#: src/dialogs/object-attributes.c:56 src/spiral-context.c:362
+msgid "Expansion:"
+msgstr "Expansió:"
+
+#. Revolution
+#: src/dialogs/object-attributes.c:57 src/dialogs/tool-attributes.c:90
+#: src/spiral-context.c:350
+#, fuzzy
+msgid "Revolution:"
+msgstr "Selecció"
+
+#: src/dialogs/object-attributes.c:58
+msgid "Radius:"
+msgstr "Radi:"
+
+#: src/dialogs/object-attributes.c:59
+msgid "Argument:"
+msgstr "Argument:"
+
+#: src/dialogs/object-attributes.c:60
+msgid "T0:"
+msgstr "T0:"
+
+#: src/dialogs/object-attributes.c:65
+msgid "URL:"
+msgstr "URL:"
+
+#: src/dialogs/object-attributes.c:66 src/dialogs/object-attributes.c:74
+#: src/dialogs/object-properties.c:330
+msgid "X:"
+msgstr "X:"
+
+#: src/dialogs/object-attributes.c:67 src/dialogs/object-attributes.c:75
+#: src/dialogs/object-properties.c:345
+msgid "Y:"
+msgstr "Y:"
+
+#: src/dialogs/object-attributes.c:78
+msgid "RX:"
+msgstr "RX:"
+
+#: src/dialogs/object-attributes.c:79
+msgid "RY:"
+msgstr "RY:"
+
+#: src/dialogs/object-attributes.c:114
+#, fuzzy, c-format
+msgid "%s attributes"
+msgstr "Atributs"
+
+#: src/dialogs/object-properties.c:110
+#, fuzzy
+msgid "Object style"
+msgstr "Recta"
+
+#: src/dialogs/object-properties.c:125
+msgid "Fill"
+msgstr "Omple"
+
+#: src/dialogs/object-properties.c:139
+#, fuzzy
+msgid "Stroke paint"
+msgstr "Gruix del contorn"
+
+#: src/dialogs/object-properties.c:153
+#, fuzzy
+msgid "Stroke style"
+msgstr "Paràmetres del contorn"
+
+#: src/dialogs/object-properties.c:173
+msgid "Apply to:"
+msgstr "Aplicar a:"
+
+#: src/dialogs/object-properties.c:183
+#, fuzzy
+msgid "Selected objects"
+msgstr "Suprimeix el(s) objecte(s) seleccionat(s)"
+
+#: src/dialogs/object-properties.c:186
+#, fuzzy
+msgid "All shape tools"
+msgstr "Totes les eines de forma"
+
+#: src/dialogs/object-properties.c:189
+#, fuzzy
+msgid "Rectangle tool"
+msgstr "Rectangle"
+
+#: src/dialogs/object-properties.c:192
+msgid "Arc tool"
+msgstr "Eina arc"
+
+#: src/dialogs/object-properties.c:195
+#, fuzzy
+msgid "Star tool"
+msgstr "Color del contorn"
+
+#: src/dialogs/object-properties.c:198
+msgid "Spiral tool"
+msgstr "Eina espiral"
+
+#: src/dialogs/object-properties.c:201
+#, fuzzy
+msgid "Freehand and pen"
+msgstr "A mà alçada"
+
+#: src/dialogs/object-properties.c:204
+msgid "Calligraphic line"
+msgstr "Línia cal·ligràfica"
+
+#: src/dialogs/object-properties.c:207 src/verbs.c:475
+msgid "Text"
+msgstr "Text"
+
+#: src/dialogs/object-properties.c:283
+#, fuzzy
+msgid "Object Size and Position"
+msgstr "Puja una posició"
+
+#: src/dialogs/object-properties.c:305 src/verbs.c:494
+msgid "Size and Position"
+msgstr "Mida i posició"
+
+#: src/dialogs/stroke-style.c:543 src/toolbox.c:441
+msgid "Stroke settings"
+msgstr "Paràmetres del contorn"
+
+#. Join type
+#: src/dialogs/stroke-style.c:579
+#, fuzzy
+msgid "Join:"
+msgstr "Uneix"
+
+#. Cap type
+#: src/dialogs/stroke-style.c:622
+#, fuzzy
+msgid "Cap:"
+msgstr "Cobreix"
+
+#. Dash
+#: src/dialogs/stroke-style.c:665
+msgid "Pattern:"
+msgstr "Patró:"
+
+#: src/dialogs/text-edit.c:95
+msgid "Text properties"
+msgstr "Propietats de text"
+
+#. Layout
+#: src/dialogs/text-edit.c:134
+msgid "Layout"
+msgstr "Esquema"
+
+#: src/dialogs/text-edit.c:142
+msgid "Alignment:"
+msgstr "Aliniament:"
+
+#: src/dialogs/text-edit.c:167
+msgid "Orientation:"
+msgstr "Orientació:"
+
+#: src/dialogs/text-edit.c:185
+msgid "Line spacing:"
+msgstr "Espaiat entre línies:"
+
+#: src/dialogs/text-edit.c:210
+msgid "Text and font"
+msgstr "Text i tipus de lletra"
+
+#: src/dialogs/text-edit.c:221
+msgid "Set as default"
+msgstr "Fixa per defecte"
+
+#: src/dialogs/tool-attributes.c:45 src/verbs.c:492
+msgid "Tool attributes"
+msgstr "Atributs d'eina"
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Expansion"
+msgstr "Expansió"
+
+#: src/dialogs/tool-attributes.c:90
+msgid "Inner radius"
+msgstr "Radi intern"
+
+#: src/dialogs/tool-attributes.c:94 src/dialogs/tool-attributes.c:104
+#: src/dialogs/tool-attributes.c:114 src/dialogs/tool-attributes.c:124
+msgid "Missing tool preferences"
+msgstr "Falten les preferències d'eina"
+
+#. Magnitude
+#: src/dialogs/tool-attributes.c:100 src/star-context.c:355
+msgid "Corners:"
+msgstr "Cantonades:"
+
+#: src/dialogs/tool-attributes.c:100
+msgid "Proportion"
+msgstr "Proporció"
+
+#: src/dialogs/tool-attributes.c:110
+msgid "Transform:"
+msgstr "Transforma:"
+
+#. Mass
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1043
+msgid "Mass:"
+msgstr "Cota:"
+
+#. Drag
+#: src/dialogs/tool-attributes.c:120 src/dyna-draw-context.c:1055
+msgid "Drag:"
+msgstr "Arrossega:"
+
+#: src/dialogs/tool-attributes.c:120
+msgid "Angle"
+msgstr "Angle"
+
+#: src/dialogs/tool-attributes.c:127
+msgid "Tool has no attributes"
+msgstr "L'eina no té atributs"
+
+#: src/dialogs/tool-attributes.c:130 src/dialogs/tool-options.c:88
+msgid "No active tool"
+msgstr "No hi ha cap eina activa"
+
+#: src/dialogs/tool-options.c:44 src/verbs.c:491
+msgid "Tool options"
+msgstr "Opcions d'eina"
+
+#: src/dialogs/tool-options.c:85
+msgid "Tool has no options"
+msgstr "L'eina no té opcions"
+
+#: src/dialogs/transformation.c:193
+msgid "Transform selection"
+msgstr "Transforma la selecció"
+
+#: src/dialogs/transformation.c:365
+msgid "Move"
+msgstr "Mou"
+
+#. Relative moves
+#: src/dialogs/transformation.c:407
+msgid "Relative move"
+msgstr "Moviment relatiu"
+
+#: src/dialogs/transformation.c:539
+msgid "Scale"
+msgstr "Escala"
+
+#: src/dialogs/transformation.c:666
+msgid "Rotate"
+msgstr "Gira"
+
+#: src/dialogs/transformation.c:684
+msgid "deg"
+msgstr "graus"
+
+#: src/dialogs/xml-tree.c:158
+msgid "Drag to reorder nodes"
+msgstr "Arrossega per a reordenar els nodes"
+
+#: src/dialogs/xml-tree.c:171
+msgid "New element node"
+msgstr "Node del nou element"
+
+#: src/dialogs/xml-tree.c:189
+msgid "New text node"
+msgstr "Nou node de text"
+
+#: src/dialogs/xml-tree.c:206
+msgid "Duplicate node"
+msgstr "Duplica el node"
+
+#: src/dialogs/xml-tree.c:222
+msgid "Delete node"
+msgstr "Suprimeix el node"
+
+#: src/dialogs/xml-tree.c:235
+msgid "Unindent node"
+msgstr "Desindenta el node"
+
+#: src/dialogs/xml-tree.c:246
+msgid "Indent node"
+msgstr "Indenta el node"
+
+#: src/dialogs/xml-tree.c:256
+msgid "Raise node"
+msgstr "Puja el node"
+
+#: src/dialogs/xml-tree.c:267
+msgid "Lower node"
+msgstr "Baixa el node"
+
+#: src/dialogs/xml-tree.c:304
+msgid "Delete attribute"
+msgstr "Suprimeix l'atribut"
+
+#: src/dialogs/xml-tree.c:334
+msgid "Attribute name"
+msgstr "Nom de l'atribut"
+
+#: src/dialogs/xml-tree.c:341
+#, fuzzy
+msgid "Set attribute"
+msgstr "Suprimeix l'atribut"
+
+#: src/dialogs/xml-tree.c:354
+#, fuzzy
+msgid "Attribute value"
+msgstr "Atributs"
+
+#: src/dialogs/xml-tree.c:826
+#, c-format
+msgid "Sodipodi: %s : XML View"
+msgstr "Sodipodi: %s : Vista XML"
+
+#: src/dialogs/xml-tree.c:849
+#, fuzzy
+msgid "New element node..."
+msgstr "Nou fitxer"
+
+#: src/dialogs/xml-tree.c:869
+#, fuzzy
+msgid "Cancel"
+msgstr "Canvi"
+
+#: src/dialogs/xml-tree.c:873
+#, fuzzy
+msgid "Create"
+msgstr "Contingut"
+
+#: src/document.c:340
+#, fuzzy, c-format
+msgid "New document %d"
+msgstr "Paràmetres del tipus de lletra"
+
+#: src/document.c:369
+#, c-format
+msgid "Memory document %d"
+msgstr ""
+
+#: src/document.c:455
+#, c-format
+msgid "Unnamed document %d"
+msgstr ""
+
+#: src/draw-context.c:280
+msgid "Appending to selection. Press 'a' to toggle Append/New."
+msgstr "S'està afegint a la selecció. Premeu 'a' per a commutar Afegir/Nou."
+
+#: src/draw-context.c:285
+msgid "Creating new curve. Press 'a' to toggle Append/New."
+msgstr "S'està creant una nova corba. Premeu 'a' per a commutar Afegir/Nou."
+
+#. Angle
+#: src/dyna-draw-context.c:1067
+#, fuzzy
+msgid "Angle:"
+msgstr "Canvi"
+
+#. Reset
+#: src/dyna-draw-context.c:1091 src/rect-context.c:421
+#: src/spiral-context.c:386 src/star-context.c:386
+msgid "Defaults"
+msgstr "Per defecte"
+
+#: src/file.c:150 src/file.c:161 src/file.c:173
+msgid "Select file to open"
+msgstr "Seleccioneu el fitxer que s'ha d'obrir"
+
+#: src/file.c:190 src/module.c:548
+msgid "Scalable Vector Graphic (SVG)"
+msgstr "Gràfic vectorial escalable (SVG)"
+
+#: src/file.c:190 src/module.c:548
+msgid "Sodipodi native file format and W3C standard"
+msgstr "Format natiu Sodipodi i estàndard W3C"
+
+#: src/file.c:196 src/file.c:309
+#, fuzzy
+msgid "File type:"
+msgstr "Tipus d'emplenat"
+
+#: src/file.c:294
+msgid "Save file"
+msgstr "Desa el fitxer"
+
+#: src/file.c:470 src/file.c:480 src/file.c:486
+msgid "Select file to import"
+msgstr "Seleccioneu el fitxer que s'ha de importar"
+
+#: src/help.c:49
+msgid "About sodipodi"
+msgstr "Quant a Sodipodi"
+
+#. Do not insert any elements before/between first 4
+#: src/helper/units.c:40
+msgid "Unit"
+msgstr "Unitat"
+
+#: src/helper/units.c:40
+msgid "Units"
+msgstr "Unitats"
+
+#: src/helper/units.c:41
+msgid "Point"
+msgstr "Punt"
+
+#: src/helper/units.c:41
+msgid "pt"
+msgstr "pt"
+
+#: src/helper/units.c:41
+msgid "Points"
+msgstr "Punts"
+
+#: src/helper/units.c:41
+msgid "Pt"
+msgstr "Pt"
+
+#: src/helper/units.c:42
+msgid "Pixel"
+msgstr "Píxel"
+
+#: src/helper/units.c:42
+msgid "px"
+msgstr "px"
+
+#: src/helper/units.c:42
+msgid "Pixels"
+msgstr "Píxels"
+
+#: src/helper/units.c:42
+msgid "Px"
+msgstr "Px"
+
+#: src/helper/units.c:43
+msgid "Userspace unit"
+msgstr "Unitat de l'espai de l'usuari"
+
+#: src/helper/units.c:43
+msgid "User"
+msgstr "Usuari"
+
+#: src/helper/units.c:43
+msgid "Userspace units"
+msgstr "Unitats de l'espai de l'usuari"
+
+#. Volatiles do not have default, so there are none here
+#. You can add new elements from this point forward
+#: src/helper/units.c:46
+msgid "Percent"
+msgstr "Percentatge"
+
+#: src/helper/units.c:46
+msgid "%"
+msgstr "% "
+
+#: src/helper/units.c:46
+msgid "Percents"
+msgstr "Percentatges"
+
+#: src/helper/units.c:47
+msgid "Millimeter"
+msgstr "Milímetre"
+
+#: src/helper/units.c:47
+msgid "mm"
+msgstr "mm"
+
+#: src/helper/units.c:47
+msgid "Millimeters"
+msgstr "Milímetres"
+
+#: src/helper/units.c:48
+msgid "Centimeter"
+msgstr "Centímetre"
+
+#: src/helper/units.c:48
+msgid "cm"
+msgstr "cm"
+
+#: src/helper/units.c:48
+msgid "Centimeters"
+msgstr "Centímetres"
+
+#: src/helper/units.c:49
+msgid "Meter"
+msgstr "Metre"
+
+#: src/helper/units.c:49
+msgid "m"
+msgstr "m"
+
+#: src/helper/units.c:49
+msgid "meters"
+msgstr "metres"
+
+#: src/helper/units.c:50
+msgid "Inch"
+msgstr "Polzada"
+
+#: src/helper/units.c:50
+msgid "in"
+msgstr "polzades"
+
+#: src/helper/units.c:50
+msgid "Inches"
+msgstr "Polzades"
+
+#: src/helper/units.c:51
+msgid "Em square"
+msgstr "Em quadrat"
+
+#: src/helper/units.c:51
+msgid "em"
+msgstr "em"
+
+#: src/helper/units.c:51
+msgid "Em squares"
+msgstr "Em quadrats"
+
+#: src/helper/units.c:52
+msgid "Ex square"
+msgstr "Ex quadrat"
+
+#: src/helper/units.c:52
+msgid "ex"
+msgstr "ex"
+
+#: src/helper/units.c:52
+msgid "Ex squares"
+msgstr "Ex quadrats"
+
+#: src/interface.c:303 src/interface.c:480
+msgid "Open Recent"
+msgstr ""
+
+#: src/interface.c:323
+msgid "Close View"
+msgstr "Tanca vista"
+
+#: src/interface.c:324 src/interface.c:495
+msgid "Exit Program"
+msgstr "Surt del programa"
+
+#: src/interface.c:326 src/interface.c:487
+msgid "About Sodipodi"
+msgstr "Quant a Sodipodi"
+
+#. Modules need abouts too
+#: src/interface.c:329 src/interface.c:490
+msgid "About Modules"
+msgstr "Quant als mòduls"
+
+#: src/interface.c:347
+#, fuzzy
+msgid "Cleanup"
+msgstr "Neteja-ho tot"
+
+#. View:Zoom
+#: src/interface.c:417 src/toolbox.c:617 src/verbs.c:476
+msgid "Zoom"
+msgstr "Zoom"
+
+#. View:New View
+#: src/interface.c:429
+msgid "New View"
+msgstr "Nova vista"
+
+#. View:New Preview
+#: src/interface.c:431
+#, fuzzy
+msgid "New Preview"
+msgstr "Previsualitza"
+
+#: src/interface.c:433
+msgid "New Toplevel Toolbox"
+msgstr "Nova caixa d'eines de primer nivell"
+
+#: src/interface.c:434
+msgid "New Docked Toolbox"
+msgstr "Nova caixa d'eines ancorada"
+
+#: src/interface.c:435
+msgid "Remove Docked Toolbox"
+msgstr "Suprimeix caixa d'eines ancorada"
+
+#. File
+#: src/interface.c:477 src/verbs.c:429
+msgid "New"
+msgstr "Nou"
+
+#: src/interface.c:478
+msgid "Open"
+msgstr "Obre"
+
+#. Generic menu
+#. File submenu
+#: src/interface.c:558 src/toolbox.c:348
+msgid "File"
+msgstr "Fitxer"
+
+#. Edit submenu
+#: src/interface.c:564 src/toolbox.c:405 src/widgets/gradient-selector.c:135
+msgid "Edit"
+msgstr "Edició"
+
+#. View submenu
+#: src/interface.c:576
+#, fuzzy
+msgid "View"
+msgstr "Nova vista"
+
+#. Drawing mode submenu
+#: src/interface.c:582
+msgid "Drawing Mode"
+msgstr "Mode de dibuix"
+
+#. Dialog submenu
+#: src/interface.c:588
+msgid "Dialogs"
+msgstr "Diàlegs"
+
+#: src/interface.c:595
+msgid "Filters"
+msgstr "Filtres"
+
+#: src/main.c:126
+msgid "Do not use X server (only process files from console)"
+msgstr "No usis el servidor X (només processa fitxers des de la consola)"
+
+#: src/main.c:129
+msgid "Try to use X server even if $DISPLAY is not set)"
+msgstr "Prova d'usar el servidor X (encara que $DISPLAY no estigui habilitat)"
+
+#: src/main.c:132
+msgid "Open specified document(s) (option string may be excluded)"
+msgstr ""
+"Obre el(s) document(s) especificat(s) (la cadena d'opcions es pot excloure)"
+
+#: src/main.c:133 src/main.c:136 src/main.c:139 src/main.c:153
+msgid "FILENAME"
+msgstr "NOM DEL FITXER"
+
+#: src/main.c:135
+#, fuzzy
+msgid "Print document(s) to specified output file (use '| program' for pipe)"
+msgstr ""
+"Imprimeix els fitxers al fitxer especificat (utilitzeu '| programa' per al "
+"conducte)"
+
+#: src/main.c:138
+#, fuzzy
+msgid "Export document to png file"
+msgstr "Exporta el dibuix a png"
+
+#: src/main.c:141
+msgid "The resolution used for converting SVG into bitmap (default 72.0)"
+msgstr ""
+"La resolució emprada per a convertir l'SVG en mapa de bits (per defecte 72.0)"
+
+#: src/main.c:142
+msgid "DPI"
+msgstr "PPP"
+
+#: src/main.c:144
+msgid ""
+"Exported area in millimeters (default is full document, 0,0 is lower-left "
+"corner)"
+msgstr ""
+
+#: src/main.c:145
+msgid "x0:y0:x1:y1"
+msgstr "x0:y0:x1:y1"
+
+#: src/main.c:147
+msgid "The width of generated bitmap in pixels (overwrites dpi)"
+msgstr "L'amplada del mapa de bits generat en píxels (sobreescriu ppp)"
+
+#: src/main.c:147
+msgid "WIDTH"
+msgstr "AMPLADA"
+
+#: src/main.c:149
+msgid "The height of generated bitmap in pixels (overwrites dpi)"
+msgstr "L'alçada del mapa de bits generat en píxels (sobreescriu ppp)"
+
+#: src/main.c:149
+msgid "HEIGHT"
+msgstr "ALÇADA"
+
+#: src/main.c:151
+msgid "Background color of exported bitmap (any SVG supported color string)"
+msgstr ""
+"Color de fons del mapa de bits exportat (qualsevol cadena de color admesa "
+"pel SVG)"
+
+#: src/main.c:151
+msgid "COLOR"
+msgstr "COLOR"
+
+#: src/main.c:153
+msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
+msgstr ""
+
+#: src/main.c:155
+msgid "Show given files one-by-one, switch to next on any key/mouse event"
+msgstr ""
+
+#: src/main.c:157
+msgid "Prefer bitmap (xpm) icons to SVG ones"
+msgstr ""
+
+#: src/module.c:556
+msgid "SVG with \"xmlns:sodipodi\" namespace"
+msgstr "SVG amb \"xmlns:sodipodi\" namespace"
+
+#: src/module.c:557
+msgid "Scalable Vector Graphics format with sodipodi extensions"
+msgstr ""
+
+#: src/module.c:560
+msgid "Plain SVG"
+msgstr "SVG simple"
+
+#: src/module.c:561
+msgid "Scalable Vector Graphics format"
+msgstr "Format gràfic vectorial escalable (SVG)"
+
+#: src/modules/gnome.c:133
+#, fuzzy
+msgid "Select printer"
+msgstr "Selecció"
+
+#: src/modules/gnome.c:187
+#, c-format
+msgid "Sodipodi (doc name %s..): Print Preview"
+msgstr "Sodipodi (nom del document %s..): Presentació preliminar"
+
+#: src/modules/kde.cpp:159
+#, fuzzy
+msgid "Document variant:"
+msgstr "Paràmetres del tipus de lletra"
+
+#: src/modules/kde.cpp:169
+msgid ""
+"*.svg *.svgz|SVG files\n"
+"*.xml|XML files\n"
+"*|All files"
+msgstr ""
+"*.svg *.svgz|fitxers SVG\n"
+"*.xmlfitxers |XML\n"
+"*|Tots els fitxers"
+
+#: src/modules/kde.cpp:171
+#, fuzzy
+msgid "Save document as"
+msgstr "Paràmetres del tipus de lletra"
+
+#. Print destination frame
+#: src/modules/ps.c:157 src/modules/ps.c:218
+#, fuzzy
+msgid "Print destination"
+msgstr "Imprimeix el fitxer"
+
+#. Print properties frame
+#: src/modules/ps.c:168
+#, fuzzy
+msgid "Print properties"
+msgstr "Objecte de text"
+
+#: src/modules/ps.c:176
+msgid "Print using PostScript operators"
+msgstr "Imprimeix usant els operadors PostScript"
+
+#: src/modules/ps.c:178
+msgid ""
+"Use PostScript vector operators, resulting image will be (usually) smaller "
+"and can be arbitrarily scaled, but alpha transparency, markers and patterns "
+"will be lost"
+msgstr ""
+
+#: src/modules/ps.c:183
+msgid "Print as bitmap"
+msgstr "Imprimeix com a mapa de bits"
+
+#: src/modules/ps.c:185
+msgid ""
+"Print everything as bitmap, resulting image will be (usualy) larger and it "
+"quality depends on zoom factor, but all graphics will be rendered identical "
+"to display"
+msgstr ""
+
+#: src/modules/ps.c:199
+msgid "Preferred resolution (dots per inch) of bitmap"
+msgstr ""
+
+#: src/modules/ps.c:214
+msgid "Resolution:"
+msgstr "Resolució:"
+
+#: src/modules/ps.c:224
+msgid ""
+"Enter destination lpr queue.\n"
+"Use '> filename' to print to file.\n"
+"Use '| prog arg...' to pipe to program"
+msgstr ""
+
+#: src/modules/ps.c:837
+msgid "write error occured"
+msgstr "hi ha hagut un error d'escriptura"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:105
+msgid "Item"
+msgstr "Element"
+
+#. Item dialog
+#: src/object-ui.c:108 src/verbs.c:499
+msgid "Item Properties"
+msgstr "Propietats de l'element"
+
+#. Select item
+#: src/object-ui.c:118
+msgid "Select this"
+msgstr "Selecciona això"
+
+#. Reset transformations
+#: src/object-ui.c:128
+msgid "Reset transformation"
+msgstr "Reinicialitza la transformació"
+
+#: src/object-ui.c:134
+msgid "Make sensitive"
+msgstr "Fes sensible"
+
+#: src/object-ui.c:134
+msgid "Make insensitive"
+msgstr "Fes insensible"
+
+#. Create link
+#: src/object-ui.c:139
+msgid "Create link"
+msgstr "Crea un enllaç"
+
+#: src/object-ui.c:251 src/verbs.c:453
+msgid "Group"
+msgstr "Agrupa"
+
+#. Group dialog
+#: src/object-ui.c:255
+msgid "Group Properties"
+msgstr "Propietats del grup"
+
+#. "Ungroup"
+#: src/object-ui.c:268 src/verbs.c:454
+msgid "Ungroup"
+msgstr "Desagrupa"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:316
+msgid "Link"
+msgstr "Enllaç"
+
+#. Link dialog
+#: src/object-ui.c:319
+msgid "Link Properties"
+msgstr "Propietats de l'enllaç"
+
+#. Select item
+#: src/object-ui.c:329
+msgid "Follow link"
+msgstr "Segueix un enllaç"
+
+#. Reset transformations
+#: src/object-ui.c:334
+msgid "Remove link"
+msgstr "Suprimeix un enllaç"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:397
+msgid "Image"
+msgstr "Imatge"
+
+#. Link dialog
+#: src/object-ui.c:400
+msgid "Image Properties"
+msgstr "Propietats de la imatge"
+
+#. Autotrace dialog
+#: src/object-ui.c:408 src/sp-image.c:780
+#, fuzzy
+msgid "Trace"
+msgstr "Tolerància:"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:457
+#, fuzzy
+msgid "Shape"
+msgstr "Desa\t"
+
+#. Item dialog
+#: src/object-ui.c:460 src/toolbox.c:442
+#, fuzzy
+msgid "Fill settings"
+msgstr "Paràmetres del tipus de lletra"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:487
+#, fuzzy
+msgid "Rect"
+msgstr "Recta"
+
+#. Link dialog
+#: src/object-ui.c:490
+#, fuzzy
+msgid "Rect Properties"
+msgstr "Objecte de text"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:523 src/verbs.c:470
+#, fuzzy
+msgid "Star"
+msgstr "Contorn"
+
+#. Link dialog
+#: src/object-ui.c:526
+#, fuzzy
+msgid "Star Properties"
+msgstr "Objecte de text"
+
+#. Create toplevel menuitem
+#: src/object-ui.c:559 src/verbs.c:471
+#, fuzzy
+msgid "Spiral"
+msgstr "Especial"
+
+#. Link dialog
+#: src/object-ui.c:562
+#, fuzzy
+msgid "Spiral Properties"
+msgstr "Objecte de text"
+
+#. rx_ratio
+#: src/rect-context.c:397
+msgid "Roundness ratio for x:"
+msgstr "Radi de corbatura per x:"
+
+#. ry_ratio
+#: src/rect-context.c:409
+msgid "Roundness ratio for y:"
+msgstr "Radi de corbatura per y:"
+
+#: src/select-context.c:564
+#, fuzzy
+msgid "Visual transformation"
+msgstr "Inicia la transformació"
+
+#: src/select-context.c:572
+#, fuzzy
+msgid "Show content"
+msgstr "Contingut"
+
+#: src/select-context.c:579
+#, fuzzy
+msgid "Show outline"
+msgstr "Alinea amb les guies"
+
+#: src/select-context.c:586
+#, fuzzy
+msgid "Object transformation"
+msgstr "Inicia la transformació"
+
+#: src/select-context.c:594
+msgid "Optimize"
+msgstr "Optimitza"
+
+#: src/select-context.c:601
+#, fuzzy
+msgid "Preserve"
+msgstr "Previsualitza"
+
+#: src/slideshow.c:88
+#, fuzzy
+msgid "Sodipodi slideshow"
+msgstr "Sodipodi"
+
+#: src/sodipodi.c:398
+msgid "Untitled document"
+msgstr "Document sense títol"
+
+#. Show nice dialog box
+#: src/sodipodi.c:423
+msgid "Sodipodi encountered an internal error and will close now.\n"
+msgstr "Sodipodi ha trobat un error intern i es tancarà ara.\n"
+
+#: src/sodipodi.c:424
+msgid ""
+"Automatic backups of unsaved documents were done to following locations:\n"
+msgstr ""
+
+#: src/sodipodi.c:425
+msgid "Automatic backup of following documents failed:\n"
+msgstr ""
+
+#: src/sodipodi.c:564
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you can\n"
+"neither load nor save preferences\n"
+msgstr ""
+
+#: src/sodipodi.c:567
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:572
+#, c-format
+msgid ""
+"%s is not valid sodipodi preferences file.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:584
+#, c-format
+msgid ""
+"%s is not regular file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:587
+#, c-format
+msgid ""
+"%s either is not valid xml file or\n"
+"you do not have read premissions on it.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:591
+#, c-format
+msgid ""
+"%s is not valid sodipodi extensions file.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:930
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"%s."
+msgstr ""
+
+#: src/sodipodi.c:934
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:938
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:942
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you\n"
+"are neither able to load nor save\n"
+"preferences."
+msgstr ""
+
+#: src/sodipodi.c:952
+#, c-format
+msgid ""
+"Cannot create directory %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:955
+#, c-format
+msgid ""
+"%s is not a valid directory.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:958
+#, c-format
+msgid ""
+"Cannot create file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sodipodi.c:961
+#, c-format
+msgid ""
+"Cannot write file %s.\n"
+"Although sodipodi will run, you are\n"
+"not able to use extensions (plugins)\n"
+msgstr ""
+
+#: src/sp-anchor.c:195
+#, c-format
+msgid "Link to %s"
+msgstr ""
+
+#: src/sp-image.c:370
+#, c-format
+msgid "Image with bad reference: %s"
+msgstr ""
+
+#: src/sp-image.c:372
+#, c-format
+msgid "Color image %d x %d: %s"
+msgstr ""
+
+#: src/sp-image.c:926
+#, c-format
+msgid "Error to write %s: %s"
+msgstr ""
+
+#: src/sp-image.c:960
+msgid "Untitled"
+msgstr ""
+
+#: src/sp-image.c:965
+#, fuzzy
+msgid "Document Name:"
+msgstr "Paràmetres del tipus de lletra"
+
+#: src/sp-image.c:978
+#, fuzzy
+msgid "Unknown"
+msgstr "Element desconegut :-("
+
+#: src/sp-image.c:984
+#, fuzzy
+msgid "Image URI:"
+msgstr "Mida de la imatge"
+
+#: src/sp-item-group.c:456
+#, fuzzy, c-format
+msgid "Group of %d objects"
+msgstr "Grup de %d elements"
+
+#: src/sp-item.c:497
+msgid "Unknown item :-("
+msgstr "Element desconegut :-("
+
+#. fixme:
+#: src/sp-text.c:1305
+msgid "Text object"
+msgstr "Objecte de text"
+
+#. T0
+#: src/spiral-context.c:374
+msgid "Inner radius:"
+msgstr "Radi intern:"
+
+#. Proportion
+#: src/star-context.c:367
+msgid "Proportion:"
+msgstr "Proporció:"
+
+#. Making sides flat
+#: src/star-context.c:380
+msgid "Make sides flat"
+msgstr ""
+
+#: src/toolbox.c:439
+#, fuzzy
+msgid "Object"
+msgstr "Recta"
+
+#: src/toolbox.c:443 src/verbs.c:494
+#, fuzzy
+msgid "Object size and position"
+msgstr "Puja una posició"
+
+#: src/toolbox.c:444
+#, fuzzy
+msgid "Text and font settings"
+msgstr "Paràmetres del gradient"
+
+#: src/toolbox.c:446 src/verbs.c:495
+#, fuzzy
+msgid "Object transformations"
+msgstr "Inicia la transformació"
+
+#: src/toolbox.c:519
+msgid "Draw"
+msgstr "Dibuixa"
+
+#: src/toolbox.c:574
+#, fuzzy
+msgid "Extension"
+msgstr "Defineix les dimensions"
+
+#: src/toolbox.c:651
+msgid "Nodes"
+msgstr "Nodes"
+
+#: src/toolbox.c:653
+#, fuzzy
+msgid "Insert new nodes into selected segments"
+msgstr "Inclou un node en els segments seleccionats"
+
+#: src/toolbox.c:654
+#, fuzzy
+msgid "Break line at selected nodes"
+msgstr "Fes un 'cusp'a la línia als nodes seleccionats"
+
+#: src/toolbox.c:655
+#, fuzzy
+msgid "Make selected nodes corner"
+msgstr "Suprimeix els nodes seleccionats"
+
+#: src/toolbox.c:656
+#, fuzzy
+msgid "Make selected segments lines"
+msgstr "Converteix els segments seleccionats en línies"
+
+#: src/toolbox.c:657
+msgid "Delete selected nodes"
+msgstr "Suprimeix els nodes seleccionats"
+
+#: src/toolbox.c:658
+#, fuzzy
+msgid "Join lines at selected nodes"
+msgstr "Allisa la línia als nodes seleccionats"
+
+#: src/toolbox.c:659
+#, fuzzy
+msgid "Join lines at selected nodes with new segment"
+msgstr "Allisa la línia als nodes seleccionats"
+
+#: src/toolbox.c:660
+msgid "Make selected nodes smooth"
+msgstr "Suavitza els nodes seleccionats"
+
+#: src/toolbox.c:661
+msgid "Make selected segments curves"
+msgstr "Converteix els segments seleccionats en corbes"
+
+#: src/verbs.c:427
+msgid "Does nothing"
+msgstr ""
+
+#: src/verbs.c:429
+msgid "Create new SVG document"
+msgstr ""
+
+#: src/verbs.c:430
+msgid "Open..."
+msgstr "Obre"
+
+#: src/verbs.c:430
+msgid "Open existing SVG document"
+msgstr ""
+
+#: src/verbs.c:431
+msgid "Save"
+msgstr "Desa"
+
+#: src/verbs.c:431
+msgid "Save document"
+msgstr "Desa el document"
+
+#: src/verbs.c:432
+msgid "Save As..."
+msgstr "Desa com a..."
+
+#: src/verbs.c:432
+msgid "Save document under new name"
+msgstr ""
+
+#: src/verbs.c:433
+msgid "Print..."
+msgstr "Imprimeix..."
+
+#: src/verbs.c:433
+msgid "Print document"
+msgstr "Imprimeix document"
+
+#: src/verbs.c:434
+msgid "Print Direct..."
+msgstr ""
+
+#: src/verbs.c:434
+msgid "Print directly to file or pipe"
+msgstr ""
+
+#: src/verbs.c:435
+#, fuzzy
+msgid "Print Preview"
+msgstr "Previsualització d'impressió"
+
+#: src/verbs.c:435
+#, fuzzy
+msgid "Preview document printout"
+msgstr "Paràmetres del tipus de lletra"
+
+#: src/verbs.c:436
+msgid "Import"
+msgstr "Importa"
+
+#: src/verbs.c:436
+msgid "Import bitmap or SVG image into document"
+msgstr ""
+
+#: src/verbs.c:437
+msgid "Export document as PNG bitmap"
+msgstr "Exporta el document com un mapa de bits PNG"
+
+#. Edit
+#: src/verbs.c:439
+msgid "Undo"
+msgstr "Desfés"
+
+#: src/verbs.c:439
+msgid "Revert last action"
+msgstr "Desfès l'ultima acció"
+
+#: src/verbs.c:440
+msgid "Redo"
+msgstr "Refés"
+
+#: src/verbs.c:440
+msgid "Do again undone action"
+msgstr ""
+
+#: src/verbs.c:441
+msgid "Cut"
+msgstr "Talla"
+
+#: src/verbs.c:441
+msgid "Cut selected objects to clipboard"
+msgstr "Retalla els objectes seleccionats al porta-retalls"
+
+#: src/verbs.c:442
+msgid "Copy"
+msgstr "Copia"
+
+#: src/verbs.c:442
+msgid "Copy selected objects to clipboard"
+msgstr "Copia els objectes seleccionats al porta-retalls"
+
+#: src/verbs.c:443
+msgid "Paste"
+msgstr "Enganxa"
+
+#: src/verbs.c:443
+msgid "Paste objects from clipboard"
+msgstr ""
+
+#: src/verbs.c:444
+msgid "Delete"
+msgstr "Suprimeix"
+
+#: src/verbs.c:444
+msgid "Delete selected objects"
+msgstr "Suprimeix el(s) objecte(s) seleccionat(s)"
+
+#: src/verbs.c:445
+msgid "Duplicate"
+msgstr "Duplica"
+
+#: src/verbs.c:445
+msgid "Duplicate selected objects"
+msgstr "Duplica el(s) objecte(s) seleccionat(s)"
+
+#: src/verbs.c:446
+msgid "Clear All"
+msgstr "Esborra'ls tots"
+
+#: src/verbs.c:446
+msgid "Delete all objects from document"
+msgstr ""
+
+#: src/verbs.c:447
+msgid "Select All"
+msgstr "Selecciona'ls tots"
+
+#: src/verbs.c:447
+msgid "Select all objects in document"
+msgstr "Selecciona tots els objectes del document"
+
+#. Selection
+#: src/verbs.c:449
+msgid "Bring to Front"
+msgstr "Porta a primer pla"
+
+#: src/verbs.c:449
+msgid "Raise selected objects to top"
+msgstr "Puja els objectes seleccionats a dalt de tot"
+
+#: src/verbs.c:450
+msgid "Send to Back"
+msgstr "Envia al fons"
+
+#: src/verbs.c:450
+msgid "Lower selected objects to bottom"
+msgstr "Baixa els objectes seleccionats a baix de tot"
+
+#: src/verbs.c:451
+msgid "Raise"
+msgstr "Puja"
+
+#: src/verbs.c:451
+msgid "Raise selected objects one position"
+msgstr "Puja el(s) objecte(s) seleccionat(s) una posició"
+
+#: src/verbs.c:452
+msgid "Lower"
+msgstr ""
+
+#: src/verbs.c:452
+msgid "Lower selected objects one position"
+msgstr "Baixa el(s) objecte(s) seleccionat(s) una posició"
+
+#: src/verbs.c:453
+msgid "Group selected objects"
+msgstr "Agrupa els objectes seleccionats"
+
+#: src/verbs.c:454
+msgid "Ungroup selected group"
+msgstr "Desagrupa els objectes seleccionats"
+
+#: src/verbs.c:455
+msgid "Combine"
+msgstr "Combina"
+
+#: src/verbs.c:455
+msgid "Combine multiple paths"
+msgstr "Combina múltiples camins"
+
+#: src/verbs.c:456
+#, fuzzy
+msgid "Break Apart"
+msgstr "Trenca Apart"
+
+#: src/verbs.c:456
+#, fuzzy
+msgid "Break selected path to subpaths"
+msgstr "Separa el node seleccionat"
+
+#. Object
+#: src/verbs.c:458
+msgid "Rotate 90 degrees"
+msgstr "Gira 90 graus"
+
+#: src/verbs.c:458
+#, fuzzy
+msgid "Rotates object 90 degrees clockwise"
+msgstr "Puja el(s) objecte(s) seleccionat(s) a la part superior"
+
+#: src/verbs.c:459
+#, fuzzy
+msgid "Flatten object"
+msgstr "Suprimeix el(s) objecte(s) seleccionat(s)"
+
+#: src/verbs.c:459
+#, fuzzy
+msgid "Remove transformations from object"
+msgstr "Inicia la transformació"
+
+#: src/verbs.c:460
+msgid "Convert to Curves"
+msgstr "Converteix en corbes"
+
+#: src/verbs.c:460
+msgid "Convert selected object to path"
+msgstr "Converteix els objectes seleccionats en corbes"
+
+#: src/verbs.c:461
+msgid "Flip Horizontally"
+msgstr "Volteja horitzontalment"
+
+#: src/verbs.c:462
+msgid "Flip selected objects horizontally"
+msgstr "Volteja horitzontalment el(s) objecte(s) seleccionat(s)"
+
+#: src/verbs.c:463
+msgid "Flip Vertically"
+msgstr "Volteja verticalment"
+
+#: src/verbs.c:464
+msgid "Flip selected objects vertically"
+msgstr "Volteja verticalment el(s) objecte(s) seleccionat(s)"
+
+#. Event contexts
+#: src/verbs.c:466
+msgid "Select"
+msgstr "Selecciona"
+
+#: src/verbs.c:466
+msgid "Select and transform objects"
+msgstr "Selecciona i transforma els objectes"
+
+#: src/verbs.c:467
+msgid "Node edit"
+msgstr "Edició del node"
+
+#: src/verbs.c:467
+msgid "Modify existing objects by control nodes"
+msgstr "Modifica els objectes existents mitjançant els nodes de control"
+
+#: src/verbs.c:468
+msgid "Rectangle"
+msgstr "Rectangle"
+
+#: src/verbs.c:468
+msgid "Create rectangles and squares with optional rounded corners"
+msgstr ""
+"Crea rectangles i quadrats, opcionalment amb les cantonades arrodonides"
+
+#: src/verbs.c:469
+msgid "Ellipse"
+msgstr "El·lipse"
+
+#: src/verbs.c:469
+msgid "Create circles, ellipses and arcs"
+msgstr "Crea cercles, el·lipses i arcs"
+
+#: src/verbs.c:470
+msgid "Create stars and polygons"
+msgstr "Crea estrelles i polígons"
+
+#: src/verbs.c:471
+msgid "Create spirals"
+msgstr "Crea espirals"
+
+#: src/verbs.c:472
+msgid "Pencil"
+msgstr "Llàpis"
+
+#: src/verbs.c:472
+msgid "Draw freehand curves and straight lines"
+msgstr "Dibuixa corbes a mà alçada i línies rectes"
+
+#: src/verbs.c:473
+msgid "Pen"
+msgstr "Llàpis"
+
+#: src/verbs.c:473
+msgid "Draw precisely positioned curved and straight lines"
+msgstr "Dibuixa corbes posicionades amb precisió i línies rectes"
+
+#: src/verbs.c:474
+msgid "Calligraphy"
+msgstr "Cal·ligrafia"
+
+#: src/verbs.c:474
+msgid "Draw calligraphic lines"
+msgstr "Dibuixa línies de cal·ligrafia"
+
+#: src/verbs.c:475
+msgid "Create and edit text objects"
+msgstr "Crea i edita objectes de text"
+
+#: src/verbs.c:476
+msgid "Zoom into precisely selected area"
+msgstr "Amplia una àrea seleccionada de forma precisa"
+
+#: src/verbs.c:477
+#, fuzzy
+msgid "Dropper"
+msgstr "Comptagotes"
+
+#: src/verbs.c:477
+msgid "Pick averaged colors from image"
+msgstr ""
+
+#. Zooming
+#: src/verbs.c:479
+msgid "In"
+msgstr "Entrada"
+
+#: src/verbs.c:479
+msgid "Zoom in drawing"
+msgstr "Amplia el dibuix"
+
+#: src/verbs.c:480
+msgid "Out"
+msgstr "Sortida"
+
+#: src/verbs.c:480
+msgid "Zoom out drawing"
+msgstr "Redueix el dibuix"
+
+#: src/verbs.c:481
+msgid "1:1"
+msgstr "1:1"
+
+#: src/verbs.c:481
+msgid "Set zoom factor to 1:1"
+msgstr "Fixa el factor d'ampliació 1:1"
+
+#: src/verbs.c:482
+msgid "1:2"
+msgstr "1:2"
+
+#: src/verbs.c:482
+msgid "Set zoom factor to 1:2"
+msgstr "Fixa el factor d'ampliació a 1:2"
+
+#: src/verbs.c:483
+msgid "2:1"
+msgstr "2:1"
+
+#: src/verbs.c:483
+msgid "Set zoom factor to 2:1"
+msgstr "Fixa el factor d'ampliació a 2:1"
+
+#: src/verbs.c:484
+msgid "Fit the whole page into window"
+msgstr "Ajusta la pàgina a la finestra"
+
+#: src/verbs.c:485
+msgid "Fit the whole drawing into window"
+msgstr "Ajusta el dibuix a la finestra"
+
+#: src/verbs.c:486
+msgid "Fit the whole selection into window"
+msgstr "Ajusta la selecció a la finestra"
+
+#. Dialogs
+#: src/verbs.c:488
+#, fuzzy
+msgid "Display"
+msgstr "Paràmetres d'emplenat"
+
+#: src/verbs.c:488
+#, fuzzy
+msgid "Global display settings"
+msgstr "Paràmetres globals de presentació"
+
+#: src/verbs.c:489
+msgid "Document"
+msgstr "Document"
+
+#: src/verbs.c:489
+msgid "Page layout"
+msgstr "Esquema de la pàgina"
+
+#: src/verbs.c:490
+msgid "Editing Window"
+msgstr "Finestra d'edició"
+
+#: src/verbs.c:490
+msgid "Editing window properties"
+msgstr "Edita les propietats de la finestra"
+
+#: src/verbs.c:491
+msgid "Tool Options"
+msgstr "Opcions de l'eina"
+
+#: src/verbs.c:492
+msgid "Tool Attributes"
+msgstr "Atributs de l'eina"
+
+#: src/verbs.c:493
+msgid "Fill and Stroke"
+msgstr ""
+
+#: src/verbs.c:493
+msgid "Fill and stroke settings"
+msgstr "Paràmetres d'emplenat i contorn"
+
+#: src/verbs.c:495
+msgid "Transformations"
+msgstr "Transformacions"
+
+#: src/verbs.c:496
+msgid "Align and Distribute"
+msgstr "Alinea i distribueix"
+
+#: src/verbs.c:496
+msgid "Align and distribute"
+msgstr "Alinea i distribueix"
+
+#: src/verbs.c:497
+msgid "Text and Font"
+msgstr "Text i tipus de lletra"
+
+#: src/verbs.c:497
+msgid "Text editing and font settings"
+msgstr "Paràmetres d'edicio de text i tipus de lletra"
+
+#: src/verbs.c:498
+msgid "XML Editor"
+msgstr "Editor XML"
+
+#. Family frame
+#: src/widgets/font-selector.c:144
+msgid "Font family"
+msgstr "Tipus de lletra"
+
+#. Style frame
+#: src/widgets/font-selector.c:172
+msgid "Style"
+msgstr " Estil"
+
+#: src/widgets/font-selector.c:207
+msgid "Font size:"
+msgstr "Mida de la lletra"
+
+#: src/widgets/font-selector.c:517
+msgid "AaBbCcIiPpQq12368.;/()"
+msgstr "AaBbCcIiPpQq12368.;/()"
+
+#: src/widgets/gradient-selector.c:140
+msgid "Add"
+msgstr "Afegeix"
+
+#: src/widgets/gradient-selector.c:176
+msgid "gradientUnits"
+msgstr "unitatsGradient"
+
+#: src/widgets/gradient-selector.c:205
+msgid "gradientSpread"
+msgstr ""
+
+#: src/widgets/gradient-vector.c:245
+msgid "No document selected"
+msgstr "No hi ha cap document seleccionat"
+
+#: src/widgets/gradient-vector.c:251
+msgid "No gradients in document"
+msgstr "No hi ha gradients al document"
+
+#: src/widgets/gradient-vector.c:257
+msgid "No gradient selected"
+msgstr "No hi ha cap gradient seleccionat"
+
+#: src/widgets/gradient-vector.c:412
+msgid "Start color"
+msgstr "Color inicial"
+
+#: src/widgets/gradient-vector.c:422
+msgid "End color"
+msgstr "Color final"
+
+#: src/widgets/gradient-vector.c:447
+msgid "Gradient vector"
+msgstr "Vector de gradient"
+
+#: src/widgets/paint-selector.c:620
+msgid "No objects"
+msgstr "No hi ha objectes"
+
+#: src/widgets/paint-selector.c:634
+msgid "Multiple styles"
+msgstr "Múltiples estils"
+
+#: src/widgets/paint-selector.c:648
+#, fuzzy
+msgid "No paint"
+msgstr "Imprimeix"
+
+#. Label
+#: src/widgets/paint-selector.c:738
+msgid "Mode:"
+msgstr "Mode:"
+
+#: src/widgets/paint-selector.c:748
+msgid "RGB"
+msgstr "RGB"
+
+#: src/widgets/paint-selector.c:748 src/widgets/paint-selector.c:749
+msgid "RGB Colorspace"
+msgstr "Espai de color RGB"
+
+#: src/widgets/paint-selector.c:749
+msgid "HSV"
+msgstr "HSV"
+
+#: src/widgets/paint-selector.c:750
+msgid "CMYK"
+msgstr "CMYK"
+
+#: src/widgets/paint-selector.c:750
+msgid "CMYK Colorspace"
+msgstr "Espai de color CMYK"
+
+#. Use dropper
+#: src/widgets/paint-selector.c:757
+msgid "Get from dropper"
+msgstr "Agafa del comptagotes"
+
+#: src/widgets/paint-selector.c:788
+#, fuzzy
+msgid "Color paint"
+msgstr "Color del mapa de bits"
+
+#: src/widgets/paint-selector.c:858
+msgid "Linear gradient"
+msgstr "Gradient lineal"
+
+#: src/widgets/paint-selector.c:861
+msgid "Radial gradient"
+msgstr "Gradient radial"
+
+#: src/widgets/sp-color-selector.c:620
+msgid "Red:"
+msgstr "Vermell:"
+
+#: src/widgets/sp-color-selector.c:621
+msgid "Green:"
+msgstr "Verd:"
+
+#: src/widgets/sp-color-selector.c:622
+msgid "Blue:"
+msgstr "Blau:"
+
+#: src/widgets/sp-color-selector.c:623 src/widgets/sp-color-selector.c:643
+#: src/widgets/sp-color-selector.c:665
+msgid "Alpha:"
+msgstr "Alfa:"
+
+#: src/widgets/sp-color-selector.c:640
+msgid "Hue:"
+msgstr "Matís:"
+
+#: src/widgets/sp-color-selector.c:641
+msgid "Saturation:"
+msgstr "Saturació:"
+
+#: src/widgets/sp-color-selector.c:642
+msgid "Value:"
+msgstr "Valor:"
+
+#: src/widgets/sp-color-selector.c:661
+msgid "Cyan:"
+msgstr "Cian:"
+
+#: src/widgets/sp-color-selector.c:662
+msgid "Magenta:"
+msgstr "Magenta:"
+
+#: src/widgets/sp-color-selector.c:663
+msgid "Yellow:"
+msgstr "Groc:"
+
+#: src/widgets/sp-color-selector.c:664
+msgid "Black:"
+msgstr "Negre:"
+
+#: src/widgets/sp-toolbox.c:305
+msgid "Toggle separate window and main toolbox placement"
+msgstr ""
+
+#: src/widgets/sp-xmlview-attr-list.c:55
+msgid "Attribute"
+msgstr "Atribut"
+
+#: src/widgets/sp-xmlview-attr-list.c:56
+msgid "Value"
+msgstr "Valor"
+
+#~ msgid "Item is reference"
+#~ msgstr "L'element és una referència"
+
+#~ msgid "The SVG ID of item"
+#~ msgstr "L'identificador SVG de l'element"
+
+#~ msgid "The ID is not valid"
+#~ msgstr "L'identificador no és vàlid"
+
+#~ msgid "The ID is already defined"
+#~ msgstr "L'identificador ja està definit"
+
+#~ msgid "Object position and size"
+#~ msgstr "Posició i mida de l'objecte"
+
+#~ msgid "Position and size"
+#~ msgstr "Posició i mida"

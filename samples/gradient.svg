@@ -1,0 +1,76 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
+[
+ <!ATTLIST svg
+  xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   style="fill:#000000;fill-opacity:0.5;stroke:none"
+   id="svg1"
+   sodipodi:docbase="/home/lauris/cvs/sodipodi/samples/"
+   sodipodi:docname="/home/lauris/cvs/sodipodi/samples/gradient.svg"
+   sodipodi:version="0.28pre"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="210mm"
+   height="297mm">
+  <sodipodi:namedview
+     id="base" />
+  <defs
+     id="defs3">
+    <linearGradient
+       id="grad01"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="5%"
+         style="stop-color:#f60"
+         id="stop5" />
+      <stop
+         offset="50%"
+         style="stop-color:#ff6"
+         id="stop6" />
+      <stop
+         offset="95%"
+         style="stop-color:#6f6"
+         id="stop10" />
+    </linearGradient>
+    <linearGradient
+       id="grad02"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1"
+       spreadMethod="reflect">
+      <stop
+         offset="35%"
+         style="stop-color:#fff"
+         id="stop8" />
+      <stop
+         offset="55%"
+         style="stop-color:#000"
+         id="stop9" />
+    </linearGradient>
+  </defs>
+  <ellipse
+     style="stroke:#000000;fill:url(#grad01);fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     id="ellipse3"
+     cx="260.453738"
+     cy="327.991845"
+     rx="146.069243"
+     ry="151.380852"
+     transform="matrix(1 0 0 1 -50.4599 135.446)" />
+  <ellipse
+     style="stroke:#000000;fill:url(#grad02);fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     id="ellipse4"
+     cx="288.339685"
+     cy="423.600804"
+     rx="227.071278"
+     ry="82.329937"
+     transform="matrix(0.684211 0 0 1.8871 186.664 -467.405)" />
+</svg>

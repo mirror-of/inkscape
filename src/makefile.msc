@@ -1,0 +1,253 @@
+TOP = ..\..
+PRJ_TOP = ..
+PACKAGE = sodipodi
+PKG_VER = 0.32
+!INCLUDE $(TOP)\glib\build\win32\make.msc
+
+SUBDIRS = libnr libnrtype xml svg helper widgets dialogs display $(module_subdirs)
+
+sub-all: 
+	for %d in ($(SUBDIRS)) do nmake -nologo -f makefile.msc sub-one THIS=%d
+
+sub-one:
+	cd $(THIS)
+	nmake -nologo -f makefile.msc
+	cd ..
+
+PKG_CFLAGS = \
+	-FImsvc_recommended_pragmas.h \
+	-I$(PRJ_TOP) -I. \
+	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(LIBXML2_CFLAGS) $(GTK2_CFLAGS) \
+	$(POPT_CFLAGS)
+
+SODIPODI_LIBS = \
+	libnr/libnr-$(PKG_VER).lib \
+	libnrtype/libnrtype-$(PKG_VER).lib \
+	xml/sp-xml-$(PKG_VER).lib \
+	svg/sp-svg-$(PKG_VER).lib \
+#	helper/sp-helper-$(PKG_VER).lib \
+	helper/sp-helper.lib \
+	widgets/sp-widgets.lib \
+	dialogs/sp-dialogs.lib \
+	display/sp-display.lib \
+
+PKG_LINK = \
+	$(SODIPODI_LIBS) \
+	$(GLIB_LIBS) $(GTK2_LIBS) $(LIBART_LIBS) $(LIBXML2_LIBS) $(PNG_LIBS) \
+	$(INTL_LIBS) \
+	$(POPT_LIBS) \
+	$(GNOME_PRINT_LIBS) \
+
+
+sodipodilib_src = \
+	macros.h \
+	forward.h \
+	enums.h \
+	attributes.c \
+	attributes.h \
+	sp-object.c \
+	sp-object.h \
+	sp-object-repr.c \
+	sp-object-repr.h \
+	sp-object-group.c \
+	sp-object-group.h \
+	sp-defs.c \
+	sp-defs.h \
+	sp-item.c \
+	sp-item.h \
+	sp-item-group.c \
+	sp-item-group.h \
+	sp-symbol.c \
+	sp-symbol.h \
+	sp-marker.c \
+	sp-marker.h \
+	sp-use.c \
+	sp-use.h \
+	sp-anchor.c \
+	sp-anchor.h \
+	sp-root.c \
+	sp-root.h \
+	sp-namedview.c \
+	sp-namedview.h \
+	sp-guide.c \
+	sp-guide.h \
+	sp-image.c \
+	sp-image.h \
+	sp-path.c \
+	sp-path.h \
+	sp-shape.c \
+	sp-shape.h \
+	sp-rect.c \
+	sp-rect.h \
+	sp-ellipse.c \
+	sp-ellipse.h \
+	sp-star.c \
+	sp-star.h \
+	sp-spiral.c \
+	sp-spiral.h \
+	sp-line.c \
+	sp-line.h \
+	sp-polyline.c \
+	sp-polyline.h \
+	sp-polygon.c \
+	sp-polygon.h \
+	sp-chars.c \
+	sp-chars.h \
+	sp-text.c \
+	sp-text.h \
+	sp-paint-server.c \
+	sp-paint-server.h \
+	sp-gradient.c \
+	sp-gradient.h \
+	sp-pattern.c \
+	sp-pattern.h \
+	sp-clippath.c \
+	sp-clippath.h \
+	sp-mask.c \
+	sp-mask.h \
+	sp-animation.c \
+	sp-animation.h \
+	color.c \
+	color.h \
+	style.c \
+	style.h \
+	document.c \
+	document.h \
+	document-private.h \
+	document-undo.c \
+	uri-references.c \
+	uri-references.h \
+	extension.h
+
+sodipodi_private_libs = \
+	$(spproglibs) \
+	dialogs/libspdialogs.a \
+	xml/libspxml.a \
+	svg/libspsvg.a \
+	widgets/libspwidgets.a \
+	display/libspdisplay.a \
+	helper/libspchelp.a \
+	libnrtype/libnrtype.a \
+	libnr/libnr.a \
+	libnrtype/libnrtype.a \
+	$(module_libs)
+
+EXTRA_DIST = \
+	brokenimage.xpm
+
+module_src = \
+	module.c module.h
+
+OBJECTS = \
+	sodipodi.obj \
+	view.obj \
+	svg-view.obj \
+	selection.obj \
+	desktop.obj \
+	desktop-events.obj \
+	desktop-handles.obj \
+	desktop-affine.obj \
+	desktop-snap.obj \
+	sp-metrics.obj \
+	toolbox.obj \
+	verbs.obj \
+	shortcuts.obj \
+	event-context.obj \
+	seltrans-handles.obj \
+	seltrans.obj \
+	select-context.obj \
+	node-context.obj \
+	nodepath.obj \
+	knotholder.obj \
+	rect-context.obj \
+	arc-context.obj \
+	star-context.obj \
+	spiral-context.obj \
+	draw-context.obj \
+	dyna-draw-context.obj \
+	text-context.obj \
+	zoom-context.obj \
+	dropper-context.obj \
+	knot.obj \
+	main.obj \
+	help.obj \
+	sp-cursor.obj \
+	dir-util.obj \
+	rubberband.obj \
+	event-broker.obj \
+	path-chemistry.obj \
+	selection-chemistry.obj \
+	gradient-chemistry.obj \
+	sp-item-transform.obj \
+	file.obj \
+	print.obj \
+	interface.obj \
+	slideshow.obj \
+	\
+	document.obj \
+	document-undo.obj \
+	sp-gradient.obj \
+	sp-text.obj \
+	sp-item.obj \
+	sp-item-group.obj \
+	sp-object.obj \
+	style.obj \
+	color.obj \
+	sp-ellipse.obj \
+	sp-chars.obj \
+	sp-mask.obj \
+	sp-clippath.obj \
+	uri-references.obj \
+	sp-anchor.obj \
+	sp-object-repr.obj \
+	module.obj \
+	sp-paint-server.obj \
+	attributes.obj \
+	sp-pattern.obj \
+	sp-polygon.obj \
+	sp-polyline.obj \
+	sp-line.obj \
+	sp-image.obj \
+	sp-defs.obj \
+	sp-animation.obj \
+	sp-marker.obj \
+	sp-symbol.obj \
+	sp-use.obj \
+	sp-namedview.obj \
+	sp-shape.obj \
+	sp-spiral.obj \
+	sp-object-group.obj \
+	sp-rect.obj \
+	sp-path.obj \
+	sp-star.obj \
+	sp-guide.obj \
+	sp-root.obj \
+	\
+	winmain.obj
+
+all : \
+	$(PRJ_TOP)\config.h \
+	sub-all \
+	$(PACKAGE).exe
+
+#LDFLAGS = /link $(LINKDEBUG) /subsystem:windows /machine:ix86
+LINKDEBUG = $(LINKDEBUG) /nodefaultlib:msvcrt
+LDFLAGS = /link $(LINKDEBUG) /subsystem:console /machine:ix86
+
+$(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
+	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
+
+RESOURCE = $(PACKAGE).res
+
+$(PACKAGE).lib : $(OBJECTS)
+	lib /out:$(PACKAGE).lib $(OBJECTS)
+
+$(PACKAGE)-$(PKG_VER).dll : $(OBJECTS) $(PACKAGE).def
+	$(CC) $(CFLAGS) -LD -Fe$(PACKAGE)-$(PKG_VER).dll $(OBJECTS) $(PKG_LINK) user32.lib advapi32.lib wsock32.lib $(LDFLAGS) /def:$(PACKAGE).def
+
+$(PACKAGE).exe : $(OBJECTS) $(SODIPODI_LIBS) $(PACKAGE).def $(PACKAGE).res
+	$(CC) $(CFLAGS) -Fe$(PACKAGE).exe $(PACKAGE).res $(OBJECTS) $(PKG_LINK) \
+	user32.lib advapi32.lib shell32.lib wsock32.lib winspool.lib $(LDFLAGS) /def:$(PACKAGE).def
+
+.c.obj :
+	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<

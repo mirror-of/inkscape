@@ -1,0 +1,59 @@
+#!/usr/bin/make -f
+
+tmp:=$(shell pwd)/debian/tmp
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+CFLAGS += -O0
+else
+CFLAGS += -O2
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+INSTALL_PROGRAM += -s
+endif
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --sysconfdir=/etc --with-gtk-prefix=/usr --mandir=$(tmp)/usr/share/man --without-bonobo --without-arena --without-new-render \
+	--with-xft --with-popt --without-gnome-print --disable-mmx
+	$(MAKE)
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	[ ! -f Makefile ] || $(MAKE) clean
+	rm -f build-stamp 
+	-test -r /usr/share/misc/config.sub && \
+	cp -f /usr/share/misc/config.sub $(CURDIR)/config.sub
+	-test -r /usr/share/misc/config.guess && \
+	cp -f /usr/share/misc/config.guess $(CURDIR)/config.guess
+	rm -f conftest.o po/*.gmo po/messages config.log src/bonobo/Makefile src/display/nr/Makefile
+	rm -f sodipodi.spec sodipodi.desktop intltool-extract intltool-merge intltool-update GNOME_Sodipodi.oaf
+	rm -f config.status intl/Makefile po/Makefile.in po/POTFILES po/.intltool-merge-cache
+	dh_clean 
+
+binary-indep: 
+
+binary-arch: build 
+	dh_testdir
+	dh_testroot
+	$(MAKE) install prefix=$(tmp)/usr sysconfdir=$(tmp)/etc
+	find $(tmp)/usr -name "Makefile*" | xargs -r rm -f
+	dh_installdocs README
+	dh_installmenu
+	dh_installexamples samples/*.svg
+	dh_installchangelogs ChangeLog
+ifeq "$(findstring nostrip,$(DEB_BUILD_OPTIONS))" ""
+	dh_strip
+endif
+	dh_compress -X.svg
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary 

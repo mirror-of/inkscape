@@ -1,0 +1,5 @@
+Makefile
+Makefile.in
+testnr
+gen_nr_config
+nr_config.h

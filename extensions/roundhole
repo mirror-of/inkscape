@@ -1,0 +1,124 @@
+#!/usr/bin/perl
+
+use strict;
+
+use vars qw($VERSION);
+$VERSION = '1.00';
+
+my ($x, $y, $w, $h, $done) = (0,0,0,0,0);
+
+my $seen_rect = 0;
+while (<>) {
+    my $line = $_;
+
+    # Look for the starting <rect... tag
+    if (! $seen_rect) {
+        if ($line =~ /^(.*)\<rect\s+/) {
+            # Aha, this line contains a "<rect " tag... start looking
+            $seen_rect = 1;
+
+            # Ignore the stuff before the opening tag
+            print $1;
+            $line =~ s/^$1//;
+        } else {
+            # If we haven't hit a rect element, reloop to next line
+            print $line;
+            next;
+        }
+    } 
+
+    # Have we hit the end of the rect element?
+    my $endtext = '';
+    if ($line =~ m|</rect>(.*)$|) {
+        # Ignore stuff after the closing tag
+        $endtext = $1;
+        $line =~ s/$1$//;
+        $seen_rect = 0;
+        $done = 0; $x=0; $y=0; $h=0; $w=0;
+    }
+
+    $line =~ s|\<rect|\<ellipse|;
+    $line =~ s|\</rect|\</ellipse|;
+
+    if (/x\=\"(\w+)\"/)      { $x = $1; $line =~ s/x\=\"\w+\"//; }
+    if (/y\=\"(\w+)\"/)      { $y = $1; $line =~ s/y\=\"(\w+)\"//; }
+    if (/width\=\"(\w+)\"/)  { $w = $1; $line =~ s/width\=\"(\w+)\"//; }
+    if (/height\=\"(\w+)\"/) { $h = $1; $line =~ s/height\=\"(\w+)\"//; }
+
+    if ($x && $y && $h && $w && ! $done) {
+        my $rx = $w / 2;
+        my $ry = $h / 2;
+        my $cx = $x + $rx;
+        my $cy = $y + $ry;
+        print qq|     cx="$cx"\n|;
+        print qq|     cy="$cy"\n|;
+        print qq|     rx="$ry"\n|;
+        print qq|     ry="$rx"\n|;
+
+        $done = 1;
+    }
+    print $line unless ($line =~ /^\s*$/);
+
+    print $endtext;
+}
+
+
+=pod
+
+=head1 NAME
+
+roundhole - Perl script for changing a square of a given width into a
+circle of that diameter.  Useful for putting square pegs in round holes.
+;-)
+
+=head1 SYNOPSIS
+
+cat square.svg | roundhole > circle.svg
+
+=head1 DESCRIPTION
+
+Send a rect SVG entity to the program's STDIN, and it will be parsed,
+and corresponding SVG code for a circle emitted to STDOUT.  Note that
+the id will remain unchanged (you may want to rename it if it had been
+something like "rect4").
+
+This is a deliberately simpleminded script, created mostly for
+experimental and hopefully educational purposes, to demonstrate what a
+stdin/stdout SVG filter module for Sodipodi might look like.  I've
+skipped using the perl module SVG.pm to illustrate that for simple
+conversions, it's feasible to just slap something together with just
+regular Perl know-how (well, mostly regexps!)  For more "proper" scripts,
+refer to http://search.cpan.org/author/RONAN/SVG-2.25/SVG.pm.
+
+=head1 PREREQUISITES
+
+None
+
+=head1 COREQUISITES
+
+Sodipodi
+
+=head1 OSNAMES
+
+any
+
+=head1 SCRIPT CATEGORIES
+
+Fun/Educational
+
+=head1 AUTHOR
+
+ Bryce W. Harrington <bryce@osdl.org> <bryce@neptune.net>
+
+=head1 SEE ALSO
+
+SVG
+
+=head1 COPYRIGHT
+
+ roundhole is Copyright (c) 2002, by Bryce W. Harrington. 
+ All rights reserved. You may distribute this code under the terms 
+ of either the GNU General Public License or the Artistic License, 
+ as specified in the Perl README file.
+
+=cut
