@@ -18,6 +18,15 @@ INCLUDES = \
 	$(INKSCAPE_CFLAGS) \
 	$(GNOME_PRINT_CFLAGS)
 
+check-recursive: all-recursive
+# So that test programs can link against object files in other directories.
+# We can get rid of this if we switch to a single makefile in src or toplevel
+# that contains all the rules & dependencies for its (recursive) subdirectories
+# (*see (automake-1)Alternative, in the Texinfo documentation for automake).
+# Disadvantages of adding this all-recursive dependency: `make check' takes
+# longer; and the dependency won't have any effect if someone does `make check'
+# from a subdirectory.
+
 bin_PROGRAMS = inkscape inkview
 
 inkscapelib_src = \

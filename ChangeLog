@@ -1,5 +1,8 @@
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am: Add `check-recursive: all-recursive' dependency
+	(and a comment with related discussion).
+
 	* src/xml/Makefile.am: Append $(EXEEXT) to executables in TESTS.
 
 	* src/verbs.cpp (sp_action_get_title): Get rid of fixed-sized buffer.
