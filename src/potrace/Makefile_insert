@@ -10,28 +10,29 @@ potrace_libpotrace_a_CPPFLAGS =	\
 	-DPOTRACE=\"potrace\"
 
 potrace_libpotrace_a_SOURCES =	\
+	potrace/backend_eps.h	\
 	potrace/bitmap.cpp \
 	potrace/bitmap.h \
 	potrace/bits.cpp \
 	potrace/bits.h \
+	potrace/canny.cpp	\
+	potrace/canny.h	\
 	potrace/curve.cpp \
 	potrace/curve.h \
 	potrace/flate.cpp \
 	potrace/flate.h \
+	potrace/graymap-gdk.cpp	\
+	potrace/graymap-gdk.h	\
+	potrace/graymap.cpp	\
+	potrace/graymap.h	\
 	potrace/greymap.cpp \
 	potrace/greymap.h \
+	potrace/inkscape-potrace.cpp	\
+	potrace/inkscape-potrace.h	\
 	potrace/lists.h \
+	potrace/lzw.h	\
+	potrace/main.h	\
 	potrace/path.cpp \
 	potrace/path.h \
 	potrace/render.cpp \
-	potrace/render.h \
-	potrace/inkscape-potrace.cpp \
-	potrace/inkscape-potrace.h \
-	potrace/graymap.cpp \
-	potrace/graymap.h \
-	potrace/graymap-gdk.cpp \
-	potrace/graymap-gdk.h \
-	potrace/canny.cpp \
-	potrace/canny.h
-
-
+	potrace/render.h
