@@ -18,6 +18,8 @@
 #include "sp-item.h"
 #include "sp-marker.h"
 
+G_BEGIN_DECLS
+
 #define SP_TYPE_SHAPE (sp_shape_get_type ())
 #define SP_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SHAPE, SPShape))
 #define SP_SHAPE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_SHAPE, SPShapeClass))
@@ -55,5 +57,7 @@ void sp_shape_set_curve_insync (SPShape *shape, SPCurve *curve, unsigned int own
 
 /* PROTECTED */
 void sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value);
+
+G_END_DECLS
 
 #endif

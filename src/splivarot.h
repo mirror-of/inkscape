@@ -9,6 +9,8 @@
 
 #include "forward.h"
 
+G_BEGIN_DECLS
+
 // boolean operations
 // work on the current selection
 // selection has 2 contain exactly 2 items
@@ -28,5 +30,7 @@ void sp_selected_path_outline (void);
 
 // simplifies a path (removes small segments and the like)
 void sp_selected_path_simplify(void);
+
+G_END_DECLS
 
 #endif

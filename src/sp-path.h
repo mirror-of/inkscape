@@ -15,6 +15,8 @@
 
 #include "sp-shape.h"
 
+G_BEGIN_DECLS
+
 #define SP_TYPE_PATH (sp_path_get_type ())
 #define SP_PATH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PATH, SPPath))
 #define SP_IS_PATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PATH))
@@ -28,5 +30,7 @@ struct _SPPathClass {
 };
 
 GType sp_path_get_type (void);
+
+G_END_DECLS
 
 #endif
