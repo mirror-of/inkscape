@@ -452,13 +452,17 @@ void SVGPreview::showTooLarge(long fileLength)
 static bool
 hasSuffix(Glib::ustring &str, Glib::ustring &ext)
 {
-    int len    = str.length();
-    int extlen = ext.length();
-    if (extlen >= len)
+    int strLen = str.length();
+    int extLen = ext.length();
+    if (extLen > strLen)
+        return false;
+    int strpos = strLen-1;
+    for (int extpos = extLen-1 ; extpos>=0 ; extpos--, strpos--)
+        {
+        if (str[strpos] != ext[extpos])
             return false;
-    if (str.find(ext, len-extlen)>0)
-            return true;
-    return false;
+        }
+    return true;
 }
 
 
@@ -476,8 +480,10 @@ isValidImageFile(Glib::ustring &fileName)
         for (unsigned int j=0; j<extensions.size(); j++)
             {
             Glib::ustring ext = extensions[j];
-            if (hasSuffix(fileName, extensions[j]))
+            if (hasSuffix(fileName, ext))
+                {
                 return true;
+                }
             }
         }
     return false;
@@ -513,8 +519,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
     Glib::ustring svgz = ".svgz";
 
     if ((dialogType == SVG_TYPES || dialogType == IMPORT_TYPES) &&
-           (hasSuffix(fileName, svg) ||
-            hasSuffix(fileName, svgz)   )
+           (hasSuffix(fileName, svg) || hasSuffix(fileName, svgz)   )
          )
         {
         bool retval = setFileName(fileName);
