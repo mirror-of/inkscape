@@ -186,7 +186,6 @@ src/shortcuts.cpp
 src/slideshow.cpp
 src/sp-anchor.cpp
 src/sp-animation.cpp
-src/sp-chars.cpp
 src/sp-clippath.cpp
 src/sp-cursor.cpp
 src/sp-defs.cpp
