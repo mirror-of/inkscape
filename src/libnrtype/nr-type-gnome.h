@@ -21,7 +21,7 @@ struct NRTypeFaceGnomeClass;
 #include <libnrtype/nr-type-directory.h>
 #include <libgnomeprint/gnome-font.h>
 
-struct NRTypeFaceGnome {
+struct NRTypeFaceGnome : public NRTypeFace {
 	NRTypeFace typeface;
 
 	GnomeFontFace *face;

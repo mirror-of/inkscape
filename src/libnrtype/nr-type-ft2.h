@@ -26,8 +26,7 @@ struct NRTypeFaceGlyphFT2;
 #include <libnr/nr-point.h>
 #include <libnr/nr-rect.h>
 
-struct NRTypeFaceDefFT2 {
-	NRTypeFaceDef def;
+struct NRTypeFaceDefFT2 : public NRTypeFaceDef {
 	unsigned int is_file : 1;
 	union {
 		gchar *file;
@@ -44,9 +43,7 @@ struct NRTypeFaceGlyphFT2 {
 	NRBPath outline;
 };
 
-struct NRTypeFaceFT2 {
-	NRTypeFace typeface;
-
+struct NRTypeFaceFT2 : public NRTypeFace {
 	FT_Face ft_face;
 	double ft2ps;
 	unsigned int unimap : 1;

@@ -50,9 +50,7 @@ struct NRTypeFaceGlyphW32 {
 	NRBPath outline;
 };
 
-struct NRTypeFaceW32 {
-	NRTypeFace typeface;
-
+struct NRTypeFaceW32 : public NRTypeFace {
 	NRFont *fonts;
 
 	/* Glyph slots */

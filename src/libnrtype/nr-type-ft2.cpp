@@ -147,13 +147,13 @@ nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 	if (dft2->is_file) {
 		ft_result = FT_New_Face (ft_library, dft2->data.file, dft2->face, &ft_face);
 		if (ft_result != FT_Err_Ok) {
-			fprintf (stderr, "Error loading typeface %s from file %s:%d", dft2->def.name, dft2->data.file, dft2->face);
+			fprintf (stderr, "Error loading typeface %s from file %s:%d", dft2->name, dft2->data.file, dft2->face);
 			return;
 		}
 	} else {
 		ft_result = FT_New_Memory_Face (ft_library, (FT_Byte*)dft2->data.data, dft2->size, dft2->face, &ft_face);
 		if (ft_result != FT_Err_Ok) {
-			fprintf (stderr, "Error loading typeface %s from memory", dft2->def.name);
+			fprintf (stderr, "Error loading typeface %s from memory", dft2->name);
 			return;
 		}
 	}
@@ -162,7 +162,7 @@ nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 
 	tff->ft_face = ft_face;
 
-	tff->typeface.nglyphs = tff->ft_face->num_glyphs;
+	tff->nglyphs = tff->ft_face->num_glyphs;
 
 	ft_result = FT_Select_Charmap (ft_face, ft_encoding_unicode);
 	if (ft_result != FT_Err_Ok) {
@@ -172,7 +172,7 @@ nr_typeface_ft2_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 		int cp, nglyphs;
 		tff->unimap = 1;
 		tff->freelo = 1;
-		nglyphs = MIN (tff->typeface.nglyphs, 0x1900);
+		nglyphs = MIN (tff->nglyphs, 0x1900);
 		/* Check whether we have free U+E000 - U+F8FF */
 		for (cp = 0; cp < nglyphs; cp++) {
 			if (FT_Get_Char_Index (tff->ft_face, 0xe000 + cp)) {
@@ -203,10 +203,10 @@ nr_type_ft2_build_def (NRTypeFaceDefFT2 *dft2,
 		       const gchar *file,
 		       unsigned int face)
 {
-	dft2->def.type = NR_TYPE_TYPEFACE_FT2;
-	dft2->def.name = strdup (name);
-	dft2->def.family = strdup (family);
-	dft2->def.typeface = NULL;
+	dft2->type = NR_TYPE_TYPEFACE_FT2;
+	dft2->name = strdup (name);
+	dft2->family = strdup (family);
+	dft2->typeface = NULL;
 	dft2->is_file = TRUE;
 	dft2->data.file = strdup (file);
 	dft2->face = face;
@@ -220,10 +220,10 @@ nr_type_ft2_build_def_data (NRTypeFaceDefFT2 *dft2,
 			    unsigned int size,
 			    unsigned int face)
 {
-	dft2->def.type = NR_TYPE_TYPEFACE_FT2;
-	dft2->def.name = strdup (name);
-	dft2->def.family = strdup (family);
-	dft2->def.typeface = NULL;
+	dft2->type = NR_TYPE_TYPEFACE_FT2;
+	dft2->name = strdup (name);
+	dft2->family = strdup (family);
+	dft2->typeface = NULL;
 	dft2->is_file = FALSE;
 	dft2->data.data = data;
 	dft2->size = size;
@@ -430,8 +430,8 @@ nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, unsigned int glyph)
 {
 	if (!tff->hgidx) {
 		unsigned int i;
-		tff->hgidx = nr_new (int, tff->typeface.nglyphs);
-		for (i = 0; i < tff->typeface.nglyphs; i++) {
+		tff->hgidx = nr_new (int, tff->nglyphs);
+		for (i = 0; i < tff->nglyphs; i++) {
 			tff->hgidx[i] = -1;
 		}
 	}
@@ -469,8 +469,8 @@ nr_typeface_ft2_ensure_slot_v (NRTypeFaceFT2 *tff, unsigned int glyph)
 {
 	if (!tff->vgidx) {
 		unsigned int i;
-		tff->vgidx = nr_new (int, tff->typeface.nglyphs);
-		for (i = 0; i < tff->typeface.nglyphs; i++) {
+		tff->vgidx = nr_new (int, tff->nglyphs);
+		for (i = 0; i < tff->nglyphs; i++) {
 			tff->vgidx[i] = -1;
 		}
 	}

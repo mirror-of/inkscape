@@ -1,4 +1,13 @@
-2004-05-14  MenTaLguY  <mental@rydia.net>
+2004-05-16  MenTaLguY  <mental@rydia.net>
+
+	* src/libnrtype/nr-type-directory.cpp, src/libnrtype/nr-type-ft2.cpp,
+	  src/libnrtype/nr-type-ft2.h, src/libnrtype/nr-type-gnome.h,
+	  src/libnrtype/nr-type-w32.h, src/libnrtype/nr-type-xft.cpp,
+	  src/libnrtype/nr-typeface.h:
+
+	  transition to C++ inheritance
+
+2004-05-15  MenTaLguY  <mental@rydia.net>
 
 	* src/display/nr-arena-shape.h, src/display/nr-arena-shape.cpp:
 	  further reduced dependency on SPStyle

@@ -89,8 +89,8 @@ nr_type_read_xft_list (void)
 		NRTypeFaceDefFT2 *tdef;
 		if (family) {
 			tdef = nr_new (NRTypeFaceDefFT2, 1);
-			tdef->def.next = NULL;
-			tdef->def.pdef = NULL;
+			tdef->next = NULL;
+			tdef->pdef = NULL;
 			nr_type_xft_build_def (tdef, (gchar *)gnames.names[i], (gchar *)family);
 			nr_type_register ((NRTypeFaceDef *) tdef);
 		}

@@ -693,8 +693,8 @@ nr_type_build (const gchar *name, const gchar *family,
 	if (!typedict) nr_type_directory_build ();
 
 	dft2 = nr_new (NRTypeFaceDefFT2, 1);
-	dft2->def.next = NULL;
-	dft2->def.pdef = NULL;
+	dft2->next = NULL;
+	dft2->pdef = NULL;
 	nr_type_ft2_build_def_data (dft2, name, family, data, size, face);
 	nr_type_register ((NRTypeFaceDef *) dft2);
 

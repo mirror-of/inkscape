@@ -74,12 +74,7 @@ struct NRTypeFaceClass {
 	void (* rasterfont_glyph_mask_render) (NRRasterFont *rfont, unsigned int glyph, NRPixBlock *m, float x, float y);
 };
 
-struct NRTypeFace {
-	NRObject object;
-
-	/* NRTypeFaceVMV *vmv; */
-	/* unsigned int refcount; */
-
+struct NRTypeFace : public NRObject {
 	NRTypeFaceDef *def;
 	unsigned int nglyphs;
 };
