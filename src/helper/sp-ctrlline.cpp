@@ -347,9 +347,9 @@ ctrl_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
     if ( sv > 249.999 ) {
       /* Simple copy */
       while (len > 0) {
-        d[0] = NR_COMPOSEN11 (r, 255, d[0]);
-        d[1] = NR_COMPOSEN11 (g, 255, d[1]);
-        d[2] = NR_COMPOSEN11 (b, 255, d[2]);
+        d[0] = INK_COMPOSE (r, 255, d[0]);
+        d[1] = INK_COMPOSE (g, 255, d[1]);
+        d[2] = INK_COMPOSE (b, 255, d[2]);
         d += 3;
         len -= 1;
       }
@@ -357,9 +357,9 @@ ctrl_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
       unsigned int c0_24=(int)sv;
       c0_24&=0xFF;
       while (len > 0) {
-        d[0] = NR_COMPOSEN11 (r, c0_24, d[0]);
-        d[1] = NR_COMPOSEN11 (g, c0_24, d[1]);
-        d[2] = NR_COMPOSEN11 (b, c0_24, d[2]);
+        d[0] = INK_COMPOSE (r, c0_24, d[0]);
+        d[1] = INK_COMPOSE (g, c0_24, d[1]);
+        d[2] = INK_COMPOSE (b, c0_24, d[2]);
         d += 3;
         len -= 1;
       }
@@ -369,9 +369,9 @@ ctrl_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
       sv=0.5*(vst+ven);
       unsigned int c0_24=(int)sv;
       c0_24&=0xFF;
-      d[0] = NR_COMPOSEN11 (r, c0_24, d[0]);
-      d[1] = NR_COMPOSEN11 (g, c0_24, d[1]);
-      d[2] = NR_COMPOSEN11 (b, c0_24, d[2]);
+      d[0] = INK_COMPOSE (r, c0_24, d[0]);
+      d[1] = INK_COMPOSE (g, c0_24, d[1]);
+      d[2] = INK_COMPOSE (b, c0_24, d[2]);
     } else {
       dv/=len;
       sv+=0.5*dv; // correction trapezoidale
@@ -384,9 +384,9 @@ ctrl_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
         /* Draw */
         ca = c0_24 >> 16;
         if ( ca > 255 ) ca=255;
-        d[0] = NR_COMPOSEN11 (r, ca, d[0]);
-        d[1] = NR_COMPOSEN11 (g, ca, d[1]);
-        d[2] = NR_COMPOSEN11 (b, ca, d[2]);
+        d[0] = INK_COMPOSE (r, ca, d[0]);
+        d[1] = INK_COMPOSE (g, ca, d[1]);
+        d[2] = INK_COMPOSE (b, ca, d[2]);
         d += 3;
         c0_24 += s0_24;
         c0_24 = CLAMP (c0_24, 0, 16777216);
