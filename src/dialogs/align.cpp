@@ -206,10 +206,7 @@ sp_align_add_button ( GtkWidget *t, int col, int row,
 void
 sp_quick_align_dialog (void)
 {
-    if (!dlg)
-    {
-        
-        GtkWidget *nb, *vb, *om, *t, *l;
+    if (!dlg) {
         GtkTooltips * tt = gtk_tooltips_new ();
 
         gchar title[500];
@@ -221,7 +218,7 @@ sp_quick_align_dialog (void)
             y = prefs_get_int_attribute (prefs_path, "y", 0);
         }
         
-        if (w ==0 || h == 0) {
+        if (w == 0 || h == 0) {
             w = prefs_get_int_attribute (prefs_path, "w", 0);
             h = prefs_get_int_attribute (prefs_path, "h", 0);
         }
@@ -260,20 +257,20 @@ sp_quick_align_dialog (void)
         g_signal_connect (   G_OBJECT (INKSCAPE), "dialogs_unhide", 
                              G_CALLBACK (sp_dialog_unhide), dlg);
 
-        nb = gtk_notebook_new ();
+        GtkWidget *nb = gtk_notebook_new ();
         gtk_container_add (GTK_CONTAINER (dlg), nb);
 
         /* Align */
 
-        vb = gtk_vbox_new (FALSE, 4);
+        GtkWidget *vb = gtk_vbox_new (FALSE, 4);
         gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
 
-        om = gtk_option_menu_new ();
+        GtkWidget *om = gtk_option_menu_new ();
         gtk_box_pack_start (GTK_BOX (vb), om, FALSE, FALSE, 0);
         gtk_option_menu_set_menu ( GTK_OPTION_MENU (om), 
                                    sp_align_dialog_create_base_menu () );
 
-        t = gtk_table_new (2, 5, TRUE);
+        GtkWidget *t = gtk_table_new (2, 5, TRUE);
         gtk_box_pack_start (GTK_BOX (vb), t, FALSE, FALSE, 0);
 
         struct {
@@ -309,7 +306,7 @@ sp_quick_align_dialog (void)
                 
         };
         
-        for (unsigned i = 0 ; i < G_N_ELEMENTS(align_buttons) ; ++i) {
+        for (unsigned int i = 0 ; i < G_N_ELEMENTS(align_buttons) ; ++i) {
         
             sp_align_add_button ( t, align_buttons[i].col,
                                   align_buttons[i].row,
@@ -320,7 +317,7 @@ sp_quick_align_dialog (void)
                                   tt );
         }
 
-        l = gtk_label_new (_("Align"));
+        GtkWidget *l = gtk_label_new (_("Align"));
         gtk_widget_show (l);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
@@ -414,9 +411,7 @@ static void
 sp_align_add_menuitem ( GtkWidget *menu, const gchar *label, 
                         GCallback handler, int value )
 {
-    GtkWidget *menuitem;
-
-    menuitem = gtk_menu_item_new_with_label (label);
+    GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
     gtk_widget_show (menuitem);
     
     if (handler) {
@@ -433,9 +428,7 @@ sp_align_add_menuitem ( GtkWidget *menu, const gchar *label,
 static GtkWidget *
 sp_align_dialog_create_base_menu (void)
 {
-    GtkWidget *menu;
-
-    menu = gtk_menu_new ();
+    GtkWidget *menu = gtk_menu_new ();
 
     sp_align_add_menuitem ( menu, _("Last selected"), 
                             G_CALLBACK (set_base), SP_ALIGN_LAST);
@@ -506,10 +499,9 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
                 sp_quick_align_find_master ( slist, 
                                              (a.mx0 != 0.0) || (a.mx1 != 0.0) );
             slist = g_slist_remove (slist, master);
-            NRRect b;
-            sp_item_bbox_desktop (master, &b);
-            mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
-                           a.my0 * b.y0 + a.my1 * b.y1);
+            NR::Rect b = sp_item_bbox_desktop (master);
+            mp = NR::Point(a.mx0 * b.min()[NR::X] + a.mx1 * b.max()[NR::X],
+                           a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
             break;
         }
             
@@ -522,21 +514,19 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
         case SP_ALIGN_DRAWING:
         {
             slist = g_slist_copy (slist);
-            NRRect b;
-            sp_item_bbox_desktop 
-                ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)), &b );
-            mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
-                           a.my0 * b.y0 + a.my1 * b.y1);
+            NR::Rect b = sp_item_bbox_desktop 
+                ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)) );
+            mp = NR::Point(a.mx0 * b.min()[NR::X] + a.mx1 * b.max()[NR::X],
+                           a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
             break;
         }
 
         case SP_ALIGN_SELECTION:
         {
             slist = g_slist_copy (slist);
-            NRRect b;
-            selection->bounds(&b);
-            mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
-                           a.my0 * b.y0 + a.my1 * b.y1);
+            NR::Rect b =  selection->bounds();
+            mp = NR::Point(a.mx0 * b.min()[NR::X] + a.mx1 * b.max()[NR::X],
+                           a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
             break;
         }
 
@@ -548,10 +538,9 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
     bool changed = false;
     for (GSList *l = slist; l != NULL; l = l->next) {
         SPItem *item = (SPItem *) l->data;
-        NRRect b;
-        sp_item_bbox_desktop (item, &b);
-        NR::Point const sp(a.sx0 * b.x0 + a.sx1 * b.x1,
-                           a.sy0 * b.y0 + a.sy1 * b.y1);
+        NR::Rect b = sp_item_bbox_desktop (item);
+        NR::Point const sp(a.sx0 * b.min()[NR::X] + a.sx1 * b.max()[NR::X],
+                           a.sy0 * b.min()[NR::Y] + a.sy1 * b.max()[NR::Y]);
         NR::Point const mp_rel( mp - sp );
         if (LInfty(mp_rel) > 1e-9) {
             sp_item_move_rel(item, NR::translate(mp_rel));
@@ -572,14 +561,6 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
 static SPItem *
 sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
 {
-
-    NRRect b;
-    const GSList * l;
-    SPItem * master, * item;
-    gdouble dim, max;
-
-    master = NULL;
-
     switch (base) {
         case SP_ALIGN_LAST:
             return (SPItem *) slist->data;
@@ -590,15 +571,13 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
             break;
         
         case SP_ALIGN_BIGGEST:
-            max = -1e18;
-            for (l = slist; l != NULL; l = l->next) {
-                item = (SPItem *) l->data;
-                sp_item_bbox_desktop (item, &b);
-                if (horizontal) {
-                    dim = b.x1 - b.x0; 
-                } else {
-                    dim = b.y1 - b.y0;
-                }
+        {
+            gdouble max = -1e18;
+            SPItem *master = NULL;
+            for (const GSList *l = slist; l != NULL; l = l->next) {
+                SPItem *item = (SPItem *) l->data;
+                NR::Rect b = sp_item_bbox_desktop (item);
+                gdouble dim = b.extent(horizontal ? NR::X : NR::Y);
                 if (dim > max) {
                     max = dim;
                     master = item;
@@ -606,17 +585,16 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
             }
             return master;
             break;
+        }
         
         case SP_ALIGN_SMALLEST:
-            max = 1e18;
-            for (l = slist; l != NULL; l = l->next) {
-                item = (SPItem *) l->data;
-                sp_item_bbox_desktop (item, &b);
-                if (horizontal) {
-                    dim = b.x1 - b.x0;
-                } else {
-                    dim = b.y1 - b.y0;
-                }
+        {
+            gdouble max = 1e18;
+            SPItem *master = NULL;
+            for (const GSList *l = slist; l != NULL; l = l->next) {
+                SPItem *item = (SPItem *) l->data;
+                NR::Rect b = sp_item_bbox_desktop (item);
+                gdouble dim = b.extent(horizontal ? NR::X : NR::Y);
                 if (dim < max) {
                     max = dim;
                     master = item;
@@ -624,6 +602,7 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
             }
             return master;
             break;
+        }
         
         default:
             g_assert_not_reached ();
@@ -639,7 +618,7 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
 
 struct SPBBoxSort {
     SPItem *item;
-    NRRect bbox;
+    NR::Rect bbox;
     float anchor;
 };
 
@@ -648,9 +627,8 @@ struct SPBBoxSort {
 static int
 sp_align_bbox_sort ( const void *a, const void *b )
 {
-    const SPBBoxSort *bbsa, *bbsb;
-    bbsa = (SPBBoxSort *) a;
-    bbsb = (SPBBoxSort *) b;
+    const SPBBoxSort *bbsa = (SPBBoxSort *) a;
+    const SPBBoxSort *bbsb = (SPBBoxSort *) b;
     
     if (bbsa->anchor < bbsb->anchor) 
         return -1;
@@ -662,7 +640,7 @@ sp_align_bbox_sort ( const void *a, const void *b )
 } // end of sp_align_bbox_sort()
 
 
-static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout, bool horiz)
+static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout, NR::Dim2 dim)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     
@@ -684,10 +662,10 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
         
         for (const GSList *l = slist; l != NULL; l = l->next) {
             bbs[pos].item = SP_ITEM (l->data);
-            sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
+            bbs[pos].bbox = sp_item_bbox_desktop (bbs[pos].item);
             bbs[pos].anchor =
-                0.5 * layout[0] * (horiz ? bbs[pos].bbox.x0 : bbs[pos].bbox.y0) +
-                0.5 * layout[0] * (horiz ? bbs[pos].bbox.x1 : bbs[pos].bbox.y1);
+                0.5 * layout[0] * bbs[pos].bbox.min()[dim] +
+                0.5 * layout[0] * bbs[pos].bbox.max()[dim];
             ++pos;
         }
     }
@@ -701,35 +679,32 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
         float dist = bbs[len - 1].anchor - bbs[0].anchor;
         float step = dist / (len - 1);
         for (int i = 0; i < len; i++) {
-            float pos;
-            pos = bbs[0].anchor + i * step;
+            float pos = bbs[0].anchor + i * step;
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].anchor, 1e-6)) {
-                float d = pos - bbs[i].anchor;
-                sp_item_move_rel(bbs[i].item, NR::translate(horiz ? d : 0.0, horiz ? 0.0 : d));
+                NR::Point t(0.0, 0.0);
+                t[dim] = pos - bbs[i].anchor;
+                sp_item_move_rel(bbs[i].item, NR::translate(t));
                 changed = true;
             }
         }
     } else {
         /* Damn I am not sure, how to order them initially (Lauris) */
-        float dist = horiz ? (bbs[len - 1].bbox.x1 - bbs[0].bbox.x0) : (bbs[len - 1].bbox.y1 - bbs[0].bbox.y0);
+        float dist = (bbs[len - 1].bbox.max()[dim] - bbs[0].bbox.min()[dim]);
         float span = 0;
         for (int i = 0; i < len; i++) {
-            span += horiz ? (bbs[i].bbox.x1 - bbs[i].bbox.x0) : (bbs[i].bbox.y1 - bbs[i].bbox.y0);
+            span += bbs[i].bbox.extent(dim);
         }
         
         float step = (dist - span) / (len - 1);
-        float pos = horiz ? bbs[0].bbox.x0 : bbs[0].bbox.y0;
+        float pos = bbs[0].bbox.min()[dim];
         for (int i = 0; i < len; i++) {
-            if (!NR_DF_TEST_CLOSE (pos, bbs[i].bbox.x0, 1e-6)) {
-                if (horiz) {
-                    sp_item_move_rel(bbs[i].item, NR::translate(pos - bbs[i].bbox.x0, 0.0));
-                } else {
-                    sp_item_move_rel(bbs[i].item, NR::translate(0.0, pos - bbs[i].bbox.y0));
-                }
-                    
+            if (!NR_DF_TEST_CLOSE (pos, bbs[i].bbox.min()[dim], 1e-6)) {
+                NR::Point t(0.0, 0.0);
+                t[dim] = pos - bbs[i].bbox.min()[dim];
+                sp_item_move_rel(bbs[i].item, NR::translate(t));
                 changed = true;
             }
-            pos += horiz ? (bbs[i].bbox.x1 - bbs[i].bbox.x0) : (bbs[i].bbox.y1 - bbs[i].bbox.y0);
+            pos += bbs[i].bbox.extent(dim);
             pos += step;
         }
         
@@ -746,12 +721,12 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
 
 static void sp_align_distribute_h_clicked(GtkWidget *w, gchar const *layout)
 {
-    sp_align_distribute_h_or_v_clicked(w, layout, true);
+    sp_align_distribute_h_or_v_clicked(w, layout, NR::X);
 }
 
 static void sp_align_distribute_v_clicked(GtkWidget *w, gchar const *layout)
 {
-    sp_align_distribute_h_or_v_clicked(w, layout, false);
+    sp_align_distribute_h_or_v_clicked(w, layout, NR::Y);
 }
 
 
