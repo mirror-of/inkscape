@@ -22,6 +22,8 @@
 #include <gtk/gtkmenuitem.h>
 #include "helper/sp-marshal.h"
 #include "unit-menu.h"
+#include "../widgets/spw-utilities.h"
+#include "../widgets/widget-sizes.h"
 
 struct _SPUnitSelector {
 	GtkHBox box;
@@ -105,6 +107,7 @@ sp_unit_selector_init (SPUnitSelector *us)
 	us->plural = TRUE;
 
 	us->menu = gtk_option_menu_new ();
+	gtk_widget_set_size_request (us->menu, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
 
 	gtk_widget_show (us->menu);
 	gtk_box_pack_start (GTK_BOX (us), us->menu, TRUE, TRUE, 0);
@@ -206,10 +209,6 @@ spus_rebuild_menu (SPUnitSelector *us)
 	GSList *l;
 	gint pos, p;
 
-	//fixme
-	PangoFontDescription* pan = pango_font_description_new ();
-	pango_font_description_set_size (pan, 8000);
-
 	if (GTK_OPTION_MENU (us->menu)->menu) {
 		gtk_option_menu_remove_menu (GTK_OPTION_MENU (us->menu));
 	}
@@ -229,18 +228,16 @@ spus_rebuild_menu (SPUnitSelector *us)
 
 		gtk_object_set_data (GTK_OBJECT (i), "unit", (gpointer) u);
 		gtk_signal_connect (GTK_OBJECT (i), "activate", GTK_SIGNAL_FUNC (spus_unit_activate), us);
-		gtk_widget_show (i);
 
-		//fixme
-		gtk_widget_modify_font (i, pan);
+		sp_set_font_size (i, AUX_FONT_SIZE);
+		gtk_widget_set_size_request (i, AUX_MENU_ITEM_WIDTH, AUX_MENU_ITEM_HEIGHT);
+
+		gtk_widget_show (i);
 
 		gtk_menu_shell_append (GTK_MENU_SHELL (m), i);
 		if (u == us->unit) pos = p;
 		p += 1;
 	}
-
-	//fixme
-	pango_font_description_free (pan);
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (us->menu), m);
 
