@@ -393,6 +393,8 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
     rect->x = pos[NR::X];
     rect->y = pos[NR::Y];
 
+    sp_rect_set_shape(&rect->shape);
+
     // Adjust stroke width
     sp_shape_adjust_stroke(item, sqrt(fabs(sw * sh)));
 
@@ -401,8 +403,6 @@ sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
 
     // Adjust gradient fill
     sp_shape_adjust_gradient(item, xform / ret);
-
-    sp_rect_set_shape(&rect->shape);
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

@@ -463,6 +463,43 @@ pattern_chain (SPPattern *pattern)
 	return SP_PATTERN (child);
 }
 
+SPPattern *
+sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property)
+{
+	if (pattern_users(pattern) > 1) {
+		pattern = pattern_chain (pattern);
+		gchar *href = g_strconcat ("url(#", sp_repr_attr (SP_OBJECT_REPR (pattern), "id"), ")", NULL);
+
+		SPCSSAttr *css = sp_repr_css_attr_new ();
+		sp_repr_css_set_property (css, property, href);
+		sp_repr_css_change_recursive (SP_OBJECT_REPR (item), css, "style");
+	} 
+	return pattern;
+}
+
+void
+sp_pattern_transform_multiply (SPPattern *pattern, NR::Matrix postmul, bool set)
+{
+	// this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
+	// for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
+	//pattern->patternTransform = premul * item->transform * NR::Matrix(pattern->patternTransform) * item->transform.inverse() * postmul;
+
+	// otherwise the formula is much simpler
+	if (set) {
+		pattern->patternTransform = postmul;
+	} else {
+		pattern->patternTransform = NR::Matrix(pattern_patternTransform(pattern)) * postmul;
+	}
+	pattern->patternTransform_set = TRUE;
+
+	gchar c[256];
+	if (sp_svg_transform_write(c, 256, &(pattern->patternTransform))) {
+		sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
+	} else {
+		sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
+	}
+}
+
 SPRepr *
 pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transform)
 {

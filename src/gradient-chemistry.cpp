@@ -24,6 +24,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include "svg/svg.h"
 
 
 // Terminology:
@@ -237,7 +238,7 @@ sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector, SPGra
 }
 
 SPGradient *
-sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
+sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *property)
 {
 	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
 
@@ -268,7 +269,7 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
 			// gradient vector in user space due to application of the non-uniform scaling
 			// transformation from bounding box space to user space.
 
-		NR::Matrix skew = bbox2user;
+		NR::Matrix skew = bbox2user; 
 		double exp = skew.expansion();
 		skew[0] /= exp;
 		skew[1] /= exp;
@@ -281,21 +282,26 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
 		for(int i = 0; i < 6; i++) {
 			gr->gradientTransform[i] = skew[i];
 		}
-		gr->gradientTransform_set = TRUE;
-		SP_OBJECT (gr)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            gchar c[256];
+            if (sp_svg_transform_write(c, 256, &(gr->gradientTransform))) {
+                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", c);
+            } else {
+                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", NULL);
+            }
 
-		// Matrix to convert points to userspace coords; postmultiply by inverses of item
-		// transform and skew so as to cancel them out when they are applied to the
-		// gradient during rendering
-		NR::Matrix point_convert = bbox2user * NR::Matrix(item->transform).inverse() * skew.inverse();
+		// Matrix to convert points to userspace coords; postmultiply by inverse of skew so
+		// as to cancel it out when it's applied to the gradient during rendering
+		NR::Matrix point_convert = bbox2user * skew.inverse();
 
 		if (SP_IS_RADIALGRADIENT (gr)) {
 			SPRadialGradient *rg = SP_RADIALGRADIENT (gr);
 
+			// original points in the bbox coords
 			NR::Point c_b = NR::Point (rg->cx.computed, rg->cy.computed);
 			NR::Point f_b = NR::Point (rg->fx.computed, rg->fy.computed);
 			double r_b = rg->r.computed;
 
+			// converted points in userspace coords
 			NR::Point c_u = c_b * point_convert; 
 			NR::Point f_u = f_b * point_convert; 
 			double r_u = r_b * point_convert.expansion();
@@ -309,7 +315,6 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
 		} else {
 			SPLinearGradient *lg = SP_LINEARGRADIENT (gr);
 
-			// original points in the bbox coords
 			NR::Point p1_b = NR::Point (lg->x1.computed, lg->y1.computed);
 			NR::Point p2_b = NR::Point (lg->x2.computed, lg->y2.computed);
 
@@ -327,9 +332,27 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, bool is_fill)
 	}
 
 	// apply the gradient to the item (may be necessary if we cloned it)
-	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", gr);
+	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), property, gr);
 
 	return gr;
+}
+
+void
+sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool set)
+{
+	if (set) {
+		gradient->gradientTransform = postmul;
+	} else {
+		gradient->gradientTransform = NR::Matrix(gradient->gradientTransform) * postmul; // fixme: get gradient transform by climbing to hrefs?
+	}
+	gradient->gradientTransform_set = TRUE;
+
+	gchar c[256];
+	if (sp_svg_transform_write(c, 256, &(gradient->gradientTransform))) {
+		sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", c);
+	} else {
+		sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
+	}
 }
 
 

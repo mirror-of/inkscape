@@ -905,80 +905,53 @@ sp_shape_set_curve_insync (SPShape *shape, SPCurve *curve, unsigned int owner)
 // Adjusters
 
 void
-sp_shape_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set)
+sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &postmul, bool set)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { // fixme: do the same for stroke
-        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
         if (SP_IS_PATTERN (server)) {
-
-            SPPattern *pattern;
-
-            if (pattern_users(SP_PATTERN (server)) > 1) {
-                pattern = pattern_chain (SP_PATTERN (server));
-                gchar *href = g_strconcat ("url(#", sp_repr_attr (SP_OBJECT_REPR (pattern), "id"), ")", NULL);
-
-                SPCSSAttr *css = sp_repr_css_attr_new ();
-                sp_repr_css_set_property (css, "fill", href);
-                sp_repr_css_change_recursive (SP_OBJECT_REPR (item), css, "style");
-            } else {
-                pattern = SP_PATTERN (server);
-            }
-
-            // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
-            // for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
-            //pattern->patternTransform = premul * item->transform * NR::Matrix(pattern->patternTransform) * item->transform.inverse() * postmul;
-
-            // otherwise the formula is much simpler
-            if (set) {
-                pattern->patternTransform = postmul;
-            } else {
-                pattern->patternTransform = NR::Matrix(pattern_patternTransform(pattern)) * postmul;
-            }
-            pattern->patternTransform_set = TRUE;
-
-            gchar c[256];
-            if (sp_svg_transform_write(c, 256, &(pattern->patternTransform))) {
-                sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
-            } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
-            }
+            SPPattern *pattern = sp_pattern_clone_if_necessary (item, SP_PATTERN (server), "fill");
+            sp_pattern_transform_multiply (pattern, postmul, set);
         }
     }
+
+    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
+        if (SP_IS_PATTERN (server)) {
+            SPPattern *pattern = sp_pattern_clone_if_necessary (item, SP_PATTERN (server), "stroke");
+            sp_pattern_transform_multiply (pattern, postmul, set);
+        }
+    }
+
 }
 
 void
-sp_shape_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set)
+sp_shape_adjust_gradient (SPItem *item, NR::Matrix const &postmul, bool set)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { // fixme: do the same for stroke
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_GRADIENT (server)) {
-
-            SPGradient *gradient = SP_GRADIENT (server);
 
             // Bbox units for a gradient are generally a bad idea because with them, you cannot
             // preserve the relative position of the object and its gradient after rotation or
             // skew. So now we convert them to userspace units which are easy to keep in sync just
             // by adding the object's transform to gradientTransform.  FIXME: convert back to bbox
             // units after transforming with the item, so as to preserve the original units.
-            gradient = sp_gradient_convert_to_userspace (gradient, item, true);
+            SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
 
-            if (set) {
-                gradient->gradientTransform = postmul;
-            } else {
-                gradient->gradientTransform = NR::Matrix(gradient->gradientTransform) * postmul; // fixme: get gradient transform by climbing to hrefs?
-            }
-            gradient->gradientTransform_set = TRUE;
+            sp_gradient_transform_multiply (gradient, postmul, set);
+        }
+    }
 
-            gchar c[256];
-            if (sp_svg_transform_write(c, 256, &(gradient->gradientTransform))) {
-                sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", c);
-            } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
-            }
+    if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
+        SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+        if (SP_IS_GRADIENT (server)) {
+            SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "stroke");
+            sp_gradient_transform_multiply (gradient, postmul, set);
         }
     }
 }

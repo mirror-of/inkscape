@@ -603,7 +603,7 @@ sp_item_invoke_hide(SPItem *item, unsigned key)
 Find out the inverse of previous transform of an item (from its repr)
 */
 NR::Matrix
-sp_item_transform_old_inverse (SPItem *item)
+sp_item_transform_repr (SPItem *item)
 {
     NR::Matrix t_old(NR::identity());
     gchar const *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
@@ -614,7 +614,7 @@ sp_item_transform_old_inverse (SPItem *item)
         }
     }
 
-    return t_old.inverse();
+    return t_old;
 }
 
 
@@ -649,34 +649,28 @@ sp_item_adjust_rects_recursive(SPItem *item, NR::Matrix advertized_transform)
 }
 
 /**
- Recursively compensate pattern fill's transform
+ Recursively compensate pattern or gradient transform
 */
 void
-sp_item_adjust_pattern_recursive(SPItem *item, NR::Matrix advertized_transform)
+sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, NR::Matrix t_ancestors, bool is_pattern)
 {
-    if (SP_IS_ITEM (item)) {
-        sp_shape_adjust_pattern (item, advertized_transform.inverse());
-    }
+// _Before_ full pattern/gradient transform: t_paint * t_item * t_ancestors
+// _After_ full pattern/gradient transform: t_paint_new * t_item * t_ancestors * advertised_transform
+// By equating these two expressions we get t_paint_new = t_paint * paint_delta, where:
+    NR::Matrix t_item = sp_item_transform_repr (item);
+    NR::Matrix paint_delta = t_item * t_ancestors * advertized_transform * t_ancestors.inverse() * t_item.inverse();
+
+    if (is_pattern)
+        sp_shape_adjust_pattern (item, paint_delta);
+    else 
+        sp_shape_adjust_gradient (item, paint_delta);
 
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o))
-            sp_item_adjust_pattern_recursive(SP_ITEM(o), advertized_transform);
-    }
-}
-
-/**
- Recursively compensate gradient fill's transform
-*/
-void
-sp_item_adjust_gradient_recursive(SPItem *item, NR::Matrix advertized_transform)
-{
-    if (SP_IS_ITEM (item)) {
-        sp_shape_adjust_gradient (item, advertized_transform.inverse());
-    }
-
-    for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o))
-            sp_item_adjust_gradient_recursive(SP_ITEM(o), advertized_transform);
+        if (SP_IS_ITEM(o)) {
+// At the level of the transformed item, t_ancestors is identity;
+// below it, it is the accmmulated chain of transforms from this level to the top level
+            sp_item_adjust_paint_recursive (SP_ITEM(o), advertized_transform, t_item * t_ancestors, is_pattern);
+        }
     }
 }
 
@@ -705,34 +699,36 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform,
     g_return_if_fail(SP_IS_ITEM(item));
     g_return_if_fail(repr != NULL);
 
+    // this converts the gradient fill, if any, to userspace; we need to do it here for compensations before the new transform is set
+    sp_shape_adjust_gradient (item, NR::identity(), false);
+
     // calculate the relative transform, if not given by the adv attribute
     NR::Matrix advertized_transform;
     if (adv != NULL) {
         advertized_transform = *adv;
     } else {
-        advertized_transform = sp_item_transform_old_inverse (item) * transform;
+        advertized_transform = sp_item_transform_repr (item).inverse() * transform;
     }
 
-     // compensate for stroke scaling, depending on user preference
+     // recursively compensate for stroke scaling, depending on user preference
     if (prefs_get_int_attribute("options.transform", "stroke", 1) == 0) {
         double const expansion = 1. / NR::expansion(advertized_transform);
         sp_item_adjust_stroke_width_recursive(item, expansion);
     }
 
-    // compensate rx/ry of a rect if requested
+    // recursively compensate rx/ry of a rect if requested
     if (prefs_get_int_attribute("options.transform", "rectcorners", 1) == 0) {
         sp_item_adjust_rects_recursive(item, advertized_transform);
     }
 
-    // compensate pattern fill if requested; 
-    // here we post-multiply the old transform inverse because patterns are transformed before item they're applied to
+    // recursively compensate pattern fill if it's not to be transformed 
     if (prefs_get_int_attribute("options.transform", "pattern", 1) == 0) {
-        sp_item_adjust_pattern_recursive(item, transform * sp_item_transform_old_inverse (item));
+        sp_item_adjust_paint_recursive (item, advertized_transform.inverse(), NR::identity(), true);
     }
 
-    // compensate gradient fill if requested; 
+    // recursively compensate gradient fill if it's not to be transformed
     if (prefs_get_int_attribute("options.transform", "gradient", 1) == 0) {
-        sp_item_adjust_gradient_recursive(item, transform * sp_item_transform_old_inverse (item));
+        sp_item_adjust_paint_recursive (item, advertized_transform.inverse(), NR::identity(), false);
     }
 
     // run the object's set_transform if transforms are stored optimized

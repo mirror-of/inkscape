@@ -80,6 +80,9 @@ struct SPPatternClass {
 
 guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);
+SPPattern *sp_pattern_clone_if_necessary (SPItem *item, SPPattern *pattern, const gchar *property);
+void sp_pattern_transform_multiply (SPPattern *pattern, NR::Matrix postmul, bool set);
+
 SPRepr *pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transformation);
 
 SPPattern *pattern_getroot (SPPattern *pat);
