@@ -182,14 +182,8 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
 	g_signal_emit (G_OBJECT (us), signals[SET_UNIT], 0, old, unit, &consumed);
 
 	if (!consumed && (unit->base == old->base)) {
-		/* Recalculate adjustments.  We only do this if the `base' (ie
-		 * whether dimensionless, absolute, device independent etc.)
-		 * of the old and new units is the same.  I think this is
-		 * because there is no sensible conversion between units of
-		 * different bases, or perhaps because such conversions have
-		 * not yet been implemented.
-		 */
-		for (l = us->adjustments; l != NULL; l = l->next) {
+		/* Recalculate adjustments. */
+		for (l = us->adjustments; l != NULL; l = g_slist_next(l)) {
 			GtkAdjustment *adj;
 			gdouble val;
 			adj = GTK_ADJUSTMENT (l->data);
@@ -201,18 +195,12 @@ spus_unit_activate (GtkWidget *widget, SPUnitSelector *us)
 #ifdef UNIT_SELECTOR_VERBOSE
 			g_print ("new val %g\n", val);
 #endif
-			gtk_adjustment_set_value (adj, val);
+			adj->value = val;
 		}
-	}
-	else if (!consumed && unit->base != old->base) {
-		/* The unit's base was changed.  We haven't changed the
-		 * adjustment values for the reasons above, but we must
-		 * pretend that their values changed.  If we don't, a
-		 * change in units from, say, pixels to mm will not be
-		 * noticed.
-		 */
-		for (l = us->adjustments; l != NULL; l = l->next) {
-			gtk_signal_emit_by_name (GTK_OBJECT (l->data), "value_changed");
+		/* need to separate the value changing from the notification
+		 * or else the unit changes can break the calculations */
+		for (l = us->adjustments; l != NULL; l = g_slist_next(l)) {
+			gtk_adjustment_value_changed (GTK_ADJUSTMENT (l->data));
 		}
 	}
 

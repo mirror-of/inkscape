@@ -10,7 +10,8 @@
 	  share/palettes/.cvsignore, share/patterns/.cvsignore:
 	  Added Makefile build-cruft to .cvsignores.
 	* src/helper/unit-menu.cpp: applied patch 934358 from cth103 to fix
-	  grid unit changing bug.
+	  grid unit changing bug.  Turns out this wasn't the correct fix, so
+	  I fixed that instead.
 
 2004-04-13  Ted Gould <ted@gould.cx>
 
