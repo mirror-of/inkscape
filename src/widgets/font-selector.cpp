@@ -359,7 +359,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 	scl = GTK_CLIST (fsel->style);
 
 	if (font) {
-		{
+		{ // select family in the list
 			gchar family[256];
 			font->Family (family, 256);
 
@@ -379,24 +379,21 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 			fsel->block_emit = FALSE;
 		}
 
-		{
+		{ // select style in the list
 			gchar descr[256];
 			font->Name (descr, 256);
 
 			unsigned int i;
 			for (i = 0; i < fsel->styles.length; i++) {
-				//			g_print ("style length %d   descr %s    record descr %s\n", fsel->styles.length, descr, (gchar *) (fsel->styles.records)[i].descr);
 				if (!strcmp(descr, (gchar *) (fsel->styles.records)[i].descr)) {
-					//					g_print ("style match at %d\n", i);
 					break;
 				}
 			}
 
-			if (i >= fsel->styles.length) 
-				return;
-
-			gtk_clist_select_row (scl, i, 0);
-			gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
+			if (i < fsel->styles.length) { // a matching style found
+				gtk_clist_select_row (scl, i, 0);
+				gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
+			}
 		}
 
 		gchar s[8];
@@ -529,25 +526,25 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		if (fprev->rfont) {
-			font_instance *tface;
-			gchar *p;
-			int		 glyphs[SPFP_MAX_LEN];
+
+			int glyphs[SPFP_MAX_LEN];
 			double hpos[SPFP_MAX_LEN];
-			float px, py;
-			int len;
-			NRRect bbox;
-			float startx, starty;
-			int x, y;
-			tface=fprev->rfont->daddy;
-			double theSize=NR_MATRIX_DF_EXPANSION(&fprev->rfont->style.transform);
+
+			font_instance *tface = fprev->rfont->daddy;
+
+			double theSize = NR_MATRIX_DF_EXPANSION (&fprev->rfont->style.transform);
+
+			gchar *p;
 			if (fprev->phrase) {
 				p = fprev->phrase;
 			} else {
 				p = _("AaBbCcIiPpQq12368.;/()");
 			}
-			px = 0.0;
-			py = 0.0;
-			len = 0;
+			float px = 0.0;
+			float py = 0.0;
+			int len = 0;
+
+			NRRect bbox;
 			bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
 			
 			text_wrapper* str_text=new text_wrapper;
@@ -587,27 +584,30 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 				}
 			}
 			delete str_text;
-// XXX: FIXME: why does this code ignore adv.y
-/*			while (p && *p && (len < SPFP_MAX_LEN)) {
-				unsigned int unival;
-				NRRect gbox;
-				unival = g_utf8_get_char (p);
-				glyphs[len] =  tface->MapUnicodeChar( unival);
-				hpos[len] = (int)px;
-				NR::Point adv = fprev->rfont->Advance(glyphs[len]);
-				fprev->rfont->BBox( glyphs[len], &gbox);
-				bbox.x0 = MIN (px + gbox.x0, bbox.x0);
-				bbox.y0 = MIN (py + gbox.y0, bbox.y0);
-				bbox.x1 = MAX (px + gbox.x1, bbox.x1);
-				bbox.y1 = MAX (py + gbox.y1, bbox.y1);
-				px += adv[NR::X];
-				len += 1;
-				p = g_utf8_next_char (p);
-			}*/
-			startx = (widget->allocation.width - (bbox.x1 - bbox.x0)) / 2;
-			starty = widget->allocation.height - (widget->allocation.height - (bbox.y1 - bbox.y0)) / 2 - bbox.y1;
-			for (y = event->area.y; y < event->area.y + event->area.height; y += 64) {
-				for (x = event->area.x; x < event->area.x + event->area.width; x += 64) {
+
+			// XXX: FIXME: why does this code ignore adv.y
+			/*			while (p && *p && (len < SPFP_MAX_LEN)) {
+							unsigned int unival;
+							NRRect gbox;
+							unival = g_utf8_get_char (p);
+							glyphs[len] =  tface->MapUnicodeChar( unival);
+							hpos[len] = (int)px;
+							NR::Point adv = fprev->rfont->Advance(glyphs[len]);
+							fprev->rfont->BBox( glyphs[len], &gbox);
+							bbox.x0 = MIN (px + gbox.x0, bbox.x0);
+							bbox.y0 = MIN (py + gbox.y0, bbox.y0);
+							bbox.x1 = MAX (px + gbox.x1, bbox.x1);
+							bbox.y1 = MAX (py + gbox.y1, bbox.y1);
+							px += adv[NR::X];
+							len += 1;
+							p = g_utf8_next_char (p);
+							}*/
+
+			float startx = (widget->allocation.width - (bbox.x1 - bbox.x0)) / 2;
+			float starty = widget->allocation.height - (widget->allocation.height - (bbox.y1 - bbox.y0)) / 2 - bbox.y1;
+
+			for (int y = event->area.y; y < event->area.y + event->area.height; y += 64) {
+				for (int x = event->area.x; x < event->area.x + event->area.width; x += 64) {
 					guchar *ps;
 					NRPixBlock pb, m;
 					int x0, y0, x1, y1;
@@ -626,8 +626,8 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 					}
 					nr_blit_pixblock_mask_rgba32 (&pb, &m, fprev->rgba);
 					gdk_draw_rgb_image (widget->window, widget->style->black_gc,
-							    x0, y0, x1 - x0, y1 - y0,
-							    GDK_RGB_DITHER_NONE, NR_PIXBLOCK_PX (&pb), pb.rs);
+															x0, y0, x1 - x0, y1 - y0,
+															GDK_RGB_DITHER_NONE, NR_PIXBLOCK_PX (&pb), pb.rs);
 					nr_pixblock_release (&m);
 					nr_pixblock_release (&pb);
 					nr_pixelstore_16K_free (ps);
@@ -635,10 +635,10 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			}
 		} else {
 			nr_gdk_draw_gray_garbage (widget->window, widget->style->black_gc,
-						  event->area.x, event->area.y,
-						  event->area.width, event->area.height);
+																event->area.x, event->area.y,
+																event->area.width, event->area.height);
 		}
-  }
+	}
 
 	return TRUE;
 }

@@ -277,7 +277,7 @@ font_instance* font_factory::FaceFromDescr(const char* descr)
 
 font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 {
-	pango_font_description_set_size (descr, (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
+	pango_font_description_set_size (descr, (int) (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
 
 //	char* tc=pango_font_description_to_string(descr);
 //	printf("asked: %s (family=%s)\n",tc,pango_font_description_get_family(descr));
