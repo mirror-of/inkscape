@@ -1,7 +1,11 @@
 2004-02-04  jon phillips <kidproto@user.sf.net>
 
-    * inkscape/*: all files converted from tabs to 4 spaces and cleaned up the 
+    * COPYING, COPYING.LIB, ChangeLog, Makefile.am, Makefile.mingw, 
+      Makefile.mingw.common, NEWS, README, autogen.sh, configure.in, 
+      inkscape-cvs-0.ebuild, inkscape.1.in, inkscape.spec.in: 
+      all files converted from tabs to 4 spaces and cleaned up the 
       coding style, tested, they build, and have committed.
+      
 
 2004-02-04  bulia byak <bulia@users.sourceforge.net>
 
