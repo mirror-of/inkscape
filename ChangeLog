@@ -1,5 +1,7 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/selection-chemistry.cpp: Use NR::Rect bounds() method instead of old bounds(NRRect*).
+
 	* src/document.cpp (sp_document_create): 
 	* src/preferences-skeleton.h:
 	  Use INKSCAPE_VERSION from inkscape_version.h instead of VERSION.

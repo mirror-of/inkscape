@@ -37,6 +37,7 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rotate-fns.h"
+#include "libnr/nr-scale-ops.h"
 #include "style.h"
 #include "document-private.h"
 #include "sp-gradient.h"
@@ -728,14 +729,11 @@ void sp_selection_paste(bool in_place)
     if (!in_place) {
         sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
 
-        NR::Rect bbox = selection->bounds();
-
-        NR::Point m = sp_desktop_point(desktop);
-        m -= bbox.midpoint();
+        NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
 
         /* Snap the offset of the new item(s) to the grid */
         /* FIXME: this gridsnap fiddling is a hack. */
-        gdouble curr_gridsnap = desktop->gridsnap;
+        gdouble const curr_gridsnap = desktop->gridsnap;
         desktop->gridsnap = 1e18;
         sp_desktop_free_snap(desktop, m);
         desktop->gridsnap = curr_gridsnap;
@@ -841,14 +839,13 @@ sp_selection_scale_absolute(SPSelection *selection,
                             double const x0, double const x1,
                             double const y0, double const y1)
 {
-    NRRect bbox;
-    selection->bounds(&bbox);
+    NR::Rect const bbox(selection->bounds());
 
-    NR::translate const p2o(-bbox.x0, -bbox.y0);
+    NR::translate const p2o(-bbox.min());
 
-    double const dx = (x1 - x0) / (bbox.x1 - bbox.x0);
-    double const dy = (y1 - y0) / (bbox.y1 - bbox.y0);
-    NR::scale const scale(dx, dy);
+    NR::scale const newSize(x1 - x0,
+                            y1 - y0);
+    NR::scale const scale( newSize / NR::scale(bbox.dimensions()) );
     NR::translate const o2n(x0, y0);
     NR::Matrix const final( p2o * scale * o2n );
 
@@ -960,9 +957,7 @@ void sp_selection_rotate_90_ccw()
 void
 sp_selection_rotate(SPSelection *selection, gdouble const angle_degrees)
 {
-    NRRect bbox;
-    selection->bounds(&bbox);
-    NR::Point const center(NR::Rect(bbox).midpoint());
+    NR::Point const center(selection->bounds().midpoint());
 
     sp_selection_rotate_relative(selection, center, angle_degrees);
 
@@ -978,10 +973,8 @@ sp_selection_rotate(SPSelection *selection, gdouble const angle_degrees)
 void
 sp_selection_rotate_screen(SPSelection *selection, gdouble angle)
 {
-    NRRect bbox_compat;
-    selection->bounds(&bbox_compat);
-    NR::Rect const bbox(bbox_compat);
-    NR::Point const center = bbox.midpoint();
+    NR::Rect const bbox(selection->bounds());
+    NR::Point const center(bbox.midpoint());
 
     gdouble const zoom = SP_DESKTOP_ZOOM(selection->desktop());
     gdouble const zmove = angle / zoom;
