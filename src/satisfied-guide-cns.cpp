@@ -8,7 +8,7 @@
 #include <approx-equal.h>
 
 void satisfied_guide_cns(SPDesktop const &desktop,
-                         const std::vector<NR::Point> &snappoints,
+                         std::vector<NR::Point> const &snappoints,
                          std::vector<SPGuideConstraint> &cns)
 {
     g_assert(SP_IS_DESKTOP(&desktop));

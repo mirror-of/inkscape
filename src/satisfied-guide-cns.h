@@ -7,7 +7,7 @@ namespace NR { class Point; }
 class SPGuideConstraint;
 
 void satisfied_guide_cns(SPDesktop const &desktop,
-                         std::vector<NR::Point> &snappoints,
+                         std::vector<NR::Point> const &snappoints,
                          std::vector<SPGuideConstraint> &cns);
 
 
