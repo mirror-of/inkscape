@@ -61,7 +61,7 @@ static char const preferences_skeleton[] =
 "    </group>\n"
 "    <eventcontext id=\"calligraphic\" style=\"fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;\"\n"
 "                       mass=\"0.3\" drag=\"0.5\" angle=\"30\" width=\"0.2\" selcue=\"1\"/>\n"
-"    <eventcontext id=\"text\"\n"
+"    <eventcontext id=\"text\"  usecurrent=\"0\"\n"
 "                  style=\"fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:12px;\" selcue=\"1\"/>\n"
 "    <eventcontext id=\"nodes\" selcue=\"1\"/>\n"
 "    <eventcontext id=\"zoom\" selcue=\"1\"/>\n"
