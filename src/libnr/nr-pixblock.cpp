@@ -105,7 +105,8 @@ nr_pixblock_setup_extern (NRPixBlock *pb, int mode, int x0, int y0, int x1, int 
 
 	if (clear) {
 		if (rs == bpp * w) {
-			memset (pb->data.px, 0x0, bpp * (y1 - y0) * w);
+			if (pb->data.px) // there were mysterious crashes without this check
+				memset (pb->data.px, 0x0, bpp * (y1 - y0) * w);
 		} else {
 			int y;
 			for (y = y0; y < y1; y++) {
