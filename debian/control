@@ -8,7 +8,7 @@ Standards-Version: 3.6.1
 Package: inkscape
 Architecture: any
 Depends: ${shlibs:Depends}
-Suggests: dia, sketch
+Suggests: dia, pstoedit, sketch
 Description: Vector based drawing program
  Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
  format, a standard maintained by the WWW consortium.
