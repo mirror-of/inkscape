@@ -1,3 +1,10 @@
+2004-09-10  MenTaLguY <mental@rydia.net>
+
+	* src/render/polygon.h, src/render/shape-builder.h,
+	  src/render/shape-builder.cpp:
+
+	  beginnings of a simple alternate renderer
+
 2004-09-09  Carl Hetherington <inkscape@carlh.net>
 
 	* src/sp-flowtext.cpp, src/sp-offset.cpp, src/splivarot.cpp,
