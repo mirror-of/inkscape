@@ -290,9 +290,10 @@ unclump (GSList *items)
             //g_print ("NEI %d for item %s    closest %s at %g  farest %s at %g  ave %g\n", g_slist_length(nei), SP_OBJECT_ID(item), SP_OBJECT_ID(closest), dist_closest, SP_OBJECT_ID(farest), dist_farest, ave);
 
             if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farest) < 1e6) { // otherwise the items are bogus
-                // reduce the divisor (3) to make unclumping more aggressive and less stable
-                unclump_push (closest, item, (ave - dist_closest) / 3 ); 
-                unclump_pull (farest, item, (dist_farest - ave) / 3 );
+                // increase these coefficients to make unclumping more aggressive and less stable
+                // the pull coefficient is a bit bigger to counteract the long-term expansion trend
+                unclump_push (closest, item, 0.3 * (ave - dist_closest)); 
+                unclump_pull (farest, item, 0.35 * (dist_farest - ave));
             }
         }
     }
