@@ -243,7 +243,6 @@ livarot/LivarotDefs.h
 livarot/MyMath.h
 livarot/MySeg.cpp
 livarot/MySeg.h
-livarot/Path-test.cpp
 livarot/Path.cpp
 livarot/Path.h
 livarot/PathConversion.cpp

@@ -318,6 +318,7 @@ dialogs/dialog-events.o: \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	macros.h \
+	prefs-utils.h \
 	view.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
@@ -603,10 +604,13 @@ dialogs/text-edit.o: \
 	inkscape.h \
 	interface.h \
 	libnr/nr-forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	libnrtype/font-style-to-pos.h \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
@@ -686,8 +690,10 @@ dialogs/xml-tree.o: \
 	dialogs/dialog-events.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	forward.h \
 	helper/action.h \
+	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -695,13 +701,28 @@ dialogs/xml-tree.o: \
 	inkscape-stock.h \
 	inkscape.h \
 	interface.h \
+	libnr/nr-forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
+	libnr/nr-path.h \
+	libnr/nr-pixblock.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
+	libnrtype/nr-font.h \
+	libnrtype/nr-rasterfont.h \
+	libnrtype/nr-typeface.h \
 	macros.h \
 	prefs-utils.h \
 	selection.h \
+	sp-chars.h \
+	sp-item-group.h \
+	sp-item.h \
 	sp-item.h \
 	sp-object.h \
+	sp-root.h \
+	sp-text.h \
+	svg/svg-types.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -1224,10 +1245,12 @@ help.o: \
 	helper/units.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-typeface.h \
@@ -1889,6 +1912,7 @@ libnrtype/nr-type-directory.o: \
 	libarikkei/arikkei-token.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -1984,15 +2008,6 @@ livarot/MySeg.o: \
 	livarot/MySeg.cpp \
 	livarot/MyMath.h \
 	livarot/MySeg.h
-
-livarot/Path-test.o: \
-	livarot/Path-test.cpp \
-	libnr/nr-point-fns.h \
-	libnr/nr-types.h \
-	livarot/LivarotDefs.h \
-	livarot/Path.cpp \
-	livarot/Path.h \
-	utest/utest.h
 
 livarot/Path.o: \
 	livarot/Path.cpp \
@@ -2360,6 +2375,7 @@ nodepath.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2913,10 +2929,13 @@ slideshow.o: \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-typeface.h \
@@ -3526,12 +3545,15 @@ sp-offset.o: \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-typeface.h \
@@ -4013,6 +4035,7 @@ spiral-context.o: \
 	libnr/nr-values.h \
 	macros.h \
 	modules/svg.h \
+	prefs-utils.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -4120,6 +4143,7 @@ star-context.o: \
 	libnr/nr-values.h \
 	macros.h \
 	modules/svg.h \
+	prefs-utils.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \

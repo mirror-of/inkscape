@@ -19,6 +19,7 @@ inkview.cpp
 libnr/nr-types-test.cpp
 libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
+livarot/Path-test.cpp
 main.cpp
 modules/gnome.cpp
 svg/gill-svg-path.cpp

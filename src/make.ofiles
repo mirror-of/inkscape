@@ -123,7 +123,6 @@ OBJECTS = \
 	livarot/AVL.o \
 	livarot/DblLinked.o \
 	livarot/MySeg.o \
-	livarot/Path-test.o \
 	livarot/Path.o \
 	livarot/PathConversion.o \
 	livarot/PathOutline.o \
@@ -368,7 +367,6 @@ LINTS = \
 	livarot/AVL.lint \
 	livarot/DblLinked.lint \
 	livarot/MySeg.lint \
-	livarot/Path-test.lint \
 	livarot/Path.lint \
 	livarot/PathConversion.lint \
 	livarot/PathOutline.lint \
