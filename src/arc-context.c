@@ -57,7 +57,7 @@ sp_arc_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_arc_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPArcContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPArcContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -71,7 +71,7 @@ sp_arc_context_class_init (SPArcContextClass *klass)
 	object_class = (GObjectClass *) klass;
 	event_context_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_arc_context_dispose;
 
