@@ -288,6 +288,8 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
     static gboolean dragging;
 
     SPDesktop *desktop = event_context->desktop;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+
     SPStarContext *sc = SP_STAR_CONTEXT (event_context);
 
     event_context->tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
@@ -303,8 +305,8 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             event_context->yp = (gint) event->button.y;
             event_context->within_tolerance = true;
 
-           // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+           // remember clicked item, disregarding groups, honoring Alt
+            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
             dragging = TRUE;
             /* Position center */
@@ -345,10 +347,14 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             sp_star_finish (sc);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-                SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
+                if (event->button.state & GDK_SHIFT_MASK) {
+                    selection->toggleItem(event_context->item_to_select);
+                } else {
+                    selection->setItem(event_context->item_to_select);
+                }
             } else {
                 // click in an empty space
-                SP_DT_SELECTION(desktop)->clear();
+                selection->clear();
             }
 
             event_context->item_to_select = NULL;

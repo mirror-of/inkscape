@@ -284,8 +284,8 @@ static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *
             event_context->yp = (gint) event->button.y;
             event_context->within_tolerance = true;
 
-            // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
+            // remember clicked item, disregarding groups, honoring Alt
+            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
             ret = TRUE;
         }
@@ -307,6 +307,8 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
     static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+
     SPRectContext *rc = SP_RECT_CONTEXT(event_context);
 
     event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
@@ -323,8 +325,8 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             event_context->yp = (gint) button_w[NR::Y];
             event_context->within_tolerance = true;
 
-            // remember clicked item, disregarding groups
-            event_context->item_to_select = sp_desktop_item_at_point(desktop, button_w, TRUE);
+            // remember clicked item, disregarding groups, honoring Alt
+            event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
 
             dragging = true;
             /* Position center */
@@ -373,10 +375,14 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
                 sp_rect_finish(rc);
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
-                SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
+                if (event->button.state & GDK_SHIFT_MASK) {
+                    selection->toggleItem(event_context->item_to_select);
+                } else {
+                    selection->setItem(event_context->item_to_select);
+                }
             } else {
                 // click in an empty space
-                SP_DT_SELECTION(desktop)->clear();
+                selection->clear();
             }
 
             event_context->item_to_select = NULL;

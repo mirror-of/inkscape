@@ -377,6 +377,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
     gint ret = FALSE;
 
     SPDesktop *desktop = event_context->desktop;
+    SPSelection *selection = SP_DT_SELECTION (desktop);
 
     SPNodeContext *nc = SP_NODE_CONTEXT(event_context);
 
@@ -384,12 +385,15 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1) {
                 if (!nc->drag) {
-                    // find out clicked item, disregarding groups
-                    SPItem *item_ungrouped = sp_desktop_item_at_point(desktop,
-                                                                      NR::Point(event->button.x,
-                                                                                event->button.y),
-                                                                      TRUE);
-                    SP_DT_SELECTION(desktop)->setItem(item_ungrouped);
+                    // find out clicked item, disregarding groups, honoring Alt
+                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+
+                    if (event->button.state & GDK_SHIFT_MASK) {
+                        selection->toggleItem(item_ungrouped);
+                    } else {
+                        selection->setItem(item_ungrouped);
+                    }
+
                     ret = TRUE;
                 }
                 break;
