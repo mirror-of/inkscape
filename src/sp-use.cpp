@@ -162,9 +162,6 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static void
 sp_use_release (SPObject *object)
 {
-	if (((SPObjectClass *) parent_class)->release)
-		((SPObjectClass *) parent_class)->release (object);
-
 	SPUse *use=SP_USE (object);
 
 	use->child = NULL;
@@ -176,6 +173,9 @@ sp_use_release (SPObject *object)
 	use->href = NULL;
 
 	use->ref->detach();
+
+	if (((SPObjectClass *) parent_class)->release)
+		((SPObjectClass *) parent_class)->release (object);
 }
 
 static void
@@ -316,26 +316,25 @@ sp_use_description (SPItem * item)
 static NRArenaItem *
 sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 {
-	SPUse *use;
+	SPUse *use = SP_USE (item);
 
-	use = SP_USE (item);
+	NRArenaItem *ai;
+	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
 
 	if (use->child) {
-		NRArenaItem *ai, *ac;
-		NRMatrix t;
-		ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
-		nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
+		NRArenaItem *ac;
 		ac = sp_item_invoke_show (SP_ITEM (use->child), arena, key, flags);
 		if (ac) {
 			nr_arena_item_add_child (ai, ac, NULL);
 			nr_arena_item_unref (ac);
 		}
+		NRMatrix t;
 		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &t);
-		return ai;
 	}
-		
-	return NULL;
+
+	return ai;
 }
 
 static void
