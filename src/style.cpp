@@ -772,6 +772,9 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 	while (*p) {
 		const gchar *s, *e;
 		gint len, idx;
+		/* fixme: Use of isalpha seems to assume that p is valid.  E.g. it skips over
+		   punctuation, and the behaviour for accented characters varies according to
+		   LC_CTYPE. */
 		while (!isalpha (*p)) {
 			if (!*p) return;
 			p += 1;
@@ -784,6 +787,7 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 		e = strchr (p, ';');
 		if (!e) {
 			e = p + strlen (p);
+			/* fixme: What on earth is this "if p[strlen(p)]" test?  It will never succeed. */
 			if (*e) g_warning ("No end marker at style at: %s", p);
 		}
 		len = MIN (s - p, 4095);
