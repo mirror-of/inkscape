@@ -4,6 +4,17 @@
 	(nr_arena_group_set_child_transform):
 	Indicate that matrix isn't written to.
 
+	* src/sp-item-transform.cpp (sp_item_rotate_rel, sp_item_scale_rel,
+	sp_item_skew_rel),
+	src/sp-marker.cpp (sp_marker_update, sp_marker_show_instance),
+	src/sp-shape.cpp (sp_shape_bbox),
+	src/sp-symbol.cpp (sp_symbol_update, sp_symbol_show, sp_symbol_print),
+	src/display/nr-arena-shape.cpp (nr_arena_shape_update, nr_arena_shape_pick):
+	Remove uses of nr_matrix_f_from_d.
+	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (nr_matrix_f_from_d),
+	src/libnr/libnr.def:
+	Remove now-unused nr_matrix_f_from_d.
+
 	* src/nodepath.cpp (sp_nodepath_new),
 	src/path-chemistry.cpp (sp_selected_path_combine, sp_selected_path_break_apart),
 	src/selection-chemistry.cpp (sp_selection_apply_affine),
@@ -13,8 +24,9 @@
 	src/modules/gnome.cpp (sp_module_print_gnome_fill),
 	src/widgets/icon.cpp (sp_icon_image_load_svg):
 	Remove uses of nr_matrix_d_from_f.
-	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (nr_matrix_d_from_f):
-	Remove.
+	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (nr_matrix_d_from_f),
+	src/libnr/libnr.def:
+	Remove now-unused nr_matrix_d_from_f.
 
 	* src/sp-item.h, src/sp-item.cpp (sp_item_set_i2d_affine_d,
 	sp_item_i2doc_affine_d, sp_item_i2d_affine_d, sp_item_dt2i_affine_d):

@@ -434,11 +434,10 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	/* As last step set additional transform of arena group */
 	for (v = marker->views; v != NULL; v = v->next) {
-		NRMatrix vbf;
-		unsigned int i;
-		nr_matrix_f_from_d (&vbf, &marker->c2p);
-		for (i = 0; i < v->size; i++) {
-			if (v->items[i]) nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->items[i]), &vbf);
+		for (unsigned i = 0 ; i < v->size ; i++) {
+			if (v->items[i]) {
+				nr_arena_group_set_child_transform(NR_ARENA_GROUP(v->items[i]), &marker->c2p);
+			}
 		}
 	}
 }
@@ -573,12 +572,10 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 										      parent->arena, key,
 										      SP_ITEM_REFERENCE_FLAGS);
 				if (v->items[pos]) {
-					NRMatrix vbf;
 					/* fixme: Position (Lauris) */
 					nr_arena_item_add_child (parent, v->items[pos], NULL);
 					/* nr_arena_item_unref (v->items[pos]); */
-					nr_matrix_f_from_d (&vbf, &marker->c2p);
-					nr_arena_group_set_child_transform ((NRArenaGroup *) v->items[pos], &vbf);
+					nr_arena_group_set_child_transform((NRArenaGroup *) v->items[pos], &marker->c2p);
 				}
 			}
 			if (v->items[pos]) {

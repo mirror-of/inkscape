@@ -382,19 +382,16 @@ sp_shape_modified (SPObject *object, unsigned int flags)
 	}
 }
 
-static void
-sp_shape_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform, unsigned flags)
 {
 	SPShape *shape;
 
 	shape = SP_SHAPE (item);
 
 	if (shape->curve) {
-		NRMatrix a;
 		NRBPath bp;
-		nr_matrix_f_from_d (&a, transform);
 		bp.path = SP_CURVE_BPATH (shape->curve);
-		nr_path_matrix_f_bbox_f_union (&bp, &a, bbox, 0.25);
+		nr_path_matrix_f_bbox_f_union(&bp, transform, bbox, 0.25);
 	}
 }
 

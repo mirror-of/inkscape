@@ -39,12 +39,10 @@ EXPORTS
 	nr_flat_insert_sorted
 	nr_flat_new_full
 	nr_lgradient_renderer_setup
-	nr_matrix_d_from_f
 	nr_matrix_d_invert
 	nr_matrix_d_set_rotate
 	nr_matrix_d_set_scale
 	nr_matrix_d_set_translate
-	nr_matrix_f_from_d
 	nr_matrix_f_invert
 	nr_matrix_f_set_rotate
 	nr_matrix_f_set_scale

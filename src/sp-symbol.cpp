@@ -369,9 +369,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 
 		/* As last step set additional transform of arena group */
 		for (v = item->display; v != NULL; v = v->next) {
-			NRMatrix vbf;
-			nr_matrix_f_from_d (&vbf, &symbol->c2p);
-			nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &vbf);
+			nr_arena_group_set_child_transform(NR_ARENA_GROUP(v->arenaitem), &symbol->c2p);
 		}
 	} else {
 		/* No-op */
@@ -424,9 +422,7 @@ sp_symbol_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int fla
 		if (((SPItemClass *) (parent_class))->show) {
 			ai = ((SPItemClass *) (parent_class))->show (item, arena, key, flags);
 			if (ai) {
-				NRMatrix vbf;
-				nr_matrix_f_from_d (&vbf, &symbol->c2p);
-				nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &vbf);
+				nr_arena_group_set_child_transform(NR_ARENA_GROUP(ai), &symbol->c2p);
 			}
 		} else {
 			ai = NULL;
@@ -474,16 +470,11 @@ sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned 
 static void
 sp_symbol_print (SPItem *item, SPPrintContext *ctx)
 {
-	SPSymbol *symbol;
-	NRMatrix t;
-
-	symbol = SP_SYMBOL (item);
-
+	SPSymbol *symbol = SP_SYMBOL(item);
 	if (SP_OBJECT_IS_CLONED (symbol)) {
 		/* Cloned <symbol> is actually renderable */
 
-		nr_matrix_f_from_d (&t, &symbol->c2p);
-		sp_print_bind (ctx, &t, 1.0);
+		sp_print_bind(ctx, &symbol->c2p, 1.0);
 
 		if (((SPItemClass *) (parent_class))->print) {
 			((SPItemClass *) (parent_class))->print (item, ctx);

@@ -24,10 +24,8 @@ void
 sp_item_rotate_rel (SPItem * item, double angle)
 {
 	NRRect b;
-	NRMatrix curaff, f;
   double rotate[6], s[6], t[6], u[6], v[6], newaff[6];
   double x,y;
-  char tstr[80];
 
   sp_item_bbox_desktop (item, &b);
 
@@ -38,15 +36,13 @@ sp_item_rotate_rel (SPItem * item, double angle)
   nr_matrix_set_translate (NR_MATRIX_D_FROM_DOUBLE (s),x,y);
   nr_matrix_set_translate (NR_MATRIX_D_FROM_DOUBLE (t),-x,-y);
 
-  tstr[79] = '\0';
-
   // rotate item
+  NRMatrix curaff;
   sp_item_i2d_affine (item, &curaff);
   nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (u), &curaff, NR_MATRIX_D_FROM_DOUBLE (t));
   art_affine_multiply (v, u, rotate);
   art_affine_multiply (newaff, v, s);
-  nr_matrix_f_from_d (&f, NR_MATRIX_D_FROM_DOUBLE (newaff));
-  sp_item_set_i2d_affine (item, &f);
+  sp_item_set_i2d_affine(item, NR_MATRIX_D_FROM_DOUBLE(newaff));
 
 #if 1
 	// this method is consistent with sp_selection_apply_affine()
@@ -57,6 +53,8 @@ sp_item_rotate_rel (SPItem * item, double angle)
 #else
 	// this is the old method, always adding transform= attribute
 	// I think it's wrong --bb
+	char tstr[80];
+	tstr[79] = '\0';
 	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {
@@ -69,9 +67,7 @@ sp_item_rotate_rel (SPItem * item, double angle)
 void
 sp_item_scale_rel (SPItem *item, double dx, double dy)
 {
-	NRMatrix curaff, new_transform;
 	NRMatrix scale, s, t, u, v;
-	char tstr[80];
 	double x, y;
 	NRRect b;
 
@@ -84,16 +80,13 @@ sp_item_scale_rel (SPItem *item, double dx, double dy)
 	nr_matrix_set_translate (&s, x, y);
 	nr_matrix_set_translate (&t, -x, -y);
 
-	tstr[79] = '\0';
-
 	// scale item
+	NRMatrix curaff;
 	sp_item_i2d_affine (item, &curaff);
 	nr_matrix_multiply (&u, &curaff, &t);
 	nr_matrix_multiply (&v, &u, &scale);
 	nr_matrix_multiply (&u, &v, &s);
-	nr_matrix_f_from_d (&new_transform, &u);
-
-	sp_item_set_i2d_affine (item, &new_transform);
+	sp_item_set_i2d_affine(item, &u);
 
 #if 1
 	// this method is consistent with sp_selection_apply_affine()
@@ -104,6 +97,8 @@ sp_item_scale_rel (SPItem *item, double dx, double dy)
 #else
 	// this is the old method, always adding transform= attribute
 	// I think it's wrong --bb
+	char tstr[80];
+	tstr[79] = '\0';
 	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {
@@ -127,9 +122,7 @@ art_affine_skew (double dst[6], double dx, double dy)
 void
 sp_item_skew_rel (SPItem *item, double dx, double dy)
 {
-	NRMatrix cur, new_transform;
 	double skew[6], s[6], t[6] ,u[6] ,v[6] ,newaff[6];
-	char tstr[80];
 	double x,y;
 	NRRect b;
 
@@ -141,15 +134,13 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 	art_affine_translate (s, x, y);
 	art_affine_translate (t, -x, -y);
 
-	tstr[79] = '\0';
-
 	// skew item
+	NRMatrix cur;
 	sp_item_i2d_affine (item, &cur);
 	nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (u), &cur, NR_MATRIX_D_FROM_DOUBLE (t));
 	art_affine_multiply (v, u, skew);
 	art_affine_multiply (newaff, v, s);
-	nr_matrix_f_from_d (&new_transform, NR_MATRIX_D_FROM_DOUBLE (newaff));
-	sp_item_set_i2d_affine (item, &new_transform);
+	sp_item_set_i2d_affine(item, NR_MATRIX_D_FROM_DOUBLE(newaff));
 
 #if 1
 	// this method is consistent with sp_selection_apply_affine()
@@ -160,6 +151,8 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 #else
 	// this is the old method, always adding transform= attribute
 	// I think it's wrong --bb
+	char tstr[80];
+	tstr[79] = '\0';
 	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {
@@ -174,9 +167,6 @@ sp_item_move_rel (SPItem * item, double dx, double dy)
 {
 	NRMatrix cur, new_transform;
 	double move[6];
-	char tstr[80];
-
-	tstr[79] = '\0';
 
 	// move item
 	art_affine_translate (move, dx, dy);
@@ -193,6 +183,8 @@ sp_item_move_rel (SPItem * item, double dx, double dy)
 #else
 	// this is the old method, always adding transform= attribute
 	// I think it's wrong --bb
+	char tstr[80];
+	tstr[79] = '\0';
 	if (sp_svg_transform_write (tstr, 80, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 	} else {

@@ -21,8 +21,6 @@
 #define nr_matrix_test_transform_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (m0, m1, e)))
 #define nr_matrix_test_translate_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (m0, m1, e)))
 
-NRMatrix *nr_matrix_f_from_d (NRMatrix *d, const NRMatrix *s);
-
 NRMatrix *nr_matrix_invert (NRMatrix *d, const NRMatrix *m);
 
 /* d,m0,m1 needn't be distinct in any of these multiply routines. */

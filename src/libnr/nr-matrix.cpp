@@ -12,19 +12,6 @@
 #include "nr-matrix.h"
 
 NRMatrix *
-nr_matrix_f_from_d(NRMatrix *d, NRMatrix const *s)
-{
-	if (s) {
-		for(int i = 0; i < 6; i++)
-			d->c[i] = s->c[i];
-	} else {
-		nr_matrix_set_identity (d);
-	}
-
-	return d;
-}
-
-NRMatrix *
 nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
