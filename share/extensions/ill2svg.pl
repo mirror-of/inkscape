@@ -4,12 +4,15 @@
 use Getopt::Std;
 
 my %args;
-getopts('hl:', \%args);
+
+# Newline characters
+my $NL_DOS = "\015\012";
+my $NL_MAC = "\015";
+my $NL_UNX = "\012";
+
+getopts('h:', \%args);
 
 if ($args{h}) { usage() && exit }
-if ($args{l}) {
-	$/ = ($args{l} =~ /^dos/i) ? "\015\012" : (($args{l} =~ /^mac/i) ? "\015" : "\012");
-}
 $color = "#000";
 
 sub cmyk_to_css {
@@ -59,16 +62,13 @@ sub strokeparams {
 }
 
 sub usage {
-	print STDERR qq|Usage: ill2svg [-l "string" -h] infile > outfile
+    warn qq|Usage: ill2svg [-l "string" -h] infile > outfile
 options: 
-	-l specify the file's line-ending convention: dos, mac, or unix; the default	   is unix
-
 	-h print this message and exit
 |;
 }
 
-print "<svg>\n";
-while (<>) {
+sub process_line {
 	chomp;
 	next if /^%_/;
     if (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) k$/) {
@@ -179,8 +179,27 @@ while (<>) {
 	chomp;
 #	print " <!--$_-->\n";
     }
-}
     if( $firstChar != 0){
        print ("</tspan>\n</text>\n");
     }
+}
+
+
+print "<svg>\n";
+while (<>) {
+    if (m/$NL_DOS$/) { 
+	$/ = $NL_DOS; 
+	foreach (split /$NL_DOS/) {
+	    process_line($_);
+	}
+    } elsif (m/$NL_MAC$/) {
+	$/ = $NL_MAC;
+	foreach (split /$NL_MAC/) {
+	    process_line($_);
+	}
+    } else {
+	chomp;
+	process_line($_);
+    }
+}
 print "</svg>\n";
