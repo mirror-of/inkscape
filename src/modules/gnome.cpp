@@ -25,7 +25,7 @@
 #include <gtk/gtkbox.h>
 #include <gtk/gtkstock.h>
 
-#if 0
+#if OLDGnome
 #include <libgnomeprint/gnome-print-master.h>
 #include <libgnomeprintui/gnome-print-master-preview.h>
 #endif
@@ -126,7 +126,7 @@ sp_module_print_gnome_setup (SPModulePrint *mod)
 {
     SPModulePrintGnome *gpmod;
     GnomePrintConfig *config;
-#if 0
+#if OLDGnome
     GtkWidget *dlg, *vbox, *sel;
 #endif
     int btn;
@@ -134,7 +134,7 @@ sp_module_print_gnome_setup (SPModulePrint *mod)
     gpmod = (SPModulePrintGnome *) mod;
 
     config = gnome_print_config_default ();
-#if 0
+#if OLDGnome
     dlg = gtk_dialog_new_with_buttons (_("Select printer"), NULL,
 				       GTK_DIALOG_MODAL,
 				       GTK_STOCK_PRINT,
@@ -163,7 +163,7 @@ sp_module_print_gnome_setup (SPModulePrint *mod)
 static unsigned int
 sp_module_print_gnome_set_preview (SPModulePrint *mod)
 {
-#if 0
+#if OLDGnome
     SPModulePrintGnome *gpmod;
     SPPrintContext ctx;
     GnomePrintContext *gpc;
