@@ -23,12 +23,12 @@
 
 #include <gtk/gtk.h>
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/label.h>
-#include <gtkmm/box.h>
-#include <gtkmm/image.h>
-#include <gtkmm/stock.h>
-#include <gtkmm/alignment.h>
+#include <gtk/gtkdialog.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkbox.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkalignment.h>
 
 #include "macros.h"
 #include "helper/sp-intl.h"
@@ -289,7 +289,6 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	SPCanvasGroup *root;
 	/* *page; */
 	NRArenaItem *ai;
-	gdouble dw, dh;
 	SPDocument *document;
 
 	document = SP_OBJECT_DOCUMENT (namedview);
@@ -978,67 +977,42 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 
 	if (doc && (((GObject *) doc)->ref_count == 1)) {
 		if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL) {
+			GtkWidget *dialog;
+			
+			dialog = gtk_message_dialog_new(
+				GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw))),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_WARNING,
+				GTK_BUTTONS_NONE,
+				NULL);
+
 			gchar *markup;
-			gint b;
-			
-			Gtk::Dialog *dialog = new Gtk::Dialog();
-			Gtk::Button *close_button = new Gtk::Button();
-			Gtk::HBox *hbox;
-			
-			dialog->set_title("");
-			dialog->set_border_width(6);
-			dialog->set_resizable(false);
-			dialog->set_has_separator(false);
-			
-			
-			hbox = new Gtk::HBox(false, 12);
-			hbox->set_border_width(6);
-
-			Gtk::Image *image = new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG);
-			image->set_alignment(0.5, 0);
-			hbox->pack_start(*Gtk::manage(image), false, false);
-
+			/* FIXME !!! obviously this will have problems if the document name contains markup characters */
 			markup = g_strdup_printf(
-			        _("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n" \
-			        "If you close without saving, your changes will be discarded."),
+				_("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n"
+				"If you close without saving, your changes will be discarded."),
 				SP_DOCUMENT_NAME(doc));
-			
-			Gtk::Label *label = new Gtk::Label("", 0.5, 0);
-			label->set_markup(markup);
+
+			/* FIXME !!! Gtk 2.3+ gives us gtk_message_dialog_set_markup() (and actually even gtk_message_dialog_new_with_markup(..., format, ...)!) -- until then, we will have to be a little bit evil here and poke at GtkMessageDialog::label, which is private... */
+			gtk_label_set_markup(GTK_LABEL(GTK_MESSAGE_DIALOG(dialog)->label), markup);
 			g_free(markup);
+
+			//gtk_window_set_title(GTK_WINDOW(dialog), "Document has unsaved changes");
 			
-			label->set_selectable();
-			label->set_line_wrap();
-			hbox->pack_start(*Gtk::manage(label), false, false);
-			hbox->show_all();
+			GtkWidget *close_button;
+			close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
+			gtk_widget_show(close_button);
+			gtk_dialog_add_action_widget(GTK_DIALOG(dialog), close_button, GTK_RESPONSE_NO);
 			
-			dialog->get_vbox()->add(*Gtk::manage(hbox));
-			dialog->get_vbox()->set_spacing(12);
+			gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+			gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+			gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 			
-			
-			hbox = new Gtk::HBox(false, 3);
-			hbox->pack_start(*Gtk::manage(
-			                 new Gtk::Image(Gtk::Stock::QUIT, Gtk::ICON_SIZE_BUTTON)),
-					 true, false);
-			hbox->pack_start(*Gtk::manage(
-			                 new Gtk::Label(_("Close _without Saving"), true)),
-					 true, false);
-			Gtk::Alignment *align = new Gtk::Alignment(0.5, 0.5, 0, 0);
-			align->add(*Gtk::manage(hbox));
-			close_button->add(*Gtk::manage(align));
-			close_button->show_all();
-			
-			dialog->add_action_widget(*Gtk::manage(close_button), GTK_RESPONSE_NO);
-			dialog->add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
-			dialog->add_button(Gtk::Stock::SAVE, GTK_RESPONSE_YES);
-			dialog->set_default_response(GTK_RESPONSE_YES);
-			
-			// TODO: A more elegant way to set the parent window perhaps?
-			sp_transientize(GTK_WIDGET(dialog->gobj()));
-			
-			b = dialog->run();
-			delete (dialog);
-			switch (b) {
+			gint response;
+			response = gtk_dialog_run(GTK_DIALOG(dialog));
+			gtk_widget_destroy(dialog);
+
+			switch (response) {
 			case GTK_RESPONSE_YES:
 				sp_document_ref(doc);
 				if (sp_file_save_document(doc)) {

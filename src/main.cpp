@@ -44,7 +44,7 @@
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkbox.h>
 
-#include <gtkmm/main.h>
+#include <gtk/gtkmain.h>
 
 #include "macros.h"
 #include "file.h"
@@ -216,7 +216,7 @@ sp_main_gui (int argc, const char **argv)
 #endif
 	GSList *fl = NULL;
 	
-	Gtk::Main kit = Gtk::Main(&argc, (char ***) &argv);
+	gtk_init(&argc, const_cast<char ***>(&argv));
 
 	sp_modules_init();
 
@@ -296,7 +296,7 @@ sp_main_gui (int argc, const char **argv)
 		}
 	}
 
-	kit.run();
+	gtk_main();
 
 #ifdef WIN32
 	sp_win32_finish ();

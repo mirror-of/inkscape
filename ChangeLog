@@ -1,3 +1,8 @@
+2003-12-31  MenTaLguY <mental@rydia.net>
+
+	* configure.in, src/desktop.cpp, src/main.cpp: removed gtkmm
+	  dependency for now
+
 2003-12-30  bulia byak <bulia@dr.com>
 
 	* src/selection-chemistry.cpp: Grouping: Statusbar messages for nothing to group or
