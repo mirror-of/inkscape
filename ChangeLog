@@ -3,6 +3,17 @@
 	* src/desktop.cpp: Check for there being no items when zooming to
 	the drawing.  This fixes bug #942137.
 
+2004-04-26  Carl Hetherington <inkscape@carlh.net>
+
+	* config.h.mingw, prefix.h:
+	INKSCAPE_VERSION moved to inkscape_version.h.
+	INKSCAPE_{PIXMAP,SCREENS,TUTORIALS,MARKERS}DIR moved to prefix.h
+
+	* src/Makefile.mingw, src/inkscape_version.h.mingw
+	Use CVS inkscape_version.h.mingw for inkscape_version.h on Win32.
+
+	* src/sp-use.cpp: fix a warning.
+
 2004-04-26  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/ai_input.inkmod, share/extensions/dia.inkmod,
