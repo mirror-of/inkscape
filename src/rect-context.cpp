@@ -38,7 +38,7 @@
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "prefs-utils.h"
-
+#include "widgets/spw-utilities.h"
 
 static void sp_rect_context_class_init(SPRectContextClass *klass);
 static void sp_rect_context_init(SPRectContext *rect_context);
@@ -381,6 +381,18 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             if (!MOD__CTRL_ONLY)
                 ret = TRUE;
             break;
+
+        case GDK_x:
+        case GDK_X:
+            if (MOD__ALT_ONLY) {
+                gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-rect");
+                if (hb && GTK_IS_WIDGET(hb)) {
+                    gtk_widget_grab_focus (GTK_WIDGET (hb));
+                }
+                ret = TRUE;
+            }
+            break;
+
         case GDK_Escape:
             SP_DT_SELECTION(desktop)->clear();
             //TODO: make dragging escapable by Esc

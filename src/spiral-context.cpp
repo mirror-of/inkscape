@@ -42,7 +42,7 @@
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "prefs-utils.h"
-
+#include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>
 
 static void sp_spiral_context_class_init (SPSpiralContextClass * klass);
@@ -347,9 +347,19 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
 			break;
-        case GDK_Escape:
-            SP_DT_SELECTION(desktop)->clear();
-            //TODO: make dragging escapable by Esc
+ 		case GDK_x:
+ 		case GDK_X:
+ 			if (MOD__ALT_ONLY) {
+ 				gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-spiral");
+ 				if (hb && GTK_IS_WIDGET(hb)) {
+					gtk_widget_grab_focus (GTK_WIDGET (hb));
+				}
+ 				ret = TRUE;
+ 			}
+			break;
+		case GDK_Escape:
+			SP_DT_SELECTION(desktop)->clear();
+			//TODO: make dragging escapable by Esc
 		default:
 			break;
 		}

@@ -42,9 +42,10 @@
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "object-edit.h"
+#include "widgets/spw-utilities.h"
+#include <libnr/nr-point-fns.h>
 
 #include "star-context.h"
-#include <libnr/nr-point-fns.h>
 
 static void sp_star_context_class_init (SPStarContextClass * klass);
 static void sp_star_context_init (SPStarContext * star_context);
@@ -383,6 +384,16 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             // prevent the zoom field from activation
             if (!MOD__CTRL_ONLY)
                 ret = TRUE;
+            break;
+        case GDK_x:
+        case GDK_X:
+            if (MOD__ALT_ONLY) {
+                gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-star");
+                if (hb && GTK_IS_WIDGET(hb)) {
+                    gtk_widget_grab_focus (GTK_WIDGET (hb));
+                }
+                ret = TRUE;
+            }
             break;
         case GDK_Escape:
             SP_DT_SELECTION(desktop)->clear();

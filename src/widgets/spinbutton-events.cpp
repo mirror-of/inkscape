@@ -83,6 +83,10 @@ spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
 		spinbutton_defocus (GTK_OBJECT (spw));
 		return TRUE; // I consumed the event
 		break;
+	case GDK_Return: // defocus
+		spinbutton_defocus (GTK_OBJECT (spw));
+		return TRUE; // I consumed the event
+		break;
 	case GDK_Tab:
 	case GDK_ISO_Left_Tab:
 		// set the flag meaning "do not leave toolbar when changing value"

@@ -36,6 +36,7 @@
 #include "xml/repr-private.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
+#include "widgets/spw-utilities.h"
 
 static void sp_arc_context_class_init (SPArcContextClass *klass);
 static void sp_arc_context_init (SPArcContext *arc_context);
@@ -341,6 +342,16 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
 			// prevent the zoom field from activation
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
+			break;
+ 		case GDK_x:
+ 		case GDK_X:
+ 			if (MOD__ALT_ONLY) {
+ 				gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-arc");
+ 				if (hb && GTK_IS_WIDGET(hb)) {
+					gtk_widget_grab_focus (GTK_WIDGET (hb));
+				}
+ 				ret = TRUE;
+ 			}
 			break;
         case GDK_Escape:
 	    SP_DT_SELECTION (desktop)->clear();

@@ -58,7 +58,7 @@
 #include "desktop-affine.h"
 #include "desktop-snap.h"
 #include "dyna-draw-context.h"
-
+#include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>
 
 #define DDC_RED_RGBA 0xff0000ff
@@ -514,6 +514,17 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                 ret = TRUE;
             }
             break;
+        case GDK_x:
+        case GDK_X:
+            if (MOD__ALT_ONLY) {
+                gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-calligraphy");
+                if (hb && GTK_IS_WIDGET(hb)) {
+                    gtk_widget_grab_focus (GTK_WIDGET (hb));
+                }
+                ret = TRUE;
+            }
+            break;
+
         default:
             break;
         }
