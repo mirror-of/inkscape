@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-23 22:30+0200\n"
+"POT-Creation-Date: 2004-10-27 21:39+0200\n"
 "PO-Revision-Date: 2001-12-28 21:07+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -74,18 +74,21 @@ msgstr "Επιλογή χρώματος"
 msgid "Move %s"
 msgstr "Μετακίνηση"
 
-#: src/desktop.cpp:908
+#: src/desktop.cpp:907
 #, fuzzy
 msgid "Zoom drawing if window size changes"
 msgstr "Αλλαγή κλίμακας για _ταίριασμα"
 
-#: src/desktop.cpp:930 src/dialogs/display-settings.cpp:1081
+#: src/desktop.cpp:929 src/dialogs/display-settings.cpp:1081
 #: src/verbs.cpp:1597
 msgid "Zoom"
 msgstr "Εστίαση"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:954
+#. that's because labels are "lightweight" widgets that don't have
+#. their own gdk window (and so can't receive events to detect hover);
+#. you need to put them in an eventbox at minimum
+#: src/desktop.cpp:955
 msgid "Cursor coordinates"
 msgstr ""
 
@@ -509,7 +512,7 @@ msgstr "&Μονάδες:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:1041 src/dialogs/export.cpp:293
 #: src/dialogs/export.cpp:400 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1365
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1359
 #: src/toolbox.cpp:1815
 msgid "Width:"
 msgstr "Πλάτος:"
@@ -578,7 +581,7 @@ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:257 src/dialogs/display-settings.cpp:393
 #: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1412
-#: src/dialogs/stroke-style.cpp:1079 src/interface.cpp:660 src/verbs.cpp:1396
+#: src/dialogs/stroke-style.cpp:1073 src/interface.cpp:660 src/verbs.cpp:1396
 msgid "None"
 msgstr "Κανένα"
 
@@ -1275,57 +1278,62 @@ msgstr "Το %s εισήχθη"
 msgid "Exporting [%d x %d] %s"
 msgstr ""
 
-#: src/dialogs/export.cpp:1114
+#: src/dialogs/export.cpp:1016
+#, c-format
+msgid "Could not export to filename %s.\n"
+msgstr ""
+
+#: src/dialogs/export.cpp:1119
 #, fuzzy
 msgid "Select a filename for exporting"
 msgstr "Επιλογή αρχείου για φόρτωση"
 
-#: src/dialogs/filedialog.cpp:354
+#: src/dialogs/filedialog.cpp:360
 #, fuzzy
 msgid "No preview"
 msgstr "Χρήση Προεπισκόπησης"
 
-#: src/dialogs/filedialog.cpp:455
+#: src/dialogs/filedialog.cpp:461
 msgid "too large for preview"
 msgstr ""
 
 #
-#: src/dialogs/filedialog.cpp:737 src/dialogs/filedialog.cpp:738
+#: src/dialogs/filedialog.cpp:746 src/dialogs/filedialog.cpp:747
 #, fuzzy
 msgid "All Images"
 msgstr "Εικόνα"
 
-#: src/dialogs/filedialog.cpp:742 src/dialogs/filedialog.cpp:743
+#: src/dialogs/filedialog.cpp:751 src/dialogs/filedialog.cpp:752
 #, fuzzy
 msgid "All Files"
 msgstr "Όλες οι ρυθμίσεις"
 
-#: src/dialogs/filedialog.cpp:749 src/dialogs/filedialog.cpp:750
+#: src/dialogs/filedialog.cpp:758 src/dialogs/filedialog.cpp:759
 #, fuzzy
 msgid "All Inkscape Files"
 msgstr "Συμπαγές"
 
 #
-#: src/dialogs/filedialog.cpp:754 src/dialogs/filedialog.cpp:755
+#: src/dialogs/filedialog.cpp:763 src/dialogs/filedialog.cpp:764
 #, fuzzy
 msgid "SVG Files"
 msgstr "Αρχείο"
 
-#: src/dialogs/filedialog.cpp:760 src/dialogs/filedialog.cpp:761
+#: src/dialogs/filedialog.cpp:769 src/dialogs/filedialog.cpp:770
 #, fuzzy
 msgid "Compressed SVG Files"
 msgstr "Συμπίεση αρχείων:"
 
-#: src/dialogs/filedialog.cpp:1138
+#: src/dialogs/filedialog.cpp:1146
 #, fuzzy
 msgid "Inkscape SVG"
 msgstr "Συμπαγές"
 
-#: src/dialogs/filedialog.cpp:1145
+#: src/dialogs/filedialog.cpp:1153
 msgid "Plain SVG"
 msgstr ""
 
-#: src/dialogs/filedialog.cpp:1185
+#: src/dialogs/filedialog.cpp:1193
 #, fuzzy
 msgid "Guess from extension"
 msgstr "Μετασχηματισμός"
@@ -1333,7 +1341,7 @@ msgstr "Μετασχηματισμός"
 #. ###### Add the file types menu
 #. createFilterMenu();
 #. ###### Do we want the .xxx extension automatically added?
-#: src/dialogs/filedialog.cpp:1263
+#: src/dialogs/filedialog.cpp:1271
 msgid "Append filename extension automatically"
 msgstr ""
 
@@ -1934,13 +1942,13 @@ msgid "XML fragment for the RDF 'License' section."
 msgstr ""
 
 #
-#: src/dialogs/stroke-style.cpp:1062 src/widgets/gradient-vector.cpp:265
-#: src/widgets/paint-selector.cpp:863
+#: src/dialogs/stroke-style.cpp:1056 src/widgets/gradient-vector.cpp:265
+#: src/widgets/paint-selector.cpp:876
 #, fuzzy
 msgid "No document selected"
 msgstr "Επιλέχθησαν \"%s\""
 
-#: src/dialogs/stroke-style.cpp:1372
+#: src/dialogs/stroke-style.cpp:1366
 #, fuzzy
 msgid "Stroke width"
 msgstr "Καπνός με άνεμο"
@@ -1949,7 +1957,7 @@ msgstr "Καπνός με άνεμο"
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1392
+#: src/dialogs/stroke-style.cpp:1386
 #, fuzzy
 msgid "Join:"
 msgstr "Όνομα χρήστη:"
@@ -1957,7 +1965,7 @@ msgstr "Όνομα χρήστη:"
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1406
+#: src/dialogs/stroke-style.cpp:1400
 #, fuzzy
 msgid "Miter join"
 msgstr "Πρωτεύον Μονοφωνικό"
@@ -1966,7 +1974,7 @@ msgstr "Πρωτεύον Μονοφωνικό"
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1416
+#: src/dialogs/stroke-style.cpp:1410
 #, fuzzy
 msgid "Round join"
 msgstr "Εκτέλεση σε:"
@@ -1974,7 +1982,7 @@ msgstr "Εκτέλεση σε:"
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1426
+#: src/dialogs/stroke-style.cpp:1420
 #, fuzzy
 msgid "Bevel join"
 msgstr "Πρώτο επίπεδο"
@@ -1986,60 +1994,60 @@ msgstr "Πρώτο επίπεδο"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1437
+#: src/dialogs/stroke-style.cpp:1431
 #, fuzzy
 msgid "Miter limit:"
 msgstr "Πρωτεύον Μονοφωνικό"
 
-#: src/dialogs/stroke-style.cpp:1445
+#: src/dialogs/stroke-style.cpp:1439
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1458
+#: src/dialogs/stroke-style.cpp:1452
 #, fuzzy
 msgid "Cap:"
 msgstr "Κυανό"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1471
+#: src/dialogs/stroke-style.cpp:1465
 msgid "Butt cap"
 msgstr ""
 
 #
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1480
+#: src/dialogs/stroke-style.cpp:1474
 #, fuzzy
 msgid "Round cap"
 msgstr "Εκτέλεση σε:"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1489
+#: src/dialogs/stroke-style.cpp:1483
 #, fuzzy
 msgid "Square cap"
 msgstr "Λίστα Τετραγώνων"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1495
+#: src/dialogs/stroke-style.cpp:1489
 msgid "Dashes:"
 msgstr ""
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1516
+#: src/dialogs/stroke-style.cpp:1510
 #, fuzzy
 msgid "Start Markers:"
 msgstr " Ιδιότητες"
 
-#: src/dialogs/stroke-style.cpp:1526
+#: src/dialogs/stroke-style.cpp:1520
 msgid "Mid Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1537
+#: src/dialogs/stroke-style.cpp:1531
 msgid "End Markers:"
 msgstr ""
 
@@ -2387,146 +2395,150 @@ msgid "Inkscape: Print Preview"
 msgstr "GHex (%s): Προεπισκόπηση Εκτύπωσης"
 
 #
-#: src/extension/internal/ps.cpp:115
+#: src/extension/internal/ps.cpp:116
 #, fuzzy
 msgid "Print Destination"
 msgstr "Σε εκτύπωση"
 
 #. Print properties frame
-#: src/extension/internal/ps.cpp:129
+#: src/extension/internal/ps.cpp:130
 #, fuzzy
 msgid "Print properties"
 msgstr " Ιδιότητες"
 
-#: src/extension/internal/ps.cpp:136
+#: src/extension/internal/ps.cpp:137
 msgid "Print using PostScript operators"
 msgstr ""
 
-#: src/extension/internal/ps.cpp:138
+#: src/extension/internal/ps.cpp:139
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency, gradients "
 "and patterns will be lost."
 msgstr ""
 
-#: src/extension/internal/ps.cpp:143
+#: src/extension/internal/ps.cpp:144
 #, fuzzy
 msgid "Print as bitmap"
 msgstr "Εξαγωγή Αρχείου"
 
-#: src/extension/internal/ps.cpp:145
+#: src/extension/internal/ps.cpp:146
 msgid ""
 "Print everything as bitmap. The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
 msgstr ""
 
-#: src/extension/internal/ps.cpp:159
+#: src/extension/internal/ps.cpp:160
 msgid "Preferred resolution (dots per inch) of bitmap"
 msgstr ""
 
-#: src/extension/internal/ps.cpp:174
+#: src/extension/internal/ps.cpp:175
 #, fuzzy
 msgid "Resolution:"
 msgstr "Επιλογή"
 
 #
 #. Print destination frame
-#: src/extension/internal/ps.cpp:178
+#: src/extension/internal/ps.cpp:179
 #, fuzzy
 msgid "Print destination"
 msgstr "Σε εκτύπωση"
 
-#: src/extension/internal/ps.cpp:184
+#: src/extension/internal/ps.cpp:185
 msgid ""
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to a program."
 msgstr ""
 
-#: src/extension/internal/ps.cpp:938
+#: src/extension/internal/ps.cpp:977
 msgid "write error occurred"
 msgstr ""
 
-#: src/extension/system.cpp:105
+#. We can't call sp_ui_error_dialog because we may be
+#. running from the console, in which case calling sp_ui
+#. routines will cause a segfault.  See bug 1000350 - bryce
+#. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
+#: src/extension/system.cpp:109
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 
-#: src/file.cpp:167 src/file.cpp:646
+#: src/file.cpp:186 src/file.cpp:783
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
 
-#: src/file.cpp:191
+#: src/file.cpp:210
 #, fuzzy
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Έγγραφο"
 
-#: src/file.cpp:198
+#: src/file.cpp:217
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 
-#: src/file.cpp:217
+#: src/file.cpp:236
 #, fuzzy
 msgid "Document reverted."
 msgstr "Έγγραφο"
 
-#: src/file.cpp:220
+#: src/file.cpp:239
 #, fuzzy
 msgid "Document not reverted."
 msgstr "Έγγραφο"
 
-#: src/file.cpp:224
+#: src/file.cpp:243
 msgid "Document not modified.  No need to revert."
 msgstr ""
 
-#: src/file.cpp:258
+#: src/file.cpp:377
 #, fuzzy
 msgid "Select file to open"
 msgstr "Επιλογή αρχείου προς ανάγνωση"
 
-#: src/file.cpp:358
+#: src/file.cpp:483
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:359 src/file.cpp:365
+#: src/file.cpp:484 src/file.cpp:490
 #, fuzzy
 msgid "Document not saved."
 msgstr "Έγγραφο"
 
-#: src/file.cpp:364
+#: src/file.cpp:489
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
 
-#: src/file.cpp:373
+#: src/file.cpp:498
 #, fuzzy
 msgid "Document saved."
 msgstr "Έγγραφο"
 
-#: src/file.cpp:420
+#: src/file.cpp:545
 #, fuzzy, c-format
 msgid "drawing%s"
 msgstr "Σχεδίαση"
 
-#: src/file.cpp:426
+#: src/file.cpp:551
 #, fuzzy, c-format
 msgid "drawing-%d%s"
 msgstr "Σχεδίαση"
 
-#: src/file.cpp:454
+#: src/file.cpp:585
 #, fuzzy
 msgid "Select file to save to"
 msgstr "Επιλογή αρχείου προς ανάγνωση"
 
-#: src/file.cpp:532
+#: src/file.cpp:669
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:673
+#: src/file.cpp:810
 #, fuzzy
 msgid "Select file to import"
 msgstr "Επιλογή αρχείου για φόρτωση"
@@ -2685,33 +2697,33 @@ msgstr "Δεκαεξαδικό"
 msgid "Ex squares"
 msgstr "Τετράγωνο"
 
-#: src/inkscape.cpp:465
+#: src/inkscape.cpp:470
 msgid "Untitled document"
 msgstr ""
 
 #. Show nice dialog box
-#: src/inkscape.cpp:496
+#: src/inkscape.cpp:501
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr ""
 
-#: src/inkscape.cpp:497
+#: src/inkscape.cpp:502
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr ""
 
-#: src/inkscape.cpp:498
+#: src/inkscape.cpp:503
 msgid "Automatic backup of the following documents failed:\n"
 msgstr ""
 
-#: src/inkscape.cpp:670
+#: src/inkscape.cpp:676
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:671
+#: src/inkscape.cpp:677
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -2719,48 +2731,48 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:673
+#: src/inkscape.cpp:679
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:674
+#: src/inkscape.cpp:680
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
 msgstr ""
 
-#: src/inkscape.cpp:1165
+#: src/inkscape.cpp:1197
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1166
+#: src/inkscape.cpp:1198
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1167
+#: src/inkscape.cpp:1199
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1168
+#: src/inkscape.cpp:1200
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1169
+#: src/inkscape.cpp:1201
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -3687,31 +3699,31 @@ msgstr "Προτιμίσεις Ναυτίλου"
 msgid "<b>Image</b> %d x %d: %s"
 msgstr ""
 
-#: src/sp-image.cpp:730
+#: src/sp-image.cpp:720
 msgid "Trace"
 msgstr ""
 
-#: src/sp-image.cpp:876
+#: src/sp-image.cpp:867
 #, c-format
 msgid "Error writing %s: %s"
 msgstr ""
 
-#: src/sp-image.cpp:910
+#: src/sp-image.cpp:901
 msgid "Untitled"
 msgstr ""
 
-#: src/sp-image.cpp:915
+#: src/sp-image.cpp:906
 #, fuzzy
 msgid "Document Name:"
 msgstr "Έγγραφο"
 
-#: src/sp-image.cpp:928
+#: src/sp-image.cpp:919
 #, fuzzy
 msgid "Unknown"
 msgstr "Άγνωστο σύστημα"
 
 #
-#: src/sp-image.cpp:934
+#: src/sp-image.cpp:925
 #, fuzzy
 msgid "Image URI:"
 msgstr "Εικόνα"
@@ -3723,7 +3735,7 @@ msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "Εισαγωγή αντικειμένων"
 
 #
-#: src/sp-item.cpp:593
+#: src/sp-item.cpp:592
 msgid "Object"
 msgstr "Αντικείμενο"
 
@@ -4246,23 +4258,17 @@ msgid ""
 msgstr ""
 
 #
-#: src/trace/trace.cpp:68 src/trace/trace.cpp:77
+#: src/trace/trace.cpp:69 src/trace/trace.cpp:78 src/trace/trace.cpp:86
 #, fuzzy
-msgid "Trace: Nothing selected"
-msgstr "Επιλέχθησαν \"%s\""
-
-#
-#: src/trace/trace.cpp:85
-#, fuzzy
-msgid "Trace: Selected object is not an image"
+msgid "Select an <b>image</b> to trace"
 msgstr "Διαγραφή επιλεγμένου αντικειμένου"
 
-#: src/trace/trace.cpp:137
+#: src/trace/trace.cpp:140
 #, fuzzy
 msgid "Trace: No active document"
 msgstr "Έγγραφο"
 
-#: src/trace/trace.cpp:158
+#: src/trace/trace.cpp:161
 msgid "Trace: Image has no bitmap data"
 msgstr ""
 
@@ -5673,41 +5679,17 @@ msgid "AaBbCcIiPpQq12368.;/()"
 msgstr ""
 
 #
-#: src/widgets/gradient-selector.cpp:138
+#: src/widgets/gradient-selector.cpp:137
 msgid "Edit"
 msgstr "Επεξεργασία"
 
 #
-#: src/widgets/gradient-selector.cpp:143
+#: src/widgets/gradient-selector.cpp:142
 msgid "Add"
 msgstr "Προσθήκη"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
-#: src/widgets/gradient-selector.cpp:167
-msgid ""
-"Whether the gradient vector is defined in the user space coordinates "
-"(gradientUnits=\"userSpaceOnUse\") or relative to the object's bounding box "
-"(gradientUnits=\"objectBoundingBox\")"
-msgstr ""
-
-#
-#: src/widgets/gradient-selector.cpp:172
-#, fuzzy
-msgid "object"
-msgstr "Αντικείμενο"
-
-#: src/widgets/gradient-selector.cpp:176
-#, fuzzy
-msgid "user space"
-msgstr "Κατειλλημένος χώρος"
-
-#: src/widgets/gradient-selector.cpp:184
-#, fuzzy
-msgid "Coordinates:"
-msgstr "Κολομβία"
-
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: src/widgets/gradient-selector.cpp:197
+#: src/widgets/gradient-selector.cpp:166
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -5716,24 +5698,24 @@ msgid ""
 msgstr ""
 
 #
-#: src/widgets/gradient-selector.cpp:203
+#: src/widgets/gradient-selector.cpp:172
 #, fuzzy
 msgid "none"
 msgstr "Κανένα"
 
 #
-#: src/widgets/gradient-selector.cpp:207
+#: src/widgets/gradient-selector.cpp:176
 #, fuzzy
 msgid "reflected"
 msgstr "Επιλέχθησαν \"%s\""
 
 #
-#: src/widgets/gradient-selector.cpp:211
+#: src/widgets/gradient-selector.cpp:180
 #, fuzzy
 msgid "direct"
 msgstr "Ορθογ."
 
-#: src/widgets/gradient-selector.cpp:219
+#: src/widgets/gradient-selector.cpp:188
 #, fuzzy
 msgid "Repeat:"
 msgstr "Αναγνωσμένα"
@@ -5788,24 +5770,24 @@ msgstr " χρώμα"
 msgid "Gradient editor"
 msgstr "Βαθμίδα"
 
-#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:674
+#: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:687
 #, fuzzy
 msgid "No paint"
 msgstr "Σημείο"
 
-#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:742
+#: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:755
 #, fuzzy
 msgid "Flat color"
 msgstr " χρώμα"
 
 #
-#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:809
+#: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:822
 #, fuzzy
 msgid "Linear gradient"
 msgstr "Προσθήκη νέου παροχέα"
 
 #
-#: src/widgets/paint-selector.cpp:176 src/widgets/paint-selector.cpp:812
+#: src/widgets/paint-selector.cpp:176 src/widgets/paint-selector.cpp:825
 #, fuzzy
 msgid "Radial gradient"
 msgstr "Προσθήκη νέου παροχέα"
@@ -5815,28 +5797,28 @@ msgstr "Προσθήκη νέου παροχέα"
 msgid "Pattern"
 msgstr "Σχέδιο"
 
-#: src/widgets/paint-selector.cpp:639
+#: src/widgets/paint-selector.cpp:652
 #, fuzzy
 msgid "No objects"
 msgstr "Επιλέξτε αντικείμενο"
 
-#: src/widgets/paint-selector.cpp:650
+#: src/widgets/paint-selector.cpp:663
 msgid "Multiple styles"
 msgstr ""
 
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
-#: src/widgets/paint-selector.cpp:663
+#: src/widgets/paint-selector.cpp:676
 #, fuzzy
 msgid "Clone Selected"
 msgstr "Διαγραφή επιλογής"
 
-#: src/widgets/paint-selector.cpp:869
+#: src/widgets/paint-selector.cpp:882
 #, fuzzy
 msgid "No patterns in document"
 msgstr "Έγγραφο"
 
-#: src/widgets/paint-selector.cpp:997
+#: src/widgets/paint-selector.cpp:1010
 #, fuzzy
 msgid "Pattern fill"
 msgstr "Σχέδιο"
@@ -5985,6 +5967,29 @@ msgstr "Ιδιότητες"
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 msgid "Value"
 msgstr "Τιμή"
+
+#
+#, fuzzy
+#~ msgid "Trace: Nothing selected"
+#~ msgstr "Επιλέχθησαν \"%s\""
+
+#
+#, fuzzy
+#~ msgid "Trace: Selected object is not an image"
+#~ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+
+#
+#, fuzzy
+#~ msgid "object"
+#~ msgstr "Αντικείμενο"
+
+#, fuzzy
+#~ msgid "user space"
+#~ msgstr "Κατειλλημένος χώρος"
+
+#, fuzzy
+#~ msgid "Coordinates:"
+#~ msgstr "Κολομβία"
 
 #
 #~ msgid "Opacity:"
