@@ -54,6 +54,7 @@
 #include "display/nr-arena-item.h"
 #include "prefix.h"
 #include "widgets/icon.h"
+#include "helper/stock-items.h"
 
 #include "dialogs/stroke-style.h"
 
@@ -776,7 +777,7 @@ sp_stroke_radio_button(GtkWidget *tb, char const *n, char const *xpm,
 
     return tb;
 
-} 
+}
 
 void mm_print (gchar *say, NR::Matrix m)
 { g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
@@ -787,7 +788,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
 {
     // the object of the marker
     const SPObject *marker = sp_document_lookup_id (source, mname);
-    if (marker == NULL) 
+    if (marker == NULL)
         return NULL;
 
     // the repr of the marker; make a copy with id="sample"
@@ -797,7 +798,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     // replace the old sample in the sandbox by the new one
     SPRepr *defsrepr = SP_OBJECT_REPR (sp_document_lookup_id (sandbox, "defs"));
     SPObject *oldmarker = sp_document_lookup_id (sandbox, "sample");
-    if (oldmarker) 
+    if (oldmarker)
         sp_repr_unparent (SP_OBJECT_REPR (oldmarker));
     sp_repr_append_child (defsrepr, mrepr);
     sp_repr_unref (mrepr);
@@ -817,7 +818,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     SPObject *object = sp_document_lookup_id (sandbox, menu_id);
     sp_object_request_update (sp_document_root (sandbox), SP_OBJECT_MODIFIED_FLAG);
 
-    if (object == NULL || !SP_IS_ITEM(object)) 
+    if (object == NULL || !SP_IS_ITEM(object))
         return NULL; // sandbox broken?
 
     // Find object's bbox in document
@@ -842,7 +843,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
     int width, height, dx, dy;
 
     /* Update to renderable state */
-    sf = 0.8; 
+    sf = 0.8;
     nr_matrix_set_scale(&t, sf, sf);
     nr_arena_item_set_transform(root, &t);
     nr_matrix_set_identity(&gc.transform);
@@ -967,11 +968,15 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 
         SPRepr *repr = SP_OBJECT_REPR((SPItem *) ml->data);
 
-        if (current_doc && sp_document_lookup_id (current_doc, sp_repr_attr (repr, "id")))
-            continue; // also present in the current doc, skip
+        if (!current_doc && sp_repr_attr(repr,"inkscape:stockid"))
+                    continue; // stock item, dont add to list from current doc
+
 
         GtkWidget *i = gtk_menu_item_new();
         gtk_widget_show(i);
+
+        if (sp_repr_attr(repr,"inkscape:stockid"))  g_object_set_data (G_OBJECT(i), "stockid", (void *)"true");
+        else g_object_set_data (G_OBJECT(i), "stockid", (void *)"false");
 
         const gchar *markid = sp_repr_attr (repr, "id");
         g_object_set_data (G_OBJECT(i), "marker", (void *) markid);
@@ -1124,12 +1129,14 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
     gchar *markid = (gchar *) g_object_get_data(G_OBJECT(gtk_menu_get_active(GTK_MENU(gtk_option_menu_get_menu(mnu)))),
                                                 "marker");
     gchar *marker = "";
-    if (strcmp(markid, "none") != 0){
-        if (!sp_document_lookup_id(doc, markid) && !SP_IS_MARKER(sp_document_lookup_id(doc, markid))) {
-            sp_marker_load_from_svg(markid, doc);
-        }
-        SPMarker *mark = SP_MARKER(sp_document_lookup_id(doc, markid));
-        if (mark) {
+    if (strcmp(markid, "none")){
+       gchar *stockid = (gchar *) g_object_get_data(G_OBJECT(gtk_menu_get_active(GTK_MENU(gtk_option_menu_get_menu(mnu)))),
+                                                "stockid");
+
+       gchar *markurn = markid;
+       if (!strcmp(stockid,"true")) markurn = g_strconcat("urn:inkscape:marker:",markid,NULL);
+       SPObject *mark = get_stock_item(markurn);
+       if (mark) {
             SPRepr *repr = SP_OBJECT_REPR(mark);
             marker = g_strconcat("url(#", sp_repr_attr(repr,"id"), ")", NULL);
         }
@@ -1390,7 +1397,7 @@ sp_stroke_style_line_widget_new(void)
 
     return spw;
 
-} 
+}
 
 
 
@@ -1459,11 +1466,11 @@ sp_dash_selector_set_from_style (GtkWidget *dsel, SPStyle *style)
         for (int i = 0; i < len; i++) {
             if (style->stroke_width.computed != 0)
                 d[i] = style->stroke_dash.dash[i] / style->stroke_width.computed;
-            else 
+            else
                 d[i] = style->stroke_dash.dash[i]; // is there a better thing to do for stroke_width==0?
         }
         sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), len, d,
-               style->stroke_width.computed != 0? 
+               style->stroke_width.computed != 0?
                     style->stroke_dash.offset / style->stroke_width.computed  :
                     style->stroke_dash.offset);
     } else {
@@ -1617,7 +1624,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
 
     gtk_object_set_data(GTK_OBJECT(spw), "update",
                         GINT_TO_POINTER(FALSE));
-} 
+}
 
 
 /**
@@ -1672,7 +1679,7 @@ sp_stroke_style_line_update_repr(SPWidget *spw, SPRepr *repr)
 
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
 
-} 
+}
 
 
 
@@ -1698,7 +1705,7 @@ sp_stroke_style_set_scaled_dash(SPCSSAttr *css,
         sp_repr_css_set_property(css, "stroke-dasharray", "none");
         sp_repr_css_set_property(css, "stroke-dashoffset", NULL);
     }
-} 
+}
 
 
 
@@ -1805,7 +1812,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
 
     g_slist_free(reprs);
 
-} 
+}
 
 
 
@@ -1909,7 +1916,7 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
         g_slist_free(reprs);
     }
 
-} 
+}
 
 
 
@@ -2076,7 +2083,6 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
 
         GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu(mnu));
         gchar *markname = ink_extract_marker_name(object->style->marker[SP_MARKER_LOC_START].value);
-
         int markpos = 0;
         GList *kids = GTK_MENU_SHELL(m)->children;
         int i = 0;
@@ -2163,6 +2169,7 @@ sp_stroke_style_update_marker_menus( SPWidget *spw,
 static gchar*
 ink_extract_marker_name(gchar const *n)
 {
+
     gchar const *p = n;
     while (*p != '\0' && *p != '#') {
         p++;
@@ -2184,6 +2191,15 @@ ink_extract_marker_name(gchar const *n)
 
     gchar* b = g_strdup(p);
     b[c] = '\0';
+
+
+    SPDesktop *desktop = inkscape_active_desktop();
+    SPDocument *doc = SP_DT_DOCUMENT(desktop);
+    SPObject *marker = sp_document_lookup_id (doc, b);
+    if (marker && sp_repr_attr(SP_OBJECT_REPR(marker),"inkscape:stockid")) {
+         gchar *buffer = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker),"inkscape:stockid"));
+         return buffer;
+     }
 
     return b;
 }
