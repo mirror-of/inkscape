@@ -17,6 +17,7 @@ OBJECTS = \
 	dialogs/export.o \
 	dialogs/filedialog-win32.o \
 	dialogs/fill-style.o \
+	dialogs/in-dt-coordsys.o \
 	dialogs/item-properties.o \
 	dialogs/object-attributes.o \
 	dialogs/object-properties.o \
@@ -276,6 +277,7 @@ LINTS = \
 	dialogs/export.lint \
 	dialogs/filedialog-win32.lint \
 	dialogs/fill-style.lint \
+	dialogs/in-dt-coordsys.lint \
 	dialogs/item-properties.lint \
 	dialogs/object-attributes.lint \
 	dialogs/object-properties.lint \

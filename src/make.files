@@ -32,6 +32,8 @@ dialogs/filedialog-win32.cpp
 dialogs/filedialog.h
 dialogs/fill-style.cpp
 dialogs/fill-style.h
+dialogs/in-dt-coordsys.cpp
+dialogs/in-dt-coordsys.h
 dialogs/item-properties.cpp
 dialogs/item-properties.h
 dialogs/object-attributes.cpp

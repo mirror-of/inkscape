@@ -582,6 +582,36 @@ dialogs/fill-style.o: \
 	xml/repr.h \
 	xml/repr.h
 
+dialogs/in-dt-coordsys.o: \
+	dialogs/in-dt-coordsys.cpp \
+	dialogs/in-dt-coordsys.h \
+	display/nr-arena-forward.h \
+	enums.h \
+	forward.h \
+	helper/units.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-object.h \
+	sp-root.h \
+	svg/svg-types.h \
+	version.h \
+	xml/repr.h
+
 dialogs/item-properties.o: \
 	dialogs/item-properties.cpp \
 	color.h \
@@ -912,6 +942,7 @@ dialogs/xml-tree.o: \
 	dialogs/xml-tree.cpp \
 	desktop-handles.h \
 	dialogs/dialog-events.h \
+	dialogs/in-dt-coordsys.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
