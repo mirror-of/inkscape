@@ -82,7 +82,7 @@ sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
         case GDK_MOTION_NOTIFY:
             break;
         case GDK_KEY_PRESS:
-            if (event->key.keyval == GDK_space) {
+            if (get_group0_keyval (&event->key) == GDK_space) {
                 /* stamping mode: both mode(show content and outline) operation with knot */
                 if (!SP_KNOT_IS_GRABBED(knot)) return FALSE;
                 SPDesktop *desktop = knot->desktop;

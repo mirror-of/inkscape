@@ -387,11 +387,11 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		xp = yp = 0; 
 		break;
         case GDK_KEY_PRESS:
-		switch (event->key.keyval) {
+		switch (get_group0_keyval (&event->key)) {
 			unsigned int shortcut;
 		case GDK_F1:
 			/* Grab it away from Gtk */
-			shortcut = event->key.keyval;
+			shortcut = get_group0_keyval (&event->key);
 			if (event->key.state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
 			if (event->key.state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
 			if (event->key.state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
@@ -402,7 +402,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 				ret = TRUE;
 			} else {
 				/* Grab it away from Gtk */
-				shortcut = event->key.keyval;
+				shortcut = get_group0_keyval (&event->key);
 				if (event->key.state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
 				if (event->key.state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
 				if (event->key.state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
@@ -430,7 +430,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		case GDK_KP_4:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
-				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
+				gobble_key_events (get_group0_keyval (&event->key), GDK_CONTROL_MASK);
 				sp_desktop_scroll_world (event_context->desktop, i, 0);
 				ret = TRUE;
 			}
@@ -440,7 +440,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		case GDK_KP_8:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
-				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
+				gobble_key_events (get_group0_keyval (&event->key), GDK_CONTROL_MASK);
 				sp_desktop_scroll_world (event_context->desktop, 0, i);
 				ret = TRUE;
 			}
@@ -450,7 +450,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		case GDK_KP_6:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
-				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
+				gobble_key_events (get_group0_keyval (&event->key), GDK_CONTROL_MASK);
 				sp_desktop_scroll_world (event_context->desktop, -i, 0);
 				ret = TRUE;
 			}
@@ -460,7 +460,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		case GDK_KP_2:
 			if (event->key.state & GDK_CONTROL_MASK) {
 				int i = (int) floor (key_scroll * accelerate_scroll (event, acceleration));
-				gobble_key_events (event->key.keyval, GDK_CONTROL_MASK);
+				gobble_key_events (get_group0_keyval (&event->key), GDK_CONTROL_MASK);
 				sp_desktop_scroll_world (event_context->desktop, 0, -i);
 				ret = TRUE;
 			}
@@ -746,10 +746,10 @@ sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event)
 void
 sp_event_show_modifier_tip (Inkscape::MessageContext *message_context, GdkEvent *event, const gchar *ctrl_tip, const gchar *shift_tip, const gchar *alt_tip)
 {
-	bool ctrl = ctrl_tip && (MOD__CTRL || (event->key.keyval == GDK_Control_L) || (event->key.keyval == GDK_Control_R));
-	bool shift = shift_tip && (MOD__SHIFT || (event->key.keyval == GDK_Shift_L) || (event->key.keyval == GDK_Shift_R));
-	bool alt = alt_tip && (MOD__ALT || (event->key.keyval == GDK_Alt_L) || (event->key.keyval == GDK_Alt_R) 
-		|| (event->key.keyval == GDK_Meta_L) || (event->key.keyval == GDK_Meta_R));
+	guint keyval = get_group0_keyval (&event->key);
+	bool ctrl = ctrl_tip && (MOD__CTRL || (keyval == GDK_Control_L) || (keyval == GDK_Control_R));
+	bool shift = shift_tip && (MOD__SHIFT || (keyval == GDK_Shift_L) || (keyval == GDK_Shift_R));
+	bool alt = alt_tip && (MOD__ALT || (keyval == GDK_Alt_L) || (keyval == GDK_Alt_R) || (keyval == GDK_Meta_L) || (keyval == GDK_Meta_R));
 
 	gchar *tip = g_strdup_printf ("%s%s%s%s%s", 
 						ctrl? ctrl_tip : "",
@@ -765,4 +765,19 @@ sp_event_show_modifier_tip (Inkscape::MessageContext *message_context, GdkEvent 
 	}
 
 	g_free (tip);
+}
+
+/**
+Return the keyval corresponding to the key event in group 0, i.e. in the main (English)
+layout.  Use this instead of simply event->keyval, so that your keyboard shortcuts work
+regardless of layouts (e.g. in Cyrillic).
+ */
+guint
+get_group0_keyval (GdkEventKey *event) 
+{
+	guint keyval = 0;
+	gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (gdk_display_get_default ()),
+					 event->hardware_keycode, (GdkModifierType) event->state, 0/*event->key.group*/,
+					 &keyval, NULL, NULL, NULL);
+	return keyval;
 }

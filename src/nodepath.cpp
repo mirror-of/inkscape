@@ -1955,7 +1955,7 @@ static gboolean node_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
             active_node = NULL;
             break;
         case GDK_KEY_PRESS:
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_space:
                     if (event->key.state & GDK_BUTTON1_MASK) {
                         Path::Path *nodepath = n->subpath->nodepath;
@@ -1983,7 +1983,7 @@ gboolean node_key(GdkEvent *event)
 
     if ((event->type == GDK_KEY_PRESS) && !(event->key.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
         gint ret = FALSE;
-        switch (event->key.keyval) {
+        switch (get_group0_keyval (&event->key)) {
             // FIXME: this does not seem to work, the keys are stolen by tool contexts!
             case GDK_BackSpace:
                 np = active_node->subpath->nodepath;
@@ -2369,7 +2369,7 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, Path::Node *n)
     gboolean ret = FALSE;
     switch (event->type) {
         case GDK_KEY_PRESS:
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_space:
                     if (event->key.state & GDK_BUTTON1_MASK) {
                         Path::Path *nodepath = n->subpath->nodepath;

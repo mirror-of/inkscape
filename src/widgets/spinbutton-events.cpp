@@ -26,6 +26,8 @@
 #include <gtk/gtkhandlebox.h>
 #include <gdk/gdkkeysyms.h>
 
+#include "../event-context.h"
+
 #include "sp-widget.h"
 #include "widget-sizes.h"
 
@@ -77,7 +79,7 @@ spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
 	SPWidget *spw = (SPWidget *) data;
 	gdouble v;
 
-	switch (event->keyval) {
+	switch (get_group0_keyval (event)) {
 	case GDK_Escape: // defocus
 		spinbutton_undo (w);
 		spinbutton_defocus (GTK_OBJECT (spw));

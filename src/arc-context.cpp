@@ -346,7 +346,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
             sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
             break;
         case GDK_KEY_PRESS:
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_Alt_L:
                 case GDK_Alt_R:
                 case GDK_Control_L:

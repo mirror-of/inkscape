@@ -380,7 +380,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
         }
         break;
     case GDK_KEY_PRESS:
-        switch (event->key.keyval) {
+        switch (get_group0_keyval (&event->key)) {
         case GDK_Alt_L:
         case GDK_Alt_R:
         case GDK_Control_L:
@@ -422,7 +422,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
         }
         break;
     case GDK_KEY_RELEASE:
-        switch (event->key.keyval) {
+        switch (get_group0_keyval (&event->key)) {
         case GDK_Alt_L:
         case GDK_Alt_R:
         case GDK_Control_L:

@@ -584,7 +584,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		consumed = TRUE;
 		break;
 	case GDK_KEY_PRESS: // keybindings for knot
-		switch (event->key.keyval) {  
+		switch (get_group0_keyval (&event->key)) {  
 		case GDK_Escape:
 			sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
 			if (!nograb) {

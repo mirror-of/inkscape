@@ -44,6 +44,7 @@
 #include "../sp-tspan.h"
 #include "../sp-root.h"
 #include "../sp-defs.h"
+#include "../event-context.h"
 #include "in-dt-coordsys.h"
 
 
@@ -628,7 +629,7 @@ static gboolean
 sp_xml_tree_key_press (GtkWidget *widget, GdkEventKey *event)
 {
 
-    unsigned int shortcut = event->keyval |
+    unsigned int shortcut = get_group0_keyval (event) |
         ( event->state & GDK_SHIFT_MASK ?
           SP_SHORTCUT_SHIFT_MASK : 0 ) |
         ( event->state & GDK_CONTROL_MASK ?

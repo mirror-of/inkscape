@@ -26,6 +26,7 @@
 #include "desktop.h"
 #include "inkscape-private.h"
 #include "prefs-utils.h"
+#include "event-context.h"
 
 #include "dialog-events.h"
 
@@ -101,7 +102,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
     
         case GDK_KEY_PRESS:
         
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_Escape: 
                     sp_dialog_defocus (win);
                     ret = TRUE; 

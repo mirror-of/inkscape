@@ -240,7 +240,7 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
             break;
 
         case GDK_KEY_PRESS:
-            ret = pen_handle_key_press(pc, event->key.keyval);
+            ret = pen_handle_key_press(pc, get_group0_keyval (&event->key));
             break;
 
         default:

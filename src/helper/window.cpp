@@ -17,14 +17,14 @@
 #include "inkscape.h"
 #include "shortcuts.h"
 #include "view.h"
+#include "event-context.h"
 #include "helper/window.h"
 
 static gboolean
 sp_window_key_press (GtkWidget *widget, GdkEventKey *event)
 {
 	unsigned int shortcut;
-	shortcut = event->keyval; // Huh?
-	shortcut = event->keyval |
+	shortcut = get_group0_keyval (event) |
 	           ( event->state & GDK_SHIFT_MASK ?
 	             SP_SHORTCUT_SHIFT_MASK : 0 ) |
 	           ( event->state & GDK_CONTROL_MASK ?

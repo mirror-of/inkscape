@@ -179,7 +179,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
             break;
             
         case GDK_KEY_PRESS:
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_Escape: 
                     sp_rubberband_stop();
                     xp = yp = 0; 
@@ -204,7 +204,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
 		}
 		break;
 	case GDK_KEY_RELEASE:
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
 		case GDK_Shift_L:
 		case GDK_Shift_R:
                     event_context->cursor_shape = cursor_zoom_xpm;

@@ -384,7 +384,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		break;
 	case GDK_KEY_PRESS:
 
-		if (event->key.keyval == GDK_KP_Add || event->key.keyval == GDK_KP_Subtract)
+		if (get_group0_keyval (&event->key) == GDK_KP_Add || get_group0_keyval (&event->key) == GDK_KP_Subtract)
 			break; // pass on keypad +/- so they can zoom
 
 		if (MOD__CTRL && MOD__SHIFT) {
@@ -399,7 +399,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				//IM did not consume the key, or we're in unimode
 
 				if (MOD__CTRL_ONLY) {
-					switch (event->key.keyval) {
+					switch (get_group0_keyval (&event->key)) {
 					case GDK_space:
 						/* No-break space */
 						if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -429,8 +429,8 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					}
 				} else {
 					if (tc->unimode) {
-						if (isxdigit ((guchar) event->key.keyval)) {
-							tc->uni[tc->unipos] = event->key.keyval;
+						if (isxdigit ((guchar) get_group0_keyval (&event->key))) {
+							tc->uni[tc->unipos] = get_group0_keyval (&event->key);
 							ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                                         _("Unicode: %c%c%c%c"), 
                                                         tc->uni[0], 
@@ -459,7 +459,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								tc->unipos += 1;
 								return TRUE;
 							}
-						} else if (event->key.keyval != GDK_Shift_L && event->key.keyval != GDK_Shift_R) { // non-hex-digit, canceling unimode
+						} else if (get_group0_keyval (&event->key) != GDK_Shift_L && get_group0_keyval (&event->key) != GDK_Shift_R) { // non-hex-digit, canceling unimode
 							tc->unimode = FALSE;
 							gtk_im_context_reset (tc->imc);
 							ec->defaultMessageContext()->clear();
@@ -468,7 +468,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					}
 
 					/* Neither unimode nor IM consumed key */
-					switch (event->key.keyval) {
+					switch (get_group0_keyval (&event->key)) {
 					case GDK_Return:
 					case GDK_KP_Enter:
 						if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -641,10 +641,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			} else return TRUE; // return the "I took care of it" value if it was consumed by the IM
 		} else { // do nothing if there's no object to type in - the key will be sent to parent context, 
 			    // except up/down that are swallowed to prevent the zoom field from activation
-			if ((event->key.keyval == GDK_Up || 
-				 event->key.keyval == GDK_Down ||
-				 event->key.keyval == GDK_KP_Up || 
-				 event->key.keyval == GDK_KP_Down) && !MOD__CTRL_ONLY) 
+			if ((get_group0_keyval (&event->key) == GDK_Up || 
+				 get_group0_keyval (&event->key) == GDK_Down ||
+				 get_group0_keyval (&event->key) == GDK_KP_Up || 
+				 get_group0_keyval (&event->key) == GDK_KP_Down) && !MOD__CTRL_ONLY) 
 				return TRUE;
 		}
 		break;

@@ -340,7 +340,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 		}
 		break;
 	case GDK_KEY_PRESS:
-		switch (event->key.keyval) {
+		switch (get_group0_keyval (&event->key)) {
 		case GDK_Alt_R:
 		case GDK_Control_L:
 		case GDK_Control_R:
@@ -379,7 +379,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 		}
 		break;
 	case GDK_KEY_RELEASE:
-		switch (event->key.keyval) {
+		switch (get_group0_keyval (&event->key)) {
 		case GDK_Alt_L:
 		case GDK_Alt_R:
 		case GDK_Control_L:

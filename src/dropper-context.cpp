@@ -328,7 +328,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_KEY_PRESS:
-		switch (event->key.keyval) {
+		switch (get_group0_keyval (&event->key)) {
 		case GDK_Up: 
 		case GDK_Down: 
 		case GDK_KP_Up: 

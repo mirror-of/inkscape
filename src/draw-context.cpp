@@ -219,8 +219,7 @@ sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
 
     switch (event->type) {
     case GDK_KEY_PRESS:
-        /* fixme: */
-        switch (event->key.keyval) {
+        switch (get_group0_keyval (&event->key)) {
         case GDK_A:
         case GDK_a:
             if (dc->attach) {

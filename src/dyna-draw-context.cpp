@@ -567,7 +567,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
         }
         break;
     case GDK_KEY_PRESS:
-        switch (event->key.keyval) {
+        switch (get_group0_keyval (&event->key)) {
         case GDK_Up:
         case GDK_KP_Up:
             if (!MOD__CTRL_ONLY) {

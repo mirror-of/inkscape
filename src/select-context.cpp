@@ -423,7 +423,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
             break;
 
         case GDK_KEY_PRESS:
-            if (event->key.keyval == GDK_space) {
+            if (get_group0_keyval (&event->key) == GDK_space) {
                 if (sc->dragging && sc->grabbed) {
                     /* stamping mode: show content mode moving */
                     sp_sel_trans_stamp(seltrans);
@@ -685,7 +685,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             break;
 
         case GDK_KEY_PRESS: // keybindings for select context
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_Alt_L:
                 case GDK_Alt_R:
                 case GDK_Control_L:
@@ -847,7 +847,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             }
             break;
         case GDK_KEY_RELEASE:
-            switch (event->key.keyval) {
+            switch (get_group0_keyval (&event->key)) {
                 case GDK_Alt_L:
                 case GDK_Alt_R:
                 case GDK_Control_L:

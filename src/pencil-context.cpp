@@ -147,9 +147,7 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
             break;
 
         case GDK_KEY_PRESS:
-            ret = pencil_handle_key_press(pc,
-                                          event->key.keyval,
-                                          event->key.state);
+            ret = pencil_handle_key_press(pc, get_group0_keyval (&event->key), event->key.state);
             break;
 
         default:

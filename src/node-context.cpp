@@ -460,7 +460,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		}
 		break;
 	case GDK_KEY_PRESS:
-		switch (event->key.keyval) {
+		switch (get_group0_keyval (&event->key)) {
 		case GDK_Insert:
 		case GDK_KP_Insert:
 			// with any modifiers
@@ -737,7 +737,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		}
 		break;
 	case GDK_KEY_RELEASE:
-		switch (event->key.keyval) {
+		switch (get_group0_keyval (&event->key)) {
 		case GDK_Alt_L:
 			nc->leftalt = FALSE;
 			event_context->defaultMessageContext()->clear();
