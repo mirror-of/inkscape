@@ -1,0 +1,255 @@
+Keyboard shortcuts
+
+   Unless  noted otherwise, keypad keys (such as arrows, Home, End, +, -,
+   digits)  are  supposed to work the same as corresponding regular keys.
+   Some  of  the  keys  (e.g.  arrows)  currently  only work if the mouse
+   pointer is over the document canvas; hopefully this will be fixed in a
+   later  version.  See also [7]KeyboardShortcutsToDo for a discussion of
+   other  shortcuts we're planning to implement; you can leave your ideas
+   and requests there.
+
+Tool switching
+
+     * F1, s     select tool
+     * Space      switch  to  the  select tool temporarily; another Space
+       switches back
+     * F2, n     node edit tool
+     * F3, z     zoom tool
+     * F4, r     rectangle tool
+     * F5, e     ellipse/arc tool
+     * F6, p     pencil (freehand) tool
+     * Shift+F6, b     pen (bezier) tool
+     * Ctrl+F6     calligraphic tool
+     * F7, d     dropper tool
+     * F8, t     text tool
+     * F9, i     spiral tool
+     * Shift+F9, *     star tool
+
+Canvas operations
+
+     * +, =     zoom in
+     * -     zoom out
+     * 1     zoom 1:1
+     * 2     zoom 1:2
+     * 3     zoom to selection
+     * 4     zoom to drawing
+     * 5     zoom to page
+
+     * Ctrl+arrows     scroll canvas
+     * Middle mouse button drag     scroll canvas
+
+     * Mouse wheel     scroll canvas vertically
+     * Ctrl + Mouse wheel     scroll canvas horizontally
+     * Shift + Mouse wheel     zoom in or out
+
+     * #, Shift+3     (not keypad 3) toggle grid on or off
+     * |,  Shift+\      toggle guides on or off (FIXME: does not work, is
+       disabled in the dialog too)
+
+Menu
+
+     * F10     main menu
+     * Shift+F10, right mouse button     drop-down (context) menu
+
+Undo/redo
+
+     * Ctrl+z, Ctrl+Shift+y     undo
+     * Ctrl+Shift+z, Ctrl+y     redo
+
+Object operations
+
+     * Ctrl+x     cut selected object(s)
+     * Ctrl+c     copy selected object(s)
+     * Ctrl+v     paste selected object(s)
+     * Ctrl+Shift+v      paste style (apply the style of the coped object
+       to the current selection)
+
+     * Ctrl+d      duplicate  selected  object(s); new objects are placed
+       exactly over the old ones and are selected
+     * Ctrl+Shift+c     convert selected object(s) to curves
+
+File operations
+
+     * Ctrl+F4, Ctrl+w     close document window (this will shut down the
+       program if it was the only document window)
+     * Ctrl+n     new document
+     * Ctrl+o     open file
+     * Ctrl+e     export file
+     * Ctrl+i     import file
+     * Ctrl+p     print file
+     * Ctrl+s     save file
+     * Ctrl+Shift+s     save file under a new name
+     * Ctrl+q     exit
+
+Opening dialogs
+
+   These  shortcuts  will open a new dialog window if it wasn't open yet,
+   otherwise the corresponding dialog will get focus.
+
+     * Ctrl+Shift+f     Fill and stroke
+     * Ctrl+Shift+t     Text properties
+     * Ctrl+Shift+m     Transform selection
+     * Ctrl+Shift+a     Align and distribute
+     * Ctrl+Shift+x     XML editor
+     * Ctrl+Shift+d     Document settings
+     * Ctrl+Shift+o     Options
+
+Within a dialog
+
+     * Esc     return to the canvas
+     * Ctrl+F4, Ctrl+w     close the dialog
+     * Tab, Shift+Tab     move between widgets
+     * Enter      in  a  text  field,  accept new value and return to the
+       canvas
+     * Space, Enter     activate current button or list
+     * Ctrl+PgUp[8]?,  Ctrl+PgDn[9]?      in  a  multi-tab dialog, switch
+       tabs
+
+Selector tool shortcuts (F1, s)
+
+     * arrows     move selection by the nudge distance (default 1 mm)
+     * Shift+arrows     move selection by ten times the nudge distance
+     * Alt+arrows      move selection by 1 pixel (actual distance depends
+       on zoom)
+     * Alt+Shift+arrows      move selection by 10 pixels (actual distance
+       depends on zoom)
+
+     * Tab     select next object on the canvas
+     * Shift+Tab     select previous object on the canvas
+
+     * Ctrl+a     select all
+     * Esc     deselect
+     * Del     delete selected object(s)
+
+     * Home     raise selection to top
+     * End     lower selection to bottom
+     * PageUp[10]?     raise selection one layer
+     * PageDown[11]?     lower selection one layer
+
+     * Ctrl+g, Ctrl+Shift+u     group
+     * Ctrl+Shift+g, Ctrl+u     ungroup
+     * Ctrl+k     combine paths
+     * Ctrl+Shift+k     break apart
+
+     * When using mouse:
+          + Shift + drag     add to selection
+
+     * Shift + transform     make the transformation symmetric around the
+       center of selection
+
+     * Alt + transform     slow movement
+     * Ctrl + strech     only smaller
+     * Ctrl + scale     keep aspect
+     * Ctrl + skew     strech
+     * Ctrl + move     restrict movement to horizontal or vertical
+     * Drag  + Space     clone; when dragging or transforming with mouse,
+       each Space leaves a copy of the selcted object (e.g. you can press
+       and hold Space while dragging for a nice "trail")
+     * Esc     cancel rubberband selection, cancel drag or transformation
+
+  Node edit tool shortcuts (F2, n)
+
+     * arrows      move selected node(s) by the nudge distance (default 1
+       mm)
+     * Shift+arrows      move  selected  node(s)  by  ten times the nudge
+       distance
+     * Alt+arrows      move  selected node(s) by 1 pixel (actual distance
+       depends on zoom)
+     * Alt+Shift+arrows      move  selected  node(s) by 10 pixels (actual
+       distance depends on zoom)
+
+     * Tab     select next node (within the selected shape)
+     * Shift+Tab     select previous node
+
+     * Ctrl+a     select all nodes of the shape
+     * Esc     deselect all nodes
+
+   Shortcuts for selected node(s):
+
+     * Shift+l     make selected segment(s) line
+     * Shift+k     make selected segment(s) curve
+
+     * Shift+c     make selected node(s) cusp
+     * Shift+s     make selected node(s) smooth
+     * Shift+y     make selected node(s) symmetrical
+
+     * Shift+j     join selected nodes
+     * Shift+b     break selected node(s)
+
+     * Shift+d      duplicate  selected  node(s);  new  nodes  are placed
+       exactly over the old ones and are selected
+     * Del     delete selected node(s)
+     * Ins     insert new node(s) in the middle(s) of selected segment(s)
+
+   Shortcuts for active node (the one under mouse or being dragged):
+
+     * c      make active node cusp
+     * s      make active node smooth
+     * y      make active node symmetrical
+     * b      break active node
+     * Backspace     delete active node
+
+          Note:  When  you have an active node, some of the single-letter
+          tool  switch  shortcuts may not work; move your mouse cursor so
+          that no node is active if you want to use them
+
+     * When using mouse:
+          * Shift + drag     add to selection
+          * Shift + click     add to selection
+          * Ctrl + click     toggle smooth/cusp
+          * Drag  +  Space      clone; when dragging or transforming with
+            mouse,  each  Space leaves a copy of the selcted object (e.g.
+            you  can  press  and  hold  Space  while  dragging for a nice
+            "trail")
+          * Esc     cancel rubberband selection, cancel drag
+
+  Zoom tool shortcuts (F3, z)
+
+     * When using mouse:
+          * Shift + right button     zoom out
+
+  Rectangle tool shortcuts (F4, r)
+
+     * When using mouse:
+          * Ctrl  + drag     restrict rectangle so its height/width ratio
+            is a whole number
+          * Shift  +  drag     create rectangle around the starting point
+            as a center
+
+  Ellipse/arc tool shortcuts (F5, e)
+
+     * When using mouse:
+          * Ctrl + drag     restrict ellipse so its height/width ratio is
+            a whole number
+          * Shift  + drag     create ellipse around the starting point as
+            a center
+
+  Pen tool shortcuts (Shift-F6, b)
+
+     * a     toggles creation of new shape, or appending to selection
+     * Enter     finishes current line
+     * Escape     cancels current line
+     * Backspace     erases last segment of current line
+
+     * When using mouse:
+          * Alt      restrict  control  point  placement to single point,
+            instead  of  both  (FIXME:  this  may not work because window
+            manager may steal alt-mousedrag)
+
+  Text tool shortcuts (F8, t)
+
+     * arrows, Home, End     navigate in a text object
+     * letters, digits, space, ...     type text in a text object
+     * Enter     start new line
+     * Esc     deselect text object (remove cursor)
+     * Ctrl+u     toggle Unicode mode
+
+          In  this  mode,  every  four hex digits you type are translated
+          into the corresponding Unicode character. Another Ctrl+u or
+          Esc or  any  non-hex  character  quits  Unicode  mode. For
+          example, Ctrl+u 2 0 1 4 Esc inserts an em-dash.
+
+     * Ctrl+Space     insert non-break space
+
+          A  non-break  space  is  visible  even in a text object without
+          xml:space="preserve".
