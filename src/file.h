@@ -15,7 +15,7 @@
  */
 
 #include "forward.h"
-#include "modules/sp-module.h"
+#include "module.h"
 
 void sp_file_new (void);
 

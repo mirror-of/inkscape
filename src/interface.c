@@ -20,9 +20,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include "inkscape.h"
-#ifdef WITH_MODULES
-#include "modules/sp-module-sys.h"
-#endif /* WITH_MODULES */
+#include "modules/menu.h"
 #include "widgets/icon.h"
 
 #include "verbs.h"
@@ -328,7 +326,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 #ifdef WITH_MODULES
 	/* Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (fm), NULL, _("About Modules"), NULL, NULL)),
-			                   GTK_WIDGET(sp_modulesys_menu_about()));
+			                   GTK_WIDGET(sp_module_menu_about()));
 #endif /* WITH_MODULES */
 }
 
@@ -492,7 +490,7 @@ sp_ui_populate_main_menu(GtkWidget *m)
 #ifdef lalaWITH_MODULES
 	/* Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Modules"), NULL, NULL)),
-			                   GTK_WIDGET(sp_modulesys_menu_about()));
+			                   GTK_WIDGET(sp_module_menu_about()));
 #endif /* WITH_MODULES */
 
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
@@ -595,10 +593,8 @@ sp_ui_generic_menu (SPView *v, SPItem *item)
 	gtk_widget_show (sm);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), sm);
 	/* Filters submenu */
-#ifdef lalaWITH_MODULES
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("Filters"), NULL, NULL)),
-			                   GTK_WIDGET(sp_modulesys_menu_filter()));
-#endif /* WITH_MODULES */
+			                   GTK_WIDGET(sp_module_menu_filter()));
 
 	return m;
 }

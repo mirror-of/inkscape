@@ -1,0 +1,13 @@
+<spmodule>
+	<name>Dia Input</name>
+	<id>modules.input.dia</id>
+	<input>
+		<extension>dia</extension>
+		<mimetype>application/x-dia</mimetype>
+		<filetypename>Dia Diagram</filetypename>
+		<filetypetooltip>A diagram created with the program Dia</filetypetooltip>
+	</input>
+	<extension>
+		<command reldir="extensions">dia2svg.sh</command>
+	</extension>
+</spmodule>

@@ -1,0 +1,9 @@
+<spmodule>
+	<name>Roundhole</name>
+	<id>modules.filter.roundhole</id>
+	<filter>
+	</filter>
+	<extension>
+		<command reldir="extensions">roundhole</command>
+	</extension>
+</spmodule>

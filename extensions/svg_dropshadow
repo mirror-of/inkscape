@@ -11,6 +11,9 @@
 use strict;
 use warnings;
 
+use File::Basename();
+use lib File::Basename::dirname($0);
+
 use SpSVG;
 
 my $sp = new SpSVG;

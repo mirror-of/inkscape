@@ -1,0 +1,13 @@
+<spmodule>
+	<name>SVGZ Output</name>
+	<id>modules.output.SVGZ</id>
+	<output>
+		<extension>svgz</extension>
+		<mimetype>image/x-svgz</mimetype>
+		<filetypename>Compressed SVG</filetypename>
+		<filetypetooltip>Sodipodi native file format compressed with GZip</filetypetooltip>
+	</output>
+	<extension>
+		<command reldir="path">gzip -c</command>
+	</extension>
+</spmodule>

@@ -1,0 +1,15 @@
+<spmodule>
+	<name>AI Input</name>
+	<id>modules.input.AdobeIllustrator</id>
+	<input>
+		<extension>ai</extension>
+		<mimetype>image/x-adobe-illustrator</mimetype>
+		<filetypename>Adobe Illustrator</filetypename>
+		<filetypetooltip>Open files saved with Adobe Illustrator</filetypetooltip>
+	</input>
+	<extension>
+    	<command reldir="extensions">ill2svg.pl -l &quot;mac&quot;</command>
+		<check>/usr/bin/perl</check>
+		<check reldir="extensions">ill2svg.pl</check>
+	</extension>
+</spmodule>

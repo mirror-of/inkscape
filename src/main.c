@@ -62,10 +62,6 @@
 #include "sp-guide.h"
 #include "sp-object-repr.h"
 
-#ifdef WITH_MODULES
-#include "modules/sp-module-sys.h"
-#endif /* WITH_MODULES */
-
 #ifdef WIN32
 #include "modules/win32.h"
 #endif
@@ -218,7 +214,7 @@ sp_main_gui (int argc, const char **argv)
 
 	gtk_init (&argc, (char ***) &argv);
 
-	sp_modulesys_init();
+	sp_modules_init();
 
 	/* We must set LC_NUMERIC to default, or otherwise */
 	/* we'll end with localised SVG files :-( */

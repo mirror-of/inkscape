@@ -2,6 +2,11 @@
 
 	* Mege Jon's improved src/help.c patch from the mailing list (with some temporary cruft of my own that I hope he'll forgive me for)
 
+2003-11-14  Ted Gould <ted@gould.cx>
+
+	* Fixed up the module code alot.  Now extentions are usable with
+	  a XML file in the /usr/share/inkscape/modules directory.
+
 2003-11-12  Jon Cruz <jon@joncruz.org>
 	* Fix warnings due to missing casts - nr-rasterfont.c (840539)
 	* Fix warnings due to missing casts - desktop-snap.c (840543)

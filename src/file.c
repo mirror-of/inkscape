@@ -42,14 +42,11 @@
 #include "print.h"
 #include "file.h"
 
-/* fixme: (Lauris) */
 #include "sp-namedview.h"
 
-#ifdef WITH_MODULES
 #include "module.h"
-#include "modules/sp-module-sys.h"
-#include "modules/sp-module-doc.h"
-#endif /* WITH_MODULES */
+#include "modules/menu.h"
+#include "modules/system.h"
 
 #ifdef WIN32
 #include "modules/win32.h"
@@ -83,9 +80,7 @@ sp_file_open (const gchar *uri, const gchar *key)
 
 	doc = NULL;
 	if (!key) key = SP_MODULE_KEY_INPUT_DEFAULT;
-	mod = sp_module_system_get (key);
-	if (mod) doc = sp_module_input_document_open (SP_MODULE_INPUT (mod), uri, TRUE, TRUE);
-	sp_module_unref (mod);
+	doc = sp_module_system_open (key, uri);
 	if (doc) {
 		SPViewWidget *dtw;
 		dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
@@ -167,13 +162,8 @@ void sp_file_open_dialog (gpointer object, gpointer data)
 	gtk_box_pack_start (GTK_BOX (fsel->main_vbox), hb, FALSE, FALSE, 0);
 	om = gtk_option_menu_new ();
 	gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
-	m = sp_menu_new ();
-#ifdef WITH_MODULES
-	sp_module_system_menu_open (SP_MENU (m));
-#else
-	sp_menu_append (SP_MENU (m), _("Scalable Vector Graphic (SVG)"), _("Inkscape native file format and W3C standard"), NULL);
-	gtk_widget_set_sensitive (m, FALSE);
-#endif
+
+ 	m = GTK_WIDGET(sp_module_menu_open ());
 	g_object_set_data (G_OBJECT (fsel), "type-key", ((SPMenu *) m)->activedata);
 	g_signal_connect (G_OBJECT (m), "selected", G_CALLBACK (sp_file_open_dialog_type_selected), fsel);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
@@ -195,52 +185,8 @@ sp_file_do_save (SPDocument *doc, const gchar *uri, const gchar *key)
 	if (!doc) return;
 	if (!uri) return;
 
-#ifdef WITH_MODULES
 	if (!key) key = SP_MODULE_KEY_OUTPUT_DEFAULT;
-	mod = sp_module_system_get (key);
-	if (mod) sp_module_output_document_save (SP_MODULE_OUTPUT (mod), doc, uri);
-	sp_module_unref (mod);
-#else
-	spns = (!key || !strcmp (key, SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
-	if (spns) {
-		char *dirname;
-		rdoc = NULL;
-		repr = sp_document_repr_root (doc);
-		dirname = g_dirname (uri);
-		sp_repr_set_attr (repr, "sodipodi:docbase", dirname);
-		g_free (dirname);
-		sp_repr_set_attr (repr, "sodipodi:docname", uri);
-	} else {
-		rdoc = sp_repr_document_new ("svg");
-		repr = sp_repr_document_root (rdoc);
-		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
-	}
-
-	images = sp_document_get_resource_list (doc, "image");
-	for (l = images; l != NULL; l = l->next) {
-		SPRepr *ir;
-		const guchar *href, *relname;
-		ir = SP_OBJECT_REPR (l->data);
-		href = sp_repr_attr (ir, "xlink:href");
-		if (spns && !g_path_is_absolute (href)) {
-			href = sp_repr_attr (ir, "sodipodi:absref");
-		}
-		if (href && g_path_is_absolute (href)) {
-			relname = sp_relative_path_from_path (href, save_path);
-			sp_repr_set_attr (ir, "xlink:href", relname);
-		}
-	}
-
-	/* fixme: */
-	sp_document_set_undo_sensitive (doc, FALSE);
-	sp_repr_set_attr (repr, "sodipodi:modified", NULL);
-	sp_document_set_undo_sensitive (doc, TRUE);
-
-	sp_repr_save_file (sp_repr_document (repr), uri);
-	sp_document_set_uri (doc, uri);
-
-	if (!spns) sp_repr_document_unref (rdoc);
-#endif
+ 	return sp_module_system_save (key, doc, uri);
 }
 
 static void
@@ -273,9 +219,8 @@ sp_file_save_dialog (SPDocument *doc)
 	gtk_box_pack_start (GTK_BOX (fsel->main_vbox), hb, FALSE, FALSE, 0);
 	om = gtk_option_menu_new ();
 	gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, 0);
-	menu = sp_menu_new ();
 
-	sp_module_system_menu_save (SP_MENU (menu));
+	menu = GTK_WIDGET(sp_module_menu_save ());
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
 	l = gtk_label_new (_("File type:"));
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);

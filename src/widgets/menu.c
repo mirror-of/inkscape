@@ -109,6 +109,13 @@ sp_menu_append (SPMenu *menu, const gchar *label, const gchar *tip, const void *
 	GtkWidget *mi;
 	GList *cl;
 
+	if (label == NULL && tip == NULL && data == NULL) {
+		mi = gtk_separator_menu_item_new();
+		gtk_widget_show(mi);
+		gtk_menu_append (GTK_MENU (menu), mi);
+		return;
+	}
+
 	mi = gtk_menu_item_new_with_label (label);
 	gtk_widget_show (mi);
 	g_object_set_data (G_OBJECT (mi), "itemdata", (gpointer) data);
