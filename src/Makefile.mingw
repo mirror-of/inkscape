@@ -22,8 +22,8 @@ INC += $(INCLUDEPATH)
 
 OBJ = $(OBJECTS)
 
-RES=inkres.o
-#RES=
+#RES=inkres.o
+RES=
 
 inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
 	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o $(RES) libinkscape.a $(LIBS)
