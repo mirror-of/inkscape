@@ -223,7 +223,8 @@ static GrayMap *grayMapSobel(GrayMap *gm,
                 if (sum > 765)
                     sum = 765;
 
-                /*###  GET ORIENTATION ### */
+#if 0
+                /*###  GET ORIENTATION (slow, pedantic way) ### */
                 double orient = 0.0;
                 if (sumX==0)
                     {
@@ -254,7 +255,27 @@ static GrayMap *grayMapSobel(GrayMap *gm,
                     edgeDirection = 90;
 	        else if (orient < 157.5)
                     edgeDirection = 135;
+#else
+                /*###  GET EDGE DIRECTION (fast way) ### */
+                int edgeDirection = 0; /*x,y=0*/
+                if (sumX==0)
+                    {
+                    if (sumY!=0)
+                        edgeDirection = 90;
+                    }
+                else
+                   {
+                   /*long slope = sumY*1024/sumX;*/
+                   long slope = (sumY << 10)/sumX;
+                   if (slope > 2472 || slope< -2472)  /*tan(67.5)*1024*/
+                       edgeDirection = 90;
+                   else if (slope > 414) /*tan(22.5)*1024*/
+                       edgeDirection = 45;
+                   else if (slope < -414) /*-tan(22.5)*1024*/
+                       edgeDirection = 135;
+                   }
 
+#endif
                 /* printf("%ld %ld %f %d\n", sumX, sumY, orient, edgeDirection); */
 
                 /*### Get two adjacent pixels in edge direction ### */
