@@ -72,9 +72,8 @@ void    sp_spiral_position_set		(SPSpiral      *spiral,
 				 gdouble	arg,
 				 gdouble	t0);
 
-void    sp_spiral_get_xy	(SPSpiral const *spiral,
-				 gdouble	t,
-				 NRPoint	*p);
+NR::Point    sp_spiral_get_xy	(SPSpiral const *spiral,
+				 gdouble	t);
 
 void    sp_spiral_get_polar	(SPSpiral const *spiral,
 				 gdouble	t,

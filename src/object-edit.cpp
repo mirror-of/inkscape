@@ -54,60 +54,50 @@ sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 
 /* SPRect */
 
-static void
-sp_rect_rx_get (SPItem *item, NRPoint *p)
+static NR::Point sp_rect_rx_get (SPItem *item)
 {
-	SPRect *rect;
+	SPRect *rect = SP_RECT (item);
 
-	rect = SP_RECT (item);
-
-	p->x = rect->x.computed + rect->rx.computed;
-	p->y = rect->y.computed;
+	return NR::Point(rect->x.computed + rect->rx.computed,
+			 rect->y.computed);
 }
 
 static void
-sp_rect_rx_set (SPItem *item, const NRPoint *p, guint state)
+sp_rect_rx_set (SPItem *item, const NR::Point &p, guint state)
 {
-	SPRect *rect;
-
-	rect = SP_RECT(item);
+	SPRect *rect = SP_RECT(item);
 	
 	if (state & GDK_CONTROL_MASK) {
 		gdouble temp = MIN (rect->height.computed, rect->width.computed) / 2.0;
-		rect->rx.computed = rect->ry.computed = CLAMP (p->x - rect->x.computed, 0.0, temp);
+		rect->rx.computed = rect->ry.computed = CLAMP (p[NR::X] - rect->x.computed, 0.0, temp);
 		rect->rx.set = rect->ry.set = TRUE;
 	} else {
-		rect->rx.computed = CLAMP (p->x - rect->x.computed, 0.0, rect->width.computed / 2.0);
+		rect->rx.computed = CLAMP (p[NR::X] - rect->x.computed, 0.0, rect->width.computed / 2.0);
 		rect->rx.set = TRUE;
 	}
 	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
 }
 
 
-static void
-sp_rect_ry_get (SPItem *item, NRPoint *p)
+static NR::Point sp_rect_ry_get (SPItem *item)
 {
-	SPRect *rect;
+	SPRect *rect = SP_RECT(item);
 
-	rect = SP_RECT(item);
-
-	p->x = rect->x.computed;
-	p->y = rect->y.computed + rect->ry.computed;
+	return NR::Point(rect->x.computed,
+			 rect->y.computed + rect->ry.computed);
 }
 
 static void
-sp_rect_ry_set (SPItem *item, const NRPoint *p, guint state)
+sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
 {
-	SPRect *rect;
-
-	rect = SP_RECT(item);
+	SPRect *rect = SP_RECT(item);
 	
 	if (state & GDK_CONTROL_MASK) {
 		gdouble temp = MIN (rect->height.computed, rect->width.computed) / 2.0;
-		rect->rx.computed = rect->ry.computed = CLAMP (p->y - rect->y.computed, 0.0, temp);
+		rect->rx.computed = rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, temp);
 		rect->ry.set = rect->rx.set = TRUE;
 	} else {
-		rect->ry.computed = CLAMP (p->y - rect->y.computed, 0.0, rect->height.computed / 2.0);
+		rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, rect->height.computed / 2.0);
 		rect->ry.set = TRUE;
 	}
 	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
@@ -116,11 +106,7 @@ sp_rect_ry_set (SPItem *item, const NRPoint *p, guint state)
 static SPKnotHolder *
 sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 {
-	SPRect *rect;
-	SPKnotHolder *knot_holder;
-
-	rect = (SPRect *) item;
-	knot_holder = sp_knot_holder_new (desktop, item, NULL);
+	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 	
 	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get);
 	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get);
@@ -137,36 +123,29 @@ sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
  *   -1 : outside
  */
 static gint
-sp_genericellipse_side (SPGenericEllipse *ellipse, const NRPoint *p)
+sp_genericellipse_side (SPGenericEllipse *ellipse, const NR::Point &p)
 {
-	gdouble dx, dy;
-	gdouble s;
+	gdouble dx = (p[NR::X] - ellipse->cx.computed) / ellipse->rx.computed;
+	gdouble dy = (p[NR::Y] - ellipse->cy.computed) / ellipse->ry.computed;
 
-	dx = p->x - ellipse->cx.computed;
-	dy = p->y - ellipse->cy.computed;
-
-	s = dx * dx / (ellipse->rx.computed * ellipse->rx.computed) + dy * dy / (ellipse->ry.computed * ellipse->ry.computed);
+	gdouble s = dx * dx + dy * dy;
 	if (s < 1.0) return 1;
 	if (s > 1.0) return -1;
 	return 0;
 }
 
 static void
-sp_arc_start_set (SPItem *item, const NRPoint *p, guint state)
+sp_arc_start_set (SPItem *item, const NR::Point &p, guint state)
 {
-	SPGenericEllipse *ge;
-	SPArc *arc;
-	gdouble dx, dy;
-
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-	ge = SP_GENERICELLIPSE (item);
-	arc = SP_ARC(item);
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPArc *arc = SP_ARC(item);
 
 	ge->closed = (sp_genericellipse_side (ge, p) == -1) ? TRUE : FALSE;
 
-	dx = p->x - ge->cx.computed;
-	dy = p->y - ge->cy.computed;
+	gdouble dx = p[NR::X] - ge->cx.computed;
+	gdouble dy = p[NR::Y] - ge->cy.computed;
 
 	ge->start = atan2 (dy / ge->ry.computed, dx / ge->rx.computed);
 	if ( ( state & GDK_CONTROL_MASK )
@@ -178,34 +157,26 @@ sp_arc_start_set (SPItem *item, const NRPoint *p, guint state)
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_arc_start_get (SPItem *item, NRPoint *p)
+static NR::Point sp_arc_start_get (SPItem *item)
 {
-	SPGenericEllipse *ge;
-	SPArc *arc;
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPArc *arc = SP_ARC (item);
 
-	ge = SP_GENERICELLIPSE (item);
-	arc = SP_ARC (item);
-
-	sp_arc_get_xy (arc, ge->start, p);
+	return sp_arc_get_xy (arc, ge->start);
 }
 
 static void
-sp_arc_end_set (SPItem *item, const NRPoint *p, guint state)
+sp_arc_end_set (SPItem *item, const NR::Point &p, guint state)
 {
-	SPGenericEllipse *ge;
-	SPArc *arc;
-	gdouble dx, dy;
-
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-	ge = SP_GENERICELLIPSE (item);
-	arc = SP_ARC(item);
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPArc *arc = SP_ARC(item);
 
 	ge->closed = (sp_genericellipse_side (ge, p) == -1) ? TRUE : FALSE;
 
-	dx = p->x - ge->cx.computed;
-	dy = p->y - ge->cy.computed;
+	gdouble dx = p[NR::X] - ge->cx.computed;
+	gdouble dy = p[NR::Y] - ge->cy.computed;
 	ge->end = atan2 (dy / ge->ry.computed, dx / ge->rx.computed);
 	if ( ( state & GDK_CONTROL_MASK )
 	     && snaps )
@@ -216,26 +187,18 @@ sp_arc_end_set (SPItem *item, const NRPoint *p, guint state)
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_arc_end_get (SPItem *item, NRPoint *p)
+static NR::Point sp_arc_end_get (SPItem *item)
 {
-	SPGenericEllipse *ge;
-	SPArc *arc;
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPArc *arc = SP_ARC (item);
 
-	ge = SP_GENERICELLIPSE (item);
-	arc = SP_ARC (item);
-
-	sp_arc_get_xy (arc, ge->end, p);
+	return sp_arc_get_xy (arc, ge->end);
 }
 
 static SPKnotHolder *
 sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 {
-	SPArc *arc;
-	SPKnotHolder *knot_holder;
-
-	arc = SP_ARC (item);
-	knot_holder = sp_knot_holder_new (desktop, item, NULL);
+	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 	
 	sp_knot_holder_add (knot_holder,
 			    sp_arc_start_set,
@@ -250,11 +213,11 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 /* SPStar */
 
 static void
-sp_star_knot1_set (SPItem *item, const NRPoint* p, guint state)
+sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPStar *star = SP_STAR (item);
 
-	NR::Point d = NR::Point(*p) - star->center;
+	NR::Point d = p - star->center;
 
         double arg1 = atan2(d);
 	double darg1 = arg1 - star->arg[0];
@@ -270,11 +233,11 @@ sp_star_knot1_set (SPItem *item, const NRPoint* p, guint state)
 }
 
 static void
-sp_star_knot2_set (SPItem *item, const NRPoint* p, guint state)
+sp_star_knot2_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPStar *star = SP_STAR (item);
 
-	NR::Point d = NR::Point(*p) - star->center;
+	NR::Point d = p - star->center;
 
 	if (state & GDK_CONTROL_MASK) {
 		star->r[1]   = L2(d);
@@ -286,38 +249,29 @@ sp_star_knot2_set (SPItem *item, const NRPoint* p, guint state)
 	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_star_knot1_get (SPItem *item, NRPoint *p)
+static NR::Point sp_star_knot1_get (SPItem *item)
 {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (p != NULL);
+	g_assert (item != NULL);
 
 	SPStar *star = SP_STAR(item);
 
-	*p = NRPoint(sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+	return sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0);
 }
 
-static void
-sp_star_knot2_get (SPItem *item, NRPoint *p)
+static NR::Point sp_star_knot2_get (SPItem *item)
 {
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (p != NULL);
+	g_assert (item != NULL);
 
 	SPStar *star = SP_STAR(item);
 
-	*p = NRPoint(sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
+	return sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0);
 }
 
 static SPKnotHolder *
 sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
 {
-	SPStar  *star;
-	SPKnotHolder *knot_holder;
-	
-	star = SP_STAR(item);
-
 	/* we don't need to get parent knot_holder */
-	knot_holder = sp_knot_holder_new (desktop, item, NULL);
+	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
 	sp_knot_holder_add (knot_holder,
 			    sp_star_knot1_set,
@@ -338,24 +292,19 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_inner_set (SPItem *item, const NRPoint *p, guint state)
+sp_spiral_inner_set (SPItem *item, const NR::Point &p, guint state)
 {
-	SPSpiral *spiral;
-	gdouble   dx, dy;
-	gdouble   arg_tmp;
-	gdouble   arg_t0;
-	gdouble   arg_t0_new;
-
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-	spiral = SP_SPIRAL (item);
+	SPSpiral *spiral = SP_SPIRAL (item);
 
-	dx = p->x - spiral->cx;
-	dy = p->y - spiral->cy;
+	gdouble   dx = p[NR::X] - spiral->cx;
+	gdouble   dy = p[NR::Y] - spiral->cy;
+	gdouble   arg_t0;
 	sp_spiral_get_polar (spiral, spiral->t0, NULL, &arg_t0);
 	arg_t0 = 2.0*M_PI*spiral->revo * spiral->t0 + spiral->arg; //
-	arg_tmp = atan2(dy, dx) - arg_t0;
-	arg_t0_new = arg_tmp - floor((arg_tmp+M_PI)/(2.0*M_PI))*2.0*M_PI + arg_t0;
+	gdouble   arg_tmp = atan2(dy, dx) - arg_t0;
+	gdouble   arg_t0_new = arg_tmp - floor((arg_tmp+M_PI)/(2.0*M_PI))*2.0*M_PI + arg_t0;
 	spiral->t0 = (arg_t0_new - spiral->arg) / (2.0*M_PI*spiral->revo);
 
 	/* round inner arg per PI/snaps, if CTRL is pressed */
@@ -378,17 +327,14 @@ sp_spiral_inner_set (SPItem *item, const NRPoint *p, guint state)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_outer_set (SPItem *item, const NRPoint *p, guint state)
+sp_spiral_outer_set (SPItem *item, const NR::Point &p, guint state)
 {
-	SPSpiral *spiral;
-	gdouble   dx, dy;
-
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-	spiral = SP_SPIRAL (item);
+	SPSpiral *spiral = SP_SPIRAL (item);
 
-	dx = p->x - spiral->cx;
-	dy = p->y - spiral->cy;
+	gdouble  dx = p[NR::X] - spiral->cx;
+	gdouble  dy = p[NR::Y] - spiral->cy;
 	spiral->arg = atan2(dy, dx) - 2.0*M_PI*spiral->revo;
 
 	if (!(state & GDK_MOD1_MASK)) {
@@ -403,34 +349,24 @@ sp_spiral_outer_set (SPItem *item, const NRPoint *p, guint state)
 	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);
 }
 
-static void
-sp_spiral_inner_get (SPItem *item, NRPoint *p)
+static NR::Point sp_spiral_inner_get (SPItem *item)
 {
-	SPSpiral *spiral;
+	SPSpiral *spiral = SP_SPIRAL (item);
 
-	spiral = SP_SPIRAL (item);
-
-	sp_spiral_get_xy (spiral, spiral->t0, p);
+	return sp_spiral_get_xy (spiral, spiral->t0);
 }
 
-static void
-sp_spiral_outer_get (SPItem *item, NRPoint *p)
+static NR::Point sp_spiral_outer_get (SPItem *item)
 {
-	SPSpiral *spiral;
+	SPSpiral *spiral = SP_SPIRAL (item);
 
-	spiral = SP_SPIRAL (item);
-
-	sp_spiral_get_xy (spiral, 1.0, p);
+	return sp_spiral_get_xy (spiral, 1.0);
 }
 
 static SPKnotHolder *
 sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 {
-	SPSpiral *spiral;
-	SPKnotHolder *knot_holder;
-
-	spiral = SP_SPIRAL (item);
-	knot_holder = sp_knot_holder_new (desktop, item, NULL);
+	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
 	sp_knot_holder_add (knot_holder,
 			    sp_spiral_inner_set,
@@ -445,39 +381,31 @@ sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 /* SPOffset */
 
 static void
-sp_offset_offset_set (SPItem *item, const NRPoint *p, guint state)
+sp_offset_offset_set (SPItem *item, const NR::Point &p, guint state)
 {
 	SPOffset *offset = SP_OFFSET (item);
 	
-	offset->rad = sp_offset_distance_to_original(offset, *p);
-	offset->knot = *p;
+	offset->rad = sp_offset_distance_to_original(offset, p);
+	offset->knot = p;
 	offset->knotSet=true;
 	
 	sp_object_request_update ((SPObject *) offset, SP_OBJECT_MODIFIED_FLAG);
 }
 
 
-static void
-sp_offset_offset_get (SPItem *item, NRPoint *p)
+static NR::Point sp_offset_offset_get (SPItem *item)
 {
-	SPOffset *offset;
-
-	offset = SP_OFFSET (item);
-
-  NR::Point   np(p->x,p->y);
-  sp_offset_top_point(offset,&np);
-  p->x=np[NR::X];
-  p->y=np[NR::Y];
+	SPOffset *offset = SP_OFFSET (item);
+	
+	NR::Point np;
+	sp_offset_top_point(offset,&np);
+	return np;
 }
 
 static SPKnotHolder *
 sp_offset_knot_holder (SPItem * item, SPDesktop *desktop)
 {
-	SPOffset *offset;
-	SPKnotHolder *knot_holder;
-
-	offset = SP_OFFSET (item);
-	knot_holder = sp_knot_holder_new (desktop, item, NULL);
+	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
 	sp_knot_holder_add (knot_holder,
 			    sp_offset_offset_set,

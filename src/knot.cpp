@@ -27,6 +27,7 @@
 #include "inkscape.h"
 #include "document.h"
 #include "prefs-utils.h"
+#include <libnr/nr-point-fns.h>
 
 #include "sp-guide.h"
 
@@ -108,10 +109,9 @@ sp_knot_get_type (void)
 static void
 sp_knot_class_init (SPKnotClass * klass)
 {
-	GObjectClass * object_class;
 	const gchar *nograbenv;
 
-	object_class = (GObjectClass *) klass;
+	GObjectClass * object_class = (GObjectClass *) klass;
 
 	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
@@ -291,8 +291,8 @@ sp_knot_init (SPKnot * knot)
 	knot->flags = 0;
 
 	knot->size = 8;
-	knot->x = knot->y = 0.0;
-	knot->hx = knot->hy = 0.0;
+	knot->pos = NR::Point(0, 0);
+	knot->grabbed_rel_pos = NR::Point(0, 0);
 	knot->anchor = GTK_ANCHOR_CENTER;
 	knot->shape = SP_KNOT_SHAPE_SQUARE;
 	knot->mode = SP_KNOT_MODE_XOR;
@@ -320,10 +320,7 @@ sp_knot_init (SPKnot * knot)
 static void
 sp_knot_dispose (GObject * object)
 {
-	SPKnot * knot;
-	gint i;
-
-	knot = (SPKnot *) object;
+	SPKnot *knot = (SPKnot *) object;
 
 	/* ungrab pointer if still grabbed by mouseover, find a different way */
 	if (gdk_pointer_is_grabbed ()) gdk_pointer_ungrab (GDK_CURRENT_TIME);
@@ -333,7 +330,7 @@ sp_knot_dispose (GObject * object)
 		knot->item = NULL;
 	}
 
-	for (i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
+	for (gint i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
 		if (knot->cursor[i]) {
 			gdk_cursor_unref (knot->cursor[i]);
 			knot->cursor[i] = NULL;
@@ -347,11 +344,9 @@ sp_knot_dispose (GObject * object)
 static void
 sp_knot_set_property (GObject * object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
-	SPKnot * knot;
 	GdkCursor * cursor;
-	gint i;
 
-	knot = SP_KNOT (object);
+	SPKnot *knot = SP_KNOT (object);
 
 	switch (prop_id) {
 	case PROP_SIZE:
@@ -403,7 +398,7 @@ sp_knot_set_property (GObject * object, guint prop_id, const GValue *value, GPar
 		break;
 	case PROP_CURSOR:
 		cursor = (GdkCursor*)g_value_get_boxed (value);
-		for (i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
+		for (gint i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
 			if (knot->cursor[i]) gdk_cursor_unref (knot->cursor[i]);
 			knot->cursor[i] = cursor;
 			if (cursor) gdk_cursor_ref (cursor);
@@ -445,7 +440,6 @@ sp_knot_get_property (GObject * object, guint prop_id, GValue *value, GParamSpec
 static int
 sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 {
-	gboolean consumed;
 	static gboolean grabbed = FALSE;
 	static gboolean moved = FALSE;
 
@@ -454,7 +448,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 
-	consumed = FALSE;
+	gboolean consumed = FALSE;
 
 	/* Run client universal event handler, if present */
 
@@ -465,16 +459,15 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPoint p;
+			NR::Point p;
 
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
 			within_tolerance = true;
 
-			sp_desktop_w2d_xy_point (knot->desktop, &p, event->button.x, event->button.y);
-			knot->hx = p.x - knot->x;
-			knot->hy = p.y - knot->y;
+			p = sp_desktop_w2d_xy_point (knot->desktop, NR::Point(event->button.x, event->button.y));
+			knot->grabbed_rel_pos = p - knot->pos;
 			if (!nograb) {
 				sp_canvas_item_grab (knot->item,
 						     KNOT_EVENT_MASK,
@@ -536,11 +529,8 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					SP_KNOT_DRAGGING,
 					TRUE);
 			}
-			NRPoint fp;
-			sp_desktop_w2d_xy_point (knot->desktop, &fp, event->motion.x, event->motion.y);
-			NRPoint p;
-			p.x = fp.x - knot->hx;
-			p.y = fp.y - knot->hy;
+			NR::Point fp = sp_desktop_w2d_xy_point (knot->desktop, NR::Point(event->motion.x, event->motion.y));
+			NR::Point p = fp - knot->grabbed_rel_pos;
 			sp_knot_request_position (knot, &p, event->motion.state);
 			moved = TRUE;
 		}
@@ -591,13 +581,11 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 SPKnot *
 sp_knot_new (SPDesktop * desktop)
 {
-	SPKnot * knot;
-
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (SP_DT_IS_EDITABLE (desktop), NULL);
 
-	knot = (SPKnot*)g_object_new (SP_TYPE_KNOT, 0);
+	SPKnot * knot = (SPKnot*)g_object_new (SP_TYPE_KNOT, 0);
 
 	knot->desktop = desktop;
 	knot->flags = SP_KNOT_VISIBLE;
@@ -637,15 +625,12 @@ sp_knot_hide (SPKnot * knot)
 }
 
 void
-sp_knot_request_position (SPKnot * knot, NRPoint * p, guint state)
+sp_knot_request_position (SPKnot * knot, NR::Point *p, guint state)
 {
-	gboolean done;
-
 	g_return_if_fail (knot != NULL);
 	g_return_if_fail (SP_IS_KNOT (knot));
-	g_return_if_fail (p != NULL);
 
-	done = FALSE;
+	gboolean done = FALSE;
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[REQUEST], 0,
@@ -661,15 +646,12 @@ sp_knot_request_position (SPKnot * knot, NRPoint * p, guint state)
 }
 
 gdouble
-sp_knot_distance (SPKnot * knot, NRPoint * p, guint state)
+sp_knot_distance (SPKnot * knot, NR::Point *p, guint state)
 {
-	gdouble distance;
-
 	g_return_val_if_fail (knot != NULL, 1e18);
 	g_return_val_if_fail (SP_IS_KNOT (knot), 1e18);
-	g_return_val_if_fail (p != NULL, 1e18);
 
-	distance = hypot (p->x - knot->x, p->y - knot->y);
+	gdouble distance = NR::L2 (*p - knot->pos);
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[DISTANCE], 0,
@@ -681,16 +663,15 @@ sp_knot_distance (SPKnot * knot, NRPoint * p, guint state)
 }
 
 void
-sp_knot_set_position (SPKnot * knot, NRPoint * p, guint state)
+sp_knot_set_position (SPKnot * knot, NR::Point *p, guint state)
 {
 	g_return_if_fail (knot != NULL);
 	g_return_if_fail (SP_IS_KNOT (knot));
-	g_return_if_fail (p != NULL);
 
-	knot->x = p->x;
-	knot->y = p->y;
+	knot->pos = *p;
 
-	if (knot->item) sp_ctrl_moveto (SP_CTRL (knot->item), p->x, p->y);
+	if (knot->item)
+		sp_ctrl_moveto (SP_CTRL (knot->item), *p);
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[MOVED], 0,
@@ -698,31 +679,12 @@ sp_knot_set_position (SPKnot * knot, NRPoint * p, guint state)
 		       state);
 }
 
-void sp_knot_set_position(SPKnot *knot, NR::Point const &p, guint state)
-{
-	NRPoint pp = p;
-	sp_knot_set_position(knot, &pp, state);
-}
-
-NRPoint *
-sp_knot_position (SPKnot * knot, NRPoint * p)
-{
-	g_return_val_if_fail (knot != NULL, NULL);
-	g_return_val_if_fail (SP_IS_KNOT (knot), NULL);
-	g_return_val_if_fail (p != NULL, NULL);
-
-	p->x = knot->x;
-	p->y = knot->y;
-
-	return p;
-}
-
 NR::Point sp_knot_position (SPKnot const * knot)
 {
 	g_assert(knot != NULL);
 	g_assert(SP_IS_KNOT (knot));
 
-	return NR::Point(knot->x, knot->y);
+	return knot->pos;
 }
 
 static void

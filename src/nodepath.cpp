@@ -909,7 +909,7 @@ sp_node_ensure_knot (SPPathNode * node, gint which, gboolean show_knot)
 			sp_knot_show (side->knot);
 		}
 
-		sp_knot_set_position (side->knot, side->pos, 0);
+		sp_knot_set_position (side->knot, &side->pos, 0);
 		sp_canvas_item_show (side->line);
 
 	} else {
@@ -929,7 +929,7 @@ sp_node_ensure_ctrls (SPPathNode * node)
 		sp_knot_show (node->knot);
 	}
 
-	sp_knot_set_position (node->knot, node->pos, 0);
+	sp_knot_set_position (node->knot, &node->pos, 0);
 
 	gboolean show_knots = node->selected;
 	if (node->p.other != NULL) {
@@ -1799,7 +1799,7 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 		if (linelen < 1e-18) return;
 
 		me->pos = node->pos + (len / linelen)*delta;
-		sp_knot_set_position (me->knot, me->pos, 0);
+		sp_knot_set_position (me->knot, &me->pos, 0);
 
 		sp_node_ensure_ctrls (node);
 		return;
@@ -1808,7 +1808,7 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 	if (node->type == SP_PATHNODE_SYMM) {
 
 		me->pos = 2 * node->pos - other->pos;
-		sp_knot_set_position (me->knot, me->pos, 0);
+		sp_knot_set_position (me->knot, &me->pos, 0);
 
 		sp_node_ensure_ctrls (node);
 		return;
@@ -1822,7 +1822,7 @@ sp_node_adjust_knot (SPPathNode * node, gint which_adjust)
 	if (otherlen < 1e-18) return;
 
 	me->pos = node->pos - (len / otherlen) * delta;
-	sp_knot_set_position (me->knot, me->pos, 0);
+	sp_knot_set_position (me->knot, &me->pos, 0);
 
 	sp_node_ensure_ctrls (node);
 }
@@ -1989,7 +1989,7 @@ node_grabbed (SPKnot * knot, guint state, gpointer data)
 {
 	SPPathNode *n = (SPPathNode *) data;
 
-	n->origin = NR::Point(knot->x, knot->y);
+	n->origin = knot->pos;
 
 	if (!n->selected) {
 		sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
@@ -2183,10 +2183,10 @@ node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data)
 	// forget origin and set knot position once more (because it can be wrong now due to restrictions)
 	if (n->p.knot == knot) {
 		n->p.origin.a = 0;
-		sp_knot_set_position (knot, n->p.pos, state);
+		sp_knot_set_position (knot, &n->p.pos, state);
 	} else if (n->n.knot == knot) {
 		n->n.origin.a = 0;
-		sp_knot_set_position (knot, n->n.pos, state);
+		sp_knot_set_position (knot, &n->n.pos, state);
 	} else {
 		g_assert_not_reached ();
 	}
@@ -2303,7 +2303,7 @@ node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 		rother.a += rnew.a - rme.a;
 		other->pos = radial_to_xy (&rother, &(n->pos));
 		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos, other->pos);
-		sp_knot_set_position (other->knot, other->pos, 0);
+		sp_knot_set_position (other->knot, &other->pos, 0);
 	} 
 
 	me->pos = radial_to_xy (&rnew, &(n->pos));
@@ -2658,7 +2658,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	n->n.other = next;
 
 	n->knot = sp_knot_new (sp->nodepath->desktop);
-	sp_knot_set_position (n->knot, *pos, 0);
+	sp_knot_set_position (n->knot, pos, 0);
 	g_object_set (G_OBJECT (n->knot),
 		      "anchor", GTK_ANCHOR_CENTER,
 		      "fill", NODE_FILL,
@@ -2679,7 +2679,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	sp_knot_show (n->knot);
 
 	n->p.knot = sp_knot_new (sp->nodepath->desktop);
-	sp_knot_set_position (n->p.knot, *ppos, 0);
+	sp_knot_set_position (n->p.knot, ppos, 0);
 	g_object_set (G_OBJECT (n->p.knot),
 		      "shape", SP_KNOT_SHAPE_CIRCLE,
 		      "size", 7,
@@ -2702,7 +2702,7 @@ sp_nodepath_node_new (SPNodeSubPath *sp, SPPathNode *next, SPPathNodeType type, 
 	sp_canvas_item_hide (n->p.line);
 
 	n->n.knot = sp_knot_new (sp->nodepath->desktop);
-	sp_knot_set_position (n->n.knot, *npos, 0);
+	sp_knot_set_position (n->n.knot, npos, 0);
 	g_object_set (G_OBJECT (n->n.knot),
 		      "shape", SP_KNOT_SHAPE_CIRCLE,
 		      "size", 7,

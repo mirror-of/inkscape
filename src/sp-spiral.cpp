@@ -303,8 +303,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 	int depth, i;
 
 	for (d = *t, i = 0; i <= SAMPLE_SIZE; d += dstep, i++) {
-		NRPoint tmp;
-		sp_spiral_get_xy (spiral, d, &tmp);
+		NRPoint tmp = sp_spiral_get_xy (spiral, d);
 		darray[i] = tmp;
 
 		/* Avoid useless adjacent dups.  (Otherwise we can have all of darray filled with
@@ -365,16 +364,14 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 static void
 sp_spiral_set_shape (SPShape *shape)
 {
-	SPSpiral *spiral;
 	NR::Point darray[SAMPLE_SIZE + 1];
 	double t;
-	SPCurve *c;
 
-	spiral = SP_SPIRAL(shape);
+	SPSpiral *spiral = SP_SPIRAL(shape);
 
 	sp_object_request_modified (SP_OBJECT (spiral), SP_OBJECT_MODIFIED_FLAG);
 
-	c = sp_curve_new ();
+	SPCurve *c = sp_curve_new ();
 	
 #ifdef SPIRAL_VERBOSE
 	g_print ("ex=%g, revo=%g, rad=%g, arg=%g, t0=%g\n",
@@ -389,8 +386,7 @@ sp_spiral_set_shape (SPShape *shape)
 
 	/* Initial moveto. */
 	{
-		NRPoint t0_pt;
-		sp_spiral_get_xy (spiral, spiral->t0, &t0_pt);
+		NRPoint t0_pt = sp_spiral_get_xy (spiral, spiral->t0);
 		sp_curve_moveto (c, t0_pt.x, t0_pt.y);
 	}
 
@@ -452,12 +448,10 @@ sp_spiral_snappoints (SPItem *item, NR::Point *p, int size)
  *  Requires: t \in [0.0, 2.03].  (It doesn't make sense for t to be much more than 1.0,
  *	though some callers go slightly beyond 1.0 for curve-fitting purposes.)
  */
-void
-sp_spiral_get_xy (SPSpiral const *spiral, gdouble t, NRPoint *p)
+NR::Point sp_spiral_get_xy (SPSpiral const *spiral, gdouble t)
 {
-	g_return_if_fail (spiral != NULL);
-	g_return_if_fail (SP_IS_SPIRAL(spiral));
-	g_return_if_fail (p != NULL);
+	g_assert (spiral != NULL);
+	g_assert (SP_IS_SPIRAL(spiral));
 	g_assert (spiral->exp >= 0.0);
 	/* Otherwise we get NaN for t==0. */
 	g_assert (spiral->exp <= 1000.0);
@@ -468,8 +462,8 @@ sp_spiral_get_xy (SPSpiral const *spiral, gdouble t, NRPoint *p)
 	double const rad = spiral->rad * pow(t, spiral->exp);
 	double const arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
 
-	p->x = rad * cos (arg) + spiral->cx;
-	p->y = rad * sin (arg) + spiral->cy;
+	return NR::Point(rad * cos (arg) + spiral->cx,
+			 rad * sin (arg) + spiral->cy);
 }
 
 

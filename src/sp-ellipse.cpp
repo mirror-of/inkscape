@@ -672,12 +672,10 @@ sp_arc_init (SPArc *arc)
 static void
 sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	SPVersion version;
-
 	if (((SPObjectClass *) arc_parent_class)->build)
 		(* ((SPObjectClass *) arc_parent_class)->build) (object, document, repr);
 
-	version = sp_object_get_sodipodi_version (object);
+	SPVersion version = sp_object_get_sodipodi_version (object);
 
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		/* Old spec violating arc attributes */
@@ -719,21 +717,18 @@ static gboolean
 sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 {
 #define ARC_BUFSIZE 256
-	SPGenericEllipse *ge;
-	NRPoint p1, p2;
 	gint fa, fs;
 	gdouble  dt;
 	gchar c[ARC_BUFSIZE];
 
-	ge = SP_GENERICELLIPSE (arc);
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (arc);
 
-	sp_arc_get_xy (arc, ge->start, &p1);
-	sp_arc_get_xy (arc, ge->end, &p2);
+	NRPoint p1 = sp_arc_get_xy (arc, ge->start);
+	NRPoint p2 = sp_arc_get_xy (arc, ge->end);
 
 	dt = fmod (ge->end - ge->start, SP_2PI);
 	if (fabs (dt) < 1e-6) {
-		NRPoint ph;
-		sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0, &ph);
+		NRPoint ph = sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0);
 		g_snprintf (c, ARC_BUFSIZE, "M %f %f A %f %f 0 %d %d %f,%f A %g %g 0 %d %d %g %g L %f %f z",
 			    p1.x, p1.y,
 			    ge->rx.computed, ge->ry.computed,
@@ -769,12 +764,10 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 static SPRepr *
 sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPGenericEllipse *ge;
-	SPArc *arc;
 	gdouble len;
 
-	ge = SP_GENERICELLIPSE (object);
-	arc = SP_ARC (object);
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
+	SPArc *arc = SP_ARC (object);
 
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -829,12 +822,9 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 static void
 sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPGenericEllipse *ge;
-	SPVersion version;
-
-	ge = SP_GENERICELLIPSE (object);
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
 	
-	version = sp_object_get_sodipodi_version (object);
+	SPVersion version = sp_object_get_sodipodi_version (object);
 
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		switch (key) {
@@ -925,12 +915,10 @@ sp_arc_description (SPItem * item)
 void
 sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 {
-	SPGenericEllipse *ge;
-
 	g_return_if_fail (arc != NULL);
 	g_return_if_fail (SP_IS_ARC (arc));
 
-	ge = SP_GENERICELLIPSE (arc);
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (arc);
 
 	ge->cx.computed = x;
 	ge->cy.computed = y;
@@ -940,14 +928,11 @@ sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
 }
 
-void
-sp_arc_get_xy (SPArc *arc, gdouble arg, NRPoint *p)
+NR::Point sp_arc_get_xy (SPArc *arc, gdouble arg)
 {
-	SPGenericEllipse *ge;
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (arc);
 
-	ge = SP_GENERICELLIPSE (arc);
-
-	p->x = ge->rx.computed * cos(arg) + ge->cx.computed;
-	p->y = ge->ry.computed * sin(arg) + ge->cy.computed;
+	return NR::Point(ge->rx.computed * cos(arg) + ge->cx.computed,
+			 ge->ry.computed * sin(arg) + ge->cy.computed);
 }
 

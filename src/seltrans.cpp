@@ -510,7 +510,7 @@ sp_sel_trans_update_handles (SPSelTrans * seltrans)
 			    G_CALLBACK (sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
 	}
 	sp_knot_show (seltrans->chandle);
-	sp_knot_set_position (seltrans->chandle, seltrans->center, 0);
+	sp_knot_set_position (seltrans->chandle, &seltrans->center, 0);
 }
 
 static void
@@ -584,13 +584,13 @@ static void sp_show_handles (SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHan
 		sp_knot_show (knot[i]);
 
 		NR::Point const handle_pt(handle[i].x, handle[i].y);
-		NR::Point const p( seltrans->box.topleft()
+		NR::Point p( seltrans->box.topleft()
 				   + ( NR::scale(handle_pt)
 				       * (seltrans->box.dimensions()) ) );
 
 		//gtk_signal_handler_block_by_func (GTK_OBJECT (knot[i]),
 		//				  GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
-		sp_knot_set_position(knot[i], p, 0);
+		sp_knot_set_position(knot[i], &p, 0);
 		//gtk_signal_handler_unblock_by_func (GTK_OBJECT (knot[i]),
 		//				    GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
 
@@ -697,8 +697,8 @@ sp_sel_trans_handle_request (SPKnot * knot, NRPoint *position, guint state, gboo
 	}
 	NR::Point p = *position;
 	if (handle->request (seltrans, handle, p, state)) {
+		sp_knot_set_position (knot, &p, state);
 		*position = p;
-		sp_knot_set_position (knot, position, state);
 		sp_ctrl_moveto (SP_CTRL (seltrans->grip), position->x, position->y);
 		sp_ctrl_moveto (SP_CTRL (seltrans->norm), seltrans->origin[X], seltrans->origin[Y]);
 	}
