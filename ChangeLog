@@ -1,4 +1,51 @@
-2004-03-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+2004-03-27  bulia byak <bulia@users.sourceforge.net>
+
+	* src/main.cpp: Removed redundancy in error messages, reworded some
+
+	* src/verbs.cpp src/toolbox.cpp src/nodepath.cpp src/inkscape.cpp
+	src/extension/internal/ps.cpp src/main.cpp: Typos, reported by Arpad Biro
+
+	* AUTHORS: Added John Cliff, Fred (long overdue), Adib
+
+	* src/widgets/gradient-vector.cpp: John Cliff: multistage gradient editor
+
+	* src/splivarot.cpp src/style.cpp src/xml/repr-util.cpp src/sp-polygon.cpp:
+	Adib's svgostringstream patches
+ 
+	* src/toolbox.cpp: All default buttons work correctly with undo, use freezing to
+	prevent double changes; tooltip edits, formatting; defocusing on all widgets
+
+	* src/display/nr-arena-image.cpp: Tentative fix for 906376: image always uses
+	_P_P_P_ compositing
+
+	* src/dialogs/item-properties.cpp: Refixing the slider 0.99 problem properly,
+	reported by simarilius
+
+	* src/help.cpp src/help.h src/interface.cpp: Expanded and split tutorial, all
+	tutorials in submenu
+ 
+	* src/sp-text.cpp: Do not write dx/dy if they only contain 0s
+
+	* src/verbs.cpp src/verbs.h src/splivarot.cpp src/splivarot.h src/shortcuts.cpp:
+	Inset/outset by pixels: commands, keys
+
+	* src/preferences-skeleton.h: Default nudge 2pt
+
+	* src/event-context.cpp: Increased accelerated-scroll delay
+
+	* src/sp-text.cpp,h src/text-context.cpp: Clicking positions cursor closest to
+	the click point
+
+	* src/extension/internal/ps.cpp: Print dialog transient; Enter activates print;
+	patches from sodi to flush stream and add boundingBox to PS output
+
+	* src/dialogs/xml-tree.cpp: XML editor watches desktop change
+
+	* src/sp-root.cpp: Fix from sodi: default preserveAspectRatio value
+
+	* src/libnrtype/nr-type-w32.cpp: Fix for 915440 (from sodi)
+
+2004-03-27 Peter Moulder <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dyna-draw-context.cpp (sp_dyna_draw_context_set):
 	Tweak angle setting: prefer 0.0 instead of 360.0.
