@@ -201,6 +201,7 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_boolean(repr, key, gtk_toggle_button_get_active(tb));
+    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, TRUE);
     sp_document_done(doc);
 }
@@ -225,7 +226,7 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, "borderlayer",
                      gtk_toggle_button_get_active(tb) ? "top" : NULL);
-
+    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, TRUE);
     sp_document_done(doc);
 }
@@ -261,6 +262,7 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
 
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, key, os.str().c_str());
+    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, TRUE);
     sp_document_done(doc);
 }

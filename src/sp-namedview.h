@@ -96,8 +96,8 @@ SPNamedView *sp_document_namedview (SPDocument * document, const gchar * name);
 void sp_namedview_window_from_document (SPDesktop *desktop);
 void sp_namedview_document_from_window (SPDesktop *desktop);
 
-void sp_namedview_toggle_guides (SPRepr *repr);
-void sp_namedview_toggle_grid (SPRepr *repr);
+void sp_namedview_toggle_guides (SPDocument *doc, SPRepr *repr);
+void sp_namedview_toggle_grid (SPDocument *doc, SPRepr *repr);
 
 #endif
 

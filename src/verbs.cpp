@@ -1142,16 +1142,15 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
 void
 ZoomVerb::perform (SPAction *action, void * data, void * pdata)
 {
-    SPDesktop *dt;
     NRRect d;
-    SPRepr *repr;
 
-    dt = SP_DESKTOP (sp_action_get_view (action));
-
+    SPDesktop *dt = SP_DESKTOP (sp_action_get_view (action));
     if (!dt)
         return;
 
-    repr = SP_OBJECT_REPR (dt->namedview);
+    SPDocument *doc = SP_DT_DOCUMENT (dt);
+
+    SPRepr *repr = SP_OBJECT_REPR (dt->namedview);
 
     gdouble zoom_inc =
         prefs_get_double_attribute_limited ( "options.zoomincrement",
@@ -1208,10 +1207,10 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
             sp_desktop_toggle_scrollbars (dt);
             break;
         case SP_VERB_TOGGLE_GUIDES:
-            sp_namedview_toggle_guides (repr);
+            sp_namedview_toggle_guides (doc, repr);
             break;
         case SP_VERB_TOGGLE_GRID:
-            sp_namedview_toggle_grid (repr);
+            sp_namedview_toggle_grid (doc, repr);
             break;
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
         case SP_VERB_FULLSCREEN:

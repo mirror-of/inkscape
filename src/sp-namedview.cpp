@@ -725,7 +725,7 @@ sp_namedview_setup_guides (SPNamedView *nv)
 }
 
 void
-sp_namedview_toggle_guides (SPRepr *repr)
+sp_namedview_toggle_guides (SPDocument *doc, SPRepr *repr)
 {
 	unsigned int v;
 	unsigned int set = sp_repr_get_boolean (repr, "showguides", &v);
@@ -735,19 +735,29 @@ sp_namedview_toggle_guides (SPRepr *repr)
 		v = !v;
 	}
 
+	sp_document_set_undo_sensitive(doc, FALSE);
+
 	sp_repr_set_boolean (repr, "showguides", v);
 	sp_repr_set_boolean (repr, "inkscape:guide-bbox", v);
+
+	sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+	sp_document_set_undo_sensitive(doc, TRUE);
 }
 
 void
-sp_namedview_toggle_grid (SPRepr *repr)
+sp_namedview_toggle_grid (SPDocument *doc, SPRepr *repr)
 {
 	unsigned int v;
 	sp_repr_get_boolean (repr, "showgrid", &v);
 	v = !v;
 
+	sp_document_set_undo_sensitive(doc, FALSE);
+
 	sp_repr_set_boolean (repr, "showgrid", v);
 	sp_repr_set_boolean (repr, "inkscape:grid-bbox", v);
+
+	sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+	sp_document_set_undo_sensitive(doc, TRUE);
 }
 
 static void
