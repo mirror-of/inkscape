@@ -111,6 +111,7 @@ inkscape_SOURCES = \
 	zoom-context.c zoom-context.h \
 	dropper-context.c dropper-context.h \
 	tools-switch.c tools-switch.h\
+	prefs-utils.c prefs-utils.h\
 	\
 	knot.c knot.h \
 	\
