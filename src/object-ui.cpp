@@ -55,6 +55,12 @@ sp_object_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 #include "dialogs/fill-style.h"
 #include "dialogs/object-properties.h"
 
+#include "sp-flowtext.h"
+#include "sp-flowregion.h"
+#include "sp-flowdiv.h"
+#include "sp-path.h"
+
+
 static void sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
 static void sp_anchor_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu);
@@ -91,6 +97,7 @@ static void sp_item_select_this (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_reset_transformation (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_toggle_sensitivity (GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_create_link (GtkMenuItem *menuitem, SPItem *item);
+static void sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item);
 
 /* Generate context menu item section */
 
@@ -141,6 +148,13 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	gtk_widget_set_sensitive (w, !SP_IS_ANCHOR (item));
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
+    /* Add Text to shape*/
+    w = gtk_menu_item_new_with_mnemonic (_("_Add Text to shape"));
+    gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
+    gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_create_text_shape), item);
+    gtk_widget_set_sensitive (w, !SP_IS_IMAGE(item));
+    gtk_widget_show (w);
+    gtk_menu_append (GTK_MENU (m), w);
 }
 
 static void
@@ -199,6 +213,69 @@ sp_item_toggle_sensitivity (GtkMenuItem * menuitem, SPItem * item)
 	sp_repr_set_attr (SP_OBJECT_REPR (item), "sodipodi:insensitive", val);
 	sp_document_done (SP_OBJECT_DOCUMENT (item));
 }
+
+
+static void
+sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
+{
+    g_assert (SP_IS_ITEM (item));
+    g_assert (!SP_IS_ANCHOR (item));
+
+
+    SPDesktop *desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
+    g_return_if_fail (desktop != NULL);
+    g_return_if_fail (SP_IS_DESKTOP (desktop));
+    SPDocument *doc = SP_OBJECT_DOCUMENT (item);
+
+    SPRepr *root_repr = sp_repr_new ("flowRoot");
+    sp_repr_append_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), root_repr);
+    SPObject *root_object = doc->getObjectByRepr(root_repr);
+    g_return_if_fail (SP_IS_FLOWTEXT (root_object));
+
+    SPRepr *region_repr = sp_repr_new ("flowRegion");
+    sp_repr_append_child (root_repr, region_repr);
+    SPObject *object = doc->getObjectByRepr(region_repr);
+    g_return_if_fail (SP_IS_FLOWREGION (object));
+
+    /* Add clones */
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+    SPRepr *clone;
+
+    GSList *reprs = g_slist_copy((GSList *) selection->reprList());
+    for (GSList *i = reprs; i; i = i->next) {
+         if (!SP_IS_IMAGE(doc->getObjectByRepr((SPRepr *)i->data))){
+            clone = sp_repr_new("use");
+            sp_repr_set_attr(clone, "x", "0");
+            sp_repr_set_attr(clone, "y", "0");
+            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr((SPRepr *)i->data, "id")));
+
+            // add the new clone to the top of the original's parent
+            sp_repr_append_child(region_repr, clone);
+         }
+
+    }
+
+
+
+    SPRepr *div_repr = sp_repr_new ("flowDiv");
+    sp_repr_append_child (root_repr, div_repr);
+    SPObject *div_object = doc->getObjectByRepr(div_repr);
+    g_return_if_fail (SP_IS_FLOWDIV (div_object));
+
+    SPRepr *para_repr = sp_repr_new ("flowPara");
+    sp_repr_append_child (div_repr, para_repr);
+    object = doc->getObjectByRepr(para_repr);
+    g_return_if_fail (SP_IS_FLOWPARA (object));
+
+    SPRepr *text = sp_repr_new_text ("This is flowed text. Currently, you can only edit it by using the XML editor. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
+    sp_repr_append_child (para_repr, text);
+
+
+    sp_document_done (SP_OBJECT_DOCUMENT (object));
+
+    SP_DT_SELECTION(desktop)->setItem(SP_ITEM(root_object));
+}
+
 
 static void
 sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
