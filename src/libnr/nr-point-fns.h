@@ -22,6 +22,9 @@ inline NR::Coord NR::L2(Point const &p) {
 }
 
 extern double LInfty(Point const &p);
+
+bool is_zero(Point const &p);
+
 extern double atan2(Point const p);
 
 inline bool point_equalp(NR::Point const &a, NR::Point const &b, double const eps)
