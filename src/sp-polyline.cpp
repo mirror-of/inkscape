@@ -118,7 +118,7 @@ sp_polyline_set (SPObject *object, unsigned int key, const gchar *value)
 			while (*cptr != '\0' && (*cptr == ',' || *cptr == '\x20' || *cptr == '\x9' || *cptr == '\xD' || *cptr == '\xA')) {
 				cptr++;
 			}
-			if (!cptr) break;
+			if (!*cptr) break;
 
 			x = g_ascii_strtod (cptr, &eptr);
 			if (eptr == cptr) break;
@@ -127,7 +127,7 @@ sp_polyline_set (SPObject *object, unsigned int key, const gchar *value)
 			while (*cptr != '\0' && (*cptr == ',' || *cptr == '\x20' || *cptr == '\x9' || *cptr == '\xD' || *cptr == '\xA')) {
 				cptr++;
 			}
-			if (!cptr) break;
+			if (!*cptr) break;
 
 			y = g_ascii_strtod (cptr, &eptr);
 			if (eptr == cptr) break;
