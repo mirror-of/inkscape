@@ -229,6 +229,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			break;
 		case GDK_W:
 		case GDK_w:
+		case GDK_F4:
 			/* Close view */
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_ui_close_view (NULL);
