@@ -12,6 +12,9 @@
 #include "gdkpixbuf-input.h"
 
 namespace Inkscape {
+namespace IO {
+GdkPixbuf* pixbuf_new_from_file( const char *utf8name, GError **error );
+}
 namespace Extension {
 namespace Internal {
 
@@ -20,15 +23,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 {
     /* Try pixbuf */
     SPDocument * doc = sp_document_new(NULL, TRUE, TRUE, TRUE);
-    gsize bytesRead = 0;
-    gsize bytesWritten = 0;
-    GError* error = NULL;
-    gchar* localFilename = g_filename_from_utf8 ( uri,
-                                                  -1,
-                                                  &bytesRead,
-                                                  &bytesWritten,
-                                                  &error);
-    GdkPixbuf *pb = gdk_pixbuf_new_from_file (localFilename, NULL);
+    GdkPixbuf* pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
     SPRepr *rdoc = sp_document_repr_root (doc);
     const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
     const gchar *relname = sp_relative_path_from_path (uri, docbase);
@@ -43,8 +38,30 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             repr = sp_repr_new ("image");
             sp_repr_set_attr (repr, "xlink:href", relname);
             sp_repr_set_attr (repr, "sodipodi:absref", uri);
-            sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
-            sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+            double width = gdk_pixbuf_get_width(pb);
+            double height = gdk_pixbuf_get_height(pb);
+            const gchar* str = gdk_pixbuf_get_option( pb, "Inkscape::DpiX" );
+            if ( str )
+            {
+                gint dpi = atoi(str);
+                if ( dpi > 0 && dpi != 72 )
+                {
+                    double scale = 72.0 / (double)dpi;
+                    width *= scale;
+                }
+            }
+            str = gdk_pixbuf_get_option( pb, "Inkscape::DpiY" );
+            if ( str )
+            {
+                gint dpi = atoi(str);
+                if ( dpi > 0 && dpi != 72 )
+                {
+                    double scale = 72.0 / (double)dpi;
+                    height *= scale;
+                }
+            }
+            sp_repr_set_double (repr, "width", width);
+            sp_repr_set_double (repr, "height", height);
 
         } else {
             // import as pattern-filled rect
@@ -76,10 +93,6 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
         gdk_pixbuf_unref (pb);
     } else {
         printf("GdkPixbuf loader failed\n");
-    }
-
-    if ( localFilename != NULL ) {
-            g_free (localFilename);
     }
 
     return doc;
