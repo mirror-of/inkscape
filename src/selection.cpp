@@ -189,16 +189,18 @@ void SPSelection::setList(GSList const *list) {
 }
 
 void SPSelection::addList(GSList const *list) {
+
+    if (list == NULL)
+        return;
+
     _invalidateCachedLists();
 
-    if ( list != NULL ) {
-        for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-            SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
-            if (includes(obj)) {
-                continue;
-            }
-            _add (obj);
+    for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
+        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+        if (includes(obj)) {
+            continue;
         }
+        _add (obj);
     }
 
     _emitChanged();
