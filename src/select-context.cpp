@@ -209,6 +209,46 @@ sp_select_context_find_item (SPDesktop *desktop, NR::Point const p, int state, g
     return item;
 }
 
+static void
+sp_select_context_abort(SPEventContext *event_context)
+{
+    SPDesktop *desktop = event_context->desktop;
+    SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
+    SPSelTrans *seltrans = sc->_seltrans;
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    if (sc->dragging) {
+        if (sc->moved) { // cancel dragging an object
+            sp_sel_trans_ungrab(seltrans);
+            sc->moved = FALSE;
+            sc->dragging = FALSE;
+            drag_escaped = 1;
+
+            // only undo if the item is still valid
+            if (SP_OBJECT_DOCUMENT( SP_OBJECT(sc->item))) {
+              sp_document_undo(SP_DT_DOCUMENT(desktop));
+            }
+
+            if (sc->item) {
+                sp_object_unref( SP_OBJECT(sc->item), NULL);
+            }
+            sc->item = NULL;
+
+            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
+        }
+    } else {
+        NRRect b;
+
+        if (sp_rubberband_rect(&b)) { // cancel rubberband
+            sp_rubberband_stop();
+            rb_escaped = 1;
+            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
+        } else {
+            selection->clear();
+        }
+    }
+}
+
 static gint
 sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
@@ -220,6 +260,11 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
     SPSelection *selection = SP_DT_SELECTION(desktop);
 
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
+
+    // make sure we still have valid objects to move around
+    if (sc->item && SP_OBJECT_DOCUMENT( SP_OBJECT(sc->item))==NULL) {
+        sp_select_context_abort(event_context);
+    }
 
     switch (event->type) {
         case GDK_2BUTTON_PRESS:
@@ -254,6 +299,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     } else { // simple click
                         sc->item = item;
                     }
+                    sp_object_ref(sc->item, NULL);
 
                     rb_escaped = drag_escaped = 0;
 
@@ -344,6 +390,9 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     }
                 }
                 sc->dragging = FALSE;
+                if (sc->item) {
+                    sp_object_unref( SP_OBJECT(sc->item), NULL);
+                }
                 sc->item = NULL;
                 if (sc->grabbed) {
                     sp_canvas_item_ungrab(sc->grabbed, event->button.time);
@@ -407,6 +456,11 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     gdouble const offset = prefs_get_double_attribute_limited("options.defaultscale", "value", 2, 0, 1000);
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
     int const snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
+
+    // make sure we still have valid objects to move around
+    if (sc->item && SP_OBJECT_DOCUMENT( SP_OBJECT(sc->item))==NULL) {
+        sp_select_context_abort(event_context);
+    }
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -533,6 +587,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         }
                     }
                     sc->dragging = FALSE;
+                    if (sc->item) {
+                        sp_object_unref( SP_OBJECT(sc->item), NULL);
+                    }
                     sc->item = NULL;
                 } else {
                     if (sp_rubberband_rect(&b) && !within_tolerance) {
@@ -703,25 +760,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     }
                     break;
                 case GDK_Escape:
-                    if (sc->dragging) {
-                        if (sc->moved) { // cancel dragging an object
-                            sp_sel_trans_ungrab(seltrans);
-                            sc->moved = FALSE;
-                            sc->dragging = FALSE;
-                            sc->item = NULL;
-                            sp_document_undo(SP_DT_DOCUMENT(desktop));
-                            drag_escaped = 1;
-                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
-                        }
-                    } else {
-                        if (sp_rubberband_rect(&b)) { // cancel rubberband
-                            sp_rubberband_stop();
-                            rb_escaped = 1;
-                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
-                        } else {
-                            selection->clear();
-                        }
-                    }
+                    sp_select_context_abort(event_context);
                     ret = TRUE;
                     break;
                 case GDK_a:

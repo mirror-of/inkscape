@@ -611,6 +611,15 @@ static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, gui
 
 	SPDesktop *desktop = knot->desktop;
 	SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
+
+        // in case items have been unhooked from the document, don't
+        // try to continue processing events for them.
+	for (unsigned i = 0; i < seltrans->items.size(); i++) {
+            if (!SP_OBJECT_DOCUMENT (SP_OBJECT (seltrans->items[i].first)) ) {
+                return;
+            }
+        }
+
 	SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 	handle.action(seltrans, handle, *position, state);
 }
