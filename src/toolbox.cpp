@@ -179,7 +179,7 @@ sp_toolbox_button_new_from_verb_with_doubleclick(GtkWidget *t, unsigned size, SP
     SPAction *doubleclick_action;
     if (doubleclick_verb)
         doubleclick_action = doubleclick_verb->get_action(view);
-    else 
+    else
         doubleclick_action = NULL;
 
     /* fixme: Handle sensitive/unsensitive */
@@ -559,8 +559,8 @@ setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         GtkWidget *button =
             sp_toolbox_button_new_from_verb_with_doubleclick( toolbox, TOOL_BUTTON_SIZE,
                                                               SP_BUTTON_TYPE_TOGGLE,
-                                                              Inkscape::Verb::get(tools[i].verb), 
-                                                              Inkscape::Verb::get(tools[i].doubleclick_verb), 
+                                                              Inkscape::Verb::get(tools[i].verb),
+                                                              Inkscape::Verb::get(tools[i].doubleclick_verb),
                                                               SP_VIEW(desktop),
                                                               tooltips );
 
@@ -729,10 +729,10 @@ sp_empty_toolbox_new(SPDesktop *desktop)
 
 GtkWidget *
 sp_tb_spinbutton(
-    gchar *label, gchar const *tooltip, 
+    gchar *label, gchar const *tooltip,
     gchar const *path, gchar const *data, gdouble def,
-    GtkWidget *us, 
-    SPWidget *tbl, 
+    GtkWidget *us,
+    SPWidget *tbl,
     gboolean altx, gchar const *altx_mark,
     gdouble lower, gdouble upper, gdouble step, gdouble page,
     void (*callback)(GtkAdjustment *, SPWidget *),
@@ -747,7 +747,7 @@ sp_tb_spinbutton(
     gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
     gtk_container_add(GTK_CONTAINER(hb), l);
 
-    GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute(path, data, def), 
+    GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute(path, data, def),
                                       lower, upper, step, page, page);
     gtk_object_set_data(GTK_OBJECT(tbl), data, a);
     if (us)
@@ -774,7 +774,7 @@ sp_tb_spinbutton(
 //########################
 
 static void
-sp_stb_magnitude_value_changed(GtkAdjustment *adj, SPWidget *tbl) 
+sp_stb_magnitude_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 {
     SPDesktop *desktop = (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
 
@@ -797,7 +797,7 @@ sp_stb_magnitude_value_changed(GtkAdjustment *adj, SPWidget *tbl)
     SPSelection *selection = SP_DT_SELECTION(desktop);
     GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
-        if (SP_IS_STAR((SPItem *) items->data))	{
+        if (SP_IS_STAR((SPItem *) items->data)) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_int(repr,"sodipodi:sides",(gint)adj->value);
             sp_repr_set_double(repr,"sodipodi:arg2",sp_repr_get_double_attribute(repr, "sodipodi:arg1", 0.5) + M_PI / (gint)adj->value);
@@ -910,7 +910,7 @@ sp_stb_sides_flat_state_changed(GtkWidget *widget, GtkObject *tbl)
 }
 
 static void
-sp_stb_rounded_value_changed(GtkAdjustment *adj, SPWidget *tbl) 
+sp_stb_rounded_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 {
     SPDesktop *desktop = (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
 
@@ -947,7 +947,7 @@ sp_stb_rounded_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 
 
 static void
-sp_stb_randomized_value_changed(GtkAdjustment *adj, SPWidget *tbl) 
+sp_stb_randomized_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 {
     SPDesktop *desktop = (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
 
@@ -1053,7 +1053,7 @@ sp_star_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
     Inkscape::XML::Node *oldrepr = NULL;
-    
+
     for (GSList const *items = selection->itemList();
          items != NULL;
          items = items->next)
@@ -1077,7 +1077,7 @@ sp_star_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
             sp_repr_unref(oldrepr);
             oldrepr = 0;
         }
-        
+
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
             sp_repr_ref(repr);
@@ -1159,10 +1159,10 @@ sp_star_toolbox_new(SPDesktop *desktop)
 
     /* Magnitude */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Corners:"), _("Number of corners of a polygon or star"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Corners:"), _("Number of corners of a polygon or star"),
                                          "tools.shapes.star", "magnitude", 3,
                                          NULL, (SPWidget *) tbl, TRUE, "altx-star",
-                                         3, 1024, 1, 1, 
+                                         3, 1024, 1, 1,
                                          sp_stb_magnitude_value_changed, 1, 0);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
@@ -1207,7 +1207,7 @@ sp_star_toolbox_new(SPDesktop *desktop)
 
     /* Roundedness */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Rounded:"), _("How much rounded are the corners (0 for sharp)"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Rounded:"), _("How much rounded are the corners (0 for sharp)"),
                                          "tools.shapes.star", "rounded", 0.0,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          -100.0, 100.0, 0.01, 0.1,
@@ -1217,7 +1217,7 @@ sp_star_toolbox_new(SPDesktop *desktop)
 
     /* Randomization */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Randomized:"), _("Scatter randomly the corners and angles"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Randomized:"), _("Scatter randomly the corners and angles"),
                                          "tools.shapes.star", "randomized", 0.0,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          -10.0, 10.0, 0.001, 0.01,
@@ -1318,11 +1318,11 @@ sp_rtb_defaults( GtkWidget *widget, GtkObject *obj)
     adj = (GtkAdjustment*)gtk_object_get_data(obj, "rx");
     gtk_adjustment_set_value(adj, 0.0);
     // this is necessary if the previous value was 0, but we still need to run the callback to change all selected objects
-    gtk_adjustment_value_changed(adj); 
+    gtk_adjustment_value_changed(adj);
 
     adj = (GtkAdjustment*)gtk_object_get_data(obj, "ry");
     gtk_adjustment_set_value(adj, 0.0);
-    gtk_adjustment_value_changed(adj); 
+    gtk_adjustment_value_changed(adj);
 
     spinbutton_defocus(GTK_OBJECT(tbl));
 }
@@ -1381,7 +1381,7 @@ sp_rect_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
     Inkscape::XML::Node *repr = NULL;
     SPItem *item = NULL;
     Inkscape::XML::Node *oldrepr = NULL;
-  
+
     for (GSList const *items = selection->itemList();
          items != NULL;
          items = items->next) {
@@ -1391,7 +1391,7 @@ sp_rect_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
             repr = SP_OBJECT_REPR(item);
         }
     }
-  
+
     GtkWidget *l = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(tbl), "mode_label"));
 
     if (n_selected == 0) {
@@ -1440,7 +1440,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
 
     /* rx */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Rx:"), _("Horizontal radius of rounded corners"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Rx:"), _("Horizontal radius of rounded corners"),
                                          "tools.shapes.rect", "rx", 0,
                                          us, (SPWidget *) tbl, TRUE, "altx-rect",
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
@@ -1450,7 +1450,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
 
     /* ry */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Ry:"), _("Vertical radius of rounded corners"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Ry:"), _("Vertical radius of rounded corners"),
                                          "tools.shapes.rect", "ry", 0,
                                          us, (SPWidget *) tbl, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
@@ -1528,7 +1528,7 @@ sp_spl_tb_value_changed(GtkAdjustment *adj, SPWidget *tbl, gchar const *value_na
     }
 
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(FALSE));
-        
+
     spinbutton_defocus(GTK_OBJECT(tbl));
 }
 
@@ -1620,7 +1620,7 @@ sp_spiral_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
     Inkscape::XML::Node *oldrepr = NULL;
-  
+
     for (GSList const *items = selection->itemList();
          items != NULL;
          items = items->next)
@@ -1630,21 +1630,21 @@ sp_spiral_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
             repr = SP_OBJECT_REPR((SPItem *) items->data);
         }
     }
-  
+
     GtkWidget *l = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(tbl), "mode_label"));
 
     if (n_selected == 0) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>New:</b>"));
     } else if (n_selected == 1) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
-        
+
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data(oldrepr, tbl);
             sp_repr_unref(oldrepr);
             oldrepr = 0;
         }
-        
+
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
             sp_repr_ref(repr);
@@ -1672,17 +1672,17 @@ sp_spiral_toolbox_new(SPDesktop *desktop)
 
     /* Revolution */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Turns:"), _("Number of revolutions"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Turns:"), _("Number of revolutions"),
                                          "tools.shapes.spiral", "revolution", 3.0,
                                          NULL, (SPWidget *) tbl, TRUE, "altx-spiral",
-                                         0.01, 1024.0, 0.1, 1.0, 
+                                         0.01, 1024.0, 0.1, 1.0,
                                          sp_spl_tb_revolution_value_changed, 1, 2);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
     /* Expansion */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Divergence:"), _("How much denser/sparser are outer revolutions; 1 = uniform"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Divergence:"), _("How much denser/sparser are outer revolutions; 1 = uniform"),
                                          "tools.shapes.spiral", "expansion", 1.0,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.0, 1000.0, 0.01, 1.0,
@@ -1692,7 +1692,7 @@ sp_spiral_toolbox_new(SPDesktop *desktop)
 
     /* T0 */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Inner radius:"), _("Radius of the innermost revolution (relative to the spiral size)"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Inner radius:"), _("Radius of the innermost revolution (relative to the spiral size)"),
                                          "tools.shapes.spiral", "t0", 0.0,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.0, 0.999, 0.01, 1.0,
@@ -1807,20 +1807,20 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
 
     /* Width */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Width:"), _("The width of the calligraphic pen (relative to the visible canvas area)"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Width:"), _("The width of the calligraphic pen (relative to the visible canvas area)"),
                                          "tools.calligraphic", "width", 0.15,
                                          NULL, (SPWidget *) tbl, TRUE, "altx-calligraphy",
-                                         0.01, 1.0, 0.01, 0.1, 
+                                         0.01, 1.0, 0.01, 0.1,
                                          sp_ddc_width_value_changed);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
     /* Thinning */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Thinning:"), _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Thinning:"), _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"),
                                          "tools.calligraphic", "thinning", 0.1,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
-                                         -1.0, 1.0, 0.01, 0.1, 
+                                         -1.0, 1.0, 0.01, 0.1,
                                          sp_ddc_velthin_value_changed);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
@@ -1830,7 +1830,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
 
     /* Angle */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if fixation = 0)"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if fixation = 0)"),
                                          "tools.calligraphic", "angle", 30,
                                          NULL, (SPWidget *) tbl, TRUE, "calligraphy-angle",
                                          -90.0, 90.0, 1.0, 10.0,
@@ -1840,10 +1840,10 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
 
     /* Fixation */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Fixation:"), _("How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 = fixed)"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Fixation:"), _("How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 = fixed)"),
                                          "tools.calligraphic", "flatness", 0.9,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
-                                         0.0, 1.0, 0.01, 0.1, 
+                                         0.0, 1.0, 0.01, 0.1,
                                          sp_ddc_flatness_value_changed);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
@@ -1853,7 +1853,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
 
     /* Mass */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Mass:"), _("How much inertia affects the movement of the pen"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Mass:"), _("How much inertia affects the movement of the pen"),
                                          "tools.calligraphic", "mass", 0.02,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.0, 1.0, 0.01, 0.1,
@@ -1864,7 +1864,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
     /* Drag */
     {
         // TRANSLATORS: "drag" means "resistance" here
-        GtkWidget *hb = sp_tb_spinbutton(_("Drag:"), _("How much resistance affects the movement of the pen"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Drag:"), _("How much resistance affects the movement of the pen"),
                                          "tools.calligraphic", "drag", 1,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          0.0, 1.0, 0.01, 0.1,
@@ -1930,7 +1930,7 @@ sp_arctb_startend_value_changed(GtkAdjustment *adj, SPWidget *tbl, gchar const *
 
             if (!strcmp(value_name, "start"))
                 ge->start = (adj->value * M_PI)/ 180;
-            else 
+            else
                 ge->end = (adj->value * M_PI)/ 180;
 
             sp_genericellipse_normalize(ge);
@@ -1997,7 +1997,7 @@ sp_arctb_open_state_changed(GtkWidget *widget, GtkObject *tbl)
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(TRUE));
 
     bool modmade = FALSE;
-    
+
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
         for (GSList const *items = SP_DT_SELECTION(desktop)->itemList();
              items != NULL;
@@ -2023,13 +2023,13 @@ sp_arctb_open_state_changed(GtkWidget *widget, GtkObject *tbl)
             }
         }
     }
-    
+
     if (modmade) {
         sp_document_done(SP_DT_DOCUMENT(desktop));
     }
 
     g_object_set_data(G_OBJECT(tbl), "freeze", GINT_TO_POINTER(FALSE));
-    
+
     spinbutton_defocus(GTK_OBJECT(tbl));
 }
 
@@ -2076,10 +2076,10 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *na
     char const *openstr = NULL;
     openstr = repr->attribute("sodipodi:open");
 
-    if (adj1->value == 0 && adj2->value == 0) 
-	gtk_widget_set_sensitive(GTK_WIDGET(ocb), FALSE);
-    else 
-	gtk_widget_set_sensitive(GTK_WIDGET(ocb), TRUE);
+    if (adj1->value == 0 && adj2->value == 0)
+        gtk_widget_set_sensitive(GTK_WIDGET(ocb), FALSE);
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(ocb), TRUE);
 
     if (openstr) {
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ocb),  TRUE);
@@ -2105,7 +2105,7 @@ sp_arc_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
     Inkscape::XML::Node *oldrepr = NULL;
-  
+
     for (GSList const *items = selection->itemList();
          items != NULL;
          items = items->next)
@@ -2115,7 +2115,7 @@ sp_arc_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
             repr = SP_OBJECT_REPR((SPItem *) items->data);
         }
     }
-  
+
     GtkWidget *l = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(tbl), "mode_label"));
 
     if (n_selected == 0) {
@@ -2124,13 +2124,13 @@ sp_arc_toolbox_selection_changed(SPSelection *selection, GtkObject *tbl)
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
 
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
-     
+
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data(oldrepr, tbl);
             sp_repr_unref(oldrepr);
             oldrepr = 0;
         }
-     
+
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
             sp_repr_ref(repr);
@@ -2159,7 +2159,7 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 
     /* Start */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Start:"), _("The angle (in degrees) from the horizontal to the arc's start point"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("Start:"), _("The angle (in degrees) from the horizontal to the arc's start point"),
                                          "tools.shapes.arc", "start", 0.0,
                                          NULL, (SPWidget *) tbl, TRUE, "altx-arc",
                                          -360.0, 360.0, 1.0, 10.0,
@@ -2169,7 +2169,7 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 
     /* End */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("End:"), _("The angle (in degrees) from the horizontal to the arc's end point"), 
+        GtkWidget *hb = sp_tb_spinbutton(_("End:"), _("The angle (in degrees) from the horizontal to the arc's end point"),
                                          "tools.shapes.arc", "end", 0.0,
                                          NULL, (SPWidget *) tbl, FALSE, NULL,
                                          -360.0, 360.0, 1.0, 10.0,
@@ -2193,9 +2193,9 @@ sp_arc_toolbox_new(SPDesktop *desktop)
         GtkAdjustment *adj1 = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(tbl), "start"));
         GtkAdjustment *adj2 = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(tbl), "end"));
 
-        if (adj1->value == 0 && adj2->value == 0) 
+        if (adj1->value == 0 && adj2->value == 0)
             gtk_widget_set_sensitive(GTK_WIDGET(fscb), FALSE);
-        else 
+        else
             gtk_widget_set_sensitive(GTK_WIDGET(fscb), TRUE);
 
         gtk_widget_show(fscb);
