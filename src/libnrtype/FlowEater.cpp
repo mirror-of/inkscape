@@ -103,7 +103,7 @@ void          flow_eater::StartLetter(text_style* g_style,double k_x,double k_y,
 	}
 	letter_length=k_x;
 	if ( the_flow ) {
-		the_flow->StartLetter(g_style,word_rtl,k_x,k_y,px,line_st_y+k_y,0,n_letter,utf8_offset);
+		the_flow->StartLetter(g_style,word_rtl,k_x,k_y,px+letter_length,line_st_y+k_y,0,n_letter,utf8_offset);
 	}
 }
 void          flow_eater::Eat(int g_id,double g_x,double g_y,double g_w,char* iText,int iLen)
