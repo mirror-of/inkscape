@@ -20,7 +20,7 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 	if ( descr_flags & descr_doing_subpath ) {
 		CloseSubpath();
 	}
-	if (descr_nb <= 2) return;
+	if (descr_nb <= 1) return;
 	if (dest == NULL) return;
 	dest->Reset ();
 	dest->SetBackData (false);
@@ -180,7 +180,7 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	if (descr_flags & descr_doing_subpath) {
 		CloseSubpath();
 	}
-	if (descr_nb <= 2) return;
+	if (descr_nb <= 1) return;
 	if (dest == NULL) return;
 	dest->Reset ();
 	dest->SetBackData (false);
@@ -204,7 +204,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	if ( descr_flags & descr_doing_subpath ) {
 		CloseSubpath();
 	}
-	if (descr_nb <= 2) return;
+	if (descr_nb <= 1) return;
 	if (dest == NULL) return;
 	dest->Reset ();
 	dest->SetBackData (false);

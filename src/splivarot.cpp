@@ -400,6 +400,7 @@ sp_selected_path_outline ()
     {
       // pas de stroke pas de chocolat
       sp_curve_unref (curve);
+      sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not stroked, cannot outline."));
       return;
     }
   }
@@ -453,6 +454,7 @@ sp_selected_path_outline ()
   {
     g_free (style);
     sp_curve_unref (curve);
+    sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object has no curve, cannot outline."));
     return;
   }
   
@@ -523,6 +525,7 @@ sp_selected_path_outline ()
     delete orig;
     g_free (style);
     
+    sp_view_set_statusf_error(SP_VIEW(desktop), _("Outline of object could not be computed."));
     return;
   }
   
@@ -570,14 +573,22 @@ sp_selected_path_outline ()
       SPCSSAttr *ocss;
       SPCSSAttr *css;
       const gchar *val;
+      const gchar *opac;
       
       ocss = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
       val = sp_repr_css_property (ocss, "stroke", NULL);
+      opac = sp_repr_css_property (ocss, "stroke-opacity", NULL);
       
       css = sp_repr_css_attr_new ();
       
       sp_repr_css_set_property (css, "stroke", "none");
+      sp_repr_css_set_property (css, "stroke-opacity", "1.0");
       sp_repr_css_set_property (css, "fill", val);
+      if ( opac ) {
+        sp_repr_css_set_property (css, "fill-opacity", opac);
+      } else {
+        sp_repr_css_set_property (css, "fill-opacity", "1.0");
+      }
       sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
       
       sp_repr_css_attr_unref (css);
