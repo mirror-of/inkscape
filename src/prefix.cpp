@@ -257,7 +257,7 @@ br_thread_local_store_init ()
 
 #else /* BR_PTHREADS */
 
-static char *br_last_value = NULL;
+static char *br_last_value = (char*)NULL;
 
 static void
 br_free_last_value ()
@@ -347,10 +347,10 @@ br_strcat (const char *str1, const char *str2)
 static char *
 br_strndup (char *str, size_t size)
 {
-	char *result = NULL;
+	char *result = (char*)NULL;
 	size_t len;
 
-	br_return_val_if_fail (str != NULL, NULL);
+	br_return_val_if_fail (str != (char*)NULL, (char*)NULL);
 
 	len = strlen (str);
 	if (!len) return strdup ("");
@@ -378,7 +378,7 @@ br_extract_dir (const char *path)
 {
 	char *end, *result;
 
-	br_return_val_if_fail (path != NULL, NULL);
+	br_return_val_if_fail (path != (char*)NULL, (char*)NULL);
 
 	end = strrchr (path, '/');
 	if (!end) return strdup (".");
@@ -413,7 +413,7 @@ br_extract_prefix (const char *path)
 {
 	char *end, *tmp, *result;
 
-	br_return_val_if_fail (path != NULL, NULL);
+	br_return_val_if_fail (path != (char*)NULL, (char*)NULL);
 
 	if (!*path) return strdup ("/");
 	end = strrchr (path, '/');
