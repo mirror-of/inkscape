@@ -267,7 +267,7 @@ sp_file_open_dialog(gpointer object, gpointer data)
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
-        GError *error;
+        GError *error = NULL;
         gchar *newFileName = g_filename_to_utf8( fileName,
                                                  -1,
                                                  &bytesRead,
@@ -466,7 +466,7 @@ sp_file_save_dialog(SPDocument *doc)
     if (fileName && *fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
-        GError *error;
+        GError *error = NULL;
         gchar *newFileName = g_filename_to_utf8( fileName,
                                                  -1,
                                                  &bytesRead,
@@ -681,7 +681,7 @@ sp_file_import(GtkWidget *widget)
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
-        GError *error;
+        GError *error = NULL;
         gchar *newFileName = g_filename_to_utf8( fileName,
                                                  -1,
                                                  &bytesRead,
