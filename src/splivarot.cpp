@@ -1244,8 +1244,6 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             sp_repr_set_attr (repr, "id", id);
 
-            SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-
             selection->addRepr (repr);
 
             sp_repr_unref (repr);
