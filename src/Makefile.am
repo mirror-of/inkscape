@@ -40,6 +40,9 @@ include widgets/Makefile_insert
 include xml/Makefile_insert
 include traits/Makefile_insert
 include algorithms/Makefile_insert
+include ui/Makefile_insert
+include ui/dialog/Makefile_insert
+include ui/widget/Makefile_insert
 include util/Makefile_insert
 include trace/Makefile_insert
 
@@ -55,6 +58,9 @@ noinst_LIBRARIES =	\
 	extension/script/libscript.a	\
 	helper/libspchelp.a	\
 	io/libio.a	\
+	ui/libui.a	\
+	ui/dialog/libuidialog.a	\
+	ui/widget/libuiwidget.a	\
 	util/libinkutil.a \
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
@@ -97,6 +103,9 @@ EXTRA_DIST =	\
 	trace/makefile.in	\
 	traits/makefile.in	\
 	utest/makefile.in	\
+	ui/makefile.in		\
+	ui/dialog/makefile.in		\
+	ui/widget/makefile.in		\
 	util/makefile.in	\
 	widgets/makefile.in	\
 	xml/makefile.in	\

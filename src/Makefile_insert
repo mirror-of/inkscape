@@ -233,6 +233,9 @@ inkscape_private_libs =	\
 	libnrtype/libnrtype.a	\
 	libnr/libnr.a	\
 	livarot/libvarot.a	\
+	ui/libui.a	\
+	ui/dialog/libuidialog.a	\
+	ui/widget/libuiwidget.a	\
 	util/libinkutil.a \
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\

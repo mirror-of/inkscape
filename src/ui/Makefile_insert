@@ -1,0 +1,8 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+ui/all: ui/libui.a ui/widget/all ui/dialog/all
+
+ui/clean: ui/widget/clean ui/dialog/clean
+	rm -f ui/libui.a $(ui_libui_a_OBJECTS)
+
+ui_libui_a_SOURCES =	
