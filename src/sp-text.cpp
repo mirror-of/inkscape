@@ -2183,7 +2183,7 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
         }
     }
 
-    sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+    sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 
     return i2p;
 }

@@ -1,3 +1,9 @@
+2004-05-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-text.cpp (sp_text_set_transform):
+	  Don't include SP_OBJECT_CHILD_MODIFIED_FLAG in flags for
+	  sp_object_request_update.  Addresses `critical' warning.
+
 2004-05-13  John Cliff <simarilius@yahoo.com>
 
 	* src/dialogs/stroke-style.cpp: Switched to using get_stock to retrieve markers.
@@ -7,7 +13,7 @@
 2004-05-13  Kees Cook <kees@outflux.net>
 
 	* configure.in, src/main.cpp, config.h.mingw, debian/rules:
-      made popt a requirement instead of an option.
+	  made popt a requirement instead of an option.
 
 2004-05-13  Carl Hetherington  <cth103@houllier.home>
 
