@@ -1,3 +1,16 @@
+2005-03-21  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: text-context.cpp, text-context.h: text selection using the
+	  mouse
+
+	* src/: make.dep, make.files, make.ofiles,
+	  libnrtype/Layout-TNG-OutIter.cpp: further optimisation of text
+	  selection, and an implementation for text on a path
+
+	* src/: text-editing.cpp, libnrtype/Layout-TNG-OutIter.cpp,
+	  libnrtype/Layout-TNG.h: optimisation of text selection and fixing
+	  some bugs in it
+
 2005-03-18  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/file.cpp, src/gradient-context.cpp,
@@ -11,11 +24,70 @@
 
 	  cleaned up the selection API slightly
 
+2005-03-20  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: text-context.cpp, text-context.h, text-editing.cpp,
+	  text-editing.h, libnrtype/Layout-TNG-OutIter.cpp,
+	  libnrtype/Layout-TNG.h: initial implementation of text selection
+	  (keyboard only)
+
+	* src/libnrtype/Layout-TNG-OutIter.cpp: making
+	  createSelectionShape() work
+
+	* src/: sp-text.cpp, sp-text.h: text-anchor sometimes won't work in
+	  text on a path when x/y coordinates are set
+
+	* src/libnrtype/Layout-TNG-Output.cpp: text on path: cut characters
+	  before start of path and calculate bounding box correctly when
+	  this happens
+
 2005-03-14  Jon A. Cruz  <jon@joncruz.org>
 	* src/dialogs/Makefile_insert, src/dialogs/swatches.cpp,
 	  src/dialogs/swatches.h, src/verbs.h, src/verbs.cpp,
 	  src/interface.cpp:
 	  Initial cut of swatches panel.
+
+2005-03-19  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/libnrtype/Layout-TNG-Compute.cpp: rendering of
+	  multiple-character clusters in rtl text is wrong (bug 1166603)
+
+	* src/: make.dep, make.files, make.ofiles, sp-text.cpp, sp-text.h,
+	  text-editing.cpp: glue kerning info back together on deleting
+	  line breaks
+
+	* src/sp-tspan.cpp: textpath startOffset attribute doesn't save
+	  correctly when it's a percentage (remnants of bug 1124722)
+
+	* src/: text-context.cpp, text-context.h, text-editing.cpp,
+	  text-editing.h, libnrtype/Layout-TNG.h: use Layout::iterator for
+	  storing cursor position. Fixes bug 1093660 related to rtl cursor
+	  movement
+
+	* src/libnrtype/: Layout-TNG-OutIter.cpp, Layout-TNG.h: implement
+	  backend cursor movement functions properly for multidirectional
+	  text
+
+	* src/libnrtype/Layout-TNG-Output.cpp: create more efficient
+	  postscript output
+
+	* src/libnrtype/: Layout-TNG-OutIter.cpp, Layout-TNG-Output.cpp,
+	  Layout-TNG.h: obey text-align attribute when fitting text to a
+	  path (fixes bug 1124722)
+
+	* src/: attributes-test.cpp, attributes.cpp, attributes.h,
+	  sp-flowtext.cpp, sp-text.cpp, sp-tspan.cpp, sp-tspan.h,
+	  style-test.cpp, libnrtype/Layout-TNG-Output.cpp: wire up
+	  startOffset attribute to textpath and fix bugs in it
+
+	* src/sp-flowtext.cpp: unflow text command loses formatting
+
+	* src/xml/repr-io.cpp: xml pretty-printer adding whitespace in
+	  xml:space=preserve elements
+
+	* src/: sp-flowtext.cpp, text-editing.cpp: line breaks not being
+	  put before strings immediately following para elements, and
+	  deleting line breaks copies style wrongly
 
 2005-03-18  MenTaLguY  <mental@rydia.net>
 
@@ -28,6 +100,13 @@
 	  into Inkscape::XML namespace (as e.g. previous_node)
 
 2005-03-18  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/libnrtype/Layout-TNG-Compute.cpp: cursor position on blank
+	  first line sometimes goes wrong
+
+	* src/: make.dep, make.files, make.ofiles, text-editing.cpp:
+	  spurious line break added before text in text and font dialog
+	  (bug 1166016)
 
 	* src/: make.dep, make.files, make.ofiles, libnrtype/FlowBoxes.cpp,
 	  libnrtype/FlowBoxes.h, libnrtype/FlowDefs.h,
