@@ -96,8 +96,6 @@ sp_selected_path_boolop (bool_op bop)
 		SPRepr* a=SP_OBJECT_REPR(il->data);
 		SPRepr* b=SP_OBJECT_REPR(il->next->data);
 		if ( a == NULL || b == NULL ) {
-			printf("a ou b ==NULL\n");
-			fflush(stdout);
 			return;
 		}
 		if ( Ancetre(a,b) ) {
@@ -107,8 +105,6 @@ sp_selected_path_boolop (bool_op bop)
 		} else {
 			SPRepr* dad=LCA(a,b);
 			if ( dad == NULL ) {
-				printf("dad==NULL\n");
-				fflush(stdout);
 				return;
 			}
 			SPRepr* as=AncetreFils(a,dad);
@@ -179,7 +175,7 @@ sp_selected_path_boolop (bool_op bop)
 		} else if ( val && strcmp (val,"evenodd") == 0 ) {
 			theShapeA->ConvertToShape(theShape,fill_oddEven);
 		} else {
-			theShapeA->ConvertToShape(theShape,fill_positive);
+			theShapeA->ConvertToShape(theShape,fill_nonZero);
 		}
 	}
 	
@@ -209,7 +205,7 @@ sp_selected_path_boolop (bool_op bop)
 		} else if ( val && strcmp (val,"evenodd") == 0 ) {
 			theShapeB->ConvertToShape(theShape,fill_oddEven);
 		} else {
-			theShapeB->ConvertToShape(theShape,fill_positive);
+			theShapeB->ConvertToShape(theShape,fill_nonZero);
 		}
 		
 		// les elements arrivent en ordre inverse dans la liste
@@ -666,7 +662,7 @@ void        sp_selected_path_do_offset(bool expand)
 		} else if ( val && strcmp (val,"evenodd") == 0 ) {
 			theRes->ConvertToShape(theShape,fill_oddEven);
 		} else {
-			theRes->ConvertToShape(theShape,fill_positive);
+			theRes->ConvertToShape(theShape,fill_nonZero);
 		}
 		Path*  originaux[1];
 		originaux[0]=orig;
