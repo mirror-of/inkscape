@@ -86,6 +86,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 	int wx, wy;
 
 	desktop = dtw->desktop;
+	SPRepr *repr = SP_OBJECT_REPR (desktop->namedview);
 
 	gdk_window_get_pointer (GTK_WIDGET (dtw->canvas)->window, &wx, &wy, NULL);
 
@@ -96,6 +97,11 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
 			NRPoint p;
 			sp_desktop_w2d_xy_point (desktop, &p, px, py);
+
+			// explicitly show guidelines; if I draw a guide, I want them on
+			sp_repr_set_boolean (repr, "showguides", TRUE);
+			sp_repr_set_boolean (repr, "snaptoguides", TRUE);
+
 			guide = sp_guideline_new (desktop->guides, (horiz) ? p.y : p.x, !horiz);
 			sp_guideline_set_color (SP_GUIDELINE (guide), desktop->namedview->guidehicolor);
 			gdk_pointer_grab (widget->window, FALSE,
