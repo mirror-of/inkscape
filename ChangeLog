@@ -1,3 +1,8 @@
+2004-07-23  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile.am, src/traits/reference.h, src/util/tuple.h:
+	  added generic Tuple type
+
 2004-07-23  Ted Gould  <ted@gould.cx>
 
 	* src/attributes.cpp, src/attributes.h, src/sp-namedview.cpp,

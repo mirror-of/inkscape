@@ -80,9 +80,11 @@ EXTRA_DIST =	\
 	utest/utest.h \
 	algorithms/longest-common-suffix.h \
 	traits/list.h \
+	traits/reference.h \
 	traits/tree-iterator.h \
 	util/parent-axis.h \
 	util/sibling-axis.h \
+	util/tuple.h \
 	util/list-iterator.h
 
 EXTRA_PROGRAMS =	\
