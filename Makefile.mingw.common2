@@ -1,3 +1,9 @@
+###########################################################################
+# $Id$
+# File: Makefile.mingw.common
+# Does: Common definitions for all Makefile.mingw files
+# Author: Bob Jamison & the Inkscape Guys
+###########################################################################
 
 # Sense whether we are on a DOS box or cross-compiling
 ifdef ComSpec
@@ -34,6 +40,7 @@ AS      = i686-pc-mingw32-as
 AR      = i686-pc-mingw32-ar
 RANLIB  = i686-pc-mingw32-ranlib
 WINDRES = i686-pc-mingw32-windres
+LD      = i686-pc-mingw32-ld
 DLLWRAP = i686-pc-mingw32-dllwrap
 
 # file separator
@@ -47,7 +54,7 @@ CPDIR  = cp -rf
 MSGFMT = msgfmt
 
 # Where is your GTK directory?
-GTK=$(HOME)/xmingw/gtk
+GTK=/target
 #Same thing, file system style
 GTKDOS=$(GTK)
 
@@ -59,7 +66,7 @@ else
 
 
 # change me!!
-DTG := 20040415
+DTG := 20040721
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
@@ -95,8 +102,8 @@ MSGFMT = $(GTKDOS)\bin\msgfmt
 endif
 
 
-#VERSION = \"0.37\"
-VERSION = \"0.39cvs-${DTG}\"
+#VERSION = \"0.40\"
+VERSION = \"0.40cvs-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a
 CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
@@ -117,64 +124,34 @@ CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
 # INCLUDES AND LIBRARIES
 #########################################
 
-###########################
-# DYNAMIC LINKING
-###########################
-POPT=c:/ink/popt
-
-GTKINC = -I$(GTK)/include/gtkmm-2.0 -I$(GTK)/lib/gtkmm-2.0/include \
--I$(GTK)/include/sigc++-1.2 -I$(GTK)/lib/sigc++-1.2/include \
+GTKINC = \
+-I$(GTK)/include/gtkmm-2.4 -I$(GTK)/lib/gtkmm-2.4/include \
+-I$(GTK)/include/gdkmm-2.4 -I$(GTK)/lib/gdkmm-2.4/include \
+-I$(GTK)/include/pangomm-1.4 -I$(GTK)/lib/pangomm-1.4/include \
+-I$(GTK)/include/atkmm-1.6 -I$(GTK)/lib/atkmm-1.6/include \
+-I$(GTK)/include/glibmm-2.4 -I$(GTK)/lib/glibmm-2.4/include \
+-I$(GTK)/include/sigc++-2.0 -I$(GTK)/lib/sigc++-2.0/include \
 -I$(GTK)/include/gtk-2.0 -I$(GTK)/lib/gtk-2.0/include \
 -I$(GTK)/include/atk-1.0 -I$(GTK)/include/pango-1.0 \
 -I$(GTK)/include/glib-2.0 -I$(GTK)/lib/glib-2.0/include
 
 GTKLIB = -L$(GTK)/lib \
--lsigc-1.2.dll\
+-lgtkmm-2.4.dll -lgdkmm-2.4.dll -lglibmm-2.4.dll\
+-latkmm-1.6.dll -lpangomm-1.4.dll -lsigc-2.0.dll\
 -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 \
 -lgdk_pixbuf-2.0 -lm -lpangoft2-1.0 -lpangowin32-1.0 -lpango-1.0 \
 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0
 
+# remove -DLIBXML_STATIC 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
--I$(GTK)/include/libart-2.0 -DLIBXML_STATIC -I$(GTK)/include/libxml2 \
+-I$(GTK)/include/libart-2.0 -I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2
 
 LIBS = $(GTKLIB) -lxml2 \
 $(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
--lfreetype -lpng -lpopt $(GTK)/lib/libz.lib \
+-lfreetype -lpng -lpopt $(GTK)/lib/zdll.lib \
 -mwindows -lws2_32 -lintl
 
-
-###########################
-# STATIC LINKING
-###########################
-# Worry about these later when statics are done
-#GTKS=c:/ink/gtk2
-GTKS=$(HOME)/xmingw32/gtk2
-#Same thing, DOS style
-GTKSDOS=c:\ink\gtk2
-
-GTKSINC = \
--I$(GTKS)/include \
--I$(GTKS)/include/sigc++-1.2 \
--I$(GTKS)/include/gtk-2.0 \
--I$(GTKS)/include/atk-1.0 \
--I$(GTKS)/include/pango-1.0 \
--I$(GTKS)/include/glib-2.0 \
--I$(GTKS)/include/freetype2  \
--I$(GTKS)/include/libxml2 \
--I$(GTKS)/include/libart-2.0
-
-
-GTKSLIB = \
--mwindows -L$(GTKS)/lib -lsigc++-1.2.4 \
--lgtk-2.0 -lpango-1.0 -lglib-2.0 -latk-1.0 \
--lfreetype -lart_lgpl -ltiff -lpng -ljpeg -lz \
--lxml2 -lintl -liconv -lws2_32
-
-
-#INC = -I. -I.. -I../.. $(GTKSINC)
-
-#LIBS = $(GTKSLIB) -mwindows -lws2_32 -limm32 -lole32
 
 #########################################
 # END INCLUDES AND LIBRARIES

@@ -9,7 +9,8 @@ include ../Makefile.mingw.common2
 
 
 #Check for 'generated' files
-all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h inkscape.exe
+all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
+inkscape.exe inkview.exe
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
 	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
@@ -57,5 +58,7 @@ libinkscape.a: $(OBJ)
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
 	$(RM) *.a
+	$(RM) *.def
+	$(RM) *.dll
 
 
