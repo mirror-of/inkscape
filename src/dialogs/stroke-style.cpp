@@ -1376,7 +1376,7 @@ sp_stroke_style_line_widget_new(void)
 
     gtk_box_pack_start(GTK_BOX(hb), sb, FALSE, FALSE, 0);
     us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
-    sp_unit_selector_add_unit ( SP_UNIT_SELECTOR (us), sp_unit_get_by_abbreviation ("%"), 0 );
+    sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
     g_signal_connect ( G_OBJECT (us), "set_unit", G_CALLBACK (stroke_width_set_unit), spw );
     gtk_widget_show(us);
     sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us), GTK_ADJUSTMENT(a) );
@@ -1727,7 +1727,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
     }
 
     if (stroke_width_varying (objects)) {
-        sp_unit_selector_set_unit (SP_UNIT_SELECTOR (us), sp_unit_get_by_abbreviation ("%"));
+        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
     }
 
     const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));

@@ -678,10 +678,10 @@ sp_transformation_page_scale_new (GObject *obj)
     /* fixme: Default has to be percentage */
     GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
     g_object_set_data (obj, "scale_units", us);
-    sp_unit_selector_add_unit ( SP_UNIT_SELECTOR (us), 
-                                sp_unit_get_by_abbreviation ("%"), 0 );
-    sp_unit_selector_set_unit ( SP_UNIT_SELECTOR (us), 
-                                sp_unit_get_by_abbreviation ("%") );
+    sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us),
+                              &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
+    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us),
+                              &sp_unit_get_by_id(SP_UNIT_PERCENT));
     g_signal_connect ( G_OBJECT (us), "set_unit", 
                        G_CALLBACK (sp_transformation_scale_set_unit), obj );
     /* Horizontal */

@@ -381,7 +381,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     // Create the units menu.
     GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
-    sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), sp_unit_get_by_abbreviation("%"), 0);
+    sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
     g_signal_connect(G_OBJECT(us), "set_unit", G_CALLBACK(aux_set_unit), spw);
 
     // four spinbuttons
