@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-01 19:51+0100\n"
-"PO-Revision-Date: 2005-01-26 12:36+0100\n"
+"POT-Creation-Date: 2005-02-01 20:20+0100\n"
+"PO-Revision-Date: 2005-02-01 18:50+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Español <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -606,10 +606,9 @@ msgstr " R_einiciar "
 
 #. TRANSLATORS: "change" is a noun here
 #: src/dialogs/clonetiler.cpp:1357
-#, fuzzy
 msgid "Reset all shifts, scales, rotates, and opacity changes to zero"
 msgstr ""
-"Reiniciar todos los movimientos, escalas, rotaciones y opacidades a cero"
+"Reiniciar todos los cambios de movimiento, escala, rotación y opacidad a cero"
 
 #: src/dialogs/debugdialog.cpp:138
 msgid "Messages"
@@ -2827,64 +2826,55 @@ msgstr ""
 "de un área."
 
 #: src/extension/dependency.cpp:29
-#, fuzzy
 msgid "executable"
-msgstr "Rectángulo"
+msgstr "ejecutable"
 
 #: src/extension/dependency.cpp:30
-#, fuzzy
 msgid "file"
-msgstr "_Mosaico"
+msgstr "archivo"
 
 #: src/extension/dependency.cpp:31
-#, fuzzy
 msgid "extension"
-msgstr "Expansión:"
+msgstr "extensión"
 
 #: src/extension/dependency.cpp:32
 msgid "plugin"
-msgstr ""
+msgstr "plugin"
 
 #. TRANSLATORS: "path" refers to "filesystem path" here
 #: src/extension/dependency.cpp:37
-#, fuzzy
 msgid "path"
-msgstr "T_razo"
+msgstr "trazo"
 
 #: src/extension/dependency.cpp:38
-#, fuzzy
 msgid "extensions"
-msgstr "Expansión:"
+msgstr "extensiones"
 
 #  TRANSLATORS: This string appears when double-clicking on a guide.
 #  This is the target location where the guide is to be moved.
 #: src/extension/dependency.cpp:39
-#, fuzzy
 msgid "absolute"
-msgstr " absoluto a "
+msgstr "absoluto"
 
 #: src/extension/dependency.cpp:238
 msgid "Dependency::"
-msgstr ""
+msgstr "Dependencia:"
 
 #: src/extension/dependency.cpp:239
-#, fuzzy
 msgid "  type: "
-msgstr "T_ipo: "
+msgstr "  tipo: "
 
 #: src/extension/dependency.cpp:240
-#, fuzzy
 msgid "  location: "
-msgstr "Relación"
+msgstr "  localización: "
 
 #: src/extension/dependency.cpp:241
 msgid "  string: "
-msgstr ""
+msgstr "  cadena: "
 
 #: src/extension/dependency.cpp:244
-#, fuzzy
 msgid "  description: "
-msgstr "Descripción"
+msgstr "  descripción: "
 
 #. static int i = 0;
 #. std::cout << "Checking module[" << i++ << "]: " << name << std::endl;
@@ -2893,37 +2883,38 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
+" La causa de esto es un archivo .inx incorrecto para esta extensión. Un "
+"archivo ibx incorrecto puede er el resultado de una instalación defectuosa "
+"de Inkscape."
 
 #: src/extension/extension.cpp:234
 msgid "an ID was not defined for it."
-msgstr ""
+msgstr "no se le definió un ID."
 
 #: src/extension/extension.cpp:238
 msgid "there was no name defined for it."
-msgstr ""
+msgstr "no se le definión un nombre."
 
 #: src/extension/extension.cpp:242
 msgid "the XML description of it got lost."
-msgstr ""
+msgstr "se perdió su descripción XML."
 
 #: src/extension/extension.cpp:246
 msgid "no implementation was defined for the extension."
-msgstr ""
+msgstr "no se definió una implementación correcta para la extensión."
 
 #. std::cout << "Failed: " << *(_deps[i]) << std::endl;
 #: src/extension/extension.cpp:253
 msgid "a dependency was not met."
-msgstr ""
+msgstr "no se cumplió una dependencia."
 
 #: src/extension/extension.cpp:273
-#, fuzzy
 msgid "Extension \""
-msgstr "Expansión:"
+msgstr "La extensión \""
 
 #: src/extension/extension.cpp:273
-#, fuzzy
 msgid "\" failed to load because "
-msgstr "Error al cargar el archivo pedido %s"
+msgstr "\" no se cargó porque "
 
 #: src/extension/extension.cpp:811
 #, fuzzy, c-format
@@ -2940,11 +2931,17 @@ msgid ""
 "normally but those extensions will be unavailable.  For details to "
 "troubleshoot this problem, please refer to the error log located at:"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">No se cargaron una o más extensiones.</"
+"span>\n"
+"\n"
+"Se han omitido las extensiones erróneas. Inkscape seguirá su ejecución con "
+"normalidad, pero esas extensiones no estarán disponibles. Para obtener más "
+"detalles para solucionar este problema, acuda al archivo de registro en:"
 
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:63
 msgid "Show dialog on startup"
-msgstr ""
+msgstr "Mostrar diálogo al inicio"
 
 #: src/extension/init.cpp:153
 msgid "Null external module directory name.  Modules will not be loaded."
@@ -3063,9 +3060,8 @@ msgid "Vertical Offset"
 msgstr "Desvío vertical"
 
 #: src/extension/prefdialog.cpp:19
-#, fuzzy
 msgid " Preferences"
-msgstr "Preferencias de bolígrafo"
+msgstr " Preferencias"
 
 #. We can't call sp_ui_error_dialog because we may be
 #. running from the console, in which case calling sp_ui
@@ -5718,9 +5714,10 @@ msgid "_Unflow Text"
 msgstr "Deshacer fl_ujo de texto"
 
 #: src/verbs.cpp:1724
-#, fuzzy
 msgid "Convert selected flowed text(s) to regular text objects"
-msgstr "Convertir el texto de flujo seleccionado a texto"
+msgstr ""
+"Convertir el/los texto(s) de flujo seleccionado(s) a objetos de texto "
+"normales"
 
 #: src/verbs.cpp:1726
 msgid "Flip _Horizontally"
