@@ -1,0 +1,32 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+#
+# Sodipodi xml wrapper
+# Author: Lauris Kaplinski <lauris@ariman.ee>
+#
+# Implements xml backbone of inkscape document. In future will be
+# repaced with (wrapper of?) DOM
+#
+
+xml/all: xml/libspxml.a
+
+xml/clean:
+	rm -f xml/libspxml.a $(xml_libspxml_a_OBJECTS)
+
+xml_libspxml_a_CPPFLAGS =	\
+	$(INKSCAPE_CFLAGS)	\
+	-I$(includedir)
+
+xml_libspxml_a_SOURCES =	\
+	xml/repr-action.cpp	\
+	xml/repr-action.h	\
+	xml/repr-css.cpp	\
+	xml/repr-io.cpp	\
+	xml/repr-private.h	\
+	xml/repr-util.cpp	\
+	xml/repr.cpp	\
+	xml/repr.h
+
+xml_repr_action_test_SOURCES = xml/repr-action-test.cpp
+
+xml_repr_action_test_LDADD = xml/libspxml.a $(INKSCAPE_LIBS)

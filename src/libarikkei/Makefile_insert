@@ -1,0 +1,14 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+libarikkei/all: libarikkei/libarikkei.a
+
+libarikkei/clean:
+	rm -f libarikkei/libarikkei.a $(libarikkei_libarikkei_OBJECTS)
+
+libarikkei_libarikkei_CPPFLAGS = \
+	$(cflags)	\
+	$(INKSCAPE_CFLAGS)
+
+libarikkei_libarikkei_a_SOURCES =	\
+	libarikkei/arikkei-token.cpp	\
+	libarikkei/arikkei-token.h

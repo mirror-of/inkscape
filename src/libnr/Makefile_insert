@@ -1,0 +1,104 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+libnr/all: libnr/libnr.a
+
+libnr/clean:
+	rm -f libnr/libnr.a $(libnr_libnr_a_OBJECTS)
+
+libnr_libnr_a_CPPFLAGS =	\
+	$(cflags)	\
+	$(INKSCAPE_CFLAGS)
+
+if USE_MMX
+libnr_mmx_sources =	\
+	libnr/have_mmx.S	\
+	libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.S	\
+	libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_A8_RGBAP.S	\
+	libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM.S	\
+	libnr/nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.S
+endif
+
+libnr_libnr_a_SOURCES =	\
+	libnr/nr-blit.cpp	\
+	libnr/nr-blit.h	\
+	libnr/nr-compose-transform.cpp	\
+	libnr/nr-compose-transform.h	\
+	libnr/nr-compose.cpp	\
+	libnr/nr-compose.h	\
+	libnr/nr-coord.h	\
+	libnr/nr-dim2.h	\
+	libnr/nr-forward.h	\
+	libnr/nr-gradient.cpp	\
+	libnr/nr-gradient.h	\
+	libnr/nr-i-coord.h	\
+	libnr/nr-macros.h	\
+	libnr/nr-matrix-fns.cpp	\
+	libnr/nr-matrix-fns.h	\
+	libnr/nr-matrix-ops.h	\
+	libnr/nr-matrix.cpp	\
+	libnr/nr-matrix.h	\
+	libnr/nr-maybe.h	\
+	libnr/nr-object.cpp	\
+	libnr/nr-object.h	\
+	libnr/nr-path.cpp	\
+	libnr/nr-path.h	\
+	libnr/nr-pixblock-line.cpp	\
+	libnr/nr-pixblock-line.h	\
+	libnr/nr-pixblock-pattern.cpp	\
+	libnr/nr-pixblock-pattern.h	\
+	libnr/nr-pixblock-pixel.cpp	\
+	libnr/nr-pixblock-pixel.h	\
+	libnr/nr-pixblock.cpp	\
+	libnr/nr-pixblock.h	\
+	libnr/nr-pixops.h	\
+	libnr/nr-point-fns.cpp	\
+	libnr/nr-point-fns.h	\
+	libnr/nr-point-l.h	\
+	libnr/nr-point-ops.h	\
+	libnr/nr-point.h	\
+	libnr/nr-rect-l.cpp	\
+	libnr/nr-rect-l.h	\
+	libnr/nr-rect.cpp	\
+	libnr/nr-rect.h	\
+	libnr/nr-render.h	\
+	libnr/nr-rotate-ops.h	\
+	libnr/nr-rotate.h	\
+	libnr/nr-scale-ops.h	\
+	libnr/nr-scale.h	\
+	libnr/nr-svp-private.h	\
+	libnr/nr-svp-render.cpp	\
+	libnr/nr-svp-render.h	\
+	libnr/nr-svp.cpp	\
+	libnr/nr-svp.h	\
+	libnr/nr-translate-ops.h	\
+	libnr/nr-translate.h	\
+	libnr/nr-types.cpp	\
+	libnr/nr-types.h	\
+	libnr/nr-values.cpp	\
+	libnr/nr-values.h	\
+	$(libnr_mmx_sources)
+
+libnr_testnr_SOURCES =	\
+	libnr/testnr.cpp
+
+libnr_testnr_LDADD =	\
+	libnr/libnr.a	\
+	-lglib-2.0
+
+libnr_nr_types_test_SOURCES = libnr/nr-types-test.cpp
+libnr_nr_types_test_LDADD = libnr/libnr.a -lglib-2.0
+
+libnr_nr_point_fns_test_SOURCES = libnr/nr-point-fns-test.cpp
+libnr_nr_point_fns_test_LDADD = libnr/libnr.a -lglib-2.0
+
+libnr_nr_matrix_test_SOURCES = libnr/nr-matrix-test.cpp
+libnr_nr_matrix_test_LDADD = libnr/libnr.a -lglib-2.0
+
+libnr_nr_rotate_test_SOURCES = libnr/nr-rotate-test.cpp
+libnr_nr_rotate_test_LDADD = libnr/libnr.a -lglib-2.0
+
+libnr_nr_scale_test_SOURCES = libnr/nr-scale-test.cpp
+libnr_nr_scale_test_LDADD = libnr/libnr.a -lglib-2.0
+
+libnr_nr_translate_test_SOURCES = libnr/nr-translate-test.cpp
+libnr_nr_translate_test_LDADD = libnr/libnr.a -lglib-2.0

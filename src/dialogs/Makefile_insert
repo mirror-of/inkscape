@@ -1,0 +1,60 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+#
+# Several object property dialogs
+# Author: Lauris Kaplinski <lauris@ximian.com>
+#
+# Here should be things, that use only xml interface, not objects themselves
+# Currently we still have selection_changed functions, but these will be
+# replaced by selection 'changed' signal handlers
+#
+
+dialogs/all: dialogs/libspdialogs.a
+
+dialogs/clean:
+	rm -f dialogs/libspdialogs.a $(dialogs_libspdialogs_a_OBJECTS)
+
+dialogs_libspdialogs_a_CPPFLAGS = \
+	-I$(top_srcdir)/src/dialogs \
+	$(INKSCAPE_CFLAGS)
+
+dialogs_libspdialogs_a_SOURCES = \
+	dialogs/align.cpp	\
+	dialogs/align.h	\
+	dialogs/desktop-properties.cpp	\
+	dialogs/desktop-properties.h	\
+	dialogs/dialog-events.cpp	\
+	dialogs/dialog-events.h	\
+	dialogs/display-settings.cpp	\
+	dialogs/display-settings.h	\
+	dialogs/export.cpp	\
+	dialogs/export.h	\
+	dialogs/filedialog.cpp	\
+	dialogs/filedialog.h	\
+	dialogs/fill-style.cpp	\
+	dialogs/fill-style.h	\
+	dialogs/in-dt-coordsys.cpp	\
+	dialogs/in-dt-coordsys.h	\
+	dialogs/item-properties.cpp	\
+	dialogs/item-properties.h	\
+	dialogs/object-attributes.cpp	\
+	dialogs/object-attributes.h	\
+	dialogs/object-properties.cpp	\
+	dialogs/object-properties.h	\
+	dialogs/sp-attribute-widget.cpp	\
+	dialogs/sp-attribute-widget.h	\
+	dialogs/stroke-style.cpp	\
+	dialogs/stroke-style.h	\
+	dialogs/text-edit.cpp	\
+	dialogs/text-edit.h	\
+	dialogs/transformation.cpp	\
+	dialogs/transformation.h	\
+	dialogs/xml-tree.cpp	\
+	dialogs/xml-tree.h
+
+#	dialogs/sp-widget.c	\
+#	dialogs/sp-widget.h	\
+#	dialogs/gradient-vector.c	\
+#	dialogs/gradient-vector.h	\
+#	dialogs/gradient-selector.c	\
+#	dialogs/gradient-selector.h
+

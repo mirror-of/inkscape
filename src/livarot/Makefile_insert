@@ -1,0 +1,43 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+livarot/all: livarot/libvarot.a
+
+livarot/clean:
+	rm -f livarot/libvarot.a $(livarot_libvarot_a_OBJECTS)
+
+livarot_libvarot_a_CPPFLAGS =	\
+	$(INKSCAPE_CFLAGS)
+
+livarot_libvarot_a_SOURCES =	\
+	livarot/AVL.cpp	\
+	livarot/AVL.h	\
+	livarot/AlphaLigne.cpp	\
+	livarot/AlphaLigne.h	\
+	livarot/BitLigne.cpp	\
+	livarot/BitLigne.h	\
+	livarot/DblLinked.cpp	\
+	livarot/DblLinked.h	\
+	livarot/Ligne.cpp	\
+	livarot/Ligne.h	\
+	livarot/LivarotDefs.h	\
+	livarot/MyMath.h	\
+	livarot/MySeg.cpp	\
+	livarot/MySeg.h	\
+	livarot/Path.cpp	\
+	livarot/Path.h	\
+	livarot/PathConversion.cpp	\
+	livarot/PathCutting.cpp	\
+	livarot/PathOutline.cpp	\
+	livarot/PathSimplify.cpp	\
+	livarot/PathStroke.cpp	\
+	livarot/Shape.cpp	\
+	livarot/Shape.h	\
+	livarot/ShapeDraw.cpp	\
+	livarot/ShapeMisc.cpp	\
+	livarot/ShapeRaster.cpp	\
+	livarot/ShapeSweep.cpp	\
+	livarot/ShapeSweepUtils.cpp	\
+	livarot/ShapeUtils.h
+
+livarot_Path_test_SOURCES = livarot/Path-test.cpp
+livarot_Path_test_LDADD = livarot/libvarot.a libnr/libnr.a -lglib-2.0

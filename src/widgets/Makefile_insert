@@ -1,0 +1,92 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+#
+# Widgets for inkscape
+# Author: Lauris Kaplinski <lauris@ximian.com>
+#
+
+widgets/all: widgets/libspwidgets.a
+
+widgets/clean:
+	rm -f widgets/libspwidgets.a $(widgets_libspwidgets_a_OBJECTS)
+
+widgets_libspwidgets_a_CPPFLAGS =	\
+	$(INKSCAPE_CFLAGS)
+
+widgets_libspwidgets_a_SOURCES =	\
+	widgets/button.cpp	\
+	widgets/button.h	\
+	widgets/dash-selector.cpp	\
+	widgets/dash-selector.h	\
+	widgets/font-selector.cpp	\
+	widgets/font-selector.h	\
+	widgets/gradient-image.cpp	\
+	widgets/gradient-image.h	\
+	widgets/gradient-position.cpp	\
+	widgets/gradient-position.h	\
+	widgets/gradient-selector.cpp	\
+	widgets/gradient-selector.h	\
+	widgets/gradient-vector.cpp	\
+	widgets/gradient-vector.h	\
+	widgets/icon.cpp	\
+	widgets/icon.h	\
+	widgets/menu.cpp	\
+	widgets/menu.h	\
+	widgets/paint-selector.cpp	\
+	widgets/paint-selector.h	\
+	widgets/ruler.cpp	\
+	widgets/ruler.h	\
+	widgets/sp-color-gtkselector.cpp	\
+	widgets/sp-color-gtkselector.h	\
+	widgets/sp-color-notebook.cpp	\
+	widgets/sp-color-notebook.h	\
+	widgets/sp-color-preview.cpp	\
+	widgets/sp-color-preview.h	\
+	widgets/sp-color-scales.cpp	\
+	widgets/sp-color-scales.h	\
+	widgets/sp-color-selector.cpp	\
+	widgets/sp-color-selector.h	\
+	widgets/sp-color-slider.cpp	\
+	widgets/sp-color-slider.h	\
+	widgets/sp-color-wheel-selector.cpp	\
+	widgets/sp-color-wheel-selector.h	\
+	widgets/sp-color-wheel.cpp	\
+	widgets/sp-color-wheel.h	\
+	widgets/sp-widget.cpp	\
+	widgets/sp-widget.h\
+	widgets/sp-xmlview-attr-list.cpp	\
+	widgets/sp-xmlview-attr-list.h	\
+	widgets/sp-xmlview-content.cpp	\
+	widgets/sp-xmlview-content.h	\
+	widgets/sp-xmlview-tree.cpp	\
+	widgets/sp-xmlview-tree.h	\
+	widgets/spinbutton-events.cpp	\
+	widgets/spinbutton-events.h	\
+	widgets/spw-utilities.cpp	\
+	widgets/spw-utilities.h	\
+	widgets/widget-sizes.h
+
+#	widgets/sp-value-winder.c	\
+#	widgets/sp-value-winder.h
+#	widgets/sp-spin-button.cpp	\
+#	widgets/sp-spin-button.h
+
+
+#noinst_PROGRAMS = test-widgets test-wrapbox
+#noinst_PROGRAMS = test-wrapbox
+
+#test_widgets_SOURCES =	\
+#	test-widgets.cpp	\
+#	sp-value-winder.c sp-value-winder.h	\
+#	sp-color-slider.cpp sp-color-slider.h	\
+#	sp-color-selector.cpp sp-color-selector.h
+
+#test_widgets_LDADD = $(INKSCAPE_LIBS)
+
+#test_wrapbox_SOURCES =	\
+#	test-wrapbox.cpp	\
+#	sp-wrap-box.cpp sp-wrap-box.h	\
+#	sp-hwrap-box.cpp sp-hwrap-box.h	\
+#	sp-vwrap-box.cpp sp-vwrap-box.h
+
+#test_wrapbox_LDADD = $(INKSCAPE_LIBS)
