@@ -1,5 +1,7 @@
 2004-02-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/nodepath.cpp: Mark several functions as static.
+
 	* src/dialogs/stroke-style.cpp: Rename DEBUG_MARKERS ifdef to
 	WITH_MARKER_GUI, and make more things conditional on it.
 	(Fixes failing assertion for the !defined case.)

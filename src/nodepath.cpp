@@ -187,7 +187,7 @@ void sp_nodepath_destroy(SPNodePath *np) {
 /**
  *  Return the node count of a given NodeSubPath
  */
-gint sp_nodepath_subpath_get_node_count(SPNodeSubPath *subpath)
+static gint sp_nodepath_subpath_get_node_count(SPNodeSubPath *subpath)
 {
     if (!subpath)
         return 0;
@@ -198,7 +198,7 @@ gint sp_nodepath_subpath_get_node_count(SPNodeSubPath *subpath)
 /**
  *  Return the node count of a given NodePath
  */
-gint sp_nodepath_get_node_count(SPNodePath *np)
+static gint sp_nodepath_get_node_count(SPNodePath *np)
 {
     if (!np)
         return 0;
@@ -215,8 +215,7 @@ gint sp_nodepath_get_node_count(SPNodePath *np)
  * Clean up a nodepath after editing.
  * Currently we are deleting trivial subpaths
  */
-void
-sp_nodepath_cleanup(SPNodePath *nodepath)
+static void sp_nodepath_cleanup(SPNodePath *nodepath)
 {
 	GList *badSubPaths = NULL;
 
@@ -850,7 +849,7 @@ static void sp_node_ensure_knot(SPPathNode *node, gint which, gboolean show_knot
 	}
 }
 
-void sp_node_ensure_ctrls(SPPathNode *node)
+static void sp_node_ensure_ctrls(SPPathNode *node)
 {
 	g_assert (node != NULL);
 
@@ -1939,9 +1938,8 @@ Radial::operator NR::Point() const
 \param a   angle of the line; it is assumed to go through coordinate origin
 \param closest   pointer to the point struct where the result is stored
 */
-void
-point_line_closest (NR::Point *p, double a, NR::Point *closest)
 // FIXME: use dot product perhaps?
+static void point_line_closest(NR::Point *p, double a, NR::Point *closest)
 {
 	if (a == HUGE_VAL) { // vertical
 		*closest = NR::Point(0, (*p)[NR::Y]);
@@ -1958,8 +1956,7 @@ point_line_closest (NR::Point *p, double a, NR::Point *closest)
 \param p   point
 \param a   angle of the line; it is assumed to go through coordinate origin
 */
-double
-point_line_distance (NR::Point *p, double a)
+static double point_line_distance(NR::Point *p, double a)
 {
 	NR::Point c;
 	point_line_closest (p, a, &c);
@@ -2238,16 +2235,14 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, SPPathNode *n)
 	return ret;
 }
 
-void
-node_rotate_internal (SPPathNode *n, gdouble angle, Radial &rme, Radial &rother, gboolean both)
+static void node_rotate_internal(SPPathNode *n, gdouble angle, Radial &rme, Radial &rother, gboolean both)
 {
 	rme.a += angle; 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) 
 		rother.a += angle;
 }
 
-void
-node_rotate_internal_screen (SPPathNode *n, gdouble const angle, Radial &rme, Radial &rother, gboolean both)
+static void node_rotate_internal_screen(SPPathNode *n, gdouble const angle, Radial &rme, Radial &rother, gboolean both)
 {
 	gdouble r;
 
@@ -2268,8 +2263,7 @@ node_rotate_internal_screen (SPPathNode *n, gdouble const angle, Radial &rme, Ra
 		rother.a += weird_angle;
 }
 
-void
-node_rotate_common (SPPathNode *n, gdouble angle, int which, gboolean screen)
+static void node_rotate_common(SPPathNode *n, gdouble angle, int which, gboolean screen)
 {
 	SPPathNodeSide *me, *other;
 	gboolean both = FALSE;
@@ -2332,7 +2326,7 @@ void sp_nodepath_selected_nodes_rotate_screen(SPNodePath *nodepath, gdouble angl
 	update_repr (nodepath);
 }
 
-void node_scale(SPPathNode *n, gdouble grow, int which)
+static void node_scale(SPPathNode *n, gdouble grow, int which)
 {
 	bool both = false;
 	SPPathNodeSide *me, *other;
@@ -2375,7 +2369,7 @@ void node_scale(SPPathNode *n, gdouble grow, int which)
 	sp_node_ensure_ctrls (n);
 }
 
-void node_scale_screen (SPPathNode *n, gdouble const grow, int which)
+static void node_scale_screen(SPPathNode *n, gdouble const grow, int which)
 {
 	node_scale (n, grow / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop), which);
 }
@@ -2701,7 +2695,7 @@ static ArtPathcode sp_node_path_code_from_side(SPPathNode *node, SPPathNodeSide 
 	return ART_END;
 }
 
-gchar const *sp_node_type_description(SPPathNode *n)
+static gchar const *sp_node_type_description(SPPathNode *n)
 {
 	switch (n->type) {
 	case SP_PATHNODE_CUSP:
