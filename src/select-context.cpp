@@ -304,9 +304,9 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 					if (event->button.state & GDK_SHIFT_MASK) {
 						sp_sel_trans_reset_state (seltrans);
 						if (sp_selection_item_selected (selection, sc->item)) {
-							sp_selection_remove_item (selection, sc->item);
+							selection->removeItem(sc->item);
 						} else {
-							sp_selection_add_item (selection, sc->item);
+							selection->addItem(sc->item);
 						}
 					} else {
 						if (sp_selection_item_selected (selection, sc->item)) {
@@ -481,9 +481,9 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							// with shift, toggle selection
 							sp_sel_trans_reset_state (seltrans);
 							if (sp_selection_item_selected (selection, sc->item)) {
-								sp_selection_remove_item (selection, sc->item);
+								selection->removeItem(sc->item);
 							} else {
-								sp_selection_add_item (selection, sc->item);
+								selection->addItem (sc->item);
 							}
 						} else {
 							// without shift, increase state (i.e. toggle scale/rotation handles)
@@ -514,15 +514,15 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							item = SP_ITEM (l->data);
 							if (sp_selection_item_selected (selection, item)) {
 								// uncomment if you want toggle behavior for shift-rubberband
-								//	sp_selection_remove_item (selection, item);
+								//	selection->removeItem(item);
 							} else {
-								sp_selection_add_item (selection, item);
+								selection->addItem(item);
 							}
 							l = g_slist_remove (l, item);
 						}
 					} else {
 						// without shift, simply select anew
-						sp_selection_set_item_list (selection, l);
+						selection->setItemList(l);
 					}
 				} else { // it was just a click, or a too small rubberband
 					sp_rubberband_stop ();
@@ -541,15 +541,15 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						// if there's both a group and an item at point, deselect group to prevent double selection
 						if (group) {
 							if (sp_selection_item_selected (selection, group)) {
-								sp_selection_remove_item (selection, group);
+								selection->removeItem(group);
 							}
 						}
 						if (item) {
 							// toggle selected status
 							if (sp_selection_item_selected (selection, item)) {
-								sp_selection_remove_item (selection, item);
+								selection->removeItem(item);
 							} else {
-								sp_selection_add_item (selection, item);
+								selection->addItem(item);
 							}
 							item = NULL;
 						}

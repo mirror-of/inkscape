@@ -259,12 +259,6 @@ struct SPSelectionClass {
  * contents at their call sites */
 
 inline __attribute__ ((deprecated))
-SPSelection *sp_selection_new(SPDesktop *desktop)
-{
-	return new SPSelection(desktop);
-}
-
-inline __attribute__ ((deprecated))
 gboolean sp_selection_item_selected(SPSelection const *selection,
 		                    SPItem *item)
 {
@@ -284,16 +278,6 @@ gboolean sp_selection_is_empty(SPSelection const *selection)
 }
 
 inline __attribute__ ((deprecated))
-void sp_selection_add_item(SPSelection *selection, SPItem *item)
-{
-	selection->addItem(item);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_add_repr(SPSelection *selection, SPRepr *repr)
-{
-	selection->addRepr(repr);
-}
-inline __attribute__ ((deprecated))
 void sp_selection_set_item(SPSelection *selection, SPItem *item)
 {
 	selection->setItem(item);
@@ -302,16 +286,6 @@ inline __attribute__ ((deprecated))
 void sp_selection_set_repr(SPSelection *selection, SPRepr *repr)
 {
 	selection->setRepr(repr);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_remove_item(SPSelection *selection, SPItem *item)
-{
-	selection->removeItem(item);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_remove_repr(SPSelection *selection, SPRepr *repr)
-{
-	selection->removeRepr(repr);
 }
 inline __attribute__ ((deprecated))
 void sp_selection_set_item_list(SPSelection *selection, GSList const *list)

@@ -157,7 +157,7 @@ void sp_edit_select_all()
 	while (items) {
 		SPRepr *repr = SP_OBJECT_REPR (items->data);
 		if (!sp_selection_repr_selected (selection, repr))
-			sp_selection_add_repr (selection, repr);
+			selection->addRepr(repr);
 		items = g_slist_remove (items, items->data);
 	}
 	sp_document_done (doc);
@@ -314,7 +314,7 @@ void sp_selection_ungroup()
 
 	if (new_select) { // set new selection
 		sp_selection_empty(SP_DT_SELECTION(desktop));
-		sp_selection_set_item_list(SP_DT_SELECTION(desktop), new_select);
+		(SP_DT_SELECTION(desktop))->setItemList(new_select);
 		g_slist_free(new_select);
 	}
 	if (!ungrouped) {
@@ -689,7 +689,7 @@ void sp_selection_paste(bool in_place)
 	// add new documents to selection (would have done this above but screws with fill/stroke dialog)
 	for (GSList *l = copied; l != NULL; l = l->next) {
 		SPRepr *repr = (SPRepr *) l->data;
-		sp_selection_add_repr (selection, repr);
+		selection->addRepr(repr);
 	}
 
 	if (!in_place) {

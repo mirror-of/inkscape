@@ -23,6 +23,7 @@
 
 #include "gtk/gtkiconfactory.h"
 
+#include "prefix.h"
 #include "config.h"
 #include "inkscape-stock.h"
 

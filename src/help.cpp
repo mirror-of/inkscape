@@ -14,6 +14,7 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include "prefix.h"
 #include "inkscape.h"
 #include "document.h"
 #include "sp-text.h"
@@ -50,7 +51,9 @@ sp_help_about (void)
      */
 
     if (!w) {
-        doc = sp_document_new (INKSCAPE_SCREENSDIR "/about.svg", FALSE, TRUE);
+	 char *about = g_build_filename(INKSCAPE_SCREENSDIR, "/about.svg", NULL);
+        doc = sp_document_new (about, FALSE, TRUE);
+	 g_free(about);
         g_return_if_fail (doc != NULL);
         version = sp_document_lookup_id (doc, "version");
         

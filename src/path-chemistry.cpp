@@ -189,7 +189,7 @@ sp_selected_path_break_apart (void)
 			// move to the saved position 
 			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
-			sp_selection_add_repr (selection, repr);
+			selection->addRepr(repr);
 
 			sp_repr_unref (repr);
 		}
@@ -241,7 +241,7 @@ sp_selected_path_to_curves0 (gboolean do_document_done, guint32 text_grouping_po
 		sp_repr_add_child (SP_OBJECT_REPR (parent), 
 				   repr, SP_OBJECT_REPR (item));
 		sp_repr_unparent (SP_OBJECT_REPR (item));
-		sp_selection_add_repr (SP_DT_SELECTION (dt), repr);
+		SP_DT_SELECTION(dt)->addRepr(repr);
 		sp_repr_unref(repr);
 	}
 	if (do_document_done)

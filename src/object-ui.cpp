@@ -263,7 +263,7 @@ sp_item_group_ungroup_activate (GtkMenuItem *menuitem, SPGroup *group)
 	children = NULL;
 	sp_item_group_ungroup (group, &children);
 
-	sp_selection_set_item_list (SP_DT_SELECTION (desktop), children);
+	(SP_DT_SELECTION(desktop))->setItemList(children);
 	g_slist_free (children);
 }
 

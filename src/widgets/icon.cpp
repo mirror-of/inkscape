@@ -25,6 +25,8 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
 
+#include "prefix.h"
+
 #include "forward.h"
 #include "inkscape-private.h"
 #include "document.h"
@@ -346,15 +348,14 @@ sp_icon_image_load_svg ( const gchar *name,
 
     /* Try to load from document */
     if (!edoc && !doc) {
-        if (g_file_test("icons/icons.svg", G_FILE_TEST_IS_REGULAR)) {
+        if (g_file_test("icons/icons.svg", G_FILE_TEST_IS_REGULAR))
             doc = sp_document_new ("icons/icons.svg", FALSE, FALSE);
-        }
-        if ( !doc && g_file_test( INKSCAPE_PIXMAPDIR "/icons.svg", 
-                                  G_FILE_TEST_IS_REGULAR) )
-        {
-            doc = sp_document_new ( INKSCAPE_PIXMAPDIR "/icons.svg", 
-                                    FALSE, FALSE );
-        }
+
+	 char *icons = g_build_filename(INKSCAPE_PIXMAPDIR, "/icons.svg", NULL);
+        if ( !doc && g_file_test( icons, G_FILE_TEST_IS_REGULAR) )
+            doc = sp_document_new ( icons, FALSE, FALSE );
+	 g_free(icons);
+	
         if (doc) {
             unsigned int visionkey;
             sp_document_ensure_up_to_date (doc);
