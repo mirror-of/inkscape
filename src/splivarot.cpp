@@ -865,7 +865,7 @@ sp_selected_path_do_offset (bool expand)
 	return;
     }
 
-  {
+/*  {
     SPCSSAttr *css;
     const gchar *val;
 
@@ -879,7 +879,7 @@ sp_selected_path_do_offset (bool expand)
 	sp_curve_unref (curve);
 	return;
       }
-  }
+  }*/
 
   sp_item_i2root_affine (item, &i2root);
   style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
