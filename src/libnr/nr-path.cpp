@@ -80,8 +80,7 @@ nr_vpath_release (NRVPath *vpath)
 
 static void nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, NR::Coord x011, NR::Coord y011, NR::Coord x111, NR::Coord y111, NRRect *bbox);
 
-NRBPath *
-nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrix *transform)
+NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *transform)
 {
 	int i;
 
@@ -265,7 +264,7 @@ nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
 }
 
 void
-nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix *m, NRPoint *pt,
+nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, NRPoint *pt,
 					     NRRect *bbox, int *wind, float *dist,
 					     float tolerance)
 {
@@ -419,7 +418,7 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 }
 
 void
-nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix *m,
+nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix const *m,
 			       NRRect *bbox,
 			       float tolerance)
 {

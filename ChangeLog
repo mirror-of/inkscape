@@ -1,5 +1,8 @@
 2004-01-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-path.h, src/libnr/nr-path.cpp: Mark some functions
+	as not modifying the matrix passed to them.
+
 	* src/display/nr-arena-group.h, src/display/nr-arena-group.cpp
 	(nr_arena_group_set_child_transform):
 	Indicate that matrix isn't written to.
