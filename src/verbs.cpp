@@ -62,6 +62,7 @@
 #include "view.h"
 #include "prefs-utils.h"
 #include "splivarot.h"
+#include "sp-namedview.h"
 
 #include "verbs.h"
 
@@ -455,7 +456,6 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 	SPDesktop *dt;
 	NRRect d;
 	SPRepr *repr;
-	unsigned int v = 0;
 
 	dt = SP_DESKTOP (sp_action_get_view (action));
 	if (!dt) return;
@@ -509,12 +509,10 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 		sp_desktop_toggle_scrollbars (dt);
 		break;
 	case SP_VERB_TOGGLE_GUIDES:
-		sp_repr_get_boolean (repr, "showguides", &v);
-		sp_repr_set_boolean (repr, "showguides", !(v));
+		sp_namedview_toggle_guides (repr);
 		break;
 	case SP_VERB_TOGGLE_GRID:
-		sp_repr_get_boolean (repr, "showgrid", &v);
-		sp_repr_set_boolean (repr, "showgrid", !(v));
+		sp_namedview_toggle_grid (repr);
 		break;
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	case SP_VERB_FULLSCREEN:
