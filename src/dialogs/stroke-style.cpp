@@ -633,21 +633,21 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                      * changed mode
                      */
 
-                    bool same = items_have_same_color (items, false);
+                    bool same = items_have_same_color(items, false);
                     if (same) {
-                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), false);
+                        vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(items->data), false);
                     }
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         if (!same)
-                            vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), false);
+                            vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(i->data), false);
                         sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                     }
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         SPGradient *gr = sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
-                        sp_gradient_selector_attrs_to_gradient (gr, psel);
+                        sp_gradient_selector_attrs_to_gradient(gr, psel);
                     }
                 }
 
