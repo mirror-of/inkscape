@@ -735,13 +735,13 @@ public:
     bool operator!= (iterator const &other) const
         {return _glyph_index != other._glyph_index || _char_index != other._char_index;}
     bool operator< (iterator const &other) const
-        {return _char_index < other._char_index || _glyph_index < other._glyph_index;}
+        {return _char_index < other._char_index;}
     bool operator<= (iterator const &other) const
-        {return _char_index <= other._char_index || _glyph_index <= other._glyph_index;}
+        {return _char_index <= other._char_index;}
     bool operator> (iterator const &other) const
-        {return _char_index > other._char_index || _glyph_index > other._glyph_index;}
+        {return _char_index > other._char_index;}
     bool operator>= (iterator const &other) const
-        {return _char_index >= other._char_index || _glyph_index >= other._glyph_index;}
+        {return _char_index >= other._char_index;}
 
     /* **** visual-oriented methods **** */
 
@@ -857,8 +857,11 @@ inline int Layout::iteratorToCharIndex(Layout::iterator const &it) const
 inline void Layout::validateIterator(Layout::iterator *it) const
 {
     it->_parent_layout = this;
-    if (it->_char_index > _characters.size()) it->_char_index = _characters.size();
-    it->_glyph_index = _characters[it->_char_index].in_glyph;
+    if (it->_char_index > _characters.size()) {
+        it->_char_index = _characters.size();
+        it->_glyph_index = _glyphs.size();
+    } else
+        it->_glyph_index = _characters[it->_char_index].in_glyph;
 }
 
 inline Layout::iterator Layout::getNearestCursorPositionTo(NR::Point &point) const

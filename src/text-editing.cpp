@@ -1139,6 +1139,8 @@ like * to point to the inner span because we can apply style to that whole
 span. */
 static SPObject* ascend_while_first(SPObject *item, Glib::ustring::iterator text_iter, SPObject *common_ancestor)
 {
+    if (item == common_ancestor)
+        return item;
     if (SP_IS_STRING(item))
         if (text_iter != SP_STRING(item)->string.begin())
             return item;
@@ -1224,12 +1226,60 @@ static bool tidy_operator_excessive_nesting(SPObject **item)
     return true;
 }
 
-/* possible tidy operators that are not yet implemented:
+/** helper for tidy_operator_redundant_double_nesting() */
+static bool redundant_double_nesting_processor(SPObject **item, SPObject *child, bool prepend)
+{
+    if (SP_IS_STRING(child)) return false;
+    if (is_line_break_object(child)) return false;
+    TextTagAttributes *attrs = attributes_for_object(child);
+    if (attrs && attrs->anyAttributesSet()) return false;
+    gchar *parent_style = sp_style_write_string(SP_OBJECT_STYLE(SP_OBJECT_PARENT(*item)), SP_STYLE_FLAG_ALWAYS);
+    gchar *child_style = sp_style_write_string(SP_OBJECT_STYLE(child), SP_STYLE_FLAG_ALWAYS);
+    bool styles_differ = strcmp(parent_style, child_style) != 0;
+    g_free(parent_style);
+    g_free(child_style);
+    if (styles_differ) return false;
+
+    Inkscape::XML::Node *insert_after_repr;
+    if (prepend) insert_after_repr = SP_OBJECT_REPR(SP_OBJECT_PREV(*item));
+    else insert_after_repr = SP_OBJECT_REPR(*item);
+    while (SP_OBJECT_REPR(child)->childCount()) {
+        Inkscape::XML::Node *move_repr = SP_OBJECT_REPR(child)->firstChild();
+        sp_repr_ref(move_repr);
+        SP_OBJECT_REPR(child)->removeChild(move_repr);
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(move_repr, insert_after_repr);
+        sp_repr_unref(move_repr);
+        insert_after_repr = move_repr;      // I think this will stay valid long enough. It's garbage collected these days.
+    }
+    child->deleteObject();
+}
+
+/**    redundant double nesting: <font b><font a><font b>abc</font>def</font>ghi</font>
+                                -> <font b>abc<font a>def</font>ghi</font>
+this function does its work when the parameter is the <font a> tag in the
+example. You may note that this only does its work when the doubly-nested
+child is the first or last. The other cases are called 'style inversion'
+below, and I'm not yet convinced that the result of that operation will be
+tidier in all cases. */
+static bool tidy_operator_redundant_double_nesting(SPObject **item)
+{
+    if (!(*item)->hasChildren()) return false;
+    if ((*item)->firstChild() == (*item)->lastChild()) return false;     // this is excessive nesting, done above
+    if (redundant_double_nesting_processor(item, (*item)->firstChild(), true))
+        return true;
+    if (redundant_double_nesting_processor(item, (*item)->lastChild(), false))
+        return true;
+    return false;
+}
+
+/* possible tidy operators that are not yet implemented, either because
+they are difficult, occur infrequently, or because I'm not sure that the
+output is tidier in all cases:
     redundant semi-nesting: <font a><font b>abc</font>def</font>
-                             -> <font b>abc</font><font a>def</font>
+                             -> <font b>abc</font><font>def</font>
     style inversion: <font a>abc<font b>def<font a>ghi</font>jkl</font>mno</font>
                       -> <font a>abc<font b>def</font>ghi<font b>jkl</font>mno</font>
-    mistaken precedence: <font a,size 1>abc</font><size 1>def</size></font>
+    mistaken precedence: <font a,size 1>abc</font><size 1>def</size>
                           -> <size 1><font a>abc</font>def</size>
 */
 
@@ -1246,7 +1296,8 @@ static bool tidy_xml_tree_recursively(SPObject *root)
         tidy_operator_empty_spans,
         tidy_operator_inexplicable_spans,
         tidy_operator_repeated_spans,
-        tidy_operator_excessive_nesting
+        tidy_operator_excessive_nesting,
+        tidy_operator_redundant_double_nesting
     };
     bool changes = false;
 
