@@ -34,7 +34,8 @@ SimpleNode::SimpleNode(int code)
 {
     this->_logger = NULL;
     this->_document = NULL;
-    this->_parent = this->_next = this->_children = NULL;
+    this->_parent = this->_next = NULL;
+    this->_first_child = this->_last_child = NULL;
     this->_attributes = NULL;
     this->_last_listener = this->_listeners = NULL;
 }
@@ -48,23 +49,25 @@ SimpleNode::SimpleNode(SimpleNode const &node)
 {
     this->_logger = NULL;
     this->_document = NULL;
-    this->_parent = this->_next = this->_children = NULL;
+    this->_parent = this->_next = NULL;
+    this->_first_child = this->_last_child = NULL;
     this->_attributes = NULL;
     this->_last_listener = this->_listeners = NULL;
 
-    SPRepr *prev_child_copy=NULL;
-    for ( SPRepr *child = node._children ; child != NULL ; child = child->next() ) {
+    for ( SPRepr *child = node._first_child ;
+          child != NULL ; child = child->next() )
+    {
         SPRepr *child_copy=child->duplicate();
 
         child_copy->_setParent(this);
-        if (prev_child_copy) {
-            prev_child_copy->_setNext(child_copy);
+        if (_last_child) {
+            _last_child->_setNext(child_copy);
         } else {
-            this->_children = child_copy;
+            _first_child = child_copy;
         }
-        child_copy->release(); // release here to avoid a leak
+        _last_child = child_copy;
 
-        prev_child_copy = child_copy;
+        child_copy->release(); // release to avoid a leak
     }
 
     SPReprAttr *prev_attr_copy=NULL;
@@ -113,7 +116,7 @@ unsigned SimpleNode::position() const {
 unsigned SimpleNode::_childPosition(SPRepr const &child) const {
     if (!_cached_positions_valid) {
         unsigned position=0;
-        for ( SPRepr *sibling = _children ;
+        for ( SPRepr *sibling = _first_child ;
               sibling ; sibling = sibling->next() )
         {
             sibling->_setCachedPosition(position);
@@ -125,19 +128,9 @@ unsigned SimpleNode::_childPosition(SPRepr const &child) const {
 }
 
 SPRepr *SimpleNode::nthChild(unsigned index) {
-    SPRepr *child = _children;
+    SPRepr *child = _first_child;
     for ( ; index > 0 && child ; child = child->next() ) {
         index--;
-    }
-    return child;
-}
-
-SPRepr *SimpleNode::lastChild() {
-    SPRepr *child = _children;
-    if (child) {
-        while ( child->next() ) {
-            child = child->next();
-        }
     }
     return child;
 }
@@ -237,10 +230,11 @@ void SimpleNode::addChild(SPRepr *child, SPRepr *ref) {
         next = ref->next();
         ref->_setNext(child);
     } else {
-        next = _children;
-        _children = child;
+        next = _first_child;
+        _first_child = child;
     }
-    if (!next) {
+    if (!next) { // appending?
+        _last_child = child;
         // set cached position if possible when appending
         if (!ref) {
             // if !next && !ref, child is sole child
@@ -281,7 +275,7 @@ void SimpleNode::_bindDocument(SPReprDoc &document) {
     if (!_document) {
         _document = &document;
 
-        for ( SPRepr *child = _children ; child != NULL ; child = child->next() ) {
+        for ( SPRepr *child = _first_child ; child != NULL ; child = child->next() ) {
             child->_bindDocument(document);
         }
     }
@@ -293,7 +287,7 @@ void SimpleNode::_bindLogger(Inkscape::XML::TransactionLogger &logger) {
     if (!_logger) {
         _logger = &logger;
 
-        for ( SPRepr *child = _children ; child != NULL ; child = child->next() ) {
+        for ( SPRepr *child = _first_child ; child != NULL ; child = child->next() ) {
             child->_bindLogger(logger);
         }
     }
@@ -303,17 +297,18 @@ void SimpleNode::removeChild(SPRepr *child) {
     g_assert(child);
     g_assert(child->parent() == this);
 
-    SPRepr *ref = ( child != _children ? sp_repr_prev(child) : NULL );
+    SPRepr *ref = ( child != _first_child ? sp_repr_prev(child) : NULL );
 
     SPRepr *next = child->next();
     if (ref) {
         ref->_setNext(next);
     } else {
-        _children = next;
+        _first_child = next;
     }
-    if (next) {
-        // removing any child, save the last, invalidates
-        // the cached positions
+    if (!next) { // removing the last child?
+        _last_child = ref;
+    } else {
+        // removing any other child invalidates the cached positions
         _cached_positions_valid = false;
     }
 
@@ -344,19 +339,30 @@ void SimpleNode::changeOrder(SPRepr *child, SPRepr *ref) {
 
     if (prev == ref) { return; }
 
+    SPRepr *next;
+
     /* Remove from old position. */
+    next=child->next();
     if (prev) {
-        prev->_setNext(child->next());
+        prev->_setNext(next);
     } else {
-        _children = child->next();
+        _first_child = next;
     }
+    if (!next) {
+        _last_child = prev;
+    }
+
     /* Insert at new position. */
     if (ref) {
-        child->_setNext(ref->next());
+        next = ref->next();
         ref->_setNext(child);
     } else {
-        child->_setNext(_children);
-        _children = child;
+        next = _first_child;
+        _first_child = child;
+    }
+    child->_setNext(next);
+    if (!next) {
+        _last_child = child;
     }
 
     _cached_positions_valid = false;
@@ -401,9 +407,11 @@ void SimpleNode::synthesizeEvents(SPReprEventVector const *vector, void *data) {
     }
     if (vector->child_added) {
         SPRepr *ref = NULL;
-        SPRepr *child = this->_children;
-        for ( ; child ; ref = child, child = child->next() ) {
+        for ( SPRepr *child = this->_first_child ;
+              child ; child = child->next() )
+        {
             vector->child_added(this, child, ref, data);
+            ref = child;
         }
     }
     if (vector->content_changed) {

@@ -57,12 +57,10 @@ public:
     SPRepr *next() { return _next; }
     SPRepr const *next() const { return _next; }
 
-    SPRepr *firstChild() { return _children; }
-    SPRepr const *firstChild() const { return _children; }
-    SPRepr *lastChild();
-    SPRepr const *lastChild() const {
-        return const_cast<SimpleNode *>(this)->lastChild();
-    }
+    SPRepr *firstChild() { return _first_child; }
+    SPRepr const *firstChild() const { return _first_child; }
+    SPRepr *lastChild() { return _last_child; }
+    SPRepr const *lastChild() const { return _last_child; }
 
     unsigned childCount() const { return _child_count; }
     SPRepr *nthChild(unsigned index);
@@ -71,9 +69,7 @@ public:
     }
 
     void addChild(SPRepr *child, SPRepr *ref);
-    void appendChild(SPRepr *child) {
-        addChild(child, lastChild());
-    }
+    void appendChild(SPRepr *child) { addChild(child, _last_child); }
     void removeChild(SPRepr *child);
     void changeOrder(SPRepr *child, SPRepr *ref);
 
@@ -125,7 +121,8 @@ private:
     SPReprAttr *_attributes;
     Inkscape::Util::SharedCStringPtr _content;
     SPRepr *_parent;
-    SPRepr *_children;
+    SPRepr *_first_child;
+    SPRepr *_last_child;
     SPRepr *_next;
 
     unsigned _child_count;

@@ -1,3 +1,10 @@
+2004-01-27  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/simple-node.h, src/xml/simple-node.cpp:
+
+	  SimpleNode::lastChild() and SimpleNode::appendChild() are now
+	  O(1) rather than O(n)
+
 2004-01-26  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-util.cpp, src/xml/repr.cpp, src/xml/repr.h,
