@@ -9,6 +9,7 @@
  *
  * Copyright (C) 1999-2002 Authors
  * Copyright (C) 2001-2002 Ximian, Inc.
+ * Copyright (C) 2004 David Turner
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -293,6 +294,33 @@ sp_file_open_dialog(gpointer object, gpointer data)
     return;
 }
 
+
+/*######################
+## V A C U U M
+######################*/
+
+/**
+ * Remove unreferenced defs from the defs section of the document.
+ */
+
+
+void
+sp_file_vacuum()
+{
+
+    SPDocument* doc = SP_ACTIVE_DOCUMENT;
+    SPDefs *defs = SP_ROOT(SP_DOCUMENT_ROOT(doc))->defs;
+
+    for ( SPObject* def = defs->object.firstChild () ;
+          def ; def = SP_OBJECT_NEXT (def) )
+    {
+
+        /* fixme: some inkscape-internal nodes in the future might not be collectable */
+        def->requestOrphanCollection ();
+    }
+
+    sp_document_done (doc);
+}
 
 
 

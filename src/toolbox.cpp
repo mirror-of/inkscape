@@ -7,8 +7,10 @@
 *   MenTaLguY <mental@rydia.net>
 *   Lauris Kaplinski <lauris@kaplinski.com>
 *   Frank Felfe <innerspace@iname.com>
- *   John Cliff <simarilius@yahoo.com>
+*   John Cliff <simarilius@yahoo.com>
+*   David Turner <novalis@gnu.org>
 *
+* Copyright (C) 2004 David Turner
 * Copyright (C) 2003 MenTaLguY
 * Copyright (C) 1999-2002 authors
 * Copyright (C) 2001-2002 Ximian, Inc.
@@ -619,6 +621,7 @@ setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_IMPORT, view, tt);
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_EXPORT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_VACUUM, view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 

@@ -12,6 +12,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Ted Gould <ted@gould.cx>
  *   MenTaLguY <mental@rydia.net>
+ *   David Turner <novalis@gnu.org>
  *
  * This code is in public domain.
  *
@@ -199,6 +200,9 @@ sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
             break;
         case SP_VERB_FILE_PRINT:
             sp_file_print ();
+            break;
+        case SP_VERB_FILE_VACUUM:
+            sp_file_vacuum ();
             break;
         case SP_VERB_FILE_PRINT_DIRECT:
             sp_file_print_direct ();
@@ -813,6 +817,8 @@ static const SPVerbActionDef props[] = {
         N_("Save document under new name"), GTK_STOCK_SAVE_AS },
     {SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
         GTK_STOCK_PRINT },
+    {SP_VERB_FILE_VACUUM, "FileVacuum", N_("Vacuum _unused defs"), N_("Vacuum document"),
+     NULL },
     {SP_VERB_FILE_PRINT_DIRECT, "FilePrintDirect", N_("Print _Direct"),
         N_("Print directly to file or pipe"), NULL },
     {SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Previe_w"),

@@ -9,6 +9,7 @@
  *
  * Copyright (C) 1999-2002 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
+ * Copyright (C) 2004 David Turner
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -601,6 +602,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
         SP_VERB_NONE,
        SP_VERB_DIALOG_NAMEDVIEW,
        SP_VERB_DIALOG_DISPLAY,
+        SP_VERB_FILE_VACUUM,
 
         SP_VERB_NONE,
 	SP_VERB_FILE_CLOSE_VIEW,

@@ -136,5 +136,14 @@ void sp_file_print_direct (void);
  */
 void sp_file_print_preview (gpointer object, gpointer data);
 
+/*#####################
+## U T I L I T Y
+#####################*/
+
+/**
+ * clean unused defs out of file
+ */
+void sp_file_vacuum ();
+
 
 #endif
