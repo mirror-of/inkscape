@@ -16,6 +16,7 @@
 #include "helper/curve.h"
 
 #include "sp-item.h"
+#include "sp-marker.h"
 
 #define SP_TYPE_SHAPE (sp_shape_get_type ())
 #define SP_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SHAPE, SPShape))
@@ -30,10 +31,7 @@ struct _SPShape {
 
 	SPCurve *curve;
 
-        SPObject *marker;
-	SPObject *marker_start;
-	SPObject *marker_mid;
-	SPObject *marker_end;
+        SPObject *marker[SP_MARKER_LOC_QTY];
 };
 
 struct _SPShapeClass {

@@ -19,6 +19,7 @@
 #include "xml/repr.h"
 #include "color.h"
 #include "forward.h"
+#include "sp-marker.h"
 
 typedef struct _SPIFloat SPIFloat;
 typedef struct _SPIScale24 SPIScale24;
@@ -205,10 +206,8 @@ struct _SPStyle {
 	SPIEnum writing_mode;
 
         /* markers */
-        SPIEnum marker;
-        SPIEnum marker_start;
-        SPIEnum marker_mid;
-        SPIEnum marker_end;
+  /*        GQuark marker[SP_MARKER_LOC_QTY]; */
+	SPIString marker[SP_MARKER_LOC_QTY];
 };
 
 SPStyle *sp_style_new (void);

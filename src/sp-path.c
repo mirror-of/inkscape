@@ -103,11 +103,13 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
 	SPPath *path;
 	SPVersion version;
+	const gchar* marker_value;
 
 	path = SP_PATH (object);
 
 	version = sp_object_get_sodipodi_version (object);
 
+	/* Fixes old Sodipodi nodetype to namespaced parameter */
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		const gchar *str;
 		str = sp_repr_attr (repr, "INKSCAPE-PATH-NODE-TYPES");
@@ -116,6 +118,8 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	}
 
 	sp_object_read_attr (object, "d");
+
+	/* Are these calls actually necessary? */
 	sp_object_read_attr (object, "marker");
 	sp_object_read_attr (object, "marker-start");
 	sp_object_read_attr (object, "marker-mid");
@@ -156,12 +160,15 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 				changed = TRUE;
 			}
 		}
-		if (changed) sp_repr_css_set (repr, css, "style");
+		if (changed) {
+			sp_repr_css_set (repr, css, "style");
+		}
 		sp_repr_css_attr_unref (css);
 	}
 
-	if (((SPObjectClass *) parent_class)->build)
+	if (((SPObjectClass *) parent_class)->build) {
 		((SPObjectClass *) parent_class)->build (object, document, repr);
+	}
 }
 
 /**
@@ -172,6 +179,7 @@ static void
 sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPPath *path;
+	int marker_type;
 
 	path = (SPPath *) object;
 
@@ -192,12 +200,12 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_PROP_MARKER_START:
 	case SP_PROP_MARKER_MID:
 	case SP_PROP_MARKER_END:
-	  /* TODO:  value is NULL at this point - need to find why & fix */
-		sp_shape_set_marker (object, key, value);
-		break;
-	default:
-		if (((SPObjectClass *) parent_class)->set)
+	      sp_shape_set_marker (object, key,  value);
+	    break;
+ 	default:
+		if (((SPObjectClass *) parent_class)->set) {
 			((SPObjectClass *) parent_class)->set (object, key, value);
+		}
 		break;
 	}
 }
@@ -224,8 +232,9 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_attr (repr, "d", str);
 	g_free (str);
 
-	if (((SPObjectClass *) (parent_class))->write)
+	if (((SPObjectClass *) (parent_class))->write) {
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
+	}
 
 	return repr;
 }

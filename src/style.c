@@ -129,13 +129,6 @@ static const SPStyleEnum enum_font_style[] = {
 	{NULL, -1}
 };
 
-static const SPStyleEnum enum_marker[] = {
-	{"none",                SP_MARKER_NONE},
-	{"url(#mTriangle)",     SP_MARKER_TRIANGLE},
-	{"url(#mArrow)",        SP_MARKER_ARROW},
-	{NULL, -1}
-};
-
 static const SPStyleEnum enum_font_size[] = {
 	{"xx-small", SP_CSS_FONT_SIZE_XX_SMALL},
 	{"x-small", SP_CSS_FONT_SIZE_X_SMALL},
@@ -369,12 +362,32 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 	SPS_READ_PENUM_IF_UNSET (&style->stroke_linecap, repr, "stroke-linecap", enum_stroke_linecap, TRUE);
 	SPS_READ_PENUM_IF_UNSET (&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, TRUE);
  
-       /* marker */
-        SPS_READ_PENUM_IF_UNSET (&style->marker, repr, "marker", enum_marker, TRUE);
-        SPS_READ_PENUM_IF_UNSET (&style->marker_start, repr, "marker-start", enum_marker, TRUE);
-        SPS_READ_PENUM_IF_UNSET (&style->marker_mid, repr, "marker-mid", enum_marker, TRUE);
-        SPS_READ_PENUM_IF_UNSET (&style->marker_end, repr, "marker-end", enum_marker, TRUE);
-                                                                                                         
+        /* markers */
+	if (!style->marker[SP_MARKER_LOC].set) {
+		val = sp_repr_attr (repr, "marker");
+		if (val) {
+			sp_style_read_istring (&style->marker[SP_MARKER_LOC], val);
+		}
+	}
+	if (!style->marker[SP_MARKER_LOC_START].set) {
+		val = sp_repr_attr (repr, "marker-start");
+		if (val) {
+			sp_style_read_istring (&style->marker[SP_MARKER_LOC_START], val);
+		}
+	}
+	if (!style->marker[SP_MARKER_LOC_MID].set) {
+		val = sp_repr_attr (repr, "marker-mid");
+		if (val) {
+			sp_style_read_istring (&style->marker[SP_MARKER_LOC_MID], val);
+		}
+	}
+	if (!style->marker[SP_MARKER_LOC_END].set) {
+		val = sp_repr_attr (repr, "marker-end");
+		if (val) {
+			sp_style_read_istring (&style->marker[SP_MARKER_LOC_END], val);
+		}
+	}
+
  	/* stroke-opacity */
 	if (!style->stroke_opacity.set) {
 		val = sp_repr_attr (repr, "stroke-opacity");
@@ -613,25 +626,42 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 		g_warning ("Unimplemented style property SP_PROP_IMAGE_RENDERING: value: %s", val);
 		break;
 	case SP_PROP_MARKER:
-          g_message ("SP_PROP_MARKER found for '%'s", val);
-          /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-                SPS_READ_IENUM_IF_UNSET (&style->marker, val, enum_marker, TRUE);
+        	/* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+		/* style->marker[SP_MARKER_LOC] = g_quark_from_string(val); */
+		if (!style->marker[SP_MARKER_LOC].set) {
+			g_free (style->marker[SP_MARKER_LOC].value);
+			style->marker[SP_MARKER_LOC].value = g_strdup (val);
+			style->marker[SP_MARKER_LOC].set = TRUE;
+			style->marker[SP_MARKER_LOC].inherit = (val && !strcmp (val, "inherit"));
+		}
                 break;
  	case SP_PROP_MARKER_START:
-	  /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-          g_message("SP_PROP_MARKER_START found for '%s'", val);
-                SPS_READ_IENUM_IF_UNSET (&style->marker_start, val, enum_marker, TRUE);
+		/* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+		if (!style->marker[SP_MARKER_LOC_START].set) {
+			g_free (style->marker[SP_MARKER_LOC_START].value);
+			style->marker[SP_MARKER_LOC_START].value = g_strdup (val);
+			style->marker[SP_MARKER_LOC_START].set = TRUE;
+			style->marker[SP_MARKER_LOC_START].inherit = (val && !strcmp (val, "inherit"));
+		}
                 break;
  	case SP_PROP_MARKER_MID:
-          /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-          g_message("SP_PROP_MARKER_MID found for '%s'", val);
-                SPS_READ_IENUM_IF_UNSET (&style->marker_mid, val, enum_marker, TRUE);
+        	/* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+		if (!style->marker[SP_MARKER_LOC_MID].set) {
+			g_free (style->marker[SP_MARKER_LOC_MID].value);
+			style->marker[SP_MARKER_LOC_MID].value = g_strdup (val);
+			style->marker[SP_MARKER_LOC_MID].set = TRUE;
+			style->marker[SP_MARKER_LOC_MID].inherit = (val && !strcmp (val, "inherit"));
+		}
                 break;
  	case SP_PROP_MARKER_END:
-          /* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
-          g_message("SP_PROP_MARKER_END found for '%s'", val);
-	  SPS_READ_IENUM_IF_UNSET (&style->marker_end, val, enum_marker, TRUE);
-	  break;
+        	/* TODO:  Call sp_uri_reference_resolve (SPDocument *document, const guchar *uri) */
+		if (!style->marker[SP_MARKER_LOC_END].set) {
+			g_free (style->marker[SP_MARKER_LOC_END].value);
+			style->marker[SP_MARKER_LOC_END].value = g_strdup (val);
+			style->marker[SP_MARKER_LOC_END].set = TRUE;
+			style->marker[SP_MARKER_LOC_END].inherit = (val && !strcmp (val, "inherit"));
+		}
+		break;
  	  
 	case SP_PROP_SHAPE_RENDERING:
 		g_warning ("Unimplemented style property SP_PROP_SHAPE_RENDERING: value: %s", val);
@@ -680,8 +710,11 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 			sp_style_read_iscale24 (&style->stroke_opacity, val);
 		}
 		break;
-	case SP_PROP_TEXT_RENDERING:
+               
 	/* Text */
+	case SP_PROP_TEXT_RENDERING:
+		g_warning ("Unimplemented style property SP_PROP_TEXT_RENDERING: value: %s", val);
+		break;
 	case SP_PROP_ALIGNMENT_BASELINE:
 		g_warning ("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
 		break;
@@ -917,6 +950,14 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 			style->text->font_family.value = g_strdup (parent->text->font_family.value);
 		}
 	}
+
+	/* Markers - Free the old value and make copy of the new */
+	for (int i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
+		if (!style->marker[i].set || style->marker[i].inherit) {
+			g_free(style->marker[i].value);
+			style->marker[i].value = g_strdup(parent->marker[i].value);
+		}
+	}
 }
 
 static void
@@ -1006,6 +1047,12 @@ sp_style_write_string (SPStyle *style)
 	p += sp_style_write_ilength (p, c + BMAX - p, "stroke-width", &style->stroke_width, NULL, SP_STYLE_FLAG_IFSET);
 	p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linecap", enum_stroke_linecap, &style->stroke_linecap, NULL, SP_STYLE_FLAG_IFSET);
 	p += sp_style_write_ienum (p, c + BMAX - p, "stroke-linejoin", enum_stroke_linejoin, &style->stroke_linejoin, NULL, SP_STYLE_FLAG_IFSET);
+
+	p += g_snprintf (p, c + BMAX - p, "marker:%s", &style->marker[SP_MARKER_LOC].value);
+	p += g_snprintf (p, c + BMAX - p, "marker-start:%s", &style->marker[SP_MARKER_LOC_START].value);
+	p += g_snprintf (p, c + BMAX - p, "marker-mid:%s", &style->marker[SP_MARKER_LOC_MID].value);
+	p += g_snprintf (p, c + BMAX - p, "marker-end:%s", &style->marker[SP_MARKER_LOC_END].value);
+
 	p += sp_style_write_ifloat (p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, SP_STYLE_FLAG_IFSET);
 	/* fixme: */
 	if (style->stroke_dasharray_set) {
@@ -1083,6 +1130,12 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
 		p += g_snprintf (p, c + BMAX - p, "stroke-dashoffset:%g;", from->stroke_dash.offset);
 	}
 	p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &from->stroke_opacity, &to->stroke_opacity, SP_STYLE_FLAG_IFDIFF);
+
+	/* markers */
+	p += g_snprintf (p, c + BMAX - p, "marker:%s",       from->marker[SP_MARKER_LOC]);
+	p += g_snprintf (p, c + BMAX - p, "marker-start:%s", from->marker[SP_MARKER_LOC_START]);
+	p += g_snprintf (p, c + BMAX - p, "marker-mid:%s",   from->marker[SP_MARKER_LOC_MID]);
+	p += g_snprintf (p, c + BMAX - p, "marker-end:%s",   from->marker[SP_MARKER_LOC_END]);
 
 	/* fixme: */
 	p += sp_text_style_write (p, c + BMAX - p, from->text);
@@ -1164,6 +1217,11 @@ sp_style_clear (SPStyle *style)
 	style->text_anchor.computed = SP_CSS_TEXT_ANCHOR_START;
 	style->writing_mode.set = FALSE;
 	style->writing_mode.computed = SP_CSS_WRITING_MODE_LR;
+
+	for (int i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
+	  g_free(style->marker[i].value);
+	  style->marker[i].set      = FALSE;
+	}
 }
 
 static void
@@ -1393,6 +1451,9 @@ sp_style_read_iscale24 (SPIScale24 *val, const gchar *str)
 	}
 }
 
+/**
+ * Reads a style value and performs lookup based on the given style value enumerations
+ */
 static void
 sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, unsigned int inherit)
 {

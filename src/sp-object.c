@@ -142,8 +142,9 @@ sp_object_finalize (GObject * object)
 
 	spobject = (SPObject *) object;
 
-	if (((GObjectClass *) (parent_class))->finalize)
+	if (((GObjectClass *) (parent_class))->finalize) {
 		(* ((GObjectClass *) (parent_class))->finalize) (object);
+	}
 }
 
 /*
@@ -391,8 +392,9 @@ sp_object_repr_remove_child (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer 
 
 	object = SP_OBJECT (data);
 
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->remove_child)
+	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->remove_child) {
 		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->remove_child) (object, child);
+	}
 
 	return TRUE;
 }
@@ -406,8 +408,9 @@ sp_object_repr_order_changed (SPRepr * repr, SPRepr * child, SPRepr * old, SPRep
 
 	object = SP_OBJECT (data);
 
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->order_changed)
+	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->order_changed) {
 		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->order_changed) (object, child, old, newer);
+	}
 }
 
 static void
@@ -457,8 +460,9 @@ sp_object_set (SPObject *object, unsigned int key, const gchar *value)
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
 
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS (object))->set)
+	if (((SPObjectClass *) G_OBJECT_GET_CLASS (object))->set) {
 		((SPObjectClass *) G_OBJECT_GET_CLASS(object))->set (object, key, value);
+	}
 }
 
 void
@@ -478,7 +482,9 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 	keyid = sp_attribute_lookup (key);
 	if (keyid != SP_ATTR_INVALID) {
 		const gchar *value;
+		/* Retrieve the 'key' attribute from the object's XML representation */
 		value = sp_repr_attr (object->repr, key);
+
 		sp_object_set (object, keyid, value);
 	}
 }

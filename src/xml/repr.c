@@ -269,6 +269,10 @@ sp_repr_content (const SPRepr *repr)
 	return SP_REPR_CONTENT (repr);
 }
 
+/** 
+ * Retrieves the first attribute in the XML representation with
+ * the given key 'key'
+ */
 const gchar *
 sp_repr_attr (const SPRepr *repr, const gchar *key)
 {
@@ -278,12 +282,14 @@ sp_repr_attr (const SPRepr *repr, const gchar *key)
 	g_return_val_if_fail (repr != NULL, NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 
+	/* retrieve an int identifier specific to this string */
 	q = g_quark_from_string (key);
 
 	for (ra = repr->attributes; ra != NULL; ra = ra->next)
 	{
-		if ( INK_STATIC_CAST( unsigned int, ra->key ) == q )
+		if ( ra->key == q ) {
 			return ra->value;
+		}
 	}
 
 	return NULL;
@@ -302,7 +308,9 @@ sp_repr_set_content (SPRepr *repr, const gchar *newcontent)
 
 	allowed = TRUE;
 	for (rl = repr->listeners; rl && allowed; rl = rl->next) {
-		if (rl->vector->change_content) allowed = (* rl->vector->change_content) (repr, oldcontent, newcontent, rl->data);
+		if (rl->vector->change_content) {
+			allowed = (* rl->vector->change_content) (repr, oldcontent, newcontent, rl->data);
+		}
 	}
 
 	if (allowed) {
@@ -341,7 +349,7 @@ sp_repr_del_attr (SPRepr *repr, const gchar *key)
 
 	q = g_quark_from_string (key);
 	prev = NULL;
-	for (attr = repr->attributes; attr && (INK_STATIC_CAST(unsigned int, attr->key) != q); attr = attr->next)
+	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next)
 	{
 		prev = attr;
 	}
@@ -395,7 +403,7 @@ sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 	oldval = NULL;
 	q = g_quark_from_string (key);
 	prev = NULL;
-	for (attr = repr->attributes; attr && (INK_STATIC_CAST(unsigned int, attr->key) != q); attr = attr->next)
+	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next)
 	{
 		prev = attr;
 	}
@@ -445,7 +453,9 @@ sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value)
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (*key != '\0', FALSE);
 
-	if (!value) return sp_repr_del_attr (repr, key);
+	if (!value) {
+		return sp_repr_del_attr (repr, key);
+	}
 
 	return sp_repr_chg_attr (repr, key, value);
 }
@@ -885,7 +895,7 @@ sp_repr_merge (SPRepr *repr, const SPRepr *src, const gchar *key)
 			sp_repr_append_child (repr, rch);
 		}
 	}
-	
+
 	for (attr = src->attributes; attr != NULL; attr = attr->next) {
 		sp_repr_set_attr (repr, SP_REPR_ATTRIBUTE_KEY (attr), SP_REPR_ATTRIBUTE_VALUE (attr));
 	}
