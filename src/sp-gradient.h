@@ -39,6 +39,7 @@
 #define SP_IS_RADIALGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_RADIALGRADIENT))
 #define SP_IS_RADIALGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_RADIALGRADIENT))
 
+#include "libnr/nr-matrix.h"
 #include "svg/svg-types.h"
 #include "forward.h"
 #include "color.h"
@@ -128,7 +129,7 @@ struct SPGradient {
 	SPGradientUnits units;
 	guint units_set : 1;
 	/* gradientTransform attribute */
-	NRMatrix gradientTransform;
+	NR::Matrix gradientTransform;
 	guint gradientTransform_set : 1;
 	/* spreadMethod attribute */
 	SPGradientSpread spread;
@@ -189,9 +190,11 @@ void sp_gradient_render_vector_block_rgba (SPGradient *gr, guchar *px, gint w, g
 void sp_gradient_render_vector_block_rgb (SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, gboolean horizontal);
 
 /* Transforms to/from gradient position space in given environment */
-NRMatrix *sp_gradient_get_g2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *g2d);
-NRMatrix *sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *gs2d);
-void sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *gs2d);
+NRMatrix *sp_gradient_get_g2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm, NRRect const *bbox,
+				       NRMatrix *g2d);
+NRMatrix *sp_gradient_get_gs2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm, NRRect const *bbox,
+					NRMatrix *gs2d);
+void sp_gradient_set_gs2d_matrix_f(SPGradient *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix const *gs2d);
 
 /*
  * Linear Gradient

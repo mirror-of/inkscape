@@ -269,7 +269,7 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 			// gradient vector in user space due to application of the non-uniform scaling
 			// transformation from bounding box space to user space.
 
-		NR::Matrix skew = bbox2user; 
+		NR::Matrix skew = bbox2user;
 		double exp = skew.expansion();
 		skew[0] /= exp;
 		skew[1] /= exp;
@@ -279,15 +279,15 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 		skew[5] = 0;
 
 		// apply skew to the gradient
-		for(int i = 0; i < 6; i++) {
-			gr->gradientTransform[i] = skew[i];
+		gr->gradientTransform = skew;
+		{
+			gchar c[256];
+			if (sp_svg_transform_write(c, 256, gr->gradientTransform)) {
+				sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", c);
+			} else {
+				sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", NULL);
+			}
 		}
-            gchar c[256];
-            if (sp_svg_transform_write(c, 256, &(gr->gradientTransform))) {
-                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", c);
-            } else {
-                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", NULL);
-            }
 
 		// Matrix to convert points to userspace coords; postmultiply by inverse of skew so
 		// as to cancel it out when it's applied to the gradient during rendering
@@ -343,12 +343,12 @@ sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool s
 	if (set) {
 		gradient->gradientTransform = postmul;
 	} else {
-		gradient->gradientTransform = NR::Matrix(gradient->gradientTransform) * postmul; // fixme: get gradient transform by climbing to hrefs?
+		gradient->gradientTransform *= postmul; // fixme: get gradient transform by climbing to hrefs?
 	}
 	gradient->gradientTransform_set = TRUE;
 
 	gchar c[256];
-	if (sp_svg_transform_write(c, 256, &(gradient->gradientTransform))) {
+	if (sp_svg_transform_write(c, 256, gradient->gradientTransform)) {
 		sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", c);
 	} else {
 		sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
