@@ -107,11 +107,13 @@ static void inkscape_dispose (GObject *object);
 static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 
-static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, unsigned int skel_size,
-                  const gchar *e_mkdir,
-                  const gchar *e_notdir,
-                  const gchar *e_ccf,
-                  const gchar *e_cwf);
+static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, 
+				  unsigned int skel_size,
+				  const gchar *e_mkdir,
+				  const gchar *e_notdir,
+				  const gchar *e_ccf,
+				  const gchar *e_cwf,
+				  const gchar *warn);
 
 static void inkscape_init_preferences (Inkscape::Application *inkscape);
 
@@ -1124,9 +1126,14 @@ inkscape_active_event_context (void)
 # HELPERS
 #####################*/
 
-static void
-inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, unsigned int skel_size,
-              const gchar *e_mkdir, const gchar *e_notdir, const gchar *e_ccf, const gchar *e_cwf, const gchar *warn)
+static void 
+inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, 
+		      unsigned int skel_size,
+		      const gchar *e_mkdir, 
+		      const gchar *e_notdir, 
+		      const gchar *e_ccf, 
+		      const gchar *e_cwf, 
+		      const gchar *warn)
 {
     gchar * dn, *fn;
     FILE *fh;
@@ -1187,13 +1194,14 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 static void
 inkscape_init_preferences (Inkscape::Application *inkscape)
 {
-    inkscape_init_config (inkscape->preferences, PREFERENCES_FILE, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
-                  _("Cannot create directory %s.\n%s"),
-                  _("%s is not a valid directory.\n%s"),
-                  _("Cannot create file %s.\n%s"),
-                  _("Cannot write file %s.\n%s"), 
-                    _("Although Inkscape will run, it will use default settings,\n"
-                "and any changes made in preferences will not be saved."));
+    inkscape_init_config (inkscape->preferences, PREFERENCES_FILE, preferences_skeleton, 
+			  PREFERENCES_SKELETON_SIZE,
+			  _("Cannot create directory %s.\n%s"),
+			  _("%s is not a valid directory.\n%s"),
+			  _("Cannot create file %s.\n%s"),
+			  _("Cannot write file %s.\n%s"), 
+			  _("Although Inkscape will run, it will use default settings,\n"
+			    "and any changes made in preferences will not be saved."));
 }
 
 
