@@ -190,6 +190,7 @@ sp_use_set (SPObject *object, unsigned int key, const gchar *value)
 			if (use->href) {
 				if (strcmp (value, use->href) == 0) return;
 				g_free (use->href);
+				// FIXME: add proper URI parsing instead of just skipping the first char (and hoping it's #)
 				use->href = g_strdup (value + 1);
 			} else {
 				use->href = g_strdup (value + 1);
@@ -268,9 +269,10 @@ sp_use_description (SPItem * item)
 
 	use = SP_USE (item);
 
-	if (use->child) return sp_item_description (SP_ITEM (use->child));
+	if (use->child) 
+		return g_strdup_printf (_("Clone of: %s"), sp_item_description (SP_ITEM (use->child))); // add "; use <key> to look up parent"
 
-	return g_strdup ("Empty reference [SHOULDN'T HAPPEN]");
+	return g_strdup ("Orphaned clone");
 }
 
 static NRArenaItem *
@@ -362,6 +364,9 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	ictx = (SPItemCtx *) ctx;
 	cctx = *ictx;
 
+	if (((SPObjectClass *) (parent_class))->update)
+		((SPObjectClass *) (parent_class))->update (object, ctx, flags);
+
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
@@ -383,7 +388,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	cctx.vp.x1 = use->width.computed;
 	cctx.vp.y1 = use->height.computed;
 	nr_matrix_set_identity (&cctx.i2vp);
-  flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B;
+	flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
 	if (use->child) {
 		g_object_ref (G_OBJECT (use->child));
