@@ -293,9 +293,11 @@ sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
 static void
 toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func)
 {
+	gpointer ptr;
 	SPDesktop *old_desktop;
 
-	old_desktop = SP_DESKTOP (g_object_get_data (G_OBJECT (toolbox), "desktop"));
+	ptr = g_object_get_data (G_OBJECT (toolbox), "desktop");
+	old_desktop = SP_IS_DESKTOP (ptr) ? SP_DESKTOP (ptr) : NULL;
 
 	if (old_desktop) {
 		GList *children, *iter;
