@@ -982,7 +982,9 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
     g_assert(SP_IS_ITEM(item));
 
     NR::Matrix ret(NR::identity());
+#ifdef NDEBUG
     g_assert(ret.test_identity());
+#endif
 
     /* Note that this routine may be called for items that are not members of
     ** the root.  For example, markers are members of a <def> object.  Hence
@@ -1060,11 +1062,23 @@ NR::Matrix sp_item_i2d_affine(SPItem const *item)
     NR::Matrix const ret( sp_item_i2doc_affine(item)
                           * NR::scale(0.8, -0.8)
                           * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
-#ifndef NDEBUG
+#ifdef NDEBUG
     NRMatrix tst;
     sp_item_i2d_affine(item, &tst);
     assert_close( ret, NR::Matrix(&tst) );
 #endif
+    return ret;
+}
+
+// same as i2d but with i2root instead of i2doc
+NR::Matrix sp_item_i2r_affine(SPItem const *item)
+{
+    g_assert(item != NULL);
+    g_assert(SP_IS_ITEM(item));
+
+    NR::Matrix const ret( sp_item_i2root_affine(item)
+                          * NR::scale(0.8, -0.8)
+                          * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
     return ret;
 }
 

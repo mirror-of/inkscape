@@ -213,7 +213,8 @@ NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *transform);
  */
 NR::Matrix sp_item_i2d_affine(SPItem const *item);
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *transform);
-NR::Matrix sp_item_i2d_affine(SPItem const *item);
+
+NR::Matrix sp_item_i2r_affine(SPItem const *item);
 
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &transform);
 
