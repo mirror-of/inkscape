@@ -479,10 +479,13 @@ sp_star_knot_click (SPItem *item, guint state)
 
 	if (state & GDK_MOD1_MASK) {
 		star->randomized = 0;
-		((SPObject *)star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		((SPObject *)star)->updateRepr();
 	} else if (state & GDK_SHIFT_MASK) {
 		star->rounded = 0;
-		((SPObject *)star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		((SPObject *)star)->updateRepr();
+	} else if (state & GDK_CONTROL_MASK) {
+		star->arg[1] = star->arg[0] + M_PI / star->sides;
+		((SPObject *)star)->updateRepr();
 	}
 }
 
@@ -523,23 +526,30 @@ sp_spiral_inner_set (SPItem *item, const NR::Point &p, guint state)
 
 	gdouble   dx = p[NR::X] - spiral->cx;
 	gdouble   dy = p[NR::Y] - spiral->cy;
-	gdouble   arg_t0;
-	sp_spiral_get_polar (spiral, spiral->t0, NULL, &arg_t0);
-	arg_t0 = 2.0*M_PI*spiral->revo * spiral->t0 + spiral->arg; //
-	gdouble   arg_tmp = atan2(dy, dx) - arg_t0;
-	gdouble   arg_t0_new = arg_tmp - floor((arg_tmp+M_PI)/(2.0*M_PI))*2.0*M_PI + arg_t0;
-	spiral->t0 = (arg_t0_new - spiral->arg) / (2.0*M_PI*spiral->revo);
 
-	/* round inner arg per PI/snaps, if CTRL is pressed */
-	if ( ( state & GDK_CONTROL_MASK )
-	     && ( fabs(spiral->revo) > SP_EPSILON_2 )
-	     && ( snaps != 0 ) )
-	{
-		gdouble arg = 2.0*M_PI*spiral->revo*spiral->t0 + spiral->arg;
-		spiral->t0 = (sp_round(arg, M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
+	if (state & GDK_MOD1_MASK) {
+		// adjust divergence by vertical drag, relative to rad
+		double new_exp = (spiral->rad + dy)/(spiral->rad);
+		spiral->exp = new_exp > 0? new_exp : 0;
+	} else {
+		// roll/unroll from inside
+		gdouble   arg_t0;
+		sp_spiral_get_polar (spiral, spiral->t0, NULL, &arg_t0);
+
+		gdouble   arg_tmp = atan2(dy, dx) - arg_t0;
+		gdouble   arg_t0_new = arg_tmp - floor((arg_tmp+M_PI)/(2.0*M_PI))*2.0*M_PI + arg_t0;
+		spiral->t0 = (arg_t0_new - spiral->arg) / (2.0*M_PI*spiral->revo);
+
+		/* round inner arg per PI/snaps, if CTRL is pressed */
+		if ( ( state & GDK_CONTROL_MASK )
+				 && ( fabs(spiral->revo) > SP_EPSILON_2 )
+				 && ( snaps != 0 ) )	{
+			gdouble arg = 2.0*M_PI*spiral->revo*spiral->t0 + spiral->arg;
+			spiral->t0 = (sp_round(arg, M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
+		}
+
+		spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
 	}
-
-	spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
 
 	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -558,15 +568,61 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, guint state)
 
 	gdouble  dx = p[NR::X] - spiral->cx;
 	gdouble  dy = p[NR::Y] - spiral->cy;
-	spiral->arg = atan2(dy, dx) - 2.0*M_PI*spiral->revo;
 
-	if (!(state & GDK_MOD1_MASK)) {
-		spiral->rad = MAX (hypot (dx, dy), 0.001);
-	}
+	if (state & GDK_SHIFT_MASK) { // rotate without roll/unroll
+		spiral->arg = atan2(dy, dx) - 2.0*M_PI*spiral->revo;
+		if (!(state & GDK_MOD1_MASK)) { 
+			// if alt not pressed, change also rad; otherwise it is locked
+			spiral->rad = MAX (hypot (dx, dy), 0.001);
+		}
+		if ( ( state & GDK_CONTROL_MASK )
+				 && snaps ) {
+			spiral->arg = sp_round(spiral->arg, M_PI/snaps);
+		}
+	} else { // roll/unroll
+		// arg of the spiral outer end
+		double arg_1;
+		sp_spiral_get_polar (spiral, 1, NULL, &arg_1);
 
-	if ( ( state & GDK_CONTROL_MASK )
-	     && snaps ) {
-		spiral->arg = sp_round(spiral->arg, M_PI/snaps);
+		// its fractional part after the whole turns are subtracted
+		double arg_r = arg_1 - sp_round (arg_1, 2.0*M_PI);
+
+		// arg of the mouse point relative to spiral center
+		double mouse_angle = atan2(dy, dx);
+		if (mouse_angle < 0)
+			mouse_angle += 2*M_PI;
+
+		// snap if ctrl
+		if ( ( state & GDK_CONTROL_MASK ) && snaps ) {
+			mouse_angle = sp_round (mouse_angle, M_PI/snaps);
+		}
+
+		// by how much we want to rotate the outer point
+		double diff = mouse_angle - arg_r;
+		if (diff > M_PI) 
+			diff -= 2*M_PI;
+		else if (diff < -M_PI)
+			diff += 2*M_PI;
+
+		// calculate the new rad;
+		// the value of t corresponding to the angle arg_1 + diff:
+		double t_temp = ((arg_1 + diff) - spiral->arg)/(2*M_PI*spiral->revo);
+		// the rad at that t:
+		double rad_new = 0;
+		if (t_temp > spiral->t0)
+			sp_spiral_get_polar (spiral, t_temp, &rad_new, NULL);
+
+		// change the revo (converting diff from radians to the number of turns)
+		spiral->revo += diff/(2*M_PI);
+		if (spiral->revo < 1e-3)
+			spiral->revo = 1e-3;
+
+		// if alt not pressed and the values are sane, change the rad
+		if (!(state & GDK_MOD1_MASK) && rad_new > 1e-3 && rad_new/spiral->rad < 2) {
+			// adjust t0 too so that the inner point stays unmoved
+			spiral->t0 = (spiral->t0 * spiral->rad) / rad_new;
+			spiral->rad = rad_new;
+		}
 	}
 
 	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -586,15 +642,29 @@ static NR::Point sp_spiral_outer_get (SPItem *item)
 	return sp_spiral_get_xy (spiral, 1.0);
 }
 
+static void
+sp_spiral_inner_click (SPItem *item, guint state)
+{
+	SPSpiral *spiral = SP_SPIRAL (item);
+
+	if (state & GDK_MOD1_MASK) {
+		spiral->exp = 1;
+		((SPObject *)spiral)->updateRepr();
+	} else if (state & GDK_SHIFT_MASK) {
+		spiral->t0 = 0;
+		((SPObject *)spiral)->updateRepr();
+	}
+}
+
 static SPKnotHolder *
 sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
-	sp_knot_holder_add (knot_holder, sp_spiral_inner_set, sp_spiral_inner_get, NULL,
-					_("Position the <b>inner end</b> of the spiral; with <b>Ctrl</b> to snap angle"));
+	sp_knot_holder_add (knot_holder, sp_spiral_inner_set, sp_spiral_inner_get, sp_spiral_inner_click,
+					_("Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to converge/diverge"));
 	sp_knot_holder_add (knot_holder, sp_spiral_outer_set, sp_spiral_outer_get, NULL,
-					_("Position the <b>outer end</b> of the spiral; with <b>Ctrl</b> to snap angle"));
+					_("Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to scale/rotate"));
 
 	sp_pat_knot_holder (item, knot_holder);
 

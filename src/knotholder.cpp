@@ -140,6 +140,23 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 /**
  * \param p In desktop coordinates.
  */
+
+static void
+knotholder_update_knots (SPKnotHolder *knot_holder, SPItem *item)
+{
+	NR::Matrix const i2d(sp_item_i2d_affine(item));
+
+	for (GSList *el = knot_holder->entity; el; el = el->next) {
+		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
+		GObject *kob = G_OBJECT (e->knot);
+
+		NR::Point dp( e->knot_get(item) * i2d );
+		g_signal_handler_block (kob, e->handler_id);
+		sp_knot_set_position (e->knot, &dp, SP_KNOT_STATE_NORMAL);
+		g_signal_handler_unblock (kob, e->handler_id);
+	}
+}
+
 static void
 knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 {
@@ -156,6 +173,11 @@ knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 	}
 
 	sp_shape_set_shape (SP_SHAPE (item));
+
+	knotholder_update_knots (knot_holder, item);
+
+	// for drag, this is done by ungrabbed_handler, but for click we must do it here
+	sp_document_done (SP_OBJECT_DOCUMENT (knot_holder->item)); 
 }
 
 static void
@@ -177,17 +199,7 @@ knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data)
 
 	sp_shape_set_shape (SP_SHAPE (item));
 
-	NR::Matrix const i2d(sp_item_i2d_affine(item));
-
-	for (GSList *el = knot_holder->entity; el; el = el->next) {
-		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
-		GObject *kob = G_OBJECT (e->knot);
-
-		NR::Point dp( e->knot_get(item) * i2d );
-		g_signal_handler_block (kob, e->handler_id);
-		sp_knot_set_position (e->knot, &dp, SP_KNOT_STATE_NORMAL);
-		g_signal_handler_unblock (kob, e->handler_id);
-	}
+	knotholder_update_knots (knot_holder, item);
 }
 
 static void

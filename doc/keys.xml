@@ -775,12 +775,23 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Editing</title>
 <mouse><key><left-click/></key> <action>click a spiral to select</action></mouse>
-<mouse><key><left-drag/></key> <action>drag a handle to vary the spiral shape</action></mouse>
-<note>Dragging internal handle "unrolls" the spiral from inside. Dragging the external handle adjusts spiral size.</note>
+
+<mouse><key><left-drag/></key> <action>roll/unroll from inside (inner handle)</action></mouse>
+<note>Dragging the inner handle adjusts the "inner radius" parameter.</note>
+<mouse><key><alt/><left-drag/></key> <action>converge/diverge (inner handle)</action></mouse>
+<mouse><key><alt/><left-click/></key> <action>reset divergence (inner handle)</action></mouse>
+<note>Vertical Alt+drag of the inner handle adjusts the "divergence" parameter, Alt+click resets it to 1.</note>
+<mouse><key><shift/><left-click/></key> <action>zero inner radius (inner handle)</action></mouse>
+<note>Shift+click on inner handle makes the spiral start from the center.</note>
+
+<mouse><key><left-drag/></key> <action>roll/unroll from outside (outer handle)</action></mouse>
+<note>Dragging the outer handle adjusts the "turns" parameter. Use Shift+Alt+drag to roll/unroll without changing radius.</note>
+<mouse><key><shift/><left-drag/></key> <action>scale/rotate (outer handle)</action></mouse>
+<note>Use Shift+Alt to rotate only (locks the radius of the spiral).</note>
+
 <mouse><key><ctrl/><left-drag/></key> <action>snap handles to angle steps</action></mouse>
-<note>The default angle step is 15 degrees.</note>
-<mouse><key><alt/><left-drag/></key> <action>lock spiral radius</action></mouse>
-<note>This has effect when dragging the outer handle of the spiral.</note>
+<note>The default angle step is 15 degrees. This works for both handles.</note>
+
 <keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
 </section>
