@@ -1,0 +1,7 @@
+Sun Apr 11 00:51:50 PDT 2004
+
+The icons in this folder are in transition. The general idea is that all XPMs are moving to SVGs to better support SVG use within our SVG editor, Inkscape.
+
+Thus, the XPMs need to be placed into icons.svg and the XPMs should be removed, or moved into some compressed historical archive.
+
+The only graphics that will be kept as XPMs will be the cursor icons. (REJON: I"m actually in favor of trying to convert these to XPMs as well)
