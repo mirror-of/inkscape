@@ -146,7 +146,6 @@ static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 static GtkWidget *
 sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 {
-	//char c[256];
 	SPIcon *icon;
 	guchar *pixels;
 
@@ -154,7 +153,7 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
 	icon->size = CLAMP (size, 1, 128);
-	//g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
+        //g_warning ("loading '%s' (%d:%d)", name, icon->size, scale);
 	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
 	if (pixels) {
@@ -174,7 +173,10 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 			pixels += stride;
 		}
 	}
-	/* we should do something useful if we can't load the image */
+	else {
+	    /* we should do something more useful if we can't load the image */
+            g_warning ("failed to load icon '%s'", name);
+	}
 
 	return (GtkWidget *) icon;
 }

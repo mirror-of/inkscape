@@ -37,12 +37,12 @@ static struct StockIcon
 
 } const stock_icons[] = {
     /*stroke style */
-    {INKSCAPE_STOCK_JOIN_MITER,                    "join_miter.xpm"          },
-    {INKSCAPE_STOCK_JOIN_ROUND,                    "join_round.xpm"          },
-    {INKSCAPE_STOCK_JOIN_BEVEL,                    "join_bevel.xpm"          },
-    {INKSCAPE_STOCK_CAP_BUTT,                      "cap_butt.xpm"            },
-    {INKSCAPE_STOCK_CAP_ROUND,                     "cap_round.xpm"           },
-    {INKSCAPE_STOCK_CAP_SQUARE,                    "cap_square.xpm"          },
+  //{INKSCAPE_STOCK_JOIN_MITER,                    "join_miter.xpm"          },
+  //{INKSCAPE_STOCK_JOIN_ROUND,                    "join_round.xpm"          },
+  //{INKSCAPE_STOCK_JOIN_BEVEL,                    "join_bevel.xpm"          },
+  //{INKSCAPE_STOCK_CAP_BUTT,                      "cap_butt.xpm"            },
+  //{INKSCAPE_STOCK_CAP_ROUND,                     "cap_round.xpm"           },
+  //{INKSCAPE_STOCK_CAP_SQUARE,                    "cap_square.xpm"          },
   //{INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_NONE, "marker_none_start.xpm" },
   //{INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW, "marker_triangle_start.xpm" },
   //{INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, "marker_arrow_start.xpm" },
@@ -54,12 +54,12 @@ static struct StockIcon
   //{INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, "marker_arrow_end.xpm" },
 
     /*object properties */
-    {INKSCAPE_STOCK_ROTATE_LEFT,                   "rotate_left.xpm"         },
-    {INKSCAPE_STOCK_SCALE_HOR,                     "scale_hor.xpm"           },
-    {INKSCAPE_STOCK_SCALE_VER,                     "scale_ver.xpm"           },
-    {INKSCAPE_STOCK_ARROWS_HOR,                    "arrows_hor.xpm"          },
-    {INKSCAPE_STOCK_ARROWS_VER,                    "arrows_ver.xpm"          },
-    {INKSCAPE_STOCK_DIMENSION_HOR,                 "dimension_hor.xpm"       },
+  //{INKSCAPE_STOCK_ROTATE_LEFT,                   "rotate_left.xpm"         },
+  //{INKSCAPE_STOCK_SCALE_HOR,                     "scale_hor.xpm"           },
+  //{INKSCAPE_STOCK_SCALE_VER,                     "scale_ver.xpm"           },
+  //{INKSCAPE_STOCK_ARROWS_HOR,                    "arrows_hor.xpm"          },
+  //{INKSCAPE_STOCK_ARROWS_VER,                    "arrows_ver.xpm"          },
+  //{INKSCAPE_STOCK_DIMENSION_HOR,                 "dimension_hor.xpm"       },
 
     {INKSCAPE_STOCK_WRITING_MODE_LR,               "writing_mode_lr.xpm"     },
     {INKSCAPE_STOCK_WRITING_MODE_TB,               "writing_mode_tb.xpm"     },
@@ -72,12 +72,12 @@ static struct StockIcon
     {INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE,          "delete_xml_attribute.xpm"},
     {INKSCAPE_STOCK_SET,                           "set.xpm"                 },
 
-    {INKSCAPE_STOCK_FILL_NONE,                     "fill_none.xpm"           },
-    {INKSCAPE_STOCK_FILL_SOLID,                    "fill_solid.xpm"          },
-    {INKSCAPE_STOCK_FILL_GRADIENT,                 "fill_gradient.xpm"       },
-    {INKSCAPE_STOCK_FILL_RADIAL,                   "fill_radial.xpm"         },
-    {INKSCAPE_STOCK_FILL_PATTERN,                  "fill_pattern.xpm"        },
-    {INKSCAPE_STOCK_FILL_FRACTAL,                  "fill_fractal.xpm"        },
+  //{INKSCAPE_STOCK_FILL_NONE,                     "fill_none.xpm"           },
+  //{INKSCAPE_STOCK_FILL_SOLID,                    "fill_solid.xpm"          },
+  //{INKSCAPE_STOCK_FILL_GRADIENT,                 "fill_gradient.xpm"       },
+  //{INKSCAPE_STOCK_FILL_RADIAL,                   "fill_radial.xpm"         },
+  //{INKSCAPE_STOCK_FILL_PATTERN,                  "fill_pattern.xpm"        },
+  //{INKSCAPE_STOCK_FILL_FRACTAL,                  "fill_fractal.xpm"        },
 
   //{INKSCAPE_STOCK_GUIDE_DIALOG,                  "guide_dialog.xpm"        },
 
@@ -131,9 +131,9 @@ static struct StockIcon
   //{INKSCAPE_STOCK_OBJECT_ALIGN,                  "object_align.xpm"        },
   //{INKSCAPE_STOCK_OBJECT_FONT,                   "object_font.xpm"         },
 
-    {INKSCAPE_STOCK_PROPERTIES_FILL_PAGE,          "properties_fill.xpm"     },
-    {INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE,  "properties_stroke.xpm"   },
-    {INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE,        "properties_stroke.xpm"   },
+  //{INKSCAPE_STOCK_PROPERTIES_FILL_PAGE,          "properties_fill.xpm"     },
+  //{INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE,  "properties_stroke.xpm"   },
+  //{INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE,        "properties_stroke.xpm"   },
 
 };
 

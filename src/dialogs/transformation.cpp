@@ -33,6 +33,7 @@
 #include "helper/window.h"
 #include "libnr/nr-scale.h"
 #include "libnr/nr-scale-ops.h"
+#include "widgets/icon.h"
 #include "macros.h"
 #include "inkscape.h"
 #include "document.h"
@@ -479,8 +480,8 @@ sp_transformation_page_move_new(GObject *obj)
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit(desktop));
 
     /* Horizontal */
-    GtkWidget *img = gtk_image_new_from_stock(INKSCAPE_STOCK_ARROWS_HOR,
-                                              GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget *img = sp_icon_new( SP_ICON_SIZE_NOTEBOOK,
+                                  INKSCAPE_STOCK_ARROWS_HOR );
     gtk_table_attach( GTK_TABLE(tbl), img, 0, 1, 0, 1,
                       (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
     GtkAdjustment *adj = (GtkAdjustment *) gtk_adjustment_new(0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
@@ -495,8 +496,8 @@ sp_transformation_page_move_new(GObject *obj)
                       0, 0 );
 
     /* Vertical */
-    img = gtk_image_new_from_stock( INKSCAPE_STOCK_ARROWS_VER,
-                                    GTK_ICON_SIZE_LARGE_TOOLBAR );
+    img = sp_icon_new( SP_ICON_SIZE_NOTEBOOK,
+                       INKSCAPE_STOCK_ARROWS_VER );
     gtk_table_attach( GTK_TABLE(tbl), img, 0, 1, 1, 2,
                       (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
     adj = (GtkAdjustment *) gtk_adjustment_new(0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
@@ -678,8 +679,8 @@ sp_transformation_page_scale_new(GObject *obj)
     g_signal_connect( G_OBJECT(us), "set_unit",
                       G_CALLBACK(sp_transformation_scale_set_unit), obj );
     /* Horizontal */
-    GtkWidget *img = gtk_image_new_from_stock( INKSCAPE_STOCK_SCALE_HOR,
-                                               GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget *img = sp_icon_new( SP_ICON_SIZE_NOTEBOOK,
+                                  INKSCAPE_STOCK_SCALE_HOR );
     gtk_table_attach( GTK_TABLE(tbl), img, 0, 1, 0, 1,
                       (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
     GtkAdjustment *adj = (GtkAdjustment *) gtk_adjustment_new(0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
@@ -692,8 +693,8 @@ sp_transformation_page_scale_new(GObject *obj)
                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
     /* Vertical */
-    img = gtk_image_new_from_stock( INKSCAPE_STOCK_SCALE_VER,
-                                    GTK_ICON_SIZE_LARGE_TOOLBAR );
+    img = sp_icon_new( SP_ICON_SIZE_NOTEBOOK,
+                       INKSCAPE_STOCK_SCALE_VER );
     gtk_table_attach( GTK_TABLE(tbl), img, 0, 1, 1, 2,
                       (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
     adj = (GtkAdjustment *) gtk_adjustment_new(0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
@@ -807,8 +808,8 @@ sp_transformation_page_rotate_new(GObject *obj)
     gtk_table_set_col_spacings(GTK_TABLE(tbl), 4);
     gtk_box_pack_start(GTK_BOX(vb), tbl, FALSE, FALSE, 0);
 
-    GtkWidget *img = gtk_image_new_from_stock( INKSCAPE_STOCK_ROTATE_LEFT,
-                                               GTK_ICON_SIZE_LARGE_TOOLBAR );
+    GtkWidget *img = sp_icon_new( SP_ICON_SIZE_NOTEBOOK,
+                                  INKSCAPE_STOCK_ROTATE_LEFT );
     gtk_table_attach( GTK_TABLE(tbl), img, 0, 1, 0, 1,
                       (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
     GtkAdjustment *adj = (GtkAdjustment *) gtk_adjustment_new(0.0, -1e6, 1e6, 0.01, 0.1, 0.1);

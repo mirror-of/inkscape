@@ -773,11 +773,11 @@ static SPObject *ink_extract_marker_name(gchar const *n);
  * when reimplementing this with Gtkmm.
  */
 static GtkWidget *
-sp_stroke_radio_button(GtkWidget *tb, char const *n, char const *xpm,
+sp_stroke_radio_button(GtkWidget *tb, char const *icon,
                        GtkWidget *hb, GtkWidget *spw,
                        gchar const *key, gchar const *data)
 {
-    g_assert(xpm != NULL);
+    g_assert(icon != NULL);
     g_assert(hb  != NULL);
     g_assert(spw != NULL);
 
@@ -790,12 +790,12 @@ sp_stroke_radio_button(GtkWidget *tb, char const *n, char const *xpm,
     gtk_widget_show(tb);
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(tb), FALSE);
     gtk_box_pack_start(GTK_BOX(hb), tb, FALSE, FALSE, 0);
-    gtk_object_set_data(GTK_OBJECT(spw), n, tb);
+    gtk_object_set_data(GTK_OBJECT(spw), icon, tb);
     gtk_object_set_data(GTK_OBJECT(tb), key, (gpointer*)data);
     gtk_signal_connect(GTK_OBJECT(tb), "toggled",
                        GTK_SIGNAL_FUNC(sp_stroke_style_any_toggled),
                        spw);
-    GtkWidget *px = gtk_image_new_from_stock(n, GTK_ICON_SIZE_LARGE_TOOLBAR);
+    GtkWidget *px = sp_icon_new(SP_ICON_SIZE_NOTEBOOK, icon);
     g_assert(px != NULL);
     gtk_widget_show(px);
     gtk_container_add(GTK_CONTAINER(tb), px);
@@ -1394,30 +1394,24 @@ sp_stroke_style_line_widget_new(void)
 
     tb = NULL;
 
-    char *path = g_build_filename(INKSCAPE_PIXMAPDIR, "/join_miter.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_MITER,
-                                path, hb, spw, "join", "miter");
-    g_free(path);
+                                hb, spw, "join", "miter");
 
     // TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Miter join"), NULL);
 
-    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/join_round.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_ROUND,
-                                path, hb, spw, "join", "round");
-    g_free(path);
+                                hb, spw, "join", "round");
 
     // TRANSLATORS: Round join: joining lines with a rounded corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Round join"), NULL);
 
-    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/join_bevel.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
-                                path, hb, spw, "join", "bevel");
-    g_free(path);
+                                hb, spw, "join", "bevel");
 
     // TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
@@ -1460,28 +1454,22 @@ sp_stroke_style_line_widget_new(void)
 
     tb = NULL;
 
-    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/cap_butt.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
-                                path, hb, spw, "cap", "butt");
-    g_free(path);
+                                hb, spw, "cap", "butt");
 
     // TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
     //  of the line; the ends of the line are square
     gtk_tooltips_set_tip(tt, tb, _("Butt cap"), NULL);
 
-    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/cap_round.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_ROUND,
-                                path, hb, spw, "cap", "round");
-    g_free(path);
+                                hb, spw, "cap", "round");
 
     // TRANSLATORS: Round cap: the line shape extends beyond the end point of the
     //  line; the ends of the line are rounded
     gtk_tooltips_set_tip(tt, tb, _("Round cap"), NULL);
 
-    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/cap_square.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_SQUARE,
-                                path, hb, spw, "cap", "square");
-    g_free(path);
+                                hb, spw, "cap", "square");
 
     // TRANSLATORS: Square cap: the line shape extends beyond the end point of the
     //  line; the ends of the line are square

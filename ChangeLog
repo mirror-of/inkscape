@@ -1,3 +1,12 @@
+2004-01-14  Kees Cook  <kees@outflux.net>
+
+    * share/icons/Makefile.am, share/icons/icons.svg, src/inkscape-stock.cpp,
+	src/inkscape-stock.h, src/verbs.cpp, src/dialogs/stroke-style.cpp,
+	src/dialogs/transformation.cpp, src/widgets/icon.cpp, src/widgets/icon.h,
+	src/widgets/paint-selector.cpp:
+	Fixed up code and replaced pixmaps with icons from myself and
+	Andreas Nilsson.
+
 2004-01-11  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-io.cpp: promote non-namespaced SVG documents into SVG

@@ -1747,7 +1747,7 @@ Verb * Verb::_base_verbs[] = {
     new ContextVerb(SP_VERB_CONTEXT_PEN, "DrawPen", N_("Pen"),
         N_("Draw Bezier curves and straight lines"), "draw_pen"),
     new ContextVerb(SP_VERB_CONTEXT_CALLIGRAPHIC, "DrawCalligrphic", N_("Calligraphy"),
-        N_("Draw calligraphic lines"), "draw_dynahand"),
+        N_("Draw calligraphic lines"), "draw_calligraphic"),
     new ContextVerb(SP_VERB_CONTEXT_TEXT, "DrawText", N_("Text"),
         N_("Create and edit text objects"), "draw_text"),
     new ContextVerb(SP_VERB_CONTEXT_ZOOM, "DrawZoom", N_("Zoom"),

@@ -46,13 +46,13 @@
 //#define INKSCAPE_STOCK_MARKER_QTY            (3)
 
 /*object properties*/
-#define INKSCAPE_STOCK_ROTATE_LEFT           "rotate_left"
-#define INKSCAPE_STOCK_SCALE_HOR             "scale_hor"
-#define INKSCAPE_STOCK_SCALE_VER             "scale_ver"
+#define INKSCAPE_STOCK_ROTATE_LEFT           "transform_rotate"
+#define INKSCAPE_STOCK_SCALE_HOR             "transform_scale_hor"
+#define INKSCAPE_STOCK_SCALE_VER             "transform_scale_ver"
 #define INKSCAPE_STOCK_ARROWS_HOR            "arrows_hor"
 #define INKSCAPE_STOCK_ARROWS_VER            "arrows_ver"
-#define INKSCAPE_STOCK_DIMENSION_HOR         "dimension_hor"
-#define INKSCAPE_STOCK_DIMENSION_VER         "dimension_hor"
+//#define INKSCAPE_STOCK_DIMENSION_HOR         "dimension_hor"
+//#define INKSCAPE_STOCK_DIMENSION_VER         "dimension_ver"
 
 #define INKSCAPE_STOCK_WRITING_MODE_LR       "writing_mode_lr"
 #define INKSCAPE_STOCK_WRITING_MODE_TB       "writing_mode_tb"

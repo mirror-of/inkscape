@@ -76,7 +76,7 @@ public :
 
 
   const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid) {
-    ID id (oid, 20, 20);
+    ID id (oid, SP_ICON_SIZE_NOTEBOOK, SP_ICON_SIZE_NOTEBOOK);
     return getIcon(id);
   }
   const Glib::RefPtr<Gdk::Pixbuf> getIcon(const ID &id);

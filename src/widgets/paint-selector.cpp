@@ -214,7 +214,7 @@ sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, 
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 	gtk_object_set_data (GTK_OBJECT (b), "mode", GUINT_TO_POINTER (mode));
 
-	w = sp_icon_new (16, pixmap);
+	w = sp_icon_new (SP_ICON_SIZE_BUTTON, pixmap);
 	gtk_widget_show (w);
 	gtk_container_add (GTK_CONTAINER (b), w);
 
