@@ -634,8 +634,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"), N_("Select all objects or all nodes"), NULL},
 	{SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"), N_("Deselect any selected objects or nodes"), NULL},
 	/* Selection */
-	{SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Bring to _Front"), N_("Raise selection to top"), "selection_top"},
-	{SP_VERB_SELECTION_TO_BACK, "SelectionToBack", N_("Send to _Back"), N_("Lower selection to bottom"), "selection_bot"},
+	{SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to Top"), N_("Raise selection to top"), "selection_top"},
+	{SP_VERB_SELECTION_TO_BACK, "SelectionToBack", N_("Lower to Bottom"), N_("Lower selection to bottom"), "selection_bot"},
 	{SP_VERB_SELECTION_RAISE, "SelectionRaise", N_("_Raise"), N_("Raise selection one step"), "selection_up"},
 	{SP_VERB_SELECTION_LOWER, "SelectionLower", N_("_Lower"), N_("Lower selection one step"), "selection_down"},
 	{SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("_Group"), N_("Group selected objects"), "selection_group"},
