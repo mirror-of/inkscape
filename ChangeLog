@@ -1,5 +1,12 @@
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/FontInstance.h, src/libnrtype/font-glyph.h,
+	  src/libnrtype/font-instance.h, src/libnrtype/font-style.h:
+	  Move font_glyph, font_instance, and font_style definitions from
+	  FontInstance.h into new files font-glyph.h, font-instance.h,
+	  font-style.h.
+	* src/libnrtype/Makefile_insert: Add the new files to SOURCES.
+
 	* src/libnrtype/nrtype-forward.h: New file.
 	* src/libnrtype/Makefile_insert: Add it to SOURCES.
 	* src/libnrtype/FontFactory.h, src/libnrtype/TextWrapper.h:
