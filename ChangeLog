@@ -1,3 +1,7 @@
+2004-08-18  Bryce Harrington <bryce@bryceharrington.com>
+
+	* autogen.sh:  Fixing the 'missing ltmain.sh' bug
+
 2004-08-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-star.cpp: Use cast to guint32 instead of using modulo 2**32.
