@@ -296,13 +296,22 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
     if (style->stroke.type != SP_PAINT_TYPE_NONE) {
       float width, scale;
       scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
+      width = MAX (0.125, style->stroke_width.computed * scale);
       if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
-        width = MAX (0.125, style->stroke_width.computed * scale);
         bbox.x0-=width;
         bbox.x1+=width;
         bbox.y0-=width;
         bbox.y1+=width;
       }      
+      // those pesky miters, now
+      float miterMax=width*shape->style->stroke_miterlimit.value;
+      if ( miterMax > 0.01 ) {
+        // grunt mode. we should compute the various miters instead (one for each point on the curve)
+        bbox.x0-=miterMax;
+        bbox.x1+=miterMax;
+        bbox.y0-=miterMax;
+        bbox.y1+=miterMax;        
+      }
     }
   } else {
   }
