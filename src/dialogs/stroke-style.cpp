@@ -806,14 +806,16 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
 
     sp_document_ensure_up_to_date(sandbox);
 
-//    FILE *fp = fopen (g_strconcat(mname, ".svg", NULL), "w");
-//    sp_repr_save_stream (sp_document_repr_doc (sandbox), fp);
+// Uncomment this to get the sandbox documents saved (useful for debugging)
+    //FILE *fp = fopen (g_strconcat(mname, ".svg", NULL), "w");
+    //sp_repr_save_stream (sp_document_repr_doc (sandbox), fp);
+    //fclose (fp);
 
     /* Create new arena */
     static NRArena *arena = NRArena::create();
     /* Create ArenaItem and set transform */
     unsigned int visionkey = sp_item_display_key_new(1);
-    static NRArenaItem *root = sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), arena, visionkey, SP_ITEM_SHOW_PRINT );
+    NRArenaItem *root = sp_item_invoke_show( SP_ITEM(SP_DOCUMENT_ROOT (sandbox)), arena, visionkey, SP_ITEM_SHOW_PRINT );
 
     // object to render; note that the id is the same as that of the menu we're building
     SPObject *object = sp_document_lookup_id (sandbox, menu_id);
