@@ -15,7 +15,15 @@
 
 #include <gtk/gtkobject.h>
 
+#ifdef __cplusplus
+extern "C"
+#endif
+
 void sp_marshal_NONE__DOUBLE_DOUBLE (GtkObject *object, GtkSignalFunc func, gpointer func_data, GtkArg *args);
 void sp_marshal_NONE__STRING_BOOL (GtkObject *object, GtkSignalFunc func, gpointer func_data, GtkArg *args);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif
