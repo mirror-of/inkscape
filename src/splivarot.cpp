@@ -955,264 +955,254 @@ sp_selected_path_create_offset_object (int expand,bool updating)
   g_free (style);
 }
 
+
+
 void
 sp_selected_path_do_offset (bool expand)
 {
-  SPSelection *selection;
-  SPRepr *repr;
-  SPItem *item;
-  SPCurve *curve;
-  gchar *style, *str;
-  SPDesktop *desktop;
-  float o_width, o_miter;
-  JoinType o_join;
-  ButtType o_butt;
-  NRMatrix i2root;
-  
-  curve = NULL;
-  
-  desktop = SP_ACTIVE_DESKTOP;
-  if (!SP_IS_DESKTOP (desktop))
-    return;
-  
-  selection = SP_DT_SELECTION (desktop);
-  
-  item = sp_selection_item (selection);
-  
-  if (item == NULL || (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))) {
-    sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot inset/outset."));
-    return;
-  }
-  if (SP_IS_SHAPE (item))
-  {
-    curve = sp_shape_get_curve (SP_SHAPE (item));
-    if (curve == NULL)
-      return;
-  }
-  if (SP_IS_TEXT (item))
-  {
-    curve = sp_text_normalized_bpath (SP_TEXT (item));
-    if (curve == NULL)
-      return;
-  }
-  
-  /*  {
-    SPCSSAttr *css;
-  const gchar *val;
-  
-  css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-  val = sp_repr_css_property (css, "stroke", NULL);
-  
-  if (val == NULL || strcmp (val, "none") == 0)
-  {
-    // pas de stroke pas de chocolat
-	  sp_view_set_statusf_error(SP_VIEW(desktop),"the offset/inset operation uses the stroke width as offset value: give a stroke to the object");
-    sp_curve_unref (curve);
-    return;
-  }
-  }*/
-  
-  sp_item_i2root_affine (item, &i2root);
-  style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-  
-  {
-    SPStyle *i_style = SP_OBJECT (item)->style;
-    int jointype, captype;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP (desktop))
+		return;
+
+	SPSelection *selection = SP_DT_SELECTION (desktop);
+
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to inset/outset."));
+		return;
+	}
+
+	bool did = false;
+
+	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+			 items != NULL;
+			 items = items->next) {
+
+		SPItem *item = (SPItem *) items->data;
+
+		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
+			continue;
+
+		SPCurve *curve = NULL;
+		if (SP_IS_SHAPE (item)) {
+			curve = sp_shape_get_curve (SP_SHAPE (item));
+			if (curve == NULL)
+				continue;
+		}
+		if (SP_IS_TEXT (item)) {
+			curve = sp_text_normalized_bpath (SP_TEXT (item));
+			if (curve == NULL)
+				continue;
+		}
+
+		NRMatrix i2root;
+		sp_item_i2root_affine (item, &i2root);
+		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
+
+		float o_width, o_miter;
+		JoinType o_join;
+		ButtType o_butt;
+     
+		{
+			SPStyle *i_style = SP_OBJECT (item)->style;
+			int jointype, captype;
+
+			o_width = 1.0;
+			o_miter = 4 * o_width;
+			o_join = join_straight;
+			o_butt = butt_straight;
+
+			jointype = i_style->stroke_linejoin.value;
+			captype = i_style->stroke_linecap.value;
+			o_width = i_style->stroke_width.computed;
+
+			switch (jointype) {
+			case SP_STROKE_LINEJOIN_MITER:
+				o_join = join_pointy;
+				break;
+			case SP_STROKE_LINEJOIN_ROUND:
+				o_join = join_round;
+				break;
+			default:
+				o_join = join_straight;
+				break;
+			}
+
+			switch (captype) {
+			case SP_STROKE_LINECAP_SQUARE:
+				o_butt = butt_square;
+				break;
+			case SP_STROKE_LINECAP_ROUND:
+				o_butt = butt_round;
+				break;
+			default:
+				o_butt = butt_straight;
+				break;
+			}
+
+			// recuperer l'offset dans les preferences
+			{
+				double prefOffset = 1.0;
+				prefOffset = prefs_get_double_attribute ("options.defaultoffsetwidth", "value", prefOffset);
+				o_width = prefOffset;
+			}
+
+			if (o_width < 0.1)
+				o_width = 0.1;
+			o_miter = 4 * o_width;
+		}
+
+		Path *orig = Path_for_item (item, true);
+		if (orig == NULL) {
+			g_free (style);
+			sp_curve_unref (curve);
+			continue;
+		}
+
+		Path *res = new Path;
+		res->SetBackData (false);
+
+		{
+			SPCSSAttr *css;
+			const gchar *val;
+
+			Shape *theShape = new Shape;
+			Shape *theRes = new Shape;
+
+			orig->ConvertWithBackData (1.0);
+			orig->Fill (theShape, 0);
+
+			css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+			val = sp_repr_css_property (css, "fill-rule", NULL);
+			if (val && strcmp (val, "nonzero") == 0)
+				{
+					theRes->ConvertToShape (theShape, fill_nonZero);
+				}
+			else if (val && strcmp (val, "evenodd") == 0)
+				{
+					theRes->ConvertToShape (theShape, fill_oddEven);
+				}
+			else
+				{
+					theRes->ConvertToShape (theShape, fill_nonZero);
+				}
+
+			Path *originaux[1];
+			originaux[0] = orig;
+			theRes->ConvertToForme (res, 1, originaux);
+
+			// et maintenant: offset
+			// methode inexacte
+			/*      if (expand)
+							{
+							res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
+							}
+							else
+							{
+							res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
+							}
     
-    o_width = 1.0;
-    o_miter = 4 * o_width;
-    o_join = join_straight;
-    o_butt = butt_straight;
+							orig->ConvertWithBackData (1.0);
+							orig->Fill (theShape, 0);
+							theRes->ConvertToShape (theShape, fill_positive);
+							originaux[0] = orig;
+							theRes->ConvertToForme (res, 1, originaux);
     
-    jointype = i_style->stroke_linejoin.value;
-    captype = i_style->stroke_linecap.value;
-    o_width = i_style->stroke_width.computed;
-    if (jointype == SP_STROKE_LINEJOIN_MITER)
-    {
-      o_join = join_pointy;
-    }
-    else if (jointype == SP_STROKE_LINEJOIN_ROUND)
-    {
-      o_join = join_round;
-    }
-    else
-    {
-      o_join = join_straight;
-    }
-    if (captype == SP_STROKE_LINECAP_SQUARE)
-    {
-      o_butt = butt_square;
-    }
-    else if (captype == SP_STROKE_LINECAP_ROUND)
-    {
-      o_butt = butt_round;
-    }
-    else
-    {
-      o_butt = butt_straight;
-    }
+							if (o_width >= 0.5)
+							{
+							//     res->Coalesce (1.0);
+							res->ConvertEvenLines (1.0);
+							res->Simplify (1.0);
+							}
+							else
+							{
+							//      res->Coalesce (o_width);
+							res->ConvertEvenLines (1.0*o_width);
+							res->Simplify (1.0 * o_width);
+							}*/
+			// methode par makeoffset
+			if (expand)
+				{
+					theShape->MakeOffset(theRes, o_width, o_join, o_miter);
+				}
+			else
+				{
+					theShape->MakeOffset(theRes, -o_width, o_join, o_miter);
+				}
+			theRes->ConvertToShape(theShape,fill_positive);
+
+			res->Reset();
+			theRes->ConvertToForme (res);
     
-    // recuperer l'offset dans les preferences
-    {
-      double    prefOffset=1.0;
-      prefOffset=prefs_get_double_attribute("options.defaultoffsetwidth","value",prefOffset);
-      o_width=prefOffset;
-    }
-    
-    if (o_width < 0.1)
-      o_width = 0.1;
-    o_miter = 4 * o_width;
-  }
+			if (o_width >= 1.0)
+				{
+					res->ConvertEvenLines (1.0);
+					res->Simplify (1.0);
+				}
+			else
+				{
+					res->ConvertEvenLines (1.0*o_width);
+					res->Simplify (1.0 * o_width);
+				}
+
+			delete theShape;
+			delete theRes;
+		}
+
+		did = true;
+
+		sp_curve_unref (curve);
+		// remember the position of the item
+		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+		// remember parent
+		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+
+		sp_selection_remove_item (selection, item);
+		sp_repr_unparent (SP_OBJECT_REPR (item));
+
+		if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
+
+			gchar tstr[80];
+
+			tstr[79] = '\0';
+
+			SPRepr *repr = sp_repr_new ("path");
+
+			/*    if (sp_svg_transform_write (tstr, 80, &i2root))
+						{
+						sp_repr_set_attr (repr, "transform", tstr);
+						}
+						else
+						{
+						sp_repr_set_attr (repr, "transform", NULL);
+						}*/
+
+			sp_repr_set_attr (repr, "style", style);
+
+			gchar *str = liv_svg_dump_path (res);
+			sp_repr_set_attr (repr, "d", str);
+			g_free (str);
+
+			// add the new repr to the parent
+			sp_repr_append_child (parent, repr);
+
+			// move to the saved position 
+			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+			sp_selection_add_repr (selection, repr);
+
+			sp_repr_unref (repr);
+		}
+	}
   
-  Path *orig = Path_for_item (item,true);
-  if (orig == NULL)
-  {
-    g_free (style);
-    sp_curve_unref (curve);
-    return;
-  }
-  
-  Path *res = new Path;
-  res->SetBackData (false);
-  
-  {
-    SPCSSAttr *css;
-    const gchar *val;
-    
-    Shape *theShape = new Shape;
-    Shape *theRes = new Shape;
-    
-    orig->ConvertWithBackData (1.0);
-    orig->Fill (theShape, 0);
-    
-    css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-    val = sp_repr_css_property (css, "fill-rule", NULL);
-    if (val && strcmp (val, "nonzero") == 0)
-    {
-      theRes->ConvertToShape (theShape, fill_nonZero);
-    }
-    else if (val && strcmp (val, "evenodd") == 0)
-    {
-      theRes->ConvertToShape (theShape, fill_oddEven);
-    }
-    else
-    {
-      theRes->ConvertToShape (theShape, fill_nonZero);
-    }
-    
-    Path *originaux[1];
-    originaux[0] = orig;
-    theRes->ConvertToForme (res, 1, originaux);
-    
-    // et maintenant: offset
-    // methode inexacte
- /*      if (expand)
-    {
-      res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
-    }
-    else
-    {
-      res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
-    }
-    
-    orig->ConvertWithBackData (1.0);
-    orig->Fill (theShape, 0);
-    theRes->ConvertToShape (theShape, fill_positive);
-    originaux[0] = orig;
-    theRes->ConvertToForme (res, 1, originaux);
-    
-    if (o_width >= 0.5)
-    {
- //     res->Coalesce (1.0);
-      res->ConvertEvenLines (1.0);
-      res->Simplify (1.0);
-    }
-    else
-    {
-//      res->Coalesce (o_width);
-      res->ConvertEvenLines (1.0*o_width);
-      res->Simplify (1.0 * o_width);
-    }*/
-    // methode par makeoffset
-    if (expand)
-    {
-      theShape->MakeOffset(theRes, o_width, o_join, o_miter);
-    }
-    else
-    {
-      theShape->MakeOffset(theRes, -o_width, o_join, o_miter);
-    }
-    theRes->ConvertToShape(theShape,fill_positive);
-    
-    res->Reset();
-    theRes->ConvertToForme (res);
-        
-    if (o_width >= 1.0)
-    {
-      res->ConvertEvenLines (1.0);
-      res->Simplify (1.0);
-    }
-    else
-    {
-      res->ConvertEvenLines (1.0*o_width);
-      res->Simplify (1.0 * o_width);
-    }
-    
-    delete theShape;
-    delete theRes;
-  }
-  
-  sp_curve_unref (curve);
-  sp_repr_unparent (SP_OBJECT_REPR (item));
-  
-  if (res->descr_nb <= 1)
-  {
-    // pas vraiment de points sur le resultat               
-    // donc il ne reste rien
-    sp_document_done (SP_DT_DOCUMENT (desktop));
-    sp_selection_empty (selection);
-    
-    delete res;
-    delete orig;
-    g_free (style);
-    return;
-  }
-  
-  {
-    //              SPCSSAttr *css;
-    //              const gchar *val;
-    gchar tstr[80];
-    
-    tstr[79] = '\0';
-    
-    repr = sp_repr_new ("path");
-/*    if (sp_svg_transform_write (tstr, 80, &i2root))
-    {
-      sp_repr_set_attr (repr, "transform", tstr);
-    }
-    else
-    {
-      sp_repr_set_attr (repr, "transform", NULL);
-    }*/
-    
-    sp_repr_set_attr (repr, "style", style);
-    str = liv_svg_dump_path (res);
-    sp_repr_set_attr (repr, "d", str);
-    g_free (str);
-    item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-    sp_repr_unref (repr);
-    sp_selection_empty (selection);
-    sp_selection_add_item (selection, item);
-    
-  }
-  
-  sp_document_done (SP_DT_DOCUMENT (desktop));
-  
-  delete res;
-  delete orig;
-  
-  g_free (style);
+ 	if (did) {
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+	} else {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("No paths to inset/outset in the selection."));
+		return;
+	} 
 }
+
+
 
 // globals for keeping track of accelerated simplify
 static double prev_time = 0;
