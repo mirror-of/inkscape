@@ -24,8 +24,8 @@
 
 #include <config.h>
 
-#ifdef __FreeBSD__
-#include <floatingpoint.h>
+#ifdef HAVE_FPSETMASK
+#include <ieeefp.h>
 #endif
 #include <string.h>
 #include <locale.h>
@@ -161,7 +161,7 @@ main (int argc, const char **argv)
 	gboolean use_gui;
 	gint result, i;
 
-#ifdef __FreeBSD__
+#ifdef HAVE_FPSETMASK
 	fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
 
@@ -199,7 +199,7 @@ main (int argc, const char **argv)
 		result = sp_main_console (argc, argv);
 	}
 
-#ifdef __FreeBSD__
+#ifdef HAVE_FPSETMASK
 	fpresetsticky(FP_X_DZ|FP_X_INV);
 	fpsetmask(FP_X_DZ|FP_X_INV);
 #endif

@@ -194,16 +194,9 @@ void sp_extension(GtkWidget * widget)
 	/* Close pipe */
 #ifndef WIN32
 	if (pclose(ppipe) == -1) {
-	  if (errno == EINVAL) {
-	    perror("extension.c:  Invalid mode set for pclose\n");
-	  } else if (errno == ECHILD) {
-	    perror("extension.c:  Could not obtain child status for pclose\n");
-	  } else {
-	    perror("extension.c:  Unknown error for pclose\n");
-	  }
-	}
 #else
 	if (_pclose (ppipe) == -1) {
+#endif
 	  if (errno == EINVAL) {
 	    perror("extension.c:  Invalid mode set for pclose\n");
 	  } else if (errno == ECHILD) {
@@ -212,7 +205,6 @@ void sp_extension(GtkWidget * widget)
 	    perror("extension.c:  Unknown error for pclose\n");
 	  }
 	}
-#endif
 
 	/* TODO:  Make a routine like sp_file_open, that can load from popen's output stream */	
 
