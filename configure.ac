@@ -616,7 +616,6 @@ dnl Have to add module makefiles (lauris)
 
 AC_CONFIG_FILES([
 Makefile
-Makefile.mingw.common
 src/Makefile
 src/check-header-compile
 src/dialogs/makefile
@@ -656,7 +655,6 @@ share/screens/Makefile
 share/templates/Makefile
 share/tutorials/Makefile
 inkscape.spec
-inkscape.nsi
 inkview.1
 ])
 

@@ -32,8 +32,6 @@ ifeq ($(BUILD),cross)
 # CROSS COMPILER SETTINGS
 ###########################
 
-DTG := $(shell date +%y%m%d.%H%M)
-
 CC      = i686-pc-mingw32-gcc
 CXX     = i686-pc-mingw32-g++
 AS      = i686-pc-mingw32-as
@@ -59,15 +57,13 @@ GTK=/target
 #Same thing, file system style
 GTKDOS=$(GTK)
 
+DTG := $(shell date +%y%m%d.%H%M)
+
 else
 
 ###########################
 # NATIVE COMPILER SETTINGS
 ###########################
-
-
-# change me!!
-DTG := 20040721
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
@@ -101,9 +97,12 @@ GTKDOS=c:\gtk
 
 MSGFMT = $(GTKDOS)$(S)bin$(S)msgfmt
 
+# change me!!
+DTG := 20040721
+
 endif
 
-VERSION_NR = @VERSION@
+VERSION_NR = 0.41+cvs
 VERSION = \"$(VERSION_NR)-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a

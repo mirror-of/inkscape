@@ -30,7 +30,7 @@ Inkscape more powerful and successful. You probably already have an idea
 of something you'd like to work on. If not, here are just a few ways you
 can help: 
 
-   * Pick a bug, fix it, and send in a patch
+   * Pick a bug, fix it, and send in a patch ("diff -uNrp" or "cvs diff -up")
    * Choose a feature you want to see developed, and make it
    * If you speak a language in addition to English, work on your
      language's i18n file in the po/ directory
