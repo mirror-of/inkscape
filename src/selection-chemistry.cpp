@@ -744,7 +744,7 @@ sp_selection_remove_transform (void)
 		l = l->next;
 	}
 
-	sp_selection_changed (selection);
+	//	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
@@ -855,7 +855,7 @@ sp_selection_rotate_90 (void)
 		sp_item_rotate_rel (item,-90);
 	}
 
-	sp_selection_changed (selection);
+	//	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
@@ -874,8 +874,11 @@ sp_selection_rotate (SPSelection *selection, gdouble angle)
 
 	sp_selection_rotate_relative (selection, &center, angle);
 
-	sp_selection_changed (selection);
-	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+	//	sp_selection_changed (selection);
+	if (angle > 0)
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
+	else
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:cw");
 }
 
 /**
@@ -901,8 +904,12 @@ sp_selection_rotate_screen (SPSelection *selection,  gdouble angle)
 
 	sp_selection_rotate_relative (selection, &center, zangle);
 
-	sp_selection_changed (selection);
-	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+	//	sp_selection_changed (selection);
+	if (angle > 0)
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
+	else
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:cw");
+
 }
 
 void
@@ -925,8 +932,12 @@ sp_selection_scale (SPSelection *selection, gdouble grow)
 
 	sp_selection_scale_relative (selection, &center, times, times);
 
-	sp_selection_changed (selection);
-	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+	//	sp_selection_changed (selection);
+	if (grow > 0)
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
+	else
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:smaller");
+
 }
 
 void
@@ -951,8 +962,11 @@ sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 
 	sp_selection_scale_relative (selection, &center, times, times);
 
-	sp_selection_changed (selection);
-	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+	//	sp_selection_changed (selection);
+	if (grow_pixels > 0)
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:larger");
+	else
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:scale:smaller");
 }
 
 void
@@ -968,7 +982,7 @@ sp_selection_scale_times (SPSelection *selection, gdouble times)
 
 	sp_selection_scale_relative (selection, &center, times, times);
 
-	sp_selection_changed (selection);
+	//	sp_selection_changed (selection);
 	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
 }
 
@@ -990,7 +1004,7 @@ sp_selection_move (gdouble dx, gdouble dy)
 
 	sp_selection_move_relative (selection, dx, dy);
 
-	sp_selection_changed (selection);
+	//	sp_selection_changed (selection);
 
 	if (dx == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
@@ -1024,7 +1038,7 @@ sp_selection_move_screen (gdouble dx, gdouble dy)
 	zdy = dy / zoom;
 	sp_selection_move_relative (selection, zdx, zdy);
 
-	sp_selection_changed (selection);
+	//	sp_selection_changed (selection);
 
 	if (dx == 0) {
 		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
