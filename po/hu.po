@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-04-07 22:56-0700\n"
-"PO-Revision-Date: 2004-04-06 21:19+0200\n"
+"PO-Revision-Date: 2004-04-11 23:36+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -180,8 +180,7 @@ msgstr "Az objektumok bal oldalainak egyenletes távolságban való elrendezése"
 
 #: src/dialogs/align.cpp:352
 msgid "Distribute centers of objects at even distances horizontally"
-msgstr ""
-"Az objektumok közepének egyenletes távolságban való vízszintes elrendezése"
+msgstr "Az objektumok közepének egyenletes távolságban való vízszintes elrendezése"
 
 #: src/dialogs/align.cpp:359
 msgid "Distribute right sides of objects at even distances"
@@ -197,8 +196,7 @@ msgstr "Az objektumok tetejének egyenletes távolságban való elrendezése"
 
 #: src/dialogs/align.cpp:381
 msgid "Distribute centers of objects at even distances vertically"
-msgstr ""
-"Az objektumok közepének egyenletes távolságban való függõleges elrendezése"
+msgstr "Az objektumok közepének egyenletes távolságban való függõleges elrendezése"
 
 #: src/dialogs/align.cpp:388
 msgid "Distribute bottom sides of objects at even distances"
@@ -650,7 +648,7 @@ msgstr "Argumentum:"
 
 #: src/dialogs/object-attributes.cpp:61
 msgid "T0:"
-msgstr "CÍM:"
+msgstr "T0:"
 
 #: src/dialogs/object-attributes.cpp:66
 msgid "URL:"
@@ -1153,14 +1151,12 @@ msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Az Inkscape belsõ hibába ütközött. A program bezárásra kerül.\n"
 
 #: src/inkscape.cpp:503
-msgid ""
-"Automatic backups of unsaved documents were done to following locations:\n"
+msgid "Automatic backups of unsaved documents were done to following locations:\n"
 msgstr "A nem mentett dokumentumokról mentés készült a következõ helyekre:\n"
 
 #: src/inkscape.cpp:504
 msgid "Automatic backup of following documents failed:\n"
-msgstr ""
-"Nem sikerült automatikus mentést készíteni a következõ dokumentumokról:\n"
+msgstr "Nem sikerült automatikus mentést készíteni a következõ dokumentumokról:\n"
 
 #: src/inkscape.cpp:661
 #, c-format
@@ -1453,8 +1449,7 @@ msgstr "írási hiba történt"
 
 #: src/main.cpp:130
 msgid "Do not use X server (only process files from console)"
-msgstr ""
-"Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
+msgstr "Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
 
 #: src/main.cpp:133
 msgid "Try to use X server (even if $DISPLAY is not set)"
@@ -1504,8 +1499,7 @@ msgstr "x0:y0:x1:y1"
 
 #: src/main.cpp:151
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
-msgstr ""
-"A létrehozott bitkép szélessége képpontban (felülbírálja a DPI értéket)"
+msgstr "A létrehozott bitkép szélessége képpontban (felülbírálja a DPI értéket)"
 
 #: src/main.cpp:151
 msgid "WIDTH"
@@ -1576,20 +1570,17 @@ msgstr "szimmetrikus"
 
 #: src/nodepath.cpp:2709
 msgid "Drag nodes or control points to edit the path"
-msgstr ""
-"A lánc szerkesztéséhez helyezze át a csomópontokat vagy a kontrollpontokat"
+msgstr "A lánc szerkesztéséhez helyezze át a csomópontokat vagy a kontrollpontokat"
 
 #: src/nodepath.cpp:2723
-msgid ""
-"Select one path object with selector first, then switch back to node tool."
+msgid "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Jelöljön ki egy láncot a kijelölõeszközzel, majd váltson vissza a "
 "csomóponteszközre."
 
 #: src/nodepath.cpp:2725
 #, c-format
-msgid ""
-"0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
+msgid "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
 msgstr ""
 "%i csomópontból 0 van kijelölve. Kijelölés: kattintással (ha szükséges, "
 "Shifttel) vagy egy terület kijelölésével."
@@ -1786,8 +1777,7 @@ msgstr "Jelöljön ki legalább 2 objektumot a csoportosításhoz."
 
 #: src/selection-chemistry.cpp:239
 msgid "You cannot group objects from different groups or layers."
-msgstr ""
-"Eltérõ csoportban illetve szinten levõ objektumok nem foglalhatók csoportba."
+msgstr "Eltérõ csoportban illetve szinten levõ objektumok nem foglalhatók csoportba."
 
 #: src/selection-chemistry.cpp:284
 msgid "Select a group to ungroup."
@@ -1841,8 +1831,7 @@ msgstr "Jelöljön ki objektumokat a stílus beillesztéséhez."
 
 #: src/selection.cpp:197
 msgid "Click selection to toggle scale/rotation handles"
-msgstr ""
-"A méretezési és az elforgatási mód közti váltáshoz kattintson a kijelölésre"
+msgstr "A méretezési és az elforgatási mód közti váltáshoz kattintson a kijelölésre"
 
 #: src/selection.cpp:202
 msgid "No objects selected. Click, Shift+click, drag around objects to select."
@@ -1992,8 +1981,7 @@ msgstr "Logikai mûveletekhez legalább 2 láncot ki kell jelölni."
 
 #: src/splivarot.cpp:119
 msgid "Select exactly 2 paths to perform difference or XOR."
-msgstr ""
-"Különbségképzés illetve kizáró VAGY esetén pontosan 2 láncot kell kijelölni."
+msgstr "Különbségképzés illetve kizáró VAGY esetén pontosan 2 láncot kell kijelölni."
 
 #: src/splivarot.cpp:136 src/splivarot.cpp:152
 msgid "Unable to determine the z-order of the objects selected for difference."
@@ -2025,8 +2013,7 @@ msgstr "Az objektum körvonala nem határozható meg."
 
 #: src/splivarot.cpp:837
 msgid "Selected object is not a path, cannot inset/outset."
-msgstr ""
-"A kijelölt objektum nem lánc; zsugorítás illetve nyújtás nem végezhetõ."
+msgstr "A kijelölt objektum nem lánc; zsugorítás illetve nyújtás nem végezhetõ."
 
 #: src/splivarot.cpp:1038
 msgid "Select some paths to inset/outset."
@@ -2173,8 +2160,7 @@ msgstr "Tágulás:"
 
 #: src/toolbox.cpp:1326
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
-msgstr ""
-"Mennyivel sûrûbbek illetve ritkábbak a külsõ fordulatok; 1 = egyenletes"
+msgstr "Mennyivel sûrûbbek illetve ritkábbak a külsõ fordulatok; 1 = egyenletes"
 
 #: src/toolbox.cpp:1344
 msgid "Radius of the innermost revolution"
@@ -2238,15 +2224,13 @@ msgstr ""
 "módosítása pedig gépeléssel."
 
 #: src/tools-switch.cpp:172
-msgid ""
-"Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
+msgid "Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
 msgstr ""
 "Nagyítás kattintással vagy a kívánt terület kijelölésével végezhetõ, "
 "kicsinyítés pedig Shift+kattintással."
 
 #: src/tools-switch.cpp:178
-msgid ""
-"Click to pick a color, click and drag to pick the average color of an area."
+msgid "Click to pick a color, click and drag to pick the average color of an area."
 msgstr ""
 "Egy adott szín kattintással választható ki, egy terület átlagszíne pedig a "
 "terület kijelölésével."
@@ -2650,8 +2634,7 @@ msgstr "Elfo_rgatás -90 fokkal"
 
 #: src/verbs.cpp:829
 msgid "Rotate selection 90 degrees clockwise"
-msgstr ""
-"A kijelölt objektumok elforgatása az óramutató járásának irányában 90 fokkal"
+msgstr "A kijelölt objektumok elforgatása az óramutató járásának irányában 90 fokkal"
 
 #: src/verbs.cpp:830
 msgid "Rotate 9_0 deg CCW"
@@ -3168,3 +3151,4 @@ msgstr "Érték"
 
 #~ msgid "evenodd"
 #~ msgstr "páros-páratlan"
+
