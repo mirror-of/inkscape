@@ -2612,6 +2612,8 @@ sp_nodepath_selected_nodes_rotate (SPNodePath * nodepath, gdouble angle, int whi
 	GList * l;
 	SPPathNode * n;
 
+	if (!nodepath) return;
+
 	for (l = nodepath->selected; l != NULL; l = l->next) {
 		n = (SPPathNode *) l->data;
 		node_rotate_common (n, angle, which, FALSE);
@@ -2627,6 +2629,8 @@ sp_nodepath_selected_nodes_rotate_screen (SPNodePath * nodepath, gdouble angle, 
 {
 	GList * l;
 	SPPathNode * n;
+
+	if (!nodepath) return;
 
 	for (l = nodepath->selected; l != NULL; l = l->next) {
 		n = (SPPathNode *) l->data;
@@ -2699,8 +2703,10 @@ node_scale_screen (SPPathNode *n, gdouble grow, int which)
 void
 sp_nodepath_selected_nodes_scale (SPNodePath * nodepath, gdouble grow, int which)
 {
-	GList * l;
-	SPPathNode * n;
+	GList *l;
+	SPPathNode *n = NULL;
+
+	if (!nodepath) return;
 
 	for (l = nodepath->selected; l != NULL; l = l->next) {
 		n = (SPPathNode *) l->data;
@@ -2709,14 +2715,17 @@ sp_nodepath_selected_nodes_scale (SPNodePath * nodepath, gdouble grow, int which
 
 	update_object (nodepath);
 	// fixme: use _keyed
-	update_repr (n->subpath->nodepath);
+	if (n && nodepath->selected)
+		update_repr (n->subpath->nodepath);
 }
 
 void
 sp_nodepath_selected_nodes_scale_screen (SPNodePath * nodepath, gdouble grow, int which)
 {
-	GList * l;
-	SPPathNode * n;
+	GList *l;
+	SPPathNode *n = NULL;
+
+	if (!nodepath) return;
 
 	for (l = nodepath->selected; l != NULL; l = l->next) {
 		n = (SPPathNode *) l->data;
@@ -2725,7 +2734,8 @@ sp_nodepath_selected_nodes_scale_screen (SPNodePath * nodepath, gdouble grow, in
 
 	update_object (nodepath);
 	// fixme: use _keyed
-	update_repr (n->subpath->nodepath);
+	if (n && nodepath->selected)
+		update_repr (n->subpath->nodepath);
 }
 
 
