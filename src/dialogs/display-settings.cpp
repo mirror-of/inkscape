@@ -546,10 +546,14 @@ options_sb (
         gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
 
         GtkWidget *sb;
-        if (isint)
+        if (isint) {
             sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
-        else 
-            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
+        } else {
+            if (step_increment < 0.1)
+                sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 3);
+            else 
+                sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
+        }
 
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tooltip, NULL);
         gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
@@ -1017,7 +1021,6 @@ options_checkbox (
         }
 
 
-
 // To be broken into: Display, Save, Export, SVG, Commands
         l = gtk_label_new (_("Misc"));
         gtk_widget_show (l);
@@ -1047,6 +1050,18 @@ options_checkbox (
             true, false,
             options_changed_int
             );
+
+        options_sb (
+            _("Simplification threshold:"), 
+            _("How strong is the Simplify command by default. If you invoke this command several times in quick succession, it will act more and more aggressively; invoking it again after a pause restores the default threshold."), tt,
+            "",
+            vb,
+            0.0, 1.0, 0.001, 0.01, 0.01,
+            "options.simplifythreshold", "value", 0.002,
+            false, false,
+            options_changed_double
+            );
+
 
         // Store transformation (global)
         {
