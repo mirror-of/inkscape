@@ -27,7 +27,6 @@
 
 static void sp_gradient_repr_set_link (SPRepr *repr, SPGradient *gr);
 static void sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr);
-static gchar *sp_style_change_property (const gchar *sstr, const gchar *key, const gchar *value);
 
 /* fixme: One more step is needed - normalization vector to 0-1 (not sure 100% still) */
 
