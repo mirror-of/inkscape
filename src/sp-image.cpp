@@ -397,12 +397,8 @@ sp_image_repr_read_image (SPRepr * repr)
 		} else if (!g_path_is_absolute (filename)) {
 			/* try to load from relative pos */
 			docbase = sp_repr_attr (sp_repr_document_root (sp_repr_document (repr)), "sodipodi:docbase");
-			if (!docbase) docbase = "./";
-			#ifdef WIN32
-                fullname = g_strconcat (docbase, "\\", filename, NULL);
-            #else
-                fullname = g_strconcat (docbase, filename, NULL);
-            #endif
+			if (!docbase) docbase = ".";
+			fullname = g_build_filename(docbase, filename, NULL);
 			// TODO: bulia, please look over
 			gsize bytesRead = 0;
 			gsize bytesWritten = 0;
