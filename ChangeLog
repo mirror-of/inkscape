@@ -3,6 +3,8 @@
 	* src/sp-item.cpp, src/dialogs/display-settings.cpp: primitive
 	support for preserving line widths when scaling.  Thanks to Bulia
 	for telling me what to do :)
+	* src/dialogs/align.cpp: refactor some cut-and-paste code into
+	a separate function.
 
 2004-05-09  MenTaLguY <mental@rydia.net>
 
