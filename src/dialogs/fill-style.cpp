@@ -48,6 +48,7 @@
 #include <style.h>
 #include <gradient-chemistry.h>
 #include <document.h>
+#include <desktop-style.h>
 #include <desktop-handles.h>
 #include <selection.h>
 #include <sp-item.h>
@@ -738,6 +739,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         reprs = g_slist_prepend (NULL, spw->repr);
     }
 
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
     switch (psel->mode) {
 
         case SP_PAINT_SELECTOR_MODE_EMPTY:
@@ -750,11 +753,9 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         {
             SPCSSAttr *css = sp_repr_css_attr_new ();
             sp_repr_css_set_property (css, "fill", "none");
-            for (GSList *r = reprs; r != NULL; r = r->next) {
-                sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data,
-                                            "sodipodi:fill-cmyk", NULL);
-            }
+
+            sp_desktop_set_style (desktop, css);
+
             sp_repr_css_attr_unref (css);
             if (spw->inkscape) {
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -778,11 +779,9 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             Inkscape::SVGOStringStream osalpha;
             osalpha << alpha;
             sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
-            for (GSList *r = reprs; r != NULL; r = r->next) {
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data,
-                                             "sodipodi:fill-cmyk", NULL);
-                sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-            }
+
+            sp_desktop_set_style (desktop, css);
+
             sp_repr_css_attr_unref (css);
             if (spw->inkscape) {
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -803,16 +802,9 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             Inkscape::SVGOStringStream osalpha;
             osalpha << alpha;
             sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
-            gfloat cmyk[4];
-            sp_color_get_cmyk_floatv (&color, cmyk);
-            Inkscape::SVGOStringStream oscolour;
-            oscolour << "(" << cmyk[0] << " " << cmyk[1] << " " << cmyk[2] << " " << cmyk[3] << ")";
 
-            for (GSList *r = reprs; r != NULL; r = r->next) {
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data,
-                                             "sodipodi:fill-cmyk", oscolour.str().c_str() );
-                sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-            }
+            sp_desktop_set_style (desktop, css);
+
             sp_repr_css_attr_unref (css);
             if (spw->inkscape) {
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -968,39 +960,22 @@ sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;
 
-    GSList *reprs = NULL;
-    const GSList *items = NULL;
-    if (spw->inkscape) {
-
-        items = sp_widget_get_item_list (spw);
-
-        for (const GSList *i = items; i != NULL; i = i->next) {
-            reprs = g_slist_prepend (reprs, SP_OBJECT_REPR (i->data));
-        }
-
-    } else {
-        reprs = g_slist_prepend (NULL, spw->repr);
-    }
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
     sp_repr_css_set_property ( css, "fill-rule",
                                (const gchar *)g_object_get_data (G_OBJECT (w),
                                "fill-rule") );
 
-    for (const GSList *r = reprs; r != NULL; r = r->next) {
-        sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-    }
-
+    sp_desktop_set_style (desktop, css);
+  
     sp_repr_css_attr_unref (css);
 
     if (spw->inkscape) {
         sp_document_done (SP_WIDGET_DOCUMENT (spw));
     }
 
-    g_slist_free (reprs);
-
-} // end of sp_fill_style_widget_fill_rule_activate()
-
+}
 
 
 

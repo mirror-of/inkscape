@@ -36,6 +36,7 @@
 #include "desktop-affine.h"
 #include "snap.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "pixmaps/cursor-star.xpm"
 #include "sp-desktop-widget.h"
 #include "sp-metrics.h"
@@ -404,13 +405,10 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
         /* Create object */
         SPRepr *repr = sp_repr_new ("path");
         sp_repr_set_attr (repr, "sodipodi:type", "star");
+
         /* Set style */
-        SPRepr *style = inkscape_get_repr (INKSCAPE, "tools.shapes.star");
-        if (style) {
-            SPCSSAttr *css = sp_repr_css_attr_inherited (style, "style");
-            sp_repr_css_set (repr, css, "style");
-            sp_repr_css_attr_unref (css);
-        }
+        sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.star", false);
+
         sc->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
         sp_repr_unref (repr);
         sc->item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());

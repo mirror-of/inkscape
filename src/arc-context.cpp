@@ -42,6 +42,7 @@
 #include "widgets/spw-utilities.h"
 #include "message-context.h"
 #include "desktop.h"
+#include "desktop-style.h"
 
 #include "arc-context.h"
 
@@ -395,13 +396,10 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 		/* Create object */
 		SPRepr *repr = sp_repr_new("path");
 		sp_repr_set_attr (repr, "sodipodi:type", "arc");
+
 		/* Set style */
-		SPRepr *style = inkscape_get_repr(INKSCAPE, "tools.shapes.arc");
-		if (style) {
-			SPCSSAttr *css = sp_repr_css_attr_inherited(style, "style");
-			sp_repr_css_set (repr, css, "style");
-			sp_repr_css_attr_unref (css);
-		}
+		sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.arc", false);
+
 		ac->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
 		sp_repr_unref (repr);
 		ac->item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());

@@ -48,6 +48,7 @@ extern "C" {
 #include "../inkscape.h"
 #include "../document.h"
 #include "../desktop.h"
+#include "../desktop-style.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../style.h"

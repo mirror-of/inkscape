@@ -49,6 +49,7 @@
 #include "gradient-chemistry.h"
 #include "document.h"
 #include "desktop-handles.h"
+#include "desktop-style.h"
 #include "marker-status.h"
 #include "selection.h"
 #include "sp-item.h"
@@ -570,6 +571,8 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
         items = NULL;
     }
 
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
     switch (psel->mode) {
         case SP_PAINT_SELECTOR_MODE_EMPTY:
         case SP_PAINT_SELECTOR_MODE_MULTIPLE:
@@ -581,11 +584,9 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
         {
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_set_property(css, "stroke", "none");
-            for (GSList const *r = reprs; r != NULL; r = r->next) {
-                sp_repr_css_change_recursive((SPRepr *) r->data, css, "style");
-                sp_repr_set_attr_recursive((SPRepr *) r->data,
-                                           "sodipodi:stroke-cmyk", NULL);
-            }
+
+            sp_desktop_set_style (desktop, css);
+
             sp_repr_css_attr_unref(css);
             if (spw->inkscape) {
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
@@ -608,21 +609,8 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
             osalpha << alpha;
             sp_repr_css_set_property(css, "stroke-opacity", osalpha.str().c_str());
 
-            Inkscape::SVGOStringStream oscolour;
-            if ( sp_color_get_colorspace_type(&color) == SP_COLORSPACE_TYPE_CMYK ) {
-                gfloat cmyk[4];
-                sp_color_get_cmyk_floatv(&color, cmyk);
-                oscolour << "(" << cmyk[0] << " " << cmyk[1] << " " << cmyk[2] << " " << cmyk[3] << ")";
-            }
+            sp_desktop_set_style (desktop, css);
 
-            for (GSList const *r = reprs; r != NULL; r = r->next) {
-                sp_repr_set_attr_recursive((SPRepr *) r->data,
-                                           "sodipodi:stroke-cmyk",
-                                           ( oscolour.str().length() > 0
-                                             ? oscolour.str().c_str()
-                                             : NULL ));
-                sp_repr_css_change_recursive((SPRepr *) r->data, css, "style");
-            }
             sp_repr_css_attr_unref(css);
 
             if (spw->inkscape) {
@@ -1178,16 +1166,16 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
     gchar *menu_id = (gchar *) g_object_get_data(G_OBJECT(mnu), "menu_id");
     sp_repr_css_set_property(css, menu_id, marker);
 
-    SPSelection *selection = SP_DT_SELECTION(desktop);
-    GSList const *items = selection->itemList();
-    for (; items != NULL; items = items->next) {
-        SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
-        if (selrepr) {
-            sp_repr_css_change_recursive(selrepr, css, "style");
-        }
-        SP_OBJECT(items->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-        SP_OBJECT(items->data)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-    }
+     SPSelection *selection = SP_DT_SELECTION(desktop);
+     GSList const *items = selection->itemList();
+     for (; items != NULL; items = items->next) {
+         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
+         if (selrepr) {
+             sp_repr_css_change_recursive(selrepr, css, "style");
+         }
+         SP_OBJECT(items->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+         SP_OBJECT(items->data)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+     }
 
     sp_repr_css_attr_unref(css);
 
@@ -1917,6 +1905,8 @@ sp_stroke_style_scale_line(SPWidget *spw)
         items = NULL;
     }
 
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
     /* TODO: Create some standardized method */
     SPCSSAttr *css = sp_repr_css_attr_new();
 
@@ -1968,40 +1958,11 @@ sp_stroke_style_scale_line(SPWidget *spw)
             gtk_adjustment_set_value (wadj, 100.0);
         }
 
-    } else {
-
-         // FIXME: seems like this reprs list can only contain one repr, that of the selected tool's pref when you "apply to" some tool.
-         // That stupidity will be eliminated when we have current style in SPDesktop.
-        for (GSList const *r = reprs; r != NULL; r = r->next) {
-            double length = wadj->value;
-            double const miterlimit = ml->value;
-            double *dash, offset;
-            int ndash;
-            sp_dash_selector_get_dash(dsel, &ndash, &dash, &offset);
-
-            sp_convert_distance( &length, sp_unit_selector_get_unit(us),
-                                 SP_PS_UNIT );
-
-            /* Set stroke width. */
-            {
-                Inkscape::SVGOStringStream os_width;
-                os_width << length * 1.25;
-                sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
-            }
-
-            /* Set stroke miterlimit. */
-            {
-                Inkscape::SVGOStringStream os_ml;
-                os_ml << miterlimit;
-                sp_repr_css_set_property(css, "stroke-miterlimit", os_ml.str().c_str());
-            }
-
-            sp_stroke_style_set_scaled_dash(css, ndash, dash, offset, length);
-
-            sp_repr_css_change_recursive((SPRepr *) r->data, css, "style");
-            g_free(dash);
-        }
     }
+
+    // we have already changed the items, so set style without changing selection
+    // FIXME: move the above stroke-setting stuff, including percentages, to desktop-style
+    sp_desktop_set_style (desktop, css, false);
 
     sp_repr_css_attr_unref(css);
 
@@ -2063,22 +2024,19 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
     }
 
     if (gtk_toggle_button_get_active(tb)) {
-        /* XXX: It looks wrong that we assign to items here and then
-           never use it: it seems that we unconditionally overwrite it
-           in the if-then-else below. */
-        GSList const *items = sp_widget_get_item_list(spw);
+
         gchar const *join
-            = static_cast<gchar const *>(gtk_object_get_data(GTK_OBJECT(tb),
-                                                             "join"));
+            = static_cast<gchar const *>(gtk_object_get_data(GTK_OBJECT(tb), "join"));
         gchar const *cap
-            = static_cast<gchar const *>(gtk_object_get_data(GTK_OBJECT(tb),
-                                                             "cap"));
+            = static_cast<gchar const *>(gtk_object_get_data(GTK_OBJECT(tb), "cap"));
+
         if (join) {
             GtkWidget *ml = GTK_WIDGET(g_object_get_data(G_OBJECT(spw), "miterlimit_sb"));
-            gtk_widget_set_sensitive(ml, !strcmp(join, "miter"));
+            gtk_widget_set_sensitive (ml, !strcmp(join, "miter"));
         }
 
         GSList *reprs;
+        const GSList *items;
         if (spw->inkscape) {
             reprs = NULL;
             items = sp_widget_get_item_list(spw);
@@ -2090,20 +2048,22 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
             items = NULL;
         }
 
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
         /* TODO: Create some standardized method */
         SPCSSAttr *css = sp_repr_css_attr_new();
 
         if (join) {
             sp_repr_css_set_property(css, "stroke-linejoin", join);
-            for (GSList const *r = reprs; r != NULL; r = r->next) {
-                sp_repr_css_change_recursive((SPRepr *) r->data, css, "style");
-            }
+
+            sp_desktop_set_style (desktop, css);
+
             sp_stroke_style_set_join_buttons(spw, GTK_WIDGET(tb));
         } else if (cap) {
             sp_repr_css_set_property(css, "stroke-linecap", cap);
-            for (GSList const *r = reprs; r != NULL; r = r->next) {
-                sp_repr_css_change_recursive((SPRepr *) r->data, css, "style");
-            }
+
+            sp_desktop_set_style (desktop, css);
+
             sp_stroke_style_set_cap_buttons(spw, GTK_WIDGET(tb));
         }
 

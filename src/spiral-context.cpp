@@ -35,6 +35,7 @@
 #include "desktop-affine.h"
 #include "snap.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "pixmaps/cursor-spiral.xpm"
 #include "spiral-context.h"
 #include "sp-desktop-widget.h"
@@ -391,16 +392,10 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 	if (!sc->item) {
 		/* Create object */
 		SPRepr *repr = sp_repr_new ("path");
-                sp_repr_set_attr (repr, "sodipodi:type", "spiral");
+             sp_repr_set_attr (repr, "sodipodi:type", "spiral");
+
 		/* Set style */
-		SPRepr *style = inkscape_get_repr (INKSCAPE, "tools.shapes.spiral");
-		if (style) {
-			SPCSSAttr *css = sp_repr_css_attr_inherited (style, "style");
-			sp_repr_css_set (repr, css, "style");
-			sp_repr_css_attr_unref (css);
-		}
-                else
-                  g_print ("sp_spiral_drag: cant get style\n");
+		sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.spiral", false);
 
 		sc->item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
 		sp_repr_unref (repr);

@@ -32,6 +32,7 @@
 #include "color.h"
 #include "color-rgba.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "prefs-utils.h"
 #include "sp-namedview.h"
 #include "view.h"
