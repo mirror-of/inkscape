@@ -348,9 +348,24 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	/* desktop->page = sp_canvas_item_new (page, SP_TYPE_CTRLRECT, NULL); */
 	sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
 	
-        // the following changes the document shadow on the canvas
-        // It was originally set to 5, which is really cheesy!
-        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page), 1, 0x3f3f3fff);
+        /* the following changes the document shadow on the canvas
+           It was originally set to 5, which is really cheesy!
+           It now is a preference in the preferences.xml file. If a value of
+           0 is used, then the constructor for a shadow is not initialized.
+         */        
+
+	gint page_shadow = 
+		prefs_get_int_attribute_limited ("options.pageshadow", 
+						 "value", 2, 0, 30);
+
+	if ( page_shadow != 0 ) {
+
+		sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page), 
+					page_shadow, 0x3f3f3fff);
+	
+	}
+
+
 
 	/* Connect event for page resize */
 	desktop->doc2dt[5] = sp_document_height (document);

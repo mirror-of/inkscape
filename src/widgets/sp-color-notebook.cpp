@@ -200,11 +200,10 @@ void ColorNotebook::init()
 	/* tempory hardcoding to get types loaded */
 	SP_TYPE_COLOR_SCALES;
 
-	/* REJON: I'm commenting this fucker out because its too big
-           on the screen when editing. It is especially bad on screens <= to 
-           1024by768 */
+	/* REJON: Comment out the next line to not use the normal GTK Color 
+           wheel. */
 
-        // SP_TYPE_COLOR_GTKSELECTOR;
+        SP_TYPE_COLOR_GTKSELECTOR;
 
 	_updating = FALSE;
 	_btn = 0;
