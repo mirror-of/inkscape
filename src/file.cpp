@@ -363,7 +363,7 @@ sp_file_save_dialog(SPDocument *doc)
             g_free(save_path);
             save_path = NULL;
         }
-        if (!g_file_test(save_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+        if (save_path && !g_file_test(save_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
             g_free(save_path);
             save_path = NULL;
         }
