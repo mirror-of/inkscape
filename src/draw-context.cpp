@@ -995,8 +995,10 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				} else {
 					sp_desktop_free_snap (dt, &p);
 				}
-				spdc_add_freehand_point (pc, &p, event->motion.state);
-				ret = TRUE;
+				if (dc->npoints != 0) { // buttonpress may have happened before we entered draw context!
+					spdc_add_freehand_point (pc, &p, event->motion.state);
+					ret = TRUE;
+				}
 			}
 			break;
 		}
