@@ -118,16 +118,16 @@ sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point cons
  *  the vector to the requested point.  If the distance along the
  *  vector is less than the snap distance then snap. */
 		upper = MIN(best, desktop->gridsnap);
-		for(unsigned d = 0; d < 2; ++d) {
+		for(unsigned i = 0; i < 2; ++i) {
 			NR::Point trial(req);
 			double const rounded
-				= round_to_nearest_multiple_plus(req.pt[d],
-								 nv->gridspacing[d],
-								 nv->gridorigin[d]);
+				= round_to_nearest_multiple_plus(req.pt[i],
+								 nv->gridspacing[i],
+								 nv->gridorigin[i]);
 
 			double const dist = sp_intersector_a_vector_snap (trial,
 									  v,
-									  component_vectors[d],
+									  component_vectors[i],
 									  rounded);
 
 			if (dist < upper) {

@@ -330,9 +330,6 @@ static SPGradient *
 sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector)
 {
 	SPDefs *defs;
-	SPObject *child;
-	SPRepr *repr;
-	SPGradient *gr;
 
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
@@ -342,7 +339,7 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector)
 
 	defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
 
-	for (child = defs->children; child != NULL; child = child->next) {
+	for (SPObject *child = defs->children ; child != NULL ; child = child->next) {
 		if (SP_IS_LINEARGRADIENT (child)) {
 			SPGradient *gr;
 			gr = SP_GRADIENT (child);
@@ -381,12 +378,14 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector)
 	}
 
 	/* Have to create our own */
+	SPRepr *repr;
 	repr = sp_repr_new ("linearGradient");
 	sp_gradient_repr_set_link (repr, vector);
 	/* Append cloned private gradient to defs */
 	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
 	sp_repr_unref (repr);
 	/* fixme: This does not look like nice */
+	SPGradient *gr;
 	gr = (SPGradient *) sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
 	g_assert (gr != NULL);
 	g_assert (SP_IS_GRADIENT (gr));
@@ -400,9 +399,6 @@ static SPGradient *
 sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vector)
 {
 	SPDefs *defs;
-	SPObject *child;
-	SPRepr *repr;
-	SPGradient *gr;
 
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
@@ -412,7 +408,7 @@ sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vec
 
 	defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
 
-	for (child = defs->children; child != NULL; child = child->next) {
+	for (SPObject *child = defs->children ; child != NULL ; child = child->next) {
 		if (SP_IS_RADIALGRADIENT (child)) {
 			SPGradient *gr;
 			gr = SP_GRADIENT (child);
@@ -454,12 +450,14 @@ sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vec
 	}
 
 	/* Have to create our own */
+	SPRepr *repr;
 	repr = sp_repr_new ("radialGradient");
 	sp_gradient_repr_set_link (repr, vector);
 	/* Append cloned private gradient to defs */
 	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
 	sp_repr_unref (repr);
 	/* fixme: This does not look like nice */
+	SPGradient *gr;
 	gr = (SPGradient *) sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
 	g_assert (gr != NULL);
 	g_assert (SP_IS_GRADIENT (gr));
@@ -725,13 +723,10 @@ SPGradient *
 sp_document_default_gradient_vector (SPDocument *document)
 {
 	SPDefs *defs;
-	SPObject *child;
-	SPRepr *repr, *stop;
-	SPGradient *gr;
 
 	defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
 
-	for (child = defs->children; child != NULL; child = child->next) {
+	for (SPObject *child = defs->children; child != NULL; child = child->next) {
 		if (SP_IS_GRADIENT (child)) {
 			SPGradient *gr;
 			gr = SP_GRADIENT (child);
@@ -746,6 +741,7 @@ sp_document_default_gradient_vector (SPDocument *document)
 	}
 
 	/* There were no suitable vector gradients - create one */
+	SPRepr *repr, *stop;
 	repr = sp_repr_new ("linearGradient");
 	stop = sp_repr_new ("stop");
 	sp_repr_set_attr (stop, "style", "stop-color:#000;stop-opacity:1;");
@@ -762,6 +758,7 @@ sp_document_default_gradient_vector (SPDocument *document)
 	sp_repr_unref (repr);
 
 	/* fixme: This does not look like nice */
+	SPGradient *gr;
 	gr = (SPGradient *) sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
 	g_assert (gr != NULL);
 	g_assert (SP_IS_GRADIENT (gr));

@@ -1,5 +1,10 @@
 2004-01-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop-events.cpp, src/desktop-snap.cpp, src/draw-context.cpp,
+	  src/gradient-chemistry.cpp, src/selection-chemistry.cpp,
+	  src/seltrans.cpp, src/sp-shape.cpp:
+	  Address some `-Wshadow' warnings.
+
 	* src/attributes.cpp, src/color.cpp, src/inkscape.cpp,
 	  src/interface.cpp, src/helper/units.h, src/libnrtype/nr-type-xft.cpp,
 	  src/svg/svg-color.cpp, src/widgets/gradient-vector.cpp:

@@ -904,7 +904,6 @@ sp_selection_item_next (void)
 	GSList *children = NULL, *l = NULL;
 	NRRect dbox;
 	NRRect sbox;
-	ArtPoint s,d;
 	gint dx=0, dy=0;
 
 	document = SP_ACTIVE_DOCUMENT;
@@ -914,16 +913,11 @@ sp_selection_item_next (void)
 	if (!SP_IS_DESKTOP (desktop)) return;
 	selection = SP_DT_SELECTION(desktop);
 	g_return_if_fail(selection!=NULL);
-  
+
 	// get item list
 	if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-		NRRect d;
 		sp_desktop_get_display_area (desktop, &dbox);
-		d.x0 = dbox.x0;
-		d.y0 = dbox.y0;
-		d.x1 = dbox.x1;
-		d.y1 = dbox.y1;
-		children = sp_document_items_in_box (document, &d);
+		children = sp_document_items_in_box(document, &dbox);
 	} else {
 		children = sp_item_group_item_list (SP_GROUP(sp_document_root(document)));
 	}
@@ -958,10 +952,12 @@ sp_selection_item_next (void)
 			double x, y;
 			x = (sbox.x0 + sbox.x1) / 2;
 			y = (sbox.y0 + sbox.y1) / 2;
+			ArtPoint s;
 			s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 			s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 			x = (dbox.x0 + dbox.x1) / 2;
 			y = (dbox.y0 + dbox.y1) / 2;
+			ArtPoint d;
 			d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 			d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 			dx = (gint) (d.x - s.x);
@@ -971,6 +967,7 @@ sp_selection_item_next (void)
 	}
 }
 
+/* TODO: Much copy & paste code here; see if can merge with sp_selection_item_next. */
 void
 sp_selection_item_prev (void)
 {
@@ -981,7 +978,6 @@ sp_selection_item_prev (void)
   GSList * children = NULL, * l = NULL;
   NRRect dbox;
   NRRect sbox;
-  ArtPoint s,d;
   gint dx=0, dy=0;
 
   document = SP_ACTIVE_DOCUMENT;
@@ -994,17 +990,12 @@ sp_selection_item_prev (void)
   
   // get item list
   if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-	  NRRect d;
 	  sp_desktop_get_display_area (desktop, &dbox);
-	  d.x0 = dbox.x0;
-	  d.y0 = dbox.y0;
-	  d.x1 = dbox.x1;
-	  d.y1 = dbox.y1;
-	  children = sp_document_items_in_box (document, &d);
+	  children = sp_document_items_in_box(document, &dbox);
   } else {
     children = sp_item_group_item_list (SP_GROUP(sp_document_root(document)));
   }
-  
+
   // compute prev item
   if (children == NULL) return;
   if sp_selection_is_empty(selection) item = SP_ITEM (g_slist_last (children)->data);
@@ -1031,10 +1022,12 @@ sp_selection_item_prev (void)
 	    double x, y;
 	    x = (sbox.x0 + sbox.x1) / 2;
 	    y = (sbox.y0 + sbox.y1) / 2;
+	    ArtPoint s;
 	    s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 	    s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 	    x = (dbox.x0 + dbox.x1) / 2;
 	    y = (dbox.y0 + dbox.y1) / 2;
+	    ArtPoint d;
 	    d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 	    d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
 	    dx = (gint) (d.x - s.x);

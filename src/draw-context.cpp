@@ -917,10 +917,8 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	SPDrawContext *dc;
 	SPPencilContext *pc;
 	SPDesktop *dt;
-	NRPoint p;
 	gint ret;
 	SPDrawAnchor *anchor;
-	NRPoint fp;
 
 	dc = SP_DRAW_CONTEXT (ec);
 	pc = SP_PENCIL_CONTEXT (ec);
@@ -931,17 +929,16 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPoint fp;
 #if 0
 			/* Grab mouse, so release will not pass unnoticed */
 			dc->grab = SP_CANVAS_ITEM (dt->acetate);
 			sp_canvas_item_grab (dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
 #endif
 			/* Find desktop coordinates */
-			sp_desktop_w2d_xy_point (dt, &fp, event->button.x, event->button.y);
-			p.x = fp.x;
-			p.y = fp.y;
-			/* Test, whether we hit any anchor */
+			NRPoint p;
+			sp_desktop_w2d_xy_point (dt, &p, event->button.x, event->button.y);
+
+			/* Test whether we hit any anchor. */
 			anchor = test_inside (dc, event->button.x, event->button.y);
 
 			switch (pc->state) {
@@ -962,6 +959,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
+	{
 #if 1
 		if ((event->motion.state & GDK_BUTTON1_MASK) && !dc->grab) {
 			/* Grab mouse, so release will not pass unnoticed */
@@ -970,10 +968,10 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 #endif
 		/* Find desktop coordinates */
-		sp_desktop_w2d_xy_point (dt, &fp, event->motion.x, event->motion.y);
-		p.x = fp.x;
-		p.y = fp.y;
-		/* Test, whether we hit any anchor */
+		NRPoint p;
+		sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+
+		/* Test whether we hit any anchor. */
 		anchor = test_inside (dc, event->button.x, event->button.y);
 
 		switch (pc->state) {
@@ -1005,14 +1003,14 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			break;
 		}
 		break;
+	}
 	case GDK_BUTTON_RELEASE:
 		if (event->button.button == 1) {
-			NRPoint fp;
 			/* Find desktop coordinates */
-			sp_desktop_w2d_xy_point (dt, &fp, event->motion.x, event->motion.y);
-			p.x = fp.x;
-			p.y = fp.y;
-			/* Test, whether we hit any anchor */
+			NRPoint p;
+			sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+
+			/* Test whether we hit any anchor. */
 			anchor = test_inside (dc, event->button.x, event->button.y);
 
 			switch (pc->state) {
@@ -1350,10 +1348,8 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	SPDrawContext *dc;
 	SPPenContext *pc;
 	SPDesktop *dt;
-	NRPoint p;
 	gint ret;
 	SPDrawAnchor *anchor;
-	NRPoint fp;
 
 	dc = SP_DRAW_CONTEXT (ec);
 	pc = SP_PEN_CONTEXT (ec);
@@ -1377,10 +1373,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			sp_canvas_item_grab (dc->grab, SPDC_EVENT_MASK, NULL, event->button.time);
 #endif
 			/* Find desktop coordinates */
-			sp_desktop_w2d_xy_point (dt, &fp, event->button.x, event->button.y);
-			p.x = fp.x;
-			p.y = fp.y;
-			/* Test, whether we hit any anchor */
+			NRPoint p;
+			sp_desktop_w2d_xy_point (dt, &p, event->button.x, event->button.y);
+
+			/* Test whether we hit any anchor. */
 			anchor = test_inside (dc, event->button.x, event->button.y);
 
 			switch (pc->mode) {
@@ -1448,7 +1444,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
-
+	{
 		if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
 			break; // do not drag if we're still within tolerance from origin
 		within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
@@ -1461,9 +1457,8 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 #endif
 		/* Find desktop coordinates */
-		sp_desktop_w2d_xy_point (dt, &fp, event->motion.x, event->motion.y);
-		p.x = fp.x;
-		p.y = fp.y;
+		NRPoint p;
+		sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
 
 		/* Test, whether we hit any anchor */
 		anchor = test_inside (dc, event->button.x, event->button.y);
@@ -1528,14 +1523,15 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			break;
 		}
 		break;
+	}
 	case GDK_BUTTON_RELEASE:
 		xp = yp = 0;
 		if (event->button.button == 1) {
 			/* Find desktop coordinates */
-			sp_desktop_w2d_xy_point (dt, &fp, event->motion.x, event->motion.y);
-			p.x = fp.x;
-			p.y = fp.y;
-			/* Test, whether we hit any anchor */
+			NRPoint p;
+			sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+
+			/* Test whether we hit any anchor. */
 			anchor = test_inside (dc, event->button.x, event->button.y);
 
 			switch (pc->mode) {

@@ -188,7 +188,6 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
 	SPItem *item;
 	SPShape *shape;
-	int i;
 
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
@@ -202,11 +201,11 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	 * sets it.
 	 */
 	/* TODO:  It would be nice if this could be done at an earlier level */
-	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
+	for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
 	  if (shape->marker[i] == NULL) {
 	    sp_shape_set_marker (object, i, object->style->marker[i].value);
 	  }
-	} 
+	}
 
 	if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 		SPStyle *style;
@@ -262,9 +261,8 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		}
 		/* Dimension marker views */
 		for (v = item->display; v != NULL; v = v->next) {
-			int i;
 			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
-			for (i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
+			for (int i = SP_MARKER_LOC_START ; i < SP_MARKER_LOC_QTY ; i++) {
 			  if (shape->marker[i]) {
 			    sp_marker_show_dimension ((SPMarker *) shape->marker[i],
 						      NR_ARENA_ITEM_GET_KEY (v->arenaitem) + i-SP_MARKER_LOC_START,

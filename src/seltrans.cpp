@@ -155,9 +155,7 @@ sp_sel_trans_init (SPSelTrans * seltrans, SPDesktop * desktop)
 void
 sp_sel_trans_shutdown (SPSelTrans *seltrans)
 {
-	gint i;
-
-	for (i = 0; i < 8; i++) {
+	for (unsigned i = 0; i < 8; i++) {
 		if (seltrans->shandle[i]) {
 			g_object_unref (G_OBJECT (seltrans->shandle[i]));
 			seltrans->shandle[i] = NULL;
@@ -204,8 +202,9 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 	nr_free (seltrans->spp);
 
 	if (seltrans->items) {
-		int i;
-		for (i = 0; i < seltrans->nitems; i++) sp_object_unref (SP_OBJECT (seltrans->items[i]), NULL);
+		for (int i = 0; i < seltrans->nitems; i++) {
+			sp_object_unref (SP_OBJECT (seltrans->items[i]), NULL);
+		}
 		nr_free (seltrans->items);
 	}
 	if (seltrans->transforms) nr_free (seltrans->transforms);

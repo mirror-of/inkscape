@@ -82,7 +82,6 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 	static gboolean dragging = FALSE;
 	static SPCanvasItem * guide = NULL;
 	SPDesktop *desktop;
-	NRPoint p;
 	double px, py;
 	int wx, wy;
 
@@ -95,6 +94,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 		if (event->button.button == 1) {
 			dragging = TRUE;
 			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
+			NRPoint p;
 			sp_desktop_w2d_xy_point (desktop, &p, px, py);
 			guide = sp_guideline_new (desktop->guides, (horiz) ? p.y : p.x, !horiz);
 			sp_guideline_set_color (SP_GUIDELINE (guide), desktop->namedview->guidehicolor);
@@ -107,6 +107,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 	case GDK_MOTION_NOTIFY:
 		if (dragging) {
 			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
+			NRPoint p;
 			sp_desktop_w2d_xy_point (desktop, &p, px, py);
 			sp_guideline_set_position (SP_GUIDELINE (guide), (horiz) ? p.y : p.x);
 			if (horiz) {
