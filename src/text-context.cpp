@@ -47,7 +47,7 @@ static gint sp_text_context_item_handler (SPEventContext * event_context, SPItem
 static void sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc);
 static void sp_text_context_selection_modified (SPSelection *selection, guint flags, SPTextContext *tc);
 
-static void sp_text_context_update_cursor (SPTextContext *tc);
+static void sp_text_context_update_cursor (SPTextContext *tc, bool scroll_to_see = true);
 static gint sp_text_context_timeout (SPTextContext *tc);
 static void sp_text_context_forget_text (SPTextContext *tc);
 
@@ -582,7 +582,9 @@ sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
 		tc->text = NULL;
 	}
 
-	sp_text_context_update_cursor (tc);
+	// we update cursor without scrolling, because this position may not be final;
+	// item_handler moves cusros to the point of click immediately
+	sp_text_context_update_cursor (tc, false);
 }
 
 static void
@@ -592,7 +594,7 @@ sp_text_context_selection_modified (SPSelection *selection, guint flags, SPTextC
 }
 
 static void
-sp_text_context_update_cursor (SPTextContext *tc)
+sp_text_context_update_cursor (SPTextContext *tc,  bool scroll_to_see)
 {
 	GdkRectangle im_cursor = { 0, 0, 1, 1 };
 
@@ -601,8 +603,17 @@ sp_text_context_update_cursor (SPTextContext *tc)
 		sp_text_get_cursor_coords (SP_TEXT (tc->text), tc->ipos, p0, p1);
 		NR::Point const d0 = p0 * sp_item_i2d_affine(SP_ITEM(tc->text));
 		NR::Point const d1 = p1 * sp_item_i2d_affine(SP_ITEM(tc->text));
+
+		// scroll to show cursor
+		if (scroll_to_see) {
+			NR::Point const dm = (d0 + d1) / 2;
+			// unlike mouse moves, here we must scroll all the way at first shot, so we override the autoscrollspeed
+			sp_desktop_scroll_to_point (SP_EVENT_CONTEXT(tc)->desktop, &dm, 1.0);
+		}
+
 		sp_canvas_item_show (tc->cursor);
 		sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), d0, d1);
+
 		/* fixme: ... need another transformation to get canvas widget coordinate space? */
 		im_cursor.x = (int) floor (d0[NR::X]);
 		im_cursor.y = (int) floor (d0[NR::Y]);
