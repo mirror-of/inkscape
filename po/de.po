@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-08 19:57-0800\n"
-"PO-Revision-Date: 2005-02-01 17:32+0100\n"
+"PO-Revision-Date: 2005-02-21 19:53+0100\n"
 "Last-Translator: Jörg Müller <jfm@ram-brand.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1531,13 +1531,15 @@ msgstr ""
 #. * of the printing commands that represent the given object.
 #: src/dialogs/display-settings.cpp:1419
 msgid "Add label comments to printing output"
-msgstr ""
+msgstr "Beim Ausdruck Bezeichnerkommentare mitdrucken"
 
 #: src/dialogs/display-settings.cpp:1420
 msgid ""
 "When on, a comment will be added to the raw print output, marking the "
 "rendered output for an object with its label"
 msgstr ""
+"Diese Option fügt der unbehandelten Druckausgabe einen Kommentar hinzu.\n"
+"Das zu druckende Objekt wird mit einem Bezeichner markiert."
 
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
 #: src/dialogs/display-settings.cpp:1428
@@ -1740,10 +1742,10 @@ msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "<b>%d</b> (von <b>%d</b>) Objekt(en) gefunden, %s passend."
+msgstr[0] "<b>%d</b> (von <b>%d</b>) Objekt gefunden, %s passend."
 msgstr[1] "<b>%d</b> (von <b>%d</b>) Objekt(en) gefunden, %s passend."
 
 #: src/dialogs/find.cpp:434
@@ -2895,13 +2897,12 @@ msgid "\" failed to load because "
 msgstr "\" Laden fehlgeschlagen wegen "
 
 #: src/extension/extension.cpp:811
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create extension error log file '%s'"
-msgstr "Could not export to filename %s.\n"
+msgstr "Fehlerprotokolldatei konnte nicht erweitert oder erzeugt werden '%s'."
 
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
-#, fuzzy
 msgid ""
 "<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</"
 "span>\n"
@@ -2929,7 +2930,7 @@ msgstr ""
 "nicht geladen."
 
 #: src/extension/init.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Modules directory (%s) is unavailable.\t External modules in that directory "
 "will not be loaded."
@@ -3082,10 +3083,10 @@ msgid "Select file to open"
 msgstr "Wählen Sie die zu öffnende Datei"
 
 #: src/file.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Removed <b>%i</b> unused item in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused items in &lt;defs&gt;."
-msgstr[0] "<b>%i</b> überflüssige Elemente aus &lt;defs&gt; entfernt."
+msgstr[0] "<b>%i</b> überflüssiges Element aus &lt;defs&gt; entfernt."
 msgstr[1] "<b>%i</b> überflüssige Elemente aus &lt;defs&gt; entfernt."
 
 #: src/file.cpp:453
@@ -3522,7 +3523,7 @@ msgstr "Verschieben von Knoten oder Knoten-Kontrollpunkten abgebrochen."
 
 #: src/libnrtype/FontFactory.cpp:343
 msgid "Ignoring font without family that will crash Pango"
-msgstr ""
+msgstr "Schriftsatz ohne zugehöriger Schriftfamilie wird ignoriert damit Pango nicht abstürzt"
 
 #: src/main.cpp:143
 msgid "Print the Inkscape version number"
@@ -3740,33 +3741,29 @@ msgstr ""
 "Knotenwerkzeug (F2) umstellen."
 
 #: src/nodepath.cpp:2915
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag around "
 "nodes to select."
 msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
 "nodes to select."
-msgstr[0] ""
-"Keine Objekte ausgewählt. Klick, Umsch+Klick, oder Ziehen um Objekte zum "
-"Auswählen."
-msgstr[1] ""
-"Keine Objekte ausgewählt. Klick, Umsch+Klick, oder Ziehen um Objekte zum "
-"Auswählen."
+msgstr[0] "<b>0</b> von <b>%i</b> Knoten ausgewählt.  Klick, Umsch+Klick, oder Ziehen wählt Knoten aus."
+msgstr[1] "<b>0</b> von <b>%i</b> Knoten ausgewählt. Klick, Umsch+Klick, oder Ziehen wählt Knoten aus."
 
 #: src/nodepath.cpp:2922
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "<b>%i</b> von <b>%i</b> Knoten ausgewählt; %s. %s."
-msgstr[1] "<b>%i</b> von <b>%i</b> Knoten ausgewählt; %s. %s."
+msgstr[1] "<b>%i</b> von <b>%i</b> Knoten ausgewählt;  %s. %s."
 
 #: src/nodepath.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
 msgstr[0] "<b>%i</b> von <b>%i</b> Knoten ausgewählt. %s."
-msgstr[1] "<b>%i</b> von <b>%i</b> Knoten ausgewählt. %s."
+msgstr[1] "<b>%i</b> von <b>%i</b> Knoten ausgewählt.  %s."
 
 #: src/object-edit.cpp:430
 msgid ""
@@ -4241,10 +4238,10 @@ msgid "Use <b>Shift+D</b> to look up original"
 msgstr "<b>Umschalt+D</b> zum finden des Originals"
 
 #: src/selection-describer.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> object selected"
 msgid_plural "<b>%i</b> objects selected"
-msgstr[0] "<b>%i</b> Objekte ausgewählt"
+msgstr[0] "<b>%i</b> Objekt ausgewählt"
 msgstr[1] "<b>%i</b> Objekte ausgewählt"
 
 #: src/selection-describer.cpp:68
@@ -4253,11 +4250,11 @@ msgid "%s%s. %s."
 msgstr ""
 
 #: src/selection-describer.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "%s in <b>%i</b> layer. %s."
 msgid_plural "%s in <b>%i</b> layers. %s."
 msgstr[0] "%s in <b>%i</b> Ebene. %s."
-msgstr[1] "%s in <b>%i</b> Ebene. %s."
+msgstr[1] "%s in <b>%i</b> Ebenen. %s."
 
 #: src/seltrans.cpp:456
 msgid ""
@@ -4368,10 +4365,10 @@ msgid "<b>Image</b> %d x %d: %s"
 msgstr "Farbbild %d x %d: %s"
 
 #: src/sp-item-group.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
 msgid_plural "<b>Group</b> of <b>%d</b> objects"
-msgstr[0] "<b>Gruppe</b> von <b>%d</b> Objekten"
+msgstr[0] "<b>Gruppe</b> von <b>%d</b> Objekt"
 msgstr[1] "<b>Gruppe</b> von <b>%d</b> Objekten"
 
 #: src/sp-item.cpp:650
@@ -4399,11 +4396,11 @@ msgid "<b>Dynamic offset</b>, %s by %f pt"
 msgstr "<b>Dynamischer Versatz</b>, %s bei %f pt"
 
 #: src/sp-path.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Path</b> (%i node)"
 msgid_plural "<b>Path</b> (%i nodes)"
 msgstr[0] "<b>Pfad</b> (%i Knoten)"
-msgstr[1] "<b>Pfad</b> (%i Knoten)"
+msgstr[1] "<b>Pfad</b> (%i Knoten) "
 
 #: src/sp-rect.cpp:245
 msgid "<b>Rectangle</b>"
@@ -4417,17 +4414,17 @@ msgid "<b>Spiral</b> with %3f turns"
 msgstr "<b>Spirale</b> mit %3f Windungen"
 
 #: src/sp-star.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Star</b> with %d vertex"
 msgid_plural "<b>Star</b> with %d vertices"
-msgstr[0] "<b>Stern</b> mit %d Eckpunkten"
+msgstr[0] "<b>Stern</b> mit %d Eckpunkt"
 msgstr[1] "<b>Stern</b> mit %d Eckpunkten"
 
 #: src/sp-star.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Polygon</b> with %d vertex"
 msgid_plural "<b>Polygon</b> with %d vertices"
-msgstr[0] "<b>Polygon</b> mit %d Eckpunkten"
+msgstr[0] "<b>Polygon</b> mit %d Eckpunkt"
 msgstr[1] "<b>Polygon</b> mit %d Eckpunkten"
 
 #: src/sp-text.cpp:484
