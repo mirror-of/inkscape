@@ -17,6 +17,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifndef WIN32
 #include <unistd.h>
