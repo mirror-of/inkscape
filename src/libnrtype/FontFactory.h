@@ -28,66 +28,75 @@
 // the font_factory keeps a hashmap of all the loaded font_instances, and uses the PangoFontDescription
 // as index (nota: since pango already does that, using the PangoFont could work too)
 struct font_descr_hash : public std::unary_function<PangoFontDescription*,size_t> {
-	size_t  operator()( PangoFontDescription* const&x) const;
+    size_t operator()(PangoFontDescription *const &x) const;
 };
-struct font_descr_equal : public std::binary_function<PangoFontDescription*,PangoFontDescription*,bool> {
-  bool  operator()( PangoFontDescription* const&a, PangoFontDescription* const&b);
+struct font_descr_equal : public std::binary_function<PangoFontDescription*, PangoFontDescription*, bool> {
+    bool operator()(PangoFontDescription *const &a, PangoFontDescription *const &b);
 };
 
 class font_factory {
 public:
-	static font_factory*  lUsine; /**< The default font_factory; i cannot think of why we would
-				       *   need more than one.
-				       *
-				       *   ("l'usine" is french for "the factory".)
-				       */
+    static font_factory *lUsine; /**< The default font_factory; i cannot think of why we would
+                                  *   need more than one.
+                                  *
+                                  *   ("l'usine" is french for "the factory".)
+                                  */
 
-	// a little cache for fonts, so that you don't loose your time looking up fonts in the font list
-	// each font in the cache is refcounted once (and deref'd when removed from the cache)
-	typedef struct font_entry {
-		font_instance*    f;
-		double            age;
-	} font_entry;
-	int                   nbEnt,maxEnt; // number of entries, cache size
-  font_entry*           ents;
-	
-	// pango data. backend specific structures are casted to these opaque types
-	PangoFontMap*					fontServer;
-	PangoContext*         fontContext;
-	double                fontSize; // the huge fontsize used as workaround for hinting.
-	                        // different between freetype and win32
-	
-	__gnu_cxx::hash_map<PangoFontDescription*,font_instance*,font_descr_hash,font_descr_equal>     loadedFaces;
-	
-	font_factory(void);
-	~font_factory(void);
-	
-	// returns the default font_factory
-	static font_factory*  Default(void);
-	
-	// various functions to get a font_instance from different descriptions
-	font_instance*        FaceFromDescr(char const *descr);
-	font_instance*        Face(PangoFontDescription *descr, bool canFail=true);
-	font_instance*        Face(char const *family,
-				   int variant=PANGO_VARIANT_NORMAL, int style=PANGO_STYLE_NORMAL,
-				   int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
-				   int size=10, int spacing=0);
-	font_instance*        Face(char const *family, NRTypePosDef apos);
+    /** A little cache for fonts, so that you don't loose your time looking up fonts in the font list
+     *  each font in the cache is refcounted once (and deref'd when removed from the cache). */
+    struct font_entry {
+        font_instance *f;
+        double age;
+    };
+    int nbEnt;   ///< Number of entries.
+    int maxEnt;  ///< Cache size.
+    font_entry *ents;
 
-	// semi-private: tells the font_factory taht the font_instance 'who' has died and should be removed from loadedFaces
-	void                  UnrefFace(font_instance* who);
-	
-	// queries for the font-selector
-	NRNameList*           Families(NRNameList *flist);
-	NRStyleList*           Styles(const gchar *family, NRStyleList *slist);
+    // Pango data.  Backend-specific structures are cast to these opaque types.
+    PangoFontMap *fontServer;
+    PangoContext *fontContext;
+    double fontSize; /**< The huge fontsize used as workaround for hinting.
+                      *   Different between freetype and win32. */
 
-	// internal
-	void                  AddInCache(font_instance* who);
+    __gnu_cxx::hash_map<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> loadedFaces;
+
+    font_factory();
+    ~font_factory();
+
+    /// Returns the default font_factory.
+    static font_factory*  Default();
+
+    // Various functions to get a font_instance from different descriptions.
+    font_instance*        FaceFromDescr(char const *descr);
+    font_instance*        Face(PangoFontDescription *descr, bool canFail=true);
+    font_instance*        Face(char const *family,
+                               int variant=PANGO_VARIANT_NORMAL, int style=PANGO_STYLE_NORMAL,
+                               int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
+                               int size=10, int spacing=0);
+    font_instance*        Face(char const *family, NRTypePosDef apos);
+
+    /// Semi-private: tells the font_factory taht the font_instance 'who' has died and should be removed from loadedFaces
+    void                  UnrefFace(font_instance* who);
+
+    // Queries for the font-selector.
+    NRNameList*           Families(NRNameList *flist);
+    NRStyleList*           Styles(const gchar *family, NRStyleList *slist);
+
+    // internal
+    void                  AddInCache(font_instance *who);
 };
 
 
 #endif /* my_font_factory */
 
 
-
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
