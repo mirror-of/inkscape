@@ -1,0 +1,12 @@
+# Convenience stub makefile to call the real Makefile.
+
+@SET_MAKE@
+
+# Explicit so that it's the default rule.
+all:
+	cd .. && $(MAKE) livarot/all
+
+%:
+	cd .. && $(MAKE) livarot/$@
+
+.PHONY: all clean

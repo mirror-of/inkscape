@@ -1,0 +1,12 @@
+# Convenience stub makefile to call the real Makefile.
+
+@SET_MAKE@
+
+# Explicit so that it's the default rule.
+all:
+	cd .. && $(MAKE) utest/all
+
+%:
+	cd .. && $(MAKE) utest/$@
+
+.PHONY: all clean
