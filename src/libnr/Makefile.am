@@ -36,7 +36,16 @@ libnr_a_SOURCES = \
 	nr-forward.h \
 	nr-macros.h \
 	nr-values.cpp nr-values.h	\
-	nr-point-fns.cpp nr-point-fns.h \
+	nr-coord.h	\
+	nr-dim2.h	\
+	nr-i-coord.h	\
+	nr-point-l.h	\
+	nr-point.h nr-point-ops.h	\
+	nr-point-fns.cpp nr-point-fns.h	\
+	nr-rect-l.h	\
+	nr-rotate.h	\
+	nr-scale.h nr-scale-ops.h	\
+	nr-translate-ops.h nr-translate.h	\
 	nr-matrix.cpp nr-matrix.h \
 	nr-matrix-fns.cpp nr-matrix-fns.h \
 	nr-rect.cpp nr-rect.h \

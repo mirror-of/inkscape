@@ -1,5 +1,10 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/Makefile.am (libnr_a_SOURCES):
+	nr-coord.h nr-dim2.h nr-i-coord.h nr-point-l.h nr-point-ops.h
+	nr-point.h nr-rect-l.h nr-rotate.h nr-scale-ops.h nr-scale.h
+	nr-translate-ops.h nr-translate.h: New files.
+
 	* src/desktop-affine.h, src/desktop-affine.cpp
 	(sp_desktop_w2d_xy_point, sp_desktop_d2w_xy_point,
 	sp_desktop_w2doc_xy_point, sp_desktop_doc2w_xy_point,
