@@ -1216,8 +1216,8 @@ sp_star_toolbox_new (SPDesktop *desktop)
         GtkWidget *hb = sp_tb_spinbutton (_("Randomization:"), _("Scatter randomly the corners and angles"), 
                                           "tools.shapes.star", "randomized", 0.0,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
-                                          -10.0, 10.0, 0.01, 0.1,
-                                          sp_stb_randomized_value_changed);
+                                          -10.0, 10.0, 0.001, 0.01,
+                                          sp_stb_randomized_value_changed, 0.1, 3);
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
