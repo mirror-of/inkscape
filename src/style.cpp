@@ -36,6 +36,8 @@
 #include "marker-status.h"
 #include "uri-references.h"
 #include "sp-paint-server.h"
+#include "streq.h"
+#include "strneq.h"
 #include "style.h"
 #include "svg/stringstream.h"
 #include "xml/repr.h"
@@ -2082,20 +2084,20 @@ sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
         ++str;
     }
  
-    if (!strcmp(str, "inherit")) {
+    if (streq(str, "inherit")) {
         paint->set = TRUE;
         paint->inherit = TRUE;
         paint->currentcolor = FALSE;
-    } else if (!strcmp(str, "currentColor")) {
+    } else if (streq(str, "currentColor")) {
         paint->set = TRUE;
         paint->inherit = FALSE;
         paint->currentcolor = TRUE;
-    } else if (!strncmp(str, "none", 4)) {
+    } else if (streq(str, "none")) {
         paint->type = SP_PAINT_TYPE_NONE;
         paint->set = TRUE;
         paint->inherit = FALSE;
         paint->currentcolor = FALSE;
-    } else if (!strncmp(str, "url", 3)) {
+    } else if (strneq(str, "url", 3)) {
         paint->value.paint.uri = extract_uri(str);
         if (paint->value.paint.uri == NULL || *(paint->value.paint.uri) == '\0') {
             paint->type = SP_PAINT_TYPE_NONE;
