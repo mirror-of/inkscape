@@ -43,6 +43,12 @@ struct _SPPrintContext {
 	SPModulePrint module;
 };
 
+unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, float opacity)
+{
+	NRMatrix const ntransform(transform);
+	return sp_print_bind(ctx, &ntransform, opacity);
+}
+
 unsigned int
 sp_print_bind (SPPrintContext *ctx, const NRMatrix *transform, float opacity)
 {

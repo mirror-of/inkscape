@@ -1,5 +1,7 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/print.h, src/print.cpp (sp_print_bind): Add NR::Matrix version.
+
 	* src/inkscape.cpp: #include sys/types.h, sys/stat.h.
 
 	* src/desktop.h (SP_DESKTOP_ZOOM): Define in terms of expansion()

@@ -14,7 +14,8 @@
 #include <libnr/nr-path.h>
 #include "forward.h"
 
-unsigned int sp_print_bind (SPPrintContext *ctx, const NRMatrix *transform, float opacity);
+unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, float opacity);
+unsigned int sp_print_bind(SPPrintContext *ctx, NRMatrix const *transform, float opacity);
 unsigned int sp_print_release (SPPrintContext *ctx);
 unsigned int sp_print_fill (SPPrintContext *ctx, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
 			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
