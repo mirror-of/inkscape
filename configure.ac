@@ -230,6 +230,8 @@ else
        AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
 fi
 
+AM_CONDITIONAL(WITH_PERL, test "x$with_perl" = "xyes")
+
 dnl ******************************
 dnl Python checking
 dnl ******************************
@@ -250,6 +252,7 @@ else
        AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
 fi
 
+AM_CONDITIONAL(WITH_PYTHON, test "x$with_python" = "xyes")
 
 dnl ******************************
 dnl   Unconditional dependencies
