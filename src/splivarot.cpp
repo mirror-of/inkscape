@@ -162,7 +162,7 @@ sp_selected_path_boolop (bool_op bop)
     }
   }
   
-  // choper les originaux pour faire l'operation demandŽe
+  // choper les originaux pour faire l'operation demandÂŽe
   int nbOriginaux = g_slist_length (il);
   Path *originaux[nbOriginaux];
   int curOrig;
@@ -520,7 +520,7 @@ sp_selected_path_outline ()
   
   if (orig->descr_nb <= 1)
   {
-    // ca a merdŽ, ou bien le resultat est vide
+    // ca a merdÂŽ, ou bien le resultat est vide
     delete res;
     delete orig;
     g_free (style);
@@ -1348,8 +1348,7 @@ liv_svg_dump_path (Path * path)
     {
       float lastX, lastY;
       {
-        NR::Point tmp;
-        path->PrevPoint (i - 1, tmp);
+        NR::Point tmp = path->PrevPoint (i - 1);
         lastX=tmp.pt[0];
         lastY=tmp.pt[1];
       }

@@ -491,8 +491,7 @@ liv_svg_dump_path2 (Path * path)
     {
       float lastX, lastY;
       {
-        NR::Point tmp;
-        path->PrevPoint (i - 1, tmp);
+        NR::Point tmp = path->PrevPoint (i - 1);
         lastX=tmp.pt[0];
         lastY=tmp.pt[1];
       }

@@ -940,29 +940,30 @@ void            Path::ConvertEvenLines(double treshhold)
 		curW=nextW;
 	}
 }
-void						Path::PrevPoint(int i,NR::Point &oPt)
+
+#include <assert.h>
+
+const NR::Point Path::PrevPoint(int i) const
 {
-	if ( i < 0 ) return;
-	int t=descr_data[i].flags&descr_type_mask;
-	if ( t == descr_forced ) {
-		PrevPoint(i-1,oPt);
-	} else if ( t == descr_moveto ) {
-		oPt=descr_data[i].d.m.p;
-	} else if ( t == descr_lineto ) {
-		oPt=descr_data[i].d.l.p;
-	} else if ( t == descr_arcto ) {
-		oPt=descr_data[i].d.a.p;
-	} else if ( t == descr_cubicto ) {
-		oPt=descr_data[i].d.c.p;
-	} else if ( t == descr_bezierto ) {
-		oPt=descr_data[i].d.b.p;
-	} else if ( t == descr_interm_bezier ) {
-		PrevPoint(i-1,oPt);
-	} else if ( t == descr_close ) {
-		PrevPoint(i-1,oPt);
+	assert ( i >= 0 );
+	switch(descr_data[i].flags & descr_type_mask) {
+	case descr_moveto:
+		return descr_data[i].d.m.p;
+	case descr_lineto:
+		return descr_data[i].d.l.p;
+	case descr_arcto:
+		return descr_data[i].d.a.p;
+	case descr_cubicto:
+		return descr_data[i].d.c.p;
+	case descr_bezierto:
+		return descr_data[i].d.b.p;
+	case descr_interm_bezier:
+	case descr_close:
+	case descr_forced:
+		return PrevPoint(i-1);
 	}
 }
-void            Path::QuadraticPoint(double t, NR::Point &oPt, 
+void Path::QuadraticPoint(double t, NR::Point &oPt, 
 				     const NR::Point &iS, const NR::Point &iM, const NR::Point &iE)
 {
 	NR::Point ax = iE-2*iM+iS;
@@ -971,7 +972,7 @@ void            Path::QuadraticPoint(double t, NR::Point &oPt,
 	
 	oPt = t*t*ax+t*bx+cx;
 }
-void            Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR::Point &isD, const NR::Point &iE, const NR::Point &ieD)
+void Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR::Point &isD, const NR::Point &iE, const NR::Point &ieD)
 {
 	NR::Point ax = ieD-2*iE+2*iS+isD;
 	NR::Point bx = 3*iE-ieD-2*isD-3*iS;
@@ -980,7 +981,7 @@ void            Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS
 	
 	oPt = 3*t*t*ax+2*t*bx+cx;
 }
-void            Path::ArcAngles( const NR::Point &iS, const NR::Point &iE,double rx,double ry,double angle,bool large,bool wise,double &sang,double &eang)
+void Path::ArcAngles( const NR::Point &iS, const NR::Point &iE,double rx,double ry,double angle,bool large,bool wise,double &sang,double &eang)
 {
 	NR::Point  dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);

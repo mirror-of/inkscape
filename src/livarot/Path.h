@@ -299,7 +299,7 @@ public:
   void PointAt (int piece, double at, NR::Point & pos);
   void PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt);
 
-  void PrevPoint (int i, NR::Point &oPt);
+  const NR::Point PrevPoint (const int i) const;
 private:
   void Alloue (int addSize);
   void CancelBezier (void);

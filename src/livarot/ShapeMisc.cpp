@@ -595,9 +595,7 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
   double sang, eang;
   bool nLarge = from->descr_data[nPiece].d.a.large;
   bool nClockwise = from->descr_data[nPiece].d.a.clockwise;
-  NR::Point prevx;
-  from->PrevPoint (nPiece - 1, prevx);
-  Path::ArcAngles (prevx, from->descr_data[nPiece].d.a.p,
+  Path::ArcAngles (from->PrevPoint (nPiece - 1), from->descr_data[nPiece].d.a.p,
                    from->descr_data[nPiece].d.a.rx,
                    from->descr_data[nPiece].d.a.ry,
                    from->descr_data[nPiece].d.a.angle, nLarge, nClockwise,
@@ -675,8 +673,7 @@ Shape::ReFormeCubicTo (int bord, int curBord, Path * dest, Path * from)
     }
     bord = swdData[bord].suivParc;
   }
-  NR::Point prevx;
-  from->PrevPoint (nPiece - 1, prevx);
+  NR::Point prevx = from->PrevPoint (nPiece - 1);
   
   NR::Point sDx, eDx;
   Path::CubicTangent (ts, sDx, prevx,
@@ -765,10 +762,8 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
     bord = swdData[bord].suivParc;
   }
   
-  NR::Point bstx;
-  NR::Point benx;
-  from->PrevPoint (inBezier - 1, bstx);
-  benx = from->descr_data[inBezier].d.b.p;
+  NR::Point bstx = from->PrevPoint (inBezier - 1);
+  NR::Point benx = from->descr_data[inBezier].d.b.p;
   
   if (pe == ps)
   {
@@ -919,10 +914,8 @@ Shape::ReFormeBezierChunk (NR::Point px, NR::Point nx,
                            Path * dest, int inBezier, int nbInterm,
                            Path * from, int p, double ts, double te)
 {
-  NR::Point bstx;
-  NR::Point benx;
-  from->PrevPoint (inBezier - 1, bstx);
-  benx = from->descr_data[inBezier].d.b.p;
+  NR::Point bstx = from->PrevPoint (inBezier - 1);
+  NR::Point benx = from->descr_data[inBezier].d.b.p;
   
   NR::Point mx;
   if (p == inBezier)

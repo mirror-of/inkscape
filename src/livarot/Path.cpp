@@ -1143,27 +1143,21 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 	}
 	else if (typ == descr_lineto)
 	{
-		NR::Point stP;
-		PrevPoint (piece - 1, stP);
 		NR::Point tgt;
 		double len;
-		TangentOnSegAt (at, stP, theD.d.l, pos, tgt, len);
+		TangentOnSegAt (at, PrevPoint (piece - 1), theD.d.l, pos, tgt, len);
 	}
 	else if (typ == descr_arcto)
 	{
-		NR::Point stP;
-		PrevPoint (piece - 1, stP);
 		NR::Point tgt;
 		double len, rad;
-		TangentOnArcAt (at,stP, theD.d.a, pos, tgt, len, rad);
+		TangentOnArcAt (at,PrevPoint (piece - 1), theD.d.a, pos, tgt, len, rad);
 	}
 	else if (typ == descr_cubicto)
 	{
-		NR::Point stP;
-		PrevPoint (piece - 1, stP);
 		NR::Point tgt;
 		double len, rad;
-		TangentOnCubAt (at, stP, theD.d.c, false, pos, tgt, len, rad);
+		TangentOnCubAt (at, PrevPoint (piece - 1), theD.d.c, false, pos, tgt, len, rad);
 	}
 	else if (typ == descr_bezierto || typ == descr_interm_bezier)
 	{
@@ -1184,11 +1178,9 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 		int k = piece - bez_st;
 		if (stB.nb == 1 || k <= 0)
 		{
-			NR::Point stP;
-			PrevPoint (bez_st - 1, stP);
 			NR::Point tgt;
 			double len, rad;
-			TangentOnBezAt (at, stP, descr_data[bez_st + 1].d.i,
+			TangentOnBezAt (at, PrevPoint (bez_st - 1), descr_data[bez_st + 1].d.i,
 					descr_data[bez_st].d.b, false, pos, tgt, len, rad);
 		}
 		else
@@ -1196,23 +1188,20 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 			// forcement plus grand que 1
 			if (k == 1)
 			{
-				NR::Point stP;
-				PrevPoint (bez_st - 1, stP);
 				NR::Point tgt;
 				double len, rad;
 				path_descr_bezierto fin;
 				fin.nb = 1;
 				fin.p = 0.5*(descr_data[bez_st + 1].d.i.p +
 					     descr_data[bez_st + 2].d.i.p) ;
-				TangentOnBezAt (at, stP, descr_data[bez_st + 1].d.i,
+				TangentOnBezAt (at, PrevPoint (bez_st - 1), descr_data[bez_st + 1].d.i,
 						fin, false, pos, tgt, len, rad);
 			}
 			else if (k == stB.nb)
 			{
-				NR::Point stP;
 				NR::Point tgt;
 				double len, rad;
-				stP = 0.5*(descr_data[bez_st + k].d.i.p +
+				NR::Point stP = 0.5*(descr_data[bez_st + k].d.i.p +
 					   descr_data[bez_st + k - 1].d.i.p) ;
 				TangentOnBezAt (at, stP, descr_data[bez_st + k].d.i,
 						descr_data[bez_st].d.b, false, pos, tgt, len,
@@ -1220,10 +1209,9 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 			}
 			else
 			{
-				NR::Point stP;
 				NR::Point tgt;
 				double len, rad;
-				stP = 0.5* (descr_data[bez_st + k].d.i.p +
+				NR::Point stP = 0.5* (descr_data[bez_st + k].d.i.p +
 					    descr_data[bez_st + k - 1].d.i.p);
 				path_descr_bezierto fin;
 				fin.nb = 1;
@@ -1256,24 +1244,18 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 	}
 	else if (typ == descr_lineto)
 	{
-		NR::Point stP;
-		PrevPoint (piece - 1,stP);
 		double len;
-		TangentOnSegAt (at,stP, theD.d.l, pos, tgt, len);
+		TangentOnSegAt (at, PrevPoint (piece - 1), theD.d.l, pos, tgt, len);
 	}
 	else if (typ == descr_arcto)
 	{
-		NR::Point stP;
-		PrevPoint (piece - 1,stP);
 		double len, rad;
-		TangentOnArcAt (at,stP, theD.d.a, pos, tgt, len, rad);
+		TangentOnArcAt (at,PrevPoint (piece - 1), theD.d.a, pos, tgt, len, rad);
 	}
 	else if (typ == descr_cubicto)
 	{
-		NR::Point stP;
-		PrevPoint (piece - 1,stP);
 		double len, rad;
-		TangentOnCubAt (at,stP, theD.d.c, false, pos, tgt, len, rad);
+		TangentOnCubAt (at,PrevPoint (piece - 1), theD.d.c, false, pos, tgt, len, rad);
 	}
 	else if (typ == descr_bezierto || typ == descr_interm_bezier)
 	{
@@ -1294,10 +1276,8 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 		int k = piece - bez_st;
 		if (stB.nb == 1 || k <= 0)
 		{
-			NR::Point stP;
-			PrevPoint (bez_st - 1,stP);
 			double len, rad;
-			TangentOnBezAt (at,stP, descr_data[bez_st + 1].d.i,
+			TangentOnBezAt (at,PrevPoint (bez_st - 1), descr_data[bez_st + 1].d.i,
 					descr_data[bez_st].d.b, false, pos, tgt, len, rad);
 		}
 		else
@@ -1305,14 +1285,12 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 			// forcement plus grand que 1
 			if (k == 1)
 			{
-				NR::Point stP;
-				PrevPoint (bez_st - 1,stP);
 				double len, rad;
 				path_descr_bezierto fin;
 				fin.nb = 1;
 				fin.p = 0.5*(descr_data[bez_st + 1].d.i.p +
 					     descr_data[bez_st + 2].d.i.p);
-				TangentOnBezAt (at,stP, descr_data[bez_st + 1].d.i,
+				TangentOnBezAt (at,PrevPoint (bez_st - 1), descr_data[bez_st + 1].d.i,
 						fin, false, pos, tgt, len, rad);
 			}
 			else if (k == stB.nb)

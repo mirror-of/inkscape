@@ -72,7 +72,7 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 	    {
 	      descr_data = sav_descr;
 	      descr_nb = sav_descr_nb;
-	      PrevPoint (curD, curX);
+	      curX = PrevPoint (curD);
 	      rev->Reset ();
 	      rev->MoveTo (curX);
 	      while (curD > lastM)
@@ -90,14 +90,14 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
           }
           else if (typ == descr_lineto)
           {
-            PrevPoint (curD - 1, nextX);
-            rev->LineTo (nextX);
-            curX = nextX;
-            curD--;
+		  nextX = PrevPoint (curD - 1);
+		  rev->LineTo (nextX);
+		  curX = nextX;
+		  curD--;
           }
           else if (typ == descr_cubicto)
           {
-            PrevPoint (curD - 1, nextX);
+            nextX = PrevPoint (curD - 1);
             NR::Point  isD=-sav_descr[curD].d.c.stD;
             NR::Point  ieD=-sav_descr[curD].d.c.enD;
             rev->CubicTo (nextX, ieD,isD);
@@ -106,7 +106,7 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
           }
           else if (typ == descr_arcto)
           {
-            PrevPoint (curD - 1, nextX);
+            nextX = PrevPoint (curD - 1);
             rev->ArcTo (nextX, sav_descr[curD].d.a.rx,
                         sav_descr[curD].d.a.ry,
                         sav_descr[curD].d.a.angle,
@@ -117,7 +117,7 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
           }
           else if (typ == descr_bezierto)
           {
-            PrevPoint (curD - 1, nextX);
+	    nextX = PrevPoint (curD - 1);
             rev->LineTo (nextX);
             curX = nextX;
             curD--;
@@ -133,13 +133,14 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
                 descr_bezierto)
             {
               // pas trouve le debut!?
-              PrevPoint (nD, nextX);
+              // Not find the start?!
+              nextX = PrevPoint (nD);
               rev->LineTo (nextX);
               curX = nextX;
             }
             else
             {
-              PrevPoint (nD - 1, nextX);
+              nextX = PrevPoint (nD - 1);
               rev->BezierTo (nextX);
               for (int i = curD; i > nD; i--)
                 rev->IntermBezierTo (sav_descr[i].d.i.p);
@@ -330,7 +331,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	    {
 	      descr_data = sav_descr;
 	      descr_nb = sav_descr_nb;
-	      PrevPoint (curD, curX);
+	      curX = PrevPoint (curD);
 	      rev->Reset ();
 	      rev->MoveTo (curX);
 	      while (curD > lastM)
@@ -347,14 +348,14 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
           }
           else if (typ == descr_lineto)
           {
-            PrevPoint (curD - 1, nextX);
+	    nextX = PrevPoint (curD - 1);
             rev->LineTo (nextX);
             curX = nextX;
             curD--;
           }
           else if (typ == descr_cubicto)
           {
-            PrevPoint (curD - 1, nextX);
+	    nextX = PrevPoint (curD - 1);
             NR::Point  isD=-sav_descr[curD].d.c.stD;
             NR::Point  ieD=-sav_descr[curD].d.c.enD;
             rev->CubicTo (nextX, ieD,isD);
@@ -363,7 +364,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
           }
           else if (typ == descr_arcto)
           {
-            PrevPoint (curD - 1, nextX);
+	    nextX = PrevPoint (curD - 1);
             rev->ArcTo (nextX, sav_descr[curD].d.a.rx,
                         sav_descr[curD].d.a.ry,
                         sav_descr[curD].d.a.angle,
@@ -374,7 +375,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
           }
           else if (typ == descr_bezierto)
           {
-            PrevPoint (curD - 1, nextX);
+	    nextX = PrevPoint (curD - 1);
             rev->LineTo (nextX);
             curX = nextX;
             curD--;
@@ -390,13 +391,13 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
                 descr_bezierto)
             {
               // pas trouve le debut!?
-              PrevPoint (nD, nextX);
+              nextX = PrevPoint (nD);
               rev->LineTo (nextX);
               curX = nextX;
             }
             else
             {
-              PrevPoint (nD - 1, nextX);
+	      nextX = PrevPoint (nD - 1);
               rev->BezierTo (nextX);
               for (int i = curD; i > nD; i--)
                 rev->IntermBezierTo (sav_descr[i].d.i.p);
