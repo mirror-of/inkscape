@@ -355,105 +355,6 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 					ss = cs;
 					cs = ns;
 				}
-#if 0
-				/* (MAX (cs->x, cs->vertex->next->x) > MIN (ns->x, ns->vertex->next->x)) */
-				/* Potential intersection */
-				NR::Coord xba, yba, xdc, ydc;
-				NR::Coord d;
-
-				/* Bitch 'o' bitches */
-				xba = cs->vertex->next->x - cs->x;
-				yba = cs->vertex->next->y - cs->y;
-				xdc = ns->vertex->next->x - ns->x;
-				ydc = ns->vertex->next->y - ns->y;
-				d = xba * ydc - yba * xdc;
-
-				if (fabs (d) > NR_EPSILON) {
-					NR::Coord xac, yac, numr, nums;
-					NR::Coord r, s, x, y, dr, ds, dr2, ds2;
-
-					/* Not parallel */
-					xac = cs->vertex->x - ns->vertex->x;
-					yac = cs->vertex->y - ns->vertex->y;
-					numr = yac * xdc - xac * ydc;
-					nums = yac * xba - xac * yba;
-					r = numr / d;
-					s = nums / d;
-					x = cs->vertex->x + r * xba;
-					y = cs->vertex->y + r * yba;
-					dr = 0.0;
-					if (r < 0.0) dr = -r;
-					if (r > 1.0) dr = r - 1.0;
-					dr2 = dr * xba * xba + yba * yba;
-					ds = 0.0;
-					if (s < 0.0) ds = -s;
-					if (s > 1.0) ds = s - 1.0;
-					ds2 = ds * xdc * xdc + ydc * ydc;
-					y = NR_COORD_SNAP_DOWN (y);
-					/* fixme: */
-					if ((dr2 < NR_COORD_TOLERANCE2) && (ds2 < NR_COORD_TOLERANCE2) &&
-					    (y >= yslice) && (y <= cs->vertex->next->y) && (y <= ns->vertex->next->y)) {
-						if (y == yslice) {
-							/* Slices are very close at yslice */
-							/* Start by breaking slices */
-							csvl = nr_svl_slice_break (cs, cs->x, yslice, csvl);
-							csvl = nr_svl_slice_break (ns, ns->x, yslice, csvl);
-							if ((ns->x - cs->x) <= NR_COORD_TOLERANCE) {
-								/* Merge intersection into cs */
-								x = cs->x;
-							}
-							if (cs->x != x) {
-								NR::Coord x0, x1;
-								x0 = MIN (x, cs->x);
-								x1 = MAX (x, cs->x);
-								f = nr_flat_new_full (y, x0, x1);
-								nflat = nr_flat_insert_sorted (nflat, f);
-							}
-							if (ns->x != cs->x) {
-								NR::Coord x0, x1;
-								x0 = MIN (x, ns->x);
-								x1 = MAX (x, ns->x);
-								f = nr_flat_new_full (y, x0, x1);
-								nflat = nr_flat_insert_sorted (nflat, f);
-							}
-							/* Set the new starting point */
-							cs->vertex->x = x;
-							cs->x = cs->vertex->x;
-							ns->vertex->x = cs->x;
-							ns->x = ns->vertex->x;
-							/* Reorder slices */
-							if (ss) {
-								assert (ns->next != ss);
-								ss->next = ns->next;
-							} else {
-								slices = ns->next;
-							}
-							slices = nr_svl_slice_insert_sorted (slices, cs);
-							slices = nr_svl_slice_insert_sorted (slices, ns);
-							CHECK_SLICES (slices, yslice, "CHECK", 0, 0, 1);
-							/* Start the row from the beginning */
-							ss = NULL;
-							cs = slices;
-						} else {
-							if (((y <= cs->vertex->next->y) || cs->vertex->next->next) &&
-							    ((y <= ns->vertex->next->y) || ns->vertex->next->next)) {
-								/* Postpone by breaking svl */
-								csvl = nr_svl_slice_break_y_and_continue_x (cs, y, x, csvl, yslice, &nflat);
-								csvl = nr_svl_slice_break_y_and_continue_x (ns, y, x, csvl, yslice, &nflat);
-							}
-							/* fixme: Slight disturbance is possible so we should repeat */
-							ss = cs;
-							cs = ns;
-						}
-					} else {
-						ss = cs;
-						cs = ns;
-					}
-				} else {
-					ss = cs;
-					cs = ns;
-				}
-#endif
 			} else {
 				ss = cs;
 				cs = ns;
@@ -717,34 +618,6 @@ nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, NR::Coord y, NR::Coord x, NR
 	return svl;
 }
 
-#if 0
-static void
-nr_svl_slice_ensure_vertex_at (NRSVLSlice *s, NRCoord x, NRCoord y)
-{
-	/* Invariant 1 */
-	assert (y >= s->y);
-	/* Invariant 2 */
-	assert (y >= s->vertex->y);
-	/* Invariant 3 */
-	assert (y <= s->vertex->next->y);
-
-	if (y == s->y) {
-		s->x = x;
-	}
-	if (y == s->vertex->y) {
-		s->vertex->x = x;
-	} else if (y < s->vertex->next->y) {
-		NRVertex *nvx;
-		nvx = nr_vertex_new_xy (x, y);
-		nvx->next = s->vertex->next;
-		s->vertex->next = nvx;
-	} else {
-		s->vertex->next->x = x;
-	}
-	/* We expect bbox to be correct (x0 <= x <= x1) */
-}
-#endif
-
 /*
  * Memory management stuff follows (remember goals?)
  */
@@ -780,9 +653,6 @@ nr_svl_slice_new (NRSVL * svl, NRCoord y)
 		ffslice = s->next;
 	}
 
-#if 0
-	s->prev = NULL;
-#endif
 	s->next = NULL;
 	s->svl = svl;
 
@@ -805,35 +675,8 @@ void
 nr_svl_slice_free_one (NRSVLSlice * slice)
 {
 	slice->next = ffslice;
-#if 0
-	if (ffslice) ffslice->prev = slice;
-#endif
 	ffslice = slice;
-#if 0
-	slice->prev = NULL;
-#endif
 }
-
-#if 0
-void
-nr_svl_slice_free_list (NRSVLSlice * slice)
-{
-	NRSVLSlice * l;
-
-	if (!slice) return;
-
-	for (l = slice; l->next != NULL; l = l->next);
-
-	l->next = ffslice;
-#if 0
-	if (ffslice) ffslice->prev = l;
-#endif
-	ffslice = slice;
-#if 0
-	slice->prev = NULL;
-#endif
-}
-#endif
 
 NRSVLSlice *
 nr_svl_slice_insert_sorted (NRSVLSlice * start, NRSVLSlice * slice)
@@ -907,11 +750,7 @@ nr_svl_slice_stretch_list (NRSVLSlice * slices, NRCoord y)
 			if (v->y == y) {
 				s->x = v->x;
 			} else {
-#if 0
-				s->x = NR_COORD_SNAP (v->x + (v->next->x - v->x) * (y - v->y) / (v->next->y - v->y));
-#else
 				s->x = v->x + (NR::Coord) (v->next->x - v->x) * (y - v->y) / (v->next->y - v->y);
-#endif
 			}
 			s->y = y;
 			p = s;
@@ -1016,38 +855,3 @@ nr_segment_intersection (NRVertex *s0, NRVertex *s1, NR::Coord *x, NR::Coord *y)
 	return sqrt (d_2);
 }
 
-/*
- * Test, whether vertex can be considered to be lying on line
- */
-
-#if 0
-static unsigned int
-nr_test_point_line (NRVertex *a, NRVertex *b, NRCoord cx, NRCoord cy)
-{
-	float xba, yba, xac, yac;
-	float n;
-
-	/*
-	 * L = sqrt (xba * xba + yba * yba)
-	 * n = yac * xba - xac * yba
-	 * s = n / (L * L)
-	 * d = s * L
-	 *
-	 * We test for d < TOLERANCE
-	 * d * d < TOLERANCE * TOLERANCE
-	 * s * s * L * L < TOLERANCE * TOLERANCE
-	 * n * n / (L * L) < TOLERANCE * TOLERANCE
-	 * n * n < TOLERANCE * TOLERANCE * L * L
-	 *
-	 */
-
-	xba = b->x - a->x;
-	yba = b->y - a->y;
-	xac = a->x - cx;
-	yac = a->y - cy;
-
-	n = yac * xba - xac * yba;
-
-	return (n * n) < (2 * NR_COORD_TOLERANCE * NR_COORD_TOLERANCE * (xba * xba + yba * yba));
-}
-#endif

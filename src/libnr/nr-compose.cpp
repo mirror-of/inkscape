@@ -614,41 +614,6 @@ nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_P_A8 (unsigned char *px, int w, int h, int rs,
 	}
 }
 
-/* FINAL DST MASK COLOR */
-
-#if 0
-void
-nr_R8G8B8_EMPTY_A8_RGBA32 (unsigned char *px, int w, int h, int rs, const unsigned char *mpx, int mrs, unsigned long rgba)
-{
-	unsigned int r, g, b, a;
-	int x, y;
-
-	r = NR_RGBA32_R (rgba);
-	g = NR_RGBA32_G (rgba);
-	b = NR_RGBA32_B (rgba);
-	a = NR_RGBA32_A (rgba);
-
-	if (a == 0) return;
-
-	for (y = 0; y < h; y++) {
-		unsigned char *d, *m;
-		d = (unsigned char *) px;
-		m = (unsigned char *) mpx;
-		for (x = 0; x < w; x++) {
-			unsigned int alpha;
-			alpha = NR_PREMUL (a, m[0]);
-			d[0] = NR_COMPOSEN11 (r, alpha, 0xff);
-			d[1] = NR_COMPOSEN11 (g, alpha, 0xff);
-			d[2] = NR_COMPOSEN11 (b, alpha, 0xff);
-			d += 3;
-			m += 1;
-		}
-		px += rs;
-		mpx += mrs;
-	}
-}
-#endif
-
 void
 nr_R8G8B8A8_N_EMPTY_A8_RGBA32 (unsigned char *px, int w, int h, int rs, const unsigned char *spx, int srs, unsigned long rgba)
 {
