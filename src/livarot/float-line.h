@@ -42,10 +42,7 @@ struct float_ligne_bord {
     bool start; ///< is the beginning of the coverage portion?
     float val; ///< amount of coverage (ie vst if start==true, and ven if start==false)
     float pente; ///< (ven-vst)/(en-st)
-//  float delta;
     int other; ///< index, in the array of float_ligne_bord, of the other boundary associated to this one
-    int prev; ///< not used
-    int next; ///< not used
     int s_prev; ///< index of the previous bord in the doubly-linked list
     int s_next; ///< index of the next bord in the doubly-linked list
     int pend_ind; ///< bords[i].pend_ind is the index of the float_ligne_bord that is the start of the
@@ -58,10 +55,6 @@ public:
     std::vector<float_ligne_bord> bords; ///< vector of coverage boundaries
     std::vector<float_ligne_run> runs; ///< vector of runs
 
-    // unused
-    int firstAc;
-    int lastAc;
-    
     // first and last boundaries in the doubly-linked list
     int s_first;
     int s_last;
@@ -83,22 +76,14 @@ public:
     // simply append boundaries at the end of the list, 'cause we know they are on the right
     int AppendBord(float spos, float sval, float epos, float eval, float pente);
     
-    // insertion primitive, for private use
-    void InsertBord(int no, float p, int guess);
-
     // extract a set of non-overlapping runs from the boundaries
     // it does so by scanning the boundaries left to right, maintaining a set of coverage portions currently being scanned
     // for each such portion, the function will add the index of its first boundary in an array; but instead of allocating
     // another array, it uses a field in float_ligne_bord: pend_ind
     void Flatten();
-//  void FlattenB();
 
     // debug dump of the instance
     void Affiche();
-
-    // internal use only
-    int AddRun(float st, float en, float vst, float ven);
-    int AddRun(float st, float en, float vst, float ven, float pente);
 
     // operations on FloatLigne instances:
     // computes a mod b and stores the result in the present FloatLigne
@@ -117,24 +102,15 @@ public:
     void Split(FloatLigne *a, float tresh, FloatLigne *over);
     
     // extract the parts where coverage > tresh
-    void Over(FloatLigne *a,float tresh);
+    void Over(FloatLigne *a, float tresh);
 	
     // copy the runs from another coverage structure into this one
     void Copy(IntLigne *a);
     void Copy(FloatLigne *a);
 
-    // private use
-    void Enqueue(int no);
-    void Dequeue(int no);
-    
     // computes the sum of the coverages of the runs currently being scanned, of which there are "pending"
     float RemainingValAt(float at, int pending);
   
-    // sorting of the float_ligne_bord, for when we use a quicksort (not the case, right now)
-    void SwapBords(int a,int b);
-    void SwapBords(int a,int b,int c);
-    void SortBords(int s,int e);
-
     static int CmpBord(float_ligne_bord const &d1, float_ligne_bord const &d2) {
         if ( d1.pos == d2.pos ) {
             if ( d1.start && !(d2.start) ) {
@@ -149,11 +125,15 @@ public:
         return (( d1.pos < d2.pos ) ? -1 : 1);
     };
 
-    // miscanellous
+    int AddRun(float st, float en, float vst, float ven, float pente);
+
+private:
+    void InsertBord(int no, float p, int guess);
+    int AddRun(float st, float en, float vst, float ven);
+
     inline float ValAt(float at, float ps, float pe, float vs, float ve) {
         return ((at - ps) * ve + (pe - at) * vs) / (pe - ps);
     };
-    
 };
 
 #endif
