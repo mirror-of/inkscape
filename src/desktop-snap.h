@@ -26,10 +26,6 @@
 /* Consider moving Snapper etc. to separate files if this reduces the number of translation units
  * that #include these class definitions.  Doing so reduces the amount of work of the compiler, and
  * reduces the number of recompilations necessary.
- *
- * Also, I'd suggest use of the standard modeline stuff (see end of this file) to make it easier to
- * conform to Inkscape's indentation standards.
- *
  * -- pjrm
  */
 
@@ -39,12 +35,20 @@ class Snapper
 public:
     Snapper(NR::Coord const d);
 
+    void setSnapToPoints(bool s);
+    void setSnapToBBox(bool s);
+
+    bool getSnapToPoints() const;
+    bool getSnapToBBox() const;
+    
     void setDistance(NR::Coord const d);
 
     NR::Coord getDistance() const;
 
 private:
     NR::Coord _distance;
+    bool _snap_to_points;
+    bool _snap_to_bbox;
 };
 
 ///< Snap to grid

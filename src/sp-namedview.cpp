@@ -114,8 +114,6 @@ sp_namedview_init (SPNamedView * nv)
 	nv->showguides = TRUE;
 	nv->snaptoguides = FALSE;
 	nv->showborder = TRUE;
-	nv->grid_snap_to = SNAP_TO_BBOX;
-	nv->guide_snap_to = SNAP_TO_BBOX;
 
 	nv->guides = NULL;
 	nv->viewcount = 0;
@@ -412,41 +410,25 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_INKSCAPE_GRID_BBOX:
 		if (value) {
-			if (sp_str_to_bool (value)) {
-				nv->grid_snap_to |= SNAP_TO_BBOX;
-			} else {
-				nv->grid_snap_to &= ~SNAP_TO_BBOX;
-			}
+			nv->grid_snapper.setSnapToBBox(sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;
 	case SP_ATTR_INKSCAPE_GUIDE_BBOX:
 		if (value) {
-			if (sp_str_to_bool (value)) {
-				nv->guide_snap_to |= SNAP_TO_BBOX;
-			} else {
-				nv->guide_snap_to &= ~SNAP_TO_BBOX;
-			}
+			nv->guide_snapper.setSnapToBBox(sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;
 	case SP_ATTR_INKSCAPE_GRID_POINTS:
 		if (value) {
-			if (sp_str_to_bool (value)) {
-				nv->grid_snap_to |= SNAP_TO_POINTS;
-			} else {
-				nv->grid_snap_to &= ~SNAP_TO_POINTS;
-			}
+			nv->grid_snapper.setSnapToPoints(sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;
 	case SP_ATTR_INKSCAPE_GUIDE_POINTS:
 		if (value) {
-			if (sp_str_to_bool (value)) {
-				nv->guide_snap_to |= SNAP_TO_POINTS;
-			} else {
-				nv->guide_snap_to &= ~SNAP_TO_POINTS;
-			}
+			nv->guide_snapper.setSnapToPoints(sp_str_to_bool(value));
 			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		}
 		break;

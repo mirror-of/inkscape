@@ -30,12 +30,6 @@ enum {
 	SP_BORDER_LAYER_TOP
 };
 
-enum {
-	SNAP_TO_POINTS = 0x1,
-	SNAP_TO_BBOX = 0x2
-};
-  
-
 struct SPNamedView {
 	SPObjectGroup objectgroup;
 	unsigned int editable : 1;
@@ -53,10 +47,6 @@ struct SPNamedView {
 	gint window_height;
 	gint window_x;
 	gint window_y;
-
-	/* Bitmasks of flags SNAP_TO_POINTS, SNAP_TO_BBOX etc. */
-	unsigned int grid_snap_to;
-	unsigned int guide_snap_to;
 
 	GridSnapper grid_snapper;
 	GuideSnapper guide_snapper;

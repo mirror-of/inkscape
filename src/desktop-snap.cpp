@@ -309,7 +309,8 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, const std::vector
 }
 
 
-Snapper::Snapper(NR::Coord const d) : _distance(d)
+Snapper::Snapper(NR::Coord const d)
+    : _distance(d), _snap_to_points(false), _snap_to_bbox(false)
 {
 
 }
@@ -322,6 +323,26 @@ void Snapper::setDistance(NR::Coord const d)
 NR::Coord Snapper::getDistance() const
 {
     return _distance;
+}
+
+void Snapper::setSnapToBBox(bool s)
+{
+    _snap_to_bbox = s;
+}
+
+bool Snapper::getSnapToBBox() const
+{
+    return _snap_to_bbox;
+}
+
+void Snapper::setSnapToPoints(bool s)
+{
+    _snap_to_points = s;
+}
+
+bool Snapper::getSnapToPoints() const
+{
+    return _snap_to_points;
 }
 
 GridSnapper::GridSnapper(NR::Coord const d) : Snapper(d)
