@@ -7,6 +7,12 @@
 
 2003-11-27 MenTaLguY <mental@rydia.net>
 
+	* src/utest/Makefile.am, src/utest/utest.inc: new minimalist
+	  unit testing framework
+
+	* src/xml/Makefile.am, src/xml/repr-action-test.c: some tests
+	  for the XML transaction stuff
+
 	* src/desktop.c: reshuffled the widgets, switched to an embedded
 	  toolbox, switched to using real GtkStatusbars for the status bar,
 	  and (for the present) nuked the body of

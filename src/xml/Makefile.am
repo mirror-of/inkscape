@@ -10,6 +10,10 @@ INCLUDES = \
 	$(INKSCAPE_CFLAGS) \
 	-I$(includedir)
 
+TESTS = repr-action-test
+
+check_PROGRAMS = repr-action-test
+
 noinst_LIBRARIES = libspxml.a
 
 libspxml_a_SOURCES = \
@@ -20,3 +24,6 @@ libspxml_a_SOURCES = \
 	repr-css.c \
 	repr-action.c repr-action.h
 
+repr_action_test_SOURCES = repr-action-test.c repr-action.c repr.c repr-util.c
+
+repr_action_test_LDADD = $(INKSCAPE_LIBS)

@@ -315,6 +315,7 @@ src/libnr/Makefile
 src/libnrtype/Makefile
 src/xml/Makefile
 src/svg/Makefile
+src/utest/Makefile
 src/widgets/Makefile
 src/helper/Makefile
 src/dialogs/Makefile
