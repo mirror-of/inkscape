@@ -693,61 +693,77 @@ static double sign(double const x)
 
 gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
 {
-	using NR::X;
-	using NR::Y;
+    using NR::X;
+    using NR::Y;
 
-	SPDesktop *desktop = seltrans->desktop;
+    SPDesktop *desktop = seltrans->desktop;
 
-	NR::Point point = seltrans->point;
-	NR::Point const norm(seltrans->origin);
+    /* Original position of the scale knot */
+    NR::Point point = seltrans->point;
+    /* Origin for scaling */
+    NR::Point const norm(seltrans->origin);
 
-	NR::Point d = point - norm;
-	NR::scale s(d);
-	for ( unsigned i = 0 ; i < 2 ; i++ ) {
-		if ( fabs(s[i]) > 0.001 ) {
-			s[i] = ( pt[i] - norm[i] ) / ( point[i] - norm[i] );
-			if ( fabs(s[i]) < 1e-9 ) {
-				s[i] = 1e-9;
-			}
-		} else {
-			s[i] = 0.0;
-		}
-	}
+    NR::Point d = point - norm;
+    NR::scale s(d);
 
-	GtkToggleButton *lock = (GtkToggleButton *) sp_search_by_data_recursive (seltrans->desktop->owner->aux_toolbox, (gpointer) "lock");
+    /* Work out the new scale factors `s' */
+    for ( unsigned int i = 0 ; i < 2 ; i++ ) {
+        if ( fabs(s[i]) > 0.001 ) {
+            s[i] = ( pt[i] - norm[i] ) / ( point[i] - norm[i] );
+            if ( fabs(s[i]) < 1e-9 ) {
+                s[i] = 1e-9;
+            }
+        } else {
+            s[i] = 0.0;
+        }
+    }
 
-	if ((state & GDK_CONTROL_MASK) || gtk_toggle_button_get_active (lock)) {
-	        double r;
+    GtkToggleButton *lock = (GtkToggleButton *) sp_search_by_data_recursive(desktop->owner->aux_toolbox,
+                                                                            (gpointer) "lock");
 
-		if ( !d[NR::X] || !d[NR::Y] ) {
-			return FALSE;
-		}
+    if ((state & GDK_CONTROL_MASK) || gtk_toggle_button_get_active (lock)) {
+        /* Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y] */
 
-		for ( unsigned i = 0 ; i < 2 ; i++ ) {
-			unsigned oi = 1 - i;
-			if ( fabs(s[i]) > fabs(s[oi]) ) {
-				s[i] = fabs(s[oi]) * sign(s[i]); 
-				break;
-			}
-		}
-		r = fabs(namedview_vector_snap_list(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, s));
-		for ( unsigned i = 0 ; i < 2 ; i++ ) {
-			s[i] = r * sign(s[i]);
-		}
-	} else {
-		for ( unsigned i = 0 ; i < 2 ; i++ ) {
-			if (d[i]) {
-				s[i] = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, s[i], s[i] ? NR::X : NR::Y);
-			}
-		}
-	}
+        /* Abort if the scale factor is zero in either direction */
+        if ( !d[NR::X] || !d[NR::Y] ) {
+            return FALSE;
+        }
 
-	pt = ( point - norm ) * s + norm;
+        /* Lock aspect ratio, using the smaller of the x and y factors */
+        if (fabs(s[NR::X]) > fabs(s[NR::Y])) {
+            s[NR::X] = fabs(s[NR::Y]) * sign(s[NR::X]);
+        } else {
+            s[NR::Y] = fabs(s[NR::X]) * sign(s[NR::Y]);
+        }
 
-	// status text
-        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
+        /* Snap the scale factor */
+        double r = fabs(namedview_vector_snap_list(desktop->namedview,
+                                                   Snapper::SNAP_POINT, seltrans->snap_points,
+                                                   norm, s));
+        
+        for ( unsigned int i = 0 ; i < 2 ; i++ ) {
+            s[i] = r * sign(s[i]);
+        }
+        
+    } else {
+        /* Scale aspect ratio is unlocked */
+        for ( unsigned int i = 0 ; i < 2 ; i++ ) {
+            if (d[i]) {
+                s[i] = namedview_dim_snap_list_scale(desktop->namedview,
+                                                     Snapper::SNAP_POINT, seltrans->snap_points,
+                                                     norm, s[i], s[i] ? NR::X : NR::Y);
+            }
+        }
+    }
 
-	return TRUE;
+    /* Update the knot position */
+    pt = ( point - norm ) * s + norm;
+    
+    /* Status text */
+    desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
+                                    _("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
+    
+    return TRUE;
 }
 
 gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
