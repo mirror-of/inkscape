@@ -2,6 +2,19 @@
 
 	* src/verbs.cpp: SPSelection OO-ification.
 
+	* src/display/curve.cpp: Don't raise a critical error if a new
+	curve cannot be created in sp_curve_new_from_bpath().  This can
+	happen if a file contains a strange path, like one with only a
+	move in it and nothing else.  This is part of the fix for bug
+	934882.
+
+	* src/sp-path.cpp: cope with sp_curve_new_from_bpath() returning
+	NULL in sp_path_set().  This is the other part of the fix for 934882.
+
+	* src/path-chemistry.cpp, src/sp-offset.cpp, src/sp-ellipse.cpp:
+	added asserts for calls to sp_curve_new_from_bpath() which look
+	like they might not expect it to return NULL.
+
 2004-04-24  MenTaLguY <mental@rydia.net>
 
 	* src/arc-context.cpp, src/dyna-draw-context.cpp, src/object-ui.cpp,
