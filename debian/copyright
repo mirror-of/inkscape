@@ -1,11 +1,38 @@
-This package was debianized by Davide Puricelli (evo) <evo@debian.org> on
-Tue,  7 Nov 2000 21:49:06 +0100.
+This package was debianized by Wolfram Quester <wolfi@mittelerde.physik.uni-konstanz.de> on
+Wed, 12 Nov 2003 10:39:40 +0100.
 
-It was downloaded from http://inkscape.sourceforge.net 
+It was downloaded from http://inkscape.sourceforge.net/
 
-Upstream Author: MenTaLguY <mental@rydia.net>
+Upstream Authors:
+	Hans Breuer
+	Bulia Byak
+	Chema Celorio
+	Zbigniew Chyla
+	Robert Crosbie
+	Danilo Egan
+	Frank Felfe
+	Ted Gould
+	Bryce Harrington
+	Nathan Hurst
+	Bob Jamison
+	Lauris Kaplinski
+	Lynn Kerby
+	Petr Kovar
+	Raph Levien
+	Vitaly Lipatov
+	Dmitry G. Mastrukov
+	Michael Meeks
+	Frederico Mena
+	MenTaLguY
+	Yukihiro Nakai
+	Christian Neumair
+	Mitsuru Oka
+	Christian Schaller
+	Tom von Schwerdtner
+	Daniel Yacob
+	Masatake Yamato
 
-Copyright: GPL
+Copyright: Gnu GPL
 
-On Debian GNU/Linux systems, the text of the GPL can be found in
+On Debian systems, the text of the Gnu GPL can be found in
 /usr/share/common-licenses/GPL.

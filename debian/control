@@ -2,15 +2,16 @@ Source: inkscape
 Section: graphics
 Priority: optional
 Maintainer: Nathan Hurst (njh) <njh@mail.csse.monash.edu.au>
-Standards-Version: 3.5.6
-Build-Depends: debhelper (>= 3.0.30), intltool, automake1.7, gettext, libtool, libart-2.0-dev, libatk1.0-dev, libfreetype6-dev, libglib2.0-dev, libgtk2.0-dev (>= 2.0.6-1), libpango1.0-dev, libpopt-dev, libpng3-dev, libxml2-dev, xlibs-dev, zlib1g-dev, libxft2-dev, libsigc++-2.0-dev, libgc-dev, libgtkmm-2.4-dev
+Build-Depends: automake1.7, debhelper (>= 4.0.0), gettext, intltool, libart-2.0-dev (>= 2.3.10), libatk1.0-dev, libfreetype6-dev, libgc-dev, libglib2.0-dev, libgtk2.0-dev (>= 2.0.6-1), libgtkmm-2.4-dev, libpango1.0-dev, libpng12-dev, libpopt-dev, libsigc++-2.0-dev, libtool, libxft2-dev, libxml-parser-perl, libxml2-dev (>= 2-2.4.24), pkg-config, xlibs-dev, zlib1g-dev
+Standards-Version: 3.6.1
 
 Package: inkscape
 Architecture: any
 Depends: ${shlibs:Depends}
+Suggests: dia, sketch
 Description: Vector based drawing program
- It loads and saves subset of SVG (Scalable Vector Graphics) format,
- a standard maintained by the WWW consortium.         
+ Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
+ format, a standard maintained by the WWW consortium.
  .
  Inkscape user interface should be familiar from CorelDraw and similar
  drawing programs. There are rectangles, ellipses, text items, bitmap
@@ -20,3 +21,5 @@ Description: Vector based drawing program
  .
  Inkscape supports multiple opened files and multiple views per file.
  Graphics can be printed and exported to png bitmaps.
+ .
+ Homepage: http://www.inkscape.org/
