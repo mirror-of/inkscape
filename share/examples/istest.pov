@@ -112,11 +112,16 @@ object {
     //## As a group
     object { AllShapesZ }
 
-    texture {
-        pigment { P_Silver1 }
-        finish  { F_MetalD  }
-        scale   .5
-        }
+    texture
+       {
+       finish {
+           phong 0.5
+           reflection 0.3
+           specular 0.5
+       }
+    }
+
+
 
     translate<-AllShapes_CENTER_X, 0, -AllShapes_CENTER_Y>
     scale  <  1,  60,   1>

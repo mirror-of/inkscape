@@ -3,6 +3,7 @@
  * then makes 'save as...' Postscript.
  *
  * Authors:
+ *   Bob Jamison <rjamison@titan.com>
  *   Ted Gould <ted@gould.cx>
  *
  * Copyright (C) 2004 Authors
@@ -16,6 +17,8 @@
 #include "pov-out.h"
 #include <inkscape.h>
 #include <sp-path.h>
+#include <style.h>
+#include <color.h>
 #include <display/curve.h>
 #include <libnr/n-art-bpath.h>
 #include <extension/system.h>
@@ -55,6 +58,18 @@ findElementsByTagName(std::vector<SPRepr *> &results, SPRepr *node, const char *
 }
 
 
+//used for saving information about shapes
+class PovShapeInfo
+{
+    public:
+    PovShapeInfo()
+        {}
+    virtual ~PovShapeInfo()
+        {}
+    std::string id;
+    std::string color;
+};
+
 /**
  * Saves the <paths> of an Inkscape SVG file as PovRay spline definitions
 */
@@ -77,7 +92,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
     fprintf(f, "### Created: %s", ctime(&tim));
     fprintf(f, "##################################################*/\n\n\n");
 
-    std::vector<std::string>ids; //Let's save a list of all of the shape IDs
+    std::vector<PovShapeInfo>povShapes; //A list for saving information about the shapes
 
     double bignum = 1000000.0;
     double minx  =  bignum;
@@ -102,7 +117,29 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         if (sp_curve_empty(curve))
             continue;
 
-        ids.push_back(id); //passed all tests.  save the name
+        PovShapeInfo shapeInfo;
+
+        shapeInfo.id    = id;
+        shapeInfo.color = "";
+
+        //Try to get the fill color of the shape
+        SPStyle *style = SP_OBJECT_STYLE(shape);
+        if (style && (style->fill.type == SP_PAINT_TYPE_COLOR))
+            {
+            // see color.h for how to parse SPColor 
+            SPColor spColor = style->fill.value.color;
+            guint32 color = sp_color_get_rgba32_ualpha(&spColor, 0);
+            int r = SP_RGBA32_R_U(color);
+            int g = SP_RGBA32_G_U(color);
+            int b = SP_RGBA32_B_U(color);
+            gchar *str = g_strdup_printf("rgb < %d, %d, %d >", r, g, b);
+            shapeInfo.color += str;
+            g_free(str);
+
+            //printf("got color for shape '%s': %s\n", id, shapeInfo.color.c_str());
+            }
+
+        povShapes.push_back(shapeInfo); //passed all tests.  save the info
 
         int curveNr;
 
@@ -190,6 +227,9 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "#declare %s_CENTER_Y = %4.3f;\n", id, (cmaxy+cminy)/2.0);
         fprintf(f, "#declare %s_MAX_Y    = %4.3f;\n", id, cmaxy);
         fprintf(f, "#declare %s_HEIGHT   = %4.3f;\n", id, cmaxy-cminy);
+        if (shapeInfo.color.length()>0)
+            fprintf(f, "#declare %s_COLOR    = %s;\n",
+                          id, shapeInfo.color.c_str());
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### end %s\n", id);
         fprintf(f, "##############################################*/\n\n\n\n");
@@ -201,34 +241,55 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             miny = cminy;
         else if (cmaxy > maxy)
             maxy = cmaxy;
-        }
 
 
-    //## Let's make a union of all of the IDs
-    if (ids.size() > 0)
+        }//for
+
+
+    
+    //## Let's make a union of all of the Shapes
+    if (povShapes.size() > 0)
         {
         char *id = "AllShapes";
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### UNION OF ALL SHAPES IN DOCUMENT\n");
         fprintf(f, "##############################################*/\n");
         fprintf(f, "#declare %s = union {\n", id);
-        for (unsigned int i=0 ; i<ids.size() ; i++)
+        for (unsigned int i=0 ; i<povShapes.size() ; i++)
             {
-            fprintf(f, "    object { %s }\n", ids[i].c_str());
+            fprintf(f, "    object { %s\n", povShapes[i].id.c_str());
+            fprintf(f, "        texture { \n");
+            if (povShapes[i].color.length()>0)
+                fprintf(f, "            pigment { %s }\n", povShapes[i].color.c_str());
+            else
+                fprintf(f, "            pigment { rgb <0,0,0> }\n");
+            fprintf(f, "            } \n");
+            fprintf(f, "        } \n");
             }
         fprintf(f, "}\n\n\n");
+
+
         fprintf(f, "/* Same union, but with Z-diffs (actually Y in pov)*/\n");
         fprintf(f, "#declare %sZ = union {\n", id);
-        double zinc   = 0.2 / (double)ids.size();
+        double zinc   = 0.2 / (double)povShapes.size();
         double zscale = 1.0;
         double ztrans = 0.0;
-        for (unsigned int i=0 ; i<ids.size() ; i++)
+        for (unsigned int i=0 ; i<povShapes.size() ; i++)
             {
-            fprintf(f, "    object { %s scale <1, %2.5f, 1>  translate <1, %2.5f, 1> }\n", 
-                         ids[i].c_str(), zscale, ztrans);
+            fprintf(f, "    object { %s\n", povShapes[i].id.c_str());
+            fprintf(f, "        texture { \n");
+            if (povShapes[i].color.length()>0)
+                fprintf(f, "            pigment { %s }\n", povShapes[i].color.c_str());
+            else
+                fprintf(f, "            pigment { rgb <0,0,0> }\n");
+            fprintf(f, "            } \n");
+            fprintf(f, "        scale <1, %2.5f, 1>  translate <1, %2.5f, 1>\n", 
+                                     zscale, ztrans);
+            fprintf(f, "        } \n");
             zscale += zinc;
             ztrans -= zinc/2.0;
             }
+
         fprintf(f, "}\n");
         fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, minx);
         fprintf(f, "#declare %s_CENTER_X = %4.3f;\n", id, (maxx+minx)/2.0);
