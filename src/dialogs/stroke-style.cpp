@@ -998,7 +998,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
         // generate preview
         GtkWidget *prv = sp_marker_prev_new (22, markid, source, sandbox, menu_id);
         gtk_widget_show(prv);
-        gtk_box_pack_start(GTK_BOX(hb), prv, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(hb), prv, FALSE, FALSE, 6);
 
         // create label
         GtkWidget *l = gtk_label_new(sp_repr_attr(repr, "id"));
