@@ -144,7 +144,7 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 	if (length == 0)
         return NULL; // prevent crash for one-node paths
 
-	const gchar *nodetypes = sp_repr_attr(repr, "sodipodi:nodetypes");
+	gchar const *nodetypes = sp_repr_attr(repr, "sodipodi:nodetypes");
 	gchar *typestr = parse_nodetypes(nodetypes, length);
 
 	//Create new nodepath
@@ -418,7 +418,7 @@ static void update_repr(Path::Path *np)
 	sp_document_done(SP_DT_DOCUMENT(np->desktop));
 }
 
-static void update_repr_keyed(Path::Path *np, const gchar *key)
+static void update_repr_keyed(Path::Path *np, gchar const *key)
 {
 	update_repr_internal(np);
 	sp_document_maybe_done(SP_DT_DOCUMENT(np->desktop), key);
@@ -595,16 +595,16 @@ static void sp_nodepath_line_midpoint(Path::Node *new_path, Path::Node *end, gdo
 		new_path->code = NR_CURVETO;
 		gdouble s      = 1 - t;
 		for(int dim = 0; dim < 2; dim++) {
-			const NR::Coord f000 = start->pos[dim];
-			const NR::Coord f001 = start->n.pos[dim];
-			const NR::Coord f011 = end->p.pos[dim];
-			const NR::Coord f111 = end->pos[dim];
-			const NR::Coord f00t = s * f000 + t * f001;
-			const NR::Coord f01t = s * f001 + t * f011;
-			const NR::Coord f11t = s * f011 + t * f111;
-			const NR::Coord f0tt = s * f00t + t * f01t;
-			const NR::Coord f1tt = s * f01t + t * f11t;
-			const NR::Coord fttt = s * f0tt + t * f1tt;
+			NR::Coord const f000 = start->pos[dim];
+			NR::Coord const f001 = start->n.pos[dim];
+			NR::Coord const f011 = end->p.pos[dim];
+			NR::Coord const f111 = end->pos[dim];
+			NR::Coord const f00t = s * f000 + t * f001;
+			NR::Coord const f01t = s * f001 + t * f011;
+			NR::Coord const f11t = s * f011 + t * f111;
+			NR::Coord const f0tt = s * f00t + t * f01t;
+			NR::Coord const f1tt = s * f01t + t * f11t;
+			NR::Coord const fttt = s * f0tt + t * f1tt;
 			start->n.pos[dim]    = f00t;
 			new_path->p.pos[dim] = f0tt;
 			new_path->pos[dim]   = fttt;
@@ -967,7 +967,7 @@ struct NodeSort
   
 };
 
-bool operator< (const NodeSort &a, const NodeSort &b)
+bool operator<(NodeSort const &a, NodeSort const &b)
 {
     return (a._coord < b._coord);
 }
@@ -1904,7 +1904,7 @@ static void sp_node_adjust_knots(Path::Node *node)
 
 	/* both are curves */
 
-	const NR::Point delta  = node->n.pos - node->p.pos;
+	NR::Point const delta( node->n.pos - node->p.pos );
 
 	if (node->type == Path::NODE_SYMM) {
 		node->p.pos = node->pos - delta / 2;
@@ -2500,12 +2500,12 @@ static void node_scale(Path::Node *n, gdouble grow, int which)
 	sp_node_ensure_ctrls (n);
 }
 
-static void node_scale_screen (Path::Node *n, gdouble const grow, int which)
+static void node_scale_screen (Path::Node *n, gdouble const grow, int const which)
 {
 	node_scale (n, grow / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop), which);
 }
 
-void sp_nodepath_selected_nodes_scale(Path::Path *nodepath, gdouble const grow, int which)
+void sp_nodepath_selected_nodes_scale(Path::Path *nodepath, gdouble const grow, int const which)
 {
 	if (!nodepath) return;
 
@@ -2519,7 +2519,7 @@ void sp_nodepath_selected_nodes_scale(Path::Path *nodepath, gdouble const grow, 
 	update_repr (nodepath);
 }
 
-void sp_nodepath_selected_nodes_scale_screen (Path::Path *nodepath, gdouble const grow, int which)
+void sp_nodepath_selected_nodes_scale_screen (Path::Path *nodepath, gdouble const grow, int const which)
 {
 	if (!nodepath) return;
 
@@ -2851,7 +2851,7 @@ sp_nodepath_update_statusbar (Path::Path *nodepath)
 {
 	if (!nodepath) return;
 
-	const gchar* when_selected = _("Drag nodes or control points to edit the path");
+	gchar const *when_selected = _("Drag nodes or control points to edit the path");
 
 	gint total = 0;
 

@@ -1,9 +1,11 @@
 2004-08-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/nodepath.cpp: Cleanups: Mark some things as static.  Switch from
-	  pointer to reference in some places.
+	  pointer to reference in some places. Make const placement conform to
+	  CodingStyle.
 
-	* src/inkview.cpp (sp_svgview_main_key_press): Accept some common keys like PgUp, q.
+	* src/inkview.cpp (sp_svgview_main_key_press): Accept some common keys
+	  like PgUp, q.
 
 	* src/draw-context.cpp (fit_and_split):
 	  Slight simplification: don't handle impossible condition npoints < 2.
