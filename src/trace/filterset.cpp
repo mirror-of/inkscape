@@ -738,7 +738,16 @@ OctreeNode *octreeBuild(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 }
 
 
-
+/* Compare two rgb's for brightness, for the qsort() below */
+static int compRGB(const void *a, const void *b)
+{
+    RGB *ra = (RGB *)a;
+    RGB *rb = (RGB *)b;
+    int ba = ra->r + ra->g + ra->b;
+    int bb = rb->r + rb->g + rb->b;
+    int comp = ba - bb;
+    return comp;
+}
 
 /**
  *
@@ -778,6 +787,9 @@ RGB *makeRGBPalette(OctreeNode *root, int nrColors)
         }
 
     free(palette);
+    
+    /* sort by brightness, to avoid high contrasts */
+    qsort((void *)rgbpal, len, sizeof(RGB), compRGB);
 
     return rgbpal;
 }
