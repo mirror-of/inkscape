@@ -338,6 +338,9 @@ gr_tb_selection_changed (SPSelection *sel_sender, gpointer data)
 
     om = gr_vector_list (desktop, selection->isEmpty(), gr_selected, gr_multi);
     g_object_set_data (G_OBJECT (widget), "menu", om);
+
+    GtkWidget *buttons = (GtkWidget *) g_object_get_data (G_OBJECT(widget), "buttons");
+    gtk_widget_set_sensitive (buttons, (gr_selected && !gr_multi));
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
 
@@ -426,17 +429,8 @@ gr_change_widget (SPDesktop *desktop)
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
 
-
-    /* Edit... */
     {
-        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
-        GtkWidget *b = gtk_button_new_with_label(_("Edit..."));
-        gtk_tooltips_set_tip(tt, b, _("Edit the stops of the gradient"), NULL);
-        gtk_widget_show(b);
-        gtk_container_add(GTK_CONTAINER(hb), b);
-        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(gr_edit), widget);
-        gtk_box_pack_end(GTK_BOX(widget), hb, FALSE, FALSE, 0);
-    }
+    GtkWidget *buttons = gtk_hbox_new(FALSE, 1);
 
     /* Fork */
     {
@@ -446,7 +440,23 @@ gr_change_widget (SPDesktop *desktop)
         gtk_widget_show(b);
         gtk_container_add(GTK_CONTAINER(hb), b);
         gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(gr_fork), widget);
-        gtk_box_pack_end(GTK_BOX(widget), hb, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX(buttons), hb, FALSE, FALSE, 0);
+    }
+
+    /* Edit... */
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *b = gtk_button_new_with_label(_("Edit..."));
+        gtk_tooltips_set_tip(tt, b, _("Edit the stops of the gradient"), NULL);
+        gtk_widget_show(b);
+        gtk_container_add(GTK_CONTAINER(hb), b);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(gr_edit), widget);
+        gtk_box_pack_start (GTK_BOX(buttons), hb, FALSE, FALSE, 0);
+    }
+
+    gtk_box_pack_end (GTK_BOX(widget), buttons, FALSE, FALSE, 0);
+    g_object_set_data (G_OBJECT(widget), "buttons", buttons);
+    gtk_widget_set_sensitive (buttons, (gr_selected && !gr_multi));
     }
 
     sigc::connection conn1 = selection->connectChanged(
