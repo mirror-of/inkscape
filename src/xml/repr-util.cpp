@@ -274,40 +274,8 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
 SPXMLText *
 sp_xml_document_createTextNode (SPXMLDocument *doc, const gchar *data)
 {
-    SPXMLText *text;
-
-    text = sp_repr_new ("text");
-    text->type = SP_XML_TEXT_NODE;
-    sp_repr_set_content (text, data);
-
-    return text;
+    return new SPReprText(Inkscape::Util::SharedCString::copy(data));
 }
-
-SPXMLElement *
-sp_xml_document_createElement (SPXMLDocument *doc, const gchar *name)
-{
-    return sp_repr_new (name);
-}
-
-SPXMLElement *
-sp_xml_document_createElementNS (SPXMLDocument *doc, const gchar *ns, const gchar *qname)
-{
-    if (!strncmp (qname, "svg:", 4)) qname += 4;
-
-    return sp_repr_new (qname);
-}
-
-/* SPXMLNode */
-
-SPXMLDocument *
-sp_xml_node_get_Document (SPXMLNode *node)
-{
-    g_warning ("sp_xml_node_get_Document: unimplemented");
-
-    return NULL;
-}
-
-/* SPXMLElement */
 
 /** Returns the first child of \a repr, or NULL if \a repr has no children (or if repr is itself
  *  NULL).
@@ -380,21 +348,6 @@ int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
     if (result == NULL) return def;
 
     return atoi (result);
-}
-
-const char *
-sp_repr_doc_attr (SPRepr * repr, const char * key)
-{
-    SPRepr * p;
-
-    p = sp_repr_parent (repr);
-
-    while (p != NULL) {
-        repr = p;
-        p = sp_repr_parent (p);
-    }
-
-    return sp_repr_attr (repr, key);
 }
 
 int
@@ -495,53 +448,6 @@ void sp_repr_unparent (SPRepr * repr)
     g_assert (parent != NULL);
 
     sp_repr_remove_child (parent, repr);
-}
-
-SPRepr * sp_repr_duplicate_and_parent (SPRepr * repr)
-{
-    SPRepr * parent, * new_repr;
-
-    g_assert (repr != NULL);
-
-    parent = sp_repr_parent (repr);
-    g_assert (parent != NULL);
-
-    new_repr = sp_repr_duplicate (repr);
-    sp_repr_append_child (parent, new_repr);
-    sp_repr_unref (new_repr);
-
-    return new_repr;
-}
-
-const gchar *
-sp_repr_attr_inherited (SPRepr *repr, const gchar *key)
-{
-    SPRepr *current;
-    const char *val;
-
-    g_assert (repr != NULL);
-    g_assert (key != NULL);
-
-    for (current = repr; current != NULL; current = sp_repr_parent (current)) {
-        val = sp_repr_attr (current, key);
-        if (val != NULL)
-            return val;
-    }
-    return NULL;
-}
-
-unsigned int
-sp_repr_set_attr_recursive (SPRepr *repr, const gchar *key, const gchar *value)
-{
-    SPRepr *child;
-
-    if (!sp_repr_set_attr (repr, key, value)) return FALSE;
-
-    for (child = repr->children; child != NULL; child = child->next) {
-        sp_repr_set_attr (child, key, NULL);
-    }
-
-    return TRUE;
 }
 
 /**

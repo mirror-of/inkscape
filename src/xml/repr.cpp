@@ -40,55 +40,31 @@ using Inkscape::Util::SharedCString;
 
 static void bind_document(SPReprDoc *doc, SPRepr *repr);
 
-static SPRepr *sp_repr_new_from_code(SPReprType type, int code);
-
-static SPRepr *
-sp_repr_new_from_code(SPReprType type, int code)
-{
-    switch (type) {
-    case SP_XML_ELEMENT_NODE:
-        return new SPReprElement(code);
-    case SP_XML_TEXT_NODE:
-        return new SPReprText(code);
-    case SP_XML_COMMENT_NODE:
-        return new SPReprComment(code);
-    case SP_XML_DOCUMENT_NODE:
-        return new SPReprDoc(code);
-    default:
-        g_assert_not_reached();
-        return NULL;
-    }
-}
-
 SPRepr *
 sp_repr_new(gchar const *name)
 {
     g_return_val_if_fail(name != NULL, NULL);
     g_return_val_if_fail(*name != '\0', NULL);
 
-    return sp_repr_new_from_code(SP_XML_ELEMENT_NODE, g_quark_from_string(name));
+    return new SPReprElement(g_quark_from_string(name));
 }
 
 SPRepr *
 sp_repr_new_text(gchar const *content)
 {
     g_return_val_if_fail(content != NULL, NULL);
-    SPRepr *repr = sp_repr_new_from_code(SP_XML_TEXT_NODE, g_quark_from_static_string("string"));
-    repr->content = SharedCString::copy(content);
-    return repr;
+    return new SPReprText(SharedCString::copy(content));
 }
 
 SPRepr *
 sp_repr_new_comment(gchar const *comment)
 {
     g_return_val_if_fail(comment != NULL, NULL);
-    SPRepr *repr = sp_repr_new_from_code(SP_XML_COMMENT_NODE, g_quark_from_static_string("comment"));
-    repr->content = SharedCString::copy(comment);
-    return repr;
+    return new SPReprComment(SharedCString::copy(comment));
 }
 
 SPRepr::SPRepr(SPReprType t, int code)
-: type(t), name(code), _child_counts_complete(true), _n_siblings(0)
+: name(code), _child_counts_complete(true), _n_siblings(0), _type(t)
 {
     this->doc = NULL;
     this->parent = this->next = this->children = NULL;
@@ -125,9 +101,9 @@ sp_repr_duplicate(SPRepr const *repr)
 }
 
 SPRepr::SPRepr(SPRepr const &repr)
-: Anchored(), type(repr.type), name(repr.name), content(repr.content),
+: Anchored(), name(repr.name), content(repr.content),
   _child_counts_complete(repr._child_counts_complete),
-  _n_siblings(repr._n_siblings)
+  _n_siblings(repr._n_siblings), _type(repr._type)
 {
     this->doc = NULL;
     this->parent = this->next = this->children = NULL;
@@ -176,7 +152,7 @@ sp_repr_name(SPRepr const *repr)
 {
     g_return_val_if_fail(repr != NULL, NULL);
 
-    return SP_REPR_NAME(repr);
+    return g_quark_to_string(repr->name);
 }
 
 gchar const *
@@ -184,7 +160,7 @@ sp_repr_content(SPRepr const *repr)
 {
     g_assert(repr != NULL);
 
-    return SP_REPR_CONTENT(repr);
+    return repr->content;
 }
 
 /**
@@ -707,7 +683,7 @@ sp_repr_remove_listener_by_data(SPRepr *repr, void *data)
 SPReprDoc *
 sp_repr_document_new(char const *rootname)
 {
-    SPReprDoc *doc = (SPReprDoc *) sp_repr_new_from_code(SP_XML_DOCUMENT_NODE, g_quark_from_static_string("xml"));
+    SPReprDoc *doc = new SPReprDoc(g_quark_from_static_string("xml"));
     if (!strcmp(rootname, "svg:svg")) {
         sp_repr_set_attr(doc, "version", "1.0");
         sp_repr_set_attr(doc, "standalone", "no");
@@ -775,7 +751,7 @@ SPRepr *sp_repr_document_root(SPReprDoc const *doc)
 
     /* We can have comments before the root node. */
     for (SPRepr *repr = doc->children ; repr ; repr = repr->next ) {
-        if ( repr->type == SP_XML_ELEMENT_NODE ) {
+        if ( repr->type() == SP_XML_ELEMENT_NODE ) {
             return repr;
         }
     }

@@ -1,3 +1,14 @@
+2004-12-24  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object-repr.cpp, src/sp-tspan.cpp, src/splivarot.cpp,
+	  src/dialogs/rdf.cpp, src/dialogs/xml-tree.cpp,
+	  src/widgets/sp-xmlview-tree.cpp, src/xml/repr-io.cpp,
+	  src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/repr.h:
+
+	  cleaned out unused code and unhygenic macros, as well as fixing
+	  constructors for text and comment nodes
+
 2004-12-24  Ted Gould  <ted@gould.cx>
 
 	* src/verbs.cpp, src/extension/effect.cpp, src/extension/effect.h:

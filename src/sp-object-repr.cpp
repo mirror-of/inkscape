@@ -75,9 +75,9 @@ sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 GType
 sp_repr_type_lookup (SPRepr *repr)
 {
-	if ( repr->type == SP_XML_TEXT_NODE ) {
+	if ( repr->type() == SP_XML_TEXT_NODE ) {
 		return SP_TYPE_STRING;
-	} else if ( repr->type == SP_XML_ELEMENT_NODE ) {
+	} else if ( repr->type() == SP_XML_ELEMENT_NODE ) {
 		gchar const * const type_name = sp_repr_attr(repr, "sodipodi:type");
 		return ( type_name
 			 ? name_to_gtype(SODIPODI_TYPE, type_name)

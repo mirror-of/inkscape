@@ -201,7 +201,7 @@ sp_tspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 	
 	bool  no_content=true;
 	for (SPRepr* rch = repr->children; rch != NULL; rch = rch->next) {
-		if ( rch->type == SP_XML_TEXT_NODE ) {no_content=false;break;}
+		if ( rch->type() == SP_XML_TEXT_NODE ) {no_content=false;break;}
 	}
 	
 	if ( no_content ) {
@@ -514,7 +514,7 @@ sp_textpath_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 	
 	bool  no_content=true;
 	for (SPRepr* rch = repr->children; rch != NULL; rch = rch->next) {
-		if ( rch->type == SP_XML_TEXT_NODE ) {no_content=false;break;}
+		if ( rch->type() == SP_XML_TEXT_NODE ) {no_content=false;break;}
 	}
 	
 	if ( no_content ) {

@@ -287,7 +287,7 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
           repr ; repr = sp_repr_next(repr) )
     {
         sp_repr_write_stream(repr, fp, 0, TRUE);
-        if ( repr->type == SP_XML_COMMENT_NODE ) {
+        if ( repr->type() == SP_XML_COMMENT_NODE ) {
             fputc('\n', fp);
         }
     }
@@ -345,11 +345,11 @@ void
 sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
                       gboolean add_whitespace)
 {
-    if (repr->type == SP_XML_TEXT_NODE) {
+    if (repr->type() == SP_XML_TEXT_NODE) {
         repr_quote_write (file, sp_repr_content (repr));
-    } else if (repr->type == SP_XML_COMMENT_NODE) {
+    } else if (repr->type() == SP_XML_COMMENT_NODE) {
         fprintf (file, "<!--%s-->", sp_repr_content (repr));
-    } else if (repr->type == SP_XML_ELEMENT_NODE) {
+    } else if (repr->type() == SP_XML_ELEMENT_NODE) {
         sp_repr_write_stream_element(repr, file, indent_level, add_whitespace);
     } else {
         g_assert_not_reached();
@@ -400,7 +400,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
 
     loose = TRUE;
     for (child = repr->children; child != NULL; child = child->next) {
-        if (child->type == SP_XML_TEXT_NODE) {
+        if (child->type() == SP_XML_TEXT_NODE) {
             loose = FALSE;
             break;
         }

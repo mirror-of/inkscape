@@ -42,7 +42,7 @@ enum SPReprType {
 };
 
 struct SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
-	SPReprType type;
+	SPReprType type() const { return _type; }
 
 	int name;
 
@@ -69,6 +69,8 @@ protected:
 
 private:
 	void operator=(SPRepr const &); // no assign
+
+	SPReprType _type;
 };
 
 struct SPReprElement : public SPRepr {
@@ -79,14 +81,22 @@ protected:
 };
 
 struct SPReprText : public SPRepr {
-	explicit SPReprText(int code) : SPRepr(SP_XML_TEXT_NODE, code) {}
+	SPReprText(Inkscape::Util::SharedCString content)
+	: SPRepr(SP_XML_TEXT_NODE, g_quark_from_static_string("string"))
+	{
+		this->content = content;
+	}
 
 protected:
 	SPRepr *_duplicate() const { return new SPReprText(*this); }
 };
 
 struct SPReprComment : public SPRepr {
-	explicit SPReprComment(int code) : SPRepr(SP_XML_COMMENT_NODE, code) {}
+	explicit SPReprComment(Inkscape::Util::SharedCString content)
+	: SPRepr(SP_XML_COMMENT_NODE, g_quark_from_static_string("comment"))
+	{
+		this->content = content;
+	}
 
 protected:
 	SPRepr *_duplicate() const { return new SPReprComment(*this); }
@@ -137,10 +147,6 @@ struct SPXMLNs {
 	SPXMLNs *next;
 	unsigned int uri, prefix;
 };
-
-#define SP_REPR_NAME(r) g_quark_to_string ((r)->name)
-#define SP_REPR_TYPE(r) ((r)->type)
-#define SP_REPR_CONTENT(r) ((r)->content)
 
 unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref);
 

@@ -1455,7 +1455,7 @@ LCA (SPRepr * a, SPRepr * b)
     SPRepr *ancestor=longest_common_suffix<SPReprParentIterator>(
         a, b, NULL, &same_repr
     );
-    if ( ancestor && SP_REPR_TYPE(ancestor) != SP_XML_DOCUMENT_NODE ) {
+    if ( ancestor && ancestor->type() != SP_XML_DOCUMENT_NODE ) {
         return ancestor;
     } else {
         return NULL;

@@ -162,11 +162,8 @@ const  char *sp_xml_ns_prefix_uri(gchar const *prefix);
 /* SPXMLDocument */
 
 SPXMLText *sp_xml_document_createTextNode(SPXMLDocument *doc, gchar const *content);
-SPXMLElement *sp_xml_document_createElement(SPXMLDocument *doc, gchar const *name);
-SPXMLElement *sp_xml_document_createElementNS(SPXMLDocument *doc, gchar const *ns, char const *qname);
-/* SPXMLNode */
 
-SPXMLDocument *sp_xml_node_get_Document(SPXMLNode *node);
+/* SPXMLNode */
 
 /* SPXMLElement */
 
@@ -280,13 +277,6 @@ int sp_repr_n_children(SPRepr *repr);
 SPRepr *sp_repr_nth_child(SPRepr *repr, int n);
 void sp_repr_append_child(SPRepr *repr, SPRepr *child);
 
-gchar const *sp_repr_doc_attr(SPRepr *repr, gchar const *key);
-
-SPRepr *sp_repr_duplicate_and_parent(SPRepr *repr);
-
-gchar const *sp_repr_attr_inherited(SPRepr *repr, gchar const *key);
-unsigned int sp_repr_set_attr_recursive(SPRepr *repr, gchar const *key, gchar const *value);
-
 /* Searching */
 SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
 		                     gchar const        *name,
@@ -294,9 +284,5 @@ SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
 SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
 				     gchar const        *key,
 				     gchar const        *value);
-
-unsigned int   p_repr_overwrite     (SPRepr             *repr,
-				     SPRepr const       *src,
-				     gchar const        *key);
 
 #endif

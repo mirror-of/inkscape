@@ -764,13 +764,13 @@ set_tree_select (SPRepr * repr)
 void
 propagate_tree_select (SPRepr * repr)
 {
-    if (repr && SP_REPR_TYPE (repr) == SP_XML_ELEMENT_NODE) {
+    if (repr && repr->type() == SP_XML_ELEMENT_NODE) {
         sp_xmlview_attr_list_set_repr (attributes, repr);
     } else {
         sp_xmlview_attr_list_set_repr (attributes, NULL);
     }
 
-    if (repr && ( SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE || SP_REPR_TYPE (repr) == SP_XML_COMMENT_NODE ) ) {
+    if (repr && ( repr->type() == SP_XML_TEXT_NODE || repr->type() == SP_XML_COMMENT_NODE ) ) {
         sp_xmlview_content_set_repr (content, repr);
     } else {
         sp_xmlview_content_set_repr (content, NULL);
@@ -799,7 +799,7 @@ set_dt_select (SPRepr *repr)
 
     SPObject *object;
     if (repr) {
-        while ( ( SP_REPR_TYPE(repr) != SP_XML_ELEMENT_NODE )
+        while ( ( repr->type() != SP_XML_ELEMENT_NODE )
                 && sp_repr_parent(repr) )
         {
             repr = sp_repr_parent(repr);
@@ -964,7 +964,7 @@ on_tree_select_row_enable_if_element ( GtkCTree * tree,
     SPRepr * repr;
     repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-    if (SP_REPR_TYPE (repr) == SP_XML_ELEMENT_NODE) {
+    if (repr->type() == SP_XML_ELEMENT_NODE) {
         gtk_widget_set_sensitive (GTK_WIDGET (data), TRUE);
     } else {
         gtk_widget_set_sensitive (GTK_WIDGET (data), FALSE);
@@ -980,7 +980,7 @@ on_tree_select_row_show_if_element ( GtkCTree * tree, GtkCTreeNode * node,
     SPRepr * repr;
     repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-    if (SP_REPR_TYPE (repr) == SP_XML_ELEMENT_NODE) {
+    if (repr->type() == SP_XML_ELEMENT_NODE) {
         gtk_widget_show (GTK_WIDGET (data));
     } else {
         gtk_widget_hide (GTK_WIDGET (data));
@@ -996,7 +996,7 @@ on_tree_select_row_show_if_text ( GtkCTree * tree, GtkCTreeNode * node,
     SPRepr * repr;
     repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-    if ( SP_REPR_TYPE (repr) == SP_XML_TEXT_NODE || SP_REPR_TYPE (repr) == SP_XML_COMMENT_NODE ) {
+    if ( repr->type() == SP_XML_TEXT_NODE || repr->type() == SP_XML_COMMENT_NODE ) {
         gtk_widget_show (GTK_WIDGET (data));
     } else {
         gtk_widget_hide (GTK_WIDGET (data));
@@ -1186,7 +1186,7 @@ on_tree_select_row_enable_if_indentable ( GtkCTree * tree, GtkCTreeNode * node,
                   prev && prev->next != repr ;
                   prev = prev->next );
 
-            if (prev && SP_REPR_TYPE (prev) == SP_XML_ELEMENT_NODE) {
+            if (prev && prev->type() == SP_XML_ELEMENT_NODE) {
                 indentable = TRUE;
             }
         }
@@ -1580,7 +1580,7 @@ cmd_indent_node (GtkObject * object, gpointer data)
         prev = prev->next;
     }
     g_return_if_fail (prev != NULL);
-    g_return_if_fail (SP_REPR_TYPE (prev) == SP_XML_ELEMENT_NODE);
+    g_return_if_fail (prev->type() == SP_XML_ELEMENT_NODE);
 
     if (prev->children) {
         for ( ref = prev->children ; ref->next ; ref = ref->next );

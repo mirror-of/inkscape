@@ -443,8 +443,6 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
     static gchar * bag = NULL;
     gchar * holder = NULL;
 
-    //printf("Getting '%s' contents from '%s'\n",entity->tag,SP_REPR_NAME(repr));
-
     SPRepr * temp=NULL;
     switch (entity->datatype) {
         case RDF_CONTENT:
