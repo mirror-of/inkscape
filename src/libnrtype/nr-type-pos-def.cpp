@@ -44,12 +44,18 @@ NRTypePosDef::NRTypePosDef(char const *description) {
 		weight = 128;
 	}
 
-	if (strstr (c, "narrow")) {
-		stretch = 64;
-	} else if (strstr (c, "condensed")) {
-		stretch = 64;
-	} else if (strstr (c, "wide")) {
-		stretch = 192;
+	if (strstr (c, "ultra narrow") || strstr (c, "ultra condensed") || strstr (c, "extra condensed")) {
+		stretch = 48;
+	} else if (strstr (c, "ultra wide") || strstr (c, "ultra expanded") || strstr (c, "ultra extended")  || strstr (c, "extra expanded")) {
+		stretch = 228;
+	} else if (strstr (c, "semi condensed") || strstr (c, "semicondensed")) {
+		stretch = 108;
+	} else if (strstr (c, "semi extended") || strstr (c, "semiextended")) {
+		stretch = 148;
+	} else if (strstr (c, "narrow") || strstr (c, "condensed")) {
+		stretch = 88;
+	} else if (strstr (c, "wide") || strstr (c, "expanded") || strstr (c, "extended")) {
+		stretch = 168;
 	} else {
 		stretch = 128;
 	}

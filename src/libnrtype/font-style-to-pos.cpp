@@ -68,5 +68,39 @@ font_style_to_pos (SPStyle const &style)
 		break;
 	}
 
+	switch (style.font_stretch.computed) {
+	case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
+	case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
+		ret.stretch = 48;
+		break;
+
+	case SP_CSS_FONT_STRETCH_CONDENSED:
+	case SP_CSS_FONT_STRETCH_NARROWER:
+		ret.stretch = 88;
+		break;
+
+	case SP_CSS_FONT_STRETCH_SEMI_CONDENSED:
+		ret.stretch = 108;
+		break;
+
+	case SP_CSS_FONT_STRETCH_SEMI_EXPANDED:
+		ret.stretch = 148;
+		break;
+
+	case SP_CSS_FONT_STRETCH_EXPANDED:
+	case SP_CSS_FONT_STRETCH_WIDER:
+		ret.stretch = 168;
+		break;
+
+	case SP_CSS_FONT_STRETCH_EXTRA_EXPANDED:
+	case SP_CSS_FONT_STRETCH_ULTRA_EXPANDED:
+		ret.stretch = 228;
+		break;
+
+	default:
+		ret.stretch = 128;
+		break;
+	}
+
 	return ret;
 }

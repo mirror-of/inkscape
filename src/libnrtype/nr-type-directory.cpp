@@ -413,7 +413,7 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 	double ditalic = 0, doblique = 0, dweight = 0, dstretch = 0;
 	double dist;
 
-	//	g_print ("Ask: %d %d %d %d   Bid: %d %d %d %d\n", ask->italic, ask->oblique, ask->weight, ask->stretch,     bid->italic, bid->oblique, bid->weight, bid->stretch);
+g_print ("Ask: %d %d %d %d   Bid: %d %d %d %d\n", ask->italic, ask->oblique, ask->weight, ask->stretch,     bid->italic, bid->oblique, bid->weight, bid->stretch);
 
 	// For oblique, match italic if oblique not found, and vice versa
       if (ask->italic || bid->italic)
