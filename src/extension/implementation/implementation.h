@@ -32,6 +32,11 @@ namespace Implementation {
  */
 class Implementation {
 public:
+    /* ----- Constructor / destructor ----- */
+    Implementation() {}
+    
+    virtual ~Implementation() {}
+
     /* ----- Basic functions for all Extension ----- */
     virtual bool load(Inkscape::Extension::Extension *module);
 

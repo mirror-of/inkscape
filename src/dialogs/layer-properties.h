@@ -30,7 +30,7 @@ namespace Dialogs {
 class LayerPropertiesDialog : public Gtk::Dialog {
  public:
     LayerPropertiesDialog();
-    ~LayerPropertiesDialog();
+    virtual ~LayerPropertiesDialog();
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 
@@ -43,6 +43,7 @@ class LayerPropertiesDialog : public Gtk::Dialog {
 
 protected:
     struct Strategy {
+        virtual ~Strategy() {}
         virtual void setup(LayerPropertiesDialog &)=0;
         virtual void perform(LayerPropertiesDialog &)=0;
     };
