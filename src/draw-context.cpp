@@ -1400,6 +1400,7 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             p = anchor->dp;
                         } else {
                             /* Create green anchor */
+                            spdc_endpoint_snap(dc, p, event->motion.state);
                             dc->green_anchor = sp_draw_anchor_new(dc, dc->green_curve, TRUE, p);
                         }
                         spdc_pen_set_initial_point(pc, p);

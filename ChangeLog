@@ -1,3 +1,11 @@
+2004-04-14  Kees Cook <kees@outflux.net>
+
+	* src/helper/unit-menu.cpp: Turns out I found a 2nd bug while
+	  investigating patch 934358.  I've applied this patch again, which gives
+	  us the entire fix.
+	* src/draw-context.cpp: Investigated patch 934351 from cth103.  Applied a
+	  slight variation to conform to the function calling styles of that code.
+
 2004-04-13  Kees Cook <kees@outflux.net>
 
 	* tools-version.sh: added a possible fix for BSDish tools.
@@ -9,9 +17,8 @@
 	  share/gradients/.cvsignore, share/keyboards/.cvsignore,
 	  share/palettes/.cvsignore, share/patterns/.cvsignore:
 	  Added Makefile build-cruft to .cvsignores.
-	* src/helper/unit-menu.cpp: applied patch 934358 from cth103 to fix
-	  grid unit changing bug.  Turns out this wasn't the entire fix, so
-	  I added it it a little.
+	* src/helper/unit-menu.cpp: applied a variation to patch 934358 from cth103
+	  to fix grid unit changing bug.
 	* configure.in: fixed capitalization of "libpng" to avoid confusion.
 	* src/sp-namedview.cpp, src/document.cpp, src/document.h, src/file.cpp,
 	  src/file.h, src/document-undo.cpp, src/interface.cpp, src/verbs.cpp,
