@@ -38,25 +38,13 @@ enum
 
 class Shape;
 
-// a little structure you shouldnt pay attention to
-// created because the function invocation was starting to be 2 lines long
-struct dashTo_info
-{
-  double     nDashAbs;
-  NR::Point prevP;
-  NR::Point curP;
-  NR::Point prevD;
-  double     prevW;
-  double     curW;
-};
-
 // path creation: 2 phases: first the path is given as a succession of commands (MoveTo, LineTo, CurveTo...); then it
 // is converted in a polyline
 // a polylone can be stroked or filled to make a polygon
 class Path
 {
   friend class Shape;
-public:
+    public:
 
   // flags for the path construction
   enum
@@ -138,28 +126,29 @@ public:
   // give each different Path a different ID, and feed the appropriate orig[] to the ConvertToForme() function
   void Fill (Shape * dest, int pathID = -1, bool justAdd =
 	     false, bool closeIfNeeded = true, bool invert = false);
+
   // - stroke the path; usual parameters: type of cap=butt, type of join=join and miter (see LivarotDefs.h)
   // doClose treat the path as closed (ie a loop)
   void Stroke (Shape * dest, bool doClose, double width, JoinType join,
 	       ButtType butt, double miter, bool justAdd = false);
-  // stroke with dashes
-  void Stroke (Shape * dest, bool doClose, double width, JoinType join,
-	       ButtType butt, double miter, int nbDash, one_dash * dashs,
-	       bool justAdd = false);
+
   // build a Path that is the outline of the Path instance's description (the result is stored in dest)
   // it doesn't compute the exact offset (it's way too complicated, but an approximation made of cubic bezier patches
   //  and segments. the algorithm was found in a plugin for Impress (by Chris Cox), but i can't find it back...
   void Outline (Path * dest, double width, JoinType join, ButtType butt,
 		double miter);
+
   // half outline with edges having the same direction as the original
   void OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		       double miter);
+
   // half outline with edges having the opposite direction as the original
   void InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		      double miter);
 
   // polyline to cubic bezier patches
   void Simplify (double treshhold);
+
   // description simplification
   void Coalesce (double tresh);
 
@@ -214,7 +203,7 @@ public:
   void  Affiche();
   char *svg_dump_path() const;
 
-private:
+    private:
   // utilitary functions for the path contruction
   void CancelBezier ();
   void CloseSubpath();
@@ -314,9 +303,6 @@ private:
 			   bool skipMoveto, NR::Point & lastP, NR::Point & lastT);
   void DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
 		ButtType butt, double miter, bool justAdd = false);
-  void DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
-		ButtType butt, double miter, int nbDash, one_dash *dashs,
-		bool justAdd = false);
 
   static void TangentOnSegAt(double at, NR::Point const &iS, PathDescrLineTo const &fin,
 			     NR::Point &pos, NR::Point &tgt, double &len);
@@ -356,13 +342,11 @@ private:
   static void DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			   NR::Point prev, NR::Point next, double miter, double prevL,
 			   double nextL, int &rightStNo, int &rightEnNo,int pathID=-1,int pieceID=0,double tID=0.0);
-  static void RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iPt,
-			NR::Point const &iS, NR::Point const &iE, double tresh,
-			int lev,NR::Point &origine,float width);
-  static void DashTo (Shape * dest, dashTo_info * dTo, double &dashAbs,
-		      int &dashNo, double &dashPos, bool & inGap,
-		      int &lastLeft, int &lastRight, int nbDash,
-		      one_dash * dashs);
+    static void RecRound (Shape * dest, int sNo, int eNo,
+            NR::Point const &iS, NR::Point const &iE,
+            NR::Point const &nS, NR::Point const &nE,
+            NR::Point &origine,float width);
+
 
   void DoSimplify(int off, int N, double treshhold);
   bool AttemptSimplify(int off, int N, double treshhold, PathDescrCubicTo &res, int &worstP);
@@ -386,3 +370,14 @@ private:
   void   FlushPendingAddition(Path* dest,PathDescr *lastAddition,PathDescrCubicTo &lastCubic,int lastAD);
 };
 #endif
+
+/*
+   Local Variables:
+mode:c++
+c-file-style:"stroustrup"
+c-file-offsets:((innamespace . 0)(inline-open . 0))
+indent-tabs-mode:nil
+fill-column:99
+End:
+ */
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -24,18 +24,22 @@
  * each join) because these are all convex polygons, then transform in alpha values
  */
 
-
-// to make round caps and joins really arcs
-// otherwise it's approximated with a (faster) quadratic bezier
-//#define joli_recround
-
 // until i find something better
-NR::Point StrokeNormalize(const NR::Point v) {
-	double l = L2(v); 
-    if ( l < 0.0000001 ) { 
+NR::Point StrokeNormalize(const NR::Point value) {
+    double length = L2(value); 
+    if ( length < 0.0000001 ) { 
 		return NR::Point(0, 0);
     } else { 
-		return v/l; 
+        return value/length; 
+    }
+}
+
+// faster version if length is known
+NR::Point StrokeNormalize(const NR::Point value, double length) {
+    if ( length < 0.0000001 ) { 
+        return NR::Point(0, 0);
+    } else { 
+        return value/length; 
     }
 }
 
@@ -66,7 +70,9 @@ void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
         if ( lastP > lastM+1 ) {
             NR::Point sbStart = pts[lastM].p;
             NR::Point sbEnd = pts[lastP - 1].p;
-            if ( NR::LInfty(sbEnd-sbStart) < 0.00001 ) {       // why close lines that shouldn't be closed? ah I see, because close is defined here for a hole path and should be defined per subpath.
+            if ( NR::LInfty(sbEnd-sbStart) < 0.00001 ) {       // why close lines that shouldn't be closed?
+                // ah I see, because close is defined here for
+                // a whole path and should be defined per subpath.
                 // debut==fin => ferme (on devrait garder un element pour les close(), mais tant pis)
                 DoStroke(lastM, lastP - lastM, dest, true, width, join, butt, miter, true);
             } else {
@@ -133,13 +139,13 @@ void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, Joi
             nextP = pts[off + nextI].p;
             NR::Point diff = curP - nextP;
             double dist = dot(diff, diff);
-            if (dist > 0.001) {
+            if (dist > 0.0) { // more tolerance for the first distance, to give the cap the right direction
                 break;
             }
             nextI++;
         }
         if (nextI > upTo) {
-            if (butt == butt_round) {  // special case: (nearly) zero length round butt is a circle
+            if (butt == butt_round) {  // special case: zero length round butt is a circle
                 int last[2] = { -1, -1 };
                 NR::Point dir;
                 dir[0] = 1;
@@ -161,8 +167,8 @@ void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, Joi
     NR::Point nextD = nextP - curP;
     double prevLe = NR::L2(prevD);
     double nextLe = NR::L2(nextD);
-    prevD = StrokeNormalize(prevD);
-    nextD = StrokeNormalize(nextD);
+    prevD = StrokeNormalize(prevD, prevLe);
+    nextD = StrokeNormalize(nextD, nextLe);
     
     if (doClose) {
         DoJoin(dest,  width, join, curP, prevD, nextD, miter, prevLe, nextLe, start, last);
@@ -184,7 +190,7 @@ void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, Joi
             nextP = pts[off + nextI].p;
             NR::Point diff = curP - nextP;
             double dist = dot(diff, diff);
-            if (dist > 0.001) {
+            if (dist > 0.001 || (nextI == upTo && dist > 0.0)) { // more tolerance for the last distance too, for the right cap direction
                 break;
             }
             nextI++;
@@ -195,7 +201,7 @@ void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, Joi
     
         nextD = nextP - curP;
         nextLe = NR::L2(nextD);
-        nextD = StrokeNormalize(nextD);
+        nextD = StrokeNormalize(nextD, nextLe);
         int nSt[2] = { -1, -1 };
         int nEn[2] = { -1, -1 };
         DoJoin(dest, width, join, curP, prevD, nextD, miter, prevLe, nextLe, nSt, nEn);
@@ -215,7 +221,7 @@ void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, Joi
 
         nextD = nextP - curP;
         nextLe = NR::L2(nextD);
-        nextD = StrokeNormalize(nextD);
+        nextD = StrokeNormalize(nextD, nextLe);
         int nSt[2] = { -1, -1 };
         int nEn[2] = { -1, -1 };
         DoJoin(dest,  width, join, curP, prevD, nextD, miter, prevLe, nextLe, nSt, nEn);
@@ -270,15 +276,10 @@ void Path::DoButt(Shape *dest, double width, ButtType butt, NR::Point pos, NR::P
 	{
 		const NR::Point sx = pos + width * nor;
 		const NR::Point ex = pos - width * nor;
-		const NR::Point mx = pos + width * dir;
 		leftNo = dest->AddPoint (sx);
 		rightNo = dest->AddPoint (ex);
-		int midNo = dest->AddPoint (mx);
     
-		NR::Point dx = pos - width * nor + width * dir;
-		RecRound (dest, rightNo, midNo, dx, ex, mx, 5.0, 8,pos,width);
-		dx = pos + width * nor + width * dir;
-		RecRound (dest, midNo, leftNo, dx, mx, sx, 5.0, 8,pos,width);
+        RecRound (dest, rightNo, leftNo, ex, sx, -nor, nor, pos, width);
 	}
 	else
 	{
@@ -297,7 +298,7 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::
     NR::Point nnor = next.ccw();
     double angSi = cross(next, prev);
 
-    /* FIXME: this special case causes bug 1028953 */
+    /* FIXED: this special case caused bug 1028953 */
     if (angSi > -0.0001 && angSi < 0.0001) {
         double angCo = dot (prev, next);
         if (angCo > 0.9999) {
@@ -306,10 +307,17 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::
             stNo[RIGHT] = enNo[RIGHT] = dest->AddPoint(pos - width * pnor);
         } else {
             // demi-tour
-            stNo[LEFT] = enNo[RIGHT] = dest->AddPoint (pos + width * pnor);
-            stNo[RIGHT] = enNo[LEFT] = dest->AddPoint (pos - width * pnor);
-            dest->AddEdge(enNo[LEFT], stNo[LEFT]);
+            const NR::Point sx = pos + width * pnor;
+            const NR::Point ex = pos - width * pnor;
+            stNo[LEFT] = enNo[RIGHT] = dest->AddPoint (sx);
+            stNo[RIGHT] = enNo[LEFT] = dest->AddPoint (ex);
+            if (join == join_round) {
+                RecRound (dest, enNo[LEFT], stNo[LEFT], ex, sx, -pnor, pnor, pos, width);
             dest->AddEdge(stNo[RIGHT], enNo[RIGHT]);
+            } else {
+                dest->AddEdge(enNo[LEFT], stNo[LEFT]);
+                dest->AddEdge(stNo[RIGHT], enNo[RIGHT]);	// two times because both are crossing each other
+            }
         }
         return;
     }
@@ -343,34 +351,15 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::
             }
             
         } else if (join == join_round) {
-
             NR::Point sx = pos - width * pnor;
             stNo[RIGHT] = dest->AddPoint(sx);
             NR::Point ex = pos - width * nnor;
             enNo[RIGHT] = dest->AddPoint(ex);
       
-            const NR::Point biss = StrokeNormalize(pnor + nnor);
-            double c2 = dot(biss, nnor);
-            double l = width / c2;
-            double typ = dot(pnor, nnor);
-            if (typ >= 0) {
-                RecRound(dest, stNo[RIGHT], enNo[RIGHT], pos - l * biss, 
-                         sx, ex, 5.0, 8,pos,width);
-            } else {
-                double s2 = cross(biss, nnor);
-                double dec = (l - width) * c2 / s2;
-                NR::Point tbiss = biss.cw();
-        
-                NR::Point nsx = pos - width * biss - dec * tbiss;
-                NR::Point nex = pos - width * biss + dec * tbiss;
-                NR::Point mx = pos - width * biss;
-                int midNo = dest->AddPoint(mx);
-                RecRound(dest, stNo[RIGHT], midNo, nsx, sx, mx, 5.0, 8, pos, width);
-                RecRound(dest, midNo, enNo[RIGHT], nex, mx, ex, 5.0, 8, pos, width);
-            }
+            RecRound(dest, stNo[RIGHT], enNo[RIGHT], 
+                    sx, ex, -pnor, -nnor, pos, width);
             
         } else {
-            
             stNo[RIGHT] = dest->AddPoint(pos - width * pnor);
             enNo[RIGHT] = dest->AddPoint(pos - width * nnor);
             dest->AddEdge(stNo[RIGHT], enNo[RIGHT]);
@@ -413,36 +402,18 @@ void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::
             NR::Point ex = pos + width * nnor;
             enNo[LEFT] = dest->AddPoint(ex);
       
-            const NR::Point biss = StrokeNormalize(pnor + nnor);
-            double c2 = dot(biss, nnor);
-            double l = width / c2;
-            double typ = dot(pnor, nnor);
-            if (typ >= 0) {
-                RecRound (dest, enNo[LEFT], stNo[LEFT], pos + l * biss, ex, sx, 5.0, 8, pos, width);
-            } else {
-                double s2 = cross (biss, nnor);
-                double dec = (l - width) * c2 / s2;
-                NR::Point tbiss = biss.cw();
-                
-                NR::Point nsx = pos + width * biss + dec * tbiss;
-                NR::Point nex = pos + width * biss - dec * tbiss;
-                NR::Point mx = pos + width * biss;
-                int midNo = dest->AddPoint (mx);
-                RecRound(dest, enNo[LEFT], midNo, nex, ex, mx, 5.0, 8, pos, width);
-                RecRound(dest, midNo, stNo[LEFT], nsx, mx, sx, 5.0, 8, pos, width);
-            }
+            RecRound(dest, enNo[LEFT], stNo[LEFT], 
+                    ex, sx, nnor, pnor, pos, width);
             
         } else {
-            
             stNo[LEFT] = dest->AddPoint(pos + width * pnor);
             enNo[LEFT] = dest->AddPoint(pos + width * nnor);
             dest->AddEdge(enNo[LEFT], stNo[LEFT]);
-            
         }
     }
 }
 
-void
+    void
 Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
                   NR::Point prev, NR::Point next, double miter, double prevL, double nextL,
                   int &leftStNo, int &leftEnNo,int pathID,int pieceID,double tID)
@@ -568,30 +539,9 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			const NR::Point ex = pos + width * nnor;
 			leftEnNo = dest->AddPoint (ex);
       
-			const NR::Point biss = StrokeNormalize (pnor + nnor);
-			const double c2 = dot (biss, nnor);
-			const double l = width / c2;
-			const double typ = dot (pnor, nnor);
-			if (typ >= 0)
-			{
-				RecRound (dest, leftEnNo, leftStNo, pos + l * biss, ex, sx, 5.0,
-						  8,pos,width);
-			}
-			else
-			{
-				double s2 = cross (biss, nnor);
-				double dec = (l - width) * c2 / s2;
-				NR::Point tbiss=biss.cw();
+            RecRound(dest, leftEnNo, leftStNo, 
+                    sx, ex, pnor, nnor ,pos, width);
         
-				NR::Point nsx = pos + width * biss + dec * tbiss;
-				NR::Point nex = pos + width * biss - dec * tbiss;
-				NR::Point mx = pos + width * biss;
-				const int midNo = dest->AddPoint (mx);
-        RecRound (dest, leftEnNo, midNo, nex, ex, mx, 5.0,
-						  8,pos,width);
-				RecRound (dest, midNo, leftStNo, nsx, mx, sx, 5.0,
-						  8,pos,width);
-			}
 		}
 		else
 		{
@@ -606,7 +556,7 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 		}
 	}
 }
-void
+    void
 Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
                    NR::Point prev, NR::Point next, double miter, double prevL,
                    double nextL, int &rightStNo, int &rightEnNo,int pathID,int pieceID,double tID)
@@ -700,30 +650,8 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			const NR::Point ex = pos - width * nnor;
 			rightEnNo = dest->AddPoint (ex);
       
-			const NR::Point biss = StrokeNormalize (pnor + nnor);
-			double c2 = dot (biss, nnor);
-			double l = width / c2;
-			double typ = dot (pnor, nnor);
-			if (typ >= 0)
-			{
-				RecRound (dest, rightStNo, rightEnNo, pos - l*biss, 
-						  sx, ex, 5.0, 8,pos,width);
-			}
-			else
-			{
-				double s2 = cross (biss, nnor);
-				double dec = (l - width) * c2 / s2;
-				NR::Point tbiss=biss.cw();
-        
-				NR::Point nsx = pos - width * biss - dec * tbiss;
-				NR::Point nex = pos - width * biss + dec * tbiss;
-				NR::Point mx = pos - width * biss;
-				int midNo = dest->AddPoint (mx);
-				RecRound (dest, rightStNo, midNo, nsx, sx, mx, 5.0,
-						  8,pos,width);
-				RecRound (dest, midNo, rightEnNo, nex, mx, ex, 5.0,
-						  8,pos,width);
-			}
+            RecRound(dest, rightStNo, rightEnNo, 
+                    sx, ex, -pnor, -nnor ,pos, width);
 		}
 		else
 		{
@@ -773,32 +701,43 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 
 
 // a very ugly way to produce round joins: doing one (or two, depend on the angle of the join) quadratic bezier curves
-// but since most joins are going to be small, nobody will notice
-void Path::RecRound(Shape *dest, int sNo, int eNo,
-                    NR::Point const &iP, NR::Point const &iS, NR::Point const &iE,
-                    double tresh, int lev, NR::Point &origine, float width)
+// but since most joins are going to be small, nobody will notice -- but somebody noticed and now the ugly stuff is gone! so:
+
+// a very nice way to produce round joins, caps or dots
+void Path::RecRound(Shape *dest, int sNo, int eNo, // start and end index
+        NR::Point const &iS, NR::Point const &iE, // start and end point
+        NR::Point const &nS, NR::Point const &nE, // start and end normal vector
+        NR::Point &origine, float width) // center and radius of round
 {
-#ifdef joli_recround
-    NR::Point stN = iS - origine;
-    NR::Point enN = iE - origine;
-    stN = StrokeNormalize(stN);
-    enN = StrokeNormalize(enN);
-    double coa = dot(stN, enN);
-    double sia = cross(stN, enN);
-    double ang = acos(coa);
+    NR::Point diff = iS - iE;
+    double dist = dot(diff, diff);
+    if (width < 0.5 || dist/width < 2.0) {
+        dest->AddEdge(sNo, eNo);
+        return;
+    }
+    double ang, sia, lod;
+    if (nS == -nE) {
+        ang = M_PI;
+        sia = 1;
+    } else {
+        double coa = dot(nS, nE);
+        sia = cross(nS, nE);
+        ang = acos(coa);
     if ( coa >= 1 ) {
         ang = 0;
     }
     if ( coa <= -1 ) {
         ang = M_PI;
     }
-    ang /= 0.1;
+    }
+    lod = 10 / (width > 500 ? 510 : 10 + width); // limit detail to about 2 degrees
+    ang /= lod;
     
     int nbS = (int) floor(ang);
-    NR::rotate omega(((sia > 0) ? -0.1 : 0.1));
+    NR::rotate omega(((sia > 0) ? -lod : lod));
     NR::Point cur = iS - origine;
-//  StrokeNormalize(cur);
-//  cur*=width;
+    //  StrokeNormalize(cur);
+    //  cur*=width;
     int lastNo = sNo;
     for (int i = 1; i < nbS; i++) {
         cur = cur * omega;
@@ -808,406 +747,15 @@ void Path::RecRound(Shape *dest, int sNo, int eNo,
         lastNo = mNo;
     }
     dest->AddEdge(lastNo, eNo);
-#else
-    if (lev <= 0) {
-        dest->AddEdge (sNo, eNo);
-        return;
-    }
-    
-    const double s = fabs(cross(iE - iP,iS - iP));
-    if (s < tresh) {
-        dest->AddEdge(sNo, eNo);
-        return;
-    }
-  
-    const NR::Point m = (iS + iE + 2 * iP) / 4;
-    int mNo = dest->AddPoint (m);
-  
-    RecRound(dest, sNo, mNo, (iS + iP) / 2, iS, m, tresh, lev - 1, origine, width);
-    RecRound(dest, mNo, eNo, (iE + iP) / 2, m, iE, tresh, lev - 1, origine, width);
-#endif
 }
-
-/*
- * dashed version
- * nota: dashes produced this way are a bot different from the usual ones, because cap styles are not
- * applied to the dashes
- */
-
-void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
-                  ButtType butt, double miter, int nbDash, one_dash *dashs,
-                  bool justAdd)
-{
-    if (nbDash <= 0) {
-        Stroke(dest, doClose, width, join, butt, miter, justAdd);
-        return;
-    }
-  
-    if (dest == NULL) {
-        return;
-    }
-    
-    if (justAdd == false) {
-        dest->Reset(3 * pts.size(), 3 * pts.size());
-    }
-    
-    if (pts.size() <= 1) {
-        return;
-    }
-    
-    dest->MakeBackData(false);
-
-    int lastM = 0;
-    while (lastM < int(pts.size())) {
-        int lastP = lastM + 1;
-        while (lastP < int(pts.size())
-               && (pts[lastP].isMoveTo == polyline_lineto
-                   || pts[lastP].isMoveTo == polyline_forced))
-        {
-            lastP++;
-        }
-
-        DoStroke(lastM, lastP - lastM, dest, doClose, width, join, butt, miter, nbDash, dashs, true);
-        lastM = lastP;
-    }
-}
-
-void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
-                    ButtType butt, double miter, int nbDash, one_dash *dashs,
-                    bool justAdd)
-{
-    if (dest == NULL) {
-        return;
-    }
-    
-    if (N <= 1) {
-        return;
-    }
-  
-    NR::Point prevP;
-    NR::Point nextP;
-    int prevI;
-    int nextI;
-    int upTo;
-    double curA;
-    double prevA;
-    double nextA;
-    double dashPos = 0;
-    double dashAbs = 0;
-    int dashNo = 0;
-    
-    int curI = 0;
-    NR::Point curP = pts[off].p;
-  
-    if (doClose) {
-
-        prevI = N - 1;
-        while (prevI > 0) {
-            prevP = pts[off + prevI].p;
-            NR::Point diff = curP - prevP;
-            double dist = dot(diff, diff);
-            if (dist > 0.001) {
-                break;
-            }
-            prevI--;
-        }
-        if (prevI <= 0) {
-            return;
-        }
-        upTo = prevI;
-        
-    } else {
-        prevP = curP;
-        prevI = curI;
-        upTo = N - 1;
-    }
-    
-    {
-        nextI = 1;
-        while (nextI <= upTo) {
-            nextP = pts[off + nextI].p;
-            NR::Point diff = curP - nextP;
-            double dist = dot(diff, diff);
-            if (dist > 0.001) {
-                break;
-            }
-            
-            nextI++;
-        }
-        if (nextI > upTo) {
-            return;
-        }
-    }
-
-    int start[2] = { -1, -1 };
-    int last[2] = { -1, -1 };
-    bool noStartJoin = false, inGap = true;
-    NR::Point prevD, nextD;
-    double prevLe, nextLe;
-    prevD = curP - prevP;
-    nextD = nextP - curP;
-    curA = 0;
-    prevA = -NR::L2(prevD);
-    nextA = NR::L2(nextD);
-    prevLe = NR::L2(prevD);
-    nextLe = NR::L2(nextD);
-    prevD = StrokeNormalize(prevD);
-    nextD = StrokeNormalize(nextD);
-    dashTo_info dTo;
-    
-    {
-        int cDashNo = dashNo;
-        double nDashAbs = 0;
-        do {
-            if (dashAbs + (dashs[dashNo].length - dashPos) <= nDashAbs) {
-
-                dashNo++;
-                if (dashNo >= nbDash) {
-                    dashNo -= nbDash;
-                }
-                dashPos = 0;
-                
-            } else {
-                break;
-            }
-        } while (dashNo != cDashNo);
-        
-    }
-    
-    if (doClose) {
-
-        if (dashs[dashNo].gap) {
-
-            noStartJoin = true;
-            inGap = true;
-            
-        } else {
-            
-            noStartJoin = false;
-            DoJoin(dest, width, join, curP, prevD, nextD, miter, prevLe, nextLe, start, last);
-            inGap = false;
-        }
-        
-    } else {
-
-        if (dashs[dashNo].gap) {
-            inGap = true;
-        } else {
-            nextD = -nextD;
-            DoButt(dest,  width, butt, curP, nextD, last[RIGHT], last[LEFT]);
-            nextD = -nextD;
-            inGap = false;
-        }
-    }
-    
-    do {
-        prevP = curP;
-        prevI = curI;
-        prevA = curA;
-        curP = nextP;
-        curI = nextI;
-        curA = nextA;
-        prevLe = nextLe;
-        prevD = nextD;
-        nextI++;
-        while (nextI <= upTo) {
-            nextP = pts[off + nextI].p;
-            NR::Point diff = curP - nextP;
-            double dist = dot(diff, diff);
-            if (dist > 0.001) {
-                break;
-            }
-            
-            nextI++;
-        }
-        
-        if (nextI > upTo) {
-            break;
-        }
-    
-        nextD = nextP - curP;
-        nextA = curA + NR::L2(nextD);
-        nextLe = NR::L2(nextD);
-        nextD = StrokeNormalize(nextD);
-    
-        dTo.nDashAbs = curA;
-        dTo.prevP = prevP;
-        dTo.curP = curP;
-        dTo.prevD = prevD;
-        dTo.prevW = width;
-        dTo.curW = width;
-    
-        DashTo(dest, &dTo, dashAbs, dashNo, dashPos, inGap, last[LEFT],
-               last[RIGHT], nbDash, dashs);
-    
-        if (inGap == false) {
-            int nSt[2] = { -1, -1 };
-            int nEn[2] = { -1, -1 };
-            DoJoin(dest, width, join, curP, prevD, nextD, miter, prevLe, nextLe, nSt, nEn);
-            
-            dest->AddEdge (nSt[LEFT], last[LEFT]);
-            last[LEFT] = nEn[LEFT];
-            dest->AddEdge (last[RIGHT], nSt[RIGHT]);
-            last[RIGHT] = nEn[RIGHT];
-        }
-    } while (nextI <= upTo);
-    
-    if (doClose) {
-        /*		prevP=curP;
-                        prevI=curI;
-                        prevA=curA;
-                        curP=nextP;
-                        curI=nextI;
-                        curA=nextA;
-                        prevD=nextD;*/
-        
-        nextP = pts[off].p;
-    
-        nextD = nextP - curP;
-        nextA = curA + L2(nextD);
-        nextLe = NR::L2(nextD);
-        nextD = StrokeNormalize(nextD);
-    
-        dTo.nDashAbs = curA;
-        dTo.prevP = prevP;
-        dTo.curP = curP;
-        dTo.prevD = prevD;
-        dTo.prevW = width;
-        dTo.curW =  width;
-        
-        DashTo(dest, &dTo, dashAbs, dashNo, dashPos, inGap, last[LEFT],
-               last[RIGHT], nbDash, dashs);
-        
-        if (inGap == false) {
-            int nSt[2] = { -1, -1 };
-            int nEn[2] = { -1, -1 };
-            DoJoin(dest,  width, join, curP, prevD, nextD, miter, prevLe, nextLe, nSt, nEn);
-            dest->AddEdge (nSt[LEFT], last[LEFT]);
-            last[LEFT] = nEn[LEFT];
-            dest->AddEdge (last[RIGHT], nSt[RIGHT]);
-            last[RIGHT] = nEn[RIGHT];
-        }
-        
-        dTo.nDashAbs = nextA;
-        dTo.prevP = curP;
-        dTo.curP = nextP;
-        dTo.prevD = nextD;
-        dTo.prevW = width;
-        dTo.curW = width;
-    
-        DashTo(dest, &dTo, dashAbs, dashNo, dashPos, inGap, last[LEFT],
-               last[RIGHT], nbDash, dashs);
-    
-        if (inGap == false) {
-            if (noStartJoin == false) {
-                dest->AddEdge(start[LEFT], last[LEFT]);
-                dest->AddEdge(last[RIGHT], start[RIGHT]);
-            } else {
-                dest->AddEdge(last[RIGHT], last[LEFT]);
-            }
-        } else {
-            if (noStartJoin == false) {
-                dest->AddEdge(start[LEFT], start[RIGHT]);
-            }
-        }
-        
-    } else {
-        
-        dTo.nDashAbs = curA;
-        dTo.prevP = prevP;
-        dTo.curP = curP;
-        dTo.prevD = prevD;
-        dTo.prevW = width;
-        dTo.curW = width;
-        
-        DashTo(dest, &dTo, dashAbs, dashNo, dashPos, inGap, last[LEFT],
-               last[RIGHT], nbDash, dashs);
-        
-        if (inGap == false) {
-            int end[2];
-            DoButt(dest,  width, butt, curP, prevD, end[LEFT], end[RIGHT]);
-            dest->AddEdge(end[LEFT], last[LEFT]);
-            dest->AddEdge(last[RIGHT], end[RIGHT]);
-        }
-    }
-}
-
-void Path::DashTo(Shape *dest, dashTo_info *dTo, double &dashAbs, int &dashNo,
-                  double &dashPos, bool &inGap, int &lastLeft, int &lastRight,
-                  int nbDash, one_dash *dashs)
-{
-    //      printf("%f %i %f %i -> %f\n",dashAbs,dashNo,dashPos,(inGap)?1:0,dTo->nDashAbs);
-    NR::Point pnor = dTo->prevD.ccw();
-  
-    double oDashAbs = dashAbs;
-    while (dashAbs < dTo->nDashAbs) {
-        int cDashNo = dashNo;
-        do {
-            double delta = dashs[dashNo].length - dashPos;
-            if (delta <= dTo->nDashAbs - dashAbs) {
-                dashNo++;
-                dashPos = 0;
-                if (dashNo >= nbDash) {
-                    dashNo -= nbDash;
-                }
-                
-                while (dashNo != cDashNo && dashs[dashNo].length <= 0) {
-                    dashNo++;
-                    dashPos = 0;
-                    if (dashNo >= nbDash) {
-                        dashNo -= nbDash;
-                    }
-                }
-                
-                if (dashs[dashNo].length > 0) {
-                    dashAbs += delta;
-                    NR::Point pos = ((dTo->nDashAbs - dashAbs) * dTo->prevP+
-                                     (dashAbs - oDashAbs)*dTo->curP) / (dTo->nDashAbs -	oDashAbs);
-                    
-                    double nw = (dTo->prevW * (dTo->nDashAbs - dashAbs) +
-                                 dTo->curW * (dashAbs - oDashAbs)) / (dTo->nDashAbs - oDashAbs);
-          
-                    if (inGap && dashs[dashNo].gap == false) {
-                        int nleftNo = dest->AddPoint(pos + nw * pnor);
-                        int nrightNo = dest->AddPoint(pos - nw * pnor);
-                        dest->AddEdge(nleftNo, nrightNo);
-                        lastLeft = nleftNo;
-                        lastRight = nrightNo;
-            
-                        inGap = false;
-                        
-                    } else if (inGap == false && dashs[dashNo].gap) {
-                        
-                        int nleftNo = dest->AddPoint(pos + nw * pnor);
-                        int nrightNo = dest->AddPoint(pos - nw * pnor);
-                        dest->AddEdge(nrightNo, nleftNo);
-                        dest->AddEdge(lastRight, nrightNo);
-                        dest->AddEdge(nleftNo, lastLeft);
-                        lastLeft = -1;
-                        lastRight = -1;
-            
-                        inGap = true;
-                    }
-                }
-            } else {
-                dashPos += dTo->nDashAbs - dashAbs;
-                dashAbs = dTo->nDashAbs;
-                break;
-            }
-        } while (dashNo != cDashNo);
-    }
-    
-    inGap = dashs[dashNo].gap;
-}
-
 
 /*
   Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
+mode:c++
+c-file-style:"stroustrup"
+c-file-offsets:((innamespace . 0)(inline-open . 0))
+indent-tabs-mode:nil
+fill-column:99
+End:
+ */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
