@@ -1,3 +1,30 @@
+inkscape (0.36) unstable; urgency=high
+
+  * KDE / Qt code and dependencies removed.
+  * Preliminary support for doxygen
+  * Preliminary support for arrowheads on path ends
+  * SPGroups behave like layers if inkscape:groupmode is set to "layer"
+  * URI namespace set to http://www.inkscape.org/namespaces/inkscape
+  * Inkscape namespace implemented
+  * All warnings in g++ build process on Linux have been eliminated
+  * The bulk of patches posted to patch tracker have been incorporated
+  * Fixed: on quit, still says I have unsaved changes, even though I saved
+  * Fixed: default save as/save uses "SVG with xmlns:sodipodi namespace"
+  * Fixed: files were erroneously saved without the extension namespaces 
+  * "SVG with xmlns:sodipodi namespace" renamed to "SVG with extension namespaces"
+  * Inkscape manpage rewritten
+  * Replace the doc/keybindings.txt file with one from Wiki
+
+  * BORKEN UI reorganization merged
+  * Fixed: Ruler coordinate system problem
+  * All dialogs are now unsinkable, closeable (ctrl-f4, ctrl-w), defocusable (esc, enter in textfields)
+  * All dialogs remember size and position across sessions
+  * Names of commands and dialogs unified
+  * Tab, Esc, ctrl-a in node editor now work
+  * Scrollwheel works correctly
+
+ -- Nathan Hurst <njh@mail.csse.monash.edu.au>  Wed, 12 Nov 2003 15:33:14 +1100
+
 inkscape (0.35-1) unstable; urgency=high
 
   * Initial release of the new code tree.
