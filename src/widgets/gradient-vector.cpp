@@ -17,6 +17,7 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#include <gtk/gtk.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtklabel.h>
@@ -40,6 +41,7 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
+#include "../svg/stringstream.h"
 
 enum {
 	VECTOR_SET,
@@ -390,9 +392,19 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 	/* fixme: Not exactly sure, what we have to do here (Lauris) */
 }
 
+/*##################################################################
+###                 Vector Editing Widget
+##################################################################*/
 
 #include "../widgets/sp-color-selector.h"
 #include "../widgets/sp-color-notebook.h"
+#include "../widgets/sp-color-preview.h"
+#include "../widgets/widget-sizes.h"
+#include "../desktop-handles.h"
+#include "../selection.h"
+#include "../xml/repr-private.h"
+#include "../svg/svg.h"
+
 
 #define PAD 4
 
@@ -407,8 +419,271 @@ static void sp_gradient_vector_gradient_release (SPGradient *gradient, GtkWidget
 static void sp_gradient_vector_gradient_modified (SPGradient *gradient, guint flags, GtkWidget *widget);
 static void sp_gradient_vector_color_dragged (SPColorSelector *csel, GtkObject *object);
 static void sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object);
+static void update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop);
 
 static gboolean blocked = FALSE;
+
+static void grad_edit_dia_stopremoved (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
+{
+   GtkWidget *vb = GTK_WIDGET(data);
+   GtkWidget *mnu = (GtkWidget *)g_object_get_data (G_OBJECT(vb), "stopmenu");
+   SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(vb), "gradient");
+   update_stop_list (mnu, gradient, NULL);
+}
+
+static SPReprEventVector grad_edit_dia_repr_events =
+{
+    NULL, /* destroy */
+    NULL, /* add_child */
+    NULL, /* child_added */
+    NULL, /* remove_child */
+    grad_edit_dia_stopremoved, /* child_removed */
+    NULL, /* change_attr */
+    NULL, /* attr_changed*/
+    NULL, /* change_list */
+    NULL, /* content_changed */
+    NULL, /* change_order */
+    NULL  /* order_changed */
+};
+
+static void
+verify_grad(SPGradient *gradient)
+{
+	int i = 0;
+	SPStop *stop = NULL;
+	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+		if (SP_IS_STOP (ochild)) {
+			i++;
+			stop = SP_STOP(ochild);
+		}
+	}
+	if (i < 1) {
+		gchar c[64];
+		sp_svg_write_color (c, 64, 0x00000000);
+
+		Inkscape::SVGOStringStream os;
+		os << "stop-color:" << c << ";stop-opacity:" << 1.0 << ";";
+
+		SPRepr *child;
+
+		child = sp_repr_new ("stop");
+		sp_repr_set_double (child, "offset", 0.0);
+		sp_repr_set_attr (child, "style", os.str().c_str());
+		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
+
+		child = sp_repr_new ("stop");
+		sp_repr_set_double (child, "offset", 1.0);
+		sp_repr_set_attr (child, "style", os.str().c_str());
+		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
+	}
+	if (i < 2) {
+		sp_repr_set_double (SP_OBJECT_REPR(stop), "offset", 0.0);
+		SPRepr *child = sp_repr_duplicate(SP_OBJECT_REPR(stop));
+		sp_repr_set_double (child, "offset", 1.0);
+		sp_repr_add_child (SP_OBJECT_REPR(gradient), child, SP_OBJECT_REPR (stop));
+	}
+}
+
+static SPStop*
+sp_prev_stop(SPStop *stop, SPGradient *gradient)
+{
+	if (sp_repr_attr(SP_OBJECT_REPR(sp_object_first_child(SP_OBJECT(gradient))),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) return NULL;
+	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+		if (SP_IS_STOP (ochild)) {
+			if (sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT_NEXT(ochild)),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) return SP_STOP(ochild);
+		}
+	}
+	return NULL;
+}
+
+static SPStop*
+sp_next_stop(SPStop *stop)
+{
+  SPObject *ochild = SP_OBJECT_NEXT(stop);
+  if (ochild != NULL && SP_IS_STOP (ochild)) return SP_STOP(ochild);
+  else return NULL;
+}
+
+
+static void
+update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
+{
+
+	if (!SP_IS_GRADIENT (gradient))
+		return;
+
+	/* Clear old menu, if there is any */
+	if (gtk_option_menu_get_menu (GTK_OPTION_MENU (mnu))) {
+		gtk_option_menu_remove_menu (GTK_OPTION_MENU (mnu));
+	}
+
+	/* Create new menu widget */
+	GtkWidget *m = gtk_menu_new ();
+	gtk_widget_show (m);
+	GSList *sl = NULL;
+	if (gradient->has_stops) {
+		for ( SPObject *ochild = sp_object_first_child (SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+			if (SP_IS_STOP (ochild)) {
+				sl = g_slist_append (sl, ochild);
+			}
+		}
+	}
+	if (!sl) {
+		GtkWidget *i = gtk_menu_item_new_with_label (_("No stops in gradient"));
+		gtk_widget_show (i);
+		gtk_menu_append (GTK_MENU (m), i);
+		gtk_widget_set_sensitive (mnu, FALSE);
+	} else {
+     
+		for (; sl != NULL; sl = sl->next){
+			SPStop *stop;
+			GtkWidget *i;
+			if (SP_IS_STOP(sl->data)){
+				stop = SP_STOP (sl->data);
+				i = gtk_menu_item_new ();
+				gtk_widget_show (i);
+				g_object_set_data (G_OBJECT (i), "stop", stop);
+				GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+				GtkWidget *cpv = sp_color_preview_new (sp_color_get_rgba32_falpha (&stop->color, stop->opacity));
+				gtk_widget_show (cpv);
+				gtk_container_add ( GTK_CONTAINER (hb), cpv );
+				g_object_set_data ( G_OBJECT (i), "preview", cpv );
+				SPRepr *repr = SP_OBJECT_REPR((SPItem *) sl->data);
+				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+				gtk_widget_show (l);
+				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+				gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+				gtk_widget_show (hb);
+				gtk_container_add (GTK_CONTAINER (i), hb);
+				gtk_menu_append (GTK_MENU (m), i);
+			}
+		}
+
+		gtk_widget_set_sensitive (mnu, TRUE);
+	}
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (mnu), m);
+	/* Set history */
+	if (new_stop == NULL) gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+	else {
+		int i = 0;
+		for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
+			if (SP_IS_STOP (ochild)) {
+				if (sp_repr_attr(SP_OBJECT_REPR(ochild),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(new_stop)),"id")) gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), i);
+			}
+			i++;
+		}
+	}
+}
+
+
+/*user selected existing stop from list*/
+static void
+sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
+{
+	SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(tbl), "gradient");
+
+	if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
+	SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
+	SPColorSelector *csel = (SPColorSelector*)g_object_get_data (G_OBJECT (tbl), "stop");
+	guint32 c = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
+	csel->base->setAlpha(SP_RGBA32_A_F (c));
+	SPColor color;
+	sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c), SP_RGBA32_G_F (c), SP_RGBA32_B_F (c));
+	// set its color, from the stored array
+	csel->base->setColor( color );
+	GtkWidget *offspin = GTK_WIDGET (g_object_get_data (G_OBJECT (tbl), "offspn"));
+	GtkWidget *offslide =GTK_WIDGET (g_object_get_data (G_OBJECT (tbl), "offslide"));
+	if (stop->offset>0 && stop->offset<1) {
+		gtk_widget_set_sensitive (offslide, TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET (offspin), TRUE);
+	} else {
+		gtk_widget_set_sensitive (offslide, FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET (offspin), FALSE);
+	}
+	GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "offset");
+	SPStop *prev = NULL;
+	prev = sp_prev_stop(stop, gradient);
+	if (prev != NULL )  adj->lower = prev->offset+.01;
+	else adj->lower = 0;
+
+	SPStop *next = NULL;
+	next = sp_next_stop(stop);
+	if (next != NULL )  adj->upper = next->offset-.01;
+	else adj->upper = 1.0;
+
+	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
+	gtk_adjustment_set_value (adj, stop->offset);
+
+	gtk_adjustment_changed (adj);
+}
+
+
+
+
+static void
+offadjustmentChanged( GtkAdjustment *adjustment, GtkWidget *vb)
+{
+    GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
+    if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
+    SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
+
+    stop->offset = adjustment->value;
+    sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
+
+}
+
+
+static void
+sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
+{
+	SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(vb), "gradient");
+	verify_grad(gradient);
+	GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
+	if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
+	SPStop *stop = (SPStop *)g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop");
+	g_assert(stop != NULL) ;
+	SPRepr *new_stop_repr = NULL;
+	SPStop *next = NULL;
+	next = sp_next_stop(stop);
+	if (next != NULL) {
+		new_stop_repr = sp_repr_duplicate(SP_OBJECT_REPR(stop));
+		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(stop));
+	} else {
+		next = stop;
+		new_stop_repr = sp_repr_duplicate(SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
+		sp_repr_add_child (SP_OBJECT_REPR(gradient), new_stop_repr, SP_OBJECT_REPR(sp_prev_stop(stop, gradient)));
+	}
+
+	SPStop *newstop = (SPStop *) sp_document_lookup_id (SP_OBJECT_DOCUMENT(gradient), sp_repr_attr (new_stop_repr, "id"));
+   
+	newstop->offset = (newstop->offset+next->offset) * 0.5 ;
+
+	sp_gradient_vector_widget_load_gradient (vb, gradient);
+	sp_repr_unref (new_stop_repr);
+	update_stop_list(GTK_WIDGET(mnu), gradient, newstop);
+	GtkWidget *offspin = GTK_WIDGET (g_object_get_data (G_OBJECT (vb), "offspn"));
+	GtkWidget *offslide =GTK_WIDGET (g_object_get_data (G_OBJECT (vb), "offslide"));
+	gtk_widget_set_sensitive (offslide, TRUE);
+	gtk_widget_set_sensitive (GTK_WIDGET (offspin), TRUE);
+	sp_document_done (SP_OBJECT_DOCUMENT (gradient));
+}
+
+static void
+sp_grd_ed_del_stop (GtkWidget *widget,  GtkWidget *vb)
+{
+    SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(vb), "gradient");
+
+    GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
+    if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
+    SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
+    if (stop->offset>0 && stop->offset<1) {
+        sp_repr_remove_child (SP_OBJECT_REPR(gradient), SP_OBJECT_REPR(stop));
+        sp_gradient_vector_widget_load_gradient (vb, gradient);
+        update_stop_list(GTK_WIDGET(mnu), gradient, NULL);
+        sp_document_done (SP_OBJECT_DOCUMENT (gradient));
+    }
+
+}
 
 static GtkWidget *
 sp_gradient_vector_widget_new (SPGradient *gradient)
@@ -425,21 +700,89 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 	gtk_widget_show (w);
 	gtk_box_pack_start (GTK_BOX (vb), w, TRUE, TRUE, PAD);
 
-	f = gtk_frame_new (_("Start color"));
-	gtk_widget_show (f);
-	gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, PAD);
-	csel = (GtkWidget*)sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_NONE);
-	g_object_set_data (G_OBJECT (vb), "start", csel);
-	gtk_widget_show (csel);
-	gtk_container_add (GTK_CONTAINER (f), csel);
-	g_signal_connect (G_OBJECT (csel), "dragged", G_CALLBACK (sp_gradient_vector_color_dragged), vb);
-	g_signal_connect (G_OBJECT (csel), "changed", G_CALLBACK (sp_gradient_vector_color_changed), vb);
+	gtk_object_set_data (GTK_OBJECT (vb), "gradient", gradient);
+	sp_repr_add_listener (SP_OBJECT_REPR(gradient), &grad_edit_dia_repr_events, vb);
+	GtkTooltips *tt = gtk_tooltips_new ();
 
-	f = gtk_frame_new (_("End color"));
+	/* Stop list */
+	GtkWidget *mnu = gtk_option_menu_new ();
+	/* Create new menu widget */
+	update_stop_list (GTK_WIDGET(mnu), gradient, NULL);
+	gtk_signal_connect (GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_grad_edit_select), vb);
+	gtk_widget_show (mnu);
+	gtk_object_set_data (GTK_OBJECT (vb), "stopmenu", mnu);
+	gtk_box_pack_start (GTK_BOX (vb), mnu, FALSE, FALSE, 0);
+
+	/* Add and Remove buttons */
+	GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+	GtkWidget *b = gtk_button_new_with_label (_("Add stop"));
+	gtk_widget_show (b);
+	gtk_container_add (GTK_CONTAINER (hb), b);
+	gtk_tooltips_set_tip (tt, b, _("Add another control stop to gradient"), NULL);
+	gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_grd_ed_add_stop), vb);
+	b = gtk_button_new_with_label (_("Delete stop"));
+	gtk_widget_show (b);
+	gtk_container_add (GTK_CONTAINER (hb), b);
+	gtk_tooltips_set_tip (tt, b, _("Delete current control stop from gradient"), NULL);
+	gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_grd_ed_del_stop), vb);
+
+	gtk_widget_show (hb);
+	gtk_box_pack_start (GTK_BOX (vb),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+
+	/*  Offset Slider and stuff   */
+	hb = gtk_hbox_new (FALSE, 0);
+
+	/* Label */
+	GtkWidget *l = gtk_label_new ("Offset:");
+	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+	gtk_box_pack_start (GTK_BOX (hb),l, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+	gtk_widget_show (l);
+
+	/* Adjustment */
+	GtkAdjustment *Offset_adj = NULL;
+	Offset_adj= (GtkAdjustment *) gtk_adjustment_new (0.0, 0.0, 1.0, 0.01, 0.01, 0.0);
+	gtk_object_set_data (GTK_OBJECT (vb), "offset", Offset_adj);
+	GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu (GTK_OPTION_MENU(mnu)));
+	SPStop *stop = SP_STOP (g_object_get_data (G_OBJECT (gtk_menu_get_active (m)), "stop"));
+	gtk_adjustment_set_value (Offset_adj, stop->offset);
+
+	/* Slider */
+	GtkWidget *slider = gtk_hscale_new(Offset_adj);
+	gtk_scale_set_draw_value( GTK_SCALE(slider), FALSE );
+	gtk_widget_show (slider);
+	gtk_box_pack_start (GTK_BOX (hb),slider, TRUE, TRUE, AUX_BETWEEN_BUTTON_GROUPS);
+	gtk_object_set_data (GTK_OBJECT (vb), "offslide", slider);
+
+	/* Spinbutton */
+	GtkWidget *sbtn = gtk_spin_button_new (GTK_ADJUSTMENT (Offset_adj), 0.01, 2);
+	sp_dialog_defocus_on_enter (sbtn);
+	gtk_widget_show (sbtn);
+	gtk_box_pack_start (GTK_BOX (hb),sbtn, FALSE, TRUE, AUX_BETWEEN_BUTTON_GROUPS);
+	gtk_object_set_data (GTK_OBJECT (vb), "offspn", sbtn);
+
+	if (stop->offset>0 && stop->offset<1) {
+		gtk_widget_set_sensitive (slider, TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET (sbtn), TRUE);
+	} else {
+		gtk_widget_set_sensitive (slider, FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET (sbtn), FALSE);
+	}
+
+
+	/* Signals */
+	gtk_signal_connect (GTK_OBJECT (Offset_adj), "value_changed",
+											GTK_SIGNAL_FUNC (offadjustmentChanged), vb);
+
+	// gtk_signal_connect (GTK_OBJECT (slider), "changed",  GTK_SIGNAL_FUNC (offsliderChanged), vb);
+	gtk_widget_show (hb);
+	gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, PAD);
+
+	f = gtk_frame_new (_("Stop Color"));
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, PAD);
 	csel = (GtkWidget*)sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_NONE);
-	g_object_set_data (G_OBJECT (vb), "end", csel);
+	g_object_set_data (G_OBJECT (vb), "stop", csel);
 	gtk_widget_show (csel);
 	gtk_container_add (GTK_CONTAINER (f), csel);
 	g_signal_connect (G_OBJECT (csel), "dragged", G_CALLBACK (sp_gradient_vector_color_dragged), vb);
@@ -452,6 +795,8 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 	return vb;
 }
 
+
+
 GtkWidget *
 sp_gradient_vector_editor_new (SPGradient *gradient)
 {
@@ -459,7 +804,7 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 
 	if (dlg == NULL) {
 
-		dlg = sp_window_new ("Gradient editor", TRUE);
+		dlg = sp_window_new (_("Gradient editor"), TRUE);
 		if (x == -1000 || y == -1000) {
 			x = prefs_get_int_attribute (prefs_path, "x", 0);
 			y = prefs_get_int_attribute (prefs_path, "y", 0);
@@ -484,10 +829,7 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 		g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
 		g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
-		//		dlg = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-		//		gtk_window_set_title (GTK_WINDOW (dlg), _("Gradient vector"));
 		gtk_container_set_border_width (GTK_CONTAINER (dlg), PAD);
-		//		g_signal_connect (G_OBJECT (dlg), "delete_event", G_CALLBACK (sp_gradient_vector_dialog_delete), dlg);
 
 		wid = (GtkWidget*)sp_gradient_vector_widget_new (gradient);
 		g_object_set_data (G_OBJECT (dlg), "gradient-vector-widget", wid);
@@ -527,30 +869,22 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 		// So far we can only handle 2 stops, but eventually we need to support arbitrary number.
 		// Remember _now_ all stop colors of the given gradient in an array, so that they're not botched
 		// by the colorselectors during setting (fixes bug 902319)
-		guint32 *c = g_new (guint32, gradient->vector->nstops);
-		for (int i = 0; i < gradient->vector->nstops; ++i) {
-			c[i] = sp_color_get_rgba32_falpha (&gradient->vector->stops[i].color, gradient->vector->stops[i].opacity);
-		}
+		GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(widget), "stopmenu");
+		SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
+		guint32 c = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
 
-		/* Color selector ids */
-		char const *names[] = {"start", "end"};
-		// This loop goes over all known color selectors, not all stops!
-		for (int i = 0; i < int(G_N_ELEMENTS(names)); ++i) {
-			// if there's a stop for this color selector,
-			if (i < gradient->vector->nstops) {
 
-				// get the color selector by its id
-				SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data (G_OBJECT (widget), names[i]));
+		/// get the color selector by its id
+			SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data (G_OBJECT (widget), "stop"));
 
-				// set its alpha, from the stored array
-				csel->base->setAlpha(SP_RGBA32_A_F (c[i]));
-				SPColor color;
-				sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c[i]), SP_RGBA32_G_F (c[i]), SP_RGBA32_B_F (c[i]));
-				// set its color, from the stored array
-				csel->base->setColor( color );
-			}
-		}
-		/* Fixme: Sensitivity */
+			// set its alpha, from the stored array
+			csel->base->setAlpha(SP_RGBA32_A_F (c));
+			SPColor color;
+			sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c), SP_RGBA32_G_F (c), SP_RGBA32_B_F (c));
+			// set its color, from the stored array
+			csel->base->setColor( color );
+
+			/* Fixme: Sensitivity */
 	}
 
 	/* Fill preview */
@@ -569,8 +903,6 @@ sp_gradient_vector_dialog_destroy (GtkObject *object, gpointer data)
 static gboolean
 sp_gradient_vector_dialog_delete (GtkWidget *widget, GdkEvent *event, GtkWidget *dialog)
 {
-	//	sp_gradient_vector_dialog_close (widget, dialog);
-	//	return TRUE;
 	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
 	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
 
@@ -594,7 +926,8 @@ sp_gradient_vector_widget_destroy (GtkObject *object, gpointer data)
 	if (gradient) {
 		/* Remove signals connected to us */
 		/* fixme: may use _connect_while_alive as well */
-  		sp_signal_disconnect_by_data (gradient, object);
+		sp_signal_disconnect_by_data (gradient, object);
+		sp_repr_remove_listener_by_data (SP_OBJECT_REPR(gradient), object);
 	}
 }
 
@@ -614,7 +947,7 @@ sp_gradient_vector_gradient_modified (SPGradient *gradient, guint flags, GtkWidg
 	}
 }
 
-static void sp_gradient_vector_color_dragged(SPColorSelector *, GtkObject *object)
+static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GtkObject *object)
 {
 	SPGradient *gradient, *ngr;
 
@@ -633,27 +966,16 @@ static void sp_gradient_vector_color_dragged(SPColorSelector *, GtkObject *objec
 
 	sp_gradient_ensure_vector (ngr);
 
-	struct { char const *name; double offset; } const places[] = {
-		{"start", 0.0},
-		{"end", 1.0}
-	};
-	size_t const needed = sizeof(SPGradientVector) + ( G_N_ELEMENTS(places) - 1 ) * sizeof(SPGradientStop);
-	SPGradientVector *vector = static_cast<SPGradientVector *>(alloca(needed));
-	vector->nstops = G_N_ELEMENTS(places);
-	vector->start = ngr->vector->start;
-	vector->end = ngr->vector->end;
-	for (unsigned i = 0; i < G_N_ELEMENTS(places); ++i) {
-		SPColorSelector &csel = *static_cast<SPColorSelector *>(g_object_get_data(G_OBJECT(object),
-											  places[i].name));
-		SPGradientStop &stop = vector->stops[i];
-		stop.offset = places[i].offset;
-		csel.base->getColorAlpha(stop.color,
-					 &stop.opacity);
-	}
+    GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(object), "stopmenu");
+    SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
 
-	sp_gradient_set_vector (ngr, vector);
+
+    csel->base->getColorAlpha(stop->color, &stop->opacity);
 
 	blocked = FALSE;
+    SPColorPreview *cpv = (SPColorPreview *)g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "preview");
+    sp_color_preview_set_rgba32 (cpv, sp_color_get_rgba32_falpha (&stop->color, stop->opacity));
+
 }
 
 static void
@@ -665,7 +987,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	SPColor color;
 	float alpha;
 	guint32 rgb;
-	gchar c[256];
+	gchar c[64];
 
 	if (blocked) return;
 
@@ -692,35 +1014,20 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	}
 	g_return_if_fail (child != NULL);
 
-	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "start");
+	GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(object), "stopmenu");
+	SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
+
+	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "stop");
 	csel->base->getColorAlpha( color, &alpha );
 	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
-	sp_repr_set_double (SP_OBJECT_REPR (child), "offset", start);
-	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, (gdouble) alpha);
-	sp_repr_set_attr (SP_OBJECT_REPR (child), "style", c);
-
-	for (child = child->next; child != NULL; child = child->next) {
-		if (SP_IS_STOP (child)) break;
-	}
-	g_return_if_fail (child != NULL);
-
-	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "end");
-	csel->base->getColorAlpha( color, &alpha );
-	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
-
-	sp_repr_set_double (SP_OBJECT_REPR (child), "offset", end);
-	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, (gdouble) alpha);
-	sp_repr_set_attr (SP_OBJECT_REPR (child), "style", c);
-
-	/* Remove other stops */
-	while (child->next) {
-		if (SP_IS_STOP (child->next)) {
-			sp_repr_remove_child (SP_OBJECT_REPR (ngr), SP_OBJECT_REPR (child->next));
-		} else {
-			child = child->next;
-		}
-	}
+	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
+	Inkscape::SVGOStringStream os;
+	sp_svg_write_color (c, 64, rgb);
+	os << "stop-color:" << c << ";stop-opacity:" << (gdouble) alpha <<";";
+	sp_repr_set_attr (SP_OBJECT_REPR (stop), "style", os.str().c_str());
+		//	g_snprintf (c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, (gdouble) alpha);
+		//sp_repr_set_attr (SP_OBJECT_REPR (stop), "style", c);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (ngr));
 
