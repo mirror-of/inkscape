@@ -541,8 +541,7 @@ sp_event_context_private_item_handler (SPEventContext *ec, SPItem *item, GdkEven
 	return ret;
 }
 
-static void
-sp_ec_repr_destroy (SPRepr *repr, gpointer data)
+static void sp_ec_repr_destroy(SPRepr *, gpointer)
 {
 	g_warning ("Oops! Repr destroyed while event context still present");
 }

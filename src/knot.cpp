@@ -431,8 +431,7 @@ sp_knot_set_property (GObject * object, guint prop_id, const GValue *value, GPar
 	sp_knot_update_ctrl (knot);
 }
 
-static void
-sp_knot_get_property (GObject * object, guint prop_id, GValue *value, GParamSpec *pspec)
+static void sp_knot_get_property(GObject *, guint, GValue *, GParamSpec *)
 {
 	g_assert_not_reached ();
 }

@@ -764,8 +764,7 @@ sp_object_ensure_fill_gradient_normalized (SPObject *object)
 	}
 }
 
-void
-sp_object_ensure_stroke_gradient_normalized (SPObject *object)
+void sp_object_ensure_stroke_gradient_normalized(SPObject *)
 {
 	g_warning ("file %s: line %d: Normalization of stroke gradient not implemented", __FILE__, __LINE__);
 }
