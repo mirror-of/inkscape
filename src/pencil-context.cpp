@@ -157,174 +157,174 @@ sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
 static gint
 pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &bevent)
 {
-            gint ret = FALSE;
-            if ( bevent.button == 1 ) {
-                NR::Point const button_w(bevent.x,
-                                         bevent.y);
-                /* Find desktop coordinates */
-                NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, button_w);
+    gint ret = FALSE;
+    if ( bevent.button == 1 ) {
+        NR::Point const button_w(bevent.x,
+                                 bevent.y);
+        /* Find desktop coordinates */
+        NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, button_w);
 
-                /* Test whether we hit any anchor. */
-                SPDrawAnchor *anchor = spdc_test_inside(pc, button_w);
+        /* Test whether we hit any anchor. */
+        SPDrawAnchor *anchor = spdc_test_inside(pc, button_w);
 
-                switch (pc->state) {
-                    case SP_PENCIL_CONTEXT_ADDLINE:
-                        /* Current segment will be finished with release */
-                        ret = TRUE;
-                        break;
-                    default:
-                        /* Set first point of sequence */
-                        if (anchor) {
-                            p = anchor->dp;
-                        }
-                        pc->sa = anchor;
-                        spdc_set_startpoint(pc, p, bevent.state);
-                        ret = TRUE;
-                        break;
+        switch (pc->state) {
+            case SP_PENCIL_CONTEXT_ADDLINE:
+                /* Current segment will be finished with release */
+                ret = TRUE;
+                break;
+            default:
+                /* Set first point of sequence */
+                if (anchor) {
+                    p = anchor->dp;
                 }
-            }
-            return ret;
+                pc->sa = anchor;
+                spdc_set_startpoint(pc, p, bevent.state);
+                ret = TRUE;
+                break;
+        }
+    }
+    return ret;
 }
 
 static gint
 pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mevent)
 {
-            gint ret = FALSE;
-            SPDesktop *const dt = pc->desktop;
-            if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
-                /* Grab mouse, so release will not pass unnoticed */
-                pc->grab = SP_CANVAS_ITEM(dt->acetate);
-                sp_canvas_item_grab(pc->grab, ( GDK_BUTTON_PRESS_MASK   |
-                                                GDK_BUTTON_RELEASE_MASK |
-                                                GDK_POINTER_MOTION_MASK  ),
-                                    NULL, mevent.time);
+    gint ret = FALSE;
+    SPDesktop *const dt = pc->desktop;
+    if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
+        /* Grab mouse, so release will not pass unnoticed */
+        pc->grab = SP_CANVAS_ITEM(dt->acetate);
+        sp_canvas_item_grab(pc->grab, ( GDK_BUTTON_PRESS_MASK   |
+                                        GDK_BUTTON_RELEASE_MASK |
+                                        GDK_POINTER_MOTION_MASK  ),
+                            NULL, mevent.time);
+    }
+
+    /* Find desktop coordinates */
+    NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(mevent.x, mevent.y));
+
+    /* Test whether we hit any anchor. */
+    SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(mevent.x, mevent.y));
+
+    switch (pc->state) {
+        case SP_PENCIL_CONTEXT_ADDLINE:
+            /* Set red endpoint */
+            if (anchor) {
+                p = anchor->dp;
             }
-
-            /* Find desktop coordinates */
-            NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(mevent.x, mevent.y));
-
-            /* Test whether we hit any anchor. */
-            SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(mevent.x, mevent.y));
-
-            switch (pc->state) {
-                case SP_PENCIL_CONTEXT_ADDLINE:
-                    /* Set red endpoint */
-                    if (anchor) {
-                        p = anchor->dp;
-                    }
-                    spdc_set_endpoint(pc, p, mevent.state);
+            spdc_set_endpoint(pc, p, mevent.state);
+            ret = TRUE;
+            break;
+        default:
+            /* We may be idle or already freehand */
+            if ( mevent.state & GDK_BUTTON1_MASK ) {
+                pc->state = SP_PENCIL_CONTEXT_FREEHAND;
+                if ( !pc->sa && !pc->green_anchor ) {
+                    /* Create green anchor */
+                    pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, pc->p[0]);
+                }
+                /* fixme: I am not sure whether we want to snap to anchors in middle of freehand (Lauris) */
+                if (anchor) {
+                    p = anchor->dp;
+                } else if ((mevent.state & GDK_SHIFT_MASK) == 0) {
+                    namedview_free_snap_all_types(dt->namedview, p);
+                }
+                if ( pc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!
+                    spdc_add_freehand_point(pc, p, mevent.state);
                     ret = TRUE;
-                    break;
-                default:
-                    /* We may be idle or already freehand */
-                    if ( mevent.state & GDK_BUTTON1_MASK ) {
-                        pc->state = SP_PENCIL_CONTEXT_FREEHAND;
-                        if ( !pc->sa && !pc->green_anchor ) {
-                            /* Create green anchor */
-                            pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, pc->p[0]);
-                        }
-                        /* fixme: I am not sure whether we want to snap to anchors in middle of freehand (Lauris) */
-                        if (anchor) {
-                            p = anchor->dp;
-                        } else if ((mevent.state & GDK_SHIFT_MASK) == 0) {
-                            namedview_free_snap_all_types(dt->namedview, p);
-                        }
-                        if ( pc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!
-                            spdc_add_freehand_point(pc, p, mevent.state);
-                            ret = TRUE;
-                        }
-                    }
-                    break;
+                }
             }
-            return ret;
+            break;
+    }
+    return ret;
 }
 
 static gint
 pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &revent)
 {
-            gint ret = FALSE;
-            if ( revent.button == 1 ) {
-                SPDesktop *const dt = pc->desktop;
+    gint ret = FALSE;
+    if ( revent.button == 1 ) {
+        SPDesktop *const dt = pc->desktop;
 
-                /* Find desktop coordinates */
-                NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(revent.x,
-                                                                    revent.y));
+        /* Find desktop coordinates */
+        NR::Point p = sp_desktop_w2d_xy_point(dt, NR::Point(revent.x,
+                                                            revent.y));
 
-                /* Test whether we hit any anchor. */
-                SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(revent.x,
-                                                                      revent.y));
+        /* Test whether we hit any anchor. */
+        SPDrawAnchor *anchor = spdc_test_inside(pc, NR::Point(revent.x,
+                                                              revent.y));
 
-                switch (pc->state) {
-                    case SP_PENCIL_CONTEXT_IDLE:
-                        /* Releasing button in idle mode means single click */
-                        /* We have already set up start point/anchor in button_press */
-                        pc->state = SP_PENCIL_CONTEXT_ADDLINE;
-                        ret = TRUE;
-                        break;
-                    case SP_PENCIL_CONTEXT_ADDLINE:
-                        /* Finish segment now */
-                        if (anchor) {
-                            p = anchor->dp;
-                        }
-                        pc->ea = anchor;
-                        spdc_finish_endpoint(pc, p, !anchor, revent.state);
-                        pc->state = SP_PENCIL_CONTEXT_IDLE;
-                        ret = TRUE;
-                        break;
-                    case SP_PENCIL_CONTEXT_FREEHAND:
-                        /* Finish segment now */
-                        /* fixme: Clean up what follows (Lauris) */
-                        if (anchor) {
-                            p = anchor->dp;
-                        }
-                        pc->ea = anchor;
-                        /* Write curves to object */
-
-                        dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
-
-                        spdc_concat_colors_and_flush(pc, FALSE);
-                        pc->sa = NULL;
-                        pc->ea = NULL;
-                        if (pc->green_anchor) {
-                            pc->green_anchor = sp_draw_anchor_destroy(pc->green_anchor);
-                        }
-                        pc->state = SP_PENCIL_CONTEXT_IDLE;
-                        ret = TRUE;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (pc->grab) {
-                    /* Release grab now */
-                    sp_canvas_item_ungrab(pc->grab, revent.time);
-                    pc->grab = NULL;
-                }
-
-                pc->grab = NULL;
+        switch (pc->state) {
+            case SP_PENCIL_CONTEXT_IDLE:
+                /* Releasing button in idle mode means single click */
+                /* We have already set up start point/anchor in button_press */
+                pc->state = SP_PENCIL_CONTEXT_ADDLINE;
                 ret = TRUE;
-            }
-            return ret;
+                break;
+            case SP_PENCIL_CONTEXT_ADDLINE:
+                /* Finish segment now */
+                if (anchor) {
+                    p = anchor->dp;
+                }
+                pc->ea = anchor;
+                spdc_finish_endpoint(pc, p, !anchor, revent.state);
+                pc->state = SP_PENCIL_CONTEXT_IDLE;
+                ret = TRUE;
+                break;
+            case SP_PENCIL_CONTEXT_FREEHAND:
+                /* Finish segment now */
+                /* fixme: Clean up what follows (Lauris) */
+                if (anchor) {
+                    p = anchor->dp;
+                }
+                pc->ea = anchor;
+                /* Write curves to object */
+
+                dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
+
+                spdc_concat_colors_and_flush(pc, FALSE);
+                pc->sa = NULL;
+                pc->ea = NULL;
+                if (pc->green_anchor) {
+                    pc->green_anchor = sp_draw_anchor_destroy(pc->green_anchor);
+                }
+                pc->state = SP_PENCIL_CONTEXT_IDLE;
+                ret = TRUE;
+                break;
+            default:
+                break;
+        }
+
+        if (pc->grab) {
+            /* Release grab now */
+            sp_canvas_item_ungrab(pc->grab, revent.time);
+            pc->grab = NULL;
+        }
+
+        pc->grab = NULL;
+        ret = TRUE;
+    }
+    return ret;
 }
 
 static gint
 pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint const state)
 {
-            gint ret = FALSE;
-            switch (keyval) {
-                case GDK_Up:
-                case GDK_Down:
-                case GDK_KP_Up:
-                case GDK_KP_Down:
-                    // Prevent the zoom field from activation.
-                    if (!mod_ctrl_only(state)) {
-                        ret = TRUE;
-                    }
-                    break;
-                default:
-                    break;
+    gint ret = FALSE;
+    switch (keyval) {
+        case GDK_Up:
+        case GDK_Down:
+        case GDK_KP_Up:
+        case GDK_KP_Down:
+            // Prevent the zoom field from activation.
+            if (!mod_ctrl_only(state)) {
+                ret = TRUE;
             }
-            return ret;
+            break;
+        default:
+            break;
+    }
+    return ret;
 }
 
 /** Snaps new node relative to the previous node. */
