@@ -435,7 +435,7 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	GdkRectangle warea, carea, aarea;
 	GdkRectangle wpaint, cpaint, apaint;
 	const guchar *b;
-	gint w, x, y;
+	gint w, x, y1, y2;
 
 	widget = GTK_WIDGET (slider);
 
@@ -511,21 +511,22 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 		gdk_gc_set_clip_rectangle (widget->style->black_gc, &apaint);
 
 		x = aarea.x;
-		y = carea.y;
-		for ( w = aarea.width; w > 0; w -= 2 )
+		y1 = carea.y;
+		y2 = aarea.y + aarea.height - 1;
+		w = aarea.width;
+		while ( w > 0 )
 		{
-			gdk_draw_line (widget->window, widget->style->white_gc, x, y, x + w - 1, y );
+			gdk_draw_line (widget->window, widget->style->white_gc, x, y1, x + w - 1, y1 );
+			gdk_draw_line (widget->window, widget->style->black_gc, x, y2, x + w - 1, y2 );
+			w -=2;
 			x++;
-			y++;
-		}
-
-		x = aarea.x;
-		y = aarea.y + aarea.height - 1;
-		for ( w = aarea.width; w > 0; w -= 2 )
-		{
-			gdk_draw_line (widget->window, widget->style->black_gc, x, y, x + w - 1, y );
-			x++;
-			y--;
+			if ( w > 0 )
+			{
+				gdk_draw_line (widget->window, widget->style->black_gc, x, y1, x + w - 1, y1 );
+				gdk_draw_line (widget->window, widget->style->white_gc, x, y2, x + w - 1, y2 );
+			}
+			y1++;
+			y2--;
 		}
 
 		gdk_gc_set_clip_rectangle (widget->style->white_gc, NULL);
