@@ -79,9 +79,7 @@
 static void sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel);
 static void sp_stroke_style_paint_selection_modified (SPWidget *spw, Inkscape::Selection *selection, guint flags, SPPaintSelector *psel);
 static void sp_stroke_style_paint_selection_changed (SPWidget *spw, Inkscape::Selection *selection, SPPaintSelector *psel);
-static void sp_stroke_style_paint_attr_changed(SPWidget *spw, gchar const *key, gchar const *oldval, gchar const *newval);
 static void sp_stroke_style_paint_update(SPWidget *spw, Inkscape::Selection *sel);
-static void sp_stroke_style_paint_update_repr(SPWidget *spw, Inkscape::XML::Node *repr);
 
 static void sp_stroke_style_paint_mode_changed(SPPaintSelector *psel, SPPaintSelectorMode mode, SPWidget *spw);
 static void sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw);
@@ -114,9 +112,6 @@ sp_stroke_style_paint_widget_new(void)
     gtk_signal_connect(GTK_OBJECT(spw), "change_selection",
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_selection_changed),
                        psel);
-    gtk_signal_connect(GTK_OBJECT(spw), "attr_changed",
-                       GTK_SIGNAL_FUNC(sp_stroke_style_paint_attr_changed),
-                       psel);
 
     gtk_signal_connect(GTK_OBJECT(psel), "mode_changed",
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_mode_changed),
@@ -132,11 +127,8 @@ sp_stroke_style_paint_widget_new(void)
                                  ( SP_ACTIVE_DESKTOP
                                    ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP)
                                    : NULL ));
-
     return spw;
-
 }
-
 
 static void
 sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel)
@@ -150,12 +142,8 @@ sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel)
                                       ( SP_ACTIVE_DESKTOP
                                         ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP)
                                         : NULL ));
-    } else if (spw->repr) {
-        sp_stroke_style_paint_update_repr(spw, spw->repr);
-    }
+    } 
 }
-
-
 
 static void
 sp_stroke_style_paint_selection_modified ( SPWidget *spw,
@@ -177,20 +165,6 @@ sp_stroke_style_paint_selection_changed ( SPWidget *spw,
 {
     sp_stroke_style_paint_update (spw, selection);
 }
-
-
-static void
-sp_stroke_style_paint_attr_changed( SPWidget *spw,
-                                    gchar const *key,
-                                    gchar const *oldval,
-                                    gchar const *newval )
-{
-    if (!strcmp(key, "style")) {
-        /* This sounds interesting */
-        sp_stroke_style_paint_update_repr(spw, spw->repr);
-    }
-}
-
 
 static void
 sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
@@ -353,57 +327,6 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 
 }
 
-
-
-static void
-sp_stroke_style_paint_update_repr(SPWidget *spw, Inkscape::XML::Node *repr)
-{
-    if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
-        return;
-    }
-
-    gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(TRUE));
-
-    SPPaintSelector *psel = SP_PAINT_SELECTOR(gtk_object_get_data( GTK_OBJECT(spw),
-                                                                   "paint-selector") );
-
-    SPStyle *style = sp_style_new();
-    sp_style_read_from_repr(style, repr);
-
-    SPPaintSelectorMode pselmode = sp_stroke_style_determine_paint_selector_mode(style);
-#ifdef SP_SS_VERBOSE
-    g_print("StrokeStyleWidget: paint selector mode %d\n", pselmode);
-#endif
-
-    switch (pselmode) {
-        case SP_PAINT_SELECTOR_MODE_NONE:
-            /* No paint at all */
-            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_NONE);
-            break;
-
-        case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-            sp_paint_selector_set_mode(psel, pselmode);
-            sp_paint_selector_set_color_alpha(psel, &style->stroke.value.color,
-                                              SP_SCALE24_TO_FLOAT(style->stroke_opacity.value) );
-            break;
-
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-            /* fixme: Think about it (Lauris) */
-            break;
-
-        default:
-            break;
-    }
-
-    sp_style_unref(style);
-
-    gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
-
-}
-
-
-
 static void
 sp_stroke_style_paint_mode_changed( SPPaintSelector *psel,
                                     SPPaintSelectorMode mode,
@@ -418,10 +341,7 @@ sp_stroke_style_paint_mode_changed( SPPaintSelector *psel,
      * Instead of relying on paint widget having meaningful colors set
      */
     sp_stroke_style_paint_changed(psel, spw);
-
 }
-
-
 
 static void
 sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
@@ -484,8 +404,6 @@ sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
 
 }
 
-
-
 static void
 sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 {
@@ -497,22 +415,14 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
     g_print("StrokeStyleWidget: paint changed\n");
 #endif
 
-    GSList const *items;
-    GSList *reprs;
+    GSList const *items = NULL;
+    GSList *reprs = NULL;
     if (spw->inkscape) {
-        /* fixme: */
-        if (!SP_WIDGET_DOCUMENT(spw))
-            return;
-
-        reprs = NULL;
         items = sp_widget_get_item_list(spw);
         for (GSList const *i = items; i != NULL; i = i->next) {
             reprs = g_slist_prepend(reprs, SP_OBJECT_REPR(i->data));
         }
-    } else {
-        reprs = g_slist_prepend(NULL, spw->repr);
-        items = NULL;
-    }
+    } 
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -689,13 +599,7 @@ static void sp_stroke_style_line_selection_changed (SPWidget *spw,
                                                    Inkscape::Selection *selection,
                                                    gpointer data );
 
-static void sp_stroke_style_line_attr_changed (SPWidget *spw,
-                                              gchar const *key,
-                                              gchar const *oldval,
-                                              gchar const *newval);
-
 static void sp_stroke_style_line_update(SPWidget *spw, Inkscape::Selection *sel);
-static void sp_stroke_style_line_update_repr(SPWidget *spw, Inkscape::XML::Node *repr);
 
 static void sp_stroke_style_set_join_buttons(SPWidget *spw,
                                              GtkWidget *active);
@@ -1475,9 +1379,6 @@ sp_stroke_style_line_widget_new(void)
 
     i++;
 
-
-
-    /* General (I think) style dialog signals */
     gtk_signal_connect( GTK_OBJECT(spw), "construct",
                         GTK_SIGNAL_FUNC(sp_stroke_style_line_construct),
                         NULL );
@@ -1487,14 +1388,10 @@ sp_stroke_style_line_widget_new(void)
     gtk_signal_connect( GTK_OBJECT(spw), "change_selection",
                         GTK_SIGNAL_FUNC(sp_stroke_style_line_selection_changed),
                         NULL );
-    gtk_signal_connect( GTK_OBJECT(spw), "attr_changed",
-                        GTK_SIGNAL_FUNC(sp_stroke_style_line_attr_changed),
-                        NULL );
 
     sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? SP_DT_SELECTION(desktop) : NULL);
 
     return spw;
-
 }
 
 
@@ -1512,12 +1409,8 @@ sp_stroke_style_line_construct(SPWidget *spw, gpointer data)
                                     ( SP_ACTIVE_DESKTOP
                                       ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP)
                                       : NULL ));
-    } else if (spw->repr) {
-        sp_stroke_style_line_update_repr(spw, spw->repr);
-    }
+    } 
 }
-
-
 
 static void
 sp_stroke_style_line_selection_modified ( SPWidget *spw,
@@ -1531,8 +1424,6 @@ sp_stroke_style_line_selection_modified ( SPWidget *spw,
 
 }
 
-
-
 static void
 sp_stroke_style_line_selection_changed ( SPWidget *spw,
                                        Inkscape::Selection *selection,
@@ -1541,19 +1432,6 @@ sp_stroke_style_line_selection_changed ( SPWidget *spw,
     sp_stroke_style_line_update (spw, selection);
 }
 
-
-
-static void
-sp_stroke_style_line_attr_changed(SPWidget *spw,
-                                  gchar const *key,
-                                  gchar const *oldval,
-                                  gchar const *newval)
-{
-    if (!strcmp(key, "style")) {
-        /* This sounds interesting. */
-        sp_stroke_style_line_update_repr(spw, spw->repr);
-    }
-}
 
 static void
 sp_dash_selector_set_from_style (GtkWidget *dsel, SPStyle *style)
@@ -1719,61 +1597,6 @@ sp_stroke_style_line_update(SPWidget *spw, Inkscape::Selection *sel)
                         GINT_TO_POINTER(FALSE));
 }
 
-
-/**
- * \brief  This routine updates the GUI widgets from data in the repr for the
- * line styles. It retrieves the current width, units, etc. from the dialog
- * and then pulls in the data from the repr and updates the widgets
- * accordingly.
- *
- */
-static void
-sp_stroke_style_line_update_repr(SPWidget *spw, Inkscape::XML::Node *repr)
-{
-    if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
-        return;
-    }
-
-    gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(TRUE));
-
-    GtkWidget *sset = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "stroke"));
-    GtkObject *width = GTK_OBJECT(gtk_object_get_data(GTK_OBJECT(spw), "width"));
-    GtkWidget *units = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "units"));
-    GtkWidget *dsel = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
-
-    SPStyle *style = sp_style_new();
-    sp_style_read_from_repr(style, repr);
-
-    if (style->stroke.type == SP_PAINT_TYPE_NONE) {
-        gtk_widget_set_sensitive(sset, FALSE);
-        gtk_object_set_data(GTK_OBJECT(spw), "update",
-                            GINT_TO_POINTER(FALSE));
-        return;
-    }
-
-    SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(units));
-    gdouble swidth = sp_pixels_get_units (style->stroke_width.computed, *unit);
-    gtk_adjustment_set_value(GTK_ADJUSTMENT(width), swidth);
-
-    /* Join */
-    sp_jointype_set (spw, style->stroke_linejoin.value);
-
-    /* Cap */
-    sp_captype_set (spw, style->stroke_linecap.value);
-
-    /* Dash */
-    sp_dash_selector_set_from_style (dsel, style);
-
-    gtk_widget_set_sensitive(sset, TRUE);
-
-    sp_style_unref(style);
-
-    gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
-
-}
-
-
-
 static void
 sp_stroke_style_set_scaled_dash(SPCSSAttr *css,
                                 int ndash, double *dash, double offset,
@@ -1798,8 +1621,6 @@ sp_stroke_style_set_scaled_dash(SPCSSAttr *css,
     }
 }
 
-
-
 static void
 sp_stroke_style_scale_line(SPWidget *spw)
 {
@@ -1814,22 +1635,14 @@ sp_stroke_style_scale_line(SPWidget *spw)
     SPDashSelector *dsel = SP_DASH_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
     GtkAdjustment *ml = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), "miterlimit"));
 
-    GSList *reprs;
-    GSList const *items;
+    GSList *reprs = NULL;
+    GSList const *items = NULL;
     if (spw->inkscape) {
-        /* TODO: */
-        if (!SP_WIDGET_DOCUMENT(spw))
-            return;
-
-        reprs = NULL;
         items = sp_widget_get_item_list(spw);
         for (GSList const *i = items; i != NULL; i = i->next) {
             reprs = g_slist_prepend(reprs, SP_OBJECT_REPR(i->data));
         }
-    } else {
-        reprs = g_slist_prepend(NULL, spw->repr);
-        items = NULL;
-    }
+    } 
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -1961,18 +1774,14 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
             gtk_widget_set_sensitive (ml, !strcmp(join, "miter"));
         }
 
-        GSList *reprs;
-        GSList const *items;
+        GSList *reprs = NULL;
+        GSList const *items = NULL;
         if (spw->inkscape) {
-            reprs = NULL;
             items = sp_widget_get_item_list(spw);
             for (GSList const *i = items; i != NULL; i = i->next) {
                 reprs = g_slist_prepend(reprs, SP_OBJECT_REPR(i->data));
             }
-        } else {
-            reprs = g_slist_prepend(NULL, spw->repr);
-            items = NULL;
-        }
+        } 
 
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 

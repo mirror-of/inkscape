@@ -27,8 +27,6 @@ enum {
 	MODIFY_SELECTION,
 	CHANGE_SELECTION,
 	SET_SELECTION,
-	ATTR_CHANGED,
-	SET_DIRTY,
 	LAST_SIGNAL
 };
 
@@ -49,26 +47,6 @@ static void sp_widget_set_selection (Inkscape::Application *inkscape, Inkscape::
 
 static GtkBinClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
-
-static void
-spw_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
-{
-	g_signal_emit (G_OBJECT (data), signals[ATTR_CHANGED], 0, key, oldval, newval);
-}
-
-static void
-spw_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldval, const gchar *newval, gpointer data)
-{
-	/* Signalling goes here */
-}
-
-Inkscape::XML::NodeEventVector spw_event_vector = {
-	NULL, /* Child added */
-	NULL, /* Child removed */
-	spw_repr_attr_changed,
-	spw_repr_content_changed,
-	NULL /* Order changed */
-};
 
 GtkType
 sp_widget_get_type (void)
@@ -128,20 +106,6 @@ sp_widget_class_init (SPWidgetClass *klass)
 						    gtk_marshal_NONE__POINTER,
 						    GTK_TYPE_NONE, 1,
 						    GTK_TYPE_POINTER);
-	signals[ATTR_CHANGED] =     gtk_signal_new ("attr_changed",
-						    GTK_RUN_FIRST,
-						    GTK_CLASS_TYPE(object_class),
-						    GTK_SIGNAL_OFFSET (SPWidgetClass, attr_changed),
-						    gtk_marshal_NONE__POINTER_POINTER_POINTER,
-						    GTK_TYPE_NONE, 3,
-						    GTK_TYPE_POINTER, GTK_TYPE_POINTER, GTK_TYPE_POINTER);
-	signals[SET_DIRTY] =        gtk_signal_new ("set_dirty",
-						    GTK_RUN_FIRST,
-						    GTK_CLASS_TYPE(object_class),
-						    GTK_SIGNAL_OFFSET (SPWidgetClass, set_dirty),
-						    gtk_marshal_NONE__BOOL,
-						    GTK_TYPE_NONE, 1,
-						    GTK_TYPE_BOOL);
 
 	widget_class->show = sp_widget_show;
 	widget_class->hide = sp_widget_hide;
@@ -154,10 +118,6 @@ static void
 sp_widget_init (SPWidget *spw)
 {
 	spw->inkscape = NULL;
-	spw->repr = NULL;
-
-	spw->dirty = FALSE;
-	spw->autoupdate = TRUE;
 }
 
 static void
@@ -174,16 +134,6 @@ sp_widget_destroy (GtkObject *object)
 		if (G_IS_OBJECT(spw->inkscape) && G_OBJECT_GET_CLASS(G_OBJECT(spw->inkscape)))
   			sp_signal_disconnect_by_data (spw->inkscape, spw);
 		spw->inkscape = NULL;
-	}
-
-	if (spw->repr) {
-#if 1
-		/* This happens in ::hide (Lauris) */
-		/* It seems it does not (Lauris) */
-		sp_repr_remove_listener_by_data (spw->repr, spw);
-#endif
-		sp_repr_unref (spw->repr);
-		spw->repr = NULL;
 	}
 
 	if (((GtkObjectClass *) parent_class)->destroy)
@@ -204,10 +154,6 @@ sp_widget_show (GtkWidget *widget)
 		g_signal_connect (G_OBJECT (spw->inkscape), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
 	}
 
-	if (spw->repr) {
-		sp_repr_add_listener (spw->repr, &spw_event_vector, spw);
-	}
-
 	if (((GtkWidgetClass *) parent_class)->show)
 		(* ((GtkWidgetClass *) parent_class)->show) (widget);
 }
@@ -222,10 +168,6 @@ sp_widget_hide (GtkWidget *widget)
 	if (spw->inkscape) {
 		/* Disconnect signals */
 		sp_signal_disconnect_by_data (spw->inkscape, spw);
-	}
-
-	if (spw->repr) {
-		sp_repr_remove_listener_by_data (spw->repr, spw);
 	}
 
 	if (((GtkWidgetClass *) parent_class)->hide)
@@ -289,51 +231,11 @@ sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape)
 {
 	g_return_val_if_fail (!spw->inkscape, NULL);
 
-	if (spw->repr) {
-		if (GTK_WIDGET_VISIBLE (spw)) {
-			sp_repr_remove_listener_by_data (spw->repr, spw);
-		}
-		sp_repr_unref (spw->repr);
-		spw->repr = NULL;
-	}
-
 	spw->inkscape = inkscape;
 	if (GTK_WIDGET_VISIBLE (spw)) {
 		g_signal_connect (G_OBJECT (inkscape), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
 		g_signal_connect (G_OBJECT (inkscape), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
 		g_signal_connect (G_OBJECT (inkscape), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
-	}
-
-	g_signal_emit (G_OBJECT (spw), signals[CONSTRUCT], 0);
-
-	return (GtkWidget *) spw;
-}
-
-GtkWidget *
-sp_widget_construct_repr (SPWidget *spw, Inkscape::XML::Node *repr)
-{
-	g_return_val_if_fail (spw != NULL, NULL);
-	g_return_val_if_fail (SP_IS_WIDGET (spw), NULL);
-	g_return_val_if_fail (repr != NULL, NULL);
-
-	if (spw->repr) {
-		if (repr == spw->repr) return (GtkWidget *) spw;
-		if (GTK_WIDGET_VISIBLE (spw)) {
-			sp_repr_remove_listener_by_data (spw->repr, spw);
-		}
-		sp_repr_unref (spw->repr);
-		spw->repr = NULL;
-	}
-	if (spw->inkscape) {
-		if (GTK_WIDGET_VISIBLE (spw)) {
-			sp_signal_disconnect_by_data (spw->inkscape, spw);
-		}
-		spw->inkscape = NULL;
-	}
-	spw->repr = repr;
-	sp_repr_ref (spw->repr);
-	if (GTK_WIDGET_VISIBLE (spw)) {
-		sp_repr_add_listener (spw->repr, &spw_event_vector, spw);
 	}
 
 	g_signal_emit (G_OBJECT (spw), signals[CONSTRUCT], 0);
@@ -359,29 +261,6 @@ sp_widget_set_selection (Inkscape::Application *inkscape, Inkscape::Selection *s
 	/* Emit "set_selection" signal */
 	g_signal_emit (G_OBJECT (spw), signals[SET_SELECTION], 0, selection);
 	/* Inkscape will force "change_selection" anyways */
-}
-
-void
-sp_widget_set_dirty (SPWidget *spw, gboolean dirty)
-{
-	if (dirty && !spw->dirty) {
-		spw->dirty = TRUE;
-		if (!spw->autoupdate) {
-			g_signal_emit (G_OBJECT (spw), signals[SET_DIRTY], 0, TRUE);
-		}
-	} else if (!dirty && spw->dirty) {
-		spw->dirty = FALSE;
-		if (!spw->autoupdate) {
-			g_signal_emit (G_OBJECT (spw), signals[SET_DIRTY], 0, FALSE);
-		}
-	}
-}
-
-void
-sp_widget_set_autoupdate (SPWidget *spw, gboolean autoupdate)
-{
-	if (autoupdate && spw->dirty) spw->dirty = FALSE;
-	spw->autoupdate = autoupdate;
 }
 
 const GSList *

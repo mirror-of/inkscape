@@ -21,8 +21,6 @@
 
 GtkWidget *sp_fill_style_widget_new (void);
 
-void sp_fill_style_dialog (void);
-
 #endif
 
 /*

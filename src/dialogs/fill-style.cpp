@@ -76,16 +76,8 @@ static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
                                                       Inkscape::Selection *selection,
                                                       SPPaintSelector *psel );
 
-static void sp_fill_style_widget_attr_changed       ( SPWidget *spw,
-                                                      gchar const *key,
-                                                      gchar const *oldval,
-                                                      gchar const *newval );
-
 static void sp_fill_style_widget_update             ( SPWidget *spw,
                                                       Inkscape::Selection *sel );
-
-static void sp_fill_style_widget_update_repr        ( SPWidget *spw,
-                                                      Inkscape::XML::Node *repr );
 
 static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                                       SPPaintSelectorMode mode,
@@ -97,36 +89,6 @@ static void sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw
 static void sp_fill_style_get_average_color_rgba (GSList const *objects, gfloat *c);
 static void sp_fill_style_get_average_color_cmyka (GSList const *objects, gfloat *c);
 static SPPaintSelectorMode sp_fill_style_determine_paint_selector_mode ( SPStyle *style );
-
-static GtkWidget *dialog = NULL;
-
-static void
-sp_fill_style_dialog_destroy (GtkObject *object, gpointer data)
-{
-    dialog = NULL;
-} // end of sp_fill_style_dialog_destroy()
-
-
-
-void
-sp_fill_style_dialog (void)
-{
-    if (!dialog) {
-        dialog = sp_window_new (_("Fill style"), TRUE);
-        g_signal_connect ( G_OBJECT (dialog), "destroy",
-                           G_CALLBACK (sp_fill_style_dialog_destroy), NULL );
-
-        GtkWidget *fs = sp_fill_style_widget_new ();
-        gtk_widget_show (fs);
-        gtk_container_add (GTK_CONTAINER (dialog), fs);
-
-        gtk_widget_show (dialog);
-
-    }
-
-} // end of sp_fill_style_dialog()
-
-
 
 
 GtkWidget *
@@ -208,9 +170,6 @@ sp_fill_style_widget_new (void)
     g_signal_connect ( G_OBJECT (spw), "change_selection",
                        G_CALLBACK (sp_fill_style_widget_change_selection), psel);
 
-    g_signal_connect ( G_OBJECT (spw), "attr_changed",
-                       G_CALLBACK (sp_fill_style_widget_attr_changed), psel);
-
     sp_fill_style_widget_update (SP_WIDGET (spw),
         SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 
@@ -233,16 +192,9 @@ sp_fill_style_widget_construct ( SPWidget *spw, SPPaintSelector *psel )
         sp_fill_style_widget_update ( spw,
             SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL );
 
-    } else if (spw->repr) {
-
-        sp_fill_style_widget_update_repr ( spw, spw->repr );
-
-    }
+    } 
 
 } // end of sp_fill_style_widget_construct()
-
-
-
 
 static void
 sp_fill_style_widget_modify_selection ( SPWidget *spw,
@@ -250,43 +202,21 @@ sp_fill_style_widget_modify_selection ( SPWidget *spw,
                                         guint flags,
                                         SPPaintSelector *psel )
 {
-
     if (flags & ( SP_OBJECT_MODIFIED_FLAG |
                   SP_OBJECT_PARENT_MODIFIED_FLAG |
                   SP_OBJECT_STYLE_MODIFIED_FLAG) )
     {
         sp_fill_style_widget_update (spw, selection);
     }
-
-} // end of sp_fill_style_widget_modify_selection()
-
-
+}
 
 static void
 sp_fill_style_widget_change_selection ( SPWidget *spw,
                                         Inkscape::Selection *selection,
                                         SPPaintSelector *psel )
 {
-
     sp_fill_style_widget_update (spw, selection);
-
-} // end of sp_fill_style_widget_change_selection()
-
-
-
-static void
-sp_fill_style_widget_attr_changed ( SPWidget *spw, gchar const *key,
-                                    gchar const *oldval, gchar const *newval )
-{
-
-    if (!strcmp (key, "style")) {
-        /* This sounds interesting */
-        sp_fill_style_widget_update_repr (spw, spw->repr);
-    }
-
-} // end of sp_fill_style_widget_attr_changed();
-
-
+}
 
 /**
 * \param sel Selection to use, or NULL.
@@ -475,94 +405,6 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 } // end of sp_fill_style_widget_update()
 
 
-
-static void
-sp_fill_style_widget_update_repr (SPWidget *spw, Inkscape::XML::Node *repr)
-{
-    if (g_object_get_data (G_OBJECT (spw), "update"))
-        return;
-
-    g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
-
-#ifdef SP_FS_VERBOSE
-    g_print ("FillStyleWidget: Set update flag\n");
-#endif
-    SPPaintSelector* psel = SP_PAINT_SELECTOR(g_object_get_data ( G_OBJECT (spw),
-                                                                 "paint-selector") );
-
-    SPStyle *style = sp_style_new ();
-    sp_style_read_from_repr (style, repr);
-
-    SPPaintSelectorMode pselmode = sp_fill_style_determine_paint_selector_mode (style);
-
-#ifdef SP_FS_VERBOSE
-    g_print ("FillStyleWidget: paint selector mode %d\n", pselmode);
-#endif
-
-    switch (pselmode) {
-        case SP_PAINT_SELECTOR_MODE_NONE:
-            /* No paint at all */
-            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_NONE);
-            break;
-
-        case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        {
-            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
-            gfloat c[5];
-            sp_color_get_rgb_floatv (&style->fill.value.color, c);
-            c[3] = SP_SCALE24_TO_FLOAT (style->fill_opacity.value);
-            SPColor color;
-            sp_color_set_rgb_float (&color, c[0], c[1], c[2]);
-            sp_paint_selector_set_color_alpha (psel, &color, c[3]);
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-        {
-            sp_paint_selector_set_mode ( psel,
-                                         SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
-            gfloat c[5];
-            sp_color_get_cmyk_floatv (&style->fill.value.color, c);
-            c[4] = SP_SCALE24_TO_FLOAT (style->fill_opacity.value);
-            SPColor color;
-            sp_color_set_cmyk_float (&color, c[0], c[1], c[2], c[3]);
-            sp_paint_selector_set_color_alpha (psel, &color, c[4]);
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-            break;
-
-        case SP_PAINT_SELECTOR_MODE_PATTERN:
-            {
-            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_PATTERN);
-            SPObject *object = (SPObject *) SP_ACTIVE_DOCUMENT->getObjectByRepr(repr);
-
-            SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
-            sp_update_pattern_list ( psel, pat);
-            }
-            break;
-
-        default:
-            break;
-    }
-
-    GtkWidget *fillrule = GTK_WIDGET(g_object_get_data (G_OBJECT (spw), "fill-rule"));
-    gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule),
-            (style->fill_rule.computed == ART_WIND_RULE_NONZERO) ? 0 : 1);
-
-    sp_style_unref (style);
-
-    g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
-
-#ifdef SP_FS_VERBOSE
-    g_print ("FillStyleWidget: Cleared update flag\n");
-#endif
-
-}
-
-
-
 static void
 sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                           SPPaintSelectorMode mode,
@@ -678,9 +520,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         for (GSList const *i = items; i != NULL; i = i->next) {
             reprs = g_slist_prepend (reprs, SP_OBJECT_REPR (i->data));
         }
-    } else {
-        reprs = g_slist_prepend (NULL, spw->repr);
-    }
+    } 
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 

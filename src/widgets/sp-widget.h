@@ -29,15 +29,7 @@
 
 struct SPWidget {
 	GtkBin bin;
-
 	Inkscape::Application *inkscape;
-	SPObject *object;
-	Inkscape::XML::Node *repr;
-
-	/* fixme: We do not need these probably (Lauris) */
-	/* fixme: Or maybe configurable? For text widget? (Lauris) */
-	guint dirty : 1;
-	guint autoupdate : 1;
 };
 
 struct SPWidgetClass {
@@ -47,9 +39,6 @@ struct SPWidgetClass {
 	void (* modify_selection) (SPWidget *spw, Inkscape::Selection *selection, guint flags);
 	void (* change_selection) (SPWidget *spw, Inkscape::Selection *selection);
 	void (* set_selection) (SPWidget *spw, Inkscape::Selection *selection);
-	void (* attr_changed) (SPWidget *spw, const guchar *key, const guchar *oldval, const guchar *newval);
-	/* Signal */
-	void (* set_dirty) (SPWidget *spw, gboolean dirty);
 };
 
 GtkType sp_widget_get_type (void);
@@ -58,10 +47,6 @@ GtkType sp_widget_get_type (void);
 /* Generic constructor for global widget */
 GtkWidget *sp_widget_new_global (Inkscape::Application *inkscape);
 GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape);
-GtkWidget *sp_widget_construct_repr (SPWidget *spw, Inkscape::XML::Node *repr);
-
-void sp_widget_set_dirty (SPWidget *spw, gboolean dirty);
-void sp_widget_set_autoupdate (SPWidget *spw, gboolean autoupdate);
 
 const GSList *sp_widget_get_item_list (SPWidget *spw);
 
@@ -69,7 +54,5 @@ const GSList *sp_widget_get_item_list (SPWidget *spw);
 #define SP_WIDGET_DOCUMENT(spw) SP_ACTIVE_DOCUMENT
 #define SP_WIDGET_DESKTOP(spw) SP_ACTIVE_DESKTOP
 #define SP_WIDGET_SELECTION(spw) SP_DT_SELECTION (SP_ACTIVE_DESKTOP)
-
-
 
 #endif
