@@ -18,7 +18,8 @@
 	  src/util/filter-list.h, src/util/map-list.h:
 	  adjust for changes in the list class' interface
 
-	* src/desktop.cpp, src/sp-desktop-widget.h: removed old layer selector
+	* src/desktop.cpp, src/sp-desktop-widget.h:
+	  removed old layer selector and added SPDesktop::itemIsHidden()
 
 	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
 	  more work; it's now at least as functional as the old selector it

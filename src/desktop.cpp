@@ -325,6 +325,10 @@ bool SPDesktop::isWithinViewport(SPItem *item) const {
     return NR::Rect(viewport).contains(NR::Rect(bbox));
 }
 
+bool SPDesktop::itemIsHidden(SPItem const *item) const {
+    return item->isHidden(this->dkey);
+}
+
 static void
 sp_desktop_request_redraw (SPView *view)
 {
