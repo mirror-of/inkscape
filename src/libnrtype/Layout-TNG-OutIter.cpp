@@ -429,7 +429,7 @@ std::vector<NR::Point> Layout::createSelectionShape(iterator const &it_start, it
             top_left[NR::X] = span_x + _characters[char_index].x;
             while (char_index < end_char_index && _characters[char_index].in_span == span_index)
                 char_index++;
-            if (_characters[char_index].in_span != span_index)
+            if (char_index == _characters.size() || _characters[char_index].in_span != span_index)
                 bottom_right[NR::X] = _spans[span_index].x_end + _spans[span_index].chunk(this).left_x;
             else
                 bottom_right[NR::X] = span_x + _characters[char_index].x;
