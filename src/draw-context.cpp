@@ -214,6 +214,7 @@ gint
 sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
+    SPDesktop *desktop = ec->desktop;
 
     gint ret = FALSE;
 
@@ -229,6 +230,8 @@ sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
             }
             ret = TRUE;
             break;
+        case GDK_Escape:
+            SP_DT_SELECTION(desktop)->clear();
         case GDK_Up:
         case GDK_Down:
         case GDK_KP_Up:
