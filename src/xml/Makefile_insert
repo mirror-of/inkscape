@@ -17,6 +17,7 @@ xml_libspxml_a_SOURCES =	\
 	xml/sp-repr-action.cpp	\
 	xml/sp-repr-action.h	\
 	xml/sp-repr-action-fns.h	\
+	xml/sp-repr-iterators.h	\
 	xml/quote.cpp	\
 	xml/quote.h	\
 	xml/repr-css.cpp	\

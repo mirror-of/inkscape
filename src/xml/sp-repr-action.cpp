@@ -18,10 +18,10 @@
 #include "sp-repr-action.h"
 #include "sp-repr-action-fns.h"
 #include "util/list.h"
-#include "util/reverse.h"
+#include "util/reverse-list.h"
 
 using Inkscape::Util::List;
-using Inkscape::Util::reverse;
+using Inkscape::Util::reverse_list;
 
 int SPReprAction::_next_serial=0;
 
@@ -113,9 +113,11 @@ sp_repr_replay_log (SPReprAction *log)
 		g_assert(!log->repr->doc->is_logging);
 	}
 
-	List<SPReprAction *> *reversed=reverse(log);
-	for ( ; reversed ; reversed = reversed->next() ) {
-		reversed->data()->replayOne();
+	List<SPReprAction &> reversed(
+		reverse_list<SPReprAction &, SPReprAction::Iterator>(log, NULL)
+	);
+	for ( ; reversed ; ++reversed ) {
+		reversed->replayOne();
 	}
 }
 

@@ -42,8 +42,8 @@
 #include "libnr/nr-point.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
+#include "xml/sp-repr-iterators.h"
 
-#include "util/parent-axis.h"
 #include "algorithms/longest-common-suffix.h"
 
 #include "livarot/Path.h"
@@ -1440,10 +1440,21 @@ Ancetre (SPRepr * a, SPRepr * who)
     return Ancetre (sp_repr_parent (a), who);
 }
 
+namespace {
+
+bool same_repr(SPRepr &a, SPRepr &b) {
+    return &a == &b;
+}
+
+}
+
 SPRepr *
 LCA (SPRepr * a, SPRepr * b)
 {
-    SPRepr *ancestor=Inkscape::Algorithms::longest_common_suffix<Inkscape::Util::ParentAxis<SPRepr *> >(a, b);
+    using Inkscape::Algorithms::longest_common_suffix;
+    SPRepr *ancestor=longest_common_suffix<SPReprParentIterator>(
+        a, b, NULL, &same_repr
+    );
     if ( ancestor && SP_REPR_TYPE(ancestor) != SP_XML_DOCUMENT_NODE ) {
         return ancestor;
     } else {

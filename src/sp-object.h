@@ -63,6 +63,7 @@
 
 #include "forward.h"
 #include "version.h"
+#include "util/forward-pointer-iterator.h"
 #include "xml/xml-forward.h"
 
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
@@ -147,6 +148,22 @@ struct SPObject : public GObject {
 	SPRepr *repr; /* Our xml representation */
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
+
+	struct ParentIteratorStrategy {
+		static SPObject const *next(SPObject const *object) {
+			return object->parent;
+		}
+	};
+	struct SiblingIteratorStrategy {
+		static SPObject const *next(SPObject const *object) {
+			return object->next;
+		}
+	};
+
+	typedef Inkscape::Util::ForwardPointerIterator<SPObject, ParentIteratorStrategy> ParentIterator;
+	typedef Inkscape::Util::ForwardPointerIterator<SPObject const, ParentIteratorStrategy> ConstParentIterator;
+	typedef Inkscape::Util::ForwardPointerIterator<SPObject, SiblingIteratorStrategy> SiblingIterator;
+	typedef Inkscape::Util::ForwardPointerIterator<SPObject const, SiblingIteratorStrategy> ConstSiblingIterator;
 
 	bool isSiblingOf(SPObject const *object) const {
 		g_return_val_if_fail(object != NULL, false);

@@ -18,7 +18,7 @@
 #include <math.h>
 #include <string.h>
 
-#include <list>
+#include <algorithm>
 
 #include "macros.h"
 #include "svg/svg.h"
@@ -40,8 +40,6 @@
 #include "sp-rect.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
-#include "sp-object-tree-iterator.h"
-#include "util/sibling-axis.h"
 #include "prefs-utils.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-div.h"
@@ -49,10 +47,9 @@
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rect.h"
 #include "svg/stringstream.h"
-#include "algorithms/longest-suffix.h"
-#include "algorithms/shortest-suffix.h"
-#include "algorithms/longest-prefix.h"
-#include "algorithms/shortest-prefix.h"
+#include "algorithms/find-last-if.h"
+#include "util/list.h"
+#include "util/reverse-list.h"
 
 #include "xml/repr.h"
 #include "xml/repr-private.h"
@@ -148,34 +145,17 @@ sp_item_init(SPItem *item)
 
 namespace {
 
-struct starts_with_any_item {
-    template <typename List>
-    bool operator()(List os) const {
-        SPObject *object=Inkscape::Traits::List<List>::first(os);
-        return SP_IS_ITEM(object);
-    }
-};
-
-struct starts_with_object {
-    SPObject *object;
-
-    starts_with_object(SPObject *o) : object(o) {}
-
-    template <typename List>
-    bool operator()(List os) const {
-        SPObject *o=Inkscape::Traits::List<List>::first(os);
-        return o == object;
-    }
-};
+bool is_item(SPObject const &object) {
+    return SP_IS_ITEM(&object);
+}
 
 }
 
 void SPItem::raiseToTop() {
-    using Inkscape::Algorithms::shortest_suffix;
-    using Inkscape::Util::SiblingAxis;
+    using Inkscape::Algorithms::find_last_if;
 
-    SPObject *topmost=shortest_suffix<SiblingAxis<SPObject *> >(
-        starts_with_any_item(), SP_OBJECT_NEXT(this)
+    SPObject *topmost=find_last_if<SPObject::SiblingIterator>(
+        SP_OBJECT_NEXT(this), NULL, &is_item
     );
     if (topmost) {
         SPRepr *repr=SP_OBJECT_REPR(this);
@@ -184,11 +164,8 @@ void SPItem::raiseToTop() {
 }
 
 void SPItem::raiseOne() {
-    using Inkscape::Algorithms::longest_suffix;
-    using Inkscape::Util::SiblingAxis;
-
-    SPObject *next_higher=longest_suffix<SiblingAxis<SPObject *> >(
-        starts_with_any_item(), SP_OBJECT_NEXT(this)
+    SPObject *next_higher=std::find_if<SPObject::SiblingIterator>(
+        SP_OBJECT_NEXT(this), NULL, &is_item
     );
     if (next_higher) {
         SPRepr *repr=SP_OBJECT_REPR(this);
@@ -198,38 +175,41 @@ void SPItem::raiseOne() {
 }
 
 void SPItem::lowerOne() {
-    using Inkscape::Algorithms::longest_suffix;
-    using Inkscape::Algorithms::shortest_prefix;
-    using Inkscape::Util::List;
-    using Inkscape::Util::SiblingAxis;
+    using Inkscape::Util::MutableList;
+    using Inkscape::Util::reverse_list;
 
-    List<SPObject *> *next_lower=longest_suffix(
-        starts_with_any_item(),
-        shortest_prefix<SiblingAxis<SPObject *> >(
-            starts_with_object(this), SP_OBJECT_PARENT(this)->firstChild()
-        )->next()
+    MutableList<SPObject &> next_lower=std::find_if(
+        reverse_list<SPObject &, SPObject::SiblingIterator>(
+            SP_OBJECT_PARENT(this)->firstChild(), this
+        ),
+        MutableList<SPObject &>(),
+        &is_item
     );
 
     if (next_lower) {
-        next_lower = next_lower->next();
+        ++next_lower;
         SPRepr *repr=SP_OBJECT_REPR(this);
-        SPRepr *ref=( next_lower ? SP_OBJECT_REPR(next_lower->data()) : NULL );
+        SPRepr *ref=( next_lower ? SP_OBJECT_REPR(&*next_lower) : NULL );
         sp_repr_change_order(sp_repr_parent(repr), repr, ref);
     }
 }
 
 void SPItem::lowerToBottom() {
-    using Inkscape::Algorithms::shortest_prefix;
-    using Inkscape::Util::List;
-    using Inkscape::Util::SiblingAxis;
+    using Inkscape::Algorithms::find_last_if;
+    using Inkscape::Util::MutableList;
+    using Inkscape::Util::reverse_list;
 
-    List<SPObject *> *bottom=shortest_prefix<SiblingAxis<SPObject *> >(
-        starts_with_any_item(), SP_OBJECT_PARENT(this)->firstChild()
+    MutableList<SPObject &> bottom=find_last_if(
+        reverse_list<SPObject &, SPObject::SiblingIterator>(
+            SP_OBJECT_PARENT(this)->firstChild(), this
+        ),
+        MutableList<SPObject &>(),
+        &is_item
     );
-    if ( bottom && bottom->data() != this ) {
-        bottom = bottom->next();
+    if (bottom) {
+        ++bottom;
         SPRepr *repr=SP_OBJECT_REPR(this);
-        SPRepr *ref=( bottom ? SP_OBJECT_REPR(bottom->data()) : NULL );
+        SPRepr *ref=( bottom ? SP_OBJECT_REPR(&*bottom) : NULL );
         sp_repr_change_order(sp_repr_parent(repr), repr, ref);
     }
 }

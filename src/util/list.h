@@ -12,97 +12,143 @@
 #ifndef SEEN_INKSCAPE_UTIL_LIST_H
 #define SEEN_INKSCAPE_UTIL_LIST_H
 
+#include <cstddef>
+#include <iterator>
 #include "gc-managed.h"
 #include "traits/reference.h"
 
 namespace Inkscape {
 
-namespace Traits { template <typename T> struct List; }
-
 namespace Util {
 
+template <typename T> class MutableList;
+
 template <typename T>
-class List : public GC::Managed<> {
+class List : public List<T const> {
 public:
-    typedef T Data;
+    typedef T value_type;
+    typedef typename Traits::Reference<value_type>::LValue reference;
+    typedef typename Traits::Reference<value_type>::RValue const_reference;
+    typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() {}
-    List(typename Traits::Reference<T>::RValue data, List<T> *next)
-    : _data(data), _next(next) {}
+    List() : List<T const>() {}
+    explicit List(const_reference value,
+                  List<T> const &next=List<T>())
+    : List<T const>(value, next) {}
 
-    typename Traits::Reference<T>::LValue data() { return _data; }
-    typename Traits::Reference<T>::RValue data() const { return _data; }
-    typename Traits::Reference<T>::RValue setData(typename Traits::Reference<T>::RValue data) {
-        return _data = data;
+    reference operator*() const { return _cell->value; }
+    pointer operator->() const { return &_cell->value; }
+
+    List<value_type> &operator++() {
+        _cell = _cell->next;
+        return *this;
+    }
+    List<value_type> operator++(int) {
+        List<value_type> old(*this);
+        _cell = _cell->next;
+        return old;
     }
 
-    List<T> *&next() { return _next; }
-    List<T> const *next() const { return _next; }
-    List<T> *setNext(List<T> *next) {
-        return _next = next;
+    List<value_type> next() const {
+        List<value_type> next(*this);
+        return ++next;
+    }
+};
+
+template <typename T>
+class List<T const> {
+public:
+    typedef std::forward_iterator_tag iterator_category;
+    typedef T const value_type;
+    typedef std::ptrdiff_t difference_type;
+    typedef typename Traits::Reference<value_type>::LValue reference;
+    typedef typename Traits::Reference<value_type>::RValue const_reference;
+    typedef typename Traits::Reference<value_type>::Pointer pointer;
+
+    List() : _cell(NULL) {}
+    explicit List(const_reference value,
+                  List<value_type> const &next=List<value_type>())
+    : _cell(new Cell(value, next._cell)) {}
+
+    reference operator*() const { return _cell->value; }
+    pointer operator->() const { return &_cell->value; }
+
+    bool operator==(List<value_type> const &other) const {
+        return _cell == other._cell;
+    }
+    bool operator!=(List<value_type> const &other) const {
+        return _cell != other._cell;
     }
 
-private:
-    T _data;
-    List<T> *_next;
+    List<value_type> &operator++() {
+        _cell = _cell->next;
+        return *this;
+    }
+    List<value_type> operator++(int) {
+        List<value_type> old(*this);
+        _cell = _cell->next;
+        return old;
+    }
+
+    operator bool() const { return _cell != NULL; }
+
+    List<value_type> next() const {
+        List<value_type> next(*this);
+        return ++next;
+    }
+
+protected:
+    struct Cell : public GC::Managed<> {
+        Cell() {}
+        Cell(const_reference v, Cell *n) : value(v), next(n) {}
+
+        T value;
+        Cell *next;
+    };
+
+    Cell *_cell;
 };
 
 template <typename T>
-inline List<T> *empty() { return NULL; }
+class MutableList : public List<T> {
+public:
+    MutableList() {}
+    explicit MutableList(typename List<T>::const_reference value,
+                         MutableList<T> const &next=MutableList<T>())
+    : List<T>(value, next) {}
+
+    MutableList<T> &operator++() {
+        _cell = _cell->next;
+        return *this;
+    }
+    MutableList<T> operator++(int) {
+        MutableList<T> old(*this);
+        _cell = _cell->next;
+        return old;
+    }
+
+    MutableList<T> next() const {
+        MutableList<T> next(*this);
+        return ++next;
+    }
+    MutableList<T> setNext(MutableList<T> next) {
+        _cell->next = next._cell;
+        return next;
+    }
+};
 
 template <typename T>
-inline List<T> const *cons(typename Traits::Reference<T>::RValue data,
-                           List<T> const *next)
+List<T> cons(typename Traits::Reference<T>::RValue value, List<T> const &next)
 {
-    return new List<T>(data, const_cast<List<T> *>(next));
+    return List<T>(value, next);
 }
 
 template <typename T>
-inline List<T> *cons_mutable(typename Traits::Reference<T>::RValue data,
-                             List<T> *next)
+MutableList<T> cons(typename Traits::Reference<T>::RValue value,
+                    MutableList<T> const &next)
 {
-    return new List<T>(data, next);
+    return MutableList<T>(value, next);
 }
-
-}
-
-namespace Traits {
-
-template <typename T>
-struct List<Util::List<T> *> {
-    typedef Util::List<T> *ListType;
-    typedef T Data;
-
-    static bool is_null(ListType l) { return ( l == NULL ); }
-    static ListType null() { return NULL; }
-
-    static typename Reference<T>::RValue first(ListType l) { return l->data(); }
-    static ListType rest(ListType l) { return l->next(); }
-};
-
-template <typename T>
-struct List<Util::List<T> const *> {
-    typedef Util::List<T> const *ListType;
-    typedef T const Data;
-
-    static bool is_null(ListType l) { return ( l == NULL ) ; }
-    static ListType null() { return NULL; }
-
-    static typename Reference<T>::RValue first(ListType l) { return l->data(); }
-    static ListType rest(ListType l) { return l->next(); }
-};
-
-template <typename T>
-struct List<Util::List<T &> const *> {
-    typedef Util::List<T &> const *ListType;
-    typedef T &Data;
-
-    static bool is_null(ListType l) { return ( l == NULL ) ; }
-    static ListType null() { return NULL; }
-
-    static T &first(ListType l) { return l->data(); }
-    static ListType rest(ListType l) { return l->next(); }
-};
 
 }
 

@@ -1,3 +1,61 @@
+2004-10-12  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile.am: added files
+
+	* src/layer-fns.cpp, src/sp-item.cpp: use iterators, simplifying code
+
+	* src/sp-object.cpp, src/splivarot.cpp: adapt to new version of 
+	  Inkscape::Algorithms::longest_common_suffix
+
+	* src/sp-object.h, src/sp-repr-iterators.h: add new iterator classes
+
+	* src/algorithms/find-last-if.h: add counterpart of std::find_if
+
+	* src/algorithms/longest-common-suffix.h: rewrite to use iterators
+
+	* src/algorithms/longest-prefix.h, src/algorithms/longest-suffix.h,
+	  src/algorithms/shortest-prefix.h, src/algorithms/shortest-suffix.h:
+
+	  removed; these algorithms are no longer necessary when using
+	  iterators
+
+	* src/traits/list.h: no longer needed
+
+	* src/traits/reference.h: add "Pointer" member type
+
+	* src/util/Makefile_insert: shuffled files
+
+	* src/util/list.h: reworked Inkscape::Util::List to be a "handle" type
+	  that can also be used as an STL iterator
+
+	* src/util/forward-pointer-iterator.h: treat a pointer as an iterator,
+	  given a base pointer type and a type which defines the iteration
+	  strategy
+
+	* src/util/map.h: obsolete
+
+	* src/util/map-list.h: iterator-based implementation
+
+	* src/traits/tree-iterator.h: no longer necessary (superceded by
+	  specific applications of Inkscape::Util::ForwardPointerIterator)
+
+	* src/sp-object-tree-iterator.h, src/util/parent-axis.h,
+	  src/util/sibling-axis.h: obsolete
+
+	* src/util/map.h, src/util/reverse.h: obsolete
+
+	* src/util/map-list.h, src/util/reverse-list.h:
+	  iterator-based implementations
+
+	* src/xml/Makefile_insert: added file
+
+	* src/xml/repr.h: removed old tree iterator stuff
+
+	* src/xml/sp-repr-action.cpp, src/xml/sp-repr-action.h: use new
+	  pointer iterator facility
+
+	* src/xml/sp-repr-iterators.h: pointer iterators for SPRepr
+
 2004-10-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/bezier-utils.h, src/display/bezier-utils.cpp

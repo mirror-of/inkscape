@@ -25,8 +25,6 @@
 #include "sp-root.h"
 
 #include "sp-object.h"
-#include "sp-object-tree-iterator.h"
-#include "util/parent-axis.h"
 #include "algorithms/longest-common-suffix.h"
 
 #define noSP_OBJECT_DEBUG
@@ -263,19 +261,20 @@ bool SPObject::isAncestorOf(SPObject const *object) const {
 	return false;
 }
 
+namespace {
+
+bool same_objects(SPObject const &a, SPObject const &b) {
+	return &a == &b;
+}
+
+}
+
 SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
 	g_return_val_if_fail(object != NULL, NULL);
 
-	return Inkscape::Algorithms::longest_common_suffix<Inkscape::Util::ParentAxis<SPObject const *> >(this, object);
+	using Inkscape::Algorithms::longest_common_suffix;
+	return longest_common_suffix<SPObject::ConstParentIterator>(this, object, NULL, &same_objects);
 }
-
-#if 0	/* unused */
-SPObject *SPObject::nearestCommonAncestor(SPObject *object) {
-	g_return_val_if_fail(object != NULL, NULL);
-
-	return Inkscape::Algorithms::longest_common_suffix<Inkscape::Util::ParentAxis<SPObject *> >(this, object);
-}
-#endif
 
 SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	if (!SP_OBJECT_IS_CLONED(this)) {

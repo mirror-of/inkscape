@@ -4,8 +4,10 @@
 #include <glib/gtypes.h>
 #include <glib/gquark.h>
 
+#include <iterator>
 #include "xml/xml-forward.h"
 #include "util/shared-c-string.h"
+#include "util/forward-pointer-iterator.h"
 #include "gc-managed.h"
 
 class SPReprAction
@@ -15,6 +17,15 @@ public:
 	SPReprAction *next;
 	int serial;
 	SPRepr *repr;
+
+	struct IteratorStrategy {
+		static SPReprAction const *next(SPReprAction const *action) {
+			return action->next;
+		}
+	};
+
+	typedef Inkscape::Util::ForwardPointerIterator<SPReprAction, IteratorStrategy> Iterator;
+	typedef Inkscape::Util::ForwardPointerIterator<SPReprAction const, IteratorStrategy> ConstIterator;
 
 	SPReprAction *optimizeOne() { return _optimizeOne(); }
 	void undoOne() const { return _undoOne(); }
@@ -117,39 +128,5 @@ private:
 	void _undoOne() const;
 	void _replayOne() const;
 };
-
-namespace Inkscape {
-
-namespace Traits {
-
-template <typename T> struct List;
-
-template <>
-struct List<SPReprAction *> {
-	typedef SPReprAction *ListType;
-	typedef SPReprAction *Data;
-
-	static bool is_null(SPReprAction *as) { return as == NULL; }
-	static ListType null() { return NULL; }
-
-	static SPReprAction *first(SPReprAction *as) { return as; }
-	static SPReprAction *rest(SPReprAction *as) { return as->next; }
-};
-
-template <>
-struct List<SPReprAction const *> {
-	typedef SPReprAction const *ListType;
-	typedef SPReprAction const *Data;
-
-	static bool is_null(SPReprAction const *as) { return as == NULL; }
-	static ListType null() { return NULL; }
-
-	static SPReprAction const *first(SPReprAction const *as) { return as; }
-	static SPReprAction const *rest(SPReprAction const *as) { return as->next; }
-};
-
-}
-
-}
 
 #endif

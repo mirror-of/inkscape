@@ -16,10 +16,7 @@
 #include "sp-object.h"
 #include "sp-item-group.h"
 #include "xml/repr.h"
-#include "algorithms/longest-suffix.h"
-#include "algorithms/shortest-prefix.h"
-#include "sp-object-tree-iterator.h"
-#include "util/sibling-axis.h"
+#include "algorithms/find-last-if.h"
 
 namespace Inkscape {
 
@@ -49,60 +46,39 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
 
 namespace {
 
-struct starts_with_any_layer {
-    starts_with_any_layer() {}
-
-    template <typename List>
-    bool operator()(List os) const {
-        SPObject *o=Inkscape::Traits::List<List>::first(os);
-        return ( SP_IS_GROUP(o) && SP_GROUP(o)->layerMode() == SPGroup::LAYER );
-    }
-};
-
-struct starts_with_object {
-    SPObject *object;
-
-    starts_with_object(SPObject *o) : object(o) {}
-
-    template <typename List>
-    bool operator()(List os) const {
-        SPObject *o=Inkscape::Traits::List<List>::first(os);
-        return ( o == object );
-    }
-};
+bool is_layer(SPObject &object) {
+    return SP_IS_GROUP(&object) &&
+           SP_GROUP(&object)->layerMode() == SPGroup::LAYER;
+}
 
 }
 
 SPObject *next_layer(SPObject *root, SPObject *layer) {
-    using Inkscape::Util::SiblingAxis;
-    using Inkscape::Algorithms::longest_suffix;
-
     if ( layer == root ) {
         return NULL;
     }
 
     // TODO: look to cousins, children, and ancestors also (depth-last order)
-    return longest_suffix<SiblingAxis<SPObject *> >(starts_with_any_layer(), SP_OBJECT_NEXT(layer));
+    return std::find_if<SPObject::SiblingIterator>(
+        SP_OBJECT_NEXT(layer),
+        NULL,
+        &is_layer
+    );
 }
 
 SPObject *previous_layer(SPObject *root, SPObject *layer) {
-    using Inkscape::Util::SiblingAxis;
-    using Inkscape::Util::List;
-    using Inkscape::Algorithms::longest_suffix;
-    using Inkscape::Algorithms::shortest_prefix;
+    using Inkscape::Algorithms::find_last_if;
 
     if ( layer == root ) {
         return NULL;
     }
 
     // TODO: look to cousins, children, and ancestors also (depth-last order)
-    List<SPObject *> *found=longest_suffix(
-        starts_with_any_layer(),
-        shortest_prefix<SiblingAxis<SPObject *> >(
-            starts_with_object(layer), SP_OBJECT_PARENT(layer)->firstChild()
-        )->next()
+    return find_last_if<SPObject::SiblingIterator>(
+        SP_OBJECT_PARENT(layer)->firstChild(),
+        layer,
+        &is_layer
     );
-    return ( found ? found->data() : NULL );
 }
 
 }

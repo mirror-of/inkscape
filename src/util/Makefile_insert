@@ -5,12 +5,11 @@ traits/clean:
 	rm -f util/libinkutil.a $(util_libinkutil_a_OBJECTS)
 
 util_libinkutil_a_SOURCES = \
+	util/forward-pointer-iterator.h \
 	util/list.h \
-	util/map.h \
-	util/reverse.h \
-	util/parent-axis.h \
+	util/map-list.h \
+	util/reverse-list.h \
 	util/shared-c-string.h \
 	util/shared-c-string.cpp \
-	util/sibling-axis.h \
 	util/tuple.h
 

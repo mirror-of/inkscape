@@ -12,18 +12,15 @@
 #ifndef SEEN_INKSCAPE_ALGORITHMS_LONGEST_COMMON_SUFFIX_H
 #define SEEN_INKSCAPE_ALGORITHMS_LONGEST_COMMON_SUFFIX_H
 
-#include <list>
+#include <iterator>
+#include <functional>
+#include "util/list.h"
 
 namespace Inkscape {
-
-namespace Traits { template <typename T> struct List; }
 
 namespace Algorithms {
 
 /**
- * Note that this implementation and the rest of this comment assume
- * that `List==List' runs in O(1) time.
- *
  * Time costs:
  *
  * The case of sharing a common successor is handled in O(1) time.
@@ -32,68 +29,68 @@ namespace Algorithms {
  *
  * Otherwise, runs in O(len(a) + len(b)) time.
  */
-template <typename List>
-List longest_common_suffix(List a, List b) {
-    typedef Traits::List<List> ListT;
 
-    if ( ListT::is_null(a) || ListT::is_null(b) ) {
-        return ListT::null();
+template <typename ForwardIterator>
+ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
+                                      ForwardIterator end)
+{
+    typedef typename std::iterator_traits<ForwardIterator>::value_type value_type;
+    return longest_common_suffix(a, b, end, std::equal_to<value_type>());
+}
+
+template <typename ForwardIterator, typename BinaryPredicate>
+ForwardIterator longest_common_suffix(ForwardIterator a, ForwardIterator b,
+                                      ForwardIterator end, BinaryPredicate pred)
+{
+    if ( a == end || b == end ) {
+        return end;
     }
 
-    /* Handle in O(1) time the common cases of equal lists or equal tails. */
+    /* Handle in O(1) time the common cases of identical lists or tails. */
     {
+        /* identical lists? */
         if ( a == b ) {
             return a;
-            /* This check is redundant except that we don't want the below check to return rest(a)
-               if a == b. */
         }
 
-        List const tail = ListT::rest(a);
-        if ( tail == ListT::rest(b) ) {
-            return tail;
+        /* identical tails? */
+        ForwardIterator tail_a(a);
+        ForwardIterator tail_b(b);
+        if ( ++tail_a == ++tail_b ) {
+            return tail_a;
         }
     }
 
     /* Build parallel lists of suffixes, ordered by increasing length. */
 
-    List lists[2] = { a, b };
-    std::list<List> suffixes[2];
+    using Inkscape::Util::List;
+    using Inkscape::Util::cons;
+    ForwardIterator lists[2] = { a, b };
+    List<ForwardIterator> suffixes[2];
 
     for ( int i=0 ; i < 2 ; i++ ) {
-        for ( List iter = lists[i] ;
-              !ListT::is_null(iter) ;
-              iter = ListT::rest(iter) )
-        {
-            // TODO: == is ambiguous; in scheme terms, I mean roughly:
-            // (eqv? iter (vector-ref lists (- 1 i)))
+        for ( ForwardIterator iter(lists[i]) ; iter != end ; ++iter ) {
             if ( iter == lists[1-i] ) {
-                return lists[1-i]; // lists[i] contains lists[1-i];
+                // the other list is a suffix of this one
+                return lists[1-i];
             }
 
-            suffixes[i].push_front(iter);
+            suffixes[i] = cons(iter, suffixes[i]);
         }
     }
 
-    /* iterate through the lists of suffix lists in parallel, stopping at
-       the first pair of suffix lists that have different heads */
+    /* Iterate in parallel through the lists of suffix lists from shortest to
+     * longest, stopping before the first pair of suffixes that differs
+     */
 
-    List longest_common = ListT::null();
+    ForwardIterator longest_common(end);
 
-    typename std::list<List>::iterator iters[2] = {
-        suffixes[0].begin(),
-        suffixes[1].begin()
-    };
-
-    while ( iters[0] != suffixes[0].end() &&
-            iters[1] != suffixes[1].end() &&
-            // TODO: == is ambiguous here also; in scheme terms I mean roughly:
-            // (equal? (car (vector-ref iters 0)) (car (vector-ref iters 1)))
-            // maybe we should make the equality predicate the third parameter
-            ListT::first(*iters[0]) == ListT::first(*iters[1]) )
+    while ( suffixes[0] && suffixes[1] &&
+            pred(**suffixes[0], **suffixes[1]) )
     {
-        longest_common = *iters[0];
-        ++iters[0];
-        ++iters[1];
+        longest_common = *suffixes[0];
+        ++suffixes[0];
+        ++suffixes[1];
     }
 
     return longest_common;

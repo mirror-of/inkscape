@@ -20,12 +20,16 @@ template <typename T>
 struct Reference {
     typedef T const &RValue;
     typedef T &LValue;
+    typedef T *Pointer;
+    typedef T const *ConstPointer;
 };
 
 template <typename T>
 struct Reference<T &> {
     typedef T &RValue;
     typedef T &LValue;
+    typedef T *Pointer;
+    typedef T const *ConstPointer;
 };
 
 }

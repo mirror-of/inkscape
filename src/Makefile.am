@@ -88,15 +88,10 @@ EXTRA_DIST =	\
 	helper/sp-marshal.list	\
 	utest/utest.h	\
 	utest/test-1ary-cases.h	\
+	algorithms/find-last-if.h \
 	algorithms/longest-common-suffix.h \
-	algorithms/longest-prefix.h \
-	algorithms/longest-suffix.h \
-	algorithms/shortest-prefix.h \
-	algorithms/shortest-suffix.h \
 	traits/function.h	\
-	traits/list.h	\
-	traits/reference.h	\
-	traits/tree-iterator.h
+	traits/reference.h
 
 EXTRA_PROGRAMS =	\
 	inkview 	\
