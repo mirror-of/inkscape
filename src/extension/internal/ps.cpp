@@ -394,14 +394,14 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 			
 			if (_bitmap)
 			{
-				os << "0 " << (int) -ceil (d.y1) << " translate\n";
+				os << "0 " << (int) -ceil (_height) << " translate\n";
 			}
 		}
 		else
 		{
 			if (!_bitmap)
 			{
-				os << "0.0 " << (int) ceil (d.y1) << " translate\n";
+				os << "0.0 " << (int) ceil (_height) << " translate\n";
 			}
 
 		}
