@@ -242,6 +242,7 @@ Matrix rotate (const NR::Coord theta)
 	// translation
 	m.c[4] = 0.0;
 	m.c[5] = 0.0;
+	return m;
 }
 
 NR::Coord Matrix::det() const {
