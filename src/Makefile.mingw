@@ -9,7 +9,7 @@ include ../Makefile.mingw.common
 
 
 #Check for 'generated' files
-all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape.exe inkview.exe
+all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape.exe
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
 	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
@@ -39,6 +39,7 @@ inkres.o: inkscape.rc
 	$(WINDRES) inkscape.rc $(RES)
 
 libinkscape.a: $(OBJ)
+	$(RM) libinkscape.a
 	ar crv libinkscape.a $(OBJ)
 	$(RANLIB) libinkscape.a
 

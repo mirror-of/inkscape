@@ -79,6 +79,7 @@ OBJECTS = \
 	libnr/nr-compose-transform.o \
 	libnr/nr-compose.o \
 	libnr/nr-gradient.o \
+	libnr/nr-matrix-fns.o \
 	libnr/nr-matrix.o \
 	libnr/nr-object.o \
 	libnr/nr-path.o \
@@ -154,6 +155,7 @@ OBJECTS = \
 	print.o \
 	rect-context.o \
 	rubberband.o \
+	satisfied-guide-cns.o \
 	select-context.o \
 	select-toolbar.o \
 	selection-chemistry.o \
@@ -173,7 +175,10 @@ OBJECTS = \
 	sp-guide.o \
 	sp-image.o \
 	sp-item-group.o \
+	sp-item-notify-moveto.o \
+	sp-item-rm-unsatisfied-cns.o \
 	sp-item-transform.o \
+	sp-item-update-cns.o \
 	sp-item.o \
 	sp-line.o \
 	sp-marker.o \
@@ -328,6 +333,7 @@ LINTS = \
 	libnr/nr-compose-transform.lint \
 	libnr/nr-compose.lint \
 	libnr/nr-gradient.lint \
+	libnr/nr-matrix-fns.lint \
 	libnr/nr-matrix.lint \
 	libnr/nr-object.lint \
 	libnr/nr-path.lint \
@@ -403,6 +409,7 @@ LINTS = \
 	print.lint \
 	rect-context.lint \
 	rubberband.lint \
+	satisfied-guide-cns.lint \
 	select-context.lint \
 	select-toolbar.lint \
 	selection-chemistry.lint \
@@ -422,7 +429,10 @@ LINTS = \
 	sp-guide.lint \
 	sp-image.lint \
 	sp-item-group.lint \
+	sp-item-notify-moveto.lint \
+	sp-item-rm-unsatisfied-cns.lint \
 	sp-item-transform.lint \
+	sp-item-update-cns.lint \
 	sp-item.lint \
 	sp-line.lint \
 	sp-marker.lint \

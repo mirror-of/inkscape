@@ -24,6 +24,7 @@ arc-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -67,6 +68,7 @@ desktop-affine.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -101,6 +103,7 @@ desktop-events.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -127,6 +130,7 @@ desktop-handles.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -142,6 +146,7 @@ desktop-snap.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -187,6 +192,7 @@ desktop.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -242,6 +248,7 @@ dialogs/align.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-object.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	macros.h \
@@ -279,6 +286,7 @@ dialogs/desktop-properties.o: \
 	interface.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -320,6 +328,7 @@ dialogs/dialog-events.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -372,6 +381,7 @@ dialogs/export.o: \
 	interface.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -529,6 +539,7 @@ dialogs/object-properties.o: \
 	inkscape.h \
 	interface.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -580,6 +591,7 @@ dialogs/stroke-style.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -696,6 +708,7 @@ dialogs/transformation.o: \
 	interface.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -780,6 +793,7 @@ display/canvas-arena.o: \
 	libnr/nr-blit.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -805,6 +819,7 @@ display/nr-arena-glyphs.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -836,6 +851,7 @@ display/nr-arena-group.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -851,6 +867,7 @@ display/nr-arena-image.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -866,6 +883,7 @@ display/nr-arena-item.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
@@ -894,6 +912,7 @@ display/nr-arena-shape.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -925,6 +944,7 @@ display/nr-arena.o: \
 	display/nr-arena.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -983,6 +1003,7 @@ document.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -1030,6 +1051,7 @@ draw-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -1076,6 +1098,7 @@ dropper-context.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
@@ -1110,6 +1133,7 @@ dyna-draw-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -1140,6 +1164,7 @@ event-context.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -1172,6 +1197,7 @@ file.o: \
 	desktop.h \
 	dialogs/dialog-events.h \
 	dialogs/export.h \
+	dialogs/filedialog.h \
 	dir-util.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
@@ -1190,6 +1216,7 @@ file.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -1200,9 +1227,7 @@ file.o: \
 	macros.h \
 	module.h \
 	modules/menu.h \
-	modules/menu.h \
 	modules/system.h \
-	modules/win32.h \
 	print.h \
 	sp-image.h \
 	sp-item.h \
@@ -1318,6 +1343,7 @@ helper/canvas-bpath.o: \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1329,6 +1355,7 @@ helper/canvas-grid.o: \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1344,6 +1371,7 @@ helper/gnome-canvas-acetate.o: \
 	helper/helper-forward.h \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1360,6 +1388,7 @@ helper/guideline.o: \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-pixops.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -1406,6 +1435,7 @@ helper/sodipodi-ctrl.o: \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1417,6 +1447,7 @@ helper/sodipodi-ctrlrect.o: \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1427,6 +1458,7 @@ helper/sp-canvas-util.o: \
 	helper/sp-canvas-util.h \
 	helper/sp-canvas.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1438,6 +1470,7 @@ helper/sp-canvas.o: \
 	helper/sp-marshal.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -1450,6 +1483,7 @@ helper/sp-ctrlline.o: \
 	helper/sp-canvas.h \
 	helper/sp-ctrlline.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1514,6 +1548,7 @@ inkscape.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -1555,6 +1590,7 @@ interface.o: \
 	interface.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -1603,6 +1639,7 @@ knot.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -1628,6 +1665,7 @@ knotholder.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -1661,6 +1699,7 @@ libnr/nr-blit.o: \
 	libnr/nr-compose.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
 	libnr/nr-rect.h \
@@ -1689,6 +1728,15 @@ libnr/nr-gradient.o: \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
 	libnr/nr-render.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h
+
+libnr/nr-matrix-fns.o: \
+	libnr/nr-matrix-fns.cpp \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
 
@@ -1726,6 +1774,7 @@ libnr/nr-pixblock-pattern.o: \
 	libnr/nr-pixblock-pattern.cpp \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
@@ -1756,6 +1805,7 @@ libnr/nr-point-fns.o: \
 libnr/nr-rect.o: \
 	libnr/nr-rect.cpp \
 	libnr/nr-macros.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h
@@ -1764,6 +1814,7 @@ libnr/nr-stroke.o: \
 	libnr/nr-stroke.cpp \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
 	libnr/nr-stroke.h \
@@ -1799,6 +1850,7 @@ libnr/nr-svp.o: \
 	libnr/nr-macros.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
 	libnr/nr-svp-private.h \
@@ -1919,6 +1971,7 @@ libnrtype/nr-font.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -1935,6 +1988,7 @@ libnrtype/nr-rasterfont.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -2196,6 +2250,7 @@ modules/extension.o: \
 	interface.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -2266,6 +2321,7 @@ modules/ps.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -2362,6 +2418,7 @@ node-context.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2416,6 +2473,7 @@ nodepath.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -2499,6 +2557,7 @@ object-ui.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2539,6 +2598,7 @@ path-chemistry.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -2592,6 +2652,7 @@ prefs-utils.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -2643,6 +2704,7 @@ print.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -2688,6 +2750,7 @@ rect-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2722,11 +2785,37 @@ rubberband.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	rubberband.h \
 	view.h
+
+satisfied-guide-cns.o: \
+	satisfied-guide-cns.cpp \
+	approx-equal.h \
+	desktop.h \
+	forward.h \
+	helper/helper-forward.h \
+	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-rect.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
+	satisfied-guide-cns.h \
+	sp-guide-attachment.h \
+	sp-guide-constraint.h \
+	sp-guide.h \
+	sp-namedview.h \
+	sp-object-group.h \
+	sp-object.h \
+	version.h \
+	view.h \
+	xml/repr.h
 
 select-context.o: \
 	select-context.cpp \
@@ -2751,6 +2840,7 @@ select-context.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2798,6 +2888,7 @@ select-toolbar.o: \
 	interface.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -2812,7 +2903,6 @@ select-toolbar.o: \
 	selection-chemistry.h \
 	selection.h \
 	sp-item-transform.h \
-	sp-item.h \
 	sp-object.h \
 	toolbox.h \
 	verbs.h \
@@ -2848,6 +2938,7 @@ selection-chemistry.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2888,6 +2979,7 @@ selection.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2912,6 +3004,7 @@ seltrans-handles.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2939,6 +3032,7 @@ seltrans.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -2950,6 +3044,7 @@ seltrans.o: \
 	selection.h \
 	seltrans-handles.h \
 	seltrans.h \
+	sp-item-update-cns.h \
 	sp-item.h \
 	sp-metrics.h \
 	sp-object.h \
@@ -3011,6 +3106,7 @@ sp-anchor.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -3189,18 +3285,27 @@ sp-gradient.o: \
 sp-guide.o: \
 	sp-guide.cpp \
 	attributes.h \
+	display/nr-arena-forward.h \
 	forward.h \
 	helper/guideline.h \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
 	helper/sp-canvas.h \
 	helper/sp-intl.h \
+	helper/units.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	modules/svg.h \
+	remove-last.h \
+	sp-guide-attachment.h \
+	sp-guide-constraint.h \
 	sp-guide.h \
+	sp-item-notify-moveto.h \
+	sp-item.h \
 	sp-object.h \
 	version.h \
 	xml/repr.h
@@ -3227,6 +3332,7 @@ sp-image.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -3288,6 +3394,47 @@ sp-item-group.o: \
 	xml/repr.h \
 	xml/repr.h
 
+sp-item-notify-moveto.o: \
+	sp-item-notify-moveto.cpp \
+	approx-equal.h \
+	display/nr-arena-forward.h \
+	forward.h \
+	helper/helper-forward.h \
+	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
+	sp-guide.h \
+	sp-item-notify-moveto.h \
+	sp-item-rm-unsatisfied-cns.h \
+	sp-item.h \
+	sp-object.h \
+	version.h \
+	xml/repr.h
+
+sp-item-rm-unsatisfied-cns.o: \
+	sp-item-rm-unsatisfied-cns.cpp \
+	approx-equal.h \
+	display/nr-arena-forward.h \
+	forward.h \
+	helper/helper-forward.h \
+	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
+	remove-last.h \
+	sp-guide-attachment.h \
+	sp-guide-constraint.h \
+	sp-guide.h \
+	sp-item-rm-unsatisfied-cns.h \
+	sp-item.h \
+	sp-object.h \
+	version.h \
+	xml/repr.h
+
 sp-item-transform.o: \
 	sp-item-transform.cpp \
 	display/nr-arena-forward.h \
@@ -3299,6 +3446,28 @@ sp-item-transform.o: \
 	libnr/nr-values.h \
 	modules/svg.h \
 	sp-item-transform.h \
+	sp-item.h \
+	sp-object.h \
+	version.h \
+	xml/repr.h
+
+sp-item-update-cns.o: \
+	sp-item-update-cns.cpp \
+	approx-equal.h \
+	display/nr-arena-forward.h \
+	forward.h \
+	helper/helper-forward.h \
+	helper/units.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
+	remove-last.h \
+	satisfied-guide-cns.h \
+	sp-guide-attachment.h \
+	sp-guide-constraint.h \
+	sp-guide.h \
+	sp-item-update-cns.h \
 	sp-item.h \
 	sp-object.h \
 	version.h \
@@ -3320,9 +3489,11 @@ sp-item.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
+	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
 	macros.h \
@@ -3332,6 +3503,7 @@ sp-item.o: \
 	sp-anchor.h \
 	sp-clippath.h \
 	sp-item-group.h \
+	sp-item-rm-unsatisfied-cns.h \
 	sp-item.h \
 	sp-marker.h \
 	sp-mask.h \
@@ -3392,6 +3564,7 @@ sp-marker.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -3465,6 +3638,7 @@ sp-namedview.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -3690,6 +3864,7 @@ sp-pattern.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -3812,6 +3987,7 @@ sp-root.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -3854,6 +4030,7 @@ sp-shape.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -3930,6 +4107,7 @@ sp-star.o: \
 	helper/units.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -3965,6 +4143,7 @@ sp-symbol.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -4007,6 +4186,7 @@ sp-text.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -4057,6 +4237,7 @@ sp-use.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -4093,6 +4274,7 @@ spiral-context.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -4138,6 +4320,7 @@ splivarot.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -4200,6 +4383,7 @@ star-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -4241,6 +4425,7 @@ style.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
@@ -4274,6 +4459,7 @@ svg-view.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-rect.h \
@@ -4333,6 +4519,7 @@ text-context.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
@@ -4389,6 +4576,7 @@ toolbox.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -4403,7 +4591,6 @@ toolbox.o: \
 	select-toolbar.h \
 	selection-chemistry.h \
 	sp-item-group.h \
-	sp-item-transform.h \
 	sp-item.h \
 	sp-marker.h \
 	sp-object.h \
@@ -4450,6 +4637,7 @@ tools-switch.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -4539,6 +4727,7 @@ verbs.o: \
 	knotholder.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
 	libnr/nr-rect.h \
@@ -4603,6 +4792,7 @@ widgets/button.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
@@ -4826,6 +5016,7 @@ widgets/icon.o: \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock-pattern.h \
 	libnr/nr-pixblock.h \
@@ -4988,6 +5179,7 @@ widgets/sp-widget.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -5065,7 +5257,6 @@ widgets/spinbutton-events.o: \
 widgets/spw-utilities.o: \
 	widgets/spw-utilities.cpp \
 	desktop-handles.h \
-	display/nr-arena-forward.h \
 	document.h \
 	forward.h \
 	helper/action.h \
@@ -5073,19 +5264,12 @@ widgets/spw-utilities.o: \
 	helper/sp-intl.h \
 	helper/unit-menu.h \
 	helper/units.h \
-	helper/units.h \
 	helper/window.h \
 	inkscape.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-types.h \
-	libnr/nr-values.h \
 	selection.h \
-	sp-item-transform.h \
-	sp-item.h \
-	sp-object.h \
-	version.h \
 	view.h \
 	widgets/button.h \
 	widgets/spw-utilities.h \
@@ -5148,6 +5332,7 @@ zoom-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
