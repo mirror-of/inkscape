@@ -618,8 +618,14 @@ void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to
     {                                                                                    \
         _cursor_moving_vertically = false;                                               \
         if (_char_index == 0) return false;                                              \
-        unsigned original_item = item_getter;                                            \
-        _char_index--;                                                                   \
+        unsigned original_item;                                                          \
+        if (_char_index == _parent_layout->_characters.size()) {                         \
+            _char_index--;                                                               \
+            original_item = item_getter;                                                 \
+        } else {                                                                         \
+            original_item = item_getter;                                                 \
+            _char_index--;                                                               \
+        }                                                                                \
         while (item_getter == original_item) {                                           \
             if (_char_index == 0) {                                                      \
                 _glyph_index = _parent_layout->_characters[_char_index].in_glyph;        \
