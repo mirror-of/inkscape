@@ -1351,6 +1351,41 @@ options_checkbox (
                 );
         }
 
+// Selecting
+        vb = new_tab (nb, _("Selecting"));
+
+            GtkWidget *f = gtk_frame_new (_("Ctrl+A, Tab, Shift+Tab:"));
+            gtk_widget_show (f);
+            gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+            GtkWidget *fb = gtk_vbox_new (FALSE, 0);
+            gtk_widget_show (fb);
+            gtk_container_add (GTK_CONTAINER (f), fb);
+
+options_checkbox (
+    _("Select only within current layer"), 
+    _("Uncheck this to make keyboard selection commands work on objects in all layers"), tt,
+    fb,
+    "options.kbselection", "inlayer", 1,
+    options_changed_boolean
+    );
+
+options_checkbox (
+    _("Ignore hidden objects"), 
+    _("Uncheck this to be able to select objects that are hidden (either by themselves or by being in a hidden group or layer)"), tt,
+    fb,
+    "options.kbselection", "onlyvisible", 1,
+    options_changed_boolean
+    );
+
+options_checkbox (
+    _("Ignore locked objects"), 
+    _("Uncheck this to be able to select objects that are locked (either by themselves or by being in a locked group or layer)"), tt,
+    fb,
+    "options.kbselection", "onlysensitive", 1,
+    options_changed_boolean
+    );
+
 
 // To be broken into: Display, Save, Export, SVG, Commands
         vb = new_tab (nb, _("Misc"));

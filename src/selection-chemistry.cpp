@@ -189,20 +189,64 @@ void sp_edit_clear_all()
     sp_document_done(doc);
 }
 
+GSList *
+get_all_items (GSList *list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive)
+{
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(from)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+        if (SP_IS_ITEM(child) &&
+            !desktop->isLayer(SP_ITEM(child)) &&
+            (!onlysensitive || !SP_ITEM(child)->isLocked()) && 
+            (!onlyvisible || !desktop->itemIsHidden(SP_ITEM(child))) )
+        {
+            list = g_slist_prepend (list, SP_ITEM(child));
+        }
+
+        if (SP_IS_ITEM(child) && desktop->isLayer(SP_ITEM(child))) {
+            list = get_all_items (list, child, desktop, onlyvisible, onlysensitive);
+        }
+    }
+
+    return list;
+}
+
 void sp_edit_select_all()
 {
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     if (!dt)
         return;
 
-    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
-    GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
     SPSelection *selection = SP_DT_SELECTION(dt);
-    while (items) {
-        SPRepr *repr = SP_OBJECT_REPR(items->data);
-        if (!selection->includesRepr(repr))
-            selection->addRepr(repr);
-        items = g_slist_remove(items, items->data);
+
+    g_return_if_fail(SP_IS_GROUP(dt->currentLayer()));
+
+    bool inlayer = prefs_get_int_attribute ("options.kbselection", "inlayer", 1);
+    bool onlyvisible = prefs_get_int_attribute ("options.kbselection", "onlyvisible", 1);
+    bool onlysensitive = prefs_get_int_attribute ("options.kbselection", "onlysensitive", 1);
+
+    if (inlayer) {
+
+        if ( (onlysensitive && SP_ITEM(dt->currentLayer())->isLocked()) ||
+             (onlyvisible && dt->itemIsHidden(SP_ITEM(dt->currentLayer()))) )
+        return;
+
+        GSList *items = sp_item_group_item_list(SP_GROUP(dt->currentLayer()));
+        while (items) {
+            SPRepr *repr = SP_OBJECT_REPR(items->data);
+            if ((!onlysensitive || !SP_ITEM(items->data)->isLocked()) && 
+                (!onlyvisible || !dt->itemIsHidden(SP_ITEM(items->data))) &&
+                !dt->isLayer(SP_ITEM(items->data)) &&
+                !selection->includesRepr(repr)) {
+                selection->addRepr(repr);
+            }
+            items = g_slist_remove(items, items->data);
+        }
+    } else {
+        GSList *all_items = get_all_items (NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive);
+        for ( GSList const *iter = all_items ; iter != NULL ; iter = iter->next ) {
+            if (!selection->includes(SP_OBJECT (iter->data))) {
+                selection->add (SP_OBJECT (iter->data));
+            }
+        }
     }
 }
 
@@ -1280,11 +1324,11 @@ namespace {
 
 template <typename D>
 SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
-                  bool only_in_viewport);
+                  bool only_in_viewport, bool onlyvisible, bool onlysensitive);
 
 template <typename D>
 SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
-                            SPObject *root, bool only_in_viewport);
+                            SPObject *root, bool only_in_viewport, bool onlyvisible, bool onlysensitive);
 
 struct Forward {
     typedef SPObject *Iterator;
@@ -1337,9 +1381,19 @@ sp_selection_item_next(void)
         return;
     }
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    SPObject *root = desktop->currentRoot();
 
-    SPItem *item=next_item_from_list<Forward>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE);
+    bool inlayer = prefs_get_int_attribute ("options.kbselection", "inlayer", 1);
+    bool onlyvisible = prefs_get_int_attribute ("options.kbselection", "onlyvisible", 1);
+    bool onlysensitive = prefs_get_int_attribute ("options.kbselection", "onlysensitive", 1);
+
+    SPObject *root;
+    if (inlayer) {
+        root = desktop->currentLayer();
+    } else {
+        root = desktop->currentRoot();
+    }
+
+    SPItem *item=next_item_from_list<Forward>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, onlyvisible, onlysensitive);
 
     if (item) {
         selection->setItem(item);
@@ -1360,9 +1414,19 @@ sp_selection_item_prev(void)
         return;
     }
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    SPObject *root = desktop->currentRoot();
 
-    SPItem *item=next_item_from_list<Reverse>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE);
+    bool inlayer = prefs_get_int_attribute ("options.kbselection", "inlayer", 1);
+    bool onlyvisible = prefs_get_int_attribute ("options.kbselection", "onlyvisible", 1);
+    bool onlysensitive = prefs_get_int_attribute ("options.kbselection", "onlysensitive", 1);
+
+    SPObject *root;
+    if (inlayer) {
+        root = desktop->currentLayer();
+    } else {
+        root = desktop->currentRoot();
+    }
+
+    SPItem *item=next_item_from_list<Reverse>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, onlyvisible, onlysensitive);
 
     if (item) {
         selection->setItem(item);
@@ -1376,7 +1440,7 @@ namespace {
 
 template <typename D>
 SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
-                            SPObject *root, bool only_in_viewport)
+                            SPObject *root, bool only_in_viewport, bool onlyvisible, bool onlysensitive)
 {
     SPObject *current=root;
     while (items) {
@@ -1398,11 +1462,11 @@ SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
 
     SPItem *next;
     // first, try from the current object
-    next = next_item<D>(desktop, path, root, only_in_viewport);
+    next = next_item<D>(desktop, path, root, only_in_viewport, onlyvisible, onlysensitive);
     g_slist_free(path);
 
     if (!next) { // if we ran out of objects, start over at the root
-        next = next_item<D>(desktop, NULL, root, only_in_viewport);
+        next = next_item<D>(desktop, NULL, root, only_in_viewport, onlyvisible, onlysensitive);
     }
 
     return next;
@@ -1410,7 +1474,7 @@ SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
 
 template <typename D>
 SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
-                  bool only_in_viewport)
+                  bool only_in_viewport, bool onlyvisible, bool onlysensitive)
 {
     typename D::Iterator children;
     typename D::Iterator iter;
@@ -1421,7 +1485,7 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
         SPObject *object=reinterpret_cast<SPObject *>(path->data);
         g_assert(SP_OBJECT_PARENT(object) == root);
         if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, path->next, object, only_in_viewport);
+            found = next_item<D>(desktop, path->next, object, only_in_viewport, onlyvisible, onlysensitive);
         }
         iter = children = D::siblings_after(object);
     } else {
@@ -1431,9 +1495,12 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
     while ( iter && !found ) {
         SPObject *object=D::object(iter);
         if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, NULL, object, only_in_viewport);
+            found = next_item<D>(desktop, NULL, object, only_in_viewport, onlyvisible, onlysensitive);
         } else if ( SP_IS_ITEM(object) &&
-                    ( !only_in_viewport || desktop->isWithinViewport(SP_ITEM(object)) ) )
+                    ( !only_in_viewport || desktop->isWithinViewport(SP_ITEM(object)) ) &&
+                    ( !onlyvisible || !desktop->itemIsHidden(SP_ITEM(object))) &&
+                    ( !onlysensitive || !SP_ITEM(object)->isLocked()) &&
+                    !desktop->isLayer(SP_ITEM(object)) )
         {
             found = SP_ITEM(object);
         }
