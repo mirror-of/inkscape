@@ -170,6 +170,7 @@ LayerPropertiesDialog::setLayerName(gchar const * name)
 
     // Notify that we've made a change
     sp_document_done(SP_DT_DOCUMENT(desktop));
+    // TRANSLATORS: This means "The layer has been renamed"
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Renamed layer"));
 }
 
