@@ -26,7 +26,7 @@
 #include "helper/sp-intl.h"
 
 #include "sp-spiral.h"
-#include <libnr/nr-types.h>
+#include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
 
 static void sp_spiral_class_init (SPSpiralClass *klass);

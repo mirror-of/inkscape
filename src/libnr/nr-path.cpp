@@ -10,6 +10,7 @@
  */
 
 #include "nr-matrix.h"
+#include "nr-rect.h"
 #include "nr-path.h"
 
 /* fixme: (Lauris) */

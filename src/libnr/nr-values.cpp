@@ -3,6 +3,10 @@
 #include "nr-values.h"
 #include <math.h>
 #include "nr-macros.h"
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-rect.h>
+#include <libnr/nr-rect-l.h>
+#include <libnr/nr-point.h>
 
 
 /*

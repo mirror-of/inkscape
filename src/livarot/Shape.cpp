@@ -8,6 +8,8 @@
 
 #include "Shape.h"
 //#include "MyMath.h"
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-fns.h>
 
 Shape::Shape (void)
 {

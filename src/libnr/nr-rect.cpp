@@ -10,6 +10,8 @@
  */
 
 #include "nr-rect.h"
+#include "nr-rect-l.h"
+#include "nr-matrix.h"
 
 NRRect *
 nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1)

@@ -23,6 +23,8 @@ typedef struct _NRTypeFaceGlyphFT2 NRTypeFaceGlyphFT2;
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <libnrtype/nr-typeface.h>
+#include <libnr/nr-point.h>
+#include <libnr/nr-rect.h>
 
 struct _NRTypeFaceDefFT2 {
 	NRTypeFaceDef def;

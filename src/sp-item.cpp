@@ -35,6 +35,9 @@
 #include "sp-mask.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rect.h"
 
 #define noSP_ITEM_DEBUG_IDLE

@@ -12,6 +12,7 @@
 #include <string.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include "nr-typeface.h"
 #include "nr-type-directory.h"
 

@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <freetype/ftoutln.h>
 #include <freetype/ftbbox.h>
 #include "nr-type-ft2.h"

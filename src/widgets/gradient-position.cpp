@@ -15,6 +15,7 @@
 #include <math.h>
 #include <string.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-pixblock.h>
 #include <libart_lgpl/art_affine.h>

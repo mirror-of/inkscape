@@ -14,8 +14,11 @@
 #include <string.h>
 
 #include <libnr/nr-macros.h>
+#include <libnr/nr-point-l.h>
 #include <libnr/nr-rect.h>
+#include <libnr/nr-rect-l.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-svp.h>
 #include <libnr/nr-svp-render.h>

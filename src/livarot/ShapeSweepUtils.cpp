@@ -8,7 +8,8 @@
 
 #include "Shape.h"
 #include "LivarotDefs.h"
-//#include "MyMath.h"
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-fns.h>
 
 SweepEvent::SweepEvent ()
 {

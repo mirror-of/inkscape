@@ -14,6 +14,8 @@
 #include <math.h>
 #include "nr-pixops.h"
 #include "nr-compose-transform.h"
+#include "nr-matrix.h"
+
 
 #ifdef WITH_MMX
 #ifdef __cplusplus

@@ -6,8 +6,10 @@
  *
  */
 
+#include <glib.h>
 #include "Path.h"
-//#include "Shape.h"
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-ops.h>
 
 
 Path::Path (void)

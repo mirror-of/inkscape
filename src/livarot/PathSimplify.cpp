@@ -9,7 +9,8 @@
 #include "Path.h"
 //#include "MyMath.h"
 #include <math.h>
-#include "../libnr/nr-matrix.h"
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
 // algo d'origine: http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
