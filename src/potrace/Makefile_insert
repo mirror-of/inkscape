@@ -26,6 +26,12 @@ potrace_libpotrace_a_SOURCES =	\
 	potrace/render.cpp \
 	potrace/render.h \
 	potrace/inkscape-potrace.cpp \
-	potrace/inkscape-potrace.h
+	potrace/inkscape-potrace.h \
+	potrace/graymap.cpp \
+	potrace/graymap.h \
+	potrace/graymap-gdk.cpp \
+	potrace/graymap-gdk.h \
+	potrace/canny.cpp \
+	potrace/canny.h
 
 
