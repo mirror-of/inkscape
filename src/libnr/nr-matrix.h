@@ -30,8 +30,6 @@ NRMatrix *nr_matrix_invert (NRMatrix *d, const NRMatrix *m);
 
 NRMatrix *nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
 
-/* Currently uses single-precision intermediate results (depending on compiler,
-   optimization settings etc.). */
 NRMatrix *nr_matrix_set_translate (NRMatrix *m, NR::Coord x, NR::Coord y);
 
 NRMatrix *nr_matrix_set_scale (NRMatrix *m, NR::Coord sx, NR::Coord sy);
@@ -47,31 +45,49 @@ NRMatrix *nr_matrix_set_rotate (NRMatrix *m, NR::Coord theta);
 namespace NR{
 class Matrix{
  public:
-	NR::Coord c[6]; // should this be a pointer?
+/*
+  c[] = | 0 2 | 4 |
+        | 1 3 | 5 |
+
+              x
+  Points are  y  from the point of view of a matrix.
+              1
+*/
+	NR::Coord cc[6];
 
 	Matrix() {
 	}
 
-	Matrix(NRMatrix nr);
-
-	operator NRMatrix() const;
+	Matrix(NRMatrix const *nr);
 	
+	Matrix(Point x_basis, Point y_basis, Point offset);
+
 	bool test_identity() const;
 	Matrix inverse() const;
 	
+	Point operator*(const Point v) const {
+		// perhaps this should be done with a loop?  It's more
+		// readable this way though.
+		return Point(cc[0]*v.pt[0] + cc[2]*v.pt[1] + cc[4],
+			     cc[1]*v.pt[0] + cc[3]*v.pt[1] + cc[5]);
+	}
+
 	void set_identity();
-	void set_translate(Point p);
-	void set_scale(Point s);
+	void set_translate(const Point p);
+	void set_scale(const Point s);
 	void set_rotate(const NR::Coord angle);
 	
 	// What do these do?  some kind of norm?
-	NR::Coord DF_EXPANSION2() const;
-	NR::Coord DF_EXPANSION() const;
+	NR::Coord Matrix::det() const;
+	NR::Coord descrim2() const;
+	NR::Coord descrim() const;
+	
+	// legacy
+	void copy(NRMatrix* nrm);
+	operator NRMatrix*() const;
 };
 
-bool operator==(const Matrix a, const Matrix b);
 Matrix operator*(const Matrix a, const Matrix b);
-Point operator*(const Matrix a, const Point v);
 
 bool transform_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
 bool translate_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
