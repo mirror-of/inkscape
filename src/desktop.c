@@ -688,8 +688,6 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 	gtk_widget_show (hbox);
 
-	/* FIXME !!! the various toolbars should take care of their initial hidden/shown state themselves; as it is we have to hack around it a bit */
-
 	dtw->tool_toolbox = sp_tool_toolbox_new ();
 	gtk_box_pack_start (GTK_BOX (hbox), dtw->tool_toolbox, FALSE, TRUE, 0);
 

@@ -1,3 +1,7 @@
+2003-11-29 MenTaLguY <mental@rydia.net>
+
+	* src/interface.c: switched to GNOME HIG menu style
+
 2003-11-29  bulia byak <bulia@dr.com>
 
 	* shortening tooltips, new verb and menu command for zoom to page width 

@@ -337,6 +337,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 	sp_ui_menu_append_item_from_verb (fm, SP_VERB_NONE);
 
 	sp_ui_menu_append_item (fm, GTK_STOCK_CLOSE, _("Close View"), G_CALLBACK (sp_ui_close_view), NULL);
+	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_QUIT);
 }
 
 static void
@@ -417,22 +418,14 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc)
 /* Menus */
 
 static void
-sp_ui_application_menu(GtkWidget *m)
+sp_ui_help_menu(GtkWidget *m)
 {
-	GtkWidget *item;
-
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 #ifdef WITH_MODULES
 	/* Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Modules"), NULL, NULL)),
 			                   GTK_WIDGET(sp_module_menu_about()));
 #endif /* WITH_MODULES */
-	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
-	item = gtk_menu_item_new_with_label (_("Preferences..."));
-	gtk_widget_set_sensitive (item, FALSE);
-	gtk_menu_shell_append (GTK_MENU_SHELL (m), item);
-	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (GTK_MENU (m), GTK_STOCK_QUIT, _("Exit Program"), G_CALLBACK(sp_file_exit), NULL);
 }
 
 GtkWidget *
@@ -442,12 +435,6 @@ sp_ui_main_menubar (void)
 	GtkWidget *menu;
 
 	mbar = gtk_menu_bar_new ();
-
-	mitem = gtk_menu_item_new_with_label (_("Inkscape"));
-	menu = gtk_menu_new ();
-	sp_ui_application_menu (menu);
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
-	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
 	mitem = gtk_menu_item_new_with_label (_("File"));
 	menu = gtk_menu_new ();
@@ -473,6 +460,12 @@ sp_ui_main_menubar (void)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(mitem), GTK_WIDGET(sp_module_menu_filter()));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 #endif
+
+	mitem = gtk_menu_item_new_with_label (_("Help"));
+	menu = gtk_menu_new ();
+	sp_ui_help_menu (menu);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
+	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
 	return mbar;
 }
