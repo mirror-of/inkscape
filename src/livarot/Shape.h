@@ -313,10 +313,7 @@ public:
     int lastQRas;
     std::vector<quick_raster_data> qrsData;
 
-    // these ones are dynamically allocated
-    int nbChgt;
-    int maxChgt;
-    sTreeChange *chgts;
+    std::vector<sTreeChange> chgts;
     int nbInc;
     int maxInc;
 
@@ -441,6 +438,7 @@ private:
 
     void initialisePointData();
     void initialiseEdgeData();
+    void clearIncidenceData();
 
     // activation/deactivation of the temporary data arrays
     void MakePointData(bool nVal);
