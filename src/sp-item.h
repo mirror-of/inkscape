@@ -156,6 +156,7 @@ void sp_item_invoke_hide (SPItem *item, unsigned int key);
 std::vector<NR::Point> sp_item_snappoints(SPItem *item);
 
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv = NULL);
+void sp_item_write_transform (SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix *adv = NULL);
 
 gint sp_item_event (SPItem *item, SPEvent *event);
 

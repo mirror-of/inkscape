@@ -688,6 +688,18 @@ sp_item_adjust_pattern_recursive(SPItem *item, NR::Matrix advertized_transform)
     }
 }
 
+/** 
+A temporary wrapper for the next function accepting the NRMatrix instead of NR::Matrix
+*/
+void
+sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
+{
+    if (transform == NULL)
+        sp_item_write_transform(item, repr, NR::identity(), adv);
+    else 
+        sp_item_write_transform(item, repr, NR::Matrix (transform), adv);
+}
+
 /**
 Set a new transform on an object. Compensate for stroke scaling and gradient/pattern
 fill transform, if necessary. Call the object's set_transform method if transforms are
@@ -695,7 +707,7 @@ stored optimized. Send _transformed_signal. Invoke _write method so that the rep
 updated with the new transform.
  */
 void
-sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
+sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix *adv)
 {
     g_return_if_fail(item != NULL);
     g_return_if_fail(SP_IS_ITEM(item));
@@ -706,12 +718,10 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     if (adv != NULL) {
         advertized_transform = *adv;
     } else {
-        advertized_transform = sp_item_transform_old_inverse (item) * NR::Matrix (transform);
+        advertized_transform = sp_item_transform_old_inverse (item) * transform;
     }
 
-    NR::Matrix xform(transform);
-
-    // compensate for stroke scaling, depending on user preference
+     // compensate for stroke scaling, depending on user preference
     if (prefs_get_int_attribute("options.transform", "stroke", 1) == 0) {
         double expansion = NR::expansion(advertized_transform.inverse());
         sp_item_adjust_stroke_width_recursive(item, expansion);
@@ -725,20 +735,16 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     // compensate pattern fill if requested; 
     // here we post-multiply the old transform inverse because patterns are transformed before item they're applied to
     if (prefs_get_int_attribute("options.transform", "pattern", 1) == 0) {
-        sp_item_adjust_pattern_recursive(item, NR::Matrix (transform) * sp_item_transform_old_inverse (item));
+        sp_item_adjust_pattern_recursive(item, transform * sp_item_transform_old_inverse (item));
     }
 
     // run the object's set_transform if transforms are stored optimized
     gint preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
-    if (!transform) {
-        sp_item_set_item_transform(item, NR::identity());
-    } else {
-        NR::Matrix transform_attr (xform);
-        if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
-            transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
-        }
-        sp_item_set_item_transform(item, transform_attr);
+    NR::Matrix transform_attr (transform);
+    if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
+        transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, transform);
     }
+    sp_item_set_item_transform(item, transform_attr);
 
     // send the relative transform with a _transformed_signal
     item->_transformed_signal.emit(&advertized_transform, item);
