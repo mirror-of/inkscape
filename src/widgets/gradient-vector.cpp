@@ -180,7 +180,7 @@ sp_gradient_vector_selector_set_gradient (SPGradientVectorSelector *gvs, SPDocum
 		/* Disconnect signals */
 		if (gvs->gr) {
   			sp_signal_disconnect_by_data (gvs->gr, gvs);
-		g_signal_handlers_disconnect_matched (G_OBJECT(gvs->gr), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, gvs);
+			g_signal_handlers_disconnect_matched (G_OBJECT(gvs->gr), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, gvs);
 			gvs->gr = NULL;
 		}
 		if (gvs->doc) {
@@ -232,25 +232,20 @@ sp_gradient_vector_selector_get_gradient (SPGradientVectorSelector *gvs)
 static void
 sp_gvs_rebuild_gui_full (SPGradientVectorSelector *gvs)
 {
-	GtkWidget *m;
-	GSList *gl;
-	gint pos, idx;
-
 	/* Clear old menu, if there is any */
 	if (gtk_option_menu_get_menu (GTK_OPTION_MENU (gvs->menu))) {
 		gtk_option_menu_remove_menu (GTK_OPTION_MENU (gvs->menu));
 	}
 
 	/* Create new menu widget */
-	m = gtk_menu_new ();
+	GtkWidget *m = gtk_menu_new ();
 	gtk_widget_show (m);
 
 	/* Pick up all gradients with vectors */
-	gl = NULL;
+	GSList *gl = NULL;
 	if (gvs->gr) {
-		const GSList *gradients, *l;
-		gradients = sp_document_get_resource_list (SP_OBJECT_DOCUMENT (gvs->gr), "gradient");
-		for (l = gradients; l != NULL; l = l->next) {
+		const GSList *gradients = sp_document_get_resource_list (SP_OBJECT_DOCUMENT (gvs->gr), "gradient");
+		for (const GSList *l = gradients; l != NULL; l = l->next) {
 			if (SP_GRADIENT_HAS_STOPS (l->data)) {
 				gl = g_slist_prepend (gl, l->data);
 			}
@@ -258,7 +253,8 @@ sp_gvs_rebuild_gui_full (SPGradientVectorSelector *gvs)
 	}
 	gl = g_slist_reverse (gl);
 
-	pos = idx = 0;
+	gint pos = 0;
+	gint idx = 0;
 
 	if (!gvs->doc) {
 		GtkWidget *i;
@@ -368,9 +364,14 @@ sp_gvs_gradient_activate (GtkMenuItem *mi, SPGradientVectorSelector *gvs)
 static void
 sp_gvs_gradient_release (SPGradient *gr, SPGradientVectorSelector *gvs)
 {
-	/* fixme: (Lauris) */
-	/* fixme: Not sure, what to do here (Lauris) */
-	gvs->gr = NULL;
+	/* Disconnect gradient */
+	if (gvs->gr) {
+  		sp_signal_disconnect_by_data (gvs->gr, gvs);
+		gvs->gr = NULL;
+	}
+
+	/* Rebuild GUI */
+	sp_gvs_rebuild_gui_full (gvs);
 }
 
 static void
@@ -390,9 +391,9 @@ sp_gvs_defs_release (SPObject *defs, SPGradientVectorSelector *gvs)
 static void
 sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs)
 {
-	/* fixme: (Lauris) */
 	/* fixme: We probably have to check some flags here (Lauris) */
-	/* fixme: Not exactly sure, what we have to do here (Lauris) */
+
+	sp_gvs_rebuild_gui_full (gvs);
 }
 
 /*##################################################################
@@ -956,6 +957,9 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 
 	GtkWidget *mnu = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(widget), "stopmenu"));
 	update_stop_list (GTK_WIDGET(mnu), gradient, NULL);
+
+	// Once the user edits a gradient, it stops being auto-collectable
+	sp_repr_set_attr (SP_OBJECT_REPR(gradient), "inkscape:collect", NULL);
 }
 
 static void
