@@ -139,8 +139,9 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 
 	gchar *save_path = g_path_get_dirname (uri);
 
-	gboolean const spns =
-	  (!mod->get_id() || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+	gboolean const spns = (!mod->get_id() 
+	  || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)
+	  || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE));
 
 	SPReprDoc *rdoc = NULL;
 	SPRepr *repr = NULL;

@@ -1,3 +1,9 @@
+2005-02-19  Jon A. Cruz  <jon@joncruz.org>
+	* src/extension/extension.h, src/extension/internal/svg.cpp,
+	  src/extension/internal/svgz.cpp:
+	  Fixing .svgz Inkscape save and adding .svgz Plain save.
+	  Fixes bug #1144223
+
 2005-02-18  Jon A. Cruz  <jon@joncruz.org>
 	* src/Makefile.am, src/libnr/Makefile_insert,
 	  src/libnr/nr-point-fns-test.h  src/libnr/nr-types-test.h:

@@ -30,6 +30,7 @@
 #define SP_MODULE_KEY_INPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 /** The key for outputing standard W3C SVG */
 #define SP_MODULE_KEY_OUTPUT_SVG "org.inkscape.output.svg.plain"
+#define SP_MODULE_KEY_OUTPUT_SVGZ "org.inkscape.output.svgz.plain"
 /** This is an output file that has SVG data with the Sodipodi namespace extensions */
 #define SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "org.inkscape.output.svg.inkscape"
 #define SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE "org.inkscape.output.svgz.inkscape"
