@@ -29,6 +29,11 @@
 	Cleanups: greater conformance to Coding_Style, combine declaration
 	and first assignment of some vars.
 
+2004-02-08  MenTaLguY <mental@rydia.net>
+
+   * src/interface.cpp: added "Autoraise Dialogs" menu item to toggle
+     the transient policy thing
+
 2004-02-08 Bryce Harrington <brycehar@bryceharrington.com>
 
 	* src/sp-namedview.cpp: This assert appears to serve no purpose

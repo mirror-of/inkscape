@@ -24,6 +24,7 @@
 #include "modules/menu.h"
 #include "modules/db.h"
 #include "widgets/icon.h"
+#include "prefs-utils.h"
 
 #include "verbs.h"
 #include "shortcuts.h"
@@ -503,6 +504,25 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	//	sp_ui_menu_append_item (menu, NULL, _("New P_review"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 }
 
+static void window_policy_toggled(GtkCheckMenuItem *menuitem,
+                                  gpointer user_data)
+{
+	gboolean checked = gtk_check_menu_item_get_active(menuitem);
+	prefs_set_int_attribute("options.transientpolicy", "value", checked);
+}
+ 
+static gboolean window_policy_update(GtkWidget *widget,
+                                     GdkEventExpose *event,
+                                     gpointer user_data)
+{
+	GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget);
+	gint policy = prefs_get_int_attribute_limited("options.transientpolicy", "value", 1, 0, 2);
+	g_signal_handlers_block_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)window_policy_toggled, user_data);
+	gtk_check_menu_item_set_active(menuitem, policy);
+	g_signal_handlers_unblock_by_func(G_OBJECT(menuitem), (gpointer)(GCallback)window_policy_toggled, user_data);
+	return FALSE;
+}
+
 static void
 sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
@@ -525,8 +545,15 @@ sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
                 SP_VERB_LAST
         };
+	GtkWidget *window_policy_check;
 
 	sp_ui_menu_append (menu, dialog_verbs, view);
+	window_policy_check = gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
+	gtk_widget_show(window_policy_check);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
+
+	g_signal_connect(G_OBJECT(window_policy_check), "toggled", (GCallback)window_policy_toggled, NULL);
+	g_signal_connect(G_OBJECT(window_policy_check), "expose_event", (GCallback)window_policy_update, NULL);
 }
 
 /* Menus */
