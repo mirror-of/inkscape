@@ -44,20 +44,28 @@ dist:
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)glib-2.0 inkscape$(S)lib$(S)glib-2.0
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)pango inkscape$(S)lib$(S)pango
-	$(MKDIR) inkscape$(S)pixmaps
-	$(CP) icons$(S)*.xpm inkscape$(S)pixmaps
-	$(CP) icons$(S)*.png inkscape$(S)pixmaps
-	$(CP) icons$(S)*.svg inkscape$(S)pixmaps
+#
+# REJON: I'm commenting out the next two lines as they are copied w/share now 
+# in accordance with the dir. reorg.
+#	$(MKDIR) inkscape$(S)pixmaps
+#	$(CP) icons$(S)*.xpm inkscape$(S)pixmaps
+#	$(CP) icons$(S)*.png inkscape$(S)pixmaps
+#	$(CP) icons$(S)*.svg inkscape$(S)pixmaps
+#
 	$(MKDIR) inkscape$(S)fonts
 	$(CP) $(GTKDOS)$(S)fonts$(S)*.ttf inkscape$(S)fonts
 	$(CPDIR) share inkscape$(S)share
 	$(RMDIR) inkscape$(S)share$(S)CVS
+	$(RMDIR) inkscape$(S)share$(S)icons$(S)CVS
+	$(RMDIR) inkscape$(S)share$(S)screens$(S)CVS
+	$(RMDIR) inkscape$(S)share$(S)extensions$(S)CVS
 	$(RMDIR) inkscape$(S)share$(S)clipart$(S)CVS
 	$(RMDIR) inkscape$(S)share$(S)clipart$(S)road_signs$(S)CVS
 	$(CPDIR) doc inkscape$(S)doc
 	$(RMDIR) inkscape$(S)doc$(S)CVS
 	$(MKDIR) inkscape$(S)data
-	$(MKDIR) inkscape$(S)extensions
+# REJON: this following is now included the share folder
+#	$(MKDIR) inkscape$(S)extensions
 	$(MKDIR) inkscape$(S)locale
 	$(MKDIR) inkscape$(S)modules
 	$(MKDIR) inkscape$(S)samples
