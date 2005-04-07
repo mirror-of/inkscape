@@ -251,24 +251,13 @@ void sp_selection_duplicate()
 
     selection->clear();
 
-    Inkscape::XML::Node *parent = ((Inkscape::XML::Node *) reprs->data)->parent();
-    gboolean sort = TRUE;
-    for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((Inkscape::XML::Node *) i->data)->parent()) != parent) {
-            // We can duplicate items from different parents, but we need not do sorting in this
-            // case because dupes will remain in their own parents. FIXME: However, we need to sort those
-            // subsets of selection which are siblings (how?).
-            sort = FALSE;
-        }
-    }
-
-    if (sort)
-        reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
+    // sorting items from different parents sorts each parent's subset without possibly mixing them, just what we need
+    reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
 
     GSList *newsel = NULL;
 
     while (reprs) {
-        parent = ((Inkscape::XML::Node *) reprs->data)->parent();
+        Inkscape::XML::Node *parent = ((Inkscape::XML::Node *) reprs->data)->parent();
         Inkscape::XML::Node *copy = ((Inkscape::XML::Node *) reprs->data)->duplicate();
 
         parent->appendChild(copy);
