@@ -308,12 +308,6 @@ gchar *sp_style_write_string(SPStyle const *style, guint flags = SP_STYLE_FLAG_I
 
 gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to);
 
-void sp_style_set_fill_color_alpha(SPStyle *style, SPColor const *color, float a, unsigned fill_set, unsigned opacity_set);
-
-void sp_style_set_stroke_color_alpha(SPStyle *style, SPColor const *color, float a, unsigned fill_set, unsigned opacity_set);
-
-void sp_style_set_opacity(SPStyle *style, float opacity, unsigned opacity_set);
-
 /* SPTextStyle */
 
 enum SPCSSFontSize {
