@@ -1,6 +1,7 @@
+/** \file
+ * Code for handling extensions (i.e.\ scripts).
+ */
 /*
- * Code for handling extensions (i.e., scripts)
- *
  * Authors:
  *   Bryce Harrington <bryce@osdl.org>
  *   Ted Gould <ted@gould.cx>
@@ -143,10 +144,7 @@ Script::check_existance(gchar const *command)
     gchar *orig_path = path;
 
     for (; path != NULL;) {
-        gchar *local_path;
-        gchar *final_name;
-
-        local_path = path;
+        gchar *const local_path = path;
         path = g_utf8_strchr(path, -1, G_SEARCHPATH_SEPARATOR);
         if (path == NULL) {
             break;
@@ -161,6 +159,7 @@ Script::check_existance(gchar const *command)
             path = NULL;
         }
 
+        gchar *final_name;
         if (local_path == '\0') {
             final_name = g_strdup(command);
         } else {
@@ -200,9 +199,6 @@ Script::check_existance(gchar const *command)
 bool
 Script::load(Inkscape::Extension::Extension *module)
 {
-    Inkscape::XML::Node *child_repr;
-    gchar *command_text = NULL;
-
     if (module->loaded()) {
         return TRUE;
     }
@@ -210,7 +206,8 @@ Script::load(Inkscape::Extension::Extension *module)
     helper_extension = NULL;
 
     /* This should probably check to find the executable... */
-    child_repr = sp_repr_children(module->get_repr());
+    Inkscape::XML::Node *child_repr = sp_repr_children(module->get_repr());
+    gchar *command_text = NULL;
     while (child_repr != NULL) {
         if (!strcmp(child_repr->name(), "script")) {
             child_repr = sp_repr_children(child_repr);
@@ -250,7 +247,6 @@ Script::unload(Inkscape::Extension::Extension *module)
 {
     g_free(command);
     g_free(helper_extension);
-    return;
 }
 
 /**
@@ -365,10 +361,8 @@ Script::prefs_effect(Inkscape::Extension::Effect *module, SPView *view)
 SPDocument *
 Script::open(Inkscape::Extension::Input *module, gchar const *filename)
 {
-    gchar *tempfilename_out;
-    SPDocument *mydoc;
     gint tempfd;
-
+    gchar *tempfilename_out;
     // FIXME: process the GError instead of passing NULL
     if ((tempfd = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_out, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
@@ -395,6 +389,7 @@ Script::open(Inkscape::Extension::Input *module, gchar const *filename)
     execute(command, local_filename, tempfilename_out);
     g_free(local_filename);
 
+    SPDocument *mydoc;
     if (helper_extension == NULL) {
         mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
     } else {
@@ -439,9 +434,8 @@ Script::open(Inkscape::Extension::Input *module, gchar const *filename)
 void
 Script::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename)
 {
-    gchar *tempfilename_in;
     gint tempfd;
-
+    gchar *tempfilename_in;
     // FIXME: process the GError instead of passing NULL
     if ((tempfd = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_in, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
@@ -480,8 +474,6 @@ Script::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *
     // FIXME: convert to utf8 (from "filename encoding") and unlink_utf8name
     unlink(tempfilename_in);
     g_free(tempfilename_in);
-
-    return;
 }
 
 /**
@@ -515,11 +507,8 @@ Script::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *
 void
 Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
 {
+    gint tempfd_in;
     gchar *tempfilename_in;
-    gchar *tempfilename_out;
-    SPDocument *mydoc;
-    gint tempfd_in, tempfd_out;
-
     // FIXME: process the GError instead of passing NULL
     if ((tempfd_in = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_in, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
@@ -537,6 +526,8 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
         }
     }
 
+    gint tempfd_out;
+    gchar *tempfilename_out;
     // FIXME: process the GError instead of passing NULL
     if ((tempfd_out = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_out, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
@@ -554,19 +545,20 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
         }
     }
 
-    Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc->doc, tempfilename_in, FALSE, FALSE, FALSE);
+    Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
+                              doc->doc, tempfilename_in, FALSE, FALSE, FALSE);
 
     Glib::ustring local_command(command);
 
-    /** \todo Should be some sort of checking here.. don't know how to
-              do this with structs instead of classes */
-    SPDesktop *desktop = (SPDesktop *)doc;
+    /* fixme: Should be some sort of checking here.  Don't know how to do this with structs instead
+     * of classes. */
+    SPDesktop *desktop = (SPDesktop *) doc;
     if (desktop != NULL) {
         std::list<SPItem *> selected;
         desktop->selection->list(selected);
 
         if (!selected.empty()) {
-            for (std::list<SPItem *>::iterator currentItem = selected.begin();
+            for (std::list<SPItem *>::const_iterator currentItem = selected.begin();
                  currentItem != selected.end(); currentItem++) {
 
                 local_command += " --id=";
@@ -577,7 +569,8 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
 
     execute(local_command.c_str(), tempfilename_in, tempfilename_out);
 
-    mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
+    SPDocument *mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG),
+                                                  tempfilename_out);
 
     // make sure we don't leak file descriptors from g_file_open_tmp
     close(tempfd_in);
@@ -592,18 +585,14 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
     /* TODO: This creates a new window, which really isn't
      * ideal...  there needs to be a better way to do this. */
     if (1) {
-        SPViewWidget *dtw;
-
         g_return_if_fail(mydoc != NULL);
 
-        dtw = sp_desktop_widget_new(sp_document_namedview(mydoc, NULL));
+        SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(mydoc, NULL));
         sp_document_unref(mydoc);
         g_return_if_fail(dtw != NULL);
 
         sp_create_window(dtw, TRUE);
     }
-
-    return;
 }
 
 /* Helper class used by Script::execute */
@@ -620,8 +609,8 @@ public:
     size_t write(void const *buffer, size_t size);
 
     enum {
-        mode_read  = 1<<0,
-        mode_write = 1<<1,
+        mode_read  = 1 << 0,
+        mode_write = 1 << 1,
     };
 
 private:
@@ -667,20 +656,15 @@ private:
 void
 Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileout)
 {
-    pipe_t pipe;
-    FILE *pfile;
-    char buf[BUFSIZE];
-    char *command;
-    int num_read;
-
     g_return_if_fail(in_command != NULL);
 
     /* Get the commandline to be run */
     /* TODO:  Perhaps replace with a sprintf? */
-    command = g_strdup_printf("%s \"%s\"", in_command, filein);
+    char *command = g_strdup_printf("%s \"%s\"", in_command, filein);
 
     // std::cout << "Command to run: " << command << std::endl;
 
+    pipe_t pipe;
     bool open_success = pipe.open(command, pipe_t::mode_read);
     g_free(command);
 
@@ -698,7 +682,7 @@ Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileo
     }
 
     Inkscape::IO::dump_fopen_call(fileout, "J");
-    pfile = Inkscape::IO::fopen_utf8name(fileout, "w");
+    FILE *pfile = Inkscape::IO::fopen_utf8name(fileout, "w");
 
     if (pfile == NULL) {
         /* Error - could not open file */
@@ -711,8 +695,12 @@ Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileo
     }
 
     /* Copy pipe output to a temporary file */
-    while ((num_read = pipe.read(buf, BUFSIZE)) != 0) {
-        fwrite(buf, 1, num_read, pfile);
+    {
+        char buf[BUFSIZE];
+        int num_read;
+        while ((num_read = pipe.read(buf, BUFSIZE)) != 0) {
+            fwrite(buf, 1, num_read, pfile);
+        }
     }
 
     /* Close file */
@@ -735,8 +723,6 @@ Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileo
             perror("Extension::Script:  Unknown error for pclose\n");
         }
     }
-
-    return;
 }
 
 #ifdef WIN32
