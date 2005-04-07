@@ -50,8 +50,11 @@
 #include <inkscape.h>
 #include <document-private.h>
 #include <desktop-handles.h>
+#include <desktop-style.h>
 #include <selection.h>
 #include <style.h>
+#include "svg/svg.h"
+#include "svg/stringstream.h"
 
 #include "paint-selector.h"
 
@@ -900,4 +903,27 @@ sp_paint_selector_get_pattern (SPPaintSelector *psel)
 	pat = pattern_getroot (SP_PATTERN(g_object_get_data (G_OBJECT(gtk_menu_get_active (m)), "pattern")));
 
 	return pat;
+}
+
+void
+sp_paint_selector_set_flat_color (SPPaintSelector *psel, SPDesktop *desktop, const gchar *color_property, const gchar *opacity_property)
+{
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+
+    SPColor color;
+    gfloat alpha;
+    sp_paint_selector_get_color_alpha (psel, &color, &alpha);
+    guint32 rgba = sp_color_get_rgba32_falpha (&color, alpha);
+
+    gchar b[64];
+    sp_svg_write_color (b, 64, rgba);
+
+    sp_repr_css_set_property (css, color_property, b);
+    Inkscape::SVGOStringStream osalpha;
+    osalpha << alpha;
+    sp_repr_css_set_property (css, opacity_property, osalpha.str().c_str());
+
+    sp_desktop_set_style (desktop, css);
+
+    sp_repr_css_attr_unref (css);
 }

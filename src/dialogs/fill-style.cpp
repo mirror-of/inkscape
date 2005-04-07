@@ -439,34 +439,9 @@ sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
     }
 }
 
-static gchar *undo_label_1 = "fillstroke:flatcolor:1";
-static gchar *undo_label_2 = "fillstroke:flatcolor:2";
+static gchar *undo_label_1 = "fill:flatcolor:1";
+static gchar *undo_label_2 = "fill:flatcolor:2";
 static gchar *undo_label = undo_label_1;
-
-static void
-sp_fill_style_set_flat_color (SPPaintSelector *psel, SPDesktop *desktop)
-{
-    SPCSSAttr *css = sp_repr_css_attr_new ();
-
-    SPColor color;
-    gfloat alpha;
-    sp_paint_selector_get_color_alpha (psel, &color, &alpha);
-    guint32 rgba = sp_color_get_rgba32_falpha (&color, alpha);
-
-    gchar b[64];
-    sp_svg_write_color (b, 64, rgba);
-
-    sp_repr_css_set_property (css, "fill", b);
-    Inkscape::SVGOStringStream osalpha;
-    osalpha << alpha;
-    sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
-
-    sp_desktop_set_style (desktop, css);
-
-    sp_repr_css_attr_unref (css);
-
-    sp_document_maybe_done (SP_DT_DOCUMENT(desktop), undo_label);
-}
 
 /**
 This is called repeatedly while you are dragging a color slider, only for flat color
@@ -491,7 +466,8 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            sp_fill_style_set_flat_color (psel, SP_ACTIVE_DESKTOP);
+            sp_paint_selector_set_flat_color (psel, SP_ACTIVE_DESKTOP, "fill", "fill-opacity");
+            sp_document_maybe_done (SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP), undo_label);
             break;
         }
 
@@ -568,7 +544,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            sp_fill_style_set_flat_color (psel, SP_ACTIVE_DESKTOP);
+            sp_paint_selector_set_flat_color (psel, desktop, "fill", "fill-opacity");
+            sp_document_maybe_done (SP_DT_DOCUMENT(desktop), undo_label);
 
             // on release, toggle undo_label so that the next drag will not be lumped with this one
             if (undo_label == undo_label_1)

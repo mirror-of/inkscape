@@ -343,6 +343,10 @@ sp_stroke_style_paint_mode_changed( SPPaintSelector *psel,
     sp_stroke_style_paint_changed(psel, spw);
 }
 
+static gchar *undo_label_1 = "stroke:flatcolor:1";
+static gchar *undo_label_2 = "stroke:flatcolor:2";
+static gchar *undo_label = undo_label_1;
+
 static void
 sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
 {
@@ -350,58 +354,20 @@ sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
         return;
     }
 
-#ifdef SP_SS_VERBOSE
-    g_print("StrokeStyleWidget: paint dragged\n");
-#endif
-
     switch (psel->mode) {
-        case SP_PAINT_SELECTOR_MODE_EMPTY:
-        case SP_PAINT_SELECTOR_MODE_MULTIPLE:
-        case SP_PAINT_SELECTOR_MODE_NONE:
-            g_warning( "file %s: line %d: Paint %d should not emit 'dragged'",
-                       __FILE__, __LINE__, psel->mode);
-            break;
-
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            SPColor color;
-            gfloat alpha;
-            sp_paint_selector_get_color_alpha(psel, &color, &alpha);
-            GSList const *items = sp_widget_get_item_list(spw);
-            for (GSList const *i = items; i != NULL; i = i->next) {
-                sp_style_set_stroke_color_alpha( SP_OBJECT_STYLE(i->data),
-                                                 &color, alpha,
-                                                 TRUE, TRUE );
-            }
+            sp_paint_selector_set_flat_color (psel, SP_ACTIVE_DESKTOP, "stroke", "stroke-opacity");
+            sp_document_maybe_done (SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP), undo_label);
             break;
         }
-
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-        {
-            // gradient in fill&stroke does not drag anymore...
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-        {
-            // gradient in fill&stroke does not drag anymore...
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_PATTERN:
-            // pattern in fill&stroke does not drag
-            break;
-
 
         default:
-            g_warning( "file %s: line %d: Paint selector should not be in "
-                       "mode %d",
-                       __FILE__, __LINE__,
-                       psel->mode );
+            g_warning( "file %s: line %d: Paint %d should not emit 'dragged'",
+                       __FILE__, __LINE__, psel->mode);
             break;
     }
-
 }
 
 static void
@@ -410,10 +376,6 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
     }
-
-#ifdef SP_SS_VERBOSE
-    g_print("StrokeStyleWidget: paint changed\n");
-#endif
 
     GSList const *items = NULL;
     GSList *reprs = NULL;
@@ -454,25 +416,14 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            SPColor color;
-            gfloat alpha;
-            sp_paint_selector_get_color_alpha(psel, &color, &alpha);
-            gchar b[64];
-            sp_svg_write_color( b, 64,
-                                sp_color_get_rgba32_falpha(&color, alpha) );
-            sp_repr_css_set_property(css, "stroke", b);
-            Inkscape::SVGOStringStream osalpha;
-            osalpha << alpha;
-            sp_repr_css_set_property(css, "stroke-opacity", osalpha.str().c_str());
+            sp_paint_selector_set_flat_color (psel, desktop, "stroke", "stroke-opacity");
+            sp_document_maybe_done (SP_DT_DOCUMENT(desktop), undo_label);
 
-            sp_desktop_set_style (desktop, css);
-
-            sp_repr_css_attr_unref(css);
-
-            if (spw->inkscape) {
-                sp_document_done(SP_WIDGET_DOCUMENT(spw));
-            }
+            // on release, toggle undo_label so that the next drag will not be lumped with this one
+            if (undo_label == undo_label_1)
+                undo_label = undo_label_2;
+            else 
+                undo_label = undo_label_1;
 
             break;
         }
