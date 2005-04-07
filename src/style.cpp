@@ -483,12 +483,7 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         sp_style_merge_from_style_string(style, val);
     }
 
-    // 2. was sodipodi cmyk stuff, removed
-
-    /* fixme: CSS etc. parsing goes here */
-    /* 3. Other styling methods */
-
-    /* 4. Presentation attributes */
+    /* 2. Presentation attributes */
     /* CSS2 */
     SPS_READ_PENUM_IF_UNSET(&style->visibility, repr, "visibility", enum_visibility, true);
     SPS_READ_PENUM_IF_UNSET(&style->display, repr, "display", enum_display, true);
@@ -639,7 +634,7 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         }
     }
 
-    /* 5. Merge from parent */
+    /* 3. Merge from parent */
     if (object) {
         if (object->parent) {
             sp_style_merge_from_parent(style, SP_OBJECT_STYLE(object->parent));

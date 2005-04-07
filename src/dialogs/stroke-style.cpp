@@ -86,7 +86,6 @@ static void sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw);
 static void sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw);
 
 static void sp_stroke_style_get_average_color_rgba(GSList const *objects, gfloat *c);
-static void sp_stroke_style_get_average_color_cmyka(GSList const *objects, gfloat *c);
 static SPPaintSelectorMode sp_stroke_style_determine_paint_selector_mode(SPStyle *style);
 
 
@@ -222,18 +221,6 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
             SPColor color;
             sp_color_set_rgb_float(&color, c[0], c[1], c[2]);
             sp_paint_selector_set_color_alpha(psel, &color, c[3]);
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-        {
-            gfloat c[5];
-            sp_paint_selector_set_mode( psel,
-                                        SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
-            sp_stroke_style_get_average_color_cmyka(objects, c);
-            SPColor color;
-            sp_color_set_cmyk_float(&color, c[0], c[1], c[2], c[3]);
-            sp_paint_selector_set_color_alpha(psel, &color, c[4]);
             break;
         }
 
@@ -1800,41 +1787,6 @@ sp_stroke_style_get_average_color_rgba(GSList const *objects, gfloat c[4])
 } // end of sp_stroke_style_get_average_color_rgba()
 
 
-
-static void
-sp_stroke_style_get_average_color_cmyka(GSList const *objects, gfloat c[5])
-{
-    c[0] = 0.0;
-    c[1] = 0.0;
-    c[2] = 0.0;
-    c[3] = 0.0;
-    c[4] = 0.0;
-    gint num = 0;
-    while (objects) {
-        gfloat d[4];
-        SPObject *object = SP_OBJECT(objects->data);
-        if (object->style->stroke.type == SP_PAINT_TYPE_COLOR) {
-            sp_color_get_cmyk_floatv(&object->style->stroke.value.color, d);
-            c[0] += d[0];
-            c[1] += d[1];
-            c[2] += d[2];
-            c[3] += d[3];
-            c[4] += SP_SCALE24_TO_FLOAT(object->style->stroke_opacity.value);
-        }
-        num += 1;
-        objects = objects->next;
-    }
-
-    c[0] /= num;
-    c[1] /= num;
-    c[2] /= num;
-    c[3] /= num;
-    c[4] /= num;
-
-} // end of sp_stroke_style_get_average_color_cmyka()
-
-
-
 static SPPaintSelectorMode
 sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
 {
@@ -1846,17 +1798,7 @@ sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
             return SP_PAINT_SELECTOR_MODE_NONE;
         case SP_PAINT_TYPE_COLOR:
         {
-            SPColorSpaceType cstype = sp_color_get_colorspace_type(&style->stroke.value.color);
-            switch (cstype) {
-                case SP_COLORSPACE_TYPE_RGB:
-                    return SP_PAINT_SELECTOR_MODE_COLOR_RGB;
-                case SP_COLORSPACE_TYPE_CMYK:
-                    return SP_PAINT_SELECTOR_MODE_COLOR_CMYK;
-                default:
-                    g_warning( "file %s: line %d: Unknown colorspace type %d",
-                               __FILE__, __LINE__, cstype );
-                    return SP_PAINT_SELECTOR_MODE_NONE;
-            }
+            return SP_PAINT_SELECTOR_MODE_COLOR_RGB; // so far only rgb can be read from svg
         }
 
         case SP_PAINT_TYPE_PAINTSERVER:
@@ -1876,10 +1818,7 @@ sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
     }
 
     return SP_PAINT_SELECTOR_MODE_NONE;
-
-
-} // end of sp_stroke_style_determine_paint_selector_mode()
-
+}
 
 
 static void
