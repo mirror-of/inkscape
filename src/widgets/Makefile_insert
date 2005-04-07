@@ -63,22 +63,5 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/spw-utilities.h	\
 	widgets/widget-sizes.h
 
-#	widgets/sp-value-winder.c	\
-#	widgets/sp-value-winder.h
-#	widgets/sp-spin-button.cpp	\
-#	widgets/sp-spin-button.h
-
 widgets/button.$(OBJEXT): helper/sp-marshal.h
 widgets/menu.$(OBJEXT): helper/sp-marshal.h
-
-
-#noinst_PROGRAMS = test-widgets 
-
-#test_widgets_SOURCES =	\
-#	test-widgets.cpp	\
-#	sp-value-winder.c sp-value-winder.h	\
-#	sp-color-slider.cpp sp-color-slider.h	\
-#	sp-color-selector.cpp sp-color-selector.h
-
-#test_widgets_LDADD = $(INKSCAPE_LIBS)
-
