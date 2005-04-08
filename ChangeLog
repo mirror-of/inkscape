@@ -1,3 +1,8 @@
+2005-04-08  MenTaLguY  <mental@rydia.net>
+
+	* src/document-undo.cpp: try again with handling incomplete transactions
+	  more gracefully
+
 2005-04-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/io/sys.h, src/io/sys.cpp (dir_open, dir_read_utf8name):

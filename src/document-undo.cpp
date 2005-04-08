@@ -140,10 +140,25 @@ sp_document_cancel (SPDocument *doc)
 	sp_repr_begin_transaction (doc->rdoc);
 }
 
+namespace {
+
+void finish_incomplete_transaction(SPDocument &doc) {
+	SPDocumentPrivate &priv=*doc.priv;
+	Inkscape::XML::Event *log=sp_repr_commit_undoable(doc.rdoc);
+	if (log || priv.partial) {
+		g_warning ("Incomplete undo transaction:");
+		priv.partial = sp_repr_coalesce_log(priv.partial, log);
+		sp_repr_debug_print_log(priv.partial);
+		priv.undo = g_slist_prepend(priv.undo, priv.partial);
+		priv.partial = NULL;
+	}
+}
+
+}
+
 gboolean
 sp_document_undo (SPDocument *doc)
 {
-	Inkscape::XML::Event *log;
 	gboolean ret;
 
 	g_assert (doc != NULL);
@@ -153,17 +168,11 @@ sp_document_undo (SPDocument *doc)
 	doc->priv->sensitive = FALSE;
 
 	doc->actionkey = NULL;
-	log = sp_repr_commit_undoable (doc->rdoc);
 
-	if (log || doc->priv->partial) {
-		g_warning ("Last operation did not complete transaction");
-		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
-		doc->priv->undo = g_slist_prepend(doc->priv->undo, doc->priv->partial);
-		doc->priv->partial = NULL;
-	}
+	finish_incomplete_transaction(*doc);
 
 	if (doc->priv->undo) {
-		log = (Inkscape::XML::Event *) doc->priv->undo->data;
+		Inkscape::XML::Event *log=(Inkscape::XML::Event *)doc->priv->undo->data;
 		doc->priv->undo = g_slist_remove (doc->priv->undo, log);
 		sp_repr_undo_log (log);
 		doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
@@ -188,7 +197,6 @@ sp_document_undo (SPDocument *doc)
 gboolean
 sp_document_redo (SPDocument *doc)
 {
-	Inkscape::XML::Event *log;
 	gboolean ret;
 
 	g_assert (doc != NULL);
@@ -198,14 +206,11 @@ sp_document_redo (SPDocument *doc)
 	doc->priv->sensitive = FALSE;
 
 	doc->actionkey = NULL;
-	log = sp_repr_commit_undoable (doc->rdoc);
 
-	if (log || doc->priv->partial) {
-		g_warning ("Redo aborted: last operation did not complete transaction");
-		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
-		ret = FALSE;
-	} else if (doc->priv->redo) {
-		log = (Inkscape::XML::Event *) doc->priv->redo->data;
+	finish_incomplete_transaction(*doc);
+
+	if (doc->priv->redo) {
+		Inkscape::XML::Event *log=(Inkscape::XML::Event *)doc->priv->redo->data;
 		doc->priv->redo = g_slist_remove (doc->priv->redo, log);
 		sp_repr_replay_log (log);
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
