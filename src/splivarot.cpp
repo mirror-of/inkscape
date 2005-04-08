@@ -508,7 +508,7 @@ sp_selected_path_boolop (bool_op bop)
             // move to the saved position 
             repr->setPosition(pos > 0 ? pos : 0);
   
-            selection->addRepr(repr);
+            selection->add(repr);
             sp_repr_unref (repr);
 
             delete resPath[i];
@@ -530,7 +530,7 @@ sp_selected_path_boolop (bool_op bop)
         parent->appendChild(repr);
         repr->setPosition(pos > 0 ? pos : 0);
      
-        selection->addRepr(repr);
+        selection->add(repr);
         sp_repr_unref (repr);
     }
 
@@ -737,7 +737,7 @@ sp_selected_path_outline ()
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
             sp_item_write_transform (newitem, repr, transform);
 
-            selection->addRepr (repr);
+            selection->add (repr);
 
             sp_repr_unref (repr);
         }
@@ -1268,7 +1268,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             sp_repr_set_attr (repr, "id", id);
 
-            selection->addRepr (repr);
+            selection->add (repr);
 
             sp_repr_unref (repr);
         }
@@ -1389,7 +1389,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, Inkscape::Selection *selectio
 
     //If we are not in a selected group
     if (modifySelection)
-        selection->addRepr (repr);
+        selection->add (repr);
 
     sp_repr_unref (repr);
 

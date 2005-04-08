@@ -138,7 +138,7 @@ sp_selected_path_combine (void)
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
 
-	selection->setRepr(repr);
+	selection->set(repr);
 
 	sp_repr_unref (repr);
 }
@@ -216,7 +216,7 @@ sp_selected_path_break_apart (void)
 			if (l == list)
 				sp_repr_set_attr (repr, "id", id);
 
-			selection->addRepr(repr);
+			selection->add(repr);
 
 			sp_repr_unref (repr);
 		}
@@ -289,7 +289,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// move to the saved position 
 		repr->setPosition(pos > 0 ? pos : 0);
 
-		selection->addRepr(repr);
+		selection->add(repr);
 		sp_repr_unref(repr);
 	}
 

@@ -1,5 +1,14 @@
 2005-04-08  MenTaLguY  <mental@rydia.net>
 
+	* src/draw-context.cpp, src/dyna-draw-context.cpp, src/path-chemistry.cpp,
+	  src/selection-chemistry.cpp, src/selection.cpp, src/selection.h,
+	  src/splivarot.cpp, src/extension/plugin/bluredge.cpp,
+	  src/trace/trace.cpp:
+
+	  renaming Inkscape::Selection methods that deal with XML::Nodes
+
+2005-04-08  MenTaLguY  <mental@rydia.net>
+
 	* src/document-undo.cpp: try again with handling incomplete transactions
 	  more gracefully
 

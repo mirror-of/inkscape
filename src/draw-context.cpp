@@ -574,7 +574,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
         if (!dc->white_item) {
             /* Attach repr */
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
-            dc->selection->setRepr(repr);
+            dc->selection->set(repr);
             sp_repr_unref(repr);
             item->transform = i2i_affine(desktop->currentRoot(), desktop->currentLayer());
             item->updateRepr();

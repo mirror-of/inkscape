@@ -533,7 +533,7 @@ void sp_selection_group()
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
-    selection->setRepr(group);
+    selection->set(group);
     sp_repr_unref(group);
 }
 
@@ -1774,7 +1774,7 @@ sp_selection_clone()
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 
-    selection->setRepr(clone);
+    selection->set(clone);
     sp_repr_unref(clone);
 }
 
@@ -2161,7 +2161,7 @@ sp_selection_create_bitmap_copy ()
 
         // Set selection to the new image
         selection->clear();
-        selection->addRepr(repr);
+        selection->add(repr);
 
         // Clean up
         sp_repr_unref (repr);

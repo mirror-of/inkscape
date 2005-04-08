@@ -226,7 +226,7 @@ void Selection::setReprList(GSList const *list) {
     _clear();
 
     for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj=_objectForRepr(reinterpret_cast<Inkscape::XML::Node *>(iter->data));
+        SPObject *obj=_objectForXMLNode(reinterpret_cast<Inkscape::XML::Node *>(iter->data));
         if (obj) {
             _add(obj);
         }
@@ -434,7 +434,7 @@ void Selection::_removeObjectAncestors(SPObject *obj) {
         }
 }
 
-SPObject *Selection::_objectForRepr(Inkscape::XML::Node *repr) const {
+SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
     gchar const *id = repr->attribute("id");
     g_return_val_if_fail(id != NULL, NULL);

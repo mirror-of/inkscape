@@ -94,7 +94,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
             sp_repr_css_change(new_items[i], css, "style");
 
             new_group->appendChild(new_items[i]);
-            selection->addRepr(new_items[i]);
+            selection->add(new_items[i]);
             sp_selected_path_to_curves();
 
             if (offset < 0.0) {

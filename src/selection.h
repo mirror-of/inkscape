@@ -81,7 +81,7 @@ public:
      *
      * @param the xml node of the item to add
      */
-    void addRepr(Inkscape::XML::Node *repr) { add(_objectForRepr(repr)); }
+    void add(Inkscape::XML::Node *repr) { add(_objectForXMLNode(repr)); }
 
     /**
      * @brief Set the selection to a single specific object
@@ -95,7 +95,7 @@ public:
      *
      * @param repr the xml node of the item to select
      */
-    void setRepr(Inkscape::XML::Node *repr) { set(_objectForRepr(repr)); }
+    void set(Inkscape::XML::Node *repr) { set(_objectForXMLNode(repr)); }
 
     /**
      * @brief Removes an item from the set of selected objects
@@ -120,7 +120,7 @@ public:
      *
      * @param repr the xml node of the item to remove
      */
-    void removeRepr(Inkscape::XML::Node *repr) { remove(_objectForRepr(repr)); }
+    void remove(Inkscape::XML::Node *repr) { remove(_objectForXMLNode(repr)); }
 
     /**
      * @brief Selects exactly the specified objects
@@ -166,8 +166,8 @@ public:
     /**
      * @brief Returns true if the given item is selected
      */
-    bool includesRepr(Inkscape::XML::Node *repr) const {
-        return includes(_objectForRepr(repr));
+    bool includes(Inkscape::XML::Node *repr) const {
+        return includes(_objectForXMLNode(repr));
     }
 
     /**
@@ -304,7 +304,7 @@ private:
     /** @brief removes an object (without issuing a notification) */
     void _remove(SPObject *obj);
     /** @brief returns the SPObject corresponding to an xml node (if any) */
-    SPObject *_objectForRepr(Inkscape::XML::Node *repr) const;
+    SPObject *_objectForXMLNode(Inkscape::XML::Node *repr) const;
 
     GSList *_objs;
     mutable GSList *_reprs;

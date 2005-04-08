@@ -671,7 +671,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
             sp_repr_unref(dc->repr);
             item->transform = SP_ITEM(desktop->currentRoot())->getRelativeTransform(desktop->currentLayer());
             item->updateRepr();
-            SP_DT_SELECTION(desktop)->setRepr(dc->repr);
+            SP_DT_SELECTION(desktop)->set(dc->repr);
         }
         abp = nr_artpath_affine(sp_curve_first_bpath(dc->accumulated), sp_desktop_dt2root_affine(desktop));
         str = sp_svg_write_path(abp);

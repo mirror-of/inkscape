@@ -264,7 +264,7 @@ void Tracer::traceThread()
         if (nrPaths == 1)
             {
             selection->clear();
-            selection->addRepr(pathRepr);
+            selection->add(pathRepr);
             }
         sp_repr_unref (pathRepr);
         }
@@ -276,7 +276,7 @@ void Tracer::traceThread()
     if (nrPaths > 1)
         {
         selection->clear();
-        selection->addRepr(groupRepr);
+        selection->add(groupRepr);
         sp_repr_unref (groupRepr);
         }
 
