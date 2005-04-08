@@ -56,7 +56,7 @@ namespace Extension {
     the extension directory and parsed */
 #define SP_MODULE_EXTENSION  "inx"
 
-static void build_module_from_dir (const gchar * dirname);
+static void build_module_from_dir (gchar const * dirname);
 static void check_extensions (void);
 
 /**
@@ -102,7 +102,7 @@ update_pref (gchar const * pref_path, gchar const * pref_attr,
 	directory.
 */
 void
-init (void)
+init ()
 {
 	/* TODO: Change to Internal */
 	Internal::Svg::init();
@@ -135,8 +135,6 @@ init (void)
 	update_pref ("dialogs.save_as", "default",
 		     SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE );
 		     // Inkscape::Extension::db.get_output_list() );
-
-	return;
 }
 
 /**
@@ -151,7 +149,7 @@ init (void)
 	with their filenames.
 */
 static void
-build_module_from_dir (const gchar * dirname)
+build_module_from_dir (gchar const * dirname)
 {
         if (!dirname) {
             g_warning(_("Null external module directory name.  Modules will not be loaded."));
@@ -186,8 +184,6 @@ build_module_from_dir (const gchar * dirname)
 	}
 
 	g_dir_close(directory);
-
-	return;
 }
 
 
@@ -201,8 +197,6 @@ check_extensions_internal (Extension * in_plug, gpointer in_data)
 		in_plug->deactivate();
 		(*count)++;
 	}
-
-	return;
 }
 
 static void
@@ -230,8 +224,6 @@ check_extensions (void)
             std::cout << "One or more extensions failed to load. The failed extensions have been skipped. Inkscape will continue to run normally but those extensions will be unavailable.  For details to troubleshoot this problem, please refer to the error log." << std::endl;
         }
 	}
-
-	return;
 }
 
 } } /* namespace Inkscape::Extension */
