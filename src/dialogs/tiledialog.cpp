@@ -117,6 +117,7 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     void on_ColSize_checkbutton_changed();
     void on_rowSize_spinbutton_changed();
     void on_colSize_spinbutton_changed();
+    void Spacing_button_changed();
     private:
 
     bool userHidden;
@@ -134,41 +135,55 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     // Number selected label
     Gtk::Label            SelectionContentsLabel;
 
+
+    Gtk::HBox             SpinsHBox;
+    Gtk::HBox             SizesHBox;
+
     // Number per Row
-    Gtk::HBox             NoPerRowBox;
-    Gtk::Label            NoPerRowLabel;
-    Gtk::SpinButton       NoPerRowSpinner;
+    Gtk::VBox             NoOfColsBox;
+    Gtk::Label            NoOfColsLabel;
+    Gtk::SpinButton       NoOfColsSpinner;
+    bool AutoRowSize;
+    Gtk::CheckButton      RowHeightButton;
+
+    Gtk::Label            XByYLabel;
 
     // Number per Column
-    Gtk::HBox             NoPerColBox;
-    Gtk::Label            NoPerColLabel;
-    Gtk::SpinButton       NoPerColSpinner;
+    Gtk::VBox             NoOfRowsBox;
+    Gtk::Label            NoOfRowsLabel;
+    Gtk::SpinButton       NoOfRowsSpinner;
+    bool AutoColSize;
+    Gtk::CheckButton      ColumnWidthButton;
 
     // padding in x
-    Gtk::HBox             XPadBox;
+    Gtk::VBox             XPadBox;
     Gtk::Label            XPadLabel;
     Gtk::SpinButton       XPadSpinner;
 
     // padding in y
-    Gtk::HBox             YPadBox;
+    Gtk::VBox             YPadBox;
     Gtk::Label            YPadLabel;
     Gtk::SpinButton       YPadSpinner;
 
+    // BBox or manual spacing
+    Gtk::VBox             SpacingVBox;
+    Gtk::RadioButtonGroup SpacingGroup;
+    Gtk::RadioButton      SpaceByBBoxRadioButton;
+    Gtk::RadioButton      SpaceManualRadioButton;
+    bool ManualSpacing;
+
+
     // Row height
-    bool AutoRowSize;
     Gtk::VBox             RowHeightVBox;
     Gtk::HBox             RowHeightBox;
     Gtk::Label            RowHeightLabel;
     Gtk::SpinButton       RowHeightSpinner;
-    Gtk::CheckButton      RowHeightButton;
 
     // Column width
-    bool AutoColSize;
     Gtk::VBox             ColumnWidthVBox;
     Gtk::HBox             ColumnWidthBox;
     Gtk::Label            ColumnWidthLabel;
     Gtk::SpinButton       ColumnWidthSpinner;
-    Gtk::CheckButton      ColumnWidthButton;
 
 };
 
@@ -224,25 +239,31 @@ void TileDialogImpl::Grid_Arrange ()
 
        #ifdef DEBUG_GRID_ARRANGE
             g_print("\n gridleft=%f",grid_left);
-        #endif
-    // if auto set, update the spinners to reflect the value
-    if (ColumnWidthButton.get_active()) ColumnWidthSpinner.set_value(col_width);
-    if (RowHeightButton.get_active()) RowHeightSpinner.set_value(row_height);
-    // otherwise get the spinner values to use.
-    if (!ColumnWidthButton.get_active()) col_width = ColumnWidthSpinner.get_value();
-    if (!RowHeightButton.get_active())  row_height = RowHeightSpinner.get_value();
+       #endif
+
+    // TODO: This Just sets it to qual height / width atm, Change to respond to the "equal" checkboxes
+    ColumnWidthSpinner.set_value(col_width);
+    RowHeightSpinner.set_value(row_height);
+    int NoOfCols = NoOfColsSpinner.get_value_as_int();
+    int NoOfRows = NoOfRowsSpinner.get_value_as_int();
+
+    if (!SpaceManualRadioButton.get_active()){
+        NR::Rect b =  selection->bounds();
+        paddingx = (( b.max()[NR::X] - b.min()[NR::X]) - (col_width * NoOfCols)) / NoOfCols;
+        paddingy = (( b.max()[NR::Y] - b.min()[NR::Y]) - (row_height * NoOfRows)) / NoOfRows;
+
+    }
 
     cnt=0;
     const GSList *items2 = selection->itemList();
     GSList *rev = g_slist_copy((GSList *) items2);
     rev = g_slist_sort(rev, (GCompareFunc) sp_item_repr_compare_position);
 
-#ifdef DEBUG_GRID_ARRANGE
-        g_print("\n row_height = %f col_width= %f",row_height,col_width);
-        g_print("\n grid_left = %f grid_top= %f",grid_left,grid_top);
-#endif
+        #ifdef DEBUG_GRID_ARRANGE
+            g_print("\n row_height = %f col_width= %f",row_height,col_width);
+            g_print("\n grid_left = %f grid_top= %f",grid_left,grid_top);
+        #endif
 
-    int noPerRow = NoPerRowSpinner.get_value_as_int();
     for (; rev != NULL; rev = rev->next) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) rev->data);
             SPItem *item=SP_ITEM(rev->data);
@@ -250,8 +271,8 @@ void TileDialogImpl::Grid_Arrange ()
             sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
             width = b.x1 - b.x0;
             height = b.y1 - b.y0;
-            new_x = grid_left + ((col_width - width)/2) + (( col_width + paddingx ) * (cnt % noPerRow));
-            new_y = grid_top + ((row_height - height)/2) +(( row_height + paddingy ) * (cnt / noPerRow));
+            new_x = grid_left + ((col_width - width)/2) + (( col_width + paddingx ) * (cnt % NoOfCols));
+            new_y = grid_top + ((row_height - height)/2) +(( row_height + paddingy ) * (cnt / NoOfCols));
             #ifdef DEBUG_GRID_ARRANGE
             g_print("\n x0 = %f x1= %f new_x= %f",b.x0,b.x1, new_x);
             g_print("\n width = %f ",width);
@@ -315,9 +336,9 @@ void TileDialogImpl::on_row_spinbutton_changed()
     GSList const *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
 
-    double PerCol = ceil(selcount / NoPerRowSpinner.get_value());
-    NoPerColSpinner.set_value(PerCol);
-    prefs_set_double_attribute ("dialogs.gridtiler", "NoPerRow", NoPerRowSpinner.get_value());
+    double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
+    NoOfRowsSpinner.set_value(PerCol);
+    prefs_set_double_attribute ("dialogs.gridtiler", "NoOfCols", NoOfColsSpinner.get_value());
     updating=false;
 }
 
@@ -339,9 +360,9 @@ void TileDialogImpl::on_col_spinbutton_changed()
     GSList const *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
 
-    double PerRow = ceil(selcount / NoPerColSpinner.get_value());
-    NoPerRowSpinner.set_value(PerRow);
-    prefs_set_double_attribute ("dialogs.gridtiler", "NoPerRow", PerRow);
+    double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
+    NoOfColsSpinner.set_value(PerRow);
+    prefs_set_double_attribute ("dialogs.gridtiler", "NoOfCols", PerRow);
 
     updating=false;
 }
@@ -431,6 +452,21 @@ void TileDialogImpl::on_colSize_spinbutton_changed()
 }
 
 /**
+ * changed Radio button in Spacing group.
+ */
+void TileDialogImpl::Spacing_button_changed()
+{
+   if (SpaceManualRadioButton.get_active()) {
+       prefs_set_double_attribute ("dialogs.gridtiler", "SpacingType", 20);
+   } else {
+       prefs_set_double_attribute ("dialogs.gridtiler", "SpacingType", -20);
+   }
+
+   SizesHBox.set_sensitive ( SpaceManualRadioButton.get_active());
+}
+
+
+/**
  * Desktop selection changed
  */
 void TileDialogImpl::updateSelection()
@@ -460,14 +496,14 @@ void TileDialogImpl::updateSelection()
     }
 
     // Update the number of rows assuming number of columns wanted remains same.
-    double PerCol = ceil(selcount / NoPerRowSpinner.get_value());
-    NoPerColSpinner.set_value(PerCol);
+    double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
+    NoOfRowsSpinner.set_value(PerCol);
 
     // if the selection has less than the number set for one row, reduce it appropriately
-    if (selcount<NoPerRowSpinner.get_value()) {
-        double PerRow = ceil(selcount / NoPerColSpinner.get_value());
-        NoPerRowSpinner.set_value(PerRow);
-        prefs_set_double_attribute ("dialogs.gridtiler", "NoPerRow", PerRow);
+    if (selcount<NoOfColsSpinner.get_value()) {
+        double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
+        NoOfColsSpinner.set_value(PerRow);
+        prefs_set_double_attribute ("dialogs.gridtiler", "NoOfCols", PerRow);
     }
     updating=false;
 
@@ -547,78 +583,27 @@ TileDialogImpl::TileDialogImpl()
     GSList const *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
 
-    /*#### Number of columns ####*/
-    NoPerRowSpinner.set_digits(0);
-    NoPerRowSpinner.set_increments(1, 5);
-    NoPerRowSpinner.set_range(1.0, 100.0);
-    double PerRow = prefs_get_double_attribute ("dialogs.gridtiler", "NoPerRow", 3);
-    NoPerRowSpinner.set_value(PerRow);
-    NoPerRowSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_row_spinbutton_changed));
-
-    NoPerRowBox.pack_end(NoPerRowSpinner, false, false, MARGIN);
-    tips.set_tip(NoPerRowSpinner, _("No of columns"));
-
-    NoPerRowLabel.set_label(_("Columns:"));
-    NoPerRowBox.pack_end(NoPerRowLabel, false, false, MARGIN);
-
-    TileBox.pack_start(NoPerRowBox, false, false, MARGIN);
-
 
     /*#### Number of Rows ####*/
 
-    NoPerColSpinner.set_digits(0);
-    NoPerColSpinner.set_increments(1, 5);
-    NoPerColSpinner.set_range(1.0, 100.0);
+    double PerRow = prefs_get_double_attribute ("dialogs.gridtiler", "NoOfCols", 3);
     double PerCol = selcount / PerRow;
-    NoPerColSpinner.set_value(PerCol);
-    NoPerColSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_col_spinbutton_changed));
-
-    NoPerColBox.pack_end(NoPerColSpinner, false, false, MARGIN);
-    tips.set_tip(NoPerColSpinner, _("No of Rows"));
-
-    NoPerColLabel.set_label(_("Rows:"));
-    NoPerColBox.pack_end(NoPerColLabel, false, false, MARGIN);
-
-    TileBox.pack_start(NoPerColBox, false, false, MARGIN);
 
 
-    /*#### X padding ####*/
+    NoOfRowsLabel.set_label(_("Rows:"));
+    NoOfRowsBox.pack_start(NoOfRowsLabel, false, false, MARGIN);
 
-    XPadSpinner.set_digits(1);
-    XPadSpinner.set_increments(0.2, 2);
-    XPadSpinner.set_range(0.0, 999.0);
-    double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
-    XPadSpinner.set_value(XPad);
-    XPadBox.pack_end(XPadSpinner, false, false, MARGIN);
-    tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
-    XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_xpad_spinbutton_changed));
+    NoOfRowsSpinner.set_digits(0);
+    NoOfRowsSpinner.set_increments(1, 5);
+    NoOfRowsSpinner.set_range(1.0, 100.0);
+    NoOfRowsSpinner.set_value(PerCol);
+    NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_col_spinbutton_changed));
 
-
-    XPadLabel.set_label(_("Column spacing:"));
-    XPadBox.pack_end(XPadLabel, false, false, MARGIN);
-
-    TileBox.pack_start(XPadBox, false, false, MARGIN);
+    NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
+    tips.set_tip(NoOfRowsSpinner, _("No of Rows"));
 
 
-    /*#### Y Padding ####*/
-
-    YPadSpinner.set_digits(1);
-    YPadSpinner.set_increments(0.2, 2);
-    YPadSpinner.set_range(0.0, 999.0);
-    double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
-    YPadSpinner.set_value(YPad);
-    YPadBox.pack_end(YPadSpinner, false, false, MARGIN);
-    tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
-    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ypad_spinbutton_changed));
-
-    YPadLabel.set_label(_("Row spacing:"));
-    YPadBox.pack_end(YPadLabel, false, false, MARGIN);
-
-    TileBox.pack_start(YPadBox, false, false, MARGIN);
-
-
-    /*#### Row Height ####*/
-    RowHeightButton.set_label(_("Auto Scale Row Height: "));
+    RowHeightButton.set_label(_("Equal Height: "));
     double AutoRow = prefs_get_double_attribute ("dialogs.gridtiler", "AutoRowSize", 15);
     if (AutoRow>0)
          AutoRowSize=true;
@@ -626,11 +611,120 @@ TileDialogImpl::TileDialogImpl()
          AutoRowSize=false;
     RowHeightButton.set_active(AutoRowSize);
 
-    RowHeightVBox.pack_start(RowHeightButton, false, false, MARGIN);
+    NoOfRowsBox.pack_start(RowHeightButton, false, false, MARGIN);
     tips.set_tip(RowHeightButton, _("Automatically scale Rows to fit selected objects."));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_RowSize_checkbutton_changed));
 
+    SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
 
+
+    /*#### Label for X ####*/
+
+    XByYLabel.set_label(_(" X "));
+    SpinsHBox.pack_start(XByYLabel, false, false, MARGIN);
+
+    /*#### Number of columns ####*/
+
+    NoOfColsLabel.set_label(_("Columns:"));
+    NoOfColsBox.pack_start(NoOfColsLabel, false, false, MARGIN);
+
+    NoOfColsSpinner.set_digits(0);
+    NoOfColsSpinner.set_increments(1, 5);
+    NoOfColsSpinner.set_range(1.0, 100.0);
+    NoOfColsSpinner.set_value(PerRow);
+    NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_row_spinbutton_changed));
+
+    NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
+    tips.set_tip(NoOfColsSpinner, _("No of columns"));
+
+    ColumnWidthButton.set_label(_("Equal Width: "));
+    double AutoCol = prefs_get_double_attribute ("dialogs.gridtiler", "AutoColSize", 15);
+    if (AutoCol>0)
+         AutoColSize=true;
+    else
+         AutoColSize=false;
+    ColumnWidthButton.set_active(AutoColSize);
+
+    NoOfColsBox.pack_start(ColumnWidthButton, false, false, MARGIN);
+    tips.set_tip(ColumnWidthButton, _("Automatically scale Columns to fit selected objects."));
+    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ColSize_checkbutton_changed));
+
+
+    SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
+
+    TileBox.pack_start(SpinsHBox, false, false, MARGIN);
+
+    {
+        /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
+        SpaceByBBoxRadioButton.set_label(_("Fit into Selection BBox "));
+        SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::Spacing_button_changed));
+        SpacingGroup = SpaceByBBoxRadioButton.get_group();
+
+
+        SpacingVBox.pack_start(SpaceByBBoxRadioButton, false, false, MARGIN);
+
+        SpaceManualRadioButton.set_label(_("Set Spacing: "));
+        SpaceManualRadioButton.set_group(SpacingGroup);
+        SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::Spacing_button_changed));
+        SpacingVBox.pack_start(SpaceManualRadioButton, false, false, MARGIN);
+
+        double SpacingType = prefs_get_double_attribute ("dialogs.gridtiler", "SpacingType", 15);
+        if (SpacingType>0) {
+            ManualSpacing=true;
+            SpaceManualRadioButton.set_active(ManualSpacing);
+            SpaceByBBoxRadioButton.set_active(!ManualSpacing);
+        }
+        else {
+            ManualSpacing=false;
+            SpaceManualRadioButton.set_active(ManualSpacing);
+            SpaceByBBoxRadioButton.set_active(!ManualSpacing);
+        }
+
+
+        TileBox.pack_start(SpacingVBox, false, false, MARGIN);
+
+    }
+
+
+    /*#### Y Padding ####*/
+
+    YPadLabel.set_label(_("Row spacing:"));
+    YPadBox.pack_start(YPadLabel, false, false, MARGIN);
+
+    YPadSpinner.set_digits(1);
+    YPadSpinner.set_increments(0.2, 2);
+    YPadSpinner.set_range(0.0, 999.0);
+    double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
+    YPadSpinner.set_value(YPad);
+    YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
+    tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
+    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ypad_spinbutton_changed));
+
+
+    SizesHBox.pack_end(YPadBox, false, false, MARGIN);
+
+    /*#### X padding ####*/
+
+
+    XPadLabel.set_label(_("Column spacing:"));
+    XPadBox.pack_start(XPadLabel, false, false, MARGIN);
+
+    XPadSpinner.set_digits(1);
+    XPadSpinner.set_increments(0.2, 2);
+    XPadSpinner.set_range(0.0, 999.0);
+    double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
+    XPadSpinner.set_value(XPad);
+    XPadBox.pack_start(XPadSpinner, false, false, MARGIN);
+    tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
+    XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_xpad_spinbutton_changed));
+
+    SizesHBox.pack_start(XPadBox, false, false, MARGIN);
+
+
+
+    TileBox.pack_start(SizesHBox, false, false, MARGIN);
+
+    /*#### Row Height ####*/
     RowHeightSpinner.set_digits(1);
     RowHeightSpinner.set_increments(0.2, 2);
     RowHeightSpinner.set_range(1.0, 9999.0);
@@ -646,22 +740,10 @@ TileDialogImpl::TileDialogImpl()
 
 
     RowHeightVBox.pack_end(RowHeightBox, false, false, MARGIN);
-    TileBox.pack_start(RowHeightVBox, false, false, MARGIN);
+    //TileBox.pack_start(RowHeightVBox, false, false, MARGIN);
 
     /*#### Column Width ####*/
 
-
-    ColumnWidthButton.set_label(_("Auto Scale Column Width: "));
-    double AutoCol = prefs_get_double_attribute ("dialogs.gridtiler", "AutoColSize", 15);
-    if (AutoCol>0)
-         AutoColSize=true;
-    else
-         AutoColSize=false;
-    ColumnWidthButton.set_active(AutoColSize);
-
-    ColumnWidthVBox.pack_start(ColumnWidthButton, false, false, MARGIN);
-    tips.set_tip(ColumnWidthButton, _("Automatically scale Columnss to fit selected objects."));
-    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ColSize_checkbutton_changed));
 
 
     ColumnWidthSpinner.set_digits(1);
@@ -678,7 +760,7 @@ TileDialogImpl::TileDialogImpl()
     ColumnWidthBox.set_sensitive ( !ColumnWidthButton.get_active() );
 
     ColumnWidthVBox.pack_end(ColumnWidthBox, false, false, MARGIN);
-    TileBox.pack_start(ColumnWidthVBox, false, false, MARGIN);
+    //TileBox.pack_start(ColumnWidthVBox, false, false, MARGIN);
 
     mainVBox->pack_start(TileBox);
 
