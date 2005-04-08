@@ -315,7 +315,7 @@ Glib::ustring node_to_string(Inkscape::XML::Node const &node) {
 	result.append("#<");
 	result.append(type_name);
 	result.append(":");
-	std::snprintf(buffer, 40, "0x%p", &node);
+	snprintf(buffer, 40, "0x%p", &node);
 	result.append(buffer);
 	result.append(">");
 
