@@ -49,27 +49,6 @@ namespace Dialogs {
 SwatchesPanel* SwatchesPanel::instance = 0;
 
 
-class ColorItem : public Inkscape::UI::Previewable
-{
-public:
-    ColorItem( unsigned int r, unsigned int g, unsigned int b, Glib::ustring& name );
-    virtual ~ColorItem();
-    ColorItem(ColorItem const &other);
-    virtual ColorItem &operator=(ColorItem const &other);
-
-    virtual Gtk::Widget* getPreview(PreviewStyle style, Gtk::BuiltinIconSize size);
-
-    void buttonClicked();
-
-    unsigned int _r;
-    unsigned int _g;
-    unsigned int _b;
-    Glib::ustring _name;
-
-private:
-    Gtk::Tooltips tips;
-};
-
 ColorItem::ColorItem( unsigned int r, unsigned int g, unsigned int b, Glib::ustring& name ) :
     _r(r),
     _g(g),
