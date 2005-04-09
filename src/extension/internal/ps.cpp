@@ -33,6 +33,7 @@
 #include <libnr/n-art-bpath.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 
 #include <glib.h>
 #include <gtk/gtkstock.h>
@@ -553,7 +554,7 @@ PrintPS::comment(Inkscape::Extension::Print *mod, const char * comment)
 }
 
 void
-PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
+PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style, const NRRect *pbox)
 {
     g_return_if_fail(style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style)));
     
@@ -563,11 +564,22 @@ PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
         sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
 
         os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+
     } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
         if (SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
+
             SPLinearGradient *lg=SP_LINEARGRADIENT(SP_STYLE_FILL_SERVER (style));
+            NR::Point p1 (lg->x1.computed, lg->y1.computed);
+            NR::Point p2 (lg->x2.computed, lg->y2.computed);
+            if (pbox && SP_GRADIENT(lg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+                // convert to userspace
+                NR::Matrix bbox2user(pbox->x1 - pbox->x0, 0, 0, pbox->y1 - pbox->y0, pbox->x0, pbox->y0);
+                p1 *= bbox2user;
+                p2 *= bbox2user;
+            }
+
             os << "<<\n/ShadingType 2\n/ColorSpace /DeviceRGB\n";
-            os << "/Coords [" << lg->x1.computed << " " << lg->y1.computed << " " << lg->x2.computed << " " << lg->y2.computed <<"]\n";
+            os << "/Coords [" << p1[NR::X] << " " << p1[NR::Y] << " " << p2[NR::X] << " " << p2[NR::Y] <<"]\n";
             os << "/Extend [true true]\n";
             os << "/Domain [0 1]\n";
             os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
@@ -592,10 +604,23 @@ PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
             }
             os << "]\n";
             os << ">>\n>>\n";
+
         } else if (SP_IS_RADIALGRADIENT (SP_STYLE_FILL_SERVER (style))) {
+
             SPRadialGradient *rg=SP_RADIALGRADIENT(SP_STYLE_FILL_SERVER (style));
+            NR::Point c (rg->cx.computed, rg->cy.computed);
+            NR::Point f (rg->fx.computed, rg->fy.computed);
+            double r = rg->r.computed;
+            if (pbox && SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+                // convert to userspace
+                NR::Matrix bbox2user(pbox->x1 - pbox->x0, 0, 0, pbox->y1 - pbox->y0, pbox->x0, pbox->y0);
+                c *= bbox2user;
+                f *= bbox2user;
+                r *= bbox2user.expansion();
+            }
+
             os << "<<\n/ShadingType 3\n/ColorSpace /DeviceRGB\n";
-            os << "/Coords ["<<rg->fx.computed<<" "<<rg->fy.computed<<" 0 "<<rg->cx.computed<<" "<<rg->cy.computed<<" "<<rg->r.computed<<"]\n";
+            os << "/Coords ["<< f[NR::X] <<" "<< f[NR::Y] <<" 0 "<< c[NR::X] <<" "<< c[NR::Y] <<" "<< r <<"]\n";
             os << "/Extend [true true]\n";
             os << "/Domain [0 1]\n";
             os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
@@ -666,7 +691,7 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
 
         os << "gsave\n";
 
-        print_fill_style(os, style);
+        print_fill_style(os, style, pbox);
 
         print_bpath(os, bpath->path);
 
@@ -823,14 +848,30 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
     Inkscape::SVGOStringStream os;
 
     // Escape chars
-    // FlowResOut feeds us text char by char
-    if (!strcmp(text, "(")) {
-        text = "\\(";
-    } else if (!strcmp(text, ")")) {
-        text = "\\)";
-    } else if (!strcmp(text, "\\")) {
-        text = "\\\\";
+    Glib::ustring s (text);
+    {    
+        size_t i = s.find_first_of("\\");
+        while (i != Glib::ustring::npos) {
+            s.replace (i, 1, "\\\\");
+            i = s.find_first_of("\\", i+2);
+        }
     }
+    {    
+        size_t i = s.find_first_of("(");
+        while (i != Glib::ustring::npos) {
+            s.replace (i, 1, "\\(");
+            i = s.find_first_of("(", i+2);
+        }
+    }
+    {    
+        size_t i = s.find_first_of(")");
+        while (i != Glib::ustring::npos) {
+            s.replace (i, 1, "\\)");
+            i = s.find_first_of(")", i+2);
+        }
+    }
+
+    os << "gsave\n";
 
     // set font
     const char *fn = PSFontName(style);
@@ -839,23 +880,31 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
     os << "setfont\n";
     g_free((void *) fn);
 
-    if (style->fill.type == SP_PAINT_TYPE_COLOR) {
+    if (style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
+
         // set fill style
-        print_fill_style(os, style);
-        // paint fill
+        print_fill_style(os, style, NULL); 
+        // FIXME: we don't know the pbox of text, so have to pass NULL. This means gradients with
+        // bbox units won't work with text. However userspace gradients don't work with text either
+        // (text is black) for some reason.
+
         os << "newpath\n";
         os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-        os << "(" << text << ") show\n";
+        os << "(" << s.c_str() << ") show\n";
     }
 
     if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
+
         // set stroke style
         print_stroke_style(os, style);
+
         // paint stroke
         os << "newpath\n";
         os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-        os << "(" << text << ") false charpath stroke\n";
+        os << "(" << s.c_str() << ") false charpath stroke\n";
     }
+
+    os << "grestore\n";
 
     fprintf(_stream, "%s", os.str().c_str());
 

@@ -33,7 +33,7 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
 
 	void print_bpath (SVGOStringStream &os, const NArtBpath *bp);
 
-	void PrintPS::print_fill_style (SVGOStringStream &os, const SPStyle *style);
+	void PrintPS::print_fill_style (SVGOStringStream &os, const SPStyle *style, const NRRect *pbox);
 	void PrintPS::print_stroke_style (SVGOStringStream &os, const SPStyle *style);
 
 	const char* PrintPS::PSFontName (const SPStyle *style);
