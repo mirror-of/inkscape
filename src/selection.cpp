@@ -210,18 +210,6 @@ void Selection::addList(GSList const *list) {
     _emitChanged();
 }
 
-void Selection::addStlItemList (std::list<SPItem *> &list) {
-    _invalidateCachedLists();
-
-    for(std::list<SPItem *>::iterator item = list.begin();
-            item != list.end(); item++)
-    {
-        add(*item);
-    }
-
-    _emitChanged();
-}
-
 void Selection::setReprList(GSList const *list) {
     _clear();
 
@@ -242,14 +230,6 @@ void Selection::clear() {
 
 GSList const *Selection::list() {
     return _objs;
-}
-
-
-
-void Selection::list(std::list<SPItem *> &l)
-{
-    StlConv<SPItem *>::slist(l, itemList());
-//TODO : this adds a copying, rework when the selection becomes a stl list
 }
 
 GSList const *Selection::itemList() {

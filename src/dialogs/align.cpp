@@ -41,6 +41,8 @@
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-rect.h"
 
+#include "util/glib-list-iterators.h"
+
 #include "widgets/icon.h"
 #include "sp-item.h"
 #include "inkscape.h"
@@ -131,8 +133,9 @@ private :
         Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
         if (!selection) return;
 
+        using Inkscape::Util::GSListConstIterator;
         std::list<SPItem *> selected;
-        selection->list(selected);
+        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
         if (selected.empty()) return;
 
         NR::Point mp; //Anchor point
@@ -287,8 +290,9 @@ private :
         Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
         if (!selection) return;
 
+        using Inkscape::Util::GSListConstIterator;
         std::list<SPItem *> selected;
-        selection->list(selected);
+        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -452,8 +456,9 @@ private :
         Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
         if (!selection) return;
 
+        using Inkscape::Util::GSListConstIterator;
         std::list<SPItem *> selected;
-        selection->list(selected);
+        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -529,8 +534,9 @@ private :
         Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
         if (!selection) return;
 
+        using Inkscape::Util::GSListConstIterator;
         std::list<SPItem *> selected;
-        selection->list(selected);
+        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
         if (selected.empty()) return;
 
         //Check 2 or more selected objects

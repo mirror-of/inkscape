@@ -43,7 +43,9 @@ public:
     // default assign
     GSList const *list() const { return _list; }
     
-    reference operator*() const { return _list->data; }
+    reference operator*() const {
+        return *reinterpret_cast<pointer>(&_list->data);
+    }
 
     bool operator==(GSListConstIterator const &other) {
         return other._list == _list;
@@ -83,8 +85,12 @@ public:
     GSList const *list() const { return _list; }
     GSList *list() { return _list; }
     
-    const_reference operator*() const { return _list->data; }
-    reference operator*() { return _list->data; }
+    const_reference operator*() const {
+        return *reinterpret_cast<pointer>(&_list->data);
+    }
+    reference operator*() {
+        return *reinterpret_cast<pointer>(&_list->data);
+    }
 
     bool operator==(GSListIterator const &other) {
         return other._list == _list;
@@ -121,7 +127,9 @@ public:
     // default assign
     GList const *list() const { return _list; }
     
-    reference operator*() const { return _list->data; }
+    reference operator*() const {
+        return *reinterpret_cast<pointer>(&_list->data);
+    }
 
     bool operator==(GListConstIterator const &other) {
         return other._list == _list;
@@ -177,8 +185,10 @@ public:
     GList const *list() const { return _list; }
     GList *list() { return _list; }
     
-    const_reference operator*() const { return _list->data; }
-    reference operator*() { return _list->data; }
+    const_reference operator*() const {
+        return *reinterpret_cast<pointer>(&_list->data);
+    }
+    reference operator*() { return *reinterpret_cast<pointer>(&_list->data); }
 
     bool operator==(GListIterator const &other) {
         return other._list == _list;

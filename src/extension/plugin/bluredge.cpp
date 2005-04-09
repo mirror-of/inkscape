@@ -18,6 +18,8 @@
 #include <prefs-utils.h>
 #include <path-chemistry.h>
 
+#include "util/glib-list-iterators.h"
+
 #include <extension/implementation/implementation.h>
 #include <extension/extension.h>
 #include <extension/effect.h>
@@ -65,8 +67,10 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
 
     double old_offset = prefs_get_double_attribute("options.defaultoffsetwidth", "value", 1.0);
 
+    using Inkscape::Util::GSListConstIterator;
+    // TODO need to properly refcount the items, at least
     std::list<SPItem *> items;
-    selection->list(items);
+    items.insert<GSListConstIterator<SPItem *> >(items.end(), selection->itemList(), NULL);
     selection->clear();
 
     std::list<SPItem *> new_items;
@@ -116,8 +120,8 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
     prefs_set_double_attribute("options.defaultoffsetwidth", "value", old_offset);
 
     selection->clear();
-    selection->addStlItemList(items);
-    selection->addStlItemList(new_items);
+    selection->add(items.begin(), items.end());
+    selection->add(new_items.begin(), new_items.end());
 
     return;
 }

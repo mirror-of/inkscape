@@ -27,8 +27,6 @@
 #include "gc-anchored.h"
 #include "util/list.h"
 
-#include <list>
-
 namespace Inkscape {
 namespace XML {
 class Node;
@@ -81,7 +79,7 @@ public:
      *
      * @param the xml node of the item to add
      */
-    void add(Inkscape::XML::Node *repr) { add(_objectForXMLNode(repr)); }
+    void add(XML::Node *repr) { add(_objectForXMLNode(repr)); }
 
     /**
      * @brief Set the selection to a single specific object
@@ -95,7 +93,7 @@ public:
      *
      * @param repr the xml node of the item to select
      */
-    void set(Inkscape::XML::Node *repr) { set(_objectForXMLNode(repr)); }
+    void set(XML::Node *repr) { set(_objectForXMLNode(repr)); }
 
     /**
      * @brief Removes an item from the set of selected objects
@@ -120,7 +118,7 @@ public:
      *
      * @param repr the xml node of the item to remove
      */
-    void remove(Inkscape::XML::Node *repr) { remove(_objectForXMLNode(repr)); }
+    void remove(XML::Node *repr) { remove(_objectForXMLNode(repr)); }
 
     /**
      * @brief Selects exactly the specified objects
@@ -143,10 +141,19 @@ public:
      */
     void setReprList(GSList const *reprs);
 
-    /** \brief  Add items from an STL list to the selection
-        \param  list  The list of items to be added
-    */
-    void addStlItemList(std::list<SPItem *> &list);
+    /** \brief  Add items from an STL iterator range to the selection
+     *  \param  from the begin iterator
+     *  \param  to   the end iterator
+     */
+    template <typename InputIterator>
+    void add(InputIterator from, InputIterator to) {
+        _invalidateCachedLists();
+        while ( from != to ) {
+            _add(*from);
+            ++from;
+        }
+        _emitChanged();
+    }
 
     /**
      * @brief Unselects all selected objects.
@@ -166,7 +173,7 @@ public:
     /**
      * @brief Returns true if the given item is selected
      */
-    bool includes(Inkscape::XML::Node *repr) const {
+    bool includes(XML::Node *repr) const {
         return includes(_objectForXMLNode(repr));
     }
 
@@ -189,14 +196,12 @@ public:
      *
      * @return NULL unless exactly one object is selected
      */
-    Inkscape::XML::Node *singleRepr();
+    XML::Node *singleRepr();
 
     /** @brief Returns the list of selected objects */
     GSList const *list();
     /** @brief Returns the list of selected SPItems */
     GSList const *itemList();
-    /** @brief Appends selected SPItems to list */
-    void list(std::list<SPItem *> &l);
     /** @brief Returns a list of the xml nodes of all selected objects */
     // TODO only returns reprs of SPItems currently; need a separate
     //      method for that
@@ -230,11 +235,11 @@ public:
      */
     std::vector<NR::Point> getSnapPoints() const;
 
-	/**
-	 * @brief Gets the snap points of a selection that form a convex hull.
-	 * @return Selection's convex hull points
-	 */
-	std::vector<NR::Point> getSnapPointsConvexHull() const;
+    /**
+     * @brief Gets the snap points of a selection that form a convex hull.
+     * @return Selection's convex hull points
+     */
+    std::vector<NR::Point> getSnapPointsConvexHull() const;
 
     /**
      * @return A vector containing the top-left and bottom-right
@@ -252,7 +257,7 @@ public:
      *
      * @return the resulting connection
      */
-    sigc::connection connectChanged( const sigc::slot<void, Selection *> &slot) {
+    sigc::connection connectChanged(sigc::slot<void, Selection *> const &slot) {
         return _changed_signal.connect(slot);
     }
 
@@ -269,7 +274,8 @@ public:
      * @return the resulting connection
      *
      */
-    sigc::connection connectModified(sigc::slot<void, Selection *, guint> slot) {
+    sigc::connection connectModified(sigc::slot<void, Selection *, guint> const &slot)
+    {
         return _modified_signal.connect(slot);
     }
 
@@ -286,9 +292,9 @@ private:
     /** @brief Releases a selected object that is being removed */
     static void _release(SPObject *obj, Selection *selection);
 
-    /** @breif Issues modified selection signal */
+    /** @brief Issues modified selection signal */
     void _emitModified(guint flags);
-    /** @breif Issues changed selection signal */
+    /** @brief Issues changed selection signal */
     void _emitChanged();
 
     void _invalidateCachedLists();
@@ -304,12 +310,12 @@ private:
     /** @brief removes an object (without issuing a notification) */
     void _remove(SPObject *obj);
     /** @brief returns the SPObject corresponding to an xml node (if any) */
-    SPObject *_objectForXMLNode(Inkscape::XML::Node *repr) const;
+    SPObject *_objectForXMLNode(XML::Node *repr) const;
 
-    GSList *_objs;
+    mutable GSList *_objs;
     mutable GSList *_reprs;
     mutable GSList *_items;
-    mutable GSList *_item_reprs;
+
     SPDesktop *_desktop;
     guint _flags;
     guint _idle;

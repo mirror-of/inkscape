@@ -41,6 +41,8 @@
 #include "implementation.h"
 #include "script.h"
 
+#include "util/glib-list-iterators.h"
+
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -554,16 +556,12 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
      * of classes. */
     SPDesktop *desktop = (SPDesktop *) doc;
     if (desktop != NULL) {
-        std::list<SPItem *> selected;
-        desktop->selection->list(selected);
-
-        if (!selected.empty()) {
-            for (std::list<SPItem *>::const_iterator currentItem = selected.begin();
-                 currentItem != selected.end(); currentItem++) {
-
-                local_command += " --id=";
-                local_command += SP_OBJECT_ID(*currentItem);
-            }
+        using Inkscape::Util::GSListConstIterator;
+        GSListConstIterator<SPItem *> selected=desktop->selection->itemList();
+        while ( selected != NULL ) {
+            local_command += " --id=";
+            local_command += SP_OBJECT_ID(*selected);
+            ++selected;
         }
     }
 

@@ -8,6 +8,14 @@
 
 2005-04-09  MenTaLguY  <mental@rydia.net>
 
+	* src/selection.cpp, src/selection.h, src/dialogs/align.cpp,
+	  src/extension/implementation/script.cpp,
+	  src/extension/plugin/bluredge.cpp, src/util/glib-list-iterators.h:
+
+	  excise STL abuse, and fix up the glib list iterators
+
+2005-04-09  MenTaLguY  <mental@rydia.net>
+
 	* src/file.cpp, src/interface.cpp, src/shortcuts.cpp,
 	  src/sp-object-repr.cpp, src/sp-skeleton.cpp, src/verbs.cpp,
 	  src/dialogs/export.cpp, src/display/nr-arena-item.cpp,
