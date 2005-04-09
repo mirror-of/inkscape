@@ -1,3 +1,7 @@
+2005-04-08 Jon Phillips <jon@rejon.org>
+	* src/ui/dialog/dialog-manager.cpp src/ui/dialog/dialog-manager.h: 
+	  added copyright statements about dialog manager code I wrote.
+
 2005-04-08  MenTaLguY  <mental@rydia.net>
 
 	* src/draw-context.cpp, src/dyna-draw-context.cpp, src/path-chemistry.cpp,

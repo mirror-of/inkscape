@@ -4,9 +4,11 @@
  *
  * Author:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
- *
+ *   Jon Phillips <jon@rejon.org>
+ *   
  * Copyright (C) 2004 Bryce Harrington
- *
+ * Copyright (C) 2005 Jon Phillips
+ * 
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
@@ -31,18 +33,14 @@ public:
     sigc::signal<void> hide_f12;
     sigc::signal<void> transientize;
 
-    /* TODO:  Implement these.  These are provided to enable us to 
-              dynamically add/remove dialogs at run time (this might
-              be useful for extensions that wish to add or replace
-              the standard dialogs. */
-  
+    /* generic dialog management start */
     typedef std::map<gchar const*, Dialog*>    DialogMap;
-    
 
     Dialog* getDialog(gchar const* dlgName); 
     void    addDialog(gchar const* dlgName, Dialog * dlg);
     bool    deleteDialog(gchar const* dlgName);
     void    deleteAllDialogs(); 
+    /* generic dialog management end */
 
     Dialog* getAboutDialog();
     Dialog* getAlignAndDistributeDialog();
@@ -66,7 +64,7 @@ protected:
     DialogManager(DialogManager const &d);
     DialogManager& operator=(DialogManager const &d);
 
-    DialogManager::DialogMap    _dialog_map;
+    DialogManager::DialogMap    _dialog_map; // internal storage for dialogs
 
     Dialog            *_about_dialog;
     Dialog            *_align_and_distribute_dialog;
