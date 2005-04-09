@@ -2,12 +2,17 @@
  * \brief Editor Implementation class declaration for Inkscape.  This
  *        class implements the functionality of the window layout, menus,
  *        and signals.
+ * 
+ * This is a reimplementation into C++/Gtkmm of Sodipodi's SPDesktop class
  *
  * Authors:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
  *   Derek P. Moore <derekm@hackunix.org>
+ *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Frank Felfe <innerspace@iname.com>
  *
- * Copyright (C) 2004 Authors
+ * Copyright (C) 1999-2004 Authors
+ * Copyright (C) 2000-2001 Ximian, Inc.
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -1013,6 +1018,8 @@ Editor::EditorImpl::initRightScrollbar()
     _viewport_table.attach(_right_scrollbar, 2, 3, 1, 2, Gtk::SHRINK, Gtk::FILL|Gtk::EXPAND);
 }
 
+/** Replaces sp_desktop_init() and sp_desktop_new() from the Gtk+ codebase
+ */
 void
 Editor::EditorImpl::initSvgCanvas()
 {
@@ -1024,6 +1031,110 @@ Editor::EditorImpl::initSvgCanvas()
     Glib::RefPtr<Gtk::Style> style = _svg_canvas->get_style();
     style->set_bg(Gtk::STATE_NORMAL, style->get_white());
     _svg_canvas->set_style(style);
+
+/* TODO - Gtkmmify (100 lines initially - can this be shortened?)
+    // Connect document
+    sp_view_set_document(SP_VIEW(desktop), document);
+    
+    // OLD:  sp_desktop_set_namedview(desktop, namedview);
+    _namedview = namedview;
+    g_signal_connect(G_OBJECT(namedview), "modified", G_CALLBACK(sp_dt_namedview_modified), desktop);
+    _number = sp_namedview_viewcount(namedview);
+
+    SPCanvasGroup *root = sp_canvas_root(canvas);
+
+    // Setup the infinite-dimensioned 'Acetate' object (a SPCanvasItem)
+    _acetate = sp_canvas_item_new(_root, GNOME_TYPE_CANVAS_ACETATE, NULL);
+    g_signal_connect(G_OBJECT(_acetate), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+    _main = (SPCanvasGroup *) sp_canvas_item_new(root, SP_TYPE_CANVAS_GROUP, NULL);
+    g_signal_connect(G_OBJECT(_main), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+
+    // Set up the 'table' SPCanvasItem for outside-of-page background
+    _table = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_area (SP_CTRLRECT (_table), -15000.0, -15000.0, 15000.0, 15000.0);
+    sp_ctrlrect_set_color (SP_CTRLRECT (_table), 0x00000000, TRUE, 0x00000000);
+    sp_canvas_item_move_to_z (_table, 0);
+
+    // Set up the page for the inside-of-page background
+    _page = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_color ((SPCtrlRect *) _page, 0x00000000, FALSE, 0x00000000);
+    desktop->page_border = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
+
+    // Set up the drawing SPCanvasItem
+    _drawing = sp_canvas_item_new (_main, SP_TYPE_CANVAS_ARENA, NULL);
+    g_signal_connect (G_OBJECT (_drawing), "arena_event", G_CALLBACK (arena_handler), desktop);
+*/
+    // Set up the grid, guides, sketc, and controls
+    _grid = (SPCanvasGroup *) sp_canvas_item_new (_main, SP_TYPE_CANVAS_GROUP, NULL);
+    _guides = (SPCanvasGroup *) sp_canvas_item_new (_main, SP_TYPE_CANVAS_GROUP, NULL);
+    _sketch = (SPCanvasGroup *) sp_canvas_item_new (_main, SP_TYPE_CANVAS_GROUP, NULL);
+    _controls = (SPCanvasGroup *) sp_canvas_item_new (_main, SP_TYPE_CANVAS_GROUP, NULL);
+
+/*
+    // Create the Selection object
+    _selection = new Inkscape::Selection (desktop);
+
+    // Push select tool to the bottom of stack
+    // FIXME: this is the only call to this.  Everything else seems to just
+    // call "set" instead of "push".  Can we assume that there is only one
+    // context ever?
+    sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
+
+    // display rect and zoom are now handled in sp_desktop_widget_realize()
+    sp_ctrlrect_set_area (SP_CTRLRECT (_page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+    sp_ctrlrect_set_area (SP_CTRLRECT (_page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+
+    // the following sets the page shadow on the canvas
+    // It was originally set to 5, which is really cheesy!
+    // It now is an attribute in the document's namedview. If a value of
+    // 0 is used, then the constructor for a shadow is not initialized.
+    if ( _namedview->pageshadow != 0 &&
+         _namedview->showpageshadow ) {
+        sp_ctrlrect_set_shadow (SP_CTRLRECT (_page_border),
+                                _namedview->pageshadow, 0x3f3f3fff);
+    }
+*/
+
+/** TODO
+    // Connect event for page resize
+    _doc2dt[5] = sp_document_height (document);
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (_drawing), _doc2dt);
+
+    _sel_modified_connection.disconnect();
+    _sel_modified_connection = _selection->connectModified(
+        sigc::bind(
+            sigc::ptr_fun(&sp_desktop_selection_modified),
+            desktop
+            )
+        );
+
+    _sel_changed_connection.disconnect();
+    _sel_changed_connection = desktop->selection->connectChanged(
+        sigc::bind(
+            sigc::ptr_fun(&SPDesktop::_selection_changed),
+            desktop
+            )
+        );
+
+    // Display the arena portion of the document
+    NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))),
+                                           SP_CANVAS_ARENA (_drawing)->arena, _dkey, SP_ITEM_SHOW_DISPLAY);
+    if (ai) {
+        nr_arena_item_add_child (SP_CANVAS_ARENA (_drawing)->root, ai, NULL);
+        nr_arena_item_unref (ai);
+    }
+
+    sp_namedview_show (_namedview, desktop);
+    // Ugly hack
+    sp_desktop_activate_guides (desktop, TRUE);
+    // Ugly hack
+    sp_dt_namedview_modified (_namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
+
+    // ?
+    // sp_active_desktop_set (desktop);
+    inkscape_add_desktop (desktop);
+
+*/
 
     _viewport_table.attach(*_svg_canvas, 1, 2, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND);
 

@@ -33,6 +33,18 @@ class MessageContext;
 class MessageStack;
 }
 
+GType    sp_view_get_type (void);
+void     sp_view_set_document (SPView *view, SPDocument *doc);
+void     sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
+void     sp_view_set_position (SPView *view, gdouble x, gdouble y);
+gboolean sp_view_shutdown (SPView *view);
+void     sp_view_request_redraw (SPView *view);
+
+inline void sp_view_set_position(SPView *view, NR::Point const &p)
+{
+	sp_view_set_position(view, p[NR::X], p[NR::Y]);
+}
+
 struct SPView {
 	GObject object;
 
@@ -53,6 +65,31 @@ struct SPView {
 	Inkscape::MessageContext *legacyMessageContext() {
 		return _legacy_message_context;
 	}
+
+    // Wrappers for C versions of routines
+    void setDocument(SPDocument *doc) {
+	sp_view_set_document(this, doc);
+    }
+
+    void emitResized(gdouble width, gdouble height) {
+	sp_view_emit_resized(this, width, height);
+    }
+
+    void setPosition(gdouble x, gdouble y) {
+	sp_view_set_position(this, x, y);
+    }
+
+    void setPosition(NR::Point const &p) {
+	sp_view_set_position(this, p);
+    }
+
+    gboolean shutdown() {
+	return sp_view_shutdown(this);
+    }
+
+    void requestRedraw() {
+	sp_view_request_redraw(this);
+    }
 
 private:
 	static void _set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view);
@@ -89,22 +126,7 @@ struct SPViewClass {
 	void (* set_status_message) (SPView *view, Inkscape::MessageType type, gchar const *message);
 };
 
-GType sp_view_get_type (void);
-
 #define SP_VIEW_DOCUMENT(v) (SP_VIEW (v)->doc)
-
-void sp_view_set_document (SPView *view, SPDocument *doc);
-
-void sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
-void sp_view_set_position (SPView *view, gdouble x, gdouble y);
-
-inline void sp_view_set_position(SPView *view, NR::Point const &p)
-{
-	sp_view_set_position(view, p[NR::X], p[NR::Y]);
-}
-
-gboolean sp_view_shutdown (SPView *view);
-void sp_view_request_redraw (SPView *view);
 
 /* SPViewWidget */
 
@@ -114,10 +136,34 @@ void sp_view_request_redraw (SPView *view);
 #define SP_IS_VIEW_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_VIEW_WIDGET))
 #define SP_IS_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_VIEW_WIDGET))
 
+GType sp_view_widget_get_type (void);
+
+void sp_view_widget_set_view (SPViewWidget *vw, SPView *view);
+
+/* Allows presenting 'save changes' dialog, FALSE - continue, TRUE - cancel */
+gboolean sp_view_widget_shutdown (SPViewWidget *vw);
+
+/* Create a new SPViewWidget (which happens to be a SPDesktopWidget). */
+SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
+
 struct SPViewWidget {
 	GtkEventBox eventbox;
 
 	SPView *view;
+
+    // C++ Wrappers
+    GType getType() const {
+	return sp_view_widget_get_type();
+    }
+
+    void setView(SPView *view) {
+	sp_view_widget_set_view(this, view);
+    }
+
+    gboolean shutdown() {
+	return sp_view_widget_shutdown(this);
+    }
+
 };
 
 struct SPViewWidgetClass {
@@ -131,17 +177,7 @@ struct SPViewWidgetClass {
 	gboolean (* shutdown) (SPViewWidget *vw);
 };
 
-GType sp_view_widget_get_type (void);
-
 #define SP_VIEW_WIDGET_VIEW(w) (SP_VIEW_WIDGET (w)->view)
 #define SP_VIEW_WIDGET_DOCUMENT(w) (SP_VIEW_WIDGET (w)->view ? ((SPViewWidget *) (w))->view->doc : NULL)
-
-void sp_view_widget_set_view (SPViewWidget *vw, SPView *view);
-
-/* Allows presenting 'save changes' dialog, FALSE - continue, TRUE - cancel */
-gboolean sp_view_widget_shutdown (SPViewWidget *vw);
-
-/* Create a new SPViewWidget (which happens to be a SPDesktopWidget). */
-SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
 
 #endif

@@ -31,8 +31,16 @@
 #include "ui/widget/toolbox.h"
 
 struct SPCanvas;
+struct SPCanvasItem;
+struct SPCanvasGroup;
+struct SPCSSAttr;
+struct SPDesktopWidget;
+struct SPNamedView;
 
 namespace Inkscape {
+class Selection;
+class Document;
+
 namespace NSApplication {
 
 class Editor;
@@ -80,6 +88,37 @@ public:
     void onUriChanged();
 
 protected:
+    SPDesktopWidget      *_owner;
+    SPNamedView          *_namedview;
+    Inkscape::Document   *_document;
+    Inkscape::Selection  *_selection;
+    sigc::connection     _sel_modified_connection;
+    sigc::connection     _sel_changed_connection;
+
+    SPEventContext       *_event_context;
+
+    unsigned int         dkey;
+
+    SPCanvasItem         *_acetate;
+    SPCanvasGroup        *_main;
+    SPCanvasGroup        *_grid;
+    SPCanvasGroup        *_guides;
+    SPCanvasItem         *_drawing;
+    SPCanvasGroup        *_sketch;
+    SPCanvasGroup        *_controls;
+
+    SPCanvasItem         *_table; // outside-of-page background
+    SPCanvasItem         *_page; // page background
+    SPCanvasItem         *_page_border; // page border
+
+/* TODO
+    NR::Matrix d2w, w2d, doc2dt;
+*/
+    gboolean             is_fullscreen;
+
+    // current style
+    SPCSSAttr            *_current_style;
+
     // Child widgets:
     Gtk::Table           _main_window_table;
     Gtk::VBox            _toolbars_vbox;
