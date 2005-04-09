@@ -80,6 +80,11 @@ public:
 	one_glyph*			glyph_text; // glyph string computed for uni32_text
 		
 	// maps between the 2
+	// These should most definitely be size_t, not int.
+	// I am quite sure (but not bored enough to actually test it
+	// on a 500MHz machine with 256MB RAM ) that this will crash
+	// for text longer than 2GB on architectures where
+	// sizeof(size_t) != sizeof(int)
 	int             utf8_length; // utf8_text length
 	int             uni32_length; // uni32_text length
 	int             glyph_length; // number of glyph in the glyph_text array

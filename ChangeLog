@@ -1,3 +1,13 @@
+2005-04-09  MenTaLguY  <mental@rydia.net>
+
+	* src/file.cpp, src/interface.cpp, src/shortcuts.cpp,
+	  src/sp-object-repr.cpp, src/sp-skeleton.cpp, src/verbs.cpp,
+	  src/dialogs/export.cpp, src/display/nr-arena-item.cpp,
+	  src/libnrtype/FontFactory.cpp, src/libnrtype/TextWrapper.h,
+	  src/livarot/ShapeMisc.cpp, src/livarot/float-line.cpp:
+
+	  combined several different 64-bit cleanness patches
+
 2005-04-08 Jon Phillips <jon@rejon.org>
 	* src/ui/dialog/dialog-manager.cpp src/ui/dialog/dialog-manager.h: 
 	  added copyright statements about dialog manager code I wrote.

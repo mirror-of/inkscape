@@ -409,10 +409,10 @@ sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary)
 	if (old_verb && old_verb != verb) {
 		unsigned int old_primary;
 
-		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, GINT_TO_POINTER (old_verb)));
+		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)old_verb)); 
 
 		if (old_primary == shortcut) {
-			g_hash_table_insert (primary_shortcuts, GINT_TO_POINTER (old_verb), (void *)Inkscape::Verb::get(SP_VERB_INVALID));
+			g_hash_table_insert (primary_shortcuts, (gpointer)old_verb, (void *)Inkscape::Verb::get(SP_VERB_INVALID));
 		}
 	}
 

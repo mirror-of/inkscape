@@ -275,7 +275,7 @@ sp_export_dialog_area_frame (GtkWidget * dlg)
 
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
         b = gtk_toggle_button_new_with_mnemonic (_(selection_labels[i]));
-        gtk_object_set_data (GTK_OBJECT (b), "key", (void *)i);
+        gtk_object_set_data (GTK_OBJECT (b), "key", GINT_TO_POINTER(i));
         gtk_object_set_data (GTK_OBJECT (dlg), selection_names[i], b);
         gtk_box_pack_start (GTK_BOX (hb), b, FALSE, TRUE, 0);
         gtk_signal_connect ( GTK_OBJECT (b), "clicked", 
@@ -605,7 +605,7 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               GtkObject *base )
 {
     selection_type current_key;
-    current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    current_key = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
 
     if ((current_key == SELECTION_DRAWING || current_key == SELECTION_PAGE) &&
             (SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false &&
@@ -616,7 +616,7 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
     }
     was_empty = (SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty();
 
-    current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    current_key = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
 
     if (inkscape &&
             SP_IS_INKSCAPE (inkscape) &&
@@ -637,7 +637,7 @@ sp_export_selection_modified ( Inkscape::Application *inkscape,
                                GtkObject *base )
 {
     selection_type current_key;
-    current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    current_key = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
 
     switch (current_key) {
         case SELECTION_DRAWING:
@@ -674,8 +674,8 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
         return;
 
     selection_type key, old_key;
-    key = (selection_type)((int)gtk_object_get_data (GTK_OBJECT (tb), "key"));
-    old_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    key = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data (GTK_OBJECT (tb), "key")));
+    old_key = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
 
     /* Ignore all "turned off" events unless we're the only active button */
     if (!gtk_toggle_button_get_active (tb) ) {
@@ -1043,7 +1043,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
 
     /* Setup the values in the document */
-    switch ((selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"))) {
+    switch ((selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")))) {
         case SELECTION_PAGE:
         case SELECTION_DRAWING: {
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
@@ -1237,7 +1237,7 @@ sp_export_detect_size(GtkObject * base) {
     current_bbox.round(2);
     // std::cout << "Current " << current_bbox;
 
-    this_test[0] = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    this_test[0] = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
         this_test[i + 1] = test_order[i];
     }
@@ -1306,7 +1306,7 @@ sp_export_detect_size(GtkObject * base) {
 
     /* We're now using a custom size, not a fixed one */
     /* printf("Detecting state: %s\n", selection_names[key]); */
-    selection_type old = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+    selection_type old = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(gtk_object_get_data(base, selection_names[old])), FALSE);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(gtk_object_get_data(base, selection_names[key])), TRUE);
     gtk_object_set_data(GTK_OBJECT(base), "selection-type", (gpointer)key);

@@ -386,7 +386,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
         if (askTo < 0 || askTo >= numberOfEdges() ) {
           dadContour=-1;
         } else {
-          dadContour = (int) swdData[askTo].misc;
+          dadContour = GPOINTER_TO_INT(swdData[askTo].misc);
           dadContour-=1; // pour compenser le decalage
         }
       }

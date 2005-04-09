@@ -515,13 +515,13 @@ void FloatLigne::Flatten()
 
 void FloatLigne::Affiche()
 {
-    printf("%i : \n", bords.size());
+    printf("%lu : \n", bords.size());
     for (int i = 0; i < int(bords.size()); i++) {
         printf("(%f %f %f %i) ",bords[i].pos,bords[i].val,bords[i].pente,(bords[i].start?1:0)); // localization ok
     }
     
     printf("\n");
-    printf("%i : \n", runs.size());
+    printf("%lu : \n", runs.size());
     
     for (int i = 0; i < int(runs.size()); i++) {
         printf("(%f %f -> %f %f / %f)",

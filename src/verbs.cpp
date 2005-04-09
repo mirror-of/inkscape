@@ -1269,7 +1269,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
         prefs_get_double_attribute_limited ( "options.zoomincrement",
                                              "value", 1.414213562, 1.01, 10 );
 
-    switch (reinterpret_cast<std::size_t>(data)) {
+    switch (GPOINTER_TO_INT(data)) {
         case SP_VERB_ZOOM_IN:
             sp_desktop_get_display_area (dt, &d);
             sp_desktop_zoom_relative ( dt, (d.x0 + d.x1) / 2,
@@ -1349,6 +1349,9 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
 void
 DialogVerb::perform (SPAction *action, void * data, void * pdata)
 {
+
+// What now, (int) data or reinterpret_cast<std::size_t>(data) ???
+
     if ((int) data != SP_VERB_DIALOG_TOGGLE) {
         // unhide all when opening a new dialog
         inkscape_dialogs_unhide ();

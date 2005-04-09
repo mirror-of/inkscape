@@ -156,7 +156,7 @@ populate_dtables()
 		for (unsigned i = 0; i < n_entries; ++i) {
 			g_hash_table_insert(dtable,
 					    (void *)entries[i].name,
-					    GINT_TO_POINTER(entries[i].type_id));
+					    (gpointer) entries[i].type_id);
 		}
 	}
 }
@@ -177,7 +177,7 @@ name_to_gtype(NameType const name_type, gchar const *name)
 	gpointer const data = g_hash_table_lookup(t2dtable[name_type], name);
 	return ( ( data == NULL )
 		 ? SP_TYPE_OBJECT
-		 : GPOINTER_TO_INT(data) );
+		 : (GType) data );
 }
 
 void
@@ -187,7 +187,7 @@ sp_object_type_register(gchar const *name, GType const gtype)
 	if (current == SP_TYPE_OBJECT) {
 		g_hash_table_insert(t2dtable[REPR_NAME],
 				    const_cast<gchar *>(name),
-				    GINT_TO_POINTER(gtype));
+				    (gpointer) gtype);
 	} else {
 		/* Already registered. */
 		if (current != gtype) {

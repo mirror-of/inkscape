@@ -91,7 +91,7 @@ sp_skeleton_class_init (SPSkeletonClass *klass)
 static void
 sp_skeleton_init (SPSkeleton *skeleton)
 {
-    debug("0x%08x",(unsigned int)skeleton);
+    debug("0x%p",skeleton);
 }
 
 /*
@@ -103,7 +103,7 @@ sp_skeleton_init (SPSkeleton *skeleton)
 static void
 sp_skeleton_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%p",object);
     if (((SPObjectClass *) skeleton_parent_class)->build)
         ((SPObjectClass *) skeleton_parent_class)->build (object, document, repr);
 
@@ -132,7 +132,7 @@ sp_skeleton_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *
 static void
 sp_skeleton_release (SPObject *object)
 {
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%p",object);
 
     /* deal with our children and our selves here */
 
@@ -146,7 +146,7 @@ sp_skeleton_release (SPObject *object)
 static void
 sp_skeleton_set (SPObject *object, unsigned int key, const gchar *value)
 {
-    debug("0x%08x %s(%u): '%s'",(unsigned int)object,
+    debug("0x%p %s(%u): '%s'",object,
             sp_attribute_name(key),key,value);
     SPSkeleton * skeleton;
 
@@ -163,7 +163,7 @@ sp_skeleton_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_skeleton_update(SPObject *object, SPCtx *ctx, guint flags)
 {
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%p",object);
     //SPSkeleton *skeleton = SP_SKELETON(object);
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
@@ -183,7 +183,7 @@ sp_skeleton_update(SPObject *object, SPCtx *ctx, guint flags)
 static Inkscape::XML::Node *
 sp_skeleton_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
-    debug("0x%08x",(unsigned int)object);
+    debug("0x%p",object);
     //SPSkeleton *skeleton = SP_SKELETON(object);
 
     // Inkscape-only object, not copied during an "plain SVG" dump:

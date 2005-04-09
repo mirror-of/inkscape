@@ -995,7 +995,7 @@ int            hitMissCount=0;
 
 int hash_that(NRArenaItem* owner,int th,int tv)
 {
-  int    res=(int)owner;
+  int res=GPOINTER_TO_INT(owner);
   res*=17;
   res+=th;
   res*=59;

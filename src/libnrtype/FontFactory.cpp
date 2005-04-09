@@ -461,11 +461,11 @@ void font_factory::UnrefFace(font_instance* who)
 	if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
 		// not found
 		char* tc=pango_font_description_to_string(who->descr);
-		g_warning("unrefFace %x=%s: failed\n",(unsigned int)who,tc);
+		g_warning("unrefFace %p=%s: failed\n",who,tc);
 		free(tc);
 	} else {
 		loadedFaces.erase(loadedFaces.find(who->descr));
-		//			printf("unrefFace %x: success\n",who);
+		//			printf("unrefFace %p: success\n",who);
 	}
 }
 

@@ -329,7 +329,7 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
         if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
         if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
         if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-        sp_shortcut_set (shortcut, (Inkscape::Verb *)((int)data), true);
+        sp_shortcut_set (shortcut, (Inkscape::Verb *)data, true);
     }
 }
 
