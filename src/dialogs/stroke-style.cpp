@@ -363,17 +363,13 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
     }
-
-    GSList const *items = NULL;
-    GSList *reprs = NULL;
-    if (spw->inkscape) {
-        items = sp_widget_get_item_list(spw);
-        for (GSList const *i = items; i != NULL; i = i->next) {
-            reprs = g_slist_prepend(reprs, SP_OBJECT_REPR(i->data));
-        }
-    } 
+    g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+
+    GSList const *items = selection->itemList();
 
     switch (psel->mode) {
         case SP_PAINT_SELECTOR_MODE_EMPTY:
@@ -394,9 +390,8 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
             sp_desktop_set_style (desktop, css);
 
             sp_repr_css_attr_unref(css);
-            if (spw->inkscape) {
-                sp_document_done(SP_WIDGET_DOCUMENT(spw));
-            }
+
+            sp_document_done(document);
             break;
         }
 
@@ -432,12 +427,12 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                         if (common_rgb == NO_COLOR) {
                             common_rgb = sp_desktop_get_color(desktop, false);
                         }
-                        vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw), common_rgb);
+                        vector = sp_document_default_gradient_vector(document, common_rgb);
                     }
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         if (common_rgb == DIFFERENT_COLORS) {
-                            vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(i->data), false);
+                            vector = sp_gradient_vector_for_object(document, desktop, SP_OBJECT(i->data), false);
                         }
                         sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                     }
@@ -449,7 +444,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     }
                 }
 
-                sp_document_done(SP_WIDGET_DOCUMENT(spw));
+                sp_document_done(document);
             }
             break;
 
@@ -492,7 +487,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 
                 } // end if
 
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
+                sp_document_done (document);
             } // end if
 
             break;
@@ -505,7 +500,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     sp_desktop_set_style (desktop, css);
                     sp_repr_css_attr_unref (css);
 
-                    sp_document_done (SP_WIDGET_DOCUMENT (spw));
+                    sp_document_done (document);
             }
             break;
 
@@ -517,8 +512,7 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
             break;
     }
 
-    g_slist_free(reprs);
-
+    g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 }
 
 
@@ -910,8 +904,8 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
     }
 
     SPDesktop *desktop = inkscape_active_desktop();
-    SPDocument *doc = SP_DT_DOCUMENT(desktop);
-    if (!doc) {
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
+    if (!document) {
         return;
     }
 
@@ -959,7 +953,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
 
     sp_repr_css_attr_unref(css);
 
-    sp_document_done(SP_WIDGET_DOCUMENT(spw));
+    sp_document_done(document);
 }
 
 /** Determine average stroke width */
@@ -1573,16 +1567,11 @@ sp_stroke_style_scale_line(SPWidget *spw)
     SPDashSelector *dsel = SP_DASH_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
     GtkAdjustment *ml = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), "miterlimit"));
 
-    GSList *reprs = NULL;
-    GSList const *items = NULL;
-    if (spw->inkscape) {
-        items = sp_widget_get_item_list(spw);
-        for (GSList const *i = items; i != NULL; i = i->next) {
-            reprs = g_slist_prepend(reprs, SP_OBJECT_REPR(i->data));
-        }
-    } 
-
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+
+    GSList const *items = selection->itemList();
 
     /* TODO: Create some standardized method */
     SPCSSAttr *css = sp_repr_css_attr_new();
@@ -1643,11 +1632,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
 
     sp_repr_css_attr_unref(css);
 
-    if (spw->inkscape) {
-        sp_document_done(SP_WIDGET_DOCUMENT(spw));
-    }
-
-    g_slist_free(reprs);
+    sp_document_done(document);
 
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
 }
@@ -1712,16 +1697,10 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
             gtk_widget_set_sensitive (ml, !strcmp(join, "miter"));
         }
 
-        GSList *reprs = NULL;
-        GSList const *items = NULL;
-        if (spw->inkscape) {
-            items = sp_widget_get_item_list(spw);
-            for (GSList const *i = items; i != NULL; i = i->next) {
-                reprs = g_slist_prepend(reprs, SP_OBJECT_REPR(i->data));
-            }
-        } 
-
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+
+        GSList const *items = selection->itemList();
 
         /* TODO: Create some standardized method */
         SPCSSAttr *css = sp_repr_css_attr_new();
@@ -1742,13 +1721,8 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
 
         sp_repr_css_attr_unref(css);
 
-        if (spw->inkscape) {
-            sp_document_done(SP_WIDGET_DOCUMENT(spw));
-        }
-
-        g_slist_free(reprs);
+        sp_document_done(SP_DT_DOCUMENT(desktop));
     }
-
 }
 
 

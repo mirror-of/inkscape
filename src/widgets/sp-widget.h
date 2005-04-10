@@ -48,11 +48,4 @@ GtkType sp_widget_get_type (void);
 GtkWidget *sp_widget_new_global (Inkscape::Application *inkscape);
 GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape::Application *inkscape);
 
-const GSList *sp_widget_get_item_list (SPWidget *spw);
-
-/* fixme: Do clean way (Lauris) */
-#define SP_WIDGET_DOCUMENT(spw) SP_ACTIVE_DOCUMENT
-#define SP_WIDGET_DESKTOP(spw) SP_ACTIVE_DESKTOP
-#define SP_WIDGET_SELECTION(spw) SP_DT_SELECTION (SP_ACTIVE_DESKTOP)
-
 #endif

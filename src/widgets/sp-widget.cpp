@@ -263,18 +263,3 @@ sp_widget_set_selection (Inkscape::Application *inkscape, Inkscape::Selection *s
 	/* Inkscape will force "change_selection" anyways */
 }
 
-const GSList *
-sp_widget_get_item_list (SPWidget *spw)
-{
-	g_return_val_if_fail (spw != NULL, NULL);
-	g_return_val_if_fail (SP_IS_WIDGET (spw), NULL);
-
-	if (spw->inkscape) {
-		return SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
-	}
-
-	return NULL;
-}
-
-
-

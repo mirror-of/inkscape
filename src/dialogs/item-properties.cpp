@@ -379,15 +379,13 @@ sp_item_widget_setup ( SPWidget *spw, Inkscape::Selection *selection )
     if (!selection->singleItem()) {
         gtk_widget_set_sensitive (GTK_WIDGET (spw), FALSE);
         return;
-        
     } else {
         gtk_widget_set_sensitive (GTK_WIDGET (spw), TRUE);
-    
     }
     
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
+    SPItem *item = selection->singleItem();
 
     /* Sensitive */
     GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
@@ -457,19 +455,16 @@ sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw)
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
+    SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
     item->setLocked(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 
-    sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
-                             "ItemDialog:insensitive" );
+    sp_document_maybe_done (SP_ACTIVE_DOCUMENT,  "ItemDialog:insensitive");
 
-    gtk_object_set_data ( GTK_OBJECT (spw), "blocked", 
-                          GUINT_TO_POINTER (FALSE) );
-
+    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
 }
 
 void
@@ -478,20 +473,17 @@ sp_item_widget_hidden_toggled(GtkWidget *widget, SPWidget *spw)
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
+    SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
     item->setExplicitlyHidden(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
-    sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
-                             "ItemDialog:visiblity" );
+    sp_document_maybe_done (SP_ACTIVE_DOCUMENT,  "ItemDialog:visiblity");
 
-    gtk_object_set_data ( GTK_OBJECT (spw), "blocked", 
-                          GUINT_TO_POINTER (FALSE) );
+    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
 }
-
 
 static void
 sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
@@ -499,7 +491,7 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) 
         return;
 
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
+    SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
@@ -512,14 +504,14 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
         gtk_label_set_text (GTK_LABEL (w), _("ID"));
     } else if (!*id || !isalnum (*id)) {
         gtk_label_set_text (GTK_LABEL (w), _("ID invalid"));
-    } else if (SP_WIDGET_DOCUMENT(spw)->getObjectById(id) != NULL) {
+    } else if (SP_ACTIVE_DOCUMENT->getObjectById(id) != NULL) {
         gtk_label_set_text (GTK_LABEL (w), _("ID exists"));
     } else {
         SPException ex;
         gtk_label_set_text (GTK_LABEL (w), _("ID"));
         SP_EXCEPTION_INIT (&ex);
         sp_object_setAttribute (SP_OBJECT (item), "id", id, &ex);
-        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "ItemDialog:id");
+        sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "ItemDialog:id");
     }
 
 
@@ -540,7 +532,7 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
     } else {
         gtk_label_set_text (GTK_LABEL (w), _("Label"));
         obj->setLabel(label);
-        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "inkscape:label");
+        sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "inkscape:label");
     }
 
 
@@ -549,14 +541,14 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
     gchar *title = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
     if (title != NULL) {
         obj->setTitle(title);
-        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "title");
+        sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "title");
     }
 
     /* Retrieve the description */
     gchar *desc = NULL; /* TODO:  get text from text buffer */
     if (desc != NULL) {
         obj->setDesc(desc);
-        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "desc");
+        sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "desc");
     }
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
@@ -570,7 +562,7 @@ sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
+    SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
     g_return_if_fail (item != NULL);
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
@@ -589,7 +581,7 @@ sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
     SP_EXCEPTION_INIT (&ex);
     sp_object_setAttribute (SP_OBJECT (item), "transform", c, &ex);
 
-    sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "ItemDialog:transform");
+    sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "ItemDialog:transform");
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
 } // end of sp_item_widget_transform_value_changed()

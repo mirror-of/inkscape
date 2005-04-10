@@ -160,7 +160,9 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     }
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(TRUE));
 
-    Inkscape::Selection *selection = SP_WIDGET_SELECTION(spw);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
     NR::Rect bbox = selection->bounds();
 
     if (!((bbox.max()[NR::X] - bbox.min()[NR::X] > 1e-6) || (bbox.max()[NR::Y] - bbox.min()[NR::Y] > 1e-6))) {
@@ -228,7 +230,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         NR::translate const o2n(x0, y0);
         sp_selection_apply_affine(selection, p2o * scale * o2n);
 
-        sp_document_maybe_done(SP_WIDGET_DOCUMENT(spw), actionkey);
+        sp_document_maybe_done (document, actionkey);
 
         // defocus spinbuttons by moving focus to the canvas, unless "stay" is on
         spinbutton_defocus(GTK_OBJECT(spw));

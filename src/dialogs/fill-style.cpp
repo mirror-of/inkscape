@@ -421,9 +421,7 @@ sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
 
     sp_repr_css_attr_unref (css);
 
-    if (spw->inkscape) {
-        sp_document_done (SP_WIDGET_DOCUMENT (spw));
-    }
+    sp_document_done (SP_ACTIVE_DOCUMENT);
 }
 
 static gchar *undo_label_1 = "fill:flatcolor:1";
@@ -482,25 +480,16 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
     if (g_object_get_data (G_OBJECT (spw), "update")) {
         return;
     }
-
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-    GSList *reprs = NULL;
-    GSList const *items = NULL;
-    if (spw->inkscape) {
-        /* fixme: */
-        if (!SP_WIDGET_DOCUMENT (spw)) {
-            g_object_set_data ( G_OBJECT (spw), "update",
-                                GINT_TO_POINTER (FALSE) );
-            return;
-        }
-        items = sp_widget_get_item_list (spw);
-        for (GSList const *i = items; i != NULL; i = i->next) {
-            reprs = g_slist_prepend (reprs, SP_OBJECT_REPR (i->data));
-        }
-    } 
-
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop) {
+        return;
+    }
+    SPDocument *document = SP_DT_DOCUMENT (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+
+    GSList const *items = selection->itemList();
 
     switch (psel->mode) {
 
@@ -522,9 +511,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             sp_desktop_set_style (desktop, css);
 
             sp_repr_css_attr_unref (css);
-            if (spw->inkscape) {
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
-            }
+
+            sp_document_done (document);
             break;
         }
 
@@ -565,7 +553,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         if (common_rgb == NO_COLOR) {
                             common_rgb = sp_desktop_get_color(desktop, true);
                         }
-                        vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw), common_rgb);
+                        vector = sp_document_default_gradient_vector(document, common_rgb);
                     }
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
@@ -573,7 +561,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
 
                         if (common_rgb == DIFFERENT_COLORS) {
-                            vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(i->data), true);
+                            vector = sp_gradient_vector_for_object(document, desktop, SP_OBJECT(i->data), true);
                         }
 
                         sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, true);
@@ -591,7 +579,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     }
                 }
 
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
+                sp_document_done (document);
             }
             break;
 
@@ -634,7 +622,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
                 } // end if
 
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
+                sp_document_done (document);
 
             } // end if
 
@@ -648,7 +636,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     sp_desktop_set_style (desktop, css);
                     sp_repr_css_attr_unref (css);
 
-                    sp_document_done (SP_WIDGET_DOCUMENT (spw));
+                    sp_document_done (document);
             }
             break;
 
@@ -659,12 +647,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             break;
     }
 
-    g_slist_free (reprs);
-
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
-
-
-} // end of sp_fill_style_widget_paint_changed()
+}
 
 static void
 sp_fill_style_get_average_color_rgba(GSList const *objects, gfloat *c)
