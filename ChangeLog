@@ -1,10 +1,10 @@
 2005-04-09  Bryce <bryce@bryceharrington.org>
 
 	* src/view.h, src/application/editor-impl.cpp,
-	  src/application/editor-impl.h:
+	  src/application/editor-impl.h, src/svg-view.h:
 
   	  C++-ification.  Created some C++ wrapper member functions for
-	  SPView, to enable Gtkmmification of SPDesktop
+	  SPView and SPSVGView, to enable Gtkmmification of SPDesktop
 
 2005-04-09  MenTaLguY  <mental@rydia.net>
 
