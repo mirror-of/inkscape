@@ -89,6 +89,20 @@ sp_item_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 
 } 
 
+void 
+transform_table_cell (GtkWidget *spw, GtkWidget *t, const gchar *label, int x, int y)
+{
+    GtkObject *a = gtk_adjustment_new (1.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
+    gtk_object_set_data (GTK_OBJECT (spw), label, a);
+    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 4);
+    gtk_entry_set_width_chars (GTK_ENTRY (sb), 5);
+    gtk_table_attach ( GTK_TABLE (t), sb, x, x + 1, y, y + 1, 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
+    gtk_signal_connect ( a, "value_changed", 
+                         GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), 
+                         spw );
+}
 
 
 /**
@@ -99,8 +113,7 @@ GtkWidget *
 sp_item_widget_new (void)
 {
 
-    GtkWidget *spw, *vb, *t, *cb, *l, *sb, *f, *tf, *pb;
-    GtkObject *a;
+    GtkWidget *spw, *vb, *t, *cb, *l, *f, *tf, *pb;
     GtkTextBuffer *desc_buffer;
 
     GtkTooltips *tt = gtk_tooltips_new();
@@ -115,19 +128,18 @@ sp_item_widget_new (void)
                          spw );
 
     vb = gtk_vbox_new (FALSE, 0);
-    gtk_widget_show (vb);
     gtk_container_add (GTK_CONTAINER (spw), vb);
 
     t = gtk_table_new (3, 4, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(t), 10);
-    gtk_widget_show (t);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 4);
+    gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+    gtk_table_set_col_spacings (GTK_TABLE (t), 4);
     gtk_box_pack_start (GTK_BOX (vb), t, TRUE, TRUE, 0);
 
 
     /* Create the label for the object id */
-    l = gtk_label_new (_("Id"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 0, 0.5);
+    l = gtk_label_new_with_mnemonic (_("_Id"));
+    gtk_misc_set_alignment (GTK_MISC (l), 1, 0.5);
     gtk_table_attach ( GTK_TABLE (t), l, 0, 1, 0, 1, 
                        (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
@@ -137,27 +149,29 @@ sp_item_widget_new (void)
     tf = gtk_entry_new ();
     gtk_tooltips_set_tip (tt, tf, _("The id= attribute (only letters, digits, and the characters .-_: allowed)"), NULL);
     gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
-    gtk_widget_show (tf);
     gtk_table_attach ( GTK_TABLE (t), tf, 1, 2, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "id", tf);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(l), tf);
 
-    /* Button for setting the object's label, title and description. */
-    pb = gtk_button_new_with_label (_("Update Properties"));
+    // pressing enter in the id field is the same as clicking Set:
+    g_signal_connect ( G_OBJECT (tf), "activate", G_CALLBACK (sp_item_widget_label_changed), spw);
+    // focus is in the id field initially:
+    gtk_widget_grab_focus (GTK_WIDGET (tf));
+
+    /* Button for setting the object's id, label, title and description. */
+    pb = gtk_button_new_with_mnemonic (_("_Set"));
     gtk_table_attach ( GTK_TABLE (t), pb, 2, 3, 0, 1, 
                        (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
     gtk_signal_connect ( GTK_OBJECT (pb), "clicked", 
                          GTK_SIGNAL_FUNC (sp_item_widget_label_changed), 
                          spw );
-    gtk_widget_show (pb);
-
 
     /* Create the label for the object label */
-    l = gtk_label_new (_("Label"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 0, 0.5);
+    l = gtk_label_new_with_mnemonic (_("_Label"));
+    gtk_misc_set_alignment (GTK_MISC (l), 1, 0.5);
     gtk_table_attach ( GTK_TABLE (t), l, 0, 1, 1, 2, 
                        (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
@@ -166,18 +180,19 @@ sp_item_widget_new (void)
     /* Create the entry box for the object label */
     tf = gtk_entry_new ();
     gtk_tooltips_set_tip (tt, tf, _("A freeform label for the object"), NULL);
-    gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
-    gtk_widget_show (tf);
+    gtk_entry_set_max_length (GTK_ENTRY (tf), 256);
     gtk_table_attach ( GTK_TABLE (t), tf, 1, 2, 1, 2, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "label", tf);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(l), tf);
 
+    // pressing enter in the label field is the same as clicking Set:
+    g_signal_connect ( G_OBJECT (tf), "activate", G_CALLBACK (sp_item_widget_label_changed), spw);
 
     /* Create the label for the object title */
     l = gtk_label_new (_("Title"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 0, 0.5);
+    gtk_misc_set_alignment (GTK_MISC (l), 1, 0.5);
     gtk_table_attach ( GTK_TABLE (t), l, 0, 1, 2, 3, 
                        (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
@@ -187,16 +202,13 @@ sp_item_widget_new (void)
     tf = gtk_entry_new ();
     gtk_widget_set_sensitive (GTK_WIDGET (tf), FALSE);
     gtk_entry_set_max_length (GTK_ENTRY (tf), 256);
-    gtk_widget_show (tf);
     gtk_table_attach ( GTK_TABLE (t), tf, 1, 3, 2, 3, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "title", tf);
 
-
     /* Create the frame for the object description */
     f = gtk_frame_new (_("Description"));
-    gtk_widget_show (f);
     gtk_table_attach ( GTK_TABLE (t), f, 0, 3, 3, 4, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0 );
@@ -204,31 +216,26 @@ sp_item_widget_new (void)
 
     /* Create the text view box for the object description */
     GtkWidget *textframe = gtk_frame_new(NULL);
-    gtk_container_set_border_width(GTK_CONTAINER(textframe), 3);
+    gtk_container_set_border_width(GTK_CONTAINER(textframe), 4);
     gtk_widget_set_sensitive (GTK_WIDGET (textframe), FALSE);
-    gtk_widget_show (textframe);
     gtk_container_add (GTK_CONTAINER (f), textframe);
     gtk_frame_set_shadow_type (GTK_FRAME (textframe), GTK_SHADOW_IN);
+
     tf = gtk_text_view_new();
     desc_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tf));
     gtk_text_buffer_set_text(desc_buffer, "", -1);
-    gtk_widget_show (tf); 
     gtk_container_add (GTK_CONTAINER (textframe), tf);
     gtk_object_set_data (GTK_OBJECT (spw), "desc", tf);
 
-
     /* Check boxes */
     GtkWidget *hb_cb = gtk_hbox_new (FALSE, 0);
-    gtk_widget_show (hb_cb);
     gtk_box_pack_start (GTK_BOX (vb), hb_cb, FALSE, FALSE, 0);
     t = gtk_table_new (1, 2, TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(t), 0);
-    gtk_widget_show (t);
     gtk_box_pack_start (GTK_BOX (hb_cb), t, TRUE, TRUE, 10);
 
     /* Hide */
-    cb = gtk_check_button_new_with_label(_("Hide"));
-    gtk_widget_show (cb);
+    cb = gtk_check_button_new_with_mnemonic (_("_Hide"));
     gtk_tooltips_set_tip (tt, cb, _("Check to make the object invisible"), NULL);
     gtk_table_attach ( GTK_TABLE (t), cb, 0, 1, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
@@ -238,8 +245,7 @@ sp_item_widget_new (void)
 
     /* Lock */
     // TRANSLATORS: "Lock" is a verb here
-    cb = gtk_check_button_new_with_label (_("Lock"));
-    gtk_widget_show (cb);
+    cb = gtk_check_button_new_with_mnemonic (_("L_ock"));
     gtk_tooltips_set_tip (tt, cb, _("Check to make the object insensitive (not selectable by mouse)"), NULL);
     gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
@@ -252,90 +258,22 @@ sp_item_widget_new (void)
 
     /* Transformation matrix */
     f = gtk_frame_new (_("Transformation matrix"));
-    gtk_widget_show (f);
-    gtk_container_set_border_width(GTK_CONTAINER(f), 10);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
     t = gtk_table_new (2, 3, TRUE);
-    gtk_widget_show (t);
-    gtk_container_set_border_width(GTK_CONTAINER(t), 2);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 4);
+    gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+    gtk_table_set_col_spacings (GTK_TABLE (t), 4);
     gtk_container_add (GTK_CONTAINER (f), t);
 
-    a = gtk_adjustment_new (1.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), "t0", a);
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_table_attach ( GTK_TABLE (t), sb, 0, 1, 0, 1, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-                       
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), 
-                         spw );
+    transform_table_cell (spw, t, "t0", 0, 0);
+    transform_table_cell (spw, t, "t1", 0, 1);
+    transform_table_cell (spw, t, "t2", 1, 0);
+    transform_table_cell (spw, t, "t3", 1, 1);
+    transform_table_cell (spw, t, "t4", 2, 0);
+    transform_table_cell (spw, t, "t5", 2, 1);
 
-    a = gtk_adjustment_new (0.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), "t1", a);
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_table_attach ( GTK_TABLE (t), sb, 0, 1, 1, 2, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-                       
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC 
-                             (sp_item_widget_transform_value_changed), 
-                         spw );
-
-    a = gtk_adjustment_new (0.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), "t2", a);
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_table_attach ( GTK_TABLE (t), sb, 1, 2, 0, 1, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-                       
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), 
-                         spw );
-
-    a = gtk_adjustment_new (1.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), "t3", a);
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_table_attach ( GTK_TABLE (t), sb, 1, 2, 1, 2, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-                       
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC 
-                             (sp_item_widget_transform_value_changed), 
-                         spw );
-
-    a = gtk_adjustment_new (0.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), "t4", a);
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_table_attach ( GTK_TABLE (t), sb, 2, 3, 0, 1, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-                       
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC 
-                             (sp_item_widget_transform_value_changed), 
-                         spw );
-
-    a = gtk_adjustment_new (0.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
-    gtk_object_set_data (GTK_OBJECT (spw), "t5", a);
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_table_attach ( GTK_TABLE (t), sb, 2, 3, 1, 2, 
-                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                       (GtkAttachOptions)0, 0, 0 );
-                       
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC 
-                             (sp_item_widget_transform_value_changed), 
-                         spw );
+    gtk_widget_show_all (spw);
 
     sp_item_widget_setup (SP_WIDGET (spw), SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
 
@@ -428,18 +366,13 @@ sp_item_widget_setup ( SPWidget *spw, Inkscape::Selection *selection )
         gtk_entry_set_text (GTK_ENTRY (w), obj->id);
         gtk_widget_set_sensitive (w, TRUE);
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
-        gtk_label_set_text (GTK_LABEL (w), _("ID"));
+        gtk_label_set_markup_with_mnemonic (GTK_LABEL (w), _("_Id"));
 
         /* Label */
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
-        if (obj->label() != NULL) {
-            gtk_entry_set_text (GTK_ENTRY (w), obj->label());
-        } else {
-            gtk_entry_set_text (GTK_ENTRY (w), obj->defaultLabel());
-        }
+        gtk_entry_set_text (GTK_ENTRY (w), obj->defaultLabel());
         gtk_widget_set_sensitive (w, TRUE);
         w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
-        gtk_label_set_text (GTK_LABEL (w), _("Label"));
     }
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
@@ -497,47 +430,40 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
     /* Retrieve the label widget for the object's id */
-    GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
-    gchar *id = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
-    if (!strcmp (id, ((SPObject *) item)->id)) {
-        gtk_label_set_text (GTK_LABEL (w), _("ID"));
+    GtkWidget *id_entry = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
+    gchar *id = (gchar *) gtk_entry_get_text (GTK_ENTRY (id_entry));
+    g_strcanon (id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
+    GtkWidget *id_label = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
+    if (!strcmp (id, SP_OBJECT_ID(item))) {
+        gtk_label_set_markup_with_mnemonic (GTK_LABEL (id_label), _("_Id"));
     } else if (!*id || !isalnum (*id)) {
-        gtk_label_set_text (GTK_LABEL (w), _("ID invalid"));
+        gtk_label_set_text (GTK_LABEL (id_label), _("Id invalid! "));
     } else if (SP_ACTIVE_DOCUMENT->getObjectById(id) != NULL) {
-        gtk_label_set_text (GTK_LABEL (w), _("ID exists"));
+        gtk_label_set_text (GTK_LABEL (id_label), _("Id exists! "));
     } else {
         SPException ex;
-        gtk_label_set_text (GTK_LABEL (w), _("ID"));
+        gtk_label_set_markup_with_mnemonic (GTK_LABEL (id_label), _("_Id"));
         SP_EXCEPTION_INIT (&ex);
         sp_object_setAttribute (SP_OBJECT (item), "id", id, &ex);
         sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "ItemDialog:id");
     }
 
-
     /* Retrieve the label widget for the object's label */
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
-    gchar *label = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
+    GtkWidget *label_entry = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
+    gchar *label = (gchar *)gtk_entry_get_text (GTK_ENTRY (label_entry));
     g_assert(label != NULL);
 
     /* Give feedback on success of setting the drawing object's label
      * using the widget's label text 
      */
     SPObject *obj = (SPObject*)item;
-    if (obj->label() && !strcmp (label, obj->label())) {
-        gtk_label_set_text (GTK_LABEL (w), _("Label"));
-    } else if (!*label || !isalnum (*label)) {
-        gtk_label_set_text (GTK_LABEL (w), _("Label invalid"));
-    } else {
-        gtk_label_set_text (GTK_LABEL (w), _("Label"));
+    if (strcmp (label, obj->defaultLabel())) {
         obj->setLabel(label);
         sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "inkscape:label");
     }
 
-
     /* Retrieve the title */
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "title"));
+    GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "title"));
     gchar *title = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
     if (title != NULL) {
         obj->setTitle(title);
@@ -584,9 +510,7 @@ sp_item_widget_transform_value_changed ( GtkWidget *widget, SPWidget *spw )
     sp_document_maybe_done (SP_ACTIVE_DOCUMENT, "ItemDialog:transform");
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
-} // end of sp_item_widget_transform_value_changed()
-
-
+}
 
 /**
  * \brief  Dialog 
