@@ -1085,9 +1085,9 @@ class Layout::Calculator
                         if (new_span.direction == RIGHT_TO_LEFT) {
                             // pango wanted to give us glyphs in visual order but we refused, so we need to work
                             // out where the cluster start is ourselves
-                            double cluster_width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width;
-                            for (unsigned rtl_index = glyph_index + 1; rtl_index < it_span->end_glyph_index ; rtl_index++) {
-                                if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start)
+                            double cluster_width = 0.0;
+                            for (unsigned rtl_index = glyph_index; rtl_index < it_span->end_glyph_index ; rtl_index++) {
+                                if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start && rtl_index != glyph_index)
                                     break;
                                 if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
                                     cluster_width += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[rtl_index].glyph, true);
