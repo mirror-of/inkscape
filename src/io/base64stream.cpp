@@ -261,7 +261,6 @@ void Base64OutputStream::putc(int ch)
     column++;
     if (columnWidth > 0 && column >= columnWidth)
         {
-        destination.put('\r');
         destination.put('\n');
         column = 0;
         }
