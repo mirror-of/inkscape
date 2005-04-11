@@ -37,6 +37,9 @@
 #include "../system.h"
 
 #include <extension/extension.h>
+#include <extension/input.h>
+#include <extension/output.h>
+#include <extension/effect.h>
 #include <extension/db.h>
 #include "implementation.h"
 #include "script.h"
@@ -307,7 +310,7 @@ Script::check(Inkscape::Extension::Extension *module)
 GtkDialog *
 Script::prefs_input(Inkscape::Extension::Input *module, gchar const *filename)
 {
-    /* Sad, this should really do something... */
+    /*return module->autogui(); */
     return NULL;
 }
 
@@ -321,7 +324,7 @@ Script::prefs_input(Inkscape::Extension::Input *module, gchar const *filename)
 GtkDialog *
 Script::prefs_output(Inkscape::Extension::Output *module)
 {
-    /* Sad, this should really do something... */
+    /*return module->autogui();*/
     return NULL;
 }
 
@@ -335,8 +338,7 @@ Script::prefs_output(Inkscape::Extension::Output *module)
 Gtk::Widget *
 Script::prefs_effect(Inkscape::Extension::Effect *module, SPView *view)
 {
-    /* Sad, this should really do something... */
-    return 0;
+    return module->autogui();
 }
 
 /**
@@ -363,8 +365,10 @@ Script::prefs_effect(Inkscape::Extension::Effect *module, SPView *view)
 SPDocument *
 Script::open(Inkscape::Extension::Input *module, gchar const *filename)
 {
+    int data_read = 0;
     gint tempfd;
     gchar *tempfilename_out;
+ 
     // FIXME: process the GError instead of passing NULL
     if ((tempfd = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_out, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
@@ -388,17 +392,20 @@ Script::open(Inkscape::Extension::Input *module, gchar const *filename)
     gchar *local_filename = g_filename_from_utf8( filename,
                                                   -1,  &bytesRead,  &bytesWritten, &error);
 
-    execute(command, local_filename, tempfilename_out);
+    data_read = execute(command, local_filename, tempfilename_out);
     g_free(local_filename);
 
-    SPDocument *mydoc;
-    if (helper_extension == NULL) {
-        mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
-    } else {
-        mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(helper_extension), tempfilename_out);
+    SPDocument *mydoc = NULL;
+    if (data_read > 10) {
+        if (helper_extension == NULL) {
+            mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
+        } else {
+            mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(helper_extension), tempfilename_out);
+        }
     }
 
-    sp_document_set_uri(mydoc, filename);
+    if (mydoc != NULL)
+        sp_document_set_uri(mydoc, (const gchar *)filename);
 
     // make sure we don't leak file descriptors from g_file_open_tmp
     close(tempfd);
@@ -509,8 +516,11 @@ Script::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *
 void
 Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
 {
+    int data_read = 0;
+    SPDocument * mydoc = NULL;
     gint tempfd_in;
     gchar *tempfilename_in;
+
     // FIXME: process the GError instead of passing NULL
     if ((tempfd_in = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_in, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
@@ -565,10 +575,10 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
         }
     }
 
-    execute(local_command.c_str(), tempfilename_in, tempfilename_out);
+    data_read = execute(local_command.c_str(), tempfilename_in, tempfilename_out);
 
-    SPDocument *mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG),
-                                                  tempfilename_out);
+    if (data_read > 10)
+        mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 
     // make sure we don't leak file descriptors from g_file_open_tmp
     close(tempfd_in);
@@ -630,6 +640,7 @@ private:
     \param    in_command  The command to be executed
     \param    filein      Filename coming in
     \param    fileout     Filename of the out file
+    \return   Number of bytes that were read into the output file.
 
     The first thing that this function does is build the command to be
     executed.  This consists of the first string (in_command) and then
@@ -651,10 +662,10 @@ private:
     At the very end (after the data has been copied) both of the files
     are closed, and we return to what we were doing.
 */
-void
-Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileout)
+int
+Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
-    g_return_if_fail(in_command != NULL);
+    g_return_val_if_fail(in_command != NULL, 0);
 
     /* Get the commandline to be run */
     /* TODO:  Perhaps replace with a sprintf? */
@@ -676,7 +687,7 @@ Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileo
         } else {
             perror("Extension::Script:  Unknown error for popen\n");
         }
-        return;
+        return 0;
     }
 
     Inkscape::IO::dump_fopen_call(fileout, "J");
@@ -689,23 +700,23 @@ Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileo
         } else {
             perror("Extension::Script:  Unknown error attempting to open temporary file\n");
         }
-        return;
+        return 0;
     }
 
     /* Copy pipe output to a temporary file */
-    {
-        char buf[BUFSIZE];
-        int num_read;
-        while ((num_read = pipe.read(buf, BUFSIZE)) != 0) {
-            fwrite(buf, 1, num_read, pfile);
-        }
+    int amount_read = 0;
+    char buf[BUFSIZE];
+    int num_read;
+    while ((num_read = pipe.read(buf, BUFSIZE)) != 0) {
+        amount_read += num_read;
+        fwrite(buf, 1, num_read, pfile);
     }
 
     /* Close file */
     if (fclose(pfile) == EOF) {
         if (errno == EBADF) {
             perror("Extension::Script:  The filedescriptor for the temporary file is invalid\n");
-            return;
+            return 0;
         } else {
             perror("Extension::Script:  Unknown error closing temporary file\n");
         }
@@ -721,6 +732,8 @@ Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileo
             perror("Extension::Script:  Unknown error for pclose\n");
         }
     }
+
+    return amount_read;
 }
 
 #ifdef WIN32

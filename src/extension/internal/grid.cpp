@@ -29,23 +29,15 @@
 #include <extension/implementation/implementation.h>
 #include <extension/extension.h>
 #include <extension/effect.h>
+#include <extension/system.h>
 
 #include <glibmm/i18n.h>
 
+#include "grid.h"
+
 namespace Inkscape {
 namespace Extension {
-namespace Plugin {
-
-/** \brief  Implementation class of the GIMP gradient plugin.  This mostly
-            just creates a namespace for the GIMP gradient plugin today.
-*/
-class Grid : public Inkscape::Extension::Implementation::Implementation {
-
-public:
-    bool load(Inkscape::Extension::Extension *module);
-    void effect(Inkscape::Extension::Effect *module, SPView *document);
-    Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
-};
+namespace Internal {
 
 /**
     \brief  A function to allocated anything -- just an example here
@@ -254,71 +246,29 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
     return vbox;
 }
 
-
-}; /* namespace Plugin */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
-
-#include <extension/implementation/plugin-link.h>
-
-/**
-    \brief  This is the actual implementation here.  This is done as
-            the more generic Implemetnation object so that this code
-            can be stolen by someone else more easily.
-*/
-Inkscape::Extension::Implementation::Implementation * myplug;
-
-/**
-    \brief  A function with a C prototype to link back into Inkscape.  This
-            function allocated a \c GimpGrad and then calls it's load.
-*/
-int
-load (inkscape_extension * in_ext)
-{
-    myplug = new Inkscape::Extension::Plugin::Grid();
-
-    return myplug->load(reinterpret_cast<Inkscape::Extension::Extension *>(in_ext));
-}
-
-/**
-    \brief  A function with a C prototype to link back to Inkscape.  This
-            function called the \c GimpGrad unload function and then deletes
-            the object.
-*/
 void
-unload (inkscape_extension * in_ext)
+Grid::init (void)
 {
-    myplug->unload(reinterpret_cast<Inkscape::Extension::Extension *>(in_ext));
-    delete myplug;
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension>\n"
+            "<name>Grid</name>\n"
+            "<id>org.inkscape.effect.grid</id>\n"
+            "<dependency type=\"plugin\" location=\"plugins\">grid</dependency>\n"
+            "<param name=\"lineWidth\" type=\"float\">1.0</param>\n"
+            "<param name=\"xspacing\" type=\"float\">10.0</param>\n"
+            "<param name=\"yspacing\" type=\"float\">10.0</param>\n"
+            "<param name=\"xoffset\" type=\"float\">5.0</param>\n"
+            "<param name=\"yoffset\" type=\"float\">5.0</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n", new Grid());
     return;
 }
 
-void
-effect (inkscape_extension * in_ext, SPView * view)
-{
-    return myplug->effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
-}
-
-Gtk::Widget *
-prefs_effect (inkscape_extension * in_ext, SPView * view)
-{
-    return myplug->prefs_effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
-}
-
-/**
-    \brief  A structure holding all the functions that Inkscape uses to
-            communicate with this plugin.  These are all C-prototype based
-            for easy compliation.
-*/
-inkscape_plugin_function_table INKSCAPE_PLUGIN_NAME = {
-    INKSCAPE_PLUGIN_VERSION,
-    load,
-    unload,
-    NULL,
-    NULL,
-    effect,
-    prefs_effect
-};
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */
 
 /*
   Local Variables:

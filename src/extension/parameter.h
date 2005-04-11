@@ -27,10 +27,14 @@ private:
     Inkscape::Extension::Extension * extension;
     /** \brief  The name of this parameter. */
     gchar *       _name;
+
 protected:
+    /** \brief  Text for the GUI selection of this. */
+    gchar *       _text;
     gchar *       pref_name (void);
+
 public:
-    Parameter (const gchar * name, Inkscape::Extension::Extension * ext);
+    Parameter (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext);
     virtual ~Parameter(void);
     bool          get_bool   (const Inkscape::XML::Document * doc);
     int           get_int    (const Inkscape::XML::Document * doc);

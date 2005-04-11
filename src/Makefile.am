@@ -29,7 +29,6 @@ include display/Makefile_insert
 include extension/Makefile_insert
 include extension/implementation/Makefile_insert
 include extension/internal/Makefile_insert
-include extension/plugin/Makefile_insert
 include extension/script/Makefile_insert
 include helper/Makefile_insert
 include inkjar/Makefile_insert

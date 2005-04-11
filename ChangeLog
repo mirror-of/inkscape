@@ -1,3 +1,12 @@
+2005-04-10  Ted Gould  <ted@gould.cx>
+
+	* Lots of files:
+
+	Moving around the plugins, and disabling the feature.  I've put all
+	the functionality into the internal directory.  This should allow for
+	the features to be used until plugins could work.  Also, adding in
+	features to do autogui with the parameters of a given extension.
+
 2005-04-09  Bryce <bryce@bryceharrington.org>
 
 	* src/view.h, src/application/editor-impl.cpp,

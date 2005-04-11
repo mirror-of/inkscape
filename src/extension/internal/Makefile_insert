@@ -12,6 +12,13 @@ extension_internal_gnome_print_sources =	\
 endif
 
 extension_internal_libinternal_a_SOURCES =	\
+	extension/internal/bluredge.h	\
+	extension/internal/bluredge.cpp	\
+	extension/internal/grid.h	\
+	extension/internal/grid.cpp	\
+\
+	extension/internal/gimpgrad.h	\
+	extension/internal/gimpgrad.cpp	\
 	extension/internal/svg.h	\
 	extension/internal/svg.cpp	\
 	extension/internal/svgz.h	\
@@ -26,5 +33,6 @@ extension_internal_libinternal_a_SOURCES =	\
 	extension/internal/gdkpixbuf-input.cpp	\
 	extension/internal/pov-out.cpp	\
 	extension/internal/pov-out.h	\
+\
 	$(extension_internal_gnome_print_sources)
 

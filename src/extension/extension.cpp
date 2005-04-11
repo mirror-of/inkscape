@@ -568,5 +568,29 @@ Extension::error_file_close (void)
 	error_file.close();
 };
 
+/** \brief  A function to automatically generate a GUI using the parameters
+	\return Generated widget
+
+	This function just goes through each parameter, and calls it's 'get_widget'
+	function to get each widget.  Then, each of those is placed into
+	a Gtk::VBox, which is then returned to the calling function.
+*/
+Gtk::Widget *
+Extension::autogui (void)
+{
+	Gtk::VBox * vbox = new Gtk::VBox();
+    vbox = new Gtk::VBox();
+
+	for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
+		Parameter * param = reinterpret_cast<Parameter *>(list->data);
+		Gtk::Widget * widg = param->get_widget();
+		if (widg != NULL)
+			vbox->pack_start(*widg, true, true);
+	}
+
+	vbox->show();
+	return vbox;
+};
+
 }  /* namespace Extension */
 }  /* namespace Inkscape */

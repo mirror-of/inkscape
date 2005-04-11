@@ -17,6 +17,7 @@
 #include <ostream>
 #include <fstream>
 #include <vector>
+#include <gtkmm/widget.h>
 #include <glibmm/ustring.h>
 #include "xml/repr.h"
 #include <extension/extension-forward.h>
@@ -154,6 +155,9 @@ public:
 public:
     static void      error_file_open  (void);
     static void      error_file_close (void);
+
+public:
+    Gtk::Widget *    autogui (void);
 };
 
 

@@ -24,6 +24,7 @@
 
 #include <inkscape.h>
 #include <xml/repr.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 
 #include "extension/extension.h"
@@ -43,6 +44,9 @@
 #include "internal/pov-out.h"
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
+#include "internal/bluredge.h"
+#include "internal/gimpgrad.h"
+#include "internal/grid.h"
 #include "prefs-utils.h"
 #include "error-file.h"
 #include "io/sys.h"
@@ -114,6 +118,18 @@ init()
 #endif
     Internal::PovOutput::init();
 
+    /* Effects */
+    Internal::BlurEdge::init();
+    Internal::GimpGrad::init();
+    Internal::Grid::init();
+
+
+    std::vector<std::string> path;
+    path.push_back(Glib::get_home_dir());
+    path.push_back(std::string(".inkscape"));
+    path.push_back(std::string("extensions"));
+    std::string ext_dir = Glib::build_filename(path);
+    build_module_from_dir(ext_dir.c_str());
     build_module_from_dir(INKSCAPE_EXTENSIONDIR);
 
     /* this is at the very end because it has several catch-alls
@@ -149,6 +165,10 @@ build_module_from_dir(gchar const *dirname)
 {
     if (!dirname) {
         g_warning(_("Null external module directory name.  Modules will not be loaded."));
+        return;
+    }
+
+    if (!Glib::file_test(std::string(dirname), Glib::FILE_TEST_EXISTS | Glib::FILE_TEST_IS_DIR)) {
         return;
     }
 

@@ -32,7 +32,7 @@
 #include "effect.h"
 #include "print.h"
 #include "implementation/script.h"
-#include "implementation/plugin.h"
+/* #include "implementation/plugin.h" */
 
 namespace Inkscape {
 namespace Extension {
@@ -344,7 +344,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
 {
     enum {
         MODULE_EXTENSION,
-        MODULE_PLUGIN,
+        /* MODULE_PLUGIN, */
         MODULE_UNKNOWN_IMP
     } module_implementation_type = MODULE_UNKNOWN_IMP;
     enum {
@@ -380,8 +380,10 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             module_functional_type = MODULE_PRINT;
         } else if (!strcmp(element_name, "script")) {
             module_implementation_type = MODULE_EXTENSION;
+#if 0
         } else if (!strcmp(element_name, "plugin")) {
             module_implementation_type = MODULE_PLUGIN;
+#endif
         }
 
         //Inkscape::XML::Node *old_repr = child_repr;
@@ -397,11 +399,13 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
                 imp = static_cast<Implementation::Implementation *>(script);
                 break;
             }
+#if 0
             case MODULE_PLUGIN: {
                 Implementation::Plugin *plugin = new Implementation::Plugin();
                 imp = static_cast<Implementation::Implementation *>(plugin);
                 break;
             }
+#endif
             default: {
                 imp = NULL;
                 break;

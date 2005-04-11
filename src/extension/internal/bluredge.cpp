@@ -23,22 +23,16 @@
 #include <extension/implementation/implementation.h>
 #include <extension/extension.h>
 #include <extension/effect.h>
+#include <extension/system.h>
 
 #include <glibmm/i18n.h>
 
+#include "bluredge.h"
+
 namespace Inkscape {
 namespace Extension {
-namespace Plugin {
+namespace Internal {
 
-/** \brief  Implementation class of the GIMP gradient plugin.  This mostly
-            just creates a namespace for the GIMP gradient plugin today.
-*/
-class BlurEdge : public Inkscape::Extension::Implementation::Implementation {
-
-public:
-    bool load(Inkscape::Extension::Extension *module);
-    void effect(Inkscape::Extension::Effect *module, SPView *document);
-};
 
 /**
     \brief  A function to allocated anything -- just an example here
@@ -126,70 +120,26 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
     return;
 }
 
-}; /* namespace Plugin */
-}; /* namespace Extension */
-}; /* namespace Inkscape */
-
-#include <extension/implementation/plugin-link.h>
-
-/**
-    \brief  This is the actual implementation here.  This is done as
-            the more generic Implemetnation object so that this code
-            can be stolen by someone else more easily.
-*/
-Inkscape::Extension::Implementation::Implementation * myplug;
-
-/**
-    \brief  A function with a C prototype to link back into Inkscape.  This
-            function allocated a \c GimpGrad and then calls it's load.
-*/
-int
-load (inkscape_extension * in_ext)
-{
-    myplug = new Inkscape::Extension::Plugin::BlurEdge();
-
-    return myplug->load(reinterpret_cast<Inkscape::Extension::Extension *>(in_ext));
-}
-
-/**
-    \brief  A function with a C prototype to link back to Inkscape.  This
-            function called the \c GimpGrad unload function and then deletes
-            the object.
-*/
 void
-unload (inkscape_extension * in_ext)
+BlurEdge::init (void)
 {
-    myplug->unload(reinterpret_cast<Inkscape::Extension::Extension *>(in_ext));
-    delete myplug;
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension>\n"
+            "<name>Blur Edge</name>\n"
+            "<id>org.inkscape.effect.bluredge</id>\n"
+            "<dependency type=\"plugin\" location=\"plugins\">bluredge</dependency>\n"
+            "<param name=\"blur-width\" type=\"float\">1.0</param>\n"
+            "<param name=\"num-steps\" type=\"int\">11</param>\n"
+            "<effect>\n"
+                "<object-type>all</object-type>\n"
+            "</effect>\n"
+        "</inkscape-extension>\n" , new BlurEdge());
     return;
 }
 
-void
-effect (inkscape_extension * in_ext, SPView * view)
-{
-    return myplug->effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
-}
-
-Gtk::Widget *
-prefs_effect (inkscape_extension * in_ext, SPView * view)
-{
-    return myplug->prefs_effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
-}
-
-/**
-    \brief  A structure holding all the functions that Inkscape uses to
-            communicate with this plugin.  These are all C-prototype based
-            for easy compliation.
-*/
-inkscape_plugin_function_table INKSCAPE_PLUGIN_NAME = {
-    INKSCAPE_PLUGIN_VERSION,
-    load,
-    unload,
-    NULL,
-    NULL,
-    effect,
-    prefs_effect
-};
+}; /* namespace Internal */
+}; /* namespace Extension */
+}; /* namespace Inkscape */
 
 /*
   Local Variables:

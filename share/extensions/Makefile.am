@@ -33,12 +33,7 @@ modules = \
 	dia.inx \
 	epsi_output.inx \
 	pdf_output.inx \
-	txt2svg.inx \
-	gimpgrad.inx \
-	grid.inx \
-	bluredge.inx \
-	randompnt.inx \
-	randompos.inx
+	txt2svg.inx
 
 extension_SCRIPTS = \
 	$(extensions)

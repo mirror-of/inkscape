@@ -37,7 +37,7 @@ private:
                                     data */
     /** This function actually does the work, everything else is preparing
         for this function.  It is the core here */
-    void          execute      (gchar const *command,
+    int           execute      (gchar const *command,
                                 gchar const *filein,
                                 gchar const *fileout);
     /** Just a quick function to find and resolve relative paths for

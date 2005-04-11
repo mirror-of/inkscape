@@ -22,24 +22,13 @@
 #include <color-rgba.h>
 #include <document.h>
 #include "io/sys.h"
+#include <extension/system.h>
+
+#include "gimpgrad.h"
 
 namespace Inkscape {
 namespace Extension {
-namespace Plugin {
-
-/** \brief  Implementation class of the GIMP gradient plugin.  This mostly
-            just creates a namespace for the GIMP gradient plugin today.
-*/
-class GimpGrad : public Inkscape::Extension::Implementation::Implementation {
-private:
-    Glib::ustring GimpGrad::new_stop (ColorRGBA in_color, float location);
-
-public:
-    bool load(Inkscape::Extension::Extension *module);
-    void unload(Inkscape::Extension::Extension *module);
-    SPDocument *open(Inkscape::Extension::Input *module, gchar const *filename);
-
-};
+namespace Internal {
 
 /**
     \brief  A function to allocated anything -- just an example here
@@ -217,65 +206,25 @@ GimpGrad::open (Inkscape::Extension::Input *module, gchar const *filename)
     return sp_document_new_from_mem(outsvg.c_str(), outsvg.length(), TRUE);
 }
 
-} } }  /* namespace Plugin; Extension; Inkscape */
-
-#include <extension/implementation/plugin-link.h>
-
-/**
-    \brief  This is the actual implementation here.  This is done as
-            the more generic Implemetnation object so that this code
-            can be stolen by someone else more easily.
-*/
-Inkscape::Extension::Implementation::Implementation * myplug;
-
-/**
-    \brief  A function with a C prototype to link back into Inkscape.  This
-            function allocated a \c GimpGrad and then calls it's load.
-*/
-int
-load (inkscape_extension * in_ext)
-{
-    myplug = new Inkscape::Extension::Plugin::GimpGrad();
-
-    return myplug->load(reinterpret_cast<Inkscape::Extension::Extension *>(in_ext));
-}
-
-/**
-    \brief  A function with a C prototype to link back to Inkscape.  This
-            function called the \c GimpGrad unload function and then deletes
-            the object.
-*/
 void
-unload (inkscape_extension * in_ext)
+GimpGrad::init (void)
 {
-    myplug->unload(reinterpret_cast<Inkscape::Extension::Extension *>(in_ext));
-    delete myplug;
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension>\n"
+            "<name>GIMP Gradients</name>\n"
+            "<id>org.inkscape.input.gimpgrad</id>\n"
+            "<dependency type=\"plugin\" location=\"plugins\">gimpgrad</dependency>\n"
+            "<input>\n"
+                "<extension>.ggr</extension>\n"
+                "<mimetype>application/x-gimp-gradient</mimetype>\n"
+                "<filetypename>GIMP Gradient (*.ggr)</filetypename>\n"
+                "<filetypetooltip>Gradients used in GIMP</filetypetooltip>\n"
+            "</input>\n"
+        "</inkscape-extension>\n", new GimpGrad());
     return;
 }
 
-/**
-    \brief  A C prototype wrapper for the object's function
-*/ 
-SPDocument *
-open (inkscape_extension * in_ext, const gchar * filename)
-{
-    return myplug->open(reinterpret_cast<Inkscape::Extension::Input *>(in_ext), filename);
-}
-
-/**
-    \brief  A structure holding all the functions that Inkscape uses to
-            communicate with this plugin.  These are all C-prototype based
-            for easy compliation.
-*/
-inkscape_plugin_function_table INKSCAPE_PLUGIN_NAME = {
-    INKSCAPE_PLUGIN_VERSION,
-    load,
-    unload,
-    open,
-    NULL,
-    NULL,
-    NULL
-};
+} } }  /* namespace Internal; Extension; Inkscape */
 
 /*
   Local Variables:
