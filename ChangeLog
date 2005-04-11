@@ -1,3 +1,9 @@
+2005-04-10  Jon A. Cruz  <jon@joncruz.org>
+	* src/interface.cpp:
+
+	Adding drag-n-drop support for arbitrary images. Fixes bug 1177714.
+
+
 2005-04-10  Ted Gould  <ted@gould.cx>
 
 	* Lots of files:

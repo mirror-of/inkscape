@@ -17,6 +17,7 @@
 #include <config.h>
 
 #include <string.h>
+#include <vector>
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -56,10 +57,16 @@
 #include "helper/window.h"
 
 #include "io/sys.h"
+#include "io/stringstream.h"
+#include "io/base64stream.h"
 
 #include "dialogs/dialog-events.h"
 
 #include "message-context.h"
+
+
+using Inkscape::IO::StringOutputStream;
+using Inkscape::IO::Base64OutputStream;
 
 /* forward declaration */
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
@@ -68,14 +75,22 @@ static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 typedef enum {
   URI_LIST,
   SVG_XML_DATA,
-  SVG_DATA
+  SVG_DATA,
+  PNG_DATA,
+  JPEG_DATA,
+  IMAGE_DATA
 } ui_drop_target_info;
 
 static GtkTargetEntry ui_drop_target_entries [] = {
   {"text/uri-list", 0, URI_LIST},
   {"image/svg+xml", 0, SVG_XML_DATA},
   {"image/svg",     0, SVG_DATA},
+  {"image/png",     0, PNG_DATA},
+  {"image/jpeg",    0, JPEG_DATA},
 };
+
+static GtkTargetEntry* completeDropTargets = 0;
+static int completeDropTargetsCount = 0;
 
 #define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0])
 static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
@@ -120,10 +135,42 @@ sp_create_window (SPViewWidget *vw, gboolean editable)
 	gtk_box_pack_end (GTK_BOX (hb), GTK_WIDGET (vw), TRUE, TRUE, 0);
 	gtk_widget_show (GTK_WIDGET (vw));
 
+
+    if ( completeDropTargets == 0 || completeDropTargetsCount == 0 )
+    {
+        std::vector<gchar*> types;
+
+        GSList* list = gdk_pixbuf_get_formats();
+        while ( list ) {
+            int i = 0;
+            GdkPixbufFormat* one = (GdkPixbufFormat*)list->data;
+            gchar** typesXX = gdk_pixbuf_format_get_mime_types(one);
+            for ( i = 0; typesXX[i]; i++ ) {
+                types.push_back(g_strdup(typesXX[i]));
+            }
+            g_strfreev(typesXX);
+
+            list = g_slist_next(list);
+        }
+        completeDropTargetsCount = nui_drop_target_entries + types.size();
+        completeDropTargets = new GtkTargetEntry[completeDropTargetsCount];
+        for ( int i = 0; i < (int)nui_drop_target_entries; i++ ) {
+            completeDropTargets[i] = ui_drop_target_entries[i];
+        }
+        int pos = nui_drop_target_entries;
+
+        for (std::vector<gchar*>::iterator it = types.begin() ; it != types.end() ; it++) {
+            completeDropTargets[pos].target = *it;
+            completeDropTargets[pos].flags = 0;
+            completeDropTargets[pos].info = IMAGE_DATA;
+            pos++;
+        }
+    }
+
 	gtk_drag_dest_set(w,
 			  GTK_DEST_DEFAULT_ALL,
-			  ui_drop_target_entries,
-			  nui_drop_target_entries,
+			  completeDropTargets,
+			  completeDropTargetsCount,
 			  GdkDragAction (GDK_ACTION_COPY | GDK_ACTION_MOVE));
 	g_signal_connect (G_OBJECT(w),
 			   "drag_data_received",
@@ -1288,9 +1335,66 @@ sp_ui_drag_data_received (GtkWidget * widget,
 
 		break;
 	case URI_LIST:
+    {
 		gchar *uri = (gchar *)data->data;
 		sp_ui_import_files(uri);
-		break;
+    }
+    break;
+
+    case PNG_DATA:
+    case JPEG_DATA:
+    case IMAGE_DATA:
+    {
+        char tmp[1024];
+
+        StringOutputStream outs;
+        Base64OutputStream b64out(outs);
+        b64out.setColumnWidth(0);
+
+        SPDocument *doc = SP_ACTIVE_DOCUMENT;
+
+        Inkscape::XML::Node *newImage = sp_repr_new ("svg:image");
+
+        for ( int i = 0; i < data->length; i++ ) {
+            b64out.put( data->data[i] );
+        }
+        b64out.close();
+
+
+        Glib::ustring str = outs.getString();
+
+        snprintf( tmp, sizeof(tmp), "data:%s;base64,", gdk_atom_name(data->type) );
+        str.insert( 0, tmp );
+        sp_repr_set_attr( newImage, "xlink:href", str.c_str() );
+
+        GError* error = NULL;
+        GdkPixbufLoader* loader = gdk_pixbuf_loader_new_with_mime_type( gdk_atom_name(data->type), &error );
+        if ( loader ) {
+            error = NULL;
+            if ( gdk_pixbuf_loader_write( loader, data->data, data->length, &error) ) {
+                GdkPixbuf* pbuf = gdk_pixbuf_loader_get_pixbuf(loader);
+                if ( pbuf ) {
+                    int width = gdk_pixbuf_get_width(pbuf);
+                    int height = gdk_pixbuf_get_height(pbuf);
+                    snprintf( tmp, sizeof(tmp), "%d", width );
+                    sp_repr_set_attr( newImage, "width", tmp );
+
+                    snprintf( tmp, sizeof(tmp), "%d", height );
+                    sp_repr_set_attr( newImage, "height", tmp );
+                }
+            }
+        }
+
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+        // Add it to the current layer
+        desktop->currentLayer()->appendChildRepr(newImage);
+
+        sp_repr_unref( newImage );
+        sp_document_done( doc );
+    }
+    break;
+
 	}
 }
 
