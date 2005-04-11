@@ -338,6 +338,21 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
             NR::Point tangent;
 
             const_cast<Path&>(path).PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, tangent);
+
+            Path::cut_position *start_otp = const_cast<Path&>(path).CurvilignToPosition(1, &start_offset, unused);
+            if (start_offset >= 0.0 && start_otp != NULL && start_otp[0].piece >= 0) {
+                Path::cut_position *end_otp = const_cast<Path&>(path).CurvilignToPosition(1, &end_offset, unused);
+                if (end_offset >= 0.0 && end_otp != NULL && end_otp[0].piece >= 0) {
+                    NR::Point startpoint, endpoint;
+                    const_cast<Path&>(path).PointAt(start_otp[0].piece, start_otp[0].t, startpoint);
+                    const_cast<Path&>(path).PointAt(end_otp[0].piece, end_otp[0].t, endpoint);
+                    tangent = endpoint - startpoint;
+                    tangent.normalize();
+                    g_free(end_otp);
+                }
+                g_free(start_otp);
+            }
+
             double rotation = atan2(tangent[1], tangent[0]);
             for (int glyph_index = _characters[char_index].in_glyph ; glyph_index < next_cluster_glyph_index ; glyph_index++) {
                 double tangent_shift = -cluster_width * 0.5 + _glyphs[glyph_index].x - (_characters[char_index].x + span.x_start);
