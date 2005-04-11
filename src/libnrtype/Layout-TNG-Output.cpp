@@ -302,6 +302,18 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
             break;
     }
 
+    if (_characters.empty()) {
+        int unused = 0;
+        Path::cut_position *point_otp = const_cast<Path&>(path).CurvilignToPosition(1, &offset, unused);
+        if (offset >= 0.0 && point_otp != NULL && point_otp[0].piece >= 0) {
+            NR::Point point;
+            NR::Point tangent;
+            const_cast<Path&>(path).PointAndTangentAt(point_otp[0].piece, point_otp[0].t, point, tangent);
+            _empty_cursor_shape.position = point;
+            _empty_cursor_shape.rotation = atan2(tangent[NR::Y], tangent[NR::X]);
+        }
+    }
+
     for (unsigned char_index = 0 ; char_index < _characters.size() ; ) {
         int next_cluster_glyph_index;
         unsigned next_cluster_char_index;
@@ -339,18 +351,20 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
 
             const_cast<Path&>(path).PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, tangent);
 
-            Path::cut_position *start_otp = const_cast<Path&>(path).CurvilignToPosition(1, &start_offset, unused);
-            if (start_offset >= 0.0 && start_otp != NULL && start_otp[0].piece >= 0) {
-                Path::cut_position *end_otp = const_cast<Path&>(path).CurvilignToPosition(1, &end_offset, unused);
-                if (end_offset >= 0.0 && end_otp != NULL && end_otp[0].piece >= 0) {
-                    NR::Point startpoint, endpoint;
-                    const_cast<Path&>(path).PointAt(start_otp[0].piece, start_otp[0].t, startpoint);
-                    const_cast<Path&>(path).PointAt(end_otp[0].piece, end_otp[0].t, endpoint);
-                    tangent = endpoint - startpoint;
-                    tangent.normalize();
-                    g_free(end_otp);
+            if (start_offset >= 0.0 && end_offset >= 0.0) {
+                Path::cut_position *start_otp = const_cast<Path&>(path).CurvilignToPosition(1, &start_offset, unused);
+                if (start_otp != NULL && start_otp[0].piece >= 0) {
+                    Path::cut_position *end_otp = const_cast<Path&>(path).CurvilignToPosition(1, &end_offset, unused);
+                    if (end_otp != NULL && end_otp[0].piece >= 0) {
+                        NR::Point startpoint, endpoint;
+                        const_cast<Path&>(path).PointAt(start_otp[0].piece, start_otp[0].t, startpoint);
+                        const_cast<Path&>(path).PointAt(end_otp[0].piece, end_otp[0].t, endpoint);
+                        tangent = endpoint - startpoint;
+                        tangent.normalize();
+                        g_free(end_otp);
+                    }
+                    g_free(start_otp);
                 }
-                g_free(start_otp);
             }
 
             double rotation = atan2(tangent[1], tangent[0]);
