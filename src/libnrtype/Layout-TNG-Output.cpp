@@ -309,7 +309,7 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
         Span const &span = _characters[char_index].span(this);
 
         for (next_cluster_char_index = char_index + 1 ;
-             next_cluster_char_index < _characters.size() && !_characters[next_cluster_char_index].char_attributes.is_char_break ;
+             next_cluster_char_index < _characters.size() && !_characters[next_cluster_char_index].char_attributes.is_cursor_position;
              next_cluster_char_index++);
 
         if (next_cluster_char_index == _characters.size()) {
