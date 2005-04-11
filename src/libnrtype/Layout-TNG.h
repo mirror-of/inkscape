@@ -818,7 +818,7 @@ public:
     bool prevStartOfLine();
     bool thisStartOfLine();
     bool nextStartOfLine();
-    inline bool thisEndOfLine();
+    bool thisEndOfLine();
 
     //shape
     bool prevStartOfShape();
@@ -981,14 +981,6 @@ inline bool Layout::iterator::prevGlyph()
     if (_glyph_index == 0) return false;
     _char_index = _parent_layout->_glyphs[--_glyph_index].in_character;
     return true;
-}
-
-
-inline bool Layout::iterator::thisEndOfLine()
-{
-    if (nextStartOfLine())
-        return prevCursorPosition();
-    return false;
 }
 
 inline bool Layout::iterator::nextCharacter()
