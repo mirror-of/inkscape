@@ -13,12 +13,13 @@
 
 #include <glib.h>
 
-#include <glibmm/i18n.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
+
+#include <glibmm/i18n.h>
 
 #include "extension.h"
 #include "prefs-utils.h"
