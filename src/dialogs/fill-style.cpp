@@ -273,8 +273,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         {
-            sp_paint_selector_set_mode ( psel,
-                                         SP_PAINT_SELECTOR_MODE_COLOR_RGB);
+            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
             gfloat c[5];
             sp_fill_style_get_average_color_rgba (objects, c);
             SPColor color;
@@ -302,8 +301,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
                                              FALSE) != vector )
                 {
                     /* Multiple vectors */
-                    sp_paint_selector_set_mode ( psel,
-                            SP_PAINT_SELECTOR_MODE_MULTIPLE);
+                    sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
 
                     g_object_set_data ( G_OBJECT (spw), "update",
                                         GINT_TO_POINTER (FALSE));
@@ -339,8 +337,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
                                              FALSE) != vector )
                 {
                     /* Multiple vectors */
-                    sp_paint_selector_set_mode ( psel,
-                            SP_PAINT_SELECTOR_MODE_MULTIPLE);
+                    sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
                     g_object_set_data ( G_OBJECT (spw),
                                         "update", GINT_TO_POINTER (FALSE) );
                     return;
