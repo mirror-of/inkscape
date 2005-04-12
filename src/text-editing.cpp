@@ -587,6 +587,7 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
     for (Glib::ustring::iterator it = iter_from ; it != iter_to ; it++)
         char_count++;
     string->erase(iter_from, iter_to);
+    SP_OBJECT_REPR(string_item)->setContent(string->c_str());
 
     SPObject *parent_item = string_item;
     for ( ; ; ) {
@@ -595,6 +596,7 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
         if (attributes == NULL) break;
 
         attributes->erase(char_index, char_count);
+        attributes->writeTo(SP_OBJECT_REPR(parent_item));
         for (SPObject *sibling = SP_OBJECT_PARENT(parent_item)->firstChild() ; sibling && sibling != parent_item ; sibling = SP_OBJECT_NEXT(sibling))
             char_index += sp_text_get_length(sibling);
     }
