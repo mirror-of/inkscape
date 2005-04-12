@@ -209,8 +209,10 @@ void sp_selection_delete()
     }
 
     if (tools_isactive (desktop, TOOLS_TEXT))
-        if (sp_text_delete_selection(desktop->event_context))
+        if (sp_text_delete_selection(desktop->event_context)) {
+            sp_document_done(SP_DT_DOCUMENT(desktop));
             return;
+        }
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
