@@ -34,7 +34,7 @@
 
 #include "text-editing.h"
 
-Inkscape::Text::Layout const * te_get_layout (SPItem *item)
+Inkscape::Text::Layout const * te_get_layout (SPItem const *item)
 {
     if (SP_IS_TEXT(item)) {
         return &(SP_TEXT(item)->layout);
@@ -53,7 +53,7 @@ static void te_update_layout_now (SPItem *item)
 }
 
 bool
-sp_te_is_empty (SPItem *item)
+sp_te_is_empty (SPItem const *item)
 {
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     return layout->begin() == layout->end();
@@ -61,7 +61,7 @@ sp_te_is_empty (SPItem *item)
 
 
 Inkscape::Text::Layout::iterator
-sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
+sp_te_get_position_by_coords (SPItem const *item, NR::Point &i_p)
 {
     NR::Matrix  im=sp_item_i2d_affine (item);
     im = im.inverse();
@@ -71,7 +71,7 @@ sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
     return layout->getNearestCursorPositionTo(p);
 }
 
-std::vector<NR::Point> sp_te_create_selection_quads(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform)
+std::vector<NR::Point> sp_te_create_selection_quads(SPItem const *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform)
 {
     if (start == end)
         return std::vector<NR::Point>();
@@ -83,7 +83,7 @@ std::vector<NR::Point> sp_te_create_selection_quads(SPItem *item, Inkscape::Text
 }
 
 void
-sp_te_get_cursor_coords (SPItem *item, Inkscape::Text::Layout::iterator const &position, NR::Point &p0, NR::Point &p1)
+sp_te_get_cursor_coords (SPItem const *item, Inkscape::Text::Layout::iterator const &position, NR::Point &p0, NR::Point &p1)
 {
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     double height, rotation;
@@ -91,12 +91,12 @@ sp_te_get_cursor_coords (SPItem *item, Inkscape::Text::Layout::iterator const &p
     p1 = NR::Point(p0[NR::X] + height * sin(rotation), p0[NR::Y] - height * cos(rotation));
 }
 
-SPStyle const * sp_te_style_at_position(SPItem *text, Inkscape::Text::Layout::iterator const &position)
+SPStyle const * sp_te_style_at_position(SPItem const *text, Inkscape::Text::Layout::iterator const &position)
 {
     Inkscape::Text::Layout const *layout = te_get_layout(text);
     if (layout == NULL)
         return NULL;
-    SPObject *pos_obj = NULL;
+    SPObject const *pos_obj = NULL;
     layout->getSourceOfCharacter(position, (void**)&pos_obj);
     if (pos_obj == NULL) pos_obj = text;
     while (SP_OBJECT_STYLE(pos_obj) == NULL)
@@ -129,7 +129,7 @@ Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Lay
 /* ***************************************************************************************************/
 //                             I N S E R T I N G   T E X T
 
-static bool is_line_break_object(SPObject const*object)
+static bool is_line_break_object(SPObject const *object)
 {
     return    SP_IS_TEXT(object)
            || (SP_IS_TSPAN(object) && SP_TSPAN(object)->role != SP_TSPAN_ROLE_UNSPECIFIED)
@@ -140,7 +140,7 @@ static bool is_line_break_object(SPObject const*object)
            || SP_IS_FLOWREGIONBREAK(object);
 }
 
-static const char * span_name_for_text_object(SPObject *object)
+static const char * span_name_for_text_object(SPObject const *object)
 {
     if (SP_IS_TEXT(object)) return "svg:tspan";
     else if (SP_IS_FLOWTEXT(object)) return "svg:flowSpan";
@@ -149,13 +149,13 @@ static const char * span_name_for_text_object(SPObject *object)
 
 /** Recursively gets the length of all the SPStrings at or below the given
 \a item. Also adds 1 for each line break encountered. */
-unsigned sp_text_get_length(SPObject *item)
+unsigned sp_text_get_length(SPObject const *item)
 {
     unsigned length = 0;
 
     if (SP_IS_STRING(item)) return SP_STRING(item)->string.length();
     if (is_line_break_object(item)) length++;
-    for (SPObject *child = item->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
+    for (SPObject const *child = item->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
         if (SP_IS_STRING(child)) length += SP_STRING(child)->string.length();
         else length += sp_text_get_length(child);
     }
@@ -190,7 +190,7 @@ static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Node 
 
 /** returns the sum of the (recursive) lengths of all the SPStrings prior
 to \a item at the same level. */
-static unsigned sum_sibling_text_lengths_before(SPObject *item)
+static unsigned sum_sibling_text_lengths_before(SPObject const *item)
 {
     unsigned char_index = 0;
     for (SPObject *sibling = SP_OBJECT_PARENT(item)->firstChild() ; sibling && sibling != item ; sibling = SP_OBJECT_NEXT(sibling))
@@ -735,7 +735,7 @@ static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *str
 /** Gets a text-only representation of the given text or flowroot object,
 replacing line break elements with '\n'. The return value must be free()d. */
 gchar *
-sp_te_get_string_multiline (SPItem *text)
+sp_te_get_string_multiline (SPItem const *text)
 {
     Glib::ustring string;
 
@@ -743,6 +743,36 @@ sp_te_get_string_multiline (SPItem *text)
     sp_te_get_ustring_multiline(text, &string);
     if (string.empty()) return NULL;
     return strdup(string.data() + 1);    // the first char will always be an unwanted line break
+}
+
+/** Gets a text-only representation of the characters in a text or flowroot
+object from \a start to \a end only. Line break elements are replaced with
+'\n'. */
+Glib::ustring
+sp_te_get_string_multiline (SPItem const *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end)
+{
+    if (start == end) return "";
+    Inkscape::Text::Layout::iterator first, last;
+    if (start < end) {
+        first = start;
+        last = end;
+    } else {
+        first = end;
+        last = start;
+    }
+    Inkscape::Text::Layout const *layout = te_get_layout(text);
+    Glib::ustring result;
+    // not a particularly fast piece of code. I'll optimise it if people start to notice.
+    for ( ; first < last ; first.nextCharacter()) {
+        SPObject *char_item;
+        Glib::ustring::iterator text_iter;
+        layout->getSourceOfCharacter(first, (void**)&char_item, &text_iter);
+        if (SP_IS_STRING(char_item))
+            result += *text_iter;
+        else
+            result += '\n';
+    }
+    return result;
 }
 
 void

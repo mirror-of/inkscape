@@ -74,5 +74,7 @@ struct SPTextContextClass {
 GtkType sp_text_context_get_type (void);
 
 bool sp_text_paste_inline(SPEventContext *ec);
+Glib::ustring sp_text_get_selected_text(SPEventContext const *ec);
+bool sp_text_delete_selection(SPEventContext *ec);
 
 #endif

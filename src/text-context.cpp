@@ -815,6 +815,42 @@ sp_text_paste_inline(SPEventContext *ec)
 }
 
 /**
+ Gets the raw characters that comprise the currently selected text, converting line
+ breaks into lf characters.
+*/
+Glib::ustring
+sp_text_get_selected_text(SPEventContext const *ec)
+{
+    if (!SP_IS_TEXT_CONTEXT(ec))
+        return "";
+    SPTextContext const *tc = SP_TEXT_CONTEXT(ec);
+    if (tc->text == NULL)
+        return "";
+
+    return sp_te_get_string_multiline(tc->text, tc->text_sel_start, tc->text_sel_end);
+}
+
+/**
+ Deletes the currently selected characters. Returns false if there is no
+ text selection currently.
+*/
+bool sp_text_delete_selection(SPEventContext *ec)
+{
+    if (!SP_IS_TEXT_CONTEXT(ec))
+        return false;
+    SPTextContext *tc = SP_TEXT_CONTEXT(ec);
+    if (tc->text == NULL)
+        return false;
+
+    if (tc->text_sel_start == tc->text_sel_end)
+        return false;
+    tc->text_sel_start = tc->text_sel_end = sp_te_delete(tc->text, tc->text_sel_start, tc->text_sel_end);
+    sp_text_context_update_cursor(tc);
+    sp_text_context_update_text_selection(tc);
+    return true;
+}
+
+/**
  * \param selection Should not be NULL.
  */
 static void

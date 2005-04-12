@@ -208,6 +208,10 @@ void sp_selection_delete()
         return;
     }
 
+    if (tools_isactive (desktop, TOOLS_TEXT))
+        if (sp_text_delete_selection(desktop->event_context))
+            return;
+
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     // check if something is selected
@@ -1007,16 +1011,21 @@ void sp_selection_copy()
     // FIXME: for non-texts, put serialized XML as text to the clipboard; 
     //for this sp_repr_write_stream needs to be rewritten with iostream instead of FILE
     Glib::ustring text;
-    guint texts = 0;
-    for (GSList *i = (GSList *) items; i; i = i->next) {
-        SPItem *item = SP_ITEM (i->data);
-        if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
-            if (texts > 0) // if more than one text object is copied, separate them by spaces
-                text += " ";
-            gchar *this_text = sp_te_get_string_multiline (item);
-            text += this_text;
-            g_free(this_text);
-            texts++;
+    if (tools_isactive (desktop, TOOLS_TEXT))
+        text = sp_text_get_selected_text(desktop->event_context);
+
+    if (text.empty()) {
+        guint texts = 0;
+        for (GSList *i = (GSList *) items; i; i = i->next) {
+            SPItem *item = SP_ITEM (i->data);
+            if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
+                if (texts > 0) // if more than one text object is copied, separate them by spaces
+                    text += " ";
+                gchar *this_text = sp_te_get_string_multiline (item);
+                text += this_text;
+                g_free(this_text);
+                texts++;
+            }
         }
     }
     if (!text.empty()) {
