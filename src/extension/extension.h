@@ -158,6 +158,7 @@ public:
 
 public:
     Gtk::Widget *    autogui (void);
+    Glib::ustring *  paramString (void);
 };
 
 

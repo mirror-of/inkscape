@@ -1,3 +1,14 @@
+2005-04-12  Ted Gould  <ted@gould.cx>
+
+	* src/extension/extension.cpp, src/extension/extension.h,
+	src/extension/parameter.cpp, src/extension/parameter.h,
+	src/extension/implementation/script.cpp:
+
+	This is support for having command line arguements from the parameters,
+	mostly this is a quick hack to get Aaron working, I'll clean it up
+	shortly, I promise.  But, it does seem to be working right now.  More
+	polish shortly.
+
 2005-04-10  Jon A. Cruz  <jon@joncruz.org>
 	* src/interface.cpp:
 

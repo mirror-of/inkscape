@@ -46,6 +46,7 @@ public:
     bool get (const Inkscape::XML::Document * doc) { return _value; }
     bool set (bool in, Inkscape::XML::Document * doc);
     Gtk::Widget * get_widget(void);
+    Glib::ustring * string (void);
 };
 
 class ParamInt : public Parameter {
@@ -60,6 +61,7 @@ public:
     int get (const Inkscape::XML::Document * doc) { return _value; }
     int set (int in, Inkscape::XML::Document * doc);
     Gtk::Widget * get_widget(void);
+    Glib::ustring * string (void);
 };
 
 class ParamFloat : public Parameter {
@@ -74,6 +76,7 @@ public:
     float get (const Inkscape::XML::Document * doc) { return _value; }
     float set (float in, Inkscape::XML::Document * doc);
     Gtk::Widget * get_widget(void);
+    Glib::ustring * string (void);
 };
 
 class ParamString : public Parameter {
@@ -87,6 +90,7 @@ public:
     /** \brief  Returns \c _value, with a \i const to protect it. */
     const gchar * get (const Inkscape::XML::Document * doc) { return _value; }
     const gchar * set (const gchar * in, Inkscape::XML::Document * doc);
+    Glib::ustring * string (void);
 };
 
 /**
@@ -397,6 +401,14 @@ Parameter::get_widget (void)
     return NULL;
 }
 
+/** \brief  If I'm not sure which it is, just don't return a value. */
+Glib::ustring *
+Parameter::string (void)
+{
+    Glib::ustring * mystring = new Glib::ustring("");
+    return mystring;
+}
+
 /** \brief  A class to make an adjustment that uses Extension params */
 class ParamFloatAdjustment : public Gtk::Adjustment {
     /** The parameter to adjust */
@@ -514,6 +526,50 @@ ParamBool::get_widget (void)
     return dynamic_cast<Gtk::Widget *>(hbox);
 }
 
+/** \brief  Return 'true' or 'false' */
+Glib::ustring *
+ParamBool::string (void)
+{
+    Glib::ustring * mystring;
+    
+    if (_value) 
+        mystring = new Glib::ustring("true");
+    else
+        mystring = new Glib::ustring("false");
+    
+    return mystring;
+}
+
+/** \brief  Return the value as a string */
+Glib::ustring *
+ParamInt::string (void)
+{
+    char startstring[32];
+    sprintf(startstring, "%d", _value);
+    Glib::ustring * mystring = new Glib::ustring(startstring);
+    return mystring;
+}
+
+/** \brief  Return the value as a string */
+Glib::ustring *
+ParamFloat::string (void)
+{
+    char startstring[32];
+    sprintf(startstring, "%f", _value);
+    Glib::ustring * mystring = new Glib::ustring(startstring);
+    return mystring;
+}
+
+/** \brief  Return the value as a string */
+Glib::ustring *
+ParamString::string (void)
+{
+    Glib::ustring * mystring = new Glib::ustring("");
+    *mystring += "\"";
+    *mystring += _value; 
+    *mystring += "\"";
+    return mystring;
+}
 
 
 }  /* namespace Extension */

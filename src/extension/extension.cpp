@@ -592,5 +592,32 @@ Extension::autogui (void)
 	return vbox;
 };
 
+/**
+	\brief  A function to get the parameters in a string form
+	\return A string with all the parameters as command line arguements
+
+	I don't really like this function, but it works for now.
+
+	\todo  Do this better.
+*/
+Glib::ustring *
+Extension::paramString (void)
+{
+	Glib::ustring * param_string = new Glib::ustring("");
+
+	for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
+		Parameter * param = reinterpret_cast<Parameter *>(list->data);
+
+		*param_string += " --";
+		*param_string += param->name();
+		*param_string += "=";
+		Glib::ustring * paramstr = param->string();
+		*param_string += *paramstr;
+		delete paramstr;
+	}
+
+	return param_string;
+}
+
 }  /* namespace Extension */
 }  /* namespace Inkscape */

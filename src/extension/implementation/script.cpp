@@ -575,6 +575,12 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
         }
     }
 
+    Glib::ustring * paramString = module->paramString();
+    local_command += *paramString;
+    delete paramString;
+
+    // std::cout << local_command << std::endl;
+
     data_read = execute(local_command.c_str(), tempfilename_in, tempfilename_out);
 
     if (data_read > 10)

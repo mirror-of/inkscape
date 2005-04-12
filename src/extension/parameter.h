@@ -50,6 +50,7 @@ public:
 
     static Parameter * make (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension * in_ext);
     virtual Gtk::Widget * get_widget (void);
+    virtual Glib::ustring * string (void);
 };
 
 
