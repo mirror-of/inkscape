@@ -304,7 +304,7 @@ AC_ARG_WITH(perl,
             [with_perl=$withval], [with_perl=skipped])
 
 if test "x$with_perl" = "xyes"; then
-    checkPERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+    checkPERL_CFLAGS=`perl -MExtUtils::Embed -e perl_inc 2>/dev/null`
     if test "$?" -gt "0"; then
         with_perl="no"
     else
