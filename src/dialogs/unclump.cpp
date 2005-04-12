@@ -13,6 +13,7 @@
 #include <glib.h>
 
 #include <map>
+#include <algorithm>
 
 #include "selection.h"
 #include "sp-object.h"
@@ -95,7 +96,74 @@ unclump_dist (SPItem *item1, SPItem *item2)
 	double r1 = 0.5 * (wh1[NR::X] + (wh1[NR::Y] - wh1[NR::X]) * (a1/(M_PI/2)));
 	double r2 = 0.5 * (wh2[NR::X] + (wh2[NR::Y] - wh2[NR::X]) * (a2/(M_PI/2)));
 
-	return (NR::L2 (c2 - c1) - r1 - r2);
+	// dist between centers minus angle-adjusted radii
+	double dist_r =  (NR::L2 (c2 - c1) - r1 - r2);
+
+	double stretch1 = wh1[NR::Y]/wh1[NR::X];
+	double stretch2 = wh2[NR::Y]/wh2[NR::X];
+
+	if ((stretch1 > 1.5 || stretch1 < 0.66) && (stretch2 > 1.5 || stretch2 < 0.66)) {
+
+		std::vector<double> dists;
+		dists.push_back (dist_r);
+
+		// If both objects are not circle-like, find dists between four corners
+		std::vector<NR::Point> c1_points(2);
+		{
+			double y_closest;
+			if (c2[NR::Y] > c1[NR::Y] + wh1[NR::Y]/2) {
+				y_closest = c1[NR::Y] + wh1[NR::Y]/2;
+			} else if (c2[NR::Y] < c1[NR::Y] - wh1[NR::Y]/2) {
+				y_closest = c1[NR::Y] - wh1[NR::Y]/2;
+			} else {
+				y_closest = c2[NR::Y];
+			}
+			c1_points[0] = NR::Point (c1[NR::X], y_closest);
+			double x_closest;
+			if (c2[NR::X] > c1[NR::X] + wh1[NR::X]/2) {
+				x_closest = c1[NR::X] + wh1[NR::X]/2;
+			} else if (c2[NR::X] < c1[NR::X] - wh1[NR::X]/2) {
+				x_closest = c1[NR::X] - wh1[NR::X]/2;
+			} else {
+				x_closest = c2[NR::X];
+			}
+			c1_points[1] = NR::Point (x_closest, c1[NR::Y]);
+		}
+
+
+		std::vector<NR::Point> c2_points(2);
+		{
+			double y_closest;
+			if (c1[NR::Y] > c2[NR::Y] + wh2[NR::Y]/2) {
+				y_closest = c2[NR::Y] + wh2[NR::Y]/2;
+			} else if (c1[NR::Y] < c2[NR::Y] - wh2[NR::Y]/2) {
+				y_closest = c2[NR::Y] - wh2[NR::Y]/2;
+			} else {
+				y_closest = c1[NR::Y];
+			}
+			c2_points[0] = NR::Point (c2[NR::X], y_closest);
+			double x_closest;
+			if (c1[NR::X] > c2[NR::X] + wh2[NR::X]/2) {
+				x_closest = c2[NR::X] + wh2[NR::X]/2;
+			} else if (c1[NR::X] < c2[NR::X] - wh2[NR::X]/2) {
+				x_closest = c2[NR::X] - wh2[NR::X]/2;
+			} else {
+				x_closest = c1[NR::X];
+			}
+			c2_points[1] = NR::Point (x_closest, c2[NR::Y]);
+		}
+
+		for (int i = 0; i < 2; i ++) {
+			for (int j = 0; j < 2; j ++) {
+				dists.push_back (NR::L2 (c1_points[i] - c2_points[j]));
+			}
+		}
+
+		// return the minimum of all dists
+		return *min_element(dists.begin(), dists.end());
+	} else {
+		return dist_r;
+	}
 }
 
 /**
