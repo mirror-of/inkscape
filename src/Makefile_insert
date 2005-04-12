@@ -41,13 +41,11 @@ libinkpre_a_SOURCES =	\
 	bad-uri-exception.h	\
 	brokenimage.xpm	\
 	color-rgba.h	\
-	color.cpp color.h	\
 	desktop-affine.cpp desktop-affine.h	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\
 	desktop-style.cpp desktop-style.h	\
 	desktop.cpp desktop.h	\
-	dir-util.cpp dir-util.h	\
 	document-undo.cpp	\
 	document.cpp document.h document-private.h	\
 	draw-anchor.cpp	\
@@ -194,7 +192,6 @@ libinkpre_a_SOURCES =	\
 	toolbox.cpp toolbox.h	\
 	tools-switch.cpp tools-switch.h\
 	uri-references.cpp uri-references.h	\
-	uri.cpp uri.h	\
 	verbs.cpp verbs.h	\
 	version.cpp version.h	\
 	view.cpp view.h	\
@@ -206,8 +203,10 @@ libinkpost_a_DEPENDENCIES = Makefile_insert
 # libinkpost.a: Any object file that needs to be near the end of the link line.
 # gradient-chemistry.o is called by some things in display/.
 libinkpost_a_SOURCES =	\
+	color.cpp color.h	\
 	common-style.cpp common-style.h	\
 	decimal-round.h	\
+	dir-util.cpp dir-util.h	\
 	fill-or-stroke.h	\
 	fixes.cpp \
 	gc-alloc.h	\
@@ -221,14 +220,14 @@ libinkpost_a_SOURCES =	\
 	round.h	\
 	streq.h	\
 	strneq.h	\
-	unit-constants.h
+	unit-constants.h	\
+	uri.cpp uri.h
 
 inkscape_private_libs =	\
 	libinkpre.a		\
 	application/libinkapp.a	\
 	dialogs/libspdialogs.a	\
 	trace/libtrace.a	\
-	xml/libspxml.a		\
 	svg/libspsvg.a		\
 	widgets/libspwidgets.a	\
 	display/libspdisplay.a	\
@@ -239,12 +238,13 @@ inkscape_private_libs =	\
 	ui/libui.a		\
 	ui/dialog/libuidialog.a	\
 	ui/widget/libuiwidget.a	\
-	util/libinkutil.a	\
-	io/libio.a	        \
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
 	extension/script/libscript.a	\
+	xml/libspxml.a		\
+	util/libinkutil.a	\
+	io/libio.a	        \
 	$(inkjar_libs)		\
 	libinkpost.a
 
