@@ -550,16 +550,14 @@ void ColorScales::_sliderAnyChanged( SPColorSlider *slider, SPColorScales *cs )
 
 void ColorScales::_adjustmentChanged( SPColorScales *cs, guint channel )
 {
-    ColorScales* scales = (ColorScales*)(SP_COLOR_SELECTOR(cs)->base);
+	ColorScales* scales = (ColorScales*)(SP_COLOR_SELECTOR(cs)->base);
 	if (scales->_updating) return;
 
 	scales->_updating = TRUE;
 
 	scales->_updateSliders( (1 << channel) );
 
-    scales->_updateInternals( scales->_color, scales->_alpha, scales->_dragging );
-
-    scales->_recalcColor( TRUE );
+	scales->_recalcColor (TRUE);
 
 	scales->_updating = FALSE;
 }
