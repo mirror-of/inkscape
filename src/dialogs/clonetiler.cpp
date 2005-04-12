@@ -79,13 +79,8 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; 
 static gchar *prefs_path = "dialogs.clonetiler";
 
-#define SB_WIDTH 90
-#define SB_LONG_ADJUSTMENT 20
 #define SB_MARGIN 1
-#define SUFFIX_WIDTH 70
-#define HB_MARGIN 4
 #define VB_MARGIN 4
-#define VB_SKIP 1
 
 enum {
     PICK_COLOR,
@@ -1339,7 +1334,7 @@ static void
 clonetiler_xy_changed (GtkAdjustment *adj, gpointer data)
 {
     const gchar *pref = (const gchar *) data;
-    prefs_set_int_attribute (prefs_path, pref, (int) round(adj->value));
+    prefs_set_int_attribute (prefs_path, pref, (int) floor(adj->value + 0.5));
 }
 
 static void
@@ -2295,15 +2290,13 @@ clonetiler_dialog (void)
         }
         }
 
-
 // Rows/columns, width/height
         {
             GtkWidget *table = gtk_table_new (2, 2, FALSE);
             gtk_container_set_border_width (GTK_CONTAINER (table), VB_MARGIN);
             gtk_table_set_row_spacings (GTK_TABLE (table), 4);
             gtk_table_set_col_spacings (GTK_TABLE (table), 6);
-            gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, VB_SKIP);
-
+            gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, 0);
 
             {
                 GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
