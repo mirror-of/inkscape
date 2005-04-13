@@ -41,6 +41,8 @@
 #include "dialogs/object-properties.h"
 #include "sp-metrics.h"
 #include "sp-item.h"
+#include "sp-item-group.h"
+#include "sp-root.h"
 #include "snap.h"
 #include "prefs-utils.h"
 #include "tools-switch.h"
@@ -280,14 +282,6 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
     }
 
     switch (event->type) {
-        case GDK_2BUTTON_PRESS:
-            if (event->button.button == 1) {
-                if (!selection->isEmpty()) {
-                    tools_switch_by_item (desktop, (SPItem *) selection->itemList()->data);
-                }
-                ret = TRUE;
-            }
-            break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
                 /* Left mousebutton */
@@ -387,7 +381,18 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
         case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
                 if (!selection->isEmpty()) {
-                    tools_switch_by_item (desktop, (SPItem *) selection->itemList()->data);
+                    SPItem *clicked_item = (SPItem *) selection->itemList()->data;
+                    if (SP_IS_GROUP (clicked_item)) { // enter group
+                        desktop->setCurrentLayer(reinterpret_cast<SPObject *>(clicked_item));
+                        SP_DT_SELECTION(desktop)->clear();
+                        sc->dragging = false;
+                    } else { // switch tool
+                        tools_switch_by_item (desktop, clicked_item);
+                    }
+                } else { // click in empty place, go up one level (but not to root)
+                    if (!SP_IS_ROOT(SP_OBJECT_PARENT(desktop->currentLayer()))) {
+                        desktop->setCurrentLayer(SP_OBJECT_PARENT(desktop->currentLayer()));
+                    }
                 }
                 ret = TRUE;
             }
