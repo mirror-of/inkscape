@@ -3,4 +3,7 @@ postinst.debhelper
 postrm.debhelper
 substvars
 tmp
-inkscape*
+inkscape[^.]*
+inkscape.[^amx]*
+inkscape.[amx][^ep]*
+inkscape.[amx][ep][^mnp]*
