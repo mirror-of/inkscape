@@ -436,7 +436,7 @@ void SPFlowtext::rebuildLayout()
     _buildLayoutInput(this, exclusion_shape, &shapes, &pending_line_break_object);
     delete exclusion_shape;
     layout.calculateFlow();
-    g_print(layout.dumpAsText().c_str());
+    //g_print(layout.dumpAsText().c_str());
 }
 
 void SPFlowtext::_clearFlow(NRArenaGroup *in_arena)
