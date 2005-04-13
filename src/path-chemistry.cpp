@@ -24,6 +24,8 @@
 #include "sp-object.h"
 #include "sp-path.h"
 #include "sp-text.h"
+#include "sp-flowtext.h"
+#include "text-editing.h"
 #include "style.h"
 #include "inkscape.h"
 #include "document.h"
@@ -312,8 +314,8 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 	SPCurve *curve = NULL;
 	if (SP_IS_SHAPE (item)) {
 		curve = sp_shape_get_curve (SP_SHAPE (item));
-	} else if (SP_IS_TEXT (item)) {
-		curve = SP_TEXT(item)->getNormalizedBpath ();
+	} else if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
+		curve = te_get_layout(item)->convertToCurves ();
 	}
 	
 	if (!curve)
