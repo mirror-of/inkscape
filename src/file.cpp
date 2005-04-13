@@ -754,11 +754,11 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             if (SP_IS_ITEM(child))
                 items_count ++;
         }
-        SPCSSAttr *style = sp_css_attr_from_style (SP_DOCUMENT_ROOT (doc), SP_STYLE_FLAG_IFSET);
+        SPCSSAttr *style = sp_css_attr_from_style (SP_DOCUMENT_ROOT (doc));
 
         SPObject *new_obj = NULL;
 
-        if (style->firstChild() || items_count > 1) {
+        if ((style && style->firstChild()) || items_count > 1) {
             // create group
             Inkscape::XML::Node *newgroup = sp_repr_new("svg:g");
             sp_repr_css_set (newgroup, style, "style");
@@ -804,6 +804,8 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
                 }
             }
         }
+
+        if (style) sp_repr_css_attr_unref (style);
 
         // select and move the imported item
         if (new_obj && SP_IS_ITEM(new_obj)) {

@@ -546,8 +546,10 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			if (gstyle) {
 				sp_repr_css_merge (cstyle, gstyle);
 			}
-			if (SP_OBJECT_STYLE (SP_OBJECT (citem))) {
-				sp_repr_css_merge (cstyle, sp_css_attr_from_style (SP_OBJECT (citem)));
+			SPCSSAttr *istyle = sp_css_attr_from_style (SP_OBJECT (citem));
+			if (istyle) {
+				sp_repr_css_merge (cstyle, istyle);
+				sp_repr_css_attr_unref (istyle);
 			}
 			sp_repr_css_change (nrepr, cstyle, "style");
 
@@ -556,6 +558,8 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			objects = g_slist_prepend (objects, nrepr);
 		}
 	}
+
+	if (gstyle) sp_repr_css_attr_unref (gstyle);
 
 	/* Step 2 - clear group */
 	// remember the position of the group

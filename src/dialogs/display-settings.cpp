@@ -743,6 +743,7 @@ style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
     css = sp_css_attr_unset_uris (css);
 
     sp_repr_css_change (inkscape_get_repr (INKSCAPE, prefs_path), css, "style");
+    sp_repr_css_attr_unref (css);
 }
 
 static void
