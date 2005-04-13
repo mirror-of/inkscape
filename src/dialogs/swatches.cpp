@@ -80,6 +80,67 @@ ColorItem &ColorItem::operator=(ColorItem const &other)
     return *this;
 }
 
+typedef enum {
+    XCOLOR_DATA = 0,
+    TEXT_DATA
+} colorFlavorType;
+
+static const GtkTargetEntry color_entries[] = {
+    {"application/x-color", 0, XCOLOR_DATA},
+    {"text/plain", 0, TEXT_DATA},
+};
+
+static void dragGetColorData( GtkWidget *widget,
+                              GdkDragContext *drag_context,
+                              GtkSelectionData *data,
+                              guint info,
+                              guint time,
+                              gpointer user_data)
+{
+    static GdkAtom typeXColor = gdk_atom_intern("application/x-color", FALSE);
+    static GdkAtom typeText = gdk_atom_intern("text/plain", FALSE);
+
+    ColorItem* item = reinterpret_cast<ColorItem*>(user_data);
+    if ( info == 1 ) {
+        gchar* tmp = g_strdup_printf("#%02x%02x%02x", item->_r, item->_g, item->_b);
+
+        gtk_selection_data_set( data,
+                                typeText,
+                                8, // format
+                                (guchar*)tmp,
+                                strlen((const char*)tmp) + 1);
+        g_free(tmp);
+        tmp = 0;
+    } else {
+        guchar tmp[8];
+        tmp[0] = item->_r;
+        tmp[1] = item->_r;
+        tmp[2] = item->_g;
+        tmp[3] = item->_g;
+        tmp[4] = item->_b;
+        tmp[5] = item->_b;
+        tmp[6] = 0x0ff;
+        tmp[7] = 0x0ff;
+        gtk_selection_data_set( data,
+                                typeXColor,
+                                8, // format
+                                tmp,
+                                (3+1) * 2);
+    }
+}
+
+//"drag-drop"
+gboolean dragDropColorData( GtkWidget *widget,
+                            GdkDragContext *drag_context,
+                            gint x,
+                            gint y,
+                            guint time,
+                            gpointer user_data)
+{
+// TODO finish
+    return TRUE;
+}
+
 
 Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size)
 {
@@ -105,6 +166,23 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size
         tips.set_tip((*btn), _name);
 
         btn->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
+
+        gtk_drag_source_set( GTK_WIDGET(btn->gobj()),
+                             GDK_BUTTON1_MASK,
+                             color_entries,
+                             G_N_ELEMENTS(color_entries),
+                             GdkDragAction(GDK_ACTION_MOVE | GDK_ACTION_COPY) );
+
+        g_signal_connect( G_OBJECT(btn->gobj()),
+                          "drag-data-get",
+                          G_CALLBACK(dragGetColorData),
+                          this);
+
+        g_signal_connect( G_OBJECT(btn->gobj()),
+                          "drag-drop",
+                          G_CALLBACK(dragDropColorData),
+                          this);
+
         widget = btn;
     }
 
