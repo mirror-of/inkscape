@@ -44,6 +44,7 @@
 #include "selection.h"
 #include "sp-image.h"
 #include "interface.h"
+#include "style.h"
 #include "print.h"
 #include "file.h"
 #include "dialogs/dialog-events.h"
@@ -753,18 +754,24 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             if (SP_IS_ITEM(child))
                 items_count ++;
         }
-        gchar const *style = repr->attribute("style");
+        SPCSSAttr *style = sp_css_attr_from_style (SP_DOCUMENT_ROOT (doc), SP_STYLE_FLAG_IFSET);
 
         SPObject *new_obj = NULL;
 
-        if (style || items_count > 1) {
+        if (style->firstChild() || items_count > 1) {
             // create group
             Inkscape::XML::Node *newgroup = sp_repr_new("svg:g");
-            sp_repr_set_attr(newgroup, "style", style);
+            sp_repr_css_set (newgroup, style, "style");
 
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
-                    newgroup->appendChild(SP_OBJECT_REPR(child)->duplicate());
+                    Inkscape::XML::Node *newchild = SP_OBJECT_REPR(child)->duplicate();
+
+                    // convert layers to groups; FIXME: add "preserve layers" mode where each layer
+                    // from impot is copied to the same-named layer in host
+                    sp_repr_set_attr (newchild, "inkscape:groupmode", NULL);
+
+                    newgroup->appendChild(newchild);
                 }
             }
 
@@ -783,6 +790,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
                     Inkscape::XML::Node *newitem = SP_OBJECT_REPR(child)->duplicate();
+                    sp_repr_set_attr (newitem, "inkscape:groupmode", NULL);
 
                     if (desktop) {
                         // Add it to the current layer
