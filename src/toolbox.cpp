@@ -158,15 +158,10 @@ static void update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext,
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
-static void toggle_dropper_color_pick (GtkWidget *button, gpointer data);
-static void sp_dropper_copy( GtkWidget *widget, GtkObject *obj);
-static void sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj);
-static bool sp_style_changed (const SPCSSAttr *css, gpointer data);
-
 /* Global text entry widgets necessary for update */
-GtkWidget *dropper_rgb_entry, 
-          *dropper_opacity_entry ;
-
+/* GtkWidget *dropper_rgb_entry, 
+          *dropper_opacity_entry ; */
+// should be made a private member once this is converted to class
 
 static void delete_connection(GObject *obj, sigc::connection *connection) {
     connection->disconnect();
@@ -2261,6 +2256,83 @@ static void toggle_dropper_color_pick (GtkWidget *button, gpointer data) {
 
 
 
+
+
+/**
+ * Copy the current saved desktop color to the clipboard as full hex + alpha
+ * color representation. This is useful for passing values between various 
+ * input boxes, or directly to xml.
+ */
+/* static void
+sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
+{
+    GtkWidget *tbl = GTK_WIDGET(obj);
+    
+    SPDesktop *desktop = 
+        (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
+
+   
+    sp_dropper_c32_color_copy( sp_desktop_get_color(desktop, true) );
+}*/
+
+
+/**
+ * Copies currently saved desktop color to the clipboard as a hex value. This 
+ * is useful for editing webpages and needing a value quickly for web
+ * colors.
+ * 
+ * TODO: When the toggle of the dropper is set to not mix color against 
+ *       page background, this still just gets the color of the page and 
+ *       doesn't get the actual mixed against background which is needed 
+ *       for the hex value ppl. want for web pages, etc.
+ */
+
+/* static void
+sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj)
+{
+    GtkWidget *tbl = GTK_WIDGET(obj);
+    
+    SPDesktop *desktop = 
+        (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
+    
+    sp_dropper_c32_color_copy_hex( sp_desktop_get_color(desktop, true) );
+}*/
+
+
+/**
+ * Sets the input boxes with the changed color and opacity. This is used as a 
+ * callback for style changing.
+ */
+/* static bool
+sp_style_changed (const SPCSSAttr *css, gpointer data)
+{
+    // GrDrag *drag = (GrDrag *) data;
+    
+    // set fill of text entry box
+    if (css->attribute("fill"))
+        gtk_entry_set_text((GtkEntry *)dropper_rgb_entry, 
+            css->attribute("fill")); 
+
+    // set opacity of text entry box
+    if (css->attribute("fill-opacity"))
+        gtk_entry_set_text((GtkEntry *)dropper_opacity_entry, 
+            css->attribute("fill-opacity")); 
+    
+    // set fill of text entry box
+    if (css->attribute("stroke"))
+        gtk_entry_set_text((GtkEntry *)dropper_rgb_entry, 
+            css->attribute("stroke")); 
+
+    // set opacity of text entry box
+    if (css->attribute("stroke-opacity"))
+        gtk_entry_set_text((GtkEntry *)dropper_opacity_entry, 
+            css->attribute("stroke-opacity"));
+    return false;
+
+}
+*/
+
+
 /**
  * Dropper auxiliary toolbar construction and setup.
  *
@@ -2286,7 +2358,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
 
     
     /* RGB Input Field */
-    {
+ /*   {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
         GtkWidget *dropper_rgba_label = gtk_label_new ("Color:");
         gtk_widget_show (dropper_rgba_label);
@@ -2305,10 +2377,10 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
         
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
                            AUX_BETWEEN_BUTTON_GROUPS);
-    }
+    } */
     
     /* Opacity Input Field */
-    {
+/*    {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
         GtkWidget *dropper_opacity_label = gtk_label_new ( _("Opacity:") );
         gtk_widget_show (dropper_opacity_label);
@@ -2326,11 +2398,11 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
         
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
                            AUX_BETWEEN_BUTTON_GROUPS);
-    }
+    } */
     
     
     /* Copy to Clipboard */
-    {
+/*    {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
         GtkWidget *b = gtk_button_new_with_label(_("Copy as RGBA"));
         gtk_tooltips_set_tip(tt, b, _("Copy last saved color as hexidecimal "
@@ -2343,11 +2415,11 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
             GTK_SIGNAL_FUNC(sp_dropper_copy), tbl);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
                            AUX_BETWEEN_BUTTON_GROUPS);
-    }
+    } */
 
 
     /* Copy to Clipboard as HEX */
-    {
+/*    {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
         GtkWidget *b = gtk_button_new_with_label(_("Copy as HEX"));
         gtk_tooltips_set_tip(tt, b, _("Copy last saved color as "
@@ -2359,9 +2431,9 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
             GTK_SIGNAL_FUNC(sp_dropper_copy_as_hex), tbl);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
                            AUX_BETWEEN_BUTTON_GROUPS);
-    }
+    } */
     
-    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+    // aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
     
     {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
@@ -2388,96 +2460,25 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 
                    AUX_BETWEEN_BUTTON_GROUPS);
     }
+   
+    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
     
+
+    // where new gtkmm stuff should go
     
     gtk_widget_show_all(tbl);
     sp_set_font_size_smaller (tbl);
 
+    /*
     sigc::connection *connection = new sigc::connection(
         desktop->connectSetStyle(
             sigc::bind(sigc::ptr_fun(sp_style_changed), 
-                       desktop)) );
+                       desktop)) ); 
     
     g_signal_connect(G_OBJECT(tbl), "destroy", G_CALLBACK(delete_connection), 
-                     connection);
+                     connection); */
     
     return tbl;
-}
-
-
-/**
- * Copy the current saved desktop color to the clipboard as full hex + alpha
- * color representation. This is useful for passing values between various 
- * input boxes, or directly to xml.
- */
-static void
-sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
-{
-    GtkWidget *tbl = GTK_WIDGET(obj);
-    
-    SPDesktop *desktop = 
-        (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
-
-   
-    sp_dropper_c32_color_copy( sp_desktop_get_color(desktop, true) );
-}
-
-
-/**
- * Copies currently saved desktop color to the clipboard as a hex value. This 
- * is useful for editing webpages and needing a value quickly for web
- * colors.
- * 
- * TODO: When the toggle of the dropper is set to not mix color against 
- *       page background, this still just gets the color of the page and 
- *       doesn't get the actual mixed against background which is needed 
- *       for the hex value ppl. want for web pages, etc.
- */
-
-static void
-sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj)
-{
-    GtkWidget *tbl = GTK_WIDGET(obj);
-    
-    SPDesktop *desktop = 
-        (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
-    
-    sp_dropper_c32_color_copy_hex( sp_desktop_get_color(desktop, true) );
-}
-
-
-/**
- * Sets the input boxes with the changed color and opacity. This is used as a 
- * callback for style changing.
- */
-static bool
-sp_style_changed (const SPCSSAttr *css, gpointer data)
-{
-    // GrDrag *drag = (GrDrag *) data;
-    
-    
-    // set fill of text entry box
-    if (css->attribute("fill"))
-        gtk_entry_set_text((GtkEntry *)dropper_rgb_entry, 
-            css->attribute("fill")); 
-
-    // set opacity of text entry box
-    if (css->attribute("fill-opacity"))
-        gtk_entry_set_text((GtkEntry *)dropper_opacity_entry, 
-            css->attribute("fill-opacity")); 
-    
-    // set fill of text entry box
-    if (css->attribute("stroke"))
-        gtk_entry_set_text((GtkEntry *)dropper_rgb_entry, 
-            css->attribute("stroke")); 
-
-    // set opacity of text entry box
-    if (css->attribute("stroke-opacity"))
-        gtk_entry_set_text((GtkEntry *)dropper_opacity_entry, 
-            css->attribute("stroke-opacity"));
-
-    return false;
-
 }
 
 

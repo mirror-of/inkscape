@@ -1,3 +1,7 @@
+2005-04-13  Jon Phillips <jon@rejon.org>
+	* src/toolbox.cpp: removed code that was beeping and prepped for new
+	  drag-n-drop color swatches.
+
 2005-04-13  Jon A. Cruz  <jon@joncruz.org>
 	* src/dialogs/swatches.cpp:
 

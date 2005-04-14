@@ -42,6 +42,7 @@ void aux_toolbox_space(GtkWidget *tb, gint space);
 void sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide = true);
 
 
+
 #endif /* !SEEN_TOOLBOX_H */
 
 /*
