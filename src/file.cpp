@@ -269,7 +269,8 @@ void dump_ustr(Glib::ustring const &ustr)
     Glib::ustring::size_type const dataLen = ustr.length();
     Glib::ustring::size_type const cstrLen = strlen(cstr);
 
-    g_message("   size: %ld\n   length: %ld\n   bytes: %ld\n    clen: %ld", ustr.size(), dataLen, byteLen, cstrLen );
+    g_message("   size: %lu\n   length: %lu\n   bytes: %lu\n    clen: %lu",
+              gulong(ustr.size()), gulong(dataLen), gulong(byteLen), gulong(cstrLen) );
     g_message( "  ASCII? %s", (ustr.is_ascii() ? "yes":"no") );
     g_message( "  UTF-8? %s", (ustr.validate() ? "yes":"no") );
 
