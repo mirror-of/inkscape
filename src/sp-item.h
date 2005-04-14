@@ -227,4 +227,6 @@ NRMatrix *sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *trans
 
 int sp_item_repr_compare_position(SPItem *first, SPItem *second);
 
+SPItem *sp_item_first_item_child (SPObject *obj);
+
 #endif

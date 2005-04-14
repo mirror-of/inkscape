@@ -1266,6 +1266,15 @@ sp_item_repr_compare_position(SPItem *first, SPItem *second)
                                     SP_OBJECT_REPR(second));
 }
 
+SPItem *
+sp_item_first_item_child (SPObject *obj)
+{
+    for ( SPObject *iter = sp_object_first_child(obj) ; iter ; iter = SP_OBJECT_NEXT(iter)) {
+        if (SP_IS_ITEM (iter))
+            return SP_ITEM (iter);
+    }
+}
+
 
 /*
   Local Variables:

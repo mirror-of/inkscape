@@ -659,7 +659,7 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                 if (sp_shape_marker_required (shape, m, bp)) {
 
                     SPMarker* marker = SP_MARKER (shape->marker[m]);
-                    SPItem* marker_path = SP_ITEM (shape->marker[m]->children);
+                    SPItem* marker_item = sp_item_first_item_child (SP_OBJECT (shape->marker[m]));
 
                     NR::Matrix tr(sp_shape_marker_get_transform(shape, bp));
 
@@ -667,12 +667,12 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                         tr = NR::scale(style->stroke_width.computed) * tr;
                     }
 
-                    tr = marker_path->transform * marker->c2p * tr;
+                    tr = marker_item->transform * marker->c2p * tr;
 
-                    NR::Matrix old_tr = marker_path->transform;
-                    marker_path->transform = tr;
-                    sp_item_invoke_print (marker_path, ctx);
-                    marker_path->transform = old_tr;
+                    NR::Matrix old_tr = marker_item->transform;
+                    marker_item->transform = tr;
+                    sp_item_invoke_print (marker_item, ctx);
+                    marker_item->transform = old_tr;
                 }
             }
         }
