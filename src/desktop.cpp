@@ -3,9 +3,10 @@
 /*
  * Editable view and widget implementation
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY <mental@rydia.net>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2004 MenTaLguY
  * Copyright (C) 1999-2002 Lauris Kaplinski

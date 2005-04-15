@@ -5,6 +5,7 @@
  * 
  * Authors:
  *   Bryce W. Harrington <brycehar@bryceharrington.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2003 Bryce W. Harrington
  *

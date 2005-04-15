@@ -4,6 +4,7 @@
  *  Inkscape
  *
  *  Created by fred on Fri Dec 05 2003.
+ *  tweaked endlessly by bulia byak <buliabyak@users.sf.net>
  *  public domain
  *
  */

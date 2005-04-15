@@ -4,7 +4,8 @@
 /*
  * Rect operators
  *
- * Copyright 2004  MenTaLguY <mental@rydia.net>
+ * Copyright 2004  MenTaLguY <mental@rydia.net>,
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * This code is licensed under the GNU GPL; see COPYING for more information.
  */

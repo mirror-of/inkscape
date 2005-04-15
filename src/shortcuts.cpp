@@ -6,6 +6,7 @@
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY <mental@rydia.net>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * This code is in public domain
  */

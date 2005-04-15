@@ -5,8 +5,9 @@
  */
 
 /*
- * Copyright (C) Lauris 2002
- */
+ * Copyright (C) Lauris Kaplinski 2002
+ *   bulia byak <buliabyak@users.sf.net>
+*/
 
 #define noSP_PS_VERBOSE
 

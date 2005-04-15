@@ -6,8 +6,9 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Bryce Harrington <brycehar@bryceharrington.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 2001-2002 authors
+ * Copyright (C) 2001-2005 authors
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2004 John Cliff
  *

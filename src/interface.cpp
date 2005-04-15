@@ -6,8 +6,9 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 1999-2005 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  * Copyright (C) 2004 David Turner
  *

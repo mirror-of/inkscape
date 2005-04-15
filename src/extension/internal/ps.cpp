@@ -5,6 +5,7 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Basic printing code, EXCEPT image and
  * ascii85 filter is in public domain

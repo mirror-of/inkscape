@@ -7,8 +7,9 @@
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 1999-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information

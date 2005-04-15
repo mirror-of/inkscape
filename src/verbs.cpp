@@ -10,11 +10,12 @@
  */
 
 /*
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Ted Gould <ted@gould.cx>
  *   MenTaLguY <mental@rydia.net>
  *   David Turner <novalis@gnu.org>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * This code is in public domain.
  */

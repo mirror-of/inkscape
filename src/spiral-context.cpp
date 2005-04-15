@@ -6,6 +6,7 @@
  * Authors:
  *   Mitsuru Oka
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 1999-2001 Lauris Kaplinski
  * Copyright (C) 2001-2002 Mitsuru Oka

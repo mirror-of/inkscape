@@ -7,8 +7,9 @@
  * Authors:
  *   Frank Felfe <innerspace@iname.com>
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 1999-2002 Authors
+ * Copyright (C) 1999-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

@@ -9,6 +9,7 @@
  *   Dirk Luetjens <dirk@luedi.oche.de>
  *   Yves Arrouye <Yves.Arrouye@marin.fdn.fr>
  *   Lauris Kaplinski <lauris@ximian.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright 1999-2001 Ximian, Inc. and authors
  *

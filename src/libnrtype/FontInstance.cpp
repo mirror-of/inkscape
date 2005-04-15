@@ -2,6 +2,10 @@
  *  FontInstance.cpp
  *  testICU
  *
+ *   Authors:
+ *     fred
+ *     bulia byak <buliabyak@users.sf.net>
+ *
  */
 
 #ifdef HAVE_CONFIG_H

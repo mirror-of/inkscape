@@ -1,3 +1,7 @@
+/*
+ *   bulia byak <buliabyak@users.sf.net>
+*/ 
+ 
 #define SP_REPR_CSS_C
 
 #include <math.h>

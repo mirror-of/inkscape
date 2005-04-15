@@ -6,6 +6,7 @@
  * Authors:
  *   Chris Lahey <clahey@ximian.com>
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 1999-2001 Ximian, Inc.
  * Copyright (C) 2002 Lauris Kaplinski

@@ -5,6 +5,7 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2002 Lauris Kaplinski
  *

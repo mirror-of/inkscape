@@ -1,3 +1,7 @@
+/*
+ *   bulia byak <buliabyak@users.sf.net>
+*/ 
+
 #include <config.h>
 #include <math.h>
 #include <string.h>

@@ -4,7 +4,7 @@
 /*
  * Text editing functions common for for text and flowtext
  *
- * Author:
+ * Authors:
  *   bulia byak
  *
  * Copyright (C) 2004 author

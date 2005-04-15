@@ -3,6 +3,7 @@
  *
  * Authors:
  *   MenTaLguY <mental@rydia.net>
+ *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2004 MenTaLguY
  *

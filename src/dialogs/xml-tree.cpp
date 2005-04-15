@@ -6,8 +6,9 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY <mental@rydia.net>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 1999-2002 Authors
+ * Copyright (C) 1999-2005 Authors
  * Copyright (C) 2004 David Turner
  *
  * Released under GNU GPL, read the file 'COPYING' for more information

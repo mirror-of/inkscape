@@ -5,8 +5,9 @@
  *
  * Authors:
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 2001-2002 authors
+ * Copyright (C) 2001-2005 authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

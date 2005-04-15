@@ -5,8 +5,9 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
- *
- * Copyright (C) 1999-2002 Lauris Kaplinski
+ *   bulia byak <buliabyak@users.sf.net>
+  *
+ * Copyright (C) 1999-2005 authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

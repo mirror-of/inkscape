@@ -6,6 +6,7 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Jon Phillips <jon@rejon.org>
+ *   bulia byak <buliabyak@users.sf.net>
  * 
  * Copyright (C) Jon Phillips 2005
  * Copyright (C) Lauris Kaplinski 2000-2002

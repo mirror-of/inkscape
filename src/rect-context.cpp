@@ -5,10 +5,10 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 2000 Lauris Kaplinski
+ * Copyright (C) 2000-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
- * Copyright (C) 2002 Lauris Kaplinski
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

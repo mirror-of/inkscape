@@ -4,9 +4,9 @@
  * Clone tiling dialog
  *
  * Authors:
- *   bulia byak
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 2004 Authors
+ * Copyright (C) 2004-2005 Authors
  * Released under GNU GPL
  */
 

@@ -7,10 +7,9 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
  *   MenTaLguY <mental@rydia.net>
+ *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 2004 MenTaLguY
- * Copyright (C) 1999-2002 Frank Felfe
- * Copyright (C) 1999-2002 Lauris Kaplinski
+ * Copyright (C) 1999-2005 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
