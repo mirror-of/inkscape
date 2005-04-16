@@ -194,7 +194,7 @@ build_module_from_dir(gchar const *dirname)
             continue;
         }
 
-        gchar *pathname = g_strdup_printf("%s/%s", INKSCAPE_EXTENSIONDIR, filename);
+        gchar *pathname = g_strdup_printf("%s/%s", dirname, filename);
         build_from_file(pathname);
         g_free(pathname);
     }

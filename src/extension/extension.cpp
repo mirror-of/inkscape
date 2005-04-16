@@ -574,10 +574,14 @@ Extension::error_file_close (void)
 	This function just goes through each parameter, and calls it's 'get_widget'
 	function to get each widget.  Then, each of those is placed into
 	a Gtk::VBox, which is then returned to the calling function.
+
+	If there are no parameters, this function just returns NULL.
 */
 Gtk::Widget *
 Extension::autogui (void)
 {
+	if (g_slist_length(parameters) == 0) return NULL;
+
 	Gtk::VBox * vbox = new Gtk::VBox();
     vbox = new Gtk::VBox();
 

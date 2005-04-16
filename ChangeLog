@@ -1,3 +1,21 @@
+2005-04-16  Ted Gould  <ted@gould.cx>
+
+	* src/main.cpp:
+
+	Added a command-line arguement --extension-directory to find what
+	extension directory Inkscape is configured for.  This should be 
+	helpful for external extensions that want to use the same path
+	as Inkscape itself on their install.
+
+	* src/extension/extension.cpp, src/extension/init.cpp:
+
+	Putting in half of Aaron's fix, mostly the one to keep things from
+	crashing, next we need to examine how to add multiple search paths
+	for extension dependencies.
+
+	Also, added a check so that autogui won't create a GUI if there are
+	no preferences.
+
 2005-04-13  Jon Phillips <jon@rejon.org>
 	* src/toolbox.cpp: removed code that was beeping and prepped for new
 	  drag-n-drop color swatches.

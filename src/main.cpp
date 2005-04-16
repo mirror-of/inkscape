@@ -112,6 +112,7 @@ enum {
     SP_ARG_EXPORT_BACKGROUND,
     SP_ARG_EXPORT_BACKGROUND_OPACITY,
     SP_ARG_EXPORT_SVG,
+    SP_ARG_EXTENSIONDIR,
     SP_ARG_SLIDESHOW,
     SP_ARG_BITMAP_ICONS,
     SP_ARG_VERSION,
@@ -227,6 +228,11 @@ struct poptOption options[] = {
      POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
      N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"), 
      N_("FILENAME")},
+
+    {"extension-directory", 'x',
+     POPT_ARG_NONE, NULL, SP_ARG_EXTENSIONDIR,
+     N_("Print out the extension directory and exit."),
+     NULL},
 
     {"slideshow", 's', 
      POPT_ARG_NONE, &sp_global_slideshow, SP_ARG_SLIDESHOW,
@@ -714,6 +720,11 @@ sp_process_args(poptContext ctx)
             }
             case SP_ARG_VERSION: {
                 printf("Inkscape %s (%s)\n", INKSCAPE_VERSION, __DATE__);
+                exit(0);
+                break;
+            }
+            case SP_ARG_EXTENSIONDIR: {
+                printf("%s\n", INKSCAPE_EXTENSIONDIR);
                 exit(0);
                 break;
             }
