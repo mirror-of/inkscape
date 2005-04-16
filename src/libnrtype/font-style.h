@@ -15,7 +15,7 @@ struct font_style {
     double        stroke_width; // if 0, the glyph is filled; otherwise stroked
     JoinType      stroke_join;
     ButtType      stroke_cap;
-    // FIXME: miterlimit is missing! as a result text does not obey miterlimit setting
+    float         stroke_miter_limit;
     int           nbDash;
     double        dash_offset;
     double*       dashes;

@@ -42,7 +42,7 @@ void          font_style::Apply(Path* src,Shape* dest) {
 				free(tdashs);
 			}
 		}
-		src->Stroke(dest,false,0.5*stroke_width,stroke_join,stroke_cap,0.5*1.414*stroke_width);
+		src->Stroke(dest,false,0.5*stroke_width,stroke_join,stroke_cap,stroke_miter_limit);
 	} else {
 		src->Fill(dest,0);
 	}

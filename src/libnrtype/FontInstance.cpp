@@ -48,7 +48,7 @@ size_t  font_style_hash::operator()(const font_style &x) const {
 	h*=12186;
 	h+=n;
 	if ( x.stroke_width >= 0.01 ) {
-		n=x.stroke_cap*10+x.stroke_join;
+		n=x.stroke_cap*10+x.stroke_join+(int)(x.stroke_miter_limit*100);
 		h*=12186;
 		h+=n;
 		if ( x.nbDash > 0 ) {
@@ -87,6 +87,7 @@ bool  font_style_equal::operator()(const font_style &a,const font_style &b) {
 	
 	if ( a.stroke_cap != b.stroke_cap ) return false;
 	if ( a.stroke_join != b.stroke_join ) return false;
+    if ( fabs(a.stroke_miter_limit-b.stroke_miter_limit) > 0.01) return false;
 	if ( a.nbDash != b.nbDash ) return false;
 	if ( a.nbDash <= 0 ) return true;
 	if ( fabs(a.dash_offset-b.dash_offset) < 0.01 ) {
@@ -564,7 +565,7 @@ double font_instance::Advance(int glyph_id,bool vertical)
 }	
 
 
-raster_font* font_instance::RasterFont(const NR::Matrix &trs,double stroke_width,bool vertical,JoinType stroke_join,ButtType stroke_cap)
+raster_font* font_instance::RasterFont(const NR::Matrix &trs,double stroke_width,bool vertical,JoinType stroke_join,ButtType stroke_cap,float miter_limit)
 {
 	font_style  nStyle;
 	nStyle.transform=trs;

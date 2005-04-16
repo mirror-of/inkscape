@@ -86,7 +86,7 @@ public:
 		// creates a rasterfont for the given style
     raster_font*         RasterFont(NR::Matrix const &trs, double stroke_width,
                                     bool vertical = false, JoinType stroke_join = join_straight,
-                                    ButtType stroke_cap = butt_straight);
+                                    ButtType stroke_cap = butt_straight, float miter_limit = 4.0);
 		// the dashes array in iStyle is copied
     raster_font*         RasterFont(font_style const &iStyle);
 		// private use: tells the font_instance that the raster_font 'who' has died
