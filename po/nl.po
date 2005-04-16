@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-23 00:20+0100\n"
-"PO-Revision-Date: 2005-03-27 15:51+0200\n"
+"PO-Revision-Date: 2005-04-13 22:24+0200\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -947,9 +947,8 @@ msgstr "Berichten"
 #. TRANSLATORS: "Clear" is a verb here
 #: src/dialogs/debugdialog.cpp:145 src/dialogs/find.cpp:806
 #: src/dialogs/scriptdialog.cpp:195
-#, fuzzy
 msgid "_Clear"
-msgstr "Alles verwijderen"
+msgstr "_Nieuwe zoekopdracht"
 
 #: src/dialogs/debugdialog.cpp:147
 msgid "Capture log messages"
@@ -1602,15 +1601,16 @@ msgid "Pencil"
 msgstr "Vrije hand"
 
 #: src/dialogs/display-settings.cpp:1150
-#, fuzzy
 msgid "Tolerance:"
-msgstr "Overtrekken"
+msgstr "Tolerantie:"
 
 #: src/dialogs/display-settings.cpp:1151
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
 msgstr ""
+"Dit beinvloed de manier waarop lijnen uit de vrije hand worden afgerond; "
+"lagere waarden leveren hoekerige lijnen op"
 
 #: src/dialogs/display-settings.cpp:1167 src/ui/stock-items.cpp:166
 #: src/verbs.cpp:1762
@@ -1619,7 +1619,7 @@ msgstr "Pen"
 
 #: src/dialogs/display-settings.cpp:1176 src/verbs.cpp:1764
 msgid "Calligraphy"
-msgstr "Calligraphy"
+msgstr "Kalligrafie"
 
 #: src/dialogs/display-settings.cpp:1183 src/dialogs/text-edit.cpp:348
 #: src/ui/dialog/text-properties.cpp:40 src/ui/stock-items.cpp:168
@@ -2068,225 +2068,197 @@ msgstr "Saturation:"
 
 #: src/dialogs/find.cpp:82 src/dialogs/find.cpp:747
 msgid "Find objects by their text content (exact or partial match)"
-msgstr ""
+msgstr "Zoek objecten op hun tekst inhoud (precieze of gedeeltelijke overeenkomst)"
 
 #: src/dialogs/find.cpp:83 src/dialogs/find.cpp:748
 msgid "Find objects by the value of the id attribute (exact or partial match)"
-msgstr ""
+msgstr "Zoek objecten op naam of op het ID-attribuut (precieze of gedeeltelijke overeenkomst)"
 
 #: src/dialogs/find.cpp:84 src/dialogs/find.cpp:749
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
+"Zoek objecten op naam of op het stijl-attribuut (precieze of gedeeltelijke overeenkomst)"
 
 #: src/dialogs/find.cpp:85 src/dialogs/find.cpp:750
 msgid "Find objects by the name of an attribute (exact or partial match)"
-msgstr ""
+msgstr "Zoek objecten op naam of op attribuut (precieze of gedeeltelijke overeenkomst)"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
-msgstr "Lijnen op de geselecteerde knooppunten samenvoegen"
+msgstr "<b>%d</b> objecten gevonden (van <b>%d</b>), %s overeenkomst."
 
 #: src/dialogs/find.cpp:434
-#, fuzzy
 msgid "exact"
-msgstr "Rechthoek"
+msgstr "precieze"
 
 #: src/dialogs/find.cpp:434
-#, fuzzy
 msgid "partial"
-msgstr "Spiraal"
+msgstr "gedeeltelijke"
 
 #: src/dialogs/find.cpp:441
-#, fuzzy
 msgid "No objects found"
-msgstr "Geen objecten"
+msgstr "Geen objecten gevonden"
 
 #: src/dialogs/find.cpp:599
-#, fuzzy
 msgid "T_ype: "
-msgstr "Type:"
+msgstr "S_oort:"
 
 #: src/dialogs/find.cpp:606
 msgid "Search in all object types"
-msgstr ""
+msgstr "Doorzoek alle soorten objecten"
 
 #: src/dialogs/find.cpp:606
-#, fuzzy
 msgid "All types"
-msgstr "Bestandstype:"
+msgstr "Alle soorten"
 
 #: src/dialogs/find.cpp:617
 msgid "Search all shapes"
-msgstr ""
+msgstr "Doorzoek alle vormen"
 
 #: src/dialogs/find.cpp:617
-#, fuzzy
 msgid "All shapes"
-msgstr "All vorm-gereedschappen"
+msgstr "Alle vormen"
 
 #: src/dialogs/find.cpp:634
-#, fuzzy
 msgid "Search rectangles"
-msgstr "Rechthoek"
+msgstr "Doorzoek rechthoeken"
 
 #: src/dialogs/find.cpp:634
-#, fuzzy
 msgid "Rectangles"
-msgstr "Rechthoek"
+msgstr "Rechthoeken"
 
 #: src/dialogs/find.cpp:639
-#, fuzzy
 msgid "Search ellipses, arcs, circles"
-msgstr "Circels, ellipsen en sterren maken"
+msgstr "Doorzoek ellipsen, veelhoeken en circels."
 
 #: src/dialogs/find.cpp:639
-#, fuzzy
 msgid "Ellipses"
-msgstr "Ellips"
+msgstr "Ellipsen"
 
 #: src/dialogs/find.cpp:644
-#, fuzzy
 msgid "Search stars and polygons"
-msgstr "Sterren en veelhoeken maken"
+msgstr "Doorzoek sterren en veelhoeken"
 
 #: src/dialogs/find.cpp:644
-#, fuzzy
 msgid "Stars"
-msgstr "Ster"
+msgstr "Sterren"
 
 #: src/dialogs/find.cpp:649
-#, fuzzy
 msgid "Search spirals"
-msgstr "Spiralen maken"
+msgstr "Doorzoek spiralen"
 
 #: src/dialogs/find.cpp:649
-#, fuzzy
 msgid "Spirals"
-msgstr "Spiraal"
+msgstr "Spiralen"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
 #: src/dialogs/find.cpp:662
 msgid "Search paths, lines, polylines"
-msgstr ""
+msgstr "Doorzoek paden, lijnen en poly-lijnen"
 
 #: src/dialogs/find.cpp:662
-#, fuzzy
 msgid "Paths"
-msgstr "Pad"
+msgstr "Paden"
 
 #: src/dialogs/find.cpp:667
-#, fuzzy
 msgid "Search text objects"
-msgstr "Geselecteerde objecten"
+msgstr "Doorzoek tekst-objecten"
 
 #: src/dialogs/find.cpp:667
-#, fuzzy
 msgid "Texts"
 msgstr "Tekst"
 
 #: src/dialogs/find.cpp:672
 msgid "Search groups"
-msgstr ""
+msgstr "Doorzoek groepen"
 
 #: src/dialogs/find.cpp:672
-#, fuzzy
 msgid "Groups"
-msgstr "Groep"
+msgstr "Groepen"
 
 #: src/dialogs/find.cpp:677
 msgid "Search clones"
-msgstr ""
+msgstr "Doorzoek klonen"
 
 #: src/dialogs/find.cpp:682
 msgid "Search images"
-msgstr ""
+msgstr "Doorzoek afbeeldingen"
 
 #: src/dialogs/find.cpp:682
-#, fuzzy
 msgid "Images"
-msgstr "Afbeelding"
+msgstr "Afbeeldingen"
 
 #: src/dialogs/find.cpp:687
-#, fuzzy
 msgid "Search offset objects"
-msgstr "Geselecteerde objecten"
+msgstr ""
 
 #: src/dialogs/find.cpp:687
 msgid "Offsets"
 msgstr ""
 
 #: src/dialogs/find.cpp:747
-#, fuzzy
 msgid "_Text: "
-msgstr "Tekst"
+msgstr "_Tekst:"
 
 #: src/dialogs/find.cpp:748
 msgid "_ID: "
-msgstr ""
+msgstr "_ID:"
 
 #: src/dialogs/find.cpp:749
-#, fuzzy
 msgid "_Style: "
-msgstr "Stijl"
+msgstr "_Stijl:"
 
 #: src/dialogs/find.cpp:750
-#, fuzzy
 msgid "_Attribute: "
-msgstr "Attribuut"
+msgstr "_Attribuut:"
 
 #: src/dialogs/find.cpp:764
-#, fuzzy
 msgid "Search in s_election"
-msgstr "Selectie"
+msgstr "Doorzoek de s_electie"
 
 #: src/dialogs/find.cpp:768
 msgid "Limit search to the current selection"
-msgstr ""
+msgstr "Beperk het zoeken tot de selectie"
 
 #: src/dialogs/find.cpp:773
-#, fuzzy
 msgid "Search in current _layer"
-msgstr "Selecteren"
+msgstr "Doorzoek de huidige _laag"
 
 #: src/dialogs/find.cpp:777
-#, fuzzy
 msgid "Limit search to the current layer"
-msgstr "De index van de huidge pagina"
+msgstr "Beperk het zoeken tot de huidige laag"
 
 #: src/dialogs/find.cpp:782
 msgid "Include _hidden"
-msgstr ""
+msgstr "Doorzoek ver_borgen objecten"
 
 #: src/dialogs/find.cpp:786
 msgid "Include hidden objects in search"
-msgstr ""
+msgstr "Doorzoek ook verborgen objecten"
 
 #: src/dialogs/find.cpp:791
 msgid "Include l_ocked"
-msgstr ""
+msgstr "Doorzoek ver_grendelde objecten"
 
 #: src/dialogs/find.cpp:795
-#, fuzzy
 msgid "Include locked objects in search"
-msgstr "Geselecteerde objecten"
+msgstr "Doorzoek ook vergrendelde objecten"
 
 #: src/dialogs/find.cpp:806
-#, fuzzy
 msgid "Clear values"
-msgstr "Alles verwijderen"
+msgstr "Maak alle invoervelden leeg om een nieuwe zoekopdracht te beginnen"
 
 #: src/dialogs/find.cpp:807
-#, fuzzy
 msgid "_Find"
-msgstr "Raster"
+msgstr "_Zoeken"
 
 #: src/dialogs/find.cpp:807
 msgid "Select objects matching all of the fields you filled in"
-msgstr ""
+msgstr "Selecteer alle objecten met de hierboven ingevulde eigenschappen"
 
 #. Create the label for the object id
 #: src/dialogs/item-properties.cpp:128
@@ -5113,8 +5085,9 @@ msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 
 #: src/toolbox.cpp:1810
+#, fuzzy
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
-msgstr ""
+msgstr "Kalligrafie"
 
 #: src/toolbox.cpp:1820
 #, fuzzy
@@ -5321,14 +5294,12 @@ msgid "Fill and Stroke Dialog"
 msgstr "Opvulling en lijnen"
 
 #: src/ui/dialog/find.cpp:37 src/ui/dialog/find.h:32
-#, fuzzy
 msgid "Find"
-msgstr "in"
+msgstr "Zoeken"
 
 #: src/ui/dialog/find.h:33
-#, fuzzy
 msgid "Find Dialog"
-msgstr "Weergeven"
+msgstr "Zoeken dialoog"
 
 #: src/ui/dialog/inkscape-preferences.cpp:80
 #, fuzzy
@@ -5603,122 +5574,102 @@ msgstr "Hulplijnen"
 
 #: src/ui/stock-items.cpp:81 src/verbs.cpp:1817
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Volledig scherm"
 
 #: src/ui/stock-items.cpp:82 src/verbs.cpp:1850
 msgid "_Messages..."
-msgstr ""
+msgstr "_Berichten..."
 
 #: src/ui/stock-items.cpp:83
-#, fuzzy
 msgid "S_cripts..."
-msgstr "Afdrukken..."
+msgstr "S_cripts..."
 
 #: src/ui/stock-items.cpp:84 src/verbs.cpp:1571
-#, fuzzy
 msgid "P_revious Window"
-msgstr "Nieuwe weergave"
+msgstr "V_orige venster"
 
 #: src/ui/stock-items.cpp:85 src/verbs.cpp:1569
-#, fuzzy
 msgid "N_ext Window"
-msgstr "Vensters"
+msgstr "_Volgende vensters"
 
 #: src/ui/stock-items.cpp:86 src/verbs.cpp:1820
-#, fuzzy
 msgid "D_uplicate Window"
-msgstr "Item dupliceren"
+msgstr "Venster d_upliceren"
 
 #. Layer menu
 #. Layer
 #: src/ui/stock-items.cpp:89 src/verbs.cpp:1706
-#, fuzzy
 msgid "_New Layer..."
-msgstr "Verlaag"
+msgstr "_Nieuwe laag..."
 
 #: src/ui/stock-items.cpp:90
-#, fuzzy
 msgid "R_ename Layer..."
-msgstr "Node naar voren brengen"
+msgstr "Laag h_ernoemen...."
 
 #: src/ui/stock-items.cpp:91
-#, fuzzy
 msgid "D_uplicate Layer"
-msgstr "Item dupliceren"
+msgstr "Laag  d_upliceren"
 
 #: src/ui/stock-items.cpp:92
-#, fuzzy
 msgid "_Anchor Layer"
-msgstr "Node naar achteren brengen"
+msgstr ""
 
 #: src/ui/stock-items.cpp:93
 msgid "Merge Do_wn"
 msgstr ""
 
 #: src/ui/stock-items.cpp:94
-#, fuzzy
 msgid "_Delete Layer"
-msgstr "Item verwijderen"
+msgstr "Laag _verwijderen"
 
 #: src/ui/stock-items.cpp:95
-#, fuzzy
 msgid "Select Ne_xt Layer"
-msgstr "Printer selecteren"
+msgstr "Volgende laag selecteren"
 
 #: src/ui/stock-items.cpp:96
-#, fuzzy
 msgid "Select Pre_vious Layer"
-msgstr "Printer selecteren"
+msgstr "Vorige laag selecteren"
 
 #: src/ui/stock-items.cpp:97
-#, fuzzy
 msgid "Select To_p Layer"
-msgstr "Printer selecteren"
+msgstr "Bovenste laag selecteren"
 
 #: src/ui/stock-items.cpp:98
 msgid "Select Botto_m Layer"
-msgstr ""
+msgstr "Onderste laag selecteren"
 
 #: src/ui/stock-items.cpp:99 src/verbs.cpp:1722
-#, fuzzy
 msgid "_Raise Layer"
-msgstr "Item naar voren brengen"
+msgstr "Laag naar voren brengen"
 
 #: src/ui/stock-items.cpp:100 src/verbs.cpp:1724
-#, fuzzy
 msgid "_Lower Layer"
-msgstr "Item naar achteren brengen"
+msgstr "Laag naar achteren brengen"
 
 #: src/ui/stock-items.cpp:101 src/verbs.cpp:1718
-#, fuzzy
 msgid "Layer to _Top"
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "Laag naar voren brengen"
 
 #: src/ui/stock-items.cpp:102 src/verbs.cpp:1720
-#, fuzzy
 msgid "Layer to _Bottom"
-msgstr "De geselecteerde objecten naar de achtergrond sturen"
+msgstr "Laag naar de achtergrond sturen"
 
 #. Object menu
 #: src/ui/stock-items.cpp:105 src/verbs.cpp:1838
-#, fuzzy
 msgid "_Fill and Stroke..."
-msgstr "Opvulling en lijnen"
+msgstr "_Opvulling en lijnen..."
 
 #: src/ui/stock-items.cpp:106 src/verbs.cpp:1859
-#, fuzzy
 msgid "_Object Properties..."
-msgstr "Rechthoek eigenschappen"
+msgstr "_Object eigenschappen..."
 
 #: src/ui/stock-items.cpp:107 src/verbs.cpp:1630
-#, fuzzy
 msgid "_Group"
-msgstr "Groep"
+msgstr "_Groep"
 
 #: src/ui/stock-items.cpp:109 src/verbs.cpp:1626
-#, fuzzy
 msgid "_Raise"
-msgstr "Verhoog"
+msgstr "Omhoog halen"
 
 #: src/ui/stock-items.cpp:110 src/verbs.cpp:1628
 #, fuzzy
@@ -6060,7 +6011,7 @@ msgstr ""
 
 #: src/verbs.cpp:1390
 msgid "tutorial-calligraphy.svg"
-msgstr ""
+msgstr "tutorial-calligraphy.svg"
 
 #: src/verbs.cpp:1393
 msgid "elementsofdesign.svg"
@@ -6175,247 +6126,206 @@ msgstr "Sodipodi diavoorstelling"
 
 #. Edit
 #: src/verbs.cpp:1578
-#, fuzzy
 msgid "_Undo"
-msgstr "Ongedaan maken"
+msgstr "_Ongedaan maken"
 
 #: src/verbs.cpp:1578
-#, fuzzy
 msgid "Undo last action"
-msgstr "De laatste handeling ongedaan maken"
+msgstr "De laatste bewerking ongedaan maken"
 
 #: src/verbs.cpp:1580
-#, fuzzy
 msgid "_Redo"
-msgstr "Opnieuw"
+msgstr "O_pnieuw"
 
 #: src/verbs.cpp:1581
-#, fuzzy
 msgid "Do again last undone action"
-msgstr "'Ongedaan maken' herstellen"
+msgstr "De ongedaan gemaakte actie opnieuw uitvoeren"
 
 #: src/verbs.cpp:1582
-#, fuzzy
 msgid "Cu_t"
-msgstr "Knippen"
+msgstr "K_nippen"
 
 #: src/verbs.cpp:1583
-#, fuzzy
 msgid "Cut selection to clipboard"
-msgstr "De geselecteerde objecten knippen en op het klembord plaatsen"
+msgstr "De selectie knippen en op het klembord plaatsen"
 
 #: src/verbs.cpp:1584
-#, fuzzy
 msgid "_Copy"
-msgstr "Kopiëren"
+msgstr "_Kopiëren"
 
 #: src/verbs.cpp:1585
-#, fuzzy
 msgid "Copy selection to clipboard"
-msgstr "De geselecteerde objecten kopiëren en op het klembord plaatsen"
+msgstr "De selectie kopiëren en op het klembord plaatsen"
 
 #: src/verbs.cpp:1586
-#, fuzzy
 msgid "_Paste"
-msgstr "Plakken"
+msgstr "_Plakken"
 
 #: src/verbs.cpp:1587
-#, fuzzy
 msgid "Paste object(s) from clipboard to mouse point"
-msgstr "Objecten plakken van het klembord"
+msgstr "Objecten plakken van het klembord naar waar de muis staat"
 
 #: src/verbs.cpp:1589
-#, fuzzy
 msgid "Apply style of the copied object to selection"
-msgstr "Geselecteerde objecten naar het klembord kopieëren"
+msgstr "De stijl van het gekopieerde object op de selectie toepassen."
 
 #: src/verbs.cpp:1591
-#, fuzzy
 msgid "Paste object(s) from clipboard to the original location"
-msgstr "Objecten plakken van het klembord"
+msgstr "Objecten plakken van het klembord naar hun originele locatie"
 
 #: src/verbs.cpp:1592
-#, fuzzy
 msgid "_Delete"
-msgstr "Verwijderen"
+msgstr "_Verwijderen"
 
 #: src/verbs.cpp:1593
-#, fuzzy
 msgid "Delete selection"
-msgstr "De geselecteerde knooppunten verwijderen"
+msgstr "De selectie verwijderen"
 
 #: src/verbs.cpp:1595
-#, fuzzy
 msgid "Duplicate selected object(s)"
-msgstr "Geselecteerde objecten dubliceren"
+msgstr "Geselecteerde object(en) dubliceren"
 
 #: src/verbs.cpp:1597
 msgid "Create a clone of selected object (a copy linked to the original)"
-msgstr ""
+msgstr "Een kloon (een kopie die aan het origineel gekoppeld is) maken van de selectie"
 
 #: src/verbs.cpp:1599
 msgid "Cut the clone's link to its original"
-msgstr ""
+msgstr "De koppeling van de kloon naar zijn origineel verwijderen"
 
 #: src/verbs.cpp:1600
-#, fuzzy
 msgid "Select _Original"
-msgstr "Printer selecteren"
+msgstr "_Origineel selecteren"
 
 #: src/verbs.cpp:1601
-#, fuzzy
 msgid "Select the object to which the clone is linked"
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer het object waaraan de kloon is gekoppeld"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: src/verbs.cpp:1603
-#, fuzzy
 msgid "O_bject(s) to Pattern"
-msgstr "Object transformatie"
+msgstr "O_bject(en) naar patroon"
 
 #: src/verbs.cpp:1604
 msgid "Convert selection to a rectangle with tiled pattern fill"
-msgstr ""
+msgstr "Zet de selectie om naar een rechthoek gevuld met een getegeld patroon"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: src/verbs.cpp:1606
-#, fuzzy
 msgid "Pattern to Ob_ject(s)"
-msgstr "Object egaliseren"
+msgstr "Patroon naar object(en)"
 
 #: src/verbs.cpp:1607
 msgid "Extract objects from a tiled pattern fill"
-msgstr ""
+msgstr "Objecten uit een getegeld patroon extraheren"
 
 #: src/verbs.cpp:1608
-#, fuzzy
 msgid "Clea_r All"
 msgstr "Alles verwijderen"
 
 #: src/verbs.cpp:1609
 msgid "Delete all objects from document"
-msgstr "Alle objecten van het documenten verwijderen."
+msgstr "Alle objecten van het document verwijderen"
 
 #: src/verbs.cpp:1610
-#, fuzzy
 msgid "Select Al_l"
-msgstr "Alles selecteren"
+msgstr "A_lles selecteren"
 
 #: src/verbs.cpp:1611
-#, fuzzy
 msgid "Select all objects or all nodes"
-msgstr "Alle objecten in het document selecteren"
+msgstr "Alle objecten of knooppunten selecteren"
 
 #: src/verbs.cpp:1612
-#, fuzzy
 msgid "Select All in All Layers"
-msgstr "Selecteren"
+msgstr "Alles selecteren in alle lagen"
 
 #: src/verbs.cpp:1613
-#, fuzzy
 msgid "Select all objects in all visible and unlocked layers"
-msgstr "Alle objecten in het document selecteren"
+msgstr "Alle objecten in alle zichtbare en niet-vergrendelde lagen selecteren"
 
 #: src/verbs.cpp:1614
-#, fuzzy
 msgid "Invert Selection"
-msgstr "Selectie"
+msgstr "Selectie omkeren"
 
 #: src/verbs.cpp:1615
 msgid "Invert selection (unselect what is selected and select everything else)"
-msgstr ""
+msgstr "De selectie omkeren (alleen dat selecteren wat nu niet geselecteerd is)"
 
 #: src/verbs.cpp:1616
 msgid "Invert in All Layers"
-msgstr ""
+msgstr "Omdraaien in alle lagen"
 
 #: src/verbs.cpp:1617
 msgid "Invert selection in all visible and unlocked layers"
-msgstr ""
+msgstr "De selectie omkeren in alle zichtbare en niet-vergrendelde lagen"
 
 #: src/verbs.cpp:1618
-#, fuzzy
 msgid "D_eselect"
-msgstr "Selecteren"
+msgstr "S_electie opheffen"
 
 #: src/verbs.cpp:1619
-#, fuzzy
 msgid "Deselect any selected objects or nodes"
-msgstr "Geselecteerde objecten verwijderen"
+msgstr "Zorg dat niets meer geselecteerd is"
 
 #: src/verbs.cpp:1623
-#, fuzzy
 msgid "Raise selection to top"
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "De selectie naar voren brengen"
 
 #: src/verbs.cpp:1625
-#, fuzzy
 msgid "Lower selection to bottom"
-msgstr "De geselecteerde objecten naar de achtergrond sturen"
+msgstr "De selectie naar de achtergrond sturen"
 
 #: src/verbs.cpp:1627
-#, fuzzy
 msgid "Raise selection one step"
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "De selectie één niveau naar voren brengen"
 
 #: src/verbs.cpp:1629
-#, fuzzy
 msgid "Lower selection one step"
-msgstr "De geselecteerde objecten één niveau naar achteren brengen"
+msgstr "De selectie één niveau naar achteren brengen"
 
 #: src/verbs.cpp:1631
 msgid "Group selected objects"
 msgstr "De geselecteerde objecten groeperen"
 
 #: src/verbs.cpp:1633
-#, fuzzy
 msgid "Ungroup selected group(s)"
-msgstr "De geselecteerde groep degoeperen"
+msgstr "De geselecteerde groep(en) degoeperen"
 
 #: src/verbs.cpp:1635
-#, fuzzy
 msgid "_Put on Path"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "Op _pad plaatsen"
 
 #: src/verbs.cpp:1636
-#, fuzzy
 msgid "Put text on path"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "Tekst op een pad plaatsen"
 
 #: src/verbs.cpp:1637
-#, fuzzy
 msgid "_Remove from Path"
-msgstr "Transformaties verwijderen van het object"
+msgstr "Van pad verwijderen"
 
 #: src/verbs.cpp:1638
-#, fuzzy
 msgid "Remove text from path"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "Tekst van een pad verwijderen"
 
 #: src/verbs.cpp:1640
-#, fuzzy
 msgid "Remove all manual kerns from a text object"
-msgstr "Transformaties verwijderen van het object"
+msgstr ""
 
 #: src/verbs.cpp:1643
-#, fuzzy
 msgid "Union of selected objects"
-msgstr "De geselecteerde objecten groeperen"
+msgstr "Vereniging van alle geselecteerde objecten"
 
 #: src/verbs.cpp:1645
-#, fuzzy
 msgid "Intersection of selected objects"
-msgstr "Geselecteerde objecten verwijderen"
+msgstr "Intersectie van alle geselecteerde objecten"
 
 #: src/verbs.cpp:1647
-#, fuzzy
 msgid "Difference of selected objects (bottom minus top)"
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "Het verschil van de geselecteerde objecten"
 
 #: src/verbs.cpp:1649
-#, fuzzy
 msgid "Exclusive OR of selected objects"
-msgstr "Geselecteerde objecten verwijderen"
+msgstr "'Exclusive-OR' van de geselecteerde objecten"
 
 #: src/verbs.cpp:1651
 msgid "Cut the bottom object into pieces"
@@ -6426,96 +6336,81 @@ msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr ""
 
 #: src/verbs.cpp:1660
-#, fuzzy
 msgid "Outset selected path(s)"
-msgstr "Bereken de vereniging van de geselecteerd paden"
+msgstr ""
 
 #: src/verbs.cpp:1662
-#, fuzzy
 msgid "O_utset Path by 1px"
-msgstr "Laatst geselecteerde"
+msgstr ""
 
 #: src/verbs.cpp:1663
-#, fuzzy
 msgid "Outset selected path(s) by 1px"
-msgstr "Laatst geselecteerde"
+msgstr ""
 
 #: src/verbs.cpp:1665
-#, fuzzy
 msgid "O_utset Path by 10px"
-msgstr "Laatst geselecteerde"
+msgstr ""
 
 #: src/verbs.cpp:1666
-#, fuzzy
 msgid "Outset selected path(s) by 10px"
-msgstr "Laatst geselecteerde"
+msgstr ""
 
 #: src/verbs.cpp:1671
-#, fuzzy
 msgid "Inset selected path(s)"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr ""
 
 #: src/verbs.cpp:1673
 msgid "I_nset Path by 1px"
 msgstr ""
 
 #: src/verbs.cpp:1674
-#, fuzzy
 msgid "Inset selected path(s) by 1px"
-msgstr "Verdeel het geselecteerde pad naar subpaden"
+msgstr ""
 
 #: src/verbs.cpp:1676
 msgid "I_nset Path by 10px"
 msgstr ""
 
 #: src/verbs.cpp:1677
-#, fuzzy
 msgid "Inset selected path(s) by 10px"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr ""
 
 #: src/verbs.cpp:1679
-#, fuzzy
 msgid "Create a dynamic offset object"
-msgstr "Tekstobjecten maken en aanpassen"
+msgstr ""
 
 #: src/verbs.cpp:1682
 msgid "Create a dynamic offset object linked to the original path"
 msgstr ""
 
 #: src/verbs.cpp:1685
-#, fuzzy
 msgid "Convert selected stroke(s) to path(s)"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "De geselecteerde ve(e)g(en) omzetten naar pad(en)"
 
 #: src/verbs.cpp:1687
 msgid "Simplify selected path(s) by removing extra nodes"
-msgstr ""
+msgstr "Vereenvoudig het geselecteerde pad door knooppunten te verwijderen"
 
 #: src/verbs.cpp:1689
-#, fuzzy
 msgid "Clean up selected path(s)"
-msgstr "Bereken de vereniging van de geselecteerd paden"
+msgstr "De geselecteerde paden opschonen"
 
 #: src/verbs.cpp:1691
-#, fuzzy
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
-msgstr "Geselecteerde objecten verwijderen"
+msgstr "De richting van de geselecteerde padne omdraaien; handig om markeringen om te draaien"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: src/verbs.cpp:1693
-#, fuzzy
 msgid "_Trace Bitmap"
-msgstr "Afdrukken als bitmap"
+msgstr "Bitmap _overtrekken"
 
 #: src/verbs.cpp:1694
-#, fuzzy
 msgid "Convert bitmap object to paths"
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "De bitmap overtrekken en omzetten naar paden"
 
 #: src/verbs.cpp:1696
-#, fuzzy
 msgid "Export selection to a bitmap and insert it into document"
-msgstr "Bitmap of SVG-bestand in het document importeren"
+msgstr "De selectie omzetten naar een bitmap en in het document importeren"
 
 #: src/verbs.cpp:1698
 msgid "Combine several paths into one"
@@ -6711,7 +6606,7 @@ msgstr "Lijnen uit de losse hand en rechte lijnen tekenen"
 
 #: src/verbs.cpp:1765
 msgid "Draw calligraphic lines"
-msgstr "Calligraphische lijnen tekenen"
+msgstr "Kalligrafisch lijnen tekenen"
 
 #: src/verbs.cpp:1767
 msgid "Create and edit text objects"
@@ -6799,18 +6694,16 @@ msgid "Open Inkscape Preferences for the Pen tool"
 msgstr "Sodipodi diavoorstelling"
 
 #: src/verbs.cpp:1790
-#, fuzzy
 msgid "Calligraphic Preferences"
-msgstr "Calligrafische lijn"
+msgstr "Kalligrafie voorkeuren"
 
 #: src/verbs.cpp:1791
 msgid "Open Inkscape Preferences for the Calligraphy tool"
-msgstr ""
+msgstr "Open de Inkscape voorkeuren voor het Kalligrafie gereedschap"
 
 #: src/verbs.cpp:1792
-#, fuzzy
 msgid "Text Preferences"
-msgstr "Tekst eigenschappen"
+msgstr "Tekst voorkeuren"
 
 #: src/verbs.cpp:1793
 msgid "Open Inkscape Preferences for the Text tool"
@@ -6986,119 +6879,108 @@ msgid "Text and Font dialog"
 msgstr "Tekst en lettertype"
 
 #: src/verbs.cpp:1848
-#, fuzzy
 msgid "_Find..."
-msgstr "Afdrukken..."
+msgstr "_Zoeken..."
 
 #: src/verbs.cpp:1849
-#, fuzzy
 msgid "Find objects in document"
-msgstr "Alle objecten in het document selecteren"
+msgstr "Zoek objecten in het document"
 
 #: src/verbs.cpp:1851
 msgid "View debug messages"
 msgstr ""
 
 #: src/verbs.cpp:1852
-#, fuzzy
 msgid "_Scripts..."
-msgstr "Afdrukken..."
+msgstr "_Scripts...."
 
 #: src/verbs.cpp:1853
 msgid "Run scripts"
-msgstr ""
+msgstr "Scripts uitvoeren"
 
 #: src/verbs.cpp:1855
 msgid "Show or hide all active dialogs"
-msgstr ""
+msgstr "Alle actieve dialogen verbergen of weergeven"
 
 #. TRANSLATORS: "Tile clones" means: "Create tiled clones"
 #: src/verbs.cpp:1857
 msgid "Tile clones..."
-msgstr ""
+msgstr "Tegelen met klonen..."
 
 #: src/verbs.cpp:1858
 msgid "Create and arrange multiple clones of selection"
-msgstr ""
+msgstr "Maak en plaats meerdere klonen van de selectie"
 
 #: src/verbs.cpp:1860
-#, fuzzy
 msgid "Object Properties dialog"
-msgstr "Rechthoek eigenschappen"
+msgstr "Object-eigenschappen dialoog"
 
 #: src/verbs.cpp:1864
 msgid "Key and mouse shortcuts reference"
-msgstr ""
+msgstr "Toetsenbord en muis handleiding"
 
 #. "help_about"
 #. Tutorials
 #: src/verbs.cpp:1869
-#, fuzzy
 msgid "Inkscape: _Basic"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Inkscape: _Basis"
 
 #: src/verbs.cpp:1870
 msgid "Getting started with Inkscape"
-msgstr ""
+msgstr "Aan de slag met Inkscape"
 
 #. "tutorial_basic"
 #: src/verbs.cpp:1871
-#, fuzzy
 msgid "Inkscape: _Shapes"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Inkscape: _Vormen"
 
 #: src/verbs.cpp:1872
 msgid "Using shape tools to create and edit shapes"
-msgstr ""
+msgstr "Gebruik het vrom-gereedschap om vormen te maken en te wijzigen"
 
 #: src/verbs.cpp:1873
-#, fuzzy
 msgid "Inkscape: _Advanced"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Inkscape: Ge_avanceerd"
 
 #: src/verbs.cpp:1874
-#, fuzzy
 msgid "Advanced Inkscape topics"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Geavanceerde Inscape onderwerpen"
 
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: src/verbs.cpp:1876
-#, fuzzy
 msgid "Inkscape: T_racing"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Inkscape: _Overtrekken"
 
 #: src/verbs.cpp:1877
-#, fuzzy
 msgid "Using bitmap tracing"
-msgstr "Bitmap afmeting"
+msgstr "Bitmaps 'overtrekken' om een lijntekening te krijgen"
 
 #. "tutorial_tracing"
 #: src/verbs.cpp:1878
-#, fuzzy
 msgid "Inkscape: _Calligraphy"
-msgstr "Calligraphy"
+msgstr "Inkscape: _Kalligrafie"
 
 #: src/verbs.cpp:1879
 msgid "Using the Calligraphy pen tool"
-msgstr ""
+msgstr "Gebruik van het kalligrafie gereedschap"
 
 #: src/verbs.cpp:1880
 msgid "_Elements of Design"
-msgstr ""
+msgstr "_Ontwerp theorieën"
 
 #: src/verbs.cpp:1881
 msgid "Principles of design in the tutorial form"
-msgstr ""
+msgstr "Een handleiding over de principes en theorieën van ontwerpen"
 
 #. "tutorial_design"
 #: src/verbs.cpp:1882
 msgid "_Tips and Tricks"
-msgstr ""
+msgstr "_Tips en ideeën"
 
 #: src/verbs.cpp:1883
 msgid "Miscellaneous tips and tricks"
-msgstr ""
+msgstr "Uiteenlopende tips en ideeën"
 
 #. "tutorial_tips"
 #. Effect
