@@ -871,16 +871,67 @@ bool Layout::iterator::prevEndOfSentence()
 
 bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
 {
+    // the only reason this function is so complicated is to enable visual cursor
+    // movement moving in to or out of counterdirectional runs
     if (_parent_layout->_characters.empty()) return false;
-    Direction para_direction;
+    unsigned old_span_index;
+    Direction old_span_direction;
     if (_char_index == _parent_layout->_characters.size())
-        para_direction = _parent_layout->_paragraphs.back().base_direction;
+        old_span_index = _parent_layout->_spans.size() - 1;
     else
-        para_direction = _parent_layout->_characters[_char_index].paragraph(_parent_layout).base_direction;
-    if (direction == para_direction)
-        return nextCursorPosition();
-    else
-        return prevCursorPosition();
+        old_span_index = _parent_layout->_characters[_char_index].in_span;
+    old_span_direction = _parent_layout->_spans[old_span_index].direction;
+    if (direction == old_span_direction) {
+        if (!nextCursorPosition()) return false;
+    } else {
+        if (!prevCursorPosition()) return false;
+    }
+
+    unsigned new_span_index = _parent_layout->_characters[_char_index].in_span;
+    if (new_span_index == old_span_index) return true;
+    int scan_direction;
+    Direction para_direction = _parent_layout->_spans[old_span_index].paragraph(_parent_layout).base_direction;
+    if (old_span_direction != _parent_layout->_spans[new_span_index].direction) {
+        // we must jump to the other end of a counterdirectional run
+        scan_direction = direction == para_direction ? +1 : -1;
+    } else if (_parent_layout->_spans[old_span_index].in_chunk != _parent_layout->_spans[new_span_index].in_chunk) {
+        // we might have to do a weird jump when we would have crossed a chunk/line break
+        if (_parent_layout->_spans[old_span_index].line(_parent_layout).in_paragraph != _parent_layout->_spans[new_span_index].line(_parent_layout).in_paragraph)
+            return true;
+        if (old_span_direction == para_direction)
+            return true;
+        scan_direction = direction == para_direction ? +1 : -1;
+    } else
+        return true;    // same direction, same chunk: no cleverness required
+
+    new_span_index = old_span_index;
+    for ( ; ; ) {
+        if (scan_direction > 0) {
+            if (new_span_index == _parent_layout->_spans.size() - 1) break;
+            new_span_index++;
+        } else {
+            if (new_span_index == 0) break;
+            new_span_index--;
+        }
+        if (_parent_layout->_spans[new_span_index].direction != old_span_direction
+            || _parent_layout->_spans[new_span_index].in_chunk != _parent_layout->_spans[old_span_index].in_chunk)
+            break;
+    }
+
+    // found the correct span, now find the correct character
+    if (_parent_layout->_spans[new_span_index].direction != direction) {
+        if (new_span_index >= _parent_layout->_spans.size() - 1)
+            _char_index = _parent_layout->_characters.size();
+        else
+            _char_index = _parent_layout->_spanToCharacter(new_span_index + 1) - 1;
+    } else
+        _char_index = _parent_layout->_spanToCharacter(new_span_index);
+    if (_char_index == _parent_layout->_characters.size()) {
+        _glyph_index = _parent_layout->_glyphs.size();
+        return false;
+    }
+    _glyph_index = _parent_layout->_characters[_char_index].in_glyph;
+    return _char_index != 0;
 }
 
 bool Layout::iterator::cursorUp()
