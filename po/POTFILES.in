@@ -3,6 +3,7 @@
 [encoding: UTF-8]
 inkscape.desktop.in
 src/application/editor.cpp
+src/application/editor-impl.cpp
 src/arc-context.cpp
 src/attributes.cpp
 src/color.cpp
@@ -12,6 +13,7 @@ src/desktop-handles.cpp
 src/desktop.cpp
 src/dialogs/align.cpp
 src/dialogs/clonetiler.cpp
+src/dialogs/color-picker.cpp
 src/dialogs/debugdialog.cpp
 src/dialogs/desktop-properties.cpp
 src/dialogs/dialog-events.cpp
@@ -21,6 +23,7 @@ src/dialogs/filedialog-win32.cpp
 src/dialogs/filedialog.cpp
 src/dialogs/fill-style.cpp
 src/dialogs/find.cpp
+src/dialogs/iconpreview.cpp
 src/dialogs/in-dt-coordsys.cpp
 src/dialogs/item-properties.cpp
 src/dialogs/layer-properties.cpp
@@ -30,6 +33,7 @@ src/dialogs/rdf.cpp
 src/dialogs/scriptdialog.cpp
 src/dialogs/sp-attribute-widget.cpp
 src/dialogs/stroke-style.cpp
+src/dialogs/swatches.cpp
 src/dialogs/text-edit.cpp
 src/dialogs/tiledialog.cpp
 src/dialogs/tracedialog.cpp
@@ -80,11 +84,11 @@ src/extension/init.cpp
 src/extension/internal/eps-out.cpp
 src/extension/internal/gdkpixbuf-input.cpp
 src/extension/internal/gnome.cpp
+src/extension/internal/grid.cpp
 src/extension/internal/ps-out.cpp
 src/extension/internal/ps.cpp
 src/extension/internal/svg.cpp
 src/extension/internal/win32.cpp
-src/extension/plugin/grid.cpp
 src/extension/prefdialog.cpp
 src/extension/system.cpp
 src/extract-uri-test.cpp
@@ -93,7 +97,9 @@ src/file.cpp
 src/fixes.cpp
 src/geom.cpp
 src/gradient-chemistry.cpp
+src/gradient-context.cpp
 src/gradient-drag.cpp
+src/gradient-toolbar.cpp
 src/help.cpp
 src/helper/action.cpp
 src/helper/gnome-utils.cpp
@@ -250,6 +256,7 @@ src/text-chemistry.cpp
 src/text-context.cpp
 src/toolbox.cpp
 src/tools-switch.cpp
+src/trace/potrace/inkscape-potrace.cpp
 src/trace/trace.cpp
 src/ui/dialog/align-and-distribute.cpp
 src/ui/dialog/align-and-distribute.h
@@ -267,6 +274,8 @@ src/ui/dialog/messages.cpp
 src/ui/dialog/messages.h
 src/ui/dialog/text-properties.cpp
 src/ui/dialog/text-properties.h
+src/ui/dialog/transformation.cpp
+src/ui/dialog/transformation.h
 src/ui/dialog/tree-editor.h
 src/ui/dialog/xml-editor.h
 src/ui/stock-items.cpp
@@ -279,12 +288,10 @@ src/widgets/button.cpp
 src/widgets/dash-selector.cpp
 src/widgets/font-selector.cpp
 src/widgets/gradient-image.cpp
-src/widgets/gradient-position.cpp
 src/widgets/gradient-selector.cpp
 src/widgets/gradient-vector.cpp
 src/widgets/icon.cpp
 src/widgets/layer-selector.cpp
-src/widgets/menu.cpp
 src/widgets/paint-selector.cpp
 src/widgets/ruler.cpp
 src/widgets/sp-color-gtkselector.cpp
@@ -301,7 +308,6 @@ src/widgets/sp-xmlview-content.cpp
 src/widgets/sp-xmlview-tree.cpp
 src/widgets/spinbutton-events.cpp
 src/widgets/spw-utilities.cpp
-src/widgets/test-widgets.cpp
 src/winmain.cpp
 src/xml/repr-action-test.cpp
 src/xml/repr-css.cpp
