@@ -881,36 +881,57 @@ bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
     else
         old_span_index = _parent_layout->_characters[_char_index].in_span;
     old_span_direction = _parent_layout->_spans[old_span_index].direction;
-    if (direction == old_span_direction) {
-        if (!nextCursorPosition()) return false;
+    Direction para_direction = _parent_layout->_spans[old_span_index].paragraph(_parent_layout).base_direction;
+
+    int scan_direction;
+    unsigned old_char_index = _char_index;
+    if (old_span_direction != para_direction
+        && ((_char_index == 0 && direction == para_direction)
+            || (_char_index == _parent_layout->_characters.size() && direction != para_direction))) {
+        // the end of the text is actually in the middle because of reordering. Do cleverness
+        scan_direction = direction == para_direction ? +1 : -1;
     } else {
-        if (!prevCursorPosition()) return false;
+        if (direction == old_span_direction) {
+            if (!nextCursorPosition()) return false;
+        } else {
+            if (!prevCursorPosition()) return false;
+        }
+
+        unsigned new_span_index = _parent_layout->_characters[_char_index].in_span;
+        if (new_span_index == old_span_index) return true;
+        if (old_span_direction != _parent_layout->_spans[new_span_index].direction) {
+            // we must jump to the other end of a counterdirectional run
+            scan_direction = direction == para_direction ? +1 : -1;
+        } else if (_parent_layout->_spans[old_span_index].in_chunk != _parent_layout->_spans[new_span_index].in_chunk) {
+            // we might have to do a weird jump when we would have crossed a chunk/line break
+            if (_parent_layout->_spans[old_span_index].line(_parent_layout).in_paragraph != _parent_layout->_spans[new_span_index].line(_parent_layout).in_paragraph)
+                return true;
+            if (old_span_direction == para_direction)
+                return true;
+            scan_direction = direction == para_direction ? +1 : -1;
+        } else
+            return true;    // same direction, same chunk: no cleverness required
     }
 
-    unsigned new_span_index = _parent_layout->_characters[_char_index].in_span;
-    if (new_span_index == old_span_index) return true;
-    int scan_direction;
-    Direction para_direction = _parent_layout->_spans[old_span_index].paragraph(_parent_layout).base_direction;
-    if (old_span_direction != _parent_layout->_spans[new_span_index].direction) {
-        // we must jump to the other end of a counterdirectional run
-        scan_direction = direction == para_direction ? +1 : -1;
-    } else if (_parent_layout->_spans[old_span_index].in_chunk != _parent_layout->_spans[new_span_index].in_chunk) {
-        // we might have to do a weird jump when we would have crossed a chunk/line break
-        if (_parent_layout->_spans[old_span_index].line(_parent_layout).in_paragraph != _parent_layout->_spans[new_span_index].line(_parent_layout).in_paragraph)
-            return true;
-        if (old_span_direction == para_direction)
-            return true;
-        scan_direction = direction == para_direction ? +1 : -1;
-    } else
-        return true;    // same direction, same chunk: no cleverness required
-
-    new_span_index = old_span_index;
+    unsigned new_span_index = old_span_index;
     for ( ; ; ) {
         if (scan_direction > 0) {
-            if (new_span_index == _parent_layout->_spans.size() - 1) break;
+            if (new_span_index == _parent_layout->_spans.size() - 1) {
+                if (_parent_layout->_spans[new_span_index].direction == old_span_direction) {
+                    _char_index = old_char_index;
+                    return false;    // the visual end is in the logical middle
+                }
+                break;
+            }
             new_span_index++;
         } else {
-            if (new_span_index == 0) break;
+            if (new_span_index == 0) {
+                if (_parent_layout->_spans[new_span_index].direction == old_span_direction) {
+                    _char_index = old_char_index;
+                    return false;    // the visual end is in the logical middle
+                }
+                break;
+            }
             new_span_index--;
         }
         if (_parent_layout->_spans[new_span_index].direction == para_direction) {
