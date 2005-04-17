@@ -1,3 +1,19 @@
+﻿2005-04-17  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: sp-text.cpp, sp-text.h, text-context.cpp, text-editing.cpp,
+	  text-editing.h, libnrtype/Layout-TNG-Compute.cpp: hook up keys
+	  for adding rotate= attribute to text elements
+
+	* src/libnrtype/Layout-TNG-OutIter.cpp: visual cursor left/right in
+	  counterdirectional text runs
+
+2005-04-16  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: display/nr-arena-glyphs.cpp, libnrtype/FontInstance.cpp,
+	  libnrtype/RasterFont.cpp, libnrtype/font-instance.h,
+	  libnrtype/font-style.h: make miter-limit work for text outlines
+	  (bug 1094430)
+
 2005-04-16  Ted Gould  <ted@gould.cx>
 
 	* src/main.cpp:
@@ -20,10 +36,21 @@
 	* src/toolbox.cpp: removed code that was beeping and prepped for new
 	  drag-n-drop color swatches.
 
+2005-04-13  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/path-chemistry.cpp: wire up converting object to path for
+	  flowtext
+
 2005-04-13  Jon A. Cruz  <jon@joncruz.org>
 	* src/dialogs/swatches.cpp:
 
 	Simple drag-n-drop out from color swatches.
+
+2005-04-12  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/: selection-chemistry.cpp, text-context.cpp, text-context.h,
+	  text-editing.cpp, text-editing.h: cut and copy selected text (bug
+	  1175441)
 
 2005-04-12  Ted Gould  <ted@gould.cx>
 
