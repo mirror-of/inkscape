@@ -833,73 +833,82 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
 /* ***************************************************************************************************/
 //                           K E R N I N G   A N D   S P A C I N G
 
-void
-sp_te_adjust_kerning_screen (SPItem *item, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, NR::Point by)
+/** Returns the attributes block and the character index within that block
+which represents the iterator \a position. */
+static TextTagAttributes*
+text_tag_attributes_at_position(SPItem *item, Inkscape::Text::Layout::iterator const &position, unsigned *char_index)
 {
-    g_return_if_fail (item != NULL);
-    g_return_if_fail (SP_IS_TEXT(item));   // flowtext doesn't support kerning yet
+    if (item == NULL || char_index == NULL || !SP_IS_TEXT(item))
+        return NULL;   // flowtext doesn't support kerning yet
     SPText *text = SP_TEXT(item);
 
     SPObject *source_item;
     Glib::ustring::iterator source_text_iter;
     text->layout.getSourceOfCharacter(position, (void**)&source_item, &source_text_iter);
 
-    if (!SP_IS_STRING(source_item)) return;
+    if (!SP_IS_STRING(source_item)) return NULL;
     Glib::ustring *string = &SP_STRING(source_item)->string;
-    unsigned char_index = sum_sibling_text_lengths_before(source_item);
+    *char_index = sum_sibling_text_lengths_before(source_item);
     for (Glib::ustring::iterator it = string->begin() ; it != source_text_iter ; it++)
-        char_index++;
+        ++*char_index;
+    
+    return attributes_for_object(SP_OBJECT_PARENT(source_item));
+}
 
+void
+sp_te_adjust_kerning_screen (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, NR::Point by)
+{
     // divide increment by zoom
     // divide increment by matrix expansion
     gdouble factor = 1 / SP_DESKTOP_ZOOM(desktop);
-    NR::Matrix t = sp_item_i2doc_affine(text);
+    NR::Matrix t = sp_item_i2doc_affine(item);
     factor = factor / NR::expansion(t);
     by = factor * by;
 
-    source_item = SP_OBJECT_PARENT(source_item);
-    TextTagAttributes *attributes = attributes_for_object(source_item);
+    unsigned char_index;
+    TextTagAttributes *attributes = text_tag_attributes_at_position(item, std::min(start, end), &char_index);
     if (attributes) attributes->addToDxDy(char_index, by);
+    if (start != end) {
+        attributes = text_tag_attributes_at_position(item, std::max(start, end), &char_index);
+        if (attributes) attributes->addToDxDy(char_index, -by);
+    }
 
-    text->updateRepr();
-    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    item->updateRepr();
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
-sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by)
+sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, gdouble by)
 {
-    g_return_if_fail (text != NULL);
-    g_return_if_fail (SP_IS_TEXT(text));   // flowtext doesn't support rotate yet
-
-    Inkscape::Text::Layout const *layout = te_get_layout(text);
-
-    SPObject *source_item;
-    Glib::ustring::iterator source_text_iter;
-    layout->getSourceOfCharacter(position, (void**)&source_item, &source_text_iter);
-
-    if (!SP_IS_STRING(source_item)) return;
-    Glib::ustring *string = &SP_STRING(source_item)->string;
-    unsigned char_index = sum_sibling_text_lengths_before(source_item);
-    for (Glib::ustring::iterator it = string->begin() ; it != source_text_iter ; it++)
-        char_index++;
+    unsigned char_index;
+    TextTagAttributes *attributes = text_tag_attributes_at_position(text, std::min(start, end), &char_index);
+    if (attributes == NULL) return;
 
     // divide increment by zoom
     // divide increment by matrix expansion
     gdouble factor = 1 / SP_DESKTOP_ZOOM(desktop);
     NR::Matrix t = sp_item_i2doc_affine(text);
     factor = factor / NR::expansion(t);
+    SPObject *source_item;
+    SP_TEXT(text)->layout.getSourceOfCharacter(std::min(start, end), (void**)&source_item);
     by = (180/M_PI) * atan2(by, SP_OBJECT_PARENT(source_item)->style->font_size.computed / factor);
 
-    source_item = SP_OBJECT_PARENT(source_item);
-    TextTagAttributes *attributes = attributes_for_object(source_item);
-    if (attributes) attributes->addToRotate(char_index, by);
+    if (start != end) {
+        attributes = text_tag_attributes_at_position(text, std::max(start, end), &char_index);
+        if (attributes) attributes->addToRotate(char_index, 0.0);    // force the array to be extended with suitable values
+        for (Inkscape::Text::Layout::iterator it = std::min(start, end) ; it != std::max(start, end) ; it.nextCharacter()) {
+            attributes = text_tag_attributes_at_position(text, it, &char_index);
+            if (attributes) attributes->addToRotate(char_index, by);
+        }
+    } else
+        attributes->addToRotate(char_index, by);
 
     text->updateRepr();
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
-sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by)
+sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, gdouble by)
 {
     g_return_if_fail (text != NULL);
     g_return_if_fail (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text));
@@ -909,14 +918,11 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::it
     gdouble val;
     SPObject *source_obj;
     unsigned nb_let;
-    layout->getSourceOfCharacter(position, (void**)&source_obj);
+    layout->getSourceOfCharacter(std::min(start, end), (void**)&source_obj);
     if (source_obj == NULL)    // end of text
         source_obj = text->lastChild();
     else if (SP_IS_STRING(source_obj))
         source_obj = source_obj->parent;
-    while (!is_line_break_object(source_obj))
-        source_obj = SP_OBJECT_PARENT(source_obj);
-    nb_let = sp_text_get_length(source_obj);
 
     SPStyle *style = SP_OBJECT_STYLE (source_obj);
 
@@ -935,6 +941,14 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::it
         val = style->letter_spacing.computed;
     }
 
+    if (start == end) {
+        while (!is_line_break_object(source_obj))     // move up the tree so we apply to the closest paragraph
+            source_obj = SP_OBJECT_PARENT(source_obj);
+        nb_let = sp_text_get_length(source_obj);
+    } else {
+        nb_let = abs(layout->iteratorToCharIndex(end) - layout->iteratorToCharIndex(start));
+    }
+
     // divide increment by zoom and by the number of characters in the line,
     // so that the entire line is expanded by by pixels, no matter what its length
     gdouble const zoom = SP_DESKTOP_ZOOM(desktop);
@@ -943,27 +957,38 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::it
                          / NR::expansion(sp_item_i2doc_affine(SP_ITEM(source_obj))));
     val += zby;
 
-    // set back value
-    style->letter_spacing.normal = FALSE;
-    if (style->letter_spacing.value != 0 && style->letter_spacing.computed == 0) { // set in em or ex
-        if (style->letter_spacing.unit == SP_CSS_UNIT_EM) {
-            style->letter_spacing.value = val / style->font_size.computed;
-        } else if (style->letter_spacing.unit == SP_CSS_UNIT_EX) {
-            style->letter_spacing.value = val / style->font_size.computed * 2;
+    if (start == end) {
+        // set back value to entire paragraph
+        style->letter_spacing.normal = FALSE;
+        if (style->letter_spacing.value != 0 && style->letter_spacing.computed == 0) { // set in em or ex
+            if (style->letter_spacing.unit == SP_CSS_UNIT_EM) {
+                style->letter_spacing.value = val / style->font_size.computed;
+            } else if (style->letter_spacing.unit == SP_CSS_UNIT_EX) {
+                style->letter_spacing.value = val / style->font_size.computed * 2;
+            }
+        } else {
+            style->letter_spacing.computed = val;
         }
-    } else {
-        style->letter_spacing.computed = val;
-    }
 
-    style->letter_spacing.set = TRUE;
+        style->letter_spacing.set = TRUE;
+    } else {
+        // apply to selection only
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        char string_val[40];
+        g_snprintf(string_val, sizeof(string_val), "%f", val);
+        sp_repr_css_set_property(css, "letter-spacing", string_val);
+        sp_te_apply_style(text, start, end, css);
+        sp_repr_css_attr_unref(css);
+    }
 
     text->updateRepr();
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
 void
-sp_te_adjust_linespacing_screen (SPItem *text, SPDesktop *desktop, gdouble by)
+sp_te_adjust_linespacing_screen (SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, gdouble by)
 {
+    // TODO: use start and end iterators to delineate the area to be affected
     g_return_if_fail (text != NULL);
     g_return_if_fail (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text));
 
