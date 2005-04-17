@@ -29,6 +29,8 @@ options:
 
     -l, --export-plain-svg=FILENAME             
 
+    -x, --extension-directory
+
     -p, --print=PRINTER
 
     -g, --with-gui                    
@@ -125,6 +127,12 @@ show in export even if they overlay the exported object. Without --export-id, th
 =item B<-l>, B<--export-plain-svg>=I<FILENAME>
 
 Export document(s) to plain SVG format, without sodipodi: or inkscape: namespaces and without RDF metadata.
+
+=item B<-l>, B<--extension-directory>
+
+Lists the current extension directory that Inkscape is configured to use and
+then exits.  This is used for external extension to use the same configuration
+as the original Inkscape installation.
 
 =item B<-p> I<PRINTER>, B<--print>=I<PRINTER>
 
