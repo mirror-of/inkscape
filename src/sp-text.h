@@ -114,6 +114,11 @@ public:
     \a index. The vectors are extended if necessary. */
     void addToDxDy(unsigned index, NR::Point const &adjust);
 
+    /** adds the given value to the rotate vector at the given \a index. The
+    vector is extended if necessary. Delta is measured in degrees, clockwise
+    positive. */
+    void addToRotate(unsigned index, double delta);
+
     /** returns the first coordinates in the x and y vectors. If either
     is zero length, 0.0 is used for that coordinate. */
     NR::Point firstXY() const;

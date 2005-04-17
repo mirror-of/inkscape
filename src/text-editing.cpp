@@ -866,6 +866,39 @@ sp_te_adjust_kerning_screen (SPItem *item, Inkscape::Text::Layout::iterator cons
 }
 
 void
+sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by)
+{
+    g_return_if_fail (text != NULL);
+    g_return_if_fail (SP_IS_TEXT(text));   // flowtext doesn't support rotate yet
+
+    Inkscape::Text::Layout const *layout = te_get_layout(text);
+
+    SPObject *source_item;
+    Glib::ustring::iterator source_text_iter;
+    layout->getSourceOfCharacter(position, (void**)&source_item, &source_text_iter);
+
+    if (!SP_IS_STRING(source_item)) return;
+    Glib::ustring *string = &SP_STRING(source_item)->string;
+    unsigned char_index = sum_sibling_text_lengths_before(source_item);
+    for (Glib::ustring::iterator it = string->begin() ; it != source_text_iter ; it++)
+        char_index++;
+
+    // divide increment by zoom
+    // divide increment by matrix expansion
+    gdouble factor = 1 / SP_DESKTOP_ZOOM(desktop);
+    NR::Matrix t = sp_item_i2doc_affine(text);
+    factor = factor / NR::expansion(t);
+    by = (180/M_PI) * atan2(by, SP_OBJECT_PARENT(source_item)->style->font_size.computed / factor);
+
+    source_item = SP_OBJECT_PARENT(source_item);
+    TextTagAttributes *attributes = attributes_for_object(source_item);
+    if (attributes) attributes->addToRotate(char_index, by);
+
+    text->updateRepr();
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+void
 sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by)
 {
     g_return_if_fail (text != NULL);

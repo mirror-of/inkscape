@@ -59,6 +59,7 @@
 #include "print.h"
 #include "sp-metrics.h"
 #include "xml/repr.h"
+#include "mod360.h"
 
 #include "sp-item.h"
 #include "sp-text.h"
@@ -892,6 +893,17 @@ void TextTagAttributes::addToDxDy(unsigned index, NR::Point const &adjust)
         if (attributes.dy.size() < index + 1) attributes.dy.resize(index + 1, zero_length);
         attributes.dy[index] = attributes.dy[index].computed + adjust[NR::Y];
     }
+}
+
+void TextTagAttributes::addToRotate(unsigned index, double delta)
+{
+    if (delta == 0.0) return;
+
+    SPSVGLength zero_length;
+    zero_length = 0.0;
+
+    if (attributes.rotate.size() < index + 1) attributes.rotate.resize(index + 1, zero_length);
+    attributes.rotate[index] = mod360(attributes.rotate[index].computed + delta);
 }
 
 /*

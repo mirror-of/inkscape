@@ -715,6 +715,34 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                                     }
                                 }
                                 break;
+                            case GDK_bracketleft:
+                                if (tc->text) {
+                                    if (MOD__ALT) {
+                                        if (MOD__SHIFT)
+                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_end, ec->desktop, -10);
+                                        else
+                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_end, ec->desktop, -1);
+                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_text_context_update_cursor(tc);
+                                        sp_text_context_update_text_selection(tc);
+                                        return TRUE;
+                                    }
+                                }
+                                break;
+                            case GDK_bracketright:
+                                if (tc->text) {
+                                    if (MOD__ALT) {
+                                        if (MOD__SHIFT)
+                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_end, ec->desktop, 10);
+                                        else
+                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_end, ec->desktop, 1);
+                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_text_context_update_cursor(tc);
+                                        sp_text_context_update_text_selection(tc);
+                                        return TRUE;
+                                    }
+                                }
+                                break;
                             case GDK_greater:
                             case GDK_period:
                                 if (tc->text) {

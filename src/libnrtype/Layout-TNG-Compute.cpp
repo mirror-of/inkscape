@@ -479,7 +479,7 @@ class Layout::Calculator
                             || (text_source->y.size()  > i && text_source->y[i].set)
                             || (text_source->dx.size() > i && text_source->dx[i].set && text_source->dx[i].computed != 0.0)
                             || (text_source->dy.size() > i && text_source->dy[i].set && text_source->dy[i].computed != 0.0)
-                            || (text_source->rotate.size() > i && text_source->rotate[i].set && text_source->rotate[i].computed != 0.0)) {
+                            || (text_source->rotate.size() > i && text_source->rotate[i].set && (i == 0 || text_source->rotate[i].computed != text_source->rotate[i - 1].computed))) {
                             new_span.text_bytes = iter_text.base() - new_span.input_stream_first_character.base();
                             break;
                         }
@@ -956,6 +956,7 @@ class Layout::Calculator
             double direction_sign;
             Direction previous_direction = para.direction;
             double counter_directional_width_remaining = 0.0;
+            float glyph_rotate = 0.0;
             if (para.direction == LEFT_TO_RIGHT) {
                 direction_sign = +1.0;
                 x = 0.0;
@@ -969,14 +970,13 @@ class Layout::Calculator
 
             for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
                 // begin adding spans to the list
-                float glyph_rotate = 0.0;
                 UnbrokenSpan const &unbroken_span = *it_span->start.iter_span;
 
                 if (it_span->start.char_byte == 0) {
                     // start of an unbroken span, we might have dx, dy or rotate still to process (x and y are done per chunk)
                     if (unbroken_span.dx.set) x += unbroken_span.dx.computed;
                     if (unbroken_span.dy.set) _y_offset += unbroken_span.dy.computed;
-                    if (unbroken_span.rotate.set) glyph_rotate = unbroken_span.rotate.computed;
+                    if (unbroken_span.rotate.set) glyph_rotate = unbroken_span.rotate.computed * (M_PI/180);
                 }
 
                 if (_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE
@@ -1132,7 +1132,6 @@ class Layout::Calculator
                             iter_source_text++;
                             char_index_in_unbroken_span++;
                             char_byte = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
-                            glyph_rotate = 0.0;    // only the first glyph is rotated because of how we split the spans
                         }
 
                         advance_width *= direction_sign;
