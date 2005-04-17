@@ -120,6 +120,12 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
     return;
 }
 
+Gtk::Widget *
+BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, SPView * view)
+{
+    return module->autogui();
+}
+
 void
 BlurEdge::init (void)
 {
@@ -128,8 +134,8 @@ BlurEdge::init (void)
             "<name>Blur Edge</name>\n"
             "<id>org.inkscape.effect.bluredge</id>\n"
             "<dependency type=\"plugin\" location=\"plugins\">bluredge</dependency>\n"
-            "<param name=\"blur-width\" type=\"float\">1.0</param>\n"
-            "<param name=\"num-steps\" type=\"int\">11</param>\n"
+            "<param name=\"blur-width\" gui-text=\"Blur Width\" type=\"float\">1.0</param>\n"
+            "<param name=\"num-steps\" gui-text=\"Number of Steps\" type=\"int\">11</param>\n"
             "<effect>\n"
                 "<object-type>all</object-type>\n"
             "</effect>\n"
