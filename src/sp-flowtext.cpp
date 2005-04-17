@@ -487,23 +487,30 @@ void SPFlowtext::convert_to_text()
             it_span_end.nextStartOfSpan();
             Inkscape::Text::Layout::OptionalTextTagAttrs attrs;
             group->layout.simulateLayoutUsingKerning(it, it_span_end, &attrs);
-            TextTagAttributes(attrs).writeTo(span_tspan);
             // set x,y attributes only when we need to
+            bool set_x = false;
+            bool set_y = false;
             if (!item->transform.test_identity()) {
-                sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
-                sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
+                set_x = set_y = true;
             } else {
                 Inkscape::Text::Layout::iterator it_chunk_start = it;
                 it_chunk_start.thisStartOfChunk();
                 if (it == it_chunk_start) {
-                    sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                    set_x = true;
                     // don't set y so linespacing adjustments and things will still work
                 }
                 Inkscape::Text::Layout::iterator it_shape_start = it;
                 it_shape_start.thisStartOfShape();
                 if (it == it_shape_start)
-                    sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
+                    set_y = true;
             }
+            if (set_x && !attrs.dx.empty())
+                attrs.dx[0] = 0.0;
+            TextTagAttributes(attrs).writeTo(span_tspan);
+            if (set_x)
+                sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+            if (set_y)
+                sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
 
             SPObject *source_obj;
             Glib::ustring::iterator span_text_start_iter;
