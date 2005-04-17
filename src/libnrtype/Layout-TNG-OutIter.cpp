@@ -913,8 +913,12 @@ bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
             if (new_span_index == 0) break;
             new_span_index--;
         }
-        if (_parent_layout->_spans[new_span_index].direction != old_span_direction
-            || _parent_layout->_spans[new_span_index].in_chunk != _parent_layout->_spans[old_span_index].in_chunk)
+        if (_parent_layout->_spans[new_span_index].direction == para_direction) {
+            if (para_direction == old_span_direction)
+                new_span_index -= scan_direction;
+            break;
+        }
+        if (_parent_layout->_spans[new_span_index].in_chunk != _parent_layout->_spans[old_span_index].in_chunk)
             break;
     }
 
