@@ -954,6 +954,8 @@ class Layout::Calculator
 
             double x;
             double direction_sign;
+            Direction previous_direction = para.direction;
+            double counter_directional_width_remaining = 0.0;
             if (para.direction == LEFT_TO_RIGHT) {
                 direction_sign = +1.0;
                 x = 0.0;
@@ -967,8 +969,6 @@ class Layout::Calculator
 
             for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
                 // begin adding spans to the list
-                Direction previous_direction = para.direction;
-                double counter_directional_width_remaining = 0.0;
                 float glyph_rotate = 0.0;
                 UnbrokenSpan const &unbroken_span = *it_span->start.iter_span;
 
@@ -991,7 +991,6 @@ class Layout::Calculator
                 new_span.in_chunk = _flow._chunks.size() - 1;
                 new_span.line_height = unbroken_span.line_height;
                 new_span.in_input_stream_item = unbroken_span.input_index;
-                new_span.x_start = x;
                 new_span.baseline_shift = _y_offset;
                 new_span.block_progression = _block_progression;
                 if (_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE) {
@@ -1006,9 +1005,10 @@ class Layout::Calculator
                     new_span.direction = para.direction;
                 }
 
-                if (new_span.direction == para.direction)
+                if (new_span.direction == para.direction) {
+                    x -= counter_directional_width_remaining;
                     counter_directional_width_remaining = 0.0;
-                else if (new_span.direction != previous_direction) {
+                } else if (new_span.direction != previous_direction) {
                     // measure width of spans we need to switch round
                     counter_directional_width_remaining = 0.0;
                     std::vector<BrokenSpan>::const_iterator it_following_span;
@@ -1025,6 +1025,7 @@ class Layout::Calculator
                     x += counter_directional_width_remaining;
                     counter_directional_width_remaining = 0.0;    // we want to go increasingly negative
                 }
+                new_span.x_start = x;
 
                 if (_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE) {
                     // the span is set up, push the glyphs and chars
@@ -1074,11 +1075,11 @@ class Layout::Calculator
                         } else */
 
                         if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
-                            new_glyph.x = x + counter_directional_width_remaining + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier + new_span.line_height.ascent;
+                            new_glyph.x = x + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier + new_span.line_height.ascent;
                             new_glyph.y = _y_offset + (unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset - unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * 0.5) * font_size_multiplier;
                             new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[glyph_index].glyph, true);
                         } else {
-                            new_glyph.x = x + counter_directional_width_remaining + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier;
+                            new_glyph.x = x + unbroken_span.glyph_string->glyphs[glyph_index].geometry.x_offset * font_size_multiplier;
                             new_glyph.y = _y_offset + unbroken_span.glyph_string->glyphs[glyph_index].geometry.y_offset * font_size_multiplier;
                             new_glyph.width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * font_size_multiplier;
                         }
@@ -1137,6 +1138,7 @@ class Layout::Calculator
                         advance_width *= direction_sign;
                         if (new_span.direction != para.direction) {
                             counter_directional_width_remaining -= advance_width;
+                            x -= advance_width;
                             x_in_span -= advance_width;
                         } else {
                             x += advance_width;
@@ -1147,14 +1149,7 @@ class Layout::Calculator
                     x += static_cast<InputStreamControlCode const *>(_flow._input_stream[unbroken_span.input_index])->width;
                 }
 
-                if (new_span.direction != para.direction) {
-                    new_span.x_end = new_span.x_start;
-                    if (new_span.direction == LEFT_TO_RIGHT)
-                        new_span.x_start -= it_span->width + add_to_each_whitespace * it_span->whitespace_count;
-                    else
-                        new_span.x_start += it_span->width + add_to_each_whitespace * it_span->whitespace_count;
-                } else
-                    new_span.x_end = new_span.x_start + x_in_span;
+                new_span.x_end = new_span.x_start + x_in_span;
                 _flow._spans.push_back(new_span);
                 previous_direction = new_span.direction;
             }
