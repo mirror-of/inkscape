@@ -1,7 +1,7 @@
 
 iconsdir = $(datadir)/inkscape/icons
 
-pixmaps = 
+pixmaps =
 
 icons_DATA = \
     $(pixmaps) \
@@ -97,6 +97,9 @@ icons_DATA = \
     scale_hor.xpm \
     scale_ver.xpm \
     \
-    icons.svg
+    icons.svg \
+	David_icons.svg \
+	\
+	README.icons
 
 EXTRA_DIST = $(icons_DATA)
