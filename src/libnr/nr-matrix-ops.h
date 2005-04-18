@@ -3,7 +3,6 @@
 #define SEEN_NR_MATRIX_OPS_H
 
 #include <libnr/nr-matrix.h>
-#include <libnr/nr-point-matrix-ops.h>  // todo: get rid of this temporary #include.
 
 namespace NR {
 
