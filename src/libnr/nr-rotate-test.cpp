@@ -1,9 +1,10 @@
 #include <cmath>
 #include <utest/utest.h>
 #include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>        /* identity, matrix_equalp */
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-rotate-fns.h>
 #include <libnr/nr-rotate-ops.h>
