@@ -39,9 +39,7 @@ private:
     /** \brief  Internal value. */
     bool _value;
 public:
-    /** \brief  Use the superclass' allocator and set the \c _value */
-    ParamBool(const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, bool value) :
-        Parameter(name, guitext, ext), _value(value) {};
+    ParamBool(const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
     /** \brief  Returns \c _value */
     bool get (const Inkscape::XML::Document * doc) { return _value; }
     bool set (bool in, Inkscape::XML::Document * doc);
@@ -49,14 +47,31 @@ public:
     Glib::ustring * string (void);
 };
 
+/** \brief  Use the superclass' allocator and set the \c _value */
+ParamBool::ParamBool (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
+        Parameter(name, guitext, ext), _value(false)
+{
+    const char * defaultval = sp_repr_children(xml)->content();
+
+    if (defaultval != NULL && (!strcmp(defaultval, "TRUE") || !strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
+        _value = true;
+    } else {
+        _value = false;
+    }
+
+    gchar * pref_name = this->pref_name();
+    _value = (bool)prefs_get_int_attribute(PREF_DIR, pref_name, _value);
+    g_free(pref_name);
+
+    return;
+}
+
 class ParamInt : public Parameter {
 private:
     /** \brief  Internal value. */
     int _value;
 public:
-    /** \brief  Use the superclass' allocator and set the \c _value */
-    ParamInt(const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, int value) :
-        Parameter(name, guitext, ext), _value(value) {};
+    ParamInt (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
     /** \brief  Returns \c _value */
     int get (const Inkscape::XML::Document * doc) { return _value; }
     int set (int in, Inkscape::XML::Document * doc);
@@ -64,14 +79,29 @@ public:
     Glib::ustring * string (void);
 };
 
+/** \brief  Use the superclass' allocator and set the \c _value */
+ParamInt::ParamInt (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
+        Parameter(name, guitext, ext), _value(0)
+{
+    const char * defaultval = sp_repr_children(xml)->content();
+
+    if (defaultval != NULL) {
+        _value = atoi(defaultval);
+    }
+
+    gchar * pref_name = this->pref_name();
+    _value = prefs_get_int_attribute(PREF_DIR, pref_name, _value);
+    g_free(pref_name);
+
+    return;
+}
+
 class ParamFloat : public Parameter {
 private:
     /** \brief  Internal value. */
     float _value;
 public:
-    /** \brief  Use the superclass' allocator and set the \c _value */
-    ParamFloat(const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, float value) :
-        Parameter(name, guitext, ext), _value(value) {};
+    ParamFloat (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
     /** \brief  Returns \c _value */
     float get (const Inkscape::XML::Document * doc) { return _value; }
     float set (float in, Inkscape::XML::Document * doc);
@@ -79,13 +109,30 @@ public:
     Glib::ustring * string (void);
 };
 
+/** \brief  Use the superclass' allocator and set the \c _value */
+ParamFloat::ParamFloat (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
+        Parameter(name, guitext, ext), _value(0.0)
+{
+    const char * defaultval = sp_repr_children(xml)->content();
+
+    if (defaultval != NULL) {
+        _value = atof(defaultval);
+    }
+
+    gchar * pref_name = this->pref_name();
+    _value = prefs_get_double_attribute(PREF_DIR, pref_name, _value);
+    g_free(pref_name);
+
+    return;
+}
+
 class ParamString : public Parameter {
 private:
     /** \brief  Internal value.  This should point to a string that has
                 been allocated in memory.  And should be free'd. */
     gchar * _value;
 public:
-    ParamString(const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, const gchar * value);
+    ParamString(const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
     ~ParamString(void);
     /** \brief  Returns \c _value, with a \i const to protect it. */
     const gchar * get (const Inkscape::XML::Document * doc) { return _value; }
@@ -122,62 +169,29 @@ Parameter::make (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension *
 {
     const char * name;
     const char * type;
-    const char * defaultval;
     const char * guitext;
-    gchar * param_name;
-    Parameter * param = NULL;
 
     name = in_repr->attribute("name");
     type = in_repr->attribute("type");
     guitext = in_repr->attribute("gui-text");
-    defaultval = sp_repr_children(in_repr)->content();
-    param_name = g_strdup_printf("%s.%s", in_ext->get_id(), name);
 
     /* In this case we just don't have enough information */
     if (name == NULL || type == NULL) {
         return NULL;
     }
 
+    Parameter * param = NULL;
     if (!strcmp(type, "boolean")) {
-        bool default_local;
-
-        if (defaultval != NULL && (!strcmp(defaultval, "TRUE") || !strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
-            default_local = true;
-        } else {
-            default_local = false;
-        }
-        param = new ParamBool(name, guitext, in_ext, (bool)prefs_get_int_attribute(PREF_DIR, param_name, default_local));
+        param = new ParamBool(name, guitext, in_ext, in_repr);
     } else if (!strcmp(type, "int")) { 
-        int default_local;
-        if (defaultval != NULL) {
-            default_local = atoi(defaultval);
-        } else {
-            default_local = 0;
-        }
-        param = new ParamInt(name, guitext, in_ext, prefs_get_int_attribute(PREF_DIR, param_name, (gint)default_local));
+        param = new ParamInt(name, guitext, in_ext, in_repr);
     } else if (!strcmp(type, "float")) { 
-        float default_local;
-        // std::cout << "Float value: " << defaultval;
-        if (defaultval != NULL) {
-            default_local = atof(defaultval);
-        } else {
-            default_local = 0.0;
-        }
-        param = new ParamFloat(name, guitext, in_ext, prefs_get_double_attribute(PREF_DIR, param_name, (gfloat)default_local));
-        // std::cout << " after: " << param->val.t_float << std::endl;
+        param = new ParamFloat(name, guitext, in_ext, in_repr);
     } else if (!strcmp(type, "string")) { 
-        const gchar * temp_str;
-
-        temp_str = prefs_get_string_attribute(PREF_DIR, param_name);
-        if (temp_str == NULL)
-            temp_str = defaultval;
-
-        param = new ParamString(name, guitext, in_ext, temp_str);
+        param = new ParamString(name, guitext, in_ext, in_repr);
     } 
 
-    g_free(param_name);
-    if (param == NULL) return NULL;
-
+    /* Note: param could equal NULL */
     return param;
 }
 
@@ -357,10 +371,20 @@ Parameter::set_string (const gchar * in, Inkscape::XML::Document * doc)
 }
 
 /** \brief  Initialize the object, to do that, copy the data. */
-ParamString::ParamString (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, const gchar * value) :
+ParamString::ParamString (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
     Parameter(name, guitext, ext), _value(NULL)
 {
-    _value = g_strdup(value);
+    const char * defaultval = sp_repr_children(xml)->content();
+
+    gchar * pref_name = this->pref_name();
+    const gchar * paramval = prefs_get_string_attribute(PREF_DIR, pref_name);
+    g_free(pref_name);
+
+    if (paramval != NULL)
+        defaultval = paramval;
+    _value = g_strdup(defaultval);
+
+    return;
 }
 
 /** \brief  Free the allocated data. */
