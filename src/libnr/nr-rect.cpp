@@ -122,34 +122,31 @@ nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y)
 }
 
 NRRect *
-nr_rect_d_matrix_transform (NRRect *d, NRRect *s, NRMatrix const *m)
+nr_rect_d_matrix_transform(NRRect *d, NRRect const *const s, NR::Matrix const &m)
 {
-	if (nr_rect_d_test_empty (s)) {
-		nr_rect_d_set_empty (d);
-	} else {
-		NR::Coord x0, y0, x1, y1, x, y;
-		x0 = x1 = m->c[0] * s->x0 + m->c[2] * s->y0 + m->c[4];
-		y0 = y1 = m->c[1] * s->x0 + m->c[3] * s->y0 + m->c[5];
-		x = m->c[0] * s->x0 + m->c[2] * s->y1 + m->c[4];
-		y = m->c[1] * s->x0 + m->c[3] * s->y1 + m->c[5];
-		x0 = MIN (x0, x);
-		y0 = MIN (y0, y);
-		x1 = MAX (x1, x);
-		y1 = MAX (y1, y);
-		x = m->c[0] * s->x1 + m->c[2] * s->y0 + m->c[4];
-		y = m->c[1] * s->x1 + m->c[3] * s->y0 + m->c[5];
-		x0 = MIN (x0, x);
-		y0 = MIN (y0, y);
-		x1 = MAX (x1, x);
-		y1 = MAX (y1, y);
-		x = m->c[0] * s->x1 + m->c[2] * s->y1 + m->c[4];
-		y = m->c[1] * s->x1 + m->c[3] * s->y1 + m->c[5];
-		d->x0 = MIN (x0, x);
-		d->y0 = MIN (y0, y);
-		d->x1 = MAX (x1, x);
-		d->y1 = MAX (y1, y);
-	}
-	return d;
+    if (nr_rect_d_test_empty(s)) {
+        nr_rect_d_set_empty(d);
+    } else {
+        NR::Point const c00(NR::Point(x->x0, s->y0) * m);
+        NR::Point const c01(NR::Point(s->x0, s->y1) * m);
+        NR::Point const c10(NR::Point(s->x1, s->y0) * m);
+        NR::Point const c11(NR::Point(s->x1, s->y1) * m);
+        d->x0 = std::min(std::min(c00[X], c01[X]),
+                         std::min(c10[X], c11[X]));
+        d->y0 = std::min(std::min(c00[Y], c01[Y]),
+                         std::min(c10[Y], c11[Y]));
+        d->x1 = std::max(std::max(c00[X], c01[X]),
+                         std::max(c10[X], c11[X]));
+        d->y1 = std::max(std::max(c00[Y], c01[Y]),
+                         std::max(c10[Y], c11[Y]));
+    }
+    return d;
+}
+
+NRRect *
+nr_rect_d_matrix_transform(NRRect *d, NRRect const *s, NRMatrix const *m)
+{
+    return nr_rect_d_matrix_transform(d, s, *m);
 }
 
 namespace NR {
