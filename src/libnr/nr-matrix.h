@@ -17,11 +17,9 @@
  * This code is in public domain.
  */
 
-#include <glib.h>
+#include <glib/gmessages.h>
 
 #include <libnr/nr-macros.h>
-#include <libnr/nr-point.h>
-#include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-scale.h>
 #include <libnr/nr-translate.h>
