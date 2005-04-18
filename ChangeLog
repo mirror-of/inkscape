@@ -1,3 +1,11 @@
+2005-04-18  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/sp-line.cpp, src/dialogs/unclump.cpp,
+	src/extension/internal/ps.cpp,
+	src/libnrtype/Layout-TNG-Output.cpp,
+	src/Layout-TNG-Scanline-Makers.cpp, src/livarot/PathCutting.cpp:
+	add missing include of nr-point-matrix-ops.h.
+
 2005-04-17  Jon A. Cruz  <jon@joncruz.org>
 	* src/toolbox.cpp:
 
