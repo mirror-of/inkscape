@@ -27,6 +27,7 @@
 #include <color.h>
 #include <display/curve.h>
 #include <libnr/n-art-bpath.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <extension/system.h>
 #include <extension/db.h>
 
@@ -215,27 +216,17 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
         fprintf(f, "    0.0, //bottom\n");
         fprintf(f, "    %d, //nr points\n", segmentCount * 4);
         int segmentNr = 0;
-        for (bp = curve->bpath, curveNr=0 ; curveNr<curve->length ; curveNr++, bp++)
-        {
-            /*
-              double x1 = bp->x1;
-              double y1 = bp->y1;
-              double x2 = bp->x2;
-              double y2 = bp->y2;
-              double x3 = bp->x3;
-              double y3 = bp->y3;
-            */
-            /**/
-            double x1 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x1, bp->y1);
-            double y1 = NR_MATRIX_DF_TRANSFORM_Y(tf, bp->x1, bp->y1);
-            double x2 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x2, bp->y2);
-            double y2 = NR_MATRIX_DF_TRANSFORM_Y(tf, bp->x2, bp->y2);
-            double x3 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x3, bp->y3);
-            double y3 = NR_MATRIX_DF_TRANSFORM_Y(tf, bp->x3, bp->y3);
-            /**/
+        for (bp = curve->bpath, curveNr=0 ; curveNr<curve->length ; curveNr++, bp++) {
+            using NR::X;
+            using NR::Y;
+            NR::Point const p1(bp->c(1) * tf);
+            NR::Point const p2(bp->c(2) * tf);
+            NR::Point const p3(bp->c(3) * tf);
+            double const x1 = p1[X], y1 = p1[Y];
+            double const x2 = p1[X], y2 = p1[Y];
+            double const x3 = p1[X], y3 = p1[Y];
 
-            switch (bp->code)
-            {
+            switch (bp->code) {
                 case NR_MOVETO:
                 case NR_MOVETO_OPEN:
                     //fprintf(f, "moveto: %f %f\n", bp->x3, bp->y3);
