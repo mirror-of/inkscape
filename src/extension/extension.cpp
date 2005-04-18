@@ -90,7 +90,8 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
             if (!strcmp(child_repr->name(), "param")) {
 				Parameter * param;
 				param = Parameter::make(child_repr, this);
-				parameters = g_slist_append(parameters, param);
+				if (param != NULL)
+					parameters = g_slist_append(parameters, param);
             } /* param */
             if (!strcmp(child_repr->name(), "dependency")) {
                 _deps.push_back(new Dependency(child_repr));

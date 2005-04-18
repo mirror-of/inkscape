@@ -1,4 +1,11 @@
-﻿2005-04-17  cyreve  <cyreve@users.sourceforge.net>
+﻿2005-04-16  Ted Gould  <ted@gould.cx>
+
+	* src/extension/extension.cpp, src/extension/parameter.cpp:
+
+	Adding in autogui for strings and booleans.  Also making everything
+	a little more robust.
+
+2005-04-17  cyreve  <cyreve@users.sourceforge.net>
 
 	* src/: sp-text.cpp, sp-text.h, text-context.cpp, text-editing.cpp,
 	  text-editing.h, libnrtype/Layout-TNG-Compute.cpp: hook up keys

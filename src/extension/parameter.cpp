@@ -90,6 +90,7 @@ public:
     /** \brief  Returns \c _value, with a \i const to protect it. */
     const gchar * get (const Inkscape::XML::Document * doc) { return _value; }
     const gchar * set (const gchar * in, Inkscape::XML::Document * doc);
+    Gtk::Widget * get_widget(void);
     Glib::ustring * string (void);
 };
 
@@ -128,7 +129,7 @@ Parameter::make (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension *
 
     name = in_repr->attribute("name");
     type = in_repr->attribute("type");
-    guitext = in_repr->attribute("guitext");
+    guitext = in_repr->attribute("gui-text");
     defaultval = sp_repr_children(in_repr)->content();
     param_name = g_strdup_printf("%s.%s", in_ext->get_id(), name);
 
@@ -140,7 +141,7 @@ Parameter::make (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension *
     if (!strcmp(type, "boolean")) {
         bool default_local;
 
-        if (defaultval != NULL && !strcmp(defaultval, "TRUE")) {
+        if (defaultval != NULL && (!strcmp(defaultval, "TRUE") || !strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
             default_local = true;
         } else {
             default_local = false;
@@ -172,7 +173,7 @@ Parameter::make (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension *
             temp_str = defaultval;
 
         param = new ParamString(name, guitext, in_ext, temp_str);
-    }
+    } 
 
     g_free(param_name);
     if (param == NULL) return NULL;
@@ -471,6 +472,11 @@ ParamIntAdjustment::val_changed (void)
     return;
 }
 
+/**
+    \brief  Creates a Float Adjustment for a float parameter
+    
+    Builds a hbox with a label and a float adjustment in it.
+*/
 Gtk::Widget *
 ParamFloat::get_widget (void)
 {
@@ -490,6 +496,11 @@ ParamFloat::get_widget (void)
     return dynamic_cast<Gtk::Widget *>(hbox);
 }
 
+/**
+    \brief  Creates a Int Adjustment for a int parameter
+    
+    Builds a hbox with a label and a int adjustment in it.
+*/
 Gtk::Widget *
 ParamInt::get_widget (void)
 {
@@ -509,6 +520,46 @@ ParamInt::get_widget (void)
     return dynamic_cast<Gtk::Widget *>(hbox);
 }
 
+/** \brief  A check button which is Param aware.  It works with the
+            parameter to change it's value as the check button changes
+            value. */
+class ParamBoolCheckButton : public Gtk::CheckButton {
+private:
+    /** \brief  Param to change */
+    ParamBool * _pref;
+public:
+    /** \brief  Initialize the check button
+        \param  param  Which parameter to adjust on changing the check button
+        
+        This function sets the value of the checkbox to be that of the
+        parameter, and then sets up a callback to \c on_toggle.
+    */
+    ParamBoolCheckButton (ParamBool * param) :
+            Gtk::CheckButton(), _pref(param) {
+        this->set_active(_pref->get(NULL) /**\todo fix */);
+        this->signal_toggled().connect(sigc::mem_fun(this, &ParamBoolCheckButton::on_toggle));
+        return;
+    }
+    void on_toggle (void);
+};
+
+/**
+    \brief  A function to respond to the check box changing
+
+    Adjusts the value of the preference to match that in the check box.
+*/
+void
+ParamBoolCheckButton::on_toggle (void)
+{
+    _pref->set(this->get_active(), NULL /**\todo fix this */);
+    return;
+}
+
+/**
+    \brief  Creates a bool check button for a bool parameter
+    
+    Builds a hbox with a label and a check button in it.
+*/
 Gtk::Widget *
 ParamBool::get_widget (void)
 {
@@ -518,8 +569,62 @@ ParamBool::get_widget (void)
     label->show();
     hbox->pack_start(*label, true, true);
 
-    Gtk::CheckButton * checkbox = new Gtk::CheckButton();
+    ParamBoolCheckButton * checkbox = new ParamBoolCheckButton(this);
+    checkbox->show();
     hbox->pack_start(*checkbox, false, false);
+
+    hbox->show();
+
+    return dynamic_cast<Gtk::Widget *>(hbox);
+}
+
+/** \brief  A special category of Gtk::Entry to handle string parameteres */
+class ParamStringEntry : public Gtk::Entry {
+private:
+    ParamString * _pref;
+public:
+    /** \brief  Build a string preference for the given parameter
+        \param  pref  Where to get the string from, and where to put it
+                      when it changes.
+    */
+    ParamStringEntry (ParamString * pref) :
+        Gtk::Entry(), _pref(pref) {
+        this->set_text(Glib::ustring(_pref->get(NULL)));
+        this->signal_changed().connect(sigc::mem_fun(this, &ParamStringEntry::changed_text));
+    };
+    void changed_text (void);
+};
+
+/** \brief  Respond to the text box changing
+
+    This function responds to the box changing by grabbing the value
+    from the text box and putting it in the parameter.
+*/
+void
+ParamStringEntry::changed_text (void)
+{
+    Glib::ustring data = this->get_text();
+    _pref->set(data.c_str(), NULL);
+    return;
+}
+
+/**
+    \brief  Creates a text box for the string parameter
+    
+    Builds a hbox with a label and a text box in it.
+*/
+Gtk::Widget *
+ParamString::get_widget (void)
+{
+    Gtk::HBox * hbox = new Gtk::HBox();
+
+    Gtk::Label * label = new Gtk::Label(_(_text), Gtk::ALIGN_LEFT);
+    label->show();
+    hbox->pack_start(*label, true, true);
+
+    ParamStringEntry * textbox = new ParamStringEntry(this);
+    textbox->show();
+    hbox->pack_start(*textbox, false, false);
 
     hbox->show();
 
