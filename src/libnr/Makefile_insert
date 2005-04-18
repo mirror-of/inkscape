@@ -62,6 +62,7 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-point-fns.cpp	\
 	libnr/nr-point-fns.h	\
 	libnr/nr-point-l.h	\
+	libnr/nr-point-matrix-ops.h	\
 	libnr/nr-point-ops.h	\
 	libnr/nr-point.h	\
 	libnr/nr-rect-l.cpp	\
