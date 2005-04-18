@@ -19,6 +19,7 @@
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-rotate-ops.h>

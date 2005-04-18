@@ -1,5 +1,6 @@
 #include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 
 NR::Point operator/(NR::Point const &p, NR::Matrix const &m) {
     return p * m.inverse();

@@ -40,6 +40,7 @@
 
 #include "libnr/nr-macros.h"
 #include "libnr/nr-point-fns.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-rect.h"
 
 #include "util/glib-list-iterators.h"

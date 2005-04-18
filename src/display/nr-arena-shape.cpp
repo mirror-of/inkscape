@@ -24,6 +24,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-path.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-blit.h>
 #include <livarot/Shape.h>

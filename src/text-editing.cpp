@@ -13,6 +13,7 @@
 #include "config.h"
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-point-matrix-ops.h>
 
 #include <glib.h>
 

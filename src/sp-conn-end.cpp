@@ -6,6 +6,7 @@
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-point.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-rect.h"
 #include "xml/repr.h"
 #include "sp-conn-end.h"

@@ -19,6 +19,7 @@
 #include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sodipodi-ctrlrect.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "libnrtype/Layout-TNG.h"
 #include "text-editing.h"
 #include "sp-text.h"

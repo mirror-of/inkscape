@@ -40,6 +40,7 @@
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 
 #include "xml/repr.h"
 

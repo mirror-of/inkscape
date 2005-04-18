@@ -26,6 +26,7 @@
 #include "knot-holder-entity.h"
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 
 static void knot_clicked_handler (SPKnot *knot, guint state, gpointer data);
 static void knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data);
