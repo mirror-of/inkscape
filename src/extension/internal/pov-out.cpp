@@ -49,7 +49,7 @@ namespace Internal {
  * Make sure that we are in the database
  */
 bool
-PovOutput::check (Inkscape::Extension::Extension * module)
+PovOutput::check (Inkscape::Extension::Extension *module)
 {
     /* We don't need a Key
     if (NULL == Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_POV))
@@ -67,15 +67,17 @@ PovOutput::check (Inkscape::Extension::Extension * module)
  * and adds refs to all nodes with the given name, to the result vector
  */
 static void
-findElementsByTagName(std::vector<Inkscape::XML::Node *> &results, Inkscape::XML::Node *node, const char *name)
+findElementsByTagName(std::vector<Inkscape::XML::Node *> &results,
+                      Inkscape::XML::Node *node,
+                      char const *name)
 {
-    if (!name)
+    if ( !name
+         || strcmp(node->name(), name) == 0 ) {
         results.push_back(node);
-    else if (strcmp(node->name(), name) == 0)
-        results.push_back(node);
+    }
 
     for (Inkscape::XML::Node *child = node->firstChild() ; child ; child = child->next())
-        findElementsByTagName ( results, child, name );
+        findElementsByTagName( results, child, name );
 
 }
 
@@ -85,11 +87,11 @@ findElementsByTagName(std::vector<Inkscape::XML::Node *> &results, Inkscape::XML
  */
 class PovShapeInfo
 {
-    public:
+public:
     PovShapeInfo()
-        {}
+    {}
     virtual ~PovShapeInfo()
-        {}
+    {}
     std::string id;
     std::string color;
 };
@@ -101,7 +103,7 @@ class PovShapeInfo
  * Saves the <paths> of an Inkscape SVG file as PovRay spline definitions
 */
 void
-PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
+PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *uri)
 {
     std::vector<Inkscape::XML::Node *>results;
     //findElementsByTagName(results, SP_ACTIVE_DOCUMENT->rroot, "path");
@@ -128,9 +130,9 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
     double miny  =  bignum;
     double maxy  = -bignum;
 
-    unsigned int indx;
+    unsigned indx;
     for (indx = 0; indx < results.size() ; indx++)
-        {
+    {
         //### Fetch the object from the repr info
         Inkscape::XML::Node *rpath = results[indx];
         gchar *id  = (gchar *)rpath->attribute("id");
@@ -140,19 +142,19 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
 
         //### Get the transform of the item
         if (!SP_IS_ITEM(reprobj))
-            {
+        {
             continue;
-            }
+        }
         SPItem *item = SP_ITEM(reprobj);
         NR::Matrix tf = sp_item_i2d_affine(item);
 
         //### Get the Shape
         if (!SP_IS_SHAPE(reprobj))//Bulia's suggestion.  Allow all shapes
-            {
+        {
             continue;
-            }
+        }
         SPShape *shape = SP_SHAPE(reprobj);
-        SPCurve *curve = shape->curve; 
+        SPCurve *curve = shape->curve;
         if (sp_curve_empty(curve))
             continue;
 
@@ -164,8 +166,8 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         //Try to get the fill color of the shape
         SPStyle *style = SP_OBJECT_STYLE(shape);
         if (style && (style->fill.type == SP_PAINT_TYPE_COLOR))
-            {
-            // see color.h for how to parse SPColor 
+        {
+            // see color.h for how to parse SPColor
             SPColor spColor = style->fill.value.color;
             guint32 color = sp_color_get_rgba32_ualpha(&spColor, 0);
             int r     = SP_RGBA32_R_U(color);
@@ -175,14 +177,14 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             double dg = ((double)g) / 256.0;
             double db = ((double)b) / 256.0;
             double dopacity = SP_SCALE24_TO_FLOAT(style->opacity.value) *
-                              SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
+                SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
             gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
-                     dr, dg, db, 1.0-dopacity);
+                                         dr, dg, db, 1.0-dopacity);
             shapeInfo.color += str;
             g_free(str);
 
             //printf("got color for shape '%s': %s\n", id, shapeInfo.color.c_str());
-            }
+        }
 
         povShapes.push_back(shapeInfo); //passed all tests.  save the info
 
@@ -214,14 +216,14 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "    %d, //nr points\n", segmentCount * 4);
         int segmentNr = 0;
         for (bp = curve->bpath, curveNr=0 ; curveNr<curve->length ; curveNr++, bp++)
-            {
+        {
             /*
-            double x1 = bp->x1;
-            double y1 = bp->y1;
-            double x2 = bp->x2;
-            double y2 = bp->y2;
-            double x3 = bp->x3;
-            double y3 = bp->y3;
+              double x1 = bp->x1;
+              double y1 = bp->y1;
+              double x2 = bp->x2;
+              double y2 = bp->y2;
+              double x3 = bp->x3;
+              double y3 = bp->y3;
             */
             /**/
             double x1 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x1, bp->y1);
@@ -233,15 +235,15 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             /**/
 
             switch (bp->code)
-                {
+            {
                 case NR_MOVETO:
                 case NR_MOVETO_OPEN:
                     //fprintf(f, "moveto: %f %f\n", bp->x3, bp->y3);
-                break;
+                    break;
                 case NR_CURVETO:
 
                     fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
-                        segmentNr++, lastx, lasty, x1, y1, x2, y2, x3, y3);
+                            segmentNr++, lastx, lasty, x1, y1, x2, y2, x3, y3);
 
                     if (segmentNr < segmentCount)
                         fprintf(f, ",\n");
@@ -256,11 +258,11 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                         cminy = lasty;
                     if (lasty > cmaxy)
                         cmaxy = lasty;
-                break;
+                    break;
                 case NR_LINETO:
 
                     fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
-                        segmentNr++, lastx, lasty, lastx, lasty, x3, y3, x3, y3);
+                            segmentNr++, lastx, lasty, lastx, lasty, x3, y3, x3, y3);
 
                     if (segmentNr < segmentCount)
                         fprintf(f, ",\n");
@@ -276,14 +278,14 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                         cminy = lasty;
                     if (lasty > cmaxy)
                         cmaxy = lasty;
-                break;
+                    break;
                 case NR_END:
                     //fprintf(f, "end\n");
-                break;
-                }
+                    break;
+            }
             lastx = x3;
             lasty = y3;
-            }
+        }
         fprintf(f, "}\n");
         fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, cminx);
         fprintf(f, "#declare %s_CENTER_X = %4.3f;\n", id, (cmaxx+cminx)/2.0);
@@ -295,7 +297,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "#declare %s_HEIGHT   = %4.3f;\n", id, cmaxy-cminy);
         if (shapeInfo.color.length()>0)
             fprintf(f, "#declare %s_COLOR    = %s;\n",
-                          id, shapeInfo.color.c_str());
+                    id, shapeInfo.color.c_str());
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### end %s\n", id);
         fprintf(f, "##############################################*/\n\n\n\n");
@@ -309,14 +311,13 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             maxy = cmaxy;
 
 
-        }//for
+    }//for
 
 
-    
+
     //## Let's make a union of all of the Shapes
-    if (povShapes.size() > 0)
-        {
-        char *id = "AllShapes";
+    if (!povShapes.empty()) {
+        char const *id = "AllShapes";
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### UNION OF ALL SHAPES IN DOCUMENT\n");
         fprintf(f, "##############################################*/\n");
@@ -334,8 +335,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "#end\n");
         fprintf(f, "\n\n");
         fprintf(f, "#declare %s = union {\n", id);
-        for (unsigned int i=0 ; i<povShapes.size() ; i++)
-            {
+        for (unsigned i = 0 ; i < povShapes.size() ; i++) {
             fprintf(f, "    object { %s\n", povShapes[i].id.c_str());
             fprintf(f, "        texture { \n");
             if (povShapes[i].color.length()>0)
@@ -345,7 +345,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             fprintf(f, "            finish { %s_Finish }\n", id);
             fprintf(f, "            } \n");
             fprintf(f, "        } \n");
-            }
+        }
         fprintf(f, "}\n\n\n\n");
 
 
@@ -362,8 +362,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "#declare AllShapes_Z_Scale = 1.0;\n");
         fprintf(f, "\n\n");
         fprintf(f, "#declare %s_Z = union {\n", id);
-        for (unsigned int i=0 ; i<povShapes.size() ; i++)
-            {
+        for (unsigned i = 0 ; i < povShapes.size() ; i++) {
             fprintf(f, "    object { %s\n", povShapes[i].id.c_str());
             fprintf(f, "        texture { \n");
             if (povShapes[i].color.length()>0)
@@ -375,8 +374,8 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             fprintf(f, "        scale <1, %s_Z_Scale, 1>\n", id);
             fprintf(f, "        } \n");
             fprintf(f, "#declare %s_Z_Scale = %s_Z_Scale + %s_Z_Increment;\n\n",
-                                  id, id, id);
-            }
+                    id, id, id);
+        }
 
         fprintf(f, "}\n");
         fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, minx);
@@ -390,7 +389,7 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### end %s\n", id);
         fprintf(f, "##############################################*/\n\n\n\n");
-        }
+    }
 
     //All done
     fclose(f);
@@ -402,21 +401,20 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
  * describes the data.
 */
 void
-PovOutput::init (void)
+PovOutput::init()
 {
-	Inkscape::Extension::build_from_mem(
-		"<inkscape-extension>\n"
-			"<name>PovRay Output</name>\n"
-			"<id>org.inkscape.output.pov</id>\n"
-			"<output>\n"
-				"<extension>.pov</extension>\n"
-				"<mimetype>text/x-povray-script</mimetype>\n"
-				"<filetypename>PovRay (*.pov) (export splines)</filetypename>\n"
-				"<filetypetooltip>PovRay Raytracer File</filetypetooltip>\n"
-			"</output>\n"
-		"</inkscape-extension>", new PovOutput());
-
-	return;
+    Inkscape::Extension::build_from_mem(
+        "<inkscape-extension>\n"
+            "<name>PovRay Output</name>\n"
+            "<id>org.inkscape.output.pov</id>\n"
+            "<output>\n"
+                "<extension>.pov</extension>\n"
+                "<mimetype>text/x-povray-script</mimetype>\n"
+                "<filetypename>PovRay (*.pov) (export splines)</filetypename>\n"
+                "<filetypetooltip>PovRay Raytracer File</filetypetooltip>\n"
+            "</output>\n"
+        "</inkscape-extension>",
+        new PovOutput());
 }
 
 
@@ -426,3 +424,15 @@ PovOutput::init (void)
 }  //namespace Internal
 }  //namespace Extension
 }  //namespace Inkscape
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
