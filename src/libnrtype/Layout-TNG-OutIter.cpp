@@ -16,6 +16,7 @@
 #include "svg/svg-types.h"
 #include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-rotate-matrix-ops.h"
 #include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-rotate-ops.h"

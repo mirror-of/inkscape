@@ -39,6 +39,7 @@
 #include "svg/svg.h"
 
 #include "libnr/nr-point.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "libnr/nr-point-ops.h"
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-rect.h"
