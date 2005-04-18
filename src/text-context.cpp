@@ -25,7 +25,7 @@
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
 #include <display/sp-ctrlquadr.h>
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <gtk/gtkimmulticontext.h>
 
 #include <gtkmm.h>

@@ -1,4 +1,4 @@
-#include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "livarot/path-description.h"
 
 PathDescr *PathDescrMoveTo::clone() const

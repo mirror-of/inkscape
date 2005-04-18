@@ -51,7 +51,7 @@ GType sp_flowtext_get_type (void);
 
 #include "helper/stlport.h"
 
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
 /* fixme: Implement these via preferences */

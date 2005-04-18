@@ -13,7 +13,7 @@
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "canvas-grid.h"
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 
 enum {
     ARG_0,

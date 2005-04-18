@@ -25,7 +25,7 @@
 #include "display/guideline.h"
 #include "helper/unit-menu.h"
 #include "helper/units.h"
-#include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "widgets/icon.h"
 #include "inkscape-private.h"
 #include "desktop.h"

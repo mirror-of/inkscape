@@ -31,8 +31,8 @@
 #include "libnr/nr-point.h"
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-point-ops.h"
-#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-point-l.h"
+#include "libnr/nr-point-matrix-ops.h"
 
 #include "sp-star.h"
 

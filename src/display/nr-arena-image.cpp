@@ -15,7 +15,7 @@
 #include <math.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-compose-transform.h>
 #include "../prefs-utils.h"
 #include "nr-arena-image.h"

@@ -24,8 +24,8 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-path.h>
 #include <libnr/nr-macros.h>
-#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-translate-ops.h>
 
 #define SP_CURVE_LENSTEP 32

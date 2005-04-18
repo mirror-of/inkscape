@@ -21,7 +21,7 @@
 
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-matrix.h"
-#include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "xml/repr.h"

@@ -37,7 +37,7 @@
 #include "dialogs/object-attributes.h"
 #include "sp-image.h"
 #include <glibmm/i18n.h>
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <xml/repr.h>
 
 #include "file.h"

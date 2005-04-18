@@ -11,7 +11,7 @@
 
 #include "n-art-bpath.h"
 #include "nr-matrix.h"
-#include "nr-matrix-ops.h"
+#include "nr-point-matrix-ops.h"
 #include "nr-rect.h"
 #include "nr-path.h"
 

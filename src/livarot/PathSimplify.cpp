@@ -9,7 +9,7 @@
 #include <glib/gmem.h>
 #include <cmath>
 #include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 #include "livarot/Path.h"
 #include "livarot/path-description.h"

@@ -34,7 +34,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include "xml/repr.h"
 #include "svg/svg.h"
 
