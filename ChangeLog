@@ -5,6 +5,9 @@
 	floating point component.  Changed to use sp_color_get_rgb_floatv
 	instead.  (N.B. This change is wrong if pov files disallow 1.0.)
 
+	Multiply opacity by product of all ancestors' opacity property computed
+	value.
+
 2005-04-18  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/sp-line.cpp, src/dialogs/unclump.cpp,

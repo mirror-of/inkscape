@@ -99,6 +99,18 @@ public:
 
 
 
+static double
+effective_opacity(SPItem const *item)
+{
+    double ret = 1.0;
+    for (SPObject const *obj = item; obj; obj = obj->parent) {
+        SPStyle const *const style = SP_OBJECT_STYLE(obj);
+        g_return_val_if_fail(style, ret);
+        ret *= SP_SCALE24_TO_FLOAT(style->opacity.value);
+    }
+    return ret;
+}
+
 
 /**
  * Saves the <paths> of an Inkscape SVG file as PovRay spline definitions
@@ -172,8 +184,8 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
             // see color.h for how to parse SPColor
             float rgb[3];
             sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
-            double const dopacity = ( SP_SCALE24_TO_FLOAT(style->opacity.value) *
-                                      SP_SCALE24_TO_FLOAT(style->fill_opacity.value) );
+            double const dopacity = ( SP_SCALE24_TO_FLOAT(style->fill_opacity.value)
+                                      * effective_opacity(shape) );
             gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
                                          rgb[0], rgb[1], rgb[2], 1.0 - dopacity);
             shapeInfo.color += str;
