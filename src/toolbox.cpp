@@ -585,7 +585,7 @@ update_tool_toolbox( SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget
 static void
 setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    static GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH);
+    GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
 
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox;
