@@ -11,6 +11,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <config.h>
+#include <iostream>
+
 #include <glib.h>
 
 #include <gtkmm/adjustment.h>
@@ -70,28 +73,50 @@ class ParamInt : public Parameter {
 private:
     /** \brief  Internal value. */
     int _value;
+    int _min;
+    int _max;
 public:
     ParamInt (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
     /** \brief  Returns \c _value */
     int get (const Inkscape::XML::Document * doc) { return _value; }
     int set (int in, Inkscape::XML::Document * doc);
+    int max (void) { return _max; }
+    int min (void) { return _min; }
     Gtk::Widget * get_widget(void);
     Glib::ustring * string (void);
 };
 
 /** \brief  Use the superclass' allocator and set the \c _value */
 ParamInt::ParamInt (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-        Parameter(name, guitext, ext), _value(0)
+        Parameter(name, guitext, ext), _value(0), _min(0), _max(10)
 {
     const char * defaultval = sp_repr_children(xml)->content();
-
     if (defaultval != NULL) {
         _value = atoi(defaultval);
+    }
+
+    const char * maxval = xml->attribute("max");
+    if (maxval != NULL)
+        _max = atoi(maxval);
+
+    const char * minval = xml->attribute("min");
+    if (minval != NULL)
+        _min = atoi(minval);
+
+    /* We're handling this by just killing both values */
+    if (_max < _min) {
+        _max = 10;
+        _min = 0;
     }
 
     gchar * pref_name = this->pref_name();
     _value = prefs_get_int_attribute(PREF_DIR, pref_name, _value);
     g_free(pref_name);
+
+    // std::cout << "New Int::  value: " << _value << "  max: " << _max << "  min: " << _min << std::endl;
+
+    if (_value > _max) _value = _max;
+    if (_value < _min) _value = _min;
 
     return;
 }
@@ -100,28 +125,50 @@ class ParamFloat : public Parameter {
 private:
     /** \brief  Internal value. */
     float _value;
+    float _min;
+    float _max;
 public:
     ParamFloat (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
     /** \brief  Returns \c _value */
     float get (const Inkscape::XML::Document * doc) { return _value; }
     float set (float in, Inkscape::XML::Document * doc);
+    float max (void) { return _max; }
+    float min (void) { return _min; }
     Gtk::Widget * get_widget(void);
     Glib::ustring * string (void);
 };
 
 /** \brief  Use the superclass' allocator and set the \c _value */
 ParamFloat::ParamFloat (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-        Parameter(name, guitext, ext), _value(0.0)
+        Parameter(name, guitext, ext), _value(0.0), _min(0.0), _max(10.0)
 {
     const char * defaultval = sp_repr_children(xml)->content();
-
     if (defaultval != NULL) {
         _value = atof(defaultval);
+    }
+
+    const char * maxval = xml->attribute("max");
+    if (maxval != NULL)
+        _max = atof(maxval);
+
+    const char * minval = xml->attribute("min");
+    if (minval != NULL)
+        _min = atof(minval);
+
+    /* We're handling this by just killing both values */
+    if (_max < _min) {
+        _max = 10.0;
+        _min = 0.0;
     }
 
     gchar * pref_name = this->pref_name();
     _value = prefs_get_double_attribute(PREF_DIR, pref_name, _value);
     g_free(pref_name);
+
+    // std::cout << "New Float::  value: " << _value << "  max: " << _max << "  min: " << _min << std::endl;
+
+    if (_value > _max) _value = _max;
+    if (_value < _min) _value = _min;
 
     return;
 }
@@ -227,6 +274,8 @@ int
 ParamInt::set (int in, Inkscape::XML::Document * doc)
 {
     _value = in;
+    if (_value > _max) _value = _max;
+    if (_value < _min) _value = _min;
 
     gchar * prefname = this->pref_name();
     prefs_set_int_attribute(PREF_DIR, prefname, _value);
@@ -247,6 +296,8 @@ float
 ParamFloat::set (float in, Inkscape::XML::Document * doc)
 {
     _value = in;
+    if (_value > _max) _value = _max;
+    if (_value < _min) _value = _min;
 
     gchar * prefname = this->pref_name();
     prefs_set_double_attribute(PREF_DIR, prefname, _value);
@@ -442,7 +493,7 @@ public:
     /** \brief  Make the adjustment using an extension and the string
                 describing the parameter. */
     ParamFloatAdjustment (ParamFloat * param) :
-            Gtk::Adjustment(0.0, 0.0, 10.0, 0.1), _pref(param) {
+            Gtk::Adjustment(0.0, param->min(), param->max(), 0.1), _pref(param) {
         this->set_value(_pref->get(NULL) /* \todo fix */); 
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamFloatAdjustment::val_changed));
         return;
@@ -473,7 +524,7 @@ public:
     /** \brief  Make the adjustment using an extension and the string
                 describing the parameter. */
     ParamIntAdjustment (ParamInt * param) :
-            Gtk::Adjustment(0.0, 0.0, 10.0, 1.0), _pref(param) {
+            Gtk::Adjustment(0.0, param->min(), param->max(), 1.0), _pref(param) {
         this->set_value(_pref->get(NULL) /* \todo fix */); 
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamIntAdjustment::val_changed));
         return;
@@ -535,7 +586,7 @@ ParamInt::get_widget (void)
     hbox->pack_start(*label, true, true);
 
     ParamIntAdjustment * fadjust = new ParamIntAdjustment(this);
-    Gtk::SpinButton * spin = new Gtk::SpinButton(*fadjust, 0.1, 1);
+    Gtk::SpinButton * spin = new Gtk::SpinButton(*fadjust, 1.0, 0);
     spin->show();
     hbox->pack_start(*spin, false, false);
 
