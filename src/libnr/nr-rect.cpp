@@ -12,6 +12,7 @@
 #include "nr-rect.h"
 #include "nr-rect-l.h"
 #include "nr-matrix.h"
+#include "nr-point-matrix-ops.h"
 
 /**
  *    \param r0 Rectangle.
@@ -124,10 +125,13 @@ nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y)
 NRRect *
 nr_rect_d_matrix_transform(NRRect *d, NRRect const *const s, NR::Matrix const &m)
 {
+    using NR::X;
+    using NR::Y;
+
     if (nr_rect_d_test_empty(s)) {
         nr_rect_d_set_empty(d);
     } else {
-        NR::Point const c00(NR::Point(x->x0, s->y0) * m);
+        NR::Point const c00(NR::Point(s->x0, s->y0) * m);
         NR::Point const c01(NR::Point(s->x0, s->y1) * m);
         NR::Point const c10(NR::Point(s->x1, s->y0) * m);
         NR::Point const c11(NR::Point(s->x1, s->y1) * m);
