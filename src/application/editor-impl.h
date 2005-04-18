@@ -27,6 +27,7 @@
 #include <gtkmm/uimanager.h>
 #include <gtkmm/drawingarea.h>  // TODO: remove this when SVG Canvas is hooked in
 
+#include "application/editor.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/widget/toolbox.h"
 

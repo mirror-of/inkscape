@@ -2,8 +2,9 @@
 #define __COLOR_PICKER_H__
 
 /**
- * \brief  Color picker button & window
- *
+ * \file  Color picker button \& window.
+ */
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -12,10 +13,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib/gtypes.h>
+#include <gtk/gtkwidget.h>
+
 namespace Inkscape {
-	namespace XML {
-		class Node;
-	}
+namespace XML {
+class Node;
+}
 }
 
 void
@@ -32,15 +36,16 @@ sp_color_picker_new(Inkscape::XML::Node *repr, bool undo, GtkWidget *dlg, gchar 
 
 void sp_color_picker_set_rgba32(GtkWidget *cp, guint32 rgba);
 
-#endif
+
+#endif /* !__COLOR_PICKER_H__ */
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

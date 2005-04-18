@@ -16,6 +16,7 @@
 #define SEEN_INKSCAPE_XML_INVALID_OPERATION_EXCEPTION_H
 
 #include <exception>
+#include <stdexcept>
 
 namespace Inkscape {
 
@@ -23,8 +24,9 @@ namespace XML {
 
 class InvalidOperationException : public std::logic_error {
 public:
-    InvalidOperationException(std::string const &message)
-    : logic_error(message) {}
+    InvalidOperationException(std::string const &message) :
+        std::logic_error(message)
+    { }
 };
 
 }
@@ -32,13 +34,14 @@ public:
 }
 
 #endif
+
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

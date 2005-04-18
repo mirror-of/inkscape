@@ -1,9 +1,10 @@
-#ifndef __UNCLUMP_H__
-#define __UNCLUMP_H__
+#ifndef UNCLUMP_H_SEEN
+#define UNCLUMP_H_SEEN
 
-/*
+/** \file
  * Unclumping objects
- *
+ */
+/*
  * Authors:
  *   bulia byak
  *
@@ -11,6 +12,9 @@
  * Released under GNU GPL
  */
 
-void unclump (GSList *items);
+#include <glib/gslist.h>
 
-#endif
+void unclump(GSList *items);
+
+
+#endif /* !UNCLUMP_H_SEEN */

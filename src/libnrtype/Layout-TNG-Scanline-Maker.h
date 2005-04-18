@@ -12,6 +12,8 @@
 #define __LAYOUT_TNG_SCANLINE_MAKER_H__
 
 #include <vector>
+#include <cmath>
+#include "libnrtype/Layout-TNG.h"
 
 class Shape;
 
@@ -36,7 +38,7 @@ public:
         double y;  /// that's the top of the scan run, not the baseline
         double x_start;    // these are not flipped according to the text direction
         double x_end;
-        inline double width() const {return fabs(x_start - x_end);}
+        inline double width() const {return std::abs(x_start - x_end);}
     };
 
     /** Returns a list of chunks on the current line which can fit text with
@@ -155,3 +157,14 @@ private:
 }//namespace Inkscape
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
