@@ -13,6 +13,7 @@
 #include "livarot/Shape.h"
 #include "livarot/float-line.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 
 namespace Inkscape {
 namespace Text {

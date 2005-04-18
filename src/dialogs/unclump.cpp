@@ -26,6 +26,7 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-point-matrix-ops.h"
 
 // Taking bbox of an item is an expensive operation, and we need to do it many times, so here we
 // cache the centers, widths, and heights of items

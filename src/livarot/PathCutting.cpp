@@ -14,6 +14,7 @@
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-point-ops.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-point-matrix-ops.h"
 
 void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
 {
