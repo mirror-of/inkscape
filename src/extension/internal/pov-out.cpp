@@ -166,25 +166,18 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
 
         //Try to get the fill color of the shape
         SPStyle *style = SP_OBJECT_STYLE(shape);
-        if (style && (style->fill.type == SP_PAINT_TYPE_COLOR))
-        {
+        /* fixme: Handle other fill types, even if this means translating gradients to a single
+           flat colour. */
+        if (style && (style->fill.type == SP_PAINT_TYPE_COLOR)) {
             // see color.h for how to parse SPColor
-            SPColor spColor = style->fill.value.color;
-            guint32 color = sp_color_get_rgba32_ualpha(&spColor, 0);
-            int r     = SP_RGBA32_R_U(color);
-            int g     = SP_RGBA32_G_U(color);
-            int b     = SP_RGBA32_B_U(color);
-            double dr = ((double)r) / 256.0;
-            double dg = ((double)g) / 256.0;
-            double db = ((double)b) / 256.0;
-            double dopacity = SP_SCALE24_TO_FLOAT(style->opacity.value) *
-                SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
+            float rgb[3];
+            sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+            double const dopacity = ( SP_SCALE24_TO_FLOAT(style->opacity.value) *
+                                      SP_SCALE24_TO_FLOAT(style->fill_opacity.value) );
             gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
-                                         dr, dg, db, 1.0-dopacity);
+                                         rgb[0], rgb[1], rgb[2], 1.0 - dopacity);
             shapeInfo.color += str;
             g_free(str);
-
-            //printf("got color for shape '%s': %s\n", id, shapeInfo.color.c_str());
         }
 
         povShapes.push_back(shapeInfo); //passed all tests.  save the info
