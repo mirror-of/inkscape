@@ -5,6 +5,7 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-rotate-ops.h>
 #include <libnr/nr-matrix-scale-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-scale-ops.h>
