@@ -1,4 +1,9 @@
-﻿2005-04-16  Ted Gould  <ted@gould.cx>
+2005-04-17  Jon A. Cruz  <jon@joncruz.org>
+	* src/toolbox.cpp:
+
+	Corrected improper use of static. Fixes bug #1171919.
+
+2005-04-16  Ted Gould  <ted@gould.cx>
 
 	* src/extension/extension.cpp, src/extension/parameter.cpp:
 
