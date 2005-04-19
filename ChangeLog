@@ -1,3 +1,7 @@
+2005-04-19  Piers Titus van der Torren  <piersvdt@users.sourceforge.net>
+	* src/seltrans.cpp:
+	Fixed skew so it displays and snaps to angle instead of percentage.
+
 2005-04-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/extension/internal/pov-out.cpp (PovOutput::save):
