@@ -115,8 +115,8 @@ enum {
     SP_ARG_EXPORT_SVG,
     SP_ARG_EXPORT_PS,
     SP_ARG_EXPORT_EPS,
-    SP_ARG_TEXT_TO_PATH,
-    SP_ARG_PAGE_BOUNDING_BOX,
+    SP_ARG_EXPORT_TEXT_TO_PATH,
+    SP_ARG_EXPORT_BBOX_PAGE,
     SP_ARG_EXTENSIONDIR,
     SP_ARG_SLIDESHOW,
     SP_ARG_BITMAP_ICONS,
@@ -147,7 +147,7 @@ static gchar *sp_export_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
 static gboolean sp_export_text_to_path = FALSE;
-static gboolean sp_export_page_bounding_box = FALSE;
+static gboolean sp_export_bbox_page = FALSE;
 static int sp_new_gui = FALSE;
 
 static gchar *sp_export_png_utf8 = NULL;
@@ -249,14 +249,14 @@ struct poptOption options[] = {
      N_("Export document to an EPS file"),
      N_("FILENAME")},
 
-    {"text-to-path", 'T',
-     POPT_ARG_NONE, &sp_export_text_to_path, SP_ARG_TEXT_TO_PATH,
-     N_("Convert text to paths when exporting to EPS"),
+    {"export-text-to-path", 'T',
+     POPT_ARG_NONE, &sp_export_text_to_path, SP_ARG_EXPORT_TEXT_TO_PATH,
+     N_("Convert text object to paths on export, where applicable"),
      NULL},
 
-    {"page-bounding-box", 'B',
-     POPT_ARG_NONE, &sp_export_page_bounding_box, SP_ARG_PAGE_BOUNDING_BOX,
-     N_("Set the bounding box of exported EPS files to the page"),
+    {"export-bbox-page", 'B',
+     POPT_ARG_NONE, &sp_export_bbox_page, SP_ARG_EXPORT_BBOX_PAGE,
+     N_("Export files with the bounding box set to the page size, where applicable"),
      NULL},
 
     {"extension-directory", 'x',
@@ -773,29 +773,29 @@ static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
     }
 
     bool old_text_to_path = false;
-    bool old_page_bounding_box = false;
+    bool old_bbox_page = false;
     
     try {
         old_text_to_path = (*i)->get_param_bool("textToPath");
         (*i)->set_param_bool("textToPath", sp_export_text_to_path);
     }
     catch (...) {
-        g_warning ("Could not set text-to-path option for this export.");
+        g_warning ("Could not set export-text-to-path option for this export.");
     }
 
     try {
-        old_page_bounding_box = (*i)->get_param_bool("pageBoundingBox");
-        (*i)->set_param_bool("pageBoundingBox", sp_export_page_bounding_box);
+        old_bbox_page = (*i)->get_param_bool("pageBoundingBox");
+        (*i)->set_param_bool("pageBoundingBox", sp_export_bbox_page);
     }
     catch (...) {
-        g_warning ("Could not set page-bounding-box option for this export.");
+        g_warning ("Could not set export-bbox-page option for this export.");
     }
     
     (*i)->save(doc, uri);
 
     try {
         (*i)->set_param_bool("textToPath", old_text_to_path);
-        (*i)->set_param_bool("pageBoundingBox", old_page_bounding_box);
+        (*i)->set_param_bool("pageBoundingBox", old_bbox_page);
     }
     catch (...) {
         
