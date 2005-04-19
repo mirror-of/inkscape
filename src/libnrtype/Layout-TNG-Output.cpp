@@ -132,7 +132,7 @@ void Layout::print(SPPrintContext *ctx,
         NRMatrix glyph_matrix;
         Span const &span = _spans[_characters[_glyphs[glyph_index].in_character].in_span];
         InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[span.in_input_stream_item]);
-        if (text_to_path) {
+        if (text_to_path || _path_fitted) {
             NRBPath bpath;
             bpath.path = (NArtBpath*)span.font->ArtBPath(_glyphs[glyph_index].glyph);
             if (bpath.path) {
@@ -147,10 +147,11 @@ void Layout::print(SPPrintContext *ctx,
             }
             glyph_index++;
         } else {
-            NR::Point g_pos(0,0);    // huh?
+            NR::Point g_pos(0,0);    // all strings are output at (0,0) because we do the translation using the matrix
             glyph_matrix = NR::Matrix(NR::scale(1.0, -1.0) * NR::Matrix(NR::rotate(_glyphs[glyph_index].rotation)));
             if (block_progression == LEFT_TO_RIGHT || block_progression == RIGHT_TO_LEFT) {
                 glyph_matrix.c[4] = span.line(this).baseline_y + span.baseline_shift;
+                // since we're outputting character codes, not glyphs, we want the character x
                 glyph_matrix.c[5] = span.chunk(this).left_x + span.x_start + _characters[_glyphs[glyph_index].in_character].x;
             } else {
                 glyph_matrix.c[4] = span.chunk(this).left_x + span.x_start + _characters[_glyphs[glyph_index].in_character].x;
@@ -178,6 +179,7 @@ void Layout::print(SPPrintContext *ctx,
                     glyph_index++;
                 }
             } while (glyph_index < _glyphs.size()
+                     && _path_fitted == NULL
                      && _characters[_glyphs[glyph_index].in_character].in_span == this_span_index
                      && fabs(char_x - _characters[_glyphs[glyph_index].in_character].x) < FLT_EPSILON);
             sp_print_bind(ctx, glyph_matrix, 1.0);
