@@ -251,12 +251,12 @@ struct poptOption options[] = {
 
     {"export-text-to-path", 'T',
      POPT_ARG_NONE, &sp_export_text_to_path, SP_ARG_EXPORT_TEXT_TO_PATH,
-     N_("Convert text object to paths on export, where applicable"),
+     N_("Convert text object to paths on export (EPS)"),
      NULL},
 
     {"export-bbox-page", 'B',
      POPT_ARG_NONE, &sp_export_bbox_page, SP_ARG_EXPORT_BBOX_PAGE,
-     N_("Export files with the bounding box set to the page size, where applicable"),
+     N_("Export files with the bounding box set to the page size (EPS)"),
      NULL},
 
     {"extension-directory", 'x',
