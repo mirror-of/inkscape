@@ -10,7 +10,7 @@ Summary:	A Vector Drawing Application
 Version:	@VERSION@
 # Use release "0" so that distro-released versions will override ours.
 Release:	0
-Copyright:	GPL
+License:	GPL
 Group:		Applications/Graphics
 Source:		%{name}-%{version}.tar.gz
 URL:		http://inkscape.sourceforge.net/
