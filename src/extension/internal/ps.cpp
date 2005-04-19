@@ -585,7 +585,9 @@ PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style, const NRRe
             os << "/Extend [true true]\n";
             os << "/Domain [0 1]\n";
             os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
-            for (gint i=0;unsigned(i)<lg->vector.stops.size()-1;i++) {
+
+            sp_gradient_ensure_vector(SP_GRADIENT(lg)); // when exporting from commandline, vector is not built
+            for (gint i = 0; unsigned(i) < lg->vector.stops.size() - 1; i++) {
                 float rgb[3];
                 sp_color_get_rgb_floatv(&lg->vector.stops[i].color, rgb);
                 os << "<<\n/FunctionType 2\n/Domain [0 1]\n";
@@ -626,7 +628,9 @@ PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style, const NRRe
             os << "/Extend [true true]\n";
             os << "/Domain [0 1]\n";
             os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
-            for (gint i=0;unsigned(i)<rg->vector.stops.size()-1;i++) {
+
+            sp_gradient_ensure_vector(SP_GRADIENT(rg)); // when exporting from commandline, vector is not built
+            for (gint i = 0; unsigned(i) < rg->vector.stops.size() - 1; i++) {
                 float rgb[3];
                 sp_color_get_rgb_floatv(&rg->vector.stops[i].color, rgb);
                 os << "<<\n/FunctionType 2\n/Domain [0 1]\n";
