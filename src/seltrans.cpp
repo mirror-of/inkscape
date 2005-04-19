@@ -476,7 +476,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
     } else {
         sp_remove_handles(seltrans.shandle, 8);
         sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
-                        _("<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"), // fixme: CTRL SNAP!!! remove "skew and scale"
+                        _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"), // fixme: remove "skew and scale"?
                         _("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner"));
     }
     if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
@@ -889,40 +889,45 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     }
 
     skew[dim_a] = ( pt[dim_b] - point[dim_b] ) / ( point[dim_a] - norm[dim_a] );
-    skew[dim_a] = namedview_dim_snap_list_skew(desktop->namedview,
-                                               Snapper::SNAP_POINT, seltrans->snap_points,
-                                               norm, skew[dim_a], dim_b);
 
-    pt[dim_b] = ( point[dim_a] - norm[dim_a] ) * skew[dim_a] + point[dim_b];
     s[dim_a] = ( pt[dim_a] - norm[dim_a] ) / ( point[dim_a] - norm[dim_a] );
-    if (state & GDK_CONTROL_MASK) {
-        std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(desktop->namedview,
-                                                                      Snapper::SNAP_POINT, seltrans->snap_points,
-                                                                      norm, s[dim_a], dim_a);
-        s[dim_a] = sn.first;
+    
+    if ( fabs(s[dim_a]) < 1 ) {
+        s[dim_a] = sign(s[dim_a]);
     } else {
-        if ( fabs(s[dim_a]) < NR_EPSILON ) {
-            s[dim_a] = NR_EPSILON;
-        }
-        if ( fabs(s[dim_a]) < 1 ) {
-            s[dim_a] = sign(s[dim_a]);
-        }
         s[dim_a] = floor( s[dim_a] + 0.5 );
     }
-
-    if (fabs(s[dim_a]) < NR_EPSILON) {
-        s[dim_a] = NR_EPSILON;
+    
+    double radians = atan(skew[dim_a] / s[dim_a]);
+    
+    if (state & GDK_CONTROL_MASK) {
+        
+        int snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
+        
+        if (snaps) {
+            double sections = floor( radians * snaps / M_PI + .5 );
+            if (fabs(sections) >= snaps / 2) sections = sign(sections) * (snaps / 2 - 1);
+            radians = ( M_PI / snaps ) * sections;
+        }
+        skew[dim_a] = tan(radians) * s[dim_a];
+    } else {
+        skew[dim_a] = namedview_dim_snap_list_skew(desktop->namedview,
+                Snapper::SNAP_POINT, seltrans->snap_points,
+                norm, skew[dim_a], dim_b);
     }
 
+    pt[dim_b] = ( point[dim_a] - norm[dim_a] ) * skew[dim_a] + point[dim_b];
     pt[dim_a] = ( point[dim_a] - norm[dim_a] ) * s[dim_a] + norm[dim_a];
+    
+    /* status text */
+    double degrees = 180 / M_PI * radians;
+    if (degrees > 180) degrees -= 360;
+    if (degrees < -180) degrees += 360;
 
-    skew[dim_b] = 0;
-
-    // status text
     seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
-                                    _("<b>Skew</b>: %0.2f%% x %0.2f%%"), // FIXME: display angle! % makes no sense here; snap with ctrl!
-                                    100 * fabs(skew[1]),
-                                    100 * fabs(skew[0]));
+                                    _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), // FIXED: display angle! % makes no sense here; snap with ctrl!
+                                    //%0.2f%%, 100 * fabs(skew[dim_a]),
+                                    degrees);
 
     return TRUE;
 }
