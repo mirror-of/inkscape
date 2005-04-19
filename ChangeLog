@@ -3,6 +3,9 @@
 	* src/pen-context.cpp: snap first point to grid correctly, fixing
 	#1152057.  Remove a pointless call to spdc_endpoint_snap().
 
+	* src/main.cpp: support for command-line export of PS and EPS,
+	with options.
+
 2005-04-19  Piers Titus van der Torren  <piersvdt@users.sourceforge.net>
 	* src/seltrans.cpp:
 	Fixed skew so it displays and snaps to angle instead of percentage.

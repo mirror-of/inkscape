@@ -77,6 +77,7 @@
 #include <extension/extension.h>
 #include <extension/system.h>
 #include <extension/db.h>
+#include <extension/output.h>
 
 #ifdef WIN32
 #include "extension/internal/win32.h"
@@ -112,6 +113,10 @@ enum {
     SP_ARG_EXPORT_BACKGROUND,
     SP_ARG_EXPORT_BACKGROUND_OPACITY,
     SP_ARG_EXPORT_SVG,
+    SP_ARG_EXPORT_PS,
+    SP_ARG_EXPORT_EPS,
+    SP_ARG_TEXT_TO_PATH,
+    SP_ARG_PAGE_BOUNDING_BOX,
     SP_ARG_EXTENSIONDIR,
     SP_ARG_SLIDESHOW,
     SP_ARG_BITMAP_ICONS,
@@ -123,6 +128,7 @@ enum {
 int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
 static void sp_do_export_png(SPDocument *doc);
+static void do_export_ps(SPDocument* doc, gchar const* uri, char const *mime);
 
 
 static gchar *sp_global_printer = NULL;
@@ -138,6 +144,10 @@ static gchar *sp_export_background_opacity = NULL;
 static gboolean sp_export_use_hints = FALSE;
 static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
+static gchar *sp_export_ps = NULL;
+static gchar *sp_export_eps = NULL;
+static gboolean sp_export_text_to_path = FALSE;
+static gboolean sp_export_page_bounding_box = FALSE;
 static int sp_new_gui = FALSE;
 
 static gchar *sp_export_png_utf8 = NULL;
@@ -229,6 +239,26 @@ struct poptOption options[] = {
      N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"), 
      N_("FILENAME")},
 
+    {"export-ps", 'P',
+     POPT_ARG_STRING, &sp_export_ps, SP_ARG_EXPORT_PS,
+     N_("Export document to a PS file"),
+     N_("FILENAME")},
+
+    {"export-eps", 'E',
+     POPT_ARG_STRING, &sp_export_eps, SP_ARG_EXPORT_EPS,
+     N_("Export document to an EPS file"),
+     N_("FILENAME")},
+
+    {"text-to-path", 'T',
+     POPT_ARG_NONE, &sp_export_text_to_path, SP_ARG_TEXT_TO_PATH,
+     N_("Convert text to paths when exporting to EPS"),
+     NULL},
+
+    {"page-bounding-box", 'B',
+     POPT_ARG_NONE, &sp_export_page_bounding_box, SP_ARG_PAGE_BOUNDING_BOX,
+     N_("Set the bounding box of exported EPS files to the page"),
+     NULL},
+
     {"extension-directory", 'x',
      POPT_ARG_NONE, NULL, SP_ARG_EXTENSIONDIR,
      N_("Print out the extension directory and exit."),
@@ -307,6 +337,10 @@ main(int argc, char **argv)
             || !strncmp(argv[i], "--export-plain-svg", 12)
             || !strcmp(argv[i], "-i")
             || !strncmp(argv[i], "--export-id", 12)
+            || !strcmp(argv[i], "-P")
+            || !strncmp(argv[i], "--export-ps", 11)
+            || !strcmp(argv[i], "-E")
+            || !strncmp(argv[i], "--export-eps", 12)
            )
         {
             /* main_console handles any exports -- not the gui */
@@ -511,6 +545,12 @@ sp_main_console(int argc, char const **argv)
                 repr = sp_document_root(doc)->updateRepr(repr, SP_OBJECT_WRITE_BUILD);
                 sp_repr_save_file(repr->document(), sp_export_svg, SP_SVG_NS_URI);
             }
+            if (sp_export_ps) {
+                do_export_ps(doc, sp_export_ps, "image/x-postscript");
+            }
+            if (sp_export_eps) {
+                do_export_ps(doc, sp_export_eps, "image/x-e-postscript");
+            }
         }
         fl = g_slist_remove(fl, fl->data);
     }
@@ -701,6 +741,65 @@ sp_do_export_png(SPDocument *doc)
     }
 
     g_slist_free (items);
+}
+
+
+/**
+ *  Perform an export of either PS or EPS.
+ *
+ *  \param doc Document to export.
+ *  \param uri URI to export to.
+ *  \param mime MIME type to export as.
+ */
+
+static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
+{
+    /* FIXME: I've no idea if this is the `proper' way to do this.
+    ** If anyone feels qualified to say that it is, perhaps they
+    ** could remove this comment.
+    */
+
+    Inkscape::Extension::DB::OutputList o;
+    Inkscape::Extension::db.get_output_list(o);
+    Inkscape::Extension::DB::OutputList::const_iterator i = o.begin();
+    while (i != o.end() && strcmp( (*i)->get_mimetype(), mime ) != 0) {
+        i++;
+    }
+
+    if (i == o.end())
+    {
+        g_warning ("Could not find an extension to export this file.");
+        return;
+    }
+
+    bool old_text_to_path = false;
+    bool old_page_bounding_box = false;
+    
+    try {
+        old_text_to_path = (*i)->get_param_bool("textToPath");
+        (*i)->set_param_bool("textToPath", sp_export_text_to_path);
+    }
+    catch (...) {
+        g_warning ("Could not set text-to-path option for this export.");
+    }
+
+    try {
+        old_page_bounding_box = (*i)->get_param_bool("pageBoundingBox");
+        (*i)->set_param_bool("pageBoundingBox", sp_export_page_bounding_box);
+    }
+    catch (...) {
+        g_warning ("Could not set page-bounding-box option for this export.");
+    }
+    
+    (*i)->save(doc, uri);
+
+    try {
+        (*i)->set_param_bool("textToPath", old_text_to_path);
+        (*i)->set_param_bool("pageBoundingBox", old_page_bounding_box);
+    }
+    catch (...) {
+        
+    }
 }
 
 static GSList *
