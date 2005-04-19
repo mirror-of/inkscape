@@ -1,3 +1,8 @@
+2005-04-19  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/pen-context.cpp: snap first point to grid correctly, fixing
+	#1152057.  Remove a pointless call to spdc_endpoint_snap().
+
 2005-04-19  Piers Titus van der Torren  <piersvdt@users.sourceforge.net>
 	* src/seltrans.cpp:
 	Fixed skew so it displays and snaps to angle instead of percentage.

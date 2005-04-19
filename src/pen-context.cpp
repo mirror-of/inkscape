@@ -29,6 +29,7 @@
 #include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
 #include "libnr/n-art-bpath.h"
+#include "snap.h"
 
 static void sp_pen_context_class_init(SPPenContextClass *klass);
 static void sp_pen_context_init(SPPenContext *pc);
@@ -318,7 +319,12 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                             } else {
                                 /* Create green anchor */
                                 p = event_dt;
-                                spdc_endpoint_snap(pc, p, bevent.state);
+                                /* This is the first point, so just snap it to the grid as there's
+                                ** no other points to go off.
+                                */
+                                if ( (bevent.state & GDK_SHIFT_MASK) == 0) {
+                                    namedview_free_snap_all_types(pc->desktop->namedview, p);
+                                }
                                 pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, p);
                             }
                             spdc_pen_set_initial_point(pc, p);
@@ -489,7 +495,6 @@ pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent)
                                 p = anchor->dp;
                             }
                             pc->sa = anchor;
-                            spdc_endpoint_snap(pc, p, revent.state);
                             spdc_pen_set_initial_point(pc, p);
                         } else {
                             /* Set end anchor here */
