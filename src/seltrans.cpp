@@ -476,7 +476,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
     } else {
         sp_remove_handles(seltrans.shandle, 8);
         sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
-                        _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"), // fixme: remove "skew and scale"?
+                        _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"), 
                         _("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner"));
     }
     if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
@@ -925,8 +925,8 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     if (degrees < -180) degrees += 360;
 
     seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
-                                    _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), // FIXED: display angle! % makes no sense here; snap with ctrl!
-                                    //%0.2f%%, 100 * fabs(skew[dim_a]),
+                                    // TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
+                                    _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), 
                                     degrees);
 
     return TRUE;
