@@ -226,7 +226,7 @@ void sp_color_wheel_set_color( SPColorWheel *wheel, const SPColor* color )
         }
     }
     // scratch[lowInd] should always be 0
-    gdouble sat = sat = (rgb[hiInd] - rgb[lowInd])/(scratch[hiInd]-scratch[lowInd]);
+    gdouble sat = (rgb[hiInd] - rgb[lowInd])/(scratch[hiInd]-scratch[lowInd]);
     gdouble val = sat < 1.0 ? (rgb[hiInd] - sat * scratch[hiInd])/(1.0-sat) : 0.0;
 
 

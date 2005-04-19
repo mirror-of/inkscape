@@ -1274,6 +1274,7 @@ sp_item_first_item_child (SPObject *obj)
         if (SP_IS_ITEM (iter))
             return SP_ITEM (iter);
     }
+    return NULL;
 }
 
 

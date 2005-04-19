@@ -749,7 +749,6 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             sp_repr_add_child(SP_OBJECT_REPR(in_defs), SP_OBJECT_REPR(child)->duplicate(), last_def);
         }
 
-        Inkscape::XML::Node *repr = sp_document_repr_root(doc);
         guint items_count = 0;
         for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc));
              child != NULL; child = SP_OBJECT_NEXT(child)) {

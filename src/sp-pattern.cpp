@@ -906,7 +906,7 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 			double          px_y=pb->area.y0;
 			for (int j=pb->area.y0;j<pb->area.y1;j++) {
 				unsigned char* cpx=lpx;
-				double         px_x=px_x=pb->area.x0;
+				double         px_x = pb->area.x0;
 				
 				double ps_x=pp->px2ps.c[0]*px_x+pp->px2ps.c[2]*px_y+pp->px2ps.c[4];
 				double ps_y=pp->px2ps.c[1]*px_x+pp->px2ps.c[3]*px_y+pp->px2ps.c[5];
@@ -937,7 +937,7 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 			double          px_y=pb->area.y0;
 			for (int j=pb->area.y0;j<pb->area.y1;j++) {
 				unsigned char* cpx=lpx;
-				double         px_x=px_x=pb->area.x0;
+				double         px_x = pb->area.x0;
 				
 				double ps_x=pp->px2ps.c[0]*px_x+pp->px2ps.c[2]*px_y+pp->px2ps.c[4];
 				double ps_y=pp->px2ps.c[1]*px_x+pp->px2ps.c[3]*px_y+pp->px2ps.c[5];

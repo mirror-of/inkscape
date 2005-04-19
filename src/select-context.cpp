@@ -273,7 +273,6 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
     SPSelTrans *seltrans = sc->_seltrans;
-    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
 

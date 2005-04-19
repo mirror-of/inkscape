@@ -1701,8 +1701,6 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
-        GSList const *items = selection->itemList();
-
         /* TODO: Create some standardized method */
         SPCSSAttr *css = sp_repr_css_attr_new();
 

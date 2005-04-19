@@ -213,11 +213,10 @@ sp_dropper_c32_color_copy_hex (guint32 c32)
     gchar c[48];
 
     
+    /*
     int pick = prefs_get_int_attribute ("tools.dropper", "pick", 
                                     SP_DROPPER_PICK_VISIBLE);
-
-    /*
-    
+   
     if ( pick == SP_DROPPER_PICK_ACTUAL )
         ; // process c32 so that it computes against page
     // else just can cut off that last 2 hex digits....
