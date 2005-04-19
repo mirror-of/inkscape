@@ -228,8 +228,8 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
             NR::Point const p2(bp->c(2) * tf);
             NR::Point const p3(bp->c(3) * tf);
             double const x1 = p1[X], y1 = p1[Y];
-            double const x2 = p1[X], y2 = p1[Y];
-            double const x3 = p1[X], y3 = p1[Y];
+            double const x2 = p2[X], y2 = p2[Y];
+            double const x3 = p3[X], y3 = p3[Y];
 
             switch (bp->code) {
                 case NR_MOVETO:
