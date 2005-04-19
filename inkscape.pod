@@ -26,6 +26,10 @@ options:
     -d, --export-dpi=DPI              
     -w, --export-width=WIDTH          
     -h, --export-height=HEIGHT        
+    -P, --export-ps=FILENAME
+    -E, --export-eps=FILENAME
+    -T, --export-text-to-path
+    -B, --export-bbox-page 
 
     -l, --export-plain-svg=FILENAME             
 
@@ -174,6 +178,22 @@ If not set and the -b option is not used,
 then the page opacity set in Inkscape in the Document Options dialog will be used (stored in the inkscape:pageopacity= attribute of sodipodi:namedview).
 If not set but the -b option is used,
 then the value of 255 (full opacity) will be used. 
+
+=item B<-P> I<FILENAME>, B<--export-ps>=I<FILENAME>
+
+Export document(s) to PostScript format.
+
+=item B<-E> I<FILENAME>, B<--export-eps>=I<FILENAME>
+
+Export document(s) to Encapsulated PostScript format.
+
+=item B<-T>, B<--export-text-to-path>
+
+Convert text objects to paths on export, where applicable.
+
+=item B<-B>, B<--export-bbox-page>
+
+Export files with the bounding box set to the page size, where applicable.
 
 =item B<-z>, B<--without-gui>
 
@@ -350,9 +370,6 @@ rotation handles.
 
 The Import command works with most bitmap formats (PNG, BMP, JPG, XPM, GIF etc.) and SVG
 vector images. The Open command can handle only SVG files.
-
-The Export command only exports bitmaps in PNG format. To export into PS, EPS and other
-vector formats, use Save As.
 
 A Wacom tablet will work with Inkscape if it is configured to act as a regular pointing
 device. We do not support pressure/tilt sensitivity or any tablet-specific
