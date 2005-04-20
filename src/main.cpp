@@ -62,6 +62,7 @@
 #include "unit-constants.h"
 
 #include "svg/svg.h"
+#include "svg/stringstream.h"
 
 #include "inkscape-private.h"
 #include "inkscape-stock.h"
@@ -119,6 +120,8 @@ enum {
     SP_ARG_EXPORT_BBOX_PAGE,
     SP_ARG_EXTENSIONDIR,
     SP_ARG_SLIDESHOW,
+    SP_ARG_QUERY_X,
+    SP_ARG_QUERY_Y,
     SP_ARG_QUERY_WIDTH,
     SP_ARG_QUERY_HEIGHT,
     SP_ARG_QUERY_ID,
@@ -131,7 +134,7 @@ int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
 static void sp_do_export_png(SPDocument *doc);
 static void do_export_ps(SPDocument* doc, gchar const* uri, char const *mime);
-static void do_query_dimension (SPDocument *doc, NR::Dim2 const axis, const gchar *id);
+static void do_query_dimension (SPDocument *doc, bool extent, NR::Dim2 const axis, const gchar *id);
 
 
 static gchar *sp_global_printer = NULL;
@@ -151,6 +154,8 @@ static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
 static gboolean sp_export_text_to_path = FALSE;
 static gboolean sp_export_bbox_page = FALSE;
+static gboolean sp_query_x = FALSE;
+static gboolean sp_query_y = FALSE;
 static gboolean sp_query_width = FALSE;
 static gboolean sp_query_height = FALSE;
 static gchar *sp_query_id = NULL;
@@ -265,6 +270,16 @@ struct poptOption options[] = {
      N_("Export files with the bounding box set to the page size (EPS)"),
      NULL},
 
+    {"query-x", 'X',
+     POPT_ARG_NONE, &sp_query_x, SP_ARG_QUERY_X,
+     N_("Query the X coordinate of the drawing or, if specified, of the object with --query-id"),
+     NULL},
+
+    {"query-y", 'Y',
+     POPT_ARG_NONE, &sp_query_y, SP_ARG_QUERY_Y,
+     N_("Query the Y coordinate of the drawing or, if specified, of the object with --query-id"),
+     NULL},
+
     {"query-width", 'W',
      POPT_ARG_NONE, &sp_query_width, SP_ARG_QUERY_WIDTH,
      N_("Query the width of the drawing or, if specified, of the object with --query-id"),
@@ -366,6 +381,10 @@ main(int argc, char **argv)
             || !strncmp(argv[i], "--query-width", 13)
             || !strcmp(argv[i], "-H")
             || !strncmp(argv[i], "--query-height", 14)
+            || !strcmp(argv[i], "-X")
+            || !strncmp(argv[i], "--query-x", 13)
+            || !strcmp(argv[i], "-Y")
+            || !strncmp(argv[i], "--query-y", 14)
            )
         {
             /* main_console handles any exports -- not the gui */
@@ -577,7 +596,9 @@ sp_main_console(int argc, char const **argv)
                 do_export_ps(doc, sp_export_eps, "image/x-e-postscript");
             }
             if (sp_query_width || sp_query_height) {
-                do_query_dimension (doc, sp_query_width? NR::X : NR::Y, sp_query_id);
+                do_query_dimension (doc, true, sp_query_width? NR::X : NR::Y, sp_query_id);
+            } else if (sp_query_x || sp_query_y) {
+                do_query_dimension (doc, false, sp_query_x? NR::X : NR::Y, sp_query_id);
             }
         }
         fl = g_slist_remove(fl, fl->data);
@@ -589,7 +610,7 @@ sp_main_console(int argc, char const **argv)
 }
 
 static void
-do_query_dimension (SPDocument *doc, NR::Dim2 const axis, const gchar *id)
+do_query_dimension (SPDocument *doc, bool extent, NR::Dim2 const axis, const gchar *id)
 {
     SPObject *o = NULL;
 
@@ -612,7 +633,13 @@ do_query_dimension (SPDocument *doc, NR::Dim2 const axis, const gchar *id)
         sp_document_ensure_up_to_date (doc);
         NR::Rect area = sp_item_bbox_desktop((SPItem *) o);
 
-        g_print ("%g\n", area.extent(axis));
+        Inkscape::SVGOStringStream os;
+        if (extent) {
+            os << area.extent(axis);
+        } else {
+            os << area.min()[axis];
+        }
+        g_print ("%s\n", os.str().c_str());
     }
 }
 

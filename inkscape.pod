@@ -26,12 +26,19 @@ options:
     -d, --export-dpi=DPI              
     -w, --export-width=WIDTH          
     -h, --export-height=HEIGHT        
+
     -P, --export-ps=FILENAME
     -E, --export-eps=FILENAME
     -T, --export-text-to-path
     -B, --export-bbox-page 
 
     -l, --export-plain-svg=FILENAME             
+
+    -I, --query-id=ID     
+    -X, --query-x
+    -Y, --query-y
+    -W, --query-width
+    -H, --query-height
 
     -x, --extension-directory
 
@@ -189,11 +196,32 @@ Export document(s) to Encapsulated PostScript format.
 
 =item B<-T>, B<--export-text-to-path>
 
-Convert text objects to paths on export, where applicable.
+Convert text objects to paths on export, where applicable (currently works with EPS only).
 
 =item B<-B>, B<--export-bbox-page>
 
-Export files with the bounding box set to the page size, where applicable.
+Export files with the bounding box set to the page size, where applicable (currently works with EPS only).
+
+=item B<-I>, B<--query-id>
+
+Set the ID of the object whose dimensions are queried. If not set, query options will 
+return the dimensions of the drawing (i.e. all document objects), not the page or viewbox
+
+=item B<-X>, B<--query-x>
+
+Query the X coordinate of of the drawing or, if specified, of the object with --query-id. The returned value is in px (SVG user units). 
+
+=item B<-Y>, B<--query-y>
+
+Query the Y coordinate of of the drawing or, if specified, of the object with --query-id. The returned value is in px (SVG user units). 
+
+=item B<-W>, B<--query-width>
+
+Query the width of of the drawing or, if specified, of the object with --query-id. The returned value is in px (SVG user units). 
+
+=item B<-H>, B<--query-height>
+
+Query the height of of the drawing or, if specified, of the object with --query-id. The returned value is in px (SVG user units). 
 
 =item B<-z>, B<--without-gui>
 
@@ -296,6 +324,15 @@ Export an SVG file into PNG:
 Convert an Inkscape SVG document to plain SVG:  
 
     inkscape filename1.svg --export-plain-svg=filename2.svg
+
+Convert an SVG document to EPS, converting all texts to paths:
+
+    inkscape filename.svg --export-eps=filename.eps --export-text-to-path
+
+Query the width of the object with id="text1555":
+
+    inkscape filename.svg --query-width --query-id text1555
+
 
 =head1 ENVIRONMENT
 
