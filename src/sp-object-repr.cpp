@@ -94,7 +94,7 @@ populate_dtables()
 	struct NameTypeEntry { char const *const name; GType const type_id; };
 	NameTypeEntry const repr_name_entries[] = {
 		{ "svg:a", SP_TYPE_ANCHOR },
-		{ "svg:animate", SP_TYPE_ANIMATE },
+//		{ "svg:animate", SP_TYPE_ANIMATE },
 		{ "svg:circle", SP_TYPE_CIRCLE },
 		{ "svg:clipPath", SP_TYPE_CLIPPATH },
 		{ "svg:defs", SP_TYPE_DEFS },
