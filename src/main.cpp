@@ -119,7 +119,9 @@ enum {
     SP_ARG_EXPORT_BBOX_PAGE,
     SP_ARG_EXTENSIONDIR,
     SP_ARG_SLIDESHOW,
-    SP_ARG_BITMAP_ICONS,
+    SP_ARG_QUERY_WIDTH,
+    SP_ARG_QUERY_HEIGHT,
+    SP_ARG_QUERY_ID,
     SP_ARG_VERSION,
     SP_ARG_NEW_GUI,
     SP_ARG_LAST
@@ -129,6 +131,7 @@ int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
 static void sp_do_export_png(SPDocument *doc);
 static void do_export_ps(SPDocument* doc, gchar const* uri, char const *mime);
+static void do_query_dimension (SPDocument *doc, NR::Dim2 const axis, const gchar *id);
 
 
 static gchar *sp_global_printer = NULL;
@@ -148,6 +151,9 @@ static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
 static gboolean sp_export_text_to_path = FALSE;
 static gboolean sp_export_bbox_page = FALSE;
+static gboolean sp_query_width = FALSE;
+static gboolean sp_query_height = FALSE;
+static gchar *sp_query_id = NULL;
 static int sp_new_gui = FALSE;
 
 static gchar *sp_export_png_utf8 = NULL;
@@ -259,9 +265,24 @@ struct poptOption options[] = {
      N_("Export files with the bounding box set to the page size (EPS)"),
      NULL},
 
+    {"query-width", 'W',
+     POPT_ARG_NONE, &sp_query_width, SP_ARG_QUERY_WIDTH,
+     N_("Query the width of the drawing or, if specified, of the object with --query-id"),
+     NULL},
+
+    {"query-height", 'H',
+     POPT_ARG_NONE, &sp_query_height, SP_ARG_QUERY_HEIGHT,
+     N_("Query the height of the drawing or, if specified, of the object with --query-id"),
+     NULL},
+
+    {"query-id", 'I', 
+     POPT_ARG_STRING, &sp_query_id, SP_ARG_QUERY_ID,
+     N_("The ID of the object whose dimensions are queried"), 
+     N_("ID")},
+
     {"extension-directory", 'x',
      POPT_ARG_NONE, NULL, SP_ARG_EXTENSIONDIR,
-     N_("Print out the extension directory and exit."),
+     N_("Print out the extension directory and exit"),
      NULL},
 
     {"slideshow", 's', 
@@ -341,6 +362,10 @@ main(int argc, char **argv)
             || !strncmp(argv[i], "--export-ps", 11)
             || !strcmp(argv[i], "-E")
             || !strncmp(argv[i], "--export-eps", 12)
+            || !strcmp(argv[i], "-W")
+            || !strncmp(argv[i], "--query-width", 13)
+            || !strcmp(argv[i], "-H")
+            || !strncmp(argv[i], "--query-height", 14)
            )
         {
             /* main_console handles any exports -- not the gui */
@@ -551,6 +576,9 @@ sp_main_console(int argc, char const **argv)
             if (sp_export_eps) {
                 do_export_ps(doc, sp_export_eps, "image/x-e-postscript");
             }
+            if (sp_query_width || sp_query_height) {
+                do_query_dimension (doc, sp_query_width? NR::X : NR::Y, sp_query_id);
+            }
         }
         fl = g_slist_remove(fl, fl->data);
     }
@@ -559,6 +587,35 @@ sp_main_console(int argc, char const **argv)
 
     return 0;
 }
+
+static void
+do_query_dimension (SPDocument *doc, NR::Dim2 const axis, const gchar *id)
+{
+    SPObject *o = NULL;
+
+    if (id) {
+        o = doc->getObjectById(id);
+        if (o) {
+            if (!SP_IS_ITEM (o)) {
+                g_warning("Object with id=\"%s\" is not a visible item. Cannot query dimensions.", id);
+                return;
+            }
+        } else {
+            g_warning("Object with id=\"%s\" is not found. Cannot query dimensions.", id);
+            return;
+        }
+    } else {
+        o = SP_DOCUMENT_ROOT(doc);
+    }
+
+    if (o) {
+        sp_document_ensure_up_to_date (doc);
+        NR::Rect area = sp_item_bbox_desktop((SPItem *) o);
+
+        g_print ("%g\n", area.extent(axis));
+    }
+}
+
 
 static void
 sp_do_export_png(SPDocument *doc)

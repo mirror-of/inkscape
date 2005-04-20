@@ -236,7 +236,7 @@ check_extensions()
             Inkscape::Extension::ErrorFileNotice dialog;
             dialog.run();
         } else {
-            std::cout << "One or more extensions failed to load. The failed extensions have been skipped. Inkscape will continue to run normally but those extensions will be unavailable.  For details to troubleshoot this problem, please refer to the error log." << std::endl;
+            // command line run, be silent
         }
     }
 }
