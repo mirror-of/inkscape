@@ -359,11 +359,23 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
                 if (start_otp != NULL && start_otp[0].piece >= 0) {
                     Path::cut_position *end_otp = const_cast<Path&>(path).CurvilignToPosition(1, &end_offset, unused);
                     if (end_otp != NULL && end_otp[0].piece >= 0) {
-                        NR::Point startpoint, endpoint;
-                        const_cast<Path&>(path).PointAt(start_otp[0].piece, start_otp[0].t, startpoint);
-                        const_cast<Path&>(path).PointAt(end_otp[0].piece, end_otp[0].t, endpoint);
-                        tangent = endpoint - startpoint;
-                        tangent.normalize();
+                        bool on_same_subpath = true;
+                        for (size_t i = 0 ; i < path.pts.size() ; i++) {
+                            if (path.pts[i].piece <= start_otp[0].piece) continue;
+                            if (path.pts[i].piece >= end_otp[0].piece) break;
+                            if (path.pts[i].isMoveTo == polyline_moveto) {
+                                on_same_subpath = false;
+                                break;
+                            }
+                        }
+                        if (on_same_subpath) {
+                            // both points were on the same subpath (without this test the angle is very weird)
+                            NR::Point startpoint, endpoint;
+                            const_cast<Path&>(path).PointAt(start_otp[0].piece, start_otp[0].t, startpoint);
+                            const_cast<Path&>(path).PointAt(end_otp[0].piece, end_otp[0].t, endpoint);
+                            tangent = endpoint - startpoint;
+                            tangent.normalize();
+                        }
                         g_free(end_otp);
                     }
                     g_free(start_otp);
