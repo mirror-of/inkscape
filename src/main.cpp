@@ -106,6 +106,7 @@ enum {
     SP_ARG_EXPORT_PNG,
     SP_ARG_EXPORT_DPI,
     SP_ARG_EXPORT_AREA,
+    SP_ARG_EXPORT_AREA_DRAWING,
     SP_ARG_EXPORT_WIDTH,
     SP_ARG_EXPORT_HEIGHT,
     SP_ARG_EXPORT_ID,
@@ -142,6 +143,7 @@ static gboolean sp_global_slideshow = FALSE;
 static gchar *sp_export_png = NULL;
 static gchar *sp_export_dpi = NULL;
 static gchar *sp_export_area = NULL;
+static gboolean sp_export_area_drawing = FALSE;
 static gchar *sp_export_width = NULL;
 static gchar *sp_export_height = NULL;
 static gchar *sp_export_id = NULL;
@@ -205,8 +207,13 @@ struct poptOption options[] = {
 
     {"export-area", 'a', 
      POPT_ARG_STRING, &sp_export_area, SP_ARG_EXPORT_AREA,
-     N_("Exported area in SVG pixels (default is full document; 0,0 is lower-left corner)"),
+     N_("Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"),
      N_("x0:y0:x1:y1")},
+
+    {"export-area-drawing", 'D', 
+     POPT_ARG_NONE, &sp_export_area_drawing, SP_ARG_EXPORT_AREA_DRAWING,
+     N_("Exported area is the entire drawing (not canvas)"),
+     NULL},
 
     {"export-width", 'w', 
      POPT_ARG_STRING, &sp_export_width, SP_ARG_EXPORT_WIDTH,
@@ -228,7 +235,7 @@ struct poptOption options[] = {
      // TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
      //  See "man inkscape" for details.
      N_("Export just the object with export-id, hide all others (only with export-id)"), 
-     N_("ID")},
+     NULL},
 
     {"export-use-hints", 't', 
      POPT_ARG_NONE, &sp_export_use_hints, SP_ARG_EXPORT_USE_HINTS,
@@ -372,6 +379,8 @@ main(int argc, char **argv)
             || !strcmp(argv[i], "-l")
             || !strncmp(argv[i], "--export-plain-svg", 12)
             || !strcmp(argv[i], "-i")
+            || !strncmp(argv[i], "--export-area-drawing", 21)
+            || !strcmp(argv[i], "-D")
             || !strncmp(argv[i], "--export-id", 12)
             || !strcmp(argv[i], "-P")
             || !strncmp(argv[i], "--export-ps", 11)
@@ -578,7 +587,7 @@ sp_main_console(int argc, char const **argv)
             if (sp_global_printer) {
                 sp_print_document_to_file(doc, sp_global_printer);
             }
-            if (sp_export_png || sp_export_id) {
+            if (sp_export_png || sp_export_id || sp_export_area_drawing) {
                 sp_do_export_png(doc);
             }
             if (sp_export_svg) {
@@ -650,15 +659,22 @@ sp_do_export_png(SPDocument *doc)
     const gchar *filename = NULL;
     gdouble dpi = 0.0;
 
-    if (sp_export_use_hints && !sp_export_id) {
-        g_warning ("--export-use-hints can only be used with --export-id; ignored.");
+    if (sp_export_use_hints && (!sp_export_id && !sp_export_area_drawing)) {
+        g_warning ("--export-use-hints can only be used with --export-id or --export-area-drawing; ignored.");
     }
 
     GSList *items = NULL;
 
     NRRect area;
-    if (sp_export_id) {
-        SPObject *o = doc->getObjectById(sp_export_id);
+    if (sp_export_id || sp_export_area_drawing) {
+
+        SPObject *o = NULL;
+        if (sp_export_id) {
+            o = doc->getObjectById(sp_export_id);
+        } else if (sp_export_area_drawing) {
+            o = SP_DOCUMENT_ROOT (doc);
+        }
+
         if (o) {
             if (!SP_IS_ITEM (o)) {
                 g_warning("Object with id=\"%s\" is not a visible item. Nothing exported.", sp_export_id);
@@ -722,7 +738,7 @@ sp_do_export_png(SPDocument *doc)
             return;
         }
     } else {
-        /* Export the whole document */
+        /* Export the whole canvas */
         area.x0 = 0.0;
         area.y0 = 0.0;
         area.x1 = sp_document_width(doc);
@@ -815,9 +831,7 @@ sp_do_export_png(SPDocument *doc)
     g_print("Area %g:%g:%g:%g exported to %d x %d pixels (%g dpi)\n", area.x0, area.y0, area.x1, area.y1, width, height, dpi);
 
     g_print("Bitmap saved as: %s\n", filename);
-//     Inkscape::IO::dump_fopen_call( filename, "BitmapExp" );
-    
-
+  
     if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
         sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true, sp_export_id_only ? items : NULL);
     } else {

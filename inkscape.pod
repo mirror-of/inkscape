@@ -18,6 +18,7 @@ options:
 
     -e, --export-png=FILENAME         
     -a, --export-area=x0:y0:x1:y1     
+    -D, --export-area-drawing
     -i, --export-id=ID     
     -j, --export-id-only     
     -t, --export-use-hints
@@ -88,9 +89,15 @@ Show Inkscape version and build date.
 
 =item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
 
-Exported area in SVG pixels (anonymous length units normally used in Inkscape SVG).
-The default is to export the entire document page.
-The point (0,0) is the lower-left corner.
+In PNG export, set the exported area in SVG pixels (anonymous length units normally used
+in Inkscape SVG).  The default is to export the entire document canvas.  The point (0,0)
+is the lower-left corner.
+
+=item B<-D>, B<--export-area-drawing>
+
+In PNG export, exported area is the entire drawing (not canvas). With this option, the
+exported image will display just the visible objects of the document without margins or
+cropping. Can be used in combination wtih --export-use-hints.
 
 =item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
 
