@@ -69,8 +69,6 @@
 
 #include "uri.h"
 
-void sp_help_panic(void);
-
 /**
  * 'Current' paths.  Used to remember which directory
  * had the last file accessed.
@@ -184,9 +182,6 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
     } else {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri);
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), safeUri);
-
-        sp_help_panic();
-
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
@@ -834,9 +829,6 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
-
-        sp_help_panic();
-
         sp_ui_error_dialog(text);
         g_free(text);
     }
