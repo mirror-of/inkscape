@@ -236,7 +236,7 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
                                      &src,
                                      localFilename,
                                      NULL, //"UTF-8",
-                                     0 );
+                                     XML_PARSE_NOENT );
 
 
 #ifdef HAVE_LIBWMF
