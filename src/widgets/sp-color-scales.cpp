@@ -1,6 +1,6 @@
 /*
  *   bulia byak <buliabyak@users.sf.net>
-*/ 
+ */
 
 #include <config.h>
 #include <math.h>
@@ -99,6 +99,7 @@ sp_color_scales_class_init (SPColorScalesClass *klass)
 ColorScales::ColorScales( SPColorSelector* csel )
     : ColorSelector( csel ),
       _mode( SP_COLOR_SCALES_MODE_NONE ),
+      _rangeLimit( 255.0 ),
       _updating( FALSE ),
       _dragging( FALSE )
 {
@@ -156,7 +157,7 @@ void ColorScales::init()
 		gtk_widget_show (_l[i]);
 		gtk_table_attach (GTK_TABLE (t), _l[i], 0, 1, i, i + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 		/* Adjustment */
-		_a[i] = (GtkAdjustment *) gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 10.0, 10.0);
+		_a[i] = (GtkAdjustment *) gtk_adjustment_new (0.0, 0.0, _rangeLimit, 1.0, 10.0, 10.0);
 		/* Slider */
 		_s[i] = sp_color_slider_new (_a[i]);
 		gtk_widget_show (_s[i]);
@@ -248,14 +249,25 @@ void ColorScales::_recalcColor( gboolean changing )
 }
 
 /* Helpers for setting color value */
-gfloat get1( const GtkAdjustment *a )
+gfloat ColorScales::getScaled( const GtkAdjustment *a )
 {
-	return (a->value)/255;
+    gfloat val = a->value / a->upper;
+    return val;
 }
 
-void set255( GtkAdjustment *a, gfloat v)
+void ColorScales::setScaled( GtkAdjustment *a, gfloat v )
 {
-	gtk_adjustment_set_value  (a, v*255.0);
+    gfloat val = v * a->upper;
+    gtk_adjustment_set_value( a, val );
+}
+
+void ColorScales::_setRangeLimit( gdouble upper )
+{
+    _rangeLimit = upper;
+    for ( gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(_a)); i++ ) {
+        _a[i]->upper = upper;
+        gtk_adjustment_changed( _a[i] );
+    }
 }
 
 void ColorScales::_colorChanged( const SPColor& color, gfloat alpha )
@@ -271,7 +283,7 @@ void ColorScales::_colorChanged( const SPColor& color, gfloat alpha )
 		break;
 	case SP_COLOR_SCALES_MODE_HSV:
 		sp_color_get_rgb_floatv (&color, tmp);
-		c[0] = get1 (_a[0]);
+		c[0] = getScaled( _a[0] );
 		sp_color_rgb_to_hsl_floatv (c, tmp[0], tmp[1], tmp[2]);
 		c[3] = alpha;
 		c[4] = 0.0;
@@ -286,11 +298,11 @@ void ColorScales::_colorChanged( const SPColor& color, gfloat alpha )
 	}
 
 	_updating = TRUE;
-	set255 (_a[0], c[0]);
-	set255 (_a[1], c[1]);
-	set255 (_a[2], c[2]);
-	set255 (_a[3], c[3]);
-	set255 (_a[4], c[4]);
+	setScaled( _a[0], c[0] );
+	setScaled( _a[1], c[1] );
+	setScaled( _a[2], c[2] );
+	setScaled( _a[3], c[3] );
+	setScaled( _a[4], c[4] );
 	_updateSliders( CSC_CHANNELS_ALL );
 	_updating = FALSE;
 }
@@ -301,18 +313,18 @@ void ColorScales::_getRgbaFloatv( gfloat *rgba )
 
 	switch (_mode) {
 	case SP_COLOR_SCALES_MODE_RGB:
-		rgba[0] = get1(_a[0]);
-		rgba[1] = get1(_a[1]);
-		rgba[2] = get1(_a[2]);
-		rgba[3] = get1(_a[3]);
+		rgba[0] = getScaled(_a[0]);
+		rgba[1] = getScaled(_a[1]);
+		rgba[2] = getScaled(_a[2]);
+		rgba[3] = getScaled(_a[3]);
 		break;
 	case SP_COLOR_SCALES_MODE_HSV:
-		sp_color_hsl_to_rgb_floatv (rgba, get1(_a[0]), get1(_a[1]), get1(_a[2]));
-		rgba[3] = get1(_a[3]);
+		sp_color_hsl_to_rgb_floatv (rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+		rgba[3] = getScaled(_a[3]);
 		break;
 	case SP_COLOR_SCALES_MODE_CMYK:
-		sp_color_cmyk_to_rgb_floatv (rgba, get1(_a[0]), get1(_a[1]), get1(_a[2]), get1(_a[3]));
-		rgba[3] = get1(_a[4]);
+		sp_color_cmyk_to_rgb_floatv (rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+		rgba[3] = getScaled(_a[4]);
 		break;
 	default:
 		g_warning ("file %s: line %d: Illegal color selector mode", __FILE__, __LINE__);
@@ -328,20 +340,20 @@ void ColorScales::_getCmykaFloatv( gfloat *cmyka )
 
 	switch (_mode) {
 	case SP_COLOR_SCALES_MODE_RGB:
-		sp_color_rgb_to_cmyk_floatv (cmyka, get1(_a[0]), get1(_a[1]), get1(_a[2]));
-		cmyka[4] = get1(_a[3]);
+		sp_color_rgb_to_cmyk_floatv (cmyka, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+		cmyka[4] = getScaled(_a[3]);
 		break;
 	case SP_COLOR_SCALES_MODE_HSV:
-		sp_color_hsl_to_rgb_floatv (rgb, get1(_a[0]), get1(_a[1]), get1(_a[2]));
+		sp_color_hsl_to_rgb_floatv (rgb, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
 		sp_color_rgb_to_cmyk_floatv (cmyka, rgb[0], rgb[1], rgb[2]);
-		cmyka[4] = get1(_a[3]);
+		cmyka[4] = getScaled(_a[3]);
 		break;
 	case SP_COLOR_SCALES_MODE_CMYK:
-		cmyka[0] = get1(_a[0]);
-		cmyka[1] = get1(_a[1]);
-		cmyka[2] = get1(_a[2]);
-		cmyka[3] = get1(_a[3]);
-		cmyka[4] = get1(_a[4]);
+		cmyka[0] = getScaled(_a[0]);
+		cmyka[1] = getScaled(_a[1]);
+		cmyka[2] = getScaled(_a[2]);
+		cmyka[3] = getScaled(_a[3]);
+		cmyka[4] = getScaled(_a[4]);
 		break;
 	default:
 		g_warning ("file %s: line %d: Illegal color selector mode", __FILE__, __LINE__);
@@ -380,6 +392,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
 
 	switch (mode) {
 	case SP_COLOR_SCALES_MODE_RGB:
+		_setRangeLimit(255.0);
 		gtk_label_set_markup_with_mnemonic (GTK_LABEL (_l[0]), _("_R"));
 		gtk_tooltips_set_tip (_tt, _s[0], _("Red"), NULL);
 		gtk_tooltips_set_tip (_tt, _b[0], _("Red"), NULL);
@@ -397,14 +410,15 @@ void ColorScales::setMode(SPColorScalesMode mode)
 		gtk_widget_hide (_s[4]);
 		gtk_widget_hide (_b[4]);
 		_updating = TRUE;
-		set255 (_a[0], rgba[0]);
-		set255 (_a[1], rgba[1]);
-		set255 (_a[2], rgba[2]);
-		set255 (_a[3], rgba[3]);
+		setScaled( _a[0], rgba[0] );
+		setScaled( _a[1], rgba[1] );
+		setScaled( _a[2], rgba[2] );
+		setScaled( _a[3], rgba[3] );
 		_updating = FALSE;
 		_updateSliders( CSC_CHANNELS_ALL );
 		break;
 	case SP_COLOR_SCALES_MODE_HSV:
+		_setRangeLimit(255.0);
 		gtk_label_set_markup_with_mnemonic (GTK_LABEL (_l[0]), _("_H"));
 		gtk_tooltips_set_tip (_tt, _s[0], _("Hue"), NULL);
 		gtk_tooltips_set_tip (_tt, _b[0], _("Hue"), NULL);
@@ -424,14 +438,15 @@ void ColorScales::setMode(SPColorScalesMode mode)
 		_updating = TRUE;
 		c[0] = 0.0;
 		sp_color_rgb_to_hsl_floatv (c, rgba[0], rgba[1], rgba[2]);
-		set255 (_a[0], c[0]);
-		set255 (_a[1], c[1]);
-		set255 (_a[2], c[2]);
-		set255 (_a[3], rgba[3]);
+		setScaled( _a[0], c[0] );
+		setScaled( _a[1], c[1] );
+		setScaled( _a[2], c[2] );
+		setScaled( _a[3], rgba[3] );
 		_updating = FALSE;
 		_updateSliders( CSC_CHANNELS_ALL );
 		break;
 	case SP_COLOR_SCALES_MODE_CMYK:
+		_setRangeLimit(100.0);
 		gtk_label_set_markup_with_mnemonic (GTK_LABEL (_l[0]), _("_C"));
 		gtk_tooltips_set_tip (_tt, _s[0], _("Cyan"), NULL);
 		gtk_tooltips_set_tip (_tt, _b[0], _("Cyan"), NULL);
@@ -453,11 +468,11 @@ void ColorScales::setMode(SPColorScalesMode mode)
 		gtk_widget_show (_b[4]);
 		_updating = TRUE;
 		sp_color_rgb_to_cmyk_floatv (c, rgba[0], rgba[1], rgba[2]);
-		set255 (_a[0], c[0]);
-		set255 (_a[1], c[1]);
-		set255 (_a[2], c[2]);
-		set255 (_a[3], c[3]);
-		set255 (_a[4], rgba[3]);
+		setScaled( _a[0], c[0] );
+		setScaled( _a[1], c[1] );
+		setScaled( _a[2], c[2] );
+		setScaled( _a[3], c[3] );
+		setScaled( _a[4], rgba[3] );
 		_updating = FALSE;
 		_updateSliders( CSC_CHANNELS_ALL );
 		break;
@@ -515,10 +530,11 @@ guint ColorScales::getSubmode() const
 
 void ColorScales::_adjustmentAnyChanged( GtkAdjustment *adjustment, SPColorScales *cs )
 {
-	// if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255 
+// TODO check this. It looks questionable:
+	// if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
 	if (adjustment->value > 0.0 && adjustment->value < 1.0) {
-		gtk_adjustment_set_value  (adjustment, floor ((adjustment->value)*255.0 + 0.5));
-	} 
+		gtk_adjustment_set_value( adjustment, floor ((adjustment->value) * adjustment->upper + 0.5) );
+	}
 
 	gint channel = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (adjustment), "channel"));
 
@@ -577,39 +593,39 @@ void ColorScales::_updateSliders( guint channels )
 		if ((channels != CSC_CHANNEL_R) && (channels != CSC_CHANNEL_A)) {
 			/* Update red */
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[0]),
-							SP_RGBA32_F_COMPOSE (0.0, get1(_a[1]), get1(_a[2]), 1.0),
-							SP_RGBA32_F_COMPOSE (0.5, get1(_a[1]), get1(_a[2]), 1.0),
-							SP_RGBA32_F_COMPOSE (1.0, get1(_a[1]), get1(_a[2]), 1.0));
+							SP_RGBA32_F_COMPOSE (0.0, getScaled(_a[1]), getScaled(_a[2]), 1.0),
+							SP_RGBA32_F_COMPOSE (0.5, getScaled(_a[1]), getScaled(_a[2]), 1.0),
+							SP_RGBA32_F_COMPOSE (1.0, getScaled(_a[1]), getScaled(_a[2]), 1.0));
 		}
 		if ((channels != CSC_CHANNEL_G) && (channels != CSC_CHANNEL_A)) {
 			/* Update green */
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[1]),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), 0.0, get1(_a[2]), 1.0),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), 0.5, get1(_a[2]), 1.0),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), 1.0, get1(_a[2]), 1.0));
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), 0.0, getScaled(_a[2]), 1.0),
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), 0.5, getScaled(_a[2]), 1.0),
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), 1.0, getScaled(_a[2]), 1.0));
 		}
 		if ((channels != CSC_CHANNEL_B) && (channels != CSC_CHANNEL_A)) {
 			/* Update blue */
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[2]),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), get1(_a[1]), 0.0, 1.0),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), get1(_a[1]), 0.5, 1.0),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), get1(_a[1]), 1.0, 1.0));
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), getScaled(_a[1]), 0.0, 1.0),
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), getScaled(_a[1]), 0.5, 1.0),
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), getScaled(_a[1]), 1.0, 1.0));
 		}
 		if (channels != CSC_CHANNEL_A) {
 			/* Update alpha */
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[3]),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), get1(_a[1]), get1(_a[2]), 0.0),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), get1(_a[1]), get1(_a[2]), 0.5),
-							SP_RGBA32_F_COMPOSE (get1(_a[0]), get1(_a[1]), get1(_a[2]), 1.0));
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.0),
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.5),
+							SP_RGBA32_F_COMPOSE (getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 1.0));
 		}
 		break;
 	case SP_COLOR_SCALES_MODE_HSV:
 		/* Hue is never updated */
 		if ((channels != CSC_CHANNEL_S) && (channels != CSC_CHANNEL_A)) {
 			/* Update saturation */
-			sp_color_hsl_to_rgb_floatv (rgb0, get1(_a[0]), 0.0, get1(_a[2]));
-			sp_color_hsl_to_rgb_floatv (rgbm, get1(_a[0]), 0.5, get1(_a[2]));
-			sp_color_hsl_to_rgb_floatv (rgb1, get1(_a[0]), 1.0, get1(_a[2]));
+			sp_color_hsl_to_rgb_floatv (rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]));
+			sp_color_hsl_to_rgb_floatv (rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]));
+			sp_color_hsl_to_rgb_floatv (rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]));
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[1]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0),
 							SP_RGBA32_F_COMPOSE (rgbm[0], rgbm[1], rgbm[2], 1.0),
@@ -617,9 +633,9 @@ void ColorScales::_updateSliders( guint channels )
 		}
 		if ((channels != CSC_CHANNEL_V) && (channels != CSC_CHANNEL_A)) {
 			/* Update value */
-			sp_color_hsl_to_rgb_floatv (rgb0, get1(_a[0]), get1(_a[1]), 0.0);
-			sp_color_hsl_to_rgb_floatv (rgbm, get1(_a[0]), get1(_a[1]), 0.5);
-			sp_color_hsl_to_rgb_floatv (rgb1, get1(_a[0]), get1(_a[1]), 1.0);
+			sp_color_hsl_to_rgb_floatv (rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0);
+			sp_color_hsl_to_rgb_floatv (rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5);
+			sp_color_hsl_to_rgb_floatv (rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0);
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[2]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0),
 							SP_RGBA32_F_COMPOSE (rgbm[0], rgbm[1], rgbm[2], 1.0),
@@ -627,7 +643,7 @@ void ColorScales::_updateSliders( guint channels )
 		}
 		if (channels != CSC_CHANNEL_A) {
 			/* Update alpha */
-			sp_color_hsl_to_rgb_floatv (rgb0, get1(_a[0]), get1(_a[1]), get1(_a[2]));
+			sp_color_hsl_to_rgb_floatv (rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[3]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 0.0),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 0.5),
@@ -637,9 +653,9 @@ void ColorScales::_updateSliders( guint channels )
 	case SP_COLOR_SCALES_MODE_CMYK:
 		if ((channels != CSC_CHANNEL_C) && (channels != CSC_CHANNEL_CMYKA)) {
 			/* Update C */
-			sp_color_cmyk_to_rgb_floatv (rgb0, 0.0, get1(_a[1]), get1(_a[2]), get1(_a[3]));
-			sp_color_cmyk_to_rgb_floatv (rgbm, 0.5, get1(_a[1]), get1(_a[2]), get1(_a[3]));
-			sp_color_cmyk_to_rgb_floatv (rgb1, 1.0, get1(_a[1]), get1(_a[2]), get1(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb0, 0.0, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgbm, 0.5, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb1, 1.0, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[0]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0),
 							SP_RGBA32_F_COMPOSE (rgbm[0], rgbm[1], rgbm[2], 1.0),
@@ -647,9 +663,9 @@ void ColorScales::_updateSliders( guint channels )
 		}
 		if ((channels != CSC_CHANNEL_M) && (channels != CSC_CHANNEL_CMYKA)) {
 			/* Update M */
-			sp_color_cmyk_to_rgb_floatv (rgb0, get1(_a[0]), 0.0, get1(_a[2]), get1(_a[3]));
-			sp_color_cmyk_to_rgb_floatv (rgbm, get1(_a[0]), 0.5, get1(_a[2]), get1(_a[3]));
-			sp_color_cmyk_to_rgb_floatv (rgb1, get1(_a[0]), 1.0, get1(_a[2]), get1(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]), getScaled(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]), getScaled(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]), getScaled(_a[3]));
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[1]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0),
 							SP_RGBA32_F_COMPOSE (rgbm[0], rgbm[1], rgbm[2], 1.0),
@@ -657,9 +673,9 @@ void ColorScales::_updateSliders( guint channels )
 		}
 		if ((channels != CSC_CHANNEL_Y) && (channels != CSC_CHANNEL_CMYKA)) {
 			/* Update Y */
-			sp_color_cmyk_to_rgb_floatv (rgb0, get1(_a[0]), get1(_a[1]), 0.0, get1(_a[3]));
-			sp_color_cmyk_to_rgb_floatv (rgbm, get1(_a[0]), get1(_a[1]), 0.5, get1(_a[3]));
-			sp_color_cmyk_to_rgb_floatv (rgb1, get1(_a[0]), get1(_a[1]), 1.0, get1(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0, getScaled(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5, getScaled(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0, getScaled(_a[3]));
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[2]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0),
 							SP_RGBA32_F_COMPOSE (rgbm[0], rgbm[1], rgbm[2], 1.0),
@@ -667,9 +683,9 @@ void ColorScales::_updateSliders( guint channels )
 		}
 		if ((channels != CSC_CHANNEL_K) && (channels != CSC_CHANNEL_CMYKA)) {
 			/* Update K */
-			sp_color_cmyk_to_rgb_floatv (rgb0, get1(_a[0]), get1(_a[1]), get1(_a[2]), 0.0);
-			sp_color_cmyk_to_rgb_floatv (rgbm, get1(_a[0]), get1(_a[1]), get1(_a[2]), 0.5);
-			sp_color_cmyk_to_rgb_floatv (rgb1, get1(_a[0]), get1(_a[1]), get1(_a[2]), 1.0);
+			sp_color_cmyk_to_rgb_floatv (rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.0);
+			sp_color_cmyk_to_rgb_floatv (rgbm, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.5);
+			sp_color_cmyk_to_rgb_floatv (rgb1, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 1.0);
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[3]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 1.0),
 							SP_RGBA32_F_COMPOSE (rgbm[0], rgbm[1], rgbm[2], 1.0),
@@ -677,7 +693,7 @@ void ColorScales::_updateSliders( guint channels )
 		}
 		if (channels != CSC_CHANNEL_CMYKA) {
 			/* Update alpha */
-			sp_color_cmyk_to_rgb_floatv (rgb0, get1(_a[0]), get1(_a[1]), get1(_a[2]), get1(_a[3]));
+			sp_color_cmyk_to_rgb_floatv (rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
 			sp_color_slider_set_colors (SP_COLOR_SLIDER (_s[4]),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 0.0),
 							SP_RGBA32_F_COMPOSE (rgb0[0], rgb0[1], rgb0[2], 0.5),

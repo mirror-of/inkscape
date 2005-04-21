@@ -25,6 +25,9 @@ typedef enum {
 class ColorScales: public ColorSelector
 {
 public:
+    static gfloat getScaled( const GtkAdjustment *a );
+    static void setScaled( GtkAdjustment *a, gfloat v);
+
     ColorScales(SPColorSelector *csel);
     virtual ~ColorScales();
 
@@ -52,7 +55,10 @@ protected:
     void _updateSliders(guint channels);
     void _recalcColor(gboolean changing);
 
+    void _setRangeLimit( gdouble upper );
+
     SPColorScalesMode _mode;
+    gdouble _rangeLimit;
     gboolean _updating : 1;
     gboolean _dragging : 1;
     GtkAdjustment *_a[5]; /* Channel adjustments */
@@ -87,10 +93,6 @@ struct SPColorScalesClass {
 GType sp_color_scales_get_type();
 
 GtkWidget *sp_color_scales_new();
-
-gfloat get1(GtkAdjustment const *a);
-void set255(GtkAdjustment *a, gfloat v);
-
 
 #endif /* !SEEN_SP_COLOR_SCALES_H */
 

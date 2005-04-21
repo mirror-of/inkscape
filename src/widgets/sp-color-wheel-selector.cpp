@@ -222,24 +222,25 @@ void ColorWheelSelector::_colorChanged( const SPColor& color, gfloat alpha )
 
     sp_color_slider_set_colors (SP_COLOR_SLIDER(_slider), start, mid, end);
 
-    set255 (_adj, alpha);
+    ColorScales::setScaled(_adj, alpha);
 
     _updating = FALSE;
 }
 
 void ColorWheelSelector::_adjustmentChanged( GtkAdjustment *adjustment, SPColorWheelSelector *cs )
 {
-    // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255 
+// TODO check this. It looks questionable:
+    // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
     if (adjustment->value > 0.0 && adjustment->value < 1.0) {
-	gtk_adjustment_set_value  (adjustment, floor ((adjustment->value)*255.0 + 0.5));
-    } 
+        gtk_adjustment_set_value( adjustment, floor ((adjustment->value) * adjustment->upper + 0.5) );
+    }
 
     ColorWheelSelector* wheelSelector = (ColorWheelSelector*)(SP_COLOR_SELECTOR(cs)->base);
     if (wheelSelector->_updating) return;
 
     wheelSelector->_updating = TRUE;
 
-    wheelSelector->_updateInternals( wheelSelector->_color, get1 (wheelSelector->_adj), wheelSelector->_dragging );
+    wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
 
     wheelSelector->_updating = FALSE;
 }
@@ -250,7 +251,7 @@ void ColorWheelSelector::_sliderGrabbed( SPColorSlider *slider, SPColorWheelSele
     if (!wheelSelector->_dragging) {
         wheelSelector->_dragging = TRUE;
         wheelSelector->_grabbed();
-        wheelSelector->_updateInternals( wheelSelector->_color, get1 (wheelSelector->_adj), wheelSelector->_dragging );
+        wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
     }
 }
 
@@ -260,7 +261,7 @@ void ColorWheelSelector::_sliderReleased( SPColorSlider *slider, SPColorWheelSel
     if (wheelSelector->_dragging) {
         wheelSelector->_dragging = FALSE;
         wheelSelector->_released();
-        wheelSelector->_updateInternals( wheelSelector->_color, get1 (wheelSelector->_adj), wheelSelector->_dragging );
+        wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
     }
 }
 
@@ -268,7 +269,7 @@ void ColorWheelSelector::_sliderChanged( SPColorSlider *slider, SPColorWheelSele
 {
     ColorWheelSelector* wheelSelector = (ColorWheelSelector*)(SP_COLOR_SELECTOR(cs)->base);
 
-    wheelSelector->_updateInternals( wheelSelector->_color, get1 (wheelSelector->_adj), wheelSelector->_dragging );
+    wheelSelector->_updateInternals( wheelSelector->_color, ColorScales::getScaled( wheelSelector->_adj ), wheelSelector->_dragging );
 }
 
 void ColorWheelSelector::_wheelChanged( SPColorWheel *wheel, SPColorWheelSelector *cs )

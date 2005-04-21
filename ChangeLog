@@ -1,4 +1,10 @@
 2005-04-21  Jon A. Cruz  <jon@joncruz.org>
+	* src/widgets/sp-color-wheel-selector.cpp,
+	  src/widgets/sp-color-scales.h, src/widgets/sp-color-slider.cpp,
+	  src/widgets/sp-color-scales.cpp:
+	Changed CMYK selector to display values as 0-100. Fixes REF #1124499.
+
+2005-04-21  Jon A. Cruz  <jon@joncruz.org>
 	* src/xml/repr-io.cpp:
 	Expand entities; matches 0.41 behavior. Fixes bug #1157478.
 
