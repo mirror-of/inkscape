@@ -371,6 +371,7 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
             {10, 18},
             {7.5, 24},
             {6, 30},
+            {5, 36},
             {3, 60},
             {2, 90},
             {1, 180},
