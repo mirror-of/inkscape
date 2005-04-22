@@ -851,7 +851,19 @@ sp_arc_modified (SPObject *object, guint flags)
 
 static gchar *sp_arc_description(SPItem *item)
 {
-	return g_strdup(_("<b>Arc</b>"));
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+
+	gdouble len = fmod (ge->end - ge->start, SP_2PI);
+	if (len < 0.0) len += SP_2PI;
+	if (!(fabs (len) < 1e-8 || fabs (len - SP_2PI) < 1e-8)) {
+		if (ge->closed) {
+			return g_strdup(_("<b>Segment</b>"));
+		} else {
+			return g_strdup(_("<b>Arc</b>"));
+		}
+	} else {
+		return g_strdup(_("<b>Ellipse</b>"));
+	}
 }
 
 void
