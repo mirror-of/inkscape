@@ -137,7 +137,7 @@ uri_to_id(SPDocument *document, const gchar *uri)
 	e = uri + 5;
 	while (*e) {
 		if (*e == ')') break;
-		if (!isalnum (*e) && (*e != '_') && (*e != '-')) return NULL;
+		if (!isalnum (*e) && (*e != '_') && (*e != '-') && (*e != ':') && (*e != '.')) return NULL;
 		e += 1;
 		if (!*e) return NULL;
 	}
