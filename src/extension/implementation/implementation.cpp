@@ -42,7 +42,7 @@ Implementation::check (Inkscape::Extension::Extension * module) {
 	return TRUE;
 } /* Implemenation::check */
 
-GtkDialog *
+Gtk::Widget *
 Implementation::prefs_input (Inkscape::Extension::Input * module, const gchar * filename) {
 	return NULL;
 } /* Implementation::prefs_input */
@@ -53,7 +53,7 @@ Implementation::open (Inkscape::Extension::Input * module, const gchar * filenam
     return NULL;
 } /* Implementation::open */
 
-GtkDialog *
+Gtk::Widget *
 Implementation::prefs_output (Inkscape::Extension::Output * module) {
 	return NULL;
 } /* Implementation::prefs_output */

@@ -11,6 +11,8 @@
 #include "implementation/implementation.h"
 #include "output.h"
 
+#include "prefdialog.h"
+
 /* Inkscape::Extension::Output */
 
 namespace Inkscape {
@@ -163,10 +165,28 @@ Output::get_filetypetooltip(void)
 
 	Calls the implementation to get the preferences.
 */
-GtkDialog *
+bool
 Output::prefs (void)
 {
-    return imp->prefs_output(this);
+    if (!loaded())
+        set_state(Extension::STATE_LOADED);
+    if (!loaded()) return false;
+
+    Gtk::Widget * controls;
+    controls = imp->prefs_output(this);
+    if (controls == NULL) {
+        // std::cout << "No preferences for Output" << std::endl;
+        return true;
+    }
+
+    PrefDialog * dialog = new PrefDialog(this->get_name(), controls);
+    int response = dialog->run();
+    dialog->hide();
+
+    delete dialog;
+
+    if (response == Gtk::RESPONSE_OK) return true;
+    return false;
 }
 
 /**

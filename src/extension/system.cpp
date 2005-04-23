@@ -90,10 +90,8 @@ open(Extension *key, gchar const *filename)
         throw Input::open_failed();
     }
 
-    GtkDialog *prefs = imod->prefs(filename);
-    if (prefs != NULL) {
-        gtk_dialog_run(prefs);
-    }
+    if (!imod->prefs(filename))
+        return NULL;
 
     SPDocument *doc = imod->open(filename);
     if (!doc) {
@@ -227,17 +225,8 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
         throw Output::save_failed();
     }
 
-    GtkDialog *prefs = omod->prefs();
-    if (prefs != NULL) {
-        gint response;
-
-        response = gtk_dialog_run(prefs);
-        gtk_widget_hide(GTK_WIDGET(prefs));
-
-        if (response != GTK_RESPONSE_OK) {
-            return;
-        }
-    }
+    if (!omod->prefs())
+        return;
 
     gchar *fileName = NULL;
     if (setextension) {

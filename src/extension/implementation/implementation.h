@@ -48,7 +48,7 @@ public:
 
     /* ----- Input functions ----- */
     /** Find out information about the file. */
-    virtual GtkDialog *prefs_input(Inkscape::Extension::Input *module,
+    virtual Gtk::Widget *prefs_input(Inkscape::Extension::Input *module,
                              gchar const *filename);
 
     virtual SPDocument *open(Inkscape::Extension::Input *module,
@@ -56,7 +56,7 @@ public:
 
     /* ----- Output functions ----- */
     /** Find out information about the file. */
-    virtual GtkDialog *prefs_output(Inkscape::Extension::Output *module);
+    virtual Gtk::Widget *prefs_output(Inkscape::Extension::Output *module);
     virtual void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename);
 
     /* ----- Effect functions ----- */

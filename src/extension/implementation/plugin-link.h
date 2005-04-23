@@ -33,7 +33,7 @@ typedef void (*inkscape_plugin_unload)(inkscape_extension * in_ext);
 /** \brief  The C prototype of an open function.  */
 typedef SPDocument *(*inkscape_plugin_open)(inkscape_extension * in_ext, const gchar * filename);
 /** \brief  The C prototype of an input prefs function.  */
-typedef GtkDialog * (*inkscape_plugin_prefs_input)(inkscape_extension * in_ext, gchar const * filename);
+typedef Gtk::Widget * (*inkscape_plugin_prefs_input)(inkscape_extension * in_ext, gchar const * filename);
 /** \brief  The C prototype of an effect function.  */
 typedef void (*inkscape_plugin_effect)(inkscape_extension * in_ext, SPView * view);
 /** \brief  The C prototype of an effect prefs function.  */

@@ -42,7 +42,7 @@ public:
     gchar *       get_extension        (void);
     gchar *       get_filetypename     (void);
     gchar *       get_filetypetooltip  (void);
-    GtkDialog *   prefs                (gchar const *uri);
+    bool          prefs                (gchar const *uri);
 };
 
 } }  /* namespace Inkscape, Extension */

@@ -2,7 +2,7 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2004 Authors
+ * Copyright (C) 2002-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -15,6 +15,7 @@
 #include "timer.h"
 #include "input.h"
 #include "io/sys.h"
+#include "prefdialog.h"
 
 /* Inkscape::Extension::Input */
 
@@ -219,10 +220,28 @@ Input::get_filetypetooltip(void)
 
 	Calls the implementation to get the preferences.
 */
-GtkDialog *
+bool
 Input::prefs (const gchar *uri)
 {
-    return imp->prefs_input(this, uri);
+    if (!loaded())
+        set_state(Extension::STATE_LOADED);
+    if (!loaded()) return false;
+
+    Gtk::Widget * controls;
+    controls = imp->prefs_input(this, uri);
+    if (controls == NULL) {
+        // std::cout << "No preferences for Input" << std::endl;
+        return true;
+    }
+
+    PrefDialog * dialog = new PrefDialog(this->get_name(), controls);
+    int response = dialog->run();
+    dialog->hide();
+
+    delete dialog;
+
+    if (response == Gtk::RESPONSE_OK) return true;
+    return false;
 }
 
 } }  /* namespace Inkscape, Extension */

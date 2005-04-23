@@ -1,3 +1,22 @@
+2005-04-23  Ted Gould  <ted@gould.cx>
+
+	* src/extension/input.cpp, src/extension/input.h,
+	src/extension/output.cpp, src/extension/output.h,
+	src/extension/system.cpp, src/extension/implementation/implementation.cpp,
+	src/extension/implementation/implementation.h,
+	src/extension/implementation/plugin-link.h,
+	src/extension/implementation/plugin.cpp,
+	src/extension/implementation/plugin.h,
+	src/extension/implementation/script.cpp,
+	src/extension/implementation/script.h, src/extension/internal/eps-out.cpp,
+	src/extension/internal/eps-out.h:
+
+	Changing the prototype for the input/output preferences to be closer to
+	that of Effects.  This is a good thing because now autogui can be used for
+	all, and it is much cleaner.  Unfortunately, this caused alot of files to
+	be changed.  Also, this sets up the extensions dialog (we're only using
+	one now) to be integrated into the GTKmm codebase easier.
+
 2005-04-21  Jon A. Cruz  <jon@joncruz.org>
 	* src/widgets/sp-color-wheel-selector.cpp,
 	  src/widgets/sp-color-scales.h, src/widgets/sp-color-slider.cpp,

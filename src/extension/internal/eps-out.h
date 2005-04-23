@@ -21,7 +21,7 @@ namespace Extension {
 namespace Internal {
 
 class EpsOutput : Inkscape::Extension::Implementation::Implementation {
-    GtkDialog *dialog;
+    Gtk::Widget *dialog;
     static void pageBoxToggle(GtkWidget *widget, Inkscape::Extension::Output *omod);
     static void textToPathToggle(GtkWidget *widget, Inkscape::Extension::Output *omod);
 
@@ -32,7 +32,7 @@ public:
 
     bool check(Inkscape::Extension::Extension *module);
 
-    GtkDialog *prefs_output(Inkscape::Extension::Output *module);
+    Gtk::Widget *prefs_output(Inkscape::Extension::Output *module);
 
     void save(Inkscape::Extension::Output *mod,
               SPDocument *doc,

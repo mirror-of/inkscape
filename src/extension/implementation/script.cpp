@@ -307,7 +307,7 @@ Script::check(Inkscape::Extension::Extension *module)
 
     This function should really do something, right now it doesn't.
 */
-GtkDialog *
+Gtk::Widget *
 Script::prefs_input(Inkscape::Extension::Input *module, gchar const *filename)
 {
     /*return module->autogui(); */
@@ -321,7 +321,7 @@ Script::prefs_input(Inkscape::Extension::Input *module, gchar const *filename)
 
     This function should really do something, right now it doesn't.
 */
-GtkDialog *
+Gtk::Widget *
 Script::prefs_output(Inkscape::Extension::Output *module)
 {
     /*return module->autogui();*/

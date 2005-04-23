@@ -50,11 +50,11 @@ public:
     virtual bool          load         (Inkscape::Extension::Extension *module);
     virtual void          unload       (Inkscape::Extension::Extension *module);
     virtual bool          check        (Inkscape::Extension::Extension *module);
-    virtual GtkDialog *   prefs_input  (Inkscape::Extension::Input *module,
+    virtual Gtk::Widget * prefs_input  (Inkscape::Extension::Input *module,
                                         gchar const *filename);
     virtual SPDocument *  open         (Inkscape::Extension::Input *module,
                                         gchar const *filename);
-    virtual GtkDialog *   prefs_output (Inkscape::Extension::Output *module);
+    virtual Gtk::Widget * prefs_output (Inkscape::Extension::Output *module);
     virtual void          save         (Inkscape::Extension::Output *module,
                                         SPDocument *doc,
                                         gchar const *filename);

@@ -36,7 +36,7 @@ public:
     virtual bool check                (void);
     void         save (SPDocument *doc,
                        gchar const *uri);
-    GtkDialog *  prefs (void);
+    bool         prefs (void);
     gchar *      get_mimetype(void);
     gchar *      get_extension(void);
     gchar *      get_filetypename(void);

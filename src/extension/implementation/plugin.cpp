@@ -182,7 +182,7 @@ Plugin::check(Inkscape::Extension::Extension *module)
     return TRUE;
 }
 
-GtkDialog *
+Gtk::Widget *
 Plugin::prefs_input(Inkscape::Extension::Input *module, gchar const *filename)
 {
     return Inkscape::Extension::Implementation::Implementation::prefs_input(module, filename);
@@ -208,7 +208,7 @@ Plugin::open(Inkscape::Extension::Input *module, gchar const *filename)
     }
 }
 
-GtkDialog *
+Gtk::Widget *
 Plugin::prefs_output(Inkscape::Extension::Output *module)
 {
     return Inkscape::Extension::Implementation::Implementation::prefs_output(module);

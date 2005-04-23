@@ -60,45 +60,10 @@ EpsOutput::textToPathToggle (GtkWidget * widget, Inkscape::Extension::Output * o
                (bool) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 }
 
-GtkDialog *
+Gtk::Widget *
 EpsOutput::prefs_output (Inkscape::Extension::Output * module)
 {
-    GtkWidget * checkbox;
-
-    if (dialog != NULL)
-        return dialog;
-
-    dialog = GTK_DIALOG(
-             gtk_dialog_new_with_buttons (_("EPS Output Settings"),
-                                          NULL,
-                                          (GtkDialogFlags)(GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
-                                          GTK_STOCK_CANCEL,
-                                          GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_OK,
-                                          GTK_RESPONSE_OK,
-                                          NULL));
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
-
-    sp_transientize(GTK_WIDGET(dialog));
-
-    checkbox = gtk_check_button_new_with_label(_("Make bounding box around full page"));
-    bool pageBox = module->get_param_bool("pageBoundingBox");
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), pageBox);
-    g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(pageBoxToggle), (gpointer)module);
-    gtk_widget_show(checkbox);
-    gtk_box_pack_start(GTK_BOX(dialog->vbox), checkbox, FALSE, FALSE, 5);
-
-    checkbox = gtk_check_button_new_with_label(_("Convert text to path"));
-    bool textToPath = module->get_param_bool("textToPath");
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), textToPath);
-    g_signal_connect(G_OBJECT(checkbox),
-                     "toggled",
-                     G_CALLBACK(textToPathToggle),
-                     (gpointer) module);
-    gtk_widget_show(checkbox);
-    gtk_box_pack_start(GTK_BOX(dialog->vbox), checkbox, FALSE, FALSE, 5);
-
-    return dialog;
+    return module->autogui();
 }
 
 /**
@@ -153,8 +118,8 @@ EpsOutput::init (void)
         "<inkscape-extension>\n"
             "<name>Encapsulated Postscript Output</name>\n"
             "<id>org.inkscape.output.eps</id>\n"
-            "<param name=\"pageBoundingBox\" type=\"boolean\">FALSE</param>\n"
-            "<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
+            "<param name=\"pageBoundingBox\" type=\"boolean\" gui-text=\"Make bounding box around full page\">FALSE</param>\n"
+            "<param name=\"textToPath\" type=\"boolean\" gui-text=\"Convert text to path\">TRUE</param>\n"
             "<output>\n"
                 "<extension>.eps</extension>\n"
                 "<mimetype>image/x-e-postscript</mimetype>\n"
