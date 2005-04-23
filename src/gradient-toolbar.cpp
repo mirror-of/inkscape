@@ -451,6 +451,8 @@ gr_fork (GtkWidget *button, GtkWidget *widget)
             }
         }
     }
+
+    spinbutton_defocus(GTK_OBJECT(widget));
 }
 
 static void gr_disconnect_sigc (GObject *obj, sigc::connection *connection) {
@@ -468,6 +470,8 @@ static void
 gr_edit (GtkWidget *button, GtkWidget *widget)
 {
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT(widget), "menu");
+
+    spinbutton_defocus(GTK_OBJECT(widget));
 
     if (om) {
         GtkWidget *i = gtk_menu_get_active (GTK_MENU (gtk_option_menu_get_menu (GTK_OPTION_MENU (om))));
@@ -498,6 +502,7 @@ gr_change_widget (SPDesktop *desktop)
     gr_read_selection (selection, ev? ev->get_drag() : NULL, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
  
     GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
+    gtk_object_set_data(GTK_OBJECT(widget), "dtw", desktop->owner->canvas);
     g_object_set_data (G_OBJECT (widget), "desktop", desktop);
 
     GtkWidget *om = gr_vector_list (desktop, selection->isEmpty(), gr_selected, gr_multi);
