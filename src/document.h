@@ -194,6 +194,6 @@ SPItem * sp_document_group_at_point (SPDocument *document, unsigned int key,  NR
 void sp_document_set_uri (SPDocument *document, const gchar *uri);
 void sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height);
 
-
+unsigned int vacuum_document (SPDocument *document);
 
 #endif

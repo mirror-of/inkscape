@@ -921,3 +921,61 @@ sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
 	g_slist_free ((GSList *) value);
 	return TRUE;
 }
+
+unsigned int
+count_objects_recursive (SPObject *obj, unsigned int count)
+{
+	count ++; // obj itself
+
+	for (SPObject *i = sp_object_first_child(obj); i != NULL; i = SP_OBJECT_NEXT(i)) {
+		count = count_objects_recursive (i, count);
+	}
+
+	return count;
+}
+
+unsigned int
+objects_in_document (SPDocument *document)
+{
+	return count_objects_recursive (SP_DOCUMENT_ROOT(document), 0);
+}
+
+void
+vacuum_document_recursive (SPObject *obj)
+{
+	if (SP_IS_DEFS(obj)) {
+		for (SPObject *def = obj->firstChild(); def; def = SP_OBJECT_NEXT(def)) {
+                 /* fixme: some inkscape-internal nodes in the future might not be collectable */
+			def->requestOrphanCollection();
+		}
+	} else {
+		for (SPObject *i = sp_object_first_child(obj); i != NULL; i = SP_OBJECT_NEXT(i)) {
+			vacuum_document_recursive (i);
+		}
+	}
+}
+
+unsigned int
+vacuum_document (SPDocument *document)
+{
+	unsigned int start = objects_in_document (document);
+	unsigned int end;
+	unsigned int newend = start;
+
+	unsigned int iterations = 0;
+
+	do {
+		end = newend;
+
+		vacuum_document_recursive (SP_DOCUMENT_ROOT(document));
+		document->collectOrphans();
+		iterations ++;
+
+		newend = objects_in_document (document);
+
+	} while (iterations < 100 && newend < end);
+
+	return start - newend;
+}
+
+
