@@ -1,6 +1,5 @@
 /**
- * \brief Application Implementation class declaration for Inkscape.  This
- *        class implements the functionality of the window layout, menus,
+ * \brief This class implements the functionality of the window layout, menus,
  *        and signals.
  *
  * Authors:
@@ -12,10 +11,8 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-// TODO:  This stuff should mostly be moved into Inkscape::UI::View::Edit
-
-#ifndef INKSCAPE_APPLICATION_EDITOR_IMPL_H
-#define INKSCAPE_APPLICATION_EDITOR_IMPL_H
+#ifndef INKSCAPE_UI_VIEW_EDIT_H
+#define INKSCAPE_UI_VIEW_EDIT_H
 
 #include <gtkmm/box.h>
 #include <gtkmm/table.h>
@@ -27,29 +24,31 @@
 #include <gtkmm/uimanager.h>
 #include <gtkmm/drawingarea.h>  // TODO: remove this when SVG Canvas is hooked in
 
-#include "application/editor.h"
+#include "libnr/nr-matrix.h"
+#include "view.h"
+
 #include "ui/dialog/dialog-manager.h"
 #include "ui/widget/toolbox.h"
 
 struct SPCanvas;
 struct SPCanvasItem;
 struct SPCanvasGroup;
+struct SPCanvasArena;
 struct SPCSSAttr;
 struct SPDesktopWidget;
 struct SPNamedView;
+struct NRArenaItem;
 
 namespace Inkscape {
 class Selection;
-class Document;
 
-namespace NSApplication {
+namespace UI {
+namespace View {
 
-class Editor;
-
-class Editor::EditorImpl : public Gtk::Window {
+class Edit : public Gtk::Window, SPView {
 public:
-    EditorImpl();
-    ~EditorImpl();
+    Edit();
+    ~Edit();
 
     // Initialization
     void initActions();
@@ -88,17 +87,17 @@ public:
 
     void onUriChanged();
 
+    SPEventContext       *event_context;
+
 protected:
     SPDesktopWidget      *_owner;
     SPNamedView          *_namedview;
-    Inkscape::Document   *_document;
+    SPDocument           *_document;
     Inkscape::Selection  *_selection;
     sigc::connection     _sel_modified_connection;
     sigc::connection     _sel_changed_connection;
 
-    SPEventContext       *_event_context;
-
-    unsigned int         dkey;
+    unsigned int         _dkey;
 
     SPCanvasItem         *_acetate;
     SPCanvasGroup        *_main;
@@ -112,10 +111,9 @@ protected:
     SPCanvasItem         *_page; // page background
     SPCanvasItem         *_page_border; // page border
 
-/* TODO
-    NR::Matrix d2w, w2d, doc2dt;
-*/
-    gboolean             is_fullscreen;
+    NR::Matrix           _d2w, _w2d, _doc2dt;
+    gint                 _number;
+    gboolean             _is_fullscreen;
 
     // current style
     SPCSSAttr            *_current_style;
@@ -159,11 +157,27 @@ protected:
     void initSvgCanvas();
     void initStatusbar();
 };
+/** Edit Handlers
+ *
+ *  These routines implement a C-style interface for signal handlers.
+ *  This is mostly for backwards compatibility with the Gtkm code;
+ *  ideally, these would all be implemented in Inkscape::UI::View::Edit
+ *  directly.
+ *
+ */
 
-} // namespace NSApplication
+gint editor_enter_notify(GtkWidget *widget, GdkEventCrossing *event);
+gint editor_canvas_enter_notify(GtkWidget *widget, GdkEventCrossing *event);
+gint editor_canvas_leave_notify(GtkWidget *widget, GdkEventCrossing *event);
+gint editor_canvas_motion_notify(GtkWidget *widget, GdkEventCrossing *event);
+
+void editor_namedview_modified(SPNamedView *nv, guint flags, Edit *editor);
+
+} // namespace View
+} // namespace UI
 } // namespace Inkscape
 
-#endif // INKSCAPE_APPLICATION_EDITOR_IMPL_H
+#endif // INKSCAPE_UI_VIEW_EDIT_H
 
 /*
   Local Variables:

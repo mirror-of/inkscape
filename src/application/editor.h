@@ -24,6 +24,11 @@ namespace Inkscape {
 namespace XML {
 class Document;
 }
+namespace UI {
+namespace View {
+class Edit;
+}
+}
 
 namespace NSApplication {
 
@@ -61,8 +66,7 @@ public:
     gboolean        deleteView(SPDesktop* view);
 
 protected:
-    class EditorImpl;
-    EditorImpl *rep;
+    UI::View::Edit *rep;
 
     Editor(Editor const &);
     Editor& operator=(Editor const &);

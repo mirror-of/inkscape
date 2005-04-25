@@ -44,6 +44,7 @@ include traits/Makefile_insert
 include algorithms/Makefile_insert
 include ui/Makefile_insert
 include ui/dialog/Makefile_insert
+include ui/view/Makefile_insert
 include ui/widget/Makefile_insert
 include util/Makefile_insert
 include trace/Makefile_insert
@@ -63,6 +64,7 @@ noinst_LIBRARIES =	\
 	io/libio.a	\
 	ui/libui.a	\
 	ui/dialog/libuidialog.a	\
+	ui/view/libuiview.a 	\
 	ui/widget/libuiwidget.a	\
 	util/libinkutil.a \
 	$(inkjar_libs)	\
@@ -107,16 +109,17 @@ EXTRA_DIST =	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	livarot/makefile.in	\
-	svg/makefile.in	\
+	svg/makefile.in		\
 	trace/makefile.in	\
 	traits/makefile.in	\
 	utest/makefile.in	\
 	ui/makefile.in		\
-	ui/dialog/makefile.in		\
-	ui/widget/makefile.in		\
+	ui/dialog/makefile.in	\
+	ui/view/makefile.in	\
+	ui/widget/makefile.in	\
 	util/makefile.in	\
 	widgets/makefile.in	\
-	xml/makefile.in	\
+	xml/makefile.in		\
 	extension/internal/gnome.cpp	\
 	extension/internal/gnome.h	\
 	extension/internal/win32.cpp	\

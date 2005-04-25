@@ -29,7 +29,7 @@
 */
 
 #include "editor.h"
-#include "editor-impl.h"
+#include "ui/view/edit.h"
 
 namespace Inkscape {
 namespace NSApplication {
@@ -43,7 +43,7 @@ Editor::Editor(gint argc, char **argv, gboolean use_gui)
       _save_preferences(true),
       _use_gui(use_gui)
 {
-    rep = new EditorImpl();
+    rep = new UI::View::Edit();
 
     // Store the arguments
 //    if (_argv != NULL) {

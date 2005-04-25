@@ -10,7 +10,5 @@ application_libinkapp_a_SOURCES = \
 	application/editor.h		\
 	application/application.cpp	\
 	application/application.h	\
-	application/editor-impl.h	\
-	application/editor-impl.cpp	\
 	application/app-prototype.cpp	\
 	application/app-prototype.h

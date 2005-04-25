@@ -116,6 +116,10 @@ _load_uri (const gchar *uri)
 
     GnomeVFSResult result = gnome_vfs_open (&handle, uri, GNOME_VFS_OPEN_READ);
 
+    if (result != GNOME_VFS_OK) {
+        g_warning(gnome_vfs_result_to_string(result));
+    }
+
     while (result == GNOME_VFS_OK) {
         result = gnome_vfs_read (handle, buffer, BUF_SIZE, &bytes_read);
         buffer[bytes_read] = '\0';
@@ -147,13 +151,21 @@ SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
 #ifdef WITH_GNOME_VFS
-	gchar * buffer = _load_uri(uri);
-	SPDocument * doc = sp_document_new_from_mem(buffer, strlen(buffer), 1);
-
-        g_free(buffer);
-        return doc;
+    if (gnome_vfs_uri_is_local(gnome_vfs_uri_new(uri))) {
+        // Use built-in loader instead of VFS for this
+        return sp_document_new(uri, TRUE);
+    }
+    gchar * buffer = _load_uri(uri);
+    if (buffer == NULL) {
+        g_warning("Error:  Could not open file '%s' with VFS\n", uri);
+        return NULL;
+    }
+    SPDocument * doc = sp_document_new_from_mem(buffer, strlen(buffer), 1);
+    
+    g_free(buffer);
+    return doc;
 #else
-	return sp_document_new (uri, TRUE);
+    return sp_document_new (uri, TRUE);
 #endif
 }
 

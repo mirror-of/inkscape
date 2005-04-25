@@ -1,6 +1,5 @@
 /**
- * \brief Editor Implementation class declaration for Inkscape.  This
- *        class implements the functionality of the window layout, menus,
+ * \brief This class implements the functionality of the window layout, menus,
  *        and signals.
  * 
  * This is a reimplementation into C++/Gtkmm of Sodipodi's SPDesktop class
@@ -21,10 +20,6 @@
 # include <config.h>
 #endif
 
-/*
-  TODO:  Should EditorImpl be renamed?
-*/
-
 #include <gtkmm/action.h>
 #include <gtkmm/radioaction.h>
 #include <gtkmm/buttonbox.h>
@@ -37,22 +32,31 @@
 #include <glibmm/i18n.h>
 
 #include "path-prefix.h"
-#include "editor.h"
-#include "editor-impl.h"
+#include "edit.h"
 #include "ui/stock.h"
 #include "ui/stock-items.h"
 #include "ui/icons.h"
 #include "ui/widget/toolbox.h"
 
 #include "display/sp-canvas.h"
+#include "display/sp-canvas-util.h"
+#include "display/canvas-arena.h"
+#include "display/sodipodi-ctrlrect.h"
+#include "display/gnome-canvas-acetate.h"
+
+#include "document.h"
+#include "sp-namedview.h"
+#include "sp-item.h"
+#include "event-context.h"
 
 using namespace Inkscape::UI;
 using namespace Inkscape::UI::Widget;
 
 namespace Inkscape {
-namespace NSApplication {
+namespace UI {
+namespace View {
 
-Editor::EditorImpl::EditorImpl()
+Edit::Edit()
     : _main_window_table(4),
       _viewport_table(3,3),
       _act_grp(Gtk::ActionGroup::create()),
@@ -66,19 +70,19 @@ Editor::EditorImpl::EditorImpl()
     initLayout();
 }
 
-Editor::EditorImpl::~EditorImpl()
+Edit::~Edit()
 {
 }
 
 void
-Editor::EditorImpl::initActions()
+Edit::initActions()
 {
     initMenuActions();
     initToolbarActions();
 }
 
 void
-Editor::EditorImpl::initUIManager()
+Edit::initUIManager()
 {
     _ui_mgr->insert_action_group(_act_grp);
     add_accel_group(_ui_mgr->get_accel_group());
@@ -92,7 +96,7 @@ Editor::EditorImpl::initUIManager()
 }
 
 void
-Editor::EditorImpl::initLayout()
+Edit::initLayout()
 {
     set_title("New document 1 - Inkscape");
     set_resizable();
@@ -128,13 +132,13 @@ Editor::EditorImpl::initLayout()
 }
 
 void
-Editor::EditorImpl::onMenuItem()
+Edit::onMenuItem()
 {
     g_warning("onMenuItem called");
 }
 
 void
-Editor::EditorImpl::onActionFileNew()
+Edit::onActionFileNew()
 {
     g_warning("onActionFileNew called");
 
@@ -142,7 +146,7 @@ Editor::EditorImpl::onActionFileNew()
 }
 
 void
-Editor::EditorImpl::onActionFileOpen()
+Edit::onActionFileOpen()
 {
     g_warning("onActionFileOpen called");
 
@@ -150,39 +154,39 @@ Editor::EditorImpl::onActionFileOpen()
 }
 
 void
-Editor::EditorImpl::onActionFileQuit()
+Edit::onActionFileQuit()
 {
     g_warning("onActionFileQuit");
 }
 
 void
-Editor::EditorImpl::onActionFilePrint()
+Edit::onActionFilePrint()
 {
     g_warning("onActionFilePrint");
 }
 
 void
-Editor::EditorImpl::onToolbarItem()
+Edit::onToolbarItem()
 {
     g_warning("onToolbarItem called");
 }
 
 void
-Editor::EditorImpl::onSelectTool()
+Edit::onSelectTool()
 {
     _tool_ctrl->remove();
     _tool_ctrl->add(*_select_ctrl);
 }
 
 void
-Editor::EditorImpl::onNodeTool()
+Edit::onNodeTool()
 {
     _tool_ctrl->remove();
     _tool_ctrl->add(*_node_ctrl);
 }
 
 void
-Editor::EditorImpl::onDialogInkscapePreferences()
+Edit::onDialogInkscapePreferences()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getInkscapePreferencesDialog();
     g_assert(dlg);
@@ -192,7 +196,7 @@ Editor::EditorImpl::onDialogInkscapePreferences()
 }
 
 void
-Editor::EditorImpl::onDialogAbout()
+Edit::onDialogAbout()
 {
 /*
     UI::Dialog::Dialog *dlg = _dlg_mgr.getAboutDialog();
@@ -204,7 +208,7 @@ Editor::EditorImpl::onDialogAbout()
 }
 
 void
-Editor::EditorImpl::onDialogAlignAndDistribute()
+Edit::onDialogAlignAndDistribute()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getAlignAndDistributeDialog();
     g_assert(dlg);
@@ -214,7 +218,7 @@ Editor::EditorImpl::onDialogAlignAndDistribute()
 }
 
 void
-Editor::EditorImpl::onDialogDocumentProperties()
+Edit::onDialogDocumentProperties()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getDocumentPreferencesDialog();
     g_assert(dlg);
@@ -224,7 +228,7 @@ Editor::EditorImpl::onDialogDocumentProperties()
 }
 
 void
-Editor::EditorImpl::onDialogExport()
+Edit::onDialogExport()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getExportDialog();
     g_assert(dlg);
@@ -234,7 +238,7 @@ Editor::EditorImpl::onDialogExport()
 }
 
 void
-Editor::EditorImpl::onDialogExtensionEditor()
+Edit::onDialogExtensionEditor()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getExtensionEditorDialog();
     g_assert(dlg);
@@ -244,7 +248,7 @@ Editor::EditorImpl::onDialogExtensionEditor()
 }
 
 void
-Editor::EditorImpl::onDialogFillAndStroke()
+Edit::onDialogFillAndStroke()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getFillAndStrokeDialog();
     g_assert(dlg);
@@ -254,7 +258,7 @@ Editor::EditorImpl::onDialogFillAndStroke()
 }
 
 void
-Editor::EditorImpl::onDialogFind()
+Edit::onDialogFind()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getFindDialog();
     g_assert(dlg);
@@ -264,7 +268,7 @@ Editor::EditorImpl::onDialogFind()
 }
 
 void
-Editor::EditorImpl::onDialogLayerEditor()
+Edit::onDialogLayerEditor()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getLayerEditorDialog();
     g_assert(dlg);
@@ -274,7 +278,7 @@ Editor::EditorImpl::onDialogLayerEditor()
 }
 
 void
-Editor::EditorImpl::onDialogMessages()
+Edit::onDialogMessages()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getMessagesDialog();
     g_assert(dlg);
@@ -284,7 +288,7 @@ Editor::EditorImpl::onDialogMessages()
 }
 
 void
-Editor::EditorImpl::onDialogObjectProperties()
+Edit::onDialogObjectProperties()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getObjectPropertiesDialog();
     g_assert(dlg);
@@ -294,7 +298,7 @@ Editor::EditorImpl::onDialogObjectProperties()
 }
 
 void 
-Editor::EditorImpl::onDialogTextProperties()
+Edit::onDialogTextProperties()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getTextPropertiesDialog();
     g_assert(dlg);
@@ -304,7 +308,7 @@ Editor::EditorImpl::onDialogTextProperties()
 }
 
 void
-Editor::EditorImpl::onDialogTrace()
+Edit::onDialogTrace()
 {
 /*
     UI::Dialog::Dialog *dlg = _dlg_mgr.getTraceDialog();
@@ -316,7 +320,7 @@ Editor::EditorImpl::onDialogTrace()
 }
 
 void 
-Editor::EditorImpl::onDialogTransformation()
+Edit::onDialogTransformation()
 {
     Gtk::Dialog *dlg = _dlg_mgr.getTransformationDialog();
     g_assert(dlg);
@@ -326,7 +330,7 @@ Editor::EditorImpl::onDialogTransformation()
 }
 
 void
-Editor::EditorImpl::onDialogXmlEditor()
+Edit::onDialogXmlEditor()
 {
     UI::Dialog::Dialog *dlg = _dlg_mgr.getXmlEditorDialog();
     g_assert(dlg);
@@ -336,14 +340,14 @@ Editor::EditorImpl::onDialogXmlEditor()
 }
 
 void
-Editor::EditorImpl::onUriChanged()
+Edit::onUriChanged()
 {
     g_message("onUriChanged called");
     
 }
 
 void
-Editor::EditorImpl::initMenuActions()
+Edit::initMenuActions()
 {
     _act_grp->add(Gtk::Action::create("MenuFile",   _("_File")));
     _act_grp->add(Gtk::Action::create("MenuEdit",   _("_Edit")));
@@ -358,12 +362,12 @@ Editor::EditorImpl::initMenuActions()
     _act_grp->add(Gtk::Action::create("New",
                                       Gtk::Stock::NEW, Glib::ustring(),
                                       _("New")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileNew));
+                  sigc::mem_fun(*this, &Edit::onActionFileNew));
 
     _act_grp->add(Gtk::Action::create("Open",
                                       Gtk::Stock::OPEN, Glib::ustring(),
                                       _("Open...")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("OpenRecent",
                                       Stock::OPEN_RECENT));
@@ -371,58 +375,58 @@ Editor::EditorImpl::initMenuActions()
     _act_grp->add(Gtk::Action::create("Revert",
                                       Gtk::Stock::REVERT_TO_SAVED, Glib::ustring(),
                                       _("Revert to Saved")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Save",
                                       Gtk::Stock::SAVE, Glib::ustring(),
                                       _("Save")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("SaveAs",
                                       Gtk::Stock::SAVE_AS, Glib::ustring(),
                                       _("Save As...")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Import",
                                       Stock::IMPORT, Glib::ustring(),
                                       _("Import...")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Export",
                                       Stock::EXPORT, Glib::ustring(),
                                       _("Export...")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogExport));
+                  sigc::mem_fun(*this, &Edit::onDialogExport));
 
     _act_grp->add(Gtk::Action::create("Print",
                                       Gtk::Stock::PRINT, Glib::ustring(),
                                       _("Print...")),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("PrintPreview",
                                       Gtk::Stock::PRINT_PREVIEW),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("VacuumDefs",
                                       Stock::VACUUM_DEFS),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("DocumentProperties",
                                       Gtk::Stock::PROPERTIES, Glib::ustring(),
                                       _("Document properties (Shift+Ctrl+D)")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogDocumentProperties));
+                  sigc::mem_fun(*this, &Edit::onDialogDocumentProperties));
 
     _act_grp->add(Gtk::Action::create("InkscapePreferences",
                                       Gtk::Stock::PREFERENCES, Glib::ustring(),
                                       _("Global Inkscape preferences (Shift+Ctrl+P)")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogInkscapePreferences));
+                  sigc::mem_fun(*this, &Edit::onDialogInkscapePreferences));
 
     _act_grp->add(Gtk::Action::create("Close",
                                       Gtk::Stock::CLOSE),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Quit",
                                       Gtk::Stock::QUIT),
-                  sigc::mem_fun(*this, &EditorImpl::onActionFileOpen));
+                  sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     // Edit menu
     _act_grp->add(Gtk::Action::create("Undo",
@@ -453,7 +457,7 @@ Editor::EditorImpl::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Find",
                                       Gtk::Stock::FIND),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogFind));
+                  sigc::mem_fun(*this, &Edit::onDialogFind));
 
     _act_grp->add(Gtk::Action::create("Duplicate",
                                       Stock::DUPLICATE, Glib::ustring(),
@@ -497,7 +501,7 @@ Editor::EditorImpl::initMenuActions()
     _act_grp->add(Gtk::Action::create("XmlEditor",
                                       Stock::XML_EDITOR, Glib::ustring(),
                                       _("XML Editor dialog (Shift+Ctrl+X)")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogXmlEditor));
+                  sigc::mem_fun(*this, &Edit::onDialogXmlEditor));
 
     // View menu
     _act_grp->add(Gtk::Action::create("Zoom",
@@ -582,7 +586,7 @@ Editor::EditorImpl::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Messages",
                                       Stock::MESSAGES),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogMessages));
+                  sigc::mem_fun(*this, &Edit::onDialogMessages));
 
     _act_grp->add(Gtk::Action::create("Scripts",
                                       Stock::SCRIPTS));
@@ -643,11 +647,11 @@ Editor::EditorImpl::initMenuActions()
     _act_grp->add(Gtk::Action::create("FillAndStroke",
                                       Stock::FILL_STROKE, Glib::ustring(),
                                       _("Fill and Stroke dialog (Shift+Ctrl+F)")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogFillAndStroke));
+                  sigc::mem_fun(*this, &Edit::onDialogFillAndStroke));
 
     _act_grp->add(Gtk::Action::create("ObjectProperties",
                                       Stock::OBJECT_PROPERTIES),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogObjectProperties));
+                  sigc::mem_fun(*this, &Edit::onDialogObjectProperties));
 
     _act_grp->add(Gtk::Action::create("Group",
                                       Stock::GROUP, Glib::ustring(),
@@ -712,12 +716,12 @@ Editor::EditorImpl::initMenuActions()
     _act_grp->add(Gtk::Action::create("Transformation",
                                       Stock::TRANSFORMATION, Glib::ustring(),
                                       _("Transformation")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogTransformation));
+                  sigc::mem_fun(*this, &Edit::onDialogTransformation));
 
     _act_grp->add(Gtk::Action::create("AlignAndDistribute",
                                       Stock::ALIGN_DISTRIBUTE, Glib::ustring(),
                                       _("Align and Distribute dialog (Shift+Ctrl+A)")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogAlignAndDistribute));
+                  sigc::mem_fun(*this, &Edit::onDialogAlignAndDistribute));
 
     // Path menu
     _act_grp->add(Gtk::Action::create("ObjectToPath",
@@ -730,7 +734,7 @@ Editor::EditorImpl::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Trace",
                                       Stock::TRACE),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogTrace));
+                  sigc::mem_fun(*this, &Edit::onDialogTrace));
 
     _act_grp->add(Gtk::Action::create("Union",
                                       Stock::UNION));
@@ -782,7 +786,7 @@ Editor::EditorImpl::initMenuActions()
     _act_grp->add(Gtk::Action::create("TextProperties",
                                       Gtk::Stock::SELECT_FONT, Glib::ustring(),
                                       _("Text and Font dialog (Shift+Ctrl+T)")),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogTextProperties));
+                  sigc::mem_fun(*this, &Edit::onDialogTextProperties));
 
     _act_grp->add(Gtk::Action::create("PutOnPath",
                                       Stock::PUT_ON_PATH));
@@ -802,11 +806,11 @@ Editor::EditorImpl::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("About",
                                       Stock::ABOUT),
-                  sigc::mem_fun(*this, &EditorImpl::onDialogAbout));
+                  sigc::mem_fun(*this, &Edit::onDialogAbout));
 }
 
 void
-Editor::EditorImpl::initToolbarActions()
+Edit::initToolbarActions()
 {
     // Tools bar
     Gtk::RadioAction::Group tools;
@@ -814,12 +818,12 @@ Editor::EditorImpl::initToolbarActions()
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolSelect",
                                            Stock::TOOL_SELECT, Glib::ustring(),
                                            _("Select tool")),
-                  sigc::mem_fun(*this, &EditorImpl::onSelectTool));
+                  sigc::mem_fun(*this, &Edit::onSelectTool));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolNode",
                                            Stock::TOOL_NODE, Glib::ustring(),
                                            _("Node tool")),
-                  sigc::mem_fun(*this, &EditorImpl::onNodeTool));
+                  sigc::mem_fun(*this, &Edit::onNodeTool));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolZoom",
                                            Stock::TOOL_ZOOM, Glib::ustring(),
@@ -925,7 +929,7 @@ Editor::EditorImpl::initToolbarActions()
 }
 
 void
-Editor::EditorImpl::initAccelMap()
+Edit::initAccelMap()
 {
     gchar *filename = g_build_filename(INKSCAPE_UIDIR, "keybindings.rc", NULL);
     Gtk::AccelMap::load(filename);
@@ -933,7 +937,7 @@ Editor::EditorImpl::initAccelMap()
 }
 
 void
-Editor::EditorImpl::initMenuBar()
+Edit::initMenuBar()
 {
     g_assert(_ui_mgr);
     Gtk::MenuBar *menu = static_cast<Gtk::MenuBar*>(_ui_mgr->get_widget("/MenuBar"));
@@ -942,7 +946,7 @@ Editor::EditorImpl::initMenuBar()
 }
 
 void
-Editor::EditorImpl::initCommandsBar()
+Edit::initCommandsBar()
 {
     g_assert(_ui_mgr);
     Toolbox *bar = new Toolbox(static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/CommandsBar")),
@@ -952,7 +956,7 @@ Editor::EditorImpl::initCommandsBar()
 }
 
 void
-Editor::EditorImpl::initToolControlsBar()
+Edit::initToolControlsBar()
 {
     // TODO: Do UIManager controlled widgets need to be deleted?
     _select_ctrl = static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/SelectControlsBar"));
@@ -964,7 +968,7 @@ Editor::EditorImpl::initToolControlsBar()
 }
 
 void
-Editor::EditorImpl::initUriBar()
+Edit::initUriBar()
 {
     // TODO:  Create an Inkscape::UI::Widget::UriBar class (?)
 
@@ -975,13 +979,13 @@ Editor::EditorImpl::initUriBar()
     _uri_ctrl->add(_uri_entry);
 
     _uri_entry.signal_activate()
-        .connect_notify(sigc::mem_fun(*this, &Editor::EditorImpl::onUriChanged));
+        .connect_notify(sigc::mem_fun(*this, &Edit::onUriChanged));
 
     _toolbars_vbox.pack_start(*Gtk::manage(_uri_ctrl), Gtk::PACK_SHRINK);
 }
 
 void
-Editor::EditorImpl::initToolsBar()
+Edit::initToolsBar()
 {
     Toolbox *bar = new Toolbox(static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/ToolsBar")),
                                Gtk::TOOLBAR_ICONS,
@@ -991,7 +995,7 @@ Editor::EditorImpl::initToolsBar()
 }
 
 void
-Editor::EditorImpl::initTopRuler()
+Edit::initTopRuler()
 {
     _viewport_table.attach(_top_ruler,  1, 2, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
     _top_ruler.set_metric(Gtk::PIXELS);
@@ -999,7 +1003,7 @@ Editor::EditorImpl::initTopRuler()
 }
 
 void
-Editor::EditorImpl::initLeftRuler()
+Edit::initLeftRuler()
 {
     _viewport_table.attach(_left_ruler, 0, 1, 1, 2, Gtk::SHRINK, Gtk::FILL|Gtk::EXPAND);
     _left_ruler.set_metric(Gtk::PIXELS);
@@ -1007,21 +1011,100 @@ Editor::EditorImpl::initLeftRuler()
 }
 
 void
-Editor::EditorImpl::initBottomScrollbar()
+Edit::initBottomScrollbar()
 {
     _viewport_table.attach(_bottom_scrollbar, 1, 2, 2, 3, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
 }
 
 void
-Editor::EditorImpl::initRightScrollbar()
+Edit::initRightScrollbar()
 {
     _viewport_table.attach(_right_scrollbar, 2, 3, 1, 2, Gtk::SHRINK, Gtk::FILL|Gtk::EXPAND);
 }
 
+int editor_root_handler(SPCanvasItem *item, GdkEvent *event, Edit *editor) {
+    return sp_event_context_root_handler(editor->event_context, event);
+}
+
+int editor_item_handler(SPCanvasItem *item, GdkEvent *event, gpointer data) {
+    gpointer ddata = gtk_object_get_data (GTK_OBJECT (item->canvas), "Editor");
+    g_return_val_if_fail (ddata != NULL, FALSE);
+
+    Edit *editor = (Edit*)ddata;
+
+    return sp_event_context_item_handler (editor->event_context, SP_ITEM (data), event);
+}
+
+int editor_arena_handler(SPCanvasItem *arena, NRArenaItem *ai, GdkEvent *event, Edit *editor) {
+    if (ai) {
+        SPItem *spi = (SPItem*)NR_ARENA_ITEM_GET_DATA (ai);
+        return sp_event_context_item_handler (editor->event_context, spi, event);
+    } else {
+        return sp_event_context_root_handler (editor->event_context, event);
+    }
+}
+
+void editor_namedview_modified(SPNamedView *nv, guint flags, Edit *editor) {
+    /* TODO 
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+
+        // Recalculate snap distances
+        sp_dt_update_snap_distances (desktop);
+
+        // Show/hide page background
+        if (nv->pagecolor & 0xff) {
+            sp_canvas_item_show (desktop->table);
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000,
+                                   TRUE, nv->pagecolor);
+            sp_canvas_item_move_to_z (desktop->table, 0);
+        } else {
+            sp_canvas_item_hide (desktop->table);
+        }
+        // Show/hide page border
+        if (nv->showborder) {
+            // show
+            sp_canvas_item_show (desktop->page_border);
+            // set color and shadow
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border,
+                                   nv->bordercolor, FALSE, 0x00000000);
+            if (nv->pageshadow)
+                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border,
+                                        nv->pageshadow, nv->bordercolor);
+            // place in the z-order stack
+            if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
+                sp_canvas_item_move_to_z (desktop->page_border, 2);
+            } else {
+                int order = sp_canvas_item_order (desktop->page_border);
+                int morder = sp_canvas_item_order (desktop->drawing);
+                if (morder > order) sp_canvas_item_raise (desktop->page_border,
+                                                          morder - order);
+            }
+        } else {
+            sp_canvas_item_hide (desktop->page_border);
+            if (nv->pageshadow)
+                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0,
+                                        0x00000000);
+        }
+
+        // Show/hide page shadow
+        if (nv->showpageshadow && nv->pageshadow) {
+            // show
+            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border,
+                                    nv->pageshadow, nv->bordercolor);
+        } else {
+            // hide
+            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 0,
+                                    0x00000000);
+        }
+    }
+    */
+}
+
+
 /** Replaces sp_desktop_init() and sp_desktop_new() from the Gtk+ codebase
  */
 void
-Editor::EditorImpl::initSvgCanvas()
+Edit::initSvgCanvas()
 {
     GtkWidget* canvas = (GtkWidget*)gtk_type_new (sp_canvas_get_type ());
     _svg_canvas = Glib::wrap(canvas);
@@ -1032,22 +1115,24 @@ Editor::EditorImpl::initSvgCanvas()
     style->set_bg(Gtk::STATE_NORMAL, style->get_white());
     _svg_canvas->set_style(style);
 
-/* TODO - Gtkmmify (100 lines initially - can this be shortened?)
     // Connect document
-    sp_view_set_document(SP_VIEW(desktop), document);
+    setDocument(_document);
+    _namedview = sp_document_namedview(_document, NULL);
     
-    // OLD:  sp_desktop_set_namedview(desktop, namedview);
-    _namedview = namedview;
-    g_signal_connect(G_OBJECT(namedview), "modified", G_CALLBACK(sp_dt_namedview_modified), desktop);
-    _number = sp_namedview_viewcount(namedview);
+/* TODO - Gtkmmify
+    g_signal_connect(G_OBJECT(_namedview), "modified", G_CALLBACK(sp_dt_namedview_modified), desktop);
+*/
+    _number = sp_namedview_viewcount(_namedview);
 
-    SPCanvasGroup *root = sp_canvas_root(canvas);
+    SPCanvasGroup *root = sp_canvas_root((SPCanvas*)canvas);
 
     // Setup the infinite-dimensioned 'Acetate' object (a SPCanvasItem)
-    _acetate = sp_canvas_item_new(_root, GNOME_TYPE_CANVAS_ACETATE, NULL);
-    g_signal_connect(G_OBJECT(_acetate), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+    _acetate = sp_canvas_item_new(root, GNOME_TYPE_CANVAS_ACETATE, NULL);
+    g_signal_connect(G_OBJECT(_acetate), "event", G_CALLBACK(editor_root_handler), this);
     _main = (SPCanvasGroup *) sp_canvas_item_new(root, SP_TYPE_CANVAS_GROUP, NULL);
+/*
     g_signal_connect(G_OBJECT(_main), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
+*/
 
     // Set up the 'table' SPCanvasItem for outside-of-page background
     _table = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
@@ -1058,10 +1143,11 @@ Editor::EditorImpl::initSvgCanvas()
     // Set up the page for the inside-of-page background
     _page = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
     sp_ctrlrect_set_color ((SPCtrlRect *) _page, 0x00000000, FALSE, 0x00000000);
-    desktop->page_border = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
+    _page_border = sp_canvas_item_new (_main, SP_TYPE_CTRLRECT, NULL);
 
     // Set up the drawing SPCanvasItem
     _drawing = sp_canvas_item_new (_main, SP_TYPE_CANVAS_ARENA, NULL);
+/* Gtkmmify
     g_signal_connect (G_OBJECT (_drawing), "arena_event", G_CALLBACK (arena_handler), desktop);
 */
     // Set up the grid, guides, sketc, and controls
@@ -1079,10 +1165,11 @@ Editor::EditorImpl::initSvgCanvas()
     // call "set" instead of "push".  Can we assume that there is only one
     // context ever?
     sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
+*/
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
-    sp_ctrlrect_set_area (SP_CTRLRECT (_page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
-    sp_ctrlrect_set_area (SP_CTRLRECT (_page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+    sp_ctrlrect_set_area (SP_CTRLRECT (_page), 0.0, 0.0, sp_document_width (_document), sp_document_height (_document));
+    sp_ctrlrect_set_area (SP_CTRLRECT (_page_border), 0.0, 0.0, sp_document_width (_document), sp_document_height (_document));
 
     // the following sets the page shadow on the canvas
     // It was originally set to 5, which is really cheesy!
@@ -1093,7 +1180,6 @@ Editor::EditorImpl::initSvgCanvas()
         sp_ctrlrect_set_shadow (SP_CTRLRECT (_page_border),
                                 _namedview->pageshadow, 0x3f3f3fff);
     }
-*/
 
 /** TODO
     // Connect event for page resize
@@ -1115,16 +1201,19 @@ Editor::EditorImpl::initSvgCanvas()
             desktop
             )
         );
+*/
 
     // Display the arena portion of the document
-    NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))),
+    NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (_document)),
                                            SP_CANVAS_ARENA (_drawing)->arena, _dkey, SP_ITEM_SHOW_DISPLAY);
     if (ai) {
         nr_arena_item_add_child (SP_CANVAS_ARENA (_drawing)->root, ai, NULL);
         nr_arena_item_unref (ai);
     }
 
+/*
     sp_namedview_show (_namedview, desktop);
+
     // Ugly hack
     sp_desktop_activate_guides (desktop, TRUE);
     // Ugly hack
@@ -1141,12 +1230,13 @@ Editor::EditorImpl::initSvgCanvas()
 }
 
 void
-Editor::EditorImpl::initStatusbar()
+Edit::initStatusbar()
 {
     _main_window_table.attach(_statusbar, 0, 1, 3, 4, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
 }
 
-} // namespace NSApplication
+} // namespace View
+} // namespace UI
 } // namespace Inkscape
 
 /*
