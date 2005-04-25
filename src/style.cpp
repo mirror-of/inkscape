@@ -154,6 +154,8 @@ static gint sp_style_write_ifontsize(gchar *p, gint len, gchar const *key, SPIFo
 static gint sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key, SPILengthOrNormal const *const val, SPILengthOrNormal const *const base, guint const flags);
 static gint sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key, SPITextDecoration const *const val, SPITextDecoration const *const base, guint const flags);
 
+void css2_unescape_unquote (SPIString *val);
+
 static void sp_style_paint_clear(SPStyle *style, SPIPaint *paint, unsigned hunref, unsigned unset);
 
 #define SPS_READ_IENUM_IF_UNSET(v,s,d,i) if (!(v)->set) {sp_style_read_ienum((v), (s), (d), (i));}
@@ -632,6 +634,7 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         if (val) {
             if (!style->text_private) sp_style_privatize_text(style);
             sp_style_read_istring(&style->text->font_family, val);
+            css2_unescape_unquote(&style->text->font_family);
         }
     }
 
@@ -713,6 +716,7 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             if (!style->text_private) sp_style_privatize_text(style);
             if (!style->text->font_family.set) {
                 sp_style_read_istring(&style->text->font_family, val);
+                css2_unescape_unquote (&style->text->font_family);
             }
             break;
         case SP_PROP_FONT_SIZE:
@@ -3452,6 +3456,25 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
     sp_css_attr_scale_property_single(css, "line-height", ex, true);
 
     return css;
+}
+
+
+// FIXME: now used for font family, but perhaps this should apply to ALL strings (check CSS spec),
+// in which case this should be part of read_istring
+void
+css2_unescape_unquote (SPIString *val)
+{
+    if (val->set && val->value && strlen(val->value) >= 2) {
+
+       //TODO: unescape all \-escaped chars
+
+        int l = strlen(val->value);
+        if ((val->value[0] == '"' && val->value[l - 1] == '"') || 
+            (val->value[0] == '\'' && val->value[l - 1] == '\'')) {
+                memcpy (val->value, val->value+1, l - 2);
+                val->value[l - 2] = '\0';
+        }
+    }
 }
 
 
