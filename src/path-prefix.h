@@ -46,7 +46,7 @@ extern "C" {
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
 #    define INKSCAPE_PLUGINDIR    "plugins"
 #    define INKSCAPE_TEMPLATESDIR "share\\templates"
-#    define INKSCAPE_UIDIR        "share\\ui"
+#    define INKSCAPE_UIDIR        INKSCAPE_DATADIR "\\share\\ui"
 #  elif defined ENABLE_OSX_APP_LOCATIONS
 #    define INKSCAPE_APPICONDIR   "Inkscape.app/Contents/Resources/pixmaps"
 #    define INKSCAPE_EXTENSIONDIR "Inkscape.app/Contents/Resources/extensions"
