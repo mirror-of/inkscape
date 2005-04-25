@@ -1,3 +1,20 @@
+2005-04-24  Bryce Harrington <bryce@bryceharrington.org>
+
+ 	* src/Makefile.am src/Makefile_insert,
+	  src/application/Makefile_insert, src/application/editor.cpp,
+	  src/application/editor.h, src/extension/internal/svg.cpp,
+	  src/ui/Makefile_insert, src/ui/view/Makefile_insert,
+	  src/ui/view/edit.cpp, src/ui/view/edit.h, src/ui/view/makefile.in,
+	  src/application/editor-impl.cpp, src/application/editor-impl.h:
+
+	  Renaming EditorImpl to UI::View::Edit
+
+	  Fixing bug 1185873 "batch mode crasher" caused by VFS being
+	  called with relative paths.  Adding a check to see whether the
+	  input is a valid uri, and if not, just calling sp_document_new
+	  directly.
+	 
+
 2005-04-23  Ted Gould  <ted@gould.cx>
 
 	* src/extension/input.cpp, src/extension/input.h,
