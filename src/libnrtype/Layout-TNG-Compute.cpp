@@ -393,6 +393,7 @@ class Layout::Calculator
             }
             if (style->object->parent == NULL) break;
             style = style->object->parent->style;
+            if (style == NULL) break;
         }
         *line_height_multiplier = LINE_HEIGHT_NORMAL * font_size / line_height->total();
     }

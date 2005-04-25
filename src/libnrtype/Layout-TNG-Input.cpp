@@ -141,6 +141,7 @@ float Layout::InputStreamTextSource::styleComputeFontSize() const
         }
         if (this_style->object->parent == NULL) break;
         this_style = this_style->object->parent->style;
+        if (this_style == NULL) break;
     }
     return medium_font_size * inherit_multiplier;
 }
@@ -186,6 +187,7 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
         }
         if (this_style->object->parent == NULL) break;
         this_style = this_style->object->parent->style;
+        if (this_style == NULL) break;
     }
     return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
 }
