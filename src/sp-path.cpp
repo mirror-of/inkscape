@@ -110,6 +110,7 @@ gint
 sp_nodes_in_path(SPPath *path)
 {
     SPCurve *curve = SP_SHAPE(path)->curve;
+    if (!curve) return 0;
     gint r = curve->end;
     gint i = curve->length - 1;
     if (i > r) i = r; // sometimes after switching from node editor length is wrong, e.g. f6 - draw - f2 - tab - f1, this fixes it
@@ -327,6 +328,10 @@ static NR::Matrix
 sp_path_set_transform(SPItem *item, NR::Matrix const &xform)
 {
     SPShape *shape = (SPShape *) item;
+
+    if (!shape->curve) { // 0 nodes, nothing to transform
+        return NR::identity();
+    }
 
     /* Transform the path */
     NRBPath dpath, spath;
