@@ -19,6 +19,7 @@
 #include "desktop.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
+#include "selection.h"
 #include "draw-anchor.h"
 #include "draw-context.h"
 #include "prefs-utils.h"
@@ -317,6 +318,12 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                                 /* Adjust point to anchor if needed */
                                 p = anchor->dp;
                             } else {
+
+                                // This is the first click of a new curve; deselect item so that
+                                // this curve is not combined with it (unless it is drawn from its
+                                // anchor, which is handled by the sibling branch above)
+                                SP_DT_SELECTION(desktop)->clear();
+
                                 /* Create green anchor */
                                 p = event_dt;
                                 /* This is the first point, so just snap it to the grid as there's
@@ -332,11 +339,15 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                             /* Set end anchor */
                             pc->ea = anchor;
                             NR::Point p;
-                            if (anchor) {   /* Snap node only if not hitting anchor. */
+                            if (anchor) {   
                                 p = anchor->dp;
-                            } else {
+                                // we hit an anchor, will finish the curve (either with or without closing) in release handler
+                                pc->state = SP_PEN_CONTEXT_CLOSE;
+                                ret = TRUE;
+                                break;
+                            } else { 
                                 p = event_dt;
-                                spdc_endpoint_snap(pc, p, bevent.state);
+                                spdc_endpoint_snap(pc, p, bevent.state); /* Snap node only if not hitting anchor. */
                             }
                             spdc_pen_set_subsequent_point(pc, p);
                             if ( pc->green_anchor && pc->green_anchor->active ) {
@@ -542,7 +553,14 @@ pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent)
                     case SP_PEN_CONTEXT_CLOSE:
                         spdc_endpoint_snap(pc, p, revent.state);
                         spdc_pen_finish_segment(pc, p, revent.state);
-                        spdc_pen_finish(pc, TRUE);
+                        if (pc->green_anchor) {
+                            // finishing at the start anchor, close curve
+                            spdc_pen_finish(pc, TRUE);
+                        } else {
+                            // finishing at some other anchor, finish curve but not close
+                            spdc_pen_finish(pc, FALSE);
+                        }
+                        //spdc_pen_finish(pc, TRUE);
                         break;
                     case SP_PEN_CONTEXT_STOP:
                         /* This is allowed, if we just cancelled curve */

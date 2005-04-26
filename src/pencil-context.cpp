@@ -19,6 +19,7 @@
 #include "desktop.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
+#include "selection.h"
 #include "draw-anchor.h"
 #include "draw-context.h"
 #include "modifier-fns.h"
@@ -202,6 +203,12 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                 if (anchor) {
                     p = anchor->dp;
                 } else if (!(bevent.state & GDK_SHIFT_MASK)) {
+
+                    // This is the first click of a new curve; deselect item so that
+                    // this curve is not combined with it (unless it is drawn from its
+                    // anchor, which is handled by the sibling branch above)
+                    SP_DT_SELECTION(desktop)->clear();
+
                     namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
                 }
                 pc->sa = anchor;
