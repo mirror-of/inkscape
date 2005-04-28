@@ -132,7 +132,17 @@ void Panel::bounceCall(int i, int j)
             break;
             case 1:
             {
+                _fillable->setStyle(Gtk::ICON_SIZE_SMALL_TOOLBAR, currType);
+            }
+            break;
+            case 2:
+            {
                 _fillable->setStyle(Gtk::ICON_SIZE_BUTTON, currType);
+            }
+            break;
+            case 3:
+            {
+                _fillable->setStyle(Gtk::ICON_SIZE_DIALOG, currType);
             }
             break;
             default:
