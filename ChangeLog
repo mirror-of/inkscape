@@ -1,6 +1,14 @@
+2005-04-28  Jon A. Cruz  <jon@joncruz.org>
+	* src/dialogs/Makefile_insert, src/dialogs/eek-preview.cpp,
+	  src/dialogs/eek-preview.h, src/dialogs/swatches.cpp,
+	  src/dialogs/swatches.h, src/ui/previewholder.cpp,
+	  src/ui/previewable.h, src/ui/widget/panel.cpp:
+
+	  Adding new widget for color swatch usage.
+
 2005-04-24  Bryce Harrington <bryce@bryceharrington.org>
 
- 	* src/Makefile.am src/Makefile_insert,
+	* src/Makefile.am src/Makefile_insert,
 	  src/application/Makefile_insert, src/application/editor.cpp,
 	  src/application/editor.h, src/extension/internal/svg.cpp,
 	  src/ui/Makefile_insert, src/ui/view/Makefile_insert,
@@ -13,7 +21,7 @@
 	  called with relative paths.  Adding a check to see whether the
 	  input is a valid uri, and if not, just calling sp_document_new
 	  directly.
-	 
+
 
 2005-04-23  Ted Gould  <ted@gould.cx>
 
