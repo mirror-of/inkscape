@@ -130,7 +130,7 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_SODIPODI_RADIUS, "sodipodi:radius"},
 	{SP_ATTR_SODIPODI_ARGUMENT, "sodipodi:argument"},
 	{SP_ATTR_SODIPODI_T0, "sodipodi:t0"},
-  /* SPOffset */
+	/* SPOffset */
  	{SP_ATTR_SODIPODI_ORIGINAL, "sodipodi:original"},
  	{SP_ATTR_INKSCAPE_ORIGINAL, "inkscape:original"},
  	{SP_ATTR_INKSCAPE_HREF, "inkscape:href"},
@@ -149,8 +149,8 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_SODIPODI_ROLE, "sodipodi:role"},
 	/* SPText */
 	{SP_ATTR_SODIPODI_LINESPACING, "sodipodi:linespacing"},
-    /* SPTextPath */
-    {SP_ATTR_STARTOFFSET, "startOffset"},
+	/* SPTextPath */
+	{SP_ATTR_STARTOFFSET, "startOffset"},
 	/* SPStop */
 	{SP_ATTR_OFFSET, "offset"},
 	/* SPGradient */
@@ -201,16 +201,16 @@ static const SPStyleProp props[] = {
 	/* XML */
 	{SP_ATTR_XML_SPACE, "xml:space"},
 
-  /* typeset */
-  {SP_ATTR_TEXT_NOMARKUP, "inkscape:srcNoMarkup"},
-  {SP_ATTR_TEXT_PANGOMARKUP, "inkscape:srcPango" },
-  {SP_ATTR_TEXT_INSHAPE, "inkscape:dstShape"},
-  {SP_ATTR_TEXT_ONPATH, "inkscape:dstPath"},
-  {SP_ATTR_TEXT_INBOX,"inkscape:dstBox"},
-  {SP_ATTR_TEXT_INCOLUMN,"inkscape:dstColumn"},
-  {SP_ATTR_TEXT_EXCLUDE,"inkscape:excludeShape"},
-  {SP_ATTR_LAYOUT_OPTIONS,"inkscape:layoutOptions"},
-    
+	/* typeset */
+	{SP_ATTR_TEXT_NOMARKUP, "inkscape:srcNoMarkup"},
+	{SP_ATTR_TEXT_PANGOMARKUP, "inkscape:srcPango" },
+	{SP_ATTR_TEXT_INSHAPE, "inkscape:dstShape"},
+	{SP_ATTR_TEXT_ONPATH, "inkscape:dstPath"},
+	{SP_ATTR_TEXT_INBOX,"inkscape:dstBox"},
+	{SP_ATTR_TEXT_INCOLUMN,"inkscape:dstColumn"},
+	{SP_ATTR_TEXT_EXCLUDE,"inkscape:excludeShape"},
+	{SP_ATTR_LAYOUT_OPTIONS,"inkscape:layoutOptions"},
+
 	/* CSS2 */
 	/* Font */
 	{SP_PROP_FONT, "font"},
@@ -292,8 +292,9 @@ static const SPStyleProp props[] = {
 
 #define n_attrs (sizeof (props) / sizeof (props[0]))
 
-unsigned int
-sp_attribute_lookup (const gchar *key)
+/** Returns an SPAttributeEnum; SP_ATTR_INVALID (of value 0) if key isn't recognized. */
+unsigned
+sp_attribute_lookup(gchar const *key)
 {
 	static GHashTable *propdict = NULL;
 
