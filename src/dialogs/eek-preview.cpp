@@ -115,8 +115,10 @@ static guint eek_preview_signals[LAST_SIGNAL] = { 0 };
 gboolean eek_preview_expose_event( GtkWidget* widget, GdkEventExpose* event )
 {
 /*     g_message("Exposed!!!   %s", GTK_WIDGET_HAS_FOCUS(widget) ? "XXX" : "---" ); */
-    gint insetX = 1;
-    gint insetY = 1;
+    gint insetX = 0;
+    gint insetY = 0;
+
+/*
     gint lower = widget->allocation.width;
     lower = (widget->allocation.height < lower) ? widget->allocation.height : lower;
     if ( lower > 16 ) {
@@ -135,19 +137,22 @@ gboolean eek_preview_expose_event( GtkWidget* widget, GdkEventExpose* event )
         }
         insetY = insetX;
     }
+*/
 
     if ( GTK_WIDGET_DRAWABLE( widget ) ) {
         GtkStyle* style = gtk_widget_get_style( widget );
 
-        gtk_paint_flat_box( style,
-                            widget->window,
-                            (GtkStateType)GTK_WIDGET_STATE(widget),
-                            GTK_SHADOW_NONE,
-                            NULL,
-                            widget,
-                            NULL,
-                            0, 0,
-                            widget->allocation.width, widget->allocation.height);
+        if ( insetX > 0 || insetY > 0 ) {
+            gtk_paint_flat_box( style,
+                                widget->window,
+                                (GtkStateType)GTK_WIDGET_STATE(widget),
+                                GTK_SHADOW_NONE,
+                                NULL,
+                                widget,
+                                NULL,
+                                0, 0,
+                                widget->allocation.width, widget->allocation.height);
+        }
 
         GdkGC *gc = gdk_gc_new( widget->window );
         EekPreview* preview = EEK_PREVIEW(widget);
