@@ -55,13 +55,13 @@ void PreviewHolder::addPreview( Previewable* preview )
 
     int i = items.size() - 1;
     if ( _view == VIEW_TYPE_LIST ) {
-        Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, _baseSize));
-        Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
+        Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, VIEW_TYPE_LIST, _baseSize));
+        Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_LIST, _baseSize));
 
         _insides->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
         _insides->attach( *label, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
     } else {
-        Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
+        Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_GRID, _baseSize));
         int width = _baseSize == Gtk::ICON_SIZE_MENU ? 16 : 8;
         int col = i % width;
         int row = i / width;
@@ -96,10 +96,10 @@ void PreviewHolder::rebuildUI()
         stuff->set_col_spacings( 8 );
 
         for ( unsigned int i = 0; i < items.size(); i++ ) {
-            Gtk::Widget* label = manage(items[i]->getPreview(PREVIEW_STYLE_BLURB, _baseSize));
+            Gtk::Widget* label = manage(items[i]->getPreview(PREVIEW_STYLE_BLURB, _view, _baseSize));
             //label->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
 
-            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
+            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize));
 
             stuff->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
             stuff->attach( *label, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
@@ -118,7 +118,7 @@ void PreviewHolder::rebuildUI()
         int row = 0;
 
         for ( unsigned int i = 0; i < items.size(); i++ ) {
-            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
+            Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize));
 
             stuff->attach( *thing, col, col+1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
             col++;

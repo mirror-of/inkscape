@@ -20,7 +20,7 @@ namespace Inkscape {
 namespace UI {
 
 typedef enum {
-    PREVIEW_STYLE_ICON,
+    PREVIEW_STYLE_ICON = 0,
     PREVIEW_STYLE_PREVIEW,
     PREVIEW_STYLE_NAME,
     PREVIEW_STYLE_BLURB,
@@ -31,7 +31,7 @@ typedef enum {
 } PreviewStyle;
 
 typedef enum {
-    VIEW_TYPE_LIST,
+    VIEW_TYPE_LIST = 0,
     VIEW_TYPE_GRID
 } ViewType;
 
@@ -40,7 +40,7 @@ class Previewable
 public:
 // TODO need to add some nice parameters
     virtual ~Previewable() {}
-    virtual Gtk::Widget* getPreview( PreviewStyle style, Gtk::BuiltinIconSize size ) = 0;
+    virtual Gtk::Widget* getPreview( PreviewStyle style, ViewType view, Gtk::BuiltinIconSize size ) = 0;
 };
 
 
