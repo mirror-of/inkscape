@@ -53,6 +53,7 @@ struct SPDrawContext : public SPEventContext{
     GSList *green_bpaths;
     SPCurve *green_curve;
     SPDrawAnchor *green_anchor;
+    gboolean green_closed; // a flag meaning we hit the green anchor, so close the path on itself
 
     /* White */
     SPItem *white_item;

@@ -32,9 +32,6 @@ sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point 
 {
     SPDesktop *dt = SP_EVENT_CONTEXT_DESKTOP(dc);
 
-    dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Creating anchor at (%g,%g)"),
-                               delta[NR::X], delta[NR::Y]);
-
     SPDrawAnchor *a = g_new(SPDrawAnchor, 1);
 
     a->dc = dc;

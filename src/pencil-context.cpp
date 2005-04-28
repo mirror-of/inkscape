@@ -24,6 +24,7 @@
 #include "draw-context.h"
 #include "modifier-fns.h"
 #include "sp-item.h"
+#include "sp-path.h"
 #include "prefs-utils.h"
 #include "snap.h"
 #include "display/bezier-utils.h"
@@ -202,14 +203,21 @@ pencil_handle_button_press(SPPencilContext *const pc, GdkEventButton const &beve
                 /* Set first point of sequence */
                 if (anchor) {
                     p = anchor->dp;
-                } else if (!(bevent.state & GDK_SHIFT_MASK)) {
+                    SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+                } else {
 
-                    // This is the first click of a new curve; deselect item so that
-                    // this curve is not combined with it (unless it is drawn from its
-                    // anchor, which is handled by the sibling branch above)
-                    SP_DT_SELECTION(desktop)->clear();
+                    if (!(bevent.state & GDK_SHIFT_MASK)) {
 
-                    namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
+                        // This is the first click of a new curve; deselect item so that
+                        // this curve is not combined with it (unless it is drawn from its
+                        // anchor, which is handled by the sibling branch above)
+                        SP_DT_SELECTION(desktop)->clear();
+                        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new path"));
+
+                        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
+                    } else if (SP_DT_SELECTION(desktop)->singleItem() && SP_IS_PATH(SP_DT_SELECTION(desktop)->singleItem())) {
+                        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selected path"));
+                    }
                 }
                 pc->sa = anchor;
                 spdc_set_startpoint(pc, p);

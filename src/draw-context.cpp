@@ -55,13 +55,10 @@ static void sp_draw_context_finish(SPEventContext *ec);
 
 static gint sp_draw_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 
-static void spdc_set_attach(SPDrawContext *dc, gboolean attach);
-
 static void spdc_selection_changed(Inkscape::Selection *sel, SPDrawContext *dc);
 static void spdc_selection_modified(Inkscape::Selection *sel, guint flags, SPDrawContext *dc);
 
 static void spdc_attach_selection(SPDrawContext *dc, Inkscape::Selection *sel);
-static void spdc_detach_selection(SPDrawContext *dc, Inkscape::Selection *sel);
 
 static void spdc_flush_white(SPDrawContext *dc, SPCurve *gc);
 
@@ -183,8 +180,10 @@ sp_draw_context_setup(SPEventContext *ec)
     dc->green_curve = sp_curve_new_sized(64);
     /* No green anchor by default */
     dc->green_anchor = NULL;
+    dc->green_closed = FALSE;
 
-    spdc_set_attach(dc, TRUE);
+    dc->attach = TRUE;
+    spdc_attach_selection(dc, dc->selection);
 }
 
 static void
@@ -222,17 +221,6 @@ sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
     switch (event->type) {
         case GDK_KEY_PRESS:
             switch (get_group0_keyval (&event->key)) {
-                case GDK_A:
-                case GDK_a:
-                    if (!MOD__CTRL && !MOD__SHIFT && !MOD__ALT) {
-                        if (dc->attach) {
-                            spdc_set_attach(dc, FALSE);
-                        } else {
-                            spdc_set_attach(dc, TRUE);
-                        }
-                        ret = TRUE;
-                    }
-                    break;
                 case GDK_Escape:
                     SP_DT_SELECTION(desktop)->clear();
                     ret = TRUE;
@@ -275,19 +263,6 @@ sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
     return ret;
 }
 
-static void
-spdc_set_attach(SPDrawContext *dc, gboolean attach)
-{
-    if (attach) {
-        dc->attach = TRUE;
-        spdc_attach_selection(dc, dc->selection);
-        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Appending to selection"));
-    } else {
-        dc->attach = FALSE;
-        spdc_detach_selection(dc, dc->selection);
-        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new curve"));
-    }
-}
 
 /*
  * Selection handlers
@@ -352,14 +327,6 @@ spdc_attach_selection(SPDrawContext *dc, Inkscape::Selection *sel)
     }
 }
 
-static void
-spdc_detach_selection(SPDrawContext *dc, Inkscape::Selection *sel)
-{
-    /* We reset white and forget white/start/end anchors */
-    spdc_reset_white(dc);
-    dc->sa = NULL;
-    dc->ea = NULL;
-}
 
 /**
 \brief  Snaps node or handle to PI/rotationsnapsperpi degree increments
