@@ -42,6 +42,8 @@
 #include "io/sys.h"
 #include "path-prefix.h"
 
+#include "eek-preview.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Dialogs {
@@ -141,8 +143,21 @@ gboolean dragDropColorData( GtkWidget *widget,
     return TRUE;
 }
 
+static void bouncy( GtkWidget* widget, gpointer callback_data ) {
+    ColorItem* item = reinterpret_cast<ColorItem*>(callback_data);
+    if ( item ) {
+        item->buttonClicked(false);
+    }
+}
 
-Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size)
+static void bouncy2( GtkWidget* widget, gint arg1, gpointer callback_data ) {
+    ColorItem* item = reinterpret_cast<ColorItem*>(callback_data);
+    if ( item ) {
+        item->buttonClicked(true);
+    }
+}
+
+Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, Gtk::BuiltinIconSize size)
 {
     Gtk::Widget* widget = 0;
     if ( style == PREVIEW_STYLE_BLURB ) {
@@ -155,6 +170,15 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size
             blank = " ";
         }
 
+        GtkWidget* eekWidget = eek_preview_new();
+        EekPreview * preview = EEK_PREVIEW(eekWidget);
+        Gtk::Widget* newBlot = Glib::wrap(eekWidget);
+
+        eek_preview_set_color( preview, (_r << 8)|_r, (_g << 8)|_g, (_b << 8)|_b);
+
+        eek_preview_set_details( preview, (::PreviewStyle)style, (::ViewType)view, (::GtkIconSize)size );
+
+/*
         Gtk::Button *btn = new Gtk::Button(blank);
         Gdk::Color color;
         color.set_rgb((_r << 8)|_r, (_g << 8)|_g, (_b << 8)|_b);
@@ -163,36 +187,53 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size
         btn->modify_bg(Gtk::STATE_PRELIGHT, color);
         btn->modify_bg(Gtk::STATE_SELECTED, color);
 
-        tips.set_tip((*btn), _name);
+        Gtk::Widget* newBlot = btn;
+*/
 
-        btn->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
+        tips.set_tip((*newBlot), _name);
 
-        gtk_drag_source_set( GTK_WIDGET(btn->gobj()),
+/*
+        newBlot->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
+
+        sigc::signal<void> type_signal_something;
+*/
+        g_signal_connect( G_OBJECT(newBlot->gobj()),
+                          "clicked",
+                          G_CALLBACK(bouncy),
+                          this);
+
+        g_signal_connect( G_OBJECT(newBlot->gobj()),
+                          "alt-clicked",
+                          G_CALLBACK(bouncy2),
+                          this);
+
+        gtk_drag_source_set( GTK_WIDGET(newBlot->gobj()),
                              GDK_BUTTON1_MASK,
                              color_entries,
                              G_N_ELEMENTS(color_entries),
                              GdkDragAction(GDK_ACTION_MOVE | GDK_ACTION_COPY) );
 
-        g_signal_connect( G_OBJECT(btn->gobj()),
+        g_signal_connect( G_OBJECT(newBlot->gobj()),
                           "drag-data-get",
                           G_CALLBACK(dragGetColorData),
                           this);
 
-        g_signal_connect( G_OBJECT(btn->gobj()),
+        g_signal_connect( G_OBJECT(newBlot->gobj()),
                           "drag-drop",
                           G_CALLBACK(dragDropColorData),
                           this);
 
-        widget = btn;
+        widget = newBlot;
     }
 
     return widget;
 }
 
-void ColorItem::buttonClicked()
+void ColorItem::buttonClicked(bool secondary)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
+        char const * attrName = secondary ? "stroke" : "fill";
         guint32 rgba = (_r << 24) | (_g << 16) | (_b << 8) | 0xff;
         //g_object_set_data(G_OBJECT(cp), "color", GUINT_TO_POINTER(rgba));
         Inkscape::XML::Node *repr = SP_OBJECT_REPR(desktop->namedview);
@@ -200,11 +241,11 @@ void ColorItem::buttonClicked()
         gchar c[64];
         sp_svg_write_color(c, 64, rgba);
         if (repr)
-            sp_repr_set_attr(repr, "fill", c);
+            sp_repr_set_attr(repr, attrName, c);
 
 
         SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_set_property( css, "fill", c );
+        sp_repr_css_set_property( css, attrName, c );
         sp_desktop_set_style(desktop, css);
 
         sp_repr_css_attr_unref(css);
