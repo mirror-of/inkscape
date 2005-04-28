@@ -33,14 +33,15 @@ namespace Dialogs {
 class ColorItem : public Inkscape::UI::Previewable
 {
 public:
-    ColorItem( unsigned int r, unsigned int g, unsigned int b, 
-	       Glib::ustring& name );
+    ColorItem( unsigned int r, unsigned int g, unsigned int b,
+               Glib::ustring& name );
     virtual ~ColorItem();
     ColorItem(ColorItem const &other);
     virtual ColorItem &operator=(ColorItem const &other);
-    virtual Gtk::Widget* getPreview(PreviewStyle style, 
-		                    Gtk::BuiltinIconSize size);
-    void buttonClicked();
+    virtual Gtk::Widget* getPreview(PreviewStyle style,
+                                    ViewType view,
+                                    Gtk::BuiltinIconSize size);
+    void buttonClicked(bool secondary = false);
     unsigned int _r;
     unsigned int _g;
     unsigned int _b;
