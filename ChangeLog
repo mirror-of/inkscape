@@ -1,3 +1,9 @@
+2005-04-29  Jon A. Cruz  <jon@joncruz.org>
+	* src/dialogs/swatches.cpp, src/dialogs/eek-preview.h,
+	  src/dialogs/eek-preview.cpp:
+
+	Added property to swatch to block taking focus.
+
 2005-04-28  Jon A. Cruz  <jon@joncruz.org>
 	* src/dialogs/Makefile_insert, src/dialogs/eek-preview.cpp,
 	  src/dialogs/eek-preview.h, src/dialogs/swatches.cpp,

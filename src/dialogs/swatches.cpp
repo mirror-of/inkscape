@@ -178,6 +178,11 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, Gtk::Built
 
         eek_preview_set_details( preview, (::PreviewStyle)style, (::ViewType)view, (::GtkIconSize)size );
 
+        GValue val = {0};
+        g_value_init( &val, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &val, FALSE );
+        g_object_set_property( G_OBJECT(preview), "focus-on-click", &val );
+
 /*
         Gtk::Button *btn = new Gtk::Button(blank);
         Gdk::Color color;

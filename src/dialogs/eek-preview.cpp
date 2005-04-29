@@ -37,9 +37,13 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+#include <string.h>
 #include "eek-preview.h"
 
 #define PRIME_BUTTON_MAGIC_NUMBER 1
+
+#define FOCUS_PROP_ID 1
+
 
 
 static void eek_preview_class_init( EekPreviewClass *klass );
@@ -225,7 +229,7 @@ static gboolean eek_preview_button_press_cb( GtkWidget* widget, GdkEventButton* 
     if ( gtk_get_event_widget( (GdkEvent*)event ) == widget ) {
         EekPreview* preview = EEK_PREVIEW(widget);
 
-        if ( !GTK_WIDGET_HAS_FOCUS(widget) ) {
+        if ( preview->_takesFocus && !GTK_WIDGET_HAS_FOCUS(widget) ) {
             gtk_widget_grab_focus(widget);
         }
 
@@ -271,6 +275,53 @@ gboolean eek_preview_key_release_event( GtkWidget* widget, GdkEventKey* event)
     return FALSE;
 }
 
+static void eek_preview_get_property( GObject *object,
+                                      guint property_id,
+                                      GValue *value,
+                                      GParamSpec *pspec)
+{
+    GObjectClass* gobjClass = G_OBJECT_CLASS(parent_class);
+    switch ( property_id ) {
+        case FOCUS_PROP_ID:
+        {
+            EekPreview* preview = EEK_PREVIEW( object );
+            g_value_set_boolean( value, preview->_takesFocus );
+        }
+        break;
+        default:
+        {
+            if ( gobjClass->get_property ) {
+                gobjClass->get_property( object, property_id, value, pspec );
+            }
+        }
+    }
+}
+
+static void eek_preview_set_property( GObject *object,
+                                      guint property_id,
+                                      const GValue *value,
+                                      GParamSpec *pspec)
+{
+    GObjectClass* gobjClass = G_OBJECT_CLASS(parent_class);
+    switch ( property_id ) {
+        case FOCUS_PROP_ID:
+        {
+            EekPreview* preview = EEK_PREVIEW( object );
+            gboolean val = g_value_get_boolean( value );
+            if ( val != preview->_takesFocus ) {
+                preview->_takesFocus = val;
+            }
+        }
+        break;
+        default:
+        {
+            if ( gobjClass->set_property ) {
+                gobjClass->set_property( object, property_id, value, pspec );
+            }
+        }
+    }
+}
+
 
 static gboolean eek_preview_popup_menu( GtkWidget* widget )
 {
@@ -282,8 +333,12 @@ static gboolean eek_preview_popup_menu( GtkWidget* widget )
 
 static void eek_preview_class_init( EekPreviewClass *klass )
 {
+    GObjectClass* gobjClass = G_OBJECT_CLASS(klass);
     /*GtkObjectClass* objectClass = (GtkObjectClass*)klass;*/
     GtkWidgetClass* widgetClass = (GtkWidgetClass*)klass;
+
+    gobjClass->set_property = eek_preview_set_property;
+    gobjClass->get_property = eek_preview_get_property;
 
     /*objectClass->destroy = eek_preview_destroy;*/
 
@@ -355,6 +410,30 @@ static void eek_preview_class_init( EekPreviewClass *klass )
                       NULL, NULL,
                       g_cclosure_marshal_VOID__INT, G_TYPE_NONE,
                       1, G_TYPE_INT );
+
+
+    g_object_class_install_property( gobjClass,
+                                     FOCUS_PROP_ID,
+                                     g_param_spec_boolean(
+                                         "focus-on-click",
+                                         NULL,
+                                         "flag to grab focus when clicked",
+                                         TRUE,
+                                         (GParamFlags)(G_PARAM_READWRITE | G_PARAM_CONSTRUCT)
+                                         )
+        );
+}
+
+gboolean eek_preview_get_focus_on_click( EekPreview* preview )
+{
+    return preview->_takesFocus;
+}
+
+void eek_preview_set_focus_on_click( EekPreview* preview, gboolean focus_on_click )
+{
+    if ( focus_on_click != preview->_takesFocus ) {
+        preview->_takesFocus = focus_on_click;
+    }
 }
 
 void eek_preview_set_details( EekPreview* preview, PreviewStyle prevstyle, ViewType view, GtkIconSize size )
@@ -390,6 +469,7 @@ static void eek_preview_init( EekPreview *preview )
 
     preview->_hot = FALSE;
     preview->_within = FALSE;
+    preview->_takesFocus = FALSE;
 
     preview->_prevstyle = PREVIEW_STYLE_ICON;
     preview->_view = VIEW_TYPE_LIST;

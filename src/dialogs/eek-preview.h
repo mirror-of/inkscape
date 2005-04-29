@@ -83,6 +83,7 @@ struct _EekPreview
 
     gboolean _hot;
     gboolean _within;
+    gboolean _takesFocus;
 
     PreviewStyle _prevstyle;
     ViewType _view;
@@ -102,6 +103,9 @@ GtkWidget* eek_preview_new(void);
 
 void eek_preview_set_details( EekPreview* splat, PreviewStyle prevstyle, ViewType view, GtkIconSize size );
 void eek_preview_set_color( EekPreview* splat, int r, int g, int b );
+
+gboolean eek_preview_get_focus_on_click( EekPreview* preview );
+void eek_preview_set_focus_on_click( EekPreview* preview, gboolean focus_on_click );
 
 G_END_DECLS
 
