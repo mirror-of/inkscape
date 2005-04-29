@@ -138,7 +138,7 @@ static void sp_guideline_update(SPCanvasItem *item, NR::Matrix const &affine, un
         gl->position = (int) (affine[4] + 0.5);
         sp_canvas_update_bbox (item, gl->position, -1000000, gl->position + 1, 1000000);
     } else {
-        gl->position = (int) (affine[5] + 0.5);
+        gl->position = (int) (affine[5] - 0.5);
         sp_canvas_update_bbox (item, -1000000, gl->position, 1000000, gl->position + 1);
     }
 }
