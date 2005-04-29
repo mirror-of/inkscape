@@ -249,6 +249,7 @@ void ColorItem::buttonClicked(bool secondary)
         sp_desktop_set_style(desktop, css);
 
         sp_repr_css_attr_unref(css);
+        sp_document_done (SP_DT_DOCUMENT (desktop));
     }
 }
 
