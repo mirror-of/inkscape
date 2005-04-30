@@ -1451,7 +1451,7 @@ TutorialVerb::perform (SPAction *action, void * data, void * pdata)
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-calligraphy.svg"));
             break;
         case SP_VERB_TUTORIAL_DESIGN:
-            sp_help_open_tutorial (NULL, (gpointer)_("elementsofdesign.svg"));
+            sp_help_open_tutorial (NULL, (gpointer)_("tutorial-elements.svg"));
             break;
         case SP_VERB_TUTORIAL_TIPS:
             sp_help_open_tutorial (NULL, (gpointer)_("tipsandtricks.svg"));
