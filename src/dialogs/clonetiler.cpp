@@ -1416,7 +1416,7 @@ clonetiler_table_x_y_rand (int values)
         gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
 
         GtkWidget *l = gtk_label_new ("");
-        gtk_label_set_markup (GTK_LABEL(l), "<small>Per row:</small>");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>Per row:</small>"));
         gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 2);
 
         clonetiler_table_attach (table, hb, 0, 1, 2);
@@ -1429,7 +1429,7 @@ clonetiler_table_x_y_rand (int values)
         gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
 
         GtkWidget *l = gtk_label_new ("");
-        gtk_label_set_markup (GTK_LABEL(l), "<small>Per column:</small>");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>Per column:</small>"));
         gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 2);
 
         clonetiler_table_attach (table, hb, 0, 1, 3);
@@ -1437,7 +1437,7 @@ clonetiler_table_x_y_rand (int values)
 
     {
         GtkWidget *l = gtk_label_new ("");
-        gtk_label_set_markup (GTK_LABEL(l), "<small>Randomize:</small>");
+        gtk_label_set_markup (GTK_LABEL(l), _("<small>Randomize:</small>"));
         clonetiler_table_attach (table, l, 0, 1, 4);
     }
 
