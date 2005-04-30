@@ -892,8 +892,8 @@ sp_display_dialog (void)
              * close on the screen you need to be to an object to be able to grab it with mouse (in
              * pixels). */
             _("Grab sensitivity:"), 
-            _("How close on the screen you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
-            _("px"),
+            _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), tt,
+            _("pixels"),
             /* todo: allow real-world units. */
             vb,
             0.0, 30.0, 1.0, 1.0, 1.0,
@@ -937,8 +937,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("Scroll by:"), 
-            _("Pressing Ctrl+arrow key scrolls by this distance (in pixels)"), tt,
-            _("px"),
+            _("Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"), tt,
+            _("pixels"),
             vbvb,
             0.0, 1000.0, 1.0, 1.0, 1.0,
             "options.keyscroll", "value", 10.0,
@@ -977,8 +977,8 @@ sp_display_dialog (void)
 
         options_sb (
             _("Threshold:"), 
-            _("How far (in pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
-            _("px"),
+            _("How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
+            _("pixels"),
             vbvb,
             -600.0, 600.0, 1.0, 1.0, 1.0,
             "options.autoscrolldistance", "value", -10.0,
@@ -991,7 +991,7 @@ sp_display_dialog (void)
 
         options_sb (
             _("Arrow keys move by:"), 
-            _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in SVG pixels)"), tt,
+            _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in px units)"), tt,
             _("px"),
             vb,
             0.0, 3000.0, 0.01, 1.0, 1.0,
@@ -1002,7 +1002,7 @@ sp_display_dialog (void)
 
         options_sb (
             _("> and < scale by:"), 
-            _("Pressing > or < scales selection up or down by this increment (in SVG pixels)"), tt,
+            _("Pressing > or < scales selection up or down by this increment (in px units)"), tt,
             _("px"),
             vb,
             0.0, 3000.0, 0.01, 1.0, 1.0,
@@ -1013,7 +1013,7 @@ sp_display_dialog (void)
 
         options_sb (
             _("Inset/Outset by:"), 
-            _("Inset and Outset commands displace the path by this distance (in SVG pixels)"), tt,
+            _("Inset and Outset commands displace the path by this distance (in px units)"), tt,
             _("px"),
             vb,
             0.0, 3000.0, 0.01, 1.0, 1.0,
