@@ -556,19 +556,27 @@ void sp_selection_ungroup()
         return;
     }
 
+    GSList *items = g_slist_copy((GSList *) selection->itemList());
+    selection->clear();
+
     // Get a copy of current selection.
     GSList *new_select = NULL;
     bool ungrouped = false;
-    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
-         items != NULL;
-         items = items->next)
+    for (GSList *i = items;
+         i != NULL;
+         i = i->next)
     {
-        SPItem *group = (SPItem *) items->data;
+        SPItem *group = (SPItem *) i->data;
+
+        // when ungrouping cloned groups with their originals, some objects that were selected may no more exist due to unlinking
+        if (!SP_IS_OBJECT(group)) {
+            continue;
+        }
 
         /* We do not allow ungrouping <svg> etc. (lauris) */
         if (strcmp(SP_OBJECT_REPR(group)->name(), "svg:g") && strcmp(SP_OBJECT_REPR(group)->name(), "svg:switch")) {
             // keep the non-group item in the new selection
-            new_select = g_slist_prepend(new_select, group);
+            selection->add(group);
             continue;
         }
 
@@ -581,13 +589,14 @@ void sp_selection_ungroup()
     }
 
     if (new_select) { // Set new selection.
-        selection->clear();
-        selection->setList(new_select);
+        selection->addList(new_select);
         g_slist_free(new_select);
     }
     if (!ungrouped) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No groups</b> to ungroup in the selection."));
     }
+
+    g_slist_free(items);
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 }
