@@ -57,6 +57,10 @@ EXTRA_DIST = \
 # They were added to EXTRA_DIST in v1.5, in response to a message on
 # inkscape-devel from "Carlos Ingelmo <carlsalam@te...>" on 2003-11-12 01:35.
 
+# We want the built inkscape.1 to go in the distributed .tar.gz so
+# that .tar.gz users don't need a full perl distribution to get a man
+# page.
+
 DISTCLEANFILES = inkscape.desktop \
                  intltool-extract \
                  intltool-merge \
@@ -64,11 +68,6 @@ DISTCLEANFILES = inkscape.desktop \
 
 #ACLOCAL_AMFLAGS = -I m4
 
-# We want the built inkscape.1 to go in the distributed .tar.gz so
-# that .tar.gz users don't need a full perl distribution to get a man
-# page.
-# I'm not sure whether doing so requires placing inkscape.1 in
-# $(srcdir).
 inkscape.1: inkscape.pod fix-roff-punct Makefile.am
 	set -e; \
 	d=`sed -n 's,/,-,g;s,.*\$$[D]ate: \(..........\).*,\1,p' $(srcdir)/inkscape.pod`; \
