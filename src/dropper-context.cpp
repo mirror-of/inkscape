@@ -368,8 +368,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			// where the color is picked, to show in the statusbar
 			gchar *where = dc->dragging ? g_strdup_printf (_(", averaged with radius %d"), (int) rw) : g_strdup_printf (_(" under cursor"));
 			// message, to show in the statusbar
-			const gchar *message = dc->dragging ? _("<b>Release mouse</b> to set color.") : _("<b>Click</b> to pick fill color, <b>Shift+click</b> to pick stroke color. <b>Drag</b> to pick the average color of an area.");
-
+			const gchar *message = dc->dragging ? _("<b>Release mouse</b> to set color.") : _("<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> to copy the color under mouse to clipboard");
 			ec->defaultMessageContext()->setF(
 				Inkscape::NORMAL_MESSAGE,
 				"<b>%s%s</b>%s. %s", c,
@@ -391,10 +390,9 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 
                     // do the actual color setting
                     sp_desktop_set_color (ec->desktop, 
-                                          ColorRGBA(dc->R, dc->G, dc->B, 
-                                                    dc->alpha), 
-                                          false, 
-                                       !(event->button.state & GDK_SHIFT_MASK));
+				(event->button.state & GDK_MOD1_MASK)?
+                                ColorRGBA(1 - dc->R, 1 - dc->G, 1 - dc->B, dc->alpha) : ColorRGBA(dc->R, dc->G, dc->B, dc->alpha),
+                       false,  !(event->button.state & GDK_SHIFT_MASK));
                     
                     // REJON: set aux. toolbar input to hex color!
                     
