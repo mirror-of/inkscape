@@ -3,9 +3,9 @@ tutorialdir = $(datadir)/inkscape/tutorials
 
 tutorial_DATA = \
     tutorial-elements.svg \
+    tutorial-tips.svg \
     elementsofdesign.sl.svg \
     making_markers.svg \
-    tipsandtricks.svg \
     tipsandtricks.sl.svg \
     tutorial-advanced.svg \
     tutorial-advanced.fr.svg \

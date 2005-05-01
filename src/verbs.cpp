@@ -1454,7 +1454,7 @@ TutorialVerb::perform (SPAction *action, void * data, void * pdata)
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-elements.svg"));
             break;
         case SP_VERB_TUTORIAL_TIPS:
-            sp_help_open_tutorial (NULL, (gpointer)_("tipsandtricks.svg"));
+            sp_help_open_tutorial (NULL, (gpointer)_("tutorial-tips.svg"));
             break;
     default:
         break;
