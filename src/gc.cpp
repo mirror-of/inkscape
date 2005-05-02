@@ -187,7 +187,7 @@ void init() {
         ops = enabled_ops;
     }
 
-    if ( ops.malloc != std::malloc ) {
+    if ( (void *)ops.malloc != (void *)std::malloc ) {
         GC_no_dls = 1;
         GC_all_interior_pointers = 1;
         GC_finalize_on_demand = 0;
