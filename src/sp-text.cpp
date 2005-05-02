@@ -854,7 +854,9 @@ void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, doub
     SPSVGLength zero_length;
     zero_length = 0.0;
 
-    for (unsigned i = 0 ; i < attributes.x.size() ; i++) {
+    unsigned points_count = std::max(attributes.x.size(), attributes.y.size());
+    if (points_count < 1) points_count = 1;
+    for (unsigned i = 0 ; i < points_count ; i++) {
         NR::Point point;
         if (i < attributes.x.size()) point[NR::X] = attributes.x[i].computed;
         else point[NR::X] = 0.0;
