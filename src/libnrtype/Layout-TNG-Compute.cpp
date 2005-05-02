@@ -468,7 +468,7 @@ class Layout::Calculator
                         if (text_source->dy.size() > char_index_in_source) new_span.dx = text_source->dy[char_index_in_source];
                     }
                     if (text_source->rotate.size() > char_index_in_source) new_span.rotate = text_source->rotate[char_index_in_source];
-                    if (input_index == 0 && !new_span.y.set && _flow._input_wrap_shapes.empty()) {
+                    if (input_index == 0 && para->unbroken_spans.empty() && !new_span.y.set && _flow._input_wrap_shapes.empty()) {
                         // if we don't set an explicit y some of the automatic wrapping code takes over and moves the text vertically
                         // so that the top of the letters is at zero, not the baseline
                         new_span.y = 0.0;
