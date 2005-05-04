@@ -600,19 +600,19 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex)
     }
 }
 
-void SPText::_adjustCoordsRecursive(SPItem *item, NR::Matrix const &m, double ex)
+void SPText::_adjustCoordsRecursive(SPItem *item, NR::Matrix const &m, double ex, bool is_root)
 {
     if (SP_IS_TSPAN(item))
-        SP_TSPAN(item)->attributes.transform(m, ex, ex);
+        SP_TSPAN(item)->attributes.transform(m, ex, ex, is_root);
               // it doesn't matter if we change the x,y for role=line spans because we'll just overwrite them anyway
     else if (SP_IS_TEXT(item))
-        SP_TEXT(item)->attributes.transform(m, ex, ex);
+        SP_TEXT(item)->attributes.transform(m, ex, ex, is_root);
     else if (SP_IS_TEXTPATH(item))
-        SP_TEXTPATH(item)->attributes.transform(m, ex, ex);
+        SP_TEXTPATH(item)->attributes.transform(m, ex, ex, is_root);
 
     for (SPObject *o = item->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
-            _adjustCoordsRecursive(SP_ITEM(o), m, ex);
+            _adjustCoordsRecursive(SP_ITEM(o), m, ex, false);
     }
 }
 
@@ -849,13 +849,14 @@ void TextTagAttributes::joinSingleAttribute(std::vector<SPSVGLength> *dest_vecto
     }
 }
 
-void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, double scale_y)
+void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, double scale_y, bool extend_zero_length)
 {
     SPSVGLength zero_length;
     zero_length = 0.0;
 
     unsigned points_count = std::max(attributes.x.size(), attributes.y.size());
-    if (points_count < 1) points_count = 1;
+    if (extend_zero_length && points_count < 1)
+        points_count = 1;
     for (unsigned i = 0 ; i < points_count ; i++) {
         NR::Point point;
         if (i < attributes.x.size()) point[NR::X] = attributes.x[i].computed;

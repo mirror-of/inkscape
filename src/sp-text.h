@@ -107,8 +107,11 @@ public:
 
     /** applies the given transformation to the stored coordinates. Pairs
     of x and y coordinates are multiplied by the matrix and the dx and dy
-    vectors are multiplied by the given parameters. rotate is not altered. */
-    void transform(NR::Matrix const &matrix, double scale_x, double scale_y);
+    vectors are multiplied by the given parameters. rotate is not altered.
+    If \a extend_zero_length is true, then if the x or y vectors are empty
+    they will be made length 1 in order to store the newly calculated
+    position. */
+    void transform(NR::Matrix const &matrix, double scale_x, double scale_y, bool extend_zero_length = false);
 
     /** adds the given values to the dx and dy vectors at the given
     \a index. The vectors are extended if necessary. */
@@ -167,8 +170,11 @@ struct SPText : public SPItem {
 	
     /** when the object is transformed it's nicer to change the font size
     and coordinates when we can, rather than just applying a matrix
-    transform. */
-    static void _adjustCoordsRecursive(SPItem *item, NR::Matrix const &m, double ex);
+    transform. is_root is used to indicate to the function that it should
+    extend zero-length position vectors to length 1 in order to record the
+    new position. This is necessary to convert from objects whose position is
+    completely specified by transformations. */
+    static void _adjustCoordsRecursive(SPItem *item, NR::Matrix const &m, double ex, bool is_root = true);
     static void _adjustFontsizeRecursive(SPItem *item, double ex);
 	
     /** discards the NRArena objects representing this text. */
