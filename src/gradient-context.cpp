@@ -40,6 +40,7 @@
 #include "gradient-drag.h"
 #include "sp-gradient.h"
 #include "gradient-chemistry.h"
+#include "xml/repr.h"
 
 static void sp_gradient_context_class_init(SPGradientContextClass *klass);
 static void sp_gradient_context_init(SPGradientContext *gr_context);
@@ -407,8 +408,17 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
             vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(selection->itemList()->data), fill_or_stroke);
         }
 
+        // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_set_property(css, "fill-opacity", "1.0");
+
         for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
+
+            //FIXME: see above
+            sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
+
             sp_item_set_gradient(SP_ITEM(i->data), vector, (SPGradientType) type, fill_or_stroke);
+
             if (type == SP_GRADIENT_TYPE_LINEAR) {
                 sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P1, rc.origin, fill_or_stroke, true, false);
                 sp_item_gradient_set_coords (SP_ITEM(i->data), POINT_LG_P2, pt, fill_or_stroke, true, false);
