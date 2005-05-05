@@ -75,6 +75,8 @@
 
 #include "io/sys.h"
 
+#include "debug/logger.h"
+
 #include <extension/extension.h>
 #include <extension/system.h>
 #include <extension/db.h>
@@ -349,6 +351,8 @@ main(int argc, char **argv)
     LIBXML_TEST_VERSION
 
     Inkscape::GC::init();
+
+    Inkscape::Debug::Logger::init();
 
     gboolean use_gui;
 #ifndef WIN32

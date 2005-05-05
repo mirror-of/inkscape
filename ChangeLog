@@ -1,3 +1,8 @@
+2005-05-05  MenTaLguY  <mental@rydia.net>
+
+	* src/inkscape.cpp, src/main.cpp: initialize and shutdown debug log
+	  from more reliable place
+
 2005-05-04  MenTaLguY  <mental@rydia.net>
 
 	* configure.ac, src/Makefile.am, src/Makefile_insert,

@@ -56,6 +56,10 @@ std::ofstream log_stream;
 bool empty_tag=false;
 std::vector<Util::SharedCStringPtr, GC::Alloc<Util::SharedCStringPtr, GC::MANUAL> > tag_stack;
 
+void do_shutdown() {
+    Debug::Logger::shutdown();
+}
+
 }
 
 class SessionEvent : public Event {
@@ -81,6 +85,7 @@ void Logger::init() {
                 log_stream.flush();
                 _enabled = true;
                 start<SessionEvent>();
+                std::atexit(&do_shutdown);
             }
         }
     }

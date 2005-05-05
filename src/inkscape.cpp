@@ -306,8 +306,6 @@ inkscape_init (SPObject * object)
         g_assert_not_reached ();
     }
 
-    Inkscape::Debug::Logger::init();
-
     inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
 
     inkscape->documents = NULL;
@@ -334,8 +332,6 @@ inkscape_dispose (GObject *object)
         inkscape->preferences = NULL;
         inkscape->save_preferences = FALSE;
     }
-
-    Inkscape::Debug::Logger::shutdown();
 
     G_OBJECT_CLASS (parent_class)->dispose (object);
 
