@@ -26,7 +26,7 @@ bool Logger::_enabled=false;
 
 namespace {
 
-void write_escaped_value(std::ostream &os, Util::SharedCStringPtr value) {
+static void write_escaped_value(std::ostream &os, Util::SharedCStringPtr value) {
     for ( char const *current=value ; *current ; ++current ) {
         switch (*current) {
         case '&':
@@ -47,17 +47,17 @@ void write_escaped_value(std::ostream &os, Util::SharedCStringPtr value) {
     }
 }
 
-void write_indent(std::ostream &os, unsigned depth) {
+static void write_indent(std::ostream &os, unsigned depth) {
     for ( unsigned i = 0 ; i < depth ; i++ ) {
         os.write("  ", 2);
     }
 }
 
-std::ofstream log_stream;
-bool empty_tag=false;
-std::vector<Util::SharedCStringPtr, GC::Alloc<Util::SharedCStringPtr, GC::MANUAL> > tag_stack;
+static std::ofstream log_stream;
+static bool empty_tag=false;
+static std::vector<Util::SharedCStringPtr, GC::Alloc<Util::SharedCStringPtr, GC::MANUAL> > tag_stack;
 
-void do_shutdown() {
+static void do_shutdown() {
     Debug::Logger::shutdown();
 }
 
@@ -139,9 +139,9 @@ void Logger::shutdown() {
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
