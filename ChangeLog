@@ -1,3 +1,17 @@
+2005-05-04  MenTaLguY  <mental@rydia.net>
+
+	* configure.ac, src/Makefile.am, src/Makefile_insert,
+	  src/debug/Makefile_insert, src/debug/makefile.in:
+
+	  added src/debug/ subdir
+
+	* src/gc-alloc.h: no default management type for now
+
+	* src/debug/event-tracker.h, src/debug/event.h, src/debug/logger.cpp,
+	  src/debug/logger.h: simple XML logging facility
+
+	* src/util/Makefile_insert: fixed cut-and-paste error
+
 2005-04-29  Jon A. Cruz  <jon@joncruz.org>
 	* src/dialogs/swatches.cpp, src/dialogs/eek-preview.h,
 	  src/dialogs/eek-preview.cpp:

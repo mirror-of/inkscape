@@ -243,6 +243,7 @@ inkscape_private_libs =	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
 	extension/script/libscript.a	\
+	debug/libinkdebug.a	\
 	xml/libspxml.a		\
 	util/libinkutil.a	\
 	io/libio.a	        \

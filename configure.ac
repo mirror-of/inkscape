@@ -674,6 +674,7 @@ src/svg/makefile
 src/utest/makefile
 src/widgets/makefile
 src/xml/makefile
+src/debug/makefile
 src/traits/makefile
 src/algorithms/makefile
 src/util/makefile

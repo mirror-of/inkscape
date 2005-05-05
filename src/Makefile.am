@@ -39,6 +39,7 @@ include livarot/Makefile_insert
 include svg/Makefile_insert
 include utest/Makefile_insert
 include widgets/Makefile_insert
+include debug/Makefile_insert
 include xml/Makefile_insert
 include traits/Makefile_insert
 include algorithms/Makefile_insert
@@ -67,6 +68,7 @@ noinst_LIBRARIES =	\
 	ui/view/libuiview.a 	\
 	ui/widget/libuiwidget.a	\
 	util/libinkutil.a \
+	debug/libinkdebug.a \
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
 	libnrtype/libnrtype.a	\

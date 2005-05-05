@@ -1,7 +1,7 @@
 
-traits/all: util/libinkutil.a
+util/all: util/libinkutil.a
 
-traits/clean:
+util/clean:
 	rm -f util/libinkutil.a $(util_libinkutil_a_OBJECTS)
 
 util_libinkutil_a_SOURCES = \

@@ -1,0 +1,11 @@
+
+debug/all: debug/libinkdebug.a
+
+debug/clean:
+	rm -f debug/libinkdebug.a $(debug_libinkdebug_a_OBJECTS)
+
+debug_libinkdebug_a_SOURCES = \
+	debug/event.h \
+	debug/event-tracker.h \
+	debug/logger.h debug/logger.cpp
+

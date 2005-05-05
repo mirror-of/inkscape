@@ -22,7 +22,7 @@ namespace Inkscape {
 
 namespace GC {
 
-template <typename T, CollectionPolicy collect=MANUAL>
+template <typename T, CollectionPolicy collect>
 class Alloc {
 public:
     typedef T value_type;
@@ -39,6 +39,7 @@ public:
     pointer address(reference r) { return &r; }
     const_pointer address(const_reference r) { return &r; }
 
+    Alloc() {}
     template <typename U>
     Alloc(Alloc<U, collect> const &) {}
 
