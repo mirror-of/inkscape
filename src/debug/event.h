@@ -23,7 +23,22 @@ class Event {
 public:
     virtual ~Event() {}
 
-    typedef std::pair<Util::SharedCStringPtr, Util::SharedCStringPtr> PropertyPair;
+    struct PropertyPair {
+    public:
+        PropertyPair() {}
+        PropertyPair(Util::SharedCStringPtr n, Util::SharedCStringPtr v)
+        : name(n), value(v) {}
+        PropertyPair(char const *n, Util::SharedCStringPtr v)
+        : name(Util::SharedCStringPtr::copy(n)), value(v) {}
+        PropertyPair(Util::SharedCStringPtr n, char const *v)
+        : name(n), value(Util::SharedCStringPtr::copy(v)) {}
+        PropertyPair(char const *n, char const *v)
+        : name(Util::SharedCStringPtr::copy(n)),
+          value(Util::SharedCStringPtr::copy(v)) {}
+
+        Util::SharedCStringPtr name;
+        Util::SharedCStringPtr value;
+    };
 
     virtual Util::SharedCStringPtr name() const=0;
     virtual unsigned propertyCount() const=0;

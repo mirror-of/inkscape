@@ -17,6 +17,7 @@
 
 #include <glib/gquark.h>
 #include <glib/gmessages.h>
+#include <glib/gstrfuncs.h>
 #include <cstring>
 #include "algorithms/find-if-before.h"
 #include "xml/simple-node.h"
@@ -24,10 +25,216 @@
 #include "xml/node-fns.h"
 #include "xml/repr.h"
 #include "xml/node-observer.h"
+#include "debug/event-tracker.h"
+#include "debug/event.h"
 
 namespace Inkscape {
 
 namespace XML {
+
+namespace {
+
+Util::SharedCStringPtr stringify_node(Node const &node) {
+    gchar *string;
+    switch (node.type()) {
+    case ELEMENT_NODE: {
+        char const *id=node.attribute("id");
+        if (id) {
+            string = g_strdup_printf("element(%p)=%s(#%s)", &node, node.name(), id);
+        } else {
+            string = g_strdup_printf("element(%p)=%s", &node, node.name());
+        }
+    } break;
+    case TEXT_NODE:
+        string = g_strdup_printf("text(%p)=%s", &node, node.content());
+        break;
+    case COMMENT_NODE:
+        string = g_strdup_printf("comment(%p)=<!--%s-->", &node, node.content());
+        break;
+    case DOCUMENT_NODE:
+        string = g_strdup_printf("document(%p)", &node);
+        break;
+    default:
+        string = g_strdup_printf("unknown(%p)", &node);
+    }
+    Util::SharedCStringPtr result=Util::SharedCStringPtr::copy(string);
+    g_free(string);
+    return result;
+}
+
+Util::SharedCStringPtr stringify_unsigned(unsigned n) {
+    gchar *string = g_strdup_printf("%u", n);
+    Util::SharedCStringPtr result=Util::SharedCStringPtr::copy(string);
+    g_free(string);
+    return result;
+}
+
+}
+
+class DebugAddChild : public Debug::Event {
+public:
+    DebugAddChild(Node const &node, Node const &child, Node const *prev)
+    : _parent(stringify_node(node)),
+      _child(stringify_node(child)),
+      _position(prev ? prev->position() + 1 : 0)
+    {}
+    Util::SharedCStringPtr name() const {
+        return Util::SharedCStringPtr::coerce("add-child");
+    }
+    unsigned propertyCount() const { return 3; }
+    PropertyPair property(unsigned i) const {
+        switch (i) {
+        case 0:
+            return PropertyPair("parent", _parent);
+        case 1:
+            return PropertyPair("child", _child);
+        case 2:
+            return PropertyPair("position", stringify_unsigned(_position));
+        default:
+            return PropertyPair();
+        }
+    }
+private:
+    Util::SharedCStringPtr _parent;
+    Util::SharedCStringPtr _child;
+    unsigned _position;
+};
+
+class DebugRemoveChild : public Debug::Event {
+public:
+    DebugRemoveChild(Node const &node, Node const &child, Node const *prev)
+    : _parent(stringify_node(node)),
+      _child(stringify_node(child))
+    {}
+    Util::SharedCStringPtr name() const {
+        return Util::SharedCStringPtr::coerce("remove-child");
+    }
+    unsigned propertyCount() const { return 2; }
+    PropertyPair property(unsigned i) const {
+        switch (i) {
+        case 0:
+            return PropertyPair("parent", _parent);
+        case 1:
+            return PropertyPair("child", _child);
+        default:
+            return PropertyPair();
+        }
+    }
+private:
+    Util::SharedCStringPtr _parent;
+    Util::SharedCStringPtr _child;
+};
+
+class DebugSetChildPosition : public Debug::Event {
+public:
+    DebugSetChildPosition(Node const &node, Node const &child, Node const *old_prev, Node const *new_prev)
+    : _parent(stringify_node(node)),
+      _child(stringify_node(child))
+    {
+        unsigned old_position = ( old_prev ? old_prev->position() : 0 );
+        _position = ( new_prev ? new_prev->position() : 0 );
+        if ( _position > old_position ) {
+            --_position;
+        }
+    }
+    Util::SharedCStringPtr name() const {
+        return Util::SharedCStringPtr::coerce("set-child-position");
+    }
+    unsigned propertyCount() const { return 3; }
+    PropertyPair property(unsigned i) const {
+        switch (i) {
+        case 0:
+            return PropertyPair("parent", _parent);
+        case 1:
+            return PropertyPair("child", _child);
+        case 2:
+            return PropertyPair("position", stringify_unsigned(_position));
+        default:
+            return PropertyPair();
+        }
+    }
+private:
+    Util::SharedCStringPtr _parent;
+    Util::SharedCStringPtr _child;
+    unsigned _position;
+};
+
+class DebugSetContent : public Debug::Event {
+public:
+    DebugSetContent(Node const &node,
+                    Util::SharedCStringPtr old_content,
+                    Util::SharedCStringPtr new_content)
+    : _node(stringify_node(node)), _content(new_content) {}
+    Util::SharedCStringPtr name() const {
+        if (_content) {
+            return Util::SharedCStringPtr::coerce("set-content");
+        } else {
+            return Util::SharedCStringPtr::coerce("clear-content");
+        }
+    }
+    unsigned propertyCount() const {
+        if (_content) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+    PropertyPair property(unsigned i) const {
+        switch (i) {
+        case 0:
+            return PropertyPair("node", _node);
+        case 1:
+            return PropertyPair("content", _content);
+        default:
+            return PropertyPair();
+        }
+    }
+private:
+    Util::SharedCStringPtr _node;
+    Util::SharedCStringPtr _content;
+};
+
+class DebugSetAttribute : public Debug::Event {
+public:
+    DebugSetAttribute(Node const &node, GQuark name,
+                      Util::SharedCStringPtr old_value,
+                      Util::SharedCStringPtr new_value)
+    : _node(stringify_node(node)),
+      _name(Util::SharedCStringPtr::coerce(g_quark_to_string(name))),
+      _value(new_value) {}
+
+    Util::SharedCStringPtr name() const {
+        if (_value) {
+            return Util::SharedCStringPtr::coerce("set-attribute");
+        } else {
+            return Util::SharedCStringPtr::coerce("clear-attribute");
+        }
+    }
+    unsigned propertyCount() const {
+        if (_value) {
+            return 3;
+        } else {
+            return 2;
+        }
+    }
+    PropertyPair property(unsigned i) const {
+        switch (i) {
+        case 0:
+            return PropertyPair("node", _node);
+        case 1:
+            return PropertyPair("name", _name);
+        case 2:
+            return PropertyPair("value", _value);
+        default:
+            return PropertyPair();
+        }
+    }
+
+private:
+    Util::SharedCStringPtr _node;
+    Util::SharedCStringPtr _name;
+    Util::SharedCStringPtr _value;
+};
 
 using Inkscape::Util::SharedCStringPtr;
 using Inkscape::Util::List;
@@ -147,9 +354,15 @@ bool SimpleNode::matchAttributeName(gchar const *partial_name) const {
     return false;
 }
 
-void SimpleNode::setContent(gchar const *new_content) {
+void SimpleNode::setContent(gchar const *content) {
     SharedCStringPtr old_content=_content;
-    _content = ( new_content ? SharedCStringPtr::copy(new_content) : SharedCStringPtr() );
+    SharedCStringPtr new_content = ( content ? SharedCStringPtr::copy(content) : SharedCStringPtr() );
+
+    Debug::EventTracker<DebugSetContent> tracker(
+        *this, old_content, new_content
+    );
+
+    _content = new_content;
 
     if ( _content != old_content ) {
         if (_logger) {
@@ -182,17 +395,21 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
         ref = existing;
     }
 
+    Debug::EventTracker<> tracker;
+
     SharedCStringPtr old_value=( existing ? existing->value : SharedCStringPtr() );
 
     SharedCStringPtr new_value=SharedCStringPtr();
     if (value) {
         new_value = SharedCStringPtr::copy(value);
+        tracker.set<DebugSetAttribute>(*this, key, old_value, new_value);
         if (!existing) {
             _attributes = cons(AttributeRecord(key, new_value), _attributes);
         } else {
             existing->value = new_value;
         }
     } else {
+        tracker.set<DebugSetAttribute>(*this, key, old_value, new_value);
         if (existing) {
             if (ref) {
                 set_rest(ref, rest(existing));
@@ -222,6 +439,8 @@ void SimpleNode::addChild(Node *child, Node *ref) {
     g_assert(child);
     g_assert(!ref || ref->parent() == this);
     g_assert(!child->parent());
+
+    Debug::EventTracker<DebugAddChild> tracker(*this, *child, ref);
 
     Node *next;
     if (ref) {
@@ -297,6 +516,8 @@ void SimpleNode::removeChild(Node *child) {
 
     Node *ref = ( child != _first_child ? previous_node(child) : NULL );
 
+    Debug::EventTracker<DebugRemoveChild> tracker(*this, *child, ref);
+
     Node *next = child->next();
     if (ref) {
         ref->_setNext(next);
@@ -334,6 +555,8 @@ void SimpleNode::changeOrder(Node *child, Node *ref) {
     g_return_if_fail(!ref || ref->parent() == this);
 
     Node *const prev = previous_node(child);
+
+    Debug::EventTracker<DebugSetChildPosition> tracker(*this, *child, prev, ref);
 
     if (prev == ref) { return; }
 

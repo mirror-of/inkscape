@@ -1,5 +1,19 @@
 2005-05-05  MenTaLguY  <mental@rydia.net>
 
+	* src/debug/event.h, src/debug/logger.cpp:
+
+	  PropertyPair is now its own class
+	
+	* src/xml/simple-node.cpp: add logging of XML node mutation
+
+	* src/xml/Makefile_insert, src/xml/composite-node-observer.cpp,
+	  src/xml/composite-node-observer.h:
+
+	  added CompositeNodeObserver class, which will eventually replace
+	  the existing notifier lists
+
+2005-05-05  MenTaLguY  <mental@rydia.net>
+
 	* src/inkscape.cpp: try to cleanly terminate log in case of crashes
 
 2005-05-05  MenTaLguY  <mental@rydia.net>

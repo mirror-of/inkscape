@@ -48,7 +48,7 @@ void write_escaped_value(std::ostream &os, Util::SharedCStringPtr value) {
 }
 
 void write_indent(std::ostream &os, unsigned depth) {
-    for ( int i = 0 ; i < depth ; i++ ) {
+    for ( unsigned i = 0 ; i < depth ; i++ ) {
         os.write("  ", 2);
     }
 }
@@ -96,10 +96,10 @@ void Logger::_start(Event const &event) {
     log_stream << "<" << name.cString();
 
     unsigned property_count=event.propertyCount();
-    for ( int i = 0 ; i < property_count ; i++ ) {
+    for ( unsigned i = 0 ; i < property_count ; i++ ) {
         Event::PropertyPair property=event.property(i);
-        log_stream << " " << property.first.cString() << "=\"";
-        write_escaped_value(log_stream, property.second);
+        log_stream << " " << property.name.cString() << "=\"";
+        write_escaped_value(log_stream, property.value);
         log_stream << "\"";
     }
 
