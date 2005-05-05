@@ -87,9 +87,8 @@ static void sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw);
 static void sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw);
 
 static void sp_stroke_style_get_average_color_rgba(GSList const *objects, gfloat *c);
-static SPPaintSelectorMode sp_stroke_style_determine_paint_selector_mode(SPStyle *style);
 
-
+static void sp_stroke_style_widget_change_subselection ( Inkscape::Application *inkscape, SPDesktop *desktop, SPWidget *spw );
 
 GtkWidget *
 sp_stroke_style_paint_widget_new(void)
@@ -112,6 +111,8 @@ sp_stroke_style_paint_widget_new(void)
     gtk_signal_connect(GTK_OBJECT(spw), "change_selection",
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_selection_changed),
                        psel);
+
+    g_signal_connect (INKSCAPE, "change_subselection", G_CALLBACK (sp_stroke_style_widget_change_subselection), spw);
 
     gtk_signal_connect(GTK_OBJECT(psel), "mode_changed",
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_mode_changed),
@@ -167,6 +168,14 @@ sp_stroke_style_paint_selection_changed ( SPWidget *spw,
 }
 
 static void
+sp_stroke_style_widget_change_subselection ( Inkscape::Application *inkscape, 
+                                        SPDesktop *desktop,
+                                        SPWidget *spw )
+{
+    sp_stroke_style_paint_update (spw, SP_DT_SELECTION(desktop));
+}
+
+static void
 sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
@@ -175,8 +184,30 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(TRUE));
 
-    SPPaintSelector *psel = SP_PAINT_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw),
-                                                                  "paint-selector"));
+    SPPaintSelector *psel = SP_PAINT_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw), "paint-selector"));
+
+
+    // create temporary style
+    SPStyle *query = sp_style_new ();
+    // query into it
+    int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FILLSTROKE); 
+
+    if (result) { 
+// for now this is mostly a duplication of the else branch; eventually the else will be eliminated,
+// after sp_desktop_query_style can query selection (for now it only works for subselections which implement it)
+        SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, false);
+
+        sp_paint_selector_set_mode (psel, pselmode);
+
+        if (query->stroke.type == SP_PAINT_TYPE_COLOR) {
+            gfloat d[3];
+            sp_color_get_rgb_floatv (&query->stroke.value.color, d);
+            SPColor color;
+            sp_color_set_rgb_float (&color, d[0], d[1], d[2]);
+            sp_paint_selector_set_color_alpha (psel, &color, SP_SCALE24_TO_FLOAT (query->fill_opacity.value));
+        }
+
+    } else { 
 
     if ( !sel || sel->isEmpty() ) {
         /* No objects, set empty */
@@ -189,13 +220,13 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
     GSList const *objects = sel->itemList();
     SPObject *object = SP_OBJECT(objects->data);
 
-    // prevent trying to modify objects with multiple fill modes
+    // prevent trying to modify objects with multiple stroke modes
     SPPaintSelectorMode pselmode =
-        sp_stroke_style_determine_paint_selector_mode(SP_OBJECT_STYLE(object));
+        sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE(object), false);
 
     for (GSList const *l = objects->next; l != NULL; l = l->next) {
         SPPaintSelectorMode nextmode
-            = sp_stroke_style_determine_paint_selector_mode(SP_OBJECT_STYLE(l->data));
+            = sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE(l->data), false);
         if (nextmode != pselmode) {
             /* Multiple styles */
             sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
@@ -227,18 +258,14 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
         {
-            object = SP_OBJECT(objects->data);
             /* We know that all objects have lineargradient stroke style */
             SPGradient *vector =
-                sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object)),
-                                       FALSE);
+                sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object)), FALSE);
 
             for (GSList const *l = objects->next; l != NULL; l = l->next) {
                 SPObject *next = SP_OBJECT(l->data);
-                if (sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(next)),
-                                           FALSE) != vector)
+                if (sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(next)), FALSE) != vector)
                 {
-
                     /* Multiple vectors */
                     sp_paint_selector_set_mode(psel,
                                                SP_PAINT_SELECTOR_MODE_MULTIPLE);
@@ -247,10 +274,9 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
                                          GINT_TO_POINTER(FALSE) );
                     return;
                 }
-            } // end of for loop
+            }
 
-            sp_paint_selector_set_mode(psel,
-                                       SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR);
+            sp_paint_selector_set_gradient_linear (psel, vector);
 
             SPLinearGradient *lg = SP_LINEARGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
             sp_paint_selector_set_gradient_properties(psel,
@@ -261,18 +287,14 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
         {
-            object = SP_OBJECT(objects->data);
-
             /* We know that all objects have radialgradient stroke style */
 
             SPGradient *vector =
-                sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object)),
-                                       FALSE);
+                sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object)), FALSE);
 
             for (GSList const *l = objects->next; l != NULL; l = l->next) {
                 SPObject *next = SP_OBJECT(l->data);
-                if (sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(next)),
-                                           FALSE) != vector)
+                if (sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(next)), FALSE) != vector)
                 {
                     /* Multiple vectors */
                     sp_paint_selector_set_mode(psel,
@@ -309,10 +331,11 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
         default:
             sp_paint_selector_set_mode( psel, SP_PAINT_SELECTOR_MODE_MULTIPLE );
             break;
+    } // end of switch
+
     }
 
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
-
 }
 
 static void
@@ -1699,7 +1722,6 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
         }
 
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
         /* TODO: Create some standardized method */
         SPCSSAttr *css = sp_repr_css_attr_new();
@@ -1759,39 +1781,6 @@ sp_stroke_style_get_average_color_rgba(GSList const *objects, gfloat c[4])
 
 } // end of sp_stroke_style_get_average_color_rgba()
 
-
-static SPPaintSelectorMode
-sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
-{
-    if (!style->stroke.set)
-        return SP_PAINT_SELECTOR_MODE_UNSET;
-
-   switch (style->stroke.type) {
-        case SP_PAINT_TYPE_NONE:
-            return SP_PAINT_SELECTOR_MODE_NONE;
-        case SP_PAINT_TYPE_COLOR:
-        {
-            return SP_PAINT_SELECTOR_MODE_COLOR_RGB; // so far only rgb can be read from svg
-        }
-
-        case SP_PAINT_TYPE_PAINTSERVER:
-            if (SP_IS_LINEARGRADIENT(SP_STYLE_STROKE_SERVER(style))) {
-                return SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR;
-            } else if (SP_IS_RADIALGRADIENT(SP_STYLE_STROKE_SERVER(style))) {
-                return SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL;
-            } else if (SP_IS_PATTERN(SP_STYLE_STROKE_SERVER(style))) {
-                return SP_PAINT_SELECTOR_MODE_PATTERN;
-            }
-            return SP_PAINT_SELECTOR_MODE_NONE;
-
-        default:
-            g_warning( "file %s: line %d: Unknown paint type %d",
-                       __FILE__, __LINE__, style->stroke.type );
-            break;
-    }
-
-    return SP_PAINT_SELECTOR_MODE_NONE;
-}
 
 
 static void

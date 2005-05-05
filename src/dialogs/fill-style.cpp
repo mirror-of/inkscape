@@ -72,10 +72,8 @@ static void sp_fill_style_widget_modify_selection   ( SPWidget *spw,
                                                       Inkscape::Selection *selection,
                                                       guint flags,
                                                       SPPaintSelector *psel );
-static void
-sp_fill_style_widget_change_subselection ( Inkscape::Application *inkscape, 
-                                        SPDesktop *desktop,
-                                           SPWidget *spw );
+
+static void sp_fill_style_widget_change_subselection ( Inkscape::Application *inkscape, SPDesktop *desktop, SPWidget *spw );
 
 static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
                                                       Inkscape::Selection *selection,
@@ -94,8 +92,6 @@ static void sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
 static void sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw );
 static void sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw );
 static void sp_fill_style_get_average_color_rgba (GSList const *objects, gfloat *c);
-static SPPaintSelectorMode sp_fill_style_determine_paint_selector_mode ( SPStyle *style );
-
 
 GtkWidget *
 sp_fill_style_widget_new (void)
@@ -218,7 +214,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
     if (result) { 
 // for now this is mostly a duplication of the else branch; eventually the else will be eliminated,
 // after sp_desktop_query_style can query selection (for now it only works for subselections which implement it)
-        SPPaintSelectorMode pselmode = sp_fill_style_determine_paint_selector_mode (query);
+        SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, true);
         sp_paint_selector_set_mode (psel, pselmode);
 
         sp_paint_selector_set_fillrule (psel, query->fill_rule.computed == ART_WIND_RULE_NONZERO? 
@@ -246,11 +242,11 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
     // prevent trying to modify objects with multiple fill modes
     SPPaintSelectorMode pselmode =
-        sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object));
+        sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object), true);
 
     for (GSList const *l = objects->next; l != NULL; l = l->next) {
         SPPaintSelectorMode nextmode =
-            sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (l->data));
+            sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE (l->data), true);
 
         if (nextmode != pselmode) {
             /* Multiple styles */
@@ -285,21 +281,14 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
         {
-            SPObject *object = SP_OBJECT (objects->data);
             /* We know that all objects have lineargradient fill style */
             SPGradient *vector =
-                sp_gradient_get_vector ( SP_GRADIENT
-                                            (SP_OBJECT_STYLE_FILL_SERVER
-                                                (object)),
-                                         FALSE );
+                sp_gradient_get_vector ( SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object)), FALSE );
 
             for (GSList const *l = objects->next; l != NULL; l = l->next) {
                 SPObject const *next = SP_OBJECT(l->data);
 
-                if (sp_gradient_get_vector ( SP_GRADIENT
-                                             (SP_OBJECT_STYLE_FILL_SERVER
-                                                 (next)),
-                                             FALSE) != vector )
+                if (sp_gradient_get_vector ( SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (next)), FALSE) != vector )
                 {
                     /* Multiple vectors */
                     sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
@@ -307,10 +296,8 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
                     g_object_set_data ( G_OBJECT (spw), "update",
                                         GINT_TO_POINTER (FALSE));
                     return;
-
-                } // end of if
-
-            } // end of for()
+                }
+            }
 
             sp_paint_selector_set_gradient_linear (psel, vector);
 
@@ -325,10 +312,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
         {
             /* We know that all objects have radialgradient fill style */
             SPGradient *vector =
-                sp_gradient_get_vector ( SP_GRADIENT
-                                            (SP_OBJECT_STYLE_FILL_SERVER
-                                                (object)),
-                                         FALSE );
+                sp_gradient_get_vector ( SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object)), FALSE );
 
             for (GSList const *l = objects->next; l != NULL; l = l->next) {
                 SPObject const *next = SP_OBJECT(l->data);
@@ -352,17 +336,14 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
             sp_paint_selector_set_gradient_properties (psel,
                                                        SP_GRADIENT_UNITS (rg),
                                                        SP_GRADIENT_SPREAD (rg));
-
             break;
         }
 
         case SP_PAINT_SELECTOR_MODE_PATTERN:
         {
             sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN );
-
             SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
             sp_update_pattern_list ( psel, pat);
-
             break;
         }
 
@@ -677,46 +658,6 @@ sp_fill_style_get_average_color_rgba(GSList const *objects, gfloat *c)
     c[3] /= num;
 
 } // end of sp_fill_style_get_average_color_rgba()
-
-
-static SPPaintSelectorMode
-sp_fill_style_determine_paint_selector_mode (SPStyle *style)
-{
-    if (!style->fill.set)
-        return SP_PAINT_SELECTOR_MODE_UNSET;
-
-    switch (style->fill.type) {
-
-        case SP_PAINT_TYPE_NONE:
-            return SP_PAINT_SELECTOR_MODE_NONE;
-
-        case SP_PAINT_TYPE_COLOR:
-        {
-            return SP_PAINT_SELECTOR_MODE_COLOR_RGB; // so far only rgb can be read from svg
-        }
-
-        case SP_PAINT_TYPE_PAINTSERVER:
-
-            if (SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
-                return SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR;
-            } else if (SP_IS_RADIALGRADIENT (SP_STYLE_FILL_SERVER (style))) {
-                return SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL;
-            } else if (SP_IS_PATTERN (SP_STYLE_FILL_SERVER (style))) {
-                return SP_PAINT_SELECTOR_MODE_PATTERN;
-            }
-
-            g_warning ( "file %s: line %d: Unknown paintserver",
-                        __FILE__, __LINE__ );
-            return SP_PAINT_SELECTOR_MODE_NONE;
-
-        default:
-            g_warning ( "file %s: line %d: Unknown paint type %d",
-                        __FILE__, __LINE__, style->fill.type );
-            break;
-    }
-
-    return SP_PAINT_SELECTOR_MODE_NONE;
-}
 
 
 /*

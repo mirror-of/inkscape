@@ -143,8 +143,10 @@ gr_drag_style_query (SPStyle *style, int property, gpointer data)
             // set both fill and stroke with our stop-color and stop-opacity
             sp_color_set_rgb_float((SPColor *) &style->fill.value.color, cf[0], cf[1], cf[2]);
             style->fill.set = TRUE;
+            style->fill.type = SP_PAINT_TYPE_COLOR;
             sp_color_set_rgb_float((SPColor *) &style->stroke.value.color, cf[0], cf[1], cf[2]);
             style->stroke.set = TRUE;
+            style->stroke.type = SP_PAINT_TYPE_COLOR;
 
             style->fill_opacity.value = SP_SCALE24_FROM_FLOAT (cf[3]);
             style->fill_opacity.set = TRUE;

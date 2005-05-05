@@ -105,4 +105,6 @@ void sp_update_pattern_list ( SPPaintSelector *psel, SPPattern *pat);
 
 void sp_paint_selector_set_flat_color (SPPaintSelector *psel, SPDesktop *desktop, const gchar *color_property, const gchar *opacity_property);
 
+SPPaintSelectorMode sp_style_determine_paint_selector_mode (SPStyle *style, bool isfill);
+
 #endif
