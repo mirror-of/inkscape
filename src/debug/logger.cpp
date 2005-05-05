@@ -15,6 +15,7 @@
 #include <vector>
 #include "debug/logger.h"
 #include "debug/event.h"
+#include "debug/simple-event.h"
 #include "gc-alloc.h"
 
 namespace Inkscape {
@@ -62,17 +63,9 @@ void do_shutdown() {
 
 }
 
-class SessionEvent : public Event {
+class SessionEvent : public SimpleEvent {
 public:
-    SessionEvent() {}
-
-    Util::SharedCStringPtr name() const {
-        return Util::SharedCStringPtr::coerce("session");
-    }
-    unsigned propertyCount() const { return 0; }
-    PropertyPair property(unsigned) const {
-        return PropertyPair(Util::SharedCStringPtr(), Util::SharedCStringPtr());
-    }
+    SessionEvent() : SimpleEvent(Util::SharedCStringPtr::coerce("session")) {}
 };
 
 void Logger::init() {

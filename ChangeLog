@@ -1,5 +1,12 @@
 2005-05-05  MenTaLguY  <mental@rydia.net>
 
+	* src/document-undo.cpp, src/debug/Makefile_insert, src/debug/logger.cpp,
+	  src/debug/simple-event.h, src/xml/event.cpp:
+
+	  add debug logging for undo+redo+transactions
+
+2005-05-05  MenTaLguY  <mental@rydia.net>
+
 	* src/inkscape.cpp, src/main.cpp: initialize and shutdown debug log
 	  from more reliable place
 

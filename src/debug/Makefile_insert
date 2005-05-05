@@ -7,5 +7,6 @@ debug/clean:
 debug_libinkdebug_a_SOURCES = \
 	debug/event.h \
 	debug/event-tracker.h \
-	debug/logger.h debug/logger.cpp
+	debug/logger.h debug/logger.cpp \
+	debug/simple-event.h
 

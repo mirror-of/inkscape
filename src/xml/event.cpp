@@ -21,6 +21,8 @@
 #include "xml/node.h"
 #include "xml/document.h"
 #include "xml/session.h"
+#include "debug/event-tracker.h"
+#include "debug/simple-event.h"
 #include <cstring>
 
 using Inkscape::Util::List;
@@ -33,6 +35,11 @@ using Inkscape::XML::Session;
 void
 sp_repr_begin_transaction (Inkscape::XML::Document *doc)
 {
+	using Inkscape::Debug::SimpleEvent;
+	using Inkscape::Debug::EventTracker;
+
+	EventTracker<SimpleEvent> tracker("begin-transaction");
+
 	g_assert(doc != NULL);
 	Session *session=doc->session();
 	g_assert(session != NULL);
@@ -42,6 +49,11 @@ sp_repr_begin_transaction (Inkscape::XML::Document *doc)
 void
 sp_repr_rollback (Inkscape::XML::Document *doc)
 {
+	using Inkscape::Debug::SimpleEvent;
+	using Inkscape::Debug::EventTracker;
+
+	EventTracker<SimpleEvent> tracker("rollback");
+
 	g_assert(doc != NULL);
 	Session *session=doc->session();
 	g_assert(session != NULL);
@@ -51,6 +63,11 @@ sp_repr_rollback (Inkscape::XML::Document *doc)
 void
 sp_repr_commit (Inkscape::XML::Document *doc)
 {
+	using Inkscape::Debug::SimpleEvent;
+	using Inkscape::Debug::EventTracker;
+
+	EventTracker<SimpleEvent> tracker("commit");
+
 	g_assert(doc != NULL);
 	Session *session=doc->session();
 	g_assert(session != NULL);
@@ -60,6 +77,11 @@ sp_repr_commit (Inkscape::XML::Document *doc)
 Inkscape::XML::Event *
 sp_repr_commit_undoable (Inkscape::XML::Document *doc)
 {
+	using Inkscape::Debug::SimpleEvent;
+	using Inkscape::Debug::EventTracker;
+
+	EventTracker<SimpleEvent> tracker("commit");
+
 	g_assert(doc != NULL);
 	Session *session=doc->session();
 	g_assert(session != NULL);
@@ -69,6 +91,11 @@ sp_repr_commit_undoable (Inkscape::XML::Document *doc)
 void
 sp_repr_undo_log (Inkscape::XML::Event *log)
 {
+	using Inkscape::Debug::SimpleEvent;
+	using Inkscape::Debug::EventTracker;
+
+	EventTracker<SimpleEvent> tracker("undo-log");
+
 	Inkscape::XML::Event *action;
 
 	if (log) {
@@ -113,6 +140,11 @@ void Inkscape::XML::EventChgOrder::_undoOne() const {
 void
 sp_repr_replay_log (Inkscape::XML::Event *log)
 {
+	using Inkscape::Debug::SimpleEvent;
+	using Inkscape::Debug::EventTracker;
+
+	EventTracker<SimpleEvent> tracker("replay-log");
+
 	if (log) {
 		g_assert(!log->repr->session()->inTransaction());
 	}

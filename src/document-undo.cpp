@@ -31,6 +31,8 @@
 #include "document.h"
 #include "selection.h"
 #include "inkscape.h"
+#include "debug/event-tracker.h"
+#include "debug/simple-event.h"
 
 /*
  * Undo & redo
@@ -159,7 +161,12 @@ void finish_incomplete_transaction(SPDocument &doc) {
 gboolean
 sp_document_undo (SPDocument *doc)
 {
+	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::SimpleEvent;
+
 	gboolean ret;
+
+	EventTracker<SimpleEvent> tracker("undo");
 
 	g_assert (doc != NULL);
 	g_assert (doc->priv != NULL);
@@ -197,7 +204,12 @@ sp_document_undo (SPDocument *doc)
 gboolean
 sp_document_redo (SPDocument *doc)
 {
+	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::SimpleEvent;
+
 	gboolean ret;
+
+	EventTracker<SimpleEvent> tracker("redo");
 
 	g_assert (doc != NULL);
 	g_assert (doc->priv != NULL);
