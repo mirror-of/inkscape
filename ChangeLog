@@ -1,5 +1,9 @@
 2005-05-05  MenTaLguY  <mental@rydia.net>
 
+	* src/inkscape.cpp: try to cleanly terminate log in case of crashes
+
+2005-05-05  MenTaLguY  <mental@rydia.net>
+
 	* src/document-undo.cpp, src/debug/Makefile_insert, src/debug/logger.cpp,
 	  src/debug/simple-event.h, src/xml/event.cpp:
 

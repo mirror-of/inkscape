@@ -25,6 +25,8 @@
 #include <sys/stat.h>
 
 #include "debug/logger.h"
+#include "debug/simple-event.h"
+#include "debug/event-tracker.h"
 
 #ifndef WIN32
 #include <unistd.h>
@@ -375,6 +377,10 @@ inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop 
 static void
 inkscape_segv_handler (int signum)
 {
+    using Inkscape::Debug::SimpleEvent;
+    using Inkscape::Debug::EventTracker;
+    using Inkscape::Debug::Logger;
+
     static gint recursion = FALSE;
 
     /* let any SIGABRTs seen from within this handler dump core */
@@ -385,6 +391,9 @@ inkscape_segv_handler (int signum)
         abort ();
     }
     recursion = TRUE;
+
+    EventTracker<SimpleEvent> tracker("crash");
+    tracker.set<SimpleEvent>("emergency-save");
 
     fprintf(stderr, "\nEmergency save activated!\n");
 
@@ -539,6 +548,9 @@ inkscape_segv_handler (int signum)
         g_message( "Error: %s", b );
     }
     g_free (b);
+
+    tracker.clear();
+    Logger::shutdown();
 
     (* segv_handler) (signum);
 }
