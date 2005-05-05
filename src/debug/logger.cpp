@@ -41,6 +41,9 @@ static void write_escaped_value(std::ostream &os, Util::SharedCStringPtr value) 
         case '<':
             os << "&lt;";
             break;
+        case '>':
+            os << "&gt;";
+            break;
         default:
             os.put(*current);
         }
