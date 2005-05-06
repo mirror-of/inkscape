@@ -37,6 +37,7 @@
 #include "xml/repr.h"
 #include "object-edit.h"
 #include "prefs-utils.h"
+#include "sp-metrics.h"
 
 // evil evil evil. There is a conflict in the namespace between two classes named Path
 //#include "sp-flowtext.h"
@@ -2483,6 +2484,25 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     sp_desktop_set_coordinate_status(knot->desktop, me->pos, 0);
 
     update_object(n->subpath->nodepath);
+
+    /* status text */
+    SPDesktop *desktop = n->subpath->nodepath->desktop;
+    if (!desktop) return;
+    SPEventContext *ec = desktop->event_context;
+    if (!ec) return;
+    Inkscape::MessageContext *mc = SP_NODE_CONTEXT (ec)->_node_message_context;
+    if (!mc) return;
+
+    double degrees = 180 / M_PI * rnew.a;
+    if (degrees > 180) degrees -= 360;
+    if (degrees < -180) degrees += 360;
+
+    GString *length = SP_PX_TO_METRIC_STRING(rnew.r, sp_desktop_get_default_metric(desktop));
+
+    mc->setF(Inkscape::NORMAL_MESSAGE,
+         _("<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"), degrees, length->str);
+
+    g_string_free(length, TRUE);
 }
 
 static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event,Inkscape::NodePath::Node *n)
@@ -2914,7 +2934,7 @@ sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *n
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
-                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite handle in sync"),
+                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"),
                  NULL);
     g_signal_connect(G_OBJECT(n->p.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->p.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
@@ -3059,18 +3079,44 @@ static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Ink
     return NR_END;
 }
 
-static gchar const *sp_node_type_description(Inkscape::NodePath::Node *n)
+static gchar const *sp_node_type_description(Inkscape::NodePath::Node *node)
 {
-    switch (n->type) {
-        case Inkscape::NodePath::NODE_CUSP:
-            // TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-            return _("cusp");
-        case Inkscape::NodePath::NODE_SMOOTH:
-            // TRANSLATORS: "smooth" is an adjective here
-            return _("smooth");
-        case Inkscape::NodePath::NODE_SYMM:
-            return _("symmetric");
+    unsigned retracted = 0;
+    bool endnode = false;
+
+    for (int which = -1; which <= 1; which += 2) {
+        Inkscape::NodePath::NodeSide *side = sp_node_get_side(node, which);
+        if (side->other && NR::L2(side->pos - node->pos) < 1e-6)
+            retracted ++;
+        if (!side->other)
+            endnode = true;
     }
+
+    if (retracted == 0) {
+        if (endnode) {
+                return _("end node");
+        } else {
+            switch (node->type) {
+                case Inkscape::NodePath::NODE_CUSP:
+                    // TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
+                    return _("cusp");
+                case Inkscape::NodePath::NODE_SMOOTH:
+                    // TRANSLATORS: "smooth" is an adjective here
+                    return _("smooth");
+                case Inkscape::NodePath::NODE_SYMM:
+                    return _("symmetric");
+            }
+        }
+    } else if (retracted == 1) {
+        if (endnode) {
+            return _("end node, handle retracted (drag with <b>Shift</b> to extend)");
+        } else {
+            return _("one handle retracted (drag with <b>Shift</b> to extend)");
+        }
+    } else {
+        return _("both handles retracted (drag with <b>Shift</b> to extend)");
+    }
+
     return NULL;
 }
 
@@ -3079,7 +3125,8 @@ sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
 {
     if (!nodepath) return;
 
-    gchar const *when_selected = _("Drag nodes or node handles to edit the path");
+    gchar const *when_selected = _("<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes");
+    gchar const *when_selected_one = _("<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node");
 
     gint total = 0;
 
@@ -3101,8 +3148,8 @@ sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
                      _("Select one path object with selector first, then switch back to node tool."));
         } else {
             mc->setF(Inkscape::NORMAL_MESSAGE,
-                     ngettext("<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag around nodes to select.",
-                              "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around nodes to select.",
+                     ngettext("<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to select.",
+                              "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to select.",
                               total),
                      total);
         }
@@ -3111,7 +3158,7 @@ sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
                  ngettext("<b>%i</b> of <b>%i</b> node selected; %s. %s.",
                           "<b>%i</b> of <b>%i</b> nodes selected; %s. %s.",
                           total),
-                 selected, total, sp_node_type_description((Inkscape::NodePath::Node *) nodepath->selected->data), when_selected);
+                 selected, total, sp_node_type_description((Inkscape::NodePath::Node *) nodepath->selected->data), when_selected_one);
     } else {
         mc->setF(Inkscape::NORMAL_MESSAGE,
                  ngettext("<b>%i</b> of <b>%i</b> node selected. %s.",
