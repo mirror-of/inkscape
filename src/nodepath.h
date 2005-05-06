@@ -61,18 +61,10 @@ operator NR::Point() const
 
 };
 
-
-
-
 /** defined in node-context.h */
 class SPNodeContext;
 
-
-
-
-
 namespace Inkscape {
-
 namespace NodePath {
 
 /**
@@ -356,20 +348,9 @@ void sp_node_selected_move (gdouble dx, gdouble dy);
  */
 void sp_node_selected_move_screen (gdouble dx, gdouble dy);
 
+void sp_nodepath_selected_nodes_rotate (Inkscape::NodePath::Path * nodepath, gdouble angle, int which, bool screen);
 
-void sp_nodepath_selected_nodes_rotate (Inkscape::NodePath::Path * nodepath, gdouble angle, int which);
-void sp_nodepath_selected_nodes_rotate_screen (Inkscape::NodePath::Path * nodepath, gdouble angle, int which);
 void sp_nodepath_selected_nodes_scale (Inkscape::NodePath::Path * nodepath, gdouble grow, int which);
 void sp_nodepath_selected_nodes_scale_screen (Inkscape::NodePath::Path * nodepath, gdouble grow, int which);
-
-
-
-
-
-
-
-
-
-
 
 #endif

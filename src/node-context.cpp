@@ -654,40 +654,40 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 case GDK_bracketleft:
                     if ( MOD__CTRL && !MOD__ALT && ( snaps != 0 ) ) {
                         if (nc->leftctrl)
-                            sp_nodepath_selected_nodes_rotate(nc->nodepath, M_PI/snaps, -1);
+                            sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, -1, false);
                         if (nc->rightctrl)
-                            sp_nodepath_selected_nodes_rotate(nc->nodepath, M_PI/snaps, 1);
+                            sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, 1, false);
                     } else if ( MOD__ALT && !MOD__CTRL ) {
                         if (nc->leftalt && nc->rightalt)
-                            sp_nodepath_selected_nodes_rotate_screen(nc->nodepath, 1, 0);
+                            sp_nodepath_selected_nodes_rotate (nc->nodepath, 1, 0, true);
                         else {
                             if (nc->leftalt)
-                                sp_nodepath_selected_nodes_rotate_screen(nc->nodepath, 1, -1);
+                                sp_nodepath_selected_nodes_rotate (nc->nodepath, 1, -1, true);
                             if (nc->rightalt)
-                                sp_nodepath_selected_nodes_rotate_screen(nc->nodepath, 1, 1);
+                                sp_nodepath_selected_nodes_rotate (nc->nodepath, 1, 1, true);
                         }
                     } else if ( snaps != 0 ) {
-                        sp_nodepath_selected_nodes_rotate(nc->nodepath, M_PI/snaps, 0);
+                        sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, 0, false);
                     }
                     ret = TRUE;
                     break;
                 case GDK_bracketright:
                     if ( MOD__CTRL && !MOD__ALT && ( snaps != 0 ) ) {
                         if (nc->leftctrl)
-                            sp_nodepath_selected_nodes_rotate(nc->nodepath, -M_PI/snaps, -1);
+                            sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, -1, false);
                         if (nc->rightctrl)
-                            sp_nodepath_selected_nodes_rotate(nc->nodepath, -M_PI/snaps, 1);
+                            sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, 1, false);
                     } else if ( MOD__ALT && !MOD__CTRL ) {
                         if (nc->leftalt && nc->rightalt)
-                            sp_nodepath_selected_nodes_rotate_screen(nc->nodepath, -1, 0);
+                            sp_nodepath_selected_nodes_rotate (nc->nodepath, -1, 0, true);
                         else {
                             if (nc->leftalt)
-                                sp_nodepath_selected_nodes_rotate_screen(nc->nodepath, -1, -1);
+                                sp_nodepath_selected_nodes_rotate (nc->nodepath, -1, -1, true);
                             if (nc->rightalt)
-                                sp_nodepath_selected_nodes_rotate_screen(nc->nodepath, -1, 1);
+                                sp_nodepath_selected_nodes_rotate (nc->nodepath, -1, 1, true);
                         }
                     } else if ( snaps != 0 ) {
-                        sp_nodepath_selected_nodes_rotate(nc->nodepath, -M_PI/snaps, 0);
+                        sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, 0, false);
                     }
                     ret = TRUE;
                     break;

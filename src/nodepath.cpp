@@ -39,6 +39,13 @@
 #include "prefs-utils.h"
 #include "sp-metrics.h"
 
+#include "libnr/nr-point-ops.h"
+#include <libnr/nr-rect.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-matrix-ops.h>
+
 // evil evil evil. There is a conflict in the namespace between two classes named Path
 //#include "sp-flowtext.h"
 //#include "sp-flowregion.h" //FIXME: conflict of two different Path classes!
@@ -2529,7 +2536,7 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event,Inkscape::NodePath
     return ret;
 }
 
-static void node_rotate_internal(Inkscape::NodePath::Node const &n, gdouble const angle,
+static void node_rotate_one_internal(Inkscape::NodePath::Node const &n, gdouble const angle,
                                  Radial &rme, Radial &rother, gboolean const both)
 {
     rme.a += angle;
@@ -2541,7 +2548,7 @@ static void node_rotate_internal(Inkscape::NodePath::Node const &n, gdouble cons
     }
 }
 
-static void node_rotate_internal_screen(Inkscape::NodePath::Node const &n, gdouble const angle,
+static void node_rotate_one_internal_screen(Inkscape::NodePath::Node const &n, gdouble const angle,
                                         Radial &rme, Radial &rother, gboolean const both)
 {
     gdouble const norm_angle = angle / SP_DESKTOP_ZOOM(n.subpath->nodepath->desktop);
@@ -2570,7 +2577,7 @@ static void node_rotate_internal_screen(Inkscape::NodePath::Node const &n, gdoub
     }
 }
 
-static void node_rotate_common(Inkscape::NodePath::Node *n, gdouble angle, int which, gboolean screen)
+static void node_rotate_one (Inkscape::NodePath::Node *n, gdouble angle, int which, gboolean screen)
 {
     Inkscape::NodePath::NodeSide *me, *other;
     bool both = false;
@@ -2612,9 +2619,9 @@ static void node_rotate_common(Inkscape::NodePath::Node *n, gdouble angle, int w
     Radial rother(other->pos - n->pos);
 
     if (screen) {
-        node_rotate_internal_screen(*n, angle, rme, rother, both);
+        node_rotate_one_internal_screen (*n, angle, rme, rother, both);
     } else {
-        node_rotate_internal(*n, angle, rme, rother, both);
+        node_rotate_one_internal (*n, angle, rme, rother, both);
     }
 
     me->pos = n->pos + NR::Point(rme);
@@ -2626,15 +2633,45 @@ static void node_rotate_common(Inkscape::NodePath::Node *n, gdouble angle, int w
     sp_node_ensure_ctrls(n);
 }
 
-void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdouble angle, int which)
+void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdouble angle, int which, bool screen)
 {
     if (!nodepath || !nodepath->selected) return;
 
     if (g_list_length(nodepath->selected) == 1) {
        Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
-        node_rotate_common(n, angle, which, FALSE);
+        node_rotate_one (n, angle, which, screen);
     } else {
-       // rotate as an object
+       // rotate as an object:
+
+        Inkscape::NodePath::Node *n0 = (Inkscape::NodePath::Node *) nodepath->selected->data;
+        NR::Rect box (n0->pos, n0->pos); // originally includes the first selected node
+        for (GList *l = nodepath->selected; l != NULL; l = l->next) { 
+            Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+            box.expandTo (n->pos); // contain all selected nodes
+        }
+
+        gdouble rot;
+        if (screen) {
+            gdouble const zoom = SP_DESKTOP_ZOOM(nodepath->desktop);
+            gdouble const zmove = angle / zoom;
+            gdouble const r = NR::L2(box.max() - box.midpoint());
+            rot = atan2(zmove, r);
+        } else {
+            rot = angle;
+        }
+
+        NR::Matrix t = 
+            NR::Matrix (NR::translate(-box.midpoint())) * 
+            NR::Matrix (NR::rotate(rot)) * 
+            NR::Matrix (NR::translate(box.midpoint()));
+
+        for (GList *l = nodepath->selected; l != NULL; l = l->next) { 
+            Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+            n->pos *= t;
+            n->n.pos *= t;
+            n->p.pos *= t;
+            sp_node_ensure_ctrls(n);
+        }
     }
 
     update_object(nodepath);
@@ -2642,23 +2679,8 @@ void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdoub
     update_repr(nodepath);
 }
 
-void sp_nodepath_selected_nodes_rotate_screen(Inkscape::NodePath::Path *nodepath, gdouble angle, int which)
-{
-    if (!nodepath || !nodepath->selected) return;
 
-    if (g_list_length(nodepath->selected) == 1) {
-       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
-        node_rotate_common(n, angle, which, TRUE);
-    } else {
-       // rotate as an object
-    }
-
-    update_object(nodepath);
-    // fixme: use _keyed
-    update_repr(nodepath);
-}
-
-static void node_scale(Inkscape::NodePath::Node *n, gdouble grow, int which)
+static void node_scale_one (Inkscape::NodePath::Node *n, gdouble grow, int which)
 {
     bool both = false;
     Inkscape::NodePath::NodeSide *me, *other;
@@ -2738,11 +2760,6 @@ static void node_scale(Inkscape::NodePath::Node *n, gdouble grow, int which)
     sp_node_ensure_ctrls(n);
 }
 
-static void node_scale_screen(Inkscape::NodePath::Node *n, gdouble const grow, int const which)
-{
-    node_scale(n, grow / SP_DESKTOP_ZOOM(n->subpath->nodepath->desktop), which);
-}
-
 void sp_nodepath_selected_nodes_scale(Inkscape::NodePath::Path *nodepath, gdouble const grow, int const which)
 {
     if (!nodepath || !nodepath->selected) return;
@@ -2750,10 +2767,31 @@ void sp_nodepath_selected_nodes_scale(Inkscape::NodePath::Path *nodepath, gdoubl
     if (g_list_length(nodepath->selected) == 1) {
         // scale handles of the single selected node
         Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
-        node_scale(n, grow, which);
+        node_scale_one (n, grow, which);
     } else {
-        // scale nodes as an "object"
+        // scale nodes as an "object":
 
+        Inkscape::NodePath::Node *n0 = (Inkscape::NodePath::Node *) nodepath->selected->data;
+        NR::Rect box (n0->pos, n0->pos); // originally includes the first selected node
+        for (GList *l = nodepath->selected; l != NULL; l = l->next) { 
+            Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+            box.expandTo (n->pos); // contain all selected nodes
+        }
+
+        double scale = (box.maxExtent() + grow)/box.maxExtent();
+
+        NR::Matrix t = 
+            NR::Matrix (NR::translate(-box.midpoint())) * 
+            NR::Matrix (NR::scale(scale, scale)) * 
+            NR::Matrix (NR::translate(box.midpoint()));
+
+        for (GList *l = nodepath->selected; l != NULL; l = l->next) { 
+            Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+            n->pos *= t;
+            n->n.pos *= t;
+            n->p.pos *= t;
+            sp_node_ensure_ctrls(n);
+        }
     }
 
     update_object(nodepath);
@@ -2764,15 +2802,7 @@ void sp_nodepath_selected_nodes_scale(Inkscape::NodePath::Path *nodepath, gdoubl
 void sp_nodepath_selected_nodes_scale_screen(Inkscape::NodePath::Path *nodepath, gdouble const grow, int const which)
 {
     if (!nodepath) return;
-
-    for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
-        node_scale_screen(n, grow, which);
-    }
-
-    update_object(nodepath);
-    // fixme: use _keyed
-    update_repr(nodepath);
+    sp_nodepath_selected_nodes_scale(nodepath, grow / SP_DESKTOP_ZOOM(nodepath->desktop), which);
 }
 
 
