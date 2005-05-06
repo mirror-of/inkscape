@@ -2181,15 +2181,25 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
                return FALSE;
 
            Inkscape::NodePath::NodeSide *opposite;
-           if (appr_p > appr_n) {
+           if (appr_p > appr_n) { // closer to p
                n->dragging_out = &n->p;
                opposite = &n->n;
                n->code = NR_CURVETO;
-           } else {
+           } else if (appr_p < appr_n) { // closer to n
                n->dragging_out = &n->n;
                opposite = &n->p;
                n->n.other->code = NR_CURVETO;
-           } 
+           } else { // p and n nodes are the same
+               if (n->n.pos != n->pos) { // n handle already dragged, drag p
+                   n->dragging_out = &n->p;
+                   opposite = &n->n;
+                   n->code = NR_CURVETO;
+               } else {
+                   n->dragging_out = &n->n;
+                   opposite = &n->p;
+                   n->n.other->code = NR_CURVETO;
+               }
+           }
 
            // if there's another handle, make sure the one we drag out starts parallel to it
            if (opposite->pos != n->pos) {
