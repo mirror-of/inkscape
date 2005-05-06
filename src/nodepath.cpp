@@ -2542,19 +2542,40 @@ static void node_rotate_internal_screen(Inkscape::NodePath::Node const &n, gdoub
 
 static void node_rotate_common(Inkscape::NodePath::Node *n, gdouble angle, int which, gboolean screen)
 {
-   Inkscape::NodePath::NodeSide *me, *other;
-    gboolean both = FALSE;
+    Inkscape::NodePath::NodeSide *me, *other;
+    bool both = false;
 
-    if (which > 0) {
-        me = &(n->n);
-        other = &(n->p);
-    } else if (which < 0){
+    double xn = n->n.other? n->n.other->pos[NR::X] : n->pos[NR::X];
+    double xp = n->p.other? n->p.other->pos[NR::X] : n->pos[NR::X];
+
+    if (!n->n.other) { // if this is an endnode, select its single handle regardless of "which"
         me = &(n->p);
         other = &(n->n);
-    } else {
+    } else if (!n->p.other) {
         me = &(n->n);
         other = &(n->p);
-        both = TRUE;
+    } else {
+        if (which > 0) { // right handle
+            if (xn > xp) {
+                me = &(n->n);
+                other = &(n->p);
+            } else {
+                me = &(n->p);
+                other = &(n->n);
+            }
+        } else if (which < 0){ // left handle
+            if (xn <= xp) {
+                me = &(n->n);
+                other = &(n->p);
+            } else {
+                me = &(n->p);
+                other = &(n->n);
+            }
+        } else { // both handles
+            me = &(n->n);
+            other = &(n->p);
+            both = true;
+        }
     }
 
     Radial rme(me->pos - n->pos);
@@ -2577,11 +2598,13 @@ static void node_rotate_common(Inkscape::NodePath::Node *n, gdouble angle, int w
 
 void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdouble angle, int which)
 {
-    if (!nodepath) return;
+    if (!nodepath || !nodepath->selected) return;
 
-    for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+    if (g_list_length(nodepath->selected) == 1) {
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
         node_rotate_common(n, angle, which, FALSE);
+    } else {
+       // rotate as an object
     }
 
     update_object(nodepath);
@@ -2591,11 +2614,13 @@ void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdoub
 
 void sp_nodepath_selected_nodes_rotate_screen(Inkscape::NodePath::Path *nodepath, gdouble angle, int which)
 {
-    if (!nodepath) return;
+    if (!nodepath || !nodepath->selected) return;
 
-    for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+    if (g_list_length(nodepath->selected) == 1) {
+       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
         node_rotate_common(n, angle, which, TRUE);
+    } else {
+       // rotate as an object
     }
 
     update_object(nodepath);
@@ -2606,34 +2631,71 @@ void sp_nodepath_selected_nodes_rotate_screen(Inkscape::NodePath::Path *nodepath
 static void node_scale(Inkscape::NodePath::Node *n, gdouble grow, int which)
 {
     bool both = false;
-   Inkscape::NodePath::NodeSide *me, *other;
-    if (which > 0) {
-        me = &(n->n);
-        other = &(n->p);
-    } else if (which < 0){
+    Inkscape::NodePath::NodeSide *me, *other;
+
+    double xn = n->n.other? n->n.other->pos[NR::X] : n->pos[NR::X];
+    double xp = n->p.other? n->p.other->pos[NR::X] : n->pos[NR::X];
+
+    if (!n->n.other) { // if this is an endnode, select its single handle regardless of "which"
         me = &(n->p);
         other = &(n->n);
-    } else {
+        n->code = NR_CURVETO;
+    } else if (!n->p.other) {
         me = &(n->n);
         other = &(n->p);
-        both = true;
+        if (n->n.other)    
+            n->n.other->code = NR_CURVETO;
+    } else {
+        if (which > 0) { // right handle
+            if (xn > xp) {
+                me = &(n->n);
+                other = &(n->p);
+                if (n->n.other)    
+                    n->n.other->code = NR_CURVETO;
+            } else {
+                me = &(n->p);
+                other = &(n->n);
+                n->code = NR_CURVETO;
+            }
+        } else if (which < 0){ // left handle
+            if (xn <= xp) {
+                me = &(n->n);
+                other = &(n->p);
+                if (n->n.other)    
+                    n->n.other->code = NR_CURVETO;
+            } else {
+                me = &(n->p);
+                other = &(n->n);
+                n->code = NR_CURVETO;
+            }
+        } else { // both handles
+            me = &(n->n);
+            other = &(n->p);
+            both = true;
+            n->code = NR_CURVETO;
+            if (n->n.other)    
+                n->n.other->code = NR_CURVETO;
+        }
     }
 
     Radial rme(me->pos - n->pos);
     Radial rother(other->pos - n->pos);
 
     rme.r += grow;
-    if (rme.r < 0) rme.r = 1e-6; // not 0, so that direction is not lost
+    if (rme.r < 0) rme.r = 0;
     if (rme.a == HUGE_VAL) {
-        rme.a = 0; // if direction is unknown, initialize to 0
-        sp_node_selected_set_line_type(NR_CURVETO);
+        if (me->other) { // if direction is unknown, initialize it towards the next node
+            Radial rme_next(me->other->pos - n->pos);
+            rme.a = rme_next.a;
+        } else { // if there's no next, initialize to 0
+            rme.a = 0;
+        }
     }
     if (both || n->type == Inkscape::NodePath::NODE_SYMM) {
         rother.r += grow;
-        if (rother.r < 0) rother.r = 1e-6;
-        if (rother.r == HUGE_VAL) {
-            rother.a = 0;
-            sp_node_selected_set_line_type(NR_CURVETO);
+        if (rother.r < 0) rother.r = 0;
+        if (rother.a == HUGE_VAL) {
+            rother.a = rme.a + M_PI;
         }
     }
 
@@ -2653,11 +2715,15 @@ static void node_scale_screen(Inkscape::NodePath::Node *n, gdouble const grow, i
 
 void sp_nodepath_selected_nodes_scale(Inkscape::NodePath::Path *nodepath, gdouble const grow, int const which)
 {
-    if (!nodepath) return;
+    if (!nodepath || !nodepath->selected) return;
 
-    for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-       Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+    if (g_list_length(nodepath->selected) == 1) {
+        // scale handles of the single selected node
+        Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
         node_scale(n, grow, which);
+    } else {
+        // scale nodes as an "object"
+
     }
 
     update_object(nodepath);
