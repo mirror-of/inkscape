@@ -11,7 +11,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#define DEBUG_GRID_ARRANGE 0
+//#define DEBUG_GRID_ARRANGE 0
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -47,6 +47,42 @@
 #include "libnr/nr-matrix-ops.h"
 
 #include <glib.h>
+
+/*
+ *    0    positions are equivalent
+ *    1    first object's position is greater than the second
+ *   -1    first object's position is less than the second
+ */
+int
+sp_compare_x_position(SPItem *first, SPItem *second)
+{
+    NRRect a;
+    sp_item_invoke_bbox(first, &a, sp_item_i2doc_affine(first), TRUE);
+    NRRect b;
+    sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
+
+    if (a.x0 > b.x0) return 1;
+    if (a.x0 > b.x0) return -1;
+    return 0;
+}
+
+/*
+ *    0    positions are equivalent
+ *    1    first object's position is greater than the second
+ *   -1    first object's position is less than the second
+ */
+int
+sp_compare_y_position(SPItem *first, SPItem *second)
+{
+    NRRect a;
+    sp_item_invoke_bbox(first, &a, sp_item_i2doc_affine(first), TRUE);
+    NRRect b;
+    sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
+
+    if (a.y0 > b.y0) return 1;
+    if (a.y0 > b.y0) return -1;
+    return 0;
+}
 
 namespace Inkscape {
 namespace UI {
@@ -136,6 +172,7 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     Gtk::Label            SelectionContentsLabel;
 
 
+    Gtk::HBox             AlignHBox;
     Gtk::HBox             SpinsHBox;
     Gtk::HBox             SizesHBox;
 
@@ -155,6 +192,22 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     bool AutoColSize;
     Gtk::CheckButton      ColumnWidthButton;
 
+    // Horizontal align
+    Gtk::Label            HorizAlignLabel;
+    Gtk::VBox             HorizAlignVBox;
+    Gtk::RadioButtonGroup HorizAlignGroup;
+    Gtk::RadioButton      HorizCentreRadioButton;
+    Gtk::RadioButton      HorizLeftRadioButton;
+    Gtk::RadioButton      HorizRightRadioButton;
+
+    // Vertical align
+    Gtk::Label            VertAlignLabel;
+    Gtk::VBox             VertAlignVBox;
+    Gtk::RadioButtonGroup VertAlignGroup;
+    Gtk::RadioButton      VertCentreRadioButton;
+    Gtk::RadioButton      VertTopRadioButton;
+    Gtk::RadioButton      VertBotRadioButton;
+
     // padding in x
     Gtk::VBox             XPadBox;
     Gtk::Label            XPadLabel;
@@ -171,6 +224,7 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     Gtk::RadioButton      SpaceByBBoxRadioButton;
     Gtk::RadioButton      SpaceManualRadioButton;
     bool ManualSpacing;
+
 
 
     // Row height
@@ -203,13 +257,17 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
 void TileDialogImpl::Grid_Arrange ()
 {
 
-    int cnt;
+    int cnt,row_cnt,col_cnt;
     double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y,cx,cy;
     col_width = 0;
     row_height = 0;
+
+    // set padding to manual values
     paddingx = XPadSpinner.get_value();
     paddingy = YPadSpinner.get_value();
-    grid_left = 9999;
+
+
+    grid_left = 99999;
     grid_top = 99999;
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -241,54 +299,77 @@ void TileDialogImpl::Grid_Arrange ()
             g_print("\n gridleft=%f",grid_left);
        #endif
 
-    // TODO: This Just sets it to qual height / width atm, Change to respond to the "equal" checkboxes
+    // TODO: This Just sets it to equal row height / column width atm, Change to respond to the "equal" checkboxes
     ColumnWidthSpinner.set_value(col_width);
     RowHeightSpinner.set_value(row_height);
     int NoOfCols = NoOfColsSpinner.get_value_as_int();
     int NoOfRows = NoOfRowsSpinner.get_value_as_int();
 
     if (!SpaceManualRadioButton.get_active()){
-        NR::Rect b =  selection->bounds();
-        paddingx = (( b.max()[NR::X] - b.min()[NR::X]) - (col_width * NoOfCols)) / NoOfCols;
-        paddingy = (( b.max()[NR::Y] - b.min()[NR::Y]) - (row_height * NoOfRows)) / NoOfRows;
+        NRRect b;
+        selection->bounds(&b);
+       // g_print("\n OLD b.x0 = %f b.x1= %f b.y0 = %f b.y1= %f",b.x0,b.x1,b.y0,b.y1);
+
+        paddingx = (fabs (b.x1 - b.x0) - (col_width * NoOfCols)) / (NoOfCols - 1);
+        paddingy = (fabs (b.y1 - b.y0) - (row_height * NoOfRows)) / (NoOfRows - 1);
+
+        g_print("\n paddingx = %f paddingy = %f ",paddingx,paddingy);
 
     }
+
 
     cnt=0;
     const GSList *items2 = selection->itemList();
     GSList *rev = g_slist_copy((GSList *) items2);
-    rev = g_slist_sort(rev, (GCompareFunc) sp_item_repr_compare_position);
+    rev = g_slist_sort(rev, (GCompareFunc) sp_compare_y_position);
 
-        #ifdef DEBUG_GRID_ARRANGE
-            g_print("\n row_height = %f col_width= %f",row_height,col_width);
-            g_print("\n grid_left = %f grid_top= %f",grid_left,grid_top);
-        #endif
+         #ifdef DEBUG_GRID_ARRANGE
+             g_print("\n row_height = %f col_width= %f",row_height,col_width);
+             g_print("\n grid_left = %f grid_top= %f",grid_left,grid_top);
+         #endif
 
-    for (; rev != NULL; rev = rev->next) {
-            Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) rev->data);
-            SPItem *item=SP_ITEM(rev->data);
-            NRRect b;
-            sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
-            width = b.x1 - b.x0;
-            height = b.y1 - b.y0;
-            new_x = grid_left + ((col_width - width)/2) + (( col_width + paddingx ) * (cnt % NoOfCols));
-            new_y = grid_top + ((row_height - height)/2) +(( row_height + paddingy ) * (cnt / NoOfCols));
-            #ifdef DEBUG_GRID_ARRANGE
-            g_print("\n x0 = %f x1= %f new_x= %f",b.x0,b.x1, new_x);
-            g_print("\n width = %f ",width);
-            #endif
-            NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y);
-            NR::Matrix const &affine = NR::Matrix(NR::translate(move));
-            sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
-            sp_item_write_transform(item, repr, item->transform,  NULL);
-            SP_OBJECT (rev->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
-            cnt +=1;
+    for (row_cnt=0; ((rev != NULL) && (row_cnt<NoOfRows)); row_cnt++) {
+
+             GSList *current_row = NULL;
+             for (col_cnt = 0; ((rev != NULL) && (col_cnt<NoOfCols)); col_cnt++) {
+                 current_row = g_slist_append (current_row, rev->data);
+                 rev = rev->next;
+             }
+             current_row = g_slist_sort(current_row, (GCompareFunc) sp_compare_x_position);
+
+             for (; current_row != NULL; current_row = current_row->next) {
+                 SPItem *item=SP_ITEM(current_row->data);
+                 Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
+                 NRRect b;
+                 sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
+                 width = b.x1 - b.x0;
+                 height = b.y1 - b.y0;
+                 int hor_align = 1;  // 0 = left 1= centre 2 = right
+                 int vert_align = 1;  // 0 = bottom 1= centre 2 = top
+                 new_x = grid_left + (((col_width - width)/2)*hor_align) + (( col_width + paddingx ) * (cnt % NoOfCols));
+                 new_y = grid_top + (((row_height - height)/2)*vert_align) +(( row_height + paddingy ) * (cnt / NoOfCols));
+                 #ifdef DEBUG_GRID_ARRANGE
+                 g_print("\n x0 = %f x1= %f new_x= %f",b.x0,b.x1, new_x);
+                 g_print("\n width = %f ",width);
+                 #endif
+                 NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y);
+                 NR::Matrix const &affine = NR::Matrix(NR::translate(move));
+                 sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
+                 sp_item_write_transform(item, repr, item->transform,  NULL);
+                 SP_OBJECT (current_row->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
+                 cnt +=1;
+             }
+             g_slist_free (current_row);
     }
+
+    NRRect b;
+            selection->bounds(&b);
+            g_print("\n NEW b.x0 = %f b.x1= %f b.y0 = %f b.y1= %f",b.x0,b.x1,b.y0,b.y1);
+
+
     sp_document_done (SP_DT_DOCUMENT (desktop));
 
 }
-
-
 
 
 //#########################################################################
@@ -485,26 +566,24 @@ void TileDialogImpl::updateSelection()
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     const GSList *items = selection->itemList();
     int selcount = g_slist_length((GSList *)items);
-    for (; items != NULL; items = items->next) {
-        NRRect b;
-        SPItem *item=SP_ITEM(items->data);
-        sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
-        width = fabs (b.x1 - b.x0);
-        height = fabs (b.y1 - b.y0);
-        if (width > col_width) col_width = width;
-        if (height > row_height) row_height = height;
+
+    if (NoOfColsSpinner.get_value()>1){
+        // Update the number of rows assuming number of columns wanted remains same.
+        double NoOfRows = ceil(selcount / NoOfColsSpinner.get_value());
+        NoOfRowsSpinner.set_value(NoOfRows);
+
+        // if the selection has less than the number set for one row, reduce it appropriately
+        if (selcount<NoOfColsSpinner.get_value()) {
+            double NoOfCols = ceil(selcount / NoOfRowsSpinner.get_value());
+            NoOfColsSpinner.set_value(NoOfCols);
+            prefs_set_double_attribute ("dialogs.gridtiler", "NoOfCols", NoOfCols);
+        }
+    } else {
+        NoOfColsSpinner.set_value(selcount);
+        prefs_set_double_attribute ("dialogs.gridtiler", "NoOfCols", selcount);
+
     }
 
-    // Update the number of rows assuming number of columns wanted remains same.
-    double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
-    NoOfRowsSpinner.set_value(PerCol);
-
-    // if the selection has less than the number set for one row, reduce it appropriately
-    if (selcount<NoOfColsSpinner.get_value()) {
-        double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
-        NoOfColsSpinner.set_value(PerRow);
-        prefs_set_double_attribute ("dialogs.gridtiler", "NoOfCols", PerRow);
-    }
     updating=false;
 
 }
