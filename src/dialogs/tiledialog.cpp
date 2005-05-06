@@ -313,7 +313,7 @@ void TileDialogImpl::Grid_Arrange ()
         paddingx = (fabs (b.x1 - b.x0) - (col_width * NoOfCols)) / (NoOfCols - 1);
         paddingy = (fabs (b.y1 - b.y0) - (row_height * NoOfRows)) / (NoOfRows - 1);
 
-        g_print("\n paddingx = %f paddingy = %f ",paddingx,paddingy);
+      //  g_print("\n paddingx = %f paddingy = %f ",paddingx,paddingy);
 
     }
 
@@ -364,7 +364,7 @@ void TileDialogImpl::Grid_Arrange ()
 
     NRRect b;
             selection->bounds(&b);
-            g_print("\n NEW b.x0 = %f b.x1= %f b.y0 = %f b.y1= %f",b.x0,b.x1,b.y0,b.y1);
+            //g_print("\n NEW b.x0 = %f b.x1= %f b.y0 = %f b.y1= %f",b.x0,b.x1,b.y0,b.y1);
 
 
     sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -552,7 +552,7 @@ void TileDialogImpl::Spacing_button_changed()
  */
 void TileDialogImpl::updateSelection()
 {
-    double width, height,col_width, row_height;
+    double col_width, row_height;
     // quit if run by the attr_changed listener
     if (updating) {
             return;
