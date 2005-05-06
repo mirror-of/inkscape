@@ -373,8 +373,12 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
                             NR::Point startpoint, endpoint;
                             const_cast<Path&>(path).PointAt(start_otp[0].piece, start_otp[0].t, startpoint);
                             const_cast<Path&>(path).PointAt(end_otp[0].piece, end_otp[0].t, endpoint);
-                            tangent = endpoint - startpoint;
-                            tangent.normalize();
+                            if (endpoint != startpoint) {
+                                tangent = endpoint - startpoint;
+                                tangent.normalize();
+                            } else {
+                                tangent = NR::Point (0,0);
+                            }
                         }
                         g_free(end_otp);
                     }
