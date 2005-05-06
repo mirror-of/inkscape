@@ -2202,10 +2202,22 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
                    n->dragging_out = &n->p;
                    opposite = &n->n;
                    n->code = NR_CURVETO;
-               } else {
+               } else if (n->p.pos != n->pos) { // p handle already dragged, drag n
                    n->dragging_out = &n->n;
                    opposite = &n->p;
                    n->n.other->code = NR_CURVETO;
+               } else { // find out to which handle of the adjacent node we're closer; note that n->n.other == n->p.other
+                   double appr_other_n = (n->n.other ? NR::L2(n->n.other->n.pos - n->pos) - NR::L2(n->n.other->n.pos - (*p)) : -HUGE_VAL);
+                   double appr_other_p = (n->n.other ? NR::L2(n->n.other->p.pos - n->pos) - NR::L2(n->n.other->p.pos - (*p)) : -HUGE_VAL);
+                   if (appr_other_p > appr_other_n) { // closer to other's p handle
+                       n->dragging_out = &n->n;
+                       opposite = &n->p;
+                       n->n.other->code = NR_CURVETO;
+                   } else { // closer to other's n handle
+                       n->dragging_out = &n->p;
+                       opposite = &n->n;
+                       n->code = NR_CURVETO;
+                   }
                }
            }
 
