@@ -24,6 +24,16 @@ void display_warning(char *msg, GC_word arg) {
     g_warning(msg, arg);
 }
 
+void do_init() {
+    GC_no_dls = 1;
+    GC_all_interior_pointers = 1;
+    GC_finalize_on_demand = 0;
+
+    GC_INIT();
+
+    GC_set_warn_proc(&display_warning);
+}
+
 void *debug_malloc(std::size_t size) {
     return GC_debug_malloc(size, GC_EXTRAS);
 }
@@ -58,6 +68,8 @@ int debug_general_register_disappearing_link(void **p_ptr, void *base) {
     return GC_general_register_disappearing_link(p_ptr, real_base);
 }
 
+void dummy_do_init() {}
+
 void *dummy_base(void *) { return NULL; }
 
 void dummy_register_finalizer(void *, CleanupFunc, void *,
@@ -71,11 +83,22 @@ void dummy_register_finalizer(void *, CleanupFunc, void *,
     }
 }
 
-int dummy_general_register_disappearing_link(void **, void *) { return 0; }
+int dummy_general_register_disappearing_link(void **, void *) { return false; }
 
-int dummy_unregister_disappearing_link(void **link) { return 0; }
+int dummy_unregister_disappearing_link(void **link) { return false; }
+
+std::size_t dummy_get_heap_size() { return 0; }
+
+std::size_t dummy_get_free_bytes() { return 0; }
+
+void dummy_gcollect() {}
+
+void dummy_enable() {}
+
+void dummy_disable() {}
 
 Ops enabled_ops = {
+    &do_init,
     &GC_malloc,
     &GC_malloc_atomic,
     &GC_malloc_uncollectable,
@@ -83,10 +106,16 @@ Ops enabled_ops = {
     &GC_register_finalizer_ignore_self,
     &GC_general_register_disappearing_link,
     &GC_unregister_disappearing_link,
+    &GC_get_heap_size,
+    &GC_get_free_bytes,
+    &GC_gcollect,
+    &GC_enable,
+    &GC_disable,
     &GC_free
 };
 
 Ops debug_ops = {
+    &do_init,
     &debug_malloc,
     &debug_malloc_atomic,
     &debug_malloc_uncollectable,
@@ -94,10 +123,16 @@ Ops debug_ops = {
     &GC_debug_register_finalizer_ignore_self,
     &debug_general_register_disappearing_link,
     &GC_unregister_disappearing_link,
+    &GC_get_heap_size,
+    &GC_get_free_bytes,
+    &GC_gcollect,
+    &GC_enable,
+    &GC_disable,
     &GC_debug_free
 };
 
 Ops disabled_ops = {
+    &dummy_do_init,
     &std::malloc,
     &std::malloc,
     &std::malloc,
@@ -105,6 +140,11 @@ Ops disabled_ops = {
     &dummy_register_finalizer,
     &dummy_general_register_disappearing_link,
     &dummy_unregister_disappearing_link,
+    &dummy_get_heap_size,
+    &dummy_get_free_bytes,
+    &dummy_gcollect,
+    &dummy_enable,
+    &dummy_disable,
     &std::free
 };
 
@@ -162,40 +202,60 @@ int stub_unregister_disappearing_link(void **) {
     return 0;
 }
 
+std::size_t stub_get_heap_size() {
+    die_because_not_initialized();
+    return 0;
+}
+
+std::size_t stub_get_free_bytes() {
+    die_because_not_initialized();
+    return 0;
+}
+
+void stub_gcollect() {
+    die_because_not_initialized();
+}
+
+void stub_enable() {
+    die_because_not_initialized();
+}
+
+void stub_disable() {
+    die_because_not_initialized();
+}
+
 void stub_free(void *) {
     die_because_not_initialized();
 }
 
 }
 
-Ops ops = {
-    stub_malloc,
-    stub_malloc,
-    stub_malloc,
-    stub_base,
-    stub_register_finalizer_ignore_self,
-    stub_general_register_disappearing_link,
-    stub_unregister_disappearing_link,
-    stub_free
+Ops Core::_ops = {
+    NULL,
+    &stub_malloc,
+    &stub_malloc,
+    &stub_malloc,
+    &stub_base,
+    &stub_register_finalizer_ignore_self,
+    &stub_general_register_disappearing_link,
+    &stub_unregister_disappearing_link,
+    &stub_get_heap_size,
+    &stub_get_free_bytes,
+    &stub_gcollect,
+    &stub_enable,
+    &stub_disable,
+    &stub_free
 };
 
-void init() {
+void Core::init() {
     try {
-        ops = get_ops();
+        _ops = get_ops();
     } catch (InvalidGCModeError &e) {
         g_warning("%s; enabling normal collection", e.what());
-        ops = enabled_ops;
+        _ops = enabled_ops;
     }
 
-    if ( (void *)ops.malloc != (void *)std::malloc ) {
-        GC_no_dls = 1;
-        GC_all_interior_pointers = 1;
-        GC_finalize_on_demand = 0;
-
-        GC_INIT();
-
-        GC_set_warn_proc(&display_warning);
-    }
+    _ops.do_init();
 }
 
 }

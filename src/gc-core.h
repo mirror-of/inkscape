@@ -29,8 +29,6 @@
 namespace Inkscape {
 namespace GC {
 
-void init();
-
 enum ScanPolicy {
     SCANNED,
     ATOMIC
@@ -48,6 +46,7 @@ enum Delete {
 typedef void (*CleanupFunc)(void *mem, void *data);
 
 struct Ops {
+    void (*do_init)();
     void *(*malloc)(std::size_t size);
     void *(*malloc_atomic)(std::size_t size);
     void *(*malloc_uncollectable)(std::size_t size);
@@ -59,10 +58,71 @@ struct Ops {
     int (*general_register_disappearing_link)(void **p_ptr,
                                               void *base);
     int (*unregister_disappearing_link)(void **p_ptr);
+    std::size_t (*get_heap_size)();
+    std::size_t (*get_free_bytes)();
+    void (*gcollect)();
+    void (*enable)();
+    void (*disable)();
     void (*free)(void *ptr);
 };
 
-extern Ops ops;
+struct Core {
+public:
+    static void init();
+    static inline void *malloc(std::size_t size) {
+        return _ops.malloc(size);
+    }
+    static inline void *malloc_atomic(std::size_t size) {
+        return _ops.malloc_atomic(size);
+    }
+    static inline void *malloc_uncollectable(std::size_t size) {
+        return _ops.malloc_uncollectable(size);
+    }
+    static inline void *base(void *ptr) {
+        return _ops.base(ptr);
+    }
+    static inline void register_finalizer_ignore_self(void *base,
+                                                      CleanupFunc func,
+                                                      void *data,
+                                                      CleanupFunc *old_func,
+                                                      void **old_data)
+    {
+        return _ops.register_finalizer_ignore_self(base, func, data,
+                                                   old_func, old_data);
+    }
+    static inline int general_register_disappearing_link(void **p_ptr,
+                                                         void *base)
+    {
+        return _ops.general_register_disappearing_link(p_ptr, base);
+    }
+    static inline int unregister_disappearing_link(void **p_ptr) {
+        return _ops.unregister_disappearing_link(p_ptr);
+    }
+    static inline std::size_t get_heap_size() {
+        return _ops.get_heap_size();
+    }
+    static inline std::size_t get_free_bytes() {
+        return _ops.get_free_bytes();
+    }
+    static inline void gcollect() {
+        _ops.gcollect();
+    }
+    static inline void enable() {
+        _ops.enable();
+    }
+    static inline void disable() {
+        _ops.disable();
+    }
+    static inline void free(void *ptr) {
+        return _ops.free(ptr);
+    }
+private:
+    static Ops _ops;
+};
+
+inline void init() {
+    Core::init();
+}
 
 }
 }
@@ -74,18 +134,18 @@ inline void *operator new(std::size_t size,
                           void *data=NULL)
 throw(std::bad_alloc)
 {
-    using Inkscape::GC::ops;
+    using namespace Inkscape::GC;
 
     void *mem;
-    if ( collect == Inkscape::GC::AUTO ) {
-        if ( scan == Inkscape::GC::SCANNED ) {
-            mem = ops.malloc(size);
+    if ( collect == AUTO ) {
+        if ( scan == SCANNED ) {
+            mem = Core::malloc(size);
         } else {
-            mem = ops.malloc_atomic(size);
+            mem = Core::malloc_atomic(size);
         }
     } else {
-        if ( scan == Inkscape::GC::SCANNED ) {
-            mem = ops.malloc_uncollectable(size);
+        if ( scan == SCANNED ) {
+            mem = Core::malloc_uncollectable(size);
         } else {
             abort(); // can't use g_assert as g++ doesn't like to inline it
         }
@@ -94,7 +154,7 @@ throw(std::bad_alloc)
         throw std::bad_alloc();
     }
     if (cleanup) {
-        ops.register_finalizer_ignore_self(mem, cleanup, data, NULL, NULL);
+        Core::register_finalizer_ignore_self(mem, cleanup, data, NULL, NULL);
     }
     return mem;
 }
@@ -128,7 +188,7 @@ throw(std::bad_alloc)
 }
 
 inline void operator delete(void *mem, Inkscape::GC::Delete) {
-    Inkscape::GC::ops.free(mem);
+    Inkscape::GC::Core::free(mem);
 }
 
 inline void operator delete[](void *mem, Inkscape::GC::Delete) {

@@ -1,3 +1,11 @@
+2005-05-07  MenTaLguY  <mental@rydia.net>
+
+	* src/gc-anchored.h, src/gc-core.h, src/gc-finalized.h,
+	  src/gc-managed.h, src/gc.cpp:
+
+	  hide the global Ops structure from the outside world, and expose
+	  some additional libgc API.
+
 2005-05-07  Ted Gould  <ted@gould.cx>
 
 	* src/extension/parameter.cpp: bug fix for empty string parameter

@@ -67,7 +67,7 @@ private:
     struct Anchor : public Managed<SCANNED, MANUAL> {
         Anchor() : refcount(0) {}
         Anchor(Anchored const *obj) : refcount(0) {
-            base = ops.base(const_cast<Anchored *>(obj));
+            base = Core::base(const_cast<Anchored *>(obj));
         }
         int refcount;
         void *base;

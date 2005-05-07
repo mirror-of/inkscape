@@ -33,8 +33,8 @@ public:
       */
     template <typename T>
     void clearOnceInaccessible(T **p_ptr) {
-        ops.general_register_disappearing_link(
-            reinterpret_cast<void **>(p_ptr), ops.base(this)
+        Core::general_register_disappearing_link(
+            reinterpret_cast<void **>(p_ptr), Core::base(this)
         );
     }
 
@@ -43,7 +43,7 @@ public:
       */
     template <typename T>
     void cancelClearOnceInaccessible(T **p_ptr) {
-        ops.unregister_disappearing_link(
+        Core::unregister_disappearing_link(
             reinterpret_cast<void **>(p_ptr)
         );
     }

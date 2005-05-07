@@ -73,7 +73,7 @@ namespace GC {
 class Finalized {
 public:
     Finalized() {
-        void *base=ops.base(this);
+        void *base=Core::base(this);
         if (base) { // only if we are managed by the collector
             CleanupFunc old_cleanup;
             void *old_data;
@@ -83,9 +83,9 @@ public:
             // ourselves would pin us forever and prevent us from being
             // finalized; instead we use an offset-from-base-address
 
-            ops.register_finalizer_ignore_self(base, _invoke_dtor,
-                                                     _offset(base, this),
-                                                     &old_cleanup, &old_data);
+            Core::register_finalizer_ignore_self(base, _invoke_dtor,
+                                                       _offset(base, this),
+                                                       &old_cleanup, &old_data);
 
             if (old_cleanup) {
                 // If there was already a finalizer registered for our
@@ -103,9 +103,9 @@ public:
                 // after ours (e.g. via placement new).  Don't do that.
 
                 if ( old_cleanup != _invoke_dtor ) {
-                    ops.register_finalizer_ignore_self(base,
-                                                       old_cleanup, old_data,
-                                                       NULL, NULL);
+                    Core::register_finalizer_ignore_self(base,
+                                                         old_cleanup, old_data,
+                                                         NULL, NULL);
                 }
             }
         }
@@ -113,8 +113,8 @@ public:
 
     virtual ~Finalized() {
         // make sure the destructor won't get invoked twice
-        ops.register_finalizer_ignore_self(ops.base(this),
-                                           NULL, NULL, NULL, NULL);
+        Core::register_finalizer_ignore_self(Core::base(this),
+                                             NULL, NULL, NULL, NULL);
     }
 
 private:
