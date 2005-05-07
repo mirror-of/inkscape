@@ -693,7 +693,7 @@ int
 Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
     g_return_val_if_fail(in_command != NULL, 0);
-    printf("Executing: %s\n", in_command);
+    // printf("Executing: %s\n", in_command);
 
     /* Get the commandline to be run */
     /* TODO:  Perhaps replace with a sprintf? */
