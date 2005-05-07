@@ -154,6 +154,8 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     void on_rowSize_spinbutton_changed();
     void on_colSize_spinbutton_changed();
     void Spacing_button_changed();
+    void VertAlign_changed();
+    void HorizAlign_changed();
     private:
 
     bool userHidden;
@@ -183,6 +185,8 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     bool AutoRowSize;
     Gtk::CheckButton      RowHeightButton;
 
+    Gtk::VBox             XByYLabelVBox;
+    Gtk::Label            padXByYLabel;
     Gtk::Label            XByYLabel;
 
     // Number per Column
@@ -192,21 +196,25 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
     bool AutoColSize;
     Gtk::CheckButton      ColumnWidthButton;
 
-    // Horizontal align
-    Gtk::Label            HorizAlignLabel;
-    Gtk::VBox             HorizAlignVBox;
-    Gtk::RadioButtonGroup HorizAlignGroup;
-    Gtk::RadioButton      HorizCentreRadioButton;
-    Gtk::RadioButton      HorizLeftRadioButton;
-    Gtk::RadioButton      HorizRightRadioButton;
-
     // Vertical align
     Gtk::Label            VertAlignLabel;
+    Gtk::HBox             VertAlignHBox;
     Gtk::VBox             VertAlignVBox;
     Gtk::RadioButtonGroup VertAlignGroup;
     Gtk::RadioButton      VertCentreRadioButton;
     Gtk::RadioButton      VertTopRadioButton;
     Gtk::RadioButton      VertBotRadioButton;
+    double VertAlign;
+
+    // Horizontal align
+    Gtk::Label            HorizAlignLabel;
+    Gtk::VBox             HorizAlignVBox;
+    Gtk::HBox             HorizAlignHBox;
+    Gtk::RadioButtonGroup HorizAlignGroup;
+    Gtk::RadioButton      HorizCentreRadioButton;
+    Gtk::RadioButton      HorizLeftRadioButton;
+    Gtk::RadioButton      HorizRightRadioButton;
+    double HorizAlign;
 
     // padding in x
     Gtk::VBox             XPadBox;
@@ -257,16 +265,36 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
 void TileDialogImpl::Grid_Arrange ()
 {
 
-    int cnt,row_cnt,col_cnt;
+    int cnt,row_cnt,col_cnt,a,row,col;
     double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y,cx,cy;
+    double total_col_width,total_row_height;
     col_width = 0;
     row_height = 0;
+    total_col_width=0;
+    total_row_height=0;
+
 
     // set padding to manual values
     paddingx = XPadSpinner.get_value();
     paddingy = YPadSpinner.get_value();
 
+    std::vector<double> row_heights;
+    std::vector<double> col_widths;
+    std::vector<double> row_ys;
+    std::vector<double> col_xs;
 
+    int NoOfCols = NoOfColsSpinner.get_value_as_int();
+    int NoOfRows = NoOfRowsSpinner.get_value_as_int();
+
+    width = 0;
+    for (a=0;a<NoOfCols; a++){
+        col_widths.push_back(width);
+    }
+
+    height = 0;
+    for (a=0;a<NoOfRows; a++){
+        row_heights.push_back(height);
+    }
     grid_left = 99999;
     grid_top = 99999;
 
@@ -274,6 +302,7 @@ void TileDialogImpl::Grid_Arrange ()
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
     const GSList *items = selection->itemList();
+    cnt=0;
     for (; items != NULL; items = items->next) {
         NRRect b;
         SPItem *item=SP_ITEM(items->data);
@@ -291,51 +320,106 @@ void TileDialogImpl::Grid_Arrange ()
         if (cy < grid_top) grid_top = cy;
         if (width > col_width) col_width = width;
         if (height > row_height) row_height = height;
+
     }
     grid_top = grid_top - (row_height / 2);
     grid_left = grid_left - (col_width/2);
 
-       #ifdef DEBUG_GRID_ARRANGE
-            g_print("\n gridleft=%f",grid_left);
-       #endif
+    // require the sorting done before we can calculate row heights etc.
 
-    // TODO: This Just sets it to equal row height / column width atm, Change to respond to the "equal" checkboxes
-    ColumnWidthSpinner.set_value(col_width);
-    RowHeightSpinner.set_value(row_height);
-    int NoOfCols = NoOfColsSpinner.get_value_as_int();
-    int NoOfRows = NoOfRowsSpinner.get_value_as_int();
-
-    if (!SpaceManualRadioButton.get_active()){
-        NRRect b;
-        selection->bounds(&b);
-       // g_print("\n OLD b.x0 = %f b.x1= %f b.y0 = %f b.y1= %f",b.x0,b.x1,b.y0,b.y1);
-
-        paddingx = (fabs (b.x1 - b.x0) - (col_width * NoOfCols)) / (NoOfCols - 1);
-        paddingy = (fabs (b.y1 - b.y0) - (row_height * NoOfRows)) / (NoOfRows - 1);
-
-      //  g_print("\n paddingx = %f paddingy = %f ",paddingx,paddingy);
-
-    }
-
-
-    cnt=0;
     const GSList *items2 = selection->itemList();
     GSList *rev = g_slist_copy((GSList *) items2);
+    GSList *sorted = NULL;
     rev = g_slist_sort(rev, (GCompareFunc) sp_compare_y_position);
-
-         #ifdef DEBUG_GRID_ARRANGE
-             g_print("\n row_height = %f col_width= %f",row_height,col_width);
-             g_print("\n grid_left = %f grid_top= %f",grid_left,grid_top);
-         #endif
 
     for (row_cnt=0; ((rev != NULL) && (row_cnt<NoOfRows)); row_cnt++) {
 
-             GSList *current_row = NULL;
+             GSList *sort_current_row = NULL;
              for (col_cnt = 0; ((rev != NULL) && (col_cnt<NoOfCols)); col_cnt++) {
-                 current_row = g_slist_append (current_row, rev->data);
+                 sort_current_row = g_slist_append (sort_current_row, rev->data);
                  rev = rev->next;
              }
-             current_row = g_slist_sort(current_row, (GCompareFunc) sp_compare_x_position);
+             sort_current_row = g_slist_sort(sort_current_row, (GCompareFunc) sp_compare_x_position);
+             sorted = g_slist_concat(sorted, sort_current_row);
+         }
+
+    // Calculate individual Row and Column sizes if necessary
+
+    if ((!ColumnWidthButton.get_active()) || (!RowHeightButton.get_active())){
+        cnt=0;
+        const GSList *items3 = sorted;
+        GSList *sizes = g_slist_copy((GSList *) items3);
+        for (; sizes != NULL; sizes = sizes->next) {
+            NRRect b;
+            SPItem *item=SP_ITEM(sizes->data);
+            sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
+            width = fabs (b.x1 - b.x0);
+            height = fabs (b.y1 - b.y0);
+            if (width > col_widths[(cnt % NoOfCols)]) col_widths[(cnt % NoOfCols)] = width;
+            if (height > row_heights[(cnt / NoOfCols)]) row_heights[(cnt / NoOfCols)] = height;
+            cnt++;
+        }
+    }
+
+    // Calculate total widths and heights, allowing for columns and rows non uniformly sized.
+
+    if (ColumnWidthButton.get_active()){
+        total_col_width = col_width * NoOfCols;
+        col_widths.clear();
+        for (a=0;a<NoOfCols; a++){
+            col_widths.push_back(col_width);
+        }
+    } else {
+        for (a = 0; a < col_widths.size(); a++)
+        {
+          total_col_width += col_widths[a] ;
+        }
+    }
+
+    if (RowHeightButton.get_active()){
+        total_row_height = row_height * NoOfRows;
+        row_heights.clear();
+        for (a=0;a<NoOfRows; a++){
+            row_heights.push_back(row_height);
+        }
+    } else {
+        for (a = 0; a < row_heights.size(); a++)
+        {
+          total_row_height += row_heights[a] ;
+        }
+    }
+
+
+    // Fit to bbox, calculate padding between rows accordingly.
+    if (!SpaceManualRadioButton.get_active()){
+        NRRect b;
+        selection->bounds(&b);
+        g_print("\n row = %f     col = %f", total_row_height,total_col_width);
+        paddingx = (fabs (b.x1 - b.x0) - total_col_width) / (NoOfCols - 1);
+        paddingy = (fabs (b.y1 - b.y0) - total_row_height) / (NoOfRows - 1);
+    }
+
+    // Calculate row and column x and y coords required to allow for columns and rows which are non uniformly sized.
+
+    for (a=0;a<NoOfCols; a++){
+        if (a<1) col_xs.push_back(0);
+        else col_xs.push_back(col_widths[a-1]+paddingx+col_xs[a-1]);
+    }
+
+
+    for (a=0;a<NoOfRows; a++){
+        if (a<1) row_ys.push_back(0);
+        else row_ys.push_back(row_heights[a-1]+paddingy+row_ys[a-1]);
+    }
+
+    cnt=0;
+  for (row_cnt=0; ((sorted != NULL) && (row_cnt<NoOfRows)); row_cnt++) {
+
+             GSList *current_row = NULL;
+             for (col_cnt = 0; ((sorted != NULL) && (col_cnt<NoOfCols)); col_cnt++) {
+                 current_row = g_slist_append (current_row, sorted->data);
+                 sorted = sorted->next;
+             }
 
              for (; current_row != NULL; current_row = current_row->next) {
                  SPItem *item=SP_ITEM(current_row->data);
@@ -344,14 +428,17 @@ void TileDialogImpl::Grid_Arrange ()
                  sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
                  width = b.x1 - b.x0;
                  height = b.y1 - b.y0;
-                 int hor_align = 1;  // 0 = left 1= centre 2 = right
-                 int vert_align = 1;  // 0 = bottom 1= centre 2 = top
-                 new_x = grid_left + (((col_width - width)/2)*hor_align) + (( col_width + paddingx ) * (cnt % NoOfCols));
-                 new_y = grid_top + (((row_height - height)/2)*vert_align) +(( row_height + paddingy ) * (cnt / NoOfCols));
-                 #ifdef DEBUG_GRID_ARRANGE
-                 g_print("\n x0 = %f x1= %f new_x= %f",b.x0,b.x1, new_x);
-                 g_print("\n width = %f ",width);
-                 #endif
+                 row = cnt / NoOfCols;
+                 col = cnt % NoOfCols;
+
+
+                // original before I started fecking about with it.
+                // new_x = grid_left + (((col_width - width)/2)*HorizAlign) + (( col_width + paddingx ) * (cnt % NoOfCols));
+                // new_y = grid_top + (((row_height - height)/2)*VertAlign) +(( row_height + paddingy ) * (cnt / NoOfCols));
+
+                 new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
+                 new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
+
                  NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y);
                  NR::Matrix const &affine = NR::Matrix(NR::translate(move));
                  sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
@@ -546,6 +633,41 @@ void TileDialogImpl::Spacing_button_changed()
    SizesHBox.set_sensitive ( SpaceManualRadioButton.get_active());
 }
 
+/**
+ * changed Radio button in Vertical Align group.
+ */
+void TileDialogImpl::VertAlign_changed()
+{
+   if (VertTopRadioButton.get_active()) {
+       VertAlign = 0;
+       prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 0);
+   } else if (VertBotRadioButton.get_active()){
+       VertAlign = 2;
+       prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 2);
+   } else if (VertCentreRadioButton.get_active()){
+       VertAlign = 1;
+       prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 1);
+   }
+
+}
+
+/**
+ * changed Radio button in Vertical Align group.
+ */
+void TileDialogImpl::HorizAlign_changed()
+{
+   if (HorizLeftRadioButton.get_active()) {
+       HorizAlign = 0;
+       prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 0);
+   } else if (HorizRightRadioButton.get_active()){
+       prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 2);
+       HorizAlign = 2;
+   } else if (HorizCentreRadioButton.get_active()){
+       HorizAlign = 1;
+       prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 1);
+   }
+
+}
 
 /**
  * Desktop selection changed
@@ -694,13 +816,48 @@ TileDialogImpl::TileDialogImpl()
     tips.set_tip(RowHeightButton, _("Automatically scale Rows to fit selected objects."));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_RowSize_checkbutton_changed));
 
+ {
+
+        /*#### Radio buttons to control vertical alignment ####*/
+
+        VertAlignLabel.set_label(_("Align:"));
+        VertAlignHBox.pack_start(VertAlignLabel, false, false, MARGIN);
+
+        VertTopRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::VertAlign_changed));
+        VertAlignGroup = VertTopRadioButton.get_group();
+        VertAlignVBox.pack_start(VertTopRadioButton, false, false, MARGIN);
+
+        VertCentreRadioButton.set_group(VertAlignGroup);
+        VertCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::VertAlign_changed));
+        VertAlignVBox.pack_start(VertCentreRadioButton, false, false, MARGIN);
+
+        VertBotRadioButton.set_group(VertAlignGroup);
+        VertBotRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::VertAlign_changed));
+        VertAlignVBox.pack_start(VertBotRadioButton, false, false, MARGIN);
+
+        VertAlign = prefs_get_double_attribute ("dialogs.gridtiler", "VertAlign", 1);
+        if (VertAlign=0) {
+            VertTopRadioButton.set_active(TRUE);
+        }
+        else if (VertAlign=2) {
+            VertCentreRadioButton.set_active(TRUE);
+        }
+        else if (VertAlign=1){
+            VertBotRadioButton.set_active(TRUE);
+        }
+        VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
+        NoOfRowsBox.pack_start(VertAlignHBox, false, false, MARGIN);
+    }
+
     SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
 
 
     /*#### Label for X ####*/
-
+    padXByYLabel.set_label(_("   "));
+    XByYLabelVBox.pack_start(padXByYLabel, false, false, MARGIN);
     XByYLabel.set_label(_(" X "));
-    SpinsHBox.pack_start(XByYLabel, false, false, MARGIN);
+    XByYLabelVBox.pack_start(XByYLabel, false, false, MARGIN);
+    SpinsHBox.pack_start(XByYLabelVBox, false, false, MARGIN);
 
     /*#### Number of columns ####*/
 
@@ -729,9 +886,47 @@ TileDialogImpl::TileDialogImpl()
     ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ColSize_checkbutton_changed));
 
 
+
+    {
+        /*#### Radio buttons to control horizontal alignment ####*/
+
+        HorizAlignLabel.set_label(_("Align:"));
+        HorizAlignVBox.pack_start(HorizAlignLabel, false, false, MARGIN);
+
+        HorizLeftRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::HorizAlign_changed));
+        HorizAlignGroup = HorizLeftRadioButton.get_group();
+        HorizAlignHBox.pack_start(HorizLeftRadioButton, false, false, MARGIN);
+
+        HorizCentreRadioButton.set_group(HorizAlignGroup);
+        HorizCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::HorizAlign_changed));
+        HorizAlignHBox.pack_start(HorizCentreRadioButton, false, false, MARGIN);
+
+        HorizRightRadioButton.set_group(HorizAlignGroup);
+        HorizRightRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::HorizAlign_changed));
+        HorizAlignHBox.pack_start(HorizRightRadioButton, false, false, MARGIN);
+
+        HorizAlign = prefs_get_double_attribute ("dialogs.gridtiler", "HorizAlign", 1);
+        if (HorizAlign=0) {
+            HorizLeftRadioButton.set_active(TRUE);
+        }
+        else if (HorizAlign=2) {
+            HorizCentreRadioButton.set_active(TRUE);
+        }
+        else if (HorizAlign=2) {
+            HorizRightRadioButton.set_active(TRUE);
+        }
+        HorizAlignVBox.pack_start(HorizAlignHBox, false, false, MARGIN);
+
+        NoOfColsBox.pack_start(HorizAlignVBox, false, false, MARGIN);
+
+    }
+
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
 
     TileBox.pack_start(SpinsHBox, false, false, MARGIN);
+
+
+
 
     {
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
@@ -765,23 +960,6 @@ TileDialogImpl::TileDialogImpl()
     }
 
 
-    /*#### Y Padding ####*/
-
-    YPadLabel.set_label(_("Row spacing:"));
-    YPadBox.pack_start(YPadLabel, false, false, MARGIN);
-
-    YPadSpinner.set_digits(1);
-    YPadSpinner.set_increments(0.2, 2);
-    YPadSpinner.set_range(0.0, 999.0);
-    double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
-    YPadSpinner.set_value(YPad);
-    YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
-    tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
-    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ypad_spinbutton_changed));
-
-
-    SizesHBox.pack_end(YPadBox, false, false, MARGIN);
-
     /*#### X padding ####*/
 
 
@@ -799,47 +977,26 @@ TileDialogImpl::TileDialogImpl()
 
     SizesHBox.pack_start(XPadBox, false, false, MARGIN);
 
+    /*#### Y Padding ####*/
 
+    YPadLabel.set_label(_("Row spacing:"));
+    YPadBox.pack_start(YPadLabel, false, false, MARGIN);
+
+    YPadSpinner.set_digits(1);
+    YPadSpinner.set_increments(0.2, 2);
+    YPadSpinner.set_range(0.0, 999.0);
+    double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
+    YPadSpinner.set_value(YPad);
+    YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
+    tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
+    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ypad_spinbutton_changed));
+
+
+    SizesHBox.pack_start(YPadBox, false, false, MARGIN);
 
     TileBox.pack_start(SizesHBox, false, false, MARGIN);
 
-    /*#### Row Height ####*/
-    RowHeightSpinner.set_digits(1);
-    RowHeightSpinner.set_increments(0.2, 2);
-    RowHeightSpinner.set_range(1.0, 9999.0);
-    double RowHeight = prefs_get_double_attribute ("dialogs.gridtiler", "RowHeight", 50);
-    RowHeightSpinner.set_value(RowHeight);
-    RowHeightBox.pack_end(RowHeightSpinner, false, false, MARGIN);
-    RowHeightSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_rowSize_spinbutton_changed));
-    tips.set_tip(ColumnWidthSpinner, _("Row height."));
 
-    RowHeightLabel.set_label(_("Row height:"));
-    RowHeightBox.pack_end(RowHeightLabel, false, false, MARGIN);
-    RowHeightBox.set_sensitive (!RowHeightButton.get_active());
-
-
-    RowHeightVBox.pack_end(RowHeightBox, false, false, MARGIN);
-    //TileBox.pack_start(RowHeightVBox, false, false, MARGIN);
-
-    /*#### Column Width ####*/
-
-
-
-    ColumnWidthSpinner.set_digits(1);
-    ColumnWidthSpinner.set_increments(0.2, 2);
-    ColumnWidthSpinner.set_range(1.0, 9999.0);
-    double ColumnWidth = prefs_get_double_attribute ("dialogs.gridtiler", "ColumnWidth", 50);
-    ColumnWidthSpinner.set_value(ColumnWidth);
-    ColumnWidthBox.pack_end(ColumnWidthSpinner, false, false, MARGIN);
-    ColumnWidthSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_colSize_spinbutton_changed));
-    tips.set_tip(ColumnWidthSpinner, _("Column width."));
-
-    ColumnWidthLabel.set_label(_("Column width:"));
-    ColumnWidthBox.pack_end(ColumnWidthLabel, false, false, MARGIN);
-    ColumnWidthBox.set_sensitive ( !ColumnWidthButton.get_active() );
-
-    ColumnWidthVBox.pack_end(ColumnWidthBox, false, false, MARGIN);
-    //TileBox.pack_start(ColumnWidthVBox, false, false, MARGIN);
 
     mainVBox->pack_start(TileBox);
 
