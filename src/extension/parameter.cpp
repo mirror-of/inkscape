@@ -54,7 +54,9 @@ public:
 ParamBool::ParamBool (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
         Parameter(name, guitext, ext), _value(false)
 {
-    const char * defaultval = sp_repr_children(xml)->content();
+    const char * defaultval = NULL;
+    if (sp_repr_children(xml) != NULL)
+        defaultval = sp_repr_children(xml)->content();
 
     if (defaultval != NULL && (!strcmp(defaultval, "TRUE") || !strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
         _value = true;
@@ -90,7 +92,9 @@ public:
 ParamInt::ParamInt (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
         Parameter(name, guitext, ext), _value(0), _min(0), _max(10)
 {
-    const char * defaultval = sp_repr_children(xml)->content();
+    const char * defaultval = NULL;
+    if (sp_repr_children(xml) != NULL)
+        defaultval = sp_repr_children(xml)->content();
     if (defaultval != NULL) {
         _value = atoi(defaultval);
     }
@@ -142,7 +146,9 @@ public:
 ParamFloat::ParamFloat (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
         Parameter(name, guitext, ext), _value(0.0), _min(0.0), _max(10.0)
 {
-    const char * defaultval = sp_repr_children(xml)->content();
+    const char * defaultval = NULL;
+    if (sp_repr_children(xml) != NULL)
+        defaultval = sp_repr_children(xml)->content();
     if (defaultval != NULL) {
         _value = atof(defaultval);
     }
