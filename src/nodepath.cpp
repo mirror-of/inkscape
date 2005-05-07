@@ -2817,6 +2817,47 @@ void sp_nodepath_selected_nodes_scale_screen(Inkscape::NodePath::Path *nodepath,
     sp_nodepath_selected_nodes_scale(nodepath, grow / SP_DESKTOP_ZOOM(nodepath->desktop), which);
 }
 
+void sp_nodepath_flip (Inkscape::NodePath::Path *nodepath, NR::Dim2 axis)
+{
+    if (!nodepath || !nodepath->selected) return;
+
+    if (g_list_length(nodepath->selected) == 1) {
+        // flip handles of the single selected node
+        Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) nodepath->selected->data;
+        double temp = n->p.pos[axis];
+        n->p.pos[axis] = n->n.pos[axis];
+        n->n.pos[axis] = temp;
+        sp_node_ensure_ctrls(n);
+    } else {
+        // scale nodes as an "object":
+
+        Inkscape::NodePath::Node *n0 = (Inkscape::NodePath::Node *) nodepath->selected->data;
+        NR::Rect box (n0->pos, n0->pos); // originally includes the first selected node
+        for (GList *l = nodepath->selected; l != NULL; l = l->next) { 
+            Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+            box.expandTo (n->pos); // contain all selected nodes
+        }
+
+        NR::Matrix t = 
+            NR::Matrix (NR::translate(-box.midpoint())) * 
+            NR::Matrix ((axis == NR::X)? NR::scale(-1, 1) : NR::scale(1, -1)) * 
+            NR::Matrix (NR::translate(box.midpoint()));
+
+        for (GList *l = nodepath->selected; l != NULL; l = l->next) { 
+            Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+            n->pos *= t;
+            n->n.pos *= t;
+            n->p.pos *= t;
+            sp_node_ensure_ctrls(n);
+        }
+    }
+
+    update_object(nodepath);
+    // fixme: use _keyed
+    update_repr(nodepath);
+}
+
+
 
 /*
  * Constructors and destructors

@@ -353,4 +353,6 @@ void sp_nodepath_selected_nodes_rotate (Inkscape::NodePath::Path * nodepath, gdo
 void sp_nodepath_selected_nodes_scale (Inkscape::NodePath::Path * nodepath, gdouble grow, int which);
 void sp_nodepath_selected_nodes_scale_screen (Inkscape::NodePath::Path * nodepath, gdouble grow, int which);
 
+void sp_nodepath_flip (Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
+
 #endif

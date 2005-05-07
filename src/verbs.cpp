@@ -721,14 +721,11 @@ FileVerb::perform (SPAction *action, void * data, void *pdata)
 void
 EditVerb::perform (SPAction *action, void * data, void * pdata)
 {
-    SPDesktop *dt;
-    SPEventContext *ec;
-
-    dt = SP_DESKTOP (sp_action_get_view (action));
+    SPDesktop *dt = SP_DESKTOP (sp_action_get_view (action));
     if (!dt)
         return;
 
-    ec = dt->event_context;
+    SPEventContext *ec = dt->event_context;
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
@@ -1066,9 +1063,10 @@ void
 ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
 {
     SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
-
     if (!dt)
         return;
+
+    SPEventContext *ec = dt->event_context;
 
     Inkscape::Selection *sel = SP_DT_SELECTION(dt);
 
@@ -1094,13 +1092,19 @@ ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
             SPFlowtext::convert_to_text ();
             break;
         case SP_VERB_OBJECT_FLIP_HORIZONTAL:
-            // TODO: make tool-sensitive, in node edit flip selected node(s)
-            sp_selection_scale_relative(sel, center, NR::scale(-1.0, 1.0));
+            if (tools_isactive (dt, TOOLS_NODES)) {
+                sp_nodepath_flip (SP_NODE_CONTEXT(ec)->nodepath, NR::X);
+            } else {
+                sp_selection_scale_relative(sel, center, NR::scale(-1.0, 1.0));
+            }
             sp_document_done (SP_DT_DOCUMENT (dt));
             break;
         case SP_VERB_OBJECT_FLIP_VERTICAL:
-            // TODO: make tool-sensitive, in node edit flip selected node(s)
-            sp_selection_scale_relative(sel, center, NR::scale(1.0, -1.0));
+            if (tools_isactive (dt, TOOLS_NODES)) {
+                sp_nodepath_flip (SP_NODE_CONTEXT(ec)->nodepath, NR::Y);
+            } else {
+                sp_selection_scale_relative(sel, center, NR::scale(1.0, -1.0));
+            }
             sp_document_done (SP_DT_DOCUMENT (dt));
             break;
         default:
