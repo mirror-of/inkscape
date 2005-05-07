@@ -1,3 +1,16 @@
+2005-05-07  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/composite-node-observer.cpp: bug fixes
+
+	* src/xml/simple-node.cpp, src/xml/simple-node.h: switch to using
+	  CompositeNodeObserver, which has saner add/remove semantics
+
+	* src/util/list-container-test.cpp: add another test, just to be sure
+
+	* src/dialogs/xml-tree.cpp: remove need for is_interactive flag on
+	  attribute changes (the flag is effectively disabled by the other
+	  changes)
+
 2005-05-05  MenTaLguY  <mental@rydia.net>
 
 	* src/debug/event.h, src/debug/logger.cpp:

@@ -18,6 +18,7 @@
 #include "xml/node.h"
 #include "xml/attribute-record.h"
 #include "xml/transaction-logger.h"
+#include "xml/composite-node-observer.h"
 #include "util/list-container.h"
 
 namespace Inkscape {
@@ -28,20 +29,6 @@ class SimpleNode
 : virtual public Node, public Inkscape::GC::Managed<>
 {
 public:
-    struct Listener {
-        Listener(NodeEventVector const &v, void *d)
-        : vector(v), data(d) {}
-
-        NodeEventVector const &vector;
-        void * const data;
-
-        // Use default copy constructor.
-
-    private:
-        /// No assignment operator: can't assign to a reference or to a const member.
-        Listener &operator=(Listener const &);
-    };
-
     Session *session() {
         return ( _logger ? &_logger->session() : NULL );
     }
@@ -49,7 +36,7 @@ public:
     gchar const *name() const;
     int code() const { return _name; }
     void setCodeUnsafe(int code) {
-        g_assert(!_logger && _listeners.empty());
+        g_assert(_logger == NULL);
         _name = code;
     }
 
@@ -107,10 +94,20 @@ public:
 
     void synthesizeEvents(NodeEventVector const *vector, void *data);
     void synthesizeEvents(NodeObserver &observer);
-    void addListener(NodeEventVector const *vector, void *data);
-    void addObserver(NodeObserver &observer);
-    void removeListenerByData(void *data);
-    void removeObserver(NodeObserver &observer);
+
+    void addListener(NodeEventVector const *vector, void *data) {
+        g_assert(vector != NULL);
+        _observers.addListener(*vector, data);
+    }
+    void addObserver(NodeObserver &observer) {
+        _observers.add(observer);
+    }
+    void removeListenerByData(void *data) {
+        _observers.removeListenerByData(data);
+    }
+    void removeObserver(NodeObserver &observer) {
+        _observers.remove(observer);
+    }
 
 protected:
     SimpleNode(int code);
@@ -133,8 +130,6 @@ public: // ideally these should be protected somehow...
 private:
     void operator=(Node const &); // no assign
 
-    typedef Inkscape::Util::ListContainer<Listener> Listeners;
-
     Node *_parent;
     Node *_next;
     Document *_document;
@@ -152,7 +147,7 @@ private:
     Node *_first_child;
     Node *_last_child;
 
-    Listeners _listeners;
+    CompositeNodeObserver _observers;
 };
 
 }

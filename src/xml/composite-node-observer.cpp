@@ -17,6 +17,8 @@
 #include "algorithms/find-if-before.h"
 #include "xml/composite-node-observer.h"
 #include "xml/node-event-vector.h"
+#include "debug/event-tracker.h"
+#include "debug/simple-event.h"
 
 namespace Inkscape {
 
@@ -148,6 +150,7 @@ public:
 void CompositeNodeObserver::addListener(NodeEventVector const &vector,
                                         void *data)
 {
+    Debug::EventTracker<Debug::SimpleEvent> tracker("add-listener");
     add(*(new VectorNodeObserver(vector, data)));
 }
 
@@ -159,9 +162,9 @@ typedef CompositeNodeObserver::ObserverRecord ObserverRecord;
 typedef CompositeNodeObserver::ObserverRecordList ObserverRecordList;
 
 template <typename ObserverPredicate>
-struct test_observer_record {
+struct unmarked_record_satisfying {
     ObserverPredicate predicate;
-    test_observer_record(ObserverPredicate p) : predicate(p) {}
+    unmarked_record_satisfying(ObserverPredicate p) : predicate(p) {}
     bool operator()(ObserverRecord const &record) {
         return !record.marked && predicate(record.observer);
     }
@@ -171,9 +174,13 @@ template <typename Predicate>
 bool mark_one(ObserverRecordList &observers, unsigned &marked_count,
               Predicate p)
 {
-    ObserverRecordList::iterator iter=std::find_if(observers.begin(), observers.end(), test_observer_record<Predicate>(p));
-    if ( iter != observers.end() ) {
-        iter->marked = true;
+    ObserverRecordList::iterator found=std::find_if(
+        observers.begin(), observers.end(),
+        unmarked_record_satisfying<Predicate>(p)
+    );
+
+    if ( found != observers.end() ) {
+        found->marked = true;
         return true;
     } else {
         return false;
@@ -184,9 +191,22 @@ template <typename Predicate>
 bool remove_one(ObserverRecordList &observers, unsigned &marked_count,
                 Predicate p)
 {
-    ObserverRecordList::iterator iter=find_if_before(observers.begin(), observers.end(), test_observer_record<Predicate>(p));
-    if ( iter != observers.end() ) {
-        observers.erase_after(iter);
+    if (observers.empty()) {
+        return false;
+    }
+
+    if (unmarked_record_satisfying<Predicate>(p)(observers.front())) {
+        observers.pop_front();
+        return true;
+    }
+
+    ObserverRecordList::iterator found=find_if_before(
+        observers.begin(), observers.end(),
+        unmarked_record_satisfying<Predicate>(p)
+    );
+
+    if ( found != observers.end() ) {
+        observers.erase_after(found);
         return true;
     } else {
         return false;
@@ -198,6 +218,8 @@ bool is_marked(ObserverRecord const &record) { return record.marked; }
 void remove_all_marked(ObserverRecordList &observers, unsigned &marked_count)
 {
     ObserverRecordList::iterator iter;
+
+    g_assert( !observers.empty() || !marked_count );
 
     while ( marked_count && observers.front().marked ) {
         observers.pop_front();
@@ -261,6 +283,7 @@ struct vector_data_matches {
 }
 
 void CompositeNodeObserver::removeListenerByData(void *data) {
+    Debug::EventTracker<Debug::SimpleEvent> tracker("remove-listener-by-data");
     vector_data_matches p(data);
     if (_iterating) {
         mark_one(_active, _active_marked, p) ||

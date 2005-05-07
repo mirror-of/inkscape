@@ -369,13 +369,7 @@ void SimpleNode::setContent(gchar const *content) {
             _logger->notifyContentChanged(*this, old_content, _content);
         }
 
-        for ( Listeners::iterator iter = _listeners.begin() ;
-              iter != _listeners.end() ; ++iter )
-        {
-            if (iter->vector.content_changed) {
-                iter->vector.content_changed(this, old_content, _content, iter->data);
-            }
-        }
+        _observers.notifyContentChanged(*this, old_content, _content);
     }
 }
 
@@ -425,13 +419,7 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
             _logger->notifyAttributeChanged(*this, key, old_value, new_value);
         }
 
-        for ( Listeners::iterator iter = _listeners.begin() ;
-              iter != _listeners.end() ; ++iter )
-        {
-            if (iter->vector.attr_changed) {
-                iter->vector.attr_changed(this, name, old_value, new_value, is_interactive, iter->data);
-            }
-        }
+        _observers.notifyAttributeChanged(*this, key, old_value, new_value);
     }
 }
 
@@ -477,13 +465,7 @@ void SimpleNode::addChild(Node *child, Node *ref) {
         _logger->notifyChildAdded(*this, *child, ref);
     }
 
-    for ( Listeners::iterator iter = _listeners.begin() ;
-          iter != _listeners.end() ; ++iter )
-    {
-        if (iter->vector.child_added) {
-            iter->vector.child_added(this, child, ref, iter->data);
-        }
-    }
+    _observers.notifyChildAdded(*this, *child, ref);
 }
 
 void SimpleNode::_bindDocument(Document &document) {
@@ -539,13 +521,7 @@ void SimpleNode::removeChild(Node *child) {
         _logger->notifyChildRemoved(*this, *child, ref);
     }
 
-    for ( Listeners::iterator iter = _listeners.begin() ;
-          iter != _listeners.end() ; ++iter )
-    {
-        if (iter->vector.child_removed) {
-            iter->vector.child_removed(this, child, ref, iter->data);
-        }
-    }
+    _observers.notifyChildRemoved(*this, *child, ref);
 }
 
 void SimpleNode::changeOrder(Node *child, Node *ref) {
@@ -592,13 +568,7 @@ void SimpleNode::changeOrder(Node *child, Node *ref) {
         _logger->notifyChildOrderChanged(*this, *child, prev, ref);
     }
 
-    for ( Listeners::iterator iter = _listeners.begin() ;
-          iter != _listeners.end() ; ++iter )
-    {
-        if (iter->vector.order_changed) {
-            iter->vector.order_changed(this, child, prev, ref, iter->data);
-        }
-    }
+    _observers.notifyChildOrderChanged(*this, *child, prev, ref);
 }
 
 void SimpleNode::setPosition(int pos) {
@@ -676,40 +646,6 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
 
 void SimpleNode::synthesizeEvents(NodeObserver &observer) {
     synthesizeEvents(&OBSERVER_EVENT_VECTOR, &observer);
-}
-
-void SimpleNode::addListener(NodeEventVector const *vector, void *data) {
-    g_assert(vector != NULL);
-    _listeners.push_back(Listener(*vector, data));
-}
-
-void SimpleNode::addObserver(NodeObserver &observer) {
-    addListener(&OBSERVER_EVENT_VECTOR, &observer);
-}
-
-namespace {
-
-struct listener_data_matches {
-    listener_data_matches(void *d) : data(d) {}
-    bool operator()(SimpleNode::Listener const &listener) {
-        return listener.data == data;
-    }
-    void * const data;
-};
-
-}
-
-void SimpleNode::removeListenerByData(void *data) {
-    Listeners::iterator const pos(std::find_if(_listeners.begin(),
-                                               _listeners.end(),
-                                               listener_data_matches(data)));
-    if ( pos != _listeners.end() ) {
-        _listeners.erase(pos);
-    }
-}
-
-void SimpleNode::removeObserver(NodeObserver &observer) {
-    removeListenerByData(&observer);
 }
 
 Node *SimpleNode::root() {

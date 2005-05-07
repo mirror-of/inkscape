@@ -117,6 +117,14 @@ int main(int argc, char *argv[]) {
 		c.push_back(3);
 		UTEST_ASSERT(check_values(c, 3, 1, 2, 3));
 	}
+	UTEST_TEST("bulk appending") {
+		int const a[] = { 1, 2, 3, 4 };
+		int const b[] = { 5, 6, 7 };
+		ListContainer<int> c_a(ARRAY_RANGE(a));
+		ListContainer<int> c_b(ARRAY_RANGE(b));
+		c_a.insert(c_a.end(), c_b.begin(), c_b.end());
+		UTEST_ASSERT(check_values(c_a, 7, 1, 2, 3, 4, 5, 6, 7));
+	}
 	UTEST_TEST("prepending") {
 		ListContainer<int> c;
 		c.push_front(1);

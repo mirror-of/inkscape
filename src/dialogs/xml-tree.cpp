@@ -1479,6 +1479,12 @@ cmd_delete_attr (GtkObject * object, gpointer data)
     g_assert (selected_attr != 0);
     sp_repr_set_attr (selected_repr, g_quark_to_string (selected_attr), NULL);
 
+    SPObject *updated=current_document->getObjectByRepr(selected_repr);
+    if (updated) {
+        // force immediate update of dependant attributes
+        updated->updateRepr();
+    }
+
     sp_document_done (current_document);
 }
 
@@ -1500,7 +1506,7 @@ cmd_set_attr (GtkObject * object, gpointer data)
     value = gtk_text_buffer_get_text ( gtk_text_view_get_buffer (attr_value),
                                        &start, &end, TRUE );
 
-    if (!sp_repr_set_attr (selected_repr, name, value, true)) {
+    if (!sp_repr_set_attr (selected_repr, name, value)) {
         gchar * message = g_strdup_printf(_("Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"), name, value);
         _message_stack->flash(Inkscape::WARNING_MESSAGE, message);
         g_free(message);
@@ -1508,6 +1514,12 @@ cmd_set_attr (GtkObject * object, gpointer data)
 
     g_free (name);
     g_free (value);
+
+    SPObject *updated=current_document->getObjectByRepr(selected_repr);
+    if (updated) {
+        // force immediate update of dependant attributes
+        updated->updateRepr();
+    }
 
     sp_document_done (current_document);
 
