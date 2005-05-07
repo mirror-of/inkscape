@@ -1,3 +1,15 @@
+2005-05-07  Ted Gould  <ted@gould.cx>
+
+	* src/extension/parameter.cpp: bug fix for empty string parameter
+
+	* share/extensions/dropshadow.inx,
+	src/extension/implementation/script.cpp:
+
+	Adding in an "interpreter" attribute for "command" that will prepend
+	the command with the interpreter.  Right now only "perl" and "python"
+	work, and they only prepend "perl" and "python", but more will be
+	added later.
+
 2005-05-07  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/composite-node-observer.cpp: bug fixes

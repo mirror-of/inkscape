@@ -219,6 +219,27 @@ Script::load(Inkscape::Extension::Extension *module)
             while (child_repr != NULL) {
                 if (!strcmp(child_repr->name(), "command")) {
                     command_text = solve_reldir(child_repr);
+
+                    const gchar * interpretstr = child_repr->attribute("interpreter");
+                    if (interpretstr != NULL) {
+                        struct interpreter_t {
+                            gchar * identity;
+                            gchar * prefstring;
+                            gchar * defaultval;
+                        };
+                        const interpreter_t interpreterlst[] = {
+                            {"perl", "perl-interpreter", "perl"},
+                            {"python", "python-interpreter", "python"}
+                        };
+                        for (unsigned int i = 0; i < 2; i++) {
+                            if (!strcmp(interpretstr, interpreterlst[i].identity)) {
+                                gchar * temp = command_text;
+                                command_text = g_strconcat(interpreterlst[i].defaultval, " ", temp);
+                                g_free(temp);
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (!strcmp(child_repr->name(), "helper_extension")) {
                     helper_extension = g_strdup(sp_repr_children(child_repr)->content());
@@ -672,6 +693,7 @@ int
 Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
     g_return_val_if_fail(in_command != NULL, 0);
+    printf("Executing: %s\n", in_command);
 
     /* Get the commandline to be run */
     /* TODO:  Perhaps replace with a sprintf? */

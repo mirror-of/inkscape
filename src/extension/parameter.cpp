@@ -323,7 +323,8 @@ ParamString::set (const gchar * in, Inkscape::XML::Document * doc)
 {
     if (in == NULL) return NULL; /* Can't have NULL string */
 
-    g_free(_value);
+    if (_value != NULL)
+        g_free(_value);
     _value = g_strdup(in);
 
     gchar * prefname = this->pref_name();
@@ -425,7 +426,9 @@ Parameter::set_string (const gchar * in, Inkscape::XML::Document * doc)
 ParamString::ParamString (const gchar * name, const gchar * guitext, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
     Parameter(name, guitext, ext), _value(NULL)
 {
-    const char * defaultval = sp_repr_children(xml)->content();
+    const char * defaultval = NULL;
+    if (sp_repr_children(xml) != NULL)
+        defaultval = sp_repr_children(xml)->content();
 
     gchar * pref_name = this->pref_name();
     const gchar * paramval = prefs_get_string_attribute(PREF_DIR, pref_name);
@@ -433,7 +436,8 @@ ParamString::ParamString (const gchar * name, const gchar * guitext, Inkscape::E
 
     if (paramval != NULL)
         defaultval = paramval;
-    _value = g_strdup(defaultval);
+    if (defaultval != NULL)
+        _value = g_strdup(defaultval);
 
     return;
 }
@@ -664,7 +668,8 @@ public:
     */
     ParamStringEntry (ParamString * pref) :
         Gtk::Entry(), _pref(pref) {
-        this->set_text(Glib::ustring(_pref->get(NULL)));
+        if (_pref->get(NULL) != NULL)
+            this->set_text(Glib::ustring(_pref->get(NULL)));
         this->signal_changed().connect(sigc::mem_fun(this, &ParamStringEntry::changed_text));
     };
     void changed_text (void);
