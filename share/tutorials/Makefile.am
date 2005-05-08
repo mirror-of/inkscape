@@ -20,9 +20,11 @@ tutorial_DATA = \
     tutorial-calligraphy.svg \
     tutorial-calligraphy.sl.svg \
     tutorial-calligraphy.es.svg \
+    tutorial-calligraphy.fr.svg \
     tutorial-shapes.svg \
     tutorial-shapes.sl.svg \
-    tutorial-tracing.svg potrace.png oldguitar.jpg tux.png
+    tutorial-tracing.svg potrace.png oldguitar.jpg tux.png \
+    tutorial-tracing.fr.svg potrace-fr.png \
 
 
 
