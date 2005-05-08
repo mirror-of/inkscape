@@ -3,7 +3,6 @@
 [encoding: UTF-8]
 inkscape.desktop.in
 src/application/editor.cpp
-src/application/editor-impl.cpp
 src/arc-context.cpp
 src/attributes.cpp
 src/color.cpp
@@ -279,6 +278,7 @@ src/ui/dialog/transformation.h
 src/ui/dialog/tree-editor.h
 src/ui/dialog/xml-editor.h
 src/ui/stock-items.cpp
+src/ui/view/edit.cpp
 src/uri-references.cpp
 src/uri.cpp
 src/verbs.cpp
