@@ -2464,6 +2464,11 @@ clonetiler_dialog (void)
                 gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, 0);
                 g_object_set_data (G_OBJECT(dlg), "buttons_on_tiles", (gpointer) sb);
                 {
+                    // TRANSLATORS: if a group of objects are "clumped" together, then they
+                    //  are unevenly spread in the given amount of space - as shown in the
+                    //  diagrams on the left in the following screenshot:
+                    //  http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
+                    //  So unclumping is the process of spreading a number of objects out more evenly.
                     GtkWidget *b = gtk_button_new_with_mnemonic (_(" _Unclump "));
                     gtk_tooltips_set_tip (tt, b, _("Spread out clones to reduce clumping; can be applied repeatedly"), NULL);
                     gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (clonetiler_unclump), NULL);
