@@ -1,3 +1,14 @@
+2005-05-08  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile_insert: change link order since the GC code now
+	  depends on the debugging stuff
+
+	* src/debug/Makefile_insert, src/debug/heap.cpp, src/debug/heap.h:
+
+      added heap statistics stuff
+
+	* src/gc.cpp: register the GC heap with the heap statistics facility
+
 2005-05-07  MenTaLguY  <mental@rydia.net>
 
 	* src/gc-anchored.h, src/gc-core.h, src/gc-finalized.h,

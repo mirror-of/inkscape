@@ -14,11 +14,25 @@
 #include <cstring>
 #include <stdexcept>
 #include <glib/gmessages.h>
+#include "debug/heap.h"
 
 namespace Inkscape {
 namespace GC {
 
 namespace {
+
+class GCHeapInfo : public Debug::Heap {
+public:
+    int features() const {
+        return SIZE_AVAILABLE | FREE_AVAILABLE | GARBAGE_COLLECTED;
+    }
+    Util::SharedCStringPtr name() const {
+        return Util::SharedCStringPtr::coerce("libgc");
+    }
+    std::size_t size() const { return Core::get_heap_size(); }
+    std::size_t bytes_free() const { return Core::get_free_bytes(); }
+    void force_collect() { Core::gcollect(); }
+};
 
 void display_warning(char *msg, GC_word arg) {
     g_warning(msg, arg);
@@ -32,6 +46,9 @@ void do_init() {
     GC_INIT();
 
     GC_set_warn_proc(&display_warning);
+
+    static GCHeapInfo heap_info;
+    Debug::register_extra_heap(heap_info);
 }
 
 void *debug_malloc(std::size_t size) {
