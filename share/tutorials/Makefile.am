@@ -11,7 +11,7 @@ tutorial_DATA = \
     tutorial-advanced.fr.svg \
     tutorial-advanced.sl.svg \
     tutorial-basic.svg \
-    tutorial-basic-es.svg \
+    tutorial-basic.es.svg \
     tutorial-basic.ca.svg \
     tutorial-basic.fr.svg \
     tutorial-basic.nn.svg \
@@ -19,7 +19,7 @@ tutorial_DATA = \
     tutorial-basic.sl.svg \
     tutorial-calligraphy.svg \
     tutorial-calligraphy.sl.svg \
-    tutorial-calligraphy-es.svg \
+    tutorial-calligraphy.es.svg \
     tutorial-shapes.svg \
     tutorial-shapes.sl.svg \
     tutorial-tracing.svg potrace.png oldguitar.jpg tux.png
