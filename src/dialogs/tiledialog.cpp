@@ -836,13 +836,13 @@ TileDialogImpl::TileDialogImpl()
         VertAlignVBox.pack_start(VertBotRadioButton, false, false, MARGIN);
 
         VertAlign = prefs_get_double_attribute ("dialogs.gridtiler", "VertAlign", 1);
-        if (VertAlign=0) {
+        if (VertAlign == 0) {
             VertTopRadioButton.set_active(TRUE);
         }
-        else if (VertAlign=2) {
+        else if (VertAlign == 2) {
             VertCentreRadioButton.set_active(TRUE);
         }
-        else if (VertAlign=1){
+        else if (VertAlign == 1){
             VertBotRadioButton.set_active(TRUE);
         }
         VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
@@ -906,13 +906,13 @@ TileDialogImpl::TileDialogImpl()
         HorizAlignHBox.pack_start(HorizRightRadioButton, false, false, MARGIN);
 
         HorizAlign = prefs_get_double_attribute ("dialogs.gridtiler", "HorizAlign", 1);
-        if (HorizAlign=0) {
+        if (HorizAlign == 0) {
             HorizLeftRadioButton.set_active(TRUE);
         }
-        else if (HorizAlign=2) {
+        else if (HorizAlign == 2) {
             HorizCentreRadioButton.set_active(TRUE);
         }
-        else if (HorizAlign=2) {
+        else if (HorizAlign == 2) {
             HorizRightRadioButton.set_active(TRUE);
         }
         HorizAlignVBox.pack_start(HorizAlignHBox, false, false, MARGIN);
