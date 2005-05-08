@@ -399,14 +399,14 @@ sp_select_toolbox_new(SPDesktop *desktop)
     // four spinbuttons
 
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton("X", "X", -1e6, us, spw, _("Horizontal coordinate of selection"), TRUE));
+                      sp_select_toolbox_spinbutton(_("X"), "X", -1e6, us, spw, _("Horizontal coordinate of selection"), TRUE));
     aux_toolbox_space(vb, AUX_BETWEEN_SPINBUTTONS);
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton("Y", "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
+                      sp_select_toolbox_spinbutton(_("Y"), "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
     aux_toolbox_space(vb, AUX_BETWEEN_BUTTON_GROUPS);
 
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton("W", "width", 1e-3, us, spw, _("Width of selection"), FALSE));
+                      sp_select_toolbox_spinbutton(_("W"), "width", 1e-3, us, spw, _("Width of selection"), FALSE));
 
     // lock toggle
     GtkWidget *lockbox = gtk_vbox_new(TRUE, 0);
@@ -421,7 +421,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     gtk_object_set_data(GTK_OBJECT(spw), "lock", lock);
 
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton("H", "height", 1e-3, us, spw, _("Height of selection"), FALSE));
+                      sp_select_toolbox_spinbutton(_("H"), "height", 1e-3, us, spw, _("Height of selection"), FALSE));
 
     aux_toolbox_space(vb, 2);
 
