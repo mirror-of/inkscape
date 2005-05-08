@@ -24,7 +24,7 @@ tutorial_DATA = \
     tutorial-shapes.svg \
     tutorial-shapes.sl.svg \
     tutorial-tracing.svg potrace.png oldguitar.jpg tux.png \
-    tutorial-tracing.fr.svg potrace-fr.png \
+    tutorial-tracing.fr.svg potrace-fr.png
 
 
 
