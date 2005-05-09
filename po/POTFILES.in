@@ -259,7 +259,9 @@ src/trace/trace.cpp
 src/ui/dialog/align-and-distribute.cpp
 src/ui/dialog/align-and-distribute.h
 src/ui/dialog/document-preferences.cpp
+src/ui/dialog/export.cpp
 src/ui/dialog/export.h
+src/ui/dialog/extension-editor.cpp
 src/ui/dialog/extension-editor.h
 src/ui/dialog/fill-and-stroke.cpp
 src/ui/dialog/fill-and-stroke.h
@@ -267,6 +269,7 @@ src/ui/dialog/find.cpp
 src/ui/dialog/find.h
 src/ui/dialog/inkscape-preferences.cpp
 src/ui/dialog/inkscape-preferences.h
+src/ui/dialog/layer-editor.cpp
 src/ui/dialog/layer-editor.h
 src/ui/dialog/messages.cpp
 src/ui/dialog/messages.h
@@ -275,6 +278,7 @@ src/ui/dialog/text-properties.h
 src/ui/dialog/transformation.cpp
 src/ui/dialog/transformation.h
 src/ui/dialog/tree-editor.h
+src/ui/dialog/xml-editor.cpp
 src/ui/dialog/xml-editor.h
 src/ui/stock-items.cpp
 src/ui/view/edit.cpp
@@ -282,7 +286,6 @@ src/uri-references.cpp
 src/uri.cpp
 src/verbs.cpp
 src/version.cpp
-src/view.cpp
 src/widgets/button.cpp
 src/widgets/dash-selector.cpp
 src/widgets/font-selector.cpp
