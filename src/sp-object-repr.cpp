@@ -52,6 +52,9 @@ static unsigned const N_NAME_TYPES = SODIPODI_TYPE + 1;
 
 static GType name_to_gtype(NameType name_type, gchar const *name);
 
+/**
+ * Construct an SPRoot and all its descendents from the given repr.
+ */
 SPObject *
 sp_object_repr_build_tree (SPDocument *document, Inkscape::XML::Node *repr)
 {
