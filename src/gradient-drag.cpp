@@ -93,7 +93,7 @@ gr_drag_sel_modified (Inkscape::Selection *selection, guint flags, gpointer data
 }
 
 /**
-When a _query_style_signal is received, check that \a property requests fillstroke (otherwise
+When a _query_style_signal is received, check that \a property requests fill/stroke (otherwise
 skip), and fill the \a style with the averaged color of all draggables of the selected dragger, if
 any.
 */
@@ -102,7 +102,7 @@ gr_drag_style_query (SPStyle *style, int property, gpointer data)
 {
     GrDrag *drag = (GrDrag *) data;
 
-    if (property != QUERY_STYLE_PROPERTY_FILLSTROKE) {
+    if (property != QUERY_STYLE_PROPERTY_FILL && property != QUERY_STYLE_PROPERTY_STROKE) {
         return QUERY_STYLE_NOTHING;
     }
 

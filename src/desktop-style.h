@@ -34,7 +34,8 @@ enum { // what kind of a style the query is returning
 
 enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_EVERYTHING,
-    QUERY_STYLE_PROPERTY_FILLSTROKE,  // fill, fill-opacity, stroke, stroke-opacity
+    QUERY_STYLE_PROPERTY_FILL,  // fill, fill-opacity
+    QUERY_STYLE_PROPERTY_STROKE,  // stroke, stroke-opacity
     QUERY_STYLE_PROPERTY_STROKESTYLE, // markers, dasharray, miterlimit, stroke-width, stroke-cap, stroke-join
     QUERY_STYLE_PROPERTY_TEXT // font-family, font-size, font-style, font-variant, line-height, text-anchor...
 };
