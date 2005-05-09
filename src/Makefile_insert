@@ -119,7 +119,7 @@ libinkpre_a_SOURCES =	\
 	sp-conn-end.cpp sp-conn-end.h	\
 	sp-cursor.cpp sp-cursor.h	\
 	sp-defs.cpp sp-defs.h	\
-	sp-desktop-widget.h	\
+	desktop-widget.h	\
 	sp-ellipse.cpp sp-ellipse.h	\
 	sp-flowdiv.h sp-flowdiv.cpp \
 	sp-flowregion.h sp-flowregion.cpp \

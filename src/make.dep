@@ -101,7 +101,7 @@ arc-context.o: \
 	selcue.h \
 	selection.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-ellipse.h \
 	sp-item.h \
 	sp-marker-loc.h \
@@ -264,7 +264,7 @@ desktop-events.o: \
 	round.h \
 	selcue.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-guide.h \
 	sp-item.h \
 	sp-metric.h \
@@ -466,7 +466,7 @@ desktop.o: \
 	selection.h \
 	seltrans.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-metric.h \
@@ -3316,7 +3316,7 @@ dyna-draw-context.o: \
 	selcue.h \
 	selection.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item.h \
 	sp-metric.h \
 	sp-object.h \
@@ -4724,7 +4724,7 @@ gradient-context.o: \
 	selcue.h \
 	selection.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-gradient-fns.h \
 	sp-gradient-spread.h \
 	sp-gradient-units.h \
@@ -4895,7 +4895,7 @@ gradient-toolbar.o: \
 	selection.h \
 	sp-conn-end-pair.h \
 	sp-defs.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-ellipse.h \
 	sp-gradient-fns.h \
 	sp-gradient-spread.h \
@@ -5290,7 +5290,7 @@ interface.o: \
 	selection.h \
 	shortcuts.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-metric.h \
@@ -7440,7 +7440,7 @@ rect-context.o: \
 	selcue.h \
 	selection.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item.h \
 	sp-marker-loc.h \
 	sp-metric.h \
@@ -7667,7 +7667,7 @@ select-context.o: \
 	seltrans.h \
 	snap.h \
 	sp-cursor.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-metric.h \
@@ -7738,7 +7738,7 @@ select-toolbar.o: \
 	select-toolbar.h \
 	selection-chemistry.h \
 	selection.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item-transform.h \
 	sp-item.h \
 	sp-metric.h \
@@ -8087,7 +8087,7 @@ seltrans.o: \
 	seltrans-handles.h \
 	seltrans.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item-update-cns.h \
 	sp-item.h \
 	sp-metric.h \
@@ -10704,7 +10704,7 @@ spiral-context.o: \
 	selcue.h \
 	selection.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item.h \
 	sp-marker-loc.h \
 	sp-metric.h \
@@ -10862,7 +10862,7 @@ star-context.o: \
 	selcue.h \
 	selection.h \
 	snap.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-item.h \
 	sp-marker-loc.h \
 	sp-metric.h \
@@ -11405,7 +11405,7 @@ toolbox.o: \
 	selection.h \
 	sp-conn-end-pair.h \
 	sp-defs.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -12346,7 +12346,7 @@ ui/widget/toolbox.o: \
 	selection.h \
 	sp-conn-end-pair.h \
 	sp-defs.h \
-	sp-desktop-widget.h \
+	desktop-widget.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \

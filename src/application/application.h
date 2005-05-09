@@ -29,11 +29,11 @@ class AppPrototype;
 class Application
 {
 public:
-    Application(int argc, char **argv, gboolean use_gui=true, gboolean new_gui=false);
+    Application(int argc, char **argv, bool use_gui=true, bool new_gui=false);
     virtual ~Application();
 
-    gboolean        loadPreferences();
-    gboolean        savePreferences();
+    bool        loadPreferences();
+    bool        savePreferences();
 
     const gchar*    homedir() const;
 
@@ -52,8 +52,8 @@ protected:
 
     mutable gchar  *_path_home;
 
-    gboolean        _save_preferences;
-    gboolean        _use_gui;
+    bool        _save_preferences;
+    bool        _use_gui;
 };
 
 } // namespace NSApplication

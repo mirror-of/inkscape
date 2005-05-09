@@ -1362,6 +1362,10 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         inkscape_dialogs_unhide ();
     }
 
+    SPDesktop *dt = SP_DESKTOP (sp_action_get_view (action));
+    g_assert(dt->_dlg_mgr != NULL);
+    Inkscape::UI::Dialog::Dialog *dlg = NULL;
+
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_DIALOG_DISPLAY:
             sp_display_dialog ();
@@ -1391,7 +1395,8 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
             sp_find_dialog ();
             break;
         case SP_VERB_DIALOG_DEBUG:
-            Inkscape::UI::Dialogs::DebugDialog::showInstance();
+//            Inkscape::UI::Dialogs::DebugDialog::showInstance();
+            dlg = dt->_dlg_mgr->getMessagesDialog();
             break;
         case SP_VERB_DIALOG_SCRIPT:
             Inkscape::UI::Dialogs::ScriptDialog::showInstance();
@@ -1409,12 +1414,21 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
             break;
     }
 
+    if (dlg != NULL) {
+        dlg->show();
+        dlg->raise();
+    }
+
 } // end of sp_verb_action_dialog_perform()
 
 /** \brief  Decode the verb code and take appropriate action */
 void
 HelpVerb::perform (SPAction *action, void * data, void * pdata)
 {
+    SPDesktop *dt = SP_DESKTOP (sp_action_get_view (action));
+    g_assert(dt->_dlg_mgr != NULL);
+    Inkscape::UI::Dialog::Dialog *dlg = NULL;
+
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_KEYS:
             sp_help_open_screen (_("keys.svg"));
@@ -1432,6 +1446,12 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
     default:
         break;
     }
+
+    if (dlg != NULL) {
+        dlg->show();
+        dlg->raise();
+    }
+
 } // end of sp_verb_action_help_perform()
 
 /** \brief  Decode the verb code and take appropriate action */

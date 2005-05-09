@@ -31,9 +31,6 @@ public:
     Transformation();
     virtual ~Transformation();
 
-    Glib::ustring getName() const { return _("Transformation"); }
-    Glib::ustring getDesc() const { return _("Transformation Dialog"); }
-
     void setPageMove()   { present(PAGE_MOVE); }
     void setPageScale()  { present(PAGE_SCALE); }
     void setPageRotate() { present(PAGE_ROTATE); }

@@ -21,7 +21,7 @@ namespace Dialog {
 
 XmlEditor::XmlEditor() 
 {
-    set_title(getName());
+    set_title(_("XML Editor"));
     set_default_size(200, 200);
 
     transientize();

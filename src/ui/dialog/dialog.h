@@ -30,9 +30,6 @@ public:
 
     virtual void onDestroy();
 
-    virtual Glib::ustring  getName() const = 0;
-    virtual Glib::ustring  getDesc() const = 0;
-
     /** Hide and show dialogs */
     virtual void   onHideDialogs();
     virtual void   onHideF12();
@@ -51,7 +48,7 @@ protected:
     virtual void   _apply();
     virtual void   _close();
 
-    static gboolean windowKeyPress( GtkWidget *widget, GdkEventKey *event );
+    static bool windowKeyPress( GtkWidget *widget, GdkEventKey *event );
     static void Dialog::hideCallback(GtkObject *object, gpointer dlgPtr);
     static void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr);
 

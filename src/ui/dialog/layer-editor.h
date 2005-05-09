@@ -25,9 +25,6 @@ public:
     LayerEditor();
     virtual ~LayerEditor();
 
-    Glib::ustring getName() const { return _("Layer Editor"); }
-    Glib::ustring getDesc() const { return _("Layer Editor Dialog"); }
-
 protected:
 
 private:

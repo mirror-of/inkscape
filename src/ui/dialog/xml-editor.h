@@ -25,9 +25,6 @@ public:
     XmlEditor();
     virtual ~XmlEditor();
 
-    Glib::ustring getName() const { return _("XML Editor"); }
-    Glib::ustring getDesc() const { return _("XML Editor Dialog"); }
-
 protected:
 
 private:

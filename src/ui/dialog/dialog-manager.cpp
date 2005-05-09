@@ -102,11 +102,23 @@ DialogManager::~DialogManager()
  */
 Dialog* DialogManager::getDialog(gchar const* dlgName) 
 {
-    DialogMap::const_iterator iter = _dialog_map.find(dlgName);
-    if (iter != _dialog_map.end())
+    return getDialog(g_quark_from_string(dlgName));
+}
+
+/**
+ * Gets a dilog by dialog name, which is the key to the map which contains
+ * a pointer to a dialog.
+ */
+Dialog* DialogManager::getDialog(GQuark q) 
+{
+    DialogMap::const_iterator iter = _dialog_map.find(q);
+    if (iter != _dialog_map.end()) {
         return (*iter).second; // dialog found
-    else
+    } else {
+        // TODO:  Look up the class providing q and instantiate it
+
         return NULL;    // dialog not found
+    }
 }
 
 /**
@@ -114,6 +126,15 @@ Dialog* DialogManager::getDialog(gchar const* dlgName)
  * signals for a dialog.
  */
 void DialogManager::addDialog(gchar const* dlgName, Dialog * dlg) 
+{
+    addDialog(g_quark_from_string(dlgName), dlg);
+}
+
+/**
+ * Adds a dialog to the map structure and connects it to the standard
+ * signals for a dialog.
+ */
+void DialogManager::addDialog(GQuark dlgName, Dialog * dlg) 
 {
     _dialog_map[dlgName] = dlg; 
 
@@ -132,15 +153,22 @@ void DialogManager::addDialog(gchar const* dlgName, Dialog * dlg)
  */
 bool DialogManager::deleteDialog(gchar const* dlgName) 
 {
-    DialogMap::iterator iter = _dialog_map.find(dlgName);
-    if (iter != _dialog_map.end())
-    {
+    return deleteDialog(g_quark_from_string(dlgName));
+}
+
+/**
+ * Deletes a dialog from the map structure and from existence.
+ */
+bool DialogManager::deleteDialog(GQuark q) 
+{
+    DialogMap::iterator iter = _dialog_map.find(q);
+    if (iter != _dialog_map.end()) {
         delete (*iter).second;
         _dialog_map.erase(iter);
         return true;
-    } 
-    else 
+    } else {
         return false;
+    }
 }
 
 /**
@@ -148,14 +176,11 @@ bool DialogManager::deleteDialog(gchar const* dlgName)
  */
 void DialogManager::deleteAllDialogs()
 {
-
     DialogMap::iterator iter = _dialog_map.begin();
-    while (iter != _dialog_map.end()) 
-    {
+    while (iter != _dialog_map.end()) {
         delete (*iter).second;
         ++iter;
     }
-
 }
 
 
@@ -163,14 +188,7 @@ void DialogManager::deleteAllDialogs()
 Dialog* DialogManager::getAboutDialog() {
     if (_about_dialog == NULL) {
         _about_dialog = About::create();
-        hide_dialogs.connect(sigc::mem_fun(*_about_dialog, 
-                                           &About::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_about_dialog, 
-                                       &About::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_about_dialog, 
-                                           &About::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_about_dialog, 
-                                       &About::onShowF12));
+        addDialog("About", _about_dialog);
     }
     return _about_dialog;
 }

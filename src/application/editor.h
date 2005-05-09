@@ -35,7 +35,7 @@ namespace NSApplication {
 class Editor : public AppPrototype
 {
 public:
-    Editor(int argc, char **argv, gboolean use_gui=true);
+    Editor(int argc, char **argv, bool use_gui=true);
     virtual ~Editor();
 
     Gtk::Window*    getWindow();
@@ -57,13 +57,13 @@ public:
     void            refreshDisplay();
     void            exit();
 
-    gboolean        lastViewOfDocument(SPDocument* doc, SPDesktop* view) const;
+    bool        lastViewOfDocument(SPDocument* doc, SPDesktop* view) const;
     
-    gboolean        addDocument(SPDocument* doc);
-    gboolean        deleteDocument(SPDocument* doc);
+    bool        addDocument(SPDocument* doc);
+    bool        deleteDocument(SPDocument* doc);
 
-    gboolean        addView(SPDesktop* view);
-    gboolean        deleteView(SPDesktop* view);
+    bool        addView(SPDesktop* view);
+    bool        deleteView(SPDesktop* view);
 
 protected:
     UI::View::Edit *rep;
@@ -76,9 +76,9 @@ protected:
     GSList         *_desktops;
     gchar          *_argv0;
 
-    gboolean       _dialogs_toggle;
-    gboolean       _save_preferences;
-    gboolean       _use_gui;
+    bool       _dialogs_toggle;
+    bool       _save_preferences;
+    bool       _use_gui;
 };
 
 } // namespace NSApplication

@@ -21,7 +21,7 @@ namespace Dialog {
 
 ExtensionEditor::ExtensionEditor()
 {
-    set_title(getName());
+    set_title(_("Extensions Editor"));
     set_default_size(400, 200);
 
     transientize();

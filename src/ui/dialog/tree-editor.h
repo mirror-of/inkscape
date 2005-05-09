@@ -29,9 +29,6 @@ public:
     TreeEditor();
     virtual ~TreeEditor();
 
-    Glib::ustring getName() const { return _("Tree Editor"); }
-    Glib::ustring getDesc() const { return _("Tree Editor"); }
-
 protected:
 
     Gtk::HBox             _hbox;

@@ -34,11 +34,14 @@ public:
     sigc::signal<void> transientize;
 
     /* generic dialog management start */
-    typedef std::map<gchar const*, Dialog*>    DialogMap;
+    typedef std::map<GQuark, Dialog*>    DialogMap;
 
     Dialog* getDialog(gchar const* dlgName); 
+    Dialog* getDialog(GQuark dlgName); 
     void    addDialog(gchar const* dlgName, Dialog * dlg);
+    void    addDialog(GQuark dlgName, Dialog * dlg);
     bool    deleteDialog(gchar const* dlgName);
+    bool    deleteDialog(GQuark dlgName);
     void    deleteAllDialogs(); 
     /* generic dialog management end */
 

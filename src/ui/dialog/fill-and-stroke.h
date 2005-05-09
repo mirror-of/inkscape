@@ -29,9 +29,6 @@ public:
     FillAndStroke();
     virtual ~FillAndStroke();
 
-    Glib::ustring getName() const { return _("Fill and Stroke"); }
-    Glib::ustring getDesc() const { return _("Fill and Stroke Dialog"); }
-
 protected:
     Gtk::Notebook  _notebook;
 

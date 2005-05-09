@@ -23,7 +23,7 @@ TextProperties::TextProperties()
     : _page_font("Font", 1, 1),
       _page_text("Text", 1, 1)
 {
-    set_title(getName());
+    set_title(_("Text Properties"));
     set_default_size(200, 200);
 
     transientize();

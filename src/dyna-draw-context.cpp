@@ -53,7 +53,7 @@
 #include "desktop-affine.h"
 #include "desktop-style.h"
 #include "snap.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "dyna-draw-context.h"
 #include "widgets/spw-utilities.h"
 #include "libnr/n-art-bpath.h"

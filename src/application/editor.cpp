@@ -34,7 +34,7 @@
 namespace Inkscape {
 namespace NSApplication {
 
-Editor::Editor(gint argc, char **argv, gboolean use_gui)
+Editor::Editor(gint argc, char **argv, bool use_gui)
     : _preferences(NULL),
       _documents(NULL),
       _desktops(NULL),
@@ -43,6 +43,7 @@ Editor::Editor(gint argc, char **argv, gboolean use_gui)
       _save_preferences(true),
       _use_gui(use_gui)
 {
+    g_warning("Creating new rep from UI::View::Edit()");
     rep = new UI::View::Edit();
 
     // Store the arguments

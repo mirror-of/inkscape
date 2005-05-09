@@ -39,7 +39,7 @@ InkscapePreferences::InkscapePreferences()
       _page_steps_adj_inset(0, 0, 3000, 0.01, 1, 1),
       _page_steps_adj_zoom(0, 101, 500, 1, 1, 1)
 {
-    set_title(getName());
+    set_title(_("Preferences"));
 
     transientize();
 

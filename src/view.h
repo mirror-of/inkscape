@@ -42,66 +42,80 @@ void     sp_view_request_redraw (SPView *view);
 
 inline void sp_view_set_position(SPView *view, NR::Point const &p)
 {
-	sp_view_set_position(view, p[NR::X], p[NR::Y]);
+    sp_view_set_position(view, p[NR::X], p[NR::Y]);
 }
 
-struct SPView {
-	GObject object;
+class SPView : public GObject {
+ public:
+    GObject object;  // TODO:  Remove this
 
-	SPDocument *doc;
+    SPDocument *doc;
 
-	static void init(SPView *view);
-	static void dispose(GObject *obj);
+    static void init(SPView *view);
+    static void dispose(GObject *obj);
 
-	Inkscape::MessageStack *messageStack() {
-		return _message_stack;
-	}
+    Inkscape::MessageStack *messageStack() {
+	return _message_stack;
+    }
 
-	Inkscape::MessageContext *tipsMessageContext() {
-		return _tips_message_context;
-	}
+    Inkscape::MessageContext *tipsMessageContext() {
+	return _tips_message_context;
+    }
 
-	/* don't use this in new code */
-	Inkscape::MessageContext *legacyMessageContext() {
-		return _legacy_message_context;
-	}
+    /* don't use this in new code */
+    Inkscape::MessageContext *legacyMessageContext() {
+	return _legacy_message_context;
+    }
 
     // Wrappers for C versions of routines
     void setDocument(SPDocument *doc) {
-	sp_view_set_document(this, doc);
+	/*
+	sp_view_set_document((SPView*)this, doc);
+	*/
     }
 
     void emitResized(gdouble width, gdouble height) {
-	sp_view_emit_resized(this, width, height);
+	/*
+	sp_view_emit_resized((SPView*)this, width, height);
+	*/
     }
 
     void setPosition(gdouble x, gdouble y) {
-	sp_view_set_position(this, x, y);
+	/*
+	sp_view_set_position((SPView*)this, x, y);
+	*/
     }
 
     void setPosition(NR::Point const &p) {
-	sp_view_set_position(this, p);
+	/*
+	sp_view_set_position((SPView*)this, p);
+	*/
     }
 
     gboolean shutdown() {
-	return sp_view_shutdown(this);
+	/*
+	return sp_view_shutdown((SPView*)this);
+	*/
+	return true;
     }
 
     void requestRedraw() {
-	sp_view_request_redraw(this);
+	/*
+	sp_view_request_redraw((SPView*)this);
+	*/
     }
 
 private:
-	static void _set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view);
+    static void _set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view);
 
-	Inkscape::MessageStack *_message_stack;
-	Inkscape::MessageContext *_tips_message_context;
-	Inkscape::MessageContext *_legacy_message_context;
+    Inkscape::MessageStack *_message_stack;
+    Inkscape::MessageContext *_tips_message_context;
+    Inkscape::MessageContext *_legacy_message_context;
 
-	sigc::connection _message_changed_connection;
-public: // for now...
-	sigc::connection _document_uri_set_connection;
-	sigc::connection _document_resized_connection;
+    sigc::connection _message_changed_connection;
+ public: // for now...
+    sigc::connection _document_uri_set_connection;
+    sigc::connection _document_resized_connection;
 };
 
 struct SPViewClass {
@@ -167,14 +181,14 @@ struct SPViewWidget {
 };
 
 struct SPViewWidgetClass {
-	GtkEventBoxClass parent_class;
+    GtkEventBoxClass parent_class;
 
-	/* Vrtual method to set/change/remove view */
-	void (* set_view) (SPViewWidget *vw, SPView *view);
-	/* Virtual method about view size change */
-	void (* view_resized) (SPViewWidget *vw, SPView *view, gdouble width, gdouble height);
+    /* Vrtual method to set/change/remove view */
+    void (* set_view) (SPViewWidget *vw, SPView *view);
+    /* Virtual method about view size change */
+    void (* view_resized) (SPViewWidget *vw, SPView *view, gdouble width, gdouble height);
 
-	gboolean (* shutdown) (SPViewWidget *vw);
+    gboolean (* shutdown) (SPViewWidget *vw);
 };
 
 #define SP_VIEW_WIDGET_VIEW(w) (SP_VIEW_WIDGET (w)->view)

@@ -30,9 +30,6 @@ public:
     InkscapePreferences();
     virtual ~InkscapePreferences();
 
-    Glib::ustring    getName() const { return _("Inkscape Preferences"); }
-    Glib::ustring    getDesc() const { return _("Inkscape Preferences Dialog"); }
-
 protected:
     Gtk::Notebook    _notebook;
     Gtk::VBox        _page_mouse;

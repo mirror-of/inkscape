@@ -29,9 +29,6 @@ public:
     Find();
     virtual ~Find();
 
-    Glib::ustring getName() const { return _("Find"); }
-    Glib::ustring getDesc() const { return _("Find Dialog"); }
-
 protected:
     Gtk::Notebook  _notebook;
 

@@ -29,9 +29,6 @@ public:
     Export();
     virtual ~Export();
 
-    Glib::ustring getName() const { return _("Export"); }
-    Glib::ustring getDesc() const { return _("Export Dialog"); }
-
 protected:
     Gtk::Notebook  _notebook;
 

@@ -25,9 +25,6 @@ public:
     ExtensionEditor();
     virtual ~ExtensionEditor();
 
-    Glib::ustring getName() const { return _("Extension Editor"); }
-    Glib::ustring getDesc() const { return _("Extension Editor Dialog"); }
-
 protected:
 
 private:

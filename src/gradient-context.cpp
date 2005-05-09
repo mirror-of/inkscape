@@ -31,7 +31,7 @@
 #include "desktop-style.h"
 #include "pixmaps/cursor-gradient.xpm"
 #include "gradient-context.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "sp-metrics.h"
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"

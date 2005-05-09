@@ -21,7 +21,7 @@ namespace Dialog {
 
 LayerEditor::LayerEditor() 
 {
-    set_title(getName());
+    set_title(_("Layer Editor"));
     set_default_size(200, 200);
 
     transientize();

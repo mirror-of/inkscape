@@ -56,7 +56,7 @@
 #include "document.h"
 #include "selection.h"
 #include "select-context.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "sp-namedview.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
@@ -191,6 +191,7 @@ sp_desktop_class_init (SPDesktopClass *klass)
 static void
 sp_desktop_init (SPDesktop *desktop)
 {
+    desktop->_dlg_mgr = NULL;
     desktop->namedview = NULL;
     desktop->selection = NULL;
     desktop->acetate = NULL;
@@ -402,6 +403,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 
     /* Setup widget */
     SPDesktop *desktop = (SPDesktop *) g_object_new (SP_TYPE_DESKTOP, NULL);
+
+    /* Setup Dialog Manager */
+    desktop->_dlg_mgr = new Inkscape::UI::Dialog::DialogManager();
 
     desktop->dkey = sp_item_display_key_new (1);
 

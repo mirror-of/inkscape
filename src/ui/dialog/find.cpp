@@ -22,7 +22,7 @@ namespace Dialog {
 Find::Find() 
     : _page_find("Find", 1, 1)
 {
-    set_title(getName());
+    set_title(_("Find"));
     set_default_size(200, 200);
 
     transientize();

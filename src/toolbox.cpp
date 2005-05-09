@@ -80,7 +80,7 @@
 #include "star-context.h"
 #include "spiral-context.h"
 #include "gradient-context.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "sp-rect.h"
 #include "sp-star.h"
 #include "sp-spiral.h"

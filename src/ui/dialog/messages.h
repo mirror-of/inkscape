@@ -58,9 +58,6 @@ public:
      */
     void releaseLogMessages();
 
-    Glib::ustring  getName() const { return "Messages"; }
-    Glib::ustring  getDesc() const { return ""; }
-
 protected:
     Gtk::MenuBar        menuBar;
     Gtk::Menu           fileMenu;

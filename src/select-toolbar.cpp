@@ -61,7 +61,7 @@
 #include "prefs-utils.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "sp-item-transform.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-translate-scale-ops.h"

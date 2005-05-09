@@ -64,7 +64,7 @@ Transformation::Transformation()
                                "arrows_ver.xpm", &_units_skew),
       _check_move_relative    ("Relative move")
 {
-    set_title(getName());
+    set_title(_("Transformation"));
 
     transientize();
 

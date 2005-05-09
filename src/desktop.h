@@ -26,6 +26,8 @@
 #include "sp-metric.h"
 #include "view.h"
 
+#include "ui/dialog/dialog-manager.h"
+
 class SPCSSAttr;
 
 struct SPItem;
@@ -71,99 +73,100 @@ struct StopOnTrue {
 namespace Inkscape { class Selection; }
 
 struct SPDesktop : public SPView {
-	Inkscape::MessageContext *guidesMessageContext() {
-		return _guides_message_context;
-	}
+    Inkscape::MessageContext *guidesMessageContext() {
+	return _guides_message_context;
+    }
 
-	SPDesktopWidget *owner;
-	Inkscape::Application *inkscape;
+    SPDesktopWidget *owner;
+    Inkscape::Application *inkscape;
+    Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
 
-	SPNamedView *namedview;
-	Inkscape::Selection *selection; ///< current selection; will never generally be NULL
-	sigc::connection sel_modified_connection;
+    SPNamedView *namedview;
+    Inkscape::Selection *selection; ///< current selection; will never generally be NULL
+    sigc::connection sel_modified_connection;
 
-	sigc::connection sel_changed_connection;
+    sigc::connection sel_changed_connection;
 
-	SPEventContext *event_context;
+    SPEventContext *event_context;
 
-	unsigned int dkey;
+    unsigned int dkey;
 
-	SPCanvasItem *acetate;
-	SPCanvasGroup *main;
-	SPCanvasGroup *grid;
-  	SPCanvasGroup *guides;
-	SPCanvasItem *drawing;
-	SPCanvasGroup *sketch;
-	SPCanvasGroup *controls;
+    SPCanvasItem *acetate;
+    SPCanvasGroup *main;
+    SPCanvasGroup *grid;
+    SPCanvasGroup *guides;
+    SPCanvasItem *drawing;
+    SPCanvasGroup *sketch;
+    SPCanvasGroup *controls;
 
-	SPCanvasItem *table; // outside-of-page background
-	SPCanvasItem *page; // page background
-	SPCanvasItem *page_border; // page border
+    SPCanvasItem *table; // outside-of-page background
+    SPCanvasItem *page; // page background
+    SPCanvasItem *page_border; // page border
 
-	NR::Matrix d2w, w2d, doc2dt;
+    NR::Matrix d2w, w2d, doc2dt;
 
-	gint number;
-	gboolean active;
+    gint number;
+    gboolean active;
 
-	/* fixme: This has to be implemented in different way */
-	guint guides_active : 1;
+    /* fixme: This has to be implemented in different way */
+    guint guides_active : 1;
 
-	GList *zooms_past;
-	GList *zooms_future;
+    GList *zooms_past;
+    GList *zooms_future;
 
-	gboolean is_fullscreen;
+    gboolean is_fullscreen;
 
-	// current style
-	SPCSSAttr *current;
+    // current style
+    SPCSSAttr *current;
 
-	// storage for selected dragger used by GrDrag as it's created and deleted by tools
-	SPItem *gr_item;
-	guint gr_point_num;
-	bool gr_fill_or_stroke;
+    // storage for selected dragger used by GrDrag as it's created and deleted by tools
+    SPItem *gr_item;
+    guint gr_point_num;
+    bool gr_fill_or_stroke;
 
-	SPObject *currentRoot();
-	SPObject *currentLayer();
-	void setCurrentLayer(SPObject *object);
-	sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
-		return _layer_changed_signal.connect(slot);
-	}
-	SPObject *layerForObject(SPObject *object);
-	bool isLayer(SPObject *object) const;
-	bool isWithinViewport(SPItem *item) const;
-	bool itemIsHidden(SPItem const *item) const;
+    SPObject *currentRoot();
+    SPObject *currentLayer();
+    void setCurrentLayer(SPObject *object);
+    sigc::connection connectCurrentLayerChanged(const sigc::slot<void, SPObject *> & slot) {
+	return _layer_changed_signal.connect(slot);
+    }
+    SPObject *layerForObject(SPObject *object);
+    bool isLayer(SPObject *object) const;
+    bool isWithinViewport(SPItem *item) const;
+    bool itemIsHidden(SPItem const *item) const;
+    
+    static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
+    static void _layer_activated(SPObject *layer, SPDesktop *desktop);
+    static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
+    static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
+    static void _selection_changed(Inkscape::Selection *selection, SPDesktop *desktop);
 
-	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
-	static void _layer_activated(SPObject *layer, SPDesktop *desktop);
-	static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
-	static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
-	static void _selection_changed(Inkscape::Selection *selection, SPDesktop *desktop);
+    sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
+    
+    sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
+    sigc::connection connectSetStyle(const sigc::slot<bool, const SPCSSAttr *> & slot) {
+	return _set_style_signal.connect(slot);
+    }
 
-	sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
-
-	sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
-	sigc::connection connectSetStyle(const sigc::slot<bool, const SPCSSAttr *> & slot) {
-		return _set_style_signal.connect(slot);
-	}
-
-	sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
-	sigc::connection connectQueryStyle(const sigc::slot<int, SPStyle *, int> & slot) {
-		return _query_style_signal.connect(slot);
-	}
-
-	sigc::signal<void, SPObject *> _layer_changed_signal;
-
-	sigc::signal<void, sp_verb_t> _tool_changed;
-
-	// subselection is some sort of selection which is specific to the tool, such as a handle in gradient tool, or a text selection
-	sigc::signal<void, gpointer> _tool_subselection_changed;
-	sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot) {
-		return _tool_subselection_changed.connect(slot);
-	}
-	void emitToolSubselectionChanged(gpointer data); 
-
-	Inkscape::MessageContext *_guides_message_context;
-
-	Inkscape::ObjectHierarchy *_layer_hierarchy;
+    sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
+    sigc::connection connectQueryStyle(const sigc::slot<int, SPStyle *, int> & slot) {
+	return _query_style_signal.connect(slot);
+    }
+    
+    sigc::signal<void, SPObject *> _layer_changed_signal;
+    
+    sigc::signal<void, sp_verb_t> _tool_changed;
+    
+    // subselection is some sort of selection which is specific to the tool, such as a handle in gradient tool, or a text selection
+    sigc::signal<void, gpointer> _tool_subselection_changed;
+    sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot) {
+	return _tool_subselection_changed.connect(slot);
+    }
+    void emitToolSubselectionChanged(gpointer data); 
+    
+    Inkscape::MessageContext *_guides_message_context;
+    
+    Inkscape::ObjectHierarchy *_layer_hierarchy;
 };
 
 struct SPDesktopClass {

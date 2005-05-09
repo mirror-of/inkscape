@@ -29,9 +29,6 @@ public:
     DocumentPreferences();
     virtual ~DocumentPreferences();
 
-    Glib::ustring getName() const { return "Document Preferences Dialog"; }
-    Glib::ustring getDesc() const { return "Document Preferences Dialog"; }
-
 protected:
 
     Gtk::Notebook  _notebook;

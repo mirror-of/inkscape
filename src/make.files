@@ -574,7 +574,7 @@ sp-cursor.cpp
 sp-cursor.h
 sp-defs.cpp
 sp-defs.h
-sp-desktop-widget.h
+desktop-widget.h
 sp-ellipse.cpp
 sp-ellipse.h
 sp-flowdiv.cpp

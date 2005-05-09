@@ -46,7 +46,7 @@
 #include "path-chemistry.h"
 #include "zoom-context.h"
 #include "svg-view.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 

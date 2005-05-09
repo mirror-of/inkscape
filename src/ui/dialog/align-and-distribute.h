@@ -32,9 +32,6 @@ public:
     AlignAndDistribute();
     virtual ~AlignAndDistribute();
 
-    Glib::ustring getName() const { return _("Align and Distribute"); }
-    Glib::ustring getDesc() const { return _("Align and Distribute Dialog"); }
-
     enum AlignTarget { LAST=0, FIRST, BIGGEST, SMALLEST, PAGE, DRAWING, SELECTION };
 
     AlignTarget getAlignTarget() const;

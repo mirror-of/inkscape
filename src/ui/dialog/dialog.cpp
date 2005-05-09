@@ -115,7 +115,7 @@ Dialog::~Dialog()
 }
 
 
-gboolean Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
+bool Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
 {
     unsigned int shortcut = 0;
     shortcut = get_group0_keyval (event) |

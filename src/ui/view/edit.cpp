@@ -62,12 +62,14 @@ Edit::Edit()
       _act_grp(Gtk::ActionGroup::create()),
       _ui_mgr(Gtk::UIManager::create())
 {
+    g_warning("Creating new Edit");
     Icons::init();
     Stock::init();
     initActions();
     initAccelMap();
     initUIManager();
     initLayout();
+    g_warning("Done creating new Edit");
 }
 
 Edit::~Edit()
@@ -1117,18 +1119,20 @@ Edit::initSvgCanvas()
 
     // Connect document
     setDocument(_document);
+/* TODO - Gtkmmify
     _namedview = sp_document_namedview(_document, NULL);
     
-/* TODO - Gtkmmify
     g_signal_connect(G_OBJECT(_namedview), "modified", G_CALLBACK(sp_dt_namedview_modified), desktop);
-*/
     _number = sp_namedview_viewcount(_namedview);
+*/
 
     SPCanvasGroup *root = sp_canvas_root((SPCanvas*)canvas);
 
     // Setup the infinite-dimensioned 'Acetate' object (a SPCanvasItem)
     _acetate = sp_canvas_item_new(root, GNOME_TYPE_CANVAS_ACETATE, NULL);
+/*
     g_signal_connect(G_OBJECT(_acetate), "event", G_CALLBACK(editor_root_handler), this);
+*/
     _main = (SPCanvasGroup *) sp_canvas_item_new(root, SP_TYPE_CANVAS_GROUP, NULL);
 /*
     g_signal_connect(G_OBJECT(_main), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
@@ -1156,7 +1160,7 @@ Edit::initSvgCanvas()
     _sketch = (SPCanvasGroup *) sp_canvas_item_new (_main, SP_TYPE_CANVAS_GROUP, NULL);
     _controls = (SPCanvasGroup *) sp_canvas_item_new (_main, SP_TYPE_CANVAS_GROUP, NULL);
 
-/*
+/* TODO
     // Create the Selection object
     _selection = new Inkscape::Selection (desktop);
 
@@ -1175,11 +1179,13 @@ Edit::initSvgCanvas()
     // It was originally set to 5, which is really cheesy!
     // It now is an attribute in the document's namedview. If a value of
     // 0 is used, then the constructor for a shadow is not initialized.
+/* TODO
     if ( _namedview->pageshadow != 0 &&
          _namedview->showpageshadow ) {
         sp_ctrlrect_set_shadow (SP_CTRLRECT (_page_border),
                                 _namedview->pageshadow, 0x3f3f3fff);
     }
+*/
 
 /** TODO
     // Connect event for page resize
@@ -1201,7 +1207,6 @@ Edit::initSvgCanvas()
             desktop
             )
         );
-*/
 
     // Display the arena portion of the document
     NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (_document)),
@@ -1211,7 +1216,6 @@ Edit::initSvgCanvas()
         nr_arena_item_unref (ai);
     }
 
-/*
     sp_namedview_show (_namedview, desktop);
 
     // Ugly hack

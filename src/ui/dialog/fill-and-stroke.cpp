@@ -24,7 +24,7 @@ FillAndStroke::FillAndStroke()
       _page_stroke_paint("Stroke Paint", 1, 1),
       _page_stroke_style("Stroke Style", 1, 1)
 {
-    set_title(getName());
+    set_title(_("Fill and Stroke"));
     set_default_size(200, 200);
 
     transientize();

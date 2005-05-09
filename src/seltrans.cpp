@@ -42,7 +42,7 @@
 #include "selection.h"
 #include "select-context.h"
 #include "uri-references.h"
-#include "sp-desktop-widget.h"
+#include "desktop-widget.h"
 #include "sp-use.h"
 #include "sp-item.h"
 #include <sp-item-update-cns.h>

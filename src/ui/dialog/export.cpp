@@ -22,7 +22,7 @@ namespace Dialog {
 Export::Export() 
     : _page_export("Export", 1, 1)
 {
-    set_title(getName());
+    set_title(_("Export"));
     set_default_size(200, 200);
 
     transientize();
@@ -34,7 +34,7 @@ Export::Export()
     // Notebook for individual transformations
     vbox->pack_start(_notebook, true, true);
 
-    _notebook.append_page(_page_export, getName());
+    _notebook.append_page(_page_export, _("Export"));
 
     // TODO:  Insert widgets
 

@@ -34,7 +34,7 @@ class Document;
 
 class GSList;
 
-Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_gui)
+Application::Application(int argc, char **argv, bool use_gui, bool new_gui)
     : _gtk_main(NULL),
       _argc(argc),
       _argv(NULL),
@@ -53,6 +53,7 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
         _gtk_main = new Gtk::Main(argc, argv, true);
 
         // TODO:  Determine class by arguments
+        g_warning("Creating new Editor");
         _app_impl = (AppPrototype*)new Editor(_argc, _argv);
     } else if (use_gui) {
         // No op - we'll use the old interface
@@ -70,14 +71,14 @@ Application::~Application()
     g_free(_path_home);
 }
 
-gboolean
+bool
 Application::loadPreferences()
 {
     // TODO
     return true;
 }
 
-gboolean
+bool
 Application::savePreferences()
 {
     // TODO
@@ -123,6 +124,7 @@ Application::run()
     if (_gtk_main != NULL) {
         g_assert(_app_impl != NULL);
 
+        g_warning("Running main window");
         Gtk::Window *win = _app_impl->getWindow();
         g_assert(win != NULL);
         _gtk_main->run(*win);

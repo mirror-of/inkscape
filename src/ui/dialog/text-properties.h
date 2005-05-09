@@ -29,9 +29,6 @@ public:
     TextProperties();
     virtual ~TextProperties();
 
-    Glib::ustring getName() const { return _("Text Properties"); }
-    Glib::ustring getDesc() const { return _("Text Properties Dialog"); }
-
 protected:
     Gtk::Notebook  _notebook;
 

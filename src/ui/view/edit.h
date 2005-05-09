@@ -113,7 +113,7 @@ protected:
 
     NR::Matrix           _d2w, _w2d, _doc2dt;
     gint                 _number;
-    gboolean             _is_fullscreen;
+    bool             _is_fullscreen;
 
     // current style
     SPCSSAttr            *_current_style;
