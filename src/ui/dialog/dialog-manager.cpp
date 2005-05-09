@@ -116,7 +116,9 @@ Dialog* DialogManager::getDialog(GQuark q)
         return (*iter).second; // dialog found
     } else {
         // TODO:  Look up the class providing q and instantiate it
-
+        // This probably needs to be a Factory object or something...
+        // or else maybe create a hash of GQuark to new functions for
+        // the corresponding class.
         return NULL;    // dialog not found
     }
 }
