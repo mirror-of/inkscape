@@ -69,7 +69,7 @@
 #include "text-chemistry.h"
 #include "shortcuts.h"
 #include "toolbox.h"
-#include "view.h"
+#include "ui/view/view.h"
 #include "interface.h"
 #include "prefs-utils.h"
 #include "splivarot.h"

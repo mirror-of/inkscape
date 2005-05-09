@@ -245,7 +245,10 @@ AC_ARG_WITH(gnome-vfs,
 	AC_HELP_STRING([--with-gnome-vfs], [use gnome vfs for loading files]),
 	[with_gnome_vfs=$withval], [with_gnome_vfs=auto])
 
-if test "x$with_gnome_vfs" = "xyes"; then
+if test "x$with_gnome_vfs" = "xno"; then
+	dnl Asked to ignore gnome-vfs
+	gnome_vfs=no
+else
         dnl Have to test gnome-vfs presence
 	PKG_CHECK_MODULES(GNOME_VFS, gnome-vfs-2.0 >= 2.0, gnome_vfs=yes, gnome_vfs=no)
 	if test "x$gnome_vfs" != "xyes"; then
@@ -258,9 +261,6 @@ if test "x$with_gnome_vfs" = "xyes"; then
 			AC_MSG_RESULT($gnome_vfs)
 		fi
 	fi
-else
-	dnl Asked to ignore gnome-vfs
-	gnome_vfs=no
 fi
 
 AM_CONDITIONAL(USE_GNOME_VFS, test "x$gnome_vfs" = "xyes")

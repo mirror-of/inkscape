@@ -19,17 +19,17 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/spinbutton.h>
 
-#include <view.h>
-#include <document.h>
-#include <desktop.h>
-#include <selection.h>
-#include <xml/repr.h>
-#include <svg/ftos.h>
+#include "ui/view/view.h"
+#include "document.h"
+#include "desktop.h"
+#include "selection.h"
+#include "xml/repr.h"
+#include "svg/ftos.h"
 
-#include <extension/implementation/implementation.h>
-#include <extension/extension.h>
-#include <extension/effect.h>
-#include <extension/system.h>
+#include "extension/implementation/implementation.h"
+#include "extension/extension.h"
+#include "extension/effect.h"
+#include "extension/system.h"
 
 #include <glibmm/i18n.h>
 

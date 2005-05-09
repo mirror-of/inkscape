@@ -24,8 +24,8 @@
 #include "helper/helper-forward.h"
 #include "forward.h"
 #include "sp-metric.h"
-#include "view.h"
 
+#include "ui/view/view.h"
 #include "ui/dialog/dialog-manager.h"
 
 class SPCSSAttr;

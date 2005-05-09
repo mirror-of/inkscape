@@ -43,7 +43,7 @@
 #include "desktop-affine.h"
 #include "pixmaps/cursor-text.xpm"
 #include "pixmaps/cursor-text-insert.xpm"
-#include "view.h"
+#include "ui/view/view.h"
 #include <glibmm/i18n.h>
 #include "xml/repr.h"
 #include "xml/attribute-record.h"

@@ -21,10 +21,10 @@
 /** A macro to check whether or not something is an action */
 #define SP_IS_ACTION(o) (NR_CHECK_INSTANCE_TYPE((o), SP_TYPE_ACTION))
 
-#include <helper/helper-forward.h>
-#include <libnr/nr-object.h>
-#include <forward.h>
-#include <view.h>
+#include "helper/helper-forward.h"
+#include "libnr/nr-object.h"
+#include "forward.h"
+#include "ui/view/view.h"
 
 namespace Inkscape {
 class Verb;

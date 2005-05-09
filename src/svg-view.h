@@ -23,7 +23,7 @@ class SPSVGViewClass;
 #define SP_IS_SVG_VIEW_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_SVG_VIEW))
 
 #include "display/display-forward.h"
-#include "view.h"
+#include "ui/view/view.h"
 
 
 void sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale);

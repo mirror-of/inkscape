@@ -36,7 +36,7 @@
 #include "desktop-style.h"
 #include "prefs-utils.h"
 #include "sp-namedview.h"
-#include "view.h"
+#include "ui/view/view.h"
 #include "inkscape-private.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"

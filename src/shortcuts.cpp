@@ -19,7 +19,7 @@
 #include "helper/action.h"
 #include "shortcuts.h"
 #include "verbs.h"
-#include "view.h"
+#include "ui/view/view.h"
 
 
 /* Returns true if action was performed */

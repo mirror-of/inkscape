@@ -55,7 +55,7 @@
 #include "style.h"
 #include "version.h"
 #include "inkscape.h"
-#include "view.h"
+#include "ui/view/view.h"
 #include "print.h"
 #include "sp-metrics.h"
 #include "xml/repr.h"

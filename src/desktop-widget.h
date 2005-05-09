@@ -7,11 +7,11 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktooltips.h>
 
-#include <display/display-forward.h>
-#include <libnr/nr-point.h>
+#include "display/display-forward.h"
+#include "libnr/nr-point.h"
 #include "forward.h"
 #include "message.h"
-#include "view.h"
+#include "ui/view/view.h"
 
 #define SP_TYPE_DESKTOP_WIDGET (sp_desktop_widget_get_type ())
 #define SP_DESKTOP_WIDGET(o) (GTK_CHECK_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))

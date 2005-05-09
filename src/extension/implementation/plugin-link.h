@@ -19,9 +19,9 @@
 #include <gtkmm/widget.h>
 
 /** \todo  This needs to go away eventually. */
-#include <document.h>
+#include "document.h"
 /** \todo  This needs to go away eventually. */
-#include <view.h>
+#include "ui/view/view.h"
 
 /** \brief  A simple typedef to make it so that inkscape_extension can
             be used before I figure out what makes sense here */

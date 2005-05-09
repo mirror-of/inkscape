@@ -194,7 +194,6 @@ libinkpre_a_SOURCES =	\
 	uri-references.cpp uri-references.h	\
 	verbs.cpp verbs.h	\
 	version.cpp version.h	\
-	view.cpp view.h	\
 	zoom-context.cpp zoom-context.h
 
 # Force libinkpost.a to be rebuilt if we add files to libinkpost_a_SOURCES.

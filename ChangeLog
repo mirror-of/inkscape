@@ -1,7 +1,65 @@
+2005-05-08  Bryce Harrington <bryce@bryceharrington.org>
+
+	* ChangeLog configure.ac src/Makefile_insert src/desktop-widget.h
+	  src/desktop.h src/dropper-context.cpp src/file.cpp
+	  src/shortcuts.cpp src/sp-text.cpp src/splivarot.cpp
+	  src/svg-view.h src/text-context.cpp src/verbs.cpp
+	  src/extension/implementation/plugin-link.h
+	  src/extension/internal/grid.cpp src/helper/action.h
+	  src/helper/window.cpp src/ui/dialog/dialog.cpp
+	  src/ui/dialog/messages.cpp src/ui/view/view.cpp
+	  src/ui/view/view.h:	
+
+	  Moving view.* into src/ui/view/
+	
 2005-05-09  MenTaLguY  <mental@rydia.net>
 
 	* src/gc-alloc.h: const-correctness fix
 
+2005-05-08  Bryce Harrington <bryce@bryceharrington.org>
+
+	* configure.ac:  Defaulting with-gnome-vfs to on if library is
+	  present. 
+	
+	* po/POTFILES.in : Fixed error causing compile failure
+
+	* src/Makefile_insert src/arc-context.cpp src/desktop-events.cpp
+	   src/desktop.cpp src/desktop.h src/dyna-draw-context.cpp
+	   src/gradient-context.cpp src/gradient-toolbar.cpp
+	   src/interface.cpp src/make.dep src/make.files
+	   src/rect-context.cpp src/select-context.cpp
+	   src/select-toolbar.cpp src/seltrans.cpp src/spiral-context.cpp
+	   src/star-context.cpp src/toolbox.cpp src/verbs.cpp src/view.cpp
+	   src/view.h src/application/application.cpp
+	   src/application/application.h src/application/editor.cpp
+	   src/application/editor.h src/ui/dialog/align-and-distribute.cpp
+	   src/ui/dialog/align-and-distribute.h
+	   src/ui/dialog/dialog-manager.cpp src/ui/dialog/dialog-manager.h
+	   src/ui/dialog/dialog.cpp src/ui/dialog/dialog.h
+	   src/ui/dialog/document-preferences.cpp
+	   src/ui/dialog/document-preferences.h src/ui/dialog/export.cpp
+	   src/ui/dialog/export.h src/ui/dialog/extension-editor.cpp
+	   src/ui/dialog/extension-editor.h
+	   src/ui/dialog/fill-and-stroke.cpp
+	   src/ui/dialog/fill-and-stroke.h src/ui/dialog/find.cpp
+	   src/ui/dialog/find.h src/ui/dialog/inkscape-preferences.cpp
+	   src/ui/dialog/inkscape-preferences.h
+	   src/ui/dialog/layer-editor.cpp src/ui/dialog/layer-editor.h
+	   src/ui/dialog/messages.h src/ui/dialog/text-properties.cpp
+	   src/ui/dialog/text-properties.h
+	   src/ui/dialog/transformation.cpp src/ui/dialog/transformation.h
+	   src/ui/dialog/tree-editor.h src/ui/dialog/xml-editor.cpp
+	   src/ui/dialog/xml-editor.h src/ui/view/Makefile_insert
+	   src/ui/view/edit.cpp src/ui/view/edit.h :
+
+	   Renaming sp-desktop-widget.h to desktop-widget.h for
+	   consistency with other desktop files.  Beginning migration of
+	   desktop-* and view* files into ui/view/ subdir.  Incorporating
+	   DialogManager into existing SPDesktop code.  Making SPView
+	   derive from GObject.  Changing Messages dialog to run via
+	   DialogManager.  Removing getName() and getDesc() routines from
+	   Dialogs.  
+	
 2005-05-08  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert: change link order since the GC code now

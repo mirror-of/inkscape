@@ -19,7 +19,7 @@
 
 #include "inkscape.h"
 #include "event-context.h"
-#include "view.h"
+#include "ui/view/view.h"
 #include "dialog.h"
 #include "dialog-manager.h"
 #include "dialogs/dialog-events.h"

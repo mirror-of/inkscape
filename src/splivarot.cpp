@@ -36,7 +36,7 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include <glibmm/i18n.h>
-#include "view.h"
+#include "ui/view/view.h"
 #include "prefs-utils.h"
 
 #include "libnr/n-art-bpath.h"

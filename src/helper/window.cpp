@@ -16,7 +16,7 @@
 
 #include "inkscape.h"
 #include "shortcuts.h"
-#include "view.h"
+#include "ui/view/view.h"
 #include "event-context.h"
 #include "helper/window.h"
 
