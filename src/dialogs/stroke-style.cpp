@@ -80,7 +80,7 @@
 static void sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel);
 static void sp_stroke_style_paint_selection_modified (SPWidget *spw, Inkscape::Selection *selection, guint flags, SPPaintSelector *psel);
 static void sp_stroke_style_paint_selection_changed (SPWidget *spw, Inkscape::Selection *selection, SPPaintSelector *psel);
-static void sp_stroke_style_paint_update(SPWidget *spw, Inkscape::Selection *sel);
+static void sp_stroke_style_paint_update(SPWidget *spw);
 
 static void sp_stroke_style_paint_mode_changed(SPPaintSelector *psel, SPPaintSelectorMode mode, SPWidget *spw);
 static void sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw);
@@ -122,10 +122,7 @@ sp_stroke_style_paint_widget_new(void)
                        GTK_SIGNAL_FUNC(sp_stroke_style_paint_changed),
                        spw);
 
-    sp_stroke_style_paint_update(SP_WIDGET(spw),
-                                 ( SP_ACTIVE_DESKTOP
-                                   ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP)
-                                   : NULL ));
+    sp_stroke_style_paint_update (SP_WIDGET(spw));
     return spw;
 }
 
@@ -137,10 +134,7 @@ sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel)
              spw->inkscape, spw->repr );
 #endif
     if (spw->inkscape) {
-        sp_stroke_style_paint_update( spw,
-                                      ( SP_ACTIVE_DESKTOP
-                                        ? SP_DT_SELECTION(SP_ACTIVE_DESKTOP)
-                                        : NULL ));
+        sp_stroke_style_paint_update (spw);
     } 
 }
 
@@ -152,7 +146,7 @@ sp_stroke_style_paint_selection_modified ( SPWidget *spw,
 {
     if (flags & ( SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG |
                   SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
-        sp_stroke_style_paint_update(spw, selection);
+        sp_stroke_style_paint_update(spw);
     }
 }
 
@@ -162,7 +156,7 @@ sp_stroke_style_paint_selection_changed ( SPWidget *spw,
                                         Inkscape::Selection *selection,
                                         SPPaintSelector *psel )
 {
-    sp_stroke_style_paint_update (spw, selection);
+    sp_stroke_style_paint_update (spw);
 }
 
 static void
@@ -170,11 +164,11 @@ sp_stroke_style_widget_change_subselection ( Inkscape::Application *inkscape,
                                         SPDesktop *desktop,
                                         SPWidget *spw )
 {
-    sp_stroke_style_paint_update (spw, SP_DT_SELECTION(desktop));
+    sp_stroke_style_paint_update (spw);
 }
 
 static void
-sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
+sp_stroke_style_paint_update (SPWidget *spw)
 {
     if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
         return;
@@ -198,7 +192,7 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
         }
 
         case QUERY_STYLE_SINGLE:
-        case QUERY_STYLE_MULTIPLE_AVERAGED:
+        case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently, e.g. display "averaged" somewhere in paint selector
         case QUERY_STYLE_MULTIPLE_SAME:
         {
             SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, false);

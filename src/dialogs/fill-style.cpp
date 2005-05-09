@@ -79,8 +79,7 @@ static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
                                                       Inkscape::Selection *selection,
                                                       SPPaintSelector *psel );
 
-static void sp_fill_style_widget_update             ( SPWidget *spw,
-                                                      Inkscape::Selection *sel );
+static void sp_fill_style_widget_update (SPWidget *spw);
 
 static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                                       SPPaintSelectorMode mode,
@@ -136,8 +135,7 @@ sp_fill_style_widget_new (void)
 
     g_signal_connect (INKSCAPE, "change_subselection", G_CALLBACK (sp_fill_style_widget_change_subselection), spw);
 
-    sp_fill_style_widget_update (SP_WIDGET (spw),
-        SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
+    sp_fill_style_widget_update (SP_WIDGET (spw));
 
     return spw;
 
@@ -155,8 +153,7 @@ sp_fill_style_widget_construct ( SPWidget *spw, SPPaintSelector *psel )
 #endif
     if (spw->inkscape) {
 
-        sp_fill_style_widget_update ( spw,
-            SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL );
+        sp_fill_style_widget_update (spw);
 
     } 
 
@@ -172,7 +169,7 @@ sp_fill_style_widget_modify_selection ( SPWidget *spw,
                   SP_OBJECT_PARENT_MODIFIED_FLAG |
                   SP_OBJECT_STYLE_MODIFIED_FLAG) )
     {
-        sp_fill_style_widget_update (spw, selection);
+        sp_fill_style_widget_update (spw);
     }
 }
 
@@ -181,7 +178,7 @@ sp_fill_style_widget_change_subselection ( Inkscape::Application *inkscape,
                                         SPDesktop *desktop,
                                         SPWidget *spw )
 {
-    sp_fill_style_widget_update (spw, SP_DT_SELECTION(desktop));
+    sp_fill_style_widget_update (spw);
 }
 
 static void
@@ -189,14 +186,14 @@ sp_fill_style_widget_change_selection ( SPWidget *spw,
                                         Inkscape::Selection *selection,
                                         SPPaintSelector *psel )
 {
-    sp_fill_style_widget_update (spw, selection);
+    sp_fill_style_widget_update (spw);
 }
 
 /**
 * \param sel Selection to use, or NULL.
 */
 static void
-sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
+sp_fill_style_widget_update (SPWidget *spw)
 {
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;
@@ -207,7 +204,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
     // create temporary style
     SPStyle *query = sp_style_new ();
-    // query into it
+    // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
     int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FILL); 
 
     switch (result) {
@@ -219,8 +216,8 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
         }
 
         case QUERY_STYLE_SINGLE:
-        case QUERY_STYLE_MULTIPLE_AVERAGED:
-        case QUERY_STYLE_MULTIPLE_SAME:
+        case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently, e.g. display "averaged" somewhere in paint selector
+        case QUERY_STYLE_MULTIPLE_SAME: 
         {
             SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, true);
             sp_paint_selector_set_mode (psel, pselmode);
@@ -272,7 +269,7 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 
-} // end of sp_fill_style_widget_update()
+}
 
 
 static void
