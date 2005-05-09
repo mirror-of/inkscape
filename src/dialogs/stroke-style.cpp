@@ -86,8 +86,6 @@ static void sp_stroke_style_paint_mode_changed(SPPaintSelector *psel, SPPaintSel
 static void sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw);
 static void sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw);
 
-static void sp_stroke_style_get_average_color_rgba(GSList const *objects, gfloat *c);
-
 static void sp_stroke_style_widget_change_subselection ( Inkscape::Application *inkscape, SPDesktop *desktop, SPWidget *spw );
 
 GtkWidget *
@@ -186,153 +184,66 @@ sp_stroke_style_paint_update (SPWidget *spw, Inkscape::Selection *sel)
 
     SPPaintSelector *psel = SP_PAINT_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw), "paint-selector"));
 
-
     // create temporary style
     SPStyle *query = sp_style_new ();
     // query into it
-    int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FILLSTROKE); 
+    int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKE); 
 
-    if (result) { 
-// for now this is mostly a duplication of the else branch; eventually the else will be eliminated,
-// after sp_desktop_query_style can query selection (for now it only works for subselections which implement it)
-        SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, false);
-
-        sp_paint_selector_set_mode (psel, pselmode);
-
-        if (query->stroke.type == SP_PAINT_TYPE_COLOR) {
-            gfloat d[3];
-            sp_color_get_rgb_floatv (&query->stroke.value.color, d);
-            SPColor color;
-            sp_color_set_rgb_float (&color, d[0], d[1], d[2]);
-            sp_paint_selector_set_color_alpha (psel, &color, SP_SCALE24_TO_FLOAT (query->fill_opacity.value));
-        }
-
-    } else { 
-
-    if ( !sel || sel->isEmpty() ) {
-        /* No objects, set empty */
-        sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_EMPTY);
-        gtk_object_set_data( GTK_OBJECT(spw), "update",
-                             GINT_TO_POINTER(FALSE) );
-        return;
-    }
-
-    GSList const *objects = sel->itemList();
-    SPObject *object = SP_OBJECT(objects->data);
-
-    // prevent trying to modify objects with multiple stroke modes
-    SPPaintSelectorMode pselmode =
-        sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE(object), false);
-
-    for (GSList const *l = objects->next; l != NULL; l = l->next) {
-        SPPaintSelectorMode nextmode
-            = sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE(l->data), false);
-        if (nextmode != pselmode) {
-            /* Multiple styles */
-            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
-            gtk_object_set_data( GTK_OBJECT(spw),
-                                 "update",
-                                 GINT_TO_POINTER(FALSE) );
-            return;
-        }
-    }
-#ifdef SP_SS_VERBOSE
-    g_print("StrokeStyleWidget: paint selector mode %d\n", pselmode);
-#endif
-    switch (pselmode) {
-        case SP_PAINT_SELECTOR_MODE_NONE:
+    switch (result) {
+        case QUERY_STYLE_NOTHING:
+        {
             /* No paint at all */
-            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_NONE);
-            break;
-
-        case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        {
-            gfloat c[4];
-            sp_paint_selector_set_mode(psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
-            sp_stroke_style_get_average_color_rgba(objects, c);
-            SPColor color;
-            sp_color_set_rgb_float(&color, c[0], c[1], c[2]);
-            sp_paint_selector_set_color_alpha(psel, &color, c[3]);
+            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_EMPTY);
             break;
         }
 
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
+        case QUERY_STYLE_SINGLE:
+        case QUERY_STYLE_MULTIPLE_AVERAGED:
+        case QUERY_STYLE_MULTIPLE_SAME:
         {
-            /* We know that all objects have lineargradient stroke style */
-            SPGradient *vector =
-                sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object)), FALSE);
+            SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, false);
+            sp_paint_selector_set_mode (psel, pselmode);
 
-            for (GSList const *l = objects->next; l != NULL; l = l->next) {
-                SPObject *next = SP_OBJECT(l->data);
-                if (sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(next)), FALSE) != vector)
-                {
-                    /* Multiple vectors */
-                    sp_paint_selector_set_mode(psel,
-                                               SP_PAINT_SELECTOR_MODE_MULTIPLE);
-                    gtk_object_set_data( GTK_OBJECT(spw),
-                                         "update",
-                                         GINT_TO_POINTER(FALSE) );
-                    return;
+            if (query->stroke.set && query->stroke.type == SP_PAINT_TYPE_COLOR) {
+                gfloat d[3];
+                sp_color_get_rgb_floatv (&query->stroke.value.color, d);
+                SPColor color;
+                sp_color_set_rgb_float (&color, d[0], d[1], d[2]);
+                sp_paint_selector_set_color_alpha (psel, &color, SP_SCALE24_TO_FLOAT (query->stroke_opacity.value));
+
+            } else if (query->stroke.set && query->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
+
+                SPPaintServer *server = SP_STYLE_STROKE_SERVER (query);
+
+                if (SP_IS_LINEARGRADIENT (server)) {
+                    SPGradient *vector = sp_gradient_get_vector (SP_GRADIENT (server), FALSE);
+                    sp_paint_selector_set_gradient_linear (psel, vector);
+
+                    SPLinearGradient *lg = SP_LINEARGRADIENT (server);
+                    sp_paint_selector_set_gradient_properties (psel,
+                                                       SP_GRADIENT_UNITS (lg),
+                                                       SP_GRADIENT_SPREAD (lg));
+                } else if (SP_IS_RADIALGRADIENT (server)) {
+                    SPGradient *vector = sp_gradient_get_vector (SP_GRADIENT (server), FALSE);
+                    sp_paint_selector_set_gradient_radial (psel, vector);
+
+                    SPRadialGradient *rg = SP_RADIALGRADIENT (server);
+                    sp_paint_selector_set_gradient_properties (psel,
+                                                       SP_GRADIENT_UNITS (rg),
+                                                       SP_GRADIENT_SPREAD (rg));
+                } else if (SP_IS_PATTERN (server)) {
+                    SPPattern *pat = pattern_getroot (SP_PATTERN (server));
+                    sp_update_pattern_list (psel, pat);
                 }
             }
-
-            sp_paint_selector_set_gradient_linear (psel, vector);
-
-            SPLinearGradient *lg = SP_LINEARGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
-            sp_paint_selector_set_gradient_properties(psel,
-                                                      SP_GRADIENT_UNITS(lg),
-                                                      SP_GRADIENT_SPREAD(lg));
             break;
         }
 
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
+        case QUERY_STYLE_MULTIPLE_DIFFERENT:
         {
-            /* We know that all objects have radialgradient stroke style */
-
-            SPGradient *vector =
-                sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object)), FALSE);
-
-            for (GSList const *l = objects->next; l != NULL; l = l->next) {
-                SPObject *next = SP_OBJECT(l->data);
-                if (sp_gradient_get_vector(SP_GRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(next)), FALSE) != vector)
-                {
-                    /* Multiple vectors */
-                    sp_paint_selector_set_mode(psel,
-                                               SP_PAINT_SELECTOR_MODE_MULTIPLE);
-                    gtk_object_set_data( GTK_OBJECT(spw), "update",
-                                         GINT_TO_POINTER(FALSE) );
-                    return;
-                }
-            }
-
-            sp_paint_selector_set_gradient_radial(psel, vector);
-
-            SPRadialGradient *rg = SP_RADIALGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
-            sp_paint_selector_set_gradient_properties(psel,
-                                                      SP_GRADIENT_UNITS(rg),
-                                                      SP_GRADIENT_SPREAD(rg) );
+            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
             break;
         }
-
-        case SP_PAINT_SELECTOR_MODE_PATTERN:
-        {
-            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN);
-            SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_STROKE_SERVER (object)));
-            sp_update_pattern_list ( psel, pat );
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_UNSET:
-        {
-            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_UNSET );
-            break;
-        }
-
-        default:
-            sp_paint_selector_set_mode( psel, SP_PAINT_SELECTOR_MODE_MULTIPLE );
-            break;
-    } // end of switch
-
     }
 
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
@@ -1745,42 +1656,6 @@ sp_stroke_style_any_toggled(GtkToggleButton *tb, SPWidget *spw)
         sp_document_done(SP_DT_DOCUMENT(desktop));
     }
 }
-
-
-
-/* Helpers */
-
-
-
-static void
-sp_stroke_style_get_average_color_rgba(GSList const *objects, gfloat c[4])
-{
-    c[0] = 0.0;
-    c[1] = 0.0;
-    c[2] = 0.0;
-    c[3] = 0.0;
-    gint num = 0;
-    while (objects) {
-        gfloat d[3];
-        SPObject *object = SP_OBJECT(objects->data);
-        if (object->style->stroke.type == SP_PAINT_TYPE_COLOR) {
-            sp_color_get_rgb_floatv(&object->style->stroke.value.color, d);
-            c[0] += d[0];
-            c[1] += d[1];
-            c[2] += d[2];
-            c[3] += SP_SCALE24_TO_FLOAT(object->style->stroke_opacity.value);
-        }
-        num += 1;
-        objects = objects->next;
-    }
-
-    c[0] /= num;
-    c[1] /= num;
-    c[2] /= num;
-    c[3] /= num;
-
-} // end of sp_stroke_style_get_average_color_rgba()
-
 
 
 static void

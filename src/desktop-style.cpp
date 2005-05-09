@@ -27,6 +27,10 @@
 #include "sp-use.h"
 #include "sp-flowtext.h"
 #include "sp-flowregion.h"
+#include "sp-gradient.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
+#include "sp-pattern.h"
 #include "xml/repr.h"
 
 #include "desktop-style.h"
@@ -241,9 +245,146 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
 }
 
 int
+objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill)
+{
+
+    if (g_slist_length(objects) == 0) {
+        /* No objects, set empty */
+        return QUERY_STYLE_NOTHING;
+    }
+
+    SPIPaint *paint_res = isfill? &style_res->fill : &style_res->stroke;
+    paint_res->type = SP_PAINT_TYPE_IMPOSSIBLE;
+    paint_res->set = TRUE;
+
+    gfloat c[4];
+    c[0] = 0.0;
+    c[1] = 0.0;
+    c[2] = 0.0;
+    c[3] = 0.0;
+    gint num = 0;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        SPIPaint *paint = isfill? &style->fill : &style->stroke;
+
+        // 1. Bail out with QUERY_STYLE_MULTIPLE_DIFFERENT if necessary
+
+        if ((paint_res->type != SP_PAINT_TYPE_IMPOSSIBLE) && (paint->type != paint_res->type || (paint_res->set != paint->set))) {
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different types of paint
+        }
+
+        if (paint_res->set && paint->set && paint_res->type == SP_PAINT_TYPE_PAINTSERVER) {
+            // both previous paint and this paint were a server, see if the servers are compatible
+
+            SPPaintServer *server_res = isfill? SP_STYLE_FILL_SERVER (style_res) : SP_STYLE_STROKE_SERVER (style_res);
+            SPPaintServer *server = isfill? SP_STYLE_FILL_SERVER (style) : SP_STYLE_STROKE_SERVER (style);
+
+            if (SP_IS_LINEARGRADIENT (server_res)) {
+
+                if (!SP_IS_LINEARGRADIENT(server))
+                   return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
+
+                SPGradient *vector = sp_gradient_get_vector ( SP_GRADIENT (server), FALSE );
+                SPGradient *vector_res = sp_gradient_get_vector ( SP_GRADIENT (server_res), FALSE );
+                if (vector_res != vector)
+                   return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different gradient vectors
+
+            } else if (SP_IS_RADIALGRADIENT (server_res)) {
+
+                if (!SP_IS_RADIALGRADIENT(server))
+                   return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
+
+                SPGradient *vector = sp_gradient_get_vector ( SP_GRADIENT (server), FALSE );
+                SPGradient *vector_res = sp_gradient_get_vector ( SP_GRADIENT (server_res), FALSE );
+                if (vector_res != vector)
+                   return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different gradient vectors
+
+            } else if (SP_IS_PATTERN (server_res)) {
+
+                if (!SP_IS_PATTERN(server))
+                   return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
+ 
+                SPPattern *pat = pattern_getroot (SP_PATTERN (server));
+                SPPattern *pat_res = pattern_getroot (SP_PATTERN (server_res));
+                if (pat_res != pat)
+                   return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different pattern roots
+            }
+        }
+
+        // 2. Sum color, copy server from paint to paint_res
+
+        if (paint_res->set && paint->set && paint->type == SP_PAINT_TYPE_COLOR) {
+            // average color
+            gfloat d[3];
+            sp_color_get_rgb_floatv (&paint->value.color, d);
+            c[0] += d[0];
+            c[1] += d[1];
+            c[2] += d[2];
+            c[3] += SP_SCALE24_TO_FLOAT (isfill? style->fill_opacity.value : style->stroke_opacity.value);
+            num ++;
+        }
+
+       if (paint_res->set && paint->set && paint->type == SP_PAINT_TYPE_PAINTSERVER) { // copy the server
+           if (isfill) {
+               SP_STYLE_FILL_SERVER (style_res) = SP_STYLE_FILL_SERVER (style);
+           } else {
+               SP_STYLE_STROKE_SERVER (style_res) = SP_STYLE_STROKE_SERVER (style);
+           }
+       }
+       paint_res->type = paint->type;
+       paint_res->set = paint->set;
+       style_res->fill_rule.computed = style->fill_rule.computed; // no averaging on this, just use the last one
+    }
+
+    // After all objects processed, divide the color if necessary and return
+    if (paint_res->set && paint_res->type == SP_PAINT_TYPE_COLOR) { // set the color
+        g_assert (num >= 1);
+
+        c[0] /= num;
+        c[1] /= num;
+        c[2] /= num;
+        c[3] /= num;
+        sp_color_set_rgb_float(&paint_res->value.color, c[0], c[1], c[2]);
+        if (isfill) {
+            style_res->fill_opacity.value = SP_SCALE24_FROM_FLOAT (c[3]);
+        } else {
+            style_res->stroke_opacity.value = SP_SCALE24_FROM_FLOAT (c[3]);
+        }
+        if (num > 1) 
+            return QUERY_STYLE_MULTIPLE_AVERAGED;
+        else 
+            return QUERY_STYLE_SINGLE;
+    }
+
+    // Not color
+    if (g_slist_length(objects) > 1) {
+        return QUERY_STYLE_MULTIPLE_SAME;
+    } else {
+        return QUERY_STYLE_SINGLE;
+    }
+}
+
+
+int
 sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
 {
-    return desktop->_query_style_signal.emit(style, property);
+    int ret = desktop->_query_style_signal.emit(style, property);
+
+    if (ret != QUERY_STYLE_NOTHING)  
+        return ret; // subselection returned a style, pass it on
+
+    // otherwise, do querying and averaging over selection
+    if (property == QUERY_STYLE_PROPERTY_FILL) {
+        return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, true);
+    } else if (property == QUERY_STYLE_PROPERTY_STROKE) {
+        return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, false);
+    }
+
+    return QUERY_STYLE_NOTHING;
 }
 
 

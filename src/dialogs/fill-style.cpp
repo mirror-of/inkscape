@@ -91,7 +91,6 @@ static void sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
 
 static void sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw );
 static void sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw );
-static void sp_fill_style_get_average_color_rgba (GSList const *objects, gfloat *c);
 
 GtkWidget *
 sp_fill_style_widget_new (void)
@@ -209,159 +208,66 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
     // create temporary style
     SPStyle *query = sp_style_new ();
     // query into it
-    int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FILLSTROKE); 
+    int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FILL); 
 
-    if (result) { 
-// for now this is mostly a duplication of the else branch; eventually the else will be eliminated,
-// after sp_desktop_query_style can query selection (for now it only works for subselections which implement it)
-        SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, true);
-        sp_paint_selector_set_mode (psel, pselmode);
-
-        sp_paint_selector_set_fillrule (psel, query->fill_rule.computed == ART_WIND_RULE_NONZERO? 
-                                        SP_PAINT_SELECTOR_FILLRULE_NONZERO : SP_PAINT_SELECTOR_FILLRULE_EVENODD);
-
-        if (query->fill.type == SP_PAINT_TYPE_COLOR) {
-            gfloat d[3];
-            sp_color_get_rgb_floatv (&query->fill.value.color, d);
-            SPColor color;
-            sp_color_set_rgb_float (&color, d[0], d[1], d[2]);
-            sp_paint_selector_set_color_alpha (psel, &color, SP_SCALE24_TO_FLOAT (query->fill_opacity.value));
-        }
-
-    } else { 
-
-    if ( !sel || sel->isEmpty() ) {
-        /* No objects, set empty */
-        sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_EMPTY);
-        g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
-        return;
-    }
-
-    GSList const *objects = sel->itemList();
-    SPObject *object = SP_OBJECT (objects->data);
-
-    // prevent trying to modify objects with multiple fill modes
-    SPPaintSelectorMode pselmode =
-        sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object), true);
-
-    for (GSList const *l = objects->next; l != NULL; l = l->next) {
-        SPPaintSelectorMode nextmode =
-            sp_style_determine_paint_selector_mode(SP_OBJECT_STYLE (l->data), true);
-
-        if (nextmode != pselmode) {
-            /* Multiple styles */
-            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
-            g_object_set_data ( G_OBJECT (spw), "update",
-                                GINT_TO_POINTER (FALSE));
-            return;
-        }
-    }
-
-#ifdef SP_FS_VERBOSE
-    g_print ("FillStyleWidget: paint selector mode %d\n", pselmode);
-#endif
-
-    switch (pselmode) {
-
-        case SP_PAINT_SELECTOR_MODE_NONE:
+    switch (result) {
+        case QUERY_STYLE_NOTHING:
+        {
             /* No paint at all */
-            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_NONE);
-            break;
-
-        case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        {
-            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
-            gfloat c[5];
-            sp_fill_style_get_average_color_rgba (objects, c);
-            SPColor color;
-            sp_color_set_rgb_float (&color, c[0], c[1], c[2]);
-            sp_paint_selector_set_color_alpha (psel, &color, c[3]);
+            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_EMPTY);
             break;
         }
 
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
+        case QUERY_STYLE_SINGLE:
+        case QUERY_STYLE_MULTIPLE_AVERAGED:
+        case QUERY_STYLE_MULTIPLE_SAME:
         {
-            /* We know that all objects have lineargradient fill style */
-            SPGradient *vector =
-                sp_gradient_get_vector ( SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object)), FALSE );
+            SPPaintSelectorMode pselmode = sp_style_determine_paint_selector_mode (query, true);
+            sp_paint_selector_set_mode (psel, pselmode);
 
-            for (GSList const *l = objects->next; l != NULL; l = l->next) {
-                SPObject const *next = SP_OBJECT(l->data);
+            sp_paint_selector_set_fillrule (psel, query->fill_rule.computed == ART_WIND_RULE_NONZERO? 
+                                     SP_PAINT_SELECTOR_FILLRULE_NONZERO : SP_PAINT_SELECTOR_FILLRULE_EVENODD);
 
-                if (sp_gradient_get_vector ( SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (next)), FALSE) != vector )
-                {
-                    /* Multiple vectors */
-                    sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
+            if (query->fill.set && query->fill.type == SP_PAINT_TYPE_COLOR) {
+                gfloat d[3];
+                sp_color_get_rgb_floatv (&query->fill.value.color, d);
+                SPColor color;
+                sp_color_set_rgb_float (&color, d[0], d[1], d[2]);
+                sp_paint_selector_set_color_alpha (psel, &color, SP_SCALE24_TO_FLOAT (query->fill_opacity.value));
 
-                    g_object_set_data ( G_OBJECT (spw), "update",
-                                        GINT_TO_POINTER (FALSE));
-                    return;
-                }
-            }
+            } else if (query->fill.set && query->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
 
-            sp_paint_selector_set_gradient_linear (psel, vector);
+                SPPaintServer *server = SP_STYLE_FILL_SERVER (query);
 
-            SPLinearGradient *lg = SP_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
-            sp_paint_selector_set_gradient_properties (psel,
+                if (SP_IS_LINEARGRADIENT (server)) {
+                    SPGradient *vector = sp_gradient_get_vector (SP_GRADIENT (server), FALSE);
+                    sp_paint_selector_set_gradient_linear (psel, vector);
+
+                    SPLinearGradient *lg = SP_LINEARGRADIENT (server);
+                    sp_paint_selector_set_gradient_properties (psel,
                                                        SP_GRADIENT_UNITS (lg),
                                                        SP_GRADIENT_SPREAD (lg));
-            break;
-        }
+                } else if (SP_IS_RADIALGRADIENT (server)) {
+                    SPGradient *vector = sp_gradient_get_vector (SP_GRADIENT (server), FALSE);
+                    sp_paint_selector_set_gradient_radial (psel, vector);
 
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-        {
-            /* We know that all objects have radialgradient fill style */
-            SPGradient *vector =
-                sp_gradient_get_vector ( SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object)), FALSE );
-
-            for (GSList const *l = objects->next; l != NULL; l = l->next) {
-                SPObject const *next = SP_OBJECT(l->data);
-                if (sp_gradient_get_vector ( SP_GRADIENT
-                                                (SP_OBJECT_STYLE_FILL_SERVER
-                                                    (next)),
-                                             FALSE) != vector )
-                {
-                    /* Multiple vectors */
-                    sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
-                    g_object_set_data ( G_OBJECT (spw),
-                                        "update", GINT_TO_POINTER (FALSE) );
-                    return;
-                }
-
-            } // end of for loop
-
-            sp_paint_selector_set_gradient_radial (psel, vector);
-
-            SPRadialGradient *rg = SP_RADIALGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
-            sp_paint_selector_set_gradient_properties (psel,
+                    SPRadialGradient *rg = SP_RADIALGRADIENT (server);
+                    sp_paint_selector_set_gradient_properties (psel,
                                                        SP_GRADIENT_UNITS (rg),
                                                        SP_GRADIENT_SPREAD (rg));
+                } else if (SP_IS_PATTERN (server)) {
+                    SPPattern *pat = pattern_getroot (SP_PATTERN (server));
+                    sp_update_pattern_list (psel, pat);
+                }
+            }
             break;
         }
 
-        case SP_PAINT_SELECTOR_MODE_PATTERN:
+        case QUERY_STYLE_MULTIPLE_DIFFERENT:
         {
-            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN );
-            SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
-            sp_update_pattern_list ( psel, pat);
+            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
             break;
         }
-
-        case SP_PAINT_SELECTOR_MODE_UNSET:
-        {
-            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_UNSET );
-            break;
-        }
-
-        default:
-            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_MULTIPLE );
-            break;
-
-    } // end of switch
-
-    sp_paint_selector_set_fillrule (psel, SP_OBJECT_STYLE(object)->fill_rule.computed == ART_WIND_RULE_NONZERO? 
-        SP_PAINT_SELECTOR_FILLRULE_NONZERO : SP_PAINT_SELECTOR_FILLRULE_EVENODD);
-
     }
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
@@ -628,36 +534,6 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 }
-
-static void
-sp_fill_style_get_average_color_rgba(GSList const *objects, gfloat *c)
-{
-    c[0] = 0.0;
-    c[1] = 0.0;
-    c[2] = 0.0;
-    c[3] = 0.0;
-    gint num = 0;
-
-    while (objects) {
-        gfloat d[3];
-        SPObject *object = SP_OBJECT (objects->data);
-        if (object->style->fill.type == SP_PAINT_TYPE_COLOR) {
-            sp_color_get_rgb_floatv (&object->style->fill.value.color, d);
-            c[0] += d[0];
-            c[1] += d[1];
-            c[2] += d[2];
-            c[3] += SP_SCALE24_TO_FLOAT (object->style->fill_opacity.value);
-        }
-        num += 1;
-        objects = objects->next;
-    }
-
-    c[0] /= num;
-    c[1] /= num;
-    c[2] /= num;
-    c[3] /= num;
-
-} // end of sp_fill_style_get_average_color_rgba()
 
 
 /*
