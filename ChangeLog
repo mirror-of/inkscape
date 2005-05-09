@@ -1,3 +1,7 @@
+2005-05-09  MenTaLguY  <mental@rydia.net>
+
+	* src/gc-alloc.h: const-correctness fix
+
 2005-05-08  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert: change link order since the GC code now

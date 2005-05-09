@@ -36,12 +36,11 @@ public:
     template <typename U>
     struct rebind { typedef Alloc<U, collect> other; };
 
+    explicit Alloc() {}
+    template <typename U> explicit Alloc(Alloc<U, collect> const &) {}
+
     pointer address(reference r) { return &r; }
     const_pointer address(const_reference r) { return &r; }
-
-    Alloc() {}
-    template <typename U>
-    Alloc(Alloc<U, collect> const &) {}
 
     size_type max_size() const {
         return std::numeric_limits<std::size_t>::max() / sizeof(T);
@@ -51,7 +50,7 @@ public:
         return static_cast<pointer>(::operator new(count, SCANNED, collect));
     }
 
-    void construct(pointer p, reference value) {
+    void construct(pointer p, const_reference value) {
         new (static_cast<void *>(p)) T(value);
     }
     void destroy(pointer p) { p->~T(); }
