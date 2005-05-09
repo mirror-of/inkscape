@@ -258,11 +258,12 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
     paint_res->set = TRUE;
 
     gfloat c[4];
-    c[0] = 0.0;
-    c[1] = 0.0;
-    c[2] = 0.0;
-    c[3] = 0.0;
+    c[0] = c[1] = c[2] = c[3] = 0.0;
     gint num = 0;
+
+    gfloat prev[4];
+    prev[0] = prev[1] = prev[2] = prev[3] = 0.0;
+    bool same_color = true;
 
     for (GSList const *i = objects; i != NULL; i = i->next) {
         SPObject *obj = SP_OBJECT (i->data);
@@ -318,9 +319,22 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
         // 2. Sum color, copy server from paint to paint_res
 
         if (paint_res->set && paint->set && paint->type == SP_PAINT_TYPE_COLOR) {
-            // average color
+
             gfloat d[3];
             sp_color_get_rgb_floatv (&paint->value.color, d);
+
+            // Check if this color is the same as previous
+            if (paint_res->type == SP_PAINT_TYPE_IMPOSSIBLE) {
+                prev[0] = d[0];
+                prev[1] = d[1];
+                prev[2] = d[2];
+                prev[3] = d[3];
+            } else {
+                if (same_color && (prev[0] != d[0] || prev[1] != d[1] || prev[2] != d[2] || prev[3] != d[3]))
+                    same_color = false;
+            }
+
+            // average color
             c[0] += d[0];
             c[1] += d[1];
             c[2] += d[2];
@@ -354,10 +368,14 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
         } else {
             style_res->stroke_opacity.value = SP_SCALE24_FROM_FLOAT (c[3]);
         }
-        if (num > 1) 
-            return QUERY_STYLE_MULTIPLE_AVERAGED;
-        else 
+        if (num > 1) {
+            if (same_color)
+                return QUERY_STYLE_MULTIPLE_SAME;
+            else 
+                return QUERY_STYLE_MULTIPLE_AVERAGED;
+        } else {
             return QUERY_STYLE_SINGLE;
+        }
     }
 
     // Not color
