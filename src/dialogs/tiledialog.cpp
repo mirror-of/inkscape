@@ -370,7 +370,7 @@ void TileDialogImpl::Grid_Arrange ()
             col_widths.push_back(col_width);
         }
     } else {
-        for (a = 0; a < col_widths.size(); a++)
+        for (a = 0; a < (int)col_widths.size(); a++)
         {
           total_col_width += col_widths[a] ;
         }
@@ -383,7 +383,7 @@ void TileDialogImpl::Grid_Arrange ()
             row_heights.push_back(row_height);
         }
     } else {
-        for (a = 0; a < row_heights.size(); a++)
+        for (a = 0; a < (int)row_heights.size(); a++)
         {
           total_row_height += row_heights[a] ;
         }
