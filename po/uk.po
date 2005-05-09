@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-08 12:22+0200\n"
+"POT-Creation-Date: 2005-05-10 00:44+0200\n"
 "PO-Revision-Date: 2005-02-01 13:33+0300\n"
 "Last-Translator: Maxim V. Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -88,22 +88,22 @@ msgstr "Напрямна"
 msgid "Move %s"
 msgstr "Перемістити %s"
 
-#: src/desktop.cpp:957
+#: src/desktop.cpp:961
 msgid "Zoom drawing if window size changes"
 msgstr "Змінювати масштаб при змінюванні розмірів вікна"
 
-#: src/desktop.cpp:979 src/dialogs/display-settings.cpp:1066
-#: src/ui/stock-items.cpp:160 src/verbs.cpp:1835
+#: src/desktop.cpp:983 src/dialogs/display-settings.cpp:1066
+#: src/ui/stock-items.cpp:160 src/verbs.cpp:1855
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: src/desktop.cpp:1003
+#: src/desktop.cpp:1007
 msgid "Cursor coordinates"
 msgstr "Координати курсору"
 
 #. sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:1018
+#: src/desktop.cpp:1022
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
@@ -112,17 +112,17 @@ msgstr ""
 "малювання для створення об'єктів; для їх переміщенням чи трансформації "
 "використовуйте селектор (стрілку)."
 
-#: src/desktop.cpp:1063
+#: src/desktop.cpp:1067
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: src/desktop.cpp:1065
+#: src/desktop.cpp:1069
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: src/desktop.cpp:1212
+#: src/desktop.cpp:1216
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -135,11 +135,11 @@ msgstr ""
 "\n"
 "Якщо ви закриєте документ без збереження, усі зміни будуть втрачені."
 
-#: src/desktop.cpp:1225 src/desktop.cpp:1283
+#: src/desktop.cpp:1229 src/desktop.cpp:1287
 msgid "Close _without saving"
 msgstr "_Не зберігати"
 
-#: src/desktop.cpp:1269
+#: src/desktop.cpp:1273
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -152,26 +152,26 @@ msgstr ""
 "\n"
 "Зберегти документ у іншому форматі?"
 
-#: src/desktop.cpp:1675
+#: src/desktop.cpp:1679
 msgid "No previous zoom."
 msgstr "Немає попереднього масштабу."
 
-#: src/desktop.cpp:1698
+#: src/desktop.cpp:1702
 msgid "No next zoom."
 msgstr "Немає наступного масштабу."
 
 #. Page page
-#: src/desktop.cpp:2097 src/dialogs/align.cpp:815
+#: src/desktop.cpp:2101 src/dialogs/align.cpp:815
 #: src/dialogs/desktop-properties.cpp:1003
 #: src/ui/dialog/document-preferences.cpp:39
 msgid "Page"
 msgstr "Сторінка"
 
-#: src/desktop.cpp:2101 src/dialogs/align.cpp:816
+#: src/desktop.cpp:2105 src/dialogs/align.cpp:816
 msgid "Drawing"
 msgstr "Малюнок"
 
-#: src/desktop.cpp:2105 src/dialogs/align.cpp:817
+#: src/desktop.cpp:2109 src/dialogs/align.cpp:817
 msgid "Selection"
 msgstr "Виділене"
 
@@ -179,7 +179,8 @@ msgstr "Виділене"
 msgid "Layout"
 msgstr "Розташування"
 
-#: src/dialogs/align.cpp:702 src/ui/dialog/align-and-distribute.cpp:41
+#: src/dialogs/align.cpp:702 src/ui/dialog/align-and-distribute.cpp:29
+#: src/ui/dialog/align-and-distribute.cpp:41
 msgid "Align"
 msgstr "Вирівнювання"
 
@@ -827,7 +828,7 @@ msgstr "_B"
 msgid "Pick the Blue component of the color"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:2170
+#: src/dialogs/clonetiler.cpp:2170 src/select-toolbar.cpp:424
 #, fuzzy
 msgid "H"
 msgstr "_H"
@@ -1018,7 +1019,7 @@ msgstr "Повідомлення"
 #. ## Add a menu for clear()
 #: src/dialogs/debugdialog.cpp:144 src/dialogs/scriptdialog.cpp:194
 #: src/interface.cpp:1143 src/ui/dialog/messages.cpp:57
-#: src/ui/view/edit.cpp:352
+#: src/ui/view/edit.cpp:354
 msgid "_File"
 msgstr "_Файл"
 
@@ -1048,7 +1049,7 @@ msgstr "Сітка"
 msgid "Show grid"
 msgstr "Показувати сітку"
 
-#: src/dialogs/desktop-properties.cpp:891 src/verbs.cpp:1873
+#: src/dialogs/desktop-properties.cpp:891 src/verbs.cpp:1893
 msgid "Show or hide grid"
 msgstr "Показати/сховати сітку"
 
@@ -1150,7 +1151,7 @@ msgstr "Напрямні"
 msgid "Show guides"
 msgstr "Показувати напрямні"
 
-#: src/dialogs/desktop-properties.cpp:974 src/verbs.cpp:1874
+#: src/dialogs/desktop-properties.cpp:974 src/verbs.cpp:1894
 msgid "Show or hide guides"
 msgstr "Показати/сховати напрямні"
 
@@ -1268,7 +1269,7 @@ msgstr "Одиниці:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:1138 src/dialogs/export.cpp:310
 #: src/dialogs/object-attributes.cpp:89 src/dialogs/object-attributes.cpp:97
-#: src/dialogs/stroke-style.cpp:1163 src/toolbox.cpp:1827
+#: src/dialogs/stroke-style.cpp:1068 src/toolbox.cpp:1827
 msgid "Width:"
 msgstr "Ширина:"
 
@@ -1324,8 +1325,8 @@ msgstr "Позначення виділених об'єктів:"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:250 src/dialogs/display-settings.cpp:387
 #: src/dialogs/display-settings.cpp:442 src/dialogs/display-settings.cpp:1460
-#: src/dialogs/stroke-style.cpp:874 src/interface.cpp:747
-#: src/ui/dialog/inkscape-preferences.cpp:154 src/verbs.cpp:1608
+#: src/dialogs/stroke-style.cpp:779 src/interface.cpp:747
+#: src/ui/dialog/inkscape-preferences.cpp:154 src/verbs.cpp:1628
 msgid "None"
 msgstr "немає"
 
@@ -1682,25 +1683,25 @@ msgid "Shapes"
 msgstr "Фігури"
 
 #: src/dialogs/display-settings.cpp:1081 src/ui/stock-items.cpp:161
-#: src/verbs.cpp:1817
+#: src/verbs.cpp:1837
 msgid "Rectangle"
 msgstr "Прямокутник"
 
-#: src/dialogs/display-settings.cpp:1087 src/verbs.cpp:1819
+#: src/dialogs/display-settings.cpp:1087 src/verbs.cpp:1839
 msgid "Ellipse"
 msgstr "Еліпс"
 
 #: src/dialogs/display-settings.cpp:1093 src/ui/stock-items.cpp:163
-#: src/verbs.cpp:1821
+#: src/verbs.cpp:1841
 msgid "Star"
 msgstr "Зірка"
 
 #: src/dialogs/display-settings.cpp:1099 src/ui/stock-items.cpp:164
-#: src/verbs.cpp:1823
+#: src/verbs.cpp:1843
 msgid "Spiral"
 msgstr "Спіраль"
 
-#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1825
+#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1845
 msgid "Pencil"
 msgstr "Олівець"
 
@@ -1717,28 +1718,28 @@ msgstr ""
 "менше значення, тим більше вузлів у контурі "
 
 #: src/dialogs/display-settings.cpp:1133 src/ui/stock-items.cpp:166
-#: src/verbs.cpp:1827
+#: src/verbs.cpp:1847
 msgid "Pen"
 msgstr "Перо"
 
-#: src/dialogs/display-settings.cpp:1142 src/verbs.cpp:1829
+#: src/dialogs/display-settings.cpp:1142 src/verbs.cpp:1849
 msgid "Calligraphy"
 msgstr "Каліграфія"
 
 #: src/dialogs/display-settings.cpp:1149 src/dialogs/text-edit.cpp:351
 #: src/ui/dialog/text-properties.cpp:40 src/ui/stock-items.cpp:168
-#: src/verbs.cpp:1831
+#: src/verbs.cpp:1851
 msgid "Text"
 msgstr "Текст"
 
 #: src/dialogs/display-settings.cpp:1159 src/ui/stock-items.cpp:174
-#: src/verbs.cpp:1833
+#: src/verbs.cpp:1853
 #, fuzzy
 msgid "Gradient"
 msgstr "Редактор градієнтів"
 
 #: src/dialogs/display-settings.cpp:1166 src/ui/stock-items.cpp:169
-#: src/verbs.cpp:1837
+#: src/verbs.cpp:1857
 msgid "Dropper"
 msgstr "Піпетка"
 
@@ -2041,15 +2042,15 @@ msgid "16x16"
 msgstr "16x16"
 
 #. "view_icon_preview"
-#: src/dialogs/export.cpp:133 src/ui/stock-items.cpp:67 src/verbs.cpp:1895
+#: src/dialogs/export.cpp:133 src/ui/stock-items.cpp:67 src/verbs.cpp:1915
 msgid "_Page"
 msgstr "_Сторінка"
 
-#: src/dialogs/export.cpp:133 src/ui/stock-items.cpp:66 src/verbs.cpp:1899
+#: src/dialogs/export.cpp:133 src/ui/stock-items.cpp:66 src/verbs.cpp:1919
 msgid "_Drawing"
 msgstr "_Малюнок"
 
-#: src/dialogs/export.cpp:133 src/ui/stock-items.cpp:65 src/verbs.cpp:1901
+#: src/dialogs/export.cpp:133 src/ui/stock-items.cpp:65 src/verbs.cpp:1921
 msgid "_Selection"
 msgstr "Виді_лене"
 
@@ -2816,40 +2817,40 @@ msgstr "Вивід"
 msgid "Errors"
 msgstr "Помилки"
 
-#: src/dialogs/stroke-style.cpp:857 src/widgets/gradient-vector.cpp:261
+#: src/dialogs/stroke-style.cpp:762 src/widgets/gradient-vector.cpp:261
 #: src/widgets/paint-selector.cpp:750
 msgid "No document selected"
 msgstr "Документ не вибрано"
 
-#: src/dialogs/stroke-style.cpp:1170
+#: src/dialogs/stroke-style.cpp:1075
 msgid "Stroke width"
 msgstr "Товщина штриха"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1193
+#: src/dialogs/stroke-style.cpp:1098
 msgid "Join:"
 msgstr "Об'єднання:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1205
+#: src/dialogs/stroke-style.cpp:1110
 msgid "Miter join"
 msgstr "Гостре"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1213
+#: src/dialogs/stroke-style.cpp:1118
 msgid "Round join"
 msgstr "Округлене"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1221
+#: src/dialogs/stroke-style.cpp:1126
 msgid "Bevel join"
 msgstr "Фасочне"
 
@@ -2860,54 +2861,54 @@ msgstr "Фасочне"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1232
+#: src/dialogs/stroke-style.cpp:1137
 msgid "Miter limit:"
 msgstr "Межа вістря:"
 
-#: src/dialogs/stroke-style.cpp:1240
+#: src/dialogs/stroke-style.cpp:1145
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Максимальна довжина вістря (у одиницях товщини штриха)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1253
+#: src/dialogs/stroke-style.cpp:1158
 msgid "Cap:"
 msgstr "Закінчення:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1264
+#: src/dialogs/stroke-style.cpp:1169
 msgid "Butt cap"
 msgstr "Плоскі"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1271
+#: src/dialogs/stroke-style.cpp:1176
 msgid "Round cap"
 msgstr "Круглі"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1278
+#: src/dialogs/stroke-style.cpp:1183
 msgid "Square cap"
 msgstr "Квадратні"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1284
+#: src/dialogs/stroke-style.cpp:1189
 msgid "Dashes:"
 msgstr "Пунктир:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1305
+#: src/dialogs/stroke-style.cpp:1210
 msgid "Start Markers:"
 msgstr "Початкові маркери:"
 
-#: src/dialogs/stroke-style.cpp:1315
+#: src/dialogs/stroke-style.cpp:1220
 msgid "Mid Markers:"
 msgstr "Серединні маркери:"
 
-#: src/dialogs/stroke-style.cpp:1326
+#: src/dialogs/stroke-style.cpp:1231
 msgid "End Markers:"
 msgstr "Кінцеві маркери:"
 
@@ -3834,7 +3835,7 @@ msgstr "<b>Змінити:</b>"
 msgid "about.svg"
 msgstr "about.svg"
 
-#: src/help.cpp:83 src/verbs.cpp:1941
+#: src/help.cpp:83 src/verbs.cpp:1961
 msgid "About Inkscape"
 msgstr "Про програму"
 
@@ -4135,27 +4136,27 @@ msgstr "_Підручники"
 msgid "Interactive Inkscape tutorials"
 msgstr "Інтерактивні підручники Inkscape"
 
-#: src/interface.cpp:1149 src/ui/view/edit.cpp:353
+#: src/interface.cpp:1149 src/ui/view/edit.cpp:355
 msgid "_Edit"
 msgstr "_Правка"
 
-#: src/interface.cpp:1155 src/ui/view/edit.cpp:354
+#: src/interface.cpp:1155 src/ui/view/edit.cpp:356
 msgid "_View"
 msgstr "_Вигляд"
 
-#: src/interface.cpp:1161 src/ui/view/edit.cpp:355
+#: src/interface.cpp:1161 src/ui/view/edit.cpp:357
 msgid "_Layer"
 msgstr "_Шар"
 
-#: src/interface.cpp:1167 src/ui/view/edit.cpp:356
+#: src/interface.cpp:1167 src/ui/view/edit.cpp:358
 msgid "_Object"
 msgstr "_Об'єкт"
 
-#: src/interface.cpp:1173 src/ui/view/edit.cpp:357
+#: src/interface.cpp:1173 src/ui/view/edit.cpp:359
 msgid "_Path"
 msgstr "_Контур"
 
-#: src/interface.cpp:1179 src/ui/view/edit.cpp:358
+#: src/interface.cpp:1179 src/ui/view/edit.cpp:360
 msgid "_Text"
 msgstr "_Текст"
 
@@ -4163,7 +4164,7 @@ msgstr "_Текст"
 msgid "Effects"
 msgstr "Ефекти"
 
-#: src/interface.cpp:1193 src/ui/view/edit.cpp:359
+#: src/interface.cpp:1193 src/ui/view/edit.cpp:361
 msgid "_Help"
 msgstr "_Довідка"
 
@@ -4686,7 +4687,7 @@ msgid "Select <b>a shape</b> to flow text into."
 msgstr "Виберіть <b>фігуру</b> в яку буде вкладено текст"
 
 #. "Ungroup"
-#: src/object-ui.cpp:295 src/ui/stock-items.cpp:108 src/verbs.cpp:1697
+#: src/object-ui.cpp:295 src/ui/stock-items.cpp:108 src/verbs.cpp:1717
 msgid "_Ungroup"
 msgstr "Розгр_упувати"
 
@@ -4846,12 +4847,26 @@ msgstr ""
 "<b>Shift</b> - без прилипання"
 
 #: src/select-toolbar.cpp:402
+#, fuzzy
+msgid "X"
+msgstr "X:"
+
+#: src/select-toolbar.cpp:402
 msgid "Horizontal coordinate of selection"
 msgstr "Горизонтальна координати виділення"
 
 #: src/select-toolbar.cpp:405
+#, fuzzy
+msgid "Y"
+msgstr "_Y"
+
+#: src/select-toolbar.cpp:405
 msgid "Vertical coordinate of selection"
 msgstr "Вертикальна координата виділення"
+
+#: src/select-toolbar.cpp:409
+msgid "W"
+msgstr ""
 
 #: src/select-toolbar.cpp:409
 msgid "Width of selection"
@@ -5409,19 +5424,19 @@ msgstr "Юнікод: %c%c%c%c"
 msgid "Non-printable character"
 msgstr "Недрукований символ"
 
-#: src/toolbox.cpp:406 src/ui/view/edit.cpp:888
+#: src/toolbox.cpp:406 src/ui/view/edit.cpp:890
 msgid "Insert new nodes into selected segments"
 msgstr "Вставити нові вузли у виділені сегменти"
 
-#: src/toolbox.cpp:408 src/ui/view/edit.cpp:892
+#: src/toolbox.cpp:408 src/ui/view/edit.cpp:894
 msgid "Delete selected nodes"
 msgstr "Видалити виділені вузли"
 
-#: src/toolbox.cpp:413 src/ui/view/edit.cpp:896
+#: src/toolbox.cpp:413 src/ui/view/edit.cpp:898
 msgid "Join paths at selected nodes"
 msgstr "Об'єднати контури у виділених вузлах"
 
-#: src/toolbox.cpp:415 src/ui/view/edit.cpp:900
+#: src/toolbox.cpp:415 src/ui/view/edit.cpp:902
 msgid "Join paths at selected nodes with new segment"
 msgstr "Об'єднати контури у виділених вузлах новим сегментом"
 
@@ -5429,27 +5444,27 @@ msgstr "Об'єднати контури у виділених вузлах но
 msgid "Split path between two non-endpoint nodes"
 msgstr "Розбити контур між двома не кінцевими вузлами"
 
-#: src/toolbox.cpp:421 src/ui/view/edit.cpp:908
+#: src/toolbox.cpp:421 src/ui/view/edit.cpp:910
 msgid "Break path at selected nodes"
 msgstr "Розірвати контур у виділеному вузлі"
 
-#: src/toolbox.cpp:426 src/ui/view/edit.cpp:912
+#: src/toolbox.cpp:426 src/ui/view/edit.cpp:914
 msgid "Make selected nodes corner"
 msgstr "Зробити виділені вузли гострими"
 
-#: src/toolbox.cpp:429 src/ui/view/edit.cpp:916
+#: src/toolbox.cpp:429 src/ui/view/edit.cpp:918
 msgid "Make selected nodes smooth"
 msgstr "Зробити виділені вузли гладкими"
 
-#: src/toolbox.cpp:432 src/ui/view/edit.cpp:920
+#: src/toolbox.cpp:432 src/ui/view/edit.cpp:922
 msgid "Make selected nodes symmetric"
 msgstr "Зробити виділені вузли симетричними"
 
-#: src/toolbox.cpp:437 src/ui/view/edit.cpp:924
+#: src/toolbox.cpp:437 src/ui/view/edit.cpp:926
 msgid "Make selected segments lines"
 msgstr "Зробити виділені сегменти прямими"
 
-#: src/toolbox.cpp:440 src/ui/view/edit.cpp:928
+#: src/toolbox.cpp:440 src/ui/view/edit.cpp:930
 msgid "Make selected segments curves"
 msgstr "Зробити виділені сегменти кривими"
 
@@ -5767,33 +5782,24 @@ msgstr "Векторизація: у зображенні немає растр�
 msgid "Trace: Done. %ld nodes created"
 msgstr ""
 
-#: src/ui/dialog/align-and-distribute.h:35
+#: src/ui/dialog/document-preferences.cpp:27
 #, fuzzy
-msgid "Align and Distribute"
-msgstr "Ви_рівняти..."
+msgid "Document Preferences"
+msgstr "Параметри д_окумента..."
 
-#: src/ui/dialog/align-and-distribute.h:36
-#, fuzzy
-msgid "Align and Distribute Dialog"
-msgstr "Вікно вирівнювання"
-
-#: src/ui/dialog/export.h:32
+#: src/ui/dialog/export.cpp:25 src/ui/dialog/export.cpp:37
 msgid "Export"
 msgstr "Експорт"
 
-#: src/ui/dialog/export.h:33
+#: src/ui/dialog/extension-editor.cpp:24
 #, fuzzy
-msgid "Export Dialog"
-msgstr "Область експорту"
-
-#: src/ui/dialog/extension-editor.h:28
-#, fuzzy
-msgid "Extension Editor"
+msgid "Extensions Editor"
 msgstr "Помилка у розширенні \""
 
-#: src/ui/dialog/extension-editor.h:29
-msgid "Extension Editor Dialog"
-msgstr ""
+#: src/ui/dialog/fill-and-stroke.cpp:27
+#, fuzzy
+msgid "Fill and Stroke"
+msgstr "_Заповнення та штрих"
 
 #: src/ui/dialog/fill-and-stroke.cpp:39
 msgid "Fill"
@@ -5809,25 +5815,15 @@ msgstr "Колір штриха"
 msgid "Stroke Style"
 msgstr "Стиль штриха"
 
-#: src/ui/dialog/fill-and-stroke.h:32
-#, fuzzy
-msgid "Fill and Stroke"
-msgstr "_Заповнення та штрих"
-
-#: src/ui/dialog/fill-and-stroke.h:33
-#, fuzzy
-msgid "Fill and Stroke Dialog"
-msgstr "Вікно заповнення та штриха"
-
-#: src/ui/dialog/find.cpp:37 src/ui/dialog/find.h:32
+#: src/ui/dialog/find.cpp:25 src/ui/dialog/find.cpp:37
 #, fuzzy
 msgid "Find"
 msgstr "З_найти"
 
-#: src/ui/dialog/find.h:33
+#: src/ui/dialog/inkscape-preferences.cpp:42
 #, fuzzy
-msgid "Find Dialog"
-msgstr "Показати/сховати діало_ги"
+msgid "Preferences"
+msgstr "Параметри"
 
 #: src/ui/dialog/inkscape-preferences.cpp:80
 #, fuzzy
@@ -5889,76 +5885,41 @@ msgstr "Обмеження обертання:"
 msgid "Zoom in/out by"
 msgstr "Крок масштабу:"
 
-#: src/ui/dialog/inkscape-preferences.h:33
-#, fuzzy
-msgid "Inkscape Preferences"
-msgstr "П_араметри Inkscape..."
-
-#: src/ui/dialog/inkscape-preferences.h:34
-#, fuzzy
-msgid "Inkscape Preferences Dialog"
-msgstr "П_араметри Inkscape..."
-
-#: src/ui/dialog/layer-editor.h:28
+#: src/ui/dialog/layer-editor.cpp:24
 #, fuzzy
 msgid "Layer Editor"
 msgstr "Редактор XML"
 
-#: src/ui/dialog/layer-editor.h:29
-#, fuzzy
-msgid "Layer Editor Dialog"
-msgstr "Підняти до_гори"
-
-#: src/ui/dialog/text-properties.h:32
+#: src/ui/dialog/text-properties.cpp:26
 #, fuzzy
 msgid "Text Properties"
 msgstr "В_ластивості прямокутника"
 
-#: src/ui/dialog/text-properties.h:33
+#: src/ui/dialog/transformation.cpp:67 src/ui/view/edit.cpp:720
 #, fuzzy
-msgid "Text Properties Dialog"
-msgstr "Вікно властивостей об'єкта"
+msgid "Transformation"
+msgstr "Матриця трансформації"
 
 #: src/ui/dialog/transformation.cpp:81
 #, fuzzy
 msgid "Skew"
 msgstr "Товщина штриха"
 
-#: src/ui/dialog/transformation.h:34 src/ui/view/edit.cpp:718
-#, fuzzy
-msgid "Transformation"
-msgstr "Матриця трансформації"
-
-#: src/ui/dialog/transformation.h:35
-#, fuzzy
-msgid "Transformation Dialog"
-msgstr "Вікно трансформації"
-
-#: src/ui/dialog/tree-editor.h:32 src/ui/dialog/tree-editor.h:33
-#, fuzzy
-msgid "Tree Editor"
-msgstr "Редактор XML"
-
-#: src/ui/dialog/xml-editor.h:28 src/verbs.cpp:1920
+#: src/ui/dialog/xml-editor.cpp:24 src/verbs.cpp:1940
 msgid "XML Editor"
 msgstr "Редактор XML"
 
-#: src/ui/dialog/xml-editor.h:29
-#, fuzzy
-msgid "XML Editor Dialog"
-msgstr "Редактор XML"
-
 #. File menu
-#: src/ui/stock-items.cpp:31 src/ui/view/edit.cpp:369
+#: src/ui/stock-items.cpp:31 src/ui/view/edit.cpp:371
 #, fuzzy
 msgid "Open..."
 msgstr "_Відкрити..."
 
-#: src/ui/stock-items.cpp:33 src/verbs.cpp:1619
+#: src/ui/stock-items.cpp:33 src/verbs.cpp:1639
 msgid "Save _As..."
 msgstr "Зберегти _як..."
 
-#: src/ui/stock-items.cpp:34 src/verbs.cpp:1630
+#: src/ui/stock-items.cpp:34 src/verbs.cpp:1650
 msgid "_Import..."
 msgstr "_Імпорт..."
 
@@ -5967,16 +5928,16 @@ msgstr "_Імпорт..."
 msgid "_Export..."
 msgstr "_Імпорт..."
 
-#: src/ui/stock-items.cpp:36 src/verbs.cpp:1621
+#: src/ui/stock-items.cpp:36 src/verbs.cpp:1641
 msgid "_Print..."
 msgstr "Д_рук..."
 
-#: src/ui/stock-items.cpp:37 src/verbs.cpp:1628
+#: src/ui/stock-items.cpp:37 src/verbs.cpp:1648
 msgid "Print Previe_w"
 msgstr "_Попередній перегляд"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-#: src/ui/stock-items.cpp:38 src/verbs.cpp:1624
+#: src/ui/stock-items.cpp:38 src/verbs.cpp:1644
 msgid "Vac_uum Defs"
 msgstr "О_чистити Defs"
 
@@ -5991,23 +5952,23 @@ msgid "In_kscape Preferences"
 msgstr "П_араметри Inkscape..."
 
 #. Edit menu
-#: src/ui/stock-items.cpp:43 src/verbs.cpp:1655
+#: src/ui/stock-items.cpp:43 src/verbs.cpp:1675
 msgid "Paste _In Place"
 msgstr "Вставити на _місце"
 
-#: src/ui/stock-items.cpp:44 src/verbs.cpp:1653
+#: src/ui/stock-items.cpp:44 src/verbs.cpp:1673
 msgid "Paste _Style"
 msgstr "Вставити _стиль"
 
-#: src/ui/stock-items.cpp:45 src/verbs.cpp:1659
+#: src/ui/stock-items.cpp:45 src/verbs.cpp:1679
 msgid "Duplic_ate"
 msgstr "_Дублювати"
 
-#: src/ui/stock-items.cpp:46 src/verbs.cpp:1661
+#: src/ui/stock-items.cpp:46 src/verbs.cpp:1681
 msgid "Clo_ne"
 msgstr "Клон_увати"
 
-#: src/ui/stock-items.cpp:47 src/verbs.cpp:1663
+#: src/ui/stock-items.cpp:47 src/verbs.cpp:1683
 msgid "Unlin_k Clone"
 msgstr "В_ід'єднати клон"
 
@@ -6016,7 +5977,7 @@ msgstr "В_ід'єднати клон"
 msgid "Select _Original Clone"
 msgstr "Виділити о_ригінал"
 
-#: src/ui/stock-items.cpp:49 src/verbs.cpp:1760
+#: src/ui/stock-items.cpp:49 src/verbs.cpp:1780
 msgid "_Make a Bitmap Copy"
 msgstr "_Зробити растрову копію"
 
@@ -6050,7 +6011,7 @@ msgstr "Інвертувати виділення"
 msgid "Select Non_e"
 msgstr "Виділене"
 
-#: src/ui/stock-items.cpp:56 src/verbs.cpp:1919
+#: src/ui/stock-items.cpp:56 src/verbs.cpp:1939
 msgid "_XML Editor..."
 msgstr "Редактор _XML..."
 
@@ -6112,31 +6073,31 @@ msgstr "Параметри інструментів"
 msgid "_Tools bar"
 msgstr "_Панель інструментів"
 
-#: src/ui/stock-items.cpp:75 src/verbs.cpp:1871
+#: src/ui/stock-items.cpp:75 src/verbs.cpp:1891
 msgid "_Rulers"
 msgstr "_Лінійки"
 
-#: src/ui/stock-items.cpp:76 src/verbs.cpp:1872
+#: src/ui/stock-items.cpp:76 src/verbs.cpp:1892
 msgid "Scroll_bars"
 msgstr "_Смуги прокрутки"
 
-#: src/ui/stock-items.cpp:78 src/verbs.cpp:1927
+#: src/ui/stock-items.cpp:78 src/verbs.cpp:1947
 msgid "Show/_Hide Dialogs"
 msgstr "Показати/сховати діало_ги"
 
-#: src/ui/stock-items.cpp:79 src/verbs.cpp:1873
+#: src/ui/stock-items.cpp:79 src/verbs.cpp:1893
 msgid "_Grid"
 msgstr "С_ітка"
 
-#: src/ui/stock-items.cpp:80 src/verbs.cpp:1874
+#: src/ui/stock-items.cpp:80 src/verbs.cpp:1894
 msgid "G_uides"
 msgstr "Нап_рямні"
 
-#: src/ui/stock-items.cpp:81 src/verbs.cpp:1886
+#: src/ui/stock-items.cpp:81 src/verbs.cpp:1906
 msgid "_Fullscreen"
 msgstr "На весь _екран"
 
-#: src/ui/stock-items.cpp:82 src/verbs.cpp:1923
+#: src/ui/stock-items.cpp:82 src/verbs.cpp:1943
 msgid "_Messages..."
 msgstr "По_відомлення..."
 
@@ -6145,21 +6106,21 @@ msgstr "По_відомлення..."
 msgid "S_cripts..."
 msgstr "С_ценарії..."
 
-#: src/ui/stock-items.cpp:84 src/verbs.cpp:1636
+#: src/ui/stock-items.cpp:84 src/verbs.cpp:1656
 msgid "P_revious Window"
 msgstr "_Попереднє вікно"
 
-#: src/ui/stock-items.cpp:85 src/verbs.cpp:1634
+#: src/ui/stock-items.cpp:85 src/verbs.cpp:1654
 msgid "N_ext Window"
 msgstr "_Наступне вікно"
 
-#: src/ui/stock-items.cpp:86 src/verbs.cpp:1889
+#: src/ui/stock-items.cpp:86 src/verbs.cpp:1909
 msgid "D_uplicate Window"
 msgstr "_Дублювати вікно"
 
 #. Layer menu
 #. Layer
-#: src/ui/stock-items.cpp:89 src/verbs.cpp:1771
+#: src/ui/stock-items.cpp:89 src/verbs.cpp:1791
 msgid "_New Layer..."
 msgstr "_Створити шар..."
 
@@ -6206,49 +6167,49 @@ msgstr "Вибране"
 msgid "Select Botto_m Layer"
 msgstr ""
 
-#: src/ui/stock-items.cpp:99 src/verbs.cpp:1787
+#: src/ui/stock-items.cpp:99 src/verbs.cpp:1807
 msgid "_Raise Layer"
 msgstr "_Підняти шар"
 
-#: src/ui/stock-items.cpp:100 src/verbs.cpp:1789
+#: src/ui/stock-items.cpp:100 src/verbs.cpp:1809
 msgid "_Lower Layer"
 msgstr "_Опустити шар"
 
-#: src/ui/stock-items.cpp:101 src/verbs.cpp:1783
+#: src/ui/stock-items.cpp:101 src/verbs.cpp:1803
 msgid "Layer to _Top"
 msgstr "Підняти до_гори"
 
-#: src/ui/stock-items.cpp:102 src/verbs.cpp:1785
+#: src/ui/stock-items.cpp:102 src/verbs.cpp:1805
 msgid "Layer to _Bottom"
 msgstr "Опустити до_долу"
 
 #. Object menu
-#: src/ui/stock-items.cpp:105 src/verbs.cpp:1909
+#: src/ui/stock-items.cpp:105 src/verbs.cpp:1929
 msgid "_Fill and Stroke..."
 msgstr "_Заповнення та штрих"
 
-#: src/ui/stock-items.cpp:106 src/verbs.cpp:1932
+#: src/ui/stock-items.cpp:106 src/verbs.cpp:1952
 msgid "_Object Properties..."
 msgstr "В_ластивості об'єкта..."
 
-#: src/ui/stock-items.cpp:107 src/verbs.cpp:1695
+#: src/ui/stock-items.cpp:107 src/verbs.cpp:1715
 msgid "_Group"
 msgstr "З_групувати"
 
-#: src/ui/stock-items.cpp:109 src/verbs.cpp:1691
+#: src/ui/stock-items.cpp:109 src/verbs.cpp:1711
 msgid "_Raise"
 msgstr "_Підняти"
 
-#: src/ui/stock-items.cpp:110 src/verbs.cpp:1693
+#: src/ui/stock-items.cpp:110 src/verbs.cpp:1713
 msgid "_Lower"
 msgstr "_Опустити"
 
 #. Selection
-#: src/ui/stock-items.cpp:111 src/verbs.cpp:1687
+#: src/ui/stock-items.cpp:111 src/verbs.cpp:1707
 msgid "Raise to _Top"
 msgstr "Підняти на п_ередній план"
 
-#: src/ui/stock-items.cpp:112 src/verbs.cpp:1689
+#: src/ui/stock-items.cpp:112 src/verbs.cpp:1709
 msgid "Lower to _Bottom"
 msgstr "Опустити на з_адній план"
 
@@ -6287,28 +6248,28 @@ msgstr "Обернути на _90° за годинниковою стрілко
 msgid "Rotate 9_0° CCW"
 msgstr "Обернути на 9_0° проти годинникової стрілки"
 
-#: src/ui/stock-items.cpp:120 src/verbs.cpp:1806
+#: src/ui/stock-items.cpp:120 src/verbs.cpp:1826
 msgid "Flip _Horizontally"
 msgstr "Віддзеркалити гор_изонтально"
 
-#: src/ui/stock-items.cpp:121 src/verbs.cpp:1809
+#: src/ui/stock-items.cpp:121 src/verbs.cpp:1829
 msgid "Flip _Vertically"
 msgstr "Віддзеркалити _вертикально"
 
-#: src/ui/stock-items.cpp:122 src/ui/stock-items.cpp:123 src/verbs.cpp:1913
+#: src/ui/stock-items.cpp:122 src/ui/stock-items.cpp:123 src/verbs.cpp:1933
 msgid "Transfor_m..."
 msgstr "_Трансформувати..."
 
-#: src/ui/stock-items.cpp:124 src/verbs.cpp:1915
+#: src/ui/stock-items.cpp:124 src/verbs.cpp:1935
 msgid "_Align and Distribute..."
 msgstr "Ви_рівняти..."
 
 #. Path menu
-#: src/ui/stock-items.cpp:127 src/verbs.cpp:1801
+#: src/ui/stock-items.cpp:127 src/verbs.cpp:1821
 msgid "_Object to Path"
 msgstr "_Об'єкт у контур"
 
-#: src/ui/stock-items.cpp:128 src/verbs.cpp:1749
+#: src/ui/stock-items.cpp:128 src/verbs.cpp:1769
 msgid "_Stroke to Path"
 msgstr "_Штрих у контур"
 
@@ -6317,75 +6278,75 @@ msgstr "_Штрих у контур"
 msgid "_Trace Bitmap..."
 msgstr "_Векторизувати растр"
 
-#: src/ui/stock-items.cpp:130 src/verbs.cpp:1707
+#: src/ui/stock-items.cpp:130 src/verbs.cpp:1727
 msgid "_Union"
 msgstr "С_ума"
 
-#: src/ui/stock-items.cpp:131 src/verbs.cpp:1711
+#: src/ui/stock-items.cpp:131 src/verbs.cpp:1731
 msgid "_Difference"
 msgstr "Р_ізниця"
 
-#: src/ui/stock-items.cpp:132 src/verbs.cpp:1709
+#: src/ui/stock-items.cpp:132 src/verbs.cpp:1729
 msgid "_Intersection"
 msgstr "_Перетин"
 
-#: src/ui/stock-items.cpp:133 src/verbs.cpp:1713
+#: src/ui/stock-items.cpp:133 src/verbs.cpp:1733
 msgid "E_xclusion"
 msgstr "Виключне _АБО"
 
-#: src/ui/stock-items.cpp:134 src/verbs.cpp:1715
+#: src/ui/stock-items.cpp:134 src/verbs.cpp:1735
 msgid "Di_vision"
 msgstr "_Ділення"
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: src/ui/stock-items.cpp:135 src/verbs.cpp:1719
+#: src/ui/stock-items.cpp:135 src/verbs.cpp:1739
 msgid "Cut _Path"
 msgstr "Розрізати _контур"
 
-#: src/ui/stock-items.cpp:136 src/verbs.cpp:1762
+#: src/ui/stock-items.cpp:136 src/verbs.cpp:1782
 msgid "_Combine"
 msgstr "Об'_єднати"
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: src/ui/stock-items.cpp:137 src/verbs.cpp:1766
+#: src/ui/stock-items.cpp:137 src/verbs.cpp:1786
 msgid "Break _Apart"
 msgstr "_Розділити"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/ui/stock-items.cpp:138 src/verbs.cpp:1735
+#: src/ui/stock-items.cpp:138 src/verbs.cpp:1755
 msgid "I_nset"
 msgstr "В_тягнути"
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/ui/stock-items.cpp:139 src/verbs.cpp:1724
+#: src/ui/stock-items.cpp:139 src/verbs.cpp:1744
 msgid "Ou_tset"
 msgstr "Ро_зтягнути"
 
-#: src/ui/stock-items.cpp:140 src/verbs.cpp:1744
+#: src/ui/stock-items.cpp:140 src/verbs.cpp:1764
 msgid "D_ynamic Offset"
 msgstr "Д_инамічне втягування"
 
-#: src/ui/stock-items.cpp:141 src/verbs.cpp:1746
+#: src/ui/stock-items.cpp:141 src/verbs.cpp:1766
 msgid "_Linked Offset"
 msgstr "Зв'_язане втягування"
 
-#: src/ui/stock-items.cpp:142 src/verbs.cpp:1751
+#: src/ui/stock-items.cpp:142 src/verbs.cpp:1771
 msgid "Si_mplify"
 msgstr "_Спростити"
 
-#: src/ui/stock-items.cpp:143 src/verbs.cpp:1755
+#: src/ui/stock-items.cpp:143 src/verbs.cpp:1775
 msgid "_Reverse"
 msgstr "Роз_горнути"
 
 #. add(Gtk::StockItem(CLEANUP, _("Cl_eanup"))); (using Gtk::Stock::CLEAR)
 #. Text menu
-#: src/ui/stock-items.cpp:147 src/verbs.cpp:1917
+#: src/ui/stock-items.cpp:147 src/verbs.cpp:1937
 msgid "_Text and Font..."
 msgstr "_Текст і шрифт..."
 
@@ -6399,23 +6360,23 @@ msgstr "Розмістити текст по контуру"
 msgid "_Remove Text from Path"
 msgstr "Зняти текст з контуру"
 
-#: src/ui/stock-items.cpp:150 src/verbs.cpp:1704
+#: src/ui/stock-items.cpp:150 src/verbs.cpp:1724
 msgid "Remove Manual _Kerns"
 msgstr "Видалити ручний _кернінг"
 
 #. About menu
 #. Help
-#: src/ui/stock-items.cpp:153 src/verbs.cpp:1936
+#: src/ui/stock-items.cpp:153 src/verbs.cpp:1956
 msgid "_Keys and Mouse"
 msgstr "_Клавіатура та миша"
 
-#: src/ui/stock-items.cpp:155 src/verbs.cpp:1940
+#: src/ui/stock-items.cpp:155 src/verbs.cpp:1960
 msgid "_About Inkscape"
 msgstr "_Про програму Inkscape"
 
 #. Tools toolbox
 #. Tools
-#: src/ui/stock-items.cpp:158 src/verbs.cpp:1813
+#: src/ui/stock-items.cpp:158 src/verbs.cpp:1833
 msgid "Select"
 msgstr "Селектор"
 
@@ -6496,337 +6457,337 @@ msgstr "Ліцензія"
 msgid "Curve"
 msgstr ""
 
-#: src/ui/view/edit.cpp:364
+#: src/ui/view/edit.cpp:366
 #, fuzzy
 msgid "New"
 msgstr "_Створити"
 
-#: src/ui/view/edit.cpp:377
+#: src/ui/view/edit.cpp:379
 msgid "Revert to Saved"
 msgstr ""
 
-#: src/ui/view/edit.cpp:382
+#: src/ui/view/edit.cpp:384
 #, fuzzy
 msgid "Save"
 msgstr "З_берегти"
 
-#: src/ui/view/edit.cpp:387
+#: src/ui/view/edit.cpp:389
 #, fuzzy
 msgid "Save As..."
 msgstr "Зберегти _як..."
 
-#: src/ui/view/edit.cpp:392
+#: src/ui/view/edit.cpp:394
 #, fuzzy
 msgid "Import..."
 msgstr "_Імпорт..."
 
-#: src/ui/view/edit.cpp:397
+#: src/ui/view/edit.cpp:399
 #, fuzzy
 msgid "Export..."
 msgstr "Експорт"
 
-#: src/ui/view/edit.cpp:402
+#: src/ui/view/edit.cpp:404
 #, fuzzy
 msgid "Print..."
 msgstr "Д_рук..."
 
-#: src/ui/view/edit.cpp:415
+#: src/ui/view/edit.cpp:417
 msgid "Document properties (Shift+Ctrl+D)"
 msgstr ""
 
-#: src/ui/view/edit.cpp:420
+#: src/ui/view/edit.cpp:422
 #, fuzzy
 msgid "Global Inkscape preferences (Shift+Ctrl+P)"
 msgstr "Загальні параметри Inkscape"
 
-#: src/ui/view/edit.cpp:434
+#: src/ui/view/edit.cpp:436
 #, fuzzy
 msgid "Undo"
 msgstr "В_ернути"
 
-#: src/ui/view/edit.cpp:438
+#: src/ui/view/edit.cpp:440
 #, fuzzy
 msgid "Redo"
 msgstr "Повт_орити"
 
-#: src/ui/view/edit.cpp:442
+#: src/ui/view/edit.cpp:444
 #, fuzzy
 msgid "Cut"
 msgstr "_Вирізати"
 
-#: src/ui/view/edit.cpp:446
+#: src/ui/view/edit.cpp:448
 #, fuzzy
 msgid "Copy"
 msgstr "_Копіювати"
 
-#: src/ui/view/edit.cpp:450
+#: src/ui/view/edit.cpp:452
 #, fuzzy
 msgid "Paste"
 msgstr "Вст_авити"
 
-#: src/ui/view/edit.cpp:464
+#: src/ui/view/edit.cpp:466
 #, fuzzy
 msgid "Duplicate selected object(s) (Ctrl+D)"
 msgstr "Створити копію виділених об'єктів"
 
-#: src/ui/view/edit.cpp:468
+#: src/ui/view/edit.cpp:470
 #, fuzzy
 msgid "Clone selected object (Alt+D)"
 msgstr "Створити копію виділених об'єктів"
 
-#: src/ui/view/edit.cpp:472
+#: src/ui/view/edit.cpp:474
 msgid "Unlink clone from its original (Shift+Alt+D)"
 msgstr ""
 
-#: src/ui/view/edit.cpp:503
+#: src/ui/view/edit.cpp:505
 msgid "XML Editor dialog (Shift+Ctrl+X)"
 msgstr ""
 
-#: src/ui/view/edit.cpp:512
+#: src/ui/view/edit.cpp:514
 #, fuzzy
 msgid "Zoom in (+)"
 msgstr "Збільшити"
 
-#: src/ui/view/edit.cpp:516
+#: src/ui/view/edit.cpp:518
 #, fuzzy
 msgid "Zoom out (-)"
 msgstr "Зменшити"
 
-#: src/ui/view/edit.cpp:520
+#: src/ui/view/edit.cpp:522
 #, fuzzy
 msgid "Zoom to 1:1 (100%) (1)"
 msgstr "Масштаб 1:1"
 
-#: src/ui/view/edit.cpp:524
+#: src/ui/view/edit.cpp:526
 #, fuzzy
 msgid "Zoom to 1:2 (50%) (2)"
 msgstr "Масштаб 1:2"
 
-#: src/ui/view/edit.cpp:528
+#: src/ui/view/edit.cpp:530
 #, fuzzy
 msgid "Zoom to 2:1 (200%) (0)"
 msgstr "Масштаб 2:1"
 
-#: src/ui/view/edit.cpp:532
+#: src/ui/view/edit.cpp:534
 #, fuzzy
 msgid "Zoom to fit selection in window (3)"
 msgstr "Змінити масштаб, щоб умістити виділену область"
 
-#: src/ui/view/edit.cpp:536
+#: src/ui/view/edit.cpp:538
 #, fuzzy
 msgid "Zoom to fit drawing in window (4)"
 msgstr "Змінити масштаб, щоб умістити малюнок цілком"
 
-#: src/ui/view/edit.cpp:540
+#: src/ui/view/edit.cpp:542
 #, fuzzy
 msgid "Zoom to fit page in window (5)"
 msgstr "Змінити масштаб, щоб умістити сторінку цілком"
 
-#: src/ui/view/edit.cpp:544
+#: src/ui/view/edit.cpp:546
 #, fuzzy
 msgid "Zoom to fit page width in window (6)"
 msgstr "Змінити масштаб, щоб умістити сторінку по ширині"
 
-#: src/ui/view/edit.cpp:548
+#: src/ui/view/edit.cpp:550
 #, fuzzy
 msgid "Previous zoom (from history of zooms) (`)"
 msgstr "Попередній масштаб (з історії масштабування)"
 
-#: src/ui/view/edit.cpp:552
+#: src/ui/view/edit.cpp:554
 #, fuzzy
 msgid "Next zoom (from history of zooms) (Shift+`)"
 msgstr "Наступний масштаб (з історії масштабування)"
 
-#: src/ui/view/edit.cpp:649
+#: src/ui/view/edit.cpp:651
 #, fuzzy
 msgid "Fill and Stroke dialog (Shift+Ctrl+F)"
 msgstr "Вікно заповнення та штриха"
 
-#: src/ui/view/edit.cpp:658
+#: src/ui/view/edit.cpp:660
 #, fuzzy
 msgid "Group selected objects (Ctrl+G)"
 msgstr "Згрупувати виділені об'єкти"
 
-#: src/ui/view/edit.cpp:662
+#: src/ui/view/edit.cpp:664
 #, fuzzy
 msgid "Ungroup selected group(s) (Ctrl+U)"
 msgstr "Розгрупувати виділені групи"
 
-#: src/ui/view/edit.cpp:666
+#: src/ui/view/edit.cpp:668
 #, fuzzy
 msgid "Raise selection up one step (PgUp)"
 msgstr "Підняти виділене на один рівень"
 
-#: src/ui/view/edit.cpp:670
+#: src/ui/view/edit.cpp:672
 #, fuzzy
 msgid "Lower selection down one step (PgDn)"
 msgstr "Опустити виділене на один рівень"
 
-#: src/ui/view/edit.cpp:674
+#: src/ui/view/edit.cpp:676
 #, fuzzy
 msgid "Raise selection to top (Home)"
 msgstr "Підняти виділене на передній план"
 
-#: src/ui/view/edit.cpp:678
+#: src/ui/view/edit.cpp:680
 #, fuzzy
 msgid "Lower selection to bottom (End)"
 msgstr "Опустити виділене на задній план"
 
-#: src/ui/view/edit.cpp:682
+#: src/ui/view/edit.cpp:684
 #, fuzzy
 msgid "Move selection to new layer"
 msgstr "Опустити виділене на один рівень"
 
-#: src/ui/view/edit.cpp:686
+#: src/ui/view/edit.cpp:688
 #, fuzzy
 msgid "Move selection to next layer"
 msgstr "Переміщений на наступний рівень."
 
-#: src/ui/view/edit.cpp:690
+#: src/ui/view/edit.cpp:692
 #, fuzzy
 msgid "Move selection to previous layer"
 msgstr "Переміщений на попередній шар."
 
-#: src/ui/view/edit.cpp:694
+#: src/ui/view/edit.cpp:696
 #, fuzzy
 msgid "Move selection to top layer"
 msgstr "Підняти виділене на передній план"
 
-#: src/ui/view/edit.cpp:698
+#: src/ui/view/edit.cpp:700
 #, fuzzy
 msgid "Move selection to bottom layer"
 msgstr "Опустити виділене на задній план"
 
-#: src/ui/view/edit.cpp:702
+#: src/ui/view/edit.cpp:704
 #, fuzzy
 msgid "Rotate selection 90° clockwise (Shift+Ctrl+Right)"
 msgstr "Обернути об'єкт на 90° за годинниковою стрілкою"
 
-#: src/ui/view/edit.cpp:706
+#: src/ui/view/edit.cpp:708
 #, fuzzy
 msgid "Rotate selection 90° counter-clockwise (Shift+Ctrl+Left)"
 msgstr "Обернути об'єкт на 90° проти годинникової стрілки"
 
-#: src/ui/view/edit.cpp:710
+#: src/ui/view/edit.cpp:712
 #, fuzzy
 msgid "Flip selection horizontally (H)"
 msgstr "Віддзеркалити виділені об'єкти горизонтально"
 
-#: src/ui/view/edit.cpp:714
+#: src/ui/view/edit.cpp:716
 #, fuzzy
 msgid "Flip selection vertically (V)"
 msgstr "Віддзеркалити виділені об'єкти вертикально"
 
-#: src/ui/view/edit.cpp:723
+#: src/ui/view/edit.cpp:725
 #, fuzzy
 msgid "Align and Distribute dialog (Shift+Ctrl+A)"
 msgstr "Вікно вирівнювання"
 
-#: src/ui/view/edit.cpp:729
+#: src/ui/view/edit.cpp:731
 #, fuzzy
 msgid "Convert selected object(s) to path(s) (Shift+Ctrl+C)"
 msgstr "Перетворити виділені об'єкти на контури"
 
-#: src/ui/view/edit.cpp:733
+#: src/ui/view/edit.cpp:735
 #, fuzzy
 msgid "Convert selected stroke(s) to path(s) (Ctrl+Alt+C)"
 msgstr "Перетворити виділені штрихи у контури"
 
-#: src/ui/view/edit.cpp:783 src/verbs.cpp:1753
+#: src/ui/view/edit.cpp:785 src/verbs.cpp:1773
 msgid "Cl_eanup"
 msgstr "О_чистити"
 
-#: src/ui/view/edit.cpp:788
+#: src/ui/view/edit.cpp:790
 #, fuzzy
 msgid "Text and Font dialog (Shift+Ctrl+T)"
 msgstr "Вікно тексту та вибору шрифту"
 
-#: src/ui/view/edit.cpp:820
+#: src/ui/view/edit.cpp:822
 #, fuzzy
 msgid "Select tool"
 msgstr "Селектор"
 
-#: src/ui/view/edit.cpp:825
+#: src/ui/view/edit.cpp:827
 #, fuzzy
 msgid "Node tool"
 msgstr "Редактор вузлів"
 
-#: src/ui/view/edit.cpp:830
+#: src/ui/view/edit.cpp:832
 #, fuzzy
 msgid "Zoom tool"
 msgstr "Зменшити"
 
-#: src/ui/view/edit.cpp:834
+#: src/ui/view/edit.cpp:836
 #, fuzzy
 msgid "Rectangle tool"
 msgstr "Прямокутник"
 
-#: src/ui/view/edit.cpp:838
+#: src/ui/view/edit.cpp:840
 msgid "Arc tool"
 msgstr ""
 
-#: src/ui/view/edit.cpp:842
+#: src/ui/view/edit.cpp:844
 #, fuzzy
 msgid "Star tool"
 msgstr "Початок:"
 
-#: src/ui/view/edit.cpp:846
+#: src/ui/view/edit.cpp:848
 #, fuzzy
 msgid "Spiral tool"
 msgstr "Спіраль"
 
-#: src/ui/view/edit.cpp:850
+#: src/ui/view/edit.cpp:852
 msgid "Freehand tool"
 msgstr ""
 
-#: src/ui/view/edit.cpp:854
+#: src/ui/view/edit.cpp:856
 msgid "Pen tool"
 msgstr ""
 
-#: src/ui/view/edit.cpp:858
+#: src/ui/view/edit.cpp:860
 #, fuzzy
 msgid "Calligraphy tool"
 msgstr "Каліграфія"
 
-#: src/ui/view/edit.cpp:862
+#: src/ui/view/edit.cpp:864
 #, fuzzy
 msgid "Text tool"
 msgstr "Н_аступний масштаб"
 
-#: src/ui/view/edit.cpp:866
+#: src/ui/view/edit.cpp:868
 #, fuzzy
 msgid "Dropper tool"
 msgstr "Піпетка"
 
-#: src/ui/view/edit.cpp:871
+#: src/ui/view/edit.cpp:873
 #, fuzzy
 msgid "When scaling objects, scale stroke width by same proportion"
 msgstr ""
 "При зміні розміру об'єктів змінювати ширину штриха у відповідній пропорції"
 
-#: src/ui/view/edit.cpp:875
+#: src/ui/view/edit.cpp:877
 #, fuzzy
 msgid "When scaling rectangles, scale radii of rounded corners"
 msgstr ""
 "При зміні розміру прямокутників міняти радіус закруглених кутів у тій самій "
 "пропорції"
 
-#: src/ui/view/edit.cpp:879
+#: src/ui/view/edit.cpp:881
 #, fuzzy
 msgid "Transform gradients (in fill or stroke) along with objects"
 msgstr "Трансформувати градієнти (у заповненні чи штрихах) разом з об'єктом"
 
-#: src/ui/view/edit.cpp:883
+#: src/ui/view/edit.cpp:885
 #, fuzzy
 msgid "Transform patterns (in fill or stroke) along with objects"
 msgstr "Трансформувати візерунки (у заповненнях чи штрихах) разом з об'єктом"
 
-#: src/ui/view/edit.cpp:904
+#: src/ui/view/edit.cpp:906
 #, fuzzy
 msgid "Delete segment between two nodes"
 msgstr "Видалити виділені вузли"
 
-#: src/ui/view/edit.cpp:977
+#: src/ui/view/edit.cpp:979
 #, fuzzy
 msgid "URI:"
 msgstr "URI"
@@ -6870,1015 +6831,1015 @@ msgstr "Не вдається перемістити шар далі."
 msgid "Deleted layer."
 msgstr "Шар видалено."
 
-#: src/verbs.cpp:1420
+#: src/verbs.cpp:1434
 msgid "keys.svg"
 msgstr "keys.svg"
 
-#: src/verbs.cpp:1443
+#: src/verbs.cpp:1463
 msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.svg"
 
-#: src/verbs.cpp:1446
+#: src/verbs.cpp:1466
 msgid "tutorial-shapes.svg"
 msgstr "tutorial-shapes.svg"
 
-#: src/verbs.cpp:1449
+#: src/verbs.cpp:1469
 msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.svg"
 
-#: src/verbs.cpp:1452
+#: src/verbs.cpp:1472
 msgid "tutorial-tracing.svg"
 msgstr "tutorial-tracing.svg"
 
-#: src/verbs.cpp:1455
+#: src/verbs.cpp:1475
 msgid "tutorial-calligraphy.svg"
 msgstr "tutorial-calligraphy.svg"
 
-#: src/verbs.cpp:1458
+#: src/verbs.cpp:1478
 #, fuzzy
 msgid "tutorial-elements.svg"
 msgstr "tutorial-shapes.svg"
 
-#: src/verbs.cpp:1461
+#: src/verbs.cpp:1481
 #, fuzzy
 msgid "tutorial-tips.svg"
 msgstr "tutorial-shapes.svg"
 
-#: src/verbs.cpp:1608
+#: src/verbs.cpp:1628
 msgid "Does nothing"
 msgstr "Немає дій"
 
 #. File
-#: src/verbs.cpp:1611
+#: src/verbs.cpp:1631
 msgid "Default"
 msgstr "Типовий"
 
-#: src/verbs.cpp:1611
+#: src/verbs.cpp:1631
 msgid "Create new document from default template"
 msgstr "Створити новий документ зі стандартного шаблону"
 
-#: src/verbs.cpp:1613
+#: src/verbs.cpp:1633
 msgid "_Open..."
 msgstr "_Відкрити..."
 
-#: src/verbs.cpp:1614
+#: src/verbs.cpp:1634
 msgid "Open existing document"
 msgstr "Відкрити існуючий документ"
 
-#: src/verbs.cpp:1615
+#: src/verbs.cpp:1635
 msgid "Re_vert"
 msgstr "Від_новити"
 
-#: src/verbs.cpp:1616
+#: src/verbs.cpp:1636
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr "Відновити останню збережену версію документа (зміни будуть втрачені)"
 
-#: src/verbs.cpp:1617
+#: src/verbs.cpp:1637
 msgid "_Save"
 msgstr "З_берегти"
 
-#: src/verbs.cpp:1617
+#: src/verbs.cpp:1637
 msgid "Save document"
 msgstr "Зберегти документ"
 
-#: src/verbs.cpp:1620
+#: src/verbs.cpp:1640
 msgid "Save document under new name"
 msgstr "Зберегти документ під іншою назвою"
 
-#: src/verbs.cpp:1621
+#: src/verbs.cpp:1641
 msgid "Print document"
 msgstr "Надрукувати документ"
 
-#: src/verbs.cpp:1624
+#: src/verbs.cpp:1644
 msgid "Remove unused stuff from the &lt;defs&gt; of the document"
 msgstr "Прибрати непотрібне з &lt;defs&gt; документу"
 
-#: src/verbs.cpp:1626
+#: src/verbs.cpp:1646
 msgid "Print _Direct"
 msgstr "_Прямий друк"
 
-#: src/verbs.cpp:1627
+#: src/verbs.cpp:1647
 msgid "Print directly to file or pipe"
 msgstr "Надрукувати документ у файл або передати програмі"
 
-#: src/verbs.cpp:1629
+#: src/verbs.cpp:1649
 msgid "Preview document printout"
 msgstr "Попередній перегляд друку"
 
-#: src/verbs.cpp:1631
+#: src/verbs.cpp:1651
 msgid "Import bitmap or SVG image into document"
 msgstr "Імпортувати зображення (растрове чи SVG) у документ"
 
-#: src/verbs.cpp:1632
+#: src/verbs.cpp:1652
 msgid "_Export Bitmap..."
 msgstr "_Експорт..."
 
-#: src/verbs.cpp:1633
+#: src/verbs.cpp:1653
 msgid "Export document or selection as PNG bitmap"
 msgstr "Експортувати документ чи виділену частину у растровий формат PNG"
 
-#: src/verbs.cpp:1635
+#: src/verbs.cpp:1655
 msgid "Switch to the next document window"
 msgstr "Перемикнутись у наступне вікно документу"
 
-#: src/verbs.cpp:1637
+#: src/verbs.cpp:1657
 msgid "Switch to the previous document window"
 msgstr "Перемикнутись на попереднє вікно документу"
 
-#: src/verbs.cpp:1638
+#: src/verbs.cpp:1658
 msgid "_Close"
 msgstr "_Закрити"
 
-#: src/verbs.cpp:1639
+#: src/verbs.cpp:1659
 msgid "Close window"
 msgstr "Закрити вікно"
 
-#: src/verbs.cpp:1640
+#: src/verbs.cpp:1660
 msgid "_Quit"
 msgstr "Ви_йти"
 
-#: src/verbs.cpp:1640
+#: src/verbs.cpp:1660
 msgid "Quit Inkscape"
 msgstr "Вийти з Inkscape"
 
 #. Edit
-#: src/verbs.cpp:1643
+#: src/verbs.cpp:1663
 msgid "_Undo"
 msgstr "В_ернути"
 
-#: src/verbs.cpp:1643
+#: src/verbs.cpp:1663
 msgid "Undo last action"
 msgstr "Скасувати останню операцію"
 
-#: src/verbs.cpp:1645
+#: src/verbs.cpp:1665
 msgid "_Redo"
 msgstr "Повт_орити"
 
-#: src/verbs.cpp:1646
+#: src/verbs.cpp:1666
 msgid "Do again last undone action"
 msgstr "Повторити останню скасовану дію"
 
-#: src/verbs.cpp:1647
+#: src/verbs.cpp:1667
 msgid "Cu_t"
 msgstr "_Вирізати"
 
-#: src/verbs.cpp:1648
+#: src/verbs.cpp:1668
 msgid "Cut selection to clipboard"
 msgstr "Вирізати виділене у буфер обміну"
 
-#: src/verbs.cpp:1649
+#: src/verbs.cpp:1669
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/verbs.cpp:1650
+#: src/verbs.cpp:1670
 msgid "Copy selection to clipboard"
 msgstr "Скопіювати виділене у буфер обміну"
 
-#: src/verbs.cpp:1651
+#: src/verbs.cpp:1671
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: src/verbs.cpp:1652
+#: src/verbs.cpp:1672
 msgid "Paste object(s) from clipboard to mouse point"
 msgstr "Вставити об'єкт(и) з буферу обміну у позицію курсора миші"
 
-#: src/verbs.cpp:1654
+#: src/verbs.cpp:1674
 msgid "Apply style of the copied object to selection"
 msgstr "Застосувати стиль скопійованого об'єкта до виділеного"
 
-#: src/verbs.cpp:1656
+#: src/verbs.cpp:1676
 msgid "Paste object(s) from clipboard to the original location"
 msgstr "Вставити об'єкти з буфера у місце, де вони були раніше"
 
-#: src/verbs.cpp:1657
+#: src/verbs.cpp:1677
 msgid "_Delete"
 msgstr "В_идалити"
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1678
 msgid "Delete selection"
 msgstr "Видалити виділене"
 
-#: src/verbs.cpp:1660
+#: src/verbs.cpp:1680
 msgid "Duplicate selected object(s)"
 msgstr "Створити копію виділених об'єктів"
 
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1682
 msgid "Create a clone of selected object (a copy linked to the original)"
 msgstr "Створити клон виділеного об'єкту (копію, пов'язану з оригіналом)"
 
-#: src/verbs.cpp:1664
+#: src/verbs.cpp:1684
 msgid "Cut the clone's link to its original"
 msgstr "Прибрати у клона посилання на оригінал"
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1685
 msgid "Select _Original"
 msgstr "Виділити о_ригінал"
 
-#: src/verbs.cpp:1666
+#: src/verbs.cpp:1686
 msgid "Select the object to which the clone is linked"
 msgstr "Виділити об'єкт з яким пов'язаний клон"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
-#: src/verbs.cpp:1668
+#: src/verbs.cpp:1688
 msgid "O_bject(s) to Pattern"
 msgstr "О_б'єкти у текстуру"
 
-#: src/verbs.cpp:1669
+#: src/verbs.cpp:1689
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr "Перетворити виділене у прямокутник, заповнений текстурою"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1691
 msgid "Pattern to Ob_ject(s)"
 msgstr "_Текстуру у об'єкти"
 
-#: src/verbs.cpp:1672
+#: src/verbs.cpp:1692
 msgid "Extract objects from a tiled pattern fill"
 msgstr "Витягнути об'єкти з текстурного заповнення"
 
-#: src/verbs.cpp:1673
+#: src/verbs.cpp:1693
 msgid "Clea_r All"
 msgstr "О_чистити все"
 
-#: src/verbs.cpp:1674
+#: src/verbs.cpp:1694
 msgid "Delete all objects from document"
 msgstr "Видалити усі об'єкти з документу"
 
-#: src/verbs.cpp:1675
+#: src/verbs.cpp:1695
 msgid "Select Al_l"
 msgstr "Виді_лити все"
 
-#: src/verbs.cpp:1676
+#: src/verbs.cpp:1696
 msgid "Select all objects or all nodes"
 msgstr "Виділити усі об'єкти чи усі вузли"
 
-#: src/verbs.cpp:1677
+#: src/verbs.cpp:1697
 msgid "Select All in All Layers"
 msgstr "Виділити все в усіх шарах"
 
-#: src/verbs.cpp:1678
+#: src/verbs.cpp:1698
 msgid "Select all objects in all visible and unlocked layers"
 msgstr "Виділити усі об'єкти в усіх видимих та невидимих шарах"
 
-#: src/verbs.cpp:1679
+#: src/verbs.cpp:1699
 msgid "Invert Selection"
 msgstr "Інвертувати виділення"
 
-#: src/verbs.cpp:1680
+#: src/verbs.cpp:1700
 msgid "Invert selection (unselect what is selected and select everything else)"
 msgstr "Інвертувати видалення (зняти виділення з виділеного та виділити решту)"
 
-#: src/verbs.cpp:1681
+#: src/verbs.cpp:1701
 msgid "Invert in All Layers"
 msgstr "Інвертувати в усіх шарах"
 
-#: src/verbs.cpp:1682
+#: src/verbs.cpp:1702
 msgid "Invert selection in all visible and unlocked layers"
 msgstr "Інвертувати виділення в усіх видимих та невидимих шарах"
 
-#: src/verbs.cpp:1683
+#: src/verbs.cpp:1703
 msgid "D_eselect"
 msgstr "Зн_яти виділення"
 
-#: src/verbs.cpp:1684
+#: src/verbs.cpp:1704
 msgid "Deselect any selected objects or nodes"
 msgstr "Зняти виділення з усіх об'єктів чи вузлів"
 
-#: src/verbs.cpp:1688
+#: src/verbs.cpp:1708
 msgid "Raise selection to top"
 msgstr "Підняти виділене на передній план"
 
-#: src/verbs.cpp:1690
+#: src/verbs.cpp:1710
 msgid "Lower selection to bottom"
 msgstr "Опустити виділене на задній план"
 
-#: src/verbs.cpp:1692
+#: src/verbs.cpp:1712
 msgid "Raise selection one step"
 msgstr "Підняти виділене на один рівень"
 
-#: src/verbs.cpp:1694
+#: src/verbs.cpp:1714
 msgid "Lower selection one step"
 msgstr "Опустити виділене на один рівень"
 
-#: src/verbs.cpp:1696
+#: src/verbs.cpp:1716
 msgid "Group selected objects"
 msgstr "Згрупувати виділені об'єкти"
 
-#: src/verbs.cpp:1698
+#: src/verbs.cpp:1718
 msgid "Ungroup selected group(s)"
 msgstr "Розгрупувати виділені групи"
 
-#: src/verbs.cpp:1700
+#: src/verbs.cpp:1720
 msgid "_Put on Path"
 msgstr "_Розмістити по контуру"
 
-#: src/verbs.cpp:1701
+#: src/verbs.cpp:1721
 msgid "Put text on path"
 msgstr "Розмістити текст по контуру"
 
-#: src/verbs.cpp:1702
+#: src/verbs.cpp:1722
 msgid "_Remove from Path"
 msgstr "В_идалити з контуру"
 
-#: src/verbs.cpp:1703
+#: src/verbs.cpp:1723
 msgid "Remove text from path"
 msgstr "Зняти текст з контуру"
 
-#: src/verbs.cpp:1705
+#: src/verbs.cpp:1725
 msgid "Remove all manual kerns from a text object"
 msgstr ""
 "Видалити з текстового об'єкта усі додані вручну вертикальні та горизонтальні "
 "керни"
 
-#: src/verbs.cpp:1708
+#: src/verbs.cpp:1728
 msgid "Union of selected objects"
 msgstr "Сума виділених об'єктів"
 
-#: src/verbs.cpp:1710
+#: src/verbs.cpp:1730
 msgid "Intersection of selected objects"
 msgstr "Перетин виділених об'єктів"
 
-#: src/verbs.cpp:1712
+#: src/verbs.cpp:1732
 msgid "Difference of selected objects (bottom minus top)"
 msgstr "Різниця виділених об'єктів (низ мінус верх)"
 
-#: src/verbs.cpp:1714
+#: src/verbs.cpp:1734
 msgid "Exclusive OR of selected objects"
 msgstr "Виключне АБО виділених об'єктів"
 
-#: src/verbs.cpp:1716
+#: src/verbs.cpp:1736
 msgid "Cut the bottom object into pieces"
 msgstr "Розрізати нижній об'єкт верхнім на частини"
 
-#: src/verbs.cpp:1720
+#: src/verbs.cpp:1740
 msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr ""
 "Розрізати контур нижнього об'єкта нижнім на частини, з видаленням заповнення"
 
-#: src/verbs.cpp:1725
+#: src/verbs.cpp:1745
 msgid "Outset selected path(s)"
 msgstr "Розтягнути виділений контур"
 
-#: src/verbs.cpp:1727
+#: src/verbs.cpp:1747
 msgid "O_utset Path by 1px"
 msgstr "Р_озтягнути на 1 точку"
 
-#: src/verbs.cpp:1728
+#: src/verbs.cpp:1748
 msgid "Outset selected path(s) by 1px"
 msgstr "Розтягнути виділений контур на 1 точку"
 
-#: src/verbs.cpp:1730
+#: src/verbs.cpp:1750
 msgid "O_utset Path by 10px"
 msgstr "Р_озтягнути на 10 точок"
 
-#: src/verbs.cpp:1731
+#: src/verbs.cpp:1751
 msgid "Outset selected path(s) by 10px"
 msgstr "Розтягнути виділений контур на 10 точок"
 
-#: src/verbs.cpp:1736
+#: src/verbs.cpp:1756
 msgid "Inset selected path(s)"
 msgstr "Втягнути виділений контур"
 
-#: src/verbs.cpp:1738
+#: src/verbs.cpp:1758
 msgid "I_nset Path by 1px"
 msgstr "Вт_ягнути контур на 1 точку"
 
-#: src/verbs.cpp:1739
+#: src/verbs.cpp:1759
 msgid "Inset selected path(s) by 1px"
 msgstr "Втягнути виділений контур на 1 точку"
 
-#: src/verbs.cpp:1741
+#: src/verbs.cpp:1761
 msgid "I_nset Path by 10px"
 msgstr "Вт_ягнути контур на 10 точок"
 
-#: src/verbs.cpp:1742
+#: src/verbs.cpp:1762
 msgid "Inset selected path(s) by 10px"
 msgstr "Втягнути виділений контур на 10 точок"
 
-#: src/verbs.cpp:1744
+#: src/verbs.cpp:1764
 msgid "Create a dynamic offset object"
 msgstr ""
 "Створити об'єкт, втягування/розтягування якого можна змінювати динамічно"
 
-#: src/verbs.cpp:1747
+#: src/verbs.cpp:1767
 msgid "Create a dynamic offset object linked to the original path"
 msgstr ""
 "Створити втягування/розтягування, динамічно пов'язане з початковим контуром"
 
-#: src/verbs.cpp:1750
+#: src/verbs.cpp:1770
 msgid "Convert selected stroke(s) to path(s)"
 msgstr "Перетворити виділені штрихи у контури"
 
-#: src/verbs.cpp:1752
+#: src/verbs.cpp:1772
 msgid "Simplify selected path(s) by removing extra nodes"
 msgstr "Спростити виділені контури видаленням зайвих вузлів"
 
-#: src/verbs.cpp:1754
+#: src/verbs.cpp:1774
 msgid "Clean up selected path(s)"
 msgstr "Очистити виділені контури"
 
-#: src/verbs.cpp:1756
+#: src/verbs.cpp:1776
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr ""
 "Змінити напрямок виділених контурів на протилежний; корисно для "
 "віддзеркалення маркерів"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-#: src/verbs.cpp:1758
+#: src/verbs.cpp:1778
 msgid "_Trace Bitmap"
 msgstr "_Векторизувати растр"
 
-#: src/verbs.cpp:1759
+#: src/verbs.cpp:1779
 msgid "Convert bitmap object to paths"
 msgstr "Перетворити растровий об'єкт у контури"
 
-#: src/verbs.cpp:1761
+#: src/verbs.cpp:1781
 msgid "Export selection to a bitmap and insert it into document"
 msgstr "Експортувати виділене у растр та вставити його у документ"
 
-#: src/verbs.cpp:1763
+#: src/verbs.cpp:1783
 msgid "Combine several paths into one"
 msgstr "Об'єднати декілька контурів у один"
 
-#: src/verbs.cpp:1767
+#: src/verbs.cpp:1787
 msgid "Break selected path(s) into subpaths"
 msgstr "Розділити виділені контури на частини"
 
-#: src/verbs.cpp:1768
+#: src/verbs.cpp:1788
 msgid "_Grid Arrange..."
 msgstr ""
 
-#: src/verbs.cpp:1769
+#: src/verbs.cpp:1789
 msgid "Arrange selection in grid pattern"
 msgstr ""
 
-#: src/verbs.cpp:1772
+#: src/verbs.cpp:1792
 msgid "Create a new layer"
 msgstr "Створити новий шар"
 
-#: src/verbs.cpp:1773
+#: src/verbs.cpp:1793
 msgid "Ren_ame Layer..."
 msgstr "Пере_йменувати шар..."
 
-#: src/verbs.cpp:1774
+#: src/verbs.cpp:1794
 msgid "Rename the current layer"
 msgstr "Перейменувати поточний шар"
 
-#: src/verbs.cpp:1775
+#: src/verbs.cpp:1795
 #, fuzzy
 msgid "Switch to Layer Above"
 msgstr "Перемикнутись на наступний шар"
 
-#: src/verbs.cpp:1776
+#: src/verbs.cpp:1796
 #, fuzzy
 msgid "Switch to the layer above the current"
 msgstr "Перемикнутись на наступний шар у документі"
 
-#: src/verbs.cpp:1777
+#: src/verbs.cpp:1797
 #, fuzzy
 msgid "Switch to Layer Below"
 msgstr "Перемикнутись на наступний шар"
 
-#: src/verbs.cpp:1778
+#: src/verbs.cpp:1798
 #, fuzzy
 msgid "Switch to the layer below the current"
 msgstr "Перемикнутись на наступний шар у документі"
 
-#: src/verbs.cpp:1779
+#: src/verbs.cpp:1799
 #, fuzzy
 msgid "Move Selection to Layer Above"
 msgstr "Опустити виділене на задній план"
 
-#: src/verbs.cpp:1780
+#: src/verbs.cpp:1800
 msgid "Move selection to the layer above the current"
 msgstr ""
 
-#: src/verbs.cpp:1781
+#: src/verbs.cpp:1801
 #, fuzzy
 msgid "Move Selection to Layer Below"
 msgstr "Опустити виділене на один рівень"
 
-#: src/verbs.cpp:1782
+#: src/verbs.cpp:1802
 msgid "Move selection to the layer below the current"
 msgstr ""
 
-#: src/verbs.cpp:1784
+#: src/verbs.cpp:1804
 msgid "Raise the current layer to the top"
 msgstr "Підняти поточний шар догори"
 
-#: src/verbs.cpp:1786
+#: src/verbs.cpp:1806
 msgid "Lower the current layer to the bottom"
 msgstr "Опустити поточний шар додолу"
 
-#: src/verbs.cpp:1788
+#: src/verbs.cpp:1808
 msgid "Raise the current layer"
 msgstr "Підняти поточний шар"
 
-#: src/verbs.cpp:1790
+#: src/verbs.cpp:1810
 msgid "Lower the current layer"
 msgstr "Опустити поточний шар"
 
-#: src/verbs.cpp:1791
+#: src/verbs.cpp:1811
 msgid "_Delete Current Layer"
 msgstr "В_идалити поточний шар"
 
-#: src/verbs.cpp:1792
+#: src/verbs.cpp:1812
 msgid "Delete the current layer"
 msgstr "Видалити поточний шар"
 
 #. Object
-#: src/verbs.cpp:1795
+#: src/verbs.cpp:1815
 msgid "Rotate _90 deg CW"
 msgstr "Обернути на _90° за годинниковою стрілкою"
 
-#: src/verbs.cpp:1796
+#: src/verbs.cpp:1816
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "Обернути об'єкт на 90° за годинниковою стрілкою"
 
-#: src/verbs.cpp:1797
+#: src/verbs.cpp:1817
 msgid "Rotate 9_0 deg CCW"
 msgstr "Обернути на 9_0° проти годинникової стрілки"
 
-#: src/verbs.cpp:1798
+#: src/verbs.cpp:1818
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr "Обернути об'єкт на 90° проти годинникової стрілки"
 
-#: src/verbs.cpp:1799
+#: src/verbs.cpp:1819
 msgid "Remove _Transformations"
 msgstr "Прибрати _трансформацію"
 
-#: src/verbs.cpp:1800
+#: src/verbs.cpp:1820
 msgid "Remove transformations from object"
 msgstr "Прибрати трансформації з об'єкту"
 
-#: src/verbs.cpp:1802
+#: src/verbs.cpp:1822
 msgid "Convert selected object(s) to path(s)"
 msgstr "Перетворити виділені об'єкти на контури"
 
-#: src/verbs.cpp:1803
+#: src/verbs.cpp:1823
 msgid "_Unflow Text"
 msgstr "Прибрати текст з _фігури"
 
-#: src/verbs.cpp:1804
+#: src/verbs.cpp:1824
 msgid "Convert selected flowed text(s) to regular text objects"
 msgstr "Перетворити виділений плаваючий текст у звичайний текстовий об'єкт"
 
-#: src/verbs.cpp:1806
+#: src/verbs.cpp:1826
 msgid "Flip selection horizontally"
 msgstr "Віддзеркалити виділені об'єкти горизонтально"
 
-#: src/verbs.cpp:1809
+#: src/verbs.cpp:1829
 msgid "Flip selection vertically"
 msgstr "Віддзеркалити виділені об'єкти вертикально"
 
-#: src/verbs.cpp:1814
+#: src/verbs.cpp:1834
 msgid "Select and transform objects"
 msgstr "Виділення та трансформація об'єктів"
 
-#: src/verbs.cpp:1815
+#: src/verbs.cpp:1835
 msgid "Node Edit"
 msgstr "Редактор вузлів"
 
-#: src/verbs.cpp:1816
+#: src/verbs.cpp:1836
 msgid "Edit path nodes or control handles"
 msgstr "Редагування вузлів контурів та вусів вузлів"
 
-#: src/verbs.cpp:1818
+#: src/verbs.cpp:1838
 msgid "Create rectangles and squares"
 msgstr "Створити прямокутники та квадрати"
 
-#: src/verbs.cpp:1820
+#: src/verbs.cpp:1840
 msgid "Create circles, ellipses, and arcs"
 msgstr "Створення кіл, еліпсів та дуг"
 
-#: src/verbs.cpp:1822
+#: src/verbs.cpp:1842
 msgid "Create stars and polygons"
 msgstr "Малювати зірки та багатокутники"
 
-#: src/verbs.cpp:1824
+#: src/verbs.cpp:1844
 msgid "Create spirals"
 msgstr "Створити спіралі"
 
-#: src/verbs.cpp:1826
+#: src/verbs.cpp:1846
 msgid "Draw freehand lines"
 msgstr "Малювати довільні контури"
 
-#: src/verbs.cpp:1828
+#: src/verbs.cpp:1848
 msgid "Draw Bezier curves and straight lines"
 msgstr "Малювати криві Безьє чи прямі лінії"
 
-#: src/verbs.cpp:1830
+#: src/verbs.cpp:1850
 msgid "Draw calligraphic lines"
 msgstr "Малювати каліграфічні лінії"
 
-#: src/verbs.cpp:1832
+#: src/verbs.cpp:1852
 msgid "Create and edit text objects"
 msgstr "Створити та змінювати текстові об'єкти"
 
-#: src/verbs.cpp:1834
+#: src/verbs.cpp:1854
 #, fuzzy
 msgid "Create and edit gradients"
 msgstr "Створити та змінювати текстові об'єкти"
 
-#: src/verbs.cpp:1836
+#: src/verbs.cpp:1856
 msgid "Zoom in or out"
 msgstr "Змінити масштаб"
 
-#: src/verbs.cpp:1838
+#: src/verbs.cpp:1858
 msgid "Pick averaged colors from image"
 msgstr "Брати (усереднені) кольори з зображення"
 
 #. Tool prefs
-#: src/verbs.cpp:1841
+#: src/verbs.cpp:1861
 msgid "Selector Preferences"
 msgstr "Параметри селектора"
 
-#: src/verbs.cpp:1842
+#: src/verbs.cpp:1862
 msgid "Open Inkscape Preferences for the Selector tool"
 msgstr "Відкрити вікно параметрів Inkscape селектора"
 
-#: src/verbs.cpp:1843
+#: src/verbs.cpp:1863
 msgid "Node Tool Preferences"
 msgstr "Параметри інструмента вузлів"
 
-#: src/verbs.cpp:1844
+#: src/verbs.cpp:1864
 msgid "Open Inkscape Preferences for the Node tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента вузлів"
 
-#: src/verbs.cpp:1845
+#: src/verbs.cpp:1865
 msgid "Rectangle Preferences"
 msgstr "Параметри прямокутника"
 
-#: src/verbs.cpp:1846
+#: src/verbs.cpp:1866
 msgid "Open Inkscape Preferences for the Rectangle tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Прямокутник\""
 
-#: src/verbs.cpp:1847
+#: src/verbs.cpp:1867
 msgid "Ellipse Preferences"
 msgstr "Параметри еліпса"
 
-#: src/verbs.cpp:1848
+#: src/verbs.cpp:1868
 msgid "Open Inkscape Preferences for the Ellipse tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Еліпс\""
 
-#: src/verbs.cpp:1849
+#: src/verbs.cpp:1869
 msgid "Star Preferences"
 msgstr "Властивості зірки"
 
-#: src/verbs.cpp:1850
+#: src/verbs.cpp:1870
 msgid "Open Inkscape Preferences for the Star tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Зірка\""
 
-#: src/verbs.cpp:1851
+#: src/verbs.cpp:1871
 msgid "Spiral Preferences"
 msgstr "Властивості спіралі"
 
-#: src/verbs.cpp:1852
+#: src/verbs.cpp:1872
 msgid "Open Inkscape Preferences for the Spiral tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Спіраль\""
 
-#: src/verbs.cpp:1853
+#: src/verbs.cpp:1873
 msgid "Pencil Preferences"
 msgstr "Параметри олівця"
 
-#: src/verbs.cpp:1854
+#: src/verbs.cpp:1874
 msgid "Open Inkscape Preferences for the Pencil tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Олівець\""
 
-#: src/verbs.cpp:1855
+#: src/verbs.cpp:1875
 msgid "Pen Preferences"
 msgstr "Параметри пера"
 
-#: src/verbs.cpp:1856
+#: src/verbs.cpp:1876
 msgid "Open Inkscape Preferences for the Pen tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Перо\""
 
-#: src/verbs.cpp:1857
+#: src/verbs.cpp:1877
 msgid "Calligraphic Preferences"
 msgstr "Параметри каліграфічного пера"
 
-#: src/verbs.cpp:1858
+#: src/verbs.cpp:1878
 msgid "Open Inkscape Preferences for the Calligraphy tool"
 msgstr ""
 "Відкрити вікно параметрів Inkscape для інструмента \"Каліграфічне перо\""
 
-#: src/verbs.cpp:1859
+#: src/verbs.cpp:1879
 msgid "Text Preferences"
 msgstr "Параметри тексту"
 
-#: src/verbs.cpp:1860
+#: src/verbs.cpp:1880
 msgid "Open Inkscape Preferences for the Text tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Текст\""
 
-#: src/verbs.cpp:1861
+#: src/verbs.cpp:1881
 #, fuzzy
 msgid "Gradient Preferences"
 msgstr "Параметри пера"
 
-#: src/verbs.cpp:1862
+#: src/verbs.cpp:1882
 #, fuzzy
 msgid "Open Inkscape Preferences for the Gradient tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Перо\""
 
-#: src/verbs.cpp:1863
+#: src/verbs.cpp:1883
 msgid "Zoom Preferences"
 msgstr "Параметри масштабу"
 
-#: src/verbs.cpp:1864
+#: src/verbs.cpp:1884
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Масштаб\""
 
-#: src/verbs.cpp:1865
+#: src/verbs.cpp:1885
 msgid "Dropper Preferences"
 msgstr "Параметри піпетки"
 
-#: src/verbs.cpp:1866
+#: src/verbs.cpp:1886
 msgid "Open Inkscape Preferences for the Dropper tool"
 msgstr "Відкрити вікно параметрів Inkscape для інструмента \"Піпетка\""
 
 #. Zooming
-#: src/verbs.cpp:1869
+#: src/verbs.cpp:1889
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: src/verbs.cpp:1869
+#: src/verbs.cpp:1889
 msgid "Zoom in"
 msgstr "Збільшити"
 
-#: src/verbs.cpp:1870
+#: src/verbs.cpp:1890
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: src/verbs.cpp:1870
+#: src/verbs.cpp:1890
 msgid "Zoom out"
 msgstr "Зменшити"
 
-#: src/verbs.cpp:1871
+#: src/verbs.cpp:1891
 msgid "Show or hide the canvas rulers"
 msgstr "Показати/сховати лінійки полотна"
 
-#: src/verbs.cpp:1872
+#: src/verbs.cpp:1892
 msgid "Show or hide the canvas scrollbars"
 msgstr "Показати/сховати смуги прокрутки полотна"
 
-#: src/verbs.cpp:1875
+#: src/verbs.cpp:1895
 msgid "Nex_t Zoom"
 msgstr "Н_аступний масштаб"
 
-#: src/verbs.cpp:1875
+#: src/verbs.cpp:1895
 msgid "Next zoom (from the history of zooms)"
 msgstr "Наступний масштаб (з історії масштабування)"
 
-#: src/verbs.cpp:1877
+#: src/verbs.cpp:1897
 msgid "Pre_vious Zoom"
 msgstr "П_опередній масштаб"
 
-#: src/verbs.cpp:1877
+#: src/verbs.cpp:1897
 msgid "Previous zoom (from the history of zooms)"
 msgstr "Попередній масштаб (з історії масштабування)"
 
-#: src/verbs.cpp:1879
+#: src/verbs.cpp:1899
 msgid "Zoom 1:_1"
 msgstr "Масштаб 1:_1"
 
-#: src/verbs.cpp:1879
+#: src/verbs.cpp:1899
 msgid "Zoom to 1:1"
 msgstr "Масштаб 1:1"
 
-#: src/verbs.cpp:1881
+#: src/verbs.cpp:1901
 msgid "Zoom 1:_2"
 msgstr "Масштаб 1:_2"
 
-#: src/verbs.cpp:1881
+#: src/verbs.cpp:1901
 msgid "Zoom to 1:2"
 msgstr "Масштаб 1:2"
 
-#: src/verbs.cpp:1883
+#: src/verbs.cpp:1903
 msgid "_Zoom 2:1"
 msgstr "Мас_штаб 2:1"
 
-#: src/verbs.cpp:1883
+#: src/verbs.cpp:1903
 msgid "Zoom to 2:1"
 msgstr "Масштаб 2:1"
 
-#: src/verbs.cpp:1886
+#: src/verbs.cpp:1906
 msgid "Stretch this document window to full screen"
 msgstr "Розтягнути вікно документа на весь екран"
 
-#: src/verbs.cpp:1889
+#: src/verbs.cpp:1909
 msgid "Open a new window with the same document"
 msgstr "Відкрити нове вікно з цим самим документом"
 
-#: src/verbs.cpp:1891
+#: src/verbs.cpp:1911
 msgid "_New View Preview"
 msgstr "_Створити попередній перегляд"
 
-#: src/verbs.cpp:1892
+#: src/verbs.cpp:1912
 msgid "New View Preview"
 msgstr "Створити нове вікно попереднього перегляду"
 
 #. "view_new_preview"
-#: src/verbs.cpp:1893
+#: src/verbs.cpp:1913
 #, fuzzy
 msgid "_Icon Preview"
 msgstr "Перегляд"
 
-#: src/verbs.cpp:1894
+#: src/verbs.cpp:1914
 msgid "Open a window to preview items at different icon resolutions"
 msgstr ""
 
-#: src/verbs.cpp:1896
+#: src/verbs.cpp:1916
 msgid "Zoom to fit page in window"
 msgstr "Змінити масштаб, щоб умістити сторінку цілком"
 
-#: src/verbs.cpp:1897
+#: src/verbs.cpp:1917
 msgid "Page _Width"
 msgstr "Ш_ирина сторінки"
 
-#: src/verbs.cpp:1898
+#: src/verbs.cpp:1918
 msgid "Zoom to fit page width in window"
 msgstr "Змінити масштаб, щоб умістити сторінку по ширині"
 
-#: src/verbs.cpp:1900
+#: src/verbs.cpp:1920
 msgid "Zoom to fit drawing in window"
 msgstr "Змінити масштаб, щоб умістити малюнок цілком"
 
-#: src/verbs.cpp:1902
+#: src/verbs.cpp:1922
 msgid "Zoom to fit selection in window"
 msgstr "Змінити масштаб, щоб умістити виділену область"
 
 #. Dialogs
-#: src/verbs.cpp:1905
+#: src/verbs.cpp:1925
 msgid "In_kscape Preferences..."
 msgstr "П_араметри Inkscape..."
 
-#: src/verbs.cpp:1906
+#: src/verbs.cpp:1926
 msgid "Global Inkscape preferences"
 msgstr "Загальні параметри Inkscape"
 
-#: src/verbs.cpp:1907
+#: src/verbs.cpp:1927
 msgid "_Document Preferences..."
 msgstr "Параметри д_окумента..."
 
-#: src/verbs.cpp:1908
+#: src/verbs.cpp:1928
 msgid "Preferences saved with the document"
 msgstr "Параметри, що зберігаються разом з документом"
 
-#: src/verbs.cpp:1910
+#: src/verbs.cpp:1930
 msgid "Fill and Stroke dialog"
 msgstr "Вікно заповнення та штриха"
 
-#: src/verbs.cpp:1911
+#: src/verbs.cpp:1931
 #, fuzzy
 msgid "Swatches..."
 msgstr "Зберегти _як..."
 
-#: src/verbs.cpp:1912
+#: src/verbs.cpp:1932
 msgid "View color swatches"
 msgstr ""
 
-#: src/verbs.cpp:1914
+#: src/verbs.cpp:1934
 msgid "Transform dialog"
 msgstr "Вікно трансформації"
 
-#: src/verbs.cpp:1916
+#: src/verbs.cpp:1936
 msgid "Align and Distribute dialog"
 msgstr "Вікно вирівнювання"
 
-#: src/verbs.cpp:1918
+#: src/verbs.cpp:1938
 msgid "Text and Font dialog"
 msgstr "Вікно тексту та вибору шрифту"
 
-#: src/verbs.cpp:1921
+#: src/verbs.cpp:1941
 msgid "_Find..."
 msgstr "З_найти..."
 
-#: src/verbs.cpp:1922
+#: src/verbs.cpp:1942
 msgid "Find objects in document"
 msgstr "Знайти об'єкти у документі"
 
-#: src/verbs.cpp:1924
+#: src/verbs.cpp:1944
 msgid "View debug messages"
 msgstr "Переглянути налагоджувальні повідомлення"
 
-#: src/verbs.cpp:1925
+#: src/verbs.cpp:1945
 msgid "_Scripts..."
 msgstr "С_ценарії..."
 
-#: src/verbs.cpp:1926
+#: src/verbs.cpp:1946
 msgid "Run scripts"
 msgstr "Запустити сценарії"
 
-#: src/verbs.cpp:1928
+#: src/verbs.cpp:1948
 msgid "Show or hide all active dialogs"
 msgstr "Показати чи сховати активні діалогові вікна"
 
 #. TRANSLATORS: "Tile clones" means: "Create tiled clones"
-#: src/verbs.cpp:1930
+#: src/verbs.cpp:1950
 msgid "Tile clones..."
 msgstr "Створити мозаїку з клонів"
 
-#: src/verbs.cpp:1931
+#: src/verbs.cpp:1951
 msgid "Create and arrange multiple clones of selection"
 msgstr "Створити та впорядкувати кілька клонів з виділеного"
 
-#: src/verbs.cpp:1933
+#: src/verbs.cpp:1953
 msgid "Object Properties dialog"
 msgstr "Вікно властивостей об'єкта"
 
-#: src/verbs.cpp:1937
+#: src/verbs.cpp:1957
 msgid "Key and mouse shortcuts reference"
 msgstr "Довідка з використання клавіатури та миші"
 
-#: src/verbs.cpp:1938
+#: src/verbs.cpp:1958
 #, fuzzy
 msgid "_About Extensions"
 msgstr "розширення"
 
-#: src/verbs.cpp:1939
+#: src/verbs.cpp:1959
 #, fuzzy
 msgid "About Extensions..."
 msgstr "розширення"
 
 #. "help_about"
 #. Tutorials
-#: src/verbs.cpp:1944
+#: src/verbs.cpp:1964
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: _Початковий рівень"
 
-#: src/verbs.cpp:1945
+#: src/verbs.cpp:1965
 msgid "Getting started with Inkscape"
 msgstr "Починаємо роботу з Inkscape"
 
 #. "tutorial_basic"
-#: src/verbs.cpp:1946
+#: src/verbs.cpp:1966
 msgid "Inkscape: _Shapes"
 msgstr "Inkscape: _Фігури"
 
-#: src/verbs.cpp:1947
+#: src/verbs.cpp:1967
 msgid "Using shape tools to create and edit shapes"
 msgstr "Використання інструментів малювання та редагування фігур"
 
-#: src/verbs.cpp:1948
+#: src/verbs.cpp:1968
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: _Другий рівень"
 
-#: src/verbs.cpp:1949
+#: src/verbs.cpp:1969
 msgid "Advanced Inkscape topics"
 msgstr "Додаткові теми з Inkscape"
 
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-#: src/verbs.cpp:1951
+#: src/verbs.cpp:1971
 msgid "Inkscape: T_racing"
 msgstr "Inkscape: _Векторизація"
 
-#: src/verbs.cpp:1952
+#: src/verbs.cpp:1972
 msgid "Using bitmap tracing"
 msgstr "Використання векторизації растру"
 
 #. "tutorial_tracing"
-#: src/verbs.cpp:1953
+#: src/verbs.cpp:1973
 msgid "Inkscape: _Calligraphy"
 msgstr "Inkscape: _Каліграфія"
 
-#: src/verbs.cpp:1954
+#: src/verbs.cpp:1974
 msgid "Using the Calligraphy pen tool"
 msgstr "Використання каліграфічного пера"
 
-#: src/verbs.cpp:1955
+#: src/verbs.cpp:1975
 msgid "_Elements of Design"
 msgstr "_Елементи дизайну"
 
-#: src/verbs.cpp:1956
+#: src/verbs.cpp:1976
 msgid "Principles of design in the tutorial form"
 msgstr "Підручник з принципів дизайну"
 
 #. "tutorial_design"
-#: src/verbs.cpp:1957
+#: src/verbs.cpp:1977
 msgid "_Tips and Tricks"
 msgstr "_Поради та прийоми"
 
-#: src/verbs.cpp:1958
+#: src/verbs.cpp:1978
 msgid "Miscellaneous tips and tricks"
 msgstr "Різноманітні поради та прийоми"
 
 #. "tutorial_tips"
 #. Effect
-#: src/verbs.cpp:1961
+#: src/verbs.cpp:1981
 msgid "Previous Effect"
 msgstr "Попередній ефект"
 
-#: src/verbs.cpp:1962
+#: src/verbs.cpp:1982
 msgid "Repeat the last effect with the same settings"
 msgstr "Повторити останній ефект з тими самими параметрами"
 
 #. "tutorial_tips"
-#: src/verbs.cpp:1963
+#: src/verbs.cpp:1983
 msgid "Previous Effect..."
 msgstr "Попередній ефект..."
 
-#: src/verbs.cpp:1964
+#: src/verbs.cpp:1984
 msgid "Repeat the last effect with new settings"
 msgstr "Повторити останній ефект з новими параметрами"
 
@@ -8197,6 +8158,54 @@ msgstr "Атрибут"
 #: src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Значення"
+
+#, fuzzy
+#~ msgid "Align and Distribute"
+#~ msgstr "Ви_рівняти..."
+
+#, fuzzy
+#~ msgid "Align and Distribute Dialog"
+#~ msgstr "Вікно вирівнювання"
+
+#, fuzzy
+#~ msgid "Export Dialog"
+#~ msgstr "Область експорту"
+
+#, fuzzy
+#~ msgid "Fill and Stroke Dialog"
+#~ msgstr "Вікно заповнення та штриха"
+
+#, fuzzy
+#~ msgid "Find Dialog"
+#~ msgstr "Показати/сховати діало_ги"
+
+#, fuzzy
+#~ msgid "Inkscape Preferences"
+#~ msgstr "П_араметри Inkscape..."
+
+#, fuzzy
+#~ msgid "Inkscape Preferences Dialog"
+#~ msgstr "П_араметри Inkscape..."
+
+#, fuzzy
+#~ msgid "Layer Editor Dialog"
+#~ msgstr "Підняти до_гори"
+
+#, fuzzy
+#~ msgid "Text Properties Dialog"
+#~ msgstr "Вікно властивостей об'єкта"
+
+#, fuzzy
+#~ msgid "Transformation Dialog"
+#~ msgstr "Вікно трансформації"
+
+#, fuzzy
+#~ msgid "Tree Editor"
+#~ msgstr "Редактор XML"
+
+#, fuzzy
+#~ msgid "XML Editor Dialog"
+#~ msgstr "Редактор XML"
 
 #, fuzzy
 #~ msgid "Row height:"
