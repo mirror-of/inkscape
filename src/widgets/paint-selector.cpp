@@ -73,7 +73,7 @@ static void sp_paint_selector_class_init (SPPaintSelectorClass *klass);
 static void sp_paint_selector_init (SPPaintSelector *slider);
 static void sp_paint_selector_destroy (GtkObject *object);
 
-static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *px, SPPaintSelectorMode mode, GtkRadioButton *last, GtkTooltips *tt, const gchar *tip);
+static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *px, SPPaintSelectorMode mode, GtkTooltips *tt, const gchar *tip);
 static void sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaintSelector *psel);
 static void sp_paint_selector_fillrule_toggled (GtkToggleButton *tb, SPPaintSelector *psel);
 
@@ -178,17 +178,17 @@ sp_paint_selector_init (SPPaintSelector *psel)
 
 	/* Buttons */
 	psel->none = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_NONE,
-							 SP_PAINT_SELECTOR_MODE_NONE, NULL, tt, _("No paint"));
+							 SP_PAINT_SELECTOR_MODE_NONE, tt, _("No paint"));
 	psel->solid = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_SOLID,
-							  SP_PAINT_SELECTOR_MODE_COLOR_RGB, GTK_RADIO_BUTTON (psel->none), tt, _("Flat color"));
+							  SP_PAINT_SELECTOR_MODE_COLOR_RGB, tt, _("Flat color"));
 	psel->gradient = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_GRADIENT,
-						     SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR, GTK_RADIO_BUTTON (psel->solid), tt, _("Linear gradient"));
+						     SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR, tt, _("Linear gradient"));
 	psel->radial = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_RADIAL,
-							 SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, GTK_RADIO_BUTTON (psel->gradient), tt, _("Radial gradient")),
+							 SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, tt, _("Radial gradient")),
 	psel->pattern = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_PATTERN,
-                               SP_PAINT_SELECTOR_MODE_PATTERN, GTK_RADIO_BUTTON (psel->radial), tt, _("Pattern"));
+                               SP_PAINT_SELECTOR_MODE_PATTERN, tt, _("Pattern"));
 	psel->unset = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_UNSET,
-                               SP_PAINT_SELECTOR_MODE_UNSET, GTK_RADIO_BUTTON (psel->pattern), tt, _("Unset paint (make it undefined so it can be inherited)"));
+                               SP_PAINT_SELECTOR_MODE_UNSET, tt, _("Unset paint (make it undefined so it can be inherited)"));
 
 	/* Fillrule */
 	{
@@ -243,11 +243,11 @@ sp_paint_selector_destroy (GtkObject *object)
 }
 
 static GtkWidget *
-sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, SPPaintSelectorMode mode, GtkRadioButton *last, GtkTooltips *tt, const gchar *tip)
+sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, SPPaintSelectorMode mode, GtkTooltips *tt, const gchar *tip)
 {
 	GtkWidget *b, *w;
 
-	b = gtk_radio_button_new ((last) ? gtk_radio_button_group (last) : NULL);
+	b = gtk_toggle_button_new ();
 	gtk_tooltips_set_tip (tt, b, tip, NULL);
 	gtk_widget_show (b);
 
