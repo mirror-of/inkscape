@@ -15,6 +15,10 @@ AM_CONFIG_HEADER(config.h)
 
 AC_PROG_INTLTOOL(0.22)
 
+dnl These next two lines are needed only while libcroco is in our source tree.
+AC_PROG_CC
+AM_PROG_CC_C_O
+
 AC_LANG(C++)
 AC_ISC_POSIX
 AC_PROG_CXX
