@@ -171,13 +171,12 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
                                       SPGradientType type, SPObject *o)
 {
     g_return_val_if_fail(gr != NULL, NULL);
-    g_return_val_if_fail(vector != NULL, NULL);
-    g_return_val_if_fail(SP_IS_GRADIENT(vector), NULL);
+    g_return_val_if_fail(SP_IS_GRADIENT(gr), NULL);
 
     // Orphaned gradient, no vector with stops at the end of the line; this used to be an assert
     // but i think we should not abort on this - maybe just write a validity warning into some sort
     // of log
-    if (!SP_GRADIENT_HAS_STOPS(vector))
+    if (!vector || !SP_GRADIENT_HAS_STOPS(vector))
         return (gr);
 
     // user is the object that uses this gradient; normally it's item but for tspans, we
@@ -553,6 +552,9 @@ sp_item_gradient_stop_query_style (SPItem *item, guint point_num, bool fill_or_s
 
     SPGradient *vector = sp_gradient_get_vector (gradient, false);
 
+    if (!vector) // orphan!
+        return 0; // what else to do?
+
     switch (point_num) {
         case POINT_LG_P1:
         case POINT_RG_CENTER:
@@ -590,6 +592,10 @@ sp_item_gradient_stop_set_style (SPItem *item, guint point_num, bool fill_or_str
         return;
 
     SPGradient *vector = sp_gradient_get_vector (gradient, false);
+
+    if (!vector) // orphan!
+        return;
+
     vector = sp_gradient_fork_vector_if_necessary (vector);
     if ( gradient != vector && gradient->ref->getObject() != vector ) {
         sp_gradient_repr_set_link(SP_OBJECT_REPR(gradient), vector);
