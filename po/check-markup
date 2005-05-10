@@ -88,6 +88,7 @@ sub check_str ($) {
 	$str =~ s/\A>+//;
 	$str =~ s/<+\Z//;
 	$str =~ s/\([<>][01]\)//g;
+	$str =~ s/ -> //g;
 
 	# Quoting.
 	$str =~ s/\[[<>]\]//g;
