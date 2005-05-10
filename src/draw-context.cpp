@@ -213,7 +213,7 @@ sp_draw_context_set(SPEventContext *ec, const gchar *key, const gchar *value)
 gint
 sp_draw_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
-    SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
+    //SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
     SPDesktop *desktop = ec->desktop;
 
     gint ret = FALSE;
