@@ -29,6 +29,9 @@
 #endif
 
 #include <gtk/gtksignal.h>
+#include "libcroco/cr-prop-list.h"
+#include "libcroco/cr-sel-eng.h"
+#include "xml/croco-node-iface.h"
 
 #include "svg/svg.h"
 
@@ -168,6 +171,8 @@ static void sp_style_paint_clear(SPStyle *style, SPIPaint *paint, unsigned hunre
 
 #define SPS_READ_IFONTSIZE_IF_UNSET(v,s) if (!(v)->set) {sp_style_read_ifontsize((v), (s));}
 #define SPS_READ_PFONTSIZE_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_pfontsize((v), (r), (k));}
+
+static void sp_style_merge_from_object_stylesheet(SPStyle *, SPObject const *);
 
 struct SPStyleEnum {
     gchar const *key;
@@ -486,6 +491,14 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         sp_style_merge_from_style_string(style, val);
     }
 
+    if (object) {
+        sp_style_merge_from_object_stylesheet(style, object);
+    } else {
+        /* No stylesheet information.  TODO: Find out under what circumstances
+           this occurs, and handle accordingly.  (If we really wanted to, we
+           could probably get stylesheets by going through repr->doc.) */
+    }
+
     /* 2. Presentation attributes */
     /* CSS2 */
     SPS_READ_PENUM_IF_UNSET(&style->visibility, repr, "visibility", enum_visibility, true);
@@ -702,6 +715,10 @@ sp_style_privatize_text(SPStyle *style)
 
 
 /**
+ * Should be called in order of highest to lowest precedence.
+ * E.g. for a single style string, call from the last declaration to the first,
+ * as CSS says that later declarations override earlier ones.
+ *
  * \pre val != NULL.
  */
 static void
@@ -1018,6 +1035,79 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
     }
 }
 
+static void
+sp_style_merge_style_from_decl(SPStyle *const style, CRDeclaration const *const decl)
+{
+    /* TODO: Ensure that property is lcased, as per http://www.w3.org/TR/REC-CSS2/syndata.html#q4.
+     * Should probably be done in libcroco. */
+    unsigned const prop_idx = sp_attribute_lookup(decl->property->stryng->str);
+    if (prop_idx != SP_ATTR_INVALID) {
+        /* effic: Test whether the property is already set before trying to convert to string.
+         *
+         * Alternatively, set from CRTerm directly rather than converting to string. */
+        guchar *const str_value_unsigned = cr_term_to_string(decl->value);
+        gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
+        sp_style_merge_property(style, prop_idx, str_value);
+        g_free(str_value);
+    }
+}
+
+static void
+sp_style_merge_from_props(SPStyle *const style, CRPropList *const props)
+{
+#if 0 /* forwards */
+    for (CRPropList const *cur = props; cur; cur = cr_prop_list_get_next(cur)) {
+        CRDeclaration *decl = NULL;
+        cr_prop_list_get_decl(cur, &decl);
+        sp_style_merge_style_from_decl(style, decl);
+    }
+#else /* in reverse order, as we need later declarations to take precedence over earlier ones. */
+    if (props) {
+        sp_style_merge_from_props(style, cr_prop_list_get_next(props));
+        CRDeclaration *decl = NULL;
+        cr_prop_list_get_decl(props, &decl);
+        sp_style_merge_style_from_decl(style, decl);
+    }
+#endif
+}
+
+static CRSelEng *
+sp_repr_sel_eng()
+{
+    CRSelEng *const ret = cr_sel_eng_new();
+    cr_sel_eng_set_node_iface(ret, &Inkscape::XML::croco_node_iface);
+
+    /* TODO: Check whether we need to register any pseudo-class handlers.
+     * libcroco has its own default handlers for first-child and lang.
+     *
+     * We probably want handlers for link and arguably visited (though inkscape can't visit links
+     * at the time of writing).  hover etc. more useful in inkview than the editor inkscape.
+     */
+
+    g_assert(ret);
+    return ret;
+}
+
+static void
+sp_style_merge_from_object_stylesheet(SPStyle *const style, SPObject const *const object)
+{
+    static CRSelEng *sel_eng = NULL;
+    if (!sel_eng) {
+        sel_eng = sp_repr_sel_eng();
+    }
+
+    CRPropList *props = NULL;
+    CRStatus status = cr_sel_eng_get_matched_properties_from_cascade(sel_eng,
+                                                                     object->document->style_cascade,
+                                                                     object->repr,
+                                                                     &props);
+    g_return_if_fail(status == CR_OK);
+    /* fixme: Check what errors can occur, and handle them properly. */
+    if (props) {
+        sp_style_merge_from_props(style, props);
+        cr_prop_list_destroy(props);
+    }
+}
 
 static bool
 is_css_S(gchar const c)
@@ -1076,6 +1166,11 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
      * Indeed, we currently allow any number of semicolons at the beginning or end,
      * and any non-zero number of semicolons between declarations.
      */
+
+    /* todo: Use cr_declaration_parse_list_from_buf(p, CR_UTF_8), or loop around
+     * cr_parser_parse_declaration.  (The latter gives us better control over error handling.
+     * todo: Check what the SVG spec says to do if we encounter an error in a style attribute
+     * string: should we ignore the whole string or just from the first error onwards?) */
 
     gchar property [BMAX];
     gchar value [BMAX];
