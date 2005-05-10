@@ -30,7 +30,9 @@ EXTRA_DIST = \
 	$(Graphics_in_files)	\
 	po/check-markup \
 	inkscape.1		\
+	inkscape.fr.1		\
 	inkscape.pod		\
+	inkscape.fr.pod		\
 	inkscape.spec.in	\
 	inkscape.spec		\
 	Info.plist.in	\
@@ -68,16 +70,23 @@ DISTCLEANFILES = inkscape.desktop \
 
 #ACLOCAL_AMFLAGS = -I m4
 
-inkscape.1: inkscape.pod fix-roff-punct Makefile.am
+SUFFIXES = .pod .1
+inkscape.1 inkscape.fr.1: fix-roff-punct Makefile.am
+.pod.1:
 	set -e; \
-	d=`sed -n 's,/,-,g;s,.*\$$[D]ate: \(..........\).*,\1,p' $(srcdir)/inkscape.pod`; \
-	pod2man $(srcdir)/inkscape.pod \
-	  | sed 's/^\.TH .*/.TH INKSCAPE 1 "'"$$d"'" "Inkscape-$(VERSION)" "User Commands"/' \
+	d=`sed -n 's,/,-,g;s,.*\$$[D]ate: \(..........\).*,\1,p' $<`; \
+	pod2man $< \
+	  | sed 's/^\.TH .*/.TH INKSCAPE 1 "'"$$d"'" "Inkscape-$(VERSION)" "Inkscape"/' \
 	  | perl -pe 'if (/^\[\% .*INCLUDE.*AUTHORS.* \%\]/) { open(FOO, "$(srcdir)/AUTHORS");$$_ = join(",\n", map { chomp; $$_ } <FOO>) . "\n"; }' \
 	  | perl $(srcdir)/fix-roff-punct \
+	  | recode utf8..latin1	\
 	  > tmp.$$$$ \
-	 && mv tmp.$$$$ inkscape.1
+	 && mv tmp.$$$$ $@
+# man 7 groff_char for further remarks on charset encoding for man pages.
 
+install-data-local: inkscape.fr.1
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/fr/man1
+	$(INSTALL_DATA) `if [ -f inkscape.fr.1 ]; then :; else echo $(srcdir)/;fi`inkscape.fr.1 $(DESTDIR)$(mandir)/fr/man1/inkscape.1
 
 .PHONY: warn_markup
 noinst_DATA = warn_markup
