@@ -33,6 +33,7 @@
 #include <sp-object.h>
 #include <sp-namedview.h>
 #include "io/sys.h"
+#include <prefs-utils.h>
 
 #include "../system.h"
 
@@ -229,13 +230,19 @@ Script::load(Inkscape::Extension::Extension *module)
                         };
                         const interpreter_t interpreterlst[] = {
                             {"perl", "perl-interpreter", "perl"},
-                            {"python", "python-interpreter", "python"}
+                            {"python", "python-interpreter", "python"},
+                            {"shell", "shell-interpreter", "sh"}
                         };
-                        for (unsigned int i = 0; i < 2; i++) {
+                        for (unsigned int i = 0; i < 3; i++) {
                             if (!strcmp(interpretstr, interpreterlst[i].identity)) {
+                                const gchar * insertText = interpreterlst[i].defaultval;
+                                if (prefs_get_string_attribute("extensions", interpreterlst[i].prefstring) != NULL)
+                                    insertText = prefs_get_string_attribute("extensions", interpreterlst[i].prefstring);
+
                                 gchar * temp = command_text;
-                                command_text = g_strconcat(interpreterlst[i].defaultval, " ", temp);
+                                command_text = g_strconcat(insertText, " ", temp, NULL);
                                 g_free(temp);
+
                                 break;
                             }
                         }
@@ -693,7 +700,7 @@ int
 Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
     g_return_val_if_fail(in_command != NULL, 0);
-    // printf("Executing: %s\n", in_command);
+    printf("Executing: %s\n", in_command);
 
     /* Get the commandline to be run */
     /* TODO:  Perhaps replace with a sprintf? */
