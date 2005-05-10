@@ -22,6 +22,7 @@
 #include <sigc++/class_slot.h>
 
 #include "forward.h"
+#include "libcroco/cr-cascade.h"
 #include "libnr/nr-forward.h"
 
 #include "gc-managed.h"
@@ -63,6 +64,7 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	Inkscape::XML::Document *rdoc; /* Our Inkscape::XML::Document */
 	Inkscape::XML::Node *rroot; /* Root element of Inkscape::XML::Document */
 	SPObject *root; /* Our SPRoot */
+	CRCascade *style_cascade;
 
 	gchar *uri; /* URI string or NULL */
 	gchar *base;

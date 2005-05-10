@@ -70,6 +70,7 @@ SPDocument::SPDocument() {
 	rdoc = NULL;
 	rroot = NULL;
 	root = NULL;
+	style_cascade = cr_cascade_new(NULL, NULL, NULL);
 
 	uri = NULL;
 	base = NULL;
@@ -125,6 +126,9 @@ SPDocument::~SPDocument() {
 		delete priv;
 		priv = NULL;
 	}
+
+	cr_cascade_unref(style_cascade);
+	style_cascade = NULL;
 
 	if (name) {
 		g_free (name);
