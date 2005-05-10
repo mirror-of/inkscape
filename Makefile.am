@@ -79,7 +79,7 @@ inkscape.1 inkscape.fr.1: fix-roff-punct Makefile.am
 	  | sed 's/^\.TH .*/.TH INKSCAPE 1 "'"$$d"'" "Inkscape-$(VERSION)" "Inkscape"/' \
 	  | perl -pe 'if (/^\[\% .*INCLUDE.*AUTHORS.* \%\]/) { open(FOO, "$(srcdir)/AUTHORS");$$_ = join(",\n", map { chomp; $$_ } <FOO>) . "\n"; }' \
 	  | perl $(srcdir)/fix-roff-punct \
-	  | recode utf8..latin1	\
+	  | perl -CI $(srcdir)/utf8-to-roff	\
 	  > tmp.$$$$ \
 	 && mv tmp.$$$$ $@
 # man 7 groff_char for further remarks on charset encoding for man pages.
