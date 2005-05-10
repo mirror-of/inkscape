@@ -95,3 +95,8 @@ check_markup:
 distcheck-hook:
 	perl $(srcdir)/po/check-markup $(srcdir)/po/*.po
 
+test-check-markup:
+	if perl -e 42; then \
+	  perl $(srcdir)/po/check-markup $(srcdir)/po/bad.po.test 2>&1	\
+	    | diff $(srcdir)/po/bad.po.test.exp -;	\
+	fi
