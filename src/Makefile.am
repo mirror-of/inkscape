@@ -33,6 +33,7 @@ include extension/script/Makefile_insert
 include helper/Makefile_insert
 include inkjar/Makefile_insert
 include io/Makefile_insert
+include libcroco/Makefile_insert
 include libnr/Makefile_insert
 include libnrtype/Makefile_insert
 include livarot/Makefile_insert
@@ -63,6 +64,7 @@ noinst_LIBRARIES =	\
 	extension/script/libscript.a	\
 	helper/libspchelp.a	\
 	io/libio.a	\
+	libcroco/libcroco.a	\
 	ui/libui.a	\
 	ui/dialog/libuidialog.a	\
 	ui/view/libuiview.a 	\
@@ -149,6 +151,7 @@ TESTS =	\
 	mod360-test$(EXEEXT)	\
 	round-test$(EXEEXT)	\
 	sp-gradient-test$(EXEEXT)	\
+	sp-style-elem-test$(EXEEXT)	\
 	style-test$(EXEEXT)	\
 	display/bezier-utils-test$(EXEEXT)	\
 	helper/units-test$(EXEEXT)	\
@@ -181,6 +184,7 @@ check_PROGRAMS =	\
 	mod360-test	\
 	round-test	\
 	sp-gradient-test	\
+	sp-style-elem-test	\
 	style-test	\
 	display/bezier-utils-test	\
 	helper/units-test	\

@@ -75,6 +75,7 @@ libinkpre_a_SOURCES =	\
 	layer-fns.cpp layer-fns.h	\
 	macros.h	\
 	marker-status.cpp marker-status.h	\
+	media.cpp media.h	\
 	message-context.cpp message-context.h \
 	message-stack.cpp message-stack.h \
 	message.h \
@@ -184,6 +185,7 @@ libinkpre_a_SOURCES =	\
 	streams-jar.h streams-jar.cpp	\
 	streams-zlib.h streams-zlib.cpp	\
 	style.cpp style.h	\
+	sp-style-elem.cpp sp-style-elem.h	\
 	svg-profile.h \
 	svg-view.cpp svg-view.h	\
 	text-chemistry.cpp text-chemistry.h	\
@@ -231,6 +233,7 @@ inkscape_private_libs =	\
 	widgets/libspwidgets.a	\
 	display/libspdisplay.a	\
 	helper/libspchelp.a	\
+	libcroco/libcroco.a	\
 	libnrtype/libnrtype.a	\
 	libnr/libnr.a		\
 	livarot/libvarot.a	\
@@ -304,6 +307,9 @@ round_test_LDADD = libinkpost.a
 
 sp_gradient_test_SOURCES = sp-gradient-test.cpp
 sp_gradient_test_LDADD = $(all_libs) 
+
+sp_style_elem_test_SOURCES = sp-style-elem-test.cpp
+sp_style_elem_test_LDADD = $(all_libs)
 
 style_test_SOURCES = style-test.cpp
 style_test_LDADD = $(all_libs)
