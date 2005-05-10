@@ -37,6 +37,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/simple-session.cpp \
 	xml/simple-session.h \
 	xml/node.h \
+	xml/croco-node-iface.cpp	\
+	xml/croco-node-iface.h	\
 	xml/attribute-record.h \
 	xml/sp-css-attr.h \
 	xml/event.cpp xml/event.h xml/event-fns.h	\
