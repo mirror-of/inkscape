@@ -5270,7 +5270,7 @@ msgstr[1] "<b>Pad</b> (%i knooppunten)"
 
 #: src/sp-rect.cpp:247
 msgid "<b>Rectangle</b>"
-msgstr "</b>Rechthoek<b>"
+msgstr "<b>Rechthoek</b>"
 
 #. TRANSLATORS: since turn count isn't an integer, please adjust the
 #. string as needed to deal with an localized plural forms.
@@ -5399,7 +5399,7 @@ msgstr "<b>Ctrl</b>: draai in stappen; houdt de punten radiaal"
 #: src/star-context.cpp:487
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Veelhoek</p>: straal %s, hoek %5g; <b>Ctrl</b> draait in stappen"
+msgstr "<b>Veelhoek</b>: straal %s, hoek %5g; <b>Ctrl</b> draait in stappen"
 
 #: src/star-context.cpp:488
 #, c-format
@@ -5417,7 +5417,7 @@ msgid ""
 "first. Use <b>Shift+D</b> to look up its path."
 msgstr ""
 "Dit tekst object <b>staat al op een pad</b>; haal het eerst van dat pad af. "
-"Gebruik <b>shift+D<b> om het pad te vinden."
+"Gebruik <b>shift+D</b> om het pad te vinden."
 
 #. rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
 #: src/text-chemistry.cpp:103

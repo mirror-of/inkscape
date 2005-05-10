@@ -5358,7 +5358,7 @@ msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
 msgstr ""
-"<b>Incliner/b> la sélection; <b>Ctrl</b> pour forcer la modification de "
+"<b>Incliner</b> la sélection; <b>Ctrl</b> pour forcer la modification de "
 "l'angle par incréments; <b>Maj</b> pour incliner autour du coin opposé"
 
 #: src/seltrans.cpp:480
