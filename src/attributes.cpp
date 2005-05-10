@@ -176,6 +176,8 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_MARKERWIDTH, "markerWidth"},
 	{SP_ATTR_MARKERHEIGHT, "markerHeight"},
 	{SP_ATTR_ORIENT, "orient"},
+	/* SPStyleElem */
+	{SP_ATTR_TYPE, "type"},
 	/* Animations */
 	{SP_ATTR_ATTRIBUTENAME, "attributeName"},
 	{SP_ATTR_ATTRIBUTETYPE, "attributeType"},

@@ -22,8 +22,8 @@ const unsigned char *sp_attribute_name (unsigned char id);
  */
 #define SP_ATTRIBUTE_IS_CSS(k) (((k) >= SP_PROP_FONT) && ((k) <= SP_PROP_TEXT_RENDERING))
 
-enum {
-	SP_ATTR_INVALID,
+enum SPAttributeEnum {
+	SP_ATTR_INVALID,  ///< Must have value 0.
 	/* SPObject */
 	SP_ATTR_ID,
 	SP_ATTR_INKSCAPE_COLLECT,
@@ -177,6 +177,8 @@ enum {
 	SP_ATTR_MARKERWIDTH,
 	SP_ATTR_MARKERHEIGHT,
 	SP_ATTR_ORIENT,
+	/* SPStyleElem */
+	SP_ATTR_TYPE,
 	/* Animations */
 	SP_ATTR_ATTRIBUTENAME,
 	SP_ATTR_ATTRIBUTETYPE,
