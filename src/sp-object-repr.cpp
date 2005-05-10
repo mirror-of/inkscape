@@ -45,6 +45,7 @@
 #include "sp-flowregion.h"
 #include "sp-flowtext.h"
 #include "sp-object-repr.h"
+#include "sp-style-elem.h"
 #include "xml/repr.h"
 
 enum NameType { REPR_NAME, SODIPODI_TYPE };
@@ -127,6 +128,7 @@ populate_dtables()
 		{ "svg:rect", SP_TYPE_RECT },
 		{ "svg:stop", SP_TYPE_STOP },
 		{ "svg:svg", SP_TYPE_ROOT },
+		{ "svg:style", SP_TYPE_STYLE_ELEM },
 		{ "svg:switch", SP_TYPE_GROUP },
 		{ "svg:symbol", SP_TYPE_SYMBOL },
 		{ "svg:text", SP_TYPE_TEXT },
