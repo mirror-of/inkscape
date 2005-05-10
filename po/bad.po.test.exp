@@ -19,7 +19,7 @@ msgstr "\\""
 
 bad.po.test: unclosed <b>:
 msgid "bad6"
-msgstr "<b>"
+msgstr "<b>x"
 
 bad.po.test: unclosed <b>:
 msgid "bad7"
@@ -61,11 +61,11 @@ bad.po.test: unclosed <b>:
 msgid "bad16"
 msgstr "<b>a</b"
 
-bad.po.test: Unexpected characters in <b> tag:
+bad.po.test: <b> can't have attributes in Pango:
 msgid "bad17"
 msgstr "<b face=\"bold\">hi</b>"
 
-bad.po.test: Unexpected <span> attribute:
+bad.po.test: Unexpected <span> attributes `fdsa="bold"':
 msgid "bad18"
 msgstr "<span fdsa=\"bold\">hi</span>"
 
