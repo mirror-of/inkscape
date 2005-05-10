@@ -4288,7 +4288,7 @@ msgid ""
 "handles"
 msgstr ""
 "<b>Ovládací bod uzlu</b>: tažením lze tvarovat křivku; s <b>Ctrl</b> "
-"přichytává k úhlu; s <bAlt</b se uzamkne délka; s <b>Shift</b> se otáčí "
+"přichytává k úhlu; s <b>Alt</b> se uzamkne délka; s <b>Shift</b> se otáčí "
 "synchronizovaně i protější ovl. bod."
 
 #: src/nodepath.cpp:2996
@@ -4306,7 +4306,7 @@ msgid ""
 "with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"
 msgstr ""
 "<b>Ovládací bod uzlu</b>: tažením lze tvarovat křivku; s <b>Ctrl</b> "
-"přichytává k úhlu; s <bAlt</b se uzamkne délka; s <b>Shift</b> se otáčí "
+"přichytává k úhlu; s <b>Alt</b> se uzamkne délka; s <b>Shift</b> se otáčí "
 "synchronizovaně i protější ovl. bod."
 
 #: src/nodepath.cpp:3044
@@ -4316,7 +4316,7 @@ msgid ""
 "handle in sync"
 msgstr ""
 "<b>Ovládací bod uzlu</b>: tažením lze tvarovat křivku; s <b>Ctrl</b> "
-"přichytává k úhlu; s <bAlt</b se uzamkne délka; s <b>Shift</b> se otáčí "
+"přichytává k úhlu; s <b>Alt</b> se uzamkne délka; s <b>Shift</b> se otáčí "
 "synchronizovaně i protější ovl. bod."
 
 #: src/nodepath.cpp:3180

@@ -4671,7 +4671,7 @@ msgstr "<b>Skalowanie</b> proporcjonalnie wzoru wypełenienia"
 #: src/object-edit.cpp:961
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"</b>Obracanie</b> wzoru wypełnienia; z <b>Ctrl</b> przyciąganie do kąta"
+"<b>Obracanie</b> wzoru wypełnienia; z <b>Ctrl</b> przyciąganie do kąta"
 
 #. Item dialog
 #: src/object-ui.cpp:115

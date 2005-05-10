@@ -3736,7 +3736,7 @@ msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
 "preserve angle, with <b>Ctrl+Alt</b> to scale around center"
 msgstr ""
-"%s per a: %s%s; arrossegueu amb <b>ctrl<b> per a ajustar l'angle, amb <b>ctrl"
+"%s per a: %s%s; arrossegueu amb <b>ctrl</b> per a ajustar l'angle, amb <b>ctrl"
 "+alt</b> per presevar l'angle"
 
 #: src/gradient-drag.cpp:655
@@ -5592,7 +5592,7 @@ msgid ""
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
 "Com s'aprima el contorn segons la velocitat (>0 fa que el contorn sigui més "
-"prim, >0 el fa més gruixut i amb 0 la velocitat no l'afecta)"
+"prim, <0 el fa més gruixut i amb 0 la velocitat no l'afecta)"
 
 #: src/toolbox.cpp:1850
 msgid "Angle:"

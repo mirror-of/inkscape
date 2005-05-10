@@ -342,7 +342,7 @@ msgstr "Menor item"
 #: src/dialogs/clonetiler.cpp:135
 #, fuzzy
 msgid "<small>Nothing selected.</small>"
-msgstr "</b>Nada</b> foi apagado."
+msgstr "<small>Nada foi apagado.</small>"
 
 #: src/dialogs/clonetiler.cpp:141
 #, fuzzy
@@ -363,23 +363,23 @@ msgstr ""
 #: src/dialogs/clonetiler.cpp:818
 #, fuzzy
 msgid "Select <b>one object</b> whose tiled clones to unclump."
-msgstr "Selecione um </b>objeto</b> para clonar."
+msgstr "Selecione <b>um objeto</b> para clonar."
 
 #: src/dialogs/clonetiler.cpp:869
 #, fuzzy
 msgid "Select <b>one object</b> whose tiled clones to remove."
-msgstr "Selecione um </b>objeto</b> para clonar."
+msgstr "Selecione <b>um objeto</b> para clonar."
 
 #: src/dialogs/clonetiler.cpp:919 src/selection-chemistry.cpp:1774
 msgid "Select an <b>object</b> to clone."
-msgstr "Selecione um </b>objeto</b> para clonar."
+msgstr "Selecione um <b>objeto</b> para clonar."
 
 #: src/dialogs/clonetiler.cpp:925 src/selection-chemistry.cpp:1780
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr ""
-"Se você quiser clonar diversos objetos, </b>agrupe-os</b> e </b>clone o "
+"Se você quiser clonar diversos objetos, <b>agrupe-os</b> e <b>clone o "
 "grupo</b>."
 
 #: src/dialogs/clonetiler.cpp:1419
@@ -394,7 +394,7 @@ msgstr "Nenhum gradiente selecionado"
 #: src/dialogs/clonetiler.cpp:1440
 #, fuzzy
 msgid "<small>Randomize:</small>"
-msgstr "</b>Nada</b> foi apagado."
+msgstr "<small>Nada</small>"
 
 #: src/dialogs/clonetiler.cpp:1583
 #, fuzzy
@@ -2192,11 +2192,10 @@ msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:428
-#, fuzzy, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "%d objeto(s) encontrados (de %d), %s casados."
-msgstr[1] "%d objeto(s) encontrados (de %d), %s casados."
+msgstr[0] "<b>%d</b> objeto(s) encontrados (de <b>%d</b>), %s casados."
+msgstr[1] "<b>%d</b> objeto(s) encontrados (de <b>%d</b>), %s casados."
 
 #: src/dialogs/find.cpp:431
 msgid "exact"
@@ -3691,7 +3690,7 @@ msgstr ""
 #: src/gradient-context.cpp:448
 #, fuzzy
 msgid "Select <b>objects</b> on which to create gradient."
-msgstr "Selecione </b>algum objetos</b> para levantar."
+msgstr "Selecione <b>algum objetos</b> para levantar."
 
 #: src/gradient-drag.cpp:65
 #, fuzzy
@@ -4771,15 +4770,15 @@ msgstr "Selecione algum(ns) <b>objeto(s)</b> para converter para um caminho."
 
 #: src/path-chemistry.cpp:303
 msgid "<b>No objects</b> to convert to path in the selection."
-msgstr "</b>Nenhum objeto</b> para converter para um caminho na seleção."
+msgstr "<b>Nenhum objeto</b> para converter para um caminho na seleção."
 
 #: src/path-chemistry.cpp:404
 msgid "Select <b>path(s)</b> to reverse."
-msgstr "Selecione </b>um ou mais caminhos</b> para reverter."
+msgstr "Selecione <b>um ou mais caminhos</b> para reverter."
 
 #: src/path-chemistry.cpp:429
 msgid "<b>No paths</b> to reverse in the selection."
-msgstr "</b>Nenhum caminho</b> para reverter na seleção."
+msgstr "<b>Nenhum caminho</b> para reverter na seleção."
 
 #: src/pen-context.cpp:321 src/pencil-context.cpp:206
 #, fuzzy
@@ -4887,51 +4886,51 @@ msgstr "Altura da seleção"
 
 #: src/selection-chemistry.cpp:221
 msgid "<b>Nothing</b> was deleted."
-msgstr "</b>Nada</b> foi apagado."
+msgstr "<b>Nada</b> foi apagado."
 
 #: src/selection-chemistry.cpp:252
 msgid "Select <b>object(s)</b> to duplicate."
-msgstr "Selecione </b>alguns objetos</b> para duplicar."
+msgstr "Selecione <b>alguns objetos</b> para duplicar."
 
 #: src/selection-chemistry.cpp:462
 msgid "Select <b>two or more objects</b> to group."
-msgstr "Selecione </b>dois ou mais objetos</b> para agrupar."
+msgstr "Selecione <b>dois ou mais objetos</b> para agrupar."
 
 #: src/selection-chemistry.cpp:470
 msgid "Select <b>at least two objects</b> to group."
-msgstr "Selecione </b>pelo menos dois objetos</b> para agrupar."
+msgstr "Selecione <b>pelo menos dois objetos</b> para agrupar."
 
 #: src/selection-chemistry.cpp:555
 msgid "Select a <b>group</b> to ungroup."
-msgstr "Selecione um </b>grupo</b> para desagrupar."
+msgstr "Selecione um <b>grupo</b> para desagrupar."
 
 #: src/selection-chemistry.cpp:596
 msgid "<b>No groups</b> to ungroup in the selection."
-msgstr "</b>Nenhum grupo</b> para desagrupar na seleção."
+msgstr "<b>Nenhum grupo</b> para desagrupar na seleção."
 
 #: src/selection-chemistry.cpp:665
 msgid "Select <b>objects</b> to raise."
-msgstr "Selecione </b>algum objetos</b> para levantar."
+msgstr "Selecione <b>algum objetos</b> para levantar."
 
 #: src/selection-chemistry.cpp:671 src/selection-chemistry.cpp:723
 #: src/selection-chemistry.cpp:757 src/selection-chemistry.cpp:815
 msgid ""
 "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
-"Você não pode levantar/abaixar objetos de </b>diferentes grupos ou camadas</"
+"Você não pode levantar/abaixar objetos de <b>diferentes grupos ou camadas</"
 "b>."
 
 #: src/selection-chemistry.cpp:715
 msgid "Select <b>object(s)</b> to raise to top."
-msgstr "Selecione </b>alguns objetos</b> para levantar até o topo."
+msgstr "Selecione <b>alguns objetos</b> para levantar até o topo."
 
 #: src/selection-chemistry.cpp:751
 msgid "Select <b>object(s)</b> to lower."
-msgstr "Selecione </b>alguns objetos</b> para abaixar."
+msgstr "Selecione <b>alguns objetos</b> para abaixar."
 
 #: src/selection-chemistry.cpp:807
 msgid "Select <b>object(s)</b> to lower to bottom."
-msgstr "Selecione </b>alguns objetos</b> para abaixar até o fundo."
+msgstr "Selecione <b>alguns objetos</b> para abaixar até o fundo."
 
 #: src/selection-chemistry.cpp:849
 msgid "Nothing to undo."
@@ -4959,7 +4958,7 @@ msgstr "Nada na área de transferência."
 
 #: src/selection-chemistry.cpp:1136
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Selecione </b>os objetos</b> para onde será colado o estilo."
+msgstr "Selecione <b>os objetos</b> para onde será colado o estilo."
 
 #: src/selection-chemistry.cpp:1155
 #, fuzzy
@@ -4983,11 +4982,11 @@ msgstr "Nenhuma camada no desenho."
 
 #: src/selection-chemistry.cpp:1811
 msgid "Select a <b>clone</b> to unlink."
-msgstr "Selecionar um </b>clone</b> para romper a ligação."
+msgstr "Selecionar um <b>clone</b> para romper a ligação."
 
 #: src/selection-chemistry.cpp:1842
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr "</b>Nenhum clone</b> para  romper a ligação na seleção."
+msgstr "<b>Nenhum clone</b> para romper a ligação na seleção."
 
 #: src/selection-chemistry.cpp:1859
 msgid ""
@@ -5012,7 +5011,7 @@ msgid ""
 "defs&gt;)"
 msgstr ""
 "O objeto que você está tentando selecionar <b>não está visível</b> (está no "
-"<defs>)"
+"&lt;defs&gt;)"
 
 #: src/selection-chemistry.cpp:1913
 #, fuzzy
@@ -5023,13 +5022,13 @@ msgstr "Selecione algum(ns) <b>objeto(s)</b> para converter para um caminho."
 #, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr ""
-"Selecione um </b>objeto com padrão de preenchimento</b> para retirar a "
+"Selecione um <b>objeto com padrão de preenchimento</b> para retirar a "
 "repetição."
 
 #: src/selection-chemistry.cpp:2042
 #, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
-msgstr "</b>Nenhum padrão de preenchiento</b> em ladrilho na seleção."
+msgstr "<b>Nenhum padrão de preenchiento</b> em ladrilho na seleção."
 
 #: src/selection-chemistry.cpp:2062
 msgid "Select <b>object(s)</b> to make a bitmap copy."
@@ -5401,7 +5400,7 @@ msgstr "<b>Nenhum texto-no-caminho</b> na seleção."
 #: src/text-chemistry.cpp:211 src/text-chemistry.cpp:231
 #, fuzzy
 msgid "Select <b>text(s)</b> to remove kerns from."
-msgstr "Selecione </b>um ou mais caminhos</b> para reverter."
+msgstr "Selecione <b>um ou mais caminhos</b> para reverter."
 
 #: src/text-context.cpp:415
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
@@ -8387,7 +8386,7 @@ msgstr "Valor"
 #~ msgid ""
 #~ "You cannot group objects from <b>different groups</b> or <b>layers</b>."
 #~ msgstr ""
-#~ "Você não pode agrupar objetos de </b>grupos ou camadas diferentes</b>."
+#~ "Você não pode agrupar objetos de <b>grupos ou camadas diferentes</b>."
 
 #, fuzzy
 #~ msgid "Messages Dialog"
@@ -8490,7 +8489,7 @@ msgstr "Valor"
 #~ msgstr "Preferir ícones de figura (XPM) aos do formato SVG"
 
 #~ msgid "Select <b>object(s)</b> to tile."
-#~ msgstr "Selecione um </b>objeto</b> para repetir como ladrilho."
+#~ msgstr "Selecione um <b>objeto</b> para repetir como ladrilho."
 
 #~ msgid "Trace"
 #~ msgstr "Traçar"

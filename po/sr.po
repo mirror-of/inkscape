@@ -5661,7 +5661,7 @@ msgid ""
 "<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. "
 "<b>Click</b> to select."
 msgstr ""
-"Цртање звезде <b>повлачењем</b>. Уређивање <b>повлачењем квачица<b>. "
+"Цртање звезде <b>повлачењем</b>. Уређивање <b>повлачењем квачица</b>. "
 "<b>Клик</b> за избор."
 
 #: src/tools-switch.cpp:163

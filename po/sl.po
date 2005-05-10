@@ -5657,7 +5657,7 @@ msgid ""
 "<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and "
 "resize. <b>Click</b> to select."
 msgstr ""
-"<b>Povlecite</b> in ustvarite pravokotnik. Povlecite vozlišča</b>, da "
+"<b>Povlecite</b> in ustvarite pravokotnik. <b>Povlecite vozlišča</b>, da "
 "zaobljte kote ali spremenite velikost. <b>Pritisk miške</b> za izbiro."
 
 #: src/tools-switch.cpp:151
