@@ -205,7 +205,6 @@ libinkpost_a_DEPENDENCIES = Makefile_insert
 # gradient-chemistry.o is called by some things in display/.
 libinkpost_a_SOURCES =	\
 	color.cpp color.h	\
-	common-style.cpp common-style.h	\
 	decimal-round.h	\
 	dir-util.cpp dir-util.h	\
 	fill-or-stroke.h	\

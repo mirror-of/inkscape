@@ -48,6 +48,7 @@ guint32 sp_desktop_get_color (SPDesktop *desktop, bool is_fill);
 double sp_desktop_get_font_size_tool (SPDesktop *desktop);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char const *tool, bool with_text);
 
+int objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill);
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
 
 #endif

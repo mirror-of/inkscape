@@ -48,7 +48,6 @@
 #include "enums.h"
 #include "style.h"
 #include "gradient-chemistry.h"
-#include "common-style.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
@@ -240,6 +239,8 @@ sp_stroke_style_paint_update (SPWidget *spw)
         }
     }
 
+    g_free (query);
+
     gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
 }
 
@@ -347,23 +348,29 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                                                        : SP_GRADIENT_TYPE_RADIAL );
                 SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
                 if (!vector) {
-                    /* No vector in paint selector should mean that we just
-                     * changed mode
-                     */
+                    /* No vector in paint selector should mean that we just changed mode */
 
-                    guint32 common_rgb = objects_get_common_rgb(items, STROKE);
-                    if (common_rgb != DIFFERENT_COLORS) {
-                        if (common_rgb == NO_COLOR) {
+                    SPStyle *query = sp_style_new ();
+                    int result = objects_query_fillstroke ((GSList *) items, query, false); 
+                    guint32 common_rgb = 0;
+                    if (result == QUERY_STYLE_MULTIPLE_SAME) {
+                        if (query->fill.type != SP_PAINT_TYPE_COLOR) {
                             common_rgb = sp_desktop_get_color(desktop, false);
+                        } else {
+                            common_rgb = sp_color_get_rgba32_ualpha(&query->stroke.value.color, 0xff);
                         }
                         vector = sp_document_default_gradient_vector(document, common_rgb);
                     }
+                    g_free (query);
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        if (common_rgb == DIFFERENT_COLORS) {
-                            vector = sp_gradient_vector_for_object(document, desktop, SP_OBJECT(i->data), false);
+                        if (!vector) {
+                            sp_item_set_gradient(SP_ITEM(i->data), 
+                                                 sp_gradient_vector_for_object(document, desktop, SP_OBJECT(i->data), false),
+                                                 gradient_type, false);
+                        } else {
+                            sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                         }
-                        sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                     }
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
