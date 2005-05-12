@@ -49,27 +49,36 @@
 #include <glib.h>
 
 /*
- *    0    positions are equivalent
- *    1    first object's position is greater than the second
- *   -1    first object's position is less than the second
+ *    Sort items by their x co-ordinates, taking account of y (keeps rows intact)
+ *
+ *    <0 *elem1 goes before *elem2
+ *    0  *elem1 == *elem2
+ *    >0  *elem1 goes after *elem2
  */
 int
 sp_compare_x_position(SPItem *first, SPItem *second)
 {
     NRRect a;
     sp_item_invoke_bbox(first, &a, sp_item_i2doc_affine(first), TRUE);
+    double a_height = fabs (a.y1 - a.y0);
+
     NRRect b;
     sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
+    double b_height = fabs (b.y1 - b.y0);
+    bool a_in_b_vert = FALSE;
+    if ((a.y0 < b.y0+0.1) && (a.y0 > b.y0 - b_height)) a_in_b_vert = TRUE;
+    else if ((b.y0 < a.y0+0.1) && (b.y0 > a.y0 - a_height)) a_in_b_vert = TRUE;
+    else if (b.y0 == a.y0) a_in_b_vert = TRUE;
+    else a_in_b_vert = FALSE;
 
-    if (a.x0 > b.x0) return 1;
-    if (a.x0 > b.x0) return -1;
+    if (!a_in_b_vert) return -1;
+    if (a_in_b_vert && (a.x0 > b.x0)) return 1;
+    if (a_in_b_vert && (a.x0 < b.x0)) return -1;
     return 0;
 }
 
 /*
- *    0    positions are equivalent
- *    1    first object's position is greater than the second
- *   -1    first object's position is less than the second
+ *    Sort items by their y co-ordinates.
  */
 int
 sp_compare_y_position(SPItem *first, SPItem *second)
@@ -79,8 +88,9 @@ sp_compare_y_position(SPItem *first, SPItem *second)
     NRRect b;
     sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
 
+
     if (a.y0 > b.y0) return 1;
-    if (a.y0 > b.y0) return -1;
+    if (a.y0 < b.y0) return -1;
     return 0;
 }
 
@@ -331,24 +341,14 @@ void TileDialogImpl::Grid_Arrange ()
     GSList *rev = g_slist_copy((GSList *) items2);
     GSList *sorted = NULL;
     rev = g_slist_sort(rev, (GCompareFunc) sp_compare_y_position);
+    sorted = g_slist_sort(rev, (GCompareFunc) sp_compare_x_position);
 
-    for (row_cnt=0; ((rev != NULL) && (row_cnt<NoOfRows)); row_cnt++) {
-
-             GSList *sort_current_row = NULL;
-             for (col_cnt = 0; ((rev != NULL) && (col_cnt<NoOfCols)); col_cnt++) {
-                 sort_current_row = g_slist_append (sort_current_row, rev->data);
-                 rev = rev->next;
-             }
-             sort_current_row = g_slist_sort(sort_current_row, (GCompareFunc) sp_compare_x_position);
-             sorted = g_slist_concat(sorted, sort_current_row);
-         }
 
     // Calculate individual Row and Column sizes if necessary
 
     if ((!ColumnWidthButton.get_active()) || (!RowHeightButton.get_active())){
         cnt=0;
-        const GSList *items3 = sorted;
-        GSList *sizes = g_slist_copy((GSList *) items3);
+        const GSList *sizes = sorted;
         for (; sizes != NULL; sizes = sizes->next) {
             NRRect b;
             SPItem *item=SP_ITEM(sizes->data);
@@ -394,15 +394,20 @@ void TileDialogImpl::Grid_Arrange ()
     if (!SpaceManualRadioButton.get_active()){
         NRRect b;
         selection->bounds(&b);
-        g_print("\n row = %f     col = %f", total_row_height,total_col_width);
-        paddingx = (fabs (b.x1 - b.x0) - total_col_width) / (NoOfCols - 1);
-        paddingy = (fabs (b.y1 - b.y0) - total_row_height) / (NoOfRows - 1);
+        #ifdef DEBUG_GRID_ARRANGE
+        g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_height,total_col_width,fabs (b.x1 - b.x0),fabs (b.y1 - b.y0));
+        #endif
+        paddingx = (fabs (b.x1 - b.x0) - total_col_width) / (NoOfCols -1);
+        paddingy = (fabs (b.y1 - b.y0) - total_row_height) / (NoOfRows -1);
     }
 
     // Calculate row and column x and y coords required to allow for columns and rows which are non uniformly sized.
 
     for (a=0;a<NoOfCols; a++){
-        if (a<1) col_xs.push_back(0);
+        if (a<1) {
+            //if (HorizAlign==0) col_xs.push_back(0);
+            col_xs.push_back(0);
+        }
         else col_xs.push_back(col_widths[a-1]+paddingx+col_xs[a-1]);
     }
 
@@ -761,7 +766,6 @@ TileDialogImpl::TileDialogImpl()
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
-    //  Dont have a clue why the below crashes IS every time you change the selection
         g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
@@ -779,17 +783,23 @@ TileDialogImpl::TileDialogImpl()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+    int selcount = 1;
+    if (!selection->isEmpty()) {
+        GSList const *items = selection->itemList();
+        selcount =g_slist_length((GSList *)items);
+    }
 
-    //SelectionContentsLabel(_("objects selected:"));
-    GSList const *items = selection->itemList();
-    int selcount = g_slist_length((GSList *)items);
+
 
 
     /*#### Number of Rows ####*/
 
-    double PerRow = prefs_get_double_attribute ("dialogs.gridtiler", "NoOfCols", 3);
-    double PerCol = selcount / PerRow;
+    double PerRow = selcount;
+    double PerCol = 1;
 
+    #ifdef DEBUG_GRID_ARRANGE
+        g_print("/n PerRox = %f PerCol = %f selcount = %d",PerRow,PerCol,selcount);
+    #endif
 
     NoOfRowsLabel.set_label(_("Rows:"));
     NoOfRowsBox.pack_start(NoOfRowsLabel, false, false, MARGIN);
