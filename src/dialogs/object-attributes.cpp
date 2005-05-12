@@ -46,42 +46,6 @@ static const SPAttrDesc anchor_desc[] = {
     { NULL, NULL}
 };
 
-static const SPAttrDesc star_desc[] = {
-    { N_("Sides:"), "sodipodi:sides"},
-    { N_("Center X:"), "sodipodi:cx"},
-    { N_("Center Y:"), "sodipodi:cy"},
-    { N_("R1:"), "sodipodi:r1"},
-    { N_("R2:"), "sodipodi:r2"},
-    { N_("ARG1:"), "sodipodi:arg1"},
-    { N_("ARG2:"), "sodipodi:arg2"},
-    { N_("Flatsides:"), "inkscape:flatsided"},
-    { NULL, NULL}
-};
-
-static const SPAttrDesc ellipse_desc[] = {
-    { N_("Center X:"), "sodipodi:cx"},
-    { N_("Center Y:"), "sodipodi:cy"},
-    { N_("Radius X:"), "sodipodi:rx"},
-    { N_("Radius Y:"), "sodipodi:ry"},
-    { N_("Start Angle:"), "sodipodi:start"},
-    { N_("End Angle:"), "sodipodi:end"},
-    // TRANSLATORS: "Open" is an adjective here (is the ellipse open or not)
-    { N_("Open:"), "sodipodi:open"},
-    { NULL, NULL}
-};
-
-static const SPAttrDesc spiral_desc[] = {
-    { N_("Center X:"), "sodipodi:cx"},
-    { N_("Center Y:"), "sodipodi:cy"},
-    { N_("Expansion:"), "sodipodi:expansion"},
-    { N_("Revolutions:"), "sodipodi:revolution"},
-    { N_("Radius:"), "sodipodi:radius"},
-    { N_("Argument:"), "sodipodi:argument"},
-    // TRANSLATORS: this is "T-zero", not "to"
-    { N_("T0:"), "sodipodi:t0"},
-    { NULL, NULL}
-};
-
 static const SPAttrDesc image_desc[] = {
     { N_("URL:"), "xlink:href"},
     { N_("X:"), "x"},
@@ -90,17 +54,6 @@ static const SPAttrDesc image_desc[] = {
     { N_("Height:"), "height"},
     { NULL, NULL}
 };
-
-static const SPAttrDesc rect_desc[] = {
-    { N_("X:"), "x"},
-    { N_("Y:"), "y"},
-    { N_("Width:"), "width"},
-    { N_("Height:"), "height"},
-    { N_("RX:"), "rx"},
-    { N_("RY:"), "ry"},
-    { NULL, NULL}
-};
-
 
 
 static void
@@ -167,19 +120,11 @@ sp_object_attributes_dialog (SPObject *object, const gchar *tag)
     g_return_if_fail (SP_IS_OBJECT (object));
     g_return_if_fail (tag != NULL);
 
-    if (!strcmp (tag, "SPAnchor")) {
+    if (!strcmp (tag, "Link")) {
         sp_object_attr_show_dialog (object, anchor_desc, tag);
-    } else if (!strcmp (tag, "SPStar")) {
-        sp_object_attr_show_dialog (object, star_desc, tag);
-    } else if (!strcmp (tag, "SPEllipse")) {
-        sp_object_attr_show_dialog (object, ellipse_desc, tag);
-    } else if (!strcmp (tag, "SPSpiral")) {
-        sp_object_attr_show_dialog (object, spiral_desc, tag);
-    } else if (!strcmp (tag, "SPImage")) {
+    } else if (!strcmp (tag, "Image")) {
         sp_object_attr_show_dialog (object, image_desc, tag);
-    } else if (!strcmp (tag, "SPRect")) {
-        sp_object_attr_show_dialog (object, rect_desc, tag);
-    }
+    } 
 
 } // end of sp_object_attributes_dialog()
 
