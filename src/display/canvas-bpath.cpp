@@ -12,7 +12,9 @@
  *
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include "curve.h"
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"

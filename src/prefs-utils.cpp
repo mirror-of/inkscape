@@ -11,7 +11,9 @@
 
 #include <string.h>
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "inkscape.h"
 #include "xml/repr.h"

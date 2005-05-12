@@ -11,8 +11,11 @@
 
     The implementation of plugable objects into Inkscape.
 */
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <stdio.h>
-#include <config.h>
+
 #include <glibmm/module.h>
 #include <glibmm/fileutils.h>
 #include <path-prefix.h>

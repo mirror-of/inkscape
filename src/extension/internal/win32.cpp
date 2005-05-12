@@ -9,7 +9,9 @@
  * This code is in public domain
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>

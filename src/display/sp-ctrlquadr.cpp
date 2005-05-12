@@ -16,7 +16,9 @@
 #include "sp-canvas-util.h"
 #include "sp-ctrlquadr.h"
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-point-ops.h>

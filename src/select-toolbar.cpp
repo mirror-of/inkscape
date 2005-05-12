@@ -10,7 +10,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <string.h>
 #include <glib.h>

@@ -11,7 +11,9 @@
  * which is Copyright (C) Masatake Yamato 2002
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
 #include <string.h>

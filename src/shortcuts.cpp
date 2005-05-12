@@ -11,7 +11,9 @@
  * This code is in public domain
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <glib.h>
 #include <gdk/gdkkeysyms.h>

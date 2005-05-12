@@ -27,7 +27,9 @@
 
 #include <gtk/gtkstock.h>
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "helper/action.h"
 #include <glibmm/i18n.h>

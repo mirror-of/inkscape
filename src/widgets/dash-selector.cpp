@@ -15,7 +15,9 @@
 #define DASH_PREVIEW_WIDTH 2
 #define DASH_PREVIEW_LENGTH 80
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <string.h>
 #include <glib.h>
 #include <string.h>

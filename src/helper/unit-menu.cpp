@@ -14,7 +14,9 @@
 
 #define noUNIT_SELECTOR_VERBOSE
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <glib.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkadjustment.h>

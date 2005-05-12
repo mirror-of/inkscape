@@ -14,7 +14,9 @@
 
 #undef SPCS_PREVIEW
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>

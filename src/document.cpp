@@ -18,7 +18,9 @@
 #define noSP_DOCUMENT_DEBUG_IDLE
 #define noSP_DOCUMENT_DEBUG_UNDO
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <glib.h>
 #include <string.h>
 #include <gtk/gtkmain.h>

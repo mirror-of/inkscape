@@ -21,7 +21,9 @@
  * the API, and two or more .cpp files for the implementations.
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <string.h>
 #include <time.h>
