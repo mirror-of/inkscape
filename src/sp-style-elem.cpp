@@ -4,6 +4,7 @@
 #include <libcroco/cr-statement.h>
 #include <libcroco/cr-string.h>
 #include "xml/node.h"
+#include "xml/node-event-vector.h"
 #include "xml/repr.h"
 #include "document.h"
 #include "sp-style-elem.h"
@@ -98,6 +99,28 @@ sp_style_elem_set(SPObject *object, unsigned const key, gchar const *const value
             break;
         }
     }
+}
+
+static void
+child_add_rm_cb(Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Node *,
+                void *const data)
+{
+    sp_style_elem_read_content(static_cast<SPObject *>(data));
+}
+
+static void
+content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
+                   void *const data)
+{
+    sp_style_elem_read_content(static_cast<SPObject *>(data));
+}
+
+static void
+child_order_changed_cb(Inkscape::XML::Node *, Inkscape::XML::Node *,
+                       Inkscape::XML::Node *, Inkscape::XML::Node *,
+                       void *const data)
+{
+    sp_style_elem_read_content(static_cast<SPObject *>(data));
 }
 
 static Inkscape::XML::Node *
@@ -268,18 +291,41 @@ sp_style_elem_read_content(SPObject *const object)
     //object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ * Does addListener(fns, data) on \a repr and all of its descendents.
+ */
+static void
+rec_add_listener(Inkscape::XML::Node &repr,
+                 Inkscape::XML::NodeEventVector const *const fns, void *const data)
+{
+    repr.addListener(fns, data);
+    for (Inkscape::XML::Node *child = repr.firstChild(); child != NULL; child = child->next()) {
+        rec_add_listener(*child, fns, data);
+    }
+}
+
 static void
 sp_style_elem_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    if (((SPObjectClass *) parent_class)->build) {
-        ((SPObjectClass *) parent_class)->build(object, document, repr);
-    }
-
     sp_style_elem_read_content(object);
 
     sp_object_read_attr(object, "type");
     sp_object_read_attr(object, "media");
+
+    static Inkscape::XML::NodeEventVector const nodeEventVector = {
+        child_add_rm_cb,   // child_added
+        child_add_rm_cb,   // child_removed
+        NULL,   // attr_changed
+        content_changed_cb,   // content_changed
+        child_order_changed_cb,   // order_changed
+    };
+    rec_add_listener(*repr, &nodeEventVector, object);
+
+    if (((SPObjectClass *) parent_class)->build) {
+        ((SPObjectClass *) parent_class)->build(object, document, repr);
+    }
 }
+
 
 /*
   Local Variables:
