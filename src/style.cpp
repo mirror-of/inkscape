@@ -1082,6 +1082,9 @@ sp_repr_sel_eng()
      *
      * We probably want handlers for link and arguably visited (though inkscape can't visit links
      * at the time of writing).  hover etc. more useful in inkview than the editor inkscape.
+     *
+     * http://www.w3.org/TR/SVG11/styling.html#StylingWithCSS says that the following should be
+     * honoured, at least by inkview: :hover, :active, :focus, :visited, :link.
      */
 
     g_assert(ret);
