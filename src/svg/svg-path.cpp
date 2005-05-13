@@ -60,6 +60,7 @@ struct RSVGParsePathCtx {
     GnomeCanvasBpathDef *bpath;
     double cpx, cpy;  /* current point */
     double rpx, rpy;  /* reflection point (for 's' and 't' commands) */
+    double spx, spy;  /* beginning of current subpath point */
     char cmd;         /* current command (lowercase) */
     int param;        /* parameter number */
     gboolean rel;     /* true if relative coords */
@@ -247,8 +248,8 @@ static void rsvg_parse_path_do_cmd(RSVGParsePathCtx *ctx, gboolean final)
 #endif
             rsvg_bpath_def_moveto (ctx->bpath,
                                    ctx->params[0], ctx->params[1]);
-            ctx->cpx = ctx->rpx = ctx->params[0];
-            ctx->cpy = ctx->rpy = ctx->params[1];
+            ctx->cpx = ctx->rpx = ctx->spx = ctx->params[0];
+            ctx->cpy = ctx->rpy = ctx->spy = ctx->params[1];
             ctx->param = 0;
         }
         break;
@@ -587,6 +588,11 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
             if (ctx->param)
                 rsvg_parse_path_do_cmd (ctx, TRUE);
             rsvg_bpath_def_closepath (ctx->bpath);
+
+            ctx->cmd = 'm';
+            ctx->params[0] = ctx->cpx = ctx->rpx = ctx->spx;
+            ctx->params[1] = ctx->cpy = ctx->rpy = ctx->spy;
+            ctx->param = 2;
         }
         else if (c >= 'A' && c <= 'Z' && c != 'E')
         {
@@ -620,7 +626,7 @@ NArtBpath *sp_svg_read_path(gchar const *str)
 
     rsvg_parse_path_data (&ctx, str);
 
-    if (ctx.param) {
+    if (ctx.param && ctx.cmd != 'm') {
         rsvg_parse_path_do_cmd (&ctx, TRUE);
     }
 
