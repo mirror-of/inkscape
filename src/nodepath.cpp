@@ -64,17 +64,17 @@ GType sp_flowtext_get_type (void);
 
 /* fixme: Implement these via preferences */
 
-#define NODE_FILL          0xafafaf00
+#define NODE_FILL          0xbfbfbf00
 #define NODE_STROKE        0x000000ff
-#define NODE_FILL_HI       0xff669900
+#define NODE_FILL_HI       0xff000000
 #define NODE_STROKE_HI     0x000000ff
-#define NODE_FILL_SEL      0x5020ffff
+#define NODE_FILL_SEL      0x0000ffff
 #define NODE_STROKE_SEL    0x000000ff
-#define NODE_FILL_SEL_HI   0xff669900
+#define NODE_FILL_SEL_HI   0xff000000
 #define NODE_STROKE_SEL_HI 0x000000ff
-#define KNOT_FILL          0x00000000
+#define KNOT_FILL          0xffffffff
 #define KNOT_STROKE        0x000000ff
-#define KNOT_FILL_HI       0xff669900
+#define KNOT_FILL_HI       0xff000000
 #define KNOT_STROKE_HI     0x000000ff
 
 static GMemChunk *nodechunk = NULL;
@@ -1688,6 +1688,33 @@ sp_nodepath_select_all(Inkscape::NodePath::Path *nodepath)
             sp_nodepath_node_select(node, TRUE, TRUE);
         }
     }
+}
+
+/** If nothing selected, does the same as sp_nodepath_select_all; otherwise selects all nodes in
+ * all subpaths that have selected nodes (i.e. similar to "select all in layer", with the
+ * "selected" subpaths being treated as "layers" in the path) */
+void
+sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath)
+{
+    if (!nodepath) return;
+
+    if (g_list_length (nodepath->selected) == 0) {
+        sp_nodepath_select_all (nodepath);
+        return;
+    }
+
+    GList *copy = g_list_copy (nodepath->selected); // copy initial selection so that selecting in the loop does not affect us
+
+    for (GList *l = copy; l != NULL; l = l->next) {
+        Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node *) l->data;
+        Inkscape::NodePath::SubPath *subpath = n->subpath;
+        for (GList *nl = subpath->nodes; nl != NULL; nl = nl->next) {
+            Inkscape::NodePath::Node *node = (Inkscape::NodePath::Node *) nl->data;
+            sp_nodepath_node_select(node, TRUE, TRUE);
+        }
+    }
+
+    g_list_free (copy);
 }
 
 /**

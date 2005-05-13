@@ -235,6 +235,8 @@ void sp_nodepath_deselect (Inkscape::NodePath::Path *nodepath);
  */
 void sp_nodepath_select_all (Inkscape::NodePath::Path *nodepath);
 
+void sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath);
+
 /**
  *
  */

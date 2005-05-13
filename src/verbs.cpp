@@ -777,7 +777,7 @@ EditVerb::perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_EDIT_SELECT_ALL:
             if (tools_isactive (dt, TOOLS_NODES)) {
-                sp_nodepath_select_all (SP_NODE_CONTEXT(ec)->nodepath);
+                sp_nodepath_select_all_from_subpath (SP_NODE_CONTEXT(ec)->nodepath);
             } else {
                 sp_edit_select_all();
             }
@@ -790,7 +790,11 @@ EditVerb::perform (SPAction *action, void * data, void * pdata)
             }
             break;
         case SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS:
-            sp_edit_select_all_in_all_layers();
+            if (tools_isactive (dt, TOOLS_NODES)) {
+                sp_nodepath_select_all (SP_NODE_CONTEXT(ec)->nodepath);
+            } else {
+                sp_edit_select_all_in_all_layers();
+            }
             break;
         case SP_VERB_EDIT_INVERT_IN_ALL_LAYERS:
             sp_edit_invert_in_all_layers();
