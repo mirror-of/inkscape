@@ -251,6 +251,7 @@ static void rsvg_parse_path_do_cmd(RSVGParsePathCtx *ctx, gboolean final)
             ctx->cpx = ctx->rpx = ctx->spx = ctx->params[0];
             ctx->cpy = ctx->rpy = ctx->spy = ctx->params[1];
             ctx->param = 0;
+            ctx->cmd = 'l';
         }
         break;
     case 'l':
