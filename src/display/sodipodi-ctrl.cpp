@@ -213,7 +213,7 @@ sp_ctrl_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags
 	if (!ctrl->defined) return;
 
 	x = (gint) (affine[4] + 0.5) - ctrl->span;
-	y = (gint) (affine[5] + 0.5) - ctrl->span;
+	y = (gint) (affine[5] - 0.5) - ctrl->span;
 
 	switch (ctrl->anchor) {
 	case GTK_ANCHOR_N:
