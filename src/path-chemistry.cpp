@@ -341,56 +341,6 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 }
 
 void
-sp_path_cleanup (SPPath *path)
-{
-	if (strcmp (SP_OBJECT_REPR (path)->name(), "svg:path"))
-	  return;
-
-	SPStyle *style = SP_OBJECT_STYLE (path);
-	if (style->fill.type == SP_PAINT_TYPE_NONE)
-	  return;
-
-	SPCurve *curve = sp_shape_get_curve (SP_SHAPE (path));
-	if (!curve)
-	  return;
-	
-	GSList *c = sp_curve_split (curve);
-	sp_curve_unref (curve);
-
-	gboolean dropped = FALSE;
-	GSList *curves = NULL;
-	while (c) {
-		curve = (SPCurve *) c->data;
-		if (curve->closed) {
-			curves = g_slist_prepend (curves, curve);
-		} else {
-			dropped = TRUE;
-			sp_curve_unref (curve);
-		}
-		c = g_slist_remove (c, c->data);
-	}
-	curves = g_slist_reverse (curves);
-
-	curve = sp_curve_concat (curves);
-
-	while (curves) {
-		sp_curve_unref ((SPCurve *) curves->data);
-		curves = g_slist_remove (curves, curves->data);
-	}
-
-	if (sp_curve_is_empty (curve)) {
-		SP_OBJECT (path)->deleteObject();
-	} else if (dropped) {
-		gchar *svgpath;
-		svgpath = sp_svg_write_path (curve->bpath);
-		sp_repr_set_attr (SP_OBJECT_REPR (path), "d", svgpath);
-		g_free (svgpath);
-	}
-
-	sp_curve_unref (curve);
-}
-
-void
 sp_selected_path_reverse ()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;

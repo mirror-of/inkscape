@@ -22,8 +22,6 @@ namespace Inkscape { class Selection; }
 
 class SPCSSAttr;
 
-void sp_selection_cleanup();
-
 void sp_selection_delete();
 void sp_selection_duplicate();
 void sp_edit_clear_all();

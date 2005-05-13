@@ -400,55 +400,6 @@ void sp_edit_invert_in_all_layers ()
     sp_edit_select_all_full (true, true);
 }
 
-
-static void
-sp_group_cleanup(SPGroup *group)
-{
-    GSList *l = NULL;
-    for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-        sp_object_ref(child, NULL);
-        l = g_slist_prepend(l, child);
-    }
-
-    while (l) {
-        if (SP_IS_GROUP(l->data)) {
-            sp_group_cleanup(SP_GROUP(l->data));
-        } else if (SP_IS_PATH(l->data)) {
-            sp_path_cleanup(SP_PATH(l->data));
-        }
-        sp_object_unref(SP_OBJECT(l->data), NULL);
-        l = g_slist_remove(l, l->data);
-    }
-
-
-    if (!strcmp(SP_OBJECT_REPR(group)->name(), "svg:g")) {
-        gint numitems;
-        numitems = 0;
-        for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            if (SP_IS_ITEM(child)) numitems += 1;
-        }
-        if (numitems <= 1) {
-            sp_item_group_ungroup(group, NULL);
-        }
-    }
-}
-
-void sp_selection_cleanup()
-{
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    if (!doc)
-        return;
-
-    if (SP_ACTIVE_DESKTOP) {
-        SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->clear();
-    }
-
-    SPGroup *root = SP_GROUP(SP_DOCUMENT_ROOT(doc));
-    sp_group_cleanup(root);
-
-    sp_document_done(doc);
-}
-
 void sp_selection_group()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;

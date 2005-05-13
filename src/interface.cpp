@@ -948,7 +948,6 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_SELECTION_SIMPLIFY),
         Inkscape::Verb::get(SP_VERB_SELECTION_REVERSE),
-        Inkscape::Verb::get(SP_VERB_SELECTION_CLEANUP),
         Inkscape::Verb::get(SP_VERB_LAST)
     };
     sp_ui_menu_append (menu, selection, view);
@@ -1003,7 +1002,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
     sp_ui_menu_append (menu, view_verbs1, view);
 
-    GtkWidget *item_showhide = sp_ui_menu_append_item (menu, NULL, _("_Show/Hide"), _("Show or hide parts of the document window (differently for normal and fullscreen modes)"), view, NULL, NULL);
+    GtkWidget *item_showhide = sp_ui_menu_append_item (menu, NULL, _("S_how/Hide"), _("Show or hide parts of the document window (differently for normal and fullscreen modes)"), view, NULL, NULL);
     GtkMenu *m = (GtkMenu *) gtk_menu_new ();
 
 //    sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",

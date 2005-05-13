@@ -900,9 +900,6 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_SELECTION_SIMPLIFY:
             sp_selected_path_simplify ();
             break;
-        case SP_VERB_SELECTION_CLEANUP:
-            sp_selection_cleanup ();
-            break;
         case SP_VERB_SELECTION_REVERSE:
             sp_selected_path_reverse ();
             break;
@@ -1696,9 +1693,9 @@ Verb * Verb::_base_verbs[] = {
         N_("Delete all objects from document"), NULL),
     new EditVerb(SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select Al_l"),
         N_("Select all objects or all nodes"), "selection_select_all"),
-    new EditVerb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, "EditSelectAllInAllLayers", N_("Select All in All Layers"),
+    new EditVerb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS, "EditSelectAllInAllLayers", N_("Select All in All La_yers"),
         N_("Select all objects in all visible and unlocked layers"), NULL),
-    new EditVerb(SP_VERB_EDIT_INVERT, "EditInvert", N_("Invert Selection"),
+    new EditVerb(SP_VERB_EDIT_INVERT, "EditInvert", N_("In_vert Selection"),
         N_("Invert selection (unselect what is selected and select everything else)"), NULL),
     new EditVerb(SP_VERB_EDIT_INVERT_IN_ALL_LAYERS, "EditInvertInAllLayers", N_("Invert in All Layers"),
         N_("Invert selection in all visible and unlocked layers"), NULL),
@@ -1743,7 +1740,7 @@ Verb * Verb::_base_verbs[] = {
     // TRANSLATORS: "outset": expand a shape by offsetting the object's path,
     // i.e. by displacing it perpendicular to the path in each point.
     // See also the Advanced Tutorial for explanation.
-    new SelectionVerb(SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Ou_tset"),
+    new SelectionVerb(SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Outs_et"),
         N_("Outset selected path(s)"), "outset_path"),
     new SelectionVerb(SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen",
         N_("O_utset Path by 1px"),
@@ -1772,8 +1769,6 @@ Verb * Verb::_base_verbs[] = {
         N_("Convert selected stroke(s) to path(s)"), "stroke_tocurve"),
     new SelectionVerb(SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Si_mplify"),
         N_("Simplify selected path(s) by removing extra nodes"), "simplify"),
-    new SelectionVerb(SP_VERB_SELECTION_CLEANUP, "SelectionCleanup", N_("Cl_eanup"),
-        N_("Clean up selected path(s)"), "selection_cleanup"),
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
         N_("Reverses the direction of selected path(s); useful for flipping markers"), "selection_reverse"),
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
@@ -1787,20 +1782,20 @@ Verb * Verb::_base_verbs[] = {
     // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
         N_("Break selected path(s) into subpaths"), "selection_break"),
-    new SelectionVerb(SP_VERB_SELECTION_GRIDTILE, "SelectionGridTile", N_("_Grid Arrange..."),
+    new SelectionVerb(SP_VERB_SELECTION_GRIDTILE, "SelectionGridTile", N_("_Gri_d Arrange..."),
         N_("Arrange selection in grid pattern"), "grid_arrange"),
     /* Layer */
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("_New Layer..."),
         N_("Create a new layer"), "new_layer"),
     new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Ren_ame Layer..."),
         N_("Rename the current layer"), "rename_layer"),
-    new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Layer Above"),
+    new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Layer Abov_e"),
         N_("Switch to the layer above the current"), "switch_to_layer_above"),
-    new LayerVerb(SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Layer Below"),
+    new LayerVerb(SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Layer Belo_w"),
         N_("Switch to the layer below the current"), "switch_to_layer_below"),
-    new LayerVerb(SP_VERB_LAYER_MOVE_TO_NEXT, "LayerMoveToNext", N_("Move Selection to Layer Above"),
+    new LayerVerb(SP_VERB_LAYER_MOVE_TO_NEXT, "LayerMoveToNext", N_("Move Selection to Layer Abo_ve"),
         N_("Move selection to the layer above the current"), "move_selection_above"),
-    new LayerVerb(SP_VERB_LAYER_MOVE_TO_PREV, "LayerMoveToPrev", N_("Move Selection to Layer Below"),
+    new LayerVerb(SP_VERB_LAYER_MOVE_TO_PREV, "LayerMoveToPrev", N_("Move Selection to Layer Bel_ow"),
         N_("Move selection to the layer below the current"), "move_selection_below"),
     new LayerVerb(SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Layer to _Top"),
         N_("Raise the current layer to the top"), "layer_to_top"),
@@ -1908,11 +1903,11 @@ Verb * Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Stretch this document window to full screen"),
         "fullscreen"),
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
-    new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("D_uplicate Window"), N_("Open a new window with the same document"),
+    new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("Duplic_ate Window"), N_("Open a new window with the same document"),
         "view_new"),
     new ZoomVerb(SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"),
          N_("New View Preview"), NULL/*"view_new_preview"*/),
-    new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("_Icon Preview"),
+    new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview"),
          N_("Open a window to preview items at different icon resolutions"), NULL/*"view_icon_preview"*/),
     new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"),
        N_("Zoom to fit page in window"), "zoom_page"),
@@ -1930,7 +1925,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Preferences saved with the document"), GTK_STOCK_PROPERTIES ),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
         N_("Fill and Stroke dialog"), "fill_and_stroke"),
-    new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("Swatches..."),
+    new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),
         N_("View color swatches"), GTK_STOCK_SELECT_COLOR),
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
         N_("Transform dialog"), "object_trans"),
@@ -1944,9 +1939,9 @@ Verb * Verb::_base_verbs[] = {
         N_("Find objects in document"), GTK_STOCK_FIND ),
     new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."),
         N_("View debug messages"), NULL),
-    new DialogVerb(SP_VERB_DIALOG_SCRIPT, "DialogScript", N_("_Scripts..."),
+    new DialogVerb(SP_VERB_DIALOG_SCRIPT, "DialogScript", N_("S_cripts..."),
         N_("Run scripts"), NULL),
-    new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/_Hide Dialogs"),
+    new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/Hide D_ialogs"),
         N_("Show or hide all active dialogs"), "dialog_toggle"),
     // TRANSLATORS: "Tile clones" means: "Create tiled clones"
     new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogsClonetiler", N_("Tile clones..."),
@@ -1957,7 +1952,7 @@ Verb * Verb::_base_verbs[] = {
     /* Help */
     new HelpVerb(SP_VERB_HELP_KEYS, "HelpKeys", N_("_Keys and Mouse"),
         N_("Key and mouse shortcuts reference"), "help_keys"),
-    new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("_About Extensions"),
+    new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("About E_xtensions"),
         N_("About Extensions..."), NULL),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"),
         N_("About Inkscape"), /*"help_about"*/"inkscape_options"),
