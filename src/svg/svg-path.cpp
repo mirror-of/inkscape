@@ -493,7 +493,7 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
                 sign = 1;
             }
         }
-        else if (c == '.')
+        else if (c == '.' && !(in_frac || in_exp))
         {
             if (!in_num)
             {
@@ -558,7 +558,15 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
             }
             ctx->params[ctx->param++] = val;
             rsvg_parse_path_do_cmd (ctx, FALSE);
-            in_num = FALSE;
+            if (c=='.') {
+                in_num = TRUE;
+                val = 0;
+                in_frac = TRUE;
+                frac = 1;
+            }
+            else {
+                in_num = FALSE;
+            }
         }
 
         if (c == '\0')
