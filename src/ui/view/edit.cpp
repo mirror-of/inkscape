@@ -348,27 +348,30 @@ Edit::onUriChanged()
     
 }
 
+// FIXME: strings are replaced by placeholders, NOT to be translated until the code is enabled
+// See http://sourceforge.net/mailarchive/message.php?msg_id=11746016 for details
+
 void
 Edit::initMenuActions()
 {
-    _act_grp->add(Gtk::Action::create("MenuFile",   _("_File")));
-    _act_grp->add(Gtk::Action::create("MenuEdit",   _("_Edit")));
-    _act_grp->add(Gtk::Action::create("MenuView",   _("_View")));
-    _act_grp->add(Gtk::Action::create("MenuLayer",  _("_Layer")));
-    _act_grp->add(Gtk::Action::create("MenuObject", _("_Object")));
-    _act_grp->add(Gtk::Action::create("MenuPath",   _("_Path")));
-    _act_grp->add(Gtk::Action::create("MenuText",   _("_Text")));
-    _act_grp->add(Gtk::Action::create("MenuHelp",   _("_Help")));
+    _act_grp->add(Gtk::Action::create("MenuFile",   _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuEdit",   _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuView",   _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuLayer",  _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuObject", _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuPath",   _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuText",   _("PLACEHOLDER, do not translate")));
+    _act_grp->add(Gtk::Action::create("MenuHelp",   _("PLACEHOLDER, do not translate")));
 
     // File menu
     _act_grp->add(Gtk::Action::create("New",
                                       Gtk::Stock::NEW, Glib::ustring(),
-                                      _("New")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileNew));
 
     _act_grp->add(Gtk::Action::create("Open",
                                       Gtk::Stock::OPEN, Glib::ustring(),
-                                      _("Open...")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("OpenRecent",
@@ -376,32 +379,32 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Revert",
                                       Gtk::Stock::REVERT_TO_SAVED, Glib::ustring(),
-                                      _("Revert to Saved")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Save",
                                       Gtk::Stock::SAVE, Glib::ustring(),
-                                      _("Save")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("SaveAs",
                                       Gtk::Stock::SAVE_AS, Glib::ustring(),
-                                      _("Save As...")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Import",
                                       Stock::IMPORT, Glib::ustring(),
-                                      _("Import...")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("Export",
                                       Stock::EXPORT, Glib::ustring(),
-                                      _("Export...")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogExport));
 
     _act_grp->add(Gtk::Action::create("Print",
                                       Gtk::Stock::PRINT, Glib::ustring(),
-                                      _("Print...")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onActionFileOpen));
 
     _act_grp->add(Gtk::Action::create("PrintPreview",
@@ -414,12 +417,12 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("DocumentProperties",
                                       Gtk::Stock::PROPERTIES, Glib::ustring(),
-                                      _("Document properties (Shift+Ctrl+D)")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogDocumentProperties));
 
     _act_grp->add(Gtk::Action::create("InkscapePreferences",
                                       Gtk::Stock::PREFERENCES, Glib::ustring(),
-                                      _("Global Inkscape preferences (Shift+Ctrl+P)")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogInkscapePreferences));
 
     _act_grp->add(Gtk::Action::create("Close",
@@ -433,23 +436,23 @@ Edit::initMenuActions()
     // Edit menu
     _act_grp->add(Gtk::Action::create("Undo",
                                       Gtk::Stock::UNDO, Glib::ustring(),
-                                      _("Undo")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Redo",
                                       Gtk::Stock::REDO, Glib::ustring(),
-                                      _("Redo")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Cut",
                                       Gtk::Stock::CUT, Glib::ustring(),
-                                      _("Cut")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Copy",
                                       Gtk::Stock::COPY, Glib::ustring(),
-                                      _("Copy")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Paste",
                                       Gtk::Stock::PASTE, Glib::ustring(),
-                                      _("Paste")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("PasteInPlace",
                                       Stock::PASTE_IN_PLACE));
@@ -463,15 +466,15 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Duplicate",
                                       Stock::DUPLICATE, Glib::ustring(),
-                                      _("Duplicate selected object(s) (Ctrl+D)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Clone",
                                       Stock::CLONE, Glib::ustring(),
-                                      _("Clone selected object (Alt+D)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("CloneUnlink",
                                       Stock::CLONE_UNLINK, Glib::ustring(),
-                                      _("Unlink clone from its original (Shift+Alt+D)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("CloneSelectOrig",
                                       Stock::CLONE_SELECT_ORIG));
@@ -502,7 +505,7 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("XmlEditor",
                                       Stock::XML_EDITOR, Glib::ustring(),
-                                      _("XML Editor dialog (Shift+Ctrl+X)")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogXmlEditor));
 
     // View menu
@@ -511,47 +514,47 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("ZoomIn",
                                       Stock::ZOOM_IN, Glib::ustring(),
-                                      _("Zoom in (+)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomOut",
                                       Stock::ZOOM_OUT, Glib::ustring(),
-                                      _("Zoom out (-)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Zoom100",
                                       Stock::ZOOM_100, Glib::ustring(),
-                                      _("Zoom to 1:1 (100%) (1)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Zoom50",
                                       Stock::ZOOM_50, Glib::ustring(),
-                                      _("Zoom to 1:2 (50%) (2)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Zoom200",
                                       Stock::ZOOM_200, Glib::ustring(),
-                                      _("Zoom to 2:1 (200%) (0)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomSelection",
                                       Stock::ZOOM_SELECTION, Glib::ustring(),
-                                      _("Zoom to fit selection in window (3)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomDrawing",
                                       Stock::ZOOM_DRAWING, Glib::ustring(),
-                                      _("Zoom to fit drawing in window (4)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomPage",
                                       Stock::ZOOM_PAGE, Glib::ustring(),
-                                      _("Zoom to fit page in window (5)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomWidth",
                                       Stock::ZOOM_WIDTH, Glib::ustring(),
-                                      _("Zoom to fit page width in window (6)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomPrev",
                                       Stock::ZOOM_PREV, Glib::ustring(),
-                                      _("Previous zoom (from history of zooms) (`)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ZoomNext",
                                       Stock::ZOOM_NEXT, Glib::ustring(),
-                                      _("Next zoom (from history of zooms) (Shift+`)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("ShowHide",
                                       Stock::SHOW_HIDE));
@@ -648,7 +651,7 @@ Edit::initMenuActions()
     // Object menu
     _act_grp->add(Gtk::Action::create("FillAndStroke",
                                       Stock::FILL_STROKE, Glib::ustring(),
-                                      _("Fill and Stroke dialog (Shift+Ctrl+F)")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogFillAndStroke));
 
     _act_grp->add(Gtk::Action::create("ObjectProperties",
@@ -657,82 +660,82 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Group",
                                       Stock::GROUP, Glib::ustring(),
-                                      _("Group selected objects (Ctrl+G)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Ungroup",
                                       Stock::UNGROUP, Glib::ustring(),
-                                      _("Ungroup selected group(s) (Ctrl+U)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Raise",
                                       Stock::RAISE, Glib::ustring(),
-                                      _("Raise selection up one step (PgUp)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Lower",
                                       Stock::LOWER, Glib::ustring(),
-                                      _("Lower selection down one step (PgDn)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("RaiseToTop",
                                       Stock::RAISE_TO_TOP, Glib::ustring(),
-                                      _("Raise selection to top (Home)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("LowerToBottom",
                                       Stock::LOWER_TO_BOTTOM, Glib::ustring(),
-                                      _("Lower selection to bottom (End)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("MoveToNewLayer",
                                       Stock::MOVE_TO_NEW_LAYER, Glib::ustring(),
-                                      _("Move selection to new layer")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("MoveToNextLayer",
                                       Stock::MOVE_TO_NEXT_LAYER, Glib::ustring(),
-                                      _("Move selection to next layer")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("MoveToPrevLayer",
                                       Stock::MOVE_TO_PREV_LAYER, Glib::ustring(),
-                                      _("Move selection to previous layer")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("MoveToTopLayer",
                                       Stock::MOVE_TO_TOP_LAYER, Glib::ustring(),
-                                      _("Move selection to top layer")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("MoveToBottomLayer",
                                       Stock::MOVE_TO_BOTTOM_LAYER, Glib::ustring(),
-                                      _("Move selection to bottom layer")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Rotate90CW",
                                       Stock::ROTATE_90_CW, Glib::ustring(),
-                                      _("Rotate selection 90° clockwise (Shift+Ctrl+Right)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Rotate90CCW",
                                       Stock::ROTATE_90_CCW, Glib::ustring(),
-                                      _("Rotate selection 90° counter-clockwise (Shift+Ctrl+Left)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("FlipHoriz",
                                       Stock::FLIP_HORIZ, Glib::ustring(),
-                                      _("Flip selection horizontally (H)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("FlipVert",
                                       Stock::FLIP_VERT, Glib::ustring(),
-                                      _("Flip selection vertically (V)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Transformation",
                                       Stock::TRANSFORMATION, Glib::ustring(),
-                                      _("Transformation")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogTransformation));
 
     _act_grp->add(Gtk::Action::create("AlignAndDistribute",
                                       Stock::ALIGN_DISTRIBUTE, Glib::ustring(),
-                                      _("Align and Distribute dialog (Shift+Ctrl+A)")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogAlignAndDistribute));
 
     // Path menu
     _act_grp->add(Gtk::Action::create("ObjectToPath",
                                       Stock::OBJECT_TO_PATH, Glib::ustring(),
-                                      _("Convert selected object(s) to path(s) (Shift+Ctrl+C)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("StrokeToPath",
                                       Stock::STROKE_TO_PATH, Glib::ustring(),
-                                      _("Convert selected stroke(s) to path(s) (Ctrl+Alt+C)")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("Trace",
                                       Stock::TRACE),
@@ -782,12 +785,12 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("Cleanup",
                                       Gtk::Stock::CLEAR,
-                                      _("Cl_eanup")));
+                                      _("PLACEHOLDER, do not translate")));
 
     // Text menu
     _act_grp->add(Gtk::Action::create("TextProperties",
                                       Gtk::Stock::SELECT_FONT, Glib::ustring(),
-                                      _("Text and Font dialog (Shift+Ctrl+T)")),
+                                      _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onDialogTextProperties));
 
     _act_grp->add(Gtk::Action::create("PutOnPath",
@@ -819,115 +822,115 @@ Edit::initToolbarActions()
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolSelect",
                                            Stock::TOOL_SELECT, Glib::ustring(),
-                                           _("Select tool")),
+                                           _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onSelectTool));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolNode",
                                            Stock::TOOL_NODE, Glib::ustring(),
-                                           _("Node tool")),
+                                           _("PLACEHOLDER, do not translate")),
                   sigc::mem_fun(*this, &Edit::onNodeTool));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolZoom",
                                            Stock::TOOL_ZOOM, Glib::ustring(),
-                                           _("Zoom tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolRect",
                                            Stock::TOOL_RECT, Glib::ustring(),
-                                           _("Rectangle tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolArc",
                                            Stock::TOOL_ARC, Glib::ustring(),
-                                           _("Arc tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolStar",
                                            Stock::TOOL_STAR, Glib::ustring(),
-                                           _("Star tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolSpiral",
                                            Stock::TOOL_SPIRAL, Glib::ustring(),
-                                           _("Spiral tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolFreehand",
                                            Stock::TOOL_FREEHAND, Glib::ustring(),
-                                           _("Freehand tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolPen",
                                            Stock::TOOL_PEN, Glib::ustring(),
-                                           _("Pen tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolDynaDraw",
                                            Stock::TOOL_DYNADRAW, Glib::ustring(),
-                                           _("Calligraphy tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolText",
                                            Stock::TOOL_TEXT, Glib::ustring(),
-                                           _("Text tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::RadioAction::create(tools, "ToolDropper",
                                            Stock::TOOL_DROPPER, Glib::ustring(),
-                                           _("Dropper tool")));
+                                           _("PLACEHOLDER, do not translate")));
 
     // Select Controls bar
     _act_grp->add(Gtk::ToggleAction::create("TransformStroke",
                                             Stock::TRANSFORM_STROKE, Glib::ustring(),
-                                            _("When scaling objects, scale stroke width by same proportion")));
+                                            _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::ToggleAction::create("TransformCorners",
                                             Stock::TRANSFORM_CORNERS, Glib::ustring(),
-                                            _("When scaling rectangles, scale radii of rounded corners")));
+                                            _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::ToggleAction::create("TransformGradient",
                                             Stock::TRANSFORM_GRADIENT, Glib::ustring(),
-                                            _("Transform gradients (in fill or stroke) along with objects")));
+                                            _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::ToggleAction::create("TransformPattern",
                                             Stock::TRANSFORM_PATTERN, Glib::ustring(),
-                                            _("Transform patterns (in fill or stroke) along with objects")));
+                                            _("PLACEHOLDER, do not translate")));
 
     // Node Controls bar
     _act_grp->add(Gtk::Action::create("NodeInsert",
                                       Stock::NODE_INSERT, Glib::ustring(),
-                                      _("Insert new nodes into selected segments")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeDelete",
                                       Stock::NODE_DELETE, Glib::ustring(),
-                                      _("Delete selected nodes")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeJoin",
                                       Stock::NODE_JOIN, Glib::ustring(),
-                                      _("Join paths at selected nodes")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeJoinSegment",
                                       Stock::NODE_JOIN_SEGMENT, Glib::ustring(),
-                                      _("Join paths at selected nodes with new segment")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeDeleteSegment",
                                       Stock::NODE_DELETE_SEGMENT, Glib::ustring(),
-                                      _("Delete segment between two nodes")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeBreak",
                                       Stock::NODE_BREAK, Glib::ustring(),
-                                      _("Break path at selected nodes")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeCorner",
                                       Stock::NODE_CORNER, Glib::ustring(),
-                                      _("Make selected nodes corner")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeSmooth",
                                       Stock::NODE_SMOOTH, Glib::ustring(),
-                                      _("Make selected nodes smooth")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeSymmetric",
                                       Stock::NODE_SYMMETRIC, Glib::ustring(),
-                                      _("Make selected nodes symmetric")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeLine",
                                       Stock::NODE_LINE, Glib::ustring(),
-                                      _("Make selected segments lines")));
+                                      _("PLACEHOLDER, do not translate")));
 
     _act_grp->add(Gtk::Action::create("NodeCurve",
                                       Stock::NODE_CURVE, Glib::ustring(),
-                                      _("Make selected segments curves")));
+                                      _("PLACEHOLDER, do not translate")));
 }
 
 void
@@ -976,7 +979,7 @@ Edit::initUriBar()
 
     _uri_ctrl = new Gtk::Toolbar();
 
-    _uri_label.set_label(_("URI:"));
+    _uri_label.set_label(_("PLACEHOLDER, DO NOT TRANSLATE"));
     _uri_ctrl->add(_uri_label);
     _uri_ctrl->add(_uri_entry);
 
