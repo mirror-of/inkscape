@@ -1446,6 +1446,9 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
             show_panel( *panel );
         }
         break;
+        case SP_VERB_HELP_MEMORY:
+            dlg = dt->_dlg_mgr->getMemoryDialog();
+            break;
     default:
         break;
     }
@@ -1958,6 +1961,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Key and mouse shortcuts reference"), "help_keys"),
     new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("About E_xtensions"),
         N_("About Extensions..."), NULL),
+    new HelpVerb(SP_VERB_HELP_MEMORY, "HelpAboutMemory", N_("About _Memory"),
+        N_("About Memory..."), NULL),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"),
         N_("About Inkscape"), /*"help_about"*/"inkscape_options"),
 

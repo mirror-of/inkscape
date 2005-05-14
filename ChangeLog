@@ -1,3 +1,12 @@
+2005-05-14  MenTaLguY  <mental@rydia.net>
+
+	* src/interface.cpp, src/verbs.cpp, src/verbs.h,
+	  src/ui/dialog/Makefile_insert, src/ui/dialog/dialog-manager.cpp,
+	  src/ui/dialog/dialog-manager.h, src/ui/dialog/memory.cpp,
+	  src/ui/dialog/memory.h:
+	  
+	  added skeletal memory statistics dialog
+
 2005-05-08  Bryce Harrington <bryce@bryceharrington.org>
 
 	* ChangeLog configure.ac src/Makefile_insert src/desktop-widget.h

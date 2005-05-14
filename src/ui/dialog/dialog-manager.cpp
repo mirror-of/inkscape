@@ -16,20 +16,21 @@
 # include <config.h>
 #endif
 
-#include "dialog-manager.h"
+#include "ui/dialog/dialog-manager.h"
 
-#include "align-and-distribute.h"
-#include "inkscape-preferences.h"
-#include "document-preferences.h"
-#include "export.h"
-#include "extension-editor.h"
-#include "fill-and-stroke.h"
-#include "find.h"
-#include "layer-editor.h"
-#include "messages.h"
-#include "text-properties.h"
-#include "transformation.h"
-#include "xml-editor.h"
+#include "ui/dialog/align-and-distribute.h"
+#include "ui/dialog/inkscape-preferences.h"
+#include "ui/dialog/document-preferences.h"
+#include "ui/dialog/export.h"
+#include "ui/dialog/extension-editor.h"
+#include "ui/dialog/fill-and-stroke.h"
+#include "ui/dialog/find.h"
+#include "ui/dialog/layer-editor.h"
+#include "ui/dialog/messages.h"
+#include "ui/dialog/text-properties.h"
+#include "ui/dialog/transformation.h"
+#include "ui/dialog/xml-editor.h"
+#include "ui/dialog/memory.h"
 
 
 namespace Inkscape {
@@ -84,7 +85,8 @@ DialogManager::DialogManager()
       _text_properties_dialog(NULL),
       _trace_dialog(NULL),
       _transformation_dialog(NULL),
-      _xml_editor_dialog(NULL)
+      _xml_editor_dialog(NULL),
+      _memory_dialog(NULL)
 {
 }
 
@@ -183,6 +185,7 @@ void DialogManager::deleteAllDialogs()
         delete (*iter).second;
         ++iter;
     }
+    _dialog_map.clear();
 }
 
 
@@ -410,6 +413,14 @@ Dialog* DialogManager::getXmlEditorDialog() {
                                        &XmlEditor::onShowF12));
     }
     return _xml_editor_dialog;
+}
+
+Dialog *DialogManager::getMemoryDialog() {
+    if (_memory_dialog == NULL) {
+        _memory_dialog = Memory::create();
+        addDialog("Memory", _memory_dialog);
+    }
+    return _memory_dialog;
 }
 
 } // namespace Dialog

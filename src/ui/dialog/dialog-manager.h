@@ -36,8 +36,8 @@ public:
     /* generic dialog management start */
     typedef std::map<GQuark, Dialog*>    DialogMap;
 
-    Dialog* getDialog(gchar const* dlgName); 
-    Dialog* getDialog(GQuark dlgName); 
+    Dialog *getDialog(gchar const* dlgName); 
+    Dialog *getDialog(GQuark dlgName); 
     void    addDialog(gchar const* dlgName, Dialog * dlg);
     void    addDialog(GQuark dlgName, Dialog * dlg);
     bool    deleteDialog(gchar const* dlgName);
@@ -45,23 +45,24 @@ public:
     void    deleteAllDialogs(); 
     /* generic dialog management end */
 
-    Dialog* getAboutDialog();
-    Dialog* getAlignAndDistributeDialog();
-    Dialog* getInkscapePreferencesDialog();
-    Dialog* getDocumentPreferencesDialog();
-    Dialog* getDebugDialog();
-    Dialog* getExportDialog();
-    Dialog* getExtensionEditorDialog();
-    Dialog* getFillAndStrokeDialog();
-    Dialog* getFindDialog();
-    Dialog* getLayerEditorDialog();
-    Dialog* getMessagesDialog();
-    Dialog* getObjectPropertiesDialog();
-    Dialog* getTextPropertiesDialog();
-    Dialog* getTraceDialog();
-    Dialog* getTransformDialog();
-    Dialog* getTransformationDialog();
-    Dialog* getXmlEditorDialog();
+    Dialog *getAboutDialog();
+    Dialog *getAlignAndDistributeDialog();
+    Dialog *getInkscapePreferencesDialog();
+    Dialog *getDocumentPreferencesDialog();
+    Dialog *getDebugDialog();
+    Dialog *getExportDialog();
+    Dialog *getExtensionEditorDialog();
+    Dialog *getFillAndStrokeDialog();
+    Dialog *getFindDialog();
+    Dialog *getLayerEditorDialog();
+    Dialog *getMessagesDialog();
+    Dialog *getObjectPropertiesDialog();
+    Dialog *getTextPropertiesDialog();
+    Dialog *getTraceDialog();
+    Dialog *getTransformDialog();
+    Dialog *getTransformationDialog();
+    Dialog *getXmlEditorDialog();
+    Dialog *getMemoryDialog();
 
 protected:
     DialogManager(DialogManager const &d);
@@ -85,6 +86,7 @@ protected:
     Dialog            *_trace_dialog;
     Dialog            *_transformation_dialog;
     Dialog            *_xml_editor_dialog;
+    Dialog            *_memory_dialog;
 };
 
 } // namespace Dialog
