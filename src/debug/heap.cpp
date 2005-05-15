@@ -9,7 +9,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif
+
 #include "gc-alloc.h"
 #include "debug/heap.h"
 #include <vector>
@@ -20,90 +27,75 @@ namespace Debug {
 
 namespace {
 
-class MallocHeap : public Heap {
+class SysVHeap : public Heap {
 public:
-    MallocHeap() {}
+    SysVHeap() {}
     
     int features() const;
 
     Util::SharedCStringPtr name() const {
         return Util::SharedCStringPtr::coerce("standard malloc()");
     }
-    std::size_t size() const;
-    std::size_t bytes_free() const;
+    Stats stats() const;
     void force_collect() {}
 };
 
-int MallocHeap::features() const {
-#ifdef HAS_MALLINFO
+int SysVHeap::features() const {
+#ifdef HAVE_MALLINFO
     return SIZE_AVAILABLE | FREE_AVAILABLE;
 #else
     return 0;
 #endif
 }
 
-std::size_t MallocHeap::size() const {
-    std::size_t total=0;
+Heap::Stats SysVHeap::stats() const {
+    Stats stats;
 
-#ifdef HAS_MALLINFO
+    stats.size = 0;
+    stats.bytes_free = 0;
+
+#ifdef HAVE_MALLINFO
     struct mallinfo info=mallinfo();
 
-#ifdef HAS_MALLINFO_HBLKHD
-    total += info.hblkhd;
+#ifdef HAVE_MALLINFO_USMBLKS
+    stats.size += info.usmblks;
 #endif
 
-#ifdef HAS_MALLINFO_USMBLKS
-    total += info.usmblks;
+#ifdef HAVE_MALLINFO_FSMBLKS
+    stats.size += info.fsmblks;
+    stats.bytes_free += info.fsmblks;
 #endif
 
-#ifdef HAS_MALLINFO_FSMBLKS
-    total += info.fsmblks;
+#ifdef HAVE_MALLINFO_UORDBLKS
+    stats.size += info.uordblks;
 #endif
 
-#ifdef HAS_MALLINFO_UORDBLKS
-    total += info.uordblks;
+#ifdef HAVE_MALLINFO_FORDBLKS
+    stats.size += info.fordblks;
+    stats.free += info.fordblks;
 #endif
 
-#ifdef HAS_MALLINFO_FORDBLKS
-    total += info.fordblks;
+#ifdef HAVE_MALLINFO_HBLKHD
+    stats.size += info.hblkhd;
 #endif
 
 #endif
 
-    return total;
+    return stats;
 }
 
-std::size_t MallocHeap::bytes_free() const {
-    std::size_t total=0;
+typedef std::vector<Heap *, GC::Alloc<Heap *, GC::MANUAL> > HeapCollection;
 
-#ifdef HAS_MALLINFO
-    struct mallinfo info=mallinfo();
-
-#ifdef HAS_MALLINFO_FSMBLKS
-    total += info.fsmblks;
-#endif
-
-#ifdef HAS_MALLINFO_FORDBLKS
-    total += info.fordblks;
-#endif
-
-#endif
-
-    return total;
-}
-
-typedef std::vector<Heap *, GC::Alloc<Heap *, GC::MANUAL> > Heaps;
-
-Heaps &heaps() {
-    static Heaps heaps;
+HeapCollection &heaps() {
+    static bool is_initialized=false;
+    static HeapCollection heaps;
+    if (!is_initialized) {
+        heaps.push_back(new SysVHeap());
+        is_initialized = true;
+    }
     return heaps;
 }
 
-}
-
-Heap &get_malloc_heap() {
-    static MallocHeap heap;
-    return heap;
 }
 
 unsigned heap_count() {
@@ -111,16 +103,7 @@ unsigned heap_count() {
 }
 
 Heap *get_heap(unsigned i) {
-    if (i) {
-        i--;
-        if ( i < heaps().size() ) {
-            return heaps()[i];
-        } else {
-            return NULL;
-        }
-    } else {
-        return &get_malloc_heap();
-    }
+    return heaps()[i];
 }
 
 void register_extra_heap(Heap &heap) {

@@ -23,6 +23,14 @@ class Heap {
 public:
     virtual ~Heap() {}
 
+    struct Stats {
+        Stats() {}
+        Stats(std::size_t s, std::size_t f) : size(s), bytes_free(f) {}
+
+        std::size_t size;
+        std::size_t bytes_free;
+    };
+
     enum {
         SIZE_AVAILABLE    = ( 1 << 0 ),
         FREE_AVAILABLE    = ( 1 << 1 ),
@@ -32,12 +40,9 @@ public:
     virtual int features() const=0;
 
     virtual Util::SharedCStringPtr name() const=0;
-    virtual std::size_t size() const=0;
-    virtual std::size_t bytes_free() const=0;
+    virtual Stats stats() const=0;
     virtual void force_collect()=0;
 };
-
-Heap &get_malloc_heap();
 
 unsigned heap_count();
 Heap *get_heap(unsigned i);

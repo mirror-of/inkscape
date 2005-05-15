@@ -1,3 +1,11 @@
+2005-05-15  MenTaLguY  <mental@rydia.net>
+
+	* configure.ac: added tests for mallinfo and malloc.h
+
+	* src/gc.cpp, src/debug/heap.cpp, src/debug/heap.h:
+
+	  fix up Debug::Heap API slightly
+
 2005-05-14  MenTaLguY  <mental@rydia.net>
 
 	* src/interface.cpp, src/verbs.cpp, src/verbs.h,

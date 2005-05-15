@@ -29,8 +29,9 @@ public:
     Util::SharedCStringPtr name() const {
         return Util::SharedCStringPtr::coerce("libgc");
     }
-    std::size_t size() const { return Core::get_heap_size(); }
-    std::size_t bytes_free() const { return Core::get_free_bytes(); }
+    Heap::Stats stats() const {
+        return Stats(Core::get_heap_size(), Core::get_free_bytes());
+    }
     void force_collect() { Core::gcollect(); }
 };
 
