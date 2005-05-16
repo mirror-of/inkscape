@@ -298,33 +298,33 @@ sp_export_dialog_area_frame (GtkWidget * dlg)
     gtk_table_set_col_spacings (GTK_TABLE (t), 4);
     gtk_container_set_border_width (GTK_CONTAINER (t), 4);
 
-    sp_export_spinbutton_new ( "x0", 0.0, -10000.0, 10000.0, 0.1, 1.0, us, 
+    sp_export_spinbutton_new ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
                                t, 0, 0, _("_x0:"), NULL, 2, 1,
                                G_CALLBACK ( sp_export_area_x_value_changed), 
                                dlg );
 
-    sp_export_spinbutton_new ( "x1", 0.0, -10000.0, 10000.0, 0.1, 1.0, us, 
+    sp_export_spinbutton_new ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
                                t, 2, 0, _("x_1:"), NULL, 2, 1,
                                G_CALLBACK (sp_export_area_x_value_changed), 
                                dlg );
 
-    sp_export_spinbutton_new ( "width", 0.0, -10000.0, 10000.0, 0.1, 1.0, 
+    sp_export_spinbutton_new ( "width", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, 
                                us, t, 4, 0, _("Width:"), NULL, 2, 1,
                                G_CALLBACK 
                                    (sp_export_area_width_value_changed), 
                                dlg );
 
-    sp_export_spinbutton_new ( "y0", 0.0, -10000.0, 10000.0, 0.1, 1.0, us, 
+    sp_export_spinbutton_new ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
                                t, 0, 1, _("_y0:"), NULL, 2, 1,
                                G_CALLBACK (sp_export_area_y_value_changed), 
                                dlg );
 
-    sp_export_spinbutton_new ( "y1", 0.0, -10000.0, 10000.0, 0.1, 1.0, us, 
+    sp_export_spinbutton_new ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
                                t, 2, 1, _("y_1:"), NULL, 2, 1,
                                G_CALLBACK (sp_export_area_y_value_changed), 
                                dlg );
 
-    sp_export_spinbutton_new ( "height", 0.0, -10000.0, 10000.0, 0.1, 1.0, 
+    sp_export_spinbutton_new ( "height", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, 
                                us, t, 4, 1, _("Height:"), NULL, 2, 1,
                                G_CALLBACK 
                                    (sp_export_area_height_value_changed), 
