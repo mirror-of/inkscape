@@ -1,5 +1,5 @@
-#ifndef __SP_ROOT_H__
-#define __SP_ROOT_H__
+#ifndef SP_ROOT_H_SEEN
+#define SP_ROOT_H_SEEN
 
 /** \file
  * SPRoot: SVG <svg> implementation.
@@ -14,11 +14,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_TYPE_ROOT (sp_root_get_type ())
-#define SP_ROOT(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_ROOT, SPRoot))
-#define SP_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_ROOT, SPRootClass))
-#define SP_IS_ROOT(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_ROOT))
-#define SP_IS_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_ROOT))
+#define SP_TYPE_ROOT (sp_root_get_type())
+#define SP_ROOT(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_ROOT, SPRoot))
+#define SP_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), SP_TYPE_ROOT, SPRootClass))
+#define SP_IS_ROOT(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_ROOT))
+#define SP_IS_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_ROOT))
 
 #include <libnr/nr-matrix.h>
 #include "svg/svg-types.h"
@@ -27,40 +27,52 @@
 #include "version.h"
 
 struct SPRoot : public SPGroup {
-	struct {
-		SPVersion svg, sodipodi, inkscape;
-	} version, original;
+    struct {
+        SPVersion svg, sodipodi, inkscape;
+    } version, original;
 
-	SPSVGLength x;
-	SPSVGLength y;
-	SPSVGLength width;
-	SPSVGLength height;
+    SPSVGLength x;
+    SPSVGLength y;
+    SPSVGLength width;
+    SPSVGLength height;
 
-	/* viewBox; */
-	unsigned int viewBox_set : 1;
-	NRRect viewBox;
+    /* viewBox; */
+    unsigned int viewBox_set : 1;
+    NRRect viewBox;
 
-	/* preserveAspectRatio */
-	unsigned int aspect_set : 1;
-	unsigned int aspect_align : 4;
-	unsigned int aspect_clip : 1;
+    /* preserveAspectRatio */
+    unsigned int aspect_set : 1;
+    unsigned int aspect_align : 4;
+    unsigned int aspect_clip : 1;
 
-	/** Child to parent additional transform. */
-	NR::Matrix c2p;
+    /** Child to parent additional transform. */
+    NR::Matrix c2p;
 
-	/**
-	 * Primary \<defs\> element where we put new defs (patterns, gradients etc.).
-	 *
-	 * At the time of writing, this is chosen as the first \<defs\> child of
-	 * this \<svg\> element: see writers of this member in sp-root.cpp.
-	 */
-	SPDefs *defs;
+    /**
+     * Primary \<defs\> element where we put new defs (patterns, gradients etc.).
+     *
+     * At the time of writing, this is chosen as the first \<defs\> child of
+     * this \<svg\> element: see writers of this member in sp-root.cpp.
+     */
+    SPDefs *defs;
 };
 
 struct SPRootClass {
-	SPGroupClass parent_class;
+    SPGroupClass parent_class;
 };
 
-GType sp_root_get_type (void);
+GType sp_root_get_type();
 
-#endif
+
+#endif /* !SP_ROOT_H_SEEN */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
