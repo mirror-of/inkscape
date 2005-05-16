@@ -1,9 +1,10 @@
 #ifndef __SP_ROOT_H__
 #define __SP_ROOT_H__
 
+/** \file
+ * SPRoot: SVG <svg> implementation.
+ */
 /*
- * SVG <svg> implementation
- *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -44,10 +45,15 @@ struct SPRoot : public SPGroup {
 	unsigned int aspect_align : 4;
 	unsigned int aspect_clip : 1;
 
-	/* Child to parent additional transform */
+	/** Child to parent additional transform. */
 	NR::Matrix c2p;
 
-	/* Root-level <defs> node */
+	/**
+	 * Primary \<defs\> element where we put new defs (patterns, gradients etc.).
+	 *
+	 * At the time of writing, this is chosen as the first \<defs\> child of
+	 * this \<svg\> element: see writers of this member in sp-root.cpp.
+	 */
 	SPDefs *defs;
 };
 
