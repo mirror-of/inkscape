@@ -167,16 +167,20 @@ concat_children(Inkscape::XML::Node const &repr)
 
 /* Callbacks for SAC-style libcroco parser. */
 
+enum StmtType { NO_STMT, FONT_FACE_STMT, NORMAL_RULESET_STMT };
+
 struct ParseTmp
 {
     CRStyleSheet *const stylesheet;
-    CRStatement *curr_stmt;
+    StmtType stmtType;
+    CRStatement *currStmt;
     unsigned magic;
     static unsigned const ParseTmp_magic = 0x23474397;  // from /dev/urandom
 
     ParseTmp(CRStyleSheet *const stylesheet) :
         stylesheet(stylesheet),
-        curr_stmt(NULL),
+        stmtType(NO_STMT),
+        currStmt(NULL),
         magic(ParseTmp_magic)
     { }
 
@@ -196,12 +200,19 @@ start_selector_cb(CRDocHandler *a_handler,
                   CRSelector *a_sel_list)
 {
     g_return_if_fail(a_handler && a_sel_list);
-    ParseTmp *const parse_tmp = static_cast<ParseTmp *>(a_handler->app_data);
-    g_return_if_fail(parse_tmp && parse_tmp->hasMagic());
-    CRStatement *ruleset = cr_statement_new_ruleset(parse_tmp->stylesheet, a_sel_list, NULL, NULL);
+    g_return_if_fail(a_handler->app_data != NULL);
+    ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
+    g_return_if_fail(parse_tmp.hasMagic());
+    if ( (parse_tmp.currStmt != NULL)
+         || (parse_tmp.stmtType != NO_STMT) ) {
+        g_warning("Expecting currStmt==NULL and stmtType==0 (NO_STMT) at start of ruleset, but found currStmt=%p, stmtType=%u",
+                  static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
+        // fixme: Check whether we need to unref currStmt if non-NULL.
+    }
+    CRStatement *ruleset = cr_statement_new_ruleset(parse_tmp.stylesheet, a_sel_list, NULL, NULL);
     g_return_if_fail(ruleset && ruleset->type == RULESET_STMT);
-    g_return_if_fail(!parse_tmp->curr_stmt);
-    parse_tmp->curr_stmt = ruleset;
+    parse_tmp.stmtType = NORMAL_RULESET_STMT;
+    parse_tmp.currStmt = ruleset;
 }
 
 static void
@@ -209,14 +220,58 @@ end_selector_cb(CRDocHandler *a_handler,
                 CRSelector *a_sel_list)
 {
     g_return_if_fail(a_handler && a_sel_list);
-    ParseTmp *const parse_tmp = static_cast<ParseTmp *>(a_handler->app_data);
-    g_return_if_fail(parse_tmp && parse_tmp->hasMagic());
-    CRStatement *const ruleset = parse_tmp->curr_stmt;
-    g_return_if_fail(ruleset && ruleset->type == RULESET_STMT);
-    g_return_if_fail(ruleset->kind.ruleset->sel_list == a_sel_list);
-    parse_tmp->stylesheet->statements = cr_statement_append(parse_tmp->stylesheet->statements,
-                                                            ruleset);
-    parse_tmp->curr_stmt = NULL;
+    g_return_if_fail(a_handler->app_data != NULL);
+    ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
+    g_return_if_fail(parse_tmp.hasMagic());
+    CRStatement *const ruleset = parse_tmp.currStmt;
+    if (parse_tmp.stmtType == NORMAL_RULESET_STMT
+        && ruleset
+        && ruleset->type == RULESET_STMT
+        && ruleset->kind.ruleset->sel_list == a_sel_list)
+    {
+        parse_tmp.stylesheet->statements = cr_statement_append(parse_tmp.stylesheet->statements,
+                                                               ruleset);
+    } else {
+        g_warning("Found stmtType=%u, stmt=%p, stmt.type=%u, ruleset.sel_list=%p, a_sel_list=%p.",
+                  unsigned(parse_tmp.stmtType),
+                  ruleset,
+                  unsigned(ruleset->type),
+                  ruleset->kind.ruleset->sel_list,
+                  a_sel_list);
+    }
+    parse_tmp.currStmt = NULL;
+    parse_tmp.stmtType = NO_STMT;
+}
+
+static void
+start_font_face_cb(CRDocHandler *a_handler,
+                   CRParsingLocation *)
+{
+    g_return_if_fail(a_handler->app_data != NULL);
+    ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
+    g_return_if_fail(parse_tmp.hasMagic());
+    if (parse_tmp.stmtType != NO_STMT || parse_tmp.currStmt != NULL) {
+        g_warning("Expecting currStmt==NULL and stmtType==0 (NO_STMT) at start of @font-face, but found currStmt=%p, stmtType=%u",
+                  static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
+        // fixme: Check whether we need to unref currStmt if non-NULL.
+    }
+    parse_tmp.stmtType = FONT_FACE_STMT;
+    parse_tmp.currStmt = NULL;
+}
+
+static void
+end_font_face_cb(CRDocHandler *a_handler)
+{
+    g_return_if_fail(a_handler->app_data != NULL);
+    ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
+    g_return_if_fail(parse_tmp.hasMagic());
+    if (parse_tmp.stmtType != FONT_FACE_STMT || parse_tmp.currStmt != NULL) {
+        g_warning("Expecting currStmt==NULL and stmtType==1 (FONT_FACE_STMT) at end of @font-face, but found currStmt=%p, stmtType=%u",
+                  static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
+        // fixme: Check whether we need to unref currStmt if non-NULL.
+        parse_tmp.currStmt = NULL;
+    }
+    parse_tmp.stmtType = NO_STMT;
 }
 
 static void
@@ -225,11 +280,20 @@ property_cb(CRDocHandler *const a_handler,
             CRTerm *const a_value, gboolean const a_important)
 {
     g_return_if_fail(a_handler && a_name);
-    ParseTmp *const parse_tmp = static_cast<ParseTmp *>(a_handler->app_data);
-    g_return_if_fail(parse_tmp && parse_tmp->hasMagic());
-    CRStatement *const ruleset = parse_tmp->curr_stmt;
+    g_return_if_fail(a_handler->app_data != NULL);
+    ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
+    g_return_if_fail(parse_tmp.hasMagic());
+    if (parse_tmp.stmtType == FONT_FACE_STMT) {
+        if (parse_tmp.currStmt != NULL) {
+            g_warning("Found non-NULL currStmt %p though stmtType==FONT_FACE_STMT.", parse_tmp.currStmt);
+        }
+        /* We currently ignore @font-face descriptors. */
+        return;
+    }
+    CRStatement *const ruleset = parse_tmp.currStmt;
     g_return_if_fail(ruleset
-                     && ruleset->type == RULESET_STMT);
+                     && ruleset->type == RULESET_STMT
+                     && parse_tmp.stmtType == NORMAL_RULESET_STMT);
     CRDeclaration *const decl = cr_declaration_new(ruleset, cr_string_dup(a_name), a_value);
     g_return_if_fail(decl);
     decl->important = a_important;
@@ -277,6 +341,8 @@ sp_style_elem_read_content(SPObject *const object)
     sac_handler->app_data = &parse_tmp;
     sac_handler->start_selector = start_selector_cb;
     sac_handler->end_selector = end_selector_cb;
+    sac_handler->start_font_face = start_font_face_cb;
+    sac_handler->end_font_face = end_font_face_cb;
     sac_handler->property = property_cb;
     /* todo: start_media, end_media. */
     /* todo: Test error condition. */
