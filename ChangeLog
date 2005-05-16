@@ -1,5 +1,13 @@
 2005-05-15  MenTaLguY  <mental@rydia.net>
 
+	* src/debug/heap.cpp: fix bounds error
+
+	* src/ui/dialog/memory.cpp, src/ui/dialog/memory.h:
+	
+	flesh out basic memory info dialog
+
+2005-05-15  MenTaLguY  <mental@rydia.net>
+
 	* configure.ac: cleaned up tests
 
 	* src/debug/heap.cpp: fixed feature macro names

@@ -9,9 +9,6 @@
 #ifndef SEEN_INKSCAPE_UI_DIALOG_MEMORY_H
 #define SEEN_INKSCAPE_UI_DIALOG_MEMORY_H
 
-#include <gtkmm/notebook.h>
-#include <glibmm/i18n.h>
-
 #include "dialog.h"
 
 namespace Inkscape {
@@ -28,6 +25,9 @@ public:
 private:
     Memory(Memory const &d); // no copy
     void operator=(Memory const &d); // no assign
+
+    struct Private;
+    Private &_private;
 };
 
 } // namespace Dialog

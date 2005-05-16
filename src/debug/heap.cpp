@@ -49,10 +49,7 @@ int SysVHeap::features() const {
 }
 
 Heap::Stats SysVHeap::stats() const {
-    Stats stats;
-
-    stats.size = 0;
-    stats.bytes_free = 0;
+    Stats stats(0, 0);
 
 #ifdef HAVE_MALLINFO
     struct mallinfo info=mallinfo();
@@ -99,7 +96,7 @@ HeapCollection &heaps() {
 }
 
 unsigned heap_count() {
-    return heaps().size() + 1;
+    return heaps().size();
 }
 
 Heap *get_heap(unsigned i) {
