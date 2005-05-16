@@ -69,7 +69,7 @@ Heap::Stats SysVHeap::stats() const {
 
 #ifdef HAVE_STRUCT_MALLINFO_FORDBLKS
     stats.size += info.fordblks;
-    stats.free += info.fordblks;
+    stats.bytes_free += info.fordblks;
 #endif
 
 #ifdef HAVE_STRUCT_MALLINFO_HBLKHD
