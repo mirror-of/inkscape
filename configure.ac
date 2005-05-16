@@ -129,25 +129,15 @@ if test "x$gc_ok" != "xyes"; then
 	AC_MSG_ERROR([libgc (the Boehm Conservative Collector) 6.4+, is needed to compile inkscape -- http://www.hpl.hp.com/personal/Hans_Boehm/gc])
 fi
 
-AC_CHECK_FUNC(mallinfo, [
-	AC_DEFINE(HAVE_MALLINFO)
-
-	AC_CHECK_MEMBER(struct mallinfo.usmblks,
-	                [AC_DEFINE(HAVE_MALLINFO_USMBLKS)],,
-			[#include <malloc.h>])
-	AC_CHECK_MEMBER(struct mallinfo.fsmblks,
-	                [AC_DEFINE(HAVE_MALLINFO_FSMBLKS)],,
-			[#include <malloc.h>])
-	AC_CHECK_MEMBER(struct mallinfo.uordblks,
-	                [AC_DEFINE(HAVE_MALLINFO_UORDBLKS)],,
-			[#include <malloc.h>])
-	AC_CHECK_MEMBER(struct mallinfo.fordblks,
-	                [AC_DEFINE(HAVE_MALLINFO_FORDBLKS)],,
-			[#include <malloc.h>])
-	AC_CHECK_MEMBER(struct mallinfo.hblkhd,
-	                [AC_DEFINE(HAVE_MALLINFO_HBLKHD)],,
-			[#include <malloc.h>])
-],,)
+AC_CHECK_HEADERS([malloc.h])
+AC_CHECK_FUNCS([mallinfo], [
+	AC_CHECK_MEMBERS([struct mallinfo.usmblks,
+			  struct mallinfo.fsmblks,
+			  struct mallinfo.uordblks,
+			  struct mallinfo.fordblks,
+			  struct mallinfo.hblkhd],,,
+			 [#include <malloc.h>])
+])
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
 if test "x$FREETYPE_CONFIG" = "xno"; then

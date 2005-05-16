@@ -57,25 +57,25 @@ Heap::Stats SysVHeap::stats() const {
 #ifdef HAVE_MALLINFO
     struct mallinfo info=mallinfo();
 
-#ifdef HAVE_MALLINFO_USMBLKS
+#ifdef HAVE_STRUCT_MALLINFO_USMBLKS
     stats.size += info.usmblks;
 #endif
 
-#ifdef HAVE_MALLINFO_FSMBLKS
+#ifdef HAVE_STRUCT_MALLINFO_FSMBLKS
     stats.size += info.fsmblks;
     stats.bytes_free += info.fsmblks;
 #endif
 
-#ifdef HAVE_MALLINFO_UORDBLKS
+#ifdef HAVE_STRUCT_MALLINFO_UORDBLKS
     stats.size += info.uordblks;
 #endif
 
-#ifdef HAVE_MALLINFO_FORDBLKS
+#ifdef HAVE_STRUCT_MALLINFO_FORDBLKS
     stats.size += info.fordblks;
     stats.free += info.fordblks;
 #endif
 
-#ifdef HAVE_MALLINFO_HBLKHD
+#ifdef HAVE_STRUCT_MALLINFO_HBLKHD
     stats.size += info.hblkhd;
 #endif
 

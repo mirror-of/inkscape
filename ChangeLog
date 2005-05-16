@@ -1,5 +1,11 @@
 2005-05-15  MenTaLguY  <mental@rydia.net>
 
+	* configure.ac: cleaned up tests
+
+	* src/debug/heap.cpp: fixed feature macro names
+
+2005-05-15  MenTaLguY  <mental@rydia.net>
+
 	* configure.ac: added tests for mallinfo and malloc.h
 
 	* src/gc.cpp, src/debug/heap.cpp, src/debug/heap.h:
