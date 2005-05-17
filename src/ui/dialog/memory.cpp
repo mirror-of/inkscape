@@ -10,11 +10,13 @@
 # include <config.h>
 #endif
 
+#include <vector>
 #include <glibmm/i18n.h>
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 
+#include "gc-core.h"
 #include "ui/dialog/memory.h"
 #include "debug/heap.h"
 
@@ -22,13 +24,60 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+namespace {
+
+Glib::ustring format_size(std::size_t value) {
+    if (!value) {
+        return Glib::ustring("0");
+    }
+
+    typedef std::vector<char> Digits;
+    typedef std::vector<Digits> Groups;
+
+    Groups groups;
+
+    while (value) {
+        groups.push_back(Digits());
+        unsigned places=3;
+
+        while ( value && places ) {
+            groups.back().push_back('0' + (char)( value % 10 ));
+            value /= 10;
+            --places;
+        }
+    }
+
+    Glib::ustring temp;
+    Digits *digits=&groups.back();
+
+    while (!digits->empty()) {
+        temp.append(1, digits->back());
+        digits->pop_back();
+    }
+    groups.pop_back();
+
+    while (!groups.empty()) {
+        temp.append(",");
+        digits = &groups.back();
+        while (!digits->empty()) {
+            temp.append(1, digits->back());
+            digits->pop_back();
+        }
+        groups.pop_back();
+    }
+
+    return temp;
+}
+
+}
+
 struct Memory::Private {
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         Gtk::TreeModelColumn<Glib::ustring> name;
-        Gtk::TreeModelColumn<std::size_t> used;
-        Gtk::TreeModelColumn<std::size_t> slack;
-        Gtk::TreeModelColumn<std::size_t> total;
+        Gtk::TreeModelColumn<Glib::ustring> used;
+        Gtk::TreeModelColumn<Glib::ustring> slack;
+        Gtk::TreeModelColumn<Glib::ustring> total;
 
         ModelColumns() { add(name); add(used); add(slack); add(total); }
     };
@@ -55,7 +104,9 @@ struct Memory::Private {
 };
 
 void Memory::Private::update() {
-    Debug::Heap::Stats total(0, 0);
+    Debug::Heap::Stats total = { 0, 0 };
+
+    int aggregate_features = Debug::Heap::SIZE_AVAILABLE | Debug::Heap::USED_AVAILABLE;
     Gtk::ListStore::iterator row;
 
     row = model->children().begin();
@@ -64,18 +115,34 @@ void Memory::Private::update() {
         Debug::Heap *heap=Debug::get_heap(i);
         if (heap) {
             Debug::Heap::Stats stats=heap->stats();
+            int features=heap->features();
+
+            aggregate_features &= features;
 
             if ( row == model->children().end() ) {
                 row = model->append();
             }
 
             row->set_value(columns.name, Glib::ustring(heap->name()));
-            row->set_value(columns.used, stats.size - stats.bytes_free);
-            row->set_value(columns.slack, stats.bytes_free);
-            row->set_value(columns.total, stats.size);
-
-            total.size += stats.size;
-            total.bytes_free += stats.bytes_free;
+            if ( features & Debug::Heap::SIZE_AVAILABLE ) {
+                row->set_value(columns.total, format_size(stats.size));
+                total.size += stats.size;
+            } else {
+                row->set_value(columns.total, Glib::ustring(_("Unknown")));
+            }
+            if ( features & Debug::Heap::USED_AVAILABLE ) {
+                row->set_value(columns.used, format_size(stats.bytes_used));
+                total.bytes_used += stats.bytes_used;
+            } else {
+                row->set_value(columns.used, Glib::ustring(_("Unknown")));
+            }
+            if ( features & Debug::Heap::SIZE_AVAILABLE &&
+                 features & Debug::Heap::USED_AVAILABLE )
+            {
+                row->set_value(columns.slack, format_size(stats.size - stats.bytes_used));
+            } else {
+                row->set_value(columns.slack, Glib::ustring(_("Unknown")));
+            }
 
             ++row;
         }
@@ -85,10 +152,29 @@ void Memory::Private::update() {
         row = model->append();
     }
 
+    Glib::ustring value;
+
     row->set_value(columns.name, Glib::ustring(_("Combined")));
-    row->set_value(columns.used, total.size - total.bytes_free);
-    row->set_value(columns.slack, total.bytes_free);
-    row->set_value(columns.total, total.size);
+
+    if ( aggregate_features & Debug::Heap::SIZE_AVAILABLE ) {
+        row->set_value(columns.total, format_size(total.size));
+    } else {
+        row->set_value(columns.total, Glib::ustring("> ") + format_size(total.size));
+    }
+
+    if ( aggregate_features & Debug::Heap::USED_AVAILABLE ) {
+        row->set_value(columns.used, format_size(total.bytes_used));
+    } else {
+        row->set_value(columns.used, Glib::ustring("> ") + format_size(total.bytes_used));
+    }
+
+    if ( aggregate_features & Debug::Heap::SIZE_AVAILABLE &&
+         aggregate_features & Debug::Heap::USED_AVAILABLE )
+    {
+        row->set_value(columns.slack, format_size(total.size - total.bytes_used));
+    } else {
+        row->set_value(columns.slack, Glib::ustring(_("Unknown")));
+    }
 
     ++row;
 
@@ -127,6 +213,11 @@ Memory::Memory() : _private(*(new Memory::Private())) {
 
 Memory::~Memory() {
     delete &_private;
+}
+
+void Memory::_apply() {
+    GC::Core::gcollect();
+    _private.update();
 }
 
 } // namespace Dialog

@@ -22,6 +22,9 @@ public:
 
     static Memory *create() { return new Memory(); }
 
+protected:
+    void _apply();
+
 private:
     Memory(Memory const &d); // no copy
     void operator=(Memory const &d); // no assign

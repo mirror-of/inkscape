@@ -24,16 +24,13 @@ public:
     virtual ~Heap() {}
 
     struct Stats {
-        Stats() {}
-        Stats(std::size_t s, std::size_t f) : size(s), bytes_free(f) {}
-
         std::size_t size;
-        std::size_t bytes_free;
+        std::size_t bytes_used;
     };
 
     enum {
         SIZE_AVAILABLE    = ( 1 << 0 ),
-        FREE_AVAILABLE    = ( 1 << 1 ),
+        USED_AVAILABLE    = ( 1 << 1 ),
         GARBAGE_COLLECTED = ( 1 << 2 )
     };
 

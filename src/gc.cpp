@@ -21,16 +21,19 @@ namespace GC {
 
 namespace {
 
-class GCHeapInfo : public Debug::Heap {
+class GCHeap : public Debug::Heap {
 public:
     int features() const {
-        return SIZE_AVAILABLE | FREE_AVAILABLE | GARBAGE_COLLECTED;
+        return SIZE_AVAILABLE | USED_AVAILABLE | GARBAGE_COLLECTED;
     }
     Util::SharedCStringPtr name() const {
         return Util::SharedCStringPtr::coerce("libgc");
     }
     Heap::Stats stats() const {
-        return Stats(Core::get_heap_size(), Core::get_free_bytes());
+        Stats stats;
+        stats.size = Core::get_heap_size();
+        stats.bytes_used = stats.size - Core::get_free_bytes();
+        return stats;
     }
     void force_collect() { Core::gcollect(); }
 };
@@ -48,7 +51,7 @@ void do_init() {
 
     GC_set_warn_proc(&display_warning);
 
-    static GCHeapInfo heap_info;
+    static GCHeap heap_info;
     Debug::register_extra_heap(heap_info);
 }
 

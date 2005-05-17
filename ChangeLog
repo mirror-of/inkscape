@@ -1,5 +1,16 @@
 2005-05-16  MenTaLguY  <mental@rydia.net>
 
+	* src/gc.cpp, src/debug/heap.cpp, src/debug/heap.h:
+
+	  revised Debug::Heap API slightly
+
+	* src/ui/dialog/memory.cpp, src/ui/dialog/memory.h:
+
+	  thousands separators and other nicities.  'apply' now forces a
+	  garbage collection and immediate update.
+
+2005-05-16  MenTaLguY  <mental@rydia.net>
+
 	* src/ui/dialog/memory.cpp: re-use existing rows, though it doesn't
 	  seem to help memory jitter much
 
