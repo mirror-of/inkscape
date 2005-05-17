@@ -24,8 +24,8 @@ namespace Dialog {
 
 class Dialog : public Gtk::Dialog {
 public:
-    Dialog();
     Dialog(BaseObjectType *gobj);
+    Dialog(const char *prefs_path);
     virtual ~Dialog();
 
     virtual void onDestroy();
@@ -37,6 +37,10 @@ public:
     virtual void   onShowF12();
 
     void           transientize();
+
+    void           update_position();
+
+    const char           *_prefs_path;
 
 protected:
     Dialog( bool flag );
@@ -56,6 +60,8 @@ protected:
     void           _setDesktop(SPDesktop *desktop);
 
 private:
+    Dialog();
+
     Dialog(Dialog const &d);            // no copy
     Dialog& operator=(Dialog const &d); // no assign
 };

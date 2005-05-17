@@ -20,6 +20,7 @@ namespace UI {
 namespace Dialog {
 
 XmlEditor::XmlEditor() 
+    : Dialog ("dialogs.xml")
 {
     set_title(_("XML Editor"));
     set_default_size(200, 200);

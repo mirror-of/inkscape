@@ -1454,8 +1454,8 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
     }
 
     if (dlg != NULL) {
-        dlg->show();
-        dlg->raise();
+        dlg->present();
+        dlg->update_position();
     }
 
 } // end of sp_verb_action_help_perform()

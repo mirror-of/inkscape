@@ -16,6 +16,7 @@
 
 #include <gtkmm/stock.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtk.h>
 
 #include "inkscape.h"
 #include "event-context.h"
@@ -24,10 +25,67 @@
 #include "dialog-manager.h"
 #include "dialogs/dialog-events.h"
 #include "shortcuts.h"
+#include "prefs-utils.h"
+#include "macros.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+static void
+sp_dialog_destroy ( GtkObject *object, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    sp_signal_disconnect_by_data (INKSCAPE, dlg);
+
+    delete dlg;
+
+//    wd.win = dlg = NULL;
+//    wd.stop = 0;
+//    x = -1000; y = -1000; w = 0; h = 0;
+}
+
+static gboolean
+sp_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+
+    int y, x, w, h;
+
+    dlg->get_position(x, y);
+    dlg->get_size(w, h);
+
+    prefs_set_int_attribute (dlg->_prefs_path, "x", x);
+    prefs_set_int_attribute (dlg->_prefs_path, "y", y);
+    prefs_set_int_attribute (dlg->_prefs_path, "w", w);
+    prefs_set_int_attribute (dlg->_prefs_path, "h", h);
+
+    return FALSE; // which means, go ahead and destroy it
+} 
+
+void
+Dialog::update_position()
+{
+    int x = prefs_get_int_attribute (_prefs_path, "x", -1000);
+    int y = prefs_get_int_attribute (_prefs_path, "y", -1000);
+    int w = prefs_get_int_attribute (_prefs_path, "w", 0);
+    int h = prefs_get_int_attribute (_prefs_path, "h", 0);
+
+    // If there are stored height and width values for the dialog,
+    // resize the window to match; otherwise we leave it at its default
+    if (w != 0 && h != 0) {
+        resize(w, h);
+    }
+
+    // If there are stored values for where the dialog should be
+    // located, then restore the dialog to that position.
+    if (x != -1000 && y != -1000) {
+        move(x, y);
+    } else {
+        // ...otherwise just put it in the middle of the screen
+        set_position(Gtk::WIN_POS_CENTER);
+    }
+}
 
 /**
  * UI::Dialog::Dialog is a base class for all dialogs in Inkscape.  The
@@ -39,42 +97,41 @@ namespace Dialog {
  * It also provides some general purpose signal handlers for things like
  * showing and hiding all dialogs.
  */
-Dialog::Dialog()
+Dialog::Dialog(const char *prefs_path)
 {
     set_has_separator(false);
 
-    add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
+    _prefs_path = prefs_path;
+
+    //add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
+
+    // TODO: make this prefs-settable
     add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
     set_default_response(Gtk::RESPONSE_APPLY);
+    
+    GtkWidget *dlg = GTK_WIDGET(gobj());
 
-    // TODO:  Perhaps this '-1000' should be a constant instead of a magic number?
-    int x = -1000;
-    int y = -1000;
-    int w = 0;
-    int h = 0;
+//         gchar title[500];
+//         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
+//         set_title(title);
 
-    /* TODO:  Hook to preferences...
-       x = prefs_get_int_attribute (prefs_path, "x", 0);
-       y = prefs_get_int_attribute (prefs_path, "y", 0);
-       w = prefs_get_int_attribute (prefs_path, "w", 0);
-       h = prefs_get_int_attribute (prefs_path, "h", 0);
-    */
+    sp_transientize(dlg);
+    
+    gtk_signal_connect( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg );
 
-    // If there are stored values for where the dialog should be
-    // located, then restore the dialog to that position.
-    if (x != -1000 && y != -1000) {
-        move(x, y);
-    } else {
-        // ...otherwise just put it in the middle of the screen
-/* TODO        set_position(GTK_WIN_POS_CENTER);
-*/
-    }
+    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
+    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
 
-    // If there are stored height and width values for the dialog,
-    // resize the window to match; otherwise we leave it at its default
-    if (w != 0 && h != 0) {
-        resize(w, h);
-    }
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
+                             G_CALLBACK (sp_dialog_destroy), (void *)this);
+                             
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
+                             G_CALLBACK (sp_dialog_delete), (void *)this);
+
+    g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
+
+    present();
+    update_position();
 }
 
 Dialog::Dialog(BaseObjectType *gobj)
@@ -82,8 +139,12 @@ Dialog::Dialog(BaseObjectType *gobj)
 {
 }
 
+
 Dialog::Dialog( bool flag )
 {
+
+    g_print ("someone called Dialog(flag)!!!\n");
+
     // This block is a much simplified version of the code used in all other dialogs for
     // saving/restoring geometry, transientising, passing events to the aplication, and
     // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
@@ -95,7 +156,7 @@ Dialog::Dialog( bool flag )
 //         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
 //         set_title(title);
 
-    set_position(Gtk::WIN_POS_CENTER);
+    //set_position(Gtk::WIN_POS_CENTER);
 
     sp_transientize(dlg);
 
@@ -104,14 +165,11 @@ Dialog::Dialog( bool flag )
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
 
-
     g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
 }
 
 Dialog::~Dialog()
 {
-    // TODO:  Should this be invoked prior to the destructor stage?
-    onDestroy();
 }
 
 
@@ -150,15 +208,12 @@ Dialog::onDestroy()
     get_position(x, y);
     get_size(w, h);
 
-/* TODO:  Hook up preferences storing
-    prefs_set_int_attribute (prefs_path, "x", x);
-    prefs_set_int_attribute (prefs_path, "y", y);
-    prefs_set_int_attribute (prefs_path, "w", w);
-    prefs_set_int_attribute (prefs_path, "h", h);
-*/
+    prefs_set_int_attribute (_prefs_path, "x", x);
+    prefs_set_int_attribute (_prefs_path, "y", y);
+    prefs_set_int_attribute (_prefs_path, "w", w);
+    prefs_set_int_attribute (_prefs_path, "h", h);
 
     _setDesktop(NULL);
-
 }
 
 void
@@ -232,9 +287,6 @@ Dialog::_setDesktop(SPDesktop *desktop) {
 void
 Dialog::transientize()
 {
-    if (get_modal()) {
-        set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);
-    }
 
 /* TODO:  Gtkmmify
     if (prefs_get_int_attribute( "options.dialogsskiptaskbar", "value", 0)) {
@@ -284,7 +336,20 @@ Dialog::_apply()
 void
 Dialog::_close()
 {
-    hide();
+    GtkWidget *dlg = GTK_WIDGET(gobj());
+
+                        /* this code sends a delete_event to the dialog, 
+                         * instead of just destroying it, so that the 
+                         * dialog can do some housekeeping, such as remember 
+                         * its position.
+                         */
+                        GdkEventAny event;
+                        event.type = GDK_DELETE;
+                        event.window = dlg->window;
+                        event.send_event = TRUE;
+                        g_object_ref (G_OBJECT (event.window));
+                        gtk_main_do_event ((GdkEvent*)&event);
+                        g_object_unref (G_OBJECT (event.window));
 }
 
 } // namespace Dialog

@@ -195,7 +195,10 @@ void Memory::Private::stop_update_task() {
     update_task.disconnect();
 }
 
-Memory::Memory() : _private(*(new Memory::Private())) {
+Memory::Memory() 
+    : Dialog ("dialogs.memory"),
+      _private(*(new Memory::Private())) 
+{
     set_title(_("Memory Info"));
     set_default_size(200, 200);
 
@@ -209,6 +212,8 @@ Memory::Memory() : _private(*(new Memory::Private())) {
 
     signal_show().connect(sigc::mem_fun(_private, &Private::start_update_task));
     signal_hide().connect(sigc::mem_fun(_private, &Private::stop_update_task));
+
+    _private.start_update_task();
 }
 
 Memory::~Memory() {

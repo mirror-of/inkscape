@@ -20,7 +20,8 @@ namespace UI {
 namespace Dialog {
 
 Find::Find() 
-    : _page_find("Find", 1, 1)
+    : Dialog ("dialogs.find"),
+      _page_find("Find", 1, 1)
 {
     set_title(_("Find"));
     set_default_size(200, 200);

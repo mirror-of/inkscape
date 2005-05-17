@@ -19,7 +19,8 @@ namespace UI {
 namespace Dialog {
 
 DocumentPreferences::DocumentPreferences() 
-    : _page_page("Page", 1, 1),
+    : Dialog ("dialogs.documentoptions"),
+      _page_page("Page", 1, 1),
       _page_grid("Grid", 1, 1),
       _page_guides("Guides", 1, 1),
       _page_metadata("Metadata", 1, 1)

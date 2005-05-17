@@ -27,7 +27,8 @@ namespace UI {
 namespace Dialog {
 
 InkscapePreferences::InkscapePreferences()
-    : _page_mouse_adj_sensitivity(0, 0, 30, 1, 1, 1), // TODO: set up initial values
+    : Dialog ("dialogs.preferences"),
+      _page_mouse_adj_sensitivity(0, 0, 30, 1, 1, 1), // TODO: set up initial values
       _page_mouse_adj_threshold(0, 0, 20, 1, 1, 1),
       _page_scrolling_adj_wheel(0, 0, 1000, 1, 1, 1),
       _page_scrolling_adj_ctrl_scroll(0, 0, 1000, 1, 1, 1),

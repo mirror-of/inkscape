@@ -44,7 +44,8 @@ namespace Dialog {
  * additional debugging once it is set up.
  */
 Transformation::Transformation()
-    : _page_move              ("Move",   4, 2),
+    : Dialog ("dialogs.transformation"),
+      _page_move              ("Move",   4, 2),
       _page_scale             ("Scale",  4, 2),
       _page_rotate            ("Rotate", 4, 2),
       _page_skew              ("Skew",   4, 2),

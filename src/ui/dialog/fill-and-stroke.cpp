@@ -20,7 +20,8 @@ namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke() 
-    : _page_fill("Fill", 1, 1),
+    : Dialog ("dialogs.fillstroke"),
+      _page_fill("Fill", 1, 1),
       _page_stroke_paint("Stroke Paint", 1, 1),
       _page_stroke_style("Stroke Style", 1, 1)
 {

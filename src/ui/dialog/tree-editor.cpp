@@ -17,6 +17,7 @@ namespace UI {
 namespace Dialog {
 
 TreeEditor::TreeEditor()
+    : Dialog ("dialogs.treeeditor")
 {
     get_vbox()->pack_start(_hbox);
 

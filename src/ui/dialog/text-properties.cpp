@@ -20,7 +20,8 @@ namespace UI {
 namespace Dialog {
 
 TextProperties::TextProperties() 
-    : _page_font("Font", 1, 1),
+    : Dialog ("dialogs.textandfont"),
+      _page_font("Font", 1, 1),
       _page_text("Text", 1, 1)
 {
     set_title(_("Text Properties"));

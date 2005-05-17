@@ -417,7 +417,7 @@ Dialog* DialogManager::getXmlEditorDialog() {
 
 Dialog *DialogManager::getMemoryDialog() {
     if (_memory_dialog == NULL) {
-        _memory_dialog = Memory::create();
+        _memory_dialog = new Memory;
         addDialog("Memory", _memory_dialog);
     }
     return _memory_dialog;

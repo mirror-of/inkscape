@@ -23,7 +23,8 @@ namespace UI {
 namespace Dialog {
 
 AlignAndDistribute::AlignAndDistribute() 
-    : _page_align("Align", 1, 1),
+    : Dialog ("dialogs.align"),
+      _page_align("Align", 1, 1),
       _page_distribute("Distribute", 1, 1)
 {
     set_title(_("Align"));

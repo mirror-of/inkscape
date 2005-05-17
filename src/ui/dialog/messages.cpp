@@ -47,6 +47,7 @@ void Messages::clear()
  * Constructor
  */
 Messages::Messages()
+	: Dialog ("dialogs.messages")
 {
     set_title(_("Messages"));
     set_size_request(300, 400);

@@ -20,6 +20,7 @@ namespace UI {
 namespace Dialog {
 
 LayerEditor::LayerEditor() 
+    : Dialog ("dialogs.layereditor")
 {
     set_title(_("Layer Editor"));
     set_default_size(200, 200);

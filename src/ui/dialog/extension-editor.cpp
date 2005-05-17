@@ -20,6 +20,7 @@ namespace UI {
 namespace Dialog {
 
 ExtensionEditor::ExtensionEditor()
+    : Dialog ("dialogs.extensioneditor")
 {
     set_title(_("Extensions Editor"));
     set_default_size(400, 200);

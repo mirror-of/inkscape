@@ -20,7 +20,8 @@ namespace UI {
 namespace Dialog {
 
 Export::Export() 
-    : _page_export("Export", 1, 1)
+    : Dialog ("dialogs.export"),
+      _page_export("Export", 1, 1)
 {
     set_title(_("Export"));
     set_default_size(200, 200);
