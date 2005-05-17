@@ -55,17 +55,19 @@ struct Memory::Private {
 };
 
 void Memory::Private::update() {
-    model->clear();
-
     Debug::Heap::Stats total(0, 0);
     Gtk::ListStore::iterator row;
+
+    row = model->children().begin();
 
     for ( unsigned i = 0 ; i < Debug::heap_count() ; i++ ) {
         Debug::Heap *heap=Debug::get_heap(i);
         if (heap) {
             Debug::Heap::Stats stats=heap->stats();
 
-            row = model->append();
+            if ( row == model->children().end() ) {
+                row = model->append();
+            }
 
             row->set_value(columns.name, Glib::ustring(heap->name()));
             row->set_value(columns.used, stats.size - stats.bytes_free);
@@ -74,15 +76,25 @@ void Memory::Private::update() {
 
             total.size += stats.size;
             total.bytes_free += stats.bytes_free;
+
+            ++row;
         }
     }
 
-    row = model->append();
+    if ( row == model->children().end() ) {
+        row = model->append();
+    }
 
     row->set_value(columns.name, Glib::ustring(_("Combined")));
     row->set_value(columns.used, total.size - total.bytes_free);
     row->set_value(columns.slack, total.bytes_free);
     row->set_value(columns.total, total.size);
+
+    ++row;
+
+    while ( row != model->children().end() ) {
+        row = model->erase(row);
+    }
 }
 
 void Memory::Private::start_update_task() {

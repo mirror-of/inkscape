@@ -1,3 +1,8 @@
+2005-05-16  MenTaLguY  <mental@rydia.net>
+
+	* src/ui/dialog/memory.cpp: re-use existing rows, though it doesn't
+	  seem to help memory jitter much
+
 2005-05-15  MenTaLguY  <mental@rydia.net>
 
 	* src/debug/heap.cpp: fix bounds error
