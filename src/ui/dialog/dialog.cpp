@@ -103,7 +103,7 @@ Dialog::Dialog(const char *prefs_path)
 
     _prefs_path = prefs_path;
 
-    //add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
+    add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
 
     // TODO: make this prefs-settable
     add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
