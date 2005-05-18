@@ -198,6 +198,11 @@ sp_fill_style_widget_update (SPWidget *spw)
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;
 
+    if (g_object_get_data (G_OBJECT (spw), "local")) {
+        g_object_set_data (G_OBJECT (spw), "local", GINT_TO_POINTER (FALSE)); // local change; do nothing, but reset the flag
+        return;
+    }
+
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
     SPPaintSelector *psel = SP_PAINT_SELECTOR (g_object_get_data (G_OBJECT (spw), "paint-selector"));
@@ -328,6 +333,14 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
     if (g_object_get_data (G_OBJECT (spw), "update")) {
         return;
     }
+
+    if (g_object_get_data (G_OBJECT (spw), "local")) {
+        // previous local flag not cleared yet; 
+        // this means dragged events come too fast, so we better skip this one to speed up display 
+        // (it's safe to do this in any case)
+        return;
+    }
+
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
     switch (psel->mode) {
@@ -337,6 +350,7 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
         {
             sp_paint_selector_set_flat_color (psel, SP_ACTIVE_DESKTOP, "fill", "fill-opacity");
             sp_document_maybe_done (SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP), undo_label);
+            g_object_set_data (G_OBJECT (spw), "local", GINT_TO_POINTER (TRUE)); // local change, do not update from selection
             break;
         }
 
