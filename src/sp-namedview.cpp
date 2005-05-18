@@ -223,8 +223,6 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPNamedView *nv = SP_NAMEDVIEW(object);
 
-	SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
-
 	switch (key) {
 	case SP_ATTR_VIEWONLY:
 		nv->editable = (!value);
@@ -467,7 +465,25 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_DOCUMENT_UNITS: {
-		SPUnit const *new_unit = pt; // old documents were pretty much pt-based, so leave it as the default
+		/* The default unit if the document doesn't override this: e.g. for files saved as
+		 * `plain SVG', or non-inkscape files, or files created by an inkscape 0.40 &
+		 * earlier.
+		 *
+		 * Here we choose `px': useful for screen-destined SVGs, and fewer bug reports
+		 * about "not the same numbers as what's in the SVG file" (at least for documents
+		 * without a viewBox attribute on the root <svg> element).  Similarly, it's also
+		 * the most reliable unit (i.e. least likely to be wrong in different viewing
+		 * conditions) for viewBox-less SVG files given that it's the unit that inkscape
+		 * uses for all coordinates.
+		 *
+		 * For documents that do have a viewBox attribute on the root <svg> element, it
+		 * might be better if we used either viewBox coordinates or if we used the unit of
+		 * say the width attribute of the root <svg> element.  However, these pose problems
+		 * in that they aren't in general absolute units as currently required by
+		 * doc_units.
+		 */
+		SPUnit const *new_unit = &sp_unit_get_by_id(SP_UNIT_PX);
+
 		if (value) {
 			SPUnit const *const req_unit = sp_unit_get_by_abbreviation(value);
 			if ( req_unit == NULL ) {
