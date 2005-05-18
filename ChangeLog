@@ -1,3 +1,10 @@
+2005-05-17  MenTaLguY  <mental@rydia.net>
+
+	* src/ui/dialog/memory.cpp:
+
+	  reduce magnitude of memory jitter somewhat by avoiding some vector
+	  resizing and copying
+
 2005-05-16  MenTaLguY  <mental@rydia.net>
 
 	* src/gc.cpp, src/debug/heap.cpp, src/debug/heap.h:

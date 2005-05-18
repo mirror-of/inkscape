@@ -32,38 +32,42 @@ Glib::ustring format_size(std::size_t value) {
     }
 
     typedef std::vector<char> Digits;
-    typedef std::vector<Digits> Groups;
+    typedef std::vector<Digits *> Groups;
 
     Groups groups;
 
+    Digits *digits;
+
     while (value) {
-        groups.push_back(Digits());
         unsigned places=3;
+        digits = new Digits();
+        digits->reserve(places);
 
         while ( value && places ) {
-            groups.back().push_back('0' + (char)( value % 10 ));
+            digits->push_back('0' + (char)( value % 10 ));
             value /= 10;
             --places;
         }
+
+        groups.push_back(digits);
     }
 
     Glib::ustring temp;
-    Digits *digits=&groups.back();
 
-    while (!digits->empty()) {
-        temp.append(1, digits->back());
-        digits->pop_back();
-    }
-    groups.pop_back();
-
-    while (!groups.empty()) {
-        temp.append(",");
-        digits = &groups.back();
+    while (true) {
+        digits = groups.back();
         while (!digits->empty()) {
             temp.append(1, digits->back());
             digits->pop_back();
         }
+        delete digits;
+
         groups.pop_back();
+        if (groups.empty()) {
+            break;
+        }
+
+        temp.append(",");
     }
 
     return temp;
