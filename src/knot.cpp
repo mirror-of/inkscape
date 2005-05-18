@@ -347,11 +347,9 @@ sp_knot_dispose (GObject * object)
 {
 	SPKnot *knot = (SPKnot *) object;
 
-	/* ungrab pointer if still grabbed by mouseover, find a different way (lauris) */
-	// This warning seems to never be triggered, so remove this stanza after some additional testing --bb
 	if ((knot->flags & SP_KNOT_GRABBED) && gdk_pointer_is_grabbed ()) {
+		// This happens e.g. when deleting a node in node tool while dragging it
 		gdk_pointer_ungrab (GDK_CURRENT_TIME);
-		g_warning ("Deleting still-grabbed knot");
 	}
 
 	if (knot->item) {
