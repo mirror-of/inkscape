@@ -143,8 +143,8 @@ sp_node_context_dispose(GObject *object)
     if (nc->nodepath) {
         repr = nc->nodepath->repr;
     }
-    if (!repr && nc->knot_holder) {
-        repr = nc->knot_holder->repr;
+    if (!repr && ec->shape_knot_holder) {
+        repr = ec->shape_knot_holder->repr;
     }
 
     if (repr) {
@@ -157,9 +157,9 @@ sp_node_context_dispose(GObject *object)
         nc->nodepath = NULL;
     }
 
-    if (nc->knot_holder) {
-        sp_knot_holder_destroy(nc->knot_holder);
-        nc->knot_holder = NULL;
+    if (ec->shape_knot_holder) {
+        sp_knot_holder_destroy(ec->shape_knot_holder);
+        ec->shape_knot_holder = NULL;
     }
 
     if (nc->_node_message_context) {
@@ -193,7 +193,7 @@ sp_node_context_setup(SPEventContext *ec)
     SPItem *item = selection->singleItem();
 
     nc->nodepath = NULL;
-    nc->knot_holder = NULL;
+    ec->shape_knot_holder = NULL;
 
     if (item) {
         nc->nodepath = sp_nodepath_new(ec->desktop, item);
@@ -201,9 +201,9 @@ sp_node_context_setup(SPEventContext *ec)
             //point pack to parent in case nodepath is deleted
             nc->nodepath->nodeContext = nc;
         }
-        nc->knot_holder = sp_item_knot_holder(item, ec->desktop);
+        ec->shape_knot_holder = sp_item_knot_holder(item, ec->desktop);
 
-        if (nc->nodepath || nc->knot_holder) {
+        if (nc->nodepath || ec->shape_knot_holder) {
             // setting listener
             Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
             if (repr) {
@@ -242,9 +242,9 @@ sp_node_context_selection_changed(Inkscape::Selection *selection, gpointer data)
         old_repr = nc->nodepath->repr;
         sp_nodepath_destroy(nc->nodepath);
     }
-    if (nc->knot_holder) {
-        old_repr = nc->knot_holder->repr;
-        sp_knot_holder_destroy(nc->knot_holder);
+    if (ec->shape_knot_holder) {
+        old_repr = ec->shape_knot_holder->repr;
+        sp_knot_holder_destroy(ec->shape_knot_holder);
     }
 
     if (old_repr) { // remove old listener
@@ -256,15 +256,15 @@ sp_node_context_selection_changed(Inkscape::Selection *selection, gpointer data)
 
     SPDesktop *desktop = selection->desktop();
     nc->nodepath = NULL;
-    nc->knot_holder = NULL;
+    ec->shape_knot_holder = NULL;
     if (item) {
         nc->nodepath = sp_nodepath_new(desktop, item);
         if (nc->nodepath) {
             nc->nodepath->nodeContext = nc;
         }
-        nc->knot_holder = sp_item_knot_holder(item, desktop);
+        ec->shape_knot_holder = sp_item_knot_holder(item, desktop);
 
-        if (nc->nodepath || nc->knot_holder) {
+        if (nc->nodepath || ec->shape_knot_holder) {
             // setting new listener
             Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
             if (repr) {
@@ -287,6 +287,7 @@ void
 sp_nodepath_update_from_item(SPNodeContext *nc, SPItem *item)
 {
     g_assert(nc);
+    SPEventContext *ec = ((SPEventContext *) nc);
 
     SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(SP_EVENT_CONTEXT(nc));
     g_assert(desktop);
@@ -295,18 +296,18 @@ sp_nodepath_update_from_item(SPNodeContext *nc, SPItem *item)
         sp_nodepath_destroy(nc->nodepath);
     }
 
-    if (nc->knot_holder) {
-        sp_knot_holder_destroy(nc->knot_holder);
+    if (ec->shape_knot_holder) {
+        sp_knot_holder_destroy(ec->shape_knot_holder);
     }
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     item = selection->singleItem();
 
     nc->nodepath = NULL;
-    nc->knot_holder = NULL;
+    ec->shape_knot_holder = NULL;
     if (item) {
         nc->nodepath = sp_nodepath_new(desktop, item);
-        nc->knot_holder = sp_item_knot_holder(item, desktop);
+        ec->shape_knot_holder = sp_item_knot_holder(item, desktop);
     }
     sp_nodepath_update_statusbar(nc->nodepath);
 }
@@ -325,9 +326,10 @@ nodepath_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
 
     g_assert(data);
     SPNodeContext *nc = ((SPNodeContext *) data);
+    SPEventContext *ec = ((SPEventContext *) data);
     g_assert(nc);
     Inkscape::NodePath::Path *np = nc->nodepath;
-    SPKnotHolder *kh = nc->knot_holder;
+    SPKnotHolder *kh = ec->shape_knot_holder;
 
     if (np) {
         item = SP_ITEM(np->path);

@@ -106,27 +106,23 @@ tools_isactive (SPDesktop *dt, unsigned num)
 {
 	g_assert( num < G_N_ELEMENTS(tool_ids) );
 	if (SP_IS_EVENT_CONTEXT(dt->event_context))
-		return (!strcmp (dt->event_context->repr->attribute("id"), tool_ids[num]));
+		return (!strcmp (dt->event_context->prefs_repr->attribute("id"), tool_ids[num]));
 	else return FALSE;
 }
 
 int
 tools_active (SPDesktop *dt)
 {
-	return (tools_id2num (dt->event_context->repr->attribute("id")));
+	return (tools_id2num (dt->event_context->prefs_repr->attribute("id")));
 }
 
 void
 tools_switch (SPDesktop *dt, int num)
 {
-
-  if (dt)
-    {
-      dt->_tool_changed.emit(num);
-    }
-  
-  
-  
+	if (dt) {
+		dt->_tool_changed.emit(num);
+	}
+ 
 	switch (num) {
 	case TOOLS_SELECT:
 		sp_desktop_set_event_context (dt, SP_TYPE_SELECT_CONTEXT, tool_names[num]);

@@ -112,6 +112,9 @@ sp_spiral_context_init(SPSpiralContext *spiral_context)
     event_context->within_tolerance = false;
     event_context->item_to_select = NULL;
 
+    event_context->shape_repr = NULL;
+    event_context->shape_knot_holder = NULL;
+
     spiral_context->item = NULL;
 
     spiral_context->revo = 3.0;
@@ -135,15 +138,15 @@ sp_spiral_context_dispose(GObject *object)
     /* fixme: This is necessary because we do not grab */
     if (sc->item) sp_spiral_finish(sc);
 
-    if (sc->knot_holder) {
-        sp_knot_holder_destroy(sc->knot_holder);
-        sc->knot_holder = NULL;
+    if (ec->shape_knot_holder) {
+        sp_knot_holder_destroy(ec->shape_knot_holder);
+        ec->shape_knot_holder = NULL;
     }
 
-    if (sc->repr) { // remove old listener
-        sp_repr_remove_listener_by_data(sc->repr, ec);
-        sp_repr_unref(sc->repr);
-        sc->repr = 0;
+    if (ec->shape_repr) { // remove old listener
+        sp_repr_remove_listener_by_data(ec->shape_repr, ec);
+        sp_repr_unref(ec->shape_repr);
+        ec->shape_repr = 0;
     }
 
     if (sc->_message_context) {
@@ -153,30 +156,10 @@ sp_spiral_context_dispose(GObject *object)
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
-static void shape_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
-                                     gchar const *old_value, gchar const *new_value,
-                                     bool is_interactive, gpointer data)
-{
-    SPSpiralContext *sc = SP_SPIRAL_CONTEXT(data);
-    SPEventContext *ec = SP_EVENT_CONTEXT(sc);
-
-    if (sc->knot_holder) {
-        sp_knot_holder_destroy(sc->knot_holder);
-    }
-    sc->knot_holder = NULL;
-
-    SPDesktop *desktop = ec->desktop;
-    SPItem *item = SP_DT_SELECTION(desktop)->singleItem();
-
-    if (item) {
-        sc->knot_holder = sp_item_knot_holder(item, desktop);
-    }
-}
-
-static Inkscape::XML::NodeEventVector shape_repr_events = {
+static Inkscape::XML::NodeEventVector ec_shape_repr_events = {
     NULL, /* child_added */
     NULL, /* child_removed */
-    shape_event_attr_changed,
+    ec_shape_event_attr_changed,
     NULL, /* content_changed */
     NULL  /* order_changed */
 };
@@ -191,26 +174,26 @@ sp_spiral_context_selection_changed(Inkscape::Selection *selection, gpointer dat
     SPSpiralContext *sc = SP_SPIRAL_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(sc);
 
-    if (sc->knot_holder) { // desktroy knotholder
-        sp_knot_holder_destroy(sc->knot_holder);
-        sc->knot_holder = NULL;
+    if (ec->shape_knot_holder) { // desktroy knotholder
+        sp_knot_holder_destroy(ec->shape_knot_holder);
+        ec->shape_knot_holder = NULL;
     }
 
-    if (sc->repr) { // remove old listener
-        sp_repr_remove_listener_by_data(sc->repr, ec);
-        sp_repr_unref(sc->repr);
-        sc->repr = 0;
+    if (ec->shape_repr) { // remove old listener
+        sp_repr_remove_listener_by_data(ec->shape_repr, ec);
+        sp_repr_unref(ec->shape_repr);
+        ec->shape_repr = 0;
     }
 
     SPItem *item = selection->singleItem();
     if (item) {
-        sc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
-        if (repr) {
-            sc->repr = repr;
-            sp_repr_ref(repr);
-            sp_repr_add_listener(repr, &shape_repr_events, ec);
-            sp_repr_synthesize_events(repr, &shape_repr_events, ec);
+        ec->shape_knot_holder = sp_item_knot_holder(item, ec->desktop);
+        Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(item);
+        if (shape_repr) {
+            ec->shape_repr = shape_repr;
+            sp_repr_ref(shape_repr);
+            sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
+            sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }
     }
 }
@@ -231,13 +214,13 @@ sp_spiral_context_setup(SPEventContext *ec)
 
     SPItem *item = selection->singleItem();
     if (item) {
-        sc->knot_holder = sp_item_knot_holder(item, ec->desktop);
-        Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
-        if (repr) {
-            sc->repr = repr;
-            sp_repr_ref(repr);
-            sp_repr_add_listener(repr, &shape_repr_events, ec);
-            sp_repr_synthesize_events(repr, &shape_repr_events, ec);
+        ec->shape_knot_holder = sp_item_knot_holder(item, ec->desktop);
+        Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(item);
+        if (shape_repr) {
+            ec->shape_repr = shape_repr;
+            sp_repr_ref(shape_repr);
+            sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
+            sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }
     }
 

@@ -32,9 +32,6 @@ struct SPRectContext : public SPEventContext {
 	SPItem *item;
 	NR::Point center;
 
-	SPKnotHolder *knot_holder;
-	Inkscape::XML::Node *repr;
-	
   	gdouble rx;	/* roundness radius (x direction) */
   	gdouble ry;	/* roundness radius (y direction) */
 

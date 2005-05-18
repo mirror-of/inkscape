@@ -35,6 +35,8 @@ class Point;
 
 struct GrDrag;
 
+struct SPKnotHolder;
+
 namespace Inkscape { class MessageContext; }
 
 struct SPEventContext : public GObject {
@@ -45,7 +47,7 @@ struct SPEventContext : public GObject {
     SPEventContext *next;
     unsigned key;
     SPDesktop *desktop;
-    Inkscape::XML::Node *repr;
+    Inkscape::XML::Node *prefs_repr;
     gchar **cursor_shape;
     gint hot_x, hot_y;
     GdkCursor *cursor;
@@ -66,6 +68,9 @@ struct SPEventContext : public GObject {
 
     GrDrag *_grdrag;
     GrDrag *get_drag () {return _grdrag;}
+
+    SPKnotHolder *shape_knot_holder;
+    Inkscape::XML::Node *shape_repr;
 };
 
 struct SPEventContextClass : public GObjectClass {
@@ -79,11 +84,10 @@ struct SPEventContextClass : public GObjectClass {
 };
 
 #define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT(e)->desktop)
-#define SP_EVENT_CONTEXT_REPR(e) (SP_EVENT_CONTEXT(e)->repr)
 
 #define SP_EVENT_CONTEXT_STATIC 0
 
-SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *repr, unsigned key);
+SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *prefs_repr, unsigned key);
 void sp_event_context_finish(SPEventContext *ec);
 void sp_event_context_read(SPEventContext *ec, gchar const *key);
 void sp_event_context_activate(SPEventContext *ec);
@@ -105,6 +109,10 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEv
 guint get_group0_keyval(GdkEventKey *event);
 
 SPItem *sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, int state, gboolean into_groups);
+
+void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
+                                     gchar const *name, gchar const *old_value, gchar const *new_value,
+                                 bool const is_interactive, gpointer const data);
 
 #endif
 

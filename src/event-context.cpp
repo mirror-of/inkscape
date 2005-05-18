@@ -46,6 +46,9 @@
 #include "message-context.h"
 #include "widgets/spw-utilities.h"
 #include "gradient-drag.h"
+#include "knotholder.h"
+#include "object-edit.h"
+#include "attributes.h"
 
 #include "event-context.h"
 
@@ -140,10 +143,10 @@ sp_event_context_dispose(GObject *object)
         ec->desktop = NULL;
     }
 
-    if (ec->repr) {
-        sp_repr_remove_listener_by_data(ec->repr, ec);
-        sp_repr_unref(ec->repr);
-        ec->repr = NULL;
+    if (ec->prefs_repr) {
+        sp_repr_remove_listener_by_data(ec->prefs_repr, ec);
+        sp_repr_unref(ec->prefs_repr);
+        ec->prefs_repr = NULL;
     }
 
     G_OBJECT_CLASS(parent_class)->dispose(object);
@@ -578,7 +581,7 @@ sp_event_context_private_item_handler(SPEventContext *ec, SPItem *item, GdkEvent
 }
 
 static void
-sp_ec_repr_attr_changed(Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval,
+sp_ec_repr_attr_changed(Inkscape::XML::Node *prefs_repr, gchar const *key, gchar const *oldval, gchar const *newval,
                         bool is_interactive, gpointer data)
 {
     SPEventContext *ec;
@@ -599,7 +602,7 @@ Inkscape::XML::NodeEventVector sp_ec_event_vector = {
 };
 
 SPEventContext *
-sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *repr, unsigned int key)
+sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *prefs_repr, unsigned int key)
 {
     g_return_val_if_fail(g_type_is_a(type, SP_TYPE_EVENT_CONTEXT), NULL);
     g_return_val_if_fail(desktop != NULL, NULL);
@@ -610,10 +613,10 @@ sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *repr, 
     ec->desktop = desktop;
     ec->_message_context = new Inkscape::MessageContext(desktop->messageStack());
     ec->key = key;
-    ec->repr = repr;
-    if (ec->repr) {
-        sp_repr_ref(ec->repr);
-        sp_repr_add_listener(ec->repr, &sp_ec_event_vector, ec);
+    ec->prefs_repr = prefs_repr;
+    if (ec->prefs_repr) {
+        sp_repr_ref(ec->prefs_repr);
+        sp_repr_add_listener(ec->prefs_repr, &sp_ec_event_vector, ec);
     }
 
     if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->setup)
@@ -671,8 +674,8 @@ sp_event_context_read(SPEventContext *ec, gchar const *key)
     g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
     g_return_if_fail(key != NULL);
 
-    if (ec->repr) {
-        gchar const *val = ec->repr->attribute(key);
+    if (ec->prefs_repr) {
+        gchar const *val = ec->prefs_repr->attribute(key);
         if (((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set)
             ((SPEventContextClass *) G_OBJECT_GET_CLASS(ec))->set(ec, key, val);
     }
@@ -820,6 +823,32 @@ sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, int state, gb
 
     return item;
 }
+
+void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
+                                     gchar const *name, gchar const *old_value, gchar const *new_value,
+                                     bool const is_interactive, gpointer const data)
+{
+    if (!name || !strcmp(name, "style") || SP_ATTRIBUTE_IS_CSS(sp_attribute_lookup(name))) {
+        // no need to regenrate knotholder if only style changed
+        return;
+    }
+
+    SPEventContext *ec = SP_EVENT_CONTEXT(data);
+
+    if (ec->shape_knot_holder) {
+        sp_knot_holder_destroy(ec->shape_knot_holder);
+    }
+    ec->shape_knot_holder = NULL;
+
+    SPDesktop *desktop = ec->desktop;
+
+    SPItem *item = SP_DT_SELECTION(desktop)->singleItem();
+
+    if (item) {
+        ec->shape_knot_holder = sp_item_knot_holder(item, desktop);
+    }
+}
+
 
 /*
   Local Variables:

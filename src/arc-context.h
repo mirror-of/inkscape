@@ -36,9 +36,6 @@ struct SPArcContext : public SPEventContext {
 
     sigc::connection sel_changed_connection;
 
-    SPKnotHolder *knot_holder;
-    Inkscape::XML::Node *repr;
-
     Inkscape::MessageContext *_message_context;
 };
 
