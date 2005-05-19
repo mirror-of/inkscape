@@ -4,6 +4,7 @@ tutorialdir = $(datadir)/inkscape/tutorials
 tutorial_DATA = \
     tutorial-elements.svg \
     tutorial-elements.fr.svg \
+    tutorial-elements.es.svg \
     elementsofdesign.sl.svg \
     tutorial-tips.svg \
     tipsandtricks.sl.svg \
@@ -24,9 +25,11 @@ tutorial_DATA = \
     tutorial-calligraphy.fr.svg \
     tutorial-shapes.svg \
     tutorial-shapes.fr.svg \
+    tutorial-shapes.es.svg \
     tutorial-shapes.sl.svg \
     tutorial-tracing.svg potrace.png oldguitar.jpg tux.png \
-    tutorial-tracing.fr.svg potrace-fr.png
+    tutorial-tracing.fr.svg potrace-fr.png \
+    tutorial-tracing.es.svg
 
 
 
