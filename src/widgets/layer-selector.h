@@ -71,7 +71,7 @@ private:
 
     sigc::connection _layer_changed_connection;
     sigc::connection _selection_changed_connection;
-    sigc::connection _hide_toggled_connection;
+    sigc::connection _visibility_toggled_connection;
     sigc::connection _lock_toggled_connection;
 
     SPObject *_layer;
@@ -85,6 +85,7 @@ private:
     void _buildSiblingEntries(unsigned depth,
                               SPObject &parent,
                               Inkscape::Util::List<SPObject &> hierarchy);
+    void _protectUpdate(sigc::slot<void> slot);
     void _destroyEntry(Gtk::ListStore::iterator const &row);
     void _hideLayer(bool hide);
     void _lockLayer(bool lock);

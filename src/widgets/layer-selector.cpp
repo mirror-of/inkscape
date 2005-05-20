@@ -107,7 +107,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
             sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
         )
     );
-    _hide_toggled_connection = _visibility_toggle.signal_toggled().connect(
+    _visibility_toggled_connection = _visibility_toggle.signal_toggled().connect(
         sigc::compose(
             sigc::mem_fun(*this, &LayerSelector::_hideLayer),
             sigc::mem_fun(_visibility_toggle, &Gtk::ToggleButton::get_active)
@@ -359,10 +359,10 @@ void attribute_changed(Inkscape::XML::Node *repr, gchar const *name,
                        gchar const *old_value, gchar const *new_value,
                        bool is_interactive, void *data) 
 {
-    if ( !std::strcmp(name, "id") || !std::strcmp(name, "inkscape:label") ) {
-        reinterpret_cast<Callbacks *>(data)->update_row();
-    } else if ( !std::strcmp(name, "inkscape:groupmode") ) {
+    if ( !std::strcmp(name, "inkscape:groupmode") ) {
         reinterpret_cast<Callbacks *>(data)->update_list();
+    } else {
+        reinterpret_cast<Callbacks *>(data)->update_row();
     }
 }
 
@@ -381,7 +381,8 @@ void node_removed(Inkscape::XML::Node *parent, Inkscape::XML::Node *child, Inksc
 }
 
 void node_reordered(Inkscape::XML::Node *parent, Inkscape::XML::Node *child,
-                    Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref, void *data)
+                    Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref,
+                    void *data)
 {
     gchar const *mode=child->attribute("inkscape:groupmode");
     if ( mode && !std::strcmp(mode, "layer") ) {
@@ -412,6 +413,16 @@ void rebuild_all_rows(sigc::slot<void, SPObject *> rebuild, SPDesktop *desktop)
 
 }
 
+void LayerSelector::_protectUpdate(sigc::slot<void> slot) {
+    bool visibility_blocked=_visibility_toggled_connection.blocked();
+    bool lock_blocked=_lock_toggled_connection.blocked();
+    _visibility_toggled_connection.block(true);
+    _lock_toggled_connection.block(true);
+    slot();
+    _visibility_toggled_connection.block(visibility_blocked);
+    _lock_toggled_connection.block(lock_blocked);
+}
+
 /** Builds and appends a row in the layer model object.
  */
 void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
@@ -420,16 +431,22 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
     Callbacks *callbacks=new Callbacks();
 
     callbacks->update_row = sigc::bind(
-        sigc::ptr_fun(&update_row_for_object),
-        &object, _model_columns.object, _layer_model
+        sigc::mem_fun(*this, &LayerSelector::_protectUpdate),
+        sigc::bind(
+            sigc::ptr_fun(&update_row_for_object),
+            &object, _model_columns.object, _layer_model
+        )
     );
 
     SPObject *layer=_desktop->currentLayer();
     if ( &object == layer || &object == SP_OBJECT_PARENT(layer) ) {
         callbacks->update_list = sigc::bind(
-            sigc::ptr_fun(&rebuild_all_rows),
-            sigc::mem_fun(*this, &LayerSelector::_selectLayer),
-            _desktop
+            sigc::mem_fun(*this, &LayerSelector::_protectUpdate),
+            sigc::bind(
+                sigc::ptr_fun(&rebuild_all_rows),
+                sigc::mem_fun(*this, &LayerSelector::_selectLayer),
+                _desktop
+            )
         );
 
         Inkscape::XML::NodeEventVector events = {

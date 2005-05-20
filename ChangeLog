@@ -1,3 +1,9 @@
+2005-05-29  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
+
+	  fix layer property undo crash bugs (#1192708 and #1171704)
+
 2005-05-19  MenTaLguY  <mental@rydia.net>
 
 	* src/debug/Makefile_insert, src/debug/sysv-heap.cpp,
