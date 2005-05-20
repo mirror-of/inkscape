@@ -1,3 +1,12 @@
+2005-05-19  MenTaLguY  <mental@rydia.net>
+
+	* src/debug/Makefile_insert, src/debug/sysv-heap.cpp,
+	  src/debug/sysv-heap.h, src/gc.cpp, src/debug/gc-heap.h,
+	  src/debug/heap.cpp:
+
+	  moved GC Heap statistics stuff into libdebug to ease circular
+	  dependencies
+
 2005-05-17  MenTaLguY  <mental@rydia.net>
 
 	* src/ui/dialog/memory.cpp:

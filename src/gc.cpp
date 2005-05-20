@@ -21,23 +21,6 @@ namespace GC {
 
 namespace {
 
-class GCHeap : public Debug::Heap {
-public:
-    int features() const {
-        return SIZE_AVAILABLE | USED_AVAILABLE | GARBAGE_COLLECTED;
-    }
-    Util::SharedCStringPtr name() const {
-        return Util::SharedCStringPtr::coerce("libgc");
-    }
-    Heap::Stats stats() const {
-        Stats stats;
-        stats.size = Core::get_heap_size();
-        stats.bytes_used = stats.size - Core::get_free_bytes();
-        return stats;
-    }
-    void force_collect() { Core::gcollect(); }
-};
-
 void display_warning(char *msg, GC_word arg) {
     g_warning(msg, arg);
 }
@@ -50,9 +33,6 @@ void do_init() {
     GC_INIT();
 
     GC_set_warn_proc(&display_warning);
-
-    static GCHeap heap_info;
-    Debug::register_extra_heap(heap_info);
 }
 
 void *debug_malloc(std::size_t size) {
