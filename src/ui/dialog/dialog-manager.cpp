@@ -37,6 +37,13 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+namespace {
+
+template <typename T>
+Dialog *create() { return T::create(); }
+
+}
+
 /**
  *  This class is provided as a container for Inkscape's various
  *  dialogs.  This allows Inkscape::Application to treat the various
@@ -56,371 +63,101 @@ namespace Dialog {
  *  DialogManager ensures that every dialog it handles will listen
  *  to these signals.
  *
- *  Note that I considered implementing this class a bit differently.
- *  Instead of holding a pointer to each different dialog, I thought
- *  about creating a map of strings or quarks to Dialog pointers.  This
- *  abstraction would have the advantage of letting us iterate over
- *  all the dialogs instead of having to use the long lists of calls.
- *  I decided to do it this way because I don't expect this
- *  code to change that much, other than maybe adding or renaming 
- *  individual dialogs once and a while, but I think the map approach
- *  might have some advantages if we ever wanted to dynamically add
- *  new dialogs to the manager (such as from extensions).  So maybe
- *  some day this should be reimplemented that way.
- *  
  */
-DialogManager::DialogManager()
-    : _about_dialog(NULL),
-      _align_and_distribute_dialog(NULL),
-      _inkscape_preferences_dialog(NULL),
-      _debug_dialog(NULL),
-      _document_preferences_dialog(NULL),
-      _export_dialog(NULL),
-      _extension_editor_dialog(NULL),
-      _fill_and_stroke_dialog(NULL),
-      _find_dialog(NULL),
-      _layer_editor_dialog(NULL),
-      _messages_dialog(NULL),
-      _object_properties_dialog(NULL),
-      _text_properties_dialog(NULL),
-      _trace_dialog(NULL),
-      _transformation_dialog(NULL),
-      _xml_editor_dialog(NULL),
-      _memory_dialog(NULL)
-{
+DialogManager::DialogManager() {
+    registerFactory("AlignAndDistribute", &create<AlignAndDistribute>);
+    registerFactory("DocumentPreferences", &create<DocumentPreferences>);
+    registerFactory("Export", &create<Export>);
+    registerFactory("ExtensionEditor", &create<ExtensionEditor>);
+    registerFactory("FillAndStroke", &create<FillAndStroke>);
+    registerFactory("Find", &create<Find>);
+    registerFactory("InkscapePreferences", &create<InkscapePreferences>);
+    registerFactory("LayerEditor", &create<LayerEditor>);
+    registerFactory("Memory", &create<Memory>);
+    registerFactory("Messages", &create<Messages>);
+    registerFactory("TextProperties", &create<TextProperties>);
+    registerFactory("Transformation", &create<Transformation>);
+    registerFactory("XmlEditor", &create<XmlEditor>);
 }
 
-DialogManager::~DialogManager() 
-{
+DialogManager::~DialogManager() {
     // TODO:  Disconnect the signals
     // TOOD:  Do we need to explicitly delete the dialogs?
     //        Appears to cause a segfault if we do
 }
 
-
 /**
- * Gets a dilog by dialog name, which is the key to the map which contains
- * a pointer to a dialog.
+ * Registers a dialog factory function used to create the named dialog.
  */
-Dialog* DialogManager::getDialog(gchar const* dlgName) 
+void DialogManager::registerFactory(gchar const *name,
+                                    DialogManager::DialogFactory factory)
 {
-    return getDialog(g_quark_from_string(dlgName));
+    registerFactory(g_quark_from_string(name), factory);
 }
 
 /**
- * Gets a dilog by dialog name, which is the key to the map which contains
- * a pointer to a dialog.
+ * Registers a dialog factory function used to create the named dialog.
  */
-Dialog* DialogManager::getDialog(GQuark q) 
+void DialogManager::registerFactory(GQuark name,
+                                    DialogManager::DialogFactory factory)
 {
-    DialogMap::const_iterator iter = _dialog_map.find(q);
-    if (iter != _dialog_map.end()) {
-        return (*iter).second; // dialog found
+    _factory_map[name] = factory;
+}
+
+/**
+ * Fetches the named dialog, creating it if it has not already been
+ * created (assuming a factory has been registered for it).
+ */
+Dialog *DialogManager::getDialog(gchar const *name) {
+    return getDialog(g_quark_from_string(name));
+}
+
+/**
+ * Fetches the named dialog, creating it if it has not already been
+ * created (assuming a factory has been registered for it).
+ */
+Dialog *DialogManager::getDialog(GQuark name) {
+    DialogMap::iterator dialog_found;
+    dialog_found = _dialog_map.find(name);
+
+    Dialog *dialog=NULL;
+    if ( dialog_found != _dialog_map.end() ) {
+        dialog = dialog_found->second;
     } else {
-        // TODO:  Look up the class providing q and instantiate it
-        // This probably needs to be a Factory object or something...
-        // or else maybe create a hash of GQuark to new functions for
-        // the corresponding class.
-        return NULL;    // dialog not found
+        FactoryMap::iterator factory_found;
+        factory_found = _factory_map.find(name);
+
+        if ( factory_found != _factory_map.end() ) {
+            dialog = factory_found->second();
+            hide_dialogs.connect(sigc::mem_fun(*dialog,
+                                               &Dialog::onHideDialogs));
+            hide_f12.connect(sigc::mem_fun(*dialog, &Dialog::onHideF12));
+            show_dialogs.connect(sigc::mem_fun(*dialog,
+                                               &Dialog::onShowDialogs));
+            show_f12.connect(sigc::mem_fun(*dialog, &Dialog::onShowF12));
+            _dialog_map[name] = dialog;
+        }
     }
+
+    return dialog;
 }
 
 /**
- * Adds a dialog to the map structure and connects it to the standard
- * signals for a dialog.
+ * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::addDialog(gchar const* dlgName, Dialog * dlg) 
-{
-    addDialog(g_quark_from_string(dlgName), dlg);
+void DialogManager::showDialog(gchar const *name) {
+    showDialog(g_quark_from_string(name));
 }
 
 /**
- * Adds a dialog to the map structure and connects it to the standard
- * signals for a dialog.
+ * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::addDialog(GQuark dlgName, Dialog * dlg) 
-{
-    _dialog_map[dlgName] = dlg; 
-
-    hide_dialogs.connect(sigc::mem_fun(*_dialog_map[dlgName],
-                                       &Dialog::onHideDialogs));
-    hide_f12.connect(sigc::mem_fun(*_dialog_map[dlgName],
-                                   &Dialog::onHideF12));
-    show_dialogs.connect(sigc::mem_fun(*_dialog_map[dlgName],
-                                       &Dialog::onShowDialogs));
-    show_f12.connect(sigc::mem_fun(*_dialog_map[dlgName],
-                                   &Dialog::onShowF12));
-}
-
-/**
- * Deletes a dialog from the map structure and from existence.
- */
-bool DialogManager::deleteDialog(gchar const* dlgName) 
-{
-    return deleteDialog(g_quark_from_string(dlgName));
-}
-
-/**
- * Deletes a dialog from the map structure and from existence.
- */
-bool DialogManager::deleteDialog(GQuark q) 
-{
-    DialogMap::iterator iter = _dialog_map.find(q);
-    if (iter != _dialog_map.end()) {
-        delete (*iter).second;
-        _dialog_map.erase(iter);
-        return true;
-    } else {
-        return false;
+void DialogManager::showDialog(GQuark name) {
+    Dialog *dialog=getDialog(name);
+    if (dialog) {
+        dialog->show();
+        dialog->raise();
     }
-}
-
-/**
- * Deletes all dialogs
- */
-void DialogManager::deleteAllDialogs()
-{
-    DialogMap::iterator iter = _dialog_map.begin();
-    while (iter != _dialog_map.end()) {
-        delete (*iter).second;
-        ++iter;
-    }
-    _dialog_map.clear();
-}
-
-
-#if 1==2
-Dialog* DialogManager::getAboutDialog() {
-    if (_about_dialog == NULL) {
-        _about_dialog = About::create();
-        addDialog("About", _about_dialog);
-    }
-    return _about_dialog;
-}
-#endif
-
-Dialog* DialogManager::getAlignAndDistributeDialog() {
-    if (_align_and_distribute_dialog == NULL) {
-        _align_and_distribute_dialog = new AlignAndDistribute;
-        hide_dialogs.connect(sigc::mem_fun(*_align_and_distribute_dialog, 
-                                           &AlignAndDistribute::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_align_and_distribute_dialog, 
-                                       &AlignAndDistribute::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_align_and_distribute_dialog, 
-                                           &AlignAndDistribute::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_align_and_distribute_dialog, 
-                                       &AlignAndDistribute::onShowF12));
-    }
-    return _align_and_distribute_dialog;
-}
-
-Dialog* DialogManager::getInkscapePreferencesDialog() {
-    if (_inkscape_preferences_dialog == NULL) {
-        _inkscape_preferences_dialog = new InkscapePreferences;
-        hide_dialogs.connect(sigc::mem_fun(*_inkscape_preferences_dialog, 
-                                           &InkscapePreferences::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_inkscape_preferences_dialog, 
-                                       &InkscapePreferences::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_inkscape_preferences_dialog, 
-                                           &InkscapePreferences::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_inkscape_preferences_dialog, 
-                                       &InkscapePreferences::onShowF12));
-    }
-    return _inkscape_preferences_dialog;
-}
-
-
-Dialog* DialogManager::getDocumentPreferencesDialog() {
-    if (_document_preferences_dialog == NULL) {
-        _document_preferences_dialog = new DocumentPreferences;
-        hide_dialogs.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                           &DocumentPreferences::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                       &DocumentPreferences::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                           &DocumentPreferences::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_document_preferences_dialog, 
-                                       &DocumentPreferences::onShowF12));
-    }
-    return _document_preferences_dialog;
-}
-
-Dialog* DialogManager::getExportDialog() {
-    if (_export_dialog == NULL) {
-        _export_dialog = new Export;
-        hide_dialogs.connect(sigc::mem_fun(*_export_dialog, 
-                                           &Export::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_export_dialog, 
-                                       &Export::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_export_dialog, 
-                                           &Export::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_export_dialog, 
-                                       &Export::onShowF12));
-    }
-    return _export_dialog;
-}
-
-Dialog* DialogManager::getExtensionEditorDialog() {
-    if (_extension_editor_dialog == NULL) {
-        _extension_editor_dialog = new ExtensionEditor;
-        hide_dialogs.connect(sigc::mem_fun(*_extension_editor_dialog, 
-                                           &ExtensionEditor::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_extension_editor_dialog, 
-                                       &ExtensionEditor::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_extension_editor_dialog, 
-                                           &ExtensionEditor::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_extension_editor_dialog, 
-                                       &ExtensionEditor::onShowF12));
-    }
-    return _export_dialog;
-}
-
-Dialog* DialogManager::getFillAndStrokeDialog() {
-    if (_fill_and_stroke_dialog == NULL) {
-        _fill_and_stroke_dialog = new FillAndStroke;
-        hide_dialogs.connect(sigc::mem_fun(*_fill_and_stroke_dialog, 
-                                           &FillAndStroke::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_fill_and_stroke_dialog, 
-                                       &FillAndStroke::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_fill_and_stroke_dialog, 
-                                           &FillAndStroke::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_fill_and_stroke_dialog, 
-                                       &FillAndStroke::onShowF12));
-    }
-    return _fill_and_stroke_dialog;
-}
-
-Dialog* DialogManager::getFindDialog() {
-    if (_find_dialog == NULL) {
-        _find_dialog = new Find;
-        hide_dialogs.connect(sigc::mem_fun(*_find_dialog, 
-                                           &Find::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_find_dialog, 
-                                       &Find::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_find_dialog, 
-                                           &Find::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_find_dialog, 
-                                       &Find::onShowF12));
-    }
-    return _find_dialog;
-}
-
-Dialog* DialogManager::getLayerEditorDialog() {
-    if (_layer_editor_dialog == NULL) {
-        _layer_editor_dialog = new LayerEditor;
-        hide_dialogs.connect(sigc::mem_fun(*_layer_editor_dialog, 
-                                           &LayerEditor::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_layer_editor_dialog, 
-                                       &LayerEditor::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_layer_editor_dialog, 
-                                           &LayerEditor::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_layer_editor_dialog, 
-                                       &LayerEditor::onShowF12));
-    }
-    return _layer_editor_dialog;
-}
-
-Dialog* DialogManager::getMessagesDialog() {
-    if (_messages_dialog == NULL) {
-        _messages_dialog = new Messages;
-        hide_dialogs.connect(sigc::mem_fun(*_messages_dialog, 
-                                           &Messages::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_messages_dialog, 
-                                       &Messages::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_messages_dialog, 
-                                           &Messages::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_messages_dialog, 
-                                       &Messages::onShowF12));
-    }
-    return _messages_dialog;
-}
-
-Dialog* DialogManager::getObjectPropertiesDialog() {
-    if (_object_properties_dialog == NULL) {
-/*
-        _object_properties_dialog = ObjectProperties::create();
-        hide_dialogs.connect(sigc::mem_fun(*_object_properties_dialog, 
-                                           &ObjectProperties::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_object_properties_dialog, 
-                                       &ObjectProperties::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_object_properties_dialog, 
-                                           &ObjectProperties::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_object_properties_dialog, 
-                                       &ObjectProperties::onShowF12));
-*/
-    }
-    return _object_properties_dialog;
-}
-
-Dialog* DialogManager::getTextPropertiesDialog() {
-    if (_text_properties_dialog == NULL) {
-        _text_properties_dialog = new TextProperties;
-        hide_dialogs.connect(sigc::mem_fun(*_text_properties_dialog, 
-                                           &TextProperties::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_text_properties_dialog, 
-                                       &TextProperties::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_text_properties_dialog, 
-                                           &TextProperties::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_text_properties_dialog, 
-                                       &TextProperties::onShowF12));
-    }
-    return _text_properties_dialog;
-
-}
-
-/*
-Dialog* DialogManager::getTraceDialog() {
-    if (_trace_dialog == NULL) {
-        _trace_dialog = Trace::create();
-        hide_dialogs.connect(sigc::mem_fun(*_trace_dialog, 
-                                           &Trace::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_trace_dialog, 
-                                       &Trace::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_trace_dialog, 
-                                           &Trace::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_trace_dialog, 
-                                       &Trace::onShowF12));
-    }
-    return _trace_dialog;
-}
-*/
-
-Dialog* DialogManager::getTransformationDialog() {
-    if (_transformation_dialog == NULL) {
-        _transformation_dialog = new Transformation;
-        hide_dialogs.connect(sigc::mem_fun(*_transformation_dialog, 
-                                           &Transformation::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_transformation_dialog, 
-                                       &Transformation::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_transformation_dialog, 
-                                           &Transformation::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_transformation_dialog, 
-                                       &Transformation::onShowF12));
-    }
-    return _transformation_dialog;
-}
-
-Dialog* DialogManager::getXmlEditorDialog() {
-    if (_xml_editor_dialog == NULL) {
-        _xml_editor_dialog = new XmlEditor;
-        hide_dialogs.connect(sigc::mem_fun(*_xml_editor_dialog, 
-                                           &XmlEditor::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_xml_editor_dialog, 
-                                       &XmlEditor::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_xml_editor_dialog, 
-                                           &XmlEditor::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_xml_editor_dialog, 
-                                       &XmlEditor::onShowF12));
-    }
-    return _xml_editor_dialog;
-}
-
-Dialog *DialogManager::getMemoryDialog() {
-    if (_memory_dialog == NULL) {
-        _memory_dialog = new Memory;
-        addDialog("Memory", _memory_dialog);
-    }
-    return _memory_dialog;
 }
 
 } // namespace Dialog

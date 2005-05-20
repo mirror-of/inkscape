@@ -29,6 +29,8 @@ public:
     Find();
     virtual ~Find();
 
+    static Find *create() { return new Find(); }
+
 protected:
     Gtk::Notebook  _notebook;
 

@@ -38,6 +38,8 @@ public:
     Messages();
     virtual ~Messages();
 
+    static Messages *create() { return new Messages(); }
+
     /**
      * Clear all information from the dialog
      */

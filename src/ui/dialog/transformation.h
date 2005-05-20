@@ -31,6 +31,8 @@ public:
     Transformation();
     virtual ~Transformation();
 
+    static Transformation *create() { return new Transformation(); }
+
     void setPageMove()   { present(PAGE_MOVE); }
     void setPageScale()  { present(PAGE_SCALE); }
     void setPageRotate() { present(PAGE_ROTATE); }

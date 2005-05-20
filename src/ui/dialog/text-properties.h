@@ -29,6 +29,8 @@ public:
     TextProperties();
     virtual ~TextProperties();
 
+    static TextProperties *create() { return new TextProperties(); }
+
 protected:
     Gtk::Notebook  _notebook;
 

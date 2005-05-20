@@ -1,4 +1,18 @@
-2005-05-29  MenTaLguY  <mental@rydia.net>
+2005-05-19  MenTaLguY  <mental@rydia.net>
+
+	* src/verbs.cpp, src/ui/dialog/align-and-distribute.h,
+	  src/ui/dialog/dialog-manager.cpp, src/ui/dialog/dialog-manager.h,
+	  src/ui/dialog/document-preferences.h, src/ui/dialog/export.h,
+	  src/ui/dialog/extension-editor.h, src/ui/dialog/fill-and-stroke.h,
+	  src/ui/dialog/find.h, src/ui/dialog/inkscape-preferences.h,
+	  src/ui/dialog/layer-editor.h, src/ui/dialog/messages.h,
+	  src/ui/dialog/text-properties.h, src/ui/dialog/transformation.h,
+	  src/ui/dialog/xml-editor.h, src/ui/view/edit.cpp:
+
+	  refactoring of the dialog manager code, introducing factory
+	  functions and a method specifically for showing a dialog
+
+2005-05-19  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
 

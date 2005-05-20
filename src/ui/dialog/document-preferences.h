@@ -29,6 +29,8 @@ public:
     DocumentPreferences();
     virtual ~DocumentPreferences();
 
+    static DocumentPreferences *create() { return new DocumentPreferences(); }
+
 protected:
 
     Gtk::Notebook  _notebook;

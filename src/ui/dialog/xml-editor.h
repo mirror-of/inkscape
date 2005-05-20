@@ -25,6 +25,8 @@ public:
     XmlEditor();
     virtual ~XmlEditor();
 
+    static XmlEditor *create() { return new XmlEditor(); }
+
 protected:
 
 private:

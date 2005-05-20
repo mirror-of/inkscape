@@ -29,6 +29,8 @@ public:
     Export();
     virtual ~Export();
 
+    static Export *create() { return new Export(); }
+
 protected:
     Gtk::Notebook  _notebook;
 

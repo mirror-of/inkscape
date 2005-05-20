@@ -30,6 +30,8 @@ public:
     InkscapePreferences();
     virtual ~InkscapePreferences();
 
+    static InkscapePreferences *create() { return new InkscapePreferences(); }
+
 protected:
     Gtk::Notebook    _notebook;
     Gtk::VBox        _page_mouse;

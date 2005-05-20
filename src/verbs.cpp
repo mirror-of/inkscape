@@ -908,7 +908,7 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_reverse ();
             break;
         case SP_VERB_SELECTION_POTRACE:
-            Inkscape::UI::Dialogs::TraceDialog::showInstance();
+            dt->_dlg_mgr->showDialog("Trace");
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
             sp_selection_create_bitmap_copy ();
@@ -921,7 +921,7 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_break_apart ();
             break;
         case SP_VERB_SELECTION_GRIDTILE:
-            Inkscape::UI::Dialogs::TileDialog::showInstance();
+            dt->_dlg_mgr->showDialog("Tile");
             break;
         default:
             break;
@@ -1367,7 +1367,6 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
 
     SPDesktop *dt = SP_DESKTOP (sp_action_get_view (action));
     g_assert(dt->_dlg_mgr != NULL);
-    Inkscape::UI::Dialog::Dialog *dlg = NULL;
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_DIALOG_DISPLAY:
@@ -1398,11 +1397,10 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
             sp_find_dialog ();
             break;
         case SP_VERB_DIALOG_DEBUG:
-//            Inkscape::UI::Dialogs::DebugDialog::showInstance();
-            dlg = dt->_dlg_mgr->getMessagesDialog();
+            dt->_dlg_mgr->showDialog("Messages");
             break;
         case SP_VERB_DIALOG_SCRIPT:
-            Inkscape::UI::Dialogs::ScriptDialog::showInstance();
+            dt->_dlg_mgr->showDialog("Script");
             break;
         case SP_VERB_DIALOG_TOGGLE:
             inkscape_dialogs_toggle ();
@@ -1416,12 +1414,6 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         default:
             break;
     }
-
-    if (dlg != NULL) {
-        dlg->show();
-        dlg->raise();
-    }
-
 } // end of sp_verb_action_dialog_perform()
 
 /** \brief  Decode the verb code and take appropriate action */
@@ -1430,7 +1422,6 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
 {
     SPDesktop *dt = SP_DESKTOP (sp_action_get_view (action));
     g_assert(dt->_dlg_mgr != NULL);
-    Inkscape::UI::Dialog::Dialog *dlg = NULL;
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_KEYS:
@@ -1447,17 +1438,11 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
         }
         break;
         case SP_VERB_HELP_MEMORY:
-            dlg = dt->_dlg_mgr->getMemoryDialog();
+            dt->_dlg_mgr->showDialog("Memory");
             break;
     default:
         break;
     }
-
-    if (dlg != NULL) {
-        dlg->present();
-        dlg->update_position();
-    }
-
 } // end of sp_verb_action_help_perform()
 
 /** \brief  Decode the verb code and take appropriate action */

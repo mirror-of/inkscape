@@ -190,155 +190,89 @@ Edit::onNodeTool()
 void
 Edit::onDialogInkscapePreferences()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getInkscapePreferencesDialog();
-    g_assert(dlg);
-
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("InkscapePreferences");
 }
 
 void
 Edit::onDialogAbout()
 {
-/*
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getAboutDialog();
-    g_assert(dlg);
-
-    dlg->show();
-    dlg->raise();
-*/
 }
 
 void
 Edit::onDialogAlignAndDistribute()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getAlignAndDistributeDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("AlignAndDistribute");
 }
 
 void
 Edit::onDialogDocumentProperties()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getDocumentPreferencesDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("DocumentPreferences");
 }
 
 void
 Edit::onDialogExport()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getExportDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("Export");
 }
 
 void
 Edit::onDialogExtensionEditor()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getExtensionEditorDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("ExtensionEditor");
 }
 
 void
 Edit::onDialogFillAndStroke()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getFillAndStrokeDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("FillAndStroke");
 }
 
 void
 Edit::onDialogFind()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getFindDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("Find");
 }
 
 void
 Edit::onDialogLayerEditor()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getLayerEditorDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("LayerEditor");
 }
 
 void
 Edit::onDialogMessages()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getMessagesDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("Messages");
 }
 
 void
 Edit::onDialogObjectProperties()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getObjectPropertiesDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("ObjectProperties");
 }
 
 void 
 Edit::onDialogTextProperties()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getTextPropertiesDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("TextProperties");
 }
 
 void
 Edit::onDialogTrace()
 {
-/*
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getTraceDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
-*/
 }
 
 void 
 Edit::onDialogTransformation()
 {
-    Gtk::Dialog *dlg = _dlg_mgr.getTransformationDialog();
-    g_assert(dlg);
-
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("Transformation");
 }
 
 void
 Edit::onDialogXmlEditor()
 {
-    UI::Dialog::Dialog *dlg = _dlg_mgr.getXmlEditorDialog();
-    g_assert(dlg);
-    
-    dlg->show();
-    dlg->raise();
+    _dlg_mgr.showDialog("XmlEditor");
 }
 
 void

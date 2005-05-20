@@ -29,6 +29,8 @@ public:
     FillAndStroke();
     virtual ~FillAndStroke();
 
+    static FillAndStroke *create() { return new FillAndStroke(); }
+
 protected:
     Gtk::Notebook  _notebook;
 

@@ -32,6 +32,8 @@ public:
     AlignAndDistribute();
     virtual ~AlignAndDistribute();
 
+    static AlignAndDistribute *create() { return new AlignAndDistribute(); }
+
     enum AlignTarget { LAST=0, FIRST, BIGGEST, SMALLEST, PAGE, DRAWING, SELECTION };
 
     AlignTarget getAlignTarget() const;

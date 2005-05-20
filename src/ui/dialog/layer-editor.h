@@ -25,6 +25,8 @@ public:
     LayerEditor();
     virtual ~LayerEditor();
 
+    static LayerEditor *create() { return new LayerEditor(); }
+
 protected:
 
 private:

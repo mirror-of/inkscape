@@ -25,6 +25,8 @@ public:
     ExtensionEditor();
     virtual ~ExtensionEditor();
 
+    static ExtensionEditor *create() { return new ExtensionEditor(); }
+
 protected:
 
 private:
