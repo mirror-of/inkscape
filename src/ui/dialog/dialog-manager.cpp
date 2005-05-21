@@ -155,8 +155,8 @@ void DialogManager::showDialog(gchar const *name) {
 void DialogManager::showDialog(GQuark name) {
     Dialog *dialog=getDialog(name);
     if (dialog) {
-        dialog->show();
-        dialog->raise();
+        dialog->present();
+        dialog->update_position();
     }
 }
 
