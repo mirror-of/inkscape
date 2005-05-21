@@ -174,27 +174,27 @@ struct rdf_license_t rdf_licenses [] = {
     },
 
     { "CC Attribution-ShareAlike", 
-      "http://creativecommons.org/licenses/by/2.0/",
+      "http://creativecommons.org/licenses/by-sa/2.0/",
       rdf_license_cc_a_sa,
     },
 
     { "CC Attribution-NoDerivs", 
-      "http://creativecommons.org/licenses/by/2.0/",
+      "http://creativecommons.org/licenses/by-nd/2.0/",
       rdf_license_cc_a_nd,
     },
 
     { "CC Attribution-NonCommercial", 
-      "http://creativecommons.org/licenses/by/2.0/",
+      "http://creativecommons.org/licenses/by-nc/2.0/",
       rdf_license_cc_a_nc,
     },
 
     { "CC Attribution-NonCommercial-ShareAlike", 
-      "http://creativecommons.org/licenses/by/2.0/",
+      "http://creativecommons.org/licenses/by-nc-sa/2.0/",
       rdf_license_cc_a_nc_sa,
     },
 
     { "CC Attribution-NonCommercial-NoDerivs", 
-      "http://creativecommons.org/licenses/by/2.0/",
+      "http://creativecommons.org/licenses/by-nc-nd/2.0/",
       rdf_license_cc_a_nc_nd,
     },
 
