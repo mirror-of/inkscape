@@ -14,20 +14,16 @@
 #endif
 
 #include "export.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 Export::Export() 
-    : Dialog ("dialogs.export"),
+    : Dialog ("dialogs.export", SP_VERB_FILE_EXPORT),
       _page_export("Export", 1, 1)
 {
-    set_title(_("Export"));
-    set_default_size(200, 200);
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);

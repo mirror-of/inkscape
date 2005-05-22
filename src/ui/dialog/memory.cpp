@@ -19,6 +19,7 @@
 #include "gc-core.h"
 #include "ui/dialog/memory.h"
 #include "debug/heap.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
@@ -200,17 +201,12 @@ void Memory::Private::stop_update_task() {
 }
 
 Memory::Memory() 
-    : Dialog ("dialogs.memory"),
+    : Dialog ("dialogs.memory", SP_VERB_HELP_MEMORY, _("Recalculate")),
       _private(*(new Memory::Private())) 
 {
-    set_title(_("Memory Info"));
-    set_default_size(200, 200);
-
     get_vbox()->add(_private.view);
 
     _private.update();
-
-    transientize();
 
     show_all_children();
 

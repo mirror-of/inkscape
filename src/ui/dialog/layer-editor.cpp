@@ -14,22 +14,15 @@
 #endif
 
 #include "layer-editor.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 LayerEditor::LayerEditor() 
-    : Dialog ("dialogs.layereditor")
+    : Dialog ("dialogs.layereditor", SP_VERB_NONE /*FIXME*/)
 {
-    set_title(_("Layer Editor"));
-    set_default_size(200, 200);
-
-    transientize();
-
-   // Top level vbox
-//    Gtk::VBox *vbox = get_vbox();
-
     // TODO:  Insert widgets
 
     show_all_children();

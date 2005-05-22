@@ -14,20 +14,16 @@
 #endif
 
 #include "find.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 Find::Find() 
-    : Dialog ("dialogs.find"),
+    : Dialog ("dialogs.find", SP_VERB_DIALOG_FIND),
       _page_find("Find", 1, 1)
 {
-    set_title(_("Find"));
-    set_default_size(200, 200);
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);

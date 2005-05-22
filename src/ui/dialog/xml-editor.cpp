@@ -14,22 +14,15 @@
 #endif
 
 #include "xml-editor.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 XmlEditor::XmlEditor() 
-    : Dialog ("dialogs.xml")
+    : Dialog ("dialogs.xml", SP_VERB_DIALOG_XML_EDITOR)
 {
-    set_title(_("XML Editor"));
-    set_default_size(200, 200);
-
-    transientize();
-
-    // Top level vbox
-    //Gtk::VBox *vbox = get_vbox();
-
     // TODO:  Insert widgets
 
     show_all_children();

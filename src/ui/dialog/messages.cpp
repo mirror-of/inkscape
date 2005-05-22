@@ -20,6 +20,7 @@
 #include <glib.h>
 
 #include "dialogs/dialog-events.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
@@ -47,11 +48,8 @@ void Messages::clear()
  * Constructor
  */
 Messages::Messages()
-	: Dialog ("dialogs.messages")
+	: Dialog ("dialogs.messages", SP_VERB_DIALOG_DEBUG)
 {
-    set_title(_("Messages"));
-    set_size_request(300, 400);
-
     Gtk::VBox *mainVBox = get_vbox();
 
     //## Add a menu for clear()

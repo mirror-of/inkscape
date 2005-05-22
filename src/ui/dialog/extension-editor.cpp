@@ -14,22 +14,15 @@
 #endif
 
 #include "extension-editor.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 ExtensionEditor::ExtensionEditor()
-    : Dialog ("dialogs.extensioneditor")
+    : Dialog ("dialogs.extensioneditor", SP_VERB_NONE /*FIXME*/)
 {
-    set_title(_("Extensions Editor"));
-    set_default_size(400, 200);
-
-    transientize();
-
-    // Top level vbox
-//    Gtk::VBox *vbox = get_vbox();
-
     // TODO:  Insert widgets
 
     show_all_children();

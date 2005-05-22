@@ -27,6 +27,8 @@
 #include "shortcuts.h"
 #include "prefs-utils.h"
 #include "macros.h"
+#include "interface.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
@@ -97,23 +99,26 @@ Dialog::update_position()
  * It also provides some general purpose signal handlers for things like
  * showing and hiding all dialogs.
  */
-Dialog::Dialog(const char *prefs_path)
+Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
 {
     set_has_separator(false);
 
     _prefs_path = prefs_path;
 
-    add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
-
-    // TODO: make this prefs-settable
-    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-    set_default_response(Gtk::RESPONSE_APPLY);
+    if (prefs_get_int_attribute ("dialogs", "showclose", 0) || apply_label) {
+        // TODO: make the order of buttons obey the global preference
+        if (apply_label) {
+            add_button(Glib::ustring(apply_label), Gtk::RESPONSE_APPLY);
+            set_default_response(Gtk::RESPONSE_APPLY);
+        }
+       add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+    }
     
     GtkWidget *dlg = GTK_WIDGET(gobj());
 
-//         gchar title[500];
-//         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
-//         set_title(title);
+    gchar title[500];
+    sp_ui_dialog_title_string (Inkscape::Verb::get(verb_num), title);
+    set_title(title);
 
     sp_transientize(dlg);
     

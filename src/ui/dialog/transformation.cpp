@@ -19,6 +19,7 @@
 #include "libnr/nr-rect.h"
 #include "selection.h"
 #include "selection-chemistry.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
@@ -44,7 +45,7 @@ namespace Dialog {
  * additional debugging once it is set up.
  */
 Transformation::Transformation()
-    : Dialog ("dialogs.transformation"),
+    : Dialog ("dialogs.transformation", SP_VERB_DIALOG_TRANSFORM),
       _page_move              ("Move",   4, 2),
       _page_scale             ("Scale",  4, 2),
       _page_rotate            ("Rotate", 4, 2),
@@ -65,10 +66,6 @@ Transformation::Transformation()
                                "arrows_ver.xpm", &_units_skew),
       _check_move_relative    ("Relative move")
 {
-    set_title(_("Transformation"));
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);

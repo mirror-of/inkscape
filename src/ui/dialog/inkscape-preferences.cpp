@@ -19,6 +19,7 @@
 #include "inkscape-preferences.h"
 #include "ui/widget/labelled.h"
 #include "ui/widget/scalar.h"
+#include "verbs.h"
 
 using namespace Inkscape::UI::Widget;
 
@@ -27,7 +28,7 @@ namespace UI {
 namespace Dialog {
 
 InkscapePreferences::InkscapePreferences()
-    : Dialog ("dialogs.preferences"),
+    : Dialog ("dialogs.preferences", SP_VERB_DIALOG_DISPLAY),
       _page_mouse_adj_sensitivity(0, 0, 30, 1, 1, 1), // TODO: set up initial values
       _page_mouse_adj_threshold(0, 0, 20, 1, 1, 1),
       _page_scrolling_adj_wheel(0, 0, 1000, 1, 1, 1),
@@ -40,10 +41,6 @@ InkscapePreferences::InkscapePreferences()
       _page_steps_adj_inset(0, 0, 3000, 0.01, 1, 1),
       _page_steps_adj_zoom(0, 101, 500, 1, 1, 1)
 {
-    set_title(_("Preferences"));
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);

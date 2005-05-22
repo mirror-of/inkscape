@@ -24,8 +24,10 @@ namespace Dialog {
 
 class Dialog : public Gtk::Dialog {
 public:
-    Dialog(BaseObjectType *gobj);
-    Dialog(const char *prefs_path);
+    Dialog(BaseObjectType *gobj); // fixme: remove this
+
+    Dialog(const char *prefs_path, int verb_num, const char *apply_label = NULL);
+
     virtual ~Dialog();
 
     virtual void onDestroy();
@@ -43,7 +45,7 @@ public:
     const char           *_prefs_path;
 
 protected:
-    Dialog( bool flag );
+    Dialog( bool flag ); // fixme: remove this
 
     SPDesktop      *_desktop;
     bool           _user_hidden;
@@ -60,7 +62,7 @@ protected:
     void           _setDesktop(SPDesktop *desktop);
 
 private:
-    Dialog();
+    Dialog(); // no constructor without params
 
     Dialog(Dialog const &d);            // no copy
     Dialog& operator=(Dialog const &d); // no assign

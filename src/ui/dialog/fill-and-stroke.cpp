@@ -14,16 +14,17 @@
 #endif
 
 #include "fill-and-stroke.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke() 
-    : Dialog ("dialogs.fillstroke"),
+    : Dialog ("dialogs.fillstroke", SP_VERB_DIALOG_FILL_STROKE),
       _page_fill("Fill", 1, 1),
-      _page_stroke_paint("Stroke Paint", 1, 1),
-      _page_stroke_style("Stroke Style", 1, 1)
+      _page_stroke_paint("Stroke paint", 1, 1),
+      _page_stroke_style("Stroke style", 1, 1)
 {
     set_title(_("Fill and Stroke"));
     set_default_size(200, 200);

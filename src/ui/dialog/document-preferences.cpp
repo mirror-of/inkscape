@@ -13,13 +13,14 @@
 #endif
 
 #include "document-preferences.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 DocumentPreferences::DocumentPreferences() 
-    : Dialog ("dialogs.documentoptions"),
+    : Dialog ("dialogs.documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page("Page", 1, 1),
       _page_grid("Grid", 1, 1),
       _page_guides("Guides", 1, 1),

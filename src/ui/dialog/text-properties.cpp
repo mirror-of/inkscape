@@ -14,21 +14,17 @@
 #endif
 
 #include "text-properties.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 TextProperties::TextProperties() 
-    : Dialog ("dialogs.textandfont"),
+    : Dialog ("dialogs.textandfont", SP_VERB_DIALOG_TEXT),
       _page_font("Font", 1, 1),
       _page_text("Text", 1, 1)
 {
-    set_title(_("Text Properties"));
-    set_default_size(200, 200);
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);

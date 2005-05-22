@@ -10,14 +10,19 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
 #include "tree-editor.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 TreeEditor::TreeEditor()
-    : Dialog ("dialogs.treeeditor")
+    : Dialog ("dialogs.treeeditor", SP_VERB_NONE /*FIXME*/)
 {
     get_vbox()->pack_start(_hbox);
 
