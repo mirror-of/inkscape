@@ -58,7 +58,10 @@
 #include <libnr/nr-object.h>
 #include "nr-arena-forward.h"
 
-#define arena_item_tile_cache
+// My testing shows that disabling cache reduces the amount 
+// of leaked memory when many documents are loaded one from the other,
+// while there's no noticeable change in speed
+//#define arena_item_tile_cache
 
 struct NRGC {
 	NRGC(NRGC const *p) : parent(p) {}
