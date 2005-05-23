@@ -7,6 +7,7 @@ tutorial_DATA = \
     tutorial-elements.es.svg \
     elementsofdesign.sl.svg \
     tutorial-tips.svg \
+    tutorial-tips.fr.svg \
     tipsandtricks.sl.svg \
     making_markers.svg \
     tutorial-advanced.svg \
