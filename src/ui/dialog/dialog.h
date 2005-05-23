@@ -30,8 +30,6 @@ public:
 
     virtual ~Dialog();
 
-    virtual void onDestroy();
-
     /** Hide and show dialogs */
     virtual void   onHideDialogs();
     virtual void   onHideF12();

@@ -62,6 +62,8 @@ sp_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer dlgPtr)
     prefs_set_int_attribute (dlg->_prefs_path, "w", w);
     prefs_set_int_attribute (dlg->_prefs_path, "h", h);
 
+//    g_print ("write %d %d %d %d\n", x, y, w, h);
+
     return FALSE; // which means, go ahead and destroy it
 } 
 
@@ -72,6 +74,8 @@ Dialog::update_position()
     int y = prefs_get_int_attribute (_prefs_path, "y", -1000);
     int w = prefs_get_int_attribute (_prefs_path, "w", 0);
     int h = prefs_get_int_attribute (_prefs_path, "h", 0);
+
+//    g_print ("read %d %d %d %d\n", x, y, w, h);
 
     // If there are stored height and width values for the dialog,
     // resize the window to match; otherwise we leave it at its default
@@ -148,7 +152,7 @@ Dialog::Dialog(BaseObjectType *gobj)
 Dialog::Dialog( bool flag )
 {
 
-    g_print ("someone called Dialog(flag)!!!\n");
+//    g_print ("someone called Dialog(flag)!!!\n");
 
     // This block is a much simplified version of the code used in all other dialogs for
     // saving/restoring geometry, transientising, passing events to the aplication, and
@@ -201,24 +205,6 @@ void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
     dlg->onShowF12();
-}
-
-
-
-void
-Dialog::onDestroy()
-{
-    int y, x, w, h;
-
-    get_position(x, y);
-    get_size(w, h);
-
-    prefs_set_int_attribute (_prefs_path, "x", x);
-    prefs_set_int_attribute (_prefs_path, "y", y);
-    prefs_set_int_attribute (_prefs_path, "w", w);
-    prefs_set_int_attribute (_prefs_path, "h", h);
-
-    _setDesktop(NULL);
 }
 
 void

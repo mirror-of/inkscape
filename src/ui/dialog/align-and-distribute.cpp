@@ -17,21 +17,17 @@
 #endif
 
 #include "align-and-distribute.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 AlignAndDistribute::AlignAndDistribute() 
-    : Dialog ("dialogs.align"),
+    : Dialog ("dialogs.align", SP_VERB_DIALOG_ALIGN_DISTRIBUTE),
       _page_align("Align", 1, 1),
       _page_distribute("Distribute", 1, 1)
 {
-    set_title(_("Align"));
-    set_default_size(200, 200);
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);
