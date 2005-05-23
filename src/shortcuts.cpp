@@ -190,10 +190,10 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_z, Inkscape::Verb::get(SP_VERB_EDIT_UNDO), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_Z, Inkscape::Verb::get(SP_VERB_EDIT_UNDO), false);
 
-	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_y, Inkscape::Verb::get(SP_VERB_EDIT_REDO), true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_y, Inkscape::Verb::get(SP_VERB_EDIT_REDO), false);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_Y, Inkscape::Verb::get(SP_VERB_EDIT_REDO), false);
 
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_z, Inkscape::Verb::get(SP_VERB_EDIT_REDO), false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_z, Inkscape::Verb::get(SP_VERB_EDIT_REDO), true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_Z, Inkscape::Verb::get(SP_VERB_EDIT_REDO), false);
 
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_y, Inkscape::Verb::get(SP_VERB_EDIT_UNDO), false);
