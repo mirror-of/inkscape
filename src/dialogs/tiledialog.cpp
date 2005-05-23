@@ -863,7 +863,7 @@ TileDialogImpl::TileDialogImpl()
 
 
     /*#### Label for X ####*/
-    padXByYLabel.set_label(_("   "));
+    padXByYLabel.set_label("   ");
     XByYLabelVBox.pack_start(padXByYLabel, false, false, MARGIN);
     XByYLabel.set_label(_(" X "));
     XByYLabelVBox.pack_start(XByYLabel, false, false, MARGIN);
