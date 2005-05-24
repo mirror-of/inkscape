@@ -5,10 +5,10 @@
  * Author:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
  *   Jon Phillips <jon@rejon.org>
- *   
+ *
  * Copyright (C) 2004 Bryce Harrington
  * Copyright (C) 2005 Jon Phillips
- * 
+ *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
@@ -31,6 +31,7 @@
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/xml-editor.h"
 #include "ui/dialog/memory.h"
+#include "dialogs/tiledialog.h"
 
 
 namespace Inkscape {
@@ -47,19 +48,19 @@ Dialog *create() { return T::create(); }
 /**
  *  This class is provided as a container for Inkscape's various
  *  dialogs.  This allows Inkscape::Application to treat the various
- *  dialogs it invokes, as abstractions.  
+ *  dialogs it invokes, as abstractions.
  *
  *  DialogManager is essentially a cache of dialogs.  It lets us
  *  initialize dialogs lazily - instead of constructing them during
  *  application startup, they're constructed the first time they're
  *  actually invoked by Inkscape::Application.  The constructed
- *  dialog is held here after that, so future invokations of the 
+ *  dialog is held here after that, so future invokations of the
  *  dialog don't need to get re-constructed each time.  The memory for
  *  the dialogs are then reclaimed when the DialogManager is destroyed.
  *
  *  In addition, DialogManager also serves as a signal manager for
  *  dialogs.  It provides a set of signals that can be sent to all
- *  dialogs for doing things such as hiding/unhiding them, etc.  
+ *  dialogs for doing things such as hiding/unhiding them, etc.
  *  DialogManager ensures that every dialog it handles will listen
  *  to these signals.
  *
@@ -78,6 +79,7 @@ DialogManager::DialogManager() {
     registerFactory("TextProperties", &create<TextProperties>);
     registerFactory("Transformation", &create<Transformation>);
     registerFactory("XmlEditor", &create<XmlEditor>);
+    registerFactory("TileDialog", &create<TileDialog>);
 }
 
 DialogManager::~DialogManager() {
