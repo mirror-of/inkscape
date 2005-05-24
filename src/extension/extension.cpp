@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "path-prefix.h"
 #include "xml/repr.h"
 #include <glibmm/i18n.h>
 #include "dir-util.h"
@@ -46,6 +47,7 @@ namespace Extension {
 
 /* Inkscape::Extension::Extension */
 
+std::vector<gchar *> Extension::search_path;
 std::ofstream Extension::error_file;
 
 Parameter * param_shared (const gchar * name, GSList * list);

@@ -160,7 +160,13 @@ Dependency::check (void) const
             std::string location(_string);
             switch (_location) {
                 case LOCATION_EXTENSIONS: {
-                    location = Glib::build_filename(INKSCAPE_EXTENSIONDIR, location);
+                    for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
+                        std::string temploc = Glib::build_filename(Inkscape::Extension::Extension::search_path[i], location);
+                        if (Glib::file_test(temploc, filetest)) {
+                            location = temploc;
+                            break;
+                        }
+                    }
                 } /* PASS THROUGH!!! */
                 case LOCATION_ABSOLUTE: {
                     if (!Glib::file_test(location, filetest)) {

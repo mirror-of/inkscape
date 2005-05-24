@@ -122,15 +122,17 @@ init()
     Internal::BlurEdge::init();
     Internal::GimpGrad::init();
     Internal::Grid::init();
+    
+    /* Load search path for extensions */
+    if (Inkscape::Extension::Extension::search_path.size() == 0)
+    {
+	Inkscape::Extension::Extension::search_path.push_back(profile_path("extensions"));
+	Inkscape::Extension::Extension::search_path.push_back(INKSCAPE_EXTENSIONDIR);
+    }
 
-
-    std::vector<std::string> path;
-    path.push_back(Glib::get_home_dir());
-    path.push_back(std::string(".inkscape"));
-    path.push_back(std::string("extensions"));
-    std::string ext_dir = Glib::build_filename(path);
-    build_module_from_dir(ext_dir.c_str());
-    build_module_from_dir(INKSCAPE_EXTENSIONDIR);
+    for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
+        build_module_from_dir(Inkscape::Extension::Extension::search_path[i]);
+    }
 
     /* this is at the very end because it has several catch-alls
      * that are possibly over-ridden by other extensions (such as

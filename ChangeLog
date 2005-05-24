@@ -1,3 +1,13 @@
+2005-05-24  Ted Gould  <ted@gould.cx>
+
+	* src/extension/dependency.cpp, src/extension/extension.cpp,
+	src/extension/extension.h, src/extension/init.cpp,
+	src/extension/implementation/script.cpp:
+
+	Applying patch 1199856 which allows Inkscape to have multiple directories
+	for extensions.  Currently those are /share/inkscape/extensions and
+	~/.inkscape/extensions.  The patch was written by Aaron Spike.
+
 2005-05-23  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/<alot>
