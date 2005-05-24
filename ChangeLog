@@ -1,3 +1,11 @@
+2005-05-24  Simarilius	Simarilius@yahoo.com
+
+	* src/verbs.cpp, src/dialogs/tiledialog.cpp, src/dialogs/tiledialog.h,
+	src/ui/dialogs/dialog-manager.cpp
+	
+	Converted the tiledialog over to the inkscape:ui:dialog class and hooked
+	it into dialog manager
+
 2005-05-24  Ted Gould  <ted@gould.cx>
 
 	* src/extension/dependency.cpp, src/extension/extension.cpp,
