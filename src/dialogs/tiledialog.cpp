@@ -19,13 +19,6 @@
 
 #include "tiledialog.h"
 
-#include <gtkmm.h>
-#include <gtkmm/box.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/button.h>
-
-#include <gtk/gtk.h>
-
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
@@ -88,7 +81,6 @@ sp_compare_y_position(SPItem *first, SPItem *second)
     NRRect b;
     sp_item_invoke_bbox(second, &b, sp_item_i2doc_affine(second), TRUE);
 
-
     if (a.y0 > b.y0) return 1;
     if (a.y0 < b.y0) return -1;
     return 0;
@@ -96,170 +88,7 @@ sp_compare_y_position(SPItem *first, SPItem *second)
 
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
-
-
-//#########################################################################
-//## I M P L E M E N T A T I O N
-//#########################################################################
-
-/**
- * A dialog for creating grid patterns of selected objects
- */
-class TileDialogImpl : public TileDialog, public Gtk::Dialog
-{
-
-    public:
-
-
-    /**
-     * Constructor
-     */
-    TileDialogImpl();
-
-    /**
-     * Destructor
-     */
-    ~TileDialogImpl();
-
-
-    /**
-     * Show the dialog
-     */
-    void show();
-    void showF12();
-
-    /**
-     * Do not show the dialog
-     */
-    void hide();
-    void hideF12();
-
-    /**
-     * Do the actual work
-     */
-    void Grid_Arrange();
-
-
-    /**
-     * Respond to selection change
-     */
-    void TileDialogImpl::updateSelection();
-
-
-    /**
-     * Callback from OK or Cancel
-     */
-    void responseCallback(int response_id);
-
-    /**
-     * Callback from spinbuttons
-     */
-    void on_row_spinbutton_changed();
-    void on_col_spinbutton_changed();
-    void on_xpad_spinbutton_changed();
-    void on_ypad_spinbutton_changed();
-    void on_RowSize_checkbutton_changed();
-    void on_ColSize_checkbutton_changed();
-    void on_rowSize_spinbutton_changed();
-    void on_colSize_spinbutton_changed();
-    void Spacing_button_changed();
-    void VertAlign_changed();
-    void HorizAlign_changed();
-    private:
-
-    bool userHidden;
-    bool updating;
-
-
-
-    Gtk::Notebook   notebook;
-    Gtk::Tooltips   tips;
-
-    Gtk::VBox             TileBox;
-    Gtk::Button           *TileOkButton;
-    Gtk::Button           *TileCancelButton;
-
-    // Number selected label
-    Gtk::Label            SelectionContentsLabel;
-
-
-    Gtk::HBox             AlignHBox;
-    Gtk::HBox             SpinsHBox;
-    Gtk::HBox             SizesHBox;
-
-    // Number per Row
-    Gtk::VBox             NoOfColsBox;
-    Gtk::Label            NoOfColsLabel;
-    Gtk::SpinButton       NoOfColsSpinner;
-    bool AutoRowSize;
-    Gtk::CheckButton      RowHeightButton;
-
-    Gtk::VBox             XByYLabelVBox;
-    Gtk::Label            padXByYLabel;
-    Gtk::Label            XByYLabel;
-
-    // Number per Column
-    Gtk::VBox             NoOfRowsBox;
-    Gtk::Label            NoOfRowsLabel;
-    Gtk::SpinButton       NoOfRowsSpinner;
-    bool AutoColSize;
-    Gtk::CheckButton      ColumnWidthButton;
-
-    // Vertical align
-    Gtk::Label            VertAlignLabel;
-    Gtk::HBox             VertAlignHBox;
-    Gtk::VBox             VertAlignVBox;
-    Gtk::RadioButtonGroup VertAlignGroup;
-    Gtk::RadioButton      VertCentreRadioButton;
-    Gtk::RadioButton      VertTopRadioButton;
-    Gtk::RadioButton      VertBotRadioButton;
-    double VertAlign;
-
-    // Horizontal align
-    Gtk::Label            HorizAlignLabel;
-    Gtk::VBox             HorizAlignVBox;
-    Gtk::HBox             HorizAlignHBox;
-    Gtk::RadioButtonGroup HorizAlignGroup;
-    Gtk::RadioButton      HorizCentreRadioButton;
-    Gtk::RadioButton      HorizLeftRadioButton;
-    Gtk::RadioButton      HorizRightRadioButton;
-    double HorizAlign;
-
-    // padding in x
-    Gtk::VBox             XPadBox;
-    Gtk::Label            XPadLabel;
-    Gtk::SpinButton       XPadSpinner;
-
-    // padding in y
-    Gtk::VBox             YPadBox;
-    Gtk::Label            YPadLabel;
-    Gtk::SpinButton       YPadSpinner;
-
-    // BBox or manual spacing
-    Gtk::VBox             SpacingVBox;
-    Gtk::RadioButtonGroup SpacingGroup;
-    Gtk::RadioButton      SpaceByBBoxRadioButton;
-    Gtk::RadioButton      SpaceManualRadioButton;
-    bool ManualSpacing;
-
-
-
-    // Row height
-    Gtk::VBox             RowHeightVBox;
-    Gtk::HBox             RowHeightBox;
-    Gtk::Label            RowHeightLabel;
-    Gtk::SpinButton       RowHeightSpinner;
-
-    // Column width
-    Gtk::VBox             ColumnWidthVBox;
-    Gtk::HBox             ColumnWidthBox;
-    Gtk::Label            ColumnWidthLabel;
-    Gtk::SpinButton       ColumnWidthSpinner;
-
-};
-
-
+namespace Dialog {
 
 
 //#########################################################################
@@ -272,7 +101,7 @@ class TileDialogImpl : public TileDialog, public Gtk::Dialog
  *
  */
 
-void TileDialogImpl::Grid_Arrange ()
+void TileDialog::Grid_Arrange ()
 {
 
     int cnt,row_cnt,col_cnt,a,row,col;
@@ -472,7 +301,7 @@ void TileDialogImpl::Grid_Arrange ()
 /**
  * Default response from the dialog.  Let's intercept it
  */
-void TileDialogImpl::responseCallback(int response_id)
+void TileDialog::responseCallback(int response_id)
 {
 
     if (response_id == GTK_RESPONSE_OK)
@@ -493,7 +322,7 @@ void TileDialogImpl::responseCallback(int response_id)
 /**
  * changed value in # of columns spinbox.
  */
-void TileDialogImpl::on_row_spinbutton_changed()
+void TileDialog::on_row_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -518,7 +347,7 @@ void TileDialogImpl::on_row_spinbutton_changed()
 /**
  * changed value in # of rows spinbox.
  */
-void TileDialogImpl::on_col_spinbutton_changed()
+void TileDialog::on_col_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -543,7 +372,7 @@ void TileDialogImpl::on_col_spinbutton_changed()
 /**
  * changed value in x padding spinbox.
  */
-void TileDialogImpl::on_xpad_spinbutton_changed()
+void TileDialog::on_xpad_spinbutton_changed()
 {
 
     prefs_set_double_attribute ("dialogs.gridtiler", "XPad", XPadSpinner.get_value());
@@ -553,7 +382,7 @@ void TileDialogImpl::on_xpad_spinbutton_changed()
 /**
  * changed value in y padding spinbox.
  */
-void TileDialogImpl::on_ypad_spinbutton_changed()
+void TileDialog::on_ypad_spinbutton_changed()
 {
 
     prefs_set_double_attribute ("dialogs.gridtiler", "YPad", YPadSpinner.get_value());
@@ -564,7 +393,7 @@ void TileDialogImpl::on_ypad_spinbutton_changed()
 /**
  * checked/unchecked autosize Rows button.
  */
-void TileDialogImpl::on_RowSize_checkbutton_changed()
+void TileDialog::on_RowSize_checkbutton_changed()
 {
 
    if (RowHeightButton.get_active()) {
@@ -578,7 +407,7 @@ void TileDialogImpl::on_RowSize_checkbutton_changed()
 /**
  * checked/unchecked autosize Rows button.
  */
-void TileDialogImpl::on_ColSize_checkbutton_changed()
+void TileDialog::on_ColSize_checkbutton_changed()
 {
 
    if (ColumnWidthButton.get_active()) {
@@ -593,7 +422,7 @@ void TileDialogImpl::on_ColSize_checkbutton_changed()
 /**
  * changed value in columns spinbox.
  */
-void TileDialogImpl::on_rowSize_spinbutton_changed()
+void TileDialog::on_rowSize_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -610,7 +439,7 @@ void TileDialogImpl::on_rowSize_spinbutton_changed()
 /**
  * changed value in rows spinbox.
  */
-void TileDialogImpl::on_colSize_spinbutton_changed()
+void TileDialog::on_colSize_spinbutton_changed()
 {
     // quit if run by the attr_changed listener
     if (updating) {
@@ -627,7 +456,7 @@ void TileDialogImpl::on_colSize_spinbutton_changed()
 /**
  * changed Radio button in Spacing group.
  */
-void TileDialogImpl::Spacing_button_changed()
+void TileDialog::Spacing_button_changed()
 {
    if (SpaceManualRadioButton.get_active()) {
        prefs_set_double_attribute ("dialogs.gridtiler", "SpacingType", 20);
@@ -641,7 +470,7 @@ void TileDialogImpl::Spacing_button_changed()
 /**
  * changed Radio button in Vertical Align group.
  */
-void TileDialogImpl::VertAlign_changed()
+void TileDialog::VertAlign_changed()
 {
    if (VertTopRadioButton.get_active()) {
        VertAlign = 0;
@@ -659,7 +488,7 @@ void TileDialogImpl::VertAlign_changed()
 /**
  * changed Radio button in Vertical Align group.
  */
-void TileDialogImpl::HorizAlign_changed()
+void TileDialog::HorizAlign_changed()
 {
    if (HorizLeftRadioButton.get_active()) {
        HorizAlign = 0;
@@ -677,7 +506,7 @@ void TileDialogImpl::HorizAlign_changed()
 /**
  * Desktop selection changed
  */
-void TileDialogImpl::updateSelection()
+void TileDialog::updateSelection()
 {
     double col_width, row_height;
     // quit if run by the attr_changed listener
@@ -716,26 +545,19 @@ void TileDialogImpl::updateSelection()
 }
 
 
+
+
+
 /*##########################
 ## Experimental
 ##########################*/
-static void hideCallback(GtkObject *object, gpointer dlgPtr)
-{
-    TileDialogImpl *dlg = (TileDialogImpl *) dlgPtr;
-    dlg->hideF12();
-}
 
-static void unhideCallback(GtkObject *object, gpointer dlgPtr)
+static void updateSelectionCallback(Inkscape::Application *inkscape, Inkscape::Selection *selection, TileDialog *dlg)
 {
-    TileDialogImpl *dlg = (TileDialogImpl *) dlgPtr;
-    dlg->showF12();
-}
-
-static void updateSelectionCallback(Inkscape::Application *inkscape, Inkscape::Selection *selection, TileDialogImpl *dlg)
-{
-    TileDialogImpl *tledlg = (TileDialogImpl *) dlg;
+    TileDialog *tledlg = (TileDialog *) dlg;
     tledlg->updateSelection();
 }
+
 
 //#########################################################################
 //## C O N S T R U C T O R    /    D E S T R U C T O R
@@ -743,36 +565,16 @@ static void updateSelectionCallback(Inkscape::Application *inkscape, Inkscape::S
 /**
  * Constructor
  */
-TileDialogImpl::TileDialogImpl()
+TileDialog::TileDialog()
+    : Dialog ("dialogs.gridtiler", SP_VERB_SELECTION_GRIDTILE)
 {
-    {
-    // This block is a much simplified version of the code used in all other dialogs for
-    // saving/restoring geometry, transientising, passing events to the aplication, and
-    // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
-    // mutilated somewhat. This block should be removed when the same functionality is made
-    // available to all gtkmm dialogs via a base class.
-        GtkWidget *dlg = GTK_WIDGET(gobj());
-
-        gchar title[500];
-        sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_GRIDTILE), title);
-	    set_title(title);
-
-        gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
-
-        sp_transientize (dlg);
-
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
-
-        //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
-        //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
-
-        g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
-        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
-        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
-    }
-
-    // bool used by spin button callbacks to stop loops where they change each other.
+     // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;
+
+    {
+        // Selection Change signal
+        g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), this);
+    }
 
     Gtk::VBox *mainVBox = get_vbox();
 
@@ -808,7 +610,7 @@ TileDialogImpl::TileDialogImpl()
     NoOfRowsSpinner.set_increments(1, 5);
     NoOfRowsSpinner.set_range(1.0, 100.0);
     NoOfRowsSpinner.set_value(PerCol);
-    NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_col_spinbutton_changed));
+    NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_col_spinbutton_changed));
 
     NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
     tips.set_tip(NoOfRowsSpinner, _("No of Rows"));
@@ -824,7 +626,7 @@ TileDialogImpl::TileDialogImpl()
 
     NoOfRowsBox.pack_start(RowHeightButton, false, false, MARGIN);
     tips.set_tip(RowHeightButton, _("Automatically scale Rows to fit selected objects."));
-    RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_RowSize_checkbutton_changed));
+    RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
 
  {
 
@@ -833,16 +635,16 @@ TileDialogImpl::TileDialogImpl()
         VertAlignLabel.set_label(_("Align:"));
         VertAlignHBox.pack_start(VertAlignLabel, false, false, MARGIN);
 
-        VertTopRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::VertAlign_changed));
+        VertTopRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
         VertAlignGroup = VertTopRadioButton.get_group();
         VertAlignVBox.pack_start(VertTopRadioButton, false, false, MARGIN);
 
         VertCentreRadioButton.set_group(VertAlignGroup);
-        VertCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::VertAlign_changed));
+        VertCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
         VertAlignVBox.pack_start(VertCentreRadioButton, false, false, MARGIN);
 
         VertBotRadioButton.set_group(VertAlignGroup);
-        VertBotRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::VertAlign_changed));
+        VertBotRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::VertAlign_changed));
         VertAlignVBox.pack_start(VertBotRadioButton, false, false, MARGIN);
 
         VertAlign = prefs_get_double_attribute ("dialogs.gridtiler", "VertAlign", 1);
@@ -878,7 +680,7 @@ TileDialogImpl::TileDialogImpl()
     NoOfColsSpinner.set_increments(1, 5);
     NoOfColsSpinner.set_range(1.0, 100.0);
     NoOfColsSpinner.set_value(PerRow);
-    NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_row_spinbutton_changed));
+    NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_row_spinbutton_changed));
 
     NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
     tips.set_tip(NoOfColsSpinner, _("No of columns"));
@@ -893,7 +695,7 @@ TileDialogImpl::TileDialogImpl()
 
     NoOfColsBox.pack_start(ColumnWidthButton, false, false, MARGIN);
     tips.set_tip(ColumnWidthButton, _("Automatically scale Columns to fit selected objects."));
-    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ColSize_checkbutton_changed));
+    ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
 
 
 
@@ -903,16 +705,16 @@ TileDialogImpl::TileDialogImpl()
         HorizAlignLabel.set_label(_("Align:"));
         HorizAlignVBox.pack_start(HorizAlignLabel, false, false, MARGIN);
 
-        HorizLeftRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::HorizAlign_changed));
+        HorizLeftRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
         HorizAlignGroup = HorizLeftRadioButton.get_group();
         HorizAlignHBox.pack_start(HorizLeftRadioButton, false, false, MARGIN);
 
         HorizCentreRadioButton.set_group(HorizAlignGroup);
-        HorizCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::HorizAlign_changed));
+        HorizCentreRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
         HorizAlignHBox.pack_start(HorizCentreRadioButton, false, false, MARGIN);
 
         HorizRightRadioButton.set_group(HorizAlignGroup);
-        HorizRightRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::HorizAlign_changed));
+        HorizRightRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::HorizAlign_changed));
         HorizAlignHBox.pack_start(HorizRightRadioButton, false, false, MARGIN);
 
         HorizAlign = prefs_get_double_attribute ("dialogs.gridtiler", "HorizAlign", 1);
@@ -941,7 +743,7 @@ TileDialogImpl::TileDialogImpl()
     {
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
         SpaceByBBoxRadioButton.set_label(_("Fit into Selection BBox "));
-        SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::Spacing_button_changed));
+        SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
         SpacingGroup = SpaceByBBoxRadioButton.get_group();
 
 
@@ -949,7 +751,7 @@ TileDialogImpl::TileDialogImpl()
 
         SpaceManualRadioButton.set_label(_("Set Spacing: "));
         SpaceManualRadioButton.set_group(SpacingGroup);
-        SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialogImpl::Spacing_button_changed));
+        SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
         SpacingVBox.pack_start(SpaceManualRadioButton, false, false, MARGIN);
 
         double SpacingType = prefs_get_double_attribute ("dialogs.gridtiler", "SpacingType", 15);
@@ -983,7 +785,7 @@ TileDialogImpl::TileDialogImpl()
     XPadSpinner.set_value(XPad);
     XPadBox.pack_start(XPadSpinner, false, false, MARGIN);
     tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
-    XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_xpad_spinbutton_changed));
+    XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_xpad_spinbutton_changed));
 
     SizesHBox.pack_start(XPadBox, false, false, MARGIN);
 
@@ -999,7 +801,7 @@ TileDialogImpl::TileDialogImpl()
     YPadSpinner.set_value(YPad);
     YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
     tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
-    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ypad_spinbutton_changed));
+    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_ypad_spinbutton_changed));
 
 
     SizesHBox.pack_start(YPadBox, false, false, MARGIN);
@@ -1018,95 +820,16 @@ TileDialogImpl::TileDialogImpl()
 
     //## Connect the signal
     signal_response().connect(
-    sigc::mem_fun(*this, &TileDialogImpl::responseCallback) );
-
-}
-
-/**
- * Factory method.  Use this to create a new TileDialog
- */
-TileDialog *TileDialog::create()
-{
-    TileDialog *dialog = new TileDialogImpl();
-    return dialog;
-}
-
-
-/**
- * Constructor
- */
-TileDialogImpl::~TileDialogImpl()
-{
-
+    sigc::mem_fun(*this, &TileDialog::responseCallback) );
 
 }
 
 
-/* static instance, to reduce dependencies */
-static TileDialog *traceDialogInstance = NULL;
-
-TileDialog *TileDialog::getInstance()
-{
-    if ( !traceDialogInstance )
-        {
-        traceDialogInstance = new TileDialogImpl();
-        }
-    return traceDialogInstance;
-}
-
-
-
-void TileDialog::showInstance()
-{
-    TileDialog *traceDialog = getInstance();
-    traceDialog->show();
-}
-
-
-//#########################################################################
-//## M E T H O D S
-//#########################################################################
-
-void TileDialogImpl::show()
-{
-    userHidden = false;
-    //call super()
-    Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
-    raise();
-    Gtk::Dialog::present();
-}
-
-void TileDialogImpl::showF12()
-{
-    if (userHidden)
-        return;
-    //call super()
-    Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
-    raise();
-
-}
-
-
-void TileDialogImpl::hide()
-{
-    userHidden = true;
-    //call super()
-    Gtk::Dialog::hide();
-}
-
-void TileDialogImpl::hideF12()
-{
-    //userHidden = true;
-    //call super()
-    Gtk::Dialog::hide();
-}
 
 
 
 
-} //namespace Dialogs
+} //namespace Dialog
 } //namespace UI
 } //namespace Inkscape
 
