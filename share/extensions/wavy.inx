@@ -1,0 +1,16 @@
+<inkscape-extension>
+    <name>Wavy Line</name>
+    <id>org.ekips.filter.wavy</id>
+	<dependency type="executable" location="extensions">wavy.py</dependency>
+	<dependency type="executable" location="extensions">inkex.py</dependency>
+	<param name="period" type="float" min="0.0" max="32.0" gui-text="Sampling Period (Pi/X)">4.0</param>
+	<param name="length" type="int" min="1" max="1000" gui-text="Samples">8</param>
+	<param name="fofx" type="string" gui-text="Function">sin(x)</param>
+	<param name="fpofx" type="string" gui-text="First Derivative">cos(x)</param>
+    <effect>
+		<object-type>rect</object-type>
+    </effect>
+    <script>
+        <command reldir="extensions" interpreter="python">wavy.py</command>
+    </script>
+</inkscape-extension>

@@ -16,7 +16,28 @@ extensions = \
 	txt2svg.pl \
 	inkscape-shadow.sh \
 	inkscape-shadow-white.sh \
-	embed_raster_in_svg.pl
+	embed_raster_in_svg.pl \
+	bezmisc.py \
+	cubicsuperpath.py \
+	dots.py \
+	ffgeom.py \
+	ffproc.py \
+	ffscale.py \
+	fretfind.py \
+	handles.py \
+	inkex.py \
+	interp.py \
+	kochify.py \
+	kochify_load.py \
+	lindenmayer.py \
+	motion.py \
+	pturtle.py \
+	radiusrand.py \
+	rtree.py \
+	simplepath.py \
+	simplestyle.py \
+	straightseg.py \
+	wavy.py
 
 otherstuff =
 
@@ -33,7 +54,22 @@ modules = \
 	dia.inx \
 	epsi_output.inx \
 	pdf_output.inx \
-	txt2svg.inx
+	txt2svg.inx \
+	dots.inx \
+	ffmet.inx \
+	ffms.inx \
+	ffss.inx \
+	ffset.inx \
+	handles.inx \
+	interp.inx \
+	kochify.inx \
+	kochify_load.inx \
+	lindenmayer.inx \
+	motion.inx \
+	radiusrand.inx \
+	rtree.inx \
+	straightseg.inx \
+	wavy.inx
 
 extension_SCRIPTS = \
 	$(extensions)

@@ -1,3 +1,10 @@
+2005-05-23  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/<alot>
+
+	Adding in Aaron Spike's extensions so that they come with the standard
+	build.  Lot's of useful stuff that is worth having for most users.
+
 2005-05-19  MenTaLguY  <mental@rydia.net>
 
 	* src/verbs.cpp, src/ui/dialog/align-and-distribute.h,

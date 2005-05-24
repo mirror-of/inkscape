@@ -1,0 +1,17 @@
+<inkscape-extension>
+    <name>Motion</name>
+    <id>org.ekips.filter.motion</id>
+	<dependency type="executable" location="extensions">motion.py</dependency>
+	<dependency type="executable" location="extensions">inkex.py</dependency>
+	<param name="magnitude" type="float" min="0" max="1000" gui-text="Magnitude">100</param>
+	<param name="angle" type="float" min="0.0" max="360.0" gui-text="Direction">45</param>
+	<param name="ends" type="boolean" gui-text="Connect Ends">true</param>
+	<param name="splits" type="boolean" gui-text="Connect Splits">true</param>
+	<param name="split" type="boolean" gui-text="Split Curves">true</param>
+    <effect>
+		<object-type>path</object-type>
+    </effect>
+    <script>
+        <command reldir="extensions" interpreter="python">motion.py</command>
+    </script>
+</inkscape-extension>
