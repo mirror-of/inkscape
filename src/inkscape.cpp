@@ -312,6 +312,8 @@ inkscape_init (SPObject * object)
 
     inkscape->documents = NULL;
     inkscape->desktops = NULL;
+
+    inkscape->dialogs_toggle = TRUE;
 }
 
 

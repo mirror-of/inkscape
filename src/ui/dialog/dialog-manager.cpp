@@ -129,12 +129,6 @@ Dialog *DialogManager::getDialog(GQuark name) {
 
         if ( factory_found != _factory_map.end() ) {
             dialog = factory_found->second();
-            hide_dialogs.connect(sigc::mem_fun(*dialog,
-                                               &Dialog::onHideDialogs));
-            hide_f12.connect(sigc::mem_fun(*dialog, &Dialog::onHideF12));
-            show_dialogs.connect(sigc::mem_fun(*dialog,
-                                               &Dialog::onShowDialogs));
-            show_f12.connect(sigc::mem_fun(*dialog, &Dialog::onShowF12));
             _dialog_map[name] = dialog;
         }
     }
@@ -156,7 +150,7 @@ void DialogManager::showDialog(GQuark name) {
     Dialog *dialog=getDialog(name);
     if (dialog) {
         dialog->present();
-        dialog->update_position();
+        dialog->read_geometry();
     }
 }
 

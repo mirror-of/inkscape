@@ -31,30 +31,27 @@ public:
     virtual ~Dialog();
 
     /** Hide and show dialogs */
-    virtual void   onHideDialogs();
     virtual void   onHideF12();
-    virtual void   onShowDialogs();
     virtual void   onShowF12();
 
     void           transientize();
 
-    void           update_position();
+    void           read_geometry();
+    void           save_geometry();
 
     const char           *_prefs_path;
+    bool           _user_hidden; // when it is closed by the user, to prevent repopping on f12
 
 protected:
     Dialog( bool flag ); // fixme: remove this
 
     SPDesktop      *_desktop;
-    bool           _user_hidden;
 
     virtual void   on_response(int response_id);
     virtual void   _apply();
     virtual void   _close();
 
     static bool windowKeyPress( GtkWidget *widget, GdkEventKey *event );
-    static void Dialog::hideCallback(GtkObject *object, gpointer dlgPtr);
-    static void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr);
 
     Inkscape::Selection*   _getSelection();
     void           _setDesktop(SPDesktop *desktop);

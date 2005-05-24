@@ -41,7 +41,6 @@ sp_dialog_destroy ( GtkObject *object, gpointer dlgPtr)
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
     delete dlg;
-
 //    wd.win = dlg = NULL;
 //    wd.stop = 0;
 //    x = -1000; y = -1000; w = 0; h = 0;
@@ -52,24 +51,34 @@ sp_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
 
-    int y, x, w, h;
-
-    dlg->get_position(x, y);
-    dlg->get_size(w, h);
-
-    prefs_set_int_attribute (dlg->_prefs_path, "x", x);
-    prefs_set_int_attribute (dlg->_prefs_path, "y", y);
-    prefs_set_int_attribute (dlg->_prefs_path, "w", w);
-    prefs_set_int_attribute (dlg->_prefs_path, "h", h);
-
-//    g_print ("write %d %d %d %d\n", x, y, w, h);
+    dlg->save_geometry();
+    dlg->_user_hidden = true;
 
     return FALSE; // which means, go ahead and destroy it
 } 
 
+
 void
-Dialog::update_position()
+Dialog::save_geometry()
 {
+    int y, x, w, h;
+
+    get_position(x, y);
+    get_size(w, h);
+
+//    g_print ("write %d %d %d %d\n", x, y, w, h);
+
+    prefs_set_int_attribute (_prefs_path, "x", x);
+    prefs_set_int_attribute (_prefs_path, "y", y);
+    prefs_set_int_attribute (_prefs_path, "w", w);
+    prefs_set_int_attribute (_prefs_path, "h", h);
+}
+
+void
+Dialog::read_geometry()
+{
+    _user_hidden = false;
+
     int x = prefs_get_int_attribute (_prefs_path, "x", -1000);
     int y = prefs_get_int_attribute (_prefs_path, "y", -1000);
     int w = prefs_get_int_attribute (_prefs_path, "w", 0);
@@ -91,6 +100,18 @@ Dialog::update_position()
         // ...otherwise just put it in the middle of the screen
         set_position(Gtk::WIN_POS_CENTER);
     }
+}
+
+void hideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    dlg->onHideF12();
+}
+
+void unhideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    dlg->onShowF12();
 }
 
 /**
@@ -140,7 +161,7 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
     g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
 
     present();
-    update_position();
+    read_geometry();
 }
 
 Dialog::Dialog(BaseObjectType *gobj)
@@ -179,6 +200,7 @@ Dialog::Dialog( bool flag )
 
 Dialog::~Dialog()
 {
+    save_geometry();
 }
 
 
@@ -195,57 +217,25 @@ bool Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
     return sp_shortcut_invoke( shortcut, SP_VIEW(SP_ACTIVE_DESKTOP) );
 }
 
-void Dialog::hideCallback(GtkObject *object, gpointer dlgPtr)
-{
-    Dialog *dlg = (Dialog *)dlgPtr;
-    dlg->onHideF12();
-}
-
-void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr)
-{
-    Dialog *dlg = (Dialog *)dlgPtr;
-    dlg->onShowF12();
-}
-
-void
-Dialog::onHideDialogs()
-{
-    _user_hidden = true;
-    hide();
-}
-
 void
 Dialog::onHideF12()
 {
+    //g_print ("hide f12\n");
+
+    save_geometry();
     hide();
 }
-
-void
-Dialog::onShowDialogs()
-{
-    _user_hidden = false;
-/* TODO:  Gtkmmify
-    gtk_window_set_transient_for(GTK_WINDOW(gobj()), 
-                                 GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(owner)))
-        );
-*/
-    property_destroy_with_parent() = true;
-
-    show();
-    raise();
-    present();
-}
-
 
 void
 Dialog::onShowF12()
 {
-    if (_user_hidden) {
+    if (_user_hidden)
         return;
-    }
-    show();
-    raise();
+
+    //g_print ("show f12\n");
+
     present();
+    read_geometry();
 }
 
 // TODO:  Temporary define until this code is hooked into Inkscape
