@@ -921,7 +921,7 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_break_apart ();
             break;
         case SP_VERB_SELECTION_GRIDTILE:
-            dt->_dlg_mgr->showDialog("Tile");
+            dt->_dlg_mgr->showDialog("TileDialog");
             break;
         default:
             break;
