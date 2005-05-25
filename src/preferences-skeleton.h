@@ -136,6 +136,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"treeeditor\" />\n"
 "    <group id=\"layereditor\" />\n"
 "    <group id=\"extensioneditor\" />\n"
+"    <group id=\"trace\" />\n"
 "  </group>\n"
 "  <group id=\"printing\">\n"
 "    <settings id=\"ps\"/>\n"
