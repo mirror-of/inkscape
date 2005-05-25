@@ -15,7 +15,7 @@
 
 #include "trace/trace.h"
 #include "trace/potrace/inkscape-potrace.h"
-#include <dialogs/tracedialog.h>
+#include "ui/dialog/tracedialog.h"
 
 #include <inkscape.h>
 #include <desktop.h>
