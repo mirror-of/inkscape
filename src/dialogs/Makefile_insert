@@ -50,8 +50,6 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/object-attributes.h	\
 	dialogs/object-properties.cpp	\
 	dialogs/object-properties.h	\
-	dialogs/scriptdialog.cpp	\
-	dialogs/scriptdialog.h	\
 	dialogs/sp-attribute-widget.cpp	\
 	dialogs/sp-attribute-widget.h	\
 	dialogs/stroke-style.cpp	\
@@ -60,8 +58,6 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/swatches.h	\
 	dialogs/text-edit.cpp	\
 	dialogs/text-edit.h	\
-	dialogs/tracedialog.cpp	\
-	dialogs/tracedialog.h	\
 	dialogs/tiledialog.cpp	\
 	dialogs/tiledialog.h	\
 	dialogs/transformation.cpp	\
