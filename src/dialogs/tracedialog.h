@@ -13,24 +13,29 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+
+#include "verbs.h"
+#include "dialog.h"
+
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
+namespace Dialog {
 
 
 /**
  * A dialog that displays log messages
  */
-class TraceDialog
+class TraceDialog : public Dialog
 {
 
 public:
-    
+
 
     /**
      * Constructor
      */
-    TraceDialog() {  };
+    TraceDialog() : Dialog ("dialogs.trace", SP_VERB_SELECTION_TRACE)
+        {}
 
 
     /**
@@ -44,30 +49,10 @@ public:
     virtual ~TraceDialog() {};
 
 
-    /**
-     * Show the dialog
-     */
-    virtual void show() = 0;
-
-    /**
-     * Do not show the dialog
-     */
-    virtual void hide() = 0;
-
-    /**
-     * Get a shared singleton instance
-     */
-    static TraceDialog *getInstance();
-
-    /**
-     * Show the instance above
-     */
-    static void showInstance();
-
 };
 
 
-} //namespace Dialogs
+} //namespace Dialog
 } //namespace UI
 } //namespace Inkscape
 

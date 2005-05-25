@@ -907,7 +907,7 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_SELECTION_REVERSE:
             sp_selected_path_reverse ();
             break;
-        case SP_VERB_SELECTION_POTRACE:
+        case SP_VERB_SELECTION_TRACE:
             dt->_dlg_mgr->showDialog("Trace");
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
@@ -1764,7 +1764,7 @@ Verb * Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
         N_("Reverses the direction of selected path(s); useful for flipping markers"), "selection_reverse"),
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-    new SelectionVerb(SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace Bitmap"),
+    new SelectionVerb(SP_VERB_SELECTION_TRACE, "SelectionTrace", N_("_Trace Bitmap"),
         N_("Convert bitmap object to paths"), "selection_trace"),
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("_Make a Bitmap Copy"),
         N_("Export selection to a bitmap and insert it into document"), "selection_bitmap" ),

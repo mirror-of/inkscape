@@ -925,7 +925,7 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     static Inkscape::Verb * selection[] = {
         Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE),
         Inkscape::Verb::get(SP_VERB_SELECTION_OUTLINE),
-        Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE),
+        Inkscape::Verb::get(SP_VERB_SELECTION_TRACE),
 
         Inkscape::Verb::get(SP_VERB_NONE),
         Inkscape::Verb::get(SP_VERB_SELECTION_UNION),

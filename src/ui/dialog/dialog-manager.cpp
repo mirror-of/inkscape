@@ -32,6 +32,7 @@
 #include "ui/dialog/xml-editor.h"
 #include "ui/dialog/memory.h"
 #include "dialogs/tiledialog.h"
+#include "dialogs/tracedialog.h"
 
 
 namespace Inkscape {
@@ -77,6 +78,7 @@ DialogManager::DialogManager() {
     registerFactory("Memory", &create<Memory>);
     registerFactory("Messages", &create<Messages>);
     registerFactory("TextProperties", &create<TextProperties>);
+    registerFactory("Trace", &create<TraceDialog>);
     registerFactory("Transformation", &create<Transformation>);
     registerFactory("XmlEditor", &create<XmlEditor>);
     registerFactory("TileDialog", &create<TileDialog>);

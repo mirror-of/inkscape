@@ -359,8 +359,8 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_b, Inkscape::Verb::get(SP_VERB_SELECTION_CREATE_BITMAP), true);
 	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_B, Inkscape::Verb::get(SP_VERB_SELECTION_CREATE_BITMAP), false);
 
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_b, Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), true);
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_B, Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_b, Inkscape::Verb::get(SP_VERB_SELECTION_TRACE), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_B, Inkscape::Verb::get(SP_VERB_SELECTION_TRACE), false);
 
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_k, Inkscape::Verb::get(SP_VERB_SELECTION_COMBINE), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_K, Inkscape::Verb::get(SP_VERB_SELECTION_COMBINE), false);
@@ -412,7 +412,7 @@ sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary)
 	if (old_verb && old_verb != verb) {
 		unsigned int old_primary;
 
-		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)old_verb)); 
+		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)old_verb));
 
 		if (old_primary == shortcut) {
 			g_hash_table_insert (primary_shortcuts, (gpointer)old_verb, (void *)Inkscape::Verb::get(SP_VERB_INVALID));
