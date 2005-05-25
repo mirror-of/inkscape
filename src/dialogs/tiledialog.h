@@ -19,7 +19,8 @@
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
-#include "dialog.h"
+
+#include "ui/dialog/dialog.h"
 
 namespace Inkscape {
 namespace UI {
