@@ -69,22 +69,22 @@ Dialog *create() { return T::create(); }
  *
  */
 DialogManager::DialogManager() {
-    registerFactory("AlignAndDistribute", &create<AlignAndDistribute>);
+    registerFactory("AlignAndDistribute",  &create<AlignAndDistribute>);
     registerFactory("DocumentPreferences", &create<DocumentPreferences>);
-    registerFactory("Export", &create<Export>);
-    registerFactory("ExtensionEditor", &create<ExtensionEditor>);
-    registerFactory("FillAndStroke", &create<FillAndStroke>);
-    registerFactory("Find", &create<Find>);
+    registerFactory("Export",              &create<Export>);
+    registerFactory("ExtensionEditor",     &create<ExtensionEditor>);
+    registerFactory("FillAndStroke",       &create<FillAndStroke>);
+    registerFactory("Find",                &create<Find>);
     registerFactory("InkscapePreferences", &create<InkscapePreferences>);
-    registerFactory("LayerEditor", &create<LayerEditor>);
-    registerFactory("Memory", &create<Memory>);
-    registerFactory("Messages", &create<Messages>);
-    registerFactory("Script", &create<ScriptDialog>);
-    registerFactory("TextProperties", &create<TextProperties>);
-    registerFactory("Trace", &create<TraceDialog>);
-    registerFactory("Transformation", &create<Transformation>);
-    registerFactory("XmlEditor", &create<XmlEditor>);
-    registerFactory("TileDialog", &create<TileDialog>);
+    registerFactory("LayerEditor",         &create<LayerEditor>);
+    registerFactory("Memory",              &create<Memory>);
+    registerFactory("Messages",            &create<Messages>);
+    registerFactory("Script",              &create<ScriptDialog>);
+    registerFactory("TextProperties",      &create<TextProperties>);
+    registerFactory("TileDialog",          &create<TileDialog>);
+    registerFactory("Trace",               &create<TraceDialog>);
+    registerFactory("Transformation",      &create<Transformation>);
+    registerFactory("XmlEditor",           &create<XmlEditor>);
 }
 
 DialogManager::~DialogManager() {
