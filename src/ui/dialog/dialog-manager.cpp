@@ -19,23 +19,22 @@
 #include "ui/dialog/dialog-manager.h"
 
 #include "ui/dialog/align-and-distribute.h"
-#include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/document-preferences.h"
 #include "ui/dialog/export.h"
 #include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/find.h"
+#include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/layer-editor.h"
+#include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
+#include "ui/dialog/scriptdialog.h"
 #include "ui/dialog/text-properties.h"
+#include "ui/dialog/tracedialog.h"
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/xml-editor.h"
-#include "ui/dialog/memory.h"
 
-#include "dialogs/scriptdialog.h"
 #include "dialogs/tiledialog.h"
-#include "dialogs/tracedialog.h"
-
 
 namespace Inkscape {
 namespace UI {
