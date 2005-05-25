@@ -14,25 +14,28 @@
  */
 
 
+#include "dialog.h"
+#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
+namespace Dialog {
 
 
 /**
  * A script editor, loader, and executor
  */
-class ScriptDialog
+class ScriptDialog : public Dialog
 {
 
     public:
-    
+
 
     /**
      * Constructor
      */
-    ScriptDialog() {};
+    ScriptDialog() : Dialog ("dialogs.script", SP_VERB_DIALOG_SCRIPT)
+        {}
 
 
     /**
@@ -46,33 +49,12 @@ class ScriptDialog
     virtual ~ScriptDialog() {};
 
 
-    /**
-     * Show the dialog
-     */
-    virtual void show() = 0;
 
-    /**
-     * Do not show the dialog
-     */
-    virtual void hide() = 0;
-
-    /**
-     * Get a shared singleton instance
-     */
-    static ScriptDialog *getInstance();
-
-    /**
-     * Show the instance above
-     */
-    static void showInstance();
-
-
-    
 
 }; // class ScriptDialog
 
 
-} //namespace Dialogs
+} //namespace Dialog
 } //namespace UI
 } //namespace Inkscape
 

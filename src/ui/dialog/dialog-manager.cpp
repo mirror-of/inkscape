@@ -31,6 +31,8 @@
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/xml-editor.h"
 #include "ui/dialog/memory.h"
+
+#include "dialogs/scriptdialog.h"
 #include "dialogs/tiledialog.h"
 #include "dialogs/tracedialog.h"
 
@@ -77,6 +79,7 @@ DialogManager::DialogManager() {
     registerFactory("LayerEditor", &create<LayerEditor>);
     registerFactory("Memory", &create<Memory>);
     registerFactory("Messages", &create<Messages>);
+    registerFactory("Script", &create<ScriptDialog>);
     registerFactory("TextProperties", &create<TextProperties>);
     registerFactory("Trace", &create<TraceDialog>);
     registerFactory("Transformation", &create<Transformation>);

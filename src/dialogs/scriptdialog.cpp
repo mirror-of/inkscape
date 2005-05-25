@@ -21,12 +21,11 @@
 
 #include <extension/script/InkscapeScript.h>
 
-#include <dialogs/dialog-events.h>
 #include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
+namespace Dialog {
 
 
 //#########################################################################
@@ -36,11 +35,11 @@ namespace Dialogs {
 /**
  * A script editor/executor
  */
-class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
+class ScriptDialogImpl : public ScriptDialog
 {
 
     public:
-    
+
 
     /**
      * Constructor
@@ -50,18 +49,9 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
     /**
      * Destructor
      */
-    ~ScriptDialogImpl();
+    ~ScriptDialogImpl()
+        {}
 
-
-    /**
-     * Show the dialog
-     */
-    void show();
-
-    /**
-     * Do not show the dialog
-     */
-    void hide();
 
     /**
      * Clear the text
@@ -108,7 +98,7 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
     Gtk::TextView       errorText;
 
 
- 
+
 };
 
 static char *defaultPythonCodeStr =
@@ -199,7 +189,7 @@ ScriptDialogImpl::ScriptDialogImpl()
     fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Execute Perl"),
            sigc::mem_fun(*this, &ScriptDialogImpl::executePerl) ) );
     mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
-    
+
 
     //### Set up the script field
     scriptText.set_editable(true);
@@ -242,60 +232,6 @@ ScriptDialog *ScriptDialog::create()
 {
     ScriptDialog *dialog = new ScriptDialogImpl();
     return dialog;
-}
-
-
-/**
- * Constructor
- */
-ScriptDialogImpl::~ScriptDialogImpl()
-{
-
-
-}
-
-
-//#########################################################################
-//## M E T H O D S
-//#########################################################################
-
-void ScriptDialogImpl::show()
-{
-    //call super()
-    Gtk::Dialog::show();
-    //sp_transientize((GtkWidget *)gobj());  //Make transient
-    raise();
-    Gtk::Dialog::present();
-}
-
-
-
-void ScriptDialogImpl::hide()
-{
-    //call super()
-    Gtk::Dialog::hide();
-}
-
-
-
-/* static instance, to reduce dependencies */
-static ScriptDialog *scriptDialogInstance = NULL;
-
-ScriptDialog *ScriptDialog::getInstance()
-{
-    if ( !scriptDialogInstance )
-        {
-        scriptDialogInstance = new ScriptDialogImpl();
-        }
-    return scriptDialogInstance;
-}
-
-
-
-void ScriptDialog::showInstance()
-{
-    ScriptDialog *scriptDialog = getInstance();
-    scriptDialog->show();
 }
 
 
