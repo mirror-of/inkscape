@@ -226,6 +226,7 @@ libinkpost_a_SOURCES =	\
 inkscape_private_libs =	\
 	libinkpre.a		\
 	application/libinkapp.a	\
+	ui/dialog/libuidialog.a	\
 	dialogs/libspdialogs.a	\
 	trace/libtrace.a	\
 	svg/libspsvg.a		\
@@ -238,7 +239,6 @@ inkscape_private_libs =	\
 	livarot/libvarot.a	\
 	ui/view/libuiview.a	\
 	ui/libui.a		\
-	ui/dialog/libuidialog.a	\
 	ui/widget/libuiwidget.a	\
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\
