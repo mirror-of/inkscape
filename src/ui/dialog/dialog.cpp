@@ -35,7 +35,7 @@ namespace UI {
 namespace Dialog {
 
 static void
-sp_dialog_destroy ( GtkObject *object, gpointer dlgPtr)
+sp_dialog_destroy (GtkObject *object, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
@@ -47,7 +47,7 @@ sp_dialog_destroy ( GtkObject *object, gpointer dlgPtr)
 }
 
 static gboolean
-sp_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer dlgPtr)
+sp_dialog_delete (GtkObject *object, GdkEvent *event, gpointer dlgPtr)
 {
     Dialog *dlg = (Dialog *)dlgPtr;
 
@@ -57,6 +57,14 @@ sp_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer dlgPtr)
     return FALSE; // which means, go ahead and destroy it
 } 
 
+static void
+sp_dialog_shutdown (GtkObject *object, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+
+    dlg->save_geometry();
+    dlg->_user_hidden = true;
+} 
 
 void
 Dialog::save_geometry()
@@ -152,11 +160,9 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
 
-        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
-                             G_CALLBACK (sp_dialog_destroy), (void *)this);
-                             
-        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
-                             G_CALLBACK (sp_dialog_delete), (void *)this);
+    gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_dialog_destroy), (void *)this);
+    gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_dialog_delete), (void *)this);
+    g_signal_connect   (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_dialog_shutdown), (void *)this); 
 
     g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
 
