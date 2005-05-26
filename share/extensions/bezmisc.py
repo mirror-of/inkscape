@@ -1,56 +1,29 @@
 #!/usr/bin/env python
 '''
-Cubic solver borrowed from:
-http://answers.google.com/answers/threadview?id=433886
-http://answers.google.com/answers/threadview?id=441538
+Copyright (C) 2005 Aaron Spike, aaron@ekips.org
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
 
 import math, cmath
 
-def solveCubicMonic(a,b,c):
-    """Solve a monic real cubic polynomial.
-    
-    Input three real coefficients a,b,c and return
-    three complex roots of U^3 + aU^2 + bU + c = 0.
-    """
-    m = b - (a*a)/3
-    n = (b + m + m)*a/9 - c
-    x,y,z = solveCubicReduced(m,n)
-    x,y,z = x - a/3, y - a/3, z - a/3
-    return (x,y,z)
-
-def solveCubicReduced(m,n):
-    """Solve a reduced monic real cubic polynomial.
-
-    Input two real coefficients m,n and return
-    three complex roots of u^3 + mu = n.
-    """
-    if m == 0:
-        return cubeRoots(n)
-    if n == 0:
-        return (0,cmath.sqrt(-m + 0j),-cmath.sqrt(-m + 0j))
-    m = m/3 + 0j
-    n = n/2
-    w = n + cmath.sqrt(n*n + m*m*m)
-    x,y,z = cubeRoots(w)
-    return (x - m/x, y - m/y, z - m/z)
-
-def cubeRoots(x):
-    """Find three complex cube roots of real or complex x."""
-    z = x + 0j
-    s = 1
-    if z.real < 0:
-        z,s = -z,-s
-    t = math.atan2(z.imag, z.real)/3
-    a = s * (abs(z)**(1./3))
-    w = complex(-0.5,math.sqrt(0.75))
-    w_ = w.conjugate()
-    u = a * complex(math.cos(t),math.sin(t))
-    return (u, u*w, u*w_)
-
 def rootWrapper(a,b,c,d):
     if a:
-      	return solveCubicMonic(b/a,c/a,d/a)
+	#TODO: find a new cubic solver and put it here
+      	#return solveCubicMonic(b/a,c/a,d/a)
+        return ()
     elif b:
         det=c**2.0-4.0*b*d
         if det:
