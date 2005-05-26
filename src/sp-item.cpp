@@ -1105,26 +1105,6 @@ NR::Matrix sp_item_i2root_affine(SPItem const *item)
     return ret;
 }
 
-NRMatrix *sp_item_i2doc_affine(SPItem const *item, NRMatrix *affine)
-{
-    g_return_val_if_fail(item != NULL, NULL);
-    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
-    g_return_val_if_fail(affine != NULL, NULL);
-
-    *affine = sp_item_i2doc_affine(item);
-    return affine;
-}
-
-NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *affine)
-{
-    g_return_val_if_fail(item != NULL, NULL);
-    g_return_val_if_fail(SP_IS_ITEM(item), NULL);
-    g_return_val_if_fail(affine != NULL, NULL);
-
-    *affine = sp_item_i2root_affine(item);
-    return affine;
-}
-
 /* fixme: This is EVIL!!! */
 
 NR::Matrix sp_item_i2d_affine(SPItem const *item)
@@ -1135,11 +1115,6 @@ NR::Matrix sp_item_i2d_affine(SPItem const *item)
     NR::Matrix const ret( sp_item_i2doc_affine(item)
                           * NR::scale(1, -1)
                           * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
-#ifdef NDEBUG
-    NRMatrix tst;
-    sp_item_i2d_affine(item, &tst);
-    assert_close( ret, NR::Matrix(&tst) );
-#endif
     return ret;
 }
 
@@ -1161,13 +1136,13 @@ NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
     g_return_val_if_fail(SP_IS_ITEM(item), NULL);
     g_return_val_if_fail(affine != NULL, NULL);
 
-    sp_item_i2doc_affine(item, affine);
+    NRMatrix const i2doc(sp_item_i2doc_affine(item));
 
     NRMatrix doc2dt;
     nr_matrix_set_scale(&doc2dt, 1, -1);
     doc2dt.c[5] = sp_document_height(SP_OBJECT_DOCUMENT(item));
 
-    nr_matrix_multiply(affine, affine, &doc2dt);
+    nr_matrix_multiply(affine, &i2doc, &doc2dt);
 
     return affine;
 }

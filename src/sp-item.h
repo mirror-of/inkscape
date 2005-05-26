@@ -204,10 +204,6 @@ NR::Matrix i2i_affine(SPObject const *src, SPObject const *dest);
 NR::Matrix sp_item_i2doc_affine(SPItem const *item);
 NR::Matrix sp_item_i2root_affine(SPItem const *item);
 
-/* Old NRMatrix version (deprecated). */
-NRMatrix *sp_item_i2doc_affine (SPItem const *item, NRMatrix *transform);
-NRMatrix *sp_item_i2root_affine(SPItem const *item, NRMatrix *transform);
-
 /* fixme: - these are evil, but OK */
 
 /* Fill *TRANSFORM with the item-to-desktop transform.  See doc/coordinates.txt
