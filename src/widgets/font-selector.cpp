@@ -542,6 +542,10 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			if (fprev->phrase) {
 				p = fprev->phrase;
 			} else {
+				/* TRANSLATORS: Test string used in text and font dialog (when no
+				 * text has been entered) to get a preview of the font.  Choose
+				 * some representative characters that users of your locale will be
+				 * interested in. */
 				p = _("AaBbCcIiPpQq12368.;/()");
 			}
 			int len = 0;
