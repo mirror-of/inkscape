@@ -5059,7 +5059,7 @@ msgstr "<b>Cirkel</b>"
 #: src/sp-ellipse.cpp:862
 #, fuzzy
 msgid "<b>Segment</b>"
-msgstr "</b>Rechthoek<b>"
+msgstr "<b>Taartpunt</b>"
 
 #: src/sp-ellipse.cpp:864
 msgid "<b>Arc</b>"
