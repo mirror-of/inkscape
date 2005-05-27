@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-05-06 13:18+0200\n"
-"PO-Revision-Date: 2005-05-06 13:32+0200\n"
+"PO-Revision-Date: 2005-05-26 13:32+0200\n"
 "Last-Translator: Xavier Conde Rueda <xavi.conde@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -342,9 +342,8 @@ msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>L'objecte no té cap clon en mosaic.</small>"
 
 #: ../src/dialogs/clonetiler.cpp:818
-#, fuzzy
 msgid "Select <b>one object</b> whose tiled clones to unclump."
-msgstr "Seleccioneu <b>un objecte</b> per esborrar els seus clons del mosaic."
+msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:869
 msgid "Select <b>one object</b> whose tiled clones to remove."
@@ -370,9 +369,8 @@ msgid "<small>Per column:</small>"
 msgstr "<small>Per columna:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:1440
-#, fuzzy
 msgid "<small>Randomize:</small>"
-msgstr "<small>Cap degradat</small>"
+msgstr "<small>Aleatoritza:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:1583
 msgid "_Symmetry"
@@ -504,11 +502,11 @@ msgstr "<b>Exponent:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1724
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Si les files estan separades equitativament (1), convergeixen (<1) o divergeixen (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:1731
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Si les columnes estan separades equitativament (1), convergeixen (<1) o divergeixen (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
 #: ../src/dialogs/clonetiler.cpp:1739 ../src/dialogs/clonetiler.cpp:1829
@@ -649,6 +647,7 @@ msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
 msgstr ""
+"Color inicial per als clons (només s'usa si l'original no té farciment ni traç)"
 
 #: ../src/dialogs/clonetiler.cpp:1987
 msgid "<b>H:</b>"
@@ -850,6 +849,8 @@ msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
 msgstr ""
+"Cada clon es pinta amb el color seleccionat (l'original no ha de tenir "
+"farciment ni traç)"
 
 #: ../src/dialogs/clonetiler.cpp:2284
 msgid "Each clone's opacity is determined by the picked value in that point"
@@ -990,7 +991,7 @@ msgstr "Ajusta la caixa del voltant a la graella"
 #: ../src/dialogs/desktop-properties.cpp:892
 #: ../src/dialogs/desktop-properties.cpp:975
 msgid "Snap the edges of the object bounding boxes"
-msgstr ""
+msgstr "Ajusta les vores de la caixa al voltant de l'objecte"
 
 #: ../src/dialogs/desktop-properties.cpp:893
 msgid "Snap points to grid"
@@ -1368,7 +1369,7 @@ msgid ""
 "<b>More than one object selected.</b>  Cannot take style from multiple "
 "objects."
 msgstr ""
-"<b>S'ha seleccionat més d'un objecte.</b> No es pot agafar l'estil de "
+"<b>S'ha seleccionat més d'un objecte.</b> No es pot prendre l'estil de "
 "múltiples objectes."
 
 #: ../src/dialogs/display-settings.cpp:769
@@ -1422,13 +1423,12 @@ msgid "Grab sensitivity:"
 msgstr "Proximitat per seleccionar:"
 
 #: ../src/dialogs/display-settings.cpp:895
-#, fuzzy
 msgid ""
 "How close on the screen you need to be to an object to be able to grab it "
 "with mouse (in screen pixels)"
 msgstr ""
 "Quant s'ha d'apropar a un objecte per seleccionar-lo amb el ratolí (en "
-"píxels)"
+"píxels de pantalla)"
 
 #: ../src/dialogs/display-settings.cpp:896
 #: ../src/dialogs/display-settings.cpp:908
@@ -1477,9 +1477,8 @@ msgid "Scroll by:"
 msgstr "Desplaça:"
 
 #: ../src/dialogs/display-settings.cpp:940
-#, fuzzy
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
-msgstr "En prémer control i fletxa desplaça aquesta distància (en píxels)"
+msgstr "En prémer control i fletxa es desplaça aquesta distància (en píxels de pantalla)"
 
 #: ../src/dialogs/display-settings.cpp:950
 msgid "Acceleration:"
@@ -1490,8 +1489,8 @@ msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
 msgstr ""
-"En prémer i mantenir control i fletxa gradualment accelerarà el desplaçament "
-"(0 per no accelerar)"
+"En prémer i mantenir control i fletxa, gradualment accelerarà el desplaçament "
+"(0 per a no accelerar)"
 
 #: ../src/dialogs/display-settings.cpp:960
 #: ../src/ui/dialog/inkscape-preferences.cpp:111
@@ -1516,12 +1515,11 @@ msgid "Threshold:"
 msgstr "Llindar:"
 
 #: ../src/dialogs/display-settings.cpp:980
-#, fuzzy
 msgid ""
 "How far (in screen pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
-"A quina distància (en píxels) heu d'estar del contorn del llenç per activar "
+"A quina distància (en píxels de pantalla) heu d'estar del contorn del llenç per a activar "
 "el desplaçament automàtic. Positiu és fora del llenç, negatiu és dins"
 
 #. Steps
@@ -1535,13 +1533,12 @@ msgid "Arrow keys move by:"
 msgstr "Les tecles de fletxa mouen:"
 
 #: ../src/dialogs/display-settings.cpp:994
-#, fuzzy
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in px units)"
 msgstr ""
 "En prémer una tecla de fletxa es mou els objectes seleccionats o els nodes "
-"aquesta distància (en píxels SVG)"
+"aquesta distància (en unitats de píxels)"
 
 #: ../src/dialogs/display-settings.cpp:995
 #: ../src/dialogs/display-settings.cpp:1006
@@ -1559,24 +1556,23 @@ msgid "> and < scale by:"
 msgstr "> i < escalen:"
 
 #: ../src/dialogs/display-settings.cpp:1005
-#, fuzzy
+
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in px units)"
 msgstr ""
 "En prémer > o < s'escala la selecció o es redueix en aquesta quantitat (en "
-"píxels SVG)"
+"unitats de píxel)"
 
 #: ../src/dialogs/display-settings.cpp:1015
 msgid "Inset/Outset by:"
 msgstr "Contreu/expandeix:"
 
 #: ../src/dialogs/display-settings.cpp:1016
-#, fuzzy
 msgid ""
 "Inset and Outset commands displace the path by this distance (in px units)"
 msgstr ""
-"Les ordres d'expandir i contreure desplaça el camí aquesta distància (en "
-"píxels SVG)"
+"Les ordres d'expandir i contreure desplacen el camí aquesta distància (en "
+"unitats de píxel)"
 
 #: ../src/dialogs/display-settings.cpp:1028
 msgid "Zoom in/out by:"
@@ -1609,7 +1605,6 @@ msgstr "Seleccionador"
 msgid "Node"
 msgstr "Node"
 
-# Si fa no fa ...
 #. The 4 shape tools
 #: ../src/dialogs/display-settings.cpp:1073
 msgid "Shapes"
@@ -1704,7 +1699,7 @@ msgstr ""
 
 #: ../src/dialogs/display-settings.cpp:1199
 msgid "Zoom when window is resized"
-msgstr "Amplia/redueix si canvia la mida de la finestra"
+msgstr "Apropa/allunya si canvia la mida de la finestra"
 
 #: ../src/dialogs/display-settings.cpp:1200
 msgid ""
@@ -1712,7 +1707,7 @@ msgid ""
 "(this is the default which can be changed in any window using the button "
 "above the right scrollbar)"
 msgstr ""
-"Amplia el dibuix quan es canvia la mida de la finestra del document, per "
+"Apropa el dibuix quan es canvia la mida de la finestra del document, per "
 "mantenir la mateix àrea visible (es pot canviar aquest valor predeterminat "
 "fent servir el botó a sobre de la barra de desplaçament de la dreta)"
 
@@ -1732,7 +1727,7 @@ msgstr "Es mouen en paral·lel"
 
 #: ../src/dialogs/display-settings.cpp:1225
 msgid "Clones are translated by the same vector as their original."
-msgstr "Els clons es traslladen pel mateix vector que l'original."
+msgstr "Els clons es traslladen seguint el mateix vector que l'original."
 
 #: ../src/dialogs/display-settings.cpp:1232
 msgid "Stay unmoved"
@@ -1761,7 +1756,7 @@ msgstr "Quan l'original s'esborra, els seus clons:"
 
 #: ../src/dialogs/display-settings.cpp:1262
 msgid "Are unlinked"
-msgstr "es desenllacen"
+msgstr "Es desenllacen"
 
 #: ../src/dialogs/display-settings.cpp:1262
 msgid "Orphaned clones are converted to regular objects."
@@ -1842,7 +1837,7 @@ msgstr "Preservat"
 #: ../src/dialogs/display-settings.cpp:1342
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
-"Emmagatzema sempre les transformacions coma a atribut transform= en els "
+"Emmagatzema sempre les transformacions com a atribut transform= en els "
 "objectes"
 
 #. Selecting
@@ -1852,7 +1847,7 @@ msgstr "Seleccionar"
 
 #: ../src/dialogs/display-settings.cpp:1352
 msgid "Ctrl+A, Tab, Shift+Tab:"
-msgstr "Ctrl+A, tab., maj.+tab:"
+msgstr "Ctrl+a, tab., maj.+tab:"
 
 #: ../src/dialogs/display-settings.cpp:1361
 msgid "Select only within current layer"
@@ -1875,7 +1870,7 @@ msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden group or layer)"
 msgstr ""
-"Inhabiliteu-lo per seleccionar objectes que estan amagats (per estar amagats "
+"Inhabiliteu-lo per seleccionar objectes amagats (per estar amagats "
 "o per estar en un grup o capa amagats)"
 
 #: ../src/dialogs/display-settings.cpp:1377
@@ -1887,7 +1882,7 @@ msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
 msgstr ""
-"Inhabiliteu-lo per seleccionar objectes que estan blocats (per estar amagats "
+"Inhabiliteu-lo per seleccionar objectes blocats (per estar amagats "
 "o per estar en un grup o capa blocats)"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
@@ -2936,7 +2931,7 @@ msgstr ""
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
 #: ../src/dialogs/tiledialog.cpp:659
 msgid "Fit into Selection BBox "
-msgstr ""
+msgstr "Ajusta a la caixa de selecció "
 
 #: ../src/dialogs/tiledialog.cpp:666
 msgid "Set Spacing: "
@@ -3308,15 +3303,14 @@ msgid "<b>Release mouse</b> to set color."
 msgstr "<b>Allibereu el ratolí</b> per definir el color."
 
 #: ../src/dropper-context.cpp:371 ../src/tools-switch.cpp:205
-#, fuzzy
 msgid ""
 "<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to "
 "average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> "
 "to copy the color under mouse to clipboard"
 msgstr ""
-"<b>Cliqueu</b> per establir el color de farciment, <b>maj+clic</b> per "
-"establir el color del contorn. <b>Cliqueu i arrossegueu</b> per seleccionar "
-"el color mitjà d'una àrea. <b>Ctrl+c</b> per copiar al porta-retalls el "
+"<b>Cliqueu</b> per establir el farciment, <b>maj+clic</b> per "
+"establir el contorn. <b>arrossegueu</b> per seleccionar "
+"el color mitjà d'una àrea; <b>alt</b> per seleccionar el color invers; <b>ctrl+c</b> per copiar al porta-retalls el "
 "color sota del ratolí."
 
 #: ../src/extension/dependency.cpp:239
@@ -3549,11 +3543,11 @@ msgid "Select file to open"
 msgstr "Seleccioneu el fitxer per obrir"
 
 #: ../src/file.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
-msgstr[0] "S'ha suprimit <b>%i</b> element sense fer servir a &lt;defs&gt;."
-msgstr[1] "S'han suprimit <b>%i</b> elements sense fer servir a &lt;defs&gt;."
+msgstr[0] "S'ha suprimit <b>%i</b> definició sense fer servir a &lt;defs&gt;."
+msgstr[1] "S'han suprimit <b>%i</b> definicions sense fer servir a &lt;defs&gt;."
 
 #: ../src/file.cpp:438
 msgid "No unused definitions in &lt;defs&gt;."
@@ -4177,11 +4171,10 @@ msgid "DPI"
 msgstr "PPP"
 
 #: ../src/main.cpp:212
-#, fuzzy
 msgid ""
 "Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"
 msgstr ""
-"Àrea exportada en píxels SVG (per defecte el document sencer; 0,0 és la "
+"Àrea exportada en píxels SVG (per defecte el llenç; 0,0 és la "
 "cantonada inferior esquerra)"
 
 #: ../src/main.cpp:213
@@ -4190,7 +4183,7 @@ msgstr "x0:y0:x1:y1"
 
 #: ../src/main.cpp:217
 msgid "Exported area is the entire drawing (not canvas)"
-msgstr ""
+msgstr "L'àrea exportada és el dibuix sencer (no el llenç)"
 
 #: ../src/main.cpp:222
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
@@ -4267,46 +4260,48 @@ msgid "Export document to an EPS file"
 msgstr "Exporta el document a un fitxer EPS"
 
 #: ../src/main.cpp:274
-#, fuzzy
 msgid "Convert text object to paths on export (EPS)"
-msgstr "Converteix el text en camí"
+msgstr "Converteix els objectes de text en camins per a exportar (EPS)"
 
 #: ../src/main.cpp:279
 msgid "Export files with the bounding box set to the page size (EPS)"
-msgstr ""
+msgstr "Exporta fitxers amb la caixa del voltant establerta a la mida de la página (EPS)"
 
 #: ../src/main.cpp:284
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
+"Consulta la coordenada X del dibuix o, si s'especifica, de l'objecte amb --query-id"
 
 #: ../src/main.cpp:289
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
+"Consulta la coordenada Y del dibuix o, si s'especifica, de l'objecte amb --query-id"
 
 #: ../src/main.cpp:294
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
+"Consulta l'amplada del dibuix o, si s'especifica, de l'objecte amb --query-id"
 
 #: ../src/main.cpp:299
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
+"Consulta l'alçada del dibuix o, si s'especifica, de l'objecte amb --query-id"
 
 #: ../src/main.cpp:304
-#, fuzzy
 msgid "The ID of the object whose dimensions are queried"
-msgstr "L'id de l'objecte per exportar (s'ignora export-area)"
+msgstr "L'id de l'objecte les dimensions del qual es volen consultar"
 
 #: ../src/main.cpp:309
 msgid "Print out the extension directory and exit"
-msgstr ""
+msgstr "Escriu el directori d'extensions i surt"
 
 #: ../src/main.cpp:314
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
@@ -4334,7 +4329,7 @@ msgid ""
 "+Alt</b>: move along handles"
 msgstr ""
 "<b>Control</b>: commuta el tipus de node, ajusta l'angle de gir, mou hor/"
-"vert; <b>Ctrl+alt</b>: mou les nanses"
+"vert; <b>ctrl+alt</b>: mou les nanses"
 
 #: ../src/node-context.cpp:371
 msgid ""
@@ -4366,13 +4361,13 @@ msgid "Cannot find path between nodes."
 msgstr "No es pot trobar el camí entre els nodes."
 
 #: ../src/nodepath.cpp:2503
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both "
 "handles"
 msgstr ""
-"<b>Nansa de node</b>: arrossegueu per donar forma a la corba; amb <b>ctrl</"
+"<b>Nansa de node</b>: a %0.2f&#176;, longithd %s; amb <b>ctrl</"
 "b> s'ajusta l'angle; amb <b>alt</b> es bloca la longitud; amb <b>majúscules</"
 "b> es gira la nansa oposada a la vegada"
 
@@ -4385,14 +4380,13 @@ msgstr ""
 "hor./vert.; amb <b>ctrl+alt</b> per ajustar les direccions de les nanses"
 
 #: ../src/nodepath.cpp:2937
-#, fuzzy
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"
 msgstr ""
 "<b>Nansa de node</b>: arrossegueu per donar forma a la corba; amb <b>ctrl</"
 "b> s'ajusta l'angle; amb <b>alt</b> es bloca la longitud; amb <b>majúscules</"
-"b> es gira la nansa oposada a la vegada"
+"b> es giren ambdues nanses"
 
 #: ../src/nodepath.cpp:2961
 msgid ""
@@ -4405,7 +4399,6 @@ msgstr ""
 "b> es gira la nansa oposada a la vegada"
 
 #: ../src/nodepath.cpp:3097
-#, fuzzy
 msgid "end node"
 msgstr "node final"
 
@@ -4436,16 +4429,13 @@ msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 
 #: ../src/nodepath.cpp:3128
-#, fuzzy
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
-msgstr "Arrossegueu nodes o nanses per editar el camí"
+msgstr "<b>Arrossegueu</b> nodes o nanses; les <b>fletxes de teclat</b> mouen els modes"
 
 #: ../src/nodepath.cpp:3129
-#, fuzzy
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
-"<b>Arrossegueu</b> per crear una línia a mà alçada. Premeu <b>a</b> per "
-"commutar entre afegir i nou."
+"<b>Arrossegueu</b> el node o les seves nanses; les <b>fletxes de teclat</b> mouen el node"
 
 #: ../src/nodepath.cpp:3148
 msgid ""
@@ -4455,7 +4445,7 @@ msgstr ""
 "nou a l'eina de nodes."
 
 #: ../src/nodepath.cpp:3151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
@@ -4463,10 +4453,10 @@ msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
 msgstr[0] ""
-"No s'ha seleccionat <b>cap</b> node de %i. Cliqueu, majúscula i clic o "
+"No s'ha seleccionat <b>cap</b> node de %i seleccionat. Cliqueu, majúscula i clic o "
 "arrossegueu al voltant dels nodes per seleccionar."
 msgstr[1] ""
-"No s'ha seleccionat <b>cap</b> node de %i. Cliqueu, majúscula i clic o "
+"No s'ha seleccionat <b>cap</b> node de %i seleccionats. Cliqueu, majúscula i clic o "
 "arrossegueu al voltant dels nodes per seleccionar."
 
 #: ../src/nodepath.cpp:3158
@@ -4707,18 +4697,16 @@ msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>No hi ha cap camí</b> per invertir en la selecció."
 
 #: ../src/pen-context.cpp:321 ../src/pencil-context.cpp:206
-#, fuzzy
 msgid "Continuing selected path"
-msgstr "Contreu els camins seleccionats"
+msgstr "Continuar els camins seleccionats"
 
 #: ../src/pen-context.cpp:329 ../src/pencil-context.cpp:215
 msgid "Creating new path"
 msgstr "S'està creant un nou camí"
 
 #: ../src/pen-context.cpp:331 ../src/pencil-context.cpp:219
-#, fuzzy
 msgid "Appending to selected path"
-msgstr "S'està afegint a la selecció"
+msgstr "S'està afegint al camí seleccionat"
 
 #: ../src/pen-context.cpp:803
 msgid "Finishing pen"
@@ -5007,12 +4995,11 @@ msgstr ""
 "<b>majúscules</b> per escalar al voltant del centre de rotació"
 
 #: ../src/seltrans.cpp:479
-#, fuzzy
 msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
 msgstr ""
-"<b>Gireu</b> la selecció; amb <b>ctrl</b> per ajustar l'angle; amb "
+"<b>Torceu</b> la selecció; amb <b>ctrl</b> per ajustar l'angle; amb "
 "<b>majúscules</b> per girar al voltant de la cantonada contrària"
 
 #: ../src/seltrans.cpp:480
@@ -5031,9 +5018,9 @@ msgstr ""
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Gira</b>: %0.2f&#176;; amb <b>ctrl</b> per ajustar l'angle"
+msgstr "<b>Torceu</b>: %0.2f&#176;; amb <b>ctrl</b> per ajustar l'angle"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:980
@@ -5617,22 +5604,21 @@ msgstr ""
 "per editar l'espiral. <b>Cliqueu</b> per seleccionar."
 
 #: ../src/tools-switch.cpp:169
-#, fuzzy
 msgid ""
 "<b>Drag</b> to create a freehand line. Start drawing with <b>Shift</b> to "
 "append to selected path."
 msgstr ""
-"<b>Arrossegueu</b> per crear una línia a mà alçada. Premeu <b>a</b> per "
-"commutar entre afegir i nou."
+"<b>Arrossegueu</b> per crear una línia a mà alçada. Comenceu a dibuixar amb "
+"<b>majúscules</b> per afegir al camí seleccionat."
 
 #: ../src/tools-switch.cpp:175
-#, fuzzy
 msgid ""
 "<b>Click</b> to create a node, <b>click and drag</b> to create a smooth "
 "node. Start drawing with <b>Shift</b> to append to selected path."
 msgstr ""
 "<b>Cliqueu</b> per crear un node, <b>cliqueu i arrossegueu</b> per crear un "
-"node suau. Premeu <b>a</b> per commutar entre afegir i nou."
+"node suau. Comenceu a dibuixar amb "
+"<b>majúscules</b> per afegir al camí seleccionat."
 
 #: ../src/tools-switch.cpp:181
 msgid ""
@@ -5650,13 +5636,12 @@ msgstr ""
 "escriviu."
 
 #: ../src/tools-switch.cpp:193
-#, fuzzy
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, "
 "<b>drag handles</b> to adjust gradients."
 msgstr ""
-"<b>Arrossegueu</b> per crear un degradat en els objectes seleccionats, "
-"<b>arrossegueu les nanses</b> per ajustar els degradats"
+"<b>Arrossegueu</b> o feu <b>doble click</b> per crear un degradat en els objectes seleccionats, "
+"<b>arrossegueu les nanses</b> per ajustar els degradats."
 
 #: ../src/tools-switch.cpp:199
 msgid ""
@@ -5816,7 +5801,7 @@ msgstr "Diàleg de propietats del text"
 
 #: ../src/ui/dialog/transformation.cpp:81
 msgid "Skew"
-msgstr ""
+msgstr "Torç"
 
 #: ../src/ui/dialog/transformation.h:34
 msgid "Transformation"
@@ -5940,11 +5925,11 @@ msgstr "A_mpliació"
 
 #: ../src/ui/stock-items.cpp:60
 msgid "Zoom _In"
-msgstr "Augmenta l'ampl_iació"
+msgstr "A_propa"
 
 #: ../src/ui/stock-items.cpp:61
 msgid "Zoom _Out"
-msgstr "_Redueix l'ampliació"
+msgstr "All_unya"
 
 #: ../src/ui/stock-items.cpp:62
 msgid "1:_1 (100%)"
@@ -6402,14 +6387,12 @@ msgid "tutorial-calligraphy.svg"
 msgstr "tutorial-calligraphy.svg"
 
 #: ../src/verbs.cpp:1454
-#, fuzzy
 msgid "tutorial-elements.svg"
-msgstr "tutorial-shapes.svg"
+msgstr "tutorial-elements.svg"
 
 #: ../src/verbs.cpp:1457
-#, fuzzy
 msgid "tutorial-tips.svg"
-msgstr "tutorial-shapes.svg"
+msgstr "tutorial-tips.svg"
 
 #: ../src/verbs.cpp:1604
 msgid "Does nothing"
@@ -6982,7 +6965,7 @@ msgstr "Crea i edita els degradats"
 
 #: ../src/verbs.cpp:1832
 msgid "Zoom in or out"
-msgstr "Augmenta o redueix l'ampliació"
+msgstr "Apropa o allunya"
 
 #: ../src/verbs.cpp:1834
 msgid "Pick averaged colors from image"
@@ -7512,7 +7495,7 @@ msgstr "Degradat radial"
 
 #: ../src/widgets/paint-selector.cpp:191
 msgid "Unset paint (make it undefined so it can be inherited)"
-msgstr ""
+msgstr "Indefineix el color perquè es pugui heretar"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: ../src/widgets/paint-selector.cpp:203
