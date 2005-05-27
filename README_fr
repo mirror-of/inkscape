@@ -1,8 +1,7 @@
-﻿
 Inkscape. Dessinez librement.
 =============================
 
-http://www.inkscape.org
+http://www.inkscape.org/
 
 Inkscape est un logiciel de dessin vectoriel libre avec des possibilités
 similaires à celles d'Illustrator, Freehand ou CorelDraw et utilisant le format
@@ -15,7 +14,7 @@ du SVG XML. Il peut aussi importer depuis plusieurs formats comme EPS,
 Postscript, JPEG, PNG, BMP, et TIFF et exporter en PNG aussi bien qu'en de
 nombreux formats vectoriels.
 
-Le but principal d'Inkscape est de fournir à la communeauté du logiciel libre
+Le but principal d'Inkscape est de fournir à la communauté du logiciel libre
 un outil de dessin totalement conforme aux spécifications XML, SVG et CSS2 du
 W3C. De plus les tâches planifiées incluent la conversion du code de C/Gtk en
 C++/Gtkmm, la mise en valeur d'un noyau léger avec des fonctionnalités ajoutées
@@ -31,14 +30,15 @@ make install
 Si le fichier "./configure" n'est pas présent, vous pouvez le créer en
 exécutant la commande  "./autogen.sh", qui appelle alternativement d'autres
 programmes tels que automake et autoconf. Consultez le fichier INSTALL pour de
-plus amples détails
+plus amples détails.
 
-Veuillez consulter www.inkscape.org pour les dépendances les plus courantes.
+Veuillez consulter http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape
+pour les dépendances les plus courantes.
 
 Si vous modifiez Inkscape d'une quelconque manière utilisable, daignez nous en
 informer s'il vous plait. 
 
 Veuillez consulter le fichier HACKING pour de plus amples informations sur le
-développement d'Inkscape
+développement d'Inkscape.
 
 Traduction par Matiphas (matiphas _chez_ free point fr), 2005.
