@@ -1422,6 +1422,9 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_KEYS:
+            /* TRANSLATORS: If you have translated the keys.svg file to your language, then
+               translate this string as "keys.LANG.svg" (where LANG is your language code);
+               otherwise leave as "keys.svg". */
             sp_help_open_screen (_("keys.svg"));
             break;
         case SP_VERB_HELP_ABOUT:
@@ -1448,24 +1451,33 @@ TutorialVerb::perform (SPAction *action, void * data, void * pdata)
 {
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_TUTORIAL_BASIC:
+            /* TRANSLATORS: If you have translated the tutorial-basic.svg file to your language,
+               then translate this string as "tutorial-basic.LANG.svg" (where LANG is your language
+               code); otherwise leave as "tutorial-basic.svg". */
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-basic.svg"));
             break;
         case SP_VERB_TUTORIAL_SHAPES:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-shapes.svg"));
             break;
         case SP_VERB_TUTORIAL_ADVANCED:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-advanced.svg"));
             break;
         case SP_VERB_TUTORIAL_TRACING:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-tracing.svg"));
             break;
         case SP_VERB_TUTORIAL_CALLIGRAPHY:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-calligraphy.svg"));
             break;
         case SP_VERB_TUTORIAL_DESIGN:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-elements.svg"));
             break;
         case SP_VERB_TUTORIAL_TIPS:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-tips.svg"));
             break;
     default:
