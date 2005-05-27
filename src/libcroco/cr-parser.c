@@ -507,7 +507,7 @@ cr_parser_error_destroy (CRParserError * a_this)
  *@param a_this the current instance of #CRParser.
  *@param a_msg the error message.
  *@param a_status the error status.
- *@return CR_OK upon successfull completion, an error code otherwise.
+ *@return CR_OK upon successful completion, an error code otherwise.
  */
 static enum CRStatus
 cr_parser_push_error (CRParser * a_this,
@@ -549,7 +549,7 @@ cr_parser_push_error (CRParser * a_this,
 }
 
 /**
- *Dumps the error stack on stdout.
+ *Dumps the error stack using g_printerr.
  *@param a_this the current instance of #CRParser.
  *@param a_clear_errs whether to clear the error stack
  *after the dump or not.
