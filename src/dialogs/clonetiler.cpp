@@ -1585,6 +1585,11 @@ clonetiler_dialog (void)
             GtkWidget *vb = clonetiler_new_tab (nb, _("_Symmetry"));
 
             GtkWidget *om = gtk_option_menu_new ();
+            /* TRANSLATORS: For the following 17 symmetry groups, see
+             * http://www.bib.ulb.ac.be/coursmath/doc/17.htm (visual examples);
+             * http://www.clarku.edu/~djoyce/wallpaper/seventeen.html (English vocabulary); or
+             * http://membres.lycos.fr/villemingerard/Geometri/Sym1D.htm (French vocabulary).
+             */
             gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Select one of the 17 symmetry groups for the tiling"), NULL);
             gtk_box_pack_start (GTK_BOX (vb), om, FALSE, FALSE, SB_MARGIN);
 
@@ -1595,11 +1600,11 @@ clonetiler_dialog (void)
                 int group;
                 gchar const *label;
             } const sym_groups[] = {
-                // TRANSLATORS: "translation" means "shift" here
+                // TRANSLATORS: "translation" means "shift" / "displacement" here.
                 {TILE_P1, _("<b>P1</b>: simple translation")},
                 {TILE_P2, _("<b>P2</b>: 180&#176; rotation")},
                 {TILE_PM, _("<b>PM</b>: reflection")},
-                // TRANSLATORS: "glide reflection" is a reflection and a translation combined
+                // TRANSLATORS: "glide reflection" is a reflection and a translation combined.
                 //  For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
                 {TILE_PG, _("<b>PG</b>: glide reflection")},
                 {TILE_CM, _("<b>CM</b>: reflection + glide reflection")},
