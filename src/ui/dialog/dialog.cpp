@@ -34,6 +34,62 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+static gboolean 
+sp_retransientize_again (gpointer dlgPtr) 
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    dlg->retransientize_suppress = false;
+    return FALSE; // so that it is only called once
+}
+
+static void
+sp_retransientize (Inkscape::Application *inkscape, SPDesktop *desktop, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    GtkWindow *dialog_win = GTK_WINDOW(dlg->gobj());
+
+    gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
+
+    if (!transient_policy) 
+        return;
+
+#ifndef WIN32
+    if (dlg->retransientize_suppress) { 
+         /* if retransientizing of this dialog is still forbidden after 
+          * previous call warning turned off because it was confusingly fired 
+          * when loading many files from command line
+          */
+         
+         // g_warning("Retranzientize aborted! You're switching windows too fast!"); 
+        return;
+    }
+    
+    GtkWindow *desktop_win = (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"); 
+    
+    if (desktop_win && dialog_win)
+    {
+        dlg->retransientize_suppress = true; // disallow other attempts to retranzientize this dialog
+        
+        gtk_window_set_transient_for (dialog_win, desktop_win);
+
+        /* 
+         * This enables "aggressive" transientization,
+         * i.e. dialogs always emerging on top when you switch documents. Note 
+         * however that this breaks "click to raise" policy of a window 
+         * manager because the switched-to document will be raised at once 
+         * (so that its transients also could raise)
+         */
+        if (transient_policy == 2 && !dlg->_hiddenF12 && !dlg->_user_hidden) {
+            // without this, a transient window not always emerges on top
+            gtk_window_present (dialog_win); 
+        }
+    }
+    
+    // we're done, allow next retransientizing not sooner than after 120 msec
+    gtk_timeout_add (120, (GtkFunction) sp_retransientize_again, (gpointer) dlg);  
+#endif
+}
+
 static void
 sp_dialog_destroy (GtkObject *object, gpointer dlgPtr)
 {
@@ -97,7 +153,7 @@ Dialog::read_geometry()
     // If there are stored height and width values for the dialog,
     // resize the window to match; otherwise we leave it at its default
     if (w != 0 && h != 0) {
-        resize(w, h);
+        set_size_request (w, h);
     }
 
     // If there are stored values for where the dialog should be
@@ -154,9 +210,12 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
     set_title(title);
 
     sp_transientize(dlg);
+    retransientize_suppress = false;
+    g_signal_connect   (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_retransientize), (void *)this);
     
     gtk_signal_connect( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg );
 
+    _hiddenF12 = false;
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
     g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
 
@@ -178,8 +237,7 @@ Dialog::Dialog(BaseObjectType *gobj)
 
 Dialog::Dialog( bool flag )
 {
-
-//    g_print ("someone called Dialog(flag)!!!\n");
+    g_warning ("Someone called Dialog(flag) constructor. It is deprecated. Please use the main constructor passing it the prefs path and the verb.\n");
 
     // This block is a much simplified version of the code used in all other dialogs for
     // saving/restoring geometry, transientising, passing events to the aplication, and
@@ -226,8 +284,7 @@ bool Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
 void
 Dialog::onHideF12()
 {
-    //g_print ("hide f12\n");
-
+    _hiddenF12 = true;
     save_geometry();
     hide();
 }
@@ -238,7 +295,7 @@ Dialog::onShowF12()
     if (_user_hidden)
         return;
 
-    //g_print ("show f12\n");
+    _hiddenF12 = false;
 
     present();
     read_geometry();
@@ -269,34 +326,6 @@ Dialog::_setDesktop(SPDesktop *desktop) {
         g_object_unref(_desktop);
     }
     _desktop = desktop;
-}
-
-void
-Dialog::transientize()
-{
-
-/* TODO:  Gtkmmify
-    if (prefs_get_int_attribute( "options.dialogsskiptaskbar", "value", 0)) {
-        set_skip_taskbar_hint(TRUE);
-    }
-
-    gint transient_policy = prefs_get_int_attribute_limited( "options.transientpolicy", "value", 1, 0, 2);
-
-    if (transient_policy) {
-        // transientzing does not work on windows; when you minimize a document
-        // and then open it back, only its transient emerges and you cannot access
-        // the document window.
-        //
-#ifndef WIN32
-        // if there's an active document window, attach dialog to it as a transient:
-        if ( SP_ACTIVE_DESKTOP &&
-             g_object_get_data( G_OBJECT(SP_ACTIVE_DESKTOP), "window"))
-        {
-            set_transient_for( this, get_data(G_OBJECT(SP_ACTIVE_DESKTOP), "window"));
-        }
-#endif
-    }
-*/
 }
 
 void

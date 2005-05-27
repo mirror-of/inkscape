@@ -26,11 +26,6 @@ FillAndStroke::FillAndStroke()
       _page_stroke_paint("Stroke paint", 1, 1),
       _page_stroke_style("Stroke style", 1, 1)
 {
-    set_title(_("Fill and Stroke"));
-    set_default_size(200, 200);
-
-    transientize();
-
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();
     vbox->set_spacing(4);

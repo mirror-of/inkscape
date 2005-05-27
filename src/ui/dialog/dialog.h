@@ -34,13 +34,15 @@ public:
     virtual void   onHideF12();
     virtual void   onShowF12();
 
-    void           transientize();
+    bool           _hiddenF12;
+    bool           _user_hidden; // when it is closed by the user, to prevent repopping on f12
 
     void           read_geometry();
     void           save_geometry();
 
     const char           *_prefs_path;
-    bool           _user_hidden; // when it is closed by the user, to prevent repopping on f12
+
+    bool retransientize_suppress; // when true, do not retransientize (prevents races when switching new windows too fast)
 
 protected:
     Dialog( bool flag ); // fixme: remove this

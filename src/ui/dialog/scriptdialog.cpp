@@ -175,9 +175,6 @@ void ScriptDialogImpl::executePerl()
  */
 ScriptDialogImpl::ScriptDialogImpl()
 {
-    set_title(_("Script"));
-    set_size_request(300, 400);
-
     Gtk::VBox *mainVBox = get_vbox();
 
     //## Add a menu for clear()
@@ -189,7 +186,6 @@ ScriptDialogImpl::ScriptDialogImpl()
     fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Execute Perl"),
            sigc::mem_fun(*this, &ScriptDialogImpl::executePerl) ) );
     mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
-
 
     //### Set up the script field
     scriptText.set_editable(true);
