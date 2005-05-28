@@ -188,6 +188,16 @@ Scalar::update() {
     static_cast<Gtk::SpinButton*>(_widget)->update();
 }
 
+
+
+/** Signal raised when the spin button's value changes */
+Glib::SignalProxy0<void>
+Scalar::signal_value_changed()
+{
+    return static_cast<Gtk::SpinButton*>(_widget)->signal_value_changed();
+}
+
+
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape

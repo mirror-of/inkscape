@@ -126,12 +126,7 @@ ScalarUnit::getValue(Glib::ustring const &unit_name) const {
     }
 }
 
-/** Signal raised when the spin button's value changes */
-Glib::SignalProxy0<void> 
-ScalarUnit::signal_value_changed()
-{
-    return static_cast<Gtk::SpinButton*>(_widget)->signal_value_changed();
-}
+
 
 /** Signal handler for updating the suffix label when unit is changed */
 void

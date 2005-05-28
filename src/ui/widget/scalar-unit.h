@@ -41,7 +41,6 @@ public:
     bool      setUnit(Glib::ustring const &units);
     void      setValue(double number, Glib::ustring const &units);
 
-    Glib::SignalProxy0<void> signal_value_changed();
     void on_unit_changed();
 
 protected:
@@ -54,7 +53,7 @@ protected:
 
 #endif // INKSCAPE_UI_WIDGET_SCALAR_UNIT_H
 
-/* 
+/*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"

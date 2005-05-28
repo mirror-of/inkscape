@@ -58,6 +58,8 @@ public:
     void    setValue(double value);
 
     void    update();
+
+    Glib::SignalProxy0<void> signal_value_changed();
 };
 
 } // namespace Widget
