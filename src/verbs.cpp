@@ -1380,6 +1380,7 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_DIALOG_TRANSFORM:
             sp_transformation_dialog_move ();
+            //dt->_dlg_mgr->showDialog("Transformation");
             break;
         case SP_VERB_DIALOG_ALIGN_DISTRIBUTE:
             sp_quick_align_dialog ();
