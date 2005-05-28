@@ -1,4 +1,3 @@
-
 /*
  * SimpleSAX
  *
@@ -11,11 +10,11 @@
  */
 
 
+#include <libxml/xmlerror.h>
 #include "simple-sax.h"
 
 namespace Inkscape {
-namespace IO
-{
+namespace IO {
 
 SaxHandler::SaxHandler()
 {
@@ -1492,4 +1491,4 @@ void FlatSaxHandler::_characters(const xmlChar *ch, int len)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
