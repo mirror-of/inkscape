@@ -854,6 +854,10 @@ void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, doub
     SPSVGLength zero_length;
     zero_length = 0.0;
 
+    /* edge testcases for this code:
+     1) moving text elements whose position is done entirely with transform="...", no x,y attributes
+     2) unflowing multi-line flowtext then moving it (it has x but not y)
+    */
     unsigned points_count = std::max(attributes.x.size(), attributes.y.size());
     if (extend_zero_length && points_count < 1)
         points_count = 1;
@@ -866,13 +870,13 @@ void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, doub
         point *= matrix;
         if (i < attributes.x.size())
             attributes.x[i] = point[NR::X];
-        else if (point[NR::X] != 0.0) {
+        else if (point[NR::X] != 0.0 && extend_zero_length) {
             attributes.x.resize(i + 1, zero_length);
             attributes.x[i] = point[NR::X];
         }
         if (i < attributes.y.size())
             attributes.y[i] = point[NR::Y];
-        else if (point[NR::Y] != 0.0) {
+        else if (point[NR::Y] != 0.0 && extend_zero_length) {
             attributes.y.resize(i + 1, zero_length);
             attributes.y[i] = point[NR::Y];
         }
