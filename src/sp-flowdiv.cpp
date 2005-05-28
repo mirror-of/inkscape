@@ -186,6 +186,8 @@ sp_flowdiv_modified (SPObject *object, guint flags)
 static void
 sp_flowdiv_build (SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
 {
+	object->_requireSVGVersion(Inkscape::Version(1, 2));
+
 	if (((SPObjectClass *) flowdiv_parent_class)->build)
 		((SPObjectClass *) flowdiv_parent_class)->build (object, doc, repr);
 }

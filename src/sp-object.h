@@ -73,8 +73,6 @@ class Node;
 }
 
 
-typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
-
 typedef enum {
 	SP_NO_EXCEPTION,
 	SP_INDEX_SIZE_ERR,
@@ -437,6 +435,11 @@ struct SPObject : public GObject {
 	void _sendDeleteSignalRecursive();
 	void _updateTotalHRefCount(int increment);
 
+	void _requireSVGVersion(unsigned major, unsigned minor) {
+		_requireSVGVersion(Inkscape::Version(major, minor));
+	}
+	void _requireSVGVersion(Inkscape::Version version);
+
 	sigc::signal<void, SPObject *> _delete_signal;
 	SPObject *_successor;
 	CollectionPolicy _collection_policy;
@@ -515,7 +518,7 @@ void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException 
 
 const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
 
-SPVersion sp_object_get_sodipodi_version (SPObject *object);
+Inkscape::Version sp_object_get_sodipodi_version (SPObject *object);
 
 int sp_object_compare_position(SPObject const *first, SPObject const *second);
 

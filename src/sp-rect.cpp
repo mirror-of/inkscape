@@ -126,7 +126,7 @@ sp_rect_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "rx");
     sp_object_read_attr(object, "ry");
 
-    SPVersion const version = sp_object_get_sodipodi_version(object);
+    Inkscape::Version const version = sp_object_get_sodipodi_version(object);
 
     if ( version.major == 0 && version.minor == 29 ) {
         if (rect->rx.set && rect->ry.set) {

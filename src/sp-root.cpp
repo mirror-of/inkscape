@@ -115,7 +115,7 @@ sp_root_class_init (SPRootClass *klass)
 static void
 sp_root_init (SPRoot *root)
 {
-	static const SPVersion zero_version = { 0, 0 };
+	static const Inkscape::Version zero_version(0, 0);
 
 	sp_version_from_string (SVG_VERSION, &root->original.svg);
 	root->version.svg = root->original.svg;

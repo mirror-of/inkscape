@@ -1231,10 +1231,22 @@ sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *d
 	return def;
 }
 
-SPVersion
+void SPObject::_requireSVGVersion(Inkscape::Version version) {
+	for ( SPObject::ParentIterator iter=this ; iter ; ++iter ) {
+		SPObject *object=iter;
+		if (SP_IS_ROOT(object)) {
+			SPRoot *root=SP_ROOT(object);
+			if ( root->version.svg < version ) {
+				root->version.svg = version;
+			}
+		}
+	}
+}
+
+Inkscape::Version
 sp_object_get_sodipodi_version (SPObject *object)
 {
-	static const SPVersion zero_version = { 0, 0 };
+	static const Inkscape::Version zero_version(0, 0);
 
 	while (object) {
 		if (SP_IS_ROOT (object)) {

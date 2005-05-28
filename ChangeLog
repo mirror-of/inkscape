@@ -1,4 +1,14 @@
-2005-05-24  Simarilius	Simarilius@yahoo.com
+2005-05-28  MenTaLguY  <mental@rydia.net>
+
+	* src/document.cpp, src/sp-ellipse.cpp, src/sp-flowdiv.cpp,
+	  src/sp-flowtext.cpp, src/sp-object.cpp, src/sp-object.h,
+	  src/sp-path.cpp, src/sp-rect.cpp, src/sp-root.cpp, src/sp-root.h,
+	  src/sp-shape.cpp, src/version.cpp, src/version.h:
+
+	  propagate SVG version upwards, and move SPVersion into Inkscape
+	  namespace
+
+2005-05-24  Simarilius	<Simarilius@yahoo.com>
 
 	* src/verbs.cpp, src/dialogs/tiledialog.cpp, src/dialogs/tiledialog.h,
 	src/ui/dialogs/dialog-manager.cpp

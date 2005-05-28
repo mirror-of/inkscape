@@ -154,7 +154,7 @@ sp_path_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPPath *path = SP_PATH(object);
 
-    SPVersion version = sp_object_get_sodipodi_version(object);
+    Inkscape::Version version = sp_object_get_sodipodi_version(object);
 
     /* Fixes old Sodipodi nodetype to namespaced parameter */
     if (sp_version_inside_range(version, 0, 0, 0, 25)) {

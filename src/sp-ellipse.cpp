@@ -645,7 +645,7 @@ sp_arc_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 	if (((SPObjectClass *) arc_parent_class)->build)
 		(* ((SPObjectClass *) arc_parent_class)->build) (object, document, repr);
 
-	SPVersion version = sp_object_get_sodipodi_version (object);
+	Inkscape::Version version = sp_object_get_sodipodi_version (object);
 
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		/* Old spec violating arc attributes */
@@ -769,7 +769,7 @@ sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
 
-	SPVersion version = sp_object_get_sodipodi_version (object);
+	Inkscape::Version version = sp_object_get_sodipodi_version (object);
 
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		switch (key) {

@@ -21,14 +21,16 @@
 #define SP_IS_ROOT_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE((k), SP_TYPE_ROOT))
 
 #include <libnr/nr-matrix.h>
+#include "version.h"
 #include "svg/svg-types.h"
 #include "enums.h"
 #include "sp-item-group.h"
-#include "version.h"
 
 struct SPRoot : public SPGroup {
     struct {
-        SPVersion svg, sodipodi, inkscape;
+        Inkscape::Version svg;
+        Inkscape::Version sodipodi;
+        Inkscape::Version inkscape;
     } version, original;
 
     SPSVGLength x;

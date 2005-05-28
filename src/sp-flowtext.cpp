@@ -198,6 +198,8 @@ sp_flowtext_modified(SPObject */*object*/, guint /*flags*/)
 static void
 sp_flowtext_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
+    object->_requireSVGVersion(Inkscape::Version(1, 2));
+
     if (((SPObjectClass *) (parent_class))->build) {
         (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
     }

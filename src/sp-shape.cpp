@@ -130,7 +130,7 @@ sp_shape_init (SPShape *shape)
 static void
 sp_shape_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-	SPVersion version;
+	Inkscape::Version version;
 
 	version = sp_object_get_sodipodi_version (object);
 

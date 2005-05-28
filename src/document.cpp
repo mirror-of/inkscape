@@ -186,7 +186,7 @@ sp_document_create (Inkscape::XML::Document *rdoc,
 {
 	SPDocument *document;
 	Inkscape::XML::Node *rroot;
-	SPVersion sodipodi_version;
+	Inkscape::Version sodipodi_version;
 
 	rroot = sp_repr_document_root (rdoc);
 
