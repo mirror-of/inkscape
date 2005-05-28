@@ -58,11 +58,26 @@ Labelled::Labelled(Glib::ustring const &label,
     }
 }
 
+
+/**
+ * Allow the setting of the width of the labelled widget
+ */
+void Labelled::setWidgetSizeRequest(int width, int height)
+{
+    if (_widget)
+        _widget->set_size_request(width, height);
+
+
+}
+
+
+
+
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
 
-/* 
+/*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"

@@ -31,6 +31,12 @@ public:
              Glib::ustring const &icon = "",
              bool mnemonic = false);
 
+    /**
+     * Allow the setting of the width of the labelled widget
+     */
+    void setWidgetSizeRequest(int width, int height);
+
+
 protected:
     Gtk::Widget  *_widget;
     Gtk::Label   *_label;
@@ -44,7 +50,7 @@ protected:
 
 #endif // INKSCAPE_UI_WIDGET_LABELLED_H
 
-/* 
+/*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
