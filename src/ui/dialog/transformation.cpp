@@ -89,63 +89,19 @@ Transformation::Transformation()
     // Notebook for individual transformations
     vbox->pack_start(_notebook, true, true);
 
-    _notebook.append_page(_page_move,      _("Move"));
-    _notebook.append_page(_page_scale,     _("Scale"));
-    _notebook.append_page(_page_rotate,    _("Rotate"));
-    _notebook.append_page(_page_skew,      _("Skew"));
-    _notebook.append_page(_page_transform, _("Transform"));
-
-    // Unit widgets initialization
-    _units_move.setUnitType(UNIT_TYPE_LINEAR);
-    _units_scale.setUnitType(UNIT_TYPE_DIMENSIONLESS);
-    _units_scale.setUnitType(UNIT_TYPE_LINEAR);
-    _units_skew.setUnitType(UNIT_TYPE_DIMENSIONLESS);
-    _units_skew.setUnitType(UNIT_TYPE_LINEAR);
-
-    _scalar_move_horizontal.initScalar(0, 100);
-    _scalar_move_vertical.initScalar(0, 100);
-    _scalar_scale_horizontal.initScalar(0, 100);
-    _scalar_scale_vertical.initScalar(0, 100);
-    _scalar_rotate.initScalar(0, 100);
-    _scalar_skew_horizontal.initScalar(0, 100);
-    _scalar_skew_vertical.initScalar(0, 100);
-
-    _scalar_transform_a.setRange(-1e10, 1e10);
-    _scalar_transform_a.setDigits(3);
-    _scalar_transform_a.setIncrements(0.1, 1.0);
-    _scalar_transform_a.setValue(0.0);
-
-    _scalar_transform_b.setRange(-1e10, 1e10);
-    _scalar_transform_b.setDigits(3);
-    _scalar_transform_b.setIncrements(0.1, 1.0);
-    _scalar_transform_b.setValue(0.0);
-
-    _scalar_transform_c.setRange(-1e10, 1e10);
-    _scalar_transform_c.setDigits(3);
-    _scalar_transform_c.setIncrements(0.1, 1.0);
-    _scalar_transform_c.setValue(0.0);
-
-    _scalar_transform_d.setRange(-1e10, 1e10);
-    _scalar_transform_d.setDigits(3);
-    _scalar_transform_d.setIncrements(0.1, 1.0);
-    _scalar_transform_d.setValue(0.0);
-
-    _scalar_transform_e.setRange(-1e10, 1e10);
-    _scalar_transform_e.setDigits(3);
-    _scalar_transform_e.setIncrements(0.1, 1.0);
-    _scalar_transform_e.setValue(0.0);
-
-    _scalar_transform_f.setRange(-1e10, 1e10);
-    _scalar_transform_f.setDigits(3);
-    _scalar_transform_f.setIncrements(0.1, 1.0);
-    _scalar_transform_f.setValue(0.0);
-
-
-
+    _notebook.append_page(_page_move, _("Move"));
     layoutPageMove();
+
+    _notebook.append_page(_page_scale, _("Scale"));
     layoutPageScale();
+
+    _notebook.append_page(_page_rotate, _("Rotate"));
     layoutPageRotate();
+
+    _notebook.append_page(_page_skew, _("Skew"));
     layoutPageSkew();
+
+    _notebook.append_page(_page_transform, _("Transform"));
     layoutPageTransform();
 
     updateSelection(PAGE_MOVE, _getSelection());
@@ -165,6 +121,12 @@ Transformation::~Transformation()
 }
 
 
+
+
+/*########################################################################
+# U T I L I T Y
+########################################################################*/
+
 void
 Transformation::present(Transformation::PageType page)
 {
@@ -174,13 +136,21 @@ Transformation::present(Transformation::PageType page)
 }
 
 
+
+
 /*########################################################################
 # S E T U P   L A Y O U T
 ########################################################################*/
 
+
 void
 Transformation::layoutPageMove()
 {
+    _units_move.setUnitType(UNIT_TYPE_LINEAR);
+    _scalar_move_horizontal.initScalar(0, 100);
+    _scalar_move_vertical.initScalar(0, 100);
+
+    //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_HOR );
     _page_move.table()
         .attach(_scalar_move_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
 
@@ -190,7 +160,7 @@ Transformation::layoutPageMove()
     _scalar_move_horizontal.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onMoveValueChanged));
 
-    /* _scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_VER ); */
+    //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_VER );
     _page_move.table()
         .attach(_scalar_move_vertical, 0, 2, 1, 2, Gtk::FILL, Gtk::SHRINK);
 
@@ -208,12 +178,17 @@ Transformation::layoutPageMove()
 void
 Transformation::layoutPageScale()
 {
+    // TODO:  Default should be %
+    _units_scale.setUnitType(UNIT_TYPE_LINEAR);
+
+    _scalar_scale_horizontal.initScalar(0, 100);
+    _scalar_scale_vertical.initScalar(0, 100);
+
     _page_scale.table()
         .attach(_scalar_scale_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
     _scalar_scale_horizontal.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onScaleValueChanged));
 
-    // TODO:  Default should be %
     _page_scale.table()
         .attach(_units_scale, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
 
@@ -226,6 +201,8 @@ Transformation::layoutPageScale()
 void
 Transformation::layoutPageRotate()
 {
+    _scalar_rotate.initScalar(0, 100);
+
     _page_rotate.table()
         .attach(_scalar_rotate, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
 
@@ -236,6 +213,11 @@ Transformation::layoutPageRotate()
 void
 Transformation::layoutPageSkew()
 {
+    _units_skew.setUnitType(UNIT_TYPE_LINEAR);
+
+    _scalar_skew_horizontal.initScalar(0, 100);
+    _scalar_skew_vertical.initScalar(0, 100);
+
     _page_skew.table()
         .attach(_scalar_skew_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
     _scalar_skew_horizontal.signal_value_changed()
@@ -244,17 +226,23 @@ Transformation::layoutPageSkew()
     _page_skew.table()
         .attach(_units_skew, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
 
+
     _page_skew.table()
         .attach(_scalar_skew_vertical, 0, 2, 1, 2, Gtk::FILL, Gtk::SHRINK);
     _scalar_skew_vertical.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onSkewValueChanged));
 }
 
+
+
 void
 Transformation::layoutPageTransform()
 {
-
     _scalar_transform_a.setWidgetSizeRequest(75, -1);
+    _scalar_transform_a.setRange(-1e10, 1e10);
+    _scalar_transform_a.setDigits(3);
+    _scalar_transform_a.setIncrements(0.1, 1.0);
+    _scalar_transform_a.setValue(0.0);
     _page_transform.table()
         .attach(_scalar_transform_a, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_a.signal_value_changed()
@@ -262,6 +250,10 @@ Transformation::layoutPageTransform()
 
 
     _scalar_transform_b.setWidgetSizeRequest(75, -1);
+    _scalar_transform_b.setRange(-1e10, 1e10);
+    _scalar_transform_b.setDigits(3);
+    _scalar_transform_b.setIncrements(0.1, 1.0);
+    _scalar_transform_b.setValue(0.0);
     _page_transform.table()
         .attach(_scalar_transform_b, 0, 1, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_b.signal_value_changed()
@@ -269,6 +261,10 @@ Transformation::layoutPageTransform()
 
 
     _scalar_transform_c.setWidgetSizeRequest(75, -1);
+    _scalar_transform_c.setRange(-1e10, 1e10);
+    _scalar_transform_c.setDigits(3);
+    _scalar_transform_c.setIncrements(0.1, 1.0);
+    _scalar_transform_c.setValue(0.0);
     _page_transform.table()
         .attach(_scalar_transform_c, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_c.signal_value_changed()
@@ -276,6 +272,10 @@ Transformation::layoutPageTransform()
 
 
     _scalar_transform_d.setWidgetSizeRequest(75, -1);
+    _scalar_transform_d.setRange(-1e10, 1e10);
+    _scalar_transform_d.setDigits(3);
+    _scalar_transform_d.setIncrements(0.1, 1.0);
+    _scalar_transform_d.setValue(0.0);
     _page_transform.table()
         .attach(_scalar_transform_d, 1, 2, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_d.signal_value_changed()
@@ -283,6 +283,10 @@ Transformation::layoutPageTransform()
 
 
     _scalar_transform_e.setWidgetSizeRequest(75, -1);
+    _scalar_transform_e.setRange(-1e10, 1e10);
+    _scalar_transform_e.setDigits(3);
+    _scalar_transform_e.setIncrements(0.1, 1.0);
+    _scalar_transform_e.setValue(0.0);
     _page_transform.table()
         .attach(_scalar_transform_e, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_e.signal_value_changed()
@@ -290,6 +294,10 @@ Transformation::layoutPageTransform()
 
 
     _scalar_transform_f.setWidgetSizeRequest(75, -1);
+    _scalar_transform_f.setRange(-1e10, 1e10);
+    _scalar_transform_f.setDigits(3);
+    _scalar_transform_f.setIncrements(0.1, 1.0);
+    _scalar_transform_f.setValue(0.0);
     _page_transform.table()
         .attach(_scalar_transform_f, 2, 3, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_f.signal_value_changed()
@@ -604,10 +612,12 @@ Transformation::applyPageTransform(Inkscape::Selection *selection)
 void
 Transformation::onMoveValueChanged()
 {
+    /*
     double x = _scalar_move_horizontal.getValue("px");
     double y = _scalar_move_vertical.getValue("px");
 
     //g_message("onMoveValueChanged: %f, %f px\n", x, y);
+    */
 
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 
@@ -645,10 +655,12 @@ Transformation::onMoveRelativeToggled()
 void
 Transformation::onScaleValueChanged()
 {
+    /*
     double scalex = _scalar_scale_horizontal.getValue("px");
     double scaley = _scalar_scale_vertical.getValue("px");
 
     //g_message("onScaleValueChanged: %f, %f px\n", scalex, scaley);
+    */
 
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
@@ -656,9 +668,11 @@ Transformation::onScaleValueChanged()
 void
 Transformation::onRotateValueChanged()
 {
+    /*
     double angle = _scalar_rotate.getValue("deg");
 
     //g_message("onRotateValueChanged: %f deg\n", angle);
+    */
 
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
@@ -668,10 +682,12 @@ Transformation::onRotateValueChanged()
 void
 Transformation::onSkewValueChanged()
 {
+    /*
     double skewx = _scalar_skew_horizontal.getValue("px");
     double skewy = _scalar_skew_vertical.getValue("px");
 
     //g_message("onSkewValueChanged:  %f, %f px\n", skewx, skewy);
+    */
 
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
@@ -682,6 +698,7 @@ void
 Transformation::onTransformValueChanged()
 {
 
+    /*
     double a = _scalar_transform_a.getValue();
     double b = _scalar_transform_b.getValue();
     double c = _scalar_transform_c.getValue();
@@ -691,6 +708,7 @@ Transformation::onTransformValueChanged()
 
     //g_message("onTransformValueChanged: (%f, %f, %f, %f, %f, %f)\n",
     //          a, b, c, d, e ,f);
+    */
 
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }

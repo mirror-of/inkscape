@@ -12,36 +12,88 @@
 #ifndef INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 #define INKSCAPE_UI_DIALOG_TRANSFORMATION_H
 
+
+
 #include <gtkmm/notebook.h>
 #include <glibmm/i18n.h>
+
+
 
 #include "dialog.h"
 #include "application/application.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
 
+
 using namespace Inkscape::UI::Widget;
+
+
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class Transformation : public Dialog {
+
+
+
+class Transformation : public Dialog
+{
+
 public:
 
+    /**
+     * Create a new transform
+     */
     Transformation();
 
+    /**
+     * Cleanup
+     */
     virtual ~Transformation();
 
-    static Transformation *create() { return new Transformation(); }
 
-    void setPageMove()      { present(PAGE_MOVE);      }
-    void setPageScale()     { present(PAGE_SCALE);     }
-    void setPageRotate()    { present(PAGE_ROTATE);    }
-    void setPageSkew()      { present(PAGE_SKEW);      }
-    void setPageTransform() { present(PAGE_TRANSFORM); }
+    /**
+     * Factory method.  Create an instance of this class/interface
+     */
+    static Transformation *create()
+        { return new Transformation(); }
+
+
+    /**
+     * Show the Move panel
+     */
+    void setPageMove()
+        { present(PAGE_MOVE);      }
+
+
+    /**
+     * Show the Scale panel
+     */
+    void setPageScale()
+        { present(PAGE_SCALE);     }
+
+
+    /**
+     * Show the Rotate panel
+     */
+    void setPageRotate()
+        { present(PAGE_ROTATE);    }
+
+    /**
+     * Show the Skew panel
+     */
+    void setPageSkew()
+        { present(PAGE_SKEW);      }
+
+    /**
+     * Show the Transform panel
+     */
+    void setPageTransform()
+        { present(PAGE_TRANSFORM); }
 
 protected:
+
+
     typedef enum {
         PAGE_MOVE, PAGE_SCALE, PAGE_ROTATE, PAGE_SKEW, PAGE_TRANSFORM, PAGE_QTY
     } PageType;
@@ -75,6 +127,9 @@ protected:
 
     Gtk::CheckButton  _check_move_relative;
 
+    /**
+     * Layout the GUI components, and prepare for use
+     */
     void layoutPageMove();
     void layoutPageScale();
     void layoutPageRotate();
@@ -90,12 +145,10 @@ protected:
     void onSelectionModified(Inkscape::NSApplication::Application *inkscape,
                              Inkscape::Selection *selection,
                              int unsigned flags);
-/* TODO
-    void onSwitchPage(Gtk::Notebook *notebook,
-                      Gtk::Notebook::Page *page,
-                      guint pagenum);
-*/
 
+    /**
+     * Callbacks for when a user changes values on the panels
+     */
     void onMoveValueChanged();
     void onMoveRelativeToggled();
     void onScaleValueChanged();
@@ -103,12 +156,21 @@ protected:
     void onSkewValueChanged();
     void onTransformValueChanged();
 
+    /**
+     * Called when the selection is updated, to make
+     * the panel(s) show the new values.
+     * Editor---->dialog
+     */
     void updatePageMove(Inkscape::Selection *);
     void updatePageScale(Inkscape::Selection *);
     void updatePageRotate(Inkscape::Selection *);
     void updatePageSkew(Inkscape::Selection *);
     void updatePageTransform(Inkscape::Selection *);
 
+    /**
+     * Called when the Apply button is pushed
+     * Dialog---->editor
+     */
     void applyPageMove(Inkscape::Selection *);
     void applyPageScale(Inkscape::Selection *);
     void applyPageRotate(Inkscape::Selection *);
@@ -116,7 +178,15 @@ protected:
     void applyPageTransform(Inkscape::Selection *);
 
 private:
+
+    /**
+     * Copy constructor
+     */
     Transformation(Transformation const &d);
+
+    /**
+     * Assignment operator
+     */
     Transformation operator=(Transformation const &d);
 
     Gtk::Button *applyButton;
@@ -125,11 +195,19 @@ private:
 
 };
 
+
+
+
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
 
+
+
 #endif //INKSCAPE_UI_DIALOG_TRANSFORMATION_H
+
+
+
 
 /*
   Local Variables:
