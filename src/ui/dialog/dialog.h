@@ -13,7 +13,7 @@
 #ifndef INKSCAPE_DIALOG_H
 #define INKSCAPE_DIALOG_H
 
-#include <gtkmm/dialog.h>
+#include <gtkmm.h>
 
 namespace Inkscape { class Selection; }
 class SPDesktop;
@@ -45,6 +45,12 @@ public:
     bool retransientize_suppress; // when true, do not retransientize (prevents races when switching new windows too fast)
 
 protected:
+
+    /**
+     * Tooltips object for all descendants to use
+     */
+    Gtk::Tooltips tooltips;
+
     Dialog( bool flag ); // fixme: remove this
 
     SPDesktop      *_desktop;

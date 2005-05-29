@@ -29,6 +29,10 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+/*########################################################################
+# C O N S T R U C T O R
+########################################################################*/
+
 /**
  * Constructor for Transformation.  This does the initialization
  * and layout of the dialog used for transforming SVG objects.  It
@@ -138,18 +142,18 @@ Transformation::Transformation()
 
 
 
-    initPageMove();
-    initPageScale();
-    initPageRotate();
-    initPageSkew();
-    initPageTransform();
+    layoutPageMove();
+    layoutPageScale();
+    layoutPageRotate();
+    layoutPageSkew();
+    layoutPageTransform();
 
     updateSelection(PAGE_MOVE, _getSelection());
 
     applyButton = add_button(Gtk::Stock::APPLY,   Gtk::RESPONSE_APPLY);
     if (applyButton)
         {
-        //tips.set_tip((*applyButton), _("Apply transform to object"));
+        tooltips.set_tip((*applyButton), _("Apply transform to object"));
         applyButton->set_sensitive(false);
         }
 
@@ -169,12 +173,13 @@ Transformation::present(Transformation::PageType page)
     Gtk::Dialog::present();
 }
 
-/*#######################################
-# I N I T
-#######################################*/
+
+/*########################################################################
+# S E T U P   L A Y O U T
+########################################################################*/
 
 void
-Transformation::initPageMove()
+Transformation::layoutPageMove()
 {
     _page_move.table()
         .attach(_scalar_move_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -193,7 +198,6 @@ Transformation::initPageMove()
         .connect(sigc::mem_fun(*this, &Transformation::onMoveValueChanged));
 
     // Relative moves
-    set_data("move_relative", &_check_move_relative);
     _page_move.table()
         .attach(_check_move_relative, 1, 2, 2, 3, Gtk::FILL, Gtk::SHRINK);
     _check_move_relative.set_active(true);
@@ -202,7 +206,7 @@ Transformation::initPageMove()
 }
 
 void
-Transformation::initPageScale()
+Transformation::layoutPageScale()
 {
     _page_scale.table()
         .attach(_scalar_scale_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -220,7 +224,7 @@ Transformation::initPageScale()
 }
 
 void
-Transformation::initPageRotate()
+Transformation::layoutPageRotate()
 {
     _page_rotate.table()
         .attach(_scalar_rotate, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -230,7 +234,7 @@ Transformation::initPageRotate()
 }
 
 void
-Transformation::initPageSkew()
+Transformation::layoutPageSkew()
 {
     _page_skew.table()
         .attach(_scalar_skew_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -247,7 +251,7 @@ Transformation::initPageSkew()
 }
 
 void
-Transformation::initPageTransform()
+Transformation::layoutPageTransform()
 {
 
     _scalar_transform_a.setWidgetSizeRequest(75, -1);
@@ -295,14 +299,17 @@ Transformation::initPageTransform()
 
 
 
-/*#######################################
-#  U P D A T E
-#######################################*/
 
+/*########################################################################
+# U P D A T E
+########################################################################*/
 
 void
 Transformation::updateSelection(PageType page, Inkscape::Selection *selection)
 {
+    if (!selection || selection->isEmpty())
+        return;
+
     switch (page) {
         case PAGE_MOVE: {
             updatePageMove(selection);
@@ -445,15 +452,21 @@ Transformation::updatePageTransform(Inkscape::Selection *selection)
 }
 
 
-/*#######################################
+
+
+
+/*########################################################################
 # A P P L Y
-#######################################*/
+########################################################################*/
+
+
 
 void
 Transformation::_apply()
 {
     Inkscape::Selection * const selection = _getSelection();
-    g_return_if_fail (!selection->isEmpty());
+    if (!selection || selection->isEmpty())
+        return;
 
     int const page = _notebook.get_current_page();
 
@@ -582,91 +595,40 @@ Transformation::applyPageTransform(Inkscape::Selection *selection)
 
 
 
-////////////////////////////////////////////////////////////////////////
-// Internal routines
-////////////////////////////////////////////////////////////////////////
 
-int
-Transformation::scaleSetUnit(Unit const *old_unit,
-                             Unit const *new_unit,
-                             GObject *dlg)
-{
-    Inkscape::Selection *selection = _getSelection();
 
-    if (!selection || selection->isEmpty()) {
-        return false;
-    }
-
-    if (old_unit->isAbsolute() && !new_unit->isAbsolute()) {
-/* TODO:  Gtkmm
-       // Absolute to percentage
-       set_data("update", GUINT_TO_POINTER (TRUE));
-       double x = _scalar_scale_horizontal.getValue("px");
-       double y = _scalar_scale_vertical.getValue("px");
-*/
-       NR::Rect bbox = selection->bounds();
-/*
-       _scalar_scale_horizontal.setValue(100.0 * x / bbox.extent(NR::X), "%");
-       _scalar_scale_vertical.setValue(100.0 * y / bbox.extent(NR::Y), "%");
-       set_data("update", GUINT_TO_POINTER (FALSE));
-       return true;
-*/
-
-   } else if (old_unit->isAbsolute() && new_unit->isAbsolute()) {
-/* TODO:  Gtkmm
-    // Percentage to absolute
-    set_data("update", GUINT_TO_POINTER (TRUE));
-    double x = _scalar_scale_horizontal.getValue("px");
-    double y = _scalar_scale_vertical.getValue("px");
-*/
-    NR::Rect bbox = selection->bounds();
-/*
-    _scalar_scale_horizontal.setValue( 0.01 * x * bbox.extent(NR::X), new_units);
-    _scalar_scale_vertical.setValue(   0.01 * y * bbox.extent(NR::Y), new_units);
-    set_data("update", GUINT_TO_POINTER (FALSE));
-    return true;
-*/
-    }
-
-    return false;
-}
+/*########################################################################
+# V A L U E - C H A N G E D    C A L L B A C K S
+########################################################################*/
 
 void
 Transformation::onMoveValueChanged()
 {
-    if (get_data("update")) {
-        return;
-    }
-    g_message("Move value changed to %f, %f px\n",
-              _scalar_move_horizontal.getValue("px"),
-              _scalar_move_vertical.getValue("px"));
+    double x = _scalar_move_horizontal.getValue("px");
+    double y = _scalar_move_vertical.getValue("px");
+
+    //g_message("onMoveValueChanged: %f, %f px\n", x, y);
+
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
+
 }
 
 void
 Transformation::onMoveRelativeToggled()
 {
-    if (get_data("update")) {
-        return;
-    }
     Inkscape::Selection *selection = _getSelection();
 
-    if (!selection || selection->isEmpty()) {
+    if (!selection || selection->isEmpty())
         return;
-    }
 
-
-
-/* TODO:
-    NR::Rect bbox = selection->bounds();
-
-    // Read values from widget
     double x = _scalar_move_horizontal.getValue("px");
     double y = _scalar_move_vertical.getValue("px");
 
-    set_data("update", GUINT_TO_POINTER (TRUE));
+    //g_message("onMoveRelativeToggled: %f, %f px\n", x, y);
 
-    if (_check_move_relative.get_active(tb)) {
+    NR::Rect bbox = selection->bounds();
+
+    if (_check_move_relative.get_active()) {
         // From absolute to relative
         _scalar_move_horizontal.setValue(x - bbox.min()[NR::X], "px");
         _scalar_move_vertical.setValue(  y - bbox.min()[NR::Y], "px");
@@ -675,69 +637,72 @@ Transformation::onMoveRelativeToggled()
         _scalar_move_horizontal.setValue(bbox.min()[NR::X] + x, "px");
         _scalar_move_vertical.setValue(  bbox.min()[NR::Y] + y, "px");
     }
-*/
 
-    g_message("Move relative changed\n");
+
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
-
-    set_data("update", GUINT_TO_POINTER(false));
 }
 
 void
 Transformation::onScaleValueChanged()
 {
-    if (get_data("update")) {
-        return;
-    }
-    g_message("Scale value changed to %f, %f px\n",
-              _scalar_scale_horizontal.getValue("px"),
-              _scalar_scale_vertical.getValue("px"));
+    double scalex = _scalar_scale_horizontal.getValue("px");
+    double scaley = _scalar_scale_vertical.getValue("px");
+
+    //g_message("onScaleValueChanged: %f, %f px\n", scalex, scaley);
+
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
 
 void
 Transformation::onRotateValueChanged()
 {
-    if (get_data("update")) {
-        return;
-    }
-    g_message("Rotate value changed to %f deg\n",
-              _scalar_scale_vertical.getValue("deg"));
+    double angle = _scalar_rotate.getValue("deg");
+
+    //g_message("onRotateValueChanged: %f deg\n", angle);
+
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
+
+
 
 void
 Transformation::onSkewValueChanged()
 {
-    if (get_data("update")) {
-        return;
-    }
-    g_message("Skew value changed to %f, %f px\n",
-              _scalar_skew_horizontal.getValue("px"),
-              _scalar_skew_vertical.getValue("px"));
+    double skewx = _scalar_skew_horizontal.getValue("px");
+    double skewy = _scalar_skew_vertical.getValue("px");
+
+    //g_message("onSkewValueChanged:  %f, %f px\n", skewx, skewy);
+
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
+
+
 
 void
 Transformation::onTransformValueChanged()
 {
-    if (get_data("update")) {
-        return;
-    }
-    g_message("Transform value changed to (%f, %f, %f, %f, %f, %f)\n",
-              _scalar_transform_a.getValue(),
-              _scalar_transform_b.getValue(),
-              _scalar_transform_c.getValue(),
-              _scalar_transform_d.getValue(),
-              _scalar_transform_e.getValue(),
-              _scalar_transform_f.getValue());
+
+    double a = _scalar_transform_a.getValue();
+    double b = _scalar_transform_b.getValue();
+    double c = _scalar_transform_c.getValue();
+    double d = _scalar_transform_d.getValue();
+    double e = _scalar_transform_e.getValue();
+    double f = _scalar_transform_f.getValue();
+
+    //g_message("onTransformValueChanged: (%f, %f, %f, %f, %f, %f)\n",
+    //          a, b, c, d, e ,f);
 
     set_response_sensitive(Gtk::RESPONSE_APPLY, true);
 }
 
+
+
+
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
+
+
 
 /*
   Local Variables:

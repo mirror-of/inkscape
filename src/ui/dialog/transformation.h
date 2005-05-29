@@ -75,11 +75,11 @@ protected:
 
     Gtk::CheckButton  _check_move_relative;
 
-    void initPageMove();
-    void initPageScale();
-    void initPageRotate();
-    void initPageSkew();
-    void initPageTransform();
+    void layoutPageMove();
+    void layoutPageScale();
+    void layoutPageRotate();
+    void layoutPageSkew();
+    void layoutPageTransform();
 
     virtual void _apply();
     void present(PageType page);
@@ -114,10 +114,6 @@ protected:
     void applyPageRotate(Inkscape::Selection *);
     void applyPageSkew(Inkscape::Selection *);
     void applyPageTransform(Inkscape::Selection *);
-
-    int scaleSetUnit(Unit const *,
-                     Unit const *,
-                     GObject *dlg);
 
 private:
     Transformation(Transformation const &d);
