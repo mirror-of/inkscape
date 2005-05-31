@@ -23,6 +23,7 @@
 #include "application/application.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
+#include "ui/widget/imageicon.h"
 
 
 using namespace Inkscape::UI::Widget;
@@ -124,6 +125,8 @@ protected:
     Scalar            _scalar_transform_d;
     Scalar            _scalar_transform_e;
     Scalar            _scalar_transform_f;
+
+    ImageIcon        transformImageIcon;
 
     Gtk::CheckButton  _check_move_relative;
 

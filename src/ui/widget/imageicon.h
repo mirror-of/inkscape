@@ -47,41 +47,22 @@ public:
     /**
      * Constructor
      */
-    ImageIcon()
-        {
-        init();
-        }
+    ImageIcon();
 
     /**
      * Construct from a file name
      */
-    ImageIcon(const Glib::ustring &fileName)
-        {
-        init();
-        showSvgFile(fileName);
-        }
+    ImageIcon(const Glib::ustring &fileName);
 
     /**
      * Copy Constructor
      */
-    ImageIcon(const ImageIcon &other)
-        {
-        if (!INKSCAPE)
-            inkscape_application_init("",false);
-        int width, height;
-        other.get_size_request(width, height);
-        set_size_request(width, height);
-        document           = other.document;
-        viewerGtk          = other.viewerGtk;
-        showingBrokenImage = other.showingBrokenImage;
-        }
+    ImageIcon(const ImageIcon &other);
 
     /**
      * Destructor
      */
-    ~ImageIcon()
-        {
-        }
+    ~ImageIcon();
 
     /**
      *
@@ -118,15 +99,7 @@ private:
     /**
      * basic initialization, called by the various constructors
      */
-    void init()
-        {
-        if (!INKSCAPE)
-            inkscape_application_init("",false);
-        document = NULL;
-        viewerGtk = NULL;
-        set_size_request(150,150);
-        showingBrokenImage = false;
-        }
+    void init();
 
     /**
      * The svg document we are currently showing

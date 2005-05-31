@@ -41,6 +41,58 @@ typedef enum {
 #########################################################################*/
 
 
+/**
+ * Constructor
+ */
+ImageIcon::ImageIcon()
+{
+    init();
+}
+
+/**
+ * Construct from a file name
+ */
+ImageIcon::ImageIcon(const Glib::ustring &fileName)
+{
+    init();
+    showSvgFile(fileName);
+}
+
+/**
+ * Copy Constructor
+ */
+ImageIcon::ImageIcon(const ImageIcon &other)
+{
+    init();
+    document           = other.document;
+    viewerGtk          = other.viewerGtk;
+    showingBrokenImage = other.showingBrokenImage;
+}
+
+/**
+ * Destructor
+ */
+ImageIcon::~ImageIcon()
+{
+    if (document)
+        sp_document_unref(document);
+}
+
+
+/**
+ * basic initialization, called by the various constructors
+ */
+void ImageIcon::init()
+{
+    if (!INKSCAPE)
+        inkscape_application_init("",false);
+    document = NULL;
+    viewerGtk = NULL;
+    //set_size_request(150,150);
+    showingBrokenImage = false;
+}
+
+
 bool ImageIcon::showSvgDocument(const SPDocument *docArg)
 {
 
