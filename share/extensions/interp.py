@@ -16,8 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
-import inkex, cubicsuperpath, simplestyle, copy, math, bezmisc
+import inkex, cubicsuperpath, simplestyle, copy, math, re, bezmisc
 
+uuconv = {'in':90.0, 'pt':1.25, 'px':1, 'mm':3.5433070866, 'cm':35.433070866, 'pc':15.0}
 def numsegs(csp):
 	return sum([len(p)-1 for p in csp])
 def interpcoord(v1,v2,p):
@@ -55,6 +56,50 @@ def csplength(csp):
 			lengths[-1].append(l)
 			total += l			
 	return lengths, total
+def styleunittouu(string):
+	unit = re.compile('(%s)$' % '|'.join(uuconv.keys()))
+	param = re.compile(r'(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)')
+
+	p = param.match(string)
+	u = unit.search(string)	
+	if p:
+		retval = float(p.string[p.start():p.end()])
+	else:
+		retval = 0.0
+	if u:
+		try:
+			return retval * uuconv[u.string[u.start():u.end()]]
+		except KeyError:
+			pass
+	return retval
+	
+def tweenstylefloat(property, start, end, time):
+	sp = float(start[property])
+	ep = float(end[property])
+	return str(sp + (time * (ep - sp)))
+def tweenstyleunit(property, start, end, time):
+	sp = styleunittouu(start[property])
+	ep = styleunittouu(end[property])
+	return str(sp + (time * (ep - sp)))
+def tweenstylecolor(property, start, end, time):
+	sr,sg,sb = parsecolor(start[property])
+	er,eg,eb = parsecolor(end[property])
+	return '#%s%s%s' % (tweenhex(time,sr,er),tweenhex(time,sg,eg),tweenhex(time,sb,eb))
+def tweenhex(time,s,e):
+	s = float(int(s,16))
+	e = float(int(e,16))
+	retval = hex(int(math.floor(s + (time * (e - s)))))[2:]
+	if len(retval)==1:
+		retval = '0%s' % retval
+	return retval
+def parsecolor(c):
+	r,g,b = '0','0','0'
+	if c[:1]=='#':
+		if len(c)==4:
+			r,g,b = c[1:2],c[2:3],c[3:4]
+		elif len(c)==7:
+			r,g,b = c[1:3],c[3:5],c[5:7]
+	return r,g,b
 
 class Interp(inkex.Effect):
 	def __init__(self):
@@ -75,6 +120,10 @@ class Interp(inkex.Effect):
 						action="store", type="inkbool", 
 						dest="dup", default=True,
 						help="duplicate endpaths")	
+		self.OptionParser.add_option("--style",
+						action="store", type="inkbool", 
+						dest="style", default=True,
+						help="try interpolation of some style properties")	
 	def effect(self):
 		exponent = self.options.exponent
 		if exponent>= 0:
@@ -86,24 +135,63 @@ class Interp(inkex.Effect):
 			steps.append(steps[0] + steps[-1])
 		steps = [step**exponent for step in steps]
 			
-		paths = {}
+		paths = {}			
+		styles = {}
 		for id in self.options.ids:
 			node = self.selected[id]
 			if node.tagName =='path':
 				paths[id] = cubicsuperpath.parsePath(node.attributes.getNamedItem('d').value)
+				styles[id] = simplestyle.parseStyle(node.attributes.getNamedItem('style').value)
 			else:
 				self.options.ids.remove(id)
 
 		for i in range(1,len(self.options.ids)):
 			start = copy.deepcopy(paths[self.options.ids[i-1]])
 			end = copy.deepcopy(paths[self.options.ids[i]])
+			sst = copy.deepcopy(styles[self.options.ids[i-1]])
+			est = copy.deepcopy(styles[self.options.ids[i]])
+			basestyle = copy.deepcopy(sst)
+
+			#prepare for experimental style tweening
+			if self.options.style:
+				dostroke = True
+				dofill = True
+				styledefaults = {'opacity':'1.0', 'stroke-opacity':'1.0', 'fill-opacity':'1.0',
+						'stroke-width':'1.0', 'stroke':'none', 'fill':'none'}
+				for key in styledefaults.keys():
+					sst.setdefault(key,styledefaults[key])
+					est.setdefault(key,styledefaults[key])
+				isnotplain = lambda x: not (x=='none' or x[:1]=='#')
+				if isnotplain(sst['stroke']) or isnotplain(est['stroke']) or (sst['stroke']=='none' and est['stroke']=='none'):
+					dostroke = False
+				if isnotplain(sst['fill']) or isnotplain(est['fill']) or (sst['fill']=='none' and est['fill']=='none'):
+					dofill = False
+				if dostroke:
+					if sst['stroke']=='none':
+						sst['stroke-width'] = '0.0'
+						sst['stroke-opacity'] = '0.0'
+						sst['stroke'] = est['stroke'] 
+					elif est['stroke']=='none':
+						est['stroke-width'] = '0.0'
+						est['stroke-opacity'] = '0.0'
+						est['stroke'] = sst['stroke'] 
+				if dofill:
+					if sst['fill']=='none':
+						sst['fill-opacity'] = '0.0'
+						sst['fill'] = est['fill'] 
+					elif est['fill']=='none':
+						est['fill-opacity'] = '0.0'
+						est['fill'] = sst['fill'] 
 
 			#which path has fewer segments?
 			lengthdiff = numsegs(start) - numsegs(end)
 			if lengthdiff > 0:
 				start, end = end, start
-				if len(steps) == 1:
-					steps[0] = 1.0 - steps[0]
+				sst, est = est, sst
+				#TODO: see if this is necessary
+				for si in xrange(len(steps)):
+					steps[si] = 1.0 - steps[si]
+					
 
 			if self.options.method == 2:
 				#subdivide both paths into segments of relatively equal lengths
@@ -170,14 +258,14 @@ class Interp(inkex.Effect):
 					subpath = 0
 					segment = 0
 					for y in range(len(start)):
-						for z in range(1,len(start[y])):
-							leng = bezlenapprx(start[y][z-1],start[y][z])
+						for z in range(1, len(start[y])):
+							leng = bezlenapprx(start[y][z-1], start[y][z])
 							if leng > maxlen:
 								maxlen = leng
 								subpath = y
 								segment = z
-					sp1, sp2 = start[subpath][segment - 1:segment+1]
-					start[subpath][segment - 1:segment+1] = cspbezsplit(sp1, sp2)
+					sp1, sp2 = start[subpath][segment - 1:segment + 1]
+					start[subpath][segment - 1:segment + 1] = cspbezsplit(sp1, sp2)
 			
 			#break paths so that corresponding subpaths have an equal number of segments
 			s = [[]]
@@ -206,30 +294,37 @@ class Interp(inkex.Effect):
 			for time in steps:
 				interp = []
 				#process subpaths
-				for ssp,esp in zip(s,e):
+				for ssp,esp in zip(s, e):
 					if not (ssp or esp):
 						break
 					interp.append([])
 					#process superpoints
-					for sp,ep in zip(ssp,esp):
+					for sp,ep in zip(ssp, esp):
 						if not (sp or ep):
 							break
 						interp[-1].append([])
 						#process points
-						for p1,p2 in zip(sp,ep):
+						for p1,p2 in zip(sp, ep):
 							if not (sp or ep):
 								break
-							interp[-1][-1].append(interppoints(p1,p2,time))
+							interp[-1][-1].append(interppoints(p1, p2, time))
 
 				#remove final subpath if empty.
 				if not interp[-1]:
 					del interp[-1]
 				new = self.document.createElement('svg:path')
-				style = {'stroke-linejoin': 'miter', 'stroke-width': '1.0px', 
-					'stroke-opacity': '1.0', 'fill-opacity': '1.0', 
-					'stroke': '#000000', 'stroke-linecap': 'butt', 
-					'fill': 'none'}
-				new.setAttribute('style', simplestyle.formatStyle(style))
+
+				#basic style tweening
+				if self.options.style:
+					basestyle['opacity'] = tweenstylefloat('opacity',sst,est,time)
+					if dostroke:
+						basestyle['stroke-opacity'] = tweenstylefloat('stroke-opacity',sst,est,time)
+						basestyle['stroke-width'] = tweenstyleunit('stroke-width',sst,est,time)
+						basestyle['stroke'] = tweenstylecolor('stroke',sst,est,time)
+					if dofill:
+						basestyle['fill-opacity'] = tweenstylefloat('fill-opacity',sst,est,time)
+						basestyle['fill'] = tweenstylecolor('fill',sst,est,time)
+				new.setAttribute('style', simplestyle.formatStyle(basestyle))
 				new.setAttribute('d', cubicsuperpath.formatPath(interp))
 				group.appendChild(new)
 
