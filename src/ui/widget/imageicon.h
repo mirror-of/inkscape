@@ -109,7 +109,7 @@ private:
     /**
      * The sp_svg_view widget
      */
-    GtkWidget *viewerGtk;
+    Gtk::Widget *viewerGtkmm;
 
     /**
      * are we currently showing the "broken image" image?

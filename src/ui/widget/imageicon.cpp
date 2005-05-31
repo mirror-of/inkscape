@@ -65,7 +65,7 @@ ImageIcon::ImageIcon(const ImageIcon &other)
 {
     init();
     document           = other.document;
-    viewerGtk          = other.viewerGtk;
+    viewerGtkmm        = other.viewerGtkmm;
     showingBrokenImage = other.showingBrokenImage;
 }
 
@@ -87,7 +87,7 @@ void ImageIcon::init()
     if (!INKSCAPE)
         inkscape_application_init("",false);
     document = NULL;
-    viewerGtk = NULL;
+    viewerGtkmm = NULL;
     //set_size_request(150,150);
     showingBrokenImage = false;
 }
@@ -105,14 +105,17 @@ bool ImageIcon::showSvgDocument(const SPDocument *docArg)
     document = doc;
 
     //This should remove it from the box, and free resources
-    if (viewerGtk) {
-        gtk_widget_destroy(viewerGtk);
-    }
+    //if (viewerGtkmm)
+    //    viewerGtkmm->destroy();
 
-    viewerGtk  = sp_svg_view_widget_new(doc);
-    GtkWidget *vbox = (GtkWidget *)gobj();
-    gtk_box_pack_start(GTK_BOX(vbox), viewerGtk, TRUE, TRUE, 0);
-    gtk_widget_show(viewerGtk);
+    GtkWidget *viewerGtk  = sp_svg_view_widget_new(doc);
+    viewerGtkmm = Glib::wrap(viewerGtk);
+
+    viewerGtkmm->show();
+    pack_start(*viewerGtkmm, TRUE, TRUE, 0);
+
+    //GtkWidget *vbox = (GtkWidget *)gobj();
+    //gtk_box_pack_start(GTK_BOX(vbox), viewerGtk, TRUE, TRUE, 0);
 
     return true;
 }
