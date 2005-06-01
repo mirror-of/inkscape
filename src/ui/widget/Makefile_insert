@@ -12,6 +12,8 @@ ui_widget_libuiwidget_a_SOURCES =	\
 	ui/widget/handlebox.h		\
 	ui/widget/icon-widget.cpp	\
 	ui/widget/icon-widget.h		\
+	ui/widget/imageicon.cpp		\
+	ui/widget/imageicon.h		\
 	ui/widget/labelled.cpp		\
 	ui/widget/labelled.h		\
 	ui/widget/notebook-page.cpp	\
