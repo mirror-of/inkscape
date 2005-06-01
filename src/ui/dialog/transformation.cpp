@@ -530,7 +530,8 @@ Transformation::_apply()
         }
     }
 
-    set_response_sensitive(Gtk::RESPONSE_APPLY, false);
+    //Let's play with never turning this off
+    //set_response_sensitive(Gtk::RESPONSE_APPLY, false);
 }
 
 void
