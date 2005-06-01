@@ -178,7 +178,7 @@ void
 Scalar::setValue(double value)
 {
     g_assert(_widget != NULL);
-    static_cast<Gtk::SpinButton*>(_widget)->get_value();
+    static_cast<Gtk::SpinButton*>(_widget)->set_value(value);
 }
 
 /** Manually forces an update of the spin button */
