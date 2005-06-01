@@ -147,8 +147,8 @@ void
 Transformation::layoutPageMove()
 {
     _units_move.setUnitType(UNIT_TYPE_LINEAR);
-    _scalar_move_horizontal.initScalar(0, 100);
-    _scalar_move_vertical.initScalar(0, 100);
+    _scalar_move_horizontal.initScalar(-100, 100);
+    _scalar_move_vertical.initScalar(-100, 100);
 
     //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_HOR );
     _page_move.table()
