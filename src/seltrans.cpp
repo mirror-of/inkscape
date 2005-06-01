@@ -670,11 +670,8 @@ sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer 
 
     if (!seltrans->grabbed) {
         sp_sel_trans_update_volatile_state(*seltrans);
-        if (!seltrans->changed) { // do not reset center if the change was by seltrans itself; otherwise reset
-            seltrans->center = seltrans->box.midpoint();
-        } else {
-            seltrans->changed = FALSE;
-        }
+        seltrans->changed = FALSE;
+        // Do not reset center, just update the handles
         sp_sel_trans_update_handles(*seltrans);
     }
 }
