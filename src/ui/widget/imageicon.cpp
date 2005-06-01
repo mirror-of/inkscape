@@ -61,7 +61,8 @@ ImageIcon::ImageIcon(const Glib::ustring &fileName)
 /**
  * Copy Constructor
  */
-ImageIcon::ImageIcon(const ImageIcon &other)
+ImageIcon::ImageIcon(const ImageIcon &other) 
+             : sigc::trackable(), Glib::ObjectBase(), Gtk::VBox()
 {
     init();
     document           = other.document;
