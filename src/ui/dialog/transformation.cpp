@@ -242,7 +242,7 @@ Transformation::layoutPageTransform()
     _scalar_transform_a.setRange(-1e10, 1e10);
     _scalar_transform_a.setDigits(3);
     _scalar_transform_a.setIncrements(0.1, 1.0);
-    _scalar_transform_a.setValue(0.0);
+    _scalar_transform_a.setValue(1.0);
     _page_transform.table()
         .attach(_scalar_transform_a, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_a.signal_value_changed()
@@ -275,7 +275,7 @@ Transformation::layoutPageTransform()
     _scalar_transform_d.setRange(-1e10, 1e10);
     _scalar_transform_d.setDigits(3);
     _scalar_transform_d.setIncrements(0.1, 1.0);
-    _scalar_transform_d.setValue(0.0);
+    _scalar_transform_d.setValue(1.0);
     _page_transform.table()
         .attach(_scalar_transform_d, 1, 2, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
     _scalar_transform_d.signal_value_changed()
