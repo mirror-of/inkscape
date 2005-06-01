@@ -1,3 +1,11 @@
+2005-05-31  MenTaLguY  <mental@rydia.net>
+
+	* src/preferences-skeleton.h: disable extension error dialog on startup
+	  -- I'm sick of hearing that Inkscape is broken because people see
+	  this dialog on startup.  It makes us look bad.
+	  
+	  We're not going to repeat this for 0.42 -- find a better approach.
+
 2005-05-28  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp, src/sp-ellipse.cpp, src/sp-flowdiv.cpp,

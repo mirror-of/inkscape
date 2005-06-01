@@ -129,7 +129,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"debug\" redirect=\"0\"/>\n"
 "    <group id=\"clonetiler\" />\n"
 "    <group id=\"gridtiler\" />\n"
-"    <group id=\"extension-error\" show-on-startup=\"1\"/>\n"
+"    <group id=\"extension-error\" show-on-startup=\"0\"/>\n"
 "    <group id=\"memory\" />\n"
 "    <group id=\"messages\" />\n"
 "    <group id=\"swatches\" />\n"
