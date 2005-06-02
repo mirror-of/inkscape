@@ -182,7 +182,10 @@ Transformation::layoutPageScale()
     _units_scale.setUnitType(UNIT_TYPE_DIMENSIONLESS);
 
     _scalar_scale_horizontal.initScalar(0, 500);
+    _scalar_scale_horizontal.setValue(100.0, "%");
+
     _scalar_scale_vertical.initScalar(0, 500);
+    _scalar_scale_vertical.setValue(100.0, "%");
 
     _page_scale.table()
         .attach(_scalar_scale_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -566,7 +569,7 @@ Transformation::applyPageScale(Inkscape::Selection *selection)
     NR::Point center(bbox.midpoint());
 
     NR::scale scale(scaleX / 100.0, scaleY / 100.0);
-    
+
     sp_selection_scale_relative(selection, center, scale);
 
     sp_document_done(SP_DT_DOCUMENT(selection->desktop()));
@@ -599,7 +602,7 @@ Transformation::applyPageSkew(Inkscape::Selection *selection)
 
     NR::Point center = bbox.midpoint();
 
-    sp_selection_skew_relative(selection, center, 
+    sp_selection_skew_relative(selection, center,
                     skewX / width, skewY / height );
 
     sp_document_done(SP_DT_DOCUMENT(selection->desktop()));
