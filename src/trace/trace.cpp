@@ -38,26 +38,6 @@ namespace Trace {
 /**
  *
  */
-Tracer::Tracer()
-{
-    engine = NULL;
-    selectedItem = NULL;
-}
-
-
-
-/**
- *
- */
-Tracer::~Tracer()
-{
-}
-
-
-
-/**
- *
- */
 SPImage *
 Tracer::getSelectedSPImage()
 {

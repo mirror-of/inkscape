@@ -161,13 +161,19 @@ public:
     /**
      *
      */
-    Tracer();
+    Tracer()
+        {
+        engine       = NULL;
+        selectedItem = NULL;
+        }
+
 
 
     /**
      *
      */
-    ~Tracer();
+    ~Tracer()
+        {}
 
 
     /**
