@@ -670,8 +670,17 @@ sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer 
 
     if (!seltrans->grabbed) {
         sp_sel_trans_update_volatile_state(*seltrans);
+
+        if ((flags & SP_OBJECT_MODIFIED_FLAG) && !seltrans->changed) {
+            // Only reset center if object itself is modified, and this is not a local change by seltrans
+            // (still annoyingly recenters on keyboard transforms, fixme)
+            seltrans->center = seltrans->box.midpoint();
+        }
+
+        // reset internal flag
         seltrans->changed = FALSE;
-        // Do not reset center, just update the handles
+
+        // Update the handles
         sp_sel_trans_update_handles(*seltrans);
     }
 }
