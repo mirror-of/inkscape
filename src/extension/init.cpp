@@ -231,16 +231,6 @@ check_extensions()
         if (count != 0) anyfail = true;
     }
     Inkscape::Extension::Extension::error_file_close();
-
-    if (anyfail) {
-        /* show dialog here */
-        if ( inkscape_app_use_gui( inkscape_get_instance() ) ) {
-            Inkscape::Extension::ErrorFileNotice dialog;
-            dialog.run();
-        } else {
-            // command line run, be silent
-        }
-    }
 }
 
 } } /* namespace Inkscape::Extension */

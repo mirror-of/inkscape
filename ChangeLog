@@ -1,3 +1,13 @@
+2005-06-04  MenTaLguY  <mental@rydia.net>
+
+	* src/extensions/init.cpp:
+
+	  That tears it.  Showing the error dialog on startup goes.  I've
+	  had to respond to one too many bloody bug reports.  If we released
+      0.42 with this too we'll drive away users permanently.  As it was,
+	  a lot of people were assuming 0.41 was broken when they saw this
+	  and reverted to 0.40.
+
 2005-05-31  MenTaLguY  <mental@rydia.net>
 
 	* src/preferences-skeleton.h: disable extension error dialog on startup
