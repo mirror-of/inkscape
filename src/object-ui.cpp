@@ -223,7 +223,7 @@ sp_item_create_text_shape(GtkMenuItem *menuitem, SPItem *item)
     object = doc->getObjectByRepr(para_repr);
     g_return_if_fail(SP_IS_FLOWPARA(object));
 
-    Inkscape::XML::Node *text = sp_repr_new_text("This is flowed text. Currently, you can only edit it by using the XML editor. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
+    Inkscape::XML::Node *text = sp_repr_new_text("This is flowed text. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
     para_repr->appendChild(text);
 
 
