@@ -651,7 +651,7 @@ class Layout::Calculator
                                std::vector<ChunkInfo> *chunk_info,
                                LineHeight *line_height) const
     {
-        BrokenSpan new_span, last_span_at_break;
+        BrokenSpan new_span, last_span_at_break, last_span_at_emergency_break;
         ChunkInfo new_chunk;
 
         new_chunk.text_width = 0.0;
@@ -662,6 +662,8 @@ class Layout::Calculator
         // we haven't done anything yet so the last valid break position is the beginning
         last_span_at_break.start = start_span_pos;
         last_span_at_break.setZero();
+        last_span_at_emergency_break.start = start_span_pos;
+        last_span_at_emergency_break.setZero();
 
         TRACE("trying chunk from %f to %g", scan_run.x_start, scan_run.x_end);
         new_span.end = start_span_pos;
@@ -696,7 +698,7 @@ class Layout::Calculator
                     return false;
             }
 
-            bool span_fitted = _measureUnbrokenSpan(para, &new_span, &last_span_at_break, new_chunk.scanrun_width - new_chunk.text_width);
+            bool span_fitted = _measureUnbrokenSpan(para, &new_span, &last_span_at_break, &last_span_at_emergency_break, new_chunk.scanrun_width - new_chunk.text_width);
 
             new_chunk.text_width += new_span.width;
             new_chunk.whitespace_count += new_span.whitespace_count;
@@ -712,6 +714,20 @@ class Layout::Calculator
 
         TRACE("chunk complete, used %f width (%d whitespaces, %d brokenspans)", new_chunk.text_width, new_chunk.whitespace_count, new_chunk.broken_spans.size());
         chunk_info->push_back(new_chunk);
+
+        if (scan_run.width() >= 4.0 * line_height->total() && last_span_at_break.end == start_span_pos) {
+            /* **non-SVG spec bit**: See bug #1191102
+            If the user types a very long line with no spaces, the way the spec
+            is written at the moment means that when the length of the text
+            exceeds the available width of all remaining areas, the text is
+            completely hidden. This condition alters that behaviour so that if
+            the length of the line is greater than four times the line-height
+            and there are no spaces, it'll be emergency-wrapped at the last
+            character. One could read the SVG Tiny 1.2 draft as permitting this
+            sort of behaviour, but it's still a bit dodgy. The hard-coding of
+            4x is not nice, either. */
+            last_span_at_break = last_span_at_emergency_break;
+        }
 
         if (!chunk_info->back().broken_spans.empty() && last_span_at_break.end != chunk_info->back().broken_spans.back().end) {
             // need to back out spans until we come to the one with the last break in it
@@ -757,8 +773,11 @@ class Layout::Calculator
     done immediately the function will also return false. On return
     \a last_break_span will contain the vital statistics for the span only
     up to the last line breaking change. If there are no line breaking
-    characters in the span then \a last_break_span will not be  altered. */
-    bool _measureUnbrokenSpan(ParagraphInfo const &para, BrokenSpan *span, BrokenSpan *last_break_span, double maximum_width) const
+    characters in the span then \a last_break_span will not be altered.
+    Similarly, \a last_emergency_break_span will contain the vital
+    statistics for the span up to the last inter-character boundary,
+    or will be unaltered if there is none. */
+    bool _measureUnbrokenSpan(ParagraphInfo const &para, BrokenSpan *span, BrokenSpan *last_break_span, BrokenSpan *last_emergency_break_span, double maximum_width) const
     {
         span->setZero();
 
@@ -775,7 +794,7 @@ class Layout::Calculator
         if (_flow._input_stream[span->start.iter_span->input_index]->Type() == CONTROL_CODE) {
             InputStreamControlCode const *control_code = static_cast<InputStreamControlCode const *>(_flow._input_stream[span->start.iter_span->input_index]);
             if (control_code->code == SHAPE_BREAK || control_code->code == PARAGRAPH_BREAK) {
-                *last_break_span = *span;
+                *last_emergency_break_span = *last_break_span = *span;
                 return false;
             }
             if (control_code->code == ARBITRARY_GAP) {
@@ -819,20 +838,22 @@ class Layout::Calculator
             PangoLogAttr const &char_attributes = _charAttributes(para, span->end);
             
             if (char_attributes.is_mandatory_break) {
-                *last_break_span = *span;
+                *last_emergency_break_span = *last_break_span = *span;
                 TRACE("span %d end of para; width = %f chars = %d", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count);
                 return false;
             }
 
             if (char_attributes.is_line_break || char_attributes.is_white || is_soft_hyphen) {
                 // a suitable position to break at, record where we are
-                *last_break_span = *span;
+                *last_emergency_break_span = *last_break_span = *span;
                 if (soft_hyphen_in_word) {
                     // if there was a previous soft hyphen we're not going to need it any more so we can remove it
                     span->width -= soft_hyphen_glyph_width;
                     if (!is_soft_hyphen)
                         soft_hyphen_in_word = false;
                 }
+            } else if (char_attributes.is_char_break) {
+                *last_emergency_break_span = *span;
             }
             // todo: break between chars if necessary (ie no word breaks present) when doing rectangular flowing
 
