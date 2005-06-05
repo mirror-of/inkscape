@@ -314,14 +314,10 @@ font_factory::~font_factory(void)
 	//	g_object_unref(fontContext);
 }
 
-font_instance* font_factory::FaceFromDescr(const char* descr)
+font_instance* font_factory::FaceFromDescr(const char* family, const char* style)
 {
-	PangoFontDescription* temp_descr=pango_font_description_from_string(descr);
-        // workaround for bug #1025565.
-        if (pango_font_description_get_family(temp_descr)==NULL) {
-            pango_font_description_set_family(temp_descr,descr);
-            //g_warning(_("Font '%s' didn't have a default family\n"),descr);
-        }
+	PangoFontDescription* temp_descr=pango_font_description_from_string(style);
+    pango_font_description_set_family(temp_descr,family);
 	font_instance *res=Face(temp_descr);
 	pango_font_description_free(temp_descr);
 	return res;

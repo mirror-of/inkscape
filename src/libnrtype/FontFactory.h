@@ -67,7 +67,7 @@ public:
     static font_factory*  Default();
 
     // Various functions to get a font_instance from different descriptions.
-    font_instance*        FaceFromDescr(char const *descr);
+    font_instance*        FaceFromDescr(char const *family, char const *style);
     font_instance*        Face(PangoFontDescription *descr, bool canFail=true);
     font_instance*        Face(char const *family,
                                int variant=PANGO_VARIANT_NORMAL, int style=PANGO_STYLE_NORMAL,

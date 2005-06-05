@@ -321,8 +321,10 @@ sp_font_selector_emit_set (SPFontSelector *fsel)
 {
 	font_instance *font;
 
-	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length) {
-		font = (font_factory::Default())->FaceFromDescr ((gchar *) ((fsel->styles.records)[fsel->styleidx].descr));
+	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length
+        && static_cast< unsigned int > (fsel->familyidx) < fsel->families.length) {
+		font = (font_factory::Default())->FaceFromDescr ((gchar *) ((fsel->families.names)[fsel->familyidx]),
+                                                         (gchar *) ((fsel->styles.records)[fsel->styleidx].name));
 	} else {
 		font = NULL;
 	}
