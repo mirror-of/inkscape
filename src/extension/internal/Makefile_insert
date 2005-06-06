@@ -33,6 +33,10 @@ extension_internal_libinternal_a_SOURCES =	\
 	extension/internal/gdkpixbuf-input.cpp	\
 	extension/internal/pov-out.cpp	\
 	extension/internal/pov-out.h	\
+	extension/internal/latex-pstricks.cpp	\
+	extension/internal/latex-pstricks.h	\
+	extension/internal/latex-pstricks-out.cpp	\
+	extension/internal/latex-pstricks-out.h	\
 \
 	$(extension_internal_gnome_print_sources)
 

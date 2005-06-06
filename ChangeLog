@@ -1,3 +1,18 @@
+2005-06-06  Ted Gould  <ted@gould.cx>
+
+	* src/extensions/effect.cpp:
+
+	Adding in the code so that effects can be undoable.
+
+	* src/extensions/implementation/script.[cpp,h]
+
+	Adding in the code so that a new window is not displayed when an
+	effect is executed.  Now it is in the same window (much nicer).
+
+	* src/extensions/internal/latex*.[cpp,h]
+
+	Patches from the mailing list to add LaTeX output.
+
 2005-06-04  MenTaLguY  <mental@rydia.net>
 
 	* src/extensions/init.cpp:

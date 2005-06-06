@@ -42,6 +42,8 @@
 #endif
 #include "internal/ps-out.h"
 #include "internal/pov-out.h"
+#include "internal/latex-pstricks-out.h"
+#include "internal/latex-pstricks.h"
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
 #include "internal/bluredge.h"
@@ -117,6 +119,8 @@ init()
     Internal::PrintWin32::init();
 #endif
     Internal::PovOutput::init();
+    Internal::PrintLatex::init();
+    Internal::LatexOutput::init();
 
     /* Effects */
     Internal::BlurEdge::init();

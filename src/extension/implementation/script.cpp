@@ -100,13 +100,7 @@ Script::solve_reldir(Inkscape::XML::Node *reprin) {
     }
 
     if (!strcmp(reldir, "extensions")) {
-        for(unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
-            gchar * filename = g_build_filename(Inkscape::Extension::Extension::search_path[i], sp_repr_children(reprin)->content(), NULL);
-            if ( Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS) ) {
-                return filename;
-            }
-            g_free(filename);
-        }
+        return g_build_filename(INKSCAPE_EXTENSIONDIR, sp_repr_children(reprin)->content(), NULL);
     } else {
         return g_strdup(sp_repr_children(reprin)->content());
     }
@@ -601,7 +595,7 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
     SPDesktop *desktop = (SPDesktop *) doc;
     if (desktop != NULL) {
         using Inkscape::Util::GSListConstIterator;
-        GSListConstIterator<SPItem *> selected=desktop->selection->itemList();
+        GSListConstIterator<SPItem *> selected = desktop->selection->itemList();
         while ( selected != NULL ) {
             local_command += " --id=";
             local_command += SP_OBJECT_ID(*selected);
@@ -630,17 +624,55 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
     g_free(tempfilename_out);
 
     /* Do something with mydoc.... */
-    /* TODO: This creates a new window, which really isn't
-     * ideal...  there needs to be a better way to do this. */
-    if (1) {
-        g_return_if_fail(mydoc != NULL);
+    copy_doc(doc->doc->rroot, mydoc->rroot);
+    mydoc->release();
+}
 
-        SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(mydoc, NULL));
-        sp_document_unref(mydoc);
-        g_return_if_fail(dtw != NULL);
+#include <desktop.h>
 
-        sp_create_window(dtw, TRUE);
+/**
+    \brief  A function to take all the svg elements from one document
+            and put them in another.
+    \param  oldroot  The root node of the document to be replaced
+    \param  newroot  The root node of the document to replace it with
+
+    This function first deletes all of the data in the old document.  It
+    does this by creating a list of what needs to be deleted, and then
+    goes through the list.  This two pass approach removes issues with
+    the list being change while parsing through it.  Lots of nasty bugs.
+
+    Then, it goes through the new document, duplicating all of the
+    elements and putting them into the old document.  The copy
+    is then complete.
+*/
+void
+Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newroot)
+{
+    std::vector<Inkscape::XML::Node *> delete_list;
+    for (Inkscape::XML::Node * child = oldroot->firstChild();
+            child != NULL;
+            child = child->next()) {
+        if (!strcmp("sodipodi:namedview", child->name()))
+            continue;
+        if (!strcmp("svg:defs", child->name()))
+            continue;
+        delete_list.push_back(child);
     }
+    for (unsigned int i = 0; i < delete_list.size(); i++)
+        sp_repr_unparent(delete_list[i]);
+
+    for (Inkscape::XML::Node * child = newroot->firstChild();
+            child != NULL;
+            child = child->next()) {
+        if (!strcmp("sodipodi:namedview", child->name()))
+            continue;
+        if (!strcmp("svg:defs", child->name()))
+            continue;
+        oldroot->appendChild(child->duplicate());
+    }
+
+    /** \todo  Restore correct layer */
+    /** \todo  Restore correct selection */
 }
 
 /* Helper class used by Script::execute */
@@ -706,7 +738,7 @@ int
 Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
     g_return_val_if_fail(in_command != NULL, 0);
-    printf("Executing: %s\n", in_command);
+    // printf("Executing: %s\n", in_command);
 
     /* Get the commandline to be run */
     /* TODO:  Perhaps replace with a sprintf? */

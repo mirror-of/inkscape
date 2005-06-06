@@ -44,6 +44,7 @@ private:
         the incoming scripts */
     gchar *       solve_reldir (Inkscape::XML::Node *reprin);
     bool          check_existance (gchar const *command);
+    void          copy_doc (Inkscape::XML::Node * olddoc, Inkscape::XML::Node * newdoc);
 
 public:
                           Script       (void);

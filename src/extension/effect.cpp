@@ -8,6 +8,7 @@
  */
 
 #include <helper/action.h>
+#include <document.h>
 
 #include "prefdialog.h"
 
@@ -65,6 +66,16 @@ Effect::prefs (SPView * doc)
     return false;
 }
 
+/**
+    \brief  The function that 'does' the effect itself
+    \param  doc  The SPView to do the effect on
+
+    This function first insures that the extension is loaded, and if not,
+    loads it.  It then calls the implemention to do the actual work.  It
+    also resets the last effect pointer to be this effect.  Finally, it
+    executes a \c sp_document_done to commit the changes to the undo
+    stack.
+*/
 void
 Effect::effect (SPView * doc)
 {
@@ -73,7 +84,11 @@ Effect::effect (SPView * doc)
     if (!loaded()) return;
 
     _last_effect = this;
-    return imp->effect(this, doc);
+    imp->effect(this, doc);
+
+    sp_document_done(doc->doc);
+
+    return;
 }
 
 
