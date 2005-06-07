@@ -65,7 +65,7 @@ class DebugDialog
     /**
      * Display a message
      */
-    virtual void message(char *msg) = 0;
+    virtual void message(char const *msg) = 0;
 
     /**
      * Redirect g_log() messages to this widget

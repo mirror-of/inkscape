@@ -75,7 +75,7 @@ class DebugDialogImpl : public DebugDialog, public Gtk::Dialog
     /**
      * Display a message
      */
-    void message(char *msg);
+    void message(char const *msg);
     
     /**
      * Redirect g_log() messages to this widget
@@ -214,7 +214,7 @@ void DebugDialogImpl::hide()
 
 
 
-void DebugDialogImpl::message(char *msg)
+void DebugDialogImpl::message(char const *msg)
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = messageText.get_buffer();
     Glib::ustring uMsg = msg;
@@ -255,7 +255,7 @@ void dialogLoggingFunction(const gchar *log_domain,
 {
     DebugDialogImpl *dlg = (DebugDialogImpl *)user_data;
 
-    dlg->message((char *)messageText);
+    dlg->message(messageText);
 
 }
 
