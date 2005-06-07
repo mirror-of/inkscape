@@ -25,10 +25,10 @@
 #include "sp-attribute-widget.h"
 #include "object-attributes.h"
 
-typedef struct {
-    gchar *label;
-    gchar *attribute;
-} SPAttrDesc;
+struct SPAttrDesc {
+    gchar const *label;
+    gchar const *attribute;
+};
 
 static const SPAttrDesc anchor_desc[] = {
     { N_("Href:"), "xlink:href"},
