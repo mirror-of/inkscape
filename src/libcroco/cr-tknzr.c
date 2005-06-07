@@ -1484,12 +1484,12 @@ cr_tknzr_parse_num (CRTknzr * a_this,
 {
         enum CRStatus status = CR_PARSING_ERROR;
         enum CRNumType val_type = NUM_GENERIC;
-        gboolean parsing_dec = FALSE,
-                parsed = FALSE;
+        gboolean parsing_dec,  /* true iff seen decimal point. */
+                parsed; /* true iff the substring seen so far is a valid CSS
+                           number, i.e. `[0-9]+|[0-9]*\.[0-9]+'. */
         guint32 cur_char = 0,
-                int_part = 0,
-                dec_part = 0,
                 next_char = 0;
+        gdouble numerator, denominator = 1;
         CRInputPos init_pos;
         CRParsingLocation location = {0,0,0} ;
 
@@ -1499,12 +1499,14 @@ cr_tknzr_parse_num (CRTknzr * a_this,
 
         RECORD_INITIAL_POS (a_this, &init_pos);
         READ_NEXT_CHAR (a_this, &cur_char);        
-        if (IS_NUM (cur_char) == TRUE) {
-                int_part = int_part * 10 + (cur_char - '0');
-
+        if (IS_NUM (cur_char)) {
+                numerator = (cur_char - '0');
+                parsing_dec = FALSE;
                 parsed = TRUE;
         } else if (cur_char == '.') {
+                numerator = 0;
                 parsing_dec = TRUE;
+                parsed = FALSE;
         } else {
                 status = CR_PARSING_ERROR;
                 goto error;
@@ -1519,29 +1521,29 @@ cr_tknzr_parse_num (CRTknzr * a_this,
                         break;
                 }
                 if (next_char == '.') {
-                        if (parsing_dec == TRUE) {
+                        if (parsing_dec) {
                                 status = CR_PARSING_ERROR;
                                 goto error;
                         }
 
                         READ_NEXT_CHAR (a_this, &cur_char);
                         parsing_dec = TRUE;
-                        parsed = TRUE;
-                } else if (IS_NUM (next_char) == TRUE) {
+                        parsed = FALSE;  /* In CSS, there must be at least
+                                            one digit after `.'. */
+                } else if (IS_NUM (next_char)) {
                         READ_NEXT_CHAR (a_this, &cur_char);
                         parsed = TRUE;
 
-                        if (parsing_dec == FALSE) {
-                                int_part = int_part * 10 + (cur_char - '0');
-                        } else {
-                                dec_part = dec_part * 10 + (cur_char - '0');
+                        numerator = numerator * 10 + (cur_char - '0');
+                        if (parsing_dec) {
+                                denominator *= 10;
                         }
                 } else {
                         break;
                 }
         }
 
-        if (parsed == FALSE) {
+        if (!parsed) {
                 status = CR_PARSING_ERROR;
         }
 
@@ -1549,10 +1551,7 @@ cr_tknzr_parse_num (CRTknzr * a_this,
          *Now, set the output param values.
          */
         if (status == CR_OK) {
-                gdouble val = 0.0;
-
-                val = int_part;
-                val += cr_utils_n_to_0_dot_n (dec_part);
+                gdouble val = numerator / denominator;
                 if (*a_num == NULL) {
                         *a_num = cr_num_new_with_val (val, val_type);
 
