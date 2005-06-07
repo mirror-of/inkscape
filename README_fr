@@ -23,9 +23,9 @@ développement amical, ouvert et tourné vers la communeauté.
 
 Inkscape se compile et s'installe selon la procédure standard : 
 
-./configure
-make
-make install
+  ./configure
+  make
+  make install
 
 Si le fichier "./configure" n'est pas présent, vous pouvez le créer en
 exécutant la commande  "./autogen.sh", qui appelle alternativement d'autres
@@ -38,7 +38,7 @@ pour les dépendances les plus courantes.
 Si vous modifiez Inkscape d'une quelconque manière utilisable, daignez nous en
 informer s'il vous plait. 
 
-Veuillez consulter le fichier HACKING pour de plus amples informations sur le
+Veuillez consulter le fichier HACKING_fr pour de plus amples informations sur le
 développement d'Inkscape.
 
 Traduction par Matiphas (matiphas _chez_ free point fr), 2005.
