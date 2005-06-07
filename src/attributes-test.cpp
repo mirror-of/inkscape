@@ -248,7 +248,7 @@ static struct {char const *attr; bool supported;} const all_attrs[] = {
     {"title", false},
     {"to", true},
     {"transform", true},
-    {"type", false},
+    {"type", true},
     {"u1", false},
     {"u2", false},
     {"underline-position", false},
