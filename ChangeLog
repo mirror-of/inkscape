@@ -1,5 +1,8 @@
 2005-06-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/pen-context.cpp (spdc_endpoint_snap): Do shift-snapping
+	  (i.e. namedview_free_snap_all_types) even for initial point.
+
 	* src/Makefile.am (INCLUDES), src/extension/script/Makefile_insert
 	(extension_script_libscript_a_CXXFLAGS):
 
