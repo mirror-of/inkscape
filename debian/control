@@ -8,7 +8,7 @@ Standards-Version: 3.6.1
 Package: inkscape
 Architecture: any
 Depends: ${shlibs:Depends}
-Suggests: dia, libwmf-bin, pstoedit, sketch
+Suggests: dia, libwmf-bin, pstoedit, sketch, libxml-xql-perl
 Description: Vector based drawing program
  Inkscape loads and saves a subset of the SVG (Scalable Vector Graphics)
  format, a standard maintained by the WWW consortium.
@@ -23,3 +23,10 @@ Description: Vector based drawing program
  Graphics can be printed and exported to png bitmaps.
  .
  Homepage: http://www.inkscape.org/
+ .
+ If you wish to import postscript or pdf files, then you need pstoedit
+ and sketch.
+ dia is needed only if you wish to import Dia files.
+ libwmf-bin is needed only if you wish to import Windows metafile
+ (.wmf) files.
+ libxml-xql-perl is needed only by the drop-shadow effect.
