@@ -149,6 +149,13 @@
 	  
 	  added skeletal memory statistics dialog
 
+2005-05-12  Juerg Billeter  <j@bitron.ch>
+ 
+	* configure.ac: Have pkgconfig explicitly require gdkmm-2.4 & glibmm-2.4
+	(used directly by Inkscape), rather than relying on transitive
+	dependencies.  It's said that this is required in some cases with
+	pkgconfig 0.17 and later.
+ 
 2005-05-08  Bryce Harrington <bryce@bryceharrington.org>
 
 	* ChangeLog configure.ac src/Makefile_insert src/desktop-widget.h
