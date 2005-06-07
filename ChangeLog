@@ -1,3 +1,12 @@
+2005-06-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/Makefile.am (INCLUDES), src/extension/script/Makefile_insert
+	(extension_script_libscript_a_CXXFLAGS):
+
+	  Put PERL_CFLAGS PYTHON_CFLAGS into global INCLUDES rather than
+	  using a libscript_a_CXXFLAGS var (which involved creating .o files
+	  specific to that lib).
+
 2005-06-06  Ted Gould  <ted@gould.cx>
 
 	* src/extensions/effect.cpp:
@@ -19,7 +28,7 @@
 
 	  That tears it.  Showing the error dialog on startup goes.  I've
 	  had to respond to one too many bloody bug reports.  If we released
-      0.42 with this too we'll drive away users permanently.  As it was,
+	  0.42 with this too we'll drive away users permanently.  As it was,
 	  a lot of people were assuming 0.41 was broken when they saw this
 	  and reverted to 0.40.
 
@@ -150,12 +159,12 @@
 	  added skeletal memory statistics dialog
 
 2005-05-12  Juerg Billeter  <j@bitron.ch>
- 
+
 	* configure.ac: Have pkgconfig explicitly require gdkmm-2.4 & glibmm-2.4
 	(used directly by Inkscape), rather than relying on transitive
 	dependencies.  It's said that this is required in some cases with
 	pkgconfig 0.17 and later.
- 
+
 2005-05-08  Bryce Harrington <bryce@bryceharrington.org>
 
 	* ChangeLog configure.ac src/Makefile_insert src/desktop-widget.h
@@ -225,7 +234,7 @@
 
 	* src/debug/Makefile_insert, src/debug/heap.cpp, src/debug/heap.h:
 
-      added heap statistics stuff
+	  added heap statistics stuff
 
 	* src/gc.cpp: register the GC heap with the heap statistics facility
 
@@ -499,7 +508,7 @@
 	* src/view.h, src/application/editor-impl.cpp,
 	  src/application/editor-impl.h, src/svg-view.h:
 
-  	  C++-ification.  Created some C++ wrapper member functions for
+	  C++-ification.  Created some C++ wrapper member functions for
 	  SPView and SPSVGView, to enable Gtkmmification of SPDesktop
 
 2005-04-09  MenTaLguY  <mental@rydia.net>
@@ -566,7 +575,8 @@
 	  more debugging info for incomplete transactions
 
 2005-04-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-    * src/sp-gradient.cpp: Fix crash with cycles in gradient hrefs.
+
+	* src/sp-gradient.cpp: Fix crash with cycles in gradient hrefs.
 
 2005-04-01  Jon A. Cruz  <jon@joncruz.org>
     * src/ui/widget/panel.h, src/ui/widget/panel.cpp, src/ui/previewholder.h,

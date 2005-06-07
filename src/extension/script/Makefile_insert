@@ -5,9 +5,6 @@ extension/script/all: extension/script/libscript.a
 extension/script/clean:
 	rm -f extension/script/libscript.a
 	rm -f $(extension_script_libscript_a_OBJECTS)
-        
-extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
-
 
 if WITH_PERL
 perl_sources = \
