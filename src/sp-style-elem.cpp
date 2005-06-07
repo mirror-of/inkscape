@@ -348,12 +348,19 @@ sp_style_elem_read_content(SPObject *const object)
     /* todo: Test error condition. */
     cr_parser_set_sac_handler(parser, sac_handler);
     CRStatus const parse_status = cr_parser_parse(parser);
-    g_return_if_fail(parse_status == CR_OK);  // fixme: this is just for debugging.
     g_assert(sac_handler->app_data == &parse_tmp);
-    cr_cascade_set_sheet(style_elem.document->style_cascade, stylesheet, ORIGIN_AUTHOR);
-
+    if (parse_status == CR_OK) {
+        cr_cascade_set_sheet(style_elem.document->style_cascade, stylesheet, ORIGIN_AUTHOR);
+    } else {
+        if (parse_status != CR_PARSING_ERROR) {
+            g_printerr("parsing error code=%u\n", unsigned(parse_status));
+            /* Better than nothing.  TODO: Improve libcroco's error handling.  At a minimum, add a
+               strerror-like function so that we can give a string rather than an integer. */
+            /* TODO: Improve error diagnosis stuff in inkscape.  We'd like a panel showing the
+               errors/warnings/unsupported features of the current document. */
+        }
+    }
     cr_parser_destroy(parser);
-
     //object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
