@@ -25,13 +25,13 @@ community-orientierten Entwicklungsprozesses.
 
 Inkscape nutzt die Standardprozedur für Compilation und Installation:
 
-./configure
-make
-make install
+  ./configure
+  make
+  make install
 
 Detalliertere Information hierzu siehe in der Datei INSTALL.
 Wg. Voraussetzungen und Abhängigkeiten von anderer Software 
-siehe http://www.inkscape.org/
+siehe http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape
 
 Wenn Sie inkscape in einer neuen, brauchbaren Weise verändern, 
 lassen Sie uns an den Änderungen teilhaben.

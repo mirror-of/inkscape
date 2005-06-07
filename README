@@ -2,7 +2,7 @@
 Inkscape. Draw Freely.
 ======================
 
-http://www.inkscape.org
+http://www.inkscape.org/
 
 Inkscape is an open source drawing tool with capabilities similar to
 Illustrator, Freehand, and CorelDraw that uses the W3C standard scalable
@@ -23,16 +23,17 @@ community-oriented development processes.
 
 Inkscape uses the standard procedure for compilation and installation: 
 
-./configure
-make
-make install
+  ./configure
+  make
+  make install
 
 If a "./configure" file is not present, you can create it by running
 the "./autogen.sh" command, which calls in turn a number of other
 programs such as automake and autoconf.  See INSTALL for more
 details. 
 
-Please see www.inkscape.org for the most current dependencies.
+Please see http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape for the
+most current dependencies.
 
 If you modify Inkscape in any usable way, please let us know also.
 

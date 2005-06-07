@@ -1,8 +1,8 @@
 
 Inkscape. Disegna in Libertà.
-======================
+=============================
 
-http://www.inkscape.org
+http://www.inkscape.org/
 
 Inkscape è un programma open source per il disegno, simile a Illustrator,
 Freehand e CorelDraw, che si basa sul formato standard W3C "scalable vector
@@ -22,16 +22,17 @@ la creazione di un processo di sviluppo aperto, collaborativo e orientato alla c
 
 Inkscape usa la procedura standard per la compilazione e l'installazione:
 
-./configure
-make
-make install
+  ./configure
+  make
+  make install
 
 Se il file "./configure" non esiste, lo puoi creare con il comando "./autogen.sh",
 che si basa su altri programmi quali automake e autoconf. Consulta il file INSTALL
 per ulteriori dettagli.
 
-Visita www.inkscape.org per la più recente lista delle dipendenze.
+Visita http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape per la più
+recente lista delle dipendenze.
 
 Se apporti delle modifiche utili ad Inkscape, condividile con la comunità.
 
-Per ulteriori informazioni sullo sviluppo di Inkscape, consulta il file HACKING.
+Per ulteriori informazioni sullo sviluppo di Inkscape, consulta il file HACKING_it.

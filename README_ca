@@ -24,15 +24,16 @@ desenvolupament amicable, obert i orientat a la comunitat.
 
 L'Inkscape usa el procediment estàndard per a compilació i instal·lació:
 
-./configure
-make
-make install
+  ./configure
+  make
+  make install
 
 Si no trobeu el fitxer "./configure", podeu crear-lo executant l'ordre
 "./autogen.sh", que crida a d'altres programes diferents com l'automake
 i l'autoconf. Veieu INSTALL per a més detalls.
 
-Podeu consultar a www.inkscape.org les dependències més habituals.
+Podeu consultar a http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape les
+dependències més habituals.
 
 Feu-nos saber si heu modificat l'Inkscape d'alguna manera usable.
 
