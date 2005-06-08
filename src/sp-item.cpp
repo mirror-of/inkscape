@@ -1139,8 +1139,8 @@ NR::Matrix sp_item_i2r_affine(SPItem const *item)
 NR::Matrix matrix_to_desktop(NR::Matrix const m, SPItem const *item)
 {
     NR::Matrix const ret(m
-                         * NR::Matrix(NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item))))
-                         * NR::Matrix(NR::scale(1, -1)));
+                         * NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))
+                         * NR::scale(1, -1));
     return ret;
 }
 
