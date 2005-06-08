@@ -1130,6 +1130,20 @@ NR::Matrix sp_item_i2r_affine(SPItem const *item)
     return ret;
 }
 
+/** Converts a matrix \a m into the desktop coords of the \a item. Will become a noop when we eliminate the coordinate flipping. */
+NR::Matrix matrix_to_desktop (NR::Matrix m, SPItem const *item)
+{
+    NR::Matrix const ret (m * NR::Matrix(NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))) * NR::Matrix(NR::scale(1, -1)));
+    return ret;
+}
+
+/** Converts a matrix \a m from the desktop coords of the \a item. Will become a noop when we eliminate the coordinate flipping. */
+NR::Matrix matrix_from_desktop (NR::Matrix m, SPItem const *item)
+{
+    NR::Matrix const ret (NR::Matrix(NR::scale(1, -1)) * NR::Matrix(NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item)))) * m);
+    return ret;
+}
+
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
 {
     g_return_val_if_fail(item != NULL, NULL);
