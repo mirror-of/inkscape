@@ -56,6 +56,8 @@
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-matrix-scale-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
+#include "libnr/nr-scale-translate-ops.h"
+#include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
 #include "libnr/nr-rect.h"
 #include "svg/stringstream.h"
@@ -1130,17 +1132,27 @@ NR::Matrix sp_item_i2r_affine(SPItem const *item)
     return ret;
 }
 
-/** Converts a matrix \a m into the desktop coords of the \a item. Will become a noop when we eliminate the coordinate flipping. */
-NR::Matrix matrix_to_desktop (NR::Matrix m, SPItem const *item)
+/**
+ * Converts a matrix \a m into the desktop coords of the \a item.
+ * Will become a noop when we eliminate the coordinate flipping.
+ */
+NR::Matrix matrix_to_desktop(NR::Matrix const m, SPItem const *item)
 {
-    NR::Matrix const ret (m * NR::Matrix(NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))) * NR::Matrix(NR::scale(1, -1)));
+    NR::Matrix const ret(m
+                         * NR::Matrix(NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item))))
+                         * NR::Matrix(NR::scale(1, -1)));
     return ret;
 }
 
-/** Converts a matrix \a m from the desktop coords of the \a item. Will become a noop when we eliminate the coordinate flipping. */
-NR::Matrix matrix_from_desktop (NR::Matrix m, SPItem const *item)
+/**
+ * Converts a matrix \a m from the desktop coords of the \a item.
+ * Will become a noop when we eliminate the coordinate flipping.
+ */
+NR::Matrix matrix_from_desktop(NR::Matrix const m, SPItem const *item)
 {
-    NR::Matrix const ret (NR::Matrix(NR::scale(1, -1)) * NR::Matrix(NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item)))) * m);
+    NR::Matrix const ret(NR::scale(1, -1)
+                         * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item)))
+                         * m);
     return ret;
 }
 
