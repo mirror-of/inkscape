@@ -192,7 +192,7 @@ sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data)
 {
 	if (data != NULL) {
 		char *new_str = g_strdup (data);
-		char **token = g_strsplit (new_str, ";", 32);
+		char **token = g_strsplit (new_str, ";", 0);
 		for (char **ctoken = token; *ctoken != NULL; ctoken++) {
 			char *current = g_strstrip (* ctoken);
 			char *key = current;
