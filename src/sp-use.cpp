@@ -455,6 +455,9 @@ sp_use_move_compensate(NR::Matrix const *mp, SPItem *original, SPUse *self)
     if (!(m.is_translation()))
         return;
 
+    // restore item->transform field from the repr, in case it was changed by seltrans
+    sp_object_read_attr (SP_OBJECT (self), "transform");
+
     NR::Matrix t = sp_use_get_parent_transform(self);
     NR::Matrix clone_move = t.inverse() * m * t;
 
