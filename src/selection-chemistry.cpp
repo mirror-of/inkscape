@@ -49,6 +49,7 @@
 #include "snap.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-rotate-ops.h"
 #include "libnr/nr-matrix-translate-ops.h"
 #include "libnr/nr-point-matrix-ops.h"
@@ -1175,12 +1176,13 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
 #endif
 
         // we're moving both a clone and its original
-        bool move_clone_with_original = (affine.is_translation() && SP_IS_USE(item) && selection->includes( sp_use_get_original (SP_USE(item)) ));
+        bool transform_clone_with_original = (SP_IS_USE(item) && selection->includes( sp_use_get_original (SP_USE(item)) ));
         bool transform_textpath_with_path = (SP_IS_TEXT_TEXTPATH(item) && selection->includes( sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item)))) ));
         bool move_offset_with_source = (affine.is_translation() && (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) ));
 
         // "clones are unmoved when original is moved" preference
         bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
+        bool prefs_parallel = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_PARALLEL);
 
 	// If this is a clone and it's selected along with its original, do not move it; it will feel the
 	// transform of its original and respond to it itself. Without this, a clone is doubly
@@ -1188,23 +1190,51 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
       // Same for textpath if we are also doing ANY transform to its path: do not touch textpath,
       // letters cannot be squeezed or rotated anyway, they only refill the changed path.
       // Same for linked offset if we are also moving its source: do not move it.
-        if ((move_clone_with_original && !prefs_unmoved) || transform_textpath_with_path || move_offset_with_source) {
-		// just restore the transform field from the repr
+        if (transform_textpath_with_path || move_offset_with_source) {
+		// restore item->transform field from the repr, in case it was changed by seltrans
             sp_object_read_attr (SP_OBJECT (item), "transform");
-        } else {
 
+        } else if (transform_clone_with_original) {
+            // We are transforming a clone along with its original. The below matrix juggling is
+            // necessary to ensure that they transform as a whole, i.e. the clone's induced
+            // transform and its move compensation are both cancelled out.
+
+            // restore item->transform field from the repr, in case it was changed by seltrans
+            sp_object_read_attr (SP_OBJECT (item), "transform");
+
+            // calculate the matrix we need to apply to the clone to cancel its induced transform from its original
+            NR::Matrix t = matrix_to_desktop (matrix_from_desktop (affine, item), item);
+            NR::Matrix t_inv = matrix_to_desktop (matrix_from_desktop (affine.inverse(), item), item); 
+            NR::Matrix result = t_inv * item->transform * t;
+
+            if ((prefs_parallel || prefs_unmoved) && affine.is_translation()) {
+                // we need to cancel out the move compensation, too
+
+                // find out the clone move, same as in sp_use_move_compensate
+                NR::Matrix parent = sp_use_get_parent_transform (SP_USE(item));
+                NR::Matrix clone_move = parent.inverse() * t * parent;
+
+                if (prefs_parallel) {
+                    NR::Matrix move = result * clone_move * t_inv;
+                    sp_item_write_transform(item, SP_OBJECT_REPR(item), move, &move);
+
+                } else if (prefs_unmoved) {
+                    if (SP_IS_USE(sp_use_get_original(SP_USE(item))))
+                        clone_move = NR::identity();
+                    NR::Matrix move = result * clone_move;
+                    sp_item_write_transform(item, SP_OBJECT_REPR(item), move, &move);
+                }
+
+            } else {
+                // just apply the result
+                sp_item_write_transform(item, SP_OBJECT_REPR(item), result, &result);
+            }
+
+        } else {
             if (set_i2d) {
                 sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
             }
-
-            // we need to store this in a variable so that we can take a pointer
-            NR::Matrix inv = (item->transform).inverse();
-
-            // send inv as advertised transform if we're moving clone with original _and_ clones
-            // compensation is set to unmoved - in this case we actually _want_ to move it (bug
-            // 983568), so we're sending the inverse transform to balance out the compensation in
-            // sp_use_move_compensate
-            sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform, (move_clone_with_original && prefs_unmoved) ? &inv : NULL);
+            sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform, NULL);
         }
     }
 }
