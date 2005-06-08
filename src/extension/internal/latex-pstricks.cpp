@@ -15,6 +15,7 @@
 
 #include <string.h>
 #include <signal.h>
+#include <errno.h>
 
 #include <libnr/n-art-bpath.h>
 #include <libnr/nr-point-matrix-ops.h>
