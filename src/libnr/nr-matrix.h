@@ -241,7 +241,7 @@ class Matrix {
     /**
      *
      */
-    bool is_translation(Coord const eps = 0.01) const;
+    bool is_translation(Coord const eps = 1e-6) const;
 
 
     /**
