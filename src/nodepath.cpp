@@ -333,7 +333,7 @@ static NArtBpath *subpath_from_bpath(Inkscape::NodePath::Path *np, NArtBpath *b,
 
     g_assert((b->code == NR_MOVETO) || (b->code == NR_MOVETO_OPEN));
 
-   Inkscape::NodePath::SubPath *sp = sp_nodepath_subpath_new(np);
+    Inkscape::NodePath::SubPath *sp = sp_nodepath_subpath_new(np);
     bool const closed = (b->code == NR_MOVETO);
 
     pos = NR::Point(b->x3, b->y3) * np->i2d;
@@ -342,7 +342,7 @@ static NArtBpath *subpath_from_bpath(Inkscape::NodePath::Path *np, NArtBpath *b,
     } else {
         npos = pos;
     }
-   Inkscape::NodePath::Node *n;
+    Inkscape::NodePath::Node *n;
     n = sp_nodepath_node_new(sp, NULL, (Inkscape::NodePath::NodeType) *t, NR_MOVETO, &pos, &pos, &npos);
     g_assert(sp->first == n);
     g_assert(sp->last  == n);
@@ -391,15 +391,17 @@ static gchar *parse_nodetypes(gchar const *types, gint length)
                         typestr[pos++] =Inkscape::NodePath::NODE_SYMM;
                         break;
                     case 'c':
-                    default:
                         typestr[pos++] =Inkscape::NodePath::NODE_CUSP;
+                        break;
+                    default:
+                        typestr[pos++] =Inkscape::NodePath::NODE_NONE;
                         break;
                 }
             }
         }
     }
 
-    while (pos < length) typestr[pos++] =Inkscape::NodePath::NODE_CUSP;
+    while (pos < length) typestr[pos++] =Inkscape::NodePath::NODE_NONE;
 
     return typestr;
 }
@@ -2968,9 +2970,14 @@ static void sp_nodepath_subpath_open(Inkscape::NodePath::SubPath *sp,Inkscape::N
     new_path->p.other = NULL;
 }
 
+double
+triangle_area (NR::Point p1, NR::Point p2, NR::Point p3) 
+{
+    return (p1[NR::X]*p2[NR::Y] + p1[NR::Y]*p3[NR::X] + p2[NR::X]*p3[NR::Y] - p2[NR::Y]*p3[NR::X] - p1[NR::Y]*p2[NR::X] - p1[NR::X]*p3[NR::Y]);
+}
+
 Inkscape::NodePath::Node *
-sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *next,Inkscape::NodePath::NodeType type, NRPathcode code,
-                     NR::Point *ppos, NR::Point *pos, NR::Point *npos)
+sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp, Inkscape::NodePath::Node *next, Inkscape::NodePath::NodeType type, NRPathcode code, NR::Point *ppos, NR::Point *pos, NR::Point *npos)
 {
     g_assert(sp);
     g_assert(sp->nodepath);
@@ -2982,7 +2989,24 @@ sp_nodepath_node_new(Inkscape::NodePath::SubPath *sp,Inkscape::NodePath::Node *n
     Inkscape::NodePath::Node *n = (Inkscape::NodePath::Node*)g_mem_chunk_alloc(nodechunk);
 
     n->subpath  = sp;
-    n->type     = type;
+
+    if (type != Inkscape::NodePath::NODE_NONE) {
+        // use the type from sodipodi:nodetypes
+        n->type = type;
+    } else {
+        if (fabs (triangle_area (*pos, *ppos, *npos)) < 1e-2) {
+            // points are (almost) collinear
+            if (NR::L2(*pos - *ppos) < 1e-6 || NR::L2(*pos - *npos) < 1e-6) {
+                // endnode, or a node with a retracted handle
+                n->type = Inkscape::NodePath::NODE_CUSP;
+            } else {
+                n->type = Inkscape::NodePath::NODE_SMOOTH;
+            }
+        } else {
+            n->type = Inkscape::NodePath::NODE_CUSP;
+        }
+    }
+
     n->code     = code;
     n->selected = FALSE;
     n->pos      = *pos;
