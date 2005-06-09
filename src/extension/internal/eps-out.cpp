@@ -70,7 +70,7 @@ EpsOutput::prefs_output (Inkscape::Extension::Output * module)
     \brief  This function calls the print system with the filename
     \param  mod   unused
     \param  doc   Document to be saved
-    \param  uri   Filename to save to (probably will end in .ps)
+    \param  uri   Filename to save to (probably will end in .eps)
 
     The most interesting thing that this function does is just attach
     an '>' on the front of the filename.  This is the syntax used to

@@ -248,6 +248,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     int res;
     FILE *osf, *osp;
     const gchar * fn;
+    gboolean epsexport=false;
 
     fn = mod->get_param_string("destination");
 
@@ -283,6 +284,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
             _stream = osp;
         } else if (*fn == '>') {
             fn += 1;
+            epsexport = g_str_has_suffix(fn,".eps");
             while (isspace(*fn)) fn += 1;
             Inkscape::IO::dump_fopen_call(fn, "K");
             osf = Inkscape::IO::fopen_utf8name(fn, "w+");
@@ -321,7 +323,10 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 #endif
     }
 
-    res = fprintf(_stream, "%%!PS-Adobe-3.0\n");
+    if (epsexport)
+        res = fprintf(_stream, "%%!PS-Adobe-3.0 EPSF-3.0\n");
+    else
+        res = fprintf(_stream, "%%!PS-Adobe-3.0\n");
     /* flush this to test output stream as early as possible */
     if (fflush(_stream)) {
         /*g_print("caught error in sp_module_print_plain_begin\n");*/
@@ -383,6 +388,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
                  (w > 0. && h > 0.) // empty documents fail this sanity check, have w<0, h<0
                  && (w > h)   // implies, but does not prove, the user wanted landscape
                  && (w > 600) // approximate maximum printable width of an A4
+                 && (!epsexport) // eps should always be portrait
              )
              ? true : false;
         }
