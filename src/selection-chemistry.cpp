@@ -1178,7 +1178,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
         // we're moving both a clone and its original
         bool transform_clone_with_original = (SP_IS_USE(item) && selection->includes( sp_use_get_original (SP_USE(item)) ));
         bool transform_textpath_with_path = (SP_IS_TEXT_TEXTPATH(item) && selection->includes( sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item)))) ));
-        bool move_offset_with_source = (affine.is_translation() && (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) ));
+        bool transform_offset_with_source = ((SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) ));
 
         // "clones are unmoved when original is moved" preference
         bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
@@ -1190,7 +1190,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
       // Same for textpath if we are also doing ANY transform to its path: do not touch textpath,
       // letters cannot be squeezed or rotated anyway, they only refill the changed path.
       // Same for linked offset if we are also moving its source: do not move it.
-        if (transform_textpath_with_path || move_offset_with_source) {
+        if (transform_textpath_with_path || transform_offset_with_source) {
 		// restore item->transform field from the repr, in case it was changed by seltrans
             sp_object_read_attr (SP_OBJECT (item), "transform");
 
