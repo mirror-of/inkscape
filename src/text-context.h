@@ -50,8 +50,8 @@ struct SPTextContext {
 	Inkscape::Text::Layout::iterator text_sel_start;
 	Inkscape::Text::Layout::iterator text_sel_end;
 
-	gchar uni[5];
-	gchar unimode;
+	gchar uni[9];
+	bool unimode;
 	guint unipos;
 
 	SPCanvasItem *cursor;

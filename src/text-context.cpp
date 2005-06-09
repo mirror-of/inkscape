@@ -132,7 +132,7 @@ sp_text_context_init(SPTextContext *tc)
     new (&tc->text_sel_end) Inkscape::Text::Layout::iterator();
     new (&tc->text_selection_quads) std::vector<SPCanvasItem*>();
 
-    tc->unimode = FALSE;
+    tc->unimode = false;
 
     tc->cursor = NULL;
     tc->indicator = NULL;
@@ -390,10 +390,87 @@ sp_text_context_setup_text(SPTextContext *tc)
     sp_document_done(SP_DT_DOCUMENT(ec->desktop));
 }
 
-static gint
-sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
+/**
+ * Insert the character indicated by tc.uni to replace the current selection,
+ * and reset tc.uni/tc.unipos to empty string.
+ *
+ * \pre tc.uni/tc.unipos non-empty.
+ */
+static void
+insert_uni_char(SPTextContext *const tc)
 {
-    SPTextContext *tc = SP_TEXT_CONTEXT(ec);
+    g_return_if_fail(tc->unipos
+                     && tc->unipos < sizeof(tc->uni)
+                     && tc->uni[tc->unipos] == '\0');
+    SPEventContext *const ec = &tc->event_context;
+    unsigned int uv;
+    sscanf(tc->uni, "%x", &uv);
+    tc->unipos = 0;
+    tc->uni[tc->unipos] = '\0';
+
+    if (!g_unichar_isprint((gunichar) uv)) {
+        // This may be due to bad input, so it goes to statusbar.
+        ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+                                           _("Non-printable character"));
+    } else {
+        if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
+            sp_text_context_setup_text(tc);
+            tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+        }
+
+        gchar u[10];
+        guint const len = g_unichar_to_utf8(uv, u);
+        u[len] = '\0';
+
+        tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, u);
+        sp_text_context_update_cursor(tc);
+        sp_text_context_update_text_selection(tc);
+        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+    }
+}
+
+static void
+hex_to_printable_utf8_buf(char const *const hex, char *utf8)
+{
+    unsigned int uv;
+    sscanf(hex, "%x", &uv);
+    if (!g_unichar_isprint((gunichar) uv)) {
+        uv = 0xfffd;
+    }
+    guint const len = g_unichar_to_utf8(uv, utf8);
+    utf8[len] = '\0';
+}
+
+static void
+show_curr_uni_char(SPTextContext *const tc)
+{
+    g_return_if_fail(tc->unipos < sizeof(tc->uni)
+                     && tc->uni[tc->unipos] == '\0');
+    SPEventContext *const ec = &tc->event_context;
+    if (tc->unipos) {
+        char utf8[10];
+        hex_to_printable_utf8_buf(tc->uni, utf8);
+
+        /* Status bar messages are in pango markup, so we need xml escaping. */
+        if (utf8[1] == '\0') {
+            switch(utf8[0]) {
+                case '<': strcpy(utf8, "&lt;"); break;
+                case '>': strcpy(utf8, "&gt;"); break;
+                case '&': strcpy(utf8, "&amp;"); break;
+                default: break;
+            }
+        }
+        ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+                                          _("Unicode: %s: %s"), tc->uni, utf8);
+    } else {
+        ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
+    }
+}
+
+static gint
+sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
+{
+    SPTextContext *const tc = SP_TEXT_CONTEXT(ec);
 
     sp_canvas_item_hide(tc->indicator);
 
@@ -440,13 +517,16 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 return TRUE;
             }
             break;
-        case GDK_KEY_PRESS:
+        case GDK_KEY_PRESS: {
+            guint const group0_keyval = get_group0_keyval(&event->key);
 
-            if (get_group0_keyval(&event->key) == GDK_KP_Add || get_group0_keyval(&event->key) == GDK_KP_Subtract)
+            if (group0_keyval == GDK_KP_Add ||
+                group0_keyval == GDK_KP_Subtract) {
                 break; // pass on keypad +/- so they can zoom
+            }
 
             if (MOD__CTRL && MOD__SHIFT) {
-                // some input methods (recently started to) gobble ctrl+shift keystrokes, but we need them for dialogs!
+                // Some input methods (recently started to) gobble ctrl+shift keystrokes, but we need them for dialogs!
                 break;
             }
 
@@ -457,7 +537,7 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                     //IM did not consume the key, or we're in unimode
 
                     if (MOD__CTRL_ONLY) {
-                        switch (get_group0_keyval(&event->key)) {
+                        switch (group0_keyval) {
                             case GDK_space:
                                 /* No-break space */
                                 if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -473,10 +553,10 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                             case GDK_U:
                             case GDK_u:
                                 if (tc->unimode) {
-                                    tc->unimode = FALSE;
+                                    tc->unimode = false;
                                     ec->defaultMessageContext()->clear();
                                 } else {
-                                    tc->unimode = TRUE;
+                                    tc->unimode = true;
                                     tc->unipos = 0;
                                     ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
                                 }
@@ -527,50 +607,89 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                         }
                     } else {
                         if (tc->unimode) {
-                            if (isxdigit((guchar) get_group0_keyval(&event->key))) {
-                                tc->uni[tc->unipos] = get_group0_keyval(&event->key);
-                                ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
-                                                                  _("Unicode: %c%c%c%c"),
-                                                                  tc->uni[0],
-                                                                  tc->unipos > 0 ? tc->uni[1] : ' ',
-                                                                  tc->unipos > 1 ? tc->uni[2] : ' ',
-                                                                  tc->unipos > 2 ? tc->uni[3] : ' ');
-                                if (tc->unipos == 3) {
-                                    gchar u[7];
-                                    guint uv, len;
-                                    sscanf(tc->uni, "%x", &uv);
-                                    len = g_unichar_to_utf8(uv, u);
-                                    u[len] = '\0';
-                                    tc->unipos = 0;
-                                    if (!g_unichar_isprint((gunichar) uv)) {
-                                        ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Non-printable character")); // this may be due to bad input, so it goes to statusbar
-                                    } else {
-                                        if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
-                                            sp_text_context_setup_text(tc);
-                                            tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
-                                        }
-                                        tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, u);
-                                        sp_text_context_update_cursor(tc);
-                                        sp_text_context_update_text_selection(tc);
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                            /* TODO: ISO 14755 (section 3 Definitions) says that we should also
+                               accept the first 6 characters of alphabets other than the latin
+                               alphabet "if the Latin alphabet is not used".  The below is also
+                               reasonable (viz. hope that the user's keyboard includes latin
+                               characters and force latin interpretation -- just as we do for our
+                               keyboard shortcuts), but differs from the ISO 14755
+                               recommendation. */
+                            switch (group0_keyval) {
+                                case GDK_space:
+                                case GDK_KP_Space: {
+                                    if (tc->unipos) {
+                                        insert_uni_char(tc);
                                     }
-                                    return TRUE;
-                                } else {
-                                    tc->unipos += 1;
+                                    /* Stay in unimode. */
+                                    show_curr_uni_char(tc);
                                     return TRUE;
                                 }
-                            } else if (get_group0_keyval(&event->key) != GDK_Shift_L && get_group0_keyval(&event->key) != GDK_Shift_R) { // non-hex-digit, canceling unimode
-                                tc->unimode = FALSE;
-                                gtk_im_context_reset(tc->imc);
-                                ec->defaultMessageContext()->clear();
-                                return TRUE;
+
+                                case GDK_BackSpace: {
+                                    g_return_val_if_fail(tc->unipos < sizeof(tc->uni), TRUE);
+                                    if (tc->unipos) {
+                                        tc->uni[--tc->unipos] = '\0';
+                                    }
+                                    show_curr_uni_char(tc);
+                                    return TRUE;
+                                }
+
+                                case GDK_Return:
+                                case GDK_KP_Enter: {
+                                    if (tc->unipos) {
+                                        insert_uni_char(tc);
+                                    }
+                                    /* Exit unimode. */
+                                    tc->unimode = false;
+                                    ec->defaultMessageContext()->clear();
+                                    return TRUE;
+                                }
+
+                                case GDK_Escape: {
+                                    // Cancel unimode.
+                                    tc->unimode = false;
+                                    gtk_im_context_reset(tc->imc);
+                                    ec->defaultMessageContext()->clear();
+                                    return TRUE;
+                                }
+
+                                case GDK_Shift_L:
+                                case GDK_Shift_R:
+                                    break;
+
+                                default: {
+                                    if (g_ascii_isxdigit(group0_keyval)) {
+                                        g_return_val_if_fail(tc->unipos < sizeof(tc->uni) - 1, TRUE);
+                                        tc->uni[tc->unipos++] = group0_keyval;
+                                        tc->uni[tc->unipos] = '\0';
+                                        if (tc->unipos == 8) {
+                                            /* This behaviour is partly to allow us to continue to
+                                               use a fixed-length buffer for tc->uni.  Reason for
+                                               choosing the number 8 is that it's the length of
+                                               ``canonical form'' mentioned in the ISO 14755 spec.
+                                               An advantage over choosing 6 is that it allows using
+                                               backspace for typos & misremembering when entering a
+                                               6-digit number. */
+                                            insert_uni_char(tc);
+                                        }
+                                        show_curr_uni_char(tc);
+                                        return TRUE;
+                                    } else {
+                                        /* The intent is to ignore but consume characters that could be
+                                           typos for hex digits.  Gtk seems to ignore & consume all
+                                           non-hex-digits, and we do similar here.  Though note that some
+                                           shortcuts (like keypad +/- for zoom) get processed before
+                                           reaching this code. */
+                                        return TRUE;
+                                    }
+                                }
                             }
                         }
 
                         bool (Inkscape::Text::Layout::iterator::*cursor_movement_operator)() = NULL;
 
                         /* Neither unimode nor IM consumed key */
-                        switch (get_group0_keyval(&event->key)) {
+                        switch (group0_keyval) {
                             case GDK_Return:
                             case GDK_KP_Enter:
                                 if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -785,13 +904,17 @@ sp_text_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 } else return TRUE; // return the "I took care of it" value if it was consumed by the IM
             } else { // do nothing if there's no object to type in - the key will be sent to parent context,
                 // except up/down that are swallowed to prevent the zoom field from activation
-                if ((get_group0_keyval(&event->key) == GDK_Up ||
-                     get_group0_keyval(&event->key) == GDK_Down ||
-                     get_group0_keyval(&event->key) == GDK_KP_Up ||
-                     get_group0_keyval(&event->key) == GDK_KP_Down) && !MOD__CTRL_ONLY)
+                if ((group0_keyval == GDK_Up    ||
+                     group0_keyval == GDK_Down  ||
+                     group0_keyval == GDK_KP_Up ||
+                     group0_keyval == GDK_KP_Down )
+                    && !MOD__CTRL_ONLY) {
                     return TRUE;
+                }
             }
             break;
+        }
+
         case GDK_KEY_RELEASE:
             if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress(tc->imc, (GdkEventKey*) event)) {
                 return TRUE;

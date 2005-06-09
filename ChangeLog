@@ -1,6 +1,16 @@
+2005-06-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/text-context.cpp (sp_text_context_root_handler):
+	  Greater conformance to ISO 14755 for unicode entry.  We now
+	  implement all of the ``Basic method'' portion of that spec
+	  except for non-latin hexadecimal digits (first 6 letters of
+	  other alphabets).  (Instead, we do the same as for all other
+	  shortcuts, viz. force a group0 (latin) interpretation of the
+	  keypress.)
+
 2005-06-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/pen-context.cpp (spdc_endpoint_snap): Do shift-snapping
+	* src/pen-context.cpp (spdc_endpoint_snap): Pen tool: do snapping
 	  (i.e. namedview_free_snap_all_types) even for initial point.
 
 	* src/Makefile.am (INCLUDES), src/extension/script/Makefile_insert
