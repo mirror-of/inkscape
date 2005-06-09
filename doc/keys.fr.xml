@@ -1,5 +1,6 @@
 ﻿<root xmlns="http://www.inkscape.org/namespaces/keys">
-<!-- Translated to French, based on cvs revision 1.43 of the English version 2005, Matiphas, matiphas@free.fr -->
+<!-- Translated to French, based on cvs revision 1.43 of the English version 2005, Matiphas, matiphas@free.fr.
+     Updated for 1.44 (Unicode entry) by Peter Moulder.  Native French speaker please check & adapt freely, then update this comment. -->
 <p>
 Sauf mention contraire, les touches du pavé numérique (Début, Fin, +, -, les flèches et les chiffres par exemple) sont supposées se comporter comme des touches normales. Se référer au wiki, sur la page KeyboardShortcutsToDo (en anglais), pour voir la discussion sur les autres raccourcis que nous prévoyons d'instaurer; vous pouvez y laisser vos idées et requêtes.
 </p>
@@ -873,10 +874,10 @@ L'outil nœud agit aussi sur les poignées des formes (rectangles, ellipses, ét
 <title>Caractères spéciaux</title>
 <keys><key><ctrl/>U</key> <action>(dés)activer le mode Unicode</action></keys> 
 
-<note>Dans ce mode, quatre chiffres hexadécimaux entrés consécutivement seront convertis en le caractère unicode correspondant.
-</note> 
-<note>L'appui suivant sur Ctrl+U ou Esc ou sur un caractère qui n'est pas un chiffre hexadécimal quitte le mode unicode.</note> 
-<note>Exemple : Ctrl+U 2 0 1 4 Esc insère un tiret long.</note>
+<note>Dans ce mode, les chiffres hexadécimaux que vous entrez (jusqu'au caractère Entrée ou Espace) seront convertis en le caractère unicode correspondant.</note> 
+<note>Exemple : Ctrl+U 2 0 1 4 Entrée insère un tiret long.</note>
+<note>Tapez sur Espace au lieu d'Entrée pour rester dans le mode Unicode après avoir inséré le caractère.</note>
+<note>Un appui sur Esc anulle le mode Unicode (sans insérer un caractère).</note>
 
 <keys><key><ctrl/><misc-wide f="Espace"/></key> <action>insérer un espace insécable</action></keys>
 <note>Un espace insécable est visible même dans un objet texte sans attribut xml:space="preserve".</note>

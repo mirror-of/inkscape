@@ -855,11 +855,12 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Special characters</title>
-<keys><key><ctrl/>U</key> <action>toggle Unicode mode</action></keys> 
+<keys><key><ctrl/>U</key> <action>toggle Unicode entry</action></keys> 
 
-<note>In this mode, every four hex digits you type are translated into the corresponding Unicode character.</note> 
-<note>Another Ctrl+U or Esc or any non-hex character quits Unicode mode.</note> 
-<note>For example, Ctrl+U 2 0 1 4 Esc inserts an em-dash.</note>
+<note>To insert a character for which you know the Unicode number in hexadecimal, type Ctrl+U, then the hexadecimal digits, then Enter.</note>
+<note>For example, Ctrl+U 2 0 1 4 Enter inserts an em-dash.</note>
+<note>To stay in Unicode mode after inserting the character, press Space instead of Enter.</note>
+<note>Press Esc or another Ctrl+U to cancel Unicode mode without inserting the character.</note>
 
 <keys><key><ctrl/><misc-wide f="Space"/></key> <action>insert no-break space</action></keys>
 <note>A no-break space is visible even in a text object without xml:space="preserve".</note>
