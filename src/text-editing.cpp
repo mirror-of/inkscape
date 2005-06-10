@@ -901,8 +901,6 @@ sp_te_adjust_rotation(SPItem *text, Inkscape::Text::Layout::iterator const &star
     if (attributes == NULL) return;
 
     if (start != end) {
-        attributes = text_tag_attributes_at_position(text, std::max(start, end), &char_index);
-        if (attributes) attributes->addToRotate(char_index, 0.0);    // force the array to be extended with suitable values
         for (Inkscape::Text::Layout::iterator it = std::min(start, end) ; it != std::max(start, end) ; it.nextCharacter()) {
             attributes = text_tag_attributes_at_position(text, it, &char_index);
             if (attributes) attributes->addToRotate(char_index, degrees);

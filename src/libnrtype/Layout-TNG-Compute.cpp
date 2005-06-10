@@ -485,7 +485,7 @@ class Layout::Calculator
                             || (text_source->y.size()  > i && text_source->y[i].set)
                             || (text_source->dx.size() > i && text_source->dx[i].set && text_source->dx[i].computed != 0.0)
                             || (text_source->dy.size() > i && text_source->dy[i].set && text_source->dy[i].computed != 0.0)
-                            || (text_source->rotate.size() > i && text_source->rotate[i].set && (i == 0 || text_source->rotate[i].computed != text_source->rotate[i - 1].computed))) {
+                            || (text_source->rotate.size() > i && text_source->rotate[i].set && text_source->rotate[i].computed != 0.0)) {
                             new_span.text_bytes = iter_text.base() - new_span.input_stream_first_character.base();
                             break;
                         }
@@ -1162,6 +1162,7 @@ class Layout::Calculator
                             iter_source_text++;
                             char_index_in_unbroken_span++;
                             char_byte = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
+                            glyph_rotate = 0.0;
                         }
 
                         advance_width *= direction_sign;

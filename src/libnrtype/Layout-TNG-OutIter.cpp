@@ -426,17 +426,16 @@ std::vector<NR::Point> Layout::createSelectionShape(iterator const &it_start, it
             char_index++;
             continue;
         }
-        double char_rotation;
+        double char_rotation = _glyphs[_characters[char_index].in_glyph].rotation;
         unsigned span_index = _characters[char_index].in_span;
 
         NR::Point top_left, bottom_right;
-        if (_path_fitted) {
+        if (_path_fitted || char_rotation != 0.0) {
             NR::Rect box = characterBoundingBox(iterator(this, char_index), &char_rotation);
             top_left = box.min();
             bottom_right = box.max();
             char_index++;
         } else {   // for straight text we can be faster by combining all the character boxes in a span into one box
-            char_rotation = _glyphs[_characters[char_index].in_glyph].rotation;
             double span_x = _spans[span_index].x_start + _spans[span_index].chunk(this).left_x;
             top_left[NR::X] = span_x + _characters[char_index].x;
             while (char_index < end_char_index && _characters[char_index].in_span == span_index)
