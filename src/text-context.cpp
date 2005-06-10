@@ -536,77 +536,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 if (tc->unimode || !tc->imc || !gtk_im_context_filter_keypress(tc->imc, (GdkEventKey*) event)) {
                     //IM did not consume the key, or we're in unimode
 
-                    if (MOD__CTRL_ONLY) {
-                        switch (group0_keyval) {
-                            case GDK_space:
-                                /* No-break space */
-                                if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
-                                    sp_text_context_setup_text(tc);
-                                    tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
-                                }
-                                tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, "\302\240");
-                                sp_text_context_update_cursor(tc);
-                                sp_text_context_update_text_selection(tc);
-                                ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
-                                sp_document_done(SP_DT_DOCUMENT(ec->desktop));
-                                return TRUE;
-                            case GDK_U:
-                            case GDK_u:
-                                if (tc->unimode) {
-                                    tc->unimode = false;
-                                    ec->defaultMessageContext()->clear();
-                                } else {
-                                    tc->unimode = true;
-                                    tc->unipos = 0;
-                                    ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
-                                }
-                                if (tc->imc) {
-                                    gtk_im_context_reset(tc->imc);
-                                }
-                                return TRUE;
-                            case GDK_B:
-                            case GDK_b:
-                                if (tc->text) {
-                                    SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
-                                    SPCSSAttr *css = sp_repr_css_attr_new();
-                                    if (style->font_weight.computed == SP_CSS_FONT_WEIGHT_NORMAL
-                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_100
-                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_200
-                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_300
-                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_400)
-                                        sp_repr_css_set_property(css, "font-weight", "bold");
-                                    else
-                                        sp_repr_css_set_property(css, "font-weight", "normal");
-                                    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
-                                    sp_repr_css_attr_unref(css);
-                                    sp_document_done(SP_DT_DOCUMENT(ec->desktop));
-                                    sp_text_context_update_cursor(tc);
-                                    sp_text_context_update_text_selection(tc);
-                                    return TRUE;
-                                }
-                                break;
-                            case GDK_I:
-                            case GDK_i:
-                                if (tc->text) {
-                                    SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
-                                    SPCSSAttr *css = sp_repr_css_attr_new();
-                                    if (style->font_style.computed == SP_CSS_FONT_STYLE_NORMAL)
-                                        sp_repr_css_set_property(css, "font-style", "italic");
-                                    else
-                                        sp_repr_css_set_property(css, "font-style", "normal");
-                                    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
-                                    sp_repr_css_attr_unref(css);
-                                    sp_document_done(SP_DT_DOCUMENT(ec->desktop));
-                                    sp_text_context_update_cursor(tc);
-                                    sp_text_context_update_text_selection(tc);
-                                    return TRUE;
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    } else {
-                        if (tc->unimode) {
+                        if (!MOD__CTRL_ONLY && tc->unimode) {
                             /* TODO: ISO 14755 (section 3 Definitions) says that we should also
                                accept the first 6 characters of alphabets other than the latin
                                alphabet "if the Latin alphabet is not used".  The below is also
@@ -688,8 +618,79 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
 
                         bool (Inkscape::Text::Layout::iterator::*cursor_movement_operator)() = NULL;
 
-                        /* Neither unimode nor IM consumed key */
+                        /* Neither unimode nor IM consumed key; process text tool shortcuts */
                         switch (group0_keyval) {
+                            case GDK_space:
+                                if (MOD__CTRL_ONLY) {
+                                    /* No-break space */
+                                    if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
+                                        sp_text_context_setup_text(tc);
+                                        tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+                                    }
+                                    tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, "\302\240");
+                                    sp_text_context_update_cursor(tc);
+                                    sp_text_context_update_text_selection(tc);
+                                    ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("No-break space"));
+                                    sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                    return TRUE;
+                                }
+                                break;
+                            case GDK_U:
+                            case GDK_u:
+                                if (MOD__CTRL_ONLY) {
+                                    if (tc->unimode) {
+                                        tc->unimode = false;
+                                        ec->defaultMessageContext()->clear();
+                                    } else {
+                                        tc->unimode = true;
+                                        tc->unipos = 0;
+                                        ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
+                                    }
+                                    if (tc->imc) {
+                                        gtk_im_context_reset(tc->imc);
+                                    }
+                                    return TRUE;
+                                }
+                                break;
+                            case GDK_B:
+                            case GDK_b:
+                                if (MOD__CTRL_ONLY && tc->text) {
+                                    SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
+                                    SPCSSAttr *css = sp_repr_css_attr_new();
+                                    if (style->font_weight.computed == SP_CSS_FONT_WEIGHT_NORMAL
+                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_100
+                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_200
+                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_300
+                                        || style->font_weight.computed == SP_CSS_FONT_WEIGHT_400)
+                                        sp_repr_css_set_property(css, "font-weight", "bold");
+                                    else
+                                        sp_repr_css_set_property(css, "font-weight", "normal");
+                                    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
+                                    sp_repr_css_attr_unref(css);
+                                    sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                    sp_text_context_update_cursor(tc);
+                                    sp_text_context_update_text_selection(tc);
+                                    return TRUE;
+                                }
+                                break;
+                            case GDK_I:
+                            case GDK_i:
+                                if (MOD__CTRL_ONLY && tc->text) {
+                                    SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
+                                    SPCSSAttr *css = sp_repr_css_attr_new();
+                                    if (style->font_style.computed == SP_CSS_FONT_STYLE_NORMAL)
+                                        sp_repr_css_set_property(css, "font-style", "italic");
+                                    else
+                                        sp_repr_css_set_property(css, "font-style", "normal");
+                                    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
+                                    sp_repr_css_attr_unref(css);
+                                    sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                    sp_text_context_update_cursor(tc);
+                                    sp_text_context_update_text_selection(tc);
+                                    return TRUE;
+                                }
+                                break;
+
                             case GDK_Return:
                             case GDK_KP_Enter:
                                 if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -812,6 +813,46 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                             case GDK_Escape:
                                 SP_DT_SELECTION(ec->desktop)->clear();
                                 return TRUE;
+                            case GDK_bracketleft:
+                                if (tc->text) {
+                                    if (MOD__ALT || MOD__CTRL) {
+                                        if (MOD__ALT) {
+                                            if (MOD__SHIFT) {
+                                                // FIXME: alt+shift+[] does not work, don't know why
+                                                sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -10);
+                                            } else {
+                                                sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -1);
+                                            } 
+                                        } else {
+                                            sp_te_adjust_rotation(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -90);
+                                        }
+                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_text_context_update_cursor(tc);
+                                        sp_text_context_update_text_selection(tc);
+                                        return TRUE;
+                                    } 
+                                }
+                                break;
+                            case GDK_bracketright:
+                                if (tc->text) {
+                                    if (MOD__ALT || MOD__CTRL) {
+                                        if (MOD__ALT) {
+                                            if (MOD__SHIFT) {
+                                                // FIXME: alt+shift+[] does not work, don't know why
+                                                sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 10);
+                                            } else {
+                                                sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 1);
+                                            } 
+                                        } else {
+                                            sp_te_adjust_rotation(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 90);
+                                        }
+                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_text_context_update_cursor(tc);
+                                        sp_text_context_update_text_selection(tc);
+                                        return TRUE;
+                                    }
+                                }
+                                break;
                             case GDK_less:
                             case GDK_comma:
                                 if (tc->text) {
@@ -827,34 +868,6 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                             else
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -1);
                                         }
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
-                                        sp_text_context_update_cursor(tc);
-                                        sp_text_context_update_text_selection(tc);
-                                        return TRUE;
-                                    }
-                                }
-                                break;
-                            case GDK_bracketleft:
-                                if (tc->text) {
-                                    if (MOD__ALT) {
-                                        if (MOD__SHIFT)
-                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -10);
-                                        else
-                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -1);
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
-                                        sp_text_context_update_cursor(tc);
-                                        sp_text_context_update_text_selection(tc);
-                                        return TRUE;
-                                    }
-                                }
-                                break;
-                            case GDK_bracketright:
-                                if (tc->text) {
-                                    if (MOD__ALT) {
-                                        if (MOD__SHIFT)
-                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 10);
-                                        else
-                                            sp_te_adjust_rotation_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 1);
                                         sp_document_done(SP_DT_DOCUMENT(ec->desktop));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
@@ -900,7 +913,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                             }
                             return TRUE;
                         }
-                    }
+
                 } else return TRUE; // return the "I took care of it" value if it was consumed by the IM
             } else { // do nothing if there's no object to type in - the key will be sent to parent context,
                 // except up/down that are swallowed to prevent the zoom field from activation
