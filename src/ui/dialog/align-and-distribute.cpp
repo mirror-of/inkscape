@@ -18,10 +18,7 @@
 #endif
 
 #include "sp-item.h"
-
 #include "verbs.h"
-
-
 
 #include "dialogs/unclump.h"
 
@@ -769,11 +766,9 @@ AlignAndDistribute::AlignAndDistribute()
     vbox->pack_start(_alignFrame, true, true);
     vbox->pack_start(_distributeFrame, true, true);
     vbox->pack_start(_nodesFrame, true, true);
-    
 
     //Connect to the global tool change signal
     g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (on_tool_changed), this);
-    on_tool_changed (NULL, NULL, this);
 
     // Connect to the global selection change, to invalidate cached randomize_bbox
     g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (on_selection_changed), this);
@@ -781,6 +776,8 @@ AlignAndDistribute::AlignAndDistribute()
     randomize_bbox_set = false;
 
     show_all_children();
+
+    on_tool_changed (NULL, NULL, this); // set current mode
 }
 
 AlignAndDistribute::~AlignAndDistribute() 
