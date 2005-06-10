@@ -879,12 +879,8 @@ sp_te_adjust_kerning_screen (SPItem *item, Inkscape::Text::Layout::iterator cons
 }
 
 void
-sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, gdouble by)
+sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, gdouble pixels)
 {
-    unsigned char_index;
-    TextTagAttributes *attributes = text_tag_attributes_at_position(text, std::min(start, end), &char_index);
-    if (attributes == NULL) return;
-
     // divide increment by zoom
     // divide increment by matrix expansion
     gdouble factor = 1 / SP_DESKTOP_ZOOM(desktop);
@@ -892,17 +888,27 @@ sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator cons
     factor = factor / NR::expansion(t);
     SPObject *source_item;
     SP_TEXT(text)->layout.getSourceOfCharacter(std::min(start, end), (void**)&source_item);
-    by = (180/M_PI) * atan2(by, SP_OBJECT_PARENT(source_item)->style->font_size.computed / factor);
+    gdouble degrees = (180/M_PI) * atan2(pixels, SP_OBJECT_PARENT(source_item)->style->font_size.computed / factor);
+
+    sp_te_adjust_rotation(text, start, end, desktop, degrees);
+}
+
+void
+sp_te_adjust_rotation(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPDesktop *desktop, gdouble degrees)
+{
+    unsigned char_index;
+    TextTagAttributes *attributes = text_tag_attributes_at_position(text, std::min(start, end), &char_index);
+    if (attributes == NULL) return;
 
     if (start != end) {
         attributes = text_tag_attributes_at_position(text, std::max(start, end), &char_index);
         if (attributes) attributes->addToRotate(char_index, 0.0);    // force the array to be extended with suitable values
         for (Inkscape::Text::Layout::iterator it = std::min(start, end) ; it != std::max(start, end) ; it.nextCharacter()) {
             attributes = text_tag_attributes_at_position(text, it, &char_index);
-            if (attributes) attributes->addToRotate(char_index, by);
+            if (attributes) attributes->addToRotate(char_index, degrees);
         }
     } else
-        attributes->addToRotate(char_index, by);
+        attributes->addToRotate(char_index, degrees);
 
     text->updateRepr();
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
