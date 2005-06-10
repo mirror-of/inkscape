@@ -18,8 +18,6 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/docker.h	\
 	dialogs/dockable.cpp	\
 	dialogs/dockable.h	\
-	dialogs/align.cpp	\
-	dialogs/align.h	\
 	dialogs/color-picker.cpp \
 	dialogs/color-picker.h \
 	dialogs/debugdialog.cpp	\

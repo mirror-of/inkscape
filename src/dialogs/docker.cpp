@@ -1,6 +1,5 @@
 #include "dialogs/docker.h"
 #include  "dialogs/dockable.h"
-#include "dialogs/align.h"
 #include "dialogs/dialog-events.h"
 #include "inkscape.h"
 #include "desktop.h"

@@ -71,7 +71,6 @@
 #include "dialogs/object-properties.h"
 #include "dialogs/transformation.h"
 #include "dialogs/text-edit.h"
-#include "dialogs/align.h"
 #include "dialogs/export.h"
 #include "dialogs/dialog-events.h"
 
