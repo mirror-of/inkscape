@@ -18,14 +18,31 @@
 #include <gtkmm/notebook.h>
 #include <glibmm/i18n.h>
 
+#include <list>
+#include <gtkmm/frame.h>
+#include <gtkmm/tooltips.h>
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/table.h>
+#include <gtkmm/buttonbox.h>
+#include <gtkmm/label.h>
+#include "libnr/nr-dim2.h"
+#include "libnr/nr-rect.h"
+
+
 #include "dialog.h"
 #include "ui/widget/notebook-page.h"
 
 using namespace Inkscape::UI::Widget;
 
+
+class SPItem;
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
+
+class Action;
+
 
 class AlignAndDistribute : public Dialog {
 public:
@@ -38,12 +55,43 @@ public:
 
     AlignTarget getAlignTarget() const;
 
+    Gtk::Table &align_table(){return _alignTable;}
+    Gtk::Table &distribute_table(){return _distributeTable;}
+    Gtk::Table &nodes_table(){return _nodesTable;}
+    Gtk::Tooltips &tooltips(){return _tooltips;}
+
+    std::list<SPItem *>::iterator find_master(std::list <SPItem *> &list, bool horizontal);
+    void setMode(bool nodeEdit);
+
+    NR::Rect randomize_bbox;
+    bool randomize_bbox_set;
+
+
 protected:
 
-    Gtk::Notebook  _notebook;
+    void on_ref_change();
+    void addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+                                      guint row, guint col, bool onInterSpace, 
+                                      NR::Dim2 orientation, float kBegin, float kEnd);
+    void addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+                        guint row, guint col);
+    void addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+                        guint col, NR::Dim2 orientation, bool distribute);
+    void addUnclumpButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+                        guint row, guint col);
+    void addRandomizeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+                        guint row, guint col);
+    void addBaselineButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                           guint row, guint col, Gtk::Table &table, NR::Dim2 orientation, bool distribute);
 
-    NotebookPage   _page_align;
-    NotebookPage   _page_distribute;
+    std::list<Action *> _actionList;
+    Gtk::Frame _alignFrame, _distributeFrame, _nodesFrame;
+    Gtk::Table _alignTable, _distributeTable, _nodesTable;
+    Gtk::HBox _anchorBox;
+    Gtk::VBox _alignBox;
+    Gtk::Label _anchorLabel;
+    Gtk::ComboBoxText _combo;
+    Gtk::Tooltips _tooltips;
 
 private:
     AlignAndDistribute(AlignAndDistribute const &d);
