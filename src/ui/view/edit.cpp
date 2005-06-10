@@ -123,7 +123,7 @@ Edit::initLayout()
     // Canvas Viewport
     initLeftRuler();
     initTopRuler();
-    initSvgCanvas();
+//    initSvgCanvas();
     initBottomScrollbar();
     initRightScrollbar();
 
