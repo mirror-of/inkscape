@@ -1,3 +1,10 @@
+2005-06-09  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/ui/dialogs/align-and-distribute.cpp,
+	  src/ui/dialogs/align-and-distribute.h,
+	  src/verbs.cpp:
+	  Hooking up Aubanel's new align and distribute dialog
+
 2005-06-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/text-context.cpp (sp_text_context_root_handler):
