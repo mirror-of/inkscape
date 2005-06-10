@@ -525,15 +525,13 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 break; // pass on keypad +/- so they can zoom
             }
 
-            if (MOD__CTRL && MOD__SHIFT) {
-                // Some input methods (recently started to) gobble ctrl+shift keystrokes, but we need them for dialogs!
-                break;
-            }
-
             if ((tc->text) || (tc->nascent_object)) {
                 // there is an active text object in this context, or a new object was just created
 
-                if (tc->unimode || !tc->imc || !gtk_im_context_filter_keypress(tc->imc, (GdkEventKey*) event)) {
+                if (tc->unimode || !tc->imc
+                    || (MOD__CTRL && MOD__SHIFT)    // input methods tend to steal this for unimode,
+                                                    // but we have our own so make sure they don't swallow it
+                    || !gtk_im_context_filter_keypress(tc->imc, (GdkEventKey*) event)) {
                     //IM did not consume the key, or we're in unimode
 
                         if (!MOD__CTRL_ONLY && tc->unimode) {
@@ -691,6 +689,20 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                 }
                                 break;
 
+                            case GDK_A:
+                            case GDK_a:
+                                if (MOD__CTRL_ONLY && tc->text) {
+                                    Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+                                    if (layout) {
+                                        tc->text_sel_start = layout->begin();
+                                        tc->text_sel_end = layout->end();
+                                        sp_text_context_update_cursor(tc);
+                                        sp_text_context_update_text_selection(tc);
+                                        return TRUE;
+                                    }
+                                }
+                                break;
+
                             case GDK_Return:
                             case GDK_KP_Enter:
                                 if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -737,7 +749,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_text_context_update_text_selection(tc);
                                         sp_document_done(SP_DT_DOCUMENT(ec->desktop));
                                     } else {
-                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::cursorLeft;
+                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::prevStartOfWord
+                                                                             : &Inkscape::Text::Layout::iterator::cursorLeft;
                                         break;
                                     }
                                 }
@@ -755,7 +768,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_text_context_update_text_selection(tc);
                                         sp_document_done(SP_DT_DOCUMENT(ec->desktop));
                                     } else {
-                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::cursorRight;
+                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::nextStartOfWord
+                                                                             : &Inkscape::Text::Layout::iterator::cursorRight;
                                         break;
                                     }
                                 }
