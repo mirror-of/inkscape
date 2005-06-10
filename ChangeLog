@@ -1,3 +1,9 @@
+2005-06-10  Richard Hughes  <cyreve@users.sourceforge.net>
+
+	* src/text-context.cpp:
+	  use ctrl-left/right for moving cursor by word in text mode,
+      and ctrl-a for select all text
+
 2005-06-09  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/ui/dialogs/align-and-distribute.cpp,
