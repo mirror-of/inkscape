@@ -107,6 +107,7 @@ extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o inkscape.la
 
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
+	$(RM) main.o winmain.o inkview.o
 	$(RM) *.a
 	$(RM) *.la
 	$(RM) inkscape.def
