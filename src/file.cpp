@@ -113,7 +113,7 @@ sp_file_new(gchar const *templ)
 void
 sp_file_new_default()
 {
-    char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, "/default.svg", NULL);
+    char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, _("default.svg"), NULL);
     if (Inkscape::IO::file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
         sp_file_new(default_template);
     } else {
