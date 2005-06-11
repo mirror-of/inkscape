@@ -17,6 +17,22 @@
 #include "attributes.h"
 #include "sp-animation.h"
 
+#if 0
+/* Feel free to remove this function and its calls. */
+static void
+log_set_attr(char const *const classname, unsigned int const key, char const *const value)
+{
+    unsigned char const *const attr_name = sp_attribute_name(key);
+    if (value) {
+        g_print("%s: Set %s=%s\n", classname, attr_name, value);
+    } else {
+        g_print("%s: unset %s.\n", classname, attr_name);
+    }
+}
+#else
+# define log_set_attr(_classname, _key, _value) static_cast<void>(0)
+#endif
+
 /* Animation base class */
 
 static void sp_animation_class_init(SPAnimationClass *klass);
@@ -98,7 +114,7 @@ sp_animation_set(SPObject *object, unsigned int key, gchar const *value)
 {
     //SPAnimation *animation = SP_ANIMATION(object);
 
-    g_print("SPAnimation: Set %s %s\n", sp_attribute_name(key), value);
+    log_set_attr("SPAnimation", key, value);
 
     if (((SPObjectClass *) animation_parent_class)->set)
         ((SPObjectClass *) animation_parent_class)->set(object, key, value);
@@ -182,7 +198,7 @@ sp_ianimation_set(SPObject *object, unsigned int key, gchar const *value)
 {
     //SPIAnimation *ianimation = SP_IANIMATION(object);
 
-    g_print("SPIAnimation: Set %s %s\n", sp_attribute_name(key), value);
+    log_set_attr("SPIAnimation", key, value);
 
     if (((SPObjectClass *) ianimation_parent_class)->set)
         ((SPObjectClass *) ianimation_parent_class)->set(object, key, value);
@@ -256,7 +272,7 @@ sp_animate_set(SPObject *object, unsigned int key, gchar const *value)
 {
     //SPAnimate *animate = SP_ANIMATE(object);
 
-    g_print("SPAnimate: Set %s %s\n", sp_attribute_name(key), value);
+    log_set_attr("SPAnimate", key, value);
 
     if (((SPObjectClass *) animate_parent_class)->set)
         ((SPObjectClass *) animate_parent_class)->set(object, key, value);
