@@ -47,7 +47,7 @@ namespace Extension {
 
 /* Inkscape::Extension::Extension */
 
-std::vector<gchar *> Extension::search_path;
+std::vector<const gchar *> Extension::search_path;
 std::ofstream Extension::error_file;
 
 Parameter * param_shared (const gchar * name, GSList * list);
