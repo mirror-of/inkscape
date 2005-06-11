@@ -154,7 +154,7 @@ Dialog::read_geometry()
     // If there are stored height and width values for the dialog,
     // resize the window to match; otherwise we leave it at its default
     if (w != 0 && h != 0) {
-        set_size_request (w, h);
+        resize (w, h);
     }
 
     // If there are stored values for where the dialog should be
