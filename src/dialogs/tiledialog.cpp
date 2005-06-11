@@ -475,12 +475,12 @@ void TileDialog::VertAlign_changed()
    if (VertTopRadioButton.get_active()) {
        VertAlign = 0;
        prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 0);
-   } else if (VertBotRadioButton.get_active()){
-       VertAlign = 2;
-       prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 2);
    } else if (VertCentreRadioButton.get_active()){
        VertAlign = 1;
        prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 1);
+   } else if (VertBotRadioButton.get_active()){
+       VertAlign = 2;
+       prefs_set_double_attribute ("dialogs.gridtiler", "VertAlign", 2);
    }
 
 }
@@ -493,12 +493,12 @@ void TileDialog::HorizAlign_changed()
    if (HorizLeftRadioButton.get_active()) {
        HorizAlign = 0;
        prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 0);
-   } else if (HorizRightRadioButton.get_active()){
-       prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 2);
-       HorizAlign = 2;
    } else if (HorizCentreRadioButton.get_active()){
        HorizAlign = 1;
        prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 1);
+   } else if (HorizRightRadioButton.get_active()){
+       HorizAlign = 2;
+       prefs_set_double_attribute ("dialogs.gridtiler", "HorizAlign", 2);
    }
 
 }
@@ -578,7 +578,7 @@ TileDialog::TileDialog()
 
     Gtk::VBox *mainVBox = get_vbox();
 
-#define MARGIN 4
+#define MARGIN 2
 
     //##Set up the panel
 
@@ -590,8 +590,6 @@ TileDialog::TileDialog()
         GSList const *items = selection->itemList();
         selcount =g_slist_length((GSList *)items);
     }
-
-
 
 
     /*#### Number of Rows ####*/
@@ -613,10 +611,10 @@ TileDialog::TileDialog()
     NoOfRowsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_col_spinbutton_changed));
 
     NoOfRowsBox.pack_start(NoOfRowsSpinner, false, false, MARGIN);
-    tips.set_tip(NoOfRowsSpinner, _("No of Rows"));
+    tips.set_tip(NoOfRowsSpinner, _("Number of rows"));
 
 
-    RowHeightButton.set_label(_("Equal Height: "));
+    RowHeightButton.set_label(_("Equal height"));
     double AutoRow = prefs_get_double_attribute ("dialogs.gridtiler", "AutoRowSize", 15);
     if (AutoRow>0)
          AutoRowSize=true;
@@ -625,7 +623,7 @@ TileDialog::TileDialog()
     RowHeightButton.set_active(AutoRowSize);
 
     NoOfRowsBox.pack_start(RowHeightButton, false, false, MARGIN);
-    tips.set_tip(RowHeightButton, _("Automatically scale Rows to fit selected objects."));
+    tips.set_tip(RowHeightButton, _("If not set, each row has the height of the tallest object in it"));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
 
  {
@@ -651,10 +649,10 @@ TileDialog::TileDialog()
         if (VertAlign == 0) {
             VertTopRadioButton.set_active(TRUE);
         }
-        else if (VertAlign == 2) {
+        else if (VertAlign == 1) {
             VertCentreRadioButton.set_active(TRUE);
         }
-        else if (VertAlign == 1){
+        else if (VertAlign == 2){
             VertBotRadioButton.set_active(TRUE);
         }
         VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
@@ -683,9 +681,9 @@ TileDialog::TileDialog()
     NoOfColsSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_row_spinbutton_changed));
 
     NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
-    tips.set_tip(NoOfColsSpinner, _("No of columns"));
+    tips.set_tip(NoOfColsSpinner, _("Number of columns"));
 
-    ColumnWidthButton.set_label(_("Equal Width: "));
+    ColumnWidthButton.set_label(_("Equal width"));
     double AutoCol = prefs_get_double_attribute ("dialogs.gridtiler", "AutoColSize", 15);
     if (AutoCol>0)
          AutoColSize=true;
@@ -694,9 +692,8 @@ TileDialog::TileDialog()
     ColumnWidthButton.set_active(AutoColSize);
 
     NoOfColsBox.pack_start(ColumnWidthButton, false, false, MARGIN);
-    tips.set_tip(ColumnWidthButton, _("Automatically scale Columns to fit selected objects."));
+    tips.set_tip(ColumnWidthButton, _("If not set, each column has the width of the widest object in it"));
     ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
-
 
 
     {
@@ -721,7 +718,7 @@ TileDialog::TileDialog()
         if (HorizAlign == 0) {
             HorizLeftRadioButton.set_active(TRUE);
         }
-        else if (HorizAlign == 2) {
+        else if (HorizAlign == 1) {
             HorizCentreRadioButton.set_active(TRUE);
         }
         else if (HorizAlign == 2) {
@@ -742,14 +739,14 @@ TileDialog::TileDialog()
 
     {
         /*#### Radio buttons to control spacing manually or to fit selection bbox ####*/
-        SpaceByBBoxRadioButton.set_label(_("Fit into Selection BBox "));
+        SpaceByBBoxRadioButton.set_label(_("Fit into selection box"));
         SpaceByBBoxRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
         SpacingGroup = SpaceByBBoxRadioButton.get_group();
 
 
         SpacingVBox.pack_start(SpaceByBBoxRadioButton, false, false, MARGIN);
 
-        SpaceManualRadioButton.set_label(_("Set Spacing: "));
+        SpaceManualRadioButton.set_label(_("Set spacing:"));
         SpaceManualRadioButton.set_group(SpacingGroup);
         SpaceManualRadioButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::Spacing_button_changed));
         SpacingVBox.pack_start(SpaceManualRadioButton, false, false, MARGIN);
@@ -800,15 +797,13 @@ TileDialog::TileDialog()
     double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
     YPadSpinner.set_value(YPad);
     YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
-    tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
+    tips.set_tip(YPadSpinner, _("Vertical spacing between rows"));
     YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_ypad_spinbutton_changed));
 
 
     SizesHBox.pack_start(YPadBox, false, false, MARGIN);
 
     TileBox.pack_start(SizesHBox, false, false, MARGIN);
-
-
 
     mainVBox->pack_start(TileBox);
 
