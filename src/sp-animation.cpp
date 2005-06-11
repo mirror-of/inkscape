@@ -21,7 +21,7 @@ static void sp_animation_init (SPAnimation *animation);
 
 static void sp_animation_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_animation_release (SPObject *object);
-static void sp_animation_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_animation_set (SPObject *object, unsigned int key, gchar const *value);
 
 static SPObjectClass *animation_parent_class;
 
@@ -49,11 +49,8 @@ sp_animation_get_type (void)
 static void
 sp_animation_class_init (SPAnimationClass *klass)
 {
-	GObjectClass *gobject_class;
-	SPObjectClass *sp_object_class;
-
-	gobject_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
+	//GObjectClass *gobject_class = (GObjectClass *) klass;
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
 	animation_parent_class = (SPObjectClass*)g_type_class_peek_parent (klass);
 
@@ -94,11 +91,9 @@ sp_animation_release (SPObject *object)
 }
 
 static void
-sp_animation_set (SPObject *object, unsigned int key, const gchar *value)
+sp_animation_set (SPObject *object, unsigned int key, gchar const *value)
 {
-	SPAnimation * animation;
-
-	animation = SP_ANIMATION (object);
+	//SPAnimation *animation = SP_ANIMATION (object);
 
 	g_print ("SPAnimation: Set %s %s\n", sp_attribute_name (key), value);
 
@@ -113,7 +108,7 @@ static void sp_ianimation_init (SPIAnimation *animation);
 
 static void sp_ianimation_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_ianimation_release (SPObject *object);
-static void sp_ianimation_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_ianimation_set (SPObject *object, unsigned int key, gchar const *value);
 
 static SPObjectClass *ianimation_parent_class;
 
@@ -141,11 +136,8 @@ sp_ianimation_get_type (void)
 static void
 sp_ianimation_class_init (SPIAnimationClass *klass)
 {
-	GObjectClass *gobject_class;
-	SPObjectClass *sp_object_class;
-
-	gobject_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
+	//GObjectClass *gobject_class = (GObjectClass *) klass;
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
 	ianimation_parent_class = (SPObjectClass*)g_type_class_peek_parent (klass);
 
@@ -183,11 +175,9 @@ sp_ianimation_release (SPObject *object)
 }
 
 static void
-sp_ianimation_set (SPObject *object, unsigned int key, const gchar *value)
+sp_ianimation_set (SPObject *object, unsigned int key, gchar const *value)
 {
-	SPIAnimation *ianimation;
-
-	ianimation = SP_IANIMATION (object);
+	//SPIAnimation *ianimation = SP_IANIMATION (object);
 
 	g_print ("SPIAnimation: Set %s %s\n", sp_attribute_name (key), value);
 
@@ -202,7 +192,7 @@ static void sp_animate_init (SPAnimate *animate);
 
 static void sp_animate_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 static void sp_animate_release (SPObject *object);
-static void sp_animate_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_animate_set (SPObject *object, unsigned int key, gchar const *value);
 
 static SPIAnimationClass *animate_parent_class;
 
@@ -230,11 +220,8 @@ sp_animate_get_type (void)
 static void
 sp_animate_class_init (SPAnimateClass *klass)
 {
-	GObjectClass *gobject_class;
-	SPObjectClass *sp_object_class;
-
-	gobject_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
+	//GObjectClass *gobject_class = (GObjectClass *) klass;
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 
 	animate_parent_class = (SPIAnimationClass*)g_type_class_peek_parent (klass);
 
@@ -262,11 +249,9 @@ sp_animate_release (SPObject *object)
 }
 
 static void
-sp_animate_set (SPObject *object, unsigned int key, const gchar *value)
+sp_animate_set (SPObject *object, unsigned int key, gchar const *value)
 {
-	SPAnimate * animate;
-
-	animate = SP_ANIMATE (object);
+	//SPAnimate *animate = SP_ANIMATE (object);
 
 	g_print ("SPAnimate: Set %s %s\n", sp_attribute_name (key), value);
 
