@@ -183,14 +183,6 @@ class Interp(inkex.Effect):
 						est['fill-opacity'] = '0.0'
 						est['fill'] = sst['fill'] 
 
-			#which path has fewer segments?
-			lengthdiff = numsegs(start) - numsegs(end)
-			if lengthdiff > 0:
-				start, end = end, start
-				sst, est = est, sst
-				#TODO: see if this is necessary
-				for si in xrange(len(steps)):
-					steps[si] = 1.0 - steps[si]
 					
 
 			if self.options.method == 2:
@@ -252,6 +244,11 @@ class Interp(inkex.Effect):
 				start = s[:]
 				end = e[:]
 			else:
+				#which path has fewer segments?
+				lengthdiff = numsegs(start) - numsegs(end)
+				#swap shortest first
+				if lengthdiff > 0:
+					start, end = end, start
 				#subdivide the shorter path
 				for x in range(abs(lengthdiff)):
 					maxlen = 0
@@ -266,6 +263,9 @@ class Interp(inkex.Effect):
 								segment = z
 					sp1, sp2 = start[subpath][segment - 1:segment + 1]
 					start[subpath][segment - 1:segment + 1] = cspbezsplit(sp1, sp2)
+				#if swapped, swap them back
+				if lengthdiff > 0:
+					start, end = end, start
 			
 			#break paths so that corresponding subpaths have an equal number of segments
 			s = [[]]
