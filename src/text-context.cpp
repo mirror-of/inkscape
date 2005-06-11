@@ -747,7 +747,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, NR::Point(-1, 0));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:left");
                                     } else {
                                         cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::prevStartOfWord
                                                                              : &Inkscape::Text::Layout::iterator::cursorLeft;
@@ -766,7 +766,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, NR::Point(1, 0));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:right");
                                     } else {
                                         cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::nextStartOfWord
                                                                              : &Inkscape::Text::Layout::iterator::cursorRight;
@@ -785,7 +785,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, NR::Point(0, -1));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:up");
                                     } else {
                                         cursor_movement_operator = &Inkscape::Text::Layout::iterator::cursorUp;
                                         break;
@@ -803,7 +803,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                             sp_te_adjust_kerning_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, NR::Point(0, 1));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:down");
                                     } else {
                                         cursor_movement_operator = &Inkscape::Text::Layout::iterator::cursorDown;
                                         break;
@@ -840,7 +840,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         } else {
                                             sp_te_adjust_rotation(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -90);
                                         }
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "textrot:ccw");
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
                                         return TRUE;
@@ -860,7 +860,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         } else {
                                             sp_te_adjust_rotation(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 90);
                                         }
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+                                        sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "textrot:cw");
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
                                         return TRUE;
@@ -876,13 +876,14 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                                 sp_te_adjust_linespacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -10);
                                             else
                                                 sp_te_adjust_linespacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -1);
+                                            sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "linespacing:dec");
                                         } else {
                                             if (MOD__SHIFT)
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -10);
                                             else
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, -1);
+                                            sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "letterspacing:dec");
                                         }
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
                                         return TRUE;
@@ -898,13 +899,14 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                                 sp_te_adjust_linespacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 10);
                                             else
                                                 sp_te_adjust_linespacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 1);
+                                            sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "linespacing:inc");
                                         } else {
                                             if (MOD__SHIFT)
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 10);
                                             else
                                                 sp_te_adjust_tspan_letterspacing_screen(tc->text, tc->text_sel_start, tc->text_sel_end, ec->desktop, 1);
+                                            sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "letterspacing:inc");
                                         }
-                                        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
                                         sp_text_context_update_cursor(tc);
                                         sp_text_context_update_text_selection(tc);
                                         return TRUE;
