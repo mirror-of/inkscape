@@ -114,7 +114,6 @@ libinkpre_a_SOURCES =	\
 	slideshow.cpp slideshow.h	\
 	snap.cpp snap.h	\
 	sp-anchor.cpp sp-anchor.h	\
-	sp-animation.cpp sp-animation.h	\
 	sp-clippath.cpp sp-clippath.h	\
 	sp-conn-end-pair.cpp sp-conn-end-pair.h	\
 	sp-conn-end.cpp sp-conn-end.h	\
