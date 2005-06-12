@@ -398,7 +398,7 @@ dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
-PKG_CHECK_MODULES(INKSCAPE, gdkmm-2.4  glibmm-2.4  gtkmm-2.4  gtk+-2.0 >= 2.4.0  libxml-2.0 >= 2.6.0  libxslt >= 1.0.15  sigc++-2.0 >= 2.0.3  $ink_spell_pkg)
+PKG_CHECK_MODULES(INKSCAPE, gdkmm-2.4  glibmm-2.4  gtkmm-2.4  gtk+-2.0 >= 2.4.0  libxml-2.0 >= 2.6.0  libxslt >= 1.0.15  sigc++-2.0 >= 2.0.3  $ink_spell_pkg  gthread-2.0 >= 2.0)
 
 dnl Shouldn't we test for libpng and libz?
 INKSCAPE_LIBS="$INKSCAPE_LIBS -lpng -lz"
@@ -710,6 +710,7 @@ share/screens/Makefile
 share/templates/Makefile
 share/tutorials/Makefile
 share/ui/Makefile
+packaging/autopackage/default.apspec
 inkscape.spec
 Info.plist
 inkview.1

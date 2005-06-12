@@ -1,3 +1,10 @@
+2005-06-11  Aaron Spike  <aaron@ekips.org>
+
+	* confiugre.ac,
+	  packaging/autopackage/default.apspec.in:
+
+	  Adding the autopackage specfile
+
 2005-06-10  Richard Hughes  <cyreve@users.sourceforge.net>
 
 	* src/text-context.cpp:
