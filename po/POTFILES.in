@@ -1,6 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-[encoding: UTF-8] 
+[encoding: UTF-8] +
 inkscape.desktop.in
 src/application/editor.cpp
 src/arc-context.cpp
@@ -10,7 +10,6 @@ src/desktop-affine.cpp
 src/desktop-events.cpp
 src/desktop-handles.cpp
 src/desktop.cpp
-src/dialogs/align.cpp
 src/dialogs/clonetiler.cpp
 src/dialogs/color-picker.cpp
 src/dialogs/debugdialog.cpp
