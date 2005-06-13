@@ -399,6 +399,16 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_F12, Inkscape::Verb::get(SP_VERB_DIALOG_TOGGLE), true);
 }
 
+/**
+ * Adds a keyboard shortcut for the given verb.
+ * (Removes any existing binding for the given shortcut, including appropriately
+ * adjusting sp_shortcut_get_primary if necessary.)
+ *
+ * \param is_primary True iff this is the shortcut to be written in menu items or buttons.
+ *
+ * \post sp_shortcut_get_verb(shortcut) == verb.
+ * \post !is_primary or sp_shortcut_get_primary(verb) == shortcut.
+ */
 void
 sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary)
 {
@@ -409,13 +419,14 @@ sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary)
 	old_verb = (Inkscape::Verb *)(g_hash_table_lookup (verbs, GINT_TO_POINTER (shortcut)));
 	g_hash_table_insert (verbs, GINT_TO_POINTER (shortcut), (gpointer)(verb));
 
+	/* Maintain the invariant that sp_shortcut_get_primary(v) returns either 0 or a valid shortcut for v. */
 	if (old_verb && old_verb != verb) {
 		unsigned int old_primary;
 
 		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)old_verb));
 
 		if (old_primary == shortcut) {
-			g_hash_table_insert (primary_shortcuts, (gpointer)old_verb, (void *)Inkscape::Verb::get(SP_VERB_INVALID));
+			g_hash_table_insert (primary_shortcuts, (gpointer)old_verb, GINT_TO_POINTER (0));
 		}
 	}
 
