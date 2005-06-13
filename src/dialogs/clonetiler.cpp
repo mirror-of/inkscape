@@ -2174,7 +2174,7 @@ clonetiler_dialog (void)
                     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), prefs_get_int_attribute(prefs_path, "pick", 0) == PICK_B);
                 }
                 {
-                    radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), _("H"));
+                    radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), Q_("clonetiler|H"));
                     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), radio, _("Pick the hue of the color"), NULL);
                     clonetiler_table_attach (table, radio, 0.0, 1, 3);
                     gtk_signal_connect (GTK_OBJECT (radio), "toggled", 
@@ -2182,7 +2182,7 @@ clonetiler_dialog (void)
                     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), prefs_get_int_attribute(prefs_path, "pick", 0) == PICK_H);
                 }
                 {
-                    radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), _("S"));
+                    radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), Q_("clonetiler|S"));
                     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), radio, _("Pick the saturation of the color"), NULL);
                     clonetiler_table_attach (table, radio, 0.0, 2, 3);
                     gtk_signal_connect (GTK_OBJECT (radio), "toggled", 
@@ -2190,7 +2190,7 @@ clonetiler_dialog (void)
                     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio), prefs_get_int_attribute(prefs_path, "pick", 0) == PICK_S);
                 }
                 {
-                    radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), _("L"));
+                    radio = gtk_radio_button_new_with_label (gtk_radio_button_group (GTK_RADIO_BUTTON (radio)), Q_("clonetiler|L"));
                     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), radio, _("Pick the lightness of the color"), NULL);
                     clonetiler_table_attach (table, radio, 0.0, 3, 3);
                     gtk_signal_connect (GTK_OBJECT (radio), "toggled", 

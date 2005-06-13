@@ -247,7 +247,7 @@ sp_select_toolbox_spinbutton(gchar *label, gchar *data, float lower_limit, GtkWi
     GtkTooltips *tt = gtk_tooltips_new();
 
     GtkWidget *hb = gtk_hbox_new(FALSE, 1);
-    GtkWidget *l = gtk_label_new(_(label));
+    GtkWidget *l = gtk_label_new(Q_(label));
     gtk_tooltips_set_tip(tt, l, tooltip, NULL);
     gtk_widget_show(l);
     gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
@@ -401,14 +401,14 @@ sp_select_toolbox_new(SPDesktop *desktop)
     // four spinbuttons
 
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton(_("X"), "X", -1e6, us, spw, _("Horizontal coordinate of selection"), TRUE));
+                      sp_select_toolbox_spinbutton(_("select_toolbar|X"), "X", -1e6, us, spw, _("Horizontal coordinate of selection"), TRUE));
     aux_toolbox_space(vb, AUX_BETWEEN_SPINBUTTONS);
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton(_("Y"), "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
+                      sp_select_toolbox_spinbutton(_("select_toolbar|Y"), "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
     aux_toolbox_space(vb, AUX_BETWEEN_BUTTON_GROUPS);
 
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton(_("W"), "width", 1e-3, us, spw, _("Width of selection"), FALSE));
+                      sp_select_toolbox_spinbutton(_("select_toolbar|W"), "width", 1e-3, us, spw, _("Width of selection"), FALSE));
 
     // lock toggle
     GtkWidget *lockbox = gtk_vbox_new(TRUE, 0);
@@ -423,7 +423,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     gtk_object_set_data(GTK_OBJECT(spw), "lock", lock);
 
     gtk_container_add(GTK_CONTAINER(vb),
-                      sp_select_toolbox_spinbutton(_("H"), "height", 1e-3, us, spw, _("Height of selection"), FALSE));
+                      sp_select_toolbox_spinbutton(_("select_toolbar|H"), "height", 1e-3, us, spw, _("Height of selection"), FALSE));
 
     aux_toolbox_space(vb, 2);
 
