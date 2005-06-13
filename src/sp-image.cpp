@@ -837,7 +837,7 @@ sp_image_description (SPItem * item)
 		return g_strdup_printf (_("<b>Image</b> %d &#215; %d: %s"),
 					  gdk_pixbuf_get_width (image->pixbuf),
 					  gdk_pixbuf_get_height (image->pixbuf),
-					  image->href);
+                            (strncmp (image->href, "data:", 5) == 0) ? _("embedded") : image->href);
 	}
 }
 
@@ -1063,6 +1063,7 @@ sp_image_repr_read_dataURI (const gchar * uri_data)
 		if (strncmp (data,"base64",6) == 0) {
 			/* base64-encoding */
 			data_is_base64 = 1;
+			data_is_image = 1; // Illustrator produces embedded images without MIME type, so we assume it's image no matter what
 			data += 6;
 		}
 		else if (strncmp (data,"image/png",9) == 0) {
