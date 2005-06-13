@@ -692,8 +692,10 @@ sp_menu_append_new_templates (GtkWidget *menu, SPView *view)
     for (const gchar *file = g_dir_read_name (dir); file != NULL; file = g_dir_read_name (dir)) {
         if (!g_str_has_suffix (file, ".svg"))
             continue; // skip non-svg files
-        if (g_str_has_suffix (file, _("default.svg")))
-            continue; // skip default.svg - it's in the menu already
+
+        gchar *basename = g_path_get_basename (file);
+        if (g_str_has_suffix (basename, ".svg") && g_str_has_prefix (basename, "default."))
+            continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
 
         const gchar *filepath = g_build_filename(INKSCAPE_TEMPLATESDIR, file, NULL);
         gchar * dupfile = g_strndup(file, strlen(file) - 4);
