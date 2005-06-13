@@ -1003,8 +1003,8 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
     g_object_set_data ((GObject *) base, "progress", prg);
     fn = g_path_get_basename (filename);
-    text = g_strdup_printf ( _("Exporting [%d x %d] %s"), 
-                             width, height, fn);
+    text = g_strdup_printf ( _("Exporting %s (%d x %d)"), 
+                             fn, width, height);
     g_free (fn);
     gtk_progress_bar_set_text ((GtkProgressBar *) prg, text);
     g_free (text);

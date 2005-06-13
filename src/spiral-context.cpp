@@ -468,7 +468,7 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
     /* status text */
     GString *rads = SP_PX_TO_METRIC_STRING(rad, sp_desktop_get_default_metric(desktop));
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
-                               _("<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"),
+                               _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
                                rads->str, sp_round((arg + 2.0*M_PI*spiral->revo)*180/M_PI, 0.0001));
     g_string_free(rads, FALSE);
 }

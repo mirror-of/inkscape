@@ -468,8 +468,8 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     GString *rads = SP_PX_TO_METRIC_STRING(r1, sp_desktop_get_default_metric(desktop));
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
                                       ( sc->isflatsided?
-                                      _("<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle")
-                                          : _("<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle") ),
+                                      _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
+                                          : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
                                       rads->str, sp_round ((arg1)*180/M_PI, 0.0001));
     g_string_free(rads, FALSE);
 }
