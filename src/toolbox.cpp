@@ -13,6 +13,7 @@
 *   Frank Felfe <innerspace@iname.com>
 *   John Cliff <simarilius@yahoo.com>
 *   David Turner <novalis@gnu.org>
+*   Josh Andler <scislac@scislac.com>
 *
 * Copyright (C) 2004 David Turner
 * Copyright (C) 2003 MenTaLguY
@@ -74,6 +75,7 @@
 #include "dialogs/export.h"
 #include "dialogs/dialog-events.h"
 
+
 #include "select-toolbar.h"
 #include "gradient-toolbar.h"
 
@@ -106,6 +108,7 @@ static GtkWidget *sp_spiral_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_dropper_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
+static GtkWidget *sp_text_toolbox_new(SPDesktop *desktop);
 
 
 static struct {
@@ -125,7 +128,7 @@ static struct {
     { "SPPenContext",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
     { "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
     { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
-    { "SPGradientContext", "gradient_tool", SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
+    { "SPGradientContext", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
     { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
     { NULL, NULL, 0, 0 }
 };
@@ -145,7 +148,7 @@ static struct {
     { "SPPencilContext", "pencil_toolbox", NULL },
     { "SPPenContext", "pen_toolbox", NULL },
     { "SPDynaDrawContext", "calligraphy_toolbox", sp_calligraphy_toolbox_new },
-    { "SPTextContext", "text_toolbox", NULL },
+    { "SPTextContext",   "text_toolbox",   sp_text_toolbox_new },
     { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
     { "SPDropperContext", "dropper_toolbox", sp_dropper_toolbox_new },
     { NULL, NULL, NULL }
@@ -389,9 +392,9 @@ sp_node_path_edit_symmetrical(void)
 
 
 
-//####################################
-//# node editing toolbox
-//####################################
+//################################
+//##    Node Editing Toolbox    ##
+//################################
 
 static GtkWidget *
 sp_node_toolbox_new(SPDesktop *desktop)
@@ -452,6 +455,10 @@ sp_node_toolbox_new(SPDesktop *desktop)
 
 } // end of sp_node_toolbox_new()
 
+
+//########################
+//##    Zoom Toolbox    ##
+//########################
 
 static GtkWidget *
 sp_zoom_toolbox_new(SPDesktop *desktop)
@@ -1904,6 +1911,25 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
         gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
+/*
+     // Tablet features
+    {
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        GtkWidget *fscb = gtk_check_button_new_with_label(_("Tablet"));
+        gtk_widget_set_sensitive(GTK_WIDGET(fscb), TRUE);
+
+
+
+
+        gtk_tooltips_set_tip(tt, fscb, _("Enable/Disable drawing tablet features"), NULL);
+        gtk_widget_show(fscb);
+        gtk_object_set_data(GTK_OBJECT(tbl), "flat_checkbox", fscb);
+        gtk_container_add(GTK_CONTAINER(hb), fscb);
+
+        gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_SPACING);
+    }
+*/
+
     gtk_widget_show_all(tbl);
     sp_set_font_size_smaller (tbl);
 
@@ -2250,14 +2276,15 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 
 // toggle button callbacks and updaters
 
+//########################
+//##    Dropper    ##
+//########################
+
 static void toggle_dropper_color_pick (GtkWidget *button, gpointer data) {
     prefs_set_int_attribute ("tools.dropper", "pick", 
         // 0 and 1 are backwards here because of pref
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 0 : 1);
 }
-
-
-
 
 
 /**
@@ -2484,8 +2511,330 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
 }
 
 
+//########################
+//##    Text Toolbox    ##
+//########################
+/*
+static void
+sp_text_letter_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+    //Call back for letter sizing spinbutton
+}
+
+static void
+sp_text_line_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+    //Call back for line height spinbutton
+}
+
+static void
+sp_text_horiz_kern_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+    //Call back for horizontal kerning spinbutton
+}
+
+static void
+sp_text_vert_kern_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+    //Call back for vertical kerning spinbutton
+}
+
+static void
+sp_text_letter_rotation_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+    //Call back for letter rotation spinbutton
+}*/
+static GtkWidget *
+sp_text_toolbox_new(SPDesktop *desktop)
+{
+    GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
+/*    GtkWidget *us = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(tbl), "units");
+    GtkTooltips *tt = gtk_tooltips_new();
+    GtkWidget *group;
+
+        //Font Family
+        {
+        GtkWidget *c = gtk_combo_new ();
+        gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
+        gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
+        gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
+        gtk_widget_set_size_request (c, 144, -1);
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), c, FALSE, FALSE, 0);
+        }
+
+        //Font Style
+        {
+        GtkWidget *c = gtk_combo_new ();
+        gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
+        gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
+        gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
+        gtk_widget_set_size_request (c, 88, -1);
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), c, FALSE, FALSE, 0);
+        }
+
+        //Font Size
+        {
+        GtkWidget *c = gtk_combo_new ();
+        gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
+        gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
+        gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
+        gtk_widget_set_size_request (c, 64, -1);
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), c, FALSE, FALSE, 0);
+        }
+
+        //Bold
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        {
+        GtkWidget *px = gtk_image_new_from_stock(GTK_STOCK_BOLD, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *button = gtk_toggle_button_new ();
+        gtk_container_add (GTK_CONTAINER (button), px);
+        gtk_widget_show(button);
+        gtk_tooltips_set_tip (tt, button, _("Bold"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+        gtk_widget_set_sensitive(button, TRUE);
+        gtk_box_pack_start (GTK_BOX (tbl), button, FALSE, FALSE, 0);
+        }
 
 
+        //Italic
+        {
+        GtkWidget *px = gtk_image_new_from_stock(GTK_STOCK_ITALIC, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *button = gtk_toggle_button_new ();
+        gtk_container_add (GTK_CONTAINER (button), px);
+        gtk_widget_show(button);
+        gtk_tooltips_set_tip (tt, button, _("Italics"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+        gtk_widget_set_sensitive(button, TRUE);
+        gtk_box_pack_start (GTK_BOX (tbl), button, FALSE, FALSE, 0);
+        }
+
+        //Underline
+        {
+        GtkWidget *px = gtk_image_new_from_stock(GTK_STOCK_UNDERLINE, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *button = gtk_toggle_button_new ();
+        gtk_container_add (GTK_CONTAINER (button), px);
+        gtk_widget_show(button);
+        gtk_tooltips_set_tip (tt, button, _("Underline"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+        gtk_widget_set_sensitive(button, FALSE);
+        gtk_box_pack_start (GTK_BOX (tbl), button, FALSE, FALSE, 0);
+        }
+
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        // align left
+        {
+        GtkWidget *px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_LEFT, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *b = group = gtk_radio_button_new (NULL);
+		gtk_container_add (GTK_CONTAINER (b), px);
+        gtk_tooltips_set_tip (tt, b, _("Align lines left"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+        gtk_box_pack_start (GTK_BOX (tbl), b, FALSE, FALSE, 0);
+        }
+
+        // align center
+        {
+        GtkWidget *px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_CENTER, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+		gtk_container_add (GTK_CONTAINER (b), px);
+        // TRANSLATORS: `Center' here is a verb.
+        gtk_tooltips_set_tip (tt, b, _("Center lines"), NULL);
+		gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+        gtk_box_pack_start (GTK_BOX (tbl), b, FALSE, FALSE, 0);
+        }
+
+        // align right
+        {
+        GtkWidget *px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_RIGHT, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+		gtk_container_add (GTK_CONTAINER (b), px);
+        gtk_tooltips_set_tip (tt, b, _("Align lines right"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+        gtk_box_pack_start (GTK_BOX (tbl), b, FALSE, FALSE, 0);
+        }
+
+        // full justification
+        {
+        GtkWidget *px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+		gtk_container_add (GTK_CONTAINER (b), px);
+        gtk_tooltips_set_tip (tt, b, _("Full justification"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+        gtk_box_pack_start (GTK_BOX (tbl), b, FALSE, FALSE, 0);
+        }
+        
+		
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+		
+        // horizontal
+        {
+        GtkWidget *px= sp_icon_new(GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_WRITING_MODE_LR);
+        GtkWidget *b = group = gtk_radio_button_new (NULL);
+		gtk_container_add (GTK_CONTAINER (b), px);
+        gtk_tooltips_set_tip (tt, b, _("Horizontal text"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+        gtk_box_pack_start (GTK_BOX (tbl), b, FALSE, FALSE, 0);
+        }
+
+        // vertical
+        {
+        GtkWidget *px = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_WRITING_MODE_TB);
+        GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
+		gtk_container_add (GTK_CONTAINER (b), px);
+        gtk_tooltips_set_tip (tt, b, _("Vertical text"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+        gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE );
+        gtk_box_pack_start (GTK_BOX (tbl), b, FALSE, FALSE, 0);
+        }
+
+        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+
+        // letter spacing
+    {
+        {
+        GtkWidget *image = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_TEXT_LETTER_SPACING);
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        gtk_container_add (GTK_CONTAINER (hb), image);
+        gtk_widget_show(image);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, 0);
+        }
+    
+        {
+            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Spacing between letters"),
+                                             "tools.text", "letter_spacing", 0,
+                                             us, (SPWidget *) tbl, TRUE, "altx-rect",
+                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             sp_text_letter_changed);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        }
+    }
+
+        // line spacing
+    {
+        {
+        GtkWidget *image = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_TEXT_LINE_SPACING);
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        gtk_container_add (GTK_CONTAINER (hb), image);
+        gtk_widget_show(image);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, 0);
+        }
+    
+        {
+            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Spacing between lines"),
+                                             "tools.text", "line_spacing", 0,
+                                             us, (SPWidget *) tbl, FALSE, NULL,
+                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             sp_text_line_changed);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 0);
+        }
+    }
+
+{
+    // horizontal kerning/vertical kerning units menu: create
+    GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
+    sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
+    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit(desktop));
+
+    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+
+    // horizontal kerning
+    {
+        {
+        GtkWidget *image = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_TEXT_HORZ_KERN);
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        gtk_container_add (GTK_CONTAINER (hb), image);
+        gtk_widget_show(image);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, 0);
+        }
+
+        {
+            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Horizontal kerning"),
+                                             "tools.text", "horizontal_kerning", 0,
+                                             us, (SPWidget *) tbl, TRUE, "altx-rect",
+                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             sp_text_horiz_kern_changed);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        }
+    }
+
+    // vertical kerning
+    {
+        {
+        GtkWidget *image = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_TEXT_VERT_KERN);
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        gtk_container_add (GTK_CONTAINER (hb), image);
+        gtk_widget_show(image);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, 0);
+        }
+    
+        {
+            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Vertical kerning"),
+                                             "tools.text", "vertical_kerning", 0,
+                                             us, (SPWidget *) tbl, FALSE, NULL,
+                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             sp_text_vert_kern_changed);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 0);
+        }
+    }
+
+    // add the units menu
+    gtk_widget_show(us);
+    gtk_box_pack_start(GTK_BOX(tbl), us, FALSE, FALSE, 0);
+    gtk_object_set_data(GTK_OBJECT(tbl), "units", us);
+    }
+
+
+
+	// letter rotation
+    aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+    {
+        {
+        GtkWidget *image = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_TEXT_ROTATION);
+        GtkWidget *hb = gtk_hbox_new(FALSE, 1);
+        gtk_container_add (GTK_CONTAINER (hb), image);
+        gtk_widget_show(image);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, 0);
+        }
+        {
+            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Horizontal kerning"),
+                                             "tools.text", "horizontal_kerning", 0,
+                                             us, (SPWidget *) tbl, TRUE, "altx-rect",
+                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             sp_text_letter_rotation_changed);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 0);
+        }
+        // rotation degree label
+        {
+        GtkWidget *label = gtk_widget_new (GTK_TYPE_LABEL, "label", "\302\260", "xalign", 0.0, NULL);
+        gtk_box_pack_start(GTK_BOX(tbl), label, FALSE, FALSE, 0);
+        }
+    }
+	
+        // Remove Manual Kerns
+        {
+        GtkWidget *px = sp_icon_new (GTK_ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_STOCK_TEXT_REMOVE_KERNS);
+        GtkWidget *button = gtk_button_new ();
+        gtk_container_add (GTK_CONTAINER (button), px);
+        gtk_widget_show(button);
+        gtk_tooltips_set_tip (tt, button, _("Remove manual kerns"), NULL);
+        gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+        gtk_widget_set_sensitive(button, TRUE);
+        gtk_box_pack_start (GTK_BOX (tbl), button, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        }
+
+    gtk_widget_show_all(tbl);
+    sp_set_font_size_smaller (tbl);
+*/
+    return tbl;
+
+} // end of sp_text_toolbox_new()
 
 
 /*
@@ -2498,3 +2847,4 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
+

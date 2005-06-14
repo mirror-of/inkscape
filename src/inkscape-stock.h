@@ -54,9 +54,15 @@
 //#define INKSCAPE_STOCK_DIMENSION_HOR         "dimension_hor"
 //#define INKSCAPE_STOCK_DIMENSION_VER         "dimension_ver"
 
-/* text editor */
+/*text editing*/
 #define INKSCAPE_STOCK_WRITING_MODE_LR       "writing_mode_lr"
 #define INKSCAPE_STOCK_WRITING_MODE_TB       "writing_mode_tb"
+#define INKSCAPE_STOCK_TEXT_LETTER_SPACING   "text_letter_spacing"
+#define INKSCAPE_STOCK_TEXT_LINE_SPACING     "text_line_spacing"
+#define INKSCAPE_STOCK_TEXT_HORZ_KERN        "text_horz_kern"
+#define INKSCAPE_STOCK_TEXT_VERT_KERN        "text_vert_kern"
+#define INKSCAPE_STOCK_TEXT_ROTATION         "text_rotation"
+#define INKSCAPE_STOCK_TEXT_REMOVE_KERNS     "text_remove_kerns"
 
 /*xml-tree*/
 #define INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE  "add_xml_element_node"
@@ -141,3 +147,4 @@ void inkscape_gtk_stock_init(void);
   End:
 */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
