@@ -49,6 +49,7 @@
 #include "xml/attribute-record.h"
 #include "prefs-utils.h"
 #include "rubberband.h"
+#include "sp-metrics.h"
 
 #include "text-editing.h"
 
@@ -143,10 +144,12 @@ sp_text_context_init(SPTextContext *tc)
     tc->cursor = NULL;
     tc->indicator = NULL;
     tc->frame = NULL;
+    tc->grabbed = NULL;
     tc->timeout = 0;
     tc->show = FALSE;
     tc->phase = 0;
     tc->nascent_object = 0;
+    tc->over_text = 0;
     tc->dragging = 0;
     tc->creating = 0;
 
@@ -171,6 +174,10 @@ sp_text_context_dispose(GObject *obj)
     if (tc->grabbed) {
         sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
         tc->grabbed = NULL;
+    }
+    NRRect b;
+    if (sp_rubberband_rect(&b)) {
+        sp_rubberband_stop();
     }
 }
 
@@ -362,6 +369,14 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 sp_event_context_update_cursor(ec);
                 sp_text_context_update_text_selection(tc);
 
+                if (SP_IS_TEXT (item_ungrouped)) {
+                    desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to edit the text, <b>drag</b> to select part of the text."));
+                } else {
+                    desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."));
+                }
+
+                tc->over_text = true;
+
                 ret = TRUE;
             }
             break;
@@ -526,7 +541,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 tc->p0 = NR::Point(sp_desktop_w2d_xy_point(desktop, button_pt));
                 sp_rubberband_start(desktop, tc->p0);
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                    GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
+                                    GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK |
+                                        GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
                                     NULL, event->button.time);
                 tc->grabbed = SP_CANVAS_ITEM(desktop->acetate);
                 tc->creating = 1;
@@ -536,10 +552,15 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
             }
             break;
         case GDK_MOTION_NOTIFY: 
-            ec->cursor_shape = cursor_text_xpm;
-            ec->hot_x = 7;
-            ec->hot_y = 7;
-            sp_event_context_update_cursor(ec);
+            if (tc->over_text) {
+                tc->over_text = 0;
+                // update cursor and statusbar: we are not over a text object now
+                ec->cursor_shape = cursor_text_xpm;
+                ec->hot_x = 7;
+                ec->hot_y = 7;
+                sp_event_context_update_cursor(ec);
+                desktop->event_context->defaultMessageContext()->clear();
+            }
 
             if (tc->creating && event->motion.state & GDK_BUTTON1_MASK) {
                 if ( ec->within_tolerance
@@ -557,6 +578,14 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
 
                 sp_rubberband_move(p);
                 gobble_motion_events(GDK_BUTTON1_MASK);
+
+                // status text
+                GString *xs = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::X]), sp_desktop_get_default_metric(desktop));
+                GString *ys = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::Y]), sp_desktop_get_default_metric(desktop));
+                ec->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs->str, ys->str);
+                g_string_free(xs, FALSE);
+                g_string_free(ys, FALSE);
+
             }
             break;
         case GDK_BUTTON_RELEASE: 
@@ -588,6 +617,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                     // articifically here, for the text object does not exist yet:
                     double cursor_height = sp_desktop_get_font_size_tool(ec->desktop);
                     sp_ctrlline_set_coords(SP_CTRLLINE(tc->cursor), dtp, dtp + NR::Point(0, cursor_height));
+                    ec->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Type text; <b>Enter</b> to start new line.")); // FIXME:: this is a copy of a string from _update_cursor below, do not desync
 
                     ec->within_tolerance = false;
                 } else if (tc->creating) {
@@ -598,10 +628,10 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                         // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)
                         SPItem *ft = create_flowtext_with_internal_frame (desktop, tc->p0, p1);
                         SP_DT_SELECTION(desktop)->set(ft);
-                        ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Created frame for flowed text."));
+                        ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Flowed text is created."));
                         sp_document_done(SP_DT_DOCUMENT(desktop));
                     } else {
-                        ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is too small for your font size."));
+                        ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is <b>too small</b> for the current font size. Flowed text not created."));
                     }
                 }
                 tc->creating = false;
@@ -916,7 +946,19 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                 }
                                 return TRUE;
                             case GDK_Escape:
-                                SP_DT_SELECTION(ec->desktop)->clear();
+                                if (tc->creating) {
+                                    tc->creating = 0;
+                                    if (tc->grabbed) {
+                                        sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
+                                        tc->grabbed = NULL;
+                                    }
+                                    NRRect b;
+                                    if (sp_rubberband_rect(&b)) {
+                                        sp_rubberband_stop();
+                                    }
+                                } else {
+                                    SP_DT_SELECTION(ec->desktop)->clear();
+                                }
                                 return TRUE;
                             case GDK_bracketleft:
                                 if (tc->text) {
@@ -1030,6 +1072,18 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                      group0_keyval == GDK_KP_Down )
                     && !MOD__CTRL_ONLY) {
                     return TRUE;
+                } else if (group0_keyval == GDK_Escape) { // cancel rubberband
+                    if (tc->creating) {
+                        tc->creating = 0;
+                        if (tc->grabbed) {
+                            sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
+                            tc->grabbed = NULL;
+                        }
+                        NRRect b;
+                        if (sp_rubberband_rect(&b)) {
+                            sp_rubberband_stop();
+                        }
+                    } 
                 }
             }
             break;
@@ -1225,12 +1279,18 @@ sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see)
                 sp_canvas_item_show(tc->frame);
                 sp_ctrlrect_set_area(SP_CTRLRECT(tc->frame), bbox.x0, bbox.y0, bbox.x1, bbox.y1);
             }
+            SP_EVENT_CONTEXT(tc)->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Type flowed text; <b>Enter</b> to start new paragraph."));
+        } else {
+            SP_EVENT_CONTEXT(tc)->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Type text; <b>Enter</b> to start new line."));
         }
 
     } else {
         sp_canvas_item_hide(tc->cursor);
         sp_canvas_item_hide(tc->frame);
         tc->show = FALSE;
+        if (!tc->nascent_object) {
+            SP_EVENT_CONTEXT(tc)->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type.")); // FIXME: this is a copy of string from tools-switch, do not desync
+        }
     }
 
     if (tc->imc) {

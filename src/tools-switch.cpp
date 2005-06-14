@@ -182,7 +182,7 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_set_event_context (dt, SP_TYPE_TEXT_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text object, then type."));
+		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type."));
 		break;
 	case TOOLS_GRADIENT:
 		sp_desktop_set_event_context (dt, SP_TYPE_GRADIENT_CONTEXT, tool_names[num]);

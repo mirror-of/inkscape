@@ -63,6 +63,8 @@ struct SPTextContext {
 	guint phase : 1;
 	guint nascent_object : 1; // true if we're clicked on canvas to put cursor, but no text typed yet so ->text is still NULL
 
+	guint over_text : 1; // true if cursor is over a text object
+
 	guint dragging : 1; // dragging selection over text
 
 	guint creating : 1; // dragging rubberband to create flowtext
