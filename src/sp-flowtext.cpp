@@ -15,6 +15,7 @@
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop.h"
+#include "desktop-affine.h"
 #include "print.h"
 
 #include "libnr/nr-matrix.h"
@@ -27,6 +28,7 @@
 #include "sp-string.h"
 #include "sp-text.h"
 #include "sp-use.h"
+#include "sp-rect.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-translate.h"
@@ -584,8 +586,6 @@ void SPFlowtext::convert_to_text()
 
 SPItem *SPFlowtext::get_frame(SPItem *after)
 {
-    if (!this->layout.outputExists()) return NULL;
-
     SPObject *ft = SP_OBJECT (this);
     SPObject *region = NULL;
 
@@ -620,6 +620,61 @@ SPItem *SPFlowtext::get_frame(SPItem *after)
     } else {
         return frame;
     }
+}
+
+SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, NR::Point p1)
+{
+    SPDocument *doc = SP_DT_DOCUMENT (desktop);
+
+    Inkscape::XML::Node *root_repr = sp_repr_new("svg:flowRoot");
+    SPItem *ft_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(root_repr));
+    SPObject *root_object = doc->getObjectByRepr(root_repr);
+    g_assert(SP_IS_FLOWTEXT(root_object));
+
+    Inkscape::XML::Node *region_repr = sp_repr_new("svg:flowRegion");
+    root_repr->appendChild(region_repr);
+    SPObject *region_object = doc->getObjectByRepr(region_repr);
+    g_assert(SP_IS_FLOWREGION(region_object));
+
+    Inkscape::XML::Node *rect_repr = sp_repr_new("svg:rect"); // FIXME: use path!!! after rects are converted to use path
+    region_repr->appendChild(rect_repr);
+
+    SPObject *rect = doc->getObjectByRepr(rect_repr);
+
+    p0 = sp_desktop_dt2root_xy_point(desktop, p0);
+    p1 = sp_desktop_dt2root_xy_point(desktop, p1);
+    using NR::X;
+    using NR::Y;
+    NR::Coord const x0 = MIN(p0[X], p1[X]);
+    NR::Coord const y0 = MIN(p0[Y], p1[Y]);
+    NR::Coord const x1 = MAX(p0[X], p1[X]);
+    NR::Coord const y1 = MAX(p0[Y], p1[Y]);
+    NR::Coord const w  = x1 - x0;
+    NR::Coord const h  = y1 - y0;
+
+    sp_rect_position_set(SP_RECT(rect), x0, y0, w, h);
+
+    Inkscape::XML::Node *div_repr = sp_repr_new("svg:flowDiv");
+    sp_repr_set_attr(div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+    root_repr->appendChild(div_repr);
+    SPObject *div_object = doc->getObjectByRepr(div_repr);
+    g_assert(SP_IS_FLOWDIV(div_object));
+
+    Inkscape::XML::Node *para_repr = sp_repr_new("svg:flowPara");
+    div_repr->appendChild(para_repr);
+    SPObject *para_object = doc->getObjectByRepr(para_repr);
+    g_assert(SP_IS_FLOWPARA(para_object));
+
+    Inkscape::XML::Node *text = sp_repr_new_text("");
+    para_repr->appendChild(text);
+
+    sp_repr_unref(root_repr);
+    sp_repr_unref(region_repr);
+    sp_repr_unref(div_repr);
+    sp_repr_unref(para_repr);
+    sp_repr_unref(rect_repr);
+
+    return ft_item;
 }
 
 

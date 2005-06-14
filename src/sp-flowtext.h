@@ -49,4 +49,6 @@ struct SPFlowtextClass {
 
 GType sp_flowtext_get_type (void);
 
+SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p1, NR::Point p2);
+
 #endif
