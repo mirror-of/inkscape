@@ -109,18 +109,20 @@ class PanelDialog : public Inkscape::UI::Dialog::Dialog
 {
 public:
 
-    PanelDialog() : Dialog(true) {}
+    PanelDialog(char const *prefs_path, int const verb_num) : Dialog(prefs_path, verb_num) {}
+/*
     virtual Glib::ustring getName() const {return "foo";}
     virtual Glib::ustring getDesc() const {return "bar";}
+*/
 };
 
 /** \brief Utility function to get a panel displayed. */
-static void show_panel( Inkscape::UI::Widget::Panel &panel )
+static void show_panel( Inkscape::UI::Widget::Panel &panel, char const *prefs_path, int const verb_num )
 {
     Gtk::Container* container = panel.get_toplevel();
     if ( &panel == container ) { // safe check?
         //g_message("Creating new dialog to hold it");
-        PanelDialog* dia = new PanelDialog();
+        PanelDialog* dia = new PanelDialog(prefs_path, verb_num);
         Gtk::VBox *mainVBox = dia->get_vbox();
         mainVBox->pack_start(panel);
         dia->show_all_children();
@@ -1341,7 +1343,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
             sp_ui_new_view_preview ();
             break;
         case SP_VERB_VIEW_ICON_PREVIEW:
-            show_panel( Inkscape::UI::Dialogs::IconPreviewPanel::getInstance() );
+            show_panel( Inkscape::UI::Dialogs::IconPreviewPanel::getInstance(), "dialogs.iconpreview", SP_VERB_VIEW_ICON_PREVIEW );
             break;
         default:
             break;
@@ -1375,7 +1377,7 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
             sp_object_properties_dialog ();
             break;
         case SP_VERB_DIALOG_SWATCHES:
-            show_panel( Inkscape::UI::Dialogs::SwatchesPanel::getInstance() );
+            show_panel( Inkscape::UI::Dialogs::SwatchesPanel::getInstance(), "dialogs.swatches", SP_VERB_DIALOG_SWATCHES);
             break;
         case SP_VERB_DIALOG_TRANSFORM:
             //sp_transformation_dialog_move ();
@@ -1434,7 +1436,7 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
         {
             Inkscape::UI::Dialogs::ExtensionsPanel * panel = new Inkscape::UI::Dialogs::ExtensionsPanel();
             panel->set_full(true);
-            show_panel( *panel );
+            show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
         }
         break;
         case SP_VERB_HELP_MEMORY:
