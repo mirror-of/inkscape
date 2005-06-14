@@ -320,6 +320,9 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
 
                     ret = TRUE;
                 }
+            } else if (event->button.button == 3) {
+                // right click; do not eat it so that right-click menu can appear, but cancel dragging & rubberband
+                sp_select_context_abort(event_context);
             }
             break;
 
@@ -425,6 +428,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 rb_escaped = drag_escaped = 0;
 
                 ret = TRUE;
+            } else if (event->button.button == 3) {
+                // right click; do not eat it so that right-click menu can appear, but cancel dragging & rubberband
+                sp_select_context_abort(event_context);
             }
             break;
 
