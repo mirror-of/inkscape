@@ -661,6 +661,7 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, N
     NR::Coord const h  = y1 - y0;
 
     sp_rect_position_set(SP_RECT(rect), x0, y0, w, h);
+    SP_OBJECT(rect)->updateRepr();
 
     Inkscape::XML::Node *div_repr = sp_repr_new("svg:flowDiv");
     sp_repr_set_attr(div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
