@@ -211,7 +211,7 @@ void Path::Convert(double treshhold)
     // et le reste, 1 par 1
     while ( curP < int(descr_cmd.size()) ) {
         
-        int nType = descr_cmd[curP]->getType();
+        int const nType = descr_cmd[curP]->getType();
         NR::Point nextX;
 
         if ( nType == descr_forced ) {
@@ -225,7 +225,7 @@ void Path::Convert(double treshhold)
             nextX = nData->p;
             lastMoveTo = AddPoint(nextX, true);
             descr_cmd[curP]->associated = lastMoveTo;
-			
+
             // et on avance
             curP++;
             
@@ -404,7 +404,7 @@ void Path::ConvertEvenLines(double treshhold)
 	
     // le moveto
     {
-        int firstTyp = descr_cmd[0]->getType();
+        int const firstTyp = descr_cmd[0]->getType();
         if ( firstTyp == descr_moveto ) {
             curX = dynamic_cast<PathDescrMoveTo *>(descr_cmd[0])->p;
         } else {
@@ -432,6 +432,7 @@ void Path::ConvertEvenLines(double treshhold)
             nextX = nData->p;
             lastMoveTo = AddPoint(nextX,true);
             descr_cmd[curP]->associated = lastMoveTo;
+
             // et on avance
             curP++;
             
@@ -565,7 +566,7 @@ void Path::ConvertEvenLines(double treshhold)
                     }
                     
                     {
-                        const NR::Point mx = (cx + dx) / 2;
+                        NR::Point const mx = (cx + dx) / 2;
                         RecBezierTo(cx, stx, mx, treshhold, 8, 4 * treshhold);
                     }
                 }
@@ -577,7 +578,7 @@ void Path::ConvertEvenLines(double treshhold)
                     dx = nextX;
                     dx = 2 * dx - cx;
 					
-                    const NR::Point stx = (bx + cx) / 2;
+                    NR::Point const stx = (bx + cx) / 2;
 					
                     descr_cmd[ip - 1]->associated = AddPoint(stx, false);
                     if ( descr_cmd[ip - 1]->associated < 0 ) {
@@ -589,7 +590,7 @@ void Path::ConvertEvenLines(double treshhold)
                     }
                     
                     {
-                        const NR::Point mx = (cx + dx) / 2;
+                        NR::Point const mx = (cx + dx) / 2;
                         RecBezierTo(cx, stx, mx, treshhold, 8, 4 * treshhold);
                     }
                 }
