@@ -22,6 +22,7 @@
 #include "sp-star.h"
 #include "sp-spiral.h"
 #include "sp-offset.h"
+#include "sp-flowtext.h"
 #include "prefs-utils.h"
 #include "document.h"
 #include <style.h>
@@ -54,6 +55,7 @@ static SPKnotHolder *sp_star_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop);
 static SPKnotHolder *sp_offset_knot_holder (SPItem * item, SPDesktop *desktop);
 static SPKnotHolder *sp_path_knot_holder (SPItem * item, SPDesktop *desktop);
+static SPKnotHolder *sp_flowtext_knot_holder (SPItem * item, SPDesktop *desktop);
 static void sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder);
 
 SPKnotHolder *
@@ -71,9 +73,12 @@ sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 		return sp_spiral_knot_holder (item, desktop);
 	} else if (SP_IS_OFFSET (item)) {
 		return sp_offset_knot_holder (item, desktop);
-    } else if (SP_IS_PATH (item)) {
-        return sp_path_knot_holder (item, desktop);
-    }
+	} else if (SP_IS_PATH (item)) {
+		return sp_path_knot_holder (item, desktop);
+	} else if (SP_IS_FLOWTEXT (item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+		return sp_flowtext_knot_holder (item, desktop);
+	}
+
 	return NULL;
 }
 
@@ -306,10 +311,8 @@ static NR::Point sp_rect_wh_get (SPItem *item)
 }
 
 static void
-sp_rect_wh_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+sp_rect_wh_set_internal (SPRect *rect, const NR::Point &p, const NR::Point &origin, guint state)
 {
-	SPRect *rect = SP_RECT(item);
-
 	if (state & GDK_CONTROL_MASK) {
 		// original width/height when drag started
 		gdouble w_orig = (origin[NR::X] - rect->x.computed);
@@ -354,6 +357,14 @@ sp_rect_wh_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint
 	sp_rect_clamp_radii (rect);
 
 	((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+static void
+sp_rect_wh_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+{
+	SPRect *rect = SP_RECT(item);
+
+	sp_rect_wh_set_internal (rect, p, origin, state);
 }
 
 static NR::Point sp_rect_xy_get (SPItem *item)
@@ -931,7 +942,7 @@ sp_offset_knot_holder (SPItem * item, SPDesktop *desktop)
 }
 
 static SPKnotHolder *
-sp_path_knot_holder (SPItem * item, SPDesktop *desktop)
+sp_path_knot_holder (SPItem * item, SPDesktop *desktop) // FIXME: eliminate, instead make a pattern-drag similar to gradient-drag
 {
     if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
         && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
@@ -960,4 +971,30 @@ sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder)
             sp_knot_holder_add_full (knot_holder, sp_pattern_angle_set, sp_pattern_angle_get, NULL, SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
 																		 _("<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"));
         }
+}
+
+static NR::Point sp_flowtext_corner_get (SPItem *item)
+{
+	SPRect *rect = SP_RECT(item);
+
+	return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed);
+}
+
+static void
+sp_flowtext_corner_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+{
+	SPRect *rect = SP_RECT(item);
+
+	sp_rect_wh_set_internal (rect, p, origin, state);
+}
+
+static SPKnotHolder *
+sp_flowtext_knot_holder (SPItem * item, SPDesktop *desktop)
+{
+	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, SP_FLOWTEXT(item)->get_frame(NULL), NULL);
+
+	sp_knot_holder_add (knot_holder, sp_flowtext_corner_set, sp_flowtext_corner_get, NULL, 
+					_("Drag to resize the <b>flowed text frame</b>"));
+
+	return knot_holder;
 }

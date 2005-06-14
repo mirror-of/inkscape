@@ -45,8 +45,12 @@
 #include "pixmaps/cursor-text-insert.xpm"
 #include "ui/view/view.h"
 #include <glibmm/i18n.h>
+#include "object-edit.h"
+#include "knotholder.h"
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
+#include "xml/node-event-vector.h"
+#include "event-context.h"
 #include "prefs-utils.h"
 #include "rubberband.h"
 #include "sp-metrics.h"
@@ -131,6 +135,9 @@ sp_text_context_init(SPTextContext *tc)
     event_context->tolerance = 0;
     event_context->within_tolerance = false;
 
+    event_context->shape_repr = NULL;
+    event_context->shape_knot_holder = NULL;
+
     tc->imc = NULL;
 
     tc->text = NULL;
@@ -162,6 +169,7 @@ static void
 sp_text_context_dispose(GObject *obj)
 {
     SPTextContext *tc = SP_TEXT_CONTEXT(obj);
+    SPEventContext *ec = SP_EVENT_CONTEXT(tc);
     tc->style_set_connection.~connection();
     tc->sel_changed_connection.~connection();
     tc->sel_modified_connection.~connection();
@@ -179,7 +187,24 @@ sp_text_context_dispose(GObject *obj)
     if (sp_rubberband_rect(&b)) {
         sp_rubberband_stop();
     }
+    if (ec->shape_knot_holder) {
+        sp_knot_holder_destroy(ec->shape_knot_holder);
+        ec->shape_knot_holder = NULL;
+    }
+    if (ec->shape_repr) { // remove old listener
+        sp_repr_remove_listener_by_data(ec->shape_repr, ec);
+        sp_repr_unref(ec->shape_repr);
+        ec->shape_repr = 0;
+    }
 }
+
+static Inkscape::XML::NodeEventVector ec_shape_repr_events = {
+    NULL, /* child_added */
+    NULL, /* child_removed */
+    ec_shape_event_attr_changed,
+    NULL, /* content_changed */
+    NULL  /* order_changed */
+};
 
 static void
 sp_text_context_setup(SPEventContext *ec)
@@ -228,6 +253,18 @@ sp_text_context_setup(SPEventContext *ec)
 
     if (((SPEventContextClass *) parent_class)->setup)
         ((SPEventContextClass *) parent_class)->setup(ec);
+
+    SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
+    if (item && SP_IS_FLOWTEXT (item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+        ec->shape_knot_holder = sp_item_knot_holder(item, ec->desktop);
+        Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(SP_FLOWTEXT(item)->get_frame(NULL));
+        if (shape_repr) {
+            ec->shape_repr = shape_repr;
+            sp_repr_ref(shape_repr);
+            sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
+            sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
+        }
+    }
 
     tc->sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(
         sigc::bind(sigc::ptr_fun(&sp_text_context_selection_changed), tc)
@@ -1184,7 +1221,30 @@ sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext 
 {
     g_assert(selection != NULL);
 
+    SPEventContext *ec = SP_EVENT_CONTEXT(tc);
+
+    if (ec->shape_knot_holder) { // destroy knotholder
+        sp_knot_holder_destroy(ec->shape_knot_holder);
+        ec->shape_knot_holder = NULL;
+    }
+
+    if (ec->shape_repr) { // remove old listener
+        sp_repr_remove_listener_by_data(ec->shape_repr, ec);
+        sp_repr_unref(ec->shape_repr);
+        ec->shape_repr = 0;
+    }
+
     SPItem *item = selection->singleItem();
+    if (item && SP_IS_FLOWTEXT (item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+        ec->shape_knot_holder = sp_item_knot_holder(item, ec->desktop);
+        Inkscape::XML::Node *shape_repr = SP_OBJECT_REPR(SP_FLOWTEXT(item)->get_frame(NULL));
+        if (shape_repr) {
+            ec->shape_repr = shape_repr;
+            sp_repr_ref(shape_repr);
+            sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
+            sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
+        }
+    }
 
     if (tc->text && (item != tc->text)) {
         sp_text_context_forget_text(tc);
