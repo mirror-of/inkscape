@@ -51,8 +51,6 @@ protected:
      */
     Gtk::Tooltips tooltips;
 
-    Dialog( bool flag ); // fixme: remove this
-
     SPDesktop      *_desktop;
 
     virtual void   on_response(int response_id);

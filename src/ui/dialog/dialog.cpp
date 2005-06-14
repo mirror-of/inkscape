@@ -238,34 +238,6 @@ Dialog::Dialog(BaseObjectType *gobj)
 {
 }
 
-
-Dialog::Dialog( bool flag )
-{
-    g_warning ("Someone called Dialog(flag) constructor. It is deprecated. Please use the main constructor passing it the prefs path and the verb.\n");
-
-    // This block is a much simplified version of the code used in all other dialogs for
-    // saving/restoring geometry, transientising, passing events to the aplication, and
-    // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
-    // mutilated somewhat. This block should be removed when the same functionality is made
-    // available to all gtkmm dialogs via a base class.
-    GtkWidget *dlg = GTK_WIDGET(gobj());
-
-//         gchar title[500];
-//         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
-//         set_title(title);
-
-    //set_position(Gtk::WIN_POS_CENTER);
-
-    sp_transientize(dlg);
-
-    gtk_signal_connect( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg );
-
-    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
-    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
-
-    g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
-}
-
 Dialog::~Dialog()
 {
     save_geometry();
