@@ -99,6 +99,7 @@ EXTRA_DIST =	\
 	make.files	\
 	make.ofiles	\
 	Doxyfile	\
+	sp-skeleton.cpp sp-skeleton.h	\
 	algorithms/makefile.in	\
 	application/makefile.in	\
 	dialogs/makefile.in	\
