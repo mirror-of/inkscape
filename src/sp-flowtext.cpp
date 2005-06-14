@@ -622,6 +622,14 @@ SPItem *SPFlowtext::get_frame(SPItem *after)
     }
 }
 
+bool SPFlowtext::has_internal_frame()
+{
+    SPItem *frame = get_frame(NULL);
+
+    return (frame && SP_OBJECT(this)->isAncestorOf(SP_OBJECT(frame)) && SP_IS_RECT(frame));
+}
+
+
 SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, NR::Point p1)
 {
     SPDocument *doc = SP_DT_DOCUMENT (desktop);

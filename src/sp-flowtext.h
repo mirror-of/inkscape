@@ -27,6 +27,8 @@ struct SPFlowtext : public SPItem {
 
     SPItem *get_frame(SPItem *after);
 
+    bool has_internal_frame();
+
 //semiprivate:  (need to be accessed by the C-style functions still)
     Inkscape::Text::Layout layout;
 
