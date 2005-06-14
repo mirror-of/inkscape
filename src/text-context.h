@@ -68,7 +68,6 @@ struct SPTextContext {
 	guint creating : 1; // dragging rubberband to create flowtext
 	SPCanvasItem *grabbed; // we grab while we are creating, to get events even if the mouse goes out of the window
 	NR::Point p0; // initial point if the flowtext rect
-	bool rb_escaped = false; // if true, rubberband was canceled by Esc
 
 	/* Preedit String */
 	gchar* preedit_string;
