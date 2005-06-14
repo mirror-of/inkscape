@@ -192,8 +192,26 @@ sp_flowtext_update(SPObject *object, SPCtx *ctx, unsigned flags)
 }
 
 static void
-sp_flowtext_modified(SPObject */*object*/, guint /*flags*/)
+sp_flowtext_modified(SPObject *object, guint flags)
 {
+    SPObject *ft = SP_FLOWTEXT (object);
+    SPObject *region = NULL;
+
+    if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+    flags &= SP_OBJECT_MODIFIED_CASCADE;
+
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(ft)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (SP_IS_FLOWREGION(o)) {
+            region = o;
+            break;
+        }
+    }
+
+    if (!region) return;
+
+    if (flags || (region->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+        region->emitModified(flags); // pass down to the region only
+    }
 }
 
 static void
