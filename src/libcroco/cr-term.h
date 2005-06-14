@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 
 /**
  *@file
- *Declaration of the #CRTem class.
+ *Declaration of the #CRTerm class.
  */
 
 enum CRTermType
