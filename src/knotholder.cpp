@@ -179,7 +179,8 @@ knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 		}
 	}
 
-	sp_shape_set_shape (SP_SHAPE (item));
+	if (SP_IS_SHAPE (item))
+		sp_shape_set_shape (SP_SHAPE (item));
 
 	knotholder_update_knots (knot_holder, item);
 
@@ -204,7 +205,8 @@ knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data)
 		}
 	}
 
-	sp_shape_set_shape (SP_SHAPE (item));
+	if (SP_IS_SHAPE (item))
+		sp_shape_set_shape (SP_SHAPE (item));
 
 	knotholder_update_knots (knot_holder, item);
 }
