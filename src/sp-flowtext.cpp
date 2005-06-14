@@ -26,6 +26,7 @@
 #include "sp-flowtext.h"
 #include "sp-string.h"
 #include "sp-text.h"
+#include "sp-use.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-translate.h"
@@ -562,6 +563,47 @@ void SPFlowtext::convert_to_text()
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
 }
+
+SPItem *SPFlowtext::get_frame(SPItem *after)
+{
+    if (!this->layout.outputExists()) return NULL;
+
+    SPObject *ft = SP_OBJECT (this);
+    SPObject *region = NULL;
+
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(ft)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (SP_IS_FLOWREGION(o)) {
+            region = o;
+            break;
+        }
+    }
+
+    if (!region) return NULL;
+
+    bool past = false;
+    SPItem *frame = NULL;
+
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(region)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (SP_IS_ITEM(o)) {
+            if (after == NULL || past) {
+                frame = SP_ITEM(o);
+            } else {
+                if (SP_ITEM(o) == after) {
+                    past = true;
+                }
+            }
+        }
+    }
+
+    if (!frame) return NULL;
+
+    if (SP_IS_USE (frame)) {
+        return sp_use_get_original(SP_USE(frame));
+    } else {
+        return frame;
+    }
+}
+
 
 /*
   Local Variables:

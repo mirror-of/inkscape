@@ -1178,7 +1178,8 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
         // we're moving both a clone and its original
         bool transform_clone_with_original = (SP_IS_USE(item) && selection->includes( sp_use_get_original (SP_USE(item)) ));
         bool transform_textpath_with_path = (SP_IS_TEXT_TEXTPATH(item) && selection->includes( sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item)))) ));
-        bool transform_offset_with_source = ((SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) ));
+        bool transform_flowtext_with_frame = (SP_IS_FLOWTEXT(item) && selection->includes( SP_FLOWTEXT(item)->get_frame (NULL))); // only the first frame so far
+        bool transform_offset_with_source = (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) );
 
         // "clones are unmoved when original is moved" preference
         bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
@@ -1190,7 +1191,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
       // Same for textpath if we are also doing ANY transform to its path: do not touch textpath,
       // letters cannot be squeezed or rotated anyway, they only refill the changed path.
       // Same for linked offset if we are also moving its source: do not move it.
-        if (transform_textpath_with_path || transform_offset_with_source) {
+        if (transform_textpath_with_path || transform_offset_with_source || transform_flowtext_with_frame) {
 		// restore item->transform field from the repr, in case it was changed by seltrans
             sp_object_read_attr (SP_OBJECT (item), "transform");
 
@@ -1839,7 +1840,7 @@ sp_select_clone_original()
 
     SPItem *item = selection->singleItem();
 
-    const gchar *error = _("Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> to go to its source. Select a <b>text on path</b> to go to the path.");
+    const gchar *error = _("Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> to go to its source. Select a <b>text on path</b> to go to the path. Select a <b>flowed text</b> to go to its frame.");
 
     // Check if other than two objects are selected
     if (g_slist_length((GSList *) selection->itemList()) != 1 || !item) {
@@ -1854,13 +1855,15 @@ sp_select_clone_original()
         original = sp_offset_get_source (SP_OFFSET(item));
     } else if (SP_IS_TEXT_TEXTPATH(item)) {
         original = sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item))));
+    } else if (SP_IS_FLOWTEXT(item)) {
+        original = SP_FLOWTEXT(item)->get_frame (NULL); // first frame only
     } else { // it's an object that we don't know what to do with
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, error);
         return;
     }
 
     if (!original) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>Cannot find</b> the object to select (orphaned clone, offset, or textpath?)"));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, flowed text?)"));
         return;
     }
 

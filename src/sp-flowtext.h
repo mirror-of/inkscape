@@ -25,6 +25,8 @@ struct SPFlowtext : public SPItem {
     the automatic wrapping ability. */
     static void convert_to_text();
 
+    SPItem *get_frame(SPItem *after);
+
 //semiprivate:  (need to be accessed by the C-style functions still)
     Inkscape::Text::Layout layout;
 
