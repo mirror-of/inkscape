@@ -56,12 +56,19 @@ struct SPTextContext {
 
 	SPCanvasItem *cursor;
 	SPCanvasItem *indicator;
+	SPCanvasItem *frame; // hiliting the first frame of flowtext; FIXME: make this a list to accommodate arbitrarily many chained shapes
 	std::vector<SPCanvasItem*> text_selection_quads;
 	gint timeout;
 	guint show : 1;
 	guint phase : 1;
 	guint nascent_object : 1; // true if we're clicked on canvas to put cursor, but no text typed yet so ->text is still NULL
-    guint dragging : 1;
+
+	guint dragging : 1; // dragging selection over text
+
+	guint creating : 1; // dragging rubberband to create flowtext
+	SPCanvasItem *grabbed; // we grab while we are creating, to get events even if the mouse goes out of the window
+	NR::Point p0; // initial point if the flowtext rect
+	bool rb_escaped = false; // if true, rubberband was canceled by Esc
 
 	/* Preedit String */
 	gchar* preedit_string;

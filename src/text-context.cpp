@@ -48,6 +48,7 @@
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
 #include "prefs-utils.h"
+#include "rubberband.h"
 
 #include "text-editing.h"
 
@@ -124,6 +125,11 @@ sp_text_context_init(SPTextContext *tc)
     event_context->hot_x = 7;
     event_context->hot_y = 7;
 
+    event_context->xp = 0;
+    event_context->yp = 0;
+    event_context->tolerance = 0;
+    event_context->within_tolerance = false;
+
     tc->imc = NULL;
 
     tc->text = NULL;
@@ -136,11 +142,13 @@ sp_text_context_init(SPTextContext *tc)
 
     tc->cursor = NULL;
     tc->indicator = NULL;
+    tc->frame = NULL;
     tc->timeout = 0;
     tc->show = FALSE;
     tc->phase = 0;
     tc->nascent_object = 0;
     tc->dragging = 0;
+    tc->creating = 0;
 
     new (&tc->sel_changed_connection) sigc::connection();
     new (&tc->sel_modified_connection) sigc::connection();
@@ -160,6 +168,10 @@ sp_text_context_dispose(GObject *obj)
     if (G_OBJECT_CLASS(parent_class)->dispose) {
         G_OBJECT_CLASS(parent_class)->dispose(obj);
     }
+    if (tc->grabbed) {
+        sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
+        tc->grabbed = NULL;
+    }
 }
 
 static void
@@ -177,6 +189,11 @@ sp_text_context_setup(SPEventContext *ec)
     sp_ctrlrect_set_area(SP_CTRLRECT(tc->indicator), 0, 0, 100, 100);
     sp_ctrlrect_set_color(SP_CTRLRECT(tc->indicator), 0x0000ff7f, FALSE, 0);
     sp_canvas_item_hide(tc->indicator);
+
+    tc->frame = sp_canvas_item_new(SP_DT_CONTROLS(desktop), SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_area(SP_CTRLRECT(tc->frame), 0, 0, 100, 100);
+    sp_ctrlrect_set_color(SP_CTRLRECT(tc->frame), 0x0000ff7f, FALSE, 0);
+    sp_canvas_item_hide(tc->frame);
 
     tc->timeout = gtk_timeout_add(250, (GtkFunction) sp_text_context_timeout, ec);
 
@@ -256,6 +273,11 @@ sp_text_context_finish(SPEventContext *ec)
     if (tc->indicator) {
         gtk_object_destroy(GTK_OBJECT(tc->indicator));
         tc->indicator = NULL;
+    }
+
+    if (tc->frame) {
+        gtk_object_destroy(GTK_OBJECT(tc->frame));
+        tc->frame = NULL;
     }
 
     for (std::vector<SPCanvasItem*>::iterator it = tc->text_selection_quads.begin() ;
@@ -472,17 +494,15 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
 {
     SPTextContext *const tc = SP_TEXT_CONTEXT(ec);
 
+    SPDesktop *desktop = ec->desktop;
+
     sp_canvas_item_hide(tc->indicator);
 
     sp_text_context_validate_cursor_iterators(tc);
 
+    ec->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
+
     switch (event->type) {
-        case GDK_MOTION_NOTIFY:
-            ec->cursor_shape = cursor_text_xpm;
-            ec->hot_x = 7;
-            ec->hot_y = 7;
-            sp_event_context_update_cursor(ec);
-            break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
 
@@ -497,23 +517,94 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                     return TRUE;
                 }
 
-                /* Button 1, set X & Y & new item */
-                SP_DT_SELECTION(ec->desktop)->clear();
-                NR::Point dtp = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
-                tc->pdoc = sp_desktop_dt2root_xy_point(ec->desktop, dtp);
+                // save drag origin
+                ec->xp = (gint) event->button.x;
+                ec->yp = (gint) event->button.y;
+                ec->within_tolerance = true;
 
-                tc->show = TRUE;
-                tc->phase = 1;
-                tc->nascent_object = 1; // new object was just created
-
-                /* Cursor */
-                sp_canvas_item_show(tc->cursor);
-                // Cursor height is defined by the new text object's font size; it needs to be set
-                // articifically here, for the text object does not exist yet:
-                double cursor_height = sp_desktop_get_font_size_tool(ec->desktop);
-                sp_ctrlline_set_coords(SP_CTRLLINE(tc->cursor), dtp, dtp + NR::Point(0, cursor_height));
+                NR::Point const button_pt(event->button.x, event->button.y);
+                tc->p0 = NR::Point(sp_desktop_w2d_xy_point(desktop, button_pt));
+                sp_rubberband_start(desktop, tc->p0);
+                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                                    GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
+                                    NULL, event->button.time);
+                tc->grabbed = SP_CANVAS_ITEM(desktop->acetate);
+                tc->creating = 1;
 
                 /* Processed */
+                return TRUE;
+            }
+            break;
+        case GDK_MOTION_NOTIFY: 
+            ec->cursor_shape = cursor_text_xpm;
+            ec->hot_x = 7;
+            ec->hot_y = 7;
+            sp_event_context_update_cursor(ec);
+
+            if (tc->creating && event->motion.state & GDK_BUTTON1_MASK) {
+                if ( ec->within_tolerance
+                     && ( abs( (gint) event->motion.x - ec->xp ) < ec->tolerance )
+                     && ( abs( (gint) event->motion.y - ec->yp ) < ec->tolerance ) ) {
+                    break; // do not drag if we're within tolerance from origin
+                }
+                // Once the user has moved farther than tolerance from the original location
+                // (indicating they intend to draw, not click), then always process the
+                // motion notify coordinates as given (no snapping back to origin)
+                ec->within_tolerance = false;
+
+                NR::Point const motion_pt(event->motion.x, event->motion.y);
+                NR::Point const p(sp_desktop_w2d_xy_point(desktop, motion_pt));
+
+                sp_rubberband_move(p);
+                gobble_motion_events(GDK_BUTTON1_MASK);
+            }
+            break;
+        case GDK_BUTTON_RELEASE: 
+            if (event->button.button == 1) {
+
+                if (tc->grabbed) {
+                    sp_canvas_item_ungrab(tc->grabbed, GDK_CURRENT_TIME);
+                    tc->grabbed = NULL;
+                }
+
+                NRRect b;
+                if (sp_rubberband_rect(&b)) {
+                    sp_rubberband_stop();
+                }
+
+                if (tc->creating && ec->within_tolerance) {
+                    /* Button 1, set X & Y & new item */
+                    SP_DT_SELECTION(desktop)->clear();
+                    NR::Point dtp = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
+                    tc->pdoc = sp_desktop_dt2root_xy_point(ec->desktop, dtp);
+
+                    tc->show = TRUE;
+                    tc->phase = 1;
+                    tc->nascent_object = 1; // new object was just created
+
+                    /* Cursor */
+                    sp_canvas_item_show(tc->cursor);
+                    // Cursor height is defined by the new text object's font size; it needs to be set
+                    // articifically here, for the text object does not exist yet:
+                    double cursor_height = sp_desktop_get_font_size_tool(ec->desktop);
+                    sp_ctrlline_set_coords(SP_CTRLLINE(tc->cursor), dtp, dtp + NR::Point(0, cursor_height));
+
+                    ec->within_tolerance = false;
+                } else if (tc->creating) {
+                    NR::Point const button_pt(event->button.x, event->button.y);
+                    NR::Point p1 = NR::Point(sp_desktop_w2d_xy_point(desktop, button_pt));
+                    double cursor_height = sp_desktop_get_font_size_tool(ec->desktop);
+                    if (fabs(p1[NR::Y] - tc->p0[NR::Y]) > cursor_height) {
+                        // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)
+                        SPItem *ft = create_flowtext_with_internal_frame (desktop, tc->p0, p1);
+                        SP_DT_SELECTION(desktop)->set(ft);
+                        ec->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Created frame for flowed text."));
+                        sp_document_done(SP_DT_DOCUMENT(desktop));
+                    } else {
+                        ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is too small for your font size."));
+                    }
+                }
+                tc->creating = false;
                 return TRUE;
             }
             break;
@@ -1125,9 +1216,20 @@ sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see)
 
         tc->show = TRUE;
         tc->phase = 1;
-    } else {
 
+        if (SP_IS_FLOWTEXT(tc->text)) {
+            SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (NULL); // first frame only
+            if (frame) {
+                NRRect bbox;
+                sp_item_bbox_desktop(frame, &bbox);
+                sp_canvas_item_show(tc->frame);
+                sp_ctrlrect_set_area(SP_CTRLRECT(tc->frame), bbox.x0, bbox.y0, bbox.x1, bbox.y1);
+            }
+        }
+
+    } else {
         sp_canvas_item_hide(tc->cursor);
+        sp_canvas_item_hide(tc->frame);
         tc->show = FALSE;
     }
 
