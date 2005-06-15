@@ -396,6 +396,9 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_o, Inkscape::Verb::get(SP_VERB_DIALOG_ITEM), true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_O, Inkscape::Verb::get(SP_VERB_DIALOG_ITEM), false);
 
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_w, Inkscape::Verb::get(SP_VERB_DIALOG_SWATCHES), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_W, Inkscape::Verb::get(SP_VERB_DIALOG_SWATCHES), false);
+
 	sp_shortcut_set (GDK_F12, Inkscape::Verb::get(SP_VERB_DIALOG_TOGGLE), true);
 }
 
