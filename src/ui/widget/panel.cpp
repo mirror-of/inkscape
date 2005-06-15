@@ -37,23 +37,23 @@ namespace Widget {
  */
 
 Panel::Panel(const gchar *prefs_path) :
-    _fillable(0),
-    _prefs_path(NULL)
+    _prefs_path(NULL),
+    _fillable(0)
 {
     _prefs_path = prefs_path;
     init();
 }
 
 Panel::Panel() :
-    _fillable(0),
-    _prefs_path(NULL)
+    _prefs_path(NULL),
+    _fillable(0)
 {
     init();
 }
 
 Panel::Panel(Glib::ustring const &label) :
-    _fillable(0),
-    _prefs_path(NULL)
+    _prefs_path(NULL),
+    _fillable(0)
 {
     this->label = label;
     init();
