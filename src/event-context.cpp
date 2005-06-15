@@ -425,14 +425,14 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 case GDK_w:
                 case GDK_F4:
                     /* Close view */
-                    if (event->key.state & GDK_CONTROL_MASK) {
+                    if (MOD__CTRL_ONLY) {
                         sp_ui_close_view(NULL);
                         ret = TRUE;
                     }
                     break;
                     // FIXME: make import a verb
                 case GDK_i: // Ctrl i - import file
-                    if (event->key.state & GDK_CONTROL_MASK) {
+                    if (MOD__CTRL_ONLY) {
                         sp_file_import(NULL);
                         ret = TRUE;
                     }
@@ -440,7 +440,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 case GDK_Left: // Ctrl Left 
                 case GDK_KP_Left:
                 case GDK_KP_4:
-                    if (event->key.state & GDK_CONTROL_MASK) {
+                    if (MOD__CTRL_ONLY) {
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                         sp_desktop_scroll_world(event_context->desktop, i, 0);
@@ -450,7 +450,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 case GDK_Up: // Ctrl Up
                 case GDK_KP_Up:
                 case GDK_KP_8:
-                    if (event->key.state & GDK_CONTROL_MASK) {
+                    if (MOD__CTRL_ONLY) {
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                         sp_desktop_scroll_world(event_context->desktop, 0, i);
@@ -460,7 +460,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 case GDK_Right: // Ctrl Right
                 case GDK_KP_Right:
                 case GDK_KP_6:
-                    if (event->key.state & GDK_CONTROL_MASK) {
+                    if (MOD__CTRL_ONLY) {
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                         sp_desktop_scroll_world(event_context->desktop, -i, 0);
@@ -470,7 +470,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                 case GDK_Down: // Ctrl Down
                 case GDK_KP_Down:
                 case GDK_KP_2:
-                    if (event->key.state & GDK_CONTROL_MASK) {
+                    if (MOD__CTRL_ONLY) {
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                         sp_desktop_scroll_world(event_context->desktop, 0, -i);
@@ -478,7 +478,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                     }
                     break;
                 case GDK_F10:
-                    if (event->key.state & GDK_SHIFT_MASK) {
+                    if (MOD__SHIFT_ONLY) {
                         sp_event_root_menu_popup(desktop, NULL, event);
                         ret= TRUE;
                     } 
