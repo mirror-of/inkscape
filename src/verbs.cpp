@@ -103,7 +103,9 @@ sp_action_get_title (const SPAction *action)
 } // end of sp_action_get_title()
 
 
-namespace Inkscape {
+namespace Inkscape { 
+
+// !!!FIXME:: kill this, use DialogManager instead!!!
 
 class PanelDialog : public Inkscape::UI::Dialog::Dialog
 {
@@ -126,12 +128,13 @@ static void show_panel( Inkscape::UI::Widget::Panel &panel, char const *prefs_pa
         Gtk::VBox *mainVBox = dia->get_vbox();
         mainVBox->pack_start(panel);
         dia->show_all_children();
-        dia->show();
+        dia->present();
+        dia->read_geometry();
     } else {
         Gtk::Dialog* dia = dynamic_cast<Gtk::Dialog*>(container);
         if ( dia ) {
             //g_message("Found an existing dialog");
-            dia->show();
+            dia->present();
         } else {
             g_message("Failed to find an existing dialog");
         }
