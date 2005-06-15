@@ -1,5 +1,4 @@
-This new folder is part of the Inkscape 0.38 directory reorganization. Please place the appropriate files into this folder.
-
-Thank You!
-
-Inkscape Developers
+This is the directory with the Inkscape color palettes. 
+They are in Gimp format (.gpl). Within Inkscape, they
+can be accessed by a drop-down menu in the Swatches
+dialog (Ctrl+Shift+W).
