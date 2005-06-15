@@ -1,5 +1,5 @@
-This new folder is part of the Inkscape 0.38 directory reorganization. Please place the appropriate files into this folder.
-
-Thank You!
-
-Inkscape Developers
+This directory contains some example SVG files created
+with Inkscape. If you have a file which is visually nice and
+demonstrates some Inkscape features (not covered by the 
+existing examples) in an interesting way, please submit it
+to the developers.
