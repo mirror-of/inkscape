@@ -2559,7 +2559,7 @@ sp_text_toolbox_new(SPDesktop *desktop)
         gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
         gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
         gtk_widget_set_size_request (c, 144, -1);
-        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        aux_toolbox_space(tbl, 1);
         gtk_box_pack_start (GTK_BOX (tbl), c, FALSE, FALSE, 0);
         }
 
@@ -2570,7 +2570,7 @@ sp_text_toolbox_new(SPDesktop *desktop)
         gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
         gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
         gtk_widget_set_size_request (c, 88, -1);
-        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        aux_toolbox_space(tbl, 1);
         gtk_box_pack_start (GTK_BOX (tbl), c, FALSE, FALSE, 0);
         }
 
@@ -2581,12 +2581,12 @@ sp_text_toolbox_new(SPDesktop *desktop)
         gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
         gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
         gtk_widget_set_size_request (c, 64, -1);
-        aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        aux_toolbox_space(tbl, 1);
         gtk_box_pack_start (GTK_BOX (tbl), c, FALSE, FALSE, 0);
         }
 
-        //Bold
         aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
+        //Bold
         {
         GtkWidget *px = gtk_image_new_from_stock(GTK_STOCK_BOLD, GTK_ICON_SIZE_SMALL_TOOLBAR);
         GtkWidget *button = gtk_toggle_button_new ();
@@ -2708,11 +2708,12 @@ sp_text_toolbox_new(SPDesktop *desktop)
     
         {
             GtkWidget *hb = sp_tb_spinbutton(_(""), _("Spacing between letters"),
-                                             "tools.text", "letter_spacing", 0,
-                                             us, (SPWidget *) tbl, TRUE, "altx-rect",
-                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                             sp_text_letter_changed);
-            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+                                             "tools.text", "letter_spacing", 0.0,
+                                             us, (SPWidget *) tbl, FALSE, NULL,
+                                             -1000.0, 1000.0, 0.1, 0.1,
+                                             sp_text_letter_changed, 0.1, 1);
+            gtk_widget_set_size_request (hb, 45, 6);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 6);
         }
     }
 
@@ -2730,9 +2731,10 @@ sp_text_toolbox_new(SPDesktop *desktop)
             GtkWidget *hb = sp_tb_spinbutton(_(""), _("Spacing between lines"),
                                              "tools.text", "line_spacing", 0,
                                              us, (SPWidget *) tbl, FALSE, NULL,
-                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                             sp_text_line_changed);
-            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 0);
+                                             -1000.0, 1000.0, 0.1, 0.1,
+                                             sp_text_line_changed, 0.1, 1);
+            gtk_widget_set_size_request (hb, 45, 0);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 3);
         }
     }
 
@@ -2757,10 +2759,11 @@ sp_text_toolbox_new(SPDesktop *desktop)
         {
             GtkWidget *hb = sp_tb_spinbutton(_(""), _("Horizontal kerning"),
                                              "tools.text", "horizontal_kerning", 0,
-                                             us, (SPWidget *) tbl, TRUE, "altx-rect",
-                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             us, (SPWidget *) tbl, FALSE, NULL,
+                                             -100.00, 100.00, 0.01, 0.1,
                                              sp_text_horiz_kern_changed);
-            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+            gtk_widget_set_size_request (hb, 45, 0);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 6);
         }
     }
 
@@ -2778,19 +2781,18 @@ sp_text_toolbox_new(SPDesktop *desktop)
             GtkWidget *hb = sp_tb_spinbutton(_(""), _("Vertical kerning"),
                                              "tools.text", "vertical_kerning", 0,
                                              us, (SPWidget *) tbl, FALSE, NULL,
-                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                             -100.00, 100.00, 0.01, 0.1,
                                              sp_text_vert_kern_changed);
-            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 0);
+            gtk_widget_set_size_request (hb, 45, 0);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 5);
         }
     }
 
     // add the units menu
     gtk_widget_show(us);
-    gtk_box_pack_start(GTK_BOX(tbl), us, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(tbl), us, FALSE, FALSE, 1);
     gtk_object_set_data(GTK_OBJECT(tbl), "units", us);
     }
-
-
 
 	// letter rotation
     aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
@@ -2803,12 +2805,13 @@ sp_text_toolbox_new(SPDesktop *desktop)
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, 0);
         }
         {
-            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Horizontal kerning"),
-                                             "tools.text", "horizontal_kerning", 0,
-                                             us, (SPWidget *) tbl, TRUE, "altx-rect",
-                                             0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                             sp_text_letter_rotation_changed);
-            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 0);
+            GtkWidget *hb = sp_tb_spinbutton(_(""), _("Letter rotation"),
+                                             "tools.text", "letter_rotation", 0,
+                                             us, (SPWidget *) tbl, FALSE, NULL,
+                                             -180.0, 180.0, 0.1, 0.1,
+                                             sp_text_letter_rotation_changed, 0.1, 1);
+            gtk_widget_set_size_request (hb, 45, 0);
+            gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, 6);
         }
         // rotation degree label
         {
@@ -2831,8 +2834,8 @@ sp_text_toolbox_new(SPDesktop *desktop)
 
     gtk_widget_show_all(tbl);
     sp_set_font_size_smaller (tbl);
-*/
-    return tbl;
+
+*/    return tbl;
 
 } // end of sp_text_toolbox_new()
 
