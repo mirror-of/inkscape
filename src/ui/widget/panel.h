@@ -33,9 +33,13 @@ public:
     Panel();
     virtual ~Panel();
     Panel(Glib::ustring const &label);
+    Panel(const gchar *prefs_path);
 
     void setLabel(Glib::ustring const &label);
     Glib::ustring const &getLabel() const;
+
+    const gchar *_prefs_path;
+    void restorePanelPrefs();
 
 protected:
     void _setTargetFillable( PreviewFillable *target );

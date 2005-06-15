@@ -464,6 +464,7 @@ SwatchesPanel& SwatchesPanel::getInstance()
  * Constructor
  */
 SwatchesPanel::SwatchesPanel() :
+    Inkscape::UI::Widget::Panel ("dialogs.swatches"),
     _holder(0)
 {
     _holder = new PreviewHolder();
@@ -491,6 +492,8 @@ SwatchesPanel::SwatchesPanel() :
     _setTargetFillable(_holder);
 
     show_all_children();
+
+    restorePanelPrefs();
 }
 
 SwatchesPanel::~SwatchesPanel()

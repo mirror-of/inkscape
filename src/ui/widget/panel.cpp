@@ -24,6 +24,7 @@
 #include <gtk/gtkmain.h>
 
 #include "panel.h"
+#include "../../prefs-utils.h"
 
 namespace Inkscape {
 namespace UI {
@@ -34,6 +35,13 @@ namespace Widget {
  *
  *    \param label Label.
  */
+
+Panel::Panel(const gchar *prefs_path) :
+    _fillable(0)
+{
+    _prefs_path = prefs_path;
+    init();
+}
 
 Panel::Panel() :
     _fillable(0)
@@ -57,6 +65,16 @@ void Panel::init()
     Glib::ustring tmp("<");
     tabTitle.set_label(this->label);
 
+    guint panel_size = 0;
+    if (_prefs_path) {
+        panel_size = prefs_get_int_attribute_limited (_prefs_path, "panel_size", 1, 0, 10);
+    }
+
+    guint panel_mode = 0;
+    if (_prefs_path) {
+        panel_mode = prefs_get_int_attribute_limited (_prefs_path, "panel_mode", 1, 0, 10);
+    }
+
     tabButton.set_menu(menu);
     Gtk::MenuItem* dummy = manage(new Gtk::MenuItem(tmp));
     menu.append( *dummy );
@@ -73,7 +91,7 @@ void Panel::init()
             Glib::ustring foo(things[i]);
             Gtk::RadioMenuItem* single = manage(new Gtk::RadioMenuItem(groupOne, foo));
             menu.append(*single);
-            if ( i == 1 ) {
+            if ( i == panel_size ) {
                 single->set_active(true);
             }
             single->signal_activate().connect( sigc::bind<int, int>( sigc::mem_fun(*this, &Panel::bounceCall), 0, i) );
@@ -85,7 +103,13 @@ void Panel::init()
     Glib::ustring twoLab("Grid");
     Gtk::RadioMenuItem *one = manage(new Gtk::RadioMenuItem(group, oneLab));
     Gtk::RadioMenuItem *two = manage(new Gtk::RadioMenuItem(group, twoLab));
-    one->set_active(true);
+
+    if (panel_mode == 0) {
+        one->set_active(true);
+    } else if (panel_mode == 1) {
+        two->set_active(true);
+    }
+
     menu.append( *one );
     menu.append( *two );
     menu.append( *manage(new Gtk::SeparatorMenuItem()) );
@@ -96,13 +120,15 @@ void Panel::init()
 
     topBar.pack_start(tabTitle);
 
-
     topBar.pack_end(closeButton, false, false);
     topBar.pack_end(tabButton, false, false);
 
     pack_start( topBar, false, false );
 
     show_all_children();
+
+    bounceCall (0, panel_size);
+    bounceCall (1, panel_mode);
 }
 
 void Panel::setLabel(Glib::ustring const &label)
@@ -117,11 +143,26 @@ void Panel::_regItem( Gtk::MenuItem* item, int group, int id )
     item->signal_activate().connect( sigc::bind<int, int>( sigc::mem_fun(*this, &Panel::bounceCall), group + 2, id) );
 }
 
+void Panel::restorePanelPrefs()
+{
+    guint panel_size = 0;
+    if (_prefs_path) {
+        panel_size = prefs_get_int_attribute_limited (_prefs_path, "panel_size", 1, 0, 10);
+    }
+    guint panel_mode = 0;
+    if (_prefs_path) {
+        panel_mode = prefs_get_int_attribute_limited (_prefs_path, "panel_mode", 1, 0, 10);
+    }
+    bounceCall (0, panel_size);
+    bounceCall (1, panel_mode);
+}
+
 void Panel::bounceCall(int i, int j)
 {
     menu.set_active(0);
     switch ( i ) {
     case 0:
+        if (_prefs_path) prefs_set_int_attribute (_prefs_path, "panel_size", j);
         if ( _fillable ) {
             ViewType currType = _fillable->getPreviewType();
             switch ( j ) {
@@ -151,6 +192,7 @@ void Panel::bounceCall(int i, int j)
         }
         break;
     case 1:
+        if (_prefs_path) prefs_set_int_attribute (_prefs_path, "panel_mode", j);
         if ( _fillable ) {
             Gtk::BuiltinIconSize currSize = _fillable->getPreviewSize();
             switch ( j ) {
