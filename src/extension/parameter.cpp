@@ -747,8 +747,8 @@ ParamInt::string (void)
 Glib::ustring *
 ParamFloat::string (void)
 {
-    char startstring[32];
-    sprintf(startstring, "%f", _value);
+    char startstring[G_ASCII_DTOSTR_BUF_SIZE];
+    g_ascii_dtostr(startstring, G_ASCII_DTOSTR_BUF_SIZE, _value);
     Glib::ustring * mystring = new Glib::ustring(startstring);
     return mystring;
 }
