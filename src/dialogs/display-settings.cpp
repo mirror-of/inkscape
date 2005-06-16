@@ -46,7 +46,7 @@ static GtkWidget *dlg = NULL;
 static win_data wd;
 
 // impossible original values to make sure they are read from prefs
-static gint x = -1000, y = -1000, w = 0, h = 0; 
+static gint x = -1000, y = -1000, w = 0, h = 0;
 static gchar *prefs_path = "dialogs.preferences";
 
 extern gint nr_arena_image_x_sample;
@@ -68,7 +68,7 @@ sp_display_dialog_destroy (GtkObject *object, gpointer data)
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
-    
+
 } // edn of sp_display_dialog_destroy()
 
 
@@ -193,7 +193,7 @@ static GtkWidget* sp_select_context_add_radio (
 
   if (isint)
 	gtk_object_set_data (GTK_OBJECT (r), "value", GUINT_TO_POINTER (v_uint));
-  else 
+  else
 	gtk_object_set_data (GTK_OBJECT (r), "value", (void*) v_string);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (r), s);
@@ -294,7 +294,7 @@ options_selector ()
         scale_orig && !strcmp (scale_orig, "points"),
         options_scale_origin_toggled
         );
-    
+
     return vb;
 }
 
@@ -315,8 +315,8 @@ sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
     inkscape_refresh_display (INKSCAPE);
 
     prefs_set_int_attribute ( "options.bitmapoversample", "value", os );
-    
-} 
+
+}
 
 
 static void
@@ -324,16 +324,16 @@ options_rotation_steps_changed (GtkMenuItem *item, gpointer data)
 {
     gint snaps_new = GPOINTER_TO_INT (data);
     prefs_set_int_attribute ( "options.rotationsnapsperpi", "value", snaps_new );
-} 
+}
 
 static void
 options_dialogs_ontop_changed (GtkMenuItem *item, gpointer data)
 {
     gint policy_new = GPOINTER_TO_INT (data);
     prefs_set_int_attribute ( "options.transientpolicy", "value", policy_new );
-} 
+}
 
-void 
+void
 options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
 {
     GtkWidget *hb = gtk_hbox_new (FALSE, HB_MARGIN);
@@ -395,7 +395,7 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
                 position_current = j;
 
             GtkWidget *item = gtk_menu_item_new_with_label (label);
-            gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+            gtk_signal_connect ( GTK_OBJECT (item), "activate",
                                  GTK_SIGNAL_FUNC (options_rotation_steps_changed),
                                  GINT_TO_POINTER (rs.snaps) );
             gtk_widget_show (item);
@@ -414,7 +414,7 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
     }
 }
 
-void 
+void
 options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
 {
     GtkWidget *hb = gtk_hbox_new (FALSE, HB_MARGIN);
@@ -443,7 +443,7 @@ options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
         {
         const gchar *label = _("None");
         GtkWidget *item = gtk_menu_item_new_with_label (label);
-        gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (item), "activate",
                                  GTK_SIGNAL_FUNC (options_dialogs_ontop_changed),
                                  GINT_TO_POINTER (0) );
         gtk_widget_show (item);
@@ -453,7 +453,7 @@ options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
         {
         const gchar *label = _("Normal");
         GtkWidget *item = gtk_menu_item_new_with_label (label);
-        gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (item), "activate",
                                  GTK_SIGNAL_FUNC (options_dialogs_ontop_changed),
                                  GINT_TO_POINTER (1) );
         gtk_widget_show (item);
@@ -463,7 +463,7 @@ options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
         {
         const gchar *label = _("Aggressive");
         GtkWidget *item = gtk_menu_item_new_with_label (label);
-        gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (item), "activate",
                                  GTK_SIGNAL_FUNC (options_dialogs_ontop_changed),
                                  GINT_TO_POINTER (2) );
         gtk_widget_show (item);
@@ -487,9 +487,9 @@ static void
 sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
 {
     nr_arena_global_delta = adj->value;
-    prefs_set_double_attribute ( "options.cursortolerance", "value", 
+    prefs_set_double_attribute ( "options.cursortolerance", "value",
                                  nr_arena_global_delta );
-} 
+}
 
 static void
 options_freehand_tolerance_changed (GtkAdjustment *adj, gpointer data)
@@ -526,9 +526,9 @@ options_changed_boolean (GtkToggleButton *tb, gpointer data)
     prefs_set_int_attribute (prefs_path, prefs_attr, gtk_toggle_button_get_active (tb));
 }
 
-void 
+void
 options_sb (
-    gchar const *label, 
+    gchar const *label,
     gchar const *tooltip, GtkTooltips *tt,
     gchar const *suffix,
     GtkWidget *box,
@@ -553,13 +553,13 @@ options_sb (
     {
         GtkObject *a = gtk_adjustment_new(0.0, lower, upper, step_increment, page_increment, page_size);
 
-        gdouble value; 
+        gdouble value;
         if (isint)
-            if (ispercent) 
+            if (ispercent)
                 value = 100 * (gdouble) prefs_get_double_attribute_limited (prefs_path, attr, def, lower/100.0, upper/100.0);
-            else 
+            else
                 value = (gdouble) prefs_get_int_attribute_limited (prefs_path, attr, (int) def, (int) lower, (int) upper);
-        else 
+        else
             value = prefs_get_double_attribute_limited (prefs_path, attr, def, lower, upper);
 
         gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
@@ -570,7 +570,7 @@ options_sb (
         } else {
             if (step_increment < 0.1)
                 sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 3);
-            else 
+            else
                 sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
         }
 
@@ -594,9 +594,9 @@ options_sb (
 }
 
 
-void 
+void
 options_checkbox (
-    gchar const *label, 
+    gchar const *label,
     gchar const *tooltip, GtkTooltips *tt,
     GtkWidget *box,
     gchar const *prefs_path, gchar const *attr, gint def,
@@ -646,7 +646,7 @@ void
 selcue_checkbox (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
 {
     options_checkbox (
-        _("Show selection cue"), 
+        _("Show selection cue"),
         _("Whether selected objects display a selection cue (the same as in selector)"), tt,
         vb,
         path, "selcue", 1,
@@ -658,7 +658,7 @@ void
 gradientdrag_checkbox (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
 {
     options_checkbox (
-        _("Enable gradient editing"), 
+        _("Enable gradient editing"),
         _("Whether selected objects display gradient editing controls"), tt,
         vb,
         path, "gradientdrag", 1,
@@ -791,7 +791,7 @@ new_objects_style (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
         );
 
     new_objects_style_add_radio (
-        b, fb, tt, _("This tool's own style:"), _("Each tool may store its own style to apply to the newly created objects. Use the button below to set it."), 
+        b, fb, tt, _("This tool's own style:"), _("Each tool may store its own style to apply to the newly created objects. Use the button below to set it."),
         0,
         usecurrent == 0,
         options_changed_radio,
@@ -846,54 +846,54 @@ sp_display_dialog (void)
             x = prefs_get_int_attribute (prefs_path, "x", 0);
             y = prefs_get_int_attribute (prefs_path, "y", 0);
         }
-        
+
         if (w ==0 || h == 0) {
             w = prefs_get_int_attribute (prefs_path, "w", 0);
             h = prefs_get_int_attribute (prefs_path, "h", 0);
         }
-        
+
         if (x != 0 || y != 0) {
             gtk_window_move ((GtkWindow *) dlg, x, y);
-        
+
         } else {
-        
+
             gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
         }
-        
+
         if (w && h) {
             gtk_window_resize ((GtkWindow *) dlg, w, h);
         }
-        
+
         sp_transientize (dlg);
         wd.win = dlg;
         wd.stop = 0;
-        
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", 
+
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop",
                              G_CALLBACK (sp_transientize_callback), &wd);
-                             
+
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
-        
+
         gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_display_dialog_destroy), dlg);
         gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_display_dialog_delete), dlg);
         g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_display_dialog_delete), dlg);
-        
+
         g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
         g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
         GtkTooltips *tt = gtk_tooltips_new();
-                             
+
         nb = gtk_notebook_new ();
         gtk_widget_show (nb);
         gtk_container_add (GTK_CONTAINER (dlg), nb);
 
-// Mouse                                      
+// Mouse
         vb = new_tab (nb, _("Mouse"));
 
         options_sb (
             /* TRANSLATORS: "Grab" is a noun here.  "Grab sensitivity" is intended to mean how
              * close on the screen you need to be to an object to be able to grab it with mouse (in
              * pixels). */
-            _("Grab sensitivity:"), 
+            _("Grab sensitivity:"),
             _("How close on the screen you need to be to an object to be able to grab it with mouse (in screen pixels)"), tt,
             _("pixels"),
             /* todo: allow real-world units. */
@@ -905,7 +905,7 @@ sp_display_dialog (void)
             );
 
         options_sb (
-            _("Click/drag threshold:"), 
+            _("Click/drag threshold:"),
             _("Maximum mouse drag (in screen pixels) which is considered a click, not a drag"), tt,
             _("pixels"),
             vb,
@@ -920,7 +920,7 @@ sp_display_dialog (void)
         vb = new_tab (nb, _("Scrolling"));
 
         options_sb (
-            _("Mouse wheel scrolls by:"), 
+            _("Mouse wheel scrolls by:"),
             _("One mouse wheel notch scrolls by this distance in screen pixels (horizontally with Shift)"), tt,
             _("pixels"),
             vb,
@@ -938,7 +938,7 @@ sp_display_dialog (void)
         gtk_container_add (GTK_CONTAINER (frame), vbvb);
 
         options_sb (
-            _("Scroll by:"), 
+            _("Scroll by:"),
             _("Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"), tt,
             _("pixels"),
             vbvb,
@@ -949,7 +949,7 @@ sp_display_dialog (void)
             );
 
         options_sb (
-            _("Acceleration:"), 
+            _("Acceleration:"),
             _("Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no acceleration)"), tt,
             "",
             vbvb,
@@ -967,7 +967,7 @@ sp_display_dialog (void)
         gtk_container_add (GTK_CONTAINER (frame), vbvb);
 
         options_sb (
-            _("Speed:"), 
+            _("Speed:"),
             _("How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn autoscroll off)"), tt,
             "",
             vbvb,
@@ -978,7 +978,7 @@ sp_display_dialog (void)
             );
 
         options_sb (
-            _("Threshold:"), 
+            _("Threshold:"),
             _("How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
             _("pixels"),
             vbvb,
@@ -992,7 +992,7 @@ sp_display_dialog (void)
         vb = new_tab (nb, _("Steps"));
 
         options_sb (
-            _("Arrow keys move by:"), 
+            _("Arrow keys move by:"),
             _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in px units)"), tt,
             _("px"),
             vb,
@@ -1003,7 +1003,7 @@ sp_display_dialog (void)
             );
 
         options_sb (
-            _("> and < scale by:"), 
+            _("> and < scale by:"),
             _("Pressing > or < scales selection up or down by this increment (in px units)"), tt,
             _("px"),
             vb,
@@ -1014,7 +1014,7 @@ sp_display_dialog (void)
             );
 
         options_sb (
-            _("Inset/Outset by:"), 
+            _("Inset/Outset by:"),
             _("Inset and Outset commands displace the path by this distance (in px units)"), tt,
             _("px"),
             vb,
@@ -1027,7 +1027,7 @@ sp_display_dialog (void)
         options_rotation_steps (vb, tt);
 
         options_sb (
-            _("Zoom in/out by:"), 
+            _("Zoom in/out by:"),
             _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), tt,
             _("%"),
             vb,
@@ -1044,7 +1044,7 @@ sp_display_dialog (void)
         gtk_widget_show (nb_tools);
         gtk_container_add (GTK_CONTAINER (vb), nb_tools);
 
-        // Selector        
+        // Selector
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Selector"));
 
@@ -1115,7 +1115,7 @@ sp_display_dialog (void)
             GtkWidget *vb_tool = new_tab (nb_tools, _("Pencil"));
 
             options_sb (
-                _("Tolerance:"), 
+                _("Tolerance:"),
                 _("This value affects the amount of smoothing applied to freehand lines; lower values produce more uneven paths with more nodes"), tt,
                 "",
                 vb_tool,
@@ -1182,7 +1182,7 @@ sp_display_dialog (void)
         options_dialogs_ontop (vb, tt);
 
 options_checkbox (
-    _("Save window geometry"), 
+    _("Save window geometry"),
     _("Save the window size and position with each document (only for Inkscape SVG format)"), tt,
     vb,
     "options.savewindowgeometry", "value", 1,
@@ -1190,7 +1190,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Dialogs are hidden in taskbar"), 
+    _("Dialogs are hidden in taskbar"),
     _("Whether dialog windows are to be hidden in the window manager taskbar"), tt,
     vb,
     "options.dialogsskiptaskbar", "value", 1,
@@ -1198,7 +1198,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Zoom when window is resized"), 
+    _("Zoom when window is resized"),
     _("Zoom drawing when document window is resized, to keep the same area visible (this is the default which can be changed in any window using the button above the right scrollbar)"), tt,
     vb,
     "options.stickyzoom", "value", 0,
@@ -1221,7 +1221,7 @@ options_checkbox (
 
             gint compense = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
 
-            GtkWidget *b = 
+            GtkWidget *b =
             sp_select_context_add_radio (
                 NULL, fb, tt, _("Move in parallel"),
                 _("Clones are translated by the same vector as their original."),
@@ -1259,7 +1259,7 @@ options_checkbox (
 
             gint orphans = prefs_get_int_attribute ("options.cloneorphans", "value", SP_CLONE_ORPHANS_UNLINK);
 
-            GtkWidget *b = 
+            GtkWidget *b =
             sp_select_context_add_radio (
                 NULL, fb, tt, _("Are unlinked"), _("Orphaned clones are converted to regular objects."), NULL, SP_CLONE_ORPHANS_UNLINK, true,
                 orphans == SP_CLONE_ORPHANS_UNLINK,
@@ -1286,7 +1286,7 @@ options_checkbox (
         vb = new_tab (nb, _("Transforms"));
 
 options_checkbox (
-    _("Scale stroke width"), 
+    _("Scale stroke width"),
     _("When scaling objects, scale the stroke width by the same proportion"), tt,
     vb,
     "options.transform", "stroke", 1,
@@ -1294,7 +1294,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Scale rounded corners in rectangles"), 
+    _("Scale rounded corners in rectangles"),
     _("When scaling rectangles, scale the radii of rounded corners"), tt,
     vb,
     "options.transform", "rectcorners", 0,
@@ -1302,7 +1302,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Transform gradients"), 
+    _("Transform gradients"),
     _("Transform gradients (in fill or stroke) along with the objects"), tt,
     vb,
     "options.transform", "gradient", 1,
@@ -1310,7 +1310,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Transform patterns"), 
+    _("Transform patterns"),
     _("Transform patterns (in fill or stroke) along with the objects"), tt,
     vb,
     "options.transform", "pattern", 1,
@@ -1360,7 +1360,7 @@ options_checkbox (
             gtk_container_add (GTK_CONTAINER (f), fb);
 
 options_checkbox (
-    _("Select only within current layer"), 
+    _("Select only within current layer"),
     _("Uncheck this to make keyboard selection commands work on objects in all layers"), tt,
     fb,
     "options.kbselection", "inlayer", 1,
@@ -1368,7 +1368,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Ignore hidden objects"), 
+    _("Ignore hidden objects"),
     _("Uncheck this to be able to select objects that are hidden (either by themselves or by being in a hidden group or layer)"), tt,
     fb,
     "options.kbselection", "onlyvisible", 1,
@@ -1376,7 +1376,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Ignore locked objects"), 
+    _("Ignore locked objects"),
     _("Uncheck this to be able to select objects that are locked (either by themselves or by being in a locked group or layer)"), tt,
     fb,
     "options.kbselection", "onlysensitive", 1,
@@ -1388,7 +1388,7 @@ options_checkbox (
         vb = new_tab (nb, _("Misc"));
 
         options_sb (
-            _("Default export resolution:"), 
+            _("Default export resolution:"),
             _("Default bitmap resolution (in dots per inch) in the Export dialog"), tt, // FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
             _("dpi"),
             vb,
@@ -1401,7 +1401,7 @@ options_checkbox (
         options_checkbox (
     /* TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
      * rectangle with bitmap fill. */
-    _("Import bitmap as <image>"), 
+    _("Import bitmap as <image>"),
     _("When on, an imported bitmap creates an <image> element; otherwise it is a rectangle with bitmap fill"), tt,
     vb,
     "options.importbitmapsasimages", "value", 1,
@@ -1412,16 +1412,25 @@ options_checkbox (
     /* TRANSLATORS: When on, the print out (currently Postscript) will have
      * a comment with the each object's label visible, marking the section
      * of the printing commands that represent the given object. */
-    _("Add label comments to printing output"), 
+    _("Add label comments to printing output"),
     _("When on, a comment will be added to the raw print output, marking the rendered output for an object with its label"), tt,
     vb,
     "printing.debug", "show-label-comments", 0,
     options_changed_boolean
     );
 
+        options_checkbox (
+    /* TRANSLATORS: When on, enable the effects menu, default is off */
+    _("Enable script effects (requires restart) - EXPERIMENTAL"),
+    _("When on, the effects menu is enabled, allowing external effect scripts to be called, requires restart before effective - EXPERIMENTAL"), tt,
+    vb,
+    "extensions", "show-effects-menu", 0,
+    options_changed_boolean
+    );
+
         options_sb (
             /* TRANSLATORS: The maximum length of the Open Recent list in the File menu. */
-            _("Max recent documents:"), 
+            _("Max recent documents:"),
             _("The maximum length of the Open Recent list in the File menu"), tt,
             "",
             vb,
@@ -1432,7 +1441,7 @@ options_checkbox (
             );
 
         options_sb (
-            _("Simplification threshold:"), 
+            _("Simplification threshold:"),
             _("How strong is the Simplify command by default. If you invoke this command several times in quick succession, it will act more and more aggressively; invoking it again after a pause restores the default threshold."), tt,
             "",
             vb,
@@ -1442,7 +1451,7 @@ options_checkbox (
             options_changed_double
             );
 
-       
+
         /* Oversample */
         hb = gtk_hbox_new (FALSE, 4);
         gtk_widget_show (hb);
@@ -1460,31 +1469,31 @@ options_checkbox (
         gtk_widget_show (m);
 
         i = gtk_menu_item_new_with_label (_("None"));
-        gtk_signal_connect ( GTK_OBJECT (i), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (i), "activate",
                              GTK_SIGNAL_FUNC (sp_display_dialog_set_oversample),
                              GINT_TO_POINTER (0) );
         gtk_widget_show (i);
         gtk_menu_append (GTK_MENU (m), i);
         i = gtk_menu_item_new_with_label (_("2x2"));
-        gtk_signal_connect ( GTK_OBJECT (i), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (i), "activate",
                              GTK_SIGNAL_FUNC (sp_display_dialog_set_oversample),
                              GINT_TO_POINTER (1) );
         gtk_widget_show (i);
         gtk_menu_append (GTK_MENU (m), i);
         i = gtk_menu_item_new_with_label (_("4x4"));
-        gtk_signal_connect ( GTK_OBJECT (i), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (i), "activate",
                              GTK_SIGNAL_FUNC (sp_display_dialog_set_oversample),
                              GINT_TO_POINTER (2) );
         gtk_widget_show (i);
         gtk_menu_append (GTK_MENU (m), i);
         i = gtk_menu_item_new_with_label (_("8x8"));
-        gtk_signal_connect ( GTK_OBJECT (i), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (i), "activate",
                              GTK_SIGNAL_FUNC (sp_display_dialog_set_oversample),
                              GINT_TO_POINTER (3));
         gtk_widget_show (i);
         gtk_menu_append (GTK_MENU (m), i);
         i = gtk_menu_item_new_with_label (_("16x16"));
-        gtk_signal_connect ( GTK_OBJECT (i), "activate", 
+        gtk_signal_connect ( GTK_OBJECT (i), "activate",
                              GTK_SIGNAL_FUNC (sp_display_dialog_set_oversample),
                              GINT_TO_POINTER (4) );
         gtk_widget_show (i);
@@ -1492,14 +1501,16 @@ options_checkbox (
 
         gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
 
-        gtk_option_menu_set_history ( GTK_OPTION_MENU (om), 
+        gtk_option_menu_set_history ( GTK_OPTION_MENU (om),
                                       nr_arena_image_x_sample);
+
+
 
         g_signal_connect(GTK_OBJECT (nb), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_top");
         gtk_notebook_set_current_page (GTK_NOTEBOOK (nb), prefs_get_int_attribute ("dialogs.preferences", "page_top", 0));
-                             
+
     } // end of if (!dlg)
-    
+
     gtk_window_present ((GtkWindow *) dlg);
 
 } // end of sp_display_dialog()
