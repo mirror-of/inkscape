@@ -176,7 +176,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"createbitmap\" minsize=\"250\"/>\n"
 "  </group>\n"
 "\n"
-"  <group id=\"extensions\">"
+"  <group id=\"extensions\" show-effects-menu=\"0\">"
 "  </group>\n"
 "\n"
 "  <group id=\"desktop\""
