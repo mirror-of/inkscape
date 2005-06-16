@@ -231,6 +231,7 @@ private:
 /** Selects the given layer in the dropdown selector.  
  */
 void LayerSelector::_selectLayer(SPObject *layer) {
+    using Inkscape::Util::List;
     using Inkscape::Util::cons;
     using Inkscape::Util::reverse_list;
 
@@ -242,7 +243,7 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         _layer_model->erase(first_row);
     }
 
-    SPObject *root(_desktop->currentRoot());
+    SPObject *root=_desktop->currentRoot();
 
     if (_layer) {
         sp_object_unref(_layer, NULL);
@@ -250,9 +251,12 @@ void LayerSelector::_selectLayer(SPObject *layer) {
     }
 
     if (layer) {
-        _buildEntries(0, cons(*root,
-            reverse_list<SPObject::ParentIterator>(layer, root)
-        ));
+        List<SPObject &> hierarchy=reverse_list<SPObject::ParentIterator>(layer, root);
+        if ( layer == root ) {
+            _buildEntries(0, cons(*root, hierarchy));
+        } else if (hierarchy) {
+            _buildSiblingEntries(0, *root, hierarchy);
+        }
 
         Gtk::TreeIter row(
             std::find_if(
@@ -309,8 +313,8 @@ void LayerSelector::_buildEntries(unsigned depth,
 
     _buildEntry(depth, *hierarchy);
 
-    List<SPObject &> remainder(rest(hierarchy));
-    if ( remainder && rest(remainder) ) {
+    List<SPObject &> remainder=rest(hierarchy);
+    if (remainder) {
         _buildEntries(depth+1, remainder);
     } else {
         _buildSiblingEntries(depth+1, *hierarchy, remainder);
@@ -519,25 +523,24 @@ void LayerSelector::_prepareLabelRenderer(
         SPObject *layer=( _desktop ? _desktop->currentLayer() : NULL );
         SPObject *root=( _desktop ? _desktop->currentRoot() : NULL );
 
-        bool isroot = !( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
-                layer == root && SP_OBJECT_PARENT(object) == root);
+        bool isancestor = !( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) || layer == root && SP_OBJECT_PARENT(object) == root);
 
         bool iscurrent = ( object == layer && object != root );
 
         gchar *format = g_strdup_printf (
             "<span size=\"smaller\" %s><tt>%*s%s</tt>%s%s%s%%s%s%s%s</span>",
-            (_desktop && _desktop->itemIsHidden (SP_ITEM(object))) ? "foreground=\"gray50\"" : "",
-            depth ? (depth) : 0, "", iscurrent ? "&#8226;" : (depth? " " : ""),
-            iscurrent? "<b>" : "",
-            (SP_ITEM(object)->isLocked()) ? "[" : "",
-            isroot ? "<small>" : "",
-            isroot ? "</small>" : "",
-            (SP_ITEM(object)->isLocked()) ? "]" : "",
-            iscurrent? "</b>" : ""
+            ( _desktop && _desktop->itemIsHidden (SP_ITEM(object)) ? "foreground=\"gray50\"" : "" ),
+            depth, "", ( iscurrent ? "&#8226;" : " " ),
+            ( iscurrent ? "<b>" : "" ),
+            ( SP_ITEM(object)->isLocked() ? "[" : "" ),
+            ( isancestor ? "<small>" : "" ),
+            ( isancestor ? "</small>" : "" ),
+            ( SP_ITEM(object)->isLocked() ? "]" : "" ),
+            ( iscurrent ? "</b>" : "" )
             );
 
         gchar const *label;
-        if (depth) {
+        if ( object != root ) {
             label = object->label();
             if (!label) {
                 label = object->defaultLabel();

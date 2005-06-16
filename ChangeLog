@@ -1,3 +1,10 @@
+2005-06-16  MenTaLguY  <mental@rydia.net>
+
+	* src/interface.cpp: removed "Go to root" context menu item
+
+	* src/widgets/layer-selector.cpp: hide "(root)" unless it is the current
+	  layer
+
 2005-06-11  Aaron Spike  <aaron@ekips.org>
 
 	* confiugre.ac,

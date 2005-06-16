@@ -1206,10 +1206,6 @@ static void leave_group(GtkMenuItem *, SPDesktop *desktop) {
     desktop->setCurrentLayer(SP_OBJECT_PARENT(desktop->currentLayer()));
 }
 
-static void leave_all_groups(GtkMenuItem *, SPDesktop *desktop) {
-    desktop->setCurrentLayer(desktop->currentRoot());
-}
-
 static void enter_group(GtkMenuItem *mi, SPDesktop *desktop) {
     desktop->setCurrentLayer(reinterpret_cast<SPObject *>(g_object_get_data(G_OBJECT(mi), "group")));
     SP_DT_SELECTION(desktop)->clear();
@@ -1282,10 +1278,6 @@ sp_ui_context_menu (SPView *view, SPItem *item)
                 gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
 
             }
-            GtkWidget *w = gtk_menu_item_new_with_label(_("Go to root"));
-            g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_all_groups), dt);
-            gtk_widget_show(w);
-            gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
         }
 
 	return m;
