@@ -862,27 +862,18 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
     Inkscape::SVGOStringStream os;
 
     // Escape chars
-    Glib::ustring s (text);
-    {    
-        size_t i = s.find_first_of("\\");
-        while (i != Glib::ustring::npos) {
-            s.replace (i, 1, "\\\\");
-            i = s.find_first_of("\\", i+2);
-        }
-    }
-    {    
-        size_t i = s.find_first_of("(");
-        while (i != Glib::ustring::npos) {
-            s.replace (i, 1, "\\(");
-            i = s.find_first_of("(", i+2);
-        }
-    }
-    {    
-        size_t i = s.find_first_of(")");
-        while (i != Glib::ustring::npos) {
-            s.replace (i, 1, "\\)");
-            i = s.find_first_of(")", i+2);
-        }
+    Glib::ustring s;
+    for (const gchar *p_text = text ; *p_text ; p_text = g_utf8_next_char(p_text)) {
+        gunichar c = g_utf8_get_char(p_text);
+        if (c == '\\' || c == ')' || c == '(') {
+            s += '\\';
+            s += c;
+        } else if (c >= 0x80) {
+            Inkscape::SVGOStringStream escaped;
+            escaped << '\\' << std::oct << c;
+            s += escaped.str();
+        } else
+            s += c;
     }
 
     os << "gsave\n";
