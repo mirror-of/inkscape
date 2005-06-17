@@ -20,9 +20,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 import sys, copy, optparse
-import xml.dom.ext
-import xml.dom.ext.reader.Sax2
-import xml.xpath
+try:
+	import xml.dom.ext
+	import xml.dom.ext.reader.Sax2
+	import xml.xpath
+except:
+	sys.exit('The inkex.py module requires PyXML. Please download the latest version from <http://pyxml.sourceforge.net/>.')
 
 def debug(what):
 	sys.stderr.write(str(what) + "\n")

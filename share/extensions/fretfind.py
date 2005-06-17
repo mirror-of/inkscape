@@ -106,7 +106,7 @@ class FretFind(inkex.Effect):
 				f = open(self.options.scalafile,'r')
 				self.options.scalascale = f.read()
 			except: 
-				pass
+				sys.exit('Scala scale description file expected.')
 		#scale
 		if self.doScala:
 			self.scale = ffscale.ScalaScale(self.options.scalascale)
