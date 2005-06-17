@@ -3325,7 +3325,7 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
             }
         } else if (val->type == SP_FONT_SIZE_LENGTH) {
             Inkscape::SVGOStringStream os;
-            os << key << ":" << val->computed << ";";
+            os << key << ":" << val->computed << "px;";      // must specify px, see inkscape bug 1221626, mozilla bug 234789
             return g_strlcpy(p, os.str().c_str(), len);
         } else if (val->type == SP_FONT_SIZE_PERCENTAGE) {
             Inkscape::SVGOStringStream os;
