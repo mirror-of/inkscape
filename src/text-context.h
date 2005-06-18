@@ -65,7 +65,7 @@ struct SPTextContext {
 
 	guint over_text : 1; // true if cursor is over a text object
 
-	guint dragging : 1; // dragging selection over text
+	guint dragging : 2; // dragging selection over text
 
 	guint creating : 1; // dragging rubberband to create flowtext
 	SPCanvasItem *grabbed; // we grab while we are creating, to get events even if the mouse goes out of the window

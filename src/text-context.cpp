@@ -369,6 +369,31 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 }
             }
             break;
+        case GDK_2BUTTON_PRESS:
+            if (event->button.button == 1 && tc->text) {
+                Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+                if (layout) {
+                    if (!layout->isStartOfWord(tc->text_sel_start))
+                        tc->text_sel_start.prevStartOfWord();
+                    if (!layout->isEndOfWord(tc->text_sel_end))
+                        tc->text_sel_end.nextEndOfWord();
+                    sp_text_context_update_cursor(tc);
+                    sp_text_context_update_text_selection(tc);
+                    tc->dragging = 2;
+                    ret = TRUE;
+                }
+            }
+            break;
+        case GDK_3BUTTON_PRESS:
+            if (event->button.button == 1 && tc->text) {
+                tc->text_sel_start.thisStartOfLine();
+                tc->text_sel_end.thisEndOfLine();
+                sp_text_context_update_cursor(tc);
+                sp_text_context_update_text_selection(tc);
+                tc->dragging = 3;
+                ret = TRUE;
+            }
+            break;
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1 && tc->dragging) {
                 tc->dragging = 0;
@@ -377,10 +402,27 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
             break;
         case GDK_MOTION_NOTIFY:
             if (event->motion.state & GDK_BUTTON1_MASK && tc->dragging) {
+                Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+                if (!layout) break;
                 // find out click point in document coordinates
                 NR::Point p = sp_desktop_w2d_xy_point(ec->desktop, NR::Point(event->button.x, event->button.y));
                 // set the cursor closest to that point
                 Inkscape::Text::Layout::iterator new_end = sp_te_get_position_by_coords(tc->text, p);
+                if (tc->dragging == 2) {
+                    // double-click dragging: go by word
+                    if (new_end < tc->text_sel_start) {
+                        if (!layout->isStartOfWord(new_end))
+                            new_end.prevStartOfWord();
+                    } else 
+                        if (!layout->isEndOfWord(new_end))
+                            new_end.nextEndOfWord();
+                } else if (tc->dragging == 3) {
+                    // triple-click dragging: go by line
+                    if (new_end < tc->text_sel_start)
+                        new_end.thisStartOfLine();
+                    else 
+                        new_end.thisEndOfLine();
+                }
                 // update display
                 if (tc->text_sel_end != new_end) {
                     tc->text_sel_end = new_end;

@@ -781,14 +781,10 @@ public:
     bool operator!= (iterator const &other) const
         {return _glyph_index != other._glyph_index || _char_index != other._char_index;}
 
-    /* FIXME: Please document why the below are inconsistent with the above (in the case of equal
-     * char index but different glyph index, e.g. arabic character with multiple glyphs); or remove
-     * these operators, or change implementation of operator< to _char_index < o._char_index ||
-     * _glyph_index < o._glyph_index (and similarly the other operators).  Also, I'm inclined
-     * to add assertions of equal parent, and that (ch<=o.ch && g<=o.g)||(vice versa).
-     *
-     * If the existing semantics are deliberate, then consider adding a named function
-     * instead of using operator< in strange ways. */
+    /* mustn't compare _glyph_index in these operators because for characters
+    that don't have glyphs (line breaks, elided soft hyphens, etc), the glyph
+    index is -1 which makes them not well-ordered. To be honest, interating by
+    glyphs is not very useful and should be avoided. */
     bool operator< (iterator const &other) const
         {return _char_index < other._char_index;}
     bool operator<= (iterator const &other) const
@@ -932,7 +928,7 @@ inline unsigned Layout::shapeIndex(iterator const &it) const
     {return it._char_index == _characters.size() ? _input_wrap_shapes.size() - 1 : _characters[it._char_index].line(this).in_shape;}
 
 inline bool Layout::isWhitespace(iterator const &it) const
-    {return _characters[it._char_index].char_attributes.is_white;}
+    {return it._char_index == _characters.size() || _characters[it._char_index].char_attributes.is_white;}
 
 inline int Layout::characterAt(iterator const &it) const
 {
@@ -943,19 +939,19 @@ inline int Layout::characterAt(iterator const &it) const
 }
 
 inline bool Layout::isCursorPosition(iterator const &it) const
-    {return _characters[it._char_index].char_attributes.is_cursor_position;}
+    {return it._char_index == _characters.size() || _characters[it._char_index].char_attributes.is_cursor_position;}
 
 inline bool Layout::isStartOfWord(iterator const &it) const
-    {return _characters[it._char_index].char_attributes.is_word_start;}
+    {return it._char_index != _characters.size() && _characters[it._char_index].char_attributes.is_word_start;}
 
 inline bool Layout::isEndOfWord(iterator const &it) const
-    {return _characters[it._char_index].char_attributes.is_word_end;}
+    {return it._char_index == _characters.size() || _characters[it._char_index].char_attributes.is_word_end;}
 
 inline bool Layout::isStartOfSentence(iterator const &it) const
-    {return _characters[it._char_index].char_attributes.is_sentence_start;}
+    {return it._char_index != _characters.size() && _characters[it._char_index].char_attributes.is_sentence_start;}
 
 inline bool Layout::isEndOfSentence(iterator const &it) const
-    {return _characters[it._char_index].char_attributes.is_sentence_end;}
+    {return it._char_index == _characters.size() || _characters[it._char_index].char_attributes.is_sentence_end;}
 
 inline unsigned Layout::paragraphIndex(iterator const &it) const
     {return it._char_index == _characters.size() ? _paragraphs.size() - 1 : _characters[it._char_index].line(this).in_paragraph;}

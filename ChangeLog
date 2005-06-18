@@ -1,3 +1,9 @@
+2005-06-18  Richard Hughes  <cyreve@users.sourceforge.net>
+
+	* src/text-context.cpp, src/text-context.h, src/libnrtype/Layout-TNG.h:
+	  implement double- and triple-clicking of text for selecting the
+	  current word and line respectively
+
 2005-06-16  MenTaLguY  <mental@rydia.net>
 
 	* src/interface.cpp: removed "Go to root" context menu item
