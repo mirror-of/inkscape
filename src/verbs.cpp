@@ -1092,6 +1092,12 @@ ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
         case SP_VERB_OBJECT_TO_CURVE:
             sp_selected_path_to_curves ();
             break;
+        case SP_VERB_OBJECT_FLOW_TEXT:
+            text_flow_into_shape();
+            break;
+        case SP_VERB_OBJECT_UNFLOW_TEXT:
+            text_unflow();
+            break;
         case SP_VERB_OBJECT_FLOWTEXT_TO_TEXT:
             SPFlowtext::convert_to_text ();
             break;
@@ -1727,7 +1733,7 @@ Verb * Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_TEXTFROMPATH, "SelectionTextFromPath", N_("_Remove from Path"),
         N_("Remove text from path"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_REMOVE_KERNS, "SelectionTextRemoveKerns", N_("Remove Manual _Kerns"),
-        N_("Remove all manual kerns from a text object"), NULL),
+        N_("Remove all manual kerns and glyph rotations from a text object"), NULL),
 
     new SelectionVerb(SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
         N_("Union of selected objects"), "union"),
@@ -1823,8 +1829,12 @@ Verb * Verb::_base_verbs[] = {
         N_("Remove transformations from object"), "object_reset"),
     new ObjectVerb(SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"),
         N_("Convert selected object(s) to path(s)"), "object_tocurve"),
-    new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Unflow Text"),
-        N_("Convert selected flowed text(s) to regular text objects"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_FLOW_TEXT, "ObjectFlowText", N_("_Flow into Frame"),
+        N_("Put text into frame(s)"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_UNFLOW_TEXT, "ObjectUnFlowText", N_("_Unflow"),
+        N_("Remove text from frame (creates a single-line text object)"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Convert to Text"),
+        N_("Convert flowed text(s) to regular text objects (preserves appearance)"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally",
         N_("Flip _Horizontally"), N_("Flip selection horizontally"),
         "object_flip_hor"),

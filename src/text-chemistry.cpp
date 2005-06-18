@@ -32,6 +32,9 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "text-editing.h"
+#include "sp-flowtext.h"
+#include "sp-flowregion.h"
+#include "sp-flowdiv.h"
 
 
 SPItem *
@@ -41,6 +44,18 @@ text_in_selection(Inkscape::Selection *selection)
          items != NULL;
          items = items->next) {
         if (SP_IS_TEXT(items->data))
+            return ((SPItem *) items->data);
+    }
+    return NULL;
+}
+
+SPItem *
+flowtext_in_selection(Inkscape::Selection *selection)
+{
+    for (GSList *items = (GSList *) selection->itemList();
+         items != NULL;
+         items = items->next) {
+        if (SP_IS_FLOWTEXT(items->data))
             return ((SPItem *) items->data);
     }
     return NULL;
@@ -57,24 +72,6 @@ shape_in_selection(Inkscape::Selection *selection)
     }
     return NULL;
 }
-
-void
-scale_text_recursive(SPItem *item, gdouble scale)
-{
-    SPStyle *style = SP_OBJECT_STYLE(item);
-    if (style) {
-        style->font_size.computed *= scale;
-    }
-    SP_OBJECT(item)->updateRepr();
-
-    for (SPObject *child = sp_object_first_child(SP_OBJECT(item));
-         child != NULL; child = SP_OBJECT_NEXT(child))
-    {
-        if (SP_IS_ITEM(child))
-            scale_text_recursive((SPItem *) child, scale);
-    }
-}
-
 
 void
 text_put_on_path()
@@ -108,7 +105,7 @@ text_put_on_path()
     Inkscape::Text::Layout::Alignment text_alignment = layout->paragraphAlignment(layout->begin());
 
     // remove transform from text, but recursively scale text's fontsize by the expansion
-    scale_text_recursive(text, NR::expansion(SP_ITEM(text)->transform));
+    SP_TEXT(text)->_adjustFontsizeRecursive (text, NR::expansion(SP_ITEM(text)->transform));
     sp_repr_set_attr(SP_OBJECT_REPR(text), "transform", NULL);
 
     // make a list of text children
@@ -233,6 +230,166 @@ text_remove_all_kerns()
         sp_document_done(SP_DT_DOCUMENT(desktop));
     }
 }
+
+void
+text_flow_into_shape()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop)
+        return;
+
+    SPDocument *doc = SP_DT_DOCUMENT (desktop);
+
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+
+    SPItem *text = text_in_selection(selection);
+    SPItem *shape = shape_in_selection(selection);
+
+    if (!text || !shape || g_slist_length((GSList *) selection->itemList()) < 2) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text into frame."));
+        return;
+    }
+
+    // remove transform from text, but recursively scale text's fontsize by the expansion
+    SP_TEXT(text)->_adjustFontsizeRecursive(text, NR::expansion(SP_ITEM(text)->transform));
+    sp_repr_set_attr(SP_OBJECT_REPR(text), "transform", NULL);
+
+    Inkscape::XML::Node *root_repr = sp_repr_new("svg:flowRoot");
+    sp_repr_set_attr(root_repr, "style", SP_OBJECT_REPR(text)->attribute("style")); // fixme: transfer style attrs too
+    SP_OBJECT_REPR(SP_OBJECT_PARENT(shape))->appendChild(root_repr);
+    SPObject *root_object = doc->getObjectByRepr(root_repr);
+    g_return_if_fail(SP_IS_FLOWTEXT(root_object));
+
+    Inkscape::XML::Node *region_repr = sp_repr_new("svg:flowRegion");
+    root_repr->appendChild(region_repr);
+    SPObject *object = doc->getObjectByRepr(region_repr);
+    g_return_if_fail(SP_IS_FLOWREGION(object));
+
+    /* Add clones */
+    for (GSList *items = (GSList *) selection->itemList();
+         items != NULL;
+         items = items->next) {
+        SPItem *item = SP_ITEM(items->data);
+        if (SP_IS_SHAPE(item)){
+            Inkscape::XML::Node *clone = sp_repr_new("svg:use");
+            sp_repr_set_attr(clone, "x", "0");
+            sp_repr_set_attr(clone, "y", "0");
+            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", SP_OBJECT_REPR(item)->attribute("id")));
+
+            // add the new clone to the region
+            region_repr->appendChild(clone);
+        }
+    }
+
+    Inkscape::XML::Node *div_repr = sp_repr_new("svg:flowDiv");
+    sp_repr_set_attr(div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+    root_repr->appendChild(div_repr);
+    SPObject *div_object = doc->getObjectByRepr(div_repr);
+    g_return_if_fail(SP_IS_FLOWDIV(div_object));
+
+    Inkscape::XML::Node *para_repr = sp_repr_new("svg:flowPara");
+    div_repr->appendChild(para_repr);
+    object = doc->getObjectByRepr(para_repr);
+    g_return_if_fail(SP_IS_FLOWPARA(object));
+
+    Inkscape::Text::Layout const *layout = te_get_layout(text);
+    Glib::ustring text_ustring = sp_te_get_string_multiline(text, layout->begin(), layout->end());
+
+    Inkscape::XML::Node *text_repr = sp_repr_new_text(text_ustring.c_str()); // FIXME: transfer all formatting!!!
+    para_repr->appendChild(text_repr);
+
+    SP_OBJECT(text)->deleteObject (true);
+
+    sp_document_done(doc);
+
+    SP_DT_SELECTION(desktop)->set(SP_ITEM(root_object));
+
+    sp_repr_unref(root_repr);
+    sp_repr_unref(div_repr);
+    sp_repr_unref(region_repr);
+    sp_repr_unref(para_repr);
+    sp_repr_unref(text_repr);
+}
+
+void
+text_unflow ()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop)
+        return;
+
+    SPDocument *doc = SP_DT_DOCUMENT (desktop);
+
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+
+
+    if (!flowtext_in_selection(selection) || g_slist_length((GSList *) selection->itemList()) < 1) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a flowed text</b> to unflow it."));
+        return;
+    }
+
+    GSList *new_objs = NULL;
+    GSList *old_objs = NULL;
+
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
+         items != NULL;
+         items = items->next) {
+
+        if (!SP_IS_FLOWTEXT(SP_OBJECT(items->data))) {
+            continue;
+        }
+
+        SPItem *flowtext = SP_ITEM(items->data);
+
+        /* Create <text> */
+        Inkscape::XML::Node *rtext = sp_repr_new("svg:text");
+        sp_repr_set_attr(rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+        /* Set style */
+        sp_repr_set_attr(rtext, "style", SP_OBJECT_REPR(flowtext)->attribute("style")); // fixme: transfer style attrs too; and from descendants
+
+        NRRect bbox;
+        sp_item_invoke_bbox(SP_ITEM(flowtext), &bbox, sp_item_i2doc_affine(SP_ITEM(flowtext)), TRUE);
+        NR::Point xy(bbox.x0, bbox.y0);
+        if (xy[NR::X] != 1e18 && xy[NR::Y] != 1e18) {
+            sp_repr_set_double(rtext, "x", xy[NR::X]);
+            sp_repr_set_double(rtext, "y", xy[NR::Y]);
+        }
+
+        /* Create <tspan> */
+        Inkscape::XML::Node *rtspan = sp_repr_new("svg:tspan");
+        sp_repr_set_attr(rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
+        sp_repr_add_child(rtext, rtspan, NULL);
+
+        Inkscape::Text::Layout const *layout = te_get_layout(flowtext);
+        Glib::ustring text_ustring = sp_te_get_string_multiline(flowtext, layout->begin(), layout->end());
+
+        Inkscape::XML::Node *text_repr = sp_repr_new_text(text_ustring.c_str()); // FIXME: transfer all formatting!!!
+        rtspan->appendChild(text_repr);
+
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(flowtext))->appendChild(rtext);
+        SPObject *text_object = doc->getObjectByRepr(rtext);
+
+        new_objs = g_slist_prepend (new_objs, text_object);
+        old_objs = g_slist_prepend (old_objs, flowtext);
+
+        sp_repr_unref(rtext);
+        sp_repr_unref(rtspan);
+        sp_repr_unref(text_repr);
+    }
+
+    selection->clear();
+    selection->setList(new_objs);
+    for (GSList *i = old_objs; i; i = i->next) {
+        SP_OBJECT(i->data)->deleteObject (true);
+    }
+
+    g_slist_free (old_objs);
+    g_slist_free (new_objs);
+
+    sp_document_done(doc);
+}
+
 
 
 /*

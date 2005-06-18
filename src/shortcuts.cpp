@@ -239,8 +239,10 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_c, Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE), true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_C, Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE), false);
 
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_w, Inkscape::Verb::get(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT), true);
-	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_W, Inkscape::Verb::get(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT), false);
+	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_w, Inkscape::Verb::get(SP_VERB_OBJECT_FLOW_TEXT), true);
+	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_W, Inkscape::Verb::get(SP_VERB_OBJECT_FLOW_TEXT), false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_w, Inkscape::Verb::get(SP_VERB_OBJECT_UNFLOW_TEXT), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_W, Inkscape::Verb::get(SP_VERB_OBJECT_UNFLOW_TEXT), false);
 
 	sp_shortcut_set (GDK_h, Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_HORIZONTAL), true);
 	sp_shortcut_set (GDK_H, Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_HORIZONTAL), false);

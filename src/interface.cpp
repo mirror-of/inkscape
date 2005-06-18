@@ -1037,10 +1037,12 @@ sp_ui_text_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_SELECTION_TEXTFROMPATH),
 
         Inkscape::Verb::get(SP_VERB_NONE),
-        Inkscape::Verb::get(SP_VERB_SELECTION_REMOVE_KERNS),
+        Inkscape::Verb::get(SP_VERB_OBJECT_FLOW_TEXT),
+        Inkscape::Verb::get(SP_VERB_OBJECT_UNFLOW_TEXT),
+        Inkscape::Verb::get(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT),
 
         Inkscape::Verb::get(SP_VERB_NONE),
-        Inkscape::Verb::get(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT),
+        Inkscape::Verb::get(SP_VERB_SELECTION_REMOVE_KERNS),
 
         Inkscape::Verb::get(SP_VERB_LAST)
     };
