@@ -92,7 +92,6 @@ sp_object_type_menu(GType type, SPObject *object, SPDesktop *desktop, GtkMenu *m
 static void sp_item_properties(GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_select_this(GtkMenuItem *menuitem, SPItem *item);
 static void sp_item_create_link(GtkMenuItem *menuitem, SPItem *item);
-static void sp_item_create_text_shape(GtkMenuItem *menuitem, SPItem *item);
 
 /* Generate context menu item section */
 
@@ -131,13 +130,6 @@ sp_item_menu(SPObject *object, SPDesktop *desktop, GtkMenu *m)
     gtk_widget_set_sensitive(w, !SP_IS_ANCHOR(item));
     gtk_widget_show(w);
     gtk_menu_append(GTK_MENU(m), w);
-    /* Add Text to shape*/
-    w = gtk_menu_item_new_with_mnemonic(_("_Flow Text into Shape"));
-    gtk_object_set_data(GTK_OBJECT(w), "desktop", desktop);
-    gtk_signal_connect(GTK_OBJECT(w), "activate", GTK_SIGNAL_FUNC(sp_item_create_text_shape), item);
-    gtk_widget_set_sensitive(w, !SP_IS_IMAGE(item));
-    gtk_widget_show(w);
-    gtk_menu_append(GTK_MENU(m), w);
 }
 
 static void
@@ -169,69 +161,6 @@ sp_item_select_this(GtkMenuItem *menuitem, SPItem *item)
 
     SP_DT_SELECTION(desktop)->set(item);
 }
-
-
-static void
-sp_item_create_text_shape(GtkMenuItem *menuitem, SPItem *item)
-{
-    SPDesktop *desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
-    g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
-    SPDocument *doc = SP_OBJECT_DOCUMENT(item);
-
-    if (!SP_IS_SHAPE(item)) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a shape</b> to flow text into."));
-        return;
-    }
-
-    Inkscape::XML::Node *root_repr = sp_repr_new("svg:flowRoot");
-    SP_OBJECT_REPR(SP_OBJECT_PARENT(item))->appendChild(root_repr);
-    SPObject *root_object = doc->getObjectByRepr(root_repr);
-    g_return_if_fail(SP_IS_FLOWTEXT(root_object));
-
-    Inkscape::XML::Node *region_repr = sp_repr_new("svg:flowRegion");
-    root_repr->appendChild(region_repr);
-    SPObject *object = doc->getObjectByRepr(region_repr);
-    g_return_if_fail(SP_IS_FLOWREGION(object));
-
-    /* Add clones */
-    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
-    Inkscape::XML::Node *clone;
-
-    GSList *reprs = g_slist_copy((GSList *) selection->reprList());
-    for (GSList *i = reprs; i; i = i->next) {
-        if (!SP_IS_IMAGE(doc->getObjectByRepr((Inkscape::XML::Node *)i->data))){
-            clone = sp_repr_new("svg:use");
-            sp_repr_set_attr(clone, "x", "0");
-            sp_repr_set_attr(clone, "y", "0");
-            sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", ((Inkscape::XML::Node *)i->data)->attribute("id")));
-
-            // add the new clone to the top of the original's parent
-            region_repr->appendChild(clone);
-        }
-
-    }
-
-    Inkscape::XML::Node *div_repr = sp_repr_new("svg:flowDiv");
-    sp_repr_set_attr(div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
-    root_repr->appendChild(div_repr);
-    SPObject *div_object = doc->getObjectByRepr(div_repr);
-    g_return_if_fail(SP_IS_FLOWDIV(div_object));
-
-    Inkscape::XML::Node *para_repr = sp_repr_new("svg:flowPara");
-    div_repr->appendChild(para_repr);
-    object = doc->getObjectByRepr(para_repr);
-    g_return_if_fail(SP_IS_FLOWPARA(object));
-
-    Inkscape::XML::Node *text = sp_repr_new_text("This is flowed text. You can paste style (Ctrl+Shift+V) from regular text objects to it.");
-    para_repr->appendChild(text);
-
-
-    sp_document_done(SP_OBJECT_DOCUMENT(object));
-
-    SP_DT_SELECTION(desktop)->set(SP_ITEM(root_object));
-}
-
 
 static void
 sp_item_create_link(GtkMenuItem *menuitem, SPItem *item)
