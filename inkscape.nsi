@@ -140,14 +140,14 @@ SectionEnd
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
 
-  MessageBox MB_YESNO|MB_ICONQUESTION $(lng_Editor) IDNO NoEditor
+  MessageBox  MB_YESNO|MB_ICONQUESTION $(lng_Editor) /SD IDYES IDNO NoEditor
   WriteRegStr HKCR ".svg" "" "svgfile"
   WriteRegStr HKCR ".svgz" "" "svgfile"
   WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
   WriteRegStr HKCR "svgfile\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
   NoEditor:
 
-  MessageBox MB_YESNO|MB_ICONQUESTION $(lng_Reader) IDNO NoReader
+  MessageBox  MB_YESNO|MB_ICONQUESTION $(lng_Reader) /SD IDYES IDNO NoReader
   WriteRegStr HKCR ".svg" "" "svgfile"
   WriteRegStr HKCR ".svgz" "" "svgfile"
   WriteRegStr HKCR "svgfile" "" "Scalable Vector Graphics file"
