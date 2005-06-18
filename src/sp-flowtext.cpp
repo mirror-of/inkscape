@@ -357,7 +357,10 @@ sp_flowtext_print(SPItem *item, SPPrintContext *ctx)
 static gchar *sp_flowtext_description(SPItem *item)
 {
     Inkscape::Text::Layout const &layout = SP_FLOWTEXT(item)->layout;
-    return g_strdup_printf("<b>Flowed text</b> (%d characters)", layout.iteratorToCharIndex(layout.end()));
+    if (SP_FLOWTEXT(item)->has_internal_frame())
+        return g_strdup_printf("<b>Flowed text</b> (%d characters)", layout.iteratorToCharIndex(layout.end()));
+    else 
+        return g_strdup_printf("<b>Linked flowed text</b>", layout.iteratorToCharIndex(layout.end()));
 }
 
 static NRArenaItem *
