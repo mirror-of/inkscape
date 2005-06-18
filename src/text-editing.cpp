@@ -53,13 +53,23 @@ static void te_update_layout_now (SPItem *item)
         SP_FLOWTEXT(item)->rebuildLayout();
 }
 
+/** Returns true if there are no visible characters on the canvas */
 bool
-sp_te_is_empty (SPItem const *item)
+sp_te_output_is_empty (SPItem const *item)
 {
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     return layout->begin() == layout->end();
 }
 
+/** Returns true if the user has typed nothing in the text box */
+bool
+sp_te_input_is_empty (SPObject const *item)
+{
+    if (SP_IS_STRING(item)) return SP_STRING(item)->string.empty();
+    for (SPObject const *child = item->firstChild() ; child ; child = SP_OBJECT_NEXT(child))
+        if (!sp_te_input_is_empty(child)) return false;
+    return true;
+}
 
 Inkscape::Text::Layout::iterator
 sp_te_get_position_by_coords (SPItem const *item, NR::Point &i_p)

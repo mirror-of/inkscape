@@ -20,7 +20,8 @@ namespace NR { class Point; }
 
 
 Inkscape::Text::Layout const * te_get_layout (SPItem const *item);
-bool sp_te_is_empty (SPItem const *item);
+bool sp_te_output_is_empty (SPItem const *item);
+bool sp_te_input_is_empty (SPObject const *item);
 
 unsigned sp_text_get_length(SPObject const *item);
 std::vector<NR::Point> sp_te_create_selection_quads(SPItem const *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, NR::Matrix const &transform);

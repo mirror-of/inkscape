@@ -1403,7 +1403,7 @@ sp_text_context_forget_text(SPTextContext *tc)
     /* We have to set it to zero,
      * or selection changed signal messes everything up */
     tc->text = NULL;
-    if ((SP_IS_TEXT(ti) || SP_IS_FLOWTEXT(ti)) && sp_te_is_empty(ti)) {
+    if ((SP_IS_TEXT(ti) || SP_IS_FLOWTEXT(ti)) && sp_te_input_is_empty(ti)) {
         Inkscape::XML::Node *text_repr=SP_OBJECT_REPR(ti);
         // the repr may already have been unparented
         // if we were called e.g. as the result of
