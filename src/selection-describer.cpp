@@ -18,6 +18,7 @@
 #include "desktop.h"
 #include "sp-tspan.h"
 #include "sp-offset.h"
+#include "sp-flowtext.h"
 #include "sp-use.h"
 
 namespace Inkscape {
@@ -49,9 +50,15 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         }
 
         if (!items->next) { // one item
-            if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) || SP_IS_TEXT_TEXTPATH(item)) {
-                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+            if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref)) {
+                    _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
                               sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up original"), when_selected);
+            } else if (SP_IS_TEXT_TEXTPATH(item)) {
+                    _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+                              sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up path"), when_selected);
+            } else if (SP_IS_FLOWTEXT(item) && !SP_FLOWTEXT(item)->has_internal_frame()) {
+                    _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+                              sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up frame"), when_selected);
             } else {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s.", 
                               sp_item_description(item), layer_name? layer_name : "", when_selected);
