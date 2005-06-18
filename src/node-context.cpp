@@ -205,7 +205,7 @@ sp_node_context_setup(SPEventContext *ec)
 
         if (nc->nodepath || ec->shape_knot_holder) {
             // setting listener
-            Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
+            Inkscape::XML::Node *repr = ec->shape_knot_holder->repr;
             if (repr) {
                 sp_repr_ref(repr);
                 sp_repr_add_listener(repr, &nodepath_repr_events, ec);
@@ -266,7 +266,7 @@ sp_node_context_selection_changed(Inkscape::Selection *selection, gpointer data)
 
         if (nc->nodepath || ec->shape_knot_holder) {
             // setting new listener
-            Inkscape::XML::Node *repr = SP_OBJECT_REPR(item);
+            Inkscape::XML::Node *repr = ec->shape_knot_holder->repr;
             if (repr) {
                 sp_repr_ref(repr);
                 sp_repr_add_listener(repr, &nodepath_repr_events, ec);
