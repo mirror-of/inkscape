@@ -12,6 +12,7 @@
 
 #include "../config.h"
 #include <glibmm/i18n.h>
+#include "xml/quote.h"
 #include "selection.h"
 #include "message-stack.h"
 #include "selection-describer.h"
@@ -40,29 +41,42 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         SPItem *item = SP_ITEM(items->data);
         SPObject *layer = selection->desktop()->layerForObject (SP_OBJECT (item));
         SPObject *root = selection->desktop()->currentRoot();
-        const gchar *layer_name = NULL;
-        if (layer != root) {
+        gchar *layer_phrase;
+        if (layer == root) {
+            layer_phrase = g_strdup("");  // for simplicity
+        } else {
+            char const *name, *fmt;
             if (layer && layer->label()) {
-                layer_name = g_strdup_printf (_(" in layer <b>%s</b>"), layer->label());
+                name = layer->label();
+                fmt = _(" in layer <b>%s</b>");
             } else {
-                layer_name = g_strdup_printf (_(" in layer <b><i>%s</i></b>"), layer->defaultLabel());
+                name = layer->defaultLabel();
+                fmt = _(" in layer <b><i>%s</i></b>");
             }
+            char *quoted_name = xml_quote_strdup(name);
+            layer_phrase = g_strdup_printf(fmt, quoted_name);
+            g_free(quoted_name);
         }
 
         if (!items->next) { // one item
+            char *item_desc = sp_item_description(item);
             if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref)) {
-                    _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
-                              sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up original"), when_selected);
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+                              item_desc, layer_phrase,
+                              _("Use <b>Shift+D</b> to look up original"), when_selected);
             } else if (SP_IS_TEXT_TEXTPATH(item)) {
-                    _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
-                              sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up path"), when_selected);
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+                              item_desc, layer_phrase,
+                              _("Use <b>Shift+D</b> to look up path"), when_selected);
             } else if (SP_IS_FLOWTEXT(item) && !SP_FLOWTEXT(item)->has_internal_frame()) {
-                    _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
-                              sp_item_description(item), layer_name? layer_name : "", _("Use <b>Shift+D</b> to look up frame"), when_selected);
+                _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.", 
+                              item_desc, layer_phrase,
+                              _("Use <b>Shift+D</b> to look up frame"), when_selected);
             } else {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s.", 
-                              sp_item_description(item), layer_name? layer_name : "", when_selected);
+                              item_desc, layer_phrase, when_selected);
             }
+            g_free(item_desc);
         } else { // multiple items
             int object_count = g_slist_length((GSList *)items);
             const gchar *object_count_str = NULL;
@@ -74,7 +88,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
 
             if (selection->numberOfLayers() == 1) {
                 _context.setF(Inkscape::NORMAL_MESSAGE, _("%s%s. %s."), 
-                              object_count_str, layer_name? layer_name : "", when_selected);
+                              object_count_str, layer_phrase, when_selected);
             } else {
                 _context.setF(Inkscape::NORMAL_MESSAGE, 
                               ngettext("%s in <b>%i</b> layer. %s.",
@@ -87,8 +101,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
                 g_free ((gchar *) object_count_str);
         }
 
-        if (layer_name) 
-            g_free ((gchar *) layer_name);
+        g_free(layer_phrase);
     }
 }
 
