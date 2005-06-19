@@ -630,8 +630,10 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
     g_free(tempfilename_out);
 
     /* Do something with mydoc.... */
-    copy_doc(doc->doc->rroot, mydoc->rroot);
-    mydoc->release();
+    if (mydoc != NULL) {
+        copy_doc(doc->doc->rroot, mydoc->rroot);
+        mydoc->release();
+    }
 }
 
 #include <desktop.h>
