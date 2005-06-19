@@ -753,7 +753,11 @@ bool Layout::iterator::thisEndOfLine()
 {
     if (_char_index == _parent_layout->_characters.size()) return false;
     if (nextStartOfLine())
-        return prevCursorPosition();
+    {
+        if (_char_index && _parent_layout->_characters[_char_index - 1].char_attributes.is_white)
+            return prevCursorPosition();
+        return true;
+    }
     if (_char_index && _parent_layout->_characters[_char_index - 1].chunk(_parent_layout).in_line != _parent_layout->_lines.size() - 1)
         return prevCursorPosition();   // for when the last paragraph is empty
     return false;

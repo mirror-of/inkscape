@@ -1323,9 +1323,9 @@ public:
                     new_character.char_attributes.is_white = 1;
                     new_character.char_attributes.is_cursor_position = 1;
                     new_character.char_attributes.is_word_start = 0;
-                    new_character.char_attributes.is_word_end = 0;
+                    new_character.char_attributes.is_word_end = 1;
                     new_character.char_attributes.is_sentence_start = 0;
-                    new_character.char_attributes.is_sentence_end = 0;
+                    new_character.char_attributes.is_sentence_end = 1;
                     new_character.char_attributes.is_sentence_boundary = 1;
                     new_character.char_attributes.backspace_deletes_character = 1;
                     new_character.x = _flow._spans.back().x_end - _flow._spans.back().x_start;
