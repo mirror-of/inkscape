@@ -174,7 +174,7 @@ sp_polyline_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 }
 
 static gchar *
-sp_polyline_description (SPItem * item)
+sp_polyline_description(SPItem *item)
 {
-	return g_strdup ("<b>Polyline</b>");
+	return g_strdup(_("<b>Polyline</b>"));
 }

@@ -5,6 +5,7 @@
 # include "config.h"
 #endif
 #include <string.h>
+#include <glibmm/i18n.h>
 
 #include "attributes.h"
 #include "xml/repr.h"
@@ -357,10 +358,11 @@ sp_flowtext_print(SPItem *item, SPPrintContext *ctx)
 static gchar *sp_flowtext_description(SPItem *item)
 {
     Inkscape::Text::Layout const &layout = SP_FLOWTEXT(item)->layout;
+    int const nChars = layout.iteratorToCharIndex(layout.end());
     if (SP_FLOWTEXT(item)->has_internal_frame())
-        return g_strdup_printf("<b>Flowed text</b> (%d characters)", layout.iteratorToCharIndex(layout.end()));
+        return g_strdup_printf(_("<b>Flowed text</b> (%d characters)"), nChars);
     else 
-        return g_strdup_printf("<b>Linked flowed text</b> (%d characters)", layout.iteratorToCharIndex(layout.end()));
+        return g_strdup_printf(_("<b>Linked flowed text</b> (%d characters)"), nChars);
 }
 
 static NRArenaItem *

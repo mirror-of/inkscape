@@ -7,6 +7,7 @@
 # include "config.h"
 #endif
 #include <string.h>
+#include <glibmm/i18n.h>
 
 #include <xml/repr.h>
 
@@ -260,14 +261,9 @@ sp_flowregion_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 }
 
 
-static gchar * sp_flowregion_description (SPItem * item)
+static gchar *sp_flowregion_description(SPItem *item)
 {
-	SPFlowregion * group;
-	
-	group = SP_FLOWREGION (item);
-	
-	//	return g_strdup_printf(_("Flow region"));
-	return g_strdup_printf("Flow region");
+	return g_strdup_printf(_("Flow region"));
 }
 
 /*
@@ -470,14 +466,13 @@ sp_flowregionexclude_write (SPObject *object, Inkscape::XML::Node *repr, guint f
 }
 
 
-static gchar * sp_flowregionexclude_description (SPItem * item)
+static gchar *sp_flowregionexclude_description(SPItem *item)
 {
-	SPFlowregionExclude * group;
-	
-	group = SP_FLOWREGIONEXCLUDE (item);
-	
-	//	return g_strdup_printf(_("Flow region"));
-	return g_strdup_printf("Flow excluded region");
+	/* TRANSLATORS: A region "cut out of" a flow region; text is not allowed to flow inside the
+	 * flow excluded region.  flowRegionExclude in SVG 1.2: see
+	 * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
+	 * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem. */
+	return g_strdup_printf(_("Flow excluded region"));
 }
 
 /*
