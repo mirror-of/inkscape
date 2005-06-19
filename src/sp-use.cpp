@@ -306,9 +306,16 @@ sp_use_description(SPItem *item)
 {
     SPUse *use = SP_USE(item);
 
+    char *ret;
     if (use->child) {
-        return g_strdup_printf(_("<b>Clone</b> of: %s"),
-                               sp_item_description(SP_ITEM(use->child)));
+        char *child_desc = sp_item_description(SP_ITEM(use->child));
+        /* TODO: Try to keep the description brief; e.g. for the case that the child is itself a
+         * clone.  A minimal implementation would be to use a static boolean var to detect
+         * recursion, and return short string for that case. */
+
+        ret = g_strdup_printf(_("<b>Clone</b> of: %s"), child_desc);
+        g_free(child_desc);
+        return ret;
     } else {
         return g_strdup(_("<b>Orphaned clone</b>"));
     }

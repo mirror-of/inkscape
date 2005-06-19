@@ -651,8 +651,12 @@ GrDragger::updateTip ()
 
     if (g_slist_length (this->draggables) == 1) {
         GrDraggable *draggable = (GrDraggable *) this->draggables->data;
+        char *item_desc = sp_item_description(draggable->item);
         this->knot->tip = g_strdup_printf (_("%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to preserve angle, with <b>Ctrl+Shift</b> to scale around center"), 
-                                           _(gr_knot_descr[draggable->point_num]), sp_item_description (draggable->item), draggable->fill_or_stroke == false ? _(" (stroke)") : "");
+                                           _(gr_knot_descr[draggable->point_num]),
+                                           item_desc,
+                                           draggable->fill_or_stroke == false ? _(" (stroke)") : "");
+        g_free(item_desc);
     } else if (g_slist_length (draggables) == 2 && isA (POINT_RG_CENTER) && isA (POINT_RG_FOCUS)) {
         this->knot->tip = g_strdup_printf (_("Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to separate focus"));
     } else {
