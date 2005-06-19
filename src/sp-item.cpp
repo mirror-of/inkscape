@@ -674,6 +674,11 @@ sp_item_private_description(SPItem *item)
     return g_strdup(_("Object"));
 }
 
+/**
+ * Returns a string suitable for status bar, formatted in pango markup language.
+ *
+ * Must be freed by caller.
+ */
 gchar *
 sp_item_description(SPItem *item)
 {
