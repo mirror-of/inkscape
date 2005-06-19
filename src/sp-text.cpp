@@ -58,6 +58,7 @@
 #include "ui/view/view.h"
 #include "print.h"
 #include "sp-metrics.h"
+#include "xml/quote.h"
 #include "xml/repr.h"
 #include "mod360.h"
 
@@ -396,22 +397,23 @@ sp_text_description(SPItem *item)
     font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value,
                                                         font_style_to_pos(*style));
     char name_buf[256];
-    char const *n;
+    char *n;
     if (tf) {
         tf->Name(name_buf, sizeof(name_buf));
-        n = name_buf;
+        n = xml_quote_strdup(name_buf);
         tf->Unref();
     } else {
-        n = _("<no name found>");
+        /* TRANSLATORS: For description of font with no name. */
+        n = g_strdup(_("&lt;no name found&gt;"));
     }
 
     GString *xs = SP_PX_TO_METRIC_STRING(style->font_size.computed, sp_desktop_get_default_metric(SP_ACTIVE_DESKTOP));
 
-    if (SP_IS_TEXT_TEXTPATH(item)) {
-        return g_strdup_printf (_("<b>Text on path</b> (%s, %s)"), n, xs->str);
-    } else {
-        return g_strdup_printf (_("<b>Text</b> (%s, %s)"), n, xs->str);
-    }
+    char *ret = ( SP_IS_TEXT_TEXTPATH(item)
+                  ? g_strdup_printf(_("<b>Text on path</b> (%s, %s)"), n, xs->str)
+                  : g_strdup_printf(_("<b>Text</b> (%s, %s)"), n, xs->str) );
+    g_free(n);
+    return ret;
 }
 
 static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
