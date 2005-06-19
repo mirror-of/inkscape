@@ -547,7 +547,7 @@ void LayerSelector::_prepareLabelRenderer(
                 label_defaulted = true;
             }
         } else {
-            label = "(root)";
+            label = _("(root)");
         }
 
         gchar *text = g_markup_printf_escaped(format, label); 
