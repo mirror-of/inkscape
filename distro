@@ -133,7 +133,7 @@ case "`uname`" in
         files="/etc/mandrake-release /etc/SuSE-release \
                 /etc/redhat-release /etc/debian_version \
                 /etc/slackware-version /etc/.issue \
-                /etc/ROCK-LINUX"
+                /etc/ROCK-LINUX /etc/gentoo-release"
         for file in $files; do
             if test -f "$file"; then
                 filename="$file"
