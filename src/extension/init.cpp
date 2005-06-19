@@ -131,7 +131,7 @@ init()
     if (Inkscape::Extension::Extension::search_path.size() == 0)
     {
 	Inkscape::Extension::Extension::search_path.push_back(profile_path("extensions"));
-	Inkscape::Extension::Extension::search_path.push_back(INKSCAPE_EXTENSIONDIR);
+	Inkscape::Extension::Extension::search_path.push_back(g_strdup(INKSCAPE_EXTENSIONDIR));
     }
 
     for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {

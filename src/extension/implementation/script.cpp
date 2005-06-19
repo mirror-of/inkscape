@@ -100,7 +100,13 @@ Script::solve_reldir(Inkscape::XML::Node *reprin) {
     }
 
     if (!strcmp(reldir, "extensions")) {
-        return g_build_filename(INKSCAPE_EXTENSIONDIR, sp_repr_children(reprin)->content(), NULL);
+        for(unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
+            gchar * filename = g_build_filename(Inkscape::Extension::Extension::search_path[i], sp_repr_children(reprin)->content(), NULL);
+            if ( Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS) ) {
+                return filename;
+            }
+            g_free(filename);
+        }
     } else {
         return g_strdup(sp_repr_children(reprin)->content());
     }
