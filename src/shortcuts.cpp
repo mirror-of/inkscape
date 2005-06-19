@@ -29,11 +29,9 @@
 bool
 sp_shortcut_invoke (unsigned int shortcut, SPView *view)
 {
-	Inkscape::Verb * verb;
-	verb = sp_shortcut_get_verb (shortcut);
+	Inkscape::Verb *verb = sp_shortcut_get_verb (shortcut);
 	if (verb) {
-		SPAction *action;
-		action = verb->get_action(view);
+		SPAction *action = verb->get_action(view);
 		if (action) {
 			sp_action_perform (action, NULL);
 			return true;
@@ -415,20 +413,16 @@ sp_shortcut_init ()
  * \post !is_primary or sp_shortcut_get_primary(verb) == shortcut.
  */
 void
-sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary)
+sp_shortcut_set (unsigned int const shortcut, Inkscape::Verb *const verb, bool const is_primary)
 {
-	Inkscape::Verb * old_verb;
-
 	if (!verbs) sp_shortcut_init();
 
-	old_verb = (Inkscape::Verb *)(g_hash_table_lookup (verbs, GINT_TO_POINTER (shortcut)));
+	Inkscape::Verb *old_verb = (Inkscape::Verb *)(g_hash_table_lookup (verbs, GINT_TO_POINTER (shortcut)));
 	g_hash_table_insert (verbs, GINT_TO_POINTER (shortcut), (gpointer)(verb));
 
 	/* Maintain the invariant that sp_shortcut_get_primary(v) returns either 0 or a valid shortcut for v. */
 	if (old_verb && old_verb != verb) {
-		unsigned int old_primary;
-
-		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)old_verb));
+		unsigned int const old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)old_verb));
 
 		if (old_primary == shortcut) {
 			g_hash_table_insert (primary_shortcuts, (gpointer)old_verb, GINT_TO_POINTER (0));
@@ -443,16 +437,15 @@ sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary)
 void
 sp_shortcut_clear (unsigned int shortcut)
 {
-	Inkscape::Verb * verb;
-
 	if (!verbs) return;
 
-	verb = (Inkscape::Verb *)(g_hash_table_lookup (verbs, GINT_TO_POINTER (shortcut)));
+	Inkscape::Verb *verb = (Inkscape::Verb *)(g_hash_table_lookup (verbs, GINT_TO_POINTER (shortcut)));
 
 	if (verb) {
-		unsigned int old_primary;
 		g_hash_table_remove (verbs, GINT_TO_POINTER (shortcut));
-		old_primary = (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)(verb)));
+		unsigned int const old_primary
+			= (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts,
+									      (gpointer)(verb)));
 		if (old_primary == shortcut) {
 			g_hash_table_remove (primary_shortcuts, (gpointer)(verb));
 		}
@@ -470,6 +463,7 @@ unsigned int
 sp_shortcut_get_primary (Inkscape::Verb * verb)
 {
 	if (!primary_shortcuts) sp_shortcut_init();
-	return (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts, (gpointer)(verb)));
+	return (unsigned int)GPOINTER_TO_INT (g_hash_table_lookup (primary_shortcuts,
+								   (gpointer)(verb)));
 }
 
