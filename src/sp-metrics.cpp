@@ -75,30 +75,30 @@ sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SP
   switch (metric_dst) {
   case SP_M:
     os << len << (m?" m":"");
-	g_string_sprintf (str, os.str().c_str());
+	g_string_printf (str, os.str().c_str());
     break;
   case SP_MM:
     os << len << (m?" mm":"");
-	g_string_sprintf (str, os.str().c_str());
+	g_string_printf (str, os.str().c_str());
     break;
   case SP_CM:
     os << len << (m?" cm":"");
-	g_string_sprintf (str, os.str().c_str());
+	g_string_printf (str, os.str().c_str());
     break;
   case SP_IN:
     os << len << (m?"\"":"");
-	g_string_sprintf (str, os.str().c_str());
+	g_string_printf (str, os.str().c_str());
     break;
   case SP_PT:
 	os << len << (m?" pt":"");
-	g_string_sprintf (str, os.str().c_str());
+	g_string_printf (str, os.str().c_str());
     break;
   case SP_PX:
 	os << len << (m?" px":"");
-	g_string_sprintf (str, os.str().c_str());
+	g_string_printf (str, os.str().c_str());
     break;
   case NONE:
-    g_string_sprintf (str, "%s", "ups!");
+	g_string_printf (str, "%s", "ups!");
     break;
   }
 

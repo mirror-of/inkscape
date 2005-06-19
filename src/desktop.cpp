@@ -1066,9 +1066,9 @@ sp_desktop_widget_set_title (SPDesktopWidget *dtw)
                                : g_basename(uri) );
         GString *name = g_string_new ("");
         if (dtw->desktop->number > 1) {
-            g_string_sprintf (name, _("%s: %d - Inkscape"), fname, dtw->desktop->number);
+            g_string_printf (name, _("%s: %d - Inkscape"), fname, dtw->desktop->number);
         } else {
-            g_string_sprintf (name, _("%s - Inkscape"), fname);
+            g_string_printf (name, _("%s - Inkscape"), fname);
         }
         gtk_window_set_title (window, name->str);
         g_string_free (name, TRUE);
