@@ -22,6 +22,7 @@
 #include <glibmm/i18n.h>
 #include "display/sp-canvas.h"
 #include "dialogs/object-attributes.h"
+#include "xml/quote.h"
 #include "xml/repr.h"
 #include "attributes.h"
 #include "sp-anchor.h"
@@ -176,10 +177,14 @@ static Inkscape::XML::Node *sp_anchor_write(SPObject *object, Inkscape::XML::Nod
 static gchar *sp_anchor_description(SPItem *item)
 {
     SPAnchor *anchor = SP_ANCHOR(item);
-    if (anchor->href) 
-        return g_strdup_printf (_("<b>Link</b> to %s"), anchor->href);
-    else 
+    if (anchor->href) {
+        char *quoted_href = xml_quote_strdup(anchor->href);
+        char *ret = g_strdup_printf(_("<b>Link</b> to %s"), quoted_href);
+        g_free(quoted_href);
+        return ret;
+    } else {
         return g_strdup (_("<b>Link</b> without URI"));
+    }
 }
 
 /* fixme: We should forward event to appropriate container/view */

@@ -40,6 +40,7 @@
 #include "sp-image.h"
 #include <glibmm/i18n.h>
 #include <libnr/nr-point-matrix-ops.h>
+#include "xml/quote.h"
 #include <xml/repr.h>
 
 #include "file.h"
@@ -825,20 +826,20 @@ sp_image_print (SPItem *item, SPPrintContext *ctx)
 }
 
 static gchar *
-sp_image_description (SPItem * item)
+sp_image_description(SPItem *item)
 {
-	SPImage * image;
-
-	image = SP_IMAGE (item);
-
-	if (image->pixbuf == NULL) {
-		return g_strdup_printf (_("<b>Image with bad reference</b>: %s"), image->href);
-	} else {
-		return g_strdup_printf (_("<b>Image</b> %d &#215; %d: %s"),
-					  gdk_pixbuf_get_width (image->pixbuf),
-					  gdk_pixbuf_get_height (image->pixbuf),
-                            (strncmp (image->href, "data:", 5) == 0) ? _("embedded") : image->href);
-	}
+	SPImage *image = SP_IMAGE(item);
+	char *href_desc = ( strncmp(image->href, "data:", 5) == 0
+			    ? g_strdup(_("embedded"))
+			    : xml_quote_strdup(image->href) );
+	char *ret = ( image->pixbuf == NULL
+		      ? g_strdup_printf(_("<b>Image with bad reference</b>: %s"), href_desc)
+		      : g_strdup_printf(_("<b>Image</b> %d &#215; %d: %s"),
+					gdk_pixbuf_get_width(image->pixbuf),
+					gdk_pixbuf_get_height(image->pixbuf),
+					href_desc) );
+	g_free(href_desc);
+	return ret;
 }
 
 static NRArenaItem *
