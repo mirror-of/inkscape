@@ -308,10 +308,17 @@ sp_use_description(SPItem *item)
 
     char *ret;
     if (use->child) {
+        static unsigned recursion_depth = 0;
+        if (recursion_depth >= 2) {
+            /* TRANSLATORS: Used for statusbar description for long <use> chains:
+             * "Clone of: Clone of: ... in Layer 1". */
+            return g_strdup(_("..."));
+            /* We could do better, e.g. chasing the href chain until we reach something other than
+             * a <use>, and giving its description. */
+        }
+        ++recursion_depth;
         char *child_desc = sp_item_description(SP_ITEM(use->child));
-        /* TODO: Try to keep the description brief; e.g. for the case that the child is itself a
-         * clone.  A minimal implementation would be to use a static boolean var to detect
-         * recursion, and return short string for that case. */
+        --recursion_depth;
 
         ret = g_strdup_printf(_("<b>Clone</b> of: %s"), child_desc);
         g_free(child_desc);
