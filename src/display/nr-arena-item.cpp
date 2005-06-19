@@ -335,8 +335,11 @@ unsigned int nr_arena_item_invoke_render(NRArenaItem *item, NRRectL const *area,
 	}
 
 	dpb = pb;
-  bool  canCache=false,checkCache=false;
+  bool  canCache=false;
+#ifdef arena_item_tile_cache  
+  bool checkCache=false;
   int   tile_h=0,tile_v=0;
+#endif  
 	/* Setup cache if we can */
 	if ((!(flags & NR_ARENA_ITEM_RENDER_NO_CACHE)) &&
 	    (carea.x0 <= item->bbox.x0) && (carea.y0 <= item->bbox.y0) &&
