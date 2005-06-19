@@ -7,7 +7,7 @@
  * Copyright (C) 2004 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
- */
+ */ 
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -20,6 +20,10 @@
 #include "ui/widget/labelled.h"
 #include "ui/widget/scalar.h"
 #include "verbs.h"
+
+// NOTE: this is currently a placeholder. The real dialog is in src/dialogs/display-settings.cpp.
+// The below code never runs, Please remove this notice when you gtkmmify this dialog and remove
+// the file in src/dialogs.
 
 using namespace Inkscape::UI::Widget;
 
