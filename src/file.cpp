@@ -333,6 +333,7 @@ static Inkscape::UI::Dialogs::FileOpenDialog *openDialogInstance = NULL;
 
 /**
  *  Display an file Open selector.  Open a document if OK is pressed.
+ *  Can select single or multiple files for opening.
  */
 void
 sp_file_open_dialog(gpointer object, gpointer data)
@@ -367,6 +368,66 @@ sp_file_open_dialog(gpointer object, gpointer data)
     g_free(open_path);
 
     if (!success) return;
+
+    // Code to check & open iff multiple files.
+    Glib::SListHandle<Glib::ustring> flist=openDialogInstance->getFilenames();
+    GSList *list=flist.data();
+
+    if(g_slist_length(list)>1)
+    {
+        gchar *fileName=NULL;
+
+        while(list!=NULL)
+        {
+
+#ifdef INK_DUMP_FILENAME_CONV
+            g_message(" FileName: %s",(const char *)list->data);           
+#endif
+
+            fileName=(gchar *)g_strdup((gchar *)list->data);
+
+            if (fileName && !g_file_test(fileName,G_FILE_TEST_IS_DIR)) {
+                gsize bytesRead = 0;
+                gsize bytesWritten = 0;
+                GError *error = NULL;
+#ifdef INK_DUMP_FILENAME_CONV
+                dump_str( fileName, "A file pre  is " );
+#endif
+                gchar *newFileName = g_filename_to_utf8(fileName,
+                                                -1,
+                                                        &bytesRead,
+                                                        &bytesWritten,
+                                                        &error);
+                if ( newFileName != NULL ) {
+                    g_free(fileName);
+                    fileName = newFileName;
+#ifdef INK_DUMP_FILENAME_CONV
+                    dump_str( fileName, "A file post is " );
+#endif
+                } else {
+                    // TODO: bulia, please look over
+                    g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
+                }
+
+#ifdef INK_DUMP_FILENAME_CONV                
+                g_message("Opening File %s\n",fileName);
+#endif
+
+                sp_file_open(fileName, selection);
+                g_free(fileName);
+            }
+            else
+            {
+                g_message("Cannot Open Directory %s\n",fileName);
+            }
+            
+            list=list->next;
+        }
+
+        return;
+    }
+
+
     if (fileName) {
         gsize bytesRead = 0;
         gsize bytesWritten = 0;

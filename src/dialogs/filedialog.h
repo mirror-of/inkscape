@@ -89,6 +89,8 @@ public:
 
     virtual gchar * getFilename () =0;
 
+    virtual Glib::SListHandle<Glib::ustring> getFilenames () = 0;
+
 }; //FileOpenDialog
 
 

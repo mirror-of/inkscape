@@ -616,7 +616,7 @@ public:
 
     gchar *getFilename();
 
-
+    Glib::SListHandle<Glib::ustring> getFilenames ();
 protected:
 
 
@@ -818,7 +818,8 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
 
 
     /* One file at a time */
-    set_select_multiple(false);
+    /* And also Multiple Files */
+    set_select_multiple(true);
 
     /* Initalize to Autodetect */
     extension = NULL;
@@ -947,7 +948,13 @@ FileOpenDialogImpl::getFilename (void)
 }
 
 
-
+/**
+ * To Get Multiple filenames selected at-once.
+ */
+Glib::SListHandle<Glib::ustring>FileOpenDialogImpl::getFilenames()
+{    
+    return get_filenames();
+}
 
 
 
