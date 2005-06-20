@@ -75,17 +75,15 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
     // but must always inherit from the parent text. Same for textPath.
     // However, if the line tspan or textPath contains some style (old file?), we reluctantly set our style to it too.
 
-    // 2. Generally we allow setting style on clones (though fill&stroke currently forbids this,
-    // will be fixed) but when it's inside flowRegion, do not touch it; it's just styleless shape
-    // (because that's how Inkscape does flowtext). We also should not set style to its parents
-    // because it will be inherited. So we skip them.
+    // 2. Generally we allow setting style on clones, but when it's inside flowRegion, do not touch
+    // it, be it clone or not; it's just styleless shape (because that's how Inkscape does
+    // flowtext). 
 
     if (!(skip_lines
           && ((SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE) || SP_IS_TEXTPATH(o))
           && !SP_OBJECT_REPR(o)->attribute("style"))
         &&
-        !(SP_IS_FLOWTEXT(o) ||
-          SP_IS_FLOWREGION(o) ||
+        !(SP_IS_FLOWREGION(o) ||
           SP_IS_FLOWREGIONEXCLUDE(o) ||
           (SP_IS_USE(o) &&
            SP_OBJECT_PARENT(o) &&
