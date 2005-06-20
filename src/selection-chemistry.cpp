@@ -1182,8 +1182,9 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, NR::Matrix const 
         bool transform_offset_with_source = (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) );
 
         // "clones are unmoved when original is moved" preference
-        bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
-        bool prefs_parallel = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_PARALLEL);
+        int compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+        bool prefs_unmoved = (compensation == SP_CLONE_COMPENSATION_UNMOVED);
+        bool prefs_parallel = (compensation == SP_CLONE_COMPENSATION_PARALLEL);
 
 	// If this is a clone and it's selected along with its original, do not move it; it will feel the
 	// transform of its original and respond to it itself. Without this, a clone is doubly

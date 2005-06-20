@@ -52,6 +52,8 @@
 #include "desktop.h"
 #include "macros.h"
 #include "sp-item-transform.h"
+#include "prefs-utils.h"
+#include "enums.h"
 
 #include "sp-text.h"
 #include "sp-flowtext.h"
@@ -197,12 +199,22 @@ private :
             break;
         };  // end of switch
 
+        // Top hack: temporarily set clone compensation to unmoved, so that we can align/distribute
+        // clones with their original (and the move of the original does not disturb the
+        // clones). The only problem with this is that if there are outside-of-selection clones of
+        // a selected original, they will be unmoved too, possibly contrary to user's
+        // expecation. However this is a minor point compared to making align/distribute always
+        // work as expected, and "unmoved" is the default option anyway.
+        int saved_compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+        prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+
         bool changed = false;
         //Move each item in the selected list
         for (std::list<SPItem *>::iterator it(selected.begin());
              it != selected.end();
              it++)
         {
+            sp_document_ensure_up_to_date(SP_DT_DOCUMENT (desktop));
             NR::Rect b = sp_item_bbox_desktop (*it);
             NR::Point const sp(a.sx0 * b.min()[NR::X] + a.sx1 * b.max()[NR::X],
                                a.sy0 * b.min()[NR::Y] + a.sy1 * b.max()[NR::Y]);
@@ -213,6 +225,8 @@ private :
             }
         }
 
+        // restore compensation setting
+        prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);
 
         if (changed) {
             sp_document_done ( SP_DT_DOCUMENT (desktop) );
@@ -312,6 +326,10 @@ private :
         //sort bbox by anchors
         std::sort(sorted.begin(), sorted.end());
 
+        // see comment in ActionAlign above
+        int saved_compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+        prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+
         unsigned int len = sorted.size();
         bool changed = false;
         if (_onInterSpace)
@@ -365,6 +383,9 @@ private :
                 }
             }
         }
+
+        // restore compensation setting
+        prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);
 
         if (changed) {
             sp_document_done ( SP_DT_DOCUMENT (desktop) );
@@ -430,7 +451,14 @@ private :
     {
         if (!SP_ACTIVE_DESKTOP) return;
 
+        // see comment in ActionAlign above
+        int saved_compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+        prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+
         unclump ((GSList *) SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList());
+
+        // restore compensation setting
+        prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);
 
         sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
     }
@@ -472,10 +500,15 @@ private :
             _dialog.randomize_bbox_set = true;
         }
 
+        // see comment in ActionAlign above
+        int saved_compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+        prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+
         for (std::list<SPItem *>::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
+            sp_document_ensure_up_to_date(SP_DT_DOCUMENT (desktop));
             NR::Rect item_box = sp_item_bbox_desktop (*it);
             // find new center, staying within bbox 
             double x = _dialog.randomize_bbox.min()[NR::X] + item_box.extent(NR::X)/2 +
@@ -486,6 +519,9 @@ private :
             NR::Point t = NR::Point (x, y) - 0.5*(item_box.max() + item_box.min());
             sp_item_move_rel(*it, NR::translate(t));
         }
+
+        // restore compensation setting
+        prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);
 
         sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
     }
