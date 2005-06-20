@@ -366,7 +366,7 @@ an iterator pointing just after the inserted text. */
 Inkscape::Text::Layout::iterator
 sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gchar const *utf8)
 {
-    if ( g_utf8_validate(utf8,-1,NULL) != TRUE ) {
+    if (!g_utf8_validate(utf8,-1,NULL)) {
         g_warning("Trying to insert invalid utf8");
         return position;
     }
@@ -378,11 +378,13 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
     // it makes a difference at span boundaries
     Inkscape::Text::Layout::iterator it_prev_char = position;
     bool cursor_at_start = !it_prev_char.prevCharacter();
+    bool cursor_at_end = position == layout->end();
     layout->getSourceOfCharacter(it_prev_char, (void**)&source_obj, &iter_text);
     if (SP_IS_STRING(source_obj)) {
         // the simple case
         if (!cursor_at_start) iter_text++;
-        insert_into_spstring(SP_STRING(source_obj), iter_text, utf8);
+        SPString *string_item = SP_STRING(source_obj);
+        insert_into_spstring(string_item, cursor_at_end ? string_item->string.end() : iter_text, utf8);
     } else {
         // the not-so-simple case where we're at a line break or other control char; add to the next child/sibling SPString
         if (cursor_at_start) {
@@ -402,7 +404,7 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
                 g_assert(SP_IS_STRING(source_obj->firstChild()));
                 string_item = SP_STRING(source_obj->firstChild());
             }
-            insert_into_spstring(string_item, string_item->string.begin(), utf8);
+            insert_into_spstring(string_item, cursor_at_end ? string_item->string.end() : string_item->string.begin(), utf8);
         }
     }
 
