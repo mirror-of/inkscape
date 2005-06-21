@@ -126,8 +126,7 @@ public:
 
     virtual void completeLine();
 
-    virtual double yCoordinate()
-        {return _y;}
+    virtual double yCoordinate();
 
     virtual void setNewYCoordinate(double new_y);
 

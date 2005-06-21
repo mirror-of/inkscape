@@ -84,15 +84,18 @@ Layout::ShapeScanlineMaker::ShapeScanlineMaker(Shape const *shape, Layout::Direc
         _rotated_shape = const_cast<Shape*>(shape);
         _shape_needs_freeing = false;
     } else {
-        _rotated_shape = new Shape;
+        Shape *temp_rotated_shape = new Shape;
         _shape_needs_freeing = true;
-        _rotated_shape->Copy(const_cast<Shape*>(shape));
+        temp_rotated_shape->Copy(const_cast<Shape*>(shape));
         switch (block_progression) {
-            case BOTTOM_TO_TOP: _rotated_shape->Transform(NR::Matrix(NR::rotate(-1.0, 0.0))); break;
-            case LEFT_TO_RIGHT: _rotated_shape->Transform(NR::Matrix(NR::rotate(0.0, 1.0))); break;
-            case RIGHT_TO_LEFT: _rotated_shape->Transform(NR::Matrix(NR::rotate(0.0, -1.0))); break;
+            case BOTTOM_TO_TOP: temp_rotated_shape->Transform(NR::Matrix(1.0, 0.0, 0.0, -1.0, 0.0, 0.0)); break;  // reflect about x axis
+            case LEFT_TO_RIGHT: temp_rotated_shape->Transform(NR::Matrix(0.0, 1.0, 1.0, 0.0, 0.0, 0.0)); break;   // reflect about y=x
+            case RIGHT_TO_LEFT: temp_rotated_shape->Transform(NR::Matrix(0.0, -1.0, 1.0, 0.0, 0.0, 0.0)); break;  // reflect about y=-x
             default: break;
         }
+        _rotated_shape = new Shape;
+        _rotated_shape->ConvertToShape(temp_rotated_shape);
+        delete temp_rotated_shape;
     }
     _rotated_shape->CalcBBox(true);
     _bounding_box_top = _rotated_shape->topY;
@@ -135,29 +138,34 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
     // cut out any run that's really short
     line_decent_length_runs.Over(&line_rasterization, 0.9 * line_text_height);
 
+    _current_line_height = (float)line_height.total();
+
     // convert the FloatLigne to what we use: vector<ScanRun>
     std::vector<ScanRun> result(line_decent_length_runs.runs.size());
     for (unsigned i = 0 ; i < result.size() ; i++) {
         result[i].x_start = line_decent_length_runs.runs[i].st;
         result[i].x_end   = line_decent_length_runs.runs[i].en;
-        result[i].y = _y;
+        result[i].y = _negative_block_progression ? -_current_line_height - _y : _y;
     }
 
-    _current_line_height = (float)line_height.total();
     return result;
 }
 
 void Layout::ShapeScanlineMaker::completeLine()
 {
-    if (_negative_block_progression)
-        _y -= _current_line_height;
-    else
-        _y += _current_line_height;
+    _y += _current_line_height;
+}
+
+double Layout::ShapeScanlineMaker::yCoordinate()
+{
+    if (_negative_block_progression) return -_current_line_height - _y;
+    return _y;
 }
 
 void Layout::ShapeScanlineMaker::setNewYCoordinate(double new_y)
 {
     _y = (float)new_y;
+    if (_negative_block_progression) _y = -_current_line_height - _y;
     // what will happen with the rasteriser if we move off the shape?
     // it's not an important question because <flowSpan> doesn't have a y attribute
 }
