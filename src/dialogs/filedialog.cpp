@@ -832,7 +832,14 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
 
     /* Set the pwd and/or the filename */
     if (dir != NULL)
-        set_current_folder(dir);
+    {
+        Glib::ustring udir(dir);
+        Glib::ustring::size_type len = udir.length();
+        // leaving a trailing backslash on the directory name leads to the infamous
+        // double-directory bug on win32
+        if (len != 0 && udir[len - 1] == '\\') udir.erase(len - 1);
+        set_current_folder(udir.c_str());
+    }
 
     //###### Add the file types menu
     createFilterMenu();
@@ -1238,7 +1245,14 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
 
     /* Set the pwd and/or the filename */
     if (dir != NULL)
-        set_current_folder(dir);
+    {
+        Glib::ustring udir(dir);
+        Glib::ustring::size_type len = udir.length();
+        // leaving a trailing backslash on the directory name leads to the infamous
+        // double-directory bug on win32
+        if (len != 0 && udir[len - 1] == '\\') udir.erase(len - 1);
+        set_current_folder(udir.c_str());
+    }
 
     //###### Add the file types menu
     //createFilterMenu();
