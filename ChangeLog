@@ -1,3 +1,7 @@
+2005-06-20  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-io.cpp: whoops... don't emit xmlns:xml
+
 2005-06-18  Richard Hughes  <cyreve@users.sourceforge.net>
 
 	* src/text-context.cpp, src/text-context.h, src/libnrtype/Layout-TNG.h:

@@ -653,6 +653,7 @@ sp_repr_write_stream_root_element (Node *repr, Writer &out, gboolean add_whitesp
 {
     using Inkscape::Util::SharedCStringPtr;
     g_assert(repr != NULL);
+    Glib::QueryQuark xml_prefix=g_quark_from_static_string("xml");
 
     NSMap ns_map;
     populate_ns_map(ns_map, *repr);
@@ -669,14 +670,16 @@ sp_repr_write_stream_root_element (Node *repr, Writer &out, gboolean add_whitesp
         SharedCStringPtr ns_uri=(*iter).second;
 
         if (prefix.id()) {
-            if ( elide_prefix == prefix ) {
-                attributes = cons(AttributeRecord(g_quark_from_static_string("xmlns"), ns_uri), attributes);
-            }
+            if ( prefix != xml_prefix ) {
+                if ( elide_prefix == prefix ) {
+                    attributes = cons(AttributeRecord(g_quark_from_static_string("xmlns"), ns_uri), attributes);
+                }
 
-            Glib::ustring attr_name="xmlns:";
-            attr_name.append(g_quark_to_string(prefix));
-            GQuark key = g_quark_from_string(attr_name.c_str());
-            attributes = cons(AttributeRecord(key, ns_uri), attributes);
+                Glib::ustring attr_name="xmlns:";
+                attr_name.append(g_quark_to_string(prefix));
+                GQuark key = g_quark_from_string(attr_name.c_str());
+                attributes = cons(AttributeRecord(key, ns_uri), attributes);
+            }
         } else {
             // if there are non-namespaced elements, we can't globally
             // use a default namespace
