@@ -263,6 +263,9 @@ private:
                file. */
     unsigned int  _code;
 
+    /** \brief Whether this verb is set to default to sensitive or
+               insensitive when new actions are created. */
+    bool _default_sensitive;
 public:
     /** \brief Accessor to get the internal variable. */
     unsigned int get_code (void) { return _code; }
@@ -298,7 +301,7 @@ public:
          gchar const * name,
          gchar const * tip,
          gchar const * image) :
-        _actions(NULL), _id(id), _name(name), _tip(tip), _image(image), _code(code) {
+        _actions(NULL), _id(id), _name(name), _tip(tip), _image(image), _code(code), _default_sensitive(true) {
     }
     Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image);
     virtual ~Verb (void);
@@ -328,6 +331,8 @@ public:
 
     static void delete_all_view (SPView * view);
     void delete_view (SPView * view);
+
+    void sensitive (SPDocument * in_doc = NULL, bool in_sensitive = true);
 }; /* Verb class */
 
 

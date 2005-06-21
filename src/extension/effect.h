@@ -55,6 +55,7 @@ public:
     Inkscape::Verb * get_verb (void) { return &_verb; };
 
     static Effect *  get_last_effect (void) { return _last_effect; };
+    static void      set_last_effect (Effect * in_effect);
 };
 
 } }  /* namespace Inkscape, Extension */

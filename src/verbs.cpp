@@ -576,7 +576,27 @@ Verb::get_action (SPView * view)
         _actions->insert(ActionTable::value_type(view, action));
     }
 
+    // sp_action_set_sensitive(action, _default_sensitive ? 1 : 0);
+
     return action;
+}
+
+void
+Verb::sensitive (SPDocument * in_doc, bool in_sensitive)
+{
+    for (ActionTable::iterator cur_action = _actions->begin();
+             cur_action != _actions->end();
+             cur_action++) {
+        if (in_doc == NULL || cur_action->first->doc == in_doc) {
+            sp_action_set_sensitive(cur_action->second, in_sensitive ? 1 : 0);
+        }
+    }
+    
+    if (in_doc == NULL) {
+        _default_sensitive = in_sensitive;
+    }
+
+    return;
 }
 
 /** \brief  A function to remove the action associated with a view.
@@ -1583,6 +1603,7 @@ public:
                    gchar const * tip,
                    gchar const * image) :
             Verb(code, id, name, tip, image) {
+        // sensitive(NULL, false);
     }
 }; /* EffectLastVerb class */
 

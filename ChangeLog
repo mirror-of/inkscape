@@ -1,3 +1,20 @@
+2005-06-20  Ted Gould  <ted@gould.cx>
+
+	* src/desktop.cpp, src/desktop.h, src/document-private.h,
+	src/document.cpp, src/document.h, src/extension/effect.h,
+	src/extension/implementation/script.cpp:
+
+	Adding in a signal to show that the document is being reconstructed from
+	another document.  This is used by the scripting extensions implementation
+	to say to the desktops that they need to save their object references
+	as strings instead of pointers -- and then recreate them when the
+	reconstruction is complete.
+
+	* src/extension/prefdialog.cpp: Making "OK" have focus.
+
+	* src/verbs.cpp, src/verbs.h: Some prototype code to start making verbs
+	sensitive or not.  Not tied in to anything currently.
+
 2005-06-20  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-io.cpp: whoops... don't emit xmlns:xml

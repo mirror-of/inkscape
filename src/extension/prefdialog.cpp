@@ -21,7 +21,10 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls) :
     this->get_vbox()->pack_start(*controls, true, true, 5);
 
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+
+    Gtk::Button * ok = add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+    set_default_response(Gtk::RESPONSE_OK);
+    ok->grab_focus();
 
     return;
 }

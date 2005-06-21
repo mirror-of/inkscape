@@ -302,6 +302,7 @@ SPObject *SPDesktop::currentLayer() {
 void SPDesktop::setCurrentLayer(SPObject *object) {
     g_return_if_fail(SP_IS_GROUP(object));
     g_return_if_fail( currentRoot() == object || currentRoot()->isAncestorOf(object));
+    // printf("Set Layer to ID: %s\n", SP_OBJECT_ID(object));
     _layer_hierarchy->setBottom(object);
 }
 
@@ -501,6 +502,14 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     sp_desktop_activate_guides (desktop, TRUE);
     /* Ugly hack */
     sp_dt_namedview_modified (desktop->namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
+
+    /* Set up notification of rebuilding the document, this allows
+       for saving object related settings in the document. */
+    desktop->_reconstruction_start_connection =
+        document->connectReconstructionStart(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_start), desktop));
+    desktop->_reconstruction_finish_connection =
+        document->connectReconstructionFinish(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_finish), desktop));
+    desktop->_reconstruction_old_layer_id = NULL;
 
     // ?
     // sp_active_desktop_set (desktop);
@@ -1496,6 +1505,41 @@ void SPDesktop::_selection_changed(Inkscape::Selection *selection, SPDesktop *de
             desktop->setCurrentLayer(layer);
         }
     }
+}
+
+void
+SPDesktop::_reconstruction_start (SPDesktop * desktop)
+{
+    // printf("Desktop, starting reconstruction\n");
+    desktop->_reconstruction_old_layer_id = g_strdup(SP_OBJECT_ID(desktop->currentLayer()));
+    desktop->_layer_hierarchy->setBottom(desktop->currentRoot());
+
+    /*
+    GSList const * selection_objs = desktop->selection->list();
+    for (; selection_objs != NULL; selection_objs = selection_objs->next) {
+
+    }
+    */
+    desktop->selection->clear();
+
+    // printf("Desktop, starting reconstruction end\n");
+}
+
+void
+SPDesktop::_reconstruction_finish (SPDesktop * desktop)
+{
+    // printf("Desktop, finishing reconstruction\n");
+    if (desktop->_reconstruction_old_layer_id == NULL)
+        return;
+
+    SPObject * newLayer = SP_OBJECT_DOCUMENT(desktop->namedview)->getObjectById(desktop->_reconstruction_old_layer_id);
+    if (newLayer != NULL)
+        desktop->setCurrentLayer(newLayer);
+
+    g_free(desktop->_reconstruction_old_layer_id);
+    desktop->_reconstruction_old_layer_id = NULL;
+    // printf("Desktop, finishing reconstruction end\n");
+    return;
 }
 
 void SPDesktop::emitToolSubselectionChanged(gpointer data) {

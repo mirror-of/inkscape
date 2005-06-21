@@ -54,6 +54,8 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	typedef sigc::signal<void, guint> ModifiedSignal;
 	typedef sigc::signal<void, gchar const *> URISetSignal;
 	typedef sigc::signal<void, double, double> ResizedSignal;
+	typedef sigc::signal<void> ReconstructionStart;
+	typedef sigc::signal<void> ReconstructionFinish;
 
 	SPDocument();
 	~SPDocument();
@@ -98,6 +100,12 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 private:
 	SPDocument(SPDocument const &); // no copy
 	void operator=(SPDocument const &); // no assign
+
+public:
+	sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
+	sigc::connection connectReconstructionFinish (ReconstructionFinish::slot_type  slot);
+	void emitReconstructionStart (void);
+	void emitReconstructionFinish  (void);
 };
 
 /* Fetches document from URI, or creates new, if NULL

@@ -484,6 +484,35 @@ sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type
 	return priv->resized_signal.connect(slot);
 }
 
+sigc::connection
+SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
+{
+	return priv->_reconstruction_start_signal.connect(slot);
+}
+
+void
+SPDocument::emitReconstructionStart (void)
+{
+	// printf("Starting Reconstruction\n");
+	priv->_reconstruction_start_signal.emit();
+	return;
+}
+
+sigc::connection
+SPDocument::connectReconstructionFinish (SPDocument::ReconstructionFinish::slot_type  slot)
+{
+	return priv->_reconstruction_finish_signal.connect(slot);
+}
+
+void
+SPDocument::emitReconstructionFinish (void)
+{
+	// printf("Finishing Reconstruction\n");
+	priv->_reconstruction_finish_signal.emit();
+	return;
+}
+
+
 void SPDocument::_emitModified() {
 	static const guint flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
 	root->emitModified(0);

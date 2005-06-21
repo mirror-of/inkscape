@@ -87,6 +87,11 @@ struct SPDesktop : public SPView {
 
     sigc::connection sel_changed_connection;
 
+	/* Reconstruction related variables */
+	sigc::connection _reconstruction_start_connection;
+	sigc::connection _reconstruction_finish_connection;
+	gchar * _reconstruction_old_layer_id;
+
     SPEventContext *event_context;
 
     unsigned int dkey;
@@ -140,6 +145,8 @@ struct SPDesktop : public SPView {
     static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
     static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
     static void _selection_changed(Inkscape::Selection *selection, SPDesktop *desktop);
+	static void _reconstruction_start(SPDesktop * desktop);
+	static void _reconstruction_finish(SPDesktop * desktop);
 
     sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
     

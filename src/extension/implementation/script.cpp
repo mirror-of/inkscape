@@ -631,7 +631,9 @@ Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
 
     /* Do something with mydoc.... */
     if (mydoc != NULL) {
+        doc->doc->emitReconstructionStart();
         copy_doc(doc->doc->rroot, mydoc->rroot);
+        doc->doc->emitReconstructionFinish();
         mydoc->release();
     }
 }
