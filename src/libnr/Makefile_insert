@@ -69,6 +69,7 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-rect-l.h	\
 	libnr/nr-rect.cpp	\
 	libnr/nr-rect.h	\
+	libnr/nr-rect-ops.h	\
 	libnr/nr-render.h	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
