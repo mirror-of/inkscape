@@ -117,7 +117,6 @@ Layout::ShapeScanlineMaker::~ShapeScanlineMaker()
 std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScanline(Layout::LineHeight const &line_height)
 {
     FloatLigne line_rasterization;
-    FloatLigne line_decent_length_runs;
     float line_text_height = (float)(line_height.ascent + line_height.descent);
 
     if (_y > _bounding_box_bottom)
@@ -135,16 +134,14 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
     _rotated_shape->Scan(_rasterizer_y, _current_rasterization_point, _y + line_text_height , &line_rasterization, true, line_text_height);
     // sanitise the raw rasterisation, which could have weird overlaps
     line_rasterization.Flatten();
-    // cut out any run that's really short
-    line_decent_length_runs.Over(&line_rasterization, 0.9 * line_text_height);
 
     _current_line_height = (float)line_height.total();
 
     // convert the FloatLigne to what we use: vector<ScanRun>
-    std::vector<ScanRun> result(line_decent_length_runs.runs.size());
+    std::vector<ScanRun> result(line_rasterization.runs.size());
     for (unsigned i = 0 ; i < result.size() ; i++) {
-        result[i].x_start = line_decent_length_runs.runs[i].st;
-        result[i].x_end   = line_decent_length_runs.runs[i].en;
+        result[i].x_start = line_rasterization.runs[i].st;
+        result[i].x_end   = line_rasterization.runs[i].en;
         result[i].y = _negative_block_progression ? -_current_line_height - _y : _y;
     }
 
