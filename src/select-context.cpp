@@ -210,13 +210,12 @@ sp_select_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     } 
 }
 
-static void
+static bool
 sp_select_context_abort(SPEventContext *event_context)
 {
     SPDesktop *desktop = event_context->desktop;
     SPSelectContext *sc = SP_SELECT_CONTEXT(event_context);
     SPSelTrans *seltrans = sc->_seltrans;
-    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (sc->dragging) {
         if (sc->moved) { // cancel dragging an object
@@ -241,6 +240,7 @@ sp_select_context_abort(SPEventContext *event_context)
             sc->item = NULL;
 
             SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
+            return true;
         }
     } else {
         NRRect b;
@@ -249,10 +249,10 @@ sp_select_context_abort(SPEventContext *event_context)
             sp_rubberband_stop();
             rb_escaped = 1;
             SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
-        } else {
-            selection->clear();
-        }
+            return true;
+        } 
     }
+    return false;
 }
 
 bool 
@@ -678,7 +678,8 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     }
                     break;
                 case GDK_Escape:
-                    sp_select_context_abort(event_context);
+                    if (!sp_select_context_abort(event_context))
+                        selection->clear();
                     ret = TRUE;
                     break;
                 case GDK_a:
