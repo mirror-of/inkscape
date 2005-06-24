@@ -250,6 +250,9 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     const gchar * fn;
     gboolean epsexport=false;
 
+    _latin1_encoded_fonts.clear();
+    _newlatin1font_proc_defined = false;
+
     fn = mod->get_param_string("destination");
 
     osf = NULL;
@@ -524,6 +527,7 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
     /* fixme: should really use pclose for popen'd streams */
     fclose(_stream);
     _stream = 0;
+    _latin1_encoded_fonts.clear();
 
     return res;
 }
@@ -862,25 +866,36 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
     Inkscape::SVGOStringStream os;
 
     // Escape chars
-    Glib::ustring s;
+    Inkscape::SVGOStringStream escaped_text;
+    escaped_text << std::oct;
     for (const gchar *p_text = text ; *p_text ; p_text = g_utf8_next_char(p_text)) {
         gunichar c = g_utf8_get_char(p_text);
-        if (c == '\\' || c == ')' || c == '(') {
-            s += '\\';
-            s += c;
-        } else if (c >= 0x80) {
-            Inkscape::SVGOStringStream escaped;
-            escaped << '\\' << std::oct << c;
-            s += escaped.str();
-        } else
-            s += c;
+        if (c == '\\' || c == ')' || c == '(')
+            escaped_text << '\\' << static_cast<char>(c);
+        else if (c >= 0x80)
+            escaped_text << '\\' << c;
+        else
+            escaped_text << static_cast<char>(c);
     }
 
     os << "gsave\n";
 
     // set font
     const char *fn = PSFontName(style);
-    os << "/" << fn << " findfont\n";
+    if (_latin1_encoded_fonts.find(fn) == _latin1_encoded_fonts.end()) {
+        if (!_newlatin1font_proc_defined) {
+            // input: newfontname, existingfontname
+            // output: new font object, also defined to newfontname
+            os << "/newlatin1font "         // name of the proc
+                  "{findfont dup length dict copy "     // load the font and create a copy of it
+                  "dup /Encoding ISOLatin1Encoding put "     // change the encoding in the copy
+                  "definefont} def\n";      // create the new font and leave it on the stack, define the proc
+            _newlatin1font_proc_defined = true;
+        }
+        os << "/" << fn << "-ISOLatin1 /" << fn << " newlatin1font\n";
+        _latin1_encoded_fonts.insert(fn);
+    } else
+        os << "/" << fn << "-ISOLatin1 findfont\n";
     os << style->font_size.computed << " scalefont\n";
     os << "setfont\n";
     g_free((void *) fn);
@@ -895,7 +910,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
 
         os << "newpath\n";
         os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-        os << "(" << s.c_str() << ") show\n";
+        os << "(" << escaped_text.str() << ") show\n";
     }
 
     if (style->stroke.type == SP_PAINT_TYPE_COLOR) {
@@ -906,7 +921,7 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
         // paint stroke
         os << "newpath\n";
         os << p[NR::X] << " " << p[NR::Y] << " moveto\n";
-        os << "(" << s.c_str() << ") false charpath stroke\n";
+        os << "(" << escaped_text.str() << ") false charpath stroke\n";
     }
 
     os << "grestore\n";

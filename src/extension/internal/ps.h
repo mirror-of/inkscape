@@ -15,6 +15,7 @@
 #include <config.h>
 #include <extension/extension.h>
 #include <extension/implementation/implementation.h>
+#include <set>
 
 #include <libnr/nr-path.h>
 
@@ -30,6 +31,8 @@ class PrintPS : public Inkscape::Extension::Implementation::Implementation {
     FILE * _stream;
     unsigned short _dpi;
     bool   _bitmap;
+    std::set<std::string> _latin1_encoded_fonts;
+    bool   _newlatin1font_proc_defined;
 
 	void print_bpath (SVGOStringStream &os, const NArtBpath *bp);
 
