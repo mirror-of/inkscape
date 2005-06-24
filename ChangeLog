@@ -1,3 +1,8 @@
+2005-06-23  MenTaLguY  <mental@rydia.net>
+
+	* src/extension/implementation/script.cpp:
+	  support for ruby scripts (interpreter="ruby")
+
 2005-06-20  Ted Gould  <ted@gould.cx>
 
 	* src/desktop.cpp, src/desktop.h, src/document-private.h,

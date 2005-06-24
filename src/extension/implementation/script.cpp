@@ -237,6 +237,7 @@ Script::load(Inkscape::Extension::Extension *module)
                         const interpreter_t interpreterlst[] = {
                             {"perl", "perl-interpreter", "perl"},
                             {"python", "python-interpreter", "python"},
+                            {"ruby", "ruby-interpreter", "ruby"},
                             {"shell", "shell-interpreter", "sh"}
                         };
                         for (unsigned int i = 0; i < 3; i++) {
