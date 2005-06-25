@@ -5,7 +5,7 @@
 # Author: Bob Jamison & the Inkscape Guys
 ###########################################################################
 
-# Sense whether we are on a DOS box or cross-compiling
+####### Sense whether we are on a DOS box or cross-compiling
 ifdef ComSpec
 BUILD=native
 DOSSHELL=CMD_EXE
@@ -21,16 +21,25 @@ endif
 
 
 
+##########################################################################
+# FILE SEPARATORS
+# $(S) will be set to one of these
+##########################################################################
 BSLASH := \\#
 FSLASH := /
 
 
 
+##########################################################################
+# CROSS / NATIVE    SWITCHES
+##########################################################################
 ifeq ($(BUILD),cross)
 
-###########################
+
+
+##########################################################################
 # CROSS COMPILER SETTINGS
-###########################
+##########################################################################
 
 CC      = i686-pc-mingw32-gcc
 CXX     = i686-pc-mingw32-g++
@@ -42,28 +51,29 @@ LD      = i686-pc-mingw32-ld
 DLLWRAP = i686-pc-mingw32-dllwrap
 DLLTOOL = i686-pc-mingw32-dlltool
 
-# file separator
+####### file separator
 S = $(FSLASH)
 
-# file manipulation programs
+####### file manipulation programs
 CP     = cp
 RMDIR  = rm -rf 
 MKDIR  = mkdir
 CPDIR  = cp -rf 
 MSGFMT = msgfmt
 
-# Where is your GTK directory?
+####### Where is your GTK directory?
 GTK=/target
-#Same thing, file system style
+
+####### Same thing, file system style
 GTKDOS=$(GTK)
 
 DTG := $(shell date +%y%m%d.%H%M)
 
 else
 
-###########################
+##########################################################################
 # NATIVE COMPILER SETTINGS
-###########################
+##########################################################################
 
 CC      = mingw32-gcc
 CXX     = mingw32-g++
@@ -74,12 +84,13 @@ WINDRES = windres
 DLLWRAP = dllwrap
 DLLTOOL = dlltool
 
-# file separator
+####### file separator
 S = $(BSLASH)
 
-# file manipulation programs
+####### file manipulation programs
 CP = copy
-#are we on WinNt and beyond?
+
+####### are we on WinNt and beyond?
 ifeq ($(DOSSHELL),CMD_EXE)
 RMDIR = rmdir /s /q
 RM    = del
@@ -90,26 +101,37 @@ endif
 MKDIR = mkdir
 CPDIR = xcopy /e /i
 
-# Where is your GTK directory?
+#######  Where is your GTK directory?
 GTK=c:/gtk
-#Same thing, DOS style
+
+####### Same thing, DOS style
 GTKDOS=c:\gtk
 
+####### Command to process .po files --> .mo
 MSGFMT = $(GTKDOS)$(S)bin$(S)msgfmt
 
-# change me!!
-DTG := 20040721
+####### change me!!
+DTG := 20050626
 
 endif
+##########################################################################
+# END    CROSS / NATIVE    SWITCHES
+##########################################################################
 
-VERSION_NR = 0.41+cvs
-VERSION = \"$(VERSION_NR)-${DTG}\"
 
-# the XP_WIN def is necessary for libjs.a
+
+###### VERSION NUMBER
+VERSION_NR = 0.42
+
+# VERSION_NR = 0.42+cvs
+# VERSION = \"$(VERSION_NR)-${DTG}\"
+
+####### the XP_WIN def is necessary for libjs.a
 CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
 -DXP_WIN -D_INTL_REDIRECT_INLINE -DHAVE_CONFIG_H
 
 
+####### IMPLICIT RULES
 .cpp.o:
 	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
 
@@ -120,9 +142,9 @@ CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
 
 
 
-#########################################
+##########################################################################
 # INCLUDES AND LIBRARIES
-#########################################
+##########################################################################
 
 GTKINC = \
 -I$(GTK)/include/glibmm-2.4 -I$(GTK)/lib/glibmm-2.4/include \
@@ -136,7 +158,7 @@ GTKINC = \
 -I$(GTK)/include/glib-2.0 -I$(GTK)/lib/glib-2.0/include
 
 
-# New way with static C++ libs
+####### New way with static C++ libs
 GTKLIB = -L$(GTK)/lib \
 -lgtkmm-2.4 -lgdkmm-2.4 -lglibmm-2.4 \
 -latkmm-1.6 -lpangomm-1.4 -lsigc-2.0 \
@@ -144,17 +166,17 @@ GTKLIB = -L$(GTK)/lib \
 -lgdk_pixbuf-2.0 -lm -lpangoft2-1.0 -lpangowin32-1.0 -lpango-1.0 \
 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0
 
-# For PERL
-# (note: perl's config.h has some nested comments)
+####### For PERL
+####### (note: perl's config.h has some nested comments)
 PERLINC = -Wno-comment -I$(GTK)/perl/lib/CORE
 PERLLIB = -L$(GTK)/perl/lib/CORE -lperl58
 
-#For Python
+####### For Python
 PYTHONINC = -I$(GTK)/python/include
 PYTHONLIB = -L$(GTK)/python/libs -lpython24
 #PYTHONLIB = -L$(GTK)/python/libs/libpython24.a
 
-# remove -DLIBXML_STATIC 
+####### remove -DLIBXML_STATIC 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
 $(PERLINC) $(PYTHONINC) -I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2 \
@@ -166,9 +188,16 @@ $(GTK)/lib/iconv.lib	\
 -lgc -mwindows -lws2_32 -lintl
 
 
-#########################################
+##########################################################################
 # END INCLUDES AND LIBRARIES
-#########################################
+##########################################################################
+
+
+
+
+##########################################################################
+# E N D     O F     F I L E
+##########################################################################
 
 
 
