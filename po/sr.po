@@ -4940,8 +4940,8 @@ msgstr[0] "<b>Полигон</b> са %d страном"
 msgstr[1] "<b>Полигон</b> са %d страна"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<назив није пронађен>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;назив није пронађен&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

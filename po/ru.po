@@ -5030,8 +5030,8 @@ msgstr[1] "<b>Многоугольник</b> с %d вершинами"
 msgstr[2] "<b>Многоугольник</b> с %d вершинами"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<название не найдено>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;название не найдено&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

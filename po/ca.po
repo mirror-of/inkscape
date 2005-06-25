@@ -4871,8 +4871,8 @@ msgstr[0] "<b>Polígon</b> amb %d vèrtex"
 msgstr[1] "<b>Polígon</b> amb %d vèrtexs"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<no s'ha trobat el nom>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;no s'ha trobat el nom&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

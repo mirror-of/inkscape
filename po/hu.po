@@ -4976,8 +4976,8 @@ msgstr[0] "%d csúcsú <b>sokszög</b>"
 msgstr[1] "%d csúcsú <b>sokszög</b>"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<név nem található>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;név nem található&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

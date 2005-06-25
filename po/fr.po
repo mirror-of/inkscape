@@ -4299,8 +4299,8 @@ msgstr[0] "<b>Polygone</b> à %d sommet"
 msgstr[1] "<b>Polygone</b> à %d sommets"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<aucun nom trouvé>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;aucun nom trouvé&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

@@ -4849,8 +4849,8 @@ msgstr[0] "<b>ポリゴン</b>(%d点)"
 msgstr[1] "<b>ポリゴン</b>(%d点)"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<みつかりませんでした>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;みつかりませんでした&gt;"
 
 #: ../src/sp-text.cpp:411
 #, fuzzy, c-format

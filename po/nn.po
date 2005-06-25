@@ -4842,8 +4842,8 @@ msgstr[0] "<b>Mangekant</b> med %d hjørne"
 msgstr[1] "<b>Mangekant</b> med %d hjørne"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<fann ingen namn>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;fann ingen namn&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

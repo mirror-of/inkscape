@@ -5013,8 +5013,8 @@ msgstr[0] "<b>Veelhoek</b> met %d hoeken"
 msgstr[1] "<b>Veelhoek</b> met %d hoeken"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<geen naam gevonden>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;geen naam gevonden&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

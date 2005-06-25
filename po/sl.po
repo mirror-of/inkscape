@@ -4952,8 +4952,8 @@ msgstr[2] "<b>Mnogokotnik</b> s/z %d ogliščema"
 msgstr[3] "<b>Mnogokotnik</b> s/z %d oglišči"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<ne najdem imena>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;ne najdem imena&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

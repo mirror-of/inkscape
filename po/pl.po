@@ -4982,8 +4982,8 @@ msgstr[0] "<b>Wielokąt</b> z %d wierzchołkiem"
 msgstr[1] "<b>Wielokąt</b> z %d wierzchołkami"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<nie znaleziono nazwy>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;nie znaleziono nazwy&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

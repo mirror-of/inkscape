@@ -4853,8 +4853,8 @@ msgstr[1] "<b>Mnohouholník</b> s %d vrcholmi"
 msgstr[2] "<b>Mnohouholník</b> s %d vrcholmi"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<názov nebol nájdený>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;názov nebol nájdený&gt;"
 
 #: ../src/sp-text.cpp:411
 #, fuzzy, c-format

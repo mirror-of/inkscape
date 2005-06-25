@@ -5021,8 +5021,8 @@ msgstr[0] "<b>Poligono</b> con %d vertice"
 msgstr[1] "<b>Poligono</b> con %d vertici"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<nessun nome trovato>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;nessun nome trovato&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

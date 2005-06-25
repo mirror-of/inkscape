@@ -4970,8 +4970,8 @@ msgstr[0] "<b>Polígono</b> de %d vértices"
 msgstr[1] "<b>Polígono</b> de %d vértices"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<nenhum nome encontrado>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;nenhum nome encontrado&gt;"
 
 #: ../src/sp-text.cpp:411
 #, fuzzy, c-format

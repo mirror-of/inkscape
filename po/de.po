@@ -4943,8 +4943,8 @@ msgstr[0] "<b>Polygon</b> mit %d Eckpunkt"
 msgstr[1] "<b>Polygon</b> mit %d Eckpunkten"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<kein Name gefunden>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;kein Name gefunden&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format

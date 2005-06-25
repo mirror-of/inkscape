@@ -4976,8 +4976,8 @@ msgstr[1] "<b>Багатокутник</b> з %d вершинами"
 msgstr[2] "<b>Багатокутник</b> з %d вершинами"
 
 #: ../src/sp-text.cpp:405
-msgid "<no name found>"
-msgstr "<назву не знайдено>"
+msgid "&lt;no name found&gt;"
+msgstr "&lt;назву не знайдено&gt;"
 
 #: ../src/sp-text.cpp:411
 #, c-format
