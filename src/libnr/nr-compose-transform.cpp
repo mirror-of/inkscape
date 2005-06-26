@@ -234,6 +234,9 @@ nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int w, int h
 	int x, y;
 
 	size = (1 << dbits);
+    unsigned alpha_rounding_fix = size * 255;
+    unsigned rgb_rounding_fix = size * (255 * 256);
+    if (alpha > 127) ++alpha;
 
 	d0 = px;
 	FFsx0 = FFd2s[4];
@@ -266,11 +269,11 @@ nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int w, int h
 					}
 				}
 			}
-			a >>= (8 + dbits);
+			a = (a + alpha_rounding_fix) >> (8 + dbits);
 			if (a != 0) {
-				r = r >> (16 + dbits);
-				g = g >> (16 + dbits);
-				b = b >> (16 + dbits);
+				r = (r + rgb_rounding_fix) >> (16 + dbits);
+				g = (g + rgb_rounding_fix) >> (16 + dbits);
+				b = (b + rgb_rounding_fix) >> (16 + dbits);
 				if ((a == 255) || (d[3] == 0)) {
 					/* Transparent BG, premul src */
 					d[0] = r;
