@@ -145,7 +145,7 @@ GtkWidget *sp_canvas_new_aa (void);
 
 SPCanvasGroup *sp_canvas_root (SPCanvas *canvas);
 
-void sp_canvas_scroll_to (SPCanvas *canvas, float cx, float cy, unsigned int clear);
+void sp_canvas_scroll_to (SPCanvas *canvas, double cx, double cy, unsigned int clear);
 void sp_canvas_update_now (SPCanvas *canvas);
 
 void sp_canvas_request_redraw (SPCanvas *canvas, int x1, int y1, int x2, int y2);

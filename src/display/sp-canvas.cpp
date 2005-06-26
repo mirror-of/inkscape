@@ -1029,7 +1029,7 @@ sp_canvas_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 }
 
 static void
-scroll_to (SPCanvas *canvas, float x, float y, unsigned int clear)
+scroll_to (SPCanvas *canvas, double x, double y, unsigned int clear)
 {
     int ix = (int) (x + 0.5);
     int iy = (int) (y + 0.5);
@@ -1703,7 +1703,7 @@ sp_canvas_root (SPCanvas *canvas)
 }
 
 void
-sp_canvas_scroll_to (SPCanvas *canvas, float cx, float cy, unsigned int clear)
+sp_canvas_scroll_to (SPCanvas *canvas, double cx, double cy, unsigned int clear)
 {
     g_return_if_fail (canvas != NULL);
     g_return_if_fail (SP_IS_CANVAS (canvas));

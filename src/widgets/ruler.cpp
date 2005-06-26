@@ -133,7 +133,7 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
   gint xthickness;
   gint ythickness;
   gint length, ideal_length;
-  gfloat lower, upper;		/* Upper and lower limits, in ruler units */
+  double lower, upper;		/* Upper and lower limits, in ruler units */
   gfloat increment;		/* Number of pixels per unit */
   gint scale;			/* Number of units per major unit */
   gfloat subd_incr;
@@ -423,7 +423,7 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
   gint xthickness;
   gint ythickness;
   gint length, ideal_length;
-  gfloat lower, upper;		/* Upper and lower limits, in ruler units */
+  double lower, upper;		/* Upper and lower limits, in ruler units */
   gfloat increment;		/* Number of pixels per unit */
   gint scale;			/* Number of units per major unit */
   gfloat subd_incr;
