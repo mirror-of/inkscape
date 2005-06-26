@@ -61,10 +61,12 @@ xml_test_xml_includes = \
 	$(srcdir)/xml/quote-test.h
 
 xml_libtest_xml_a_SOURCES =	\
-	xml/test-xml.cpp
+	xml/test-xml.cpp \
+	$(xml_test_xml_includes)
 
 xml_test_xml_SOURCES =	\
-	xml/test-xml-main.cpp
+	xml/test-xml-main.cpp \
+	$(xml_test_xml_includes)
 
 xml_test_xml_LDADD =	\
 	xml/libtest-xml.a	\
