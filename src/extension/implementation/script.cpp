@@ -239,8 +239,8 @@ Script::load(Inkscape::Extension::Extension *module)
                             {"python", "python-interpreter", "python"},
                             {"ruby", "ruby-interpreter", "ruby"},
                             {"shell", "shell-interpreter", "sh"}
-                        };
-                        for (unsigned int i = 0; i < 3; i++) {
+                        }; /* Change count below if you change structure */
+                        for (unsigned int i = 0; i < 4; i++) {
                             if (!strcmp(interpretstr, interpreterlst[i].identity)) {
                                 const gchar * insertText = interpreterlst[i].defaultval;
                                 if (prefs_get_string_attribute("extensions", interpreterlst[i].prefstring) != NULL)
