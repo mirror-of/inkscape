@@ -43,6 +43,43 @@ EXTRA_DIST = \
 	README HACKING		\
 	inkscape.png \
 	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico \
+	cxxtest/cxxtestgen.pl \
+	cxxtest/cxxtestgen.py \
+	cxxtest/cxxtest/Descriptions.cpp \
+	cxxtest/cxxtest/Descriptions.h \
+	cxxtest/cxxtest/DummyDescriptions.cpp \
+	cxxtest/cxxtest/DummyDescriptions.h \
+	cxxtest/cxxtest/ErrorFormatter.h \
+	cxxtest/cxxtest/ErrorPrinter.h \
+	cxxtest/cxxtest/Flags.h \
+	cxxtest/cxxtest/GlobalFixture.cpp \
+	cxxtest/cxxtest/GlobalFixture.h \
+	cxxtest/cxxtest/Gui.h \
+	cxxtest/cxxtest/LinkedList.cpp \
+	cxxtest/cxxtest/LinkedList.h \
+	cxxtest/cxxtest/Mock.h \
+	cxxtest/cxxtest/ParenPrinter.h \
+	cxxtest/cxxtest/QtGui.h \
+	cxxtest/cxxtest/RealDescriptions.cpp \
+	cxxtest/cxxtest/RealDescriptions.h \
+	cxxtest/cxxtest/Root.cpp \
+	cxxtest/cxxtest/SelfTest.h \
+	cxxtest/cxxtest/StdHeaders.h \
+	cxxtest/cxxtest/StdValueTraits.h \
+	cxxtest/cxxtest/StdioFilePrinter.h \
+	cxxtest/cxxtest/StdioPrinter.h \
+	cxxtest/cxxtest/TeeListener.h \
+	cxxtest/cxxtest/TestListener.h \
+	cxxtest/cxxtest/TestRunner.h \
+	cxxtest/cxxtest/TestSuite.cpp \
+	cxxtest/cxxtest/TestSuite.h \
+	cxxtest/cxxtest/TestTracker.cpp \
+	cxxtest/cxxtest/TestTracker.h \
+	cxxtest/cxxtest/ValueTraits.cpp \
+	cxxtest/cxxtest/ValueTraits.h \
+	cxxtest/cxxtest/Win32Gui.h \
+	cxxtest/cxxtest/X11Gui.h \
+	cxxtest/cxxtest/YesNoRunner.h \
 	debian/changelog \
 	debian/compat	\
 	debian/control \
@@ -54,6 +91,7 @@ EXTRA_DIST = \
 	debian/inkscape.xpm	\
 	debian/mime	\
 	debian/rules
+
 # Note: it isn't clear that debian/* belongs in the tar file:
 # tarfile users should be able to use the official Debian packages.
 # They were added to EXTRA_DIST in v1.5, in response to a message on
