@@ -253,7 +253,6 @@ Grid::init (void)
         "<inkscape-extension>\n"
             "<name>Grid</name>\n"
             "<id>org.inkscape.effect.grid</id>\n"
-            "<dependency type=\"plugin\" location=\"plugins\">grid</dependency>\n"
             "<param name=\"lineWidth\" type=\"float\">1.0</param>\n"
             "<param name=\"xspacing\" type=\"float\">10.0</param>\n"
             "<param name=\"yspacing\" type=\"float\">10.0</param>\n"

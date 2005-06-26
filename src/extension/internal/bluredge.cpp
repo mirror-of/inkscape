@@ -133,7 +133,6 @@ BlurEdge::init (void)
         "<inkscape-extension>\n"
             "<name>Blur Edge</name>\n"
             "<id>org.inkscape.effect.bluredge</id>\n"
-            "<dependency type=\"plugin\" location=\"plugins\">bluredge</dependency>\n"
             "<param name=\"blur-width\" gui-text=\"Blur Width\" type=\"float\" min=\"1.0\" max=\"50.0\">1.0</param>\n"
             "<param name=\"num-steps\" gui-text=\"Number of Steps\" type=\"int\" min=\"5\" max=\"100\">11</param>\n"
             "<effect>\n"
