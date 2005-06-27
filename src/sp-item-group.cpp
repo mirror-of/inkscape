@@ -494,8 +494,6 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
       // this converts the gradient/pattern fill/stroke on the group, if any, to userSpaceOnUse
       sp_item_adjust_paint_recursive (gitem, NR::identity(), NR::identity(), false);
 
-	SPCSSAttr *gstyle = sp_css_attr_from_style (SP_OBJECT (gitem));
-
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
 	Inkscape::XML::Node *prepr = SP_OBJECT_REPR (pitem);
 
@@ -504,13 +502,21 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	GSList *objects = NULL;
 	for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 
-		Inkscape::XML::Node *nrepr = SP_OBJECT_REPR (child)->duplicate();
-
 		if (SP_IS_ITEM (child)) {
-			gchar affinestr[80];
 
 			SPItem *citem = SP_ITEM (child);
 
+			/* Merging of style */
+			// this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
+			// it here _before_ the new transform is set, so as to use the pre-transform bbox
+			sp_item_adjust_paint_recursive (citem, NR::identity(), NR::identity(), false);
+
+			sp_style_merge_from_dying_parent(SP_OBJECT_STYLE(child), SP_OBJECT_STYLE(gitem));
+			child->updateRepr();
+
+			Inkscape::XML::Node *nrepr = SP_OBJECT_REPR (child)->duplicate();
+
+			// Merging transform
 			NR::Matrix ctrans;
 			NR::Matrix const g(gitem->transform);
 			if (SP_IS_USE(citem) && sp_use_get_original (SP_USE(citem)) && 
@@ -531,38 +537,20 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			// This is just a way to temporarily remember the transform in repr. When repr is
 			// reattached outside of the group, the transform will be written more properly
 			// (i.e. optimized into the object if the corresponding preference is set)
+			gchar affinestr[80];
 			if (sp_svg_transform_write(affinestr, 79, ctrans)) {
 				sp_repr_set_attr (nrepr, "transform", affinestr);
 			} else {
 				sp_repr_set_attr (nrepr, "transform", NULL);
 			}
 
-			/* Merging of style */
-
-			// this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
-			// it here _before_ the new transform is set, so as to use the pre-transform bbox
-			sp_item_adjust_paint_recursive (citem, NR::identity(), NR::identity(), false);
-
-			// we do this by merging SPCSSAttrs, because there's no easy way to do this with SPStyle
-			// perhaps we need to program some sort of sp_style_combine_with_parent (SPStyle *, SPStyle *)
-			SPCSSAttr *cstyle = sp_repr_css_attr_new ();
-			if (gstyle) {
-				sp_repr_css_merge (cstyle, gstyle);
-			}
-			SPCSSAttr *istyle = sp_css_attr_from_style (SP_OBJECT (citem));
-			if (istyle) {
-				sp_repr_css_merge (cstyle, istyle);
-				sp_repr_css_attr_unref (istyle);
-			}
-			sp_repr_css_change (nrepr, cstyle, "style");
-
 			items = g_slist_prepend (items, nrepr);
+
 		} else {
+			Inkscape::XML::Node *nrepr = SP_OBJECT_REPR (child)->duplicate();
 			objects = g_slist_prepend (objects, nrepr);
 		}
 	}
-
-	if (gstyle) sp_repr_css_attr_unref (gstyle);
 
 	/* Step 2 - clear group */
 	// remember the position of the group
