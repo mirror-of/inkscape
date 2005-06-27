@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-07 01:08+0200\n"
+"POT-Creation-Date: 2005-06-27 21:43+0200\n"
 "PO-Revision-Date: 2005-05-23 23:44+0200\n"
 "Last-Translator: cornelius <josef.vybiral@gmail.com>\n"
 "Language-Team: Czech <none>\n"
@@ -36,7 +36,7 @@ msgid "<b>Shift</b>: draw around the starting point"
 msgstr "<b>Shift</b>: kreslit kolem počátečního bodu"
 
 #: ../src/arc-context.cpp:420 ../src/dyna-draw-context.cpp:458
-#: ../src/pen-context.cpp:276 ../src/pencil-context.cpp:181
+#: ../src/pen-context.cpp:277 ../src/pencil-context.cpp:181
 #: ../src/rect-context.cpp:453 ../src/spiral-context.cpp:423
 #: ../src/star-context.cpp:428
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
@@ -45,7 +45,7 @@ msgstr ""
 "kreslit."
 
 #: ../src/arc-context.cpp:424 ../src/dyna-draw-context.cpp:462
-#: ../src/pen-context.cpp:280 ../src/pencil-context.cpp:185
+#: ../src/pen-context.cpp:281 ../src/pencil-context.cpp:185
 #: ../src/rect-context.cpp:457 ../src/spiral-context.cpp:428
 #: ../src/star-context.cpp:432
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
@@ -54,10 +54,10 @@ msgstr ""
 "kreslit."
 
 #: ../src/arc-context.cpp:503
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio "
-"ellipse; with <b>Shift</b> to draw around the starting point"
+"<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle or integer-"
+"ratio ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Ellipsa</b>: %s × %s; s <b>Ctrl</b> se vytvoří kružnice nebo elipsa s "
 "celočíselným poměrem stran; s <b>Shift</b> se vykreslí kolem počátku"
@@ -89,22 +89,22 @@ msgstr "Vodítko"
 msgid "Move %s"
 msgstr "Přesun %s"
 
-#: ../src/desktop.cpp:963
+#: ../src/desktop.cpp:972
 msgid "Zoom drawing if window size changes"
 msgstr "Měnit přiblížení podle velikosti okna"
 
-#: ../src/desktop.cpp:985 ../src/dialogs/display-settings.cpp:1068
-#: ../src/verbs.cpp:1854
+#: ../src/desktop.cpp:994 ../src/dialogs/display-settings.cpp:1068
+#: ../src/verbs.cpp:1889
 msgid "Zoom"
 msgstr "Lupa"
 
-#: ../src/desktop.cpp:1009
+#: ../src/desktop.cpp:1018
 msgid "Cursor coordinates"
 msgstr "Souřadnice kurzoru"
 
 #. sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
 #. display the initial welcome message in the statusbar
-#: ../src/desktop.cpp:1024
+#: ../src/desktop.cpp:1033
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
@@ -112,17 +112,17 @@ msgstr ""
 "<b>Vítejte v Inkscape!</b> Použijte nástrojů tvarů nebo kreslení k vytvoření "
 "objektů. Nástroj výběru(šipka) k jejich přesunu nebo transformaci."
 
-#: ../src/desktop.cpp:1069
+#: ../src/desktop.cpp:1078
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: ../src/desktop.cpp:1071
+#: ../src/desktop.cpp:1080
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: ../src/desktop.cpp:1218
+#: ../src/desktop.cpp:1227
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -135,11 +135,11 @@ msgstr ""
 "\n"
 "Pokud jej zavřete bez uložení, změny budou ztraceny."
 
-#: ../src/desktop.cpp:1231 ../src/desktop.cpp:1289
+#: ../src/desktop.cpp:1240 ../src/desktop.cpp:1298
 msgid "Close _without saving"
 msgstr "Zavřít _bez uložení"
 
-#: ../src/desktop.cpp:1275
+#: ../src/desktop.cpp:1284
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -152,177 +152,28 @@ msgstr ""
 "\n"
 "Nechcete jej uložit v jiném formátu?"
 
-#: ../src/desktop.cpp:1681
+#: ../src/desktop.cpp:1725
 msgid "No previous zoom."
 msgstr "Žádné předchozí hodnoty přiblížení"
 
-#: ../src/desktop.cpp:1704
+#: ../src/desktop.cpp:1748
 msgid "No next zoom."
 msgstr "Žádné další hodnoty přiblížení"
 
 #. Page page
-#: ../src/desktop.cpp:2103 ../src/dialogs/align.cpp:817
-#: ../src/dialogs/desktop-properties.cpp:1003
+#: ../src/desktop.cpp:2147 ../src/dialogs/desktop-properties.cpp:1003
+#: ../src/ui/dialog/align-and-distribute.cpp:779
 #: ../src/ui/dialog/document-preferences.cpp:36
 msgid "Page"
 msgstr "Strana"
 
-#: ../src/desktop.cpp:2107 ../src/dialogs/align.cpp:818
+#: ../src/desktop.cpp:2151 ../src/ui/dialog/align-and-distribute.cpp:780
 msgid "Drawing"
 msgstr "Kresba"
 
-#: ../src/desktop.cpp:2111 ../src/dialogs/align.cpp:819
+#: ../src/desktop.cpp:2155 ../src/ui/dialog/align-and-distribute.cpp:781
 msgid "Selection"
 msgstr "Výběr"
-
-#: ../src/dialogs/align.cpp:702 ../src/dialogs/text-edit.cpp:216
-msgid "Layout"
-msgstr "Rozložení"
-
-#: ../src/dialogs/align.cpp:704 ../src/ui/dialog/align-and-distribute.cpp:38
-msgid "Align"
-msgstr "Zarovnat"
-
-#: ../src/dialogs/align.cpp:705 ../src/ui/dialog/align-and-distribute.cpp:39
-msgid "Distribute"
-msgstr "Rozmístit"
-
-#: ../src/dialogs/align.cpp:706
-msgid "Nodes"
-msgstr "Uzly"
-
-#: ../src/dialogs/align.cpp:710
-msgid "Relative to: "
-msgstr "Relativní přesun:"
-
-#: ../src/dialogs/align.cpp:714
-msgid "Align right sides of objects to left side of anchor"
-msgstr "Zarovnat pravou stranu objektů k levé straně ukotvení"
-
-#: ../src/dialogs/align.cpp:717
-msgid "Align left sides"
-msgstr "Zarovnat levé strany"
-
-#: ../src/dialogs/align.cpp:720
-msgid "Center on vertical axis"
-msgstr "Zarovnat na střed svisle"
-
-#: ../src/dialogs/align.cpp:723
-msgid "Align right sides"
-msgstr "Zarovnat pravé strany"
-
-#: ../src/dialogs/align.cpp:726
-msgid "Align left sides of objects to right side of anchor"
-msgstr "Zarovnat levou stranu objektů k pravé straně ukotvení"
-
-#: ../src/dialogs/align.cpp:729
-msgid "Align bottoms of objects to top of anchor"
-msgstr "Zarovnat spodní strany objektů k horním ukotvením"
-
-#: ../src/dialogs/align.cpp:732
-msgid "Align tops"
-msgstr "Zarovnat horní strany"
-
-#: ../src/dialogs/align.cpp:735
-msgid "Center on horizontal axis"
-msgstr "Zarovnat na střed vodorovně"
-
-#: ../src/dialogs/align.cpp:738
-msgid "Align bottoms"
-msgstr "Zarovnat spodní strany"
-
-#: ../src/dialogs/align.cpp:741
-msgid "Align tops of objects to bottom of anchor"
-msgstr "Zarovnat horní strany objektů ke spodní straně ukotvení"
-
-#: ../src/dialogs/align.cpp:746
-msgid "Align baseline anchors of texts vertically"
-msgstr "Zarovnat základny textu svisle"
-
-#: ../src/dialogs/align.cpp:749
-msgid "Align baseline anchors of texts horizontally"
-msgstr "Zarovnat základny textu vodorovně"
-
-#: ../src/dialogs/align.cpp:754
-msgid "Make horizontal gaps between objects equal"
-msgstr "Rozdělit vodorovné mezery mezi objekty rovnoměrně"
-
-#: ../src/dialogs/align.cpp:758
-msgid "Distribute left sides equidistantly"
-msgstr "Rozmístit levé strany objektů rovnoměrně vzdálené"
-
-#: ../src/dialogs/align.cpp:761
-msgid "Distribute centers equidistantly horizontally"
-msgstr "Rozmístit středy objektů vodorovně a v rovnoměrné vzdálenosti"
-
-#: ../src/dialogs/align.cpp:764
-msgid "Distribute right sides equidistantly"
-msgstr "Rozmístit pravé strany objektů rovnoměrně vzdálené"
-
-#: ../src/dialogs/align.cpp:768
-msgid "Make vertical gaps between objects equal"
-msgstr "Rozdělit svislou vzdálenost mezi objekty rovnoměrně"
-
-#: ../src/dialogs/align.cpp:772
-msgid "Distribute bottoms equidistantly"
-msgstr "Rozmístit dolní strany objektů rovnoměrně vzdálené"
-
-#: ../src/dialogs/align.cpp:775
-msgid "Distribute centers equidistantly vertically"
-msgstr "Rozmístit středy objektů svisle a v rovnoměrné vzdálenosti"
-
-#: ../src/dialogs/align.cpp:778
-msgid "Distribute tops equidistantly"
-msgstr "Rozmístit horní strany objektů rovnoměrně vzdálené"
-
-#: ../src/dialogs/align.cpp:783
-msgid "Distribute baseline anchors of texts horizontally"
-msgstr "Rozmístit základny textu vodorovně"
-
-#: ../src/dialogs/align.cpp:786
-msgid "Distribute baseline anchors of texts vertically"
-msgstr "Rozmístit základny textu svisle"
-
-#: ../src/dialogs/align.cpp:791
-msgid "Randomize centers in both dimensions"
-msgstr "Náhodně rozmístit středy v obou rozměrech"
-
-#: ../src/dialogs/align.cpp:794
-msgid "Unclump objects: try to equalize edge-to-edge distances"
-msgstr "Rozhodit objekty: vzdálenosti okraj-okraj by měly být rovnoměrné"
-
-#: ../src/dialogs/align.cpp:799
-msgid "Align selected nodes horizontally"
-msgstr "Zarovnat vybrané uzly vodorovně"
-
-#: ../src/dialogs/align.cpp:802
-msgid "Align selected nodes vertically"
-msgstr "Zarovnat vybrané uzly svisle"
-
-#: ../src/dialogs/align.cpp:805
-msgid "Distribute selected nodes horizontally"
-msgstr "Rozmístit vybrané uzly vodorovně"
-
-#: ../src/dialogs/align.cpp:808
-msgid "Distribute selected nodes vertically"
-msgstr "Rozmístit vybrané uzly svisle"
-
-#. Rest of the widgetry
-#: ../src/dialogs/align.cpp:813
-msgid "Last selected"
-msgstr "Poslední vybraný"
-
-#: ../src/dialogs/align.cpp:814
-msgid "First selected"
-msgstr "První vybraný"
-
-#: ../src/dialogs/align.cpp:815
-msgid "Biggest item"
-msgstr "Největší položka"
-
-#: ../src/dialogs/align.cpp:816
-msgid "Smallest item"
-msgstr "Nejmenší položka"
 
 #: ../src/dialogs/clonetiler.cpp:137
 msgid "<small>Nothing selected.</small>"
@@ -349,11 +200,11 @@ msgstr "Vyberte <b>jeden objekt</b> jehož dlaždicové klony se mají odstranit
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Vyberte <b>jeden objekt</b> jehož dlaždicové klony se mají odstranit."
 
-#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1727
+#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1759
 msgid "Select an <b>object</b> to clone."
 msgstr "Vyberte <b>objekt</b> ke klonování."
 
-#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1733
+#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1765
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -775,25 +626,25 @@ msgstr "_B"
 msgid "Pick the Blue component of the color"
 msgstr "Nabrat modrou složku barvy"
 
-#: ../src/dialogs/clonetiler.cpp:2177 ../src/select-toolbar.cpp:426
-msgid "H"
-msgstr "V"
+#: ../src/dialogs/clonetiler.cpp:2177
+msgid "clonetiler|H"
+msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2178
 msgid "Pick the hue of the color"
 msgstr "Nabrat odstín barvy"
 
 #: ../src/dialogs/clonetiler.cpp:2185
-msgid "S"
-msgstr "_S"
+msgid "clonetiler|S"
+msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2186
 msgid "Pick the saturation of the color"
 msgstr "Nabrat sytost barvy"
 
 #: ../src/dialogs/clonetiler.cpp:2193
-msgid "L"
-msgstr "L"
+msgid "clonetiler|L"
+msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2194
 msgid "Pick the lightness of the color"
@@ -957,7 +808,7 @@ msgid "Messages"
 msgstr "Zprávy"
 
 #. ## Add a menu for clear()
-#: ../src/dialogs/debugdialog.cpp:144 ../src/interface.cpp:1145
+#: ../src/dialogs/debugdialog.cpp:144 ../src/interface.cpp:1148
 #: ../src/ui/dialog/messages.cpp:56 ../src/ui/dialog/scriptdialog.cpp:181
 msgid "_File"
 msgstr "_Soubor"
@@ -988,7 +839,7 @@ msgstr "Mřížka"
 msgid "Show grid"
 msgstr "Zobrazovat mřížku"
 
-#: ../src/dialogs/desktop-properties.cpp:891 ../src/verbs.cpp:1892
+#: ../src/dialogs/desktop-properties.cpp:891 ../src/verbs.cpp:1927
 msgid "Show or hide grid"
 msgstr "Zobrazit/Skrýt mřížku"
 
@@ -1084,7 +935,7 @@ msgstr "Vodítka"
 msgid "Show guides"
 msgstr "Zobrazovat vodítka"
 
-#: ../src/dialogs/desktop-properties.cpp:974 ../src/verbs.cpp:1893
+#: ../src/dialogs/desktop-properties.cpp:974 ../src/verbs.cpp:1928
 msgid "Show or hide guides"
 msgstr "Zobrazit/Skrýt vodítka"
 
@@ -1199,7 +1050,7 @@ msgstr "Jednotky:"
 #. Stroke width
 #: ../src/dialogs/desktop-properties.cpp:1138 ../src/dialogs/export.cpp:312
 #: ../src/dialogs/object-attributes.cpp:55
-#: ../src/dialogs/stroke-style.cpp:1075 ../src/toolbox.cpp:1829
+#: ../src/dialogs/stroke-style.cpp:1075 ../src/toolbox.cpp:1835
 msgid "Width:"
 msgstr "Šířka:"
 
@@ -1254,9 +1105,9 @@ msgstr "Označení vybraného objektu:"
 #: ../src/dialogs/display-settings.cpp:252
 #: ../src/dialogs/display-settings.cpp:389
 #: ../src/dialogs/display-settings.cpp:444
-#: ../src/dialogs/display-settings.cpp:1462
-#: ../src/dialogs/stroke-style.cpp:786 ../src/interface.cpp:749
-#: ../src/ui/dialog/inkscape-preferences.cpp:152 ../src/verbs.cpp:1629
+#: ../src/dialogs/display-settings.cpp:1471
+#: ../src/dialogs/stroke-style.cpp:786 ../src/interface.cpp:751
+#: ../src/ui/dialog/inkscape-preferences.cpp:156 ../src/verbs.cpp:1660
 msgid "None"
 msgstr "Žádné"
 
@@ -1301,7 +1152,7 @@ msgid "Default scale origin will be on the bounding box of the item's points"
 msgstr "Výchozí bod měřítka bude na ohraničení bodů položky"
 
 #: ../src/dialogs/display-settings.cpp:344
-#: ../src/ui/dialog/inkscape-preferences.cpp:155
+#: ../src/ui/dialog/inkscape-preferences.cpp:159
 msgid "degrees"
 msgstr "stupnů"
 
@@ -1409,7 +1260,7 @@ msgstr ""
 
 #. Mouse
 #: ../src/dialogs/display-settings.cpp:890
-#: ../src/ui/dialog/inkscape-preferences.cpp:51
+#: ../src/ui/dialog/inkscape-preferences.cpp:55
 msgid "Mouse"
 msgstr "Myš"
 
@@ -1448,7 +1299,7 @@ msgstr ""
 
 #. Scrolling
 #: ../src/dialogs/display-settings.cpp:920
-#: ../src/ui/dialog/inkscape-preferences.cpp:52
+#: ../src/ui/dialog/inkscape-preferences.cpp:56
 msgid "Scrolling"
 msgstr "Posun"
 
@@ -1465,7 +1316,7 @@ msgstr ""
 "(vodorovný posun s Shift)."
 
 #: ../src/dialogs/display-settings.cpp:933
-#: ../src/ui/dialog/inkscape-preferences.cpp:95
+#: ../src/ui/dialog/inkscape-preferences.cpp:99
 msgid "Ctrl+arrows"
 msgstr "Ctrl+šipky"
 
@@ -1490,7 +1341,7 @@ msgstr ""
 "žádné zrychlení)"
 
 #: ../src/dialogs/display-settings.cpp:962
-#: ../src/ui/dialog/inkscape-preferences.cpp:109
+#: ../src/ui/dialog/inkscape-preferences.cpp:113
 msgid "Autoscrolling"
 msgstr "Automatický posun"
 
@@ -1521,7 +1372,7 @@ msgstr ""
 
 #. Steps
 #: ../src/dialogs/display-settings.cpp:992
-#: ../src/ui/dialog/inkscape-preferences.cpp:53
+#: ../src/ui/dialog/inkscape-preferences.cpp:57
 msgid "Steps"
 msgstr "Kroky"
 
@@ -1540,11 +1391,11 @@ msgstr ""
 #: ../src/dialogs/display-settings.cpp:997
 #: ../src/dialogs/display-settings.cpp:1008
 #: ../src/dialogs/display-settings.cpp:1019 ../src/helper/units.cpp:41
-#: ../src/ui/dialog/inkscape-preferences.cpp:80
 #: ../src/ui/dialog/inkscape-preferences.cpp:84
-#: ../src/ui/dialog/inkscape-preferences.cpp:92
-#: ../src/ui/dialog/inkscape-preferences.cpp:102
-#: ../src/ui/dialog/inkscape-preferences.cpp:119
+#: ../src/ui/dialog/inkscape-preferences.cpp:88
+#: ../src/ui/dialog/inkscape-preferences.cpp:96
+#: ../src/ui/dialog/inkscape-preferences.cpp:106
+#: ../src/ui/dialog/inkscape-preferences.cpp:123
 msgid "px"
 msgstr "px"
 
@@ -1582,13 +1433,13 @@ msgstr ""
 "přiblíží a oddálío násobek této hodnoty"
 
 #: ../src/dialogs/display-settings.cpp:1032 ../src/helper/units.cpp:43
-#: ../src/ui/dialog/inkscape-preferences.cpp:160
+#: ../src/ui/dialog/inkscape-preferences.cpp:164
 msgid "%"
 msgstr "%"
 
 #. Tools
 #: ../src/dialogs/display-settings.cpp:1041
-#: ../src/ui/dialog/inkscape-preferences.cpp:54
+#: ../src/ui/dialog/inkscape-preferences.cpp:58
 msgid "Tools"
 msgstr "Nástroje"
 
@@ -1605,23 +1456,23 @@ msgstr "Uzly"
 msgid "Shapes"
 msgstr "Tvary"
 
-#: ../src/dialogs/display-settings.cpp:1083 ../src/verbs.cpp:1836
+#: ../src/dialogs/display-settings.cpp:1083 ../src/verbs.cpp:1871
 msgid "Rectangle"
 msgstr "Čtyřúhelník"
 
-#: ../src/dialogs/display-settings.cpp:1089 ../src/verbs.cpp:1838
+#: ../src/dialogs/display-settings.cpp:1089 ../src/verbs.cpp:1873
 msgid "Ellipse"
 msgstr "Elipsa"
 
-#: ../src/dialogs/display-settings.cpp:1095 ../src/verbs.cpp:1840
+#: ../src/dialogs/display-settings.cpp:1095 ../src/verbs.cpp:1875
 msgid "Star"
 msgstr "Hvězda"
 
-#: ../src/dialogs/display-settings.cpp:1101 ../src/verbs.cpp:1842
+#: ../src/dialogs/display-settings.cpp:1101 ../src/verbs.cpp:1877
 msgid "Spiral"
 msgstr "Spirála"
 
-#: ../src/dialogs/display-settings.cpp:1115 ../src/verbs.cpp:1844
+#: ../src/dialogs/display-settings.cpp:1115 ../src/verbs.cpp:1879
 msgid "Pencil"
 msgstr "Tužka"
 
@@ -1637,30 +1488,30 @@ msgstr ""
 "Tato hodnota vyjadřuje hodnotu vyhlazení aplikovanou na křivky kreslené od "
 "ruky; nižší hodnoty dávají kostrbatější křivky s více uzly."
 
-#: ../src/dialogs/display-settings.cpp:1135 ../src/verbs.cpp:1846
+#: ../src/dialogs/display-settings.cpp:1135 ../src/verbs.cpp:1881
 msgid "Pen"
 msgstr "Pero"
 
-#: ../src/dialogs/display-settings.cpp:1144 ../src/verbs.cpp:1848
+#: ../src/dialogs/display-settings.cpp:1144 ../src/verbs.cpp:1883
 msgid "Calligraphy"
 msgstr "Kaligrafická linie"
 
 #: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:353
-#: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:1850
+#: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:1885
 msgid "Text"
 msgstr "Text"
 
-#: ../src/dialogs/display-settings.cpp:1161 ../src/verbs.cpp:1852
+#: ../src/dialogs/display-settings.cpp:1161 ../src/verbs.cpp:1887
 msgid "Gradient"
 msgstr "Barevný přechod"
 
-#: ../src/dialogs/display-settings.cpp:1168 ../src/verbs.cpp:1856
+#: ../src/dialogs/display-settings.cpp:1168 ../src/verbs.cpp:1891
 msgid "Dropper"
 msgstr "Pipeta"
 
 #. Windows
 #: ../src/dialogs/display-settings.cpp:1180
-#: ../src/ui/dialog/inkscape-preferences.cpp:55
+#: ../src/ui/dialog/inkscape-preferences.cpp:59
 msgid "Windows"
 msgstr "Okna"
 
@@ -1700,7 +1551,7 @@ msgstr ""
 
 #. Clones
 #: ../src/dialogs/display-settings.cpp:1210 ../src/dialogs/find.cpp:674
-#: ../src/ui/dialog/inkscape-preferences.cpp:56
+#: ../src/ui/dialog/inkscape-preferences.cpp:60
 msgid "Clones"
 msgstr "Klony"
 
@@ -1760,7 +1611,7 @@ msgstr "Osiřelé klony jsou smazány stejně jako jejich originál."
 #. Transforms
 #. TRANSLATORS: Noun, i.e. transformations.
 #: ../src/dialogs/display-settings.cpp:1286
-#: ../src/ui/dialog/inkscape-preferences.cpp:57
+#: ../src/ui/dialog/inkscape-preferences.cpp:61
 msgid "Transforms"
 msgstr "Transformace"
 
@@ -1868,7 +1719,7 @@ msgstr ""
 
 #. To be broken into: Display, Save, Export, SVG, Commands
 #: ../src/dialogs/display-settings.cpp:1388
-#: ../src/ui/dialog/inkscape-preferences.cpp:58
+#: ../src/ui/dialog/inkscape-preferences.cpp:62
 msgid "Misc"
 msgstr "Různé"
 
@@ -1912,20 +1763,31 @@ msgid ""
 "rendered output for an object with its label"
 msgstr "Pokud je zapnuto, pak se k výtisku přidá komentář s jménem objektu"
 
-#. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
+#. TRANSLATORS: When on, enable the effects menu, default is off
 #: ../src/dialogs/display-settings.cpp:1424
+msgid "Enable script effects (requires restart) - EXPERIMENTAL"
+msgstr ""
+
+#: ../src/dialogs/display-settings.cpp:1425
+msgid ""
+"When on, the effects menu is enabled, allowing external effect scripts to be "
+"called, requires restart before effective - EXPERIMENTAL"
+msgstr ""
+
+#. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
+#: ../src/dialogs/display-settings.cpp:1433
 msgid "Max recent documents:"
 msgstr "Max. počet posledních otevřených dokumentů"
 
-#: ../src/dialogs/display-settings.cpp:1425
+#: ../src/dialogs/display-settings.cpp:1434
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr "Maximální délka seznamu posledně otevřených dokumentů v menu Soubor"
 
-#: ../src/dialogs/display-settings.cpp:1435
+#: ../src/dialogs/display-settings.cpp:1444
 msgid "Simplification threshold:"
 msgstr "Práh zjednodušení:"
 
-#: ../src/dialogs/display-settings.cpp:1436
+#: ../src/dialogs/display-settings.cpp:1445
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -1935,36 +1797,36 @@ msgstr ""
 "několikrát po sobě, bude působit čím dál více agresivněji; Opětovnou "
 "aplikací po pauze obnoví výchozí nastavení prahu."
 
-#: ../src/dialogs/display-settings.cpp:1451
+#: ../src/dialogs/display-settings.cpp:1460
 msgid "Oversample bitmaps:"
 msgstr "Převzorkované bitmapy:"
 
-#: ../src/dialogs/display-settings.cpp:1468
+#: ../src/dialogs/display-settings.cpp:1477
 msgid "2x2"
 msgstr "2 × 2"
 
-#: ../src/dialogs/display-settings.cpp:1474
+#: ../src/dialogs/display-settings.cpp:1483
 msgid "4x4"
 msgstr "4 × 4"
 
-#: ../src/dialogs/display-settings.cpp:1480
+#: ../src/dialogs/display-settings.cpp:1489
 msgid "8x8"
 msgstr "8 × 8"
 
-#: ../src/dialogs/display-settings.cpp:1486
+#: ../src/dialogs/display-settings.cpp:1495
 msgid "16x16"
 msgstr "16 × 16"
 
 #. "view_icon_preview"
-#: ../src/dialogs/export.cpp:135 ../src/verbs.cpp:1914
+#: ../src/dialogs/export.cpp:135 ../src/verbs.cpp:1949
 msgid "_Page"
 msgstr "Strana"
 
-#: ../src/dialogs/export.cpp:135 ../src/verbs.cpp:1918
+#: ../src/dialogs/export.cpp:135 ../src/verbs.cpp:1953
 msgid "_Drawing"
 msgstr "Kresba"
 
-#: ../src/dialogs/export.cpp:135 ../src/verbs.cpp:1920
+#: ../src/dialogs/export.cpp:135 ../src/verbs.cpp:1955
 msgid "_Selection"
 msgstr "Výběr"
 
@@ -2042,8 +1904,8 @@ msgid "Export in progress"
 msgstr "Probíhá export"
 
 #: ../src/dialogs/export.cpp:1006
-#, c-format
-msgid "Exporting [%d x %d] %s"
+#, fuzzy, c-format
+msgid "Exporting %s (%d x %d)"
 msgstr "Exportuji [%d × %d] %s"
 
 #: ../src/dialogs/export.cpp:1033
@@ -2075,14 +1937,14 @@ msgstr "Všechny soubory"
 msgid "All Inkscape Files"
 msgstr "Všechny soubory Inkscape"
 
-#: ../src/dialogs/filedialog.cpp:1162
+#: ../src/dialogs/filedialog.cpp:1176
 msgid "Guess from extension"
 msgstr "Určit dle přípony"
 
 #. ###### Add the file types menu
 #. createFilterMenu();
 #. ###### Do we want the .xxx extension automatically added?
-#: ../src/dialogs/filedialog.cpp:1240
+#: ../src/dialogs/filedialog.cpp:1261
 msgid "Append filename extension automatically"
 msgstr "Automaticky přidat ke jménu souboru příponu"
 
@@ -2711,6 +2573,10 @@ msgstr "Adresář pro palety (%s) je nedostupný"
 msgid "Font"
 msgstr "Font"
 
+#: ../src/dialogs/text-edit.cpp:216
+msgid "Layout"
+msgstr "Rozložení"
+
 #: ../src/dialogs/text-edit.cpp:229
 msgid "Align lines left"
 msgstr "Zarovnání vlevo"
@@ -2740,77 +2606,84 @@ msgstr "Mezery mezi řádky:"
 msgid "Set as default"
 msgstr "Nastavit jako výchozí"
 
-#: ../src/dialogs/tiledialog.cpp:606
+#: ../src/dialogs/tiledialog.cpp:604
 msgid "Rows:"
 msgstr "Řádky:"
 
-#: ../src/dialogs/tiledialog.cpp:616
-msgid "No of Rows"
-msgstr "Žádné řádky"
+#: ../src/dialogs/tiledialog.cpp:614
+#, fuzzy
+msgid "Number of rows"
+msgstr "Počet revolucí"
 
-#: ../src/dialogs/tiledialog.cpp:619
-msgid "Equal Height: "
+#: ../src/dialogs/tiledialog.cpp:617
+#, fuzzy
+msgid "Equal height"
 msgstr "Rovnoměrná výška:"
 
-#: ../src/dialogs/tiledialog.cpp:628
-msgid "Automatically scale Rows to fit selected objects."
-msgstr "Automaticky změnit měřítko řad aby vyplnily vybrané objekty"
+#: ../src/dialogs/tiledialog.cpp:626
+msgid "If not set, each row has the height of the tallest object in it"
+msgstr ""
 
 #. #### Radio buttons to control vertical alignment ####
 #. #### Radio buttons to control horizontal alignment ####
-#: ../src/dialogs/tiledialog.cpp:635 ../src/dialogs/tiledialog.cpp:705
+#: ../src/dialogs/tiledialog.cpp:633 ../src/dialogs/tiledialog.cpp:702
 msgid "Align:"
 msgstr "Zarovnat:"
 
-#: ../src/dialogs/tiledialog.cpp:670
+#: ../src/dialogs/tiledialog.cpp:668
 msgid " X "
 msgstr "X"
 
 #. #### Number of columns ####
-#: ../src/dialogs/tiledialog.cpp:676
+#: ../src/dialogs/tiledialog.cpp:674
 msgid "Columns:"
 msgstr "Sloupce:"
 
-#: ../src/dialogs/tiledialog.cpp:686
-msgid "No of columns"
+#: ../src/dialogs/tiledialog.cpp:684
+#, fuzzy
+msgid "Number of columns"
 msgstr "Žádné sloupce"
 
-#: ../src/dialogs/tiledialog.cpp:688
-msgid "Equal Width: "
+#: ../src/dialogs/tiledialog.cpp:686
+#, fuzzy
+msgid "Equal width"
 msgstr "Rovnoměrná Šířka:"
 
-#: ../src/dialogs/tiledialog.cpp:697
-msgid "Automatically scale Columns to fit selected objects."
-msgstr "Automaticky změnit měřítko Sloupců aby vyplnily vybrané objekty."
+#: ../src/dialogs/tiledialog.cpp:695
+msgid "If not set, each column has the width of the widest object in it"
+msgstr ""
 
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
-#: ../src/dialogs/tiledialog.cpp:745
-msgid "Fit into Selection BBox "
+#: ../src/dialogs/tiledialog.cpp:742
+#, fuzzy
+msgid "Fit into selection box"
 msgstr "Přizpůsobit hranicím výběru"
 
-#: ../src/dialogs/tiledialog.cpp:752
-msgid "Set Spacing: "
+#: ../src/dialogs/tiledialog.cpp:749
+#, fuzzy
+msgid "Set spacing:"
 msgstr "Nastavit rozestupy:"
 
 #. #### X padding ####
-#: ../src/dialogs/tiledialog.cpp:778
+#: ../src/dialogs/tiledialog.cpp:775
 msgid "Column spacing:"
 msgstr "Mezery mezi sloupci:"
 
-#: ../src/dialogs/tiledialog.cpp:787
+#: ../src/dialogs/tiledialog.cpp:784
 msgid "Horizontal spacing between columns"
 msgstr "Vodorovné mezery mezi sloupci"
 
 #. #### Y Padding ####
-#: ../src/dialogs/tiledialog.cpp:794
+#: ../src/dialogs/tiledialog.cpp:791
 msgid "Row spacing:"
 msgstr "Mezery mezi řádky:"
 
-#: ../src/dialogs/tiledialog.cpp:803
-msgid "Vertical spacing between Rows"
+#: ../src/dialogs/tiledialog.cpp:800
+#, fuzzy
+msgid "Vertical spacing between rows"
 msgstr "Svislé mezery meři řádky"
 
-#: ../src/dialogs/tiledialog.cpp:817
+#: ../src/dialogs/tiledialog.cpp:812
 msgid "Arrange Objects"
 msgstr "Zarovnat objekty"
 
@@ -3176,7 +3049,7 @@ msgstr ""
 "Použijte '> soubor', chcete-li tisk do souboru.\n"
 "Použijte '| prog arg...', chcete-li směrovat tisk do programu"
 
-#: ../src/extension/internal/ps.cpp:1208
+#: ../src/extension/internal/ps.cpp:1220
 msgid "write error occurred"
 msgstr "vyskytla se chyba při zápisu"
 
@@ -3192,7 +3065,12 @@ msgstr " Nastavení"
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr "Autodetekce formátu selhala. Soubor bude otevřen jako SVG."
 
-#: ../src/file.cpp:186 ../src/file.cpp:817
+#: ../src/file.cpp:116
+#, fuzzy
+msgid "default.svg"
+msgstr "Výchozí"
+
+#: ../src/file.cpp:186 ../src/file.cpp:878
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Selhalo načtení požadovaného souboru %s"
@@ -3214,22 +3092,22 @@ msgstr "Stav dokumentu byl navrácen do uloženého stavu."
 msgid "Document not reverted."
 msgstr "Stav dokumentu nebyl navrácen do uloženého stavu."
 
-#: ../src/file.cpp:359
+#: ../src/file.cpp:360
 msgid "Select file to open"
 msgstr "Vyberte soubor pro otevření"
 
-#: ../src/file.cpp:435
+#: ../src/file.cpp:496
 #, fuzzy, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "Z &lt;defs&gt; bylo odstraněno <b>%i</b> nepoužitých položek."
 msgstr[1] "Z &lt;defs&gt; bylo odstraněno <b>%i</b> nepoužitých položek."
 
-#: ../src/file.cpp:440
+#: ../src/file.cpp:501
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Žádné nepoužité položky v &lt;defs&gt;."
 
-#: ../src/file.cpp:465
+#: ../src/file.cpp:526
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -3238,38 +3116,38 @@ msgstr ""
 "Nenalezeno žádné rozšíření Inkscape pro uložeí dokumentu (%s).  Mohlo to být "
 "způsobeno neznámou příponou souboru."
 
-#: ../src/file.cpp:466 ../src/file.cpp:474
+#: ../src/file.cpp:527 ../src/file.cpp:535
 msgid "Document not saved."
 msgstr "Dokument nebyl uložen."
 
-#: ../src/file.cpp:473
+#: ../src/file.cpp:534
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Soubor %s nemohl být uložen."
 
-#: ../src/file.cpp:483
+#: ../src/file.cpp:544
 msgid "Document saved."
 msgstr "Dokument uložen."
 
-#: ../src/file.cpp:531
+#: ../src/file.cpp:592
 #, c-format
 msgid "drawing%s"
 msgstr "kresba%s"
 
-#: ../src/file.cpp:537
+#: ../src/file.cpp:598
 #, c-format
 msgid "drawing-%d%s"
 msgstr "kresba-%d%s"
 
-#: ../src/file.cpp:572
+#: ../src/file.cpp:633
 msgid "Select file to save to"
 msgstr "Vyberte soubor, do kterého se má ukládat"
 
-#: ../src/file.cpp:656
+#: ../src/file.cpp:717
 msgid "No changes need to be saved."
 msgstr "Nebylo nutné uložit žádné změny."
 
-#: ../src/file.cpp:843
+#: ../src/file.cpp:904
 msgid "Select file to import"
 msgstr "Vyberte soubor pro import"
 
@@ -3314,20 +3192,20 @@ msgstr "Kruhový přechod: <b>poloměr</b>"
 msgid "Radial gradient <b>focus</b>"
 msgstr "Kruhový přechod: <b>zaostření</b>"
 
-#: ../src/gradient-drag.cpp:654
-#, c-format
+#: ../src/gradient-drag.cpp:655
+#, fuzzy, c-format
 msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
-"preserve angle, with <b>Ctrl+Alt</b> to scale around center"
+"preserve angle, with <b>Ctrl+Shift</b> to scale around center"
 msgstr ""
 "%s pro: %s%s; Tažením s <b>Ctrl</b> přichytává na úhly, s <b>Ctrl+Alt</b> "
 "zachovává úhel, s <b>Ctrl+Shift</b> mění měřítko kolem středu"
 
-#: ../src/gradient-drag.cpp:655
+#: ../src/gradient-drag.cpp:658
 msgid " (stroke)"
 msgstr " (okraj)"
 
-#: ../src/gradient-drag.cpp:657
+#: ../src/gradient-drag.cpp:661
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
@@ -3335,7 +3213,7 @@ msgstr ""
 "Kruhový přechod <b>střed</b> a <b>těžiště</b>; tažením s <b>Shift</b>em lze "
 "těžiště oddělit"
 
-#: ../src/gradient-drag.cpp:659
+#: ../src/gradient-drag.cpp:663
 #, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to "
@@ -3380,10 +3258,10 @@ msgstr "Úpravy..."
 msgid "Edit the stops of the gradient"
 msgstr "Upravit zarážky barevného přechodu"
 
-#: ../src/gradient-toolbar.cpp:590 ../src/toolbox.cpp:1081
-#: ../src/toolbox.cpp:1169 ../src/toolbox.cpp:1415 ../src/toolbox.cpp:1450
-#: ../src/toolbox.cpp:1654 ../src/toolbox.cpp:1688 ../src/toolbox.cpp:2141
-#: ../src/toolbox.cpp:2177
+#: ../src/gradient-toolbar.cpp:590 ../src/toolbox.cpp:1087
+#: ../src/toolbox.cpp:1175 ../src/toolbox.cpp:1421 ../src/toolbox.cpp:1456
+#: ../src/toolbox.cpp:1660 ../src/toolbox.cpp:1694 ../src/toolbox.cpp:2166
+#: ../src/toolbox.cpp:2202
 msgid "<b>New:</b>"
 msgstr "<b>Nový:</b>"
 
@@ -3411,10 +3289,10 @@ msgstr "Vytvořit barevný přechod v obrysu"
 #. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
 #. FIXME: implement averaging of all parameters for multiple selected
 #. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-#: ../src/gradient-toolbar.cpp:673 ../src/toolbox.cpp:1083
-#: ../src/toolbox.cpp:1101 ../src/toolbox.cpp:1417 ../src/toolbox.cpp:1435
-#: ../src/toolbox.cpp:1656 ../src/toolbox.cpp:1674 ../src/toolbox.cpp:2143
-#: ../src/toolbox.cpp:2162
+#: ../src/gradient-toolbar.cpp:673 ../src/toolbox.cpp:1089
+#: ../src/toolbox.cpp:1107 ../src/toolbox.cpp:1423 ../src/toolbox.cpp:1441
+#: ../src/toolbox.cpp:1662 ../src/toolbox.cpp:1680 ../src/toolbox.cpp:2168
+#: ../src/toolbox.cpp:2187
 msgid "<b>Change:</b>"
 msgstr "<b>Změnit:</b>"
 
@@ -3430,7 +3308,7 @@ msgstr "<b>Změnit:</b>"
 msgid "about.svg"
 msgstr "about.svg"
 
-#: ../src/help.cpp:83 ../src/verbs.cpp:1962
+#: ../src/help.cpp:83 ../src/verbs.cpp:1997
 msgid "About Inkscape"
 msgstr "O Inkscape"
 
@@ -3446,9 +3324,9 @@ msgstr "Jednotky"
 msgid "Point"
 msgstr "Bod"
 
-#: ../src/helper/units.cpp:40 ../src/ui/dialog/inkscape-preferences.cpp:127
-#: ../src/ui/dialog/inkscape-preferences.cpp:132
-#: ../src/ui/dialog/inkscape-preferences.cpp:137
+#: ../src/helper/units.cpp:40 ../src/ui/dialog/inkscape-preferences.cpp:131
+#: ../src/ui/dialog/inkscape-preferences.cpp:136
+#: ../src/ui/dialog/inkscape-preferences.cpp:141
 msgid "pt"
 msgstr "pt"
 
@@ -3656,27 +3534,27 @@ msgstr ""
 "Ačkoliv Inkscape poběží, bude využívat výchozí nastavení,\n"
 "a žádná změna v nastavení se neuloží."
 
-#: ../src/interface.cpp:759
+#: ../src/interface.cpp:761
 msgid "_New"
 msgstr "_Nový"
 
-#: ../src/interface.cpp:759
+#: ../src/interface.cpp:761
 msgid "Create new document"
 msgstr "Vytvořit nový dokument"
 
-#: ../src/interface.cpp:768
+#: ../src/interface.cpp:770
 msgid "Open _Recent"
 msgstr "Otevřít nedávné"
 
-#: ../src/interface.cpp:768
+#: ../src/interface.cpp:770
 msgid "Open one of the recently visited documents"
 msgstr "Otevřít jeden z posledně zobrazených dokumentů"
 
-#: ../src/interface.cpp:1005
+#: ../src/interface.cpp:1006
 msgid "S_how/Hide"
 msgstr "Zobrazit/Skrýt"
 
-#: ../src/interface.cpp:1005
+#: ../src/interface.cpp:1006
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
@@ -3686,35 +3564,35 @@ msgstr ""
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
-#: ../src/interface.cpp:1010
+#: ../src/interface.cpp:1011
 msgid "Commands Bar"
 msgstr "Panel příkazů"
 
-#: ../src/interface.cpp:1010
+#: ../src/interface.cpp:1011
 msgid "Show or hide the Commands bar (under the menu)"
 msgstr "Zobrazit/Skrýt panel Příkazů (pod menu)"
 
-#: ../src/interface.cpp:1012
+#: ../src/interface.cpp:1013
 msgid "Tool Controls"
 msgstr "Volby nástroje"
 
-#: ../src/interface.cpp:1012
+#: ../src/interface.cpp:1013
 msgid "Show or hide the Tool Controls panel"
 msgstr "Zobrazit/Skrýt panel Ovládání nástrojů"
 
-#: ../src/interface.cpp:1014
+#: ../src/interface.cpp:1015
 msgid "_Toolbox"
 msgstr "Nás_troje"
 
-#: ../src/interface.cpp:1014
+#: ../src/interface.cpp:1015
 msgid "Show or hide the main toolbox (on the left)"
 msgstr "Ukázat nebo skrýt hlavní panel nástrojů (vlevo)"
 
-#: ../src/interface.cpp:1020
+#: ../src/interface.cpp:1021
 msgid "_Statusbar"
 msgstr "_Stavový řádek"
 
-#: ../src/interface.cpp:1020
+#: ../src/interface.cpp:1021
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr "Ukázat/Skrýt stavový řádek (vespod okna)"
 
@@ -3722,70 +3600,66 @@ msgstr "Ukázat/Skrýt stavový řádek (vespod okna)"
 #. * list of verb arguments) in the verb system right now, so we have to build
 #. * the submenu by hand.  Luckily, we can populate it using the same verb system.
 #.
-#: ../src/interface.cpp:1119
+#: ../src/interface.cpp:1122
 msgid "_Tutorials"
 msgstr "_Návody"
 
-#: ../src/interface.cpp:1119
+#: ../src/interface.cpp:1122
 msgid "Interactive Inkscape tutorials"
 msgstr "Interaktivní návody pro Inkscape"
 
-#: ../src/interface.cpp:1151
+#: ../src/interface.cpp:1154
 msgid "_Edit"
 msgstr "Úpravy"
 
-#: ../src/interface.cpp:1157
+#: ../src/interface.cpp:1160
 msgid "_View"
 msgstr "_Zobrazení"
 
-#: ../src/interface.cpp:1163
+#: ../src/interface.cpp:1166
 msgid "_Layer"
 msgstr "_Vrstva"
 
-#: ../src/interface.cpp:1169
+#: ../src/interface.cpp:1172
 msgid "_Object"
 msgstr "_Objekt"
 
-#: ../src/interface.cpp:1175
+#: ../src/interface.cpp:1178
 msgid "_Path"
 msgstr "_Křivka"
 
-#: ../src/interface.cpp:1181
+#: ../src/interface.cpp:1184
 msgid "_Text"
 msgstr "_Text"
 
-#: ../src/interface.cpp:1188
+#: ../src/interface.cpp:1191
 msgid "Effects"
 msgstr "Efekty"
 
-#: ../src/interface.cpp:1195
+#: ../src/interface.cpp:1198
 msgid "_Help"
 msgstr "_Nápověda"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
-#: ../src/interface.cpp:1267
+#: ../src/interface.cpp:1266
 #, c-format
 msgid "Enter group #%s"
 msgstr "Vstoupit do skupiny #%s"
 
-#: ../src/interface.cpp:1278
+#: ../src/interface.cpp:1277
 msgid "Go to parent"
 msgstr "Jít na rodičovský prvek"
 
-#: ../src/interface.cpp:1284
-msgid "Go to root"
-msgstr "Jdi na \"root\""
-
-#: ../src/interface.cpp:1314
+#: ../src/interface.cpp:1309
 msgid "Could not parse SVG data"
 msgstr "Nebylo možné parsovat SVG data"
 
-#: ../src/interface.cpp:1464
+#: ../src/interface.cpp:1459
 #, c-format
 msgid "Overwrite %s"
 msgstr "Přepsat %s"
 
-#: ../src/interface.cpp:1482
+#: ../src/interface.cpp:1477
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -3985,7 +3859,7 @@ msgstr ""
 "\n"
 "Dostupné volby:"
 
-#: ../src/node-context.cpp:374
+#: ../src/node-context.cpp:382
 msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
@@ -3993,23 +3867,23 @@ msgstr ""
 "<b>Ctrl</b> přepne typ uzlu, přychytává ovládací bod, přesunuje svisle/"
 "vodorovně;<b>Ctrl+Alt</b>: posunuje podél ovládacích bodů"
 
-#: ../src/node-context.cpp:375
+#: ../src/node-context.cpp:383
 msgid ""
 "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Shift</b>: přidá uzel k vybraným, vypíná přichytávání, otáčí oběma úchyty"
 
-#: ../src/node-context.cpp:376
+#: ../src/node-context.cpp:384
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
 msgstr ""
 "<b>Alt</b>: zamkne délku ovl. prvku; <b>Ctrl+Alt</b>: přesun podél ovl. prvků"
 
-#: ../src/nodepath.cpp:1186 ../src/nodepath.cpp:1198 ../src/nodepath.cpp:1278
-#: ../src/nodepath.cpp:1290
+#: ../src/nodepath.cpp:1188 ../src/nodepath.cpp:1200 ../src/nodepath.cpp:1280
+#: ../src/nodepath.cpp:1292
 msgid "To join, you must have <b>two endnodes</b> selected."
 msgstr "Pro spojení je nutné vybraz <b>dva koncové uzly</b>."
 
-#: ../src/nodepath.cpp:1417 ../src/nodepath.cpp:1431
+#: ../src/nodepath.cpp:1419 ../src/nodepath.cpp:1433
 msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
@@ -4017,11 +3891,11 @@ msgstr ""
 "Vyberte <b>dva ne-koncové body</b> na křivce mezi kterými chcete vymazat "
 "segmenty."
 
-#: ../src/nodepath.cpp:1527
+#: ../src/nodepath.cpp:1529
 msgid "Cannot find path between nodes."
 msgstr "Nemohu nalézt křivku mezi uzly"
 
-#: ../src/nodepath.cpp:2549
+#: ../src/nodepath.cpp:2551
 #, c-format
 msgid ""
 "<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -4032,7 +3906,7 @@ msgstr ""
 "k úhlu; s <b>Alt</b> se uzamkne délka; s <b>Shift</b> se otáčí "
 "synchronizovaně i protější ovl. bod."
 
-#: ../src/nodepath.cpp:3023
+#: ../src/nodepath.cpp:3047
 msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
@@ -4040,7 +3914,7 @@ msgstr ""
 "<b>Uzel</b>: tažením upraví křivku; s <b>Ctrl</b> přichytává s svislé/"
 "vodorovné ose; s <b>Ctrl+Alt</b> přichytává k směru kontrolních přímek."
 
-#: ../src/nodepath.cpp:3047
+#: ../src/nodepath.cpp:3071
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"
@@ -4049,7 +3923,7 @@ msgstr ""
 "přichytává k úhlu; s <b>Alt</b> se uzamkne délka; s <b>Shift</b> se otáčí "
 "synchronizovaně i protější ovl. bod."
 
-#: ../src/nodepath.cpp:3071
+#: ../src/nodepath.cpp:3095
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite "
@@ -4059,59 +3933,59 @@ msgstr ""
 "přichytává k úhlu; s <b>Alt</b> se uzamkne délka; s <b>Shift</b> se otáčí "
 "synchronizovaně i protější ovl. bod."
 
-#: ../src/nodepath.cpp:3207
+#: ../src/nodepath.cpp:3231
 msgid "end node"
 msgstr "koncový uzel"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: ../src/nodepath.cpp:3212
+#: ../src/nodepath.cpp:3236
 msgid "cusp"
 msgstr "hrot"
 
 #. TRANSLATORS: "smooth" is an adjective here
-#: ../src/nodepath.cpp:3215
+#: ../src/nodepath.cpp:3239
 msgid "smooth"
 msgstr "hladké"
 
-#: ../src/nodepath.cpp:3217
+#: ../src/nodepath.cpp:3241
 msgid "symmetric"
 msgstr "symetrické"
 
-#: ../src/nodepath.cpp:3222
+#: ../src/nodepath.cpp:3246
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "ukončovací uzel, ovládací bod byl stažen (tažením s <b>Shift</b> jej opět "
 "vytáhnete)"
 
-#: ../src/nodepath.cpp:3224
+#: ../src/nodepath.cpp:3248
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "jeden ovládací bod byl stažen (tažením s <b>Shift</b> jej opět vytáhnete)"
 
-#: ../src/nodepath.cpp:3227
+#: ../src/nodepath.cpp:3251
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 "oba ovládací body byly staženy (tažením s <b>Shift</b> jej opět vytáhnete)"
 
-#: ../src/nodepath.cpp:3238
+#: ../src/nodepath.cpp:3262
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
 msgstr ""
 "<b>Posunujte</b> uzly nebo ovládacími body pro úpravu křivky; <b>šipkami</b> "
 "posunujete uzly"
 
-#: ../src/nodepath.cpp:3239
+#: ../src/nodepath.cpp:3263
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Tažení</b> za uzel nebo jeho ovládací prvky; <b>šipky</b> posunou uzlem"
 
-#: ../src/nodepath.cpp:3258
+#: ../src/nodepath.cpp:3282
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Vyberte nejdříve objekt typu křivka pomocí nástroje pro výběr, a pak zvolte "
 "znovu nástroj editace uzlů."
 
-#: ../src/nodepath.cpp:3261
+#: ../src/nodepath.cpp:3285
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -4126,21 +4000,21 @@ msgstr[1] ""
 "Žádné objekty nevybrány. Click, Shift+kliknutí, nebo tažením myší kolem "
 "objektů je vyberete."
 
-#: ../src/nodepath.cpp:3268
+#: ../src/nodepath.cpp:3292
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "Je vybráno <b>%i</b> z <b>%i</b> uzlů; %s. %s."
 msgstr[1] "Je vybráno <b>%i</b> z <b>%i</b> uzlů; %s. %s."
 
-#: ../src/nodepath.cpp:3274
+#: ../src/nodepath.cpp:3298
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
 msgstr[0] "Je vybrán <b>%i</b> uzel z <b>%i</b>; %s."
 msgstr[1] "Je vybrán <b>%i</b> uzel z <b>%i</b>; %s."
 
-#: ../src/object-edit.cpp:434
+#: ../src/object-edit.cpp:445
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
@@ -4148,7 +4022,7 @@ msgstr ""
 "Upraví poloměr <b>vodorovného zaoblení</b>; s <b>Ctrl</b> bude poloměr "
 "svislého zaoblení stejné"
 
-#: ../src/object-edit.cpp:436
+#: ../src/object-edit.cpp:447
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
@@ -4156,7 +4030,7 @@ msgstr ""
 "Upraví poloměr <b>svislého zaoblení</b>; s <b>Ctrl</b> bude poloměr "
 "vodorovného zaoblení stejné"
 
-#: ../src/object-edit.cpp:438 ../src/object-edit.cpp:440
+#: ../src/object-edit.cpp:449 ../src/object-edit.cpp:451
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
@@ -4164,15 +4038,15 @@ msgstr ""
 "Upraví <b>šířku a výšku</b> čtyřúhelníku; <b>Ctrl</b> uzamkne poměr stran "
 "nebo změní pouze jeden rozměr"
 
-#: ../src/object-edit.cpp:609
+#: ../src/object-edit.cpp:620
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "Upravit <b>šířku</b> elipsy, s <b>Ctrl</b> vytvoří kružnici"
 
-#: ../src/object-edit.cpp:611
+#: ../src/object-edit.cpp:622
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "Upravit <b>výšku</b> elipsy, with <b>Ctrl</b> to make circle"
 
-#: ../src/object-edit.cpp:613
+#: ../src/object-edit.cpp:624
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -4182,7 +4056,7 @@ msgstr ""
 "přichytává k úhlu; tažením <b>uvnitř</b> elipsy získáte oblouk, <b>zvenčí</"
 "b> elipsy kruhový segment"
 
-#: ../src/object-edit.cpp:615
+#: ../src/object-edit.cpp:626
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to "
 "snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for "
@@ -4192,7 +4066,7 @@ msgstr ""
 "k úhlu; tažením <b>uvnitř</b> elipsy získáte oblouk, <b>zvenčí</b> elipsy "
 "kruhový segment"
 
-#: ../src/object-edit.cpp:720
+#: ../src/object-edit.cpp:731
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -4200,7 +4074,7 @@ msgstr ""
 "Upraví <b>poloměr hrotu</b> hvězdy nebo mnohoúhelníku; <b>Shift</b> "
 "zaobluje; s <b>Alt</b> náhodně"
 
-#: ../src/object-edit.cpp:723
+#: ../src/object-edit.cpp:734
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -4210,7 +4084,7 @@ msgstr ""
 "paprsky hvězdy v kruhu (bez zkosení) <b>Shift</b> zaobluje; s <b>Alt</b> "
 "náhodně"
 
-#: ../src/object-edit.cpp:887
+#: ../src/object-edit.cpp:898
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -4218,7 +4092,7 @@ msgstr ""
 "Zavinout/Rozvinout spirálu <b>zevnitř</b>; <b>Ctrl</b> přichytává na úhel;"
 "<b>Alt</b> ovládá sbíhavost/rozbíhavost"
 
-#: ../src/object-edit.cpp:889
+#: ../src/object-edit.cpp:900
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
@@ -4226,74 +4100,69 @@ msgstr ""
 "Zavinout/Rozvinout spirálu <b>zvenčí</b>; <b>Ctrl</b> přichytává na úhel;"
 "<b>Shift</b> mění velikost/rotaci"
 
-#: ../src/object-edit.cpp:926
+#: ../src/object-edit.cpp:937
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Upravit <b>vzdálenost posunu</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: ../src/object-edit.cpp:957
+#: ../src/object-edit.cpp:968
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Přesunout</b> vzorek výplně uvnitř objektu"
 
-#: ../src/object-edit.cpp:959
+#: ../src/object-edit.cpp:970
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "<b>Měnit měřítko</b> výplně stejnoměrně"
 
-#: ../src/object-edit.cpp:961
+#: ../src/object-edit.cpp:972
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Rotovat</b> výplň vzorkem; <b>Ctrl</b> přichytává k úhlům"
 
+#: ../src/object-edit.cpp:997
+msgid "Drag to resize the <b>flowed text frame</b>"
+msgstr ""
+
 #. Item dialog
-#: ../src/object-ui.cpp:108
+#: ../src/object-ui.cpp:107
 msgid "Object _Properties"
 msgstr "Vlastnosti Objektu"
 
 #. Select item
-#: ../src/object-ui.cpp:118
+#: ../src/object-ui.cpp:117
 msgid "_Select This"
 msgstr "Vybrat toto"
 
 #. Create link
-#: ../src/object-ui.cpp:128
+#: ../src/object-ui.cpp:127
 msgid "_Create Link"
 msgstr "Vytvořit odkaz"
 
-#. Add Text to shape
-#: ../src/object-ui.cpp:135
-msgid "_Flow Text into Shape"
-msgstr "_Vlít text do tvaru"
-
-#: ../src/object-ui.cpp:183
-msgid "Select <b>a shape</b> to flow text into."
-msgstr "Vyberte <b>tvar</b>, do kterého chcete \"vlít\" text."
-
 #. "Ungroup"
-#: ../src/object-ui.cpp:274 ../src/verbs.cpp:1718
+#: ../src/object-ui.cpp:203 ../src/verbs.cpp:1749
 msgid "_Ungroup"
 msgstr "Zrušit seskupení"
 
 #. Link dialog
-#: ../src/object-ui.cpp:315
+#: ../src/object-ui.cpp:244
 msgid "Link _Properties"
 msgstr "Vlastnosti odkazu"
 
 #. Select item
-#: ../src/object-ui.cpp:325
+#: ../src/object-ui.cpp:254
 msgid "_Follow Link"
 msgstr "Následovat odkaz"
 
 #. Reset transformations
-#: ../src/object-ui.cpp:330
+#: ../src/object-ui.cpp:259
 msgid "_Remove Link"
 msgstr "Odstranit odkaz"
 
 #. Link dialog
-#: ../src/object-ui.cpp:379
+#: ../src/object-ui.cpp:308
 msgid "Image _Properties"
 msgstr "Vlastnosti obrázku"
 
 #. Item dialog
-#: ../src/object-ui.cpp:421
+#: ../src/object-ui.cpp:350
 msgid "_Fill and Stroke"
 msgstr "Výplň a čáry"
 
@@ -4334,19 +4203,19 @@ msgstr "Vyberte <b>křivky</b> k převrácení."
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "<b>Žádné křivky</b> k převrácení nebyly vybrány."
 
-#: ../src/pen-context.cpp:321 ../src/pencil-context.cpp:206
+#: ../src/pen-context.cpp:322 ../src/pencil-context.cpp:206
 msgid "Continuing selected path"
 msgstr "Pokračuje ve vybrané křivce"
 
-#: ../src/pen-context.cpp:329 ../src/pencil-context.cpp:215
+#: ../src/pen-context.cpp:330 ../src/pencil-context.cpp:215
 msgid "Creating new path"
 msgstr "Vytvářím novou křivku"
 
-#: ../src/pen-context.cpp:331 ../src/pencil-context.cpp:219
+#: ../src/pen-context.cpp:332 ../src/pencil-context.cpp:219
 msgid "Appending to selected path"
 msgstr "Připojuje k vybrané křivce"
 
-#: ../src/pen-context.cpp:803
+#: ../src/pen-context.cpp:804
 msgid "Finishing pen"
 msgstr "Dokončování kreslení perem"
 
@@ -4364,15 +4233,15 @@ msgstr ""
 "udrží zaoblené rohy kruhovými"
 
 #: ../src/rect-context.cpp:550
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"<b>Rectangle</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio "
-"rectangle; with <b>Shift</b> to draw around the starting point"
+"<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-"
+"ratio rectangle; with <b>Shift</b> to draw around the starting point"
 msgstr ""
 "<b>Obdélník</b>: %s × %s; s <b>Ctrl</b> se vytvoří čtverec nebo obdélník s "
 "celočíselným poměrem stran; s <b>Shift</b> se vykreslí kolem počátečního bodu"
 
-#: ../src/select-context.cpp:243
+#: ../src/select-context.cpp:242
 msgid "Move canceled."
 msgstr "Přesun zrušen"
 
@@ -4380,20 +4249,20 @@ msgstr "Přesun zrušen"
 msgid "Selection canceled."
 msgstr "Výběr zrušen"
 
-#: ../src/select-context.cpp:607
+#: ../src/select-context.cpp:613
 msgid "<b>Ctrl</b>: select in groups, move hor/vert"
 msgstr "<b>Ctrl</b>: výběr ve skupinách, přesun vodorovně/svisle"
 
-#: ../src/select-context.cpp:608
+#: ../src/select-context.cpp:614
 msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
 msgstr ""
 "<b>Shift</b>: přepíná stav vybrání, vynutí gumovitost, vypíná přichytávání"
 
-#: ../src/select-context.cpp:609
+#: ../src/select-context.cpp:615
 msgid "<b>Alt</b>: select under, move selected"
 msgstr "<b>Alt</b>: vybrat pod, přesun vybraného"
 
-#: ../src/select-context.cpp:823
+#: ../src/select-context.cpp:830
 #, c-format
 msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
@@ -4403,24 +4272,27 @@ msgstr ""
 "vypne přichytávání"
 
 #: ../src/select-toolbar.cpp:404
-msgid "X"
-msgstr "X"
+#, fuzzy
+msgid "select_toolbar|X"
+msgstr "Výběr"
 
 #: ../src/select-toolbar.cpp:404
 msgid "Horizontal coordinate of selection"
 msgstr "Vodorovná souřadnice výběru"
 
 #: ../src/select-toolbar.cpp:407
-msgid "Y"
-msgstr "Y"
+#, fuzzy
+msgid "select_toolbar|Y"
+msgstr "Výběr"
 
 #: ../src/select-toolbar.cpp:407
 msgid "Vertical coordinate of selection"
 msgstr "Svislá souřadnice výběru"
 
 #: ../src/select-toolbar.cpp:411
-msgid "W"
-msgstr "Š"
+#, fuzzy
+msgid "select_toolbar|W"
+msgstr "Výběr"
 
 #: ../src/select-toolbar.cpp:411
 msgid "Width of selection"
@@ -4431,193 +4303,211 @@ msgid "Change both width and height by the same proportion"
 msgstr "Změnit šířku a výšku ve stejném poměru"
 
 #: ../src/select-toolbar.cpp:426
+#, fuzzy
+msgid "select_toolbar|H"
+msgstr "Výběr"
+
+#: ../src/select-toolbar.cpp:426
 msgid "Height of selection"
 msgstr "Výška výběru"
 
-#: ../src/selection-chemistry.cpp:223
+#: ../src/selection-chemistry.cpp:224
 msgid "<b>Nothing</b> was deleted."
 msgstr "Nebylo <b>nic</b> vymazáno."
 
-#: ../src/selection-chemistry.cpp:254
+#: ../src/selection-chemistry.cpp:255
 msgid "Select <b>object(s)</b> to duplicate."
 msgstr "Vyberte <b>objekt(y)</b> k duplikaci."
 
-#: ../src/selection-chemistry.cpp:415
+#: ../src/selection-chemistry.cpp:416
 msgid "Select <b>two or more objects</b> to group."
 msgstr "Vyberte <b>dva nebo více objektů</b> pro seskupení."
 
-#: ../src/selection-chemistry.cpp:423
+#: ../src/selection-chemistry.cpp:424
 msgid "Select <b>at least two objects</b> to group."
 msgstr "Vyberte <b>nejméně dva objekty</b> pro seskupení"
 
-#: ../src/selection-chemistry.cpp:508
+#: ../src/selection-chemistry.cpp:509
 msgid "Select a <b>group</b> to ungroup."
 msgstr "Vyberte <b>skupinu</b> k zrušení seskupení"
 
-#: ../src/selection-chemistry.cpp:549
+#: ../src/selection-chemistry.cpp:550
 msgid "<b>No groups</b> to ungroup in the selection."
 msgstr "<b>Žádné skupiny</b> ke zrušení seskupení ve výběru."
 
-#: ../src/selection-chemistry.cpp:618
+#: ../src/selection-chemistry.cpp:619
 msgid "Select <b>objects</b> to raise."
 msgstr "Vyberte <b>objekty</b> k přesunu výš"
 
-#: ../src/selection-chemistry.cpp:624 ../src/selection-chemistry.cpp:676
-#: ../src/selection-chemistry.cpp:710 ../src/selection-chemistry.cpp:768
+#: ../src/selection-chemistry.cpp:625 ../src/selection-chemistry.cpp:677
+#: ../src/selection-chemistry.cpp:711 ../src/selection-chemistry.cpp:769
 msgid ""
 "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 "Nelze přeunout objekty výš ši níž z <b>různých skupin</b> nebo <b>vrstev</b>."
 
-#: ../src/selection-chemistry.cpp:668
+#: ../src/selection-chemistry.cpp:669
 msgid "Select <b>object(s)</b> to raise to top."
 msgstr "Vyberte <b>objekty</b> k přesunu úplně nahoru"
 
-#: ../src/selection-chemistry.cpp:704
+#: ../src/selection-chemistry.cpp:705
 msgid "Select <b>object(s)</b> to lower."
 msgstr "Vyberte <b>objekty</b> k přesunu níž"
 
-#: ../src/selection-chemistry.cpp:760
+#: ../src/selection-chemistry.cpp:761
 msgid "Select <b>object(s)</b> to lower to bottom."
 msgstr "Vyberte <b>objekty</b> k přesunu úplně dolů"
 
-#: ../src/selection-chemistry.cpp:802
+#: ../src/selection-chemistry.cpp:803
 msgid "Nothing to undo."
 msgstr "Nic pro Zpět"
 
-#: ../src/selection-chemistry.cpp:811
+#: ../src/selection-chemistry.cpp:812
 msgid "Nothing to redo."
 msgstr "Nic pro Opakovat"
 
-#: ../src/selection-chemistry.cpp:968
+#: ../src/selection-chemistry.cpp:969
 msgid "Nothing was copied."
 msgstr "Nebylo nic kopírováno"
 
-#: ../src/selection-chemistry.cpp:1030
+#: ../src/selection-chemistry.cpp:1031
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
 "<b>Aktuální vrstva je skrytá</b>. Odkryjte ji aby jste do ní mohli vkládat."
 
-#: ../src/selection-chemistry.cpp:1034
+#: ../src/selection-chemistry.cpp:1035
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 "<b>Aktuální vrstva je uzamčena</b>. Aby jste na ni mohli vložit objekt, "
 "musíte ji odemknout."
 
-#: ../src/selection-chemistry.cpp:1047 ../src/selection-chemistry.cpp:1083
+#: ../src/selection-chemistry.cpp:1048 ../src/selection-chemistry.cpp:1084
 msgid "Nothing on the clipboard."
 msgstr "Schránka je prázdná."
 
-#: ../src/selection-chemistry.cpp:1089
+#: ../src/selection-chemistry.cpp:1090
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Vyberte <b>objekty</b> na které aplikovat styl"
 
-#: ../src/selection-chemistry.cpp:1108
+#: ../src/selection-chemistry.cpp:1109
 msgid "Select <b>object(s)</b> to move to the layer above."
 msgstr "Vyberte <b>objekty</b> k přesunu o vrstvu výš"
 
-#: ../src/selection-chemistry.cpp:1126
+#: ../src/selection-chemistry.cpp:1127
 msgid "No more layers above."
 msgstr "Výš nejsou žádné další vrstvy"
 
-#: ../src/selection-chemistry.cpp:1140
+#: ../src/selection-chemistry.cpp:1141
 msgid "Select <b>object(s)</b> to move to the layer below."
 msgstr "Vyberte <b>objekty</b> k přesunu o vrstvu níž"
 
-#: ../src/selection-chemistry.cpp:1158
+#: ../src/selection-chemistry.cpp:1159
 msgid "No more layers below."
 msgstr "Vespod již nejsou žádné ldaší vrstvy"
 
-#: ../src/selection-chemistry.cpp:1764
+#: ../src/selection-chemistry.cpp:1796
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Vyberte <b>klon</b> k odpojení"
 
-#: ../src/selection-chemistry.cpp:1795
+#: ../src/selection-chemistry.cpp:1827
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "<b>Žádné klony k odpojení</b> ve výběru."
 
-#: ../src/selection-chemistry.cpp:1812
+#: ../src/selection-chemistry.cpp:1844
+#, fuzzy
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
-"to go to its source. Select a <b>text on path</b> to go to the path."
+"to go to its source. Select a <b>text on path</b> to go to the path. Select "
+"a <b>flowed text</b> to go to its frame."
 msgstr ""
 "Vyberte <b>klon</b> a dostanete se na jeho originál. Vyberte <b>propojený "
 "posun</b> a dostanete se na jeho zdroj. Vyberte <b>text na křivce</b> a "
 "získáte jeho křivku."
 
-#: ../src/selection-chemistry.cpp:1833
+#: ../src/selection-chemistry.cpp:1867
+#, fuzzy
 msgid ""
-"<b>Cannot find</b> the object to select (orphaned clone, offset, or "
-"textpath?)"
+"<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
+"flowed text?)"
 msgstr ""
 "<b>Nemohu nalézt</b> objekt k výběru (osiřelý klon, posuv, nebo text na "
 "křivce?)"
 
-#: ../src/selection-chemistry.cpp:1839
+#: ../src/selection-chemistry.cpp:1873
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 "Objekt který se snažíte vybrat je <b>neviditelný</b> (je v &lt;defs&gt;)"
 
-#: ../src/selection-chemistry.cpp:1866
+#: ../src/selection-chemistry.cpp:1900
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Vyberte <b>objekty</b> ke konverzi na vzorek."
 
-#: ../src/selection-chemistry.cpp:1942
+#: ../src/selection-chemistry.cpp:1976
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr ""
 "Vyberte <b>objekt s výplní vzorkem</b> ze kterého se bude extrahovat objekt."
 
-#: ../src/selection-chemistry.cpp:1995
+#: ../src/selection-chemistry.cpp:2029
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "Ve výběru <b>nejsou žádné výplňové vzroky</b>."
 
-#: ../src/selection-chemistry.cpp:2015
+#: ../src/selection-chemistry.cpp:2049
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Vyberte <b>objekt(y)</b> ze kterých chcete vytvořit bitmapovou kopii."
 
-#: ../src/selection-describer.cpp:35
+#: ../src/selection-describer.cpp:37
 msgid "Click selection to toggle scale/rotation handles"
 msgstr ""
 "Kliknutím na výběr přepnete ovládací prvky ze změny měřítka na rotaci a "
 "naopak"
 
 #. no items
-#: ../src/selection-describer.cpp:37
+#: ../src/selection-describer.cpp:39
 msgid ""
 "No objects selected. Click, Shift+click, or drag around objects to select."
 msgstr ""
 "Žádné objekty nevybrány. Click, Shift+kliknutí, nebo tažením myší kolem "
 "objektů je vyberete."
 
-#: ../src/selection-describer.cpp:45
+#: ../src/selection-describer.cpp:51
 #, c-format
 msgid " in layer <b>%s</b>"
 msgstr " ve vrstvě <b>%s</b>"
 
-#: ../src/selection-describer.cpp:47
+#: ../src/selection-describer.cpp:54
 #, c-format
 msgid " in layer <b><i>%s</i></b>"
 msgstr " ve vrstvě <b><i>%s</i></b>"
 
-#: ../src/selection-describer.cpp:54
+#: ../src/selection-describer.cpp:66
 msgid "Use <b>Shift+D</b> to look up original"
 msgstr "Použijte <b>Shift+D</b> k vyhledání originálu"
 
-#: ../src/selection-describer.cpp:63
+#: ../src/selection-describer.cpp:70
+#, fuzzy
+msgid "Use <b>Shift+D</b> to look up path"
+msgstr "Použijte <b>Shift+D</b> k vyhledání originálu"
+
+#: ../src/selection-describer.cpp:74
+#, fuzzy
+msgid "Use <b>Shift+D</b> to look up frame"
+msgstr "Použijte <b>Shift+D</b> k vyhledání originálu"
+
+#: ../src/selection-describer.cpp:84
 #, fuzzy, c-format
 msgid "<b>%i</b> object selected"
 msgid_plural "<b>%i</b> objects selected"
 msgstr[0] "Vybrán objekt <b>%i</b>"
 msgstr[1] "Vybrán objekt <b>%i</b>"
 
-#: ../src/selection-describer.cpp:69
+#: ../src/selection-describer.cpp:90
 #, c-format
 msgid "%s%s. %s."
 msgstr "%s%s. %s."
 
-#: ../src/selection-describer.cpp:73
+#: ../src/selection-describer.cpp:94
 #, fuzzy, c-format
 msgid "%s in <b>%i</b> layer. %s."
 msgid_plural "%s in <b>%i</b> layers. %s."
@@ -4690,12 +4580,12 @@ msgstr "Přesuň <b>střed</b> na %s, %s"
 msgid "Inkscape slideshow"
 msgstr "Promítání snímků"
 
-#: ../src/sp-anchor.cpp:180
+#: ../src/sp-anchor.cpp:182
 #, c-format
 msgid "<b>Link</b> to %s"
 msgstr "<b>Odkaz</b> na %s"
 
-#: ../src/sp-anchor.cpp:182
+#: ../src/sp-anchor.cpp:186
 msgid "<b>Link</b> without URI"
 msgstr "<b>Odkaz</b> bez URI adresy"
 
@@ -4715,6 +4605,29 @@ msgstr "<b>Segment:</b>"
 msgid "<b>Arc</b>"
 msgstr "<b>Oblouk</b>"
 
+#: ../src/sp-flowregion.cpp:266
+#, fuzzy
+msgid "Flow region"
+msgstr "Následovat odkaz"
+
+#. TRANSLATORS: A region "cut out of" a flow region; text is not allowed to flow inside the
+#. * flow excluded region.  flowRegionExclude in SVG 1.2: see
+#. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
+#. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
+#: ../src/sp-flowregion.cpp:475
+msgid "Flow excluded region"
+msgstr ""
+
+#: ../src/sp-flowtext.cpp:363
+#, c-format
+msgid "<b>Flowed text</b> (%d characters)"
+msgstr ""
+
+#: ../src/sp-flowtext.cpp:365
+#, c-format
+msgid "<b>Linked flowed text</b> (%d characters)"
+msgstr ""
+
 #: ../src/sp-guide.cpp:290
 msgid "vertical guideline"
 msgstr "Svislá vodící čára"
@@ -4723,14 +4636,18 @@ msgstr "Svislá vodící čára"
 msgid "horizontal guideline"
 msgstr "Vodorovná vodící čára"
 
-#: ../src/sp-image.cpp:835
+#: ../src/sp-image.cpp:833
+msgid "embedded"
+msgstr ""
+
+#: ../src/sp-image.cpp:836
 #, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>Obrázek s chybným odkazem</b>: %s"
 
 #: ../src/sp-image.cpp:837
-#, c-format
-msgid "<b>Image</b> %d x %d: %s"
+#, fuzzy, c-format
+msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Obrázek</b> %d × %d: %s"
 
 #: ../src/sp-item-group.cpp:390
@@ -4740,9 +4657,14 @@ msgid_plural "<b>Group</b> of <b>%d</b> objects"
 msgstr[0] "<b>Skupina</b> <b>%d</b> objektů"
 msgstr[1] "<b>Skupina</b> <b>%d</b> objektů"
 
-#: ../src/sp-item.cpp:672
+#: ../src/sp-item.cpp:674
 msgid "Object"
 msgstr "Objekt"
+
+#: ../src/sp-line.cpp:202
+#, fuzzy
+msgid "<b>Line</b>"
+msgstr "<b>L:</b>"
 
 #. TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
 #: ../src/sp-offset.cpp:399
@@ -4771,6 +4693,16 @@ msgid_plural "<b>Path</b> (%i nodes)"
 msgstr[0] "<b>Křivka</b> (%i uzel)"
 msgstr[1] "<b>Křivka</b> (%i uzel)"
 
+#: ../src/sp-polygon.cpp:216
+#, fuzzy
+msgid "<b>Polygon</b>"
+msgstr "Mnohoúhelník"
+
+#: ../src/sp-polyline.cpp:179
+#, fuzzy
+msgid "<b>Polyline</b>"
+msgstr "<b>Elipsa</b>"
+
 #: ../src/sp-rect.cpp:249
 msgid "<b>Rectangle</b>"
 msgstr "<b>Čtyřúhelník</b>"
@@ -4796,26 +4728,34 @@ msgid_plural "<b>Polygon</b> with %d vertices"
 msgstr[0] "<b>Mnohoúhelník</b> s %d vrcholy"
 msgstr[1] "<b>Mnohoúhelník</b> s %d vrcholy"
 
-#: ../src/sp-text.cpp:405
+#. TRANSLATORS: For description of font with no name.
+#: ../src/sp-text.cpp:407
 msgid "&lt;no name found&gt;"
 msgstr "&lt;nebylo nalezeno jméno&gt;"
 
-#: ../src/sp-text.cpp:411
+#: ../src/sp-text.cpp:413
 #, c-format
 msgid "<b>Text on path</b> (%s, %s)"
 msgstr "<b>Text na křivce</b> (%s, %s)"
 
-#: ../src/sp-text.cpp:413
+#: ../src/sp-text.cpp:414
 #, c-format
 msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Text</b> (%s, %s)"
 
-#: ../src/sp-use.cpp:310
+#. TRANSLATORS: Used for statusbar description for long <use> chains:
+#. * "Clone of: Clone of: ... in Layer 1".
+#: ../src/sp-use.cpp:315
+#, fuzzy
+msgid "..."
+msgstr "Otevřít..."
+
+#: ../src/sp-use.cpp:323
 #, c-format
 msgid "<b>Clone</b> of: %s"
 msgstr "<b>Klon</b> of: %s"
 
-#: ../src/sp-use.cpp:313
+#: ../src/sp-use.cpp:327
 msgid "<b>Orphaned clone</b>"
 msgstr "<b>Osiřelý klon</b>"
 
@@ -4828,8 +4768,9 @@ msgid "<b>Alt</b>: lock spiral radius"
 msgstr "<b>Alt</b>: zamkne poloměr spirály"
 
 #: ../src/spiral-context.cpp:471
-#, c-format
-msgid "<b>Spiral</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
+#, fuzzy, c-format
+msgid ""
+"<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Spirála</b>: poloměr %s, úhel %5g; s <b>Ctrl</b> prichytává úhel"
 
 #: ../src/splivarot.cpp:108
@@ -4892,20 +4833,21 @@ msgid "<b>Ctrl</b>: snap angle; keep rays radial"
 msgstr "<b>Ctrl</b>: přichytává k úhlům; udržuje paprsky kruhovými"
 
 #: ../src/star-context.cpp:471
-#, c-format
-msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
+#, fuzzy, c-format
+msgid ""
+"<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Mnohoúhelník</b>: poloměr %s, úhel %5g; <b>Ctrl</b> skoky úhlů"
 
 #: ../src/star-context.cpp:472
-#, c-format
-msgid "<b>Star</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
+#, fuzzy, c-format
+msgid "<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>Hvězda</b>: poloměr %s, úhel %5g; s <b>Ctrl</b> přichytávání úhlu"
 
-#: ../src/text-chemistry.cpp:92
+#: ../src/text-chemistry.cpp:89
 msgid "Select <b>a text and a path</b> to put text on path."
 msgstr "Vyberte <b>text a křivku</b> k umístění textu na křivku."
 
-#: ../src/text-chemistry.cpp:97
+#: ../src/text-chemistry.cpp:94
 msgid ""
 "This text object is <b>already put to a path</b>. Remove it from the path "
 "first. Use <b>Shift+D</b> to look up its path."
@@ -4914,7 +4856,7 @@ msgstr ""
 "Pomocí<b>Shift+D</b> tuto křivku naleznete."
 
 #. rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
-#: ../src/text-chemistry.cpp:103
+#: ../src/text-chemistry.cpp:100
 msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
@@ -4922,138 +4864,191 @@ msgstr ""
 "V této verzi ještě nelze umístit text na čtyřúhelník. Převeďte "
 "čtyřúhelníknejdřív na křivku."
 
-#: ../src/text-chemistry.cpp:161
+#: ../src/text-chemistry.cpp:158
 msgid "Select <b>a text on path</b> to remove it from path."
 msgstr "Vyberte <b>text na křivce</b>, který chcete odstranit z křivky."
 
-#: ../src/text-chemistry.cpp:183
+#: ../src/text-chemistry.cpp:180
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "Ve výběru nejsou <b>žádne texty na křivkách</b>."
 
-#: ../src/text-chemistry.cpp:211 ../src/text-chemistry.cpp:231
+#: ../src/text-chemistry.cpp:208 ../src/text-chemistry.cpp:228
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Vyberte <b>texty</b> ze kterých se má odstranit kerning"
 
-#: ../src/text-context.cpp:415
+#: ../src/text-chemistry.cpp:249
+#, fuzzy
+msgid ""
+"Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
+"into frame."
+msgstr "Vyberte <b>text a křivku</b> k umístění textu na křivku."
+
+#: ../src/text-chemistry.cpp:327
+#, fuzzy
+msgid "Select <b>a flowed text</b> to unflow it."
+msgstr "Vyberte <b>tvar</b>, do kterého chcete \"vlít\" text."
+
+#: ../src/text-context.cpp:452
+#, fuzzy
+msgid "<b>Click</b> to edit the text, <b>drag</b> to select part of the text."
+msgstr "<b>Kliknutím</b> vyberete uzly, <b>tažením</b> je upravíte."
+
+#: ../src/text-context.cpp:454
+#, fuzzy
+msgid ""
+"<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
+msgstr "<b>Kliknutím</b> vyberete uzly, <b>tažením</b> je upravíte."
+
+#: ../src/text-context.cpp:530
+msgid "Non-printable character"
+msgstr "Netisknutelný znak"
+
+#: ../src/text-context.cpp:580
+#, fuzzy, c-format
+msgid "Unicode: %s: %s"
+msgstr "Unicode: "
+
+#: ../src/text-context.cpp:582 ../src/text-context.cpp:845
+msgid "Unicode: "
+msgstr "Unicode: "
+
+#: ../src/text-context.cpp:606
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
 msgstr ""
 "<b>Aktuální vrstva je skrytá</b>. Musíte ji zobrazit aby jste do ní mohli "
 "přidat text."
 
-#: ../src/text-context.cpp:419
+#: ../src/text-context.cpp:610
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
 msgstr ""
 "<b>Aktuální vrstva je zamčena</b>. Musíte ji odemknout aby jste do ní mohli "
 "přidat text."
 
-#: ../src/text-context.cpp:470
+#: ../src/text-context.cpp:664
+#, c-format
+msgid "<b>Flowed text frame</b>: %s &#215; %s"
+msgstr ""
+
+#: ../src/text-context.cpp:699 ../src/text-context.cpp:1386
+msgid "Type text; <b>Enter</b> to start new line."
+msgstr ""
+
+#: ../src/text-context.cpp:710
+msgid "Flowed text is created."
+msgstr ""
+
+#: ../src/text-context.cpp:713
+msgid ""
+"The frame is <b>too small</b> for the current font size. Flowed text not "
+"created."
+msgstr ""
+
+#: ../src/text-context.cpp:831
 msgid "No-break space"
 msgstr "Nezalomitelná mezera"
 
-#: ../src/text-context.cpp:481
-msgid "Unicode: "
-msgstr "Unicode: "
+#: ../src/text-context.cpp:1384
+msgid "Type flowed text; <b>Enter</b> to start new paragraph."
+msgstr ""
 
-#: ../src/text-context.cpp:533
-#, c-format
-msgid "Unicode: %c%c%c%c"
-msgstr "Unicode: %c%c%c%c"
+#: ../src/text-context.cpp:1394 ../src/tools-switch.cpp:185
+#, fuzzy
+msgid ""
+"<b>Click</b> to select or create text, <b>drag</b> to create flowed text; "
+"then type."
+msgstr "<b>Kliknutím</b> vyberete nebo vytvoříte textový objekt, pak pište."
 
-#: ../src/text-context.cpp:546
-msgid "Non-printable character"
-msgstr "Netisknutelný znak"
-
-#: ../src/toolbox.cpp:408
+#: ../src/toolbox.cpp:410
 msgid "Insert new nodes into selected segments"
 msgstr "Vložit nové uzly do zvolených segmentů"
 
-#: ../src/toolbox.cpp:410
+#: ../src/toolbox.cpp:412
 msgid "Delete selected nodes"
 msgstr "Odstranit vybrané uzly"
 
-#: ../src/toolbox.cpp:415
+#: ../src/toolbox.cpp:417
 msgid "Join paths at selected nodes"
 msgstr "Spojit čáry ve vybraných uzlech"
 
-#: ../src/toolbox.cpp:417
+#: ../src/toolbox.cpp:419
 msgid "Join paths at selected nodes with new segment"
 msgstr "Spojit čáry ve vybraných uzlech s vytvořením nového segmentu"
 
-#: ../src/toolbox.cpp:420
+#: ../src/toolbox.cpp:422
 msgid "Split path between two non-endpoint nodes"
 msgstr "Rozdělit křivku mezi dvěma vnitřními body"
 
-#: ../src/toolbox.cpp:423
+#: ../src/toolbox.cpp:425
 msgid "Break path at selected nodes"
 msgstr "Zlomit čáru ve vybraných uzlech"
 
-#: ../src/toolbox.cpp:428
+#: ../src/toolbox.cpp:430
 msgid "Make selected nodes corner"
 msgstr "Vytvořit z vybraných uzlů roh"
 
-#: ../src/toolbox.cpp:431
+#: ../src/toolbox.cpp:433
 msgid "Make selected nodes smooth"
 msgstr "Učinit vybrané uzly hladké"
 
-#: ../src/toolbox.cpp:434
+#: ../src/toolbox.cpp:436
 msgid "Make selected nodes symmetric"
 msgstr "Učinit vybrané uzly symetrické"
 
-#: ../src/toolbox.cpp:439
+#: ../src/toolbox.cpp:441
 msgid "Make selected segments lines"
 msgstr "Vytvořit z vybraných segmentů čáru"
 
-#: ../src/toolbox.cpp:442
+#: ../src/toolbox.cpp:444
 msgid "Make selected segments curves"
 msgstr "Učinit z vybraných segmentů křivky"
 
-#: ../src/toolbox.cpp:1176
+#: ../src/toolbox.cpp:1182
 msgid "Polygon"
 msgstr "Mnohoúhelník"
 
-#: ../src/toolbox.cpp:1183
+#: ../src/toolbox.cpp:1189
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Pravidelný mnohoúhelník (s jedním ovl. táhlem) místo hvězdy"
 
-#: ../src/toolbox.cpp:1195
+#: ../src/toolbox.cpp:1201
 msgid "Corners:"
 msgstr "Rohy:"
 
-#: ../src/toolbox.cpp:1195
+#: ../src/toolbox.cpp:1201
 msgid "Number of corners of a polygon or star"
 msgstr "Počet rohů mnohoúhelníku nebo hvězdy"
 
-#: ../src/toolbox.cpp:1205
+#: ../src/toolbox.cpp:1211
 msgid "Spoke ratio:"
 msgstr "Poměr paprsku:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/toolbox.cpp:1208
+#: ../src/toolbox.cpp:1214
 msgid "Base radius to tip radius ratio"
 msgstr "Poloměr základny mnohoúhelníku"
 
-#: ../src/toolbox.cpp:1223
+#: ../src/toolbox.cpp:1229
 msgid "Rounded:"
 msgstr "Zaoblení:"
 
-#: ../src/toolbox.cpp:1223
+#: ../src/toolbox.cpp:1229
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Jak moc jsou rohy zakulaceny (0 znamená ostré rohy)"
 
-#: ../src/toolbox.cpp:1233
+#: ../src/toolbox.cpp:1239
 msgid "Randomized:"
 msgstr "Náhodné:"
 
-#: ../src/toolbox.cpp:1233
+#: ../src/toolbox.cpp:1239
 msgid "Scatter randomly the corners and angles"
 msgstr "Náhodně rozptýlit rohy a úhly"
 
-#: ../src/toolbox.cpp:1246 ../src/toolbox.cpp:1725 ../src/toolbox.cpp:1900
+#: ../src/toolbox.cpp:1252 ../src/toolbox.cpp:1731 ../src/toolbox.cpp:1906
 msgid "Defaults"
 msgstr "Výchozí"
 
-#: ../src/toolbox.cpp:1247 ../src/toolbox.cpp:1726 ../src/toolbox.cpp:1901
+#: ../src/toolbox.cpp:1253 ../src/toolbox.cpp:1732 ../src/toolbox.cpp:1907
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -5061,63 +5056,63 @@ msgstr ""
 "Obnovit parametry tvaru na výchozí hodnoty (ke změně výchozích hodnot "
 "využijte Nastavení Inkscape > Nástroje)"
 
-#: ../src/toolbox.cpp:1460
+#: ../src/toolbox.cpp:1466
 msgid "Rx:"
 msgstr "Rx:"
 
-#: ../src/toolbox.cpp:1460
+#: ../src/toolbox.cpp:1466
 msgid "Horizontal radius of rounded corners"
 msgstr "Vodorovný poloměr zaoblených rohů"
 
-#: ../src/toolbox.cpp:1470
+#: ../src/toolbox.cpp:1476
 msgid "Ry:"
 msgstr "Ry:"
 
-#: ../src/toolbox.cpp:1470
+#: ../src/toolbox.cpp:1476
 msgid "Vertical radius of rounded corners"
 msgstr "Svislý poloměr zaoblených rohů"
 
-#: ../src/toolbox.cpp:1486
+#: ../src/toolbox.cpp:1492
 msgid "Not rounded"
 msgstr "Nezaobleno"
 
-#: ../src/toolbox.cpp:1487
+#: ../src/toolbox.cpp:1493
 msgid "Make corners sharp"
 msgstr "Udělá rohy ostré"
 
-#: ../src/toolbox.cpp:1692
+#: ../src/toolbox.cpp:1698
 msgid "Turns:"
 msgstr "Otočky:"
 
-#: ../src/toolbox.cpp:1692
+#: ../src/toolbox.cpp:1698
 msgid "Number of revolutions"
 msgstr "Počet revolucí"
 
-#: ../src/toolbox.cpp:1702
+#: ../src/toolbox.cpp:1708
 msgid "Divergence:"
 msgstr "Soustřednost:"
 
-#: ../src/toolbox.cpp:1702
+#: ../src/toolbox.cpp:1708
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Jak moc husté/řídké jsou venkovní obrátky; 1 = rovnoměrné"
 
-#: ../src/toolbox.cpp:1712
+#: ../src/toolbox.cpp:1718
 msgid "Inner radius:"
 msgstr "Vnitřní poloměr:"
 
-#: ../src/toolbox.cpp:1712
+#: ../src/toolbox.cpp:1718
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Poloměr nejvnitřnější otočky (relativně k velikosti spirály)"
 
-#: ../src/toolbox.cpp:1829
+#: ../src/toolbox.cpp:1835
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "Šířka kaligrafického pera (relativní vůči viditelné oblasti plátna)"
 
-#: ../src/toolbox.cpp:1839
+#: ../src/toolbox.cpp:1845
 msgid "Thinning:"
 msgstr "Ztenčování:"
 
-#: ../src/toolbox.cpp:1839
+#: ../src/toolbox.cpp:1845
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -5125,11 +5120,11 @@ msgstr ""
 "Jak moc zužuje rychlost šířku čáry (> 0: rychlejší = tenčí čára, < 0: "
 "rychlejší = širší čára, 0 pro šířku nezávislou na rychlosti)"
 
-#: ../src/toolbox.cpp:1852
+#: ../src/toolbox.cpp:1858
 msgid "Angle:"
 msgstr "Úhel:"
 
-#: ../src/toolbox.cpp:1852
+#: ../src/toolbox.cpp:1858
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
@@ -5137,67 +5132,67 @@ msgstr ""
 "Úhel hrotu pera (ve stupních; 0 = vodorovné; je bez efektu když je fixace "
 "nastavena na 0)"
 
-#: ../src/toolbox.cpp:1862
+#: ../src/toolbox.cpp:1868
 msgid "Fixation:"
 msgstr "Fixace:"
 
-#: ../src/toolbox.cpp:1862
+#: ../src/toolbox.cpp:1868
 msgid ""
 "How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
 "= fixed)"
 msgstr "Jak je úhel pera ukončen (0 = vždy kolmo na směr tahu, 1 = fixováno )"
 
-#: ../src/toolbox.cpp:1875
+#: ../src/toolbox.cpp:1881
 msgid "Mass:"
 msgstr "Hmota:"
 
-#: ../src/toolbox.cpp:1875
+#: ../src/toolbox.cpp:1881
 msgid "How much inertia affects the movement of the pen"
 msgstr "Jak velkou setrvačnost má pohyb pera"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: ../src/toolbox.cpp:1886
+#: ../src/toolbox.cpp:1892
 msgid "Drag:"
 msgstr "Táhnutí:"
 
-#: ../src/toolbox.cpp:1886
+#: ../src/toolbox.cpp:1892
 msgid "How much resistance affects the movement of the pen"
 msgstr "Jak velký odpor je kladen pohybu pera"
 
-#: ../src/toolbox.cpp:2181
+#: ../src/toolbox.cpp:2206
 msgid "Start:"
 msgstr "Start:"
 
-#: ../src/toolbox.cpp:2181
+#: ../src/toolbox.cpp:2206
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Úhel (ve stupních) od vodorovné linky k prvnímu bodu oblouku"
 
-#: ../src/toolbox.cpp:2191
+#: ../src/toolbox.cpp:2216
 msgid "End:"
 msgstr "Konec:"
 
-#: ../src/toolbox.cpp:2191
+#: ../src/toolbox.cpp:2216
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Úhel (ve stupních) od vodorovné linky k poslednímu bodu oblouku"
 
-#: ../src/toolbox.cpp:2202
+#: ../src/toolbox.cpp:2227
 msgid "Open arc"
 msgstr "Otevřený oblouk"
 
-#: ../src/toolbox.cpp:2203
+#: ../src/toolbox.cpp:2228
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr "Přepnout mezi "
 
-#: ../src/toolbox.cpp:2230
+#: ../src/toolbox.cpp:2255
 msgid "Make whole"
 msgstr "Udělat celým"
 
-#: ../src/toolbox.cpp:2231
+#: ../src/toolbox.cpp:2256
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Udělá z tvaru celou elipsu, ne oblouk nebo výseč"
 
-#: ../src/toolbox.cpp:2449
+#: ../src/toolbox.cpp:2475
 msgid ""
 "When pressed, picks visible color without alpha and when not pressed, picks "
 "color including its alpha"
@@ -5272,10 +5267,6 @@ msgstr ""
 "<b>Tažením</b> vytvoříte kaligrafickou linii. <b>Levá</b>/<b>pravá</b> šipka "
 "upraví šířku. Šipky <b>nahoru</b>/<b>dolů</b> upraví úhel."
 
-#: ../src/tools-switch.cpp:185
-msgid "<b>Click</b> to select or create text object, then type."
-msgstr "<b>Kliknutím</b> vyberete nebo vytvoříte textový objekt, pak pište."
-
 #: ../src/tools-switch.cpp:191
 msgid ""
 "<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, "
@@ -5316,6 +5307,151 @@ msgstr "Trasování: V obrázku nejsou bitmapová data"
 msgid "Trace: Done. %ld nodes created"
 msgstr "Trasování: Dokončeno. %ld uzlů vytvořeno"
 
+#: ../src/ui/dialog/align-and-distribute.cpp:665
+msgid "Align"
+msgstr "Zarovnat"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:666
+msgid "Distribute"
+msgstr "Rozmístit"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:667
+msgid "Nodes"
+msgstr "Uzly"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:671
+msgid "Relative to: "
+msgstr "Relativní přesun:"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:676
+msgid "Align right sides of objects to left side of anchor"
+msgstr "Zarovnat pravou stranu objektů k levé straně ukotvení"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:679
+msgid "Align left sides"
+msgstr "Zarovnat levé strany"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:682
+msgid "Center on vertical axis"
+msgstr "Zarovnat na střed svisle"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:685
+msgid "Align right sides"
+msgstr "Zarovnat pravé strany"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:688
+msgid "Align left sides of objects to right side of anchor"
+msgstr "Zarovnat levou stranu objektů k pravé straně ukotvení"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:691
+msgid "Align bottoms of objects to top of anchor"
+msgstr "Zarovnat spodní strany objektů k horním ukotvením"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:694
+msgid "Align tops"
+msgstr "Zarovnat horní strany"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:697
+msgid "Center on horizontal axis"
+msgstr "Zarovnat na střed vodorovně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:700
+msgid "Align bottoms"
+msgstr "Zarovnat spodní strany"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:703
+msgid "Align tops of objects to bottom of anchor"
+msgstr "Zarovnat horní strany objektů ke spodní straně ukotvení"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:708
+msgid "Align baseline anchors of texts vertically"
+msgstr "Zarovnat základny textu svisle"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:711
+msgid "Align baseline anchors of texts horizontally"
+msgstr "Zarovnat základny textu vodorovně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:716
+msgid "Make horizontal gaps between objects equal"
+msgstr "Rozdělit vodorovné mezery mezi objekty rovnoměrně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:720
+msgid "Distribute left sides equidistantly"
+msgstr "Rozmístit levé strany objektů rovnoměrně vzdálené"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:723
+msgid "Distribute centers equidistantly horizontally"
+msgstr "Rozmístit středy objektů vodorovně a v rovnoměrné vzdálenosti"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:726
+msgid "Distribute right sides equidistantly"
+msgstr "Rozmístit pravé strany objektů rovnoměrně vzdálené"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:730
+msgid "Make vertical gaps between objects equal"
+msgstr "Rozdělit svislou vzdálenost mezi objekty rovnoměrně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:734
+msgid "Distribute bottoms equidistantly"
+msgstr "Rozmístit dolní strany objektů rovnoměrně vzdálené"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:737
+msgid "Distribute centers equidistantly vertically"
+msgstr "Rozmístit středy objektů svisle a v rovnoměrné vzdálenosti"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:740
+msgid "Distribute tops equidistantly"
+msgstr "Rozmístit horní strany objektů rovnoměrně vzdálené"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:745
+msgid "Distribute baseline anchors of texts horizontally"
+msgstr "Rozmístit základny textu vodorovně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:748
+msgid "Distribute baseline anchors of texts vertically"
+msgstr "Rozmístit základny textu svisle"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:753
+msgid "Randomize centers in both dimensions"
+msgstr "Náhodně rozmístit středy v obou rozměrech"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:756
+msgid "Unclump objects: try to equalize edge-to-edge distances"
+msgstr "Rozhodit objekty: vzdálenosti okraj-okraj by měly být rovnoměrné"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:761
+msgid "Align selected nodes horizontally"
+msgstr "Zarovnat vybrané uzly vodorovně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:764
+msgid "Align selected nodes vertically"
+msgstr "Zarovnat vybrané uzly svisle"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:767
+msgid "Distribute selected nodes horizontally"
+msgstr "Rozmístit vybrané uzly vodorovně"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:770
+msgid "Distribute selected nodes vertically"
+msgstr "Rozmístit vybrané uzly svisle"
+
+#. Rest of the widgetry
+#: ../src/ui/dialog/align-and-distribute.cpp:775
+msgid "Last selected"
+msgstr "Poslední vybraný"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:776
+msgid "First selected"
+msgstr "První vybraný"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:777
+msgid "Biggest item"
+msgstr "Největší položka"
+
+#: ../src/ui/dialog/align-and-distribute.cpp:778
+msgid "Smallest item"
+msgstr "Nejmenší položka"
+
 #: ../src/ui/dialog/export.cpp:34
 msgid "Export"
 msgstr "Export"
@@ -5336,51 +5472,51 @@ msgstr "Styl obrysu"
 msgid "Find"
 msgstr "Hledat"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:78
+#: ../src/ui/dialog/inkscape-preferences.cpp:82
 msgid "Grab sensitivity"
 msgstr "Citlivost na výběr"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:82
+#: ../src/ui/dialog/inkscape-preferences.cpp:86
 msgid "Click/drag threshold"
 msgstr "Práh klinutí/tažení"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:90
+#: ../src/ui/dialog/inkscape-preferences.cpp:94
 msgid "Mouse wheel scrolls by"
 msgstr "Kolečko myši posune o"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:100
+#: ../src/ui/dialog/inkscape-preferences.cpp:104
 msgid "Scroll by"
 msgstr "Posun o"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:105
+#: ../src/ui/dialog/inkscape-preferences.cpp:109
 msgid "Acceleration"
 msgstr "Zrychlení"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:114
+#: ../src/ui/dialog/inkscape-preferences.cpp:118
 msgid "Speed"
 msgstr "Rychlost"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:117
+#: ../src/ui/dialog/inkscape-preferences.cpp:121
 msgid "Threshold"
 msgstr "Práh"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:125
+#: ../src/ui/dialog/inkscape-preferences.cpp:129
 msgid "Arrow keys move by"
 msgstr "Šipky přesunují po"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:130
+#: ../src/ui/dialog/inkscape-preferences.cpp:134
 msgid "> and < scale by"
 msgstr "> a < mění měřítko po"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:135
+#: ../src/ui/dialog/inkscape-preferences.cpp:139
 msgid "Inset/Outset by"
 msgstr "Smrštit/Rozšířit o"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:154
+#: ../src/ui/dialog/inkscape-preferences.cpp:158
 msgid "Rotation snaps every"
 msgstr "Přichytávat při otáčení každých"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:158
+#: ../src/ui/dialog/inkscape-preferences.cpp:162
 msgid "Zoom in/out by"
 msgstr "Přiblížit/Oddálit po"
 
@@ -5741,1303 +5877,1333 @@ msgstr ""
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
 
-#: ../src/verbs.cpp:954
+#: ../src/verbs.cpp:978
 msgid "Moved to next layer."
 msgstr "Přesunuto do následující vrstvy."
 
-#: ../src/verbs.cpp:956
+#: ../src/verbs.cpp:980
 msgid "Can't move past last layer."
 msgstr "Nelze přesunout minulou poslední vrstvu"
 
-#: ../src/verbs.cpp:965
+#: ../src/verbs.cpp:989
 msgid "Moved to previous layer."
 msgstr "Přesunuto do předchozí vrstvy"
 
-#: ../src/verbs.cpp:967
+#: ../src/verbs.cpp:991
 msgid "Can't move past first layer."
 msgstr "Nelze přesunout minulou první vrstvu"
 
-#: ../src/verbs.cpp:984 ../src/verbs.cpp:1052
+#: ../src/verbs.cpp:1008 ../src/verbs.cpp:1076
 msgid "No current layer."
 msgstr "Žádná vrstva není aktuální."
 
-#: ../src/verbs.cpp:1013
+#: ../src/verbs.cpp:1037
 #, c-format
 msgid "Raised layer <b>%s</b>."
 msgstr "Přesunout vrstvu <b>%s</b> výš."
 
-#: ../src/verbs.cpp:1017
+#: ../src/verbs.cpp:1041
 #, c-format
 msgid "Lowered layer <b>%s</b>."
 msgstr "Přesunout vrstvu <b>%s</b> níž."
 
-#: ../src/verbs.cpp:1026
+#: ../src/verbs.cpp:1050
 msgid "Can't move layer any further."
 msgstr "Nelze dále přesouvat vrstvu."
 
 #. TRANSLATORS: this means "The layer has been deleted."
-#: ../src/verbs.cpp:1050
+#: ../src/verbs.cpp:1074
 msgid "Deleted layer."
 msgstr "Vymazat vrstvu."
 
 #. TRANSLATORS: If you have translated the keys.svg file to your language, then
 #. translate this string as "keys.LANG.svg" (where LANG is your language code);
 #. otherwise leave as "keys.svg".
-#: ../src/verbs.cpp:1429
+#: ../src/verbs.cpp:1459
 msgid "keys.svg"
 msgstr "keys.svg"
 
 #. TRANSLATORS: If you have translated the tutorial-basic.svg file to your language,
 #. then translate this string as "tutorial-basic.LANG.svg" (where LANG is your language
 #. code); otherwise leave as "tutorial-basic.svg".
-#: ../src/verbs.cpp:1458
+#: ../src/verbs.cpp:1488
 msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1462
+#: ../src/verbs.cpp:1492
 msgid "tutorial-shapes.svg"
 msgstr "tutorial-shapes.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1466
+#: ../src/verbs.cpp:1496
 msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1470
+#: ../src/verbs.cpp:1500
 msgid "tutorial-tracing.svg"
 msgstr "tutorial-tracing.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1474
+#: ../src/verbs.cpp:1504
 msgid "tutorial-calligraphy.svg"
 msgstr "tutorial-calligraphy.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1478
+#: ../src/verbs.cpp:1508
 msgid "tutorial-elements.svg"
 msgstr "tutorial-elements.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
-#: ../src/verbs.cpp:1482
+#: ../src/verbs.cpp:1512
 msgid "tutorial-tips.svg"
 msgstr "tutorial-tips.svg"
 
-#: ../src/verbs.cpp:1629
+#: ../src/verbs.cpp:1660
 msgid "Does nothing"
 msgstr "Nedělá nic"
 
 #. File
-#: ../src/verbs.cpp:1632
+#: ../src/verbs.cpp:1663
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../src/verbs.cpp:1632
+#: ../src/verbs.cpp:1663
 msgid "Create new document from default template"
 msgstr "Vytvořit nový dokument z výchozí šablony"
 
-#: ../src/verbs.cpp:1634
+#: ../src/verbs.cpp:1665
 msgid "_Open..."
 msgstr "Otevřít..."
 
-#: ../src/verbs.cpp:1635
+#: ../src/verbs.cpp:1666
 msgid "Open existing document"
 msgstr "Otevřít existující dokument"
 
-#: ../src/verbs.cpp:1636
+#: ../src/verbs.cpp:1667
 msgid "Re_vert"
 msgstr "Na_vrátit"
 
-#: ../src/verbs.cpp:1637
+#: ../src/verbs.cpp:1668
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr "Vrátit se k poslední uložené verzi dokumentu (změny budou ztraceny)"
 
-#: ../src/verbs.cpp:1638
+#: ../src/verbs.cpp:1669
 msgid "_Save"
 msgstr "Uložit"
 
-#: ../src/verbs.cpp:1638
+#: ../src/verbs.cpp:1669
 msgid "Save document"
 msgstr "Uložit dokument"
 
-#: ../src/verbs.cpp:1640
+#: ../src/verbs.cpp:1671
 msgid "Save _As..."
 msgstr "Uložit j_ako..."
 
-#: ../src/verbs.cpp:1641
+#: ../src/verbs.cpp:1672
 msgid "Save document under new name"
 msgstr "Uložit dokument pod novým názvem"
 
-#: ../src/verbs.cpp:1642
+#: ../src/verbs.cpp:1673
 msgid "_Print..."
 msgstr "Tisk..."
 
-#: ../src/verbs.cpp:1642
+#: ../src/verbs.cpp:1673
 msgid "Print document"
 msgstr "Tisknout dokument"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-#: ../src/verbs.cpp:1645
+#: ../src/verbs.cpp:1676
 msgid "Vac_uum Defs"
 msgstr "Vyčistit definice"
 
-#: ../src/verbs.cpp:1645
+#: ../src/verbs.cpp:1676
 msgid "Remove unused stuff from the &lt;defs&gt; of the document"
 msgstr "Odstranit nepoužívané položky z &lt;defs&gt; dokumentu"
 
-#: ../src/verbs.cpp:1647
+#: ../src/verbs.cpp:1678
 msgid "Print _Direct"
 msgstr "Přímý tisk..."
 
-#: ../src/verbs.cpp:1648
+#: ../src/verbs.cpp:1679
 msgid "Print directly to file or pipe"
 msgstr "Tisk přímo do souboru nebo roury"
 
-#: ../src/verbs.cpp:1649
+#: ../src/verbs.cpp:1680
 msgid "Print Previe_w"
 msgstr "Náhled tisku"
 
-#: ../src/verbs.cpp:1650
+#: ../src/verbs.cpp:1681
 msgid "Preview document printout"
 msgstr "Náhled tisku dokumentu"
 
-#: ../src/verbs.cpp:1651
+#: ../src/verbs.cpp:1682
 msgid "_Import..."
 msgstr "_Import..."
 
-#: ../src/verbs.cpp:1652
+#: ../src/verbs.cpp:1683
 msgid "Import bitmap or SVG image into document"
 msgstr "Import bitmapy nebo obrázku SVG do dokumentu"
 
-#: ../src/verbs.cpp:1653
+#: ../src/verbs.cpp:1684
 msgid "_Export Bitmap..."
 msgstr "Exportovat bitmapu"
 
-#: ../src/verbs.cpp:1654
+#: ../src/verbs.cpp:1685
 msgid "Export document or selection as PNG bitmap"
 msgstr "Export dokumentu nebo výběru jako bitmapy PNG"
 
-#: ../src/verbs.cpp:1655
+#: ../src/verbs.cpp:1686
 msgid "N_ext Window"
 msgstr "Následující okno"
 
-#: ../src/verbs.cpp:1656
+#: ../src/verbs.cpp:1687
 msgid "Switch to the next document window"
 msgstr "Přepnout do dalšího okna dokumentu"
 
-#: ../src/verbs.cpp:1657
+#: ../src/verbs.cpp:1688
 msgid "P_revious Window"
 msgstr "Předchozí okno"
 
-#: ../src/verbs.cpp:1658
+#: ../src/verbs.cpp:1689
 msgid "Switch to the previous document window"
 msgstr "Přepnout di okna předchozího dokumentu"
 
-#: ../src/verbs.cpp:1659
+#: ../src/verbs.cpp:1690
 msgid "_Close"
 msgstr "Zavřít"
 
-#: ../src/verbs.cpp:1660
+#: ../src/verbs.cpp:1691
 msgid "Close window"
 msgstr "Zavřít okno"
 
-#: ../src/verbs.cpp:1661
+#: ../src/verbs.cpp:1692
 msgid "_Quit"
 msgstr "Ukončit"
 
-#: ../src/verbs.cpp:1661
+#: ../src/verbs.cpp:1692
 msgid "Quit Inkscape"
 msgstr "Ukončit Inkscape"
 
 #. Edit
-#: ../src/verbs.cpp:1664
+#: ../src/verbs.cpp:1695
 msgid "_Undo"
 msgstr "Zpět"
 
-#: ../src/verbs.cpp:1664
+#: ../src/verbs.cpp:1695
 msgid "Undo last action"
 msgstr "Vrátit zpět poslední akci"
 
-#: ../src/verbs.cpp:1666
+#: ../src/verbs.cpp:1697
 msgid "_Redo"
 msgstr "Znovu"
 
-#: ../src/verbs.cpp:1667
+#: ../src/verbs.cpp:1698
 msgid "Do again last undone action"
 msgstr "Znovu provést vrácenou akci"
 
-#: ../src/verbs.cpp:1668
+#: ../src/verbs.cpp:1699
 msgid "Cu_t"
 msgstr "Vyjmout"
 
-#: ../src/verbs.cpp:1669
+#: ../src/verbs.cpp:1700
 msgid "Cut selection to clipboard"
 msgstr "Vyjmout vybrané objekty do schránky"
 
-#: ../src/verbs.cpp:1670
+#: ../src/verbs.cpp:1701
 msgid "_Copy"
 msgstr "Kopírovat"
 
-#: ../src/verbs.cpp:1671
+#: ../src/verbs.cpp:1702
 msgid "Copy selection to clipboard"
 msgstr "Kopírovat vybrané objekty do schránky"
 
-#: ../src/verbs.cpp:1672
+#: ../src/verbs.cpp:1703
 msgid "_Paste"
 msgstr "Vložit"
 
-#: ../src/verbs.cpp:1673
+#: ../src/verbs.cpp:1704
 msgid "Paste object(s) from clipboard to mouse point"
 msgstr "Vložit objekty ze schránky"
 
-#: ../src/verbs.cpp:1674
+#: ../src/verbs.cpp:1705
 msgid "Paste _Style"
 msgstr "Vložit _Styl"
 
-#: ../src/verbs.cpp:1675
+#: ../src/verbs.cpp:1706
 msgid "Apply style of the copied object to selection"
 msgstr "Aplikovat styl z kopírovaného objektu na výběr"
 
-#: ../src/verbs.cpp:1676
+#: ../src/verbs.cpp:1707
 msgid "Paste _In Place"
 msgstr "Vložit v místě"
 
-#: ../src/verbs.cpp:1677
+#: ../src/verbs.cpp:1708
 msgid "Paste object(s) from clipboard to the original location"
 msgstr "Vložit objekt(y) ze schránky na původní umístění"
 
-#: ../src/verbs.cpp:1678
+#: ../src/verbs.cpp:1709
 msgid "_Delete"
 msgstr "Odstranit"
 
-#: ../src/verbs.cpp:1679
+#: ../src/verbs.cpp:1710
 msgid "Delete selection"
 msgstr "Odstranit výběr"
 
-#: ../src/verbs.cpp:1680
+#: ../src/verbs.cpp:1711
 msgid "Duplic_ate"
 msgstr "Duplikovat"
 
-#: ../src/verbs.cpp:1681
+#: ../src/verbs.cpp:1712
 msgid "Duplicate selected object(s)"
 msgstr "Duplikovat vybrané objekty"
 
-#: ../src/verbs.cpp:1682
+#: ../src/verbs.cpp:1713
 msgid "Clo_ne"
 msgstr "Klo_novat"
 
-#: ../src/verbs.cpp:1683
+#: ../src/verbs.cpp:1714
 msgid "Create a clone of selected object (a copy linked to the original)"
 msgstr "Vytvořit klon vybraného objektu (kopie propojená s originálem)"
 
-#: ../src/verbs.cpp:1684
+#: ../src/verbs.cpp:1715
 msgid "Unlin_k Clone"
 msgstr "Odpojit klon"
 
-#: ../src/verbs.cpp:1685
+#: ../src/verbs.cpp:1716
 msgid "Cut the clone's link to its original"
 msgstr "Odstranit propojení klonu s originálem"
 
-#: ../src/verbs.cpp:1686
+#: ../src/verbs.cpp:1717
 msgid "Select _Original"
 msgstr "Vybrat originál"
 
-#: ../src/verbs.cpp:1687
+#: ../src/verbs.cpp:1718
 msgid "Select the object to which the clone is linked"
 msgstr "Vybere objekt, se kterým je klon spojen"
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
-#: ../src/verbs.cpp:1689
+#: ../src/verbs.cpp:1720
 msgid "O_bject(s) to Pattern"
 msgstr "Objekt(y) na vzorek"
 
-#: ../src/verbs.cpp:1690
+#: ../src/verbs.cpp:1721
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr "Převést výběr na obdélník s dlaždicovou výplní"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
-#: ../src/verbs.cpp:1692
+#: ../src/verbs.cpp:1723
 msgid "Pattern to Ob_ject(s)"
 msgstr "Vzorek na objekt(y)"
 
-#: ../src/verbs.cpp:1693
+#: ../src/verbs.cpp:1724
 msgid "Extract objects from a tiled pattern fill"
 msgstr "Extrahovat objekty z dlaždicového vzoru výplně"
 
-#: ../src/verbs.cpp:1694
+#: ../src/verbs.cpp:1725
 msgid "Clea_r All"
 msgstr "Vymazat vše"
 
-#: ../src/verbs.cpp:1695
+#: ../src/verbs.cpp:1726
 msgid "Delete all objects from document"
 msgstr "Odstranit všechny objekty z dokumentu"
 
-#: ../src/verbs.cpp:1696
+#: ../src/verbs.cpp:1727
 msgid "Select Al_l"
 msgstr "Vybrat vše"
 
-#: ../src/verbs.cpp:1697
+#: ../src/verbs.cpp:1728
 msgid "Select all objects or all nodes"
 msgstr "Vybere všechny objekty nebo všechny uzly"
 
-#: ../src/verbs.cpp:1698
+#: ../src/verbs.cpp:1729
 msgid "Select All in All La_yers"
 msgstr "Vybrat vše ve všech vrstvách"
 
-#: ../src/verbs.cpp:1699
+#: ../src/verbs.cpp:1730
 msgid "Select all objects in all visible and unlocked layers"
 msgstr "Vybere všechny objekty ve všech viditelných a odemčených vrstvách"
 
-#: ../src/verbs.cpp:1700
+#: ../src/verbs.cpp:1731
 msgid "In_vert Selection"
 msgstr "Invertovat výběr"
 
-#: ../src/verbs.cpp:1701
+#: ../src/verbs.cpp:1732
 msgid "Invert selection (unselect what is selected and select everything else)"
 msgstr "Invertovat výběr (odznačit co je vybrané a označit vše ostatní)"
 
-#: ../src/verbs.cpp:1702
+#: ../src/verbs.cpp:1733
 msgid "Invert in All Layers"
 msgstr "Invertovat ve všech vrstvách"
 
-#: ../src/verbs.cpp:1703
+#: ../src/verbs.cpp:1734
 msgid "Invert selection in all visible and unlocked layers"
 msgstr "Invertovat výběr ve všech viditelných a odemčených vrstvách"
 
-#: ../src/verbs.cpp:1704
+#: ../src/verbs.cpp:1735
 msgid "D_eselect"
 msgstr "Zrušit výběr"
 
-#: ../src/verbs.cpp:1705
+#: ../src/verbs.cpp:1736
 msgid "Deselect any selected objects or nodes"
 msgstr "Zrušit výběr jakýchkoliv vybraných objektů nebo uzlů"
 
 #. Selection
-#: ../src/verbs.cpp:1708
+#: ../src/verbs.cpp:1739
 msgid "Raise to _Top"
 msgstr "Přesunout úplně nahoru"
 
-#: ../src/verbs.cpp:1709
+#: ../src/verbs.cpp:1740
 msgid "Raise selection to top"
 msgstr "Přesunout výběr úplně nahoru"
 
-#: ../src/verbs.cpp:1710
+#: ../src/verbs.cpp:1741
 msgid "Lower to _Bottom"
 msgstr "Přesunout dospod"
 
-#: ../src/verbs.cpp:1711
+#: ../src/verbs.cpp:1742
 msgid "Lower selection to bottom"
 msgstr "Přesunout výběr úplně dolů"
 
-#: ../src/verbs.cpp:1712
+#: ../src/verbs.cpp:1743
 msgid "_Raise"
 msgstr "Posunout výš"
 
-#: ../src/verbs.cpp:1713
+#: ../src/verbs.cpp:1744
 msgid "Raise selection one step"
 msgstr "Přesunout výběr o úroveň výš"
 
-#: ../src/verbs.cpp:1714
+#: ../src/verbs.cpp:1745
 msgid "_Lower"
 msgstr "Posunout níž"
 
-#: ../src/verbs.cpp:1715
+#: ../src/verbs.cpp:1746
 msgid "Lower selection one step"
 msgstr "Přesunout výběr o úroveň níž"
 
-#: ../src/verbs.cpp:1716
+#: ../src/verbs.cpp:1747
 msgid "_Group"
 msgstr "Seskupit"
 
-#: ../src/verbs.cpp:1717
+#: ../src/verbs.cpp:1748
 msgid "Group selected objects"
 msgstr "Seskupit vybrané objekty"
 
-#: ../src/verbs.cpp:1719
+#: ../src/verbs.cpp:1750
 msgid "Ungroup selected group(s)"
 msgstr "Zrušit seskupení vybrané skupiny"
 
-#: ../src/verbs.cpp:1721
+#: ../src/verbs.cpp:1752
 msgid "_Put on Path"
 msgstr "_Umístit na křivku"
 
-#: ../src/verbs.cpp:1722
+#: ../src/verbs.cpp:1753
 msgid "Put text on path"
 msgstr "Položit text na křivku"
 
-#: ../src/verbs.cpp:1723
+#: ../src/verbs.cpp:1754
 msgid "_Remove from Path"
 msgstr "Odstranit z křivky"
 
-#: ../src/verbs.cpp:1724
+#: ../src/verbs.cpp:1755
 msgid "Remove text from path"
 msgstr "Odstranit text z křivky"
 
-#: ../src/verbs.cpp:1725
+#: ../src/verbs.cpp:1756
 msgid "Remove Manual _Kerns"
 msgstr "Odstranit manuální _kerning"
 
-#: ../src/verbs.cpp:1726
-msgid "Remove all manual kerns from a text object"
+#: ../src/verbs.cpp:1757
+#, fuzzy
+msgid "Remove all manual kerns and glyph rotations from a text object"
 msgstr "Odstranit včechen manuální kerning z textového objektu"
 
-#: ../src/verbs.cpp:1728
+#: ../src/verbs.cpp:1759
 msgid "_Union"
 msgstr "_Sjednocení"
 
-#: ../src/verbs.cpp:1729
+#: ../src/verbs.cpp:1760
 msgid "Union of selected objects"
 msgstr "Sjednocení vybraných objektů"
 
-#: ../src/verbs.cpp:1730
+#: ../src/verbs.cpp:1761
 msgid "_Intersection"
 msgstr "Průn_ik"
 
-#: ../src/verbs.cpp:1731
+#: ../src/verbs.cpp:1762
 msgid "Intersection of selected objects"
 msgstr "Průnik vybraných objektů"
 
-#: ../src/verbs.cpp:1732
+#: ../src/verbs.cpp:1763
 msgid "_Difference"
 msgstr "Roz_díl"
 
-#: ../src/verbs.cpp:1733
+#: ../src/verbs.cpp:1764
 msgid "Difference of selected objects (bottom minus top)"
 msgstr "Rozdíl vybraných objektů (spodní mínus horní)"
 
-#: ../src/verbs.cpp:1734
+#: ../src/verbs.cpp:1765
 msgid "E_xclusion"
 msgstr "Non-Ekvivalence (XOR)"
 
-#: ../src/verbs.cpp:1735
+#: ../src/verbs.cpp:1766
 msgid "Exclusive OR of selected objects"
 msgstr "XOR vybraných objektů"
 
-#: ../src/verbs.cpp:1736
+#: ../src/verbs.cpp:1767
 msgid "Di_vision"
 msgstr "Dělení"
 
-#: ../src/verbs.cpp:1737
+#: ../src/verbs.cpp:1768
 msgid "Cut the bottom object into pieces"
 msgstr "Rozřezat spodní objekt na kousky"
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: ../src/verbs.cpp:1740
+#: ../src/verbs.cpp:1771
 msgid "Cut _Path"
 msgstr "Oříznout křivku"
 
-#: ../src/verbs.cpp:1741
+#: ../src/verbs.cpp:1772
 msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr "Rozřezat obrys spodního objektu na kousky, odstraní výplň"
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: ../src/verbs.cpp:1745
+#: ../src/verbs.cpp:1776
 msgid "Outs_et"
 msgstr "Rozšířit"
 
-#: ../src/verbs.cpp:1746
+#: ../src/verbs.cpp:1777
 msgid "Outset selected path(s)"
 msgstr "Rozšířit vybrané křivky"
 
-#: ../src/verbs.cpp:1748
-msgid "O_utset Path by 1px"
+#: ../src/verbs.cpp:1779
+#, fuzzy
+msgid "O_utset Path by 1 px"
 msgstr "Rozšířit křivku o 1px"
 
-#: ../src/verbs.cpp:1749
-msgid "Outset selected path(s) by 1px"
+#: ../src/verbs.cpp:1780
+#, fuzzy
+msgid "Outset selected path(s) by 1 px"
 msgstr "Rozšířit vybrané křivky o 1px"
 
-#: ../src/verbs.cpp:1751
-msgid "O_utset Path by 10px"
+#: ../src/verbs.cpp:1782
+#, fuzzy
+msgid "O_utset Path by 10 px"
 msgstr "Rozšířit křivku o 10px"
 
-#: ../src/verbs.cpp:1752
-msgid "Outset selected path(s) by 10px"
+#: ../src/verbs.cpp:1783
+#, fuzzy
+msgid "Outset selected path(s) by 10 px"
 msgstr "Rozšířit vybrané křivky o 10px"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: ../src/verbs.cpp:1756
+#: ../src/verbs.cpp:1787
 msgid "I_nset"
 msgstr "Smrštit"
 
-#: ../src/verbs.cpp:1757
+#: ../src/verbs.cpp:1788
 msgid "Inset selected path(s)"
 msgstr "Smrštit vybrané křivky"
 
-#: ../src/verbs.cpp:1759
-msgid "I_nset Path by 1px"
+#: ../src/verbs.cpp:1790
+#, fuzzy
+msgid "I_nset Path by 1 px"
 msgstr "Smrštit křivku o 1px"
 
-#: ../src/verbs.cpp:1760
-msgid "Inset selected path(s) by 1px"
+#: ../src/verbs.cpp:1791
+#, fuzzy
+msgid "Inset selected path(s) by 1 px"
 msgstr "Smrštit vybrané křivky o 1px"
 
-#: ../src/verbs.cpp:1762
-msgid "I_nset Path by 10px"
+#: ../src/verbs.cpp:1793
+#, fuzzy
+msgid "I_nset Path by 10 px"
 msgstr "Smrštit křivku o 10px"
 
-#: ../src/verbs.cpp:1763
-msgid "Inset selected path(s) by 10px"
+#: ../src/verbs.cpp:1794
+#, fuzzy
+msgid "Inset selected path(s) by 10 px"
 msgstr "Smrštit vybrané křivky o 10px"
 
-#: ../src/verbs.cpp:1765
+#: ../src/verbs.cpp:1796
 msgid "D_ynamic Offset"
 msgstr "D_ynamické rozšíření"
 
-#: ../src/verbs.cpp:1765
+#: ../src/verbs.cpp:1796
 msgid "Create a dynamic offset object"
 msgstr "Vytvořit objekt s dynamickým okrajem"
 
-#: ../src/verbs.cpp:1767
+#: ../src/verbs.cpp:1798
 msgid "_Linked Offset"
 msgstr "Propojené rozšíření"
 
-#: ../src/verbs.cpp:1768
+#: ../src/verbs.cpp:1799
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "Vytvořit dynamicky rozšiřovaný objekt propojený s původní křivkou"
 
-#: ../src/verbs.cpp:1770
+#: ../src/verbs.cpp:1801
 msgid "_Stroke to Path"
 msgstr "Obry_s na křivku"
 
-#: ../src/verbs.cpp:1771
+#: ../src/verbs.cpp:1802
 msgid "Convert selected stroke(s) to path(s)"
 msgstr "Převést vybrané obrysy na křivky"
 
-#: ../src/verbs.cpp:1772
+#: ../src/verbs.cpp:1803
 msgid "Si_mplify"
 msgstr "Zjednodušit"
 
-#: ../src/verbs.cpp:1773
+#: ../src/verbs.cpp:1804
 msgid "Simplify selected path(s) by removing extra nodes"
 msgstr "Zjedodušit vybrané křivky odstraněním nadbytečných uzlů"
 
-#: ../src/verbs.cpp:1774
+#: ../src/verbs.cpp:1805
 msgid "_Reverse"
 msgstr "Přev_rátit"
 
-#: ../src/verbs.cpp:1775
+#: ../src/verbs.cpp:1806
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr ""
 "Převrátí směr vybraných křivek; užitečné pro prohození značek začátku a konce"
 
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-#: ../src/verbs.cpp:1777
+#: ../src/verbs.cpp:1808
 msgid "_Trace Bitmap"
 msgstr "Převés_t bitmapu"
 
-#: ../src/verbs.cpp:1778
+#: ../src/verbs.cpp:1809
 msgid "Convert bitmap object to paths"
 msgstr "Převést bitmapové objekty na cesty"
 
-#: ../src/verbs.cpp:1779
+#: ../src/verbs.cpp:1810
 msgid "_Make a Bitmap Copy"
 msgstr "Vytvořit bitmapovou kopii"
 
-#: ../src/verbs.cpp:1780
+#: ../src/verbs.cpp:1811
 msgid "Export selection to a bitmap and insert it into document"
 msgstr "Exportovat výběr do bitmapy a vložit do dokumentu"
 
-#: ../src/verbs.cpp:1781
+#: ../src/verbs.cpp:1812
 msgid "_Combine"
 msgstr "Kombinace"
 
-#: ../src/verbs.cpp:1782
+#: ../src/verbs.cpp:1813
 msgid "Combine several paths into one"
 msgstr "Kombinovat několik křivek do jedné"
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: ../src/verbs.cpp:1785
+#: ../src/verbs.cpp:1816
 msgid "Break _Apart"
 msgstr "Rozdělit na části"
 
-#: ../src/verbs.cpp:1786
+#: ../src/verbs.cpp:1817
 msgid "Break selected path(s) into subpaths"
 msgstr "Rozdělit vybrané křivky na podkřivky"
 
-#: ../src/verbs.cpp:1787
-msgid "_Gri_d Arrange..."
+#: ../src/verbs.cpp:1818
+#, fuzzy
+msgid "Gri_d Arrange..."
 msgstr "Uspořádat do mřížky..."
 
-#: ../src/verbs.cpp:1788
+#: ../src/verbs.cpp:1819
 msgid "Arrange selection in grid pattern"
 msgstr "Uspořádat výběr do mřížky"
 
 #. Layer
-#: ../src/verbs.cpp:1790
+#: ../src/verbs.cpp:1821
 msgid "_New Layer..."
 msgstr "_Nová Vrstva"
 
-#: ../src/verbs.cpp:1791
+#: ../src/verbs.cpp:1822
 msgid "Create a new layer"
 msgstr "Vytvořit novou vrstvu"
 
-#: ../src/verbs.cpp:1792
+#: ../src/verbs.cpp:1823
 msgid "Ren_ame Layer..."
 msgstr "Přejmenovat vrstvu..."
 
-#: ../src/verbs.cpp:1793
+#: ../src/verbs.cpp:1824
 msgid "Rename the current layer"
 msgstr "Přejmenovat aktuální vrstvu"
 
-#: ../src/verbs.cpp:1794
+#: ../src/verbs.cpp:1825
 msgid "Switch to Layer Abov_e"
 msgstr "Přepnout O Vrstvu Výš"
 
-#: ../src/verbs.cpp:1795
+#: ../src/verbs.cpp:1826
 msgid "Switch to the layer above the current"
 msgstr "Přepnout na vrstu nad současnou"
 
-#: ../src/verbs.cpp:1796
+#: ../src/verbs.cpp:1827
 msgid "Switch to Layer Belo_w"
 msgstr "Přepnout O Vrstvu Níž"
 
-#: ../src/verbs.cpp:1797
+#: ../src/verbs.cpp:1828
 msgid "Switch to the layer below the current"
 msgstr "Přepnout na vrstu pod současnou"
 
-#: ../src/verbs.cpp:1798
+#: ../src/verbs.cpp:1829
 msgid "Move Selection to Layer Abo_ve"
 msgstr "Přesunout Výběr o Vrstvu Výš"
 
-#: ../src/verbs.cpp:1799
+#: ../src/verbs.cpp:1830
 msgid "Move selection to the layer above the current"
 msgstr "Přesunou výběr do vrstvy nad současnou"
 
-#: ../src/verbs.cpp:1800
+#: ../src/verbs.cpp:1831
 msgid "Move Selection to Layer Bel_ow"
 msgstr "Přesunout Výběr o Vrstvu Níž"
 
-#: ../src/verbs.cpp:1801
+#: ../src/verbs.cpp:1832
 msgid "Move selection to the layer below the current"
 msgstr "Přesunou výběr do vrstvy pod současnou"
 
-#: ../src/verbs.cpp:1802
+#: ../src/verbs.cpp:1833
 msgid "Layer to _Top"
 msgstr "Vrstvu úplně nahoru"
 
-#: ../src/verbs.cpp:1803
+#: ../src/verbs.cpp:1834
 msgid "Raise the current layer to the top"
 msgstr "Přesunout aktuální vrstvu úplně nahoru"
 
-#: ../src/verbs.cpp:1804
+#: ../src/verbs.cpp:1835
 msgid "Layer to _Bottom"
 msgstr "Vrstvu úplně dolů"
 
-#: ../src/verbs.cpp:1805
+#: ../src/verbs.cpp:1836
 msgid "Lower the current layer to the bottom"
 msgstr "Přesunout aktuální vrstvy úplně naspod"
 
-#: ../src/verbs.cpp:1806
+#: ../src/verbs.cpp:1837
 msgid "_Raise Layer"
 msgstr "Posunout vrstvu výš"
 
-#: ../src/verbs.cpp:1807
+#: ../src/verbs.cpp:1838
 msgid "Raise the current layer"
 msgstr "Přesunout vrstvu níž"
 
-#: ../src/verbs.cpp:1808
+#: ../src/verbs.cpp:1839
 msgid "_Lower Layer"
 msgstr "Posunout vrstvu níž"
 
-#: ../src/verbs.cpp:1809
+#: ../src/verbs.cpp:1840
 msgid "Lower the current layer"
 msgstr "Přesunout vrstvu výš"
 
-#: ../src/verbs.cpp:1810
+#: ../src/verbs.cpp:1841
 msgid "_Delete Current Layer"
 msgstr "_Vymazat aktuální vrstvu"
 
-#: ../src/verbs.cpp:1811
+#: ../src/verbs.cpp:1842
 msgid "Delete the current layer"
 msgstr "Vymazat aktuální vrstvu"
 
 #. Object
-#: ../src/verbs.cpp:1814
+#: ../src/verbs.cpp:1845
 msgid "Rotate _90 deg CW"
 msgstr "Otočit o _90° vpravo"
 
-#: ../src/verbs.cpp:1815
+#: ../src/verbs.cpp:1846
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "Otočit výběr o 90° po směru hodinových ručiček"
 
-#: ../src/verbs.cpp:1816
+#: ../src/verbs.cpp:1847
 msgid "Rotate 9_0 deg CCW"
 msgstr "Otočit o 9_0° vlevo"
 
-#: ../src/verbs.cpp:1817
+#: ../src/verbs.cpp:1848
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr "Otočit výběr o 90° po směru hodinových ručiček"
 
-#: ../src/verbs.cpp:1818
+#: ../src/verbs.cpp:1849
 msgid "Remove _Transformations"
 msgstr "Odstranit _transformaci"
 
-#: ../src/verbs.cpp:1819
+#: ../src/verbs.cpp:1850
 msgid "Remove transformations from object"
 msgstr "Odstranit transformace z objektu"
 
-#: ../src/verbs.cpp:1820
+#: ../src/verbs.cpp:1851
 msgid "_Object to Path"
 msgstr "_Objekt na Křivku"
 
-#: ../src/verbs.cpp:1821
+#: ../src/verbs.cpp:1852
 msgid "Convert selected object(s) to path(s)"
 msgstr "Převést vybraný objekt na křivku"
 
-#: ../src/verbs.cpp:1822
-msgid "_Unflow Text"
+#: ../src/verbs.cpp:1853
+#, fuzzy
+msgid "_Flow into Frame"
+msgstr "_Vlít text do tvaru"
+
+#: ../src/verbs.cpp:1854
+#, fuzzy
+msgid "Put text into frame(s)"
+msgstr "Položit text na křivku"
+
+#: ../src/verbs.cpp:1855
+#, fuzzy
+msgid "_Unflow"
 msgstr "Zrusit Vtečení textu"
 
-#: ../src/verbs.cpp:1823
-msgid "Convert selected flowed text(s) to regular text objects"
+#: ../src/verbs.cpp:1856
+msgid "Remove text from frame (creates a single-line text object)"
+msgstr ""
+
+#: ../src/verbs.cpp:1857
+msgid "_Convert to Text"
+msgstr ""
+
+#: ../src/verbs.cpp:1858
+#, fuzzy
+msgid "Convert flowed text(s) to regular text objects (preserves appearance)"
 msgstr "Převést vybraný plovoucí text na textový objekt"
 
-#: ../src/verbs.cpp:1825
+#: ../src/verbs.cpp:1860
 msgid "Flip _Horizontally"
 msgstr "Obrátit vodorovně"
 
-#: ../src/verbs.cpp:1825
+#: ../src/verbs.cpp:1860
 msgid "Flip selection horizontally"
 msgstr "Obrátit vybrané objekty vodorovně"
 
-#: ../src/verbs.cpp:1828
+#: ../src/verbs.cpp:1863
 msgid "Flip _Vertically"
 msgstr "Obrátit svisle"
 
-#: ../src/verbs.cpp:1828
+#: ../src/verbs.cpp:1863
 msgid "Flip selection vertically"
 msgstr "Obrátit vybrané objekty svisle"
 
 #. Tools
-#: ../src/verbs.cpp:1832
+#: ../src/verbs.cpp:1867
 msgid "Select"
 msgstr "Vybrat"
 
-#: ../src/verbs.cpp:1833
+#: ../src/verbs.cpp:1868
 msgid "Select and transform objects"
 msgstr "Výběr a transformace objektů"
 
-#: ../src/verbs.cpp:1834
+#: ../src/verbs.cpp:1869
 msgid "Node Edit"
 msgstr "Úpravy uzlů"
 
-#: ../src/verbs.cpp:1835
+#: ../src/verbs.cpp:1870
 msgid "Edit path nodes or control handles"
 msgstr "Upravit uzly křivek nebo jejich ovládací táhla"
 
-#: ../src/verbs.cpp:1837
+#: ../src/verbs.cpp:1872
 msgid "Create rectangles and squares"
 msgstr "Tvorba obdélníků a čtverců"
 
-#: ../src/verbs.cpp:1839
+#: ../src/verbs.cpp:1874
 msgid "Create circles, ellipses, and arcs"
 msgstr "Tvorba kruhů, elips a oblouků"
 
-#: ../src/verbs.cpp:1841
+#: ../src/verbs.cpp:1876
 msgid "Create stars and polygons"
 msgstr "Tvorba hvězd a polygonů"
 
-#: ../src/verbs.cpp:1843
+#: ../src/verbs.cpp:1878
 msgid "Create spirals"
 msgstr "Tvorba spirál"
 
-#: ../src/verbs.cpp:1845
+#: ../src/verbs.cpp:1880
 msgid "Draw freehand lines"
 msgstr "Kresba od ruky"
 
-#: ../src/verbs.cpp:1847
+#: ../src/verbs.cpp:1882
 msgid "Draw Bezier curves and straight lines"
 msgstr "Kresba Bezierových křivek a přímých čar"
 
-#: ../src/verbs.cpp:1849
+#: ../src/verbs.cpp:1884
 msgid "Draw calligraphic lines"
 msgstr "Kresba kaligrafických linií"
 
-#: ../src/verbs.cpp:1851
+#: ../src/verbs.cpp:1886
 msgid "Create and edit text objects"
 msgstr "Tvorba a úprava textových objektů"
 
-#: ../src/verbs.cpp:1853
+#: ../src/verbs.cpp:1888
 msgid "Create and edit gradients"
 msgstr "Tvorba a úpravy barevných přechodů"
 
-#: ../src/verbs.cpp:1855
+#: ../src/verbs.cpp:1890
 msgid "Zoom in or out"
 msgstr "Přiblížení/oddálení obrázku"
 
-#: ../src/verbs.cpp:1857
+#: ../src/verbs.cpp:1892
 msgid "Pick averaged colors from image"
 msgstr "Výběr průměrných barev z obrázku"
 
 #. Tool prefs
-#: ../src/verbs.cpp:1860
+#: ../src/verbs.cpp:1895
 msgid "Selector Preferences"
 msgstr "Vlastnosti nástroje pro výběr"
 
-#: ../src/verbs.cpp:1861
+#: ../src/verbs.cpp:1896
 msgid "Open Inkscape Preferences for the Selector tool"
 msgstr "Otevře nastavení Inkscape pro Nástroj výběru"
 
-#: ../src/verbs.cpp:1862
+#: ../src/verbs.cpp:1897
 msgid "Node Tool Preferences"
 msgstr "Vlastnosti nástroje editace uzlů"
 
-#: ../src/verbs.cpp:1863
+#: ../src/verbs.cpp:1898
 msgid "Open Inkscape Preferences for the Node tool"
 msgstr "Otevře nastavení Inkscape pro Nástroj úpravy uzlů"
 
-#: ../src/verbs.cpp:1864
+#: ../src/verbs.cpp:1899
 msgid "Rectangle Preferences"
 msgstr "Vlastnosti čtyřúhelníku"
 
-#: ../src/verbs.cpp:1865
+#: ../src/verbs.cpp:1900
 msgid "Open Inkscape Preferences for the Rectangle tool"
 msgstr "Otevře nastavení Inkscape pro Čtyřúhelníky"
 
-#: ../src/verbs.cpp:1866
+#: ../src/verbs.cpp:1901
 msgid "Ellipse Preferences"
 msgstr "Vlastnosti elipsy"
 
-#: ../src/verbs.cpp:1867
+#: ../src/verbs.cpp:1902
 msgid "Open Inkscape Preferences for the Ellipse tool"
 msgstr "Otevře nastavení Inkscape pro Elipsu"
 
-#: ../src/verbs.cpp:1868
+#: ../src/verbs.cpp:1903
 msgid "Star Preferences"
 msgstr "Vlastnosti hvězdy"
 
-#: ../src/verbs.cpp:1869
+#: ../src/verbs.cpp:1904
 msgid "Open Inkscape Preferences for the Star tool"
 msgstr "Otevře nastavení Inkscape pro Hvězdu"
 
-#: ../src/verbs.cpp:1870
+#: ../src/verbs.cpp:1905
 msgid "Spiral Preferences"
 msgstr "Vlastnosti spirály"
 
-#: ../src/verbs.cpp:1871
+#: ../src/verbs.cpp:1906
 msgid "Open Inkscape Preferences for the Spiral tool"
 msgstr "Otevře nastavení Inkscape pro Spirálu"
 
-#: ../src/verbs.cpp:1872
+#: ../src/verbs.cpp:1907
 msgid "Pencil Preferences"
 msgstr "Vlastnosti tužky"
 
-#: ../src/verbs.cpp:1873
+#: ../src/verbs.cpp:1908
 msgid "Open Inkscape Preferences for the Pencil tool"
 msgstr "Otevře nastavení Inkscape pro Tužku"
 
-#: ../src/verbs.cpp:1874
+#: ../src/verbs.cpp:1909
 msgid "Pen Preferences"
 msgstr "Vlastnosti pera"
 
-#: ../src/verbs.cpp:1875
+#: ../src/verbs.cpp:1910
 msgid "Open Inkscape Preferences for the Pen tool"
 msgstr "Otevře vlastnosti pro nástroj Pero"
 
-#: ../src/verbs.cpp:1876
+#: ../src/verbs.cpp:1911
 msgid "Calligraphic Preferences"
 msgstr "Vlastnosti kaligrafické linie"
 
-#: ../src/verbs.cpp:1877
+#: ../src/verbs.cpp:1912
 msgid "Open Inkscape Preferences for the Calligraphy tool"
 msgstr "Otevře nastavení Inkscape pro Kaligrafické pero"
 
-#: ../src/verbs.cpp:1878
+#: ../src/verbs.cpp:1913
 msgid "Text Preferences"
 msgstr "Vlastnosti textu"
 
-#: ../src/verbs.cpp:1879
+#: ../src/verbs.cpp:1914
 msgid "Open Inkscape Preferences for the Text tool"
 msgstr "Otevře nastavení Inkscape pro Text"
 
-#: ../src/verbs.cpp:1880
+#: ../src/verbs.cpp:1915
 msgid "Gradient Preferences"
 msgstr "Vlastnosti Barevného přechodu"
 
-#: ../src/verbs.cpp:1881
+#: ../src/verbs.cpp:1916
 msgid "Open Inkscape Preferences for the Gradient tool"
 msgstr "Otevře Nastavení Inkscape pro nástroj Barevný přechod"
 
-#: ../src/verbs.cpp:1882
+#: ../src/verbs.cpp:1917
 msgid "Zoom Preferences"
 msgstr "Vlastnosti lupy"
 
-#: ../src/verbs.cpp:1883
+#: ../src/verbs.cpp:1918
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr "Otevře nastavení Inkscape pro Lupu"
 
-#: ../src/verbs.cpp:1884
+#: ../src/verbs.cpp:1919
 msgid "Dropper Preferences"
 msgstr "Vlastnosti pipety"
 
-#: ../src/verbs.cpp:1885
+#: ../src/verbs.cpp:1920
 msgid "Open Inkscape Preferences for the Dropper tool"
 msgstr "Otevře nastavení Inkscape pro Pipetu"
 
 #. Zooming
-#: ../src/verbs.cpp:1888
+#: ../src/verbs.cpp:1923
 msgid "Zoom In"
 msgstr "Přiblížit"
 
-#: ../src/verbs.cpp:1888
+#: ../src/verbs.cpp:1923
 msgid "Zoom in"
 msgstr "Přiblížit"
 
-#: ../src/verbs.cpp:1889
+#: ../src/verbs.cpp:1924
 msgid "Zoom Out"
 msgstr "Oddálit"
 
-#: ../src/verbs.cpp:1889
+#: ../src/verbs.cpp:1924
 msgid "Zoom out"
 msgstr "Oddálit"
 
-#: ../src/verbs.cpp:1890
+#: ../src/verbs.cpp:1925
 msgid "_Rulers"
 msgstr "P_ravítka"
 
-#: ../src/verbs.cpp:1890
+#: ../src/verbs.cpp:1925
 msgid "Show or hide the canvas rulers"
 msgstr "Zobrazit/Skrýt pravítka"
 
-#: ../src/verbs.cpp:1891
+#: ../src/verbs.cpp:1926
 msgid "Scroll_bars"
 msgstr "Posuvníky"
 
-#: ../src/verbs.cpp:1891
+#: ../src/verbs.cpp:1926
 msgid "Show or hide the canvas scrollbars"
 msgstr "Zobrazit/Skrýt posuvníky"
 
-#: ../src/verbs.cpp:1892
+#: ../src/verbs.cpp:1927
 msgid "_Grid"
 msgstr "Mřížka"
 
-#: ../src/verbs.cpp:1893
+#: ../src/verbs.cpp:1928
 msgid "G_uides"
 msgstr "Vodítka"
 
-#: ../src/verbs.cpp:1894
+#: ../src/verbs.cpp:1929
 msgid "Nex_t Zoom"
 msgstr "Následující přiblížení"
 
-#: ../src/verbs.cpp:1894
+#: ../src/verbs.cpp:1929
 msgid "Next zoom (from the history of zooms)"
 msgstr "Následující přiblížní(z historie přiblížení)"
 
-#: ../src/verbs.cpp:1896
+#: ../src/verbs.cpp:1931
 msgid "Pre_vious Zoom"
 msgstr "Předchozí přiblížení"
 
-#: ../src/verbs.cpp:1896
+#: ../src/verbs.cpp:1931
 msgid "Previous zoom (from the history of zooms)"
 msgstr "Předchozí přiblížní(z historie přiblížení)"
 
-#: ../src/verbs.cpp:1898
+#: ../src/verbs.cpp:1933
 msgid "Zoom 1:_1"
 msgstr "Nastavit poměr zvětšení na 1:_1"
 
-#: ../src/verbs.cpp:1898
+#: ../src/verbs.cpp:1933
 msgid "Zoom to 1:1"
 msgstr "Nastavit poměr zvětšení na 1:1"
 
-#: ../src/verbs.cpp:1900
+#: ../src/verbs.cpp:1935
 msgid "Zoom 1:_2"
 msgstr "Nastavit poměr zvětšení na 1:_2"
 
-#: ../src/verbs.cpp:1900
+#: ../src/verbs.cpp:1935
 msgid "Zoom to 1:2"
 msgstr "Nastavit poměr zvětšení na 1:2"
 
-#: ../src/verbs.cpp:1902
+#: ../src/verbs.cpp:1937
 msgid "_Zoom 2:1"
 msgstr "Nastavit poměr zvětšení na 2:1"
 
-#: ../src/verbs.cpp:1902
+#: ../src/verbs.cpp:1937
 msgid "Zoom to 2:1"
 msgstr "Nastavit poměr zvětšení na 2:1"
 
-#: ../src/verbs.cpp:1905
+#: ../src/verbs.cpp:1940
 msgid "_Fullscreen"
 msgstr "Celá obrazovka"
 
-#: ../src/verbs.cpp:1905
+#: ../src/verbs.cpp:1940
 msgid "Stretch this document window to full screen"
 msgstr "Přepne velikost okna dokumentu na celou obrazovku"
 
-#: ../src/verbs.cpp:1908
+#: ../src/verbs.cpp:1943
 msgid "Duplic_ate Window"
 msgstr "Duplikov_at okno"
 
-#: ../src/verbs.cpp:1908
+#: ../src/verbs.cpp:1943
 msgid "Open a new window with the same document"
 msgstr "Otevřít nové okno se stávajícím dokumentem"
 
-#: ../src/verbs.cpp:1910
+#: ../src/verbs.cpp:1945
 msgid "_New View Preview"
 msgstr "_Nový náhled"
 
-#: ../src/verbs.cpp:1911
+#: ../src/verbs.cpp:1946
 msgid "New View Preview"
 msgstr "Nový náhled"
 
 #. "view_new_preview"
-#: ../src/verbs.cpp:1912
+#: ../src/verbs.cpp:1947
 msgid "Ico_n Preview"
 msgstr "Náhled _Ikony"
 
-#: ../src/verbs.cpp:1913
+#: ../src/verbs.cpp:1948
 msgid "Open a window to preview items at different icon resolutions"
 msgstr "Otevře okno s náhledem na ikonu v různých rozlišeních"
 
-#: ../src/verbs.cpp:1915
+#: ../src/verbs.cpp:1950
 msgid "Zoom to fit page in window"
 msgstr "Přizpůsobit stránku oknu"
 
-#: ../src/verbs.cpp:1916
+#: ../src/verbs.cpp:1951
 msgid "Page _Width"
 msgstr "Šířka strany"
 
-#: ../src/verbs.cpp:1917
+#: ../src/verbs.cpp:1952
 msgid "Zoom to fit page width in window"
 msgstr "Přizpůsobit šířku stránky oknu"
 
-#: ../src/verbs.cpp:1919
+#: ../src/verbs.cpp:1954
 msgid "Zoom to fit drawing in window"
 msgstr "Přizpůsobit kresbu oknu"
 
-#: ../src/verbs.cpp:1921
+#: ../src/verbs.cpp:1956
 msgid "Zoom to fit selection in window"
 msgstr "Přizpůsobit výběr oknu"
 
 #. Dialogs
-#: ../src/verbs.cpp:1924
+#: ../src/verbs.cpp:1959
 msgid "In_kscape Preferences..."
 msgstr "Nastavení In_kscape..."
 
-#: ../src/verbs.cpp:1925
+#: ../src/verbs.cpp:1960
 msgid "Global Inkscape preferences"
 msgstr "Globální nastavení Inkscape"
 
-#: ../src/verbs.cpp:1926
+#: ../src/verbs.cpp:1961
 msgid "_Document Preferences..."
 msgstr "Vlastnosti _Dokumentu..."
 
-#: ../src/verbs.cpp:1927
+#: ../src/verbs.cpp:1962
 msgid "Preferences saved with the document"
 msgstr "Nastavení uložená s dokumentem"
 
-#: ../src/verbs.cpp:1928
+#: ../src/verbs.cpp:1963
 msgid "_Fill and Stroke..."
 msgstr "Výplň a čáry..."
 
-#: ../src/verbs.cpp:1929
+#: ../src/verbs.cpp:1964
 msgid "Fill and Stroke dialog"
 msgstr "Výplň a obrys"
 
-#: ../src/verbs.cpp:1930
+#: ../src/verbs.cpp:1965
 msgid "S_watches..."
 msgstr "Vzorníky..."
 
-#: ../src/verbs.cpp:1931
+#: ../src/verbs.cpp:1966
 msgid "View color swatches"
 msgstr "Zobrazit vzorníky barev"
 
-#: ../src/verbs.cpp:1932
+#: ../src/verbs.cpp:1967
 msgid "Transfor_m..."
 msgstr "Transformace..."
 
-#: ../src/verbs.cpp:1933
+#: ../src/verbs.cpp:1968
 msgid "Transform dialog"
 msgstr "Transformace"
 
-#: ../src/verbs.cpp:1934
+#: ../src/verbs.cpp:1969
 msgid "_Align and Distribute..."
 msgstr "Z_arovnat a rozmístit..."
 
-#: ../src/verbs.cpp:1935
+#: ../src/verbs.cpp:1970
 msgid "Align and Distribute dialog"
 msgstr "Zarovnání a rozmístění"
 
-#: ../src/verbs.cpp:1936
+#: ../src/verbs.cpp:1971
 msgid "_Text and Font..."
 msgstr "_Text a písmo..."
 
-#: ../src/verbs.cpp:1937
+#: ../src/verbs.cpp:1972
 msgid "Text and Font dialog"
 msgstr "Text a písmo"
 
-#: ../src/verbs.cpp:1938
+#: ../src/verbs.cpp:1973
 msgid "_XML Editor..."
 msgstr "Editor _XML..."
 
-#: ../src/verbs.cpp:1939
+#: ../src/verbs.cpp:1974
 msgid "XML Editor"
 msgstr "Editor XML"
 
-#: ../src/verbs.cpp:1940
+#: ../src/verbs.cpp:1975
 msgid "_Find..."
 msgstr "Hledat..."
 
-#: ../src/verbs.cpp:1941
+#: ../src/verbs.cpp:1976
 msgid "Find objects in document"
 msgstr "Nalézt objekty v dokumentu"
 
-#: ../src/verbs.cpp:1942
+#: ../src/verbs.cpp:1977
 msgid "_Messages..."
 msgstr "Zprávy..."
 
-#: ../src/verbs.cpp:1943
+#: ../src/verbs.cpp:1978
 msgid "View debug messages"
 msgstr "Zobrazit ladící informace"
 
-#: ../src/verbs.cpp:1944
+#: ../src/verbs.cpp:1979
 msgid "S_cripts..."
 msgstr "Skripty..."
 
-#: ../src/verbs.cpp:1945
+#: ../src/verbs.cpp:1980
 msgid "Run scripts"
 msgstr "Spustit skripty"
 
-#: ../src/verbs.cpp:1946
+#: ../src/verbs.cpp:1981
 msgid "Show/Hide D_ialogs"
 msgstr "Zobrazit/Skrýt Dialogová Okna"
 
-#: ../src/verbs.cpp:1947
+#: ../src/verbs.cpp:1982
 msgid "Show or hide all active dialogs"
 msgstr "Ukázat nebo skrát všechny aktivní dialogy"
 
 #. TRANSLATORS: "Tile clones" means: "Create tiled clones"
-#: ../src/verbs.cpp:1949
+#: ../src/verbs.cpp:1984
 msgid "Tile clones..."
 msgstr "Dláždit pomocí klonů..."
 
-#: ../src/verbs.cpp:1950
+#: ../src/verbs.cpp:1985
 msgid "Create and arrange multiple clones of selection"
 msgstr "Vytvořit a rozmístit klony výběru"
 
-#: ../src/verbs.cpp:1951
+#: ../src/verbs.cpp:1986
 msgid "_Object Properties..."
 msgstr "Vlastnosti _objektu..."
 
-#: ../src/verbs.cpp:1952
+#: ../src/verbs.cpp:1987
 msgid "Object Properties dialog"
 msgstr "Dialog Vlastnosti objektu"
 
 #. Help
-#: ../src/verbs.cpp:1955
+#: ../src/verbs.cpp:1990
 msgid "_Keys and Mouse"
 msgstr "_Klávesy a Myš"
 
-#: ../src/verbs.cpp:1956
+#: ../src/verbs.cpp:1991
 msgid "Key and mouse shortcuts reference"
 msgstr "Seznam klávesových zkratek a příkazů myši"
 
-#: ../src/verbs.cpp:1957
+#: ../src/verbs.cpp:1992
 msgid "About E_xtensions"
 msgstr "O Rozšířeních"
 
-#: ../src/verbs.cpp:1958
+#: ../src/verbs.cpp:1993
 msgid "About Extensions..."
 msgstr "O Rozšířeních..."
 
-#: ../src/verbs.cpp:1959
+#: ../src/verbs.cpp:1994
 msgid "About _Memory"
 msgstr "O Pa_měti"
 
-#: ../src/verbs.cpp:1960
+#: ../src/verbs.cpp:1995
 msgid "About Memory..."
 msgstr "O Paměti..."
 
-#: ../src/verbs.cpp:1961
+#: ../src/verbs.cpp:1996
 msgid "_About Inkscape"
 msgstr "O Inksc_ape"
 
 #. "help_about"
 #. Tutorials
-#: ../src/verbs.cpp:1965
+#: ../src/verbs.cpp:2000
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: Základy"
 
-#: ../src/verbs.cpp:1966
+#: ../src/verbs.cpp:2001
 msgid "Getting started with Inkscape"
 msgstr "Začínáme s Inkscape"
 
 #. "tutorial_basic"
-#: ../src/verbs.cpp:1967
+#: ../src/verbs.cpp:2002
 msgid "Inkscape: _Shapes"
 msgstr "Inkscape: Tvary"
 
-#: ../src/verbs.cpp:1968
+#: ../src/verbs.cpp:2003
 msgid "Using shape tools to create and edit shapes"
 msgstr "Používáte nástroje tvaru pro tvorbu a úpravu tvarů"
 
-#: ../src/verbs.cpp:1969
+#: ../src/verbs.cpp:2004
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: Pokročilé"
 
-#: ../src/verbs.cpp:1970
+#: ../src/verbs.cpp:2005
 msgid "Advanced Inkscape topics"
 msgstr "Pokročilá témata"
 
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
-#: ../src/verbs.cpp:1972
+#: ../src/verbs.cpp:2007
 msgid "Inkscape: T_racing"
 msgstr "Inkscape: Trasování"
 
-#: ../src/verbs.cpp:1973
+#: ../src/verbs.cpp:2008
 msgid "Using bitmap tracing"
 msgstr "Používám trasování bitové mapy"
 
 #. "tutorial_tracing"
-#: ../src/verbs.cpp:1974
+#: ../src/verbs.cpp:2009
 msgid "Inkscape: _Calligraphy"
 msgstr "Inkscape: Kaligrafie"
 
-#: ../src/verbs.cpp:1975
+#: ../src/verbs.cpp:2010
 msgid "Using the Calligraphy pen tool"
 msgstr "Používáte Kaligrafické pero"
 
-#: ../src/verbs.cpp:1976
+#: ../src/verbs.cpp:2011
 msgid "_Elements of Design"
 msgstr "Elements of Design"
 
-#: ../src/verbs.cpp:1977
+#: ../src/verbs.cpp:2012
 msgid "Principles of design in the tutorial form"
 msgstr "Principy designu v podobě tutorialu"
 
 #. "tutorial_design"
-#: ../src/verbs.cpp:1978
+#: ../src/verbs.cpp:2013
 msgid "_Tips and Tricks"
 msgstr "_Tipy a triky"
 
-#: ../src/verbs.cpp:1979
+#: ../src/verbs.cpp:2014
 msgid "Miscellaneous tips and tricks"
 msgstr "Různé tipy a triky"
 
 #. "tutorial_tips"
 #. Effect
-#: ../src/verbs.cpp:1982
+#: ../src/verbs.cpp:2017
 msgid "Previous Effect"
 msgstr "Předchozí efekt"
 
-#: ../src/verbs.cpp:1983
+#: ../src/verbs.cpp:2018
 msgid "Repeat the last effect with the same settings"
 msgstr "Opakovat poslední efekt se stejným nastavením"
 
 #. "tutorial_tips"
-#: ../src/verbs.cpp:1984
+#: ../src/verbs.cpp:2019
 msgid "Previous Effect..."
 msgstr "Předchozí efekt..."
 
-#: ../src/verbs.cpp:1985
+#: ../src/verbs.cpp:2020
 msgid "Repeat the last effect with new settings"
 msgstr "Opakovat poslední efekt s novým nastavením"
 
@@ -7162,6 +7328,10 @@ msgstr "Zamkne nebo odemkne aktuální vrstvu"
 #: ../src/widgets/layer-selector.cpp:142
 msgid "Current layer"
 msgstr "Aktuální vrstva"
+
+#: ../src/widgets/layer-selector.cpp:550
+msgid "(root)"
+msgstr ""
 
 #: ../src/widgets/paint-selector.cpp:183 ../src/widgets/paint-selector.cpp:562
 msgid "No paint"
@@ -7381,6 +7551,39 @@ msgstr "Atribut"
 msgid "Value"
 msgstr "Hodnota"
 
+#~ msgid "H"
+#~ msgstr "V"
+
+#~ msgid "S"
+#~ msgstr "_S"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "No of Rows"
+#~ msgstr "Žádné řádky"
+
+#~ msgid "Automatically scale Rows to fit selected objects."
+#~ msgstr "Automaticky změnit měřítko řad aby vyplnily vybrané objekty"
+
+#~ msgid "Automatically scale Columns to fit selected objects."
+#~ msgstr "Automaticky změnit měřítko Sloupců aby vyplnily vybrané objekty."
+
+#~ msgid "Go to root"
+#~ msgstr "Jdi na \"root\""
+
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgid "W"
+#~ msgstr "Š"
+
+#~ msgid "Unicode: %c%c%c%c"
+#~ msgstr "Unicode: %c%c%c%c"
+
 #~ msgid "   "
 #~ msgstr "   "
 
@@ -7493,9 +7696,6 @@ msgstr "Hodnota"
 
 #~ msgid "Transformation"
 #~ msgstr "Transformace"
-
-#~ msgid "Open..."
-#~ msgstr "Otevřít..."
 
 #~ msgid "_Export..."
 #~ msgstr "_Export..."
@@ -7846,10 +8046,6 @@ msgstr "Hodnota"
 #, fuzzy
 #~ msgid "Text and Font dialog (Shift+Ctrl+T)"
 #~ msgstr "Text a písmo"
-
-#, fuzzy
-#~ msgid "Select tool"
-#~ msgstr "Výběr"
 
 #, fuzzy
 #~ msgid "Node tool"
