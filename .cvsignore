@@ -28,3 +28,7 @@ toru
 inkscape-*.tar.gz
 builddir
 Info.plist
+compile
+depcomp
+install-sh
+missing
