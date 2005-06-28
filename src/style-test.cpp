@@ -341,7 +341,8 @@ length_val(char const prop[], char const *const dummy_vals[])
     assert(dummy_vals == NULL);
     number_val(prop, 0., 6., 1e-7);
     unitful_length_val(prop, dummy_vals);
-    /* todo: exponential notation */
+    /* todo: exponential notation.  See http://www.w3.org/TR/SVG11/types.html#DataTypeNumber for
+       where exponential notation is/isn't allowed. */
 }
 
 static void
