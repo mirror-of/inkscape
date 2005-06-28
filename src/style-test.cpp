@@ -324,12 +324,23 @@ font_family_val(char const prop[], char const *const dummy_vals[])
     /* todo: unrecognized fonts, comma-separated lists. */
 }
 
+/**
+ * "unitful length" is used for font-size, which we always write with an explicit unit (typically
+ * `px') for better CSS interoperability.
+ */
+static void
+unitful_length_val(char const prop[], char const *const dummy_vals[])
+{
+    /* todo */
+    assert(dummy_vals == NULL);
+}
+
 static void
 length_val(char const prop[], char const *const dummy_vals[])
 {
     assert(dummy_vals == NULL);
     number_val(prop, 0., 6., 1e-7);
-    /* todo: units */
+    unitful_length_val(prop, dummy_vals);
     /* todo: exponential notation */
 }
 
@@ -383,7 +394,7 @@ test_style()
         {"fill-rule", "nonzero", "nonzero", enum_val, fill_rule_vals, true},
         {"font-family", "Bitstream Vera Sans", "Bitstream Vera Sans", font_family_val, NULL, true},
         // initial value depends on user agent
-        {"font-size", "medium", "medium", length_val, NULL, true},
+        {"font-size", "medium", "medium", unitful_length_val, NULL, true},
         // TODO: abs, rel, pcnt.
         {"font-stretch", "normal", "normal", enum_val, font_stretch_vals, true},
         {"font-style", "normal", "normal", enum_val, font_style_vals, true},
