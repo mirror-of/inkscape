@@ -4,10 +4,10 @@
 
 # Explicit so that it's the default rule.
 all:
-	cd ../.. && $(MAKE) ui/widget/all
+	cd .. && $(MAKE) application/all
 
 clean %.a %.o:
-	cd ../.. && $(MAKE) ui/widget/$@
+	cd .. && $(MAKE) application/$@
 
 .PHONY: all clean
 

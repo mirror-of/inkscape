@@ -4,10 +4,10 @@
 
 # Explicit so that it's the default rule.
 all:
-	cd .. && $(MAKE) extension/all
+	cd .. && $(MAKE) ui/all
 
 clean %.a %.o:
-	cd .. && $(MAKE) extension/$@
+	cd .. && $(MAKE) ui/$@
 
 .PHONY: all clean
 

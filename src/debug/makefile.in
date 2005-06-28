@@ -4,10 +4,10 @@
 
 # Explicit so that it's the default rule.
 all:
-	cd .. && $(MAKE) util/all
+	cd .. && $(MAKE) debug/all
 
 clean %.a %.o:
-	cd .. && $(MAKE) util/$@
+	cd .. && $(MAKE) debug/$@
 
 .PHONY: all clean
 
