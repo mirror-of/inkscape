@@ -90,7 +90,8 @@ EXTRA_DIST = \
 	debian/inkscape.menu	\
 	debian/inkscape.xpm	\
 	debian/mime	\
-	debian/rules
+	debian/rules	\
+	packaging/autopackage/default.apspec.in
 
 # Note: it isn't clear that debian/* belongs in the tar file:
 # tarfile users should be able to use the official Debian packages.
