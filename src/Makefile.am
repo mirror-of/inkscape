@@ -102,16 +102,20 @@ EXTRA_DIST =	\
 	sp-skeleton.cpp sp-skeleton.h	\
 	algorithms/makefile.in	\
 	application/makefile.in	\
+	debug/makefile.in	\
 	dialogs/makefile.in	\
 	display/makefile.in	\
-	extension/makefile.in	\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\
+	extension/makefile.in	\
+	extension/plugin/makefile.in	\
+	extension/script/makefile.in	\
 	helper/makefile.in	\
 	inkjar/makefile.in	\
 	io/makefile.in  	\
 	io/crystalegg.xml  	\
 	io/doc2html.xsl  	\
+	libcroco/makefile.in	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	livarot/makefile.in	\
