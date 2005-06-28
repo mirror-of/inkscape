@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-27 21:43+0200\n"
-"PO-Revision-Date: 2005-06-17 00:37+0200\n"
+"POT-Creation-Date: 2005-06-26 00:09+1000\n"
+"PO-Revision-Date: 2005-06-28 01:31+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -393,7 +393,7 @@ msgstr "Maßstab"
 
 #: ../src/dialogs/clonetiler.cpp:1774
 msgid "<b>Scale X:</b>"
-msgstr "<b>X Skalierung:</b>"
+msgstr "<b>X-Skalierung:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1782
 #, no-c-format
@@ -411,7 +411,7 @@ msgstr "Horizontale Skalierung um diesen Prozentsatz zufällig verändern"
 
 #: ../src/dialogs/clonetiler.cpp:1805
 msgid "<b>Scale Y:</b>"
-msgstr "<b>Y Skalierung:</b>"
+msgstr "<b>Y-Skalierung:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1813
 #, no-c-format
@@ -429,15 +429,15 @@ msgstr "Vertikale Skalierung um diesen Prozentsatz zufällig verändern"
 
 #: ../src/dialogs/clonetiler.cpp:1842
 msgid "Alternate the sign of scales for each row"
-msgstr "Vorzeichen des Transparenzfaktors bei jeder Reihe umkehren"
+msgstr "Vorzeichen der Verschiebungen für jede Reihe umkehren"
 
 #: ../src/dialogs/clonetiler.cpp:1847
 msgid "Alternate the sign of scales for each column"
-msgstr "Vorzeichenumkehrung der Verschiebungen für jede Spalte"
+msgstr "Vorzeichen der Verschiebungen für jede Spalte umkehren"
 
 #: ../src/dialogs/clonetiler.cpp:1856
 msgid "_Rotation"
-msgstr "Rotation"
+msgstr "_Rotation"
 
 #: ../src/dialogs/clonetiler.cpp:1864
 msgid "<b>Angle:</b>"
@@ -467,7 +467,7 @@ msgstr "Vorzeichenumkehrung des Rotationsfaktors bei jeder Spalte"
 
 #: ../src/dialogs/clonetiler.cpp:1914
 msgid "_Opacity"
-msgstr "Deckkraft"
+msgstr "_Deckkraft"
 
 #: ../src/dialogs/clonetiler.cpp:1922
 msgid "<b>Fade out:</b>"
@@ -1894,19 +1894,19 @@ msgstr "Bereich exportieren"
 
 #: ../src/dialogs/export.cpp:302
 msgid "_x0:"
-msgstr "x0:"
+msgstr "_x0:"
 
 #: ../src/dialogs/export.cpp:307
 msgid "x_1:"
-msgstr "x1:"
+msgstr "x_1:"
 
 #: ../src/dialogs/export.cpp:318
 msgid "_y0:"
-msgstr "y0:"
+msgstr "_y0:"
 
 #: ../src/dialogs/export.cpp:323
 msgid "y_1:"
-msgstr "y1:"
+msgstr "y_1:"
 
 #: ../src/dialogs/export.cpp:409
 msgid "Bitmap size"
@@ -1914,7 +1914,7 @@ msgstr "Bitmap-Größe"
 
 #: ../src/dialogs/export.cpp:419
 msgid "_Width:"
-msgstr "Breite:"
+msgstr "_Breite:"
 
 #: ../src/dialogs/export.cpp:419 ../src/dialogs/export.cpp:434
 msgid "pixels at"
@@ -1926,15 +1926,15 @@ msgstr "DPI"
 
 #: ../src/dialogs/export.cpp:451
 msgid "_Filename"
-msgstr "Dateiname"
+msgstr "_Dateiname"
 
 #: ../src/dialogs/export.cpp:515
 msgid "_Browse..."
-msgstr "Auswählen..."
+msgstr "_Auswählen..."
 
 #: ../src/dialogs/export.cpp:542
 msgid " <b>_Export</b> "
-msgstr " <b>Exportieren</b> "
+msgstr " <b>_Exportieren</b> "
 
 #: ../src/dialogs/export.cpp:544
 msgid "Export the bitmap file with these settings"
@@ -1951,7 +1951,7 @@ msgstr "Der zum Exportieren gewählte Bereich ist ungültig"
 #: ../src/dialogs/export.cpp:984
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
-msgstr "Verzeichnis %s existiert nicht oder ist kein Verzeichnis.\n"
+msgstr "Das Verzeichnis %s existiert nicht oder ist kein Verzeichnis.\n"
 
 #: ../src/dialogs/export.cpp:1000
 msgid "Export in progress"
@@ -1965,7 +1965,7 @@ msgstr "Exportiere %s (%d × %d)"
 #: ../src/dialogs/export.cpp:1033
 #, c-format
 msgid "Could not export to filename %s.\n"
-msgstr "Could not export to filename %s.\n"
+msgstr "Konnte nicht als Datei %s exportieren.\n"
 
 #: ../src/dialogs/export.cpp:1139
 msgid "Select a filename for exporting"
@@ -2253,7 +2253,7 @@ msgstr "Verbergen"
 
 #: ../src/dialogs/item-properties.cpp:242
 msgid "Check to make the object invisible"
-msgstr "Aktivieren macht das Objekt sichtbar"
+msgstr "Aktivieren macht das Objekt unsichtbar"
 
 #. Lock
 #. TRANSLATORS: "Lock" is a verb here
@@ -2381,7 +2381,7 @@ msgstr "Linienstil"
 
 #: ../src/dialogs/object-properties.cpp:183
 msgid "Master _opacity"
-msgstr "Transparenz (Alpha)"
+msgstr "Gesamt-Transparenz"
 
 #: ../src/dialogs/rdf.cpp:229
 msgid "Name by which this document is formally known."
@@ -3428,7 +3428,7 @@ msgstr "Pixel"
 
 #: ../src/helper/units.cpp:41
 msgid "Px"
-msgstr "px"
+msgstr "Px"
 
 #. You can add new elements from this point forward
 #: ../src/helper/units.cpp:43
@@ -4608,17 +4608,15 @@ msgstr " in Ebene <b><i>%s</i></b>"
 
 #: ../src/selection-describer.cpp:66
 msgid "Use <b>Shift+D</b> to look up original"
-msgstr "<b>Umschalt+D</b> zum finden des Originals"
+msgstr "<b>Umschalt+D</b> zum Finden des Originals"
 
 #: ../src/selection-describer.cpp:70
-#, fuzzy
 msgid "Use <b>Shift+D</b> to look up path"
-msgstr "<b>Umschalt+D</b> zum finden des Originals"
+msgstr "<b>Umschalt+D</b> zum Finden des Pfades"
 
 #: ../src/selection-describer.cpp:74
-#, fuzzy
 msgid "Use <b>Shift+D</b> to look up frame"
-msgstr "<b>Umschalt+D</b> zum finden des Originals"
+msgstr "<b>Umschalt+D</b> zum Finden des Rahmens"
 
 #: ../src/selection-describer.cpp:84
 #, c-format
@@ -4790,9 +4788,8 @@ msgid "Object"
 msgstr "Objekt"
 
 #: ../src/sp-line.cpp:202
-#, fuzzy
 msgid "<b>Line</b>"
-msgstr "<b>L:</b>"
+msgstr "<b>Linie</b>"
 
 #. TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
 #: ../src/sp-offset.cpp:399
@@ -5220,7 +5217,7 @@ msgstr "Nicht abgerundet"
 
 #: ../src/toolbox.cpp:1493
 msgid "Make corners sharp"
-msgstr "Ecken scharf zeichnen"
+msgstr "Spitze Ecken"
 
 #: ../src/toolbox.cpp:1698
 msgid "Turns:"
@@ -7364,7 +7361,7 @@ msgstr "Letzten Effekt mit anderen Einstellungen wiederholen"
 
 #: ../src/widgets/dash-selector.cpp:106
 msgid "Dash pattern"
-msgstr "Strichmuster"
+msgstr "Muster der Strichlinien"
 
 #: ../src/widgets/dash-selector.cpp:121
 msgid "Pattern offset"
@@ -7479,7 +7476,7 @@ msgstr "Sichbarkeit der aktuellen Ebene umschalten"
 
 #: ../src/widgets/layer-selector.cpp:139
 msgid "Lock or unlock current layer"
-msgstr "Sperren o. Entsperren der aktuellen Ebene"
+msgstr "Sperren oder Entsperren der aktuellen Ebene"
 
 #: ../src/widgets/layer-selector.cpp:142
 msgid "Current layer"
@@ -7626,7 +7623,7 @@ msgstr "_A"
 #: ../src/widgets/sp-color-wheel-selector.cpp:152
 #: ../src/widgets/sp-color-wheel-selector.cpp:164
 msgid "Alpha (opacity)"
-msgstr "Alpha (Durchsichtigkeit)"
+msgstr "Alpha (Transparenz)"
 
 #: ../src/widgets/sp-color-scales.cpp:424
 msgid "_H"
@@ -7653,7 +7650,7 @@ msgstr "_L"
 #: ../src/widgets/sp-color-scales.cpp:431
 #: ../src/widgets/sp-color-scales.cpp:432
 msgid "Lightness"
-msgstr "Helligkeitswert"
+msgstr "Helligkeit"
 
 #: ../src/widgets/sp-color-scales.cpp:452
 msgid "_C"
@@ -7662,7 +7659,7 @@ msgstr "_C"
 #: ../src/widgets/sp-color-scales.cpp:453
 #: ../src/widgets/sp-color-scales.cpp:454
 msgid "Cyan"
-msgstr "Cyan"
+msgstr "Zyan"
 
 #: ../src/widgets/sp-color-scales.cpp:455
 msgid "_M"
