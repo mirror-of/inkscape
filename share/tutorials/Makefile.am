@@ -2,6 +2,7 @@
 tutorialdir = $(datadir)/inkscape/tutorials
 
 tutorial_DATA = \
+    README \
     tutorial-elements.svg \
     tutorial-elements.fr.svg \
     tutorial-elements.es.svg \
