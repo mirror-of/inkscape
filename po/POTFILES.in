@@ -36,7 +36,6 @@ src/dialogs/tiledialog.cpp
 src/dialogs/transformation.cpp
 src/dialogs/xml-tree.cpp
 src/dir-util.cpp
-src/display/bezier-utils-test.cpp
 src/display/bezier-utils.cpp
 src/display/canvas-arena.cpp
 src/display/canvas-bpath.cpp
@@ -58,17 +57,12 @@ src/display/sodipodi-ctrlrect.cpp
 src/display/sp-canvas-util.cpp
 src/display/sp-canvas.cpp
 src/display/sp-ctrlline.cpp
-src/display/testnr.cpp
 src/document-undo.cpp
 src/document.cpp
 src/draw-anchor.cpp
 src/draw-context.cpp
 src/dropper-context.cpp
 src/dyna-draw-context.cpp
-src/ecma/EcmaBinding.cpp
-src/ecma/SVGViewer.cpp
-src/ecma/ecmatest.cpp
-src/ecma/svgview.cpp
 src/event-context.cpp
 src/extension/db.cpp
 src/extension/dependency.cpp
@@ -87,7 +81,6 @@ src/extension/internal/svg.cpp
 src/extension/internal/win32.cpp
 src/extension/prefdialog.cpp
 src/extension/system.cpp
-src/extract-uri-test.cpp
 src/extract-uri.cpp
 src/file.cpp
 src/fixes.cpp
@@ -102,7 +95,6 @@ src/helper/gnome-utils.cpp
 src/helper/png-write.cpp
 src/helper/stock-items.cpp
 src/helper/unit-menu.cpp
-src/helper/units-test.cpp
 src/helper/units.cpp
 src/helper/window.cpp
 src/inkjar/jar.cpp
@@ -117,7 +109,6 @@ src/libnr/nr-compose-transform.cpp
 src/libnr/nr-compose.cpp
 src/libnr/nr-gradient.cpp
 src/libnr/nr-matrix-fns.cpp
-src/libnr/nr-matrix-test.cpp
 src/libnr/nr-matrix.cpp
 src/libnr/nr-object.cpp
 src/libnr/nr-path.cpp
@@ -125,21 +116,14 @@ src/libnr/nr-pixblock-line.cpp
 src/libnr/nr-pixblock-pattern.cpp
 src/libnr/nr-pixblock-pixel.cpp
 src/libnr/nr-pixblock.cpp
-src/libnr/nr-point-fns-test.cpp
 src/libnr/nr-point-fns.cpp
 src/libnr/nr-rect-l.cpp
 src/libnr/nr-rect.cpp
-src/libnr/nr-rotate-fns-test.cpp
 src/libnr/nr-rotate-fns.cpp
-src/libnr/nr-rotate-test.cpp
-src/libnr/nr-scale-test.cpp
 src/libnr/nr-svp-render.cpp
 src/libnr/nr-svp.cpp
-src/libnr/nr-translate-test.cpp
-src/libnr/nr-types-test.cpp
 src/libnr/nr-types.cpp
 src/libnr/nr-values.cpp
-src/libnr/testnr.cpp
 src/libnrtype/FontFactory.cpp
 src/libnrtype/FontInstance.cpp
 src/libnrtype/RasterFont.cpp
@@ -166,7 +150,6 @@ src/main.cpp
 src/marker-status.cpp
 src/message-context.cpp
 src/message-stack.cpp
-src/mod360-test.cpp
 src/mod360.cpp
 src/node-context.cpp
 src/nodepath.cpp
@@ -192,7 +175,6 @@ src/seltrans.cpp
 src/shortcuts.cpp
 src/slideshow.cpp
 src/sp-anchor.cpp
-src/sp-animation.cpp
 src/sp-clippath.cpp
 src/sp-cursor.cpp
 src/sp-defs.cpp
@@ -297,7 +279,6 @@ src/widgets/sp-xmlview-tree.cpp
 src/widgets/spinbutton-events.cpp
 src/widgets/spw-utilities.cpp
 src/winmain.cpp
-src/xml/repr-action-test.cpp
 src/xml/repr-css.cpp
 src/xml/repr-io.cpp
 src/xml/repr-util.cpp

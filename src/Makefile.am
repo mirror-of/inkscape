@@ -104,6 +104,7 @@ EXTRA_DIST =	\
 	application/makefile.in	\
 	debug/makefile.in	\
 	dialogs/makefile.in	\
+	dialogs/filedialog-win32.cpp \
 	display/makefile.in	\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\

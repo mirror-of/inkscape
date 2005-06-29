@@ -119,9 +119,8 @@ endif
 ##########################################################################
 
 
-
 ###### VERSION NUMBER
-VERSION_NR = 0.42
+VERSION_NR = 0.41+0.42pre0
 
 # VERSION_NR = 0.42+cvs
 # VERSION = \"$(VERSION_NR)-${DTG}\"
