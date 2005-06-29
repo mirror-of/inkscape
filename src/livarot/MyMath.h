@@ -62,10 +62,6 @@ typedef struct mat2d
     (d).y =  (a).x;\
 }
 
-#define Dot(a,b) ((a).x*(b).y - (a).y*(b).x)
-
-#define Cross(a,b) ((a).x*(b).x + (a).y*(b).y)
-
 #define Normalize(a) { \
     double _le = (a).x*(a).x+(a).y*(a).y; \
     if ( _le > 0.0001 ) { \
