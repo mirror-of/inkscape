@@ -8,6 +8,7 @@
 #endif
 #include <string.h>
 
+#include "libnr/nr-matrix-ops.h"
 #include "xml/repr.h"
 //#include "svg/svg.h"
 
@@ -139,14 +140,9 @@ sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-
-				NRMatrix chitransform; // FIXME!!! we need to make everything NR::Matrix
-				(chi->transform).copyto (&chitransform);
-
-				nr_matrix_multiply (&cctx.i2doc, &chitransform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chitransform, &ictx->i2vp);
+				SPItem const &chi = *SP_ITEM(child);
+				cctx.i2doc = chi.transform * ictx->i2doc;
+				cctx.i2vp = chi.transform * ictx->i2vp;
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -322,14 +318,9 @@ sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-
-				NRMatrix chitransform; // FIXME!!! we need to make everything NR::Matrix
-				(chi->transform).copyto (&chitransform);
-
-				nr_matrix_multiply (&cctx.i2doc, &chitransform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chitransform, &ictx->i2vp);
+				SPItem const &chi = *SP_ITEM(child);
+				cctx.i2doc = chi.transform * ictx->i2doc;
+				cctx.i2vp = chi.transform * ictx->i2vp;
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);
@@ -498,14 +489,9 @@ sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			if (SP_IS_ITEM (child)) {
-				SPItem *chi;
-				chi = SP_ITEM (child);
-
-				NRMatrix chitransform; // FIXME!!! we need to make everything NR::Matrix
-				(chi->transform).copyto (&chitransform);
-
-				nr_matrix_multiply (&cctx.i2doc, &chitransform, &ictx->i2doc);
-				nr_matrix_multiply (&cctx.i2vp, &chitransform, &ictx->i2vp);
+				SPItem const &chi = *SP_ITEM(child);
+				cctx.i2doc = chi.transform * ictx->i2doc;
+				cctx.i2vp = chi.transform * ictx->i2vp;
 				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
 				child->updateDisplay(ctx, flags);

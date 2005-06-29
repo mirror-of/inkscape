@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-scale-matrix-ops.h"
 #include "libnr/nr-rotate-fns.h"
 #include "svg/svg.h"
@@ -329,8 +330,8 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	/* Copy parent context */
 	rctx.ctx = *ctx;
 	/* Initialize tranformations */
-	nr_matrix_set_identity (&rctx.i2doc);
-	nr_matrix_set_identity (&rctx.i2vp);
+	rctx.i2doc = NR::identity();
+	rctx.i2vp = NR::identity();
 	/* Set up viewport */
 	rctx.vp.x0 = 0.0;
 	rctx.vp.y0 = 0.0;
@@ -421,7 +422,7 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	nr_matrix_set_translate (&q, -marker->refX.computed, -marker->refY.computed);
 	nr_matrix_multiply (&marker->c2p, &q, &marker->c2p);
 
-	nr_matrix_multiply (&rctx.i2doc, &marker->c2p, &rctx.i2doc);
+	rctx.i2doc = marker->c2p * rctx.i2doc;
 
 	/* If viewBox is set reinitialize child viewport */
 	/* Otherwise it already correct */
@@ -430,7 +431,7 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 		rctx.vp.y0 = marker->viewBox.y0;
 		rctx.vp.x1 = marker->viewBox.x1;
 		rctx.vp.y1 = marker->viewBox.y1;
-		nr_matrix_set_identity (&rctx.i2vp);
+		rctx.i2vp = NR::identity();
 	}
 
 	/* And invoke parent method */

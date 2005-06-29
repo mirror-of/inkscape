@@ -77,11 +77,11 @@ class SPItemCtx;
 struct SPItemCtx {
 	SPCtx ctx;
 	/* Item to document transformation */
-	NRMatrix i2doc;
+	NR::Matrix i2doc;
 	/* Viewport size */
 	NRRect vp;
 	/* Item to viewport transformation */
-	NRMatrix i2vp;
+	NR::Matrix i2vp;
 };
 
 /** Abstract base class for all visible shapes. */

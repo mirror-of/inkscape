@@ -227,13 +227,10 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		SPStyle *style;
 		style = SP_OBJECT_STYLE (object);
 		if (style->stroke_width.unit == SP_CSS_UNIT_PERCENT) {
-			SPItemCtx *ictx;
-			SPItemView *v;
-			double aw;
-			ictx = (SPItemCtx *) ctx;
-			aw = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
+			SPItemCtx *ictx = (SPItemCtx *) ctx;
+			double const aw = 1.0 / NR::expansion(ictx->i2vp);
 			style->stroke_width.computed = style->stroke_width.value * aw;
-			for (v = ((SPItem *) (shape))->display; v != NULL; v = v->next) {
+			for (SPItemView *v = ((SPItem *) (shape))->display; v != NULL; v = v->next) {
 				nr_arena_shape_set_style ((NRArenaShape *) v->arenaitem, style);
 			}
 		}

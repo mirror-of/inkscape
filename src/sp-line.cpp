@@ -156,7 +156,7 @@ sp_line_update (SPObject *object, SPCtx *ctx, guint flags)
 		SPLine *line = SP_LINE (object);
 
  		SPStyle const *style = object->style;
- 		double const d = 1.0 / NR_MATRIX_DF_EXPANSION(&((SPItemCtx const *) ctx)->i2vp);
+ 		double const d = 1.0 / NR::expansion(((SPItemCtx const *) ctx)->i2vp);
 		double const em = style->font_size.computed;
 		double const ex = em * 0.5;  // fixme: get from pango or libnrtype.
  		sp_svg_length_update(&line->x1, em, ex, d);

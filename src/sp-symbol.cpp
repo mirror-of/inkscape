@@ -342,7 +342,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 			nr_matrix_multiply (&symbol->c2p, &q, &symbol->c2p);
 		}
 
-		nr_matrix_multiply (&rctx.i2doc, &symbol->c2p, &rctx.i2doc);
+		rctx.i2doc = symbol->c2p * rctx.i2doc;
 
 		/* If viewBox is set initialize child viewport */
 		/* Otherwise <use> has set it up already */
@@ -351,7 +351,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 			rctx.vp.y0 = symbol->viewBox.y0;
 			rctx.vp.x1 = symbol->viewBox.x1;
 			rctx.vp.y1 = symbol->viewBox.y1;
-			nr_matrix_set_identity (&rctx.i2vp);
+			rctx.i2vp = NR::identity();
 		}
 
 		/* And invoke parent method */

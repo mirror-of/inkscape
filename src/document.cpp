@@ -598,13 +598,13 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 		if (doc->root->uflags) {
 			SPItemCtx ctx;
 			ctx.ctx.flags = 0;
-			nr_matrix_set_identity (&ctx.i2doc);
+			ctx.i2doc = NR::identity();
 			/* Set up viewport in case svg has it defined as percentages */
 			ctx.vp.x0 = 0.0;
 			ctx.vp.y0 = 0.0;
 			ctx.vp.x1 = 210 * PX_PER_MM;
 			ctx.vp.y1 = 297 * PX_PER_MM;
-			nr_matrix_set_identity (&ctx.i2vp);
+			ctx.i2vp = NR::identity();
 			doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		}
 		doc->_emitModified();
@@ -633,13 +633,13 @@ sp_document_idle_handler (gpointer data)
 	if (doc->root->uflags) {
 		SPItemCtx ctx;
 		ctx.ctx.flags = 0;
-		nr_matrix_set_identity (&ctx.i2doc);
+		ctx.i2doc = NR::identity();
 		/* Set up viewport in case svg has it defined as percentages */
 		ctx.vp.x0 = 0.0;
 		ctx.vp.y0 = 0.0;
 		ctx.vp.x1 = 21.0 * PX_PER_CM;
 		ctx.vp.y1 = 29.7 * PX_PER_CM;
-		nr_matrix_set_identity (&ctx.i2vp);
+		ctx.i2vp = NR::identity();
 
 		gboolean saved = sp_document_get_undo_sensitive(doc);
 		sp_document_set_undo_sensitive (doc, FALSE);

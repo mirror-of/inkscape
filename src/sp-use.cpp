@@ -584,7 +584,7 @@ sp_use_update(SPObject *object, SPCtx *ctx, unsigned flags)
     cctx.vp.y0 = 0.0;
     cctx.vp.x1 = use->width.computed;
     cctx.vp.y1 = use->height.computed;
-    nr_matrix_set_identity(&cctx.i2vp);
+    cctx.i2vp = NR::identity();
     flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
     if (use->child) {

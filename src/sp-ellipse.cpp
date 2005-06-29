@@ -23,6 +23,7 @@
 
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-point-matrix-ops.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
@@ -141,7 +142,7 @@ sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags)
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 		SPGenericEllipse *ellipse = (SPGenericEllipse *) object;
 		SPStyle const *style = object->style;
-		double const d = 1.0 / NR_MATRIX_DF_EXPANSION(&((SPItemCtx const *) ctx)->i2vp);
+		double const d = 1.0 / NR::expansion(((SPItemCtx const *) ctx)->i2vp);
 		double const em = style->font_size.computed;
 		double const ex = em * 0.5; // fixme: get from pango or libnrtype
 		sp_svg_length_update(&ellipse->cx, em, ex, d);

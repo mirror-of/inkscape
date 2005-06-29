@@ -200,7 +200,7 @@ sp_rect_update(SPObject *object, SPCtx *ctx, guint flags)
         SPRect *rect = (SPRect *) object;
         SPStyle *style = object->style;
         SPItemCtx const *ictx = (SPItemCtx const *) ctx;
-        double const d = NR_MATRIX_DF_EXPANSION(&ictx->i2vp);
+        double const d = NR::expansion(ictx->i2vp);
         double const w = (ictx->vp.x1 - ictx->vp.x0) / d;
         double const h = (ictx->vp.y1 - ictx->vp.y0) / d;
         double const em = style->font_size.computed;

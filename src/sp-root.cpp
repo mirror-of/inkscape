@@ -537,7 +537,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		root->c2p = NR::translate(-viewBox_min) * ( new_length / viewBox_length ) * NR::translate(x, y) * root->c2p;
 	}
 
-	rctx.i2doc = root->c2p * NR::Matrix(&rctx.i2doc);
+	rctx.i2doc = root->c2p * rctx.i2doc;
 
 	/* Initialize child viewport */
 	if (root->viewBox_set) {
@@ -558,7 +558,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		rctx.vp.y1 = root->height.computed;
 	}
 
-	nr_matrix_set_identity (&rctx.i2vp);
+	rctx.i2vp = NR::identity();
 
 	/* And invoke parent method */
 	if (((SPObjectClass *) (parent_class))->update)
