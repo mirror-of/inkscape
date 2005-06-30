@@ -12,17 +12,6 @@
 #include "utest/utest.h"
 #include "xml/repr.h"
 
-static NRRect copy_of(NR::Rect const &src)
-{
-    NRRect dest;
-    using NR::X; using NR::Y;
-    dest.x0 = src.min()[X];
-    dest.x1 = src.max()[X];
-    dest.y0 = src.min()[Y];
-    dest.y1 = src.max()[Y];
-    return dest;
-}
-
 static bool
 test_gradient()
 {
@@ -76,22 +65,13 @@ test_gradient()
                                  4, 6);
         gr->gradientTransform = grXform;
         NR::Rect const unit_rect(NR::Point(0, 0), NR::Point(1, 1));
-        NRRect const unit_nrrect(copy_of(unit_rect));
         {
-            NRMatrix nr_g2d, nr_gs2d;
-            sp_gradient_get_g2d_matrix_f(gr, &NR_MATRIX_IDENTITY, &unit_nrrect, &nr_g2d);
-            sp_gradient_get_gs2d_matrix_f(gr, &NR_MATRIX_IDENTITY, &unit_nrrect, &nr_gs2d);
             NR::Matrix const g2d(sp_gradient_get_g2d_matrix(gr, NR::identity(), unit_rect));
             NR::Matrix const gs2d(sp_gradient_get_gs2d_matrix(gr, NR::identity(), unit_rect));
-            UTEST_ASSERT(g2d == NR::Matrix(nr_g2d));
-            UTEST_ASSERT(nr_matrix_test_identity(&nr_g2d, 1e-14));
             UTEST_ASSERT(g2d == NR::identity());
-            UTEST_ASSERT(gs2d == NR::Matrix(nr_gs2d));
             UTEST_ASSERT(NR::matrix_equalp(gs2d, gr->gradientTransform * g2d, 1e-12));
 
             sp_gradient_set_gs2d_matrix(gr, NR::identity(), unit_rect, gs2d);
-            UTEST_ASSERT(NR::matrix_equalp(gr->gradientTransform, grXform, 1e-12));
-            sp_gradient_set_gs2d_matrix_f(gr, &NR_MATRIX_IDENTITY, &unit_nrrect, &nr_gs2d);
             UTEST_ASSERT(NR::matrix_equalp(gr->gradientTransform, grXform, 1e-12));
         }
 
@@ -99,55 +79,33 @@ test_gradient()
         NR::Matrix const funny(2, 3,
                                4, 5,
                                6, 7);
-        NRMatrix const nr_funny = funny;
-        UTEST_ASSERT(nr_funny[3] == 5);
         {
-            NRMatrix nr_g2d, nr_gs2d;
-            sp_gradient_get_g2d_matrix_f(gr, &nr_funny, &unit_nrrect, &nr_g2d);
-            sp_gradient_get_gs2d_matrix_f(gr, &nr_funny, &unit_nrrect, &nr_gs2d);
             NR::Matrix const g2d(sp_gradient_get_g2d_matrix(gr, funny, unit_rect));
             NR::Matrix const gs2d(sp_gradient_get_gs2d_matrix(gr, funny, unit_rect));
-            UTEST_ASSERT(g2d == NR::Matrix(nr_g2d));
             UTEST_ASSERT(g2d == funny);
-            UTEST_ASSERT(NR_MATRIX_DF_TEST_CLOSE(&nr_g2d, &nr_funny, 1e-14));
-            UTEST_ASSERT(gs2d == NR::Matrix(nr_gs2d));
             UTEST_ASSERT(NR::matrix_equalp(gs2d, gr->gradientTransform * g2d, 1e-12));
 
             sp_gradient_set_gs2d_matrix(gr, funny, unit_rect, gs2d);
-            UTEST_ASSERT(NR::matrix_equalp(gr->gradientTransform, grXform, 1e-12));
-            sp_gradient_set_gs2d_matrix_f(gr, &nr_funny, &unit_nrrect, &nr_gs2d);
             UTEST_ASSERT(NR::matrix_equalp(gr->gradientTransform, grXform, 1e-12));
         }
 
         gr->gradientTransform = grXform;
         NR::Rect const larger_rect(NR::Point(5, 6), NR::Point(8, 10));
-        NRRect const larger_nrrect(copy_of(larger_rect));
         {
-            NRMatrix nr_g2d, nr_gs2d;
-            sp_gradient_get_g2d_matrix_f(gr, &nr_funny, &larger_nrrect, &nr_g2d);
-            sp_gradient_get_gs2d_matrix_f(gr, &nr_funny, &larger_nrrect, &nr_gs2d);
             NR::Matrix const g2d(sp_gradient_get_g2d_matrix(gr, funny, larger_rect));
             NR::Matrix const gs2d(sp_gradient_get_gs2d_matrix(gr, funny, larger_rect));
-            UTEST_ASSERT(g2d == NR::Matrix(nr_g2d));
             UTEST_ASSERT(g2d == NR::Matrix(3, 0,
                                            0, 4,
                                            5, 6) * funny);
-            UTEST_ASSERT(gs2d == NR::Matrix(nr_gs2d));
             UTEST_ASSERT(NR::matrix_equalp(gs2d, gr->gradientTransform * g2d, 1e-12));
 
             sp_gradient_set_gs2d_matrix(gr, funny, larger_rect, gs2d);
             UTEST_ASSERT(NR::matrix_equalp(gr->gradientTransform, grXform, 1e-12));
-            sp_gradient_set_gs2d_matrix_f(gr, &nr_funny, &larger_nrrect, &nr_gs2d);
-            UTEST_ASSERT(NR::matrix_equalp(gr->gradientTransform, grXform, 1e-12));
 
             sp_object_set(SP_OBJECT(gr), SP_ATTR_GRADIENTUNITS, "userSpaceOnUse");
-            sp_gradient_get_g2d_matrix_f(gr, &nr_funny, &larger_nrrect, &nr_g2d);
-            sp_gradient_get_gs2d_matrix_f(gr, &nr_funny, &larger_nrrect, &nr_gs2d);
             NR::Matrix const user_g2d(sp_gradient_get_g2d_matrix(gr, funny, larger_rect));
             NR::Matrix const user_gs2d(sp_gradient_get_gs2d_matrix(gr, funny, larger_rect));
-            UTEST_ASSERT(user_g2d == NR::Matrix(nr_g2d));
             UTEST_ASSERT(user_g2d == funny);
-            UTEST_ASSERT(user_gs2d == NR::Matrix(nr_gs2d));
             UTEST_ASSERT(NR::matrix_equalp(user_gs2d, gr->gradientTransform * user_g2d, 1e-12));
         }
         g_object_unref(gr);

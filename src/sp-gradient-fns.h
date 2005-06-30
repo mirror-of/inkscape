@@ -52,12 +52,6 @@ void sp_gradient_render_vector_block_rgba(SPGradient *gr, guchar *px, gint w, gi
 void sp_gradient_render_vector_block_rgb(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, gboolean horizontal);
 
 /** Transforms to/from gradient position space in given environment */
-NRMatrix *sp_gradient_get_g2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm, NRRect const *bbox,
-                                       NRMatrix *g2d);
-NRMatrix *sp_gradient_get_gs2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm, NRRect const *bbox,
-                                        NRMatrix *gs2d);
-void sp_gradient_set_gs2d_matrix_f(SPGradient *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix const *gs2d);
-
 NR::Matrix sp_gradient_get_g2d_matrix(SPGradient const *gr, NR::Matrix const &ctm,
                                       NR::Rect const &bbox);
 NR::Matrix sp_gradient_get_gs2d_matrix(SPGradient const *gr, NR::Matrix const &ctm,

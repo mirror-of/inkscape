@@ -1063,14 +1063,6 @@ sp_gradient_render_vector_block_rgb(SPGradient *gradient, guchar *buf,
     }
 }
 
-NRMatrix *
-sp_gradient_get_g2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm,
-                             NRRect const *bbox, NRMatrix *g2d)
-{
-    *g2d = sp_gradient_get_g2d_matrix(gr, *ctm, *bbox);
-    return g2d;
-}
-
 NR::Matrix
 sp_gradient_get_g2d_matrix(SPGradient const *gr, NR::Matrix const &ctm, NR::Rect const &bbox)
 {
@@ -1081,14 +1073,6 @@ sp_gradient_get_g2d_matrix(SPGradient const *gr, NR::Matrix const &ctm, NR::Rect
     } else {
         return ctm;
     }
-}
-
-NRMatrix *
-sp_gradient_get_gs2d_matrix_f(SPGradient const *gr, NRMatrix const *ctm,
-                              NRRect const *bbox, NRMatrix *gs2d)
-{
-    *gs2d = sp_gradient_get_gs2d_matrix(gr, *ctm, *bbox);
-    return gs2d;
 }
 
 NR::Matrix
@@ -1102,13 +1086,6 @@ sp_gradient_get_gs2d_matrix(SPGradient const *gr, NR::Matrix const &ctm, NR::Rec
     } else {
         return gr->gradientTransform * ctm;
     }
-}
-
-void
-sp_gradient_set_gs2d_matrix_f(SPGradient *gr, NRMatrix const *ctm,
-                              NRRect const *bbox, NRMatrix const *gs2d)
-{
-    sp_gradient_set_gs2d_matrix(gr, *ctm, *bbox, *gs2d);
 }
 
 void
