@@ -138,7 +138,7 @@ sp_pattern_init (SPPattern *pat)
 	pat->patternContentUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
 	pat->patternContentUnits_set = FALSE;
 
-	nr_matrix_set_identity (&pat->patternTransform);
+	pat->patternTransform = NR::identity();
 	pat->patternTransform_set = FALSE;
 
 	sp_svg_length_unset (&pat->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
@@ -231,7 +231,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 			pat->patternTransform = t;
 			pat->patternTransform_set = TRUE;
 		} else {
-			nr_matrix_set_identity (&pat->patternTransform);
+			pat->patternTransform = NR::identity();
 			pat->patternTransform_set = FALSE;
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -485,18 +485,18 @@ sp_pattern_transform_multiply (SPPattern *pattern, NR::Matrix postmul, bool set)
 {
 	// this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
 	// for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
-	//pattern->patternTransform = premul * item->transform * NR::Matrix(pattern->patternTransform) * item->transform.inverse() * postmul;
+	//pattern->patternTransform = premul * item->transform * pattern->patternTransform * item->transform.inverse() * postmul;
 
 	// otherwise the formula is much simpler
 	if (set) {
 		pattern->patternTransform = postmul;
 	} else {
-		pattern->patternTransform = NR::Matrix(pattern_patternTransform(pattern)) * postmul;
+		pattern->patternTransform = pattern_patternTransform(pattern) * postmul;
 	}
 	pattern->patternTransform_set = TRUE;
 
 	gchar c[256];
-	if (sp_svg_transform_write(c, 256, &(pattern->patternTransform))) {
+	if (sp_svg_transform_write(c, 256, pattern->patternTransform)) {
 		sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
 	} else {
 		sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
@@ -582,13 +582,13 @@ guint pattern_patternContentUnits (SPPattern *pat)
 	return pat->patternContentUnits;
 }
 
-NRMatrix *pattern_patternTransform (SPPattern *pat)
+NR::Matrix const &pattern_patternTransform(SPPattern const *pat)
 {
-	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+	for (SPPattern const *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
 		if (pat_i->patternTransform_set)
-			return &(pat_i->patternTransform);
+			return pat_i->patternTransform;
 	}
-	return &(pat->patternTransform);
+	return pat->patternTransform;
 }
 
 gdouble pattern_x (SPPattern *pat)
@@ -663,7 +663,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0.0, 0.0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
 		// the final patternTransform, taking into account bbox
-		NR::Matrix ps2user = NR::Matrix (pattern_patternTransform (pat)) * bbox2user;
+		NR::Matrix const ps2user(pattern_patternTransform(pat) * bbox2user);
 
 		// see (*) comment below
 		NR::Matrix ps2px = ps2user * full_transform;
@@ -686,8 +686,8 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		// So here I comply with the majority opinion, but leave my interpretation commented out below.
 		// (To get item_transform, I subtract parent from full.)
 
-		//NR::Matrix ps2px = (full_transform / parent_transform) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
-		NR::Matrix ps2px = NR::Matrix (pattern_patternTransform (pat)) * full_transform;
+		//NR::Matrix ps2px = (full_transform / parent_transform) * pattern_patternTransform(pat) * parent_transform;
+		NR::Matrix ps2px = pattern_patternTransform(pat) * full_transform;
 
 		ps2px.copyto (&pp->ps2px);
 	}
@@ -704,7 +704,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		/* Problem: What to do, if we have mixed lengths and percentages? (Lauris) */
 		/* Currently we do ignore percentages at all, but that is not good (Lauris) */
 
-		NR::Matrix vb2us = vb2ps * NR::Matrix (pattern_patternTransform (pat));
+		NR::Matrix vb2us = vb2ps * pattern_patternTransform(pat);
 
 		// see (*)
 		NR::Matrix pcs2px = vb2us * full_transform;
@@ -718,14 +718,14 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 			/* BBox to user coordinate system */
 			NR::Matrix bbox2user (bbox->x1 - bbox->x0, 0.0, 0.0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
 
-			NR::Matrix pcs2user = NR::Matrix (pattern_patternTransform (pat)) * bbox2user;
+			NR::Matrix pcs2user = pattern_patternTransform(pat) * bbox2user;
 
 			// see (*)
 			pcs2px = pcs2user * full_transform;
 		} else {
 			// see (*)
-			//pcs2px = (full_transform / parent_transform) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
-			pcs2px = NR::Matrix (pattern_patternTransform (pat)) * full_transform;
+			//pcs2px = (full_transform / parent_transform) * pattern_patternTransform(pat) * parent_transform;
+			pcs2px = pattern_patternTransform(pat) * full_transform;
 		}
 
 		pcs2px = NR::translate (pattern_x (pat), pattern_y (pat)) * pcs2px; 

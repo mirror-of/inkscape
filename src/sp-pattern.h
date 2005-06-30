@@ -60,7 +60,7 @@ struct SPPattern : public SPPaintServer {
 	guint patternContentUnits : 1;
 	guint patternContentUnits_set : 1;
 	/* patternTransform attribute */
-	NRMatrix patternTransform;
+	NR::Matrix patternTransform;
 	guint patternTransform_set : 1;
 	/* Tile rectangle */
 	SPSVGLength x;
@@ -87,7 +87,7 @@ SPPattern *pattern_getroot (SPPattern *pat);
 
 guint pattern_patternUnits (SPPattern *pat);
 guint pattern_patternContentUnits (SPPattern *pat);
-NRMatrix *pattern_patternTransform (SPPattern *pat);
+NR::Matrix const &pattern_patternTransform(SPPattern const *pat);
 gdouble pattern_x (SPPattern *pat);
 gdouble pattern_y (SPPattern *pat);
 gdouble pattern_width (SPPattern *pat);
