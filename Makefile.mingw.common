@@ -120,10 +120,11 @@ endif
 
 
 ###### VERSION NUMBER
-VERSION_NR = 0.41+devel
-
-# VERSION_NR = 0.42+cvs
+# VERSION_NR = 0.41+devel
 # VERSION = \"$(VERSION_NR)-${DTG}\"
+
+VERSION_NR = 0.42+pre0
+VERSION = \"$(VERSION_NR)\"
 
 ####### the XP_WIN def is necessary for libjs.a
 CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
