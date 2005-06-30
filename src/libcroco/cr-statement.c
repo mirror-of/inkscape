@@ -25,6 +25,8 @@
 #include "cr-statement.h"
 #include "cr-parser.h"
 
+#define UNUSED(_param) ((void)(_param))
+
 /**
  *@file
  *Definition of the #CRStatement class.
@@ -40,6 +42,8 @@ parse_font_face_start_font_face_cb (CRDocHandler * a_this,
 {
         CRStatement *stmt = NULL;
         enum CRStatus status = CR_OK;
+
+        UNUSED(a_location);
 
         stmt = cr_statement_new_at_font_face_rule (NULL, NULL);
         g_return_if_fail (stmt);
@@ -81,6 +85,8 @@ parse_font_face_property_cb (CRDocHandler * a_this,
         CRDeclaration *decl = NULL;
         CRStatement *stmt = NULL;
         CRStatement **stmtptr = NULL;
+
+        UNUSED(a_important);
 
         g_return_if_fail (a_this && a_name);
 
@@ -143,6 +149,8 @@ parse_page_start_page_cb (CRDocHandler * a_this,
         CRStatement *stmt = NULL;
         enum CRStatus status = CR_OK;
         CRString *page_name = NULL, *pseudo_name = NULL ;
+
+        UNUSED(a_location);
 
         if (a_name)
                 page_name = cr_string_dup (a_name) ;
@@ -217,6 +225,9 @@ parse_page_end_page_cb (CRDocHandler * a_this,
         CRStatement *stmt = NULL;
         CRStatement **stmtptr = NULL;
 
+        UNUSED(a_name);
+        UNUSED(a_pseudo_page);
+
 	stmtptr = &stmt;
         status = cr_doc_handler_get_ctxt (a_this, (gpointer *) stmtptr);
         g_return_if_fail (status == CR_OK && stmt);
@@ -234,6 +245,8 @@ parse_at_media_start_media_cb (CRDocHandler * a_this,
         enum CRStatus status = CR_OK;
         CRStatement *at_media = NULL;
         GList *media_list = NULL;
+
+        UNUSED(a_location);
 
         g_return_if_fail (a_this && a_this->priv);
 
@@ -366,6 +379,8 @@ parse_at_media_end_media_cb (CRDocHandler * a_this,
         enum CRStatus status = CR_OK;
         CRStatement *at_media = NULL;
         CRStatement **at_media_ptr = NULL;
+
+        UNUSED(a_media_list);
 
         g_return_if_fail (a_this && a_this->priv);
 

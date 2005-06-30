@@ -25,6 +25,8 @@
 #include "cr-utils.h"
 #include "cr-om-parser.h"
 
+#define UNUSED(_param) ((void)(_param))
+
 /**
  *@file
  *The definition of the CSS Object Model Parser.
@@ -215,7 +217,7 @@ start_font_face (CRDocHandler * a_this,
         ParsingContext *ctxt = NULL;
         ParsingContext **ctxtptr = NULL;
 
-        g_return_if_fail (a_this);
+        UNUSED(a_location);
 
         g_return_if_fail (a_this);
 	ctxtptr = &ctxt;
@@ -314,6 +316,8 @@ charset (CRDocHandler * a_this, CRString * a_charset,
         ParsingContext *ctxt = NULL;
         ParsingContext **ctxtptr = NULL;
 
+        UNUSED(a_location);
+
         g_return_if_fail (a_this);
 	ctxtptr = &ctxt;
         status = cr_doc_handler_get_ctxt (a_this, (gpointer *) ctxtptr);
@@ -347,6 +351,8 @@ start_page (CRDocHandler * a_this,
         enum CRStatus status = CR_OK;
         ParsingContext *ctxt = NULL;
         ParsingContext **ctxtptr = NULL;
+
+        UNUSED(a_location);
 
         g_return_if_fail (a_this);
 	ctxtptr = &ctxt;
@@ -425,6 +431,8 @@ start_media (CRDocHandler * a_this,
         ParsingContext **ctxtptr = NULL;
         GList *media_list = NULL;
 
+        UNUSED(a_location);
+
         g_return_if_fail (a_this);
 	ctxtptr = &ctxt;
         status = cr_doc_handler_get_ctxt (a_this, (gpointer *) ctxtptr);
@@ -491,6 +499,8 @@ import_style (CRDocHandler * a_this,
         ParsingContext *ctxt = NULL;
         ParsingContext **ctxtptr = NULL;
         GList *media_list = NULL ;
+
+        UNUSED(a_location);
 
         g_return_if_fail (a_this);
 	ctxtptr = &ctxt;
