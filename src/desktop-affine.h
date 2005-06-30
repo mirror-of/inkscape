@@ -16,18 +16,6 @@
 #include "forward.h"
 #include <libnr/nr-forward.h>
 
-NRMatrix *sp_desktop_w2dt_affine(SPDesktop const *desktop, NRMatrix *w2dt);
-NRMatrix *sp_desktop_dt2w_affine(SPDesktop const *desktop, NRMatrix *dt2w);
-
-NRMatrix *sp_desktop_dt2doc_affine(SPDesktop const *desktop, NRMatrix *d2doc);
-NRMatrix *sp_desktop_doc2dt_affine(SPDesktop const *desktop, NRMatrix *doc2d);
-
-NRMatrix *sp_desktop_w2doc_affine(SPDesktop const *desktop, NRMatrix *w2doc);
-NRMatrix *sp_desktop_doc2w_affine(SPDesktop const *desktop, NRMatrix *doc2w);
-
-NRMatrix *sp_desktop_root2dt_affine(SPDesktop const *dt, NRMatrix *root2dt);
-NRMatrix *sp_desktop_dt2root_affine(SPDesktop const *dt, NRMatrix *dt2root);
-
 NR::Matrix const sp_desktop_w2dt_affine(SPDesktop const *desktop);
 NR::Matrix const sp_desktop_dt2w_affine(SPDesktop const *desktop);
 
