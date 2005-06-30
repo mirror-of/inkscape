@@ -8,6 +8,7 @@ set -e
 mydir=`dirname "$0"`
 cd "$mydir"
 rm -rf autom4te.cache
+rm -rf src/.libs
 for d in `find -name .cvsignore -printf '%h '`; do
 	(cd "$d" && rm -f *~ && rm -rf .deps && rm -f $(grep '^[][a-zA-Z0-9_.*?-]*$' .cvsignore) )
 done
