@@ -37,7 +37,7 @@
 
 #define RULER_WIDTH           12
 #define RULER_HEIGHT          12
-#define RULER_FONT_SIZE 7000
+#define RULER_FONT_SIZE 6500
 #define RULER_FONT_VERTICAL_SPACING 1.2
 
 /*
