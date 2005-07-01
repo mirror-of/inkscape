@@ -146,7 +146,7 @@ CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
 # INCLUDES AND LIBRARIES
 ##########################################################################
 
-GTKINC = \
+GTKINC = -DGLIBMM_DLL \
 -I$(GTK)/include/glibmm-2.4 -I$(GTK)/lib/glibmm-2.4/include \
 -I$(GTK)/include/gtkmm-2.4  -I$(GTK)/lib/gtkmm-2.4/include \
 -I$(GTK)/include/gdkmm-2.4  -I$(GTK)/lib/gdkmm-2.4/include \
