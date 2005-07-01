@@ -592,7 +592,7 @@ NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble const u)
         }
     }
 
-    if (!finite(improved_u)) {
+    if (!isFinite(improved_u)) {
         improved_u = u;
     } else if ( improved_u < 0.0 ) {
         improved_u = 0.0;
@@ -817,7 +817,7 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
     /* Then scale to [0.0 .. 1.0]. */
     gdouble tot_len = u[len - 1];
     g_return_if_fail( tot_len != 0 );
-    if (finite(tot_len)) {
+    if (isFinite(tot_len)) {
         for (unsigned i = 1; i < len; ++i) {
             u[i] /= tot_len;
         }
