@@ -409,7 +409,7 @@ sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, 
 	SPSVGViewWidget *svgvw = SP_SVG_VIEW_WIDGET (vw);
 
 	if (svgvw->resize) {
-		gtk_widget_set_usize (svgvw->canvas, (int)width, (int)height);
+		gtk_widget_set_size_request (svgvw->canvas, (int)width, (int)height);
 		gtk_widget_queue_resize (GTK_WIDGET (vw));
 	}
 }

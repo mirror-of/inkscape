@@ -343,7 +343,7 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
     {
         GtkWidget *l = gtk_label_new (_("degrees"));
         gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
-        gtk_widget_set_usize (l, SUFFIX_WIDTH, -1);
+        gtk_widget_set_size_request (l, SUFFIX_WIDTH, -1);
         gtk_widget_show (l);
         gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
@@ -351,7 +351,7 @@ options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
     {
         GtkWidget *om = gtk_option_menu_new ();
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Rotating with Ctrl pressed snaps every that much degrees; also, pressing [ or ] rotates by this amount"), NULL);
-        gtk_widget_set_usize (om, SB_WIDTH, -1);
+        gtk_widget_set_size_request (om, SB_WIDTH, -1);
         gtk_widget_show (om);
         gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, SB_MARGIN);
 
@@ -423,7 +423,7 @@ options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
 
     { // empty label for alignment
         GtkWidget *l = gtk_label_new ("");
-        gtk_widget_set_usize (l, SUFFIX_WIDTH - SB_LONG_ADJUSTMENT, -1);
+        gtk_widget_set_size_request (l, SUFFIX_WIDTH - SB_LONG_ADJUSTMENT, -1);
         gtk_widget_show (l);
         gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
@@ -431,7 +431,7 @@ options_dialogs_ontop (GtkWidget *vb, GtkTooltips *tt)
     {
         GtkWidget *om = gtk_option_menu_new ();
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("None: dialogs are treated as regular windows; Normal: dialogs stay on top of document windows; Aggressive: same as Normal but may work better with some window managers."), NULL);
-        gtk_widget_set_usize (om, SB_WIDTH + SB_LONG_ADJUSTMENT, -1);
+        gtk_widget_set_size_request (om, SB_WIDTH + SB_LONG_ADJUSTMENT, -1);
         gtk_widget_show (om);
         gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, SB_MARGIN);
 
@@ -545,7 +545,7 @@ options_sb (
     {
         GtkWidget *l = gtk_label_new (suffix);
         gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
-        gtk_widget_set_usize (l, SUFFIX_WIDTH, -1);
+        gtk_widget_set_size_request (l, SUFFIX_WIDTH, -1);
         gtk_widget_show (l);
         gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
@@ -576,7 +576,7 @@ options_sb (
 
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tooltip, NULL);
         gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-        gtk_widget_set_usize (sb, SB_WIDTH, -1);
+        gtk_widget_set_size_request (sb, SB_WIDTH, -1);
         gtk_widget_show (sb);
         gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
@@ -609,7 +609,7 @@ options_checkbox (
 
     { // empty label for alignment
         GtkWidget *l = gtk_label_new ("");
-        gtk_widget_set_usize (l, SUFFIX_WIDTH, -1);
+        gtk_widget_set_size_request (l, SUFFIX_WIDTH, -1);
         gtk_widget_show (l);
         gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
@@ -624,7 +624,7 @@ options_checkbox (
 
         gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, tooltip, NULL);
 
-        gtk_widget_set_usize (b, SB_WIDTH, -1);
+        gtk_widget_set_size_request (b, SB_WIDTH, -1);
         gtk_widget_show (b);
         gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, SB_MARGIN);
 

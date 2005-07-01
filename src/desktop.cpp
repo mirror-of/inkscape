@@ -992,7 +992,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     // zoom status spinbutton
     dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
     gtk_tooltips_set_tip (dtw->tt, dtw->zoom_status, _("Zoom"), NULL);
-    gtk_widget_set_usize (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
+    gtk_widget_set_size_request (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
     gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
     gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
@@ -1016,7 +1016,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     eventbox = gtk_event_box_new ();
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
     gtk_tooltips_set_tip (dtw->tt, eventbox, _("Cursor coordinates"), NULL);
-    gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, -1);
+    gtk_widget_set_size_request (dtw->coord_status, STATUS_COORD_WIDTH, -1);
     sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), eventbox, FALSE, FALSE, 1);
 

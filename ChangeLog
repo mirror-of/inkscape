@@ -1,3 +1,10 @@
+2005-07-01  Ben Fowler  <bpfowler@users.sourceforge.net>
+
+	* src/desktop.cpp src/svg-view.cpp src/dialogs/display-settings.cpp 
+	src/dialogs/export.cpp src/dialogs/find.cpp 
+	src/extension/internal/ps.cpp: Replaced calls to gtk_widget_set_usize 
+	with GTK2 version.
+
 2005-06-30  Bryce Harrington <bryce@bryceharrington.org>
 
 	* inkscape.pod, src/main.cpp: Applying Makzu's patch to implement

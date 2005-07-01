@@ -469,7 +469,7 @@ sp_find_new_searchfield (GtkWidget *dlg, GtkWidget *vb, const gchar *label, cons
 {
     GtkWidget *hb = gtk_hbox_new (FALSE, 0);
     GtkWidget *l = gtk_label_new_with_mnemonic (label);
-    gtk_widget_set_usize (l, FIND_LABELWIDTH, -1);
+    gtk_widget_set_size_request (l, FIND_LABELWIDTH, -1);
     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
 
@@ -569,7 +569,7 @@ sp_find_types_checkbox_indented (GtkWidget *w, const gchar *data, gboolean activ
     { // empty label for indent
         GtkWidget *l = gtk_label_new ("");
         gtk_widget_show (l);
-        gtk_widget_set_usize (l, FIND_LABELWIDTH + indent, -1);
+        gtk_widget_set_size_request (l, FIND_LABELWIDTH + indent, -1);
         gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
     }
 
@@ -595,7 +595,7 @@ sp_find_types ()
         {
             GtkWidget *l = gtk_label_new_with_mnemonic (_("T_ype: "));
             gtk_widget_show (l);
-            gtk_widget_set_usize (l, FIND_LABELWIDTH, -1);
+            gtk_widget_set_size_request (l, FIND_LABELWIDTH, -1);
             gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
         }
@@ -623,7 +623,7 @@ sp_find_types ()
             { // empty label for alignment
                 GtkWidget *l = gtk_label_new ("");
                 gtk_widget_show (l);
-                gtk_widget_set_usize (l, FIND_LABELWIDTH + 20, -1);
+                gtk_widget_set_size_request (l, FIND_LABELWIDTH + 20, -1);
                 gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
             }
 

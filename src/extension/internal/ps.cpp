@@ -171,7 +171,7 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     gtk_combo_set_value_in_list(GTK_COMBO(combo), FALSE, FALSE);
     gtk_combo_set_use_arrows(GTK_COMBO(combo), TRUE);
     gtk_combo_set_use_arrows_always(GTK_COMBO(combo), TRUE);
-    gtk_widget_set_usize(combo, 64, -1);
+    gtk_widget_set_size_request(combo, 64, -1);
     gtk_tooltips_set_tip((GtkTooltips *) tt, GTK_COMBO(combo)->entry,
                          _("Preferred resolution (dots per inch) of bitmap"), NULL);
     /* Setup strings */

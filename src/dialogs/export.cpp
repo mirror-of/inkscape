@@ -223,7 +223,7 @@ sp_export_spinbutton_new ( gchar *key, float val, float min, float max,
     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, digits);
     gtk_table_attach ( GTK_TABLE (t), sb, x + pos, x + pos + 1, y, y + 1, 
                        (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-    gtk_widget_set_usize (sb, 64, -1);
+    gtk_widget_set_size_request (sb, 64, -1);
     gtk_widget_set_sensitive (sb, sensitive);
     pos += 1;
 
