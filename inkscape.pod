@@ -231,6 +231,18 @@ Query the width of of the drawing or, if specified, of the object with --query-i
 
 Query the height of of the drawing or, if specified, of the object with --query-id. The returned value is in px (SVG user units). 
 
+=item B<--vacuum-defs>
+
+Remove all unused items from the <lt>defs<gt> section of the SVG file.  This
+option has no effect on its own, but is very useful when used in conjunction
+with the -l option.
+
+=item B<--vacuum-defs>
+
+Remove all unused items from the <lt>defs<gt> section of the SVG file.  This
+option has no effect on its own, but is very useful when used in conjunction
+with the -l option.
+
 =item B<-z>, B<--without-gui>
 
 Do not open the GUI (on Unix, do not use X server); only process the files from console.

@@ -130,6 +130,7 @@ enum {
     SP_ARG_QUERY_ID,
     SP_ARG_VERSION,
     SP_ARG_NEW_GUI,
+    SP_ARG_VACUUM_DEFS,
     SP_ARG_LAST
 };
 
@@ -164,6 +165,7 @@ static gboolean sp_query_width = FALSE;
 static gboolean sp_query_height = FALSE;
 static gchar *sp_query_id = NULL;
 static int sp_new_gui = FALSE;
+static gboolean sp_vacuum_defs = FALSE;
 
 static gchar *sp_export_png_utf8 = NULL;
 static gchar *sp_export_svg_utf8 = NULL;
@@ -317,6 +319,12 @@ struct poptOption options[] = {
     {"new-gui", 'G', 
      POPT_ARG_NONE, &sp_new_gui, SP_ARG_NEW_GUI,
      N_("Use the new Gtkmm GUI interface"),
+     NULL},
+
+    {"vacuum-defs", 0,
+     POPT_ARG_NONE, &sp_vacuum_defs, SP_ARG_VACUUM_DEFS,
+     // TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
+     N_("Remove unreferenced defs from the defs section of the document."),
      NULL},
 
     POPT_AUTOHELP POPT_TABLEEND
@@ -588,6 +596,9 @@ sp_main_console(int argc, char const **argv)
         if (doc == NULL) {
             g_warning("Specified document %s cannot be opened (is it valid SVG file?)", (gchar *) fl->data);
         } else {
+            if (sp_vacuum_defs) {
+                vacuum_document(doc);
+            }
             if (sp_global_printer) {
                 sp_print_document_to_file(doc, sp_global_printer);
             }
