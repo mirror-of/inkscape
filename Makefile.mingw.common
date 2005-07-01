@@ -102,10 +102,10 @@ MKDIR = mkdir
 CPDIR = xcopy /e /i
 
 #######  Where is your GTK directory?
-GTK=c:/gtk
+GTK=c:/gtk26
 
 ####### Same thing, DOS style
-GTKDOS=c:\gtk
+GTKDOS=c:\gtk26
 
 ####### Command to process .po files --> .mo
 MSGFMT = $(GTKDOS)$(S)bin$(S)msgfmt
@@ -158,8 +158,10 @@ GTKINC = \
 -I$(GTK)/include/glib-2.0 -I$(GTK)/lib/glib-2.0/include
 
 
-####### New way with static C++ libs
-GTKLIB = -L$(GTK)/lib \
+####### Our Gtk libs
+####### '-Wl,--enable-runtime-pseudo-reloc' is to avoid a link error
+####### with Gtk::TreeViewColumn
+GTKLIB = -Wl,--enable-runtime-pseudo-reloc -L$(GTK)/lib \
 -lgtkmm-2.4 -lgdkmm-2.4 -lglibmm-2.4 \
 -latkmm-1.6 -lpangomm-1.4 -lsigc-2.0 \
 -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 \
@@ -182,9 +184,10 @@ $(PERLINC) $(PYTHONINC) -I$(GTK)/include/libxml2 \
 -I$(GTK)/include/freetype2 \
 
 
-LIBS = $(GTKLIB) $(PERLLIB) $(PYTHONLIB) -lxml2 \
+LIBS = $(GTKLIB) $(PERLLIB) $(PYTHONLIB) \
+$(GTK)/bin/libxml2.dll \
 $(GTK)/lib/iconv.lib	\
--lfreetype6.dll -lfontconfig-1.dll -lpng -lpopt $(GTK)/lib/zdll.lib \
+-lfreetype.dll -lfontconfig.dll -lpng -lpopt $(GTK)/lib/zdll.lib \
 -lgc -mwindows -lws2_32 -lintl
 
 
