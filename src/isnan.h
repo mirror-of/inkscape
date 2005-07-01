@@ -6,47 +6,48 @@
  * isnan() is becoming undef'd in some .h files. 
  * #include this last in your .cpp file to get it right.
  *
+ * The problem is that isnan and isfinite are part of C99 but aren't part of
+ * the C++ standard (which predates C99).
+ *
  * Authors:
  *   Inkscape groupies and obsessive-compulsives
  *
  * Copyright (C) 2004 authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
+ *
+ * 2005 modification hereby placed in public domain.  Probably supercedes the 2004 copyright
+ * for the code itself.
  */
 
 #include <math.h>
+/* You might try changing the above to <cmath> if you have problems.
+ * Whether you use math.h or cmath, you may need to edit the .cpp file
+ * and/or other .h files to use the same header file.
+ */
 
-
-
-#ifdef __APPLE__
-
-/* MacOSX definition */
-#define isNaN(a) (__isnan(a))
-#define isFinite(a) (__isfinite(a))
-
+#if defined(__APPLE__) || defined(__isnan)
+# define isNaN(_a) (__isnan(_a))	/* MacOSX/Darwin definition */
+#elif defined(WIN32) || defined(_isnan)
+# define isNaN(_a) (_isnan(_a)) 	/* Win32 definition */
 #else
+# define isNaN(_a) (isnan(_a))	/* GNU definition */
+#endif
+/* If the above doesn't work, then try (a != a).
+ * Also, please report a bug as per http://www.inkscape.org/report_bugs.php,
+ * giving information about what platform and compiler version you're using.
+ */
 
-#ifdef WIN32
 
-/* Win32 definition */
-#define isNaN(a) (_isnan(a))
-#define isFinite(a) (std::isfinite(a))
-
+#if defined(__APPLE__) || defined(__isfinite)
+# define isFinite(_a) (__isfinite(_a))	/* MacOSX/Darwin definition */
 #else
-
-/* Linux definition */
-#define isNaN(a) (isnan(a))
-#define isFinite(a) (std::isfinite(a))
-
-#endif /* WIN32 */
-
-#endif /* __APPLE__ */
-
-
-
+# define isFinite(_a) (std::isfinite(_a))
+#endif
+/* If the above doesn't work, then try (finite(_a) && !isNaN(_a)) or (!isNaN((_a) - (_a))).
+ * Also, please report a bug as per http://www.inkscape.org/report_bugs.php,
+ * giving information about what platform and compiler version you're using.
+ */
 
 
 #endif /* __ISNAN_H__ */
-
-
-
