@@ -156,7 +156,8 @@ Cette valeur préempte l'option --export-dpi setting (ou la PPP enregistrée ave
 =item B<-y> I<VALEUR>, B<--export-background-opacity>=I<VALEUR>
 
 Opacité du fond du PNG exporté.
-Cela peut être une valeur entre 0.0 and 1.0 (0.0 : complètement transparent, 1.0 complètement opaque) ou entre 1 et 255 (255 : complètement opaque).
+Cela peut être une valeur entre 0.0 and 1.0 (0.0 : complètement transparent, 1.0 complètement opaque)
+ou entre 1.01 et 255 (255 : complètement opaque).
 Si cette valeur n'est pas spécifiée et si l'option -b n'est pas utilisée, l'opacité de la page enregistrée avec le document (dans l'attribut inkscape:pageopacity= de l'espace de nom sodipodi:namedview) sera utilisée.
 Si cette valeur n'est pas spécifiée et l'option -b utilisé, la valeur 255 (opacité complète) sera utilisée.
 

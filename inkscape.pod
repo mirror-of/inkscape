@@ -187,7 +187,8 @@ This value overrides the --export-dpi setting (or the DPI hint if used with --ex
 =item B<-y> I<VALUE>, B<--export-background-opacity>=I<VALUE>
 
 Opacity of the background of exported PNG.
-This may be a value either between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity) or between 1 and 255 (255 meaning full opacity).
+This may be a value either between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity)
+or greater than 1 up to 255 (255 meaning full opacity).
 If not set and the -b option is not used,
 then the page opacity set in Inkscape in the Document Options dialog will be used (stored in the inkscape:pageopacity= attribute of sodipodi:namedview).
 If not set but the -b option is used,
