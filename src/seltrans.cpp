@@ -476,7 +476,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
     } else {
         sp_remove_handles(seltrans.shandle, 8);
         sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
-                        _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"), 
+                        _("<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to skew around the opposite side"),
                         _("<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to rotate around the opposite corner"));
     }
     if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
@@ -672,9 +672,9 @@ sp_sel_trans_sel_modified(Inkscape::Selection *selection, guint flags, gpointer 
         sp_sel_trans_update_volatile_state(*seltrans);
 
         if (
-             (flags != (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) && 
-             (flags != SP_OBJECT_PARENT_MODIFIED_FLAG) && 
-             (flags != SP_OBJECT_CHILD_MODIFIED_FLAG) && 
+             (flags != (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) &&
+             (flags != SP_OBJECT_PARENT_MODIFIED_FLAG) &&
+             (flags != SP_OBJECT_CHILD_MODIFIED_FLAG) &&
              !seltrans->changed) {
             // Only reset center if object itself is modified (not style, parent or child), and this is not a local change by seltrans
             // (still annoyingly recenters on keyboard transforms, fixme)
@@ -901,19 +901,19 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     skew[dim_a] = ( pt[dim_b] - point[dim_b] ) / ( point[dim_a] - norm[dim_a] );
 
     s[dim_a] = ( pt[dim_a] - norm[dim_a] ) / ( point[dim_a] - norm[dim_a] );
-    
+
     if ( fabs(s[dim_a]) < 1 ) {
         s[dim_a] = sign(s[dim_a]);
     } else {
         s[dim_a] = floor( s[dim_a] + 0.5 );
     }
-    
+
     double radians = atan(skew[dim_a] / s[dim_a]);
-    
+
     if (state & GDK_CONTROL_MASK) {
-        
+
         int snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
-        
+
         if (snaps) {
             double sections = floor( radians * snaps / M_PI + .5 );
             if (fabs(sections) >= snaps / 2) sections = sign(sections) * (snaps / 2 - 1);
@@ -928,7 +928,7 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 
     pt[dim_b] = ( point[dim_a] - norm[dim_a] ) * skew[dim_a] + point[dim_b];
     pt[dim_a] = ( point[dim_a] - norm[dim_a] ) * s[dim_a] + norm[dim_a];
-    
+
     /* status text */
     double degrees = 180 / M_PI * radians;
     if (degrees > 180) degrees -= 360;
@@ -936,7 +936,7 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 
     seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
                                     // TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-                                    _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), 
+                                    _("<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"),
                                     degrees);
 
     return TRUE;
@@ -1003,7 +1003,7 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
         NR::Point point = seltrans->point;
         if ( fabs( point[X] - pt[X] )  >
              fabs( point[Y] - pt[Y] ) ) {
-            pt[Y] = point[X];
+            pt[Y] = point[Y];
         } else {
             pt[X] = point[X];
         }
