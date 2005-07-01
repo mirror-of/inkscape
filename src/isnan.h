@@ -41,6 +41,8 @@
 
 #if defined(__APPLE__) || defined(__isfinite)
 # define isFinite(_a) (__isfinite(_a))	/* MacOSX/Darwin definition */
+#elif defined(isfinite)
+# define isFinite(_a) (isfinite(_a))
 #else
 # define isFinite(_a) (std::isfinite(_a))
 #endif
