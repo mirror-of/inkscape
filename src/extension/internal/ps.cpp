@@ -675,18 +675,31 @@ PrintPS::print_stroke_style(SVGOStringStream &os, const SPStyle *style)
 
     os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
 
+    // There are rare cases in which for a solid line stroke_dasharray_set is true. To avoid 
+    // invalid PS-lines such as "[0.0000000 0.0000000] 0.0000000 setdash", which should be "[] 0 setdash",
+    // we first check if all components of stroke_dash.dash are 0.
+    bool LineSolid = true;
     if (style->stroke_dasharray_set &&
         style->stroke_dash.n_dash &&
-        style->stroke_dash.dash) {
-        int i;
-        os << "[";
-        for (i = 0; i < style->stroke_dash.n_dash; i++) {
-            if ((i)) {
-                os << " ";
-            }
-            os << style->stroke_dash.dash[i];
+        style->stroke_dash.dash ) {
+        int i = 0;
+        while (LineSolid && (i < style->stroke_dash.n_dash)) {
+                i++;
+                if (style->stroke_dash.dash[i] > 0.00000001)
+                    LineSolid = false;
         }
-        os << "] " << style->stroke_dash.offset << " setdash\n";
+        if (!LineSolid) {
+            os << "[";
+            for (i = 0; i < style->stroke_dash.n_dash; i++) {
+                if (i > 0) {
+                    os << " ";
+                }
+                os << style->stroke_dash.dash[i];
+            }
+            os << "] " << style->stroke_dash.offset << " setdash\n";
+        } else {
+            os << "[] 0 setdash\n";
+        }
     } else {
         os << "[] 0 setdash\n";
     }

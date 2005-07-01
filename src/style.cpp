@@ -2425,14 +2425,22 @@ sp_style_read_dash(SPStyle *style, gchar const *str)
     gdouble d[64];
     gchar *e = NULL;
 
+    bool LineSolid=true;
     while (e != str && n_dash < 64) {
         /* TODO: Should allow <length> rather than just a unitless (px) number. */
         d[n_dash] = g_ascii_strtod(str, (char **) &e);
+        if (d[n_dash] > 0.00000001)
+            LineSolid = false;
         if (e != str) {
             n_dash += 1;
             str = e;
         }
         while (str && *str && !isalnum(*str)) str += 1;
+    }
+
+    if (LineSolid) {
+        dash.n_dash = 0;
+        return;
     }
 
     if (n_dash > 0) {
