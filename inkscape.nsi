@@ -55,13 +55,15 @@
 ; #######################################
 ; Thanks to Adib Taraben and Luca Bruno for getting this started
 ; Add your translation here!  :-)
+; I had wanted to list the languages alphabetically, but apparently
+; the first is the default.  So putting English first is just being
+; practical.  It is not chauvinism or hubris, I swear!  ;-)
 ; default language first
 
 ; Product name
 LangString lng_Caption   ${LANG_ENGLISH} "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
 LangString lng_Caption   ${LANG_CATALAN} "${PRODUCT_NAME} -- Editor de gràfics vectorials escalables de codi obert"
 LangString lng_Caption   ${LANG_CZECH}   "${PRODUCT_NAME} -- Open Source Editor SVG vektorové grafiky"
-LangString lng_Caption   ${LANG_ENGLISH} "${PRODUCT_NAME} -- Open Source Scalable Vector Graphics Editor"
 LangString lng_Caption   ${LANG_FRENCH}  "${PRODUCT_NAME} -- Logiciel de dessin vectoriel SVG libre"
 LangString lng_Caption   ${LANG_GERMAN}  "${PRODUCT_NAME} -- Open Source SVG-Vektorillustrator"
 LangString lng_Caption   ${LANG_ITALIAN} "${PRODUCT_NAME} -- Editor di grafica vettoriale Open Source"
