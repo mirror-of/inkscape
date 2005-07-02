@@ -774,9 +774,10 @@ sp_gradient_invalidate_vector(SPGradient *gr)
 {
     bool ret = false;
 
-    if (gr->color) {
-        g_free(gr->color);
+    if (gr->color != NULL) {
+        void *tmp = gr->color;
         gr->color = NULL;
+        g_free(tmp);
         ret = true;
     }
 
@@ -1354,6 +1355,11 @@ sp_lg_fill(SPPainter *painter, NRPixBlock *pb)
 {
     SPLGPainter *lgp = (SPLGPainter *) painter;
 
+    if (lgp->lg->color == NULL) {
+        sp_gradient_ensure_colors (lgp->lg);
+        lgp->lgr.vector = lgp->lg->color;
+    }
+
     nr_render((NRRenderer *) &lgp->lgr, pb, NULL);
 }
 
@@ -1594,6 +1600,11 @@ static void
 sp_rg_fill(SPPainter *painter, NRPixBlock *pb)
 {
     SPRGPainter *rgp = (SPRGPainter *) painter;
+
+    if (rgp->rg->color == NULL) {
+        sp_gradient_ensure_colors (rgp->rg);
+        rgp->rgr.vector = rgp->rg->color;
+    }
 
     nr_render((NRRenderer *) &rgp->rgr, pb, NULL);
 }
