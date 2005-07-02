@@ -48,6 +48,8 @@ options:
     -g, --with-gui                    
     -z, --without-gui                 
 
+        --vacuum-defs
+
         --g-fatal-warnings
 
 =head1 DESCRIPTION
@@ -233,20 +235,14 @@ Query the height of of the drawing or, if specified, of the object with --query-
 
 =item B<--vacuum-defs>
 
-Remove all unused items from the <lt>defs<gt> section of the SVG file.  This
-option has no effect on its own, but is very useful when used in conjunction
-with the -l option.
-
-=item B<--vacuum-defs>
-
-Remove all unused items from the <lt>defs<gt> section of the SVG file.  This
-option has no effect on its own, but is very useful when used in conjunction
-with the -l option.
+Remove all unused items from the <lt>defs<gt> section of the SVG file.  If this
+option is invoked in conjunction with --export-plain-svg, only the exported file
+will be affected.  If it is used alone, the specified file will be modified in place.
 
 =item B<-z>, B<--without-gui>
 
 Do not open the GUI (on Unix, do not use X server); only process the files from console.
-This is assumed for -p, -e, and -l options. 
+This is assumed for -p, -e, -l, and --vacuum-defs options. 
 
 =item B<--g-fatal-warnings>
 

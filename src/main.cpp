@@ -323,8 +323,7 @@ struct poptOption options[] = {
 
     {"vacuum-defs", 0,
      POPT_ARG_NONE, &sp_vacuum_defs, SP_ARG_VACUUM_DEFS,
-     // TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-     N_("Remove unreferenced defs from the defs section of the document."),
+     N_("Remove unused definitions from the <defs> section(s) of the document"),
      NULL},
 
     POPT_AUTOHELP POPT_TABLEEND
@@ -406,6 +405,7 @@ main(int argc, char **argv)
             || !strncmp(argv[i], "--query-x", 13)
             || !strcmp(argv[i], "-Y")
             || !strncmp(argv[i], "--query-y", 14)
+            || !strcmp(argv[i], "--vacuum-defs")
            )
         {
             /* main_console handles any exports -- not the gui */
@@ -598,6 +598,10 @@ sp_main_console(int argc, char const **argv)
         } else {
             if (sp_vacuum_defs) {
                 vacuum_document(doc);
+            }
+            if (sp_vacuum_defs && !sp_export_svg) {
+                // save under the name given in the command line
+                sp_repr_save_file(doc->rdoc, (gchar *)fl->data, SP_SVG_NS_URI);
             }
             if (sp_global_printer) {
                 sp_print_document_to_file(doc, sp_global_printer);
