@@ -1818,9 +1818,9 @@ Verb * Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_GRIDTILE, "SelectionGridTile", N_("Gri_d Arrange..."),
         N_("Arrange selection in grid pattern"), "grid_arrange"),
     /* Layer */
-    new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("_New Layer..."),
+    new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("_Add Layer..."),
         N_("Create a new layer"), "new_layer"),
-    new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Ren_ame Layer..."),
+    new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Re_name Layer..."),
         N_("Rename the current layer"), "rename_layer"),
     new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Layer Abov_e"),
         N_("Switch to the layer above the current"), "switch_to_layer_above"),

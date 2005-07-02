@@ -46,7 +46,7 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     // Layer name widgets
     _layer_name_entry.set_activates_default(true);
     _layer_name_hbox.pack_end(_layer_name_entry, false, false, 4);
-    _layer_name_label.set_label(_("Layer Name:"));
+    _layer_name_label.set_label(_("Layer name:"));
     _layer_name_hbox.pack_end(_layer_name_label, false, false, 4);
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
@@ -147,9 +147,9 @@ void LayerPropertiesDialog::Rename::perform(LayerPropertiesDialog &dialog) {
 }
 
 void LayerPropertiesDialog::Create::setup(LayerPropertiesDialog &dialog) {
-    dialog.set_title(_("Create Layer"));
+    dialog.set_title(_("Add Layer"));
     dialog._layer_name_entry.set_text("");
-    dialog._apply_button.set_label(_("C_reate"));
+    dialog._apply_button.set_label(_("_Add"));
 }
 
 void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
