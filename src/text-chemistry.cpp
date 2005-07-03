@@ -361,10 +361,9 @@ text_unflow ()
         sp_repr_set_attr(rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
         sp_repr_add_child(rtext, rtspan, NULL);
 
-        Inkscape::Text::Layout const *layout = te_get_layout(flowtext);
-        Glib::ustring text_ustring = sp_te_get_string_multiline(flowtext, layout->begin(), layout->end());
-
-        Inkscape::XML::Node *text_repr = sp_repr_new_text(text_ustring.c_str()); // FIXME: transfer all formatting!!!
+        gchar *text_string = sp_te_get_string_multiline(flowtext);
+        Inkscape::XML::Node *text_repr = sp_repr_new_text(text_string); // FIXME: transfer all formatting!!!
+        free(text_string);
         rtspan->appendChild(text_repr);
 
         SP_OBJECT_REPR(SP_OBJECT_PARENT(flowtext))->appendChild(rtext);
