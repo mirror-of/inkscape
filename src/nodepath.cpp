@@ -3257,37 +3257,50 @@ static gchar const *sp_node_type_description(Inkscape::NodePath::Node *node)
 void
 sp_nodepath_update_statusbar(Inkscape::NodePath::Path *nodepath)
 {
-    if (!nodepath) return;
-
     gchar const *when_selected = _("<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes");
     gchar const *when_selected_one = _("<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node");
 
     gint total = 0;
+    gint selected = 0;
+    SPDesktop *desktop = NULL;
 
-    for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
-       Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
-        total += g_list_length(subpath->nodes);
+    if (nodepath) {
+        for (GList *spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+            Inkscape::NodePath::SubPath *subpath = (Inkscape::NodePath::SubPath *) spl->data;
+            total += g_list_length(subpath->nodes);
+        }
+        selected = g_list_length(nodepath->selected);
+        desktop = nodepath->desktop;
+    } else {
+        desktop = SP_ACTIVE_DESKTOP;
     }
 
-    gint selected = g_list_length(nodepath->selected);
-    SPEventContext *ec = nodepath->desktop->event_context;
+    SPEventContext *ec = desktop->event_context;
     if (!ec) return;
     Inkscape::MessageContext *mc = SP_NODE_CONTEXT (ec)->_node_message_context;
     if (!mc) return;
 
     if (selected == 0) {
-        Inkscape::Selection *sel = nodepath->desktop->selection;
+        Inkscape::Selection *sel = desktop->selection;
         if (!sel || sel->isEmpty()) {
             mc->setF(Inkscape::NORMAL_MESSAGE,
-                     _("Select one path object with selector first, then switch back to node tool."));
+                     _("Select a single object to edit its nodes or handles."));
         } else {
+            if (nodepath) {
             mc->setF(Inkscape::NORMAL_MESSAGE,
                      ngettext("<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to select.",
                               "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to select.",
                               total),
                      total);
+            } else {
+                if (g_slist_length((GSList *)sel->itemList()) == 1) {
+                    mc->setF(Inkscape::NORMAL_MESSAGE, _("Drag the handles of the object to modify it."));
+                } else {
+                    mc->setF(Inkscape::NORMAL_MESSAGE, _("Select a single object to edit its nodes or handles."));
+                }
+            }
         }
-    } else if (selected == 1) {
+    } else if (nodepath && selected == 1) {
         mc->setF(Inkscape::NORMAL_MESSAGE,
                  ngettext("<b>%i</b> of <b>%i</b> node selected; %s. %s.",
                           "<b>%i</b> of <b>%i</b> nodes selected; %s. %s.",
