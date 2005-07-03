@@ -46,6 +46,9 @@ sub check_str ($) {
 
     my $is_xml = 0;
 
+    # Remove html-like sequences that would trigger errors
+    while ($str =~ s/<defs>//) {};
+
     # Remove valid sequences.
     while ($str =~ s{<([bisu]|big|su[bp]|small|tt|span)(${attrsRE})>[^<>]*</\1>}{}) {
 	$is_xml = 1;
