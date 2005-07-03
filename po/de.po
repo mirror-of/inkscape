@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-26 00:09+1000\n"
+"POT-Creation-Date: 2005-07-03 11:03+0200\n"
 "PO-Revision-Date: 2005-06-28 01:31+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -2237,12 +2237,12 @@ msgid "A freeform label for the object"
 msgstr "Freiform-Bezeichner des Objektes"
 
 #. Create the label for the object title
-#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:228
+#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:243
 msgid "Title"
 msgstr "Titel"
 
 #. Create the frame for the object description
-#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:272
+#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:287
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -2284,31 +2284,34 @@ msgid "Id exists! "
 msgstr "ID-Kennung existiert"
 
 #: ../src/dialogs/layer-properties.cpp:49
-msgid "Layer Name:"
+#, fuzzy
+msgid "Layer name:"
 msgstr "Ebenenname:"
 
-#: ../src/dialogs/layer-properties.cpp:130
+#: ../src/dialogs/layer-properties.cpp:132
 msgid "Rename Layer"
 msgstr "Ebene umbenennen"
 
-#: ../src/dialogs/layer-properties.cpp:133
+#: ../src/dialogs/layer-properties.cpp:135
 msgid "_Rename"
 msgstr "Umbenennen"
 
 #. TRANSLATORS: This means "The layer has been renamed"
-#: ../src/dialogs/layer-properties.cpp:144
+#: ../src/dialogs/layer-properties.cpp:146
 msgid "Renamed layer"
 msgstr "Umbenannte Ebene"
 
-#: ../src/dialogs/layer-properties.cpp:148
-msgid "Create Layer"
-msgstr "Eine neue Ebene anlegen"
-
 #: ../src/dialogs/layer-properties.cpp:150
-msgid "C_reate"
-msgstr "Erstellen"
+#, fuzzy
+msgid "Add Layer"
+msgstr "_Ebene"
 
-#: ../src/dialogs/layer-properties.cpp:164
+#: ../src/dialogs/layer-properties.cpp:152
+#, fuzzy
+msgid "_Add"
+msgstr "Hinzufügen"
+
+#: ../src/dialogs/layer-properties.cpp:166
 msgid "New layer created."
 msgstr "Neue Ebene angelegt."
 
@@ -2383,98 +2386,98 @@ msgstr "Linienstil"
 msgid "Master _opacity"
 msgstr "Gesamt-Transparenz"
 
-#: ../src/dialogs/rdf.cpp:229
+#: ../src/dialogs/rdf.cpp:244
 msgid "Name by which this document is formally known."
 msgstr "Name, unter dem dieses Dokument formal bekannt ist."
 
-#: ../src/dialogs/rdf.cpp:231
+#: ../src/dialogs/rdf.cpp:246
 msgid "Date"
 msgstr "Datum"
 
-#: ../src/dialogs/rdf.cpp:232
+#: ../src/dialogs/rdf.cpp:247
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr ""
 "Datum, das mit der Erstellung dieses Dokuments assoziiert ist (JJJJ-MM-TT)."
 
-#: ../src/dialogs/rdf.cpp:234
+#: ../src/dialogs/rdf.cpp:249
 msgid "Format"
 msgstr "Format"
 
-#: ../src/dialogs/rdf.cpp:235
+#: ../src/dialogs/rdf.cpp:250
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr ""
 "Die physische oder digitale Erscheinungsform dieses Dokuments (MIME-Typ)."
 
-#: ../src/dialogs/rdf.cpp:237
+#: ../src/dialogs/rdf.cpp:252
 msgid "Type"
 msgstr "Typ"
 
-#: ../src/dialogs/rdf.cpp:238
+#: ../src/dialogs/rdf.cpp:253
 msgid "Type of document (DCMI Type)."
 msgstr "Typ des Dokuments (DCMI-Typ)."
 
 # !!! Urheber?
-#: ../src/dialogs/rdf.cpp:241
+#: ../src/dialogs/rdf.cpp:256
 msgid "Creator"
 msgstr "Autor/Urheber"
 
-#: ../src/dialogs/rdf.cpp:242
+#: ../src/dialogs/rdf.cpp:257
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr ""
 "Name der Person oder Organisation, die hauptsächlich für die Erstellung des "
 "Dokumenteninhalts verantwortlich ist."
 
-#: ../src/dialogs/rdf.cpp:244
+#: ../src/dialogs/rdf.cpp:259
 msgid "Rights"
 msgstr "Rechte"
 
-#: ../src/dialogs/rdf.cpp:245
+#: ../src/dialogs/rdf.cpp:260
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr ""
 "Name der Person oder Organisation, welche die Urheberrechte (Intellectual "
 "Property) an diesem Dokument hält."
 
-#: ../src/dialogs/rdf.cpp:247
+#: ../src/dialogs/rdf.cpp:262
 msgid "Publisher"
 msgstr "Herausgeber"
 
-#: ../src/dialogs/rdf.cpp:248
+#: ../src/dialogs/rdf.cpp:263
 msgid "Name of entity responsible for making this document available."
 msgstr ""
 "Name der Person oder Organisation, die für die Verfügbarmachung des "
 "Dokuments verantwortlich ist."
 
-#: ../src/dialogs/rdf.cpp:251
+#: ../src/dialogs/rdf.cpp:266
 msgid "Identifier"
 msgstr "Identifikator"
 
-#: ../src/dialogs/rdf.cpp:252
+#: ../src/dialogs/rdf.cpp:267
 msgid "Unique URI to reference this document."
 msgstr "Eindeutige URI, um dieses Dokument zu referenzieren."
 
-#: ../src/dialogs/rdf.cpp:254
+#: ../src/dialogs/rdf.cpp:269
 msgid "Source"
 msgstr "Quelle"
 
-#: ../src/dialogs/rdf.cpp:255
+#: ../src/dialogs/rdf.cpp:270
 msgid "Unique URI to reference the source of this document."
 msgstr "Eindeutige URI, um die Quelle dieses Dokuments zu referenzieren."
 
-#: ../src/dialogs/rdf.cpp:257
+#: ../src/dialogs/rdf.cpp:272
 msgid "Relation"
 msgstr "Beziehung"
 
-#: ../src/dialogs/rdf.cpp:258
+#: ../src/dialogs/rdf.cpp:273
 msgid "Unique URI to a related document."
 msgstr "Eindeutige URI zu einem verwandten Dokument."
 
-#: ../src/dialogs/rdf.cpp:260
+#: ../src/dialogs/rdf.cpp:275
 msgid "Language"
 msgstr "Sprache"
 
-#: ../src/dialogs/rdf.cpp:261
+#: ../src/dialogs/rdf.cpp:276
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
@@ -2482,11 +2485,11 @@ msgstr ""
 "Zweibuchstabiges Sprachsymbol mit optionalen Untersymbolen für die Sprache "
 "dieses Dokuments (z.B. »de-CH«)"
 
-#: ../src/dialogs/rdf.cpp:263
+#: ../src/dialogs/rdf.cpp:278
 msgid "Keywords"
 msgstr "Schlagworte"
 
-#: ../src/dialogs/rdf.cpp:264
+#: ../src/dialogs/rdf.cpp:279
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
@@ -2496,24 +2499,24 @@ msgstr ""
 # !!! not the best translation
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: ../src/dialogs/rdf.cpp:268
+#: ../src/dialogs/rdf.cpp:283
 msgid "Coverage"
 msgstr "Abdeckung"
 
-#: ../src/dialogs/rdf.cpp:269
+#: ../src/dialogs/rdf.cpp:284
 msgid "Extent or scope of this document."
 msgstr "Umfang oder Abdeckungsbereich dieses Dokuments."
 
-#: ../src/dialogs/rdf.cpp:273
+#: ../src/dialogs/rdf.cpp:288
 msgid "A short account of the content of this document."
 msgstr "Kurzer Abriß des Inhalts dieses Dokuments."
 
 #. FIXME: need to handle 1 agent per line of input
-#: ../src/dialogs/rdf.cpp:277
+#: ../src/dialogs/rdf.cpp:292
 msgid "Contributors"
 msgstr "Mitwirkende"
 
-#: ../src/dialogs/rdf.cpp:278
+#: ../src/dialogs/rdf.cpp:293
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
@@ -2522,23 +2525,23 @@ msgstr ""
 "mitgewirkt haben."
 
 #. TRANSLATORS: URL to a page that defines the license for the document
-#: ../src/dialogs/rdf.cpp:282
+#: ../src/dialogs/rdf.cpp:297
 msgid "URI"
 msgstr "URI"
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: ../src/dialogs/rdf.cpp:284
+#: ../src/dialogs/rdf.cpp:299
 msgid "URI to this document's license's namespace definition."
 msgstr ""
 "URI, unter dem die Lizenzdefinition (license namespace) dieses Dokuments zu "
 "finden ist."
 
 #. TRANSLATORS: fragment of XML representing the license of the document
-#: ../src/dialogs/rdf.cpp:288
+#: ../src/dialogs/rdf.cpp:303
 msgid "Fragment"
 msgstr "Fragment"
 
-#: ../src/dialogs/rdf.cpp:289
+#: ../src/dialogs/rdf.cpp:304
 msgid "XML fragment for the RDF 'License' section."
 msgstr "XML-Fragment für den RDF-Abschnitt »Lizenz«."
 
@@ -2637,7 +2640,7 @@ msgstr "Markierungen dazwischen:"
 msgid "End Markers:"
 msgstr "Endmarkierungen"
 
-#: ../src/dialogs/swatches.cpp:422
+#: ../src/dialogs/swatches.cpp:425
 #, c-format
 msgid "Palettes directory (%s) is unavailable."
 msgstr "Palettenverzeichnis (%s) nicht auffindbar"
@@ -3125,7 +3128,7 @@ msgstr ""
 "Verwenden Sie »> Dateiname« zum Drucken in eine Datei.\n"
 "Verwenden Sie »| Prog. Arg. ...« zur Weiterleitung an ein Programm."
 
-#: ../src/extension/internal/ps.cpp:1220
+#: ../src/extension/internal/ps.cpp:1233
 msgid "write error occurred"
 msgstr "Schreibfehler aufgetreten"
 
@@ -3764,147 +3767,147 @@ msgstr ""
 "Schriftsatz ohne zugehöriger Schriftfamilie wird ignoriert damit Pango nicht "
 "abstürzt"
 
-#: ../src/main.cpp:177
+#: ../src/main.cpp:179
 msgid "Print the Inkscape version number"
 msgstr "Versionsnummer von Inkscape ausgeben"
 
-#: ../src/main.cpp:182
+#: ../src/main.cpp:184
 msgid "Do not use X server (only process files from console)"
 msgstr "X-Server nicht verwenden (Dateien nur mittels Konsole verarbeiten)"
 
-#: ../src/main.cpp:187
+#: ../src/main.cpp:189
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 "Versuchen, den X-Server zu verwenden (sogar wenn die Umgebungsvariable "
 "»$DISPLAY« nicht gesetzt wurde)"
 
-#: ../src/main.cpp:192
+#: ../src/main.cpp:194
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Angegebene(s) Dokument(e) öffnen (Optionszeichenkette muss nicht übergeben "
 "werden)"
 
-#: ../src/main.cpp:193 ../src/main.cpp:198 ../src/main.cpp:203
-#: ../src/main.cpp:260 ../src/main.cpp:265 ../src/main.cpp:270
+#: ../src/main.cpp:195 ../src/main.cpp:200 ../src/main.cpp:205
+#: ../src/main.cpp:262 ../src/main.cpp:267 ../src/main.cpp:272
 msgid "FILENAME"
 msgstr "DATEINAME"
 
-#: ../src/main.cpp:197
+#: ../src/main.cpp:199
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Dokument(e) in angegebene Ausgabedatei drucken (verwenden Sie »| Programm« "
 "zur Weiterleitung)"
 
-#: ../src/main.cpp:202
+#: ../src/main.cpp:204
 msgid "Export document to a PNG file"
 msgstr "Das Dokument in eine PNG-Datei exportieren"
 
-#: ../src/main.cpp:207
+#: ../src/main.cpp:209
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr "Verwendete Auflösung beim Umwandeln von SVG nach Bitmap (Vorgabe: 90)"
 
-#: ../src/main.cpp:208
+#: ../src/main.cpp:210
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:212
+#: ../src/main.cpp:214
 msgid ""
 "Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"
 msgstr ""
 "Exportierter Bereich in SVG Pixeln (Vorgabe: Gesamtes Zeichenfläche, »0,0« "
 "ist die untere linke Ecke)"
 
-#: ../src/main.cpp:213
+#: ../src/main.cpp:215
 msgid "x0:y0:x1:y1"
 msgstr "X0:Y0:X1:Y1"
 
-#: ../src/main.cpp:217
+#: ../src/main.cpp:219
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr ""
 "Exportierter Bereich ist die gesamte Zeichnung, nicht die Zeichenfläche"
 
-#: ../src/main.cpp:222
+#: ../src/main.cpp:224
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Breite der erzeugten Bitmap in Pixeln (überschreibt DPI)"
 
-#: ../src/main.cpp:223
+#: ../src/main.cpp:225
 msgid "WIDTH"
 msgstr "BREITE"
 
-#: ../src/main.cpp:227
+#: ../src/main.cpp:229
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Höhe der erzeugten Bitmap in Pixeln (überschreibt DPI)"
 
-#: ../src/main.cpp:228
+#: ../src/main.cpp:230
 msgid "HEIGHT"
 msgstr "HÖHE"
 
-#: ../src/main.cpp:232
+#: ../src/main.cpp:234
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
 "ID des zu exportierenden Objektes (hat Vorrang gegenüber Export-Bereich)"
 
-#: ../src/main.cpp:233 ../src/main.cpp:305
+#: ../src/main.cpp:235 ../src/main.cpp:307
 msgid "ID"
 msgstr "Kennung"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:239
+#: ../src/main.cpp:241
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Nur das Objekt mit der angegebenen export-id exportieren, alle anderen "
 "auslassen"
 
-#: ../src/main.cpp:244
+#: ../src/main.cpp:246
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Verwende gespeicherten Dateinamen und DPI-Hinweise zum Exportieren (nur mit "
 "export-id)"
 
-#: ../src/main.cpp:249
+#: ../src/main.cpp:251
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Hintergrundfarbe der exportierten Bitmap (jede von SVG unterstützte "
 "Farbzeichenkette)"
 
-#: ../src/main.cpp:250
+#: ../src/main.cpp:252
 msgid "COLOR"
 msgstr "FARBE"
 
-#: ../src/main.cpp:254
+#: ../src/main.cpp:256
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Hintergrundtransparenz der exportierten Bitmap (0,0 bis 1,0 oder 1 bis 255)"
 
-#: ../src/main.cpp:255
+#: ../src/main.cpp:257
 msgid "VALUE"
 msgstr "WERT"
 
-#: ../src/main.cpp:259
+#: ../src/main.cpp:261
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Dokument in einfache SVG-Datei exportieren (keine sodipodi- oder inkscape-"
 "Namensräume)"
 
-#: ../src/main.cpp:264
+#: ../src/main.cpp:266
 msgid "Export document to a PS file"
 msgstr "Das Dokument in eine PS-Datei exportieren"
 
-#: ../src/main.cpp:269
+#: ../src/main.cpp:271
 msgid "Export document to an EPS file"
 msgstr "Das Dokument in eine EPS-Datei exportieren"
 
-#: ../src/main.cpp:274
+#: ../src/main.cpp:276
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Textelemente beim EPS-Export in Pfade umwandeln "
 
-#: ../src/main.cpp:279
+#: ../src/main.cpp:281
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr "Exportiere EPS-Dateien mit den Seitengrößen als Umrandungsbox"
 
-#: ../src/main.cpp:284
+#: ../src/main.cpp:286
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -3912,7 +3915,7 @@ msgstr ""
 "Abfragen der X-Koordinate der Zeichnung oder des mit --query-id angegebenen "
 "Objektes"
 
-#: ../src/main.cpp:289
+#: ../src/main.cpp:291
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -3920,7 +3923,7 @@ msgstr ""
 "Abfragen der Y-Koordinate der Zeichnung oder des mit --query-id angegebenen "
 "Objektes"
 
-#: ../src/main.cpp:294
+#: ../src/main.cpp:296
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -3928,32 +3931,37 @@ msgstr ""
 "Abfragen der Breite der Zeichnung oder des mit --query-id angegebenen "
 "Objektes"
 
-#: ../src/main.cpp:299
+#: ../src/main.cpp:301
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 "Abfragen der Höhe der Zeichnung oder des mit --query-id angegebenen Objektes"
 
-#: ../src/main.cpp:304
+#: ../src/main.cpp:306
 msgid "The ID of the object whose dimensions are queried"
 msgstr "Objekt-ID-Kennung, dessen Abmaße abgefragt werden"
 
-#: ../src/main.cpp:309
+#: ../src/main.cpp:311
 msgid "Print out the extension directory and exit"
 msgstr "Erweiterungsverzeichnis ausgeben und beenden"
 
-#: ../src/main.cpp:314
+#: ../src/main.cpp:316
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Eine angegebene Datei nach der anderen anzeigen, mit beliebigem Tastatur-/"
 "Mausereignis weiterschalten"
 
-#: ../src/main.cpp:319
+#: ../src/main.cpp:321
 msgid "Use the new Gtkmm GUI interface"
 msgstr "Die neue Gtkmm GUI verwenden"
 
-#: ../src/main.cpp:467
+#: ../src/main.cpp:326
+#, fuzzy
+msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgstr "Unbenutzte Elemente aus den &lt;defs&gt; des Dokuments entfernen"
+
+#: ../src/main.cpp:475
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4715,23 +4723,23 @@ msgstr "Mit %s <b>verknüpfen</b>"
 msgid "<b>Link</b> without URI"
 msgstr "<b>Verknüpfung</b> ohne URI"
 
-#: ../src/sp-ellipse.cpp:436 ../src/sp-ellipse.cpp:867
+#: ../src/sp-ellipse.cpp:437 ../src/sp-ellipse.cpp:868
 msgid "<b>Ellipse</b>"
 msgstr "<b>Ellipse</b>"
 
-#: ../src/sp-ellipse.cpp:581
+#: ../src/sp-ellipse.cpp:582
 msgid "<b>Circle</b>"
 msgstr "<b>Kreis</b>"
 
-#: ../src/sp-ellipse.cpp:862
+#: ../src/sp-ellipse.cpp:863
 msgid "<b>Segment</b>"
 msgstr "<b>Segment</b>"
 
-#: ../src/sp-ellipse.cpp:864
+#: ../src/sp-ellipse.cpp:865
 msgid "<b>Arc</b>"
 msgstr "<b>Kreisbogen</b>"
 
-#: ../src/sp-flowregion.cpp:266
+#: ../src/sp-flowregion.cpp:261
 #, fuzzy
 msgid "Flow region"
 msgstr "Verknüpfung folgen"
@@ -4740,7 +4748,7 @@ msgstr "Verknüpfung folgen"
 #. * flow excluded region.  flowRegionExclude in SVG 1.2: see
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
-#: ../src/sp-flowregion.cpp:475
+#: ../src/sp-flowregion.cpp:465
 msgid "Flow excluded region"
 msgstr ""
 
@@ -4762,16 +4770,20 @@ msgstr "Vertikale Führung"
 msgid "horizontal guideline"
 msgstr "Horizontale Führung"
 
-#: ../src/sp-image.cpp:833
+#: ../src/sp-image.cpp:835
 msgid "embedded"
 msgstr "eingebettet"
 
-#: ../src/sp-image.cpp:836
+#: ../src/sp-image.cpp:839
+msgid "(null_pointer)"
+msgstr ""
+
+#: ../src/sp-image.cpp:843
 #, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>Bild-Objekt mit fehlerhaftem Bezug</b>: %s"
 
-#: ../src/sp-image.cpp:837
+#: ../src/sp-image.cpp:844
 #, c-format
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Farbbild</b> %d × %d: %s"
@@ -6666,7 +6678,8 @@ msgstr "Auswahl im Raster anordnen"
 
 #. Layer
 #: ../src/verbs.cpp:1821
-msgid "_New Layer..."
+#, fuzzy
+msgid "_Add Layer..."
 msgstr "_Neue Ebene"
 
 #: ../src/verbs.cpp:1822
@@ -6674,7 +6687,8 @@ msgid "Create a new layer"
 msgstr "Eine neue Ebene anlegen"
 
 #: ../src/verbs.cpp:1823
-msgid "Ren_ame Layer..."
+#, fuzzy
+msgid "Re_name Layer..."
 msgstr "Ebene umbenennen"
 
 #: ../src/verbs.cpp:1824
@@ -7703,6 +7717,12 @@ msgstr "Attribut"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Wert"
+
+#~ msgid "Create Layer"
+#~ msgstr "Eine neue Ebene anlegen"
+
+#~ msgid "C_reate"
+#~ msgstr "Erstellen"
 
 #~ msgid "Exporting [%d &#215; %d] %s"
 #~ msgstr "Exportiere [%d × %d] %s"

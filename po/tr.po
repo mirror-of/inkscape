@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-27 21:43+0200\n"
+"POT-Creation-Date: 2005-07-03 11:03+0200\n"
 "PO-Revision-Date: 2003-02-03 02:18+0200\n"
 "Last-Translator: Arman Aksoy (Armish) <armish@linux-sevenler.de>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -2246,13 +2246,13 @@ msgid "A freeform label for the object"
 msgstr ""
 
 #. Create the label for the object title
-#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:228
+#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:243
 #, fuzzy
 msgid "Title"
 msgstr "Başlık:"
 
 #. Create the frame for the object description
-#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:272
+#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:287
 #, fuzzy
 msgid "Description"
 msgstr "Konum"
@@ -2297,36 +2297,36 @@ msgid "Id exists! "
 msgstr ""
 
 #: ../src/dialogs/layer-properties.cpp:49
-msgid "Layer Name:"
+msgid "Layer name:"
 msgstr ""
 
-#: ../src/dialogs/layer-properties.cpp:130
+#: ../src/dialogs/layer-properties.cpp:132
 #, fuzzy
 msgid "Rename Layer"
 msgstr "Düğümü büyüt"
 
-#: ../src/dialogs/layer-properties.cpp:133
+#: ../src/dialogs/layer-properties.cpp:135
 #, fuzzy
 msgid "_Rename"
 msgstr "Dosya adı:"
 
 #. TRANSLATORS: This means "The layer has been renamed"
-#: ../src/dialogs/layer-properties.cpp:144
+#: ../src/dialogs/layer-properties.cpp:146
 #, fuzzy
 msgid "Renamed layer"
 msgstr "Düğümü büyüt"
 
-#: ../src/dialogs/layer-properties.cpp:148
-#, fuzzy
-msgid "Create Layer"
-msgstr "Yeni bir SVG dökümanı oluştur"
-
 #: ../src/dialogs/layer-properties.cpp:150
 #, fuzzy
-msgid "C_reate"
-msgstr "Yarat"
+msgid "Add Layer"
+msgstr "Küçült"
 
-#: ../src/dialogs/layer-properties.cpp:164
+#: ../src/dialogs/layer-properties.cpp:152
+#, fuzzy
+msgid "_Add"
+msgstr "Ekle"
+
+#: ../src/dialogs/layer-properties.cpp:166
 msgid "New layer created."
 msgstr ""
 
@@ -2405,108 +2405,108 @@ msgstr "Vuruş ayarları"
 msgid "Master _opacity"
 msgstr "Donukluk:"
 
-#: ../src/dialogs/rdf.cpp:229
+#: ../src/dialogs/rdf.cpp:244
 msgid "Name by which this document is formally known."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:231
+#: ../src/dialogs/rdf.cpp:246
 #, fuzzy
 msgid "Date"
 msgstr "Metin çiz"
 
-#: ../src/dialogs/rdf.cpp:232
+#: ../src/dialogs/rdf.cpp:247
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:234
+#: ../src/dialogs/rdf.cpp:249
 #, fuzzy
 msgid "Format"
 msgstr "Fraktal"
 
-#: ../src/dialogs/rdf.cpp:235
+#: ../src/dialogs/rdf.cpp:250
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:237
+#: ../src/dialogs/rdf.cpp:252
 #, fuzzy
 msgid "Type"
 msgstr "Tip:"
 
-#: ../src/dialogs/rdf.cpp:238
+#: ../src/dialogs/rdf.cpp:253
 msgid "Type of document (DCMI Type)."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:241
+#: ../src/dialogs/rdf.cpp:256
 #, fuzzy
 msgid "Creator"
 msgstr "Yarat"
 
-#: ../src/dialogs/rdf.cpp:242
+#: ../src/dialogs/rdf.cpp:257
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:244
+#: ../src/dialogs/rdf.cpp:259
 #, fuzzy
 msgid "Rights"
 msgstr "sağ"
 
-#: ../src/dialogs/rdf.cpp:245
+#: ../src/dialogs/rdf.cpp:260
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:247
+#: ../src/dialogs/rdf.cpp:262
 msgid "Publisher"
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:248
+#: ../src/dialogs/rdf.cpp:263
 msgid "Name of entity responsible for making this document available."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:251
+#: ../src/dialogs/rdf.cpp:266
 #, fuzzy
 msgid "Identifier"
 msgstr "İçerik"
 
-#: ../src/dialogs/rdf.cpp:252
+#: ../src/dialogs/rdf.cpp:267
 msgid "Unique URI to reference this document."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:254
+#: ../src/dialogs/rdf.cpp:269
 msgid "Source"
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:255
+#: ../src/dialogs/rdf.cpp:270
 msgid "Unique URI to reference the source of this document."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:257
+#: ../src/dialogs/rdf.cpp:272
 #, fuzzy
 msgid "Relation"
 msgstr "Devir:"
 
-#: ../src/dialogs/rdf.cpp:258
+#: ../src/dialogs/rdf.cpp:273
 #, fuzzy
 msgid "Unique URI to a related document."
 msgstr "Başlıksız döküman"
 
-#: ../src/dialogs/rdf.cpp:260
+#: ../src/dialogs/rdf.cpp:275
 #, fuzzy
 msgid "Language"
 msgstr "Değiştir"
 
-#: ../src/dialogs/rdf.cpp:261
+#: ../src/dialogs/rdf.cpp:276
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:263
+#: ../src/dialogs/rdf.cpp:278
 msgid "Keywords"
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:264
+#: ../src/dialogs/rdf.cpp:279
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
@@ -2514,47 +2514,47 @@ msgstr ""
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: ../src/dialogs/rdf.cpp:268
+#: ../src/dialogs/rdf.cpp:283
 msgid "Coverage"
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:269
+#: ../src/dialogs/rdf.cpp:284
 msgid "Extent or scope of this document."
 msgstr ""
 
-#: ../src/dialogs/rdf.cpp:273
+#: ../src/dialogs/rdf.cpp:288
 msgid "A short account of the content of this document."
 msgstr ""
 
 #. FIXME: need to handle 1 agent per line of input
-#: ../src/dialogs/rdf.cpp:277
+#: ../src/dialogs/rdf.cpp:292
 #, fuzzy
 msgid "Contributors"
 msgstr "Santrimetre"
 
-#: ../src/dialogs/rdf.cpp:278
+#: ../src/dialogs/rdf.cpp:293
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
 msgstr ""
 
 #. TRANSLATORS: URL to a page that defines the license for the document
-#: ../src/dialogs/rdf.cpp:282
+#: ../src/dialogs/rdf.cpp:297
 msgid "URI"
 msgstr ""
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: ../src/dialogs/rdf.cpp:284
+#: ../src/dialogs/rdf.cpp:299
 msgid "URI to this document's license's namespace definition."
 msgstr ""
 
 #. TRANSLATORS: fragment of XML representing the license of the document
-#: ../src/dialogs/rdf.cpp:288
+#: ../src/dialogs/rdf.cpp:303
 #, fuzzy
 msgid "Fragment"
 msgstr "Argüman:"
 
-#: ../src/dialogs/rdf.cpp:289
+#: ../src/dialogs/rdf.cpp:304
 msgid "XML fragment for the RDF 'License' section."
 msgstr ""
 
@@ -2659,7 +2659,7 @@ msgstr ""
 msgid "End Markers:"
 msgstr ""
 
-#: ../src/dialogs/swatches.cpp:422
+#: ../src/dialogs/swatches.cpp:425
 #, c-format
 msgid "Palettes directory (%s) is unavailable."
 msgstr ""
@@ -3156,7 +3156,7 @@ msgstr ""
 "Dosyaya yazmak için '>dosyaadi' \n"
 "Programa yönlendirmek için '|' kullanın"
 
-#: ../src/extension/internal/ps.cpp:1220
+#: ../src/extension/internal/ps.cpp:1233
 msgid "write error occurred"
 msgstr ""
 
@@ -3791,49 +3791,49 @@ msgstr ""
 msgid "Ignoring font without family that will crash Pango"
 msgstr ""
 
-#: ../src/main.cpp:177
+#: ../src/main.cpp:179
 msgid "Print the Inkscape version number"
 msgstr ""
 
-#: ../src/main.cpp:182
+#: ../src/main.cpp:184
 msgid "Do not use X server (only process files from console)"
 msgstr "X sunucusunu kullanma (dosyaları sadece konsoldan sürdür)"
 
-#: ../src/main.cpp:187
+#: ../src/main.cpp:189
 #, fuzzy
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "$DISPLAY atanmamışsa bile X sunucusunu kullanmaya çalış)"
 
-#: ../src/main.cpp:192
+#: ../src/main.cpp:194
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Belirtilen döküman(lar)ı aç (seçenekler dahil olmayacaktır)"
 
-#: ../src/main.cpp:193 ../src/main.cpp:198 ../src/main.cpp:203
-#: ../src/main.cpp:260 ../src/main.cpp:265 ../src/main.cpp:270
+#: ../src/main.cpp:195 ../src/main.cpp:200 ../src/main.cpp:205
+#: ../src/main.cpp:262 ../src/main.cpp:267 ../src/main.cpp:272
 msgid "FILENAME"
 msgstr "DOSYA ADI"
 
-#: ../src/main.cpp:197
+#: ../src/main.cpp:199
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Dökümanları belirtilen dosyaya yazdur (başka programa yönlendirmek için '|' "
 "kullanın)"
 
-#: ../src/main.cpp:202
+#: ../src/main.cpp:204
 #, fuzzy
 msgid "Export document to a PNG file"
 msgstr "Resmi png olarak aktar"
 
-#: ../src/main.cpp:207
+#: ../src/main.cpp:209
 #, fuzzy
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr "SVG'den bitmap'e çevirim için kullanılacak çözünürlük (öntanımlı 72.0)"
 
-#: ../src/main.cpp:208
+#: ../src/main.cpp:210
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:212
+#: ../src/main.cpp:214
 #, fuzzy
 msgid ""
 "Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"
@@ -3841,138 +3841,142 @@ msgstr ""
 "Milimetre değerinde aktarılan bölüm (öntanımlı olarak tüm döküman, 0,0 "
 "resmin en alt sol köşesi)"
 
-#: ../src/main.cpp:213
+#: ../src/main.cpp:215
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:217
+#: ../src/main.cpp:219
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr ""
 
-#: ../src/main.cpp:222
+#: ../src/main.cpp:224
 #, fuzzy
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Yaratılan bitmap'in piksel değerinde genişliği (dpi üzerine yazar)"
 
-#: ../src/main.cpp:223
+#: ../src/main.cpp:225
 msgid "WIDTH"
 msgstr "GENİŞLİK"
 
-#: ../src/main.cpp:227
+#: ../src/main.cpp:229
 #, fuzzy
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Yaratılan bitmap'in piksel değerinde yüksekliği (dpi üzerine yazar)"
 
-#: ../src/main.cpp:228
+#: ../src/main.cpp:230
 msgid "HEIGHT"
 msgstr "YÜKSEKLİK"
 
-#: ../src/main.cpp:232
+#: ../src/main.cpp:234
 #, fuzzy
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "Yaratılan bitmap'in piksel değerinde genişliği (dpi üzerine yazar)"
 
-#: ../src/main.cpp:233 ../src/main.cpp:305
+#: ../src/main.cpp:235 ../src/main.cpp:307
 msgid "ID"
 msgstr ""
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:239
+#: ../src/main.cpp:241
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 
-#: ../src/main.cpp:244
+#: ../src/main.cpp:246
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 
-#: ../src/main.cpp:249
+#: ../src/main.cpp:251
 #, fuzzy
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr "Dışarı aktarılan birmap'in arkaplanı (SVG destekli herhangi bir renk)"
 
-#: ../src/main.cpp:250
+#: ../src/main.cpp:252
 msgid "COLOR"
 msgstr "RENK"
 
-#: ../src/main.cpp:254
+#: ../src/main.cpp:256
 #, fuzzy
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "Dışarı aktarılan birmap'in arkaplanı (SVG destekli herhangi bir renk)"
 
-#: ../src/main.cpp:255
+#: ../src/main.cpp:257
 msgid "VALUE"
 msgstr ""
 
-#: ../src/main.cpp:259
+#: ../src/main.cpp:261
 #, fuzzy
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr "Dökümanı düz SVG dosyasına aktar (\"xmlns:sodipodi\" alan boşluğu yok)"
 
-#: ../src/main.cpp:264
+#: ../src/main.cpp:266
 #, fuzzy
 msgid "Export document to a PS file"
 msgstr "Resmi png olarak aktar"
 
-#: ../src/main.cpp:269
+#: ../src/main.cpp:271
 #, fuzzy
 msgid "Export document to an EPS file"
 msgstr "Resmi png olarak aktar"
 
-#: ../src/main.cpp:274
+#: ../src/main.cpp:276
 #, fuzzy
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Seçili nesneleri eğrilere dönder"
 
-#: ../src/main.cpp:279
+#: ../src/main.cpp:281
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr ""
 
-#: ../src/main.cpp:284
+#: ../src/main.cpp:286
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
-#: ../src/main.cpp:289
+#: ../src/main.cpp:291
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
-#: ../src/main.cpp:294
+#: ../src/main.cpp:296
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:299
+#: ../src/main.cpp:301
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:304
+#: ../src/main.cpp:306
 #, fuzzy
 msgid "The ID of the object whose dimensions are queried"
 msgstr "Yaratılan bitmap'in piksel değerinde genişliği (dpi üzerine yazar)"
 
-#: ../src/main.cpp:309
+#: ../src/main.cpp:311
 msgid "Print out the extension directory and exit"
 msgstr ""
 
-#: ../src/main.cpp:314
+#: ../src/main.cpp:316
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Verilen dosyaları teker teker göster, herhangi bir tuşa basıldığında "
 "sonrakine geç"
 
-#: ../src/main.cpp:319
+#: ../src/main.cpp:321
 msgid "Use the new Gtkmm GUI interface"
 msgstr ""
 
-#: ../src/main.cpp:467
+#: ../src/main.cpp:326
+msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgstr ""
+
+#: ../src/main.cpp:475
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4674,26 +4678,26 @@ msgstr "%s'e bağlantı"
 msgid "<b>Link</b> without URI"
 msgstr "%s'e bağlantı"
 
-#: ../src/sp-ellipse.cpp:436 ../src/sp-ellipse.cpp:867
+#: ../src/sp-ellipse.cpp:437 ../src/sp-ellipse.cpp:868
 #, fuzzy
 msgid "<b>Ellipse</b>"
 msgstr "Elips"
 
-#: ../src/sp-ellipse.cpp:581
+#: ../src/sp-ellipse.cpp:582
 #, fuzzy
 msgid "<b>Circle</b>"
 msgstr "Değiştir"
 
-#: ../src/sp-ellipse.cpp:862
+#: ../src/sp-ellipse.cpp:863
 #, fuzzy
 msgid "<b>Segment</b>"
 msgstr "Değiştir"
 
-#: ../src/sp-ellipse.cpp:864
+#: ../src/sp-ellipse.cpp:865
 msgid "<b>Arc</b>"
 msgstr ""
 
-#: ../src/sp-flowregion.cpp:266
+#: ../src/sp-flowregion.cpp:261
 #, fuzzy
 msgid "Flow region"
 msgstr "Bağlantıyı takip et"
@@ -4702,7 +4706,7 @@ msgstr "Bağlantıyı takip et"
 #. * flow excluded region.  flowRegionExclude in SVG 1.2: see
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
-#: ../src/sp-flowregion.cpp:475
+#: ../src/sp-flowregion.cpp:465
 msgid "Flow excluded region"
 msgstr ""
 
@@ -4726,16 +4730,20 @@ msgstr "dikey"
 msgid "horizontal guideline"
 msgstr "yatay"
 
-#: ../src/sp-image.cpp:833
+#: ../src/sp-image.cpp:835
 msgid "embedded"
 msgstr ""
 
-#: ../src/sp-image.cpp:836
+#: ../src/sp-image.cpp:839
+msgid "(null_pointer)"
+msgstr ""
+
+#: ../src/sp-image.cpp:843
 #, fuzzy, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "Kötü referanslı resim: %s"
 
-#: ../src/sp-image.cpp:837
+#: ../src/sp-image.cpp:844
 #, fuzzy, c-format
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "Resmi renklendir %d x %d: %s"
@@ -6729,7 +6737,7 @@ msgstr ""
 #. Layer
 #: ../src/verbs.cpp:1821
 #, fuzzy
-msgid "_New Layer..."
+msgid "_Add Layer..."
 msgstr "Küçült"
 
 #: ../src/verbs.cpp:1822
@@ -6739,7 +6747,7 @@ msgstr "Yeni bir SVG dökümanı oluştur"
 
 #: ../src/verbs.cpp:1823
 #, fuzzy
-msgid "Ren_ame Layer..."
+msgid "Re_name Layer..."
 msgstr "Düğümü büyüt"
 
 #: ../src/verbs.cpp:1824
@@ -7890,6 +7898,14 @@ msgstr "Özellik"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Değer"
+
+#, fuzzy
+#~ msgid "Create Layer"
+#~ msgstr "Yeni bir SVG dökümanı oluştur"
+
+#, fuzzy
+#~ msgid "C_reate"
+#~ msgstr "Yarat"
 
 #, fuzzy
 #~ msgid "Automatically scale Rows to fit selected objects."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-27 21:43+0200\n"
+"POT-Creation-Date: 2005-07-03 11:03+0200\n"
 "PO-Revision-Date: 2005-06-23 21:10+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <hu@li.org>\n"
@@ -2277,12 +2277,12 @@ msgstr "Az objektum címkéje; kötetlen formátumú"
 
 # May contain a short, human readable description of the resource as plain, unmarked text.
 #. Create the label for the object title
-#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:228
+#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:243
 msgid "Title"
 msgstr "Cím"
 
 #. Create the frame for the object description
-#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:272
+#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:287
 msgid "Description"
 msgstr "Leírás"
 
@@ -2330,31 +2330,34 @@ msgid "Id exists! "
 msgstr "Létező azonosító"
 
 #: ../src/dialogs/layer-properties.cpp:49
-msgid "Layer Name:"
+#, fuzzy
+msgid "Layer name:"
 msgstr "A réteg neve:"
 
-#: ../src/dialogs/layer-properties.cpp:130
+#: ../src/dialogs/layer-properties.cpp:132
 msgid "Rename Layer"
 msgstr "Réteg átnevezése"
 
-#: ../src/dialogs/layer-properties.cpp:133
+#: ../src/dialogs/layer-properties.cpp:135
 msgid "_Rename"
 msgstr "Átne_vezés"
 
 #. TRANSLATORS: This means "The layer has been renamed"
-#: ../src/dialogs/layer-properties.cpp:144
+#: ../src/dialogs/layer-properties.cpp:146
 msgid "Renamed layer"
 msgstr "A réteg átnevezése megtörtént."
 
-#: ../src/dialogs/layer-properties.cpp:148
-msgid "Create Layer"
-msgstr "Réteg létrehozása"
-
 #: ../src/dialogs/layer-properties.cpp:150
-msgid "C_reate"
-msgstr "_Létrehozás"
+#, fuzzy
+msgid "Add Layer"
+msgstr "_Réteg"
 
-#: ../src/dialogs/layer-properties.cpp:164
+#: ../src/dialogs/layer-properties.cpp:152
+#, fuzzy
+msgid "_Add"
+msgstr "Felvétel"
+
+#: ../src/dialogs/layer-properties.cpp:166
 msgid "New layer created."
 msgstr "Új réteg létrehozva."
 
@@ -2437,92 +2440,92 @@ msgstr "Körvonalstílus"
 msgid "Master _opacity"
 msgstr "Alap-átlátszatlanság"
 
-#: ../src/dialogs/rdf.cpp:229
+#: ../src/dialogs/rdf.cpp:244
 msgid "Name by which this document is formally known."
 msgstr "A dokumentum formális neve."
 
-#: ../src/dialogs/rdf.cpp:231
+#: ../src/dialogs/rdf.cpp:246
 msgid "Date"
 msgstr "Dátum"
 
-#: ../src/dialogs/rdf.cpp:232
+#: ../src/dialogs/rdf.cpp:247
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr "A dokumentum létrehozásához kapcsolható dátum (ÉÉÉÉ-HH-NN)."
 
-#: ../src/dialogs/rdf.cpp:234
+#: ../src/dialogs/rdf.cpp:249
 msgid "Format"
 msgstr "Formátum"
 
-#: ../src/dialogs/rdf.cpp:235
+#: ../src/dialogs/rdf.cpp:250
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr "A dokumentum fizikai vagy digitális formátuma (MIME-típus)."
 
-#: ../src/dialogs/rdf.cpp:237
+#: ../src/dialogs/rdf.cpp:252
 msgid "Type"
 msgstr "Típus"
 
-#: ../src/dialogs/rdf.cpp:238
+#: ../src/dialogs/rdf.cpp:253
 msgid "Type of document (DCMI Type)."
 msgstr "A dokumentum típusa (DCMI-típus)."
 
-#: ../src/dialogs/rdf.cpp:241
+#: ../src/dialogs/rdf.cpp:256
 msgid "Creator"
 msgstr "Készítő"
 
-#: ../src/dialogs/rdf.cpp:242
+#: ../src/dialogs/rdf.cpp:257
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr ""
 "A dokumentum tartalmának elkészítéséért elsődlegesen felelős személy "
 "(entitás) neve."
 
-#: ../src/dialogs/rdf.cpp:244
+#: ../src/dialogs/rdf.cpp:259
 msgid "Rights"
 msgstr "Jogok"
 
-#: ../src/dialogs/rdf.cpp:245
+#: ../src/dialogs/rdf.cpp:260
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr ""
 "A dokumentum szellemi tulajdonjogaival rendelkező személy (entitás) neve."
 
-#: ../src/dialogs/rdf.cpp:247
+#: ../src/dialogs/rdf.cpp:262
 msgid "Publisher"
 msgstr "Kiadó"
 
-#: ../src/dialogs/rdf.cpp:248
+#: ../src/dialogs/rdf.cpp:263
 msgid "Name of entity responsible for making this document available."
 msgstr "A dokumentum elérhetővé tételéért felelős személy (entitás) neve."
 
-#: ../src/dialogs/rdf.cpp:251
+#: ../src/dialogs/rdf.cpp:266
 msgid "Identifier"
 msgstr "Azonosító"
 
-#: ../src/dialogs/rdf.cpp:252
+#: ../src/dialogs/rdf.cpp:267
 msgid "Unique URI to reference this document."
 msgstr "A dokumentumra való hivatkozásra használható egyedi URI."
 
-#: ../src/dialogs/rdf.cpp:254
+#: ../src/dialogs/rdf.cpp:269
 msgid "Source"
 msgstr "Forrás"
 
-#: ../src/dialogs/rdf.cpp:255
+#: ../src/dialogs/rdf.cpp:270
 msgid "Unique URI to reference the source of this document."
 msgstr "A dokumentum forrására való hivatkozásra használható egyedi URI."
 
-#: ../src/dialogs/rdf.cpp:257
+#: ../src/dialogs/rdf.cpp:272
 msgid "Relation"
 msgstr "Kapcsolat"
 
-#: ../src/dialogs/rdf.cpp:258
+#: ../src/dialogs/rdf.cpp:273
 msgid "Unique URI to a related document."
 msgstr "Egy kapcsolódó dokumentumra utaló egyedi URI."
 
-#: ../src/dialogs/rdf.cpp:260
+#: ../src/dialogs/rdf.cpp:275
 msgid "Language"
 msgstr "Nyelv"
 
-#: ../src/dialogs/rdf.cpp:261
+#: ../src/dialogs/rdf.cpp:276
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
@@ -2530,11 +2533,11 @@ msgstr ""
 "A dokumentum nyelvének kétbetűs jele esetlegesen ellátva kiegészítő jelekkel "
 "(példa: \"en-GB\")."
 
-#: ../src/dialogs/rdf.cpp:263
+#: ../src/dialogs/rdf.cpp:278
 msgid "Keywords"
 msgstr "Kulcsszavak"
 
-#: ../src/dialogs/rdf.cpp:264
+#: ../src/dialogs/rdf.cpp:279
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
@@ -2544,24 +2547,24 @@ msgstr ""
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: ../src/dialogs/rdf.cpp:268
+#: ../src/dialogs/rdf.cpp:283
 msgid "Coverage"
 msgstr "Hely/idő"
 
-#: ../src/dialogs/rdf.cpp:269
+#: ../src/dialogs/rdf.cpp:284
 msgid "Extent or scope of this document."
 msgstr "A dokumentum által átfogott hely vagy idő."
 
-#: ../src/dialogs/rdf.cpp:273
+#: ../src/dialogs/rdf.cpp:288
 msgid "A short account of the content of this document."
 msgstr "A dokumentum tartalmának rövid leírása."
 
 #. FIXME: need to handle 1 agent per line of input
-#: ../src/dialogs/rdf.cpp:277
+#: ../src/dialogs/rdf.cpp:292
 msgid "Contributors"
 msgstr "Közreműködők"
 
-#: ../src/dialogs/rdf.cpp:278
+#: ../src/dialogs/rdf.cpp:293
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
@@ -2570,21 +2573,21 @@ msgstr ""
 "neve."
 
 #. TRANSLATORS: URL to a page that defines the license for the document
-#: ../src/dialogs/rdf.cpp:282
+#: ../src/dialogs/rdf.cpp:297
 msgid "URI"
 msgstr "URI"
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: ../src/dialogs/rdf.cpp:284
+#: ../src/dialogs/rdf.cpp:299
 msgid "URI to this document's license's namespace definition."
 msgstr "A dokumentum licencének névtérdefiníciójára utaló URI."
 
 #. TRANSLATORS: fragment of XML representing the license of the document
-#: ../src/dialogs/rdf.cpp:288
+#: ../src/dialogs/rdf.cpp:303
 msgid "Fragment"
 msgstr "Rész"
 
-#: ../src/dialogs/rdf.cpp:289
+#: ../src/dialogs/rdf.cpp:304
 msgid "XML fragment for the RDF 'License' section."
 msgstr "Az RDF szerinti \"Licenc\" szakaszt tartalmazó XML-rész."
 
@@ -2683,7 +2686,7 @@ msgstr "Közép jelölése:"
 msgid "End Markers:"
 msgstr "Vég jelölése:"
 
-#: ../src/dialogs/swatches.cpp:422
+#: ../src/dialogs/swatches.cpp:425
 #, c-format
 msgid "Palettes directory (%s) is unavailable."
 msgstr ""
@@ -3190,7 +3193,7 @@ msgstr ""
 "a kimenetnek egy program számára való átadásához pedig a\n"
 "következőt: \"| programnév argumentum ...\"."
 
-#: ../src/extension/internal/ps.cpp:1220
+#: ../src/extension/internal/ps.cpp:1233
 msgid "write error occurred"
 msgstr "írási hiba történt"
 
@@ -3841,51 +3844,51 @@ msgstr ""
 "A családmegadás nélküli betűtípus figyelmen kívül hagyása (az ilyen "
 "betűtípus problémát okozhat)"
 
-#: ../src/main.cpp:177
+#: ../src/main.cpp:179
 msgid "Print the Inkscape version number"
 msgstr "Az Inkscape verziószámának kiírása"
 
-#: ../src/main.cpp:182
+#: ../src/main.cpp:184
 msgid "Do not use X server (only process files from console)"
 msgstr ""
 "Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
 
-#: ../src/main.cpp:187
+#: ../src/main.cpp:189
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 "Az X grafikus rendszer használatának megkísérlése akkor is, ha a DISPLAY "
 "változó nincs beállítva"
 
-#: ../src/main.cpp:192
+#: ../src/main.cpp:194
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "A megadott dokumentum(ok) megnyitása (az opciók elhagyhatók)"
 
-#: ../src/main.cpp:193 ../src/main.cpp:198 ../src/main.cpp:203
-#: ../src/main.cpp:260 ../src/main.cpp:265 ../src/main.cpp:270
+#: ../src/main.cpp:195 ../src/main.cpp:200 ../src/main.cpp:205
+#: ../src/main.cpp:262 ../src/main.cpp:267 ../src/main.cpp:272
 msgid "FILENAME"
 msgstr "FÁJLNÉV"
 
-#: ../src/main.cpp:197
+#: ../src/main.cpp:199
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "A dokumentum(ok) nyomtatása egy adott fájlba (program számára való átadás: "
 "\"| programnév\")"
 
-#: ../src/main.cpp:202
+#: ../src/main.cpp:204
 msgid "Export document to a PNG file"
 msgstr "A dokumentum exportálása PNG formátumú képbe"
 
-#: ../src/main.cpp:207
+#: ../src/main.cpp:209
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 "Az SVG-dokumentum bitképbe való exportálásához használt felbontás "
 "(alapértelmezés: 90)"
 
-#: ../src/main.cpp:208
+#: ../src/main.cpp:210
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:212
+#: ../src/main.cpp:214
 #, fuzzy
 msgid ""
 "Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"
@@ -3893,147 +3896,152 @@ msgstr ""
 "Az exportált terület SVG-képpontban (alapértelmezés: teljes dokumentum, a "
 "bal alsó sarok a 0,0 pont)"
 
-#: ../src/main.cpp:213
+#: ../src/main.cpp:215
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:217
+#: ../src/main.cpp:219
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr ""
 
-#: ../src/main.cpp:222
+#: ../src/main.cpp:224
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "Az exportált bitkép szélessége képpontban (felülbírálja az export-dpi "
 "értéket)"
 
-#: ../src/main.cpp:223
+#: ../src/main.cpp:225
 msgid "WIDTH"
 msgstr "SZÉLESSÉG"
 
-#: ../src/main.cpp:227
+#: ../src/main.cpp:229
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "Az exportált bitkép magassága képpontban (felülbírálja az export-dpi értéket)"
 
-#: ../src/main.cpp:228
+#: ../src/main.cpp:230
 msgid "HEIGHT"
 msgstr "MAGASSÁG"
 
-#: ../src/main.cpp:232
+#: ../src/main.cpp:234
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
 "Az exportálandó objektum azonosítója (felülbírálja az export-area értéket)"
 
-#: ../src/main.cpp:233 ../src/main.cpp:305
+#: ../src/main.cpp:235 ../src/main.cpp:307
 msgid "ID"
 msgstr "Azonosító"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:239
+#: ../src/main.cpp:241
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Csak az export-id-vel rendelkező objektum exportálása; a többi elrejtése "
 "(csak export-id esetén)"
 
-#: ../src/main.cpp:244
+#: ../src/main.cpp:246
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Tárolt fájlnév és DPI-információk használata exportáláskor (csak export-id "
 "esetén)"
 
-#: ../src/main.cpp:249
+#: ../src/main.cpp:251
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Az exportált bitkép háttérszíne (bármilyen, az SVG formátum által támogatott "
 "színmegadás)"
 
-#: ../src/main.cpp:250
+#: ../src/main.cpp:252
 msgid "COLOR"
 msgstr "SZÍN"
 
-#: ../src/main.cpp:254
+#: ../src/main.cpp:256
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Az exportált bitkép hátterének átlátszatlansága (vagy 0,0 és 1,0 közt, vagy "
 "1 és 255 közt)"
 
-#: ../src/main.cpp:255
+#: ../src/main.cpp:257
 msgid "VALUE"
 msgstr "ÉRTÉK"
 
-#: ../src/main.cpp:259
+#: ../src/main.cpp:261
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "A dokumentum exportálása normál SVG-fájlba (nincs sem \"sodipodi\", sem "
 "\"inkscape\" névtér)"
 
-#: ../src/main.cpp:264
+#: ../src/main.cpp:266
 #, fuzzy
 msgid "Export document to a PS file"
 msgstr "A dokumentum exportálása PNG formátumú képbe"
 
-#: ../src/main.cpp:269
+#: ../src/main.cpp:271
 #, fuzzy
 msgid "Export document to an EPS file"
 msgstr "A dokumentum exportálása PNG formátumú képbe"
 
-#: ../src/main.cpp:274
+#: ../src/main.cpp:276
 #, fuzzy
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Bitkép-objektum átalakítása láncokká"
 
-#: ../src/main.cpp:279
+#: ../src/main.cpp:281
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr ""
 
-#: ../src/main.cpp:284
+#: ../src/main.cpp:286
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
-#: ../src/main.cpp:289
+#: ../src/main.cpp:291
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
-#: ../src/main.cpp:294
+#: ../src/main.cpp:296
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:299
+#: ../src/main.cpp:301
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:304
+#: ../src/main.cpp:306
 #, fuzzy
 msgid "The ID of the object whose dimensions are queried"
 msgstr ""
 "Az exportálandó objektum azonosítója (felülbírálja az export-area értéket)"
 
-#: ../src/main.cpp:309
+#: ../src/main.cpp:311
 msgid "Print out the extension directory and exit"
 msgstr ""
 
-#: ../src/main.cpp:314
+#: ../src/main.cpp:316
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "A megadott fájlok egyenkénti megjelenítése - ugrás a következőre: "
 "billentyűzet vagy egér használatával"
 
-#: ../src/main.cpp:319
+#: ../src/main.cpp:321
 msgid "Use the new Gtkmm GUI interface"
 msgstr ""
 
-#: ../src/main.cpp:467
+#: ../src/main.cpp:326
+#, fuzzy
+msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgstr "A nem használt &lt;defs&gt;-elemek eltávolítása a dokumentumból"
+
+#: ../src/main.cpp:475
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4796,24 +4804,24 @@ msgstr "<b>Hivatkozás</b> erre: %s"
 msgid "<b>Link</b> without URI"
 msgstr "URI nélküli <b>hivatkozás</b>"
 
-#: ../src/sp-ellipse.cpp:436 ../src/sp-ellipse.cpp:867
+#: ../src/sp-ellipse.cpp:437 ../src/sp-ellipse.cpp:868
 msgid "<b>Ellipse</b>"
 msgstr "<b>Ellipszis</b>"
 
-#: ../src/sp-ellipse.cpp:581
+#: ../src/sp-ellipse.cpp:582
 msgid "<b>Circle</b>"
 msgstr "<b>Kör</b>"
 
-#: ../src/sp-ellipse.cpp:862
+#: ../src/sp-ellipse.cpp:863
 #, fuzzy
 msgid "<b>Segment</b>"
 msgstr "<b>Új:</b>"
 
-#: ../src/sp-ellipse.cpp:864
+#: ../src/sp-ellipse.cpp:865
 msgid "<b>Arc</b>"
 msgstr "<b>Ellipszisív</b>"
 
-#: ../src/sp-flowregion.cpp:266
+#: ../src/sp-flowregion.cpp:261
 #, fuzzy
 msgid "Flow region"
 msgstr "Hiv_atkozás követése"
@@ -4822,7 +4830,7 @@ msgstr "Hiv_atkozás követése"
 #. * flow excluded region.  flowRegionExclude in SVG 1.2: see
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
-#: ../src/sp-flowregion.cpp:475
+#: ../src/sp-flowregion.cpp:465
 msgid "Flow excluded region"
 msgstr ""
 
@@ -4844,16 +4852,20 @@ msgstr "függőleges segédvonal"
 msgid "horizontal guideline"
 msgstr "vízszintes segédvonal"
 
-#: ../src/sp-image.cpp:833
+#: ../src/sp-image.cpp:835
 msgid "embedded"
 msgstr ""
 
-#: ../src/sp-image.cpp:836
+#: ../src/sp-image.cpp:839
+msgid "(null_pointer)"
+msgstr ""
+
+#: ../src/sp-image.cpp:843
 #, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>Helytelen képhivatkozás</b>: %s"
 
-#: ../src/sp-image.cpp:837
+#: ../src/sp-image.cpp:844
 #, fuzzy, c-format
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "%d x %d méretű <b>kép</b>: %s"
@@ -6785,7 +6797,8 @@ msgstr ""
 
 #. Layer
 #: ../src/verbs.cpp:1821
-msgid "_New Layer..."
+#, fuzzy
+msgid "_Add Layer..."
 msgstr "Ú_j réteg..."
 
 #: ../src/verbs.cpp:1822
@@ -6793,7 +6806,8 @@ msgid "Create a new layer"
 msgstr "Új réteg létrehozása"
 
 #: ../src/verbs.cpp:1823
-msgid "Ren_ame Layer..."
+#, fuzzy
+msgid "Re_name Layer..."
 msgstr "Réteg át_nevezése..."
 
 #: ../src/verbs.cpp:1824
@@ -7846,6 +7860,12 @@ msgstr "Tulajdonság"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Érték"
+
+#~ msgid "Create Layer"
+#~ msgstr "Réteg létrehozása"
+
+#~ msgid "C_reate"
+#~ msgstr "_Létrehozás"
 
 #, fuzzy
 #~ msgid "H"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-27 21:43+0200\n"
+"POT-Creation-Date: 2005-07-03 11:03+0200\n"
 "PO-Revision-Date: 2005-02-01 13:33+0300\n"
 "Last-Translator: Maxim V. Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -2258,12 +2258,12 @@ msgid "A freeform label for the object"
 msgstr "Довільна позначка об'єкту"
 
 #. Create the label for the object title
-#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:228
+#: ../src/dialogs/item-properties.cpp:197 ../src/dialogs/rdf.cpp:243
 msgid "Title"
 msgstr "Назва"
 
 #. Create the frame for the object description
-#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:272
+#: ../src/dialogs/item-properties.cpp:214 ../src/dialogs/rdf.cpp:287
 msgid "Description"
 msgstr "Опис"
 
@@ -2309,31 +2309,34 @@ msgid "Id exists! "
 msgstr "Такий ID вже є"
 
 #: ../src/dialogs/layer-properties.cpp:49
-msgid "Layer Name:"
+#, fuzzy
+msgid "Layer name:"
 msgstr "Назва шару:"
 
-#: ../src/dialogs/layer-properties.cpp:130
+#: ../src/dialogs/layer-properties.cpp:132
 msgid "Rename Layer"
 msgstr "Перейменування шару"
 
-#: ../src/dialogs/layer-properties.cpp:133
+#: ../src/dialogs/layer-properties.cpp:135
 msgid "_Rename"
 msgstr "Пере_йменувати"
 
 #. TRANSLATORS: This means "The layer has been renamed"
-#: ../src/dialogs/layer-properties.cpp:144
+#: ../src/dialogs/layer-properties.cpp:146
 msgid "Renamed layer"
 msgstr "Перейменований шар"
 
-#: ../src/dialogs/layer-properties.cpp:148
-msgid "Create Layer"
-msgstr "Створення шару"
-
 #: ../src/dialogs/layer-properties.cpp:150
-msgid "C_reate"
-msgstr "С_творити"
+#, fuzzy
+msgid "Add Layer"
+msgstr "_Шар"
 
-#: ../src/dialogs/layer-properties.cpp:164
+#: ../src/dialogs/layer-properties.cpp:152
+#, fuzzy
+msgid "_Add"
+msgstr "Додати"
+
+#: ../src/dialogs/layer-properties.cpp:166
 msgid "New layer created."
 msgstr "Новий шар створено."
 
@@ -2412,100 +2415,100 @@ msgstr "Стиль штриха"
 msgid "Master _opacity"
 msgstr "Загальна прозорість"
 
-#: ../src/dialogs/rdf.cpp:229
+#: ../src/dialogs/rdf.cpp:244
 msgid "Name by which this document is formally known."
 msgstr "Назва, під яким цей документ офіційно відомий."
 
-#: ../src/dialogs/rdf.cpp:231
+#: ../src/dialogs/rdf.cpp:246
 msgid "Date"
 msgstr "Дата"
 
-#: ../src/dialogs/rdf.cpp:232
+#: ../src/dialogs/rdf.cpp:247
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr "Дата, до якої відноситься створення цього документу (РРРР-ММ-ДД)."
 
-#: ../src/dialogs/rdf.cpp:234
+#: ../src/dialogs/rdf.cpp:249
 msgid "Format"
 msgstr "Формат"
 
-#: ../src/dialogs/rdf.cpp:235
+#: ../src/dialogs/rdf.cpp:250
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr "Фізичний або цифровий вияв цього документу (MIME-тип)."
 
-#: ../src/dialogs/rdf.cpp:237
+#: ../src/dialogs/rdf.cpp:252
 msgid "Type"
 msgstr "Тип"
 
-#: ../src/dialogs/rdf.cpp:238
+#: ../src/dialogs/rdf.cpp:253
 msgid "Type of document (DCMI Type)."
 msgstr "Тип документу (тип DCMI)"
 
-#: ../src/dialogs/rdf.cpp:241
+#: ../src/dialogs/rdf.cpp:256
 msgid "Creator"
 msgstr "Автор"
 
-#: ../src/dialogs/rdf.cpp:242
+#: ../src/dialogs/rdf.cpp:257
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr ""
 "Назва суб'єкта, головним чином відповідального за створення цього документу."
 
-#: ../src/dialogs/rdf.cpp:244
+#: ../src/dialogs/rdf.cpp:259
 msgid "Rights"
 msgstr "Права"
 
-#: ../src/dialogs/rdf.cpp:245
+#: ../src/dialogs/rdf.cpp:260
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr "Назва суб'єкта, чиєю інтелектуальною власністю є цей документ."
 
-#: ../src/dialogs/rdf.cpp:247
+#: ../src/dialogs/rdf.cpp:262
 msgid "Publisher"
 msgstr "Видавець"
 
-#: ../src/dialogs/rdf.cpp:248
+#: ../src/dialogs/rdf.cpp:263
 msgid "Name of entity responsible for making this document available."
 msgstr "Назва суб'єкта, відповідального за публікацію цього документу."
 
-#: ../src/dialogs/rdf.cpp:251
+#: ../src/dialogs/rdf.cpp:266
 msgid "Identifier"
 msgstr "Ідентифікатор"
 
-#: ../src/dialogs/rdf.cpp:252
+#: ../src/dialogs/rdf.cpp:267
 msgid "Unique URI to reference this document."
 msgstr "Унікальний URI для посилання на цей документ."
 
-#: ../src/dialogs/rdf.cpp:254
+#: ../src/dialogs/rdf.cpp:269
 msgid "Source"
 msgstr "Джерело"
 
-#: ../src/dialogs/rdf.cpp:255
+#: ../src/dialogs/rdf.cpp:270
 msgid "Unique URI to reference the source of this document."
 msgstr "Унікальний URI для посилання на джерело цього документу."
 
-#: ../src/dialogs/rdf.cpp:257
+#: ../src/dialogs/rdf.cpp:272
 msgid "Relation"
 msgstr "Пов'язаного"
 
-#: ../src/dialogs/rdf.cpp:258
+#: ../src/dialogs/rdf.cpp:273
 msgid "Unique URI to a related document."
 msgstr "Унікальний URI пов'язаного документу."
 
-#: ../src/dialogs/rdf.cpp:260
+#: ../src/dialogs/rdf.cpp:275
 msgid "Language"
 msgstr "Мова"
 
-#: ../src/dialogs/rdf.cpp:261
+#: ../src/dialogs/rdf.cpp:276
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
 msgstr "Дволітерний код мови, можливо з підтегами (наприклад, uk-UA)"
 
-#: ../src/dialogs/rdf.cpp:263
+#: ../src/dialogs/rdf.cpp:278
 msgid "Keywords"
 msgstr "Ключові слова"
 
-#: ../src/dialogs/rdf.cpp:264
+#: ../src/dialogs/rdf.cpp:279
 msgid ""
 "The topic of this document as comma-separated key words, phrases, or "
 "classifications."
@@ -2513,45 +2516,45 @@ msgstr "Опис теми цього документу списком ключ�
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: ../src/dialogs/rdf.cpp:268
+#: ../src/dialogs/rdf.cpp:283
 msgid "Coverage"
 msgstr "Висвітлення"
 
-#: ../src/dialogs/rdf.cpp:269
+#: ../src/dialogs/rdf.cpp:284
 msgid "Extent or scope of this document."
 msgstr "Висвітлення або тематичні рамки цього документу."
 
-#: ../src/dialogs/rdf.cpp:273
+#: ../src/dialogs/rdf.cpp:288
 msgid "A short account of the content of this document."
 msgstr "Короткий опис вмісту документа."
 
 #. FIXME: need to handle 1 agent per line of input
-#: ../src/dialogs/rdf.cpp:277
+#: ../src/dialogs/rdf.cpp:292
 msgid "Contributors"
 msgstr "Співавтори"
 
-#: ../src/dialogs/rdf.cpp:278
+#: ../src/dialogs/rdf.cpp:293
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
 msgstr "Назви суб'єктів, що зробили внесок у створення цього документу. "
 
 #. TRANSLATORS: URL to a page that defines the license for the document
-#: ../src/dialogs/rdf.cpp:282
+#: ../src/dialogs/rdf.cpp:297
 msgid "URI"
 msgstr "URI"
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: ../src/dialogs/rdf.cpp:284
+#: ../src/dialogs/rdf.cpp:299
 msgid "URI to this document's license's namespace definition."
 msgstr "URI тексту ліцензії, що застосовується до цього документу."
 
 #. TRANSLATORS: fragment of XML representing the license of the document
-#: ../src/dialogs/rdf.cpp:288
+#: ../src/dialogs/rdf.cpp:303
 msgid "Fragment"
 msgstr "Фрагмент"
 
-#: ../src/dialogs/rdf.cpp:289
+#: ../src/dialogs/rdf.cpp:304
 msgid "XML fragment for the RDF 'License' section."
 msgstr "XML-фрагмент RDF-розділу \"Ліцензія\""
 
@@ -2650,7 +2653,7 @@ msgstr "Серединні маркери:"
 msgid "End Markers:"
 msgstr "Кінцеві маркери:"
 
-#: ../src/dialogs/swatches.cpp:422
+#: ../src/dialogs/swatches.cpp:425
 #, c-format
 msgid "Palettes directory (%s) is unavailable."
 msgstr ""
@@ -3153,7 +3156,7 @@ msgstr ""
 "Використовуйте '> filename' для друкування у файл.\n"
 "Використовуйте '| prog arg...' для передавання виводу іншій програмі."
 
-#: ../src/extension/internal/ps.cpp:1220
+#: ../src/extension/internal/ps.cpp:1233
 msgid "write error occurred"
 msgstr "помилка при записуванні"
 
@@ -3794,48 +3797,48 @@ msgstr "Переміщення вузла скасовано."
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Шрифт без сімейства, який може привести до збою Pango, ігнорується"
 
-#: ../src/main.cpp:177
+#: ../src/main.cpp:179
 msgid "Print the Inkscape version number"
 msgstr "Вивести версію Inkscape"
 
-#: ../src/main.cpp:182
+#: ../src/main.cpp:184
 msgid "Do not use X server (only process files from console)"
 msgstr "Не використовувати X сервер (лише консольні операції)"
 
-#: ../src/main.cpp:187
+#: ../src/main.cpp:189
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 "Намагатися використовувати X сервер, навіть якщо змінну $DISPLAY не "
 "встановлено"
 
-#: ../src/main.cpp:192
+#: ../src/main.cpp:194
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Відкрити вказані документи (аргумент може бути виключений)"
 
-#: ../src/main.cpp:193 ../src/main.cpp:198 ../src/main.cpp:203
-#: ../src/main.cpp:260 ../src/main.cpp:265 ../src/main.cpp:270
+#: ../src/main.cpp:195 ../src/main.cpp:200 ../src/main.cpp:205
+#: ../src/main.cpp:262 ../src/main.cpp:267 ../src/main.cpp:272
 msgid "FILENAME"
 msgstr "НАЗВА_ФАЙЛА"
 
-#: ../src/main.cpp:197
+#: ../src/main.cpp:199
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Друкувати документ(и) у вказаний файл (для передавання програмі "
 "використовуйте '| program')"
 
-#: ../src/main.cpp:202
+#: ../src/main.cpp:204
 msgid "Export document to a PNG file"
 msgstr "Експортувати документ у файл формату PNG"
 
-#: ../src/main.cpp:207
+#: ../src/main.cpp:209
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr "Роздільна здатність для експортування SVG у растр (типово 90)"
 
-#: ../src/main.cpp:208
+#: ../src/main.cpp:210
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:212
+#: ../src/main.cpp:214
 #, fuzzy
 msgid ""
 "Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"
@@ -3843,139 +3846,144 @@ msgstr ""
 "Експортована область у одиницях SVG (типово - весь документ; 0,0 - лівий "
 "нижній кут)"
 
-#: ../src/main.cpp:213
+#: ../src/main.cpp:215
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:217
+#: ../src/main.cpp:219
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr ""
 
-#: ../src/main.cpp:222
+#: ../src/main.cpp:224
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Ширина зображення для експорту у точках (перевизначає export-dpi)"
 
-#: ../src/main.cpp:223
+#: ../src/main.cpp:225
 msgid "WIDTH"
 msgstr "ШИРИНА"
 
-#: ../src/main.cpp:227
+#: ../src/main.cpp:229
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Висота зображення для експорту у точках (перевизначає export-dpi)"
 
-#: ../src/main.cpp:228
+#: ../src/main.cpp:230
 msgid "HEIGHT"
 msgstr "ВИСОТА"
 
-#: ../src/main.cpp:232
+#: ../src/main.cpp:234
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "Ідентифікатор об'єкту, що експортується (перевизначає export-area)"
 
-#: ../src/main.cpp:233 ../src/main.cpp:305
+#: ../src/main.cpp:235 ../src/main.cpp:307
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:239
+#: ../src/main.cpp:241
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Експортувати лише об'єкт з заданим ідентифікатором, усі інші приховати (лише "
 "з export-id)"
 
-#: ../src/main.cpp:244
+#: ../src/main.cpp:246
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "При експорті використовувати збережену назву файлу та розширення (лише з "
 "export-id)"
 
-#: ../src/main.cpp:249
+#: ../src/main.cpp:251
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Колір тла для експорту растрового зображення (будь-яка підтримувана SVG-"
 "кольорова гама)"
 
-#: ../src/main.cpp:250
+#: ../src/main.cpp:252
 msgid "COLOR"
 msgstr "КОЛІР"
 
-#: ../src/main.cpp:254
+#: ../src/main.cpp:256
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "Прозорість тла для експорту растру (від 0.0 до 1.0, або від 1 до 255)"
 
-#: ../src/main.cpp:255
+#: ../src/main.cpp:257
 msgid "VALUE"
 msgstr "VALUE"
 
-#: ../src/main.cpp:259
+#: ../src/main.cpp:261
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Експортувати документ у формат \"звичайний SVG\" (без елементів sodipodi: "
 "або inkscape:)"
 
-#: ../src/main.cpp:264
+#: ../src/main.cpp:266
 #, fuzzy
 msgid "Export document to a PS file"
 msgstr "Експортувати документ у файл формату PNG"
 
-#: ../src/main.cpp:269
+#: ../src/main.cpp:271
 #, fuzzy
 msgid "Export document to an EPS file"
 msgstr "Експортувати документ у файл формату PNG"
 
-#: ../src/main.cpp:274
+#: ../src/main.cpp:276
 #, fuzzy
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Перетворити растровий об'єкт у контури"
 
-#: ../src/main.cpp:279
+#: ../src/main.cpp:281
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr ""
 
-#: ../src/main.cpp:284
+#: ../src/main.cpp:286
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
-#: ../src/main.cpp:289
+#: ../src/main.cpp:291
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
 
-#: ../src/main.cpp:294
+#: ../src/main.cpp:296
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:299
+#: ../src/main.cpp:301
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
 
-#: ../src/main.cpp:304
+#: ../src/main.cpp:306
 #, fuzzy
 msgid "The ID of the object whose dimensions are queried"
 msgstr "Ідентифікатор об'єкту, що експортується (перевизначає export-area)"
 
-#: ../src/main.cpp:309
+#: ../src/main.cpp:311
 msgid "Print out the extension directory and exit"
 msgstr ""
 
-#: ../src/main.cpp:314
+#: ../src/main.cpp:316
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Показати дані файли по черзі, перемикання на наступний - будь-яка клавіша"
 
-#: ../src/main.cpp:319
+#: ../src/main.cpp:321
 msgid "Use the new Gtkmm GUI interface"
 msgstr ""
 
-#: ../src/main.cpp:467
+#: ../src/main.cpp:326
+#, fuzzy
+msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgstr "Прибрати непотрібне з &lt;defs&gt; документу"
+
+#: ../src/main.cpp:475
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4730,24 +4738,24 @@ msgstr "<b>Посилання</b> на %s"
 msgid "<b>Link</b> without URI"
 msgstr "<b>Посилання</b> без URI"
 
-#: ../src/sp-ellipse.cpp:436 ../src/sp-ellipse.cpp:867
+#: ../src/sp-ellipse.cpp:437 ../src/sp-ellipse.cpp:868
 msgid "<b>Ellipse</b>"
 msgstr "<b>Еліпс</b>"
 
-#: ../src/sp-ellipse.cpp:581
+#: ../src/sp-ellipse.cpp:582
 msgid "<b>Circle</b>"
 msgstr "<b>Коло</b>"
 
-#: ../src/sp-ellipse.cpp:862
+#: ../src/sp-ellipse.cpp:863
 #, fuzzy
 msgid "<b>Segment</b>"
 msgstr "<b>Новий:</b>"
 
-#: ../src/sp-ellipse.cpp:864
+#: ../src/sp-ellipse.cpp:865
 msgid "<b>Arc</b>"
 msgstr "<b>Дуга</b>"
 
-#: ../src/sp-flowregion.cpp:266
+#: ../src/sp-flowregion.cpp:261
 #, fuzzy
 msgid "Flow region"
 msgstr "_Перейти за посиланням"
@@ -4756,7 +4764,7 @@ msgstr "_Перейти за посиланням"
 #. * flow excluded region.  flowRegionExclude in SVG 1.2: see
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
-#: ../src/sp-flowregion.cpp:475
+#: ../src/sp-flowregion.cpp:465
 msgid "Flow excluded region"
 msgstr ""
 
@@ -4778,16 +4786,20 @@ msgstr "вертикальна напрямна"
 msgid "horizontal guideline"
 msgstr "горизонтальна напрямна"
 
-#: ../src/sp-image.cpp:833
+#: ../src/sp-image.cpp:835
 msgid "embedded"
 msgstr ""
 
-#: ../src/sp-image.cpp:836
+#: ../src/sp-image.cpp:839
+msgid "(null_pointer)"
+msgstr ""
+
+#: ../src/sp-image.cpp:843
 #, c-format
 msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>Зображення з неправильним посиланням</b>: %s"
 
-#: ../src/sp-image.cpp:837
+#: ../src/sp-image.cpp:844
 #, fuzzy, c-format
 msgid "<b>Image</b> %d &#215; %d: %s"
 msgstr "<b>Зображення</b> %d x %d: %s"
@@ -6725,7 +6737,8 @@ msgstr ""
 
 #. Layer
 #: ../src/verbs.cpp:1821
-msgid "_New Layer..."
+#, fuzzy
+msgid "_Add Layer..."
 msgstr "_Створити шар..."
 
 #: ../src/verbs.cpp:1822
@@ -6733,7 +6746,8 @@ msgid "Create a new layer"
 msgstr "Створити новий шар"
 
 #: ../src/verbs.cpp:1823
-msgid "Ren_ame Layer..."
+#, fuzzy
+msgid "Re_name Layer..."
 msgstr "Пере_йменувати шар..."
 
 #: ../src/verbs.cpp:1824
@@ -7775,6 +7789,12 @@ msgstr "Атрибут"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Значення"
+
+#~ msgid "Create Layer"
+#~ msgstr "Створення шару"
+
+#~ msgid "C_reate"
+#~ msgstr "С_творити"
 
 #, fuzzy
 #~ msgid "H"
