@@ -18,7 +18,7 @@ INPUT = \
 	extension/implementation/plugin-link.h	\
 	extension/implementation/plugin.cpp	\
 	extension/implementation/plugin.h	\
-	extension/plugin/gimpgrad.cpp	\
+	extension/internal/gimpgrad.cpp	\
 	geom.cpp	\
 	helper/action.h	\
 	knot-enums.h	\
