@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-03 11:03+0200\n"
-"PO-Revision-Date: 2005-07-03 22:37+0200\n"
+"PO-Revision-Date: 2005-07-03 22:55+0200\n"
 "Last-Translator: root\n"
 "Language-Team:  <hu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -510,9 +510,8 @@ msgstr ""
 "objektumnak nincs kitöltése vagy körvonala)"
 
 #: ../src/dialogs/clonetiler.cpp:1994
-#, fuzzy
 msgid "<b>H:</b>"
-msgstr "<b>Új:</b>"
+msgstr "<b>Á:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2001
 msgid "Change the tile hue by this percentage for each row"
@@ -527,9 +526,8 @@ msgid "Randomize the tile hue by this percentage"
 msgstr "A csempék árnyalatának véletlenszerűsítése ennyi százalékkal"
 
 #: ../src/dialogs/clonetiler.cpp:2024
-#, fuzzy
 msgid "<b>S:</b>"
-msgstr "<b>Új:</b>"
+msgstr "<b>T:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2031
 msgid "Change the color saturation by this percentage for each row"
@@ -544,9 +542,8 @@ msgid "Randomize the color saturation by this percentage"
 msgstr "A színtelítettség véletlenszerűsítése ennyi százalékkal"
 
 #: ../src/dialogs/clonetiler.cpp:2053
-#, fuzzy
 msgid "<b>L:</b>"
-msgstr "<b>Új:</b>"
+msgstr "<b>F:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:2060
 msgid "Change the color lightness by this percentage for each row"
@@ -631,7 +628,7 @@ msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2177
 msgid "clonetiler|H"
-msgstr "clonetiler|Á"
+msgstr "Á"
 
 #: ../src/dialogs/clonetiler.cpp:2178
 #, fuzzy
@@ -640,7 +637,7 @@ msgstr "A csökkentett színek száma"
 
 #: ../src/dialogs/clonetiler.cpp:2185
 msgid "clonetiler|S"
-msgstr "clonetiler|T"
+msgstr "T"
 
 #: ../src/dialogs/clonetiler.cpp:2186
 msgid "Pick the saturation of the color"
@@ -648,7 +645,7 @@ msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2193
 msgid "clonetiler|L"
-msgstr "clonetiler|F"
+msgstr "F"
 
 #: ../src/dialogs/clonetiler.cpp:2194
 msgid "Pick the lightness of the color"
@@ -4423,7 +4420,7 @@ msgstr ""
 
 #: ../src/select-toolbar.cpp:404
 msgid "select_toolbar|X"
-msgstr ""
+msgstr "X"
 
 #: ../src/select-toolbar.cpp:404
 msgid "Horizontal coordinate of selection"
@@ -4431,7 +4428,7 @@ msgstr "A kijelölés vízszintes koordinátája"
 
 #: ../src/select-toolbar.cpp:407
 msgid "select_toolbar|Y"
-msgstr ""
+msgstr "Y"
 
 #: ../src/select-toolbar.cpp:407
 msgid "Vertical coordinate of selection"
@@ -4439,7 +4436,7 @@ msgstr "A kijelölés függőleges koordinátája"
 
 #: ../src/select-toolbar.cpp:411
 msgid "select_toolbar|W"
-msgstr ""
+msgstr "Sz"
 
 #: ../src/select-toolbar.cpp:411
 msgid "Width of selection"
@@ -4451,7 +4448,7 @@ msgstr "A szélesség és a magasság azonos arányban való módosítása"
 
 #: ../src/select-toolbar.cpp:426
 msgid "select_toolbar|H"
-msgstr ""
+msgstr "M"
 
 #: ../src/select-toolbar.cpp:426
 msgid "Height of selection"
