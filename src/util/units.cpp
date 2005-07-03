@@ -147,6 +147,8 @@ UnitTable::loadText(Glib::ustring const &filename) {
     if (f == NULL) {
 	g_warning("Could not open units file '%s': %s\n", 
 		filename.c_str(), strerror(errno));
+        g_warning("* INKSCAPE_DATADIR is:  '%s'\n", INKSCAPE_DATADIR);
+        g_warning("* INKSCAPE_UIDIR is:  '%s'\n", INKSCAPE_UIDIR);
 	return false;
     }
 
