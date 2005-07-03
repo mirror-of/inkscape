@@ -3991,15 +3991,15 @@ msgstr "симметричный"
 
 #: ../src/nodepath.cpp:3246
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
-msgstr "оконечный узел, ус втянут (вытаскивается с <b>Shift</b)"
+msgstr "оконечный узел, ус втянут (вытаскивается с <b>Shift</b>)"
 
 #: ../src/nodepath.cpp:3248
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
-msgstr "один ус втянут (вытаскивается с <b>Shift</b)"
+msgstr "один ус втянут (вытаскивается с <b>Shift</b>)"
 
 #: ../src/nodepath.cpp:3251
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
-msgstr "оба уса втянуты (вытаскиваются с <b>Shift</b)"
+msgstr "оба уса втянуты (вытаскиваются с <b>Shift</b>)"
 
 #: ../src/nodepath.cpp:3262
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
@@ -5510,7 +5510,7 @@ msgstr "Стрелки двигают на:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:134
 msgid "> and < scale by"
-msgstr "Шаг масштабирования по > и <:"
+msgstr "Шаг масштабирования по &gt; и &lt;:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:139
 msgid "Inset/Outset by"
