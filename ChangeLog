@@ -1,3 +1,14 @@
+2005-06-30  Bryce Harrington <bryce@bryceharrington.org>
+
+	* inkscape.nsi:  Fix for bug #1230744 'wrong installer language'
+	by theadib.
+
+	* src/swatches.cpp: Fix for bug #1217973.  The KDE swatches file
+	consists of 3 column numbers (missing 4th column), and also lacks
+	an ending newline.  In this situation, the name variable returned
+	from trim() could be null, thus causing a segfault when used as an
+	input to Glib::ustring.
+	
 2005-07-01  Ben Fowler  <bpfowler@users.sourceforge.net>
 
 	* src/desktop.cpp src/svg-view.cpp src/dialogs/display-settings.cpp 
