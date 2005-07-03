@@ -35,7 +35,13 @@ details.
 Please see http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape for the
 most current dependencies.
 
-If you modify Inkscape in any usable way, please let us know also.
+If you install dependencies to non-standard locations, such as
+installing XML::Parser someplace in your home directory, you may need to
+take some extra steps to indicate where those dependencies are to be
+found.  For instance, with Perl modules, set the PERLLIB or PERL5LIB
+variable (see `man perlrun`)
+
+If you modify Inkscape in any usable way, please let us know.
 
 Please see the file HACKING for further information on developing Inkscape.
 

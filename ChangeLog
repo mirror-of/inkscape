@@ -11,6 +11,9 @@
 
 	* src/sp-image.cpp: Patch for bug #1210100 by bpfowler to help
 	narrow in on the cause of the bug.
+
+	* README:  Requested change for bug #1174991.  Directions for
+	installation of perl libs
 	
 2005-07-01  Ben Fowler  <bpfowler@users.sourceforge.net>
 
