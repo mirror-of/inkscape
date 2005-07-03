@@ -323,7 +323,7 @@ struct poptOption options[] = {
 
     {"vacuum-defs", 0,
      POPT_ARG_NONE, &sp_vacuum_defs, SP_ARG_VACUUM_DEFS,
-     N_("Remove unused definitions from the <defs> section(s) of the document"),
+     N_("Remove unused definitions from the defs section(s) of the document"),
      NULL},
 
     POPT_AUTOHELP POPT_TABLEEND
