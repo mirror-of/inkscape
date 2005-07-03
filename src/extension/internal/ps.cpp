@@ -153,8 +153,8 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
     rb = gtk_radio_button_new_with_label(NULL, _("Print using PostScript operators"));
     gtk_tooltips_set_tip((GtkTooltips *) tt, rb,
                          _("Use PostScript vector operators. The resulting image is usually smaller "
-                           "in file size and can be arbitrarily scaled, but alpha transparency, "
-                           "gradients and patterns will be lost."), NULL);
+                           "in file size and can be arbitrarily scaled, but alpha transparency "
+                           "and patterns will be lost."), NULL);
     if (!p2bm) gtk_toggle_button_set_active((GtkToggleButton *) rb, TRUE);
     gtk_box_pack_start(GTK_BOX(vb), rb, FALSE, FALSE, 0);
     rb = gtk_radio_button_new_with_label(gtk_radio_button_get_group((GtkRadioButton *) rb), _("Print as bitmap"));
