@@ -337,7 +337,7 @@ if test "x$with_perl" = "xyes"; then
     oldLDFLAGS="$LDFLAGS"
     CFLAGS="$CFLAGS $checkPERL_CFLAGS"
     LDFLAGS="$LDFLAGS $checkPERL_LDFLAGS"
-    AC_CHECK_FUNC([perl_alloc],[
+    AC_CHECK_FUNC([perl_parse],[
 	PERL_CFLAGS="$checkPERL_CFLAGS"
 	PERL_LDFLAGS="$checkPERL_LDFLAGS"
         AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
