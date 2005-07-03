@@ -194,9 +194,6 @@ Dependency::check (void) const
 
                         local_path = path;
                         path = g_utf8_strchr(path, -1, G_SEARCHPATH_SEPARATOR);
-                        if (path == NULL) {
-                            break;
-                        }
                         /* Not sure whether this is UTF8 happy, but it would seem
                            like it considering that I'm searching (and finding)
                            the ':' character */
