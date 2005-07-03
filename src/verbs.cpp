@@ -1031,14 +1031,16 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
 
             if ( SP_OBJECT_NEXT(layer) != old_pos ) {
                 char const *message = NULL;
+                char const *layer_label = layer->label();
+                if (layer_label == NULL) layer_label = "";
                 switch (verb) {
                     case SP_VERB_LAYER_TO_TOP:
                     case SP_VERB_LAYER_RAISE:
-                        message = g_strdup_printf (_("Raised layer <b>%s</b>."), layer->label());
+                        message = g_strdup_printf (_("Raised layer <b>%s</b>."), layer_label);
                         break;
                     case SP_VERB_LAYER_TO_BOTTOM:
                     case SP_VERB_LAYER_LOWER:
-                        message = g_strdup_printf (_("Lowered layer <b>%s</b>."), layer->label());
+                        message = g_strdup_printf (_("Lowered layer <b>%s</b>."), layer_label);
                         break;
                 };
                 sp_document_done(SP_DT_DOCUMENT(dt));
