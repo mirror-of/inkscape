@@ -1,3 +1,7 @@
+2005-07-02  Kees Cook  <kees@outflux.net>
+
+	* src/dialog/rdf.cpp: Added FreeArt license, RFE #1230981.
+
 2005-06-30  Bryce Harrington <bryce@bryceharrington.org>
 
 	* inkscape.nsi:  Fix for bug #1230744 'wrong installer language'

@@ -167,6 +167,16 @@ struct rdf_double_t rdf_license_pd [] = {
     { NULL, NULL }
 };
 
+struct rdf_double_t rdf_license_freeart [] = {
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:requires", "http://web.resource.org/cc/ShareAlike", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
+    { NULL, NULL }
+};
+
 struct rdf_license_t rdf_licenses [] = {
     { "CC Attribution", 
       "http://creativecommons.org/licenses/by/2.0/",
@@ -211,6 +221,11 @@ struct rdf_license_t rdf_licenses [] = {
     { "Public Domain",
       "http://web.resource.org/cc/PublicDomain",
       rdf_license_pd,
+    },
+
+    { "FreeArt",
+      "http://artlibre.org/licence.php/lalgb.html",
+      rdf_license_freeart,
     },
 
     { NULL, NULL, rdf_license_empty, }
