@@ -37,12 +37,15 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)freetype6.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libfontconfig-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libxml2.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)xmlparse.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)jpeg62.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libtiff3.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpng13.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)msvcr70.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libintl-2.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libintl-2.dll inkscape$(S)intl.dll
 	$(CP) $(GTKDOS)$(S)bin$(S)popt1.dll inkscape
 	$(CP) $(GTKDOS)$(S)perl$(S)bin$(S)perl58.dll inkscape
 	$(CP) $(GTKDOS)$(S)python$(S)python24.dll inkscape
