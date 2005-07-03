@@ -334,7 +334,7 @@ static void loadPaletteFile( gchar const *filename )
                                 // should be an entry link
                                 inHeader = false;
                                 ptr = block;
-                                char* name = 0;
+                                Glib::ustring name("");
                                 int r = 0;
                                 int g = 0;
                                 int b = 0;
@@ -350,7 +350,10 @@ static void loadPaletteFile( gchar const *filename )
                                         hasErr = parseNum(ptr, b);
                                     }
                                     if ( !hasErr && *ptr ) {
-                                        name = trim(ptr);
+                                        char* n = trim(ptr);
+                                        if (n != NULL) {
+                                            name = n;
+                                        }
                                     }
                                     if ( !hasErr ) {
                                         // Add the entry now
