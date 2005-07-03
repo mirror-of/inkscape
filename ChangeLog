@@ -8,6 +8,9 @@
 	an ending newline.  In this situation, the name variable returned
 	from trim() could be null, thus causing a segfault when used as an
 	input to Glib::ustring.
+
+	* src/sp-image.cpp: Patch for bug #1210100 by bpfowler to help
+	narrow in on the cause of the bug.
 	
 2005-07-01  Ben Fowler  <bpfowler@users.sourceforge.net>
 
