@@ -832,7 +832,7 @@ sp_image_description(SPItem *item)
 	char *href_desc;
         if (image->href) {
             href_desc = (strncmp(image->href, "data:", 5) == 0) 
-                ? g_strdump(_("embedded"))
+                ? g_strdup(_("embedded"))
                 : xml_quote_strdup(image->href);
         } else {
             g_warning("Attempting to call strncmp() with a null pointer.");
