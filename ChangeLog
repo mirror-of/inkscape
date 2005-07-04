@@ -1,3 +1,8 @@
+2005-07-04  MenTaLguY  <mental@rydia.net>
+
+	* src/verbs.cpp: redo cryve's fix to use defaultLabel() rather than
+	  label()
+
 2005-07-04  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/livarot/float-line.cpp:  Patch from Ralf Stephan
