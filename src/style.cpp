@@ -2538,6 +2538,16 @@ sp_text_style_write(gchar *p, guint const len, SPTextStyle const *const st, guin
 
 
 
+/* The following sp_tyle_read_* functions ignore invalid values, as per
+ * http://www.w3.org/TR/REC-CSS2/syndata.html#parsing-errors.
+ *
+ * [However, the SVG spec is somewhat unclear as to whether the style attribute should
+ * be handled as per CSS2 rules or whether it must simply be a set of PROPERTY:VALUE
+ * pairs, in which case SVG's error-handling rules
+ * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing should instead be applied.]
+ */
+
+
 /**
  *
  */
@@ -2726,24 +2736,37 @@ sp_style_read_itextdecoration(SPITextDecoration *val, gchar const *str)
         val->line_through = FALSE;
         val->blink = FALSE;
     } else {
-        val->set = TRUE;
-        val->inherit = FALSE;
-        val->underline = FALSE;
-        val->overline = FALSE;
-        val->line_through = FALSE;
-        val->blink = FALSE;
+        bool found_underline = false;
+        bool found_overline = false;
+        bool found_line_through = false;
+        bool found_blink = false;
         for ( ; *str ; str++ ) {
             if (*str == ' ') continue;
-            if (!strncmp(str, "underline", 9) && (str[9] == ' ' || str[9] == '\0'))
-                val->underline = TRUE;
-            if (!strncmp(str, "overline", 8) && (str[8] == ' ' || str[8] == '\0'))
-                val->overline = TRUE;
-            if (!strncmp(str, "line-through", 12) && (str[12] == ' ' || str[12] == '\0'))
-                val->line_through = TRUE;
-            if (!strncmp(str, "blink", 5) && (str[5] == ' ' || str[5] == '\0'))
-                val->blink = TRUE;
-            while (*str && *str != ' ') str++;
+            if (strneq(str, "underline", 9) && (str[9] == ' ' || str[9] == '\0')) {
+                found_underline = true;
+                str += 9;
+            } else if (strneq(str, "overline", 8) && (str[8] == ' ' || str[8] == '\0')) {
+                found_overline = true;
+                str += 8;
+            } else if (strneq(str, "line-through", 12) && (str[12] == ' ' || str[12] == '\0')) {
+                found_line_through = true;
+                str += 12;
+            } else if (strneq(str, "blink", 5) && (str[5] == ' ' || str[5] == '\0')) {
+                found_blink = true;
+                str += 5;
+            } else {
+                return;  // invalid value
+            }
         }
+        if (!(found_underline || found_overline || found_line_through || found_blink)) {
+            return;  // invalid value: empty
+        }
+        val->set = TRUE;
+        val->inherit = FALSE;
+        val->underline = found_underline;
+        val->overline = found_overline;
+        val->line_through = found_line_through;
+        val->blink = found_blink;
     }
 }
 
@@ -2758,27 +2781,15 @@ sp_style_read_icolor(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
         paint->set = TRUE;
         paint->inherit = TRUE;
     } else {
-        guint32 const color = sp_svg_read_color(str, 0xff);
-        if (color == 0xff) {
-            /* Invalid color specification.  (sp_svg_read_color always returns 0 in the low, alpha
-             * 8 bits.)  Treat as unset, as per
-             * http://www.w3.org/TR/REC-CSS2/syndata.html#parsing-errors.
-             *
-             * [However, the SVG spec is somewhat unclear as to whether the style attribute should
-             * be handled as per CSS2 rules or whether it must simply be a set of PROPERTY:VALUE
-             * pairs, in which case SVG's error-handling rules
-             * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing should instead be applied.]
-             */
-            paint->set = FALSE;
-        } else {
+        guint32 const rgb0 = sp_svg_read_color(str, 0xff);
+        if (rgb0 != 0xff) {
             paint->type = SP_PAINT_TYPE_COLOR;
-            sp_color_set_rgb_rgba32(&paint->value.color, color);
+            sp_color_set_rgb_rgba32(&paint->value.color, rgb0);
             paint->set = TRUE;
+            paint->inherit = FALSE;
         }
-        paint->inherit = FALSE;
     }
 }
-
 
 
 /**
@@ -2832,14 +2843,14 @@ sp_style_read_ipaint(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
             }
         }
     } else {
-        paint->type = SP_PAINT_TYPE_COLOR;
-        guint32 color;
-        color = sp_color_get_rgba32_ualpha(&paint->value.color, 0);
-        color = sp_svg_read_color(str, color);
-        sp_color_set_rgb_rgba32(&paint->value.color, color);
-        paint->set = TRUE;
-        paint->inherit = FALSE;
-        paint->currentcolor = FALSE;
+        guint32 const rgb0 = sp_svg_read_color(str, 0xff);
+        if (rgb0 != 0xff) {
+            paint->type = SP_PAINT_TYPE_COLOR;
+            sp_color_set_rgb_rgba32(&paint->value.color, rgb0);
+            paint->set = TRUE;
+            paint->inherit = FALSE;
+            paint->currentcolor = FALSE;
+        }
     }
 }
 
