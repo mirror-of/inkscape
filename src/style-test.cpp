@@ -8,7 +8,7 @@
 
 /* Extracted mechanically from http://www.w3.org/TR/SVG11/types.html#ColorKeywords:
  *
- *   tidy -wrap 999 < tmp/types.html 2> /dev/null |
+ *   tidy -wrap 999 < types.html 2> /dev/null |
  *     egrep '(prop|color-keyword)-value' |
  *     sed 's,<td><span class="prop-value">,    {",;s/<td><span class="color-keyword-value">rgb(/", {/;s%).*%}},@%;s%</span></td>%%' |
  *     tr -d \\n |
@@ -522,6 +522,26 @@ test_style()
         g_free(str0_set);
     }
     g_log_remove_handler(NULL, log_handler_id);
+
+    /* The following tests involve invalid style, but aren't expected to trigger
+       g_log calls. */
+    /* invalid color setting */
+    {
+        char const *bad[] = {"#4321", "currentColor", "#87654321", "#42", "aquam"};
+        for (unsigned i = 0; i < G_N_ELEMENTS(bad); ++i) {
+            gchar *tst_name = g_strdup_printf("invalid color setting: %s", bad[i]);
+            gchar *style_str = g_strdup_printf("color:%s;color:#123;color:%s",
+                                               bad[i], bad[i]);
+            UTEST_TEST(tst_name) {
+                gchar *str0_set = merge_then_write_string(style_str, SP_STYLE_FLAG_IFSET);
+                UTEST_ASSERT(streq(str0_set, "color:#112233"));
+                g_free(str0_set);
+            }
+            g_free(style_str);
+            g_free(tst_name);
+        }
+    }
+
     /* End of invalid style string examples. */
 
 
