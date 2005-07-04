@@ -731,17 +731,33 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 static void
 sp_grd_ed_del_stop (GtkWidget *widget,  GtkWidget *vb)
 {
-    SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(vb), "gradient");
+	SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(vb), "gradient");
 
-    GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
-    if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
-    SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
-    if (stop->offset>0 && stop->offset<1) {
-        sp_repr_remove_child (SP_OBJECT_REPR(gradient), SP_OBJECT_REPR(stop));
-        sp_gradient_vector_widget_load_gradient (vb, gradient);
-        update_stop_list(GTK_WIDGET(mnu), gradient, NULL);
-        sp_document_done (SP_OBJECT_DOCUMENT (gradient));
-    }
+	GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
+	if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
+	SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
+	if (gradient->vector.stops.size() > 2) { // 2 is the minimum
+
+		// if we delete first or last stop, move the next/previous to the edge
+		if (stop->offset == 0) {
+			SPStop *next = sp_next_stop (stop);
+			if (next) {
+				next->offset = 0;
+				sp_repr_set_double (SP_OBJECT_REPR (next), "offset", 0);
+			}
+		} else if (stop->offset == 1) {
+			SPStop *prev = sp_prev_stop (stop, gradient);
+			if (prev) {
+				prev->offset = 1;
+				sp_repr_set_double (SP_OBJECT_REPR (prev), "offset", 1);
+			}
+		}
+
+		sp_repr_remove_child (SP_OBJECT_REPR(gradient), SP_OBJECT_REPR(stop));
+		sp_gradient_vector_widget_load_gradient (vb, gradient);
+		update_stop_list(GTK_WIDGET(mnu), gradient, NULL);
+		sp_document_done (SP_OBJECT_DOCUMENT (gradient));
+	}
 
 }
 
@@ -1070,7 +1086,6 @@ static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GtkObject *o
 static void
 sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 {
-	SPObject *child;
 	SPColor color;
 	float alpha;
 	guint32 rgb;
@@ -1092,10 +1107,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 
 	/* Set start parameters */
 	/* We rely on normalized vector, i.e. stops HAVE to exist */
-	for ( child = sp_object_first_child(SP_OBJECT(ngr)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		if (SP_IS_STOP (child)) break;
-	}
-	g_return_if_fail (child != NULL);
+	g_return_if_fail (sp_first_stop(ngr) != NULL);
 
 	GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(object), "stopmenu");
 	SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
