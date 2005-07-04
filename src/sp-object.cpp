@@ -22,6 +22,8 @@
 #include "style.h"
 #include "sp-object-repr.h"
 #include "sp-root.h"
+#include "streq.h"
+#include "strneq.h"
 #include "xml/repr.h"
 
 #include "sp-object.h"
@@ -1204,7 +1206,8 @@ sp_object_get_style_property(SPObject const *object, gchar const *key, gchar con
 	 * the case where the property is specified but with an invalid value (in which case I
 	 * believe the CSS2 error-handling behaviour applies, viz. behave as if the property hadn't
 	 * been specified).  Also, the current code doesn't use CRSelEng stuff to take a value from
-	 * stylesheets.
+	 * stylesheets.  Also, we aren't setting any hooks to force an update for changes
+	 * in any of the inputs (i.e. in any of the elements that this function queries).
 	 *
 	 * Given that the default value for a property depends on what property it is (e.g.
 	 * whether to inherit or not), and given the above comment about ignoring invalid values,
@@ -1228,11 +1231,18 @@ sp_object_get_style_property(SPObject const *object, gchar const *key, gchar con
 			while ((*p <= ' ') && *p) p++;
 			if (*p++ != ':') break;
 			while ((*p <= ' ') && *p) p++;
-			if (*p) return p;
+			size_t const inherit_len = sizeof("inherit") - 1;
+			if (*p
+			    && !(strneq(p, "inherit", inherit_len)
+				 && (p[inherit_len] == '\0'
+				     || p[inherit_len] == ';'
+				     || g_ascii_isspace(p[inherit_len])))) {
+				return p;
+			}
 		}
 	}
 	const gchar *val = object->repr->attribute(key);
-	if (val) {
+	if (val && !streq(val, "inherit")) {
 		return val;
 	}
 	if (object->parent) {
