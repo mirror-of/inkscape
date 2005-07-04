@@ -47,6 +47,7 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-stop.h"
+#include "streq.h"
 #include "uri.h"
 #include "uri-references.h"
 #include "xml/repr.h"
@@ -101,7 +102,9 @@ static void
 sp_stop_init(SPStop *stop)
 {
     stop->offset = 0.0;
+    stop->currentColor = false;
     sp_color_set_rgb_rgba32(&stop->specified_color, 0x000000ff);
+    stop->opacity = 1.0;
 }
 
 static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
@@ -126,15 +129,18 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
              *        build (Lauris) */
             /* fixme: We need presentation attributes etc. */
 
-           // FIXME: remove the hackish "style reading" from here, instead add stop-color and
-           // stop-opacity to SPStyle and use them from there. After that remove the ugly
-           // sp_object_get_style_property, it's used only here. With the current code e.g. a
-           // currentColor specification does not work on a stop.
-
+            /* FIXME: remove the hackish "style reading" from here: see comments in
+             * sp_object_get_style_property about the bugs in our current approach.  However, note
+             * that SPStyle doesn't currently have stop-color and stop-opacity properties.
+             */
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-color", "black");
-                guint32 color = sp_svg_read_color(p, sp_color_get_rgba32_ualpha(&stop->specified_color, 0x00));
-                sp_color_set_rgb_rgba32(&stop->specified_color, color);
+                if (streq(p, "currentColor")) {
+                    stop->currentColor = true;
+                } else {
+                    guint32 const color = sp_svg_read_color(p, 0);                    
+                    sp_color_set_rgb_rgba32(&stop->specified_color, color);
+                }
             }
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-opacity", "1");
@@ -147,8 +153,13 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
         case SP_PROP_STOP_COLOR: {
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-color", "black");
-                guint32 color = sp_svg_read_color(p, sp_color_get_rgba32_ualpha(&stop->specified_color, 0x00));
-                sp_color_set_rgb_rgba32(&stop->specified_color, color);
+                if (streq(p, "currentColor")) {
+                    stop->currentColor = true;
+                } else {
+                    stop->currentColor = false;
+                    guint32 const color = sp_svg_read_color(p, 0);
+                    sp_color_set_rgb_rgba32(&stop->specified_color, color);
+                }
             }
             object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
@@ -184,11 +195,17 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         repr = sp_repr_new("svg:stop");
     }
 
-    gchar c[64];
-    sp_svg_write_color(c, 64, sp_color_get_rgba32_ualpha(&stop->specified_color, 255));
 
     Inkscape::SVGOStringStream os;
-    os << "stop-color:" << c << ";stop-opacity:" << stop->opacity << ";";
+    os << "stop-color:";
+    if (stop->currentColor) {
+        os << "currentColor";
+    } else {
+        gchar c[64];
+        sp_svg_write_color(c, 64, sp_color_get_rgba32_ualpha(&stop->specified_color, 255));
+        os << c;
+    }
+    os << ";stop-opacity:" << stop->opacity;
     sp_repr_set_attr(repr, "style", os.str().c_str());
     sp_repr_set_attr(repr, "stop-color", NULL);
     sp_repr_set_attr(repr, "stop-opacity", NULL);
@@ -198,6 +215,48 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         (* ((SPObjectClass *) stop_parent_class)->write)(object, repr, flags);
 
     return repr;
+}
+
+guint32
+sp_stop_get_rgba32(SPStop const *const stop)
+{
+    guint32 rgb0 = 0;
+    /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
+     * value depends on user agent, and don't give any further restrictions that I can
+     * see.) */
+    if (stop->currentColor) {
+        char const *str = sp_object_get_style_property(stop, "color", NULL);
+        if (str) {
+            rgb0 = sp_svg_read_color(str, rgb0);
+        }
+        unsigned const alpha = static_cast<unsigned>(stop->opacity * 0xff + 0.5);
+        g_return_val_if_fail((alpha & ~0xff) == 0,
+                             rgb0 | 0xff);
+        return rgb0 | alpha;
+    } else {
+        return sp_color_get_rgba32_falpha(&stop->specified_color, stop->opacity);
+    }
+}
+
+static SPColor
+sp_stop_get_color(SPStop const *const stop)
+{
+    if (stop->currentColor) {
+        char const *str = sp_object_get_style_property(stop, "color", NULL);
+        guint32 const dfl = 0;
+        /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
+         * value depends on user agent, and don't give any further restrictions that I can
+         * see.) */
+        guint32 color = dfl;
+        if (str) {
+            color = sp_svg_read_color(str, dfl);
+        }
+        SPColor ret;
+        sp_color_set_rgb_rgba32(&ret, color);
+        return ret;
+    } else {
+        return stop->specified_color;
+    }
 }
 
 /*
@@ -737,12 +796,12 @@ sp_gradient_repr_write_vector(SPGradient *gr)
     GSList *cl = NULL;
 
     for (guint i = 0; i < gr->vector.stops.size(); i++) {
-        gchar c[64];
         Inkscape::SVGOStringStream os;
         Inkscape::XML::Node *child = sp_repr_new("svg:stop");
         sp_repr_set_double(child, "offset", gr->vector.stops[i].offset);
+        gchar c[64];
         sp_svg_write_color(c, 64, sp_color_get_rgba32_ualpha(&gr->vector.stops[i].color, 0x00));
-        os << "stop-color:" << c << ";stop-opacity:" << gr->vector.stops[i].opacity << ";";
+        os << "stop-color:" << c << ";stop-opacity:" << gr->vector.stops[i].opacity;
         sp_repr_set_attr(child, "style", os.str().c_str());
         /* Order will be reversed here */
         cl = g_slist_prepend(cl, child);
@@ -842,7 +901,7 @@ sp_gradient_rebuild_vector(SPGradient *gr)
             // down to 100%."
             gstop.offset = CLAMP(gstop.offset, 0, 1);
 
-            sp_color_copy(&gstop.color, &stop->specified_color);
+            gstop.color = sp_stop_get_color(stop);
             gstop.opacity = stop->opacity;
 
             gr->vector.stops.push_back(gstop);
