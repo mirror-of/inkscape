@@ -828,12 +828,15 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
         } else if (errno == ECHILD) {
             perror("Extension::Script:  Could not obtain child status for pclose\n");
         } else {
-            perror("Extension::Script:  Unknown error for pclose\n");
+            if (errorFile != NULL) {
+                checkStderr(errorFile);
+            } else {
+                perror("Extension::Script:  Unknown error for pclose\n");
+            }
         }
     }
 
     if (errorFile != NULL) {
-        checkStderr(errorFile);
         unlink(errorFile);
         g_free(errorFile);
     }
@@ -860,10 +863,9 @@ Script::checkStderr (gchar * filename)
     stderrf.seekg(0, std::ios::beg);
 
     Gtk::MessageDialog warning(
-        _("The Inkscape Extension executed returned an error message.  This may"
-        " or may not mean that the extension failed.  Inkscape will try it's best"
-        " to recover from the situation.  If there are any problems, reading the text"
-        " included here may help diagnose the problem.")
+        _("Inkscape has recieved an error from the script that it called.  "
+          "The text returned with the error is included below.  "
+          "Inkscape will continue working, but it is likely the action you requested will not work successfully.")
         , false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
 
     Gtk::VBox * vbox = warning.get_vbox();
