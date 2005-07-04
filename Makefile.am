@@ -110,7 +110,7 @@ DISTCLEANFILES = inkscape.desktop \
 #ACLOCAL_AMFLAGS = -I m4
 
 SUFFIXES = .pod .1
-inkscape.1 inkscape.fr.1: fix-roff-punct Makefile.am
+inkscape.1 inkscape.fr.1: fix-roff-punct Makefile.am AUTHORS utf8-to-roff
 .pod.1:
 	set -e; \
 	d=`sed -n 's,/,-,g;s,.*\$$[D]ate: \(..........\).*,\1,p' $<`; \
