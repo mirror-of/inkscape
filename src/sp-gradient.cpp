@@ -834,9 +834,8 @@ sp_gradient_invalidate_vector(SPGradient *gr)
     bool ret = false;
 
     if (gr->color != NULL) {
-        void *tmp = gr->color;
+        g_free(gr->color);
         gr->color = NULL;
-        g_free(tmp);
         ret = true;
     }
 
