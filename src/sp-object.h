@@ -153,6 +153,18 @@ struct SPObject : public GObject {
 	SPObject *next; /* Next object in linked list */
 	Inkscape::XML::Node *repr; /* Our xml representation */
 	gchar *id; /* Our very own unique id */
+
+	/**
+	 * Represents the style properties, whether from presentation attributes, the
+	 * <tt>style</tt> attribute, or inherited.
+	 *
+	 * sp_object_private_set doesn't handle SP_ATTR_STYLE or any presentation attributes at the
+	 * time of writing, so this is probably NULL for all SPObject's that aren't an SPItem.
+	 *
+	 * However, this gives rise to the bugs mentioned in sp_object_get_style_property.
+	 * Note that some non-SPItem SPObject's, such as SPStop, do need styling information,
+	 * and need to inherit properties even through other non-SPItem parents like \<defs\>.
+	 */
 	SPStyle *style;
 
 	struct ParentIteratorStrategy {
@@ -516,7 +528,8 @@ void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException 
 
 /* Style */
 
-const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
+gchar const *sp_object_get_style_property(SPObject const *object,
+					  gchar const *key, gchar const *def);
 
 Inkscape::Version sp_object_get_sodipodi_version (SPObject *object);
 
