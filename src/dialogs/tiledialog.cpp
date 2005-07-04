@@ -159,10 +159,12 @@ void TileDialog::Grid_Arrange ()
         if (cy < grid_top) grid_top = cy;
         if (width > col_width) col_width = width;
         if (height > row_height) row_height = height;
-
     }
-    grid_top = grid_top - (row_height / 2);
-    grid_left = grid_left - (col_width/2);
+
+    /// THIS WAS WRONG, ASSUMED THAT ITS CENTERED.
+
+    grid_top = grid_top - ((row_height / 2)*(2-VertAlign));
+    grid_left = grid_left - ((col_width/2)*(2-HorizAlign));
 
     // require the sorting done before we can calculate row heights etc.
 
@@ -614,6 +616,7 @@ TileDialog::TileDialog()
     tips.set_tip(NoOfRowsSpinner, _("Number of rows"));
 
 
+
     RowHeightButton.set_label(_("Equal height"));
     double AutoRow = prefs_get_double_attribute ("dialogs.gridtiler", "AutoRowSize", 15);
     if (AutoRow>0)
@@ -622,9 +625,14 @@ TileDialog::TileDialog()
          AutoRowSize=false;
     RowHeightButton.set_active(AutoRowSize);
 
+    #ifdef DEBUG_GRID_ARRANGE
     NoOfRowsBox.pack_start(RowHeightButton, false, false, MARGIN);
+    #endif
     tips.set_tip(RowHeightButton, _("If not set, each row has the height of the tallest object in it"));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
+
+
+
 
  {
 
@@ -656,7 +664,9 @@ TileDialog::TileDialog()
             VertBotRadioButton.set_active(TRUE);
         }
         VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
+        #ifdef DEBUG_GRID_ARRANGE
         NoOfRowsBox.pack_start(VertAlignHBox, false, false, MARGIN);
+        #endif
     }
 
     SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
@@ -683,6 +693,8 @@ TileDialog::TileDialog()
     NoOfColsBox.pack_start(NoOfColsSpinner, false, false, MARGIN);
     tips.set_tip(NoOfColsSpinner, _("Number of columns"));
 
+
+
     ColumnWidthButton.set_label(_("Equal width"));
     double AutoCol = prefs_get_double_attribute ("dialogs.gridtiler", "AutoColSize", 15);
     if (AutoCol>0)
@@ -690,8 +702,10 @@ TileDialog::TileDialog()
     else
          AutoColSize=false;
     ColumnWidthButton.set_active(AutoColSize);
-
+    #ifdef DEBUG_GRID_ARRANGE
     NoOfColsBox.pack_start(ColumnWidthButton, false, false, MARGIN);
+    #endif
+
     tips.set_tip(ColumnWidthButton, _("If not set, each column has the width of the widest object in it"));
     ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
 
@@ -725,9 +739,9 @@ TileDialog::TileDialog()
             HorizRightRadioButton.set_active(TRUE);
         }
         HorizAlignVBox.pack_start(HorizAlignHBox, false, false, MARGIN);
-
+        #ifdef DEBUG_GRID_ARRANGE
         NoOfColsBox.pack_start(HorizAlignVBox, false, false, MARGIN);
-
+        #endif
     }
 
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
@@ -763,45 +777,48 @@ TileDialog::TileDialog()
             SpaceByBBoxRadioButton.set_active(!ManualSpacing);
         }
 
-
+        #ifdef DEBUG_GRID_ARRANGE
         TileBox.pack_start(SpacingVBox, false, false, MARGIN);
+        #endif
+    }
 
+    {
+        /*#### Y Padding ####*/
+
+        YPadLabel.set_label(_("Row spacing:   "));
+        YPadBox.pack_start(YPadLabel, false, false, MARGIN);
+
+        YPadSpinner.set_digits(1);
+        YPadSpinner.set_increments(0.2, 2);
+        YPadSpinner.set_range(0.0, 999.0);
+        double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
+        YPadSpinner.set_value(YPad);
+        YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
+        tips.set_tip(YPadSpinner, _("Vertical spacing between rows"));
+        YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_ypad_spinbutton_changed));
+
+        SizesHBox.pack_start(YPadBox, false, false, MARGIN);
+    }
+
+    {
+        /*#### X padding ####*/
+
+        XPadLabel.set_label(_("Column spacing:"));
+        XPadBox.pack_start(XPadLabel, false, false, MARGIN);
+
+        XPadSpinner.set_digits(1);
+        XPadSpinner.set_increments(0.2, 2);
+        XPadSpinner.set_range(0.0, 999.0);
+        double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
+        XPadSpinner.set_value(XPad);
+        XPadBox.pack_start(XPadSpinner, false, false, MARGIN);
+        tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
+        XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_xpad_spinbutton_changed));
+
+        SizesHBox.pack_start(XPadBox, false, false, MARGIN);
     }
 
 
-    /*#### X padding ####*/
-
-
-    XPadLabel.set_label(_("Column spacing:"));
-    XPadBox.pack_start(XPadLabel, false, false, MARGIN);
-
-    XPadSpinner.set_digits(1);
-    XPadSpinner.set_increments(0.2, 2);
-    XPadSpinner.set_range(0.0, 999.0);
-    double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
-    XPadSpinner.set_value(XPad);
-    XPadBox.pack_start(XPadSpinner, false, false, MARGIN);
-    tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
-    XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_xpad_spinbutton_changed));
-
-    SizesHBox.pack_start(XPadBox, false, false, MARGIN);
-
-    /*#### Y Padding ####*/
-
-    YPadLabel.set_label(_("Row spacing:"));
-    YPadBox.pack_start(YPadLabel, false, false, MARGIN);
-
-    YPadSpinner.set_digits(1);
-    YPadSpinner.set_increments(0.2, 2);
-    YPadSpinner.set_range(0.0, 999.0);
-    double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
-    YPadSpinner.set_value(YPad);
-    YPadBox.pack_start(YPadSpinner, false, false, MARGIN);
-    tips.set_tip(YPadSpinner, _("Vertical spacing between rows"));
-    YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialog::on_ypad_spinbutton_changed));
-
-
-    SizesHBox.pack_start(YPadBox, false, false, MARGIN);
 
     TileBox.pack_start(SizesHBox, false, false, MARGIN);
 
