@@ -1194,14 +1194,25 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 
 /* Style */
 
-const gchar *
-sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def)
+gchar const *
+sp_object_get_style_property(SPObject const *object, gchar const *key, gchar const *def)
 {
-	/* fixme: Use proper CSS parsing.  The current version is buggy in a number of
-	   situations where key is a substring of the style string other than as a property
-	   name (including where key is a substring of a property name), and is
-	   also buggy in its handling of inheritance for properties that aren't inherited
-	   by default. */
+	/* fixme: Use proper CSS parsing.  The current version is buggy in a number of situations
+	 * where key is a substring of the style string other than as a property name (including
+	 * where key is a substring of a property name), and is also buggy in its handling of
+	 * inheritance for properties that aren't inherited by default.  It also doesn't allow for
+	 * the case where the property is specified but with an invalid value (in which case I
+	 * believe the CSS2 error-handling behaviour applies, viz. behave as if the property hadn't
+	 * been specified).  Also, the current code doesn't use CRSelEng stuff to take a value from
+	 * stylesheets.
+	 *
+	 * Given that the default value for a property depends on what property it is (e.g.
+	 * whether to inherit or not), and given the above comment about ignoring invalid values,
+	 * and that the repr parent isn't necessarily the right element to inherit from
+	 * (e.g. maybe we need to inherit from the referencing <use> element instead),
+	 * we should probably make the caller responsible for ascending the repr tree as
+	 * necessary.
+	 */
 	g_return_val_if_fail (object != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
