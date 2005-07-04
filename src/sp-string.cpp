@@ -131,7 +131,7 @@ sp_string_read_content(SPObject *object)
     if (object->xml_space.value == SP_XML_SPACE_PRESERVE) {
         for ( ; *xml_string ; xml_string = g_utf8_next_char(xml_string) ) {
             gunichar c = g_utf8_get_char(xml_string);
-            if (c == '\n') c = ' ';
+            if (c == '\n' || c == '\t') c = ' ';
             string->string += c;
         }
     }
