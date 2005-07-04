@@ -33,11 +33,6 @@ struct SPSVGColor {
 };
 
 /*
- * Use default if color not found
- */
-#define SP_SVG_COLOR(P,D) ((P)?((*((guint32*)(P)))):(D))
-
-/*
  * These are the colors defined in the SVG standard
  */
 static SPSVGColor sp_svg_color_named[] = {
@@ -225,11 +220,14 @@ sp_svg_read_color (const gchar *str, guint32 def)
 			val = (val << 4) + hexval;
 		}
 		/* handle #rgb case */
-		if (i == 4) {
+		if (i == 1 + 3) {
 			val = ((val & 0xf00) << 8) |
 				((val & 0x0f0) << 4) |
 				(val & 0x00f);
 			val |= val << 4;
+		} else if (i != 1 + 6) {
+			/* must be either 3 or 6 digits. */
+			return def;
 		}
 	} else if (!strncmp (str, "rgb(", 4)) {
 		gboolean hasp, hasd;
@@ -299,8 +297,13 @@ sp_svg_read_color (const gchar *str, guint32 def)
 			if (!str[i]) break;
 		}
 		c[31] = '\0';
-		/* this will default to black on a failed lookup */
-		val = SP_SVG_COLOR (g_hash_table_lookup (colors, c), def);
+
+		gpointer const rgb_ptr = g_hash_table_lookup(colors, c);
+		if (rgb_ptr) {
+			val = *(static_cast<unsigned long *>(rgb_ptr));
+		} else {
+			return def;
+		}
 	}
 
 	return (val << 8);
