@@ -558,7 +558,6 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     if (!style->color.set) {
         val = repr->attribute("color");
         if (val) {
-            /* fixme: Disallow parsing paintservers */
             sp_style_read_icolor(&style->color, val, style, ( object
                                                               ? SP_OBJECT_DOCUMENT(object)
                                                               : NULL ));
@@ -2759,13 +2758,23 @@ sp_style_read_icolor(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
         paint->set = TRUE;
         paint->inherit = TRUE;
     } else {
-        guint32 color;
-
-        paint->type = SP_PAINT_TYPE_COLOR;
-        color = sp_color_get_rgba32_ualpha(&paint->value.color, 0);
-        color = sp_svg_read_color(str, color);
-        sp_color_set_rgb_rgba32(&paint->value.color, color);
-        paint->set = TRUE;
+        guint32 const color = sp_svg_read_color(str, 0xff);
+        if (color == 0xff) {
+            /* Invalid color specification.  (sp_svg_read_color always returns 0 in the low, alpha
+             * 8 bits.)  Treat as unset, as per
+             * http://www.w3.org/TR/REC-CSS2/syndata.html#parsing-errors.
+             *
+             * [However, the SVG spec is somewhat unclear as to whether the style attribute should
+             * be handled as per CSS2 rules or whether it must simply be a set of PROPERTY:VALUE
+             * pairs, in which case SVG's error-handling rules
+             * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing should instead be applied.]
+             */
+            paint->set = FALSE;
+        } else {
+            paint->type = SP_PAINT_TYPE_COLOR;
+            sp_color_set_rgb_rgba32(&paint->value.color, color);
+            paint->set = TRUE;
+        }
         paint->inherit = FALSE;
     }
 }
