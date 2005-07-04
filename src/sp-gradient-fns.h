@@ -8,7 +8,6 @@
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
 class SPGradient;
-class SPGradientVector;
 namespace Inkscape {
 namespace XML {
 class Node;
