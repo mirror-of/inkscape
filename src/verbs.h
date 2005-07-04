@@ -201,31 +201,7 @@ enum {
 
 gchar *sp_action_get_title (const SPAction *action);
 
-/* FIXME !!! we should probably go ahead and use GHashTables, actually -- more portable */
-
-#if defined(__GNUG__) && (__GNUG__ >= 3)
-# include <ext/hash_map>
-using __gnu_cxx::hash_map;
-#else
-# include <hash_map.h>
-#endif
-
-#if defined(__GNUG__) && (__GNUG__ >= 3)
-namespace __gnu_cxx {
-#endif
-
-template <>
-class hash<SPView *> {
-    typedef SPView *T;
-public:
-    size_t operator()(const T& x) const {
-        return (size_t)g_direct_hash((gpointer)x);
-    }
-};
-
-#if defined(__GNUG__) && (__GNUG__ >= 3)
-}  /* namespace __gnu_cxx */
-#endif
+#include <map>
 
 namespace Inkscape {
 
@@ -236,7 +212,7 @@ namespace Inkscape {
 class Verb {
 private:
     /** \brief An easy to use defition of the table of verbs by code. */
-    typedef hash_map<unsigned int, Inkscape::Verb *> VerbTable;
+    typedef std::map<unsigned int, Inkscape::Verb *> VerbTable;
     /** \brief A table of all the dynamically created verbs. */
     static VerbTable _verbs;
     /** \brief The table of statically created verbs which are mostly
@@ -245,7 +221,7 @@ private:
     /* Plus one because there is an entry for SP_VERB_LAST */
 
     /** \brief A simple typedef to make using the action table easier. */
-    typedef hash_map<SPView *, SPAction *> ActionTable;
+    typedef std::map<SPView *, SPAction *> ActionTable;
     /** \brief A list of all the actions that have been created for this
                verb.  It is referenced by the view that they are created for. */
     ActionTable * _actions;

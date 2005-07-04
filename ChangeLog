@@ -1,5 +1,13 @@
 2005-06-28  Ted Gould  <ted@gould.cx>
 
+	* src/verbs.h:
+
+	Changing from gnu::hash_map to std::map.  The only reason this was a
+	hash_map before is because I was stealing code that I didn't understand,
+	and a std::map works as well.  This fixes bug #1172199 for Tru64.
+
+2005-06-28  Ted Gould  <ted@gould.cx>
+
 	* src/extension/dependency.cpp:
 
 	Fix for #1169396 -- setting the default type for a dependency to file,
