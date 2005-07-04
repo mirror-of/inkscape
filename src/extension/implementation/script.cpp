@@ -35,6 +35,9 @@
 #include "io/sys.h"
 #include <prefs-utils.h>
 
+#include <fstream>
+#include <glibmm/i18n.h>
+
 #include "../system.h"
 
 #include <extension/extension.h>
@@ -829,10 +832,22 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
             perror("Extension::Script:  Could not obtain child status for pclose\n");
         } else {
             if (errorFile != NULL) {
-                checkStderr(errorFile);
+                checkStderr(errorFile, Gtk::MESSAGE_ERROR,
+                    _("Inkscape has recieved an error from the script that it called.  "
+                      "The text returned with the error is included below.  "
+                      "Inkscape will continue working, but the action you requested has been cancelled."));
             } else {
                 perror("Extension::Script:  Unknown error for pclose\n");
             }
+        }
+        /* Could be a lie, but if there is an error, we don't want
+         * to count on what was read being good */
+        amount_read = 0;
+    } else {
+        if (errorFile != NULL) {
+            checkStderr(errorFile, Gtk::MESSAGE_INFO,
+                _("Inkscape has recieved additional data from the script executed.  "
+                  "The script did not return an error, but this may indicate the results will not be as expected."));
         }
     }
 
@@ -844,15 +859,12 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
     return amount_read;
 }
 
-#include <fstream>
-#include <glibmm/i18n.h>
-
 /**  \brief  This function checks the stderr file, and if it has data,
              shows it in a warning dialog to the user
      \param  filename  Filename of the stderr file
 */
 void
-Script::checkStderr (gchar * filename)
+Script::checkStderr (gchar * filename, Gtk::MessageType type, gchar * message)
 {
     std::ifstream stderrf (filename);
     if (!stderrf.is_open()) return;
@@ -862,11 +874,7 @@ Script::checkStderr (gchar * filename)
     if (0 == length) return;
     stderrf.seekg(0, std::ios::beg);
 
-    Gtk::MessageDialog warning(
-        _("Inkscape has recieved an error from the script that it called.  "
-          "The text returned with the error is included below.  "
-          "Inkscape will continue working, but it is likely the action you requested will not work successfully.")
-        , false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+    Gtk::MessageDialog warning(message, false, type, Gtk::BUTTONS_OK, true);
 
     Gtk::VBox * vbox = warning.get_vbox();
 
