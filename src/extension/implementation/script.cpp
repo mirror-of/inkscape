@@ -751,9 +751,24 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
     g_return_val_if_fail(in_command != NULL, 0);
     // printf("Executing: %s\n", in_command);
 
+    gchar * errorFile;
+    gint errorFileNum;
+    errorFileNum = g_file_open_tmp("ink_ext_stderr_XXXXXX", &errorFile, NULL);
+    if (errorFileNum != 0) {
+        close(errorFileNum);
+    } else {
+        g_free(errorFile);
+        errorFile = NULL;
+    }
+
     /* Get the commandline to be run */
-    /* TODO:  Perhaps replace with a sprintf? */
     char *command = g_strdup_printf("%s \"%s\"", in_command, filein);
+    if (errorFile != NULL) {
+        char * temp;
+        temp = g_strdup_printf("%s 2> %s", command, errorFile);
+        g_free(command);
+        command = temp;
+    }
 
     // std::cout << "Command to run: " << command << std::endl;
 
@@ -817,7 +832,65 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
         }
     }
 
+    if (errorFile != NULL) {
+        checkStderr(errorFile);
+        unlink(errorFile);
+        g_free(errorFile);
+    }
+
     return amount_read;
+}
+
+#include <fstream>
+#include <glibmm/i18n.h>
+
+/**  \brief  This function checks the stderr file, and if it has data,
+             shows it in a warning dialog to the user
+     \param  filename  Filename of the stderr file
+*/
+void
+Script::checkStderr (gchar * filename)
+{
+    std::ifstream stderrf (filename);
+    if (!stderrf.is_open()) return;
+
+    stderrf.seekg(0, std::ios::end);
+    int length = stderrf.tellg();
+    if (0 == length) return;
+    stderrf.seekg(0, std::ios::beg);
+
+    Gtk::MessageDialog warning(
+        _("The Inkscape Extension executed returned an error message.  This may"
+        " or may not mean that the extension failed.  Inkscape will try it's best"
+        " to recover from the situation.  If there are any problems, reading the text"
+        " included here may help diagnose the problem.")
+        , false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+
+    Gtk::VBox * vbox = warning.get_vbox();
+
+    /* Gtk::TextView * textview = new Gtk::TextView(Gtk::TextBuffer::create()); */
+    Gtk::TextView * textview = new Gtk::TextView();
+    textview->set_editable(false);
+    textview->set_wrap_mode(Gtk::WRAP_WORD);
+    textview->show();
+
+    char * buffer = new char [length];
+    stderrf.read(buffer, length);
+    textview->get_buffer()->set_text(buffer, buffer + length);
+    delete buffer;
+    stderrf.close();
+
+    Gtk::ScrolledWindow * scrollwindow = new Gtk::ScrolledWindow();
+    scrollwindow->add(*textview);
+    scrollwindow->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    scrollwindow->set_shadow_type(Gtk::SHADOW_IN);
+    scrollwindow->show();
+
+    vbox->pack_start(*scrollwindow, false, false, 5 /* fix these */);
+
+    warning.run();
+
+    return;
 }
 
 #ifdef WIN32
@@ -939,6 +1012,7 @@ size_t pipe_t::write(void const *buffer, size_t size) {
 }
 
 #endif // (Non-)Win32
+
 
 }  /* Inkscape  */
 }  /* module  */

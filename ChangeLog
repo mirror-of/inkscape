@@ -1,3 +1,11 @@
+2005-06-28  Ted Gould  <ted@gould.cx>
+
+	* src/extension/implementation/script.cpp,
+	src/extension/implementation/script.h:
+
+	Adding support for information comming back on STDERR from scripts.  This
+	fixes bug #1220959 and RFE #1178941
+
 2005-07-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-stop.h, sp-gradient.cpp, widgets/gradient-vector.cpp:
