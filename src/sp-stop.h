@@ -13,7 +13,14 @@ struct SPStop : public SPObject {
     /* fixme: Should be SPSVGPercentage */
     gfloat offset;
 
-    SPColor color;
+    bool currentColor;
+
+    /**
+     * N.B.\ Meaningless if currentColor is true.  Use sp_stop_get_rgba32 or sp_stop_get_color
+     * (currently static in sp-gradient.cpp) if you want the effective color.
+     */
+    SPColor specified_color;
+
     /* fixme: Implement SPSVGNumber or something similar */
     gfloat opacity;
 };
@@ -21,6 +28,8 @@ struct SPStop : public SPObject {
 struct SPStopClass {
     SPObjectClass parent_class;
 };
+
+guint32 sp_stop_get_rgba32(SPStop const *);
 
 
 #endif /* !SEEN_SP_STOP_H */

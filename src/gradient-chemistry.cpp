@@ -562,7 +562,7 @@ sp_item_gradient_stop_query_style (SPItem *item, guint point_num, bool fill_or_s
         {
             SPStop *first = sp_first_stop (vector);
             if (first) {
-                return sp_color_get_rgba32_falpha(&first->color, first->opacity);
+                return sp_stop_get_rgba32(first);
             }
         }
         break;
@@ -573,7 +573,7 @@ sp_item_gradient_stop_query_style (SPItem *item, guint point_num, bool fill_or_s
         {
             SPStop *last = sp_last_stop (vector);
             if (last) {
-                return sp_color_get_rgba32_falpha(&last->color, last->opacity);
+                return sp_stop_get_rgba32(last);
             }
         }
         break;

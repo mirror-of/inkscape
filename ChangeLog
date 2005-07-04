@@ -1,3 +1,8 @@
+2005-07-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-stop.h, sp-gradient.cpp, widgets/gradient-vector.cpp:
+	  Implement currentColor as possible value for stop-color, as per spec.
+
 2005-07-02  Kees Cook  <kees@outflux.net>
 
 	* src/dialog/rdf.cpp: Added FreeArt license, RFE #1230981.

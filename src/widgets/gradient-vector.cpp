@@ -545,7 +545,7 @@ update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 				gtk_widget_show (i);
 				g_object_set_data (G_OBJECT (i), "stop", stop);
 				GtkWidget *hb = gtk_hbox_new (FALSE, 4);
-				GtkWidget *cpv = sp_color_preview_new (sp_color_get_rgba32_falpha (&stop->color, stop->opacity));
+				GtkWidget *cpv = sp_color_preview_new(sp_stop_get_rgba32(stop));
 				gtk_widget_show (cpv);
 				gtk_container_add ( GTK_CONTAINER (hb), cpv );
 				g_object_set_data ( G_OBJECT (i), "preview", cpv );
@@ -588,7 +588,7 @@ sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
 	blocked = TRUE;
 
 	SPColorSelector *csel = (SPColorSelector*)g_object_get_data (G_OBJECT (tbl), "cselector");
-	guint32 c = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
+	guint32 const c = sp_stop_get_rgba32(stop);
 	csel->base->setAlpha(SP_RGBA32_A_F (c));
 	SPColor color;
 	sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c), SP_RGBA32_G_F (c), SP_RGBA32_B_F (c));
@@ -707,8 +707,8 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
    
 	newstop->offset = (stop->offset + next->offset) * 0.5 ;
 
-	guint32 c1 = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
-	guint32 c2 = sp_color_get_rgba32_falpha (&next->color, next->opacity);
+	guint32 const c1 = sp_stop_get_rgba32(stop);
+	guint32 const c2 = sp_stop_get_rgba32(next);
 	guint32 cnew = sp_average_color (c1, c2);
 
 	Inkscape::SVGOStringStream os;
@@ -949,7 +949,7 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 
 		GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(widget), "stopmenu");
 		SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
-		guint32 c = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
+		guint32 const c = sp_stop_get_rgba32(stop);
 
 		/// get the color selector 
 		SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data (G_OBJECT (widget), "cselector"));
@@ -1058,11 +1058,12 @@ static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GtkObject *o
     SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
 
 
-    csel->base->getColorAlpha(stop->color, &stop->opacity);
+    csel->base->getColorAlpha(stop->specified_color, &stop->opacity);
+    stop->currentColor = false;
 
 	blocked = FALSE;
     SPColorPreview *cpv = (SPColorPreview *)g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "preview");
-    sp_color_preview_set_rgba32 (cpv, sp_color_get_rgba32_falpha (&stop->color, stop->opacity));
+    sp_color_preview_set_rgba32(cpv, sp_stop_get_rgba32(stop));
 
 }
 
