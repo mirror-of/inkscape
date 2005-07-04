@@ -148,7 +148,12 @@ Transformation::layoutPageMove()
 {
     _units_move.setUnitType(UNIT_TYPE_LINEAR);
     _scalar_move_horizontal.initScalar(-100, 100);
+    _scalar_move_horizontal.setDigits(3);
+    _scalar_move_horizontal.setIncrements(0.1, 1.0);
+
     _scalar_move_vertical.initScalar(-100, 100);
+    _scalar_move_vertical.setDigits(3);
+    _scalar_move_vertical.setIncrements(0.1, 1.0);
 
     //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_HOR );
     _page_move.table()
@@ -183,9 +188,13 @@ Transformation::layoutPageScale()
 
     _scalar_scale_horizontal.initScalar(0, 500);
     _scalar_scale_horizontal.setValue(100.0, "%");
+    _scalar_scale_horizontal.setDigits(3);
+    _scalar_scale_horizontal.setIncrements(0.1, 1.0);
 
     _scalar_scale_vertical.initScalar(0, 500);
     _scalar_scale_vertical.setValue(100.0, "%");
+    _scalar_scale_vertical.setDigits(3);
+    _scalar_scale_vertical.setIncrements(0.1, 1.0);
 
     _page_scale.table()
         .attach(_scalar_scale_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -205,6 +214,8 @@ void
 Transformation::layoutPageRotate()
 {
     _scalar_rotate.initScalar(-180, 180);
+    _scalar_rotate.setDigits(3);
+    _scalar_rotate.setIncrements(0.1, 1.0);
 
     _page_rotate.table()
         .attach(_scalar_rotate, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
@@ -219,7 +230,12 @@ Transformation::layoutPageSkew()
     _units_skew.setUnitType(UNIT_TYPE_LINEAR);
 
     _scalar_skew_horizontal.initScalar(-100, 100);
+    _scalar_skew_horizontal.setDigits(3);
+    _scalar_skew_horizontal.setIncrements(0.1, 1.0);
+
     _scalar_skew_vertical.initScalar(-100, 100);
+    _scalar_skew_vertical.setDigits(3);
+    _scalar_skew_vertical.setIncrements(0.1, 1.0);
 
     _page_skew.table()
         .attach(_scalar_skew_horizontal, 0, 2, 0, 1, Gtk::FILL, Gtk::SHRINK);
