@@ -210,15 +210,30 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
         }
     }
 
-    char const * const actionkey = ( fabs(x0 - bbox.min()[NR::X]) > 1e-6
-                                     ? "selector:toolbar:move:horizontal"
-                                     : fabs(x1 - bbox.max()[NR::X]) > 1e-6
-                                     ? "selector:toolbar:scale:horizontal"
-                                     : fabs(y0 - bbox.min()[NR::Y]) > 1e-6
-                                     ? "selector:toolbar:move:vertical"
-                                     : fabs(y1 - bbox.max()[NR::Y]) > 1e-6
-                                     ? "selector:toolbar:scale:vertical"
-                                     : NULL );
+    // scales and moves, in px
+    double mh = fabs(x0 - bbox.min()[NR::X]);
+    double sh = fabs(x1 - bbox.max()[NR::X]);
+    double mv = fabs(y0 - bbox.min()[NR::Y]);
+    double sv = fabs(y1 - bbox.max()[NR::Y]);
+
+    // unless the unit is %, convert the scales and moves to the unit
+    if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
+        mh = sp_pixels_get_units (mh, unit);
+        sh = sp_pixels_get_units (sh, unit);
+        mv = sp_pixels_get_units (mv, unit);
+        sv = sp_pixels_get_units (sv, unit);
+    }
+
+    // do the action only if one of the scales/moves is greater than half the last significant
+    // digit in the spinbox (currently spinboxes have 2 fractional digits, so that makes 0.005). If
+    // the value was changed by the user, the difference will be at least that much; otherwise it's
+    // just rounding difference between the spinbox value and actual value, so no action is
+    // performed
+    char const * const actionkey = ( mh > 5e-3 ? "selector:toolbar:move:horizontal" : 
+                                     sh > 5e-3 ? "selector:toolbar:scale:horizontal" : 
+                                     mv > 5e-3 ? "selector:toolbar:move:vertical" : 
+                                     sv > 5e-3 ? "selector:toolbar:scale:vertical" : NULL );
+
     if (actionkey != NULL) {
         NR::translate const p2o(-bbox.min());
         NR::scale scale(1, 1);
