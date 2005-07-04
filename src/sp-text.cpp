@@ -315,12 +315,10 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
         GSList *l = NULL;
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             Inkscape::XML::Node *crepr = NULL;
-            if (SP_IS_TSPAN (child)) {
-                crepr = child->updateRepr(NULL, flags);
-            } else if (SP_IS_TEXTPATH (child)) {
-                crepr = child->updateRepr(NULL, flags);
-            } else {
+            if (SP_IS_STRING(child)) {
                 crepr = sp_repr_new_text(SP_STRING(child)->string.c_str());
+            } else {
+                crepr = child->updateRepr(NULL, flags);
             }
             if (crepr) l = g_slist_prepend (l, crepr);
         }
@@ -331,12 +329,10 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
     } else {
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            if (SP_IS_TSPAN (child)) {
-                child->updateRepr(flags);
-            } else if (SP_IS_TEXTPATH (child)) {
-                child->updateRepr(flags);
+            if (SP_IS_STRING(child)) {
+                SP_OBJECT_REPR(child)->setContent(SP_STRING(child)->string.c_str());
             } else {
-                SP_OBJECT_REPR (child)->setContent(SP_STRING(child)->string.c_str());
+                child->updateRepr(flags);
             }
         }
     }
@@ -540,12 +536,12 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
         }
 
     for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        if (SP_IS_TSPAN (child) || SP_IS_TEXTPATH (child)) {
-            length += _buildLayoutInput(child, optional_attrs, child_attrs_offset + length, in_textpath);
-        } else if (SP_IS_STRING (child)) {
+        if (SP_IS_STRING(child)) {
             Glib::ustring const &string = SP_STRING(child)->string;
             layout.appendText(string, root->style, child, &optional_attrs, child_attrs_offset + length);
             length += string.length();
+        } else {
+            length += _buildLayoutInput(child, optional_attrs, child_attrs_offset + length, in_textpath);
         }
     }
 
