@@ -1,5 +1,13 @@
 2005-06-28  Ted Gould  <ted@gould.cx>
 
+	* src/extension/dependency.cpp:
+
+	Fix for #1169396 -- setting the default type for a dependency to file,
+	this seems to be the only way that the print function could end up using
+	undefined memory, and then passing it on the gettext.
+
+2005-06-28  Ted Gould  <ted@gould.cx>
+
 	* src/extension/implementation/script.cpp,
 	src/extension/implementation/script.h:
 

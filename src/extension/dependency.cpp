@@ -51,7 +51,7 @@ gchar const * Dependency::_location_str[] = {
 */
 Dependency::Dependency (Inkscape::XML::Node * in_repr)
 {
-    _type = TYPE_CNT;
+    _type = TYPE_FILE;
     _location = LOCATION_PATH;
     _repr = in_repr;
     _string = NULL;
