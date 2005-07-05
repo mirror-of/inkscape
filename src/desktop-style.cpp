@@ -407,7 +407,9 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
     for (GSList const *i = objects; i != NULL; i = i->next) {
         SPObject *obj = SP_OBJECT (i->data);
 
-        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj))
+        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj)
+            && !SP_IS_TSPAN(obj) && !SP_IS_TEXTPATH(obj)
+            && !SP_IS_FLOWDIV(obj) && !SP_IS_FLOWPARA(obj) && !SP_IS_FLOWTSPAN(obj))
             continue;
 
         SPStyle *style = SP_OBJECT_STYLE (obj);
@@ -475,7 +477,9 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
     for (GSList const *i = objects; i != NULL; i = i->next) {
         SPObject *obj = SP_OBJECT (i->data);
 
-        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj))
+        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj)
+            && !SP_IS_TSPAN(obj) && !SP_IS_TEXTPATH(obj)
+            && !SP_IS_FLOWDIV(obj) && !SP_IS_FLOWPARA(obj) && !SP_IS_FLOWTSPAN(obj))
             continue;
 
         SPStyle *style = SP_OBJECT_STYLE (obj);
@@ -524,7 +528,9 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
     for (GSList const *i = objects; i != NULL; i = i->next) {
         SPObject *obj = SP_OBJECT (i->data);
 
-        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj))
+        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj)
+            && !SP_IS_TSPAN(obj) && !SP_IS_TEXTPATH(obj)
+            && !SP_IS_FLOWDIV(obj) && !SP_IS_FLOWPARA(obj) && !SP_IS_FLOWTSPAN(obj))
             continue;
 
         SPStyle *style = SP_OBJECT_STYLE (obj);

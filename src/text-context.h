@@ -39,6 +39,7 @@ struct SPTextContext {
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;
 	sigc::connection style_set_connection;
+	sigc::connection style_query_connection;
 
 	GtkIMContext *imc;
 

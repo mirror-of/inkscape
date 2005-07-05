@@ -52,6 +52,9 @@ void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, 
 
 int objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill);
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
+int objects_query_fontnumbers (GSList *objects, SPStyle *style_res);
+int objects_query_fontstyle (GSList *objects, SPStyle *style_res);
+int objects_query_fontfamily (GSList *objects, SPStyle *style_res);
 
 #endif
 

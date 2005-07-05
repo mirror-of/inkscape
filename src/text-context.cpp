@@ -72,6 +72,7 @@ static gint sp_text_context_item_handler(SPEventContext *event_context, SPItem *
 static void sp_text_context_selection_changed(Inkscape::Selection *selection, SPTextContext *tc);
 static void sp_text_context_selection_modified(Inkscape::Selection *selection, guint flags, SPTextContext *tc);
 static bool sp_text_context_style_set(SPCSSAttr const *css, SPTextContext *tc);
+static int sp_text_context_style_query(SPStyle *style, int property, SPTextContext *tc);
 
 static void sp_text_context_validate_cursor_iterators(SPTextContext *tc);
 static void sp_text_context_update_cursor(SPTextContext *tc, bool scroll_to_see = true);
@@ -163,6 +164,7 @@ sp_text_context_init(SPTextContext *tc)
     new (&tc->sel_changed_connection) sigc::connection();
     new (&tc->sel_modified_connection) sigc::connection();
     new (&tc->style_set_connection) sigc::connection();
+    new (&tc->style_query_connection) sigc::connection();
 }
 
 static void
@@ -170,6 +172,7 @@ sp_text_context_dispose(GObject *obj)
 {
     SPTextContext *tc = SP_TEXT_CONTEXT(obj);
     SPEventContext *ec = SP_EVENT_CONTEXT(tc);
+    tc->style_query_connection.~connection();
     tc->style_set_connection.~connection();
     tc->sel_changed_connection.~connection();
     tc->sel_modified_connection.~connection();
@@ -274,6 +277,9 @@ sp_text_context_setup(SPEventContext *ec)
         );
     tc->style_set_connection = desktop->connectSetStyle(
         sigc::bind(sigc::ptr_fun(&sp_text_context_style_set), tc)
+        );
+    tc->style_query_connection = desktop->connectQueryStyle(
+        sigc::bind(sigc::ptr_fun(&sp_text_context_style_query), tc)
         );
 
     sp_text_context_selection_changed(SP_DT_SELECTION(desktop), tc);
@@ -1331,6 +1337,51 @@ sp_text_context_style_set(SPCSSAttr const *css, SPTextContext *tc)
     return true;
 }
 
+static int
+sp_text_context_style_query(SPStyle *style, int property, SPTextContext *tc)
+{
+    if (tc->text == NULL)
+        return QUERY_STYLE_NOTHING;
+    const Inkscape::Text::Layout *layout = te_get_layout(tc->text);
+    if (layout == NULL)
+        return QUERY_STYLE_NOTHING;
+
+    GSList *styles_list = NULL;
+    int result = QUERY_STYLE_NOTHING;
+
+    Inkscape::Text::Layout::iterator begin_it, end_it;
+    if (tc->text_sel_start < tc->text_sel_end) {
+        begin_it = tc->text_sel_start;
+        end_it = tc->text_sel_end;
+    } else {
+        begin_it = tc->text_sel_end;
+        end_it = tc->text_sel_start;
+    }
+    if (begin_it == end_it) end_it.nextCharacter();
+    for (Inkscape::Text::Layout::iterator it = begin_it ; it < end_it ; it.nextStartOfSpan()) {
+        SPObject const *pos_obj = NULL;
+        layout->getSourceOfCharacter(it, (void**)&pos_obj);
+        if (pos_obj == NULL) continue;
+        while (SP_OBJECT_STYLE(pos_obj) == NULL)
+            pos_obj = SP_OBJECT_PARENT(pos_obj);   // SPStrings don't have style
+        styles_list = g_slist_prepend(styles_list, (gpointer)pos_obj);
+    }
+
+    if (property == QUERY_STYLE_PROPERTY_FONTFAMILY)
+        result = objects_query_fontfamily(styles_list, style);
+    else if (property == QUERY_STYLE_PROPERTY_FONTSTYLE)
+        result = objects_query_fontstyle(styles_list, style);
+    else if (property == QUERY_STYLE_PROPERTY_FONTNUMBERS)
+        result = objects_query_fontnumbers(styles_list, style);
+    else if (property == QUERY_STYLE_PROPERTY_FILL)
+        result = objects_query_fillstroke(styles_list, style, true);
+    else if (property == QUERY_STYLE_PROPERTY_STROKE)
+        result = objects_query_fillstroke(styles_list, style, false);
+
+    g_slist_free(styles_list);
+    return result;
+}
+
 static void
 sp_text_context_validate_cursor_iterators(SPTextContext *tc)
 {
@@ -1398,6 +1449,7 @@ sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see)
     if (tc->imc) {
         gtk_im_context_set_cursor_location(tc->imc, &im_cursor);
     }
+    SP_EVENT_CONTEXT(tc)->desktop->emitToolSubselectionChanged((gpointer)tc);
 }
 
 static void sp_text_context_update_text_selection(SPTextContext *tc)
