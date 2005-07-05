@@ -25,6 +25,7 @@
 #include "streq.h"
 #include "strneq.h"
 #include "xml/repr.h"
+#include "xml/node-fns.h"
 
 #include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"
@@ -643,7 +644,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, Inkscape::XML:
 	if (!SP_OBJECT_IS_CLONED (object)) {
 		object->document->bindObjectToRepr(object->repr, object);
 
-		if ( object->repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+		if (Inkscape::XML::id_permitted(object->repr)) {
 			/* If we are not cloned, force unique id */
 			const gchar *id = object->repr->attribute("id");
 			gchar *realid = sp_object_get_unique_id (object, id);
@@ -757,9 +758,11 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 	switch (key) {
 	case SP_ATTR_ID:
 		if ( !SP_OBJECT_IS_CLONED (object) && object->repr->type() == Inkscape::XML::ELEMENT_NODE ) {
+			SPDocument *document=object->document;
 			SPObject *conflict=NULL;
+
 			if (value) {
-				conflict = object->document->getObjectById((const char *)value);
+				conflict = document->getObjectById((const char *)value);
 			}
 			if ( conflict && conflict != object ) {
 				sp_object_ref(conflict, NULL);
@@ -771,17 +774,14 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			}
 
 			if (object->id) {
-				object->document->bindObjectToId(object->id, NULL);
+				document->bindObjectToId(object->id, NULL);
 				g_free (object->id);
-			} else {
-				g_message("id binding restored on bound object %s", value);
 			}
 
 			if (value) {
 				object->id = g_strdup ((const char*)value);
-				object->document->bindObjectToId(object->id, object);
+				document->bindObjectToId(object->id, object);
 			} else {
-				g_warning("id binding cleared on bound object %s", object->id);
 				object->id = NULL;
 			}
 

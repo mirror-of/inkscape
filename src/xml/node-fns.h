@@ -8,6 +8,8 @@ namespace XML {
 
 class Node;
 
+bool id_permitted(Node const *node);
+
 inline Node *next_node(Node *node) {
     return ( node ? node->next() : NULL );
 }

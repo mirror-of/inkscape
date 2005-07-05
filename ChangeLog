@@ -1,5 +1,11 @@
 2005-07-04  MenTaLguY  <mental@rydia.net>
 
+	* src/sp-object.cpp, src/xml/node-fns.h, src/xml/node-fns.cpp:
+	  don't force id= attributes on anything except elements in the SVG,
+	  Sodipodi, or Inkscape namespaces.
+
+2005-07-04  MenTaLguY  <mental@rydia.net>
+
 	* src/verbs.cpp: redo cryve's fix to use defaultLabel() rather than
 	  label()
 
