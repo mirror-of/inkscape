@@ -80,7 +80,7 @@ LangString lng_Editor    ${LANG_ITALIAN} "Impostare $(^Name) come editor SVG pre
 LangString lng_Reader    ${LANG_ENGLISH} "Do you want $(^Name) to be the default SVG reader?"
 LangString lng_Reader    ${LANG_CATALAN} "Voleu que l'$(^Name) sigui el lector SVG predefinit?"
 LangString lng_Reader    ${LANG_CZECH}   "Chcete nastavit $(^Name) jako výchozí prohlí¾eè SVG souborù?"
-LangString lng_Reader    ${LANG_FRENCH}  "Voulez-vous qu' $(^Name) devienne la visionneuse SVG par défaut?"
+LangString lng_Reader    ${LANG_FRENCH}  "Voulez-vous qu'$(^Name) devienne la visionneuse SVG par défaut?"
 LangString lng_Reader    ${LANG_GERMAN}  "Wollen Sie $(^Name) zu Ihrem standardmäßigem Anzeigeprogramm für SVG machen?"
 LangString lng_Reader    ${LANG_ITALIAN} "Impostare $(^Name) come lettore SVG predefinito?"
 
@@ -88,7 +88,7 @@ LangString lng_Reader    ${LANG_ITALIAN} "Impostare $(^Name) come lettore SVG pr
 LangString lng_Removed   ${LANG_ENGLISH} "$(^Name) was successfully removed from your computer."
 LangString lng_Removed   ${LANG_CATALAN} "L'$(^Name) s'ha suprimit correctament de l'ordinador."
 LangString lng_Removed   ${LANG_CZECH}   "$(^Name) byl úspì¹nì odinstalován z va¹eho poèítaèe."
-LangString lng_Removed   ${LANG_FRENCH}  "$(^Name) a été desinstallé avec succès de votre ordinateur."
+LangString lng_Removed   ${LANG_FRENCH}  "$(^Name) a été désinstallé avec succès de votre ordinateur."
 LangString lng_Removed   ${LANG_GERMAN}  "$(^Name) wurde erfolgreich von Ihrem Computer entfernt."
 LangString lng_Removed   ${LANG_ITALIAN} "$(^Name) è stato rimosso con successo dal sistema."
 
@@ -96,7 +96,7 @@ LangString lng_Removed   ${LANG_ITALIAN} "$(^Name) è stato rimosso con successo 
 LangString lng_Uninstall ${LANG_ENGLISH} "Are you sure you want to completely remove $(^Name) and all of its components?"
 LangString lng_Uninstall ${LANG_CATALAN} "Esteu segur que voleu suprimir completament $(^Name) i tots els seus components?"
 LangString lng_Uninstall ${LANG_CZECH}   "Jste si jisti, ¾e chcete úplnì odstranit $(^Name) a v¹echny jeho komponenty?"
-LangString lng_Uninstall ${LANG_FRENCH}  "Etes-vous-sûr de vouloir complètement desintaller $(^Name) et tous ses composants?"
+LangString lng_Uninstall ${LANG_FRENCH}  "Etes-vous-sûr de vouloir complètement désintaller $(^Name) et tous ses composants?"
 LangString lng_Uninstall ${LANG_GERMAN}  "Möchten Sie $(^Name) und alle seine Komponenten von Ihrem Rechner entfernen?"
 LangString lng_Uninstall ${LANG_ITALIAN} "Rimuovere completamente $(^Name) e tutti i suoi componenti?"
 
