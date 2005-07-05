@@ -21,6 +21,7 @@
 #include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-rotate-ops.h"
 #include "display/curve.h"
+#include "style.h"
 
 namespace Inkscape {
 namespace Text {
@@ -619,7 +620,21 @@ void Layout::simulateLayoutUsingKerning(iterator const &from, iterator const &to
                     glyphs_width += _glyphs[glyph_index].width;
             if (_characters[char_index].span(this).direction == RIGHT_TO_LEFT)
                 glyphs_width = -glyphs_width;
-            double dx = (_characters[char_index].x + _characters[char_index].span(this).x_start - _characters[prev_cluster_char_index].x - _characters[prev_cluster_char_index].span(this).x_start) - glyphs_width;
+
+            double dx = (_characters[char_index].x + _characters[char_index].span(this).x_start
+                         - _characters[prev_cluster_char_index].x - _characters[prev_cluster_char_index].span(this).x_start)
+                        - glyphs_width;
+
+            
+            InputStreamItem *input_item = _input_stream[_characters[char_index].span(this).in_input_stream_item];
+            if (input_item->Type() == TEXT_SOURCE) {
+                SPStyle const *style = static_cast<InputStreamTextSource*>(input_item)->style;
+                if (_characters[char_index].char_attributes.is_white)
+                    dx -= style->word_spacing.computed;
+                if (_characters[char_index].char_attributes.is_cursor_position)
+                    dx -= style->letter_spacing.computed;
+            }
+
             if (fabs(dx) > 0.0001) {
                 result->dx.resize(char_index - from._char_index + 1, zero_length);
                 result->dx.back() = dx;
