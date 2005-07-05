@@ -83,6 +83,11 @@ public:
 
 	NRTypePosDef(char const *description);
 
+	bool signature() {return this->italic + 
+			this->oblique * 255 +
+			this->weight * 255 * 255 +
+			this->stretch * 255 * 255 * 255 + 
+			this->variant * 255 * 255 * 255 * 255;};
 };
 
 int parse_name_for_style (char const *c);
