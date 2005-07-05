@@ -211,7 +211,7 @@ sp_font_selector_init (SPFontSelector *fsel)
 	gtk_combo_set_value_in_list (GTK_COMBO (fsel->size), FALSE, FALSE);
 	gtk_combo_set_use_arrows (GTK_COMBO (fsel->size), TRUE);
 	gtk_combo_set_use_arrows_always (GTK_COMBO (fsel->size), TRUE);
-	gtk_widget_set_size_request (fsel->size, 64, -1);
+	gtk_widget_set_size_request (fsel->size, 90, -1);
 	gtk_signal_connect (GTK_OBJECT (GTK_COMBO (fsel->size)->entry), "changed", GTK_SIGNAL_FUNC (sp_font_selector_size_changed), fsel);
 	gtk_box_pack_end (GTK_BOX (hb), fsel->size, FALSE, FALSE, 0);
 	
