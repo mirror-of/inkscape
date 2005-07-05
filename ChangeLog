@@ -1,5 +1,9 @@
 2005-07-04  MenTaLguY  <mental@rydia.net>
 
+	* src/sp-metadata.cpp: strip id= attributes under rdf:RDF elements
+
+2005-07-04  MenTaLguY  <mental@rydia.net>
+
 	* src/sp-object.cpp, src/xml/node-fns.h, src/xml/node-fns.cpp:
 	  don't force id= attributes on anything except elements in the SVG,
 	  Sodipodi, or Inkscape namespaces.

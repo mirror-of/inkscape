@@ -18,6 +18,7 @@
 #include "attributes.h"
 #include "sp-metadata.h"
 #include "xml/repr.h"
+#include "xml/node-iterators.h"
 #include "document.h"
 
 #include "sp-item-group.h"
@@ -88,6 +89,20 @@ sp_metadata_init (SPMetadata *metadata)
     debug("0x%08x",(unsigned int)metadata);
 }
 
+namespace {
+
+void strip_ids_recursively(Inkscape::XML::Node *node) {
+    using Inkscape::XML::NodeSiblingIterator;
+    if ( node->type() == Inkscape::XML::ELEMENT_NODE ) {
+        node->setAttribute("id", NULL);
+    }
+    for ( NodeSiblingIterator iter=node->firstChild() ; iter ; ++iter ) {
+        strip_ids_recursively(iter);
+    }
+}
+
+}
+
 /*
  * \brief Reads the Inkscape::XML::Node, and initializes SPMetadata variables.
  *        For this to get called, our name must be associated with
@@ -97,25 +112,21 @@ sp_metadata_init (SPMetadata *metadata)
 static void
 sp_metadata_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
+    using Inkscape::XML::NodeSiblingIterator;
+
     debug("0x%08x",(unsigned int)object);
+
+    /* clean up our mess from earlier versions; elements under rdf:RDF should not
+     * have id= attributes... */
+    static GQuark const rdf_root_name=g_quark_from_static_string("rdf:RDF");
+    for ( NodeSiblingIterator iter=repr->firstChild() ; iter ; ++iter ) {
+        if ( (GQuark)iter->code() == rdf_root_name ) {
+            strip_ids_recursively(iter);
+        }
+    }
+
     if (((SPObjectClass *) metadata_parent_class)->build)
         ((SPObjectClass *) metadata_parent_class)->build (object, document, repr);
-
-    /*
-    sp_object_read_attr (object, "xlink:href");
-    sp_object_read_attr (object, "attributeName");
-    sp_object_read_attr (object, "attributeType");
-    sp_object_read_attr (object, "begin");
-    sp_object_read_attr (object, "dur");
-    sp_object_read_attr (object, "end");
-    sp_object_read_attr (object, "min");
-    sp_object_read_attr (object, "max");
-    sp_object_read_attr (object, "restart");
-    sp_object_read_attr (object, "repeatCount");
-    sp_object_read_attr (object, "repeatDur");
-    sp_object_read_attr (object, "fill");
-    */
-    
 }
 
 /*
