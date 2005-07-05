@@ -551,13 +551,19 @@ void SPFlowtext::convert_to_text()
                 g_free(style_text);
             }
 
-            it = it_span_end;
             if (SP_IS_STRING(source_obj)) {
                 Glib::ustring *string = &SP_STRING(source_obj)->string;
                 SPObject *span_end_obj;
                 Glib::ustring::iterator span_text_end_iter;
-                group->layout.getSourceOfCharacter(it, (void**)&span_end_obj, &span_text_end_iter);
-                if (span_end_obj != source_obj) span_text_end_iter = string->end();    // spans will never straddle a source boundary
+                group->layout.getSourceOfCharacter(it_span_end, (void**)&span_end_obj, &span_text_end_iter);
+                if (span_end_obj != source_obj) {
+                    if (it_span_end == group->layout.end()) {
+                        span_text_end_iter = span_text_start_iter;
+                        for (int i = group->layout.iteratorToCharIndex(it_span_end) - group->layout.iteratorToCharIndex(it) ; i ; --i)
+                            ++span_text_end_iter;
+                    } else
+                        span_text_end_iter = string->end();    // spans will never straddle a source boundary
+                }
 
                 if (span_text_start_iter != span_text_end_iter) {
                     Glib::ustring new_string;
@@ -568,6 +574,7 @@ void SPFlowtext::convert_to_text()
                     sp_repr_unref(new_text);
                 }
             }
+            it = it_span_end;
 
             line_tspan->appendChild(span_tspan);
 	        sp_repr_unref(span_tspan);
