@@ -1,3 +1,7 @@
+2005-07-05  Ted Gould  <ted@gould.cx>
+
+	* 0.42pre1
+
 2005-07-04  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-metadata.cpp: strip id= attributes under rdf:RDF elements
