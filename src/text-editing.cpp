@@ -757,7 +757,11 @@ sp_te_get_string_multiline (SPItem const *text)
     if (!SP_IS_TEXT(text) && !SP_IS_FLOWTEXT(text)) return NULL;
     sp_te_get_ustring_multiline(text, &string);
     if (string.empty()) return NULL;
-    return strdup(string.data() + 1);    // the first char will always be an unwanted line break
+    if (string.data()[0] == '\n') {
+        return strdup(string.data() + 1);    // remove unwanted line break
+    } else {
+        return strdup(string.data());
+    }
 }
 
 /** Gets a text-only representation of the characters in a text or flowroot
