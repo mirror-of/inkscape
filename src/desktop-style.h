@@ -37,7 +37,9 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_FILL,  // fill, fill-opacity
     QUERY_STYLE_PROPERTY_STROKE,  // stroke, stroke-opacity
     QUERY_STYLE_PROPERTY_STROKESTYLE, // markers, dasharray, miterlimit, stroke-width, stroke-cap, stroke-join
-    QUERY_STYLE_PROPERTY_TEXT // font-family, font-size, font-style, font-variant, line-height, text-anchor...
+    QUERY_STYLE_PROPERTY_FONTFAMILY, // font-family
+    QUERY_STYLE_PROPERTY_FONTSTYLE, // font style 
+    QUERY_STYLE_PROPERTY_FONTNUMBERS // size, spacings
 };
 
 void sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines);

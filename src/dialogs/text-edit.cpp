@@ -60,8 +60,9 @@ extern "C" {
 
 #define VB_MARGIN 4
 
-static void sp_text_edit_dialog_modify_selection (Inkscape::Application *inkscape, Inkscape::Selection *sel, guint flags, GtkWidget *dlg);
-static void sp_text_edit_dialog_change_selection (Inkscape::Application *inkscape, Inkscape::Selection *sel, GtkWidget *dlg);
+static void sp_text_edit_dialog_selection_modified (Inkscape::Application *inkscape, Inkscape::Selection *sel, guint flags, GtkWidget *dlg);
+static void sp_text_edit_dialog_selection_changed (Inkscape::Application *inkscape, Inkscape::Selection *sel, GtkWidget *dlg);
+static void sp_text_edit_dialog_subselection_changed ( Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dlg);
 
 static void sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg);
 static void sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg);
@@ -318,7 +319,7 @@ sp_text_edit_dialog (void)
                     gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
                     gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
                     gtk_combo_set_use_arrows_always ((GtkCombo *) c, TRUE);
-                    gtk_widget_set_size_request (c, 64, -1);
+                    gtk_widget_set_size_request (c, 90, -1);
 
                     { /* Setup strings */
                         GList *sl = NULL;
@@ -420,9 +421,10 @@ sp_text_edit_dialog (void)
         }
 
         g_signal_connect ( G_OBJECT (INKSCAPE), "modify_selection", 
-                           G_CALLBACK (sp_text_edit_dialog_modify_selection), dlg);
+                           G_CALLBACK (sp_text_edit_dialog_selection_modified), dlg);
         g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", 
-                           G_CALLBACK (sp_text_edit_dialog_change_selection), dlg);
+                           G_CALLBACK (sp_text_edit_dialog_selection_changed), dlg);
+        g_signal_connect (INKSCAPE, "change_subselection", G_CALLBACK (sp_text_edit_dialog_subselection_changed), dlg);
 
         gtk_widget_show_all (dlg);
 
@@ -436,7 +438,7 @@ sp_text_edit_dialog (void)
 
 
 static void
-sp_text_edit_dialog_modify_selection ( Inkscape::Application *inkscape, 
+sp_text_edit_dialog_selection_modified ( Inkscape::Application *inkscape, 
                                        Inkscape::Selection *sel, 
                                        guint flags, 
                                        GtkWidget *dlg )
@@ -453,18 +455,22 @@ sp_text_edit_dialog_modify_selection ( Inkscape::Application *inkscape,
     
     sp_text_edit_dialog_read_selection (dlg, style, content);
 
-} // end of sp_text_edit_dialog_modify_selection()
+} 
 
 
 
 static void
-sp_text_edit_dialog_change_selection ( Inkscape::Application *inkscape, 
+sp_text_edit_dialog_selection_changed ( Inkscape::Application *inkscape, 
                                        Inkscape::Selection *sel, 
                                        GtkWidget *dlg )
 {
     sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
 }
 
+static void sp_text_edit_dialog_subselection_changed ( Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dlg )
+{
+    sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
+}
 
 static void
 sp_text_edit_dialog_update_object_text ( SPItem *text )
@@ -652,7 +658,6 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
     SPItem *text = sp_ted_get_selected_text_item ();
 
     Inkscape::XML::Node *repr;
-    SPStyle *style;
     if (text)
     {
         guint items = sp_ted_get_selected_text_count ();
@@ -663,7 +668,6 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         }
         gtk_widget_set_sensitive (apply, FALSE);
         gtk_widget_set_sensitive (def, TRUE);
-        style = SP_OBJECT_STYLE (text);
 
         if (docontent) {
             gchar *str;
@@ -691,63 +695,64 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         gtk_widget_set_sensitive (textw, FALSE);
         gtk_widget_set_sensitive (apply, FALSE);
         gtk_widget_set_sensitive (def, FALSE);
-        repr = inkscape_get_repr (INKSCAPE, "tools.text");
-        if (repr) {
-            gtk_widget_set_sensitive (notebook, TRUE);
-            style = sp_style_new ();
-            sp_style_read_from_repr (style, repr);
-        } else {
-            gtk_widget_set_sensitive (notebook, FALSE);
-            style = sp_style_new ();
-        }
     }
 
     if (dostyle) {
-        GtkWidget *b, *combo;
-        const gchar *sstr;
 
-        font_instance *font = (font_factory::Default())->Face ( style->text->font_family.value, font_style_to_pos(*style) );
+        // create temporary style
+        SPStyle *query = sp_style_new ();
+        // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
+        int result_family = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONTFAMILY); 
+        int result_style = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONTSTYLE); 
+        int result_numbers = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONTNUMBERS); 
 
+        // If querying returned nothing, read the style from the text tool prefs (default style for new texts)
+        if (result_family == QUERY_STYLE_NOTHING || result_style == QUERY_STYLE_NOTHING || result_numbers == QUERY_STYLE_NOTHING) {
+            repr = inkscape_get_repr (INKSCAPE, "tools.text");
+            if (repr) {
+                gtk_widget_set_sensitive (notebook, TRUE);
+                sp_style_read_from_repr (query, repr);
+            } else {
+                gtk_widget_set_sensitive (notebook, FALSE);
+            }
+        }
+
+        // FIXME: process result_family/style == QUERY_STYLE_MULTIPLE_DIFFERENT by showing "Many" in the lists
+        font_instance *font = (font_factory::Default())->Face ( query->text->font_family.value, font_style_to_pos(*query) );
         if (font) {
             // the font is oversized, so we need to pass the true size separately
-            sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font, style->font_size.computed);
+            sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font, query->font_size.computed);
             sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font, SP_FONT_SELECTOR(fontsel));
 						font->Unref();
 						font=NULL;
         }
 
-        if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
-            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                "text_anchor_start" );
-        } else if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                "text_anchor_middle" );
+        GtkWidget *b;
+        if (query->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
+            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), "text_anchor_start" );
+        } else if (query->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), "text_anchor_middle" );
         } else {
-            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                "text_anchor_end" );
+            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), "text_anchor_end" );
         }
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
+       
+        if (query->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) {
+            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), INKSCAPE_STOCK_WRITING_MODE_LR );
+        } else {
+            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), INKSCAPE_STOCK_WRITING_MODE_TB );
+        }
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
-        
-        if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) {
-            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                INKSCAPE_STOCK_WRITING_MODE_LR );
-        } else {
-            b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                INKSCAPE_STOCK_WRITING_MODE_TB );
-        }
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
-        combo = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
-                                                "line_spacing" );
-        sstr = (repr) ? repr->attribute("sodipodi:linespacing") : NULL;
-        gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, 
-                    (sstr) ? sstr : (const gchar *) "100%");
+        GtkWidget *combo = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), "line_spacing" );
+        const gchar *sstr = g_strdup_printf ("%d%%", (int) floor(query->line_height.computed * 100 + 0.5));
+        gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, sstr);
+
+        g_free (query);
     }
 
     g_object_set_data (G_OBJECT (dlg), "blocked", NULL);
-   
-} // end of sp_text_edit_dialog_read_selection()
-
+}
 
 
 static void

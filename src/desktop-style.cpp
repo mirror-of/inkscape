@@ -27,11 +27,13 @@
 #include "sp-use.h"
 #include "sp-flowtext.h"
 #include "sp-flowregion.h"
+#include "sp-flowdiv.h"
 #include "sp-gradient.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-pattern.h"
 #include "xml/repr.h"
+#include "libnrtype/font-style-to-pos.h"
 
 #include "desktop-style.h"
 
@@ -85,6 +87,8 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
         &&
         !(SP_IS_FLOWREGION(o) ||
           SP_IS_FLOWREGIONEXCLUDE(o) ||
+          SP_IS_FLOWDIV(o) ||
+          SP_IS_FLOWPARA(o) ||
           (SP_IS_USE(o) &&
            SP_OBJECT_PARENT(o) &&
            (SP_IS_FLOWREGION(SP_OBJECT_PARENT(o)) ||
@@ -245,7 +249,6 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
 int
 objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill)
 {
-
     if (g_slist_length(objects) == 0) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
@@ -384,6 +387,178 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
     }
 }
 
+int
+objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
+{
+    bool different = false;
+
+    double size = 0;
+    double letterspacing = 0;
+    double linespacing = 0;
+
+    double size_prev = 0;
+    double letterspacing_prev = 0;
+    double linespacing_prev = 0;
+
+    // FIXME: add word spacing, kerns? rotates?
+
+    int texts = 0;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+
+        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj))
+            continue;
+
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        texts ++;
+        size += style->font_size.computed; // FIXME: we assume non-% units here
+        letterspacing += style->letter_spacing.computed; // FIXME: we assume non-% units here
+
+        double linespacing_current; 
+        if (style->line_height.unit == SP_CSS_UNIT_PERCENT || style->font_size.computed == 0) {
+            linespacing_current = style->line_height.value;
+        } else { // we need % here
+            linespacing_current = style->line_height.computed / style->font_size.computed;
+        }
+        linespacing += linespacing_current;
+
+        if ((size_prev != 0 && style->font_size.computed != size_prev) ||
+            (letterspacing_prev != 0 && style->letter_spacing.computed != letterspacing_prev) ||
+            (linespacing_prev != 0 && linespacing_current != linespacing_prev)) {
+            different = true;
+        }
+
+        size_prev = style->font_size.computed;
+        letterspacing_prev = style->letter_spacing.computed;
+        linespacing_prev = linespacing_current;
+
+        // FIXME: we must detect MULTIPLE_DIFFERENT for these too
+        style_res->text_anchor.computed = style->text_anchor.computed;
+        style_res->writing_mode.computed = style->writing_mode.computed;
+    }
+
+    if (texts == 0)
+        return QUERY_STYLE_NOTHING;
+
+    if (texts > 1) {
+        size /= texts;
+        letterspacing /= texts;
+        linespacing /= texts;
+    }
+
+    style_res->font_size.computed = size;
+    style_res->letter_spacing.computed = letterspacing;
+    style_res->line_height.computed = linespacing;
+
+    if (texts > 1) {
+        if (different) {
+            return QUERY_STYLE_MULTIPLE_AVERAGED;
+        } else {
+            return QUERY_STYLE_MULTIPLE_SAME;
+        }
+    } else {
+        return QUERY_STYLE_SINGLE;
+    }
+}
+
+int
+objects_query_fontstyle (GSList *objects, SPStyle *style_res)
+{
+    bool different = false;
+    bool set = false;
+
+    int texts = 0;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+
+        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj))
+            continue;
+
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        texts ++;
+
+        if (set && 
+            font_style_to_pos(*style_res).signature() != font_style_to_pos(*style).signature() ) {
+            different = true;  // different styles
+        }
+
+        set = TRUE;
+        style_res->font_weight.computed = style->font_weight.computed;
+        style_res->font_style.computed = style->font_style.computed;
+        style_res->font_stretch.computed = style->font_stretch.computed;
+        style_res->font_variant.computed = style->font_variant.computed;
+    }
+
+    if (texts == 0 || !set)
+        return QUERY_STYLE_NOTHING;
+
+    if (texts > 1) {
+        if (different) {
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;
+        } else {
+            return QUERY_STYLE_MULTIPLE_SAME;
+        }
+    } else {
+        return QUERY_STYLE_SINGLE;
+    }
+}
+
+int
+objects_query_fontfamily (GSList *objects, SPStyle *style_res)
+{
+    bool different = false;
+    int texts = 0;
+
+    if (style_res->text->font_family.value) {
+        g_free(style_res->text->font_family.value);
+        style_res->text->font_family.value = NULL;
+    }
+    style_res->text->font_family.set = FALSE;
+
+    for (GSList const *i = objects; i != NULL; i = i->next) {
+        SPObject *obj = SP_OBJECT (i->data);
+
+        if (!SP_IS_TEXT(obj) && !SP_IS_FLOWTEXT(obj))
+            continue;
+
+        SPStyle *style = SP_OBJECT_STYLE (obj);
+        if (!style) continue;
+
+        texts ++;
+
+        if (style_res->text->font_family.value && style->text->font_family.value && 
+            strcmp (style_res->text->font_family.value, style->text->font_family.value)) {
+            different = true;  // different fonts
+        }
+
+        if (style_res->text->font_family.value) {
+            g_free(style_res->text->font_family.value);
+            style_res->text->font_family.value = NULL;
+        }
+
+        style_res->text->font_family.set = TRUE;
+        style_res->text->font_family.value = g_strdup(style->text->font_family.value);
+    }
+
+    if (texts == 0 || !style_res->text->font_family.set)
+        return QUERY_STYLE_NOTHING;
+
+    if (texts > 1) {
+        if (different) {
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;
+        } else {
+            return QUERY_STYLE_MULTIPLE_SAME;
+        }
+    } else {
+        return QUERY_STYLE_SINGLE;
+    }
+}
 
 int
 sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
@@ -398,6 +573,13 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
         return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, true);
     } else if (property == QUERY_STYLE_PROPERTY_STROKE) {
         return objects_query_fillstroke ((GSList *) desktop->selection->itemList(), style, false);
+
+    } else if (property == QUERY_STYLE_PROPERTY_FONTFAMILY) {
+        return objects_query_fontfamily ((GSList *) desktop->selection->itemList(), style);
+    } else if (property == QUERY_STYLE_PROPERTY_FONTSTYLE) {
+        return objects_query_fontstyle ((GSList *) desktop->selection->itemList(), style);
+    } else if (property == QUERY_STYLE_PROPERTY_FONTNUMBERS) {
+        return objects_query_fontnumbers ((GSList *) desktop->selection->itemList(), style);
     }
 
     return QUERY_STYLE_NOTHING;
