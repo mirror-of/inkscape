@@ -2327,12 +2327,12 @@ sp_style_clear(SPStyle *style)
     style->letter_spacing.set = FALSE;
     style->letter_spacing.unit = SP_CSS_UNIT_NONE;
     style->letter_spacing.normal = TRUE;
-    style->letter_spacing.value = style->line_height.computed = 0.0;
+    style->letter_spacing.value = style->letter_spacing.computed = 0.0;
 
     style->word_spacing.set = FALSE;
     style->word_spacing.unit = SP_CSS_UNIT_NONE;
     style->word_spacing.normal = TRUE;
-    style->word_spacing.value = style->line_height.computed = 0.0;
+    style->word_spacing.value = style->word_spacing.computed = 0.0;
 
     style->text_transform.set = FALSE;
     style->text_transform.value = style->text_transform.computed = SP_CSS_TEXT_TRANSFORM_NONE;
