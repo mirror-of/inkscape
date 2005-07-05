@@ -29,6 +29,7 @@ EXTRA_DIST = \
 	mkinstalldirs		\
 	$(Graphics_in_files)	\
 	po/check-markup \
+	utf8-to-roff \
 	inkscape.1		\
 	inkscape.fr.1		\
 	inkscape.pod		\
