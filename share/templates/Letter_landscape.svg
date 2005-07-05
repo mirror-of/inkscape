@@ -10,11 +10,9 @@
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    width="792pt"
    height="612pt">
-  <defs
-     id="defs3" />
+  <defs />
   <sodipodi:namedview
      inkscape:document-units="in"
-     id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
@@ -24,17 +22,12 @@
      inkscape:cx="490"
      inkscape:cy="380" 
      inkscape:current-layer="layer1" />
-  <metadata
-     id="metadata4">
-    <rdf:RDF
-       id="RDF5">
+  <metadata>
+    <rdf:RDF>
       <cc:Work
-         rdf:about=""
-         id="Work6">
-        <dc:format
-           id="format7">image/svg+xml</dc:format>
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
         <dc:type
-           id="type9"
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
       </cc:Work>
     </rdf:RDF>
