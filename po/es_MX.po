@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 11:03+0200\n"
+"POT-Creation-Date: 2005-07-05 23:26+0200\n"
 "PO-Revision-Date: 2004-04-05 01:29-0600\n"
 "Last-Translator: Daniel Díaz <yosoy@danieldiaz.org>\n"
 "Language-Team: none <none>\n"
@@ -20,12 +20,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../inkscape.desktop.in.h:1
-#, fuzzy
-msgid "Inkscape SVG Vector Illustrator"
-msgstr "Ilustrador vectorial SVG"
+msgid "Create and edit Scalable Vector Graphics images"
+msgstr ""
 
 #: ../inkscape.desktop.in.h:2
-msgid "SVG Vector Illustrator"
+#, fuzzy
+msgid "Inkscape SVG Vector Illustrator"
 msgstr "Ilustrador vectorial SVG"
 
 #: ../src/arc-context.cpp:355
@@ -1526,7 +1526,7 @@ msgstr "Pluma"
 msgid "Calligraphy"
 msgstr "Caligrafía"
 
-#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:353
+#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:354
 #: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:1885
 msgid "Text"
 msgstr "Texto"
@@ -1649,7 +1649,7 @@ msgstr "Transfor_mar"
 msgid "Scale stroke width"
 msgstr "Contorno"
 
-#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:460
+#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:475
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 
@@ -1657,7 +1657,7 @@ msgstr ""
 msgid "Scale rounded corners in rectangles"
 msgstr ""
 
-#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:472
+#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:487
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 
@@ -1666,7 +1666,7 @@ msgstr ""
 msgid "Transform gradients"
 msgstr "Transfor_mar"
 
-#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:484
+#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:499
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr ""
 
@@ -1675,7 +1675,7 @@ msgstr ""
 msgid "Transform patterns"
 msgstr "Matriz de transformación"
 
-#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:496
+#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:511
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr ""
 
@@ -2664,131 +2664,131 @@ msgid "Palettes directory (%s) is unavailable."
 msgstr ""
 
 #. TODO:  Insert widgets
-#: ../src/dialogs/text-edit.cpp:199 ../src/ui/dialog/text-properties.cpp:36
+#: ../src/dialogs/text-edit.cpp:200 ../src/ui/dialog/text-properties.cpp:36
 #, fuzzy
 msgid "Font"
 msgstr "Punto"
 
-#: ../src/dialogs/text-edit.cpp:216
+#: ../src/dialogs/text-edit.cpp:217
 msgid "Layout"
 msgstr "Formato"
 
-#: ../src/dialogs/text-edit.cpp:229
+#: ../src/dialogs/text-edit.cpp:230
 msgid "Align lines left"
 msgstr ""
 
 #. TRANSLATORS: `Center' here is a verb.
-#: ../src/dialogs/text-edit.cpp:243
+#: ../src/dialogs/text-edit.cpp:244
 #, fuzzy
 msgid "Center lines"
 msgstr "Centro Y:"
 
-#: ../src/dialogs/text-edit.cpp:256
+#: ../src/dialogs/text-edit.cpp:257
 msgid "Align lines right"
 msgstr ""
 
-#: ../src/dialogs/text-edit.cpp:278
+#: ../src/dialogs/text-edit.cpp:279
 #, fuzzy
 msgid "Horizontal text"
 msgstr "Líneas horizontales"
 
-#: ../src/dialogs/text-edit.cpp:292
+#: ../src/dialogs/text-edit.cpp:293
 #, fuzzy
 msgid "Vertical text"
 msgstr "Líneas verticales"
 
-#: ../src/dialogs/text-edit.cpp:307
+#: ../src/dialogs/text-edit.cpp:308
 msgid "Line spacing:"
 msgstr "Espaciado de líneas:"
 
-#: ../src/dialogs/text-edit.cpp:399
+#: ../src/dialogs/text-edit.cpp:400
 msgid "Set as default"
 msgstr "Definir como predeterminado"
 
-#: ../src/dialogs/tiledialog.cpp:604
+#: ../src/dialogs/tiledialog.cpp:606
 #, fuzzy
 msgid "Rows:"
 msgstr "Mostrar:"
 
-#: ../src/dialogs/tiledialog.cpp:614
+#: ../src/dialogs/tiledialog.cpp:616
 #, fuzzy
 msgid "Number of rows"
 msgstr "Número de revoluciones"
 
-#: ../src/dialogs/tiledialog.cpp:617
+#: ../src/dialogs/tiledialog.cpp:620
 #, fuzzy
 msgid "Equal height"
 msgstr "Alto:"
 
-#: ../src/dialogs/tiledialog.cpp:626
+#: ../src/dialogs/tiledialog.cpp:631
 msgid "If not set, each row has the height of the tallest object in it"
 msgstr ""
 
 #. #### Radio buttons to control vertical alignment ####
 #. #### Radio buttons to control horizontal alignment ####
-#: ../src/dialogs/tiledialog.cpp:633 ../src/dialogs/tiledialog.cpp:702
+#: ../src/dialogs/tiledialog.cpp:641 ../src/dialogs/tiledialog.cpp:716
 #, fuzzy
 msgid "Align:"
 msgstr "Alinear"
 
-#: ../src/dialogs/tiledialog.cpp:668
+#: ../src/dialogs/tiledialog.cpp:678
 msgid " X "
 msgstr ""
 
 #. #### Number of columns ####
-#: ../src/dialogs/tiledialog.cpp:674
+#: ../src/dialogs/tiledialog.cpp:684
 #, fuzzy
 msgid "Columns:"
 msgstr "Círculo"
 
-#: ../src/dialogs/tiledialog.cpp:684
+#: ../src/dialogs/tiledialog.cpp:694
 #, fuzzy
 msgid "Number of columns"
 msgstr "Número de revoluciones"
 
-#: ../src/dialogs/tiledialog.cpp:686
+#: ../src/dialogs/tiledialog.cpp:698
 #, fuzzy
 msgid "Equal width"
 msgstr "Ancho:"
 
-#: ../src/dialogs/tiledialog.cpp:695
+#: ../src/dialogs/tiledialog.cpp:709
 msgid "If not set, each column has the width of the widest object in it"
 msgstr ""
 
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
-#: ../src/dialogs/tiledialog.cpp:742
+#: ../src/dialogs/tiledialog.cpp:756
 #, fuzzy
 msgid "Fit into selection box"
 msgstr "Ancho de la selección"
 
-#: ../src/dialogs/tiledialog.cpp:749
+#: ../src/dialogs/tiledialog.cpp:763
 #, fuzzy
 msgid "Set spacing:"
 msgstr "Espaciado Y:"
 
-#. #### X padding ####
-#: ../src/dialogs/tiledialog.cpp:775
-#, fuzzy
-msgid "Column spacing:"
-msgstr "Espaciado de líneas:"
-
-#: ../src/dialogs/tiledialog.cpp:784
-#, fuzzy
-msgid "Horizontal spacing between columns"
-msgstr "Coordenada horizontal de la selección"
-
 #. #### Y Padding ####
-#: ../src/dialogs/tiledialog.cpp:791
+#: ../src/dialogs/tiledialog.cpp:788
 #, fuzzy
-msgid "Row spacing:"
+msgid "Row spacing:   "
 msgstr "Espaciado de líneas:"
 
-#: ../src/dialogs/tiledialog.cpp:800
+#: ../src/dialogs/tiledialog.cpp:797
 #, fuzzy
 msgid "Vertical spacing between rows"
 msgstr "Líneas verticales"
 
-#: ../src/dialogs/tiledialog.cpp:812
+#. #### X padding ####
+#: ../src/dialogs/tiledialog.cpp:806
+#, fuzzy
+msgid "Column spacing:"
+msgstr "Espaciado de líneas:"
+
+#: ../src/dialogs/tiledialog.cpp:815
+#, fuzzy
+msgid "Horizontal spacing between columns"
+msgstr "Coordenada horizontal de la selección"
+
+#: ../src/dialogs/tiledialog.cpp:829
 #, fuzzy
 msgid "Arrange Objects"
 msgstr "Objeto"
@@ -2973,25 +2973,25 @@ msgstr ""
 "Haga clic para seleccionar un color, clic y arrastre para seleccionar la "
 "media de color de un área."
 
-#: ../src/extension/dependency.cpp:245
+#: ../src/extension/dependency.cpp:242
 msgid "Dependency::"
 msgstr ""
 
-#: ../src/extension/dependency.cpp:246
+#: ../src/extension/dependency.cpp:243
 #, fuzzy
 msgid "  type: "
 msgstr "Estilo de relleno"
 
-#: ../src/extension/dependency.cpp:247
+#: ../src/extension/dependency.cpp:244
 #, fuzzy
 msgid "  location: "
 msgstr "Resolución:"
 
-#: ../src/extension/dependency.cpp:248
+#: ../src/extension/dependency.cpp:245
 msgid "  string: "
 msgstr ""
 
-#: ../src/extension/dependency.cpp:251
+#: ../src/extension/dependency.cpp:248
 #, fuzzy
 msgid "  description: "
 msgstr "Selección"
@@ -3054,6 +3054,20 @@ msgstr ""
 #. This is some filler text, needs to change before relase
 #: ../src/extension/error-file.cpp:65
 msgid "Show dialog on startup"
+msgstr ""
+
+#: ../src/extension/implementation/script.cpp:836
+msgid ""
+"Inkscape has recieved an error from the script that it called.  The text "
+"returned with the error is included below.  Inkscape will continue working, "
+"but the action you requested has been cancelled."
+msgstr ""
+
+#: ../src/extension/implementation/script.cpp:849
+msgid ""
+"Inkscape has recieved additional data from the script executed.  The script "
+"did not return an error, but this may indicate the results will not be as "
+"expected."
 msgstr ""
 
 #: ../src/extension/init.cpp:173
@@ -3123,8 +3137,8 @@ msgstr "Imprimir usando operadores PostScript"
 #, fuzzy
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
-"file size and can be arbitrarily scaled, but alpha transparency, gradients "
-"and patterns will be lost."
+"file size and can be arbitrarily scaled, but alpha transparency and patterns "
+"will be lost."
 msgstr ""
 "Usar operadores PostScript vectoriales. La imagen resultante normalmente "
 "será menor y puede ser escalada arbitrariamente, pero la transparencia alfa, "
@@ -4004,7 +4018,7 @@ msgid "Use the new Gtkmm GUI interface"
 msgstr ""
 
 #: ../src/main.cpp:326
-msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 
 #: ../src/main.cpp:475
@@ -4106,26 +4120,24 @@ msgstr ""
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 
-#: ../src/nodepath.cpp:3262
+#: ../src/nodepath.cpp:3260
 #, fuzzy
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
 msgstr "Arrastre los nodos o puntos de control para editar el trazo"
 
-#: ../src/nodepath.cpp:3263
+#: ../src/nodepath.cpp:3261
 #, fuzzy
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "Arrastre para crear una línea a mano alzada. Presione 'a' para conmutar "
 "Añadir/Nuevo."
 
-#: ../src/nodepath.cpp:3282
-msgid ""
-"Select one path object with selector first, then switch back to node tool."
-msgstr ""
-"Primero seleccione un trazo con el selector, después vuelva a la herramienta "
-"de nodos."
+#: ../src/nodepath.cpp:3287 ../src/nodepath.cpp:3299
+#, fuzzy
+msgid "Select a single object to edit its nodes or handles."
+msgstr "Seleccionar todos los objetos o todos los nodos"
 
-#: ../src/nodepath.cpp:3285
+#: ../src/nodepath.cpp:3291
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -4140,14 +4152,18 @@ msgstr[1] ""
 "Se han seleccionado 0 de %i nodos. Haga clic, Mayús+clic o arrastre el ratón "
 "alrededor de los nodos para seleccionarlos."
 
-#: ../src/nodepath.cpp:3292
+#: ../src/nodepath.cpp:3297
+msgid "Drag the handles of the object to modify it."
+msgstr ""
+
+#: ../src/nodepath.cpp:3305
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "%i de %i nodos seleccionados; %s. %s."
 msgstr[1] "%i de %i nodos seleccionados; %s. %s."
 
-#: ../src/nodepath.cpp:3298
+#: ../src/nodepath.cpp:3311
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4399,43 +4415,43 @@ msgid ""
 "with <b>Shift</b> to disable snapping"
 msgstr ""
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 #, fuzzy
 msgid "select_toolbar|X"
 msgstr "Seleccionar"
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 msgid "Horizontal coordinate of selection"
 msgstr "Coordenada horizontal de la selección"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 #, fuzzy
 msgid "select_toolbar|Y"
 msgstr "Seleccionar"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 msgid "Vertical coordinate of selection"
 msgstr "Coordenada vertical de la selección"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 #, fuzzy
 msgid "select_toolbar|W"
 msgstr "Seleccionar"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 msgid "Width of selection"
 msgstr "Ancho de la selección"
 
-#: ../src/select-toolbar.cpp:419
+#: ../src/select-toolbar.cpp:434
 msgid "Change both width and height by the same proportion"
 msgstr ""
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 #, fuzzy
 msgid "select_toolbar|H"
 msgstr "Seleccionar"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 msgid "Height of selection"
 msgstr "Altura de la selección"
 
@@ -4866,16 +4882,16 @@ msgstr[0] "Polígono de %d lados"
 msgstr[1] "Polígono de %d lados"
 
 #. TRANSLATORS: For description of font with no name.
-#: ../src/sp-text.cpp:407
+#: ../src/sp-text.cpp:403
 msgid "&lt;no name found&gt;"
 msgstr ""
 
-#: ../src/sp-text.cpp:413
+#: ../src/sp-text.cpp:409
 #, fuzzy, c-format
 msgid "<b>Text on path</b> (%s, %s)"
 msgstr "Texto (%s, %.5gpt)"
 
-#: ../src/sp-text.cpp:414
+#: ../src/sp-text.cpp:410
 #, fuzzy, c-format
 msgid "<b>Text</b> (%s, %s)"
 msgstr "Texto (%s, %.5gpt)"
@@ -7646,33 +7662,33 @@ msgid "No stops in gradient"
 msgstr "Gradiente sin paradas"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:779
+#: ../src/widgets/gradient-vector.cpp:795
 msgid "Add stop"
 msgstr "Añadir parada"
 
-#: ../src/widgets/gradient-vector.cpp:782
+#: ../src/widgets/gradient-vector.cpp:798
 msgid "Add another control stop to gradient"
 msgstr "Añadir otro control de parada al gradiente"
 
-#: ../src/widgets/gradient-vector.cpp:784
+#: ../src/widgets/gradient-vector.cpp:800
 msgid "Delete stop"
 msgstr "Borrar parada"
 
-#: ../src/widgets/gradient-vector.cpp:787
+#: ../src/widgets/gradient-vector.cpp:803
 msgid "Delete current control stop from gradient"
 msgstr "Eliminar el control de parada actual"
 
 #. Label
-#: ../src/widgets/gradient-vector.cpp:798
+#: ../src/widgets/gradient-vector.cpp:814
 msgid "Offset:"
 msgstr "Offset:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:843
+#: ../src/widgets/gradient-vector.cpp:859
 msgid "Stop Color"
 msgstr "Color de parada"
 
-#: ../src/widgets/gradient-vector.cpp:872
+#: ../src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "Editor de gradiente"
 
@@ -7922,6 +7938,15 @@ msgstr "Atributo"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Valor"
+
+#~ msgid "SVG Vector Illustrator"
+#~ msgstr "Ilustrador vectorial SVG"
+
+#~ msgid ""
+#~ "Select one path object with selector first, then switch back to node tool."
+#~ msgstr ""
+#~ "Primero seleccione un trazo con el selector, después vuelva a la "
+#~ "herramienta de nodos."
 
 #, fuzzy
 #~ msgid "Create Layer"

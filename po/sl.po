@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 11:03+0200\n"
+"POT-Creation-Date: 2005-07-05 23:26+0200\n"
 "PO-Revision-Date: 2005-02-27 13:54+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "X-Poedit-Country: SLOVENIA\n"
 
 #: ../inkscape.desktop.in.h:1
-msgid "Inkscape SVG Vector Illustrator"
-msgstr "Ilustrator vektorjev SVG Inkscape"
+msgid "Create and edit Scalable Vector Graphics images"
+msgstr ""
 
 #: ../inkscape.desktop.in.h:2
-msgid "SVG Vector Illustrator"
-msgstr "Ilustrator vektorjev SVG"
+msgid "Inkscape SVG Vector Illustrator"
+msgstr "Ilustrator vektorjev SVG Inkscape"
 
 #: ../src/arc-context.cpp:355
 msgid ""
@@ -1542,7 +1542,7 @@ msgstr "Pero"
 msgid "Calligraphy"
 msgstr "Kaligrafija"
 
-#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:353
+#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:354
 #: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:1885
 msgid "Text"
 msgstr "Besedilo"
@@ -1665,7 +1665,7 @@ msgstr "Preoblikovanja"
 msgid "Scale stroke width"
 msgstr "Spremeni debelino črte"
 
-#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:460
+#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:475
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Pri raztegovanju predmetov razteguj tudi njihov debelino njihovega obrisa."
@@ -1674,7 +1674,7 @@ msgstr ""
 msgid "Scale rounded corners in rectangles"
 msgstr "Razteguj tudi zaobljene kote pravokotnikov"
 
-#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:472
+#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:487
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Pri raztegovanju pravokotnikov razteguj tudi polmer njihovih zaobljenih "
@@ -1684,7 +1684,7 @@ msgstr ""
 msgid "Transform gradients"
 msgstr "Preoblikuje prelive"
 
-#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:484
+#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:499
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr "Preoblikuj prelive (za polnilo ali potezo) skupaj s predmeti"
 
@@ -1692,7 +1692,7 @@ msgstr "Preoblikuj prelive (za polnilo ali potezo) skupaj s predmeti"
 msgid "Transform patterns"
 msgstr "Preoblikuj vzorce"
 
-#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:496
+#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:511
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr "Preoblikuj vzorce (za polnilo ali potezo) skupaj s predmeti"
 
@@ -2649,122 +2649,123 @@ msgid "Palettes directory (%s) is unavailable."
 msgstr ""
 
 #. TODO:  Insert widgets
-#: ../src/dialogs/text-edit.cpp:199 ../src/ui/dialog/text-properties.cpp:36
+#: ../src/dialogs/text-edit.cpp:200 ../src/ui/dialog/text-properties.cpp:36
 msgid "Font"
 msgstr "Pisava"
 
-#: ../src/dialogs/text-edit.cpp:216
+#: ../src/dialogs/text-edit.cpp:217
 msgid "Layout"
 msgstr "Postavitev"
 
-#: ../src/dialogs/text-edit.cpp:229
+#: ../src/dialogs/text-edit.cpp:230
 msgid "Align lines left"
 msgstr "Črte poravnaj levo"
 
 #. TRANSLATORS: `Center' here is a verb.
-#: ../src/dialogs/text-edit.cpp:243
+#: ../src/dialogs/text-edit.cpp:244
 msgid "Center lines"
 msgstr "Črte poravnaj sredinsko"
 
-#: ../src/dialogs/text-edit.cpp:256
+#: ../src/dialogs/text-edit.cpp:257
 msgid "Align lines right"
 msgstr "Črte poravnaj desno"
 
-#: ../src/dialogs/text-edit.cpp:278
+#: ../src/dialogs/text-edit.cpp:279
 msgid "Horizontal text"
 msgstr "Vodoravno besedilo"
 
-#: ../src/dialogs/text-edit.cpp:292
+#: ../src/dialogs/text-edit.cpp:293
 msgid "Vertical text"
 msgstr "Navpično besedilo"
 
-#: ../src/dialogs/text-edit.cpp:307
+#: ../src/dialogs/text-edit.cpp:308
 msgid "Line spacing:"
 msgstr "Razmik vrstic:"
 
-#: ../src/dialogs/text-edit.cpp:399
+#: ../src/dialogs/text-edit.cpp:400
 msgid "Set as default"
 msgstr "Naj bo privzeto"
 
-#: ../src/dialogs/tiledialog.cpp:604
+#: ../src/dialogs/tiledialog.cpp:606
 msgid "Rows:"
 msgstr "Vrstice:"
 
-#: ../src/dialogs/tiledialog.cpp:614
+#: ../src/dialogs/tiledialog.cpp:616
 #, fuzzy
 msgid "Number of rows"
 msgstr "Število obhodov"
 
-#: ../src/dialogs/tiledialog.cpp:617
+#: ../src/dialogs/tiledialog.cpp:620
 #, fuzzy
 msgid "Equal height"
 msgstr "Višina:"
 
-#: ../src/dialogs/tiledialog.cpp:626
+#: ../src/dialogs/tiledialog.cpp:631
 msgid "If not set, each row has the height of the tallest object in it"
 msgstr ""
 
 #. #### Radio buttons to control vertical alignment ####
 #. #### Radio buttons to control horizontal alignment ####
-#: ../src/dialogs/tiledialog.cpp:633 ../src/dialogs/tiledialog.cpp:702
+#: ../src/dialogs/tiledialog.cpp:641 ../src/dialogs/tiledialog.cpp:716
 #, fuzzy
 msgid "Align:"
 msgstr "Poravnava"
 
-#: ../src/dialogs/tiledialog.cpp:668
+#: ../src/dialogs/tiledialog.cpp:678
 msgid " X "
 msgstr ""
 
 #. #### Number of columns ####
-#: ../src/dialogs/tiledialog.cpp:674
+#: ../src/dialogs/tiledialog.cpp:684
 msgid "Columns:"
 msgstr "Stolpci:"
 
-#: ../src/dialogs/tiledialog.cpp:684
+#: ../src/dialogs/tiledialog.cpp:694
 #, fuzzy
 msgid "Number of columns"
 msgstr "Število stolpcev"
 
-#: ../src/dialogs/tiledialog.cpp:686
+#: ../src/dialogs/tiledialog.cpp:698
 #, fuzzy
 msgid "Equal width"
 msgstr "Širina:"
 
-#: ../src/dialogs/tiledialog.cpp:695
+#: ../src/dialogs/tiledialog.cpp:709
 msgid "If not set, each column has the width of the widest object in it"
 msgstr ""
 
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
-#: ../src/dialogs/tiledialog.cpp:742
+#: ../src/dialogs/tiledialog.cpp:756
 #, fuzzy
 msgid "Fit into selection box"
 msgstr "Širina izbire"
 
-#: ../src/dialogs/tiledialog.cpp:749
+#: ../src/dialogs/tiledialog.cpp:763
 #, fuzzy
 msgid "Set spacing:"
 msgstr "Presledek Y:"
 
-#. #### X padding ####
-#: ../src/dialogs/tiledialog.cpp:775
-msgid "Column spacing:"
-msgstr "Razmik vrstic:"
-
-#: ../src/dialogs/tiledialog.cpp:784
-msgid "Horizontal spacing between columns"
-msgstr "Vodoravnen razmik med stolpc"
-
 #. #### Y Padding ####
-#: ../src/dialogs/tiledialog.cpp:791
-msgid "Row spacing:"
+#: ../src/dialogs/tiledialog.cpp:788
+#, fuzzy
+msgid "Row spacing:   "
 msgstr "Razmik vrstic:"
 
-#: ../src/dialogs/tiledialog.cpp:800
+#: ../src/dialogs/tiledialog.cpp:797
 #, fuzzy
 msgid "Vertical spacing between rows"
 msgstr "Navpični razmiki med vrsticami"
 
-#: ../src/dialogs/tiledialog.cpp:812
+#. #### X padding ####
+#: ../src/dialogs/tiledialog.cpp:806
+msgid "Column spacing:"
+msgstr "Razmik vrstic:"
+
+#: ../src/dialogs/tiledialog.cpp:815
+msgid "Horizontal spacing between columns"
+msgstr "Vodoravnen razmik med stolpc"
+
+#: ../src/dialogs/tiledialog.cpp:829
 msgid "Arrange Objects"
 msgstr "Razporedi predmete"
 
@@ -2951,23 +2952,23 @@ msgstr ""
 "povprečno barvo na območju. <b>Ctrl+C</b> da kopirate barvo pod kazalcem na "
 "odložišče."
 
-#: ../src/extension/dependency.cpp:245
+#: ../src/extension/dependency.cpp:242
 msgid "Dependency::"
 msgstr "Odvisnost::"
 
-#: ../src/extension/dependency.cpp:246
+#: ../src/extension/dependency.cpp:243
 msgid "  type: "
 msgstr "  vrsta: "
 
-#: ../src/extension/dependency.cpp:247
+#: ../src/extension/dependency.cpp:244
 msgid "  location: "
 msgstr "  položaj: "
 
-#: ../src/extension/dependency.cpp:248
+#: ../src/extension/dependency.cpp:245
 msgid "  string: "
 msgstr "  niz: "
 
-#: ../src/extension/dependency.cpp:251
+#: ../src/extension/dependency.cpp:248
 msgid "  description: "
 msgstr "  opis: "
 
@@ -3037,6 +3038,20 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "Pri zagonu pokaži pogovorno okno"
 
+#: ../src/extension/implementation/script.cpp:836
+msgid ""
+"Inkscape has recieved an error from the script that it called.  The text "
+"returned with the error is included below.  Inkscape will continue working, "
+"but the action you requested has been cancelled."
+msgstr ""
+
+#: ../src/extension/implementation/script.cpp:849
+msgid ""
+"Inkscape has recieved additional data from the script executed.  The script "
+"did not return an error, but this may indicate the results will not be as "
+"expected."
+msgstr ""
+
 #: ../src/extension/init.cpp:173
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr "Ime zunanjega imenika ni podano.  Dodatki se ne bodo naložili."
@@ -3092,10 +3107,11 @@ msgid "Print using PostScript operators"
 msgstr "Tiskaj s Postscript ukazi"
 
 #: ../src/extension/internal/ps.cpp:155
+#, fuzzy
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
-"file size and can be arbitrarily scaled, but alpha transparency, gradients "
-"and patterns will be lost."
+"file size and can be arbitrarily scaled, but alpha transparency and patterns "
+"will be lost."
 msgstr ""
 "Uporabi Postscript opise vektorjev. Tako bo datoteka manjša, dalo se jo bo "
 "poljubno preoblikovati, izgubljni pa bodo prelivi, prosojnosti in vzorci."
@@ -3956,7 +3972,7 @@ msgstr ""
 
 #: ../src/main.cpp:326
 #, fuzzy
-msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Odstrani nepotrebne reči iz &lt;definicij&gt; dokumenta"
 
 #: ../src/main.cpp:475
@@ -4075,26 +4091,24 @@ msgstr ""
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 
-#: ../src/nodepath.cpp:3262
+#: ../src/nodepath.cpp:3260
 #, fuzzy
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
 msgstr "Za urejanje poti povleci vozlišča ali kontrolne točke"
 
-#: ../src/nodepath.cpp:3263
+#: ../src/nodepath.cpp:3261
 #, fuzzy
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Povlecite</b> in narišite prostoročno črto. Pritisnite <b>a</b> a izbiro "
 "med Dodaj in Ustvari"
 
-#: ../src/nodepath.cpp:3282
-msgid ""
-"Select one path object with selector first, then switch back to node tool."
-msgstr ""
-"Najprej izberite predmet poti z izbirnikom, nato ponovno izberite orodje za "
-"vozlišča."
+#: ../src/nodepath.cpp:3287 ../src/nodepath.cpp:3299
+#, fuzzy
+msgid "Select a single object to edit its nodes or handles."
+msgstr "Izberi vse predmete ali vozlišča"
 
-#: ../src/nodepath.cpp:3285
+#: ../src/nodepath.cpp:3291
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -4115,7 +4129,12 @@ msgstr[3] ""
 "Izbranih <b>0</b> od <b>%i</b> vozlišč. Izberite jih s klikom, Shift+klikom "
 "ali s potegom okrog njih."
 
-#: ../src/nodepath.cpp:3292
+#: ../src/nodepath.cpp:3297
+#, fuzzy
+msgid "Drag the handles of the object to modify it."
+msgstr "Vsak izbran predmet pokaže svoj okvir"
+
+#: ../src/nodepath.cpp:3305
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
@@ -4124,7 +4143,7 @@ msgstr[1] "Izbrano <b>%i</b> od <b>%i</b> vozlišč; %s. %s. "
 msgstr[2] "Izbrani <b>%i</b> od <b>%i</b> vozlišč; %s. %s. "
 msgstr[3] "Izbrana <b>%i</b> od <b>%i</b> vozlišč; %s. %s. "
 
-#: ../src/nodepath.cpp:3298
+#: ../src/nodepath.cpp:3311
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4391,43 +4410,43 @@ msgstr ""
 "<b>Premakni</b> za %s, %s; s <b>Ctrl</b> da omejite na vodoravno / navpično; "
 "s <b>Shift</b> izključite preskakovanje"
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 #, fuzzy
 msgid "select_toolbar|X"
 msgstr "Izbirnik"
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 msgid "Horizontal coordinate of selection"
 msgstr "Vodoravna koordinata izbire"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 #, fuzzy
 msgid "select_toolbar|Y"
 msgstr "Izbirnik"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 msgid "Vertical coordinate of selection"
 msgstr "Navpična koordinata izbire"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 #, fuzzy
 msgid "select_toolbar|W"
 msgstr "Izbirnik"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 msgid "Width of selection"
 msgstr "Širina izbire"
 
-#: ../src/select-toolbar.cpp:419
+#: ../src/select-toolbar.cpp:434
 msgid "Change both width and height by the same proportion"
 msgstr "V enakem razmerju spremeni višino in širino"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 #, fuzzy
 msgid "select_toolbar|H"
 msgstr "Izbirnik"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 msgid "Height of selection"
 msgstr "Višina izbire"
 
@@ -4864,16 +4883,16 @@ msgstr[2] "<b>Mnogokotnik</b> s/z %d ogliščema"
 msgstr[3] "<b>Mnogokotnik</b> s/z %d oglišči"
 
 #. TRANSLATORS: For description of font with no name.
-#: ../src/sp-text.cpp:407
+#: ../src/sp-text.cpp:403
 msgid "&lt;no name found&gt;"
 msgstr "&lt;ne najdem imena&gt;"
 
-#: ../src/sp-text.cpp:413
+#: ../src/sp-text.cpp:409
 #, c-format
 msgid "<b>Text on path</b> (%s, %s)"
 msgstr "<b>Besedilo po poti</b> (%s, %s)"
 
-#: ../src/sp-text.cpp:414
+#: ../src/sp-text.cpp:410
 #, c-format
 msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Besedilo</b> (%s, %s)"
@@ -7472,33 +7491,33 @@ msgid "No stops in gradient"
 msgstr "Preliv brez postankov"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:779
+#: ../src/widgets/gradient-vector.cpp:795
 msgid "Add stop"
 msgstr "Dodaj postanek"
 
-#: ../src/widgets/gradient-vector.cpp:782
+#: ../src/widgets/gradient-vector.cpp:798
 msgid "Add another control stop to gradient"
 msgstr "Dodaj nov postanek za preliv"
 
-#: ../src/widgets/gradient-vector.cpp:784
+#: ../src/widgets/gradient-vector.cpp:800
 msgid "Delete stop"
 msgstr "Izbriši postanek"
 
-#: ../src/widgets/gradient-vector.cpp:787
+#: ../src/widgets/gradient-vector.cpp:803
 msgid "Delete current control stop from gradient"
 msgstr "Izbriši trenuten konec iz preliva"
 
 #. Label
-#: ../src/widgets/gradient-vector.cpp:798
+#: ../src/widgets/gradient-vector.cpp:814
 msgid "Offset:"
 msgstr "Zamik:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:843
+#: ../src/widgets/gradient-vector.cpp:859
 msgid "Stop Color"
 msgstr "Barva za konec"
 
-#: ../src/widgets/gradient-vector.cpp:872
+#: ../src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "Urejevalnik preliva"
 
@@ -7733,6 +7752,15 @@ msgstr "Lastnost"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Vrednost"
+
+#~ msgid "SVG Vector Illustrator"
+#~ msgstr "Ilustrator vektorjev SVG"
+
+#~ msgid ""
+#~ "Select one path object with selector first, then switch back to node tool."
+#~ msgstr ""
+#~ "Najprej izberite predmet poti z izbirnikom, nato ponovno izberite orodje "
+#~ "za vozlišča."
 
 #~ msgid "Create Layer"
 #~ msgstr "Ustvari nov sloj"

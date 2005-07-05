@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 11:03+0200\n"
+"POT-Creation-Date: 2005-07-05 23:26+0200\n"
 "PO-Revision-Date: 2005-02-22 20:12+0100\n"
 "Last-Translator: Przemysław Loesch <p_loesch@poczta.onet.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../inkscape.desktop.in.h:1
-msgid "Inkscape SVG Vector Illustrator"
-msgstr "Program do tworzenia ilustracji wektorowych"
+msgid "Create and edit Scalable Vector Graphics images"
+msgstr ""
 
 #: ../inkscape.desktop.in.h:2
-msgid "SVG Vector Illustrator"
+msgid "Inkscape SVG Vector Illustrator"
 msgstr "Program do tworzenia ilustracji wektorowych"
 
 #: ../src/arc-context.cpp:355
@@ -1563,7 +1563,7 @@ msgstr "Pióro"
 msgid "Calligraphy"
 msgstr "Kaligrafia"
 
-#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:353
+#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:354
 #: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:1885
 msgid "Text"
 msgstr "Tekst"
@@ -1693,7 +1693,7 @@ msgstr "Przekształcenia"
 msgid "Scale stroke width"
 msgstr "Skalowanie grubości konturu"
 
-#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:460
+#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:475
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "Przy skalowaniu obiektów grubość konturu zmienia się proporcjonalnie"
 
@@ -1701,7 +1701,7 @@ msgstr "Przy skalowaniu obiektów grubość konturu zmienia się proporcjonalnie
 msgid "Scale rounded corners in rectangles"
 msgstr "Skalowanie zaokrąglonych narożników prostokątów"
 
-#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:472
+#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:487
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Przy skalowaniu prostokątów promień zaokrąglenia ich narożników jest "
@@ -1711,7 +1711,7 @@ msgstr ""
 msgid "Transform gradients"
 msgstr "Przekształcanie gradientów"
 
-#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:484
+#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:499
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr "Przekształcenie gradientu (w wypełnieniu i konturze) wraz z obiektami"
 
@@ -1719,7 +1719,7 @@ msgstr "Przekształcenie gradientu (w wypełnieniu i konturze) wraz z obiektami"
 msgid "Transform patterns"
 msgstr "Przekształcanie deseni"
 
-#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:496
+#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:511
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr "Przekształcenie deseni (w wypełnieniu i konturze) wraz z obiektami"
 
@@ -2682,127 +2682,127 @@ msgid "Palettes directory (%s) is unavailable."
 msgstr ""
 
 #. TODO:  Insert widgets
-#: ../src/dialogs/text-edit.cpp:199 ../src/ui/dialog/text-properties.cpp:36
+#: ../src/dialogs/text-edit.cpp:200 ../src/ui/dialog/text-properties.cpp:36
 msgid "Font"
 msgstr "Czcionka"
 
-#: ../src/dialogs/text-edit.cpp:216
+#: ../src/dialogs/text-edit.cpp:217
 msgid "Layout"
 msgstr "Układ elementów"
 
-#: ../src/dialogs/text-edit.cpp:229
+#: ../src/dialogs/text-edit.cpp:230
 msgid "Align lines left"
 msgstr "Wyrównanie do lewej"
 
 #. TRANSLATORS: `Center' here is a verb.
-#: ../src/dialogs/text-edit.cpp:243
+#: ../src/dialogs/text-edit.cpp:244
 msgid "Center lines"
 msgstr "Wyrównanie do środka"
 
-#: ../src/dialogs/text-edit.cpp:256
+#: ../src/dialogs/text-edit.cpp:257
 msgid "Align lines right"
 msgstr "Wyrównanie do prawej"
 
-#: ../src/dialogs/text-edit.cpp:278
+#: ../src/dialogs/text-edit.cpp:279
 msgid "Horizontal text"
 msgstr "Tekst poziomo"
 
-#: ../src/dialogs/text-edit.cpp:292
+#: ../src/dialogs/text-edit.cpp:293
 msgid "Vertical text"
 msgstr "Tekst pionowo"
 
-#: ../src/dialogs/text-edit.cpp:307
+#: ../src/dialogs/text-edit.cpp:308
 msgid "Line spacing:"
 msgstr "Odstęp międzywierszowy:"
 
-#: ../src/dialogs/text-edit.cpp:399
+#: ../src/dialogs/text-edit.cpp:400
 msgid "Set as default"
 msgstr "Zapisz jako domyślne"
 
-#: ../src/dialogs/tiledialog.cpp:604
+#: ../src/dialogs/tiledialog.cpp:606
 #, fuzzy
 msgid "Rows:"
 msgstr "Wyświetlanie:"
 
-#: ../src/dialogs/tiledialog.cpp:614
+#: ../src/dialogs/tiledialog.cpp:616
 #, fuzzy
 msgid "Number of rows"
 msgstr "Liczba obrotów"
 
-#: ../src/dialogs/tiledialog.cpp:617
+#: ../src/dialogs/tiledialog.cpp:620
 #, fuzzy
 msgid "Equal height"
 msgstr "Wysokość:"
 
-#: ../src/dialogs/tiledialog.cpp:626
+#: ../src/dialogs/tiledialog.cpp:631
 msgid "If not set, each row has the height of the tallest object in it"
 msgstr ""
 
 #. #### Radio buttons to control vertical alignment ####
 #. #### Radio buttons to control horizontal alignment ####
-#: ../src/dialogs/tiledialog.cpp:633 ../src/dialogs/tiledialog.cpp:702
+#: ../src/dialogs/tiledialog.cpp:641 ../src/dialogs/tiledialog.cpp:716
 #, fuzzy
 msgid "Align:"
 msgstr "Wyrównaj"
 
-#: ../src/dialogs/tiledialog.cpp:668
+#: ../src/dialogs/tiledialog.cpp:678
 msgid " X "
 msgstr ""
 
 #. #### Number of columns ####
-#: ../src/dialogs/tiledialog.cpp:674
+#: ../src/dialogs/tiledialog.cpp:684
 #, fuzzy
 msgid "Columns:"
 msgstr "<b>Kolumny</b>:"
 
-#: ../src/dialogs/tiledialog.cpp:684
+#: ../src/dialogs/tiledialog.cpp:694
 #, fuzzy
 msgid "Number of columns"
 msgstr "Liczba obrotów"
 
-#: ../src/dialogs/tiledialog.cpp:686
+#: ../src/dialogs/tiledialog.cpp:698
 #, fuzzy
 msgid "Equal width"
 msgstr "Szerokość:"
 
-#: ../src/dialogs/tiledialog.cpp:695
+#: ../src/dialogs/tiledialog.cpp:709
 msgid "If not set, each column has the width of the widest object in it"
 msgstr ""
 
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
-#: ../src/dialogs/tiledialog.cpp:742
+#: ../src/dialogs/tiledialog.cpp:756
 #, fuzzy
 msgid "Fit into selection box"
 msgstr "Szerokość zaznaczenia"
 
-#: ../src/dialogs/tiledialog.cpp:749
+#: ../src/dialogs/tiledialog.cpp:763
 #, fuzzy
 msgid "Set spacing:"
 msgstr "Odstępy Y:"
 
-#. #### X padding ####
-#: ../src/dialogs/tiledialog.cpp:775
-#, fuzzy
-msgid "Column spacing:"
-msgstr "Odstęp międzywierszowy:"
-
-#: ../src/dialogs/tiledialog.cpp:784
-#, fuzzy
-msgid "Horizontal spacing between columns"
-msgstr "Przyrost poziomy dla każdej kolumny"
-
 #. #### Y Padding ####
-#: ../src/dialogs/tiledialog.cpp:791
+#: ../src/dialogs/tiledialog.cpp:788
 #, fuzzy
-msgid "Row spacing:"
+msgid "Row spacing:   "
 msgstr "Odstęp międzywierszowy:"
 
-#: ../src/dialogs/tiledialog.cpp:800
+#: ../src/dialogs/tiledialog.cpp:797
 #, fuzzy
 msgid "Vertical spacing between rows"
 msgstr "Odstępy pionowe"
 
-#: ../src/dialogs/tiledialog.cpp:812
+#. #### X padding ####
+#: ../src/dialogs/tiledialog.cpp:806
+#, fuzzy
+msgid "Column spacing:"
+msgstr "Odstęp międzywierszowy:"
+
+#: ../src/dialogs/tiledialog.cpp:815
+#, fuzzy
+msgid "Horizontal spacing between columns"
+msgstr "Przyrost poziomy dla każdej kolumny"
+
+#: ../src/dialogs/tiledialog.cpp:829
 #, fuzzy
 msgid "Arrange Objects"
 msgstr "Obiekty"
@@ -2991,23 +2991,23 @@ msgstr ""
 "ustawić kolor konturu. <b>Kliknij i przeciągnij</b> aby pobrać uśredniony "
 "kolor z obszaru. <b>Ctrl+C</b> kopiuje kolor pod kursorem do schowka."
 
-#: ../src/extension/dependency.cpp:245
+#: ../src/extension/dependency.cpp:242
 msgid "Dependency::"
 msgstr "Zależności::"
 
-#: ../src/extension/dependency.cpp:246
+#: ../src/extension/dependency.cpp:243
 msgid "  type: "
 msgstr "  typ: "
 
-#: ../src/extension/dependency.cpp:247
+#: ../src/extension/dependency.cpp:244
 msgid "  location: "
 msgstr "  położenie: "
 
-#: ../src/extension/dependency.cpp:248
+#: ../src/extension/dependency.cpp:245
 msgid "  string: "
 msgstr "  łańcuch tekstowy: "
 
-#: ../src/extension/dependency.cpp:251
+#: ../src/extension/dependency.cpp:248
 msgid "  description: "
 msgstr "  opis: "
 
@@ -3078,6 +3078,20 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "Pokazuj to okno przy starcie programu"
 
+#: ../src/extension/implementation/script.cpp:836
+msgid ""
+"Inkscape has recieved an error from the script that it called.  The text "
+"returned with the error is included below.  Inkscape will continue working, "
+"but the action you requested has been cancelled."
+msgstr ""
+
+#: ../src/extension/implementation/script.cpp:849
+msgid ""
+"Inkscape has recieved additional data from the script executed.  The script "
+"did not return an error, but this may indicate the results will not be as "
+"expected."
+msgstr ""
+
 #: ../src/extension/init.cpp:173
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
@@ -3134,10 +3148,11 @@ msgid "Print using PostScript operators"
 msgstr "Drukuj używając poleceń PostScriptu"
 
 #: ../src/extension/internal/ps.cpp:155
+#, fuzzy
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
-"file size and can be arbitrarily scaled, but alpha transparency, gradients "
-"and patterns will be lost."
+"file size and can be arbitrarily scaled, but alpha transparency and patterns "
+"will be lost."
 msgstr ""
 "Zastosuj wektorowe polecenia PostScriptu. Plik wynikowy jest zwykle mniejszy "
 "i można skalować zapisany w nim rysunek, ale zostanie "
@@ -4000,7 +4015,7 @@ msgstr ""
 
 #: ../src/main.cpp:326
 #, fuzzy
-msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Usuwa nieużywane elementy z &lt;defs&gt; dokumentu"
 
 #: ../src/main.cpp:475
@@ -4117,26 +4132,24 @@ msgstr ""
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 
-#: ../src/nodepath.cpp:3262
+#: ../src/nodepath.cpp:3260
 #, fuzzy
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
 msgstr "Przeciągnij węzły lub uchwyty w celu edycji ścieżki"
 
-#: ../src/nodepath.cpp:3263
+#: ../src/nodepath.cpp:3261
 #, fuzzy
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Przeciągnij</b> aby utworzyć krzywą odręczną. Naciśnij <b>a</b> aby "
 "przełączyć tryb Dołączenie/Nowy obiekt."
 
-#: ../src/nodepath.cpp:3282
-msgid ""
-"Select one path object with selector first, then switch back to node tool."
-msgstr ""
-"Wybierz najpierw jedną ścieżkę narzędziem 'wskaźnik', a następnie wróć do "
-"narzędzia edycji węzłów"
+#: ../src/nodepath.cpp:3287 ../src/nodepath.cpp:3299
+#, fuzzy
+msgid "Select a single object to edit its nodes or handles."
+msgstr "Zaznacza wszystkie obiekty lub węzły"
 
-#: ../src/nodepath.cpp:3285
+#: ../src/nodepath.cpp:3291
 #, fuzzy, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -4151,14 +4164,19 @@ msgstr[1] ""
 "Wybrano <b>0</b> z <b>%i</b> węzłów. Kliknięcie, kliknięcie+Shift, lub "
 "przeciąganie pozwala wybierać węzły."
 
-#: ../src/nodepath.cpp:3292
+#: ../src/nodepath.cpp:3297
+#, fuzzy
+msgid "Drag the handles of the object to modify it."
+msgstr "Każdy z wybranych obiektów zostaje otoczony ramką"
+
+#: ../src/nodepath.cpp:3305
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "Wybrano <b>%i</b> z <b>%i</b> węzła; %s. %s."
 msgstr[1] "Wybrano <b>%i</b> z <b>%i</b> węzłów; %s. %s."
 
-#: ../src/nodepath.cpp:3298
+#: ../src/nodepath.cpp:3311
 #, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4426,43 +4444,43 @@ msgstr ""
 "<b>Przesunięcie</b> o %s, %s; z <b>Ctrl</b> poziomo/pionowo; z <b>Shift</b> "
 "wyłączenie przyciągania"
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 #, fuzzy
 msgid "select_toolbar|X"
 msgstr "Wskaźnik"
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 msgid "Horizontal coordinate of selection"
 msgstr "Pozioma współrzędna zaznaczenia"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 #, fuzzy
 msgid "select_toolbar|Y"
 msgstr "Wskaźnik"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 msgid "Vertical coordinate of selection"
 msgstr "Pionowa współrzędna zaznaczenia"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 #, fuzzy
 msgid "select_toolbar|W"
 msgstr "Wskaźnik"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 msgid "Width of selection"
 msgstr "Szerokość zaznaczenia"
 
-#: ../src/select-toolbar.cpp:419
+#: ../src/select-toolbar.cpp:434
 msgid "Change both width and height by the same proportion"
 msgstr "Zmiana szerokości i wysokości z zachowaniem proporcji"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 #, fuzzy
 msgid "select_toolbar|H"
 msgstr "Wskaźnik"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 msgid "Height of selection"
 msgstr "Wysokość zaznaczenia"
 
@@ -4893,16 +4911,16 @@ msgstr[0] "<b>Wielokąt</b> z %d wierzchołkiem"
 msgstr[1] "<b>Wielokąt</b> z %d wierzchołkami"
 
 #. TRANSLATORS: For description of font with no name.
-#: ../src/sp-text.cpp:407
+#: ../src/sp-text.cpp:403
 msgid "&lt;no name found&gt;"
 msgstr "&lt;nie znaleziono nazwy&gt;"
 
-#: ../src/sp-text.cpp:413
+#: ../src/sp-text.cpp:409
 #, c-format
 msgid "<b>Text on path</b> (%s, %s)"
 msgstr "<b>Tekst na ścieżce</b> (%s, %s)"
 
-#: ../src/sp-text.cpp:414
+#: ../src/sp-text.cpp:410
 #, c-format
 msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Tekst</b> (%s, %s)"
@@ -7535,33 +7553,33 @@ msgid "No stops in gradient"
 msgstr "Brak punktów sterujących w gradiencie"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:779
+#: ../src/widgets/gradient-vector.cpp:795
 msgid "Add stop"
 msgstr "Dodaj punkt"
 
-#: ../src/widgets/gradient-vector.cpp:782
+#: ../src/widgets/gradient-vector.cpp:798
 msgid "Add another control stop to gradient"
 msgstr "Dodaje kolejny punkt sterujący do gradientu"
 
-#: ../src/widgets/gradient-vector.cpp:784
+#: ../src/widgets/gradient-vector.cpp:800
 msgid "Delete stop"
 msgstr "Usuń punkt"
 
-#: ../src/widgets/gradient-vector.cpp:787
+#: ../src/widgets/gradient-vector.cpp:803
 msgid "Delete current control stop from gradient"
 msgstr "Usuwa aktywny punkt sterujący z gradientu"
 
 #. Label
-#: ../src/widgets/gradient-vector.cpp:798
+#: ../src/widgets/gradient-vector.cpp:814
 msgid "Offset:"
 msgstr "Przesunięcie:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:843
+#: ../src/widgets/gradient-vector.cpp:859
 msgid "Stop Color"
 msgstr "Kolor w punkcie"
 
-#: ../src/widgets/gradient-vector.cpp:872
+#: ../src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "Edytor gradientu"
 
@@ -7797,6 +7815,15 @@ msgstr "Atrybut"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Wartość"
+
+#~ msgid "SVG Vector Illustrator"
+#~ msgstr "Program do tworzenia ilustracji wektorowych"
+
+#~ msgid ""
+#~ "Select one path object with selector first, then switch back to node tool."
+#~ msgstr ""
+#~ "Wybierz najpierw jedną ścieżkę narzędziem 'wskaźnik', a następnie wróć do "
+#~ "narzędzia edycji węzłów"
 
 #~ msgid "Create Layer"
 #~ msgstr "Tworzenie nowej warstwy"

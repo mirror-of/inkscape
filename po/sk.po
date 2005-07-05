@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape-sk-0.40\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 11:03+0200\n"
+"POT-Creation-Date: 2005-07-05 23:26+0200\n"
 "PO-Revision-Date: 2005-02-13 17:05+0100\n"
 "Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
 "Language-Team: Slovak <<sk-i18n@lists.linux.sk>>\n"
@@ -20,12 +20,12 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../inkscape.desktop.in.h:1
-msgid "Inkscape SVG Vector Illustrator"
-msgstr "Inkscape SVG Vektorový ilustrátor"
+msgid "Create and edit Scalable Vector Graphics images"
+msgstr ""
 
 #: ../inkscape.desktop.in.h:2
-msgid "SVG Vector Illustrator"
-msgstr "SVG Vektorový ilustrátor"
+msgid "Inkscape SVG Vector Illustrator"
+msgstr "Inkscape SVG Vektorový ilustrátor"
 
 #: ../src/arc-context.cpp:355
 msgid ""
@@ -1531,7 +1531,7 @@ msgstr "Pero"
 msgid "Calligraphy"
 msgstr "Kaligrafická čiara"
 
-#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:353
+#: ../src/dialogs/display-settings.cpp:1151 ../src/dialogs/text-edit.cpp:354
 #: ../src/ui/dialog/text-properties.cpp:37 ../src/verbs.cpp:1885
 msgid "Text"
 msgstr "Text"
@@ -1656,7 +1656,7 @@ msgstr "Transformácie"
 msgid "Scale stroke width"
 msgstr "Zmeniť mierku šírky ťahu"
 
-#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:460
+#: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:475
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "Keď sa mení mierka objektov, rovnakou mierou sa mení aj šírka ťahu"
 
@@ -1664,7 +1664,7 @@ msgstr "Keď sa mení mierka objektov, rovnakou mierou sa mení aj šírka ťahu
 msgid "Scale rounded corners in rectangles"
 msgstr "Zmeniť mierku zaoblených rohov v pravouhloníkoch"
 
-#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:472
+#: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:487
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Keď sa mení mierka pravouholníkov, rovnakou mierou sa mení aj polomer "
@@ -1674,7 +1674,7 @@ msgstr ""
 msgid "Transform gradients"
 msgstr "Transformácia prechodov"
 
-#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:484
+#: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:499
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr "Trasformuje prechody (vo výplni a ťahu) spolu s objektami"
 
@@ -1682,7 +1682,7 @@ msgstr "Trasformuje prechody (vo výplni a ťahu) spolu s objektami"
 msgid "Transform patterns"
 msgstr "Transformácia vzoriek"
 
-#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:496
+#: ../src/dialogs/display-settings.cpp:1314 ../src/select-toolbar.cpp:511
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr "Trasformuje vzorky (vo výplni a ťahu) spolu s objektami"
 
@@ -2632,127 +2632,127 @@ msgid "Palettes directory (%s) is unavailable."
 msgstr ""
 
 #. TODO:  Insert widgets
-#: ../src/dialogs/text-edit.cpp:199 ../src/ui/dialog/text-properties.cpp:36
+#: ../src/dialogs/text-edit.cpp:200 ../src/ui/dialog/text-properties.cpp:36
 msgid "Font"
 msgstr "Písmo"
 
-#: ../src/dialogs/text-edit.cpp:216
+#: ../src/dialogs/text-edit.cpp:217
 msgid "Layout"
 msgstr "Rozloženie"
 
-#: ../src/dialogs/text-edit.cpp:229
+#: ../src/dialogs/text-edit.cpp:230
 msgid "Align lines left"
 msgstr "Zarovnať čiary doľava"
 
 #. TRANSLATORS: `Center' here is a verb.
-#: ../src/dialogs/text-edit.cpp:243
+#: ../src/dialogs/text-edit.cpp:244
 msgid "Center lines"
 msgstr "Centrovať čiary"
 
-#: ../src/dialogs/text-edit.cpp:256
+#: ../src/dialogs/text-edit.cpp:257
 msgid "Align lines right"
 msgstr "Zarovnanie čiar doprava"
 
-#: ../src/dialogs/text-edit.cpp:278
+#: ../src/dialogs/text-edit.cpp:279
 msgid "Horizontal text"
 msgstr "Vodorovný text"
 
-#: ../src/dialogs/text-edit.cpp:292
+#: ../src/dialogs/text-edit.cpp:293
 msgid "Vertical text"
 msgstr "Zvislý text"
 
-#: ../src/dialogs/text-edit.cpp:307
+#: ../src/dialogs/text-edit.cpp:308
 msgid "Line spacing:"
 msgstr "Riadkovanie:"
 
-#: ../src/dialogs/text-edit.cpp:399
+#: ../src/dialogs/text-edit.cpp:400
 msgid "Set as default"
 msgstr "Nastaviť ako štandardné"
 
-#: ../src/dialogs/tiledialog.cpp:604
+#: ../src/dialogs/tiledialog.cpp:606
 #, fuzzy
 msgid "Rows:"
 msgstr "Zobraziť:"
 
-#: ../src/dialogs/tiledialog.cpp:614
+#: ../src/dialogs/tiledialog.cpp:616
 #, fuzzy
 msgid "Number of rows"
 msgstr "Počet revolúcií"
 
-#: ../src/dialogs/tiledialog.cpp:617
+#: ../src/dialogs/tiledialog.cpp:620
 #, fuzzy
 msgid "Equal height"
 msgstr "Výška:"
 
-#: ../src/dialogs/tiledialog.cpp:626
+#: ../src/dialogs/tiledialog.cpp:631
 msgid "If not set, each row has the height of the tallest object in it"
 msgstr ""
 
 #. #### Radio buttons to control vertical alignment ####
 #. #### Radio buttons to control horizontal alignment ####
-#: ../src/dialogs/tiledialog.cpp:633 ../src/dialogs/tiledialog.cpp:702
+#: ../src/dialogs/tiledialog.cpp:641 ../src/dialogs/tiledialog.cpp:716
 #, fuzzy
 msgid "Align:"
 msgstr "Zarovnať"
 
-#: ../src/dialogs/tiledialog.cpp:668
+#: ../src/dialogs/tiledialog.cpp:678
 msgid " X "
 msgstr ""
 
 #. #### Number of columns ####
-#: ../src/dialogs/tiledialog.cpp:674
+#: ../src/dialogs/tiledialog.cpp:684
 #, fuzzy
 msgid "Columns:"
 msgstr "<b>Stĺpce</b>:"
 
-#: ../src/dialogs/tiledialog.cpp:684
+#: ../src/dialogs/tiledialog.cpp:694
 #, fuzzy
 msgid "Number of columns"
 msgstr "Počet revolúcií"
 
-#: ../src/dialogs/tiledialog.cpp:686
+#: ../src/dialogs/tiledialog.cpp:698
 #, fuzzy
 msgid "Equal width"
 msgstr "Šírka:"
 
-#: ../src/dialogs/tiledialog.cpp:695
+#: ../src/dialogs/tiledialog.cpp:709
 msgid "If not set, each column has the width of the widest object in it"
 msgstr ""
 
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
-#: ../src/dialogs/tiledialog.cpp:742
+#: ../src/dialogs/tiledialog.cpp:756
 #, fuzzy
 msgid "Fit into selection box"
 msgstr "Šírka výberu"
 
-#: ../src/dialogs/tiledialog.cpp:749
+#: ../src/dialogs/tiledialog.cpp:763
 #, fuzzy
 msgid "Set spacing:"
 msgstr "Rozostup Y:"
 
-#. #### X padding ####
-#: ../src/dialogs/tiledialog.cpp:775
-#, fuzzy
-msgid "Column spacing:"
-msgstr "Riadkovanie:"
-
-#: ../src/dialogs/tiledialog.cpp:784
-#, fuzzy
-msgid "Horizontal spacing between columns"
-msgstr "vodorovná hodnota mierky"
-
 #. #### Y Padding ####
-#: ../src/dialogs/tiledialog.cpp:791
+#: ../src/dialogs/tiledialog.cpp:788
 #, fuzzy
-msgid "Row spacing:"
+msgid "Row spacing:   "
 msgstr "Riadkovanie:"
 
-#: ../src/dialogs/tiledialog.cpp:800
+#: ../src/dialogs/tiledialog.cpp:797
 #, fuzzy
 msgid "Vertical spacing between rows"
 msgstr "Vertikálne medzery"
 
-#: ../src/dialogs/tiledialog.cpp:812
+#. #### X padding ####
+#: ../src/dialogs/tiledialog.cpp:806
+#, fuzzy
+msgid "Column spacing:"
+msgstr "Riadkovanie:"
+
+#: ../src/dialogs/tiledialog.cpp:815
+#, fuzzy
+msgid "Horizontal spacing between columns"
+msgstr "vodorovná hodnota mierky"
+
+#: ../src/dialogs/tiledialog.cpp:829
 #, fuzzy
 msgid "Arrange Objects"
 msgstr "Objekty"
@@ -2932,25 +2932,25 @@ msgid ""
 "to copy the color under mouse to clipboard"
 msgstr ""
 
-#: ../src/extension/dependency.cpp:245
+#: ../src/extension/dependency.cpp:242
 msgid "Dependency::"
 msgstr ""
 
-#: ../src/extension/dependency.cpp:246
+#: ../src/extension/dependency.cpp:243
 #, fuzzy
 msgid "  type: "
 msgstr "T_yp: "
 
-#: ../src/extension/dependency.cpp:247
+#: ../src/extension/dependency.cpp:244
 #, fuzzy
 msgid "  location: "
 msgstr "vzťah"
 
-#: ../src/extension/dependency.cpp:248
+#: ../src/extension/dependency.cpp:245
 msgid "  string: "
 msgstr ""
 
-#: ../src/extension/dependency.cpp:251
+#: ../src/extension/dependency.cpp:248
 #, fuzzy
 msgid "  description: "
 msgstr "Popis"
@@ -3015,6 +3015,20 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr ""
 
+#: ../src/extension/implementation/script.cpp:836
+msgid ""
+"Inkscape has recieved an error from the script that it called.  The text "
+"returned with the error is included below.  Inkscape will continue working, "
+"but the action you requested has been cancelled."
+msgstr ""
+
+#: ../src/extension/implementation/script.cpp:849
+msgid ""
+"Inkscape has recieved additional data from the script executed.  The script "
+"did not return an error, but this may indicate the results will not be as "
+"expected."
+msgstr ""
+
 #: ../src/extension/init.cpp:173
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
@@ -3068,10 +3082,11 @@ msgid "Print using PostScript operators"
 msgstr "Tlačiť s pomocou Postcript operátorov"
 
 #: ../src/extension/internal/ps.cpp:155
+#, fuzzy
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
-"file size and can be arbitrarily scaled, but alpha transparency, gradients "
-"and patterns will be lost."
+"file size and can be arbitrarily scaled, but alpha transparency and patterns "
+"will be lost."
 msgstr ""
 "Používať vektorové operátory PostScript. Výsledný obrázok je zvyčajne menší "
 "a je možné ľubovolne meniť jeho veľkosť, avšak sa stratí alfa priehľadnosť, "
@@ -3918,7 +3933,7 @@ msgid "Use the new Gtkmm GUI interface"
 msgstr ""
 
 #: ../src/main.cpp:326
-msgid "Remove unused definitions from the <defs> section(s) of the document"
+msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 
 #: ../src/main.cpp:475
@@ -4020,27 +4035,26 @@ msgstr ""
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
 
-#: ../src/nodepath.cpp:3262
+#: ../src/nodepath.cpp:3260
 #, fuzzy
 msgid "<b>Drag</b> nodes or node handles; <b>arrow</b> keys to move nodes"
 msgstr ""
 "<b>Ťahaním</b> vytvoríte kaligrafickú čiaru. Stlačením 'a' na prepnete medzi "
 "Pridať/Nový."
 
-#: ../src/nodepath.cpp:3263
+#: ../src/nodepath.cpp:3261
 #, fuzzy
 msgid "<b>Drag</b> the node or its handles; <b>arrow</b> keys to move the node"
 msgstr ""
 "<b>Ťahaním</b> vytvoríte kaligrafickú čiaru. Stlačením 'a' na prepnete medzi "
 "Pridať/Nový."
 
-#: ../src/nodepath.cpp:3282
-msgid ""
-"Select one path object with selector first, then switch back to node tool."
-msgstr ""
-"Najskôr označte cestu s nástrojom Výber a potom si zvoľte nástroj Uzol."
+#: ../src/nodepath.cpp:3287 ../src/nodepath.cpp:3299
+#, fuzzy
+msgid "Select a single object to edit its nodes or handles."
+msgstr "Vybrať všetky objekty alebo všetky uzly"
 
-#: ../src/nodepath.cpp:3285
+#: ../src/nodepath.cpp:3291
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
@@ -4051,7 +4065,12 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/nodepath.cpp:3292
+#: ../src/nodepath.cpp:3297
+#, fuzzy
+msgid "Drag the handles of the object to modify it."
+msgstr "Každý zvolený objekt zobrazí svoje ohraničenie"
+
+#: ../src/nodepath.cpp:3305
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
@@ -4059,7 +4078,7 @@ msgstr[0] "Označené súbory:"
 msgstr[1] "<b>%i</b> zo <b>%i</b> zvolených uzlov; %s. %s."
 msgstr[2] "<b>%i</b> zo <b>%i</b> zvolených uzlov; %s. %s."
 
-#: ../src/nodepath.cpp:3298
+#: ../src/nodepath.cpp:3311
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
@@ -4305,43 +4324,43 @@ msgid ""
 "with <b>Shift</b> to disable snapping"
 msgstr ""
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 #, fuzzy
 msgid "select_toolbar|X"
 msgstr "Výber"
 
-#: ../src/select-toolbar.cpp:404
+#: ../src/select-toolbar.cpp:419
 msgid "Horizontal coordinate of selection"
 msgstr "Vodorovné súradnice výberu"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 #, fuzzy
 msgid "select_toolbar|Y"
 msgstr "Výber"
 
-#: ../src/select-toolbar.cpp:407
+#: ../src/select-toolbar.cpp:422
 msgid "Vertical coordinate of selection"
 msgstr "Zvislé súradnice výberu"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 #, fuzzy
 msgid "select_toolbar|W"
 msgstr "Výber"
 
-#: ../src/select-toolbar.cpp:411
+#: ../src/select-toolbar.cpp:426
 msgid "Width of selection"
 msgstr "Šírka výberu"
 
-#: ../src/select-toolbar.cpp:419
+#: ../src/select-toolbar.cpp:434
 msgid "Change both width and height by the same proportion"
 msgstr "Zmeniť šírku a výšku v rovnakom pomere"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 #, fuzzy
 msgid "select_toolbar|H"
 msgstr "Výber"
 
-#: ../src/select-toolbar.cpp:426
+#: ../src/select-toolbar.cpp:441
 msgid "Height of selection"
 msgstr "Výška výberu"
 
@@ -4767,16 +4786,16 @@ msgstr[1] "<b>Mnohouholník</b> s %d vrcholmi"
 msgstr[2] "<b>Mnohouholník</b> s %d vrcholmi"
 
 #. TRANSLATORS: For description of font with no name.
-#: ../src/sp-text.cpp:407
+#: ../src/sp-text.cpp:403
 msgid "&lt;no name found&gt;"
 msgstr "&lt;názov nebol nájdený&gt;"
 
-#: ../src/sp-text.cpp:413
+#: ../src/sp-text.cpp:409
 #, fuzzy, c-format
 msgid "<b>Text on path</b> (%s, %s)"
 msgstr "Umiestniť text na cestu"
 
-#: ../src/sp-text.cpp:414
+#: ../src/sp-text.cpp:410
 #, c-format
 msgid "<b>Text</b> (%s, %s)"
 msgstr "<b>Text</b> (%s, %s)"
@@ -7374,33 +7393,33 @@ msgid "No stops in gradient"
 msgstr "V prechode nie sú stopy"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:779
+#: ../src/widgets/gradient-vector.cpp:795
 msgid "Add stop"
 msgstr "Pridať stop"
 
-#: ../src/widgets/gradient-vector.cpp:782
+#: ../src/widgets/gradient-vector.cpp:798
 msgid "Add another control stop to gradient"
 msgstr "Pridať ďalší kontrolný stop do prechodu"
 
-#: ../src/widgets/gradient-vector.cpp:784
+#: ../src/widgets/gradient-vector.cpp:800
 msgid "Delete stop"
 msgstr "Zmazať stop"
 
-#: ../src/widgets/gradient-vector.cpp:787
+#: ../src/widgets/gradient-vector.cpp:803
 msgid "Delete current control stop from gradient"
 msgstr "Zmazať aktuálny stop z prechodu"
 
 #. Label
-#: ../src/widgets/gradient-vector.cpp:798
+#: ../src/widgets/gradient-vector.cpp:814
 msgid "Offset:"
 msgstr "Posun:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:843
+#: ../src/widgets/gradient-vector.cpp:859
 msgid "Stop Color"
 msgstr "Koncová farby"
 
-#: ../src/widgets/gradient-vector.cpp:872
+#: ../src/widgets/gradient-vector.cpp:888
 msgid "Gradient editor"
 msgstr "Editor prechodov"
 
@@ -7635,6 +7654,14 @@ msgstr "Atribút"
 #: ../src/widgets/sp-xmlview-attr-list.cpp:54
 msgid "Value"
 msgstr "Hodnota"
+
+#~ msgid "SVG Vector Illustrator"
+#~ msgstr "SVG Vektorový ilustrátor"
+
+#~ msgid ""
+#~ "Select one path object with selector first, then switch back to node tool."
+#~ msgstr ""
+#~ "Najskôr označte cestu s nástrojom Výber a potom si zvoľte nástroj Uzol."
 
 #~ msgid "Create Layer"
 #~ msgstr "Vytvoriť vrstvu"
