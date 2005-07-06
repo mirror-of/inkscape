@@ -2016,7 +2016,7 @@ Verb * Verb::_base_verbs[] = {
     /* Effect */
     new EffectLastVerb(SP_VERB_EFFECT_LAST, "EffectLast", N_("Previous Effect"),
         N_("Repeat the last effect with the same settings"), NULL/*"tutorial_tips"*/),
-    new EffectLastVerb(SP_VERB_EFFECT_LAST_PREF, "EffectLastPref", N_("Previous Effect..."),
+    new EffectLastVerb(SP_VERB_EFFECT_LAST_PREF, "EffectLastPref", N_("Previous Effect Settings..."),
         N_("Repeat the last effect with new settings"), NULL/*"tutorial_tips"*/),
 
     /* Footer */
