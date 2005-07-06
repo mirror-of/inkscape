@@ -362,7 +362,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 	fcl = GTK_CLIST (fsel->family);
 	scl = GTK_CLIST (fsel->style);
 	
-	if (font) {
+	if (font && fsel->font != font) {
 		{ // select family in the list
 			gchar family[256];
 			font->Family (family, 256);
@@ -405,10 +405,12 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 			gtk_clist_moveto (scl, best_i, 0, 0.66, 0.0);
 		}
 		
-		gchar s[8];
-		g_snprintf (s, 8, "%.5g", size); // UI, so printf is ok
-		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
-		fsel->fontsize = size;
+		if (size != fsel->fontsize) {
+			gchar s[8];
+			g_snprintf (s, 8, "%.5g", size); // UI, so printf is ok
+			gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
+			fsel->fontsize = size;
+		}
 	}
 }
 
@@ -687,9 +689,10 @@ sp_font_preview_new (void)
 void
 sp_font_preview_set_font (SPFontPreview *fprev, font_instance *font, SPFontSelector *fsel)
 {
-	if (font)  font->Ref();
-	if (fprev->font) fprev->font->Unref();
-	fprev->font = font;
+	if (font != fprev->font) {
+		if (font)  font->Ref();
+		if (fprev->font) fprev->font->Unref();
+		fprev->font = font;
 	
 		if (fprev->rfont) {
 			fprev->rfont->Unref();
@@ -701,6 +704,7 @@ sp_font_preview_set_font (SPFontPreview *fprev, font_instance *font, SPFontSelec
 			fprev->rfont = fprev->font->RasterFont(flip, 0);
 		}
 		if (GTK_WIDGET_DRAWABLE (fprev)) gtk_widget_queue_draw (GTK_WIDGET (fprev));
+	}
 }
 
 void
