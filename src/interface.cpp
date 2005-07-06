@@ -258,7 +258,23 @@ sp_ui_close_all (void)
             /* The user cancelled the operation, so end doing the close */
             return FALSE;
         }
-        gtk_widget_destroy (w);
+ //       gtk_widget_destroy (w);
+
+       // Spackle for Bug [ 1217361 ] "freeze on quitting with transform dialog"
+       // The following code is intended to be temporary and IS NOT NEEDED once this part
+       // of Inkscape is de-bugged, when the single line above should be re-instituted.
+
+       // At present, SP_ACTIVE_DESKTOP does not guarantee to return a gtk_widget: If we find
+       // that we have been issued an object other than a widget we assume that something is
+       // wrong upstream and quit immediately.
+       if( GTK_IS_WIDGET(w) ) {
+ //           fprintf( stderr, "sp_ui_close_all( ) About to call  gtk_widget_destroy ( %08p )\n", w );
+            gtk_widget_destroy (w);
+        } else {
+            g_warning( "Desktop has passed us a non-widget! : %p", w );
+            gtk_main_quit();
+            break;
+        }
     }
 
     return TRUE;

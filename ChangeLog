@@ -1,5 +1,10 @@
 2005-07-06  Ben Fowler  <bpfowler@users.sourceforge.net>
 
+	* src/interface.cpp: Spackle for Bug 1217361 "freeze on quitting 
+	with transform dialog"
+
+2005-07-06  Ben Fowler  <bpfowler@users.sourceforge.net>
+
 	* src/interface.cpp: Whitespace changes only
 
 2005-07-05  Ted Gould  <ted@gould.cx>
