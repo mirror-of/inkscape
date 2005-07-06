@@ -362,7 +362,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 	fcl = GTK_CLIST (fsel->family);
 	scl = GTK_CLIST (fsel->style);
 	
-	if (font && fsel->font != font) {
+	if (font && (fsel->font != font || size != fsel->fontsize)) {
 		{ // select family in the list
 			gchar family[256];
 			font->Family (family, 256);
