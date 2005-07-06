@@ -625,9 +625,8 @@ TileDialog::TileDialog()
          AutoRowSize=false;
     RowHeightButton.set_active(AutoRowSize);
 
-    #ifdef DEBUG_GRID_ARRANGE
     NoOfRowsBox.pack_start(RowHeightButton, false, false, MARGIN);
-    #endif
+
     tips.set_tip(RowHeightButton, _("If not set, each row has the height of the tallest object in it"));
     RowHeightButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_RowSize_checkbutton_changed));
 
@@ -664,9 +663,7 @@ TileDialog::TileDialog()
             VertBotRadioButton.set_active(TRUE);
         }
         VertAlignHBox.pack_start(VertAlignVBox, false, false, MARGIN);
-        #ifdef DEBUG_GRID_ARRANGE
         NoOfRowsBox.pack_start(VertAlignHBox, false, false, MARGIN);
-        #endif
     }
 
     SpinsHBox.pack_start(NoOfRowsBox, false, false, MARGIN);
@@ -702,9 +699,7 @@ TileDialog::TileDialog()
     else
          AutoColSize=false;
     ColumnWidthButton.set_active(AutoColSize);
-    #ifdef DEBUG_GRID_ARRANGE
     NoOfColsBox.pack_start(ColumnWidthButton, false, false, MARGIN);
-    #endif
 
     tips.set_tip(ColumnWidthButton, _("If not set, each column has the width of the widest object in it"));
     ColumnWidthButton.signal_toggled().connect(sigc::mem_fun(*this, &TileDialog::on_ColSize_checkbutton_changed));
@@ -739,9 +734,7 @@ TileDialog::TileDialog()
             HorizRightRadioButton.set_active(TRUE);
         }
         HorizAlignVBox.pack_start(HorizAlignHBox, false, false, MARGIN);
-        #ifdef DEBUG_GRID_ARRANGE
         NoOfColsBox.pack_start(HorizAlignVBox, false, false, MARGIN);
-        #endif
     }
 
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
@@ -777,9 +770,8 @@ TileDialog::TileDialog()
             SpaceByBBoxRadioButton.set_active(!ManualSpacing);
         }
 
-        #ifdef DEBUG_GRID_ARRANGE
         TileBox.pack_start(SpacingVBox, false, false, MARGIN);
-        #endif
+
     }
 
     {
