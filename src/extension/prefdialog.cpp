@@ -10,6 +10,8 @@
 #include <gtkmm/stock.h>
 #include <glibmm/i18n.h>
 
+#include "../dialogs/dialog-events.h"
+
 #include "prefdialog.h"
 
 namespace Inkscape {
@@ -25,6 +27,9 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls) :
     Gtk::Button * ok = add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
     ok->grab_focus();
+    
+    GtkWidget *dlg = GTK_WIDGET(gobj());
+    sp_transientize(dlg);
 
     return;
 }
