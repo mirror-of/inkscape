@@ -273,9 +273,13 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
 
         SPIPaint *paint = isfill? &style->fill : &style->stroke;
 
+        // We consider paint "effectively set" for anything within text hierarchy
+        SPObject *parent = SP_OBJECT_PARENT (obj);
+        bool paint_effectively_set = paint->set || (SP_IS_TEXT(parent) || SP_IS_TEXTPATH(parent) || SP_IS_TSPAN(parent) || SP_IS_FLOWDIV(parent) || SP_IS_FLOWPARA(parent) || SP_IS_FLOWTSPAN(parent) || SP_IS_FLOWLINE(parent));
+
         // 1. Bail out with QUERY_STYLE_MULTIPLE_DIFFERENT if necessary
 
-        if ((paint_res->type != SP_PAINT_TYPE_IMPOSSIBLE) && (paint->type != paint_res->type || (paint_res->set != paint->set))) {
+        if ((paint_res->type != SP_PAINT_TYPE_IMPOSSIBLE) && (paint->type != paint_res->type || (paint_res->set != paint_effectively_set))) {
             return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different types of paint
         }
 
@@ -319,7 +323,7 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
 
         // 2. Sum color, copy server from paint to paint_res
 
-        if (paint_res->set && paint->set && paint->type == SP_PAINT_TYPE_COLOR) {
+        if (paint_res->set && paint_effectively_set && paint->type == SP_PAINT_TYPE_COLOR) {
 
             gfloat d[3];
             sp_color_get_rgb_floatv (&paint->value.color, d);
@@ -351,7 +355,7 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
            }
        }
        paint_res->type = paint->type;
-       paint_res->set = paint->set;
+       paint_res->set = paint_effectively_set;
        style_res->fill_rule.computed = style->fill_rule.computed; // no averaging on this, just use the last one
     }
 
