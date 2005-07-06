@@ -271,10 +271,12 @@ Dialog::onShowF12()
     if (_user_hidden)
         return;
 
-    _hiddenF12 = false;
+    if (_hiddenF12) {
+        show();
+        read_geometry();
+    }
 
-    present();
-    read_geometry();
+    _hiddenF12 = false;
 }
 
 
