@@ -833,7 +833,7 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
         } else {
             if (errorFile != NULL) {
                 checkStderr(errorFile, Gtk::MESSAGE_ERROR,
-                    _("Inkscape has recieved an error from the script that it called.  "
+                    _("Inkscape has received an error from the script that it called.  "
                       "The text returned with the error is included below.  "
                       "Inkscape will continue working, but the action you requested has been cancelled."));
             } else {
@@ -846,7 +846,7 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
     } else {
         if (errorFile != NULL) {
             checkStderr(errorFile, Gtk::MESSAGE_INFO,
-                _("Inkscape has recieved additional data from the script executed.  "
+                _("Inkscape has received additional data from the script executed.  "
                   "The script did not return an error, but this may indicate the results will not be as expected."));
         }
     }
