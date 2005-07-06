@@ -1019,14 +1019,20 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                             case GDK_Home:
                             case GDK_KP_Home:
                                 if (tc->text) {
-                                    cursor_movement_operator = &Inkscape::Text::Layout::iterator::thisStartOfLine;
+                                    if (MOD__CTRL)
+                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::thisStartOfShape;
+                                    else 
+                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::thisStartOfLine;
                                     break;
                                 }
                                 return TRUE;
                             case GDK_End:
                             case GDK_KP_End:
                                 if (tc->text) {
-                                    cursor_movement_operator = &Inkscape::Text::Layout::iterator::thisEndOfLine;
+                                    if (MOD__CTRL)
+                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::nextStartOfShape;
+                                    else 
+                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::thisEndOfLine;
                                     break;
                                 }
                                 return TRUE;
