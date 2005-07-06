@@ -469,7 +469,7 @@ sp_text_edit_dialog_selection_changed ( Inkscape::Application *inkscape,
 
 static void sp_text_edit_dialog_subselection_changed ( Inkscape::Application *inkscape, SPDesktop *desktop, GtkWidget *dlg )
 {
-    sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
+    sp_text_edit_dialog_read_selection (dlg, TRUE, FALSE);
 }
 
 static void
@@ -633,8 +633,6 @@ sp_text_edit_dialog_close (GtkButton *button, GtkWidget *dlg)
 {
     gtk_widget_destroy (GTK_WIDGET (dlg));
 }
-
-
 
 static void
 sp_text_edit_dialog_read_selection ( GtkWidget *dlg, 
