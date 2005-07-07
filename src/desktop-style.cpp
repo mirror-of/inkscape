@@ -82,13 +82,14 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
     // flowtext). 
 
     if (!(skip_lines
-          && ((SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE) || SP_IS_TEXTPATH(o))
+          && ((SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE)
+              || SP_IS_FLOWDIV(o)
+              || SP_IS_FLOWPARA(o)
+              || SP_IS_TEXTPATH(o))
           && !SP_OBJECT_REPR(o)->attribute("style"))
         &&
         !(SP_IS_FLOWREGION(o) ||
           SP_IS_FLOWREGIONEXCLUDE(o) ||
-          SP_IS_FLOWDIV(o) ||
-          SP_IS_FLOWPARA(o) ||
           (SP_IS_USE(o) &&
            SP_OBJECT_PARENT(o) &&
            (SP_IS_FLOWREGION(SP_OBJECT_PARENT(o)) ||
