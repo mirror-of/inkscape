@@ -50,7 +50,7 @@ static const char *
 dstr(gchar *sbuffer, double d)
 {
     return (const char *)g_ascii_formatd(sbuffer, 
-	         G_ASCII_DTOSTR_BUF_SIZE, "%8.3f", (gdouble)d);
+	         G_ASCII_DTOSTR_BUF_SIZE, "%.8g", (gdouble)d);
 
 }
 
