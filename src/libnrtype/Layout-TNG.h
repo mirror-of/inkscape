@@ -982,7 +982,7 @@ inline bool Layout::iterator::prevGlyph()
 inline bool Layout::iterator::nextCharacter()
 {
     _cursor_moving_vertically = false;
-    if (_char_index >= _parent_layout->_characters.size() - 1) {
+    if (_char_index + 1 >= _parent_layout->_characters.size()) {
         if (_char_index == _parent_layout->_characters.size()) return false;
         _char_index = _parent_layout->_characters.size();
         _glyph_index = _parent_layout->_glyphs.size();
