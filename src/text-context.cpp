@@ -1363,7 +1363,9 @@ sp_text_context_style_query(SPStyle *style, int property, SPTextContext *tc)
         begin_it = tc->text_sel_end;
         end_it = tc->text_sel_start;
     }
-    if (begin_it == end_it) end_it.nextCharacter();
+    if (begin_it == end_it)
+        if (!begin_it.prevCharacter())
+            end_it.nextCharacter();
     for (Inkscape::Text::Layout::iterator it = begin_it ; it < end_it ; it.nextStartOfSpan()) {
         SPObject const *pos_obj = NULL;
         layout->getSourceOfCharacter(it, (void**)&pos_obj);
