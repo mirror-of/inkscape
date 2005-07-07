@@ -46,6 +46,15 @@ namespace Internal {
 
 
 
+static const char *
+dstr(gchar *sbuffer, double d)
+{
+    return (const char *)g_ascii_formatd(sbuffer, 
+	         G_ASCII_DTOSTR_BUF_SIZE, "%8.3f", (gdouble)d);
+
+}
+
+
 /**
  * Make sure that we are in the database
  */
@@ -137,11 +146,23 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
 
     std::vector<PovShapeInfo>povShapes; //A list for saving information about the shapes
 
+    //we only need 8 for printf() calls that call dstr() 8 times
+    gchar s1[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s2[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s3[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s4[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s5[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s6[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s7[G_ASCII_DTOSTR_BUF_SIZE + 1];
+    gchar s8[G_ASCII_DTOSTR_BUF_SIZE + 1];
+	
     double bignum = 1000000.0;
     double minx  =  bignum;
     double maxx  = -bignum;
     double miny  =  bignum;
     double maxy  = -bignum;
+    
+
 
     unsigned indx;
     for (indx = 0; indx < results.size() ; indx++)
@@ -186,8 +207,11 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
             sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
             double const dopacity = ( SP_SCALE24_TO_FLOAT(style->fill_opacity.value)
                                       * effective_opacity(shape) );
-            gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
-                                         rgb[0], rgb[1], rgb[2], 1.0 - dopacity);
+            //gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
+            //                             rgb[0], rgb[1], rgb[2], 1.0 - dopacity);
+            gchar *str = g_strdup_printf("rgbf < %s, %s, %s %s>",
+                   dstr(s1, rgb[0]), dstr(s2, rgb[1]), dstr(s3, rgb[2]), dstr(s4, 1.0 - dopacity));
+
             shapeInfo.color += str;
             g_free(str);
         }
@@ -238,8 +262,14 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
                     break;
                 case NR_CURVETO:
 
-                    fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
-                            segmentNr++, lastx, lasty, x1, y1, x2, y2, x3, y3);
+                    //fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
+                    //        segmentNr++, lastx, lasty, x1, y1, x2, y2, x3, y3);
+                    fprintf(f, "    /*%4d*/ <%s, %s>, <%s, %s>, <%s,%s>, <%s,%s>",
+                            segmentNr++,
+			    dstr(s1, lastx), dstr(s2, lasty),
+			    dstr(s3, x1),    dstr(s4, y1),
+			    dstr(s5, x2),    dstr(s6, y2),
+			    dstr(s7, x3),    dstr(s8, y3));
 
                     if (segmentNr < segmentCount)
                         fprintf(f, ",\n");
@@ -257,8 +287,14 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
                     break;
                 case NR_LINETO:
 
-                    fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
-                            segmentNr++, lastx, lasty, lastx, lasty, x3, y3, x3, y3);
+                    //fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
+                    //        segmentNr++, lastx, lasty, lastx, lasty, x3, y3, x3, y3);
+                    fprintf(f, "    /*%4d*/ <%s, %s>, <%s, %s>, <%s,%s>, <%s,%s>",
+                            segmentNr++,
+			    dstr(s1, lastx),  dstr(s2, lasty),
+			    dstr(s3, lastx),  dstr(s4, lasty),
+			    dstr(s5, x3),     dstr(s6, y3),
+			    dstr(s7, x3),     dstr(s8, y3));
 
                     if (segmentNr < segmentCount)
                         fprintf(f, ",\n");
@@ -283,7 +319,8 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
             lasty = y3;
         }
         fprintf(f, "}\n");
-        fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, cminx);
+        /*
+	fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, cminx);
         fprintf(f, "#declare %s_CENTER_X = %4.3f;\n", id, (cmaxx+cminx)/2.0);
         fprintf(f, "#declare %s_MAX_X    = %4.3f;\n", id, cmaxx);
         fprintf(f, "#declare %s_WIDTH    = %4.3f;\n", id, cmaxx-cminx);
@@ -291,6 +328,15 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
         fprintf(f, "#declare %s_CENTER_Y = %4.3f;\n", id, (cmaxy+cminy)/2.0);
         fprintf(f, "#declare %s_MAX_Y    = %4.3f;\n", id, cmaxy);
         fprintf(f, "#declare %s_HEIGHT   = %4.3f;\n", id, cmaxy-cminy);
+	*/
+	fprintf(f, "#declare %s_MIN_X    = %s;\n", id, dstr(s1, cminx));
+        fprintf(f, "#declare %s_CENTER_X = %s;\n", id, dstr(s1, (cmaxx+cminx)/2.0));
+        fprintf(f, "#declare %s_MAX_X    = %s;\n", id, dstr(s1, cmaxx));
+        fprintf(f, "#declare %s_WIDTH    = %s;\n", id, dstr(s1, cmaxx-cminx));
+        fprintf(f, "#declare %s_MIN_Y    = %s;\n", id, dstr(s1, cminy));
+        fprintf(f, "#declare %s_CENTER_Y = %s;\n", id, dstr(s1, (cmaxy+cminy)/2.0));
+        fprintf(f, "#declare %s_MAX_Y    = %s;\n", id, dstr(s1, cmaxy));
+        fprintf(f, "#declare %s_HEIGHT   = %s;\n", id, dstr(s1, cmaxy-cminy));
         if (shapeInfo.color.length()>0)
             fprintf(f, "#declare %s_COLOR    = %s;\n",
                     id, shapeInfo.color.c_str());
@@ -299,11 +345,11 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
         fprintf(f, "##############################################*/\n\n\n\n");
         if (cminx < minx)
             minx = cminx;
-        else if (cmaxx > maxx)
+        if (cmaxx > maxx)
             maxx = cmaxx;
         if (cminy < miny)
             miny = cminy;
-        else if (cmaxy > maxy)
+        if (cmaxy > maxy)
             maxy = cmaxy;
 
 
@@ -352,7 +398,7 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
         fprintf(f, " * Allow the user to redefine the Z-Increment\n");
         fprintf(f, " */\n");
         fprintf(f, "#ifndef (AllShapes_Z_Increment)\n");
-        fprintf(f, "#declare AllShapes_Z_Increment = %f;\n", zinc);
+        fprintf(f, "#declare AllShapes_Z_Increment = %s;\n", dstr(s1, zinc));
         fprintf(f, "#end\n");
         fprintf(f, "\n");
         fprintf(f, "#declare AllShapes_Z_Scale = 1.0;\n");
@@ -374,6 +420,7 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
         }
 
         fprintf(f, "}\n");
+	/*
         fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, minx);
         fprintf(f, "#declare %s_CENTER_X = %4.3f;\n", id, (maxx+minx)/2.0);
         fprintf(f, "#declare %s_MAX_X    = %4.3f;\n", id, maxx);
@@ -382,6 +429,15 @@ PovOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *
         fprintf(f, "#declare %s_CENTER_Y = %4.3f;\n", id, (maxy+miny)/2.0);
         fprintf(f, "#declare %s_MAX_Y    = %4.3f;\n", id, maxy);
         fprintf(f, "#declare %s_HEIGHT   = %4.3f;\n", id, maxy-miny);
+	*/
+        fprintf(f, "#declare %s_MIN_X    = %s;\n", id, dstr(s1, minx));
+        fprintf(f, "#declare %s_CENTER_X = %s;\n", id, dstr(s1, (maxx+minx)/2.0));
+        fprintf(f, "#declare %s_MAX_X    = %s;\n", id, dstr(s1, maxx));
+        fprintf(f, "#declare %s_WIDTH    = %s;\n", id, dstr(s1, maxx-minx));
+        fprintf(f, "#declare %s_MIN_Y    = %s;\n", id, dstr(s1, miny));
+        fprintf(f, "#declare %s_CENTER_Y = %s;\n", id, dstr(s1, (maxy+miny)/2.0));
+        fprintf(f, "#declare %s_MAX_Y    = %s;\n", id, dstr(s1, maxy));
+        fprintf(f, "#declare %s_HEIGHT   = %s;\n", id, dstr(s1, maxy-miny));
         fprintf(f, "/*##############################################\n");
         fprintf(f, "### end %s\n", id);
         fprintf(f, "##############################################*/\n\n\n\n");

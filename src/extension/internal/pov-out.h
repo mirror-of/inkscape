@@ -17,6 +17,7 @@
 #define EXTENSION_INTERNAL_POV_OUT_H
 
 #include <extension/implementation/implementation.h>
+#include <glib.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -34,6 +35,7 @@ class PovOutput : public Inkscape::Extension::Implementation::Implementation
 	                     const gchar *uri);
 
 	static void   init  (void);
+	
 
 };
 
