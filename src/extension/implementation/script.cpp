@@ -858,7 +858,10 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 void
 Script::checkStderr (gchar * filename, Gtk::MessageType type, gchar * message)
 {
-    std::ifstream stderrf (filename);
+    // magic win32 crlf->lf conversion means the file length is not the same as
+    // the text length, but luckily gtk will accept crlf in textviews so we can
+    // just use binary mode
+    std::ifstream stderrf (filename, std::ios_base::in | std::ios_base::binary);
     if (!stderrf.is_open()) return;
 
     stderrf.seekg(0, std::ios::end);
