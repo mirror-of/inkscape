@@ -583,6 +583,22 @@ void octreeNodePrint(OctreeNode *node, int indent)
         }
 }
 
+/**
+ *  Count how many nodes in this (sub)tree
+ */
+static int octreeNodeCount(OctreeNode *node)
+{
+    int count = 1;
+    for (unsigned int i=0; i<8; i++)
+        {
+        OctreeNode *child = node->children[i];
+        if (!child)
+            continue;
+        count += octreeNodeCount(child);
+        }
+    return count;
+}
+
 
 
 
@@ -837,6 +853,11 @@ IndexedMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
         {
         return NULL;
         }
+        
+    /*Make sure we don't request more colors than actually exist*/
+    int nodeCount = octreeLeafCount(otree);
+    if (nodeCount < nrColors)
+        nrColors = nodeCount;
 
     RGB *rgbpal = makeRGBPalette(otree, nrColors);
     if (!rgbpal)
