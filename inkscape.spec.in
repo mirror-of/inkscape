@@ -72,9 +72,11 @@ rm -rf %{buildroot}
 %{_datadir}/pixmaps/*
 %{_datadir}/inkscape/*
 %{_mandir}/man1/*
-%{_libdir}/inkscape/plugins/*
 
 %changelog
+* Thu Jul  7 2004 Kees Cook <kees@outflux.net>
+- Adjusted for plugin relocation
+
 * Wed Nov 24 2004 Kees Cook <kees@outflux.net>
 - Added SMP flags so I can build faster
 - Added static build capability
