@@ -695,7 +695,7 @@ public:
     /* These functions set errno if they return false.
        I'm not sure whether that's a good idea or not, but it should be reasonably
        straightforward to change it if needed. */
-    bool open(char *command, int mode);
+    bool open(char *command, char const *errorFile, int mode);
     bool close();
 
     /* These return the number of bytes read/written. */
@@ -764,19 +764,11 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
         errorFile = NULL;
     }
 
-    /* Get the commandline to be run */
     char *command = g_strdup_printf("%s \"%s\"", in_command, filein);
-    if (errorFile != NULL) {
-        char * temp;
-        temp = g_strdup_printf("%s 2> %s", command, errorFile);
-        g_free(command);
-        command = temp;
-    }
-
     // std::cout << "Command to run: " << command << std::endl;
 
     pipe_t pipe;
-    bool open_success = pipe.open(command, pipe_t::mode_read);
+    bool open_success = pipe.open(command, errorFile, pipe_t::mode_read);
     g_free(command);
 
     /* Run script */
@@ -905,7 +897,7 @@ Script::checkStderr (gchar * filename, Gtk::MessageType type, gchar * message)
 
 #ifdef WIN32
 
-bool pipe_t::open(char *command, int mode_p) {
+bool pipe_t::open(char *command, char const *errorFile, int mode_p) {
     HANDLE pipe_write;
 
     // Create pipe
@@ -929,6 +921,10 @@ bool pipe_t::open(char *command, int mode_p) {
             return false;
         }
     }
+    // Open stderr file
+    HANDLE hStdErrFile = CreateFile(errorFile, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, 0, NULL);
+    HANDLE hInheritableStdErr;
+    DuplicateHandle(GetCurrentProcess(), hStdErrFile, GetCurrentProcess(), &hInheritableStdErr, 0, TRUE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS);
 
     // Create process
     {
@@ -943,6 +939,7 @@ bool pipe_t::open(char *command, int mode_p) {
         startupinfo.dwFlags = STARTF_USESTDHANDLES;
         startupinfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
         startupinfo.hStdOutput = pipe_write;
+        startupinfo.hStdError = hInheritableStdErr;
 
         if ( !CreateProcess(NULL, command, NULL, NULL, TRUE, 0, NULL, NULL, &startupinfo, &procinfo) ) {
             errno = translate_error(GetLastError());
@@ -953,6 +950,7 @@ bool pipe_t::open(char *command, int mode_p) {
     }
 
     // Close our copy of the write handle
+    CloseHandle(hInheritableStdErr);
     CloseHandle(pipe_write);
 
     return true;
@@ -992,7 +990,7 @@ int pipe_t::translate_error(DWORD err) {
 
 #else // Win32
 
-bool pipe_t::open(char *command, int mode_p) {
+bool pipe_t::open(char *command, char const *errorFile, int mode_p) {
     char popen_mode[4] = {0,0,0,0};
     char *popen_mode_cur = popen_mode;
 
@@ -1004,7 +1002,14 @@ bool pipe_t::open(char *command, int mode_p) {
         *popen_mode_cur++ = 'w';
     }
 
-    ppipe = popen(command, popen_mode);
+    /* Get the commandline to be run */
+    if (errorFile != NULL) {
+        char * temp;
+        temp = g_strdup_printf("%s 2> %s", command, errorFile);
+        ppipe = popen(temp, popen_mode);
+        g_free(temp);
+    } else
+        ppipe = popen(command, popen_mode);
 
     return ppipe != NULL;
 }
