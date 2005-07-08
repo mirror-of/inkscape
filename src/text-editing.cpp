@@ -735,15 +735,18 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
 /** Gets a text-only representation of the given text or flowroot object,
 replacing line break elements with '\n'. NB: An extra line break will
 always be added to the front of the string. */
-static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *string)
+static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *string, bool *is_first_line)
 {
-    if (!SP_IS_TEXT(root) && !SP_IS_TEXTPATH(root) && is_line_break_object(root))
-        *string += '\n';
+    if (!SP_IS_TEXT(root) && !SP_IS_TEXTPATH(root) && is_line_break_object(root)) {
+        if (*is_first_line) *is_first_line = false;
+        else *string += '\n';
+    }
     for (SPObject const *child = root->firstChild() ; child ; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_STRING(child))
+        if (SP_IS_STRING(child)) {
             *string += SP_STRING(child)->string;
-        else
-            sp_te_get_ustring_multiline(child, string);
+            *is_first_line = false;
+        } else
+            sp_te_get_ustring_multiline(child, string, is_first_line);
     }
 }
 
@@ -753,15 +756,12 @@ gchar *
 sp_te_get_string_multiline (SPItem const *text)
 {
     Glib::ustring string;
+    bool is_first_line = true;
 
     if (!SP_IS_TEXT(text) && !SP_IS_FLOWTEXT(text)) return NULL;
-    sp_te_get_ustring_multiline(text, &string);
+    sp_te_get_ustring_multiline(text, &string, &is_first_line);
     if (string.empty()) return NULL;
-    if (string.data()[0] == '\n') {
-        return strdup(string.data() + 1);    // remove unwanted line break
-    } else {
-        return strdup(string.data());
-    }
+    return strdup(string.data());
 }
 
 /** Gets a text-only representation of the characters in a text or flowroot
