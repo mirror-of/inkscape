@@ -159,9 +159,10 @@ GTKINC = -DGLIBMM_DLL \
 
 
 ####### Our Gtk libs
-####### '-Wl,--enable-runtime-pseudo-reloc' is to avoid a link error
+####### we removed the '-Wl,--enable-runtime-pseudo-reloc' option, as
+####### it proved to be very dangerous
 ####### with Gtk::TreeViewColumn
-GTKLIB = -Wl,--enable-runtime-pseudo-reloc -L$(GTK)/lib \
+GTKLIB = -L$(GTK)/lib \
 -lgtkmm-2.4 -lgdkmm-2.4 -lglibmm-2.4 \
 -latkmm-1.6 -lpangomm-1.4 -lsigc-2.0 \
 -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 \
