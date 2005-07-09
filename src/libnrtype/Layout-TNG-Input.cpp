@@ -184,16 +184,8 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
     SPStyle const *this_style = style;
 
     for ( ; ; ) {
-        // It's not clear from the specs whether svg's text-anchor or css's text-align takes precedence.
-        // Since we're an svg tool, lets choose text-anchor.
-        if (this_style->text_anchor.set) {
-            switch (this_style->text_anchor.computed) {
-                default:
-                case SP_CSS_TEXT_ANCHOR_START:  return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
-                case SP_CSS_TEXT_ANCHOR_MIDDLE: return CENTER;
-                case SP_CSS_TEXT_ANCHOR_END:    return para_direction == LEFT_TO_RIGHT ? RIGHT : LEFT;
-            }
-        }
+        // If both text-align and text-anchor are set at the same level, text-align takes
+        // precedence because it is the most expressive.
         if (this_style->text_align.set) {
             switch (style->text_align.computed) {
                 default:
@@ -203,6 +195,14 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
                 case SP_CSS_TEXT_ALIGN_RIGHT:   return RIGHT;
                 case SP_CSS_TEXT_ALIGN_CENTER:  return CENTER;
                 case SP_CSS_TEXT_ALIGN_JUSTIFY: return FULL;
+            }
+        }
+        if (this_style->text_anchor.set) {
+            switch (this_style->text_anchor.computed) {
+                default:
+                case SP_CSS_TEXT_ANCHOR_START:  return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
+                case SP_CSS_TEXT_ANCHOR_MIDDLE: return CENTER;
+                case SP_CSS_TEXT_ANCHOR_END:    return para_direction == LEFT_TO_RIGHT ? RIGHT : LEFT;
             }
         }
         if (this_style->object->parent == NULL) break;
