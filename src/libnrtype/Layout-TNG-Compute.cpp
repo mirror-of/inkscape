@@ -21,8 +21,8 @@
 namespace Inkscape {
 namespace Text {
 
-#define IFDEBUG(...)     __VA_ARGS__
-//#define IFDEBUG(...)
+//#define IFDEBUG(...)     __VA_ARGS__
+#define IFDEBUG(...)
 
 #define TRACE(format, ...) IFDEBUG(g_print(format, ## __VA_ARGS__),g_print("\n"))
 
