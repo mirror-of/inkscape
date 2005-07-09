@@ -295,13 +295,9 @@ sp_flowtext_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         GSList *l = NULL;
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             Inkscape::XML::Node *c_repr = NULL;
-            if ( SP_IS_FLOWDIV(child) ) {
+            if ( SP_IS_FLOWDIV(child) || SP_IS_FLOWPARA(child) || SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child)) {
                 c_repr = child->updateRepr(NULL, flags);
-            } else if ( SP_IS_FLOWREGION(child) ) {
-                c_repr = child->updateRepr(NULL, flags);
-            } else if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
-                c_repr = child->updateRepr(NULL, flags);
-            }
+            } 
             if ( c_repr ) l = g_slist_prepend(l, c_repr);
         }
         while ( l ) {
@@ -311,11 +307,7 @@ sp_flowtext_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         }
     } else {
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-            if ( SP_IS_FLOWDIV(child) ) {
-                child->updateRepr(flags);
-            } else if ( SP_IS_FLOWREGION(child) ) {
-                child->updateRepr(flags);
-            } else if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
+            if ( SP_IS_FLOWDIV(child) || SP_IS_FLOWPARA(child) || SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child) ) {
                 child->updateRepr(flags);
             }
         }
