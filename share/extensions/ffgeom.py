@@ -20,8 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 import math
-
-NaN = float('NaN') 
+try:
+	NaN = float('NaN')
+except ValueError:
+	PosInf = 1e300000
+	NaN = PosInf/PosInf
 
 class Point:
 	precision = 5
