@@ -21,8 +21,8 @@
 namespace Inkscape {
 namespace Text {
 
-//#define IFDEBUG(...)     __VA_ARGS__
-#define IFDEBUG(...)
+#define IFDEBUG(...)     __VA_ARGS__
+//#define IFDEBUG(...)
 
 #define TRACE(format, ...) IFDEBUG(g_print(format, ## __VA_ARGS__),g_print("\n"))
 
@@ -816,6 +816,7 @@ class Layout::Calculator
         if (_directions_are_orthogonal(_block_progression, text_source->styleGetBlockProgression())) {
             // TODO: block-progression altered in the middle
             // Measure the precomputed flow from para.input_items
+            span->end.iter_span++;  // for now, skip to the next span
             return true;
         } 
 
