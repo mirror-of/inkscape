@@ -602,6 +602,9 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 
             ++items;
         }
+        else if (SP_IS_FLOWTEXT (item_list->data))
+            // no need to set sodipodi:linespacing, because Inkscape never supported it on flowtext
+            ++items;
     }
     
     if (items == 0) { 
