@@ -255,6 +255,7 @@ text_flow_into_shape()
     sp_repr_set_attr(SP_OBJECT_REPR(text), "transform", NULL);
 
     Inkscape::XML::Node *root_repr = sp_repr_new("svg:flowRoot");
+    sp_repr_set_attr(root_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
     sp_repr_set_attr(root_repr, "style", SP_OBJECT_REPR(text)->attribute("style")); // fixme: transfer style attrs too
     SP_OBJECT_REPR(SP_OBJECT_PARENT(shape))->appendChild(root_repr);
     SPObject *root_object = doc->getObjectByRepr(root_repr);
@@ -281,21 +282,15 @@ text_flow_into_shape()
         }
     }
 
-    Inkscape::XML::Node *div_repr = sp_repr_new("svg:flowDiv");
-    sp_repr_set_attr(div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
-    root_repr->appendChild(div_repr);
-    SPObject *div_object = doc->getObjectByRepr(div_repr);
-    g_return_if_fail(SP_IS_FLOWDIV(div_object));
-
     Inkscape::XML::Node *para_repr = sp_repr_new("svg:flowPara");
-    div_repr->appendChild(para_repr);
+    root_repr->appendChild(para_repr);
     object = doc->getObjectByRepr(para_repr);
     g_return_if_fail(SP_IS_FLOWPARA(object));
 
     Inkscape::Text::Layout const *layout = te_get_layout(text);
     Glib::ustring text_ustring = sp_te_get_string_multiline(text, layout->begin(), layout->end());
 
-    Inkscape::XML::Node *text_repr = sp_repr_new_text(text_ustring.c_str()); // FIXME: transfer all formatting!!!
+    Inkscape::XML::Node *text_repr = sp_repr_new_text(text_ustring.c_str()); // FIXME: transfer all formatting! and convert newlines into flowParas!
     para_repr->appendChild(text_repr);
 
     SP_OBJECT(text)->deleteObject (true);
@@ -305,7 +300,6 @@ text_flow_into_shape()
     SP_DT_SELECTION(desktop)->set(SP_ITEM(root_object));
 
     sp_repr_unref(root_repr);
-    sp_repr_unref(div_repr);
     sp_repr_unref(region_repr);
     sp_repr_unref(para_repr);
     sp_repr_unref(text_repr);

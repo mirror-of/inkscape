@@ -825,13 +825,14 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
         if (is_textpath) {
             if (e) *e = ' '; // no lines for textpath, replace newlines with spaces
         } else {
-            if (e) *e = '\0'; // create a tspan for each line
+            if (e) *e = '\0'; 
             Inkscape::XML::Node *rtspan;
-            if (SP_IS_TEXT(text)) {
+            if (SP_IS_TEXT(text)) { // create a tspan for each line
                 rtspan = sp_repr_new ("svg:tspan");
                 sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-            } else
-                rtspan = sp_repr_new ("svg:flowDiv");
+            } else { // create a flowPara for each line
+                rtspan = sp_repr_new ("svg:flowPara");
+            }
             Inkscape::XML::Node *rstr = sp_repr_new_text(p);
             sp_repr_add_child (rtspan, rstr, NULL);
             sp_repr_unref(rstr);

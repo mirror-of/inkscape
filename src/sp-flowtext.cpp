@@ -647,6 +647,7 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, N
     SPDocument *doc = SP_DT_DOCUMENT (desktop);
 
     Inkscape::XML::Node *root_repr = sp_repr_new("svg:flowRoot");
+    sp_repr_set_attr(root_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
     SPItem *ft_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(root_repr));
     SPObject *root_object = doc->getObjectByRepr(root_repr);
     g_assert(SP_IS_FLOWTEXT(root_object));
@@ -675,14 +676,8 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, N
     sp_rect_position_set(SP_RECT(rect), x0, y0, w, h);
     SP_OBJECT(rect)->updateRepr();
 
-    Inkscape::XML::Node *div_repr = sp_repr_new("svg:flowDiv");
-    sp_repr_set_attr(div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
-    root_repr->appendChild(div_repr);
-    SPObject *div_object = doc->getObjectByRepr(div_repr);
-    g_assert(SP_IS_FLOWDIV(div_object));
-
     Inkscape::XML::Node *para_repr = sp_repr_new("svg:flowPara");
-    div_repr->appendChild(para_repr);
+    root_repr->appendChild(para_repr);
     SPObject *para_object = doc->getObjectByRepr(para_repr);
     g_assert(SP_IS_FLOWPARA(para_object));
 
@@ -691,7 +686,6 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, NR::Point p0, N
 
     sp_repr_unref(root_repr);
     sp_repr_unref(region_repr);
-    sp_repr_unref(div_repr);
     sp_repr_unref(para_repr);
     sp_repr_unref(rect_repr);
 
