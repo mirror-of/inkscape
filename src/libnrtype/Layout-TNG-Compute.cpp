@@ -921,7 +921,8 @@ class Layout::Calculator
 
         switch (para.alignment) {
             case FULL:
-                if (it_chunk->broken_spans.back().end.iter_span != para.unbroken_spans.end()) {   // don't justify the last chunk in the para
+                if (!it_chunk->broken_spans.empty()
+                    && it_chunk->broken_spans.back().end.iter_span != para.unbroken_spans.end()) {   // don't justify the last chunk in the para
                     if (it_chunk->whitespace_count)
                         *add_to_each_whitespace = (it_chunk->scanrun_width - it_chunk->text_width) / it_chunk->whitespace_count;
                     //else 
