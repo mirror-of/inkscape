@@ -746,8 +746,12 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
 
         GtkWidget *combo = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), "line_spacing" );
-        const gchar *sstr = g_strdup_printf ("%d%%", (int) floor(query->line_height.computed * 100 + 0.5));
+        double height;
+        if (query->line_height.normal) height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+        else height = query->line_height.computed;
+        gchar *sstr = g_strdup_printf ("%d%%", (int) floor(height * 100 + 0.5));
         gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, sstr);
+        g_free(sstr);
 
         g_free (query);
     }
