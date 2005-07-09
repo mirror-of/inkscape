@@ -248,6 +248,13 @@ Script::load(Inkscape::Extension::Extension *module)
                                 const gchar * insertText = interpreterlst[i].defaultval;
                                 if (prefs_get_string_attribute("extensions", interpreterlst[i].prefstring) != NULL)
                                     insertText = prefs_get_string_attribute("extensions", interpreterlst[i].prefstring);
+#ifdef _WIN32
+                                char szExePath[MAX_PATH];
+                                char szCurrentDir[MAX_PATH];
+                                GetCurrentDirectory(sizeof(szCurrentDir), szCurrentDir);
+                                if (reinterpret_cast<unsigned>(FindExecutable(command_text, szCurrentDir, szExePath)) > 32)
+                                    insertText = szExePath;
+#endif
 
                                 gchar * temp = command_text;
                                 command_text = g_strconcat(insertText, " ", temp, NULL);
