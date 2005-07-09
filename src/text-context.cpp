@@ -1351,6 +1351,7 @@ sp_text_context_style_query(SPStyle *style, int property, SPTextContext *tc)
     const Inkscape::Text::Layout *layout = te_get_layout(tc->text);
     if (layout == NULL)
         return QUERY_STYLE_NOTHING;
+    sp_text_context_validate_cursor_iterators(tc);
 
     GSList *styles_list = NULL;
     int result = QUERY_STYLE_NOTHING;
