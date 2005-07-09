@@ -365,6 +365,7 @@ sp_text_edit_dialog (void)
 
             GtkTextBuffer *tb = gtk_text_buffer_new (NULL);
             GtkWidget *txt = gtk_text_view_new_with_buffer (tb);
+            gtk_text_view_set_wrap_mode ((GtkTextView *) txt, GTK_WRAP_WORD);
 #ifdef WITH_GTKSPELL
             GError *error = NULL;
             char *errortext = NULL;
