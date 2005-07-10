@@ -228,6 +228,8 @@ PrintPS::setup(Inkscape::Extension::Print * mod)
         _dpi = (unsigned int) MAX((int)(atof(sstr)), 1);
         /* Arrgh, have to do something */
         fn = gtk_entry_get_text(GTK_ENTRY(e));
+        /* skip leading whitespace, bug #1068483 */
+        while (fn && *fn==' ') { fn++; }
         /* g_print("Printing to %s\n", fn); */
 
         mod->set_param_bool("bitmap", _bitmap);
