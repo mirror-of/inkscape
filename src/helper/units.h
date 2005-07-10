@@ -88,7 +88,7 @@ struct SPUnit {
 	gdouble unittobase; /* how many base units in this unit */
 	SPMetric metric; // the corresponding SPMetric from sp-metrics.h
 
-	/* I am not absolutely sure, but seems that gettext can do the magic */
+	/* When using, you must call "gettext" on them so they're translated */
 	gchar const *name;
 	gchar const *abbr;
 	gchar const *plural;
@@ -96,6 +96,7 @@ struct SPUnit {
 };
 
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
+/* When using, you must call "gettext" on them so they're translated */
 const gchar *sp_unit_get_abbreviation (const SPUnit *unit);
 gchar const *sp_unit_get_plural (SPUnit const *unit);
 SPMetric sp_unit_get_metric(SPUnit const *unit);

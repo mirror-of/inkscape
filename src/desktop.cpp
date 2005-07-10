@@ -940,7 +940,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->hruler = sp_hruler_new ();
     dtw->hruler_box = eventbox;
     sp_ruler_set_metric (GTK_RULER (dtw->hruler), SP_PT);
-    gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT)), NULL);
+    gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, gettext(sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT))), NULL);
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
     gtk_table_attach (GTK_TABLE (tbl), eventbox, 1, 2, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), widget->style->xthickness, 0);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -952,7 +952,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->vruler = sp_vruler_new ();
     dtw->vruler_box = eventbox;
     sp_ruler_set_metric (GTK_RULER (dtw->vruler), SP_PT);
-    gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT)), NULL);
+    gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, gettext(sp_unit_get_plural (&sp_unit_get_by_id(SP_UNIT_PT))), NULL);
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
     gtk_table_attach (GTK_TABLE (tbl), eventbox, 0, 1, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, widget->style->ythickness);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
@@ -1564,8 +1564,8 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
         sp_ruler_set_metric (GTK_RULER (dtw->vruler), sp_desktop_get_default_metric(dtw->desktop));
         sp_ruler_set_metric (GTK_RULER (dtw->hruler), sp_desktop_get_default_metric(dtw->desktop));
 
-        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop)), NULL);
-        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop)), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, gettext(sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop))), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, gettext(sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop))), NULL);
 
         sp_desktop_widget_update_rulers (dtw);
     }
