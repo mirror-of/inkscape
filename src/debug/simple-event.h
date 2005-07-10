@@ -18,10 +18,13 @@ namespace Inkscape {
 
 namespace Debug {
 
+template <Event::Category C=Event::OTHER>
 class SimpleEvent : public Event {
 public:
     SimpleEvent(Util::SharedCStringPtr name) : _name(name) {}
     SimpleEvent(char const *name) : _name(Util::SharedCStringPtr::copy(name)) {}
+
+    static Category category() { return C; }
 
     Util::SharedCStringPtr name() const { return _name; }
     unsigned propertyCount() const { return 0; }

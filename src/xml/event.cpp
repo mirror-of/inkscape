@@ -37,8 +37,9 @@ sp_repr_begin_transaction (Inkscape::XML::Document *doc)
 {
 	using Inkscape::Debug::SimpleEvent;
 	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::Event;
 
-	EventTracker<SimpleEvent> tracker("begin-transaction");
+	EventTracker<SimpleEvent<Event::XML> > tracker("begin-transaction");
 
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -51,8 +52,9 @@ sp_repr_rollback (Inkscape::XML::Document *doc)
 {
 	using Inkscape::Debug::SimpleEvent;
 	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::Event;
 
-	EventTracker<SimpleEvent> tracker("rollback");
+	EventTracker<SimpleEvent<Event::XML> > tracker("rollback");
 
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -65,8 +67,9 @@ sp_repr_commit (Inkscape::XML::Document *doc)
 {
 	using Inkscape::Debug::SimpleEvent;
 	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::Event;
 
-	EventTracker<SimpleEvent> tracker("commit");
+	EventTracker<SimpleEvent<Event::XML> > tracker("commit");
 
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -79,8 +82,9 @@ sp_repr_commit_undoable (Inkscape::XML::Document *doc)
 {
 	using Inkscape::Debug::SimpleEvent;
 	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::Event;
 
-	EventTracker<SimpleEvent> tracker("commit");
+	EventTracker<SimpleEvent<Event::XML> > tracker("commit");
 
 	g_assert(doc != NULL);
 	Session *session=doc->session();
@@ -93,8 +97,9 @@ sp_repr_undo_log (Inkscape::XML::Event *log)
 {
 	using Inkscape::Debug::SimpleEvent;
 	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::Event;
 
-	EventTracker<SimpleEvent> tracker("undo-log");
+	EventTracker<SimpleEvent<Event::XML> > tracker("undo-log");
 
 	Inkscape::XML::Event *action;
 
@@ -142,8 +147,9 @@ sp_repr_replay_log (Inkscape::XML::Event *log)
 {
 	using Inkscape::Debug::SimpleEvent;
 	using Inkscape::Debug::EventTracker;
+	using Inkscape::Debug::Event;
 
-	EventTracker<SimpleEvent> tracker("replay-log");
+	EventTracker<SimpleEvent<Event::XML> > tracker("replay-log");
 
 	if (log) {
 		g_assert(!log->repr->session()->inTransaction());

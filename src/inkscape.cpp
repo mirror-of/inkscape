@@ -394,8 +394,8 @@ inkscape_segv_handler (int signum)
     }
     recursion = TRUE;
 
-    EventTracker<SimpleEvent> tracker("crash");
-    tracker.set<SimpleEvent>("emergency-save");
+    EventTracker<SimpleEvent<Inkscape::Debug::Event::CORE> > tracker("crash");
+    tracker.set<SimpleEvent<> >("emergency-save");
 
     fprintf(stderr, "\nEmergency save activated!\n");
 

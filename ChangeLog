@@ -1,3 +1,14 @@
+2005-07-09  MenTaLguY  <mental@rydia.net>
+
+	* src/document-undo.cpp, src/inkscape.cpp, src/debug/event.h,
+	  src/debug/logger.cpp, src/debug/logger.h, src/debug/simple-event.h,
+	  src/xml/composite-node-observer.cpp, src/xml/event.cpp,
+	  src/xml/simple-node.cpp:
+
+	  Categorize debugging events and add the ability to filter them
+	  via setting the INKSCAPE_DEBUG_FILTER environment variable to
+	  a comma-separated list of debug event categories.
+
 2005-07-06  Ben Fowler  <bpfowler@users.sourceforge.net>
 
 	* src/interface.cpp: Spackle for Bug 1217361 "freeze on quitting 

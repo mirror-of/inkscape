@@ -23,6 +23,17 @@ class Event {
 public:
     virtual ~Event() {}
 
+    enum Category {
+        CORE=0,
+        XML,
+        SPOBJECT,
+        DOCUMENT,
+        REFCOUNT,
+        EXTENSION,
+        OTHER
+    };
+    enum { N_CATEGORIES=OTHER+1 };
+
     struct PropertyPair {
     public:
         PropertyPair() {}
@@ -39,6 +50,8 @@ public:
         Util::SharedCStringPtr name;
         Util::SharedCStringPtr value;
     };
+
+    static Category category() { return OTHER; }
 
     virtual Util::SharedCStringPtr name() const=0;
     virtual unsigned propertyCount() const=0;

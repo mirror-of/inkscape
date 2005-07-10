@@ -12,11 +12,11 @@
 #ifndef SEEN_INKSCAPE_DEBUG_LOGGER_H
 #define SEEN_INKSCAPE_DEBUG_LOGGER_H
 
+#include "debug/event.h"
+
 namespace Inkscape {
 
 namespace Debug {
-
-class Event;
 
 class Logger {
 public:
@@ -25,28 +25,44 @@ public:
     template <typename EventType>
     inline static void start() {
         if (_enabled) {
-            _start(EventType());
+            if (_category_mask[EventType::category()]) {
+                _start(EventType());
+            } else {
+                _skip();
+            }
         }
     }
 
     template <typename EventType, typename A>
     inline static void start(A const &a) {
         if (_enabled) {
-            _start(EventType(a));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a));
+            } else {
+                _skip();
+            }
         }
     }
 
     template <typename EventType, typename A, typename B>
     inline static void start(A const &a, B const &b) {
         if (_enabled) {
-            _start(EventType(a, b));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b));
+            } else {
+                _skip();
+            }
         }
     }
 
     template <typename EventType, typename A, typename B, typename C>
     inline static void start(A const &a, B const &b, C const &c) {
         if (_enabled) {
-            _start(EventType(a, b, c));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b, c));
+            } else {
+                _skip();
+            }
         }
     }
 
@@ -54,27 +70,39 @@ public:
                                   typename C, typename D>
     inline static void start(A const &a, B const &b, C const &c, D const &d) {
         if (_enabled) {
-            _start(EventType(a, b, c, d));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b, c, d));
+            } else {
+                _skip();
+            }
         }
     }
 
     template <typename EventType, typename A, typename B, typename C,
                                   typename D, typename E>
     inline static void start(A const &a, B const &b, C const &c,
-                              D const &d, E const &e)
+                             D const &d, E const &e)
     {
         if (_enabled) {
-            _start(EventType(a, b, c, d, e));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b, c, d, e));
+            } else {
+                _skip();
+            }
         }
     }
 
     template <typename EventType, typename A, typename B, typename C,
                                   typename D, typename E, typename F>
     inline static void start(A const &a, B const &b, C const &c,
-                              D const &d, E const &e, F const &f)
+                             D const &d, E const &e, F const &f)
     {
         if (_enabled) {
-            _start(EventType(a, b, c, d, e, f));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b, c, d, e, f));
+            } else {
+                _skip();
+            }
         }
     }
 
@@ -82,10 +110,14 @@ public:
                                   typename D, typename E, typename F,
                                   typename G>
     inline static void start(A const &a, B const &b, C const &c, D const &d,
-                              E const &e, F const &f, G const &g)
+                             E const &e, F const &f, G const &g)
     {
         if (_enabled) {
-            _start(EventType(a, b, c, d, e, f, g));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b, c, d, e, f, g));
+            } else {
+                _skip();
+            }
         }
     }
 
@@ -93,10 +125,14 @@ public:
                                   typename D, typename E, typename F,
                                   typename G, typename H>
     inline static void start(A const &a, B const &b, C const &c, D const &d,
-                              E const &e, F const &f, G const &g, H const &h)
+                             E const &e, F const &f, G const &g, H const &h)
     {
         if (_enabled) {
-            _start(EventType(a, b, c, d, e, f, g, h));
+            if (_category_mask[EventType::category()]) {
+                _start(EventType(a, b, c, d, e, f, g, h));
+            } else {
+                _skip();
+            }
         }
     }
 
@@ -112,7 +148,10 @@ private:
     static bool _enabled;
 
     static void _start(Event const &event);
+    static void _skip();
     static void _finish();
+
+    static bool _category_mask[Event::N_CATEGORIES];
 };
 
 }

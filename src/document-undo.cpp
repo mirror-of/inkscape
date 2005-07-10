@@ -166,7 +166,7 @@ sp_document_undo (SPDocument *doc)
 
 	gboolean ret;
 
-	EventTracker<SimpleEvent> tracker("undo");
+	EventTracker<SimpleEvent<Inkscape::Debug::Event::DOCUMENT> > tracker("undo");
 
 	g_assert (doc != NULL);
 	g_assert (doc->priv != NULL);
@@ -209,7 +209,7 @@ sp_document_redo (SPDocument *doc)
 
 	gboolean ret;
 
-	EventTracker<SimpleEvent> tracker("redo");
+	EventTracker<SimpleEvent<Inkscape::Debug::Event::DOCUMENT> > tracker("redo");
 
 	g_assert (doc != NULL);
 	g_assert (doc->priv != NULL);

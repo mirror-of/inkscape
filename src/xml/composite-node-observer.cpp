@@ -150,7 +150,7 @@ public:
 void CompositeNodeObserver::addListener(NodeEventVector const &vector,
                                         void *data)
 {
-    Debug::EventTracker<Debug::SimpleEvent> tracker("add-listener");
+    Debug::EventTracker<Debug::SimpleEvent<Debug::Event::XML> > tracker("add-listener");
     add(*(new VectorNodeObserver(vector, data)));
 }
 
@@ -283,7 +283,7 @@ struct vector_data_matches {
 }
 
 void CompositeNodeObserver::removeListenerByData(void *data) {
-    Debug::EventTracker<Debug::SimpleEvent> tracker("remove-listener-by-data");
+    Debug::EventTracker<Debug::SimpleEvent<Debug::Event::XML> > tracker("remove-listener-by-data");
     vector_data_matches p(data);
     if (_iterating) {
         mark_one(_active, _active_marked, p) ||

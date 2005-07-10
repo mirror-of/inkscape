@@ -13,6 +13,7 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <glib/gmessages.h>
 #include "debug/logger.h"
 #include "debug/event.h"
 #include "debug/simple-event.h"
@@ -23,6 +24,7 @@ namespace Inkscape {
 namespace Debug {
 
 bool Logger::_enabled=false;
+bool Logger::_category_mask[Event::N_CATEGORIES];
 
 namespace {
 
@@ -64,12 +66,55 @@ static void do_shutdown() {
     Debug::Logger::shutdown();
 }
 
+static bool equal_range(char const *c_string,
+                        char const *start, char const *end)
+{
+    return !std::strncmp(start, c_string, end - start) &&
+           !c_string[end - start];
 }
 
-class SessionEvent : public SimpleEvent {
-public:
-    SessionEvent() : SimpleEvent(Util::SharedCStringPtr::coerce("session")) {}
-};
+static void set_category_mask(bool * const mask, char const *filter) {
+    if (!filter) {
+        for ( unsigned i = 0 ; i < Event::N_CATEGORIES ; i++ ) {
+            mask[i] = true;
+        }
+        return;
+    } else {
+        for ( unsigned i = 0 ; i < Event::N_CATEGORIES ; i++ ) {
+            mask[i] = false;
+        }
+        mask[Event::CORE] = true;
+    }
+
+    char const *start;
+    char const *end;
+    start = end = filter;
+    while (*end) {
+        while ( *end && *end != ',' ) { end++; }
+        if ( start != end ) {
+            if (equal_range("CORE", start, end)) {
+                mask[Event::CORE] = true;
+            } else if (equal_range("XML", start, end)) {
+                mask[Event::XML] = true;
+            } else if (equal_range("SPOBJECT", start, end)) {
+                mask[Event::SPOBJECT] = true;
+            } else if (equal_range("DOCUMENT", start, end)) {
+                mask[Event::DOCUMENT] = true;
+            } else if (equal_range("REFCOUNT", start, end)) {
+                mask[Event::REFCOUNT] = true;
+            } else if (equal_range("EXTENSION", start, end)) {
+                mask[Event::EXTENSION] = true;
+            } else {
+                g_warning("Unknown debugging category %*s", end - start, start);
+            }
+        }
+        if (*end) {
+            start = end = end + 1;
+        }
+    }
+}
+
+}
 
 void Logger::init() {
     if (!_enabled) {
@@ -77,10 +122,12 @@ void Logger::init() {
         if (log_filename) {
             log_stream.open(log_filename);
             if (log_stream.is_open()) {
+                char const *log_filter=std::getenv("INKSCAPE_DEBUG_FILTER");
+                set_category_mask(_category_mask, log_filter);
                 log_stream << "<?xml version=\"1.0\"?>\n";
                 log_stream.flush();
                 _enabled = true;
-                start<SessionEvent>();
+                start<SimpleEvent<Event::CORE> >(Util::SharedCStringPtr::coerce("session"));
                 std::atexit(&do_shutdown);
             }
         }
@@ -112,18 +159,24 @@ void Logger::_start(Event const &event) {
     empty_tag = true;
 }
 
+void Logger::_skip() {
+    tag_stack.push_back(Util::SharedCStringPtr());
+}
+
 void Logger::_finish() {
-    if (empty_tag) {
-        log_stream << "/>\n";
-    } else {
-        write_indent(log_stream, tag_stack.size() - 1);
-        log_stream << "</" << tag_stack.back().cString() << ">\n";
+    if (tag_stack.back()) {
+        if (empty_tag) {
+            log_stream << "/>\n";
+        } else {
+            write_indent(log_stream, tag_stack.size() - 1);
+            log_stream << "</" << tag_stack.back().cString() << ">\n";
+        }
+        log_stream.flush();
+
+        empty_tag = false;
     }
 
-    log_stream.flush();
-
     tag_stack.pop_back();
-    empty_tag = false;
 }
 
 void Logger::shutdown() {

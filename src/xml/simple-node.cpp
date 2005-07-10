@@ -78,6 +78,9 @@ public:
       _child(stringify_node(child)),
       _position(prev ? prev->position() + 1 : 0)
     {}
+
+    static Category category() { return XML; }
+
     Util::SharedCStringPtr name() const {
         return Util::SharedCStringPtr::coerce("add-child");
     }
@@ -106,6 +109,9 @@ public:
     : _parent(stringify_node(node)),
       _child(stringify_node(child))
     {}
+
+    static Category category() { return XML; }
+
     Util::SharedCStringPtr name() const {
         return Util::SharedCStringPtr::coerce("remove-child");
     }
@@ -137,6 +143,9 @@ public:
             --_position;
         }
     }
+
+    static Category category() { return XML; }
+
     Util::SharedCStringPtr name() const {
         return Util::SharedCStringPtr::coerce("set-child-position");
     }
@@ -165,6 +174,9 @@ public:
                     Util::SharedCStringPtr old_content,
                     Util::SharedCStringPtr new_content)
     : _node(stringify_node(node)), _content(new_content) {}
+
+    static Category category() { return XML; }
+
     Util::SharedCStringPtr name() const {
         if (_content) {
             return Util::SharedCStringPtr::coerce("set-content");
@@ -202,6 +214,8 @@ public:
     : _node(stringify_node(node)),
       _name(Util::SharedCStringPtr::coerce(g_quark_to_string(name))),
       _value(new_value) {}
+
+    static Category category() { return XML; }
 
     Util::SharedCStringPtr name() const {
         if (_value) {
