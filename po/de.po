@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-05 23:26+0200\n"
-"PO-Revision-Date: 2005-06-28 01:31+0200\n"
+"PO-Revision-Date: 2005-07-10 23:36+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
-msgstr ""
+msgstr "Skalierbare Vektorgrafiken (SVG) erzeugen und bearbeiten"
 
 #: ../inkscape.desktop.in.h:2
 msgid "Inkscape SVG Vector Illustrator"
@@ -320,7 +320,7 @@ msgstr "Umschalt"
 #: ../src/dialogs/clonetiler.cpp:1660
 #, no-c-format
 msgid "<b>Shift X:</b>"
-msgstr "<b>X Verschiebung:</b>"
+msgstr "<b>X-Verschiebung:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1668
 #, no-c-format
@@ -340,7 +340,7 @@ msgstr "Zufällige horizontale Verschiebung um diesen Prozentsatz"
 #: ../src/dialogs/clonetiler.cpp:1693
 #, no-c-format
 msgid "<b>Shift Y:</b>"
-msgstr "<b>Y Verschiebung:</b>"
+msgstr "<b>Y-Verschiebung:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1701
 #, no-c-format
@@ -611,7 +611,7 @@ msgstr "Zusammengerechnete Transparenz übernehmen"
 
 #: ../src/dialogs/clonetiler.cpp:2153
 msgid "R"
-msgstr "_R"
+msgstr "R"
 
 #: ../src/dialogs/clonetiler.cpp:2154
 msgid "Pick the Red component of the color"
@@ -619,7 +619,7 @@ msgstr "Rotanteil der Farbe übernehmen"
 
 #: ../src/dialogs/clonetiler.cpp:2161
 msgid "G"
-msgstr "_G"
+msgstr "G"
 
 #: ../src/dialogs/clonetiler.cpp:2162
 msgid "Pick the Green component of the color"
@@ -627,7 +627,7 @@ msgstr "Grünanteil des Farbwertes wählen"
 
 #: ../src/dialogs/clonetiler.cpp:2169
 msgid "B"
-msgstr "_B"
+msgstr "B"
 
 #: ../src/dialogs/clonetiler.cpp:2170
 msgid "Pick the Blue component of the color"
@@ -732,7 +732,7 @@ msgstr "Anzahl der Reihen beim Kacheln"
 
 #: ../src/dialogs/clonetiler.cpp:2338
 msgid "How many columns in the tiling"
-msgstr "Anzahl der Spalten beimKacheln"
+msgstr "Anzahl der Spalten beim Kacheln"
 
 #: ../src/dialogs/clonetiler.cpp:2368
 msgid "Width of the rectangle to be filled"
@@ -862,7 +862,7 @@ msgstr "Raster anzeigen oder verstecken"
 
 #: ../src/dialogs/desktop-properties.cpp:892
 msgid "Snap bounding boxes to grid"
-msgstr "Umrandungs-Box am Raster einrasten"
+msgstr "Umrandungsbox am Raster einrasten"
 
 #: ../src/dialogs/desktop-properties.cpp:892
 #: ../src/dialogs/desktop-properties.cpp:975
@@ -882,7 +882,7 @@ msgstr ""
 
 #: ../src/dialogs/desktop-properties.cpp:911
 msgid "Grid units:"
-msgstr "Rastereinheit:"
+msgstr "Rastereinheiten:"
 
 #: ../src/dialogs/desktop-properties.cpp:913
 msgid "Origin X:"
@@ -903,7 +903,7 @@ msgstr "Abstand Y:"
 #: ../src/dialogs/desktop-properties.cpp:926
 #: ../src/dialogs/desktop-properties.cpp:987
 msgid "Snap units:"
-msgstr "Einrasteinheit:"
+msgstr "Einrasteinheiten:"
 
 #: ../src/dialogs/desktop-properties.cpp:929
 #: ../src/dialogs/desktop-properties.cpp:990
@@ -960,7 +960,7 @@ msgstr "Führungen anzeigen/verstecken"
 
 #: ../src/dialogs/desktop-properties.cpp:975
 msgid "Snap bounding boxes to guides"
-msgstr "Umrandungs-Box an Führungen einrasten"
+msgstr "Umrandungsbox an Führungen einrasten"
 
 #: ../src/dialogs/desktop-properties.cpp:976
 msgid "Snap points to guides"
@@ -1153,8 +1153,7 @@ msgstr "Umschließendes Rechteck"
 
 #: ../src/dialogs/display-settings.cpp:268
 msgid "Each selected object displays its bounding box"
-msgstr ""
-"Jedes gewählte Objekt zeigt sein umschließendes Rechteck (Umrandungs-Box)"
+msgstr "Jedes gewählte Objekt zeigt sein umschließendes Rechteck (Umrandungsbox)"
 
 #: ../src/dialogs/display-settings.cpp:273
 msgid "Default scale origin:"
@@ -1162,12 +1161,11 @@ msgstr "Voreingestellter Linealursprung:"
 
 #: ../src/dialogs/display-settings.cpp:284
 msgid "Opposite bounding box edge"
-msgstr "Gegenüberliegende Umrandungs-Box-Kante"
+msgstr "Gegenüberliegende Kante der Umrandungsbox"
 
 #: ../src/dialogs/display-settings.cpp:285
 msgid "Default scale origin will be on the bounding box of the item"
-msgstr ""
-"Vorgegebener Ursprung beim Skalieren liegt auf der Umrandung-Box des Objektes"
+msgstr "Vorgegebener Ursprung beim Skalieren liegt auf der Umrandungsbox des Objektes"
 
 #: ../src/dialogs/display-settings.cpp:291
 msgid "Farthest opposite node"
@@ -1175,9 +1173,7 @@ msgstr "Am weitesten entfernter Knoten"
 
 #: ../src/dialogs/display-settings.cpp:292
 msgid "Default scale origin will be on the bounding box of the item's points"
-msgstr ""
-"Vorgegebener Ursprung beim Skalieren liegt auf der Umrandung-Box der Knoten "
-"des Objektes"
+msgstr "Vorgegebener Ursprung beim Skalieren liegt auf der Umrandungsbox der Knoten des Objektes"
 
 #: ../src/dialogs/display-settings.cpp:344
 #: ../src/ui/dialog/inkscape-preferences.cpp:159
@@ -1817,13 +1813,13 @@ msgstr ""
 #. TRANSLATORS: When on, enable the effects menu, default is off
 #: ../src/dialogs/display-settings.cpp:1424
 msgid "Enable script effects (requires restart) - EXPERIMENTAL"
-msgstr ""
+msgstr "Skripteffekte ermöglichen (Neustart von Inkscape notwendig) - EXPERIMENTELL"
 
 #: ../src/dialogs/display-settings.cpp:1425
 msgid ""
 "When on, the effects menu is enabled, allowing external effect scripts to be "
 "called, requires restart before effective - EXPERIMENTAL"
-msgstr ""
+msgstr "Bei Aktivierung, ist das Effektmenu zugreifbar mit dem externe Skripte ausgeführt werden. Neustart von Inkscape erforderlich - EXPERIMENTELL"
 
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
 #: ../src/dialogs/display-settings.cpp:1433
@@ -2284,7 +2280,6 @@ msgid "Id exists! "
 msgstr "ID-Kennung existiert"
 
 #: ../src/dialogs/layer-properties.cpp:49
-#, fuzzy
 msgid "Layer name:"
 msgstr "Ebenenname:"
 
@@ -2302,12 +2297,10 @@ msgid "Renamed layer"
 msgstr "Umbenannte Ebene"
 
 #: ../src/dialogs/layer-properties.cpp:150
-#, fuzzy
 msgid "Add Layer"
-msgstr "_Ebene"
+msgstr "Ebene hinzufügen"
 
 #: ../src/dialogs/layer-properties.cpp:152
-#, fuzzy
 msgid "_Add"
 msgstr "Hinzufügen"
 
@@ -2739,7 +2732,6 @@ msgstr "Abstand setzen:"
 
 #. #### Y Padding ####
 #: ../src/dialogs/tiledialog.cpp:788
-#, fuzzy
 msgid "Row spacing:   "
 msgstr "Abstand der Reihen:"
 
@@ -3033,14 +3025,14 @@ msgid ""
 "Inkscape has recieved an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
 "but the action you requested has been cancelled."
-msgstr ""
+msgstr "Inkscape hat eine Fehlermeldung des ausgeführten Skripts erhalten. Der Textinhalt der Fehlermeldung wird unten angezeigt. Inkscape läuft ohne Störung weiter, die letzte Aktion wird jedoch abgebrochen. "
 
 #: ../src/extension/implementation/script.cpp:849
 msgid ""
 "Inkscape has recieved additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
 "expected."
-msgstr ""
+msgstr "Das aufgerufene Skript hat zusätzliche Daten an Inkscape übergeben. Es wurde keine Fehlermeldung vom Skript zurückgegeben, doch das Resultat der Aktion ist möglicherweise unbrauchbar."
 
 #: ../src/extension/init.cpp:173
 msgid "Null external module directory name.  Modules will not be loaded."
@@ -3099,7 +3091,6 @@ msgid "Print using PostScript operators"
 msgstr "Unter Verwendung von PostScript-Operatoren drucken"
 
 #: ../src/extension/internal/ps.cpp:155
-#, fuzzy
 msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency and patterns "
@@ -3973,7 +3964,6 @@ msgid "Use the new Gtkmm GUI interface"
 msgstr "Die neue Gtkmm GUI verwenden"
 
 #: ../src/main.cpp:326
-#, fuzzy
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr "Unbenutzte Elemente aus den &lt;defs&gt; des Dokuments entfernen"
 
@@ -4113,9 +4103,8 @@ msgstr ""
 "Knoten"
 
 #: ../src/nodepath.cpp:3287 ../src/nodepath.cpp:3299
-#, fuzzy
 msgid "Select a single object to edit its nodes or handles."
-msgstr "Alle Objekte oder alle Knoten im Dokument auswählen"
+msgstr "Einzelnes Objekt zum Bearbeiten der Knoten und Anfasser auswählen."
 
 #: ../src/nodepath.cpp:3291
 #, c-format
@@ -4133,9 +4122,8 @@ msgstr[1] ""
 "b>, oder <b>Ziehen</b> wählt Knoten aus."
 
 #: ../src/nodepath.cpp:3297
-#, fuzzy
 msgid "Drag the handles of the object to modify it."
-msgstr "Kanten der Umrandungsbox des Objektes einrasten"
+msgstr "Anfasser des Objektes zum Bearbeiten ziehen"
 
 #: ../src/nodepath.cpp:3305
 #, c-format
@@ -4760,9 +4748,8 @@ msgid "<b>Arc</b>"
 msgstr "<b>Kreisbogen</b>"
 
 #: ../src/sp-flowregion.cpp:261
-#, fuzzy
 msgid "Flow region"
-msgstr "Verknüpfung folgen"
+msgstr "Textfluß-Bereich"
 
 #. TRANSLATORS: A region "cut out of" a flow region; text is not allowed to flow inside the
 #. * flow excluded region.  flowRegionExclude in SVG 1.2: see
@@ -4770,17 +4757,17 @@ msgstr "Verknüpfung folgen"
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
 #: ../src/sp-flowregion.cpp:465
 msgid "Flow excluded region"
-msgstr ""
+msgstr "Textfluß im ausgeschlossenen Bereich"
 
 #: ../src/sp-flowtext.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Flowed text</b> (%d characters)"
-msgstr "Formtext wird erzeugt."
+msgstr "<b>Textfluß</b> (%d Zeichen)"
 
 #: ../src/sp-flowtext.cpp:365
 #, c-format
 msgid "<b>Linked flowed text</b> (%d characters)"
-msgstr ""
+msgstr "<b>Verknüpfter Textfluß</b> (%d Zeichen)"
 
 #: ../src/sp-guide.cpp:290
 msgid "vertical guideline"
@@ -4796,7 +4783,7 @@ msgstr "eingebettet"
 
 #: ../src/sp-image.cpp:839
 msgid "(null_pointer)"
-msgstr ""
+msgstr "(null_zeiger)"
 
 #: ../src/sp-image.cpp:843
 #, c-format
@@ -4851,14 +4838,12 @@ msgstr[0] "<b>Pfad</b> (%i Knoten)"
 msgstr[1] "<b>Pfad</b> (%i Knoten) "
 
 #: ../src/sp-polygon.cpp:216
-#, fuzzy
 msgid "<b>Polygon</b>"
-msgstr "<b>Spalten</b>:"
+msgstr "<b>Polygon</b>:"
 
 #: ../src/sp-polyline.cpp:179
-#, fuzzy
 msgid "<b>Polyline</b>"
-msgstr "<b>Ellipse</b>"
+msgstr "<b>Polylinie</b>"
 
 #: ../src/sp-rect.cpp:249
 msgid "<b>Rectangle</b>"
@@ -4903,9 +4888,8 @@ msgstr "<b>Text</b> (%s, %s)"
 #. TRANSLATORS: Used for statusbar description for long <use> chains:
 #. * "Clone of: Clone of: ... in Layer 1".
 #: ../src/sp-use.cpp:315
-#, fuzzy
 msgid "..."
-msgstr "Ö_ffnen..."
+msgstr "..."
 
 #: ../src/sp-use.cpp:323
 #, c-format
@@ -5044,16 +5028,14 @@ msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Selektiere <b>Text(e)</b> zum Trennen vom Pfad"
 
 #: ../src/text-chemistry.cpp:249
-#, fuzzy
 msgid ""
 "Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
 "into frame."
-msgstr "Einen <b>Text und Pfad</b> zum Erzeugen eines Textpfades auswählen"
+msgstr "Einen <b>Text</b>  und <b>Pfad / Form</b> zum Erzeugen eines Textflusses auswählen"
 
 #: ../src/text-chemistry.cpp:327
-#, fuzzy
 msgid "Select <b>a flowed text</b> to unflow it."
-msgstr "<b>Form</b> zum Setzen des Formtextes auswählen"
+msgstr "<b>Textfluß</b> zum Aufheben auswählen."
 
 #: ../src/text-context.cpp:452
 msgid "<b>Click</b> to edit the text, <b>drag</b> to select part of the text."
@@ -5469,7 +5451,7 @@ msgstr "Vektorisieren: %d. %ld Knoten"
 #: ../src/trace/trace.cpp:54 ../src/trace/trace.cpp:63
 #: ../src/trace/trace.cpp:71
 msgid "Select an <b>image</b> to trace"
-msgstr "Zu <b>vektorisierendes</b> Objekt auswählen."
+msgstr "<b>Bild</b> zum Vektorisieren auswählen."
 
 #: ../src/trace/trace.cpp:134
 msgid "Trace: No active document"
@@ -6500,9 +6482,8 @@ msgid "Remove Manual _Kerns"
 msgstr "Manuelle _Unterschneidungen entfernen"
 
 #: ../src/verbs.cpp:1757
-#, fuzzy
 msgid "Remove all manual kerns and glyph rotations from a text object"
-msgstr "Entferne alle manuellen Unterschneidungen von einem Textobjekt"
+msgstr "Entferne alle manuellen Unterschneidungen und Rotationen von einem Textobjekt"
 
 #: ../src/verbs.cpp:1759
 msgid "_Union"
@@ -6698,18 +6679,16 @@ msgstr "Auswahl im Raster anordnen"
 
 #. Layer
 #: ../src/verbs.cpp:1821
-#, fuzzy
 msgid "_Add Layer..."
-msgstr "_Neue Ebene"
+msgstr "Ebene hinzufügen..."
 
 #: ../src/verbs.cpp:1822
 msgid "Create a new layer"
 msgstr "Eine neue Ebene anlegen"
 
 #: ../src/verbs.cpp:1823
-#, fuzzy
 msgid "Re_name Layer..."
-msgstr "Ebene umbenennen"
+msgstr "Ebene umbe_nennen"
 
 #: ../src/verbs.cpp:1824
 msgid "Rename the current layer"
@@ -6821,31 +6800,26 @@ msgid "Convert selected object(s) to path(s)"
 msgstr "Das gewählte Objekt in einen Pfad umwandeln"
 
 #: ../src/verbs.cpp:1853
-#, fuzzy
 msgid "_Flow into Frame"
 msgstr "Text_fluß in Form"
 
 #: ../src/verbs.cpp:1854
-#, fuzzy
 msgid "Put text into frame(s)"
-msgstr "Text an Pfad ausrichten"
+msgstr "Text in Form(en) fließen"
 
 #: ../src/verbs.cpp:1855
-#, fuzzy
 msgid "_Unflow"
-msgstr "Formtext aufheben"
+msgstr "Textfluß aufheben"
 
 #: ../src/verbs.cpp:1856
 msgid "Remove text from frame (creates a single-line text object)"
-msgstr ""
+msgstr "Text von der Form trennen (erzeugt einzeiliges Textobjekt)"
 
 #: ../src/verbs.cpp:1857
-#, fuzzy
 msgid "_Convert to Text"
-msgstr "Text in Pfad umwandeln"
+msgstr "In Text umwandeln"
 
 #: ../src/verbs.cpp:1858
-#, fuzzy
 msgid "Convert flowed text(s) to regular text objects (preserves appearance)"
 msgstr "Ausgewählte Formtexte in gewöhnliche Textobjekte umwandeln"
 
@@ -8350,7 +8324,7 @@ msgstr "Wert"
 #~ msgstr "EPS-Ausgabe-Einstellungen"
 
 #~ msgid "Make bounding box around full page"
-#~ msgstr "Ziehe Umrandungs-Box um die gesamte Seite"
+#~ msgstr "Ziehe Umrandungsbox um die gesamte Seite"
 
 #~ msgid ""
 #~ "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
