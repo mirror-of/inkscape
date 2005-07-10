@@ -213,7 +213,7 @@ Transformation::layoutPageScale()
 void
 Transformation::layoutPageRotate()
 {
-    _scalar_rotate.initScalar(-180.0, 180.0);
+    _scalar_rotate.initScalar(-360.0, 360.0);
     _scalar_rotate.setDigits(3);
     _scalar_rotate.setIncrements(0.1, 1.0);
 
