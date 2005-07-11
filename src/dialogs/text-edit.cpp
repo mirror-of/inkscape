@@ -532,13 +532,16 @@ sp_get_text_dialog_style ()
         
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
             sp_repr_css_set_property (css, "text-anchor", "start");
+            sp_repr_css_set_property (css, "text-align", "start");
         } else {
             b = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), 
                                                 "text_anchor_middle");
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
                 sp_repr_css_set_property (css, "text-anchor", "middle");
+                sp_repr_css_set_property (css, "text-align", "center");
             } else {
                 sp_repr_css_set_property (css, "text-anchor", "end");
+                sp_repr_css_set_property (css, "text-align", "end");
             }
         }
         
