@@ -312,6 +312,7 @@ struct poptOption options[] = {
 
     {"extension-directory", 'x',
      POPT_ARG_NONE, NULL, SP_ARG_EXTENSIONDIR,
+     // TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
      N_("Print out the extension directory and exit"),
      NULL},
 
