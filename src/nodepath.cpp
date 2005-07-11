@@ -3228,6 +3228,7 @@ static gchar const *sp_node_type_description(Inkscape::NodePath::Node *node)
 
     if (retracted == 0) {
         if (endnode) {
+                // TRANSLATORS: "end" is an adjective here (NOT a verb)
                 return _("end node");
         } else {
             switch (node->type) {
@@ -3243,6 +3244,7 @@ static gchar const *sp_node_type_description(Inkscape::NodePath::Node *node)
         }
     } else if (retracted == 1) {
         if (endnode) {
+            // TRANSLATORS: "end" is an adjective here (NOT a verb)
             return _("end node, handle retracted (drag with <b>Shift</b> to extend)");
         } else {
             return _("one handle retracted (drag with <b>Shift</b> to extend)");
