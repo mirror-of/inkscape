@@ -1962,6 +1962,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Preferences saved with the document"), GTK_STOCK_PROPERTIES ),
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
         N_("Fill and Stroke dialog"), "fill_and_stroke"),
+    // TRANSLATORS: "Swatches" means: color samples
     new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),
         N_("View color swatches"), GTK_STOCK_SELECT_COLOR),
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
