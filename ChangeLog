@@ -3,6 +3,8 @@
 	* src/debug/logger.cpp: wrap stack vector in method to avoid
 	  potential static initialization issues
 
+	* src/sp-object.cpp: add refcount logging
+
 2005-07-09  MenTaLguY  <mental@rydia.net>
 
 	* src/document-undo.cpp, src/inkscape.cpp, src/debug/event.h,
