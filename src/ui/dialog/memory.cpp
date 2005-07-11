@@ -92,6 +92,8 @@ struct Memory::Private {
         view.set_model(model);
         view.append_column(_("Heap"), columns.name);
         view.append_column(_("In Use"), columns.used);
+        // TRANSLATORS: "Slack" refers to memory which is in the heap but currently unused.
+        //  More typical usage is to call this memory "free" rather than "slack".
         view.append_column(_("Slack"), columns.slack);
         view.append_column(_("Total"), columns.total);
     }
