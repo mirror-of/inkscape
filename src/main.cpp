@@ -283,21 +283,25 @@ struct poptOption options[] = {
 
     {"query-x", 'X',
      POPT_ARG_NONE, &sp_query_x, SP_ARG_QUERY_X,
+     // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the X coordinate of the drawing or, if specified, of the object with --query-id"),
      NULL},
 
     {"query-y", 'Y',
      POPT_ARG_NONE, &sp_query_y, SP_ARG_QUERY_Y,
+     // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the Y coordinate of the drawing or, if specified, of the object with --query-id"),
      NULL},
 
     {"query-width", 'W',
      POPT_ARG_NONE, &sp_query_width, SP_ARG_QUERY_WIDTH,
+     // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the width of the drawing or, if specified, of the object with --query-id"),
      NULL},
 
     {"query-height", 'H',
      POPT_ARG_NONE, &sp_query_height, SP_ARG_QUERY_HEIGHT,
+     // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the height of the drawing or, if specified, of the object with --query-id"),
      NULL},
 
