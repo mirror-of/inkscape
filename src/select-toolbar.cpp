@@ -415,20 +415,20 @@ sp_select_toolbox_new(SPDesktop *desktop)
 
     // four spinbuttons
 
-    //TRANSLATORS: only translate "string" in "context|string". 
-    // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
     gtk_container_add(GTK_CONTAINER(vb),
+                      //TRANSLATORS: only translate "string" in "context|string". 
+                      // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
                       sp_select_toolbox_spinbutton(_("select_toolbar|X"), "X", -1e6, us, spw, _("Horizontal coordinate of selection"), TRUE));
     aux_toolbox_space(vb, AUX_BETWEEN_SPINBUTTONS);
-    //TRANSLATORS: only translate "string" in "context|string". 
-    // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
     gtk_container_add(GTK_CONTAINER(vb),
+                      //TRANSLATORS: only translate "string" in "context|string". 
+                      // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
                       sp_select_toolbox_spinbutton(_("select_toolbar|Y"), "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
     aux_toolbox_space(vb, AUX_BETWEEN_BUTTON_GROUPS);
 
-    //TRANSLATORS: only translate "string" in "context|string". 
-    // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
     gtk_container_add(GTK_CONTAINER(vb),
+                      //TRANSLATORS: only translate "string" in "context|string". 
+                      // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
                       sp_select_toolbox_spinbutton(_("select_toolbar|W"), "width", 1e-3, us, spw, _("Width of selection"), FALSE));
 
     // lock toggle
@@ -443,9 +443,9 @@ sp_select_toolbox_new(SPDesktop *desktop)
     gtk_box_pack_start(GTK_BOX(vb), lockbox, FALSE, FALSE, 0);
     gtk_object_set_data(GTK_OBJECT(spw), "lock", lock);
 
-    //TRANSLATORS: only translate "string" in "context|string". 
-    // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
     gtk_container_add(GTK_CONTAINER(vb),
+                      //TRANSLATORS: only translate "string" in "context|string". 
+                      // For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
                       sp_select_toolbox_spinbutton(_("select_toolbar|H"), "height", 1e-3, us, spw, _("Height of selection"), FALSE));
 
     aux_toolbox_space(vb, 2);
