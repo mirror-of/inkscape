@@ -906,7 +906,10 @@ sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator cons
     NR::Matrix t = sp_item_i2doc_affine(text);
     factor = factor / NR::expansion(t);
     SPObject *source_item;
-    SP_TEXT(text)->layout.getSourceOfCharacter(std::min(start, end), (void**)&source_item);
+    Inkscape::Text::Layout const *layout = te_get_layout(text);
+    if (layout == NULL) return;
+    layout->getSourceOfCharacter(std::min(start, end), (void**)&source_item);
+    if (source_item == NULL) return;
     gdouble degrees = (180/M_PI) * atan2(pixels, SP_OBJECT_PARENT(source_item)->style->font_size.computed / factor);
 
     sp_te_adjust_rotation(text, start, end, desktop, degrees);
