@@ -1754,6 +1754,8 @@ Verb * Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_TEXTFROMPATH, "SelectionTextFromPath", N_("_Remove from Path"),
         N_("Remove text from path"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_REMOVE_KERNS, "SelectionTextRemoveKerns", N_("Remove Manual _Kerns"),
+        // TRANSLATORS: "glyph": An image used in the visual representation of characters;
+        //  roughly speaking, how a character looks. A font is a set of glyphs.
         N_("Remove all manual kerns and glyph rotations from a text object"), NULL),
 
     new SelectionVerb(SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
