@@ -1,3 +1,8 @@
+2005-07-11  MenTaLguY  <mental@rydia.net>
+
+	* src/debug/logger.cpp: wrap stack vector in method to avoid
+	  potential static initialization issues
+
 2005-07-09  MenTaLguY  <mental@rydia.net>
 
 	* src/document-undo.cpp, src/inkscape.cpp, src/debug/event.h,

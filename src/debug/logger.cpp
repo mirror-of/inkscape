@@ -60,7 +60,11 @@ static void write_indent(std::ostream &os, unsigned depth) {
 
 static std::ofstream log_stream;
 static bool empty_tag=false;
-static std::vector<Util::SharedCStringPtr, GC::Alloc<Util::SharedCStringPtr, GC::MANUAL> > tag_stack;
+typedef std::vector<Util::SharedCStringPtr, GC::Alloc<Util::SharedCStringPtr, GC::MANUAL> > TagStack;
+static TagStack &tag_stack() {
+    static TagStack stack;
+    return stack;
+}
 
 static void do_shutdown() {
     Debug::Logger::shutdown();
@@ -141,7 +145,7 @@ void Logger::_start(Event const &event) {
         log_stream << ">\n";
     }
 
-    write_indent(log_stream, tag_stack.size());
+    write_indent(log_stream, tag_stack().size());
 
     log_stream << "<" << name.cString();
 
@@ -155,33 +159,33 @@ void Logger::_start(Event const &event) {
 
     log_stream.flush();
 
-    tag_stack.push_back(name);
+    tag_stack().push_back(name);
     empty_tag = true;
 }
 
 void Logger::_skip() {
-    tag_stack.push_back(Util::SharedCStringPtr());
+    tag_stack().push_back(Util::SharedCStringPtr());
 }
 
 void Logger::_finish() {
-    if (tag_stack.back()) {
+    if (tag_stack().back()) {
         if (empty_tag) {
             log_stream << "/>\n";
         } else {
-            write_indent(log_stream, tag_stack.size() - 1);
-            log_stream << "</" << tag_stack.back().cString() << ">\n";
+            write_indent(log_stream, tag_stack().size() - 1);
+            log_stream << "</" << tag_stack().back().cString() << ">\n";
         }
         log_stream.flush();
 
         empty_tag = false;
     }
 
-    tag_stack.pop_back();
+    tag_stack().pop_back();
 }
 
 void Logger::shutdown() {
     if (_enabled) {
-        while (!tag_stack.empty()) {
+        while (!tag_stack().empty()) {
             finish();
         }
     }

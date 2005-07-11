@@ -26,6 +26,8 @@
 #include "strneq.h"
 #include "xml/repr.h"
 #include "xml/node-fns.h"
+#include "debug/event.h"
+#include "debug/event-tracker.h"
 
 #include "sp-object.h"
 #include "algorithms/longest-common-suffix.h"
@@ -194,6 +196,60 @@ sp_object_finalize (GObject * object)
 	spobject->_delete_signal.~signal();
 }
 
+namespace {
+
+Inkscape::Util::SharedCStringPtr stringify(SPObject *obj) {
+	char *temp=g_strdup_printf("%p", obj);
+	Inkscape::Util::SharedCStringPtr result=Inkscape::Util::SharedCStringPtr::copy(temp);
+	g_free(temp);
+	return result;
+}
+
+Inkscape::Util::SharedCStringPtr stringify(unsigned n) {
+	char *temp=g_strdup_printf("%u", n);
+	Inkscape::Util::SharedCStringPtr result=Inkscape::Util::SharedCStringPtr::copy(temp);
+	g_free(temp);
+	return result;
+}
+
+class RefEvent : public Inkscape::Debug::Event {
+public:
+	enum Type { REF, UNREF };
+
+	RefEvent(SPObject *object, Type type)
+	: _object(stringify(object)), _refcount(G_OBJECT(object)->ref_count),
+	  _type(type)
+	{}
+
+	static Category category() { return REFCOUNT; }
+
+	Inkscape::Util::SharedCStringPtr name() const {
+		if ( _type == REF) {
+			return Inkscape::Util::SharedCStringPtr::coerce("sp-object-ref");
+		} else {
+			return Inkscape::Util::SharedCStringPtr::coerce("sp-object-unref");
+		}
+	}
+	unsigned propertyCount() const { return 2; }
+	PropertyPair property(unsigned index) const {
+		switch (index) {
+		case 0:
+			return PropertyPair("object", _object);
+		case 1:
+			return PropertyPair("refcount", stringify( _type == REF ? _refcount + 1 : _refcount - 1 ));
+		default:
+			return PropertyPair();
+		}
+	}
+
+private:
+	Inkscape::Util::SharedCStringPtr _object;
+	unsigned _refcount;
+	Type _type;
+};
+
+}
+
 /*
  * Refcounting
  *
@@ -208,6 +264,9 @@ sp_object_ref (SPObject *object, SPObject *owner)
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (!owner || SP_IS_OBJECT (owner), NULL);
 
+	Inkscape::Debug::EventTracker<> tracker;
+	tracker.set<RefEvent>(object, RefEvent::REF);
+
 	g_object_ref (G_OBJECT (object));
 
 	return object;
@@ -219,6 +278,9 @@ sp_object_unref (SPObject *object, SPObject *owner)
 	g_return_val_if_fail (object != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (!owner || SP_IS_OBJECT (owner), NULL);
+
+	Inkscape::Debug::EventTracker<> tracker;
+	tracker.set<RefEvent>(object, RefEvent::UNREF);
 
 	g_object_unref (G_OBJECT (object));
 
