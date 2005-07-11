@@ -258,6 +258,7 @@ sp_flowregion_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
 static gchar *sp_flowregion_description(SPItem *item)
 {
+	// TRANSLATORS: "Flow region" is an area where text is allowed to flow
 	return g_strdup_printf(_("Flow region"));
 }
 
