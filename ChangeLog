@@ -25,6 +25,12 @@
 
 	* src/interface.cpp: Whitespace changes only
 
+2005-07-06  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* Info.plist.in, packaging/osx-app.sh, packaging/macosx/*:
+
+	Changes and new files required to build an Inkscape dmg on Mac OS X.
+
 2005-07-05  Ted Gould  <ted@gould.cx>
 
 	* 0.42pre1
