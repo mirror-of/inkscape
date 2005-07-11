@@ -113,6 +113,10 @@ sp_file_new(gchar const *templ)
 void
 sp_file_new_default()
 {
+    // TRANSLATORS: default.svg is localizable - this is the name of the default document
+    //  template. This way you can localize the default pagesize, translate the name of
+    //  the default layer, etc. If you wish to localize this file, please create a
+    //  localized share/templates/default.xx.svg file, where xx is your language code.
     char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, _("default.svg"), NULL);
     if (Inkscape::IO::file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
         sp_file_new(default_template);
