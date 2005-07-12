@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 # Copyright 2005, Kees Cook <kees@outflux.net>
 # Licensed under GNU General Public License
 #
@@ -28,19 +28,19 @@ SW=/sw
 # Package always has the same name.  Version information is stored in
 # the Info.plist file which is filled in by the configure script.
 pkg=Inkscape
-package=$pkg.app
+package="$pkg.app"
 
 # TODO: Rewrite handling of command line args and make more robust.
 
-binary=$1
-if [ ! -x $binary ]; then
+binary="$1"
+if [ ! -x "$binary" ]; then
         echo "Not executable: $binary" >&2
         exit 1
 fi
 shift
 
-plist=$1
-if [ ! -f $plist ]; then
+plist="$1"
+if [ ! -f "$plist" ]; then
 	echo "Need plist file" >&2
 	exit 1
 fi
@@ -55,7 +55,7 @@ shift
 
 # Fix a given executable or library to be relocatable
 fixlib () {
-if [ ! -d $1 ]; then
+if [ ! -d "$1" ]; then
   echo $1
   libs="`otool -L $1 | fgrep compatibility | cut -d\( -f1`"
   for lib in $libs; do
@@ -83,13 +83,14 @@ fi
 
 
 
-mkdir -p $package/Contents/Resources/{bin,lib}
-mkdir -p $package/Contents/MacOS
+mkdir -p "$package"/Contents/MacOS
+mkdir -p "$package"/Contents/Resources/bin
+mkdir -p "$package"/Contents/Resources/lib
 
-binname=`basename $binary`
-binpath=$package/Contents/Resources/bin/inkscape-bin
+binname=`basename "$binary"`
+binpath="$package/Contents/Resources/bin/inkscape-bin"
 
-cp $binary $binpath
+cp "$binary" "$binpath"
 
 # Find out libs we need from fink (e.g. $SW) - loop until no changes
 a=1
@@ -113,26 +114,27 @@ done
 #       DYLD_LIBRARY_PATH within the app bundle before running Inkscape.
 #
 # Fix package deps
-#(cd $package/Contents/MacOS/bin
+#(cd "$package/Contents/MacOS/bin"
 # for file in *; do
-#    fixlib $file
+#    fixlib "$file"
 # done
 # cd ../lib
 # for file in *; do
-#    fixlib $file
+#    fixlib "$file"
 # done)
 
 
 # Build and add the launcher.
 (
-  cd $resdir/ScriptExec
+  cd "$resdir/ScriptExec"
   xcodebuild -buildstyle Deployment clean build
 )
-cp $resdir/ScriptExec/build/ScriptExec.app/Contents/MacOS/ScriptExec $package/Contents/MacOS/Inkscape
+cp "$resdir/ScriptExec/build/ScriptExec.app/Contents/MacOS/ScriptExec" "$package/Contents/MacOS/Inkscape"
 
 # Pull down all the share files
-rsync -av `dirname $binary`/../share/$binname/* $package/Contents/Resources/
-cp $plist $package/Contents/Info.plist
+binary_dir=`dirname "$binary"`
+rsync -av "$binary_dir/../share/$binname"/* "$package/Contents/Resources/"
+cp "$plist" "$package/Contents/Info.plist"
 
 # PkgInfo must match bundle type and creator code from Info.plist
 echo "APPLInks" > $package/Contents/PkgInfo
@@ -168,4 +170,4 @@ rsync -av $resdir/Resources/* $package/Contents/Resources/
 
 
 # Make an image
-/usr/bin/hdiutil create -srcfolder $pkg.app $pkg.dmg
+/usr/bin/hdiutil create -srcfolder "$pkg.app" "$pkg.dmg"
