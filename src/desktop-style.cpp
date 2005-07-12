@@ -276,7 +276,7 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
 
         // We consider paint "effectively set" for anything within text hierarchy
         SPObject *parent = SP_OBJECT_PARENT (obj);
-        bool paint_effectively_set = paint->set || (SP_IS_TEXT(parent) || SP_IS_TEXTPATH(parent) || SP_IS_TSPAN(parent) || SP_IS_FLOWDIV(parent) || SP_IS_FLOWPARA(parent) || SP_IS_FLOWTSPAN(parent) || SP_IS_FLOWLINE(parent));
+        bool paint_effectively_set = paint->set || (SP_IS_TEXT(parent) || SP_IS_TEXTPATH(parent) || SP_IS_TSPAN(parent) || SP_IS_FLOWTEXT(parent) || SP_IS_FLOWDIV(parent) || SP_IS_FLOWPARA(parent) || SP_IS_FLOWTSPAN(parent) || SP_IS_FLOWLINE(parent));
 
         // 1. Bail out with QUERY_STYLE_MULTIPLE_DIFFERENT if necessary
 
