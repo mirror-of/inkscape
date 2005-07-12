@@ -4627,7 +4627,7 @@ msgstr ""
 #: ../src/seltrans.cpp:784 ../src/seltrans.cpp:864
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
-msgstr "<b>Skaliranje<b>: %0.2f%% x %0.2f%%; sa <b>Ctrl</b> za proporcionalno"
+msgstr "<b>Skaliranje</b>: %0.2f%% x %0.2f%%; sa <b>Ctrl</b> za proporcionalno"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
 #: ../src/seltrans.cpp:939
