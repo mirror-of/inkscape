@@ -134,15 +134,15 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	gtk_box_pack_start (GTK_BOX (sel), hb, FALSE, FALSE, 0);
 	GtkTooltips *ttips = gtk_tooltips_new ();
 
-	sel->edit = gtk_button_new_with_label (_("Edit"));
-	gtk_box_pack_start (GTK_BOX (hb), sel->edit, TRUE, TRUE, 0);
-	g_signal_connect (G_OBJECT (sel->edit), "clicked", G_CALLBACK (sp_gradient_selector_edit_vector_clicked), sel);
-	gtk_widget_set_sensitive (sel->edit, FALSE);
-
-	sel->add = gtk_button_new_with_label (_("Add"));
+	sel->add = gtk_button_new_with_label (_("Duplicate"));
 	gtk_box_pack_start (GTK_BOX (hb), sel->add, TRUE, TRUE, 0);
 	g_signal_connect (G_OBJECT (sel->add), "clicked", G_CALLBACK (sp_gradient_selector_add_vector_clicked), sel);
 	gtk_widget_set_sensitive (sel->add, FALSE);
+
+	sel->edit = gtk_button_new_with_label (_("Edit..."));
+	gtk_box_pack_start (GTK_BOX (hb), sel->edit, TRUE, TRUE, 0);
+	g_signal_connect (G_OBJECT (sel->edit), "clicked", G_CALLBACK (sp_gradient_selector_edit_vector_clicked), sel);
+	gtk_widget_set_sensitive (sel->edit, FALSE);
 
 	gtk_widget_show_all (hb);
 
