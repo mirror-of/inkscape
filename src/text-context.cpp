@@ -300,6 +300,7 @@ sp_text_context_finish(SPEventContext *ec)
     ec->enableGrDrag(false);
 
     tc->style_set_connection.disconnect();
+    tc->style_query_connection.disconnect();
     tc->sel_changed_connection.disconnect();
     tc->sel_modified_connection.disconnect();
 
