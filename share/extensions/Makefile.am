@@ -16,7 +16,6 @@ extensions = \
 	txt2svg.pl \
 	inkscape-shadow.sh \
 	inkscape-shadow-white.sh \
-	inkscape-shadow.README \
 	embed_raster_in_svg.pl \
 	bezmisc.py \
 	cubicsuperpath.py \
