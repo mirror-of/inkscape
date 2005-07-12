@@ -114,7 +114,7 @@ sp_help_about (void)
 } // close sp_help_about()
 
 void
-sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
+sp_help_open_tutorial(GtkMenuItem *, gpointer data)
 {
     gchar const *name = static_cast<gchar const *>(data);
     gchar *c = g_build_filename(INKSCAPE_TUTORIALSDIR, name, NULL);
