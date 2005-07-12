@@ -43,7 +43,7 @@
 <xsl:variable name="style-action" select="'fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:6.4;text-anchor:start;writing-mode:lr;letter-spacing:-0.4;'"/>
 
 <xsl:variable name="section-width" select="215"/>
-<xsl:variable name="section-hskip" select="12"/>
+<xsl:variable name="section-hskip" select="2"/>
 <xsl:variable name="note-hskip" select="6"/>
 
 <xsl:variable name="action-hskip" select="3"/>
@@ -85,9 +85,9 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
    sodipodi:docbase="/home/d/ink/inkscape">
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="0.65"
-     inkscape:cx="540"
-     inkscape:cy="740"
+     inkscape:zoom="0.48"
+     inkscape:cx="736"
+     inkscape:cy="588"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
