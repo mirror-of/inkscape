@@ -1125,6 +1125,7 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_HELP_ABOUT_EXTENSIONS),
         Inkscape::Verb::get(SP_VERB_HELP_MEMORY),
         Inkscape::Verb::get(SP_VERB_HELP_ABOUT),
+        Inkscape::Verb::get(SP_VERB_SHOW_LICENSE),
         Inkscape::Verb::get(SP_VERB_LAST)
     };
 
