@@ -1468,6 +1468,12 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
             show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
         }
         break;
+
+        case SP_VERB_SHOW_LICENSE:
+            // TRANSLATORS: See "tutorial-basic.svg" comment.
+            sp_help_open_tutorial(NULL, (gpointer) _("gpl-2.svg"));
+            break;
+
         case SP_VERB_HELP_MEMORY:
             dt->_dlg_mgr->showDialog("Memory");
             break;
@@ -1998,6 +2004,8 @@ Verb * Verb::_base_verbs[] = {
         N_("About Memory..."), NULL),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"),
         N_("About Inkscape"), /*"help_about"*/"inkscape_options"),
+    new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("_Copying Inkscape"),
+        N_("Show license to modify and/or redistribute Inkscape: GNU GPL"), NULL),
 
     /* Tutorials */
     new TutorialVerb(SP_VERB_TUTORIAL_BASIC, "TutorialsBasic", N_("Inkscape: _Basic"),
