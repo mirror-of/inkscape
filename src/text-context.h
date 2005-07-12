@@ -33,8 +33,7 @@ class SPTextContext;
 class SPTextContextClass;
 class SPCanvasArena;
 
-struct SPTextContext {
-	SPEventContext event_context;
+struct SPTextContext : public SPEventContext {
 
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;

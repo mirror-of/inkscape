@@ -524,7 +524,6 @@ insert_uni_char(SPTextContext *const tc)
     g_return_if_fail(tc->unipos
                      && tc->unipos < sizeof(tc->uni)
                      && tc->uni[tc->unipos] == '\0');
-    SPEventContext *const ec = &tc->event_context;
     unsigned int uv;
     sscanf(tc->uni, "%x", &uv);
     tc->unipos = 0;
@@ -532,7 +531,7 @@ insert_uni_char(SPTextContext *const tc)
 
     if (!g_unichar_isprint((gunichar) uv)) {
         // This may be due to bad input, so it goes to statusbar.
-        ec->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+        tc->desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
                                            _("Non-printable character"));
     } else {
         if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
@@ -547,7 +546,7 @@ insert_uni_char(SPTextContext *const tc)
         tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, u);
         sp_text_context_update_cursor(tc);
         sp_text_context_update_text_selection(tc);
-        sp_document_done(SP_DT_DOCUMENT(ec->desktop));
+        sp_document_done(SP_DT_DOCUMENT(tc->desktop));
     }
 }
 
@@ -568,7 +567,6 @@ show_curr_uni_char(SPTextContext *const tc)
 {
     g_return_if_fail(tc->unipos < sizeof(tc->uni)
                      && tc->uni[tc->unipos] == '\0');
-    SPEventContext *const ec = &tc->event_context;
     if (tc->unipos) {
         char utf8[10];
         hex_to_printable_utf8_buf(tc->uni, utf8);
@@ -582,10 +580,10 @@ show_curr_uni_char(SPTextContext *const tc)
                 default: break;
             }
         }
-        ec->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+        tc->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
                                           _("Unicode: %s: %s"), tc->uni, utf8);
     } else {
-        ec->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
+        tc->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("Unicode: "));
     }
 }
 
@@ -1336,7 +1334,7 @@ sp_text_context_style_set(SPCSSAttr const *css, SPTextContext *tc)
         return false;    // will get picked up by the parent and applied to the whole text object
 
     sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
-    sp_document_done(SP_DT_DOCUMENT(tc->event_context.desktop));
+    sp_document_done(SP_DT_DOCUMENT(tc->desktop));
     sp_text_context_update_cursor(tc);
     sp_text_context_update_text_selection(tc);
 
@@ -1474,7 +1472,7 @@ static void sp_text_context_update_text_selection(SPTextContext *tc)
         quads = sp_te_create_selection_quads(tc->text, tc->text_sel_start, tc->text_sel_end, sp_item_i2d_affine(tc->text));
     for (unsigned i = 0 ; i < quads.size() ; i += 4) {
         SPCanvasItem *quad_canvasitem;
-        quad_canvasitem = sp_canvas_item_new(SP_DT_CONTROLS(tc->event_context.desktop), SP_TYPE_CTRLQUADR, NULL);
+        quad_canvasitem = sp_canvas_item_new(SP_DT_CONTROLS(tc->desktop), SP_TYPE_CTRLQUADR, NULL);
         sp_ctrlquadr_set_rgba32(SP_CTRLQUADR(quad_canvasitem), 0x000000ff);
         sp_ctrlquadr_set_coords(SP_CTRLQUADR(quad_canvasitem), quads[i], quads[i+1], quads[i+2], quads[i+3]);
         sp_canvas_item_show(quad_canvasitem);
