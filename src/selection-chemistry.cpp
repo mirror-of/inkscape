@@ -917,7 +917,7 @@ SPCSSAttr *
 take_style_from_item (SPItem *item)
 {
     // write the complete cascaded style, context-free
-    SPCSSAttr *css = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
+    SPCSSAttr *css = sp_css_attr_from_object (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
     if (css == NULL)
         return NULL;
 
@@ -927,7 +927,7 @@ take_style_from_item (SPItem *item)
         // If this is a group, merge the style of its topmost (last) child with style
         for (SPObject *last_element = item->lastChild(); last_element != NULL; last_element = SP_OBJECT_PREV (last_element)) {
             if (SP_OBJECT_STYLE (last_element) != NULL) {
-                SPCSSAttr *temp = sp_css_attr_from_style (last_element, SP_STYLE_FLAG_IFSET);
+                SPCSSAttr *temp = sp_css_attr_from_object (last_element, SP_STYLE_FLAG_IFSET);
                 if (temp) {
                     sp_repr_css_merge (css, temp);
                     sp_repr_css_attr_unref (temp);
@@ -941,7 +941,7 @@ take_style_from_item (SPItem *item)
         css = sp_css_attr_unset_text (css);
     }
 
-    // FIXME: also transform gradient/pattern fills, by forking?
+    // FIXME: also transform gradient/pattern fills, by forking? NO, this must be nondestructive
     double ex = NR::expansion(sp_item_i2doc_affine(item));
     if (ex != 1.0) {
         css = sp_css_attr_scale (css, ex);
@@ -976,8 +976,9 @@ void sp_selection_copy()
     // FIXME: for non-texts, put serialized XML as text to the clipboard; 
     //for this sp_repr_write_stream needs to be rewritten with iostream instead of FILE
     Glib::ustring text;
-    if (tools_isactive (desktop, TOOLS_TEXT))
+    if (tools_isactive (desktop, TOOLS_TEXT)) {
         text = sp_text_get_selected_text(desktop->event_context);
+    }
 
     if (text.empty()) {
         guint texts = 0;
@@ -1007,6 +1008,7 @@ void sp_selection_copy()
     // clear style clipboard
     if (style_clipboard) {
         sp_repr_css_attr_unref (style_clipboard);
+        style_clipboard = NULL;
     }
   
     //clear main clipboard 
@@ -1016,6 +1018,23 @@ void sp_selection_copy()
     }
 
     sp_selection_copy_impl (items, &clipboard, &defs_clipboard, &style_clipboard);
+
+    if (tools_isactive (desktop, TOOLS_TEXT)) { // take style from cursor/text selection, overwriting the style just set by copy_impl
+        SPStyle *query = sp_style_new ();
+        if (sp_desktop_query_style_all (desktop, query)) {
+            SPCSSAttr *css = sp_css_attr_from_style (query, SP_STYLE_FLAG_ALWAYS);
+            if (css != NULL) {
+                // clear style clipboard
+                if (style_clipboard) {
+                    sp_repr_css_attr_unref (style_clipboard);
+                    style_clipboard = NULL;
+                }
+                //sp_repr_css_print (css);
+                style_clipboard = css;
+            }
+        }
+        g_free (query);
+    }
 
     g_slist_free ((GSList *) items);
 }
