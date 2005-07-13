@@ -749,6 +749,7 @@ sp_namedview_hide(SPNamedView *const nv, SPDesktop *const desktop)
 
 	g_assert (l);
 
+	sp_canvas_item_hide(SP_CANVAS_ITEM(l->data));
 	gtk_object_unref (GTK_OBJECT (l->data));
 	nv->gridviews = g_slist_remove (nv->gridviews, l->data);
 }
