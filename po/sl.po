@@ -4954,7 +4954,7 @@ msgid ""
 "Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
 "into frame."
 msgstr ""
-"Da položite besedilo na pot izberite <b>besedilo<b> in eno ali več <b>poti "
+"Da položite besedilo na pot izberite <b>besedilo</b> in eno ali več <b>poti "
 "ali oblik</b>."
 
 #: ../src/text-chemistry.cpp:321
