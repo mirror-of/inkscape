@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-12 23:47+0200\n"
+"POT-Creation-Date: 2005-07-13 22:20+0200\n"
 "PO-Revision-Date: 2001-11-10 16:49GMT\n"
 "Last-Translator: Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>\n"
 "Language-Team: Galician <trasno@trasno.net>\n"
@@ -197,12 +197,12 @@ msgstr "Converti-los obxectos seleccionados a curvas"
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1759
+#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1778
 #, fuzzy
 msgid "Select an <b>object</b> to clone."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1765
+#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1784
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -3084,14 +3084,14 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr ""
 
-#: ../src/extension/implementation/script.cpp:837
+#: ../src/extension/implementation/script.cpp:846
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
 "but the action you requested has been cancelled."
 msgstr ""
 
-#: ../src/extension/implementation/script.cpp:850
+#: ../src/extension/implementation/script.cpp:859
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -4536,88 +4536,88 @@ msgstr ""
 msgid "Nothing was copied."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1031
+#: ../src/selection-chemistry.cpp:1050
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1035
+#: ../src/selection-chemistry.cpp:1054
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1048 ../src/selection-chemistry.cpp:1084
+#: ../src/selection-chemistry.cpp:1067 ../src/selection-chemistry.cpp:1103
 #, fuzzy
 msgid "Nothing on the clipboard."
 msgstr "Copia-la selección ó portarretallos"
 
-#: ../src/selection-chemistry.cpp:1090
+#: ../src/selection-chemistry.cpp:1109
 #, fuzzy
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/selection-chemistry.cpp:1109
+#: ../src/selection-chemistry.cpp:1128
 #, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer above."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/selection-chemistry.cpp:1127
+#: ../src/selection-chemistry.cpp:1146
 #, fuzzy
 msgid "No more layers above."
 msgstr "Documento"
 
-#: ../src/selection-chemistry.cpp:1141
+#: ../src/selection-chemistry.cpp:1160
 #, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer below."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/selection-chemistry.cpp:1159
+#: ../src/selection-chemistry.cpp:1178
 #, fuzzy
 msgid "No more layers below."
 msgstr "Documento"
 
-#: ../src/selection-chemistry.cpp:1796
+#: ../src/selection-chemistry.cpp:1815
 #, fuzzy
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Seleccione o ficheiro que quere abrir"
 
-#: ../src/selection-chemistry.cpp:1827
+#: ../src/selection-chemistry.cpp:1846
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1844
+#: ../src/selection-chemistry.cpp:1863
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path. Select "
 "a <b>flowed text</b> to go to its frame."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1867
+#: ../src/selection-chemistry.cpp:1886
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1873
+#: ../src/selection-chemistry.cpp:1892
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1900
+#: ../src/selection-chemistry.cpp:1919
 #, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/selection-chemistry.cpp:1976
+#: ../src/selection-chemistry.cpp:1995
 #, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/selection-chemistry.cpp:2029
+#: ../src/selection-chemistry.cpp:2048
 #, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "Converti-los obxectos seleccionados a curvas"
 
-#: ../src/selection-chemistry.cpp:2049
+#: ../src/selection-chemistry.cpp:2068
 #, fuzzy
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Converti-los obxectos seleccionados a curvas"

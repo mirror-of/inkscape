@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-12 23:47+0200\n"
+"POT-Creation-Date: 2005-07-13 22:20+0200\n"
 "PO-Revision-Date: 2004-10-26 23:26+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -203,11 +203,11 @@ msgstr "クローンするオブジェクトを選択してください。"
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "クローンするオブジェクトを選択してください。"
 
-#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1759
+#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1778
 msgid "Select an <b>object</b> to clone."
 msgstr "クローンするオブジェクトを選択してください。"
 
-#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1765
+#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1784
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -2991,14 +2991,14 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr ""
 
-#: ../src/extension/implementation/script.cpp:837
+#: ../src/extension/implementation/script.cpp:846
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
 "but the action you requested has been cancelled."
 msgstr ""
 
-#: ../src/extension/implementation/script.cpp:850
+#: ../src/extension/implementation/script.cpp:859
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -4437,51 +4437,51 @@ msgstr "やり直し出来ません"
 msgid "Nothing was copied."
 msgstr "コピー出来ません"
 
-#: ../src/selection-chemistry.cpp:1031
+#: ../src/selection-chemistry.cpp:1050
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1035
+#: ../src/selection-chemistry.cpp:1054
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1048 ../src/selection-chemistry.cpp:1084
+#: ../src/selection-chemistry.cpp:1067 ../src/selection-chemistry.cpp:1103
 msgid "Nothing on the clipboard."
 msgstr "クリップボードが空です。"
 
-#: ../src/selection-chemistry.cpp:1090
+#: ../src/selection-chemistry.cpp:1109
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "スタイルをペーストする対象を選択してください。"
 
-#: ../src/selection-chemistry.cpp:1109
+#: ../src/selection-chemistry.cpp:1128
 #, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer above."
 msgstr "パスに変換するオブジェクトを選択してください"
 
-#: ../src/selection-chemistry.cpp:1127
+#: ../src/selection-chemistry.cpp:1146
 #, fuzzy
 msgid "No more layers above."
 msgstr "レイヤーはありません。"
 
-#: ../src/selection-chemistry.cpp:1141
+#: ../src/selection-chemistry.cpp:1160
 #, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer below."
 msgstr "パスに変換するオブジェクトを選択してください"
 
-#: ../src/selection-chemistry.cpp:1159
+#: ../src/selection-chemistry.cpp:1178
 #, fuzzy
 msgid "No more layers below."
 msgstr "レイヤーはありません。"
 
-#: ../src/selection-chemistry.cpp:1796
+#: ../src/selection-chemistry.cpp:1815
 msgid "Select a <b>clone</b> to unlink."
 msgstr "解除するクローンを選択してください。"
 
-#: ../src/selection-chemistry.cpp:1827
+#: ../src/selection-chemistry.cpp:1846
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "解除するクローンが選択されていません。"
 
-#: ../src/selection-chemistry.cpp:1844
+#: ../src/selection-chemistry.cpp:1863
 #, fuzzy
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
@@ -4490,7 +4490,7 @@ msgid ""
 msgstr ""
 "[クローン、リンクオフセット、パスと結合したテキスト]を先に選択してください。"
 
-#: ../src/selection-chemistry.cpp:1867
+#: ../src/selection-chemistry.cpp:1886
 #, fuzzy
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
@@ -4499,29 +4499,29 @@ msgstr ""
 "[クローン、リンクオフセット、パスと結合したテキスト]のオリジナルが見つかりま"
 "せんでした。"
 
-#: ../src/selection-chemistry.cpp:1873
+#: ../src/selection-chemistry.cpp:1892
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 "選択しようとしているオリジナルは可視ではありません。(&lt;defs&gt;にあります)"
 
-#: ../src/selection-chemistry.cpp:1900
+#: ../src/selection-chemistry.cpp:1919
 #, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "パスに変換するオブジェクトを選択してください"
 
-#: ../src/selection-chemistry.cpp:1976
+#: ../src/selection-chemistry.cpp:1995
 #, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr "タイル化解除する対象を選択してください。"
 
-#: ../src/selection-chemistry.cpp:2029
+#: ../src/selection-chemistry.cpp:2048
 #, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "タイル化解除する対象が選択されていません。"
 
-#: ../src/selection-chemistry.cpp:2049
+#: ../src/selection-chemistry.cpp:2068
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "ビットマップコピーの対象を選択してください"
 

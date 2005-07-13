@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-12 23:47+0200\n"
+"POT-Creation-Date: 2005-07-13 22:20+0200\n"
 "PO-Revision-Date: 2005-05-02 22:03+0200\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -206,11 +206,11 @@ msgstr "Selecteer <b>één object</b> wiens klonen verwijderd moeten worden."
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Selecteer <b>één object</b> wiens klonen verwijderd moeten worden."
 
-#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1759
+#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1778
 msgid "Select an <b>object</b> to clone."
 msgstr "Selecteer een <b>object</b> om te klonen."
 
-#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1765
+#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1784
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -3077,14 +3077,14 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "Dit venster tonen bij het opstarten"
 
-#: ../src/extension/implementation/script.cpp:837
+#: ../src/extension/implementation/script.cpp:846
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
 "but the action you requested has been cancelled."
 msgstr ""
 
-#: ../src/extension/implementation/script.cpp:850
+#: ../src/extension/implementation/script.cpp:859
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -4597,53 +4597,53 @@ msgstr "Er is niets om opnieuw te doen."
 msgid "Nothing was copied."
 msgstr "Er is niets gekopieërd."
 
-#: ../src/selection-chemistry.cpp:1031
+#: ../src/selection-chemistry.cpp:1050
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr ""
 "De <b>huidige laag is verborgen</b>. U moet hem weer zichtbaar maken om er "
 "in te kunnen plakken."
 
-#: ../src/selection-chemistry.cpp:1035
+#: ../src/selection-chemistry.cpp:1054
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 "De <b>huidige laag is vergrendeld</b>. U moet hem ontgrendelen om er in te "
 "kunnen plakken."
 
-#: ../src/selection-chemistry.cpp:1048 ../src/selection-chemistry.cpp:1084
+#: ../src/selection-chemistry.cpp:1067 ../src/selection-chemistry.cpp:1103
 msgid "Nothing on the clipboard."
 msgstr "Er staat niets op het klembord."
 
-#: ../src/selection-chemistry.cpp:1090
+#: ../src/selection-chemistry.cpp:1109
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Selecteer <b>objecten</b> om de stijl op toe te passen."
 
-#: ../src/selection-chemistry.cpp:1109
+#: ../src/selection-chemistry.cpp:1128
 msgid "Select <b>object(s)</b> to move to the layer above."
 msgstr ""
 "Selecteer <b>objecten</b> om naar de bovenliggende laag te verplaatsen."
 
-#: ../src/selection-chemistry.cpp:1127
+#: ../src/selection-chemistry.cpp:1146
 msgid "No more layers above."
 msgstr "Er zijn geen bovenliggende lagen."
 
-#: ../src/selection-chemistry.cpp:1141
+#: ../src/selection-chemistry.cpp:1160
 msgid "Select <b>object(s)</b> to move to the layer below."
 msgstr ""
 "Selecteer <b>objecten</b> om naar de onderliggende laag te verplaatsen."
 
-#: ../src/selection-chemistry.cpp:1159
+#: ../src/selection-chemistry.cpp:1178
 msgid "No more layers below."
 msgstr "Er zijn geen onderliggende lagen."
 
-#: ../src/selection-chemistry.cpp:1796
+#: ../src/selection-chemistry.cpp:1815
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Selecteer een <b>kloon</b> om te ontkoppelen."
 
-#: ../src/selection-chemistry.cpp:1827
+#: ../src/selection-chemistry.cpp:1846
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "Er zijn <b>geen klonen om te ontkoppelen</b> geselecteerd."
 
-#: ../src/selection-chemistry.cpp:1844
+#: ../src/selection-chemistry.cpp:1863
 #, fuzzy
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
@@ -4654,7 +4654,7 @@ msgstr ""
 "<b>gekoppelde XXX</b> om naar zijn bron te gaan. Selecteer <b>tekst op een "
 "pad</b> om naar het pad te gaan."
 
-#: ../src/selection-chemistry.cpp:1867
+#: ../src/selection-chemistry.cpp:1886
 #, fuzzy
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
@@ -4663,7 +4663,7 @@ msgstr ""
 "Kan het te selecteren object <b>niet vinden</b> (een wees-kloon, -XXX, of "
 "tekst?)"
 
-#: ../src/selection-chemistry.cpp:1873
+#: ../src/selection-chemistry.cpp:1892
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
@@ -4671,19 +4671,19 @@ msgstr ""
 "Het object dat u probeert te selecteren is niet zichtbaar (het staat in &lt;"
 "defs&gt;)"
 
-#: ../src/selection-chemistry.cpp:1900
+#: ../src/selection-chemistry.cpp:1919
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Selecteer <b>objecten</b> om te gebruiken als patroon."
 
-#: ../src/selection-chemistry.cpp:1976
+#: ../src/selection-chemistry.cpp:1995
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr "Selecteer <b>objecten met patroonvulling</b> om objecten uit te halen."
 
-#: ../src/selection-chemistry.cpp:2029
+#: ../src/selection-chemistry.cpp:2048
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "Er zijn geen <b>objecten met patroonvulling</b> geselecteerd."
 
-#: ../src/selection-chemistry.cpp:2049
+#: ../src/selection-chemistry.cpp:2068
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Selecteer <b>objecten</b> om een bitmap kopie van te maken."
 

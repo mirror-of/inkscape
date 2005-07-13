@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-12 23:47+0200\n"
+"POT-Creation-Date: 2005-07-13 22:20+0200\n"
 "PO-Revision-Date: 2005-07-12 15:55+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -200,11 +200,11 @@ msgstr "Izberite <b>predmet</b>, katerega klone naj razložim."
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "Izberite <b>predmet</b>, ki naj mu odstranim tlakovane klone."
 
-#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1759
+#: ../src/dialogs/clonetiler.cpp:921 ../src/selection-chemistry.cpp:1778
 msgid "Select an <b>object</b> to clone."
 msgstr "Izberite <b>predmet</b> za kloniranje."
 
-#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1765
+#: ../src/dialogs/clonetiler.cpp:927 ../src/selection-chemistry.cpp:1784
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -2960,7 +2960,7 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr "Pri zagonu pokaži pogovorno okno"
 
-#: ../src/extension/implementation/script.cpp:837
+#: ../src/extension/implementation/script.cpp:846
 #, fuzzy
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
@@ -2970,7 +2970,7 @@ msgstr ""
 "Skripta ki jo je Inkscape poklical je vrnila napako. Sporočilo sledi spodaj. "
 "Inkscape bo deloval dalje, željena operacija pa je prekinjena."
 
-#: ../src/extension/implementation/script.cpp:850
+#: ../src/extension/implementation/script.cpp:859
 #, fuzzy
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
@@ -4434,47 +4434,47 @@ msgstr "Nič za ponoviti"
 msgid "Nothing was copied."
 msgstr "Nič nisem presnel"
 
-#: ../src/selection-chemistry.cpp:1031
+#: ../src/selection-chemistry.cpp:1050
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
 msgstr "<b>Trenutni sloj je skrit</b>. Če želite lepiti vanj ga odkrijte."
 
-#: ../src/selection-chemistry.cpp:1035
+#: ../src/selection-chemistry.cpp:1054
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr "<b>Trenutni sloj je zaklenjen</b>. Če želite lepiti vanj ga odkrijte."
 
-#: ../src/selection-chemistry.cpp:1048 ../src/selection-chemistry.cpp:1084
+#: ../src/selection-chemistry.cpp:1067 ../src/selection-chemistry.cpp:1103
 msgid "Nothing on the clipboard."
 msgstr "Ničesar ni na odložišču."
 
-#: ../src/selection-chemistry.cpp:1090
+#: ../src/selection-chemistry.cpp:1109
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Izberite <b>predmet</b> za prenos sloga."
 
-#: ../src/selection-chemistry.cpp:1109
+#: ../src/selection-chemistry.cpp:1128
 msgid "Select <b>object(s)</b> to move to the layer above."
 msgstr "Izberite nekaj <b>predmetov</b> za premik v sloj zgoraj."
 
-#: ../src/selection-chemistry.cpp:1127
+#: ../src/selection-chemistry.cpp:1146
 msgid "No more layers above."
 msgstr "Zgoraj ni več slojev."
 
-#: ../src/selection-chemistry.cpp:1141
+#: ../src/selection-chemistry.cpp:1160
 msgid "Select <b>object(s)</b> to move to the layer below."
 msgstr "Izberite nekaj <b>predmetov</b> za pomik na spodnji sloj."
 
-#: ../src/selection-chemistry.cpp:1159
+#: ../src/selection-chemistry.cpp:1178
 msgid "No more layers below."
 msgstr "Spodaj ni več slojev."
 
-#: ../src/selection-chemistry.cpp:1796
+#: ../src/selection-chemistry.cpp:1815
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Izberite <b>klona</b> za razvez."
 
-#: ../src/selection-chemistry.cpp:1827
+#: ../src/selection-chemistry.cpp:1846
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "Med izbranimi predmeti <b>ni klonov</b>, ki bi jih lahko odvezali."
 
-#: ../src/selection-chemistry.cpp:1844
+#: ../src/selection-chemistry.cpp:1863
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path. Select "
@@ -4485,7 +4485,7 @@ msgstr ""
 "naj gre po poti. Izberite <b>tekoče besedilo</b>, ki naj gre k svojemu "
 "okviru."
 
-#: ../src/selection-chemistry.cpp:1867
+#: ../src/selection-chemistry.cpp:1886
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
@@ -4493,27 +4493,27 @@ msgstr ""
 "<b>Ne najdem</b> predmeta, ki ga izbirate (zapuščen klon, zamik ali besedilo "
 "na poti, tekoče besedilo?)"
 
-#: ../src/selection-chemistry.cpp:1873
+#: ../src/selection-chemistry.cpp:1892
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr "Predmet ki ga izbirate <b>ni viden</b> (je med &lt;defs&gt;)"
 
-#: ../src/selection-chemistry.cpp:1900
+#: ../src/selection-chemistry.cpp:1919
 msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr "Izberite <b>predmet(e)</b> za pretvorbo v vzorec."
 
-#: ../src/selection-chemistry.cpp:1976
+#: ../src/selection-chemistry.cpp:1995
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr ""
 "Izberite <b>predmet s tlakovanim polnilom</b> iz katerega želite izvleči "
 "predmete."
 
-#: ../src/selection-chemistry.cpp:2029
+#: ../src/selection-chemistry.cpp:2048
 msgid "<b>No pattern fills</b> in the selection."
 msgstr "Med izbiro ni <b>polnjenj z vzorci</b>."
 
-#: ../src/selection-chemistry.cpp:2049
+#: ../src/selection-chemistry.cpp:2068
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Izberite <b>predmet(e)</b> za rastersko kopiranje."
 
