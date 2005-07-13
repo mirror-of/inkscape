@@ -1,3 +1,7 @@
+2005-07-12  Ted Gould  <ted@gould.cx>
+
+	* 0.42pre2
+
 2005-07-11  MenTaLguY  <mental@rydia.net>
 
 	* src/debug/logger.cpp: wrap stack vector in method to avoid
