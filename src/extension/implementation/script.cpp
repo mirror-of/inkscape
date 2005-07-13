@@ -280,7 +280,8 @@ Script::load(Inkscape::Extension::Extension *module)
 
     g_return_val_if_fail(command_text != NULL, FALSE);
 
-    g_free(command);
+    if (command != NULL)
+        g_free(command);
     command = command_text;
 
     return TRUE;
@@ -297,8 +298,16 @@ Script::load(Inkscape::Extension::Extension *module)
 void
 Script::unload(Inkscape::Extension::Extension *module)
 {
-    g_free(command);
-    g_free(helper_extension);
+    if (command != NULL) {
+        g_free(command);
+        command = NULL;
+    }
+    if (helper_extension != NULL) {
+        g_free(helper_extension);
+        helper_extension = NULL;
+    }
+
+    return;
 }
 
 /**
