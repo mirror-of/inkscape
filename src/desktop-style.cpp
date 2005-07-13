@@ -457,6 +457,7 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
     }
 
     style_res->font_size.computed = size;
+    style_res->font_size.type = SP_FONT_SIZE_LENGTH;
     style_res->letter_spacing.computed = letterspacing;
     style_res->line_height.computed = linespacing;
 
@@ -498,10 +499,10 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
         }
 
         set = TRUE;
-        style_res->font_weight.computed = style->font_weight.computed;
-        style_res->font_style.computed = style->font_style.computed;
-        style_res->font_stretch.computed = style->font_stretch.computed;
-        style_res->font_variant.computed = style->font_variant.computed;
+        style_res->font_weight.value = style_res->font_weight.computed = style->font_weight.computed;
+        style_res->font_style.value = style_res->font_style.computed = style->font_style.computed;
+        style_res->font_stretch.value = style_res->font_stretch.computed = style->font_stretch.computed;
+        style_res->font_variant.value = style_res->font_variant.computed = style->font_variant.computed;
     }
 
     if (texts == 0 || !set)
@@ -594,6 +595,18 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
     }
 
     return QUERY_STYLE_NOTHING;
+}
+
+bool
+sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
+{
+        int result_family = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FONTFAMILY);
+        int result_fstyle = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FONTSTYLE); 
+        int result_fnumbers = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FONTNUMBERS); 
+        int result_fill = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_FILL);
+        int result_stroke = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_STROKE);
+
+        return (result_family != QUERY_STYLE_NOTHING && result_fstyle != QUERY_STYLE_NOTHING && result_fnumbers != QUERY_STYLE_NOTHING && result_fill != QUERY_STYLE_NOTHING && result_stroke != QUERY_STYLE_NOTHING);
 }
 
 
