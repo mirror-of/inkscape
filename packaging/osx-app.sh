@@ -126,6 +126,9 @@ done
 
 # Build and add the launcher.
 (
+  # Build fails if CC happens to be set (to anything other than CompileC)
+  unset CC
+  
   cd "$resdir/ScriptExec"
   xcodebuild -buildstyle Deployment clean build
 )
