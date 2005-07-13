@@ -805,7 +805,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             if (SP_IS_ITEM(child))
                 items_count ++;
         }
-        SPCSSAttr *style = sp_css_attr_from_style (SP_DOCUMENT_ROOT (doc));
+        SPCSSAttr *style = sp_css_attr_from_object (SP_DOCUMENT_ROOT (doc));
 
         SPObject *new_obj = NULL;
 

@@ -449,7 +449,8 @@ struct SPTextStyle {
     SPIString font;
 };
 
-SPCSSAttr *sp_css_attr_from_style(SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
+SPCSSAttr *sp_css_attr_from_style (SPStyle const *const style, guint flags);
+SPCSSAttr *sp_css_attr_from_object(SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
 SPCSSAttr *sp_css_attr_unset_text(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_uris(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_scale(SPCSSAttr *css, double ex);

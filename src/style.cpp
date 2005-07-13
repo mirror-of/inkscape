@@ -3462,23 +3462,32 @@ sp_style_unset_property_attrs(SPObject *o)
 }
 
 /**
- * \pre object != NULL
  * \pre flags in {IFSET, ALWAYS}.
  */
 SPCSSAttr *
-sp_css_attr_from_style(SPObject *object, guint flags)
+sp_css_attr_from_style (SPStyle const *const style, guint flags)
 {
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
                          NULL);
-    SPStyle const *const style = SP_OBJECT_STYLE(object);
-    if (style == NULL)
-        return NULL;
     gchar *style_str = sp_style_write_string(style, flags);
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css, style_str);
     g_free(style_str);
     return css;
+}
+
+
+/**
+ * \pre object != NULL
+ */
+SPCSSAttr *
+sp_css_attr_from_object (SPObject *object, guint flags)
+{
+    SPStyle const *const style = SP_OBJECT_STYLE(object);
+    if (style == NULL)
+        return NULL;
+    return sp_css_attr_from_style (style, flags);
 }
 
 /**
