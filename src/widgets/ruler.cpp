@@ -128,7 +128,7 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
   PangoFontDescription *pango_desc;
   PangoContext *pango_context;
   PangoLayout *pango_layout;
-  gint i;
+  gint i, tick_index;
   gint width, height;
   gint xthickness;
   gint ythickness;
@@ -230,8 +230,10 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 	  end   = ceil  (lower / subd_incr) * subd_incr;
 	}
 
-  
-      for (cur = start; cur <= end; cur += subd_incr)
+    tick_index = 0;
+    cur = start;
+
+	while (cur <= end)
 	{
 	  pos = ROUND ((cur - lower) * increment);
 
@@ -250,6 +252,13 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 	                       pos + 2, 0,
 			       pango_layout);
 	    }
+
+      /* Calculate cur from start rather than incrementing by subd_incr
+       * in each iteration. This is to avoid propagation of floating point 
+       * errors in subd_incr.
+       */
+      ++tick_index;
+      cur = start + (tick_index * subd_incr);
 	}
     }
 }
@@ -418,7 +427,7 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
   PangoFontDescription *pango_desc;
   PangoContext *pango_context;
   PangoLayout *pango_layout;
-  gint i, j;
+  gint i, j, tick_index;
   gint width, height;
   gint xthickness;
   gint ythickness;
@@ -522,8 +531,10 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 	  end   = ceil  (lower / subd_incr) * subd_incr;
 	}
 
-        
-      for (cur = start; cur <= end; cur += subd_incr)
+    tick_index = 0;
+    cur = start;        
+
+    while (cur < end)
 	{
 	  pos = ROUND ((cur - lower) * increment);
 
@@ -548,6 +559,13 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 		                   pango_layout); 
 		}
 	    }
+
+      /* Calculate cur from start rather than incrementing by subd_incr
+       * in each iteration. This is to avoid propagation of floating point 
+       * errors in subd_incr.
+       */
+      ++tick_index;
+      cur = start + (tick_index * subd_incr);
 	}
     }
 }
@@ -637,4 +655,3 @@ sp_ruler_set_metric (GtkRuler *ruler,
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
 }
-
