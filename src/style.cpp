@@ -391,7 +391,7 @@ sp_style_object_release(SPObject *object, SPStyle *style)
 SPStyle *
 sp_style_new()
 {
-    SPStyle *style = g_new0(SPStyle, 1);
+    SPStyle *const style = g_new0(SPStyle, 1);
 
     style->refcount = 1;
     style->object = NULL;
@@ -3462,11 +3462,13 @@ sp_style_unset_property_attrs(SPObject *o)
 }
 
 /**
+ * \pre style != NULL.
  * \pre flags in {IFSET, ALWAYS}.
  */
 SPCSSAttr *
-sp_css_attr_from_style (SPStyle const *const style, guint flags)
+sp_css_attr_from_style(SPStyle const *const style, guint const flags)
 {
+    g_return_val_if_fail(style != NULL, NULL);
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
                          NULL);
@@ -3480,10 +3482,14 @@ sp_css_attr_from_style (SPStyle const *const style, guint flags)
 
 /**
  * \pre object != NULL
+ * \pre flags in {IFSET, ALWAYS}.
  */
 SPCSSAttr *
-sp_css_attr_from_object (SPObject *object, guint flags)
+sp_css_attr_from_object(SPObject *object, guint const flags)
 {
+    g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
+                          (flags == SP_STYLE_FLAG_ALWAYS)  ),
+                         NULL);
     SPStyle const *const style = SP_OBJECT_STYLE(object);
     if (style == NULL)
         return NULL;
