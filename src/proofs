@@ -243,6 +243,42 @@ Proof of sp_style_write_string pre `style != NULL':
 Passes style as style argument.  style is const, and has already been checked against NULL.
 
 
+src/style.cpp:sp_css_attr_from_object
+
+Proof of `flags in {IFSET, ALWAYS} precondition:
+
+ $ grep sp_css_attr_from_object `sed 's,#.*,,' make.files `
+ file.cpp:  SPCSSAttr *style = sp_css_attr_from_object (SP_DOCUMENT_ROOT (doc));
+ selection-chemistry.cpp:  SPCSSAttr *css = sp_css_attr_from_object (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
+ selection-chemistry.cpp:  SPCSSAttr *temp = sp_css_attr_from_object (last_element, SP_STYLE_FLAG_IFSET);
+ style.cpp:sp_css_attr_from_object (SPObject *object, guint flags)
+ style.h:SPCSSAttr *sp_css_attr_from_object(SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
+
+
+src/style.cpp:sp_css_attr_from_style
+
+Proof of precondition `style != NULL':
+
+Callers are selection-chemistry.cpp and style.cpp:
+
+ $ grep sp_css_attr_from_style `sed 's,#.*,,' make.files `
+selection-chemistry.cpp:  SPCSSAttr *css = sp_css_attr_from_style (query, SP_STYLE_FLAG_ALWAYS);
+ style.cpp:sp_css_attr_from_style (SPStyle const *const style, guint flags)
+ style.cpp:  return sp_css_attr_from_style (style, flags);
+ style.h:SPCSSAttr *sp_css_attr_from_style (SPStyle const *const style, guint flags);
+
+selection-chemistry.cpp caller: query is initialized from sp_style_new()
+(which guarantees non-NULL), and is const.
+
+style.cpp caller: preceded by explicit test for NULL:
+
+ $ grep -B2 sp_css_attr_from_style style.cpp|tail -3
+     if (style == NULL)
+         return NULL;
+     return sp_css_attr_from_style (style, flags);
+
+
+
 
 # Local Variables:
 # mode:indented-text
