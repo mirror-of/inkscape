@@ -46,9 +46,6 @@ sub check_str ($) {
 
     my $is_xml = 0;
 
-    # Remove html-like sequences that would trigger errors
-    while ($str =~ s/<defs>//) {};
-
     # Remove valid sequences.
     while ($str =~ s{<([bisu]|big|su[bp]|small|tt|span)(${attrsRE})>[^<>]*</\1>}{}) {
 	$is_xml = 1;
@@ -86,7 +83,7 @@ sub check_str ($) {
     }
 
     if (!$is_xml) {
-	$str =~ s/<(?:image|rect|svg|no\ name\ found)>//g;
+	$str =~ s/<(?:defs|image|rect|svg)>//g;
 	$str =~ s/<[ 01]//g;
 	$str =~ s/\A>+//;
 	$str =~ s/<+\Z//;
