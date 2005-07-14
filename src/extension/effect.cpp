@@ -51,7 +51,7 @@ Effect::prefs (SPView * doc)
     Gtk::Widget * controls;
     controls = imp->prefs_effect(this, doc);
     if (controls == NULL) {
-        std::cout << "No preferences for Effect" << std::endl;
+        // std::cout << "No preferences for Effect" << std::endl;
         return true;
     }
 
