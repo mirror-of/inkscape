@@ -604,7 +604,7 @@ sp_file_save_dialog(SPDocument *doc)
             g_free(temp_filename);
         }
     } else {
-        save_loc = g_strdup(doc->uri); /* \todo should use a getter */
+        save_loc = g_path_get_dirname(doc->uri); /* \todo should use a getter */
     }
 
     { // convert save_loc from utf-8 to locale
@@ -637,7 +637,7 @@ sp_file_save_dialog(SPDocument *doc)
                  (char const *) _("Select file to save to"),
                  default_extension
             );
-    }
+    } // FIXME: else (i.e. if reshowing an already shown dialog) save_loc is not used, it thus always displays the previously opened dir
     bool success = saveDialogInstance->show();
     char *fileName = ( success
                        ? g_strdup(saveDialogInstance->getFilename())
