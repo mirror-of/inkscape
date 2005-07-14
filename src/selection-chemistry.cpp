@@ -1020,7 +1020,7 @@ void sp_selection_copy()
     sp_selection_copy_impl (items, &clipboard, &defs_clipboard, &style_clipboard);
 
     if (tools_isactive (desktop, TOOLS_TEXT)) { // take style from cursor/text selection, overwriting the style just set by copy_impl
-        SPStyle *query = sp_style_new ();
+        SPStyle *const query = sp_style_new();
         if (sp_desktop_query_style_all (desktop, query)) {
             SPCSSAttr *css = sp_css_attr_from_style (query, SP_STYLE_FLAG_ALWAYS);
             if (css != NULL) {
