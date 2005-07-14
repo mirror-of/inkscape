@@ -114,7 +114,16 @@ _load_uri (const gchar *uri)
     gchar            *doc = NULL;
     gchar            *new_doc = NULL;
 
-    GnomeVFSResult result = gnome_vfs_open (&handle, uri, GNOME_VFS_OPEN_READ);
+        gsize bytesRead = 0;
+        gsize bytesWritten = 0;
+        GError* error = NULL;
+        gchar* uri_local = g_filename_from_utf8( uri, -1, &bytesRead, &bytesWritten, &error);
+
+        if ( uri_local == NULL ) {
+            g_warning( "Error converting filename to locale encoding.");
+        }
+
+    GnomeVFSResult result = gnome_vfs_open (&handle, uri_local, GNOME_VFS_OPEN_READ);
 
     if (result != GNOME_VFS_OK) {
         g_warning(gnome_vfs_result_to_string(result));
@@ -143,7 +152,7 @@ _load_uri (const gchar *uri)
     \brief     This function takes in a filename of a SVG document and
                turns it into a SPDocument.
     \param     mod   Module to use
-    \param     uri   The path to the file
+    \param     uri   The path to the file (UTF-8)
 
     This function is really simple, it just calls sp_document_new...
 */
