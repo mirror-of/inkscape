@@ -167,6 +167,9 @@ copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len
     return dest_len;
 }
 
+/**
+ * \pre data is uniqued, i.e. not exist i: data[i] == data[i + 1].
+ */
 gint
 sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
                          NR::Point const data[], gint const len,
@@ -826,6 +829,17 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
         for (unsigned i = 1; i < len; ++i) {
             u[i] = i / (gdouble) ( len - 1 );
         }
+    }
+
+    /* It's been reported that u[len - 1] can differ from 1.0 on some systems (amd64),
+       despite it having been calculated as x / x where x is isFinite and non-zero. */
+    if (u[len - 1] != 1) {
+        double const diff = u[len - 1] - 1;
+        if (fabs(diff) > 1e-15) {
+            g_warning("u[len - 1] = %19g (= 1 + %19g), expecting exactly 1",
+                      u[len - 1], diff);
+        }
+        u[len - 1] = 1;
     }
 
 #ifdef BEZIER_DEBUG
