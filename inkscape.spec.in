@@ -74,7 +74,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/*
 
 %changelog
-* Thu Jul  7 2004 Kees Cook <kees@outflux.net>
+* Thu Jul  7 2005 Kees Cook <kees@outflux.net>
 - Adjusted for plugin relocation
 
 * Wed Nov 24 2004 Kees Cook <kees@outflux.net>
