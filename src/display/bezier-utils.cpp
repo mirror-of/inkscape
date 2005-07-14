@@ -835,7 +835,7 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
        despite it having been calculated as x / x where x is isFinite and non-zero. */
     if (u[len - 1] != 1) {
         double const diff = u[len - 1] - 1;
-        if (fabs(diff) > 1e-15) {
+        if (fabs(diff) > 1e-13) {
             g_warning("u[len - 1] = %19g (= 1 + %19g), expecting exactly 1",
                       u[len - 1], diff);
         }
