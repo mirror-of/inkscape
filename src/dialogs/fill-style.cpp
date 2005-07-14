@@ -482,6 +482,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     }
                 }
 
+                sp_repr_css_attr_unref (css);
+
                 sp_document_done (document);
             }
             break;
@@ -502,6 +504,9 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     SPCSSAttr *css = sp_repr_css_attr_new ();
                     gchar *urltext = g_strdup_printf ("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property (css, "fill", urltext);
+
+                    // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
+                    sp_repr_css_set_property(css, "fill-opacity", "1.0");
 
                     // cannot just call sp_desktop_set_style, because we don't want to touch those
                     // objects who already have the same root pattern but through a different href
