@@ -235,6 +235,15 @@ Loose proof of requirements for sp_spiral_fit_and_draw:
   which Ensures is_unit_vector(hat2).
 
 
+
+src/style.cpp:sp_css_attr_from_style:
+
+Proof of sp_style_write_string pre `style != NULL':
+
+Passes style as style argument.  style is const, and has already been checked against NULL.
+
+
+
 # Local Variables:
 # mode:indented-text
 # fill-column:99
