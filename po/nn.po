@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 02:58+0200\n"
+"POT-Creation-Date: 2005-07-15 18:02+1000\n"
 "PO-Revision-Date: 2005-07-14 20:29+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -3912,7 +3912,7 @@ msgstr "Bruk det nye Gtkmm-baserte grafiske brukargrensesnittet"
 
 #: ../src/main.cpp:331
 msgid "Remove unused definitions from the defs section(s) of the document"
-msgstr "Fjern ubrukte definisjonar frå &lt;defs&gt;-delen av dokumentet."
+msgstr "Fjern ubrukte definisjonar frå <defs>-delen av dokumentet."
 
 #: ../src/main.cpp:480
 msgid ""
@@ -6587,7 +6587,7 @@ msgstr "Bryt opp merkt(e) bane(r) til delbaner."
 
 #: ../src/verbs.cpp:1826
 msgid "Gri_d Arrange..."
-msgstr "Or&dna i rutenett ..."
+msgstr "Or_dna i rutenett ..."
 
 #: ../src/verbs.cpp:1827
 msgid "Arrange selection in grid pattern"
