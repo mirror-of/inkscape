@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.42\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-15 18:02+1000\n"
-"PO-Revision-Date: 2005-07-16 00:02+0100\n"
+"PO-Revision-Date: 2005-07-16 11:24+0100\n"
 "Last-Translator: Przemysław Loesch <p_loesch@poczta.onet.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -466,10 +466,8 @@ msgid "_Opacity"
 msgstr "_Przezroczystość"
 
 #: ../src/dialogs/clonetiler.cpp:1922
-# pjrm: Added fuzzy marker until Przemek confirms.
-#, fuzzy
 msgid "<b>Fade out:</b>"
-msgstr "<b>:</b>"
+msgstr "<b>Przyrost:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1929
 msgid "Decrease tile opacity by this percentage for each row"
@@ -570,7 +568,7 @@ msgstr "Zamiana znaku dla zmian koloru w kolejnych kolumnach"
 
 #: ../src/dialogs/clonetiler.cpp:2101
 msgid "_Trace"
-msgstr "_Próbkowani_e"
+msgstr "Próbkowani_e"
 
 #: ../src/dialogs/clonetiler.cpp:2108
 msgid "Trace the drawing under the tiles"
@@ -600,7 +598,7 @@ msgstr "Pobranie widocznego koloru i przezroczystości"
 
 #: ../src/dialogs/clonetiler.cpp:2145 ../src/dialogs/clonetiler.cpp:2294
 msgid "Opacity"
-msgstr "P_rzezroczystość"
+msgstr "Przezroczystość"
 
 #: ../src/dialogs/clonetiler.cpp:2146
 msgid "Pick the total accumulated opacity"
