@@ -725,7 +725,7 @@ cr_utils_utf8_str_to_ucs4 (const guchar * a_in,
 
         g_return_val_if_fail (status == CR_OK, status);
 
-        *a_out = g_malloc0 (*a_out_len * sizeof (guint32));
+        *a_out = (guint32 *) g_malloc0 (*a_out_len * sizeof (guint32));
 
         status = cr_utils_utf8_to_ucs4 (a_in, a_in_len, *a_out, a_out_len);
 
@@ -971,7 +971,7 @@ cr_utils_ucs1_str_to_utf8 (const guchar * a_in,
 
         in_len = *a_in_len;
 
-        *a_out = g_malloc0 (out_len);
+        *a_out = (guchar *) g_malloc0 (out_len);
 
         status = cr_utils_ucs1_to_utf8 (a_in, a_in_len, *a_out, &out_len);
 
@@ -1172,7 +1172,7 @@ cr_utils_utf8_str_to_ucs1 (const guchar * a_in,
 
         g_return_val_if_fail (status == CR_OK, status);
 
-        *a_out = g_malloc0 (*a_out_len * sizeof (guint32));
+        *a_out = (guchar *) g_malloc0 (*a_out_len * sizeof (guint32));
 
         status = cr_utils_utf8_to_ucs1 (a_in, a_in_len, *a_out, a_out_len);
         return status;
