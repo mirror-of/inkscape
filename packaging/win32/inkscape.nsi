@@ -30,7 +30,7 @@ SetCompressor /SOLID lzma
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "Copying"
+!insertmacro MUI_PAGE_LICENSE "..\..\Copying"
 Page custom CustomPageSingleuser
 Page custom CustomPageMultiuser
 ; Directory page
@@ -186,7 +186,7 @@ LangString lng_UInstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje usuwania progr
 ; Ask to purge the personal preferences
 LangString lng_PurgePrefs ${LANG_ENGLISH} "Do you want to keep your personal preferences file?"
 LangString lng_PurgePrefs ${LANG_CZECH} "Chcete zachovat vá¹ osobní soubor s nastavením?"
-LangString lng_PurgePrefs${LANG_FRENCH} "Voulez-vous conserver votre fichier de préférences personnelles ?"
+LangString lng_PurgePrefs ${LANG_FRENCH} "Voulez-vous conserver votre fichier de préférences personnelles ?"
 LangString lng_PurgePrefs ${LANG_GERMAN}  "Möchten Sie Ihre persönliche Vorgabendatei behalten?"
 LangString lng_PurgePrefs ${LANG_ITALIAN} "Mantenere i file con le configurazioni personali?"
 LangString lng_PurgePrefs ${LANG_POLISH} "Czy chcesz zachowaæ plik z w³asnymi preferencjami?"
@@ -239,14 +239,12 @@ Function GetWindowsVersion
  
   ClearErrors
  
-  ReadRegStr $R0 HKLM \
-  "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
+  ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
  
   IfErrors 0 lbl_winnt
  
   ; we are not NT
-  ReadRegStr $R0 HKLM \
-  "SOFTWARE\Microsoft\Windows\CurrentVersion" VersionNumber
+  ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion" VersionNumber
  
   StrCpy $R1 $R0 1
   StrCmp $R1 '4' 0 lbl_error
@@ -381,7 +379,7 @@ Section Install
 
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File /a /r "inkscape\*.*"
+  File /a /r "..\..\inkscape\*.*"
   WriteUninstaller "$INSTDIR\uninst.exe"
 
   ; start menu entries
