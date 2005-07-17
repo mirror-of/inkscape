@@ -182,6 +182,7 @@ void sp_item_snappoints(SPItem const *item, SnapPointsIter p);
 void sp_item_adjust_pattern (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
 void sp_item_adjust_gradient (SPItem *item, /* NR::Matrix const &premul, */ NR::Matrix const &postmul, bool set = false);
 void sp_item_adjust_stroke (SPItem *item, gdouble ex);
+void sp_item_adjust_stroke_width_recursive (SPItem *item, gdouble ex);
 void sp_item_adjust_paint_recursive (SPItem *item, NR::Matrix advertized_transform, NR::Matrix t_ancestors, bool is_pattern);
 
 void sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NRMatrix const *transform, NR::Matrix const *adv = NULL);

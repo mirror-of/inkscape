@@ -1550,7 +1550,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
             /* Set dash */
             sp_stroke_style_set_scaled_dash(css, ndash, dash, offset, width);
 
-            sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
+            sp_desktop_apply_css_recursive (SP_OBJECT(i->data), css, true);
         }
 
         g_free(dash);

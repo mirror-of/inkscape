@@ -457,7 +457,7 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
     text->_adjustFontsizeRecursive (item, ex);
 
     // Adjust stroke width
-    sp_item_adjust_stroke(item, ex);
+    sp_item_adjust_stroke_width_recursive (item, ex);
 
     // Adjust pattern fill
     sp_item_adjust_pattern(item, xform * ret.inverse());
