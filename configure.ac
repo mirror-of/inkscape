@@ -93,12 +93,12 @@ AC_CHECK_HEADERS([gc.h gc/gc.h],
                                  [gc_ok=yes;
 				  LIBS="-lgc $gc_libs $LIBS";
                                   break], [gc_ok=no], [$gc_libs])
-		    gc_libs="-ldl"
+		    gc_libs="$lt_cv_dlopen_libs"
 		    AC_CHECK_LIB(gc, GC_realloc,
                                  [gc_ok=yes;
 				  LIBS="-lgc $gc_libs $LIBS";
                                   break], [gc_ok=no], [$gc_libs])
-		    gc_libs="-lpthread -ldl"
+		    gc_libs="-lpthread $lt_cv_dlopen_libs"
 		    AC_CHECK_LIB(gc, GC_free,
                                  [gc_ok=yes;
 				  LIBS="-lgc $gc_libs $LIBS";
@@ -481,13 +481,17 @@ fi
 dnl ******************************
 dnl   Reported by autoscan
 dnl ******************************
+AC_CHECK_FUNCS(pow)
+# if we did not find pow(), see if it's in libm.
+if test x"$ac_cv_func_pow" = x"no" ; then
+	AC_CHECK_LIB(m,pow)
+fi
+AC_CHECK_FUNCS(sqrt)
 AC_CHECK_FUNCS(floor)
 AC_CHECK_FUNCS(gettimeofday)
 AC_CHECK_FUNCS(memmove)
 AC_CHECK_FUNCS(memset)
 AC_CHECK_FUNCS(mkdir)
-AC_CHECK_FUNCS(pow)
-AC_CHECK_FUNCS(sqrt)
 AC_CHECK_FUNCS(strncasecmp)
 AC_CHECK_FUNCS(strpbrk)
 AC_CHECK_FUNCS(strrchr)
