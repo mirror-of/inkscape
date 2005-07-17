@@ -584,6 +584,9 @@ raster_font* font_instance::RasterFont(const font_style &inStyle)
 	raster_font  *res=NULL;
 	double *savDashes=NULL;
 	font_style nStyle=inStyle;
+    // for some evil reason font_style doesn't have a copy ctor, so the
+    // stuff that should be done there is done here instead (because the
+    // raster_font ctor copies nStyle).
 	if ( nStyle.stroke_width > 0 && nStyle.nbDash > 0 && nStyle.dashes ) {
 		savDashes=nStyle.dashes;
 		nStyle.dashes=(double*)malloc(nStyle.nbDash*sizeof(double));
@@ -597,9 +600,9 @@ raster_font* font_instance::RasterFont(const font_style &inStyle)
 		res=nR;
 		if ( res ) Ref();
 	} else {
-		if ( nStyle.dashes ) free(nStyle.dashes); // since they're not taken by a new rasterfont
 		res=loadedStyles[nStyle];
 		res->Ref();
+		if ( nStyle.dashes ) free(nStyle.dashes); // since they're not taken by a new rasterfont
 	}
 	nStyle.dashes=savDashes;
 	return res;
