@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 02:58+0200\n"
-"PO-Revision-Date: 2005-05-02 22:03+0200\n"
+"POT-Creation-Date: 2005-07-18 01:39+0200\n"
+"PO-Revision-Date: 2005-07-09 12:35+0200\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../inkscape.desktop.in.h:1
 msgid "Create and edit Scalable Vector Graphics images"
-msgstr ""
+msgstr "'Scalable Vector Graphics (SVG) '-tekeningen maken en bewerken"
 
 #: ../inkscape.desktop.in.h:2
 msgid "Inkscape SVG Vector Illustrator"
@@ -53,14 +53,14 @@ msgstr ""
 "tekenen."
 
 #: ../src/arc-context.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle or integer-"
 "ratio ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Ellips</b>: %s x %s; druk <b>Ctrl</b> in om een cirkel of een 'gehele-"
-"verhouding' ellips te maken; druk <b>Shift</b> in om rondom het beginpunt te "
-"tekenen"
+"<b>Ellips</b>: %s &#215; %s; druk <b>Ctrl</b> in om een cirkel of een "
+"'gehele-verhouding' ellips te maken; druk <b>Shift</b> in om rondom het "
+"beginpunt te tekenen"
 
 #: ../src/desktop-events.cpp:253
 #, c-format
@@ -134,7 +134,7 @@ msgstr ""
 "<span weight=\"bold\" size=\"larger\">Wijzigingen in het document \"%s\" "
 "opslaan voor het afsluiten?</span>\n"
 "\n"
-"Als u afsluit zonder op te slaan, zullen de wijzingen verloren gaan."
+"Als u afsluit zonder op te slaan, zullen de wijzigingen verloren gaan."
 
 #: ../src/desktop.cpp:1240 ../src/desktop.cpp:1298
 msgid "Close _without saving"
@@ -177,30 +177,25 @@ msgid "Selection"
 msgstr "Selectie"
 
 #: ../src/dialogs/clonetiler.cpp:137
-#, fuzzy
 msgid "<small>Nothing selected.</small>"
-msgstr "Er is <b>niets</b> verwijderd."
+msgstr "<small>Niets geselecteerd.</small>"
 
 #: ../src/dialogs/clonetiler.cpp:143
-#, fuzzy
 msgid "<small>More than one object selected.</small>"
-msgstr ""
-"<b>Meer dan één object geselecteerd.</b> De stijl kan niet van meerdere "
-"objectentegelijk worden overgenomen."
+msgstr "<small>Meer dan één object geselecteerd.</small>"
 
 #: ../src/dialogs/clonetiler.cpp:150
 #, c-format
 msgid "<small>Object has <b>%d</b> tiled clones.</small>"
-msgstr ""
+msgstr "<small>Het object heeft <b>%d</b> getegelde klonen.</small>"
 
 #: ../src/dialogs/clonetiler.cpp:155
 msgid "<small>Object has no tiled clones.</small>"
-msgstr ""
+msgstr "<small>Het object heeft geen getegelde klonen.</small>"
 
 #: ../src/dialogs/clonetiler.cpp:820
-#, fuzzy
 msgid "Select <b>one object</b> whose tiled clones to unclump."
-msgstr "Selecteer <b>één object</b> wiens klonen verwijderd moeten worden."
+msgstr "Selecteer <b>één object</b> wiens klonen ontklonterd moeten worden."
 
 #: ../src/dialogs/clonetiler.cpp:871
 msgid "Select <b>one object</b> whose tiled clones to remove."
@@ -220,15 +215,15 @@ msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:1421
 msgid "<small>Per row:</small>"
-msgstr ""
+msgstr "<small>Per rij:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:1434
 msgid "<small>Per column:</small>"
-msgstr ""
+msgstr "<small>Per kolom:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:1442
 msgid "<small>Randomize:</small>"
-msgstr ""
+msgstr "<small>Willekeurig:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:1585
 msgid "_Symmetry"
@@ -320,17 +315,17 @@ msgstr "Ver_plaatsing"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
 #: ../src/dialogs/clonetiler.cpp:1660
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "<b>Shift X:</b>"
-msgstr "<b>Wijzigen:</b>"
+msgstr "<b>X-verplaatsing:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1668
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "Horizontale verplaatsing voor elke rij (in % van de tegel breedte)"
 
 #: ../src/dialogs/clonetiler.cpp:1676
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "Horizontale verplaatsing voor elke kolom (in % van de tegel breedte)"
 
@@ -340,19 +335,19 @@ msgstr ""
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
 #: ../src/dialogs/clonetiler.cpp:1693
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "<b>Shift Y:</b>"
-msgstr "<b>Wijzigen:</b>"
+msgstr "<b>Y-verplaatsing:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1701
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
-msgstr "Vertikale verplaatsing voor elke rij (in % van de tegel hoogte)"
+msgstr "Verticale verplaatsing voor elke rij (in % van de tegel hoogte)"
 
 #: ../src/dialogs/clonetiler.cpp:1709
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
-msgstr "Vertikale verplaatsing voor elke kolom (in % van de tegel hoogte)"
+msgstr "Verticale verplaatsing voor elke kolom (in % van de tegel hoogte)"
 
 #: ../src/dialogs/clonetiler.cpp:1716
 msgid "Randomize the vertical shift by this percentage"
@@ -365,89 +360,83 @@ msgstr "<b>Wijzigen:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1731
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Of de rij-afstand gelijk blijft (1), afneemt (<1) of toeneemt (>1)"
 
 #: ../src/dialogs/clonetiler.cpp:1738
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
-msgstr ""
+msgstr "Of de kolom-afstand gelijk blijft (1), afneemt (<1) of toeneemt (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
 #: ../src/dialogs/clonetiler.cpp:1746 ../src/dialogs/clonetiler.cpp:1836
 #: ../src/dialogs/clonetiler.cpp:1895 ../src/dialogs/clonetiler.cpp:1951
 #: ../src/dialogs/clonetiler.cpp:2082
 msgid "<small>Alternate:</small>"
-msgstr ""
+msgstr "<small>Afwisselen:</small>"
 
 #: ../src/dialogs/clonetiler.cpp:1752
-#, fuzzy
 msgid "Alternate the sign of shifts for each row"
-msgstr "De verplaatsingen voor elke rij of kolom om-en-om afwisselen"
+msgstr "De verplaatsingen voor elke rij om-en-om afwisselen"
 
 #: ../src/dialogs/clonetiler.cpp:1757
-#, fuzzy
 msgid "Alternate the sign of shifts for each column"
-msgstr "De verplaatsingen voor elke rij of kolom om-en-om afwisselen"
+msgstr "De verplaatsingen voor elke kolom om-en-om afwisselen"
 
 #: ../src/dialogs/clonetiler.cpp:1766
 msgid "Sc_ale"
 msgstr "_Vergroten"
 
 #: ../src/dialogs/clonetiler.cpp:1774
-#, fuzzy
 msgid "<b>Scale X:</b>"
-msgstr "<b>Cirkel</b>"
+msgstr "<b>X-vergroting:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1782
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
-msgstr "Horizontale verplaatsing voor elke rij (in % van de tegel breedte)"
+msgstr "Horizontale vergroting voor elke rij (in % van de tegel breedte)"
 
 #: ../src/dialogs/clonetiler.cpp:1790
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
-msgstr "Horizontale verplaatsing voor elke kolom (in % van de tegel breedte)"
+msgstr "Horizontale vergroting voor elke kolom (in % van de tegel breedte)"
 
 #: ../src/dialogs/clonetiler.cpp:1797
 msgid "Randomize the horizontal scale by this percentage"
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:1805
-#, fuzzy
 msgid "<b>Scale Y:</b>"
-msgstr "<b>Cirkel</b>"
+msgstr "<b>Y-vergroting:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1813
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
-msgstr "Vertikale verplaatsing voor elke rij (in % van de tegel hoogte)"
+msgstr "Verticale vergroting voor elke rij (in % van de tegel hoogte)"
 
 #: ../src/dialogs/clonetiler.cpp:1821
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
-msgstr "Vertikale verplaatsing voor elke kolom (in % van de tegel hoogte)"
+msgstr "Verticale vergroting voor elke kolom (in % van de tegel hoogte)"
 
 #: ../src/dialogs/clonetiler.cpp:1828
+#, fuzzy
 msgid "Randomize the vertical scale by this percentage"
-msgstr ""
+msgstr "De verticale vergroting willekeurig aanpassen met dit percentage"
 
 #: ../src/dialogs/clonetiler.cpp:1842
-#, fuzzy
 msgid "Alternate the sign of scales for each row"
-msgstr "De doorzichtigheid voor elke rij of kolom om-en-om afwisselen "
+msgstr "De vergroting voor elke rij om-en-om afwisselen"
 
 #: ../src/dialogs/clonetiler.cpp:1847
-#, fuzzy
 msgid "Alternate the sign of scales for each column"
-msgstr "De verplaatsingen voor elke rij of kolom om-en-om afwisselen"
+msgstr "De vergroting voor elke kolom om-en-om afwisselen"
 
 #: ../src/dialogs/clonetiler.cpp:1856
 msgid "_Rotation"
-msgstr "_Roteren"
+msgstr "_Draaiing"
 
 #: ../src/dialogs/clonetiler.cpp:1864
-#, fuzzy
 msgid "<b>Angle:</b>"
-msgstr "<b>Wijzigen:</b>"
+msgstr "<b>Hoek:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1872
 #, no-c-format
@@ -461,26 +450,23 @@ msgstr "De tegels onder deze hoek draaien voor elke kolom"
 
 #: ../src/dialogs/clonetiler.cpp:1887
 msgid "Randomize the rotation angle by this percentage"
-msgstr ""
+msgstr "De draai-hoek willekeurig aanpassen met dit percentage"
 
 #: ../src/dialogs/clonetiler.cpp:1901
-#, fuzzy
 msgid "Alternate the rotation direction for each row"
-msgstr "De draairichting voor elke rij of kolom om-en-om afwisselen "
+msgstr "De draai-richting voor elke rij om-en-om afwisselen "
 
 #: ../src/dialogs/clonetiler.cpp:1906
-#, fuzzy
 msgid "Alternate the rotation direction for each column"
-msgstr "De draairichting voor elke rij of kolom om-en-om afwisselen "
+msgstr "De draai-richting voor elke kolom om-en-om afwisselen "
 
 #: ../src/dialogs/clonetiler.cpp:1914
 msgid "_Opacity"
 msgstr "_Ondoorzichtigheid"
 
 #: ../src/dialogs/clonetiler.cpp:1922
-#, fuzzy
 msgid "<b>Fade out:</b>"
-msgstr "<b>Wijzigen:</b>"
+msgstr "<b>Oplossen:</b>"
 
 #: ../src/dialogs/clonetiler.cpp:1929
 msgid "Decrease tile opacity by this percentage for each row"
@@ -491,39 +477,36 @@ msgid "Decrease tile opacity by this percentage for each column"
 msgstr "Verminder de ondoorzichtigheid met dit percentage voor elke kolom"
 
 #: ../src/dialogs/clonetiler.cpp:1943
-#, fuzzy
 msgid "Randomize the tile opacity by this percentage"
-msgstr "Verminder de ondoorzichtigheid met dit percentage voor elke rij"
+msgstr "De ondoorzichtigheid willekeurig aanpassen met dit percentage"
 
 #: ../src/dialogs/clonetiler.cpp:1957
-#, fuzzy
 msgid "Alternate the sign of opacity change for each row"
-msgstr "De doorzichtigheid voor elke rij of kolom om-en-om afwisselen "
+msgstr "De doorzichtigheid voor elke rij om-en-om afwisselen "
 
 #: ../src/dialogs/clonetiler.cpp:1962
-#, fuzzy
 msgid "Alternate the sign of opacity change for each column"
-msgstr "De doorzichtigheid voor elke rij of kolom om-en-om afwisselen "
+msgstr "De doorzichtigheid voor elke kolom om-en-om afwisselen "
 
 #: ../src/dialogs/clonetiler.cpp:1970
-#, fuzzy
 msgid "Co_lor"
-msgstr "Kleur"
+msgstr "K_leur"
 
 #: ../src/dialogs/clonetiler.cpp:1975
-#, fuzzy
 msgid "Initial color: "
-msgstr "Kleur selectie:"
+msgstr "Begin kleur:"
 
 #: ../src/dialogs/clonetiler.cpp:1979
 msgid "Initial color of tiled clones"
-msgstr ""
+msgstr "Begin kleur van getegelde klonen"
 
 #: ../src/dialogs/clonetiler.cpp:1979
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke)"
 msgstr ""
+"Begin kleur van klonen (werkt alleen als het origineel geen vulling- of "
+"lijnkleur heeft)"
 
 #: ../src/dialogs/clonetiler.cpp:1994
 #, fuzzy
@@ -583,24 +566,20 @@ msgid "Randomize the color lightness by this percentage"
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2088
-#, fuzzy
 msgid "Alternate the sign of color changes for each row"
-msgstr "De doorzichtigheid voor elke rij of kolom om-en-om afwisselen "
+msgstr "De kleur-wijzigingen voor elke rij om-en-om afwisselen "
 
 #: ../src/dialogs/clonetiler.cpp:2093
-#, fuzzy
 msgid "Alternate the sign of color changes for each column"
-msgstr "De doorzichtigheid voor elke rij of kolom om-en-om afwisselen "
+msgstr "De kleur-wijzigingen voor elke kolom om-en-om afwisselen "
 
 #: ../src/dialogs/clonetiler.cpp:2101
-#, fuzzy
 msgid "_Trace"
-msgstr "Bitmap _overtrekken"
+msgstr "_Overtrekken"
 
 #: ../src/dialogs/clonetiler.cpp:2108
-#, fuzzy
 msgid "Trace the drawing under the tiles"
-msgstr "Overtrekken in het opgegeven aantal helderheidsniveaus"
+msgstr "De tekening onder de tegels overtrekken"
 
 #: ../src/dialogs/clonetiler.cpp:2112
 msgid ""
@@ -619,45 +598,40 @@ msgid "Color"
 msgstr "Kleur"
 
 #: ../src/dialogs/clonetiler.cpp:2138
-#, fuzzy
 msgid "Pick the visible color and opacity"
-msgstr "Selecteer de zichtbare kleur (niet de doorzichtigheid)"
+msgstr "Selecteer de zichtbare kleur en de ondoorzichtigheid"
 
 #: ../src/dialogs/clonetiler.cpp:2145 ../src/dialogs/clonetiler.cpp:2294
-#, fuzzy
 msgid "Opacity"
-msgstr "_Ondoorzichtigheid"
+msgstr "Ondoorzichtigheid"
 
 #: ../src/dialogs/clonetiler.cpp:2146
 msgid "Pick the total accumulated opacity"
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2153
-#, fuzzy
 msgid "R"
-msgstr "_R"
+msgstr "R"
 
 #: ../src/dialogs/clonetiler.cpp:2154
 msgid "Pick the Red component of the color"
-msgstr ""
+msgstr "Selecteer de Rood-component van de kleur"
 
 #: ../src/dialogs/clonetiler.cpp:2161
-#, fuzzy
 msgid "G"
-msgstr "_G"
+msgstr "G"
 
 #: ../src/dialogs/clonetiler.cpp:2162
 msgid "Pick the Green component of the color"
-msgstr ""
+msgstr "Selecteer de Groen-component van de kleur"
 
 #: ../src/dialogs/clonetiler.cpp:2169
-#, fuzzy
 msgid "B"
-msgstr "_B"
+msgstr "B"
 
 #: ../src/dialogs/clonetiler.cpp:2170
 msgid "Pick the Blue component of the color"
-msgstr ""
+msgstr "Selecteer de Blauw-component van de kleur"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
@@ -711,22 +685,20 @@ msgid "Randomize the picked value by this percentage"
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2244
-#, fuzzy
 msgid "Invert:"
-msgstr "Omdraaien"
+msgstr "Omdraaien:"
 
 #: ../src/dialogs/clonetiler.cpp:2248
 msgid "Invert the picked value"
-msgstr ""
+msgstr "Draai de gekozen waarde om"
 
 #: ../src/dialogs/clonetiler.cpp:2254
 msgid "3. Apply the value to the clones':"
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2264
-#, fuzzy
 msgid "Presence"
-msgstr "Behouden"
+msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2267
 msgid ""
@@ -735,9 +707,8 @@ msgid ""
 msgstr ""
 
 #: ../src/dialogs/clonetiler.cpp:2274
-#, fuzzy
 msgid "Size"
-msgstr "Zijkanten:"
+msgstr "Afmeting"
 
 #: ../src/dialogs/clonetiler.cpp:2277
 msgid "Each clone's size is determined by the picked value in that point"
@@ -763,25 +734,23 @@ msgstr "Hoeveel kolommen er betegeld moeten worden"
 
 #: ../src/dialogs/clonetiler.cpp:2374
 msgid "Width of the rectangle to be filled"
-msgstr ""
+msgstr "Breedte van de rechthoek die gevuld moet worden"
 
 #: ../src/dialogs/clonetiler.cpp:2399
 msgid "Height of the rectangle to be filled"
-msgstr ""
+msgstr "Hoogte van de rechthoek die gevuld moet worden"
 
 #: ../src/dialogs/clonetiler.cpp:2414
-#, fuzzy
 msgid "Rows, columns: "
-msgstr "Aantal kolommen"
+msgstr "Rijen, kolommen:"
 
 #: ../src/dialogs/clonetiler.cpp:2415
-#, fuzzy
 msgid "Create the specified number of rows and columns"
-msgstr "Overtrekken in het opgegeven aantal kleuren"
+msgstr "Het opgegeven aantal rijen en kolommen aanmaken"
 
 #: ../src/dialogs/clonetiler.cpp:2424
 msgid "Width, height: "
-msgstr ""
+msgstr "Breedte, hoogte:"
 
 #: ../src/dialogs/clonetiler.cpp:2425
 msgid "Fill the specified width and height with the tiling"
@@ -797,7 +766,7 @@ msgid ""
 "you tiled it (if any), instead of using the current size"
 msgstr ""
 "Doe alsof de grootte en de positie van de tegel hetzelfde zijn als de "
-"laatstekeer dat u er mee tegelde, in plaats van de huidige grootte en "
+"laatste keer dat u er mee tegelde, in plaats van de huidige grootte en "
 "positie te gebruiken."
 
 #: ../src/dialogs/clonetiler.cpp:2468
@@ -814,12 +783,15 @@ msgstr "Maak klonen van de selectie en gebruik ze als betegeling"
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
 #: ../src/dialogs/clonetiler.cpp:2485
+#, fuzzy
 msgid " _Unclump "
-msgstr ""
+msgstr "_Ontklonteren"
 
 #: ../src/dialogs/clonetiler.cpp:2486
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr ""
+"De klonen verspreiden om ze te ontklonteren; kan herhaaldelijk worden "
+"toegepast"
 
 #: ../src/dialogs/clonetiler.cpp:2492
 msgid " Re_move "
@@ -891,9 +863,8 @@ msgstr "Het raster is magnetisch voor omhullenden"
 
 #: ../src/dialogs/desktop-properties.cpp:892
 #: ../src/dialogs/desktop-properties.cpp:975
-#, fuzzy
 msgid "Snap the edges of the object bounding boxes"
-msgstr "Elk geselecteerde object heeft een eigen omhullende"
+msgstr "Omhullenden van objecten zijn magnetisch"
 
 #: ../src/dialogs/desktop-properties.cpp:893
 msgid "Snap points to grid"
@@ -935,43 +906,38 @@ msgid "Snap distance:"
 msgstr "Magnetisme werkt tot:"
 
 #: ../src/dialogs/desktop-properties.cpp:932
-#, fuzzy
 msgid "Grid line color:"
-msgstr "Kleur van hulplijnen"
+msgstr "Kleur van hulplijnen:"
 
 #: ../src/dialogs/desktop-properties.cpp:933
-#, fuzzy
 msgid "Grid line color"
 msgstr "Kleur van hulplijnen"
 
 #: ../src/dialogs/desktop-properties.cpp:933
-#, fuzzy
 msgid "Color of grid lines"
-msgstr "Afstand tussen hoofdlijnen:"
+msgstr "De kleur van de hulplijnen"
 
 #: ../src/dialogs/desktop-properties.cpp:935
 msgid "Major grid line color:"
 msgstr "Kleur van raster-hoofdlijnen:"
 
 #: ../src/dialogs/desktop-properties.cpp:936
-#, fuzzy
 msgid "Major grid line color"
-msgstr "Kleur van raster-hoofdlijnen:"
+msgstr "Kleur van raster-hoofdlijnen"
 
 #: ../src/dialogs/desktop-properties.cpp:936
 msgid "Color of the major (highlighted) grid lines"
-msgstr ""
+msgstr "De kleur van de geselecteerde raster-hoofdlijnen"
 
 #: ../src/dialogs/desktop-properties.cpp:939
-#, fuzzy
 msgid "Major grid line every:"
-msgstr "Kleur van raster-hoofdlijnen:"
+msgstr "Een raster-hoofdlijn elke:"
 
 #. TRANSLATORS: This belongs to the "Major grid line every:" string,
 #. see grid settings in the "Document Preferences" dialog
 #: ../src/dialogs/desktop-properties.cpp:951
 msgid "lines"
-msgstr "bijlijnen"
+msgstr "rasterlijnen"
 
 #. Guidelines page
 #: ../src/dialogs/desktop-properties.cpp:965
@@ -1004,9 +970,8 @@ msgid "Guideline color"
 msgstr "Kleur van hulplijnen"
 
 #: ../src/dialogs/desktop-properties.cpp:995
-#, fuzzy
 msgid "Color of guidelines"
-msgstr "horizontale hulplijn"
+msgstr "Kleur van de hulplijnen"
 
 #: ../src/dialogs/desktop-properties.cpp:997
 msgid "Highlight color:"
@@ -1021,9 +986,8 @@ msgid "Color of a guideline when it is under mouse"
 msgstr ""
 
 #: ../src/dialogs/desktop-properties.cpp:1013
-#, fuzzy
 msgid "Background:"
-msgstr "Achtergrondkleur"
+msgstr "Achtergrondkleur:"
 
 #: ../src/dialogs/desktop-properties.cpp:1014
 msgid "Background color"
@@ -1051,13 +1015,12 @@ msgid "Canvas border color"
 msgstr "Kleur van de canvasrand"
 
 #: ../src/dialogs/desktop-properties.cpp:1028
-#, fuzzy
 msgid "Color of the canvas border"
-msgstr "Canvasrand weergeven"
+msgstr "Kleur van de canvasrand"
 
 #: ../src/dialogs/desktop-properties.cpp:1033
 msgid "Show page shadow"
-msgstr ""
+msgstr "Pagina schaduw weergeve"
 
 #: ../src/dialogs/desktop-properties.cpp:1037
 msgid "Default units:"
@@ -1327,7 +1290,6 @@ msgid "Grab sensitivity:"
 msgstr "Klik-gevoeligheid:"
 
 #: ../src/dialogs/display-settings.cpp:897
-#, fuzzy
 msgid ""
 "How close on the screen you need to be to an object to be able to grab it "
 "with mouse (in screen pixels)"
@@ -1382,9 +1344,8 @@ msgid "Scroll by:"
 msgstr "Verschuiven met:"
 
 #: ../src/dialogs/display-settings.cpp:942
-#, fuzzy
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
-msgstr "Ctrl indrukken met een pijltjes toets verschuift zoveel beeldpunten"
+msgstr "Ctrl indrukken met een pijltjestoets verschuift zoveel beeldpunten"
 
 #: ../src/dialogs/display-settings.cpp:952
 msgid "Acceleration:"
@@ -1421,14 +1382,13 @@ msgid "Threshold:"
 msgstr "Grenswaarde:"
 
 #: ../src/dialogs/display-settings.cpp:982
-#, fuzzy
 msgid ""
 "How far (in screen pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
 "Hoe ver de cursor van de canvasrand moet zijn verwijderd om het automatisch "
 "verschuiven te activeren; positieve getallen voor buiten het canvas, "
-"negatieve voor er binnen."
+"negatieve voor er binnen"
 
 #. Steps
 #: ../src/dialogs/display-settings.cpp:992
@@ -1441,13 +1401,12 @@ msgid "Arrow keys move by:"
 msgstr "Pijltjes toetsen verschuiven met:"
 
 #: ../src/dialogs/display-settings.cpp:996
-#, fuzzy
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in px units)"
 msgstr ""
-"Een pijltjes toets indrukken verplaatst de geselecteeerde objecten of "
-"knooppunten zoveel (in SVG pixels)"
+"Een pijltjes toets indrukken verplaatst de geselecteerde objecten of "
+"knooppunten zoveel (in pixels)"
 
 #: ../src/dialogs/display-settings.cpp:997
 #: ../src/dialogs/display-settings.cpp:1008
@@ -1465,22 +1424,18 @@ msgid "> and < scale by:"
 msgstr "> en < schalen met:"
 
 #: ../src/dialogs/display-settings.cpp:1007
-#, fuzzy
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in px units)"
-msgstr ""
-"Op > of < drukken vergroot of verkleint de selectie met zoveel SVG pixels"
+msgstr "Op > of < drukken vergroot of verkleint de selectie met zoveel pixels"
 
 #: ../src/dialogs/display-settings.cpp:1017
 msgid "Inset/Outset by:"
 msgstr "Binnen-/buitenrand met:"
 
 #: ../src/dialogs/display-settings.cpp:1018
-#, fuzzy
 msgid ""
 "Inset and Outset commands displace the path by this distance (in px units)"
-msgstr ""
-"Binnen- en buitenrand opdrachten passen het pad aan met zoveel (SVG) pixels"
+msgstr "Binnen- en buitenrand opdrachten passen het pad aan met zoveel pixels"
 
 #: ../src/dialogs/display-settings.cpp:1030
 msgid "Zoom in/out by:"
@@ -1910,33 +1865,28 @@ msgid "Export area"
 msgstr "Gebied exporteren"
 
 #: ../src/dialogs/export.cpp:302
-#, fuzzy
 msgid "_x0:"
-msgstr "x0:"
+msgstr "_x0:"
 
 #: ../src/dialogs/export.cpp:307
-#, fuzzy
 msgid "x_1:"
-msgstr "x1:"
+msgstr "x_1:"
 
 #: ../src/dialogs/export.cpp:318
-#, fuzzy
 msgid "_y0:"
-msgstr "y0:"
+msgstr "_y0:"
 
 #: ../src/dialogs/export.cpp:323
-#, fuzzy
 msgid "y_1:"
-msgstr "y1:"
+msgstr "y_1:"
 
 #: ../src/dialogs/export.cpp:409
 msgid "Bitmap size"
 msgstr "Bitmap afmeting"
 
 #: ../src/dialogs/export.cpp:419
-#, fuzzy
 msgid "_Width:"
-msgstr "Breedte:"
+msgstr "_Breedte:"
 
 #: ../src/dialogs/export.cpp:419 ../src/dialogs/export.cpp:434
 #, fuzzy
@@ -1944,37 +1894,32 @@ msgid "pixels at"
 msgstr "beeldpunten"
 
 #: ../src/dialogs/export.cpp:429
-#, fuzzy
 msgid "dp_i"
-msgstr "dpi"
+msgstr "dp_i"
 
 #: ../src/dialogs/export.cpp:451
-#, fuzzy
 msgid "_Filename"
-msgstr "Bestandsnaam"
+msgstr "_Bestandsnaam"
 
 #: ../src/dialogs/export.cpp:515
-#, fuzzy
 msgid "_Browse..."
-msgstr "Bladeren..."
+msgstr "_Bladeren..."
 
 #: ../src/dialogs/export.cpp:542
-#, fuzzy
 msgid " <b>_Export</b> "
-msgstr "<b>_Aanmaken</b>"
+msgstr "<b>_Exporteren</b>"
 
 #: ../src/dialogs/export.cpp:544
-#, fuzzy
 msgid "Export the bitmap file with these settings"
-msgstr "Herhaal het laatste effect met dezelfde instellingen"
+msgstr "Exporteren naar een bitmap-afbeelding met deze instellingen"
 
 #: ../src/dialogs/export.cpp:970
 msgid "You have to enter a filename"
-msgstr "Vul alstublieft een bestandnaam in"
+msgstr "Vul alstublieft een bestandsnaam in"
 
 #: ../src/dialogs/export.cpp:975
 msgid "The chosen area to be exported is invalid"
-msgstr "Het geselecteerde gebied is ongeldig"
+msgstr "Het geselecteerde gebied is ongeldig voor exporten"
 
 #: ../src/dialogs/export.cpp:984
 #, c-format
@@ -1986,9 +1931,9 @@ msgid "Export in progress"
 msgstr "Bezig met exporteren"
 
 #: ../src/dialogs/export.cpp:1006
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s (%d x %d)"
-msgstr "Bezig met exporteren [%d x %d] %s"
+msgstr "Bezig met exporteren %s (%d x %d)"
 
 #: ../src/dialogs/export.cpp:1033
 #, c-format
@@ -2028,7 +1973,7 @@ msgstr "Kies op basis van extentie"
 #. ###### Do we want the .xxx extension automatically added?
 #: ../src/dialogs/filedialog.cpp:1261
 msgid "Append filename extension automatically"
-msgstr "Automatisch de bestandsnaam extentie toevoegen"
+msgstr "Automatisch de bestandsnaam extensie toevoegen"
 
 #: ../src/dialogs/find.cpp:79 ../src/dialogs/find.cpp:744
 msgid "Find objects by their text content (exact or partial match)"
@@ -2059,8 +2004,8 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s overeenkomst."
-msgstr[1] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s overeenkomst."
+msgstr[0] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s komen overeen."
+msgstr[1] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s komen overeen."
 
 #: ../src/dialogs/find.cpp:431
 msgid "exact"
@@ -2241,9 +2186,8 @@ msgstr ""
 #: ../src/dialogs/item-properties.cpp:372
 #: ../src/dialogs/item-properties.cpp:441
 #: ../src/dialogs/item-properties.cpp:448
-#, fuzzy
 msgid "_Id"
-msgstr "ID"
+msgstr "_ID"
 
 #: ../src/dialogs/item-properties.cpp:153
 msgid ""
@@ -2254,15 +2198,13 @@ msgstr ""
 
 #. Button for setting the object's id, label, title and description.
 #: ../src/dialogs/item-properties.cpp:167
-#, fuzzy
 msgid "_Set"
-msgstr "Instellen"
+msgstr "_Instellen"
 
 #. Create the label for the object label
 #: ../src/dialogs/item-properties.cpp:176
-#, fuzzy
 msgid "_Label"
-msgstr "Label "
+msgstr "_Label"
 
 #: ../src/dialogs/item-properties.cpp:185
 msgid "A freeform label for the object"
@@ -2280,9 +2222,8 @@ msgstr "Beschrijving"
 
 #. Hide
 #: ../src/dialogs/item-properties.cpp:241
-#, fuzzy
 msgid "_Hide"
-msgstr "Verbergen"
+msgstr "_Verbergen"
 
 #: ../src/dialogs/item-properties.cpp:242
 msgid "Check to make the object invisible"
@@ -2291,14 +2232,13 @@ msgstr "Selecteer dit om het object onzichtbaar te maken"
 #. Lock
 #. TRANSLATORS: "Lock" is a verb here
 #: ../src/dialogs/item-properties.cpp:251
-#, fuzzy
 msgid "L_ock"
-msgstr "Vergrendelen"
+msgstr "Ver_grendelen"
 
 #: ../src/dialogs/item-properties.cpp:252
 msgid "Check to make the object insensitive (not selectable by mouse)"
 msgstr ""
-"Selecteer dit om het object ongevoellig te maken (niet selecteerbaar met de "
+"Selecteer dit om het object ongevoelig te maken (niet selecteerbaar met de "
 "muis)"
 
 #. Transformation matrix
@@ -2312,17 +2252,14 @@ msgid "Ref"
 msgstr "Referentie"
 
 #: ../src/dialogs/item-properties.cpp:443
-#, fuzzy
 msgid "Id invalid! "
-msgstr "Ongeldig ID"
+msgstr "Ongeldig ID!"
 
 #: ../src/dialogs/item-properties.cpp:445
-#, fuzzy
 msgid "Id exists! "
-msgstr "ID bestaat"
+msgstr "ID bestaat al!"
 
 #: ../src/dialogs/layer-properties.cpp:49
-#, fuzzy
 msgid "Layer name:"
 msgstr "Naam van de laag:"
 
@@ -2340,14 +2277,12 @@ msgid "Renamed layer"
 msgstr "De laag is hernoemd"
 
 #: ../src/dialogs/layer-properties.cpp:150
-#, fuzzy
 msgid "Add Layer"
-msgstr "_Laag"
+msgstr "Laag toevoegen"
 
 #: ../src/dialogs/layer-properties.cpp:152
-#, fuzzy
 msgid "_Add"
-msgstr "Toevoegen"
+msgstr "_Toevoegen"
 
 #: ../src/dialogs/layer-properties.cpp:166
 msgid "New layer created."
@@ -2410,24 +2345,20 @@ msgid "%s attributes"
 msgstr "%s eigenschappen"
 
 #: ../src/dialogs/object-properties.cpp:158
-#, fuzzy
 msgid "_Fill"
-msgstr "Vullen"
+msgstr "_Vullen"
 
 #: ../src/dialogs/object-properties.cpp:165
-#, fuzzy
 msgid "Stroke _paint"
-msgstr "Lijnkleur"
+msgstr "_Lijnkleur"
 
 #: ../src/dialogs/object-properties.cpp:172
-#, fuzzy
 msgid "Stroke st_yle"
-msgstr "Lijnstijl"
+msgstr "Lijn_stijl"
 
 #: ../src/dialogs/object-properties.cpp:183
-#, fuzzy
 msgid "Master _opacity"
-msgstr "Hoofd-ondoorzichtigheid"
+msgstr "Hoofd-_ondoorzichtigheid"
 
 #: ../src/dialogs/rdf.cpp:244
 msgid "Name by which this document is formally known."
@@ -2451,9 +2382,8 @@ msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr "verschijning"
 
 #: ../src/dialogs/rdf.cpp:252
-#, fuzzy
 msgid "Type"
-msgstr "Type:"
+msgstr "Type"
 
 #: ../src/dialogs/rdf.cpp:253
 msgid "Type of document (DCMI Type)."
@@ -2466,7 +2396,7 @@ msgstr "Ontwerper"
 #: ../src/dialogs/rdf.cpp:257
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
-msgstr "Naam van de hoofdverantwoordelijke van dit document."
+msgstr "Naam van de eindverantwoordelijke van dit document."
 
 #: ../src/dialogs/rdf.cpp:259
 msgid "Rights"
@@ -2681,7 +2611,7 @@ msgstr "Eind markering:"
 #: ../src/dialogs/swatches.cpp:425
 #, c-format
 msgid "Palettes directory (%s) is unavailable."
-msgstr ""
+msgstr "De map met paletten (%s) is niet beschikbaar."
 
 #. TODO:  Insert widgets
 #: ../src/dialogs/text-edit.cpp:200 ../src/ui/dialog/text-properties.cpp:36
@@ -2711,7 +2641,7 @@ msgstr "Horizontale tekst"
 
 #: ../src/dialogs/text-edit.cpp:293
 msgid "Vertical text"
-msgstr "Vertikale tekst"
+msgstr "Verticale tekst"
 
 #: ../src/dialogs/text-edit.cpp:308
 msgid "Line spacing:"
@@ -2742,13 +2672,12 @@ msgstr ""
 #. #### Radio buttons to control vertical alignment ####
 #. #### Radio buttons to control horizontal alignment ####
 #: ../src/dialogs/tiledialog.cpp:640 ../src/dialogs/tiledialog.cpp:711
-#, fuzzy
 msgid "Align:"
-msgstr "Uitlijnen"
+msgstr "Uitlijnen:"
 
 #: ../src/dialogs/tiledialog.cpp:675
 msgid " X "
-msgstr ""
+msgstr " X "
 
 #. #### Number of columns ####
 #: ../src/dialogs/tiledialog.cpp:681
@@ -2756,14 +2685,12 @@ msgid "Columns:"
 msgstr "Kolommen:"
 
 #: ../src/dialogs/tiledialog.cpp:691
-#, fuzzy
 msgid "Number of columns"
 msgstr "Aantal kolommen"
 
 #: ../src/dialogs/tiledialog.cpp:695
-#, fuzzy
 msgid "Equal width"
-msgstr "Breedte:"
+msgstr "Gelijke breedte"
 
 #: ../src/dialogs/tiledialog.cpp:704
 msgid "If not set, each column has the width of the widest object in it"
@@ -2776,20 +2703,17 @@ msgid "Fit into selection box"
 msgstr "Breedte van de selectie"
 
 #: ../src/dialogs/tiledialog.cpp:756
-#, fuzzy
 msgid "Set spacing:"
-msgstr "Y tussenafstand:"
+msgstr "Tussen afstand:"
 
 #. #### Y Padding ####
 #: ../src/dialogs/tiledialog.cpp:780
-#, fuzzy
 msgid "Row spacing:   "
 msgstr "Rij afstand:"
 
 #: ../src/dialogs/tiledialog.cpp:789
-#, fuzzy
 msgid "Vertical spacing between rows"
-msgstr "Vertikale ruimte tussen rijen"
+msgstr "Verticale ruimte tussen rijen"
 
 #. #### X padding ####
 #: ../src/dialogs/tiledialog.cpp:798
@@ -2801,9 +2725,8 @@ msgid "Horizontal spacing between columns"
 msgstr "Horizontale ruimte tussen kolommen"
 
 #: ../src/dialogs/tiledialog.cpp:821
-#, fuzzy
 msgid "Arrange Objects"
-msgstr "Uitlijnen en verdelen"
+msgstr "Objecten verdelen"
 
 #. Move page
 #: ../src/dialogs/transformation.cpp:321 ../src/dialogs/transformation.cpp:464
@@ -2978,16 +2901,15 @@ msgid "<b>Release mouse</b> to set color."
 msgstr "<b>De muisknop los laten</b> om de kleur te selecteren."
 
 #: ../src/dropper-context.cpp:371 ../src/tools-switch.cpp:203
-#, fuzzy
 msgid ""
 "<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to "
 "average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> "
 "to copy the color under mouse to clipboard"
 msgstr ""
 "<b>Klik</b>om de vulkleur te kiezen, <b>shift-klik</b> om de lijnkleur te "
-"kiezen. <b>Klik en sleep</b> om de gemiddelde kleur van een gebied te "
-"kiezen. <b>Ctrl+C</b> om de kleur onder de cursor naar het klembord te "
-"kopieëren."
+"kiezen. <b>Sleep</b> om de gemiddelde kleur van een gebied te kiezen. "
+"<b>Alt</b> om de geïnverteerde kleur te kiezen. <b>Ctrl+C</b> om de kleur "
+"onder de cursor naar het klembord te kopiëren."
 
 #: ../src/extension/dependency.cpp:242
 msgid "Dependency::"
@@ -3124,7 +3046,7 @@ msgstr "Horizontale tussenruimte"
 
 #: ../src/extension/internal/grid.cpp:216
 msgid "Vertical Spacing"
-msgstr "Vertikale tussenruimte"
+msgstr "Verticale tussenruimte"
 
 #: ../src/extension/internal/grid.cpp:217
 msgid "Horizontal Offset"
@@ -3132,7 +3054,7 @@ msgstr "Horizontale inspring"
 
 #: ../src/extension/internal/grid.cpp:218
 msgid "Vertical Offset"
-msgstr "Vertikale inspring"
+msgstr "Verticale inspring"
 
 #: ../src/extension/internal/ps.cpp:132
 msgid "Print Destination"
@@ -3997,6 +3919,8 @@ msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
+"De X-coördinaat van de tekening opvragen, of - indien opgegeven met --query-"
+"id - van het object"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:293
@@ -4004,6 +3928,8 @@ msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
 msgstr ""
+"De Y-coördinaat van de tekening opvragen, of - indien opgegeven met --query-"
+"id - van het object"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:299
@@ -4011,6 +3937,8 @@ msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
+"De breedte van de tekening opvragen, of - indien opgegeven met --query-id - "
+"van het object"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
 #: ../src/main.cpp:305
@@ -4018,18 +3946,17 @@ msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
 msgstr ""
+"De hoogte van de tekening opvragen, of - indien opgegeven met --query-id - "
+"van het object"
 
 #: ../src/main.cpp:310
-#, fuzzy
 msgid "The ID of the object whose dimensions are queried"
-msgstr ""
-"Het ID van het te exporteren object (dit overschijft het te exporteren "
-"gebied)"
+msgstr "Het ID van het object waarvan de informatie wordt opgevraagd"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
 #: ../src/main.cpp:316
 msgid "Print out the extension directory and exit"
-msgstr ""
+msgstr "Geef de "
 
 #: ../src/main.cpp:321
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
@@ -4062,20 +3989,20 @@ msgid ""
 "+Alt</b>: move along handles"
 msgstr ""
 "<b>Ctrl</b>: kies knooppunt type, draai in stappen, verplaats horizontaal/"
-"vertikaal; <b>Ctrl+Alt</b>: verplaatsen in de richting van de handvaten"
+"verticaal; <b>Ctrl+Alt</b>: verplaatsen in de richting van de handvatten"
 
 #: ../src/node-context.cpp:383
 msgid ""
 "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Shift</b>: wissel knooppunt selectie, magnetisch raster uit te zetten, "
-"draai beide handvaten"
+"draai beide handvatten"
 
 #: ../src/node-context.cpp:384
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
 msgstr ""
 "<b>Alt</b>: vergrendel handvat lengte; <b>Ctrl+Alt</b>: verplaatsen in de "
-"richting van de handvaten"
+"richting van de handvatten"
 
 #: ../src/nodepath.cpp:1188 ../src/nodepath.cpp:1200 ../src/nodepath.cpp:1280
 #: ../src/nodepath.cpp:1292
@@ -4095,14 +4022,14 @@ msgid "Cannot find path between nodes."
 msgstr "Geen pad gevonden tussen de knooppunten"
 
 #: ../src/nodepath.cpp:2551
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both "
 "handles"
 msgstr ""
-"<b>Knooppunt handvat</b>: sleep om de ronding te vormen; <b>Ctrl</b> draait "
-"in stappen; <b>Alt</b> vergrendelt de lengte; <b>Shift</b> draait ook het "
+"<b>Knooppunt handvat</b>: op %.02f&#176;, lengte %s; <b>Ctrl</b> draait in "
+"stappen; <b>Alt</b> vergrendelt de lengte; <b>Shift</b> draait ook het "
 "andere handvat"
 
 #: ../src/nodepath.cpp:3047
@@ -4110,12 +4037,11 @@ msgid ""
 "<b>Node</b>: drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
 msgstr ""
-"<b>Knooppunt</b>: sleep om het pad te wijzigen; met <b>Ctrl</b> beperktde "
-"beweging tot horizontaal/vertikaal; <b>Ctrl+Alt</b> beperkt in handvat-"
+"<b>Knooppunt</b>: sleep om het pad te wijzigen; met <b>Ctrl</b> beperkt de "
+"beweging tot horizontaal/verticaal; <b>Ctrl+Alt</b> beperkt in handvat-"
 "richting"
 
 #: ../src/nodepath.cpp:3071
-#, fuzzy
 msgid ""
 "<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"
@@ -4136,9 +4062,8 @@ msgstr ""
 
 #. TRANSLATORS: "end" is an adjective here (NOT a verb)
 #: ../src/nodepath.cpp:3232
-#, fuzzy
 msgid "end node"
-msgstr "Item meer inspringen"
+msgstr "eind-knooppunt"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: ../src/nodepath.cpp:3237
@@ -4158,14 +4083,17 @@ msgstr "symmetrisch"
 #: ../src/nodepath.cpp:3248
 msgid "end node, handle retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
+"eind-knooppunt, handvat ingetrokken (sleep met <b>shift</b> om het uit te "
+"trekken)"
 
 #: ../src/nodepath.cpp:3250
 msgid "one handle retracted (drag with <b>Shift</b> to extend)"
-msgstr ""
+msgstr "één handvat ingetrokken (sleep met <b>shift</b> om het uit te trekken)"
 
 #: ../src/nodepath.cpp:3253
 msgid "both handles retracted (drag with <b>Shift</b> to extend)"
 msgstr ""
+"beide handvatten ingetrokken (sleep met <b>shift</b> om ze uit te trekken)"
 
 #: ../src/nodepath.cpp:3262
 #, fuzzy
@@ -4224,14 +4152,14 @@ msgid ""
 "vertical radius the same"
 msgstr ""
 "De straal van de <b>horizontale afronding</b> van hoeken instellen; gebruik "
-"<b>Ctrl</b> om de vertikale straal gelijk te maken"
+"<b>Ctrl</b> om de verticale straal gelijk te maken"
 
 #: ../src/object-edit.cpp:447
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
-"De straal van de <b>vertikale afronding</b> van hoeken instellen; gebruik "
+"De straal van de <b>verticale afronding</b> van hoeken instellen; gebruik "
 "<b>Ctrl</b> om de horizontale straal gelijk te maken"
 
 #: ../src/object-edit.cpp:449 ../src/object-edit.cpp:451
@@ -4448,13 +4376,13 @@ msgstr ""
 "de afronding van afgeronde hoek"
 
 #: ../src/rect-context.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-"
 "ratio rectangle; with <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Rechthoek</b>: %s x %s; <b>ctrl</b> om een 'gehele verhouding'-rechthoek "
-"te maken; <b>shift</b> om rondom het beginpunt te tekenen"
+"<b>Rechthoek</b>: %s &#215; %s; <b>ctrl</b> om een 'gehele verhouding'-"
+"rechthoek te maken; <b>shift</b> om rondom het beginpunt te tekenen"
 
 #: ../src/select-context.cpp:242
 msgid "Move canceled."
@@ -4467,7 +4395,7 @@ msgstr "Selecteren afgebroken."
 #: ../src/select-context.cpp:613
 msgid "<b>Ctrl</b>: select in groups, move hor/vert"
 msgstr ""
-"<b>Ctrl</b>: selecteer binnenin groepen, verplaats horizontaal/vertikaal"
+"<b>Ctrl</b>: selecteer binnenin groepen, verplaats horizontaal/verticaal"
 
 #: ../src/select-context.cpp:614
 msgid "<b>Shift</b>: toggle select, force rubberband, disable snapping"
@@ -4486,7 +4414,7 @@ msgid ""
 "with <b>Shift</b> to disable snapping"
 msgstr ""
 "<b>Verplaatsen</b> met %s, %s; druk <b>Ctrl</b> om het te beperken tot "
-"horizontaal en vertikaal, druk <b>Shift</b> om magnetisch raster uit te "
+"horizontaal en verticaal, druk <b>Shift</b> om magnetisch raster uit te "
 "zetten."
 
 #. TRANSLATORS: only translate "string" in "context|string".
@@ -4509,7 +4437,7 @@ msgstr "Selectie-gereedschap"
 
 #: ../src/select-toolbar.cpp:426
 msgid "Vertical coordinate of selection"
-msgstr "Vertikale coördinaat van de selectie"
+msgstr "Verticale coördinaat van de selectie"
 
 #. TRANSLATORS: only translate "string" in "context|string".
 #. For more details, see http://developer.gnome.org/doc/API/2.0/glib/glib-I18N.html#Q-:CAPS
@@ -4788,7 +4716,7 @@ msgstr ""
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
-"<b>Vergroten/verkleinen</b>:  %0.2f%% x %0.2f%%; <b>Ctrl</b> om de "
+"<b>Vergroten/verkleinen</b>:  %0.2f%% x %0.2f%%; <b>ctrl</b> om de "
 "verhouding te vergrendelen"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
@@ -4864,7 +4792,7 @@ msgstr ""
 
 #: ../src/sp-guide.cpp:290
 msgid "vertical guideline"
-msgstr "vertikale hulplijn"
+msgstr "verticale hulplijn"
 
 #: ../src/sp-guide.cpp:292
 msgid "horizontal guideline"
@@ -4884,9 +4812,9 @@ msgid "<b>Image with bad reference</b>: %s"
 msgstr "<b>Afbeelding met slechte referentie</b>: %s"
 
 #: ../src/sp-image.cpp:844
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Image</b> %d &#215; %d: %s"
-msgstr "<b>Afbeelding</b> %d x %d: %s"
+msgstr "<b>Afbeelding</b> %d &#215; %d: %s"
 
 #: ../src/sp-item-group.cpp:390
 #, fuzzy, c-format
@@ -5324,7 +5252,7 @@ msgstr "Ry:"
 
 #: ../src/toolbox.cpp:1476
 msgid "Vertical radius of rounded corners"
-msgstr "Vertikale straal van afgeronde hoeken"
+msgstr "Verticale straal van afgeronde hoeken"
 
 #: ../src/toolbox.cpp:1492
 msgid "Not rounded"
@@ -5596,9 +5524,8 @@ msgid "Align left sides"
 msgstr "Knooppunten uitlijnen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:682
-#, fuzzy
 msgid "Center on vertical axis"
-msgstr "Vertikaal centreren"
+msgstr "Verticaal centreren"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:685
 #, fuzzy
@@ -5636,9 +5563,8 @@ msgid "Align tops of objects to bottom of anchor"
 msgstr "Bovenkant van de objecten uitlijnen op de onderkant van het anker"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:708
-#, fuzzy
 msgid "Align baseline anchors of texts vertically"
-msgstr "De geselecteerde knopen vertikaal uitlijnen"
+msgstr "De geselecteerde knopen verticaal uitlijnen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:711
 #, fuzzy
@@ -5668,9 +5594,8 @@ msgstr ""
 "De afstand tussen de rechterzijden van de objecten gelijkmatig verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:730
-#, fuzzy
 msgid "Make vertical gaps between objects equal"
-msgstr "De vertikale afstand tussen de objecten gelijkmatig verdelen"
+msgstr "De verticale afstand tussen de objecten gelijkmatig verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:734
 #, fuzzy
@@ -5678,14 +5603,12 @@ msgid "Distribute bottoms equidistantly"
 msgstr "De afstand tussen de onderkanten van de objecten gelijkmatig verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:737
-#, fuzzy
 msgid "Distribute centers equidistantly vertically"
-msgstr "De middens van de objecten gelijkmatig in vertikale richting verdelen"
+msgstr "De middens van de objecten gelijkmatig in verticale richting verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:740
-#, fuzzy
 msgid "Distribute tops equidistantly"
-msgstr "De geselecteerde knopen vertikaal verdelen"
+msgstr "De geselecteerde knopen verticaal verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:745
 #, fuzzy
@@ -5693,9 +5616,8 @@ msgid "Distribute baseline anchors of texts horizontally"
 msgstr "De geselecteerde knopen horizontaal verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:748
-#, fuzzy
 msgid "Distribute baseline anchors of texts vertically"
-msgstr "De geselecteerde knopen vertikaal verdelen"
+msgstr "De geselecteerde knopen verticaal verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:753
 msgid "Randomize centers in both dimensions"
@@ -5704,6 +5626,7 @@ msgstr ""
 #: ../src/ui/dialog/align-and-distribute.cpp:756
 msgid "Unclump objects: try to equalize edge-to-edge distances"
 msgstr ""
+"Objecten ontklonteren; proberen de rand-tot-rand afstanden gelijk te maken"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:761
 msgid "Align selected nodes horizontally"
@@ -5711,7 +5634,7 @@ msgstr "De geselecteerde knopen horizontaal uitlijnen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:764
 msgid "Align selected nodes vertically"
-msgstr "De geselecteerde knopen vertikaal uitlijnen"
+msgstr "De geselecteerde knopen verticaal uitlijnen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:767
 msgid "Distribute selected nodes horizontally"
@@ -5719,7 +5642,7 @@ msgstr "De geselecteerde knopen horizontaal verdelen"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:770
 msgid "Distribute selected nodes vertically"
-msgstr "De geselecteerde knopen vertikaal verdelen"
+msgstr "De geselecteerde knopen verticaal verdelen"
 
 #. Rest of the widgetry
 #: ../src/ui/dialog/align-and-distribute.cpp:775
@@ -6988,7 +6911,7 @@ msgstr "_Spiegelen"
 
 #: ../src/verbs.cpp:1871
 msgid "Flip selection vertically"
-msgstr "Spiegel het object vertikaal"
+msgstr "Spiegel het object verticaal"
 
 #. Tools
 #: ../src/verbs.cpp:1875
@@ -7427,19 +7350,16 @@ msgid "About E_xtensions"
 msgstr "Uitbreiding \""
 
 #: ../src/verbs.cpp:2002
-#, fuzzy
 msgid "About Extensions..."
-msgstr "Uitbreiding \""
+msgstr "Over uitbreidingen..."
 
 #: ../src/verbs.cpp:2003
-#, fuzzy
 msgid "About _Memory"
-msgstr "Uitbreiding \""
+msgstr "Over _geheugengebruik"
 
 #: ../src/verbs.cpp:2004
-#, fuzzy
 msgid "About Memory..."
-msgstr "Uitbreiding \""
+msgstr "Over geheugengebruik..."
 
 #: ../src/verbs.cpp:2005
 msgid "_About Inkscape"
@@ -7470,7 +7390,7 @@ msgstr "Inkscape: _Vormen"
 
 #: ../src/verbs.cpp:2014
 msgid "Using shape tools to create and edit shapes"
-msgstr "Gebruik het vrom-gereedschap om vormen te maken en te wijzigen"
+msgstr "Gebruik het vorm-gereedschap om vormen te maken en te wijzigen"
 
 #: ../src/verbs.cpp:2015
 msgid "Inkscape: _Advanced"
@@ -7478,7 +7398,7 @@ msgstr "Inkscape: Ge_avanceerd"
 
 #: ../src/verbs.cpp:2016
 msgid "Advanced Inkscape topics"
-msgstr "Geavanceerde Inscape onderwerpen"
+msgstr "Geavanceerde Inkscape onderwerpen"
 
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
@@ -7871,720 +7791,19 @@ msgstr "Attribuut"
 msgid "Value"
 msgstr "Waarde"
 
+#, fuzzy
+#~ msgid ""
+#~ "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</"
+#~ "b>, or <b>drag around</b> nodes to select.<b>0</b> out of <b>%i</b> nodes "
+#~ "selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes "
+#~ "to select."
+#~ msgstr ""
+#~ "Er zijn geen objecten geselecteerd. Klik, shift-klik of sleep om objecten "
+#~ "te selecteren.Er zijn geen objecten geselecteerd. Klik, shift-klik of "
+#~ "sleep om objecten te selecteren."
+
 #~ msgid "Edit"
 #~ msgstr "Bewerken"
 
 #~ msgid "Add"
 #~ msgstr "Toevoegen"
-
-#~ msgid "SVG Vector Illustrator"
-#~ msgstr "SVG vector Illustrator"
-
-#~ msgid ""
-#~ "Select one path object with selector first, then switch back to node tool."
-#~ msgstr ""
-#~ "Selecteer eerst een pad-object, schakel daarna terug naar het knooppunt-"
-#~ "gereedschap."
-
-#~ msgid "Create Layer"
-#~ msgstr "Laag maken"
-
-#~ msgid "C_reate"
-#~ msgstr "_Maken"
-
-#, fuzzy
-#~ msgid "H"
-#~ msgstr "_K"
-
-#, fuzzy
-#~ msgid "S"
-#~ msgstr "_V"
-
-#~ msgid "No of Rows"
-#~ msgstr "Aantal rijen"
-
-#, fuzzy
-#~ msgid "Automatically scale Rows to fit selected objects."
-#~ msgstr "'Exclusive-OR' van de geselecteerde objecten"
-
-#~ msgid "Go to root"
-#~ msgstr "Ga naar het begin"
-
-#, fuzzy
-#~ msgid "X"
-#~ msgstr "X:"
-
-#, fuzzy
-#~ msgid "Y"
-#~ msgstr "_Y"
-
-#~ msgid "Unicode: %c%c%c%c"
-#~ msgstr "Unicode: %c%c%c%c"
-
-#~ msgid "Sides:"
-#~ msgstr "Zijkanten:"
-
-#~ msgid "Center X:"
-#~ msgstr "Midden X:"
-
-#~ msgid "Center Y:"
-#~ msgstr "Midden Y:"
-
-#~ msgid "R1:"
-#~ msgstr "R1:"
-
-#~ msgid "R2:"
-#~ msgstr "R2:"
-
-#~ msgid "ARG1:"
-#~ msgstr "ARG1:"
-
-#~ msgid "ARG2:"
-#~ msgstr "ARG2:"
-
-#, fuzzy
-#~ msgid "Flatsides:"
-#~ msgstr "Zijkanten"
-
-#~ msgid "Radius X:"
-#~ msgstr "Straal X:"
-
-#~ msgid "Radius Y:"
-#~ msgstr "Straal Y:"
-
-#~ msgid "Start Angle:"
-#~ msgstr "Begin hoek:"
-
-#~ msgid "End Angle:"
-#~ msgstr "Eind hoek:"
-
-#~ msgid "Open:"
-#~ msgstr "Open:"
-
-#~ msgid "Expansion:"
-#~ msgstr "Expantie"
-
-#~ msgid "Revolutions:"
-#~ msgstr "Omwentelingen:"
-
-#~ msgid "Radius:"
-#~ msgstr "Straal:"
-
-#~ msgid "Argument:"
-#~ msgstr "Argument:"
-
-#~ msgid "T0:"
-#~ msgstr "T0:"
-
-#~ msgid "RX:"
-#~ msgstr "RX:"
-
-#~ msgid "RY:"
-#~ msgstr "RY:"
-
-#~ msgid "Reset _Transformation"
-#~ msgstr "_Transformatie herstellen"
-
-#~ msgid "Rectangle _Properties"
-#~ msgstr "_Rechthoek eigenschappen"
-
-#~ msgid "Star _Properties"
-#~ msgstr "_Ster eigenschappen"
-
-#~ msgid "Ellipse _Properties"
-#~ msgstr "_Ellips eigenschappen"
-
-#~ msgid "Spiral _Properties"
-#~ msgstr "_Spiraal eigenschappen"
-
-#, fuzzy
-#~ msgid "Document Preferences"
-#~ msgstr "_Document voorkeuren..."
-
-#, fuzzy
-#~ msgid "Extensions Editor"
-#~ msgstr "Uitbreiding \""
-
-#~ msgid "Fill and Stroke"
-#~ msgstr "Opvulling en lijnen"
-
-#, fuzzy
-#~ msgid "Preferences"
-#~ msgstr "Voorkeuren"
-
-#~ msgid "Layer Editor"
-#~ msgstr "Lagen aanpassen"
-
-#~ msgid "Text Properties"
-#~ msgstr "Tekst eigenschappen"
-
-#, fuzzy
-#~ msgid "Transformation"
-#~ msgstr "Transformatie matrix"
-
-#~ msgid "_Export..."
-#~ msgstr "_Exporteren..."
-
-#~ msgid "_Document Properties"
-#~ msgstr "_Document voorkeuren"
-
-#~ msgid "In_kscape Preferences"
-#~ msgstr "In_kscape voorkeuren"
-
-#~ msgid "Select _Original Clone"
-#~ msgstr "Selecteer kloon-origineel"
-
-#~ msgid "Tile"
-#~ msgstr "Tegelen"
-
-#~ msgid "Select A_ll"
-#~ msgstr "A_lles selecteren"
-
-#~ msgid "Select Non_e"
-#~ msgstr "Ni_ets selecteren"
-
-#~ msgid "_Zoom"
-#~ msgstr "_Zoomen"
-
-#~ msgid "Zoom _In"
-#~ msgstr "_Inzoomen"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "_Uit zoomen"
-
-#~ msgid "1:_1 (100%)"
-#~ msgstr "1:_1 (100%)"
-
-#~ msgid "1:_2 (50%)"
-#~ msgstr "1:_2 (50%)"
-
-#~ msgid "2:1 (2_00%)"
-#~ msgstr "2:1 (2_00%)"
-
-#~ msgid "_Width"
-#~ msgstr "_Breedte"
-
-#~ msgid "Pre_vious"
-#~ msgstr "Vo_rige"
-
-#~ msgid "Nex_t"
-#~ msgstr "Vol_gende"
-
-#~ msgid "_Commands bar"
-#~ msgstr "_Opdrachten"
-
-#~ msgid "Tool Co_ntrols bar"
-#~ msgstr "Gereedschap eigenschappen"
-
-#~ msgid "_Tools bar"
-#~ msgstr "_Gereedschappen"
-
-#~ msgid "R_ename Layer..."
-#~ msgstr "Laag h_ernoemen...."
-
-#~ msgid "D_uplicate Layer"
-#~ msgstr "Laag  d_upliceren"
-
-#~ msgid "_Delete Layer"
-#~ msgstr "Laag _verwijderen"
-
-#~ msgid "Select Ne_xt Layer"
-#~ msgstr "Volgende laag selecteren"
-
-#~ msgid "Select Pre_vious Layer"
-#~ msgstr "Vorige laag selecteren"
-
-#~ msgid "Select To_p Layer"
-#~ msgstr "Bovenste laag selecteren"
-
-#~ msgid "Select Botto_m Layer"
-#~ msgstr "Onderste laag selecteren"
-
-#~ msgid "Move to Ne_w Layer"
-#~ msgstr "Verplaatsen naar nieu_we laag"
-
-#~ msgid "Move to Ne_xt Layer"
-#~ msgstr "Verplaatsen naar de vol_gende laag"
-
-#~ msgid "Move to Pre_vious Layer"
-#~ msgstr "Verplaatsen naar de vo_rige laag"
-
-#~ msgid "Move to To_p Layer"
-#~ msgstr "Verplaatsen naar de _bovenste laag"
-
-#~ msgid "Move to B_ottom Layer"
-#~ msgstr "Verplaatsen naar de _achterste laag"
-
-#~ msgid "Rotate _90° CW"
-#~ msgstr "_90° draaien MKM"
-
-#~ msgid "Rotate 9_0° CCW"
-#~ msgstr "9_0° draaien TKI"
-
-#~ msgid "_Trace Bitmap..."
-#~ msgstr "_Bitmap overtrekken..."
-
-#~ msgid "_Put Text on Path"
-#~ msgstr "_Tekst op pad zetten"
-
-#~ msgid "_Remove Text from Path"
-#~ msgstr "Tekst van pad _verwijderen"
-
-#~ msgid "Freehand"
-#~ msgstr "Losse pols"
-
-#~ msgid "Stroke"
-#~ msgstr "Lijn"
-
-#~ msgid "Corners"
-#~ msgstr "Hoeken"
-
-#~ msgid "Delete"
-#~ msgstr "Verwijderen"
-
-#~ msgid "Join"
-#~ msgstr "Samenvoegen"
-
-#~ msgid "Join Segment"
-#~ msgstr "Segment samenvoegen"
-
-#~ msgid "Delete Segment"
-#~ msgstr "Segment verwijderen"
-
-#~ msgid "Break"
-#~ msgstr "Breken"
-
-#~ msgid "Corner"
-#~ msgstr "Hoeken"
-
-#~ msgid "Symmetric"
-#~ msgstr "Symmetrisch"
-
-#~ msgid "Line"
-#~ msgstr "Rechte lijn"
-
-#~ msgid "Curve"
-#~ msgstr "Ronding"
-
-#~ msgid "New"
-#~ msgstr "Nieuw"
-
-#~ msgid "Revert to Saved"
-#~ msgstr "Terugdraaien"
-
-#~ msgid "Save"
-#~ msgstr "Opslaan"
-
-#~ msgid "Save As..."
-#~ msgstr "Opslaan als..."
-
-#~ msgid "Import..."
-#~ msgstr "Importeren..."
-
-#~ msgid "Export..."
-#~ msgstr "Exporteren..."
-
-#~ msgid "Print..."
-#~ msgstr "Afdrukken..."
-
-#~ msgid "Document properties (Shift+Ctrl+D)"
-#~ msgstr "Documenteigenschappen (Shift+Ctrl+D)"
-
-#~ msgid "Global Inkscape preferences (Shift+Ctrl+P)"
-#~ msgstr "Algemene Inkscape-voorkeuren (Shift+Ctrl+P)"
-
-#~ msgid "Undo"
-#~ msgstr "Ongedaan maken"
-
-#~ msgid "Redo"
-#~ msgstr "Opnieuw"
-
-#~ msgid "Cut"
-#~ msgstr "Knippen"
-
-#~ msgid "Copy"
-#~ msgstr "Kopiëren"
-
-#~ msgid "Paste"
-#~ msgstr "Plakken"
-
-#~ msgid "Duplicate selected object(s) (Ctrl+D)"
-#~ msgstr "Geselecteerde objecten dupliceren (Ctrl+D)"
-
-#~ msgid "Clone selected object (Alt+D)"
-#~ msgstr "Het geselecteerde object klonen (Alt+D)"
-
-#~ msgid "Unlink clone from its original (Shift+Alt+D)"
-#~ msgstr "Kloon van zijn origineel ontkoppelen (Shift+Alt+D)"
-
-#~ msgid "XML Editor dialog (Shift+Ctrl+X)"
-#~ msgstr "XML editor venster (Shift+Ctrl+X)"
-
-#~ msgid "Zoom in (+)"
-#~ msgstr "Inzoomen (+)"
-
-#~ msgid "Zoom out (-)"
-#~ msgstr "Uitzoomen (-)"
-
-#~ msgid "Zoom to 1:1 (100%) (1)"
-#~ msgstr "Zoomen naar 1:1 (100%) (1)"
-
-#~ msgid "Zoom to 1:2 (50%) (2)"
-#~ msgstr "Zoomen naar 1:2 (50%) (2)"
-
-#~ msgid "Zoom to 2:1 (200%) (0)"
-#~ msgstr "Zoomen naar 2:1 (200%) (0)"
-
-#~ msgid "Zoom to fit selection in window (3)"
-#~ msgstr "Zoomen zodat de selectie in het scherm past (3)"
-
-#~ msgid "Zoom to fit drawing in window (4)"
-#~ msgstr "Zoomen zodat de tekening in het scherm past (4)"
-
-#~ msgid "Zoom to fit page in window (5)"
-#~ msgstr "Zoomen zodat de pagina in het scherm past (5)"
-
-#~ msgid "Zoom to fit page width in window (6)"
-#~ msgstr "Zoomen zodat de pagina-breedte in het scherm past (6)"
-
-#~ msgid "Previous zoom (from history of zooms) (`)"
-#~ msgstr "Vorig zoom niveau (`)"
-
-#~ msgid "Next zoom (from history of zooms) (Shift+`)"
-#~ msgstr "Volgend zoom niveau (Shift+`)"
-
-#~ msgid "Fill and Stroke dialog (Shift+Ctrl+F)"
-#~ msgstr "Opvulling en lijnen dialoogvenster (Shift+Ctrl+F)"
-
-#~ msgid "Group selected objects (Ctrl+G)"
-#~ msgstr "De geselecteerde objecten groeperen (Ctrl+G)"
-
-#~ msgid "Ungroup selected group(s) (Ctrl+U)"
-#~ msgstr "De geselecteerde groep(en) degroeperen (Ctrl+U)"
-
-#~ msgid "Raise selection up one step (PgUp)"
-#~ msgstr "De selectie naar voren brengen"
-
-#~ msgid "Lower selection down one step (PgDn)"
-#~ msgstr "De selectie één niveau naar achteren brengen (PgDn)"
-
-#~ msgid "Raise selection to top (Home)"
-#~ msgstr "De selectie naar voren brengen (Home)"
-
-#~ msgid "Lower selection to bottom (End)"
-#~ msgstr "De selectie naar de achtergrond sturen (End)"
-
-#~ msgid "Move selection to new layer"
-#~ msgstr "De selectie in een nieuwe laag zetten"
-
-#~ msgid "Move selection to next layer"
-#~ msgstr "De selectie in de volgende laag zetten"
-
-#~ msgid "Move selection to previous layer"
-#~ msgstr "De selectie in de vorige laag zetten"
-
-#~ msgid "Move selection to top layer"
-#~ msgstr "De selectie in de voorste laag zetten"
-
-#~ msgid "Move selection to bottom layer"
-#~ msgstr "De selectie in de achterste laag zetten"
-
-#~ msgid "Rotate selection 90° clockwise (Shift+Ctrl+Right)"
-#~ msgstr "De selectie 90° graden met de klok mee draaien (Shift+Ctrl+Right)"
-
-#~ msgid "Rotate selection 90° counter-clockwise (Shift+Ctrl+Left)"
-#~ msgstr "De selectie 90° graden tegen de klok in draaien (Shift+Ctrl+Left)"
-
-#~ msgid "Flip selection horizontally (H)"
-#~ msgstr "Tuimel de selectie horizontaal (H)"
-
-#~ msgid "Flip selection vertically (V)"
-#~ msgstr "Spiegel de selectie vertikaal (V)"
-
-#~ msgid "Align and Distribute dialog (Shift+Ctrl+A)"
-#~ msgstr "Uitlijnen en verdelen dialoogvenster (Shift+Ctrl+A)"
-
-#~ msgid "Convert selected object(s) to path(s) (Shift+Ctrl+C)"
-#~ msgstr "De geselecteerde object(en) omzetten naar pad(en) (Shift+Ctrl+C)"
-
-#~ msgid "Convert selected stroke(s) to path(s) (Ctrl+Alt+C)"
-#~ msgstr "De geselecteerde lijn(en) omzetten naar pad(en) (Ctrl+Alt+C)"
-
-#~ msgid "Cl_eanup"
-#~ msgstr "_Opschonen"
-
-#~ msgid "Text and Font dialog (Shift+Ctrl+T)"
-#~ msgstr "Text-en-lettertype dialoogvenster (Shift+Ctrl+T)"
-
-#~ msgid "Node tool"
-#~ msgstr "Knooppunt-gereedschap"
-
-#~ msgid "Zoom tool"
-#~ msgstr "Zoom-gereedschap"
-
-#~ msgid "Rectangle tool"
-#~ msgstr "Rechthoek-gereedschap"
-
-#~ msgid "Arc tool"
-#~ msgstr "Hoek-gereedschap"
-
-#~ msgid "Star tool"
-#~ msgstr "Ster-gereedschap"
-
-#~ msgid "Spiral tool"
-#~ msgstr "Spiraal-gereedschap"
-
-#~ msgid "Freehand tool"
-#~ msgstr "Losse-pols-gereedschap"
-
-#~ msgid "Pen tool"
-#~ msgstr "Pen-gereedschap"
-
-#~ msgid "Calligraphy tool"
-#~ msgstr "Kalligrafie-gereedschap"
-
-#~ msgid "Text tool"
-#~ msgstr "Tekst-gereedschap"
-
-#~ msgid "Dropper tool"
-#~ msgstr "Pipet-gereedschap"
-
-#~ msgid "When scaling objects, scale stroke width by same proportion"
-#~ msgstr "Lijndikte mee schalen bij het schalen van objecten"
-
-#~ msgid "When scaling rectangles, scale radii of rounded corners"
-#~ msgstr "Hoeken mee schalen bij het schalen van rechthoeken"
-
-#~ msgid "Transform gradients (in fill or stroke) along with objects"
-#~ msgstr ""
-#~ "Transformeer kleurverlopen (in lijnen en vullingen) gelijktijdig met "
-#~ "objecten"
-
-#~ msgid "Transform patterns (in fill or stroke) along with objects"
-#~ msgstr ""
-#~ "Transformeer patronen (in lijnen en vullingen) gelijktijdig met objecten"
-
-#~ msgid "Delete segment between two nodes"
-#~ msgstr "Het segment tussen twee knooppunten verwijderen"
-
-#, fuzzy
-#~ msgid "URI:"
-#~ msgstr "URI"
-
-#~ msgid "Select All in All Layers"
-#~ msgstr "Alles selecteren in alle lagen"
-
-#~ msgid "Invert Selection"
-#~ msgstr "Selectie omkeren"
-
-#~ msgid "Clean up selected path(s)"
-#~ msgstr "De geselecteerde paden opschonen"
-
-#~ msgid "_Scripts..."
-#~ msgstr "_Scripts...."
-
-#~ msgid "Inkscape"
-#~ msgstr "Inkscape"
-
-#~ msgid "Left side of aligned objects to left side of anchor"
-#~ msgstr "Linkerkant van de objecten uitlijnen op de linkerkant van het anker"
-
-#~ msgid "Right side of aligned objects to right side of anchor"
-#~ msgstr ""
-#~ "Rechterkant van de objecten uitlijnen op de rechterkant van het anker"
-
-#~ msgid "Top of aligned objects to top of anchor"
-#~ msgstr "Bovenkant van de objecten uitlijnen op de onderkant van het anker"
-
-#~ msgid "Bottom of aligned objects to bottom of anchor"
-#~ msgstr "Onderkant van de objecten uitlijnen op de onderkant van het anker"
-
-#~ msgid "Distribute top sides of objects at even distances"
-#~ msgstr ""
-#~ "De afstand tussen de bovenkanten van de objecten gelijkmatig verdelen"
-
-#~ msgid "Per row:"
-#~ msgstr "Per rij:"
-
-#~ msgid "Per column:"
-#~ msgstr "Per kolom:"
-
-#~ msgid "Alternate sign"
-#~ msgstr "Om-en-om"
-
-#~ msgid "How much to randomize tile positions"
-#~ msgstr "Hoeveel de tegelposities afwijken"
-
-#~ msgid "Horizontal scale per each row"
-#~ msgstr "Horizontale vergroting voor elke rij"
-
-#~ msgid "Vertical scale per each row"
-#~ msgstr "Vertikale vergroting voor elke rij"
-
-#~ msgid "Horizontal scale per each column"
-#~ msgstr "Horizontale vergroting voor elke kolom"
-
-#~ msgid "Vertical scale per each column"
-#~ msgstr "Vertikale vergroting voor elke kolom"
-
-#~ msgid "Alternate the sign of the scale increment for each row or column"
-#~ msgstr "De vergrotingen voor elke rij of kolom om-en-om afwisselen"
-
-#~ msgid "How much to randomize tile sizes"
-#~ msgstr "Hoeveel de tegelgroottes afwijken"
-
-#~ msgid "How much to randomize tile rotation"
-#~ msgstr "Hoeveel de tegeldraaiingen afwijken"
-
-#~ msgid "Dissolve:"
-#~ msgstr "Oplossen:"
-
-#~ msgid "How much to randomize tile opacity"
-#~ msgstr "Hoeveel de tegel-ondoorzichtigheid afwijkt"
-
-#~ msgid "<b>Rows</b>:"
-#~ msgstr "<b>Rijen</b>:"
-
-#~ msgid "Minor grid line color:"
-#~ msgstr "Bij-rasterlijn kleur:"
-
-#~ msgid "Grid color"
-#~ msgstr "Kleur van het raster"
-
-#~ msgid "Grid emphasis color"
-#~ msgstr "Nadruk-kleur van raster:"
-
-#~ msgid "Background (also for export):"
-#~ msgstr "Achtergrondkleur (ook voor exporteren):"
-
-#~ msgid ""
-#~ "Pick the visible color under cursor, taking into account the page "
-#~ "background and disregarding the transparency of objects"
-#~ msgstr ""
-#~ "Selecteer de zichtbare kleur onder de cursor, daarbij wel de pagina "
-#~ "achtergrondkleurmaar niet de object-doorzichtigheid mee nemend."
-
-#~ msgid "Pick objects' color (including alpha)"
-#~ msgstr "Selecteer de volledige kleur (inclusief doorzichtigheid)"
-
-#~ msgid ""
-#~ "Pick the actual color of object(s) under cursor, including their "
-#~ "accumulated transparency"
-#~ msgstr ""
-#~ "Selecteer de werkelijke kleur onder de cursor, rekening houdend "
-#~ "metopeengestapelde doorzichtige objecten."
-
-#~ msgid "Fill style"
-#~ msgstr "Opvul eigenschappen"
-
-#~ msgid "Fill:"
-#~ msgstr "Vullen:"
-
-#~ msgid ""
-#~ "Specifies the method of filling overlapping areas when an object "
-#~ "intersects itself. With the \"winding fill\" method (fill-rule:nonzero), "
-#~ "all overlapping areas are filled; with the \"alternating fill\" method "
-#~ "(fill-rule:evenodd), every other of them is filled."
-#~ msgstr ""
-#~ "Geeft aan hoe overlappen delen meoten worden gevuld wanneer een object "
-#~ "zichzelf snijdt. Met 'opvullen' (fill-rule:nonzero) worden ale gebieden "
-#~ "gevuld, met 'om-en-om' (fill-rule:evenodd) worden de gebieden om-en-om "
-#~ "gevuld."
-
-#~ msgid "winding"
-#~ msgstr "Opvullen"
-
-#~ msgid "alternating"
-#~ msgstr "Om-en-om"
-
-#~ msgid "Update Properties"
-#~ msgstr "Eigenschappen verversen"
-
-#~ msgid "Label invalid"
-#~ msgstr "Ongeldig label"
-
-#~ msgid "Creating anchor at (%g,%g)"
-#~ msgstr "Beginpunt aan het maken op (%g,%g)"
-
-#~ msgid ""
-#~ "<b>Click</b> to pick fill color, <b>Shift+click</b> to pick stroke color. "
-#~ "<b>Drag</b> to pick the average color of an area."
-#~ msgstr ""
-#~ "<b>Klik</b> om de vulkleur te kiezen, <b>shift-klik</b> om de lijnkleur "
-#~ "te kiezen. <b>Sleep</b> om de gemiddelde kleur van een gebied te kiezen."
-
-#~ msgid "EPS Output Settings"
-#~ msgstr "Voorkeuren voor EPS export"
-
-#~ msgid "Make bounding box around full page"
-#~ msgstr "Een omhullende maken om de gehele pagina"
-
-#~ msgid ""
-#~ "<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag "
-#~ "around nodes to select.<b>0</b> out of <b>%i</b> nodes selected. Click, "
-#~ "Shift+click, or drag around nodes to select."
-#~ msgstr ""
-#~ "<b>0</b> van <b>%i</b> knooppunten geselecteerd. Klik, shift-klik of "
-#~ "sleep rondom knooppunten om ze te selecteren.<b>0</b> van <b>%i</b> "
-#~ "knooppunten geselecteerd. Klik, shift-klik of sleep rondom knooppunten om "
-#~ "ze te selecteren."
-
-#~ msgid ""
-#~ "You cannot group objects from <b>different groups</b> or <b>layers</b>."
-#~ msgstr ""
-#~ "U kunt groepen uit <b>verschillende groepen</b> of <b>lagen</b> niet "
-#~ "groeperen."
-
-#~ msgid ""
-#~ "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
-#~ msgstr ""
-#~ "De selectie <b>vervormen</b>; <b>Shift</b> vervormt om de "
-#~ "tegenoverliggende zijde"
-
-#~ msgid "<b>Skew</b>: %0.2f%% x %0.2f%%"
-#~ msgstr "<b>Vervormen</b>: %0.2f%% x %0.2f%%"
-
-#~ msgid "Align and Distribute"
-#~ msgstr "Uitlijnen en verdelen"
-
-#~ msgid "Align and Distribute Dialog"
-#~ msgstr "Uitlijnen en verdelen dialoogvenster"
-
-#~ msgid "Export Dialog"
-#~ msgstr "Exporteren dialoogvenster"
-
-#~ msgid "Fill and Stroke Dialog"
-#~ msgstr "Opvulling en lijnen dialoogvenster"
-
-#~ msgid "Find Dialog"
-#~ msgstr "Zoeken dialoogvenster"
-
-#~ msgid "Inkscape Preferences"
-#~ msgstr "Inkscape voorkeuren"
-
-#~ msgid "Inkscape Preferences Dialog"
-#~ msgstr "Inkscape voorkeuren dialoogvenster"
-
-#~ msgid "Layer Editor Dialog"
-#~ msgstr "Lagen aanpassen dialoogvenster"
-
-#~ msgid "Messages Dialog"
-#~ msgstr "Berichten dialoogvenster"
-
-#~ msgid "Text Properties Dialog"
-#~ msgstr "Tekst eigenschappen dialoogvenster"
-
-#~ msgid "Tree Editor"
-#~ msgstr "Boom-editor"
-
-#~ msgid "XML Editor Dialog"
-#~ msgstr "XML weergave dialoogvenster"
-
-#~ msgid "Clone selected"
-#~ msgstr "Kloon geselecteerd"
-
-#~ msgid "_V"
-#~ msgstr "_W"
-
-#~ msgid "Value (brightness)"
-#~ msgstr "Waarde (helderheid)"
