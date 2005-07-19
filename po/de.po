@@ -10,10 +10,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: inkscape 0.41\n"
+"Project-Id-Version: inkscape 0.42\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-15 02:58+0200\n"
-"PO-Revision-Date: 2005-07-10 23:36+0200\n"
+"POT-Creation-Date: 2005-07-19 21:45+0200\n"
+"PO-Revision-Date: 2005-07-18 23:41+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1245,7 +1245,7 @@ msgstr "Farbverlaufs-Editor aktiviert"
 #: ../src/dialogs/display-settings.cpp:662
 msgid "Whether selected objects display gradient editing controls"
 msgstr ""
-"Anzeige der Gradienten-Anfasser für die ausgewählten Objekte aktiviert?"
+"Anzeige der Farbverlaufs-Anfasser für die ausgewählten Objekte aktiviert?"
 
 #: ../src/dialogs/display-settings.cpp:723
 msgid "<b>No objects selected</b> to take the style from."
@@ -1683,12 +1683,12 @@ msgstr ""
 
 #: ../src/dialogs/display-settings.cpp:1305
 msgid "Transform gradients"
-msgstr "Gradienten transformieren"
+msgstr "Farbverläufe transformieren"
 
 #: ../src/dialogs/display-settings.cpp:1306 ../src/select-toolbar.cpp:507
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr ""
-"Gradienten (in Füllung oder Linie) zusammen mit den Objekten transformieren"
+"Farbverläufe (in Füllung oder Linie) zusammen mit den Objekten transformieren"
 
 #: ../src/dialogs/display-settings.cpp:1313
 msgid "Transform patterns"
@@ -3034,7 +3034,6 @@ msgid "Show dialog on startup"
 msgstr "Dialog beim Starten des Programmes zeigen"
 
 #: ../src/extension/implementation/script.cpp:846
-#, fuzzy
 msgid ""
 "Inkscape has received an error from the script that it called.  The text "
 "returned with the error is included below.  Inkscape will continue working, "
@@ -3042,10 +3041,9 @@ msgid ""
 msgstr ""
 "Inkscape hat eine Fehlermeldung des ausgeführten Skripts erhalten. Der "
 "Textinhalt der Fehlermeldung wird unten angezeigt. Inkscape läuft ohne "
-"Störung weiter, die letzte Aktion wird jedoch abgebrochen. "
+"Störung weiter, die letzte Aktion wurde jedoch abgebrochen."
 
 #: ../src/extension/implementation/script.cpp:859
-#, fuzzy
 msgid ""
 "Inkscape has received additional data from the script executed.  The script "
 "did not return an error, but this may indicate the results will not be as "
@@ -3119,7 +3117,7 @@ msgid ""
 msgstr ""
 "PostScript-Vektoroperatoren verwenden. Das resultierende Bild ist "
 "(normalerweise) kleiner und kann beliebig skaliert werden, Alpha-"
-"Transparenz, Gradienten und Muster gehen jedoch verloren."
+"Transparenz, Farbverläufe und Muster gehen jedoch verloren."
 
 #: ../src/extension/internal/ps.cpp:160
 msgid "Print as bitmap"
@@ -3267,11 +3265,11 @@ msgstr "Wählen Sie die zu importierende Datei"
 
 #: ../src/gradient-context.cpp:261
 msgid "<b>Ctrl</b>: snap gradient angle"
-msgstr "<b>Strg</b>: Winkel des Gradienten einrasten"
+msgstr "<b>Strg</b>: Winkel des Farbverlaufs einrasten"
 
 #: ../src/gradient-context.cpp:262
 msgid "<b>Shift</b>: draw gradient around the starting point"
-msgstr "<b>Umschalt</b>: Gradienten ausgehend vom Mittelpunkt zeichnen"
+msgstr "<b>Umschalt</b>: Farbverlauf ausgehend vom Mittelpunkt zeichnen"
 
 #. We did an undoable action, but sp_document_done will be called by the knot when released
 #. status text; we do not track coords because this branch is run once, not all the time
@@ -7342,11 +7340,13 @@ msgstr "Ü_ber Inkscape"
 #. "help_about"
 #: ../src/verbs.cpp:2007
 msgid "Modifying or Redistributing Inkscape"
-msgstr ""
+msgstr "Inkscape modifizieren oder weiterverbreiten"
 
 #: ../src/verbs.cpp:2008
 msgid "Show license to modify and/or redistribute Inkscape: GNU GPL"
 msgstr ""
+"Zeige Lizenz, unter der Inkscape modifiziert und/oder weiterverbreitet "
+"werden darf: GNU GPL"
 
 #. Tutorials
 #: ../src/verbs.cpp:2011
@@ -7422,9 +7422,8 @@ msgstr "Letzten Effekt mit den gleichen Einstellungen anwenden"
 
 #. "tutorial_tips"
 #: ../src/verbs.cpp:2030
-#, fuzzy
 msgid "Previous Effect Settings..."
-msgstr "Letzter Effekt..."
+msgstr "Einstellungen des vorherigen Effekts..."
 
 #: ../src/verbs.cpp:2031
 msgid "Repeat the last effect with new settings"
@@ -7458,7 +7457,7 @@ msgstr "Schriftgröße:"
 #. * interested in.
 #: ../src/widgets/font-selector.cpp:553
 msgid "AaBbCcIiPpQq12368.;/()"
-msgstr "AaBbCcIiPpQqÄäÖöÜü12368.;/()"
+msgstr "AaBbCcIiPpQqÄäÖöÜüß12369€¢?.;/()„“»«"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: ../src/widgets/gradient-selector.cpp:159
