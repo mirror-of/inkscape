@@ -93,7 +93,7 @@ LangString lng_InstOpt   ${LANG_POLISH} "Opcje instalacji"
 
 ; installation options subtitle
 LangString lng_InstOpt1  ${LANG_ENGLISH} "Please make your choices for additional options"
-LangString lng_InstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících mo¾ností"
+LangString lng_InstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících možností"
 LangString lng_InstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles"
 LangString lng_InstOpt1  ${LANG_GERMAN} "Bitte wählen Sie die optionalen Installtionsparameter"
 LangString lng_InstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per l'installazione"
@@ -109,7 +109,7 @@ LangString lng_InstType  ${LANG_POLISH} "Zainstaluj aplikacjê dla:"
 
 ; multi user installation
 LangString lng_AllUsers  ${LANG_ENGLISH} "Anyone who uses this computer (all users)"
-LangString lng_AllUsers  ${LANG_CZECH} "Kohokoliv kdo pou¾ívá tento poèítaè (V¹ichni u¾ivatelé)"
+LangString lng_AllUsers  ${LANG_CZECH} "Kohokoliv kdo používá tento poèítaè (Všichni uživatelé)"
 LangString lng_AllUsers  ${LANG_FRENCH} "Toute personne utilisant cet ordinateur (tous les utilisateurs)"
 LangString lng_AllUSers  ${LANG_GERMAN}  "Alle Benutzer dieses Computers (all users)"
 LangString lng_AllUSers  ${LANG_ITALIAN}  "Chiunque usi il computer (tutti gli utenti)"
@@ -117,7 +117,7 @@ LangString lng_AllUsers  ${LANG_POLISH} "Wszystkich, którzy korzystaj¹ z tego ko
 
 ; single user installation
 LangString lng_CurUser  ${LANG_ENGLISH} "Only for me (current user)"
-LangString lng_CurUser  ${LANG_CZECH} "Pouze pro mne (aktuální u¾ivatel)"
+LangString lng_CurUser  ${LANG_CZECH} "Pouze pro mne (aktuální uživatel)"
 LangString lng_CurUser  ${LANG_FRENCH} "Moi seulement (utilisateur courant)"
 LangString lng_CurUSer  ${LANG_GERMAN}  "Nur für mich (current user)"
 LangString lng_CurUser  ${LANG_ITALIAN} "Solo per me (utente attuale)"
@@ -143,7 +143,7 @@ LangString lng_Editor    ${LANG_POLISH}  "edycji plików SVG"
 ; File type association for reading
 LangString lng_Reader    ${LANG_ENGLISH} "reader for SVG files"
 ;LangString lng_Reader    ${LANG_CATALAN} "Voleu que l'$(^Name) sigui el lector SVG predefinit?"
-LangString lng_Reader    ${LANG_CZECH}   "prohlí¾ení SVG souborù"
+LangString lng_Reader    ${LANG_CZECH}   "prohlížení SVG souborù"
 LangString lng_Reader    ${LANG_FRENCH}  "lire des fichiers SVG"
 LangString lng_Reader    ${LANG_GERMAN}  "Anzeigeprogramm für SVG Dateien"
 LangString lng_Reader    ${LANG_ITALIAN} "leggere file SVG"
@@ -153,7 +153,7 @@ LangString lng_Reader    ${LANG_POLISH}  "otwierania plików SVG"
 ;not needed anymore, standard dialog is used
 ;LangString lng_Removed   ${LANG_ENGLISH} "$(^Name) was successfully removed from your computer."
 ;LangString lng_Removed   ${LANG_CATALAN} "L'$(^Name) s'ha suprimit correctament de l'ordinador."
-;LangString lng_Removed   ${LANG_CZECH}   "$(^Name) byl úspì¹nì odinstalován z va¹eho poèítaèe."
+;LangString lng_Removed   ${LANG_CZECH}   "$(^Name) byl úspìšnì odinstalován z vašeho poèítaèe."
 ;LangString lng_Removed   ${LANG_FRENCH}  "$(^Name) a été désinstallé avec succès de votre ordinateur."
 ;LangString lng_Removed   ${LANG_GERMAN}  "$(^Name) wurde erfolgreich von Ihrem Computer entfernt."
 ;LangString lng_Removed   ${LANG_ITALIAN} "$(^Name) è stato rimosso con successo dal sistema."
@@ -162,7 +162,7 @@ LangString lng_Reader    ${LANG_POLISH}  "otwierania plików SVG"
 ;not needed anymore, standard dialog is used
 ;LangString lng_Uninstall ${LANG_ENGLISH} "Are you sure you want to completely remove $(^Name) and all of its components?"
 ;LangString lng_Uninstall ${LANG_CATALAN} "Esteu segur que voleu suprimir completament $(^Name) i tots els seus components?"
-;LangString lng_Uninstall ${LANG_CZECH}   "Jste si jisti, ¾e chcete úplnì odstranit $(^Name) a v¹echny jeho komponenty?"
+;LangString lng_Uninstall ${LANG_CZECH}   "Jste si jisti, že chcete úplnì odstranit $(^Name) a všechny jeho komponenty?"
 ;LangString lng_Uninstall ${LANG_FRENCH}  "Etes-vous sûr de vouloir complètement désintaller $(^Name) et tous ses composants?"
 ;LangString lng_Uninstall ${LANG_GERMAN}  "Möchten Sie $(^Name) und alle seine Komponenten von Ihrem Rechner entfernen?"
 ;LangString lng_Uninstall ${LANG_ITALIAN} "Rimuovere completamente $(^Name) e tutti i suoi componenti?"
@@ -177,7 +177,7 @@ LangString lng_UInstOpt   ${LANG_POLISH} "Opcje usuwania programu"
 
 ; uninstallation options subtitle
 LangString lng_UInstOpt1  ${LANG_ENGLISH} "Please make your choices for additional options"
-LangString lng_UInstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících mo¾ností"
+LangString lng_UInstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících možností"
 LangString lng_UInstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles"
 LangString lng_UInstOpt1  ${LANG_GERMAN} "Bitte wählen Sie die optionalen Deinstalltionsparameter"
 LangString lng_UInstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per la rimozione"
@@ -185,7 +185,7 @@ LangString lng_UInstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje usuwania progr
 
 ; Ask to purge the personal preferences
 LangString lng_PurgePrefs ${LANG_ENGLISH} "Do you want to keep your personal preferences file?"
-LangString lng_PurgePrefs ${LANG_CZECH} "Chcete zachovat vá¹ osobní soubor s nastavením?"
+LangString lng_PurgePrefs ${LANG_CZECH} "Chcete zachovat váš osobní soubor s nastavením?"
 LangString lng_PurgePrefs ${LANG_FRENCH} "Voulez-vous conserver votre fichier de préférences personnelles ?"
 LangString lng_PurgePrefs ${LANG_GERMAN}  "Möchten Sie Ihre persönliche Vorgabendatei behalten?"
 LangString lng_PurgePrefs ${LANG_ITALIAN} "Mantenere i file con le configurazioni personali?"
