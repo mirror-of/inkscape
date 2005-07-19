@@ -175,7 +175,7 @@ msgstr "選択"
 
 #: ../src/dialogs/clonetiler.cpp:137
 msgid "<small>Nothing selected.</small>"
-msgstr "<small>何も選択されていません。<small>"
+msgstr "<small>何も選択されていません。</small>"
 
 #: ../src/dialogs/clonetiler.cpp:143
 msgid "<small>More than one object selected.</small>"
