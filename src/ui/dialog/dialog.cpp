@@ -22,6 +22,7 @@
 #include "event-context.h"
 #include "ui/view/view.h"
 #include "desktop.h"
+#include "desktop-handles.h"
 #include "dialog.h"
 #include "dialog-manager.h"
 #include "dialogs/dialog-events.h"
@@ -228,9 +229,6 @@ Dialog::Dialog(const char *prefs_path, int verb_num, const char *apply_label)
 
     present();
     read_geometry();
-
-    //Set to NULL first, so _setDesktop() works correctly
-    _desktop = NULL;
 }
 
 Dialog::Dialog(BaseObjectType *gobj)
@@ -283,25 +281,7 @@ Dialog::onShowF12()
 Inkscape::Selection*
 Dialog::_getSelection()
 {
-    if (!_desktop)
-        _setDesktop(SP_ACTIVE_DESKTOP);
-    if (!_desktop)
-        return NULL;
-
-    Inkscape::Selection *selection = _desktop->selection;
-
-    return selection;
-}
-
-void
-Dialog::_setDesktop(SPDesktop *desktop) {
-    if (desktop) {
-        g_object_ref(desktop);
-    }
-    if (_desktop) {
-        g_object_unref(_desktop);
-    }
-    _desktop = desktop;
+    return SP_DT_SELECTION(SP_ACTIVE_DESKTOP);
 }
 
 void

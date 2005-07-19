@@ -51,8 +51,6 @@ protected:
      */
     Gtk::Tooltips tooltips;
 
-    SPDesktop      *_desktop;
-
     virtual void   on_response(int response_id);
     virtual void   _apply();
     virtual void   _close();
@@ -60,7 +58,6 @@ protected:
     static bool windowKeyPress( GtkWidget *widget, GdkEventKey *event );
 
     Inkscape::Selection*   _getSelection();
-    void           _setDesktop(SPDesktop *desktop);
 
 private:
     Dialog(); // no constructor without params
