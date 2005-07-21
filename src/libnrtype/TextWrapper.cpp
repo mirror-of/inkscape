@@ -139,7 +139,7 @@ void            text_wrapper::AppendUTF8(char const *text, int len)
 			// get the new codepoint
 			uni32_text[i]=g_utf8_get_char(p);
 			// compute the offset in the utf8_string
-			int n_o=((int)p)-((int)utf8_text);
+			int n_o=(reinterpret_cast<int>(p))-(reinterpret_cast<int>(utf8_text));
 			// record the codepoint's start
 			utf8_codepoint[i]=n_o;
 			// record the codepoint's correspondance in the utf8 string
