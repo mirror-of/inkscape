@@ -22,6 +22,7 @@
 #include <gtkmm/separatormenuitem.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtk/gtkmain.h>
+#include <glibmm/i18n.h>
 
 #include "panel.h"
 #include "../../prefs-utils.h"
@@ -84,14 +85,14 @@ void Panel::init()
     menu.append( *manage(new Gtk::SeparatorMenuItem()) );
     {
         const char *things[] = {
-            "small",
-            "medium",
-            "large",
-            "huge"
+            N_("small"),
+            N_("medium"),
+            N_("large"),
+            N_("huge")
         };
         Gtk::RadioMenuItem::Group groupOne;
         for ( unsigned int i = 0; i < G_N_ELEMENTS(things); i++ ) {
-            Glib::ustring foo(things[i]);
+            Glib::ustring foo(gettext(things[i]));
             Gtk::RadioMenuItem* single = manage(new Gtk::RadioMenuItem(groupOne, foo));
             menu.append(*single);
             if ( i == panel_size ) {
@@ -102,8 +103,8 @@ void Panel::init()
     }
     menu.append( *manage(new Gtk::SeparatorMenuItem()) );
     Gtk::RadioMenuItem::Group group;
-    Glib::ustring oneLab("List");
-    Glib::ustring twoLab("Grid");
+    Glib::ustring oneLab(_("List"));
+    Glib::ustring twoLab(_("Grid"));
     Gtk::RadioMenuItem *one = manage(new Gtk::RadioMenuItem(group, oneLab));
     Gtk::RadioMenuItem *two = manage(new Gtk::RadioMenuItem(group, twoLab));
 

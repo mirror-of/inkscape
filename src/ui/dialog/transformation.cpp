@@ -53,24 +53,24 @@ namespace Dialog {
  */
 Transformation::Transformation()
     : Dialog ("dialogs.transformation", SP_VERB_DIALOG_TRANSFORM),
-      _page_move              ("Move",      4, 2),
-      _page_scale             ("Scale",     4, 2),
-      _page_rotate            ("Rotate",    4, 2),
-      _page_skew              ("Skew",      4, 2),
-      _page_transform         ("Transform", 3, 3),
-      _scalar_move_horizontal ("Horizontal", UNIT_TYPE_LINEAR, "",
+      _page_move              (_("Move"),      4, 2),
+      _page_scale             (_("Scale"),     4, 2),
+      _page_rotate            (_("Rotate"),    4, 2),
+      _page_skew              (_("Skew"),      4, 2),
+      _page_transform         (_("Transform"), 3, 3),
+      _scalar_move_horizontal (_("Horizontal"), UNIT_TYPE_LINEAR, "",
                                "arrows_hor", &_units_move),
-      _scalar_move_vertical   ("Vertical",   UNIT_TYPE_LINEAR, "",
+      _scalar_move_vertical   (_("Vertical"),   UNIT_TYPE_LINEAR, "",
                                "arrows_ver", &_units_move),
-      _scalar_scale_horizontal("Width",      UNIT_TYPE_DIMENSIONLESS, "",
+      _scalar_scale_horizontal(_("Width"),      UNIT_TYPE_DIMENSIONLESS, "",
                                "transform_scale_hor", &_units_scale),
-      _scalar_scale_vertical  ("Height",     UNIT_TYPE_DIMENSIONLESS, "",
+      _scalar_scale_vertical  (_("Height"),     UNIT_TYPE_DIMENSIONLESS, "",
                                "transform_scale_ver", &_units_scale),
-      _scalar_rotate          ("Rotate",     UNIT_TYPE_RADIAL, "",
+      _scalar_rotate          (_("Rotate"),     UNIT_TYPE_RADIAL, "",
                                "transform_rotate"),
-      _scalar_skew_horizontal ("Horizontal", UNIT_TYPE_LINEAR, "",
+      _scalar_skew_horizontal (_("Horizontal"), UNIT_TYPE_LINEAR, "",
                                "arrows_hor", &_units_skew),
-      _scalar_skew_vertical   ("Vertical",   UNIT_TYPE_LINEAR, "",
+      _scalar_skew_vertical   (_("Vertical"),   UNIT_TYPE_LINEAR, "",
                                "arrows_ver", &_units_skew),
 
       _scalar_transform_a     ("A"),
@@ -80,7 +80,7 @@ Transformation::Transformation()
       _scalar_transform_e     ("E"),
       _scalar_transform_f     ("F"),
 
-      _check_move_relative    ("Relative move")
+      _check_move_relative    (_("Relative move"))
 {
     // Top level vbox
     Gtk::VBox *vbox = get_vbox();

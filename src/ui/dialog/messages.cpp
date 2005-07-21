@@ -71,9 +71,8 @@ Messages::Messages()
 
     show_all_children();
 
-    message("ready.");
-    message("enable log display by setting ");
-    message("dialogs.debug 'redirect' attribute to 1 in preferences.xml");
+    message(_("Ready."));
+    message(_("Enable log display by setting dialogs.debug 'redirect' attribute to 1 in preferences.xml"));
 
     handlerDefault = 0;
     handlerGlibmm  = 0;
