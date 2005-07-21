@@ -117,6 +117,7 @@ Layout::ShapeScanlineMaker::~ShapeScanlineMaker()
 std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScanline(Layout::LineHeight const &line_height)
 {
     FloatLigne line_rasterization;
+    FloatLigne line_decent_length_runs;
     float line_text_height = (float)(line_height.ascent + line_height.descent);
 
     if (_y > _bounding_box_bottom)
@@ -128,20 +129,34 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
     if (line_text_height == 0.0)
         line_text_height = 0.001;     // Scan() doesn't work for zero height so this will have to do
 
+    _current_line_height = (float)line_height.total();
+
     // I think what's going on here is that we're moving the top of the scanline to the given position...
     _rotated_shape->Scan(_rasterizer_y, _current_rasterization_point, _y, line_text_height);
     // ...then actually retreiving the scanline (which alters the first two parameters)
     _rotated_shape->Scan(_rasterizer_y, _current_rasterization_point, _y + line_text_height , &line_rasterization, true, line_text_height);
     // sanitise the raw rasterisation, which could have weird overlaps
     line_rasterization.Flatten();
+    // cut out runs that cover less than 90% of the line
+    line_decent_length_runs.Over(&line_rasterization, 0.9 * line_text_height);
 
-    _current_line_height = (float)line_height.total();
+    if (line_decent_length_runs.runs.empty())
+    {
+        if (line_rasterization.runs.empty())
+            return std::vector<ScanRun>();     // stop the flow
+        // make up a pointless run: anything that's not an empty vector
+        std::vector<ScanRun> result(1);
+        result[0].x_start = line_rasterization.runs[0].st;
+        result[0].x_end   = line_rasterization.runs[0].st;
+        result[0].y = _negative_block_progression ? -_current_line_height - _y : _y;
+        return result;
+    }
 
     // convert the FloatLigne to what we use: vector<ScanRun>
-    std::vector<ScanRun> result(line_rasterization.runs.size());
+    std::vector<ScanRun> result(line_decent_length_runs.runs.size());
     for (unsigned i = 0 ; i < result.size() ; i++) {
-        result[i].x_start = line_rasterization.runs[i].st;
-        result[i].x_end   = line_rasterization.runs[i].en;
+        result[i].x_start = line_decent_length_runs.runs[i].st;
+        result[i].x_end   = line_decent_length_runs.runs[i].en;
         result[i].y = _negative_block_progression ? -_current_line_height - _y : _y;
     }
 
