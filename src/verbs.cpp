@@ -1384,10 +1384,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
 void
 DialogVerb::perform (SPAction *action, void * data, void * pdata)
 {
-
-// What now, (int) data or reinterpret_cast<std::size_t>(data) ???
-
-    if ((int) data != SP_VERB_DIALOG_TOGGLE) {
+    if (reinterpret_cast<std::size_t>(data) != SP_VERB_DIALOG_TOGGLE) {
         // unhide all when opening a new dialog
         inkscape_dialogs_unhide ();
     }
