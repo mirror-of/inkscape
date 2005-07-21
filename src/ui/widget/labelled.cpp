@@ -49,12 +49,6 @@ Labelled::Labelled(Glib::ustring const &label,
     g_assert(g_utf8_validate(icon.c_str(), -1, NULL));
     if (icon != "") {
         _icon = sp_icon_get_icon(icon.c_str(), GTK_ICON_SIZE_DIALOG);
-/*
-        gchar *const filename_utf8 = g_build_filename(INKSCAPE_PIXMAPDIR, icon.c_str(), NULL);
-        _icon = new Gtk::Image(filename_utf8);
-        // fixme-charset: Does Gtk::Image want a utf8 or opsys-encoded string?
-        g_free(filename_utf8);
-*/
         pack_start(*Gtk::manage(_icon), Gtk::PACK_SHRINK);
     }
     pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);
