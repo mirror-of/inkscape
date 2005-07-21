@@ -54,12 +54,19 @@ DLLTOOL = i686-pc-mingw32-dlltool
 ####### file separator
 S = $(FSLASH)
 
+####### escape character for echo
+E = /
+
 ####### file manipulation programs
 CP     = cp
 RMDIR  = rm -rf 
 MKDIR  = mkdir
 CPDIR  = cp -rf 
 MSGFMT = msgfmt
+RMREC  = find ./inkscape -type f -name 
+RMREC1 = |xargs $(RM)
+RMDIRREC = find ./inkscape -type d -name
+RMDIRREC1 = |xargs $(RMDIR)
 
 ####### Where is your GTK directory?
 GTK=/target
@@ -87,6 +94,9 @@ DLLTOOL = dlltool
 ####### file separator
 S = $(BSLASH)
 
+####### escape character for echo
+E = 
+
 ####### file manipulation programs
 CP = copy
 
@@ -100,6 +110,10 @@ RM    = del
 endif
 MKDIR = mkdir
 CPDIR = xcopy /e /i
+RMREC = cd  inkscape & $(RM) /s /q 
+RMREC1 = & cd ..
+RMDIRREC = cd inkscape & $(RMDIR) /s 
+RMDIRREC1 = & cd ..
 
 #######  Where is your GTK directory?
 GTK=c:/gtk26

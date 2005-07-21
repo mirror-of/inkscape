@@ -41,7 +41,7 @@ protected:
     Gtk::Widget  *_widget;
     Gtk::Label   *_label;
     Gtk::Label   *_suffix;
-    Gtk::Image   *_icon;
+    Gtk::Widget  *_icon;
 };
 
 } // namespace Widget

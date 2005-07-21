@@ -1,3 +1,10 @@
+2005-05-21  Kees Cook  <kees@outflux.net>
+
+    * share/icons/*xpm, src/ui/dialog/transformation.cpp,
+	  src/ui/widget/labelled.cpp, src/ui/widget/labelled.h:
+	  Hooked up Gtkmmified Icon manager correctly.  (bug 1217367)
+	* Makefile.mingw, Makefile.mingw.common: patch 1241293 for build fixes
+
 2005-07-12  Ted Gould  <ted@gould.cx>
 
 	* 0.42pre2
