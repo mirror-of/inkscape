@@ -250,6 +250,7 @@ src/ui/dialog/tracedialog.cpp
 src/ui/dialog/transformation.cpp
 src/ui/stock-items.cpp
 src/ui/view/edit.cpp
+src/ui/widget/panel.cpp
 src/uri-references.cpp
 src/uri.cpp
 src/verbs.cpp
