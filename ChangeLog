@@ -1,3 +1,7 @@
+2005-07-21  Ted Gould  <ted@gould.cx>
+
+	* 0.42pre3
+
 2005-05-21  Kees Cook  <kees@outflux.net>
 
     * share/icons/*xpm, src/ui/dialog/transformation.cpp,
