@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-22 01:58+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
 "PO-Revision-Date: 2002-01-15 13:30+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -843,7 +843,7 @@ msgstr ""
 
 #. Notebook tab
 #: ../src/dialogs/desktop-properties.cpp:882
-#: ../src/ui/dialog/document-preferences.cpp:37
+#: ../src/ui/dialog/document-preferences.cpp:37 ../src/ui/widget/panel.cpp:107
 msgid "Grid"
 msgstr "Gitter"
 
@@ -6091,6 +6091,28 @@ msgstr ""
 #: ../src/ui/view/edit.cpp:916
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
+
+#: ../src/ui/widget/panel.cpp:88
+msgid "small"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:89
+msgid "medium"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:90
+#, fuzzy
+msgid "large"
+msgstr "Mål:"
+
+#: ../src/ui/widget/panel.cpp:91
+msgid "huge"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:106
+#, fuzzy
+msgid "List"
+msgstr "tommer"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."

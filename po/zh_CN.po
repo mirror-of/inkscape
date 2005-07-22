@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-22 01:58+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
 "PO-Revision-Date: 2002-03-17 15:51+0800\n"
 "Last-Translator: wang li <charlesw1234@163.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -842,7 +842,7 @@ msgstr ""
 
 #. Notebook tab
 #: ../src/dialogs/desktop-properties.cpp:882
-#: ../src/ui/dialog/document-preferences.cpp:37
+#: ../src/ui/dialog/document-preferences.cpp:37 ../src/ui/widget/panel.cpp:107
 msgid "Grid"
 msgstr "栅格"
 
@@ -6084,6 +6084,28 @@ msgstr ""
 #: ../src/ui/view/edit.cpp:916
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
+
+#: ../src/ui/widget/panel.cpp:88
+msgid "small"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:89
+msgid "medium"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:90
+#, fuzzy
+msgid "large"
+msgstr "目标："
+
+#: ../src/ui/widget/panel.cpp:91
+msgid "huge"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:106
+#, fuzzy
+msgid "List"
+msgstr "英寸"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."

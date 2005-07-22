@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-22 01:58+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
 "PO-Revision-Date: 2005-07-12 15:55+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -834,7 +834,7 @@ msgstr "Sprosti dnevniška sporočila"
 
 #. Notebook tab
 #: ../src/dialogs/desktop-properties.cpp:882
-#: ../src/ui/dialog/document-preferences.cpp:37
+#: ../src/ui/dialog/document-preferences.cpp:37 ../src/ui/widget/panel.cpp:107
 msgid "Grid"
 msgstr "Mreža"
 
@@ -5989,6 +5989,28 @@ msgstr ""
 #: ../src/ui/view/edit.cpp:916
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
+
+#: ../src/ui/widget/panel.cpp:88
+msgid "small"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:89
+msgid "medium"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:90
+#, fuzzy
+msgid "large"
+msgstr "Cilj:"
+
+#: ../src/ui/widget/panel.cpp:91
+msgid "huge"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:106
+#, fuzzy
+msgid "List"
+msgstr "zožaj"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."

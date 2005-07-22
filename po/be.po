@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: be\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-22 01:58+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
 "PO-Revision-Date: 2003-07-20 16:00+0300\n"
 "Last-Translator: Vital Khilko <dojlid@mova.org>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -838,7 +838,7 @@ msgstr ""
 
 #. Notebook tab
 #: ../src/dialogs/desktop-properties.cpp:882
-#: ../src/ui/dialog/document-preferences.cpp:37
+#: ../src/ui/dialog/document-preferences.cpp:37 ../src/ui/widget/panel.cpp:107
 msgid "Grid"
 msgstr "Сетка"
 
@@ -6083,6 +6083,28 @@ msgstr ""
 #: ../src/ui/view/edit.cpp:916
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
+
+#: ../src/ui/widget/panel.cpp:88
+msgid "small"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:89
+msgid "medium"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:90
+#, fuzzy
+msgid "large"
+msgstr "Мэта:"
+
+#: ../src/ui/widget/panel.cpp:91
+msgid "huge"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:106
+#, fuzzy
+msgid "List"
+msgstr "Друкаваць"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."

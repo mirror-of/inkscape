@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-22 01:58+0200\n"
-"PO-Revision-Date: 2005-07-22 02:05+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
+"PO-Revision-Date: 2005-07-23 00:49+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -845,7 +845,7 @@ msgstr "Naplóüzenetek megjelenítésének megszüntetése"
 
 #. Notebook tab
 #: ../src/dialogs/desktop-properties.cpp:882
-#: ../src/ui/dialog/document-preferences.cpp:37
+#: ../src/ui/dialog/document-preferences.cpp:37 ../src/ui/widget/panel.cpp:107
 msgid "Grid"
 msgstr "Rács"
 
@@ -5739,8 +5739,8 @@ msgid ""
 "Enable log display by setting dialogs.debug 'redirect' attribute to 1 in "
 "preferences.xml"
 msgstr ""
-"A napló megjelenítésének bekapcsolása a preferences.xml-beli dialogs.debug 'redirect' "
-"attribútum 1-re való állításával lehetséges"
+"A napló megjelenítésének bekapcsolása a preferences.xml-beli dialogs.debug "
+"'redirect' attribútum 1-re való állításával lehetséges"
 
 #: ../src/ui/dialog/scriptdialog.cpp:184
 msgid "_Execute Python"
@@ -6079,6 +6079,26 @@ msgstr ""
 #: ../src/ui/view/edit.cpp:916
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
+
+#: ../src/ui/widget/panel.cpp:88
+msgid "small"
+msgstr "kicsi"
+
+#: ../src/ui/widget/panel.cpp:89
+msgid "medium"
+msgstr "közepes"
+
+#: ../src/ui/widget/panel.cpp:90
+msgid "large"
+msgstr "nagy"
+
+#: ../src/ui/widget/panel.cpp:91
+msgid "huge"
+msgstr "nagyon nagy"
+
+#: ../src/ui/widget/panel.cpp:106
+msgid "List"
+msgstr "Lista"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."

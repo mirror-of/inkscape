@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-22 01:58+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
 "PO-Revision-Date: 2005-07-19 23:32+0200\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -834,7 +834,7 @@ msgstr "Log berichten negeren"
 
 #. Notebook tab
 #: ../src/dialogs/desktop-properties.cpp:882
-#: ../src/ui/dialog/document-preferences.cpp:37
+#: ../src/ui/dialog/document-preferences.cpp:37 ../src/ui/widget/panel.cpp:107
 msgid "Grid"
 msgstr "Raster"
 
@@ -6104,6 +6104,28 @@ msgstr ""
 #: ../src/ui/view/edit.cpp:916
 msgid "PLACEHOLDER, DO NOT TRANSLATE"
 msgstr ""
+
+#: ../src/ui/widget/panel.cpp:88
+msgid "small"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:89
+msgid "medium"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:90
+#, fuzzy
+msgid "large"
+msgstr "Doel:"
+
+#: ../src/ui/widget/panel.cpp:91
+msgid "huge"
+msgstr ""
+
+#: ../src/ui/widget/panel.cpp:106
+#, fuzzy
+msgid "List"
+msgstr "binnenrand"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."
