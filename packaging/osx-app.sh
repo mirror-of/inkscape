@@ -92,37 +92,6 @@ binpath="$package/Contents/Resources/bin/inkscape-bin"
 
 cp "$binary" "$binpath"
 
-# Find out libs we need from fink (e.g. $SW) - loop until no changes
-a=1
-nfiles=0
-endl=true
-while $endl; do
-  echo "Looking for dependencies. Round " $a
-  libs="`otool -L $package/Contents/Resources/lib/* $binary 2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $SW | sort | uniq`"
-  cp -f $libs $package/Contents/Resources/lib
-  let "a+=1"  
-  nnfiles=`ls $package/Contents/Resources/lib | wc -l`
-  if [ $nnfiles = $nfiles ]; then
-    endl=false
-  else
-    nfiles=$nnfiles
-  fi
-done
-
-# NOTE: This works for all the dylibs but causes GTK to crash at startup.
-#       Instead we leave them with their original install_names and set
-#       DYLD_LIBRARY_PATH within the app bundle before running Inkscape.
-#
-# Fix package deps
-#(cd "$package/Contents/MacOS/bin"
-# for file in *; do
-#    fixlib "$file"
-# done
-# cd ../lib
-# for file in *; do
-#    fixlib "$file"
-# done)
-
 
 # Build and add the launcher.
 (
@@ -161,12 +130,43 @@ sed -e "s,$SW,\${CWD},g" $SW/etc/gtk-2.0/gtk.immodules > $pkgetc/gtk-2.0/gtk.imm
 
 pkglib="$package/Contents/Resources/lib"
 mkdir -p $pkglib/pango/1.4.0/modules
-cp $SW/lib/pango/1.4.0/modules/*.so $pkglib/pango/1.4.0/modules
+cp $SW/lib/pango/1.4.0/modules/*.so $pkglib/pango/1.4.0/modules/
 
 mkdir -p $pkglib/gtk-2.0/2.4.0/{engines,immodules,loaders}
 cp -r $SW/lib/gtk-2.0/2.4.0/engines/* $pkglib/gtk-2.0/2.4.0/engines/
 cp $SW/lib/gtk-2.0/2.4.0/immodules/*.so $pkglib/gtk-2.0/2.4.0/immodules/
 cp $SW/lib/gtk-2.0/2.4.0/loaders/*.so $pkglib/gtk-2.0/2.4.0/loaders/
+
+# Find out libs we need from fink (e.g. $SW) - loop until no changes
+a=1
+nfiles=0
+endl=true
+while $endl; do
+  echo "Looking for dependencies. Round " $a
+  libs="`otool -L $pkglib/gtk-2.0/2.4.0/loaders/* $pkglib/gtk-2.0/2.4.0/immodules/* $pkglib/gtk-2.0/2.4.0/engines/*.so $pkglib/pango/1.4.0/modules/* $package/Contents/Resources/lib/* $binary 2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $SW | sort | uniq`"
+  cp -f $libs $package/Contents/Resources/lib
+  let "a+=1"  
+  nnfiles=`ls $package/Contents/Resources/lib | wc -l`
+  if [ $nnfiles = $nfiles ]; then
+    endl=false
+  else
+    nfiles=$nnfiles
+  fi
+done
+
+# NOTE: This works for all the dylibs but causes GTK to crash at startup.
+#       Instead we leave them with their original install_names and set
+#       DYLD_LIBRARY_PATH within the app bundle before running Inkscape.
+#
+# Fix package deps
+#(cd "$package/Contents/MacOS/bin"
+# for file in *; do
+#    fixlib "$file"
+# done
+# cd ../lib
+# for file in *; do
+#    fixlib "$file"
+# done)
 
 # Get all the icons and the rest of the script framework
 rsync -av $resdir/Resources/* $package/Contents/Resources/
