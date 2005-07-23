@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.42\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-23 11:44+0200\n"
-"PO-Revision-Date: 2005-07-23 01:10+0200\n"
+"POT-Creation-Date: 2005-07-23 00:45+0200\n"
+"PO-Revision-Date: 2005-07-23 11:58+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -5769,9 +5769,7 @@ msgstr "Bereit"
 msgid ""
 "Enable log display by setting dialogs.debug 'redirect' attribute to 1 in "
 "preferences.xml"
-msgstr ""
-"Log-Anzeige ermöglichen durchs Setzen des Attributes <b>redirect</b> von "
-"<b>dialogs.debug</b> auf <b>1</b> in preferences.xml"
+msgstr "Log-Anzeige ermöglichen durchs Setzen des Attributes <b>redirect</b> von <b>dialogs.debug</b> auf <b>1</b> in preferences.xml"
 
 #: ../src/ui/dialog/scriptdialog.cpp:184
 msgid "_Execute Python"
@@ -6117,25 +6115,23 @@ msgstr ""
 
 #: ../src/ui/widget/panel.cpp:88
 msgid "small"
-msgstr ""
+msgstr "klein"
 
 #: ../src/ui/widget/panel.cpp:89
 msgid "medium"
-msgstr ""
+msgstr "mittel"
 
 #: ../src/ui/widget/panel.cpp:90
-#, fuzzy
 msgid "large"
-msgstr "Ziel:"
+msgstr "groß"
 
 #: ../src/ui/widget/panel.cpp:91
 msgid "huge"
-msgstr ""
+msgstr "sehr groß"
 
 #: ../src/ui/widget/panel.cpp:106
-#, fuzzy
 msgid "List"
-msgstr "Schrumpfen"
+msgstr "Liste"
 
 #: ../src/verbs.cpp:978
 msgid "Moved to next layer."
