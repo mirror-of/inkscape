@@ -6049,7 +6049,7 @@ msgstr ""
 #. code); otherwise leave as "tutorial-basic.svg".
 #: ../src/verbs.cpp:1491
 msgid "tutorial-basic.svg"
-msgstr "tutorial-basic.svg"
+msgstr "tutorial-basic.jp.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1495
