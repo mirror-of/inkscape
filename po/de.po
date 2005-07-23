@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.42\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-23 00:45+0200\n"
-"PO-Revision-Date: 2005-07-18 23:41+0200\n"
+"POT-Creation-Date: 2005-07-23 11:44+0200\n"
+"PO-Revision-Date: 2005-07-23 01:10+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -5762,15 +5762,16 @@ msgid "Recalculate"
 msgstr "Neu berechnen"
 
 #: ../src/ui/dialog/messages.cpp:74
-#, fuzzy
 msgid "Ready."
-msgstr "Rot"
+msgstr "Bereit"
 
 #: ../src/ui/dialog/messages.cpp:75
 msgid ""
 "Enable log display by setting dialogs.debug 'redirect' attribute to 1 in "
 "preferences.xml"
 msgstr ""
+"Log-Anzeige ermöglichen durchs Setzen des Attributes <b>redirect</b> von "
+"<b>dialogs.debug</b> auf <b>1</b> in preferences.xml"
 
 #: ../src/ui/dialog/scriptdialog.cpp:184
 msgid "_Execute Python"
@@ -5961,25 +5962,21 @@ msgstr "Transformationen"
 
 #: ../src/ui/dialog/transformation.cpp:61
 #: ../src/ui/dialog/transformation.cpp:71
-#, fuzzy
 msgid "Horizontal"
-msgstr "Horizontale Textausrichtung"
+msgstr "Horizontal"
 
 #: ../src/ui/dialog/transformation.cpp:63
 #: ../src/ui/dialog/transformation.cpp:73
-#, fuzzy
 msgid "Vertical"
-msgstr "Vertikale Textausrichtung"
+msgstr "Vertikal"
 
 #: ../src/ui/dialog/transformation.cpp:65
-#, fuzzy
 msgid "Width"
 msgstr "Breite"
 
 #: ../src/ui/dialog/transformation.cpp:67
-#, fuzzy
 msgid "Height"
-msgstr "Höhe:"
+msgstr "Höhe"
 
 #: ../src/ui/dialog/transformation.cpp:112
 msgid "Apply transform to object"
@@ -7616,7 +7613,7 @@ msgstr "Nicht zeichnen"
 
 #: ../src/widgets/paint-selector.cpp:185 ../src/widgets/paint-selector.cpp:630
 msgid "Flat color"
-msgstr "Zielfarbe"
+msgstr "Endfarbe"
 
 #: ../src/widgets/paint-selector.cpp:187 ../src/widgets/paint-selector.cpp:697
 msgid "Linear gradient"
