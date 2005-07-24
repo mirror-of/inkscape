@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '''
-import random, math, inkex, simplepath
+import random, math, inkex, cubicsuperpath
 
 def randomize((x, y), r):
 	r = random.uniform(0.0,r)
@@ -39,23 +39,27 @@ class RadiusRandomize(inkex.Effect):
 		self.OptionParser.add_option("-e", "--end",
 						action="store", type="inkbool", 
 						dest="end", default=True,
-						help="Randomize end points")
+						help="Randomize nodes")
 	def effect(self):
 		for id, node in self.selected.iteritems():
 			if node.tagName == 'path':
 				d = node.attributes.getNamedItem('d')
-				p = simplepath.parsePath(d.value)
-				for cmd,params in p:
-					if cmd == 'Z':
-						continue
-					if self.options.end:
-						params[-2:]=randomize(params[-2:], self.options.radius)
-					if self.options.ctrl:
-						if cmd in ('C','Q'):
-							params[:2]=randomize(params[:2], self.options.radius)
-						if cmd == 'C':
-							params[2:4]=randomize(params[2:4], self.options.radius)
-				d.value = simplepath.formatPath(p)
+				p = cubicsuperpath.parsePath(d.value)
+				for subpath in p:
+					for csp in subpath:
+						if self.options.end:
+							delta=randomize([0,0], self.options.radius)
+							csp[0][0]+=delta[0] 
+							csp[0][1]+=delta[1] 
+							csp[1][0]+=delta[0] 
+							csp[1][1]+=delta[1] 
+							csp[2][0]+=delta[0] 
+							csp[2][1]+=delta[1] 
+						if self.options.ctrl:
+							csp[0]=randomize(csp[0], self.options.radius)
+							csp[2]=randomize(csp[2], self.options.radius)
+				d.value = cubicsuperpath.formatPath(p)
 
 e = RadiusRandomize()
 e.affect()
+
