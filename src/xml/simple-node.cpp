@@ -412,7 +412,11 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
         new_value = SharedCStringPtr::copy(value);
         tracker.set<DebugSetAttribute>(*this, key, old_value, new_value);
         if (!existing) {
-            _attributes = cons(AttributeRecord(key, new_value), _attributes);
+            if (ref) {
+                set_rest(ref, MutableList<AttributeRecord>(AttributeRecord(key, new_value)));
+            } else {
+                _attributes = MutableList<AttributeRecord>(AttributeRecord(key, new_value));
+            }
         } else {
             existing->value = new_value;
         }
