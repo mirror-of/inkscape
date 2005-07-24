@@ -15,6 +15,7 @@ tutorial_DATA = \
     tutorial-advanced.svg \
     tutorial-advanced.fr.svg \
     tutorial-advanced.sl.svg \
+    tutorial-advanced.jp.svg \
     tutorial-basic.svg \
     tutorial-basic.es.svg \
     tutorial-basic.ca.svg \
@@ -31,6 +32,7 @@ tutorial_DATA = \
     tutorial-shapes.fr.svg \
     tutorial-shapes.es.svg \
     tutorial-shapes.sl.svg \
+    tutorial-shapes.jp.svg \
     tutorial-tracing.svg potrace.png oldguitar.jpg tux.png \
     tutorial-tracing.fr.svg potrace-fr.png \
     tutorial-tracing.es.svg

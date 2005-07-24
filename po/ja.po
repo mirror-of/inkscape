@@ -6054,12 +6054,12 @@ msgstr "tutorial-basic.jp.svg"
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1495
 msgid "tutorial-shapes.svg"
-msgstr "tutorial-shapes.svg"
+msgstr "tutorial-shapes.jp.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1499
 msgid "tutorial-advanced.svg"
-msgstr "tutorial-advanced.svg"
+msgstr "tutorial-advanced.jp.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:1503
