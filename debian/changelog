@@ -1,3 +1,9 @@
+inkscape (0.42-1) unstable; urgency=medium
+
+  * Upstream release
+
+ -- Ted Gould <ted@gould.cx>  Tue, 24 Jul 2005 22:23:00 -0700
+
 inkscape (0.41+0.42pre3-1) unstable; urgency=low
 
   * Upstream pre-release
