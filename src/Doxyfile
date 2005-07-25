@@ -6,18 +6,24 @@
 #RECURSIVE = yes
 # find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,    ,;s,$,    \\,'
 INPUT = \
+        color.h        \
 	color-rgba.h	\
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
 	display/curve.h	\
+	display/sp-canvas.cpp \
+	display/sp-canvas.h   \
 	draw-anchor.cpp	\
 	draw-anchor.h	\
+	event-context.cpp  \
+	event-context.h  \
 	extension/extension.cpp	\
 	extension/extension.h	\
 	extension/implementation/plugin-link.h	\
 	extension/implementation/plugin.cpp	\
 	extension/implementation/plugin.h	\
+	extension/internal/gimpgrad.h	\
 	extension/internal/gimpgrad.cpp	\
 	geom.cpp	\
 	helper/action.h	\
@@ -27,13 +33,17 @@ INPUT = \
 	libnr/nr-matrix-translate-ops.h	\
 	libnr/nr-matrix.cpp	\
 	libnr/nr-matrix.h	\
+	libnr/nr-pixblock.h \
+	libnr/nr-pixblock.cpp \
 	libnr/nr-point.h	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
 	libnr/nr-rotate.h	\
 	libnr/nr-scale-matrix-ops.h	\
 	libnr/nr-types.cpp	\
+	livarot/float-line.h	\
 	livarot/float-line.cpp	\
+	livarot/int-line.h	\
 	livarot/int-line.cpp	\
 	livarot/sweep-event-queue.h	\
 	livarot/sweep-event.h	\
@@ -56,10 +66,16 @@ INPUT = \
 	sp-item.h	\
 	sp-linear-gradient-fns.h	\
 	sp-linear-gradient.h	\
+	sp-offset.h  	\
 	sp-offset.cpp	\
 	sp-radial-gradient-fns.h	\
 	sp-radial-gradient.h	\
 	sp-spiral.cpp	\
+	svg-view.cpp    \
+	svg-view.h      \
+	ui/view/view.h  \
+	ui/view/view.cpp  \
+	verbs.h  	\
 	verbs.cpp	\
 	widgets/paint-selector.cpp	\
 	xml/quote.cpp	\
@@ -100,6 +116,15 @@ OUTPUT_DIRECTORY = ../doxygen
 # doxygen familiarity.
 JAVADOC_AUTOBRIEF = yes
 
-WARN_IF_UNDOCUMENTED = no
+WARN_IF_UNDOCUMENTED = yes
+
+GENERATE_TODOLIST = yes
+
+GENERATE_BUGLIST = yes
+
+REFERENCED_BY_RELATION = yes
+
+EXTRACT_STATIC = yes
 
 WARN_LOGFILE = doxygen-log
+
