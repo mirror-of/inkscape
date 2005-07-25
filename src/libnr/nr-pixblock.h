@@ -1,62 +1,89 @@
 #ifndef __NR_PIXBLOCK_H__
 #define __NR_PIXBLOCK_H__
 
-/*
- * Pixel buffer rendering library
+/** \file
+ * \brief Pixel block structure. Used for low-level rendering.
  *
  * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   (C) 1999-2002 Lauris Kaplinski <lauris@kaplinski.com>
+ *   (C) 2005 Ralf Stephan <ralf@ark.in-berlin.de> (some cleanup)
  *
- * This code is in public domain
+ * This code is in the Public Domain.
  */
 
 #include <libnr/nr-rect-l.h>
 #include <libnr/nr-forward.h>
 
-enum {
-	NR_PIXBLOCK_SIZE_TINY, /* Fits in (unsigned char *) */
-	NR_PIXBLOCK_SIZE_4K, /* Pixelstore */
-	NR_PIXBLOCK_SIZE_16K, /* Pixelstore */
-	NR_PIXBLOCK_SIZE_64K, /* Pixelstore */
-	NR_PIXBLOCK_SIZE_BIG, /* Normally allocated */
-	NR_PIXBLOCK_SIZE_STATIC /* Externally managed */
-};
+/// Size indicator. Hardcoded to max. 3 bits.
+typedef enum {
+	NR_PIXBLOCK_SIZE_TINY, ///< Fits in (unsigned char *)
+	NR_PIXBLOCK_SIZE_4K,   ///< Pixelstore 
+	NR_PIXBLOCK_SIZE_16K,  ///< Pixelstore 
+	NR_PIXBLOCK_SIZE_64K,  ///< Pixelstore 
+	NR_PIXBLOCK_SIZE_BIG,  ///< Normally allocated 
+	NR_PIXBLOCK_SIZE_STATIC ///< Externally managed 
+} NR_PIXBLOCK_SIZE;
 
-enum {
-	NR_PIXBLOCK_MODE_A8, /* Grayscale */
-	NR_PIXBLOCK_MODE_R8G8B8, /* 8 bit RGB */
-	NR_PIXBLOCK_MODE_R8G8B8A8N, /* Normal 8 bit RGBA */
-	NR_PIXBLOCK_MODE_R8G8B8A8P /* Premultiplied 8 bit RGBA */
-};
+/// Mode indicator. Hardcoded to max. 2 bits.
+typedef enum {
+	NR_PIXBLOCK_MODE_A8,        ///< Grayscale
+	NR_PIXBLOCK_MODE_R8G8B8,    ///< 8 bit RGB
+	NR_PIXBLOCK_MODE_R8G8B8A8N, ///< Normal 8 bit RGBA
+	NR_PIXBLOCK_MODE_R8G8B8A8P  ///< Premultiplied 8 bit RGBA
+} NR_PIXBLOCK_MODE;
 
+/// The pixel block struct.
 struct NRPixBlock {
-	unsigned int size : 3;
-	unsigned int mode : 2;
-	unsigned int empty : 1;
-	unsigned int rs;
+	NR_PIXBLOCK_SIZE size : 3; ///< Size indicator
+	NR_PIXBLOCK_MODE mode : 2; ///< Mode indicator
+	bool empty : 1;            ///< Empty flag
+	unsigned int rs;           ///< Size of line in bytes
 	NRRectL area;
 	union {
-		unsigned char *px;
-		unsigned char p[sizeof (unsigned char *)];
+		unsigned char *px; ///< Pointer to buffer
+		unsigned char p[sizeof (unsigned char *)]; ///< Tiny buffer
 	} data;
 };
 
-#define NR_PIXBLOCK_BPP(pb) (((pb)->mode == NR_PIXBLOCK_MODE_A8) ? 1 : ((pb)->mode == NR_PIXBLOCK_MODE_R8G8B8) ? 3 : 4)
-#define NR_PIXBLOCK_PX(pb) (((pb)->size == NR_PIXBLOCK_SIZE_TINY) ? (pb)->data.p : (pb)->data.px)
+/// Returns number of bytes per pixel (1, 3, or 4).
+inline int 
+NR_PIXBLOCK_BPP (NRPixBlock *pb)
+{ 
+    return ((pb->mode == NR_PIXBLOCK_MODE_A8) ? 1 : 
+            (pb->mode == NR_PIXBLOCK_MODE_R8G8B8) ? 3 : 4); 
+}
+    
+/// Returns pointer to pixel data.
+inline unsigned char*
+NR_PIXBLOCK_PX (NRPixBlock *pb) 
+{ 
+    return ((pb->size == NR_PIXBLOCK_SIZE_TINY) ? 
+            pb->data.p : pb->data.px);
+}
 
-void nr_pixblock_setup (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int clear);
-void nr_pixblock_setup_fast (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int clear);
-void nr_pixblock_setup_extern (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, unsigned char *px, int rs, int empty, int clear);
+void nr_pixblock_setup (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, bool clear);
+void nr_pixblock_setup_fast (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, bool clear);
+void nr_pixblock_setup_extern (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, unsigned char *px, int rs, bool empty, bool clear);
 void nr_pixblock_release (NRPixBlock *pb);
 
-NRPixBlock *nr_pixblock_new (int mode, int x0, int y0, int x1, int y1, int clear);
+NRPixBlock *nr_pixblock_new (NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, bool clear);
 NRPixBlock *nr_pixblock_free (NRPixBlock *pb);
 
-unsigned char *nr_pixelstore_4K_new (int clear, unsigned char val);
+unsigned char *nr_pixelstore_4K_new (bool clear, unsigned char val);
 void nr_pixelstore_4K_free (unsigned char *px);
-unsigned char *nr_pixelstore_16K_new (int clear, unsigned char val);
+unsigned char *nr_pixelstore_16K_new (bool clear, unsigned char val);
 void nr_pixelstore_16K_free (unsigned char *px);
-unsigned char *nr_pixelstore_64K_new (int clear, unsigned char val);
+unsigned char *nr_pixelstore_64K_new (bool clear, unsigned char val);
 void nr_pixelstore_64K_free (unsigned char *px);
 
 #endif
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
