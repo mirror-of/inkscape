@@ -105,7 +105,7 @@ sp_action_get_title (const SPAction *action)
 
 namespace Inkscape { 
 
-// !!!FIXME:: kill this, use DialogManager instead!!!
+/// \todo !!!FIXME:: kill this, use DialogManager instead!!!
 
 class PanelDialog : public Inkscape::UI::Dialog::Dialog
 {
@@ -362,7 +362,7 @@ Verb::Verb(gchar const * id, gchar const * name, gchar const * tip, gchar const 
 */
 Verb::~Verb (void)
 {
-    /** \todo all the actions need to be cleaned up first */
+    /// \todo all the actions need to be cleaned up first.
     if (_actions != NULL) {
         delete _actions;
     }
@@ -805,7 +805,7 @@ EditVerb::perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_EDIT_INVERT:
             if (tools_isactive (dt, TOOLS_NODES)) {
-                //FIXME: implement invert for nodes
+                /// \todo FIXME: implement invert for nodes
             } else {
                 sp_edit_invert();
             }
@@ -1158,7 +1158,7 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
 
     verb = (sp_verb_t)GPOINTER_TO_INT((gpointer)data);
 
-    /* TODO !!! hopefully this can go away soon and actions can look after
+    /** \todo !!! hopefully this can go away soon and actions can look after
      * themselves
      */
     for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_DROPPER_PREFS; vidx++)

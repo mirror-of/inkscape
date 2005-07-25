@@ -1,10 +1,10 @@
 #ifndef __SP_CANVAS_H__
 #define __SP_CANVAS_H__
 
-/*
- * Port of GnomeCanvas for inkscape needs
+/** \file
+ * SPCanvas, SPCanvasBuf, and SPCanvasItem.
  *
- * Author:
+ * Authors:
  *   Federico Mena <federico@nuclecu.unam.mx>
  *   Raph Levien <raph@gimp.org>
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -32,20 +32,26 @@ enum {
 	SP_CANVAS_UPDATE_AFFINE     = 1 << 1
 };
 
-
+/**
+ * The canvas buf contains the actual pixels.
+ */
 struct SPCanvasBuf{
 	guchar *buf;
 	int buf_rowstride;
 	NRRectL rect;
-	/* Background color, given as 0xrrggbb */
+	/// Background color, given as 0xrrggbb
 	guint32 bg_color;
-	/* Invariant: at least one of the following flags is true. */
-	/* Set when the render rectangle area is the solid color bg_color */
+	/// Invariant: at least one of the following flags is true.
+	/// Set when the render rectangle area is the solid color bg_color.
 	unsigned int is_bg : 1;
-	/* Set when the render rectangle area is represented by the buf */
+	/// Set when the render rectangle area is represented by the buf.
 	unsigned int is_buf : 1;
 };
 
+/**
+ * An SPCanvasItem refers to a SPCanvas and to its parent item; it has 
+ * four coordinates, a bounding rectangle, and a transformation matrix.
+ */
 struct SPCanvasItem : public GtkObject{
 	SPCanvas *canvas;
 	SPCanvasItem *parent;
@@ -55,6 +61,9 @@ struct SPCanvasItem : public GtkObject{
 	NR::Matrix xform;
 };
 
+/**
+ * The vtable of an SPCanvasItem.
+ */
 struct SPCanvasItemClass : public GtkObjectClass{
 	void (* update) (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags);
 
@@ -65,7 +74,6 @@ struct SPCanvasItemClass : public GtkObjectClass{
 };
 
 SPCanvasItem *sp_canvas_item_new (SPCanvasGroup *parent, GtkType type, const gchar *first_arg_name, ...);
-void sp_canvas_item_construct (SPCanvasItem *item, SPCanvasGroup *parent, const gchar *first_arg_name, va_list args);
 
 #define sp_canvas_item_set gtk_object_set
 
@@ -88,8 +96,11 @@ void sp_canvas_item_request_update (SPCanvasItem *item);
 
 gint sp_canvas_item_order (SPCanvasItem * item);
 
-/* SPCanvas */
 
+// SPCanvas -------------------------------------------------
+/**
+ * Port of GnomeCanvas for inkscape needs.
+ */
 struct SPCanvas {
 	GtkWidget widget;
 

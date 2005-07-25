@@ -92,14 +92,11 @@ static NR::Point const unconstrained_tangent(0, 0);
 #endif
 
 
-/*
- * sp_bezier_fit_cubic
- *
+/**
  * Fit a single-segment Bezier curve to a set of digitized points
  *
- * Returns number of segments generated or -1 on error
+ * \return Number of segments generated, or -1 on error.
  */
-
 gint
 sp_bezier_fit_cubic(NR::Point *bezier, NR::Point const *data, gint len, gdouble error)
 {
@@ -112,7 +109,7 @@ sp_bezier_fit_cubic(NR::Point *bezier, NR::Point const *data, gint len, gdouble 
  * Maximum number of generated segments is max_beziers.
  * \a bezier must be large enough for n. segments * 4 elements.
  *
- * return value: number of segments generated, or -1 on error.
+ * \return Number of segments generated, or -1 on error.
  */
 gint
 sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len, gdouble const error, unsigned const max_beziers)
@@ -831,8 +828,11 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
         }
     }
 
-    /* It's been reported that u[len - 1] can differ from 1.0 on some systems (amd64),
-       despite it having been calculated as x / x where x is isFinite and non-zero. */
+    /** \todo
+     * It's been reported that u[len - 1] can differ from 1.0 on some 
+     * systems (amd64), despite it having been calculated as x / x where x 
+     * is isFinite and non-zero.
+     */
     if (u[len - 1] != 1) {
         double const diff = u[len - 1] - 1;
         if (fabs(diff) > 1e-13) {

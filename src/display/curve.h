@@ -1,7 +1,7 @@
 #ifndef SEEN_DISPLAY_CURVE_H
 #define SEEN_DISPLAY_CURVE_H
 
-/*
+/** \file
  * Wrapper around NArtBpath
  *
  * Author:
@@ -20,18 +20,48 @@
 #include "libnr/nr-forward.h"
 #include "libnr/nr-point.h"
 
-/* See end of curve.cpp for doxygen documentation. */
+/// Wrapper around NArtBpath.
 struct SPCurve {
     gint refcount;
     NArtBpath *bpath;
+    
+    /// Index in bpath[] of NR_END element.
     gint end;
+
+    /// Allocated size (i.e.\ capacity) of bpath[] array.  Not to be confused 
+    /// with the SP_CURVE_LENGTH macro, which returns the logical length of 
+    /// the path (i.e.\ index of NR_END).
     gint length;
+
+    /// Index in bpath[] of the start (i.e. moveto element) of the last 
+    /// subpath in this path.
     gint substart;
+
+    /// Previous moveto position.
+    /// \note This is used for coalescing moveto's, whereas if we're to 
+    /// conform to the SVG spec then we mustn't coalesce movetos if we have 
+    /// midpoint markers.  Ref:
+    /// http://www.w3.org/TR/SVG11/implnote.html#PathElementImplementationNotes
+    /// (first subitem of the item about zero-length path segments)
     NR::Point movePos;
+
+    /// True iff bpath points to read-only, static storage (see callers of
+    /// sp_curve_new_from_static_bpath), in which case we shouldn't free 
+    /// bpath and shouldn't write through it.
     bool sbpath : 1;
+    
+    /// True iff current point is defined.  Initially false for a new curve; 
+    /// becomes true after moveto; becomes false on closepath.  Curveto, 
+    /// lineto etc. require hascpt; hascpt remains true after lineto/curveto.
     bool hascpt : 1;
+    
+    /// True iff previous was moveto.
     bool posSet : 1;
+
+    /// True iff bpath end is moving.
     bool moving : 1;
+    
+    /// True iff all subpaths are closed.
     bool closed : 1;
 };
 

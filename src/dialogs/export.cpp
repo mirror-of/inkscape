@@ -1191,7 +1191,7 @@ sp_export_browse_store (GtkButton *button, gpointer userdata)
     return;
 } // end of sp_export_browse_store()
 
-/*
+/** \todo
  * Looks like there is a stack/register bug under certain situations
  * where the doubles of the NR::Rect don't get set up correctly, so
  * an inline == fails.  Instead, we have to call this function to

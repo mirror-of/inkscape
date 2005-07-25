@@ -1,9 +1,8 @@
 #define __SP_STYLE_C__
 
 /** \file
- * SPStyle-related functions.
- */
-/*
+ * SVG stylesheets implementation.
+ *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Peter Moulder <pmoulder@mail.csse.monash.edu.au>
@@ -494,9 +493,10 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     if (object) {
         sp_style_merge_from_object_stylesheet(style, object);
     } else {
-        /* No stylesheet information.  TODO: Find out under what circumstances
-           this occurs, and handle accordingly.  (If we really wanted to, we
-           could probably get stylesheets by going through repr->doc.) */
+        /** \todo No stylesheet information. Find out under what circumstances
+         * this occurs, and handle accordingly.  (If we really wanted to, we
+         * could probably get stylesheets by going through repr->doc.)
+         */
     }
 
     /* 2. Presentation attributes */
@@ -657,7 +657,7 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
         }
     } else {
         if (sp_repr_parent(repr)) {
-            /* fixme: This is not the prettiest thing (Lauris) */
+            /// \todo fixme: This is not the prettiest thing (Lauris)
             SPStyle *parent = sp_style_new();
             sp_style_read(parent, NULL, sp_repr_parent(repr));
             sp_style_merge_from_parent(style, parent);
@@ -848,7 +848,10 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
             SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, true);
             break;
         case SP_PROP_OVERFLOW:
-            // FIXME: not supported properly yet, we just read and write it, but act as if it is always "display"
+            /** \todo 
+             * FIXME: not supported properly yet, we just read and write it, 
+             * but act as if it is always "display".
+             */
             SPS_READ_IENUM_IF_UNSET(&style->overflow, val, enum_overflow, true);
             break;
         case SP_PROP_VISIBILITY:
@@ -1037,13 +1040,17 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 static void
 sp_style_merge_style_from_decl(SPStyle *const style, CRDeclaration const *const decl)
 {
-    /* TODO: Ensure that property is lcased, as per http://www.w3.org/TR/REC-CSS2/syndata.html#q4.
-     * Should probably be done in libcroco. */
+    /** \todo Ensure that property is lcased, as per 
+     * http://www.w3.org/TR/REC-CSS2/syndata.html#q4.
+     * Should probably be done in libcroco.
+     */
     unsigned const prop_idx = sp_attribute_lookup(decl->property->stryng->str);
     if (prop_idx != SP_ATTR_INVALID) {
-        /* effic: Test whether the property is already set before trying to convert to string.
-         *
-         * Alternatively, set from CRTerm directly rather than converting to string. */
+        /** \todo 
+         * effic: Test whether the property is already set before trying to 
+         * convert to string. Alternatively, set from CRTerm directly rather 
+         * than converting to string.
+         */
         guchar *const str_value_unsigned = cr_term_to_string(decl->value);
         gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
         sp_style_merge_property(style, prop_idx, str_value);
@@ -1076,14 +1083,17 @@ sp_repr_sel_eng()
     CRSelEng *const ret = cr_sel_eng_new();
     cr_sel_eng_set_node_iface(ret, &Inkscape::XML::croco_node_iface);
 
-    /* TODO: Check whether we need to register any pseudo-class handlers.
+    /** \todo
+     * Check whether we need to register any pseudo-class handlers.
      * libcroco has its own default handlers for first-child and lang.
      *
-     * We probably want handlers for link and arguably visited (though inkscape can't visit links
-     * at the time of writing).  hover etc. more useful in inkview than the editor inkscape.
+     * We probably want handlers for link and arguably visited (though 
+     * inkscape can't visit links at the time of writing).  hover etc. 
+     * more useful in inkview than the editor inkscape.
      *
-     * http://www.w3.org/TR/SVG11/styling.html#StylingWithCSS says that the following should be
-     * honoured, at least by inkview: :hover, :active, :focus, :visited, :link.
+     * http://www.w3.org/TR/SVG11/styling.html#StylingWithCSS says that 
+     * the following should be honoured, at least by inkview: 
+     * :hover, :active, :focus, :visited, :link.
      */
 
     g_assert(ret);
@@ -1104,7 +1114,7 @@ sp_style_merge_from_object_stylesheet(SPStyle *const style, SPObject const *cons
                                                                      object->repr,
                                                                      &props);
     g_return_if_fail(status == CR_OK);
-    /* fixme: Check what errors can occur, and handle them properly. */
+    /// \todo Check what errors can occur, and handle them properly.
     if (props) {
         sp_style_merge_from_props(style, props);
         cr_prop_list_destroy(props);
@@ -1127,8 +1137,11 @@ is_css_S(gchar const c)
     }
 }
 
-/* Bug: doesn't allow unicode or other escapes.
-   Bug: doesn't distinguish between initial char (non-numeric, not hyphen) and others. */
+/**
+ * \bug Doesn't allow unicode or other escapes.
+ * \bug Doesn't distinguish between initial char (non-numeric, not hyphen) 
+ * and others.
+ */
 static bool
 is_css_ident_char(guchar const c)
 {
@@ -1143,36 +1156,50 @@ is_css_ident_char(guchar const c)
 void
 sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
 {
-    /* Reference: http://www.w3.org/TR/SVG11/styling.html#StyleAttribute: ``When CSS styling is
-     * used, CSS inline style is specified by including semicolon-separated property declarations
-     * of the form "name : value" within the style attribute''.
+    /** \todo
+     * Reference: http://www.w3.org/TR/SVG11/styling.html#StyleAttribute: 
+     * ``When CSS styling is used, CSS inline style is specified by including 
+     * semicolon-separated property declarations of the form "name : value" 
+     * within the style attribute''.
      *
-     * That's fairly ambiguous.  Is a `value' allowed to contain semicolons?  Why does it say
-     * "including", what else is allowed in the style attribute value?
-
-     * Note: I believe a strict reading of the spec doesn't allow space at the beginning of a style
-     * string: see section D.2 of http://www.w3.org/TR/REC-CSS2/grammar.html, where whitespace is
-     * given a specific token S, and see the definitions of `declaration' and `property' at
-     * http://www.w3.org/TR/REC-CSS2/syndata.html.
+     * That's fairly ambiguous.  Is a `value' allowed to contain semicolons?  
+     * Why does it say "including", what else is allowed in the style 
+     * attribute value?
+     * 
+     * \note 
+     * I believe a strict reading of the spec doesn't allow space at the 
+     * beginning of a style string: see section D.2 of 
+     * http://www.w3.org/TR/REC-CSS2/grammar.html, where whitespace is
+     * given a specific token S, and see the definitions of `declaration' 
+     * and `property' at http://www.w3.org/TR/REC-CSS2/syndata.html.
      *
-     * The SVG spec is quite ambiguous about what semicolons are allowed.  Probably the intent is
-     * that style strings are like CSS ruleset bodies, where there must be exactly one semicolon
-     * between declarations, and no semicolon at the beginning or end.  Whereas the SVG 1.1 spec
-     * merely says "semicolon-separated" (cf. "space-separated" which is usually understood as
-     * allowing any number of spaces at the beginning and end, and any non-zero number of spaces
-     * between items).
+     * The SVG spec is quite ambiguous about what semicolons are allowed.  
+     * Probably the intent is that style strings are like CSS ruleset bodies, 
+     * where there must be exactly one semicolon between declarations, and no 
+     * semicolon at the beginning or end.  Whereas the SVG 1.1 spec merely 
+     * says "semicolon-separated" (cf. "space-separated" which is usually 
+     * understood as allowing any number of spaces at the beginning and end, 
+     * and any non-zero number of spaces between items).
      *
-     * N.B. Inkscape up to 0.40 (and probably sodipodi) write style strings with trailing
-     * semicolon.  Given the ambiguity of the spec, we should continue to allow this.
+     * \note 
+     * Inkscape up to 0.40 (and probably sodipodi) write style strings with 
+     * trailing semicolon.  Given the ambiguity of the spec, we should 
+     * continue to allow this.
      *
-     * Indeed, we currently allow any number of semicolons at the beginning or end,
-     * and any non-zero number of semicolons between declarations.
+     * Indeed, we currently allow any number of semicolons at the beginning 
+     * or end, and any non-zero number of semicolons between declarations.
      */
 
-    /* todo: Use cr_declaration_parse_list_from_buf(p, CR_UTF_8), or loop around
-     * cr_parser_parse_declaration.  (The latter gives us better control over error handling.
-     * todo: Check what the SVG spec says to do if we encounter an error in a style attribute
-     * string: should we ignore the whole string or just from the first error onwards?) */
+    /** \todo 
+     * Use cr_declaration_parse_list_from_buf(p, CR_UTF_8), or loop around
+     * cr_parser_parse_declaration.  (The latter gives us better control 
+     * over error handling.
+     * 
+     * \todo 
+     * Check what the SVG spec says to do if we encounter an error in a 
+     * style attribute string: should we ignore the whole string or just 
+     * from the first error onwards?).
+     */
 
     gchar property [BMAX];
     gchar value [BMAX];
@@ -1194,13 +1221,13 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
         }
         gchar const *property_end = p;
         if (property_begin == property_end) {
-            /* TODO: Don't use g_warning for SVG errors. */
+            /// \todo Don't use g_warning for SVG errors.
             g_warning("Empty style property at: %s", property_begin);
             return;
         }
         size_t const property_len = property_end - property_begin;
         if (property_len >= sizeof(property)) {
-            /* TODO: Don't use g_warning for SVG errors. */
+            /// \todo Don't use g_warning for SVG errors.
             g_warning("Exceedingly long style property %.20s...", property_begin);
             return;
         }
@@ -1212,7 +1239,7 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
         }
 
         if (*p++ != ':') {
-            /* TODO: Don't use g_warning for SVG errors. */
+            /// \todo Don't use g_warning for SVG errors.
             g_warning("No separator at style at: %s", property_begin);
             return;
         }
@@ -1262,7 +1289,10 @@ sp_style_merge_font_size_from_parent(SPIFontSize &child, SPIFontSize const &pare
         /* Inherit the computed value.  Reference: http://www.w3.org/TR/SVG11/styling.html#Inheritance */
         child.computed = parent.computed;
     } else if (child.type == SP_FONT_SIZE_LITERAL) {
-        /* fixme: SVG and CSS do not specify clearly, whether we should use user or screen coordinates (Lauris) */
+        /** \todo
+         * fixme: SVG and CSS do not specify clearly, whether we should use 
+         * user or screen coordinates (Lauris)
+         */
         if (child.value < SP_CSS_FONT_SIZE_SMALLER) {
             child.computed = font_size_table[child.value];
         } else if (child.value == SP_CSS_FONT_SIZE_SMALLER) {
@@ -1295,9 +1325,12 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
 {
     g_return_if_fail(style != NULL);
 
-    /* fixme: Check for existing callers that might pass null parent.  This should probably be
-       g_return_if_fail, or else we should make a best attempt to set computed values correctly
-       without having a parent (i.e. by assuming parent has initial values). */
+    /** \todo
+     * fixme: Check for existing callers that might pass null parent.  
+     * This should probably be g_return_if_fail, or else we should make a 
+     * best attempt to set computed values correctly without having a parent 
+     * (i.e., by assuming parent has initial values).
+     */
     if (!parent)
         return;
 
@@ -1319,7 +1352,10 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
     if (!style->font_weight.set || style->font_weight.inherit) {
         style->font_weight.computed = parent->font_weight.computed;
     } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_NORMAL) {
-        /* fixme: This is unconditional, i.e. happens even if parent not present */
+        /** \todo
+         * fixme: This is unconditional, i.e., happens even if parent not 
+         * present.
+         */
         style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
     } else if (style->font_weight.value == SP_CSS_FONT_WEIGHT_BOLD) {
         style->font_weight.computed = SP_CSS_FONT_WEIGHT_700;
@@ -1461,8 +1497,10 @@ sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
     }
 
     if (!style->stroke_dasharray_set && parent->stroke_dasharray_set) {
-        /* TODO: This code looks wrong.  Why does the logic differ from the above properties?
-         * Similarly dashoffset below. */
+        /** \todo
+         * This code looks wrong.  Why does the logic differ from the 
+         * above properties? Similarly dashoffset below.
+         */
         style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
         if (style->stroke_dash.n_dash > 0) {
             style->stroke_dash.dash = g_new(gdouble, style->stroke_dash.n_dash);
@@ -1522,8 +1560,10 @@ static void
 sp_style_merge_paint_prop_from_dying_parent(SPStyle *style,
                                             SPIPaint &child, SPIPaint const &parent)
 {
-    /* TODO: I haven't given this much attention.  See comments below about currentColor,
-       colorProfile, and relative URIs. */
+    /** \todo
+     * I haven't given this much attention.  See comments below about 
+     * currentColor, colorProfile, and relative URIs.
+     */
     if (!child.set || child.inherit || child.currentcolor) {
         sp_style_merge_ipaint(style, &child, &parent);
         child.set = parent.set;
@@ -1556,23 +1596,30 @@ sp_style_merge_rel_enum_prop_from_dying_parent(SPIEnum &child, SPIEnum const &pa
                          && child.value == larger_val ) )
         {
             child.set = false;
-            /* Note that this can result in a change in computed value in the rare case that
-               the parent's setting was a no-op (i.e. if the parent's parent's computed value
-               was already ultra-condensed or ultra-expanded).  However, I'd guess that the
-               change is for the better: I'd guess that if the properties were specified
-               relatively, then the intent is to counteract parent's effect. */
+            /** \todo
+             * Note that this can result in a change in computed value in the 
+             * rare case that the parent's setting was a no-op (i.e. if the 
+             * parent's parent's computed value was already ultra-condensed or 
+             * ultra-expanded).  However, I'd guess that the change is for the 
+             * better: I'd guess that if the properties were specified
+             * relatively, then the intent is to counteract parent's effect.
+             */
         } else if (child.value == parent.value) {
             /* Leave as is. */
-            /* It's unclear what to do if style and parent specify the same relative directive
-               (narrower or wider).  We can either convert to absolute specification or
-               coalesce to a single relative request (of half the strength of the original
-               pair).
-
-               Converting to a single level of relative specification is a better choice if the
-               newly-unlinked clone is itself cloned to other contexts (inheriting different
-               font stretchiness): it would preserve the effect that it will be narrower than
-               the inherited context in each case.  The disadvantage is that it will ~certainly
-               affect the computed value of the newly-unlinked clone. */
+            /** \todo
+             * It's unclear what to do if style and parent specify the same 
+             * relative directive (narrower or wider).  We can either convert 
+             * to absolute specification or coalesce to a single relative 
+             * request (of half the strength of the original pair).
+             *
+             * Converting to a single level of relative specification is a 
+             * better choice if the newly-unlinked clone is itself cloned to 
+             * other contexts (inheriting different font stretchiness): it 
+             * would preserve the effect that it will be narrower than
+             * the inherited context in each case.  The disadvantage is that 
+             * it will ~certainly affect the computed value of the 
+             * newly-unlinked clone.
+             */
         } else {
             unsigned const parent_val = parent.computed;
             child.value = ( child.value == smaller_val
@@ -1602,7 +1649,10 @@ sp_style_merge_length_prop_from_dying_parent(LengthT &child, LengthT const &pare
             case SP_CSS_UNIT_EM:
             case SP_CSS_UNIT_EX:
                 child.value *= parent_child_em_ratio;
-                // fixme: Have separate ex ratio parameter. Get x height from libnrtype or pango.
+                /** \todo
+                 * fixme: Have separate ex ratio parameter. 
+                 * Get x height from libnrtype or pango.
+                 */
                 if (!isFinite(child.value)) {
                     child.value = child.computed;
                     child.unit = SP_CSS_UNIT_NONE;
@@ -1661,7 +1711,7 @@ get_relative_font_size_frac(SPIFontSize const &font_size)
 void
 sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const parent)
 {
-    /*
+    /** \note
      * The general rule for each property is as follows:
      *
      *   If style is set to an absolute value, then leave it as is.
@@ -1673,9 +1723,11 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
      *     Otherwise, calculate the combined relative value (e.g. multiplying the two percentages).
      */
 
-    /* We do font-size first, to ensure that em size is up-to-date.
-     * fixme: We'll need to have more font-related things up the top once we're getting x-height
-     * from pango or libnrtype. */
+    /* We do font-size first, to ensure that em size is up-to-date. */
+    /** \todo
+     * fixme: We'll need to have more font-related things up the top once 
+     * we're getting x-height from pango or libnrtype.
+     */
 
     /* Some things that allow relative specifications. */
     {
@@ -1766,9 +1818,10 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
         sp_style_merge_prop_from_dying_parent<SPIScale24>(style->stroke_opacity, parent->stroke_opacity);
         sp_style_merge_prop_from_dying_parent<SPIFloat>(style->stroke_miterlimit, parent->stroke_miterlimit);
 
-        /* We currently treat text-decoration as if it were a simple inherited property (fixme).
-         * This code may need changing once we do the special fill/stroke inheritance mentioned by
-         * the spec.
+        /** \todo
+         * We currently treat text-decoration as if it were a simple inherited 
+         * property (fixme). This code may need changing once we do the 
+         * special fill/stroke inheritance mentioned by the spec.
          */
         sp_style_merge_prop_from_dying_parent<SPITextDecoration>(style->text_decoration,
                                                                  parent->text_decoration);
@@ -1823,9 +1876,12 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
 
     /* Properties that involve a URI but are easy in other respects. */
     {
-        /* Could cause problems if original object was in another document and it used a relative
-           URL.  (At the time of writing, we don't allow hrefs to other documents, so this isn't a
-           problem yet.)  Paint properties also allow URIs. */
+        /** \todo
+         * Could cause problems if original object was in another document 
+         * and it used a relative URL.  (At the time of writing, we don't 
+         * allow hrefs to other documents, so this isn't a problem yet.)  
+         * Paint properties also allow URIs.
+         */
         //nyi: cursor,   // may involve change in effect, but we can't do much better
         //nyi: color-profile,
 
@@ -1871,16 +1927,21 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
             /* Leave as is.  (display doesn't inherit by default.) */
         }
 
-        /* fixme: Check that we correctly handle all properties that don't inherit by default
-         * (as shown in http://www.w3.org/TR/SVG11/propidx.html for most SVG 1.1 properties).
+        /** \todo
+         * fixme: Check that we correctly handle all properties that don't 
+         * inherit by default (as shown in 
+         * http://www.w3.org/TR/SVG11/propidx.html for most SVG 1.1 properties).
          */
     }
 
     /* SPIPaint properties (including color). */
     {
-        /* TODO: Think about the issues involved if specified as currentColor or if specified
-           relative to colorProfile, and if the currentColor or colorProfile differs between parent
-           & child.  See also comments elsewhere in this function about URIs. */
+        /** \todo
+         * Think about the issues involved if specified as currentColor or 
+         * if specified relative to colorProfile, and if the currentColor or 
+         * colorProfile differs between parent \& child.  See also comments 
+         * elsewhere in this function about URIs.
+         */
         SPIPaint SPStyle::*const fields[] = {
             &SPStyle::color,
             &SPStyle::fill,
@@ -1959,15 +2020,21 @@ sp_style_paint_server_modified(SPPaintServer *server, guint flags, SPStyle *styl
         && (server == style->fill.value.paint.server))
     {
         if (style->object) {
-            /* fixme: I do not know, whether it is optimal - we are forcing reread of everything (Lauris) */
-            /* fixme: We have to use object_modified flag, because parent flag is only available downstreams */
+            /** \todo
+             * fixme: I do not know, whether it is optimal - we are 
+             * forcing reread of everything (Lauris)
+             */
+            /** \todo
+             * fixme: We have to use object_modified flag, because parent 
+             * flag is only available downstreams.
+             */
             style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
     } else if ((style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)
                && (server == style->stroke.value.paint.server))
     {
         if (style->object) {
-            /* fixme: */
+            /// \todo fixme:
             style->object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
     } else {
@@ -2032,7 +2099,9 @@ sp_style_write_difference instead to take into account the object's parent.
 gchar *
 sp_style_write_string(SPStyle const *const style, guint const flags)
 {
-    /* TODO: Merge with write_difference, much duplicate code! */
+    /** \todo
+     * Merge with write_difference, much duplicate code!
+     */
     g_return_val_if_fail(style != NULL, NULL);
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
@@ -2062,7 +2131,7 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
     p += sp_style_write_ienum(p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
 
-    /* fixme: Per type methods need default flag too (lauris)*/
+    /// \todo fixme: Per type methods need default flag too (lauris)
     p += sp_style_write_iscale24(p, c + BMAX - p, "opacity", &style->opacity, NULL, flags);
     p += sp_style_write_ipaint(p, c + BMAX - p, "color", &style->color, NULL, flags);
     p += sp_style_write_ipaint(p, c + BMAX - p, "fill", &style->fill, NULL, flags);
@@ -2186,7 +2255,7 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
 
     p += sp_style_write_ienum(p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
 
-    /* fixme: Per type methods need default flag too */
+    /// \todo fixme: Per type methods need default flag too 
     if (from->opacity.set && from->opacity.value != SP_SCALE24_MAX) {
         p += sp_style_write_iscale24(p, c + BMAX - p, "opacity", &from->opacity, &to->opacity, SP_STYLE_FLAG_IFSET);
     }
@@ -2243,12 +2312,13 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     p += sp_style_write_ienum(p, c + BMAX - p, "display", enum_display, &from->display, &to->display, SP_STYLE_FLAG_IFSET);
     p += sp_style_write_ienum(p, c + BMAX - p, "overflow", enum_overflow, &from->overflow, &to->overflow, SP_STYLE_FLAG_IFSET);
 
-    /* fixme: */
     p += sp_text_style_write(p, c + BMAX - p, from->text, SP_STYLE_FLAG_IFDIFF);
 
-    /* The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
+    /** \todo
+     * The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
      * flag is mainly only for attributes that don't handle explicit unset well.
-     * We may need to revisit the behaviour of this routine. */
+     * We may need to revisit the behaviour of this routine.
+     */
 
     /* Get rid of trailing `;'. */
     if (p != c) {
@@ -2651,9 +2721,11 @@ sp_style_read_ilength(SPILength *val, gchar const *str)
         /* fixme: Move this to standard place (Lauris) */
         value = g_ascii_strtod(str, &e);
         if ((gchar const *) e != str) {
-            /* TODO: Allow the number of px per inch to vary (document preferences, X server or
-             * whatever).  E.g. don't fill in computed here, do it at the same time as percentage
-             * units are done. */
+            /** \todo 
+             * Allow the number of px per inch to vary (document preferences, 
+             * X server or whatever).  E.g. don't fill in computed here, do 
+             * it at the same time as percentage units are done.
+             */
             if (!*e) {
                 /* Userspace */
                 val->unit = SP_CSS_UNIT_NONE;
@@ -3534,7 +3606,10 @@ is_url(char const *p)
 {
     if (p == NULL)
         return false;
-// FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs in property values must start with 'url('
+/** \todo
+ * FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs 
+ * in property values must start with 'url('.
+ */
     return (g_ascii_strncasecmp(p, "url(", 4) == 0);
 }
 
@@ -3600,8 +3675,11 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
 }
 
 
-// FIXME: now used for font family, but perhaps this should apply to ALL strings (check CSS spec),
-// in which case this should be part of read_istring
+/**
+ * \todo FIXME: now used for font family, but perhaps this should apply to 
+ * ALL strings (check CSS spec), in which case this should be part of 
+ * read_istring.
+ */
 void
 css2_unescape_unquote (SPIString *val)
 {
