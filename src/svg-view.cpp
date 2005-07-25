@@ -1,7 +1,7 @@
 #define __SP_SVG_VIEW_C__
 
-/*
- * Generic SVG view and widget
+/** \file
+ * Functions and callbacks for generic SVG view and widget
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -30,6 +30,9 @@ static void sp_svg_view_rescale (SPSVGView *svgview, gboolean event);
 
 static SPViewClass *parent_class;
 
+/**
+ * Register SPSVGView class with Gtk and return its type number.
+ */
 GtkType
 sp_svg_view_get_type (void)
 {
@@ -50,6 +53,9 @@ sp_svg_view_get_type (void)
 	return type;
 }
 
+/**
+ * Callback to initialize the SPSVGView vtable.
+ */
 static void
 sp_svg_view_class_init (SPSVGViewClass *klass)
 {
@@ -67,6 +73,9 @@ sp_svg_view_class_init (SPSVGViewClass *klass)
 	view_class->document_resized = sp_svg_view_document_resized;
 }
 
+/**
+ * Callback to initialize an SPSVGView object.
+ */
 static void
 sp_svg_view_init (SPSVGView *view)
 {
@@ -80,6 +89,9 @@ sp_svg_view_init (SPSVGView *view)
 	view->dkey = 0;
 }
 
+/**
+ * Destructor callback for SPSVGView objects.
+ */
 static void
 sp_svg_view_dispose (GObject *object)
 {
@@ -93,8 +105,10 @@ sp_svg_view_dispose (GObject *object)
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
-/* fixme: */
-
+/**
+ * Callback connected with arena_event.
+ */
+/// \todo fixme.
 static gint
 arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView *svgview)
 {
@@ -141,6 +155,9 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView
 	return TRUE;
 }
 
+/**
+ * Callback connected with set_document signal.
+ */
 static void
 sp_svg_view_set_document (SPView *view, SPDocument *doc)
 {
@@ -166,6 +183,9 @@ sp_svg_view_set_document (SPView *view, SPDocument *doc)
 	}
 }
 
+/**
+ * Callback connected with document_resized signal.
+ */
 static void
 sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height)
 {
@@ -174,6 +194,9 @@ sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdou
 	sp_svg_view_rescale (svgview, !svgview->rescale);
 }
 
+/**
+ * Constructs new SPSVGView object and returns pointer to it.
+ */
 SPView *
 sp_svg_view_new (SPCanvasGroup *parent)
 {
@@ -187,6 +210,9 @@ sp_svg_view_new (SPCanvasGroup *parent)
 	return (SPView *) svgview;
 }
 
+/**
+ * Rescales SPSVGView to given proportions.
+ */
 void
 sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale)
 {
@@ -200,6 +226,9 @@ sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale)
 	}
 }
 
+/**
+ * Rescales SPSVGView and keeps aspect ratio.
+ */
 void
 sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect, gdouble width, gdouble height)
 {
@@ -216,6 +245,9 @@ sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect,
 	sp_svg_view_rescale (view, TRUE);
 }
 
+/**
+ * Helper function that sets rescale ratio and emits resize event.
+ */
 static void
 sp_svg_view_rescale (SPSVGView *svgview, gboolean event)
 {
@@ -245,9 +277,9 @@ sp_svg_view_rescale (SPSVGView *svgview, gboolean event)
 	}
 
 	if (event) {
-		sp_view_emit_resized (SP_VIEW (svgview),
-				      sp_document_width (doc) * svgview->hscale,
-				      sp_document_height (doc) * svgview->vscale);
+		svgview->emit_resized (
+		      sp_document_width (doc) * svgview->hscale,
+		      sp_document_height (doc) * svgview->vscale);
 	}
 }
 
@@ -264,6 +296,9 @@ static void sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdo
 
 static SPViewWidgetClass *widget_parent_class;
 
+/**
+ * Registers SPSVGViewWidget class with Gtk and returns its type number.
+ */
 GtkType
 sp_svg_view_widget_get_type (void)
 {
@@ -282,6 +317,9 @@ sp_svg_view_widget_get_type (void)
 	return type;
 }
 
+/**
+ * Callback to initialize SPSVGViewWidget vtable.
+ */
 static void
 sp_svg_view_widget_class_init (SPSVGViewWidgetClass *klass)
 {
@@ -303,6 +341,9 @@ sp_svg_view_widget_class_init (SPSVGViewWidgetClass *klass)
 	vw_class->view_resized = sp_svg_view_widget_view_resized;
 }
 
+/**
+ * Callback to initialize SPSVGViewWidget object.
+ */
 static void
 sp_svg_view_widget_init (SPSVGViewWidget *vw)
 {
@@ -341,6 +382,9 @@ sp_svg_view_widget_init (SPSVGViewWidget *vw)
 	g_object_unref (G_OBJECT (view));
 }
 
+/**
+ * Destructor callback for SPSVGViewWidget objects.
+ */
 static void
 sp_svg_view_widget_destroy (GtkObject *object)
 {
@@ -352,6 +396,9 @@ sp_svg_view_widget_destroy (GtkObject *object)
 		(* ((GtkObjectClass *) (widget_parent_class))->destroy) (object);
 }
 
+/**
+ * Callback connected with size_request signal.
+ */
 static void
 sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req)
 {
@@ -388,6 +435,9 @@ sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req)
 	}
 }
 
+/**
+ * Callback connected with size_allocate signal.
+ */
 static void
 sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
@@ -403,6 +453,9 @@ sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	}
 }
 
+/**
+ * Callback connected with view_resized signal.
+ */
 static void
 sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, gdouble height)
 {
@@ -414,6 +467,9 @@ sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, 
 	}
 }
 
+/**
+ * Constructs new SPSVGViewWidget object and returns pointer to it.
+ */
 GtkWidget *
 sp_svg_view_widget_new (SPDocument *doc)
 {
@@ -428,6 +484,9 @@ sp_svg_view_widget_new (SPDocument *doc)
 	return widget;
 }
 
+/**
+ * Flags the SPSVGViewWidget to have its size renegotiated with Gtk.
+ */
 void
 sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, gboolean resize, gdouble width, gdouble height)
 {
@@ -446,3 +505,13 @@ sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, gboolean resize, gdouble wid
 }
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
