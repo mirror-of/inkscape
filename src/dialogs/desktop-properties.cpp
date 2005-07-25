@@ -937,7 +937,7 @@ sp_desktop_dialog(void)
 
         if (1) {
             spw_label(t, _("Major grid line every:"), 0, row);
-            GtkObject * a = gtk_adjustment_new (0.0, 0.0, G_MAXDOUBLE, 1.0, 1.0, 1.0);
+            GtkObject * a = gtk_adjustment_new (0.0, 0.0, 25.0, 1.0, 1.0, 1.0);
             gtk_object_set_data(GTK_OBJECT(a), (const gchar *)"key", (gpointer)"gridempspacing");
             gtk_object_set_data(GTK_OBJECT(dlg), "gridempspacing", a);
 
