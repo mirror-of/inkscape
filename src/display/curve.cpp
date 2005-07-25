@@ -1,7 +1,7 @@
 #define __CURVE_C__
 
 /** \file
- * Routines for SPCurve and for NArtBpath arrays generally.
+ * Routines for SPCurve and for NArtBpath arrays in general.
  */
 
 /*
@@ -315,8 +315,11 @@ sp_curve_split(SPCurve const *curve)
         new_curve->closed = (new_curve->bpath->code == NR_MOVETO);
         new_curve->hascpt = (new_curve->bpath->code == NR_MOVETO_OPEN);
         l = g_slist_append(l, new_curve);
-        /* effic: Use g_slist_prepend instead.  Either work backwards from the end of curve,
-           or work forwards as at present but do g_slist_reverse before returning. */
+        /** \todo
+         * effic: Use g_slist_prepend instead.  Either work backwards from 
+         * the end of curve, or work forwards as at present but do
+         * g_slist_reverse before returning.
+         */
         p += i;
     }
 
@@ -592,7 +595,10 @@ sp_curve_closepath(SPCurve *curve)
     curve->closed = true;
 
     for (NArtBpath const *bp = curve->bpath; bp->code != NR_END; bp++) {
-        /* effic: Maintain a count of NR_MOVETO_OPEN's (e.g. instead of the closed boolean). */
+        /** \todo 
+         * effic: Maintain a count of NR_MOVETO_OPEN's (e.g. instead of 
+         * the closed boolean).
+         */
         if (bp->code == NR_MOVETO_OPEN) {
             curve->closed = false;
             break;
@@ -630,7 +636,10 @@ sp_curve_closepath_current(SPCurve *curve)
     curve->closed = true;
 
     for (NArtBpath const *bp = curve->bpath; bp->code != NR_END; bp++) {
-        /* effic: Maintain a count of NR_MOVETO_OPEN's (e.g. instead of the closed boolean). */
+        /** \todo 
+         * effic: Maintain a count of NR_MOVETO_OPEN's (e.g. instead of 
+         * the closed boolean).
+         */
         if (bp->code == NR_MOVETO_OPEN) {
             curve->closed = false;
             break;
@@ -976,10 +985,16 @@ static unsigned sp_bpath_length(NArtBpath const bpath[])
     return ret;
 }
 
-/*fixme: this is bogus -- it doesn't check for nr_moveto, which will indicate a closing of the
-subpath it's nonsense to talk about a path as a whole being closed, although maybe someone would
-want that for some other reason?  Oh, also, if the bpath just ends, then it's *open*.  I hope
-nobody is using this code for anything. */
+/**
+ * \brief
+ *
+ * \todo
+ * fixme: this is bogus -- it doesn't check for nr_moveto, which will indicate 
+ * a closing of the subpath it's nonsense to talk about a path as a whole 
+ * being closed, although maybe someone would want that for some other reason?  
+ * Oh, also, if the bpath just ends, then it's *open*.  I hope nobody is using 
+ * this code for anything.
+ */
 static bool sp_bpath_closed(NArtBpath const bpath[])
 {
     g_return_val_if_fail(bpath != NULL, FALSE);
@@ -1000,8 +1015,9 @@ bezier_len(NR::Point const &c0,
            NR::Point const &c3,
            double const threshold)
 {
-    /* The SVG spec claims that a closed form exists, but for the moment I'll use
-     * a stupid algorithm.
+    /** \todo
+     * The SVG spec claims that a closed form exists, but for the moment I'll 
+     * use a stupid algorithm.
      */
     double const lbound = L2( c3 - c0 );
     double const ubound = L2( c1 - c0 ) + L2( c2 - c1 ) + L2( c3 - c2 );
@@ -1125,70 +1141,6 @@ sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point co
     delete seg2len;
     g_assert(fabs(begin_dist - tot_len) < 1e-18);
 }
-
-
-/* ======== Doxygen documentation ======== */
-
-/** \struct SPCurve
- *
- *  Wrapper around NArtBpath.
- */
-
-/** \var SPCurve::end
- *
- * Index in bpath[] of NR_END element.
- */
-
-/** \var SPCurve::length
- *
- * Allocated size (i.e.\ capacity) of bpath[] array.  Not to be confused with the SP_CURVE_LENGTH
- * macro, which returns the logical length of the path (i.e.\ index of NR_END).
- */
-
-/** \var SPCurve::substart
- *
- * Index in bpath[] of the start (i.e. moveto element) of the last subpath in this path.
- */
-
-/** \var SPCurve::movePos
- *
- * Previous moveto position.
- *
- * (Note: This is used for coalescing moveto's, whereas if we're to conform to the SVG spec then we
- * mustn't coalesce movetos if we have midpoint markers.  Ref:
- * http://www.w3.org/TR/SVG11/implnote.html#PathElementImplementationNotes, first subitem of the
- * item about zero-length path segments.)
- */
-
-/** \var SPCurve::sbpath
- *
- * True iff bpath points to read-only, static storage (see callers of
- * sp_curve_new_from_static_bpath), in which case we shouldn't free bpath and shouldn't write
- * through it.
- */
-
-/** \var SPCurve::hascpt
- *
- * True iff current point is defined.  Initially false for a new curve; becomes true after moveto;
- * becomes false on closepath.  Curveto, lineto etc. require hascpt; hascpt remains true after
- * lineto/curveto.
- */
-
-/** \var SPCurve::posSet
- *
- * True iff previous was moveto.
- */
-
-/** \var SPCurve::moving
- *
- * True iff bpath end is moving.
- */
-
-/** \var SPCurve::closed
- *
- * True iff all subpaths are closed.
- */
-
 
 /*
   Local Variables:
