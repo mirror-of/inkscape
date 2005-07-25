@@ -1,5 +1,5 @@
 /** \file
- * Inkscape::MessageContext - class for message tracking
+ * A convenience class for working with MessageStacks.
  */
 
 /*
