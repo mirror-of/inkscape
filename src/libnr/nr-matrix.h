@@ -1,10 +1,10 @@
 #ifndef __NR_MATRIX_H__
 #define __NR_MATRIX_H__
 
-/*
+/** \file
  * Definition of NRMatrix and NR::Matrix types.
  *
- * Note: operator functions (e.g. Matrix * Matrix etc.) are mostly in
+ * \note Operator functions (e.g. Matrix * Matrix etc.) are mostly in
  * libnr/nr-matrix-ops.h.  See end of file for discussion.
  *
  * Main authors:
@@ -59,7 +59,9 @@ NRMatrix *nr_matrix_set_rotate(NRMatrix *m, NR::Coord const theta);
 
 namespace NR {
 
-/*
+/**
+ * The Matrix class.
+ * 
  * For purposes of multiplication, points should be thought of as row vectors
  *
  *    p = ( p[X] p[Y]  1  )
@@ -411,7 +413,7 @@ extern void assert_close(Matrix const &a, Matrix const &b);
 
 
 
-/*
+/** \note
  * Discussion of splitting up nr-matrix.h into lots of little files:
  *
  *   Advantages:

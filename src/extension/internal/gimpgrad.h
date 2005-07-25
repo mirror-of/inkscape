@@ -1,4 +1,7 @@
-/*
+/** \file
+ *
+ * Implementation class of the GIMP gradient plugin.
+ *
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
@@ -21,7 +24,7 @@ namespace Internal {
 */
 class GimpGrad : public Inkscape::Extension::Implementation::Implementation {
 private:
-    Glib::ustring GimpGrad::new_stop (ColorRGBA in_color, float location);
+    Glib::ustring new_stop (ColorRGBA in_color, float location);
 
 public:
     bool load(Inkscape::Extension::Extension *module);

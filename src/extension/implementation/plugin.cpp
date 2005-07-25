@@ -1,15 +1,14 @@
-/*
+/**
+    \file plugin.cpp
+
+    The implementation of pluggable objects into Inkscape.
+    
     Author:  Ted Gould <ted@gould.cx>
     Copyright (c) 2004-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
  
     This file implements loadable modules for Inkscape.
-*/
-/**
-    \file plugin.cpp
-
-    The implementation of plugable objects into Inkscape.
 */
 #ifdef HAVE_CONFIG_H
 # include "config.h"

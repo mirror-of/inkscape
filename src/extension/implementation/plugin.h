@@ -1,13 +1,12 @@
-/*
+/**
+    \file plugin.h
+
+    The prototypes for the Implementation class to work with plugins.
+
     Author:  Ted Gould <ted@gould.cx>
     Copyright (c) 2004-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
-*/
-/**
-    \filename plugin.h
-
-    The prototypes for the Implementation class to work with plugins.
 */
 #ifndef __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_H__
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_H__
