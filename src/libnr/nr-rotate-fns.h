@@ -1,6 +1,10 @@
 #ifndef SEEN_NR_ROTATE_FNS_H
 #define SEEN_NR_ROTATE_FNS_H
 
+/** \file
+ * Declarations for rotation functions.
+ */
+
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-point-fns.h>
 

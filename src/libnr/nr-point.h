@@ -1,7 +1,9 @@
 #ifndef SEEN_NR_POINT_H
 #define SEEN_NR_POINT_H
 
-/** \file */
+/** \file
+ * Cartesian point class.
+ */
 
 #include <math.h>
 #include <stdexcept>
@@ -13,6 +15,9 @@
 
 #include "round.h"
 
+/// A NRPoint consists of x and y coodinates.
+/// \todo
+/// This class appears to be obsoleted out in favour of NR::Point.
 struct NRPoint {
     NR::Coord x, y;
 };
@@ -21,6 +26,7 @@ namespace NR {
 
 class Matrix;
 
+/// Cartesian point.
 class Point {
 public:
     inline Point()
