@@ -1,4 +1,6 @@
-/** \file Pencil event context. */
+/** \file 
+ * Pencil event context implementation.
+ */
 
 /*
  * Authors:
@@ -275,7 +277,10 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
                     /* Create green anchor */
                     pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, pc->p[0]);
                 }
-                /* fixme: I am not sure whether we want to snap to anchors in middle of freehand (Lauris) */
+                /** \todo 
+                 * fixme: I am not sure whether we want to snap to anchors 
+                 * in middle of freehand (Lauris)
+                 */
                 if (anchor) {
                     p = anchor->dp;
                 } else if ((mevent.state & GDK_SHIFT_MASK) == 0) {
@@ -331,7 +336,7 @@ pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &re
                 break;
             case SP_PENCIL_CONTEXT_FREEHAND:
                 /* Finish segment now */
-                /* fixme: Clean up what follows (Lauris) */
+                /// \todo fixme: Clean up what follows (Lauris)
                 if (anchor) {
                     p = anchor->dp;
                 }
@@ -438,8 +443,10 @@ spdc_set_endpoint(SPPencilContext *const pc, NR::Point const p)
 
 /**
  * Finalize addline.
+ * 
+ * \todo 
  * fixme: I'd like remove red reset from concat colors (lauris).
- * fixme: Still not sure, how it will make most sense.
+ * Still not sure, how it will make most sense.
  */
 static void
 spdc_finish_endpoint(SPPencilContext *const pc)

@@ -26,7 +26,8 @@ class Node;
 }
 
 
-/** Radial objects are represented by an angle and a distance from
+/** 
+ * Radial objects are represented by an angle and a distance from
  * 0,0.  0,0 is represented by a == big_num.
  */
 class Radial{
@@ -40,6 +41,9 @@ class Radial{
 	Radial(Radial &p) : r(p.r),a(p.a) {}
 	//	operator NR::Point() const;
 
+/**
+ * Construct Radial from NR::Point.
+ */
 Radial(NR::Point const &p)
 {
 	r = NR::L2(p);
@@ -50,6 +54,9 @@ Radial(NR::Point const &p)
 	}
 }
 
+/**
+ * Cast Radial to cartesian NR::Point.
+ */
 operator NR::Point() const
 {
 	if (a == HUGE_VAL) {

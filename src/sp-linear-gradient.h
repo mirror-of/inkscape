@@ -1,6 +1,9 @@
 #ifndef SP_LINEAR_GRADIENT_H
 #define SP_LINEAR_GRADIENT_H
-/** \file */
+
+/** \file
+ * Linear gradient.
+ */
 
 #include "sp-gradient.h"
 #include "svg/svg-types.h"
@@ -14,6 +17,7 @@ struct SPLinearGradient : public SPGradient {
     SPSVGLength y2;
 };
 
+/// The SPLinearGradient vtable.
 struct SPLinearGradientClass {
     SPGradientClass parent_class;
 };

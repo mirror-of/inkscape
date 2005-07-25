@@ -1,7 +1,9 @@
 #ifndef SEEN_PEN_CONTEXT_H
 #define SEEN_PEN_CONTEXT_H
 
-/** \file Pen event context. */
+/** \file 
+ * Pen event context. 
+ */
 
 #include "draw-context.h"
 
@@ -24,6 +26,9 @@ enum {
     SP_PEN_CONTEXT_MODE_DRAG
 };
 
+/**
+ * Pen event context.
+ */
 struct SPPenContext : public SPDrawContext {
     NR::Point p[5];
 

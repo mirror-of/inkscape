@@ -1,10 +1,10 @@
 #ifndef SEEN_KNOT_HOLDER_ENTITY_H
 #define SEEN_KNOT_HOLDER_ENTITY_H
 
-/** \file SPKnotHolderEntity definition. */
-
-/*
- * Author:
+/** \file 
+ * SPKnotHolderEntity definition. 
+ * 
+ * Authors:
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
  *
  * Copyright (C) 1999-2001 Lauris Kaplinski

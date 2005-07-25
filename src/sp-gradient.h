@@ -1,10 +1,10 @@
 #ifndef __SP_GRADIENT_H__
 #define __SP_GRADIENT_H__
 
-/*
+/** \file
  * SVG <stop> <linearGradient> and <radialGradient> implementation
  *
- * Author:
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
@@ -21,13 +21,6 @@
 #include "sp-gradient-units.h"
 #include "sp-paint-server.h"
 #include "sp-gradient-vector.h"
-
-/*
- * Gradient
- *
- * Implement spread, stops list
- * fixme: Implement more here (Lauris)
- */
 
 typedef enum {
 	SP_GRADIENT_TYPE_UNKNOWN,
@@ -50,6 +43,12 @@ typedef enum {
     POINT_RG_FOCUS
 } GrPoint;
 
+/**
+ * Gradient
+ *
+ * Implement spread, stops list
+ * \todo fixme: Implement more here (Lauris)
+ */
 struct SPGradient : public SPPaintServer {
 	/* Reference (href) */
 	SPGradientReference *ref;
@@ -72,6 +71,9 @@ struct SPGradient : public SPPaintServer {
 	guchar *color;
 };
 
+/**
+ * The SPGradient vtable.
+ */
 struct SPGradientClass {
 	SPPaintServerClass parent_class;
 };

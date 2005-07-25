@@ -1,4 +1,6 @@
-/** \file Pen event context. */
+/** \file 
+ * Pen event context implementation. 
+ */
 
 /*
  * Authors:
@@ -782,7 +784,7 @@ spdc_pen_finish_segment(SPPenContext *const pc, NR::Point const p, guint const s
     if (!sp_curve_empty(pc->red_curve)) {
         sp_curve_append_continuous(pc->green_curve, pc->red_curve, 0.0625);
         SPCurve *curve = sp_curve_copy(pc->red_curve);
-        /* fixme: */
+        /// \todo fixme: 
         SPCanvasItem *cshape = sp_canvas_bpath_new(SP_DT_SKETCH(pc->desktop), curve);
         sp_curve_unref(curve);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), pc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);

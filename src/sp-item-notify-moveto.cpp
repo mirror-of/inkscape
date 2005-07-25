@@ -1,4 +1,7 @@
-/** \file */
+/** \file 
+ * Implementation of sp_item_notify_moveto().
+ */
+
 #include "sp-item-notify-moveto.h"
 #include <sp-item.h>
 #include <libnr/nr-matrix.h>
@@ -30,7 +33,7 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
     g_return_if_fail( snappoint_ix < int(snappoints.size()) );
 
     double const pos0 = dot(dir, snappoints[snappoint_ix]);
-    /* TODO/effic: skip if mv_g is already satisfied. */
+    /// \todo effic: skip if mv_g is already satisfied.
 
     /* Translate along dir to make dot(dir, snappoints(item)[snappoint_ix]) == position. */
 
@@ -43,10 +46,10 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
     NR::translate const tr( ( position - pos0 )
                             * ( dir / dir_lensq ) );
     sp_item_set_i2d_affine(&item, sp_item_i2d_affine(&item) * tr);
-    /* TODO: Reget snappoints, check satisfied. */
+    /// \todo Reget snappoints, check satisfied.
 
     if (commit) {
-        /* TODO: Consider maintaining a set of dirty items. */
+        /// \todo Consider maintaining a set of dirty items.
 
         /* Commit repr. */
         {
@@ -56,9 +59,10 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
         sp_item_rm_unsatisfied_cns(item);
 #if 0 /* nyi */
         move_cn_to_front(mv_g, snappoint_ix, item.constraints);
-        /* Note: If the guideline is connected to multiple snappoints of this
-           item, then keeping those cns in order requires that the guide
-           send notifications in order of increasing importance. */
+        /** \note If the guideline is connected to multiple snappoints of 
+         * this item, then keeping those cns in order requires that the 
+         * guide send notifications in order of increasing importance. 
+         */
 #endif
     }
 }

@@ -1,9 +1,13 @@
 #ifndef SP_LINEAR_GRADIENT_FNS_H
 #define SP_LINEAR_GRADIENT_FNS_H
-/** \file */
+
+/** \file 
+ * Macros and fn declarations related to linear gradients.
+ */
 
 #include <glib-object.h>
 #include <glib/gtypes.h>
+
 namespace Inkscape {
 namespace XML {
 class Node;

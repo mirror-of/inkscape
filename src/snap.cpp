@@ -4,6 +4,7 @@
  * \file snap.cpp
  *
  * \brief Various snapping methods
+ * \todo Circular snap, path snap?
  */
 /*
  * Authors:
@@ -14,10 +15,6 @@
  * Copyright (C) 1999-2002 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
- */
-
-/* TODO:
- * Circular snap, path snap?
  */
 
 #include <math.h>
@@ -35,7 +32,7 @@
 static std::list<const Snapper*> namedview_get_snappers(SPNamedView const *nv);
 static bool namedview_will_snap_something(SPNamedView const *nv);
 
-/* Minimal distance to norm before point is considered for snap. */
+/// Minimal distance to norm before point is considered for snap.
 static const double MIN_DIST_NORM = 1.0;
 
 /**
@@ -272,9 +269,9 @@ double namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t,
 }
 
 
-/* FIXME: this should probably be in SPNamedView */
 static std::list<const Snapper*> namedview_get_snappers(SPNamedView const *nv)
 {
+/// \todo FIXME: this should probably be in SPNamedView
     std::list<const Snapper*> s;
     s.push_back(&nv->grid_snapper);
     s.push_back(&nv->guide_snapper);

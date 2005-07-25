@@ -1,8 +1,12 @@
 #ifndef SP_RADIAL_GRADIENT_FNS_H
 #define SP_RADIAL_GRADIENT_FNS_H
-/** \file */
+
+/** \file
+ * Macros and fn definitions related to radial gradients.
+ */
 
 #include <glib-object.h>
+
 namespace Inkscape {
 namespace XML {
 class Node;

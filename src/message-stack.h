@@ -1,5 +1,5 @@
 /** \file
- * Inkscape::MessageStack - class for managing current status messages
+ * Managing current status messages.
  */
 
 /*
@@ -25,9 +25,10 @@
 namespace Inkscape {
 
 /**
- * A class which holds a stack of displayed messages.  Messages
- * can be pushed onto the top of the stack, and removed from any
- * point in the stack by their id.
+ * A class which holds a stack of displayed messages.  
+ *
+ * Messages can be pushed onto the top of the stack, and removed 
+ * from any point in the stack by their id.
  *
  * Messages may also be "flashed", meaning that they will be
  * automatically removed from the stack a fixed period of time

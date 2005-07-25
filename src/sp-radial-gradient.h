@@ -1,6 +1,9 @@
 #ifndef SP_RADIAL_GRADIENT_H
 #define SP_RADIAL_GRADIENT_H
-/** \file */
+
+/** \file
+ * Radial gradient.
+ */
 
 #include <glib/gtypes.h>
 #include "sp-gradient.h"
@@ -16,6 +19,7 @@ struct SPRadialGradient : public SPGradient {
     SPSVGLength fy;
 };
 
+/// The SPRadialGradient vtable.
 struct SPRadialGradientClass {
     SPGradientClass parent_class;
 };

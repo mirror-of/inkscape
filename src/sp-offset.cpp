@@ -1,11 +1,11 @@
 #define __SP_OFFSET_C__
 
 /** \file
- * Implementation of SPOffset, i.e. <path sodipodi:type="inkscape:offset">.
+ * Implementation of <path sodipodi:type="inkscape:offset">.
  */
 
 /*
- * Authors (of the sp-spiral.c upon which this file was constructed):
+ * Authors: (of the sp-spiral.c upon which this file was constructed):
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -54,23 +54,27 @@
 
 #define noOFFSET_VERBOSE
 
-/*
- * sp-offset is a derivative of SPShape, much like the sp-spiral or sp-rect
- * the goal is to have a source shape (= originalPath), an offset (= radius) and
- * cmpute the offset of the source by the radius. to get it to work, one needs to know
- * what the source is and what the radius is, and how it's stored in the xml
- * the object itself is a "path" element, to get lots of shape functionnality for free
- * the source is the easy part: it's stored in a "inkscape:original" attribute in the 
- * path. in case of "linked" offset, as they've been dubbed, there is an additional
- * "inkscape:href" that contains the id of an element of the svg. when built, the object will
- * attach a listener vector to that object and rebuild the "inkscape:original" whenever the href'd 
- * object changes. this is of course grossly inefficient, and also does not react to changes 
- * to the href'd during context stuff (like changing the shape of a star by dragging control points)
- * unless the path of that object is change during the context (seems to be the case for
- * sp-ellipse). the computation of the offset is done in sp_offset_set_shape(), a function that is 
- * called whenever a change occurs to the offset (change of source or change of radius).
- * just like the sp-star and other, this path derivative can make control points, or
- * more precisely one control point, that's enough to define the radius. look in object-edit
+/** \note
+ * SPOffset is a derivative of SPShape, much like the SPSpiral or SPRect.
+ * The goal is to have a source shape (= originalPath), an offset (= radius) 
+ * and compute the offset of the source by the radius. To get it to work, 
+ * one needs to know what the source is and what the radius is, and how it's 
+ * stored in the xml representation. The object itself is a "path" element, 
+ * to get lots of shape functionality for free. The source is the easy part: 
+ * it's stored in a "inkscape:original" attribute in the path. In case of 
+ * "linked" offset, as they've been dubbed, there is an additional
+ * "inkscape:href" that contains the id of an element of the svg. 
+ * When built, the object will attach a listener vector to that object and 
+ * rebuild the "inkscape:original" whenever the href'd object changes. This 
+ * is of course grossly inefficient, and also does not react to changes 
+ * to the href'd during context stuff (like changing the shape of a star by 
+ * dragging control points) unless the path of that object is changed during 
+ * the context (seems to be the case for SPEllipse). The computation of the 
+ * offset is done in sp_offset_set_shape(), a function that is called whenever 
+ * a change occurs to the offset (change of source or change of radius).
+ * just like the sp-star and other, this path derivative can make control 
+ * points, or more precisely one control point, that's enough to define the 
+ * radius (look in object-edit).
  */
 
 static void sp_offset_class_init (SPOffsetClass * klass);

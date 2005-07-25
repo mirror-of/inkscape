@@ -1,20 +1,23 @@
 #ifndef SEEN_SP_GRADIENT_FNS_H
 #define SEEN_SP_GRADIENT_FNS_H
-/** \file */
+
+/** \file
+ * Macros and fn declarations related to gradients.
+ */
 
 #include <glib/gtypes.h>
 #include <glib-object.h>
 #include "libnr/nr-forward.h"
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
+
 class SPGradient;
+
 namespace Inkscape {
 namespace XML {
 class Node;
 }
 }
-
-
 
 #define SP_TYPE_GRADIENT (sp_gradient_get_type())
 #define SP_GRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_GRADIENT, SPGradient))

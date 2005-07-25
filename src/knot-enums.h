@@ -1,9 +1,9 @@
 #ifndef SEEN_KNOT_ENUMS_H
 #define SEEN_KNOT_ENUMS_H
 
-/** \file Definitions of some enums used by SPKnot and by related types \& functions. */
-
-/*
+/** \file 
+ * Some enums used by SPKnot and by related types \& functions. 
+ *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
