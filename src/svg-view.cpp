@@ -277,7 +277,7 @@ sp_svg_view_rescale (SPSVGView *svgview, gboolean event)
 	}
 
 	if (event) {
-		svgview->emit_resized (
+		svgview->emitResized (
 		      sp_document_width (doc) * svgview->hscale,
 		      sp_document_height (doc) * svgview->vscale);
 	}
