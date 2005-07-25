@@ -1,6 +1,6 @@
 #define __SP_CANVAS_C__
 
-/*
+/** \file
  * Port of GnomeCanvas for Inkscape needs
  *
  * Authors:
@@ -42,16 +42,25 @@ enum {
     SP_CANVAS_ITEM_NEED_AFFINE = 1 << 9
 };
 
+/**
+ * A group of Items.
+ */
 struct SPCanvasGroup {
     SPCanvasItem item;
 
     GList *items, *last;
 };
 
+/**
+ * The SPCanvasGroup vtable.
+ */
 struct SPCanvasGroupClass {
     SPCanvasItemClass parent_class;
 };
 
+/**
+ * The SPCanvas vtable.
+ */
 struct SPCanvasClass {
     GtkWidgetClass parent_class;
 };
@@ -69,6 +78,7 @@ static void sp_canvas_request_update (SPCanvas *canvas);
 static void sp_canvas_item_class_init (SPCanvasItemClass *klass);
 static void sp_canvas_item_init (SPCanvasItem *item);
 static void sp_canvas_item_dispose (GObject *object);
+static void sp_canvas_item_construct (SPCanvasItem *item, SPCanvasGroup *parent, const gchar *first_arg_name, va_list args);
 
 static int emit_event (SPCanvas *canvas, GdkEvent *event);
 
@@ -76,6 +86,9 @@ static guint item_signals[ITEM_LAST_SIGNAL] = { 0 };
 
 static GtkObjectClass *item_parent_class;
 
+/**
+ * Registers the SPCanvasItem class with Glib and returns its type number.
+ */
 GType
 sp_canvas_item_get_type (void)
 {
@@ -97,7 +110,9 @@ sp_canvas_item_get_type (void)
     return type;
 }
 
-/* Class initialization function for SPCanvasItemClass */
+/**
+ * Initializes the SPCanvasItem vtable and the "event" signal.
+ */
 static void
 sp_canvas_item_class_init (SPCanvasItemClass *klass)
 {
@@ -118,6 +133,9 @@ sp_canvas_item_class_init (SPCanvasItemClass *klass)
     object_class->dispose = sp_canvas_item_dispose;
 }
 
+/**
+ * Callback for initialization of SPCanvasItem.
+ */
 static void
 sp_canvas_item_init (SPCanvasItem *item)
 {
@@ -125,6 +143,9 @@ sp_canvas_item_init (SPCanvasItem *item)
     item->xform = NR::Matrix(NR::identity());
 }
 
+/**
+ * Constructs new SPCanvasItem on SPCanvasGroup.
+ */
 SPCanvasItem *
 sp_canvas_item_new (SPCanvasGroup *parent, GtkType type, const gchar *first_arg_name, ...)
 {
@@ -143,17 +164,12 @@ sp_canvas_item_new (SPCanvasGroup *parent, GtkType type, const gchar *first_arg_
     return item;
 }
 
+/**
+ * Sets up the newly created SPCanvasItem.
+ *
+ * We make it static for encapsulation reasons since it was nowhere used.
+ */
 static void
-item_post_create_setup (SPCanvasItem *item)
-{
-    group_add (SP_CANVAS_GROUP (item->parent), item);
-
-    sp_canvas_item_request_update (item);
-    sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
-    item->canvas->need_repick = TRUE;
-}
-
-void
 sp_canvas_item_construct (SPCanvasItem *item, SPCanvasGroup *parent, const gchar *first_arg_name, va_list args)
 {
     g_return_if_fail (SP_IS_CANVAS_GROUP (parent));
@@ -164,9 +180,16 @@ sp_canvas_item_construct (SPCanvasItem *item, SPCanvasGroup *parent, const gchar
 
     g_object_set_valist (G_OBJECT (item), first_arg_name, args);
 
-    item_post_create_setup (item);
+    group_add (SP_CANVAS_GROUP (item->parent), item);
+
+    sp_canvas_item_request_update (item);
+    sp_canvas_request_redraw (item->canvas, (int)(item->x1), (int)(item->y1), (int)(item->x2 + 1), (int)(item->y2 + 1));
+    item->canvas->need_repick = TRUE;
 }
 
+/**
+ * Helper function that requests redraw only if item's visible flag is set.
+ */
 static void
 redraw_if_visible (SPCanvasItem *item)
 {
@@ -175,6 +198,9 @@ redraw_if_visible (SPCanvasItem *item)
     }
 }
 
+/**
+ * Callback that removes item from all referers and destroys it.
+ */
 static void
 sp_canvas_item_dispose (GObject *object)
 {
@@ -208,8 +234,11 @@ sp_canvas_item_dispose (GObject *object)
     G_OBJECT_CLASS (item_parent_class)->dispose (object);
 }
 
-/* NB! affine is parent2canvas */
-
+/**
+ * Helper function to update item and its children.
+ *
+ * NB! affine is parent2canvas.
+ */
 static void
 sp_canvas_item_invoke_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
@@ -234,9 +263,12 @@ sp_canvas_item_invoke_update (SPCanvasItem *item, NR::Matrix const &affine, unsi
     GTK_OBJECT_UNSET_FLAGS (item, SP_CANVAS_ITEM_NEED_AFFINE);
 }
 
-/* This routine invokes the point method of the item.  The argument x, y should
- * be in the parent's item-relative coordinate system.  This routine applies the
- * inverse of the item's transform, maintaining the affine invariant.
+/** 
+ * Helper function to invoke the point method of the item.  
+ *
+ * The argument x, y should be in the parent's item-relative coordinate 
+ * system.  This routine applies the inverse of the item's transform, 
+ * maintaining the affine invariant.
  */
 static double
 sp_canvas_item_invoke_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
@@ -248,13 +280,12 @@ sp_canvas_item_invoke_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **act
 }
 
 /**
- * sp_canvas_item_affine_absolute:
- * @item: A canvas item.
- * @affine: An affine transformation matrix.
- *
  * Makes the item's affine transformation matrix be equal to the specified
  * matrix.
- **/
+ * 
+ * @item: A canvas item.
+ * @affine: An affine transformation matrix.
+ */
 void
 sp_canvas_item_affine_absolute (SPCanvasItem *item, NR::Matrix const& affine)
 {
@@ -271,8 +302,10 @@ sp_canvas_item_affine_absolute (SPCanvasItem *item, NR::Matrix const& affine)
     item->canvas->need_repick = TRUE;
 }
 
-/* Convenience function to reorder items in a group's child list.  This puts the
- * specified link after the "before" link.
+/**
+ * Convenience function to reorder items in a group's child list.  
+ *
+ * This puts the specified link after the "before" link.
  */
 static void
 put_item_after (GList *link, GList *before)
@@ -325,14 +358,14 @@ put_item_after (GList *link, GList *before)
 
 
 /**
- * sp_canvas_item_raise:
- * @item: A canvas item.
- * @positions: Number of steps to raise the item.
- *
  * Raises the item in its parent's stack by the specified number of positions.
+ * 
+ * \param item A canvas item.
+ * \param positions Number of steps to raise the item.
+ *
  * If the number of positions is greater than the distance to the top of the
  * stack, then the item is put at the top.
- **/
+ */
 void
 sp_canvas_item_raise (SPCanvasItem *item, int positions)
 {
@@ -362,11 +395,11 @@ sp_canvas_item_raise (SPCanvasItem *item, int positions)
 
 
 /**
- * sp_canvas_item_lower:
- * @item: A canvas item.
- * @positions: Number of steps to lower the item.
- *
  * Lowers the item in its parent's stack by the specified number of positions.
+ *
+ * \param item A canvas item.
+ * \param positions Number of steps to lower the item.
+ *
  * If the number of positions is greater than the distance to the bottom of the
  * stack, then the item is put at the bottom.
  **/
@@ -397,6 +430,9 @@ sp_canvas_item_lower (SPCanvasItem *item, int positions)
     item->canvas->need_repick = TRUE;
 }
 
+/**
+ * Sets visible flag on item and requests a redraw.
+ */
 void
 sp_canvas_item_show (SPCanvasItem *item)
 {
@@ -412,6 +448,9 @@ sp_canvas_item_show (SPCanvasItem *item)
     item->canvas->need_repick = TRUE;
 }
 
+/**
+ * Clears visible flag on item and requests a redraw.
+ */
 void
 sp_canvas_item_hide (SPCanvasItem *item)
 {
@@ -427,6 +466,11 @@ sp_canvas_item_hide (SPCanvasItem *item)
     item->canvas->need_repick = TRUE;
 }
 
+/**
+ * Grab item under cursor.
+ * 
+ * \pre !canvas->grabbed_item && item->flags & SP_CANVAS_ITEM_VISIBLE
+ */
 int
 sp_canvas_item_grab (SPCanvasItem *item, guint event_mask, GdkCursor *cursor, guint32 etime)
 {
@@ -455,13 +499,12 @@ sp_canvas_item_grab (SPCanvasItem *item, guint event_mask, GdkCursor *cursor, gu
 }
 
 /**
- * sp_canvas_item_ungrab:
- * @item: A canvas item that holds a grab.
- * @etime: The timestamp for ungrabbing the mouse.
- *
  * Ungrabs the item, which must have been grabbed in the canvas, and ungrabs the
  * mouse.
- **/
+ * 
+ * \param item A canvas item that holds a grab.
+ * \param etime The timestamp for ungrabbing the mouse.
+ */
 void
 sp_canvas_item_ungrab (SPCanvasItem *item, guint32 etime)
 {
@@ -476,7 +519,10 @@ sp_canvas_item_ungrab (SPCanvasItem *item, guint32 etime)
     gdk_pointer_ungrab (etime);
 }
 
-
+/**
+ * Returns the product of all transformation matrices from the root item down
+ * to the item.
+ */
 NR::Matrix sp_canvas_item_i2w_affine(SPCanvasItem const *item)
 {
     g_assert (SP_IS_CANVAS_ITEM (item)); // should we get this?
@@ -490,6 +536,9 @@ NR::Matrix sp_canvas_item_i2w_affine(SPCanvasItem const *item)
     return affine;
 }
 
+/**
+ * Helper that returns true iff item is descendant of parent.
+ */
 static bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent)
 {
     while (item) {
@@ -501,6 +550,9 @@ static bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent)
     return false;
 }
 
+/**
+ * Focus canvas, and item under cursor if it is not already focussed.
+ */
 void
 sp_canvas_item_grab_focus (SPCanvasItem *item)
 {
@@ -535,12 +587,10 @@ sp_canvas_item_grab_focus (SPCanvasItem *item)
 }
 
 /**
- * sp_canvas_item_request_update
- * @item: A canvas item.
- *
- * To be used only by item implementations.  Requests that the canvas queue an
- * update for the specified item.
- **/
+ * Requests that the canvas queue an update for the specified item.
+ * 
+ * To be used only by item implementations.
+ */
 void
 sp_canvas_item_request_update (SPCanvasItem *item)
 {
@@ -558,6 +608,9 @@ sp_canvas_item_request_update (SPCanvasItem *item)
     }
 }
 
+/**
+ * Returns position of item in group.
+ */
 gint sp_canvas_item_order (SPCanvasItem * item)
 {
     return g_list_index (SP_CANVAS_GROUP (item->parent)->items, item);
@@ -575,6 +628,9 @@ static void sp_canvas_group_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
 static SPCanvasItemClass *group_parent_class;
 
+/**
+ * Registers SPCanvasGroup class with Gtk and returns its type number.
+ */
 GtkType
 sp_canvas_group_get_type (void)
 {
@@ -596,7 +652,9 @@ sp_canvas_group_get_type (void)
     return group_type;
 }
 
-/* Class initialization function for SPCanvasGroupClass */
+/**
+ * Class initialization function for SPCanvasGroupClass
+ */
 static void
 sp_canvas_group_class_init (SPCanvasGroupClass *klass)
 {
@@ -612,12 +670,19 @@ sp_canvas_group_class_init (SPCanvasGroupClass *klass)
     item_class->point = sp_canvas_group_point;
 }
 
+/**
+ * Callback. Empty.
+ */
 static void
 sp_canvas_group_init (SPCanvasGroup */*group*/)
 {
     /* Nothing here */
 }
 
+/**
+ * Callback that destroys all items in group and calls group's virtual 
+ * destroy() function.
+ */
 static void
 sp_canvas_group_destroy (GtkObject *object)
 {
@@ -638,7 +703,9 @@ sp_canvas_group_destroy (GtkObject *object)
         (* GTK_OBJECT_CLASS (group_parent_class)->destroy) (object);
 }
 
-/* Update handler for canvas groups */
+/**
+ * Update handler for canvas groups
+ */
 static void
 sp_canvas_group_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags)
 {
@@ -669,7 +736,9 @@ sp_canvas_group_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned i
     item->y2 = bounds.max()[NR::Y];
 }
 
-/* Point handler for canvas groups */
+/**
+ * Point handler for canvas groups.
+ */
 static double
 sp_canvas_group_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
@@ -709,6 +778,9 @@ sp_canvas_group_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_it
     return best;
 }
 
+/**
+ * Renders all visible canvas group items in buf rectangle.
+ */
 static void
 sp_canvas_group_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
@@ -728,7 +800,9 @@ sp_canvas_group_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 }
 
-/* Adds an item to a group */
+/**
+ * Adds an item to a canvas group.
+ */
 static void
 group_add (SPCanvasGroup *group, SPCanvasItem *item)
 {
@@ -745,7 +819,9 @@ group_add (SPCanvasGroup *group, SPCanvasItem *item)
     sp_canvas_item_request_update (item);
 }
 
-/* Removes an item from a group */
+/** 
+ * Removes an item from a canvas group
+ */
 static void
 group_remove (SPCanvasGroup *group, SPCanvasItem *item)
 {
@@ -797,13 +873,12 @@ static GtkWidgetClass *canvas_parent_class;
 
 void sp_canvas_resize_tiles(SPCanvas* canvas,int nl,int nt,int nr,int nb);
 void sp_canvas_dirty_rect(SPCanvas* canvas,int nl,int nt,int nr,int nb);
+
 /**
- * sp_canvas_get_type:
- *
- * Registers the &SPCanvas class if necessary, and returns the type ID
+ * Registers the SPCanvas class if necessary, and returns the type ID
  * associated to it.
  *
- * Return value:  The type ID of the &SPCanvas class.
+ * \return The type ID of the SPCanvas class.
  **/
 GtkType
 sp_canvas_get_type (void)
@@ -826,7 +901,9 @@ sp_canvas_get_type (void)
     return canvas_type;
 }
 
-/* Class initialization function for SPCanvasClass */
+/**
+ * Class initialization function for SPCanvasClass.
+ */
 static void
 sp_canvas_class_init (SPCanvasClass *klass)
 {
@@ -854,7 +931,9 @@ sp_canvas_class_init (SPCanvasClass *klass)
     widget_class->focus_out_event = sp_canvas_focus_out;
 }
 
-/* Object initialization function for SPCanvas */
+/** 
+ * Callback: object initialization for SPCanvas.
+ */
 static void
 sp_canvas_init (SPCanvas *canvas)
 {
@@ -880,7 +959,9 @@ sp_canvas_init (SPCanvas *canvas)
     canvas->tileH=canvas->tileV=0;
 }
 
-/* Convenience function to remove the idle handler of a canvas */
+/**
+ * Convenience function to remove the idle handler of a canvas.
+ */
 static void
 remove_idle (SPCanvas *canvas)
 {
@@ -890,7 +971,9 @@ remove_idle (SPCanvas *canvas)
     }
 }
 
-/* Removes the transient state of the canvas (idle handler, grabs). */
+/*
+ * Removes the transient state of the canvas (idle handler, grabs).
+ */
 static void
 shutdown_transients (SPCanvas *canvas)
 {
@@ -915,7 +998,9 @@ shutdown_transients (SPCanvas *canvas)
     remove_idle (canvas);
 }
 
-/* Destroy handler for SPCanvas */
+/**
+ * Destroy handler for SPCanvas.
+ */
 static void
 sp_canvas_destroy (GtkObject *object)
 {
@@ -932,6 +1017,9 @@ sp_canvas_destroy (GtkObject *object)
         (* GTK_OBJECT_CLASS (canvas_parent_class)->destroy) (object);
 }
 
+/**
+ * Returns new canvas as widget.
+ */
 GtkWidget *
 sp_canvas_new_aa (void)
 {
@@ -940,6 +1028,9 @@ sp_canvas_new_aa (void)
     return (GtkWidget *) canvas;
 }
 
+/**
+ * The canvas widget's realize callback.
+ */
 static void
 sp_canvas_realize (GtkWidget *widget)
 {
@@ -974,6 +1065,9 @@ sp_canvas_realize (GtkWidget *widget)
     canvas->pixmap_gc = gdk_gc_new (SP_CANVAS_WINDOW (canvas));
 }
 
+/**
+ * The canvas widget's unrealize callback.
+ */
 static void
 sp_canvas_unrealize (GtkWidget *widget)
 {
@@ -988,6 +1082,9 @@ sp_canvas_unrealize (GtkWidget *widget)
         (* GTK_WIDGET_CLASS (canvas_parent_class)->unrealize) (widget);
 }
 
+/**
+ * The canvas widget's size_request callback.
+ */
 static void
 sp_canvas_size_request (GtkWidget *widget, GtkRequisition *req)
 {
@@ -997,6 +1094,9 @@ sp_canvas_size_request (GtkWidget *widget, GtkRequisition *req)
     req->height = 256;
 }
 
+/**
+ * The canvas widget's size_allocate callback.
+ */
 static void
 sp_canvas_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
@@ -1028,48 +1128,9 @@ sp_canvas_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     }
 }
 
-static void
-scroll_to (SPCanvas *canvas, double x, double y, unsigned int clear)
-{
-    int ix = (int) (x + 0.5);
-    int iy = (int) (y + 0.5);
-    int dx = ix - canvas->x0;
-    int dy = iy - canvas->y0;
-
-    canvas->dx0 = x;
-    canvas->dy0 = y;
-    canvas->x0 = ix;
-    canvas->y0 = iy;
-
-    sp_canvas_resize_tiles(canvas,canvas->x0,canvas->y0,canvas->x0+canvas->widget.allocation.width,canvas->y0+canvas->widget.allocation.height);
-  
-    if (!clear) {
-        if ((dx != 0) || (dy != 0)) {
-            int width, height;
-            width = canvas->widget.allocation.width;
-            height = canvas->widget.allocation.height;
-            if (GTK_WIDGET_REALIZED (canvas)) {
-                gdk_window_scroll (SP_CANVAS_WINDOW (canvas), -dx, -dy);
-                gdk_window_process_updates (SP_CANVAS_WINDOW (canvas), TRUE);
-            }
-            if (dx < 0) {
-                sp_canvas_request_redraw (canvas, ix + 0, iy + 0, ix - dx, iy + height);
-            } else if (dx > 0) {
-                sp_canvas_request_redraw (canvas, ix + width - dx, iy + 0, ix + width, iy + height);
-            }
-            if (dy < 0) {
-                sp_canvas_request_redraw (canvas, ix + 0, iy + 0, ix + width, iy - dy);
-            } else if (dy > 0) {
-                sp_canvas_request_redraw (canvas, ix + 0, iy + height - dy, ix + width, iy + height);
-            }
-        }
-    } else {
-        gtk_widget_queue_draw (GTK_WIDGET (canvas));
-    }
-}
-
-/* Emits an event for an item in the canvas, be it the current item, grabbed
- * item, or focused item, as appropriate.
+/**
+ * Helper that emits an event for an item in the canvas, be it the current 
+ * item, grabbed item, or focused item, as appropriate.
  */
 static int
 emit_event (SPCanvas *canvas, GdkEvent *event)
@@ -1174,8 +1235,9 @@ emit_event (SPCanvas *canvas, GdkEvent *event)
     return finished;
 }
 
-/* Re-picks the current item in the canvas, based on the event's coordinates.
- * Also emits enter/leave events for items as appropriate.
+/**
+ * Helper that re-picks the current item in the canvas, based on the event's 
+ * coordinates and emits enter/leave events for items as appropriate.
  */
 static int
 pick_current_item (SPCanvas *canvas, GdkEvent *event)
@@ -1305,7 +1367,9 @@ pick_current_item (SPCanvas *canvas, GdkEvent *event)
     return retval;
 }
 
-/* Button event handler for the canvas */
+/**
+ * Button event handler for the canvas.
+ */
 static gint
 sp_canvas_button (GtkWidget *widget, GdkEventButton *event)
 {
@@ -1372,15 +1436,20 @@ sp_canvas_button (GtkWidget *widget, GdkEventButton *event)
     return retval;
 }
 
-/* Scroll event handler for the canvas */
-/* FIXME: generate motion events to re-select items */
+/**
+ * Scroll event handler for the canvas.
+ *
+ * \todo FIXME: generate motion events to re-select items.
+ */
 static gint
 sp_canvas_scroll (GtkWidget *widget, GdkEventScroll *event)
 {
     return emit_event (SP_CANVAS (widget), (GdkEvent *) event);
 }
 
-/* Motion event handler for the canvas */
+/**
+ * Motion event handler for the canvas.
+ */
 static int
 sp_canvas_motion (GtkWidget *widget, GdkEventMotion *event)
 {
@@ -1406,18 +1475,9 @@ sp_canvas_motion (GtkWidget *widget, GdkEventMotion *event)
 #define IMAGE_WIDTH_AA 341
 #define IMAGE_HEIGHT_AA 64
 
-int sp_canvas_bigtile_floor(int x)
-{
-    int r=x&(~127);
-    return r/128;
-}
-int sp_canvas_bigtile_ceil(int x)
-{
-    int r=x&(~127);
-    if ( x&127 ) r+=128;
-    return r/128;
-}
-
+/**
+ * Helper that draws a specific rectangular part of the canvas.
+ */
 static void
 sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
 {
@@ -1500,6 +1560,9 @@ sp_canvas_paint_rect (SPCanvas *canvas, int xx0, int yy0, int xx1, int yy1)
     }
 }
 
+/**
+ * The canvas widget's expose callback.
+ */
 static gint
 sp_canvas_expose (GtkWidget *widget, GdkEventExpose *event)
 {
@@ -1535,13 +1598,18 @@ sp_canvas_expose (GtkWidget *widget, GdkEventExpose *event)
     return FALSE;
 }
 
+/**
+ * The canvas widget's keypress callback.
+ */
 static gint
 sp_canvas_key (GtkWidget *widget, GdkEventKey *event)
 {
     return emit_event (SP_CANVAS (widget), (GdkEvent *) event);
 }
 
-/* Crossing event handler for the canvas */
+/**
+ * Crossing event handler for the canvas.
+ */
 static gint
 sp_canvas_crossing (GtkWidget *widget, GdkEventCrossing *event)
 {
@@ -1554,7 +1622,9 @@ sp_canvas_crossing (GtkWidget *widget, GdkEventCrossing *event)
     return pick_current_item (canvas, (GdkEvent *) event);
 }
 
-/* Focus in handler for the canvas */
+/**
+ * Focus in handler for the canvas.
+ */
 static gint
 sp_canvas_focus_in (GtkWidget *widget, GdkEventFocus *event)
 {
@@ -1569,7 +1639,9 @@ sp_canvas_focus_in (GtkWidget *widget, GdkEventFocus *event)
     }
 }
 
-/* Focus out handler for the canvas */
+/**
+ * Focus out handler for the canvas.
+ */
 static gint
 sp_canvas_focus_out (GtkWidget *widget, GdkEventFocus *event)
 {
@@ -1583,7 +1655,9 @@ sp_canvas_focus_out (GtkWidget *widget, GdkEventFocus *event)
         return FALSE;
 }
 
-/* Repaints the areas in the canvas that need it */
+/**
+ * Helper that repaints the areas in the canvas that need it.
+ */
 static int
 paint (SPCanvas *canvas)
 {
@@ -1632,6 +1706,9 @@ paint (SPCanvas *canvas)
     return TRUE;
 }
 
+/**
+ * Helper that invokes update, paint, and repick on canvas.
+ */
 static int
 do_update (SPCanvas *canvas)
 {
@@ -1655,7 +1732,9 @@ do_update (SPCanvas *canvas)
     return TRUE;
 }
 
-/* Idle handler for the canvas.  It deals with pending updates and redraws. */
+/**
+ * Idle handler for the canvas that deals with pending updates and redraws.
+ */
 static gint
 idle_handler (gpointer data)
 {
@@ -1675,7 +1754,9 @@ idle_handler (gpointer data)
     return !ret;
 }
 
-/* Convenience function to add an idle handler to a canvas */
+/**
+ * Convenience function to add an idle handler to a canvas.
+ */
 static void
 add_idle (SPCanvas *canvas)
 {
@@ -1686,13 +1767,8 @@ add_idle (SPCanvas *canvas)
 }
 
 /**
- * sp_canvas_root:
- * @canvas: A canvas.
- *
- * Queries the root group of a canvas.
- *
- * Return value: The root group of the specified canvas.
- **/
+ * Returns the root group of the specified canvas.
+ */
 SPCanvasGroup *
 sp_canvas_root (SPCanvas *canvas)
 {
@@ -1702,15 +1778,55 @@ sp_canvas_root (SPCanvas *canvas)
     return SP_CANVAS_GROUP (canvas->root);
 }
 
+/**
+ * Scrolls canvas to specific position.
+ */
 void
 sp_canvas_scroll_to (SPCanvas *canvas, double cx, double cy, unsigned int clear)
 {
     g_return_if_fail (canvas != NULL);
     g_return_if_fail (SP_IS_CANVAS (canvas));
 
-    scroll_to (canvas, cx, cy, clear);
+    int ix = (int) (cx + 0.5);
+    int iy = (int) (cy + 0.5);
+    int dx = ix - canvas->x0;
+    int dy = iy - canvas->y0;
+
+    canvas->dx0 = cx;
+    canvas->dy0 = cy;
+    canvas->x0 = ix;
+    canvas->y0 = iy;
+
+    sp_canvas_resize_tiles(canvas,canvas->x0,canvas->y0,canvas->x0+canvas->widget.allocation.width,canvas->y0+canvas->widget.allocation.height);
+  
+    if (!clear) {
+        if ((dx != 0) || (dy != 0)) {
+            int width, height;
+            width = canvas->widget.allocation.width;
+            height = canvas->widget.allocation.height;
+            if (GTK_WIDGET_REALIZED (canvas)) {
+                gdk_window_scroll (SP_CANVAS_WINDOW (canvas), -dx, -dy);
+                gdk_window_process_updates (SP_CANVAS_WINDOW (canvas), TRUE);
+            }
+            if (dx < 0) {
+                sp_canvas_request_redraw (canvas, ix + 0, iy + 0, ix - dx, iy + height);
+            } else if (dx > 0) {
+                sp_canvas_request_redraw (canvas, ix + width - dx, iy + 0, ix + width, iy + height);
+            }
+            if (dy < 0) {
+                sp_canvas_request_redraw (canvas, ix + 0, iy + 0, ix + width, iy - dy);
+            } else if (dy > 0) {
+                sp_canvas_request_redraw (canvas, ix + 0, iy + height - dy, ix + width, iy + height);
+            }
+        }
+    } else {
+        gtk_widget_queue_draw (GTK_WIDGET (canvas));
+    }
 }
 
+/** 
+ * Updates canvas if necessary.
+ */
 void
 sp_canvas_update_now (SPCanvas *canvas)
 {
@@ -1725,6 +1841,9 @@ sp_canvas_update_now (SPCanvas *canvas)
     do_update (canvas);
 }
 
+/**
+ * Update callback for canvas widget.
+ */
 static void
 sp_canvas_request_update (SPCanvas *canvas)
 {
@@ -1732,6 +1851,9 @@ sp_canvas_request_update (SPCanvas *canvas)
     add_idle (canvas);
 }
 
+/**
+ * Forces redraw of rectangular canvas area.
+ */
 void
 sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
 {
@@ -1761,6 +1883,9 @@ sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
     add_idle (canvas);
 }
 
+/**
+ * Sets world coordinates from win and canvas.
+ */
 void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy, double *worldx, double *worldy)
 {
     g_return_if_fail (canvas != NULL);
@@ -1770,6 +1895,9 @@ void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy,
     if (worldy) *worldy = canvas->y0 + winy;
 }
 
+/**
+ * Sets win coordinates from world and canvas.
+ */
 void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double worldy, double *winx, double *winy)
 {
     g_return_if_fail (canvas != NULL);
@@ -1779,6 +1907,9 @@ void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double wor
     if (winy) *winy = worldy - canvas->y0;
 }
 
+/**
+ * Converts point from win to world coordinates.
+ */
 NR::Point sp_canvas_window_to_world(SPCanvas const *canvas, NR::Point const win)
 {
     g_assert (canvas != NULL);
@@ -1787,6 +1918,9 @@ NR::Point sp_canvas_window_to_world(SPCanvas const *canvas, NR::Point const win)
     return NR::Point(canvas->x0 + win[0], canvas->y0 + win[1]);
 }
 
+/**
+ * Converts point from world to win coordinates.
+ */
 NR::Point sp_canvas_world_to_window(SPCanvas const *canvas, NR::Point const world)
 {
     g_assert (canvas != NULL);
@@ -1795,6 +1929,9 @@ NR::Point sp_canvas_world_to_window(SPCanvas const *canvas, NR::Point const worl
     return NR::Point(world[0] - canvas->x0, world[1] - canvas->y0);
 }
 
+/**
+ * Returns true if point given in world coordinates is inside window.
+ */
 bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, NR::Point const &world)
 {
     g_assert( canvas != NULL );
@@ -1809,6 +1946,9 @@ bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, NR::Point const &w
              ( world[Y] < canvas->y0 + w.allocation.height ) );
 }
 
+/**
+ * Return canvas window coordinates as NRRect.
+ */
 NRRect *sp_canvas_get_viewbox(SPCanvas const *canvas, NRRect *viewbox)
 {
     g_return_val_if_fail (canvas != NULL, NULL);
@@ -1823,16 +1963,19 @@ NRRect *sp_canvas_get_viewbox(SPCanvas const *canvas, NRRect *viewbox)
     return viewbox;
 }
 
-int sp_canvas_tile_floor(int x)
+inline int sp_canvas_tile_floor(int x)
 {
     return (x&(~31))/32;
 }
 
-int sp_canvas_tile_ceil(int x)
+inline int sp_canvas_tile_ceil(int x)
 {
     return ((x+31)&(~31))/32;
 }
 
+/**
+ * Helper that changes tile size for canvas redraw.
+ */
 void sp_canvas_resize_tiles(SPCanvas* canvas,int nl,int nt,int nr,int nb)
 {
     if ( nl >= nr || nt >= nb ) {
@@ -1869,6 +2012,9 @@ void sp_canvas_resize_tiles(SPCanvas* canvas,int nl,int nt,int nr,int nb)
     canvas->tileV=nv;
 }
 
+/**
+ * Helper that marks specific canvas rectangle for redraw.
+ */
 void sp_canvas_dirty_rect(SPCanvas* canvas,int nl,int nt,int nr,int nb)
 {
     if ( nl >= nr || nt >= nb ) {
@@ -1898,9 +2044,9 @@ void sp_canvas_dirty_rect(SPCanvas* canvas,int nl,int nt,int nr,int nb)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
