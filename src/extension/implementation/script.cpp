@@ -888,6 +888,7 @@ Script::checkStderr (gchar * filename, Gtk::MessageType type, gchar * message)
     stderrf.seekg(0, std::ios::beg);
 
     Gtk::MessageDialog warning(message, false, type, Gtk::BUTTONS_OK, true);
+    warning.set_resizable(true);
 
     Gtk::VBox * vbox = warning.get_vbox();
 
@@ -909,7 +910,7 @@ Script::checkStderr (gchar * filename, Gtk::MessageType type, gchar * message)
     scrollwindow->set_shadow_type(Gtk::SHADOW_IN);
     scrollwindow->show();
 
-    vbox->pack_start(*scrollwindow, false, false, 5 /* fix these */);
+    vbox->pack_start(*scrollwindow, true, true, 5 /* fix these */);
 
     warning.run();
 
