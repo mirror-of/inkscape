@@ -1,7 +1,7 @@
 #ifndef __SP_COLOR_H__
 #define __SP_COLOR_H__
 
-/*
+/** \file
  * Colors and colorspaces
  *
  * Author:
@@ -51,6 +51,9 @@ typedef enum {
 	SP_COLORSPACE_TYPE_CMYK
 } SPColorSpaceType;
 
+/**
+ * An RGBA color in an SPColorSpace
+ */
 struct SPColor {
 	const SPColorSpace *colorspace;
 	union {

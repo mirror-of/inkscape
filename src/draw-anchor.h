@@ -1,7 +1,9 @@
 #ifndef SEEN_DRAW_ANCHOR_H
 #define SEEN_DRAW_ANCHOR_H
 
-/** \file Drawing anchors. */
+/** \file 
+ * Drawing anchors. 
+ */
 
 #include <glib/gtypes.h>
 
@@ -10,8 +12,9 @@ struct SPDrawContext;
 struct SPCurve;
 struct SPCanvasItem;
 
-
-struct SPDrawAnchor { // FIXME: make this a regular knot, this will allow to set statusbar tips
+/// The drawing anchor.
+/// \todo Make this a regular knot, this will allow to set statusbar tips.
+struct SPDrawAnchor { 
     SPDrawContext *dc;
     SPCurve *curve;
     guint start : 1;

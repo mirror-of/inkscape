@@ -1,7 +1,7 @@
 #ifndef __SP_EVENT_CONTEXT_H__
 #define __SP_EVENT_CONTEXT_H__
 
-/*
+/** \file
  * Base class for event processors
  *
  * This is per desktop object, which (its derivatives) implements
@@ -39,11 +39,14 @@ struct SPKnotHolder;
 
 namespace Inkscape { class MessageContext; }
 
+/**
+ * Base class for Event processors.
+ */
 struct SPEventContext : public GObject {
-    void enableSelectionCue(bool enable=true);
-    void enableGrDrag(bool enable=true);
+    void enableSelectionCue (bool enable=true);
+    void enableGrDrag (bool enable=true);
 
-    /* Desktop eventcontext stack */
+    /// Desktop eventcontext stack
     SPEventContext *next;
     unsigned key;
     SPDesktop *desktop;
@@ -52,11 +55,12 @@ struct SPEventContext : public GObject {
     gint hot_x, hot_y;
     GdkCursor *cursor;
 
-    gint xp , yp; // where drag started
+    gint xp, yp;           ///< where drag started
     gint tolerance;
-    bool within_tolerance; // are we still within tolerance of origin
+    bool within_tolerance;  ///< are we still within tolerance of origin
 
-    SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
+    SPItem *item_to_select; ///< the item where mouse_press occurred, to 
+                            ///< be selected if this is a click not drag
 
     Inkscape::MessageContext *defaultMessageContext() {
         return _message_context;
@@ -73,6 +77,9 @@ struct SPEventContext : public GObject {
     Inkscape::XML::Node *shape_repr;
 };
 
+/**
+ * The SPEvent vtable.
+ */
 struct SPEventContextClass : public GObjectClass {
     void (* setup)(SPEventContext *ec);
     void (* finish)(SPEventContext *ec);

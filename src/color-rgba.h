@@ -1,15 +1,13 @@
-/*
-    Author:
+/** \file color-rgba.h
+
+    A class to handle a RGBA color as one unit.
+    
+    Authors:
       bulia byak <buliabyak@gmail.com>
 
     Copyright (C) 2004 Authors
 
     Released under GNU GPL, read the file 'COPYING' for more information
-*/
-/**
-    \filename color-rgba.h
-
-    A class to handle a RGBA color as one unit.
 */
 #ifndef SEEN_COLOR_RGBA_H
 #define SEEN_COLOR_RGBA_H
