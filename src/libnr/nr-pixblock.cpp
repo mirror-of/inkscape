@@ -1,12 +1,12 @@
 #define __NR_PIXBLOCK_C__
 
-/*
- * Pixel buffer rendering library
+/** \file
+ * \brief Allocation/Setup of NRPixBlock objects. Pixel store functions.
  *
  * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   (C) 1999-2002 Lauris Kaplinski <lauris@kaplinski.com>
  *
- * This code is in public domain
+ * This code is in the Public Domain
  */
 
 #include <string.h>
@@ -14,10 +14,23 @@
 #include "nr-macros.h"
 #include "nr-pixblock.h"
 
+/// Size of buffer that needs no allocation (default 4).
 #define NR_TINY_MAX sizeof (unsigned char *)
 
+/**
+ * Pixbuf initialisation using homegrown memory handling ("pixelstore").
+ *
+ * Pixbuf sizes are differentiated into tiny, <4K, <16K, <64K, and more,
+ * with each type having its own method of memory handling. After allocating
+ * memory, the buffer is cleared if the clear flag is set. Intended to
+ * reduce memory fragmentation.
+ * \param pb Pointer to the pixbuf struct.
+ * \param mode Indicates grayscale/RGB/RGBA.
+ * \param clear True if buffer should be cleared.
+ * \pre x1>=x0 && y1>=y0 && pb!=NULL
+ */
 void
-nr_pixblock_setup_fast (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int clear)
+nr_pixblock_setup_fast (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, bool clear)
 {
 	int w, h, bpp;
 	size_t size;
@@ -55,8 +68,17 @@ nr_pixblock_setup_fast (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1
 	pb->rs = bpp * w;
 }
 
+/**
+ * Pixbuf initialisation using nr_new.
+ *
+ * After allocating memory, the buffer is cleared if the clear flag is set.
+ * \param pb Pointer to the pixbuf struct.
+ * \param mode Indicates grayscale/RGB/RGBA.
+ * \param clear True if buffer should be cleared.
+ * \pre x1>=x0 && y1>=y0 && pb!=NULL
+ */
 void
-nr_pixblock_setup (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int clear)
+nr_pixblock_setup (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, bool clear)
 {
 	int w, h, bpp;
 	size_t size;
@@ -85,15 +107,24 @@ nr_pixblock_setup (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, int
 	pb->rs = bpp * w;
 }
 
+/**
+ * Pixbuf initialisation with preset values.
+ *
+ * After copying all parameters into the NRPixBlock struct, the pixel buffer is cleared if the clear flag is set.
+ * \param pb Pointer to the pixbuf struct.
+ * \param mode Indicates grayscale/RGB/RGBA.
+ * \param clear True if buffer should be cleared.
+ * \pre x1>=x0 && y1>=y0 && pb!=NULL
+ */
 void
-nr_pixblock_setup_extern (NRPixBlock *pb, int mode, int x0, int y0, int x1, int y1, unsigned char *px, int rs, int empty, int clear)
+nr_pixblock_setup_extern (NRPixBlock *pb, NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, unsigned char *px, int rs, bool empty, bool clear)
 {
 	int w, bpp;
 
 	w = x1 - x0;
 	bpp = (mode == NR_PIXBLOCK_MODE_A8) ? 1 : (mode == NR_PIXBLOCK_MODE_R8G8B8) ? 3 : 4;
 
-	pb->size = NR_PIXBLOCK_SIZE_STATIC;
+	pb->size = NR_PIXBLOCK_SIZE_STATIC; 
 	pb->mode = mode;
 	pb->empty = empty;
 	pb->area.x0 = x0;
@@ -103,9 +134,12 @@ nr_pixblock_setup_extern (NRPixBlock *pb, int mode, int x0, int y0, int x1, int 
 	pb->data.px = px;
 	pb->rs = rs;
 
+        g_assert (pb->data.px != NULL);
 	if (clear) {
 		if (rs == bpp * w) {
-			if (pb->data.px) // there were mysterious crashes without this check
+			/// \todo How do you recognise if 
+                        /// px was an uncleared tiny buffer? 
+			if (pb->data.px) 
 				memset (pb->data.px, 0x0, bpp * (y1 - y0) * w);
 		} else {
 			int y;
@@ -116,6 +150,14 @@ nr_pixblock_setup_extern (NRPixBlock *pb, int mode, int x0, int y0, int x1, int 
 	}
 }
 
+/**
+ * Frees memory taken by pixel data in NRPixBlock.
+ * \param pb Pointer to pixblock.
+ * \pre pb and pb->data.px point to valid addresses.
+ *
+ * According to pb->size, one of the functions for freeing the pixelstore
+ * is called. May be called regardless of how pixbuf was set up.
+ */
 void
 nr_pixblock_release (NRPixBlock *pb)
 {
@@ -141,8 +183,14 @@ nr_pixblock_release (NRPixBlock *pb)
 	}
 }
 
+/**
+ * Allocates NRPixBlock and sets it up.
+ *
+ * \return Pointer to fresh pixblock.
+ * Calls nr_new() and nr_pixblock_setup().
+ */
 NRPixBlock *
-nr_pixblock_new (int mode, int x0, int y0, int x1, int y1, int clear)
+nr_pixblock_new (NR_PIXBLOCK_MODE mode, int x0, int y0, int x1, int y1, bool clear)
 {
 	NRPixBlock *pb;
 
@@ -153,6 +201,11 @@ nr_pixblock_new (int mode, int x0, int y0, int x1, int y1, int clear)
 	return pb;
 }
 
+/**
+ * Frees all memory taken by pixblock.
+ *
+ * \return NULL
+ */
 NRPixBlock *
 nr_pixblock_free (NRPixBlock *pb)
 {
@@ -171,7 +224,7 @@ static unsigned int nr_4K_len = 0;
 static unsigned int nr_4K_size = 0;
 
 unsigned char *
-nr_pixelstore_4K_new (int clear, unsigned char val)
+nr_pixelstore_4K_new (bool clear, unsigned char val)
 {
 	unsigned char *px;
 
@@ -205,7 +258,7 @@ static unsigned int nr_16K_len = 0;
 static unsigned int nr_16K_size = 0;
 
 unsigned char *
-nr_pixelstore_16K_new (int clear, unsigned char val)
+nr_pixelstore_16K_new (bool clear, unsigned char val)
 {
 	unsigned char *px;
 
@@ -239,7 +292,7 @@ static unsigned int nr_64K_len = 0;
 static unsigned int nr_64K_size = 0;
 
 unsigned char *
-nr_pixelstore_64K_new (int clear, unsigned char val)
+nr_pixelstore_64K_new (bool clear, unsigned char val)
 {
 	unsigned char *px;
 
@@ -267,3 +320,13 @@ nr_pixelstore_64K_free (unsigned char *px)
 	nr_64K_len += 1;
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
