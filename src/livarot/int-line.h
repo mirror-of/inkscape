@@ -4,9 +4,11 @@
 #include "livarot/livarot-forward.h"
 #include "livarot/LivarotDefs.h"
 
-/*
- * coverage with integer boundaries: what we want for actual rasterization
- * it contains the same stuff as FloatLigne, but technically only the Copy() functions are used
+/** \file
+ * Coverage with integer boundaries.
+ *
+ * This is what we want for actual rasterization. It contains the same 
+ * stuff as FloatLigne, but technically only the Copy() functions are used.
  */
 
 struct int_ligne_run {
@@ -25,6 +27,7 @@ struct int_ligne_bord {
     int next;
 };
 
+/// Coverage with integer boundaries.
 class IntLigne {
 public:
     

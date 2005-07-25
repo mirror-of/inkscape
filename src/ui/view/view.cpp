@@ -1,7 +1,7 @@
 #define __SP_VIEW_C__
 
-/*
- * Abstract base class for all SVG document views
+/** \file
+ * Static SPView functions and SPViewWidget.
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -24,6 +24,7 @@
 #include "message-context.h"
 #include "verbs.h"
 
+/// Possible signals on an SPView.
 enum {
     SHUTDOWN,
     URI_SET,
@@ -42,6 +43,9 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GValue shutdown_accumulator_data;
 
+/**
+ * Registers the SPView class with Glib and returns its type number.
+ */
 GtkType sp_view_get_type(void)
 {
     static GType type = 0;
@@ -64,21 +68,23 @@ GtkType sp_view_get_type(void)
 }
 
 /**
+ * Accumulator callback for collecting return values during shutdown.
+ * 
  * This signal accumulator is a special callback function for collecting the
  * return values of the various callbacks that are called during the SHUTDOWN 
  * signal emission.  This allows us to see if any of the views being shutdown
  * return a 'cancel' value that needs to be honored.  Without this accumulator
  * only the return value of the last view would be checked.
  *
- * ihint:           Signal invocation hint
- * return_accu:     Accumulator to collect callback return values in, this is 
- *                  the return value of the current signal emission. 
- * handler_return:  Return value of the signal handler this function will check.
- * data:            
+ * \param ihint          Signal invocation hint
+ * \param return_accu    Accumulator to collect callback return values in. 
+ * This is the return value of the current signal emission. 
+ * \param handler_return Return value of the signal handler this function 
+ * will check.
  *
- * Returns:         The accumulator function returns whether the signal emission 
- *                  should be aborted. Returning FALSE means to abort the current 
- *                  emission and TRUE is returned for continuation. 
+ * \ret The accumulator function returns whether the signal emission 
+ * should be aborted. Returning FALSE means to abort the current emission 
+ * and TRUE is returned for continuation. 
  */
 static gboolean
 sp_shutdown_accumulator(GSignalInvocationHint *ihint, GValue *return_accu,
@@ -97,6 +103,9 @@ sp_shutdown_accumulator(GSignalInvocationHint *ihint, GValue *return_accu,
     return TRUE;   /* Signal emission can continue */
 }
 
+/**
+ * View vtable initialization and signal registration callback.
+ */
 static void sp_view_class_init(SPViewClass *vc)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(vc);
@@ -142,6 +151,10 @@ static void sp_view_class_init(SPViewClass *vc)
     object_class->dispose = &SPView::dispose;
 }
 
+/**
+ * Callback to initialize the view's message stacks and to connect it 
+ * to various signals.
+ */
 void SPView::init(SPView *view)
 {
     view->doc = NULL;
@@ -153,13 +166,16 @@ void SPView::init(SPView *view)
     view->_message_stack = new Inkscape::MessageStack();
 
     view->_tips_message_context = new Inkscape::MessageContext(view->_message_stack);
-    view->_legacy_message_context = new Inkscape::MessageContext(view->_message_stack);
 
     view->_message_changed_connection = view->_message_stack->connectChanged(
         sigc::bind(sigc::ptr_fun(&SPView::_set_status_message), view)
     );
 }
 
+/**
+ * Callback to delete and null all SPView message stacks and to disconnect it 
+ * from signals.
+ */
 void SPView::dispose(GObject *object)
 {
     SPView *view = SP_VIEW(object);
@@ -168,9 +184,6 @@ void SPView::dispose(GObject *object)
 
     delete view->_tips_message_context;
     view->_tips_message_context = NULL;
-
-    delete view->_legacy_message_context;
-    view->_legacy_message_context = NULL;
 
     Inkscape::GC::release(view->_message_stack);
     view->_message_stack = NULL;
@@ -193,7 +206,8 @@ void SPView::dispose(GObject *object)
 
 /**
  *  Closes the given 'view' by issuing the 'SHUTDOWN' signal to it.
- *  Returns the result that is returned by the signal handler, which
+ *  
+ *  \return The result that is returned by the signal handler, which
  *  is 0 (FALSE) if the user cancels the close, or non-zero otherwise.
  */
 gboolean sp_view_shutdown(SPView *view)
@@ -208,6 +222,9 @@ gboolean sp_view_shutdown(SPView *view)
     return result;
 }
 
+/**
+ * Calls the virtual function set_status_message() of the view.
+ */
 void SPView::_set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view)
 {
     if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_status_message) {
@@ -215,6 +232,9 @@ void SPView::_set_status_message(Inkscape::MessageType type, gchar const *messag
     }
 }
 
+/**
+ * Calls the virtual function request_redraw() of the view.
+ */
 void sp_view_request_redraw(SPView *view)
 {
     g_return_if_fail(view != NULL);
@@ -225,6 +245,13 @@ void sp_view_request_redraw(SPView *view)
     }
 }
 
+/**
+ * Calls the view's virtual function set_document(), disconnects the view 
+ * from its old document, connects it to a new one, and emits the signal
+ * "uri_set".
+ * 
+ * \param doc The new document to connect the view to.
+ */
 void sp_view_set_document(SPView *view, SPDocument *doc)
 {
     g_return_if_fail(view != NULL);
@@ -251,6 +278,9 @@ void sp_view_set_document(SPView *view, SPDocument *doc)
     g_signal_emit(G_OBJECT(view), signals[URI_SET], 0, (doc) ? SP_DOCUMENT_URI(doc) : NULL);
 }
 
+/**
+ * Emit the "resized" signal on the view.
+ */
 void sp_view_emit_resized(SPView *view, gdouble width, gdouble height)
 {
     g_return_if_fail(view != NULL);
@@ -259,6 +289,9 @@ void sp_view_emit_resized(SPView *view, gdouble width, gdouble height)
     g_signal_emit(G_OBJECT(view), signals[RESIZED], 0, width, height);
 }
 
+/**
+ * Emit the "position_set" signal on the view.
+ */
 void sp_view_set_position(SPView *view, gdouble x, gdouble y)
 {
     g_return_if_fail(view != NULL);
@@ -267,11 +300,17 @@ void sp_view_set_position(SPView *view, gdouble x, gdouble y)
     g_signal_emit(G_OBJECT(view), signals[POSITION_SET], 0, x, y);
 }
 
+/**
+ * Emit the "uri_set" signal on the view.
+ */
 static void sp_view_document_uri_set(gchar const *uri, SPView *view)
 {
     g_signal_emit(G_OBJECT(view), signals[URI_SET], 0, uri);
 }
 
+/**
+ * Calls the virtual function document_resized() of the view.
+ */
 static void sp_view_document_resized(gdouble width, gdouble height, SPView *view)
 {
     if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->document_resized) {
@@ -290,6 +329,9 @@ static void sp_view_widget_view_resized(SPView *view, gdouble width, gdouble hei
 
 static GtkEventBoxClass *widget_parent_class;
 
+/**
+ * Registers the SPViewWidget class with Glib and returns its type number.
+ */
 GtkType sp_view_widget_get_type(void)
 {
     static GtkType type = 0;
@@ -309,6 +351,9 @@ GtkType sp_view_widget_get_type(void)
     return type;
 }
 
+/**
+ * Callback to initialize the SPViewWidget vtable.
+ */
 static void sp_view_widget_class_init(SPViewWidgetClass *vwc)
 {
     GtkObjectClass *object_class = GTK_OBJECT_CLASS(vwc);
@@ -318,11 +363,19 @@ static void sp_view_widget_class_init(SPViewWidgetClass *vwc)
     object_class->destroy = sp_view_widget_destroy;
 }
 
+/**
+ * Callback to initialize the SPViewWidget.
+ */
 static void sp_view_widget_init(SPViewWidget *vw)
 {
     vw->view = NULL;
 }
 
+/**
+ * Callback to disconnect from view and destroy SPViewWidget.
+ *
+ * Apparently, this gets only called when a desktop is closed, but then twice!
+ */
 static void sp_view_widget_destroy(GtkObject *object)
 {
     SPViewWidget *vw = SP_VIEW_WIDGET(object);
@@ -338,6 +391,10 @@ static void sp_view_widget_destroy(GtkObject *object)
     }
 }
 
+/**
+ * Connects widget to view's 'resized' signal and calls virtual set_view()
+ * function.
+ */
 void sp_view_widget_set_view(SPViewWidget *vw, SPView *view)
 {
     g_return_if_fail(vw != NULL);
@@ -356,6 +413,9 @@ void sp_view_widget_set_view(SPViewWidget *vw, SPView *view)
     }
 }
 
+/**
+ * Calls the virtual shutdown() function of the SPViewWidget.
+ */
 gboolean sp_view_widget_shutdown(SPViewWidget *vw)
 {
     g_return_val_if_fail(vw != NULL, TRUE);
@@ -368,6 +428,10 @@ gboolean sp_view_widget_shutdown(SPViewWidget *vw)
     return FALSE;
 }
 
+/**
+ * Callback for the 'resized' signal which calls the view_resized() virtual
+ * function.
+ */
 static void sp_view_widget_view_resized(SPView *view, gdouble width, gdouble height, SPViewWidget *vw)
 {
     if (((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->view_resized) {
