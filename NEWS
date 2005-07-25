@@ -89,7 +89,7 @@ Text
           objects.
 
      * Full on-canvas editing of flowed text is now possible. Just click in
-       any flowed text object with text tool and type * the text will reflow
+       any flowed text object with text tool and type - the text will reflow
        automatically within its frame. Pressing Enter starts a new paragraph.
        Letterspacing and linespacing adjustments (but not manual kerns) work
        in flowed text as well.
@@ -135,7 +135,7 @@ Text
           in selection.
 
      * The Text&Font and Fill&Stroke dialogs now reflect the style under
-       cursor or (if there*s text selection) in the selection, instead of the
+       cursor or (if there's text selection) in the selection, instead of the
        style of the entire text object as before. If the selection contains
        several text spans with different styles, then the font size and
        spacing fields in Text&Font display averaged values, and the
@@ -157,7 +157,7 @@ Text
        right-to-left scripts. See the all-new example file
        share/examples/i18n.svg.
 
-     * Unicode entry in Text tool now conforms to ISO 14755*s *basic method*.
+     * Unicode entry in Text tool now conforms to ISO 14755's "basic method".
        This means you can now type Unicode code points consisting of other
        than 4 hex digits. As before, press Ctrl+U in Text tool to start
        Unicode mode. A preview of the current character is shown in the
@@ -174,12 +174,12 @@ Text
 
         * cursor becomes italic (slanted) when in italic text.
 
-     * A text object*s baseline anchor * at the left end of its first
-       character*s baseline * is visualized as a small square mark when the
+     * A text object's baseline anchor -- at the left end of its first
+       character's baseline -- is visualized as a small square mark when the
        text object is selected. This is especially useful when doing baseline
        snapping, alignment, or distribution (see below).
 
-     * Several new text styles are supported but don*t yet have a UI for
+     * Several new text styles are supported but don't yet have a UI for
        setting them: text-align:justify, word-spacing, textpath startOffset,
        block-progression:lr.
 
@@ -246,14 +246,14 @@ Gradients
           color of that object.
 
         * Instead of dragging, you can double-click an object to create a new
-          gradient centered within the object*s bounding box. If you have
+          gradient centered within the object's bounding box. If you have
           several objects selected, or if your selected object is behind
           another one, you can double-click with Ctrl to create gradients on
           selected object(s) without changing selection.
 
-        * The tool*s controls bar lets you choose the type of the newly
+        * The tool's controls bar lets you choose the type of the newly
           created gradients (linear or radial) and whether they will be
-          applied to the objects* fill or stroke.
+          applied to the objects' fill or stroke.
 
         * The selected (blue) on-canvas gradient handle can be nudged by
           arrow keys with all the regular modifiers (Alt to move by 1 screen
@@ -285,14 +285,14 @@ Gradients
            * Swatches dialog.
 
         * Double-clicking any gradient handle will open the Gradient Editor
-          dialog with that handle*s gradient loaded and the corresponding
+          dialog with that handle's gradient loaded and the corresponding
           stop selected in the list.
 
-        * For each gradient, you can choose one of the document*s gradient
+        * For each gradient, you can choose one of the document's gradient
           definitions (sets of color/opacity stops) from the drop-down list
           in the controls bar. If a handle is selected, this list displays
           the gradient attached to that handle; otherwise it shows the
-          gradient of the selected object (or *Multiple gradients* if there
+          gradient of the selected object (or "Multiple gradients" if there
           are different gradients in selection, or if the handle is a merged
           handle with different gradients attached). Correspondingly,
           choosing a gradient definition from the list applies it to the
@@ -345,7 +345,7 @@ Clones, tiling, distributing, unclumping
           hue, saturation, and lightness of the tile color per row or per
           column. You can also set the initial color of the tiles to which
           these alterations will apply. Changing color works only if the
-          clones* original (or some parts of it, if the original is a group)
+          clones' original (or some parts of it, if the original is a group)
           has unset fill or stroke (use the Fill&Stroke dialog to unset
           paint).
 
@@ -358,18 +358,18 @@ Clones, tiling, distributing, unclumping
            * then optionally randomize, invert, or gamma-correct the picked
              value;
 
-           * and finally apply that value to the tile*s probability of
+           * and finally apply that value to the tile's probability of
              presence, size, color, or opacity (or any combinations of
              these).
 
                 This makes it possible to do an infinite variety of effects
                 on drawings (both vector drawings and imported bitmaps), such
-                as tessellated mosaics, *impressionist paint*, geometric
+                as tessellated mosaics, "impressionist paint", geometric
                 grids, color separation lattices, and more (see the
                 Screenshots page on our site). Also, you can use this feature
                 to control the extent and the density of your tiling by
                 preparing a temporary shape and tracing opacity-to-presence
-                over it, or to emulate *object brush* by tiling over a stroke
+                over it, or to emulate "object brush" by tiling over a stroke
                 with a pattern or randomized scattering.
 
         * The new Unclump button attempts to reduce the local unevenness in
@@ -380,7 +380,7 @@ Clones, tiling, distributing, unclumping
           small-scale clumps and preserving large-scale features of the
           tiling. Unclumping can be applied to both randomized and regular
           tilings, changing them both into a characteristic texture which
-          appears random, but not blindly random * very similar to what a
+          appears random, but not blindly random -- very similar to what a
           human would produce if asked to evenly fill a space with random
           dots. As a result, properly unclumped dot tilings remind of
           hand-made engravings.
@@ -405,7 +405,7 @@ Clones, tiling, distributing, unclumping
           1000% of tile size), and the precision of the input fields is
           higher.
 
-        * There*s a mini-statusbar at the bottom of dialog which shows the
+        * There's a mini-statusbar at the bottom of dialog which shows the
           number of tiled clones of the selected object.
 
      * Improvements in the Align & Distribute dialog:
@@ -424,7 +424,7 @@ Clones, tiling, distributing, unclumping
           (non-texts are unaffected by these buttons). Now you can easily
           align or distribute lines of text in different fonts or sizes,
           regardless of whether they have letters with descenders (such as
-          *y* or *j*) or not.
+          "y" or "j") or not.
 
         * All the icons in the dialog are redrawn in a consistent style.
           Buttons are rearranged for clarity. Tooltips are made shorter and
@@ -448,12 +448,12 @@ Clones, tiling, distributing, unclumping
 
         * You can set the row/column spacing explicitly (negative values are
           allowed), or you can make the entire grid squeeze or stretch to
-          exactly fit the current selection*s bounding box.
+          exactly fit the current selection's bounding box.
 
 Effects
 
-     * The Effects menu can be made visible by the checkbox labeled *Enable
-       script effects* on the *Misc* tab of the Inkscape Preferences Dialog.
+     * The Effects menu can be made visible by the checkbox labeled "Enable
+       script effects" on the "Misc" tab of the Inkscape Preferences Dialog.
        This menu is not on by default because of some remaining problems with
        the extensions, but many users report that they are already quite
        usable. Most extensions that ship with Inkscape require Python to be
@@ -481,7 +481,7 @@ Effects
        configured to look for extensions.
 
      * Inkscape now looks for Extensions in both the systemwide Inkscape's
-       share/extensions directory and the user*s extensions directory (e.g.
+       share/extensions directory and the user's extensions directory (e.g.
        ~/.inkscape/extensions on Linux).
 
      * Several new effects, written in Python, ship with Inkscape 0.42:
@@ -624,7 +624,7 @@ Loading, saving, export, command line
 
      * Inkscape can now export documents into LaTeX with PSTricks macros.
 
-     * The new command line option --vacuum-defs performs the *Vacuum Defs*
+     * The new command line option --vacuum-defs performs the "Vacuum Defs"
        command, i.e. removes the unused definitions from the <defs>
        section(s) of the document. If specified with --export-plain-svg, it
        affects the exported plain SVG file; otherwise it replaces the source
@@ -649,19 +649,19 @@ Tools improvements
 
         * Converting a cusp node to smooth or symmetric (via Ctrl+click,
           Shift+S/Shift+Y, or a toolbar button) will, if necessary, convert
-          adjacent path segments to curves and will outset the node*s handles
+          adjacent path segments to curves and will outset the node's handles
           if they were retracted.
 
         * If a node does not show one or both handles (i.e. they are
           retracted), you can drag a handle out by dragging away from the
           node with Shift. This is often more convenient than using the
-          *Convert node to smooth* or *Convert segment to curve* buttons.
+          "Convert node to smooth" or "Convert segment to curve" buttons.
           Unlike before, dragging a node without modifiers, or with any
           modifiers but Shift, will always move the node itself, not its
           retracted handle.
 
         * When several nodes are selected, pressing < or > scales, [ or ]
-          rotates the selected nodes as if they were an *object*, around the
+          rotates the selected nodes as if they were an "object", around the
           center of that object. (This is more consistent with the arrow keys
           which have always moved selected nodes as a whole.) So, for
           example, in a single-path silhouette portrait, you can now select
@@ -689,7 +689,7 @@ Tools improvements
           layers in Selector). This change has no effect for paths with
           single subpath.
 
-        * Until you change a node*s type explicitly, it is presented as a
+        * Until you change a node's type explicitly, it is presented as a
           smooth node if its handles were collinear, and cusp node otherwise
           (not always cusp as before). This means that the majority of nodes
           created by the Freehand tool or the Trace bitmap dialog will behave
@@ -698,10 +698,10 @@ Tools improvements
 
      * In Pen and Pencil tools:
 
-        * What was previously called the *add mode* is now always on in Pen
+        * What was previously called the "add mode" is now always on in Pen
           and Pencil tools, i.e. the selected path always displays the end
           marks. This makes it easy to continue or close the selected path.
-          The *a* key to toggle the add mode is removed.
+          The "a" key to toggle the add mode is removed.
 
         * If you start drawing outside the end marks of the selected path
           then, unless Shift was pressed, that path is deselected and you are
@@ -716,7 +716,7 @@ Tools improvements
 
      * In the Dropper tool:
 
-        * The *pick visible/pick with alpha* switch, previously in the tool
+        * The "pick visible/pick with alpha" switch, previously in the tool
           preferences, is now moved to the Controls panel of the tool.
 
         * Alt+click picks the inverse of the color at point (works with
@@ -735,7 +735,7 @@ Color improvements
      * In the color selector widget, the HSV tab (Hue, Saturation, Value) is
        replaced by HSL (Hue, Saturation, Lightness). The HSL color space is
        similar to HSV but is more convenient because it better reflects the
-       intuitive understanding of what *saturation* and *lightness* are:
+       intuitive understanding of what "saturation" and "lightness" are:
 
         * In HSL, the Saturation component always goes from fully saturated
           color to the equivalent gray (in HSV, with V=max, it goes from
@@ -785,20 +785,20 @@ Miscellaneous usability
      * All controls in Fill & Stroke, Object Properties, and Export dialogs
        now have hot keys.
 
-     * In Document Preferences, there*s a checkbox to enable or disable
+     * In Document Preferences, there's a checkbox to enable or disable
        showing the page shadow. To make this change permanent for all newly
        created documents, change your default template
        (share/templates/default.svg).
 
      * Grid and guide snapping improvements:
 
-        * In the *snap points* mode, a text object now snaps its baseline
+        * In the "snap points" mode, a text object now snaps its baseline
           anchor (the left end of the baseline) to grid or guides. That
           anchor point is visualized as a little square mark when a text
           object is selected.
 
-        * When several objects (or a group) are selected and the *snap
-          points* mode is active, only the outermost points or nodes will
+        * When several objects (or a group) are selected and the "snap
+          points" mode is active, only the outermost points or nodes will
           snap, instead of all points in selection.
 
      * When skewing an object, Ctrl will snap the skew angle to standard
@@ -811,10 +811,10 @@ Miscellaneous usability
        standard icons.svg file in the directory share/inkscape/icons/ under
        the name David_icons.svg. A very simple HOWTO resides in the same
        directory under the name README.icons which contains basic
-       instructions on how to use David*s theme and how to create a new one.
+       instructions on how to use David's theme and how to create a new one.
 
-     * The confusing *(root)* in the layer selector in the statusbar is not
-       shown unless the document contains no layers. The *Go to root* command
+     * The confusing "(root)" in the layer selector in the statusbar is not
+       shown unless the document contains no layers. The "Go to root" command
        is removed from the right-click menu.
 
 Packaging, documentation, examples
@@ -838,8 +838,8 @@ Packaging, documentation, examples
        doc-docbook module in our CVS.
 
      * Inkscape now informs users of the rights granted by the license (GNU
-       GPL) with the new Help menu item, *Modifying or Redistributing
-       Inkscape*. The license is loaded from an SVG file.
+       GPL) with the new Help menu item, "Modifying or Redistributing
+       Inkscape". The license is loaded from an SVG file.
 
      * The Inkscape source tree now contains the spec file for building
        autopackages. Anyone can build a distribution-neutral package by
@@ -860,7 +860,7 @@ Translations
      * All tutorials are translated to Spanish and converted to DocBook XML.
      * There are new Japanese translations of Basic, Advanced, and Shapes
        tutorials (in DocBook XML).
-     * *Basic Tutorial* translated to Catalan.
+     * "Basic Tutorial" translated to Catalan.
      * The Inkscape Windows installer is translated into Catalan, Czech,
        French, German, Italian and Polish.
      * New Czech, Dutch, Polish and Swedish interface translation added.
@@ -883,11 +883,11 @@ SVG/CSS compliance
      * Several CSS properties (stroke-linejoin, stroke-linecap, fill-rule)
        were not inherited properly; fixed.
      * Gradient spread was not inherited from a hreffed gradient.
-     * Element IDs with *.* or *:* characters did not work for xlink:href
+     * Element IDs with "." or ":" characters did not work for xlink:href
        references.
      * http://inkscape.org/cgi-bin/wiki.pl?SVG_Test_Suite_Compliance
        documents our progress in passing the W3C SVG 1.1 Test Suite. At 0.42,
-       we pass 69 tests completely and 25 partially. There*s also a new tool,
+       we pass 69 tests completely and 25 partially. There's also a new tool,
        svg_rendertest available from Inkscape web site, which can
        automatically test SVG rendering by Inkscape and other renderers.
 
@@ -896,11 +896,11 @@ Important bugfixes
      * Several resource leaks are patched that caused resource exhausting and
        eventually freezing on Windows.
      * Memory leaking in the renderer has been reduced significantly.
-     * The annoying *menus under dialogs* bug on Mac OSX is fixed.
+     * The annoying "menus under dialogs" bug on Mac OSX is fixed.
      * Keyboard shortcuts with Latin letters now correctly work in a
        localized keyboard layout (e.g. Cyrillic).
      * Command line export was broken in 0.41, now fixed.
-     * Rendering of round caps and joins on strokes is improved * round caps
+     * Rendering of round caps and joins on strokes is improved -- round caps
        are now actually round. Zero-length paths or dashes with round or
        square caps are now rendered properly.
      * Invalid files with cyclic gradient references no longer cause Inkscape
@@ -920,7 +920,7 @@ Important bugfixes
        others, so it is removed.
      * In several dialogs, staying on top or remembering size/position across
        session was broken. These dialogs are either fixed or (such as the
-       legacy *SPObject properties* dialogs) removed.
+       legacy "SPObject properties" dialogs) removed.
      * The Vacuum Defs command sometimes did not remove all unused
        definitions at the first go, and ignored all but the first <defs>
        section in the document; both issues are fixed now.
@@ -961,16 +961,16 @@ Known issues
 
      * Exporting gradients to PS or EPS does not work for text (unless text
        is converted to path) or for stroke paint, only for fill paint of
-       shapes or paths. Also, the spread property defaults to *pad*, and
-       transparency is lost on PS or EPS export (e.g. you can*t use a
+       shapes or paths. Also, the spread property defaults to "pad", and
+       transparency is lost on PS or EPS export (e.g. you can't use a
        gradient from an opaque blue to transparent blue; as a workaround,
        replace it by a gradient from opaque blue to opaque background color).
      * While text support is overall much better in 0.42 than 0.41, text has
        a number of known areas with incorrect behaviour. For example, manual
        kerning or character rotation do not work in flowed text (this is a
        limitation of the current SVG 1.2 draft); CJK-style vertical text has
-       a number of problems; *non-breaking* space and similar characters
-       don*t behave correctly; and similar.
+       a number of problems; "non-breaking" space and similar characters
+       don't behave correctly; and similar.
      * In Gnome, dialogs are hidden behind the document window when you go
        into full screen mode (this is presumed to be a Gnome problem).
 
