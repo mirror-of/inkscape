@@ -26,15 +26,18 @@ ObjectHierarchy::~ObjectHierarchy() {
     _clear();
 }
 
-bool ObjectHierarchy::contains(SPObject *object) {
-    std::list<Record>::iterator iter;
-    for ( iter = _hierarchy.begin() ; iter != _hierarchy.end() ; ++iter ) {
-        if ( (*iter).object == object ) {
+#if 0 /* unused.  Feel free to remove. */
+bool ObjectHierarchy::contains(SPObject *const object) const {
+    for (std::list<Record>::const_iterator i(_hierarchy.begin()),
+             iEnd(_hierarchy.end());
+         i != iEnd; ++i) {
+        if ( i->object == object ) {
             return true;
         }
     }
     return false;
 }
+#endif
 
 void ObjectHierarchy::clear() {
     _clear();
@@ -182,9 +185,9 @@ void ObjectHierarchy::_detach(ObjectHierarchy::Record const &rec) {
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
