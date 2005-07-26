@@ -78,9 +78,7 @@ class SPView : public GObject {
     }
 
     void emitResized(gdouble width, gdouble height) {
-	/*
 	sp_view_emit_resized((SPView*)this, width, height);
-	*/
     }
 
     void setPosition(gdouble x, gdouble y) {
