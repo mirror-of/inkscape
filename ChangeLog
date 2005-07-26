@@ -2,6 +2,40 @@
 
 	* share/icons/icons.svg: Add icon for connector context.
 
+2005-07-25  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/libnr/nr-pixblock.h:  interface cleanup of NRPixBlock: size and mode
+	  are now named enums, empty is now bool, changes to function interfaces 
+	  because of that, changed C macros to C++ inline functions, changed clean 
+	  flag in some function interfaces from int to bool.
+	* src/libnr/nr-pixblock.cpp:  adaptations due to changes in nr-pixblock.h,
+	  added assert to ...setup_extern() which remains a bit ... risky,
+	* src/display/sp-canvas.cpp: 
+	  made sp_canvas_item_construct() static, inlined two other functions
+	* src/svg-view.cpp: piped emit_resized through C++ façade (incomplete)
+	* src/ui/view/view.h: removed legacyMessageContext() member
+	* src/Doxyfile: added files, and options to collect todo and bugs
+	* src/display/curve.cpp: moved member docs into curve.h
+	* src/event-context.cpp: long line cosmetics, moved a function for clarity
+	* src/sp-offset.h, src/sp-spiral.cpp, src/svg-view.cpp, 
+	  src/libnr/nr-types.h: added editor footer
+	* src/color-rgba.h, src/draw-anchor.h, src/event-context.*, src/knot-*.h, 
+	  src/message-*.h, src/modifier-fns.h, src/nodepath.h, 
+	  src/pencil-context.cpp, src/pen-context.*, src/snap.*, src/sp-gradient.h, 
+	  src/sp-gradient-fns.h, src/sp-item.cpp, src/sp-item-notify-moveto.h, 
+	  src/sp-linear-gradient*, src/sp-offset.*, src/sp-radial-gradient*, 
+	  src/sp-spiral.cpp, src/style.cpp, src/svg-view.cpp, src/verbs.cpp, 
+	  src/dialogs/export.cpp, src/display/bezier-utils.cpp, 
+	  src/display/curve.*, src/diplay/sp-canvas.*, 
+	  src/extension/implementation/plugin*, src/extension/internal/gimpgrad.h, 
+	  src/libnr/nr-matrix.h, src/libnr/nr-matrix-scale-ops.h, 
+	  src/libnr/nr-matrix-translate-ops.h, src/libnr/nr-pixblock.*, 
+	  src/libnr/nr-point.h, src/libnr/nr-rotate.h, src/libnr/nr-rotate-fns.h, 
+	  src/libnr/nr-scale-matrix-ops.h, src/libnr/nr-types.h, 
+	  src/livarot/int-line.h, src/ui/view/view.*:
+	  
+	  made file work with src/Doxygen, doxygen documentation improvements
+
 2005-07-24  Ted Gould  <ted@gould.cx>
 
 	* 0.42 Release
