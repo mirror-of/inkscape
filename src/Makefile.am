@@ -84,6 +84,7 @@ noinst_LIBRARIES =	\
 
 check_LIBRARIES =	\
 	libnr/libtest-nr.a	\
+	svg/libtest-svg.a	\
 	xml/libtest-xml.a
 
 DISTCLEANFILES =	\
@@ -171,6 +172,7 @@ TESTS =	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
 	libnr/test-nr$(EXEEXT)	\
+	svg/test-svg$(EXEEXT)	\
 	util/list-container-test$(EXEEXT)	\
 	xml/test-xml$(EXEEXT)	\
 	xml/quote-test$(EXEEXT)	\
@@ -204,6 +206,7 @@ check_PROGRAMS =	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
 	libnr/test-nr	\
+	svg/test-svg	\
 	util/list-container-test	\
 	xml/test-xml	\
 	xml/quote-test	\
@@ -212,14 +215,24 @@ check_PROGRAMS =	\
 #	io/streamtest
 
 
-test-all.cpp: $(libnr_test_nr_a_SOURCES) $(xml_test_xml_a_SOURCES) $(libnr_test_nr_includes)  $(xml_test_xml_includes)
-	$(top_srcdir)/cxxtest/cxxtestgen.pl --error-printer -root -o test-all.cpp $(libnr_test_nr_includes)  $(xml_test_xml_includes)
+test-all.cpp: \
+		$(libnr_test_nr_a_SOURCES)	\
+		$(svg_test_svg_a_SOURCES)	\
+		$(xml_test_xml_a_SOURCES)	\
+		$(libnr_test_nr_includes)	\
+		$(svg_test_svg_includes)	\
+		$(xml_test_xml_includes)
+	$(top_srcdir)/cxxtest/cxxtestgen.pl --error-printer -root -o test-all.cpp	\
+		$(libnr_test_nr_includes)	\
+		$(svg_test_svg_includes)	\
+		$(xml_test_xml_includes)
 
 test_all_SOURCES = \
 	test-all.cpp
 
 test_all_LDADD =	\
 	$(libnr_test_nr_LDADD)	\
+	$(svg_test_svg_LDADD)	\
 	$(xml_test_xml_LDADD)
 
 

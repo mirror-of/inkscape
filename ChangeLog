@@ -1,3 +1,14 @@
+2005-07-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/svg/stringstream.h, src/svg/stringstream.cpp:
+	  Trim trailing zeros from after the decimal point when writing
+	  float or double to Inkscape::SVGOStringStream.
+	* src/style-test.cpp: Update expected output accordingly.
+	* src/svg/stringstream-test.h: New unit test.
+	* src/Makefile.am, src/svg/Makefile_insert: Add the new unit test.
+	* src/svg/Makefile_insert:
+	  Don't link unused ftos.cpp, but do link new file stringstream.cpp.
+
 2005-07-26  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* share/icons/icons.svg: Add icon for connector context.

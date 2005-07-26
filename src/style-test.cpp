@@ -391,7 +391,7 @@ test_style()
         // initial value "depends on user agent"
         {"display", "inline", "inline", enum_val, display_vals, true},
         {"fill", "#000000", "black", paint_val, NULL, true},
-        {"fill-opacity", "1.0000000", "1", opacity_val, NULL, true},
+        {"fill-opacity", "1", "1", opacity_val, NULL, true},
         {"fill-rule", "nonzero", "nonzero", enum_val, fill_rule_vals, true},
         {"font-family", "Bitstream Vera Sans", "Bitstream Vera Sans", font_family_val, NULL, true},
         // initial value depends on user agent
@@ -406,7 +406,7 @@ test_style()
         {"marker-end", "none", "none", uri_or_enum_val, none_val, true},
         {"marker-mid", "none", "none", uri_or_enum_val, none_val, true},
         {"marker-start", "none", "none", uri_or_enum_val, none_val, true},
-        {"opacity", "1.0000000", "1", opacity_val, NULL, true},
+        {"opacity", "1", "1", opacity_val, NULL, true},
         {"stroke", "none", "none", paint_val, NULL, true},
         {"stroke-dasharray", "none", "none", enum_val, none_val, true},
         // TODO: http://www.w3.org/TR/SVG11/painting.html#StrokeDasharrayProperty
@@ -416,9 +416,9 @@ test_style()
         // delaying fixing it.  It should be changed to SPILength.
         {"stroke-linecap", "butt", "butt", enum_val, linecap_vals, true},
         {"stroke-linejoin", "miter", "miter", enum_val, linejoin_vals, true},
-        {"stroke-miterlimit", "4.0000000", "4", miterlimit_val, NULL, true},
-        {"stroke-opacity", "1.0000000", "1", opacity_val, NULL, true},
-        {"stroke-width", "1.0000000", "1", length_val, NULL, true},
+        {"stroke-miterlimit", "4", "4", miterlimit_val, NULL, true},
+        {"stroke-opacity", "1", "1", opacity_val, NULL, true},
+        {"stroke-width", "1", "1", length_val, NULL, true},
         {"text-anchor", "start", "start", enum_val, text_anchor_vals, true},
         {"visibility", "visible", "visible", enum_val, visibility_vals, true},
         {"writing-mode", "lr-tb", "lr-tb", enum_val, writing_mode_vals, true}
@@ -430,7 +430,7 @@ test_style()
         "font-variant:normal;"
         "font-weight:normal;"
         "font-stretch:normal;"
-        "text-indent:0.0000000;"
+        "text-indent:0;"
         "text-align:start;"
         "text-decoration:none;"
         "line-height:normal;"
@@ -441,23 +441,23 @@ test_style()
         "block-progression:tb;"
         "writing-mode:lr-tb;"
         "text-anchor:start;"
-        "opacity:1.0000000;"
+        "opacity:1;"
         "color:#000000;"
         "fill:#000000;"
-        "fill-opacity:1.0000000;"
+        "fill-opacity:1;"
         "fill-rule:nonzero;"
         "stroke:none;"
-        "stroke-width:1.0000000;"
+        "stroke-width:1;"
         "stroke-linecap:butt;"
         "stroke-linejoin:miter;"
         "marker:none;"
         "marker-start:none;"
         "marker-mid:none;"
         "marker-end:none;"
-        "stroke-miterlimit:4.0000000;"
+        "stroke-miterlimit:4;"
         "stroke-dasharray:none;"
         "stroke-dashoffset:0;"
-        "stroke-opacity:1.0000000;"
+        "stroke-opacity:1;"
         "visibility:visible;"
         "display:inline;"
         "overflow:visible;"
@@ -545,7 +545,7 @@ test_style()
     /* End of invalid style string examples. */
 
 
-#if 0 /* fails because of dashoffset:0 vs dashoffset:0.00000000 */
+#if 1 /* previously failed because of dashoffset:0 vs dashoffset:0.00000000 */
     UTEST_TEST("sp_style_merge_from_style_string(default): ifset") {
         gchar *ifset_str = merge_then_write_string(str0_all_exp, SP_STYLE_FLAG_IFSET);
         UTEST_ASSERT(streq(ifset_str, str0_all_exp));
