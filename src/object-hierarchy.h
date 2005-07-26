@@ -41,10 +41,6 @@ public:
     ObjectHierarchy(SPObject *top=NULL);
     ~ObjectHierarchy();
 
-#if 0 /* unused.  Feel free to remove. */
-    bool contains(SPObject *object) const;
-#endif
-
     sigc::connection connectAdded(const sigc::slot<void, SPObject *> &slot) {
         return _added_signal.connect(slot);
     }

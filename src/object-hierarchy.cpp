@@ -26,19 +26,6 @@ ObjectHierarchy::~ObjectHierarchy() {
     _clear();
 }
 
-#if 0 /* unused.  Feel free to remove. */
-bool ObjectHierarchy::contains(SPObject *const object) const {
-    for (std::list<Record>::const_iterator i(_hierarchy.begin()),
-             iEnd(_hierarchy.end());
-         i != iEnd; ++i) {
-        if ( i->object == object ) {
-            return true;
-        }
-    }
-    return false;
-}
-#endif
-
 void ObjectHierarchy::clear() {
     _clear();
     _changed_signal.emit(NULL, NULL);
