@@ -204,7 +204,9 @@ elif test $CODENAME -eq 1 ; then
     elif test -n "`echo $filename | grep debian`"; then
         # For debian, we have to determine them manually
         case "`cat $filename`" in
-                    testing/unstable) codename='woody' ;;
+                    testing/unstable) codename='etch/sid' ;;
+                    3.1) codename='sarge' ;;
+                    3.0) codename='woody' ;;
                     2.2) codename='potato' ;;
                     2.1) codename='slink' ;;
                     2.0) codename='hamm' ;;
