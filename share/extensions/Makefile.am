@@ -37,7 +37,9 @@ extensions = \
 	simplepath.py \
 	simplestyle.py \
 	straightseg.py \
-	wavy.py
+	wavy.py \
+	whirl.py \
+	addnodes.py
 
 otherstuff =
 
@@ -69,7 +71,9 @@ modules = \
 	radiusrand.inx \
 	rtree.inx \
 	straightseg.inx \
-	wavy.inx
+	wavy.inx \
+	whirl.inx \
+	addnodes.inx
 
 extension_SCRIPTS = \
 	$(extensions)
