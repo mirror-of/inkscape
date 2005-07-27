@@ -1,3 +1,24 @@
+2005-07-27  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/Doxyfile: added 10 further files to the scanned list
+	* src/gc-anchored.h, src/gc-managed.h, src/object-hierarchy.h, 
+	  src/pencil-context.h, src/selection.h, src/sp-object.h, src/sp-spiral.h, 
+	  src/svg-view.h, src/verbs.h, src/livarot/float-line.h, src/util/list.h, 
+	  src/widgets/paint-selector.h, src/xml/repr.h: 
+	  made file work with src/Doxyfile
+	* src/livarot/int-line.h, src/livarot/float-line.h: 
+	  moved part of documentation into *.cpp file
+	* src/gc-anchored.h, src/knot-holder-entity.h, src/nodepath.h, 
+	  src/pen-context.h, src/pencil-context.h, src/selection.h, 
+	  src/sp-gradient.h, src/sp-gradient.cpp, src/sp-item.h, src/sp-object.h, 
+	  src/sp-spiral.h, src/style.h, src/svg-view.h, src/extension/extension.h, 
+	  src/libnr/nr-matrix.h, src/livarot/int-line.h, src/livarot/int-line.cpp, 
+	  src/livarot/float-line.h, src/livarot/float-line.cpp, 
+	  src/livarot/sweep-event.h, src/livarot/sweep-event-queue.h, 
+	  src/util/list.h, src/widgets/paint-selector.h, src/xml/repr.h, 
+	  src/xml/repr.cpp: documentation improvements
+	* src/sp-item.h: added editor footer
+	
 2005-07-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/svg/stringstream.h, src/svg/stringstream.cpp:
