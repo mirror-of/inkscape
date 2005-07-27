@@ -400,6 +400,8 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
     double size = 0;
     double letterspacing = 0;
     double linespacing = 0;
+    bool linespacing_normal = false;
+    bool letterspacing_normal = false;
 
     double size_prev = 0;
     double letterspacing_prev = 0;
@@ -422,13 +424,25 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
 
         texts ++;
         size += style->font_size.computed; // FIXME: we assume non-% units here
-        letterspacing += style->letter_spacing.computed; // FIXME: we assume non-% units here
+        if (style->letter_spacing.normal) {
+            if (!different && (letterspacing_prev == 0 || letterspacing_prev == letterspacing))
+                letterspacing_normal = true;
+        } else {
+            letterspacing += style->letter_spacing.computed; // FIXME: we assume non-% units here
+            letterspacing_normal = false;
+        }
 
         double linespacing_current; 
-        if (style->line_height.unit == SP_CSS_UNIT_PERCENT || style->font_size.computed == 0) {
+        if (style->line_height.normal) {
+            linespacing_current = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+            if (!different && (linespacing_prev == 0 || linespacing_prev == linespacing_current))
+                linespacing_normal = true;
+        } else if (style->line_height.unit == SP_CSS_UNIT_PERCENT || style->font_size.computed == 0) {
             linespacing_current = style->line_height.value;
+            linespacing_normal = false;
         } else { // we need % here
             linespacing_current = style->line_height.computed / style->font_size.computed;
+            linespacing_normal = false;
         }
         linespacing += linespacing_current;
 
@@ -458,7 +472,9 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
 
     style_res->font_size.computed = size;
     style_res->font_size.type = SP_FONT_SIZE_LENGTH;
+    style_res->letter_spacing.normal = letterspacing_normal;
     style_res->letter_spacing.computed = letterspacing;
+    style_res->line_height.normal = linespacing_normal;
     style_res->line_height.computed = linespacing;
 
     if (texts > 1) {

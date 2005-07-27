@@ -752,6 +752,8 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
         GtkWidget *combo = (GtkWidget*)g_object_get_data ( G_OBJECT (dlg), "line_spacing" );
         double height;
         if (query->line_height.normal) height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+        else if (query->line_height.unit == SP_CSS_UNIT_PERCENT)
+            height = query->line_height.value;
         else height = query->line_height.computed;
         gchar *sstr = g_strdup_printf ("%d%%", (int) floor(height * 100 + 0.5));
         gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, sstr);
