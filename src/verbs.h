@@ -1,7 +1,7 @@
 #ifndef SEEN_SP_VERBS_H
 #define SEEN_SP_VERBS_H
 
-/**
+/** \file
  * \brief Frontend to actions
  *
  * Author:
