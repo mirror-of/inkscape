@@ -6,11 +6,9 @@
 
 /** \file
  * Coverage with integer boundaries.
- *
- * This is what we want for actual rasterization. It contains the same 
- * stuff as FloatLigne, but technically only the Copy() functions are used.
  */
 
+/// A run with integer boundaries.
 struct int_ligne_run {
     int st;
     int en;
@@ -18,6 +16,7 @@ struct int_ligne_run {
     float ven;
 };
 
+/// Integer boundary.
 struct int_ligne_bord {
     int pos;
     bool start;
@@ -27,7 +26,12 @@ struct int_ligne_bord {
     int next;
 };
 
-/// Coverage with integer boundaries.
+/**
+ * Coverage with integer boundaries.
+ *
+ * This is what we want for actual rasterization. It contains the same 
+ * stuff as FloatLigne, but technically only the Copy() functions are used.
+ */
 class IntLigne {
 public:
     
@@ -56,15 +60,10 @@ public:
 
     void Booleen(IntLigne* a, IntLigne* b, BooleanOp mod);
 
-    // copy another IntLigne
     void Copy(IntLigne* a);
-    // copy a FloatLigne's runs, ie compute non-overlapping runs with integer boundaries from a set
-    // of runs with floating-point boundaries
     void Copy(FloatLigne* a);
-    // transform a line of bits into pixel coverage values.
-    // this is where you go from supersampled data to alpha values
     void Copy(BitLigne* a);
-    void Copy(int nbSub,BitLigne **a); // nbSub is the number of BitLigne in the array "a"
+    void Copy(int nbSub,BitLigne **a); 
 
     void Enqueue(int no);
     void Dequeue(int no);
@@ -90,8 +89,6 @@ public:
         return ((at - ps) * ve + (pe - at) * vs) / (pe - ps);
     };
 
-    // rasterization.
-    // the parameters have the same meaning as in the AlphaLigne class
     void Raster(raster_info &dest, void *color, RasterInRunFunc worker);
 };
 
