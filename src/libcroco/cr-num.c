@@ -108,9 +108,9 @@ cr_num_to_string (CRNum * a_this)
         } else {
                 /* We can't use g_ascii_dtostr, because that sometimes uses
                    e notation (which wouldn't be a valid number in CSS). */
-                size_t const buflen = 23;  /* fairly arbitrary. */
+                size_t const buflen = 35;  /* fairly arbitrary. */
                 tmp_char1 = g_malloc (buflen);
-                g_ascii_formatd (tmp_char1, buflen, "%.5f", a_this->val);
+                g_ascii_formatd (tmp_char1, buflen, "%.17f", a_this->val);
         }
 
         g_return_val_if_fail (tmp_char1, NULL);
