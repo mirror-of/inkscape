@@ -276,7 +276,15 @@ number_val(char const prop[], double const min, double const max, double const e
 {
     assert(min <= max);
     /* TODO */
-    double const propns[] = {0., 1e-7, 1e-5, 0.13, 1/7., 2/3., 10/11., 1.0};
+    double const propns[] = {0., .5, .25, .125,
+                             (1.0 / (1 << 7)),
+                             (1.0 / (1 << 8)),
+                             (1.0 / (1 << 15)),
+                             (1.0 / (1 << 23)),
+                             (1.0 / (1 << 24)),
+                             (1.0 / (1 << 25)),
+                             (1.0 / (1 << 26)),
+                             1e-5, 0.13, 1/7., 2/3., 10/11., 1.0};
     size_t const prop_len = std::strlen(prop);
     for (unsigned i = 0; i < G_N_ELEMENTS(propns); ++i) {
         double const propn = propns[i];
@@ -285,7 +293,9 @@ number_val(char const prop[], double const min, double const max, double const e
                              : ( propn == 1
                                  ? max
                                  : min + (propns[i] * (max - min)) ) );
-        char *prop_eq_val = g_strdup_printf("%s:%.17g", prop, val);
+        char val_str[35];
+        g_ascii_formatd(val_str, sizeof(val_str), "%.17f", val);
+        char *prop_eq_val = g_strdup_printf("%s:%s", prop, val_str);
         gchar *ifset_str = merge_then_write_string(prop_eq_val, SP_STYLE_FLAG_IFSET);
         UTEST_ASSERT(strneq(ifset_str, prop_eq_val, prop_len + 1));
         char *endptr;
@@ -356,7 +366,7 @@ static void
 opacity_val(char const prop[], char const *const dummy_vals[])
 {
     assert(dummy_vals == NULL);
-    number_val(prop, 0., 1., 1e-7);
+    number_val(prop, 0., 1., 1.0 / (1 << 24));
      /* todo: exponential notation */
 }
 
