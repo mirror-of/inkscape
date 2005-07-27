@@ -114,9 +114,11 @@ if test "x$gc_ok" = "xyes"; then
 			#else
 			# include <gc.h>
 			#endif
+            #include <stdio.h>
 			extern unsigned GC_version;
 			int main(void){
 				unsigned min = ((6 << 16) | (4 << 8) | 0);
+                printf("%d.%d.%d ",GC_version >> 16, (GC_version >> 8) & 0xFF, GC_version & 0xFF);
 				if (GC_version>=min) return 0;
 				return 1;
 			}]])],
