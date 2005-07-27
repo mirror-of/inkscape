@@ -76,6 +76,21 @@ if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
 
+dnl Handle possible dlopen requirement for libgc
+dnl Isn't this internal to something in autoconf?  Couldn't find it...
+AC_CHECK_LIB([dld], [shl_load], [lt_cv_dlopen="shl_load" lt_cv_dlopen_libs="-dld"], [AC_CHECK_FUNC([dlopen],
+          [lt_cv_dlopen="dlopen"],
+      [AC_CHECK_LIB([dl], [dlopen],
+            [lt_cv_dlopen="dlopen" lt_cv_dlopen_libs="-ldl"],
+        [AC_CHECK_LIB([svld], [dlopen],
+              [lt_cv_dlopen="dlopen" lt_cv_dlopen_libs="-lsvld"],
+          [AC_CHECK_LIB([dld], [dld_link],
+                [lt_cv_dlopen="dld_link" lt_cv_dlopen_libs="-dld"])
+          ])
+        ])
+      ])
+    ])
+
 AC_CHECK_HEADERS([gc.h gc/gc.h],
                  [
 		    # To test for the different required libs, I have to
@@ -114,11 +129,11 @@ if test "x$gc_ok" = "xyes"; then
 			#else
 			# include <gc.h>
 			#endif
-            #include <stdio.h>
+			#include <stdio.h>
 			extern unsigned GC_version;
 			int main(void){
 				unsigned min = ((6 << 16) | (4 << 8) | 0);
-                printf("%d.%d.%d ",GC_version >> 16, (GC_version >> 8) & 0xFF, GC_version & 0xFF);
+				printf("%d.%d.%d ",GC_version >> 16, (GC_version >> 8) & 0xFF, GC_version & 0xFF);
 				if (GC_version>=min) return 0;
 				return 1;
 			}]])],
