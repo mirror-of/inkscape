@@ -23,7 +23,7 @@ namespace NR {
 class Point;
 }
 
-
+/// SPKnotHolderEntity definition. 
 struct SPKnotHolderEntity {
     SPKnot *knot;
 

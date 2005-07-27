@@ -75,19 +75,6 @@ namespace Inkscape {
 namespace NodePath {
 
 /**
- * In the following data model.   Nodepaths are made up of subpaths which
- * are comprised of nodes.
- *
- * Nodes are linked thus:
- *<pre>
- *        n            other
- *  node----->nodeside------> node
- *
- *</pre>
- *
- */
-
-/**
  * This is a node on a subpath
  */
 class Path;
@@ -107,6 +94,14 @@ class Node;
 
 /**
  *  This is a collection of subpaths which contain nodes
+ *
+ * In the following data model.   Nodepaths are made up of subpaths which
+ * are comprised of nodes.
+ *
+ * Nodes are linked thus:
+ * \verbatim
+           n              other
+    node -----> nodeside ------> node            \endverbatim
  */
 class Path {
  public:
@@ -131,7 +126,7 @@ class Path {
 
 
 /**
- *  This is the lowest list item.  A simple list of nodes
+ *  This is the lowest list item, a simple list of nodes.
  */
 class SubPath {
  public:
@@ -150,7 +145,7 @@ class SubPath {
 
 
 /**
- *  What kind of node is this?  This the value for the node->type
+ *  What kind of node is this?  This is the value for the node->type
  *  field.  NodeType indicates the degree of continuity required for
  *  the node.  I think that the corresponding integer indicates which
  *  derivate is connected. (Thus 2 means that the node is continuous

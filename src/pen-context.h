@@ -42,6 +42,7 @@ struct SPPenContext : public SPDrawContext {
     SPCanvasItem *c0, *c1, *cl0, *cl1;
 };
 
+/// The SPPenContext vtable (empty).
 struct SPPenContextClass : public SPEventContextClass { };
 
 GType sp_pen_context_get_type();

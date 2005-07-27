@@ -1168,6 +1168,7 @@ sp_gradient_set_gs2d_matrix(SPGradient *gr, NR::Matrix const &ctm,
 
 class SPLGPainter;
 
+/// A context with linear gradient, painter, and gradient renderer.
 struct SPLGPainter {
     SPPainter painter;
     SPLinearGradient *lg;
@@ -1427,6 +1428,7 @@ sp_lg_fill(SPPainter *painter, NRPixBlock *pb)
 
 class SPRGPainter;
 
+/// A context with radial gradient, painter, and gradient renderer.
 struct SPRGPainter {
     SPPainter painter;
     SPRadialGradient *rg;
