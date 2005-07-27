@@ -47,9 +47,30 @@ struct SPIFloat {
     float value;
 };
 
-#define SP_SCALE24_MAX ((1 << 24) - 1)
-#define SP_SCALE24_TO_FLOAT(v) ((float) ((double) (v) / SP_SCALE24_MAX))
-#define SP_SCALE24_FROM_FLOAT(v) ((int) ((v) * ((double) SP_SCALE24_MAX + 0.9999)))
+/*
+ * One might think that the best value for SP_SCALE24_MAX would be ((1<<24)-1), which allows the
+ * greatest possible precision for fitting [0, 1] fractions into 24 bits.
+ *
+ * However, in practice, that gives a problem with 0.5, which falls half way between two fractions
+ * of ((1<<24)-1).  What's worse is that casting double(1<<23) / ((1<<24)-1) to float on x86
+ * produces wrong rounding behaviour, resulting in a fraction of ((1<<23)+2.0f) / (1<<24) rather
+ * than ((1<<23)+1.0f) / (1<<24) as one would expect, let alone ((1<<23)+0.0f) / (1<<24) as one
+ * would ideally like for this example.
+ *
+ * The value (1<<23) is thus best if one considers float conversions alone.
+ *
+ * The value 0xff0000 can exactly represent all 8-bit alpha channel values,
+ * and can exactly represent all multiples of 0.1.  I haven't yet tested whether
+ * rounding bugs still get in the way of conversions to & from float, but my instinct is that
+ * it's fairly safe because 0xff fits three times inside float's significand.
+ *
+ * We should probably use the value 0xffff00 once we support 16 bits per channel and/or LittleCMS,
+ * though that might need to be accompanied by greater use of double instead of float for
+ * colours and opacities, to be safe from rounding bugs.
+ */
+#define SP_SCALE24_MAX (0xff0000)
+#define SP_SCALE24_TO_FLOAT(v) ((double) (v) / SP_SCALE24_MAX)
+#define SP_SCALE24_FROM_FLOAT(v) unsigned(((v) * SP_SCALE24_MAX) + .5)
 
 /// 24 bit data type internal to SPStyle.
 struct SPIScale24 {

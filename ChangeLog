@@ -1,3 +1,11 @@
+2005-07-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/style.h (SP_SCALE24_MAX): Change from 0xffffff to 0xff0000,
+	  and add documentation for choice of value.
+	  (SP_SCALE24_TO_FLOAT) Return a double instead of a float.
+	  (SP_SCALE24_FROM_FLOAT) Change rounding behaviour.
+	  These changes are intended to combat float rounding bugs on x86.
+
 2005-07-27  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/Doxyfile: added 10 further files to the scanned list
@@ -18,7 +26,7 @@
 	  src/util/list.h, src/widgets/paint-selector.h, src/xml/repr.h, 
 	  src/xml/repr.cpp: documentation improvements
 	* src/sp-item.h: added editor footer
-	
+
 2005-07-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/svg/stringstream.h, src/svg/stringstream.cpp:
