@@ -25,6 +25,8 @@ INPUT = \
 	extension/implementation/plugin.h	\
 	extension/internal/gimpgrad.h	\
 	extension/internal/gimpgrad.cpp	\
+	gc-anchored.h   \
+	gc-managed.h    \
 	geom.cpp	\
 	helper/action.h	\
 	knot-enums.h	\
@@ -51,9 +53,12 @@ INPUT = \
 	message-stack.h	\
 	modifier-fns.h	\
 	nodepath.h	\
+	object-hierarchy.h  \
 	pen-context.cpp	\
 	pen-context.h	\
+	pencil-context.h	\
 	pencil-context.cpp	\
+	selection.h     \
 	snap.cpp	\
 	snap.h	\
 	style.cpp	\
@@ -66,20 +71,25 @@ INPUT = \
 	sp-item.h	\
 	sp-linear-gradient-fns.h	\
 	sp-linear-gradient.h	\
+	sp-object.h     \
 	sp-offset.h  	\
 	sp-offset.cpp	\
 	sp-radial-gradient-fns.h	\
 	sp-radial-gradient.h	\
+	sp-spiral.h	\
 	sp-spiral.cpp	\
 	svg-view.cpp    \
 	svg-view.h      \
 	ui/view/view.h  \
 	ui/view/view.cpp  \
+	util/list.h     \
 	verbs.h  	\
 	verbs.cpp	\
+	widgets/paint-selector.h	\
 	widgets/paint-selector.cpp	\
 	xml/quote.cpp	\
 	xml/repr-util.cpp	\
+	xml/repr.h      \
 	xml/repr.cpp
 
 # Uncomment this to treat undocumented things as if they had an empty
