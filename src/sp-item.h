@@ -28,16 +28,6 @@
 namespace Inkscape { class URIReference; }
 class SPGuideConstraint;
 
-/* fixme: This is just placeholder */
-/*
- * Plan:
- * We do extensible event structure, that hold applicable (ui, non-ui)
- * data pointers. So it is up to given object/arena implementation
- * to process correct ones in meaningful way.
- * Also, this probably goes to SPObject base class
- *
- */
-
 enum {
 	SP_EVENT_INVALID,
 	SP_EVENT_NONE,
@@ -46,6 +36,16 @@ enum {
 	SP_EVENT_MOUSEOUT
 };
 
+/**
+ * Event structure.
+ * 
+ * \todo This is just placeholder. Plan:
+ * We do extensible event structure, that hold applicable (ui, non-ui)
+ * data pointers. So it is up to given object/arena implementation
+ * to process correct ones in meaningful way.
+ * Also, this probably goes to SPObject base class.
+ *
+ */
 struct SPEvent {
 	unsigned int type;
 	gpointer data;
@@ -53,6 +53,7 @@ struct SPEvent {
 
 class SPItemView;
 
+/// SPItemView 
 struct SPItemView {
 	SPItemView *next;
 	unsigned int flags;
@@ -67,20 +68,22 @@ struct SPItemView {
 
 #define SP_ITEM_SHOW_DISPLAY (1 << 0)
 
-/*
+/**
  * Flag for referenced views (i.e. clippaths, masks and patterns); always display
  */
 #define SP_ITEM_REFERENCE_FLAGS SP_ITEM_SHOW_DISPLAY
 
 class SPItemCtx;
 
+/// Contains transformations to document/viewport and the viewport size.
 struct SPItemCtx {
+        /** Unused */
 	SPCtx ctx;
-	/* Item to document transformation */
+	/** Item to document transformation */
 	NR::Matrix i2doc;
-	/* Viewport size */
+	/** Viewport size */
 	NRRect vp;
-	/* Item to viewport transformation */
+	/** Item to viewport transformation */
 	NR::Matrix i2vp;
 };
 
@@ -130,31 +133,32 @@ struct SPItem : public SPObject {
 
 typedef std::back_insert_iterator<std::vector<NR::Point> > SnapPointsIter;
 
+/// The SPItem vtable.
 struct SPItemClass {
 	SPObjectClass parent_class;
 
-	/* BBox union in given coordinate system */
+	/** BBox union in given coordinate system */
 	void (* bbox) (SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 
-	/* Printing method. Assumes ctm is set to item affine matrix */
-	/* fixme: Think about it, and maybe implement generic export method instead (Lauris) */
+	/** Printing method. Assumes ctm is set to item affine matrix */
+	/* \todo Think about it, and maybe implement generic export method instead (Lauris) */
 	void (* print) (SPItem *item, SPPrintContext *ctx);
 
-	/* Give short description of item (for status display) */
+	/** Give short description of item (for status display) */
 	gchar * (* description) (SPItem * item);
 
 	NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 	void (* hide) (SPItem *item, unsigned int key);
 
-	/* Write to an iterator the points that should be considered for snapping
-	** as the item's `nodes'.
+	/** Write to an iterator the points that should be considered for snapping
+	* as the item's `nodes'.
 	*/
         void (* snappoints) (SPItem const *item, SnapPointsIter p);
 
-	/* Apply the transform optimally, and return any residual transformation */
+	/** Apply the transform optimally, and return any residual transformation */
 	NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
 
-	/* Emit event, if applicable */
+	/** Emit event, if applicable */
 	gint (* event) (SPItem *item, SPEvent *event);
 };
 
@@ -172,7 +176,7 @@ unsigned sp_item_pos_in_parent(SPItem *item);
 gchar * sp_item_description (SPItem * item);
 void sp_item_invoke_print (SPItem *item, SPPrintContext *ctx);
 
-/* Shows/Hides item on given arena display list */
+/** Shows/Hides item on given arena display list */
 unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
@@ -214,7 +218,7 @@ NR::Matrix matrix_from_desktop (NR::Matrix m, SPItem const *item);
  * for a description of `Desktop coordinates'; though see also mental's comment
  * at the top of that file.
  *
- * Returns TRANSFORM.
+ * \return TRANSFORM.
  */
 NR::Matrix sp_item_i2d_affine(SPItem const *item);
 NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *transform);
@@ -231,3 +235,14 @@ int sp_item_repr_compare_position(SPItem *first, SPItem *second);
 SPItem *sp_item_first_item_child (SPObject *obj);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
