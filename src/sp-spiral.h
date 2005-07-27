@@ -1,7 +1,7 @@
 #ifndef __SP_SPIRAL_H__
 #define __SP_SPIRAL_H__
 
-/*
+/** \file
  * <sodipodi:spiral> implementation
  *
  * Authors:
@@ -35,15 +35,19 @@
 class SPSpiral;
 class SPSpiralClass;
 
+/**
+ * A spiral Shape.
+ *
+ * The Spiral shape is defined as:
+ * \verbatim
+   x(t) = rad * t^exp cos(2 * Pi * revo*t + arg) + cx
+   y(t) = rad * t^exp sin(2 * Pi * revo*t + arg) + cy    \endverbatim
+ * where spiral curve is drawn for {t | t0 <= t <= 1}. The  rad and arg 
+ * parameters can also be represented by transformation. 
+ *
+ * \todo Should I remove these attributes?
+ */
 struct SPSpiral : public SPShape {
-	/*
-	 * Spiral shape is defined as:
-	 * x(t) = rad * t^exp cos(2 * Pi * revo*t + arg) + cx
-	 * y(t) = rad * t^exp sin(2 * Pi * revo*t + arg) + cy
-	 * where spiral curve is drawn for {t | t0 <= t <= 1}.
-	 * rad and arg parameters can also be represented by
-	 * transformation. shoud I remove these attributes?
-	 */
 	float cx, cy;
 	float exp; /* Spiral expansion factor */
 	float revo; /* Spiral revolution factor */
@@ -52,6 +56,7 @@ struct SPSpiral : public SPShape {
 	float t0;
 };
 
+/// The SPSpiral vtable.
 struct SPSpiralClass {
 	SPShapeClass parent_class;
 };

@@ -1,7 +1,7 @@
 #ifndef __SP_SVG_VIEW_H__
 #define __SP_SVG_VIEW_H__
 
-/*
+/** \file
  * Generic SVG view and widget
  *
  * Authors:
@@ -29,7 +29,9 @@ class SPSVGViewClass;
 void sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale);
 void sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect, gdouble width, gdouble height);
 
-
+/**
+ * Generic SVG view.
+ */
 struct SPSVGView : public SPView {
     public:
 	unsigned int dkey;
@@ -44,16 +46,19 @@ struct SPSVGView : public SPView {
 	gdouble width, height;
 
     // C++ Wrappers to functions
+    /// Rescales SPSVGView to given proportions.
     void setScale(gdouble hscale, gdouble vscale) {
 	sp_svg_view_set_scale(this, hscale, vscale);
     }
 
+    /// Rescales SPSVGView and keeps aspect ratio.
     void setRescale(gboolean rescale, gboolean keepAspect, gdouble width, gdouble height) {
 	sp_svg_view_set_rescale(this, rescale, keepAspect, width, height);
     }
 
 };
 
+/// The SPSVGView vtable.
 struct SPSVGViewClass {
 	SPViewClass parent_class;
 };
@@ -75,7 +80,9 @@ class SPSVGViewWidgetClass;
 
 void sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, gboolean resize, gdouble width, gdouble height);
 
-
+/**
+ * An SPSVGViewWidget is an SVG view together with a canvas.
+ */
 struct SPSVGViewWidget {
     public:
 	SPViewWidget widget;
@@ -88,11 +95,13 @@ struct SPSVGViewWidget {
 	gdouble maxwidth, maxheight;
 
     // C++ Wrappers
+    /// Flags the SPSVGViewWidget to have its size changed with Gtk.
     void setResize(gboolean resize, gdouble width, gdouble height) {
 	sp_svg_view_widget_set_resize(this, resize, width, height);
     }
 };
 
+/// The SPSVGViewWidget vtable.
 struct SPSVGViewWidgetClass {
 	SPViewWidgetClass parent_class;
 };

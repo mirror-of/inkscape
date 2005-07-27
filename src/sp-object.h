@@ -1,7 +1,7 @@
 #ifndef __SP_OBJECT_H__
 #define __SP_OBJECT_H__
 
-/*
+/** \file
  * Abstract base class for all nodes
  *
  * Authors:
@@ -94,6 +94,7 @@ typedef enum {
 
 class SPException;
 
+/// An attempt to implement exceptions, unused?
 struct SPException {
     SPExceptionType code;
 };
@@ -103,8 +104,8 @@ struct SPException {
 
 class SPCtx;
 
+/// Unused
 struct SPCtx {
-    /* Unused */
     unsigned int flags;
 };
 
@@ -114,6 +115,8 @@ enum {
 };
 
 class SPIXmlSpace;
+
+/// Internal class consisting of two bits.
 struct SPIXmlSpace {
     guint set : 1;
     guint value : 1;
@@ -134,6 +137,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner);
 SPObject *sp_object_href(SPObject *object, gpointer owner);
 SPObject *sp_object_hunref(SPObject *object, gpointer owner);
 
+/// A refcounting tree node object.
 struct SPObject : public GObject {
     enum CollectionPolicy {
         COLLECT_WITH_PARENT,
@@ -167,11 +171,13 @@ struct SPObject : public GObject {
      */
     SPStyle *style;
 
+    /// Switch containing next() method.
     struct ParentIteratorStrategy {
         static SPObject const *next(SPObject const *object) {
             return object->parent;
         }
     };
+    /// Switch containing next() method.
     struct SiblingIteratorStrategy {
         static SPObject const *next(SPObject const *object) {
             return object->next;
@@ -442,6 +448,7 @@ struct SPObject : public GObject {
     mutable gchar *_default_label;
 };
 
+/// The SPObject vtable.
 struct SPObjectClass {
     GObjectClass parent_class;
 
