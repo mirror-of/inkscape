@@ -119,13 +119,17 @@ private:
                               extension */
 
 public:
-    class param_wrong_type {}; /**< An error class for when a parameter is
-                                    called on a type it is not */
-    class param_not_exist {};  /**< An error class for when a parameter is
-                                    looked for that just simply doesn't exist */
-    class no_overwrite {};     /**< An error class for when a filename
-                                    already exists, but the user doesn't
-                                    want to overwrite it */
+    /** An error class for when a parameter is called on a type it is not */
+    class param_wrong_type {};
+    
+    /** An error class for when a parameter is looked for that just 
+     * simply doesn't exist */
+    class param_not_exist {};
+    
+    /** An error class for when a filename already exists, but the user 
+     * doesn't want to overwrite it */
+    class no_overwrite {};
+
 private:
     void             make_param       (Inkscape::XML::Node * paramrepr);
 #if 0

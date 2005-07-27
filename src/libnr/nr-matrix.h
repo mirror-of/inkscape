@@ -24,6 +24,8 @@
 #include <libnr/nr-scale.h>
 #include <libnr/nr-translate.h>
 
+/// NRMatrix is the obsolete form of NR::Matrix.
+/// It consists of six NR::Coord values.
 struct NRMatrix {
     NR::Coord c[6];
 
@@ -67,10 +69,10 @@ namespace NR {
  *    p = ( p[X] p[Y]  1  )
  *
  * to be right-multiplied by transformation matrices
- *
- *  c[] = | c[0] c[1]  0  |
- *        | c[2] c[3]  0  |
- *        | c[4] c[5]  1  |
+ * \verbatim
+    c[] = | c[0] c[1]  0  |
+          | c[2] c[3]  0  |
+          | c[4] c[5]  1  |                           \endverbatim
  *
  * (so the columns of the matrix correspond to the columns (elements) of the result,
  * and the rows of the matrix correspond to columns (elements) of the "input").
@@ -298,7 +300,6 @@ class Matrix {
      */
     void set_identity();
 	
-    // What do these do?  some kind of norm?
     /**
      *
      */

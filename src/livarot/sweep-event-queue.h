@@ -1,6 +1,8 @@
 #ifndef SEEN_LIVAROT_SWEEP_EVENT_QUEUE_H
 #define SEEN_LIVAROT_SWEEP_EVENT_QUEUE_H
-/** \file */
+/** \file 
+ * A container of intersection events.
+ */
 
 #include <libnr/nr-forward.h>
 class SweepEvent;
@@ -21,11 +23,11 @@ public:
 
     int size() const { return nbEvt; }
 
-    // look for the topmost intersection in the heap
+    /// Look for the topmost intersection in the heap
     bool peek(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr);
-    // extract the topmost intersection from the heap
+    /// Extract the topmost intersection from the heap
     bool extract(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr);
-    // add one intersection in the binary heap
+    /// Add one intersection in the binary heap
     SweepEvent *add(SweepTree *iLeft, SweepTree *iRight, NR::Point &iPt, double itl, double itr);
 
     void remove(SweepEvent *e);

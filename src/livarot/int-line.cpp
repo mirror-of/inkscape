@@ -1,6 +1,8 @@
 /**
  *  \file livarot/int-line.cpp
  *
+ * Implementation of coverage with integer boundaries.
+ *
  *  \author Fred
  *
  *  public domain
@@ -54,6 +56,7 @@ int IntLigne::AddBord(int spos, float sval, int epos, float eval)
     if ( nbBord + 1 >= maxBord ) {
         maxBord = 2 * nbBord + 2;
         bords = (int_ligne_bord *) g_realloc(bords, maxBord * sizeof(int_ligne_bord));
+    
     }
     
     int n = nbBord++;
@@ -429,7 +432,12 @@ void IntLigne::Booleen(IntLigne *a, IntLigne *b, BooleanOp mod)
     }
 }
 
-// supersampled to alpha value. see the other Copy(int nbSub,BitLigne* *a)
+/**
+ * Transform a line of bits into pixel coverage values.
+ *
+ * This is where you go from supersampled data to alpha values.
+ * \see IntLigne::Copy(int nbSub,BitLigne* *a).
+ */
 void IntLigne::Copy(BitLigne* a)
 {
     if ( a->curMax <= a->curMin ) {
@@ -505,11 +513,16 @@ void IntLigne::Copy(BitLigne* a)
     }
 }
 
-
-
-// alpha values are computed from supersampled data, so we have to scan the BitLigne left to right, 
-// summing the bits in each pixel. the alpha value is then "number of bits"/(nbSub*nbSub)"
-// full bits and partial bits are treated as equals because the method produces ugly results otherwise
+/**
+ * Transform a line of bits into pixel coverage values.
+ *
+ * Alpha values are computed from supersampled data, so we have to scan the 
+ * BitLigne left to right, summing the bits in each pixel. The alpha value 
+ * is then "number of bits"/(nbSub*nbSub)". Full bits and partial bits are 
+ * treated as equals because the method produces ugly results otherwise.
+ *
+ * \param nbSub Number of BitLigne in the array "a".
+ */
 void IntLigne::Copy(int nbSub, BitLigne **as)
 {
     if ( nbSub <= 0 ) {
@@ -760,7 +773,7 @@ void IntLigne::Copy(int nbSub, BitLigne **as)
     }
 }
 
-
+/// Copy another IntLigne
 void IntLigne::Copy(IntLigne *a)
 {
     if ( a->nbRun <= 0 ) {
@@ -778,12 +791,19 @@ void IntLigne::Copy(IntLigne *a)
 }
 
 
-// go from runs with floating-point boundaries to integer boundaries:
-// that involves replacing floating-point boundaries that are not integer by single-pixel runs
-// so this function contains plenty of rounding and float->integer conversion (read: time-consuming)
-// Optimization Questions:
-//   * Why is this called so often compared with the other Copy() routines?
-//   * How does AddRun() look for optimization potential?
+/** 
+ * Copy a FloatLigne's runs.
+ *
+ * Compute non-overlapping runs with integer boundaries from a set of runs 
+ * with floating-point boundaries. This involves replacing floating-point 
+ * boundaries that are not integer by single-pixel runs, so this function 
+ * contains plenty of rounding and float->integer conversion (read: 
+ * time-consuming).
+ *
+ * \todo
+ * Optimization Questions: Why is this called so often compared with the 
+ * other Copy() routines? How does AddRun() look for optimization potential?
+ */
 void IntLigne::Copy(FloatLigne* a)
 {
     if ( a->runs.empty() ) {
@@ -970,7 +990,11 @@ void IntLigne::Dequeue(int no)
     bords[no].prev = bords[no].next = -1;
 }
 
-
+/**
+ * Rasterization.
+ *
+ * The parameters have the same meaning as in the AlphaLigne class.
+ */
 void IntLigne::Raster(raster_info &dest, void *color, RasterInRunFunc worker)
 {
     if ( nbRun <= 0 ) {

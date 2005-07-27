@@ -2,10 +2,9 @@
 #define __SP_STYLE_H__
 
 /** \file
- * SPStyle - a style object for SPItems
- */
-/*
- * Author:
+ * SPStyle - a style object for SPItem objects
+ *
+ * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
  * Copyright (C) 2001-2002 Lauris Kaplinski
@@ -40,6 +39,7 @@ class SPILength;
 class SPIPaint;
 class SPIFontSize;
 
+/// Float type internal to SPStyle.
 struct SPIFloat {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -51,12 +51,14 @@ struct SPIFloat {
 #define SP_SCALE24_TO_FLOAT(v) ((float) ((double) (v) / SP_SCALE24_MAX))
 #define SP_SCALE24_FROM_FLOAT(v) ((int) ((v) * ((double) SP_SCALE24_MAX + 0.9999)))
 
+/// 24 bit data type internal to SPStyle.
 struct SPIScale24 {
     unsigned set : 1;
     unsigned inherit : 1;
     unsigned value : 24;
 };
 
+/// Int type internal to SPStyle.
 struct SPIInt {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -64,6 +66,7 @@ struct SPIInt {
     int value;
 };
 
+/// Short type internal to SPStyle.
 struct SPIShort {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -71,6 +74,7 @@ struct SPIShort {
     int value : 16;
 };
 
+/// Enum type internal to SPStyle.
 struct SPIEnum {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -78,6 +82,7 @@ struct SPIEnum {
     unsigned computed : 8;
 };
 
+/// String type internal to SPStyle.
 struct SPIString {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -98,6 +103,7 @@ enum {
     SP_CSS_UNIT_PERCENT
 };
 
+/// Length type internal to SPStyle.
 struct SPILength {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -118,6 +124,7 @@ enum {
     SP_PAINT_TYPE_IMPOSSIBLE
 };
 
+/// Paint type internal to SPStyle.
 struct SPIPaint {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -147,6 +154,7 @@ enum {
 #define SP_STYLE_FLAG_IFDIFF (1 << 1)
 #define SP_STYLE_FLAG_ALWAYS (1 << 2)
 
+/// Fontsize type internal to SPStyle.
 struct SPIFontSize {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -155,6 +163,7 @@ struct SPIFontSize {
     float computed;
 };
 
+/// Text decoration type internal to SPStyle.
 struct SPITextDecoration {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -164,6 +173,7 @@ struct SPITextDecoration {
     unsigned blink : 1;    // "Conforming user agents are not required to support this value." yay!
 };
 
+/// Extended length type internal to SPStyle.
 struct SPILengthOrNormal {
     unsigned set : 1;
     unsigned inherit : 1;
@@ -175,6 +185,7 @@ struct SPILengthOrNormal {
 
 class SPTextStyle;
 
+/// Stroke dash details.
 class NRVpathDash {
 public:
     double offset;
@@ -182,6 +193,7 @@ public:
     double *dash;
 };
 
+/// An SVG style object.
 struct SPStyle {
     int refcount;
     /** Object we are attached to */
@@ -243,10 +255,10 @@ struct SPStyle {
     /** display */
     SPIEnum display;
 
-    /* overflow */
+    /** overflow */
     SPIEnum overflow;
 
-    /* visibility */
+    /** visibility */
     SPIEnum visibility;
 
     /** opacity */
@@ -283,7 +295,7 @@ struct SPStyle {
     /** Marker list */
     SPIString marker[SP_MARKER_LOC_QTY];
 
-    // style belongs to a cloned object, must not href anything
+    /// style belongs to a cloned object, must not href anything
     bool cloned; 
 };
 
@@ -418,7 +430,7 @@ enum SPOverflow {
     SP_CSS_OVERFLOW_AUTO
 };
 
-// TODO: more display types
+/// \todo more display types
 enum SPCSSDisplay {
     SP_CSS_DISPLAY_NONE,
     SP_CSS_DISPLAY_INLINE,
@@ -439,13 +451,14 @@ enum SPCSSDisplay {
     SP_CSS_DISPLAY_TABLE_CAPTION
 };
 
+/// An SPTextStyle has a refcount, a font family, and a font name.
 struct SPTextStyle {
     int refcount;
 
     /* CSS font properties */
     SPIString font_family;
 
-    /* fixme: The 'font' property is ugly, and not working (lauris) */
+    /** \todo fixme: The 'font' property is ugly, and not working (lauris) */
     SPIString font;
 };
 

@@ -1,6 +1,8 @@
 /**
  *  \file livarot/float-line.cpp
  *
+ * Implementation of coverage with floating-point values.
+ * 
  *  \author Fred
  *
  *  public domain
@@ -25,7 +27,7 @@ FloatLigne::~FloatLigne()
     
 }
 
-
+/// Reset the line to  empty (boundaries and runs).
 void FloatLigne::Reset()
 {
     bords.clear();
@@ -33,7 +35,12 @@ void FloatLigne::Reset()
     s_first = s_last = -1;
 }
 
-
+/**
+ * Add a coverage portion.
+ *
+ * \param guess Position from where we should try to insert the first 
+ * boundary, or -1 if we don't have a clue.
+ */
 int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int guess)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
@@ -85,7 +92,12 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int gues
     return n;
 }
 
-
+/**
+ * Add a coverage portion.
+ *
+ * \param guess Position from where we should try to insert the first 
+ * boundary, or -1 if we don't have a clue.
+ */
 int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pente, int guess)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
@@ -157,7 +169,12 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
     return n;
 }
 
-
+/**
+ * Add a coverage portion.
+ *
+ * \param guess Position from where we should try to insert the last
+ * boundary, or -1 if we don't have a clue.
+ */
 int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float pente, int guess)
 {
 //  if ( showCopy ) printf("br= %f %f -> %f %f \n",spos,sval,epos,eval);
@@ -231,8 +248,11 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
     return n - 1;
 }
 
-
-// variant where insertion is known to be trivial: just append to the list
+/**
+ * Add a coverage portion by appending boundaries at the end of the list.
+ *
+ * This works because we know they are on the right.
+ */
 int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float pente)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
@@ -379,7 +399,10 @@ void FloatLigne::InsertBord(int no, float p, int guess)
     }
 }
 
-
+/**
+ * Computes the sum of the coverages of the runs currently being scanned, 
+ * of which there are "pending".
+ */
 float FloatLigne::RemainingValAt(float at, int pending)
 {
     float sum = 0;
@@ -406,9 +429,14 @@ float FloatLigne::RemainingValAt(float at, int pending)
 
 
 /**
- *    computation of non-overlapping runs of coverage.
+ * Extract a set of non-overlapping runs from the boundaries.
+ *
+ * We scan the boundaries left to right, maintaining a set of coverage 
+ * portions currently being scanned. For each such portion, the function 
+ * will add the index of its first boundary in an array; but instead of 
+ * allocating another array, it uses a field in float_ligne_bord: pend_ind.
+ * The outcome is that an array of float_ligne_run is produced.
  */
-
 void FloatLigne::Flatten()
 {
     if ( int(bords.size()) <= 1 ) {
@@ -513,6 +541,7 @@ void FloatLigne::Flatten()
 }
 
 
+/// Debug dump of the instance.
 void FloatLigne::Affiche()
 {
     printf("%lu : \n", (long unsigned int) bords.size());
@@ -585,7 +614,7 @@ void FloatLigne::Copy(IntLigne *a)
     }
 }
 
-
+/// Cuts the parts having less than tresh coverage.
 void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
 {
     Reset();
@@ -674,7 +703,12 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
     }
 }
 
-
+/** 
+ * Cuts the coverage a in 2 parts.
+ *
+ * over will receive the parts where coverage > tresh, while the present
+ * FloatLigne will receive the parts where coverage <= tresh.
+ */
 void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
 {
     Reset();
@@ -710,7 +744,12 @@ void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
     }
 }
 
-
+/** 
+ * Clips the coverage runs to tresh.
+ *
+ * If addIt == false, it only leaves the parts that are not entirely under 
+ * tresh. If addIt == true, it's the coverage clamped to tresh.
+ */
 void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
 {
     Reset();
@@ -798,7 +837,7 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
     }
 }
 
-
+/// Extract the parts where coverage > tresh.
 void FloatLigne::Over(FloatLigne *a, float tresh)
 {
     Reset();

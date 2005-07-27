@@ -1,7 +1,7 @@
 #define __SP_REPR_C__
 
 /** \file
- * Fuzzy DOM-like tree implementation
+ * A few non-inline functions of the C facade to Inkscape::XML::Node.
  */
 
 /*
@@ -44,6 +44,7 @@
 
 using Inkscape::Util::SharedCStringPtr;
 
+/// Returns new node.
 Inkscape::XML::Node *
 sp_repr_new(gchar const *name)
 {
@@ -53,6 +54,7 @@ sp_repr_new(gchar const *name)
     return new Inkscape::XML::ElementNode(g_quark_from_string(name));
 }
 
+/// Returns new textnode with content. See Inkscape::XML::TextNode.
 Inkscape::XML::Node *
 sp_repr_new_text(gchar const *content)
 {
@@ -60,6 +62,7 @@ sp_repr_new_text(gchar const *content)
     return new Inkscape::XML::TextNode(SharedCStringPtr::copy(content));
 }
 
+/// Returns new commentnode with comment. See Inkscape::XML::CommentNode.
 Inkscape::XML::Node *
 sp_repr_new_comment(gchar const *comment)
 {
@@ -67,6 +70,7 @@ sp_repr_new_comment(gchar const *comment)
     return new Inkscape::XML::CommentNode(SharedCStringPtr::copy(comment));
 }
 
+/// Returns new document having as first child a node named rootname.
 Inkscape::XML::Document *
 sp_repr_document_new(char const *rootname)
 {
@@ -86,6 +90,7 @@ sp_repr_document_new(char const *rootname)
     return doc;
 }
 
+/// Returns new document having reprs as first child.
 Inkscape::XML::Document *
 sp_repr_document_new_list(GSList *reprs)
 {

@@ -1,6 +1,8 @@
 #ifndef INKSCAPE_LIVAROT_SWEEP_EVENT_H
 #define INKSCAPE_LIVAROT_SWEEP_EVENT_H
-/** \file */
+/** \file 
+ * Intersection events.
+ */
 
 #include <libnr/nr-point.h>
 class SweepTree;
