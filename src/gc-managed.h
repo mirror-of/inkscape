@@ -1,4 +1,4 @@
-/*
+/** \file
  * Inkscape::GC::Managed - base class for GC-managed objects
  *
  * Copyright 2004 MenTaLguY <mental@rydia.net>
