@@ -1,4 +1,4 @@
-/*
+/** \file
  * Inkscape::GC::Anchored - base class for anchored GC-managed objects
  *
  * Authors:
@@ -20,9 +20,10 @@ namespace Inkscape {
 namespace GC {
 
 /**
- * A base class for anchored objects.  Objects are managed
- * by our mark-and-sweep collector, but are anchored against garbage
- * collection so long as their reference count is nonzero.
+ * A base class for anchored objects.  
+ *
+ * Objects are managed by our mark-and-sweep collector, but are anchored 
+ * against garbage collection so long as their reference count is nonzero.
  *
  * Object and member destructors will not be called on destruction
  * unless a subclass also inherits from Inkscape::GC::Finalized.

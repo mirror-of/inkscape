@@ -1,7 +1,9 @@
 #ifndef SEEN_PENCIL_CONTEXT_H
 #define SEEN_PENCIL_CONTEXT_H
 
-/* Pencil context */
+/** \file
+ * Pencil context
+ */
 
 #include "draw-context.h"
 
@@ -18,6 +20,9 @@ enum PencilState {
     SP_PENCIL_CONTEXT_FREEHAND
 };
 
+/**
+ * Pencil context.
+ */
 struct SPPencilContext : public SPDrawContext {
     NR::Point p[16];
     gint npoints;
@@ -27,6 +32,7 @@ struct SPPencilContext : public SPDrawContext {
     bool is_drawing;
 };
 
+/// The SPPencilContext vtable (empty).
 struct SPPencilContextClass : public SPEventContextClass { };
 
 GType sp_pencil_context_get_type();

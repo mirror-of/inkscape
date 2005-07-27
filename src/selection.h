@@ -1,7 +1,7 @@
 #ifndef SEEN_INKSCAPE_SELECTION_H
 #define SEEN_INKSCAPE_SELECTION_H
 
-/*
+/** \file
  * Per-desktop selection container
  *
  * Authors:
@@ -204,8 +204,8 @@ public:
     /** @brief Returns the list of selected SPItems */
     GSList const *itemList();
     /** @brief Returns a list of the xml nodes of all selected objects */
-    // TODO only returns reprs of SPItems currently; need a separate
-    //      method for that
+    /// \todo only returns reprs of SPItems currently; need a separate
+    ///      method for that
     GSList const *reprList();
 
     /** @brief Returns the number of layers in which there are selected objects */
@@ -219,14 +219,14 @@ public:
     /**
      * @brief Returns the bounding rectangle of the selection
      *
-     * TODO: how is this different from bounds()?
+     * \todo how is this different from bounds()?
      */ 
     NRRect *boundsInDocument(NRRect *dest) const;
 
     /**
      * @brief Returns the bounding rectangle of the selection
      *
-     * TODO: how is this different from bounds()?
+     * \todo how is this different from bounds()?
      */
     NR::Rect boundsInDocument() const;
 
