@@ -1077,6 +1077,18 @@ sp_style_merge_from_props(SPStyle *const style, CRPropList *const props)
 #endif
 }
 
+/**
+ * \pre decl_list != NULL
+ */
+static void
+sp_style_merge_from_decl_list(SPStyle *const style, CRDeclaration const *const decl_list)
+{
+    if (decl_list->next) {
+        sp_style_merge_from_decl_list(style, decl_list->next);
+    }
+    sp_style_merge_style_from_decl(style, decl_list);
+}
+
 static CRSelEng *
 sp_repr_sel_eng()
 {
@@ -1121,42 +1133,13 @@ sp_style_merge_from_object_stylesheet(SPStyle *const style, SPObject const *cons
     }
 }
 
-static bool
-is_css_S(gchar const c)
-{
-    /* Like g_ascii_isspace, but false for '\v'. */
-    switch (c) {
-        case ' ':
-        case '\t':
-        case '\r':
-        case '\n':
-        case '\f':
-            return true;
-        default:
-            return false;
-    }
-}
-
 /**
- * \bug Doesn't allow unicode or other escapes.
- * \bug Doesn't distinguish between initial char (non-numeric, not hyphen) 
- * and others.
- */
-static bool
-is_css_ident_char(guchar const c)
-{
-    return (g_ascii_isalnum(c)
-            || (c == '-')
-            || (0x80 <= c));
-}
-
-/**
- * Parses a style="" string and merges it with an existing SPStyle.
+ * Parses a style="..." string and merges it with an existing SPStyle.
  */
 void
-sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
+sp_style_merge_from_style_string(SPStyle *const style, gchar const *const p)
 {
-    /** \todo
+    /*
      * Reference: http://www.w3.org/TR/SVG11/styling.html#StyleAttribute: 
      * ``When CSS styling is used, CSS inline style is specified by including 
      * semicolon-separated property declarations of the form "name : value" 
@@ -1165,116 +1148,13 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
      * That's fairly ambiguous.  Is a `value' allowed to contain semicolons?  
      * Why does it say "including", what else is allowed in the style 
      * attribute value?
-     * 
-     * \note 
-     * I believe a strict reading of the spec doesn't allow space at the 
-     * beginning of a style string: see section D.2 of 
-     * http://www.w3.org/TR/REC-CSS2/grammar.html, where whitespace is
-     * given a specific token S, and see the definitions of `declaration' 
-     * and `property' at http://www.w3.org/TR/REC-CSS2/syndata.html.
-     *
-     * The SVG spec is quite ambiguous about what semicolons are allowed.  
-     * Probably the intent is that style strings are like CSS ruleset bodies, 
-     * where there must be exactly one semicolon between declarations, and no 
-     * semicolon at the beginning or end.  Whereas the SVG 1.1 spec merely 
-     * says "semicolon-separated" (cf. "space-separated" which is usually 
-     * understood as allowing any number of spaces at the beginning and end, 
-     * and any non-zero number of spaces between items).
-     *
-     * \note 
-     * Inkscape up to 0.40 (and probably sodipodi) write style strings with 
-     * trailing semicolon.  Given the ambiguity of the spec, we should 
-     * continue to allow this.
-     *
-     * Indeed, we currently allow any number of semicolons at the beginning 
-     * or end, and any non-zero number of semicolons between declarations.
      */
 
-    /** \todo 
-     * Use cr_declaration_parse_list_from_buf(p, CR_UTF_8), or loop around
-     * cr_parser_parse_declaration.  (The latter gives us better control 
-     * over error handling.
-     * 
-     * \todo 
-     * Check what the SVG spec says to do if we encounter an error in a 
-     * style attribute string: should we ignore the whole string or just 
-     * from the first error onwards?).
-     */
-
-    gchar property [BMAX];
-    gchar value [BMAX];
-
-    for (;;) {
-
-        /* Bug: we don't allow CSS comments. */
-
-        while (is_css_S(*p) || *p == ';') {
-            ++p;
-        }
-        if (!*p) {
-            return;
-        }
-
-        gchar const *property_begin = p;
-        while (is_css_ident_char(*p)) {
-            ++p;
-        }
-        gchar const *property_end = p;
-        if (property_begin == property_end) {
-            /// \todo Don't use g_warning for SVG errors.
-            g_warning("Empty style property at: %s", property_begin);
-            return;
-        }
-        size_t const property_len = property_end - property_begin;
-        if (property_len >= sizeof(property)) {
-            /// \todo Don't use g_warning for SVG errors.
-            g_warning("Exceedingly long style property %.20s...", property_begin);
-            return;
-        }
-        memcpy(property, property_begin, property_len);
-        property[property_len] = '\0';
-
-        while (is_css_S(*p)) {
-            ++p;
-        }
-
-        if (*p++ != ':') {
-            /// \todo Don't use g_warning for SVG errors.
-            g_warning("No separator at style at: %s", property_begin);
-            return;
-        }
-
-        while (is_css_S(*p)) {
-            ++p;
-        }
-
-        gchar const *const value_begin = p;
-        gchar const *decl_end = strchr(p, ';');
-        if (!decl_end) {
-            decl_end = p + strlen(p);
-        }
-        gchar const *value_end = decl_end;
-        while (is_css_S(*--value_end))
-            ;
-        ++value_end;
-
-        gint const idx = sp_attribute_lookup(property);
-        if (idx > 0) {
-            if (value_begin < value_end) {
-                size_t const value_len = value_end - value_begin;
-                memcpy(value, value_begin, value_len);
-                value[value_len] = '\0';
-                sp_style_merge_property(style, idx, value);
-            } else {
-                /* TODO: Don't use g_warning for SVG errors. */
-                g_warning("No style property value at: %s", property_begin);
-            }
-        } else {
-            /* TODO: Don't use g_warning for SVG errors. */
-            g_warning("Unknown style property at: %s", property_begin);
-        }
-
-        p = decl_end;
+    CRDeclaration *const decl_list
+        = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
+    if (decl_list) {
+        sp_style_merge_from_decl_list(style, decl_list);
+        cr_declaration_destroy(decl_list);
     }
 }
 

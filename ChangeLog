@@ -6,6 +6,9 @@
 	  (SP_SCALE24_FROM_FLOAT) Change rounding behaviour.
 	  These changes are intended to combat float rounding bugs on x86.
 
+	* src/style.cpp (sp_style_merge_from_style_string): Use libcroco
+	  to parse style="..." attribute strings, to improve CSS parsing.
+
 2005-07-27  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/Doxyfile: added 10 further files to the scanned list
