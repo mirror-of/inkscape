@@ -1,9 +1,7 @@
 #ifndef __SP_PAINT_SELECTOR_H__
 #define __SP_PAINT_SELECTOR_H__
 
-/*
- * SPPaintSelector
- *
+/** \file
  * Generic paint selector widget
  *
  * Copyright (C) Lauris 2002
@@ -44,6 +42,7 @@ typedef enum {
 	SP_PAINT_SELECTOR_FILLRULE_EVENODD
 } SPPaintSelectorFillRule;
 
+/// Generic paint selector widget
 struct SPPaintSelector {
 	GtkVBox vbox;
 
@@ -63,6 +62,7 @@ struct SPPaintSelector {
 	float alpha;
 };
 
+/// The SPPaintSelector vtable
 struct SPPaintSelectorClass {
 	GtkVBoxClass parent_class;
 

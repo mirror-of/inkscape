@@ -1,8 +1,8 @@
 #ifndef __SP_REPR_H__
 #define __SP_REPR_H__
 
-/*
- * Fuzzy DOM-like tree implementation
+/** \file
+ * C facade to Inkscape::XML::Node.
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -29,116 +29,112 @@
 #define SP_CC_NS_URI "http://web.resource.org/cc/"
 #define SP_DC_NS_URI "http://purl.org/dc/elements/1.1/"
 
-/*
- * NB! Unless explicitly stated all methods are noref/nostrcpy
- */
-
-
 /**
-
-Though Inkscape::XML::Node provides "signals" for notification when individual nodes
-change, there is no mechanism to receive notification for overall
-document changes.
-
-However, with the addition of the transactions code, it would not be
-very hard to implement if you wanted it.
-
-Inkscape::XML::Node itself doesn't use GObject signals at present -- Inkscape::XML::Nodes maintain
-lists of Inkscape::XML::NodeEventVectors (added via sp_repr_add_listener), which are
-used to specify callbacks when something changes.
-
-Here are the current callbacks in an event vector (they may be NULL):
-
-    void (* child_added)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref,
-                         void *data);
-
-Called once a child has been added.
-
-    void (* child_removed)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref,
-                           void *data);
-
-Called after a child is removed; ref is the child that used to precede
-the removed child.
-
-    void (* attr_changed)(Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval,
-                          void *data);
-
-Called after an attribute has been changed.
-
-    void (* content_changed)(Inkscape::XML::Node *repr, gchar const *oldcontent,
-                             gchar const *newcontent, void *data);
-
-Called after an element's content has been changed.
-
-    void (* order_changed)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child,
-                           Inkscape::XML::Node *oldref, Inkscape::XML::Node *newref, void *data);
-
-Called once the child has been moved to its new position in the child
-order.
-
+ * \note NB! Unless explicitly stated all methods are noref/nostrcpy
  */
 
-
-/*
-
-   Inkscape::XML::Node mini-FAQ
-
-Since I'm not very familiar with this section of code but I need to use
-it heavily for the RDF work, I'm going to answer various questions I run
-into with my best-guess answers so others can follow along too.
-
-Q: How do I find the root Inkscape::XML::Node?
-A: If you have an SPDocument, use doc->rroot.  For example:
-
-     SP_ACTIVE_DOCUMENT->rroot
-
-     (but it's better to arrange for your caller to pass in the relevent
-      document rather than assuming it's necessarily the active one and
-      using SP_ACTIVE_DOCUMENT)
-
-Q: How do I find an Inkscape::XML::Node by unique key/value?
-A: Use sp_repr_lookup_child
-
-Q: How do I find an Inkscape::XML::Node by unique namespace name?
-A: Use sp_repr_lookup_name
-
-Q: How do I make an Inkscape::XML::Node namespace prefix constant in the application?
-A: Add the XML namespace URL as a #define to repr.h at the top with the
-   other SP_<NAMESPACE>_NS_URI #define's, and then in repr-util.cpp,
-   in sp_xml_ns_register_defaults, bump "defaults" up in size one, and
-   add another section.  Don't forget to increment the array offset and
-   keep ".next" pointed to the next (if any) array entry.
-
-Q: How do I create a new Inkscape::XML::Node?
-A: Use "sp_repr_new*".  Then attach it to a parent somewhere with
-   parent->appendChild(child), and then use Inkscape::GC::release(child) to
-   let go of it (the parent will hold it in memory).
-
-Q: How do I destroy an Inkscape::XML::Node?
-A: Just call "sp_repr_unparent" on it and release any references
-   you may be retaining to it.  Any attached SPObjects will
-   clean themselves up automatically, as will any children.
-
-Q: What about listeners?
-A: I have no idea yet...
-
-Q: How do I add a namespace to a newly created document?
-A: The current hack is in document.cpp:sp_document_create
-
- Kees Cook  2004-07-01
- updated MenTaLguY 2005-01-25
-
+/** \todo
+ * Though Inkscape::XML::Node provides "signals" for notification when 
+ * individual nodes change, there is no mechanism to receive notification 
+ * for overall document changes.
+ * However, with the addition of the transactions code, it would not be
+ * very hard to implement if you wanted it.
+ * 
+ * \class Inkscape::XML::Node
+ * \note
+ * Inkscape::XML::Node itself doesn't use GObject signals at present -- 
+ * Inkscape::XML::Nodes maintain lists of Inkscape::XML::NodeEventVectors 
+ * (added via sp_repr_add_listener), which are used to specify callbacks 
+ * when something changes.
+ *
+ * Here are the current callbacks in an event vector (they may be NULL):
+ *
+ * void (* child_added)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, 
+ * Inkscape::XML::Node *ref, void *data); Called once a child has been added.
+ *
+ * void (* child_removed)(Inkscape::XML::Node *repr, 
+ * Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void *data);
+ * Called after a child is removed; ref is the child that used to precede
+ * the removed child.
+ *
+ * void (* attr_changed)(Inkscape::XML::Node *repr, gchar const *key, 
+ * gchar const *oldval, gchar const *newval, void *data);
+ * Called after an attribute has been changed.
+ *
+ * void (* content_changed)(Inkscape::XML::Node *repr, gchar const *oldcontent,
+ * gchar const *newcontent, void *data);
+ * Called after an element's content has been changed.
+ *
+ * void (* order_changed)(Inkscape::XML::Node *repr, Inkscape::XML::Node *child,
+ * Inkscape::XML::Node *oldref, Inkscape::XML::Node *newref, void *data);
+ * Called once the child has been moved to its new position in the child order.
+ *
+ * <b> Inkscape::XML::Node mini-FAQ </b>
+ *
+ * Since I'm not very familiar with this section of code but I need to use
+ * it heavily for the RDF work, I'm going to answer various questions I run
+ * into with my best-guess answers so others can follow along too.
+ *
+ * \arg
+ * Q: How do I find the root Inkscape::XML::Node? <br>
+ * A: If you have an SPDocument, use doc->rroot.  For example: 
+ * 
+ * \code    SP_ACTIVE_DOCUMENT->rroot       \endcode <br>
+ * 
+ * (but it's better to arrange for your caller to pass in the relevent
+ * document rather than assuming it's necessarily the active one and
+ * using SP_ACTIVE_DOCUMENT)
+ *
+ * \arg
+ * Q: How do I find an Inkscape::XML::Node by unique key/value? <br>
+ * A: Use sp_repr_lookup_child
+ *
+ * \arg
+ * Q: How do I find an Inkscape::XML::Node by unique namespace name? <br>
+ * A: Use sp_repr_lookup_name
+ *
+ * \arg
+ * Q: How do I make an Inkscape::XML::Node namespace prefix constant in 
+ * the application? <br>
+ * A: Add the XML namespace URL as a #define to repr.h at the top with the
+ * other SP_<NAMESPACE>_NS_URI #define's, and then in repr-util.cpp,
+ * in sp_xml_ns_register_defaults, bump "defaults" up in size one, and
+ * add another section.  Don't forget to increment the array offset and
+ * keep ".next" pointed to the next (if any) array entry.
+ *
+ * \arg
+ * Q: How do I create a new Inkscape::XML::Node? <br>
+ * A: Use "sp_repr_new*".  Then attach it to a parent somewhere with
+ * parent->appendChild(child), and then use Inkscape::GC::release(child) to
+ * let go of it (the parent will hold it in memory).
+ *
+ * \arg
+ * Q: How do I destroy an Inkscape::XML::Node?
+ * A: Just call "sp_repr_unparent" on it and release any references
+ * you may be retaining to it.  Any attached SPObjects will
+ * clean themselves up automatically, as will any children.
+ *
+ * \arg
+ * Q: What about listeners? <br>
+ * A: I have no idea yet...
+ *
+ * \arg
+ * Q: How do I add a namespace to a newly created document?  <br>
+ * A: The current hack is in document.cpp:sp_document_create
+ *
+ * Kees Cook  2004-07-01, updated MenTaLguY 2005-01-25
  */
 
 /* SPXMLNs */
-
 char const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
 char const *sp_xml_ns_prefix_uri(gchar const *prefix);
+
 
 Inkscape::XML::Node *sp_repr_new(gchar const *name);
 Inkscape::XML::Node *sp_repr_new_text(gchar const *content);
 Inkscape::XML::Node *sp_repr_new_comment(gchar const *comment);
 
+/// Make \a repr an anchored object. See Inkscape::GC::Anchored.
 inline Inkscape::XML::Node *sp_repr_ref(Inkscape::XML::Node *repr) {
     return Inkscape::GC::anchor(repr);
 }
@@ -152,16 +148,18 @@ inline Inkscape::XML::Node *sp_repr_unref(Inkscape::XML::Node *repr) {
 
 Inkscape::XML::Document *sp_repr_document_new(gchar const *rootname);
 
-
+/// Returns root node of document.
 inline Inkscape::XML::Node *sp_repr_document_root(Inkscape::XML::Document const *doc) {
     return const_cast<Inkscape::XML::Node *>(doc->root());
 }
 
+/// Returns the node's document.
 inline Inkscape::XML::Document *sp_repr_document(Inkscape::XML::Node const *repr) {
     return const_cast<Inkscape::XML::Document *>(repr->document());
 }
 
 /* Contents */
+/// Sets the node's \a key attribute to \a value.
 inline unsigned sp_repr_set_attr(Inkscape::XML::Node *repr, gchar const *key, gchar const *value,
                                  bool is_interactive = false) {
     repr->setAttribute(key, value, is_interactive);
@@ -169,21 +167,29 @@ inline unsigned sp_repr_set_attr(Inkscape::XML::Node *repr, gchar const *key, gc
 }
 
 /* Tree */
+/// Returns the node's parent.
 inline Inkscape::XML::Node *sp_repr_parent(Inkscape::XML::Node const *repr) {
     return const_cast<Inkscape::XML::Node *>(repr->parent());
 }
+
+/// Returns first child of node, resets iterator.
 inline Inkscape::XML::Node *sp_repr_children(Inkscape::XML::Node *repr) {
     return ( repr ? repr->firstChild() : NULL );
 }
+
+/// Returns next child of node or NULL.
 inline Inkscape::XML::Node *sp_repr_next(Inkscape::XML::Node *repr) {
     return ( repr ? repr->next() : NULL );
 }
 
+/// Add \a child node to children of \a repr before \a ref.
 inline unsigned sp_repr_add_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
     repr->addChild(child, ref);
     return true;
 }
+
+/// Remove \a child from children of \a repr.
 inline unsigned sp_repr_remove_child(Inkscape::XML::Node *repr, Inkscape::XML::Node *child) {
     repr->removeChild(child);
     return true;
@@ -219,7 +225,7 @@ void sp_repr_css_change_recursive(Inkscape::XML::Node *repr, SPCSSAttr *css, gch
 void sp_repr_css_print(SPCSSAttr *css);
 
 /* Utility finctions */
-
+/// Remove \a repr from children of its parent node.
 inline void sp_repr_unparent(Inkscape::XML::Node *repr) {
     Inkscape::XML::Node *parent=repr->parent();
     if (parent) {
@@ -237,8 +243,9 @@ unsigned sp_repr_set_double(Inkscape::XML::Node *repr, gchar const *key, double 
 /* Defaults */
 unsigned sp_repr_set_double_default(Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e);
 
-/* Deprecated */
+/// \deprecated !
 double sp_repr_get_double_attribute(Inkscape::XML::Node *repr, gchar const *key, double def);
+/// \deprecated !
 int sp_repr_get_int_attribute(Inkscape::XML::Node *repr, gchar const *key, int def);
 /* End Deprecated? */
 
@@ -252,6 +259,7 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
                                           gchar const *key,
                                           gchar const *value);
 
+/// Put \a child after \a ref in list of \a repr's children.
 inline unsigned sp_repr_change_order(Inkscape::XML::Node *repr,
                                      Inkscape::XML::Node *child,
                                      Inkscape::XML::Node *ref) {

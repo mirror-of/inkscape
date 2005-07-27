@@ -1,4 +1,4 @@
-/*
+/** \file
  * Inkscape::Util::List - managed linked list
  *
  * Authors:
@@ -21,6 +21,7 @@ namespace Inkscape {
 
 namespace Util {
 
+/// Generic ListCell for Inkscape::Util::List.
 template <typename T>
 struct ListCell : public GC::Managed<> {
     ListCell() {}
@@ -50,6 +51,7 @@ template <typename T>
 MutableList<T> const &set_rest(MutableList<T> const &list,
                                MutableList<T> const &rest);
 
+/// Helper template.
 template <typename T>
 class List<T const> {
 public:
@@ -94,6 +96,28 @@ protected:
     ListCell<T> *_cell;
 };
 
+/**
+ * Generic linked list.
+ * 
+ * These lists are designed to store simple values like pointers,
+ * references, and scalar values.  While they can be used to directly
+ * store more complex objects, destructors for those objects will not
+ * be called unless those objects derive from Inkscape::GC::Finalized.
+ *
+ * In general it's better to use lists to store pointers or references
+ * to objects requiring finalization and manage object lifetimes separately.
+ *
+ * @see Inkscape::GC::Finalized
+ *
+ * cons() is synonymous with List<T>(first, rest), except that the
+ * compiler will usually be able to infer T from the type of \a rest.
+ *
+ * If you need to create an empty list (which can, for example, be used
+ * as an 'end' value with STL algorithms), call the List<> constructor
+ * with no arguments, like so:
+ *
+ * <code>    List<int>()    </code>
+ */
 template <typename T>
 class List : public List<T const> {
 public:
@@ -124,6 +148,7 @@ public:
     friend bool is_empty<>(List const &);
 };
 
+/// Helper template.
 template <typename T>
 class List<T &> {
 public:
@@ -168,6 +193,17 @@ protected:
     ListCell<T &> *_cell;
 };
 
+/** 
+ * Generic MutableList.
+ * 
+ * Like a linked list, but one whose tail can be exchanged for
+ * another later by using set_rest() or assignment through rest()
+ * as an lvalue.  It's otherwise identical to the "non-mutable" form.
+ *
+ * As with List, you can create an empty list like so:
+ *
+ *  <code>   MutableList<int>()    </code>
+ */
 template <typename T>
 class MutableList : public List<T> {
 public:
@@ -202,32 +238,13 @@ public:
  *
  * The returned value can also be treated as an STL forward iterator.
  *
- * These lists are designed to store simple values like pointers,
- * references, and scalar values.  While they can be used to directly
- * store more complex objects, destructors for those objects will not
- * be called unless those objects derive from Inkscape::GC::Finalized.
- *
- * In general it's better to use lists to store pointers or references
- * to objects requiring finalization and manage object lifetimes separately.
- *
- * @see Inkscape::GC::Finalized
- *
- * cons() is synonymous with List<T>(first, rest), except that the
- * compiler will usually be able to infer T from the type of \a rest.
- *
- * If you need to create an empty list (which can, for example, be used
- * as an 'end' value with STL algorithms), call the List<> constructor
- * with no arguments, like so:
- *
- *  List<int>()
- *
- * @see List<>
- * @see is_empty<>
- *
  * @param first the value for the first element of the list
  * @param rest the rest of the list; may be an empty list
  *
  * @returns a new list
+ *
+ * @see List<>
+ * @see is_empty<>
  *
  */
 template <typename T>
