@@ -394,7 +394,7 @@ sp_ellipse_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 }
 
 static void
-sp_ellipse_set (SPObject *object, unsigned int key, const gchar *value)
+sp_ellipse_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	SPGenericEllipse *ellipse;
 
@@ -463,7 +463,7 @@ static void sp_circle_init (SPCircle *circle);
 
 static void sp_circle_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static Inkscape::XML::Node *sp_circle_write(SPObject *object, Inkscape::XML::Node *repr, guint flags);
-static void sp_circle_set(SPObject *object, unsigned int key, const gchar *value);
+static void sp_circle_set(SPObject *object, unsigned int key, gchar const *value);
 static gchar *sp_circle_description(SPItem *item);
 
 static SPGenericEllipseClass *circle_parent_class;
@@ -544,7 +544,7 @@ sp_circle_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 }
 
 static void
-sp_circle_set (SPObject *object, unsigned int key, const gchar *value)
+sp_circle_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	SPGenericEllipse *ge;
 
@@ -766,7 +766,7 @@ sp_arc_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 }
 
 static void
-sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
+sp_arc_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
 
