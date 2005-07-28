@@ -799,19 +799,22 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
     g_return_if_fail (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text));
 
     Inkscape::XML::Node *repr;
+    SPObject *object;
     bool is_textpath = false;
     if (SP_IS_TEXT_TEXTPATH (text)) {
         repr = SP_OBJECT_REPR (sp_object_first_child(SP_OBJECT (text)));
+        object = sp_object_first_child(SP_OBJECT (text));
         is_textpath = true;
     } else {
         repr = SP_OBJECT_REPR (text);
+        object = SP_OBJECT (text);
     }
 
     if (!str) str = "";
     gchar *content = g_strdup (str);
 
-    SP_OBJECT_REPR (text)->setContent("");
-    SPObject *child = text->firstChild();
+    repr->setContent("");
+    SPObject *child = object->firstChild();
     while (child) {
         SPObject *next = SP_OBJECT_NEXT(child);
         if (!SP_IS_FLOWREGION(child) && !SP_IS_FLOWREGIONEXCLUDE(child))
