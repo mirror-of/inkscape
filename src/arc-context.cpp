@@ -59,8 +59,7 @@ static void sp_arc_finish(SPArcContext *ec);
 
 static SPEventContextClass *parent_class;
 
-GtkType
-sp_arc_context_get_type(void)
+GtkType sp_arc_context_get_type()
 {
     static GType type = 0;
     if (!type) {
@@ -74,21 +73,18 @@ sp_arc_context_get_type(void)
             (GInstanceInitFunc) sp_arc_context_init,
             NULL,   /* value_table */
         };
-        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPArcContext", &info, (GTypeFlags)0);
+        type = g_type_register_static(SP_TYPE_EVENT_CONTEXT, "SPArcContext", &info, (GTypeFlags) 0);
     }
     return type;
 }
 
-static void
-sp_arc_context_class_init(SPArcContextClass *klass)
+static void sp_arc_context_class_init(SPArcContextClass *klass)
 {
-    GObjectClass *object_class;
-    SPEventContextClass *event_context_class;
 
-    object_class = (GObjectClass *) klass;
-    event_context_class = (SPEventContextClass *) klass;
+    GObjectClass *object_class = (GObjectClass *) klass;
+    SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
-    parent_class = (SPEventContextClass*)g_type_class_peek_parent(klass);
+    parent_class = (SPEventContextClass*) g_type_class_peek_parent(klass);
 
     object_class->dispose = sp_arc_context_dispose;
 
@@ -140,7 +136,9 @@ static void sp_arc_context_dispose(GObject *object)
     }
 
     /* fixme: This is necessary because we do not grab */
-    if (ac->item) sp_arc_finish(ac);
+    if (ac->item) {
+        sp_arc_finish(ac);
+    }
 
     if (ac->_message_context) {
         delete ac->_message_context;
@@ -161,8 +159,7 @@ static Inkscape::XML::NodeEventVector ec_shape_repr_events = {
 \brief  Callback that processes the "changed" signal on the selection;
 destroys old and creates new knotholder.
 */
-void
-sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer data)
+void sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer data)
 {
     SPArcContext *ac = SP_ARC_CONTEXT(data);
     SPEventContext *ec = SP_EVENT_CONTEXT(ac);
@@ -188,18 +185,16 @@ sp_arc_context_selection_changed(Inkscape::Selection * selection, gpointer data)
             sp_repr_add_listener(shape_repr, &ec_shape_repr_events, ec);
             sp_repr_synthesize_events(shape_repr, &ec_shape_repr_events, ec);
         }
-
-
     }
 }
 
-static void
-sp_arc_context_setup(SPEventContext *ec)
+static void sp_arc_context_setup(SPEventContext *ec)
 {
     SPArcContext *ac = SP_ARC_CONTEXT(ec);
 
-    if (((SPEventContextClass *) parent_class)->setup)
+    if (((SPEventContextClass *) parent_class)->setup) {
         ((SPEventContextClass *) parent_class)->setup(ec);
+    }
 
     SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
 
@@ -231,9 +226,7 @@ sp_arc_context_setup(SPEventContext *ec)
 static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
     SPDesktop *desktop = event_context->desktop;
-    gint ret;
-
-    ret = FALSE;
+    gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -255,18 +248,19 @@ static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *i
             break;
     }
 
-    if (((SPEventContextClass *) parent_class)->item_handler)
+    if (((SPEventContextClass *) parent_class)->item_handler) {
         ret = ((SPEventContextClass *) parent_class)->item_handler(event_context, item, event);
+    }
 
     return ret;
 }
 
 static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
-    static gboolean dragging;
+    static bool dragging;
 
     SPDesktop *desktop = event_context->desktop;
-    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     SPArcContext *ac = SP_ARC_CONTEXT(event_context);
 
@@ -285,7 +279,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                 // remember clicked item, disregarding groups, honoring Alt
                 event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
-                dragging = TRUE;
+                dragging = true;
                 /* Position center */
                 ac->center = sp_desktop_w2d_xy_point(event_context->desktop,
                                                      NR::Point(event->button.x, event->button.y));
@@ -319,7 +313,7 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
         case GDK_BUTTON_RELEASE:
             event_context->xp = event_context->yp = 0;
             if (event->button.button == 1) {
-                dragging = FALSE;
+                dragging = false;
                 if (!event_context->within_tolerance) {
                     // we've been dragging, finish the arc
                     sp_arc_finish(ac);
@@ -402,8 +396,9 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) parent_class)->root_handler)
+        if (((SPEventContextClass *) parent_class)->root_handler) {
             ret = ((SPEventContextClass *) parent_class)->root_handler(event_context, event);
+        }
     }
 
     return ret;
