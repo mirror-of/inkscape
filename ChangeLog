@@ -1,3 +1,11 @@
+2005-07-28  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/arc-context.cpp: CodingStyle.  Replace gboolean with bool.
+
+	* src/desktop-events.cpp: CodingStyle: whitespace.  Add editor
+	variables block.  gboolean exorcism.  Declaration-to-first-use fixes.
+	
+
 2005-07-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/style.h (SP_SCALE24_MAX): Change from 0xffffff to 0xff0000,
