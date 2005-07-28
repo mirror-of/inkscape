@@ -75,7 +75,8 @@ class SplitIt(inkex.Effect):
 				new = []
 				for sub in p:
 					new.append([sub[0][:]])
-					for i in xrange(1,len(sub)-1):
+					i = 1
+					while i <= len(sub)-1:
 						length = cspseglength(new[-1][-1], sub[i])
 						if length > self.options.max:
 							splits = math.ceil(length/self.options.max)
@@ -83,6 +84,7 @@ class SplitIt(inkex.Effect):
 								new[-1][-1], next, sub[i] = cspbezsplitatlength(new[-1][-1], sub[i], 1.0/s)
 								new[-1].append(next[:])
 						new[-1].append(sub[i])
+						i+=1
 					
 				d.value = cubicsuperpath.formatPath(new)
 
