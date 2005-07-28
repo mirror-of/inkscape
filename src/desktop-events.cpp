@@ -79,9 +79,9 @@ gint sp_desktop_enter_notify(GtkWidget *widget, GdkEventCrossing *event)
     return FALSE;
 }
 
-static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gboolean horiz)
+static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz)
 {
-    static gboolean dragging = FALSE;
+    static bool dragging = false;
     static SPCanvasItem *guide = NULL;
     int wx, wy;
 
@@ -94,7 +94,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
     switch (event->type) {
 	case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                dragging = TRUE;
+                dragging = true;
                 NR::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
 
@@ -132,7 +132,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 gdk_pointer_ungrab(event->button.time);
                 NR::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
-                dragging = FALSE;
+                dragging = false;
                 gtk_object_destroy(GTK_OBJECT(guide));
                 guide = NULL;
                 if ( ( horiz
@@ -161,19 +161,20 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 
 int sp_dt_hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
-    return sp_dt_ruler_event(widget, event, dtw, TRUE);
+    return sp_dt_ruler_event(widget, event, dtw, true);
 }
 
 int sp_dt_vruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
-    return sp_dt_ruler_event(widget, event, dtw, FALSE);
+    return sp_dt_ruler_event(widget, event, dtw, false);
 }
 
 /* Guides */
 
 gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
 {
-    static gboolean dragging = FALSE, moved = FALSE;
+    static bool dragging = false;
+    static bool moved = false;
     gint ret = FALSE;
     
     SPGuide *guide = SP_GUIDE(data);
@@ -182,7 +183,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
     switch (event->type) {
 	case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
-                dragging = FALSE;
+                dragging = false;
                 sp_canvas_item_ungrab(item, event->button.time);
                 sp_dt_simple_guide_dialog(guide, desktop);
                 ret = TRUE;
@@ -190,7 +191,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             break;
 	case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                dragging = TRUE;
+                dragging = true;
                 sp_canvas_item_grab(item,
                                     ( GDK_BUTTON_RELEASE_MASK  |
                                       GDK_BUTTON_PRESS_MASK    |
@@ -207,7 +208,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                                          event->motion.y);
                 NR::Point const motion_dt( motion_w * desktop->w2d );
                 sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, motion_dt), false);
-                moved = TRUE;
+                moved = true;
                 sp_desktop_set_coordinate_status(desktop, motion_dt, 0);
                 sp_view_set_position(SP_VIEW(desktop), motion_dt);
                 ret = TRUE;
@@ -226,12 +227,12 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                         sp_guide_moveto(*guide, guide->position, false);
                         sp_guide_remove(guide);
                     }
-                    moved = FALSE;
+                    moved = false;
                     sp_document_done(SP_DT_DOCUMENT(desktop));
                     sp_desktop_set_coordinate_status(desktop, event_dt, 0);
                     sp_view_set_position(SP_VIEW(desktop), event_dt);
                 }
-                dragging = FALSE;
+                dragging = false;
                 sp_canvas_item_ungrab(item, event->button.time);
                 ret=TRUE;
             }
@@ -266,24 +267,29 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
  * simple guideline dialog
  */
 
-static GtkWidget *d = NULL, *l1, *l2, * e , *u, * m;
+static GtkWidget *d = NULL;
+static GtkWidget *l1;
+static GtkWidget *l2;
+static GtkWidget *e;
+static GtkWidget *u;
+static GtkWidget *m;
 static gdouble oldpos;
-static gboolean mode;
+static bool mode;
 static gpointer g;
 
 
-static void guide_dialog_mode_changed(GtkWidget * widget)
+static void guide_dialog_mode_changed(GtkWidget *widget)
 {
     if (mode) {
         // TRANSLATORS: This string appears when double-clicking on a guide.
         // This is the distance by which the guide is to be moved.
         gtk_label_set_text(GTK_LABEL(m), _(" relative by "));
-        mode = FALSE;
+        mode = false;
     } else {
         // TRANSLATORS: This string appears when double-clicking on a guide.
         // This is the target location where the guide is to be moved.
         gtk_label_set_text(GTK_LABEL(m), _(" absolute to "));
-        mode = TRUE;
+        mode = true;
     }
 }
 
@@ -304,7 +310,7 @@ static void guide_dialog_apply(SPGuide &guide)
     sp_document_done(SP_OBJECT_DOCUMENT(&guide));
 }
 
-static void guide_dialog_ok(GtkWidget * widget, gpointer g)
+static void guide_dialog_ok(GtkWidget *widget, gpointer g)
 {
     SPGuide &guide = **static_cast<SPGuide**>(g);
     guide_dialog_apply(guide);
@@ -346,10 +352,7 @@ static void guide_dialog_response(GtkDialog *dialog, gint response, gpointer dat
 
 static void sp_dt_simple_guide_dialog(SPGuide *guide, SPDesktop *desktop)
 {
-    GtkWidget * b1, * b2, * b3, * b4,* but;
-
     if (!GTK_IS_WIDGET(d)) {
-        GtkObject *a;
         // create dialog
         d = gtk_dialog_new_with_buttons(_("Guideline"),
                                         NULL,
@@ -364,17 +367,17 @@ static void sp_dt_simple_guide_dialog(SPGuide *guide, SPDesktop *desktop)
         sp_transientize(d);
         gtk_widget_hide(d);
         
-        b1 = gtk_hbox_new(FALSE,4);
+        GtkWidget *b1 = gtk_hbox_new(FALSE, 4);
         gtk_box_pack_start(GTK_BOX(GTK_DIALOG(d)->vbox), b1, FALSE, FALSE, 0);
         gtk_container_set_border_width(GTK_CONTAINER(b1), 4);
         gtk_widget_show(b1);
         
-        b2 = gtk_vbox_new(FALSE,4);
+        GtkWidget *b2 = gtk_vbox_new(FALSE, 4);
         gtk_box_pack_end(GTK_BOX(b1), b2, TRUE, TRUE, 0);
         gtk_widget_show(b2);
         
         //labels
-        b3 = gtk_hbox_new(FALSE,4);
+        GtkWidget *b3 = gtk_hbox_new(FALSE, 4);
         gtk_box_pack_start(GTK_BOX(b2), b3, TRUE, TRUE, 0);
         gtk_widget_show(b3);
         
@@ -388,18 +391,18 @@ static void sp_dt_simple_guide_dialog(SPGuide *guide, SPDesktop *desktop)
         gtk_misc_set_alignment(GTK_MISC(l2), 0.0, 0.5);
         gtk_widget_show(l2);
         
-        b4 = gtk_hbox_new(FALSE,4);
+        GtkWidget *b4 = gtk_hbox_new(FALSE, 4);
         gtk_box_pack_start(GTK_BOX(b2), b4, FALSE, FALSE, 0);
         gtk_widget_show(b4);
         // mode button
-        but = gtk_button_new();
+        GtkWidget *but = gtk_button_new();
         gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
         gtk_box_pack_start(GTK_BOX(b4), but, FALSE, TRUE, 0);
         gtk_signal_connect_while_alive(GTK_OBJECT(but), "clicked", GTK_SIGNAL_FUNC(guide_dialog_mode_changed), 
                                        NULL , GTK_OBJECT(but));
         gtk_widget_show(but);
         m = gtk_label_new(_(" absolute to "));
-        mode = TRUE;
+        mode = true;
         gtk_container_add(GTK_CONTAINER(but), m);
         gtk_widget_show(m);
         
@@ -409,7 +412,7 @@ static void sp_dt_simple_guide_dialog(SPGuide *guide, SPDesktop *desktop)
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(u), sp_desktop_get_default_unit(desktop));
         
         // spinbutton
-        a = gtk_adjustment_new(0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);
+        GtkObject *a = gtk_adjustment_new(0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);
         sp_unit_selector_add_adjustment(SP_UNIT_SELECTOR(u), GTK_ADJUSTMENT(a));
         e = gtk_spin_button_new(GTK_ADJUSTMENT(a), 1.0 , 2);
         gtk_widget_show(e);
