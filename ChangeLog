@@ -1,4 +1,10 @@
+
 2005-07-28  MenTaLguY  <mental@rydia.net>
+
+    * Makefile.mingw.common, configure.ac,
+	  packaging/win32/inkscape.nsi, src/inkscape_version.h.mingw:
+
+      bump version to 0.42+0.42.1cvs
 
     * src/dialogs/stroke-style.cpp: backport bulia's fix for stroke width
       spin button [bug number??]
