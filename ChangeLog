@@ -9,6 +9,8 @@
 	* src/libnrtype/Layout-TNG-OutIter.cpp: backport cyreve fix for
 	  crash on delete in virgin flowtext [bug 1245842]
 
+    * configure.ac: Kees fix for libgc detection w/dlopen [bug number??]
+
 2005-07-24  Ted Gould  <ted@gould.cx>
 
 	* 0.42 Release
