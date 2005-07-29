@@ -303,7 +303,7 @@ Function GetWindowsVersion
  
   Pop $R1
   Exch $R0
- 
+
 FunctionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
@@ -376,7 +376,52 @@ Section Install
   WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "MultiUser" "$MultiUser"  
   WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" "askMultiUser" "$askMultiUser"  
     
+  ; check for an old installation and clean that dlls and stuff
+  ClearErrors
+  IfFileExists $INSTDIR\etc 0 doDeleteLib
+    DetailPrint "$INSTDIR\etc exists, will be removed"
+    RmDir /r $INSTDIR\etc
+	IfErrors 0 +4
+      DetailPrint "fatal: failed to delete $INSTDIR\etc"
+      DetailPrint "aborting installation"
+	  Abort
+  doDeleteLib:
 
+  ClearErrors
+  IfFileExists $INSTDIR\lib 0 doDeleteLocale
+    DetailPrint "$INSTDIR\lib exists, will be removed"  
+    RmDir /r $INSTDIR\lib
+	IfErrors 0 +4
+      DetailPrint "fatal: failed to delete $INSTDIR\lib"
+      DetailPrint "aborting installation"
+	  Abort
+  doDeleteLocale:
+
+  ClearErrors
+  IfFileExists $INSTDIR\locale 0 doDeleteDll
+    DetailPrint "$INSTDIR\locale exists, will be removed"
+    RmDir /r $INSTDIR\locale
+	IfErrors 0 +4
+      DetailPrint "fatal: failed to delete $INSTDIR\locale"
+      DetailPrint "aborting installation"
+	  Abort
+  doDeleteDll:
+
+  ClearErrors
+  FindFirst $0 $1 $INSTDIR\*.dll
+    FindNextLoop:
+    StrCmp $1 "" FindNextDone
+    DetailPrint "$INSTDIR\$1 exists, will be removed"
+    Delete $INSTDIR\$1
+    IfErrors 0 +4
+      DetailPrint "fatal: failed to delete $INSTDIR\$1"
+      DetailPrint "aborting installation"
+      Abort
+    FindNext $0 $1
+    Goto FindNextLoop
+  FindNextDone:
+
+  ; now its time to copy new stuff
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File /a /r "..\..\inkscape\*.*"
@@ -574,5 +619,4 @@ Section Uninstall
   SetAutoClose false
 
 SectionEnd
-
 
