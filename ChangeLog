@@ -1,3 +1,7 @@
+2005-07-29  MenTaLguY  <mental@rydia.net>
+
+	* src/shortcuts.cpp: made Ctrl+Shift+G the "primary" ungroup shortcut
+
 2005-07-28  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/arc-context.cpp: CodingStyle.  Replace gboolean with bool.
