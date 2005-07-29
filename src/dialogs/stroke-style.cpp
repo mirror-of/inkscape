@@ -1528,8 +1528,6 @@ sp_stroke_style_scale_line(SPWidget *spw)
             double width;
             if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
                 width = sp_units_get_pixels (width_typed, *unit);
-                NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(i->data));
-                width = width / expansion(i2d);
             } else { // percentage
                 gdouble old_w = SP_OBJECT_STYLE (i->data)->stroke_width.computed;
                 width = old_w * width_typed / 100;

@@ -1,3 +1,8 @@
+2005-07-28  MenTaLguY  <mental@rydia.net>
+
+    * src/dialogs/stroke-style.cpp: backport bulia's fix for stroke width
+	  spin button [bug number??]
+
 2005-07-24  Ted Gould  <ted@gould.cx>
 
 	* 0.42 Release
