@@ -829,7 +829,7 @@ bool Layout::iterator::prevLineCursor()
     {                                                                                            \
         _cursor_moving_vertically = false;                                                       \
         for ( ; ; ) {                                                                            \
-            if (_char_index >= _parent_layout->_characters.size() - 1) {                         \
+            if (_char_index + 1 >= _parent_layout->_characters.size()) {                         \
                 _char_index = _parent_layout->_characters.size();                                \
                 _glyph_index = _parent_layout->_glyphs.size();                                   \
                 return false;                                                                    \

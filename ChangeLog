@@ -6,6 +6,9 @@
     * src/text-editing.cpp: backport bulia's fix for text crash
 	  [bug 1247066]
 
+	* src/libnrtype/Layout-TNG-OutIter.cpp: backport cyreve fix for
+	  crash on delete in virgin flowtext [bug 1245842]
+
 2005-07-24  Ted Gould  <ted@gould.cx>
 
 	* 0.42 Release
