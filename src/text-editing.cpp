@@ -1142,16 +1142,15 @@ static bool objects_have_equal_style(SPObject const *parent, SPObject const *chi
     parent_style = sp_style_write_string(parent_spstyle, SP_STYLE_FLAG_ALWAYS);
     sp_style_unref(parent_spstyle);
 
-    Glib::ustring child_style_construction;
+    Glib::ustring child_style_construction(parent_style);
     while (child != parent) {
         char const *style_text = SP_OBJECT_REPR(child)->attribute("style");
         if (style_text && *style_text) {
-            child_style_construction += style_text;
             child_style_construction += ';';
+            child_style_construction += style_text;
         }
         child = SP_OBJECT_PARENT(child);
     }
-    child_style_construction += parent_style;   // sp_style_merge_from_style_string() works backwards, ie earlier properties take precedence over later
     SPStyle *child_spstyle = sp_style_new();
     sp_style_merge_from_style_string(child_spstyle, child_style_construction.c_str());
     gchar *child_style = sp_style_write_string(child_spstyle, SP_STYLE_FLAG_ALWAYS);
