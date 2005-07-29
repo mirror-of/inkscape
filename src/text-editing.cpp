@@ -1601,6 +1601,9 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     everything to a single level of nesting and drop all pretence of
     roundtrippability. */
     while (tidy_xml_tree_recursively(common_ancestor));
+
+    // if we only modified subobjects this won't have been automatically sent
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 }
 
 /*
