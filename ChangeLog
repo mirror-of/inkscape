@@ -5,9 +5,9 @@
 	  nodepath.h, made triangle_area() inline
 	* src/node-context.cpp: added dependency removed from nodepath.h
 	* src/Doxyfile: added 2 further files to the scanned list
+	* src/nodepath.h: moved function docs into nodepath.cpp
 	* src/color.cpp: made file work with src/Doxyfile
 	* src/color.cpp, src/draw-anchor.cpp, src/geom.cpp, src/nodepath.cpp:
-	* src/nodepath.h: moved function docs into nodepath.cpp
 	  improved doxygen documentation
 	* src/event-context.cpp: added a \todo
 	* src/geom.cpp: added editor footer
