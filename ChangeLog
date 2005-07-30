@@ -2,6 +2,9 @@
 
 	* src/sp-tspan.cpp: fix from bulia for incorrect tag name [bug 1247658]
 
+	* packaging/win32/inkscape.nsi:
+	  fix from Adib to purge dlls from preexisting installation [bug 1247068]
+
 2005-07-29  MenTaLguY  <mental@rydia.net>
 
     * src/text-editing.cpp: another backport from cyreve [bug number??]
