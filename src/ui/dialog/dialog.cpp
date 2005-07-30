@@ -36,6 +36,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+#ifndef WIN32
 static gboolean
 sp_retransientize_again (gpointer dlgPtr)
 {
@@ -43,19 +44,21 @@ sp_retransientize_again (gpointer dlgPtr)
     dlg->retransientize_suppress = false;
     return FALSE; // so that it is only called once
 }
+#endif
 
 static void
 sp_retransientize (Inkscape::Application *inkscape, SPDesktop *desktop, gpointer dlgPtr)
 {
-    Dialog *dlg = (Dialog *)dlgPtr;
-    GtkWindow *dialog_win = GTK_WINDOW(dlg->gobj());
-
     gint transient_policy = prefs_get_int_attribute_limited ( "options.transientpolicy", "value", 1, 0, 2);
 
     if (!transient_policy)
         return;
 
 #ifndef WIN32
+    Dialog *dlg = (Dialog *)dlgPtr;
+
+    GtkWindow *dialog_win = GTK_WINDOW(dlg->gobj());
+
     if (dlg->retransientize_suppress) {
          /* if retransientizing of this dialog is still forbidden after
           * previous call warning turned off because it was confusingly fired
