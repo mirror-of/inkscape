@@ -485,7 +485,7 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     SPTextPath *textpath = SP_TEXTPATH(object);
 	
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = sp_repr_new("svg:textpath");
+        repr = sp_repr_new("svg:textPath");
     }
 	
     textpath->attributes.writeTo(repr);

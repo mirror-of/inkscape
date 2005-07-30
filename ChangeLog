@@ -1,6 +1,10 @@
+2005-07-30  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-tspan.cpp: fix from bulia for incorrect tag name [bug 1247658]
+
 2005-07-29  MenTaLguY  <mental@rydia.net>
 
-    * src/text-editing.cpp: another backport from cyreve
+    * src/text-editing.cpp: another backport from cyreve [bug number??]
 
 2005-07-28  MenTaLguY  <mental@rydia.net>
 
