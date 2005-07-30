@@ -522,14 +522,11 @@ FunctionEnd
 Section Uninstall
 
   ; remove personal settings
+  Delete "$APPDATA\Inkscape\extension-errors.log"
   StrCmp $MultiUser "0" 0 endPurge  ; multiuser assigned in dialog
     DetailPrint "purge personal settings"
-    Delete "$APPDATA\Inkscape\preferences.xml"
+    RMDir /r "$APPDATA\Inkscape"
   endPurge:
-
-  Delete "$APPDATA\Inkscape\extension-errors.log"
-  RMDir "$APPDATA\Inkscape"
-
 
   ; Remove file assoziations
   DetailPrint "removing file assoziations"
