@@ -1,9 +1,9 @@
-/** \file Anchors. */
+/** \file 
+ * Anchors implementation.
+ */
 
 /*
- * Initial author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *
+ * Authors:
  * Copyright (C) 2000 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 2002 Lauris Kaplinski
@@ -15,18 +15,20 @@
 #include <gtk/gtktypeutils.h>
 
 #include "draw-anchor.h"
-#include "desktop.h"
+//#include "desktop.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "event-context.h"
-#include "message.h"
+//#include "message.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-canvas.h"
 #include <glibmm/i18n.h>
 #include "libnr/nr-point-fns.h"
 #include "libnr/nr-point-ops.h"
 
-
+/**
+ * Creates an anchor object and initializes it.
+ */
 SPDrawAnchor *
 sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point delta)
 {
@@ -53,6 +55,9 @@ sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point 
     return a;
 }
 
+/**
+ * Destroys the anchor's canvas item and frees the anchor object.
+ */
 SPDrawAnchor *
 sp_draw_anchor_destroy(SPDrawAnchor *anchor)
 {
@@ -65,6 +70,10 @@ sp_draw_anchor_destroy(SPDrawAnchor *anchor)
 
 #define A_SNAP 4.0
 
+/**
+ * Test if point is near anchor, if so fill anchor on canvas and return 
+ * pointer to it or NULL.
+ */
 SPDrawAnchor *
 sp_draw_anchor_test(SPDrawAnchor *anchor, NR::Point w, gboolean activate)
 {
