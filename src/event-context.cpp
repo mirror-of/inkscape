@@ -621,7 +621,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
  * Handles item specific events. Gets called from Gdk. 
  *
  * Only reacts to right mouse button at the moment.
- * Fixme: do context sensitive popup menu on items.
+ * \todo Fixme: do context sensitive popup menu on items.
  */
 gint
 sp_event_context_private_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
