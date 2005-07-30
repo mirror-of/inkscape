@@ -28,6 +28,7 @@
 #include "rubberband.h"
 #include "desktop.h"
 #include "desktop-affine.h"
+#include "desktop-handles.h"
 #include "selection.h"
 #include "nodepath.h"
 #include "knotholder.h"
