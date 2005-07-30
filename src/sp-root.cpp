@@ -36,7 +36,7 @@ static void sp_root_init (SPRoot *root);
 
 static void sp_root_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_root_release (SPObject *object);
-static void sp_root_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_root_set (SPObject *object, unsigned int key, gchar const *value);
 static void sp_root_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 static void sp_root_remove_child (SPObject *object, Inkscape::XML::Node *child);
 static void sp_root_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -115,7 +115,7 @@ sp_root_class_init (SPRootClass *klass)
 static void
 sp_root_init (SPRoot *root)
 {
-	static const Inkscape::Version zero_version(0, 0);
+	static Inkscape::Version const zero_version(0, 0);
 
 	sp_version_from_string (SVG_VERSION, &root->original.svg);
 	root->version.svg = root->original.svg;
@@ -200,7 +200,7 @@ sp_root_release (SPObject *object)
  *  
  */
 static void
-sp_root_set (SPObject *object, unsigned int key, const gchar *value)
+sp_root_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	SPRoot *root = SP_ROOT(object);
 
@@ -288,7 +288,7 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			int len;
 			gchar c[256];
-			const gchar *p, *e;
+			gchar const *p, *e;
 			unsigned int align, clip;
 			p = value;
 			while (*p && *p == 32) p += 1;
