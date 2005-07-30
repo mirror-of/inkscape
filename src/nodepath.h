@@ -12,12 +12,16 @@
  * This code is in public domain
  */
 
-#include "knot.h"
-#include "sp-path.h"
-#include "desktop-handles.h"
+//#include "knot.h"
+//#include "sp-path.h"
+//#include "desktop-handles.h"
 #include "libnr/nr-path-code.h"
 
 #include <list>
+
+class SPDesktop;
+class SPPath;
+class SPKnot;
 
 namespace Inkscape {
 namespace XML {
@@ -217,139 +221,36 @@ class Node {
 }  // namespace NodePath
 }  // namespace Inkscape
 
-/**
- *
- */
+// Do function documentation in nodepath.cpp
 Inkscape::NodePath::Path * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
-
-/**
- *
- */
 void sp_nodepath_destroy (Inkscape::NodePath::Path * nodepath);
-
-/**
- *
- */
 void sp_nodepath_deselect (Inkscape::NodePath::Path *nodepath);
-
-/**
- *
- */
 void sp_nodepath_select_all (Inkscape::NodePath::Path *nodepath);
-
 void sp_nodepath_select_all_from_subpath(Inkscape::NodePath::Path *nodepath);
-
-/**
- *
- */
 void sp_nodepath_select_next (Inkscape::NodePath::Path *nodepath);
-
-/**
- *
- */
 void sp_nodepath_select_prev (Inkscape::NodePath::Path *nodepath);
-
-/**
- *
- */
 void sp_nodepath_select_rect (Inkscape::NodePath::Path * nodepath, NRRect * b, gboolean incremental);
-
-/**
- *
- */
 GList *save_nodepath_selection (Inkscape::NodePath::Path *nodepath);
-
-/**
- *
- */
 void restore_nodepath_selection (Inkscape::NodePath::Path *nodepath, GList *r);
-
-/**
- *
- */
 gboolean nodepath_repr_d_changed (Inkscape::NodePath::Path * np, const char *newd);
-
-/**
- *
- */
 gboolean nodepath_repr_typestr_changed (Inkscape::NodePath::Path * np, const char *newtypestr);
-
-/**
- *
- */
 gboolean node_key (GdkEvent * event);
-
-/**
- *
- */
 void sp_nodepath_update_statusbar (Inkscape::NodePath::Path *nodepath);
-
-/**
- * Align selected nodes on the specified axis
- */
 void sp_nodepath_selected_align(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
-
-/**
- * Distribute selected nodes on the specified axis
- */
 void sp_nodepath_selected_distribute(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
 
 /* possibly private functions */
 
-
-/**
- *
- */
 void sp_node_selected_add_node (void);
-
-/**
- *
- */
 void sp_node_selected_break (void);
-
-/**
- * Duplicate the selected node(s)
- */
 void sp_node_selected_duplicate (void);
-
-/**
- *  Join two nodes by merging them into one.
- */
 void sp_node_selected_join (void);
-
-/**
- *  Join two nodes by adding a segment between them.
- */
 void sp_node_selected_join_segment (void);
-
-/**
- * Delete one or more selected nodes.
- */
 void sp_node_selected_delete (void);
-
-/**
- * Delete one or more segments between two selected nodes.
- */
 void sp_node_selected_delete_segment (void);
-
-/**
- *
- */
 void sp_node_selected_set_type (Inkscape::NodePath::NodeType type);
-
-/**
- *
- */
 void sp_node_selected_set_line_type (NRPathcode code);
-
-/**
- *
- */
 void sp_node_selected_move (gdouble dx, gdouble dy);
-
-/**
- *
- */
 void sp_node_selected_move_screen (gdouble dx, gdouble dy);
 
 void sp_nodepath_selected_nodes_rotate (Inkscape::NodePath::Path * nodepath, gdouble angle, int which, bool screen);
