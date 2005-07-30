@@ -6,6 +6,7 @@
 #RECURSIVE = yes
 # find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,    ,;s,$,    \\,'
 INPUT = \
+        color.cpp        \
         color.h        \
 	color-rgba.h	\
 	dialogs/export.cpp	\
@@ -53,6 +54,7 @@ INPUT = \
 	message-stack.h	\
 	modifier-fns.h	\
 	nodepath.h	\
+	nodepath.cpp	\
 	object-hierarchy.h  \
 	pen-context.cpp	\
 	pen-context.h	\
