@@ -184,10 +184,10 @@ LangString lng_UInstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per 
 LangString lng_UInstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje usuwania programu"
 
 ; Ask to purge the personal preferences
-LangString lng_PurgePrefs ${LANG_ENGLISH} "Do you want to keep your personal preferences file?"
+LangString lng_PurgePrefs ${LANG_ENGLISH} "Keep Inkscape preferences"
 LangString lng_PurgePrefs ${LANG_CZECH} "Chcete zachovat váš osobní soubor s nastavením?"
 LangString lng_PurgePrefs ${LANG_FRENCH} "Voulez-vous conserver votre fichier de préférences personnelles ?"
-LangString lng_PurgePrefs ${LANG_GERMAN}  "Möchten Sie Ihre persönliche Vorgabendatei behalten?"
+LangString lng_PurgePrefs ${LANG_GERMAN}  "Persönliche Inkscape-Vorgaben behalten"
 LangString lng_PurgePrefs ${LANG_ITALIAN} "Mantenere i file con le configurazioni personali?"
 LangString lng_PurgePrefs ${LANG_POLISH} "Czy chcesz zachowaæ plik z w³asnymi preferencjami?"
 
