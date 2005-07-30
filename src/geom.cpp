@@ -8,23 +8,17 @@
 #include <math.h>
 #include <libnr/nr-point-fns.h>
 
-
-/* Intersect two lines */
-
 /**
  * Finds the intersection of the two (infinite) lines
  * defined by the points p such that dot(n0, p) == d0 and dot(n1, p) == d1.
  *
  * If the two lines intersect, then \a result becomes their point of
  * intersection; otherwise, \a result remains unchanged.
- */
-sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double const d0,
-						     NR::Point const &n1, double const d1,
-						     NR::Point &result) {
-/* This function finds the intersection of the two lines (infinite)
+ *
+ * This function finds the intersection of the two lines (infinite)
  * defined by n0.X = d0 and x1.X = d1.  The algorithm is as follows:
  * To compute the intersection point use kramer's rule:
- * 
+ * \verbatim
  * convert lines to form
  * ax + by = c
  * dx + ey = f
@@ -50,10 +44,17 @@ sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double
  * 
  * repeat for x and you get:
  * 
- * x = (fb - ce)/(bd - ae)
+ * x = (fb - ce)/(bd - ae)                \endverbatim
  * 
- * if the denominator (bd-ae) is 0 then the lines are parallel, if the
- * numerators are then 0 then the lines coincide. */
+ * If the denominator (bd-ae) is 0 then the lines are parallel, if the
+ * numerators are then 0 then the lines coincide. 
+ *
+ * \todo Why not use existing but outcommented code below 
+ * (HAVE_NEW_INTERSECTOR_CODE)?
+ */
+sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double const d0,
+						     NR::Point const &n1, double const d1,
+						     NR::Point &result) {
 	double denominator = dot(NR::rot90(n0), n1);
 	double X = (n1[NR::Y] * d0  -
 		    n0[NR::Y] * d1);
@@ -150,3 +151,13 @@ sp_intersector_segment_intersect(NR::Point const &p00, NR::Point const &p01,
 
 #endif /* end yet-unused HAVE_NEW_INTERSECTOR_CODE code */
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
