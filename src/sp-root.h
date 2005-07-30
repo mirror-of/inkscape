@@ -2,7 +2,7 @@
 #define SP_ROOT_H_SEEN
 
 /** \file
- * SPRoot: SVG <svg> implementation.
+ * SPRoot: SVG \<svg\> implementation.
  */
 /*
  * Authors:
@@ -26,6 +26,7 @@
 #include "enums.h"
 #include "sp-item-group.h"
 
+/** \<svg\> element */
 struct SPRoot : public SPGroup {
     struct {
         Inkscape::Version svg;
