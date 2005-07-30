@@ -1,7 +1,7 @@
 #define __SP_COLOR_C__
 
-/*
- * Colors and colorspaces
+/** \file
+ * Colors and colorspaces.
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -17,6 +17,7 @@
 #include <glib.h>
 #include "color.h"
 
+/// A color space is just a name.
 struct SPColorSpace {
     gchar const *name;
 };
@@ -24,6 +25,10 @@ struct SPColorSpace {
 static SPColorSpace const RGB = {"RGB"};
 static SPColorSpace const CMYK = {"CMYK"};
 
+/**
+ * Returns one of three values depending on if color is valid and if it 
+ * has a valid color space. Likely redundant as soon as this is C++.
+ */
 SPColorSpaceClass
 sp_color_get_colorspace_class(SPColor const *color)
 {
@@ -35,6 +40,10 @@ sp_color_get_colorspace_class(SPColor const *color)
     return SP_COLORSPACE_CLASS_UNKNOWN;
 }
 
+/**
+ * Returns the SPColorSpaceType corresponding to color's color space.
+ * \todo color->colorspace should simply be a named enum.
+ */
 SPColorSpaceType
 sp_color_get_colorspace_type(SPColor const *color)
 {
@@ -46,6 +55,9 @@ sp_color_get_colorspace_type(SPColor const *color)
     return SP_COLORSPACE_TYPE_UNKNOWN;
 }
 
+/**
+ * Shallow copy of color struct with NULL check.
+ */
 void
 sp_color_copy(SPColor *dst, SPColor const *src)
 {
@@ -55,6 +67,9 @@ sp_color_copy(SPColor *dst, SPColor const *src)
     *dst = *src;
 }
 
+/**
+ * Returns TRUE if c0 or c1 is NULL, or if colors/opacities differ.
+ */
 gboolean
 sp_color_is_equal (SPColor const *c0, SPColor const *c1)
 {
@@ -70,6 +85,11 @@ sp_color_is_equal (SPColor const *c0, SPColor const *c1)
     return TRUE;
 }
 
+/**
+ * Returns TRUE if no RGB value differs epsilon or more in both colors, 
+ * with CMYK aditionally comparing opacity, or if c0 or c1 is NULL. 
+ * \note Do we want the latter?
+ */
 gboolean
 sp_color_is_close (SPColor const *c0, SPColor const *c1, float epsilon)
 {
@@ -85,6 +105,10 @@ sp_color_is_close (SPColor const *c0, SPColor const *c1, float epsilon)
     return TRUE;
 }
 
+/**
+ * Sets RGB values and colorspace in color.
+ * \pre color != NULL && 0 <={r,g,b}<=1
+ */
 void
 sp_color_set_rgb_float(SPColor *color, float r, float g, float b)
 {
@@ -103,6 +127,10 @@ sp_color_set_rgb_float(SPColor *color, float r, float g, float b)
     color->v.c[3] = 0;
 }
 
+/**
+ * Converts 32bit value to RGB floats and sets color.
+ * \pre color != NULL 
+ */
 void
 sp_color_set_rgb_rgba32(SPColor *color, guint32 value)
 {
@@ -115,6 +143,10 @@ sp_color_set_rgb_rgba32(SPColor *color, guint32 value)
     color->v.c[3] = 0;
 }
 
+/**
+ * Sets CMYK values and colorspace in color.
+ * \pre color != NULL && 0 <={c,m,y,k}<=1
+ */
 void
 sp_color_set_cmyk_float(SPColor *color, float c, float m, float y, float k)
 {
@@ -135,6 +167,10 @@ sp_color_set_cmyk_float(SPColor *color, float c, float m, float y, float k)
     color->v.c[3] = k;
 }
 
+/**
+ * Convert SPColor with integer alpha value to 32bit RGBA value.
+ * \pre color != NULL && alpha < 256
+ */
 guint32
 sp_color_get_rgba32_ualpha(SPColor const *color, guint32 alpha)
 {
@@ -160,6 +196,10 @@ sp_color_get_rgba32_ualpha(SPColor const *color, guint32 alpha)
     return rgba;
 }
 
+/**
+ * Convert SPColor with float alpha value to 32bit RGBA value.
+ * \pre color != NULL && 0 <= alpha <= 1
+ */
 guint32
 sp_color_get_rgba32_falpha(SPColor const *color, float alpha)
 {
@@ -170,6 +210,10 @@ sp_color_get_rgba32_falpha(SPColor const *color, float alpha)
     return sp_color_get_rgba32_ualpha(color, SP_COLOR_F_TO_U(alpha));
 }
 
+/**
+ * Fill rgb float array with values from SPColor.
+ * \pre color != NULL && rgb != NULL && rgb[0-2] is meaningful
+ */
 void
 sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
 {
@@ -189,6 +233,10 @@ sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
     }
 }
 
+/**
+ * Fill cmyk float array with values from SPColor.
+ * \pre color != NULL && cmyk != NULL && cmyk[0-3] is meaningful
+ */
 void
 sp_color_get_cmyk_floatv(SPColor const *color, float *cmyk)
 {
@@ -210,6 +258,9 @@ sp_color_get_cmyk_floatv(SPColor const *color, float *cmyk)
 
 /* Plain mode helpers */
 
+/**
+ * Fill hsv float array from r,g,b float values.
+ */
 void
 sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b)
 {
@@ -242,6 +293,9 @@ sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b)
     }
 }
 
+/**
+ * Fill rgb float array from h,s,v float values.
+ */
 void
 sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
 {
@@ -280,6 +334,9 @@ sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
     }
 }
 
+/**
+ * Fill hsl float array from r,g,b float values.
+ */
 void
 sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b)
 {
@@ -321,6 +378,9 @@ hue_2_rgb (float v1, float v2, float h)
     return v1;
 }
 
+/**
+ * Fill rgb float array from h,s,l float values.
+ */
 void
 sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l)
 {
@@ -343,6 +403,9 @@ sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l)
     }
 }
 
+/**
+ * Fill cmyk float array from r,g,b float values.
+ */
 void
 sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b)
 {
@@ -371,6 +434,9 @@ sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b)
     cmyk[3] = k;
 }
 
+/**
+ * Fill rgb float array from c,m,y,k float values.
+ */
 void
 sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k)
 {
@@ -390,7 +456,6 @@ sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k)
     rgb[1] = 1.0 - m;
     rgb[2] = 1.0 - y;
 }
-
 
 /*
   Local Variables:
