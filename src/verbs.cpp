@@ -587,7 +587,7 @@ Verb::get_action (SPView * view)
             sp_action_set_sensitive(action, 0);
         } else {
             for (ActionTable::iterator cur_action = _actions->begin();
-                     cur_action != _actions->end();
+                     cur_action != _actions->end() && view != NULL;
                      cur_action++) {
                 if (cur_action->first->doc == view->doc) {
                     sp_action_set_sensitive(action, cur_action->second->sensitive);
