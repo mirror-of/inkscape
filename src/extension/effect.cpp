@@ -30,8 +30,8 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
 
 Effect::~Effect (void)
 {
-    if (_last_effect == this)
-        _last_effect = NULL;
+    if (get_last_effect() == this)
+        set_last_effect(NULL);
     return;
 }
 
@@ -83,11 +83,26 @@ Effect::effect (SPView * doc)
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return;
 
-    _last_effect = this;
+    set_last_effect(this);
     imp->effect(this, doc);
 
     sp_document_done(doc->doc);
 
+    return;
+}
+
+void
+Effect::set_last_effect (Effect * in_effect)
+{
+    if (in_effect == NULL) {
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST)->sensitive(NULL, false);
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST_PREF)->sensitive(NULL, false);
+    } else if (_last_effect == NULL) {
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST)->sensitive(NULL, true);
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST_PREF)->sensitive(NULL, true);
+    }
+
+    _last_effect = in_effect;
     return;
 }
 

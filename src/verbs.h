@@ -243,6 +243,20 @@ private:
     /** \brief Whether this verb is set to default to sensitive or
                insensitive when new actions are created. */
     bool _default_sensitive;
+protected:
+    /** \brief Allows for preliminary setting of the \c _default_sensitive
+               value without effecting existing actions
+        \param in_val New value
+
+        This function is mostly used at initialization where there are
+        not actions to effect.  I can't think of another case where it
+        should be used.
+    */
+    bool set_default_sensitive (bool in_val) { return _default_sensitive = in_val; }
+public:
+    /** \brief Accessor to get the \c _default_sensitive value */
+    bool get_default_sensitive (void) { return _default_sensitive; }
+
 public:
     /** \brief Accessor to get the internal variable. */
     unsigned int get_code (void) { return _code; }

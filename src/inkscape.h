@@ -30,6 +30,11 @@ gboolean inkscape_load_preferences (Inkscape::Application * inkscape);
 gboolean inkscape_save_preferences (Inkscape::Application * inkscape);
 Inkscape::XML::Node *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key);
 
+/* Menus */
+gboolean inkscape_load_menus (Inkscape::Application * inkscape);
+gboolean inkscape_save_menus (Inkscape::Application * inkscape);
+Inkscape::XML::Node *inkscape_get_menus (Inkscape::Application * inkscape);
+
 Inkscape::Application *inkscape_get_instance();
 
 #define SP_ACTIVE_EVENTCONTEXT inkscape_active_event_context ()

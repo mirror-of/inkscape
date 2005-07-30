@@ -32,6 +32,8 @@
 #include "inkscape.h"
 #include "xml/repr.h"
 
+#include "sp-shape.h"
+
 #include "helper/stlport.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
@@ -151,6 +153,10 @@ void Selection::_add(SPObject *obj) {
                      G_CALLBACK(&Selection::_release), this);
     g_signal_connect(G_OBJECT(obj), "modified",
                      G_CALLBACK(&Selection::_schedule_modified), this);
+
+    if (!SP_IS_SHAPE(obj)) {
+        printf("This is not a shape\n");
+    }
 }
 
 void Selection::set(SPObject *object) {

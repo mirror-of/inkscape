@@ -557,6 +557,15 @@ Verb::make_action_helper (SPView * view, SPActionEventVector * vector, void * in
     will create the verb if it can't be found in the ActionTable.  Also,
     if the \c ActionTable has not been created, it gets created by this
     function.
+
+    If the action is created, it's sensitivity must be determined.  The
+    default for a new action is that it is sensitive.  If the value in
+    \c _default_sensitive is \c false, then the sensitivity must be
+    removed.  Also, if the view being created is based on the same
+    document as a view already created, the sensitivity should be the
+    same as views on that document.  A view with the same document is
+    looked for, and the sensitivity is matched.  Unfortunately, this is
+    currently a linear search.
 */
 SPAction *
 Verb::get_action (SPView * view)
@@ -572,11 +581,23 @@ Verb::get_action (SPView * view)
         action = action_found->second;
     } else {
         action = this->make_action(view);
+
         // if (action == NULL) printf("Hmm, NULL in %s\n", _name);
+        if (!_default_sensitive) {
+            sp_action_set_sensitive(action, 0);
+        } else {
+            for (ActionTable::iterator cur_action = _actions->begin();
+                     cur_action != _actions->end();
+                     cur_action++) {
+                if (cur_action->first->doc == view->doc) {
+                    sp_action_set_sensitive(action, cur_action->second->sensitive);
+                    break;
+                }
+            }
+        }
+
         _actions->insert(ActionTable::value_type(view, action));
     }
-
-    // sp_action_set_sensitive(action, _default_sensitive ? 1 : 0);
 
     return action;
 }
@@ -584,13 +605,15 @@ Verb::get_action (SPView * view)
 void
 Verb::sensitive (SPDocument * in_doc, bool in_sensitive)
 {
-    for (ActionTable::iterator cur_action = _actions->begin();
-             cur_action != _actions->end();
-             cur_action++) {
-        if (in_doc == NULL || cur_action->first->doc == in_doc) {
-            sp_action_set_sensitive(cur_action->second, in_sensitive ? 1 : 0);
+    // printf("Setting sensitivity of \"%s\" to %d\n", _name, in_sensitive);
+    if (_actions != NULL)
+        for (ActionTable::iterator cur_action = _actions->begin();
+                 cur_action != _actions->end();
+                 cur_action++) {
+            if (in_doc == NULL || cur_action->first->doc == in_doc) {
+                sp_action_set_sensitive(cur_action->second, in_sensitive ? 1 : 0);
+            }
         }
-    }
     
     if (in_doc == NULL) {
         _default_sensitive = in_sensitive;
@@ -1606,7 +1629,7 @@ public:
                    gchar const * tip,
                    gchar const * image) :
             Verb(code, id, name, tip, image) {
-        // sensitive(NULL, false);
+        set_default_sensitive(false);
     }
 }; /* EffectLastVerb class */
 
@@ -1645,6 +1668,7 @@ EffectLastVerb::perform (SPAction *action, void * data, void *pdata)
         case SP_VERB_EFFECT_LAST_PREF:
             if (!effect->prefs(current_view))
                 return;
+            /* Note: fall through */
         case SP_VERB_EFFECT_LAST:
             effect->effect(current_view);
             break;

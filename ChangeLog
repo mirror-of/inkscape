@@ -1,3 +1,13 @@
+2005-07-30  Ted Gould  <ted@gould.cx>
+
+	* src/Makefile_insert, src/inkscape.cpp, src/inkscape.h,
+	src/interface.cpp, src/selection.cpp, src/verbs.cpp, src/verbs.h,
+	src/extension/effect.cpp, src/extension/effect.h, src/menus-skeleton.h:
+
+	Doing two things.  One, making menus configurable by an external xml file
+	and the second is enabling sensitivity in the verbs.  These are both in
+	pretty basic states right now, but workable.
+
 2005-07-29  MenTaLguY  <mental@rydia.net>
 
 	* src/shortcuts.cpp: made Ctrl+Shift+G the "primary" ungroup shortcut

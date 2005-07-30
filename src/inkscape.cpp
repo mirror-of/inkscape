@@ -80,6 +80,7 @@ static Inkscape::Application *inkscape = NULL;
 
 /* Backbones of configuration xml data */
 #include "preferences-skeleton.h"
+#include "menus-skeleton.h"
 
 enum {
     MODIFY_SELECTION, // global: one of selections modified
@@ -121,14 +122,12 @@ static void inkscape_init_config (Inkscape::XML::Document *doc, const gchar *con
 				  const gchar *e_cwf,
 				  const gchar *warn);
 
-static void inkscape_init_preferences (Inkscape::Application *inkscape);
-
-static void inkscape_init_preferences (Inkscape::Application * inkscape);
-
 struct Inkscape::Application {
     GObject object;
     Inkscape::XML::Document *preferences;
     gboolean save_preferences;
+    Inkscape::XML::Document *menus;
+    gboolean save_menus;
     GSList *documents;
     GSList *desktops;
     gchar *argv0;
@@ -168,6 +167,7 @@ static void (* segv_handler) (int) = NULL;
 #endif
 
 #define PREFERENCES_FILE "preferences.xml"
+#define MENUS_FILE "menus.xml"
 
 
 /**
@@ -309,6 +309,7 @@ inkscape_init (SPObject * object)
     }
 
     inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
+    inkscape->menus = sp_repr_read_mem (menus_skeleton, MENUS_SKELETON_SIZE, NULL);
 
     inkscape->documents = NULL;
     inkscape->desktops = NULL;
@@ -335,6 +336,14 @@ inkscape_dispose (GObject *object)
         Inkscape::GC::release(inkscape->preferences);
         inkscape->preferences = NULL;
         inkscape->save_preferences = FALSE;
+    }
+
+    if (inkscape->menus && inkscape->save_menus) {
+        /* fixme: This is not the best place */
+        inkscape_save_menus (inkscape);
+        Inkscape::GC::release(inkscape->menus);
+        inkscape->menus = NULL;
+        inkscape->save_menus = FALSE;
     }
 
     G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -487,6 +496,10 @@ inkscape_segv_handler (int signum)
         inkscape_save_preferences (inkscape);
     }
 
+    if (inkscape->menus && inkscape->save_menus) {
+        inkscape_save_menus (inkscape);
+    }
+
     fprintf (stderr, "Emergency save completed. Inkscape will close now.\n");
     fprintf (stderr, "If you can reproduce this crash, please file a bug at www.inkscape.org\n");
     fprintf (stderr, "with a detailed description of the steps leading to the crash, so we can fix it.\n");
@@ -579,6 +592,7 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
     /* Attempt to load the preferences, and set the save_preferences flag to TRUE
        if we could, or FALSE if we couldn't */
     inkscape->save_preferences = inkscape_load_preferences(inkscape);
+    inkscape->save_menus = inkscape_load_menus(inkscape);
 
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON */
 #ifdef WIN32
@@ -626,7 +640,14 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
     gchar *fn = profile_path(filename);
     if (!Inkscape::IO::file_test(fn, G_FILE_TEST_EXISTS)) {
         /* No such file */
-        inkscape_init_preferences (INKSCAPE);
+        inkscape_init_config (config, filename, skeleton, 
+                              skel_size,
+                              _("Cannot create directory %s.\n%s"),
+                              _("%s is not a valid directory.\n%s"),
+                              _("Cannot create file %s.\n%s"),
+                              _("Cannot write file %s.\n%s"), 
+                              _("Although Inkscape will run, it will use default settings,\n"
+                                "and any changes made in preferences will not be saved."));
         g_free (fn);
         return FALSE;
     }
@@ -666,7 +687,15 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
         return FALSE;
     }
 
-    config->root()->mergeFrom(doc->root(), "id");
+    /** \todo this is a hack, need to figure out how to get
+     *        a reasonable merge working with the menus.xml file */
+    if (skel_size == MENUS_SKELETON_SIZE) {
+        INKSCAPE->menus = doc;
+        doc = config;
+    } else {
+        config->root()->mergeFrom(doc->root(), "id");
+    }
+
     Inkscape::GC::release(doc);
     g_free (fn);
     return TRUE;
@@ -705,6 +734,39 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 {
     gchar *fn = profile_path(PREFERENCES_FILE);
     gboolean retval = sp_repr_save_file (inkscape->preferences, fn);
+
+    g_free (fn);
+    return retval;
+}
+
+/**
+ *  Menus management
+ * 
+ */
+gboolean
+inkscape_load_menus (Inkscape::Application *inkscape)
+{
+    return inkscape_load_config (MENUS_FILE, 
+				 inkscape->menus, 
+				 menus_skeleton, 
+				 MENUS_SKELETON_SIZE,
+				 _("%s is not a regular file.\n%s"),
+				 _("%s not a valid XML file, or\n"
+				   "you don't have read permissions on it.\n%s"),
+				 _("%s is not a valid menus file.\n%s"),
+				 _("Inkscape will run with default menus.\n"
+                             "New menus will not be saved."));
+}
+
+
+/*
+ *  Returns TRUE if file was successfully saved, FALSE if not
+ */
+gboolean
+inkscape_save_menus (Inkscape::Application * inkscape)
+{
+    gchar *fn = profile_path(MENUS_FILE);
+    gboolean retval = sp_repr_save_file (inkscape->menus, fn);
 
     g_free (fn);
     return retval;
@@ -1226,27 +1288,6 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
     fclose(fh);
 }
 
-
-
-/**
- * This routine should be obsoleted in favor of the
- * generic version
- */
-static void
-inkscape_init_preferences (Inkscape::Application *inkscape)
-{
-    inkscape_init_config (inkscape->preferences, PREFERENCES_FILE, preferences_skeleton, 
-			  PREFERENCES_SKELETON_SIZE,
-			  _("Cannot create directory %s.\n%s"),
-			  _("%s is not a valid directory.\n%s"),
-			  _("Cannot create file %s.\n%s"),
-			  _("Cannot write file %s.\n%s"), 
-			  _("Although Inkscape will run, it will use default settings,\n"
-			    "and any changes made in preferences will not be saved."));
-}
-
-
-
 void
 inkscape_refresh_display (Inkscape::Application *inkscape)
 {
@@ -1268,6 +1309,9 @@ inkscape_exit (Inkscape::Application *inkscape)
 
     if (inkscape->preferences && inkscape->save_preferences) {
         inkscape_save_preferences (INKSCAPE);
+    }
+    if (inkscape->menus && inkscape->save_menus) {
+        inkscape_save_menus (INKSCAPE);
     }
     gtk_main_quit ();
 }
@@ -1363,6 +1407,14 @@ profile_path(const char *filename)
         }
     }
     return g_build_filename(prefdir, INKSCAPE_PROFILE_DIR, filename, NULL);
+}
+
+Inkscape::XML::Node *
+inkscape_get_menus (Inkscape::Application * inkscape)
+{
+    Inkscape::XML::Node *repr = sp_repr_document_root (inkscape->menus);
+    g_assert (!(strcmp (repr->name(), "inkscape")));
+    return repr->firstChild();
 }
 
 

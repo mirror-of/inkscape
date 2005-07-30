@@ -42,6 +42,8 @@ class Effect : public Extension {
                        gchar const * image,
                        Effect *      effect) :
                     Verb(id, name, tip, image), _effect(effect) {
+                /* No clue why, but this is required */
+                this->set_default_sensitive(true);
             }
     };
     EffectVerb _verb;
