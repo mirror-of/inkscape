@@ -476,15 +476,11 @@ struct SPObjectClass {
 
 /*
  * Attaching/detaching
- *
- * Attach returns object itself, or NULL on error.
- * Detach returns next object, NULL on error.
  */
 
-void sp_object_attach_reref(SPObject *parent, SPObject *object, SPObject *prev);
+void sp_object_attach(SPObject *parent, SPObject *object, SPObject *prev);
 void sp_object_reorder(SPObject *object, SPObject *prev);
 void sp_object_detach(SPObject *parent, SPObject *object);
-void sp_object_detach_unref(SPObject *parent, SPObject *object);
 
 inline SPObject *sp_object_first_child(SPObject *parent) {
     return parent->firstChild();

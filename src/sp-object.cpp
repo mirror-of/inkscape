@@ -489,7 +489,7 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
  */
 
 void
-sp_object_attach_reref(SPObject *parent, SPObject *object, SPObject *prev)
+sp_object_attach(SPObject *parent, SPObject *object, SPObject *prev)
 {
     g_return_if_fail(parent != NULL);
     g_return_if_fail(SP_IS_OBJECT(parent));
@@ -500,7 +500,6 @@ sp_object_attach_reref(SPObject *parent, SPObject *object, SPObject *prev)
     g_return_if_fail(!object->parent);
 
     sp_object_ref(object, parent);
-    g_object_unref(G_OBJECT(object));
     object->parent = parent;
     parent->_updateTotalHRefCount(object->_total_hrefcount);
 
@@ -588,17 +587,6 @@ void sp_object_detach(SPObject *parent, SPObject *object) {
 
     sp_object_invoke_release(object);
     parent->_updateTotalHRefCount(-object->_total_hrefcount);
-}
-
-void sp_object_detach_unref(SPObject *parent, SPObject *object)
-{
-    g_return_if_fail(parent != NULL);
-    g_return_if_fail(SP_IS_OBJECT(parent));
-    g_return_if_fail(object != NULL);
-    g_return_if_fail(SP_IS_OBJECT(object));
-    g_return_if_fail(object->parent == parent);
-
-    sp_object_detach(parent, object);
     sp_object_unref(object, parent);
 }
 
@@ -627,7 +615,8 @@ static void sp_object_child_added(SPObject *object, Inkscape::XML::Node *child, 
     }
     SPObject *ochild = SP_OBJECT(g_object_new(type, 0));
     SPObject *prev = ref ? sp_object_get_child_by_repr(object, ref) : NULL;
-    sp_object_attach_reref(object, ochild, prev);
+    sp_object_attach(object, ochild, prev);
+    sp_object_unref(ochild, NULL);
 
     sp_object_invoke_build(ochild, object->document, child, SP_OBJECT_IS_CLONED(object));
 }
@@ -637,7 +626,7 @@ static void sp_object_remove_child(SPObject *object, Inkscape::XML::Node *child)
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
     SPObject *ochild = sp_object_get_child_by_repr(object, child);
     g_return_if_fail(ochild != NULL);
-    sp_object_detach_unref(object, ochild);
+    sp_object_detach(object, ochild);
 }
 
 static void sp_object_order_changed(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref,
@@ -653,7 +642,7 @@ static void sp_object_release(SPObject *object)
 {
     debug("id=%x, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
     while (object->children) {
-        sp_object_detach_unref(object, object->children);
+        sp_object_detach(object, object->children);
     }
 }
 
@@ -676,7 +665,8 @@ sp_object_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
             continue;
         }
         SPObject *child = SP_OBJECT(g_object_new(type, 0));
-        sp_object_attach_reref(object, child, object->lastChild());
+        sp_object_attach(object, child, object->lastChild());
+        sp_object_unref(child, NULL);
         sp_object_invoke_build(child, document, rchild, SP_OBJECT_IS_CLONED(object));
     }
 }

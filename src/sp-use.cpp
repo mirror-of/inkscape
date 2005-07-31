@@ -503,7 +503,7 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
     use->_transformed_connection.disconnect();
 
     if (use->child) {
-        sp_object_detach_unref(SP_OBJECT(use), use->child);
+        sp_object_detach(SP_OBJECT(use), use->child);
         use->child = NULL;
     }
 
@@ -515,7 +515,8 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
             g_return_if_fail(type > G_TYPE_NONE);
             if (g_type_is_a(type, SP_TYPE_ITEM)) {
                 use->child = (SPObject*) g_object_new(type, 0);
-                sp_object_attach_reref(SP_OBJECT(use), use->child, use->lastChild());
+                sp_object_attach(SP_OBJECT(use), use->child, use->lastChild());
+                sp_object_unref(use->child);
                 sp_object_invoke_build(use->child, SP_OBJECT(use)->document, childrepr, TRUE);
 
                 for (SPItemView *v = item->display; v != NULL; v = v->next) {

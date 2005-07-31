@@ -1,3 +1,8 @@
+2005-07-31  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.cpp, src/sp-object.h, src/sp-use.cpp:
+	  adopt more consistent refcounting policy
+
 2005-07-30  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/draw-anchor.cpp, src/nodepath.h: reduced dependencies
