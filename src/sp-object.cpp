@@ -62,21 +62,21 @@ static void sp_object_order_changed (SPObject * object, Inkscape::XML::Node * ch
 static void sp_object_release(SPObject *object);
 static void sp_object_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr);
 
-static void sp_object_private_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_object_private_set (SPObject *object, unsigned int key, gchar const *value);
 static Inkscape::XML::Node *sp_object_private_write (SPObject *object, Inkscape::XML::Node *repr, guint flags);
 
 /* Real handlers of repr signals */
 
-static void sp_object_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data);
+static void sp_object_repr_attr_changed (Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval, bool is_interactive, gpointer data);
 
-static void sp_object_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data);
+static void sp_object_repr_content_changed (Inkscape::XML::Node *repr, gchar const *oldcontent, gchar const *newcontent, gpointer data);
 
 static void sp_object_repr_child_added (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data);
 static void sp_object_repr_child_removed (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void *data);
 
 static void sp_object_repr_order_changed (Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data);
 
-static gchar * sp_object_get_unique_id (SPObject * object, const gchar * defid);
+static gchar *sp_object_get_unique_id(SPObject *object, gchar const *defid);
 
 guint update_in_progress = 0; // guard against update-during-update
 
@@ -357,7 +357,7 @@ SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
 	return longest_common_suffix<SPObject::ConstParentIterator>(this, object, NULL, &same_objects);
 }
 
-const SPObject *AncestorSon (SPObject const *obj, SPObject const *ancestor) {
+SPObject const *AncestorSon (SPObject const *obj, SPObject const *ancestor) {
     if (obj == NULL || ancestor == NULL)
         return NULL;
     if (SP_OBJECT_PARENT (obj) == ancestor)
@@ -708,7 +708,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, Inkscape::XML:
 
 		if (Inkscape::XML::id_permitted(object->repr)) {
 			/* If we are not cloned, force unique id */
-			const gchar *id = object->repr->attribute("id");
+			gchar const *id = object->repr->attribute("id");
 			gchar *realid = sp_object_get_unique_id (object, id);
 			g_assert (realid != NULL);
 
@@ -813,7 +813,7 @@ sp_object_repr_order_changed (Inkscape::XML::Node * repr, Inkscape::XML::Node * 
 }
 
 static void
-sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
+sp_object_private_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	g_assert (key != SP_ATTR_INVALID);
 
@@ -824,7 +824,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			SPObject *conflict=NULL;
 
 			if (value) {
-				conflict = document->getObjectById((const char *)value);
+				conflict = document->getObjectById((char const *)value);
 			}
 			if ( conflict && conflict != object ) {
 				sp_object_ref(conflict, NULL);
@@ -841,7 +841,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			}
 
 			if (value) {
-				object->id = g_strdup ((const char*)value);
+				object->id = g_strdup ((char const*)value);
 				document->bindObjectToId(object->id, object);
 			} else {
 				object->id = NULL;
@@ -888,7 +888,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 void
-sp_object_set (SPObject *object, unsigned int key, const gchar *value)
+sp_object_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
@@ -899,7 +899,7 @@ sp_object_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 void
-sp_object_read_attr (SPObject *object, const gchar *key)
+sp_object_read_attr (SPObject *object, gchar const *key)
 {
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
@@ -910,14 +910,14 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 	unsigned int keyid = sp_attribute_lookup (key);
 	if (keyid != SP_ATTR_INVALID) {
 		/* Retrieve the 'key' attribute from the object's XML representation */
-		const gchar *value = object->repr->attribute(key);
+		gchar const *value = object->repr->attribute(key);
 
 		sp_object_set (object, keyid, value);
 	}
 }
 
 static void
-sp_object_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
+sp_object_repr_attr_changed (Inkscape::XML::Node *repr, gchar const *key, gchar const *oldval, gchar const *newval, bool is_interactive, gpointer data)
 {
 	SPObject *object = SP_OBJECT (data);
 
@@ -931,7 +931,7 @@ sp_object_repr_attr_changed (Inkscape::XML::Node *repr, const gchar *key, const 
 }
 
 static void
-sp_object_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data)
+sp_object_repr_content_changed (Inkscape::XML::Node *repr, gchar const *oldcontent, gchar const *newcontent, gpointer data)
 {
 	SPObject * object = SP_OBJECT (data);
 
@@ -939,7 +939,7 @@ sp_object_repr_content_changed (Inkscape::XML::Node *repr, const gchar *oldconte
 		(*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content) (object);
 }
 
-static const gchar*
+static gchar const*
 sp_xml_get_space_string(unsigned int space)
 {
 	switch(space)
@@ -965,7 +965,7 @@ sp_object_private_write (SPObject *object, Inkscape::XML::Node *repr, guint flag
 		sp_repr_set_attr (repr, "id", object->id);
 
 		if (object->xml_space.set) {
-			const char *xml_space;
+			char const *xml_space;
 			xml_space = sp_xml_get_space_string(object->xml_space.value);
 			sp_repr_set_attr (repr, "xml:space", xml_space);
 		}
@@ -1146,32 +1146,32 @@ SPObject::emitModified(unsigned int flags)
  * These are inefficent, so they are not intended to be used interactively
  */
 
-const gchar *
+gchar const *
 sp_object_title_get (SPObject *object)
 {
 	return NULL;
 }
 
-const gchar *
+gchar const *
 sp_object_description_get (SPObject *object)
 {
 	return NULL;
 }
 
 unsigned int
-sp_object_title_set (SPObject *object, const gchar *title)
+sp_object_title_set (SPObject *object, gchar const *title)
 {
 	return FALSE;
 }
 
 unsigned int
-sp_object_description_set (SPObject *object, const gchar *desc)
+sp_object_description_set (SPObject *object, gchar const *desc)
 {
 	return FALSE;
 }
 
-const gchar *
-sp_object_tagName_get (const SPObject *object, SPException *ex)
+gchar const *
+sp_object_tagName_get (SPObject const *object, SPException *ex)
 {
 	/* If exception is not clear, return */
 	if (!SP_EXCEPTION_IS_OK (ex)) {
@@ -1182,8 +1182,8 @@ sp_object_tagName_get (const SPObject *object, SPException *ex)
 	return object->repr->name();
 }
 
-const gchar *
-sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *ex)
+gchar const *
+sp_object_getAttribute (SPObject const *object, gchar const *key, SPException *ex)
 {
 	/* If exception is not clear, return */
 	if (!SP_EXCEPTION_IS_OK (ex)) {
@@ -1191,11 +1191,11 @@ sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *e
 	}
 
 	/* fixme: Exception if object is NULL? */
-	return (const gchar *) object->repr->attribute(key);
+	return (gchar const *) object->repr->attribute(key);
 }
 
 void
-sp_object_setAttribute (SPObject *object, const gchar *key, const gchar *value, SPException *ex)
+sp_object_setAttribute (SPObject *object, gchar const *key, gchar const *value, SPException *ex)
 {
 	/* If exception is not clear, return */
 	g_return_if_fail (SP_EXCEPTION_IS_OK (ex));
@@ -1207,7 +1207,7 @@ sp_object_setAttribute (SPObject *object, const gchar *key, const gchar *value, 
 }
 
 void
-sp_object_removeAttribute (SPObject *object, const gchar *key, SPException *ex)
+sp_object_removeAttribute (SPObject *object, gchar const *key, SPException *ex)
 {
 	/* If exception is not clear, return */
 	g_return_if_fail (SP_EXCEPTION_IS_OK (ex));
@@ -1221,7 +1221,7 @@ sp_object_removeAttribute (SPObject *object, const gchar *key, SPException *ex)
 /* Helper */
 
 static gchar *
-sp_object_get_unique_id (SPObject * object, const gchar * id)
+sp_object_get_unique_id(SPObject *object, gchar const *id)
 {
 	static unsigned long count = 0;
 
@@ -1229,10 +1229,10 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 
 	count ++;
 
-	const gchar *name = object->repr->name();
+	gchar const *name = object->repr->name();
 	g_assert (name != NULL);
 
-	const gchar *local = strchr (name, ':');
+	gchar const *local = strchr (name, ':');
 	if (local) {
 		name = local + 1;
 	}
@@ -1282,7 +1282,7 @@ sp_object_get_style_property(SPObject const *object, gchar const *key, gchar con
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 
-	const gchar *style = object->repr->attribute("style");
+	gchar const *style = object->repr->attribute("style");
 	if (style) {
 		size_t const len = strlen(key);
 		char const *p;
@@ -1303,7 +1303,7 @@ sp_object_get_style_property(SPObject const *object, gchar const *key, gchar con
 			}
 		}
 	}
-	const gchar *val = object->repr->attribute(key);
+	gchar const *val = object->repr->attribute(key);
 	if (val && !streq(val, "inherit")) {
 		return val;
 	}
@@ -1329,7 +1329,7 @@ void SPObject::_requireSVGVersion(Inkscape::Version version) {
 Inkscape::Version
 sp_object_get_sodipodi_version (SPObject *object)
 {
-	static const Inkscape::Version zero_version(0, 0);
+	static Inkscape::Version const zero_version(0, 0);
 
 	while (object) {
 		if (SP_IS_ROOT (object)) {
