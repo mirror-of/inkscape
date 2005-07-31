@@ -13,7 +13,7 @@
 #include "config.h"
 
 #include <math.h>
-#include <string.h>
+//#include <string.h>
 #include <gdk/gdkkeysyms.h>
 #include "svg/svg.h"
 #include "display/curve.h"
@@ -34,7 +34,7 @@
 #include "selection-chemistry.h"
 #include "selection.h"
 #include "xml/repr.h"
-#include "object-edit.h"
+//#include "object-edit.h"
 #include "prefs-utils.h"
 #include "sp-metrics.h"
 #include "sp-path.h"
@@ -42,10 +42,12 @@
 
 #include "libnr/nr-point-ops.h"
 #include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
+//#include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-matrix-ops.h>
+
+class NR::Matrix;
 
 /// \todo
 /// evil evil evil. FIXME: conflict of two different Path classes!
