@@ -78,6 +78,8 @@ INPUT = \
 	sp-offset.cpp	\
 	sp-radial-gradient-fns.h	\
 	sp-radial-gradient.h	\
+	sp-root.h	\
+	sp-root.cpp	\
 	sp-spiral.h	\
 	sp-spiral.cpp	\
 	svg-view.cpp    \
