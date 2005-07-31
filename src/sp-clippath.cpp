@@ -39,7 +39,7 @@ static void sp_clippath_init (SPClipPath *clippath);
 
 static void sp_clippath_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *repr);
 static void sp_clippath_release (SPObject * object);
-static void sp_clippath_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_clippath_set (SPObject *object, unsigned int key, gchar const *value);
 static void sp_clippath_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
 static void sp_clippath_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_clippath_modified (SPObject *object, guint flags);
@@ -137,7 +137,7 @@ sp_clippath_release (SPObject * object)
 }
 
 static void
-sp_clippath_set (SPObject *object, unsigned int key, const gchar *value)
+sp_clippath_set (SPObject *object, unsigned int key, gchar const *value)
 {
 	SPClipPath *cp;
 
