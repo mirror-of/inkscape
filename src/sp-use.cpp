@@ -453,7 +453,7 @@ sp_use_move_compensate(NR::Matrix const *mp, SPItem *original, SPUse *self)
         return;
     }
 
-    // never compensate uses which are used in flowtext 
+    // never compensate uses which are used in flowtext
     if (SP_OBJECT_PARENT(self) && SP_IS_FLOWREGION(SP_OBJECT_PARENT(self))) {
         return;
     }
@@ -516,7 +516,7 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
             if (g_type_is_a(type, SP_TYPE_ITEM)) {
                 use->child = (SPObject*) g_object_new(type, 0);
                 sp_object_attach(SP_OBJECT(use), use->child, use->lastChild());
-                sp_object_unref(use->child);
+                sp_object_unref(use->child, SP_OBJECT(use));
                 sp_object_invoke_build(use->child, SP_OBJECT(use)->document, childrepr, TRUE);
 
                 for (SPItemView *v = item->display; v != NULL; v = v->next) {
@@ -538,7 +538,7 @@ sp_use_href_changed(SPObject *old_ref, SPObject *ref, SPUse *use)
 static void
 sp_use_delete_self(SPObject *deleted, SPUse *self)
 {
-    // always delete uses which are used in flowtext 
+    // always delete uses which are used in flowtext
     if (SP_OBJECT_PARENT(self) && SP_IS_FLOWREGION(SP_OBJECT_PARENT(self))) {
         SP_OBJECT(self)->deleteObject();
         return;
