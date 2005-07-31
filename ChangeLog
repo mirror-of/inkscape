@@ -3,6 +3,9 @@
 	* src/sp-object.cpp, src/sp-object.h, src/sp-use.cpp:
 	  adopt more consistent refcounting policy
 
+	* src/sp-object.h: make second parameter to sp_object_ref and
+	  sp_object_unref optional
+
 2005-07-30  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/draw-anchor.cpp, src/nodepath.h: reduced dependencies

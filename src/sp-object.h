@@ -131,8 +131,8 @@ class SPObject;
  * Ref should return object, NULL is error, unref return always NULL
  */
 
-SPObject *sp_object_ref(SPObject *object, SPObject *owner);
-SPObject *sp_object_unref(SPObject *object, SPObject *owner);
+SPObject *sp_object_ref(SPObject *object, SPObject *owner=NULL);
+SPObject *sp_object_unref(SPObject *object, SPObject *owner=NULL);
 
 SPObject *sp_object_href(SPObject *object, gpointer owner);
 SPObject *sp_object_hunref(SPObject *object, gpointer owner);
