@@ -49,6 +49,13 @@
 #include "sp-item.h"
 #include "event-context.h"
 
+#ifdef WITH_INKBOARD
+#include "ui/dialog/whiteboard-connect.h"
+#include "ui/dialog/whiteboard-sharewithuser.h"
+
+#include "dialogs/whiteboard-sharewithchat-dialog.h"
+#endif
+
 using namespace Inkscape::UI;
 using namespace Inkscape::UI::Widget;
 
@@ -274,6 +281,43 @@ Edit::onDialogXmlEditor()
 {
     _dlg_mgr.showDialog("XmlEditor");
 }
+
+#ifdef WITH_INKBOARD
+void
+Edit::onDialogWhiteboardConnect()
+{
+	Dialog::WhiteboardConnectDialogImpl* dlg = dynamic_cast< Dialog::WhiteboardConnectDialogImpl* >(_dlg_mgr.getDialog("WhiteboardConnect"));
+	dlg->setSessionManager();
+	_dlg_mgr.showDialog("WhiteboardConnect");
+}
+
+void
+Edit::onDialogWhiteboardShareWithUser()
+{
+		Dialog::WhiteboardShareWithUserDialogImpl* dlg = dynamic_cast< Dialog::WhiteboardShareWithUserDialogImpl* >(_dlg_mgr.getDialog("WhiteboardShareWithUser"));
+		dlg->setSessionManager();
+		_dlg_mgr.showDialog("WhiteboardShareWithUser");
+}
+
+void
+Edit::onDialogWhiteboardShareWithChat()
+{
+	sp_whiteboard_sharewithchat_dialog(NULL);
+}
+
+void
+Edit::onDialogOpenSessionFile()
+{
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "not reimplemented yet");
+}
+
+void
+Edit::onDumpXMLTracker()
+{
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "not reimplemented yet");
+}
+
+#endif
 
 void
 Edit::onUriChanged()
@@ -735,6 +779,34 @@ Edit::initMenuActions()
 
     _act_grp->add(Gtk::Action::create("RemoveManualKerns",
                                       Stock::REMOVE_MANUAL_KERNS));
+
+	// Whiteboard menu
+#ifdef WITH_INKBOARD
+    _act_grp->add(Gtk::Action::create("WhiteboardConnect",
+                                      Gtk::Stock::CLEAR, Glib::ustring(),
+                                      _("PLACEHOLDER, do not translate")),
+                  sigc::mem_fun(*this, &Edit::onDialogWhiteboardConnect));
+
+    _act_grp->add(Gtk::Action::create("WhiteboardShareWithUser",
+                                      Gtk::Stock::CLEAR, Glib::ustring(),
+                                      _("PLACEHOLDER, do not translate")),
+                  sigc::mem_fun(*this, &Edit::onDialogWhiteboardShareWithUser));
+
+    _act_grp->add(Gtk::Action::create("WhiteboardShareWithChat",
+                                      Gtk::Stock::CLEAR, Glib::ustring(),
+                                      _("PLACEHOLDER, do not translate")),
+                  sigc::mem_fun(*this, &Edit::onDialogWhiteboardShareWithChat));
+
+    _act_grp->add(Gtk::Action::create("WhiteboardOpenSessionFile",
+                                      Gtk::Stock::CLEAR, Glib::ustring(),
+                                      _("PLACEHOLDER, do not translate")),
+                  sigc::mem_fun(*this, &Edit::onDialogOpenSessionFile));
+
+    _act_grp->add(Gtk::Action::create("WhiteboardDumpXMLTracker",
+                                      Gtk::Stock::CLEAR, Glib::ustring(),
+                                      _("PLACEHOLDER, do not translate")),
+                  sigc::mem_fun(*this, &Edit::onDumpXMLTracker));
+#endif
 
     // About menu
     _act_grp->add(Gtk::Action::create("KeysAndMouse",

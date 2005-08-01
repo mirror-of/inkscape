@@ -71,6 +71,10 @@
 
 #include "uri.h"
 
+#ifdef WITH_INKBOARD
+#include "jabber_whiteboard/session-manager.h"
+#endif
+
 /**
  * 'Current' paths.  Used to remember which directory
  * had the last file accessed.
@@ -96,21 +100,22 @@ void dump_ustr(Glib::ustring const &ustr);
 /**
  * Create a blank document and add it to the desktop
  */
-void
+SPDesktop*
 sp_file_new(gchar const *templ)
 {
     SPDocument *doc = sp_document_new(templ, TRUE, true);
-    g_return_if_fail(doc != NULL);
+    g_return_val_if_fail(doc != NULL, NULL);
 
     SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
     sp_document_unref(doc);
-    g_return_if_fail(dtw != NULL);
+    g_return_val_if_fail(dtw != NULL, NULL);
 
     sp_create_window(dtw, TRUE);
     sp_namedview_window_from_document(SP_DESKTOP(dtw->view));
+	return SP_DESKTOP(dtw->view);
 }
 
-void
+SPDesktop*
 sp_file_new_default()
 {
     // TRANSLATORS: default.svg is localizable - this is the name of the default document
@@ -119,9 +124,9 @@ sp_file_new_default()
     //  localized share/templates/default.xx.svg file, where xx is your language code.
     char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, _("default.svg"), NULL);
     if (Inkscape::IO::file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
-        sp_file_new(default_template);
+        return sp_file_new(default_template);
     } else {
-        sp_file_new(NULL);
+        return sp_file_new(NULL);
     }
 }
 
@@ -177,6 +182,9 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
         // resize the window to match the document properties
         // (this may be redundant for new windows... if so, move to the "virgin"
         //  section above)
+#ifdef WITH_INKBOARD
+		desktop->whiteboard_session_manager()->setDesktop(desktop);
+#endif
         sp_namedview_window_from_document(desktop);
         doc->virgin = FALSE;
 

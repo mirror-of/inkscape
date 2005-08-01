@@ -162,6 +162,12 @@ Gtk::StockID const NODE_SYMMETRIC("node-symmetric");
 Gtk::StockID const NODE_LINE("node-line");
 Gtk::StockID const NODE_CURVE("node-curve");
 
+Gtk::StockID const SESSION_PLAYBACK_REW("session-rewind");
+Gtk::StockID const SESSION_PLAYBACK_STEPBACK("session-stepback");
+Gtk::StockID const SESSION_PLAYBACK_PAUSE("session-pause");
+Gtk::StockID const SESSION_PLAYBACK_STEPFORWARD("session-stepforward");
+Gtk::StockID const SESSION_PLAYBACK_PLAY("session-play");
+
 } // namespace Stock
 } // namespace UI
 } // namespace Inkscape

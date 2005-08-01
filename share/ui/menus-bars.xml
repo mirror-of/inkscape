@@ -166,11 +166,18 @@
     <menu action='MenuText'>
       <menuitem action='TextProperties'/>
       <separator/>
-      <menuitem action='PutOnPath'/>
       <menuitem action='RemoveFromPath'/>
+      <menuitem action='PutOnPath'/>
       <separator/>
       <menuitem action='RemoveManualKerns'/>
     </menu>
+	<menu action='MenuWhiteboard'>
+	  <menuitem action='DialogWhiteboardConnect'/>
+	  <separator/>
+	  <menuitem action='DialogWhiteboardShareWithUser'/>
+	  <menuitem action='DialogWhiteboardShareWithChat'/>
+	  <separator/>
+	</menu>
     <menu action='MenuHelp'>
       <menuitem action='KeysAndMouse'/>
       <menu action='Tutorials'>

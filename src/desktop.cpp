@@ -77,6 +77,10 @@
 
 #include "file.h"
 
+#ifdef WITH_INKBOARD
+#include "jabber_whiteboard/session-manager.h"
+#endif
+
 #include <extension/extension.h>
 #include <extension/db.h>
 
@@ -279,6 +283,12 @@ sp_desktop_dispose (GObject *object)
         dt->drawing = NULL;
     }
 
+#ifdef WITH_INKBOARD
+	if (dt->_whiteboard_session_manager) {
+		delete dt->_whiteboard_session_manager;
+	}
+#endif
+
     delete dt->_guides_message_context;
     dt->_guides_message_context = NULL;
 
@@ -416,6 +426,11 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     sp_view_set_document (SP_VIEW (desktop), document);
 
     sp_desktop_set_namedview (desktop, namedview);
+
+	/* Construct SessionManager */
+#ifdef WITH_INKBOARD
+	desktop->_whiteboard_session_manager = new Inkscape::Whiteboard::SessionManager(desktop);
+#endif
 
     /* Setup Canvas */
     g_object_set_data (G_OBJECT (canvas), "SPDesktop", desktop);

@@ -19,6 +19,7 @@ config.h.in
 ABOUT-NLS
 inkscape.spec
 *.1
+*.o
 *.svg
 intltool-*
 inkscape.desktop

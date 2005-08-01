@@ -25,10 +25,11 @@
 ######################*/
 
 /**
- * Creates a new Inkscape document and window
+ * Creates a new Inkscape document and window.
+ * Return value is a pointer to the newly created desktop.
  */
-void sp_file_new (const gchar *templ);
-void sp_file_new_default (void);
+SPDesktop* sp_file_new (const gchar *templ);
+SPDesktop* sp_file_new_default (void);
 
 /*######################
 ## D E L E T E

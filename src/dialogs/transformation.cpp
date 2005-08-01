@@ -787,6 +787,8 @@ static void sp_transformation_rotate_value_changed(GtkAdjustment *, GObject * co
     if (g_object_get_data(dlg, "update")) {
         return;
     }
+	
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "rotate_value_changed");
 
     GtkWidget *apply = GTK_WIDGET(g_object_get_data(dlg, "apply"));
     gtk_widget_set_sensitive(apply, TRUE);

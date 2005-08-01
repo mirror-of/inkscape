@@ -72,6 +72,12 @@ struct StopOnTrue {
 
 namespace Inkscape { class Selection; }
 
+namespace Inkscape {
+namespace Whiteboard {
+class SessionManager;
+}
+}
+
 struct SPDesktop : public SPView {
     Inkscape::MessageContext *guidesMessageContext() {
 	return _guides_message_context;
@@ -174,6 +180,16 @@ struct SPDesktop : public SPView {
     Inkscape::MessageContext *_guides_message_context;
     
     Inkscape::ObjectHierarchy *_layer_hierarchy;
+
+	// Whiteboard changes
+
+#ifdef WITH_INKBOARD
+	Inkscape::Whiteboard::SessionManager* whiteboard_session_manager() {
+	return _whiteboard_session_manager;
+	}
+
+	Inkscape::Whiteboard::SessionManager* _whiteboard_session_manager;
+#endif
 };
 
 struct SPDesktopClass {

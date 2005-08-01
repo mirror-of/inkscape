@@ -164,6 +164,12 @@ extern Gtk::StockID const NODE_SMOOTH;
 extern Gtk::StockID const NODE_SYMMETRIC;
 extern Gtk::StockID const NODE_LINE;
 extern Gtk::StockID const NODE_CURVE;
+// Session playback dialog controls
+extern Gtk::StockID const SESSION_PLAYBACK_REW;
+extern Gtk::StockID const SESSION_PLAYBACK_STEPBACK;
+extern Gtk::StockID const SESSION_PLAYBACK_PAUSE;
+extern Gtk::StockID const SESSION_PLAYBACK_STEPFORWARD;
+extern Gtk::StockID const SESSION_PLAYBACK_PLAY;
 
 } // namespace Stock
 } // namespace UI

@@ -170,6 +170,8 @@ void SPView::init(SPView *view)
     view->_message_changed_connection = view->_message_stack->connectChanged(
         sigc::bind(sigc::ptr_fun(&SPView::_set_status_message), view)
     );
+
+
 }
 
 /**

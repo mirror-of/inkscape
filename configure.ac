@@ -412,6 +412,46 @@ AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 
 dnl ******************************
+dnl Inkboard dependency checking
+dnl ******************************
+
+AC_MSG_CHECKING(if Inkboard dependencies are satisfied)
+AC_MSG_CHECKING(for loudmouth-1.0+)
+
+AC_ARG_ENABLE(inkboard,
+		AS_HELP_STRING([--enable-inkboard], [enable Inkboard online whiteboard facility (disabled by default)]),
+       with_inkboard=$enableval,with_inkboard=no)
+
+if test "x$with_inkboard" = "xyes"; then
+	PKG_CHECK_MODULES(LIBLOUDMOUTH, loudmouth-1.0, loudmouth_ok=yes, loudmouth_ok=no)
+	if test "x$loudmouth_ok" = "xyes"; then
+		AC_MSG_RESULT($loudmouth_ok)
+		dnl Check for Boost libraries used by whiteboard code
+		AC_MSG_CHECKING(for boost libraries: noncopyable smart_ptr bind)
+		AC_PREPROC_IFELSE(
+			[AC_LANG_PROGRAM([[	
+								#include <boost/bind.hpp>
+								#include <boost/function.hpp>
+								#include <boost/lexical_cast.hpp> 
+								]])],
+			[AC_DEFINE(WITH_INKBOARD, 1, [Enable Inkboard])
+				with_inkboard="yes"
+				AC_MSG_RESULT([found])],
+			[AC_MSG_RESULT([not found])
+				with_inkboard="no"])
+	else
+		with_inkboard="no"
+	fi
+else
+	with_inkboard="no"
+fi
+
+AC_MSG_RESULT($with_inkboard)
+AM_CONDITIONAL(WITH_INKBOARD, test x$with_inkboard = xyes)
+AC_SUBST(LIBLOUDMOUTH_CFLAGS)
+AC_SUBST(LIBLOUDMOUTH_LIBS)
+
+dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
@@ -710,6 +750,7 @@ src/libcroco/makefile
 src/libnr/makefile
 src/libnrtype/makefile
 src/livarot/makefile
+src/jabber_whiteboard/makefile
 src/svg/makefile
 src/trace/makefile
 src/traits/makefile
@@ -763,10 +804,11 @@ Configuration:
 
         Use Xft font database:    ${xft_ok}
         Use gnome-print:          ${gp}
-	Use gnome-vfs             ${gnome_vfs}
+	Use gnome-vfs:            ${gnome_vfs}
         Use openoffice files:     ${ij}
         Use MMX optimizations:    ${use_mmx_asm}
         Use relocation support:   ${enable_binreloc}
         Use Python extensions:    ${with_python}
         Use Perl extensions:      ${with_perl}
+	Enable Inkboard:	  ${with_inkboard}
 "

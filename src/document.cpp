@@ -154,6 +154,8 @@ SPDocument::~SPDocument() {
 		inkscape_unref ();
 		keepalive = FALSE;
 	}
+	
+//	delete this->_whiteboard_session_manager;
 }
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
@@ -1015,5 +1017,3 @@ vacuum_document (SPDocument *document)
 
 	return start - newend;
 }
-
-

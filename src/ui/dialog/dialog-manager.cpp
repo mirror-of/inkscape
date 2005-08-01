@@ -32,6 +32,13 @@
 #include "ui/dialog/text-properties.h"
 #include "ui/dialog/tracedialog.h"
 #include "ui/dialog/transformation.h"
+
+#ifdef WITH_INKBOARD
+#include "ui/dialog/whiteboard-sharewithuser.h"
+#include "ui/dialog/whiteboard-connect.h"
+#include "ui/dialog/session-player.h"
+#endif
+
 #include "ui/dialog/xml-editor.h"
 
 #include "dialogs/tiledialog.h"
@@ -83,12 +90,17 @@ DialogManager::DialogManager() {
     registerFactory("TileDialog",          &create<TileDialog>);
     registerFactory("Trace",               &create<TraceDialog>);
     registerFactory("Transformation",      &create<Transformation>);
+#ifdef WITH_INKBOARD
+	registerFactory("SessionPlayer",       &create<SessionPlaybackDialog>);
+    registerFactory("WhiteboardConnect",   &create<WhiteboardConnectDialog>);
+    registerFactory("WhiteboardShareWithUser",   &create<WhiteboardShareWithUserDialog>);
+#endif
     registerFactory("XmlEditor",           &create<XmlEditor>);
 }
 
 DialogManager::~DialogManager() {
     // TODO:  Disconnect the signals
-    // TOOD:  Do we need to explicitly delete the dialogs?
+    // TODO:  Do we need to explicitly delete the dialogs?
     //        Appears to cause a segfault if we do
 }
 

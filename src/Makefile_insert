@@ -227,6 +227,7 @@ inkscape_private_libs =	\
 	application/libinkapp.a	\
 	ui/dialog/libuidialog.a	\
 	dialogs/libspdialogs.a	\
+	jabber_whiteboard/libjabber_whiteboard.a \
 	trace/libtrace.a	\
 	svg/libspsvg.a		\
 	widgets/libspwidgets.a	\
@@ -260,7 +261,8 @@ all_libs =			\
 	$(kdeldadd)		\
 	$(win32ldflags)		\
 	$(PERL_LDFLAGS)		\
-	$(PYTHON_LIBS)
+	$(PYTHON_LIBS)	\
+	$(LIBLOUDMOUTH_LIBS) 
 
 desktop.$(OBJEXT): helper/sp-marshal.h
 document.$(OBJEXT): helper/sp-marshal.h inkscape_version.h

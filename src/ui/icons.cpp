@@ -613,6 +613,38 @@ init()
     _transform_pattern.add_source(small);
     icons->add(Stock::TRANSFORM_PATTERN, _transform_pattern);
 
+	// Session playback dialog
+	// Rewind
+    Gtk::IconSet _session_rewind;
+    src.set_icon_name("Rewind");
+    src.set_filename(get_icon_path("session-rew.svg"));
+    _session_rewind.add_source(src);
+    icons->add(Stock::SESSION_PLAYBACK_REW, _session_rewind);
+	// Step backwards
+    Gtk::IconSet _session_stepback;
+    src.set_icon_name("StepBackward");
+    src.set_filename(get_icon_path("session-back1.svg"));
+    _session_stepback.add_source(src);
+    icons->add(Stock::SESSION_PLAYBACK_STEPBACK, _session_stepback);
+	// Pause
+    Gtk::IconSet _session_pause;
+    src.set_icon_name("Pause");
+    src.set_filename(get_icon_path("session-pause.svg"));
+    _session_pause.add_source(src);
+    icons->add(Stock::SESSION_PLAYBACK_PAUSE, _session_pause);
+	// Step forwards
+    Gtk::IconSet _session_stepforward;
+    src.set_icon_name("StepForward");
+    src.set_filename(get_icon_path("session-adv1.svg"));
+    _session_stepforward.add_source(src);
+    icons->add(Stock::SESSION_PLAYBACK_STEPFORWARD, _session_stepforward);
+	// Play
+    Gtk::IconSet _session_play;
+    src.set_icon_name("Play");
+    src.set_filename(get_icon_path("session-play.svg"));
+    _session_play.add_source(src);
+    icons->add(Stock::SESSION_PLAYBACK_PLAY, _session_play);
+
     icons->add_default();
 }
 

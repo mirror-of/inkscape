@@ -85,6 +85,15 @@ public:
     void onDialogTrace();
     void onDialogXmlEditor();
 
+	// Whiteboard (Inkboard)
+#ifdef WITH_INKBOARD
+	void onDialogWhiteboardConnect();
+	void onDialogWhiteboardShareWithUser();
+	void onDialogWhiteboardShareWithChat();
+	void onDialogOpenSessionFile();
+	void onDumpXMLTracker();
+#endif
+
     void onUriChanged();
 
     SPEventContext       *event_context;

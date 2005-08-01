@@ -7,9 +7,10 @@
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Ted Gould <ted@gould.cx>
+ *   David Yip <yipdw@rose-hulman.edu>
  *
  * This code is in public domain if done by Lauris
- * This code is GPL if done by Ted
+ * This code is GPL if done by Ted or David
  */
 
 #include "require-config.h"   /* HAVE_GTK_WINDOW_FULLSCREEN */
@@ -179,6 +180,12 @@ enum {
     SP_VERB_DIALOG_TOGGLE,
     SP_VERB_DIALOG_CLONETILER,
     SP_VERB_DIALOG_ITEM,
+	SP_VERB_DIALOG_WHITEBOARD_CONNECT,
+	SP_VERB_DIALOG_WHITEBOARD_SHAREWITHUSER,
+	SP_VERB_DIALOG_WHITEBOARD_SHAREWITHCHAT,
+	SP_VERB_DIALOG_WHITEBOARD_DUMPXMLTRACKER,
+	SP_VERB_DIALOG_WHITEBOARD_OPENSESSIONFILE,
+	SP_VERB_DIALOG_WHITEBOARD_SESSIONPLAYBACK,
     /* Help */
     SP_VERB_HELP_KEYS,
     SP_VERB_HELP_ABOUT_EXTENSIONS,

@@ -1,0 +1,34 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+#
+# Jabber whiteboard communication and Inkscape listener components
+# Author: David Yip <yipdw@rose-hulman.edu>
+
+jabber_whiteboard/all: jabber_whiteboard/libjabber_whiteboard.a
+
+jabber_whiteboard/clean:
+	rm -f jabber_whiteboard/libjabber_whiteboard.a $(jabber_whiteboard_libjabber_whiteboard_a_OBJECTS)
+
+if WITH_INKBOARD
+jabber_whiteboard_libjabber_whiteboard_a_SOURCES = \
+	jabber_whiteboard/message-tags.cpp \
+	jabber_whiteboard/internal-constants.cpp \
+	jabber_whiteboard/received-message-helpers.cpp \
+	jabber_whiteboard/connection-establishment.cpp \
+	jabber_whiteboard/buddy-list-manager.cpp \
+	jabber_whiteboard/session-file-selector.cpp \
+	jabber_whiteboard/invitation-confirm-dialog.cpp \
+	jabber_whiteboard/message-utilities.cpp \
+	jabber_whiteboard/node-utilities.cpp \
+	jabber_whiteboard/message-contexts.cpp \
+	jabber_whiteboard/message-processors.cpp \
+	jabber_whiteboard/message-handler.cpp \
+	jabber_whiteboard/jabber-handlers.cpp \
+	jabber_whiteboard/node-observer.cpp \
+	jabber_whiteboard/node-tracker.cpp \
+	jabber_whiteboard/callbacks.cpp \
+	jabber_whiteboard/session-file.cpp \
+	jabber_whiteboard/session-file-player.cpp \
+	jabber_whiteboard/message-queue.cpp \
+	jabber_whiteboard/chat-handler.cpp \
+	jabber_whiteboard/session-manager.cpp 
+endif

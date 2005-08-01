@@ -189,6 +189,13 @@ init()
     add(Gtk::StockItem(NODE_SYMMETRIC, _("PLACEHOLDER, do not translate")));
     add(Gtk::StockItem(NODE_LINE, _("PLACEHOLDER, do not translate")));
     add(Gtk::StockItem(NODE_CURVE, _("PLACEHOLDER, do not translate")));
+
+	// Session playback controls
+	add(Gtk::StockItem(SESSION_PLAYBACK_REW, _("PLACEHOLDER, do not translate")));
+	add(Gtk::StockItem(SESSION_PLAYBACK_STEPBACK, _("PLACEHOLDER, do not translate")));
+	add(Gtk::StockItem(SESSION_PLAYBACK_PAUSE, _("PLACEHOLDER, do not translate")));
+	add(Gtk::StockItem(SESSION_PLAYBACK_STEPFORWARD, _("PLACEHOLDER, do not translate")));
+	add(Gtk::StockItem(SESSION_PLAYBACK_PLAY, _("PLACEHOLDER, do not translate")));
 }
 
 } // namespace Stock

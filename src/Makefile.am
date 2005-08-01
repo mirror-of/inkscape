@@ -18,6 +18,7 @@ INCLUDES =	\
 	$(FREETYPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)	\
 	$(GNOME_VFS_CFLAGS)	\
+	$(LIBLOUDMOUTH_CFLAGS) \
 	$(XFT_CFLAGS)	\
 	-DPOTRACE=\"potrace\"	\
 	$(INKSCAPE_CFLAGS) \
@@ -34,6 +35,7 @@ include extension/script/Makefile_insert
 include helper/Makefile_insert
 include inkjar/Makefile_insert
 include io/Makefile_insert
+include jabber_whiteboard/Makefile_insert
 include libcroco/Makefile_insert
 include libnr/Makefile_insert
 include libnrtype/Makefile_insert
@@ -58,6 +60,7 @@ noinst_LIBRARIES =	\
 	libinkpre.a	\
 	application/libinkapp.a	\
 	dialogs/libspdialogs.a	\
+	jabber_whiteboard/libjabber_whiteboard.a \
 	display/libspdisplay.a	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
@@ -117,6 +120,7 @@ EXTRA_DIST =	\
 	io/makefile.in  	\
 	io/crystalegg.xml  	\
 	io/doc2html.xsl  	\
+	jabber_whiteboard/makefile.in \
 	libcroco/makefile.in	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
