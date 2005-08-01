@@ -727,7 +727,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
 
             if (group0_keyval == GDK_KP_Add ||
                 group0_keyval == GDK_KP_Subtract) {
-                break; // pass on keypad +/- so they can zoom
+                if (!(event->key.state & GDK_MOD2_MASK)) // mod2 is NumLock; if on, type +/- keys
+                    break; // otherwise pass on keypad +/- so they can zoom
             }
 
             if ((tc->text) || (tc->nascent_object)) {

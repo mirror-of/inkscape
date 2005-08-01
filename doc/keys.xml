@@ -98,7 +98,7 @@ can leave your ideas and requests there.</p>
 <title>Zoom</title>
 <keys><key>=</key> <key>+</key> 	 <action>zoom in</action></keys>
 <keys><key>-</key>	 <action>zoom out</action></keys>
-<note>The keypad +/- keys do zooming even when you are editing a text object.</note>
+<note>The keypad +/- keys do zooming even when you are editing a text object, unless NumLock is on.</note>
 <mouse><key><mid-click/></key>  <key><ctrl/><right-click/></key>   <action>zoom in</action></mouse>
 <mouse><key><shift/><mid-click/></key>  <key><shift/><right-click/></key> <action>zoom out</action></mouse>
 <mouse><key><ctrl/><wheel/></key> <action>zoom in or out</action></mouse>
@@ -992,7 +992,7 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Editing text</title>
-<note>To type + and - characters, use the main keyboard; keypad + and - are reserved for zoom.</note> 
+<note>To type + and - characters, use the main keyboard; keypad + and - are reserved for zoom (unless NumLock is on).</note> 
 <keys><key><misc-wide f="Enter"/></key> <action>start a new line or paragraph</action></keys>
 <note>Enter in regular text creates new line; in flowed text it creates a new paragraph</note>
 <keys><key><ctrl/>U</key> <action>toggle Unicode entry</action></keys> 
