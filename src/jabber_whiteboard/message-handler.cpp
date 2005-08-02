@@ -295,7 +295,7 @@ MessageHandler::_default(LmMessage* message)
 		//MessagePtr msg = this->_extractData(message);
 		MessageType type = this->_getType(message);
 
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Handling message: %s", msg.body.c_str());
+//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Handling message: %s", msg.body.c_str());
 //
 		// Call message handler and return instruction value to Loudmouth
 		return boost::bind< LmHandlerResult >(*this->_received_message_processors[type], _1, msg)(type);
