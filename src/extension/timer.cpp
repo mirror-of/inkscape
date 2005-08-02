@@ -26,7 +26,7 @@ namespace Extension {
 
 ExpirationTimer * ExpirationTimer::timer_list = NULL;
 ExpirationTimer * ExpirationTimer::idle_start = NULL;
-long ExpirationTimer::timeout = 2;
+long ExpirationTimer::timeout = 240;
 bool ExpirationTimer::timer_started = false;
 
 /** \brief  Create a new expiration timer
