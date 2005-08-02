@@ -122,18 +122,11 @@ SessionManager::~SessionManager()
 	}
 
 	if (this->_mySessionFile) {
-		// SessionFile destructor handles final commit, buffer flushing, 
-		// and file handle release
-		if (this->_mySessionPlayer) {
-			delete this->_mySessionPlayer;
-		}
-		
+		delete this->_mySessionPlayer;
 		delete this->_mySessionFile;
 	}
 
-	if (this->_myChatHandler) {
-		delete this->_myChatHandler;
-	}
+	delete this->_myChatHandler;
 
 
 	// Deletion of _myTracker is done in closeSession;
@@ -145,9 +138,7 @@ SessionManager::~SessionManager()
 	// to worry (as much) about proper ordering of the teardown sequence.  (We still need
 	// to ensure that destructors in each object being deleted have access to all the
 	// members they need, though.)
-	if (this->_myObserver) {
-		delete this->_myObserver;
-	}
+	delete this->_myObserver;
 
 	// Stop dispatchers
 	if (this->_myCallbacks) {
@@ -156,13 +147,9 @@ SessionManager::~SessionManager()
 		delete this->_myCallbacks;
 	}
 
-	if (this->_myMessageHandler) {
-		delete this->_myMessageHandler;
-	}
+	delete this->_myMessageHandler;
 
-	if (this->session_data) {
-		delete this->session_data;
-	}
+	delete this->session_data;
 
 	Inkscape::GC::release(this->_myDoc);
 
