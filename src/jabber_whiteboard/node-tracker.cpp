@@ -207,9 +207,9 @@ XMLNodeTracker::remove(std::string& key)
 {
 	if (this->isTracking(key)) {
 		TrackerNode* element = new TrackerNode(&this->get(key));
+		Inkscape::GC::release(&this->get(key));
 		this->_keyToNode.erase(key);
 		this->_nodeToKey.erase(element);
-		Inkscape::GC::release(&this->get(key));
 	} 
 }
 
