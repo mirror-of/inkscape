@@ -177,7 +177,7 @@ sp_whiteboard_sharewithchat_dialog(gchar *msgText)
 
 		server_tf = gtk_entry_new ();
 		// TODO: remove after debugging is done!
-		gtk_entry_set_text(GTK_ENTRY(server_tf), "lothlann-conf");
+//		gtk_entry_set_text(GTK_ENTRY(server_tf), "lothlann-conf");
 
 		gtk_entry_set_max_length (GTK_ENTRY (server_tf), 64);
 		gtk_box_pack_start (GTK_BOX (serverbox), server_tf , TRUE, TRUE, 0);
