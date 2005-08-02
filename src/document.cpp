@@ -181,9 +181,9 @@ void SPDocument::collectOrphans() {
 
 static SPDocument *
 sp_document_create (Inkscape::XML::Document *rdoc,
-		    const gchar *uri,
-		    const gchar *base,
-		    const gchar *name,
+		    gchar const *uri,
+		    gchar const *base,
+		    gchar const *name,
 		    unsigned int keepalive)
 {
 	SPDocument *document;
@@ -298,7 +298,7 @@ sp_document_create (Inkscape::XML::Document *rdoc,
 }
 
 SPDocument *
-sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new)
+sp_document_new (gchar const *uri, unsigned int keepalive, bool make_new)
 {
 	SPDocument *doc;
 	Inkscape::XML::Document *rdoc;
@@ -349,7 +349,7 @@ sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new)
 }
 
 SPDocument *
-sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int keepalive)
+sp_document_new_from_mem (gchar const *buffer, gint length, unsigned int keepalive)
 {
 	SPDocument *doc;
 	Inkscape::XML::Document *rdoc;
@@ -516,7 +516,7 @@ SPDocument::emitReconstructionFinish (void)
 
 
 void SPDocument::_emitModified() {
-	static const guint flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
+	static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
 	root->emitModified(0);
 	priv->modified_signal.emit(flags);
 }
@@ -544,14 +544,14 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
 	}
 }
 
-SPObject *SPDocument::getObjectById(const gchar *id) {
+SPObject *SPDocument::getObjectById(gchar const *id) {
 	g_return_val_if_fail (id != NULL, NULL);
 
 	GQuark idq = g_quark_from_string(id);
 	return (SPObject*)g_hash_table_lookup (priv->iddef, GINT_TO_POINTER(idq));
 }
 
-sigc::connection SPDocument::connectIdChanged(const gchar *id, SPDocument::IDChangedSignal::slot_type slot) {
+sigc::connection SPDocument::connectIdChanged(gchar const *id, SPDocument::IDChangedSignal::slot_type slot) {
 	return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
@@ -660,7 +660,7 @@ sp_document_idle_handler (gpointer data)
 }
 
 static int
-is_within (const NRRect *area, const NRRect *box)
+is_within (NRRect const *area, NRRect const *box)
 {
 	if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
 		return false;
@@ -670,7 +670,7 @@ is_within (const NRRect *area, const NRRect *box)
 }
 
 static int
-overlaps (const NRRect *area, const NRRect *box)
+overlaps (NRRect const *area, NRRect const *box)
 {
 	if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
 		return false;
@@ -683,7 +683,7 @@ overlaps (const NRRect *area, const NRRect *box)
 
 static GSList *
 find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *area,
-                    int (*test)(const NRRect *, const NRRect *), bool take_insensitive = false)
+                    int (*test)(NRRect const *, NRRect const *), bool take_insensitive = false)
 {
 	g_return_val_if_fail (SP_IS_GROUP (group), s);
 
@@ -728,7 +728,8 @@ bool item_is_in_group (SPItem *item, SPGroup *group)
 Returns the bottommost item from the list which is at the point, or NULL if none. 
 */
 SPItem*
-sp_document_item_from_list_at_point_bottom (unsigned int dkey, SPGroup *group, const GSList *list, NR::Point const p, bool take_insensitive)
+sp_document_item_from_list_at_point_bottom(unsigned int dkey, SPGroup *group, GSList const *list,
+					   NR::Point const p, bool take_insensitive)
 {
 	g_return_val_if_fail (group, NULL);
 
@@ -887,7 +888,7 @@ sp_document_group_at_point (SPDocument *document, unsigned int key, NR::Point co
 /* Resource management */
 
 gboolean
-sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *object)
+sp_document_add_resource (SPDocument *document, gchar const *key, SPObject *object)
 {
 	GSList *rlist;
 	GQuark q=g_quark_from_string(key);
@@ -912,7 +913,7 @@ sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *obje
 }
 
 gboolean
-sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *object)
+sp_document_remove_resource (SPDocument *document, gchar const *key, SPObject *object)
 {
 	GSList *rlist;
 	GQuark q=g_quark_from_string(key);
@@ -934,8 +935,8 @@ sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *o
 	return TRUE;
 }
 
-const GSList *
-sp_document_get_resource_list (SPDocument *document, const gchar *key)
+GSList const *
+sp_document_get_resource_list (SPDocument *document, gchar const *key)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (key != NULL, NULL);
@@ -944,12 +945,11 @@ sp_document_get_resource_list (SPDocument *document, const gchar *key)
 	return (GSList*)g_hash_table_lookup (document->priv->resources, key);
 }
 
-sigc::connection sp_document_resources_changed_connect(
-	SPDocument *document,
-	const gchar *key,
-	SPDocument::ResourcesChangedSignal::slot_type slot
-) {
-	GQuark q=g_quark_from_string(key);
+sigc::connection sp_document_resources_changed_connect(SPDocument *document,
+	gchar const *key,
+	SPDocument::ResourcesChangedSignal::slot_type slot)
+{
+	GQuark q = g_quark_from_string(key);
 	return document->priv->resources_changed_signals[q].connect(slot);
 }
 
