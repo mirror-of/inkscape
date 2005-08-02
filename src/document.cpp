@@ -62,648 +62,659 @@ gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer d
 static gint doc_count = 0;
 
 SPDocument::SPDocument() {
-	SPDocumentPrivate *p;
+    SPDocumentPrivate *p;
 
-	keepalive = FALSE;
-	virgin    = TRUE;
+    keepalive = FALSE;
+    virgin    = TRUE;
 
-	modified_id = 0;
+    modified_id = 0;
 
-	rdoc = NULL;
-	rroot = NULL;
-	root = NULL;
-	style_cascade = cr_cascade_new(NULL, NULL, NULL);
+    rdoc = NULL;
+    rroot = NULL;
+    root = NULL;
+    style_cascade = cr_cascade_new(NULL, NULL, NULL);
 
-	uri = NULL;
-	base = NULL;
-	name = NULL;
+    uri = NULL;
+    base = NULL;
+    name = NULL;
 
-	_collection_queue = NULL;
+    _collection_queue = NULL;
 
-	p = new SPDocumentPrivate();
+    p = new SPDocumentPrivate();
 
-	p->iddef = g_hash_table_new (g_direct_hash, g_direct_equal);
-	p->reprdef = g_hash_table_new (g_direct_hash, g_direct_equal);
+    p->iddef = g_hash_table_new(g_direct_hash, g_direct_equal);
+    p->reprdef = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-	p->resources = g_hash_table_new (g_str_hash, g_str_equal);
+    p->resources = g_hash_table_new(g_str_hash, g_str_equal);
 
-	p->sensitive = FALSE;
-	p->partial = NULL;
-	p->history_size = 0;
-	p->undo = NULL;
-	p->redo = NULL;
+    p->sensitive = FALSE;
+    p->partial = NULL;
+    p->history_size = 0;
+    p->undo = NULL;
+    p->redo = NULL;
 
-	priv = p;
+    priv = p;
 }
 
 SPDocument::~SPDocument() {
-	collectOrphans();
+    collectOrphans();
 
-	if (priv) {
-		inkscape_remove_document (this);
+    if (priv) {
+        inkscape_remove_document(this);
 
-		if (priv->partial) {
-			sp_repr_free_log (priv->partial);
-			priv->partial = NULL;
-		}
+        if (priv->partial) {
+            sp_repr_free_log(priv->partial);
+            priv->partial = NULL;
+        }
 
-		sp_document_clear_redo (this);
-		sp_document_clear_undo (this);
+        sp_document_clear_redo(this);
+        sp_document_clear_undo(this);
 
-		if (root) {
-			sp_object_invoke_release (root);
-			g_object_unref (G_OBJECT (root));
-			root = NULL;
-		}
+        if (root) {
+            sp_object_invoke_release(root);
+            g_object_unref(G_OBJECT(root));
+            root = NULL;
+        }
 
-		if (priv->iddef) g_hash_table_destroy (priv->iddef);
-		if (priv->reprdef) g_hash_table_destroy (priv->reprdef);
+        if (priv->iddef) g_hash_table_destroy(priv->iddef);
+        if (priv->reprdef) g_hash_table_destroy(priv->reprdef);
 
-		if (rdoc) Inkscape::GC::release(rdoc);
+        if (rdoc) Inkscape::GC::release(rdoc);
 
-		/* Free resources */
-		g_hash_table_foreach_remove (priv->resources, sp_document_resource_list_free, this);
-		g_hash_table_destroy (priv->resources);
+        /* Free resources */
+        g_hash_table_foreach_remove(priv->resources, sp_document_resource_list_free, this);
+        g_hash_table_destroy(priv->resources);
 
-		delete priv;
-		priv = NULL;
-	}
+        delete priv;
+        priv = NULL;
+    }
 
-	cr_cascade_unref(style_cascade);
-	style_cascade = NULL;
+    cr_cascade_unref(style_cascade);
+    style_cascade = NULL;
 
-	if (name) {
-		g_free (name);
-		name = NULL;
-	}
-	if (base) {
-		g_free (base);
-		base = NULL;
-	}
-	if (uri) {
-		g_free (uri);
-		uri = NULL;
-	}
+    if (name) {
+        g_free(name);
+        name = NULL;
+    }
+    if (base) {
+        g_free(base);
+        base = NULL;
+    }
+    if (uri) {
+        g_free(uri);
+        uri = NULL;
+    }
 
-	if (modified_id) {
-		gtk_idle_remove (modified_id);
-		modified_id = 0;
-	}
+    if (modified_id) {
+        gtk_idle_remove(modified_id);
+        modified_id = 0;
+    }
 
-	if (keepalive) {
-		inkscape_unref ();
-		keepalive = FALSE;
-	}
-	
-//	delete this->_whiteboard_session_manager;
+    if (keepalive) {
+        inkscape_unref();
+        keepalive = FALSE;
+    }
+
+    //delete this->_whiteboard_session_manager;
 }
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
-	g_return_if_fail(object != NULL);
-	g_return_if_fail(SP_OBJECT_DOCUMENT(object) == this);
+    g_return_if_fail(object != NULL);
+    g_return_if_fail(SP_OBJECT_DOCUMENT(object) == this);
 
-	sp_object_ref(object, NULL);
-	_collection_queue = g_slist_prepend(_collection_queue, object);
+    sp_object_ref(object, NULL);
+    _collection_queue = g_slist_prepend(_collection_queue, object);
 }
 
 void SPDocument::collectOrphans() {
-	while (_collection_queue) {
-		GSList *objects=_collection_queue;
-		_collection_queue = NULL;
-		for ( GSList *iter=objects ; iter ; iter = iter->next ) {
-			SPObject *object=reinterpret_cast<SPObject *>(iter->data);
-			object->collectOrphan();
-			sp_object_unref(object, NULL);
-		}
-		g_slist_free(objects);
-	}
+    while (_collection_queue) {
+        GSList *objects=_collection_queue;
+        _collection_queue = NULL;
+        for ( GSList *iter=objects ; iter ; iter = iter->next ) {
+            SPObject *object=reinterpret_cast<SPObject *>(iter->data);
+            object->collectOrphan();
+            sp_object_unref(object, NULL);
+        }
+        g_slist_free(objects);
+    }
 }
 
 static SPDocument *
-sp_document_create (Inkscape::XML::Document *rdoc,
-		    gchar const *uri,
-		    gchar const *base,
-		    gchar const *name,
-		    unsigned int keepalive)
+sp_document_create(Inkscape::XML::Document *rdoc,
+                   gchar const *uri,
+                   gchar const *base,
+                   gchar const *name,
+                   unsigned int keepalive)
 {
-	SPDocument *document;
-	Inkscape::XML::Node *rroot;
-	Inkscape::Version sodipodi_version;
+    SPDocument *document;
+    Inkscape::XML::Node *rroot;
+    Inkscape::Version sodipodi_version;
 
-	rroot = sp_repr_document_root (rdoc);
+    rroot = sp_repr_document_root(rdoc);
 
-	document = new SPDocument();
+    document = new SPDocument();
 
-	document->keepalive = keepalive;
+    document->keepalive = keepalive;
 
-	document->rdoc = rdoc;
-	document->rroot = rroot;
+    document->rdoc = rdoc;
+    document->rroot = rroot;
 
 #ifndef WIN32
-	prepend_current_dir_if_relative (&(document->uri), uri);
+    prepend_current_dir_if_relative(&(document->uri), uri);
 #else
-	// FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-	document->uri = uri? g_strdup (uri) : NULL;
+    // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
+    document->uri = uri? g_strdup(uri) : NULL;
 #endif
 
-	// base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
-	// which is why we use g_get_current_dir() in calculating the abs path above
-        //This is NULL for a new document
-	if (base)
-            document->base = g_strdup (base);
-        else
-            document->base = NULL;
-	document->name = g_strdup (name);
+    // base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
+    // which is why we use g_get_current_dir() in calculating the abs path above
+    //This is NULL for a new document
+    if (base)
+        document->base = g_strdup(base);
+    else
+        document->base = NULL;
+    document->name = g_strdup(name);
 
-	document->root = sp_object_repr_build_tree (document, rroot);
+    document->root = sp_object_repr_build_tree(document, rroot);
 
-	sodipodi_version = SP_ROOT (document->root)->version.sodipodi;
+    sodipodi_version = SP_ROOT(document->root)->version.sodipodi;
 
-	/* fixme: Not sure about this, but lets assume ::build updates */
-	sp_repr_set_attr (rroot, "sodipodi:version", SODIPODI_VERSION);
-	sp_repr_set_attr (rroot, "inkscape:version", INKSCAPE_VERSION);
-	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
+    /* fixme: Not sure about this, but lets assume ::build updates */
+    sp_repr_set_attr(rroot, "sodipodi:version", SODIPODI_VERSION);
+    sp_repr_set_attr(rroot, "inkscape:version", INKSCAPE_VERSION);
+    /* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 
-	/* Quick hack 2 - get default image size into document */
-	if (!rroot->attribute("width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
-	if (!rroot->attribute("height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
-        /* End of quick hack 2 */
+    /* Quick hack 2 - get default image size into document */
+    if (!rroot->attribute("width")) sp_repr_set_attr(rroot, "width", A4_WIDTH_STR);
+    if (!rroot->attribute("height")) sp_repr_set_attr(rroot, "height", A4_HEIGHT_STR);
+    /* End of quick hack 2 */
 
-	/* Quick hack 3 - Set uri attributes */
-	if (uri) {
-		/* fixme: Think, what this means for images (Lauris) */
-		sp_repr_set_attr (rroot, "sodipodi:docname", uri);
-		if (document->base)
-                    sp_repr_set_attr (rroot, "sodipodi:docbase", document->base);
-	}
-	/* End of quick hack 3 */
-	/* between 0 and 0.25 */
-	if (sp_version_inside_range (sodipodi_version, 0, 0, 0, 25)) {
-		/* Clear ancient spec violating attributes */
-		sp_repr_set_attr (rroot, "SP-DOCNAME", NULL);
-		sp_repr_set_attr (rroot, "SP-DOCBASE", NULL);
-		sp_repr_set_attr (rroot, "docname", NULL);
-		sp_repr_set_attr (rroot, "docbase", NULL);
-	}
+    /* Quick hack 3 - Set uri attributes */
+    if (uri) {
+        /* fixme: Think, what this means for images (Lauris) */
+        sp_repr_set_attr(rroot, "sodipodi:docname", uri);
+        if (document->base)
+            sp_repr_set_attr(rroot, "sodipodi:docbase", document->base);
+    }
+    /* End of quick hack 3 */
+    /* between 0 and 0.25 */
+    if (sp_version_inside_range(sodipodi_version, 0, 0, 0, 25)) {
+        /* Clear ancient spec violating attributes */
+        sp_repr_set_attr(rroot, "SP-DOCNAME", NULL);
+        sp_repr_set_attr(rroot, "SP-DOCBASE", NULL);
+        sp_repr_set_attr(rroot, "docname", NULL);
+        sp_repr_set_attr(rroot, "docbase", NULL);
+    }
 
-	// creating namedview
-	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
-		// if there's none in the document already,
-		Inkscape::XML::Node *r = NULL;
-		Inkscape::XML::Node *rnew = NULL;
-		r = inkscape_get_repr (INKSCAPE, "template.base");
-		// see if there's a template with id="base" in the preferences 
-		if (!r) {
-			// if there's none, create an empty element
-			rnew = sp_repr_new ("sodipodi:namedview");
-			sp_repr_set_attr (rnew, "id", "base");
-		} else {
-			// otherwise, take from preferences
-			rnew = r->duplicate();
-		}
-		// insert into the document
-		sp_repr_add_child (rroot, rnew, NULL);
-		// clean up
-		sp_repr_unref (rnew);
-	}
-	
-	/* Defs */
-	if (!SP_ROOT (document->root)->defs) {
-		Inkscape::XML::Node *r;
-		r = sp_repr_new ("svg:defs");
-		sp_repr_add_child (rroot, r, NULL);
-		sp_repr_unref (r);
-		g_assert (SP_ROOT (document->root)->defs);
-	}
+    // creating namedview
+    if (!sp_item_group_get_child_by_name((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
+        // if there's none in the document already,
+        Inkscape::XML::Node *r = NULL;
+        Inkscape::XML::Node *rnew = NULL;
+        r = inkscape_get_repr(INKSCAPE, "template.base");
+        // see if there's a template with id="base" in the preferences
+        if (!r) {
+            // if there's none, create an empty element
+            rnew = sp_repr_new("sodipodi:namedview");
+            sp_repr_set_attr(rnew, "id", "base");
+        } else {
+            // otherwise, take from preferences
+            rnew = r->duplicate();
+        }
+        // insert into the document
+        sp_repr_add_child(rroot, rnew, NULL);
+        // clean up
+        sp_repr_unref(rnew);
+    }
 
-	/* Default RDF */
-	rdf_set_defaults ( document );
+    /* Defs */
+    if (!SP_ROOT(document->root)->defs) {
+        Inkscape::XML::Node *r;
+        r = sp_repr_new("svg:defs");
+        sp_repr_add_child(rroot, r, NULL);
+        sp_repr_unref(r);
+        g_assert(SP_ROOT(document->root)->defs);
+    }
 
-	if (keepalive) {
-		inkscape_ref ();
-	}
+    /* Default RDF */
+    rdf_set_defaults( document );
 
-	sp_document_set_undo_sensitive (document, TRUE);
+    if (keepalive) {
+        inkscape_ref();
+    }
 
-	// reset undo key when selection changes, so that same-key actions on different objects are not coalesced
-	if (INKSCAPE != NULL) {
-		g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", 
-				G_CALLBACK (sp_document_reset_key), document);
-		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", 
-				G_CALLBACK (sp_document_reset_key), document);
-	}
-	inkscape_add_document (document);
+    sp_document_set_undo_sensitive(document, TRUE);
 
-	return document;
+    // reset undo key when selection changes, so that same-key actions on different objects are not coalesced
+    if (INKSCAPE != NULL) {
+        g_signal_connect(G_OBJECT(INKSCAPE), "change_selection",
+                         G_CALLBACK(sp_document_reset_key), document);
+        g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop",
+                         G_CALLBACK(sp_document_reset_key), document);
+    }
+    inkscape_add_document(document);
+
+    return document;
 }
 
 SPDocument *
-sp_document_new (gchar const *uri, unsigned int keepalive, bool make_new)
+sp_document_new(gchar const *uri, unsigned int keepalive, bool make_new)
 {
-	SPDocument *doc;
-	Inkscape::XML::Document *rdoc;
-	gchar *base = NULL;
-        gchar *name = NULL;
+    SPDocument *doc;
+    Inkscape::XML::Document *rdoc;
+    gchar *base = NULL;
+    gchar *name = NULL;
 
-	if (uri) {
-		Inkscape::XML::Node *rroot;
-		gchar *s, *p;
-		/* Try to fetch repr from file */
-		rdoc = sp_repr_read_file (uri, SP_SVG_NS_URI);
-		/* If file cannot be loaded, return NULL without warning */
-		if (rdoc == NULL) return NULL;
-		rroot = sp_repr_document_root (rdoc);
-		/* If xml file is not svg, return NULL without warning */
-		/* fixme: destroy document */
-		if (strcmp (rroot->name(), "svg:svg") != 0) return NULL;
-		s = g_strdup (uri);
-		p = strrchr (s, '/');
-		if (p) {
-			name = g_strdup (p + 1);
-			p[1] = '\0';
-			base = g_strdup (s);
-		} else {
-			base = NULL;
-			name = g_strdup (uri);
-		}
-		g_free (s);
-	} else {
-		rdoc = sp_repr_document_new ("svg:svg");
-	}
+    if (uri) {
+        Inkscape::XML::Node *rroot;
+        gchar *s, *p;
+        /* Try to fetch repr from file */
+        rdoc = sp_repr_read_file(uri, SP_SVG_NS_URI);
+        /* If file cannot be loaded, return NULL without warning */
+        if (rdoc == NULL) return NULL;
+        rroot = sp_repr_document_root(rdoc);
+        /* If xml file is not svg, return NULL without warning */
+        /* fixme: destroy document */
+        if (strcmp(rroot->name(), "svg:svg") != 0) return NULL;
+        s = g_strdup(uri);
+        p = strrchr(s, '/');
+        if (p) {
+            name = g_strdup(p + 1);
+            p[1] = '\0';
+            base = g_strdup(s);
+        } else {
+            base = NULL;
+            name = g_strdup(uri);
+        }
+        g_free(s);
+    } else {
+        rdoc = sp_repr_document_new("svg:svg");
+    }
 
-	if (make_new) {
-		base = NULL;
-		uri = NULL;
-		name = g_strdup_printf (_("New document %d"), ++doc_count);
-	}
+    if (make_new) {
+        base = NULL;
+        uri = NULL;
+        name = g_strdup_printf(_("New document %d"), ++doc_count);
+    }
 
-        //# These should be set by now
-        g_assert (name);
+    //# These should be set by now
+    g_assert(name);
 
-	doc = sp_document_create (rdoc, uri, base, name, keepalive);
+    doc = sp_document_create(rdoc, uri, base, name, keepalive);
 
-	g_free (base);
-	g_free (name);
+    g_free(base);
+    g_free(name);
 
-	return doc;
+    return doc;
 }
 
 SPDocument *
-sp_document_new_from_mem (gchar const *buffer, gint length, unsigned int keepalive)
+sp_document_new_from_mem(gchar const *buffer, gint length, unsigned int keepalive)
 {
-	SPDocument *doc;
-	Inkscape::XML::Document *rdoc;
-	Inkscape::XML::Node *rroot;
-	gchar *name;
+    SPDocument *doc;
+    Inkscape::XML::Document *rdoc;
+    Inkscape::XML::Node *rroot;
+    gchar *name;
 
-	rdoc = sp_repr_read_mem (buffer, length, SP_SVG_NS_URI);
+    rdoc = sp_repr_read_mem(buffer, length, SP_SVG_NS_URI);
 
-	/* If it cannot be loaded, return NULL without warning */
-	if (rdoc == NULL) return NULL;
+    /* If it cannot be loaded, return NULL without warning */
+    if (rdoc == NULL) return NULL;
 
-	rroot = sp_repr_document_root (rdoc);
-	/* If xml file is not svg, return NULL without warning */
-	/* fixme: destroy document */
-	if (strcmp (rroot->name(), "svg:svg") != 0) return NULL;
+    rroot = sp_repr_document_root(rdoc);
+    /* If xml file is not svg, return NULL without warning */
+    /* fixme: destroy document */
+    if (strcmp(rroot->name(), "svg:svg") != 0) return NULL;
 
-	name = g_strdup_printf (_("Memory document %d"), ++doc_count);
+    name = g_strdup_printf(_("Memory document %d"), ++doc_count);
 
-	doc = sp_document_create (rdoc, NULL, NULL, name, keepalive);
+    doc = sp_document_create(rdoc, NULL, NULL, name, keepalive);
 
-	return doc;
+    return doc;
 }
 
 SPDocument *sp_document_new_dummy() {
-	SPDocument *document = new SPDocument();
-	inkscape_add_document(document);
-	return document;
+    SPDocument *document = new SPDocument();
+    inkscape_add_document(document);
+    return document;
 }
 
 SPDocument *
-sp_document_ref (SPDocument *doc)
+sp_document_ref(SPDocument *doc)
 {
-	g_return_val_if_fail (doc != NULL, NULL);
-	Inkscape::GC::anchor(doc);
-	return doc;
+    g_return_val_if_fail(doc != NULL, NULL);
+    Inkscape::GC::anchor(doc);
+    return doc;
 }
 
 SPDocument *
-sp_document_unref (SPDocument *doc)
+sp_document_unref(SPDocument *doc)
 {
-	g_return_val_if_fail (doc != NULL, NULL);
-	Inkscape::GC::release(doc);
-	return NULL;
+    g_return_val_if_fail(doc != NULL, NULL);
+    Inkscape::GC::release(doc);
+    return NULL;
 }
 
 gdouble sp_document_width(SPDocument *document)
 {
-	g_return_val_if_fail (document != NULL, 0.0);
-	g_return_val_if_fail (document->priv != NULL, 0.0);
-	g_return_val_if_fail (document->root != NULL, 0.0);
+    g_return_val_if_fail(document != NULL, 0.0);
+    g_return_val_if_fail(document->priv != NULL, 0.0);
+    g_return_val_if_fail(document->root != NULL, 0.0);
 
-	return SP_ROOT (document->root)->width.computed;
+    return SP_ROOT(document->root)->width.computed;
 }
 
 gdouble sp_document_height(SPDocument *document)
 {
-	g_return_val_if_fail (document != NULL, 0.0);
-	g_return_val_if_fail (document->priv != NULL, 0.0);
-	g_return_val_if_fail (document->root != NULL, 0.0);
+    g_return_val_if_fail(document != NULL, 0.0);
+    g_return_val_if_fail(document->priv != NULL, 0.0);
+    g_return_val_if_fail(document->root != NULL, 0.0);
 
-	return SP_ROOT (document->root)->height.computed;
+    return SP_ROOT(document->root)->height.computed;
 }
 
 void sp_document_set_uri(SPDocument *document, gchar const *uri)
 {
-	g_return_if_fail (document != NULL);
+    g_return_if_fail(document != NULL);
 
-	if (document->name) {
-		g_free (document->name);
-		document->name = NULL;
-	}
-	if (document->base) {
-		g_free (document->base);
-		document->base = NULL;
-	}
-	if (document->uri) {
-		g_free (document->uri);
-		document->uri = NULL;
-	}
+    if (document->name) {
+        g_free(document->name);
+        document->name = NULL;
+    }
+    if (document->base) {
+        g_free(document->base);
+        document->base = NULL;
+    }
+    if (document->uri) {
+        g_free(document->uri);
+        document->uri = NULL;
+    }
 
-	if (uri) {
+    if (uri) {
 
 #ifndef WIN32
-		prepend_current_dir_if_relative (&(document->uri), uri);
+        prepend_current_dir_if_relative(&(document->uri), uri);
 #else
-		// FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
-		document->uri = g_strdup (uri);
+        // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
+        document->uri = g_strdup(uri);
 #endif
-	
-		/* fixme: Think, what this means for images (Lauris) */
-		document->base = g_path_get_dirname (document->uri);
-		document->name = g_path_get_basename (document->uri);
 
-	} else {
-		document->uri = g_strdup_printf (_("Unnamed document %d"), ++doc_count);
-		document->base = NULL;
-		document->name = g_strdup (document->uri);
-	}
+        /* fixme: Think, what this means for images (Lauris) */
+        document->base = g_path_get_dirname(document->uri);
+        document->name = g_path_get_basename(document->uri);
 
-	// Update saveable repr attributes.
-	Inkscape::XML::Node *repr = sp_document_repr_root(document);
-	// changing uri in the document repr must not be not undoable
-	gboolean saved = sp_document_get_undo_sensitive(document);
-	sp_document_set_undo_sensitive (document, FALSE);
-	if (document->base)
-            sp_repr_set_attr (repr, "sodipodi:docbase", document->base);
+    } else {
+        document->uri = g_strdup_printf(_("Unnamed document %d"), ++doc_count);
+        document->base = NULL;
+        document->name = g_strdup(document->uri);
+    }
 
-	sp_repr_set_attr (repr, "sodipodi:docname", document->name);
-	sp_document_set_undo_sensitive (document, saved);
+    // Update saveable repr attributes.
+    Inkscape::XML::Node *repr = sp_document_repr_root(document);
+    // changing uri in the document repr must not be not undoable
+    gboolean saved = sp_document_get_undo_sensitive(document);
+    sp_document_set_undo_sensitive(document, FALSE);
+    if (document->base)
+        sp_repr_set_attr(repr, "sodipodi:docbase", document->base);
 
-	document->priv->uri_set_signal.emit(document->uri);
+    sp_repr_set_attr(repr, "sodipodi:docname", document->name);
+    sp_document_set_undo_sensitive(document, saved);
+
+    document->priv->uri_set_signal.emit(document->uri);
 }
 
 void
-sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
+sp_document_set_size_px(SPDocument *doc, gdouble width, gdouble height)
 {
-	g_return_if_fail (doc != NULL);
+    g_return_if_fail(doc != NULL);
 
-	doc->priv->resized_signal.emit(width, height);
+    doc->priv->resized_signal.emit(width, height);
 }
 
 sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
 {
-	return priv->modified_signal.connect(slot);
+    return priv->modified_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
 {
-	return priv->uri_set_signal.connect(slot);
+    return priv->uri_set_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
 {
-	return priv->resized_signal.connect(slot);
+    return priv->resized_signal.connect(slot);
 }
 
 sigc::connection
 SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
 {
-	return priv->_reconstruction_start_signal.connect(slot);
+    return priv->_reconstruction_start_signal.connect(slot);
 }
 
 void
-SPDocument::emitReconstructionStart (void)
+SPDocument::emitReconstructionStart(void)
 {
-	// printf("Starting Reconstruction\n");
-	priv->_reconstruction_start_signal.emit();
-	return;
+    // printf("Starting Reconstruction\n");
+    priv->_reconstruction_start_signal.emit();
+    return;
 }
 
 sigc::connection
-SPDocument::connectReconstructionFinish (SPDocument::ReconstructionFinish::slot_type  slot)
+SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
 {
-	return priv->_reconstruction_finish_signal.connect(slot);
+    return priv->_reconstruction_finish_signal.connect(slot);
 }
 
 void
-SPDocument::emitReconstructionFinish (void)
+SPDocument::emitReconstructionFinish(void)
 {
-	// printf("Finishing Reconstruction\n");
-	priv->_reconstruction_finish_signal.emit();
-	return;
+    // printf("Finishing Reconstruction\n");
+    priv->_reconstruction_finish_signal.emit();
+    return;
 }
 
 
 void SPDocument::_emitModified() {
-	static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
-	root->emitModified(0);
-	priv->modified_signal.emit(flags);
+    static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
+    root->emitModified(0);
+    priv->modified_signal.emit(flags);
 }
 
 void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
-	GQuark idq = g_quark_from_string(id);
+    GQuark idq = g_quark_from_string(id);
 
-	if (object) {
-		g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) == NULL);
-		g_hash_table_insert(priv->iddef, GINT_TO_POINTER(idq), object);
-	} else {
-		g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) != NULL);
-		g_hash_table_remove(priv->iddef, GINT_TO_POINTER(idq));
-	}
+    if (object) {
+        g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) == NULL);
+        g_hash_table_insert(priv->iddef, GINT_TO_POINTER(idq), object);
+    } else {
+        g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) != NULL);
+        g_hash_table_remove(priv->iddef, GINT_TO_POINTER(idq));
+    }
 
-	SPDocumentPrivate::IDChangedSignalMap::iterator pos;
+    SPDocumentPrivate::IDChangedSignalMap::iterator pos;
 
-	pos = priv->id_changed_signals.find(idq);
-	if ( pos != priv->id_changed_signals.end() ) {
-		if (!(*pos).second.empty()) {
-			(*pos).second.emit(object);
-		} else { // discard unused signal
-			priv->id_changed_signals.erase(pos);
-		}
-	}
+    pos = priv->id_changed_signals.find(idq);
+    if ( pos != priv->id_changed_signals.end() ) {
+        if (!(*pos).second.empty()) {
+            (*pos).second.emit(object);
+        } else { // discard unused signal
+            priv->id_changed_signals.erase(pos);
+        }
+    }
 }
 
 SPObject *SPDocument::getObjectById(gchar const *id) {
-	g_return_val_if_fail (id != NULL, NULL);
+    g_return_val_if_fail(id != NULL, NULL);
 
-	GQuark idq = g_quark_from_string(id);
-	return (SPObject*)g_hash_table_lookup (priv->iddef, GINT_TO_POINTER(idq));
+    GQuark idq = g_quark_from_string(id);
+    return (SPObject*)g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq));
 }
 
-sigc::connection SPDocument::connectIdChanged(gchar const *id, SPDocument::IDChangedSignal::slot_type slot) {
-	return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
+sigc::connection SPDocument::connectIdChanged(gchar const *id,
+                                              SPDocument::IDChangedSignal::slot_type slot)
+{
+    return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
 void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object) {
-	if (object) {
-		g_assert(g_hash_table_lookup(priv->reprdef, repr) == NULL);
-		g_hash_table_insert(priv->reprdef, repr, object);
-	} else {
-		g_assert(g_hash_table_lookup(priv->reprdef, repr) != NULL);
-		g_hash_table_remove(priv->reprdef, repr);
-	}
+    if (object) {
+        g_assert(g_hash_table_lookup(priv->reprdef, repr) == NULL);
+        g_hash_table_insert(priv->reprdef, repr, object);
+    } else {
+        g_assert(g_hash_table_lookup(priv->reprdef, repr) != NULL);
+        g_hash_table_remove(priv->reprdef, repr);
+    }
 }
 
 SPObject *SPDocument::getObjectByRepr(Inkscape::XML::Node *repr) {
-	g_return_val_if_fail (repr != NULL, NULL);
-	return (SPObject*)g_hash_table_lookup(priv->reprdef, repr);
+    g_return_val_if_fail(repr != NULL, NULL);
+    return (SPObject*)g_hash_table_lookup(priv->reprdef, repr);
 }
 
 /* Object modification root handler */
 
 void
-sp_document_request_modified (SPDocument *doc)
+sp_document_request_modified(SPDocument *doc)
 {
-	if (!doc->modified_id) {
-		doc->modified_id = gtk_idle_add_priority (SP_DOCUMENT_UPDATE_PRIORITY, sp_document_idle_handler, doc);
-	}
+    if (!doc->modified_id) {
+        doc->modified_id = gtk_idle_add_priority(SP_DOCUMENT_UPDATE_PRIORITY, sp_document_idle_handler, doc);
+    }
 }
 
 gint
-sp_document_ensure_up_to_date (SPDocument *doc)
+sp_document_ensure_up_to_date(SPDocument *doc)
 {
-	int lc;
-	lc = 32;
-	while (doc->root->uflags || doc->root->mflags) {
-		lc -= 1;
-		if (lc < 0) {
-			g_warning ("More than 32 iterations while updating document '%s'", doc->uri);
-			if (doc->modified_id) {
-				/* Remove handler */
-				gtk_idle_remove (doc->modified_id);
-				doc->modified_id = 0;
-			}
-			return FALSE;
-		}
-		/* Process updates */
-		if (doc->root->uflags) {
-			SPItemCtx ctx;
-			ctx.ctx.flags = 0;
-			ctx.i2doc = NR::identity();
-			/* Set up viewport in case svg has it defined as percentages */
-			ctx.vp.x0 = 0.0;
-			ctx.vp.y0 = 0.0;
-			ctx.vp.x1 = 210 * PX_PER_MM;
-			ctx.vp.y1 = 297 * PX_PER_MM;
-			ctx.i2vp = NR::identity();
-			doc->root->updateDisplay((SPCtx *)&ctx, 0);
-		}
-		doc->_emitModified();
-	}
-	if (doc->modified_id) {
-		/* Remove handler */
-		gtk_idle_remove (doc->modified_id);
-		doc->modified_id = 0;
-	}
-	return TRUE;
+    int lc;
+    lc = 32;
+    while (doc->root->uflags || doc->root->mflags) {
+        lc -= 1;
+        if (lc < 0) {
+            g_warning("More than 32 iterations while updating document '%s'", doc->uri);
+            if (doc->modified_id) {
+                /* Remove handler */
+                gtk_idle_remove(doc->modified_id);
+                doc->modified_id = 0;
+            }
+            return FALSE;
+        }
+        /* Process updates */
+        if (doc->root->uflags) {
+            SPItemCtx ctx;
+            ctx.ctx.flags = 0;
+            ctx.i2doc = NR::identity();
+            /* Set up viewport in case svg has it defined as percentages */
+            ctx.vp.x0 = 0.0;
+            ctx.vp.y0 = 0.0;
+            ctx.vp.x1 = 210 * PX_PER_MM;
+            ctx.vp.y1 = 297 * PX_PER_MM;
+            ctx.i2vp = NR::identity();
+            doc->root->updateDisplay((SPCtx *)&ctx, 0);
+        }
+        doc->_emitModified();
+    }
+    if (doc->modified_id) {
+        /* Remove handler */
+        gtk_idle_remove(doc->modified_id);
+        doc->modified_id = 0;
+    }
+    return TRUE;
 }
 
 static gint
-sp_document_idle_handler (gpointer data)
+sp_document_idle_handler(gpointer data)
 {
-	SPDocument *doc;
-	int repeat;
+    SPDocument *doc;
+    int repeat;
 
-	doc = static_cast<SPDocument *>(data);
+    doc = static_cast<SPDocument *>(data);
 
 #ifdef SP_DOCUMENT_DEBUG_IDLE
-	g_print ("->\n");
+    g_print("->\n");
 #endif
 
-	/* Process updates */
-	if (doc->root->uflags) {
-		SPItemCtx ctx;
-		ctx.ctx.flags = 0;
-		ctx.i2doc = NR::identity();
-		/* Set up viewport in case svg has it defined as percentages */
-		ctx.vp.x0 = 0.0;
-		ctx.vp.y0 = 0.0;
-		ctx.vp.x1 = 21.0 * PX_PER_CM;
-		ctx.vp.y1 = 29.7 * PX_PER_CM;
-		ctx.i2vp = NR::identity();
+    /* Process updates */
+    if (doc->root->uflags) {
+        SPItemCtx ctx;
+        ctx.ctx.flags = 0;
+        ctx.i2doc = NR::identity();
+        /* Set up viewport in case svg has it defined as percentages */
+        ctx.vp.x0 = 0.0;
+        ctx.vp.y0 = 0.0;
+        ctx.vp.x1 = 21.0 * PX_PER_CM;
+        ctx.vp.y1 = 29.7 * PX_PER_CM;
+        ctx.i2vp = NR::identity();
 
-		gboolean saved = sp_document_get_undo_sensitive(doc);
-		sp_document_set_undo_sensitive (doc, FALSE);
+        gboolean saved = sp_document_get_undo_sensitive(doc);
+        sp_document_set_undo_sensitive(doc, FALSE);
 
-		doc->root->updateDisplay((SPCtx *)&ctx, 0);
+        doc->root->updateDisplay((SPCtx *)&ctx, 0);
 
-		sp_document_set_undo_sensitive (doc, saved);
-		/* if (doc->root->uflags & SP_OBJECT_MODIFIED_FLAG) return TRUE; */
-	}
+        sp_document_set_undo_sensitive(doc, saved);
+        /* if (doc->root->uflags & SP_OBJECT_MODIFIED_FLAG) return TRUE; */
+    }
 
-	doc->_emitModified();
+    doc->_emitModified();
 
-	repeat = (doc->root->uflags || doc->root->mflags);
-	if (!repeat) doc->modified_id = 0;
-	return repeat;
+    repeat = (doc->root->uflags || doc->root->mflags);
+    if (!repeat) doc->modified_id = 0;
+    return repeat;
 }
 
 static int
-is_within (NRRect const *area, NRRect const *box)
+is_within(NRRect const *area, NRRect const *box)
 {
-	if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
-		return false;
+    if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
+        return false;
 
-	return (box->x0 > area->x0) && (box->x1 < area->x1)
-	    && (box->y0 > area->y0) && (box->y1 < area->y1);
+    return (box->x0 > area->x0) && (box->x1 < area->x1)
+        && (box->y0 > area->y0) && (box->y1 < area->y1);
 }
 
 static int
-overlaps (NRRect const *area, NRRect const *box)
+overlaps(NRRect const *area, NRRect const *box)
 {
-	if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
-		return false;
+    if (box->x0 > box->x1 || box->y0 > box->y1) // invalid (=empty) bbox, may happen e.g. with a whitespace-only text object
+        return false;
 
-	return (((area->x0 > box->x0) && (area->x0 < box->x1)) ||
-	        ((area->x1 > box->x0) && (area->x1 < box->x1))) &&
-	       (((area->y0 > box->y0) && (area->y0 < box->y1)) ||
-	        ((area->y1 > box->y0) && (area->y1 < box->y1)));
+    /* FIXME: The below looks suspicious: it tests whether area's border overlaps box rather than
+     * whether area's inside overlaps box's inside.  E.g. if box fits entirely within area then it
+     * returns false.
+     *
+     * If this is the intended behaviour, then it should be documented (both here and in the
+     * caller).
+     *
+     * Otherwise, consider replacing this function body with a call to nr_rect_d_test_intersect.
+     */
+    return (((area->x0 > box->x0) && (area->x0 < box->x1)) ||
+            ((area->x1 > box->x0) && (area->x1 < box->x1))   ) &&
+           (((area->y0 > box->y0) && (area->y0 < box->y1)) ||
+            ((area->y1 > box->y0) && (area->y1 < box->y1))   );
 }
 
 static GSList *
-find_items_in_area (GSList *s, SPGroup *group, unsigned int dkey, NRRect const *area,
-                    int (*test)(NRRect const *, NRRect const *), bool take_insensitive = false)
+find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, NRRect const *area,
+                   int (*test)(NRRect const *, NRRect const *), bool take_insensitive = false)
 {
-	g_return_val_if_fail (SP_IS_GROUP (group), s);
+    g_return_val_if_fail(SP_IS_GROUP(group), s);
 
-	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
-		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) &&
-		    SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER )
-		{
-			s = find_items_in_area(s, SP_GROUP(o), dkey, area, test);
-		} else {
-			SPItem *child = SP_ITEM(o);
-			NRRect box;
-			sp_item_bbox_desktop (child, &box);
-			if (test (area, &box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
-				s = g_slist_append (s, child);
-			}
-		}
-	}
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (!SP_IS_ITEM(o)) continue;
+        if (SP_IS_GROUP(o) &&
+            SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER )
+        {
+            s = find_items_in_area(s, SP_GROUP(o), dkey, area, test);
+        } else {
+            SPItem *child = SP_ITEM(o);
+            NRRect box;
+            sp_item_bbox_desktop(child, &box);
+            if (test(area, &box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
+                s = g_slist_append(s, child);
+            }
+        }
+    }
 
-	return s;
+    return s;
 }
 
 extern gdouble nr_arena_global_delta;
@@ -711,48 +722,48 @@ extern gdouble nr_arena_global_delta;
 /**
 Returns true if an item is among the descendants of group (recursively).
  */
-bool item_is_in_group (SPItem *item, SPGroup *group)
+bool item_is_in_group(SPItem *item, SPGroup *group)
 {
-	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
-		if (!SP_IS_ITEM (o)) continue;
-		if (SP_ITEM (o) == item)
-			return true;
-		if (SP_IS_GROUP (o))
-			if (item_is_in_group (item, SP_GROUP(o)))
-				return true;
-	}
-	return false;
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (!SP_IS_ITEM(o)) continue;
+        if (SP_ITEM(o) == item)
+            return true;
+        if (SP_IS_GROUP(o))
+            if (item_is_in_group(item, SP_GROUP(o)))
+                return true;
+    }
+    return false;
 }
 
 /**
-Returns the bottommost item from the list which is at the point, or NULL if none. 
+Returns the bottommost item from the list which is at the point, or NULL if none.
 */
 SPItem*
 sp_document_item_from_list_at_point_bottom(unsigned int dkey, SPGroup *group, GSList const *list,
-					   NR::Point const p, bool take_insensitive)
+                                           NR::Point const p, bool take_insensitive)
 {
-	g_return_val_if_fail (group, NULL);
+    g_return_val_if_fail(group, NULL);
 
-	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 
-		if (!SP_IS_ITEM (o)) continue;
+        if (!SP_IS_ITEM(o)) continue;
 
-		SPItem *item = SP_ITEM (o);
-		NRArenaItem *arenaitem = sp_item_get_arenaitem(item, dkey);
-		if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
-                      && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
-			if (g_slist_find((GSList *) list, item) != NULL)
-				return item;
-		}
+        SPItem *item = SP_ITEM(o);
+        NRArenaItem *arenaitem = sp_item_get_arenaitem(item, dkey);
+        if (nr_arena_item_invoke_pick(arenaitem, p, nr_arena_global_delta, 1) != NULL
+            && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
+            if (g_slist_find((GSList *) list, item) != NULL)
+                return item;
+        }
 
-		if (SP_IS_GROUP (o)) {
-			SPItem *found = sp_document_item_from_list_at_point_bottom (dkey, SP_GROUP(o), list, p, take_insensitive);
-			if (found)
-				return found;
-		}
+        if (SP_IS_GROUP(o)) {
+            SPItem *found = sp_document_item_from_list_at_point_bottom(dkey, SP_GROUP(o), list, p, take_insensitive);
+            if (found)
+                return found;
+        }
 
-	}
-	return NULL;
+    }
+    return NULL;
 }
 
 /**
@@ -764,39 +775,39 @@ upwards in z-order and returns what it has found so far (i.e. the found item is
 guaranteed to be lower than upto).
  */
 SPItem*
-find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false, SPItem *upto = NULL)
+find_item_at_point(unsigned int dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false, SPItem *upto = NULL)
 {
-	SPItem *seen = NULL, *newseen = NULL;
+    SPItem *seen = NULL, *newseen = NULL;
 
-	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
-		if (!SP_IS_ITEM (o)) continue;
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (!SP_IS_ITEM(o)) continue;
 
-		if (upto && SP_ITEM (o) == upto)
-			break;
+        if (upto && SP_ITEM(o) == upto)
+            break;
 
-		if (SP_IS_GROUP (o) && (SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups))	{
-			// if nothing found yet, recurse into the group
-			newseen = find_item_at_point (dkey, SP_GROUP (o), p, into_groups, take_insensitive, upto);
-			if (newseen) {
-				seen = newseen;
-				newseen = NULL;
-			}
+        if (SP_IS_GROUP(o) && (SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups))	{
+            // if nothing found yet, recurse into the group
+            newseen = find_item_at_point(dkey, SP_GROUP(o), p, into_groups, take_insensitive, upto);
+            if (newseen) {
+                seen = newseen;
+                newseen = NULL;
+            }
 
-			if (item_is_in_group (upto, SP_GROUP (o)))
-				break;
+            if (item_is_in_group(upto, SP_GROUP(o)))
+                break;
 
-		} else {
-			SPItem *child = SP_ITEM(o);
-			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
+        } else {
+            SPItem *child = SP_ITEM(o);
+            NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
-			// seen remembers the last (topmost) of items pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
-                           && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
-				seen = child;
-			}
-		}
-	}
-	return seen;
+            // seen remembers the last (topmost) of items pickable at this point
+            if (nr_arena_item_invoke_pick(arenaitem, p, nr_arena_global_delta, 1) != NULL
+                && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
+                seen = child;
+            }
+        }
+    }
+    return seen;
 }
 
 /**
@@ -804,29 +815,29 @@ Returns the topmost non-layer group from the descendants of group which is at po
 p, or NULL if none. Recurses into layers but not into groups.
  */
 SPItem*
-find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
+find_group_at_point(unsigned int dkey, SPGroup *group, NR::Point const p)
 {
-	SPItem *seen = NULL;
+    SPItem *seen = NULL;
 
-	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
-		if (!SP_IS_ITEM (o)) continue;
-		if (SP_IS_GROUP (o) && SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER) {
-			SPItem *newseen = find_group_at_point (dkey, SP_GROUP (o), p);
-			if (newseen) {
-				seen = newseen;
-			}
-		}
-		if (SP_IS_GROUP (o) && SP_GROUP (o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
-			SPItem *child = SP_ITEM(o);
-			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
+    for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
+        if (!SP_IS_ITEM(o)) continue;
+        if (SP_IS_GROUP(o) && SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER) {
+            SPItem *newseen = find_group_at_point(dkey, SP_GROUP(o), p);
+            if (newseen) {
+                seen = newseen;
+            }
+        }
+        if (SP_IS_GROUP(o) && SP_GROUP(o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
+            SPItem *child = SP_ITEM(o);
+            NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
-			// seen remembers the last (topmost) of groups pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL) {
-				seen = child;
-			}
-		}
-	}
-	return seen;
+            // seen remembers the last (topmost) of groups pickable at this point
+            if (nr_arena_item_invoke_pick(arenaitem, p, nr_arena_global_delta, 1) != NULL) {
+                seen = child;
+            }
+        }
+    }
+    return seen;
 }
 
 /*
@@ -837,14 +848,14 @@ find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
  */
 
 GSList *
-sp_document_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box)
+sp_document_items_in_box(SPDocument *document, unsigned int dkey, NRRect const *box)
 {
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (document->priv != NULL, NULL);
-	g_return_val_if_fail (box != NULL, NULL);
+    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document->priv != NULL, NULL);
+    g_return_val_if_fail(box != NULL, NULL);
 
-	return find_items_in_area (NULL, SP_GROUP (document->root),
-	                           dkey, box, is_within);
+    return find_items_in_area(NULL, SP_GROUP(document->root),
+                              dkey, box, is_within);
 }
 
 /*
@@ -855,165 +866,177 @@ sp_document_items_in_box (SPDocument *document, unsigned int dkey, NRRect const 
  */
 
 GSList *
-sp_document_partial_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box)
+sp_document_partial_items_in_box(SPDocument *document, unsigned int dkey, NRRect const *box)
 {
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (document->priv != NULL, NULL);
-	g_return_val_if_fail (box != NULL, NULL);
+    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document->priv != NULL, NULL);
+    g_return_val_if_fail(box != NULL, NULL);
 
-	return find_items_in_area (NULL, SP_GROUP (document->root),
-	                           dkey, box, overlaps);
+    return find_items_in_area(NULL, SP_GROUP(document->root),
+                              dkey, box, overlaps);
 }
 
 SPItem *
 sp_document_item_at_point(SPDocument *document, unsigned const key, NR::Point const p,
-			  gboolean const into_groups, SPItem *upto)
+                          gboolean const into_groups, SPItem *upto)
 {
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (document->priv != NULL, NULL);
+    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document->priv != NULL, NULL);
 
- 	return find_item_at_point (key, SP_GROUP (document->root), p, into_groups, false, upto);
+    return find_item_at_point(key, SP_GROUP(document->root), p, into_groups, false, upto);
 }
 
 SPItem*
-sp_document_group_at_point (SPDocument *document, unsigned int key, NR::Point const p)
+sp_document_group_at_point(SPDocument *document, unsigned int key, NR::Point const p)
 {
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (document->priv != NULL, NULL);
+    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document->priv != NULL, NULL);
 
- 	return find_group_at_point (key, SP_GROUP (document->root), p);
+    return find_group_at_point(key, SP_GROUP(document->root), p);
 }
 
 
 /* Resource management */
 
 gboolean
-sp_document_add_resource (SPDocument *document, gchar const *key, SPObject *object)
+sp_document_add_resource(SPDocument *document, gchar const *key, SPObject *object)
 {
-	GSList *rlist;
-	GQuark q=g_quark_from_string(key);
+    GSList *rlist;
+    GQuark q = g_quark_from_string(key);
 
-	g_return_val_if_fail (document != NULL, FALSE);
-	g_return_val_if_fail (key != NULL, FALSE);
-	g_return_val_if_fail (*key != '\0', FALSE);
-	g_return_val_if_fail (object != NULL, FALSE);
-	g_return_val_if_fail (SP_IS_OBJECT (object), FALSE);
+    g_return_val_if_fail(document != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(*key != '\0', FALSE);
+    g_return_val_if_fail(object != NULL, FALSE);
+    g_return_val_if_fail(SP_IS_OBJECT(object), FALSE);
 
-	if (SP_OBJECT_IS_CLONED (object)) 
-		return FALSE;
+    if (SP_OBJECT_IS_CLONED(object))
+        return FALSE;
 
-	rlist = (GSList*)g_hash_table_lookup (document->priv->resources, key);
-	g_return_val_if_fail (!g_slist_find (rlist, object), FALSE);
-	rlist = g_slist_prepend (rlist, object);
-	g_hash_table_insert (document->priv->resources, (gpointer) key, rlist);
+    rlist = (GSList*)g_hash_table_lookup(document->priv->resources, key);
+    g_return_val_if_fail(!g_slist_find(rlist, object), FALSE);
+    rlist = g_slist_prepend(rlist, object);
+    g_hash_table_insert(document->priv->resources, (gpointer) key, rlist);
 
-	document->priv->resources_changed_signals[q].emit();
+    document->priv->resources_changed_signals[q].emit();
 
-	return TRUE;
+    return TRUE;
 }
 
 gboolean
-sp_document_remove_resource (SPDocument *document, gchar const *key, SPObject *object)
+sp_document_remove_resource(SPDocument *document, gchar const *key, SPObject *object)
 {
-	GSList *rlist;
-	GQuark q=g_quark_from_string(key);
+    GSList *rlist;
+    GQuark q = g_quark_from_string(key);
 
-	g_return_val_if_fail (document != NULL, FALSE);
-	g_return_val_if_fail (key != NULL, FALSE);
-	g_return_val_if_fail (*key != '\0', FALSE);
-	g_return_val_if_fail (object != NULL, FALSE);
-	g_return_val_if_fail (SP_IS_OBJECT (object), FALSE);
+    g_return_val_if_fail(document != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(*key != '\0', FALSE);
+    g_return_val_if_fail(object != NULL, FALSE);
+    g_return_val_if_fail(SP_IS_OBJECT(object), FALSE);
 
-	rlist = (GSList*)g_hash_table_lookup (document->priv->resources, key);
-	g_return_val_if_fail (rlist != NULL, FALSE);
-	g_return_val_if_fail (g_slist_find (rlist, object), FALSE);
-	rlist = g_slist_remove (rlist, object);
-	g_hash_table_insert (document->priv->resources, (gpointer) key, rlist);
+    rlist = (GSList*)g_hash_table_lookup(document->priv->resources, key);
+    g_return_val_if_fail(rlist != NULL, FALSE);
+    g_return_val_if_fail(g_slist_find(rlist, object), FALSE);
+    rlist = g_slist_remove(rlist, object);
+    g_hash_table_insert(document->priv->resources, (gpointer) key, rlist);
 
-	document->priv->resources_changed_signals[q].emit();
+    document->priv->resources_changed_signals[q].emit();
 
-	return TRUE;
+    return TRUE;
 }
 
 GSList const *
-sp_document_get_resource_list (SPDocument *document, gchar const *key)
+sp_document_get_resource_list(SPDocument *document, gchar const *key)
 {
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (key != NULL, NULL);
-	g_return_val_if_fail (*key != '\0', NULL);
+    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(key != NULL, NULL);
+    g_return_val_if_fail(*key != '\0', NULL);
 
-	return (GSList*)g_hash_table_lookup (document->priv->resources, key);
+    return (GSList*)g_hash_table_lookup(document->priv->resources, key);
 }
 
 sigc::connection sp_document_resources_changed_connect(SPDocument *document,
-	gchar const *key,
-	SPDocument::ResourcesChangedSignal::slot_type slot)
+                                                       gchar const *key,
+                                                       SPDocument::ResourcesChangedSignal::slot_type slot)
 {
-	GQuark q = g_quark_from_string(key);
-	return document->priv->resources_changed_signals[q].connect(slot);
+    GQuark q = g_quark_from_string(key);
+    return document->priv->resources_changed_signals[q].connect(slot);
 }
 
 /* Helpers */
 
 gboolean
-sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
+sp_document_resource_list_free(gpointer key, gpointer value, gpointer data)
 {
-	g_slist_free ((GSList *) value);
-	return TRUE;
+    g_slist_free((GSList *) value);
+    return TRUE;
 }
 
 unsigned int
-count_objects_recursive (SPObject *obj, unsigned int count)
+count_objects_recursive(SPObject *obj, unsigned int count)
 {
-	count ++; // obj itself
+    count++; // obj itself
 
-	for (SPObject *i = sp_object_first_child(obj); i != NULL; i = SP_OBJECT_NEXT(i)) {
-		count = count_objects_recursive (i, count);
-	}
+    for (SPObject *i = sp_object_first_child(obj); i != NULL; i = SP_OBJECT_NEXT(i)) {
+        count = count_objects_recursive(i, count);
+    }
 
-	return count;
+    return count;
 }
 
 unsigned int
-objects_in_document (SPDocument *document)
+objects_in_document(SPDocument *document)
 {
-	return count_objects_recursive (SP_DOCUMENT_ROOT(document), 0);
+    return count_objects_recursive(SP_DOCUMENT_ROOT(document), 0);
 }
 
 void
-vacuum_document_recursive (SPObject *obj)
+vacuum_document_recursive(SPObject *obj)
 {
-	if (SP_IS_DEFS(obj)) {
-		for (SPObject *def = obj->firstChild(); def; def = SP_OBJECT_NEXT(def)) {
-                 /* fixme: some inkscape-internal nodes in the future might not be collectable */
-			def->requestOrphanCollection();
-		}
-	} else {
-		for (SPObject *i = sp_object_first_child(obj); i != NULL; i = SP_OBJECT_NEXT(i)) {
-			vacuum_document_recursive (i);
-		}
-	}
+    if (SP_IS_DEFS(obj)) {
+        for (SPObject *def = obj->firstChild(); def; def = SP_OBJECT_NEXT(def)) {
+            /* fixme: some inkscape-internal nodes in the future might not be collectable */
+            def->requestOrphanCollection();
+        }
+    } else {
+        for (SPObject *i = sp_object_first_child(obj); i != NULL; i = SP_OBJECT_NEXT(i)) {
+            vacuum_document_recursive(i);
+        }
+    }
 }
 
 unsigned int
-vacuum_document (SPDocument *document)
+vacuum_document(SPDocument *document)
 {
-	unsigned int start = objects_in_document (document);
-	unsigned int end;
-	unsigned int newend = start;
+    unsigned int start = objects_in_document(document);
+    unsigned int end;
+    unsigned int newend = start;
 
-	unsigned int iterations = 0;
+    unsigned int iterations = 0;
 
-	do {
-		end = newend;
+    do {
+        end = newend;
 
-		vacuum_document_recursive (SP_DOCUMENT_ROOT(document));
-		document->collectOrphans();
-		iterations ++;
+        vacuum_document_recursive(SP_DOCUMENT_ROOT(document));
+        document->collectOrphans();
+        iterations++;
 
-		newend = objects_in_document (document);
+        newend = objects_in_document(document);
 
-	} while (iterations < 100 && newend < end);
+    } while (iterations < 100 && newend < end);
 
-	return start - newend;
+    return start - newend;
 }
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
