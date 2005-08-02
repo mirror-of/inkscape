@@ -154,9 +154,11 @@ void Selection::_add(SPObject *obj) {
     g_signal_connect(G_OBJECT(obj), "modified",
                      G_CALLBACK(&Selection::_schedule_modified), this);
 
+    /*
     if (!SP_IS_SHAPE(obj)) {
         printf("This is not a shape\n");
     }
+    */
 }
 
 void Selection::set(SPObject *object) {
