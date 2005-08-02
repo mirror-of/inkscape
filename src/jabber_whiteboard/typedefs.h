@@ -54,18 +54,6 @@ class ListContainer;
 
 // Various specializations of std::less for XMLNodeTracker maps.
 namespace std {
-/*
-template<>
-struct less< boost::shared_ptr< Inkscape::Whiteboard::TrackerNode > > : public binary_function < boost::shared_ptr< Inkscape::Whiteboard::TrackerNode >, boost::shared_ptr< Inkscape::Whiteboard::TrackerNode >, bool >
-{
-	bool operator()(boost::shared_ptr< Inkscape::Whiteboard::TrackerNode > _x, boost::shared_ptr< Inkscape::Whiteboard::TrackerNode > _y) const
-	{
-		return _x->_node < _y->_node;
-	}
-
-};
-*/
-
 struct less< Inkscape::Whiteboard::TrackerNode* > : public binary_function < Inkscape::Whiteboard::TrackerNode*, Inkscape::Whiteboard::TrackerNode*, bool >
 {
 	bool operator()(Inkscape::Whiteboard::TrackerNode* _x, Inkscape::Whiteboard::TrackerNode* _y) const
@@ -119,8 +107,6 @@ typedef std::set< char const* > ChatterList;
 class SessionManager;
 struct ProcessorShell;
 struct JabberMessage;
-
-//typedef boost::shared_ptr< JabberMessage > MessagePtr;
 
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
 typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, ProcessorShell* >, GC::MANUAL > > MessageProcessorMap;

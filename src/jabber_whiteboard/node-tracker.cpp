@@ -23,6 +23,9 @@
 #include "jabber_whiteboard/node-tracker.h"
 #include "jabber_whiteboard/tracker-node.h"
 
+
+// TODO: remove redundant calls to isTracking(); it's a rather unnecessary
+// performance burden. 
 namespace Inkscape {
 
 namespace Whiteboard {
@@ -58,15 +61,12 @@ XMLNodeTracker::~XMLNodeTracker()
 void 
 XMLNodeTracker::put(std::string key, XML::Node& node)
 {
-	Inkscape::GC::anchor(&node);
 	TrackerNode* n = new TrackerNode(&node);
 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting node (key %s, node %p, tracker %p)", key.c_str(), &node, n);
+//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting node (key %s, node %p, tracker %p)", key.c_str(), &node, n);
 
 	this->_keyToNode.insert(std::make_pair< std::string, TrackerNode* >(key, n));
 	this->_nodeToKey.insert(std::make_pair< TrackerNode*, std::string >(n, key));
-//	this->_keyToNode[key] = n;
-//	this->_nodeToKey[n] = key;
 }
 
 void
@@ -207,7 +207,6 @@ XMLNodeTracker::remove(std::string& key)
 {
 	if (this->isTracking(key)) {
 		TrackerNode* element = new TrackerNode(&this->get(key));
-		Inkscape::GC::release(&this->get(key));
 		this->_keyToNode.erase(key);
 		this->_nodeToKey.erase(element);
 	} 
@@ -221,7 +220,6 @@ XMLNodeTracker::remove(XML::Node& node)
 		std::string const element = this->get(node);
 		this->_nodeToKey.erase(n);
 		this->_keyToNode.erase(element);
-		Inkscape::GC::release(&node);
 	}
 }
 

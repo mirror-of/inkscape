@@ -16,9 +16,6 @@
 #include "jabber_whiteboard/tracker-node.h"
 #include "jabber_whiteboard/typedefs.h"
 
-#include "gc-anchored.h"
-#include "gc-managed.h"
-
 #include <bitset>
 #include <cstring>
 #include <map>
