@@ -50,6 +50,7 @@ struct Ops {
     void *(*malloc)(std::size_t size);
     void *(*malloc_atomic)(std::size_t size);
     void *(*malloc_uncollectable)(std::size_t size);
+    void *(*malloc_atomic_uncollectable)(std::size_t size);
     void *(*base)(void *ptr);
     void (*register_finalizer_ignore_self)(void *base,
                                            CleanupFunc func, void *data,
@@ -77,6 +78,9 @@ public:
     }
     static inline void *malloc_uncollectable(std::size_t size) {
         return _ops.malloc_uncollectable(size);
+    }
+    static inline void *malloc_atomic_uncollectable(std::size_t size) {
+        return _ops.malloc_atomic_uncollectable(size);
     }
     static inline void *base(void *ptr) {
         return _ops.base(ptr);
@@ -147,7 +151,7 @@ throw(std::bad_alloc)
         if ( scan == SCANNED ) {
             mem = Core::malloc_uncollectable(size);
         } else {
-            abort(); // can't use g_assert as g++ doesn't like to inline it
+            mem = Core::malloc_atomic_uncollectable(size);
         }
     }
     if (!mem) {

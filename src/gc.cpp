@@ -47,6 +47,10 @@ void *debug_malloc_uncollectable(std::size_t size) {
     return GC_debug_malloc_uncollectable(size, GC_EXTRAS);
 }
 
+void *debug_malloc_atomic_uncollectable(std::size_t size) {
+    return GC_debug_malloc_uncollectable(size, GC_EXTRAS);
+}
+
 std::ptrdiff_t compute_debug_base_fixup() {
     char *base=reinterpret_cast<char *>(GC_debug_malloc(1, GC_EXTRAS));
     char *real_base=reinterpret_cast<char *>(GC_base(base));
@@ -103,6 +107,7 @@ Ops enabled_ops = {
     &GC_malloc,
     &GC_malloc_atomic,
     &GC_malloc_uncollectable,
+    &GC_malloc_atomic_uncollectable,
     &GC_base,
     &GC_register_finalizer_ignore_self,
     &GC_general_register_disappearing_link,
@@ -120,6 +125,7 @@ Ops debug_ops = {
     &debug_malloc,
     &debug_malloc_atomic,
     &debug_malloc_uncollectable,
+    &debug_malloc_atomic_uncollectable,
     &debug_base,
     &GC_debug_register_finalizer_ignore_self,
     &debug_general_register_disappearing_link,
@@ -134,6 +140,7 @@ Ops debug_ops = {
 
 Ops disabled_ops = {
     &dummy_do_init,
+    &std::malloc,
     &std::malloc,
     &std::malloc,
     &std::malloc,
@@ -233,6 +240,7 @@ void stub_free(void *) {
 
 Ops Core::_ops = {
     NULL,
+    &stub_malloc,
     &stub_malloc,
     &stub_malloc,
     &stub_malloc,
