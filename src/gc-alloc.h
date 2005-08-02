@@ -47,7 +47,7 @@ public:
     }
 
     pointer allocate(size_type count, void const * =NULL) {
-        return static_cast<pointer>(::operator new(count, SCANNED, collect));
+        return static_cast<pointer>(::operator new(count * sizeof(T), SCANNED, collect));
     }
 
     void construct(pointer p, const_reference value) {

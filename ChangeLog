@@ -1,3 +1,7 @@
+2005-08-01  MenTaLguY  <mental@rydia.net>
+
+    * src/gc-alloc.h: backport fix for improper allocation size
+
 2005-07-30  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-tspan.cpp: fix from bulia for incorrect tag name [bug 1247658]
