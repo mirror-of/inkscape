@@ -1,3 +1,7 @@
+2005-08-01  MenTaLguY  <mental@rydia.net>
+
+    * src/gc-alloc.h: fix improper allocation size
+
 2005-08-01  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/sp-object.cpp: improved doxygen documentation
