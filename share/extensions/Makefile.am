@@ -39,7 +39,8 @@ extensions = \
 	straightseg.py \
 	wavy.py \
 	whirl.py \
-	addnodes.py
+	addnodes.py \
+	summersnight.py
 
 otherstuff =
 
@@ -73,7 +74,8 @@ modules = \
 	straightseg.inx \
 	wavy.inx \
 	whirl.inx \
-	addnodes.inx
+	addnodes.inx \
+	summersnight.inx
 
 extension_SCRIPTS = \
 	$(extensions)
