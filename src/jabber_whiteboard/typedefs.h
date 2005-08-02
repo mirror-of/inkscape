@@ -32,8 +32,8 @@ extern "C" {
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/tracker-node.h"
 
-//#include "gc-alloc.h"
-#include <gc/gc_allocator.h>
+#include "gc-alloc.h"
+//#include <gc/gc_allocator.h>
 
 namespace Inkscape {
 
@@ -93,12 +93,14 @@ namespace Whiteboard {
 // XML node tracker maps
 //
 
+/*
 typedef std::map< std::string, TrackerNode*, std::less< std::string >, traceable_allocator< std::pair< std::string, TrackerNode* > > > KeyToTrackerNodeMap;
 typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, traceable_allocator< std::pair< TrackerNode*, std::string > > > TrackerNodeToKeyMap;
+*/
 
 // FIXME: GC::Alloc doesn't seem to work with std::map
-//typedef std::map< std::string, TrackerNode*, std::less< std::string >, GC::Alloc< std::pair < std::string, TrackerNode* >, GC::MANUAL > > KeyToTrackerNodeMap;
-//typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, GC::Alloc< std::pair< TrackerNode*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
+typedef std::map< std::string, TrackerNode*, std::less< std::string >, GC::Alloc< std::pair < std::string, TrackerNode* >, GC::MANUAL > > KeyToTrackerNodeMap;
+typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, GC::Alloc< std::pair< TrackerNode*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
 
 // Temporary storage of new object messages and new nodes in said messages
 typedef std::list< Glib::ustring > NewChildObjectMessageList;
@@ -121,7 +123,8 @@ struct JabberMessage;
 //typedef boost::shared_ptr< JabberMessage > MessagePtr;
 
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
-typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, traceable_allocator< std::pair< MessageType, ProcessorShell* > > > MessageProcessorMap;
+typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, ProcessorShell* >, GC::MANUAL > > MessageProcessorMap;
+//typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, traceable_allocator< std::pair< MessageType, ProcessorShell* > > > MessageProcessorMap;
 
 // Error handling -- someday
 // TODO: finish and integrate this
