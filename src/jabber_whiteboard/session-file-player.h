@@ -21,7 +21,7 @@
 #include "gc-finalized.h"
 
 //#include "jabber_whiteboard/sliding-buffer.hpp"
-#include "jabber_whiteboard/player-functors.h"
+//#include "jabber_whiteboard/player-functors.h"
 
 struct SPDesktop;
 
