@@ -177,6 +177,7 @@ static char const menus_skeleton[] =
 "       <seperator/>\n"
 "       <effects-list/>\n"
 "   </submenu>\n"
+#ifdef WITH_INKBOARD
 "	<submenu name=\"Whiteboard\">\n"
 "		<verb verb-id=\"DialogWhiteboardConnect\" />\n"
 "		<seperator/>\n"
@@ -187,6 +188,7 @@ static char const menus_skeleton[] =
 "		<seperator/>\n"
 "		<verb verb-id=\"DialogWhiteboardDumpXMLTracker\" />\n"
 "	</submenu>\n"
+#endif
 "   <submenu name=\"_Help\">\n"
 "       <verb verb-id=\"HelpKeys\" />\n"
 "       <submenu name=\"Tutorials\">\n"
