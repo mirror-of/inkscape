@@ -2,7 +2,7 @@
 #define SP_RADIAL_GRADIENT_H
 
 /** \file
- * Radial gradient.
+ * SPRadialGradient: SVG <radialgradient> implementtion.
  */
 
 #include <glib/gtypes.h>

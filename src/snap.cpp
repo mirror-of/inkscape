@@ -44,7 +44,8 @@ static const double MIN_DIST_NORM = 1.0;
  * \return Distance to the snap point along the \a dim axis, or \c NR_HUGE
  *    if no snap occurred.
  */
-NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Dim2 const dim)
+NR::Coord 
+namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Dim2 const dim)
 {
     return namedview_vector_snap (nv, t, req, component_vectors[dim]);
 }
@@ -56,9 +57,13 @@ NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Po
  * \param req Point to snap; updated to the snapped point if a snap occurred.
  * \return Distance to the snap point, or \c NR_HUGE if no snap occurred.
  */
-NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req)
+NR::Coord 
+namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req)
 {
-    /* fixme: If allowing arbitrary snap targets, free snap is not the sum of h and v */
+    /** \todo
+     * fixme: If allowing arbitrary snap targets, free snap is not the sum 
+     * of h and v.
+     */
     NR::Point result = req;
 	
     NR::Coord dh = namedview_dim_snap(nv, t, result, NR::X);
@@ -92,7 +97,9 @@ NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::P
  *
  * \pre d ≠ (0, 0).
  */
-NR::Coord namedview_vector_snap (SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d)
+NR::Coord 
+namedview_vector_snap (SPNamedView const *nv, Snapper::PointType t, 
+        NR::Point &req, NR::Point const &d)
 {
     g_assert(nv != NULL);
     g_assert(SP_IS_NAMEDVIEW(nv));
@@ -130,19 +137,24 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
 }
 
 
-/* 
+/*
  * functions for lists of points
  *
  * All functions take a list of NR::Point and parameter indicating the proposed transformation.
  * They return the updated transformation parameter. 
  */
 
-std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
-                                                    Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                    NR::Coord const dx, NR::Dim2 const dim)
+/**
+ * Snap list of points in one dimension.
+ * \return Coordinate difference.
+ */
+std::pair<NR::Coord, bool> 
+namedview_dim_snap_list(SPNamedView const *nv, Snapper::PointType t, 
+        const std::vector<NR::Point> &p, NR::Coord const dx, NR::Dim2 const dim)
 {
     NR::Coord dist = NR_HUGE;
     NR::Coord xdist = dx;
+   
     
     if (namedview_will_snap_something(nv)) {
         for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
@@ -160,9 +172,13 @@ std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
     return std::make_pair(xdist, dist < NR_HUGE);
 }
 
-std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv,
-                                                   Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                   NR::Point const &norm, NR::scale const &s)
+/**
+ * Snap list of points in two dimensions.
+ */
+std::pair<double, bool> 
+namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, 
+        const std::vector<NR::Point> &p, NR::Point const &norm, 
+        NR::scale const &s)
 {
     using NR::X;
     using NR::Y;
@@ -200,9 +216,10 @@ std::pair<double, bool> namedview_vector_snap_list(SPNamedView const *nv,
  *
  * \return Pair containing snapped scale and a flag which is true if a snap was made.
  */
-std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
-                                                      Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                      NR::Point const &norm, double const sx, NR::Dim2 dim)
+std::pair<double, bool> 
+namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t, 
+        const std::vector<NR::Point> &p, NR::Point const &norm, 
+        double const sx, NR::Dim2 dim)
 {
     if (namedview_will_snap_something(nv) == false) {
         return std::make_pair(sx, false);
@@ -239,8 +256,13 @@ std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
     return std::make_pair(scale, dist < NR_HUGE);
 }
 
-double namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
-				     NR::Point const &norm, double const sx, NR::Dim2 const dim)
+/**
+ * Try to snap points after they have been skewed.
+ */
+double 
+namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, 
+        const std::vector<NR::Point> &p, NR::Point const &norm, 
+        double const sx, NR::Dim2 const dim)
 {
     if (namedview_will_snap_something(nv) == false) {
         return sx;
@@ -268,8 +290,11 @@ double namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t,
     return skew;
 }
 
-
-static std::list<const Snapper*> namedview_get_snappers(SPNamedView const *nv)
+/**
+ * Return list of all snappers.
+ */
+static std::list<const Snapper*> 
+namedview_get_snappers(SPNamedView const *nv)
 {
 /// \todo FIXME: this should probably be in SPNamedView
     std::list<const Snapper*> s;
@@ -278,7 +303,11 @@ static std::list<const Snapper*> namedview_get_snappers(SPNamedView const *nv)
     return s;
 }
 
-bool namedview_will_snap_something(SPNamedView const *nv)
+/**
+ * True if one of the snappers in the named view's list will snap something.
+ */
+bool 
+namedview_will_snap_something(SPNamedView const *nv)
 {
     std::list<const Snapper*> s = namedview_get_snappers(nv);
     std::list<const Snapper*>::iterator i = s.begin();
@@ -289,8 +318,10 @@ bool namedview_will_snap_something(SPNamedView const *nv)
     return (i != s.end());
 }
             
-
-
+//-----------------------------------------------
+/**
+ * Construct new Snapper for named view.
+ */
 Snapper::Snapper(SPNamedView const *nv, NR::Coord const d) : _named_view(nv), _distance(d)
 {
     g_assert (_named_view != NULL);
@@ -298,21 +329,33 @@ Snapper::Snapper(SPNamedView const *nv, NR::Coord const d) : _named_view(nv), _d
     setSnapTo(BBOX_POINT, true);
 }
 
+/**
+ * Set snap distance.
+ */
 void Snapper::setDistance(NR::Coord const d)
 {
     _distance = d;
 }
 
+/**
+ * Get snap distance.
+ */
 NR::Coord Snapper::getDistance() const
 {
     return _distance;
 }
 
+/**
+ * Turn on/off snapping of specific point types.
+ */
 void Snapper::setSnapTo(PointType t, bool s)
 {
     _snap_to[t] = s;
 }
 
+/**
+ * True if snapper will snap specific point type.
+ */
 bool Snapper::getSnapTo(PointType t) const
 {
     std::map<PointType, bool>::const_iterator i = _snap_to.find(t);
@@ -326,6 +369,8 @@ bool Snapper::getSnapTo(PointType t) const
 
 
 /**
+ * Return a badness measure of snapping to the specified line.
+ * 
  *  Add some multiple of \a mv to \a req to make it line on the line {p : dot(n, p) == d} (within
  *  rounding error); unless that isn't possible (e.g.\ \a mv and \a n are orthogonal, or \a mv or \a
  *  n is zero-length), in which case \a req remains unchanged, and a big number is returned.
@@ -333,7 +378,8 @@ bool Snapper::getSnapTo(PointType t) const
  *  \return a badness measure of snapping to the specified line: if snapping was possible then
  *  L2(req - req0) (i.e. the distance moved); otherwise returns NR_HUGE.
  */
-NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
+NR::Coord 
+Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
                                              NR::Point const &n, NR::Coord const d) const
 {
     NR::Point const req0(req);
@@ -350,9 +396,10 @@ NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv
 
 
 /**
- *  \return true if this Snapper will snap at least one kind of point.
+ * Return true if this Snapper will snap at least one kind of point.
  */
-bool Snapper::will_snap_something() const
+bool 
+Snapper::will_snap_something() const
 {
     std::map<PointType, bool>::const_iterator i = _snap_to.begin();
     while (i != _snap_to.end() && i->second == false) {
@@ -368,7 +415,12 @@ GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv,
 
 }
 
-NR::Coord GridSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
+/**
+ * Try to snap point.
+ * \return Movement vector or NR_HUGE.
+ */
+NR::Coord 
+GridSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
 {
     if (getSnapTo(t) == false) {
         return NR_HUGE;
@@ -417,7 +469,12 @@ GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(n
 
 }
 
-NR::Coord GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
+/**
+ * Try to snap point.
+ * \return Movement vector or NR_HUGE.
+ */
+NR::Coord 
+GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
 {
     if (getSnapTo(t) == false) {
         return NR_HUGE;
@@ -453,8 +510,11 @@ NR::Coord GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const
     return best;
 }
 
-
-NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req)
+/**
+ * Snap in two dimensions to nearest snapper regardless of point type.
+ */
+NR::Coord 
+namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req)
 {
     NR::Point snap_req = req;
     NR::Coord snap_dist = namedview_free_snap(nv, Snapper::SNAP_POINT, snap_req);
@@ -465,7 +525,11 @@ NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req)
     return std::min(snap_dist, bbox_dist);
 }
 
-NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Point const &d)
+/**
+ * Snap in one direction to nearest snapper regardless of point type.
+ */
+NR::Coord 
+namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Point const &d)
 {
     NR::Point snap_req = req;
     NR::Coord snap_dist = namedview_vector_snap(nv, Snapper::SNAP_POINT, snap_req, d);
@@ -476,7 +540,11 @@ NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req,
     return std::min(snap_dist, bbox_dist);
 }
 
-NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Dim2 const dim)
+/**
+ * Snap in one dimension to nearest snapper regardless of point type.
+ */
+NR::Coord 
+namedview_dim_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Dim2 const dim)
 {
     NR::Point snap_req = req;
     NR::Coord snap_dist = namedview_dim_snap(nv, Snapper::SNAP_POINT, snap_req, dim);

@@ -2,7 +2,7 @@
 #define SEEN_PEN_CONTEXT_H
 
 /** \file 
- * Pen event context. 
+ * SPPenContext: a context for pen tool events.
  */
 
 #include "draw-context.h"
@@ -27,7 +27,7 @@ enum {
 };
 
 /**
- * Pen event context.
+ * SPPenContext: a context for pen tool events.
  */
 struct SPPenContext : public SPDrawContext {
     NR::Point p[5];

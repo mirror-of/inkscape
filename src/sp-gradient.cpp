@@ -1,7 +1,7 @@
 #define __SP_GRADIENT_C__
 
 /** \file
- * SVG \<stop\> \<linearGradient\> and \<radialGradient\> implementation.
+ * SPGradient, SPStop, SPLinearGradient, SPRadialGradient.
  */
 /*
  * Authors:
@@ -55,7 +55,7 @@
 #define SP_MACROS_SILENT
 #include "macros.h"
 
-/* Has to be power of 2 */
+/// Has to be power of 2 
 #define NCOLORS NR_GRADIENT_VECTOR_LENGTH
 
 static void sp_stop_class_init(SPStopClass *klass);
@@ -67,6 +67,9 @@ static Inkscape::XML::Node *sp_stop_write(SPObject *object, Inkscape::XML::Node 
 
 static SPObjectClass *stop_parent_class;
 
+/**
+ * Registers SPStop class and returns its type.
+ */
 GType
 sp_stop_get_type()
 {
@@ -87,6 +90,9 @@ sp_stop_get_type()
     return type;
 }
 
+/**
+ * Callback to initialize SPStop vtable.
+ */
 static void sp_stop_class_init(SPStopClass *klass)
 {
     SPObjectClass *sp_object_class = (SPObjectClass *) klass;
@@ -98,6 +104,9 @@ static void sp_stop_class_init(SPStopClass *klass)
     sp_object_class->write = sp_stop_write;
 }
 
+/**
+ * Callback to initialize SPStop object.
+ */
 static void
 sp_stop_init(SPStop *stop)
 {
@@ -107,6 +116,9 @@ sp_stop_init(SPStop *stop)
     stop->opacity = 1.0;
 }
 
+/**
+ * Virtual build: set stop attributes from its associated XML node.
+ */
 static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
     if (((SPObjectClass *) stop_parent_class)->build)
@@ -118,6 +130,9 @@ static void sp_stop_build(SPObject *object, SPDocument *document, Inkscape::XML:
     sp_object_read_attr(object, "style");
 }
 
+/**
+ * Virtual set: set attribute to value.
+ */
 static void
 sp_stop_set(SPObject *object, unsigned key, gchar const *value)
 {
@@ -125,14 +140,16 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_STYLE: {
-            /* fixme: We are reading simple values 3 times during
-             *        build (Lauris) */
-            /* fixme: We need presentation attributes etc. */
-
-            /* FIXME: remove the hackish "style reading" from here: see comments in
-             * sp_object_get_style_property about the bugs in our current approach.  However, note
-             * that SPStyle doesn't currently have stop-color and stop-opacity properties.
-             */
+        /** \todo
+         * fixme: We are reading simple values 3 times during build (Lauris).
+         * \par
+         * We need presentation attributes etc.
+         * \par
+         * remove the hackish "style reading" from here: see comments in
+         * sp_object_get_style_property about the bugs in our current 
+         * approach.  However, note that SPStyle doesn't currently have 
+         * stop-color and stop-opacity properties.
+         */
             {
                 gchar const *p = sp_object_get_style_property(object, "stop-color", "black");
                 if (streq(p, "currentColor")) {
@@ -186,6 +203,9 @@ sp_stop_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
+/**
+ * Virtual write: write object attributes to repr.
+ */
 static Inkscape::XML::Node *
 sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -217,6 +237,9 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     return repr;
 }
 
+/**
+ * Return stop's color as 32bit value.
+ */
 guint32
 sp_stop_get_rgba32(SPStop const *const stop)
 {
@@ -238,6 +261,9 @@ sp_stop_get_rgba32(SPStop const *const stop)
     }
 }
 
+/**
+ * Return stop's color as SPColor.
+ */
 static SPColor
 sp_stop_get_color(SPStop const *const stop)
 {
@@ -286,6 +312,9 @@ static void gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *g
 
 static SPPaintServerClass *gradient_parent_class;
 
+/**
+ * Registers SPGradient class and returns its type.
+ */
 GType
 sp_gradient_get_type()
 {
@@ -307,6 +336,9 @@ sp_gradient_get_type()
     return gradient_type;
 }
 
+/**
+ * SPGradient vtable initialization.
+ */
 static void
 sp_gradient_class_init(SPGradientClass *klass)
 {
@@ -323,14 +355,19 @@ sp_gradient_class_init(SPGradientClass *klass)
     sp_object_class->write = sp_gradient_write;
 }
 
+/**
+ * Callback for SPGradient object initialization.
+ */
 static void
 sp_gradient_init(SPGradient *gr)
 {
     gr->ref = new SPGradientReference(SP_OBJECT(gr));
     gr->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(gradient_ref_changed), gr));
 
-    /* Fixme: reprs being rearranged (e.g. via the XML editor)
-     *        may require us to clear the state */
+    /** \todo
+     * Fixme: reprs being rearranged (e.g. via the XML editor)
+     * may require us to clear the state.
+     */
     gr->state = SP_GRADIENT_STATE_UNKNOWN;
 
     gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
@@ -350,6 +387,9 @@ sp_gradient_init(SPGradient *gr)
     gr->color = NULL;
 }
 
+/**
+ * Virtual build: set gradient attributes from its associated repr.
+ */
 static void
 sp_gradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
@@ -375,6 +415,9 @@ sp_gradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *r
     sp_document_add_resource(document, "gradient", object);
 }
 
+/**
+ * Virtual release of SPGradient members before destruction.
+ */
 static void
 sp_gradient_release(SPObject *object)
 {
@@ -407,6 +450,9 @@ sp_gradient_release(SPObject *object)
         ((SPObjectClass *) gradient_parent_class)->release(object);
 }
 
+/**
+ * Set gradient attribute to value.
+ */
 static void
 sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
 {
@@ -474,8 +520,8 @@ sp_gradient_set(SPObject *object, unsigned key, gchar const *value)
 }
 
 /**
-Gets called when the gradient is (re)attached to another gradient
-*/
+ * Gets called when the gradient is (re)attached to another gradient.
+ */
 static void
 gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gr)
 {
@@ -487,10 +533,13 @@ gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gr)
     {
         g_signal_connect(G_OBJECT(ref), "modified", G_CALLBACK(gradient_ref_modified), gr);
     }
-    /* Fixme: what should the flags (second) argument be? */
+    /// \todo Fixme: what should the flags (second) argument be? */
     gradient_ref_modified(ref, 0, gr);
 }
 
+/**
+ * Callback for child_added event.
+ */
 static void
 sp_gradient_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 {
@@ -506,10 +555,13 @@ sp_gradient_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::
         gr->has_stops = TRUE;
     }
 
-    /* Fixme: should we schedule "modified" here? */
+    /// \todo Fixme: should we schedule "modified" here?
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ * Callback for remove_child event.
+ */
 static void
 sp_gradient_remove_child(SPObject *object, Inkscape::XML::Node *child)
 {
@@ -533,6 +585,9 @@ sp_gradient_remove_child(SPObject *object, Inkscape::XML::Node *child)
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ * Callback for modified event.
+ */
 static void
 sp_gradient_modified(SPObject *object, guint flags)
 {
@@ -562,6 +617,9 @@ sp_gradient_modified(SPObject *object, guint flags)
     }
 }
 
+/**
+ * Write gradient attributes to repr.
+ */
 static Inkscape::XML::Node *
 sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -631,7 +689,7 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 }
 
 /**
- * Forces the vector to be built, if not present (i.e.\ changed).
+ * Forces the vector to be built, if not present (i.e., changed).
  *
  * \pre SP_IS_GRADIENT(gradient).
  */
@@ -646,6 +704,9 @@ sp_gradient_ensure_vector(SPGradient *gradient)
     }
 }
 
+/**
+ * Set units property of gradient and emit modified.
+ */
 void
 sp_gradient_set_units(SPGradient *gr, SPGradientUnits units)
 {
@@ -656,6 +717,9 @@ sp_gradient_set_units(SPGradient *gr, SPGradientUnits units)
     }
 }
 
+/**
+ * Set spread property of gradient and emit modified.
+ */
 void
 sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread)
 {
@@ -708,12 +772,18 @@ chase_hrefs(SPGradient *const src, bool (*match)(SPGradient const *))
     }
 }
 
+/**
+ * True if gradient has stops.
+ */
 static bool
 has_stops(SPGradient const *gr)
 {
     return SP_GRADIENT_HAS_STOPS(gr);
 }
 
+/**
+ * True if gradient has spread set.
+ */
 static bool
 has_spread_set(SPGradient const *gr)
 {
@@ -757,7 +827,7 @@ sp_gradient_get_spread(SPGradient *gradient)
 }
 
 /**
-Clears the gradient's svg:stop children from its repr
+ * Clears the gradient's svg:stop children from its repr.
  */
 void
 sp_gradient_repr_clear_vector(SPGradient *gr)
@@ -781,8 +851,8 @@ sp_gradient_repr_clear_vector(SPGradient *gr)
 }
 
 /**
-Writes the gradient's internal vector (whether from its own stops, or inherited from
-refs) into the gradient repr as svg:stop elements
+ * Writes the gradient's internal vector (whether from its own stops, or 
+ * inherited from refs) into the gradient repr as svg:stop elements.
  */
 void
 sp_gradient_repr_write_vector(SPGradient *gr)
@@ -817,6 +887,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
         cl = g_slist_remove(cl, child);
     }
 }
+
 
 static void
 gradient_ref_modified(SPObject *href, guint flags, SPGradient *gradient)
@@ -951,6 +1022,9 @@ sp_gradient_rebuild_vector(SPGradient *gr)
     gr->vector.built = true;
 }
 
+/**
+ * The gradient's color array is newly created and set up from vector.
+ */
 void
 sp_gradient_ensure_colors(SPGradient *gr)
 {
@@ -959,6 +1033,7 @@ sp_gradient_ensure_colors(SPGradient *gr)
     }
     g_return_if_fail(!gr->vector.stops.empty());
 
+    /// \todo Where is the memory freed?
     if (!gr->color) {
         gr->color = g_new(guchar, 4 * NCOLORS);
     }
@@ -1002,7 +1077,8 @@ sp_gradient_ensure_colors(SPGradient *gr)
 }
 
 /**
- * Renders gradient vector to buffer.
+ * Renders gradient vector to buffer as line.
+ * 
  * RGB buffer background should be set up beforehand.
  *
  * @param len,width,height,rowstride Buffer parameters (1 or 2 dimensional).
@@ -1029,7 +1105,7 @@ sp_gradient_render_vector_line_rgba(SPGradient *const gradient, guchar *buf,
     gint didx = (1024 << 8) / span;
 
     for (gint x = 0; x < len; x++) {
-        // Can this be done with 4 byte copies?
+        /// \todo Can this be done with 4 byte copies?
         *buf++ = gradient->color[4 * (idx >> 8)];
         *buf++ = gradient->color[4 * (idx >> 8) + 1];
         *buf++ = gradient->color[4 * (idx >> 8) + 2];
@@ -1038,6 +1114,9 @@ sp_gradient_render_vector_line_rgba(SPGradient *const gradient, guchar *buf,
     }
 }
 
+/**
+ * Render rectangular RGBA area from gradient vector.
+ */
 void
 sp_gradient_render_vector_block_rgba(SPGradient *const gradient, guchar *buf,
                                      gint const width, gint const height, gint const rowstride,
@@ -1073,6 +1152,9 @@ sp_gradient_render_vector_block_rgba(SPGradient *const gradient, guchar *buf,
     }
 }
 
+/**
+ * Render rectangular RGB area from gradient vector.
+ */ 
 void
 sp_gradient_render_vector_block_rgb(SPGradient *gradient, guchar *buf,
                                     gint const width, gint const height, gint const rowstride,
@@ -1196,6 +1278,9 @@ static void sp_lg_fill(SPPainter *painter, NRPixBlock *pb);
 
 static SPGradientClass *lg_parent_class;
 
+/**
+ * Register SPLinearGradient class and return its type.
+ */
 GType
 sp_lineargradient_get_type()
 {
@@ -1216,6 +1301,9 @@ sp_lineargradient_get_type()
     return type;
 }
 
+/**
+ * SPLinearGradient vtable initialization.
+ */
 static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
 {
     SPObjectClass *sp_object_class = (SPObjectClass *) klass;
@@ -1231,6 +1319,9 @@ static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
     ps_class->painter_free = sp_lineargradient_painter_free;
 }
 
+/**
+ * Callback for SPLinearGradient object initialization.
+ */
 static void sp_lineargradient_init(SPLinearGradient *lg)
 {
     sp_svg_length_unset(&lg->x1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
@@ -1239,6 +1330,9 @@ static void sp_lineargradient_init(SPLinearGradient *lg)
     sp_svg_length_unset(&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 }
 
+/**
+ * Callback: set attributes from associated repr.
+ */
 static void sp_lineargradient_build(SPObject *object,
                                     SPDocument *document,
                                     Inkscape::XML::Node *repr)
@@ -1252,6 +1346,9 @@ static void sp_lineargradient_build(SPObject *object,
     sp_object_read_attr(object, "y2");
 }
 
+/**
+ * Callback: set attribute.
+ */
 static void
 sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value)
 {
@@ -1289,6 +1386,9 @@ sp_lineargradient_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
+/**
+ * Callback: write attributes to associated repr.
+ */
 static Inkscape::XML::Node *
 sp_lineargradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -1313,19 +1413,22 @@ sp_lineargradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
     return repr;
 }
 
-/*
+/**
+ * Create linear gradient context.
+ * 
  * Basically we have to deal with transformations
  *
  * 1) color2norm - maps point in (0,NCOLORS) vector to (0,1) vector
- *    fixme: I do not know how to deal with start > 0 and end < 1
  * 2) norm2pos - maps (0,1) vector to x1,y1 - x2,y2
  * 2) gradientTransform
  * 3) bbox2user
  * 4) ctm == userspace to pixel grid
-
-   See also (*) in sp-pattern about why we may need parent_transform.
+ * 
+ * See also (*) in sp-pattern about why we may need parent_transform.
+ * 
+ * \todo (point 1 above) fixme: I do not know how to deal with start > 0 
+ * and end < 1.
  */
-
 static SPPainter *
 sp_lineargradient_painter_new(SPPaintServer *ps,
                               NR::Matrix const &full_transform,
@@ -1344,14 +1447,13 @@ sp_lineargradient_painter_new(SPPaintServer *ps,
 
     lgp->lg = lg;
 
-    /* fixme: Technically speaking, we map NCOLORS on line
-     *        [start,end] onto line [0,1] (Lauris) */
-    /* fixme: I almost think we should fill color array start and
-     *        end in that case (Lauris) */
-    /* fixme: The alternative would be to leave these just empty
-     *        garbage or something similar (Lauris) */
-    /* fixme: Originally I had 1023.9999 here - not sure whether
-     *        we have really to cut out ceil int (Lauris) */
+    /** \todo
+     * Technically speaking, we map NCOLORS on line [start,end] onto line 
+     * [0,1].  I almost think we should fill color array start and end in 
+     * that case. The alternative would be to leave these just empty garbage 
+     * or something similar. Originally I had 1023.9999 here - not sure 
+     * whether we have really to cut out ceil int (Lauris).
+     */
     NR::Matrix color2norm(NR::identity());
     NR::Matrix color2px;
     if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
@@ -1392,6 +1494,9 @@ sp_lineargradient_painter_free(SPPaintServer *ps, SPPainter *painter)
     g_free(painter);
 }
 
+/**
+ * Directly set properties of linear gradient and request modified.
+ */
 void
 sp_lineargradient_set_position(SPLinearGradient *lg,
                                gdouble x1, gdouble y1,
@@ -1409,6 +1514,9 @@ sp_lineargradient_set_position(SPLinearGradient *lg,
     SP_OBJECT(lg)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ * Callback when linear gradient object is rendered.
+ */
 static void
 sp_lg_fill(SPPainter *painter, NRPixBlock *pb)
 {
@@ -1455,6 +1563,9 @@ static void sp_rg_fill(SPPainter *painter, NRPixBlock *pb);
 
 static SPGradientClass *rg_parent_class;
 
+/**
+ * Register SPRadialGradient class and return its type.
+ */
 GType
 sp_radialgradient_get_type()
 {
@@ -1475,6 +1586,9 @@ sp_radialgradient_get_type()
     return type;
 }
 
+/**
+ * SPRadialGradient vtable initialization.
+ */
 static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
 {
     SPObjectClass *sp_object_class = (SPObjectClass *) klass;
@@ -1490,6 +1604,9 @@ static void sp_radialgradient_class_init(SPRadialGradientClass *klass)
     ps_class->painter_free = sp_radialgradient_painter_free;
 }
 
+/**
+ * Callback for SPRadialGradient object initialization.
+ */
 static void
 sp_radialgradient_init(SPRadialGradient *rg)
 {
@@ -1500,6 +1617,9 @@ sp_radialgradient_init(SPRadialGradient *rg)
     sp_svg_length_unset(&rg->fy, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 }
 
+/**
+ * Set radial gradient attributes from associated repr.
+ */
 static void
 sp_radialgradient_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
@@ -1513,6 +1633,9 @@ sp_radialgradient_build(SPObject *object, SPDocument *document, Inkscape::XML::N
     sp_object_read_attr(object, "fy");
 }
 
+/**
+ * Set radial gradient attribute.
+ */
 static void
 sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
 {
@@ -1564,6 +1687,9 @@ sp_radialgradient_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
+/**
+ * Write radial gradient attributes to associated repr.
+ */
 static Inkscape::XML::Node *
 sp_radialgradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -1585,6 +1711,9 @@ sp_radialgradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
     return repr;
 }
 
+/**
+ * Create radial gradient context.
+ */
 static SPPainter *
 sp_radialgradient_painter_new(SPPaintServer *ps,
                               NR::Matrix const &full_transform,
@@ -1606,7 +1735,10 @@ sp_radialgradient_painter_new(SPPaintServer *ps,
     NR::Matrix gs2px;
 
     if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-        /* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
+        /** \todo
+         * fixme: We may try to normalize here too, look at 
+         * linearGradient (Lauris)
+         */
 
         /* BBox to user coordinate system */
         NR::Matrix bbox2user(bbox->x1 - bbox->x0, 0, 0, bbox->y1 - bbox->y0, bbox->x0, bbox->y0);
@@ -1615,8 +1747,11 @@ sp_radialgradient_painter_new(SPPaintServer *ps,
 
         gs2px = gs2user * full_transform;
     } else {
-        /* Problem: What to do, if we have mixed lengths and percentages? */
-        /* Currently we do ignore percentages at all, but that is not good (lauris) */
+        /** \todo
+         * Problem: What to do, if we have mixed lengths and percentages?
+         * Currently we do ignore percentages at all, but that is not 
+         * good (lauris)
+         */
 
         gs2px = gr->gradientTransform * full_transform;
     }
@@ -1639,6 +1774,9 @@ sp_radialgradient_painter_free(SPPaintServer *ps, SPPainter *painter)
     g_free(painter);
 }
 
+/**
+ * Directly set properties of radial gradient and request modified.
+ */
 void
 sp_radialgradient_set_position(SPRadialGradient *rg,
                                gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r)
@@ -1656,6 +1794,9 @@ sp_radialgradient_set_position(SPRadialGradient *rg,
     SP_OBJECT(rg)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ * Callback when radial gradient object is rendered.
+ */
 static void
 sp_rg_fill(SPPainter *painter, NRPixBlock *pb)
 {

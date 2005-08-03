@@ -56,7 +56,9 @@ static void fit_and_split(SPPencilContext *pc);
 
 static SPDrawContextClass *pencil_parent_class;
 
-
+/**
+ * Register SPPencilContext class with Gdk and return its type number.
+ */
 GType
 sp_pencil_context_get_type()
 {
@@ -77,6 +79,9 @@ sp_pencil_context_get_type()
     return type;
 }
 
+/**
+ * Initialize SPPencilContext vtable.
+ */
 static void
 sp_pencil_context_class_init(SPPencilContextClass *klass)
 {
@@ -94,6 +99,9 @@ sp_pencil_context_class_init(SPPencilContextClass *klass)
     event_context_class->root_handler = sp_pencil_context_root_handler;
 }
 
+/**
+ * Callback to initialize SPPencilContext object.
+ */
 static void
 sp_pencil_context_init(SPPencilContext *pc)
 {
@@ -102,6 +110,9 @@ sp_pencil_context_init(SPPencilContext *pc)
     pc->req_tangent = NR::Point(0, 0);
 }
 
+/**
+ * Callback to setup SPPencilContext object.
+ */
 static void
 sp_pencil_context_setup(SPEventContext *ec)
 {
@@ -117,7 +128,6 @@ sp_pencil_context_setup(SPEventContext *ec)
     pc->is_drawing = false;
 }
 
-
 static void
 sp_pencil_context_dispose(GObject *object)
 {
@@ -131,6 +141,9 @@ spdc_endpoint_snap(SPPencilContext const *pc, NR::Point &p, guint const state)
     spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
 }
 
+/**
+ * Callback for handling all pencil context events.
+ */
 gint
 sp_pencil_context_root_handler(SPEventContext *const ec, GdkEvent *event)
 {
@@ -530,7 +543,7 @@ fit_and_split(SPPencilContext *pc)
         sp_curve_append_continuous(pc->green_curve, pc->red_curve, 0.0625);
         SPCurve *curve = sp_curve_copy(pc->red_curve);
 
-        /* fixme: */
+        /// \todo fixme: 
         SPCanvasItem *cshape = sp_canvas_bpath_new(SP_DT_SKETCH(pc->desktop), curve);
         sp_curve_unref(curve);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), pc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);

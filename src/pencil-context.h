@@ -2,7 +2,7 @@
 #define SEEN_PENCIL_CONTEXT_H
 
 /** \file
- * Pencil context
+ * SPPencilContext: a context for pencil tool events
  */
 
 #include "draw-context.h"
@@ -21,7 +21,7 @@ enum PencilState {
 };
 
 /**
- * Pencil context.
+ * SPPencilContext: a context for pencil tool events
  */
 struct SPPencilContext : public SPDrawContext {
     NR::Point p[16];

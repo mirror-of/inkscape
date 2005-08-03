@@ -2,7 +2,7 @@
 #define SP_LINEAR_GRADIENT_H
 
 /** \file
- * Linear gradient.
+ * SPLinearGradient: SVG <lineargradient> implementation
  */
 
 #include "sp-gradient.h"
