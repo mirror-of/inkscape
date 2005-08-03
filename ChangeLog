@@ -1,3 +1,15 @@
+2005-08-03  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/pen-context.cpp: made sp_pen_context_root_handler static
+	* src/snap.h: removed getSnapToBBox() declaration
+	* src/sp-stop.h: removed three dependencies
+	* src/Doxyfile: added further 3 files
+	* src/object-hierarchy.cpp, src/pen-context.h, src/pen-context.cpp,
+	  src/pencil-context.h, src/pencil-context.cpp, src/snap.h, 
+	  src/snap.cpp, src/sp-stop.h, src/sp-gradient.h, src/sp-gradient.cpp,
+	  src/sp-linear-gradient.h, src/sp-radial-gradient.h:
+	  improved doxygen documentation
+
 2005-08-02  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/ui/dialog/*.*:  Update copyrights
