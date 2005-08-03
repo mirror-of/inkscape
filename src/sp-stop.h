@@ -1,30 +1,40 @@
 #ifndef SEEN_SP_STOP_H
 #define SEEN_SP_STOP_H
 
+/** \file
+ *
+ * SVG <stop> implementation.
+ *
+ * Authors?
+ */
+
 #include <glib/gtypes.h>
-#include <glib-object.h>
-#include "sp-object.h"
-#include "color.h"
+//#include <glib-object.h>
+//#include "sp-object.h"
+//#include "color.h"
 #include "sp-stop-fns.h"
 
+class SPObjectClass;
+class SPColor;
 
 /** Gradient stop. */
 struct SPStop : public SPObject {
-    /* fixme: Should be SPSVGPercentage */
+    /// \todo fixme: Should be SPSVGPercentage
     gfloat offset;
 
     bool currentColor;
 
-    /**
+    /** \note
      * N.B.\ Meaningless if currentColor is true.  Use sp_stop_get_rgba32 or sp_stop_get_color
      * (currently static in sp-gradient.cpp) if you want the effective color.
      */
     SPColor specified_color;
 
-    /* fixme: Implement SPSVGNumber or something similar */
+    /// \todo fixme: Implement SPSVGNumber or something similar.
     gfloat opacity;
 };
 
+/// The SPStop vtable.
 struct SPStopClass {
     SPObjectClass parent_class;
 };
