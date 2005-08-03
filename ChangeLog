@@ -1,3 +1,7 @@
+2005-08-02  MenTaLguY  <mental@rydia.net>
+
+	* src/selection-chemistry.cpp: backport crash fix from bulia [bug 1249899]
+
 2005-08-01  MenTaLguY  <mental@rydia.net>
 
     * src/gc-alloc.h: backport fix for improper allocation size

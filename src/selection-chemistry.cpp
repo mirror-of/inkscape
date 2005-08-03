@@ -988,8 +988,10 @@ void sp_selection_copy()
                 if (texts > 0) // if more than one text object is copied, separate them by spaces
                     text += " ";
                 gchar *this_text = sp_te_get_string_multiline (item);
-                text += this_text;
-                g_free(this_text);
+                if (this_text) {
+                    text += this_text;
+                    g_free(this_text);
+                }
                 texts++;
             }
         }
