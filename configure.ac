@@ -415,7 +415,8 @@ dnl ******************************
 dnl Inkboard dependency checking
 dnl ******************************
 
-AC_MSG_CHECKING(if Inkboard dependencies are satisfied)
+with_inkboard="no"
+
 AC_MSG_CHECKING(for loudmouth-1.0+)
 
 AC_ARG_ENABLE(inkboard,
@@ -425,20 +426,8 @@ AC_ARG_ENABLE(inkboard,
 if test "x$with_inkboard" = "xyes"; then
 	PKG_CHECK_MODULES(LIBLOUDMOUTH, loudmouth-1.0, loudmouth_ok=yes, loudmouth_ok=no)
 	if test "x$loudmouth_ok" = "xyes"; then
-		AC_MSG_RESULT($loudmouth_ok)
-		dnl Check for Boost libraries used by whiteboard code
-		AC_MSG_CHECKING(for boost libraries: noncopyable smart_ptr bind)
-		AC_PREPROC_IFELSE(
-			[AC_LANG_PROGRAM([[	
-								#include <boost/bind.hpp>
-								#include <boost/function.hpp>
-								#include <boost/lexical_cast.hpp> 
-								]])],
-			[AC_DEFINE(WITH_INKBOARD, 1, [Enable Inkboard])
-				with_inkboard="yes"
-				AC_MSG_RESULT([found])],
-			[AC_MSG_RESULT([not found])
-				with_inkboard="no"])
+		with_inkboard="yes"
+		AC_DEFINE(WITH_INKBOARD,1,[Build in Inkboard support])
 	else
 		with_inkboard="no"
 	fi
@@ -447,7 +436,7 @@ else
 fi
 
 AC_MSG_RESULT($with_inkboard)
-AM_CONDITIONAL(WITH_INKBOARD, test x$with_inkboard = xyes)
+AM_CONDITIONAL(WITH_INKBOARD, test "x$with_inkboard" = "xyes")
 AC_SUBST(LIBLOUDMOUTH_CFLAGS)
 AC_SUBST(LIBLOUDMOUTH_LIBS)
 

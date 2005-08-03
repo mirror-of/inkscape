@@ -19,8 +19,6 @@ inkboard_cgtk_dialogs = \
 	dialogs/whiteboard-common-dialog.h \
 	dialogs/whiteboard-connect-dialog.cpp \
 	dialogs/whiteboard-connect-dialog.h \
-	dialogs/whiteboard-sharewithuser-dialog.cpp \
-	dialogs/whiteboard-sharewithuser-dialog.h \
 	dialogs/whiteboard-sharewithchat-dialog.cpp \
 	dialogs/whiteboard-sharewithchat-dialog.h 
 endif

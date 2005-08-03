@@ -12,7 +12,7 @@
 
 #include <glibmm/i18n.h>
 
-#include <boost/lexical_cast.hpp>
+//#include <boost/lexical_cast.hpp>
 
 #include "message-stack.h"
 #include "desktop.h"
@@ -211,27 +211,29 @@ ChatMessageHandler::_finishConnection()
 void
 ChatMessageHandler::_handleError(char const* errcode)
 {
-	try {
-		unsigned int code = boost::lexical_cast< unsigned int >(errcode);
+//	try {
+	unsigned int code = atoi(errcode);
 
-		Glib::ustring buf;
-		switch (code) {
-			case ErrorCodes::CHAT_HANDLE_IN_USE:
-				// TRANSLATORS: "handle" here refers to the nickname chosen by a Jabber user
-				buf = String::ucompose(_("Chat handle %1 is already in use.  Please choose a different handle."), this->_sm->session_data->chat_handle);
-				this->_sm->connectionError(buf);
-				break;
-			case ErrorCodes::SERVER_CONNECT_FAILED:
-				buf = _("Connection error encountered while attempting to connect to Jabber conference server.");
-				this->_sm->connectionError(buf);
-				break;
-			default:
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Chat message error handler received error code %u", code);
-				break;
-		}
-	} catch (boost::bad_lexical_cast&) {
+//		unsigned int code = boost::lexical_cast< unsigned int >(errcode);
 
+	Glib::ustring buf;
+	switch (code) {
+		case ErrorCodes::CHAT_HANDLE_IN_USE:
+			// TRANSLATORS: "handle" here refers to the nickname chosen by a Jabber user
+			buf = String::ucompose(_("Chat handle %1 is already in use.  Please choose a different handle."), this->_sm->session_data->chat_handle);
+			this->_sm->connectionError(buf);
+			break;
+		case ErrorCodes::SERVER_CONNECT_FAILED:
+			buf = _("Connection error encountered while attempting to connect to Jabber conference server.");
+			this->_sm->connectionError(buf);
+			break;
+		default:
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "Chat message error handler received error code %u", code);
+			break;
 	}
+//	} catch (boost::bad_lexical_cast&) {
+
+//	}
 }
 
 }

@@ -15,8 +15,10 @@ extern "C" {
 #include <loudmouth/loudmouth.h>
 }
 
-#include <boost/smart_ptr.hpp>
-#include <boost/bind.hpp>
+//#include <boost/smart_ptr.hpp>
+//#include <boost/bind.hpp>
+
+//#include <functional>
 
 #include <glibmm.h>
 #include <glibmm/i18n.h>
@@ -295,10 +297,14 @@ MessageHandler::_default(LmMessage* message)
 		//MessagePtr msg = this->_extractData(message);
 		MessageType type = this->_getType(message);
 
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Handling message: %s", msg.body.c_str());
+		//g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) Handling message: %s", lm_connection_get_jid(this->_sm->session_data->connection), msg.body.c_str());
 //
 		// Call message handler and return instruction value to Loudmouth
-		return boost::bind< LmHandlerResult >(*this->_received_message_processors[type], _1, msg)(type);
+
+		return (*this->_received_message_processors[type])(type, msg);
+
+//		return (std::bind1st(*this->_received_message_processors[type], type))(msg);
+//		return boost::bind< LmHandlerResult >(*this->_received_message_processors[type], _1, msg)(type);
 	} else {
 		g_warning(_("Default message handler received message in invalid receive context; discarding message."));
 		return LM_HANDLER_RESULT_REMOVE_MESSAGE;

@@ -18,8 +18,8 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/messagedialog.h>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/function.hpp>
+//#include <boost/lexical_cast.hpp>
+//#include <boost/function.hpp>
 
 #include "gc-anchored.h"
 
@@ -407,6 +407,7 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	// add message body
 	if (msg != NULL) {
 		lm_message_node_add_child(m->node, MESSAGE_BODY, msg->data());
+//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending message from %s to %s: %s", lm_connection_get_jid(this->session_data->connection), recipientJID, msg->data());
 	}
 
 	// add sequence number
@@ -452,7 +453,6 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	}
 
 	// send message
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending message from %s to %s", lm_connection_get_jid(this->session_data->connection), recipientJID);
 			
 	if (!lm_connection_send(this->session_data->connection, m, &error)) {
 		g_error("Send failed: %s", error->message);
@@ -525,6 +525,9 @@ SessionManager::receiveChange(Glib::ustring const* changemsg)
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "receiveChange operating on %s", changemsg->data());
 
 	struct Node* part = new Node;
+
+	// TODO: there's no real reason to make a copy anymore; this is a holdover
+	// from the old Inkboard code
 	Glib::ustring* msgcopy = new Glib::ustring(changemsg->data());
 	this->_log(*changemsg);
 
@@ -711,7 +714,7 @@ SessionManager::clearDocument()
 		}
 	}
 
-	sp_document_done(this->_myDoc);
+//	sp_document_done(this->_myDoc);
 }
 
 void

@@ -127,6 +127,8 @@ SessionManager::receivedContentChangeHelper(Glib::ustring const& msg)
 		if (oldval != newval) {
 			// Lock listeners
 
+			// TODO: this would be (somewhat) faster with a two-argument form of lock;
+			// investigate if it's really worth it
 			this->_myTracker->lock(node, CONTENT_CHANGED);
 			this->_myTracker->lock(node, ATTR_CHANGED);
 
@@ -310,10 +312,12 @@ SessionManager::receivedNewObjectHelper(Glib::ustring* msg, Glib::ustring* rest)
 				childRepr = sp_repr_new(name.data());
 				break;
 		}
-			
-		if (childRepr != NULL) {
-			this->_myTracker->put(child, *childRepr);
-		}
+		
+		// new never returns null; this check is redundant
+//		if (childRepr != NULL) {
+		this->_myTracker->put(child, *childRepr);
+		Inkscape::GC::release(childRepr);
+//		}
 //		this->_myTracker->dump();
 	} else {
 		childRepr = &(this->_myTracker->get(this->_myTracker->getSpecialNodeKeyFromName(name)));
@@ -357,10 +361,14 @@ SessionManager::receivedNewObjectHelper(Glib::ustring* msg, Glib::ustring* rest)
 			}
 
 			if (parentRepr != NULL) {
-
+				// We need to lock both the parent's child added listener and the 
+				// (as of yet) unparented child's attribute changed listener, since some
+				// objects (like stars and spirals) transmit data at two different times:
+				// first when the object is laid down, and second when the object is
+				// committed to the document tree.
 				this->_myTracker->lock(parentRepr, CHILD_ADDED);
-				this->_myTracker->lock(childRepr, CHILD_ADDED);
-				this->_myTracker->lock(parentRepr, ATTR_CHANGED);
+//				this->_myTracker->lock(childRepr, CHILD_ADDED);
+//				this->_myTracker->lock(parentRepr, ATTR_CHANGED);
 				this->_myTracker->lock(childRepr, ATTR_CHANGED);
 
 //				this->child_added_listener_locked = true;
@@ -372,11 +380,9 @@ SessionManager::receivedNewObjectHelper(Glib::ustring* msg, Glib::ustring* rest)
 
 				parentRepr->addChild(childRepr, refRepr);
 
-				Inkscape::GC::release(childRepr);
-
 				this->_myTracker->unlock(parentRepr, CHILD_ADDED);
-				this->_myTracker->unlock(childRepr, CHILD_ADDED);
-				this->_myTracker->unlock(parentRepr, ATTR_CHANGED);
+//				this->_myTracker->unlock(childRepr, CHILD_ADDED);
+//				this->_myTracker->unlock(parentRepr, ATTR_CHANGED);
 				this->_myTracker->unlock(childRepr, ATTR_CHANGED);
 
 //				this->child_added_listener_locked = false;
@@ -424,7 +430,7 @@ SessionManager::receivedDeleteHelper(Glib::ustring* msg)
 		XML::Node& childRepr = this->_myTracker->get(child);
 	
 		this->_myTracker->lock(parentRepr, CHILD_REMOVED);
-		this->_myTracker->lock(childRepr, CHILD_REMOVED);
+//		this->_myTracker->lock(childRepr, CHILD_REMOVED);
 
 //		this->child_removed_listener_locked = true;
 

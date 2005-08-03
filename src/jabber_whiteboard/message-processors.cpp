@@ -16,7 +16,11 @@ extern "C" {
 
 #include <glibmm/i18n.h>
 
+#include "xml/session.h"
+#include "xml/document.h"
+
 #include "desktop.h"
+#include "document.h"
 #include "message-stack.h"
 
 #include "jabber_whiteboard/session-manager.h"
@@ -97,6 +101,9 @@ public:
 	operator()(MessageType mode, JabberMessage& m)
 	{
 		std::bitset< NUM_FLAGS >& status = this->_sm->session_data->status;
+		::SPDocument* doc = this->_sm->document();
+		XML::Session* session = doc->rdoc->session();
+
 		switch(mode) {
 			case DOCUMENT_BEGIN: 
 			{
@@ -104,6 +111,7 @@ public:
 					status.set(WAITING_TO_SYNC_TO_CHAT, 0);
 					status.set(SYNCHRONIZING_WITH_CHAT, 1);
 				}
+
 				break;
 			}
 			case DOCUMENT_END:
@@ -114,6 +122,16 @@ public:
 				} else {
 					this->_sm->sendMessage(CONNECTED_SIGNAL, 0, NULL, m.sender.c_str(), false);
 				}
+
+				// Set this to be the new original state of the document
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing undo/redo stacks");
+
+				sp_document_done(doc);
+				sp_document_clear_redo(doc);
+				sp_document_clear_undo(doc);
+
+				// FIXME: we don't start in the first layer of the received document...
+				// need to do that
 				break;
 			default:
 				break;
@@ -300,11 +318,19 @@ public:
 void
 initialize_received_message_processors(SessionManager* sm, MessageProcessorMap& mpm)
 {
+	/*
 	ProcessorShell* ch = new ProcessorShell(new ChangeHandler(sm));
 	ProcessorShell* dsh = new ProcessorShell(new DocumentSignalHandler(sm));
 	ProcessorShell* crh = new ProcessorShell(new ConnectRequestHandler(sm));
 	ProcessorShell* ceh = new ProcessorShell(new ConnectErrorHandler(sm));
 	ProcessorShell* csh = new ProcessorShell(new ChatSynchronizeHandler(sm));
+	*/
+
+	MessageProcessor* ch = new ChangeHandler(sm);
+	MessageProcessor* dsh = new DocumentSignalHandler(sm);
+	MessageProcessor* crh = new ConnectRequestHandler(sm);
+	MessageProcessor* ceh = new ConnectErrorHandler(sm);
+	MessageProcessor* csh = new ChatSynchronizeHandler(sm);
 
 	mpm[CHANGE_REPEATABLE] = ch;
 	mpm[CHANGE_NOT_REPEATABLE] = ch;

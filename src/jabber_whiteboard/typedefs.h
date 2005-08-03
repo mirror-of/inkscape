@@ -27,7 +27,7 @@ extern "C" {
 #include <glibmm.h>
 #include <sigc++/sigc++.h>
 
-#include <boost/function.hpp>
+//#include <boost/function.hpp>
 
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/tracker-node.h"
@@ -86,7 +86,6 @@ typedef std::map< std::string, TrackerNode*, std::less< std::string >, traceable
 typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, traceable_allocator< std::pair< TrackerNode*, std::string > > > TrackerNodeToKeyMap;
 */
 
-// FIXME: GC::Alloc doesn't seem to work with std::map
 typedef std::map< std::string, TrackerNode*, std::less< std::string >, GC::Alloc< std::pair < std::string, TrackerNode* >, GC::MANUAL > > KeyToTrackerNodeMap;
 typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, GC::Alloc< std::pair< TrackerNode*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
 
@@ -105,17 +104,18 @@ typedef std::set< char const* > ChatterList;
 
 // Message context verification and processing
 class SessionManager;
-struct ProcessorShell;
+struct MessageProcessor;
+//struct ProcessorShell;
 struct JabberMessage;
 
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
-typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, ProcessorShell* >, GC::MANUAL > > MessageProcessorMap;
+typedef std::map< MessageType, MessageProcessor*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, MessageProcessor* >, GC::MANUAL > > MessageProcessorMap;
 //typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, traceable_allocator< std::pair< MessageType, ProcessorShell* > > > MessageProcessorMap;
 
 // Error handling -- someday
 // TODO: finish and integrate this
-typedef boost::function< LmHandlerResult (unsigned int code) > ErrorHandlerFunctor;
-typedef std::map< unsigned int, ErrorHandlerFunctor > ErrorHandlerFunctorMap;
+//typedef boost::function< LmHandlerResult (unsigned int code) > ErrorHandlerFunctor;
+//typedef std::map< unsigned int, ErrorHandlerFunctor > ErrorHandlerFunctorMap;
 }
 
 }

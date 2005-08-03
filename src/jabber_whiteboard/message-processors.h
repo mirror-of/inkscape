@@ -79,22 +79,19 @@ private:
 	MessageProcessor& operator=(MessageProcessor const&);
 };
 
-/** 
- * boost::bind does not work for function objects with virtual
- * methods.  This is a class with no virtual methods that wraps
- * a MessageProcessor for binding.
- */
-struct ProcessorShell : public GC::Managed<> {
+/*
+struct ProcessorShell : public GC::Managed<>, public std::binary_function< MessageType, JabberMessage, LmHandlerResult > {
 public:
 	ProcessorShell(MessageProcessor* mpm) : _mpm(mpm) { }
 
-	LmHandlerResult operator()(MessageType type, JabberMessage& msg)
+	LmHandlerResult operator()(MessageType type, JabberMessage msg)
 	{
 		return (*this->_mpm)(type, msg);
 	}
 private:
 	MessageProcessor* _mpm;
 };
+*/
 
 void initialize_received_message_processors(SessionManager* sm, MessageProcessorMap& mpm);
 
