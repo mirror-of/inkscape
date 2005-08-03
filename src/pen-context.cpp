@@ -23,7 +23,6 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "draw-anchor.h"
-#include "draw-context.h"
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "sp-path.h"
@@ -34,6 +33,7 @@
 #include <glibmm/i18n.h>
 #include "libnr/n-art-bpath.h"
 #include "snap.h"
+
 
 static void sp_pen_context_class_init(SPPenContextClass *klass);
 static void sp_pen_context_init(SPPenContext *pc);
@@ -64,7 +64,9 @@ static bool pen_within_tolerance = false;
 
 static SPDrawContextClass *pen_parent_class;
 
-
+/**
+ * Register SPPenContext with Gdk and return its type.
+ */
 GType
 sp_pen_context_get_type(void)
 {
@@ -85,6 +87,9 @@ sp_pen_context_get_type(void)
     return type;
 }
 
+/**
+ * Initialize the SPPenContext vtable.
+ */
 static void
 sp_pen_context_class_init(SPPenContextClass *klass)
 {
@@ -104,6 +109,9 @@ sp_pen_context_class_init(SPPenContextClass *klass)
     event_context_class->root_handler = sp_pen_context_root_handler;
 }
 
+/**
+ * Callback to initialize SPPenContext object.
+ */
 static void
 sp_pen_context_init(SPPenContext *pc)
 {
@@ -117,6 +125,9 @@ sp_pen_context_init(SPPenContext *pc)
     pc->cl1 = NULL;
 }
 
+/**
+ * Callback to destroy the SPPenContext object's members and itself.
+ */
 static void
 sp_pen_context_dispose(GObject *object)
 {
@@ -144,6 +155,9 @@ sp_pen_context_dispose(GObject *object)
     G_OBJECT_CLASS(pen_parent_class)->dispose(object);
 }
 
+/**
+ * Callback to initialize SPPenContext object.
+ */
 static void
 sp_pen_context_setup(SPEventContext *ec)
 {
@@ -177,6 +191,9 @@ sp_pen_context_setup(SPEventContext *ec)
     }
 }
 
+/**
+ * Finalization callback.
+ */
 static void
 sp_pen_context_finish(SPEventContext *ec)
 {
@@ -187,6 +204,9 @@ sp_pen_context_finish(SPEventContext *ec)
     }
 }
 
+/**
+ * Callback that sets key to value in pen context.
+ */
 static void
 sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
 {
@@ -201,8 +221,9 @@ sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     }
 }
 
-
-/** Snaps new node relative to the previous node. */
+/** 
+ * Snaps new node relative to the previous node.
+ */
 static void
 spdc_endpoint_snap(SPPenContext const *const pc, NR::Point &p, guint const state)
 {
@@ -212,7 +233,9 @@ spdc_endpoint_snap(SPPenContext const *const pc, NR::Point &p, guint const state
                                 state);
 }
 
-/** Snaps new node's handle relative to the new node. */
+/** 
+ * Snaps new node's handle relative to the new node.
+ */
 static void
 spdc_endpoint_snap_handle(SPPenContext const *const pc, NR::Point &p, guint const state)
 {
@@ -222,7 +245,10 @@ spdc_endpoint_snap_handle(SPPenContext const *const pc, NR::Point &p, guint cons
     spdc_endpoint_snap_internal(pc, p, pc->p[pc->npoints - 2], state);
 }
 
-gint
+/**
+ * Callback to handle all pen events.
+ */
+static gint
 sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 {
     SPPenContext *const pc = SP_PEN_CONTEXT(ec);
@@ -265,6 +291,9 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
     return ret;
 }
 
+/**
+ * Handle mouse button press event.
+ */
 static gint
 pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
 {
@@ -392,6 +421,9 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
     return ret;
 }
 
+/**
+ * Handle motion_notify event.
+ */
 static gint
 pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
 {
@@ -494,6 +526,9 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
     return ret;
 }
 
+/**
+ * Handle mouse button release event.
+ */
 static gint
 pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent)
 {
