@@ -16,8 +16,8 @@
    height="500.00000pt"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.41+devel"
-   sodipodi:docbase="/home/d/ink/inkscape/share/screens"
+   inkscape:version="0.42+devel"
+   sodipodi:docbase="/home/mental/cvs/inkscape-0.42/share/screens"
    sodipodi:docname="about.svg">
   <defs
      id="defs3">
@@ -326,12 +326,12 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.7355229"
      inkscape:cx="462.33535"
-     inkscape:cy="281.42358"
+     inkscape:cy="306.31554"
      inkscape:current-layer="svg1"
-     inkscape:window-width="1242"
-     inkscape:window-height="996"
+     inkscape:window-width="1280"
+     inkscape:window-height="939"
      inkscape:window-x="0"
-     inkscape:window-y="0" />
+     inkscape:window-y="29" />
   <metadata
      id="metadata4">
     <rdf:RDF>
@@ -2043,7 +2043,7 @@
        id="tspan2829"
        x="284.38721"
        y="155.63885" /><tspan
-       y="262.59500"
+       y="262.595"
        x="284.38721"
        sodipodi:role="line"
        id="tspan2831" /></text>
@@ -2133,7 +2133,7 @@
        sodipodi:role="line"
        id="tspan1625"
        x="-149.35315"
-       y="737.95520">designed by andremarcel.de</tspan></text>
+       y="737.9552">designed by andremarcel.de</tspan></text>
   <text
      sodipodi:linespacing="100.00000%"
      id="text1627"
@@ -2148,16 +2148,19 @@
        sodipodi:role="line">a juicy new release of</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:43.952385px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100.00000%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans"
-     x="246.40776"
+     style="font-size:43.952385px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:100%;writing-mode:lr-tb;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+     x="317.56018"
      y="395.09308"
      id="text1631"
-     sodipodi:linespacing="100.00000%"><tspan
+     sodipodi:linespacing="100%"><tspan
        sodipodi:role="line"
        id="tspan1633"
-       x="246.40776"
+       x="317.56018"
        y="395.09308"
-       style="letter-spacing:-6.8588934">0.42</tspan></text>
+       style="font-size:43.952385px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:100%;letter-spacing:-6.8588934;writing-mode:lr-tb;text-anchor:end;font-family:Bitstream Vera Sans">0.42<tspan
+   style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:100%;writing-mode:lr-tb;text-anchor:end;fill:#969696;fill-opacity:1;font-family:Bitstream Vera Sans"
+   id="tspan3327"
+   dx="2.304781 2.304781">.1</tspan></tspan></text>
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1.0395874px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
      d="M 759.45242,602.14016 C 721.15385,565.15258 674.20353,543.95434 630.70405,534.72435 C 543.02124,516.11927 542.72901,472.22304 439.21122,472.22304 C 312.08217,472.31648 312.87103,509.55985 221.64277,527.37546 C 170.45840,537.37105 47.356200,599.49818 0.0000000,599.49818 C 0.0000000,599.49818 0.81486000,618.80684 0.81486000,618.80684 L 758.63756,618.80684 L 759.45242,602.14016 z "

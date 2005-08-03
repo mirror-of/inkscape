@@ -1,3 +1,7 @@
+2005-08-03  MenTaLguY  <mental@rydia.net>
+
+	* share/screens/about.svg: updated version number
+
 2005-08-02  MenTaLguY  <mental@rydia.net>
 
 	* src/selection-chemistry.cpp: backport crash fix from bulia [bug 1249899]
