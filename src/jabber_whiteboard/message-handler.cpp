@@ -297,7 +297,7 @@ MessageHandler::_default(LmMessage* message)
 		//MessagePtr msg = this->_extractData(message);
 		MessageType type = this->_getType(message);
 
-		//g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) Handling message: %s", lm_connection_get_jid(this->_sm->session_data->connection), msg.body.c_str());
+//		g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) Handling message: %s", lm_connection_get_jid(this->_sm->session_data->connection), msg.body.c_str());
 //
 		// Call message handler and return instruction value to Loudmouth
 

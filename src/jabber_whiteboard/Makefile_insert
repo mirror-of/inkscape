@@ -9,7 +9,7 @@ jabber_whiteboard/clean:
 	rm -f jabber_whiteboard/libjabber_whiteboard.a $(jabber_whiteboard_libjabber_whiteboard_a_OBJECTS)
 
 if WITH_INKBOARD
-jabber_whiteboard_libjabber_whiteboard_a_SOURCES = \
+jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/message-tags.cpp \
 	jabber_whiteboard/internal-constants.cpp \
 	jabber_whiteboard/received-message-helpers.cpp \
@@ -32,3 +32,7 @@ jabber_whiteboard_libjabber_whiteboard_a_SOURCES = \
 	jabber_whiteboard/chat-handler.cpp \
 	jabber_whiteboard/session-manager.cpp 
 endif
+
+jabber_whiteboard_libjabber_whiteboard_a_SOURCES = \
+	jabber_whiteboard/empty.cpp \
+	$(jabber_whiteboard_SOURCES)
