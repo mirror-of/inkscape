@@ -56,6 +56,7 @@ INPUT = \
 	nodepath.h	\
 	nodepath.cpp	\
 	object-hierarchy.h  \
+	object-hierarchy.cpp  \
 	pen-context.cpp	\
 	pen-context.h	\
 	pencil-context.h	\
@@ -74,6 +75,7 @@ INPUT = \
 	sp-linear-gradient-fns.h	\
 	sp-linear-gradient.h	\
 	sp-object.h     \
+	sp-object.cpp     \
 	sp-offset.h  	\
 	sp-offset.cpp	\
 	sp-radial-gradient-fns.h	\
@@ -82,6 +84,7 @@ INPUT = \
 	sp-root.cpp	\
 	sp-spiral.h	\
 	sp-spiral.cpp	\
+	sp-stop.h       \
 	svg-view.cpp    \
 	svg-view.h      \
 	ui/view/view.h  \
