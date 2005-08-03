@@ -1138,7 +1138,7 @@ sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point co
     g_assert(L1(curve->bpath[nSegs].c(3) - new_p1) < 1.);
     /* Explicit set for better numerical properties. */
     curve->bpath[nSegs].setC(3, new_p1);
-    delete seg2len;
+    delete [] seg2len;
     g_assert(fabs(begin_dist - tot_len) < 1e-18);
 }
 
