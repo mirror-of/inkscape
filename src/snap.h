@@ -2,7 +2,7 @@
 #define SEEN_SNAP_H
 
 /** \file
- * Snap distance calculation
+ * Snapper, GridSnapper, GuideSnapper: snap distance calculation.
  */
 
 /*
@@ -40,6 +40,7 @@ public:
     Snapper(SPNamedView const *nv, NR::Coord const d);
     virtual ~Snapper() {}
 
+    /// Point types to snap.
     enum PointType {
         SNAP_POINT,
         BBOX_POINT
@@ -49,7 +50,6 @@ public:
     void setDistance(NR::Coord d);
 
     bool getSnapTo(PointType t) const;
-    bool getSnapToBBox() const;
     NR::Coord getDistance() const;
 
     bool will_snap_something() const;
