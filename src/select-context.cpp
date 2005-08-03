@@ -394,9 +394,29 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     } else { // switch tool
                         tools_switch_by_item (desktop, clicked_item);
                     }
-                } else { // click in empty place, go up one level (but not to root)
-                    if (!SP_IS_ROOT(SP_OBJECT_PARENT(desktop->currentLayer()))) {
-                        desktop->setCurrentLayer(SP_OBJECT_PARENT(desktop->currentLayer()));
+                } else {
+                    /* Click in empty place, go up one level -- but don't leave a layer to root.
+                     *
+                     * (Rationale: we don't usually allow users to go to the root, since that
+                     * detracts from the layer metaphor: objects at the root level can in front
+                     * of or behind layers.  Whereas it's fine to go to the root if editing
+                     * a document that has no layers (e.g. a non-Inkscape document).)
+                     *
+                     * Once we support editing SVG "islands" (e.g. <svg> embedded in an xhtml
+                     * document), we might consider further restricting the below to disallow
+                     * leaving a layer to go to a non-layer.
+                     */
+                    SPObject *const current_layer = desktop->currentLayer();
+                    if (current_layer) {
+                        SPObject *const parent = SP_OBJECT_PARENT(current_layer);
+                        if ( parent
+                             && ( SP_OBJECT_PARENT(parent)
+                                  || !( SP_IS_GROUP(current_layer)
+                                        && ( SPGroup::LAYER
+                                             == SP_GROUP(current_layer)->layerMode() ) ) ) )
+                        {
+                            desktop->setCurrentLayer(parent);
+                        }
                     }
                 }
                 ret = TRUE;
