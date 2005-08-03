@@ -1,3 +1,15 @@
+2005-08-02  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/ui/dialog/*.*:  Update copyrights
+
+	* doc/WISHLIST:  s/Sodipodi/Inkscape/
+
+	* src/desktop.cpp:  Rename SPView to Inkscape::UI::View::View
+
+	* changing include file syntax from "" to <> where appropriate
+
+	* Changing copyrights to be consistent
+	
 2005-08-03  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	*  src/display/curve.cpp: Correctly free an array with "delete []".
@@ -159,6 +171,7 @@
 	  Hooked up Gtkmmified Icon manager correctly.  (bug 1217367)
 	* Makefile.mingw, Makefile.mingw.common: patch 1241293 for build fixes
 
+>>>>>>> 1.1539
 2005-07-12  Ted Gould  <ted@gould.cx>
 
 	* 0.42pre2

@@ -7,7 +7,7 @@
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
  *
- * Copyright (C) 2004 Inkscape.org
+ * Copyright (C) 2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

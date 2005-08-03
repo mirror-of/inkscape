@@ -23,8 +23,8 @@ static void sp_svg_view_class_init (SPSVGViewClass *klass);
 static void sp_svg_view_init (SPSVGView *view);
 static void sp_svg_view_dispose (GObject *object);
 
-static void sp_svg_view_set_document (SPView *view, SPDocument *doc);
-static void sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height);
+static void sp_svg_view_set_document (Inkscape::UI::View::View *view, SPDocument *doc);
+static void sp_svg_view_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height);
 
 static void sp_svg_view_rescale (SPSVGView *svgview, gboolean event);
 
@@ -159,7 +159,7 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView
  * Callback connected with set_document signal.
  */
 static void
-sp_svg_view_set_document (SPView *view, SPDocument *doc)
+sp_svg_view_set_document (Inkscape::UI::View::View *view, SPDocument *doc)
 {
 	SPSVGView *svgview = SP_SVG_VIEW (view);
 
@@ -187,7 +187,7 @@ sp_svg_view_set_document (SPView *view, SPDocument *doc)
  * Callback connected with document_resized signal.
  */
 static void
-sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height)
+sp_svg_view_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height)
 {
 	SPSVGView *svgview = SP_SVG_VIEW (view);
 
@@ -197,7 +197,7 @@ sp_svg_view_document_resized (SPView *view, SPDocument *doc, gdouble width, gdou
 /**
  * Constructs new SPSVGView object and returns pointer to it.
  */
-SPView *
+Inkscape::UI::View::View *
 sp_svg_view_new (SPCanvasGroup *parent)
 {
 	g_return_val_if_fail (parent != NULL, NULL);
@@ -207,7 +207,7 @@ sp_svg_view_new (SPCanvasGroup *parent)
 
 	svgview->parent = parent;
 
-	return (SPView *) svgview;
+	return (Inkscape::UI::View::View *) svgview;
 }
 
 /**
@@ -292,7 +292,7 @@ static void sp_svg_view_widget_destroy (GtkObject *object);
 static void sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static void sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req);
 
-static void sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, gdouble height);
+static void sp_svg_view_widget_view_resized (SPViewWidget *vw, Inkscape::UI::View::View *view, gdouble width, gdouble height);
 
 static SPViewWidgetClass *widget_parent_class;
 
@@ -349,7 +349,7 @@ sp_svg_view_widget_init (SPSVGViewWidget *vw)
 {
 	GtkStyle *style;
 	SPCanvasItem *parent;
-	SPView *view;
+	Inkscape::UI::View::View *view;
 
 	/* Settings */
 	vw->resize = FALSE;
@@ -403,7 +403,7 @@ static void
 sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req)
 {
 	SPSVGViewWidget *vw = SP_SVG_VIEW_WIDGET (widget);
-	SPView *v = SP_VIEW_WIDGET_VIEW (widget);
+	Inkscape::UI::View::View *v = SP_VIEW_WIDGET_VIEW (widget);
 
 	if (((GtkWidgetClass *) (widget_parent_class))->size_request)
 		(* ((GtkWidgetClass *) (widget_parent_class))->size_request) (widget, req);
@@ -457,7 +457,7 @@ sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
  * Callback connected with view_resized signal.
  */
 static void
-sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, gdouble height)
+sp_svg_view_widget_view_resized (SPViewWidget *vw, Inkscape::UI::View::View *view, gdouble width, gdouble height)
 {
 	SPSVGViewWidget *svgvw = SP_SVG_VIEW_WIDGET (vw);
 

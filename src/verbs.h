@@ -15,7 +15,7 @@
 
 #include "require-config.h"   /* HAVE_GTK_WINDOW_FULLSCREEN */
 #include "helper/helper-forward.h"
-#include "forward.h"    /* SPView */
+#include "forward.h"
 
 /** \brief This anonymous enum is used to provide a list of the Verbs
            which are defined staticly in the verb files.  There may be
@@ -229,7 +229,7 @@ private:
     /* Plus one because there is an entry for SP_VERB_LAST */
 
     /** \brief A simple typedef to make using the action table easier. */
-    typedef std::map<SPView *, SPAction *> ActionTable;
+    typedef std::map<Inkscape::UI::View::View *, SPAction *> ActionTable;
     /** \brief A list of all the actions that have been created for this
                verb.  It is referenced by the view that they are created for. */
     ActionTable * _actions;
@@ -271,8 +271,8 @@ public:
     gchar const * get_id (void) { return _id; }
 
 protected:
-    SPAction * make_action_helper (SPView * view, SPActionEventVector * vector, void * in_pntr = NULL);
-    virtual SPAction * make_action (SPView * view);
+    SPAction * make_action_helper (Inkscape::UI::View::View * view, SPActionEventVector * vector, void * in_pntr = NULL);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 
 public:
     /** \brief Inititalizes the Verb with the parameters
@@ -304,7 +304,7 @@ public:
     Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image);
     virtual ~Verb (void);
 
-    SPAction * get_action(SPView * view);
+    SPAction * get_action(Inkscape::UI::View::View * view);
 
 private:
     static Verb * get_search (unsigned int code);
@@ -327,8 +327,8 @@ public:
         }
     }
 
-    static void delete_all_view (SPView * view);
-    void delete_view (SPView * view);
+    static void delete_all_view (Inkscape::UI::View::View * view);
+    void delete_view (Inkscape::UI::View::View * view);
 
     void sensitive (SPDocument * in_doc = NULL, bool in_sensitive = true);
 }; /* Verb class */

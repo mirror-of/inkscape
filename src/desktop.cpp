@@ -96,13 +96,13 @@ static void sp_desktop_class_init(SPDesktopClass *klass);
 static void sp_desktop_init(SPDesktop *desktop);
 static void sp_desktop_dispose(GObject *object);
 
-static void sp_desktop_request_redraw (SPView *view);
-static void sp_desktop_set_document (SPView *view, SPDocument *doc);
-static void sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height);
+static void sp_desktop_request_redraw (Inkscape::UI::View::View *view);
+static void sp_desktop_set_document (Inkscape::UI::View::View *view, SPDocument *doc);
+static void sp_desktop_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height);
 
 /* Constructor */
 
-static SPView *sp_desktop_new (SPNamedView *nv, SPCanvas *canvas);
+static Inkscape::UI::View::View *sp_desktop_new (SPNamedView *nv, SPCanvas *canvas);
 
 static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
 static void sp_desktop_selection_modified (Inkscape::Selection *selection, guint flags, SPDesktop *desktop);
@@ -346,7 +346,7 @@ bool SPDesktop::itemIsHidden(SPItem const *item) const {
 }
 
 static void
-sp_desktop_request_redraw (SPView *view)
+sp_desktop_request_redraw (Inkscape::UI::View::View *view)
 {
     SPDesktop *dt = SP_DESKTOP (view);
 
@@ -356,7 +356,7 @@ sp_desktop_request_redraw (SPView *view)
 }
 
 static void
-sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height)
+sp_desktop_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height)
 {
     SPDesktop *desktop = SP_DESKTOP (view);
 
@@ -407,7 +407,7 @@ static void sp_desktop_set_namedview (SPDesktop *desktop, SPNamedView* namedview
  * \pre namedview != NULL.
  * \pre canvas != NULL.
  */
-static SPView *
+static Inkscape::UI::View::View *
 sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 {
     SPDocument *document = SP_OBJECT_DOCUMENT (namedview);
@@ -618,7 +618,7 @@ sp_desktop_activate_guides(SPDesktop *desktop, gboolean activate)
 }
 
 static void
-sp_desktop_set_document (SPView *view, SPDocument *doc)
+sp_desktop_set_document (Inkscape::UI::View::View *view, SPDocument *doc)
 {
     SPDesktop *desktop = SP_DESKTOP (view);
 
@@ -865,7 +865,7 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
-static void sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
+static void sp_desktop_widget_view_position_set (Inkscape::UI::View::View *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
 
 static void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
 static void sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
@@ -1220,7 +1220,7 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
  *  is cancelled or if the save is cancelled or fails, FALSE otherwise.
  */
 static gboolean
-sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
+sp_dtw_desktop_shutdown (Inkscape::UI::View::View *view, SPDesktopWidget *dtw)
 {
     SPDesktop *desktop=SP_DESKTOP(view);
     g_assert(desktop != NULL);
@@ -1346,7 +1346,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 }
 
 static void
-sp_desktop_uri_set (SPView *view, const gchar *uri, SPDesktopWidget *dtw)
+sp_desktop_uri_set (Inkscape::UI::View::View *view, const gchar *uri, SPDesktopWidget *dtw)
 {
     sp_desktop_widget_set_title (dtw);
 }
@@ -1453,7 +1453,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 }
 
 static void
-sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktopWidget *dtw)
+sp_desktop_widget_view_position_set (Inkscape::UI::View::View *view, double x, double y, SPDesktopWidget *dtw)
 {
     using NR::X;
     using NR::Y;
@@ -1484,7 +1484,7 @@ typedef struct {
     guint message_id;
 } statusbar_data;
 
-void SPDesktop::_set_status_message(SPView *view, Inkscape::MessageType type, const gchar *message)
+void SPDesktop::_set_status_message(Inkscape::UI::View::View *view, Inkscape::MessageType type, const gchar *message)
 {
     SPDesktop *desktop=SP_DESKTOP(view);
     if (desktop->owner) {

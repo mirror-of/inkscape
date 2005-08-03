@@ -6,8 +6,7 @@
  *   Bryce W. Harrington <bryce@bryceharrington.org>
  *   Jon Phillips <jon@rejon.org>
  *
- * Copyright (C) 2004 Bryce Harrington
- * Copyright (C) 2005 Jon Phillips
+ * Copyright (C) 2004, 2005 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */

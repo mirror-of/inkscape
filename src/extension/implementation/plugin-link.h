@@ -36,9 +36,9 @@ typedef SPDocument *(*inkscape_plugin_open)(inkscape_extension * in_ext, const g
 /** \brief  The C prototype of an input prefs function.  */
 typedef Gtk::Widget * (*inkscape_plugin_prefs_input)(inkscape_extension * in_ext, gchar const * filename);
 /** \brief  The C prototype of an effect function.  */
-typedef void (*inkscape_plugin_effect)(inkscape_extension * in_ext, SPView * view);
+typedef void (*inkscape_plugin_effect)(inkscape_extension * in_ext, Inkscape::UI::View::View * view);
 /** \brief  The C prototype of an effect prefs function.  */
-typedef Gtk::Widget * (*inkscape_plugin_prefs_effect)(inkscape_extension * in_ext, SPView * view);
+typedef Gtk::Widget * (*inkscape_plugin_prefs_effect)(inkscape_extension * in_ext, Inkscape::UI::View::View * view);
 
 /** \brief  The name of the symbol for the plugin.  Should match
             \c INKSCAPE_PLUGIN_NAME_STR (minus the quotes). */

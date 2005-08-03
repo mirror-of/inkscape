@@ -57,7 +57,7 @@ Grid::load (Inkscape::Extension::Extension *module)
     \param  document What should be edited.
 */
 void
-Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
+Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document)
 {
     Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
 
@@ -205,7 +205,7 @@ PrefAdjustment::val_changed (void)
     wants to make this dialog look nicer.
 */
 Gtk::Widget *
-Grid::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
+Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view)
 {
     Gtk::VBox * vbox;
     vbox = new Gtk::VBox();

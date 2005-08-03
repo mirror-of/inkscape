@@ -377,7 +377,7 @@ static void toggle_pattern (GtkWidget *button, gpointer data) {
 GtkWidget *
 sp_select_toolbox_new(SPDesktop *desktop)
 {
-    SPView *view = SP_VIEW(desktop);
+    Inkscape::UI::View::View *view = SP_VIEW(desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);

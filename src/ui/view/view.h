@@ -1,5 +1,5 @@
-#ifndef __SP_VIEW_H__
-#define __SP_VIEW_H__
+#ifndef INKSCAPE_UI_VIEW_VIEW_H
+#define INKSCAPE_UI_VIEW_VIEW_H
 
 /** \file
  * Abstract base class for all SVG document views
@@ -17,7 +17,7 @@
 #include <sigc++/connection.h>
 
 #define SP_TYPE_VIEW (sp_view_get_type ())
-#define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, SPView))
+#define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, Inkscape::UI::View::View))
 #define SP_IS_VIEW(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_VIEW))
 
 #include <sigc++/sigc++.h>
@@ -33,6 +33,8 @@ class MessageContext;
 class MessageStack;
 }
 
+
+class SPView;
 GType    sp_view_get_type (void);
 void     sp_view_set_document (SPView *view, SPDocument *doc);
 void     sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
@@ -71,40 +73,12 @@ class SPView : public GObject {
     }
 
     // Wrappers for C versions of routines
-    void setDocument(SPDocument *doc) {
-	/*
-	sp_view_set_document((SPView*)this, doc);
-	*/
-    }
-
-    void emitResized(gdouble width, gdouble height) {
-	sp_view_emit_resized((SPView*)this, width, height);
-    }
-
-    void setPosition(gdouble x, gdouble y) {
-	/*
-	sp_view_set_position((SPView*)this, x, y);
-	*/
-    }
-
-    void setPosition(NR::Point const &p) {
-	/*
-	sp_view_set_position((SPView*)this, p);
-	*/
-    }
-
-    gboolean shutdown() {
-	/*
-	return sp_view_shutdown((SPView*)this);
-	*/
-	return true;
-    }
-
-    void requestRedraw() {
-	/*
-	sp_view_request_redraw((SPView*)this);
-	*/
-    }
+    void setDocument(SPDocument *doc);
+    void emitResized(gdouble width, gdouble height);
+    void setPosition(gdouble x, gdouble y);
+    void setPosition(NR::Point const &p);
+    gboolean shutdown();
+    void requestRedraw();
 
 private:
     static void _set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view);
@@ -118,10 +92,21 @@ private:
     sigc::connection _document_resized_connection;
 };
 
+namespace Inkscape {
+namespace UI {
+namespace View {
+  typedef SPView View;
+}; // namespace View
+}; // namespace UI
+}; // namespace Inkscape
+
+
+
 /**
  * The Glib-style vtable for the SPView class.
  */
-struct SPViewClass {
+class SPViewClass {
+ public:
 	GObjectClass parent_class;
 
 	/// Request shutdown
@@ -166,7 +151,8 @@ SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
 /**
  * An SPViewWidget contains a GtkEventBox and a pointer to an SPView.
  */
-struct SPViewWidget {
+class SPViewWidget {
+ public:
 	GtkEventBox eventbox;
 
 	SPView *view;
@@ -189,10 +175,11 @@ struct SPViewWidget {
 /**
  * The Glib-style vtable for the SPViewWidget class.
  */
-struct SPViewWidgetClass {
+class SPViewWidgetClass {
+ public:
     GtkEventBoxClass parent_class;
 
-    /// Vrtual method to set/change/remove view
+    /* Virtual method to set/change/remove view */
     void (* set_view) (SPViewWidget *vw, SPView *view);
     /// Virtual method about view size change
     void (* view_resized) (SPViewWidget *vw, SPView *view, gdouble width, gdouble height);
@@ -203,4 +190,4 @@ struct SPViewWidgetClass {
 #define SP_VIEW_WIDGET_VIEW(w) (SP_VIEW_WIDGET (w)->view)
 #define SP_VIEW_WIDGET_DOCUMENT(w) (SP_VIEW_WIDGET (w)->view ? ((SPViewWidget *) (w))->view->doc : NULL)
 
-#endif
+#endif  // INKSCAPE_UI_VIEW_VIEW_H

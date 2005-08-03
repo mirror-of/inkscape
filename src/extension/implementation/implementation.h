@@ -16,10 +16,10 @@
 #include <gdkmm/types.h>
 #include <gtkmm/widget.h>
 
-#include <forward.h>
-#include <extension/extension-forward.h>
-#include <libnr/nr-forward.h>
-#include <libnr/nr-point.h>
+#include "forward.h"
+#include "extension/extension-forward.h"
+#include "libnr/nr-forward.h"
+#include "libnr/nr-point.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -61,11 +61,11 @@ public:
 
     /* ----- Effect functions ----- */
     /** Find out information about the file. */
-    virtual Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
+    virtual Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view);
     /* TODO: need to figure out what we need here */
 
     virtual void effect(Inkscape::Extension::Effect *module,
-                        SPView *document);
+                        Inkscape::UI::View::View *document);
 
     /* ----- Print functions ----- */
     virtual unsigned setup(Inkscape::Extension::Print *module);

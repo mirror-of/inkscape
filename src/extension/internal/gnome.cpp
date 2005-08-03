@@ -7,6 +7,9 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Ted Gould <ted@gould.cx>
  *
+ *
+ * Copyright (C) 2005 Authors
+ *
  * Lauris: This code is in public domain
  * Ted: This code is under the GNU GPL
  */
@@ -19,13 +22,13 @@
 
 #include <string.h>
 
-#include <libnr/n-art-bpath.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-path.h>
-#include <libnr/nr-pixblock.h>
-#include <display/canvas-bpath.h>
+#include "libnr/n-art-bpath.h"
+#include "libnr/nr-rect.h"
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-path.h"
+#include "libnr/nr-pixblock.h"
+#include "display/canvas-bpath.h"
 
 #include <glib.h>
 #include <gtk/gtkdialog.h>
@@ -45,8 +48,8 @@
 
 #include "gnome.h"
 
-#include <extension/extension.h>
-#include <extension/system.h>
+#include "extension/extension.h"
+#include "extension/system.h"
 
 static ArtBpath *nr_artpath_to_art_bpath(NArtBpath const *s);
 

@@ -4,7 +4,7 @@
  * Author:
  *   Bryce W. Harrington <bryce@bryceharrington.org>
  *
- * Copyright (C) 2004 Bryce Harrington
+ * Copyright (C) 2004, 2005 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */

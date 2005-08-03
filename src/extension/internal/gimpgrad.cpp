@@ -18,11 +18,11 @@
 #endif
 
 #include <glibmm/ustring.h>
-#include <extension/implementation/implementation.h>
+#include "extension/implementation/implementation.h"
 #include <color-rgba.h>
-#include <document.h>
+#include "document.h"
 #include "io/sys.h"
-#include <extension/system.h>
+#include "extension/system.h"
 
 #include "gimpgrad.h"
 

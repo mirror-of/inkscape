@@ -13,7 +13,7 @@
 #ifndef EXTENSION_INTERNAL_PS_OUT_H
 #define EXTENSION_INTERNAL_PS_OUT_H
 
-#include <extension/implementation/implementation.h>
+#include "extension/implementation/implementation.h"
 
 namespace Inkscape {
 namespace Extension {

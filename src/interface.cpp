@@ -72,7 +72,7 @@ using Inkscape::IO::StringOutputStream;
 using Inkscape::IO::Base64OutputStream;
 
 /* forward declaration */
-static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
+static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, Inkscape::UI::View::View *view);
 
 /* Drag and Drop */
 typedef enum {
@@ -293,7 +293,7 @@ sp_ui_close_all (void)
 }
 
 static gint
-sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
+sp_ui_delete (GtkWidget *widget, GdkEvent *event, Inkscape::UI::View::View *view)
 {
 	return sp_view_shutdown (view);
 }
@@ -326,14 +326,14 @@ sp_ui_menu_deselect_action (void *object, SPAction *action)
 static void
 sp_ui_menu_select (gpointer object, gpointer tip)
 {
-	SPView *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
+	Inkscape::UI::View::View *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
         view->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, (gchar *)tip);
 }
 
 static void
 sp_ui_menu_deselect (gpointer object)
 {
-	SPView *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
+	Inkscape::UI::View::View *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
         view->tipsMessageContext()->clear();
 }
 
@@ -362,7 +362,7 @@ sp_ui_menuitem_add_icon ( GtkWidget *item, gchar * icon_name )
 
 static GtkWidget *
 sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock,
-                         const gchar *label, const gchar *tip, SPView *view, GCallback callback,
+                         const gchar *label, const gchar *tip, Inkscape::UI::View::View *view, GCallback callback,
                          gpointer data, gboolean with_mnemonic = TRUE )
 {
     GtkWidget *item;
@@ -519,7 +519,7 @@ sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c)
  */
 
 static GtkWidget *
-sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, SPView *view)
+sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, Inkscape::UI::View::View *view)
 {
     SPAction *action;
     GtkWidget *item;
@@ -581,7 +581,7 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, SPView *
 
 
 static void
-sp_ui_menu_append (GtkMenu *menu, Inkscape::Verb ** verbs, SPView *view)
+sp_ui_menu_append (GtkMenu *menu, Inkscape::Verb ** verbs, Inkscape::UI::View::View *view)
 {
     int i;
     for (i = 0; verbs[i]->get_code() != SP_VERB_LAST; i++) {
@@ -590,11 +590,11 @@ sp_ui_menu_append (GtkMenu *menu, Inkscape::Verb ** verbs, SPView *view)
     }
 }
 
- static void
+static void
 checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
  {
      const gchar *pref = (const gchar *) user_data;
-     SPView *view = (SPView *) g_object_get_data (G_OBJECT (menuitem), "view");
+     Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data (G_OBJECT (menuitem), "view");
 
      const gchar *pref_path;
      if (SP_DESKTOP(view)->is_fullscreen)
@@ -614,7 +614,7 @@ checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
      GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget);
 
      const gchar *pref = (const gchar *) user_data;
-     SPView *view = (SPView *) g_object_get_data (G_OBJECT(menuitem), "view");
+     Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data (G_OBJECT(menuitem), "view");
 
      const gchar *pref_path;
      if (SP_DESKTOP(view)->is_fullscreen)
@@ -633,7 +633,7 @@ checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 
 
 void
-sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar *label, const gchar *tip, const gchar *pref,
+sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, Inkscape::UI::View::View *view, const gchar *label, const gchar *tip, const gchar *pref,
                               void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
                               gboolean (*callback_update)(GtkWidget *widget, GdkEventExpose *event, gpointer user_data),
                                         Inkscape::Verb * verb)
@@ -708,7 +708,7 @@ sp_file_new_from_template (GtkWidget *widget, const gchar *uri)
 }
 
 void
-sp_menu_append_new_templates (GtkWidget *menu, SPView *view)
+sp_menu_append_new_templates (GtkWidget *menu, Inkscape::UI::View::View *view)
 {
     GDir *dir = g_dir_open (INKSCAPE_TEMPLATESDIR, 0, NULL);
     if (!dir)
@@ -748,7 +748,7 @@ sp_menu_append_new_templates (GtkWidget *menu, SPView *view)
 }
 
 void
-sp_menu_append_recent_documents (GtkWidget *menu, SPView* /* view */)
+sp_menu_append_recent_documents (GtkWidget *menu, Inkscape::UI::View::View* /* view */)
 {
 	const gchar ** recent;
 
@@ -784,7 +784,7 @@ sp_menu_append_recent_documents (GtkWidget *menu, SPView* /* view */)
     \param  view  The view of the document this is being attached to.
 */
 static void
-sp_ui_effect_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
+sp_ui_effect_menu (GtkMenu *menu, SPDocument *doc, Inkscape::UI::View::View *view)
 {
     Inkscape::Extension::DB::EffectList effectlist;
     Inkscape::Extension::db.get_effect_list(effectlist);
@@ -803,7 +803,7 @@ sp_ui_effect_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 }
 
 void
-sp_ui_checkboxes_menus (GtkMenu * m, SPView * view)
+sp_ui_checkboxes_menus (GtkMenu * m, Inkscape::UI::View::View *view)
 {
 //    sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 //                                  checkitem_toggled, checkitem_update, 0);
@@ -822,7 +822,7 @@ sp_ui_checkboxes_menus (GtkMenu * m, SPView * view)
 }
 
 void
-sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, SPView * view)
+sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, Inkscape::UI::View::View *view)
 {
     for (Inkscape::XML::Node * menu_pntr = menus;
          menu_pntr != NULL;
@@ -879,7 +879,7 @@ sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, SPView * v
 }
 
 GtkWidget *
-sp_ui_main_menubar (SPView *view)
+sp_ui_main_menubar (Inkscape::UI::View::View *view)
 {
 	GtkWidget *mbar;
 
@@ -900,7 +900,7 @@ static void enter_group(GtkMenuItem *mi, SPDesktop *desktop) {
 }
 
 GtkWidget *
-sp_ui_context_menu (SPView *view, SPItem *item)
+sp_ui_context_menu (Inkscape::UI::View::View *view, SPItem *item)
 {
 	GtkWidget *m;
 	SPDesktop *dt;

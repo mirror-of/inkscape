@@ -23,28 +23,28 @@
 #include <unistd.h>
 #include <errno.h>
 #include <svg/svg.h>
-#include <interface.h>
-#include <document.h>
-#include <inkscape.h>
-#include <desktop.h>
-#include <desktop-handles.h>
-#include <selection.h>
-#include <file.h>
-#include <sp-object.h>
-#include <sp-namedview.h>
+#include "interface.h"
+#include "document.h"
+#include "inkscape.h"
+#include "desktop.h"
+#include "desktop-handles.h"
+#include "selection.h"
+#include "file.h"
+#include "sp-object.h"
+#include "sp-namedview.h"
 #include "io/sys.h"
-#include <prefs-utils.h>
+#include "prefs-utils.h"
 
 #include <fstream>
 #include <glibmm/i18n.h>
 
 #include "../system.h"
 
-#include <extension/extension.h>
-#include <extension/input.h>
-#include <extension/output.h>
-#include <extension/effect.h>
-#include <extension/db.h>
+#include "extension/extension.h"
+#include "extension/input.h"
+#include "extension/output.h"
+#include "extension/effect.h"
+#include "extension/db.h"
 #include "implementation.h"
 #include "script.h"
 
@@ -392,7 +392,7 @@ Script::prefs_output(Inkscape::Extension::Output *module)
     This function should really do something, right now it doesn't.
 */
 Gtk::Widget *
-Script::prefs_effect(Inkscape::Extension::Effect *module, SPView *view)
+Script::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *view)
 {
     return module->autogui();
 }
@@ -570,7 +570,7 @@ Script::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *
     point both should be full, and the second one is loaded.
 */
 void
-Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
+Script::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc)
 {
     int data_read = 0;
     SPDocument * mydoc = NULL;

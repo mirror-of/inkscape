@@ -320,7 +320,7 @@ sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPActi
 GtkWidget *
 sp_button_new_from_data( GtkIconSize size,
 			 SPButtonType type,
-			 SPView *view,
+			 Inkscape::UI::View::View *view,
 			 const gchar *name,
 			 const gchar *tip,
 			 GtkTooltips *tooltips )

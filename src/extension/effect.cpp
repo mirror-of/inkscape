@@ -7,11 +7,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <helper/action.h>
-#include <document.h>
-
+#include "helper/action.h"
+#include "document.h"
 #include "prefdialog.h"
-
 #include "implementation/implementation.h"
 #include "effect.h"
 
@@ -42,7 +40,7 @@ Effect::check (void)
 }
 
 bool
-Effect::prefs (SPView * doc)
+Effect::prefs (Inkscape::UI::View::View * doc)
 {
     if (!loaded())
         set_state(Extension::STATE_LOADED);
@@ -68,7 +66,7 @@ Effect::prefs (SPView * doc)
 
 /**
     \brief  The function that 'does' the effect itself
-    \param  doc  The SPView to do the effect on
+    \param  doc  The Inkscape::UI::View::View to do the effect on
 
     This function first insures that the extension is loaded, and if not,
     loads it.  It then calls the implemention to do the actual work.  It
@@ -77,7 +75,7 @@ Effect::prefs (SPView * doc)
     stack.
 */
 void
-Effect::effect (SPView * doc)
+Effect::effect (Inkscape::UI::View::View * doc)
 {
     if (!loaded())
         set_state(Extension::STATE_LOADED);
@@ -114,7 +112,7 @@ Effect::set_last_effect (Effect * in_effect)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-Effect::EffectVerb::make_action (SPView * view)
+Effect::EffectVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector, static_cast<void *>(_effect));
 }
@@ -123,7 +121,7 @@ Effect::EffectVerb::make_action (SPView * view)
 void
 Effect::EffectVerb::perform (SPAction *action, void * data, void *pdata)
 {
-    SPView * current_view = sp_action_get_view(action);
+    Inkscape::UI::View::View * current_view = sp_action_get_view(action);
 //  SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
     Effect * effect = reinterpret_cast<Effect *>(data);
 

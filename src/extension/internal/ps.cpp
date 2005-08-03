@@ -60,22 +60,22 @@
 #include "sp-item.h"
 #include "style.h"
 #include "inkscape_version.h"
-#include <sp-gradient.h>
-#include <sp-gradient-vector.h>
-#include <sp-linear-gradient.h>
-#include <sp-pattern.h>
-#include <sp-radial-gradient.h>
+#include "sp-gradient.h"
+#include "sp-gradient-vector.h"
+#include "sp-linear-gradient.h"
+#include "sp-pattern.h"
+#include "sp-radial-gradient.h"
 
-#include <libnrtype/FontFactory.h>
-#include <libnrtype/font-instance.h>
-#include <libnrtype/font-style-to-pos.h>
+#include "libnrtype/FontFactory.h"
+#include "libnrtype/font-instance.h"
+#include "libnrtype/font-style-to-pos.h"
 
 #include <unit-constants.h>
 
 #include "ps.h"
-#include <extension/system.h>
-#include <extension/extension.h>
-#include <extension/print.h>
+#include "extension/system.h"
+#include "extension/extension.h"
+#include "extension/print.h"
 
 #include "io/sys.h"
 

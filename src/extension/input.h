@@ -11,10 +11,10 @@
 #ifndef INKSCAPE_EXTENSION_INPUT_H__
 #define INKSCAPE_EXTENSION_INPUT_H__
 
-#include "extension.h"
 #include <glib.h>
-#include <xml/repr.h>
-#include <document.h>
+#include "extension.h"
+#include "xml/repr.h"
+#include "document.h"
 #include <gtk/gtkdialog.h>
 
 namespace Inkscape {

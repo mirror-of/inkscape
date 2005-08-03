@@ -14,13 +14,19 @@
 #include <config.h>
 
 #include <gtk/gtkdialog.h>
-#include <verbs.h>
+#include "verbs.h"
 
 #include "extension.h"
 
 struct SPDocument;
 
 namespace Inkscape {
+namespace UI {
+namespace View {
+typedef SPView View;
+};
+};
+
 namespace Extension {
 
 class Effect : public Extension {
@@ -33,7 +39,7 @@ class Effect : public Extension {
 
             Effect * _effect;
         protected:
-            virtual SPAction * make_action (SPView * view);
+            virtual SPAction * make_action (Inkscape::UI::View::View * view);
         public:
             /** \brief Use the Verb initializer with the same parameters. */
             EffectVerb(gchar const * id,
@@ -52,8 +58,8 @@ public:
                           Implementation::Implementation * in_imp);
     virtual     ~Effect  (void);
     virtual bool check                (void);
-    bool         prefs   (SPView * doc);
-    void         effect  (SPView * doc);
+    bool         prefs   (Inkscape::UI::View::View * doc);
+    void         effect  (Inkscape::UI::View::View * doc);
     Inkscape::Verb * get_verb (void) { return &_verb; };
 
     static Effect *  get_last_effect (void) { return _last_effect; };

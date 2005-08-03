@@ -6,7 +6,7 @@
  *   Bob Jamison
  *   Other dudes from The Inkscape Organization
  *
- * Copyright (C) 2004 The Inkscape Organization
+ * Copyright (C) 2004, 2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

@@ -11,7 +11,7 @@
 #ifndef EXTENSION_INTERNAL_LATEX_OUT_H
 #define EXTENSION_INTERNAL_LATEX_OUT_H
 
-#include <extension/implementation/implementation.h>
+#include "extension/implementation/implementation.h"
 
 namespace Inkscape {
 namespace Extension {

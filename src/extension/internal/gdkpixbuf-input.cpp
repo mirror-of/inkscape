@@ -3,12 +3,12 @@
 #endif
 #include <string.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <document.h>
-#include <document-private.h>
-#include <sp-object.h>
+#include "document.h"
+#include "document-private.h"
+#include "sp-object.h"
 #include <dir-util.h>
-#include <prefs-utils.h>
-#include <extension/system.h>
+#include "prefs-utils.h"
+#include "extension/system.h"
 #include "gdkpixbuf-input.h"
 
 namespace Inkscape {

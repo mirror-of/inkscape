@@ -7,8 +7,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <extension/implementation/implementation.h>
-#include <extension/extension-forward.h>
+#include "extension/implementation/implementation.h"
+#include "extension/extension-forward.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -21,8 +21,8 @@ class Grid : public Inkscape::Extension::Implementation::Implementation {
 
 public:
     bool load(Inkscape::Extension::Extension *module);
-    void effect(Inkscape::Extension::Effect *module, SPView *document);
-    Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
+    void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document);
+    Gtk::Widget * prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view);
 
     static void init (void);
 };

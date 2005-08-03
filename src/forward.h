@@ -173,6 +173,14 @@ class SPEvent;
 class SPPrintContext;
 
 class SPView;
+namespace Inkscape {
+namespace UI {
+namespace View {
+typedef SPView View;
+};
+};
+};
+
 class SPViewClass;
 
 class SPViewWidget;

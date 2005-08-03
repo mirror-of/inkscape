@@ -51,11 +51,6 @@ enum ColorComponent {
 };
 
 
-
-
-
-
-
 struct StopOnTrue {
   typedef bool result_type;
 
@@ -68,17 +63,16 @@ struct StopOnTrue {
 };
 
 
+namespace Inkscape { 
+  class Selection; 
 
-
-namespace Inkscape { class Selection; }
-
-namespace Inkscape {
-namespace Whiteboard {
-class SessionManager;
-}
+  namespace Whiteboard {
+    class SessionManager;
+  }
 }
 
-struct SPDesktop : public SPView {
+struct SPDesktop : public Inkscape::UI::View::View {
+
     Inkscape::MessageContext *guidesMessageContext() {
 	return _guides_message_context;
     }
@@ -146,13 +140,13 @@ struct SPDesktop : public SPView {
     bool isWithinViewport(SPItem *item) const;
     bool itemIsHidden(SPItem const *item) const;
     
-    static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
+    static void _set_status_message(Inkscape::UI::View::View *view, Inkscape::MessageType type, gchar const *message);
     static void _layer_activated(SPObject *layer, SPDesktop *desktop);
     static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
     static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
     static void _selection_changed(Inkscape::Selection *selection, SPDesktop *desktop);
-	static void _reconstruction_start(SPDesktop * desktop);
-	static void _reconstruction_finish(SPDesktop * desktop);
+    static void _reconstruction_start(SPDesktop * desktop);
+    static void _reconstruction_finish(SPDesktop * desktop);
 
     sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
     

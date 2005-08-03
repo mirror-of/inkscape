@@ -167,7 +167,7 @@ namespace {
 
 /** Helper function - detaches desktop from selector 
  */
-gboolean detach(SPView *view, LayerSelector *selector) {
+gboolean detach(Inkscape::UI::View::View *view, LayerSelector *selector) {
     selector->setDesktop(NULL);
     return FALSE;
 }

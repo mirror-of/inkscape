@@ -18,8 +18,8 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/paned.h>
 
-#include <inkscape.h>
-#include <prefs-utils.h>
+#include "inkscape.h"
+#include "prefs-utils.h"
 #include "extension/extension.h"
 #include "dialogs/extensions.h"
 

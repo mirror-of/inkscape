@@ -79,7 +79,7 @@ sp_action_finalize (NRObject *object)
 }
 
 SPAction *
-sp_action_new(SPView *view,
+sp_action_new(Inkscape::UI::View::View *view,
               const gchar *id,
               const gchar *name,
               const gchar *tip,
@@ -188,7 +188,7 @@ sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 	}
 }
 
-SPView *
+Inkscape::UI::View::View *
 sp_action_get_view (SPAction *action)
 {
 	g_return_val_if_fail (SP_IS_ACTION (action), NULL);

@@ -23,8 +23,8 @@
 #endif
 #include <windows.h>
 
-#include <extension/extension.h>
-#include <extension/implementation/implementation.h>
+#include "extension/extension.h"
+#include "extension/implementation/implementation.h"
 
 namespace Inkscape {
 namespace Extension {

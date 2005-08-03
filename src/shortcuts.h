@@ -12,6 +12,7 @@
 
 #include <forward.h>
 
+
 /* We define high-bit mask for packing into single int */
 
 #define SP_SHORTCUT_SHIFT_MASK (1 << 24)
@@ -19,7 +20,7 @@
 #define SP_SHORTCUT_ALT_MASK (1 << 26)
 
 /* Returns true if action was performed */
-bool sp_shortcut_invoke (unsigned int shortcut, SPView *view);
+bool sp_shortcut_invoke (unsigned int shortcut, Inkscape::UI::View::View *view);
 
 void sp_shortcut_set (unsigned int shortcut, Inkscape::Verb * verb, bool is_primary);
 void sp_shortcut_clear (unsigned int shortcut);

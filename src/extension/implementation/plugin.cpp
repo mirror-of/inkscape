@@ -18,8 +18,8 @@
 #include <glibmm/module.h>
 #include <glibmm/fileutils.h>
 #include <path-prefix.h>
-#include <extension/extension.h>
-#include <xml/repr.h>
+#include "extension/extension.h"
+#include "xml/repr.h"
 #include "plugin.h"
 #include "plugin-link.h"
 
@@ -223,7 +223,7 @@ Plugin::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *
 }
 
 Gtk::Widget *
-Plugin::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
+Plugin::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View * view)
 {
     if (_symTable->prefs_effect != NULL) {
         return _symTable->prefs_effect((inkscape_extension *)module, view);
@@ -233,7 +233,7 @@ Plugin::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
 }
 
 void 
-Plugin::effect(Inkscape::Extension::Effect *module, SPView *document)
+Plugin::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document)
 {
     if (_symTable->effect != NULL) {
         return _symTable->effect((inkscape_extension *)module, document);

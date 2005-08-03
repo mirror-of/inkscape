@@ -15,7 +15,7 @@
  */
 #include <gtkmm/widget.h>
 
-#include <xml/document.h>
+#include "xml/document.h"
 #include "extension-forward.h"
 
 namespace Inkscape {

@@ -33,7 +33,7 @@ void show_aux_toolbox(GtkWidget *toolbox);
 GtkWidget *sp_toolbox_button_normal_new_from_verb(GtkWidget *t,
                                                   GtkIconSize size,
                                                   Inkscape::Verb * verb,
-                                                  SPView *view,
+                                                  Inkscape::UI::View::View *view,
                                                   GtkTooltips *tt);
 
 void aux_toolbox_space(GtkWidget *tb, gint space);

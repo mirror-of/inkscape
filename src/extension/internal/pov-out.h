@@ -16,8 +16,8 @@
 #ifndef EXTENSION_INTERNAL_POV_OUT_H
 #define EXTENSION_INTERNAL_POV_OUT_H
 
-#include <extension/implementation/implementation.h>
 #include <glib.h>
+#include "extension/implementation/implementation.h"
 
 namespace Inkscape {
 namespace Extension {

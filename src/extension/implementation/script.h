@@ -62,9 +62,9 @@ public:
                                         gchar const *filename);
     virtual Gtk::Widget *
                           prefs_effect (Inkscape::Extension::Effect *module,
-                                        SPView * view);
+                                        Inkscape::UI::View::View * view);
     virtual void          effect       (Inkscape::Extension::Effect *module,
-                                        SPView *doc);
+                                        Inkscape::UI::View::View *doc);
 
 };
 

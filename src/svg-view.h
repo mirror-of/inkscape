@@ -32,7 +32,7 @@ void sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepas
 /**
  * Generic SVG view.
  */
-struct SPSVGView : public SPView {
+struct SPSVGView : public Inkscape::UI::View::View {
     public:
 	unsigned int dkey;
 
@@ -65,7 +65,7 @@ struct SPSVGViewClass {
 
 GtkType sp_svg_view_get_type (void);
 
-SPView *sp_svg_view_new (SPCanvasGroup *parent);
+Inkscape::UI::View::View *sp_svg_view_new (SPCanvasGroup *parent);
 
 /* SPSVGViewWidget */
 

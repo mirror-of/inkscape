@@ -14,7 +14,7 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkwidget.h>
 
-#include <extension/implementation/implementation.h>
+#include "extension/implementation/implementation.h"
 
 namespace Inkscape {
 namespace Extension {

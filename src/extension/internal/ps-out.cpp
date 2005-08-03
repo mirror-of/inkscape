@@ -15,8 +15,8 @@
 #endif
 #include "ps-out.h"
 #include <print.h>
-#include <extension/system.h>
-#include <extension/db.h>
+#include "extension/system.h"
+#include "extension/db.h"
 
 namespace Inkscape {
 namespace Extension {

@@ -43,12 +43,12 @@ unsigned int sp_ui_close_all (void);
 /**
  *
  */
-GtkWidget *sp_ui_main_menubar (SPView *view);
+GtkWidget *sp_ui_main_menubar (Inkscape::UI::View::View *view);
 
 /**
  *
  */
-GtkWidget *sp_ui_context_menu (SPView *v, SPItem *item);
+GtkWidget *sp_ui_context_menu (Inkscape::UI::View::View *v, SPItem *item);
 
 
 /**

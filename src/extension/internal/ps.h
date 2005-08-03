@@ -13,11 +13,11 @@
  */
 
 #include <config.h>
-#include <extension/extension.h>
-#include <extension/implementation/implementation.h>
+#include "extension/extension.h"
+#include "extension/implementation/implementation.h"
 #include <set>
 
-#include <libnr/nr-path.h>
+#include "libnr/nr-path.h"
 
 #include "svg/stringstream.h"
 

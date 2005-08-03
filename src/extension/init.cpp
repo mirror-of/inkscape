@@ -22,8 +22,8 @@
 #include <glib.h>
 #include <string.h>
 
-#include <inkscape.h>
-#include <xml/repr.h>
+#include "inkscape.h"
+#include "xml/repr.h"
 #include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 

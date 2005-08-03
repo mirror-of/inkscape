@@ -33,7 +33,7 @@
 /* Returns true if action was performed */
 
 bool
-sp_shortcut_invoke(unsigned int shortcut, SPView *view)
+sp_shortcut_invoke(unsigned int shortcut, Inkscape::UI::View::View *view)
 {
     Inkscape::Verb *verb = sp_shortcut_get_verb(shortcut);
     if (verb) {

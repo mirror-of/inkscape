@@ -12,18 +12,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <desktop.h>
-#include <selection.h>
-#include <helper/action.h>
-#include <prefs-utils.h>
-#include <path-chemistry.h>
+#include "desktop.h"
+#include "selection.h"
+#include "helper/action.h"
+#include "prefs-utils.h"
+#include "path-chemistry.h"
 
 #include "util/glib-list-iterators.h"
 
-#include <extension/implementation/implementation.h>
-#include <extension/extension.h>
-#include <extension/effect.h>
-#include <extension/system.h>
+#include "extension/implementation/implementation.h"
+#include "extension/extension.h"
+#include "extension/effect.h"
+#include "extension/system.h"
 
 #include <glibmm/i18n.h>
 
@@ -52,7 +52,7 @@ BlurEdge::load (Inkscape::Extension::Extension *module)
     \param  document What should be edited.
 */
 void
-BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
+BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document)
 {
     Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
 
@@ -121,7 +121,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, SPView *document)
 }
 
 Gtk::Widget *
-BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, SPView * view)
+BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, Inkscape::UI::View::View * view)
 {
     return module->autogui();
 }

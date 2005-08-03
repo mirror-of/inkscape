@@ -16,8 +16,8 @@
 #define INKSCAPE_EXTENSION_SYSTEM_H__
 
 #include <gtk/gtk.h>
-#include <document.h>
-#include <extension/extension.h>
+#include "document.h"
+#include "extension/extension.h"
 
 namespace Inkscape {
 namespace Extension {

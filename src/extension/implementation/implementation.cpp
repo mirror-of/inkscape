@@ -15,7 +15,7 @@
 #endif
 #include "../extension.h"
 #include "implementation.h"
-#include <libnr/nr-point.h>
+#include "libnr/nr-point.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -65,12 +65,12 @@ Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, co
 } /* Implementation::save */
 
 Gtk::Widget *
-Implementation::prefs_effect (Inkscape::Extension::Effect * module, SPView * view) {
+Implementation::prefs_effect (Inkscape::Extension::Effect * module, Inkscape::UI::View::View * view) {
 	return (Gdk::NativeWindow)0;
 } /* Implementation::prefs_effect */
 
 void
-Implementation::effect (Inkscape::Extension::Effect * module, SPView * document) {
+Implementation::effect (Inkscape::Extension::Effect * module, Inkscape::UI::View::View * document) {
 	/* throw filter_fail */
 	return;
 } /* Implementation::filter */

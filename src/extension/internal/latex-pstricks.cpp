@@ -17,14 +17,14 @@
 #include <signal.h>
 #include <errno.h>
 
-#include <libnr/n-art-bpath.h>
-#include <libnr/nr-point-matrix-ops.h>
-#include <libnr/nr-rect.h>
-#include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-path.h>
-#include <libnr/nr-pixblock.h>
-#include <display/canvas-bpath.h>
+#include "libnr/n-art-bpath.h"
+#include "libnr/nr-point-matrix-ops.h"
+#include "libnr/nr-rect.h"
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-path.h"
+#include "libnr/nr-pixblock.h"
+#include "display/canvas-bpath.h"
 #include "sp-item.h"
 
 #include <glib.h>
@@ -43,9 +43,9 @@
 
 #include <unit-constants.h>
 
-#include <extension/extension.h>
-#include <extension/system.h>
-#include <extension/print.h>
+#include "extension/extension.h"
+#include "extension/system.h"
+#include "extension/print.h"
 
 #include "io/sys.h"
 

@@ -19,9 +19,9 @@
 
 #include <interface.h>
 #include <glibmm/i18n.h>
-#include <xml/repr.h>
-#include <document.h>
-#include <inkscape.h>
+#include "xml/repr.h"
+#include "document.h"
+#include "inkscape.h"
 #include <desktop-handles.h>
 
 #include "extension/extension.h"

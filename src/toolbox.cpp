@@ -189,7 +189,7 @@ sp_toolbox_button_new(GtkWidget *t, GtkIconSize size, gchar const *pxname, GtkSi
 GtkWidget *
 sp_toolbox_button_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size, SPButtonType type,
                                                  Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
-                                                 SPView *view, GtkTooltips *tt)
+                                                 Inkscape::UI::View::View *view, GtkTooltips *tt)
 {
     SPAction *action = verb->get_action(view);
     if (!action) return NULL;
@@ -210,13 +210,13 @@ sp_toolbox_button_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size,
 }
 
 GtkWidget *sp_toolbox_button_new_from_verb(GtkWidget *t, GtkIconSize size, SPButtonType type, Inkscape::Verb *verb,
-                                           SPView *view, GtkTooltips *tt)
+                                           Inkscape::UI::View::View *view, GtkTooltips *tt)
 {
     return sp_toolbox_button_new_from_verb_with_doubleclick(t, size, type, verb, NULL, view, tt);
 }
 
 GtkWidget * sp_toolbox_button_normal_new_from_verb(GtkWidget *t, GtkIconSize size, Inkscape::Verb *verb,
-                                                   SPView *view, GtkTooltips *tt)
+                                                   Inkscape::UI::View::View *view, GtkTooltips *tt)
 {
     return sp_toolbox_button_new_from_verb(t, size, SP_BUTTON_TYPE_NORMAL, verb, view, tt);
 }
@@ -399,7 +399,7 @@ sp_node_path_edit_symmetrical(void)
 static GtkWidget *
 sp_node_toolbox_new(SPDesktop *desktop)
 {
-    SPView *view = SP_VIEW(desktop);
+    Inkscape::UI::View::View *view = SP_VIEW(desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
@@ -463,7 +463,7 @@ sp_node_toolbox_new(SPDesktop *desktop)
 static GtkWidget *
 sp_zoom_toolbox_new(SPDesktop *desktop)
 {
-    SPView *view=SP_VIEW(desktop);
+    Inkscape::UI::View::View *view=SP_VIEW(desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
@@ -630,7 +630,7 @@ update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *
 static void
 setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    SPView *view = SP_VIEW(desktop);
+    Inkscape::UI::View::View *view = SP_VIEW(desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);

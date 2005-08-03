@@ -21,15 +21,15 @@
 # include <config.h>
 #endif
 #include "pov-out.h"
-#include <inkscape.h>
-#include <sp-path.h>
+#include "inkscape.h"
+#include "sp-path.h"
 #include <style.h>
 #include <color.h>
-#include <display/curve.h>
-#include <libnr/n-art-bpath.h>
-#include <libnr/nr-point-matrix-ops.h>
-#include <extension/system.h>
-#include <extension/db.h>
+#include "display/curve.h"
+#include "libnr/n-art-bpath.h"
+#include "libnr/nr-point-matrix-ops.h"
+#include "extension/system.h"
+#include "extension/db.h"
 
 #include <stdio.h>
 #include <string.h>

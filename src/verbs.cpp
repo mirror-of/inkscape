@@ -161,7 +161,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     FileVerb(const unsigned int code,
@@ -180,7 +180,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     EditVerb(const unsigned int code,
@@ -199,7 +199,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     SelectionVerb(const unsigned int code,
@@ -218,7 +218,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     LayerVerb(const unsigned int code,
@@ -237,7 +237,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     ObjectVerb(const unsigned int code,
@@ -256,7 +256,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     ContextVerb(const unsigned int code,
@@ -275,7 +275,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     ZoomVerb(const unsigned int code,
@@ -294,7 +294,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     DialogVerb(const unsigned int code,
@@ -313,7 +313,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     HelpVerb(const unsigned int code,
@@ -332,7 +332,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     TutorialVerb(const unsigned int code,
@@ -390,7 +390,7 @@ Verb::~Verb (void)
     \return NULL to represent error (this function shouldn't ever be called)
 */
 SPAction *
-Verb::make_action (SPView * view)
+Verb::make_action (Inkscape::UI::View::View * view)
 {
 //    std::cout << "make_action" << std::endl;
     return NULL;
@@ -403,7 +403,7 @@ Verb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-FileVerb::make_action (SPView * view)
+FileVerb::make_action (Inkscape::UI::View::View * view)
 {
 //    std::cout << "fileverb: make_action: " << &vector << std::endl;
     return make_action_helper(view, &vector);
@@ -416,7 +416,7 @@ FileVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-EditVerb::make_action (SPView * view)
+EditVerb::make_action (Inkscape::UI::View::View * view)
 {
 //    std::cout << "editverb: make_action: " << &vector << std::endl;
     return make_action_helper(view, &vector);
@@ -429,7 +429,7 @@ EditVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-SelectionVerb::make_action (SPView * view)
+SelectionVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -441,7 +441,7 @@ SelectionVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-LayerVerb::make_action (SPView * view)
+LayerVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -453,7 +453,7 @@ LayerVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-ObjectVerb::make_action (SPView * view)
+ObjectVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -465,7 +465,7 @@ ObjectVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-ContextVerb::make_action (SPView * view)
+ContextVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -477,7 +477,7 @@ ContextVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-ZoomVerb::make_action (SPView * view)
+ZoomVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -489,7 +489,7 @@ ZoomVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-DialogVerb::make_action (SPView * view)
+DialogVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -501,7 +501,7 @@ DialogVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-HelpVerb::make_action (SPView * view)
+HelpVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -513,7 +513,7 @@ HelpVerb::make_action (SPView * view)
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-TutorialVerb::make_action (SPView * view)
+TutorialVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -532,7 +532,7 @@ TutorialVerb::make_action (SPView * view)
     the vector that is passed in.
 */
 SPAction *
-Verb::make_action_helper (SPView * view, SPActionEventVector * vector, void * in_pntr)
+Verb::make_action_helper (Inkscape::UI::View::View * view, SPActionEventVector * vector, void * in_pntr)
 {
     SPAction *action;
 
@@ -581,7 +581,7 @@ Verb::make_action_helper (SPView * view, SPActionEventVector * vector, void * in
     currently a linear search.
 */
 SPAction *
-Verb::get_action (SPView * view)
+Verb::get_action (Inkscape::UI::View::View * view)
 {
     SPAction * action = NULL;
 
@@ -644,7 +644,7 @@ Verb::sensitive (SPDocument * in_doc, bool in_sensitive)
     table is erased.
 */
 void
-Verb::delete_view (SPView * view)
+Verb::delete_view (Inkscape::UI::View::View * view)
 {
     if (_actions == NULL) return;
     if (_actions->empty()) return;
@@ -675,7 +675,7 @@ Verb::delete_view (SPView * view)
     deleted also.
 */
 void
-Verb::delete_all_view (SPView * view)
+Verb::delete_all_view (Inkscape::UI::View::View * view)
 {
     for (int i = 0; i <= SP_VERB_LAST; i++) {
         _base_verbs[i]->delete_view(view);
@@ -721,7 +721,7 @@ FileVerb::perform (SPAction *action, void * data, void *pdata)
 #if 0
     /* These aren't used, but are here to remind people not to use
        the CURRENT_DOCUMENT macros unless they really have to. */
-    SPView * current_view = sp_action_get_view(action);
+    Inkscape::UI::View::View * current_view = sp_action_get_view(action);
     SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
 #endif
     switch ((long) data) {
@@ -1709,7 +1709,7 @@ private:
     static void perform (SPAction * action, void * mydata, void * otherdata);
     static SPActionEventVector vector;
 protected:
-    virtual SPAction * make_action (SPView * view);
+    virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
     EffectLastVerb(const unsigned int code,
@@ -1735,7 +1735,7 @@ SPActionEventVector EffectLastVerb::vector =
     Calls \c make_action_helper with the \c vector.
 */
 SPAction *
-EffectLastVerb::make_action (SPView * view)
+EffectLastVerb::make_action (Inkscape::UI::View::View * view)
 {
     return make_action_helper(view, &vector);
 }
@@ -1746,7 +1746,7 @@ EffectLastVerb::perform (SPAction *action, void * data, void *pdata)
 {
     /* These aren't used, but are here to remind people not to use
        the CURRENT_DOCUMENT macros unless they really have to. */
-    SPView * current_view = sp_action_get_view(action);
+    Inkscape::UI::View::View * current_view = sp_action_get_view(action);
     // SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
     Inkscape::Extension::Effect * effect = Inkscape::Extension::Effect::get_last_effect();
 

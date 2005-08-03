@@ -1,7 +1,10 @@
 /**
  * \brief Memory statistics dialog
  *
- * Copyright 2005 MenTaLguY <mental@rydia.net>
+ * Authors:
+ *     MenTaLguY <mental@rydia.net>
+ * 
+ * Copyright 2005 Authors
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */

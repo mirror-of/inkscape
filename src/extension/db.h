@@ -20,7 +20,7 @@
 
 #include <glib.h>
 #include <gtkmm.h>
-#include <extension/extension.h>
+#include "extension/extension.h"
 
 namespace Inkscape {
 namespace Extension {

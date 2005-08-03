@@ -33,9 +33,11 @@ enum {
     LAST_SIGNAL
 };
 
+using namespace Inkscape::UI::View;
+
 static void sp_view_class_init(SPViewClass *vc);
 
-static void sp_view_document_uri_set(gchar const *uri, SPView *view);
+static void sp_view_document_uri_set(gchar const *uri, View *view);
 static void sp_view_document_resized(gdouble width, gdouble height, SPView *view);
 
 static GObjectClass *parent_class;
@@ -61,7 +63,7 @@ GtkType sp_view_get_type(void)
             (GInstanceInitFunc) &SPView::init,
             NULL
         };
-        type = g_type_register_static(G_TYPE_OBJECT, "SPView", &info, (GTypeFlags) 0);
+        type = g_type_register_static(G_TYPE_OBJECT, "View", &info, (GTypeFlags) 0);
     }
     
     return type;
@@ -212,16 +214,20 @@ void SPView::dispose(GObject *object)
  *  \return The result that is returned by the signal handler, which
  *  is 0 (FALSE) if the user cancels the close, or non-zero otherwise.
  */
-gboolean sp_view_shutdown(SPView *view)
-{
+gboolean SPView::shutdown() {
     gboolean result = FALSE;
 
+    g_signal_emit(G_OBJECT(this), signals[SHUTDOWN], 0, &result);
+
+    return result;
+}
+
+gboolean sp_view_shutdown(SPView *view)
+{
     g_return_val_if_fail(view != NULL, TRUE);
     g_return_val_if_fail(SP_IS_VIEW(view), TRUE);
 
-    g_signal_emit(G_OBJECT(view), signals[SHUTDOWN], 0, &result);
-
-    return result;
+    return view->shutdown();
 }
 
 /**
@@ -234,6 +240,12 @@ void SPView::_set_status_message(Inkscape::MessageType type, gchar const *messag
     }
 }
 
+void SPView::requestRedraw() {
+    if (((SPViewClass *) G_OBJECT_GET_CLASS(this))->request_redraw) {
+        ((SPViewClass *) G_OBJECT_GET_CLASS(this))->request_redraw(this);
+    }    
+}
+
 /**
  * Calls the virtual function request_redraw() of the view.
  */
@@ -242,9 +254,7 @@ void sp_view_request_redraw(SPView *view)
     g_return_if_fail(view != NULL);
     g_return_if_fail(SP_IS_VIEW(view));
 
-    if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->request_redraw) {
-        ((SPViewClass *) G_OBJECT_GET_CLASS(view))->request_redraw(view);
-    }
+    view->requestRedraw();
 }
 
 /**
@@ -254,30 +264,39 @@ void sp_view_request_redraw(SPView *view)
  * 
  * \param doc The new document to connect the view to.
  */
+void SPView::setDocument(SPDocument *doc) {
+    g_return_if_fail(doc != NULL);
+
+    if (((SPViewClass *) G_OBJECT_GET_CLASS(this))->set_document) {
+        ((SPViewClass *) G_OBJECT_GET_CLASS(this))->set_document(this, doc);
+    }
+
+    if (this->doc) {
+        this->_document_uri_set_connection.disconnect();
+        this->_document_resized_connection.disconnect();
+        sp_document_unref(this->doc);
+        this->doc = NULL;
+    }
+
+    if (doc) {
+        this->doc = sp_document_ref(doc);
+        this->_document_uri_set_connection = doc->connectURISet(sigc::bind(sigc::ptr_fun(&sp_view_document_uri_set), this));
+        this->_document_resized_connection = doc->connectResized(sigc::bind(sigc::ptr_fun(&sp_view_document_resized), this));
+    }
+
+    g_signal_emit(G_OBJECT(this), signals[URI_SET], 0, (doc) ? SP_DOCUMENT_URI(doc) : NULL);
+}
+
 void sp_view_set_document(SPView *view, SPDocument *doc)
 {
     g_return_if_fail(view != NULL);
     g_return_if_fail(SP_IS_VIEW(view));
-    g_return_if_fail(doc != NULL);
-    
-    if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_document) {
-        ((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_document(view, doc);
-    }
 
-    if (view->doc) {
-        view->_document_uri_set_connection.disconnect();
-        view->_document_resized_connection.disconnect();
-        sp_document_unref(view->doc);
-        view->doc = NULL;
-    }
-
-    if (doc) {
-        view->doc = sp_document_ref(doc);
-        view->_document_uri_set_connection = doc->connectURISet(sigc::bind(sigc::ptr_fun(&sp_view_document_uri_set), view));
-        view->_document_resized_connection = doc->connectResized(sigc::bind(sigc::ptr_fun(&sp_view_document_resized), view));
-    }
-
-    g_signal_emit(G_OBJECT(view), signals[URI_SET], 0, (doc) ? SP_DOCUMENT_URI(doc) : NULL);
+    view->setDocument(doc);
+}
+ 
+void SPView::emitResized(gdouble width, gdouble height) {
+    g_signal_emit(G_OBJECT(this), signals[RESIZED], 0, width, height);
 }
 
 /**
@@ -288,7 +307,11 @@ void sp_view_emit_resized(SPView *view, gdouble width, gdouble height)
     g_return_if_fail(view != NULL);
     g_return_if_fail(SP_IS_VIEW (view));
 
-    g_signal_emit(G_OBJECT(view), signals[RESIZED], 0, width, height);
+    view->emitResized(width, height);
+}
+
+void SPView::setPosition(gdouble x, gdouble y) {
+    g_signal_emit(G_OBJECT(this), signals[POSITION_SET], 0, x, y);
 }
 
 /**
@@ -299,7 +322,7 @@ void sp_view_set_position(SPView *view, gdouble x, gdouble y)
     g_return_if_fail(view != NULL);
     g_return_if_fail(SP_IS_VIEW(view));
 
-    g_signal_emit(G_OBJECT(view), signals[POSITION_SET], 0, x, y);
+    view->setPosition(x, y);
 }
 
 /**

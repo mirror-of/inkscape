@@ -34,8 +34,8 @@
 #include "document.h"
 #include "prefs-utils.h"
 #include "extension.h"
-#include <extension/implementation/implementation.h>
-#include <libnr/nr-point.h>
+#include "extension/implementation/implementation.h"
+#include "libnr/nr-point.h"
 
 #include "db.h"
 #include "dependency.h"

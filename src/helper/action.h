@@ -48,7 +48,7 @@ struct SPActionEventVector {
 struct SPAction : public NRActiveObject {
     unsigned sensitive : 1;  /**< Value to track whether the action is sensitive */
     unsigned active : 1;     /**< Value to track whether the action is active */
-    SPView *view;            /**< The SPView to which this action is attached */
+    Inkscape::UI::View::View *view;            /**< The View to which this action is attached */
     gchar *id;               /**< The identifier for the action */
     gchar *name;             /**< Full text name of the action */
     gchar *tip;              /**< A tooltip to describe the action */
@@ -63,7 +63,7 @@ struct SPActionClass {
 
 NRType sp_action_get_type();
 
-SPAction *sp_action_new(SPView *view,
+SPAction *sp_action_new(Inkscape::UI::View::View *view,
 			gchar const *id,
 			gchar const *name,
 			gchar const *tip,
@@ -73,7 +73,7 @@ SPAction *sp_action_new(SPView *view,
 void sp_action_perform(SPAction *action, void *data);
 void sp_action_set_active(SPAction *action, unsigned active);
 void sp_action_set_sensitive(SPAction *action, unsigned sensitive);
-SPView *sp_action_get_view(SPAction *action);
+Inkscape::UI::View::View *sp_action_get_view(SPAction *action);
 
 #endif
 

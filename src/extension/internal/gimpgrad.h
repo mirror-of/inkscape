@@ -12,8 +12,8 @@
 
 #include <glibmm/ustring.h>
 
-#include <extension/implementation/implementation.h>
-#include <extension/extension-forward.h>
+#include "extension/implementation/implementation.h"
+#include "extension/extension-forward.h"
 
 namespace Inkscape {
 namespace Extension {
