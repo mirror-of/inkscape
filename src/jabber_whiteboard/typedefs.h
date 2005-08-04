@@ -82,9 +82,6 @@ namespace Whiteboard {
 // XML node tracker maps
 //
 
-typedef std::map< std::string, TrackerNode*, std::less< std::string > > KeyToTrackerNodeMap;
-typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* > > TrackerNodeToKeyMap;
-
 typedef std::map< std::string, TrackerNode*, std::less< std::string >, GC::Alloc< std::pair < std::string, TrackerNode* >, GC::MANUAL > > KeyToTrackerNodeMap;
 typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, GC::Alloc< std::pair< TrackerNode*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
 
