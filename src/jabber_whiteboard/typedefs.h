@@ -27,13 +27,10 @@ extern "C" {
 #include <glibmm.h>
 #include <sigc++/sigc++.h>
 
-//#include <boost/function.hpp>
-
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/tracker-node.h"
 
 #include "gc-alloc.h"
-//#include <gc/gc_allocator.h>
 
 namespace Inkscape {
 
@@ -54,14 +51,18 @@ class ListContainer;
 
 // Various specializations of std::less for XMLNodeTracker maps.
 namespace std {
-struct less< Inkscape::Whiteboard::TrackerNode* > : public binary_function < Inkscape::Whiteboard::TrackerNode*, Inkscape::Whiteboard::TrackerNode*, bool >
+using Inkscape::Whiteboard::TrackerNode;
+
+template<>
+struct less< TrackerNode* > : public binary_function < TrackerNode*, TrackerNode*, bool >
 {
-	bool operator()(Inkscape::Whiteboard::TrackerNode* _x, Inkscape::Whiteboard::TrackerNode* _y) const
+	bool operator()(TrackerNode* _x, TrackerNode* _y) const
 	{
 		return _x->_node < _y->_node;
 	}
 
 };
+
 }
 
 namespace Inkscape {
@@ -81,10 +82,8 @@ namespace Whiteboard {
 // XML node tracker maps
 //
 
-/*
-typedef std::map< std::string, TrackerNode*, std::less< std::string >, traceable_allocator< std::pair< std::string, TrackerNode* > > > KeyToTrackerNodeMap;
-typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, traceable_allocator< std::pair< TrackerNode*, std::string > > > TrackerNodeToKeyMap;
-*/
+typedef std::map< std::string, TrackerNode*, std::less< std::string > > KeyToTrackerNodeMap;
+typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* > > TrackerNodeToKeyMap;
 
 typedef std::map< std::string, TrackerNode*, std::less< std::string >, GC::Alloc< std::pair < std::string, TrackerNode* >, GC::MANUAL > > KeyToTrackerNodeMap;
 typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, GC::Alloc< std::pair< TrackerNode*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
@@ -103,14 +102,10 @@ typedef sigc::slot< void, std::string const& > BuddyListListener;
 typedef std::set< char const* > ChatterList;
 
 // Message context verification and processing
-class SessionManager;
 struct MessageProcessor;
-//struct ProcessorShell;
-struct JabberMessage;
 
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
 typedef std::map< MessageType, MessageProcessor*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, MessageProcessor* >, GC::MANUAL > > MessageProcessorMap;
-//typedef std::map< MessageType, ProcessorShell*, std::less< MessageType >, traceable_allocator< std::pair< MessageType, ProcessorShell* > > > MessageProcessorMap;
 
 // Error handling -- someday
 // TODO: finish and integrate this
