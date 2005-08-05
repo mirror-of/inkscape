@@ -61,7 +61,10 @@ namespace UStringPrivate
     Glib::ustring str() const;
 
   private:
-    std::wostringstream os;
+  
+    //This is standard, not GCC-specific like wostringstream
+    std::basic_ostringstream<wchar_t> os;
+    
     int arg_no;
 
     // we store the output as a list - when the output string is requested, the
