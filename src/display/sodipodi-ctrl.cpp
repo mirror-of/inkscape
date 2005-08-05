@@ -212,8 +212,8 @@ sp_ctrl_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flags
 
 	if (!ctrl->defined) return;
 
-	x = (gint) (affine[4] + 0.5) - ctrl->span;
-	y = (gint) (affine[5] - 0.5) - ctrl->span;
+	x = (gint) ((affine[4] > 0) ? (affine[4] + 0.5) : (affine[4] - 0.5)) - ctrl->span;
+	y = (gint) ((affine[5] > 0) ? (affine[5] + 0.5) : (affine[5] - 0.5)) - ctrl->span;
 
 	switch (ctrl->anchor) {
 	case GTK_ANCHOR_N:
@@ -330,7 +330,7 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
 		s = -1;
 		for (y = 0; y <= c ; y++) {
 			a = abs (c - y);
-			z = (gint)(0.0 + sqrt ((c+0.5)*(c+0.5) - a*a));
+			z = (gint)(0.0 + sqrt ((c+.4)*(c+.4) - a*a));
 			x = 0;
 			while (x < c-z) {
 				*p++ = 0x00; *p++ = 0x00; *p++ = 0x00; *p++ = 0x00;
