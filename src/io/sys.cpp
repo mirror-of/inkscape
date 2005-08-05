@@ -164,13 +164,8 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     else
     {
         DEBUG_MESSAGE( dumpOne, "           is_os_wide() false  ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+        fp = g_fopen(utf8name, how.c_str());
         DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        fp = g_fopen((const gchar *) utf8name, (const gchar *) how.c_str());
-        DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        g_free(filename);
-        DEBUG_MESSAGE( dumpOne, "           STEP 3              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        filename = 0;
     }
 #endif
 
