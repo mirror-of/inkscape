@@ -441,13 +441,17 @@ static SPKnotHolder *
 sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
- 	sp_knot_holder_add (knot_holder, sp_rect_rx_set, sp_rect_rx_get, sp_rect_rx_knot_click,
+ 	sp_knot_holder_add_full (knot_holder, sp_rect_rx_set, sp_rect_rx_get, sp_rect_rx_knot_click,
+													 SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
 				_("Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the vertical radius the same"));
-	sp_knot_holder_add (knot_holder, sp_rect_ry_set, sp_rect_ry_get, sp_rect_ry_knot_click,
+	sp_knot_holder_add_full (knot_holder, sp_rect_ry_set, sp_rect_ry_get, sp_rect_ry_knot_click,
+													 SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
 				_("Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the horizontal radius the same"));
-	sp_knot_holder_add (knot_holder, sp_rect_wh_set, sp_rect_wh_get, NULL,
+	sp_knot_holder_add_full (knot_holder, sp_rect_wh_set, sp_rect_wh_get, NULL,
+													 SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR,
 				_("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to lock ratio or stretch in one dimension only"));
-	sp_knot_holder_add (knot_holder, sp_rect_xy_set, sp_rect_xy_get, NULL,
+	sp_knot_holder_add_full (knot_holder, sp_rect_xy_set, sp_rect_xy_get, NULL,
+													 SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR,
 				_("Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to lock ratio or stretch in one dimension only"));
 	sp_pat_knot_holder (item, knot_holder);
 	return knot_holder;
@@ -616,13 +620,17 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
-	sp_knot_holder_add (knot_holder, sp_arc_rx_set, sp_arc_rx_get, sp_arc_rx_click,
+	sp_knot_holder_add_full (knot_holder, sp_arc_rx_set, sp_arc_rx_get, sp_arc_rx_click,
+													 SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR,
 					_("Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"));
-	sp_knot_holder_add (knot_holder, sp_arc_ry_set, sp_arc_ry_get, sp_arc_ry_click,
+	sp_knot_holder_add_full (knot_holder, sp_arc_ry_set, sp_arc_ry_get, sp_arc_ry_click,
+													 SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR,
 					_("Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"));
-	sp_knot_holder_add (knot_holder, sp_arc_start_set, sp_arc_start_get, sp_arc_startend_click,
+	sp_knot_holder_add_full (knot_holder, sp_arc_start_set, sp_arc_start_get, sp_arc_startend_click,
+													 SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
 					_("Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
-	sp_knot_holder_add (knot_holder, sp_arc_end_set, sp_arc_end_get, sp_arc_startend_click,
+	sp_knot_holder_add_full (knot_holder, sp_arc_end_set, sp_arc_end_get, sp_arc_startend_click,
+													 SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR,
 					_("Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
 
 	sp_pat_knot_holder (item, knot_holder);
