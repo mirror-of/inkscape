@@ -4685,7 +4685,7 @@ msgstr "Gebied zonder tekst-vormen"
 #: ../src/sp-flowtext.cpp:363
 #, c-format
 msgid "<b>Flowed text</b> (%d characters)"
-msgstr "<b>Gevormde tekst<b> (%d tekens)"
+msgstr "<b>Gevormde tekst</b> (%d tekens)"
 
 #: ../src/sp-flowtext.cpp:365
 #, c-format

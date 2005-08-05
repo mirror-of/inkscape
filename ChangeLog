@@ -1,3 +1,7 @@
+2005-08-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+    * po/nl.po: fix a typo: close a bold tag.
+
 2005-08-03  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/pen-context.cpp: made sp_pen_context_root_handler static
