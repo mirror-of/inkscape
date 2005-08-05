@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <gtkmm.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
@@ -165,7 +166,7 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
         DEBUG_MESSAGE( dumpOne, "           is_os_wide() false  ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
         DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        fp = std::fopen(filename, how.c_str());
+        fp = g_fopen((const gchar *) utf8name, (const gchar *) how.c_str());
         DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         g_free(filename);
         DEBUG_MESSAGE( dumpOne, "           STEP 3              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
