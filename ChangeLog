@@ -2,6 +2,18 @@
 
     * po/nl.po: fix a typo: close a bold tag.
 
+2005-08-03	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/jabber_whiteboard/typedefs.h:
+	  fixed incorrect template specialization syntax,
+	  removed duplicate definitions (oops...)
+	* src/gc-alloc.h:
+	  removed explicit keyword from allocator constructors, as it is
+	  necessary to allow implicit conversion for rebinding.  Some
+	  containers in the libstdc++ in GCC 3.4.x require this, such as anything
+	  using the standard library's red-black tree implementation --
+	  std::set, std::map, std::multimap
+
 2005-08-03  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/pen-context.cpp: made sp_pen_context_root_handler static
@@ -14,6 +26,17 @@
 	  src/sp-linear-gradient.h, src/sp-radial-gradient.h:
 	  improved doxygen documentation
 
+2005-08-03	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/jabber_whiteboard/Makefile_insert,
+	  src/jabber_whiteboard/message-handler.cpp,
+	  src/jabber_whiteboard/empty.cpp:
+	  fixing some build issues (Apple's ar doesn't like creating
+	  archives with an empty member list, so empty.cpp is a null
+	  placeholder to be used as the sole member in the jabber_whiteboard
+	  archive in the event that a user does not wish to enable
+	  Inkboard)
+
 2005-08-02  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/ui/dialog/*.*:  Update copyrights
@@ -25,10 +48,29 @@
 	* changing include file syntax from "" to <> where appropriate
 
 	* Changing copyrights to be consistent
-	
+
+2005-08-03	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/menus-skeleton.h:
+	  added WITH_INKBOARD ifdef to prevent Inkboard options from being
+	  compiled into the menu skeleton if the Inkboard code is not enabled
+
 2005-08-03  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	*  src/display/curve.cpp: Correctly free an array with "delete []".
+
+2005-08-02	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/jabber/whiteboard/node-tracker.cpp:
+	  removed unnecessary anchoring of XML::Nodes in XMLNodeTracker
+
+2005-08-02	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/jabber_whiteboard/typedefs.h:
+	  moved back to GC::Alloc from traceable_allocator
+
+	* src/jabber_whiteboard/node-tracker.cpp:
+	  fixed anchor-release problem with XML::Nodes in XMLNodeTracker
 
 2005-08-01  MenTaLguY  <mental@rydia.net>
 
@@ -38,6 +80,64 @@
 2005-08-01  MenTaLguY  <mental@rydia.net>
 
     * src/gc-alloc.h: fix improper allocation size
+
+2005-08-01	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/jabber_whiteboard/message-handler.cpp: removed some
+	  debug output
+
+	* src/dialogs/whiteboard-sharewithchat.cpp: removed some excess
+	  debugging code
+
+	* src/jabber_whiteboard/session-manager.cpp: removed 
+	  redundant if (x == NULL) tests surrounding delete
+
+2005-08-01	David Yip	<yipdw@rose-hulman.edu>
+
+	* src/ui/icons.cpp, src/ui/stock-items.cpp, src/ui/stock.cpp, 
+	  src/ui/stock.h:
+	  added Inkboard UI stock items
+
+	* src/dialogs/whiteboard*:
+	  old C/Gtk Inkboard dialogs for collecting user input necessary
+	  to establish Jabber connections and Inkboard sessions (they're
+	  still used in some parts of the Inkboard code)
+
+	* src/Makefile.am, src/Makefile_insert, src/desktop.cpp, 
+	  src/desktop.h, src/document.cpp, src/file.cpp, src/file.h,
+	  src/menus-skeleton.h, src/verbs.cpp, src/verbs.h:
+	  added necessary UI code to access Inkboard functions
+
+	* src/jabber_whiteboard/Makefile_insert,
+	  src/jabber_whiteboard/buddy-list-manager.*,
+	  src/jabber_whiteboard/callbacks.*,
+	  src/jabber_whiteboard/chat-handler.*,
+	  src/jabber_whiteboard/connection-establishment.*,
+	  src/jabber_whiteboard/defines.h,
+	  src/jabber_whiteboard/error*,
+	  src/jabber_whiteboard/internal-constants.*,
+	  src/jabber_whiteboard/invitation-confirm-dialog.*,
+	  src/jabber_whiteboard/jabber-handlers.*,
+	  src/jabber_whiteboard/makefile*,
+	  src/jabber_whiteboard/message-*,
+	  src/jabber_whiteboard/node-*,
+	  src/jabber_whiteboard/received-message-helpers.cpp,
+	  src/jabber_whiteboard/player-functors.*,
+	  src/jabber_whiteboard/session-*,
+	  src/jabber_whiteboard/tracker-node.h,
+	  src/jabber_whiteboard/typedefs.h:
+	  Initial commit of Inkboard code
+	* src/ui/dialog/session-player*,
+	  src/ui/dialog/whiteboard*:
+	  C++/Gtkmm replacements for some old C/Gtk dialogs
+	* configure.ac:
+	  added Inkboard configure checks
+	* src/ui/view/edit.cpp,
+	  src/ui/view/edit.h,
+	  src/ui/view/view.cpp:
+	  added Inkboard code stubs to new Gtkmm code
+	* share/ui/menus-bars.xml:
+	  added Inkboard code stubs to menu UI XML
 
 2005-08-01  Ralf Stephan <ralf@ark.in-berlin.de>
 
