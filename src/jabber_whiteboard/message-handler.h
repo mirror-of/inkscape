@@ -47,7 +47,7 @@ private:
 	// Utilities
 	bool _isValidMessage(LmMessage* message);
 	MessageType _getType(LmMessage* message);
-	JabberMessage _extractData(LmMessage* message);
+	struct JabberMessage _extractData(LmMessage* message);
 
 
 	// Individual message handlers
