@@ -3,7 +3,7 @@
 
 /** \file
  *
- * SVG <stop> implementation.
+ * SPStop: SVG <stop> implementation.
  *
  * Authors?
  */

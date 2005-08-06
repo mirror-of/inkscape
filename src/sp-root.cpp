@@ -632,6 +632,9 @@ sp_root_show(SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
     return ai;
 }
 
+/**
+ * Virtual bbox callback.
+ */
 static void
 sp_root_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
@@ -645,6 +648,9 @@ sp_root_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsi
     }
 }
 
+/**
+ * Virtual print callback.
+ */
 static void
 sp_root_print(SPItem *item, SPPrintContext *ctx)
 {

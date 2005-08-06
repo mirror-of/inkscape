@@ -373,7 +373,7 @@ static SPStyleEnum const enum_text_rendering[] = {
 };
 
 /**
- *
+ * Release callback.
  */
 static void
 sp_style_object_release(SPObject *object, SPStyle *style)
@@ -427,7 +427,7 @@ sp_style_new_from_object(SPObject *object)
 
 
 /**
- *
+ * Increase refcount of style.
  */
 SPStyle *
 sp_style_ref(SPStyle *style)
@@ -442,7 +442,7 @@ sp_style_ref(SPStyle *style)
 
 
 /**
- *
+ * Decrease refcount of style with possible destruction.
  */
 SPStyle *
 sp_style_unref(SPStyle *style)
@@ -469,7 +469,7 @@ sp_style_unref(SPStyle *style)
 }
 
 /**
- *  Reads the various style parameters for an object
+ *  Reads the various style parameters for an object from repr.
  */
 static void
 sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
@@ -668,6 +668,8 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
 
 
 /**
+ * Read style properties from object's repr.
+ * 
  * 1. Reset existing object style
  * 2. Load current effective object style
  * 3. Load i attributes from immediate parent (which has to be up-to-date)
@@ -687,7 +689,7 @@ sp_style_read_from_object(SPStyle *style, SPObject *object)
 
 
 /**
- *
+ * Read style properties from repr only.
  */
 void
 sp_style_read_from_repr(SPStyle *style, Inkscape::XML::Node *repr)
@@ -701,7 +703,7 @@ sp_style_read_from_repr(SPStyle *style, Inkscape::XML::Node *repr)
 
 
 /**
- *
+ * 
  */
 static void
 sp_style_privatize_text(SPStyle *style)
@@ -714,6 +716,8 @@ sp_style_privatize_text(SPStyle *style)
 
 
 /**
+ * Merge property into style.
+ * 
  * Should be called in order of highest to lowest precedence.
  * E.g. for a single style string, call from the last declaration to the first,
  * as CSS says that later declarations override earlier ones.
@@ -1423,6 +1427,9 @@ sp_style_merge_prop_from_dying_parent(T &child, T const &parent)
     }
 }
 
+/**
+ * Copy SPIString from parent to child.
+ */
 static void
 sp_style_merge_string_prop_from_dying_parent(SPIString &child, SPIString const &parent)
 {
@@ -1869,7 +1876,7 @@ sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const pare
 
 
 /**
- *
+ * Disconnects from possible fill and stroke paint servers.
  */
 static void
 sp_style_paint_server_release(SPPaintServer *server, SPStyle *style)
@@ -1891,7 +1898,8 @@ sp_style_paint_server_release(SPPaintServer *server, SPStyle *style)
 
 
 /**
- *
+ * Emit style modified signal on style's object if server is style's fill
+ * or stroke paint server.
  */
 static void
 sp_style_paint_server_modified(SPPaintServer *server, guint flags, SPStyle *style)
@@ -1967,15 +1975,16 @@ sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint const *parent)
 
 
 /**
-Dumps the style to a CSS string, with either SP_STYLE_FLAG_IFSET or SP_STYLE_FLAG_ALWAYS
-flags. Used with Always for copying an object's complete cascaded style to style_clipboard. When
-you need a CSS string for an object in the document tree, you normally call
-sp_style_write_difference instead to take into account the object's parent.
-
-\pre style != NULL.
-\pre flags in {IFSET, ALWAYS}.
-\post ret != NULL.
-*/
+ * Dumps the style to a CSS string, with either SP_STYLE_FLAG_IFSET or 
+ * SP_STYLE_FLAG_ALWAYS flags. Used with Always for copying an object's 
+ * complete cascaded style to style_clipboard. When you need a CSS string 
+ * for an object in the document tree, you normally call 
+ * sp_style_write_difference instead to take into account the object's parent.
+ *
+ * \pre style != NULL.
+ * \pre flags in {IFSET, ALWAYS}.
+ * \post ret != NULL.
+ */
 gchar *
 sp_style_write_string(SPStyle const *const style, guint const flags)
 {
@@ -2046,7 +2055,7 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
     p += sp_style_write_ifloat(p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, flags);
 
-    /* fixme: */
+    /** \todo fixme: */
     if ((flags == SP_STYLE_FLAG_ALWAYS)
         || style->stroke_dasharray_set)
     {
@@ -2068,7 +2077,7 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
         }
     }
 
-    /* fixme: */
+    /** \todo fixme: */
     if (style->stroke_dashoffset_set) {
         Inkscape::SVGOStringStream os;
         os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
@@ -2102,6 +2111,8 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
 
 /**
+ * Dumps style to CSS string, see sp_style_write_string()
+ * 
  * \pre from != NULL.
  * \pre to != NULL.
  * \post ret != NULL.
@@ -2151,7 +2162,7 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
                               &from->stroke_linejoin, &to->stroke_linejoin, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ifloat(p, c + BMAX - p, "stroke-miterlimit",
                                &from->stroke_miterlimit, &to->stroke_miterlimit, SP_STYLE_FLAG_IFDIFF);
-    /* fixme: */
+    /** \todo fixme: */
     if (from->stroke_dasharray_set) {
         if (from->stroke_dasharray_inherit) {
             p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:inherit;");
@@ -2214,7 +2225,7 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
 
 
 /**
- *
+ * Reset all style properties.
  */
 static void
 sp_style_clear(SPStyle *style)
@@ -2227,7 +2238,7 @@ sp_style_clear(SPStyle *style)
         g_free(style->stroke_dash.dash);
     }
 
-    /* fixme: Do that text manipulation via parents */
+    /** \todo fixme: Do that text manipulation via parents */
     SPObject *object = style->object;
     gint const refcount = style->refcount;
     SPTextStyle *text = style->text;
@@ -2347,7 +2358,7 @@ sp_style_clear(SPStyle *style)
 
 
 /**
- *
+ * 
  */
 static void
 sp_style_read_dash(SPStyle *style, gchar const *str)
@@ -2406,7 +2417,7 @@ sp_style_read_dash(SPStyle *style, gchar const *str)
 
 
 /**
- *
+ * Return new SPTextStyle object with default settings.
  */
 static SPTextStyle *
 sp_text_style_new()
@@ -2423,7 +2434,7 @@ sp_text_style_new()
 
 
 /**
- *
+ * Clear text style settings.
  */
 static void
 sp_text_style_clear(SPTextStyle *ts)
@@ -2435,7 +2446,7 @@ sp_text_style_clear(SPTextStyle *ts)
 
 
 /**
- *
+ * Reduce refcount of text style and possibly free it.
  */
 static SPTextStyle *
 sp_text_style_unref(SPTextStyle *st)
@@ -2454,7 +2465,7 @@ sp_text_style_unref(SPTextStyle *st)
 
 
 /**
- *
+ * Return duplicate of text style.
  */
 static SPTextStyle *
 sp_text_style_duplicate_unset(SPTextStyle *st)
@@ -2471,7 +2482,7 @@ sp_text_style_duplicate_unset(SPTextStyle *st)
 
 
 /**
- *
+ * Write SPTextStyle object into string.
  */
 static guint
 sp_text_style_write(gchar *p, guint const len, SPTextStyle const *const st, guint flags)
@@ -2499,7 +2510,7 @@ sp_text_style_write(gchar *p, guint const len, SPTextStyle const *const st, guin
 
 
 /**
- *
+ * Set SPIFloat object from string.
  */
 static void
 sp_style_read_ifloat(SPIFloat *val, gchar const *str)
@@ -2520,7 +2531,7 @@ sp_style_read_ifloat(SPIFloat *val, gchar const *str)
 
 
 /**
- *
+ * Set SPIScale24 object from string.
  */
 static void
 sp_style_read_iscale24(SPIScale24 *val, gchar const *str)
@@ -2540,7 +2551,7 @@ sp_style_read_iscale24(SPIScale24 *val, gchar const *str)
 }
 
 /**
- * Reads a style value and performs lookup based on the given style value enumerations
+ * Reads a style value and performs lookup based on the given style value enumerations.
  */
 static void
 sp_style_read_ienum(SPIEnum *val, gchar const *str, SPStyleEnum const *dict,
@@ -2566,7 +2577,7 @@ sp_style_read_ienum(SPIEnum *val, gchar const *str, SPStyleEnum const *dict,
 
 
 /**
- *
+ * Set SPIString object from string.
  */
 static void
 sp_style_read_istring(SPIString *val, gchar const *str)
@@ -2587,7 +2598,7 @@ sp_style_read_istring(SPIString *val, gchar const *str)
 
 
 /**
- *
+ * Set SPILength object from string.
  */
 static void
 sp_style_read_ilength(SPILength *val, gchar const *str)
@@ -2598,7 +2609,7 @@ sp_style_read_ilength(SPILength *val, gchar const *str)
     } else {
         gdouble value;
         gchar *e;
-        /* fixme: Move this to standard place (Lauris) */
+        /** \todo fixme: Move this to standard place (Lauris) */
         value = g_ascii_strtod(str, &e);
         if ((gchar const *) e != str) {
             /** \todo 
@@ -2653,6 +2664,9 @@ sp_style_read_ilength(SPILength *val, gchar const *str)
     }
 }
 
+/**
+ * Set SPILengthOrNormal object from string.
+ */
 static void
 sp_style_read_ilengthornormal(SPILengthOrNormal *val, gchar const *str)
 {
@@ -2674,6 +2688,9 @@ sp_style_read_ilengthornormal(SPILengthOrNormal *val, gchar const *str)
     }
 }
 
+/**
+ * Set SPITextDecoration object from string.
+ */
 static void
 sp_style_read_itextdecoration(SPITextDecoration *val, gchar const *str)
 {
@@ -2723,7 +2740,8 @@ sp_style_read_itextdecoration(SPITextDecoration *val, gchar const *str)
 }
 
 /**
- *
+ * Set SPIPaint object from string containing an integer value.
+ * \param document Ignored
  */
 static void
 sp_style_read_icolor(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocument *document)
@@ -2745,7 +2763,7 @@ sp_style_read_icolor(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
 
 
 /**
- *
+ * Set SPIPaint object from string. 
  */
 static void
 sp_style_read_ipaint(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocument *document)
@@ -2809,7 +2827,7 @@ sp_style_read_ipaint(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
 
 
 /**
- *
+ * Set SPIFontSize object from string.
  */
 static void
 sp_style_read_ifontsize(SPIFontSize *val, gchar const *str)
@@ -2875,7 +2893,7 @@ sp_style_read_ifontsize(SPIFontSize *val, gchar const *str)
 
 
 /**
- *
+ * Set SPIEnum object from repr attribute.
  */
 static void
 sp_style_read_penum(SPIEnum *val, Inkscape::XML::Node *repr,
@@ -2891,7 +2909,7 @@ sp_style_read_penum(SPIEnum *val, Inkscape::XML::Node *repr,
 
 
 /**
- *
+ * Set SPILength object from repr attribute.
  */
 static void
 sp_style_read_plength(SPILength *val, Inkscape::XML::Node *repr, gchar const *key)
@@ -2903,7 +2921,7 @@ sp_style_read_plength(SPILength *val, Inkscape::XML::Node *repr, gchar const *ke
 }
 
 /**
- *
+ * Set SPIFontSize object from repr attribute.
  */
 static void
 sp_style_read_pfontsize(SPIFontSize *val, Inkscape::XML::Node *repr, gchar const *key)
@@ -2916,7 +2934,7 @@ sp_style_read_pfontsize(SPIFontSize *val, Inkscape::XML::Node *repr, gchar const
 
 
 /**
- *
+ * Set SPIFloat object from repr attribute.
  */
 static void
 sp_style_read_pfloat(SPIFloat *val, Inkscape::XML::Node *repr, gchar const *key)
@@ -2929,7 +2947,7 @@ sp_style_read_pfloat(SPIFloat *val, Inkscape::XML::Node *repr, gchar const *key)
 
 
 /**
- *
+ * Write SPIFloat object into string.
  */
 static gint
 sp_style_write_ifloat(gchar *p, gint const len, gchar const *const key,
@@ -2954,7 +2972,7 @@ sp_style_write_ifloat(gchar *p, gint const len, gchar const *const key,
 
 
 /**
- *
+ * Write SPIScale24 object into string.
  */
 static gint
 sp_style_write_iscale24(gchar *p, gint const len, gchar const *const key,
@@ -2980,7 +2998,7 @@ sp_style_write_iscale24(gchar *p, gint const len, gchar const *const key,
 
 
 /**
- *
+ * Write SPIEnum object into string.
  */
 static gint
 sp_style_write_ienum(gchar *p, gint const len, gchar const *const key,
@@ -3007,7 +3025,7 @@ sp_style_write_ienum(gchar *p, gint const len, gchar const *const key,
 
 
 /**
- *
+ * Write SPIString object into string.
  */
 static gint
 sp_style_write_istring(gchar *p, gint const len, gchar const *const key,
@@ -3029,7 +3047,7 @@ sp_style_write_istring(gchar *p, gint const len, gchar const *const key,
 
 
 /**
- *
+ * 
  */
 static bool
 sp_length_differ(SPILength const *const a, SPILength const *const b)
@@ -3049,7 +3067,7 @@ sp_length_differ(SPILength const *const a, SPILength const *const b)
 
 
 /**
- *
+ * Write SPILength object into string.
  */
 static gint
 sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
@@ -3138,7 +3156,7 @@ sp_lengthornormal_differ(SPILengthOrNormal const *const a, SPILengthOrNormal con
 }
 
 /**
- *
+ * Write SPILengthOrNormal object into string.
  */
 static gint
 sp_style_write_ilengthornormal(gchar *p, gint const len, gchar const *const key,
@@ -3179,7 +3197,7 @@ sp_textdecoration_differ(SPITextDecoration const *const a, SPITextDecoration con
 }
 
 /**
- *
+ * Write SPITextDecoration object into string.
  */
 static gint
 sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key,
@@ -3230,7 +3248,7 @@ sp_paint_differ(SPIPaint const *const a, SPIPaint const *const b)
 
 
 /**
- *
+ * Write SPIPaint object into string.
  */
 static gint
 sp_style_write_ipaint(gchar *b, gint const len, gchar const *const key,
@@ -3283,7 +3301,7 @@ sp_fontsize_differ(SPIFontSize const *const a, SPIFontSize const *const b)
 
 
 /**
- *
+ * Write SPIFontSize object into string.
  */
 static gint
 sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
@@ -3318,7 +3336,7 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
 
 
 /**
- *
+ * Clear paint object; conditionally disconnect style from paintserver.
  */
 static void
 sp_style_paint_clear(SPStyle *style, SPIPaint *paint,
@@ -3343,6 +3361,9 @@ sp_style_paint_clear(SPStyle *style, SPIPaint *paint,
     }
 }
 
+/**
+ * Clear all style property attributes in object.
+ */
 void
 sp_style_unset_property_attrs(SPObject *o)
 {
@@ -3449,8 +3470,8 @@ sp_css_attr_from_object(SPObject *object, guint const flags)
 }
 
 /**
-Unset any text-related properties
-*/
+ * Unset any text-related properties
+ */
 SPCSSAttr *
 sp_css_attr_unset_text(SPCSSAttr *css)
 {
@@ -3494,8 +3515,10 @@ is_url(char const *p)
 }
 
 /**
-Unset any properties that contain URI values. Used for storing style that will be reused across
-documents when carrying the referenced defs is impractical.
+ * Unset any properties that contain URI values. 
+ *
+ * Used for storing style that will be reused across documents when carrying 
+ * the referenced defs is impractical.
  */
 SPCSSAttr *
 sp_css_attr_unset_uris(SPCSSAttr *css)
@@ -3515,6 +3538,9 @@ sp_css_attr_unset_uris(SPCSSAttr *css)
     return css;
 }
 
+/**
+ * Scale a property.
+ */
 void
 sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
                                   double ex, bool only_with_units = false)
@@ -3537,14 +3563,14 @@ sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
 }
 
 /**
-Scale any properties that may hold <length> by ex
+ * Scale any properties that may hold <length> by ex.
  */
 SPCSSAttr *
 sp_css_attr_scale(SPCSSAttr *css, double ex)
 {
     sp_css_attr_scale_property_single(css, "baseline-shift", ex);
     sp_css_attr_scale_property_single(css, "stroke-width", ex);
-   //FIXME: scale stroke-dashoffset too; but only after making scale_property_list for stroke-dasharray
+   /// \todo FIXME: scale stroke-dashoffset too; but only after making scale_property_list for stroke-dasharray
     sp_css_attr_scale_property_single(css, "font-size", ex);
     sp_css_attr_scale_property_single(css, "kerning", ex);
     sp_css_attr_scale_property_single(css, "letter-spacing", ex);
@@ -3556,6 +3582,8 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
 
 
 /**
+ * Remove quotes from SPIString object value.
+ * 
  * \todo FIXME: now used for font family, but perhaps this should apply to 
  * ALL strings (check CSS spec), in which case this should be part of 
  * read_istring.
@@ -3565,7 +3593,7 @@ css2_unescape_unquote (SPIString *val)
 {
     if (val->set && val->value && strlen(val->value) >= 2) {
 
-       //TODO: unescape all \-escaped chars
+       /// \todo unescape all \-escaped chars
 
         int l = strlen(val->value);
         if ((val->value[0] == '"' && val->value[l - 1] == '"') || 
