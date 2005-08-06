@@ -53,6 +53,8 @@ namespace Inkscape {
 
 namespace Whiteboard {
 
+static bool lm_initialize_called = false;
+
 SessionData::SessionData(SessionManager *sm)
 {
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionData constructor called.");
@@ -104,12 +106,18 @@ SessionManager::SessionManager(::SPDesktop *desktop)
 	}
 
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "Completed SessionManager construction.");
+
+    //# lm_initialize() must be called before any network code
+    if (!lm_initialize_called) {
+        lm_initialize();
+        lm_initialize_called = true;
+        }
 }
 
 SessionManager::~SessionManager()
 {
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "Destructing SessionManager.");
-	
+
 	if (this->session_data) {
 		if (this->session_data->status[IN_WHITEBOARD]) {
 			this->disconnectFromDocument();
@@ -190,8 +198,8 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	}
 
 	// Connect to server
-	// We need to check to see if this object already exists, because 
-	// the user may be reusing an old connection that failed due to e.g. 
+	// We need to check to see if this object already exists, because
+	// the user may be reusing an old connection that failed due to e.g.
 	// authentication failure.
 	if (!this->session_data->connection) {
 		this->session_data->connection = lm_connection_new(server.c_str());
@@ -213,7 +221,7 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 		return FAILED_TO_CONNECT;
 	}
 
-	// Authenticate 
+	// Authenticate
 	if (!lm_connection_authenticate_and_block(this->session_data->connection, username.c_str(), pw.c_str(), RESOURCE_NAME, &error)) {
 		g_warning("Failed to authenticate: %s", error->message);
 		lm_connection_close(this->session_data->connection, NULL);
@@ -225,11 +233,11 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	// Register message handler for presence messages
 	mh = lm_message_handler_new((LmHandleMessageFunction)presence_handler, reinterpret_cast< gpointer >(this->_myMessageHandler), NULL);
 	lm_connection_register_message_handler(this->session_data->connection, mh, LM_MESSAGE_TYPE_PRESENCE, LM_HANDLER_PRIORITY_NORMAL);
-	
+
 	// Register message handler for stream error messages
 	mh = lm_message_handler_new((LmHandleMessageFunction)stream_error_handler, reinterpret_cast< gpointer >(this->_myMessageHandler), NULL);
 	lm_connection_register_message_handler(this->session_data->connection, mh, LM_MESSAGE_TYPE_STREAM_ERROR, LM_HANDLER_PRIORITY_NORMAL);
-	
+
 	// Register message handler for chat messages
 	mh = lm_message_handler_new((LmHandleMessageFunction)default_handler, reinterpret_cast< gpointer >(this->_myMessageHandler), NULL);
 	lm_connection_register_message_handler(this->session_data->connection, mh, LM_MESSAGE_TYPE_MESSAGE, LM_HANDLER_PRIORITY_NORMAL);
@@ -282,7 +290,7 @@ SessionManager::disconnectFromDocument()
 }
 
 void
-SessionManager::closeSession() 
+SessionManager::closeSession()
 {
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "Closing whiteboard session.");
 	XML::Node* root = sp_document_repr_root(this->_myDoc);
@@ -386,7 +394,7 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	// add sender
 	lm_message_node_set_attribute(m->node, "from", lm_connection_get_jid(this->session_data->connection));
 
-	// set message subtype according to whether or not this is 
+	// set message subtype according to whether or not this is
 	// destined for a chatroom
 	if (chatroom) {
 		lm_message_node_set_attribute(m->node, "type", "groupchat");
@@ -453,7 +461,7 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	}
 
 	// send message
-			
+
 	if (!lm_connection_send(this->session_data->connection, m, &error)) {
 		g_error("Send failed: %s", error->message);
 		lm_message_unref(m);
@@ -493,7 +501,7 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 	if(root == NULL) {
 		return;
     }
-  
+
 	NewChildObjectMessageList newchildren;
 
 	MessageUtilities::newObjectMessage(buf, newidsbuf, newnodesbuf, newchildren, this->_myTracker, root, false, false);
@@ -534,7 +542,7 @@ SessionManager::receiveChange(Glib::ustring const* changemsg)
 	bool validmsg = true;
 	while(MessageUtilities::getFirstMessageTag(part, msgcopy) != false) {
 		validmsg = true;
-	
+
 		if (part->tag == MESSAGE_CHANGE) {
 			this->receivedChangeHelper(&(part->data));
 			msgcopy->erase(0, part->next_pos);
@@ -569,7 +577,7 @@ SessionManager::receiveChange(Glib::ustring const* changemsg)
 	delete msgcopy;
 }
 
-void 
+void
 SessionManager::receiveDocument(Glib::ustring const* documentmsg)
 {
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "receiveDocument");
@@ -577,7 +585,7 @@ SessionManager::receiveDocument(Glib::ustring const* documentmsg)
 }
 
 bool
-SessionManager::isPlayingSessionFile() 
+SessionManager::isPlayingSessionFile()
 {
 	return this->session_data->status[PLAYING_SESSION_FILE];
 }
@@ -611,13 +619,13 @@ SessionManager::loadSessionFile(Glib::ustring filename)
 			}
 
 			this->session_data->status.set(PLAYING_SESSION_FILE, 1);
-			
-			
+
+
 		} catch (Glib::FileError e) {
 			g_warning("Could not load session file: %s", e.what().data());
 		}
 	}
-	
+
 }
 
 void
@@ -662,7 +670,7 @@ SessionManager::startSendQueueDispatch()
 }
 
 void
-SessionManager::stopSendQueueDispatch() 
+SessionManager::stopSendQueueDispatch()
 {
 	if (this->_send_queue_dispatcher) {
 		this->_send_queue_dispatcher.disconnect();
@@ -676,19 +684,19 @@ SessionManager::startReceiveQueueDispatch()
 }
 
 void
-SessionManager::stopReceiveQueueDispatch() 
+SessionManager::stopReceiveQueueDispatch()
 {
 	if (this->_receive_queue_dispatcher) {
 		this->_receive_queue_dispatcher.disconnect();
 	}
 }
 
-void 
+void
 SessionManager::clearDocument()
 {
 	// clear all layers, definitions, and metadata
 	XML::Node* rroot = this->_myDoc->rroot;
-	
+
 	// remove observers
 	this->removeNodeObservers(rroot);
 
@@ -763,7 +771,7 @@ SessionManager::node_tracker()
 
 
 ChatMessageHandler*
-SessionManager::chat_handler() 
+SessionManager::chat_handler()
 {
 	return this->_myChatHandler;
 }
@@ -780,7 +788,7 @@ SessionManager::session_file()
 	return this->_mySessionFile;
 }
 
-void 
+void
 SessionManager::_log(Glib::ustring const& message)
 {
 	if (this->_mySessionFile && !this->_mySessionFile->isReadOnly()) {
