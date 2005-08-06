@@ -26,7 +26,6 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "attributes.h"
-#include "document.h"
 #include "display/curve.h"
 #include "dialogs/object-attributes.h"
 #include <glibmm/i18n.h>
@@ -51,6 +50,8 @@
 #include <libnr/nr-matrix-ops.h>
 
 #include "xml/repr.h"
+
+class SPDocument;
 
 #define noOFFSET_VERBOSE
 
@@ -96,7 +97,7 @@ static void sp_offset_set_shape (SPShape * shape);
 
 Path *bpath_to_liv_path (NArtBpath * bpath);
 
-void   refresh_offset_source(SPOffset* offset);
+static void refresh_offset_source(SPOffset* offset);
 
 static void sp_offset_start_listening(SPOffset *offset,SPObject* to);
 static void sp_offset_quit_listening(SPOffset *offset);
@@ -117,6 +118,9 @@ static bool   use_slow_but_correct_offset_method=false;
 // nothing special here, same for every class in sodipodi/inkscape
 static SPShapeClass *parent_class;
 
+/**
+ * Register SPOffset class and return its type number.
+ */
 GType
 sp_offset_get_type (void)
 {
@@ -143,6 +147,9 @@ sp_offset_get_type (void)
     return offset_type;
 }
 
+/**
+ * SPOffset vtable initialization.
+ */
 static void
 sp_offset_class_init(SPOffsetClass *klass)
 {
@@ -167,6 +174,9 @@ sp_offset_class_init(SPOffsetClass *klass)
     shape_class->set_shape = sp_offset_set_shape;
 }
 
+/**
+ * Callback for SPOffset object initialization.
+ */
 static void
 sp_offset_init(SPOffset *offset)
 {
@@ -188,6 +198,9 @@ sp_offset_init(SPOffset *offset)
     offset->_changed_connection = offset->sourceRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_offset_href_changed), offset));
 }
 
+/**
+ * Callback for SPOffset finalization.
+ */
 static void
 sp_offset_finalize(GObject *obj)
 {
@@ -199,6 +212,9 @@ sp_offset_finalize(GObject *obj)
     offset->_transformed_connection.~connection();
 }
 
+/**
+ * Virtual build: set offset attributes from corresponding repr.
+ */
 static void
 sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
@@ -241,6 +257,9 @@ sp_offset_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
     }
 }
 
+/**
+ * Virtual write: write offset attributes to corresponding repr.
+ */
 static Inkscape::XML::Node *
 sp_offset_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -251,7 +270,8 @@ sp_offset_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
   
     if (flags & SP_OBJECT_WRITE_EXT) {
-        /* Fixme: we may replace these attributes by
+        /** \todo
+         * Fixme: we may replace these attributes by
          * inkscape:offset="cx cy exp revo rad arg t0"
          */
         sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
@@ -279,6 +299,9 @@ sp_offset_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     return repr;
 }
 
+/**
+ * Virtual release callback.
+ */
 static void
 sp_offset_release(SPObject *object)
 {
@@ -302,7 +325,10 @@ sp_offset_release(SPObject *object)
   
 }
 
-// the function that is called whenever a change is made to the description of the object
+/**
+ * Set callback: the function that is called whenever a change is made to 
+ * the description of the object.
+ */
 static void
 sp_offset_set(SPObject *object, unsigned key, gchar const *value)
 {
@@ -375,7 +401,9 @@ sp_offset_set(SPObject *object, unsigned key, gchar const *value)
     }
 }
 
-// the object has changed, recompute its shape
+/**
+ * Update callback: the object has changed, recompute its shape.
+ */
 static void
 sp_offset_update(SPObject *object, SPCtx *ctx, guint flags)
 {
@@ -393,6 +421,9 @@ sp_offset_update(SPObject *object, SPCtx *ctx, guint flags)
         ((SPObjectClass *) parent_class)->update (object, ctx, flags);
 }
 
+/**
+ * Returns a textual description of object.
+ */
 static gchar *
 sp_offset_description(SPItem *item)
 {
@@ -409,8 +440,10 @@ sp_offset_description(SPItem *item)
     }
 }
 
-// duplicate of splivarot
-// loads a NArtBpath (like the one stored in a SPCurve) into a livarot Path 
+/**
+ * Converts an NArtBpath (like the one stored in a SPCurve) into a 
+ * livarot Path. Duplicate of splivarot.
+ */
 Path *
 bpath_to_liv_path(NArtBpath *bpath)
 {
@@ -476,7 +509,9 @@ bpath_to_liv_path(NArtBpath *bpath)
     return dest;
 }
 
-
+/**
+ * Compute and set shape's offset.
+ */
 static void
 sp_offset_set_shape(SPShape *shape)
 {
@@ -522,7 +557,7 @@ sp_offset_set_shape(SPShape *shape)
         Path *res = new Path;
         res->SetBackData (false);
   
-        // et maintenant: offset
+        // and now: offset
         float o_width;
         if (offset->rad >= 0)
         {
@@ -586,7 +621,7 @@ sp_offset_set_shape(SPShape *shape)
         Shape *theRes = new Shape;
     
     
-        // et maintenant: offset
+        // and now: offset
         float o_width;
         if (offset->rad >= 0)
         {
@@ -597,7 +632,7 @@ sp_offset_set_shape(SPShape *shape)
             o_width = -offset->rad;
         }
     
-        // il faudrait avoir une mesure des details
+        // one has to have a measure of the details
         if (o_width >= 1.0)
         {
             orig->ConvertWithBackData (0.5);
@@ -615,7 +650,7 @@ sp_offset_set_shape(SPShape *shape)
         int    nbPart=0;
         Path** parts=res->SubPaths(nbPart,true);
         char   *holes=(char*)malloc(nbPart*sizeof(char));
-        // we offsets contours separately, because we can.
+        // we offset contours separately, because we can.
         // this way, we avoid doing a unique big ConvertToShape when dealing with big shapes with lots of holes
         {
             Shape* onePart=new Shape;
@@ -757,7 +792,9 @@ sp_offset_set_shape(SPShape *shape)
     }
 }
 
-
+/**
+ * Virtual snappoints function.
+ */
 static void sp_offset_snappoints(SPItem const *item, SnapPointsIter p)
 {
     if (((SPItemClass *) parent_class)->snappoints) {
@@ -774,14 +811,19 @@ static void sp_offset_snappoints(SPItem const *item, SnapPointsIter p)
 // outside.
 // another method would be to use the Winding() function to test whether the point is inside or outside 
 // the polygon (it would be wiser to do so, in fact, but i like being stupid)
-bool
-vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
-/* FIXME: This can be done using linear operations, more stably and
+
+/** 
+ *
+ * \todo
+ * FIXME: This can be done using linear operations, more stably and
  *  faster.  method: transform A and C into B's space, A should be
  *  negative and B should be positive in the orthogonal component.  I
  *  think this is equivalent to 
  *  dot(A, rot90(B))*dot(C, rot90(B)) == -1.  
- *    -- njh */
+ *    -- njh 
+ */
+bool
+vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
 {
     using NR::rot90;
     double ab_s = dot(A, rot90(B));
@@ -820,10 +862,14 @@ vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
     return false;
 }
 
-// distance to the original path; that funciton is called from object-edit to set the radius
-// when the control knot moves.
-// the sign of the result is the radius we're going to offset the shape with, so result > 0 ==outset
-// and result < 0 ==inset. thus result<0 means 'px inside source'
+/** 
+ * Distance to the original path; that function is called from object-edit 
+ * to set the radius when the control knot moves.
+ *
+ * The sign of the result is the radius we're going to offset the shape with, 
+ * so result > 0 ==outset and result < 0 ==inset. thus result<0 means 
+ * 'px inside source'.
+ */
 double
 sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 {
@@ -834,11 +880,15 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     Shape *theShape = new Shape;
     Shape *theRes = new Shape;
   
-    // awfully damn stupid method: uncross the source path EACH TIME you need to compute the distance
-    // the good way to do this would be to store the uncrossed source path somewhere, and delete it when the 
-    // context is finished.
-    // hopefully this part is much faster than actually computing the offset (which happen just after), so the
-    // time spent in this function should end up being negligible with respect to the delay of one context
+    /** \todo 
+     * Awfully damn stupid method: uncross the source path EACH TIME you 
+     * need to compute the distance. The good way to do this would be to 
+     * store the uncrossed source path somewhere, and delete it when the
+     * context is finished. Hopefully this part is much faster than actually 
+     * computing the offset (which happen just after), so the time spent in 
+     * this function should end up being negligible with respect to the 
+     * delay of one context.
+     */
     // move
     ((Path *) offset->originalPath)->Convert (1.0);
     ((Path *) offset->originalPath)->Fill (theShape, 0);
@@ -956,9 +1006,12 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     return dist;
 }
 
-// computes a point on the offset
-// used to set a "seed" position for the control knot
-// return the topmost point on the offset
+/** 
+ * Computes a point on the offset;  used to set a "seed" position for 
+ * the control knot.
+ *
+ * \return the topmost point on the offset.
+ */
 void
 sp_offset_top_point (SPOffset * offset, NR::Point *px)
 {
@@ -1100,7 +1153,8 @@ sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *item)
     sp_shape_set_shape ((SPShape *) offset);
 }
 
-void   refresh_offset_source(SPOffset* offset)
+static void 
+refresh_offset_source(SPOffset* offset)
 {
     if ( offset == NULL ) return;
     offset->sourceDirty=false;
