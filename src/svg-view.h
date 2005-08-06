@@ -2,7 +2,7 @@
 #define __SP_SVG_VIEW_H__
 
 /** \file
- * Generic SVG view and widget
+ * SPSVGView, SPSVGViewWidget: Generic SVG view and widget
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -27,7 +27,7 @@ class SPSVGViewClass;
 
 
 void sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale);
-void sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect, gdouble width, gdouble height);
+void sp_svg_view_set_rescale (SPSVGView *view, bool rescale, bool keepaspect, gdouble width, gdouble height);
 
 /**
  * Generic SVG view.
@@ -39,10 +39,10 @@ struct SPSVGView : public Inkscape::UI::View::View {
 	SPCanvasGroup *parent;
 	SPCanvasItem *drawing;
 
-	/* Horizontal and vertical scale */
+	/// Horizontal and vertical scale
 	gdouble hscale, vscale;
-	/* Whether to rescale automatically */
-	gboolean rescale, keepaspect;
+	/// Whether to rescale automatically
+	bool rescale, keepaspect;
 	gdouble width, height;
 
     // C++ Wrappers to functions
@@ -52,7 +52,7 @@ struct SPSVGView : public Inkscape::UI::View::View {
     }
 
     /// Rescales SPSVGView and keeps aspect ratio.
-    void setRescale(gboolean rescale, gboolean keepAspect, gdouble width, gdouble height) {
+    void setRescale(bool rescale, bool keepAspect, gdouble width, gdouble height) {
 	sp_svg_view_set_rescale(this, rescale, keepAspect, width, height);
     }
 
@@ -78,7 +78,7 @@ class SPSVGViewWidgetClass;
 #define SP_IS_SVG_VIEW_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_SVG_VIEW_WIDGET))
 #define SP_IS_SVG_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_SVG_VIEW_WIDGET))
 
-void sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, gboolean resize, gdouble width, gdouble height);
+void sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, bool resize, gdouble width, gdouble height);
 
 /**
  * An SPSVGViewWidget is an SVG view together with a canvas.
@@ -90,13 +90,13 @@ struct SPSVGViewWidget {
 	GtkWidget *sw;
 	GtkWidget *canvas;
 
-	/* Whether to resize automatically */
-	gboolean resize;
+	/// Whether to resize automatically
+	bool resize;
 	gdouble maxwidth, maxheight;
 
     // C++ Wrappers
     /// Flags the SPSVGViewWidget to have its size changed with Gtk.
-    void setResize(gboolean resize, gdouble width, gdouble height) {
+    void setResize(bool resize, gdouble width, gdouble height) {
 	sp_svg_view_widget_set_resize(this, resize, width, height);
     }
 };

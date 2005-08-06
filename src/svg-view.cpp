@@ -26,7 +26,7 @@ static void sp_svg_view_dispose (GObject *object);
 static void sp_svg_view_set_document (Inkscape::UI::View::View *view, SPDocument *doc);
 static void sp_svg_view_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height);
 
-static void sp_svg_view_rescale (SPSVGView *svgview, gboolean event);
+static void sp_svg_view_rescale (SPSVGView *svgview, bool event);
 
 static SPViewClass *parent_class;
 
@@ -230,7 +230,7 @@ sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale)
  * Rescales SPSVGView and keeps aspect ratio.
  */
 void
-sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect, gdouble width, gdouble height)
+sp_svg_view_set_rescale (SPSVGView *view, bool rescale, bool keepaspect, gdouble width, gdouble height)
 {
 	g_return_if_fail (view != NULL);
 	g_return_if_fail (SP_IS_SVG_VIEW (view));
@@ -249,7 +249,7 @@ sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepaspect,
  * Helper function that sets rescale ratio and emits resize event.
  */
 static void
-sp_svg_view_rescale (SPSVGView *svgview, gboolean event)
+sp_svg_view_rescale (SPSVGView *svgview, bool event)
 {
 	SPDocument *doc = SP_VIEW_DOCUMENT (svgview);
 
@@ -488,7 +488,7 @@ sp_svg_view_widget_new (SPDocument *doc)
  * Flags the SPSVGViewWidget to have its size renegotiated with Gtk.
  */
 void
-sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, gboolean resize, gdouble width, gdouble height)
+sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, bool resize, gdouble width, gdouble height)
 {
 	g_return_if_fail (vw != NULL);
 	g_return_if_fail (SP_IS_SVG_VIEW_WIDGET (vw));

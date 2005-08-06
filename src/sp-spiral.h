@@ -2,7 +2,7 @@
 #define __SP_SPIRAL_H__
 
 /** \file
- * <sodipodi:spiral> implementation
+ * SPSpiral: <sodipodi:spiral> implementation
  *
  * Authors:
  *   Mitsuru Oka <oka326@parkcity.ne.jp>
@@ -23,8 +23,8 @@
 #define SP_HUGE          1e5
 
 #define SPIRAL_TOLERANCE 3.0
-#define SAMPLE_STEP      (1.0/4.0) /* step per 2PI */
-#define SAMPLE_SIZE      8      /* sample size per one bezier */
+#define SAMPLE_STEP      (1.0/4.0) ///< step per 2PI 
+#define SAMPLE_SIZE      8         ///< sample size per one bezier 
 
 #define SP_TYPE_SPIRAL            (sp_spiral_get_type ())
 #define SP_SPIRAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL, SPSpiral))
@@ -49,10 +49,10 @@ class SPSpiralClass;
  */
 struct SPSpiral : public SPShape {
 	float cx, cy;
-	float exp; /* Spiral expansion factor */
-	float revo; /* Spiral revolution factor */
-	float rad; /* Spiral radius */
-	float arg; /* Spiral argument */
+	float exp;  ///< Spiral expansion factor
+	float revo; ///< Spiral revolution factor
+	float rad;  ///< Spiral radius
+	float arg;  ///< Spiral argument
 	float t0;
 };
 
@@ -83,7 +83,7 @@ void    sp_spiral_get_polar	(SPSpiral const *spiral,
 				 gdouble       *rad,
 				 gdouble       *arg);
 
-gboolean sp_spiral_is_invalid   (SPSpiral const *spiral);
+bool sp_spiral_is_invalid   (SPSpiral const *spiral);
 
 
 

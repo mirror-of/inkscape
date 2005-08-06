@@ -48,6 +48,9 @@ static NR::Point sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t);
 
 static SPShapeClass *parent_class;
 
+/**
+ * Register SPSpiral class and return its type number.
+ */
 GType
 sp_spiral_get_type (void)
 {
@@ -71,6 +74,9 @@ sp_spiral_get_type (void)
 	return spiral_type;
 }
 
+/**
+ * SPSpiral vtable initialization.
+ */
 static void
 sp_spiral_class_init (SPSpiralClass *klass)
 {
@@ -97,6 +103,9 @@ sp_spiral_class_init (SPSpiralClass *klass)
 	shape_class->set_shape = sp_spiral_set_shape;
 }
 
+/**
+ * Callback for SPSpiral object initialization.
+ */
 static void
 sp_spiral_init (SPSpiral * spiral)
 {
@@ -109,6 +118,9 @@ sp_spiral_init (SPSpiral * spiral)
 	spiral->t0         = 0.0;
 }
 
+/**
+ * Virtual build: set spiral properties from corresponding repr.
+ */
 static void
 sp_spiral_build (SPObject * object, SPDocument * document, Inkscape::XML::Node * repr)
 {
@@ -124,6 +136,9 @@ sp_spiral_build (SPObject * object, SPDocument * document, Inkscape::XML::Node *
 	sp_object_read_attr (object, "sodipodi:t0");
 }
 
+/**
+ * Virtual write: write spiral attributes to corresponding repr.
+ */
 static Inkscape::XML::Node *
 sp_spiral_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 {
@@ -169,6 +184,9 @@ sp_spiral_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	return repr;
 }
 
+/**
+ * Virtual set: change spiral object attribute.
+ */
 static void
 sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 {
@@ -178,7 +196,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 	spiral = SP_SPIRAL (object);
 	shape  = SP_SHAPE (object);
 
-	/* fixme: we should really collect updates */
+	/// \todo fixme: we should really collect updates 
 	switch (key) {
 	case SP_ATTR_SODIPODI_CX:
 		if (!sp_svg_length_read_computed_absolute (value, &spiral->cx)) {
@@ -243,9 +261,13 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			spiral->t0 = g_ascii_strtod (value, NULL);
 			spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
-			/* TODO: Have shared constants for the allowable bounds for attributes.
-			   There was a bug here where we used -1.0 as the minimum (which leads to
-			   NaN via e.g. pow(-1.0, 0.5); see sp_spiral_get_xy for requirements. */
+			/** \todo
+                         * Have shared constants for the allowable bounds for
+                         * attributes. There was a bug here where we used -1.0 
+                         * as the minimum (which leads to NaN via, e.g., 
+                         * pow(-1.0, 0.5); see sp_spiral_get_xy for 
+                         * requirements.
+                         */
 		} else {
 			spiral->t0 = 0.0;
 		}
@@ -258,6 +280,9 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
+/**
+ * Virtual update callback.
+ */
 static void
 sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags)
 {
@@ -269,6 +294,9 @@ sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags)
 		((SPObjectClass *) parent_class)->update (object, ctx, flags);
 }
 
+/**
+ * Return textual description of spiral.
+ */
 static gchar *
 sp_spiral_description (SPItem * item)
 {
@@ -278,11 +306,13 @@ sp_spiral_description (SPItem * item)
 }
 
 
-/** \pre dstep \> 0.
-    \pre is_unit_vector(*hat1).
-
-    \post is_unit_vector(*hat2).
-**/
+/** 
+ * Fit beziers together to spiral and draw it.
+ *
+ * \pre dstep \> 0.
+ * \pre is_unit_vector(*hat1).
+ * \post is_unit_vector(*hat2).
+ **/
 static void
 sp_spiral_fit_and_draw (SPSpiral const *spiral,
 			SPCurve	 *c,
@@ -411,6 +441,9 @@ sp_spiral_set_shape (SPShape *shape)
 	sp_curve_unref (c);
 }
 
+/**
+ * Set spiral properties and update display.
+ */
 void
 sp_spiral_position_set       (SPSpiral          *spiral,
 		     gdouble            cx,
@@ -439,6 +472,9 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ * Virtual snappoints callback.
+ */
 static void sp_spiral_snappoints(SPItem const *item, SnapPointsIter p)
 {
 	if (((SPItemClass *) parent_class)->snappoints) {
@@ -539,6 +575,9 @@ sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t)
 	return ret;
 }
 
+/**
+ * Compute rad and/or arg for point on spiral.
+ */
 void
 sp_spiral_get_polar (SPSpiral const *spiral, gdouble t, gdouble *rad, gdouble *arg)
 {
@@ -551,7 +590,10 @@ sp_spiral_get_polar (SPSpiral const *spiral, gdouble t, gdouble *rad, gdouble *a
 		*arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
 }
 
-gboolean
+/**
+ * Return true if spiral has properties that make it invalid.
+ */
+bool
 sp_spiral_is_invalid (SPSpiral const *spiral)
 {
 	gdouble rad;
