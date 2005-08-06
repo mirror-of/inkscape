@@ -1,3 +1,10 @@
+2005-08-06  Ted Gould <ted@gould.cx>
+
+	* src/interface.cpp, src/verbs.cpp, src/verbs.h:
+
+	Adding in a hash table for Verb ID lookups.  This makes searching for them
+	in the dynamic menus much faster.
+
 2005-08-06  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/sp-offset.cpp: 

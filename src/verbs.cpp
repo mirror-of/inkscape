@@ -346,6 +346,7 @@ public:
 
 
 Verb::VerbTable Verb::_verbs;
+Verb::VerbIDTable Verb::_verb_ids;
 
 /** \brief  Create a verb without a code.
 
@@ -364,6 +365,7 @@ Verb::Verb(gchar const * id, gchar const * name, gchar const * tip, gchar const 
     count++;
     _code = count;
     _verbs.insert(VerbTable::value_type(count, this));
+    _verb_ids.insert(VerbIDTable::value_type(_id, this));
 
     return;
 }
@@ -708,6 +710,26 @@ Verb::get_search (unsigned int code)
     VerbTable::iterator verb_found = _verbs.find(code);
 
     if (verb_found != _verbs.end()) {
+        verb = verb_found->second;
+    }
+
+    return verb;
+}
+
+/** \brief  Find a Verb using it's ID
+    \param  id  Which id to search for
+
+    This function uses the \c _verb_ids has table to find the
+    verb by it's id.  Should be much faster than previous
+    implementations.
+*/
+Verb * 
+Verb::getbyid (gchar const * id)
+{
+    Verb * verb = NULL;
+    VerbIDTable::iterator verb_found = _verb_ids.find(id);
+
+    if (verb_found != _verb_ids.end()) {
         verb = verb_found->second;
     }
 

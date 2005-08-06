@@ -821,9 +821,27 @@ sp_ui_checkboxes_menus (GtkMenu * m, Inkscape::UI::View::View *view)
                                   checkitem_toggled, checkitem_update, 0);
 }
 
+/** \brief  This function turns XML into a menu
+    \param  menus  This is the XML that defines the menu
+    \param  menu   Menu to be added to
+    \param  view   The SPView that this menu is being built for
+
+    This function is realitively simple as it just goes through the XML
+    and parses the individual elements.  In the case of a submenu, it
+    just calls itself recursively.  Because it is only reasonable to have
+    a couple of submenus, it is unlikely this will go more than two or
+    three times.
+
+    In the case of an unreconginzed verb, a menu item is made to identify
+    the verb that is missing, and display that.  The menu item is also made
+    insensitive.
+*/
 void
 sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, Inkscape::UI::View::View *view)
 {
+    if (menus == NULL) return;
+    if (menu == NULL)  return;
+
     for (Inkscape::XML::Node * menu_pntr = menus;
          menu_pntr != NULL;
          menu_pntr = menu_pntr->next()) {
@@ -836,21 +854,20 @@ sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, Inkscape::
             continue;
         }
         if (!strcmp(menu_pntr->name(), "verb")) {
-            Inkscape::Verb * verb = Inkscape::Verb::get(SP_VERB_NONE);
-
-            /** \todo Oh my!  This is really ugly! */
             const gchar * verb_name = menu_pntr->attribute("verb-id");
-            if (verb_name == NULL) continue;
-            for (int i = 0; i < SP_VERB_LAST; i++) {
-                gchar const * iverb_id = Inkscape::Verb::get(i)->get_id();
-                if (iverb_id == NULL) continue;
-                if (!strcmp(verb_name, iverb_id)) {
-                    verb = Inkscape::Verb::get(i);
-                    break;
-                }
-            }
+            Inkscape::Verb * verb = Inkscape::Verb::getbyid(verb_name);
 
-            sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+            if (verb != NULL) {
+                sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+            } else {
+                gchar string[120];
+                g_snprintf(string, 120, _("Verb \"%s\" Unknown"), verb_name);
+                string[119] = '\0'; /* may not be terminated */
+                GtkWidget * item = gtk_menu_item_new_with_label (string);
+                gtk_widget_set_sensitive(item, false);
+                gtk_widget_show (item);
+                gtk_menu_append (GTK_MENU (menu), item);
+            }
             continue;
         }
         if (!strcmp(menu_pntr->name(), "seperator")) {
@@ -878,6 +895,13 @@ sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, Inkscape::
     }
 }
 
+/** \brief  Build the main tool bar
+    \param  view  View to build the bar for
+
+    Currently the main tool bar is built as a dynamic XML menu using
+    \c sp_ui_build_dyn_menus.  This function builds the bar, and then
+    pass it to get items attached to it.
+*/
 GtkWidget *
 sp_ui_main_menubar (Inkscape::UI::View::View *view)
 {

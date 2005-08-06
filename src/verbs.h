@@ -227,6 +227,18 @@ private:
                'base verbs'. */
     static Verb * _base_verbs[SP_VERB_LAST + 1];
     /* Plus one because there is an entry for SP_VERB_LAST */
+    /** A string comparison function to be used in the Verb ID lookup
+        to find the different verbs in the hash map. */
+    struct ltstr {
+        bool operator()(const char* s1, const char* s2) const {
+            if (s1 == NULL || s2 == NULL) return true;
+            return strcmp(s1, s2) < 0;
+        }
+    };
+    /** \brief An easy to use definition of the table of verbs by ID. */
+    typedef std::map<gchar const *, Verb *, ltstr> VerbIDTable;
+    /** \brief Quick lookup of verbs by ID */
+    static VerbIDTable _verb_ids;
 
     /** \brief A simple typedef to make using the action table easier. */
     typedef std::map<Inkscape::UI::View::View *, SPAction *> ActionTable;
@@ -300,6 +312,8 @@ public:
          gchar const * tip,
          gchar const * image) :
         _actions(NULL), _id(id), _name(name), _tip(tip), _image(image), _code(code), _default_sensitive(true) {
+        _verbs.insert(VerbTable::value_type(_code, this));
+        _verb_ids.insert(VerbIDTable::value_type(_id, this));
     }
     Verb (gchar const * id, gchar const * name, gchar const * tip, gchar const * image);
     virtual ~Verb (void);
@@ -326,6 +340,7 @@ public:
             return get_search(code);
         }
     }
+    static Verb * getbyid (gchar const * id);
 
     static void delete_all_view (Inkscape::UI::View::View * view);
     void delete_view (Inkscape::UI::View::View * view);
