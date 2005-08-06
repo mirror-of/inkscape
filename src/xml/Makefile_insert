@@ -21,6 +21,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/quote.cpp	\
 	xml/quote.h	\
 	xml/repr-css.cpp	\
+	xml/log-builder.cpp	\
+	xml/log-builder.h	\
 	xml/node-fns.cpp	\
 	xml/node-fns.h	\
 	xml/repr-io.cpp	\

@@ -1,5 +1,13 @@
 2005-08-06  MenTaLguY  <mental@rydia.net>
 
+	* src/xml/Makefile_insert, src/xml/log-builder.cpp,
+	  src/xml/log-builder.h, src/xml/simple-session.cpp,
+	  src/xml/simple-session.h:
+
+	  Implement XML::LogBuilder class and use it from XML::SimpleSession.
+
+2005-08-06  MenTaLguY  <mental@rydia.net>
+
 	* src/xml/event.h, src/xml/event.cpp, src/xml/event-fns.h:
       rejigger the way XML event logs are handled, based on NodeObservers
 

@@ -29,24 +29,21 @@ void SimpleSession::beginTransaction() {
 void SimpleSession::rollback() {
     g_assert(_in_transaction);
     _in_transaction = false;
-    sp_repr_undo_log(_log);
-    sp_repr_free_log(_log);
-    _log = NULL;
+    Event *log = _log_builder.detach();
+    sp_repr_undo_log(log);
+    sp_repr_free_log(log);
 }
 
 void SimpleSession::commit() {
     g_assert(_in_transaction);
     _in_transaction = false;
-    sp_repr_free_log(_log);
-    _log = NULL;
+    _log_builder.discard();
 }
 
 Inkscape::XML::Event *SimpleSession::commitUndoable() {
     g_assert(_in_transaction);
     _in_transaction = false;
-    Inkscape::XML::Event *log=_log;
-    _log = NULL;
-    return log;
+    return _log_builder.detach();
 }
 
 void SimpleSession::notifyChildAdded(Inkscape::XML::Node &parent,
@@ -54,8 +51,7 @@ void SimpleSession::notifyChildAdded(Inkscape::XML::Node &parent,
                                      Inkscape::XML::Node *prev)
 {
     if (_in_transaction) {
-        _log = new Inkscape::XML::EventAdd(&parent, &child, prev, _log);
-        _log = _log->optimizeOne();
+        _log_builder.notifyChildAdded(parent, child, prev);
     }
 }
 
@@ -64,8 +60,7 @@ void SimpleSession::notifyChildRemoved(Inkscape::XML::Node &parent,
                                        Inkscape::XML::Node *prev)
 {
     if (_in_transaction) {
-        _log = new Inkscape::XML::EventDel(&parent, &child, prev, _log);
-        _log = _log->optimizeOne();
+        _log_builder.notifyChildRemoved(parent, child, prev);
     }
 }
 
@@ -75,8 +70,7 @@ void SimpleSession::notifyChildOrderChanged(Inkscape::XML::Node &parent,
                                             Inkscape::XML::Node *new_prev)
 {
     if (_in_transaction) {
-        _log = new Inkscape::XML::EventChgOrder(&parent, &child, old_prev, new_prev, _log);
-        _log = _log->optimizeOne();
+        _log_builder.notifyChildOrderChanged(parent, child, old_prev, new_prev);
     }
 }
 
@@ -85,8 +79,7 @@ void SimpleSession::notifyContentChanged(Inkscape::XML::Node &node,
                                          Util::SharedCStringPtr new_content)
 {
     if (_in_transaction) {
-        _log = new Inkscape::XML::EventChgContent(&node, old_content, new_content, _log);
-        _log = _log->optimizeOne();
+        _log_builder.notifyContentChanged(node, old_content, new_content);
     }
 }
 
@@ -96,8 +89,7 @@ void SimpleSession::notifyAttributeChanged(Inkscape::XML::Node &node,
                                            Util::SharedCStringPtr new_value)
 {
     if (_in_transaction) {
-        _log = new Inkscape::XML::EventChgAttr(&node, name, old_value, new_value, _log);
-        _log = _log->optimizeOne();
+        _log_builder.notifyAttributeChanged(node, name, old_value, new_value);
     }
 }
 

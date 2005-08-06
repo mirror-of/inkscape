@@ -15,16 +15,21 @@
 #ifndef SEEN_INKSCAPE_XML_SIMPLE_SESSION_H
 #define SEEN_INKSCAPE_XML_SIMPLE_SESSION_H
 
+#include "gc-managed.h"
 #include "xml/session.h"
 #include "xml/transaction-logger.h"
+#include "xml/log-builder.h"
 
 namespace Inkscape {
 
 namespace XML {
 
-class SimpleSession : public Session, public TransactionLogger {
+class SimpleSession : public GC::Managed<>,
+                      public Session,
+                      public TransactionLogger
+{
 public:
-    SimpleSession() : _in_transaction(false), _log(NULL) {}
+    SimpleSession() : _in_transaction(false) {}
 
     bool inTransaction() { return _in_transaction; }
 
@@ -55,7 +60,7 @@ private:
     void operator=(SimpleSession const &); // no assign
 
     bool _in_transaction;
-    Inkscape::XML::Event *_log;
+    LogBuilder _log_builder;
 };
 
 }
