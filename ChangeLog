@@ -1,5 +1,14 @@
 2005-08-06  MenTaLguY  <mental@rydia.net>
 
+	* Makefile.am, HACKING, HACKING_de, HACKING_fr, HACKING_it,
+	  HACKING.txt, HACKING.de.txt, HACKING.fr.txt, HACKING.it.txt,
+	  README, README_ca, README_de, README_fr, README_it,
+	  README.txt, README.ca.txt, README.de.txt, README.fr.txt, README.it.txt:
+
+	  saner filenames
+
+2005-08-06  MenTaLguY  <mental@rydia.net>
+
 	* src/xml/Makefile_insert, src/xml/log-builder.cpp,
 	  src/xml/log-builder.h, src/xml/simple-session.cpp,
 	  src/xml/simple-session.h:
