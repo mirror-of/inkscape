@@ -71,6 +71,7 @@ rm -rf %{buildroot}
 %{_datadir}/locale/*/LC_MESSAGES/inkscape.mo
 %{_datadir}/pixmaps/*
 %{_datadir}/inkscape/*
+%{_mandir}/*/man1/*
 %{_mandir}/man1/*
 
 %changelog
