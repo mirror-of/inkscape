@@ -1,5 +1,10 @@
 2005-08-06  MenTaLguY  <mental@rydia.net>
 
+	* src/xml/event.h, src/xml/event.cpp, src/xml/event-fns.h:
+      rejigger the way XML event logs are handled, based on NodeObservers
+
+2005-08-06  MenTaLguY  <mental@rydia.net>
+
 	* src/xml/simple-session.cpp: minor formatting cleanups
 
 2005-08-06  Ted Gould <ted@gould.cx>

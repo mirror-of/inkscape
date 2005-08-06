@@ -5,7 +5,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY  <mental@rydia.net>
  *
- * Copyright (C) 2004 MenTaLguY
+ * Copyright (C) 2004-2005 MenTaLguY
  * Copyright (C) 1999-2003 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  * g++ port Copyright (C) 2003 Nathan Hurst
@@ -21,6 +21,7 @@
 #include "xml/node.h"
 #include "xml/document.h"
 #include "xml/session.h"
+#include "xml/node-observer.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
 #include <cstring>
@@ -92,6 +93,57 @@ sp_repr_commit_undoable (Inkscape::XML::Document *doc)
 	return session->commitUndoable();
 }
 
+namespace {
+
+class LogPerformer : public Inkscape::XML::NodeObserver {
+public:
+	typedef Inkscape::XML::Node Node;
+
+	static LogPerformer &instance() {
+		static LogPerformer singleton;
+		return singleton;
+	}
+
+	void notifyChildAdded(Node &parent, Node &child, Node *ref) {
+		parent.addChild(&child, ref);
+	}
+
+	void notifyChildRemoved(Node &parent, Node &child, Node *old_ref) {
+		parent.removeChild(&child);
+	}
+
+	void notifyChildOrderChanged(Node &parent, Node &child,
+			             Node *old_ref, Node *new_ref)
+	{
+		parent.changeOrder(&child, new_ref);
+	}
+
+	void notifyAttributeChanged(Node &node, GQuark name,
+			            Inkscape::Util::SharedCStringPtr old_value,
+				    Inkscape::Util::SharedCStringPtr new_value)
+	{
+		node.setAttribute(g_quark_to_string(name), new_value);
+	}
+
+	void notifyContentChanged(Node &node,
+			          Inkscape::Util::SharedCStringPtr old_value,
+				  Inkscape::Util::SharedCStringPtr new_value)
+	{
+		node.setContent(new_value);
+	}
+};
+
+}
+
+void Inkscape::XML::undo_log_to_observer(
+	Inkscape::XML::Event const *log,
+	Inkscape::XML::NodeObserver &observer
+) {
+	for ( Event const *action = log ; action ; action = action->next ) {
+		action->undoOne(observer);
+	}
+}
+
 void
 sp_repr_undo_log (Inkscape::XML::Event *log)
 {
@@ -101,45 +153,52 @@ sp_repr_undo_log (Inkscape::XML::Event *log)
 
 	EventTracker<SimpleEvent<Event::XML> > tracker("undo-log");
 
-	Inkscape::XML::Event *action;
-
 	if (log) {
 		g_assert(!log->repr->session()->inTransaction());
 	}
 
-	for ( action = log ; action ; action = action->next ) {
-		action->undoOne();
-	}
+	Inkscape::XML::undo_log_to_observer(log, LogPerformer::instance());
 }
 
-void
-sp_repr_debug_print_log(Inkscape::XML::Event const *log) {
-	List<Inkscape::XML::Event const &> reversed(
-		reverse_list<Inkscape::XML::Event::ConstIterator>(log, NULL)
-	);
+void Inkscape::XML::EventAdd::_undoOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyChildRemoved(*this->repr, *this->child, this->ref);
+}
+
+void Inkscape::XML::EventDel::_undoOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyChildAdded(*this->repr, *this->child, this->ref);
+}
+
+void Inkscape::XML::EventChgAttr::_undoOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyAttributeChanged(*this->repr, this->key, this->newval, this->oldval);
+}
+
+void Inkscape::XML::EventChgContent::_undoOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyContentChanged(*this->repr, this->newval, this->oldval);
+}
+
+void Inkscape::XML::EventChgOrder::_undoOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyChildOrderChanged(*this->repr, *this->child, this->newref, this->oldref);
+}
+
+void Inkscape::XML::replay_log_to_observer(
+	Inkscape::XML::Event const *log,
+	Inkscape::XML::NodeObserver &observer
+) {
+	List<Inkscape::XML::Event const &> reversed =
+	  reverse_list<Inkscape::XML::Event::ConstIterator>(log, NULL);
 	for ( ; reversed ; ++reversed ) {
-		g_warning("Event %d: %s", reversed->serial, reversed->describe().c_str());
+		reversed->replayOne(observer);
 	}
-}
-
-void Inkscape::XML::EventAdd::_undoOne() const {
-	sp_repr_remove_child(this->repr, this->child);
-}
-
-void Inkscape::XML::EventDel::_undoOne() const {
-	sp_repr_add_child(this->repr, this->child, this->ref);
-}
-
-void Inkscape::XML::EventChgAttr::_undoOne() const {
-	sp_repr_set_attr(this->repr, g_quark_to_string(this->key), this->oldval);
-}
-
-void Inkscape::XML::EventChgContent::_undoOne() const {
-	this->repr->setContent(this->oldval);
-}
-
-void Inkscape::XML::EventChgOrder::_undoOne() const {
-	sp_repr_change_order(this->repr, this->child, this->oldref);
 }
 
 void
@@ -155,32 +214,37 @@ sp_repr_replay_log (Inkscape::XML::Event *log)
 		g_assert(!log->repr->session()->inTransaction());
 	}
 
-	List<Inkscape::XML::Event &> reversed(
-		reverse_list<Inkscape::XML::Event::Iterator>(log, NULL)
-	);
-	for ( ; reversed ; ++reversed ) {
-		reversed->replayOne();
-	}
+	Inkscape::XML::replay_log_to_observer(log, LogPerformer::instance());
 }
 
-void Inkscape::XML::EventAdd::_replayOne() const {
-	sp_repr_add_child(this->repr, this->child, this->ref);
+void Inkscape::XML::EventAdd::_replayOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyChildAdded(*this->repr, *this->child, this->ref);
 }
 
-void Inkscape::XML::EventDel::_replayOne() const {
-	sp_repr_remove_child(this->repr, this->child);
+void Inkscape::XML::EventDel::_replayOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyChildRemoved(*this->repr, *this->child, this->ref);
 }
 
-void Inkscape::XML::EventChgAttr::_replayOne() const {
-	sp_repr_set_attr(this->repr, g_quark_to_string(this->key), this->newval);
+void Inkscape::XML::EventChgAttr::_replayOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyAttributeChanged(*this->repr, this->key, this->oldval, this->newval);
 }
 
-void Inkscape::XML::EventChgContent::_replayOne() const {
-	this->repr->setContent(this->newval);
+void Inkscape::XML::EventChgContent::_replayOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyContentChanged(*this->repr, this->oldval, this->newval);
 }
 
-void Inkscape::XML::EventChgOrder::_replayOne() const {
-	sp_repr_change_order(this->repr, this->child, this->newref);
+void Inkscape::XML::EventChgOrder::_replayOne(
+	Inkscape::XML::NodeObserver &observer
+) const {
+	observer.notifyChildOrderChanged(*this->repr, *this->child, this->oldref, this->newref);
 }
 
 Inkscape::XML::Event *
@@ -330,62 +394,95 @@ Inkscape::XML::Event *Inkscape::XML::EventChgOrder::_optimizeOne() {
 }
 
 namespace {
-Glib::ustring node_to_string(Inkscape::XML::Node const &node) {
-	Glib::ustring result;
-	char const *type_name=NULL;
-	switch (node.type()) {
-	case Inkscape::XML::DOCUMENT_NODE:
-		type_name = "Document";
-		break;
-	case Inkscape::XML::ELEMENT_NODE:
-		type_name = "Element";
-		break;
-	case Inkscape::XML::TEXT_NODE:
-		type_name = "Text";
-		break;
-	case Inkscape::XML::COMMENT_NODE:
-		type_name = "Comment";
-		break;
-	default:
-		g_assert_not_reached();
+
+class LogPrinter : public Inkscape::XML::NodeObserver {
+public:
+	typedef Inkscape::XML::Node Node;
+
+	static LogPrinter &instance() {
+		static LogPrinter singleton;
+		return singleton;
 	}
-	char buffer[40];
-	result.append("#<");
-	result.append(type_name);
-	result.append(":");
-	snprintf(buffer, 40, "0x%p", &node);
-	result.append(buffer);
-	result.append(">");
 
-	return result;
-}
-}
+	static Glib::ustring node_to_string(Node const &node) {
+		Glib::ustring result;
+		char const *type_name=NULL;
+		switch (node.type()) {
+		case Inkscape::XML::DOCUMENT_NODE:
+			type_name = "Document";
+			break;
+		case Inkscape::XML::ELEMENT_NODE:
+			type_name = "Element";
+			break;
+		case Inkscape::XML::TEXT_NODE:
+			type_name = "Text";
+			break;
+		case Inkscape::XML::COMMENT_NODE:
+			type_name = "Comment";
+			break;
+		default:
+			g_assert_not_reached();
+		}
+		char buffer[40];
+		result.append("#<");
+		result.append(type_name);
+		result.append(":");
+		snprintf(buffer, 40, "0x%p", &node);
+		result.append(buffer);
+		result.append(">");
 
-Glib::ustring Inkscape::XML::EventAdd::_describe() const {
-	return Glib::ustring("Added ") + node_to_string(*child) + Glib::ustring(" to ") + node_to_string(*repr) + " after " + ( ref ? node_to_string(*ref) : "NULL" );
-}
-
-Glib::ustring Inkscape::XML::EventDel::_describe() const {
-	return Glib::ustring("Removed ") + node_to_string(*child) + " from " + node_to_string(*repr);
-}
-
-Glib::ustring Inkscape::XML::EventChgAttr::_describe() const {
-	if (newval) {
-		return Glib::ustring("Set attribute ") + g_quark_to_string(key) + " on " + node_to_string(*repr) + Glib::ustring(" to ") + static_cast<char const *>(newval);
-	} else {
-		return Glib::ustring("Unset attribute ") + g_quark_to_string(key) + " on " + node_to_string(*repr);
+		return result;
 	}
-}
 
-Glib::ustring Inkscape::XML::EventChgContent::_describe() const {
-	if (newval) {
-		return Glib::ustring("Set content of ") + node_to_string(*repr) + Glib::ustring(" to ") + static_cast<char const *>(newval);
-	} else {
-		return Glib::ustring("Unset content of ") + node_to_string(*repr);
+	static Glib::ustring ref_to_string(Node *ref) {
+		if (ref) {
+			return node_to_string(*ref);
+		} else {
+			return "beginning";
+		}
 	}
+
+	void notifyChildAdded(Node &parent, Node &child, Node *ref) {
+		g_warning("Event: Added %s to %s after %s", node_to_string(parent).c_str(), node_to_string(child).c_str(), ref_to_string(ref).c_str());
+	}
+
+	void notifyChildRemoved(Node &parent, Node &child, Node *ref) {
+		g_warning("Event: Removed %s from %s", node_to_string(parent).c_str(), node_to_string(child).c_str());
+	}
+
+	void notifyChildOrderChanged(Node &parent, Node &child,
+	                             Node *old_ref, Node *new_ref)
+	{
+		g_warning("Event: Moved %s after %s in %s", node_to_string(child).c_str(), ref_to_string(new_ref).c_str(), node_to_string(parent).c_str());
+	}
+
+	void notifyAttributeChanged(Node &node, GQuark name,
+	                            Inkscape::Util::SharedCStringPtr old_value,
+				    Inkscape::Util::SharedCStringPtr new_value)
+	{
+		if (new_value) {
+			g_warning("Event: Set attribute %s to \"%s\" on %s", g_quark_to_string(name), new_value.cString(), node_to_string(node).c_str());
+		} else {
+			g_warning("Event: Unset attribute %s on %s", g_quark_to_string(name), node_to_string(node).c_str());
+		}
+	}
+
+	void notifyContentChanged(Node &node,
+			          Inkscape::Util::SharedCStringPtr old_value,
+				  Inkscape::Util::SharedCStringPtr new_value)
+	{
+		if (new_value) {
+			g_warning("Event: Set content of %s to \"%s\"", node_to_string(node).c_str(), new_value.cString());
+		} else {
+			g_warning("Event: Unset content of %s", node_to_string(node).c_str());
+		}
+	}
+};
+
 }
 
-Glib::ustring Inkscape::XML::EventChgOrder::_describe() const {
-	return Glib::ustring("Moved ") + node_to_string(*child) + " in " + node_to_string(*repr) + " to after " + ( newref ? node_to_string(*newref) : "NULL" );
+void
+sp_repr_debug_print_log(Inkscape::XML::Event const *log) {
+	Inkscape::XML::replay_log_to_observer(log, LogPrinter::instance());
 }
 

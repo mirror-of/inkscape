@@ -3,13 +3,14 @@
 
 namespace Inkscape {
 namespace XML {
-class Document;
-}
-}
 
-namespace Inkscape {
-namespace XML {
+class Document;
 class Event;
+class NodeObserver;
+
+void replay_log_to_observer(Event const *log, NodeObserver &observer);
+void undo_log_to_observer(Event const *log, NodeObserver &observer);
+
 }
 }
 

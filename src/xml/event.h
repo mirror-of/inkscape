@@ -15,6 +15,7 @@ namespace Inkscape {
 namespace XML {
 
 class Node;
+class NodeObserver;
 
 class Event
 : public Inkscape::GC::Managed<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>
@@ -37,18 +38,20 @@ public:
 	typedef Inkscape::Util::ForwardPointerIterator<Event const, IteratorStrategy> ConstIterator;
 
 	Event *optimizeOne() { return _optimizeOne(); }
-	void undoOne() const { return _undoOne(); }
-	void replayOne() const { return _replayOne(); }
-	Glib::ustring describe() const { return _describe(); }
+	void undoOne(NodeObserver &observer) const {
+		_undoOne(observer);
+	}
+	void replayOne(NodeObserver &observer) const {
+		_replayOne(observer);
+	}
 
 protected:
 	Event(Node *r, Event *n)
 	: next(n), serial(_next_serial++), repr(r) {}
 
 	virtual Event *_optimizeOne()=0;
-	virtual void _undoOne() const=0;
-	virtual void _replayOne() const=0;
-	virtual Glib::ustring _describe() const=0;
+	virtual void _undoOne(NodeObserver &) const=0;
+	virtual void _replayOne(NodeObserver &) const=0;
 
 private:
 	static int _next_serial;
@@ -64,9 +67,8 @@ public:
 
 private:
 	Event *_optimizeOne();
-	void _undoOne() const;
-	void _replayOne() const;
-	Glib::ustring _describe() const;
+	void _undoOne(NodeObserver &observer) const;
+	void _replayOne(NodeObserver &observer) const;
 };
 
 class EventDel : public Event {
@@ -79,9 +81,8 @@ public:
 
 private:
 	Event *_optimizeOne();
-	void _undoOne() const;
-	void _replayOne() const;
-	Glib::ustring _describe() const;
+	void _undoOne(NodeObserver &observer) const;
+	void _replayOne(NodeObserver &observer) const;
 };
 
 class EventChgAttr : public Event {
@@ -99,9 +100,8 @@ public:
 
 private:
 	Event *_optimizeOne();
-	void _undoOne() const;
-	void _replayOne() const;
-	Glib::ustring _describe() const;
+	void _undoOne(NodeObserver &observer) const;
+	void _replayOne(NodeObserver &observer) const;
 };
 
 class EventChgContent : public Event {
@@ -117,9 +117,8 @@ public:
 
 private:
 	Event *_optimizeOne();
-	void _undoOne() const;
-	void _replayOne() const;
-	Glib::ustring _describe() const;
+	void _undoOne(NodeObserver &observer) const;
+	void _replayOne(NodeObserver &observer) const;
 };
 
 class EventChgOrder : public Event {
@@ -133,9 +132,8 @@ public:
 
 private:
 	Event *_optimizeOne();
-	void _undoOne() const;
-	void _replayOne() const;
-	Glib::ustring _describe() const;
+	void _undoOne(NodeObserver &observer) const;
+	void _replayOne(NodeObserver &observer) const;
 };
 
 }
