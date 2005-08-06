@@ -49,7 +49,8 @@ Inkscape::XML::Event *SimpleSession::commitUndoable() {
     return log;
 }
 
-void SimpleSession::notifyChildAdded(Inkscape::XML::Node &parent, Inkscape::XML::Node &child,
+void SimpleSession::notifyChildAdded(Inkscape::XML::Node &parent,
+                                     Inkscape::XML::Node &child,
                                      Inkscape::XML::Node *prev)
 {
     if (_in_transaction) {
@@ -58,7 +59,8 @@ void SimpleSession::notifyChildAdded(Inkscape::XML::Node &parent, Inkscape::XML:
     }
 }
 
-void SimpleSession::notifyChildRemoved(Inkscape::XML::Node &parent, Inkscape::XML::Node &child,
+void SimpleSession::notifyChildRemoved(Inkscape::XML::Node &parent,
+                                       Inkscape::XML::Node &child,
                                        Inkscape::XML::Node *prev)
 {
     if (_in_transaction) {
@@ -67,8 +69,10 @@ void SimpleSession::notifyChildRemoved(Inkscape::XML::Node &parent, Inkscape::XM
     }
 }
 
-void SimpleSession::notifyChildOrderChanged(Inkscape::XML::Node &parent, Inkscape::XML::Node &child,
-                                            Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev)
+void SimpleSession::notifyChildOrderChanged(Inkscape::XML::Node &parent,
+                                            Inkscape::XML::Node &child,
+                                            Inkscape::XML::Node *old_prev,
+                                            Inkscape::XML::Node *new_prev)
 {
     if (_in_transaction) {
         _log = new Inkscape::XML::EventChgOrder(&parent, &child, old_prev, new_prev, _log);
@@ -86,7 +90,8 @@ void SimpleSession::notifyContentChanged(Inkscape::XML::Node &node,
     }
 }
 
-void SimpleSession::notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
+void SimpleSession::notifyAttributeChanged(Inkscape::XML::Node &node,
+                                           GQuark name,
                                            Util::SharedCStringPtr old_value,
                                            Util::SharedCStringPtr new_value)
 {
