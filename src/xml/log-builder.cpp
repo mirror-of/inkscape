@@ -30,34 +30,34 @@ Event *LogBuilder::detach() {
     return log;
 }
 
-void LogBuilder::notifyChildAdded(Node &node, Node &child, Node *prev) {
+void LogBuilder::addChild(Node &node, Node &child, Node *prev) {
     _log = new Inkscape::XML::EventAdd(&node, &child, prev, _log);
     _log = _log->optimizeOne();
 }
 
-void LogBuilder::notifyChildRemoved(Node &node, Node &child, Node *prev) {
+void LogBuilder::removeChild(Node &node, Node &child, Node *prev) {
     _log = new Inkscape::XML::EventDel(&node, &child, prev, _log);
     _log = _log->optimizeOne();
 }
 
-void LogBuilder::notifyChildOrderChanged(Node &node, Node &child,
-                                         Node *old_prev, Node *new_prev)
+void LogBuilder::setChildOrder(Node &node, Node &child,
+                               Node *old_prev, Node *new_prev)
 {
     _log = new Inkscape::XML::EventChgOrder(&node, &child, old_prev, new_prev, _log);
     _log = _log->optimizeOne();
 }
 
-void LogBuilder::notifyContentChanged(Node &node,
-                                      Util::SharedCStringPtr old_content,
-                                      Util::SharedCStringPtr new_content)
+void LogBuilder::setContent(Node &node,
+                            Util::SharedCStringPtr old_content,
+                            Util::SharedCStringPtr new_content)
 {
     _log = new Inkscape::XML::EventChgContent(&node, old_content, new_content, _log);
     _log = _log->optimizeOne();
 }
 
-void LogBuilder::notifyAttributeChanged(Node &node, GQuark name,
-                                        Util::SharedCStringPtr old_value,
-                                        Util::SharedCStringPtr new_value)
+void LogBuilder::setAttribute(Node &node, GQuark name,
+                              Util::SharedCStringPtr old_value,
+                              Util::SharedCStringPtr new_value)
 {
     _log = new Inkscape::XML::EventChgAttr(&node, name, old_value, new_value, _log);
     _log = _log->optimizeOne();

@@ -51,7 +51,7 @@ void SimpleSession::notifyChildAdded(Inkscape::XML::Node &parent,
                                      Inkscape::XML::Node *prev)
 {
     if (_in_transaction) {
-        _log_builder.notifyChildAdded(parent, child, prev);
+        _log_builder.addChild(parent, child, prev);
     }
 }
 
@@ -60,7 +60,7 @@ void SimpleSession::notifyChildRemoved(Inkscape::XML::Node &parent,
                                        Inkscape::XML::Node *prev)
 {
     if (_in_transaction) {
-        _log_builder.notifyChildRemoved(parent, child, prev);
+        _log_builder.removeChild(parent, child, prev);
     }
 }
 
@@ -70,7 +70,7 @@ void SimpleSession::notifyChildOrderChanged(Inkscape::XML::Node &parent,
                                             Inkscape::XML::Node *new_prev)
 {
     if (_in_transaction) {
-        _log_builder.notifyChildOrderChanged(parent, child, old_prev, new_prev);
+        _log_builder.setChildOrder(parent, child, old_prev, new_prev);
     }
 }
 
@@ -79,7 +79,7 @@ void SimpleSession::notifyContentChanged(Inkscape::XML::Node &node,
                                          Util::SharedCStringPtr new_content)
 {
     if (_in_transaction) {
-        _log_builder.notifyContentChanged(node, old_content, new_content);
+        _log_builder.setContent(node, old_content, new_content);
     }
 }
 
@@ -89,7 +89,7 @@ void SimpleSession::notifyAttributeChanged(Inkscape::XML::Node &node,
                                            Util::SharedCStringPtr new_value)
 {
     if (_in_transaction) {
-        _log_builder.notifyAttributeChanged(node, name, old_value, new_value);
+        _log_builder.setAttribute(node, name, old_value, new_value);
     }
 }
 

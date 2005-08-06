@@ -23,29 +23,28 @@ namespace XML {
 
 class Event;
 
-class LogBuilder : public GC::Managed<>,
-                   public NodeObserver
-{
+class LogBuilder {
 public:
     LogBuilder() : _log(NULL) {}
+    ~LogBuilder() { discard(); }
 
     void discard();
     Event *detach();
 
-    void notifyChildAdded(Node &node, Node &child, Node *prev);
+    void addChild(Node &node, Node &child, Node *prev);
 
-    void notifyChildRemoved(Node &node, Node &child, Node *prev);
+    void removeChild(Node &node, Node &child, Node *prev);
 
-    void notifyChildOrderChanged(Node &node, Node &child,
-                                 Node *old_prev, Node *new_prev);
+    void setChildOrder(Node &node, Node &child,
+                       Node *old_prev, Node *new_prev);
 
-    void notifyContentChanged(Node &node,
-                              Util::SharedCStringPtr old_content,
-                              Util::SharedCStringPtr new_content);
+    void setContent(Node &node,
+                    Util::SharedCStringPtr old_content,
+                    Util::SharedCStringPtr new_content);
 
-    void notifyAttributeChanged(Node &node, GQuark name,
-                                Util::SharedCStringPtr old_value,
-                                Util::SharedCStringPtr new_value);
+    void setAttribute(Node &node, GQuark name,
+                      Util::SharedCStringPtr old_value,
+                      Util::SharedCStringPtr new_value);
 
 private:
     Event *_log;
