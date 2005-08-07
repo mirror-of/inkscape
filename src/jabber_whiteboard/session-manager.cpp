@@ -109,7 +109,9 @@ SessionManager::SessionManager(::SPDesktop *desktop)
 
     //# lm_initialize() must be called before any network code
     if (!lm_initialize_called) {
+#ifdef WIN32
         lm_initialize();
+#endif
         lm_initialize_called = true;
         }
 }
