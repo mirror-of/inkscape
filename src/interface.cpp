@@ -579,17 +579,6 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, Inkscape
 } // end of sp_ui_menu_append_item_from_verb
 
 
-
-static void
-sp_ui_menu_append (GtkMenu *menu, Inkscape::Verb ** verbs, Inkscape::UI::View::View *view)
-{
-    int i;
-    for (i = 0; verbs[i]->get_code() != SP_VERB_LAST; i++) {
-        // std::cout << "Verb name: " << verbs[i]->get_id() << " Code: " << verbs[i]->get_code() << std::endl;
-        sp_ui_menu_append_item_from_verb (menu, verbs[i], view);
-    }
-}
-
 static void
 checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
  {
