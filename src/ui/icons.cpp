@@ -613,6 +613,20 @@ init()
     _transform_pattern.add_source(small);
     icons->add(Stock::TRANSFORM_PATTERN, _transform_pattern);
 
+    // Calligraphy Tool controls
+    //  Use Pressure
+    Gtk::IconSet _use_pressure;
+    small.set_icon_name("UsePressure");
+    small.set_filename(get_icon_path("use-pressure.svg"));
+    _use_pressure.add_source(small);
+    icons->add(Stock::USE_PRESSURE, _use_pressure);
+    //  Use Tilt
+    Gtk::IconSet _use_tilt;
+    small.set_icon_name("UseTilt");
+    small.set_filename(get_icon_path("use-tilt.svg"));
+    _use_tilt.add_source(small);
+    icons->add(Stock::USE_TILT, _use_tilt);
+
 	// Session playback dialog
 	// Rewind
     Gtk::IconSet _session_rewind;

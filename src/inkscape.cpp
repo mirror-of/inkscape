@@ -59,6 +59,7 @@ using Inkscape::Extension::Internal::PrintWin32;
 #include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
 #include "dialogs/debugdialog.h"
+#include "dialogs/input.h"
 
 #include "shortcuts.h"
 
@@ -712,16 +713,21 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
 bool
 inkscape_load_preferences (Inkscape::Application *inkscape)
 {
-    return inkscape_load_config (PREFERENCES_FILE, 
-				 inkscape->preferences, 
-				 preferences_skeleton, 
-				 PREFERENCES_SKELETON_SIZE,
-				 _("%s is not a regular file.\n%s"),
-				 _("%s not a valid XML file, or\n"
-				   "you don't have read permissions on it.\n%s"),
-				 _("%s is not a valid preferences file.\n%s"),
-				 _("Inkscape will run with default settings.\n"
-                             "New settings will not be saved."));
+    if (inkscape_load_config (PREFERENCES_FILE, 
+                              inkscape->preferences, 
+                              preferences_skeleton, 
+                              PREFERENCES_SKELETON_SIZE,
+                              _("%s is not a regular file.\n%s"),
+                              _("%s not a valid XML file, or\n"
+                                "you don't have read permissions on it.\n%s"),
+                              _("%s is not a valid preferences file.\n%s"),
+                              _("Inkscape will run with default settings.\n"
+                                "New settings will not be saved.")))
+    {
+        sp_input_load_from_preferences();
+        return true;
+    } else
+        return false;
 }
 
 

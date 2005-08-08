@@ -164,6 +164,9 @@ extern Gtk::StockID const NODE_SMOOTH;
 extern Gtk::StockID const NODE_SYMMETRIC;
 extern Gtk::StockID const NODE_LINE;
 extern Gtk::StockID const NODE_CURVE;
+// Calligraphy Tool controls
+extern Gtk::StockID const USE_PRESSURE;
+extern Gtk::StockID const USE_TILT;
 // Session playback dialog controls
 extern Gtk::StockID const SESSION_PLAYBACK_REW;
 extern Gtk::StockID const SESSION_PLAYBACK_STEPBACK;

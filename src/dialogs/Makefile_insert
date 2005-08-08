@@ -50,6 +50,8 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/fill-style.h	\
 	dialogs/in-dt-coordsys.cpp	\
 	dialogs/in-dt-coordsys.h	\
+	dialogs/input.cpp	\
+	dialogs/input.h		\
 	dialogs/item-properties.cpp	\
 	dialogs/item-properties.h	\
 	dialogs/layer-properties.cpp	\

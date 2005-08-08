@@ -1819,6 +1819,20 @@ sp_ddc_flatness_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
     spinbutton_defocus(GTK_OBJECT(tbl));
 }
 
+static void
+sp_ddc_pressure_state_changed(GtkWidget *button, gpointer data)
+{
+    prefs_set_int_attribute ("tools.calligraphic", "usepressure", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+}
+
+static void
+sp_ddc_tilt_state_changed(GtkWidget *button, GtkWidget *calligraphy_angle)
+{
+    prefs_set_int_attribute ("tools.calligraphic", "usetilt", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)) ? 1 : 0);
+
+    gtk_widget_set_sensitive(GTK_WIDGET(calligraphy_angle), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)));
+}
+
 static void sp_ddc_defaults(GtkWidget *, GtkWidget *tbl)
 {
     // FIXME: make defaults settable via Inkscape Options
@@ -1851,6 +1865,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
     gtk_object_set_data(GTK_OBJECT(tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new();
+    GtkWidget *calligraphy_angle;
 
     //  interval
     gtk_box_pack_start(GTK_BOX(tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
@@ -1880,12 +1895,12 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
 
     /* Angle */
     {
-        GtkWidget *hb = sp_tb_spinbutton(_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if fixation = 0)"),
-                                         "tools.calligraphic", "angle", 30,
-                                         NULL, tbl, TRUE, "calligraphy-angle",
-                                         -90.0, 90.0, 1.0, 10.0,
-                                         sp_ddc_angle_value_changed, 1, 0);
-        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
+        calligraphy_angle = sp_tb_spinbutton(_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if fixation = 0)"),
+                                             "tools.calligraphic", "angle", 30,
+                                             NULL, tbl, TRUE, "calligraphy-angle",
+                                             -90.0, 90.0, 1.0, 10.0,
+                                             sp_ddc_angle_value_changed, 1, 0);
+        gtk_box_pack_start(GTK_BOX(tbl), calligraphy_angle, FALSE, FALSE, AUX_SPACING);
     }
 
     /* Fixation */
@@ -1924,6 +1939,39 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
 
     //  interval
     gtk_box_pack_start(GTK_BOX(tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    GtkWidget *cvbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
+
+    /* Use Pressure button */
+    {
+    GtkWidget *button = sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                                 SP_BUTTON_TYPE_TOGGLE,
+                                                 NULL,
+                                                 "use_pressure",
+                                                 _("Use the pressure of the input device to alter the width of the pen"),
+                                                 tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (sp_ddc_pressure_state_changed), NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("tools.calligraphic", "usepressure", 1));
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    /* Use Tilt button */
+    {
+    GtkWidget *button = sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                                 SP_BUTTON_TYPE_TOGGLE,
+                                                 NULL,
+                                                 "use_tilt",
+                                                 _("Use the tilt of the input device to alter the angle of the pen's nib"),
+                                                 tt);
+    g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (sp_ddc_tilt_state_changed), calligraphy_angle);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), prefs_get_int_attribute ("tools.calligraphic", "usetilt", 1));
+    gtk_widget_set_sensitive(GTK_WIDGET(calligraphy_angle), !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)));
+    gtk_box_pack_start(GTK_BOX(cbox), button, FALSE, FALSE, 0);
+    }
+
+    gtk_box_pack_start(GTK_BOX(cvbox), cbox, TRUE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(tbl), cvbox, FALSE, FALSE, 0);
 
     /* Reset */
     {

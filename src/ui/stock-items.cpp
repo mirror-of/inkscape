@@ -190,6 +190,10 @@ init()
     add(Gtk::StockItem(NODE_LINE, _("PLACEHOLDER, do not translate")));
     add(Gtk::StockItem(NODE_CURVE, _("PLACEHOLDER, do not translate")));
 
+    // Calligraphy Tool controls
+    add(Gtk::StockItem(USE_PRESSURE, _("PLACEHOLDER, do not translate")));
+    add(Gtk::StockItem(USE_TILT, _("PLACEHOLDER, do not translate")));
+
 	// Session playback controls
 	add(Gtk::StockItem(SESSION_PLAYBACK_REW, _("PLACEHOLDER, do not translate")));
 	add(Gtk::StockItem(SESSION_PLAYBACK_STEPBACK, _("PLACEHOLDER, do not translate")));

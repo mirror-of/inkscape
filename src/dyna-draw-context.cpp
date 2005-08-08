@@ -228,6 +228,8 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "width");
     sp_event_context_read(ec, "thinning");
     sp_event_context_read(ec, "flatness");
+    sp_event_context_read(ec, "usepressure");
+    sp_event_context_read(ec, "usetilt");
 
     ddc->is_drawing = false;
 
@@ -257,6 +259,10 @@ sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     } else if (!strcmp(key, "flatness")) {
         double const dval = ( val ? g_ascii_strtod (val, NULL) : 1.0 );
         ddc->flatness = CLAMP(dval, 0, 1.0);
+    } else if (!strcmp(key, "usepressure")) {
+        ddc->usepressure = (val && strcmp(val, "0"));
+    } else if (!strcmp(key, "usetilt")) {
+        ddc->usetilt = (val && strcmp(val, "0"));
     }
 
     //g_print("DDC: %g %g %g %g\n", ddc->mass, ddc->drag, ddc->angle, ddc->width);
@@ -307,6 +313,26 @@ sp_dyna_draw_reset(SPDynaDrawContext *dc, NR::Point p)
     dc->del = NR::Point(0,0);
 }
 
+static void
+sp_dyna_draw_extinput(SPDynaDrawContext *dc, GdkEvent *event)
+{
+    if (gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &dc->pressure))
+        dc->pressure = CLAMP (dc->pressure, DDC_MIN_PRESSURE, DDC_MAX_PRESSURE);
+    else
+        dc->pressure = DDC_DEFAULT_PRESSURE;
+
+    if (gdk_event_get_axis (event, GDK_AXIS_XTILT, &dc->xtilt))
+        dc->xtilt = CLAMP (dc->xtilt, DDC_MIN_TILT, DDC_MAX_TILT);
+    else
+        dc->xtilt = DDC_DEFAULT_TILT;
+
+    if (gdk_event_get_axis (event, GDK_AXIS_YTILT, &dc->ytilt))
+        dc->ytilt = CLAMP (dc->ytilt, DDC_MIN_TILT, DDC_MAX_TILT);
+    else
+        dc->ytilt = DDC_DEFAULT_TILT;
+}
+
+
 static gboolean
 sp_dyna_draw_apply(SPDynaDrawContext *dc, NR::Point p)
 {
@@ -329,9 +355,24 @@ sp_dyna_draw_apply(SPDynaDrawContext *dc, NR::Point p)
 
     /* Calculate angle of drawing tool */
 
-    // 1. fixed dc->angle (absolutely flat nib):
-    double const radians = ( (dc->angle - 90) / 180.0 ) * M_PI;
-    NR::Point ang1 = NR::Point(-sin(radians),  cos(radians));
+    double a1;
+    if (dc->usetilt) {
+        // 1a. calculate nib angle from input device tilt:
+        gdouble length = std::sqrt(dc->xtilt*dc->xtilt + dc->ytilt*dc->ytilt);;
+
+        if (length > 0) {
+            NR::Point ang1 = NR::Point(dc->ytilt/length, dc->xtilt/length);
+            a1 = atan2(ang1);
+        }
+        else
+            a1 = 0.0;
+    }
+    else {
+        // 1b. fixed dc->angle (absolutely flat nib):
+        double const radians = ( (dc->angle - 90) / 180.0 ) * M_PI;
+        NR::Point ang1 = NR::Point(-sin(radians),  cos(radians));
+        a1 = atan2(ang1);
+    }
 
     // 2. perpendicular to dc->vel (absolutely non-flat nib):
     gdouble const mag_vel = NR::L2(dc->vel);
@@ -342,7 +383,6 @@ sp_dyna_draw_apply(SPDynaDrawContext *dc, NR::Point p)
 
     // 3. Average them using flatness parameter:
     // calculate angles
-    double a1 = atan2(ang1);
     double a2 = atan2(ang2);
     // flip a2 to force it to be in the same half-circle as a1
     bool flipped = false;
@@ -382,7 +422,10 @@ sp_dyna_draw_brush(SPDynaDrawContext *dc)
         // How much velocity thins strokestyle
         double vel_thin = flerp (0, 160, dc->vel_thin);
 
-        double width = ( 1 - vel_thin * NR::L2(dc->vel) ) * dc->width;
+        // Influence of pressure on thickness
+        double pressure_thick = (dc->usepressure ? dc->pressure : 1.0);
+
+        double width = ( pressure_thick - vel_thin * NR::L2(dc->vel) ) * dc->width;
         if ( width < 0.02 * dc->width ) {
             width = 0.02 * dc->width;
         }
@@ -467,6 +510,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                                      event->button.y);
             NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
             sp_dyna_draw_reset(dc, button_dt);
+            sp_dyna_draw_extinput(dc, event);
             sp_dyna_draw_apply(dc, button_dt);
             NR::Point p = sp_dyna_draw_get_curr_vpoint(dc);
             namedview_free_snap(desktop->namedview, Snapper::SNAP_POINT, p);
@@ -509,6 +553,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                                      event->motion.y);
             NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
 
+            sp_dyna_draw_extinput(dc, event);
             if (!sp_dyna_draw_apply(dc, motion_dt)) {
                 ret = TRUE;
                 break;

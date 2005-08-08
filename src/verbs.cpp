@@ -54,6 +54,7 @@
 #include "dialogs/iconpreview.h"
 #include "dialogs/extensions.h"
 #include "dialogs/swatches.h"
+#include "dialogs/input.h"
 
 #ifdef WITH_INKBOARD
 #include "ui/dialog/whiteboard-connect.h"
@@ -1570,6 +1571,9 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
 #endif
 			break;
 		}
+        case SP_VERB_DIALOG_INPUT:
+            sp_input_dialog ();
+            break;
         default:
             break;
     }
@@ -2138,6 +2142,8 @@ Verb * Verb::_base_verbs[] = {
 		N_("_Open session file..."), N_("Open and browse through records of past whiteboard sessions"), NULL),
 	new DialogVerb(SP_VERB_DIALOG_WHITEBOARD_SESSIONPLAYBACK, "DialogWhiteboardSessionPlayback",
 		N_("Session file playback"), "", NULL),
+    new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),
+        N_("Configure extended input devices"), NULL),
 
     /* Help */
     new HelpVerb(SP_VERB_HELP_KEYS, "HelpKeys", N_("_Keys and Mouse"),

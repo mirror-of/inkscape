@@ -1036,8 +1036,6 @@ sp_canvas_realize (GtkWidget *widget)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
 
-    GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-
     GdkWindowAttr attributes;
     attributes.window_type = GDK_WINDOW_CHILD;
     attributes.x = widget->allocation.x;
@@ -1052,6 +1050,8 @@ sp_canvas_realize (GtkWidget *widget)
                              GDK_BUTTON_PRESS_MASK |
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK |
+                             GDK_PROXIMITY_IN_MASK |
+                             GDK_PROXIMITY_OUT_MASK |
                              GDK_KEY_PRESS_MASK |
                              GDK_KEY_RELEASE_MASK |
                              GDK_ENTER_NOTIFY_MASK |
@@ -1061,6 +1061,9 @@ sp_canvas_realize (GtkWidget *widget)
 
     widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
     gdk_window_set_user_data (widget->window, widget);
+    gtk_widget_set_events(widget, attributes.event_mask);
+
+    GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
     canvas->pixmap_gc = gdk_gc_new (SP_CANVAS_WINDOW (canvas));
 }

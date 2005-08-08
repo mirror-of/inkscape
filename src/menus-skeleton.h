@@ -30,6 +30,7 @@ static char const menus_skeleton[] =
 "       <seperator/>\n"
 "       <verb verb-id=\"DialogNamedview\" />\n"
 "       <verb verb-id=\"DialogDisplay\" />\n"
+"       <verb verb-id=\"DialogInput\" />\n"
 "       <seperator/>\n"
 "       <verb verb-id=\"FileCloseView\" />\n"
 "       <verb verb-id=\"FileQuit\" />\n"

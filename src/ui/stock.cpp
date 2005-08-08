@@ -161,6 +161,9 @@ Gtk::StockID const NODE_SMOOTH("node-smooth");
 Gtk::StockID const NODE_SYMMETRIC("node-symmetric");
 Gtk::StockID const NODE_LINE("node-line");
 Gtk::StockID const NODE_CURVE("node-curve");
+// Calligraphy Tool controls
+Gtk::StockID const USE_PRESSURE("use-pressure");
+Gtk::StockID const USE_TILT("use-tilt");
 
 Gtk::StockID const SESSION_PLAYBACK_REW("session-rewind");
 Gtk::StockID const SESSION_PLAYBACK_STEPBACK("session-stepback");

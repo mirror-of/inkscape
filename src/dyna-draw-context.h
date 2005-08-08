@@ -34,6 +34,14 @@ class SPDynaDrawContextClass;
 
 #define SAMPLING_SIZE 16        /* fixme: ?? */
 
+#define DDC_MIN_PRESSURE      0.0
+#define DDC_MAX_PRESSURE      1.0
+#define DDC_DEFAULT_PRESSURE  1.0
+
+#define DDC_MIN_TILT         -1.0
+#define DDC_MAX_TILT          1.0
+#define DDC_DEFAULT_TILT      0.0
+
 struct SPDynaDrawContext
 {
     SPEventContext event_context;
@@ -63,6 +71,10 @@ struct SPDynaDrawContext
     NR::Point ang;
     NR::Point last;
     NR::Point del;
+    /* extended input data */
+    gdouble pressure;
+    gdouble xtilt;
+    gdouble ytilt;
     /* attributes */
     /* fixme: shuld be merge dragging and dynahand ?? */
     guint dragging : 1;           /* mouse state: mouse is dragging */
@@ -72,6 +84,8 @@ struct SPDynaDrawContext
     double mass, drag;
     double angle;
     double width;
+    guint usepressure : 1;
+    guint usetilt : 1;
 
     double vel_thin;
     double flatness;
