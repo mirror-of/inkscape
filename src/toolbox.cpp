@@ -1290,7 +1290,7 @@ sp_rtb_sensitivize (GtkWidget *tbl)
 
 
 static void
-sp_rtb_rxry_value_changed(GtkAdjustment *adj, GtkWidget *tbl, gchar const *value_name,
+sp_rtb_value_changed(GtkAdjustment *adj, GtkWidget *tbl, gchar const *value_name,
                           void (*setter)(SPRect *, gdouble))
 {
     SPDesktop *desktop = (SPDesktop *) gtk_object_get_data(GTK_OBJECT(tbl), "desktop");
@@ -1338,13 +1338,25 @@ sp_rtb_rxry_value_changed(GtkAdjustment *adj, GtkWidget *tbl, gchar const *value
 static void
 sp_rtb_rx_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
 {
-    sp_rtb_rxry_value_changed(adj, tbl, "rx", sp_rect_set_visible_rx);
+    sp_rtb_value_changed(adj, tbl, "rx", sp_rect_set_visible_rx);
 }
 
 static void
 sp_rtb_ry_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
 {
-    sp_rtb_rxry_value_changed(adj, tbl, "ry", sp_rect_set_visible_ry);
+    sp_rtb_value_changed(adj, tbl, "ry", sp_rect_set_visible_ry);
+}
+
+static void
+sp_rtb_width_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
+{
+    sp_rtb_value_changed(adj, tbl, "width", sp_rect_set_visible_width);
+}
+
+static void
+sp_rtb_height_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
+{
+    sp_rtb_value_changed(adj, tbl, "height", sp_rect_set_visible_height);
 }
 
 
@@ -1400,6 +1412,18 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *n
             gdouble ry = sp_rect_get_visible_ry(SP_RECT(item));
             gtk_adjustment_set_value(adj, sp_pixels_get_units(ry, *unit));
         }
+
+        {
+            GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data(GTK_OBJECT(tbl), "width");
+            gdouble width = sp_rect_get_visible_width (SP_RECT(item));
+            gtk_adjustment_set_value(adj, sp_pixels_get_units(width, *unit));
+        }
+
+        {
+            GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data(GTK_OBJECT(tbl), "height");
+            gdouble height = sp_rect_get_visible_height (SP_RECT(item));
+            gtk_adjustment_set_value(adj, sp_pixels_get_units(height, *unit));
+        }
     }
 
     sp_rtb_sensitivize (tbl);
@@ -1441,8 +1465,19 @@ sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
 
     if (n_selected == 0) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>New:</b>"));
+
+        GtkWidget *w = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(tbl), "width_sb");
+        gtk_widget_set_sensitive(w, FALSE);
+        GtkWidget *h = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(tbl), "height_sb");
+        gtk_widget_set_sensitive(h, FALSE);
+
     } else if (n_selected == 1) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
+
+        GtkWidget *w = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(tbl), "width_sb");
+        gtk_widget_set_sensitive(w, TRUE);
+        GtkWidget *h = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(tbl), "height_sb");
+        gtk_widget_set_sensitive(h, TRUE);
 
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
         if (oldrepr) { // remove old listener
@@ -1483,11 +1518,35 @@ sp_rect_toolbox_new(SPDesktop *desktop)
     sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit(desktop));
     // fixme: add % meaning per cent of the width/height
 
+    /* W */
+    {
+        GtkWidget *hb = sp_tb_spinbutton(_("W:"), _("Width of rectangle"),
+                                         "tools.shapes.rect", "width", 0,
+                                         us, tbl, TRUE, "altx-rect",
+                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                         sp_rtb_width_value_changed);
+        gtk_object_set_data(GTK_OBJECT(tbl), "width_sb", hb);
+        gtk_widget_set_sensitive(hb, FALSE);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+    /* H */
+    {
+        GtkWidget *hb = sp_tb_spinbutton(_("H:"), _("Height of rectangle"),
+                                         "tools.shapes.rect", "height", 0,
+                                         us, tbl, FALSE, NULL,
+                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                         sp_rtb_height_value_changed);
+        gtk_object_set_data(GTK_OBJECT(tbl), "height_sb", hb);
+        gtk_widget_set_sensitive(hb, FALSE);
+        gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
     /* rx */
     {
         GtkWidget *hb = sp_tb_spinbutton(_("Rx:"), _("Horizontal radius of rounded corners"),
                                          "tools.shapes.rect", "rx", 0,
-                                         us, tbl, TRUE, "altx-rect",
+                                         us, tbl, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          sp_rtb_rx_value_changed);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);

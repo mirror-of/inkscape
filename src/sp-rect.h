@@ -56,6 +56,11 @@ void sp_rect_set_visible_ry (SPRect *rect, gdouble ry);
 gdouble sp_rect_get_visible_rx (SPRect *rect);
 gdouble sp_rect_get_visible_ry (SPRect *rect);
 
+void sp_rect_set_visible_width (SPRect *rect, gdouble rx);
+void sp_rect_set_visible_height (SPRect *rect, gdouble ry);
+gdouble sp_rect_get_visible_width (SPRect *rect);
+gdouble sp_rect_get_visible_height (SPRect *rect);
+
 void sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform);
 
 #endif

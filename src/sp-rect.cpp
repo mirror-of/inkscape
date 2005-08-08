@@ -520,6 +520,50 @@ sp_rect_compensate_rxry(SPRect *rect, NR::Matrix xform)
     rect->rx.set = rect->ry.set = TRUE;
 }
 
+void
+sp_rect_set_visible_width(SPRect *rect, gdouble width)
+{
+    rect->width.computed = width / vector_stretch(
+        NR::Point(rect->x.computed + 1, rect->y.computed),
+        NR::Point(rect->x.computed, rect->y.computed),
+        SP_ITEM(rect)->transform);
+    rect->width.set = TRUE;
+    SP_OBJECT(rect)->updateRepr();
+}
+
+void
+sp_rect_set_visible_height(SPRect *rect, gdouble height)
+{
+    rect->height.computed = height / vector_stretch(
+        NR::Point(rect->x.computed, rect->y.computed + 1),
+        NR::Point(rect->x.computed, rect->y.computed),
+        SP_ITEM(rect)->transform);
+    rect->height.set = TRUE;
+    SP_OBJECT(rect)->updateRepr();
+}
+
+gdouble
+sp_rect_get_visible_width(SPRect *rect)
+{
+    if (!rect->width.set)
+        return 0;
+    return rect->width.computed * vector_stretch(
+        NR::Point(rect->x.computed + 1, rect->y.computed),
+        NR::Point(rect->x.computed, rect->y.computed),
+        SP_ITEM(rect)->transform);
+}
+
+gdouble
+sp_rect_get_visible_height(SPRect *rect)
+{
+    if (!rect->height.set)
+        return 0;
+    return rect->height.computed * vector_stretch(
+        NR::Point(rect->x.computed, rect->y.computed + 1),
+        NR::Point(rect->x.computed, rect->y.computed),
+        SP_ITEM(rect)->transform);
+}
+
 /*
   Local Variables:
   mode:c++
