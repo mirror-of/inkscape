@@ -114,7 +114,7 @@ static void inkscape_dispose (GObject *object);
 static void inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 static void inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop);
 
-static void inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, const gchar *skeleton, 
+static bool inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, const gchar *skeleton, 
 				  unsigned int skel_size,
 				  const gchar *e_mkdir,
 				  const gchar *e_notdir,
@@ -125,9 +125,9 @@ static void inkscape_init_config (Inkscape::XML::Document *doc, const gchar *con
 struct Inkscape::Application {
     GObject object;
     Inkscape::XML::Document *preferences;
-    gboolean save_preferences;
+    bool save_preferences;
     Inkscape::XML::Document *menus;
-    gboolean save_menus;
+    bool save_menus;
     GSList *documents;
     GSList *desktops;
     gchar *argv0;
@@ -632,24 +632,25 @@ gboolean inkscape_app_use_gui( Inkscape::Application const * app )
  * 
  * Returns TRUE if the config file was successfully loaded, FALSE if not.
  */
-static gboolean
+static bool
 inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, const gchar *skeleton, 
 		      unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
 		      const gchar *e_notsp, const gchar *warn)
 {
     gchar *fn = profile_path(filename);
     if (!Inkscape::IO::file_test(fn, G_FILE_TEST_EXISTS)) {
+        bool result;
         /* No such file */
-        inkscape_init_config (config, filename, skeleton, 
-                              skel_size,
-                              _("Cannot create directory %s.\n%s"),
-                              _("%s is not a valid directory.\n%s"),
-                              _("Cannot create file %s.\n%s"),
-                              _("Cannot write file %s.\n%s"), 
-                              _("Although Inkscape will run, it will use default settings,\n"
-                                "and any changes made in preferences will not be saved."));
+        result = inkscape_init_config (config, filename, skeleton, 
+                                       skel_size,
+                                       _("Cannot create directory %s.\n%s"),
+                                       _("%s is not a valid directory.\n%s"),
+                                       _("Cannot create file %s.\n%s"),
+                                       _("Cannot write file %s.\n%s"), 
+                                       _("Although Inkscape will run, it will use default settings,\n"
+                                         "and any changes made in preferences will not be saved."));
         g_free (fn);
-        return FALSE;
+        return result;
     }
 
     if (!Inkscape::IO::file_test(fn, G_FILE_TEST_IS_REGULAR)) {
@@ -660,7 +661,7 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
         gtk_widget_destroy (w);
         g_free(safeFn);
         g_free (fn);
-        return FALSE;
+        return false;
     }
 
     Inkscape::XML::Document *doc = sp_repr_read_file (fn, NULL);
@@ -672,7 +673,7 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
         gtk_widget_destroy (w);
         g_free(safeFn);
         g_free (fn);
-        return FALSE;
+        return false;
     }
 
     Inkscape::XML::Node *root = sp_repr_document_root (doc);
@@ -684,7 +685,7 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
         Inkscape::GC::release(doc);
         g_free(safeFn);
         g_free (fn);
-        return FALSE;
+        return false;
     }
 
     /** \todo this is a hack, need to figure out how to get
@@ -698,7 +699,7 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
 
     Inkscape::GC::release(doc);
     g_free (fn);
-    return TRUE;
+    return true;
 }
 
 /**
@@ -706,11 +707,9 @@ inkscape_load_config (const gchar *filename, Inkscape::XML::Document *config, co
  * 
  *  Attempts to load the preferences file indicated by the global PREFERENCES_FILE
  *  parameter.  If it cannot load it, the defailt preferences_skeleton will be used
- *  instead, and the inkscape->save_preferences flag will be set to FALSE so that
- *  Inkscape won't accidentally overwrite the preferences file with the default
- *  skeleton.
+ *  instead.
  */
-gboolean
+bool
 inkscape_load_preferences (Inkscape::Application *inkscape)
 {
     return inkscape_load_config (PREFERENCES_FILE, 
@@ -727,13 +726,13 @@ inkscape_load_preferences (Inkscape::Application *inkscape)
 
 
 /*
- *  Returns TRUE if file was successfully saved, FALSE if not
+ *  Returns true if file was successfully saved, false if not
  */
-gboolean
+bool
 inkscape_save_preferences (Inkscape::Application * inkscape)
 {
     gchar *fn = profile_path(PREFERENCES_FILE);
-    gboolean retval = sp_repr_save_file (inkscape->preferences, fn);
+    bool retval = sp_repr_save_file (inkscape->preferences, fn);
 
     g_free (fn);
     return retval;
@@ -743,7 +742,7 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
  *  Menus management
  * 
  */
-gboolean
+bool
 inkscape_load_menus (Inkscape::Application *inkscape)
 {
     return inkscape_load_config (MENUS_FILE, 
@@ -760,13 +759,13 @@ inkscape_load_menus (Inkscape::Application *inkscape)
 
 
 /*
- *  Returns TRUE if file was successfully saved, FALSE if not
+ *  Returns true if file was successfully saved, false if not
  */
-gboolean
+bool
 inkscape_save_menus (Inkscape::Application * inkscape)
 {
     gchar *fn = profile_path(MENUS_FILE);
-    gboolean retval = sp_repr_save_file (inkscape->menus, fn);
+    bool retval = sp_repr_save_file (inkscape->menus, fn);
 
     g_free (fn);
     return retval;
@@ -1199,7 +1198,7 @@ inkscape_active_event_context (void)
 # HELPERS
 #####################*/
 
-static void 
+static bool
 inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, const gchar *skeleton, 
 		      unsigned int skel_size,
 		      const gchar *e_mkdir, 
@@ -1220,11 +1219,11 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
                 gtk_widget_destroy (w);
                 g_free(safeDn);
                 g_free (dn);
-                return;
+                return false;
             } else {
                 g_warning(e_mkdir, dn, warn);
                 g_free (dn);
-                return;
+                return false;
             }
         }
     } else if (!Inkscape::IO::file_test(dn, G_FILE_TEST_IS_DIR)) {
@@ -1236,11 +1235,11 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
             gtk_widget_destroy (w);
             g_free( safeDn );
             g_free (dn);
-            return;
+            return false;
         } else {
             g_warning(e_notdir, dn, warn);
             g_free(dn);
-            return;
+            return false;
         }
     }
     g_free (dn);
@@ -1258,11 +1257,11 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
             gtk_widget_destroy (w);
             g_free(safeFn);
             g_free (fn);
-            return;
+            return false;
         } else {
             g_warning(e_ccf, fn, warn);
             g_free(fn);
-            return;
+            return false;
         }
     }
     if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
@@ -1275,17 +1274,18 @@ inkscape_init_config (Inkscape::XML::Document *doc, const gchar *config_name, co
             g_free(safeFn);
             g_free (fn);
             fclose(fh);
-            return;
+            return false;
         } else {
             g_warning(e_cwf, fn, warn);
             g_free(fn);
             fclose(fh);
-            return;
+            return false;
         }
     }
 
     g_free(fn);
     fclose(fh);
+    return true;
 }
 
 void
