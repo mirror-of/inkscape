@@ -1,3 +1,7 @@
+2005-08-08  MenTaLguY  <mental@rydia.net>
+
+	* README.txt, README: make autotools happy
+
 2005-08-06  MenTaLguY  <mental@rydia.net>
 
 	* Makefile.am, HACKING, HACKING_de, HACKING_fr, HACKING_it,
