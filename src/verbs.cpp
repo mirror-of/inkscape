@@ -2001,7 +2001,7 @@ Verb * Verb::_base_verbs[] = {
         N_("About Memory..."), NULL),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"),
         N_("About Inkscape"), /*"help_about"*/"inkscape_options"),
-    new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("Modifying or Redistributing Inkscape"),
+    new HelpVerb(SP_VERB_SHOW_LICENSE, "ShowLicense", N_("License"),
         N_("Show license to modify and/or redistribute Inkscape: GNU GPL"), NULL),
 
     /* Tutorials */
