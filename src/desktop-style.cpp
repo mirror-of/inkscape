@@ -247,6 +247,102 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
     return ret;
 }
 
+/** Determine average stroke width */
+gdouble
+stroke_average_width (GSList const *objects)
+{
+    if (g_slist_length ((GSList *) objects) == 0)
+        return NR_HUGE;
+
+    gdouble avgwidth = 0.0;
+    bool notstroked = true;
+
+    for (GSList const *l = objects; l != NULL; l = l->next) {
+        if (!SP_IS_ITEM (l->data))
+            continue;
+
+        NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(l->data));
+
+        SPObject *object = SP_OBJECT(l->data);
+
+        if ( object->style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        } else {
+            notstroked = false;
+        }
+
+        avgwidth += SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion();
+    }
+
+    if (notstroked)
+        return NR_HUGE;
+
+    return avgwidth / g_slist_length ((GSList *) objects);
+}
+
+/** Determines if the stroke width differs among objects */
+bool
+stroke_width_varying (GSList const *objects)
+{
+    if (g_slist_length ((GSList *) objects) <= 1)
+        return false;
+
+    gdouble width = NR_HUGE;
+
+    for (GSList const *l = objects; l != NULL; l = l->next) {
+
+        if (!SP_IS_ITEM (l->data))
+            continue;
+
+        SPObject *object = SP_OBJECT(l->data);
+
+        if ( SP_OBJECT_STYLE (object)->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        }
+
+        NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(l->data));
+
+        if (width == NR_HUGE) {
+            width = SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion();
+        } else {
+            if (fabs (width - SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion()) > 1e-3)
+                return true;
+        }
+
+    }
+
+    return false;
+}
+
+/** Determine average miterlimit */
+gdouble
+stroke_average_miterlimit (GSList const *objects)
+{
+    if (g_slist_length ((GSList *)objects) == 0)
+        return NR_HUGE;
+
+    gdouble avgml = 0.0;
+    bool notstroked = true;
+
+    for (GSList const *l = objects; l != NULL; l = l->next) {
+        if (!SP_IS_ITEM (l->data))
+            continue;
+
+        SPObject *object = SP_OBJECT(l->data);
+
+        avgml += object->style->stroke_miterlimit.value;
+
+        if ( object->style->stroke.type != SP_PAINT_TYPE_NONE ) {
+            notstroked = false;
+        }
+    }
+
+    if (notstroked)
+        return NR_HUGE;
+
+    return avgml / g_slist_length ((GSList *) objects);
+}
+
 int
 objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill)
 {

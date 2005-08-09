@@ -50,6 +50,10 @@ guint32 sp_desktop_get_color (SPDesktop *desktop, bool is_fill);
 double sp_desktop_get_font_size_tool (SPDesktop *desktop);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char const *tool, bool with_text);
 
+gdouble stroke_average_width (GSList const *objects);
+bool stroke_width_varying (GSList const *objects);
+gdouble stroke_average_miterlimit (GSList const *objects);
+
 int objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill);
 int objects_query_fontnumbers (GSList *objects, SPStyle *style_res);
 int objects_query_fontstyle (GSList *objects, SPStyle *style_res);
