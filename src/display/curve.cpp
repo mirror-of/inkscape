@@ -78,8 +78,10 @@ sp_curve_new_sized(gint length)
 }
 
 /**
-* \return new SPCurve, or NULL if the curve was not created for some reason.
-*/
+ * Convert NArtBpath object to SPCurve object.
+ *
+ * \return new SPCurve, or NULL if the curve was not created for some reason.
+ */
 SPCurve *
 sp_curve_new_from_bpath(NArtBpath *bpath)
 {
@@ -115,7 +117,8 @@ sp_curve_new_from_bpath(NArtBpath *bpath)
     return curve;
 }
 
-/** Construct an SPCurve from read-only, static storage.
+/** 
+ * Construct an SPCurve from read-only, static storage.
  *
  *  We could treat read-onliness and staticness (i.e. can't call free on bpath) as orthogonal
  *  attributes, but at the time of writing we have only one caller.
@@ -156,6 +159,11 @@ sp_curve_new_from_static_bpath(NArtBpath const *bpath)
     return curve;
 }
 
+/**
+ * Convert const NArtBpath array to SPCurve.
+ *
+ * \return new SPCurve, or NULL if the curve was not created for some reason.
+ */
 SPCurve *sp_curve_new_from_foreign_bpath(NArtBpath const bpath[])
 {
     g_return_val_if_fail(bpath != NULL, NULL);
@@ -178,9 +186,13 @@ SPCurve *sp_curve_new_from_foreign_bpath(NArtBpath const bpath[])
     return curve;
 }
 
+/**
+ * Increase refcount of curve.
+ *
+ * \todo should this be shared with other refcounting code?
+ */
 SPCurve *
 sp_curve_ref(SPCurve *curve)
-/* should this be shared with other refcounting code? */
 {
     g_return_val_if_fail(curve != NULL, NULL);
 
@@ -189,9 +201,13 @@ sp_curve_ref(SPCurve *curve)
     return curve;
 }
 
+/**
+ * Decrease refcount of curve, with possible destruction.
+ * 
+ * \todo should this be shared with other refcounting code?
+ */
 SPCurve *
 sp_curve_unref(SPCurve *curve)
-/* should this be shared with other refcounting code? */
 {
     g_return_val_if_fail(curve != NULL, NULL);
 
@@ -207,31 +223,10 @@ sp_curve_unref(SPCurve *curve)
     return NULL;
 }
 
-
-void
-sp_curve_finish(SPCurve *curve)
-{
-    g_return_if_fail(curve != NULL);
-    g_return_if_fail(curve->sbpath);
-
-    if (curve->end > 0) {
-        NArtBpath *bp = curve->bpath + curve->end - 1;
-        if (bp->code == NR_LINETO) {
-            curve->end--;
-            bp->code = NR_END;
-        }
-    }
-
-    if (curve->end < (curve->length - 1)) {
-        curve->bpath = nr_renew(curve->bpath, NArtBpath, curve->end);
-    }
-
-    curve->hascpt = false;
-    curve->posSet = false;
-    curve->moving = false;
-}
-
-void
+/**
+ * Add space for more paths in curve.
+ */
+static void
 sp_curve_ensure_space(SPCurve *curve, gint space)
 {
     g_return_if_fail(curve != NULL);
@@ -248,6 +243,9 @@ sp_curve_ensure_space(SPCurve *curve, gint space)
     curve->length += space;
 }
 
+/**
+ * Create new curve from its own bpath array.
+ */
 SPCurve *
 sp_curve_copy(SPCurve *curve)
 {
@@ -256,6 +254,9 @@ sp_curve_copy(SPCurve *curve)
     return sp_curve_new_from_foreign_bpath(curve->bpath);
 }
 
+/**
+ * Return new curve that is the concatenation of all curves in list.
+ */
 SPCurve *
 sp_curve_concat(GSList const *list)
 {
@@ -293,7 +294,9 @@ sp_curve_concat(GSList const *list)
     return new_curve;
 }
 
-/** Returns a list of new curves corresponding to the subpaths in \a curve. */
+/** 
+ * Returns a list of new curves corresponding to the subpaths in \a curve.
+ */
 GSList *
 sp_curve_split(SPCurve const *curve)
 {
@@ -326,6 +329,9 @@ sp_curve_split(SPCurve const *curve)
     return l;
 }
 
+/**
+ * Transform all paths in curve, template helper.
+ */
 template<class M>
 static void
 tmpl_curve_transform(SPCurve *const curve, M const &m)
@@ -354,12 +360,18 @@ tmpl_curve_transform(SPCurve *const curve, M const &m)
     }
 }
 
+/**
+ * Transform all paths in curve using matrix.
+ */
 void
 sp_curve_transform(SPCurve *const curve, NR::Matrix const &m)
 {
     tmpl_curve_transform<NR::Matrix>(curve, m);
 }
 
+/**
+ * Transform all paths in curve using NR::translate.
+ */
 void
 sp_curve_transform(SPCurve *const curve, NR::translate const &m)
 {
@@ -369,6 +381,7 @@ sp_curve_transform(SPCurve *const curve, NR::translate const &m)
 
 /* Methods */
 
+///
 void
 sp_curve_reset(SPCurve *curve)
 {
@@ -650,7 +663,8 @@ sp_curve_closepath_current(SPCurve *curve)
     curve->moving = false;
 }
 
-gboolean
+/// True if no paths are in curve.
+bool
 sp_curve_empty(SPCurve *curve)
 {
     g_return_val_if_fail(curve != NULL, TRUE);
@@ -752,7 +766,7 @@ sp_curve_reverse(SPCurve const *curve)
 void
 sp_curve_append(SPCurve *curve,
                 SPCurve const *curve2,
-                gboolean use_lineto)
+                bool use_lineto)
 {
     g_return_if_fail(curve != NULL);
     g_return_if_fail(curve2 != NULL);
