@@ -28,14 +28,14 @@ namespace Text {
 
 // ******* enum conversion tables
 static Layout::EnumConversionItem const enum_convert_spstyle_direction_to_pango_direction[] = {
-	{SP_CSS_WRITING_MODE_LR_TB, PANGO_DIRECTION_LTR},
-	{SP_CSS_WRITING_MODE_RL_TB, PANGO_DIRECTION_RTL},
-	{SP_CSS_WRITING_MODE_TB_LR, PANGO_DIRECTION_LTR}};   // this is correct
+    {SP_CSS_WRITING_MODE_LR_TB, PANGO_DIRECTION_LTR},
+    {SP_CSS_WRITING_MODE_RL_TB, PANGO_DIRECTION_RTL},
+    {SP_CSS_WRITING_MODE_TB_LR, PANGO_DIRECTION_LTR}};   // this is correct
 
 static Layout::EnumConversionItem const enum_convert_spstyle_direction_to_my_direction[] = {
-	{SP_CSS_WRITING_MODE_LR_TB, Layout::LEFT_TO_RIGHT},
-	{SP_CSS_WRITING_MODE_RL_TB, Layout::RIGHT_TO_LEFT},
-	{SP_CSS_WRITING_MODE_TB_LR, Layout::LEFT_TO_RIGHT}};   // this is correct
+    {SP_CSS_WRITING_MODE_LR_TB, Layout::LEFT_TO_RIGHT},
+    {SP_CSS_WRITING_MODE_RL_TB, Layout::RIGHT_TO_LEFT},
+    {SP_CSS_WRITING_MODE_TB_LR, Layout::LEFT_TO_RIGHT}};   // this is correct
 
 /** \brief private to Layout. Does the real work of text flowing.
 
@@ -204,14 +204,14 @@ class Layout::Calculator
 /* *********************************************************************************************************/
 //                       Initialisation of ParagraphInfo structure
 
-    
+
     /** for sections of text with a block-progression different to the rest
      * of the flow, the best thing to do is to detect them in advance and
      * create child TextFlow objects with just the rotated text. In the
      * parent we then effectively use ARBITRARY_GAP fields during the
      * flowing (because we don't allow wrapping when the block-progression
      * changes) and copy the actual text in during the output phase.
-     * 
+     *
      * NB: this code not enabled yet.
      */
     void _initialiseInputItems(ParagraphInfo *para) const
@@ -381,7 +381,7 @@ class Layout::Calculator
                         *line_height_multiplier = style->line_height.value * 0.5 * font_size / line_height->total();
                                  // 0.5 is an approximation of the x-height. Fixme.
                         return;
-                    case SP_CSS_UNIT_EM: 
+                    case SP_CSS_UNIT_EM:
                     case SP_CSS_UNIT_PERCENT:
                         *line_height_multiplier = style->line_height.value * font_size / line_height->total();
                         return;
@@ -443,7 +443,7 @@ class Layout::Calculator
                     /* we need to change spans at every change of PangoItem, source stream change,
                     or change in one of the attributes altering position/rotation. */
 
-                    pango_item_bytes = pango_item_index >= para->pango_items.size() ? 0 : para->pango_items[pango_item_index].item->offset + para->pango_items[pango_item_index].item->length - byte_index_in_para; 
+                    pango_item_bytes = pango_item_index >= para->pango_items.size() ? 0 : para->pango_items[pango_item_index].item->offset + para->pango_items[pango_item_index].item->length - byte_index_in_para;
                     text_source_bytes = text_source->text_end.base() - text_source->text_begin.base() - span_start_byte_in_source;
                     new_span.text_bytes = std::min(text_source_bytes, pango_item_bytes);
                     new_span.input_stream_first_character = Glib::ustring::const_iterator(text_source->text_begin.base() + span_start_byte_in_source);
@@ -629,7 +629,7 @@ class Layout::Calculator
     }
 
     static inline PangoLogAttr const &_charAttributes(ParagraphInfo const &para,
-						      UnbrokenSpanPosition const &span_pos)
+                                                      UnbrokenSpanPosition const &span_pos)
     {
         return para.char_attributes[span_pos.iter_span->char_index_in_para + span_pos.char_index];
     }
@@ -808,7 +808,7 @@ class Layout::Calculator
             return true;
 
         }
-        
+
         if (_flow._input_stream[span->start.iter_span->input_index]->Type() != TEXT_SOURCE)
             return true;  // never happens
 
@@ -819,7 +819,7 @@ class Layout::Calculator
             // Measure the precomputed flow from para.input_items
             span->end.iter_span++;  // for now, skip to the next span
             return true;
-        } 
+        }
 
         // a normal span going with a normal block-progression
         double font_size_multiplier = span->start.iter_span->font_size / (PANGO_SCALE * _font_factory_size_multiplier);
@@ -838,7 +838,7 @@ class Layout::Calculator
         // go char-by-char summing the width, while keeping track of the previous break point
         do {
             PangoLogAttr const &char_attributes = _charAttributes(para, span->end);
-            
+
             if (char_attributes.is_mandatory_break) {
                 *last_emergency_break_span = *last_break_span = *span;
                 TRACE("span %d end of para; width = %f chars = %d", span->start.iter_span - para.unbroken_spans.begin(), span->width, char_count);
@@ -927,7 +927,7 @@ class Layout::Calculator
                     && it_chunk->broken_spans.back().end.iter_span != para.unbroken_spans.end()) {   // don't justify the last chunk in the para
                     if (it_chunk->whitespace_count)
                         *add_to_each_whitespace = (it_chunk->scanrun_width - it_chunk->text_width) / it_chunk->whitespace_count;
-                    //else 
+                    //else
                         //add_to_each_charspace = something
                 }
                 return it_chunk->x;
@@ -1146,7 +1146,7 @@ class Layout::Calculator
                                     next_cluster_glyph_index++;
                                 if (next_cluster_glyph_index < unbroken_span.glyph_string->num_glyphs)
                                     end_byte = unbroken_span.glyph_string->log_clusters[next_cluster_glyph_index];
-                                else 
+                                else
                                     end_byte = it_span->start.iter_span->text_bytes;
                             } else
                                 end_byte = char_byte;    // don't output any chars if we're not at the start of a cluster
@@ -1232,7 +1232,7 @@ public:
         TRACE("begin calculateFlow()");
 
         _flow._clearOutputObjects();
-        
+
         _pango_context = (font_factory::Default())->fontContext;
         _font_factory_size_multiplier = (font_factory::Default())->fontSize;
 
@@ -1343,7 +1343,7 @@ public:
         para.free();
         if (_scanline_maker)
             delete _scanline_maker;
-        
+
         return true;
     }
 };
@@ -1402,3 +1402,15 @@ bool Layout::calculateFlow()
 
 }//namespace Text
 }//namespace Inkscape
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
