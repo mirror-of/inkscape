@@ -30,12 +30,16 @@ INPUT = \
 	gc-managed.h    \
 	geom.cpp	\
 	helper/action.h	\
+	knot.cpp        \
+	knot.h          \
 	knot-enums.h	\
 	knot-holder-entity.h	\
+	libnr/n-art-bpath.h	\
 	libnr/nr-matrix-scale-ops.h	\
 	libnr/nr-matrix-translate-ops.h	\
 	libnr/nr-matrix.cpp	\
 	libnr/nr-matrix.h	\
+	libnr/nr-path-code.h    \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixblock.cpp \
 	libnr/nr-point.h	\
@@ -50,6 +54,7 @@ INPUT = \
 	livarot/int-line.cpp	\
 	livarot/sweep-event-queue.h	\
 	livarot/sweep-event.h	\
+	main.cpp        \
 	message-context.h	\
 	message-stack.h	\
 	modifier-fns.h	\
