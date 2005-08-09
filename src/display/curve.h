@@ -2,7 +2,7 @@
 #define SEEN_DISPLAY_CURVE_H
 
 /** \file
- * Wrapper around NArtBpath
+ * Wrapper around an array of NArtBpath objects.
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -28,12 +28,12 @@ struct SPCurve {
     /// Index in bpath[] of NR_END element.
     gint end;
 
-    /// Allocated size (i.e.\ capacity) of bpath[] array.  Not to be confused 
+    /// Allocated size (i.e., capacity) of bpath[] array.  Not to be confused 
     /// with the SP_CURVE_LENGTH macro, which returns the logical length of 
-    /// the path (i.e.\ index of NR_END).
+    /// the path (i.e., index of NR_END).
     gint length;
 
-    /// Index in bpath[] of the start (i.e. moveto element) of the last 
+    /// Index in bpath[] of the start (i.e., moveto element) of the last 
     /// subpath in this path.
     gint substart;
 
@@ -80,8 +80,6 @@ SPCurve *sp_curve_new_from_foreign_bpath(NArtBpath const bpath[]);
 SPCurve *sp_curve_ref(SPCurve *curve);
 SPCurve *sp_curve_unref(SPCurve *curve);
 
-void sp_curve_finish(SPCurve *curve);
-void sp_curve_ensure_space(SPCurve *curve, gint space);
 SPCurve *sp_curve_copy(SPCurve *curve);
 SPCurve *sp_curve_concat(GSList const *list);
 GSList *sp_curve_split(SPCurve const *curve);
@@ -106,13 +104,13 @@ void sp_curve_closepath_current(SPCurve *curve);
 SPCurve *sp_curve_append_continuous(SPCurve *c0, SPCurve const *c1, gdouble tolerance);
 
 #define sp_curve_is_empty sp_curve_empty
-gboolean sp_curve_empty(SPCurve *curve);
+bool sp_curve_empty(SPCurve *curve);
 NArtBpath *sp_curve_last_bpath(SPCurve const *curve);
 NArtBpath *sp_curve_first_bpath(SPCurve const *curve);
 NR::Point sp_curve_first_point(SPCurve const *curve);
 NR::Point sp_curve_last_point(SPCurve const *curve);
 
-void sp_curve_append(SPCurve *curve, SPCurve const *curve2, gboolean use_lineto);
+void sp_curve_append(SPCurve *curve, SPCurve const *curve2, bool use_lineto);
 SPCurve *sp_curve_reverse(SPCurve const *curve);
 void sp_curve_backspace(SPCurve *curve);
 

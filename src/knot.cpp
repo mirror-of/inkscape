@@ -1,7 +1,7 @@
 #define __SP_KNOT_C__
 
-/*
- * Desktop-bound visual control object
+/** \file
+ * SPKnot implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -44,8 +44,8 @@
 
 static bool nograb = false;
 
-static gboolean grabbed = FALSE;
-static gboolean moved = FALSE;
+static bool grabbed = FALSE;
+static bool moved = FALSE;
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
@@ -89,7 +89,7 @@ static void sp_knot_set_property (GObject * object, guint prop_id, const GValue 
 static void sp_knot_get_property (GObject * object, guint prop_id, GValue *value, GParamSpec *pspec);
 
 static int sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot);
-static void sp_knot_set_flag (SPKnot * knot, guint flag, gboolean set);
+static void sp_knot_set_flag (SPKnot * knot, guint flag, bool set);
 static void sp_knot_update_ctrl (SPKnot * knot);
 static void sp_knot_set_ctrl_state (SPKnot *knot);
 
@@ -498,7 +498,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 
-	gboolean consumed = FALSE;
+	bool consumed = FALSE;
 
 	/* Run client universal event handler, if present */
 
@@ -701,7 +701,7 @@ sp_knot_request_position (SPKnot * knot, NR::Point *p, guint state)
 	g_return_if_fail (knot != NULL);
 	g_return_if_fail (SP_IS_KNOT (knot));
 
-	gboolean done = FALSE;
+	bool done = FALSE;
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[REQUEST], 0,
@@ -771,7 +771,7 @@ NR::Point sp_knot_position (SPKnot const * knot)
 }
 
 static void
-sp_knot_set_flag (SPKnot * knot, guint flag, gboolean set)
+sp_knot_set_flag (SPKnot * knot, guint flag, bool set)
 {
 	g_assert (knot != NULL);
 	g_assert (SP_IS_KNOT (knot));
