@@ -14,6 +14,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+/** \class SPItem
+ *
+ * SPItem is an abstract base class for all graphic (visible) SVG nodes. It
+ * is a subclass of SPObject, with great deal of specific functionality.
+ */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -89,6 +95,9 @@ static SPObjectClass *parent_class;
 static void clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 static void mask_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
+/**
+ * Registers SPItem class and returns its type number.
+ */
 GType
 sp_item_get_type(void)
 {
@@ -109,6 +118,9 @@ sp_item_get_type(void)
     return type;
 }
 
+/**
+ * SPItem vtable initialization.
+ */
 static void
 sp_item_class_init(SPItemClass *klass)
 {
@@ -126,6 +138,9 @@ sp_item_class_init(SPItemClass *klass)
     klass->snappoints = sp_item_private_snappoints;
 }
 
+/**
+ * Callback for SPItem object initialization.
+ */
 static void
 sp_item_init(SPItem *item)
 {

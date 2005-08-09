@@ -151,8 +151,8 @@ sp_export_dialog_destroy ( GtkObject *object, gpointer data )
     return;
 } // end of sp_export_dialog_destroy()
 
-
-static gboolean
+/// Called when dialog is closed or inkscape is shut down.
+static bool
 sp_export_dialog_delete ( GtkObject *object, GdkEvent *event, gpointer data )
 {
 
@@ -248,7 +248,7 @@ sp_export_spinbutton_new ( gchar *key, float val, float min, float max,
 } // end of sp_export_spinbutton_new()
 
 
-GtkWidget *
+static GtkWidget *
 sp_export_dialog_area_frame (GtkWidget * dlg)
 {
     GtkWidget * f, * t, * hb, * b, * us, * l, * vb, * unitbox;
@@ -434,8 +434,8 @@ sp_export_dialog (void)
                                        NULL, t, 0, 1, _("Height:"), _("pixels at"), 
                                        0, 0, NULL, dlg );
 
-            /*
-             * TODO: Nees fixing: there's no way to set ydpi currently, so we use  
+            /** \todo
+             * Needs fixing: there's no way to set ydpi currently, so we use  
              *       the defaultxdpi value here, too...
              */
             sp_export_spinbutton_new ( "ydpi", prefs_get_double_attribute 
@@ -670,6 +670,7 @@ sp_export_selection_modified ( Inkscape::Application *inkscape,
     return;
 }
 
+/// Called when one of the selection buttons was toggled.
 static void
 sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 {
@@ -723,9 +724,8 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                     break;
                 }
             case SELECTION_DRAWING:
-                /* 
-                 * TODO: this returns wrong values if the document has a 
-                 * viewBox
+                /** \todo 
+                 * This returns wrong values if the document has a viewBox.
                  */
                 sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
                 
@@ -908,7 +908,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
     return;
 } // end of sp_export_area_toggled()
 
-
+/// Called when dialog is deleted
 static gint
 sp_export_progress_delete ( GtkWidget *widget, GdkEvent *event, GObject *base )
 {
@@ -916,14 +916,14 @@ sp_export_progress_delete ( GtkWidget *widget, GdkEvent *event, GObject *base )
     return TRUE;
 } // end of sp_export_progress_delete()
 
-
+/// Called when progress is cancelled
 static void
 sp_export_progress_cancel ( GtkWidget *widget, GObject *base )
 {
     g_object_set_data (base, "cancel", (gpointer) 1);
 } // end of sp_export_progress_cancel()
 
-
+/// Called for every progress iteration
 static unsigned int
 sp_export_progress_callback (float value, void *data)
 {
@@ -948,7 +948,7 @@ sp_export_progress_callback (float value, void *data)
     
 } // end of sp_export_progress_callback()
 
-
+/// Called when export button is clicked
 static void
 sp_export_export_clicked (GtkButton *button, GtkObject *base)
 {
@@ -1054,7 +1054,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             bool modified = FALSE;
             const gchar * temp_string;
 
-            gboolean saved = sp_document_get_undo_sensitive(doc);
+            bool saved = sp_document_get_undo_sensitive(doc);
             sp_document_set_undo_sensitive(doc, FALSE);
 
             temp_string = repr->attribute("inkscape:export-filename");
@@ -1083,7 +1083,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             bool modified = FALSE;
 
-            gboolean saved = sp_document_get_undo_sensitive(doc);
+            bool saved = sp_document_get_undo_sensitive(doc);
             sp_document_set_undo_sensitive(doc, FALSE);
             reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
 
@@ -1129,7 +1129,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     return;
 } // end of sp_export_export_clicked()
 
-
+/// Called when Browse button is clicked
 static void
 sp_export_browse_clicked (GtkButton *button, gpointer userdata)
 {
@@ -1172,7 +1172,7 @@ sp_export_browse_clicked (GtkButton *button, gpointer userdata)
     return;
 } // end of sp_export_browse_clicked()
 
-
+/// Called when OK clicked in file dialog
 static void
 sp_export_browse_store (GtkButton *button, gpointer userdata)
 {
@@ -1317,6 +1317,7 @@ sp_export_detect_size(GtkObject * base) {
     return;
 } /* sp_export_detect_size */
 
+/// Called when area x0 value is changed
 static void
 sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
 {
@@ -1363,7 +1364,7 @@ sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
     return;
 } // end of sp_export_area_x_value_changed()
 
-
+/// Called when area y0 value is changed.
 static void
 sp_export_area_y_value_changed (GtkAdjustment *adj, GtkObject *base)
 {
@@ -1409,7 +1410,7 @@ sp_export_area_y_value_changed (GtkAdjustment *adj, GtkObject *base)
     return;
 } // end of sp_export_area_y_value_changed()
 
-
+/// Called when x1-x0 or area width is changed
 static void
 sp_export_area_width_value_changed (GtkAdjustment *adj, GtkObject *base)
 {
@@ -1446,7 +1447,7 @@ sp_export_area_width_value_changed (GtkAdjustment *adj, GtkObject *base)
     return;
 } // end of sp_export_area_width_value_changed()
 
-
+/// Called when y1-y0 or area height is changed.
 static void
 sp_export_area_height_value_changed (GtkAdjustment *adj, GtkObject *base)
 {
@@ -1506,7 +1507,7 @@ sp_export_set_image_y (GtkObject *base)
     return;
 } // end of sp_export_set_image_y()
 
-
+/// Called when pixel width is changed
 static void
 sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject *base)
 {

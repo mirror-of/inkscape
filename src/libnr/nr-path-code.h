@@ -1,12 +1,16 @@
 #ifndef SEEN_LIBNR_NR_PATH_CODE_H
 #define SEEN_LIBNR_NR_PATH_CODE_H
 
+/** \file
+ * NRPathcode enum definition
+ */
+
 typedef enum {
-    NR_MOVETO,
-    NR_MOVETO_OPEN,
-    NR_CURVETO,
-    NR_LINETO,
-    NR_END
+    NR_MOVETO,        ///< Start of closed subpath
+    NR_MOVETO_OPEN,   ///< Start of open subpath
+    NR_CURVETO,       ///< Bezier curve segment
+    NR_LINETO,        ///< Line segment
+    NR_END            ///< End record
 } NRPathcode;
 
 

@@ -30,6 +30,12 @@ class SPKnotClass;
 #define SP_IS_KNOT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), SP_TYPE_KNOT))
 #define SP_IS_KNOT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), SP_TYPE_KNOT))
 
+/**
+ * Desktop-bound visual control object.
+ * 
+ * A knot is a draggable object, with callbacks to change something by
+ * dragging it, visuably represented by a canvas item (mostly square).
+ */
 struct SPKnot {
     GObject object;
     SPDesktop *desktop;   /**< Desktop we are on. */
@@ -57,6 +63,7 @@ struct SPKnot {
     gchar *tip;
 };
 
+/// The SPKnot vtable.
 struct SPKnotClass {
     GObjectClass parent_class;
 
@@ -74,7 +81,7 @@ struct SPKnotClass {
     void (* stamped) (SPKnot *know, guint state);
 
     /** Request knot to move to absolute position. */
-    gboolean (* request) (SPKnot *knot, NR::Point *pos, guint state);
+    bool (* request) (SPKnot *knot, NR::Point *pos, guint state);
 
     /** Find complex distance from knot to point. */
     gdouble (* distance) (SPKnot *knot, NR::Point *pos, guint state);

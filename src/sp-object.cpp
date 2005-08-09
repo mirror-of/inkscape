@@ -1,6 +1,6 @@
 #define __SP_OBJECT_C__
 /** \file
- * Abstract base class for all nodes
+ * SPObject implementation.
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -10,6 +10,25 @@
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+/** \class SPObject
+ * 
+ * SPObject is an abstract base class of all of the document nodes at the
+ * SVG document level. Each SPObject subclass implements a certain SVG
+ * element node type, or is an abstract base class for different node
+ * types.  The SPObject layer is bound to the SPRepr layer, closely
+ * following the SPRepr mutations via callbacks.  During creation,
+ * SPObject parses and interprets all textual attributes and CSS style
+ * strings of the SPRepr, and later updates the internal state whenever
+ * it receives a signal about a change. The opposite is not true - there
+ * are methods manipulating SPObjects directly and such changes do not
+ * propagate to the SPRepr layer. This is important for implementation of
+ * the undo stack, animations and other features.
+ *
+ * SPObjects are bound to the higher-level container SPDocument, which
+ * provides document level functionality such as the undo stack,
+ * dictionary and so on. Source: doc/architecture.txt
  */
 
 #include <cstring>
@@ -308,8 +327,11 @@ sp_object_unref(SPObject *object, SPObject *owner)
 }
 
 /**
- * Increase number of xlink:href references to this object.
+ * Increase weak refcount.
  *
+ * Hrefcount is used for weak references, for example, to
+ * determine whether any graphical element references a certain gradient
+ * node.  
  * \param owner Ignored.
  * \return object, NULL is error
  * \pre object points to real object
@@ -327,8 +349,10 @@ sp_object_href(SPObject *object, gpointer owner)
 }
 
 /**
- * Decrease number of xlink:href references to this object.
+ * Decrease weak refcount.
  *
+ * Hrefcount is used for weak references, for example, to determine whether 
+ * any graphical element references a certain gradient node.
  * \param owner Ignored.
  * \return always NULL
  * \pre object points to real object and hrefcount>0
@@ -685,6 +709,7 @@ sp_object_get_child_by_repr(SPObject *object, Inkscape::XML::Node *repr)
 
 /**
  * Callback for child_added event.
+ * Invoked whenever the given mutation event happens in the XML tree.
  */
 static void 
 sp_object_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
@@ -702,9 +727,15 @@ sp_object_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XM
 }
 
 /**
- * Callback for release signal on object.
- * 
  * Removes, releases and unrefs all children of object.
+ *
+ * This is the opposite of build. It has to be invoked as soon as the
+ * object is removed from the tree, even if it is still alive according
+ * to reference count. The frontend unregisters the object from the
+ * document and releases the SPRepr bindings; implementations should free
+ * state data and release all child objects.  Invoking release on
+ * SPRoot destroys the whole document tree.
+ * \see sp_object_build()
  */
 static void sp_object_release(SPObject *object)
 {
@@ -715,10 +746,12 @@ static void sp_object_release(SPObject *object)
 }
 
 /**
- * Callback for remove_child event.
- * 
  * Remove object's child whose node equals repr, release and 
  * unref it.
+ *
+ * Invoked whenever the given mutation event happens in the XML
+ * tree, BEFORE removal from the XML tree happens, so grouping 
+ * objects can safely release the child data.
  */
 static void 
 sp_object_remove_child(SPObject *object, Inkscape::XML::Node *child)
@@ -732,6 +765,7 @@ sp_object_remove_child(SPObject *object, Inkscape::XML::Node *child)
 /**
  * Move object corresponding to child after sibling object corresponding 
  * to new_ref.
+ * Invoked whenever the given mutation event happens in the XML tree.
  * \param old_ref Ignored
  */
 static void sp_object_order_changed(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref,
@@ -744,9 +778,15 @@ static void sp_object_order_changed(SPObject *object, Inkscape::XML::Node *child
 }
 
 /**
- * Callback for build event.
+ * Virtual build callback.
  * 
- * SPObject-specific build method.
+ * This has to be invoked immediately after creation of an SPObject. The
+ * frontend method ensures that the new object is properly attached to
+ * the document and repr; implementation then will parse all of the attributes,
+ * generate the children objects and so on.  Invoking build on the SPRoot
+ * object results in creation of the whole document tree (this is, what
+ * SPDocument does after the creation of the XML tree).
+ * \see sp_object_release()
  */
 static void
 sp_object_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)

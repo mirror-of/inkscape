@@ -12,6 +12,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+/** \class SPView
+ * SPView is an abstract base class of all UI document views.  This
+ * includes both the editing window and the SVG preview, but does not
+ * include the non-UI RGBA buffer-based NRArenas nor the XML editor or
+ * similar views.  The SPView base class has very little functionality of
+ * its own.
+ *
+ * \class SPViewWidget 
+ * SPViewWidget is a GUI widget that contain a single SPView. It is also
+ * an abstract base class with little funtionality of its own.
+ */
+
 #include "config.h"
 #include <time.h>
 #include <gtk/gtk.h>

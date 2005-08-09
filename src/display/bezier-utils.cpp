@@ -93,7 +93,7 @@ static NR::Point const unconstrained_tangent(0, 0);
 
 
 /**
- * Fit a single-segment Bezier curve to a set of digitized points
+ * Fit a single-segment Bezier curve to a set of digitized points.
  *
  * \return Number of segments generated, or -1 on error.
  */
@@ -104,10 +104,11 @@ sp_bezier_fit_cubic(NR::Point *bezier, NR::Point const *data, gint len, gdouble 
 }
 
 /**
- * Fit a multi-segment Bezier curve to a set of digitized points.
+ * Fit a multi-segment Bezier curve to a set of digitized points, with
+ * possible weedout of identical points and NaNs.
  *
- * Maximum number of generated segments is max_beziers.
- * \a bezier must be large enough for n. segments * 4 elements.
+ * \param max_beziers Maximum number of generated segments
+ * \param Result array, must be large enough for n. segments * 4 elements.
  *
  * \return Number of segments generated, or -1 on error.
  */
@@ -135,6 +136,11 @@ sp_bezier_fit_cubic_r(NR::Point bezier[], NR::Point const data[], gint const len
     return ret;
 }
 
+/** 
+ * Copy points from src to dest, filter out points containing NaN and
+ * adjacent points with equal x and y.
+ * \return length of dest
+ */
 static unsigned
 copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len, NR::Point dest[])
 {
@@ -165,7 +171,12 @@ copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len
 }
 
 /**
+ * Fit a multi-segment Bezier curve to a set of digitized points, without
+ * possible weedout of identical points and NaNs.
+ * 
  * \pre data is uniqued, i.e. not exist i: data[i] == data[i + 1].
+ * \param max_beziers Maximum number of generated segments
+ * \param Result array, must be large enough for n. segments * 4 elements.
  */
 gint
 sp_bezier_fit_cubic_full(NR::Point bezier[], int split_points[],
@@ -362,6 +373,7 @@ generate_bezier(NR::Point bezier[],
     }
 }
 
+
 static void
 estimate_lengths(NR::Point bezier[],
                  NR::Point const data[], gdouble const uPrime[], unsigned const len,
@@ -447,8 +459,8 @@ estimate_lengths(NR::Point bezier[],
     /* If alpha negative, use the Wu/Barsky heuristic (see text).  (If alpha is 0, you get
        coincident control points that lead to divide by zero in any subsequent
        NewtonRaphsonRootFind() call.) */
-    /* TODO: Check whether this special-casing is necessary now that NewtonRaphsonRootFind handles
-       non-positive denominator. */
+    /// \todo Check whether this special-casing is necessary now that 
+    /// NewtonRaphsonRootFind handles non-positive denominator.
     if ( alpha_l < 1.0e-6 ||
          alpha_r < 1.0e-6   )
     {
@@ -536,12 +548,12 @@ reparameterize(NR::Point const d[],
 
 /**
  *  Use Newton-Raphson iteration to find better root.
- *  Arguments:
- *      Q : Current fitted curve
- *      P : Digitized point
- *      u : Parameter value for "P"
- *  Return value:
- *      Improved u
+ *  
+ *  \param Q  Current fitted curve
+ *  \param P  Digitized point
+ *  \param u  Parameter value for "P"
+ *  
+ *  \return Improved u
  */
 static gdouble
 NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble const u)
@@ -622,7 +634,9 @@ NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble const u)
     return improved_u;
 }
 
-/** Evaluate a Bezier curve at parameter value \a t.
+/** 
+ * Evaluate a Bezier curve at parameter value \a t.
+ * 
  * \param degree The degree of the Bezier curve: 3 for cubic, 2 for quadratic etc.
  * \param V The control points for the Bezier curve.  Must have (\a degree+1)
  *    elements.
@@ -672,13 +686,13 @@ bezier_pt(unsigned const degree, NR::Point const V[], gdouble const t)
  * Approximate unit tangents at endpoints and "center" of digitized curve
  */
 
-/** Estimate the (forward) tangent at point d[first + 0.5].
-
-    Unlike the center and right versions, this calculates the tangent in the way one might expect,
-    i.e. wrt increasing index into d.
-
-    \pre (2 \<= len) and (d[0] != d[1]).
-**/
+/** 
+ * Estimate the (forward) tangent at point d[first + 0.5].
+ *
+ * Unlike the center and right versions, this calculates the tangent in 
+ * the way one might expect, i.e., wrt increasing index into d.
+ * \pre (2 \<= len) and (d[0] != d[1]).
+ **/
 NR::Point
 sp_darray_left_tangent(NR::Point const d[], unsigned const len)
 {
@@ -687,15 +701,16 @@ sp_darray_left_tangent(NR::Point const d[], unsigned const len)
     return unit_vector( d[1] - d[0] );
 }
 
-/** Estimates the (backward) tangent at d[last - 0.5].
-
-    N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
-    increasing index.
-
-    \pre 2 \<= len.
-    \pre d[len - 1] != d[len - 2].
-    \pre all[p in d] in_svg_plane(p).
-*/
+/** 
+ * Estimates the (backward) tangent at d[last - 0.5].
+ *
+ * \note The tangent is "backwards", i.e. it is with respect to 
+ * decreasing index rather than increasing index.
+ *
+ * \pre 2 \<= len.
+ * \pre d[len - 1] != d[len - 2].
+ * \pre all[p in d] in_svg_plane(p).
+ */
 static NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len)
 {
@@ -706,16 +721,17 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len)
     return unit_vector( d[prev] - d[last] );
 }
 
-/** Estimate the (forward) tangent at point d[0].
-
-    Unlike the center and right versions, this calculates the tangent in the way one might expect,
-    i.e. wrt increasing index into d.
-
-    \pre 2 \<= len.
-    \pre d[0] != d[1].
-    \pre all[p in d] in_svg_plane(p).
-    \post is_unit_vector(ret).
-**/
+/** 
+ * Estimate the (forward) tangent at point d[0].
+ *
+ * Unlike the center and right versions, this calculates the tangent in 
+ * the way one might expect, i.e., wrt increasing index into d.
+ *
+ * \pre 2 \<= len.
+ * \pre d[0] != d[1].
+ * \pre all[p in d] in_svg_plane(p).
+ * \post is_unit_vector(ret).
+ **/
 NR::Point
 sp_darray_left_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq)
 {
@@ -737,15 +753,16 @@ sp_darray_left_tangent(NR::Point const d[], unsigned const len, double const tol
     }
 }
 
-/** Estimates the (backward) tangent at d[last].
-
-    N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
-    increasing index.
-
-    \pre 2 \<= len.
-    \pre d[len - 1] != d[len - 2].
-    \pre all[p in d] in_svg_plane(p).
-*/
+/** 
+ * Estimates the (backward) tangent at d[last].
+ *
+ * \note The tangent is "backwards", i.e. it is with respect to 
+ * decreasing index rather than increasing index.
+ *
+ * \pre 2 \<= len.
+ * \pre d[len - 1] != d[len - 2].
+ * \pre all[p in d] in_svg_plane(p).
+ */
 NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq)
 {
@@ -767,15 +784,16 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len, double const to
     }
 }
 
-/** Estimates the (backward) tangent at d[center], by averaging the two segments connected to
-    d[center] (and then normalizing the result).
-
-    N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
-    increasing index.
-
-    \pre (0 \< center \< len - 1) and d is uniqued (at least in the immediate vicinity of
-    \a center).
-*/
+/** 
+ * Estimates the (backward) tangent at d[center], by averaging the two 
+ * segments connected to d[center] (and then normalizing the result).
+ *
+ * \note The tangent is "backwards", i.e. it is with respect to 
+ * decreasing index rather than increasing index.
+ *
+ * \pre (0 \< center \< len - 1) and d is uniqued (at least in 
+ * the immediate vicinity of \a center).
+ */
 static NR::Point
 sp_darray_center_tangent(NR::Point const d[],
                          unsigned const center,
@@ -800,7 +818,7 @@ sp_darray_center_tangent(NR::Point const d[],
 /**
  *  Assign parameter values to digitized points using relative distances between points.
  *
- *  Parameter array u must have space for \a len items.
+ *  \pre Parameter array u must have space for \a len items.
  */
 static void
 chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
@@ -914,20 +932,26 @@ compute_max_error_ratio(NR::Point const d[], double const u[], unsigned const le
     return ret;
 }
 
-/** Whereas compute_max_error_ratio checks for itself that each data point is near some point on
- *  the curve, compute_hook checks that each point on the curve is near some data point (or near
- *  some point on the polyline defined by the data points, or something like that: we allow for a
- *  "reasonable curviness" from such a polyline).  "Reasonable curviness" means we draw a circle
- *  centred at the midpoint of a..b, of radius proportional to the length |a - b|, and require that
- *  each point on the segment of bezCurve between the parameters of a and b be within that circle.
- *  If any point P on the bezCurve segment is outside of that allowable region (circle), then we
- *  return some metric that increases with the distance from P to the circle.
+/** 
+ * Whereas compute_max_error_ratio() checks for itself that each data point 
+ * is near some point on the curve, this function checks that each point on 
+ * the curve is near some data point (or near some point on the polyline 
+ * defined by the data points, or something like that: we allow for a
+ * "reasonable curviness" from such a polyline).  "Reasonable curviness" 
+ * means we draw a circle centred at the midpoint of a..b, of radius 
+ * proportional to the length |a - b|, and require that each point on the 
+ * segment of bezCurve between the parameters of a and b be within that circle.
+ * If any point P on the bezCurve segment is outside of that allowable 
+ * region (circle), then we return some metric that increases with the 
+ * distance from P to the circle.
  *
- *  Given that this is a fairly arbitrary criterion for finding appropriate places for sharp
- *  corners, we test only one point on bezCurve, namely the point on bezCurve with parameter half
- *  way between our estimated parameters for a and b.  (Alternatives are taking the farthest of a
- *  few parameters between those of a and b, or even using a variant of NewtonRaphsonFindRoot for
- *  finding the maximum rather than minimum distance.)
+ *  Given that this is a fairly arbitrary criterion for finding appropriate 
+ *  places for sharp corners, we test only one point on bezCurve, namely 
+ *  the point on bezCurve with parameter halfway between our estimated 
+ *  parameters for a and b.  (Alternatives are taking the farthest of a
+ *  few parameters between those of a and b, or even using a variant of 
+ *  NewtonRaphsonFindRoot() for finding the maximum rather than minimum 
+ *  distance.)
  */
 static double
 compute_hook(NR::Point const &a, NR::Point const &b, double const u, BezierCurve const bezCurve,
@@ -941,8 +965,11 @@ compute_hook(NR::Point const &a, NR::Point const &b, double const u, BezierCurve
     }
     double const allowed = NR::L2(b - a) + tolerance;
     return dist / allowed;
-    /* effic: Hooks are very rare.  We could start by comparing distsq, only resorting to the more
-       expensive L2 in cases of uncertainty. */
+    /** \todo 
+     * effic: Hooks are very rare.  We could start by comparing 
+     * distsq, only resorting to the more expensive L2 in cases of 
+     * uncertainty.
+     */
 }
 
 /*
