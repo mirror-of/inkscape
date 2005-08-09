@@ -1545,14 +1545,14 @@ msgstr "window1"
 
 #: ../src/dialogs/display-settings.cpp:1185
 msgid "Save window geometry"
-msgstr "Spara fönster storlek"
+msgstr "Spara fönsterstorlek"
 
 #: ../src/dialogs/display-settings.cpp:1186
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
 msgstr ""
-"Spara fönster storlek och position i varje dokument (gäller endast Inkscape "
+"Spara fönstrets storlek och position i varje dokument (gäller endast Inkscape "
 "SVG-formatet)"
 
 #: ../src/dialogs/display-settings.cpp:1193
@@ -1751,7 +1751,7 @@ msgstr ""
 
 #: ../src/dialogs/display-settings.cpp:1391
 msgid "Default export resolution:"
-msgstr "Standard export upplösning:"
+msgstr "Standardexportupplösning:"
 
 #: ../src/dialogs/display-settings.cpp:1392
 #, fuzzy
