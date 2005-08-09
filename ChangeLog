@@ -1,3 +1,16 @@
+2005-08-09  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/Doxyfile: added 5 more files
+	* src/display/curve.h, src/display/curve.cpp, src/knot.cpp,
+	  src/dialogs/export.cpp: replaced gboolean with bool
+	* src/display/curve.cpp: removed sp_curve_finish() as it is nowhere 
+	  called, made sp_curve_ensure_space() static
+	* src/sp-object.cpp, src/sp-item.cpp, src/libnr/n-art-bpath.h,
+	  src/libnr/nr-path-code.h, src/ui/view/view.cpp, src/dialogs/export.cpp,
+	  src/display/bezier-utils.cpp, src/display/curve.h,
+	  src/display/curve.cpp, src/knot.h, src/knot.cpp:
+	  improved doxygen documentation
+
 2005-08-08  MenTaLguY  <mental@rydia.net>
 
 	* README.txt, README: make autotools happy
