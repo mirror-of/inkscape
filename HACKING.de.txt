@@ -6,7 +6,7 @@ sehen, die zum Compilieren nötig sind.
 Die RPM-Unterstützung ist unvollständig. Die Datei inkscape.spec.in hat
 eine partielle Liste der Abhängigkeiten:
 
-grep Requires inkscape.spec.in
+  grep Requires inkscape.spec.in
 
 Momentan beschreibt die Datei nur ein Paket. Wenn Sie eine RPM-basierte
 Linux-Distribution benutzen, würden Sie anderen helfen, wenn Sie die
