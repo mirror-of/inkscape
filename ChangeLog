@@ -1,5 +1,9 @@
 2005-08-08  MenTaLguY  <mental@rydia.net>
 
+	* po/es.po, po/ja.po, po/nl.po, po/ru.po: merge translations from HEAD
+
+2005-08-08  MenTaLguY  <mental@rydia.net>
+
 	* src/selection-chemistry.cpp: fix const-ness issue [bug 1253235]
 
 2005-08-05  MenTaLguY  <mental@rydia.net>
