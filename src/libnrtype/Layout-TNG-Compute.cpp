@@ -27,12 +27,12 @@ namespace Text {
 #define TRACE(format, ...) IFDEBUG(g_print(format, ## __VA_ARGS__),g_print("\n"))
 
 // ******* enum conversion tables
-static const Layout::EnumConversionItem enum_convert_spstyle_direction_to_pango_direction[] = {
+static Layout::EnumConversionItem const enum_convert_spstyle_direction_to_pango_direction[] = {
 	{SP_CSS_WRITING_MODE_LR_TB, PANGO_DIRECTION_LTR},
 	{SP_CSS_WRITING_MODE_RL_TB, PANGO_DIRECTION_RTL},
 	{SP_CSS_WRITING_MODE_TB_LR, PANGO_DIRECTION_LTR}};   // this is correct
 
-static const Layout::EnumConversionItem enum_convert_spstyle_direction_to_my_direction[] = {
+static Layout::EnumConversionItem const enum_convert_spstyle_direction_to_my_direction[] = {
 	{SP_CSS_WRITING_MODE_LR_TB, Layout::LEFT_TO_RIGHT},
 	{SP_CSS_WRITING_MODE_RL_TB, Layout::RIGHT_TO_LEFT},
 	{SP_CSS_WRITING_MODE_TB_LR, Layout::LEFT_TO_RIGHT}};   // this is correct
@@ -628,7 +628,8 @@ class Layout::Calculator
         return true;
     }
 
-    static inline const PangoLogAttr& _charAttributes(ParagraphInfo const &para, UnbrokenSpanPosition const &span_pos)
+    static inline PangoLogAttr const &_charAttributes(ParagraphInfo const &para,
+						      UnbrokenSpanPosition const &span_pos)
     {
         return para.char_attributes[span_pos.iter_span->char_index_in_para + span_pos.char_index];
     }
