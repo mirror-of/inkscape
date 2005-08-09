@@ -125,14 +125,16 @@ void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_c
 
     if (clip) {
         // Sort items:
-        items = g_slist_sort((GSList *) items, (GCompareFunc) sp_object_compare_position);
+        GSList *sorted_items = g_slist_copy ((GSList *) items);
+        sorted_items = g_slist_sort((GSList *) sorted_items, (GCompareFunc) sp_object_compare_position);
 
         // Copy item reprs:
-        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+        for (GSList *i = (GSList *) sorted_items; i != NULL; i = i->next) {
             sp_selection_copy_one (SP_OBJECT_REPR (i->data), sp_item_i2doc_affine(SP_ITEM (i->data)), clip);
         }
 
         *clip = g_slist_reverse(*clip);
+        g_slist_free ((GSList *) sorted_items);
     }
 }
 

@@ -1,3 +1,7 @@
+2005-08-08  MenTaLguY  <mental@rydia.net>
+
+	* src/selection-chemistry.cpp: fix const-ness issue [bug 1253235]
+
 2005-08-05  MenTaLguY  <mental@rydia.net>
 
 	* inkscape.spec.in: include translated manpages
