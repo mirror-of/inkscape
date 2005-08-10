@@ -1,6 +1,6 @@
 #define __MAIN_C__
 
-/*
+/** \file
  * Inkscape - an ambitious vector drawing program
  *
  * Authors:
@@ -21,6 +21,46 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+// Putting the following in main.cpp appears a natural choice.
+
+/** \mainpage The Inkscape Source Code Documentation
+ * \section extlinks Links to external documentation
+ * While the standard doxygen documentation can be accessed through the links
+ * in the header, the following external documents are available to the 
+ * interested reader.
+ *
+ * \subsection liblinks External documentation on libraries used in inkscape
+ *
+ * <a href="http://www.gtkmm.org/gtkmm2/docs/">Gtkmm</a>
+ * <a href="http://www.gtkmm.org/gtkmm2/docs/reference/html/dir_000003.html">atkmm</a>
+ * <a href="http://www.gtkmm.org/gtkmm2/docs/reference/html/dir_000009.html">gdkmm</a>
+ * <a href="http://www.gtkmm.org/gtkmm2/docs/reference/html/dir_000007.html">pangomm</a>
+ * <a href="http://libsigc.sourceforge.net/libsigc1_2/reference/html/modules.html">libsigc++</a>
+ * <a href="http://www.gtk.org/api/">GTK+</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/gdk-pixbuf/index.html">gdk-pixbuf</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/gobject/index.html">GObject</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/atk/index.html">atk</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/pango/index.html">pango</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/gnome-vfs-2.0/">GnomeVFS</a>
+ * <a href="http://libsigc.sourceforge.net/libsigc2/docs/index.html">libsigc</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/ORBit/index.html">ORBit</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/libbonobo/index.html">bonobo</a>
+ * <a href="http://developer.gnome.org/doc/API/2.0/bonobo-activation/index.html">bonobo-activation</a>
+ * <a href="http://xmlsoft.org/XSLT/html/libxslt-lib.html#LIBXSLT-LIB">libxslt</a>
+ * <a href="http://xmlsoft.org/html/index.html">libxml2</a>
+ *
+ * \subsection stdlinks External standards documentation 
+ *
+ * <a href="http://www.w3.org/TR/SVG/">SVG1.1</a>
+ * <a href="http://www.w3.org/TR/SVG12/">SVG1.2</a>
+ * <a href="http://www.w3.org/TR/SVGMobile/">SVGMobile</a>
+ * <a href="http://www.w3.org/Graphics/SVG/Test/">SVGTest</a>
+ * <a href="http://www.libpng.org/pub/png/">PNG</a>
+ * <a href="http://www.w3.org/TR/xslt">XSLT</a>
+ * <a href="http://partners.adobe.com/public/developer/ps/index_specs.html">PS</a>
+ */
+
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -374,7 +414,7 @@ main(int argc, char **argv)
       We use relative paths on win32.
       HKCR\svgfile\shell\open\command is a good example
     */
-    // FIXME BROKEN - non-UTF-8 sneaks in here.
+    /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
     char *homedir = g_path_get_dirname(argv[0]);
     SetCurrentDirectory(homedir);
     g_free(homedir);
@@ -422,7 +462,7 @@ main(int argc, char **argv)
         }
     }
 
-    // TODO:  Should this be a static object (see inkscape.cpp)?
+    /// \todo  Should this be a static object (see inkscape.cpp)?
     Inkscape::NSApplication::Application app(argc, argv, use_gui, sp_new_gui);
 
     return app.run();
@@ -463,7 +503,7 @@ GSList *fixupFilenameEncoding( GSList* fl )
 
 int sp_common_main( int argc, char const **argv, GSList **flDest )
 {
-    /* fixme: Move these to some centralized location (Lauris) */
+    /// \todo fixme: Move these to some centralized location (Lauris)
     sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
     sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
 
@@ -527,7 +567,7 @@ sp_main_gui(int argc, char const **argv)
     if (!sp_global_slideshow) {
         gboolean create_new = TRUE;
 
-        // FIXME BROKEN - non-UTF-8 sneaks in here.
+        /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
         inkscape_application_init(argv[0], true);
 
         while (fl) {
@@ -542,7 +582,7 @@ sp_main_gui(int argc, char const **argv)
     } else {
         if (fl) {
             GtkWidget *ss;
-            // FIXME BROKEN - non-UTF-8 sneaks in here.
+            /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
             inkscape_application_init(argv[0], true);
             ss = sp_slideshow_new(fl);
             if (ss) gtk_widget_show(ss);
@@ -873,10 +913,11 @@ sp_do_export_png(SPDocument *doc)
 
 static void do_export_ps(SPDocument* doc, gchar const* uri, char const* mime)
 {
-    /* FIXME: I've no idea if this is the `proper' way to do this.
-    ** If anyone feels qualified to say that it is, perhaps they
-    ** could remove this comment.
-    */
+    /** \todo
+     * FIXME: I've no idea if this is the `proper' way to do this.
+     * If anyone feels qualified to say that it is, perhaps they
+     * could remove this comment.
+     */
 
     Inkscape::Extension::DB::OutputList o;
     Inkscape::Extension::db.get_output_list(o);
