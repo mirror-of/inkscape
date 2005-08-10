@@ -1,3 +1,7 @@
+2005-08-10  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/main.cpp: introduced doxygen doc main page with links
+
 2005-08-09  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/Doxyfile: added 5 more files
