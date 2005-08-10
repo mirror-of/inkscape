@@ -76,6 +76,7 @@ msgstr ""
 "no és l'esperat."
 
 #: ../src/extension/internal/ps.cpp:155
+msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency and patterns "
 "will be lost."
