@@ -1,8 +1,8 @@
 #ifndef __SP_DOCUMENT_H__
 #define __SP_DOCUMENT_H__
 
-/*
- * Typed SVG document implementation
+/** \file
+ * SPDocument: Typed SVG document implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -48,6 +48,7 @@ class UndoStackObserver;
 
 class SPDocumentPrivate;
 
+/// Typed SVG document implementation.
 struct SPDocument : public Inkscape::GC::Managed<>,
                     public Inkscape::GC::Finalized,
 		    public Inkscape::GC::Anchored
@@ -64,22 +65,22 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	~SPDocument();
 
 	unsigned int keepalive : 1;
-	unsigned int virgin    : 1; /* Has the document never been touched? */
+	unsigned int virgin    : 1; ///< Has the document never been touched?
 
-	Inkscape::XML::Document *rdoc; /* Our Inkscape::XML::Document */
-	Inkscape::XML::Node *rroot; /* Root element of Inkscape::XML::Document */
-	SPObject *root; /* Our SPRoot */
+	Inkscape::XML::Document *rdoc; ///< Our Inkscape::XML::Document
+	Inkscape::XML::Node *rroot; ///< Root element of Inkscape::XML::Document
+	SPObject *root;             ///< Our SPRoot
 	CRCascade *style_cascade;
 
-	gchar *uri; /* URI string or NULL */
+	gchar *uri; ///< URI string or NULL
 	gchar *base;
 	gchar *name;
 
 	SPDocumentPrivate *priv;
 
-	/* Last action key */
+	/// Last action key
 	const gchar *actionkey;
-	/* Handler ID */
+	/// Handler ID
 	guint modified_id;
 
 	sigc::connection connectModified(ModifiedSignal::slot_type slot);
@@ -113,10 +114,6 @@ public:
 	void emitReconstructionStart (void);
 	void emitReconstructionFinish  (void);
 };
-
-/* Fetches document from URI, or creates new, if NULL
- * Public document appear in document list
- */
 
 SPDocument *sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new = false);
 SPDocument *sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int keepalive);
