@@ -34,6 +34,8 @@
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
 
+#include "composite-undo-stack-observer.h"
+
 /*
  * Undo & redo
  *
@@ -112,6 +114,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	} else {
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
 		doc->priv->history_size++;
+		doc->priv->undoStackObservers.notifyUndoCommitEvent(log);
 	}
 
 	doc->actionkey = key;
@@ -185,6 +188,7 @@ sp_document_undo (SPDocument *doc)
 		doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
 
 		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+		doc->priv->undoStackObservers.notifyUndoEvent(log);
 
 		ret = TRUE;
 	} else {
@@ -228,6 +232,7 @@ sp_document_redo (SPDocument *doc)
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
 
 		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+		doc->priv->undoStackObservers.notifyRedoEvent(log);
 
 		ret = TRUE;
 	} else {

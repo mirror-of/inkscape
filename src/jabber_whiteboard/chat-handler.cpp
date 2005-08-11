@@ -24,6 +24,7 @@
 
 #include "jabber_whiteboard/typedefs.h"
 #include "jabber_whiteboard/message-utilities.h"
+#include "jabber_whiteboard/message-queue.h"
 #include "jabber_whiteboard/jabber-handlers.h"
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/session-manager.h"
@@ -134,10 +135,13 @@ ChatMessageHandler::parse(LmMessage* message)
 					// (see JEP-0045, section 6.3.3 - <http://www.jabber.org/jeps/jep-0045.html#enter-pres>)
 					Glib::ustring sender = lm_message_node_get_attribute(root, MESSAGE_FROM);
 					Glib::ustring chatter = sender.substr(sender.find_last_of('/') + 1, sender.length());
-//					g_log(NULL, G_LOG_LEVEL_DEBUG, "Extract chatter name: %s, my chat handle: %s", chatter.data(), this->_sm->session_data->chat_handle.data());
+					g_log(NULL, G_LOG_LEVEL_DEBUG, "Extract chatter name: original string %s, their chat handle %s, my chat handle: %s", sender.data(), chatter.data(), this->_sm->session_data->chat_handle.data());
 					if (chatter != this->_sm->session_data->chat_handle) {
 //						g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting chatter into tracker list");
 						this->_sm->session_data->chatters.insert(g_strdup(chatter.data()));
+						// Make a receive queue for this chatter
+						this->_sm->session_data->receive_queues[sender.raw()] = new ReceiveMessageQueue(this->_sm);
+						
 //						g_log(NULL, G_LOG_LEVEL_DEBUG, "Adding chatter: %s", chatter.data());
 					} else {
 						// If the presence message is from ourselves, then we know that we 
@@ -153,6 +157,10 @@ ChatMessageHandler::parse(LmMessage* message)
 					Glib::ustring sender = lm_message_node_get_attribute(root, MESSAGE_FROM);
 					Glib::ustring chatter = sender.substr(sender.find_last_of('/') + 1, sender.length());
 					this->_sm->session_data->chatters.erase(chatter.data());
+
+					// Delete the message queue used by this sender
+					this->_sm->session_data->receive_queues.erase(sender.raw());
+
 					this->_sm->desktop()->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("<b>%s</b> has left the chatroom."), sender.c_str());
 				}
 
@@ -190,6 +198,7 @@ ChatMessageHandler::_finishConnection()
 			XML::Node* root = this->_sm->document()->rroot;
 
 			this->_sm->setupInkscapeInterface();
+			this->_sm->setupCommitListener();
 
 			for ( Inkscape::XML::Node *child = root->firstChild() ; child != NULL ; child = child->next() ) {
 				MessageUtilities::newObjectMessage(NULL, newids, newnodes, newchildren, this->_sm->node_tracker(), child, true);

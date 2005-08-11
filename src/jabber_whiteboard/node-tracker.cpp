@@ -21,7 +21,6 @@
 
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/node-tracker.h"
-#include "jabber_whiteboard/tracker-node.h"
 
 
 // TODO: remove redundant calls to isTracking(); it's a rather unnecessary
@@ -58,37 +57,65 @@ XMLNodeTracker::~XMLNodeTracker()
 	this->_clear();
 }
 
+void
+XMLNodeTracker::put(std::string key, XML::Node const& node)
+{
+	this->put(key, const_cast< XML::Node& >(node));
+}
+
 void 
 XMLNodeTracker::put(std::string key, XML::Node& node)
 {
-	TrackerNode* n = new TrackerNode(&node);
-
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting node (key %s, node %p, tracker %p)", key.c_str(), &node, n);
-
-	this->_keyToNode.insert(std::make_pair< std::string, TrackerNode* >(key, n));
-	this->_nodeToKey.insert(std::make_pair< TrackerNode*, std::string >(n, key));
+	this->_keyToNode.insert(std::make_pair< std::string, XML::Node* >(key, &node));
+	this->_nodeToKey.insert(std::make_pair< XML::Node*, std::string >(&node, key));
 }
 
 void
 XMLNodeTracker::put(KeyToNodeMap& newids, NodeToKeyMap& newnodes)
 {
 	// TODO: redo
-	if (newids.size() == newnodes.size()) {
-		KeyToNodeMap::iterator i = newids.begin();
+	KeyToNodeMap::iterator i = newids.begin();
 
-		for(; i != newids.end(); i++) {
-			this->put((*i).first, *const_cast< XML::Node* >(((*i).second)));
+	for(; i != newids.end(); i++) {
+		this->put((*i).first, *((*i).second));
+	}
+}
+
+void
+XMLNodeTracker::process(KeyToNodeActionMap& actions)
+{
+	KeyToNodeActionMap::iterator i = actions.begin();
+	for(; i != actions.end(); i++) {
+		// Get the action to perform.
+		SerializedEventNodeAction action = i->second;
+		switch(action.first) {
+			case NODE_ADD:
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_ADD event: key %s, node %p", (*i).first.c_str(), action.second);
+				this->put((*i).first, *(action.second));
+				break;
+			case NODE_REMOVE:
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", (*i).first.c_str(), action.second);
+	//			this->remove(const_cast< XML::Node& >(*(action.second)));
+				break;
+			default:
+				break;
 		}
 	}
 }
 
-XML::Node&
+XML::Node*
 XMLNodeTracker::get(std::string& key)
 {
-	return const_cast< XML::Node& >(*(this->_keyToNode[key]->_node));
+	KeyToTrackerNodeMap::iterator i = this->_keyToNode.find(key);
+	if (i != this->_keyToNode.end()) {
+		return (*i).second;
+	} else {
+		g_warning("Key %s is not being tracked!", key.c_str());
+		return NULL;
+	}
 }
 
-XML::Node&
+XML::Node*
 XMLNodeTracker::get(std::string const& key)
 {
 	return this->get(const_cast< std::string& >(key));
@@ -96,10 +123,20 @@ XMLNodeTracker::get(std::string const& key)
 
 
 std::string const
+XMLNodeTracker::get(XML::Node& node)
+{
+	TrackerNodeToKeyMap::iterator i = this->_nodeToKey.find(&node);
+	if (i != this->_nodeToKey.end()) {
+		return (*i).second;
+	} else {
+		return "";
+	}
+}
+
+std::string const
 XMLNodeTracker::get(XML::Node const& node)
 {
-	TrackerNode* n = new TrackerNode(&node);
-	return this->_nodeToKey[n];
+	return this->get(const_cast< XML::Node& >(node));
 }
 
 bool
@@ -115,83 +152,15 @@ XMLNodeTracker::isTracking(std::string const& key)
 }
 
 bool
+XMLNodeTracker::isTracking(XML::Node& node)
+{
+	return (this->_nodeToKey.find(&node) != this->_nodeToKey.end());
+}
+
+bool
 XMLNodeTracker::isTracking(XML::Node const& node)
 {
-	TrackerNode* n = new TrackerNode(&node);
-	return (this->_nodeToKey.find(n) != this->_nodeToKey.end());
-}
-
-void
-XMLNodeTracker::lock(XML::Node const* node, ListenerType listener)
-{
-	TrackerNode* n = new TrackerNode(node);
-	TrackerNodeToKeyMap::iterator i = this->_nodeToKey.find(n);
-	if (i != this->_nodeToKey.end()) {
-		(*i).first->lock(listener);
-
-		// Children of this node should also be locked
-		XML::Node const* parent = node;
-		for(XML::Node const* child = parent->firstChild(); child != NULL; child = child->next()) {
-			this->lock(child, listener);
-		}
-	}
-}
-
-void
-XMLNodeTracker::lock(XML::Node const& node, ListenerType listener)
-{
-	this->lock(&node, listener);
-}
-
-void
-XMLNodeTracker::unlock(XML::Node const* node, ListenerType listener)
-{
-	TrackerNode* n = new TrackerNode(node);
-	TrackerNodeToKeyMap::iterator i = this->_nodeToKey.find(n);
-	if (i != this->_nodeToKey.end()) {
-		(*i).first->unlock(listener);
-
-		// Children of this node should also be unlocked
-		XML::Node const* parent = node;
-		for(XML::Node const* child = parent->firstChild(); child != NULL; child = child->next()) {
-			this->unlock(child, listener);
-		}
-	}
-}
-
-void
-XMLNodeTracker::unlock(XML::Node const& node, ListenerType listener)
-{
-	this->unlock(&node, listener);
-}
-
-bool
-XMLNodeTracker::isLocked(XML::Node const& node, ListenerType listener)
-{
-	TrackerNode* n = new TrackerNode(&node);
-	TrackerNodeToKeyMap::iterator i = this->_nodeToKey.find(n);
-	if (i != this->_nodeToKey.end()) {
-		return (*i).first->isLocked(listener);
-	} 
-	
-	// A listener lock, among other things, instructs a node observer to not
-	// process any changes that it may have received.  
-	// Therefore, if we can't find the node in our database, we don't want the
-	// observer to act on the signal, so we should say that the "node" is indeed
-	// locked.
-	return true;
-}
-
-bool
-XMLNodeTracker::isLocked(std::string& key, ListenerType listener)
-{
-	KeyToTrackerNodeMap::iterator i = this->_keyToNode.find(key);
-	if (i != this->_keyToNode.end()) {
-		return (*i).second->isLocked(listener);
-	} else {
-		// Similar rationale as above.
-		return true;
-	}
+	return this->isTracking(const_cast< XML::Node& >(node));
 }
 
 bool
@@ -205,8 +174,9 @@ XMLNodeTracker::isRootNode(XML::Node& node)
 void
 XMLNodeTracker::remove(std::string& key)
 {
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node with key %s", key.c_str());
 	if (this->isTracking(key)) {
-		TrackerNode* element = new TrackerNode(&this->get(key));
+		XML::Node* element = this->get(key);
 		this->_keyToNode.erase(key);
 		this->_nodeToKey.erase(element);
 	} 
@@ -215,10 +185,10 @@ XMLNodeTracker::remove(std::string& key)
 void
 XMLNodeTracker::remove(XML::Node& node)
 {
-	TrackerNode* n = new TrackerNode(&node);
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node %p", &node);
 	if (this->isTracking(node)) {
 		std::string const element = this->get(node);
-		this->_nodeToKey.erase(n);
+		this->_nodeToKey.erase(&node);
 		this->_keyToNode.erase(element);
 	}
 }
@@ -300,12 +270,12 @@ XMLNodeTracker::dump()
 	while(i != this->_keyToNode.end()) {
 		if (!((*i).first.empty())) {
 			if ((*i).second != NULL) {
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s\t->\t%p (%s)", (*i).first.c_str(), (*i).second->_node, (*i).second->_node->name());
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s\t->\t%p (%s)", (*i).first.c_str(), (*i).second, (*i).second->name());
 			} else {
 				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s\t->\t(null)", (*i).first.c_str());
 			}
 		} else {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "(null)\t->\t%p (%s)", (*i).second->_node, (*i).second->_node->name());
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "(null)\t->\t%p (%s)", (*i).second, (*i).second->name());
 		}
 		i++;
 	}
@@ -313,9 +283,13 @@ XMLNodeTracker::dump()
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "XMLNodeTracker nodeToKey dump");
 	while(j != this->_nodeToKey.end()) {
 		if (!((*j).second.empty())) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "%p\t->\t%s (parent %p)", (*j).first->_node, (*j).second.c_str(), (*j).first->_node->parent());
+			if ((*j).first) {
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "%p\t->\t%s (parent %p)", (*j).first, (*j).second.c_str(), (*j).first->parent());
+			} else {
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "(null)\t->\t%s", (*j).second.c_str());
+			}
 		} else {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "%p\t->\t(null)", (*j).first->_node);
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "%p\t->\t(null)", (*j).first);
 		}
 		j++;
 	}

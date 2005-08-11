@@ -12,7 +12,7 @@ if WITH_INKBOARD
 jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/message-tags.cpp \
 	jabber_whiteboard/internal-constants.cpp \
-	jabber_whiteboard/received-message-helpers.cpp \
+	jabber_whiteboard/deserializer.cpp \
 	jabber_whiteboard/connection-establishment.cpp \
 	jabber_whiteboard/buddy-list-manager.cpp \
 	jabber_whiteboard/session-file-selector.cpp \
@@ -22,8 +22,11 @@ jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/message-contexts.cpp \
 	jabber_whiteboard/message-processors.cpp \
 	jabber_whiteboard/message-handler.cpp \
+	jabber_whiteboard/message-aggregator.cpp \
 	jabber_whiteboard/jabber-handlers.cpp \
-	jabber_whiteboard/node-observer.cpp \
+	jabber_whiteboard/undo-stack-observer.cpp \
+	jabber_whiteboard/serializer-node-observer.cpp \
+	jabber_whiteboard/tracker-action-observer.cpp \
 	jabber_whiteboard/node-tracker.cpp \
 	jabber_whiteboard/callbacks.cpp \
 	jabber_whiteboard/session-file.cpp \

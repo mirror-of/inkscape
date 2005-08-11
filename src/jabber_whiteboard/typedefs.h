@@ -28,7 +28,6 @@ extern "C" {
 #include <sigc++/sigc++.h>
 
 #include "jabber_whiteboard/defines.h"
-#include "jabber_whiteboard/tracker-node.h"
 
 #include "gc-alloc.h"
 
@@ -51,14 +50,14 @@ class ListContainer;
 
 // Various specializations of std::less for XMLNodeTracker maps.
 namespace std {
-using Inkscape::Whiteboard::TrackerNode;
+using Inkscape::XML::Node;
 
 template<>
-struct less< TrackerNode* > : public binary_function < TrackerNode*, TrackerNode*, bool >
+struct less< Node* > : public binary_function < Node*, Node*, bool >
 {
-	bool operator()(TrackerNode* _x, TrackerNode* _y) const
+	bool operator()(Node* _x, Node* _y) const
 	{
-		return _x->_node < _y->_node;
+		return _x < _y;
 	}
 
 };
@@ -81,12 +80,23 @@ namespace Whiteboard {
 //
 // XML node tracker maps
 //
+//
 
-typedef std::map< std::string, TrackerNode*, std::less< std::string >, GC::Alloc< std::pair < std::string, TrackerNode* >, GC::MANUAL > > KeyToTrackerNodeMap;
-typedef std::map< TrackerNode*, std::string, std::less< TrackerNode* >, GC::Alloc< std::pair< TrackerNode*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
+typedef std::map< std::string, XML::Node*, std::less< std::string >, GC::Alloc< std::pair< std::string, XML::Node* >, GC::MANUAL > > KeyToTrackerNodeMap;
+typedef std::map< XML::Node*, std::string, std::less< XML::Node* >, GC::Alloc< std::pair< XML::Node*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
+
+
+// TODO: Clean up these typedefs.  I'm sure quite a few of these aren't used anymore; additionally,
+// it's probably possible to consolidate a few of these types into one.
 
 // Temporary storage of new object messages and new nodes in said messages
 typedef std::list< Glib::ustring > NewChildObjectMessageList;
+
+typedef std::pair< NodeTrackerAction, XML::Node const* > SerializedEventNodeAction;
+typedef std::map< std::string, SerializedEventNodeAction > KeyToNodeActionMap;
+typedef std::set< std::string > AttributesScannedSet;
+typedef std::set< XML::Node* > AttributesUpdatedSet;
+
 typedef std::map< std::string, XML::Node const* > KeyToNodeMap;
 typedef std::map< XML::Node const*, std::string > NodeToKeyMap;
 
@@ -100,9 +110,19 @@ typedef std::set< char const* > ChatterList;
 
 // Message context verification and processing
 struct MessageProcessor;
+class ReceiveMessageQueue;
 
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
 typedef std::map< MessageType, MessageProcessor*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, MessageProcessor* >, GC::MANUAL > > MessageProcessorMap;
+
+typedef std::map< std::string, ReceiveMessageQueue*, std::less< std::string >, GC::Alloc< std::pair< std::string, ReceiveMessageQueue* >, GC::MANUAL > > RecipientToReceiveQueueMap;
+typedef std::map< std::string, unsigned int > ReceipientToLatestTransactionMap;
+
+typedef std::string ReceivedCommitEvent;
+typedef std::list< ReceivedCommitEvent > CommitsQueue;
+
+// Message serialization
+typedef std::list< Glib::ustring > SerializedEventList;
 
 // Error handling -- someday
 // TODO: finish and integrate this

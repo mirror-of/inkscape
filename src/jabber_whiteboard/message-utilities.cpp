@@ -352,9 +352,9 @@ MessageUtilities::childOrderChangeMessage(Glib::ustring& msgbuf, std::string con
 
 
 bool
-MessageUtilities::getFirstMessageTag(struct Node* buf, Glib::ustring const* msg)
+MessageUtilities::getFirstMessageTag(struct Node& buf, Glib::ustring const& msg)
 {
-	if (msg == NULL || buf == NULL || msg->empty()) {
+	if (msg.empty()) {
 		return false;
 	}
 
@@ -364,24 +364,24 @@ MessageUtilities::getFirstMessageTag(struct Node* buf, Glib::ustring const* msg)
 	// find_first_of returns UINT_MAX when it cannot find the first
 	// instance of the given character.
 
-	Glib::ustring::size_type startDelim = msg->find_first_of('<');
+	Glib::ustring::size_type startDelim = msg.find_first_of('<');
 	if (startDelim != UINT_MAX) {
-		Glib::ustring::size_type endDelim = msg->find_first_of('>');
+		Glib::ustring::size_type endDelim = msg.find_first_of('>');
 		if (endDelim != UINT_MAX) {
 			if (endDelim > startDelim) {
-				buf->tag = msg->substr(startDelim+1, (endDelim-startDelim)-1);
-				if (buf->tag.find_first_of('/') == UINT_MAX) { // start tags should not be end tags
+				buf.tag = msg.substr(startDelim+1, (endDelim-startDelim)-1);
+				if (buf.tag.find_first_of('/') == UINT_MAX) { // start tags should not be end tags
 
-//					g_log(NULL, G_LOG_LEVEL_DEBUG, "getFirstMessageTag: tag: %s", buf->tag.data());
+//					g_log(NULL, G_LOG_LEVEL_DEBUG, "getFirstMessageTag: tag: %s", buf.tag.data());
 
-					// construct end tag (</buf->data>)
-					Glib::ustring endTag(buf->tag);
+					// construct end tag (</buf.data>)
+					Glib::ustring endTag(buf.tag);
 					endTag.insert(0, "/");
 
-					Glib::ustring::size_type endTagLoc = msg->find(endTag, endDelim);
+					Glib::ustring::size_type endTagLoc = msg.find(endTag, endDelim);
 					if (endTagLoc != UINT_MAX) {
-						buf->data = msg->substr(endDelim+1, ((endTagLoc - 1) - (endDelim + 1)));
-						buf->next_pos = endTagLoc + endTag.length() + 1;
+						buf.data = msg.substr(endDelim+1, ((endTagLoc - 1) - (endDelim + 1)));
+						buf.next_pos = endTagLoc + endTag.length() + 1;
 
 						return true;
 					}
@@ -394,9 +394,9 @@ MessageUtilities::getFirstMessageTag(struct Node* buf, Glib::ustring const* msg)
 }
 
 bool
-MessageUtilities::findTag(struct Node* buf, Glib::ustring const* msg)
+MessageUtilities::findTag(struct Node& buf, Glib::ustring const& msg)
 {
-	if (msg == NULL || buf == NULL || msg->empty()) {
+	if (msg.empty()) {
 		return false;
 	}
 
@@ -404,63 +404,34 @@ MessageUtilities::findTag(struct Node* buf, Glib::ustring const* msg)
 	// < > to it 
 	
 	Glib::ustring searchterm("<");
-	searchterm += buf->tag;
+	searchterm += buf.tag;
 	searchterm + ">";
 
-	Glib::ustring::size_type tagStart = msg->find(searchterm, 0);
+	Glib::ustring::size_type tagStart = msg.find(searchterm, 0);
 	if (tagStart != UINT_MAX) {
 		// Find ending tag starting at the point at the end of
 		// the start tag.
 		searchterm.insert(1, "/");
-		Glib::ustring::size_type tagEnd = msg->find(searchterm, tagStart + searchterm.length());
+		Glib::ustring::size_type tagEnd = msg.find(searchterm, tagStart + searchterm.length());
 		if (tagEnd != UINT_MAX) {
 			Glib::ustring::size_type start = tagStart + searchterm.length();
-			buf->data = msg->substr(start, tagEnd - start);
+			buf.data = msg.substr(start, tagEnd - start);
 			return true;
 		}
 	}
 	return false;
 }
 
-
-bool
-MessageUtilities::extractChangeData(Glib::ustring const* msg, std::string& idbuf, Glib::ustring *keybuf, Glib::ustring *oldvalbuf, Glib::ustring *newvalbuf, Glib::ustring* booleanbuf)
-{	
-	struct Node* buf = new Node;
-
-	buf->tag = MESSAGE_ID;
-	if (!MessageUtilities::findTag(buf, msg)) {
-		return false;
-	}
-	idbuf = buf->data.data();
-//	buf->data.swap(*idbuf);
-
-	buf->tag = MESSAGE_KEY;
-	if (!MessageUtilities::findTag(buf, msg)) {
-		return false;
-	}
-	buf->data.swap(*keybuf);
-
-	buf->tag = MESSAGE_OLDVAL;
-	if (!MessageUtilities::findTag(buf, msg)) {
-		return false;
-	}
-	buf->data.swap(*oldvalbuf);
-
-	buf->tag = MESSAGE_NEWVAL;
-	if (!MessageUtilities::findTag(buf, msg)) {
-		return false;
-	}
-	buf->data.swap(*newvalbuf);
-
-	buf->tag = MESSAGE_ISINTERACTIVE;
-	if (!MessageUtilities::findTag(buf, msg)) {
-		return false;
-	}
-	buf->data.swap(*booleanbuf);
-
-	return true;
+Glib::ustring
+MessageUtilities::makeTagWithContent(Glib::ustring tagname, Glib::ustring content)
+{
+	Glib::ustring buf;
+	buf = "<" + tagname + ">";
+	buf += content;
+	buf += "</" + tagname + ">";
+	return buf;
 }
+
 
 }
 

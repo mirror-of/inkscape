@@ -27,31 +27,32 @@ enum MessageType {
     CHANGE_NOT_REPEATABLE = 0,
 	CHANGE_REPEATABLE = 1,
 	DUMMY_CHANGE = 2,
-	DOCUMENT_BEGIN = 3,
-	DOCUMENT_END = 4,
+	CHANGE_COMMIT = 3,
+	DOCUMENT_BEGIN = 4,
+	DOCUMENT_END = 5,
     // 1-1 connections
-    CONNECT_REQUEST_USER = 5,
-	CONNECT_REQUEST_RESPONSE_USER = 6, 
+    CONNECT_REQUEST_USER = 6,
+	CONNECT_REQUEST_RESPONSE_USER = 7, 
     // chat connections
-    CONNECT_REQUEST_RESPONSE_CHAT = 7,
+    CONNECT_REQUEST_RESPONSE_CHAT = 8,
 	// chatroom document synchronization
-	CHATROOM_SYNCHRONIZE_REQUEST = 8, 
-	CHATROOM_SYNCHRONIZE_RESPONSE = 9,
+	CHATROOM_SYNCHRONIZE_REQUEST = 9, 
+	CHATROOM_SYNCHRONIZE_RESPONSE = 10,
     // requests
-    DOCUMENT_SENDER_REQUEST = 10, 
-	DOCUMENT_SENDER_REQUEST_RESPONSE = 11, 
-	DOCUMENT_REQUEST = 12,
+    DOCUMENT_SENDER_REQUEST = 11,
+	DOCUMENT_SENDER_REQUEST_RESPONSE = 12, 
+	DOCUMENT_REQUEST = 13,
     // notifications
-    CONNECTED_SIGNAL = 13,
-	DISCONNECTED_FROM_USER_SIGNAL = 14,
+    CONNECTED_SIGNAL = 14,
+	DISCONNECTED_FROM_USER_SIGNAL = 15,
 	// error responses
-	CONNECT_REQUEST_REFUSED_BY_PEER = 15, 
-	UNSUPPORTED_PROTOCOL_VERSION = 16,
-	ALREADY_IN_SESSION = 17,
+	CONNECT_REQUEST_REFUSED_BY_PEER = 16, 
+	UNSUPPORTED_PROTOCOL_VERSION = 17,
+	ALREADY_IN_SESSION = 18,
 	
 	// error cases, i.e. garbled messages or bad clients.  These should
 	// never actually be transmitted
-	UNKNOWN = 18
+	UNKNOWN = 21
 };
 
 // Responses to whiteboard invitations
@@ -67,6 +68,13 @@ enum HandlerMode {
 	DEFAULT,
 	PRESENCE,
 	ERROR
+};
+
+// Actions to pass to the node tracker when we modify a node in 
+// the document tree upon event serialization
+enum NodeTrackerAction {
+	NODE_ADD,
+	NODE_REMOVE
 };
 
 }

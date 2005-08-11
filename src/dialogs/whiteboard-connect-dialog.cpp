@@ -19,9 +19,10 @@
  * The real connection dialog code is in ui/dialog/whiteboard-connect.{cpp,h}.
  */
 
-#include <glibmm/i18n.h>
 
 #include "util/ucompose.hpp"
+
+#include <glibmm/i18n.h>
 
 #include "jabber_whiteboard/session-manager.h"
 

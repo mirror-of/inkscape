@@ -48,10 +48,13 @@ public:
 	~XMLNodeTracker();
 
 	void put(std::string key, XML::Node& node);
+	void put(std::string key, XML::Node const& node);
 	void put(KeyToNodeMap& newids, NodeToKeyMap& newnodes);
+	void process(KeyToNodeActionMap& actions);
 
-	XML::Node& get(std::string& key);
-	XML::Node& get(std::string const& key);
+	XML::Node* get(std::string& key);
+	XML::Node* get(std::string const& key);
+	std::string const get(XML::Node& node);
 	std::string const get(XML::Node const& node);
 
 	void remove(std::string& key);
@@ -59,14 +62,8 @@ public:
 
 	bool isTracking(std::string& key);
 	bool isTracking(std::string const& key);
+	bool isTracking(XML::Node& node);
 	bool isTracking(XML::Node const& node);
-
-	void lock(XML::Node const* node, ListenerType listener);
-	void lock(XML::Node const& node, ListenerType listener);
-	void unlock(XML::Node const* node, ListenerType listener);
-	void unlock(XML::Node const& node, ListenerType listener);
-	bool isLocked(XML::Node const& node, ListenerType listener);
-	bool isLocked(std::string& key, ListenerType listener);
 
 	bool isSpecialNode(char const* name);
 	bool isSpecialNode(std::string const& name);

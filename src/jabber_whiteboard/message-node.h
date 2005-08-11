@@ -16,16 +16,18 @@
 #include <string>
 #include <glibmm.h>
 
+#include "gc-managed.h"
 #include "gc-anchored.h"
 #include "gc-finalized.h"
+
 namespace Inkscape {
 
 namespace Whiteboard {
 
-class MessageNode { //: public GC::Anchored, public GC::Finalized {
+class MessageNode : public GC::Managed<>, public GC::Anchored, public GC::Finalized {
 public:
-	MessageNode(unsigned int seq, std::string sender, std::string recip, Glib::ustring const* message_body, bool repeatable, bool document, bool chatroom) :
-		_seq(seq), _repeatable(repeatable), _document(document), _chatroom(chatroom)
+	MessageNode(unsigned int seq, std::string sender, std::string recip, Glib::ustring const* message_body, MessageType type, bool document, bool chatroom) :
+		_seq(seq), _type(type), _document(document), _chatroom(chatroom)
 	{
 		this->_sender = sender;
 		this->_recipient = recip;
@@ -50,9 +52,9 @@ public:
 		return this->_seq;
 	}
 
-	bool repeatable()
+	MessageType type()
 	{
-		return this->_repeatable;
+		return this->_type;
 	}
 
 	bool chatroom()
@@ -85,7 +87,7 @@ private:
 	std::string _sender;
 	std::string _recipient;
 	Glib::ustring* _message;
-	bool _repeatable;
+	MessageType _type;
 	bool _document;
 	bool _chatroom;
 };

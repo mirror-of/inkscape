@@ -211,7 +211,13 @@ sp_repr_replay_log (Inkscape::XML::Event *log)
 	EventTracker<SimpleEvent<Event::XML> > tracker("replay-log");
 
 	if (log) {
-		g_assert(!log->repr->session()->inTransaction());
+		// Nodes created by the whiteboard deserializer tend to not 
+		// have an associated session.  This conditional hacks a way around that,
+		// but what's the best way to fix the whiteboard code so that new nodes
+		// will have an associated session? -- yipdw
+		if (log->repr->session()) {
+			g_assert(!log->repr->session()->inTransaction());
+		}
 	}
 
 	Inkscape::XML::replay_log_to_observer(log, LogPerformer::instance());

@@ -50,9 +50,11 @@ public:
 	static void childOrderChangeMessage(ustring& msgbuf, std::string const childid, std::string const oldprevid, std::string const newprevid);
 
 	// Message parsing utilities
-	static bool getFirstMessageTag(struct Node* buf, ustring const* msg);
-	static bool findTag(struct Node* buf, ustring const* msg);
-	static bool extractChangeData(ustring const* msg, std::string& idbuf, ustring *keybuf, ustring *oldvalbuf, ustring *newvalbuf, ustring* booleanbuf);
+	static bool getFirstMessageTag(struct Node& buf, ustring const& msg);
+	static bool findTag(struct Node& buf, ustring const& msg);
+
+	// Message tag generation utilities
+	static Glib::ustring makeTagWithContent(Glib::ustring tagname, Glib::ustring content);
 
 private:
 	// noncopyable, nonassignable

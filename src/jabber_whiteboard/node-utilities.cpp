@@ -21,7 +21,7 @@
 #include "jabber_whiteboard/typedefs.h"
 #include "jabber_whiteboard/node-utilities.h"
 #include "jabber_whiteboard/node-tracker.h"
-#include "jabber_whiteboard/node-observer.h"
+//#include "jabber_whiteboard/node-observer.h"
 
 namespace Inkscape {
 
@@ -102,24 +102,6 @@ NodeUtilities::findNodeID(XML::Node const& node, XMLNodeTracker* tracker, NodeTo
 		return "";
 	}
 }
-
-void
-NodeUtilities::recursiveRemoveFromTracker(XML::Node& parent, XMLNodeObserver& observer, XMLNodeTracker* tracker)
-{
-	if (&parent != NULL && tracker->isTracking(parent)) {
-		parent.removeObserver(dynamic_cast< XML::NodeObserver& >(observer));
-		tracker->remove(parent);
-
-		// Our anchor on this XML::Node was either released upon its creation
-		// or is being anchored by an entity that is not part of the whiteboard system,
-		// so don't worry about releasing it
-
-		for(XML::Node* child = parent.firstChild(); child != NULL; child = child->next()) {
-			NodeUtilities::recursiveRemoveFromTracker(*child, observer, tracker);
-		}
-	}
-}
-
 
 }
 

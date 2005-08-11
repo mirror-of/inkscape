@@ -15,11 +15,6 @@ extern "C" {
 #include <loudmouth/loudmouth.h>
 }
 
-//#include <boost/smart_ptr.hpp>
-//#include <boost/bind.hpp>
-
-//#include <functional>
-
 #include <glibmm.h>
 #include <glibmm/i18n.h>
 #include <glib.h>
@@ -43,6 +38,7 @@ MessageContextMap _received_message_contexts;
 MessageHandler::MessageHandler(SessionManager* sm) : _sm(sm)
 {
 	if (message_contexts_initialized == false) {
+//		this->_initializeContexts();
 		MessageHandler::_initializeContexts();
 	}
 	this->_initializeProcessors();
@@ -69,7 +65,6 @@ MessageHandler::handle(LmMessage* message, HandlerMode mode)
 				return LM_HANDLER_RESULT_REMOVE_MESSAGE;
 		}
 	} else {
-		g_warning(_("A received message failed message sanity checks; discarding message."));
 		return LM_HANDLER_RESULT_REMOVE_MESSAGE;
 	}
 }
@@ -240,13 +235,11 @@ MessageHandler::_extractData(LmMessage* message)
 {
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Extracting data from message %p", message);
 
-	JabberMessage jm;
+	JabberMessage jm(message);
 	LmMessageNode* root;
 	LmMessageNode* sequence;
 	LmMessageNode* body;
 	gchar const* tmp;
-
-	jm.message = message;
 
 	root = lm_message_get_node(message);
 
@@ -256,15 +249,20 @@ MessageHandler::_extractData(LmMessage* message)
 
 		jm.sender = lm_message_node_get_attribute(root, MESSAGE_FROM);
 
-		tmp = lm_message_node_get_value(sequence);
-		if (tmp != NULL) {
-			jm.sequence = atoi(tmp);
+		if (sequence) {
+			tmp = lm_message_node_get_value(sequence);
+			if (tmp != NULL) {
+				jm.sequence = atoi(tmp);
+			}
 		}
 
-		tmp = lm_message_node_get_value(body);
-		if (tmp != NULL) {
-			jm.body = tmp;
+		if (body) {
+			tmp = lm_message_node_get_value(body);
+			if (tmp != NULL) {
+				jm.body = tmp;
+			}
 		}
+
 	} else {
 		jm.sequence = 0;
 		jm.sender = "";
@@ -294,7 +292,6 @@ MessageHandler::_default(LmMessage* message)
 	if (this->_hasValidReceiveContext(message)) {
 		// Extract message data
 		JabberMessage msg = this->_extractData(message);
-		//MessagePtr msg = this->_extractData(message);
 		MessageType type = this->_getType(message);
 
 //		g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) Handling message: %s", lm_connection_get_jid(this->_sm->session_data->connection), msg.body.c_str());
@@ -302,9 +299,6 @@ MessageHandler::_default(LmMessage* message)
 		// Call message handler and return instruction value to Loudmouth
 
 		return (*this->_received_message_processors[type])(type, msg);
-
-//		return (std::bind1st(*this->_received_message_processors[type], type))(msg);
-//		return boost::bind< LmHandlerResult >(*this->_received_message_processors[type], _1, msg)(type);
 	} else {
 		g_warning(_("Default message handler received message in invalid receive context; discarding message."));
 		return LM_HANDLER_RESULT_REMOVE_MESSAGE;
@@ -418,6 +412,8 @@ MessageHandler::ink_type_to_string(gint ink_type) {
 			return "CHANGE_REPEATABLE";
 		case Inkscape::Whiteboard::DUMMY_CHANGE:
 			return "DUMMY_CHANGE";
+		case Inkscape::Whiteboard::CHANGE_COMMIT:
+			return "CHANGE_COMMIT";
 		case Inkscape::Whiteboard::CONNECT_REQUEST_USER:
 			return "CONNECT_REQUEST_USER";
 		case Inkscape::Whiteboard::CONNECT_REQUEST_RESPONSE_USER:

@@ -17,6 +17,7 @@ namespace Inkscape {
 namespace Whiteboard {
 // Protocol versions
 char const* MESSAGE_PROTOCOL_V1 =	"1";
+char const* MESSAGE_PROTOCOL_V2	=	"2";
 int const HIGHEST_SUPPORTED =		1;
 
 // Node types (as strings)

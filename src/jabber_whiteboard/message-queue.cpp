@@ -37,13 +37,11 @@ MessageQueue::first()
 	return this->_queue.front();
 }
 
-MessageNode*
+void
 MessageQueue::popFront()
 {
-	MessageNode* mn = this->first();
 	this->_queue.pop_front();
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removed element, queue size (for %s): %u", lm_connection_get_jid(this->_sm->session_data->connection), this->_queue.size());
-	return mn;
 }
 
 unsigned int
@@ -64,7 +62,7 @@ MessageQueue::clear()
 	this->_queue.clear();
 }
 
-ReceiveMessageQueue::ReceiveMessageQueue(SessionManager* sm) : MessageQueue(sm)
+ReceiveMessageQueue::ReceiveMessageQueue(SessionManager* sm) : MessageQueue(sm), _latest(0)
 {
 
 }
@@ -76,9 +74,9 @@ ReceiveMessageQueue::insert(MessageNode* msg)
 	// lower than the sequence number of the latest message processed
 	// by this message's sender.  If it does, drop the message and produce
 	// a warning.
-	unsigned int latest = this->_tracker[msg->sender()];
-	if (msg->sequence() < latest) {
-		g_warning(_("Received late message (message sequence number is %u, but latest processed message had sequence number %u).  Discarding message; session may be desynchronized."), msg->sequence(), latest);
+	if (msg->sequence() < this->_latest) {
+		g_warning(_("Received late message (message sequence number is %u, but latest processed message had sequence number %u).  Discarding message; session may be desynchronized."), msg->sequence(), this->_latest);
+		return;
 	}
 
 	// Otherwise, it is safe to insert this message.
@@ -89,9 +87,9 @@ ReceiveMessageQueue::insert(MessageNode* msg)
 }
 
 void
-ReceiveMessageQueue::setLatestProcessedPacket(std::string sender, unsigned int seq)
+ReceiveMessageQueue::setLatestProcessedPacket(unsigned int seq)
 {
-	this->_tracker[sender] = seq;
+	this->_latest = seq;
 }
 
 SendMessageQueue::SendMessageQueue(SessionManager* sm) : MessageQueue(sm)

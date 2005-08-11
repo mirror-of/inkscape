@@ -20,6 +20,8 @@
 #include "sp-root.h"
 #include "document.h"
 
+#include "composite-undo-stack-observer.h"
+
 #define SP_DOCUMENT_DEFS(d) ((SPObject *) SP_ROOT (SP_DOCUMENT_ROOT (d))->defs)
 
 namespace Inkscape {
@@ -56,6 +58,10 @@ struct SPDocumentPrivate {
 	int history_size;
 	GSList * undo; /* Undo stack of reprs */
 	GSList * redo; /* Redo stack of reprs */
+
+	/* Undo listener */
+	Inkscape::CompositeUndoStackObserver undoStackObservers;
+
 };
 
 #endif

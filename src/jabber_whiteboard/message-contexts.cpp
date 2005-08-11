@@ -46,7 +46,7 @@ initialize_received_message_contexts(MessageContextMap& mcm)
 	std::bitset< NUM_FLAGS > all_contexts;
 	all_contexts.flip();
 
-	// Messages: CHANGE_NOT_REPEATABLE, CHANGE_REPEATABLE, DUMMY_CHANGE
+	// Messages: CHANGE_NOT_REPEATABLE, CHANGE_REPEATABLE, DUMMY_CHANGE, CHANGE_COMMIT
 	std::bitset< NUM_FLAGS > m1;
 	m1.set(LOGGED_IN);
 	m1.set(IN_WHITEBOARD);
@@ -55,6 +55,7 @@ initialize_received_message_contexts(MessageContextMap& mcm)
 	mcm[CHANGE_NOT_REPEATABLE] = m1;
 	mcm[CHANGE_REPEATABLE] = m1;
 	mcm[DUMMY_CHANGE] = m1;
+	mcm[CHANGE_COMMIT] = m1;
 
 	// Messages: DOCUMENT_BEGIN, DOCUMENT_END
 	std::bitset< NUM_FLAGS > m4;

@@ -42,13 +42,15 @@ namespace Whiteboard {
 class ReceiveMessageQueue;
 class SendMessageQueue;
 class XMLNodeTracker;
-class XMLNodeObserver;
 class SessionManager;
 class MessageHandler;
 class ChatMessageHandler;
 class Callbacks;
 class SessionFile;
 class SessionFilePlayer;
+class UndoStackObserver;
+class SerializerNodeObserver;
+class Deserializer;
 
 // Jabber resource name
 #define RESOURCE_NAME	"Inkboard"
@@ -89,6 +91,7 @@ public:
 	 */
 	LmConnection* connection;
 
+
 	// Chatroom tracking
 	
 	/**
@@ -111,8 +114,9 @@ public:
 	/**
 	 * @brief pointer to received message queue
 	 */
-	ReceiveMessageQueue* receive_queue;
-
+	//ReceiveMessageQueue* receive_queue;
+	RecipientToReceiveQueueMap receive_queues;
+	CommitsQueue recipients_committed_queue;
 
 	/**
 	 * @brief pointer to queue for messages to be sent
@@ -127,13 +131,17 @@ public:
 	unsigned int sequence_number;
 
 	/**
-	 * @brief largest sequence number processed
-	 * @deprecated
+	 * @brief latest transaction sent
 	 */
-	unsigned int sequence_largest_dropped;
+	//unsigned int latest_sent_transaction;
+
+	/**
+	 * @brief latest processed transactions
+	 */
+	//RecipientToLatestTransactionMap latest_processed_transactions;
+
 
 	// Status tracking
-	
 	/**
 	 * @brief session states and status flags
 	 */
@@ -237,30 +245,16 @@ public:
 	 */
 	void setRecipient(char const* recipientJID);
 
-	/**
-	 * @brief add Inkboard observers for the given node and all child nodes
-	 *
-	 * @param node root of subtree in which each node will be given an Inkboard observer
-	 */
-	void addNodeObservers(XML::Node* node);
-
-	/**
-	 * @brief remove Inkboard observers from the given node and all child nodes
-	 *
-	 * @param node root of subtree in which each node will have an Inkboard observer removed
-	 */
-	void removeNodeObservers(XML::Node* node);
-
 	// Message sending utilities
 	
 	/**
 	 * @brief put an Inkboard message into the send queue
 	 *
 	 * @param msg the message to send
-	 * @param is_repeatable whether or not this message may be repeated
+	 * @param type the type of message (only CHANGE_* types permitted)
 	 * @param chatroom whether or not this message is destined for a chatroom
 	 */
-	void sendChange(Glib::ustring const* msg, gboolean is_repeatable, bool chatroom);
+	void sendChange(Glib::ustring const* msg, MessageType type, std::string const& recipientJID, bool chatroom);
 
 	/**
 	 * @brief send a message to the given recipient
@@ -274,15 +268,6 @@ public:
 	 * @return SEND_SUCCESS if successful; otherwise: UNKNOWN_OUTGOING_TYPE if msgtype is not recognized, NO_RECIPIENT_JID if recipientJID is NULL or blank, CONNECTION_ERROR if Jabber connection error occurred
 	 */
 	int sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const* msg, char const* recipientJID, bool chatroom);
-
-	// Error handlers (non-callback)
-	
-	/**
-	 * @brief inform user of session timeout
-	 *
-	 * @param errmsg message to display
-	 */
-	void timeoutError(char const* errmsg);
 
 	/**
 	 * @brief inform user of connection error
@@ -300,7 +285,6 @@ public:
 	 */
 	void resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf, NodeToKeyMap& newnodesbuf);
 	
-	// Connection establishment (in connection-establishment.cpp)
 	
 	/**
 	 * @brief send connection request to user
@@ -344,21 +328,12 @@ public:
 	 * @param response the response code
 	 * @param sender the JID of the user whom responded to our request
 	 */
-	void receiveConnectRequestResponse(InvitationResponses response, gchar const* sender = "");
+	void receiveConnectRequestResponse(InvitationResponses response, std::string& sender);
 
 	void receiveConnectRequestResponseChat(gchar const* recipient);
 
 	// Message parsing and passing
 	void receiveChange(Glib::ustring const* changemsg);
-	void receiveDocument(Glib::ustring const* documentmsg);
-
-	// Received message helpers (in received-message-helpers.cpp)
-	void receivedChangeHelper(Glib::ustring* msg);
-	void receivedContentChangeHelper(Glib::ustring const& msg);
-	void receivedChildOrderChangeHelper(Glib::ustring const& msg);
-	unsigned int receivedNewObjectHelper(Glib::ustring* msg, Glib::ustring* rest);
-	void receivedDeleteHelper(Glib::ustring* msg);
-	void applyChangesToNode(Inkscape::XML::Node* node, Glib::ustring* msg);
 
 	// Logging and session file handling
 	void startLog(Glib::ustring filename);
@@ -368,7 +343,6 @@ public:
 	// User event notification
 	void userConnectedToWhiteboard(gchar const* JID);
 	void userDisconnectedFromWhiteboard(std::string const& JID);
-	void userSessionDisconnect();
 
 	// Queue dispatching and UI setup
 	void startSendQueueDispatch();
@@ -377,20 +351,16 @@ public:
 	void stopReceiveQueueDispatch();
 	void clearDocument();
 	void setupInkscapeInterface();
-
-	// Listener locks
-	bool attr_changed_listener_locked;
-	bool child_added_listener_locked;
-	bool child_removed_listener_locked;
-	bool child_order_changed_listener_locked;
-	bool content_changed_listener_locked;
+	void setupCommitListener();
 
 	// Private object retrieval
 	::SPDesktop* desktop();
 	::SPDocument* document();
 	Callbacks* callbacks();
-	XMLNodeObserver* node_observer();
+	Whiteboard::UndoStackObserver* undo_stack_observer();
+	SerializerNodeObserver* serializer();
 	XMLNodeTracker* node_tracker();
+	Deserializer* deserializer();
 	ChatMessageHandler* chat_handler();
 	SessionFilePlayer* session_player();
 	SessionFile* session_file();
@@ -404,13 +374,15 @@ private:
 
 	::SPDesktop* _myDesktop;
 	::SPDocument* _myDoc;
-	XMLNodeObserver* _myObserver;
+	SerializerNodeObserver* _mySerializer;
+	Whiteboard::UndoStackObserver* _myUndoObserver;
 	XMLNodeTracker* _myTracker;
 	ChatMessageHandler* _myChatHandler;
 	Callbacks* _myCallbacks;
 	SessionFile* _mySessionFile;
 	SessionFilePlayer* _mySessionPlayer;
 	MessageHandler* _myMessageHandler;
+	Deserializer* _myDeserializer; 
 
 	sigc::connection _send_queue_dispatcher;
 	sigc::connection _receive_queue_dispatcher;

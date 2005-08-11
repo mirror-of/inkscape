@@ -16,6 +16,7 @@
 #include "jabber_whiteboard/typedefs.h"
 
 #include "gc-managed.h"
+#include "gc-finalized.h"
 
 namespace Inkscape {
 
@@ -32,14 +33,14 @@ struct ChatSynchronizeHandler;
 
 struct JabberMessage {
 public:
-	JabberMessage()
-	{
-
+	JabberMessage(LmMessage* m) : message(m), sequence(0)
+	{	
+		lm_message_ref(this->message);
 	}
 
 	~JabberMessage() 
 	{
-
+		lm_message_unref(this->message);
 	}
 
 	// pointer to original Loudmouth message
@@ -64,7 +65,7 @@ struct MessageProcessor : public GC::Managed<>, public GC::Finalized {
 public:
 	virtual ~MessageProcessor() 
 	{
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "~MessageProcessor()");
+
 	}
 
 	virtual LmHandlerResult operator()(MessageType mode, JabberMessage& m) = 0;

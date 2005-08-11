@@ -544,6 +544,18 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
     }
 }
 
+void
+SPDocument::addUndoObserver(Inkscape::UndoStackObserver& observer)
+{
+	this->priv->undoStackObservers.add(observer);
+}
+
+void
+SPDocument::removeUndoObserver(Inkscape::UndoStackObserver& observer)
+{
+	this->priv->undoStackObservers.remove(observer);
+}
+
 SPObject *SPDocument::getObjectById(gchar const *id) {
     g_return_val_if_fail(id != NULL, NULL);
 

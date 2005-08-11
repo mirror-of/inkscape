@@ -41,7 +41,10 @@ class Document;
 }
 }
 
-namespace Inkscape { class Selection; }
+namespace Inkscape {
+class Selection; 
+class UndoStackObserver;
+}
 
 class SPDocumentPrivate;
 
@@ -96,6 +99,9 @@ struct SPDocument : public Inkscape::GC::Managed<>,
 	void _emitModified();
 
 	GSList *_collection_queue;
+
+	void addUndoObserver(Inkscape::UndoStackObserver& observer);
+	void removeUndoObserver(Inkscape::UndoStackObserver& observer);
 
 private:
 	SPDocument(SPDocument const &); // no copy

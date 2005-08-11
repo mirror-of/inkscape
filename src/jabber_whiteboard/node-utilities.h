@@ -26,7 +26,6 @@ class Node;
 namespace Whiteboard {
 
 class XMLNodeTracker;
-class XMLNodeObserver;
 
 class NodeUtilities {
 public:
@@ -34,7 +33,6 @@ public:
 //	static Inkscape::XML::Node* lookupReprByValue(Inkscape::XML::Node* root, gchar const* key, ustring const* value);
 	static Glib::ustring const nodeTypeToString(XML::Node const& node);
 	static XML::NodeType stringToNodeType(Glib::ustring const& type);
-	static void recursiveRemoveFromTracker(XML::Node& parent, XMLNodeObserver& observer, XMLNodeTracker* tracker);
 
 	// Node key search utility method
 	static std::string const findNodeID(XML::Node const& node, XMLNodeTracker* tracker, NodeToKeyMap const& newnodes);

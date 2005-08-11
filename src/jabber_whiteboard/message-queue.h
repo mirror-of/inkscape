@@ -16,6 +16,9 @@
 #include <map>
 
 #include "gc-alloc.h"
+
+#include "gc-managed.h"
+
 #include "util/list-container.h"
 
 namespace Inkscape {
@@ -25,7 +28,7 @@ namespace Whiteboard {
 class SessionManager;
 class MessageNode;
 
-typedef std::list< MessageNode* > MessageQueueBuffer;
+typedef std::list< MessageNode*, GC::Alloc< MessageNode*, GC::MANUAL > > MessageQueueBuffer;
 typedef std::map< std::string, unsigned int > LatestProcessedTracker;
 
 class MessageQueue {
@@ -34,7 +37,7 @@ public:
 	virtual ~MessageQueue();
 
 	MessageNode* first();
-	MessageNode* popFront();
+	void popFront();
 	unsigned int size();
 	bool empty();
 	void clear();
@@ -46,13 +49,13 @@ protected:
 	SessionManager* _sm;
 };
 
-class ReceiveMessageQueue : public MessageQueue {
+class ReceiveMessageQueue : public MessageQueue, public GC::Managed<> {
 public:
 	ReceiveMessageQueue(SessionManager* sm);
 	void insert(MessageNode* msg);
-	void setLatestProcessedPacket(std::string sender, unsigned int seq);
+	void setLatestProcessedPacket(unsigned int seq);
 private:
-	LatestProcessedTracker _tracker;
+	unsigned int _latest;
 };
 
 class SendMessageQueue : public MessageQueue {

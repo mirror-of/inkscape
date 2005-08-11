@@ -219,6 +219,9 @@ libinkpost_a_SOURCES =	\
 	round.h	\
 	streq.h	\
 	strneq.h	\
+	composite-undo-stack-observer.h \
+	composite-undo-stack-observer.cpp \
+	undo-stack-observer.h \
 	unit-constants.h	\
 	uri.cpp uri.h
 

@@ -17,6 +17,14 @@ namespace XML {
 class Node;
 class NodeObserver;
 
+enum EventType {
+	EVENT_ADD,
+	EVENT_DEL,
+	EVENT_CHG_ATTR,
+	EVENT_CHG_CONTENT,
+	EVENT_CHG_ORDER
+};
+		
 class Event
 : public Inkscape::GC::Managed<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>
 {

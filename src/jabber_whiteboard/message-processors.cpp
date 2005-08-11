@@ -23,6 +23,7 @@ extern "C" {
 #include "document.h"
 #include "message-stack.h"
 
+#include "jabber_whiteboard/undo-stack-observer.h"
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/message-node.h"
 #include "jabber_whiteboard/message-queue.h"
@@ -54,23 +55,40 @@ public:
 	}
 
 	LmHandlerResult
-	operator()(MessageType mode, JabberMessage& p) {
+	operator()(MessageType mode, JabberMessage& p)
+	{
 		MessageNode* msgNode;
 		bool chatroom = this->_sm->session_data->status[IN_CHATROOM];
-		ReceiveMessageQueue* rmq = this->_sm->session_data->receive_queue;
 
-		switch (mode) {
-			case CHANGE_REPEATABLE:
-				msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, true, false, chatroom);
-				rmq->insert(msgNode);
-				break;
-			case CHANGE_NOT_REPEATABLE:
-				msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, false, false, chatroom);
-				rmq->insert(msgNode);
-				break;
-			case DUMMY_CHANGE:
-			default:
-				break;
+		ReceiveMessageQueue* rmq = this->_sm->session_data->receive_queues[p.sender];
+
+		if (rmq != NULL) {
+			switch (mode) {
+				case CHANGE_REPEATABLE:
+				case CHANGE_NOT_REPEATABLE:
+				case DOCUMENT_BEGIN:
+					msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, mode, false, chatroom);
+					rmq->insert(msgNode);
+					Inkscape::GC::release(msgNode);
+					break;
+				case DOCUMENT_END:
+					this->_sm->session_data->recipients_committed_queue.push_back(p.sender);
+					msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, mode, false, chatroom);
+					rmq->insert(msgNode);
+					Inkscape::GC::release(msgNode);
+					break;
+				case CHANGE_COMMIT:
+					this->_sm->session_data->recipients_committed_queue.push_back(p.sender);
+					msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, CHANGE_COMMIT, false, chatroom);
+					rmq->insert(msgNode);
+					Inkscape::GC::release(msgNode);
+					break;
+				case DUMMY_CHANGE:
+				default:
+					break;
+			}
+		} else {
+			g_warning("Received message from unknown sender %s", p.sender.c_str());
 		}
 		
 		return LM_HANDLER_RESULT_REMOVE_MESSAGE;
@@ -79,73 +97,6 @@ public:
 // *********************************************************************
 // ChangeHandler end
 // *********************************************************************
-
-
-
-
-// *********************************************************************
-// DocumentSignalHandler begin
-// *********************************************************************
-struct DocumentSignalHandler : public MessageProcessor {
-public:
-	~DocumentSignalHandler() 
-	{
-
-	}
-
-	DocumentSignalHandler(SessionManager* sm) : MessageProcessor(sm)
-	{
-
-	}
-	LmHandlerResult
-	operator()(MessageType mode, JabberMessage& m)
-	{
-		std::bitset< NUM_FLAGS >& status = this->_sm->session_data->status;
-		::SPDocument* doc = this->_sm->document();
-		XML::Session* session = doc->rdoc->session();
-
-		switch(mode) {
-			case DOCUMENT_BEGIN: 
-			{
-				if (status[WAITING_TO_SYNC_TO_CHAT]) {
-					status.set(WAITING_TO_SYNC_TO_CHAT, 0);
-					status.set(SYNCHRONIZING_WITH_CHAT, 1);
-				}
-
-				break;
-			}
-			case DOCUMENT_END:
-				if (status[SYNCHRONIZING_WITH_CHAT]) {
-					this->_sm->sendMessage(CONNECTED_SIGNAL, 0, NULL, this->_sm->session_data->recipient, true);
-					status.set(SYNCHRONIZING_WITH_CHAT, 0);
-					status.set(IN_CHATROOM, 1);
-				} else {
-					this->_sm->sendMessage(CONNECTED_SIGNAL, 0, NULL, m.sender.c_str(), false);
-				}
-
-				// Set this to be the new original state of the document
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing undo/redo stacks");
-
-				sp_document_done(doc);
-				sp_document_clear_redo(doc);
-				sp_document_clear_undo(doc);
-
-				// FIXME: we don't start in the first layer of the received document...
-				// need to do that
-				break;
-			default:
-				break;
-		}
-		return LM_HANDLER_RESULT_REMOVE_MESSAGE;
-	}
-private:
-};
-
-// *********************************************************************
-// DocumentSignalHandler end
-// *********************************************************************
-
-
 
 
 // *********************************************************************
@@ -173,10 +124,10 @@ public:
 				break;
 			case CONNECT_REQUEST_RESPONSE_USER:
 				if (m.sequence == 0) {
-					this->_sm->receiveConnectRequestResponse(DECLINE_INVITATION);
+					this->_sm->receiveConnectRequestResponse(DECLINE_INVITATION, m.sender);
 				} else { // FIXME: this has got to be buggy...
 					this->_sm->setRecipient(m.sender.c_str());
-					this->_sm->receiveConnectRequestResponse(ACCEPT_INVITATION);
+					this->_sm->receiveConnectRequestResponse(ACCEPT_INVITATION, m.sender);
 				}
 				break;
 			case Inkscape::Whiteboard::CONNECTED_SIGNAL:
@@ -221,12 +172,12 @@ public:
 		switch(mode) {
 			case CONNECT_REQUEST_REFUSED_BY_PEER:
 				if (this->_sm->session_data->status[WAITING_FOR_INVITE_RESPONSE]) {
-					this->_sm->receiveConnectRequestResponse(DECLINE_INVITATION, m.sender.c_str());
+					this->_sm->receiveConnectRequestResponse(DECLINE_INVITATION, m.sender);
 				}
 				break;
 			case Inkscape::Whiteboard::ALREADY_IN_SESSION:
 				if (this->_sm->session_data->status[WAITING_FOR_INVITE_RESPONSE]) {
-					this->_sm->receiveConnectRequestResponse(PEER_ALREADY_IN_SESSION, m.sender.c_str());
+					this->_sm->receiveConnectRequestResponse(PEER_ALREADY_IN_SESSION, m.sender);
 				}
 				break;
 			case Inkscape::Whiteboard::DISCONNECTED_FROM_USER_SIGNAL:
@@ -318,16 +269,7 @@ public:
 void
 initialize_received_message_processors(SessionManager* sm, MessageProcessorMap& mpm)
 {
-	/*
-	ProcessorShell* ch = new ProcessorShell(new ChangeHandler(sm));
-	ProcessorShell* dsh = new ProcessorShell(new DocumentSignalHandler(sm));
-	ProcessorShell* crh = new ProcessorShell(new ConnectRequestHandler(sm));
-	ProcessorShell* ceh = new ProcessorShell(new ConnectErrorHandler(sm));
-	ProcessorShell* csh = new ProcessorShell(new ChatSynchronizeHandler(sm));
-	*/
-
 	MessageProcessor* ch = new ChangeHandler(sm);
-	MessageProcessor* dsh = new DocumentSignalHandler(sm);
 	MessageProcessor* crh = new ConnectRequestHandler(sm);
 	MessageProcessor* ceh = new ConnectErrorHandler(sm);
 	MessageProcessor* csh = new ChatSynchronizeHandler(sm);
@@ -335,9 +277,9 @@ initialize_received_message_processors(SessionManager* sm, MessageProcessorMap& 
 	mpm[CHANGE_REPEATABLE] = ch;
 	mpm[CHANGE_NOT_REPEATABLE] = ch;
 	mpm[DUMMY_CHANGE] = ch;
-
-	mpm[DOCUMENT_BEGIN] = dsh;
-	mpm[DOCUMENT_END] = dsh;
+	mpm[CHANGE_COMMIT] = ch;
+	mpm[DOCUMENT_BEGIN] = ch;
+	mpm[DOCUMENT_END] = ch;
 
 	mpm[CONNECT_REQUEST_USER] = crh;
 	mpm[CONNECT_REQUEST_RESPONSE_USER] = crh;
@@ -353,7 +295,7 @@ initialize_received_message_processors(SessionManager* sm, MessageProcessorMap& 
 }
 
 /**
- * This function is provided strictly for convenience and style.  You can, of course,
+ * This function is provided solely for convenience and style.  You can, of course,
  * delete every MessageProcessor in the map with your own loop.
  */
 void

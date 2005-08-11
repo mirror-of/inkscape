@@ -26,6 +26,7 @@ namespace Inkscape {
 
 namespace Whiteboard {
 
+struct JabberMessage;
 class SessionManager;
 
 class MessageHandler {
@@ -56,6 +57,7 @@ private:
 	LmHandlerResult _presence(LmMessage* message);
 	
 	// Message processors map
+//	MessageContextMap _received_message_contexts;
 	MessageProcessorMap _received_message_processors;
 
 	SessionManager* _sm;

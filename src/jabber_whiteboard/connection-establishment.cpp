@@ -10,6 +10,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "util/ucompose.hpp"
 #include <glibmm/i18n.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/messagedialog.h>
@@ -19,12 +20,12 @@
 #include "document.h"
 
 #include "xml/repr.h"
-#include "util/ucompose.hpp"
 
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/typedefs.h"
 #include "jabber_whiteboard/node-tracker.h"
 #include "jabber_whiteboard/chat-handler.h"
+#include "jabber_whiteboard/message-queue.h"
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/invitation-confirm-dialog.h"
 
@@ -143,6 +144,10 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 		if (resp == ACCEPT_INVITATION) {
 			undecided = false;
 			this->clearDocument();
+		
+			// Create a receive queue for the initiator of this request
+			this->session_data->receive_queues[requesterJID] = new ReceiveMessageQueue(this);
+			
 			this->setupInkscapeInterface();
 			if (dialog.useSessionFile()) {
 				this->session_data->sessionFile = dialog.getSessionFilePath();
@@ -168,6 +173,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 				this->setDesktop(newdesktop);
 
 				// Prepare document and send acceptance notification
+				this->session_data->receive_queues[requesterJID] = new ReceiveMessageQueue(this);
 				this->clearDocument();
 				this->setupInkscapeInterface();
 				if (dialog.useSessionFile()) {
@@ -195,13 +201,18 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 // When this method is invoked, it means that the other peer
 // has accepted our request.
 void
-SessionManager::receiveConnectRequestResponse(InvitationResponses response, gchar const* sender)
+SessionManager::receiveConnectRequestResponse(InvitationResponses response, std::string& sender)
 {
 	this->session_data->status.set(WAITING_FOR_INVITE_RESPONSE, 0);
 
 	switch(response) {
 		case ACCEPT_INVITATION:
 			{
+
+			// Create a receive queue for the other peer.
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "%s is creating message queue for %s", lm_connection_get_jid(this->session_data->connection), sender.c_str());
+			this->session_data->receive_queues[sender] = new ReceiveMessageQueue(this);
+				
 			KeyToNodeMap newids;
 			NodeToKeyMap newnodes;
 			this->_myTracker = new XMLNodeTracker(this);
@@ -210,6 +221,7 @@ SessionManager::receiveConnectRequestResponse(InvitationResponses response, gcha
 			this->_myTracker->put(newids, newnodes);
 //			this->_myTracker->dump();
 			this->setupInkscapeInterface();
+			this->setupCommitListener();
 			break;
 			}
 
