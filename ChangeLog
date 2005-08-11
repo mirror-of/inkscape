@@ -1,3 +1,65 @@
+2005-08-10	David Yip	<yipdw@rose-hulman.edu>
+	* src/Makefile_insert: added composite-undo-stack-observer.{cpp,h}
+
+	* src/document.{cpp.h},
+	  src/document-undo.cpp, src/document-private.h: 
+	  added hooks for undo stack observer
+
+	* src/jabber_whiteboard/Makefile_insert: added new classes
+
+	* src/jabber_whiteboard/callbacks.cpp: moved document initialization actions
+	  here (not the best idea, admittedly...)
+
+	* src/jabber_whiteboard/connection-establishment.cpp,
+	  src/jabber_whiteboard/session-manager.*,
+	  src/jabber_whiteboard/chat-handler.cpp: updated to work with new listeners
+
+	* src/jabber_whiteboard/message-contexts.cpp,
+	  src/jabber_whiteboard/message-handler.*,
+	  src/jabber_whiteboard/message-tags.*,
+	  src/jabber_whiteboard/defines.h: new message types (TODO: trim out dead
+	  types)
+
+	* src/jabber_whiteboard/message-queue.*,
+	* src/jabber_whiteboard/message-node.h: made MessageNode capable of
+	  representing more message types, as required by callbacks.cpp
+	  and new commit model
+
+	* src/jabber_whiteboard/message-utilities.*: new utilities, although
+	  this entire class should be going bye-bye soon (its main tasks have been
+	  taken over by SerializerNodeObserver)
+
+	* src/jabber_whiteboard/node-tracker.*: removal of node-level locks
+
+	* src/jabber_whiteboard/node-utilities.*: removal of unnecessary methods;
+	  this class should also be removed soon
+
+	* src/jabber_whiteboard/session-file-selector.cpp: miscellaneous tweaks
+
+	* src/jabber_whiteboard/typedefs.h: new type definitions to handle the new
+	  commit model (TODO: prune unnecessary types)
+
+	* src/xml/event.cpp: small hack to get Inkboard working (shouldn't be
+	  there, but I'm still learning my way around XML::Node and
+	  XML::Session...help welcome)
+
+	* src/undo-stack-observer.h: interface for classes that watch undo, redo,
+	  and undo log commit events
+
+	* src/composite-undo-stack-observer.*: similar to CompositeNodeObserver;
+	  combines multiple undo stack observers
+
+	* src/jabber_whiteboard/serializer-node-observer.*: XML::Event serializer
+
+	* src/jabber_whiteboard/deserializer.*: XML::Event deserializer
+
+	* src/jabber_whiteboard/tracker-action-observer.*: simple observer to
+	  watch for added and removed nodes in undo/redo actions (put aside for
+	  now)
+
+	* src/jabber_whiteboard/undo-stack-observer.*: Inkboard's undo stack
+	  observer implementation
+
 2005-08-10  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/main.cpp: introduced doxygen doc main page with links
@@ -66,6 +128,7 @@
 
 	* inkscape.spec.in: include translated manpages
 
+>>>>>>> 1.1554
 2005-08-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
     * po/nl.po: fix a typo: close a bold tag.
@@ -75,6 +138,7 @@
 	* src/jabber_whiteboard/typedefs.h:
 	  fixed incorrect template specialization syntax,
 	  removed duplicate definitions (oops...)
+
 	* src/gc-alloc.h:
 	  removed explicit keyword from allocator constructors, as it is
 	  necessary to allow implicit conversion for rebinding.  Some
