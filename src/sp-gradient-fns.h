@@ -43,15 +43,15 @@ void sp_gradient_ensure_colors(SPGradient *gradient);
 void sp_gradient_set_units(SPGradient *gr, SPGradientUnits units);
 void sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread);
 
-SPGradient *sp_gradient_get_vector (SPGradient *gradient, gboolean force_private);
+SPGradient *sp_gradient_get_vector (SPGradient *gradient, bool force_private);
 SPGradientSpread sp_gradient_get_spread (SPGradient *gradient);
 
 /* Gradient repr methods */
 void sp_gradient_repr_write_vector(SPGradient *gr);
 void sp_gradient_repr_clear_vector(SPGradient *gr);
 
-void sp_gradient_render_vector_block_rgba(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, gboolean horizontal);
-void sp_gradient_render_vector_block_rgb(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, gboolean horizontal);
+void sp_gradient_render_vector_block_rgba(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, bool horizontal);
+void sp_gradient_render_vector_block_rgb(SPGradient *gr, guchar *px, gint w, gint h, gint rs, gint pos, gint span, bool horizontal);
 
 /** Transforms to/from gradient position space in given environment */
 NR::Matrix sp_gradient_get_g2d_matrix(SPGradient const *gr, NR::Matrix const &ctm,
