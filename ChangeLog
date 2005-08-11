@@ -1,3 +1,14 @@
+2005-08-11  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* Doxyfile: added 4 more files
+	* src/sp-gradient.cpp,src/sp-gradient-fns.h,src/event-context.h,
+	  src/event-context.cpp:  replaced gboolean with bool
+	* src/document-undo.cpp:  added editor footer
+	* src/sp-gradient.cpp, src/desktop.cpp, src/document.h,
+	  src/document.cpp, src/document-undo.cpp, src/event-context.h,
+	  src/event-context.cpp, src/selection.h:
+	  improved doxygen documentation
+
 2005-08-10	David Yip	<yipdw@rose-hulman.edu>
 	* src/Makefile_insert: added composite-undo-stack-observer.{cpp,h}
 
