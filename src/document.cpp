@@ -1,7 +1,7 @@
 #define __SP_DOCUMENT_C__
 
-/*
- * SVG document implementation
+/** \file
+ * SPDocument manipulation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -14,6 +14,22 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+/** \class SPDocument
+ * SPDocument serves as the container of both model trees (agnostic XML
+ * and typed object tree), and implements all of the document-level
+ * functionality used by the program. Many document level operations, like 
+ * load, save, print, export and so on, use SPDocument as their basic datatype.
+ *
+ * SPDocument implements undo and redo stacks and an id-based object
+ * dictionary.  Thanks to unique id attributes, the latter can be used to
+ * map from the XML tree back to the object tree.
+ *
+ * SPDocument performs the basic operations needed for asynchronous
+ * update notification (SPObject ::modified virtual method), and implements
+ * the 'modified' signal, as well.
+ */
+
 
 #define noSP_DOCUMENT_DEBUG_IDLE
 #define noSP_DOCUMENT_DEBUG_UNDO
@@ -297,6 +313,10 @@ sp_document_create(Inkscape::XML::Document *rdoc,
     return document;
 }
 
+/**
+ * Fetches document from URI, or creates new, if NULL; public document 
+ * appears in document list.
+ */
 SPDocument *
 sp_document_new(gchar const *uri, unsigned int keepalive, bool make_new)
 {

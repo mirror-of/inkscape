@@ -2,7 +2,7 @@
 #define SEEN_INKSCAPE_SELECTION_H
 
 /** \file
- * Per-desktop selection container
+ * Inkscape::Selection: per-desktop selection container
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -46,6 +46,12 @@ namespace Inkscape {
  * selecting an SPObjects has the side-effect of unselecting any of
  * its children which might have been selected.
  *
+ * This is a per-desktop object that keeps the list of selected objects
+ * at the given desktop. Both SPItem and SPRepr lists can be retrieved
+ * from the selection. Many actions operate on the selection, so it is
+ * widely used throughout the code.
+ * It also implements its own asynchronous notification signals that 
+ * UI elements can listen to.
  */
 class Selection : public Inkscape::GC::Managed<>,
                   public Inkscape::GC::Finalized,

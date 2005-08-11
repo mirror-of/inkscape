@@ -1,6 +1,6 @@
 #define __SP_DOCUMENT_UNDO_C__
 
-/*
+/** \file
  * Undo/Redo stack implementation
  *
  * Authors:
@@ -11,13 +11,46 @@
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
+ *
+ * Using the split document model gives sodipodi a very simple and clean
+ * undo implementation. Whenever mutation occurs in the XML tree,
+ * SPObject invokes one of the five corresponding handlers of its
+ * container document. This writes down a generic description of the
+ * given action, and appends it to the recent action list, kept by the
+ * document. There will be as many action records as there are mutation
+ * events, which are all kept and processed together in the undo
+ * stack. Two methods exist to indicate that the given action is completed:
+ *
+ * \verbatim
+   void sp_document_done (SPDocument *document)
+   void sp_document_maybe_done (SPDocument *document, const unsigned char *key) \endverbatim
+ *
+ * Both move the recent action list into the undo stack and clear the
+ * list afterwards.  While the first method does an unconditional push,
+ * the second one first checks the key of the most recent stack entry. If
+ * the keys are identical, the current action list is appended to the
+ * existing stack entry, instead of pushing it onto its own.  This
+ * behaviour can be used to collect multi-step actions (like winding the
+ * Gtk spinbutton) from the UI into a single undoable step.
+ *
+ * For controls implemented by Sodipodi itself, implementing undo as a
+ * single step is usually done in a more efficent way. Most controls have
+ * the abstract model of grab, drag, release, and change user
+ * action. During the grab phase, all modifications are done to the
+ * SPObject directly - i.e. they do not change XML tree, and thus do not
+ * generate undo actions either.  Only at the release phase (normally
+ * associated with releasing the mousebutton), changes are written back
+ * to the XML tree, thus generating only a single set of undo actions.
+ * (Lauris Kaplinski)
  */
+
 
 #include "config.h"
 
 #if HAVE_STRING_H
 #include <string.h>
 #endif
+
 
 #if HAVE_STDLIB_H
 #include <stdlib.h>
@@ -38,15 +71,19 @@
 
 /*
  * Undo & redo
- *
- *   Since undo sensitivity needs to be nested, setting undo sensitivity
- *   should be done like this:
- *      gboolean saved = sp_document_get_undo_sensitive(document);
- *      sp_document_set_undo_sensitive(document, FALSE);
- *      ... do stuff ...
- *      sp_document_set_undo_sensitive(document, saved);
  */
-
+/** 
+ * Set undo sensitivity.
+ *
+ * \note 
+ *   Since undo sensitivity needs to be nested, setting undo sensitivity
+ *   should be done like this: 
+ *\verbatim
+        gboolean saved = sp_document_get_undo_sensitive(document);
+        sp_document_set_undo_sensitive(document, FALSE);
+        ... do stuff ...
+        sp_document_set_undo_sensitive(document, saved);  \endverbatim
+ */
 void
 sp_document_set_undo_sensitive (SPDocument *doc, gboolean sensitive)
 {
@@ -278,3 +315,13 @@ sp_document_clear_redo (SPDocument *doc)
 		g_slist_free_1 (current);
 	}
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
