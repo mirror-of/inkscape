@@ -732,10 +732,10 @@ sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread)
 
 /**
  * Returns the first of {src, src-\>ref-\>getObject(),
- * src-\>ref-\>getObject()-\>ref-\>getObject(), ...}
+ * src-\>ref-\>getObject()-\>ref-\>getObject(),...}
  * for which \a match is true, or NULL if none found.
  *
- * The raison d'être of this routine is that it correctly handles cycles in the href chain (e.g. if
+ * The raison d'être of this routine is that it correctly handles cycles in the href chain (e.g., if
  * a gradient gives itself as its href, or if each of two gradients gives the other as its href).
  *
  * \pre SP_IS_GRADIENT(src).
@@ -799,7 +799,7 @@ has_spread_set(SPGradient const *gr)
  * \pre There exists a gradient in the chain that has stops.
  */
 SPGradient *
-sp_gradient_get_vector(SPGradient *gradient, gboolean force_vector)
+sp_gradient_get_vector(SPGradient *gradient, bool force_vector)
 {
     g_return_val_if_fail(gradient != NULL, NULL);
     g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
@@ -1120,7 +1120,7 @@ sp_gradient_render_vector_line_rgba(SPGradient *const gradient, guchar *buf,
 void
 sp_gradient_render_vector_block_rgba(SPGradient *const gradient, guchar *buf,
                                      gint const width, gint const height, gint const rowstride,
-                                     gint const pos, gint const span, gboolean const horizontal)
+                                     gint const pos, gint const span, bool const horizontal)
 {
     g_return_if_fail(gradient != NULL);
     g_return_if_fail(SP_IS_GRADIENT(gradient));
@@ -1158,7 +1158,7 @@ sp_gradient_render_vector_block_rgba(SPGradient *const gradient, guchar *buf,
 void
 sp_gradient_render_vector_block_rgb(SPGradient *gradient, guchar *buf,
                                     gint const width, gint const height, gint const rowstride,
-                                    gint const pos, gint const span, gboolean const horizontal)
+                                    gint const pos, gint const span, bool const horizontal)
 {
     g_return_if_fail(gradient != NULL);
     g_return_if_fail(SP_IS_GRADIENT(gradient));

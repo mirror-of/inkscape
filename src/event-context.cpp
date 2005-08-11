@@ -14,6 +14,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+/** \class SPEventContext
+ * SPEventContext is an abstract base class of all tools. As the name
+ * indicates, event context implementations process UI events (mouse
+ * movements and keypresses) and take actions (like creating or modifying
+ * objects).  There is one event context implementation for each tool,
+ * plus few abstract base classes. Writing a new tool involves
+ * subclassing SPEventContext.
+ */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -65,7 +74,7 @@ static void set_event_location(SPDesktop * desktop, GdkEvent * event);
 static GObjectClass *parent_class;
 
 // globals for temporary switching to selector by space
-static gboolean selector_toggled = FALSE;
+static bool selector_toggled = FALSE;
 static int switch_selector_to = 0;
 
 static gint xp = 0, yp = 0; // where drag started
@@ -300,7 +309,7 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration)
 // wrong handling of events among contexts and not by a GDK bug; 
 // if someone can fix this properly this would be great.
 static gint dontgrab = 0;
-static gboolean 
+static bool 
 grab_allow_again() 
 {
     dontgrab--; 
@@ -931,7 +940,7 @@ get_group0_keyval(GdkEventKey *event)
  */
 SPItem *
 sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, 
-        int state, gboolean into_groups)
+        int state, bool into_groups)
 {
     SPItem *item;
 
