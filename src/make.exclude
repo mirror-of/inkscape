@@ -50,3 +50,6 @@ xml/repr-action-test.cpp
 xpath
 io/streamtest.cpp
 
+dialogs/whiteboard-sharewithchat-dialog.cpp
+dialogs/whiteboard-sharewithuser-dialog.cpp
+jabber_whiteboard
