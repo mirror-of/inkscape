@@ -1,3 +1,7 @@
+2005-08-11  MenTaLguY  <mental@rydia.net>
+
+    Bump version number and update NEWS.
+
 2005-08-08  MenTaLguY  <mental@rydia.net>
 
 	* src/interface.cpp, src/verbs.cpp: clean up help menu mess slightly
