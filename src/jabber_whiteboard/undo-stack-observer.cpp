@@ -34,7 +34,7 @@ namespace Inkscape {
 
 namespace Whiteboard {
 
-UndoStackObserver::UndoStackObserver(SessionManager* sm) : _sm(sm), _undoSendEventLocks(0), _redoSendEventLocks(0), _undoCommitSendEventLocks(0), _action_observer(sm->node_tracker()) { }
+UndoStackObserver::UndoStackObserver(SessionManager* sm) : _sm(sm), _undoSendEventLocks(0), _redoSendEventLocks(0), _undoCommitSendEventLocks(0) { }
 UndoStackObserver::~UndoStackObserver() { }
 
 void
@@ -153,7 +153,7 @@ UndoStackObserver::_doAction(XML::Event* log)
 			msgbuf.clear();
 		}
 
-		KeyToNodeActionMap node_actions = this->_sm->serializer()->getNodeActionMap();
+		KeyToNodeActionList& node_actions = this->_sm->serializer()->getNodeTrackerActions();
 		this->_sm->node_tracker()->process(node_actions);
 		this->_sm->serializer()->reset();
 		Glib::ustring commit = MessageUtilities::makeTagWithContent(MESSAGE_COMMIT, "");

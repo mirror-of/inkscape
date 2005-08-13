@@ -26,8 +26,8 @@ jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/jabber-handlers.cpp \
 	jabber_whiteboard/undo-stack-observer.cpp \
 	jabber_whiteboard/serializer-node-observer.cpp \
-	jabber_whiteboard/tracker-action-observer.cpp \
 	jabber_whiteboard/node-tracker.cpp \
+	jabber_whiteboard/node-tracker-event-tracker.cpp \
 	jabber_whiteboard/callbacks.cpp \
 	jabber_whiteboard/session-file.cpp \
 	jabber_whiteboard/session-file-player.cpp \

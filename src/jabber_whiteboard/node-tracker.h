@@ -50,7 +50,7 @@ public:
 	void put(std::string key, XML::Node& node);
 	void put(std::string key, XML::Node const& node);
 	void put(KeyToNodeMap& newids, NodeToKeyMap& newnodes);
-	void process(KeyToNodeActionMap& actions);
+	void process(KeyToNodeActionList& actions);
 
 	XML::Node* get(std::string& key);
 	XML::Node* get(std::string const& key);

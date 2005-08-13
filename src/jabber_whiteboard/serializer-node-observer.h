@@ -111,6 +111,7 @@ public:
 	void reset()
 	{	
 		this->clearEventList();
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing serializer node buffers");
 		this->clearNodeBuffers();
 		this->clearAttributesScannedBuffer();
 	}

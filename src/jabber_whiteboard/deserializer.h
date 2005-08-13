@@ -15,6 +15,7 @@
 #include "xml/log-builder.h"
 #include "xml/event.h"
 
+#include "jabber_whiteboard/node-tracker-event-tracker.h"
 #include "jabber_whiteboard/node-tracker.h"
 #include "jabber_whiteboard/typedefs.h"
 
@@ -62,17 +63,18 @@ public:
 
 	void clearEventLog()
 	{
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing event log");
 		this->_log = NULL;
 	}
 
-	KeyToNodeActionMap& getNodeActionMap()
+	KeyToNodeActionList& getNodeTrackerActions()
 	{
-		return this->_newnodes;
+		return this->_actions;
 	}
 
-	KeyToNodeActionMap getNodeActionMapCopy()
+	KeyToNodeActionList getNodeTrackerActionsCopy()
 	{
-		return this->_newnodes;
+		return this->_actions;
 	}
 
 	AttributesUpdatedSet& getUpdatedAttributeNodeSet()
@@ -87,7 +89,9 @@ public:
 
 	void clearNodeBuffers()
 	{
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing deserializer node buffers");
 		this->_newnodes.clear();
+		this->_actions.clear();
 		this->_newkeys.clear();
 		this->_updated.clear();
 	}
@@ -101,9 +105,9 @@ public:
 private:
 	XML::Node* _getNodeByID(std::string const& id)
 	{
-		KeyToNodeActionMap::iterator i = this->_newnodes.find(id);
+		KeyToNodeMap::iterator i = this->_newnodes.find(id);
 		if (i != this->_newnodes.end()) {
-			return const_cast< XML::Node* >((*i).second.second);
+			return const_cast< XML::Node* >(i->second);
 		} else {
 			if (this->_xnt->isTracking(id)) {
 				return this->_xnt->get(id);
@@ -125,15 +129,31 @@ private:
 
 	void _recursiveMarkForRemoval(XML::Node* node);
 
-	XML::LogBuilder _builder;
+	// internal states with accessors:
+	
+	// node tracker actions (add node, remove node)
+	KeyToNodeActionList _actions;
 
-	KeyToNodeActionMap _newnodes;
-	NodeToKeyMap _newkeys;
+	// nodes that have had their attributes updated
 	AttributesUpdatedSet _updated;
+
+	// the deserialized event log
+	XML::Event* _log;
+
+
+	// for internal use:
+	
+	// These maps only store information on a single node.  That's fine, though;
+	// all we care about is the ability to do key <-> node association.  The NodeTrackerEventTracker
+	// and KeyToNodeActionList keep track of the actual actions we need to perform 
+	// on the node tracker.
+	NodeToKeyMap _newkeys;
+	KeyToNodeMap _newnodes;
+	NodeTrackerEventTracker _node_action_tracker;
 
 	XMLNodeTracker* _xnt;
 
-	XML::Event* _log;
+	XML::LogBuilder _builder;
 };
 
 }

@@ -82,19 +82,19 @@ XMLNodeTracker::put(KeyToNodeMap& newids, NodeToKeyMap& newnodes)
 }
 
 void
-XMLNodeTracker::process(KeyToNodeActionMap& actions)
+XMLNodeTracker::process(KeyToNodeActionList& actions)
 {
-	KeyToNodeActionMap::iterator i = actions.begin();
+	KeyToNodeActionList::iterator i = actions.begin();
 	for(; i != actions.end(); i++) {
 		// Get the action to perform.
-		SerializedEventNodeAction action = i->second;
-		switch(action.first) {
+		SerializedEventNodeAction action = *i;
+		switch(action.second) {
 			case NODE_ADD:
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_ADD event: key %s, node %p", (*i).first.c_str(), action.second);
-				this->put((*i).first, *(action.second));
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_ADD event: key %s, node %p", action.first.first.c_str(), action.first.second);
+				this->put(action.first.first, *action.first.second);
 				break;
 			case NODE_REMOVE:
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", (*i).first.c_str(), action.second);
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", action.first.first.c_str(), action.first.second);
 	//			this->remove(const_cast< XML::Node& >(*(action.second)));
 				break;
 			default:

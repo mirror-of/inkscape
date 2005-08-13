@@ -74,7 +74,8 @@ enum HandlerMode {
 // the document tree upon event serialization
 enum NodeTrackerAction {
 	NODE_ADD,
-	NODE_REMOVE
+	NODE_REMOVE,
+	NODE_UNKNOWN
 };
 
 }

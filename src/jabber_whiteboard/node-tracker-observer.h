@@ -16,6 +16,7 @@
 
 #include "xml/node-observer.h"
 
+#include "jabber_whiteboard/node-tracker-event-tracker.h"
 #include "jabber_whiteboard/node-tracker.h"
 #include "jabber_whiteboard/typedefs.h"
 
@@ -53,12 +54,12 @@ public:
 
 
 	// ...but we do provide node tracking facilities
-	KeyToNodeActionMap& getNodeActionMap()
+	KeyToNodeActionList& getNodeTrackerActions()
 	{
 		return this->newnodes;
 	}
 
-	KeyToNodeActionMap getNodeActionMapCopy()
+	KeyToNodeActionList getNodeTrackerActionsCopy()
 	{
 		return this->newnodes;
 	}
@@ -67,10 +68,10 @@ public:
 	{
 		this->newnodes.clear();
 		this->newkeys.clear();
+		this->actions.clear();
 	}
 
 protected:
-
 	std::string _findOrGenerateNodeID(XML::Node& node)
 	{
 		NodeToKeyMap::iterator i = newkeys.find(&node);
@@ -82,7 +83,7 @@ protected:
 			if (nodeid.empty()) {
 	//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating key for node %p", &node);
 				nodeid = this->_xnt->generateKey();
-				newnodes[nodeid] = SerializedEventNodeAction(NODE_ADD, &node);
+				newnodes.push_back(SerializedEventNodeAction(KeyNodePair(nodeid, &node), NODE_ADD));
 				newkeys[&node] = nodeid;
 			} else {
 	//			g_log(NULL, G_LOG_LEVEL_DEBUG, "(tracker) Found key %s for %p", nodeid.c_str(), &node);
@@ -91,7 +92,8 @@ protected:
 		}
 	}
 
-	KeyToNodeActionMap newnodes;
+	KeyToNodeActionList newnodes;
+	NodeTrackerEventTracker actions;
 	NodeToKeyMap newkeys;
 	XMLNodeTracker* _xnt;
 

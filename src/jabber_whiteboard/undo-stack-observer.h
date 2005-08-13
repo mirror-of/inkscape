@@ -14,7 +14,6 @@
 
 #include <glibmm.h>
 #include "../undo-stack-observer.h"
-#include "jabber_whiteboard/tracker-action-observer.h"
 #include "jabber_whiteboard/typedefs.h"
 
 namespace Inkscape {
@@ -53,8 +52,6 @@ private:
 	unsigned int _undoSendEventLocks;
 	unsigned int _redoSendEventLocks;
 	unsigned int _undoCommitSendEventLocks;
-
-	TrackerActionObserver _action_observer;
 };
 
 }

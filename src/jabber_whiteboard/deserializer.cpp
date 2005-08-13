@@ -51,10 +51,12 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	}
 	child = buf.data.c_str();
 
-	KeyToNodeActionMap::iterator i = this->_newnodes.find(child);
-	if (i != this->_newnodes.end() && i->second.first == NODE_ADD) {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Adding node already marked for addition; ignoring command");
-		return;
+	KeyToNodeMap::iterator i = this->_newnodes.find(child);
+	if (i != this->_newnodes.end()) {
+		if (this->_node_action_tracker.getAction(i->second) == NODE_ADD) {
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "Adding node %s already marked for addition; ignoring command", child.c_str());
+			return;
+		}
 	}
 
 	buf.tag = MESSAGE_NAME;
@@ -103,8 +105,24 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 		}
 	}
 
-	// 6.  Create the child node.
+	// 6.  Check if we already have this node parented elsewhere.  If we do,
+	// generate the appropriate events to unparent the child node from its old
+	// parent and attach it to this new one.
+	/*
+	childRepr = this->_getNodeByID(child);
+	if (childRepr != NULL) {
+		this->_builder.removeChild(*parentRepr, *childRepr, NULL); // prev isn't used 
+		this->_addOneEvent(this->_builder.detach());
+		this->_builder.addChild(*parentRepr, *childRepr, 
+
+		childRepr()->parent()->removeChild(childRepr);
+		parentRepr->addChild(childRepr);
+	*/
+
+
 	XML::Node* childRepr = NULL;
+	
+	// 6.  Create the child node.
 
 	switch (NodeUtilities::stringToNodeType(type)) {
 		case XML::TEXT_NODE:
@@ -125,7 +143,8 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 			break;
 	}
 
-	this->_newnodes[child] = SerializedEventNodeAction(NODE_ADD, childRepr);
+	this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(child, childRepr), NODE_ADD));
+	this->_newnodes[child] = childRepr;
 	this->_newkeys[childRepr] = child;
 
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "child=%p parent=%p prev=%p", childRepr, parentRepr, prevRepr);
@@ -158,10 +177,12 @@ Deserializer::deserializeEventDel(Glib::ustring const& msg)
 	}
 	child = buf.data.c_str();
 
-	KeyToNodeActionMap::iterator i = this->_newnodes.find(child);
-	if (i != this->_newnodes.end() && i->second.first == NODE_REMOVE) {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node already marked for removal; ignoring command");
-		return;
+	KeyToNodeMap::iterator i = this->_newnodes.find(child);
+	if (i != this->_newnodes.end()) {
+		if (this->_node_action_tracker.getAction(i->second) == NODE_REMOVE) {
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node %s already marked for removal; ignoring command", child.c_str());
+			return;
+		}
 	}
 
 	// 2.  Extract optional attributes: previous node.
@@ -187,7 +208,7 @@ Deserializer::deserializeEventDel(Glib::ustring const& msg)
 			this->_builder.removeChild(*parentRepr, *childRepr, prevRepr);
 			this->_addOneEvent(this->_builder.detach());
 		} else {
-			g_warning("child->parent() == parent mismatch: parent=%p child->parent()=%p", parentRepr, childRepr->parent());
+			g_warning("child->parent() == parent mismatch on child=%s, parent=%s: parent=%p child->parent()=%p", child.c_str(), parent.c_str(), parentRepr, childRepr->parent());
 		}
 	}
 
@@ -362,10 +383,10 @@ Deserializer::_recursiveMarkForRemoval(XML::Node* node)
 		if (i == this->_newkeys.end()) {
 			std::string id = this->_xnt->get(*node);
 			if (!id.empty()) {
-				this->_newnodes[id] = SerializedEventNodeAction(NODE_REMOVE, node);
+				this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(id, node), NODE_REMOVE));
 			}
 		} else {
-			this->_newnodes[(*i).second] = SerializedEventNodeAction(NODE_REMOVE, node);
+			this->_actions.push_back(SerializedEventNodeAction(KeyNodePair((*i).second, node), NODE_REMOVE));
 		}
 
 		for (XML::Node* child = node->firstChild(); child; child = child->next()) {

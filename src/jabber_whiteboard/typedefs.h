@@ -92,8 +92,13 @@ typedef std::map< XML::Node*, std::string, std::less< XML::Node* >, GC::Alloc< s
 // Temporary storage of new object messages and new nodes in said messages
 typedef std::list< Glib::ustring > NewChildObjectMessageList;
 
-typedef std::pair< NodeTrackerAction, XML::Node const* > SerializedEventNodeAction;
-typedef std::map< std::string, SerializedEventNodeAction > KeyToNodeActionMap;
+typedef std::pair< std::string, XML::Node* > KeyNodePair;
+typedef std::pair< KeyNodePair, NodeTrackerAction > SerializedEventNodeAction;
+
+typedef std::list< SerializedEventNodeAction > KeyToNodeActionList;
+
+//typedef std::map< std::string, SerializedEventNodeAction > KeyToNodeActionMap;
+
 typedef std::set< std::string > AttributesScannedSet;
 typedef std::set< XML::Node* > AttributesUpdatedSet;
 

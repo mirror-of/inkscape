@@ -26,7 +26,7 @@ MessageAggregator::addOne(Glib::ustring const& msg, Glib::ustring& buf)
 	// Add it to the buffer and return false.
 	if (msg.bytes() > MessageAggregator::MAX_SIZE && buf.empty()) {
 		buf += msg;
-		return false;
+		return true;
 	}
 
 	// 2.  If msg.bytes() + buf.bytes() > maximum size, return false.

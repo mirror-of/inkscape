@@ -521,7 +521,7 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 void
 SessionManager::receiveChange(Glib::ustring const* changemsg)
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) receiveChange operating on %s", lm_connection_get_jid(this->session_data->connection), changemsg->data());
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) receiveChange operating on %s", lm_connection_get_jid(this->session_data->connection), changemsg->data());
 
 	struct Node part;
 
@@ -562,7 +562,7 @@ SessionManager::receiveChange(Glib::ustring const* changemsg)
 //			g_log(NULL, G_LOG_LEVEL_DEBUG, "Committing changes");
 			// Retrieve the deserialized event log, node actions, and nodes with updated attributes
 			XML::Event* log = this->_myDeserializer->getEventLog();
-			KeyToNodeActionMap& node_changes = this->_myDeserializer->getNodeActionMap();
+			KeyToNodeActionList& node_changes = this->_myDeserializer->getNodeTrackerActions();
 			AttributesUpdatedSet& updated = this->_myDeserializer->getUpdatedAttributeNodeSet();
 
 			// Make document insensitive to undo

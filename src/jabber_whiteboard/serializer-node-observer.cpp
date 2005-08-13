@@ -59,11 +59,9 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 		// we do want to collect its attributes.
 		//
 		// TODO: fix
-		NodeToKeyMap::iterator i = this->newkeys.find(&child);
-		if (i != this->newkeys.end()) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %p was previously processed, skipping", &child);
-//			add_child = false;
-			childid = (*i).second;
+		if (!this->actions.tryToTrack(&child, NODE_ADD)) {
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %p was previously processed for addition, skipping", &child);
+				return;
 		} else {
 			childid = this->_findOrGenerateNodeID(child);
 		}
@@ -92,7 +90,7 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 		this->_events.push_back(buf);
 
 		// 5.  Add the child node to the new nodes buffers.
-		this->newnodes[childid] = SerializedEventNodeAction(NODE_ADD, &child);
+		this->newnodes.push_back(SerializedEventNodeAction(KeyNodePair(childid, &child), NODE_ADD));
 		this->newkeys[&child] = childid;
 	}
 
@@ -138,19 +136,15 @@ SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XM
 
 	// 2.  Double-deletes don't make any sense.  If we've seen this node already and if it's
 	// marked for deletion, return.
-	
-	KeyToNodeActionMap::iterator i = this->newnodes.find(childid);
-	if (i != this->newnodes.end()) {
-		if (i->second.first == NODE_REMOVE) {
+	if (!this->actions.tryToTrack(&child, NODE_REMOVE)) {
 			g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %s (%p) has already been marked for deletion, not generating delete message", childid.c_str(), &child);
 			return;
-		}
 	}
 
 	// 2.  Mark this node as deleted.  We don't want to be faced with the possibility of 
 	// generating a new key for this deleted node, so insert it into both maps.
-	newnodes[childid] = SerializedEventNodeAction(NODE_REMOVE, &child);
-	newkeys[&child] = childid;
+	this->newnodes.push_back(SerializedEventNodeAction(KeyNodePair(childid, &child), NODE_REMOVE));
+	this->newkeys[&child] = childid;
 	
 	// 3.  Find the ID of the parent, or generate an ID if it does not exist.
 	std::string parentid = this->_findOrGenerateNodeID(node);
