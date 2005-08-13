@@ -1,3 +1,15 @@
+2005-08-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* packaging/macosx/Resources/script, packaging/macosx/ScriptExec/main.c:
+
+	Fix for the fontconfig cache problem on OS X 10.4.  The first time 
+	Inkscape is launched on 10.4 machines, after checking X11 is available,
+	a dialog is brought up informing users of the fontconfig problem.  The
+	dialog has a button to run fc-cache as root.  If chosen, an OS X
+	authentication dialog in launched and fc-cache is run following the
+	authentication.  A file is stored in ~/.inkscape to mark that fc-cache
+	has been run.
+	
 2005-08-11  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* Doxyfile: added 4 more files
@@ -10,6 +22,7 @@
 	  improved doxygen documentation
 
 2005-08-10	David Yip	<yipdw@rose-hulman.edu>
+
 	* src/Makefile_insert: added composite-undo-stack-observer.{cpp,h}
 
 	* src/document.{cpp.h},
@@ -139,10 +152,9 @@
 
 	* inkscape.spec.in: include translated manpages
 
->>>>>>> 1.1554
 2005-08-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
-    * po/nl.po: fix a typo: close a bold tag.
+	* po/nl.po: fix a typo: close a bold tag.
 
 2005-08-03	David Yip	<yipdw@rose-hulman.edu>
 

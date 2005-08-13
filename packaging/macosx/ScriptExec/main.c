@@ -29,6 +29,8 @@
 // Apple stuff
 #include <Carbon/Carbon.h>
 #include <CoreFoundation/CoreFoundation.h>
+#include <Security/Authorization.h>
+#include <Security/AuthorizationTags.h>
 
 // Unix stuff
 #include <string.h>
@@ -51,6 +53,7 @@
 // custom carbon events
 #define kEventClassRedFatalAlert 911
 #define kEventKindX11Failed 911
+#define kEventKindFCCacheFailed 912
 
 //maximum arguments the script accepts 
 #define	kMaxArgumentsToScript 252
@@ -73,6 +76,7 @@ OSErr LoadMenuBar(char *appName);
 static OSStatus FSMakePath(FSSpec file, char *path, long maxPathSize);
 static void RedFatalAlert(Str255 errorString, Str255 expStr);
 static short DoesFileExist(char *path);
+static OSStatus FixFCCache(void);
 
 static OSErr AppQuitAEHandler(const AppleEvent *theAppleEvent,
                               AppleEvent *reply, long refCon);
@@ -82,7 +86,8 @@ static OSErr AppOpenAppAEHandler(const AppleEvent *theAppleEvent,
                                  AppleEvent *reply, long refCon);
 static OSStatus X11FailedHandler(EventHandlerCallRef theHandlerCall,
                                  EventRef theEvent, void *userData);
-
+static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
+                                 EventRef theEvent, void *userData);
 ///////////////////////////////////////
 // Globals
 ///////////////////////////////////////    
@@ -116,7 +121,8 @@ extern char **environ;
 int main(int argc, char* argv[])
 {
     OSErr err = noErr;
-    EventTypeSpec events = { kEventClassRedFatalAlert, kEventKindX11Failed };
+    EventTypeSpec X11events = { kEventClassRedFatalAlert, kEventKindX11Failed };
+    EventTypeSpec FCCacheEvents = { kEventClassRedFatalAlert, kEventKindFCCacheFailed };
 
     InitCursor();
 
@@ -132,7 +138,10 @@ int main(int argc, char* argv[])
                                  0, false);
     err += InstallEventHandler(GetApplicationEventTarget(),
                                NewEventHandlerUPP(X11FailedHandler), 1,
-                               &events, NULL, NULL);
+                               &X11events, NULL, NULL);
+    err += InstallEventHandler(GetApplicationEventTarget(),
+                               NewEventHandlerUPP(FCCacheFailedHandler), 1,
+                               &FCCacheEvents, NULL, NULL);
 
     if (err) RedFatalAlert("\pInitialization Error",
                            "\pError initing Apple Event handlers.");
@@ -149,6 +158,96 @@ int main(int argc, char* argv[])
                                  
 #pragma mark -
 
+
+//////////////////////////////////
+// Handler for when X11 fails to start
+//////////////////////////////////
+static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall, 
+                                 EventRef theEvent, void *userData)
+{
+
+    pthread_join(tid, NULL);
+    if (odtid) pthread_join(odtid, NULL);
+ 
+	SInt16 itemHit;
+
+	AlertStdAlertParamRec params;
+	params.movable = true;
+	params.helpButton = false;
+	params.filterProc = NULL;
+	params.defaultText = "\pRun fc-cache";
+	params.cancelText = "\pExit";
+	params.otherText = NULL;
+	params.defaultButton = kAlertStdAlertOKButton;
+	params.cancelButton = kAlertStdAlertCancelButton;
+	params.position = kWindowDefaultPosition;
+
+	StandardAlert(kAlertStopAlert, "\pFont caches may need to be updated",
+			"\pThere is a problem on OS X 10.4.x where X11 installation does not always generate the necessary fontconfig caches.  This can be corrected by running /usr/X11R6/bin/fc-cache as root.",
+			&params, &itemHit);
+    
+	if (itemHit == kAlertStdAlertOKButton)
+	{
+		OSStatus err = FixFCCache();
+
+		if (err == errAuthorizationSuccess)
+		{
+			params.defaultText = (void *) kAlertDefaultOKText;
+			params.cancelText = NULL;
+
+			StandardAlert(kAlertNoteAlert, "\pFont caches have been updated",
+					"\pPlease re-run Inkscape.",
+					&params, &itemHit);
+			system("test -d $HOME/.inkscape || mkdir $HOME/.inkscape; touch $HOME/.inkscape/.fccache");
+		}
+	}
+    
+	ExitToShell();
+
+    return noErr;
+}
+
+
+/////////////////////////////////////
+// Code to run fc-cache on first run
+/////////////////////////////////////
+static OSStatus FixFCCache (void)
+{
+   char* args[1];
+
+	// Run fc-cache
+	AuthorizationItem authItems[] = 
+	{
+	{
+		kAuthorizationRightExecute,
+		23,
+		"/usr/X11R6/bin/fc-cache",
+		0
+	}
+	};
+	AuthorizationItemSet authItemSet =
+	{
+		1,
+		authItems
+	};
+	AuthorizationRef authRef = NULL;
+	OSStatus err = AuthorizationCreate (NULL, &authItemSet,
+			kAuthorizationFlagInteractionAllowed | kAuthorizationFlagExtendRights, &authRef);
+
+	if (err == errAuthorizationSuccess)
+	{
+		//the arguments parameter to AuthorizationExecuteWithPrivileges is
+		//a NULL terminated array of C string pointers.
+		args[0]= NULL;
+
+		AuthorizationExecuteWithPrivileges (authRef, "/usr/X11R6/bin/fc-cache", 
+				kAuthorizationFlagDefaults, args, NULL);
+	}
+    AuthorizationFree(authRef, kAuthorizationFlagDestroyRights);
+
+	return err;
+}
+
 ///////////////////////////////////
 // Execution thread starts here
 ///////////////////////////////////
@@ -157,8 +256,15 @@ static void *Execute (void *arg)
     EventRef event;
     
     taskDone = false;
-    if (ExecuteScript(scriptPath, &pid) == (OSErr)11) {
+    
+    OSErr err = ExecuteScript(scriptPath, &pid);
+    if (err == (OSErr)11) {
         CreateEvent(NULL, kEventClassRedFatalAlert, kEventKindX11Failed, 0,
+                    kEventAttributeNone, &event);
+        PostEventToQueue(GetMainEventQueue(), event, kEventPriorityStandard);
+    }
+    else if (err == (OSErr)12) {
+        CreateEvent(NULL, kEventClassRedFatalAlert, kEventKindFCCacheFailed, 0,
                     kEventAttributeNone, &event);
         PostEventToQueue(GetMainEventQueue(), event, kEventPriorityStandard);
     }
@@ -182,9 +288,9 @@ static OSErr ExecuteScript (char *script, pid_t *pid)
 {
     pid_t wpid = 0, p = 0;
     int status, i;
-    
+ 
     if (! pid) pid = &p;
-    
+
     // Generate the array of argument strings before we do any executing
     arguments[0] = script;
     for (i = 0; i < numArgs; i++) arguments[i + 1] = fileArgs[i];
