@@ -701,7 +701,7 @@ sp_knot_request_position (SPKnot * knot, NR::Point *p, guint state)
 	g_return_if_fail (knot != NULL);
 	g_return_if_fail (SP_IS_KNOT (knot));
 
-	bool done = FALSE;
+	unsigned done = FALSE;
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[REQUEST], 0,
