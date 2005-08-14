@@ -23,7 +23,8 @@ MessageAggregator::addOne(Glib::ustring const& msg, Glib::ustring& buf)
 	// 1.  If msg.bytes() > maximum size and the buffer is clear,
 	// then we have to send an oversize packet -- 
 	// we won't be able to deliver the message any other way.
-	// Add it to the buffer and return false.
+	// Add it to the buffer and return true.  Any further attempt to 
+	// aggregate a message will be handled by condition #2.
 	if (msg.bytes() > MessageAggregator::MAX_SIZE && buf.empty()) {
 		buf += msg;
 		return true;
