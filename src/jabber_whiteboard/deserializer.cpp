@@ -105,20 +105,12 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 		}
 	}
 
-	// 6.  Check if we already have this node parented elsewhere.  If we do,
-	// generate the appropriate events to unparent the child node from its old
-	// parent and attach it to this new one.
-	/*
-	childRepr = this->_getNodeByID(child);
-	if (childRepr != NULL) {
-		this->_builder.removeChild(*parentRepr, *childRepr, NULL); // prev isn't used 
-		this->_addOneEvent(this->_builder.detach());
-		this->_builder.addChild(*parentRepr, *childRepr, 
-
-		childRepr()->parent()->removeChild(childRepr);
-		parentRepr->addChild(childRepr);
-	*/
-
+	if (prevRepr) {
+		if (prevRepr->parent() != parentRepr && this->_parent_child_map[prevRepr] != parentRepr) {
+			g_warning("ref mismatch on node %s: ref=%p parent=%p ref->parent()=%p", prev.c_str(), prevRepr, parentRepr, prevRepr->parent());
+			return;
+		}
+	}
 
 	XML::Node* childRepr = NULL;
 	
@@ -143,6 +135,7 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 			break;
 	}
 
+
 	this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(child, childRepr), NODE_ADD));
 	this->_newnodes[child] = childRepr;
 	this->_newkeys[childRepr] = child;
@@ -151,8 +144,8 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 
 	// 7.  Deserialize the event.
 	this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
+	this->_parent_child_map[childRepr] = parentRepr;
 	this->_addOneEvent(this->_builder.detach());
-
 	Inkscape::GC::release(childRepr);
 }
 
@@ -204,16 +197,20 @@ Deserializer::deserializeEventDel(Glib::ustring const& msg)
 
 	// 4.  Deserialize the event.
 	if (parentRepr && childRepr) {
-		if (childRepr->parent() == parentRepr) {
+		if (childRepr->parent() == parentRepr || this->_parent_child_map[childRepr] == parentRepr) {
+			this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(child, childRepr), NODE_REMOVE));
 			this->_builder.removeChild(*parentRepr, *childRepr, prevRepr);
+			this->_parent_child_map.erase(childRepr);
 			this->_addOneEvent(this->_builder.detach());
+
+			// 5.  Mark the removed node and all its children for removal from the tracker.
+			this->_recursiveMarkForRemoval(childRepr);
 		} else {
 			g_warning("child->parent() == parent mismatch on child=%s, parent=%s: parent=%p child->parent()=%p", child.c_str(), parent.c_str(), parentRepr, childRepr->parent());
 		}
+	} else {
+		g_warning("Missing parentRepr and childRepr: parent=%p, child=%p", parentRepr, childRepr);
 	}
-
-	// 5.  Mark the removed node and all its children for removal from the tracker.
-	this->_recursiveMarkForRemoval(childRepr);
 }
 
 void

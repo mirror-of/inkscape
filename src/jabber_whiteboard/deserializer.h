@@ -93,6 +93,7 @@ public:
 		this->_newnodes.clear();
 		this->_actions.clear();
 		this->_newkeys.clear();
+		this->_parent_child_map.clear();
 		this->_updated.clear();
 	}
 
@@ -150,6 +151,9 @@ private:
 	NodeToKeyMap _newkeys;
 	KeyToNodeMap _newnodes;
 	NodeTrackerEventTracker _node_action_tracker;
+
+	typedef std::map< XML::Node*, XML::Node* > _pc_map_type;
+	_pc_map_type _parent_child_map;
 
 	XMLNodeTracker* _xnt;
 

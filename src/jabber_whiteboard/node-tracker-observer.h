@@ -83,8 +83,8 @@ protected:
 			if (nodeid.empty()) {
 	//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating key for node %p", &node);
 				nodeid = this->_xnt->generateKey();
-				newnodes.push_back(SerializedEventNodeAction(KeyNodePair(nodeid, &node), NODE_ADD));
-				newkeys[&node] = nodeid;
+		//		newnodes.push_back(SerializedEventNodeAction(KeyNodePair(nodeid, &node), NODE_ADD));
+		//		newkeys[&node] = nodeid;
 			} else {
 	//			g_log(NULL, G_LOG_LEVEL_DEBUG, "(tracker) Found key %s for %p", nodeid.c_str(), &node);
 			}
