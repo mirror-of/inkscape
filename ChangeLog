@@ -1,3 +1,8 @@
+2005-08-14  MenTaLguY  <mental@rydia.net>
+
+    * src/widgets/layer-selector.cpp: quick fix for crash bug when
+	  deleting unnamed layer [bug 1255843]
+
 2005-08-14  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 	
 	* packaging/macosx/ScriptExec/main.c: Allow the user to ignore the
