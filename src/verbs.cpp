@@ -97,7 +97,7 @@
  * titles, etc. Allocated memory must be freed by caller.
  */
 gchar *
-sp_action_get_title (const SPAction *action)
+sp_action_get_title (SPAction const *action)
 {
     char const *src = action->name;
     gchar *ret = g_new (gchar, strlen(src) + 1);
@@ -165,7 +165,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    FileVerb(const unsigned int code,
+    FileVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -184,7 +184,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    EditVerb(const unsigned int code,
+    EditVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -203,7 +203,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    SelectionVerb(const unsigned int code,
+    SelectionVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -222,7 +222,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    LayerVerb(const unsigned int code,
+    LayerVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -241,7 +241,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    ObjectVerb(const unsigned int code,
+    ObjectVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -260,7 +260,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    ContextVerb(const unsigned int code,
+    ContextVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -279,7 +279,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    ZoomVerb(const unsigned int code,
+    ZoomVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -298,7 +298,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    DialogVerb(const unsigned int code,
+    DialogVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -317,7 +317,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    HelpVerb(const unsigned int code,
+    HelpVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -336,7 +336,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    TutorialVerb(const unsigned int code,
+    TutorialVerb(unsigned int const code,
              gchar const * id,
              gchar const * name,
              gchar const * tip,
@@ -1738,7 +1738,7 @@ protected:
     virtual SPAction * make_action (Inkscape::UI::View::View * view);
 public:
     /** \brief Use the Verb initializer with the same parameters. */
-    EffectLastVerb(const unsigned int code,
+    EffectLastVerb(unsigned int const code,
                    gchar const * id,
                    gchar const * name,
                    gchar const * tip,
