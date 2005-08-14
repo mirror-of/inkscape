@@ -176,7 +176,7 @@ static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
 	params.helpButton = false;
 	params.filterProc = NULL;
 	params.defaultText = "\pRun fc-cache";
-	params.cancelText = "\pExit";
+	params.cancelText = "\pIgnore";
 	params.otherText = NULL;
 	params.defaultButton = kAlertStdAlertOKButton;
 	params.cancelButton = kAlertStdAlertCancelButton;
@@ -196,10 +196,18 @@ static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
 			params.cancelText = NULL;
 
 			StandardAlert(kAlertNoteAlert, "\pFont caches have been updated",
-					"\pPlease re-run Inkscape.",
-					&params, &itemHit);
+					"\pPlease re-run Inkscape.", &params, &itemHit);
 			system("test -d $HOME/.inkscape || mkdir $HOME/.inkscape; touch $HOME/.inkscape/.fccache");
 		}
+	}
+	else
+	{
+		params.defaultText = (void *) kAlertDefaultOKText;
+		params.cancelText = NULL;
+
+		StandardAlert(kAlertNoteAlert, "\pFont caches have not been updated",
+				"\pThey can be updated manually by running the following:\n   sudo /usr/X11R6/bin/fc-cache\nOnce you have dealt with this, please re-run Inkscape.", &params, &itemHit);
+		system("test -d $HOME/.inkscape || mkdir $HOME/.inkscape; touch $HOME/.inkscape/.fccache");
 	}
     
 	ExitToShell();
