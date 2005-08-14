@@ -361,8 +361,8 @@ sp_ui_menuitem_add_icon ( GtkWidget *item, gchar * icon_name )
  */
 
 static GtkWidget *
-sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock,
-                         const gchar *label, const gchar *tip, Inkscape::UI::View::View *view, GCallback callback,
+sp_ui_menu_append_item ( GtkMenu *menu, gchar const *stock,
+                         gchar const *label, gchar const *tip, Inkscape::UI::View::View *view, GCallback callback,
                          gpointer data, gboolean with_mnemonic = TRUE )
 {
     GtkWidget *item;
@@ -582,10 +582,10 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, Inkscape
 static void
 checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
  {
-     const gchar *pref = (const gchar *) user_data;
+     gchar const *pref = (gchar const *) user_data;
      Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data (G_OBJECT (menuitem), "view");
 
-     const gchar *pref_path;
+     gchar const *pref_path;
      if (SP_DESKTOP(view)->is_fullscreen)
          pref_path = g_strconcat ("fullscreen.", pref, NULL);
      else
@@ -602,10 +602,10 @@ checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
  {
      GtkCheckMenuItem *menuitem=GTK_CHECK_MENU_ITEM(widget);
 
-     const gchar *pref = (const gchar *) user_data;
+     gchar const *pref = (gchar const *) user_data;
      Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data (G_OBJECT(menuitem), "view");
 
-     const gchar *pref_path;
+     gchar const *pref_path;
      if (SP_DESKTOP(view)->is_fullscreen)
          pref_path = g_strconcat ("fullscreen.", pref, NULL);
      else
@@ -622,7 +622,7 @@ checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 
 
 void
-sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, Inkscape::UI::View::View *view, const gchar *label, const gchar *tip, const gchar *pref,
+sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, Inkscape::UI::View::View *view, gchar const *label, gchar const *tip, gchar const *pref,
                               void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
                               gboolean (*callback_update)(GtkWidget *widget, GdkEventExpose *event, gpointer user_data),
                                         Inkscape::Verb * verb)
@@ -685,13 +685,13 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, Inkscape::UI::View::View 
 }
 
 static void
-sp_recent_open (GtkWidget *widget, const gchar *uri)
+sp_recent_open (GtkWidget *widget, gchar const *uri)
 {
 	sp_file_open (uri, NULL);
 }
 
 static void
-sp_file_new_from_template (GtkWidget *widget, const gchar *uri)
+sp_file_new_from_template (GtkWidget *widget, gchar const *uri)
 {
 	sp_file_new (uri);
 }
@@ -702,7 +702,7 @@ sp_menu_append_new_templates (GtkWidget *menu, Inkscape::UI::View::View *view)
     GDir *dir = g_dir_open (INKSCAPE_TEMPLATESDIR, 0, NULL);
     if (!dir)
         return;
-    for (const gchar *file = g_dir_read_name (dir); file != NULL; file = g_dir_read_name (dir)) {
+    for (gchar const *file = g_dir_read_name (dir); file != NULL; file = g_dir_read_name (dir)) {
         if (!g_str_has_suffix (file, ".svg"))
             continue; // skip non-svg files
 
@@ -710,7 +710,7 @@ sp_menu_append_new_templates (GtkWidget *menu, Inkscape::UI::View::View *view)
         if (g_str_has_suffix (basename, ".svg") && g_str_has_prefix (basename, "default."))
             continue; // skip default.*.svg (i.e. default.svg and translations) - it's in the menu already
 
-        const gchar *filepath = g_build_filename(INKSCAPE_TEMPLATESDIR, file, NULL);
+        gchar const *filepath = g_build_filename(INKSCAPE_TEMPLATESDIR, file, NULL);
         gchar * dupfile = g_strndup(file, strlen(file) - 4);
         gchar *filename =  g_filename_to_utf8(dupfile,  -1, NULL, NULL, NULL);
         g_free(dupfile);
@@ -739,15 +739,15 @@ sp_menu_append_new_templates (GtkWidget *menu, Inkscape::UI::View::View *view)
 void
 sp_menu_append_recent_documents (GtkWidget *menu, Inkscape::UI::View::View* /* view */)
 {
-	const gchar ** recent;
+	gchar const **recent;
 
 	recent = prefs_get_recent_files();
 	if (recent) {
             int i;
 
             for (i = 0; recent[i] != NULL; i += 2) {
-                const gchar *uri = recent[i];
-                const gchar *name = recent[i + 1];
+                gchar const *uri = recent[i];
+                gchar const *name = recent[i + 1];
 
                 GtkWidget *item = gtk_menu_item_new_with_label (name);
                 gtk_widget_show(item);
@@ -843,7 +843,7 @@ sp_ui_build_dyn_menus (Inkscape::XML::Node * menus, GtkWidget * menu, Inkscape::
             continue;
         }
         if (!strcmp(menu_pntr->name(), "verb")) {
-            const gchar * verb_name = menu_pntr->attribute("verb-id");
+            gchar const * verb_name = menu_pntr->attribute("verb-id");
             Inkscape::Verb * verb = Inkscape::Verb::getbyid(verb_name);
 
             if (verb != NULL) {
@@ -1010,7 +1010,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 		}
 
 		Inkscape::XML::Node *repr = sp_repr_document_root (rnewdoc);
-		const gchar *style = repr->attribute("style");
+		gchar const *style = repr->attribute("style");
 
 		Inkscape::XML::Node *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
@@ -1129,7 +1129,7 @@ sp_ui_import_one_file(char const *filename)
 }
 
 void
-sp_ui_error_dialog (const gchar * message)
+sp_ui_error_dialog(gchar const *message)
 {
 	GtkWidget *dlg;
 	gchar *safeMsg = Inkscape::IO::sanitizeString(message);
@@ -1144,7 +1144,7 @@ sp_ui_error_dialog (const gchar * message)
 }
 
 bool
-sp_ui_overwrite_file (const gchar * filename)
+sp_ui_overwrite_file(gchar const *filename)
 {
 	bool return_value = FALSE;
 	GtkWidget * dialog;
