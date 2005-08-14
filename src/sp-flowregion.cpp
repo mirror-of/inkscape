@@ -21,6 +21,7 @@
 #include "sp-flowregion.h"
 
 #include "display/curve.h"
+#include "display/canvas-bpath.h"
 
 #include "libnr/nr-point.h"
 #include "libnr/nr-matrix.h"
@@ -509,8 +510,8 @@ static void         GetDest(SPObject* child,Shape **computed,NR::Matrix itr_mat)
 		temp->Convert(0.25);
 		temp->Fill(n_shp,0);
 		Shape*  uncross=new Shape;
-		SPStyle* style=SP_OBJECT_STYLE(child);
-		if ( style && style->fill_rule.computed == 1 ) {
+		SPStyle* style=SP_OBJECT_STYLE(u_child);
+		if ( style && style->fill_rule.computed == SP_WIND_RULE_EVENODD ) {
 			uncross->ConvertToShape(n_shp,fill_oddEven);
 		} else {
 			uncross->ConvertToShape(n_shp,fill_nonZero);
