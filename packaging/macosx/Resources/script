@@ -24,6 +24,12 @@ export "DISPLAY=`cat /tmp/display.$UID`"
 
 ps -wx -ocommand | grep -e '[X]11' > /dev/null || exit 11
 
+VERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -f2 -d'.'`
+if [ "$VERSION" -eq "4" ]; then
+  # We're on tiger.  So need to update fc-cache if it hasn't been done
+  test -f ~/.inkscape/.fccache || exit 12
+fi
+
 BASE="`echo "$0" | sed -e 's/\/[A-Za-z]*.app\/Contents\/Resources\/script/\//'`"
 cd "$BASE"
 exec "$CWD/bin/inkscape" "$@"

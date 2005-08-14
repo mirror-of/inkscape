@@ -1,5 +1,11 @@
 2005-08-14  MenTaLguY  <mental@rydia.net>
 
+	* packaging/macosx/Resources/script, packaging/macosx/ScriptExec/main.c:
+	
+	backport workaround for font-related OS X Tiger launch issues
+
+2005-08-14  MenTaLguY  <mental@rydia.net>
+
     * src/widgets/layer-selector.cpp: backport quick fix for layer
 	  selector crash on unnamed layer [bug 1255843]
 
