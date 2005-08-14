@@ -1,3 +1,8 @@
+2005-08-14  MenTaLguY  <mental@rydia.net>
+
+    * src/widgets/layer-selector.cpp: backport quick fix for layer
+	  selector crash on unnamed layer [bug 1255843]
+
 2005-08-11  MenTaLguY  <mental@rydia.net>
 
     Bump version number and update NEWS.

@@ -519,7 +519,7 @@ void LayerSelector::_prepareLabelRenderer(
     //       (or before one has been selected) something appears to
     //       "invent" an iterator with null data and try to render it;
     //       where does it come from, and how can we avoid it?
-    if (object) {
+    if ( object && SP_OBJECT_REPR(object) ) {
         SPObject *layer=( _desktop ? _desktop->currentLayer() : NULL );
         SPObject *root=( _desktop ? _desktop->currentRoot() : NULL );
 
