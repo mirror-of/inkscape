@@ -1270,7 +1270,7 @@ static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *
                 sp_repr_unref(child_span);
 
             } else if (child != end_item) {   // not a string and we're applying to the entire object. This is easy
-                sp_desktop_apply_css_recursive(child, const_cast<SPCSSAttr*>(css), false);
+                sp_repr_css_change(SP_OBJECT_REPR(child), const_cast<SPCSSAttr*>(css), "style");
             }
 
         } else {  // !passed_start
