@@ -1,7 +1,7 @@
 #define __SP_ACTION_C__
 
-/*
- * Inkscape UI action implementation
+/** \file
+ * SPAction implementation
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -25,6 +25,9 @@ static void sp_action_finalize (NRObject *object);
 
 static NRActiveObjectClass *parent_class;
 
+/**
+ * Register SPAction class and return its type.
+ */
 NRType
 sp_action_get_type (void)
 {
@@ -40,6 +43,9 @@ sp_action_get_type (void)
 	return type;
 }
 
+/**
+ * SPAction vtable initialization.
+ */
 static void
 sp_action_class_init (SPActionClass *klass)
 {
@@ -53,6 +59,9 @@ sp_action_class_init (SPActionClass *klass)
 	object_class->cpp_ctor = NRObject::invoke_ctor<SPAction>;
 }
 
+/**
+ * Callback for SPAction object initialization.
+ */
 static void
 sp_action_init (SPAction *action)
 {
@@ -63,6 +72,9 @@ sp_action_init (SPAction *action)
 	action->image = NULL;
 }
 
+/**
+ * Called before SPAction object destruction.
+ */
 static void
 sp_action_finalize (NRObject *object)
 {
@@ -78,6 +90,9 @@ sp_action_finalize (NRObject *object)
 	((NRObjectClass *) (parent_class))->finalize (object);
 }
 
+/**
+ * Create new SPAction object and set its properties.
+ */
 SPAction *
 sp_action_new(Inkscape::UI::View::View *view,
               const gchar *id,
@@ -138,6 +153,9 @@ sp_action_perform (SPAction *action, void * data)
 	}
 }
 
+/**
+ * Change activation in all actions that can be taken with the action.
+ */
 void
 sp_action_set_active (SPAction *action, unsigned int active)
 {
@@ -163,6 +181,9 @@ sp_action_set_active (SPAction *action, unsigned int active)
 	}
 }
 
+/**
+ * Change sensitivity in all actions that can be taken with the action.
+ */
 void
 sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 {
@@ -188,6 +209,9 @@ sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 	}
 }
 
+/**
+ * Return View associated with the action.
+ */
 Inkscape::UI::View::View *
 sp_action_get_view (SPAction *action)
 {
@@ -195,3 +219,13 @@ sp_action_get_view (SPAction *action)
 	return action->view;
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

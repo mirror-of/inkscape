@@ -96,6 +96,9 @@ static void sp_knot_set_ctrl_state (SPKnot *knot);
 static GObjectClass *parent_class;
 static guint knot_signals[LAST_SIGNAL] = {0};
 
+/**
+ * Registers SPKnot class and returns its type number.
+ */
 GType
 sp_knot_get_type (void)
 {
@@ -118,6 +121,9 @@ sp_knot_get_type (void)
 	return type;
 }
 
+/**
+ * SPKnot vtable initialization.
+ */
 static void
 sp_knot_class_init (SPKnotClass * klass)
 {
@@ -307,6 +313,9 @@ sp_knot_class_init (SPKnotClass * klass)
 	nograb = (nograbenv && *nograbenv && (*nograbenv != '0'));
 }
 
+/**
+ * Callback for SPKnot initialization.
+ */
 static void
 sp_knot_init (SPKnot * knot)
 {
@@ -342,6 +351,9 @@ sp_knot_init (SPKnot * knot)
 	knot->pixbuf = NULL;
 }
 
+/**
+ * Called before SPKnot destruction.
+ */
 static void
 sp_knot_dispose (GObject * object)
 {
@@ -373,6 +385,9 @@ sp_knot_dispose (GObject * object)
 		(* ((GObjectClass *) (parent_class))->dispose) (object);
 }
 
+/**
+ * Callback to set property.
+ */
 static void
 sp_knot_set_property (GObject * object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
@@ -466,11 +481,15 @@ sp_knot_set_property (GObject * object, guint prop_id, const GValue *value, GPar
 	sp_knot_update_ctrl (knot);
 }
 
+/// Not reached.
 static void sp_knot_get_property(GObject *, guint, GValue *, GParamSpec *)
 {
 	g_assert_not_reached ();
 }
 
+/**
+ * Update knot for dragging and tell canvas an item was grabbed.
+ */
 void sp_knot_start_dragging (SPKnot *knot, NR::Point p, gint x, gint y, guint32 etime)
 {
 	// save drag origin
@@ -490,6 +509,9 @@ void sp_knot_start_dragging (SPKnot *knot, NR::Point p, gint x, gint y, guint32 
 	grabbed = TRUE;
 }
 
+/**
+ * Called to handle events on knots.
+ */
 static int
 sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 {
@@ -646,6 +668,9 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	return consumed;
 }
 
+/**
+ * Return new knot object.
+ */
 SPKnot *
 sp_knot_new (SPDesktop * desktop, const gchar *tip)
 {
@@ -677,6 +702,9 @@ sp_knot_new (SPDesktop * desktop, const gchar *tip)
 	return knot;
 }
 
+/**
+ * Show knot on its canvas.
+ */
 void
 sp_knot_show (SPKnot * knot)
 {
@@ -686,6 +714,9 @@ sp_knot_show (SPKnot * knot)
 	sp_knot_set_flag (knot, SP_KNOT_VISIBLE, TRUE);
 }
 
+/**
+ * Hide knot on its canvas.
+ */
 void
 sp_knot_hide (SPKnot * knot)
 {
@@ -695,13 +726,16 @@ sp_knot_hide (SPKnot * knot)
 	sp_knot_set_flag (knot, SP_KNOT_VISIBLE, FALSE);
 }
 
+/**
+ * Request or set new position for knot.
+ */
 void
 sp_knot_request_position (SPKnot * knot, NR::Point *p, guint state)
 {
 	g_return_if_fail (knot != NULL);
 	g_return_if_fail (SP_IS_KNOT (knot));
 
-	unsigned done = FALSE;
+	bool done = FALSE;
 
 	g_signal_emit (G_OBJECT (knot),
 		       knot_signals[REQUEST], 0,
@@ -716,6 +750,9 @@ sp_knot_request_position (SPKnot * knot, NR::Point *p, guint state)
 	}
 }
 
+/**
+ * Return distance of point to knot's position; unused.
+ */
 gdouble
 sp_knot_distance (SPKnot * knot, NR::Point *p, guint state)
 {
@@ -733,6 +770,9 @@ sp_knot_distance (SPKnot * knot, NR::Point *p, guint state)
 	return distance;
 }
 
+/**
+ * Move knot to new position.
+ */
 void
 sp_knot_set_position (SPKnot * knot, NR::Point *p, guint state)
 {
@@ -750,6 +790,9 @@ sp_knot_set_position (SPKnot * knot, NR::Point *p, guint state)
 		       state);
 }
 
+/**
+ * Move knot to new position, without emitting a MOVED signal.
+ */
 void
 sp_knot_moveto (SPKnot * knot, NR::Point *p)
 {
@@ -762,6 +805,9 @@ sp_knot_moveto (SPKnot * knot, NR::Point *p)
 		SP_CTRL (knot->item)->moveto (*p);
 }
 
+/**
+ * Returns position of knot.
+ */
 NR::Point sp_knot_position (SPKnot const * knot)
 {
 	g_assert(knot != NULL);
@@ -770,6 +816,9 @@ NR::Point sp_knot_position (SPKnot const * knot)
 	return knot->pos;
 }
 
+/**
+ * Set flag in knot, with side effects.
+ */
 static void
 sp_knot_set_flag (SPKnot * knot, guint flag, bool set)
 {
@@ -802,6 +851,9 @@ sp_knot_set_flag (SPKnot * knot, guint flag, bool set)
 	}
 }
 
+/**
+ * Update knot's pixbuf and set its control state.
+ */
 static void
 sp_knot_update_ctrl (SPKnot * knot)
 {
@@ -816,6 +868,9 @@ sp_knot_update_ctrl (SPKnot * knot)
 	sp_knot_set_ctrl_state (knot);
 }
 
+/**
+ * Set knot control state (dragging/mouseover/normal).
+ */
 static void
 sp_knot_set_ctrl_state (SPKnot * knot)
 {
@@ -848,3 +903,16 @@ sp_knot_set_ctrl_state (SPKnot * knot)
 				NULL);
 	}
 }
+
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

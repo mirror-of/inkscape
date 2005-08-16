@@ -1,11 +1,11 @@
 #define __SP_MODULE_C__
-/**
-    \file extension.cpp
- 
-    The ability to have features that are more modular so that they
-    can be added and removed easily.  This is the basis for defining
-    those actions.
-*/
+/** \file
+ *
+ * Inkscape::Extension::Extension: 
+ * the ability to have features that are more modular so that they
+ * can be added and removed easily.  This is the basis for defining
+ * those actions.
+ */
 
 /*
  * Authors:
@@ -630,3 +630,15 @@ Extension::paramString (void)
 
 }  /* namespace Extension */
 }  /* namespace Inkscape */
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
