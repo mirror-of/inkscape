@@ -134,6 +134,8 @@ sp_shortcut_init()
         {GDK_B, SP_VERB_CONTEXT_PEN, false},
 
         {SP_SHORTCUT_CONTROL_MASK | GDK_F6, SP_VERB_CONTEXT_CALLIGRAPHIC, true},
+        {GDK_c, SP_VERB_CONTEXT_CALLIGRAPHIC, false},
+        {GDK_C, SP_VERB_CONTEXT_CALLIGRAPHIC, false},
 
         {GDK_F7, SP_VERB_CONTEXT_DROPPER, true},
         {GDK_d, SP_VERB_CONTEXT_DROPPER, false},

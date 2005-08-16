@@ -19,7 +19,7 @@ can leave your ideas and requests there.</p>
 <keys><key><keyf f="F5"/></key><key>e</key>	 <action>ellipse/arc tool</action></keys>
 <keys><key><keyf f="F6"/></key><key>p</key>	 <action>freehand (pencil) tool</action></keys>
 <keys><key><shift/><keyf f="F6"/></key><key>b</key>	 <action>bezier (pen) tool</action></keys>
-<keys><key><ctrl/><keyf f="F6"/></key><key/>	 <action>calligraphic tool</action></keys>
+<keys><key><ctrl/><keyf f="F6"/></key><key>c</key>	 <action>calligraphic tool</action></keys>
 <keys><key><ctrl/><keyf f="F1"/></key><key>g</key>>	 <action>gradient tool</action></keys>
 <keys><key><keyf f="F7"/></key><key>d</key>	 <action>dropper tool</action></keys>
 <keys><key><keyf f="F8"/></key><key>t</key>	 <action>text tool</action></keys>
