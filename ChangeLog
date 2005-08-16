@@ -1,3 +1,17 @@
+2005-08-16  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.h, src/desktop.cpp: replaced gboolean with bool
+	* src/display/curve.cpp: made is_moveto() inline
+	* src/knot.cpp, src/extension/extension.cpp, src/helper/action.cpp:
+	  added editor footer
+	* src/desktop.h, src/desktop.cpp, src/knot.cpp, src/sp-gradient.cpp,
+	  src/display/curve.cpp, src/extension/extension.cpp,
+	  src/extension/implementation/plugin-link.h,
+	  src/extension/implementation/plugin.h, 
+	  src/extension/implementation/plugin.cpp,
+	  src/extension/internal/gimpgrad.cpp, src/helper/action.cpp:
+	  improved doxygen documentation
+
 2005-08-14  MenTaLguY  <mental@rydia.net>
 
     * src/widgets/layer-selector.cpp: quick fix for crash bug when
