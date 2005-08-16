@@ -138,7 +138,7 @@ static void sp_desktop_selection_modified (Inkscape::Selection *selection, guint
 static void sp_dt_update_snap_distances (SPDesktop *desktop);
 
 static gint sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
-static gboolean sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
+static bool sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
 static void sp_dtw_zoom_50 (GtkMenuItem *item, gpointer data);
@@ -155,6 +155,9 @@ static void sp_desktop_update_scrollbars (SPDesktop *desktop);
 SPViewClass *parent_class;
 static guint signals[LAST_SIGNAL] = { 0 };
 
+/**
+ * Registers SPDesktop class and returns its type.
+ */
 GType
 sp_desktop_get_type (void)
 {
@@ -175,6 +178,9 @@ sp_desktop_get_type (void)
     return type;
 }
 
+/**
+ * SPDesktop vtable initialization.
+ */
 static void
 sp_desktop_class_init (SPDesktopClass *klass)
 {
@@ -222,6 +228,9 @@ sp_desktop_class_init (SPDesktopClass *klass)
     view_class->set_status_message = &SPDesktop::_set_status_message;
 }
 
+/**
+ * Callback for SPDesktop initialization.
+ */
 static void
 sp_desktop_init (SPDesktop *desktop)
 {
@@ -270,6 +279,9 @@ sp_desktop_init (SPDesktop *desktop)
     desktop->_layer_hierarchy = NULL;
 }
 
+/**
+ * Called before SPDesktop destruction.
+ */
 static void
 sp_desktop_dispose (GObject *object)
 {
@@ -397,7 +409,7 @@ sp_desktop_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gd
 }
 
 void
-sp_desktop_set_active (SPDesktop *desktop, gboolean active)
+sp_desktop_set_active (SPDesktop *desktop, bool active)
 {
     if (active != desktop->active) {
         desktop->active = active;
@@ -639,7 +651,7 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 }
 
 void
-sp_desktop_activate_guides(SPDesktop *desktop, gboolean activate)
+sp_desktop_activate_guides(SPDesktop *desktop, bool activate)
 {
     desktop->guides_active = activate;
     sp_namedview_activate_guides (desktop->namedview, desktop, activate);
@@ -837,7 +849,7 @@ sp_desktop_item_from_list_at_point_bottom (SPDesktop const *desktop, const GSLis
 }
 
 SPItem *
-sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, gboolean into_groups, SPItem *upto)
+sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, bool into_groups, SPItem *upto)
 {
     SPDocument *document = SP_VIEW (desktop)->doc;
     g_return_val_if_fail (document != NULL, NULL);
@@ -1248,7 +1260,7 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
  *  to save, discard, or cancel.  Returns TRUE if the shutdown operation
  *  is cancelled or if the save is cancelled or fails, FALSE otherwise.
  */
-static gboolean
+static bool
 sp_dtw_desktop_shutdown (Inkscape::UI::View::View *view, SPDesktopWidget *dtw)
 {
     SPDesktop *desktop=SP_DESKTOP(view);
@@ -2132,7 +2144,7 @@ sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data)
     return TRUE;
 }
 
-gboolean
+bool
 sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data)
 {
     gchar b[64];

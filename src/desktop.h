@@ -1,8 +1,8 @@
 #ifndef __SP_DESKTOP_H__
 #define __SP_DESKTOP_H__
 
-/*
- * Editable view and widget implementation
+/** \file
+ * SPDesktop: an editable view.
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -50,7 +50,7 @@ enum ColorComponent {
   COMPONENT_K
 };
 
-
+/// Iterates until true or returns false.
 struct StopOnTrue {
   typedef bool result_type;
 
@@ -71,6 +71,7 @@ namespace Inkscape {
   }
 }
 
+/// Editable view.
 struct SPDesktop : public Inkscape::UI::View::View {
 
     Inkscape::MessageContext *guidesMessageContext() {
@@ -104,27 +105,27 @@ struct SPDesktop : public Inkscape::UI::View::View {
     SPCanvasGroup *sketch;
     SPCanvasGroup *controls;
 
-    SPCanvasItem *table; // outside-of-page background
-    SPCanvasItem *page; // page background
-    SPCanvasItem *page_border; // page border
+    SPCanvasItem *table;       ///< outside-of-page background
+    SPCanvasItem *page;        ///< page background
+    SPCanvasItem *page_border; ///< page border
 
     NR::Matrix d2w, w2d, doc2dt;
 
     gint number;
-    gboolean active;
+    bool active;
 
-    /* fixme: This has to be implemented in different way */
+    /// \todo fixme: This has to be implemented in different way */
     guint guides_active : 1;
 
     GList *zooms_past;
     GList *zooms_future;
 
-    gboolean is_fullscreen;
+    bool is_fullscreen;
 
-    // current style
+    /// current style
     SPCSSAttr *current;
 
-    // storage for selected dragger used by GrDrag as it's created and deleted by tools
+    /// storage for selected dragger used by GrDrag as it's created and deleted by tools
     SPItem *gr_item;
     guint gr_point_num;
     bool gr_fill_or_stroke;
@@ -186,6 +187,7 @@ struct SPDesktop : public Inkscape::UI::View::View {
 #endif
 };
 
+/// The SPDesktop vtable.
 struct SPDesktopClass {
 	SPViewClass parent_class;
 
@@ -201,19 +203,19 @@ struct SPDesktopClass {
 #define SP_DESKTOP_ZOOM(d) expansion((d)->d2w)
 #define SP_DESKTOP_EVENT_CONTEXT(d) ((d)->event_context)
 
-void sp_desktop_set_active (SPDesktop *desktop, gboolean active);
+void sp_desktop_set_active (SPDesktop *desktop, bool active);
 
 #ifndef __SP_DESKTOP_C__
-extern gboolean SPShowFullFielName;
+extern bool SPShowFullFielName;
 #else
-gboolean SPShowFullFielName = TRUE;
+bool SPShowFullFielName = TRUE;
 #endif
 
 /* Show/hide rulers & scrollbars */
 void sp_desktop_toggle_rulers (SPDesktop *dt);
 void sp_desktop_toggle_scrollbars (SPDesktop *dt);
 
-void sp_desktop_activate_guides(SPDesktop *desktop, gboolean activate);
+void sp_desktop_activate_guides(SPDesktop *desktop, bool activate);
 void sp_desktop_change_document(SPDesktop *desktop, SPDocument *document);
 
 /* Context */
@@ -228,7 +230,7 @@ void sp_desktop_pop_event_context (SPDesktop *desktop, unsigned int key);
 void sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underline);
 
 SPItem *sp_desktop_item_from_list_at_point_bottom (SPDesktop const *desktop, const GSList *list, NR::Point const p);
-SPItem *sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, gboolean into_groups, SPItem *upto = NULL);
+SPItem *sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, bool into_groups, SPItem *upto = NULL);
 SPItem *sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p);
 NR::Point sp_desktop_point (SPDesktop const *desktop);
 
