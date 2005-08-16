@@ -76,19 +76,14 @@ protected:
 	{
 		NodeToKeyMap::iterator i = newkeys.find(&node);
 		if (i != newkeys.end()) {
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "(local) Found key %s for %p", i->second.c_str(), &node);
 			return i->second;
 		} else {
 			std::string nodeid = this->_xnt->get(node);
 			if (nodeid.empty()) {
-	//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating key for node %p", &node);
-				nodeid = this->_xnt->generateKey();
-		//		newnodes.push_back(SerializedEventNodeAction(KeyNodePair(nodeid, &node), NODE_ADD));
-		//		newkeys[&node] = nodeid;
+				return this->_xnt->generateKey();
 			} else {
-	//			g_log(NULL, G_LOG_LEVEL_DEBUG, "(tracker) Found key %s for %p", nodeid.c_str(), &node);
+				return nodeid;
 			}
-			return nodeid;
 		}
 	}
 

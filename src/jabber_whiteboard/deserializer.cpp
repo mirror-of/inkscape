@@ -106,13 +106,42 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	}
 
 	if (prevRepr) {
-		if (prevRepr->parent() != parentRepr && this->_parent_child_map[prevRepr] != parentRepr) {
-			g_warning("ref mismatch on node %s: ref=%p parent=%p ref->parent()=%p", prev.c_str(), prevRepr, parentRepr, prevRepr->parent());
-			return;
+		if (prevRepr->parent() != parentRepr) {
+			if (this->_parent_child_map[prevRepr] != parentRepr) {
+				g_warning("ref mismatch on node %s: child=%s ref=%p parent=%p ref->parent()=%p", prev.c_str(), child.c_str(), prevRepr, parentRepr, prevRepr->parent());
+				g_warning("parent_child_map[%p (%s)] = %p (%s)", prevRepr, this->_xnt->get(*prevRepr).c_str(), this->_parent_child_map[prevRepr], this->_xnt->get(*(this->_parent_child_map[prevRepr])).c_str());
+				return;
+			}
 		}
 	}
 
 	XML::Node* childRepr = NULL;
+
+	// 6a.  Have we already seen this node?  If so, find it in the newnodes buffer, create the event,
+	// and return.
+	// (This is necessary in some cases: for example, the text tool does remove/add events to change
+	// node parents, but creating a new node on the add event blows away the old subtree, which is
+	// bad.)
+	KeyToNodeMap::iterator ki = this->_newnodes.find(child);
+	if (ki != this->_newnodes.end()) {
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Found previously added (and deleted?) subtree root %s (%p); re-adding", child.c_str(), ki->second);
+		childRepr = const_cast< XML::Node* >(ki->second);
+		if (childRepr->parent()) {
+			// Unparent it.
+			childRepr->parent()->removeChild(childRepr);
+		}
+
+		this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
+		this->_parent_child_map.erase(childRepr);
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting parent_child_map[%p] = %p", childRepr, parentRepr);
+		this->_parent_child_map[childRepr] = parentRepr;
+		this->_addOneEvent(this->_builder.detach());
+
+		// We don't need to release the child node, since it was released when it was 
+		// initially created.
+//		Inkscape::GC::release(childRepr);
+		return;
+	}
 	
 	// 6.  Create the child node.
 
@@ -144,6 +173,8 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 
 	// 7.  Deserialize the event.
 	this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
+	this->_parent_child_map.erase(childRepr);
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting parent_child_map[%p] = %p", childRepr, parentRepr);
 	this->_parent_child_map[childRepr] = parentRepr;
 	this->_addOneEvent(this->_builder.detach());
 	Inkscape::GC::release(childRepr);
@@ -198,15 +229,17 @@ Deserializer::deserializeEventDel(Glib::ustring const& msg)
 	// 4.  Deserialize the event.
 	if (parentRepr && childRepr) {
 		if (childRepr->parent() == parentRepr || this->_parent_child_map[childRepr] == parentRepr) {
-			this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(child, childRepr), NODE_REMOVE));
+//			this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(child, childRepr), NODE_REMOVE));
 			this->_builder.removeChild(*parentRepr, *childRepr, prevRepr);
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "Erasing %p from parent_child_map", childRepr);
 			this->_parent_child_map.erase(childRepr);
 			this->_addOneEvent(this->_builder.detach());
 
 			// 5.  Mark the removed node and all its children for removal from the tracker.
 			this->_recursiveMarkForRemoval(childRepr);
 		} else {
-			g_warning("child->parent() == parent mismatch on child=%s, parent=%s: parent=%p child->parent()=%p", child.c_str(), parent.c_str(), parentRepr, childRepr->parent());
+			g_warning("child->parent() == parent mismatch on child=%s (%p), parent=%s: parent=%p child->parent()=%p", child.c_str(), childRepr, parent.c_str(), parentRepr, childRepr->parent());
+			g_warning("parent_child_map[%p] = %p", childRepr, this->_parent_child_map[childRepr]);
 		}
 	} else {
 		g_warning("Missing parentRepr and childRepr: parent=%p, child=%p", parentRepr, childRepr);

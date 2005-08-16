@@ -39,8 +39,6 @@ SerializerNodeObserver::notifyChildAdded(XML::Node& node, XML::Node& child, XML:
 void
 SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child, XML::Node* prev)
 {
-	bool add_child = true;
-
 	// 1.  Check if we are tracking the parent node,
 	// and issue it an ID if we are not.
 	std::string parentid = this->_findOrGenerateNodeID(node);
@@ -55,44 +53,41 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 		childid = this->_xnt->get(child);
 	} else {
 		// If the child id already exists in the new node buffer, then we've already seen it.
-		// Don't mark the node for addition or generate a new node message for it; however,
-		// we do want to collect its attributes.
-		//
-		// TODO: fix
 		if (!this->actions.tryToTrack(&child, NODE_ADD)) {
 				g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %p was previously processed for addition, skipping", &child);
 				return;
 		} else {
+			//childid = this->_xnt->generateKey();
 			childid = this->_findOrGenerateNodeID(child);
 		}
 	}
 
 	// 3.  Find this node's previous node, and, if it has one, retrieve its ID.
-	if (add_child) {
-		std::string previd;
-		if (prev) {
-			previd = this->_findOrGenerateNodeID(*prev);
-		}
-
-		// 4.  Serialize.
-		Glib::ustring childmsg = MessageUtilities::makeTagWithContent(MESSAGE_CHILD, childid);
-		Glib::ustring parentmsg = MessageUtilities::makeTagWithContent(MESSAGE_PARENT, parentid);
-		Glib::ustring namemsg = MessageUtilities::makeTagWithContent(MESSAGE_NAME, child.name());
-		Glib::ustring nodetype = MessageUtilities::makeTagWithContent(MESSAGE_NODETYPE, NodeUtilities::nodeTypeToString(child));
-
-		Glib::ustring prevmsg;
-		if (!previd.empty()) {
-			prevmsg = MessageUtilities::makeTagWithContent(MESSAGE_REF, previd);
-		}
-
-		Glib::ustring buf = MessageUtilities::makeTagWithContent(MESSAGE_NEWOBJ, childmsg + parentmsg + prevmsg + namemsg + nodetype);
-
-		this->_events.push_back(buf);
-
-		// 5.  Add the child node to the new nodes buffers.
-		this->newnodes.push_back(SerializedEventNodeAction(KeyNodePair(childid, &child), NODE_ADD));
-		this->newkeys[&child] = childid;
+	std::string previd;
+	if (prev) {
+		previd = this->_findOrGenerateNodeID(*prev);
 	}
+
+	// 4.  Serialize.
+	Glib::ustring childmsg = MessageUtilities::makeTagWithContent(MESSAGE_CHILD, childid);
+	Glib::ustring parentmsg = MessageUtilities::makeTagWithContent(MESSAGE_PARENT, parentid);
+	Glib::ustring namemsg = MessageUtilities::makeTagWithContent(MESSAGE_NAME, child.name());
+	Glib::ustring nodetype = MessageUtilities::makeTagWithContent(MESSAGE_NODETYPE, NodeUtilities::nodeTypeToString(child));
+
+	Glib::ustring prevmsg;
+	if (!previd.empty()) {
+		prevmsg = MessageUtilities::makeTagWithContent(MESSAGE_REF, previd);
+	}
+
+	Glib::ustring buf = MessageUtilities::makeTagWithContent(MESSAGE_NEWOBJ, childmsg + parentmsg + prevmsg + namemsg + nodetype);
+
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating add event: child=%s parent=%s prev=%s", childid.c_str(), parentid.c_str(), previd.c_str());
+
+	this->_events.push_back(buf);
+
+	// 5.  Add the child node to the new nodes buffers.
+	this->newnodes.push_back(SerializedEventNodeAction(KeyNodePair(childid, &child), NODE_ADD));
+	this->newkeys[&child] = childid;
 
 	Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrlist = child.attributeList();
 
@@ -129,9 +124,7 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 void
 SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XML::Node* prev)
 {
-	// 1.  Find the ID of the child.  If it cannot be found,
-	// don't generate a new ID for it -- we'll be removing the ID anyway --
-	// and return.
+	// 1.  Get the ID of the child.
 	std::string childid = this->_findOrGenerateNodeID(child);
 
 	// 2.  Double-deletes don't make any sense.  If we've seen this node already and if it's
@@ -149,7 +142,10 @@ SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XM
 	// 3.  Find the ID of the parent, or generate an ID if it does not exist.
 	std::string parentid = this->_findOrGenerateNodeID(node);
 
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating delete event: child=%s parent=%s", childid.c_str(), parentid.c_str());
+
 	// 4.  Serialize the event.
+	this->_attributes_scanned.erase(childid);
 	Glib::ustring childidmsg = MessageUtilities::makeTagWithContent(MESSAGE_CHILD, childid);
 	Glib::ustring parentidmsg = MessageUtilities::makeTagWithContent(MESSAGE_PARENT, parentid);
 	this->_events.push_back(MessageUtilities::makeTagWithContent(MESSAGE_DELETE, childidmsg + parentidmsg));

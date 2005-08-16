@@ -90,11 +90,11 @@ XMLNodeTracker::process(KeyToNodeActionList& actions)
 		SerializedEventNodeAction action = *i;
 		switch(action.second) {
 			case NODE_ADD:
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_ADD event: key %s, node %p", action.first.first.c_str(), action.first.second);
+//				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_ADD event: key %s, node %p", action.first.first.c_str(), action.first.second);
 				this->put(action.first.first, *action.first.second);
 				break;
 			case NODE_REMOVE:
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", action.first.first.c_str(), action.first.second);
+//				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", action.first.first.c_str(), action.first.second);
 	//			this->remove(const_cast< XML::Node& >(*(action.second)));
 				break;
 			default:
