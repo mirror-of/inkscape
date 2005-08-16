@@ -843,8 +843,10 @@ sp_gradient_repr_clear_vector(SPGradient *gr)
     }
     /* Remove all stops */
     while (sl) {
-        /* fixme: This should work, unless we make gradient
-         *        into generic group */
+        /** \todo
+         * fixme: This should work, unless we make gradient
+         * into generic group.
+         */
         sp_repr_unparent((Inkscape::XML::Node *)sl->data);
         sl = g_slist_remove(sl, sl->data);
     }
