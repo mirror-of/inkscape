@@ -28,7 +28,8 @@ enum {
   TOOLS_TEXT,
   TOOLS_GRADIENT,
   TOOLS_ZOOM,
-  TOOLS_DROPPER
+  TOOLS_DROPPER,
+  TOOLS_CONNECTOR
 };
 
 int tools_isactive(SPDesktop *dt, unsigned num);
@@ -48,4 +49,4 @@ void tools_switch_by_item (SPDesktop *dt, SPItem *item);
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

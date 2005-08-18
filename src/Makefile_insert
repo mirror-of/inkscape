@@ -41,6 +41,7 @@ libinkpre_a_SOURCES =	\
 	bad-uri-exception.h	\
 	brokenimage.xpm	\
 	color-rgba.h	\
+	connector-context.cpp connector-context.h	\
 	desktop-affine.cpp desktop-affine.h	\
 	desktop-events.cpp desktop-events.h	\
 	desktop-handles.cpp desktop-handles.h	\

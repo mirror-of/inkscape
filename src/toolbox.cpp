@@ -110,6 +110,7 @@ static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_dropper_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_text_toolbox_new(SPDesktop *desktop);
+static GtkWidget *sp_connector_toolbox_new(SPDesktop *desktop);
 
 
 static struct {
@@ -131,6 +132,7 @@ static struct {
     { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
     { "SPGradientContext", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
     { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
+    { "SPConnectorContext","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
     { NULL, NULL, 0, 0 }
 };
 
@@ -152,6 +154,7 @@ static struct {
     { "SPTextContext",   "text_toolbox",   sp_text_toolbox_new },
     { "SPGradientContext", "gradient_toolbox", sp_gradient_toolbox_new },
     { "SPDropperContext", "dropper_toolbox", sp_dropper_toolbox_new },
+    { "SPConnectorContext", "connector_toolbox", sp_connector_toolbox_new },
     { NULL, NULL, NULL }
 };
 
@@ -2417,7 +2420,7 @@ sp_arc_toolbox_new(SPDesktop *desktop)
 // toggle button callbacks and updaters
 
 //########################
-//##    Dropper    ##
+//##      Dropper       ##
 //########################
 
 static void toggle_dropper_color_pick (GtkWidget *button, gpointer data) {
@@ -2978,6 +2981,20 @@ sp_text_toolbox_new(SPDesktop *desktop)
 */    return tbl;
 
 } // end of sp_text_toolbox_new()
+
+
+//#########################
+//##  Connector Toolbox  ##
+//#########################
+
+static GtkWidget *
+sp_connector_toolbox_new(SPDesktop *desktop)
+{
+    GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
+
+    return tbl;
+
+} // end of sp_connector_toolbox_new()
 
 
 /*

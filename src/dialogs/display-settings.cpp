@@ -1172,6 +1172,11 @@ sp_display_dialog (void)
             gtk_container_add (GTK_CONTAINER (vb_tool), dropper_page);
         }
 
+        // Connector
+        {
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Connector"));
+        }
+
         g_signal_connect(GTK_OBJECT (nb_tools), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_tools");
         gtk_notebook_set_current_page (GTK_NOTEBOOK (nb_tools), prefs_get_int_attribute ("dialogs.preferences", "page_tools", 0));
 
@@ -1525,4 +1530,4 @@ options_checkbox (
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

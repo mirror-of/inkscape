@@ -1,0 +1,1380 @@
+/*
+ * Connector creation tool
+ *
+ * Authors:
+ *   Michael Wybrow <mjwybrow@users.sourceforge.net>
+ *
+ * Copyright (C) 2005 Michael Wybrow
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ *
+ * TODO:
+ *  o  Cleanup to remove dependency on SPDrawContext, and use the standard
+ *     Inkscape selection mechanism for active connectors.
+ *      -   Remove unecessary draw context code in this file. 
+ *  o  Draw connectors to shape edges rather than bounding box.
+ *  o  Create an interface for setting markers (arrow heads).
+ *  o  Route connectors automatically with libavoid.
+ *  o  Allow user-placeable connection points.
+ *  o  Deal sanely with connectors with both endpoints attached to the 
+ *     same connection point, and drawing of connectors attaching
+ *     overlaping shapes (currently tries to adjust connector to be
+ *     outside both bounding boxes).
+ *  o  Fix many special cases related to connectors updating,
+ *     e.g., copying a couple of shapes and a connector that are
+ *           attached to each other.
+ *     e.g., detach connector when it is moved or transformed in
+ *           one of the other contexts.
+ *
+ */
+
+#include <gdk/gdkkeysyms.h>
+#include <gtk/gtksignal.h>
+
+#include "connector-context.h"
+#include "pixmaps/cursor-connector.xpm"
+#include "xml/node-event-vector.h"
+#include "xml/repr.h"
+#include "svg/svg.h"
+#include "desktop.h"
+#include "desktop-style.h"
+#include "desktop-affine.h"
+#include "desktop-handles.h"
+#include "document.h"
+#include "selection.h"
+#include "draw-anchor.h"
+#include "draw-context.h"
+#include "prefs-utils.h"
+#include "sp-item.h"
+#include "sp-path.h"
+#include "display/canvas-bpath.h"
+#include "display/sp-canvas.h"
+#include "display/sp-ctrlline.h"
+#include "display/sodipodi-ctrl.h"
+#include <glibmm/i18n.h>
+
+#include "libnr/n-art-bpath.h"
+#include "libnr/nr-point-matrix-ops.h"
+
+#include "snap.h"
+#include "knot.h"
+#include "sp-conn-end.h"
+
+#include "prefs-utils.h"  // for prefs_get_int_attribute_limited
+
+
+static void sp_connector_context_class_init(SPConnectorContextClass *klass);
+static void sp_connector_context_init(SPConnectorContext *conn_context);
+static void sp_connector_context_dispose(GObject *object);
+
+static void sp_connector_context_setup(SPEventContext *ec);
+static void sp_connector_context_finish(SPEventContext *ec);
+static gint sp_connector_context_root_handler(SPEventContext *ec, GdkEvent *event);
+static gint sp_connector_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
+
+// Stuff borrowed from DrawContext
+static void spcc_connector_set_initial_point(SPConnectorContext *cc, NR::Point const p);
+static void spcc_connector_set_subsequent_point(SPConnectorContext *cc, NR::Point const p);
+static void spcc_connector_finish_segment(SPConnectorContext *cc, NR::Point p, guint state);
+static void spcc_reset_colors(SPConnectorContext *cc);
+static void spcc_connector_finish(SPConnectorContext *cc, bool closed);
+static void spcc_concat_colors_and_flush(SPConnectorContext *cc, bool forceclosed);
+static void spcc_flush_white(SPConnectorContext *cc, SPCurve *gc);
+static SPCurve *reverse_then_unref(SPCurve *orig);
+
+// Context event handlers
+static gint connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const &bevent);
+static gint connector_handle_motion_notify(SPConnectorContext *const cc, GdkEventMotion const &mevent);
+static gint connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton const &revent);
+static gint connector_handle_key_press(SPConnectorContext *const cc, guint const keyval);
+
+static void cc_set_active_shape(SPConnectorContext *cc, SPItem *item);
+static void cc_clear_active_shape(SPConnectorContext *cc);
+static void cc_set_active_conn(SPConnectorContext *cc, SPItem *item);
+static void cc_clear_active_conn(SPConnectorContext *cc);
+static gchar *conn_pt_handle_test(SPConnectorContext *cc, NR::Point& w);
+
+static void shape_event_attr_deleted(Inkscape::XML::Node *repr,
+        Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data);
+static void shape_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
+        gchar const *old_value, gchar const *new_value, bool is_interactive,
+        gpointer data);
+
+
+static NR::Point connector_drag_origin_w(0, 0);
+static bool connector_within_tolerance = false;
+static SPDrawContextClass *connector_parent_class;
+
+
+static Inkscape::XML::NodeEventVector shape_repr_events = {
+    NULL, /* child_added */
+    NULL, /* child_added */
+    shape_event_attr_changed,
+    NULL, /* content_changed */
+    NULL  /* order_changed */
+};
+
+static Inkscape::XML::NodeEventVector layer_repr_events = {
+    NULL, /* child_added */
+    shape_event_attr_deleted,
+    NULL, /* child_added */
+    NULL, /* content_changed */
+    NULL  /* order_changed */
+};
+
+
+GType
+sp_connector_context_get_type(void)
+{
+    static GType type = 0;
+    if (!type) {
+        GTypeInfo info = {
+            sizeof(SPConnectorContextClass),
+            NULL, NULL,
+            (GClassInitFunc) sp_connector_context_class_init,
+            NULL, NULL,
+            sizeof(SPConnectorContext),
+            4,
+            (GInstanceInitFunc) sp_connector_context_init,
+            NULL,   /* value_table */
+        };
+        type = g_type_register_static(SP_TYPE_DRAW_CONTEXT, "SPConnectorContext", &info, (GTypeFlags)0);
+    }
+    return type;
+}
+
+static void
+sp_connector_context_class_init(SPConnectorContextClass *klass)
+{
+    GObjectClass *object_class;
+    SPEventContextClass *event_context_class;
+
+    object_class = (GObjectClass *) klass;
+    event_context_class = (SPEventContextClass *) klass;
+
+    connector_parent_class = (SPDrawContextClass*)g_type_class_peek_parent(klass);
+
+    object_class->dispose = sp_connector_context_dispose;
+
+    event_context_class->setup = sp_connector_context_setup;
+    event_context_class->finish = sp_connector_context_finish;
+    event_context_class->root_handler = sp_connector_context_root_handler;
+    event_context_class->item_handler = sp_connector_context_item_handler;
+}
+
+
+static void
+sp_connector_context_init(SPConnectorContext *cc)
+{
+    SPEventContext *ec = SP_EVENT_CONTEXT(cc);
+
+    ec->cursor_shape = cursor_connector_xpm;
+    ec->hot_x = 1;
+    ec->hot_y = 1;
+    ec->xp = 0;
+    ec->yp = 0;
+
+    cc->newconn = NULL;
+    
+    cc->active_shape = NULL;
+    cc->active_shape_repr = NULL;
+    cc->active_shape_layer_repr = NULL;
+
+    cc->active_conn = NULL;
+    cc->active_conn_repr = NULL;
+    cc->active_conn_layer_repr = NULL;
+
+    cc->active_handle = NULL;
+    
+    cc->clickeditem = NULL;
+    cc->clickedhandle = NULL;
+    
+    cc->connpthandle = NULL;
+    for (int i = 0; i < 2; ++i) {
+        cc->endpt_handle[i] = NULL;
+        cc->endpt_handler_id[i] = 0;
+    }
+    cc->sid = NULL;
+    cc->eid = NULL;
+    cc->npoints = 0;
+    cc->state = SP_CONNECTOR_CONTEXT_IDLE;
+
+    cc->c0 = NULL;
+    cc->c1 = NULL;
+    cc->cl0 = NULL;
+    cc->cl1 = NULL;
+}
+
+
+static void
+sp_connector_context_dispose(GObject *object)
+{
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(object);
+
+    if (cc->c0) {
+        gtk_object_destroy(GTK_OBJECT(cc->c0));
+        cc->c0 = NULL;
+    }
+    if (cc->c1) {
+        gtk_object_destroy(GTK_OBJECT(cc->c1));
+        cc->c1 = NULL;
+    }
+    if (cc->cl0) {
+        gtk_object_destroy(GTK_OBJECT(cc->cl0));
+        cc->cl0 = NULL;
+    }
+    if (cc->cl1) {
+        gtk_object_destroy(GTK_OBJECT(cc->cl1));
+        cc->cl1 = NULL;
+    }
+    if (cc->connpthandle) {
+        g_object_unref(cc->connpthandle);
+        cc->connpthandle = NULL;
+    }
+    for (int i = 0; i < 2; ++i) {
+        if (cc->endpt_handle[1]) {
+            g_object_unref(cc->endpt_handle[i]);
+            cc->endpt_handle[i] = NULL;
+        }
+    }
+    if (cc->sid) {
+        g_free(cc->sid);
+        cc->sid = NULL;
+    }
+    if (cc->eid) {
+        g_free(cc->eid);
+        cc->eid = NULL;
+    }
+
+    G_OBJECT_CLASS(connector_parent_class)->dispose(object);
+}
+
+
+static void
+sp_connector_context_setup(SPEventContext *ec)
+{
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
+
+    if (((SPEventContextClass *) connector_parent_class)->setup) {
+        ((SPEventContextClass *) connector_parent_class)->setup(ec);
+    }
+
+    /* Connector indicators */
+    cc->c0 = sp_canvas_item_new(SP_DT_CONTROLS(SP_EVENT_CONTEXT_DESKTOP(ec)), SP_TYPE_CTRL, "shape", SP_CTRL_SHAPE_CIRCLE,
+                                "size", 4.0, "filled", 0, "fill_color", 0xff00007f, "stroked", 1, "stroke_color", 0x0000ff7f, NULL);
+    cc->c1 = sp_canvas_item_new(SP_DT_CONTROLS(SP_EVENT_CONTEXT_DESKTOP(ec)), SP_TYPE_CTRL, "shape", SP_CTRL_SHAPE_CIRCLE,
+                                "size", 4.0, "filled", 0, "fill_color", 0xff00007f, "stroked", 1, "stroke_color", 0x0000ff7f, NULL);
+    cc->cl0 = sp_canvas_item_new(SP_DT_CONTROLS(SP_EVENT_CONTEXT_DESKTOP(ec)), SP_TYPE_CTRLLINE, NULL);
+    sp_ctrlline_set_rgba32(SP_CTRLLINE(cc->cl0), 0x0000007f);
+    cc->cl1 = sp_canvas_item_new(SP_DT_CONTROLS(SP_EVENT_CONTEXT_DESKTOP(ec)), SP_TYPE_CTRLLINE, NULL);
+    sp_ctrlline_set_rgba32(SP_CTRLLINE(cc->cl1), 0x0000007f);
+
+    sp_canvas_item_hide(cc->c0);
+    sp_canvas_item_hide(cc->c1);
+    sp_canvas_item_hide(cc->cl0);
+    sp_canvas_item_hide(cc->cl1);
+
+    sp_event_context_read(ec, "mode");
+
+    if (prefs_get_int_attribute("tools.connector", "selcue", 0) != 0) {
+        ec->enableSelectionCue();
+    }
+    
+    // We clear the selection here.  It might be nice to save the current
+    // selection and restore it when the context is left.  This isn't too 
+    // easy at the moment and selection information is not stored by
+    // Inkscape in many other places, such as part of undo scopes, so it
+    // is probably fine just to clear it.
+    SP_DT_SELECTION(ec->desktop)->clear();
+}
+
+
+static void
+sp_connector_context_finish(SPEventContext *ec)
+{
+    spcc_connector_finish(SP_CONNECTOR_CONTEXT(ec), FALSE);
+
+    if (((SPEventContextClass *) connector_parent_class)->finish) {
+        ((SPEventContextClass *) connector_parent_class)->finish(ec);
+    }
+    
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
+    cc_clear_active_shape(cc);
+    cc_clear_active_conn(cc);
+}
+
+
+//-----------------------------------------------------------------------------
+
+
+static void
+cc_clear_active_shape(SPConnectorContext *cc)
+{
+    if (cc->active_shape == NULL) {
+        return;
+    }
+    g_assert( cc->active_shape_repr );
+    g_assert( cc->active_shape_layer_repr );
+
+    cc->active_shape = NULL;
+
+    if (cc->active_shape_repr) {
+        sp_repr_remove_listener_by_data(cc->active_shape_repr, cc);
+        sp_repr_unref(cc->active_shape_repr);
+        cc->active_shape_repr = NULL;
+        
+        sp_repr_remove_listener_by_data(cc->active_shape_layer_repr, cc);
+        sp_repr_unref(cc->active_shape_layer_repr);
+        cc->active_shape_layer_repr = NULL;
+    }
+
+    // Hide the center connection point if it exists.
+    if (cc->connpthandle) {
+        sp_knot_hide(cc->connpthandle);
+    }
+}
+
+
+static void
+cc_clear_active_conn(SPConnectorContext *cc)
+{
+    if (cc->active_conn == NULL) {
+        return;
+    }
+    g_assert( cc->active_conn_repr );
+    g_assert( cc->active_conn_layer_repr );
+
+    cc->active_conn = NULL;
+
+    if (cc->active_conn_repr) {
+        sp_repr_remove_listener_by_data(cc->active_conn_repr, cc);
+        sp_repr_unref(cc->active_conn_repr);
+        cc->active_conn_repr = NULL;
+        
+        sp_repr_remove_listener_by_data(cc->active_conn_layer_repr, cc);
+        sp_repr_unref(cc->active_conn_layer_repr);
+        cc->active_conn_layer_repr = NULL;
+    }
+
+    // Hide the endpoint handles.
+    for (int i = 0; i < 2; ++i) {
+        if (cc->endpt_handle[i]) {
+            sp_knot_hide(cc->endpt_handle[i]);
+        }
+    }
+}
+
+
+static gchar *
+conn_pt_handle_test(SPConnectorContext *cc, NR::Point& p)
+{
+    // TODO: this will need to change when there are more connection
+    //       points available for each shape.
+   
+    SPKnot *centerpt = cc->connpthandle;
+    if (cc->active_handle && (cc->active_handle == centerpt))
+    {
+        p = centerpt->pos;
+        return g_strdup_printf("#%s", SP_OBJECT_ID(cc->active_shape));
+    }
+    return NULL;
+}
+
+
+/** Snaps new node relative to the previous node. */
+static void
+spcc_endpoint_snap(SPConnectorContext const *const cc, NR::Point &p, guint const state)
+{
+    spdc_endpoint_snap_internal(cc, p, ( cc->npoints != 0
+                                         ? cc->p[0]
+                                         : p ),
+                                state);
+}
+
+
+static gint
+sp_connector_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
+{
+    gint ret = FALSE;
+
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(ec);
+
+    switch (event->type) {
+        case GDK_ENTER_NOTIFY:
+        {
+            bool is_conn = false;
+            if (SP_IS_PATH(item)) {
+                // Show connector endpoint handles
+                
+                if (item != ((SPItem *) cc->endpt_handle[0])) {
+                    SPPath *path = SP_PATH(item);
+                    SPCurve *curve = (SP_SHAPE(path))->curve;
+                    if ( curve && !(curve->closed) ) {
+                        // Count closed connectors/paths as shapes.
+                        is_conn = true;
+                        if ((cc->state != SP_CONNECTOR_CONTEXT_DRAGGING) &&
+                                (cc->state != SP_CONNECTOR_CONTEXT_REROUTING)) {
+                            // Only show active connector while not creating a 
+                            // new connector.
+                            cc_set_active_conn(cc, item);
+                        }
+                    }
+                }
+            }
+            if (!is_conn) {
+                // This is a shape, so show connection point(s).
+                if (!(cc->active_shape) ||
+                        // Don't show handle for another handle.
+                        (item != ((SPItem *) cc->connpthandle))) {
+                    cc_set_active_shape(cc, item);
+                }
+            }
+            ret = TRUE;
+            break;
+        }
+        default:
+            break;
+    }
+
+    return ret;
+}
+
+
+gint
+sp_connector_context_root_handler(SPEventContext *ec, GdkEvent *event)
+{
+    SPConnectorContext *const cc = SP_CONNECTOR_CONTEXT(ec);
+
+    gint ret = FALSE;
+
+    switch (event->type) {
+        case GDK_BUTTON_PRESS:
+            ret = connector_handle_button_press(cc, event->button);
+            break;
+
+        case GDK_MOTION_NOTIFY:
+            ret = connector_handle_motion_notify(cc, event->motion);
+            break;
+
+        case GDK_BUTTON_RELEASE:
+            ret = connector_handle_button_release(cc, event->button);
+            break;
+        case GDK_KEY_PRESS:
+            ret = connector_handle_key_press(cc, get_group0_keyval (&event->key));
+            break;
+
+        default:
+            break;
+    }
+
+    if (!ret) {
+        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
+            = ((SPEventContextClass *) connector_parent_class)->root_handler;
+        if (parent_root_handler) {
+            ret = parent_root_handler(ec, event);
+        }
+    }
+
+    return ret;
+}
+
+
+static gint
+connector_handle_button_press(SPConnectorContext *const cc, GdkEventButton const &bevent)
+{
+    NR::Point const event_w(bevent.x, bevent.y);
+    /* Find desktop coordinates */
+    NR::Point p = sp_desktop_w2d_xy_point(cc->desktop, event_w);
+
+    gint ret = FALSE;
+    if ( bevent.button == 1 ) {
+
+        SPDrawContext *dc = SP_DRAW_CONTEXT(cc);
+        SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(dc);
+        SPItem *layer=SP_ITEM(desktop->currentLayer());
+        if ( !layer || desktop->itemIsHidden(layer)) {
+            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is hidden</b>. Unhide it to be able to draw on it."));
+            return TRUE;
+        }
+        if ( !layer || layer->isLocked()) {
+            dc->_message_context->flash(Inkscape::WARNING_MESSAGE, _("<b>Current layer is locked</b>. Unlock it to be able to draw on it."));
+            return TRUE;
+        }
+
+        NR::Point const event_w(bevent.x,
+                                bevent.y);
+        connector_drag_origin_w = event_w;
+        connector_within_tolerance = true;
+
+        NR::Point const event_dt(sp_desktop_w2d_xy_point(cc->desktop, event_w));
+        switch (cc->state) {
+            case SP_CONNECTOR_CONTEXT_STOP:
+                /* This is allowed, if we just cancelled curve */
+            case SP_CONNECTOR_CONTEXT_IDLE:
+            {
+                if ( cc->npoints == 0 ) {
+                    /* Set start anchor */
+                    cc->sa = NULL;
+                    NR::Point p;
+                        
+                    cc_clear_active_conn(cc);
+
+                    // This is the first click of a new curve; deselect
+                    // item so that this curve is not combined with it 
+                    SP_DT_SELECTION(desktop)->clear();
+                    SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Creating new connector"));
+
+                    /* Create green anchor */
+                    p = event_dt;
+                    
+                    // Test whether we clicked on a connection point
+                    cc->sid = conn_pt_handle_test(cc, p);
+                    
+                    if (!cc->sid) {
+                        // This is the first point, so just snap it to the grid
+                        // as there's no other points to go off.
+                        namedview_free_snap_all_types(cc->desktop->namedview, p);
+                    }                        
+                    cc->green_anchor = sp_draw_anchor_new(cc, cc->green_curve, TRUE, p);
+                    spcc_connector_set_initial_point(cc, p);
+                    
+                }
+                cc->state = SP_CONNECTOR_CONTEXT_DRAGGING;
+                ret = TRUE;
+                break;
+            }   
+            case SP_CONNECTOR_CONTEXT_DRAGGING:
+            {
+                // This is the second click of a connector creation.
+                
+                spcc_endpoint_snap(cc, p, bevent.state);
+                spcc_connector_set_subsequent_point(cc, p);
+                spcc_connector_finish_segment(cc, p, bevent.state);
+                // Test whether we clicked on a connection point
+                cc->eid = conn_pt_handle_test(cc, p);
+                dc->green_closed = FALSE;
+                if (cc->npoints != 0) {
+                    spcc_connector_finish(cc, FALSE);
+                }
+                SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
+                SPDocument *doc = SP_DT_DOCUMENT(desktop);
+                sp_document_done(doc);
+                cc_set_active_conn(cc, cc->newconn);
+                sp_document_ensure_up_to_date(doc);
+                cc->state = SP_CONNECTOR_CONTEXT_IDLE;
+                ret = TRUE;
+                break;
+            }
+            case SP_CONNECTOR_CONTEXT_CLOSE:
+            {
+                g_warning("Button down in CLOSE state");
+                break;
+            }
+            default:
+                break;
+        }
+    } else if (bevent.button == 3) {
+        if (cc->npoints != 0) {
+            spcc_connector_finish(cc, FALSE);
+            ret = TRUE;
+        }
+    }
+    return ret;
+}
+
+
+static gint
+connector_handle_motion_notify(SPConnectorContext *const cc, GdkEventMotion const &mevent)
+{
+    gint ret = FALSE;
+
+    if (mevent.state & GDK_BUTTON2_MASK || mevent.state & GDK_BUTTON3_MASK) {
+        // allow middle-button scrolling
+        return FALSE;
+    }
+
+    NR::Point const event_w(mevent.x, mevent.y);
+
+    if (connector_within_tolerance) {
+        gint const tolerance = prefs_get_int_attribute_limited("options.dragtolerance",
+                                                               "value", 0, 0, 100);
+        if ( NR::LInfty( event_w - connector_drag_origin_w ) < tolerance ) {
+            return FALSE;   // Do not drag if we're within tolerance from origin.
+        }
+    }
+    // Once the user has moved farther than tolerance from the original location
+    // (indicating they intend to move the object, not click), then always process
+    // the motion notify coordinates as given (no snapping back to origin)
+    connector_within_tolerance = false;
+
+    SPDesktop *const dt = cc->desktop;
+
+    /* Find desktop coordinates */
+    NR::Point p = sp_desktop_w2d_xy_point(dt, event_w);
+
+    switch (cc->state) {
+        case SP_CONNECTOR_CONTEXT_DRAWING:
+        case SP_CONNECTOR_CONTEXT_DRAGGING:
+        {
+            // This is movement during a connector creation.
+            
+            if ( cc->npoints > 0 ) {
+                /* Only set point, if we are already appending */
+
+                spcc_endpoint_snap(cc, p, mevent.state);
+                spcc_connector_set_subsequent_point(cc, p);
+                ret = TRUE;
+            }
+            break;
+        }
+        case SP_CONNECTOR_CONTEXT_REROUTING:
+        {
+            g_assert( SP_IS_PATH(cc->clickeditem));
+
+            // Update the hidden path
+            NR::Matrix i2d = sp_item_i2d_affine(cc->clickeditem);
+            NR::Matrix d2i = i2d.inverse();
+            SPPath *path = SP_PATH(cc->clickeditem);
+            SPCurve *curve = (SP_SHAPE(path))->curve;
+            if (cc->clickedhandle == cc->endpt_handle[0]) {
+                NR::Point o = cc->endpt_handle[1]->pos;
+                sp_curve_stretch_endpoints(curve, p * d2i, o * d2i);
+            }
+            else {
+                NR::Point o = cc->endpt_handle[0]->pos;
+                sp_curve_stretch_endpoints(curve, o * d2i, p * d2i);
+            }
+            sp_conn_adjust_path(path);
+            path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+           
+            // Copy this to the temporary visible path
+            cc->red_curve = sp_curve_copy(SP_SHAPE(path)->curve);
+            sp_curve_transform(cc->red_curve, i2d);
+
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve);
+            ret = TRUE;
+            break;
+        }
+        case SP_CONNECTOR_CONTEXT_STOP:
+            /* This is perfectly valid */
+            break;
+        default:
+            break;
+    }
+
+    return ret;
+}
+
+
+static gint
+connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton const &revent)
+{
+    gint ret = FALSE;
+    if ( revent.button == 1 ) {
+
+        SPDrawContext *dc = SP_DRAW_CONTEXT (cc);
+
+        SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
+        SPDocument *doc = SP_DT_DOCUMENT(desktop);
+
+        NR::Point const event_w(revent.x, revent.y);
+
+        /* Find desktop coordinates */
+        NR::Point p = sp_desktop_w2d_xy_point(cc->desktop, event_w);
+
+        switch (cc->state) {
+            //case SP_CONNECTOR_CONTEXT_POINT:
+            case SP_CONNECTOR_CONTEXT_DRAGGING:
+            {
+                if (connector_within_tolerance)
+                {
+                    spcc_endpoint_snap(cc, p, revent.state);
+                    spcc_connector_finish_segment(cc, p, revent.state);
+                    cc->green_closed = FALSE;
+                    return TRUE;
+                }
+                // Connector has been created via a drag, end it now.
+                spcc_endpoint_snap(cc, p, revent.state);
+                spcc_connector_set_subsequent_point(cc, p);
+                spcc_connector_finish_segment(cc, p, revent.state);
+                // Test whether we clicked on a connection point
+                cc->eid = conn_pt_handle_test(cc, p);
+                dc->green_closed = FALSE;
+                if (cc->npoints != 0) {
+                    spcc_connector_finish(cc, FALSE);
+                }
+                cc_set_active_conn(cc, cc->newconn);
+                cc->state = SP_CONNECTOR_CONTEXT_IDLE;
+                break;
+            }
+            case SP_CONNECTOR_CONTEXT_REROUTING:
+            {
+                // Clear the temporary path:
+                sp_curve_reset(cc->red_curve);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
+
+                gchar *shape_label = conn_pt_handle_test(cc, p);
+
+                // Test whether we clicked on a connection point
+                sp_object_setAttribute(cc->clickeditem, "inkscape:type",
+                        "connector", false);
+                
+                if (shape_label) {
+                    if (cc->clickedhandle == cc->endpt_handle[0]) {
+                        sp_object_setAttribute(cc->clickeditem,
+                                "inkscape:connection-start",shape_label, false);
+                    }
+                    else {
+                        sp_object_setAttribute(cc->clickeditem,
+                                "inkscape:connection-end",shape_label, false);
+                    }
+                    g_free(shape_label);
+                }
+                cc->clickeditem->setHidden(false);
+                sp_conn_adjust_path(SP_PATH(cc->clickeditem));
+                cc->clickeditem->updateRepr(); 
+                sp_document_done(doc);
+                cc_set_active_conn(cc, cc->clickeditem);
+                sp_document_ensure_up_to_date(doc);
+                cc->state = SP_CONNECTOR_CONTEXT_IDLE;
+                return TRUE;
+                break;
+            }
+            case SP_CONNECTOR_CONTEXT_STOP:
+                /* This is allowed, if we just cancelled curve */
+                break;
+            default:
+                break;
+        }
+        ret = TRUE;
+
+        dc->green_closed = FALSE;
+    }
+
+    return ret;
+}
+
+
+static gint
+connector_handle_key_press(SPConnectorContext *const cc, guint const keyval)
+{
+    gint ret = FALSE;
+    /* fixme: */
+    switch (keyval) {
+        case GDK_Return:
+        case GDK_KP_Enter:
+            if (cc->npoints != 0) {
+                spcc_connector_finish(cc, FALSE);
+                ret = TRUE;
+            }
+            break;
+        case GDK_Escape:
+            if (cc->npoints != 0) {
+                // if drawing, cancel, otherwise pass it up for deselecting
+                cc->state = SP_CONNECTOR_CONTEXT_STOP;
+                spcc_reset_colors(cc);
+                sp_canvas_item_hide(cc->c0);
+                sp_canvas_item_hide(cc->c1);
+                sp_canvas_item_hide(cc->cl0);
+                sp_canvas_item_hide(cc->cl1);
+                ret = TRUE;
+            }
+            break;
+        default:
+            break;
+    }
+    return ret;
+}
+
+
+static void
+spcc_reset_colors(SPConnectorContext *cc)
+{
+    /* Red */
+    sp_curve_reset(cc->red_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), NULL);
+    /* Blue */
+    sp_curve_reset(cc->blue_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->blue_bpath), NULL);
+    /* Green */
+    while (cc->green_bpaths) {
+        gtk_object_destroy(GTK_OBJECT(cc->green_bpaths->data));
+        cc->green_bpaths = g_slist_remove(cc->green_bpaths, cc->green_bpaths->data);
+    }
+    sp_curve_reset(cc->green_curve);
+    if (cc->green_anchor) {
+        cc->green_anchor = sp_draw_anchor_destroy(cc->green_anchor);
+    }
+    cc->sa = NULL;
+    cc->ea = NULL;
+    cc->npoints = 0;
+    cc->red_curve_is_valid = false;
+}
+
+
+static void
+spcc_connector_set_initial_point(SPConnectorContext *const cc, NR::Point const p)
+{
+    g_assert( cc->npoints == 0 );
+
+    cc->p[0] = p;
+    cc->p[1] = p;
+    cc->npoints = 2;
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), NULL);
+}
+
+
+static void
+spcc_connector_set_subsequent_point(SPConnectorContext *const cc, NR::Point const p)
+{
+    g_assert( cc->npoints != 0 );
+    /* todo: Check callers to see whether 2 <= npoints is guaranteed. */
+
+    cc->p[2] = p;
+    cc->p[3] = p;
+    cc->p[4] = p;
+    cc->npoints = 5;
+    sp_curve_reset(cc->red_curve);
+    sp_curve_moveto(cc->red_curve, cc->p[0]);
+    if ( (cc->onlycurves)
+         || ( cc->p[1] != cc->p[0] ) )
+    {
+        sp_curve_curveto(cc->red_curve, cc->p[1], p, p);
+    } else {
+        sp_curve_lineto(cc->red_curve, p);
+    }
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve);
+}
+
+
+static SPCurve *
+reverse_then_unref(SPCurve *orig)
+{
+    SPCurve *ret = sp_curve_reverse(orig);
+    sp_curve_unref(orig);
+    return ret;
+}
+
+
+
+/**
+ * Concats red, blue and green.
+ * If any anchors are defined, process these, optionally removing curves from white list
+ * Invoke _flush_white to write result back to object.
+ */
+static void
+spcc_concat_colors_and_flush(SPConnectorContext *dc, bool forceclosed)
+{
+    /* Concat RBG */
+    SPCurve *c = dc->green_curve;
+
+    /* Green */
+    dc->green_curve = sp_curve_new_sized(64);
+    while (dc->green_bpaths) {
+        gtk_object_destroy(GTK_OBJECT(dc->green_bpaths->data));
+        dc->green_bpaths = g_slist_remove(dc->green_bpaths, dc->green_bpaths->data);
+    }
+    /* Blue */
+    sp_curve_append_continuous(c, dc->blue_curve, 0.0625);
+    sp_curve_reset(dc->blue_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), NULL);
+    /* Red */
+    if (dc->red_curve_is_valid) {
+        sp_curve_append_continuous(c, dc->red_curve, 0.0625);
+    }
+    sp_curve_reset(dc->red_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
+
+    if (sp_curve_empty(c)) {
+        sp_curve_unref(c);
+        return;
+    }
+
+    /* Step A - test, whether we ended on green anchor */
+    if ( forceclosed || ( dc->green_anchor && dc->green_anchor->active ) ) {
+        // We hit green anchor, closing Green-Blue-Red
+        SP_EVENT_CONTEXT_DESKTOP(dc)->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
+        sp_curve_closepath_current(c);
+        /* Closed path, just flush */
+        spcc_flush_white(dc, c);
+        sp_curve_unref(c);
+        return;
+    }
+
+    /* Step C - test start */
+    if (dc->sa) {
+        SPCurve *s = dc->sa->curve;
+        dc->white_curves = g_slist_remove(dc->white_curves, s);
+        if (dc->sa->start) {
+            s = reverse_then_unref(s);
+        }
+        sp_curve_append_continuous(s, c, 0.0625);
+        sp_curve_unref(c);
+        c = s;
+    } else /* Step D - test end */ if (dc->ea) {
+        SPCurve *e = dc->ea->curve;
+        dc->white_curves = g_slist_remove(dc->white_curves, e);
+        if (!dc->ea->start) {
+            e = reverse_then_unref(e);
+        }
+        sp_curve_append_continuous(c, e, 0.0625);
+        sp_curve_unref(e);
+    }
+
+
+    spcc_flush_white(dc, c);
+
+    sp_curve_unref(c);
+}
+
+
+/*
+ * Flushes white curve(s) and additional curve into object
+ *
+ * No cleaning of colored curves - this has to be done by caller
+ * No rereading of white data, so if you cannot rely on ::modified, do it in caller
+ *
+ */
+
+static void
+spcc_flush_white(SPConnectorContext *cc, SPCurve *gc)
+{
+    SPCurve *c;
+
+    if (cc->white_curves) {
+        g_assert(cc->white_item);
+        c = sp_curve_concat(cc->white_curves);
+        g_slist_free(cc->white_curves);
+        cc->white_curves = NULL;
+        if (gc) {
+            sp_curve_append(c, gc, FALSE);
+        }
+    } else if (gc) {
+        c = gc;
+        sp_curve_ref(c);
+    } else {
+        return;
+    }
+
+    /* Now we have to go back to item coordinates at last */
+    sp_curve_transform(c, ( cc->white_item
+                            ? sp_item_dt2i_affine(cc->white_item, SP_EVENT_CONTEXT_DESKTOP(cc))
+                            : sp_desktop_dt2root_affine(SP_EVENT_CONTEXT_DESKTOP(cc)) ));
+
+    SPDesktop *desktop = SP_EVENT_CONTEXT_DESKTOP(cc);
+    SPDocument *doc = SP_DT_DOCUMENT(desktop);
+
+    if ( c && !sp_curve_empty(c) ) {
+        /* We actually have something to write */
+
+        Inkscape::XML::Node *repr;
+        if (cc->white_item) {
+            repr = SP_OBJECT_REPR(cc->white_item);
+        } else {
+            repr = sp_repr_new("svg:path");
+            /* Set style */
+            sp_desktop_apply_style_tool(desktop, repr, "tools.connector", false);
+        }
+
+        gchar *str = sp_svg_write_path(SP_CURVE_BPATH(c));
+        g_assert( str != NULL );
+        sp_repr_set_attr(repr, "d", str);
+        g_free(str);
+
+        if (!cc->white_item) {
+            /* Attach repr */
+            cc->newconn = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+            cc->selection->set(repr);
+            sp_repr_unref(repr);
+            cc->newconn->transform = i2i_affine(desktop->currentRoot(), desktop->currentLayer());
+            cc->newconn->updateRepr();
+        }
+
+        bool connection = false;
+        sp_object_setAttribute(cc->newconn, "inkscape:type", "connector", false);
+        if (cc->sid)
+        {
+            sp_object_setAttribute(cc->newconn, "inkscape:connection-start",
+                    cc->sid, false);
+            connection = true;
+        }
+
+        if (cc->eid)
+        {
+            sp_object_setAttribute(cc->newconn, "inkscape:connection-end",
+                    cc->eid, false);
+            connection = true;
+        }
+        cc->newconn->updateRepr();
+        if (connection) {
+            // Adjust endpoints to shape edge.
+            sp_conn_adjust_path(SP_PATH(cc->newconn));
+        }
+        
+        SP_DT_SELECTION(desktop)->clear();
+
+        sp_document_done(doc);
+    }
+
+    sp_curve_unref(c);
+
+    /* Flush pending updates */
+    sp_document_done(doc);
+    sp_document_ensure_up_to_date(doc);
+}
+
+
+static void
+spcc_connector_finish_segment(SPConnectorContext *const cc, NR::Point const p, guint const state)
+{
+    if (!sp_curve_empty(cc->red_curve)) {
+        sp_curve_append_continuous(cc->green_curve, cc->red_curve, 0.0625);
+        SPCurve *curve = sp_curve_copy(cc->red_curve);
+        /* fixme: */
+        SPCanvasItem *cshape = sp_canvas_bpath_new(SP_DT_SKETCH(cc->desktop), curve);
+        sp_curve_unref(curve);
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), cc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+
+        cc->green_bpaths = g_slist_prepend(cc->green_bpaths, cshape);
+
+        cc->p[0] = cc->p[3];
+        cc->p[1] = cc->p[4];
+        cc->npoints = 2;
+
+        sp_curve_reset(cc->red_curve);
+    }
+}
+
+
+static void
+spcc_connector_finish(SPConnectorContext *const cc, bool const closed)
+{
+    SPDesktop *const desktop = cc->desktop;
+    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing connector"));
+
+    sp_curve_reset(cc->red_curve);
+    spcc_concat_colors_and_flush(cc, closed);
+
+    cc->sa = NULL;
+    cc->ea = NULL;
+
+    cc->npoints = 0;
+    cc->state = SP_CONNECTOR_CONTEXT_IDLE;
+
+    sp_canvas_item_hide(cc->c0);
+    sp_canvas_item_hide(cc->c1);
+    sp_canvas_item_hide(cc->cl0);
+    sp_canvas_item_hide(cc->cl1);
+
+    if (cc->green_anchor) {
+        cc->green_anchor = sp_draw_anchor_destroy(cc->green_anchor);
+    }
+}
+
+
+static gboolean
+cc_generic_knot_handler(SPCanvasItem *, GdkEvent *event, SPKnot *knot)
+{
+    g_assert (knot != NULL);
+
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(
+            knot->desktop->event_context);
+
+    gboolean consumed = FALSE;
+
+    switch (event->type) {
+        case GDK_ENTER_NOTIFY:
+            gtk_object_set (GTK_OBJECT (knot->item), "fill_color",
+                    knot->fill [SP_KNOT_STATE_MOUSEOVER], NULL);
+            gtk_object_set (GTK_OBJECT (knot->item), "stroke_color",
+                    knot->stroke [SP_KNOT_STATE_MOUSEOVER], NULL);
+
+            cc->active_handle = knot;
+
+            if (knot->tip)
+            {
+                knot->desktop->event_context->defaultMessageContext()->set(
+                        Inkscape::NORMAL_MESSAGE, knot->tip);
+            }
+
+            consumed = TRUE;
+            break;
+        case GDK_LEAVE_NOTIFY:
+            gtk_object_set (GTK_OBJECT (knot->item), "fill_color",
+                    knot->fill [SP_KNOT_STATE_NORMAL], NULL);
+            gtk_object_set (GTK_OBJECT (knot->item), "stroke_color",
+                    knot->stroke [SP_KNOT_STATE_NORMAL], NULL);
+            
+            cc->active_handle = NULL;
+
+            if (knot->tip) {
+                knot->desktop->event_context->defaultMessageContext()->clear();
+            }
+
+            consumed = TRUE;
+            break;
+        default:
+            break;
+    }
+
+    return consumed;
+}
+
+
+static gboolean 
+endpt_handler(SPKnot *knot, GdkEvent *event, SPConnectorContext *cc)
+{
+    g_assert( SP_IS_CONNECTOR_CONTEXT(cc) );
+
+    gboolean consumed = FALSE;
+
+    switch (event->type) {
+        case GDK_BUTTON_PRESS:
+            g_assert( (cc->active_handle == cc->endpt_handle[0]) ||
+                      (cc->active_handle == cc->endpt_handle[1]) );
+            if (cc->state == SP_CONNECTOR_CONTEXT_IDLE) {
+                cc->clickeditem = cc->active_conn;
+                cc->clickedhandle = cc->active_handle;
+                cc_clear_active_conn(cc);
+                cc->state = SP_CONNECTOR_CONTEXT_REROUTING;
+                
+                // Disconnect from attached shape
+                unsigned ind = (cc->active_handle == cc->endpt_handle[0]) ? 0 : 1;
+                sp_conn_end_detach(cc->clickeditem, ind);
+              
+                NR::Point origin;
+                if (cc->clickedhandle == cc->endpt_handle[0]) {
+                    origin = cc->endpt_handle[1]->pos;
+                }
+                else {
+                    origin = cc->endpt_handle[0]->pos;
+                }
+                cc->clickeditem->setHidden(true);
+
+                // The rest of the interaction rerouting the connector is
+                // handled by the context root handler.
+                consumed = TRUE;
+            }
+            break;
+        default:
+            break;
+    }
+
+    return consumed;
+}
+
+
+static void cc_set_active_shape(SPConnectorContext *cc, SPItem *item)
+{
+    g_assert(item != NULL );
+   
+    cc->active_shape = item;
+
+    // Remove existing active shape listeners
+    if (cc->active_shape_repr) {
+        sp_repr_remove_listener_by_data(cc->active_shape_repr, cc);
+        sp_repr_unref(cc->active_shape_repr);
+        
+        sp_repr_remove_listener_by_data(cc->active_shape_layer_repr, cc);
+        sp_repr_unref(cc->active_shape_layer_repr);
+    }
+    
+    // Listen in case the active shape changes
+    cc->active_shape_repr = SP_OBJECT_REPR(item); 
+    if (cc->active_shape_repr) {
+        sp_repr_ref(cc->active_shape_repr);
+        sp_repr_add_listener(cc->active_shape_repr, &shape_repr_events, cc);
+    
+        cc->active_shape_layer_repr = cc->active_shape_repr->parent();
+        sp_repr_ref(cc->active_shape_layer_repr);
+        sp_repr_add_listener(cc->active_shape_layer_repr, &layer_repr_events, cc);
+    }
+
+ 
+    // Set center connection point.
+    if ( cc->connpthandle == NULL ) {
+	SPKnot * knot = (SPKnot*)g_object_new (SP_TYPE_KNOT, 0);
+
+	knot->desktop = cc->desktop;
+	knot->flags = SP_KNOT_VISIBLE;
+
+	knot->item = sp_canvas_item_new (SP_DT_CONTROLS(cc->desktop),
+		SP_TYPE_CTRL,
+		"anchor", GTK_ANCHOR_CENTER,
+		"filled", TRUE,
+		"stroked", TRUE,
+		"mode", SP_KNOT_MODE_XOR,
+		NULL);
+
+	gtk_signal_connect (GTK_OBJECT (knot->item), "event",
+		GTK_SIGNAL_FUNC (cc_generic_knot_handler), knot);
+
+        knot->fill [SP_KNOT_STATE_NORMAL] = 0xffffff00;
+        knot->fill [SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
+        knot->stroke [SP_KNOT_STATE_NORMAL] = 0x01000000;
+
+        g_object_set(G_OBJECT(knot),
+                     "shape", SP_KNOT_SHAPE_SQUARE,
+                     "size", 8,
+                     "anchor", GTK_ANCHOR_CENTER,
+                     "tip", _("<b>Connnection point</b>: click or drag to create a new connector"),
+                     NULL);
+        
+        cc->connpthandle = knot;
+    }
+    
+
+    NR::Rect bbox = sp_item_bbox_desktop(cc->active_shape);
+    NR::Point center = bbox.midpoint();
+    sp_knot_set_position(cc->connpthandle, &center, 0);
+
+    sp_knot_show(cc->connpthandle);
+    
+}
+
+
+static void
+cc_set_active_conn(SPConnectorContext *cc, SPItem *item)
+{
+    g_assert( SP_IS_PATH(item) );
+
+    cc->active_conn = item;
+
+    // Remove existing active conn listeners
+    if (cc->active_conn_repr) {
+        sp_repr_remove_listener_by_data(cc->active_conn_repr, cc);
+        sp_repr_unref(cc->active_conn_repr);
+        cc->active_conn_repr = NULL;
+        
+        sp_repr_remove_listener_by_data(cc->active_conn_layer_repr, cc);
+        sp_repr_unref(cc->active_conn_layer_repr);
+    }
+    
+    // Listen in case the active conn changes
+    cc->active_conn_repr = SP_OBJECT_REPR(item); 
+    if (cc->active_conn_repr) {
+        sp_repr_ref(cc->active_conn_repr);
+        sp_repr_add_listener(cc->active_conn_repr, &shape_repr_events, cc);
+    
+        cc->active_conn_layer_repr = cc->active_conn_repr->parent();
+        sp_repr_ref(cc->active_conn_layer_repr);
+        sp_repr_add_listener(cc->active_conn_layer_repr, &layer_repr_events, cc);
+    }
+
+    SPCurve *curve = SP_SHAPE(SP_PATH(item))->curve;
+    NR::Matrix i2d = sp_item_i2d_affine(cc->active_conn);
+    
+    for (int i = 0; i < 2; ++i) {
+
+        // Create the handle if it doesn't exist
+        if ( cc->endpt_handle[i] == NULL ) {
+            SPKnot * knot = (SPKnot*) g_object_new (SP_TYPE_KNOT, 0);
+
+            knot->desktop = cc->desktop;
+            knot->flags = SP_KNOT_VISIBLE;
+
+            knot->item = sp_canvas_item_new (SP_DT_CONTROLS (cc->desktop),
+                    SP_TYPE_CTRL,
+                    "anchor", GTK_ANCHOR_CENTER,
+                    "filled", TRUE,
+                    "stroked", TRUE,
+                    "mode", SP_KNOT_MODE_XOR,
+                    NULL);
+
+            knot->fill [SP_KNOT_STATE_NORMAL] = 0xffffff00;
+            knot->stroke [SP_KNOT_STATE_NORMAL] = 0x000000ff;
+            knot->stroke [SP_KNOT_STATE_DRAGGING] = 0x000000ff;
+            knot->stroke [SP_KNOT_STATE_MOUSEOVER] = 0x000000ff;
+
+            g_object_set(G_OBJECT(knot),
+                    "shape", SP_KNOT_SHAPE_DIAMOND,
+                    "size", 10,
+                    "tip", _("<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"),
+                    NULL);
+
+            gtk_signal_connect (GTK_OBJECT (knot->item), "event",
+                    GTK_SIGNAL_FUNC (cc_generic_knot_handler), knot);
+
+            cc->endpt_handle[i] = knot;
+        }
+    
+        // Remove any existing handlers
+        if (cc->endpt_handler_id[i]) {
+            g_signal_handlers_disconnect_by_func(
+                    G_OBJECT(cc->endpt_handle[i]->item),
+                    (void*)G_CALLBACK(endpt_handler), (gpointer) cc );
+            cc->endpt_handler_id[i] = 0;
+        }
+
+        // Setup handlers for connector endpoints, this is 
+        // is as 'after' so that cc_generic_knot_handler is
+        // triggered first for any endpoint.
+        cc->endpt_handler_id[i] = g_signal_connect_after(
+                G_OBJECT(cc->endpt_handle[i]->item), "event",
+                G_CALLBACK(endpt_handler), cc);
+    }
+    
+    NR::Point startpt = sp_curve_first_point(curve) * i2d;
+    sp_knot_set_position(cc->endpt_handle[0], &startpt, 0);
+    
+    NR::Point endpt = sp_curve_last_point(curve) * i2d;
+    sp_knot_set_position(cc->endpt_handle[1], &endpt, 0);
+    
+    sp_knot_show(cc->endpt_handle[0]);
+    sp_knot_show(cc->endpt_handle[1]);
+}
+
+
+static void
+shape_event_attr_deleted(Inkscape::XML::Node *repr, Inkscape::XML::Node *child,
+        Inkscape::XML::Node *ref, gpointer data)
+{
+    g_assert(data);
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(data);
+
+    if (child == cc->active_shape_repr) {
+        // The active shape has been deleted.  Clear active shape.
+        cc_clear_active_shape(cc);
+    }
+    else if (child == cc->active_conn_repr) {
+        // The active conn has been deleted.  Clear active conn.
+        cc_clear_active_conn(cc);
+    }
+}
+
+
+static void
+shape_event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
+                            gchar const *old_value, gchar const *new_value,
+                            bool is_interactive, gpointer data)
+{
+    g_assert(data);
+    SPConnectorContext *cc = SP_CONNECTOR_CONTEXT(data);
+  
+    // Look for changes than result in onscreen movement.
+    if (!strcmp(name, "d") || !strcmp(name, "x") || !strcmp(name, "y") ||
+            !strcmp(name, "width") || !strcmp(name, "height") ||
+            !strcmp(name, "transform"))
+    {
+        if (repr == cc->active_shape_repr) {
+            // Active shape has moved. Clear active shape.
+            cc_clear_active_shape(cc);
+        }
+        else if (repr == cc->active_conn_repr) {
+            // The active conn has been deleted.  Clear active conn.
+            cc_clear_active_conn(cc);
+        }
+    }
+}
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

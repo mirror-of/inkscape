@@ -84,6 +84,46 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         }
         change_endpts(path->curve, h2endPt_pcoordsys);
     } else {
+        // We leave the unattached endpoint where it is, and adjust the
+        // position of the attached endpoint to be on the edge of the bbox.
+        unsigned ind;
+        NR::Point otherpt;
+        if (h2attItem[0] != NULL) {
+            otherpt = sp_curve_last_point(path->curve);
+            ind = 0;
+        }
+        else {
+            otherpt = sp_curve_first_point(path->curve);
+            ind = 1;
+        }
+        NR::Point h2endPt_icoordsys[2];
+        NR::Matrix h2i2anc[2];
+
+        NR::Rect otherpt_rect = NR::Rect(otherpt, otherpt);
+        NR::Rect h2bbox_icoordsys[2] = { otherpt_rect, otherpt_rect };
+        h2bbox_icoordsys[ind] = get_bbox(h2attItem[ind], NR::identity());
+        
+        h2i2anc[ind] = i2anc_affine(h2attItem[ind], ancestor);
+        h2endPt_icoordsys[ind] = h2bbox_icoordsys[ind].midpoint();
+        
+        h2i2anc[!ind] = NR::Matrix(NR_MATRIX_IDENTITY);
+        h2endPt_icoordsys[!ind] = otherpt;
+
+        // For the attached object, change the corresponding point to be
+        // on the edge of the bbox.
+        NR::Point h2endPt_pcoordsys[2];
+        h2endPt_icoordsys[ind] = calc_bbox_conn_pt(h2bbox_icoordsys[ind],
+                                                 ( h2endPt_icoordsys[!ind]
+                                                   * h2i2anc[!ind]
+                                                   / h2i2anc[ind] ));
+        h2endPt_pcoordsys[ind] = h2endPt_icoordsys[ind] * h2i2anc[ind] / path2anc;
+        
+        // Leave the other where it is.
+        h2endPt_pcoordsys[!ind] = otherpt;
+        
+        change_endpts(path->curve, h2endPt_pcoordsys);
+
+#if 0
         /* Only one end attached.  Do translate. */
         unsigned const att_h = ( h2attItem[0] == NULL );
         SPCurve const *const curve = path->curve;
@@ -101,9 +141,21 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
                                                 ctr_icoordsys + dirn_icoordsys);
         sp_curve_transform(path->curve,
                            NR::translate(connPt - h2oldEndPt_pcoordsys[att_h]));
+#endif
     }
     path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     path->updateRepr();
+}
+
+void
+sp_conn_adjust_path(SPPath *const path)
+{
+    SPItem *h2attItem[2];
+    path->connEndPair.getAttachedItems(h2attItem);
+    if ( !h2attItem[0] && !h2attItem[1] ) {
+        return;
+    }
+    sp_conn_end_move_compensate(NULL, NULL, path);
 }
 
 static NR::Point
@@ -161,12 +213,19 @@ change_endpts(SPCurve *const curve, NR::Point const h2endPt[2])
 static void
 sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned const handle_ix)
 {
-    /* todo: The first argument is the deleted object.  Perhaps use it for assertion. */
+    // todo: The first argument is the deleted object, or just NULL if
+    //       called by sp_conn_end_detach.
     g_return_if_fail(handle_ix < 2);
     char const *const attr_str[] = {"inkscape:connection-start",
                                     "inkscape:connection-end"};
     sp_repr_set_attr(SP_OBJECT_REPR(owner), attr_str[handle_ix], NULL);
     /* I believe this will trigger sp_conn_end_href_changed. */
+}
+
+void
+sp_conn_end_detach(SPObject *const owner, unsigned const handle_ix)
+{
+    sp_conn_end_deleted(NULL, owner, handle_ix);
 }
 
 void

@@ -1266,6 +1266,9 @@ ContextVerb::perform(SPAction *action, void *data, void *pdata)
         case SP_VERB_CONTEXT_DROPPER:
             tools_switch_current(TOOLS_DROPPER);
             break;
+        case SP_VERB_CONTEXT_CONNECTOR:
+            tools_switch_current (TOOLS_CONNECTOR);
+            break;
 
         case SP_VERB_CONTEXT_SELECT_PREFS:
             prefs_set_int_attribute("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
@@ -1335,6 +1338,11 @@ ContextVerb::perform(SPAction *action, void *data, void *pdata)
             prefs_set_int_attribute("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
             prefs_set_int_attribute("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_DROPPER);
             sp_display_dialog();
+            break;
+        case SP_VERB_CONTEXT_CONNECTOR_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_CONNECTOR);
+            sp_display_dialog ();
             break;
 
         default:
@@ -2029,6 +2037,8 @@ Verb *Verb::_base_verbs[] = {
                     N_("Zoom in or out"), "draw_zoom"),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER, "DrawDropper", N_("Dropper"),
                     N_("Pick averaged colors from image"), "draw_dropper"),
+    new ContextVerb(SP_VERB_CONTEXT_CONNECTOR, "DrawConnector", N_("Connector"),
+                    N_("Create connectors"), "draw_connector"),
 
     /* Tool prefs */
     new ContextVerb(SP_VERB_CONTEXT_SELECT_PREFS, "SelectPrefs", N_("Selector Preferences"),
@@ -2057,6 +2067,8 @@ Verb *Verb::_base_verbs[] = {
                     N_("Open Inkscape Preferences for the Zoom tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER_PREFS, "DropperPrefs", N_("Dropper Preferences"),
                     N_("Open Inkscape Preferences for the Dropper tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
+                    N_("Open Inkscape Preferences for the Connector tool"), NULL),
 
     /* Zooming */
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"),
@@ -2191,4 +2203,8 @@ Verb *Verb::_base_verbs[] = {
   fill-column:99
   End:
 */
+//<<<<<<< verbs.cpp
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+//=======
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
+//>>>>>>> 1.226

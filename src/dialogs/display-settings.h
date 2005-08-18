@@ -44,7 +44,8 @@ enum {
     PREFS_PAGE_TOOLS_CALLIGRAPHY,
     PREFS_PAGE_TOOLS_TEXT,
     PREFS_PAGE_TOOLS_GRADIENT,
-    PREFS_PAGE_TOOLS_DROPPER
+    PREFS_PAGE_TOOLS_DROPPER,
+    PREFS_PAGE_TOOLS_CONNECTOR
 };
 
 enum {
@@ -65,4 +66,4 @@ enum {
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -1,4 +1,33 @@
+2005-08-18  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/Makefile_insert: Added connector-context.{cpp,h}
+
+	* src/connector-context.cpp, src/connector-context.h: New code for
+	  the connector context.  Handles the interaction of creating and
+	  modifying connectors.
+
+	* src/sp-conn-end.cpp, src/sp-conn-end.h: Added sp_conn_adjust_path
+	  for adjusting the path of connectors to the edge of shapes, and
+	  sp_conn_end_detach to detach a connector endpoint from a shape.
+	  Also, when there is only a single shape attached to a connector
+	  and it is moved, then reroute the connector leaving its unattached
+	  endpoint where it is, rather than just moving the whole thing with
+	  the shape.
+
+	* src/preferences-skeleton.h, src/toolbox.cpp, src/tools-switch.cpp,
+	  src/tools-switch.h, src/verbs.cpp, src/verbs.h,
+	  src/dialogs/display-settings.cpp, src/dialogs/display-settings.h:
+
+	  Enable the connector context.  Give it a preferences tab, toolbox,
+	  icon, etc.  Also, correct some vim modelines.
+	  
+	* src/display/sp-canvas.cpp: Allow enter and leave events to be generated
+	  for canvas items when mouse buttons are depressed.
+
+	* src/pixmaps/cursor-connector.xpm: A cursor for connector context.
+
 2005-08-18  Jon A. Cruz  <jon@joncruz.org>
+
 	* src/knot.cpp: Corrected type conflict for crash bugs.
 
 2005-08-18  Ralf Stephan <ralf@ark.in-berlin.de>
@@ -22,7 +51,7 @@
 
 2005-08-14  MenTaLguY  <mental@rydia.net>
 
-    * src/widgets/layer-selector.cpp: quick fix for crash bug when
+	* src/widgets/layer-selector.cpp: quick fix for crash bug when
 	  deleting unnamed layer [bug 1255843]
 
 2005-08-14  Michael Wybrow  <mjwybrow@users.sourceforge.net>

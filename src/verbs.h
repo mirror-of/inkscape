@@ -129,6 +129,7 @@ enum {
     SP_VERB_CONTEXT_GRADIENT,
     SP_VERB_CONTEXT_ZOOM,
     SP_VERB_CONTEXT_DROPPER,
+    SP_VERB_CONTEXT_CONNECTOR,
     /* Tool preferences */
     SP_VERB_CONTEXT_SELECT_PREFS,
     SP_VERB_CONTEXT_NODE_PREFS,
@@ -143,6 +144,7 @@ enum {
     SP_VERB_CONTEXT_GRADIENT_PREFS,
     SP_VERB_CONTEXT_ZOOM_PREFS,
     SP_VERB_CONTEXT_DROPPER_PREFS,
+    SP_VERB_CONTEXT_CONNECTOR_PREFS,
     /* Zooming and desktop settings */
     SP_VERB_ZOOM_IN,
     SP_VERB_ZOOM_OUT,
@@ -363,4 +365,4 @@ public:
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

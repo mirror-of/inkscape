@@ -49,6 +49,7 @@
 #include "gradient-context.h"
 #include "zoom-context.h"
 #include "dropper-context.h"
+#include "connector-context.h"
 
 #include "tools-switch.h"
 
@@ -67,6 +68,7 @@ static char const *tool_names[] = {
   "tools.gradient",
   "tools.zoom",
   "tools.dropper",
+  "tools.connector",
   NULL
 };
 
@@ -85,6 +87,7 @@ static char const *tool_ids[] = {
   "gradient",
   "zoom",
   "dropper",
+  "connector",
   NULL
 };
 
@@ -201,6 +204,12 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
 		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> to copy the color under mouse to clipboard"));
+		break;
+	case TOOLS_CONNECTOR:
+		sp_desktop_set_event_context (dt, SP_TYPE_CONNECTOR_CONTEXT, tool_names[num]);
+		sp_desktop_activate_guides (dt, FALSE);
+		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click and drag</b> between shapes to create a connector."));
 		break;
 	}
 }
