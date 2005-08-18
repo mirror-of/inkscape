@@ -1,3 +1,9 @@
+2005-08-18  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/Doxyfile: added 4 more files
+	* src/extension/implementation/plugin-link.h,
+	  src/extension/internal/gimpgrad.cpp:  improved doxygen documentation
+	  
 2005-08-16  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/desktop.h, src/desktop.cpp: replaced gboolean with bool
@@ -6,7 +12,6 @@
 	  added editor footer
 	* src/desktop.h, src/desktop.cpp, src/knot.cpp, src/sp-gradient.cpp,
 	  src/display/curve.cpp, src/extension/extension.cpp,
-	  src/extension/implementation/plugin-link.h,
 	  src/extension/implementation/plugin.h, 
 	  src/extension/implementation/plugin.cpp,
 	  src/extension/internal/gimpgrad.cpp, src/helper/action.cpp:
@@ -44,7 +49,6 @@
 	
 2005-08-11  Ralf Stephan <ralf@ark.in-berlin.de>
 
-	* Doxyfile: added 4 more files
 	* src/sp-gradient.cpp,src/sp-gradient-fns.h,src/event-context.h,
 	  src/event-context.cpp:  replaced gboolean with bool
 	* src/document-undo.cpp:  added editor footer
