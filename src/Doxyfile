@@ -9,12 +9,16 @@ INPUT = \
         color.cpp        \
         color.h        \
 	color-rgba.h	\
+	desktop.cpp     \
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
 	display/curve.h	\
 	display/sp-canvas.cpp \
 	display/sp-canvas.h   \
+	document.h    \
+	document.cpp    \
+	document-undo.cpp  \
 	draw-anchor.cpp	\
 	draw-anchor.h	\
 	event-context.cpp  \
