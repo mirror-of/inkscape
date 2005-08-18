@@ -1,8 +1,6 @@
-/**
-    \file gimpgrad.cpp
- 
-    A plug-in to import GIMP gradients into Inkscape.
-*/
+/** \file
+ * Inkscape::Extension::Internal::GimpGrad implementation
+ */
 
 /*
  * Authors:

@@ -1,17 +1,15 @@
-/**
-	\file plugin-link.h
-
-	Plugin prototypes.
-
-	This header describes which prototypes plugins should use when
-	creating their functions.  This header is also used by the internal
-	plugins code to guarantee consistency.
-
-    Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2004-2005
-
-    This code is licensed under the GNU GPL.  See COPYING for details.
-*/
+/** \file
+ * Plugin prototypes.
+ *
+ * This header describes which prototypes plugins should use when
+ * creating their functions.  This header is also used by the internal
+ * plugins code to guarantee consistency.
+ *
+ * Author:  Ted Gould <ted@gould.cx>
+ * Copyright (c) 2004-2005
+ *
+ * This code is licensed under the GNU GPL.  See COPYING for details.
+ */
 
 #ifndef __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_LINK_H__
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_LINK_H__
