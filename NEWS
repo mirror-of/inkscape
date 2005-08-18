@@ -900,6 +900,7 @@ Important bugfixes
      * Fixed several text-editing crashes
      * Windows installer clears DLLs from prior installations
      * Fixed several selection-related crashes
+     * Workaround for startup font issues on OS X Tiger
 
   In 0.42:
      * Several resource leaks are patched that caused resource exhausting and
