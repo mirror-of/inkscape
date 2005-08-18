@@ -1,3 +1,6 @@
+2005-08-18  Jon A. Cruz  <jon@joncruz.org>
+	* src/knot.cpp: Corrected type conflict for crash bugs.
+
 2005-08-18  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/Doxyfile: added 4 more files
