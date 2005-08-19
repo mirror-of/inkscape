@@ -1458,18 +1458,26 @@ options_checkbox (
 
 
         /* Oversample */
-        hb = gtk_hbox_new (FALSE, 4);
+        hb = gtk_hbox_new (FALSE, HB_MARGIN);
         gtk_widget_show (hb);
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
+        // empty label for alignment
+        l = gtk_label_new ("");
+        gtk_widget_set_size_request (l, SUFFIX_WIDTH, -1);
+        gtk_widget_show (l);
+        gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    
         l = gtk_label_new (_("Oversample bitmaps:"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
-        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-        om = gtk_option_menu_new ();
-        gtk_widget_show (om);
-        gtk_box_pack_start (GTK_BOX (hb), om, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
 
+        om = gtk_option_menu_new ();
+        gtk_widget_set_size_request (om, SB_WIDTH, -1);
+        gtk_widget_show (om);
+        gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, SB_MARGIN);
+        
         m = gtk_menu_new ();
         gtk_widget_show (m);
 
