@@ -116,10 +116,10 @@ RMDIRREC = cd inkscape & $(RMDIR) /s
 RMDIRREC1 = & cd ..
 
 #######  Where is your GTK directory?
-GTK=c:/gtk26
+GTK=c:/gtk28
 
 ####### Same thing, DOS style
-GTKDOS=c:\gtk26
+GTKDOS=c:\gtk28
 
 ####### Command to process .po files --> .mo
 MSGFMT = $(GTKDOS)$(S)bin$(S)msgfmt
@@ -169,7 +169,7 @@ GTKINC = -DGLIBMM_DLL \
 -I$(GTK)/include/gtkmm-2.4  -I$(GTK)/lib/gtkmm-2.4/include \
 -I$(GTK)/include/gdkmm-2.4  -I$(GTK)/lib/gdkmm-2.4/include \
 -I$(GTK)/include/pangomm-1.4 \
--I$(GTK)/include/atkmm-1.6  \
+-I$(GTK)/include/atkmm-1.6 -I$(GTK)/include/cairo  \
 -I$(GTK)/include/sigc++-2.0 -I$(GTK)/lib/sigc++-2.0/include \
 -I$(GTK)/include/gtk-2.0 -I$(GTK)/lib/gtk-2.0/include \
 -I$(GTK)/include/atk-1.0 -I$(GTK)/include/pango-1.0 \
