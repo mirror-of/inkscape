@@ -1,3 +1,8 @@
+2005-08-19  Kees Cook  <kees@outflux.net>
+
+    * autogen.sh, tools-version.sh, distro: report Ubuntu correctly, detect
+	  and reject unsafe automake versions (1.9.0 -> 1.9.6).
+
 2005-08-19  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/dialogs/display-settings.cpp:

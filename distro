@@ -20,7 +20,7 @@
 #  
 
 PN=`basename $0`
-VER="0.8.1"
+VER="0.8.1+inkscape"
 
 #
 # Fatal($msg,$retval)
@@ -131,13 +131,18 @@ case "`uname`" in
     OpenBSD|FreeBSD|NetBSD|CYGWIN*) contents="`uname -a`" ;;
     Linux)
         files="/etc/mandrake-release /etc/SuSE-release \
+                /usr/share/doc/ubuntu-base/changelog.gz \
                 /etc/redhat-release /etc/debian_version \
                 /etc/slackware-version /etc/.issue \
                 /etc/ROCK-LINUX /etc/gentoo-release"
         for file in $files; do
             if test -f "$file"; then
                 filename="$file"
-                contents="`cat $file`"
+                if test -n "`echo $filename | grep ubuntu`"; then
+                    contents="`cat /etc/issue`"
+		else
+                    contents="`cat $file`"
+                fi
                 break
             fi
         done
@@ -159,7 +164,9 @@ esac
 sum="`expr $ALL + $CODENAME + $FTPNAME + $NAME + $RELEASE`"
 if test $sum -eq 0 || test $FTPNAME -eq 1; then
     # FIXME: incorporate this bit into the case statement
-    name="`echo $filename | sed -e 's|/etc/||' -e 's|-*release$||' -e 's|[-_]version$||' -e 's|\.issue||' |  tr '[A-Z]' '[a-z]' | tr -d '-'`"
+    if ! test -n "`echo $filename | grep ubuntu`"; then
+      name="`echo $filename | sed -e 's|/etc/||' -e 's|-*release$||' -e 's|[-_]version$||' -e 's|\.issue||' |  tr '[A-Z]' '[a-z]' | tr -d '-'`"
+    fi
     # If that didn't work, then we likely have Solaris, Debian,
     # FreeBSD, or maybe even ROCK LINUX
     
@@ -170,6 +177,8 @@ if test $sum -eq 0 || test $FTPNAME -eq 1; then
             Linux)
                 if test -n "`grep debian $filename`"; then
                     name="debian"
+                elif test -n "`echo $filename | grep ubuntu`"; then
+                    name="ubuntu"
                 elif test -n "`grep -i caldera $filename`"; then
                      name="openlinux"
                 fi   
@@ -183,6 +192,7 @@ if test $sum -eq 0 || test $FTPNAME -eq 1; then
     case $name in
         cygwin) version="`uname -r | sed -e 's!\.!!g' -e 's!^\([0-9][0-9]*\).*$!\1!'`" ;;
         debian) version="`sed -e 's!\.!!'g -e 's!^testing/!-!' $filename`" ;;
+        ubuntu) version="`echo $contents | awk '{print $2}'`" ;;
         freebsd) version="`uname -r | sed -e 's!\([0-9][0-9]*\)\.\([0-9][0-9]*\).*!\1\2!'`" ;;
         openbsd|netbsd) version="`uname -r | sed -e 's!\.!!g'`" ;;
         rocklinux)  version="`sed -e 's!^.*Linux \([0-9]\.[0-9]\.*[0-9]*\).*$!\1!' $filename | tr -d '.' | sed -e 's!0$!!'`" ;;
@@ -201,6 +211,9 @@ elif test $CODENAME -eq 1 ; then
     # and an ix86 bit in the various SuSE releases.
     if test -n "`echo $contents | sed -e 's!(GENERIC)!!' -e 's!(native, .*)!!' -e 's!(i[3456]86)!!' | egrep "^.* \(.*\).*$"`"; then
         codename="`echo $contents | sed -e 's!.*(\(.*\)).*$!\1!'`"
+    elif test -n "`echo $filename | grep ubuntu`"; then
+        # For ubuntu, steal it out of the contents report
+        codename="`echo $contents | awk -F\\\" '{print $2}'`"
     elif test -n "`echo $filename | grep debian`"; then
         # For debian, we have to determine them manually
         case "`cat $filename`" in
@@ -250,6 +263,8 @@ elif test $NAME -eq 1 ; then
             # Hmmmm .... some are a little different
             if test -n "`echo $filename | grep debian`"; then
                 name="Debian GNU/Linux"
+            elif test -n "`echo $filename | grep ubuntu`"; then
+                name="Ubuntu Linux"
             elif test -n "`echo $filename | grep slackware`"; then
                 name="Slackware Linux"
             fi
