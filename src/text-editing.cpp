@@ -1182,6 +1182,28 @@ static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
     return true;
 }
 
+/** sets the given css attribute on this object and all its descendants.
+Annoyingly similar to sp_desktop_apply_css_recursive(), except without the
+transform stuff. */
+static void apply_css_recursive(SPObject *o, SPCSSAttr const *css)
+{
+    sp_repr_css_change(SP_OBJECT_REPR(o), const_cast<SPCSSAttr*>(css), "style");
+
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(o)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if (sp_repr_css_property(const_cast<SPCSSAttr*>(css), "opacity", NULL) != NULL) {
+            // Unset properties which are accumulating and thus should not be set recursively.
+            // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
+            SPCSSAttr *css_recurse = sp_repr_css_attr_new();
+            sp_repr_css_merge(css_recurse, const_cast<SPCSSAttr*>(css));
+            sp_repr_css_set_property(css_recurse, "opacity", NULL);
+            apply_css_recursive(child, css_recurse);
+            sp_repr_css_attr_unref(css_recurse);
+        } else {
+            apply_css_recursive(child, const_cast<SPCSSAttr*>(css));
+        }
+    }
+}
+
 /** applies the given style to all the objects at the given level and below
 which are between \a start_item and \a end_item, creating spans as necessary.
 If \a start_item or \a end_item are NULL then the style is applied to all
@@ -1270,7 +1292,7 @@ static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *
                 sp_repr_unref(child_span);
 
             } else if (child != end_item) {   // not a string and we're applying to the entire object. This is easy
-                sp_repr_css_change(SP_OBJECT_REPR(child), const_cast<SPCSSAttr*>(css), "style");
+                apply_css_recursive(child, css);
             }
 
         } else {  // !passed_start
@@ -1458,9 +1480,10 @@ static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, b
     if (!equal) return false;
 
     Inkscape::XML::Node *new_span = sp_repr_new(SP_OBJECT_REPR(*item)->name());
-    if (prepend)
-        SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(new_span, SP_OBJECT_REPR(SP_OBJECT_PREV(*item)));
-    else
+    if (prepend) {
+        SPObject *prev = SP_OBJECT_PREV(*item);
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(new_span, prev ? SP_OBJECT_REPR(prev) : NULL);
+    } else
         SP_OBJECT_REPR(SP_OBJECT_PARENT(*item))->addChild(new_span, SP_OBJECT_REPR(*item));
     new_span->setAttribute("style", SP_OBJECT_REPR(child)->attribute("style"));
     move_child_nodes(SP_OBJECT_REPR(child), new_span);
