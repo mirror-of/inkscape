@@ -1,6 +1,6 @@
 #define __SP_DESKTOP_STYLE_C__
 
-/*
+/** \file
  * Desktop style management
  *
  * Authors:
@@ -37,9 +37,13 @@
 
 #include "desktop-style.h"
 
+/**
+ * Set color on selection on desktop.
+ */
 void
 sp_desktop_set_color(SPDesktop *desktop, ColorRGBA const &color, bool is_relative, bool fill)
 {
+    /// \todo relative color setting
     if (is_relative) {
         g_warning("FIXME: relative color setting not yet implemented");
         return;
@@ -66,6 +70,9 @@ sp_desktop_set_color(SPDesktop *desktop, ColorRGBA const &color, bool is_relativ
     sp_repr_css_attr_unref(css);
 }
 
+/**
+ * Apply style on object and children, recursively.
+ */
 void
 sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
 {
@@ -136,6 +143,9 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
     }
 }
 
+/**
+ * Apply style on selection on desktop.
+ */
 void
 sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change)
 {
@@ -155,18 +165,24 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change)
 // 2. Emit signal
     bool intercepted = desktop->_set_style_signal.emit(css);
 
-// FIXME: in set_style, compensate pattern and gradient fills, stroke width, rect corners, font
-// size for the object's own transform so that pasting fills does not depend on preserve/optimize
+/** \todo
+ * FIXME: in set_style, compensate pattern and gradient fills, stroke width, 
+ * rect corners, font size for the object's own transform so that pasting 
+ * fills does not depend on preserve/optimize.
+ */
 
 // 3. If nobody has intercepted the signal, apply the style to the selection
     if (!intercepted) {
         for (GSList const *i = desktop->selection->itemList(); i != NULL; i = i->next) {
-            // todo: if the style is text-only, apply only to texts?
+            /// \todo if the style is text-only, apply only to texts?
             sp_desktop_apply_css_recursive(SP_OBJECT(i->data), css, true);
         }
     }
 }
 
+/**
+ * Return the desktop's current style.
+ */
 SPCSSAttr *
 sp_desktop_get_style(SPDesktop *desktop, bool with_text)
 {
@@ -183,6 +199,9 @@ sp_desktop_get_style(SPDesktop *desktop, bool with_text)
     }
 }
 
+/**
+ * Return the desktop's current color.
+ */
 guint32
 sp_desktop_get_color(SPDesktop *desktop, bool is_fill)
 {
@@ -201,6 +220,9 @@ sp_desktop_get_color(SPDesktop *desktop, bool is_fill)
     return r;
 }
 
+/**
+ * Apply the desktop's current style or the tool style to repr.
+ */
 void
 sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char const *tool, bool with_text)
 {
@@ -221,7 +243,8 @@ sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char 
 }
 
 /**
-Returns the font size (in SVG pixels) of the text tool style (if text tool uses its own style) or desktop style (otherwise)
+ * Returns the font size (in SVG pixels) of the text tool style (if text 
+ * tool uses its own style) or desktop style (otherwise).
 */
 double
 sp_desktop_get_font_size_tool(SPDesktop *desktop)
@@ -247,7 +270,7 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
     return ret;
 }
 
-/** Determine average stroke width */
+/** Determine average stroke width, simple method */
 gdouble
 stroke_average_width (GSList const *objects)
 {
@@ -343,6 +366,9 @@ stroke_average_miterlimit (GSList const *objects)
     return avgml / g_slist_length ((GSList *) objects);
 }
 
+/**
+ * Return average fill or stroke of list of objects, if applicable.
+ */
 int
 objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill)
 {
@@ -488,6 +514,9 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
     }
 }
 
+/**
+ * Returns style with average font size and spacing of objects.
+ */
 int
 objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
 {
@@ -503,7 +532,7 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
     double letterspacing_prev = 0;
     double linespacing_prev = 0;
 
-    // FIXME: add word spacing, kerns? rotates?
+    /// \todo FIXME: add word spacing, kerns? rotates?
 
     int texts = 0;
 
@@ -519,12 +548,12 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
         if (!style) continue;
 
         texts ++;
-        size += style->font_size.computed; // FIXME: we assume non-% units here
+        size += style->font_size.computed; /// \todo FIXME: we assume non-% units here
         if (style->letter_spacing.normal) {
             if (!different && (letterspacing_prev == 0 || letterspacing_prev == letterspacing))
                 letterspacing_normal = true;
         } else {
-            letterspacing += style->letter_spacing.computed; // FIXME: we assume non-% units here
+            letterspacing += style->letter_spacing.computed; /// \todo FIXME: we assume non-% units here
             letterspacing_normal = false;
         }
 
@@ -584,6 +613,9 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
     }
 }
 
+/**
+ * Return style with average font style of objects.
+ */
 int
 objects_query_fontstyle (GSList *objects, SPStyle *style_res)
 {
@@ -631,6 +663,9 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
     }
 }
 
+/**
+ * Return style with average font family of objects.
+ */
 int
 objects_query_fontfamily (GSList *objects, SPStyle *style_res)
 {
@@ -684,6 +719,9 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
     }
 }
 
+/**
+ * Query selection on desktop for property.
+ */
 int
 sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
 {
@@ -709,6 +747,9 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
     return QUERY_STYLE_NOTHING;
 }
 
+/**
+ * Compute average style for all selected objects and style properties.
+ */
 bool
 sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
 {
