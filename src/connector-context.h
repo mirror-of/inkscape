@@ -12,9 +12,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "draw-context.h"
-#include <libnr/nr-matrix-fns.h>
+#include <sigc++/sigc++.h>
 #include <sigc++/connection.h>
+#include "display/curve.h"
+#include "event-context.h"
+#include <forward.h>
+#include <display/display-forward.h>
+#include <libnr/nr-point.h>
 
 
 #define SP_TYPE_CONNECTOR_CONTEXT (sp_connector_context_get_type())
@@ -35,11 +39,8 @@ enum {
 };
 
 
-// TODO: I've had to replace much of the functionality from the DrawContext
-//       that I originally thought I'd be able to use.  I'll eventually rework
-//       SPConnectorContext to just extend SPEventContext. (mjwybrow)
-//
-struct SPConnectorContext : public SPDrawContext {
+struct SPConnectorContext : public SPEventContext {
+    Inkscape::Selection *selection;
     NR::Point p[5];
 
     /** \invar npoints in {0, 2}. */
@@ -47,8 +48,15 @@ struct SPConnectorContext : public SPDrawContext {
 
     unsigned int mode : 1;
     unsigned int state : 4;
-    unsigned int onlycurves : 1;
 
+    // Red curve
+    SPCanvasItem *red_bpath;
+    SPCurve *red_curve;
+    guint32 red_color;
+    
+    // Green curve
+    SPCurve *green_curve;
+    
     // The new connector
     SPItem *newconn;
     

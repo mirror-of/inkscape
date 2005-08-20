@@ -1,5 +1,12 @@
 2005-08-20  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/connector-context.cpp, src/connector-context.h:
+	  Rework connector context to extend SPEventContext instead of
+	  SPDrawContext, and remove most of the borrowed draw context
+	  code.
+
+2005-08-20  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
 	* src/menus-skeleton.h: correct the verb for "Select All In All Layers"
 	  since it was just showning a verb error in the menu.
 
