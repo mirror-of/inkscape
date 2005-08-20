@@ -614,6 +614,26 @@ sp_document_request_modified(SPDocument *doc)
     }
 }
 
+void
+sp_document_setup_viewport (SPDocument *doc, SPItemCtx *ctx)
+{
+    ctx->ctx.flags = 0;
+    ctx->i2doc = NR::identity();
+    /* Set up viewport in case svg has it defined as percentages */
+    if (SP_ROOT(doc->root)->viewBox_set) { // if set, take from viewBox
+        ctx->vp.x0 = SP_ROOT(doc->root)->viewBox.x0;
+        ctx->vp.y0 = SP_ROOT(doc->root)->viewBox.y0;
+        ctx->vp.x1 = SP_ROOT(doc->root)->viewBox.x1;
+        ctx->vp.y1 = SP_ROOT(doc->root)->viewBox.y1;
+    } else { // as a last resort, set size to A4
+        ctx->vp.x0 = 0.0;
+        ctx->vp.y0 = 0.0;
+        ctx->vp.x1 = 210 * PX_PER_MM;
+        ctx->vp.y1 = 297 * PX_PER_MM;
+    }
+    ctx->i2vp = NR::identity();
+}
+
 gint
 sp_document_ensure_up_to_date(SPDocument *doc)
 {
@@ -633,14 +653,7 @@ sp_document_ensure_up_to_date(SPDocument *doc)
         /* Process updates */
         if (doc->root->uflags) {
             SPItemCtx ctx;
-            ctx.ctx.flags = 0;
-            ctx.i2doc = NR::identity();
-            /* Set up viewport in case svg has it defined as percentages */
-            ctx.vp.x0 = 0.0;
-            ctx.vp.y0 = 0.0;
-            ctx.vp.x1 = 210 * PX_PER_MM;
-            ctx.vp.y1 = 297 * PX_PER_MM;
-            ctx.i2vp = NR::identity();
+            sp_document_setup_viewport (doc, &ctx);
             doc->root->updateDisplay((SPCtx *)&ctx, 0);
         }
         doc->_emitModified();
@@ -668,14 +681,7 @@ sp_document_idle_handler(gpointer data)
     /* Process updates */
     if (doc->root->uflags) {
         SPItemCtx ctx;
-        ctx.ctx.flags = 0;
-        ctx.i2doc = NR::identity();
-        /* Set up viewport in case svg has it defined as percentages */
-        ctx.vp.x0 = 0.0;
-        ctx.vp.y0 = 0.0;
-        ctx.vp.x1 = 21.0 * PX_PER_CM;
-        ctx.vp.y1 = 29.7 * PX_PER_CM;
-        ctx.i2vp = NR::identity();
+        sp_document_setup_viewport (doc, &ctx);
 
         gboolean saved = sp_document_get_undo_sensitive(doc);
         sp_document_set_undo_sensitive(doc, FALSE);
