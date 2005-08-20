@@ -1,3 +1,11 @@
+2005-08-20  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop-style.cpp: fixed bug 1247989: nonstroked objects are
+	  no longer counted in stroke_average_width()
+	* src/Doxyfile: added 3 more files
+	* src/main.cpp: introduced doc hierarchy on doxygen main page
+	* src/desktop-style.cpp:  improved doxygen documentation
+	  
 2005-08-20  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/connector-context.cpp, src/connector-context.h:
