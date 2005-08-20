@@ -279,6 +279,7 @@ stroke_average_width (GSList const *objects)
 
     gdouble avgwidth = 0.0;
     bool notstroked = true;
+    int n_notstroked = 0;
 
     for (GSList const *l = objects; l != NULL; l = l->next) {
         if (!SP_IS_ITEM (l->data))
@@ -289,6 +290,7 @@ stroke_average_width (GSList const *objects)
         SPObject *object = SP_OBJECT(l->data);
 
         if ( object->style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            ++n_notstroked;   // do not count nonstroked objects
             continue;
         } else {
             notstroked = false;
@@ -300,7 +302,7 @@ stroke_average_width (GSList const *objects)
     if (notstroked)
         return NR_HUGE;
 
-    return avgwidth / g_slist_length ((GSList *) objects);
+    return avgwidth / (g_slist_length ((GSList *) objects) - n_notstroked);
 }
 
 /** Determines if the stroke width differs among objects */
