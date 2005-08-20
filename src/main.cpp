@@ -244,6 +244,7 @@
 #include "slideshow.h"
 #include "color.h"
 #include "sp-item.h"
+#include "sp-root.h"
 #include "unit-constants.h"
 
 #include "svg/svg.h"
@@ -928,7 +929,7 @@ sp_do_export_png(SPDocument *doc)
 
             // write object bbox to area
             sp_document_ensure_up_to_date (doc);
-            sp_item_bbox_desktop((SPItem *) o, &area);
+            sp_item_invoke_bbox((SPItem *) o, &area, sp_item_i2r_affine((SPItem *) o), TRUE);
         } else {
             g_warning("Object with id=\"%s\" was not found in the document. Nothing exported.", sp_export_id);
             return;
@@ -945,10 +946,11 @@ sp_do_export_png(SPDocument *doc)
         }
     } else {
         /* Export the whole canvas */
-        area.x0 = 0.0;
-        area.y0 = 0.0;
-        area.x1 = sp_document_width(doc);
-        area.y1 = sp_document_height(doc);
+        sp_document_ensure_up_to_date (doc);
+        area.x0 = SP_ROOT(doc->root)->x.computed;
+        area.y0 = SP_ROOT(doc->root)->y.computed;
+        area.x1 = area.x0 + sp_document_width (doc);
+        area.y1 = area.y0 + sp_document_height (doc);
     }
 
     // set filename and dpi from options, if not yet set from the hints
