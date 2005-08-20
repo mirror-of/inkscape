@@ -9,7 +9,9 @@ INPUT = \
         color.cpp        \
         color.h        \
 	color-rgba.h	\
+	desktop.h       \
 	desktop.cpp     \
+	desktop-style.cpp     \
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
@@ -33,6 +35,7 @@ INPUT = \
 	gc-anchored.h   \
 	gc-managed.h    \
 	geom.cpp	\
+	helper/action.cpp	\
 	helper/action.h	\
 	knot.cpp        \
 	knot.h          \
