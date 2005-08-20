@@ -25,10 +25,22 @@
 // Putting the following in main.cpp appears a natural choice.
 
 /** \mainpage The Inkscape Source Code Documentation
- * \section extlinks Links to external documentation
  * While the standard doxygen documentation can be accessed through the links
- * in the header, the following external documents are available to the 
+ * in the header, the following documents are additionally available to the 
  * interested reader.
+ * 
+ * \section groups Grouped documentation
+ * Some of inkscape's classes and files can be grouped into the
+ * following categories:
+ * 
+ * - \subpage UI - inkscape's user interface
+ * - \subpage XmlTree - XML backbone of the document
+ * - \subpage ObjectTree - inkscape's SVG canvas
+ * - \subpage Tools - the tools UI
+ * - \subpage Rendering - rendering and buffering
+ * - \subpage OtherServices - what doesn't fit in the above
+ *
+ * \section extlinks Links to external documentation
  *
  * \subsection liblinks External documentation on libraries used in inkscape
  *
@@ -61,6 +73,139 @@
  * <a href="http://partners.adobe.com/public/developer/ps/index_specs.html">PS</a>
  */
 
+/** \page UI User Interface Classes and Files
+ *
+ * SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h \ref desktop-style.h]
+ * SPDesktopWidget [\ref desktop-widget.cpp, \ref desktop-widget.h] 
+ * SPDropperContext [\ref dropper-context.cpp, \ref dropper-context.h] 
+ * SPMessageContext [\ref message-context.h] 
+ * SPMessageStack [\ref message-stack.h, message.h] 
+ * 
+ * SPDrawAnchor [\ref draw-anchor.cpp, \ref draw-anchor.h] 
+ * SPKnot [\ref knot.cpp, \ref knot.h, \ref knot-enums.h]
+ * SPKnotHolder [\ref knotholder.cpp, \ref knotholder.h, \ref knot-holder-entity.h]
+ *
+ * [\ref help.cpp] [\ref inkscape.cpp] [\ref inkscape-stock.cpp]
+ * [\ref interface.cpp, \ref memeq.h] [\ref main.cpp] 
+ * [\ref menus-skeleton.h, \ref preferences-skeleton.h]
+ * [\ref object-ui.cpp] [\ref select-toolbar.cpp] [\ref shortcuts.cpp]
+ * [\ref sp-cursor.cpp]
+ *
+ * [\ref layer-fns.cpp, \ref selection-describer.h]
+ *
+ * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
+ *
+ * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h, \ref satisfied-guide-cns.cpp, \ref sp-guide-attachment.h, \ref sp-guide-constraint.h]
+ */
+/** \page XmlTree XML Tree Classes and Files
+ *
+ * SPAttributeEnum [\ref attributes.cpp, \ref attributes.h] 
+ */
+/** \page ObjectTree Object Tree Classes and Files
+ * SPDocument [\ref document.cpp, \ref document.h] 
+ * \section ObjectTree1 Class Hierarchy With Files
+ * Inkscape::ObjectHierarchy [\ref object-hierarchy.cpp, \ref object-hierarchy.h]
+ * - SPObject [\ref sp-object.cpp, \ref sp-object.h, \ref object-edit.cpp]
+ *   - SPDefs [\ref sp-defs.cpp, \ref sp-defs.h]
+ *   - SPFlowline [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
+ *   - SPFlowregionbreak [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
+ *   - SPGuide [\ref sp-guide.cpp, \ref sp-guide.h]
+ *   - SPItem [\ref sp-item.cpp, \ref sp-item.h, \ref sp-item-notify-moveto.cpp, \ref sp-item-rm-unsatisfied-cns.cpp, \ref sp-item-transform.cpp, \ref sp-item-update-cns.cpp, ]
+ *     - SPFlowdiv [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
+ *     - SPFlowpara [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
+ *     - SPFlowregion [\ref sp-flowregion.cpp, \ref sp-flowregion.h]
+ *     - SPFlowregionExclude [\ref sp-flowregion.cpp, \ref sp-flowregion.h]
+ *     - SPFlowtext [\ref sp-flowtext.cpp, \ref sp-flowtext.h]
+ *     - SPFlowtspan [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
+ *     - SPGroup [\ref sp-item-group.cpp, \ref sp-item-group.h]
+ *       - SPAnchor [\ref sp-anchor.cpp, \ref sp-anchor.h]
+ *       - SPMarker [\ref sp-marker.cpp, \ref sp-marker.h]
+ *       - SPRoot [\ref sp-root.cpp, \ref sp-root.h]
+ *       - SPSymbol [\ref sp-symbol.cpp, \ref sp-symbol.h]
+ *     - SPImage [\ref sp-image.cpp, \ref sp-image.h]
+ *     - SPShape [\ref sp-shape.cpp, \ref sp-shape.h, \ref marker-status.cpp]
+ *       - SPGenericEllipse [\ref sp-ellipse.cpp, \ref sp-ellipse.h]
+ *         - SPArc
+ *         - SPCircle
+ *         - SPEllipse
+ *       - SPLine [\ref sp-line.cpp, \ref sp-line.h]
+ *       - SPOffset [\ref sp-offset.cpp, \ref sp-offset.h]
+ *       - SPPath [\ref sp-path.cpp, \ref sp-path.h]
+ *       - SPPolygon [\ref sp-polygon.cpp, \ref sp-polygon.h]
+ *         - SPStar [\ref sp-star.cpp, \ref sp-star.h]
+ *       - SPPolyLine [\ref sp-polyline.cpp, \ref sp-polyline.h]
+ *       - SPRect [\ref sp-rect.cpp, \ref sp-rect.h]
+ *       - SPSpiral [\ref sp-spiral.cpp, \ref sp-spiral.h]
+ *     - SPText [\ref sp-text.cpp, \ref sp-text.h]
+ *     - SPTextPath [\ref sp-tspan.cpp, \ref sp-tspan.h]
+ *     - SPTSpan [\ref sp-tspan.cpp, \ref sp-tspan.h]
+ *     - SPUse [\ref sp-use.cpp, \ref sp-use.h]
+ *   - SPMetadata [\ref sp-metadata.cpp, \ref sp-metadata.h]
+ *   - SPObjectGroup [\ref sp-object-group.cpp, \ref sp-object-group.h]
+ *     - SPClipPath [\ref sp-clippath.cpp, \ref sp-clippath.h]
+ *     - SPMask [\ref sp-mask.cpp, \ref sp-mask.h]
+ *     - SPNamedView [\ref sp-namedview.cpp, \ref sp-namedview.h]
+ *   - SPPaintServer [\ref sp-paint-server.cpp, \ref sp-paint-server.h]
+ *     - SPGradient [\ref sp-gradient.cpp, \ref sp-gradient.h, \ref gradient-chemistry.cpp, \ref sp-gradient-reference.h, \ref sp-gradient-spread.h, \ref sp-gradient-units.h, \ref sp-gradient-vector.h]
+ *       - SPLinearGradient
+ *       - SPRadialGradient
+ *     - SPPattern [\ref sp-pattern.cpp, \ref sp-pattern.h]
+ *   - SPSkeleton [\ref sp-skeleton.cpp, \ref sp-skeleton.h]
+ *   - SPStop [\ref sp-stop.h]
+ *   - SPString [\ref sp-string.cpp, \ref sp-string.h]
+ *   - SPStyleElem [\ref sp-style-elem.cpp, \ref sp-style-elem.h]
+ *
+ * \section Style Related
+ * Media [\ref media.cpp, \ref media.h]
+ */
+/** \page Tools Tools Related Classes and Files
+ * 
+ * SPSelcue [\ref selcue.cpp, \ref selcue.h, \ref rubberband.cpp]
+ * Inkscape::Selection [\ref selection.cpp, \ref selection.h, selection-chemistry.cpp]
+ * SPSelTrans [\ref seltrans.cpp, \ref seltrans.h]
+ * 
+ * \section Event Context Class Hierarchy
+ * 
+ *- SPEventContext[\ref event-context.cpp, \ref event-context.h]
+ * - SPArcContext [\ref arc-context.cpp, \ref arc-context.h]
+ * - SPDrawContext [\ref draw-context.cpp, \ref draw-context.h]
+ *   - SPPenContext [\ref pen-context.cpp, \ref pen-context.h]
+ *   - SPPencilContext [\ref pencil-context.cpp, \ref pencil-context.h]
+ *   - SPConnectorContext [\ref connector-context.cpp, \ref connector-context.h, \ref sp-conn-end.cpp, \ref sp-conn-end-pair.cpp]
+ * - SPGradientContext [\ref gradient-context.cpp, \ref gradient-context.h, \ref gradient-drag.cpp, \ref gradient-toolbar.cpp]
+ * - SPRectContext [\ref rect-context.cpp, \ref rect-context.h]
+ * - SPSelectContext [\ref select-context.cpp, \ref select-context.h]
+ * - SPSpiralContext [\ref spiral-context.cpp, \ref spiral-context.h]
+ * - SPStarContext [\ref star-context.cpp, \ref star-context.h]
+ *   
+ * \section Other Tool Contexts
+ * 
+ * SPNodeContext [\ref node-context.cpp, \ref node-context.h, \ref path-chemistry.cpp]
+ * Inkscape::NodePath [\ref nodepath.cpp, \ref nodepath.h]
+ * [\ref splivarot.cpp]
+ * SPDynaDrawContext [\ref dyna-draw-context.cpp, \ref dyna-draw-context.h] 
+ */
+/** \page Rendering Rendering Related Classes and Files
+ *
+ * SPColor [\ref color.cpp, \ref color.h, \ref color-rgba.h] 
+ * [\ref geom.cpp] [\ref isnan.h] [\ref mod360.cpp]
+ */
+/** \page OtherServices Classes and Files From Other Services
+ * [\ref inkview.cpp, \ref slideshow.cpp] [\ref sp-animation.cpp]
+ * 
+ * Inkscape::GC
+ *
+ * SPMetric [\ref sp-metrics.cpp, \ref sp-metrics.h]
+ * 
+ * [\ref dir-util.cpp] [\ref file.cpp] [\ref prefs-utils.cpp] [\ref print.cpp]
+ * 
+ * BadURIException [\ref bad-uri-exception.h] [\ref extract-uri.cpp]
+ * 
+ * CompositeUndoStackObserver [\ref composite-undo-stack-observer.cpp, \ref composite-undo-stack-observer.h]
+ * [\ref document-undo.cpp]
+ * 
+ * [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] 
+ */
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
