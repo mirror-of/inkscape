@@ -1,6 +1,11 @@
+2005-08-20  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/menus-skeleton.h: correct the verb for "Select All In All Layers"
+	  since it was just showning a verb error in the menu.
+
 2005-08-19  Kees Cook  <kees@outflux.net>
 
-    * autogen.sh, tools-version.sh, distro: report Ubuntu correctly, detect
+	* autogen.sh, tools-version.sh, distro: report Ubuntu correctly, detect
 	  and reject unsafe automake versions (1.9.0 -> 1.9.6).
 
 2005-08-19  Michael Wybrow  <mjwybrow@users.sourceforge.net>

@@ -60,7 +60,7 @@ static char const menus_skeleton[] =
 "       <verb verb-id=\"EditDelete\" />\n"
 "       <seperator/>\n"
 "       <verb verb-id=\"EditSelectAll\" />\n"
-"       <verb verb-id=\"EditSelectAllInLayers\" />\n"
+"       <verb verb-id=\"EditSelectAllInAllLayers\" />\n"
 "       <verb verb-id=\"EditInvert\" />\n"
 "       <verb verb-id=\"EditDeselect\" />\n"
 "       <seperator/>\n"
