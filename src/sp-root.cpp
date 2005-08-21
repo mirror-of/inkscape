@@ -31,6 +31,8 @@
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-translate-scale-ops.h>
 #include <xml/repr.h>
+#include "svg/stringstream.h"
+#include "inkscape_version.h"
 
 static void sp_root_class_init(SPRootClass *klass);
 static void sp_root_init(SPRoot *root);
@@ -571,7 +573,7 @@ sp_root_modified(SPObject *object, guint flags)
 
     /* fixme: (Lauris) */
     if (!object->parent && (flags & SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-        sp_document_set_size_px(SP_OBJECT_DOCUMENT(root), root->width.computed, root->height.computed);
+        sp_document_resized_signal_emit (SP_OBJECT_DOCUMENT(root), root->width.computed, root->height.computed);
     }
 }
 
@@ -588,22 +590,32 @@ sp_root_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        gchar *version;
-
         sp_repr_set_attr(repr, "sodipodi:version", SODIPODI_VERSION);
-
-        version = sp_version_to_string(root->version.inkscape);
-        sp_repr_set_attr(repr, "inkscape:version", version);
-        g_free(version);
+        sp_repr_set_attr(repr, "inkscape:version", INKSCAPE_VERSION);
     }
 
     sp_repr_set_attr(repr, "version", SVG_VERSION);
 
-    sp_repr_set_double(repr, "x", root->x.computed);
-    sp_repr_set_double(repr, "y", root->y.computed);
-    sp_repr_set_double(repr, "width", root->width.computed);
-    sp_repr_set_double(repr, "height", root->height.computed);
-    sp_repr_set_attr(repr, "viewBox", object->repr->attribute("viewBox"));
+    if (fabs(root->x.computed) > 1e-9)
+        sp_repr_set_double(repr, "x", root->x.computed);
+    if (fabs(root->y.computed) > 1e-9)
+        sp_repr_set_double(repr, "y", root->y.computed);
+
+    // Unlike all other SPObject, here we want to preserve units too (and only here, according to
+    // the recommendation in http://www.w3.org/TR/SVG11/coords.html#Units)
+
+    const gchar *width_s = sp_svg_length_write_with_units (&root->width);
+    const gchar *height_s = sp_svg_length_write_with_units (&root->height);
+    sp_repr_set_attr (repr, "width", width_s);
+    sp_repr_set_attr (repr, "height", height_s);
+    g_free ((void*) width_s);
+    g_free ((void*) height_s);
+
+    if (root->viewBox_set) {
+        Inkscape::SVGOStringStream os;
+        os << root->viewBox.x0 << " " << root->viewBox.y0 << " " << root->viewBox.x1 - root->viewBox.x0 << " " << root->viewBox.y1 - root->viewBox.y0;
+        sp_repr_set_attr(repr, "viewBox", os.str().c_str());
+    } 
 
     if (((SPObjectClass *) (parent_class))->write)
         ((SPObjectClass *) (parent_class))->write(object, repr, flags);
