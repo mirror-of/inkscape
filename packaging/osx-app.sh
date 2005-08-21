@@ -2,10 +2,11 @@
 # Copyright 2005, Kees Cook <kees@outflux.net>
 # Licensed under GNU General Public License
 #
-# Usage: osx-app /path/to/bin/inkscape Info.plist /path/to/packaging/macosx
+# Usage: osx-app [-s] /path/to/bin/inkscape Info.plist /path/to/packaging/macosx
 #
 # This attempts to build an Inkscape.app package for OSX, resolving
-# Dynamic libraries, etc.
+# Dynamic libraries, etc.  Strips the executable and libraries if
+# '-s' is given.
 #
 # Thanks to GNUnet's "build_app" script for help with library dep resolution.
 # https://gnunet.org/svn/GNUnet/contrib/OSX/build_app
@@ -31,6 +32,12 @@ pkg=Inkscape
 package="$pkg.app"
 
 # TODO: Rewrite handling of command line args and make more robust.
+
+strip=false
+if [ "$1" = "-s" ]; then
+	strip=true
+	shift
+fi
 
 binary="$1"
 if [ ! -x "$binary" ]; then
@@ -124,6 +131,9 @@ ModuleFiles = "\${HOME}/.inkscape-etc/pango.modules"
 AliasFiles = "\${HOME}/.inkscape-etc/pangox.aliases"
 END_PANGO
 
+mkdir -p $pkgetc/fonts/
+cp /etc/fonts/* $pkgetc/fonts/
+
 mkdir -p $pkgetc/gtk-2.0
 sed -e "s,$SW,\${CWD},g" $SW/etc/gtk-2.0/gdk-pixbuf.loaders > $pkgetc/gtk-2.0/gdk-pixbuf.loaders
 sed -e "s,$SW,\${CWD},g" $SW/etc/gtk-2.0/gtk.immodules > $pkgetc/gtk-2.0/gtk.immodules
@@ -153,6 +163,11 @@ while $endl; do
     nfiles=$nnfiles
   fi
 done
+
+if [ "$strip" = "true" ]; then
+  strip -x "$package"/Contents/Resources/lib/*.dylib
+  strip -ur "$binpath"
+fi
 
 # NOTE: This works for all the dylibs but causes GTK to crash at startup.
 #       Instead we leave them with their original install_names and set
