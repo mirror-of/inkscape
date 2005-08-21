@@ -420,27 +420,12 @@ sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
                                                                 "unit_selector");
     SPUnit const *unit = sp_unit_selector_get_unit(us);
 
-
-    /* SVG does not support meters as a unit, so we must translate meters to
-     * cm when writing
-     */
-    Inkscape::SVGOStringStream os;
-    if (!strcmp(unit->abbr, "m")) {
-        os << 100*adjustment->value << "cm";
-    } else {
-        os << adjustment->value << unit->abbr;
-        /* FIXME: unit->abbr is a translated string, whereas we want a recognized SVG unit.
-         * (Possibly we should just avoid abbr being a translated string.)
-         *
-         * Also, we usually avoid using units at all in SVG other than in the outermost <svg>
-         * element, in line with the recommendation in
-         * http://www.w3.org/TR/SVG11/coords.html#Units.
-         *
-         * Similarly elsewhere in this file: search for abbr.
-         */
-    }
-
-    sp_repr_set_attr(repr, key, os.str().c_str());
+    if (!strcmp (key, "width")) {
+        sp_document_set_width (doc, adjustment->value, unit);
+    } else if (!strcmp (key, "height")) {
+        sp_document_set_height (doc, adjustment->value, unit);
+    } else 
+        g_warning ("sp_doc_dialog_whatever_changed should only be used for width/height");
 
     sp_document_done(doc);
 }
