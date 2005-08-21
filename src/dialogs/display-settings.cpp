@@ -1174,7 +1174,7 @@ sp_display_dialog (void)
 
         // Connector
         {
-            GtkWidget *vb_tool = new_tab (nb_tools, _("Connector"));
+            //GtkWidget *vb_tool = new_tab (nb_tools, _("Connector"));
         }
 
         g_signal_connect(GTK_OBJECT (nb_tools), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_tools");

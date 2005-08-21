@@ -414,7 +414,6 @@ sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    Inkscape::XML::Node *repr = sp_document_repr_root(doc);
     gchar const *key = (gchar const *) gtk_object_get_data(GTK_OBJECT(adjustment), "key");
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(adjustment),
                                                                 "unit_selector");
