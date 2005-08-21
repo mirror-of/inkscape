@@ -87,6 +87,7 @@ struct SPUnit {
 	SPUnitBase base;
 	gdouble unittobase; /* how many base units in this unit */
 	SPMetric metric; // the corresponding SPMetric from sp-metrics.h
+	guint svg_unit; // the corresponding SPSVGLengthUnit
 
 	/* When using, you must call "gettext" on them so they're translated */
 	gchar const *name;
@@ -99,7 +100,9 @@ const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 /* When using, you must call "gettext" on them so they're translated */
 const gchar *sp_unit_get_abbreviation (const SPUnit *unit);
 gchar const *sp_unit_get_plural (SPUnit const *unit);
+
 SPMetric sp_unit_get_metric(SPUnit const *unit);
+guint sp_unit_get_svg_unit(SPUnit const *unit);
 
 extern SPUnit const sp_units[];
 

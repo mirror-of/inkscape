@@ -26,6 +26,7 @@
 #include <glibmm/i18n.h>
 #include "sp-metrics.h"
 #include "unit-constants.h"
+#include "svg/svg-types.h"
 
 /* todo: use some fancy unit program */
 
@@ -36,20 +37,20 @@
  * calls sp_unit_table_sane) to ensure that the two are in sync.
  */
 SPUnit const sp_units[] = {
-    {SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, NONE, N_("Unit"), "", N_("Units"), ""},
-    {SP_UNIT_PT, SP_UNIT_ABSOLUTE, PX_PER_PT, SP_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
-    {SP_UNIT_PX, SP_UNIT_DEVICE, PX_PER_PX, SP_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, 
+    {SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, NONE, SP_SVG_UNIT_NONE, N_("Unit"), "", N_("Units"), ""},
+    {SP_UNIT_PT, SP_UNIT_ABSOLUTE, PX_PER_PT, SP_PT, SP_SVG_UNIT_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
+    {SP_UNIT_PX, SP_UNIT_DEVICE, PX_PER_PX, SP_PX, SP_SVG_UNIT_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, 
     /* You can add new elements from this point forward */
-    {SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, NONE, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
-    {SP_UNIT_MM, SP_UNIT_ABSOLUTE, PX_PER_MM, SP_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
-    {SP_UNIT_CM, SP_UNIT_ABSOLUTE, PX_PER_CM, SP_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
-    {SP_UNIT_M, SP_UNIT_ABSOLUTE, PX_PER_M, SP_M, N_("Meter"), N_("m"), N_("Meters"), N_("m")},
-    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PX_PER_IN, SP_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+    {SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, NONE, SP_SVG_UNIT_PERCENT, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
+    {SP_UNIT_MM, SP_UNIT_ABSOLUTE, PX_PER_MM, SP_MM, SP_SVG_UNIT_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
+    {SP_UNIT_CM, SP_UNIT_ABSOLUTE, PX_PER_CM, SP_CM, SP_SVG_UNIT_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
+    {SP_UNIT_M, SP_UNIT_ABSOLUTE, PX_PER_M, SP_M, SP_SVG_UNIT_NONE, N_("Meter"), N_("m"), N_("Meters"), N_("m")}, // no svg_unit
+    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PX_PER_IN, SP_IN, SP_SVG_UNIT_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
     /* Volatiles do not have default, so there are none here */
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
-    {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, NONE, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
+    {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, NONE, SP_SVG_UNIT_EM, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
-    {SP_UNIT_EX, SP_UNIT_VOLATILE, 1.0, NONE, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
+    {SP_UNIT_EX, SP_UNIT_VOLATILE, 1.0, NONE, SP_SVG_UNIT_EX, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
 };
 
 #define sp_num_units G_N_ELEMENTS(sp_units)
@@ -89,6 +90,14 @@ sp_unit_get_metric(SPUnit const *unit)
     g_return_val_if_fail(unit != NULL, NONE);
 
     return unit->metric;
+}
+
+guint 
+sp_unit_get_svg_unit(SPUnit const *unit)
+{
+    g_return_val_if_fail(unit != NULL, NONE);
+
+    return unit->svg_unit;
 }
 
 GSList *
