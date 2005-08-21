@@ -238,6 +238,8 @@ gboolean node_key (GdkEvent * event);
 void sp_nodepath_update_statusbar (Inkscape::NodePath::Path *nodepath);
 void sp_nodepath_selected_align(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
 void sp_nodepath_selected_distribute(Inkscape::NodePath::Path *nodepath, NR::Dim2 axis);
+void sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p);
+void sp_nodepath_add_node_near_point(SPItem * item, NR::Point p);
 
 /* possibly private functions */
 

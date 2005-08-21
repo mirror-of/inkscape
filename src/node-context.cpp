@@ -41,6 +41,7 @@
 #include "prefs-utils.h"
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
+#include "libnr/nr-point-matrix-ops.h"
 
 static void sp_node_context_class_init(SPNodeContextClass *klass);
 static void sp_node_context_init(SPNodeContext *node_context);
@@ -396,6 +397,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
     SPNodeContext *nc = SP_NODE_CONTEXT(event_context);
 
     switch (event->type) {
+        case GDK_2BUTTON_PRESS:
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1) {
                 if (!nc->drag) {
@@ -405,7 +407,32 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                     if (event->button.state & GDK_SHIFT_MASK) {
                         selection->toggle(item_ungrouped);
                     } else {
-                        selection->set(item_ungrouped);
+                        //add a node if the clicked path is selected
+                        if (selection->includes(item_ungrouped) && selection->single()) {
+                            //Translate click point into proper coord system
+                            NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
+                            p *= sp_item_dt2i_affine(item_ungrouped, desktop);
+
+                            switch (event->type) {
+                                case GDK_BUTTON_RELEASE:
+                                    if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
+                                        //add a node
+                                        sp_nodepath_add_node_near_point(item_ungrouped, p);
+                                    } else {
+                                        //select the segment
+                                        sp_nodepath_select_segment_near_point(item_ungrouped, p);
+                                    }
+                                    break; 
+                                case GDK_2BUTTON_PRESS:
+                                    //add a node
+                                    sp_nodepath_add_node_near_point(item_ungrouped, p);
+                                    break;
+                                default:
+                                    break;
+                            } 
+                        } else {
+                            selection->set(item_ungrouped);
+                        }
                     }
 
                     ret = TRUE;

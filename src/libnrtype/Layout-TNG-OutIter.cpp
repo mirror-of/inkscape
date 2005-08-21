@@ -71,94 +71,6 @@ double Layout::_getChunkWidth(unsigned chunk_index) const
     return chunk_width;
 }
 
-/* this function really belongs to Path. I'll probably move it there eventually,
-hence the Path-esque coding style */
-template<typename T> inline static T square(T x) {return x*x;}
-static Path::cut_position PointToCurvilignPosition(Path const &path, NR::Point const &pos)
-{
-    unsigned bestSeg = 0;
-    double bestRangeSquared = DBL_MAX;
-    double bestT = 0.0; // you need a sentinel, or make sure that you prime with correct values.
-
-    for (unsigned i = 1 ; i < path.pts.size() ; i++) {
-        if (path.pts[i].isMoveTo == polyline_moveto) continue;
-        NR::Point p1, p2, localPos;
-        double thisRangeSquared;
-        double t;
-
-        if (path.pts[i - 1].p == path.pts[i].p) {
-            thisRangeSquared = square(path.pts[i].p[NR::X] - pos[NR::X]) + square(path.pts[i].p[NR::Y] - pos[NR::Y]);
-            t = 0.0;
-        } else {
-            // we rotate all our coordinates so we're always looking at a mostly vertical line.
-            if (fabs(path.pts[i - 1].p[NR::X] - path.pts[i].p[NR::X]) < fabs(path.pts[i - 1].p[NR::Y] - path.pts[i].p[NR::Y])) {
-                p1 = path.pts[i - 1].p;
-                p2 = path.pts[i].p;
-                localPos = pos;
-            } else {
-                p1 = path.pts[i - 1].p.cw();
-                p2 = path.pts[i].p.cw();
-                localPos = pos.cw();
-            }
-            double gradient = (p2[NR::X] - p1[NR::X]) / (p2[NR::Y] - p1[NR::Y]);
-            double intersection = p1[NR::X] - gradient * p1[NR::Y];
-            /*
-              orthogonalGradient = -1.0 / gradient; // you are going to have numerical problems here.
-              orthogonalIntersection = localPos[NR::X] - orthogonalGradient * localPos[NR::Y];
-              nearestY = (orthogonalIntersection - intersection) / (gradient - orthogonalGradient);
-
-              expand out nearestY fully :
-              nearestY = (localPos[NR::X] - (-1.0 / gradient) * localPos[NR::Y] - intersection) / (gradient - (-1.0 / gradient));
-
-              multiply top and bottom by gradient:
-              nearestY = (localPos[NR::X] * gradient - (-1.0) * localPos[NR::Y] - intersection * gradient) / (gradient * gradient - (-1.0));
-
-              and simplify to get:
-            */
-            double nearestY =  (localPos[NR::X] * gradient + localPos[NR::Y] - intersection * gradient)
-                             / (gradient * gradient + 1.0);
-            t = (nearestY - p1[NR::Y]) / (p2[NR::Y] - p1[NR::Y]);
-            if (t <= 0.0) thisRangeSquared = square(p1[NR::X] - localPos[NR::X]) + square(p1[NR::Y] - localPos[NR::Y]);
-            else if (t >= 1.0) thisRangeSquared = square(p2[NR::X] - localPos[NR::X]) + square(p2[NR::Y] - localPos[NR::Y]);
-            else thisRangeSquared = square(nearestY * gradient + intersection - localPos[NR::X]) + square(nearestY - localPos[NR::Y]);
-        }
-
-        if (thisRangeSquared < bestRangeSquared) {
-            bestSeg = i;
-            bestRangeSquared = thisRangeSquared;
-            bestT = t;
-        }
-    }
-    Path::cut_position result;
-    if (bestSeg == 0) {
-        result.piece = 0;
-        result.t = 0.0;
-    } else {
-        result.piece = path.pts[bestSeg].piece;
-        if (result.piece == path.pts[bestSeg - 1].piece)
-            result.t = path.pts[bestSeg - 1].t * (1.0 - bestT) + path.pts[bestSeg].t * bestT;
-        else
-            result.t = path.pts[bestSeg].t * bestT;
-    }
-    return result;
-}
-
-// this one also belongs to Path
-// returns the length of the path up to the position indicated by t (0..1)
-static double PositionToLength(Path const &path, int piece, double t)
-{
-    double length = 0.0;
-    for (unsigned i = 1 ; i < path.pts.size() ; i++) {
-        if (path.pts[i].isMoveTo == polyline_moveto) continue;
-        if (path.pts[i].piece == piece && t < path.pts[i].t) {
-            length += NR::L2((t - path.pts[i - 1].t) / (path.pts[i].t - path.pts[i - 1].t) * (path.pts[i].p - path.pts[i - 1].p));
-            break;
-        }
-        length += NR::L2(path.pts[i].p - path.pts[i - 1].p);
-    }
-    return length;
-}
-
 /* getting the cursor position for a mouse click is not as simple as it might
 seem. The two major problems are flows set up in multiple columns and large
 dy adjustments such that text does not belong to the line it appears to. In
@@ -181,8 +93,8 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
     double local_y = y;
 
     if (_path_fitted) {
-        Path::cut_position position = PointToCurvilignPosition(*_path_fitted, NR::Point(x, y));
-        local_x = PositionToLength(*_path_fitted, position.piece, position.t);
+        Path::cut_position position = const_cast<Path*>(_path_fitted)->PointToCurvilignPosition(NR::Point(x, y));
+        local_x = const_cast<Path*>(_path_fitted)->PositionToLength(position.piece, position.t);
         return _cursorXOnLineToIterator(0, local_x + _chunks.front().left_x);
     }
 

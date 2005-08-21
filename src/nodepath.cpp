@@ -46,6 +46,8 @@
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-matrix-ops.h>
+#include "livarot/Path.h"
+#include "splivarot.h"
 
 class NR::Matrix;
 
@@ -134,6 +136,9 @@ static void sp_nodepath_node_destroy(Inkscape::NodePath::Node *node);
 static Inkscape::NodePath::NodeSide *sp_node_get_side(Inkscape::NodePath::Node *node, gint which);
 static Inkscape::NodePath::NodeSide *sp_node_opposite_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
 static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
+static Inkscape::NodePath::Node * sp_nodepath_get_node_by_index(int index);
+//from splivarot.cpp
+Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
 
 // active_node indicates mouseover node
 static Inkscape::NodePath::Node *active_node = NULL;
@@ -1214,6 +1219,63 @@ sp_node_selected_add_node(void)
     sp_nodepath_update_statusbar(nodepath);
 }
 
+/**
+ * Select segment nearest to point
+ */
+void
+sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p)
+{
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
+    if (!nodepath) {
+        return;
+    }
+
+    Path::cut_position position = get_nearest_position_on_Path(item, p);
+
+    //find segment to segment
+    Inkscape::NodePath::Node *e = sp_nodepath_get_node_by_index(position.piece);
+   
+    sp_nodepath_node_select(e, FALSE, FALSE);
+    sp_nodepath_node_select(e->p.other, TRUE, FALSE);
+
+    /* fixme: adjust ? */
+    sp_nodepath_ensure_ctrls(nodepath);
+
+    update_repr(nodepath);
+
+    sp_nodepath_update_statusbar(nodepath);
+}
+
+/**
+ * Add a node nearest to point
+ */
+void
+sp_nodepath_add_node_near_point(SPItem * item, NR::Point p)
+{
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
+    if (!nodepath) {
+        return;
+    }
+
+    Path::cut_position position = get_nearest_position_on_Path(item, p);
+
+    //find segment to split
+    Inkscape::NodePath::Node *e = sp_nodepath_get_node_by_index(position.piece);
+   
+    //don't know why but t seems to flip for lines
+    if (sp_node_path_code_from_side(e, sp_node_get_side(e, -1)) == NR_LINETO) {
+        position.t = 1.0 - position.t;
+    }
+    Inkscape::NodePath::Node *n = sp_nodepath_line_add_node(e, position.t);
+    sp_nodepath_node_select(n, FALSE, FALSE);
+
+    /* fixme: adjust ? */
+    sp_nodepath_ensure_ctrls(nodepath);
+
+    update_repr(nodepath);
+
+    sp_nodepath_update_statusbar(nodepath);
+}
 
 /**
  * Call sp_nodepath_break() for all selected segments.
@@ -3396,6 +3458,49 @@ static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Ink
     g_assert_not_reached();
 
     return NR_END;
+}
+
+/**
+ * Call sp_nodepath_line_add_node() at t on the segment denoted by piece
+ */
+static 
+Inkscape::NodePath::Node * 
+sp_nodepath_get_node_by_index(int index)
+{
+    Inkscape::NodePath::Node *e = NULL;
+    
+    Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
+    if (!nodepath) {
+        return e;
+    }
+
+    //find segment
+    for (GList *l = nodepath->subpaths; l ; l=l->next) {
+        
+        Inkscape::NodePath::SubPath *sp = (Inkscape::NodePath::SubPath *)l->data;
+        int n = g_list_length(sp->nodes);
+        if (sp->closed) {
+            n++;
+        } 
+        
+        //if the piece belongs to this subpath grab it
+        //otherwise move onto the next subpath
+        if (index < n) {
+            e = sp->first;
+            for (int i = 0; i < index; ++i) {
+                e = e->n.other;
+            }
+            break;
+        } else {
+            if (sp->closed) {
+                index -= (n+1);
+            } else {
+                index -= n;
+            }
+        }
+    }
+    
+    return e;
 }
 
 /**
