@@ -57,6 +57,8 @@ io/streamtest.cpp
 # For the moment, DO NOT remove these from cvs
 # until those files compile everywhere
 ###############################################
+dialogs/whiteboard-connect-dialog.cpp
+dialogs/whiteboard-common-dialog.cpp
 dialogs/whiteboard-sharewithchat-dialog.cpp
 dialogs/whiteboard-sharewithuser-dialog.cpp
 jabber_whiteboard
