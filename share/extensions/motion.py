@@ -29,27 +29,45 @@ class Motion(inkex.Effect):
 						action="store", type="float", 
 						dest="magnitude", default=100.0,
 						help="magnitude of the motion vector")	
-		self.OptionParser.add_option("-e", "--ends",
-						action="store", type="inkbool", 
-						dest="ends", default=True,
-						help="connect segment end points with motion vector")	
-		self.OptionParser.add_option("-c", "--splits",
-						action="store", type="inkbool", 
-						dest="splits", default=True,
-						help="connect split points with motion vector")	
-		self.OptionParser.add_option("-s", "--split",
-						action="store", type="inkbool", 
-						dest="split", default=True,
-						help="split curves where slope matches vectors")	
+
+	def makeface(self,last,(cmd, params)):
+		a = []
+		a.append(['M',last[:]])
+		a.append([cmd, params[:]])
+
+		#translate path segment along vector
+		np = params[:]
+		defs = simplepath.pathdefs[cmd]
+		for i in range(defs[1]):
+			if defs[3][i] == 'x':
+				np[i] += self.vx
+			elif defs[3][i] == 'y':
+				np[i] += self.vy
+
+		a.append(['L',[np[-2],np[-1]]])
+		
+		#reverse direction of path segment
+		np[-2:] = last[0]+self.vx,last[1]+self.vy
+		if cmd == 'C':
+			c1 = np[:2], np[2:4] = np[2:4], np[:2]
+		a.append([cmd,np[:]])
+			
+		a.append(['Z',[]])
+		face = self.document.createElement('svg:path')
+		self.facegroup.appendChild(face)
+		face.setAttribute('d', simplepath.formatPath(a))
+		
+		
 	def effect(self):
-		vx = math.cos(math.radians(self.options.angle))*self.options.magnitude
-		vy = math.sin(math.radians(self.options.angle))*self.options.magnitude
+		self.vx = math.cos(math.radians(self.options.angle))*self.options.magnitude
+		self.vy = math.sin(math.radians(self.options.angle))*self.options.magnitude
 		for id, node in self.selected.iteritems():
 			if node.tagName == 'path':
 				group = self.document.createElement('svg:g')
+				self.facegroup = self.document.createElement('svg:g')
 				node.parentNode.appendChild(group)
-				copy = self.document.createElement('svg:path')
-				lines = self.document.createElement('svg:path')
+				group.appendChild(self.facegroup)
+				group.appendChild(node)
 				
 				try:
 					t = node.attributes.getNamedItem('transform').value
@@ -59,36 +77,33 @@ class Motion(inkex.Effect):
 					pass
 
 				s = node.attributes.getNamedItem('style').value
-				copy.setAttribute('style', s)
-				lines.setAttribute('style', s)
+				self.facegroup.setAttribute('style', s)
 
-				a = []
-				l = []
 				p = simplepath.parsePath(node.attributes.getNamedItem('d').value)
 				for cmd,params in p:
+					tees = []
 					if cmd == 'C':
 						bez = (last,params[:2],params[2:4],params[-2:])
-						tees = [t for t in bezmisc.beziertatslope(bez,(vy,vx)) if 0<t<1]
+						tees = [t for t in bezmisc.beziertatslope(bez,(self.vy,self.vx)) if 0<t<1]
 						tees.sort()
-						if self.options.splits:
-							for t in tees:
-								tx,ty = bezmisc.bezierpointatt(bez,t)
-								l.append(['M',[tx,ty]])
-								l.append(['L',[tx+vx,ty+vy]])					
-						if len(tees) == 0 or not self.options.split:
-							a.append([cmd,params])
-						elif len(tees) == 1:
+
+					segments = []
+					if len(tees) == 0 and cmd in ['L','C']:
+							segments.append([cmd,params[:]])
+					elif len(tees) == 1:
 							one,two = bezmisc.beziersplitatt(bez,tees[0])
-							a.append([cmd,list(one[1]+one[2]+one[3])])
-							a.append([cmd,list(two[1]+two[2]+two[3])])
-						elif len(tees) == 2:
+							segments.append([cmd,list(one[1]+one[2]+one[3])])
+							segments.append([cmd,list(two[1]+two[2]+two[3])])
+					elif len(tees) == 2:
 							one,two = bezmisc.beziersplitatt(bez,tees[0])
 							two,three = bezmisc.beziersplitatt(two,tees[1])
-							a.append([cmd,list(one[1]+one[2]+one[3])])
-							a.append([cmd,list(two[1]+two[2]+two[3])])
-							a.append([cmd,list(three[1]+three[2]+three[3])])
-					else:
-						a.append([cmd,params])	
+							segments.append([cmd,list(one[1]+one[2]+one[3])])
+							segments.append([cmd,list(two[1]+two[2]+two[3])])
+							segments.append([cmd,list(three[1]+three[2]+three[3])])
+
+					for seg in segments:
+						self.makeface(last,seg)
+						last = seg[1][-2:]
 					
 					if cmd == 'M':
 						subPathStart = params[-2:]
@@ -96,17 +111,7 @@ class Motion(inkex.Effect):
 						last = subPathStart
 					else:
 						last = params[-2:]
-						if self.options.ends:
-							l.append(['M',params[-2:]])
-							l.append(['L',[params[-2]+vx,params[-1]+vy]])
 
-				node.setAttribute('d', simplepath.formatPath(a))
-				simplepath.translatePath(a, vx, vy)
-				copy.setAttribute('d', simplepath.formatPath(a))
-				lines.setAttribute('d', simplepath.formatPath(l))
-				group.appendChild(copy)
-				group.appendChild(lines)
-				group.appendChild(node)
 
 				
 
