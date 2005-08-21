@@ -133,6 +133,12 @@ SPDocument *sp_document_unref (SPDocument *doc);
 
 gdouble sp_document_width (SPDocument * document);
 gdouble sp_document_height (SPDocument * document);
+
+struct SPUnit;
+
+void sp_document_set_width (SPDocument * document, gdouble width, const SPUnit *unit);
+void sp_document_set_height (SPDocument * document, gdouble height, const SPUnit *unit);
+
 #define SP_DOCUMENT_URI(d) (d->uri)
 #define SP_DOCUMENT_NAME(d) (d->name)
 #define SP_DOCUMENT_BASE(d) (d->base)
@@ -205,7 +211,7 @@ SPItem * sp_document_item_at_point (SPDocument *document, unsigned int key, NR::
 SPItem * sp_document_group_at_point (SPDocument *document, unsigned int key,  NR::Point const p);
 
 void sp_document_set_uri (SPDocument *document, const gchar *uri);
-void sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height);
+void sp_document_resized_signal_emit (SPDocument *doc, gdouble width, gdouble height);
 
 unsigned int vacuum_document (SPDocument *document);
 

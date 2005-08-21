@@ -43,6 +43,7 @@
 #include "xml/repr.h"
 #include "xml/event-fns.h"
 #include "helper/sp-marshal.h"
+#include "helper/units.h"
 #include <glibmm/i18n.h>
 #include "inkscape-private.h"
 #include "inkscape_version.h"
@@ -424,6 +425,51 @@ gdouble sp_document_width(SPDocument *document)
     return SP_ROOT(document->root)->width.computed;
 }
 
+void
+sp_document_set_width (SPDocument *document, gdouble width, const SPUnit *unit)
+{
+    SPRoot *root = SP_ROOT(document->root);
+
+    if (root->width.unit == SP_SVG_UNIT_PERCENT && root->viewBox_set) { // set to viewBox=
+        root->viewBox.x1 = root->viewBox.x0 + sp_units_get_pixels (width, *unit);
+    } else { // set to width=
+        root->width.computed = sp_units_get_pixels (width, *unit);
+        /* SVG does not support meters as a unit, so we must translate meters to
+         * cm when writing */
+        if (!strcmp(unit->abbr, "m")) {
+            root->width.value = 100*width;
+            root->width.unit = SP_SVG_UNIT_CM;
+        } else {
+            root->width.value = width;
+            root->width.unit = (SPSVGLengthUnit) sp_unit_get_svg_unit(unit);
+        }
+    }
+
+    SP_OBJECT (root)->updateRepr();
+}
+
+void sp_document_set_height (SPDocument * document, gdouble height, const SPUnit *unit)
+{
+    SPRoot *root = SP_ROOT(document->root);
+
+    if (root->height.unit == SP_SVG_UNIT_PERCENT && root->viewBox_set) { // set to viewBox=
+        root->viewBox.y1 = root->viewBox.y0 + sp_units_get_pixels (height, *unit);
+    } else { // set to height=
+        root->height.computed = sp_units_get_pixels (height, *unit);
+        /* SVG does not support meters as a unit, so we must translate meters to
+         * cm when writing */
+        if (!strcmp(unit->abbr, "m")) {
+            root->height.value = 100*height;
+            root->height.unit = SP_SVG_UNIT_CM;
+        } else {
+            root->height.value = height;
+            root->height.unit = (SPSVGLengthUnit) sp_unit_get_svg_unit(unit);
+        }
+    }
+
+    SP_OBJECT (root)->updateRepr();
+}
+
 gdouble sp_document_height(SPDocument *document)
 {
     g_return_val_if_fail(document != NULL, 0.0);
@@ -484,7 +530,7 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 }
 
 void
-sp_document_set_size_px(SPDocument *doc, gdouble width, gdouble height)
+sp_document_resized_signal_emit(SPDocument *doc, gdouble width, gdouble height)
 {
     g_return_if_fail(doc != NULL);
 
