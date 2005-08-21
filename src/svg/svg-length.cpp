@@ -382,3 +382,31 @@ sp_svg_read_percentage (const char * str, double def)
 	return v;
 }
 
+const gchar *
+sp_svg_length_get_css_units (SPSVGLengthUnit unit)
+{
+	switch (unit) {
+	case SP_SVG_UNIT_NONE: return "";
+	case SP_SVG_UNIT_PX: return "";
+	case SP_SVG_UNIT_PT: return "pt";
+	case SP_SVG_UNIT_PC: return "pc";
+	case SP_SVG_UNIT_MM: return "mm";
+	case SP_SVG_UNIT_CM: return "cm";
+	case SP_SVG_UNIT_IN: return "in";
+	case SP_SVG_UNIT_EM: return "em";
+	case SP_SVG_UNIT_EX: return "ex";
+	case SP_SVG_UNIT_PERCENT: return "%";
+	}
+	return "";
+}
+
+const gchar *
+sp_svg_length_write_with_units (SPSVGLength *length)
+{
+	Inkscape::SVGOStringStream os;
+	if (length->unit == SP_SVG_UNIT_PERCENT)
+		os << 100*length->value << sp_svg_length_get_css_units(length->unit);
+	else 
+		os << length->value << sp_svg_length_get_css_units(length->unit);
+	return g_strdup(os.str().c_str());
+}
