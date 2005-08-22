@@ -842,6 +842,7 @@ sp_display_dialog (void)
         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_DISPLAY), title);
 
         dlg = sp_window_new (title, TRUE);
+        gtk_window_set_resizable ((GtkWindow *) dlg, FALSE);
         if (x == -1000 || y == -1000) {
             x = prefs_get_int_attribute (prefs_path, "x", 0);
             y = prefs_get_int_attribute (prefs_path, "y", 0);
