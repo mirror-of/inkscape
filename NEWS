@@ -1,6 +1,6 @@
                                   ReleaseNotes
 
-                                 Inkscape 0.42.1
+                                 Inkscape 0.42.2
 
 In brief
 
@@ -892,6 +892,9 @@ SVG/CSS compliance
        automatically test SVG rendering by Inkscape and other renderers.
 
 Important bugfixes
+
+  In 0.42.2:
+     * Fixed bug when opening filenames with international characters
 
   In 0.42.1:
      * Stroke width spin button no longer gets "stuck"
