@@ -2,6 +2,13 @@
 
     * src/io/sys.cpp: backported fopen encoding fix from HEAD
 
+    * Makefile.mingw.common, configure.ac,
+	  packaging/win32/inkscape.nsi, src/inkscape_version.h.mingw:
+
+      bump version to 0.42.2
+
+	* src/make.dep, src/make.files, src/make.ofiles: regenerated
+
 2005-08-14  MenTaLguY  <mental@rydia.net>
 
 	* packaging/macosx/Resources/script, packaging/macosx/ScriptExec/main.c:
