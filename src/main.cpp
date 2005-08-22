@@ -29,17 +29,20 @@
  * in the header, the following documents are additionally available to the 
  * interested reader.
  * 
- * \section groups Grouped documentation
- * Some of inkscape's classes and files can be grouped into the
- * following categories:
+ * \section groups Main directory documentation
+ * Inkscape's classes and files in the main directory can be grouped into 
+ * the following categories:
  * 
- * - \subpage UI - inkscape's user interface
- * - \subpage XmlTree - XML backbone of the document
  * - \subpage ObjectTree - inkscape's SVG canvas
  * - \subpage Tools - the tools UI
+ * - \subpage UI - inkscape's user interface
+ * - \subpage XmlTree - XML backbone of the document
  * - \subpage Rendering - rendering and buffering
  * - \subpage OtherServices - what doesn't fit in the above
  *
+ * See also the <a href="dirs.html">other directories</a> until doxygen
+ * allows setting links to those doc files.
+ * 
  * \section extlinks Links to external documentation
  *
  * \subsection liblinks External documentation on libraries used in inkscape
@@ -71,41 +74,12 @@
  * <a href="http://www.libpng.org/pub/png/">PNG</a>
  * <a href="http://www.w3.org/TR/xslt">XSLT</a>
  * <a href="http://partners.adobe.com/public/developer/ps/index_specs.html">PS</a>
+ * <a href="http://developer.gnome.org/projects/gup/hig/">Gnome-HIG</a>
  */
 
-/** \page UI User Interface Classes and Files
- *
- * SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h \ref desktop-style.h]
- * SPDesktopWidget [\ref desktop-widget.cpp, \ref desktop-widget.h] 
- * SPDropperContext [\ref dropper-context.cpp, \ref dropper-context.h] 
- * SPMessageContext [\ref message-context.h] 
- * SPMessageStack [\ref message-stack.h, message.h] 
- * 
- * SPDrawAnchor [\ref draw-anchor.cpp, \ref draw-anchor.h] 
- * SPKnot [\ref knot.cpp, \ref knot.h, \ref knot-enums.h]
- * SPKnotHolder [\ref knotholder.cpp, \ref knotholder.h, \ref knot-holder-entity.h]
- *
- * [\ref help.cpp] [\ref inkscape.cpp] [\ref inkscape-stock.cpp]
- * [\ref interface.cpp, \ref memeq.h] [\ref main.cpp] 
- * [\ref menus-skeleton.h, \ref preferences-skeleton.h]
- * [\ref object-ui.cpp] [\ref select-toolbar.cpp] [\ref shortcuts.cpp]
- * [\ref sp-cursor.cpp]
- *
- * [\ref layer-fns.cpp, \ref selection-describer.h]
- *
- * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
- *
- * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h, \ref satisfied-guide-cns.cpp, \ref sp-guide-attachment.h, \ref sp-guide-constraint.h]
- */
-/** \page XmlTree XML Tree Classes and Files
- *
- * SPAttributeEnum [\ref attributes.cpp, \ref attributes.h] 
- */
 /** \page ObjectTree Object Tree Classes and Files
- * SPDocument [\ref document.cpp, \ref document.h] 
- * \section ObjectTree1 Class Hierarchy With Files
  * Inkscape::ObjectHierarchy [\ref object-hierarchy.cpp, \ref object-hierarchy.h]
- * - SPObject [\ref sp-object.cpp, \ref sp-object.h, \ref object-edit.cpp]
+ * - SPObject [\ref sp-object.cpp, \ref sp-object.h, \ref object-edit.cpp, \ref sp-object-repr.cpp]
  *   - SPDefs [\ref sp-defs.cpp, \ref sp-defs.h]
  *   - SPFlowline [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
  *   - SPFlowregionbreak [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
@@ -130,13 +104,13 @@
  *         - SPEllipse
  *       - SPLine [\ref sp-line.cpp, \ref sp-line.h]
  *       - SPOffset [\ref sp-offset.cpp, \ref sp-offset.h]
- *       - SPPath [\ref sp-path.cpp, \ref sp-path.h]
+ *       - SPPath [\ref sp-path.cpp, \ref sp-path.h, \ref path-chemistry.cpp, \ref nodepath.cpp, \ref nodepath.h, \ref splivarot.cpp]
  *       - SPPolygon [\ref sp-polygon.cpp, \ref sp-polygon.h]
  *         - SPStar [\ref sp-star.cpp, \ref sp-star.h]
  *       - SPPolyLine [\ref sp-polyline.cpp, \ref sp-polyline.h]
  *       - SPRect [\ref sp-rect.cpp, \ref sp-rect.h]
  *       - SPSpiral [\ref sp-spiral.cpp, \ref sp-spiral.h]
- *     - SPText [\ref sp-text.cpp, \ref sp-text.h]
+ *     - SPText [\ref sp-text.cpp, \ref sp-text.h, \ref text-chemistry.cpp, \ref text-editing.cpp]
  *     - SPTextPath [\ref sp-tspan.cpp, \ref sp-tspan.h]
  *     - SPTSpan [\ref sp-tspan.cpp, \ref sp-tspan.h]
  *     - SPUse [\ref sp-use.cpp, \ref sp-use.h]
@@ -155,8 +129,6 @@
  *   - SPString [\ref sp-string.cpp, \ref sp-string.h]
  *   - SPStyleElem [\ref sp-style-elem.cpp, \ref sp-style-elem.h]
  *
- * \section Style Related
- * Media [\ref media.cpp, \ref media.h]
  */
 /** \page Tools Tools Related Classes and Files
  * 
@@ -178,12 +150,57 @@
  * - SPSpiralContext [\ref spiral-context.cpp, \ref spiral-context.h]
  * - SPStarContext [\ref star-context.cpp, \ref star-context.h]
  *   
- * \section Other Tool Contexts
+ * SPNodeContext [\ref node-context.cpp, \ref node-context.h]
  * 
- * SPNodeContext [\ref node-context.cpp, \ref node-context.h, \ref path-chemistry.cpp]
- * Inkscape::NodePath [\ref nodepath.cpp, \ref nodepath.h]
- * [\ref splivarot.cpp]
+ * SPZoomContext [\ref zoom-context.cpp, \ref zoom-context.h]
+ * 
  * SPDynaDrawContext [\ref dyna-draw-context.cpp, \ref dyna-draw-context.h] 
+ * 
+ * SPDropperContext [\ref dropper-context.cpp, \ref dropper-context.h] 
+ */
+/** \page UI User Interface Classes and Files
+ *
+ * - SPView [\ref ui/view/view.cpp, \ref ui/view/view.h]
+ *   - Inkscape::UI::View::Edit [\ref ui/view/edit.cpp, \ref ui/view/edit.h]
+ *   - SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h \ref desktop-style.h]
+ *   - SPSVGView [\ref svg-view.cpp, svg-view.h]
+ *
+ * SPDesktopWidget [\ref desktop-widget.h] SPSVGViewWidget [\ref svg-view.cpp]
+ * SPDocument [\ref document.cpp, \ref document.h] 
+ * 
+ * SPDrawAnchor [\ref draw-anchor.cpp, \ref draw-anchor.h] 
+ * SPKnot [\ref knot.cpp, \ref knot.h, \ref knot-enums.h]
+ * SPKnotHolder [\ref knotholder.cpp, \ref knotholder.h, \ref knot-holder-entity.h]
+ *
+ * [\ref layer-fns.cpp, \ref selection-describer.h]
+ * MessageContext [\ref message-context.h] 
+ * MessageStack [\ref message-stack.h, message.h] 
+ *
+ * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
+ *
+ * SPGuide [\ref sp-guide.cpp, \ref sp-guide.h, \ref satisfied-guide-cns.cpp, \ref sp-guide-attachment.h, \ref sp-guide-constraint.h]
+ * 
+ * [\ref help.cpp] [\ref inkscape.cpp] [\ref inkscape-stock.cpp]
+ * [\ref interface.cpp, \ref memeq.h] [\ref main.cpp, \ref winmain.cpp] 
+ * [\ref menus-skeleton.h, \ref preferences-skeleton.h]
+ * [\ref object-ui.cpp] [\ref select-toolbar.cpp] [\ref shortcuts.cpp]
+ * [\ref sp-cursor.cpp] [\ref text-edit.cpp] [\ref toolbox.cpp, \ref ui/widget/toolbox.cpp] 
+ * Inkscape::Verb [\ref verbs.h]
+ *
+ */
+/** \page XmlTree CSS/XML Tree Classes and Files
+ *
+ * SPStyle [\ref style.cpp, \ref style.h]
+ * Media [\ref media.cpp, \ref media.h]
+ * [\ref attributes.cpp, \ref attributes.h] 
+ *
+ * - Inkscape::UriReference [\ref uri-references.cpp, \ref uri-references.h]
+ *   - SPClipPathReference [\ref sp-clippath.h]
+ *   - SPGradientReference [\ref sp-gradient-reference.h]
+ *   - SPMarkerReference [\ref sp-marker.h]
+ *   - SPMaskReference [\ref sp-mask.h]
+ *   - SPUseReference [\ref sp-use-reference.h]
+ *     - SPUsePath
  */
 /** \page Rendering Rendering Related Classes and Files
  *
@@ -195,16 +212,23 @@
  * 
  * Inkscape::GC
  *
- * SPMetric [\ref sp-metrics.cpp, \ref sp-metrics.h]
+ * [\ref sp-metrics.cpp, \ref sp-metrics.h]
  * 
- * [\ref dir-util.cpp] [\ref file.cpp] [\ref prefs-utils.cpp] [\ref print.cpp]
+ * [\ref prefs-utils.cpp] [\ref print.cpp]
+ *
+ * - Inkscape::GzipBuffer [\ref streams-gzip.h]
+ * - Inkscape::JarBuffer [\ref streams-jar.h]
+ * - Inkscape::ZlibBuffer [\ref streams-zlib.h]
+ * - Inkscape::URIHandle [\ref streams-handles.h]
+ *   - Inkscape::FileHandle
+ * [\ref dir-util.cpp] [\ref file.cpp] 
+ * Inkscape::URI [\ref uri.h, \ref extract-uri.cpp, uri-references.cpp]
+ * Inkscape::BadURIException [\ref bad-uri-exception.h] 
  * 
- * BadURIException [\ref bad-uri-exception.h] [\ref extract-uri.cpp]
- * 
- * CompositeUndoStackObserver [\ref composite-undo-stack-observer.cpp, \ref composite-undo-stack-observer.h]
+ * Inkscape::XML::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
  * [\ref document-undo.cpp]
  * 
- * [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] 
+ * {\ref dialogs/} [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] [\ref unit-constants.h]
  */
 
 #ifdef HAVE_CONFIG_H
