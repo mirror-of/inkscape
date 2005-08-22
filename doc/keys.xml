@@ -525,16 +525,6 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Keyboard handle rotate (1 node selected)</title>
-<keys><key>[</key> <key>]</key> <action>rotate both handles by the angle step</action></keys>
-<note>The default angle step is 15 degrees. ] rotates clockwise, [ rotates counterclockwise. May apply to more than one node.</note>
-<keys><key><left/><ctrl/>[</key> <key><left/><ctrl/>]</key> <action>rotate left handle by the angle step</action></keys>
-<keys><key><right/><ctrl/>[</key> <key><right/><ctrl/>]</key> <action>rotate right handle by the angle step</action></keys>
-<keys><key><left/><alt/>[</key> <key><left/><alt/>]</key> <action>rotate left handle by 1 pixel</action></keys>
-<keys><key><right/><alt/>[</key> <key><right/><alt/>]</key> <action>rotate right handle by 1 pixel</action></keys>
-</group>
-
-<group>
 <title>Keyboard handle scale (1 node selected)</title>
 <keys><key>&lt;</key> <key>&gt;</key> <action>contract/expand both handles by scale step</action></keys> 
 <note>The default scale step is 2 px (SVG pixel units, not screen pixels). May apply to more than one node.</note>
@@ -561,6 +551,17 @@ can leave your ideas and requests there.</p>
 <note>The actual size increment for pixel scaling depends on zoom level. Zoom in for finer scaling.</note>
 <note>Instead of the &lt; and &gt; keys, you can use the , (comma) and . (period) keys respectively.</note>
 </group>
+
+<group>
+<title>Keyboard handle rotate (1 node selected)</title>
+<keys><key>[</key> <key>]</key> <action>rotate both handles by the angle step</action></keys>
+<note>The default angle step is 15 degrees. ] rotates clockwise, [ rotates counterclockwise. May apply to more than one node.</note>
+<keys><key><left/><ctrl/>[</key> <key><left/><ctrl/>]</key> <action>rotate left handle by the angle step</action></keys>
+<keys><key><right/><ctrl/>[</key> <key><right/><ctrl/>]</key> <action>rotate right handle by the angle step</action></keys>
+<keys><key><left/><alt/>[</key> <key><left/><alt/>]</key> <action>rotate left handle by 1 pixel</action></keys>
+<keys><key><right/><alt/>[</key> <key><right/><alt/>]</key> <action>rotate right handle by 1 pixel</action></keys>
+</group>
+
 
 <group>
 <title>Keyboard scale (&gt;1 nodes selected)</title>
@@ -617,7 +618,10 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Delete, create, duplicate</title>
 <keys><key><misc-wide f="Backspace"/></key><key><misc f="Del"/></key> <action>delete selected node(s)</action></keys>
-<mouse><key><ctrl/><alt/><left-click/></key> <action>delete node</action></mouse>
+<mouse><key><ctrl/><alt/><left-click/></key> <action>create/delete node</action></mouse>
+<note>Ctrl+Alt+click on a node deletes it; Ctrl+Alt+click on the path between nodes creates a new node in the click point.</note>
+<mouse><key><left-click/><left-click/></key> <action>create node</action></mouse>
+<note>Double clicking on the path between nodes creates a node in the click point.</note>
 <keys><key><misc f="Ins"/></key> <action>insert new node(s)</action></keys>
 <note>This adds new node(s) in the middle(s) of selected segment(s), so it requires that more than two adjacent nodes be selected.</note>
 <keys><key><shift/>D</key> <action>duplicate selected node(s)</action></keys>
@@ -639,16 +643,23 @@ can leave your ideas and requests there.</p>
 -->
 
 <group>
-<title>Mouse select</title>
-<mouse><key><left-click/></key> <action>click an object to select</action></mouse>
+<title>Mouse select: objects</title>
+<mouse><key><left-click/></key> <action>click a non-selected object to select</action></mouse>
 <mouse><key><alt/><left-click/></key> <action>select under</action></mouse>
 <mouse><key><shift/><left-click/></key> <action>toggle selection</action></mouse>
-<note>The nodes or handles of the single selected object become editable.</note>
+<note>These work the same as in Selector. The nodes or handles of the single selected object become editable.</note>
+</group>
+
+<group>
+<title>Mouse select: nodes</title>
 <mouse><key><left-click/></key> <action>select a node</action></mouse> 
 <note>Clicking on a node selects it.</note>
-<mouse><key><shift/><left-click/></key> <action>toggle selection of a node</action></mouse>
+<mouse><key><left-click/></key> <action>select two adjacent nodes</action></mouse> 
+<note>Clicking on a selected path between the nodes selects the two nodes closest to the click point.</note>
+<mouse><key><shift/><left-click/></key> <action>toggle selection</action></mouse>
+<note>This adds/removes a node (if clicked on node) or two nodes (if clicked on path) to/from the node selection.</note>
 <mouse><key><left-click/></key> <action>deselect</action></mouse> 
-<note>Clicking in an empty space deselects all selected nodes.</note>
+<note>Clicking in an empty space deselects all selected nodes. Next click will deselect the object.</note>
 </group>
 
 <group>

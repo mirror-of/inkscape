@@ -22,9 +22,9 @@ It is generated automatically from doc/keys.xml by doc/keys-html.xsl.
 <style type="text/css">
 .key {font-weight: bold}
 .action {}
-.note {padding-left: 4em; font-size: 70%}
-h1 {}
-h4 {font-weight: bold; font-style: italic}
+.note {padding-left: 50px; font-size: 70%}
+h1 {margin-top: 0.5em; padding-left: 50px; padding-bottom: 0em; margin-bottom: 0em; letter-spacing: -0.02em}
+h4 {font-weight: bold; font-style: italic; margin-top: 1em; padding-left: 50px; padding-bottom: 0em; margin-bottom: 0em}
 </style>
 </head>
 <body bgcolor="#ffffff">
@@ -69,17 +69,15 @@ h4 {font-weight: bold; font-style: italic}
 <xsl:template match="k:keys | k:mouse">
 <tr bgcolor="{ancestor::k:section/@color}">
 <td align="right">
-<span class="key">
 <xsl:choose>
 <xsl:when test="count(k:key) = 2">
-<xsl:apply-templates select="k:key[1]"/>,
-<xsl:apply-templates select="k:key[2]"/>
+<span class="key"><xsl:apply-templates select="k:key[1]"/></span>,
+<span class="key"><xsl:apply-templates select="k:key[2]"/></span>
 </xsl:when>
 <xsl:otherwise>
-<xsl:apply-templates select="k:key[1]"/>
+<span class="key"><xsl:apply-templates select="k:key[1]"/></span>
 </xsl:otherwise>
 </xsl:choose>
-</span>
 </td>
 <td>
 <span class="action">
@@ -131,6 +129,14 @@ h4 {font-weight: bold; font-style: italic}
 
 <xsl:template match="k:down">
 <xsl:text>Down arrow</xsl:text>
+</xsl:template>
+
+<xsl:template match="k:left-arrow">
+<xsl:text>Left arrow</xsl:text>
+</xsl:template>
+
+<xsl:template match="k:right-arrow">
+<xsl:text>Right arrow</xsl:text>
 </xsl:template>
 
 <xsl:template match="k:wheel">
