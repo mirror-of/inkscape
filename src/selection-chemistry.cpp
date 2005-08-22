@@ -2145,9 +2145,8 @@ sp_selection_create_bitmap_copy ()
         }
     }
 
-
     // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
-    NR::Matrix eek = sp_item_i2doc_affine (SP_ITEM(parent_object)) * NR::Matrix (NR::scale(1, -1)) * NR::translate(0, sp_document_height(document));
+    NR::Matrix eek = sp_item_i2d_affine (SP_ITEM(parent_object));
     NR::Matrix t = NR::scale (1/res, -1/res) * NR::translate (bbox.x0, bbox.y1) * eek.inverse(); 
 
     // Do the export
