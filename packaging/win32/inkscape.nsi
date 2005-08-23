@@ -85,8 +85,8 @@ LangString lng_Caption   ${LANG_POLISH}  "${PRODUCT_NAME} -- Edytor Grafiki Wekt
 
 ; installation options
 LangString lng_InstOpt   ${LANG_ENGLISH} "Installation options"
-LangString lng_InstOpt   ${LANG_CZECH} "Volby instalace
-LangString lng_InstOpt   ${LANG_FRENCH} "Options d'installation
+LangString lng_InstOpt   ${LANG_CZECH} "Volby instalace"
+LangString lng_InstOpt   ${LANG_FRENCH} "Options d'installation"
 LangString lng_InstOpt   ${LANG_GERMAN} "Installations Optionen"
 LangString lng_InstOpt   ${LANG_ITALIAN} "Preferenze per l'installazione"
 LangString lng_InstOpt   ${LANG_POLISH} "Opcje instalacji"
@@ -94,14 +94,14 @@ LangString lng_InstOpt   ${LANG_POLISH} "Opcje instalacji"
 ; installation options subtitle
 LangString lng_InstOpt1  ${LANG_ENGLISH} "Please make your choices for additional options"
 LangString lng_InstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících možností"
-LangString lng_InstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles
+LangString lng_InstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles"
 LangString lng_InstOpt1  ${LANG_GERMAN} "Bitte wählen Sie die optionalen Installtionsparameter"
 LangString lng_InstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per l'installazione"
 LangString lng_InstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje instalacji"
 
 ; installation type
 LangString lng_InstType  ${LANG_ENGLISH} "Install this application for:"
-LangString lng_InstType  ${LANG_CZECH} "Instalovat aplikaci pro:
+LangString lng_InstType  ${LANG_CZECH} "Instalovat aplikaci pro:"
 LangString lng_InstType  ${LANG_FRENCH} "Installer cette application pour :"
 LangString lng_InstType  ${LANG_GERMAN}  "Installiert diese Anwendung für:"
 LangString lng_InstType  ${LANG_ITALIAN} "Installare questa applicazione per:"
@@ -110,7 +110,7 @@ LangString lng_InstType  ${LANG_POLISH} "Zainstaluj aplikacjê dla:"
 ; multi user installation
 LangString lng_AllUsers  ${LANG_ENGLISH} "Anyone who uses this computer (all users)"
 LangString lng_AllUsers  ${LANG_CZECH} "Kohokoliv kdo používá tento poèítaè (Všichni uživatelé)"
-LangString lng_AllUsers  ${LANG_FRENCH} "Toute personne utilisant cet ordinateur (tous les utilisateurs)
+LangString lng_AllUsers  ${LANG_FRENCH} "Toute personne utilisant cet ordinateur (tous les utilisateurs)"
 LangString lng_AllUSers  ${LANG_GERMAN}  "Alle Benutzer dieses Computers (all users)"
 LangString lng_AllUSers  ${LANG_ITALIAN}  "Chiunque usi il computer (tutti gli utenti)"
 LangString lng_AllUsers  ${LANG_POLISH} "Wszystkich, którzy korzystaj¹ z tego komputera (wszyscy u¿ytkownicy)"
@@ -118,15 +118,15 @@ LangString lng_AllUsers  ${LANG_POLISH} "Wszystkich, którzy korzystaj¹ z tego ko
 ; single user installation
 LangString lng_CurUser  ${LANG_ENGLISH} "Only for me (current user)"
 LangString lng_CurUser  ${LANG_CZECH} "Pouze pro mne (aktuální uživatel)"
-LangString lng_CurUser  ${LANG_FRENCH} "Moi seulement (utilisateur courant)
+LangString lng_CurUser  ${LANG_FRENCH} "Moi seulement (utilisateur courant)"
 LangString lng_CurUSer  ${LANG_GERMAN}  "Nur für mich (current user)"
 LangString lng_CurUser  ${LANG_ITALIAN} "Solo per me (utente attuale)"
 LangString lng_CurUser  ${LANG_POLISH} "Tylko dla mnie (aktualny u¿ytkownik)"
 
 ; File type association
 LangString lng_UseAs ${LANG_ENGLISH} "Select ${PRODUCT_NAME} as default application for:"
-LangString lng_UseAs ${LANG_CZECH} "Nastavit ${PRODUCT_NAME} jako výchozí aplikaci pro:
-LangString lng_UseAs ${LANG_FRENCH} "Sélectionner ${PRODUCT_NAME} comme application par défaut pour :
+LangString lng_UseAs ${LANG_CZECH} "Nastavit ${PRODUCT_NAME} jako výchozí aplikaci pro:"
+LangString lng_UseAs ${LANG_FRENCH} "Sélectionner ${PRODUCT_NAME} comme application par défaut pour :"
 LangString lng_UseAs    ${LANG_GERMAN}  "Wählen Sie ${PRODUCT_NAME} als Standardanwendung zum:"
 LangString lng_UseAs    ${LANG_ITALIAN} "Impostare ${PRODUCT_NAME} come scelta predefinita per:"
 LangString lng_UseAs ${LANG_POLISH} "Wybierz ${PRODUCT_NAME} jako domyœlny program do:"
@@ -169,8 +169,8 @@ LangString lng_Reader    ${LANG_POLISH}  "otwierania plików SVG"
 
 ; uninstallation options
 LangString lng_UInstOpt   ${LANG_ENGLISH} "Uninstallation Options"
-LangString lng_UInstOpt   ${LANG_CZECH} "Volby pro Odinstalaci
-LangString lng_UInstOpt   ${LANG_FRENCH} "Options de désinstallation
+LangString lng_UInstOpt   ${LANG_CZECH} "Volby pro Odinstalaci"
+LangString lng_UInstOpt   ${LANG_FRENCH} "Options de désinstallation"
 LangString lng_UInstOpt   ${LANG_GERMAN} "Deinstallations Optionen"
 LangString lng_UInstOpt   ${LANG_ITALIAN} "Preferenze per la rimozione"
 LangString lng_UInstOpt   ${LANG_POLISH} "Opcje usuwania programu"
@@ -178,7 +178,7 @@ LangString lng_UInstOpt   ${LANG_POLISH} "Opcje usuwania programu"
 ; uninstallation options subtitle
 LangString lng_UInstOpt1  ${LANG_ENGLISH} "Please make your choices for additional options"
 LangString lng_UInstOpt1  ${LANG_CZECH} "Prosíme vyberte z následujících možností"
-LangString lng_UInstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles
+LangString lng_UInstOpt1  ${LANG_FRENCH} "Veuillez choisir parmi les options additionnelles"
 LangString lng_UInstOpt1  ${LANG_GERMAN} "Bitte wählen Sie die optionalen Deinstalltionsparameter"
 LangString lng_UInstOpt1  ${LANG_ITALIAN} "Completare le opzioni aggiuntive per la rimozione"
 LangString lng_UInstOpt1  ${LANG_POLISH} "Wybierz dodatkowe opcje usuwania programu"
@@ -458,9 +458,9 @@ Section Install
     DetailPrint "creating default editor"
     ClearErrors
 	ReadRegStr $0 HKCR ".svg" ""
-    WriteRegStr HKCR "$0\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
+    WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
     ReadRegStr $0 HKCR ".svgz" ""
-    WriteRegStr HKCR "$0\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
+    WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
 	IfErrors 0 +2
 	  DetailPrint "Uups! Problems creating default editor"
   NoEditor:
@@ -469,9 +469,9 @@ Section Install
     DetailPrint "creating default reader"
     ClearErrors
 	ReadRegStr $0 HKCR ".svg" ""
-	WriteRegStr HKCR "$0\shell\open\command" "" '$INSTDIR\Inkscape.exe "%1"'
+	WriteRegStr HKCR "$0\shell\open\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
     ReadRegStr $0 HKCR ".svgz" ""
-	WriteRegStr HKCR "$0\shell\open\command" "" '$INSTDIR\Inkscape.exe "%1"'
+	WriteRegStr HKCR "$0\shell\open\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
 	IfErrors 0 +2
 	  DetailPrint "Uups! Problems creating default reader"
   NoReader:
@@ -540,7 +540,7 @@ Section Uninstall
     ReadRegStr $1 HKCR "$0\shell\edit\command" ""
 	IfErrors 0 +2  
       DetailPrint "svg editor is $1"
-    StrCmp $1 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $1 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svg editor"
       DeleteRegKey HKCR "$0\shell\edit\command"
     DeleteRegKey /ifempty HKCR "$0\shell\edit"
@@ -555,7 +555,7 @@ Section Uninstall
     ReadRegStr $3 HKCR "$2\shell\edit\command" ""
     IfErrors 0 +2  
       DetailPrint "svgz editor is $1"
-    StrCmp $3 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $3 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svgz editor"
       DeleteRegKey HKCR "$2\shell\edit\command"
     DeleteRegKey /ifempty HKCR "$2\shell\edit"
@@ -569,7 +569,7 @@ Section Uninstall
     ReadRegStr $1 HKCR "$0\shell\open\command" ""
     IfErrors 0 +2  
       DetailPrint "svg viewer is $1"
-    StrCmp $1 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $1 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svg viewer"
       DeleteRegKey HKCR "$0\shell\open\command"
     DeleteRegKey /ifempty HKCR "$0\shell\open"
@@ -583,7 +583,7 @@ Section Uninstall
     ReadRegStr $3 HKCR "$2\shell\open\command" ""
     IfErrors 0 +2  
       DetailPrint "svgz viewer is $1"
-    StrCmp $3 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $3 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svgz viewer"
       DeleteRegKey HKCR "$2\shell\open\command"
     DeleteRegKey /ifempty HKCR "$2\shell\open"
