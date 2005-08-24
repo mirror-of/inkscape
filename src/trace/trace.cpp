@@ -25,7 +25,6 @@
 #include <selection.h>
 #include <sp-image.h>
 #include <sp-path.h>
-#include <svg/stringstream.h>
 #include <display/curve.h>
 #include <xml/repr.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>

@@ -11,8 +11,6 @@
 
 #include "InkscapeInterpreter.h"
 
-#include "svg/stringstream.h"
-
 #include <iostream>
 #include <fstream>
 

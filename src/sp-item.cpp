@@ -66,7 +66,6 @@
 #include "libnr/nr-translate-matrix-ops.h"
 #include "libnr/nr-translate-scale-ops.h"
 #include "libnr/nr-rect.h"
-#include "svg/stringstream.h"
 #include "algorithms/find-last-if.h"
 #include "util/list.h"
 #include "util/reverse-list.h"

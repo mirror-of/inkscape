@@ -28,7 +28,6 @@
 
 #include <glib.h>
 #include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "attributes.h"
 #include "style.h"
 

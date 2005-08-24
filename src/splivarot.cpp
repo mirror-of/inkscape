@@ -21,7 +21,6 @@
 
 #include "xml/repr.h"
 #include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "sp-item-group.h"

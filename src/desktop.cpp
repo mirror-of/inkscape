@@ -97,7 +97,6 @@
 #include "toolbox.h"
 #include "prefs-utils.h"
 #include "color.h"
-#include "svg/stringstream.h"
 #include "message-stack.h"
 #include "message-context.h"
 #include "object-hierarchy.h"

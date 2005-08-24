@@ -36,7 +36,6 @@
 #include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "../svg/svg.h"
-#include "../svg/stringstream.h"
 #include "../widgets/sp-widget.h"
 #include "../inkscape.h"
 #include "../document.h"

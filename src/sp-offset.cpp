@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "attributes.h"
 #include "display/curve.h"
 #include "dialogs/object-attributes.h"
