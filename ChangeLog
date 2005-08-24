@@ -1,3 +1,9 @@
+2005-08-24	David Yip	<yipdw@rose-hulman.edu>
+	* src/jabber_whiteboard/session-manager.{cpp.h},
+	  src/jabber_whiteboard/callbacks.cpp,
+	  src/ui/dialog/whiteboard-connect.{cpp,h}:
+	  added support for XMPP over SSL to Inkboard
+
 2005-08-22  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/dialogs/desktop-properties.cpp, src/dialogs/display-settings.cpp:
