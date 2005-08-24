@@ -14,12 +14,16 @@ svg/clean:
 	rm -f svg/libspsvg.a $(svg_libspsvg_a_OBJECTS)
 
 svg_libspsvg_a_SOURCES =	\
+	svg/css-ostringstream.h	\
+	svg/css-ostringstream.cpp	\
 	svg/gnome-canvas-bpath-util.cpp	\
 	svg/gnome-canvas-bpath-util.h	\
 	svg/itos.cpp	\
 	svg/round.cpp	\
 	svg/stringstream.h	\
 	svg/stringstream.cpp	\
+	svg/strip-trailing-zeros.h	\
+	svg/strip-trailing-zeros.cpp	\
 	svg/svg-affine.cpp	\
 	svg/svg-color.cpp	\
 	svg/svg-length.cpp	\
