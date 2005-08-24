@@ -74,13 +74,15 @@
 #include "help.h"
 #include "document.h"
 #include "desktop.h"
+#include "widgets/desktop-widget.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "text-chemistry.h"
 #include "shortcuts.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
+#include "ui/dialog/dialog-manager.h"
 #include "ui/view/view.h"
 #include "interface.h"
 #include "prefs-utils.h"
@@ -1414,10 +1416,10 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
             sp_desktop_prev_zoom(dt);
             break;
         case SP_VERB_TOGGLE_RULERS:
-            sp_desktop_toggle_rulers(dt);
+            sp_desktop_widget_toggle_rulers(dt->owner, dt->is_fullscreen);
             break;
         case SP_VERB_TOGGLE_SCROLLBARS:
-            sp_desktop_toggle_scrollbars(dt);
+            sp_desktop_widget_toggle_scrollbars(dt->owner, dt->is_fullscreen);
             break;
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, repr);

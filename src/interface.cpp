@@ -40,7 +40,7 @@
 #include "file.h"
 #include "help.h"
 #include "interface.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "desktop.h"
 #include "object-ui.h"
 #include "selection.h"
@@ -48,7 +48,7 @@
 #include "path-chemistry.h"
 #include "zoom-context.h"
 #include "svg-view.h"
-#include "desktop-widget.h"
+#include "widgets/desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 

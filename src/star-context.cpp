@@ -39,7 +39,7 @@
 #include "desktop.h"
 #include "desktop-style.h"
 #include "pixmaps/cursor-star.xpm"
-#include "desktop-widget.h"
+#include "widgets/desktop-widget.h"
 #include "sp-metrics.h"
 #include <glibmm/i18n.h>
 #include "prefs-utils.h"

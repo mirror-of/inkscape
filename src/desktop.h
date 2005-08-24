@@ -17,7 +17,7 @@
  */
 
 #include <sigc++/sigc++.h>
-#include <libnr/nr-rect.h>
+//#include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include "display/display-forward.h"
@@ -26,13 +26,24 @@
 #include "sp-metric.h"
 
 #include "ui/view/view.h"
-#include "ui/dialog/dialog-manager.h"
 
+class NRRect;
 class SPCSSAttr;
-
 struct SPItem;
 
-namespace Inkscape { class ObjectHierarchy; }
+namespace Inkscape { 
+  class Selection; 
+  class ObjectHierarchy;
+  namespace UI { 
+      namespace Dialog { 
+          class DialogManager; 
+      }
+  }
+  namespace Whiteboard {
+      class SessionManager;
+  }
+}
+
 
 enum ColorComponent {
   COMPONENT_R,
@@ -61,15 +72,6 @@ struct StopOnTrue {
 	return false;      
   }
 };
-
-
-namespace Inkscape { 
-  class Selection; 
-
-  namespace Whiteboard {
-    class SessionManager;
-  }
-}
 
 /// Editable view.
 struct SPDesktop : public Inkscape::UI::View::View {
@@ -165,7 +167,7 @@ struct SPDesktop : public Inkscape::UI::View::View {
     
     sigc::signal<void, sp_verb_t> _tool_changed;
     
-    // subselection is some sort of selection which is specific to the tool, such as a handle in gradient tool, or a text selection
+    /// subselection is some sort of selection which is specific to the tool, such as a handle in gradient tool, or a text selection
     sigc::signal<void, gpointer> _tool_subselection_changed;
     sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot) {
 	return _tool_subselection_changed.connect(slot);
@@ -203,18 +205,8 @@ struct SPDesktopClass {
 #define SP_DESKTOP_ZOOM(d) expansion((d)->d2w)
 #define SP_DESKTOP_EVENT_CONTEXT(d) ((d)->event_context)
 
+Inkscape::UI::View::View * sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas);
 void sp_desktop_set_active (SPDesktop *desktop, bool active);
-
-#ifndef __SP_DESKTOP_C__
-extern bool SPShowFullFielName;
-#else
-bool SPShowFullFielName = TRUE;
-#endif
-
-/* Show/hide rulers & scrollbars */
-void sp_desktop_toggle_rulers (SPDesktop *dt);
-void sp_desktop_toggle_scrollbars (SPDesktop *dt);
-
 void sp_desktop_activate_guides(SPDesktop *desktop, bool activate);
 void sp_desktop_change_document(SPDesktop *desktop, SPDocument *document);
 
@@ -274,3 +266,14 @@ void fullscreen(SPDesktop *dt);
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

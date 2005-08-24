@@ -32,7 +32,6 @@
 #include "desktop-affine.h"
 #include "snap.h"
 #include "pixmaps/cursor-arc.xpm"
-#include "desktop-widget.h"
 #include "sp-metrics.h"
 #include "knotholder.h"
 #include "xml/repr.h"
@@ -42,6 +41,7 @@
 #include "widgets/spw-utilities.h"
 #include "message-context.h"
 #include "desktop.h"
+#include "widgets/desktop-widget.h"
 #include "desktop-style.h"
 
 #include "arc-context.h"

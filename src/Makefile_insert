@@ -63,7 +63,6 @@ libinkpre_a_SOURCES =	\
 	geom.cpp geom.h	\
 	gradient-context.cpp gradient-context.h \
 	gradient-drag.cpp gradient-drag.h \
-	gradient-toolbar.cpp gradient-toolbar.h \
 	help.cpp help.h	\
 	inkscape-stock.cpp inkscape-stock.h\
 	inkscape.cpp inkscape.h inkscape-private.h	\
@@ -106,7 +105,6 @@ libinkpre_a_SOURCES =	\
 	satisfied-guide-cns.cpp satisfied-guide-cns.h	\
 	selcue.cpp selcue.h \
 	select-context.cpp select-context.h	\
-	select-toolbar.cpp select-toolbar.h\
 	selection-chemistry.cpp selection-chemistry.h	\
 	selection-describer.cpp selection-describer.h   \
 	selection.cpp selection.h	\
@@ -191,7 +189,6 @@ libinkpre_a_SOURCES =	\
 	text-chemistry.cpp text-chemistry.h	\
 	text-context.cpp text-context.h	\
 	text-editing.cpp text-editing.h	\
-	toolbox.cpp toolbox.h	\
 	tools-switch.cpp tools-switch.h\
 	uri-references.cpp uri-references.h	\
 	verbs.cpp verbs.h	\

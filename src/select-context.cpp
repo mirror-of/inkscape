@@ -29,7 +29,7 @@
 #include "desktop-affine.h"
 #include "seltrans-handles.h"
 #include "sp-cursor.h"
-#include "desktop-widget.h"
+#include "widgets/desktop-widget.h"
 #include "pixmaps/cursor-select-m.xpm"
 #include "pixmaps/cursor-select-d.xpm"
 #include "pixmaps/handles.xpm"
