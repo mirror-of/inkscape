@@ -62,8 +62,8 @@ struct SPXMLNs {
 # FORWARD DECLARATIONS
 #####################*/
 
-static void sp_xml_ns_register_defaults ();
-static char *sp_xml_ns_auto_prefix (char const *uri);
+static void sp_xml_ns_register_defaults();
+static char *sp_xml_ns_auto_prefix(char const *uri);
 
 /*#####################
 # UTILITY
@@ -73,7 +73,7 @@ static char *sp_xml_ns_auto_prefix (char const *uri);
  * Locale-independent double to string conversion
  */
 unsigned int
-sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
+sp_xml_dtoa(gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
 {
     double dival, fval, epsilon;
     int idigits, ival, i;
@@ -84,18 +84,18 @@ sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, uns
     }
     /* Determine number of integral digits */
     if (val >= 1.0) {
-        idigits = (int) floor (log10 (val));
+        idigits = (int) floor(log10(val));
     } else {
         idigits = 0;
     }
     /* Determine the actual number of fractional digits */
-    fprec = MAX (fprec, tprec - idigits);
+    fprec = MAX(fprec, tprec - idigits);
     /* Find epsilon */
-    epsilon = 0.5 * pow (10.0, - (double) fprec);
+    epsilon = 0.5 * pow(10.0, - (double) fprec);
     /* Round value */
     val += epsilon;
     /* Extract integral and fractional parts */
-    dival = floor (val);
+    dival = floor(val);
     ival = (int) dival;
     fval = val - dival;
     /* Write integra */
@@ -107,7 +107,7 @@ sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, uns
             c[32 - (++j)] = '0' + (ival % 10);
             ival /= 10;
         }
-        memcpy (buf + i, &c[32 - j], j);
+        memcpy(buf + i, &c[32 - j], j);
         i += j;
         tprec -= j;
     } else {
@@ -118,7 +118,7 @@ sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, uns
         buf[i++] = '.';
         while ((fprec > 0) && (padf || (fval > epsilon))) {
             fval *= 10.0;
-            dival = floor (fval);
+            dival = floor(fval);
             fval -= dival;
             buf[i++] = '0' + (int) dival;
             fprec -= 1;
@@ -148,70 +148,70 @@ static SPXMLNs *namespaces=NULL;
  * in repr.h
  */
 static void
-sp_xml_ns_register_defaults ()
+sp_xml_ns_register_defaults()
 {
     static SPXMLNs defaults[7];
 
-    defaults[0].uri = g_quark_from_static_string (SP_SODIPODI_NS_URI);
-    defaults[0].prefix = g_quark_from_static_string ("sodipodi");
+    defaults[0].uri = g_quark_from_static_string(SP_SODIPODI_NS_URI);
+    defaults[0].prefix = g_quark_from_static_string("sodipodi");
     defaults[0].next = &defaults[1];
 
-    defaults[1].uri = g_quark_from_static_string (SP_XLINK_NS_URI);
-    defaults[1].prefix = g_quark_from_static_string ("xlink");
+    defaults[1].uri = g_quark_from_static_string(SP_XLINK_NS_URI);
+    defaults[1].prefix = g_quark_from_static_string("xlink");
     defaults[1].next = &defaults[2];
 
-    defaults[2].uri = g_quark_from_static_string (SP_SVG_NS_URI);
-    defaults[2].prefix = g_quark_from_static_string ("svg");
+    defaults[2].uri = g_quark_from_static_string(SP_SVG_NS_URI);
+    defaults[2].prefix = g_quark_from_static_string("svg");
     defaults[2].next = &defaults[3];
 
-    defaults[3].uri = g_quark_from_static_string (SP_INKSCAPE_NS_URI);
-    defaults[3].prefix = g_quark_from_static_string ("inkscape");
+    defaults[3].uri = g_quark_from_static_string(SP_INKSCAPE_NS_URI);
+    defaults[3].prefix = g_quark_from_static_string("inkscape");
     defaults[3].next = &defaults[4];
 
-    defaults[4].uri = g_quark_from_static_string (SP_RDF_NS_URI);
-    defaults[4].prefix = g_quark_from_static_string ("rdf");
+    defaults[4].uri = g_quark_from_static_string(SP_RDF_NS_URI);
+    defaults[4].prefix = g_quark_from_static_string("rdf");
     defaults[4].next = &defaults[5];
 
-    defaults[5].uri = g_quark_from_static_string (SP_CC_NS_URI);
-    defaults[5].prefix = g_quark_from_static_string ("cc");
+    defaults[5].uri = g_quark_from_static_string(SP_CC_NS_URI);
+    defaults[5].prefix = g_quark_from_static_string("cc");
     defaults[5].next = &defaults[6];
 
-    defaults[6].uri = g_quark_from_static_string (SP_DC_NS_URI);
-    defaults[6].prefix = g_quark_from_static_string ("dc");
+    defaults[6].uri = g_quark_from_static_string(SP_DC_NS_URI);
+    defaults[6].prefix = g_quark_from_static_string("dc");
     defaults[6].next = NULL;
 
     namespaces = &defaults[0];
 }
 
 char *
-sp_xml_ns_auto_prefix (char const *uri)
+sp_xml_ns_auto_prefix(char const *uri)
 {
     char const *start, *end;
     char *new_prefix;
     start = uri;
-    while ((end = strpbrk (start, ":/"))) {
+    while ((end = strpbrk(start, ":/"))) {
         start = end + 1;
     }
-    end = start + strspn (start, "abcdefghijklmnopqrstuvwxyz");
+    end = start + strspn(start, "abcdefghijklmnopqrstuvwxyz");
     if (end == start) {
         start = "ns";
         end = start + 2;
     }
-    new_prefix = g_strndup (start, end - start);
-    if (sp_xml_ns_prefix_uri (new_prefix)) {
+    new_prefix = g_strndup(start, end - start);
+    if (sp_xml_ns_prefix_uri(new_prefix)) {
         char *temp;
         int counter=0;
         do {
-            temp = g_strdup_printf ("%s%d", new_prefix, counter++);
-        } while (sp_xml_ns_prefix_uri (temp));
-        g_free (new_prefix);
+            temp = g_strdup_printf("%s%d", new_prefix, counter++);
+        } while (sp_xml_ns_prefix_uri(temp));
+        g_free(new_prefix);
         new_prefix = temp;
     }
     return new_prefix;
 }
 
 gchar const *
-sp_xml_ns_uri_prefix (gchar const *uri, gchar const *suggested)
+sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested)
 {
     SPXMLNs *iter;
     char const *prefix;
@@ -219,14 +219,14 @@ sp_xml_ns_uri_prefix (gchar const *uri, gchar const *suggested)
     if (!uri) return NULL;
 
     if (!namespaces) {
-        sp_xml_ns_register_defaults ();
+        sp_xml_ns_register_defaults();
     }
 
-    GQuark const key = g_quark_from_string (uri);
+    GQuark const key = g_quark_from_string(uri);
     prefix = NULL;
     for ( iter = namespaces ; iter ; iter = iter->next ) {
         if ( iter->uri == key ) {
-            prefix = g_quark_to_string (iter->prefix);
+            prefix = g_quark_to_string(iter->prefix);
             break;
         }
     }
@@ -236,25 +236,25 @@ sp_xml_ns_uri_prefix (gchar const *uri, gchar const *suggested)
         if (suggested) {
             new_prefix = suggested;
         } else {
-            new_prefix = sp_xml_ns_auto_prefix (uri);
+            new_prefix = sp_xml_ns_auto_prefix(uri);
         }
-        ns = g_new (SPXMLNs, 1);
+        ns = g_new(SPXMLNs, 1);
         if (ns) {
-            ns->uri = g_quark_from_string (uri);
-            ns->prefix = g_quark_from_string (new_prefix);
+            ns->uri = g_quark_from_string(uri);
+            ns->prefix = g_quark_from_string(new_prefix);
             ns->next = namespaces;
             namespaces = ns;
-            prefix = g_quark_to_string (ns->prefix);
+            prefix = g_quark_to_string(ns->prefix);
         }
         if (!suggested) {
-            g_free ((char *)new_prefix);
+            g_free((char *)new_prefix);
         }
     }
     return prefix;
 }
 
 gchar const *
-sp_xml_ns_prefix_uri (gchar const *prefix)
+sp_xml_ns_prefix_uri(gchar const *prefix)
 {
     SPXMLNs *iter;
     char const *uri;
@@ -262,46 +262,46 @@ sp_xml_ns_prefix_uri (gchar const *prefix)
     if (!prefix) return NULL;
 
     if (!namespaces) {
-        sp_xml_ns_register_defaults ();
+        sp_xml_ns_register_defaults();
     }
 
     GQuark const key = g_quark_from_string(prefix);
     uri = NULL;
     for ( iter = namespaces ; iter ; iter = iter->next ) {
         if ( iter->prefix == key ) {
-            uri = g_quark_to_string (iter->uri);
+            uri = g_quark_to_string(iter->uri);
             break;
         }
     }
     return uri;
 }
 
-double sp_repr_get_double_attribute (Inkscape::XML::Node *repr, char const *key, double def)
+double sp_repr_get_double_attribute(Inkscape::XML::Node *repr, char const *key, double def)
 {
-    char * result;
+    char *result;
 
-    g_return_val_if_fail (repr != NULL, def);
-    g_return_val_if_fail (key != NULL, def);
+    g_return_val_if_fail(repr != NULL, def);
+    g_return_val_if_fail(key != NULL, def);
 
     result = (char *) repr->attribute(key);
 
     if (result == NULL) return def;
 
-    return g_ascii_strtod (result, NULL);
+    return g_ascii_strtod(result, NULL);
 }
 
-int sp_repr_get_int_attribute (Inkscape::XML::Node *repr, char const *key, int def)
+int sp_repr_get_int_attribute(Inkscape::XML::Node *repr, char const *key, int def)
 {
-    char * result;
+    char *result;
 
-    g_return_val_if_fail (repr != NULL, def);
-    g_return_val_if_fail (key != NULL, def);
+    g_return_val_if_fail(repr != NULL, def);
+    g_return_val_if_fail(key != NULL, def);
 
     result = (char *) repr->attribute(key);
 
     if (result == NULL) return def;
 
-    return atoi (result);
+    return atoi(result);
 }
 
 /** 
@@ -323,7 +323,7 @@ sp_repr_compare_position(Inkscape::XML::Node *first, Inkscape::XML::Node *second
            could be in different groups or on different layers for
            instance. */
 
-        // Find the lowest common ancestor (LCA)
+        // Find the lowest common ancestor(LCA)
         Inkscape::XML::Node *ancestor = LCA(first, second);
         g_assert(ancestor != NULL);
 
@@ -365,9 +365,9 @@ sp_repr_compare_position(Inkscape::XML::Node *first, Inkscape::XML::Node *second
  * lookup child by \a key, \a value.
  */
 Inkscape::XML::Node *
-sp_repr_lookup_child (Inkscape::XML::Node       *repr,
-                      gchar const *key,
-                      gchar const *value)
+sp_repr_lookup_child(Inkscape::XML::Node *repr,
+                     gchar const *key,
+                     gchar const *value)
 {
     g_return_val_if_fail(repr != NULL, NULL);
     for ( Inkscape::XML::Node *child = repr->firstChild() ; child ; child = child->next() ) {
@@ -389,12 +389,12 @@ sp_repr_lookup_child (Inkscape::XML::Node       *repr,
  *  
  */
 Inkscape::XML::Node *
-sp_repr_lookup_name ( Inkscape::XML::Node *repr, gchar const *name, gint maxdepth )
+sp_repr_lookup_name( Inkscape::XML::Node *repr, gchar const *name, gint maxdepth )
 {
-    g_return_val_if_fail (repr != NULL, NULL);
-    g_return_val_if_fail (name != NULL, NULL);
+    g_return_val_if_fail(repr != NULL, NULL);
+    g_return_val_if_fail(name != NULL, NULL);
 
-    GQuark const quark = g_quark_from_string (name);
+    GQuark const quark = g_quark_from_string(name);
 
     if ( (GQuark)repr->code() == quark ) return repr;
     if ( maxdepth == 0 ) return NULL;
@@ -402,9 +402,9 @@ sp_repr_lookup_name ( Inkscape::XML::Node *repr, gchar const *name, gint maxdept
     // maxdepth == -1 means unlimited
     if ( maxdepth == -1 ) maxdepth = 0;
 
-    Inkscape::XML::Node * found = NULL;
+    Inkscape::XML::Node *found = NULL;
     for (Inkscape::XML::Node *child = repr->firstChild() ; child && !found; child = child->next() ) {
-        found = sp_repr_lookup_name ( child, name, maxdepth-1 );
+        found = sp_repr_lookup_name( child, name, maxdepth-1 );
     }
 
     return found;
@@ -417,21 +417,21 @@ sp_repr_lookup_name ( Inkscape::XML::Node *repr, gchar const *name, gint maxdept
  * \return TRUE if the attr was set, FALSE otherwise.
  */
 unsigned int
-sp_repr_get_boolean (Inkscape::XML::Node *repr, gchar const *key, unsigned int *val)
+sp_repr_get_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int *val)
 {
     gchar const *v;
 
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
-    g_return_val_if_fail (val != NULL, FALSE);
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(val != NULL, FALSE);
 
     v = repr->attribute(key);
 
     if (v != NULL) {
-        if (!g_strcasecmp (v, "true") ||
-            !g_strcasecmp (v, "yes" ) ||
-            !g_strcasecmp (v, "y"   ) ||
-            (atoi (v) != 0)) {
+        if (!g_strcasecmp(v, "true") ||
+            !g_strcasecmp(v, "yes" ) ||
+            !g_strcasecmp(v, "y"   ) ||
+            (atoi(v) != 0)) {
             *val = TRUE;
         } else {
             *val = FALSE;
@@ -444,18 +444,18 @@ sp_repr_get_boolean (Inkscape::XML::Node *repr, gchar const *key, unsigned int *
 }
 
 unsigned int
-sp_repr_get_int (Inkscape::XML::Node *repr, gchar const *key, int *val)
+sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *val)
 {
     gchar const *v;
 
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
-    g_return_val_if_fail (val != NULL, FALSE);
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(val != NULL, FALSE);
 
     v = repr->attribute(key);
 
     if (v != NULL) {
-        *val = atoi (v);
+        *val = atoi(v);
         return TRUE;
     }
 
@@ -463,18 +463,18 @@ sp_repr_get_int (Inkscape::XML::Node *repr, gchar const *key, int *val)
 }
 
 unsigned int
-sp_repr_get_double (Inkscape::XML::Node *repr, gchar const *key, double *val)
+sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, double *val)
 {
     gchar const *v;
 
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
-    g_return_val_if_fail (val != NULL, FALSE);
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(val != NULL, FALSE);
 
     v = repr->attribute(key);
 
     if (v != NULL) {
-        *val = g_ascii_strtod (v, NULL);
+        *val = g_ascii_strtod(v, NULL);
         return TRUE;
     }
 
@@ -482,50 +482,50 @@ sp_repr_get_double (Inkscape::XML::Node *repr, gchar const *key, double *val)
 }
 
 unsigned int
-sp_repr_set_boolean (Inkscape::XML::Node *repr, gchar const *key, unsigned int val)
+sp_repr_set_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int val)
 {
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
 
-    return sp_repr_set_attr (repr, key, (val) ? "true" : "false");
+    return sp_repr_set_attr(repr, key, (val) ? "true" : "false");
 }
 
 unsigned int
-sp_repr_set_int (Inkscape::XML::Node *repr, gchar const *key, int val)
+sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int val)
 {
     gchar c[32];
 
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
 
-    g_snprintf (c, 32, "%d", val);
+    g_snprintf(c, 32, "%d", val);
 
-    return sp_repr_set_attr (repr, key, c);
+    return sp_repr_set_attr(repr, key, c);
 }
 
 unsigned int
-sp_repr_set_double (Inkscape::XML::Node *repr, gchar const *key, double val)
+sp_repr_set_double(Inkscape::XML::Node *repr, gchar const *key, double val)
 {
-	Inkscape::SVGOStringStream os;
-	
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
+    Inkscape::SVGOStringStream os;
 
-	os << val;
-	
-	return sp_repr_set_attr (repr, key, os.str().c_str());
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
+
+    os << val;
+
+    return sp_repr_set_attr(repr, key, os.str().c_str());
 }
 
 unsigned int
-sp_repr_set_double_default (Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e)
+sp_repr_set_double_default(Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e)
 {
-    g_return_val_if_fail (repr != NULL, FALSE);
-    g_return_val_if_fail (key != NULL, FALSE);
+    g_return_val_if_fail(repr != NULL, FALSE);
+    g_return_val_if_fail(key != NULL, FALSE);
 
-    if (fabs (val - def) <= e) {
-        return sp_repr_set_attr (repr, key, NULL);
+    if (fabs(val - def) <= e) {
+        return sp_repr_set_attr(repr, key, NULL);
     } else {
-        return sp_repr_set_double (repr, key, val);
+        return sp_repr_set_double(repr, key, val);
     }
 }
 
