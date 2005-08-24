@@ -37,7 +37,8 @@ WhiteboardConnectDialog::create()
 	return new WhiteboardConnectDialogImpl();
 }
 
-WhiteboardConnectDialogImpl::WhiteboardConnectDialogImpl()
+WhiteboardConnectDialogImpl::WhiteboardConnectDialogImpl() :
+	_usessl(_("Use _SSL"), true)
 {
 	this->setSessionManager();
 	this->_construct();
@@ -67,13 +68,19 @@ WhiteboardConnectDialogImpl::_construct()
 	this->_labels[0].set_markup_with_mnemonic(_("_Server:"));
 	this->_labels[1].set_markup_with_mnemonic(_("_Username:"));
 	this->_labels[2].set_markup_with_mnemonic(_("_Password:"));
+	this->_labels[3].set_markup_with_mnemonic(_("P_ort:"));
 
 	this->_labels[0].set_mnemonic_widget(this->_server);
 	this->_labels[1].set_mnemonic_widget(this->_username);
 	this->_labels[2].set_mnemonic_widget(this->_password);
+	this->_labels[3].set_mnemonic_widget(this->_port);
+
+	this->_port.set_text("5222");
 
 	this->_servbox.pack_start(this->_labels[0], true, true, 0);
-	this->_servbox.pack_end(this->_server, true, true, 0);
+	this->_servbox.pack_start(this->_server, true, true, 0);
+	this->_servbox.pack_start(this->_labels[3], true, true, 0);
+	this->_servbox.pack_start(this->_port, true, true, 0);
 
 	this->_userbox.pack_start(this->_labels[1], true, true, 0);
 	this->_userbox.pack_end(this->_username, true, true, 0);
@@ -89,6 +96,7 @@ WhiteboardConnectDialogImpl::_construct()
 	this->_cancel.set_label(_("Cancel"));
 	this->_ok.signal_clicked().connect(sigc::bind< 0 >(sigc::mem_fun(*this, &WhiteboardConnectDialogImpl::_respCallback), GTK_RESPONSE_OK));
 	this->_cancel.signal_clicked().connect(sigc::bind< 0 >(sigc::mem_fun(*this, &WhiteboardConnectDialogImpl::_respCallback), GTK_RESPONSE_CANCEL));
+	this->_usessl.signal_clicked().connect(sigc::mem_fun(*this, &WhiteboardConnectDialogImpl::_useSSLClickedCallback));
 
 	this->_buttons.pack_start(this->_cancel, true, true, 0);
 	this->_buttons.pack_end(this->_ok, true, true, 0);
@@ -97,6 +105,7 @@ WhiteboardConnectDialogImpl::_construct()
 	main->pack_start(this->_servbox);
 	main->pack_start(this->_userbox);
 	main->pack_start(this->_passbox);
+	main->pack_start(this->_usessl);
 	main->pack_end(this->_buttons);
 }
 
@@ -104,15 +113,19 @@ void
 WhiteboardConnectDialogImpl::_respCallback(int resp)
 {
 	if (resp == GTK_RESPONSE_OK) {
-		Glib::ustring server, username, password;
+		Glib::ustring server, port, username, password;
+		bool usessl;
+
 		server = this->_server.get_text();
+		port = this->_port.get_text();
 		username = this->_username.get_text();
 		password = this->_password.get_text();
+		usessl = this->_usessl.get_active();
 
 		Glib::ustring msg = String::ucompose(_("Establishing connection to Jabber server <b>%1</b> as user <b>%2</b>"), server, username);
 		this->_desktop->messageStack()->flash(INFORMATION_MESSAGE, msg.data());
 
-		switch (this->_sm->connectToServer(server, username, password)) {
+		switch (this->_sm->connectToServer(server, port, username, password, usessl)) {
 			case FAILED_TO_CONNECT:
 				msg = String::ucompose(_("Failed to establish connection to Jabber server <b>%1</b>"), server);
 				this->_desktop->messageStack()->flash(WARNING_MESSAGE, msg.data());
@@ -123,6 +136,12 @@ WhiteboardConnectDialogImpl::_respCallback(int resp)
 				this->_desktop->messageStack()->flash(WARNING_MESSAGE, msg.data());
 				this->_sm->connectionError(msg);
 				break;
+			case SSL_INITIALIZATION_ERROR:
+				msg = String::ucompose(_("SSL initialization failed when connecting to Jabber server <b>%1</b>"), server);
+				this->_desktop->messageStack()->flash(WARNING_MESSAGE, msg.data());
+				this->_sm->connectionError(msg);
+				break;
+				
 			case CONNECT_SUCCESS:
 				msg = String::ucompose(_("Connected to Jabber server <b>%1</b> as <b>%2</b>"), server, username);
 				this->_desktop->messageStack()->flash(INFORMATION_MESSAGE, msg.data());
@@ -134,6 +153,20 @@ WhiteboardConnectDialogImpl::_respCallback(int resp)
 
 	this->_password.set_text("");
 	this->hide();
+}
+
+void
+WhiteboardConnectDialogImpl::_useSSLClickedCallback()
+{
+	if (this->_usessl.get_active()) {
+		this->_port.set_text("5223");
+	
+		// String::ucompose seems to format numbers according to locale; unfortunately,
+		// I'm not yet sure how to turn that off
+		//this->_port.set_text(String::ucompose("%1", LM_CONNECTION_DEFAULT_PORT_SSL));
+	} else {
+		this->_port.set_text("5222");
+	}
 }
 
 }

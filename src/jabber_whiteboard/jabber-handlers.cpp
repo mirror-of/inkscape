@@ -13,6 +13,7 @@
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/jabber-handlers.h"
 #include "jabber_whiteboard/message-handler.h"
+#include "jabber_whiteboard/session-manager.h"
 
 namespace Inkscape {
 
@@ -39,6 +40,13 @@ stream_error_handler(LmMessageHandler* handler, LmConnection* connection, LmMess
 {
 	MessageHandler* mh = reinterpret_cast< MessageHandler* >(user_data);
 	return mh->handle(message, ERROR);
+}
+
+LmSSLResponse
+ssl_error_handler(LmSSL* ssl, LmSSLStatus status, gpointer user_data)
+{
+	SessionManager* sm = reinterpret_cast< SessionManager* >(user_data);
+	return sm->handleSSLError(ssl, status);
 }
 
 }

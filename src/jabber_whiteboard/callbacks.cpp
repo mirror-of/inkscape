@@ -54,10 +54,10 @@ Callbacks::dispatchSendQueue()
 
 	// If the connection is not open, inform the user that an error has occurred
 	// and stop the queue
-	if (lm_connection_get_state(this->_sd->connection) != LM_CONNECTION_STATE_OPEN) {
-		// TODO: re-enable
-		// error_connection("Connection lost");
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "error: connection lost");
+	LmConnectionState state = lm_connection_get_state(this->_sd->connection);
+
+	if (state != LM_CONNECTION_STATE_OPEN && state != LM_CONNECTION_STATE_AUTHENTICATED) {
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "error: connection lost (current state: %u)", state);
 		this->_sm->desktop()->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Jabber connection lost."));
 		return false;
 	}

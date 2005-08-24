@@ -63,14 +63,18 @@ private:
 	Gtk::Entry _server;
 	Gtk::Entry _username;
 	Gtk::Entry _password;
+	Gtk::Entry _port;
 
-	Gtk::Label _labels[3];	
+	Gtk::Label _labels[4];	
+
+	Gtk::CheckButton _usessl;
 
 	Gtk::Button _ok, _cancel;
 
-	// Construction and callback
+	// Construction and callbacks
 	void _construct();
 	void _respCallback(int resp);
+	void _useSSLClickedCallback();
 
 	// SessionManager and SPDesktop pointers
 	::SPDesktop* _desktop;

@@ -14,6 +14,8 @@
 #include "desktop-handles.h"
 */
 
+#include <cstring>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/messagedialog.h>
@@ -66,6 +68,7 @@ SessionData::SessionData(SessionManager *sm)
 	this->_sm = sm;
 	this->recipient = NULL;
 	this->connection = NULL;
+	this->ssl = NULL;
 	this->send_queue = new SendMessageQueue(sm);
 	this->sequence_number = 1;
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionData construction complete.");
@@ -178,7 +181,7 @@ SessionManager::setDesktop(::SPDesktop* desktop)
 }
 
 int
-SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const& username, Glib::ustring const& pw)
+SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const& port, Glib::ustring const& username, Glib::ustring const& pw, bool usessl)
 {
 	GError* error = NULL;
 	Glib::ustring jid;
@@ -202,8 +205,25 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	// the user may be reusing an old connection that failed due to e.g.
 	// authentication failure.
 	if (!this->session_data->connection) {
-	//	lm_initialize();
 		this->session_data->connection = lm_connection_new(server.c_str());
+	}
+
+	lm_connection_set_port(this->session_data->connection, atoi(port.c_str()));
+
+	if (usessl) {
+		if (lm_ssl_is_supported()) {
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "Initializing SSL");
+			this->session_data->ssl = lm_ssl_new(NULL, ssl_error_handler, reinterpret_cast< gpointer >(this), NULL);
+			if (!this->session_data->ssl) {
+				return SSL_INITIALIZATION_ERROR;
+			}
+
+			lm_ssl_ref(this->session_data->ssl);
+		} else {
+			return SSL_INITIALIZATION_ERROR;
+		}
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting SSL");
+		lm_connection_set_ssl(this->session_data->connection, this->session_data->ssl);
 	}
 
 	// Send authorization
@@ -262,6 +282,56 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	return CONNECT_SUCCESS;
 }
 
+LmSSLResponse
+SessionManager::handleSSLError(LmSSL* ssl, LmSSLStatus status)
+{
+	Glib::ustring msg;
+
+	// TODO: It'd be nice to provide the user with additional information in some cases,
+	// like fingerprints, hostname, etc.
+	switch(status) {
+		case LM_SSL_STATUS_NO_CERT_FOUND:
+			msg = _("No SSL certificate was found.");
+			break;
+		case LM_SSL_STATUS_UNTRUSTED_CERT:
+			msg = _("The SSL certificate provided by the Jabber server is untrusted.");
+			break;
+		case LM_SSL_STATUS_CERT_EXPIRED:
+			msg = _("The SSL certificate provided by the Jabber server is expired.");
+			break;
+		case LM_SSL_STATUS_CERT_NOT_ACTIVATED:
+			msg = _("The SSL certificate provided by the Jabber server has not been activated.");
+			break;
+		case LM_SSL_STATUS_CERT_HOSTNAME_MISMATCH:
+			msg = _("The SSL certificate provided by the Jabber server contains a hostname that does not match the Jabber server's hostname.");
+			break;
+		case LM_SSL_STATUS_CERT_FINGERPRINT_MISMATCH:
+			msg = _("The SSL certificate provided by the Jabber server contains an invalid fingerprint.");
+			break;
+		case LM_SSL_STATUS_GENERIC_ERROR:
+			msg = _("An unknown error occurred while setting up the SSL connection.");
+			break;
+	}
+
+	// TRANSLATORS: %1 is the message that describes the specific error that occurred when
+	// establishing the SSL connection.
+	Glib::ustring mainmsg = String::ucompose(_("<span weight=\"bold\" size=\"larger\">%1</span>\n\nDo you wish to continue connecting to the Jabber server?"), msg);
+
+	Gtk::MessageDialog dlg(mainmsg, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE, false);
+	dlg.add_button(_("Continue connecting to the Jabber server"), 0);
+	dlg.add_button(_("Cancel connection"), 1);
+
+	switch(dlg.run()) {
+		case 0:
+			return LM_SSL_RESPONSE_CONTINUE;
+			break;
+		case 1:
+		default:
+			return LM_SSL_RESPONSE_STOP;
+			break;
+	}
+}
+
 void
 SessionManager::disconnectFromServer()
 {
@@ -277,7 +347,12 @@ SessionManager::disconnectFromServer()
 		lm_message_unref(m);
 		lm_connection_close(this->session_data->connection, NULL);
 		lm_connection_unref(this->session_data->connection);
+		if (this->session_data->ssl) {
+			lm_ssl_unref(this->session_data->ssl);
+		}
+
 		this->session_data->connection = NULL;
+		this->session_data->ssl = NULL;
 	}
 }
 

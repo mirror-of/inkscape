@@ -59,6 +59,7 @@ class Deserializer;
 #define CONNECT_SUCCESS		0
 #define FAILED_TO_CONNECT	1
 #define INVALID_AUTH		2
+#define SSL_INITIALIZATION_ERROR	3
 
 // sendMessage return values
 #define SEND_SUCCESS			0
@@ -90,6 +91,11 @@ public:
 	 * @brief pointer to Loudmouth connection structure
 	 */
 	LmConnection* connection;
+
+	/**
+	 * @brief SSL information structure
+	 */
+	LmSSL* ssl;
 
 
 	// Chatroom tracking
@@ -217,11 +223,22 @@ public:
 	 * @param server Jabber server URL
 	 * @param username Jabber username
 	 * @param pw password for Jabber account
+	 * @param usessl use SSL for connection
 	 *
 	 * @return CONNECT_SUCCESS if connection successful; FAILED_TO_CONNECT if connection failed or INVALID_AUTH
 	 * if authentication invalid
 	 */
-	int connectToServer(Glib::ustring const& server, Glib::ustring const& username, Glib::ustring const& pw);
+	int connectToServer(Glib::ustring const& server, Glib::ustring const& port, Glib::ustring const& username, Glib::ustring const& pw, bool usessl);
+
+	/**
+	 * @brief handle SSL error based on input from user
+	 *
+	 * @param ssl pointer to LmSSL structure
+	 * @param status The error message
+	 *
+	 * @return LM_SSL_RESPONSE_CONTINUE if user wishes to continue establishing the connection or LM_SSL_RESPONSE_STOP if user wishes to abort connection
+	 */
+	LmSSLResponse handleSSLError(LmSSL* ssl, LmSSLStatus status);
 
 	/**
 	 * @brief disconnect from a Jabber server

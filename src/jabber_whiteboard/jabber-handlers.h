@@ -26,6 +26,7 @@ namespace Whiteboard {
 LmHandlerResult presence_handler(LmMessageHandler* handler, LmConnection* connection, LmMessage* message, gpointer user_data);
 LmHandlerResult default_handler(LmMessageHandler* handler, LmConnection* connection, LmMessage* message, gpointer user_data);
 LmHandlerResult stream_error_handler(LmMessageHandler* handler, LmConnection* connection, LmMessage* message, gpointer user_data);
+LmSSLResponse ssl_error_handler(LmSSL* ssl, LmSSLStatus status, gpointer user_data);
 
 }
 
