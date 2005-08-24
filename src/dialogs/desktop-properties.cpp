@@ -816,7 +816,7 @@ sp_desktop_dialog(void)
         sp_ui_dialog_title_string(Inkscape::Verb::get(SP_VERB_DIALOG_NAMEDVIEW), title);
 
         dlg = sp_window_new(title, TRUE);
-        gtk_window_set_type_hint ((GtkWindow *) dlg, GDK_WINDOW_TYPE_HINT_DIALOG);
+        gtk_window_set_resizable ((GtkWindow *) dlg, FALSE);
 
         if (x == -1000 || y == -1000) {
             x = prefs_get_int_attribute(prefs_path, "x", 0);
