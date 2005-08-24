@@ -20,11 +20,11 @@
 #include <math.h>
 
 #if HAVE_STRING_H
-#include <string.h>
+# include <string.h>
 #endif
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
+# include <stdlib.h>
 #endif
 
 #include <stdio.h>
@@ -47,15 +47,15 @@ struct SPXMLNs {
 #####################*/
 
 #ifndef FALSE
-#define FALSE 0
+# define FALSE 0
 #endif
 
 #ifndef TRUE
-#define TRUE (!FALSE)
+# define TRUE (!FALSE)
 #endif
 
 #ifndef MAX
-#define MAX(a,b) (((a) < (b)) ? (b) : (a))
+# define MAX(a,b) (((a) < (b)) ? (b) : (a))
 #endif
 
 /*#####################
@@ -63,7 +63,7 @@ struct SPXMLNs {
 #####################*/
 
 static void sp_xml_ns_register_defaults ();
-static char *sp_xml_ns_auto_prefix (const char *uri);
+static char *sp_xml_ns_auto_prefix (char const *uri);
 
 /*#####################
 # UTILITY
@@ -184,9 +184,9 @@ sp_xml_ns_register_defaults ()
 }
 
 char *
-sp_xml_ns_auto_prefix (const char *uri)
+sp_xml_ns_auto_prefix (char const *uri)
 {
-    const char *start, *end;
+    char const *start, *end;
     char *new_prefix;
     start = uri;
     while ((end = strpbrk (start, ":/"))) {
@@ -210,11 +210,11 @@ sp_xml_ns_auto_prefix (const char *uri)
     return new_prefix;
 }
 
-const gchar *
-sp_xml_ns_uri_prefix (const gchar *uri, const gchar *suggested)
+gchar const *
+sp_xml_ns_uri_prefix (gchar const *uri, gchar const *suggested)
 {
     SPXMLNs *iter;
-    const char *prefix;
+    char const *prefix;
 
     if (!uri) return NULL;
 
@@ -231,7 +231,7 @@ sp_xml_ns_uri_prefix (const gchar *uri, const gchar *suggested)
         }
     }
     if (!prefix) {
-        const char *new_prefix;
+        char const *new_prefix;
         SPXMLNs *ns;
         if (suggested) {
             new_prefix = suggested;
@@ -253,11 +253,11 @@ sp_xml_ns_uri_prefix (const gchar *uri, const gchar *suggested)
     return prefix;
 }
 
-const gchar *
-sp_xml_ns_prefix_uri (const gchar *prefix)
+gchar const *
+sp_xml_ns_prefix_uri (gchar const *prefix)
 {
     SPXMLNs *iter;
-    const char *uri;
+    char const *uri;
 
     if (!prefix) return NULL;
 
@@ -276,7 +276,7 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
     return uri;
 }
 
-double sp_repr_get_double_attribute (Inkscape::XML::Node * repr, const char * key, double def)
+double sp_repr_get_double_attribute (Inkscape::XML::Node *repr, char const *key, double def)
 {
     char * result;
 
@@ -290,7 +290,7 @@ double sp_repr_get_double_attribute (Inkscape::XML::Node * repr, const char * ke
     return g_ascii_strtod (result, NULL);
 }
 
-int sp_repr_get_int_attribute (Inkscape::XML::Node * repr, const char * key, int def)
+int sp_repr_get_int_attribute (Inkscape::XML::Node *repr, char const *key, int def)
 {
     char * result;
 
@@ -366,8 +366,8 @@ sp_repr_compare_position(Inkscape::XML::Node *first, Inkscape::XML::Node *second
  */
 Inkscape::XML::Node *
 sp_repr_lookup_child (Inkscape::XML::Node       *repr,
-                      const gchar *key,
-                      const gchar *value)
+                      gchar const *key,
+                      gchar const *value)
 {
     g_return_val_if_fail(repr != NULL, NULL);
     for ( Inkscape::XML::Node *child = repr->firstChild() ; child ; child = child->next() ) {
@@ -417,9 +417,9 @@ sp_repr_lookup_name ( Inkscape::XML::Node *repr, gchar const *name, gint maxdept
  * \return TRUE if the attr was set, FALSE otherwise.
  */
 unsigned int
-sp_repr_get_boolean (Inkscape::XML::Node *repr, const gchar *key, unsigned int *val)
+sp_repr_get_boolean (Inkscape::XML::Node *repr, gchar const *key, unsigned int *val)
 {
-    const gchar *v;
+    gchar const *v;
 
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -444,9 +444,9 @@ sp_repr_get_boolean (Inkscape::XML::Node *repr, const gchar *key, unsigned int *
 }
 
 unsigned int
-sp_repr_get_int (Inkscape::XML::Node *repr, const gchar *key, int *val)
+sp_repr_get_int (Inkscape::XML::Node *repr, gchar const *key, int *val)
 {
-    const gchar *v;
+    gchar const *v;
 
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -463,9 +463,9 @@ sp_repr_get_int (Inkscape::XML::Node *repr, const gchar *key, int *val)
 }
 
 unsigned int
-sp_repr_get_double (Inkscape::XML::Node *repr, const gchar *key, double *val)
+sp_repr_get_double (Inkscape::XML::Node *repr, gchar const *key, double *val)
 {
-    const gchar *v;
+    gchar const *v;
 
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -482,7 +482,7 @@ sp_repr_get_double (Inkscape::XML::Node *repr, const gchar *key, double *val)
 }
 
 unsigned int
-sp_repr_set_boolean (Inkscape::XML::Node *repr, const gchar *key, unsigned int val)
+sp_repr_set_boolean (Inkscape::XML::Node *repr, gchar const *key, unsigned int val)
 {
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -491,7 +491,7 @@ sp_repr_set_boolean (Inkscape::XML::Node *repr, const gchar *key, unsigned int v
 }
 
 unsigned int
-sp_repr_set_int (Inkscape::XML::Node *repr, const gchar *key, int val)
+sp_repr_set_int (Inkscape::XML::Node *repr, gchar const *key, int val)
 {
     gchar c[32];
 
@@ -504,7 +504,7 @@ sp_repr_set_int (Inkscape::XML::Node *repr, const gchar *key, int val)
 }
 
 unsigned int
-sp_repr_set_double (Inkscape::XML::Node *repr, const gchar *key, double val)
+sp_repr_set_double (Inkscape::XML::Node *repr, gchar const *key, double val)
 {
 	Inkscape::SVGOStringStream os;
 	
@@ -517,7 +517,7 @@ sp_repr_set_double (Inkscape::XML::Node *repr, const gchar *key, double val)
 }
 
 unsigned int
-sp_repr_set_double_default (Inkscape::XML::Node *repr, const gchar *key, double val, double def, double e)
+sp_repr_set_double_default (Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e)
 {
     g_return_val_if_fail (repr != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -530,14 +530,13 @@ sp_repr_set_double_default (Inkscape::XML::Node *repr, const gchar *key, double 
 }
 
 
-
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
-  fill-column:72
+  fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
