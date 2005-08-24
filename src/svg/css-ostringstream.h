@@ -1,5 +1,5 @@
-#ifndef INKSCAPE_STRINGSTREAM_H
-#define INKSCAPE_STRINGSTREAM_H
+#ifndef SVG_CSS_OSTRINGSTREAM_H_INKSCAPE
+#define SVG_CSS_OSTRINGSTREAM_H_INKSCAPE
 
 #include <glib/gtypes.h>
 #include <sstream>
@@ -66,7 +66,7 @@ Inkscape::CSSOStringStream &operator<<(Inkscape::CSSOStringStream &os, float d);
 Inkscape::CSSOStringStream &operator<<(Inkscape::CSSOStringStream &os, double d);
 
 
-#endif
+#endif /* !SVG_CSS_OSTRINGSTREAM_H_INKSCAPE */
 
 /*
   Local Variables:
