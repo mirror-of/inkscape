@@ -97,6 +97,11 @@ public:
 	 */
 	LmSSL* ssl;
 
+	/**
+	 * @brief Should we ignore further SSL errors?
+	 */
+	bool ignoreFurtherSSLErrors;
+
 
 	// Chatroom tracking
 	

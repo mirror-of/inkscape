@@ -69,6 +69,7 @@ SessionData::SessionData(SessionManager *sm)
 	this->recipient = NULL;
 	this->connection = NULL;
 	this->ssl = NULL;
+	this->ignoreFurtherSSLErrors = false;
 	this->send_queue = new SendMessageQueue(sm);
 	this->sequence_number = 1;
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionData construction complete.");
@@ -285,6 +286,10 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 LmSSLResponse
 SessionManager::handleSSLError(LmSSL* ssl, LmSSLStatus status)
 {
+	if (this->session_data->ignoreFurtherSSLErrors) {
+		return LM_SSL_RESPONSE_CONTINUE;
+	}
+
 	Glib::ustring msg;
 
 	// TODO: It'd be nice to provide the user with additional information in some cases,
@@ -318,14 +323,17 @@ SessionManager::handleSSLError(LmSSL* ssl, LmSSLStatus status)
 	Glib::ustring mainmsg = String::ucompose(_("<span weight=\"bold\" size=\"larger\">%1</span>\n\nDo you wish to continue connecting to the Jabber server?"), msg);
 
 	Gtk::MessageDialog dlg(mainmsg, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE, false);
-	dlg.add_button(_("Continue connecting to the Jabber server"), 0);
-	dlg.add_button(_("Cancel connection"), 1);
+	dlg.add_button(_("Continue connecting and ignore further errors"), 0);
+	dlg.add_button(_("Continue connecting, but warn me of further errors"), 1);
+	dlg.add_button(_("Cancel connection"), 2);
 
 	switch(dlg.run()) {
 		case 0:
+			this->session_data->ignoreFurtherSSLErrors = true;
+		case 1:
 			return LM_SSL_RESPONSE_CONTINUE;
 			break;
-		case 1:
+		case 2:
 		default:
 			return LM_SSL_RESPONSE_STOP;
 			break;
