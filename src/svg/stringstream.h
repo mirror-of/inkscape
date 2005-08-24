@@ -13,13 +13,7 @@ private:
     std::ostringstream ostr;
 
 public:
-    SVGOStringStream() {
-        /* This is probably unnecessary now that we provide our own
-         * operator<< for float and double. */
-        ostr.imbue(std::locale::classic());
-        ostr.setf(std::ios::showpoint);
-        ostr.precision(8);
-    }
+    SVGOStringStream();
 
 #define INK_STR_OP(_t) \
     SVGOStringStream &operator<<(_t arg) {  \

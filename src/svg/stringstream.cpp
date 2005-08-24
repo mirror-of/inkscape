@@ -2,6 +2,19 @@
 #include <glib/gmessages.h>
 #include <string>
 
+Inkscape::SVGOStringStream::SVGOStringStream()
+{
+    /* These two are probably unnecessary now that we provide our own operator<< for float and
+     * double. */
+    ostr.imbue(std::locale::classic());
+    ostr.setf(std::ios::showpoint);
+
+    /* This one is (currently) needed though, as we currently use ostr.precision as a sort of
+       variable for storing the desired precision: see our two precision methods and our operator<<
+       methods for float and double. */
+    ostr.precision(8);
+}
+
 static void
 write_without_trailing_zeros(Inkscape::SVGOStringStream &os, std::ostringstream &s)
 {
