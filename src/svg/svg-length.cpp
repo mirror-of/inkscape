@@ -32,27 +32,27 @@ static unsigned sp_svg_length_read_lff(gchar const *str, SPSVGLengthUnit *unit, 
 #endif
 
 unsigned int
-sp_svg_number_read_f (const gchar *str, float *val)
+sp_svg_number_read_f (gchar const *str, float *val)
 {
 	char *e;
 	float v;
 
 	if (!str) return 0;
 	v = g_ascii_strtod (str, &e);
-	if ((const gchar *) e == str) return 0;
+	if ((gchar const *) e == str) return 0;
 	*val = v;
 	return 1;
 }
 
 unsigned int
-sp_svg_number_read_d (const gchar *str, double *val)
+sp_svg_number_read_d (gchar const *str, double *val)
 {
 	char *e;
 	double v;
 
 	if (!str) return 0;
 	v = g_ascii_strtod (str, &e);
-	if ((const gchar *) e == str) return 0;
+	if ((gchar const *) e == str) return 0;
 	*val = v;
 	return 1;
 }
@@ -140,7 +140,7 @@ sp_svg_number_write_de (gchar *buf, double val, unsigned int tprec, unsigned int
 /* Length */
 
 unsigned int
-sp_svg_length_read (const gchar *str, SPSVGLength *length)
+sp_svg_length_read (gchar const *str, SPSVGLength *length)
 {
 	SPSVGLengthUnit unit;
 	float value, computed;
@@ -159,7 +159,7 @@ sp_svg_length_read (const gchar *str, SPSVGLength *length)
 }
 
 unsigned int
-sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length)
+sp_svg_length_read_absolute (gchar const *str, SPSVGLength *length)
 {
 	SPSVGLengthUnit unit;
 	float value, computed;
@@ -183,7 +183,7 @@ sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length)
 
 
 unsigned int
-sp_svg_length_read_computed_absolute (const gchar *str, float *length)
+sp_svg_length_read_computed_absolute (gchar const *str, float *length)
 {
 	SPSVGLengthUnit unit;
 	float computed;
@@ -204,7 +204,7 @@ sp_svg_length_read_computed_absolute (const gchar *str, float *length)
 }
 
 GList *
-sp_svg_length_list_read (const gchar *str)
+sp_svg_length_list_read (gchar const *str)
 {
 	SPSVGLengthUnit unit;
 	float value, computed;
@@ -237,9 +237,9 @@ sp_svg_length_list_read (const gchar *str)
 #define UVAL(a,b) (((unsigned int) (a) << 8) | (unsigned int) (b))
 
 static unsigned
-sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, float *computed, char **next)
+sp_svg_length_read_lff (gchar const *str, SPSVGLengthUnit *unit, float *val, float *computed, char **next)
 {
-	const gchar *e;
+	gchar const *e;
 	float v;
 
 	if (!str) return 0;
@@ -324,7 +324,7 @@ sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, flo
 	return 0;
 }
 
-unsigned int sp_svg_length_read_ldd (const gchar *str, SPSVGLengthUnit *unit, double *value, double *computed) {
+unsigned int sp_svg_length_read_ldd (gchar const *str, SPSVGLengthUnit *unit, double *value, double *computed) {
 	float a, b;
 	unsigned int r = sp_svg_length_read_lff (str, unit, &a, &b, NULL);
 	if (r) {
@@ -365,7 +365,7 @@ sp_svg_length_update (SPSVGLength *length, double em, double ex, double scale)
 }
 
 double
-sp_svg_read_percentage (const char * str, double def)
+sp_svg_read_percentage (char const * str, double def)
 {
 	char * u;
 	double v;
@@ -382,7 +382,7 @@ sp_svg_read_percentage (const char * str, double def)
 	return v;
 }
 
-const gchar *
+gchar const *
 sp_svg_length_get_css_units (SPSVGLengthUnit unit)
 {
 	switch (unit) {
@@ -404,7 +404,7 @@ sp_svg_length_get_css_units (SPSVGLengthUnit unit)
  * N.B.\ This routine will sometimes return strings with `e' notation, so is unsuitable for CSS
  * lengths (which don't allow scientific `e' notation).
  */
-const gchar *
+gchar const *
 sp_svg_length_write_with_units (SPSVGLength *length)
 {
 	Inkscape::SVGOStringStream os;
