@@ -668,19 +668,24 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 
         Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) ml->data);
 
+        bool stock_dupe = false;
+
         if (markers_doc && repr->attribute("inkscape:stockid")) {
             // find out if markers_doc has a marker with the same stockid, and if so, skip this
             for (SPObject *child = sp_object_first_child(SP_OBJECT(SP_DOCUMENT_DEFS(markers_doc))) ;
                  child != NULL;
                  child = SP_OBJECT_NEXT(child) )
             {
-                if (SP_OBJECT_REPR(child)->attribute("inkscape:stockid") &&
-                    !strcmp(repr->attribute("inkscape:stockid"), SP_OBJECT_REPR(child)->attribute("inkscape:stockid")) &&
-                    SP_IS_MARKER(child))
-                    continue; // stock item, dont add to list from current doc
+                if (SP_IS_MARKER(child) &&
+                    SP_OBJECT_REPR(child)->attribute("inkscape:stockid") &&
+                    !strcmp(repr->attribute("inkscape:stockid"), SP_OBJECT_REPR(child)->attribute("inkscape:stockid"))) {
+                    stock_dupe = true; 
+                }
             }
         }
 
+        if (stock_dupe) // stock item, dont add to list from current doc
+            continue;
 
         GtkWidget *i = gtk_menu_item_new();
         gtk_widget_show(i);
