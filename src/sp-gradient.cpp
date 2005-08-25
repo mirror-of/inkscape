@@ -35,7 +35,7 @@
 
 #include "display/nr-gradient-gpl.h"
 #include "svg/svg.h"
-#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "attributes.h"
 #include "document-private.h"
 #include "sp-object-repr.h"
@@ -216,7 +216,7 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 
 
-    Inkscape::SVGOStringStream os;
+    Inkscape::CSSOStringStream os;
     os << "stop-color:";
     if (stop->currentColor) {
         os << "currentColor";
@@ -868,7 +868,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
     GSList *cl = NULL;
 
     for (guint i = 0; i < gr->vector.stops.size(); i++) {
-        Inkscape::SVGOStringStream os;
+        Inkscape::CSSOStringStream os;
         Inkscape::XML::Node *child = sp_repr_new("svg:stop");
         sp_repr_set_double(child, "offset", gr->vector.stops[i].offset);
         gchar c[64];

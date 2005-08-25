@@ -34,7 +34,7 @@
 #include "macros.h"
 #include <glibmm/i18n.h>
 #include "svg/svg.h"
-#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "display/curve.h"
 #include "display/nr-arena-shape.h"
 #include "uri-references.h"
@@ -144,21 +144,21 @@ sp_shape_build (SPObject *object, SPDocument *document, Inkscape::XML::Node *rep
 		changed = TRUE;
 		val = sp_repr_css_property (css, "opacity", NULL);
 		if (val && strchr (val, '%')) {
-			Inkscape::SVGOStringStream os;
+			Inkscape::CSSOStringStream os;
 			os << sp_svg_read_percentage (val, 1.0);
 			sp_repr_css_set_property (css, "opacity", os.str().c_str());
 			changed = TRUE;
 		}
 		val = sp_repr_css_property (css, "fill-opacity", NULL);
 		if (val && strchr (val, '%')) {
-			Inkscape::SVGOStringStream os;
+			Inkscape::CSSOStringStream os;
 			os << sp_svg_read_percentage (val, 1.0);
 			sp_repr_css_set_property (css, "fill-opacity", os.str().c_str());
 			changed = TRUE;
 		}
 		val = sp_repr_css_property (css, "stroke-opacity", NULL);
 		if (val && strchr (val, '%')) {
-			Inkscape::SVGOStringStream os;
+			Inkscape::CSSOStringStream os;
 			os << sp_svg_read_percentage (val, 1.0);
 			sp_repr_css_set_property (css, "stroke-opacity", os.str().c_str());
 			changed = TRUE;

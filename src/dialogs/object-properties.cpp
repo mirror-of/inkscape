@@ -38,7 +38,7 @@
 #include "object-properties.h"
 #include "inkscape-stock.h"
 #include "prefs-utils.h"
-#include "../svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "desktop-style.h"
 #include "document.h"
 
@@ -302,7 +302,7 @@ sp_fillstroke_opacity_changed (GtkAdjustment *a, SPWidget *dlg)
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
 
-    Inkscape::SVGOStringStream os;
+    Inkscape::CSSOStringStream os;
     os << CLAMP (a->value, 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
 

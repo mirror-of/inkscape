@@ -45,7 +45,7 @@
 #include "streq.h"
 #include "strneq.h"
 #include "style.h"
-#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "xml/repr.h"
 #include "unit-constants.h"
 #include "isnan.h"
@@ -2065,7 +2065,7 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
             p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
             gint i;
             for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                Inkscape::SVGOStringStream os;
+                Inkscape::CSSOStringStream os;
                 os << style->stroke_dash.dash[i] << " ";
                 p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
             }
@@ -2079,7 +2079,7 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
     /** \todo fixme: */
     if (style->stroke_dashoffset_set) {
-        Inkscape::SVGOStringStream os;
+        Inkscape::CSSOStringStream os;
         os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
         p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
     } else if (flags == SP_STYLE_FLAG_ALWAYS) {
@@ -2169,7 +2169,7 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
         } else if (from->stroke_dash.n_dash && from->stroke_dash.dash) {
             p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:");
             for (gint i = 0; i < from->stroke_dash.n_dash; i++) {
-                Inkscape::SVGOStringStream os;
+                Inkscape::CSSOStringStream os;
                 os << from->stroke_dash.dash[i] << " ";
                 p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
             }
@@ -2178,7 +2178,7 @@ sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
     }
     /* fixme: */
     if (from->stroke_dashoffset_set) {
-        Inkscape::SVGOStringStream os;
+        Inkscape::CSSOStringStream os;
         os << "stroke-dashoffset:" << from->stroke_dash.offset << ";";
         p += g_strlcpy(p, os.str().c_str(), c + BMAX - p);
     }
@@ -2953,7 +2953,7 @@ static gint
 sp_style_write_ifloat(gchar *p, gint const len, gchar const *const key,
                       SPIFloat const *const val, SPIFloat const *const base, guint const flags)
 {
-    Inkscape::SVGOStringStream os;
+    Inkscape::CSSOStringStream os;
 
     if ((flags & SP_STYLE_FLAG_ALWAYS)
         || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
@@ -2979,7 +2979,7 @@ sp_style_write_iscale24(gchar *p, gint const len, gchar const *const key,
                         SPIScale24 const *const val, SPIScale24 const *const base,
                         guint const flags)
 {
-    Inkscape::SVGOStringStream os;
+    Inkscape::CSSOStringStream os;
 
     if ((flags & SP_STYLE_FLAG_ALWAYS)
         || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
@@ -3073,7 +3073,7 @@ static gint
 sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
                        SPILength const *const val, SPILength const *const base, guint const flags)
 {
-    Inkscape::SVGOStringStream os;
+    Inkscape::CSSOStringStream os;
 
     if ((flags & SP_STYLE_FLAG_ALWAYS)
         || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
@@ -3205,7 +3205,7 @@ sp_style_write_itextdecoration(gchar *p, gint const len, gchar const *const key,
                                SPITextDecoration const *const base,
                                guint const flags)
 {
-    Inkscape::SVGOStringStream os;
+    Inkscape::CSSOStringStream os;
 
     if ((flags & SP_STYLE_FLAG_ALWAYS)
         || ((flags & SP_STYLE_FLAG_IFSET) && val->set)
@@ -3322,11 +3322,11 @@ sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
                 }
             }
         } else if (val->type == SP_FONT_SIZE_LENGTH) {
-            Inkscape::SVGOStringStream os;
+            Inkscape::CSSOStringStream os;
             os << key << ":" << val->computed << "px;";      // must specify px, see inkscape bug 1221626, mozilla bug 234789
             return g_strlcpy(p, os.str().c_str(), len);
         } else if (val->type == SP_FONT_SIZE_PERCENTAGE) {
-            Inkscape::SVGOStringStream os;
+            Inkscape::CSSOStringStream os;
             os << key << ":" << (SP_F8_16_TO_FLOAT(val->value) * 100.0) << "%;";
             return g_strlcpy(p, os.str().c_str(), len);
         }
@@ -3556,7 +3556,7 @@ sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
             // only_with_units, but no units found, so do nothing.
             return;
         }
-        Inkscape::SVGOStringStream os;
+        Inkscape::CSSOStringStream os;
         os << wd << units; // reattach units!
         sp_repr_css_set_property(css, property, os.str().c_str());
     }

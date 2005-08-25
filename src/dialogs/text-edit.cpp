@@ -52,7 +52,7 @@ extern "C" {
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
-#include "../svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "widgets/icon.h"
 #include <xml/repr.h>
 
@@ -519,7 +519,7 @@ sp_get_text_dialog_style ()
 					font->Attribute("variant", c, 256);
 					sp_repr_css_set_property (css, "font-variant", c);
 					
-					Inkscape::SVGOStringStream os;
+					Inkscape::CSSOStringStream os;
 					os << sp_font_selector_get_size (SP_FONT_SELECTOR (fontsel));
 					sp_repr_css_set_property (css, "font-size", os.str().c_str());
 					

@@ -47,7 +47,7 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
-#include "../svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "sp-gradient-vector.h"
 #include "sp-stop.h"
 
@@ -466,7 +466,7 @@ verify_grad(SPGradient *gradient)
 		gchar c[64];
 		sp_svg_write_color (c, 64, 0x00000000);
 
-		Inkscape::SVGOStringStream os;
+		Inkscape::CSSOStringStream os;
 		os << "stop-color:" << c << ";stop-opacity:" << 1.0 << ";";
 
 		Inkscape::XML::Node *child;
@@ -711,7 +711,7 @@ sp_grd_ed_add_stop (GtkWidget *widget,  GtkWidget *vb)
 	guint32 const c2 = sp_stop_get_rgba32(next);
 	guint32 cnew = sp_average_color (c1, c2);
 
-	Inkscape::SVGOStringStream os;
+	Inkscape::CSSOStringStream os;
 	gchar c[64];
 	sp_svg_write_color (c, 64, cnew);
 	gdouble opacity = (gdouble) SP_RGBA32_A_F (cnew);
@@ -1117,7 +1117,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
 	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
-	Inkscape::SVGOStringStream os;
+	Inkscape::CSSOStringStream os;
 	gchar c[64];
 	sp_svg_write_color (c, 64, rgb);
 	os << "stop-color:" << c << ";stop-opacity:" << (gdouble) alpha <<";";

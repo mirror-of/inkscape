@@ -57,7 +57,7 @@
 #include <selection.h>
 #include <style.h>
 #include "svg/svg.h"
-#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 
 #include "paint-selector.h"
 
@@ -922,7 +922,7 @@ sp_paint_selector_set_flat_color (SPPaintSelector *psel, SPDesktop *desktop, con
     sp_svg_write_color (b, 64, rgba);
 
     sp_repr_css_set_property (css, color_property, b);
-    Inkscape::SVGOStringStream osalpha;
+    Inkscape::CSSOStringStream osalpha;
     osalpha << alpha;
     sp_repr_css_set_property (css, opacity_property, osalpha.str().c_str());
 

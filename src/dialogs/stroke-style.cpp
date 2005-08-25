@@ -34,7 +34,7 @@
 #include "helper/unit-menu.h"
 #include "helper/units.h"
 #include "svg/svg.h"
-#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
 #include "sp-gradient.h"
@@ -1376,7 +1376,7 @@ sp_stroke_style_set_scaled_dash(SPCSSAttr *css,
                                 double scale)
 {
     if (ndash > 0) {
-        Inkscape::SVGOStringStream osarray;
+        Inkscape::CSSOStringStream osarray;
         for (int i = 0; i < ndash; i++) {
             osarray << dash[i] * scale;
             if (i < (ndash - 1)) {
@@ -1385,7 +1385,7 @@ sp_stroke_style_set_scaled_dash(SPCSSAttr *css,
         }
         sp_repr_css_set_property(css, "stroke-dasharray", osarray.str().c_str());
 
-        Inkscape::SVGOStringStream osoffset;
+        Inkscape::CSSOStringStream osoffset;
         osoffset << offset * scale;
         sp_repr_css_set_property(css, "stroke-dashoffset", osoffset.str().c_str());
     } else {
@@ -1439,13 +1439,13 @@ sp_stroke_style_scale_line(SPWidget *spw)
             }
 
             {
-                Inkscape::SVGOStringStream os_width;
+                Inkscape::CSSOStringStream os_width;
                 os_width << width;
                 sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
             }
 
             {
-                Inkscape::SVGOStringStream os_ml;
+                Inkscape::CSSOStringStream os_ml;
                 os_ml << miterlimit;
                 sp_repr_css_set_property(css, "stroke-miterlimit", os_ml.str().c_str());
             }

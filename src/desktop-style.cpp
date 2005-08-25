@@ -16,7 +16,7 @@
 #include "sp-object.h"
 #include "color.h"
 #include "color-rgba.h"
-#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 #include "selection.h"
 #include "sp-tspan.h"
@@ -55,12 +55,12 @@ sp_desktop_set_color(SPDesktop *desktop, ColorRGBA const &color, bool is_relativ
     SPCSSAttr *css = sp_repr_css_attr_new();
     if (fill) {
         sp_repr_css_set_property(css, "fill", b);
-        Inkscape::SVGOStringStream osalpha;
+        Inkscape::CSSOStringStream osalpha;
         osalpha << color[3];
         sp_repr_css_set_property(css, "fill-opacity", osalpha.str().c_str());
     } else {
         sp_repr_css_set_property(css, "stroke", b);
-        Inkscape::SVGOStringStream osalpha;
+        Inkscape::CSSOStringStream osalpha;
         osalpha << color[3];
         sp_repr_css_set_property(css, "stroke-opacity", osalpha.str().c_str());
     }
