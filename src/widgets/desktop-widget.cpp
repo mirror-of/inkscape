@@ -618,6 +618,40 @@ sp_desktop_uri_set (Inkscape::UI::View::View *view, const gchar *uri, SPDesktopW
 }
 
 /**
+ * \pre dtw->desktop->main != 0
+ */
+void 
+sp_desktop_widget_queue_draw (SPDesktopWidget* dtw)
+{
+    gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (dtw->desktop->main)->canvas));
+}
+
+void 
+sp_desktop_widget_set_coordinate_status (SPDesktopWidget *dtw, gchar *cstr)
+{
+    gtk_label_set_text (GTK_LABEL (dtw->coord_status), cstr);
+}
+
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+void
+sp_desktop_widget_fullscreen(SPDesktopWidget *dtw)
+{
+    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw->canvas)));
+    if (GTK_IS_WINDOW(topw)) {
+        if (dtw->desktop->is_fullscreen) {
+            dtw->desktop->is_fullscreen = FALSE;
+            gtk_window_unfullscreen(topw);
+            sp_desktop_widget_layout (dtw);
+        } else {
+            dtw->desktop->is_fullscreen = TRUE;
+            gtk_window_fullscreen(topw);
+            sp_desktop_widget_layout (dtw);
+        }
+    }
+}
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+
+/**
  * Hide whatever the user does not want to see in the window
  */
 void

@@ -1,12 +1,13 @@
 #define __SP_DESKTOP_C__
 
 /** \file
- * Editable view and widget implementation
+ * Editable view implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY <mental@rydia.net>
  *   bulia byak <buliabyak@users.sf.net>
+ *   Ralf Stephan <ralf@ark.in-berlin.de>
  *
  * Copyright (C) 2004 MenTaLguY
  * Copyright (C) 1999-2002 Lauris Kaplinski
@@ -49,8 +50,6 @@
 
 #include <glib.h>
 #include <glibmm/i18n.h>
-
-#include <gtk/gtklabel.h>
 
 #include "macros.h"
 #include "forward.h"
@@ -368,7 +367,7 @@ sp_desktop_request_redraw (Inkscape::UI::View::View *view)
     SPDesktop *dt = SP_DESKTOP (view);
 
     if (dt->main) {
-        gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (dt->main)->canvas));
+        sp_desktop_widget_queue_draw (dt->owner);
     }
 }
 
@@ -629,6 +628,9 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
     }
 }
 
+/**
+ * Callback to reset snapper's distances.
+ */
 static void
 sp_dt_update_snap_distances (SPDesktop *desktop)
 {
@@ -813,8 +815,6 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
     }
 }
 
-/* Private helpers */
-
 /**
  * Show current coordinates on desktop.
  * \param underline Unused
@@ -844,7 +844,7 @@ sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underli
 
     g_snprintf (cstr, 64, "%6.2f, %6.2f", desktop->owner->dt2r * p[NR::X], desktop->owner->dt2r * p[NR::Y]);
 
-    gtk_label_set_text (GTK_LABEL (desktop->owner->coord_status), cstr);
+    sp_desktop_widget_set_coordinate_status (desktop->owner, cstr);
 }
 
 /**
@@ -921,103 +921,9 @@ sp_desktop_point (SPDesktop const *desktop)
     }
 }
 
-
 /**
- * the statusbars
- *
- * we have
- * - coordinate status   set with sp_desktop_coordinate_status which is currently not unset
- * - selection status    which is used in two ways:
- *    * sp_desktop_default_status sets the default status text which is visible
- *      if no other text is displayed
- *    * sp_desktop_set_status sets the status text and can be cleared
- with sp_desktop_clear_status making the default visible
-*/
-typedef struct {
-    GtkStatusbar *sb;
-    guint message_id;
-} statusbar_data;
-
-void SPDesktop::_set_status_message(Inkscape::UI::View::View *view, Inkscape::MessageType type, const gchar *message)
-{
-    SPDesktop *desktop=SP_DESKTOP(view);
-    if (desktop->owner) {
-        desktop->owner->setMessage(type, message);
-    }
-}
-
-void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
-    g_return_if_fail(SP_IS_GROUP(layer));
-    SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::LAYER);
-}
-
-void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
-    g_return_if_fail(SP_IS_GROUP(layer));
-    SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::GROUP);
-}
-
-void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
-                                         SPDesktop *desktop)
-{
-    desktop->_layer_changed_signal.emit(bottom);
-}
-
-void SPDesktop::_selection_changed(Inkscape::Selection *selection, SPDesktop *desktop)
-{
-    /** \todo 
-     * only change the layer for single selections, or what?
-     * This seems reasonable -- for multiple selections there can be many
-     * different layers involved.
-     */
-    SPItem *item=selection->singleItem();
-    if (item) {
-        SPObject *layer=desktop->layerForObject(item);
-        if ( layer && layer != desktop->currentLayer() ) {
-            desktop->setCurrentLayer(layer);
-        }
-    }
-}
-
-void
-SPDesktop::_reconstruction_start (SPDesktop * desktop)
-{
-    // printf("Desktop, starting reconstruction\n");
-    desktop->_reconstruction_old_layer_id = g_strdup(SP_OBJECT_ID(desktop->currentLayer()));
-    desktop->_layer_hierarchy->setBottom(desktop->currentRoot());
-
-    /*
-    GSList const * selection_objs = desktop->selection->list();
-    for (; selection_objs != NULL; selection_objs = selection_objs->next) {
-
-    }
-    */
-    desktop->selection->clear();
-
-    // printf("Desktop, starting reconstruction end\n");
-}
-
-void
-SPDesktop::_reconstruction_finish (SPDesktop * desktop)
-{
-    // printf("Desktop, finishing reconstruction\n");
-    if (desktop->_reconstruction_old_layer_id == NULL)
-        return;
-
-    SPObject * newLayer = SP_OBJECT_DOCUMENT(desktop->namedview)->getObjectById(desktop->_reconstruction_old_layer_id);
-    if (newLayer != NULL)
-        desktop->setCurrentLayer(newLayer);
-
-    g_free(desktop->_reconstruction_old_layer_id);
-    desktop->_reconstruction_old_layer_id = NULL;
-    // printf("Desktop, finishing reconstruction end\n");
-    return;
-}
-
-void SPDesktop::emitToolSubselectionChanged(gpointer data) {
-	_tool_subselection_changed.emit(data);
-	inkscape_subselection_changed (this);
-}
-
+ * Put current zoom data in history list.
+ */
 void
 sp_push_current_zoom (SPDesktop *dt, GList **history)
 {
@@ -1039,6 +945,9 @@ sp_push_current_zoom (SPDesktop *dt, GList **history)
     }
 }
 
+/**
+ * Set viewbox.
+ */
 void
 sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border, bool log)
 {
@@ -1095,6 +1004,32 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     sp_desktop_widget_update_zoom (dtw);
 }
 
+/**
+ * Return viewbox dimensions.
+ */
+NRRect *
+sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
+{
+    NRRect viewbox;
+
+    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
+    if (!dtw) return NULL;
+
+    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+
+    double scale = dt->d2w[0];
+
+    area->x0 = viewbox.x0 / scale;
+    area->y0 = viewbox.y1 / -scale;
+    area->x1 = viewbox.x1 / scale;
+    area->y1 = viewbox.y0 / -scale;
+
+    return area;
+}
+
+/**
+ * Revert back to previous zoom if possible.
+ */
 void
 sp_desktop_prev_zoom (SPDesktop *dt)
 {
@@ -1118,6 +1053,9 @@ sp_desktop_prev_zoom (SPDesktop *dt)
     dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
 }
 
+/**
+ * Set zoom to next in list.
+ */
 void
 sp_desktop_next_zoom (SPDesktop *dt)
 {
@@ -1141,26 +1079,9 @@ sp_desktop_next_zoom (SPDesktop *dt)
     dt->zooms_future = g_list_remove (dt->zooms_future, ((NRRect *) dt->zooms_future->data));
 }
 
-NRRect *
-sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
-{
-    NRRect viewbox;
-
-    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
-    if (!dtw) return NULL;
-
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
-
-    double scale = dt->d2w[0];
-
-    area->x0 = viewbox.x0 / scale;
-    area->y0 = viewbox.y1 / -scale;
-    area->x1 = viewbox.x1 / scale;
-    area->y1 = viewbox.y0 / -scale;
-
-    return area;
-}
-
+/**
+ * Zoom to point with absolute zoom factor.
+ */
 void
 sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double px, double py, double zoom)
 {
@@ -1171,7 +1092,7 @@ sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double
 
     // maximum or minimum zoom reached, but there's no exact equality because of rounding errors;
     // this check prevents "sliding" when trying to zoom in at maximum zoom;
-    // someone please fix calculations properly and remove this hack
+    /// \todo someone please fix calculations properly and remove this hack
     if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01))
         return;
 
@@ -1184,12 +1105,18 @@ sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double
     sp_desktop_set_display_area (dt, cx - px * width2, cy - py * height2, cx + (1 - px) * width2, cy + (1 - py) * height2, 0.0);
 }
 
+/**
+ * Zoom to center with absolute zoom factor.
+ */
 void
 sp_desktop_zoom_absolute (SPDesktop *dt, double cx, double cy, double zoom)
 {
     sp_desktop_zoom_absolute_keep_point (dt, cx, cy, 0.5, 0.5, zoom);
 }
 
+/**
+ * Zoom to point with relative zoom factor.
+ */
 void
 sp_desktop_zoom_relative_keep_point (SPDesktop *dt, double cx, double cy, double zoom)
 {
@@ -1212,6 +1139,9 @@ sp_desktop_zoom_relative_keep_point (SPDesktop *dt, double cx, double cy, double
     sp_desktop_zoom_absolute_keep_point (dt, cx, cy, px, py, scale);
 }
 
+/**
+ * Zoom to center with relative zoom factor.
+ */
 void
 sp_desktop_zoom_relative (SPDesktop *dt, double cx, double cy, double zoom)
 {
@@ -1219,6 +1149,9 @@ sp_desktop_zoom_relative (SPDesktop *dt, double cx, double cy, double zoom)
     sp_desktop_zoom_absolute (dt, cx, cy, scale);
 }
 
+/**
+ * Set display area to origin and current document dimensions.
+ */
 void
 sp_desktop_zoom_page (SPDesktop *dt)
 {
@@ -1233,6 +1166,9 @@ sp_desktop_zoom_page (SPDesktop *dt)
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
 
+/**
+ * Set display area to current document width.
+ */
 void
 sp_desktop_zoom_page_width (SPDesktop *dt)
 {
@@ -1250,6 +1186,9 @@ sp_desktop_zoom_page_width (SPDesktop *dt)
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
 
+/**
+ * Zoom to selection.
+ */
 void
 sp_desktop_zoom_selection (SPDesktop *dt)
 {
@@ -1260,6 +1199,9 @@ sp_desktop_zoom_selection (SPDesktop *dt)
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
 
+/**
+ * Zoom to whole drawing.
+ */
 void
 sp_desktop_zoom_drawing (SPDesktop *dt)
 {
@@ -1283,6 +1225,9 @@ sp_desktop_zoom_drawing (SPDesktop *dt)
     sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
 }
 
+/**
+ * Scroll canvas by specific coordinate amount.
+ */
 void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
 {
     SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
@@ -1350,24 +1295,101 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble auto
     return false;
 }
 
-#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 void
 fullscreen(SPDesktop *dt)
 {
-    GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dt->owner->canvas)));
-    if (GTK_IS_WINDOW(topw)) {
-        if (dt->is_fullscreen) {
-            dt->is_fullscreen = FALSE;
-            gtk_window_unfullscreen(topw);
-            sp_desktop_widget_layout (dt->owner);
-        } else {
-            dt->is_fullscreen = TRUE;
-            gtk_window_fullscreen(topw);
-            sp_desktop_widget_layout (dt->owner);
+    sp_desktop_widget_fullscreen (dt->owner);
+}
+
+//--------------------------------------------------------------
+//
+
+/// Callback.
+void SPDesktop::_set_status_message(Inkscape::UI::View::View *view, Inkscape::MessageType type, const gchar *message)
+{
+    SPDesktop *desktop=SP_DESKTOP(view);
+    if (desktop->owner) {
+        desktop->owner->setMessage(type, message);
+    }
+}
+
+/// Callback
+void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
+    g_return_if_fail(SP_IS_GROUP(layer));
+    SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::LAYER);
+}
+
+/// Callback
+void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
+    g_return_if_fail(SP_IS_GROUP(layer));
+    SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::GROUP);
+}
+
+/// Callback
+void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
+                                         SPDesktop *desktop)
+{
+    desktop->_layer_changed_signal.emit(bottom);
+}
+
+/// Callback
+void SPDesktop::_selection_changed(Inkscape::Selection *selection, SPDesktop *desktop)
+{
+    /** \todo 
+     * only change the layer for single selections, or what?
+     * This seems reasonable -- for multiple selections there can be many
+     * different layers involved.
+     */
+    SPItem *item=selection->singleItem();
+    if (item) {
+        SPObject *layer=desktop->layerForObject(item);
+        if ( layer && layer != desktop->currentLayer() ) {
+            desktop->setCurrentLayer(layer);
         }
     }
 }
-#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+
+/// Called when document is starting to be rebuilt.
+void
+SPDesktop::_reconstruction_start (SPDesktop * desktop)
+{
+    // printf("Desktop, starting reconstruction\n");
+    desktop->_reconstruction_old_layer_id = g_strdup(SP_OBJECT_ID(desktop->currentLayer()));
+    desktop->_layer_hierarchy->setBottom(desktop->currentRoot());
+
+    /*
+    GSList const * selection_objs = desktop->selection->list();
+    for (; selection_objs != NULL; selection_objs = selection_objs->next) {
+
+    }
+    */
+    desktop->selection->clear();
+
+    // printf("Desktop, starting reconstruction end\n");
+}
+
+/// Called when document rebuild is finished.
+void
+SPDesktop::_reconstruction_finish (SPDesktop * desktop)
+{
+    // printf("Desktop, finishing reconstruction\n");
+    if (desktop->_reconstruction_old_layer_id == NULL)
+        return;
+
+    SPObject * newLayer = SP_OBJECT_DOCUMENT(desktop->namedview)->getObjectById(desktop->_reconstruction_old_layer_id);
+    if (newLayer != NULL)
+        desktop->setCurrentLayer(newLayer);
+
+    g_free(desktop->_reconstruction_old_layer_id);
+    desktop->_reconstruction_old_layer_id = NULL;
+    // printf("Desktop, finishing reconstruction end\n");
+    return;
+}
+
+void SPDesktop::emitToolSubselectionChanged(gpointer data) {
+	_tool_subselection_changed.emit(data);
+	inkscape_subselection_changed (this);
+}
 
 /*
   Local Variables:

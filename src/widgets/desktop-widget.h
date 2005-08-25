@@ -72,11 +72,13 @@ struct SPDesktopWidgetClass {
 
 GtkType sp_desktop_widget_get_type();
 
-/* Constructor */
+void sp_desktop_widget_queue_draw (SPDesktopWidget* dtw);
+void sp_desktop_widget_set_coordinate_status (SPDesktopWidget *dtw, gchar *cstr);
 
 gint sp_desktop_widget_set_focus(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
+void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
 void sp_desktop_widget_layout(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_zoom(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
