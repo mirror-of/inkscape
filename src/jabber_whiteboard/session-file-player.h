@@ -13,6 +13,7 @@
 #define __WHITEBOARD_SESSION_FILE_PLAYER_H__
 
 #include <glibmm.h>
+#include <gtkmm.h>
 #include <list>
 
 #include "gc-alloc.h"
