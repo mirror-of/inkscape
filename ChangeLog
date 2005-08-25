@@ -1,4 +1,14 @@
+2005-08-25  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/connector-context.cpp, src/connector-context.h:
+	  Change the connector context to use Inkscape's standard selection
+	  mechanism.  Show connector endpoint handles for single connectors
+	  in the selection.  This is the proposed interaction changes as
+	  discussed on the mailing list.  See the post there for a greater
+	  description of the change.
+
 2005-08-24	David Yip	<yipdw@rose-hulman.edu>
+
 	* src/jabber_whiteboard/session-manager.{cpp.h},
 	  src/jabber_whiteboard/callbacks.cpp,
 	  src/ui/dialog/whiteboard-connect.{cpp,h}:

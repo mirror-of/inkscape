@@ -34,7 +34,6 @@ enum {
     SP_CONNECTOR_CONTEXT_DRAGGING,
     SP_CONNECTOR_CONTEXT_CLOSE,
     SP_CONNECTOR_CONTEXT_STOP,
-    SP_CONNECTOR_CONTEXT_DRAWING,
     SP_CONNECTOR_CONTEXT_REROUTING
 };
 
@@ -60,9 +59,6 @@ struct SPConnectorContext : public SPEventContext {
     // The new connector
     SPItem *newconn;
     
-    // Called when the attached object gets deleted.
-    sigc::connection _delete_connection;
-
     // The active shape
     SPItem *active_shape;
     Inkscape::XML::Node *active_shape_repr;
@@ -71,7 +67,8 @@ struct SPConnectorContext : public SPEventContext {
     // Same as above, but for the active connector
     SPItem *active_conn;
     Inkscape::XML::Node *active_conn_repr;
-    Inkscape::XML::Node *active_conn_layer_repr;
+    sigc::connection sel_changed_connection;
+
     
     // The activehandle
     SPKnot *active_handle;
