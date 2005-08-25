@@ -47,7 +47,7 @@ SessionManager::sendRequestToUser(std::string const& recipientJID)
 }
 
 void
-SessionManager::sendRequestToChatroom(gchar const* server, gchar const* chatroom, gchar const* handle, gchar const* password, Glib::ustring const* document)
+SessionManager::sendRequestToChatroom(Glib::ustring const& server, Glib::ustring const& chatroom, Glib::ustring const& handle, Glib::ustring const& password)
 {
 	// We do not yet use the Basic MUC Protocol for connection establishment etc
 	// <http://www.jabber.org/jeps/jep-0045.html>.  The protocol we use is the
@@ -69,7 +69,7 @@ SessionManager::sendRequestToChatroom(gchar const* server, gchar const* chatroom
 	
 	// If a password was supplied, add it to xmlns_node
 	if (password != NULL) {
-		lm_message_node_add_child(xmlns_node, "password", password);
+		lm_message_node_add_child(xmlns_node, "password", password.c_str());
 	}
 
 	// Create chat message handler and node tracker

@@ -33,6 +33,7 @@
 #include "ui/dialog/transformation.h"
 
 #ifdef WITH_INKBOARD
+#include "ui/dialog/whiteboard-sharewithchat.h"
 #include "ui/dialog/whiteboard-sharewithuser.h"
 #include "ui/dialog/whiteboard-connect.h"
 #include "ui/dialog/session-player.h"
@@ -93,6 +94,7 @@ DialogManager::DialogManager() {
 	registerFactory("SessionPlayer",       &create<SessionPlaybackDialog>);
     registerFactory("WhiteboardConnect",   &create<WhiteboardConnectDialog>);
     registerFactory("WhiteboardShareWithUser",   &create<WhiteboardShareWithUserDialog>);
+    registerFactory("WhiteboardShareWithChat",   &create<WhiteboardShareWithChatroomDialog>);
 #endif
     registerFactory("XmlEditor",           &create<XmlEditor>);
 }

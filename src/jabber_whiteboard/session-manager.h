@@ -323,9 +323,8 @@ public:
 	 * @param chatroom name of chatroom
 	 * @param handle chatroom handle to use
 	 * @param password chatroom password; leave NULL if no password
-	 * @param document document message to send
 	 */
-	void sendRequestToChatroom(gchar const* server, gchar const* chatroom, gchar const* handle, gchar const* password, Glib::ustring const* document);
+	void sendRequestToChatroom(Glib::ustring const& server, Glib::ustring const& chatroom, Glib::ustring const& handle, Glib::ustring const& password);
 
 	/**
 	 * @brief send connection request response to a requesting user

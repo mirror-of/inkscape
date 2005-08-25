@@ -52,8 +52,7 @@
 #ifdef WITH_INKBOARD
 #include "ui/dialog/whiteboard-connect.h"
 #include "ui/dialog/whiteboard-sharewithuser.h"
-
-#include "dialogs/whiteboard-sharewithchat-dialog.h"
+#include "ui/dialog/whiteboard-sharewithchat.h"
 #endif
 
 using namespace Inkscape::UI;
@@ -302,7 +301,9 @@ Edit::onDialogWhiteboardShareWithUser()
 void
 Edit::onDialogWhiteboardShareWithChat()
 {
-	sp_whiteboard_sharewithchat_dialog(NULL);
+	Dialog::WhiteboardShareWithChatroomDialogImpl* dlg = dynamic_cast< Dialog::WhiteboardShareWithChatroomDialogImpl* >(_dlg_mgr.getDialog("WhiteboardShareWithChat"));
+	dlg->setSessionManager();
+	_dlg_mgr.showDialog("WhiteboardShareWithChat");
 }
 
 void

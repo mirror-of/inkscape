@@ -83,8 +83,8 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/unclump.cpp \
 	dialogs/unclump.h \
 	dialogs/iconpreview.cpp     \
-	dialogs/iconpreview.h	\
-	$(inkboard_cgtk_dialogs)
+	dialogs/iconpreview.h	
+#	$(inkboard_cgtk_dialogs)
 
 
 #	dialogs/sp-widget.c	\

@@ -57,13 +57,13 @@
 #include "dialogs/input.h"
 
 #ifdef WITH_INKBOARD
-# include "ui/dialog/whiteboard-connect.h"
-# include "ui/dialog/whiteboard-sharewithuser.h"
-# include "dialogs/whiteboard-sharewithchat-dialog.h"
-# include "jabber_whiteboard/session-manager.h"
-# include "jabber_whiteboard/node-tracker.h"
-# include "jabber_whiteboard/session-file.h"
-# include "jabber_whiteboard/session-file-player.h"
+#include "ui/dialog/whiteboard-connect.h"
+#include "ui/dialog/whiteboard-sharewithuser.h"
+#include "ui/dialog/whiteboard-sharewithchat.h"
+#include "jabber_whiteboard/session-manager.h"
+#include "jabber_whiteboard/node-tracker.h"
+#include "jabber_whiteboard/session-file.h"
+#include "jabber_whiteboard/session-file-player.h"
 #endif
 
 #include "extension/effect.h"
@@ -1536,7 +1536,12 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
 #ifdef WITH_INKBOARD
             Inkscape::Whiteboard::SessionManager *sm = SP_ACTIVE_DESKTOP->whiteboard_session_manager();
             if (sm->session_data && sm->session_data->status[Inkscape::Whiteboard::LOGGED_IN]) {
-                sp_whiteboard_sharewithchat_dialog(NULL);
+                // We need to ensure that this dialog is associated with the correct SessionManager,
+                // since the user may have opened a new document (and hence swapped SessionManager
+                // instances) sometime before this dialog invocation
+                Inkscape::UI::Dialog::WhiteboardShareWithChatroomDialogImpl *dlg = dynamic_cast< Inkscape::UI::Dialog::WhiteboardShareWithChatroomDialogImpl *>(dt->_dlg_mgr->getDialog("WhiteboardShareWithChat"));
+                dlg->setSessionManager();
+                dt->_dlg_mgr->showDialog("WhiteboardShareWithChat");
             } else {
                 Gtk::MessageDialog dlg(_("You need to connect to a Jabber server before sharing a document with a chatroom."), true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_CLOSE);
                 dlg.run();
@@ -1544,6 +1549,7 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
 #endif
             break;
         }
+
         case SP_VERB_DIALOG_WHITEBOARD_DUMPXMLTRACKER:
 #ifdef WITH_INKBOARD
             if (SP_ACTIVE_DESKTOP->whiteboard_session_manager()->node_tracker()) {

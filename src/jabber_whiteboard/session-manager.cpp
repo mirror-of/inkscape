@@ -47,7 +47,7 @@
 #include "jabber_whiteboard/session-file.h"
 #include "jabber_whiteboard/session-file-player.h"
 #include "jabber_whiteboard/session-manager.h"
-//#include "jabber_whiteboard/node-observer.h"
+#include "jabber_whiteboard/message-aggregator.h"
 #include "jabber_whiteboard/undo-stack-observer.h"
 #include "jabber_whiteboard/serializer-node-observer.h"
 
@@ -205,9 +205,12 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	// We need to check to see if this object already exists, because
 	// the user may be reusing an old connection that failed due to e.g.
 	// authentication failure.
-	if (!this->session_data->connection) {
-		this->session_data->connection = lm_connection_new(server.c_str());
+	if (this->session_data->connection) {
+		lm_connection_close(this->session_data->connection, &error);
+		lm_connection_unref(this->session_data->connection);
 	}
+
+	this->session_data->connection = lm_connection_new(server.c_str());
 
 	lm_connection_set_port(this->session_data->connection, atoi(port.c_str()));
 
@@ -569,8 +572,6 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 	Glib::ustring docbegin = MessageUtilities::makeTagWithContent(MESSAGE_DOCBEGIN, "");
 	this->sendChange(&docbegin, DOCUMENT_BEGIN, recipientJID, false);
 
-	Glib::ustring *buf = new Glib::ustring();
-
 	Inkscape::XML::Node* root = sp_document_repr_root(this->_myDoc);
 
 	if(root == NULL) {
@@ -578,22 +579,33 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
     }
 
 	NewChildObjectMessageList newchildren;
+	MessageAggregator& agg = MessageAggregator::instance();
+	Glib::ustring buf;
 
     for ( Inkscape::XML::Node *child = root->firstChild() ; child != NULL ; child = child->next() ) {
 		// TODO: replace with SerializerNodeObserver methods
-		MessageUtilities::newObjectMessage(buf, newidsbuf, newnodesbuf, newchildren, this->_myTracker, child);
+		MessageUtilities::newObjectMessage(&buf, newidsbuf, newnodesbuf, newchildren, this->_myTracker, child);
 
 		NewChildObjectMessageList::iterator j = newchildren.begin();
+		Glib::ustring aggbuf;
+
 		for(; j != newchildren.end(); j++) {
-			this->sendChange(&(*j), CHANGE_REPEATABLE, recipientJID, false);
+			if (!agg.addOne(*j, aggbuf)) {
+				this->sendChange(&aggbuf, CHANGE_REPEATABLE, recipientJID, false);
+				aggbuf.clear();
+				agg.addOne(*j, aggbuf);
+			}
+		}
+
+		// send remaining changes
+		if (!aggbuf.empty()) {
+			this->sendChange(&aggbuf, CHANGE_REPEATABLE, recipientJID, false);
+			aggbuf.clear();
 		}
 
 		newchildren.clear();
-
-		buf->clear();
+		buf.clear();
     }
-
-	delete buf;
 
 	Glib::ustring commit = MessageUtilities::makeTagWithContent(MESSAGE_COMMIT, "");
 	this->sendChange(&commit, CHANGE_COMMIT, recipientJID, false);
