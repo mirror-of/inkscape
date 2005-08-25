@@ -15,28 +15,28 @@ private:
 public:
     SVGOStringStream();
 
-#define INK_STR_OP(_t) \
+#define INK_SVG_STR_OP(_t) \
     SVGOStringStream &operator<<(_t arg) {  \
         ostr << arg;    \
         return *this;   \
     }
 
-    INK_STR_OP(char)
-    INK_STR_OP(signed char)
-    INK_STR_OP(unsigned char)
-    INK_STR_OP(short)
-    INK_STR_OP(unsigned short)
-    INK_STR_OP(int)
-    INK_STR_OP(unsigned int)
-    INK_STR_OP(long)
-    INK_STR_OP(unsigned long)
-    INK_STR_OP(char const *)
-    INK_STR_OP(signed char const *)
-    INK_STR_OP(unsigned char const *)
-    INK_STR_OP(std::string const &)
-    INK_STR_OP(std_oct_type)
+    INK_SVG_STR_OP(char)
+    INK_SVG_STR_OP(signed char)
+    INK_SVG_STR_OP(unsigned char)
+    INK_SVG_STR_OP(short)
+    INK_SVG_STR_OP(unsigned short)
+    INK_SVG_STR_OP(int)
+    INK_SVG_STR_OP(unsigned int)
+    INK_SVG_STR_OP(long)
+    INK_SVG_STR_OP(unsigned long)
+    INK_SVG_STR_OP(char const *)
+    INK_SVG_STR_OP(signed char const *)
+    INK_SVG_STR_OP(unsigned char const *)
+    INK_SVG_STR_OP(std::string const &)
+    INK_SVG_STR_OP(std_oct_type)
 
-#undef INK_STR_OP
+#undef INK_SVG_STR_OP
 
     gchar const *gcharp() const {
         return reinterpret_cast<gchar const *>(ostr.str().c_str());
