@@ -1,3 +1,11 @@
+2005-08-25  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.cpp, src/widgets/desktop-widget.h, 
+	  src/widgets/desktop-widget.cpp: 
+	  abstracted out all Gtk+ calls from SPDesktop into SPDesktopWidget
+	* src/Doxyfile, src/main.cpp, src/desktop.cpp:
+	  improved doxygen documentation
+	  
 2005-08-25  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/connector-context.cpp, src/connector-context.h:
@@ -7,6 +15,22 @@
 	  discussed on the mailing list.  See the post there for a greater
 	  description of the change.
 
+2005-08-24  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/widgets/desktop-widget.h, src/widgets/desktop-widget.cpp:
+	  separated SPDesktopWidget from SPDesktop
+	* src/desktop-widget.h:   removed
+	* src/toolbox.cpp, src/toolbox.h, src/select-toolbar.cpp,
+	  src/select-toolbar.h, src/gradient-toolbar.cpp, 
+	  src/gradient-toolbar.h:   moved into src/widgets
+	* src/desktop.h, src/desktop.cpp, src/desktop-events.cpp,
+	  src/verbs.cpp, src/Makefile_insert, src/widgets/Makefile_insert,
+	  src/arc-context.cpp, src/dyna-draw-context.cpp,
+	  src/gradient-context.cpp, src/rect-context.cpp,
+	  src/select-context.cpp, src/spiral-context.cpp,
+	  src/star-context.cpp, src/interface.cpp, src/seltrans.cpp:
+	  adapted following SPDesktopWidget separation
+	
 2005-08-24	David Yip	<yipdw@rose-hulman.edu>
 
 	* src/jabber_whiteboard/session-manager.{cpp.h},
