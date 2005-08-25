@@ -132,8 +132,8 @@
  */
 /** \page Tools Tools Related Classes and Files
  * 
- * SPSelcue [\ref selcue.cpp, \ref selcue.h, \ref rubberband.cpp]
- * Inkscape::Selection [\ref selection.cpp, \ref selection.h, selection-chemistry.cpp]
+ * SPSelCue [\ref selcue.cpp, \ref selcue.h, \ref rubberband.cpp]
+ * Inkscape::Selection [\ref selection.cpp, \ref selection.h, \ref selection-chemistry.cpp]
  * SPSelTrans [\ref seltrans.cpp, \ref seltrans.h]
  * 
  * \section Event Context Class Hierarchy
@@ -162,7 +162,7 @@
  *
  * - SPView [\ref ui/view/view.cpp, \ref ui/view/view.h]
  *   - Inkscape::UI::View::Edit [\ref ui/view/edit.cpp, \ref ui/view/edit.h]
- *   - SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h \ref desktop-style.h]
+ *   - SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h, \ref desktop-style.h]
  *   - SPSVGView [\ref svg-view.cpp, svg-view.h]
  *
  * SPDesktopWidget [\ref desktop-widget.h] SPSVGViewWidget [\ref svg-view.cpp]
@@ -174,7 +174,7 @@
  *
  * [\ref layer-fns.cpp, \ref selection-describer.h]
  * MessageContext [\ref message-context.h] 
- * MessageStack [\ref message-stack.h, message.h] 
+ * MessageStack [\ref message-stack.h, \ref message.h] 
  *
  * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
  *
@@ -222,7 +222,7 @@
  * - Inkscape::URIHandle [\ref streams-handles.h]
  *   - Inkscape::FileHandle
  * [\ref dir-util.cpp] [\ref file.cpp] 
- * Inkscape::URI [\ref uri.h, \ref extract-uri.cpp, uri-references.cpp]
+ * Inkscape::URI [\ref uri.h, \ref extract-uri.cpp, \ref uri-references.cpp]
  * Inkscape::BadURIException [\ref bad-uri-exception.h] 
  * 
  * Inkscape::XML::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
