@@ -400,6 +400,10 @@ sp_svg_length_get_css_units (SPSVGLengthUnit unit)
 	return "";
 }
 
+/**
+ * N.B.\ This routine will sometimes return strings with `e' notation, so is unsuitable for CSS
+ * lengths (which don't allow scientific `e' notation).
+ */
 const gchar *
 sp_svg_length_write_with_units (SPSVGLength *length)
 {
