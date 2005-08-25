@@ -64,5 +64,6 @@ dialogs/whiteboard-sharewithuser-dialog.cpp
 jabber_whiteboard
 ui/dialog/session-player.cpp
 ui/dialog/whiteboard-connect.cpp
+ui/dialog/whiteboard-sharewithchat.cpp
 ui/dialog/whiteboard-sharewithuser.cpp
 
