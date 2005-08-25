@@ -12,6 +12,7 @@ INPUT = \
 	desktop.h       \
 	desktop.cpp     \
 	desktop-style.cpp     \
+	desktop-widget.h      \
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
