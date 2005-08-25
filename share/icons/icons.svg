@@ -1351,7 +1351,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:nodetypes="cc" />
     <path
        sodipodi:type="arc"
-       style="fill:#ffffff;fill-opacity:2.0861628e-06;fill-rule:evenodd;stroke:#000000;stroke-width:1.4443790"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.4443790"
        id="path236"
        d="M 8.8317671 152.50000 A 3.8317671 3.7500000 0 1 0 1.1682329,152.50000 A 3.8317671 3.7500000 0 1 0 8.8317671 152.50000 z"
        sodipodi:cx="5.0000000"
@@ -6187,7 +6187,7 @@ http://www.inkscape.org/</dc:description>
        ry="0.49999985"
        x="913.79681"
        y="67.500000"
-       style="fill:#e5e5e5;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2499996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:#e5e5e5;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2499996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect37" />
     <path
        d="M 916.95987,86.089738 L 918.54047,86.089738 L 918.54047,75.477132 L 919.66947,75.477132 L 919.66947,86.089738 L 921.14658,86.089738 L 919.18024,88.893423 L 916.95987,86.089738 z "
@@ -6231,7 +6231,7 @@ http://www.inkscape.org/</dc:description>
        ry="0.49999985"
        x="873.02600"
        y="67.412720"
-       style="fill:#e5e5e5;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2499996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:#e5e5e5;fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2499996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect1254" />
     <path
        d="M 892.73134,70.359913 L 892.73134,71.940514 L 882.11873,71.940514 L 882.11873,73.069514 L 892.73134,73.069514 L 892.73134,74.546624 L 895.62500,72.580281 L 892.73134,70.359913 z "
@@ -6273,7 +6273,7 @@ http://www.inkscape.org/</dc:description>
        x="912.26202"
        y="79.953575" />
     <rect
-       style="fill:url(#linearGradient63);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:url(#linearGradient63);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect17"
        width="25.912205"
        height="25.912205"
@@ -6303,7 +6303,7 @@ http://www.inkscape.org/</dc:description>
        x="821.63104"
        y="94.666397" />
     <rect
-       style="fill:url(#linearGradient60);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:url(#linearGradient60);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect21"
        width="25.912205"
        height="25.912205"
@@ -6327,7 +6327,7 @@ http://www.inkscape.org/</dc:description>
        x="918.73566"
        y="99.374496" />
     <rect
-       style="fill:url(#linearGradient70);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500010;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:url(#linearGradient70);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500010;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect2680"
        width="16.651796"
        height="16.651796"
@@ -6336,7 +6336,7 @@ http://www.inkscape.org/</dc:description>
        rx="0.50000036"
        ry="0.50000036" />
     <rect
-       style="fill:url(#linearGradient69);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500010;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:url(#linearGradient69);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500010;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect64"
        width="16.651796"
        height="16.651796"
@@ -6356,7 +6356,7 @@ http://www.inkscape.org/</dc:description>
        x="926.81250"
        y="82.937500" />
     <rect
-       style="fill:url(#linearGradient79);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:3.4694470e-17;stroke-opacity:1.0000000"
+       style="fill:url(#linearGradient79);fill-opacity:1.0000000;fill-rule:nonzero;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0;stroke-opacity:1.0000000"
        id="rect38"
        width="25.912205"
        height="25.912205"
