@@ -24,6 +24,7 @@ class SPSVGViewClass;
 
 #include "display/display-forward.h"
 #include "ui/view/view.h"
+#include "ui/view/view-widget.h"
 
 
 void sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale);

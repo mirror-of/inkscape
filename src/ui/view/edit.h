@@ -36,6 +36,7 @@ struct SPCanvasGroup;
 struct SPCanvasArena;
 struct SPCSSAttr;
 struct SPDesktopWidget;
+struct SPEventContext;
 struct SPNamedView;
 struct NRArenaItem;
 

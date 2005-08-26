@@ -15,26 +15,21 @@
 
 #include <libnr/nr-point.h>
 #include <sigc++/connection.h>
+#include <gtk/gtkeventbox.h>
+#include "message.h"
 
 #define SP_TYPE_VIEW (sp_view_get_type ())
 #define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, Inkscape::UI::View::View))
 #define SP_IS_VIEW(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_VIEW))
 
-#include <sigc++/sigc++.h>
-#include <gtk/gtkeventbox.h>
-
-#include "forward.h"
-#include "message.h"
-#include "message-stack.h"
-#include "message-context.h"
-
 namespace Inkscape {
 class MessageContext;
 class MessageStack;
 }
-
-
 class SPView;
+class SPDocument;
+
+
 GType    sp_view_get_type (void);
 void     sp_view_set_document (SPView *view, SPDocument *doc);
 void     sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
@@ -51,11 +46,15 @@ inline void sp_view_set_position(SPView *view, NR::Point const &p)
 }
 
 /**
- * Abstract base class for all SVG document views
+ * SPView is an abstract base class of all UI document views.  This
+ * includes both the editing window and the SVG preview, but does not
+ * include the non-UI RGBA buffer-based NRArenas nor the XML editor or
+ * similar views.  The SPView base class has very little functionality of
+ * its own.
  */
 class SPView : public GObject {
  public:
-    GObject object;  // TODO:  Remove this
+    GObject object;  /// \todo TODO:  Remove this
 
     SPDocument *doc;
 
@@ -130,64 +129,15 @@ class SPViewClass {
 
 #define SP_VIEW_DOCUMENT(v) (SP_VIEW (v)->doc)
 
-/* SPViewWidget */
-
-#define SP_TYPE_VIEW_WIDGET (sp_view_widget_get_type ())
-#define SP_VIEW_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_VIEW_WIDGET, SPViewWidget))
-#define SP_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_VIEW_WIDGET, SPViewWidgetClass))
-#define SP_IS_VIEW_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_VIEW_WIDGET))
-#define SP_IS_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_VIEW_WIDGET))
-
-GType sp_view_widget_get_type (void);
-
-void sp_view_widget_set_view (SPViewWidget *vw, SPView *view);
-
-/// Allows presenting 'save changes' dialog, FALSE - continue, TRUE - cancel
-gboolean sp_view_widget_shutdown (SPViewWidget *vw);
-
-/// Create a new SPViewWidget (which happens to be a SPDesktopWidget). 
-SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
-
-/**
- * An SPViewWidget contains a GtkEventBox and a pointer to an SPView.
- */
-class SPViewWidget {
- public:
-	GtkEventBox eventbox;
-
-	SPView *view;
-
-    // C++ Wrappers
-    GType getType() const {
-	return sp_view_widget_get_type();
-    }
-
-    void setView(SPView *view) {
-	sp_view_widget_set_view(this, view);
-    }
-
-    gboolean shutdown() {
-	return sp_view_widget_shutdown(this);
-    }
-
-};
-
-/**
- * The Glib-style vtable for the SPViewWidget class.
- */
-class SPViewWidgetClass {
- public:
-    GtkEventBoxClass parent_class;
-
-    /* Virtual method to set/change/remove view */
-    void (* set_view) (SPViewWidget *vw, SPView *view);
-    /// Virtual method about view size change
-    void (* view_resized) (SPViewWidget *vw, SPView *view, gdouble width, gdouble height);
-
-    gboolean (* shutdown) (SPViewWidget *vw);
-};
-
-#define SP_VIEW_WIDGET_VIEW(w) (SP_VIEW_WIDGET (w)->view)
-#define SP_VIEW_WIDGET_DOCUMENT(w) (SP_VIEW_WIDGET (w)->view ? ((SPViewWidget *) (w))->view->doc : NULL)
-
 #endif  // INKSCAPE_UI_VIEW_VIEW_H
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

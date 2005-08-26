@@ -59,6 +59,7 @@
 #include "desktop-affine.h"
 #include "widgets/desktop-widget.h"
 #include "document.h"
+#include "message-stack.h"
 #include "selection.h"
 #include "select-context.h"
 #include "sp-namedview.h"
