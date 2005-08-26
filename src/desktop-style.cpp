@@ -599,10 +599,14 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
 
     style_res->font_size.computed = size;
     style_res->font_size.type = SP_FONT_SIZE_LENGTH;
+
     style_res->letter_spacing.normal = letterspacing_normal;
     style_res->letter_spacing.computed = letterspacing;
+
     style_res->line_height.normal = linespacing_normal;
     style_res->line_height.computed = linespacing;
+    style_res->line_height.value = linespacing;
+    style_res->line_height.unit = SP_CSS_UNIT_PERCENT;
 
     if (texts > 1) {
         if (different) {
