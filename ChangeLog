@@ -1,5 +1,25 @@
 2005-08-25  Ralf Stephan <ralf@ark.in-berlin.de>
 
+	* src/ui/view/edit.h, src/ui/view/view.h, src/ui/view/view.cpp,
+	  src/ui/view/view-widget.h, src/ui/view/view-widget.cpp,
+	  src/widgets/desktop-widget.h, src/svg-view.h, src/desktop.cpp:
+	    separated SPViewWidget from SPView
+	* src/connector-context.cpp, src/dyna-draw-context.cpp,
+	  src/file.cpp, src/gradient-context.cpp, src/knot.cpp,
+	  src/node-context.cpp, src/nodepath.cpp, src/path-chemistry.cpp,
+	  src/pen-context.cpp, src/pencil-context.cpp, src/rect-context.cpp,
+	  src/selection-chemistry.cpp, src/spiral-context.cpp,
+	  src/splivarot.cpp, src/star-context.cpp, src/text-chemistry.cpp,
+	  src/text-context.cpp, src/verbs.cpp, src/dialogs/display-settings.cpp,
+	  src/dialogs/layer-properties.cpp, src/dialogs/find.cpp,
+	  src/dialogs/clonetiler.cpp, src/trace/trace.cpp,
+	  src/trace/potrace/inkscape-potrace.cpp:
+	    all these files relied on a dependency in view.h to include
+	  code for MessageStack and/or MessageContext which is now removed
+	* dialogs/desktop-properties.cpp:   improved doxygen documentation
+	
+2005-08-25  Ralf Stephan <ralf@ark.in-berlin.de>
+
 	* src/desktop.cpp, src/widgets/desktop-widget.h, 
 	  src/widgets/desktop-widget.cpp: 
 	  abstracted out all Gtk+ calls from SPDesktop into SPDesktopWidget
