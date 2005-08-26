@@ -31,6 +31,7 @@
 #include "util/ucompose.hpp"
 
 #include "message-context.h"
+#include "message-stack.h"
 #include "desktop.h"
 #include "document.h"
 #include "document-private.h"

@@ -16,6 +16,7 @@ extern "C" {
 
 #include <glibmm/i18n.h>
 
+#include "message-stack.h"
 #include "document.h"
 #include "desktop.h"
 

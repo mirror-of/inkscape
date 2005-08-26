@@ -10,6 +10,8 @@ ui_view_libuiview_a_SOURCES =		\
 	ui/view/edit.cpp		\
 	ui/view/view.h			\
 	ui/view/view.cpp		\
+	ui/view/view-widget.cpp \
+	ui/view/view-widget.h \
 	ui/view/desktop.h		\
 	ui/view/desktop.cpp		\
 	ui/view/desktop-affine.h	\

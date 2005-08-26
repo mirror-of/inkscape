@@ -17,6 +17,7 @@
 #include <sigc++/sigc++.h>
 #include <gtk/gtkdialog.h>
 
+#include "message-stack.h"
 #include "message-context.h"
 #include "inkscape.h"
 #include "desktop.h"

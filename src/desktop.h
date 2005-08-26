@@ -16,6 +16,8 @@
  *
  */
 
+#include "config.h"
+
 #include <sigc++/sigc++.h>
 //#include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>

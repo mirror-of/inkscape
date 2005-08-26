@@ -12,6 +12,7 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
+#include "message-stack.h"
 
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/message-node.h"
