@@ -41,6 +41,8 @@
 #include "desktop-style.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
+#include "message-stack.h"
+#include "message-context.h"
 #include "pixmaps/cursor-text.xpm"
 #include "pixmaps/cursor-text-insert.xpm"
 #include "ui/view/view.h"

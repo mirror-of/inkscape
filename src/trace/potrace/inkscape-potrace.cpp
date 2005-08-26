@@ -22,6 +22,7 @@
 #include <inkscape.h>
 #include <desktop.h>
 #include <document.h>
+#include "message-stack.h"
 #include <selection.h>
 #include <sp-image.h>
 #include <sp-path.h>

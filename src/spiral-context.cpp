@@ -37,6 +37,7 @@
 #include "snap.h"
 #include "desktop.h"
 #include "desktop-style.h"
+#include "message-context.h"
 #include "pixmaps/cursor-spiral.xpm"
 #include "spiral-context.h"
 #include "widgets/desktop-widget.h"

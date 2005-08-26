@@ -29,6 +29,8 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
+#include "message-stack.h"
+#include "message-context.h"
 #include "node-context.h"
 #include "nodepath.h"
 #include "selection-chemistry.h"

@@ -37,7 +37,7 @@
 #include "document.h"
 #include "document-private.h"
 #include "selection-chemistry.h"
-#include "ui/view/view.h"
+#include "ui/view/view-widget.h"
 #include "dir-util.h"
 #include "helper/png-write.h"
 #include "dialogs/export.h"

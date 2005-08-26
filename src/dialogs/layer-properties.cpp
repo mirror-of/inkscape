@@ -26,6 +26,7 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
+#include "message-stack.h"
 #include "desktop-handles.h"
 #include "layer-fns.h"
 

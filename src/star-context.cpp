@@ -38,6 +38,7 @@
 #include "snap.h"
 #include "desktop.h"
 #include "desktop-style.h"
+#include "message-context.h"
 #include "pixmaps/cursor-star.xpm"
 #include "widgets/desktop-widget.h"
 #include "sp-metrics.h"

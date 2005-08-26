@@ -33,6 +33,7 @@
 #include "nodepath.h"
 #include "knotholder.h"
 #include "pixmaps/cursor-node.xpm"
+#include "message-context.h"
 #include "node-context.h"
 #include "sp-cursor.h"
 #include "pixmaps/cursor-node-m.xpm"

@@ -23,6 +23,8 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "draw-anchor.h"
+#include "message-stack.h"
+#include "message-context.h"
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "sp-path.h"

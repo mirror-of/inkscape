@@ -21,6 +21,7 @@
 #include <desktop.h>
 #include <desktop-handles.h>
 #include <document.h>
+#include "message-stack.h"
 #include <glibmm/i18n.h>
 #include <selection.h>
 #include <sp-image.h>

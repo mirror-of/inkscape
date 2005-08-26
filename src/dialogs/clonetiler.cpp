@@ -33,6 +33,7 @@
 #include "../style.h"
 #include "../desktop.h"
 #include "../document.h"
+#include "../message-stack.h"
 #include "../sp-use.h"
 #include "unclump.h"
 

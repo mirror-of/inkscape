@@ -23,6 +23,7 @@
 #include "widgets/icon.h"
 #include "dialogs/docker.h"
 
+#include "message-stack.h"
 #include "verbs.h"
 
 //TODO  : delete this

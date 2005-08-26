@@ -42,6 +42,8 @@
 #include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "document.h"
+#include "message-context.h"
+#include "message-stack.h"
 #include "selection.h"
 #include "prefs-utils.h"
 #include "sp-item.h"

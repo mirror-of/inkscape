@@ -30,6 +30,7 @@
 #include "style.h"
 #include "inkscape.h"
 #include "document.h"
+#include "message-stack.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "path-chemistry.h"

@@ -74,6 +74,7 @@
 #include "help.h"
 #include "document.h"
 #include "desktop.h"
+#include "message-stack.h"
 #include "widgets/desktop-widget.h"
 #include "desktop-handles.h"
 #include "selection.h"

@@ -34,6 +34,7 @@
 #include "prefs-utils.h"
 #include <libnr/nr-point-fns.h>
 #include "message-stack.h"
+#include "message-context.h"
 #include "event-context.h"
 
 #include "sp-guide.h"

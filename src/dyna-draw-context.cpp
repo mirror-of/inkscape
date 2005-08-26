@@ -52,6 +52,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "desktop-style.h"
+#include "message-context.h"
 #include "snap.h"
 #include "widgets/desktop-widget.h"
 #include "dyna-draw-context.h"

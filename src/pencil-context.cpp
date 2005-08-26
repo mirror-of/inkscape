@@ -24,6 +24,8 @@
 #include "selection.h"
 #include "draw-anchor.h"
 #include "draw-context.h"
+#include "message-stack.h"
+#include "message-context.h"
 #include "modifier-fns.h"
 #include "sp-item.h"
 #include "sp-path.h"

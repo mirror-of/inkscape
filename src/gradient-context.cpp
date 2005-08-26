@@ -29,6 +29,8 @@
 #include "snap.h"
 #include "desktop.h"
 #include "desktop-style.h"
+#include "message-context.h"
+#include "message-stack.h"
 #include "pixmaps/cursor-gradient.xpm"
 #include "gradient-context.h"
 #include "widgets/desktop-widget.h"

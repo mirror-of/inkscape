@@ -31,6 +31,7 @@
 #include "selection.h"
 #include "tools-switch.h"
 #include "desktop-handles.h"
+#include "message-stack.h"
 #include "sp-item-transform.h"
 #include "sp-item-group.h"
 #include "sp-marker.h"
