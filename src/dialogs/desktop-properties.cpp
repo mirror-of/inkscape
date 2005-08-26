@@ -1,6 +1,6 @@
 #define __SP_DESKTOP_PROPERTIES_C__
 
-/**
+/** \file
  * \brief  Desktop configuration dialog
  *
  * Authors:
@@ -80,9 +80,8 @@ struct PaperSize {
     SPUnitId const unit;
 };
 
-static PaperSize const inkscape_papers[] = {
-    /*
-     * N.B. the ISO page sizes in the table below differ from ghostscript's idea of page sizes (by
+    /** \note
+     * The ISO page sizes in the table below differ from ghostscript's idea of page sizes (by
      * less than 1pt).  Being off by <1pt should be OK for most purposes, but may cause fuzziness
      * (antialiasing) problems when printing to 72dpi or 144dpi printers or bitmap files due to
      * postscript's different coordinate system (y=0 meaning bottom of page in postscript and top
@@ -94,7 +93,8 @@ static PaperSize const inkscape_papers[] = {
      * this table and in ghostscript.
      *
      * The versions here, in mm, are the official sizes according to
-     * http://en.wikipedia.org/wiki/Paper_sizes at 2005-01-25.  (The ISO entries in the below table
+     * <a href="http://en.wikipedia.org/wiki/Paper_sizes">http://en.wikipedia.org/wiki/Paper_sizes</a> 
+     * at 2005-01-25.  (The ISO entries in the below table
      * were produced mechanically from the table on that page.)
      *
      * (The rule seems to be that A0, B0, ..., D0. sizes are rounded to the nearest number of mm
@@ -112,7 +112,14 @@ static PaperSize const inkscape_papers[] = {
      * appropriate power of two (see a1).  Possibly it was prepared manually, with a human applying
      * inconsistent rounding rules when converting from mm to pt.
      */
+    /** \todo
+     * Should we include the JIS B series (used in Japan)  
+     * (JIS B0 is sometimes called JB0, and similarly for JB1 etc)?
+     * Should we exclude B7--B10 and A7--10 to make the list smaller ?
+     * Should we include any of the ISO C, D and E series (see below) ?
+     */
 
+static PaperSize const inkscape_papers[] = {
     { "A4", 210, 297, SP_UNIT_MM },
     { "US Letter", 8.5, 11, SP_UNIT_IN },
     { "US Legal", 8.5, 14, SP_UNIT_IN },
@@ -138,14 +145,6 @@ static PaperSize const inkscape_papers[] = {
     { "B8", 62, 88, SP_UNIT_MM },
     { "B9", 44, 62, SP_UNIT_MM },
     { "B10", 31, 44, SP_UNIT_MM },
-
-    /* Should we include the JIS B series (used in Japan) ?  (JIS B0 is sometimes called JB0, and
-     * similarly for JB1 etc.)
-     *
-     * Should we exclude B7..B10 and A7..10 to make the list smaller ?
-     *
-     * Should we include any of the ISO C, D and E series (see below) ?
-     */
 
 #if 0 /* Whether to include or exclude these depends on how big we mind our page size menu
          becoming.  C series is used for envelopes; don't know what D and E series are used for. */
@@ -191,6 +190,9 @@ static PaperSize const inkscape_papers[] = {
     { NULL, 0, 0, SP_UNIT_PX },
 };
 
+/**
+ * Called when XML node attribute changed; updates dialog widgets.
+ */
 static void
 docoptions_event_attr_changed(Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer)
 {
@@ -211,6 +213,9 @@ static Inkscape::XML::NodeEventVector docoptions_repr_events = {
     NULL  /* order_changed */
 };
 
+/**
+ * Callback to finalize dialog.
+ */
 static void
 sp_dtw_dialog_destroy(GtkObject *object, gpointer data)
 {
@@ -222,7 +227,10 @@ sp_dtw_dialog_destroy(GtkObject *object, gpointer data)
     wd.stop = 0;
 }
 
-static gboolean
+/**
+ * Called when dialog is closed; saves position/size.
+ */
+static bool
 sp_dtw_dialog_delete(GtkObject *object, GdkEvent *event, gpointer data)
 {
     gtk_window_get_position((GtkWindow *) dlg, &x, &y);
@@ -236,6 +244,10 @@ sp_dtw_dialog_delete(GtkObject *object, GdkEvent *event, gpointer data)
     return FALSE; // which means, go ahead and destroy it
 }
 
+/**
+ * \brief  Callback that writes the change into the corresponding 
+ * attribute of the sodipodi:namedview element.
+ */
 static void
 sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 {
@@ -266,7 +278,9 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 }
 
-
+/**
+ * Same as sp_dtw_whatever_toggled() plus it toggles canvas border on top.
+ */
 static void
 sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 {
@@ -295,9 +309,7 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
 
 /**
- * \brief  Writes the change into the corresponding attribute of the
- *         sodipodi:namedview element.
- *
+ * Same as sp_dtw_whatever_toggled() plus it writes unit_selector.
  */
 static void
 sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
@@ -429,6 +441,10 @@ sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     sp_document_done(doc);
 }
 
+/**
+ * Callback to set gridtolerance attribute from adjustment and 
+ * grid_snap_units widget.
+ */
 static void
 sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
                                   GtkWidget *dialog)
@@ -454,6 +470,9 @@ sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
     sp_document_done(SP_DT_DOCUMENT(dt));
 }
 
+/** 
+ * Callback to set gridempspacing attribute from adjustment widget.
+ */
 static void
 sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
                                  GtkWidget *dialog)
@@ -477,7 +496,10 @@ sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
     sp_document_done(SP_DT_DOCUMENT(dt));
 }
 
-
+/**
+ * Callback to set guidetolerance attribute from adjustment
+ * and guide_snap_units widgets.
+ */
 static void
 sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
                                     GtkWidget *dialog)
@@ -502,7 +524,9 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
     sp_repr_set_attr(repr, "guidetolerance", os.str().c_str());
 }
 
-
+/**
+ * Returns paper dimensions using specific unit and orientation.
+ */
 static pair<double, double>
 get_paper_size(PaperSize const &paper, bool const landscape, SPUnit const *const dest_unit)
 {
@@ -520,6 +544,10 @@ get_paper_size(PaperSize const &paper, bool const landscape, SPUnit const *const
     return pair<double, double>(w, h);
 }
 
+/**
+ * Callback to set height/width widgets from paper type, orientation,
+ * and unit widgets.
+ */
 static void
 sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
 {
@@ -560,6 +588,10 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
     sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
 }
 
+/**
+ * Callback to set height/width widgets from paper type, orientation,
+ * and unit widgets.
+ */
 static void
 sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 {
@@ -586,6 +618,34 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 
     gtk_adjustment_set_value(aw, w);
     gtk_adjustment_set_value(ah, h);
+}
+
+/**
+ * Callback to set inkscape::document-units attribute from unit widget.
+ */
+static gboolean set_doc_units (SPUnitSelector *,
+                             SPUnit const *old,
+                             SPUnit const *new_units,
+                             GObject *dlg)
+{
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+
+    if (!dt) {
+        return FALSE;
+    }
+
+    SPDocument *doc = SP_DT_DOCUMENT(dt);
+
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+
+    gboolean saved = sp_document_get_undo_sensitive(doc);
+    sp_document_set_undo_sensitive(doc, FALSE);
+    sp_repr_set_attr (repr, "inkscape:document-units", sp_unit_get_abbreviation (new_units));
+    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
+    sp_document_set_undo_sensitive(doc, saved);
+    sp_document_done(doc);
+
+    return TRUE;
 }
 
 /**
@@ -639,14 +699,14 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
             view = gtk_text_view_new ();
             gtk_widget_set_size_request (view, -1, 3);
             gtk_text_view_set_wrap_mode ( GTK_TEXT_VIEW (view), GTK_WRAP_WORD );
-// FIXME: available from GTK 2.4 on...
+// available from GTK 2.4 on...
             gtk_text_view_set_accepts_tab ( GTK_TEXT_VIEW (view), FALSE );
-//          until then, just kill tabs...
+//          previously, we just killed tabs...
 //            g_signal_connect ( G_OBJECT (view), "key-press-event",
 //                               G_CALLBACK (text_stop_tab), NULL );
 
             buf = gtk_text_view_get_buffer (GTK_TEXT_VIEW(view));
-            // FIXME: looks like tool tips don't show up for GtkTextViews
+            /// \todo FIXME: looks like tool tips don't show up for GtkTextViews
             gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), scroller, _(entity->tip), NULL );
             gtk_widget_show (view);
             gtk_container_add ( GTK_CONTAINER (scroller), view );
@@ -778,31 +838,6 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
     sp_document_done ( SP_ACTIVE_DOCUMENT );
 }
 
-static gboolean set_doc_units (SPUnitSelector *,
-                             SPUnit const *old,
-                             SPUnit const *new_units,
-                             GObject *dlg)
-{
-    SPDesktop *dt = SP_ACTIVE_DESKTOP;
-
-    if (!dt) {
-        return FALSE;
-    }
-
-    SPDocument *doc = SP_DT_DOCUMENT(dt);
-
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
-
-    gboolean saved = sp_document_get_undo_sensitive(doc);
-    sp_document_set_undo_sensitive(doc, FALSE);
-    sp_repr_set_attr (repr, "inkscape:document-units", sp_unit_get_abbreviation (new_units));
-    sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
-    sp_document_set_undo_sensitive(doc, saved);
-    sp_document_done(doc);
-
-    return TRUE;
-}
-
 
 /*
  * \brief   Creates the desktop properties dialog
@@ -873,7 +908,7 @@ sp_desktop_dialog(void)
 
 
         /* Checkbuttons */
-        // FIXME: gray out snapping when grid is off
+        /// \todo FIXME: gray out snapping when grid is off
         spw_vbox_checkbutton(dlg, v, _("Show grid"), _("Show or hide grid"), "showgrid", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), _("Snap the edges of the object bounding boxes"), "inkscape:grid-bbox", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap points to grid"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:grid-points", cb);
@@ -955,7 +990,7 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page(GTK_NOTEBOOK(nb), v, l);
 
         /* Checkbuttons */
-        // FIXME: gray out snapping when guides are off
+        /// \todo FIXME: gray out snapping when guides are off
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
         spw_vbox_checkbutton(dlg, v, _("Show guides"), _("Show or hide guides"), "showguides", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to guides"),  _("Snap the edges of the object bounding boxes"), "inkscape:guide-bbox", cb);
@@ -1263,7 +1298,9 @@ sp_desktop_dialog(void)
 
 } // end of sp_desktop_dialog(void)
 
-
+/**
+ * Callback to enable notifyig namedview of any changes in dialog widgets.
+ */
 static void
 sp_dtw_activate_desktop(Inkscape::Application *inkscape,
                         SPDesktop *desktop,
@@ -1275,8 +1312,9 @@ sp_dtw_activate_desktop(Inkscape::Application *inkscape,
     sp_dtw_update(dialog, desktop);
 }
 
-
-
+/**
+ * Callback to disable notifyig namedview of any changes in dialog widgets.
+ */
 static void
 sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
                           SPDesktop *desktop,
@@ -1289,9 +1327,10 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
     sp_dtw_update(dialog, NULL);
 }
 
-/** Returns an index into inkscape_papers of a paper of the specified size (specified in px),
-    or -1 if there's no such paper.
-**/
+/** 
+ * Returns an index into inkscape_papers of a paper of the specified 
+ * size (specified in px), or -1 if there's no such paper.
+ */
 static int
 find_paper_size(double const w_px, double const h_px)
 {
@@ -1316,6 +1355,9 @@ find_paper_size(double const w_px, double const h_px)
     return -1;
 }
 
+/**
+ * Update dialog widgets from desktop.
+ */
 static void
 sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 {
