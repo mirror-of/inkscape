@@ -550,7 +550,8 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
         if (!style) continue;
 
         texts ++;
-        size += style->font_size.computed; /// \todo FIXME: we assume non-% units here
+        size += style->font_size.computed * NR::expansion(sp_item_i2d_affine(SP_ITEM(obj))); /// \todo FIXME: we assume non-% units here
+
         if (style->letter_spacing.normal) {
             if (!different && (letterspacing_prev == 0 || letterspacing_prev == letterspacing))
                 letterspacing_normal = true;
