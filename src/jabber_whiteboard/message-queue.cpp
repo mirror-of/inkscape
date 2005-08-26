@@ -87,6 +87,12 @@ ReceiveMessageQueue::insert(MessageNode* msg)
 }
 
 void
+ReceiveMessageQueue::insertDeferred(MessageNode* msg)
+{
+	this->_deferred.push_back(msg);
+}
+
+void
 ReceiveMessageQueue::setLatestProcessedPacket(unsigned int seq)
 {
 	this->_latest = seq;

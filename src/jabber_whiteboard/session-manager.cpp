@@ -350,6 +350,7 @@ SessionManager::disconnectFromServer()
 		GError* error = NULL;
 
 		LmMessage *m;
+		this->disconnectFromDocument();
 		m = lm_message_new_with_sub_type(NULL, LM_MESSAGE_TYPE_PRESENCE, LM_MESSAGE_SUB_TYPE_UNAVAILABLE);
 		if (!lm_connection_send(this->session_data->connection, m, &error)) {
 			g_warning("Could not send unavailable presence message: %s", error->message);

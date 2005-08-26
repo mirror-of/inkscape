@@ -30,11 +30,22 @@ namespace Inkscape {
 namespace Whiteboard {
 
 // Lookup tables
+
+/**
+ * Keys for special nodes.
+ *
+ * A special node is a node that can only appear once in a document.
+ */
 char const* specialnodekeys[] = {
 	DOCUMENT_ROOT_NODE,
 	DOCUMENT_NAMEDVIEW_NODE,
 };
 
+/**
+ * Names of special nodes.
+ *
+ * A special node is a node that can only appear once in a document.
+ */
 char const* specialnodenames[] = {
 	DOCUMENT_ROOT_NAME,
 	DOCUMENT_NAMEDVIEW_NAME,

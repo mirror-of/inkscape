@@ -29,6 +29,9 @@ namespace Whiteboard {
 struct JabberMessage;
 class SessionManager;
 
+/**
+ * Handles received Jabber messages.
+ */
 class MessageHandler {
 public:
 	MessageHandler(SessionManager* sm);

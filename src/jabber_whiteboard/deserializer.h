@@ -28,14 +28,30 @@ namespace Inkscape {
 namespace Whiteboard {
 
 /**
- * A stateful deserializer, meant to deserialize XML::Events serialized by 
+ * A stateful XML::Event deserializer.
+ *
+ * The Deserializer class is meant to deserialize XML::Events serialized by 
  * Inkscape::Whiteboard::SerializerNodeObserver or a serializer that serializes
  * XML::Events into the same format.
  *
- * This deserializer provides facilities similar to SerializerNodeObserver.
+ * Usage is as follows:
+ * <ul>
+ * 	<li>For each serialized event called, call the appropriate deserialization method.</li>
+ * 	<li>Detach the deserialized event.</li>
+ * </ul>
+ *
+ * The deserializer does not actually modify any aspect of the document or node-tracking systems.
+ * Methods are provided to provide the information necessary to perform the modifications outside
+ * of the deserializer.
  */
 class Deserializer {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * \param xnt The XMLNodeTracker that a Deserializer should use for retrieving 
+	 * XML::Nodes based on string keys.
+	 */
 	Deserializer(XMLNodeTracker* xnt) : _xnt(xnt)
 	{
 		this->clearEventLog();
@@ -43,17 +59,63 @@ public:
 
 	~Deserializer() { }
 
+	/**
+	 * Deserialize a node add event.
+	 *
+	 * \see XML::EventAdd
+	 * \param msg The message that describes the event.
+	 */
 	void deserializeEventAdd(Glib::ustring const& msg);
+
+	/**
+	 * Deserialize a node remove event.
+	 *
+	 * \see XML::EventDel
+	 * \param msg The message that describes the event.
+	 */
 	void deserializeEventDel(Glib::ustring const& msg);
+
+	/**
+	 * Deserialize a node order change event.
+	 *
+	 * \see XML::EventChgOrder
+	 * \param msg The message that describes the event.
+	 */
 	void deserializeEventChgOrder(Glib::ustring const& msg);
+
+	/**
+	 * Deserialize a node content change event.
+	 *
+	 * \see XML::EventChgContent
+	 * \param msg The message that describes the event.
+	 */
 	void deserializeEventChgContent(Glib::ustring const& msg);
+
+	/**
+	 * Deserialize a node attribute change event.
+	 *
+	 * \see XML::EventChgAttr
+	 * \param msg The message that describes the event.
+	 */
 	void deserializeEventChgAttr(Glib::ustring const& msg);
 
+	/**
+	 * Retrieve the deserialized event log.
+	 * This method does <b>not</b> clear the internal event log kept by the deserializer.
+	 * To do that, use detachEventLog.
+	 *
+	 * \return The deserialized event log.
+	 */
 	XML::Event* getEventLog()
 	{
 		return this->_log;
 	}
 
+	/**
+	 * Retrieve the deserialized event log and clear the internal event log kept by the deserializer.
+	 *
+	 * \return The deserialized event log.
+	 */
 	XML::Event* detachEventLog()
 	{
 		XML::Event* ret = this->_log;
@@ -61,32 +123,74 @@ public:
 		return ret;
 	}
 
+	/**
+	 * Clear the internal event log.
+	 */
 	void clearEventLog()
 	{
 		g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing event log");
 		this->_log = NULL;
 	}
 
+	/**
+	 * Retrieve a list of node entry actions (add node entry, remove node entry)
+	 * that need to be performed on the XMLNodeTracker.
+	 *
+	 * Because this method returns a reference to a list, it is not safe for use 
+	 * across multiple invocations of this Deserializer.
+	 *
+	 * \return A reference to a list of node entry actions generated while deserializing.
+	 */
 	KeyToNodeActionList& getNodeTrackerActions()
 	{
 		return this->_actions;
 	}
 
+	/**
+	 * Retrieve a list of node entry actions (add node entry, remove node entry)
+	 * that need to be performed on the XMLNodeTracker.
+	 *
+	 * \return A list of node entry actions generated while deserializing.
+	 */
 	KeyToNodeActionList getNodeTrackerActionsCopy()
 	{
 		return this->_actions;
 	}
 
+	/**
+	 * Retrieve a set of nodes for which an EventChgAttr was deserialized.
+	 *
+	 * For some actions (i.e. text tool) it is necessary to call updateRepr() on
+	 * the updated nodes.  This method provides the information required to perform
+	 * that action.
+	 *
+	 * Because this method returns a reference to a set, it is not safe for use 
+	 * across multiple invocations of this Deserializer.
+	 *
+	 * \return A reference to a set of nodes for which an EventChgAttr was deserialized.
+	 */
 	AttributesUpdatedSet& getUpdatedAttributeNodeSet()
 	{
 		return this->_updated;
 	}
 
+	/**
+	 * Retrieve a set of nodes for which an EventChgAttr was deserialized.
+	 *
+	 * For some actions (i.e. text tool) it is necessary to call updateRepr() on
+	 * the updated nodes.  This method provides the information required to perform
+	 * that action.
+	 *
+	 * \return A set of nodes for which an EventChgAttr was deserialized.
+	 */
 	AttributesUpdatedSet getUpdatedAttributeNodeSetCopy()
 	{
 		return this->_updated;
 	}
 
+	/**
+	 * Clear all internal node buffers.
+	 */
 	void clearNodeBuffers()
 	{
 		g_log(NULL, G_LOG_LEVEL_DEBUG, "Clearing deserializer node buffers");
@@ -97,6 +201,9 @@ public:
 		this->_updated.clear();
 	}
 
+	/**
+	 * Clear all internal state.
+	 */
 	void reset() 
 	{
 		this->clearEventLog();

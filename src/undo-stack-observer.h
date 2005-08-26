@@ -22,18 +22,44 @@ class Event;
 
 }
 
+/**
+ * Observes changes made to the undo and redo stacks.
+ *
+ * More specifically, an UndoStackObserver is a class that receives notifications when
+ * any of the following events occur:
+ * <ul>
+ * 	<li>A change is committed to the undo stack.</li>
+ * 	<li>An undo action is made.</li>
+ * 	<li>A redo action is made.</li>
+ * </ul>
+ *
+ * UndoStackObservers should not be used on their own.  Instead, they should be registered
+ * with a CompositeUndoStackObserver.
+ */
 class UndoStackObserver {
 public:
 	UndoStackObserver() { }
 	virtual ~UndoStackObserver() { }
 
-	// Triggered when the user issues an undo command.
+	/**
+	 * Triggered when the user issues an undo command.
+	 *
+	 * \param log Pointer to an XML::Event describing the undone event.
+	 */
 	virtual void notifyUndoEvent(XML::Event* log) = 0;
 
-	// Triggered when the user issues a redo command.
+	/**
+	 * Triggered when the user issues a redo command.
+	 *
+	 * \param log Pointer to an XML::Event describing the redone event.
+	 */
 	virtual void notifyRedoEvent(XML::Event* log) = 0;
 
-	// Triggered when a commit is made to the undo log.
+	/**
+	 * Triggered when a set of transactions is committed to the undo log.
+	 *
+	 * \param log Pointer to an XML::Event describing the committed events.
+	 */
 	virtual void notifyUndoCommitEvent(XML::Event* log) = 0;
 };
 

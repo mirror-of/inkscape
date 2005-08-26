@@ -22,6 +22,9 @@ namespace Whiteboard {
 
 class SessionManager;
 
+/**
+ * Inkboard implementation of Inkscape::UndoStackObserver.
+ */
 class UndoStackObserver : public Inkscape::UndoStackObserver {
 public:
 	enum ObserverType {

@@ -52,22 +52,24 @@ class UndoStackObserver;
 class SerializerNodeObserver;
 class Deserializer;
 
-// Jabber resource name
+/// Jabber resource name
 #define RESOURCE_NAME	"Inkboard"
 
-// connectToServer return values
+/// connectToServer return values
 #define CONNECT_SUCCESS		0
 #define FAILED_TO_CONNECT	1
 #define INVALID_AUTH		2
 #define SSL_INITIALIZATION_ERROR	3
 
-// sendMessage return values
+/// sendMessage return values
 #define SEND_SUCCESS			0
 #define CONNECTION_ERROR		1
 #define UNKNOWN_OUTGOING_TYPE	2
 #define NO_RECIPIENT_JID		3
 
 /**
+ * Structure grouping data items pertinent to a whiteboard session.
+ *
  * SessionData holds all session data for both 1:1 and chatroom conferences.
  * Access to members should be controlled by first querying the status bitset
  * to see if useful data will actually exist in that member -- i.e. checking
@@ -77,100 +79,101 @@ class Deserializer;
  */
 struct SessionData {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * \param sm The SessionManager with which a SessionData instance should be
+	 * associated with.
+	 */
 	SessionData(SessionManager *sm);
+
 	~SessionData();
 
-	// Jabber connection tracking
-
 	/**
-	 * @brief the JID of the recipient; either another user JID or chatroom.
+	 * The JID of the recipient: either another user JID or the JID of a chatroom.
 	 */
 	gchar const* recipient;
 
 	/**
-	 * @brief pointer to Loudmouth connection structure
+	 * Pointer to Loudmouth connection structure.
+	 * Used for Loudmouth calls that require it.
 	 */
 	LmConnection* connection;
 
 	/**
-	 * @brief SSL information structure
+	 * SSL information structure for SSL connections.
 	 */
 	LmSSL* ssl;
 
 	/**
-	 * @brief Should we ignore further SSL errors?
+	 * Flag indicating whether or not we should ignore further SSL errors for a given session.
 	 */
 	bool ignoreFurtherSSLErrors;
 
 
-	// Chatroom tracking
-	
 	/**
-	 * @brief handle in a Jabber chatroom
+	 * A user's handle in a Jabber chatroom.
 	 */
 	Glib::ustring chat_handle;
 
 	/**
-	 * @brief name of the chatroom that a user in a chatroom is connected to
+	 * Name of the chatroom that a user in a chatroom is connected to.
 	 */
 	Glib::ustring chat_name;
 
 	/**
-	 * @brief name of the conference server
+	 * Name of the conference server.
 	 */
 	Glib::ustring chat_server;
 
 	// Message queues
 	
 	/**
-	 * @brief pointer to received message queue
+	 * Map associating senders to receive queues.
 	 */
-	//ReceiveMessageQueue* receive_queue;
 	RecipientToReceiveQueueMap receive_queues;
+
+	/**
+	 * Map associating senders to commit events sent by those committers.
+	 */
 	CommitsQueue recipients_committed_queue;
 
 	/**
-	 * @brief pointer to queue for messages to be sent
+	 * Pointer to queue for messages to be sent.
 	 */
 	SendMessageQueue* send_queue;
 
 	// Message sequence numbers
 	
 	/**
-	 * @brief current sequence number
+	 * The sequence number of the latest message sent by this client in a given session.
+	 * Used for determining the sequence number of the next message.
 	 */
 	unsigned int sequence_number;
 
-	/**
-	 * @brief latest transaction sent
-	 */
 	//unsigned int latest_sent_transaction;
-
-	/**
-	 * @brief latest processed transactions
-	 */
 	//RecipientToLatestTransactionMap latest_processed_transactions;
 
 
 	// Status tracking
 	/**
-	 * @brief session states and status flags
+	 * Session state and status flags.
 	 */
 	std::bitset< NUM_FLAGS > status;
 	
 	/**
-	 * @brief Jabber buddy list data
+	 * Jabber buddy list data.
 	 */
 	BuddyListManager buddyList;
 
 	/**
-	 * @brief list of participants in a Jabber chatroom
+	 * List of participants in a Jabber chatroom.
 	 */
 	ChatterList chatters;
 
 	/**
-	 * @brief session file filename, blank if no session file is to be
-	 * recorded
+	 * Session file filename; blank if no session file is to be
+	 * recorded.
 	 */
 	Glib::ustring sessionFile;
 
@@ -198,23 +201,30 @@ private:
  * session may need to handle: negotiating a connection to a Jabber server, negotiating
  * sessions with users and chatrooms, sending, receiving, and parsing messages, and so
  * forth.
+ *
+ * SessionManager instances are associated with Inkscape desktop objects on a 1:1 basis.
  */
 class SessionManager {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * \param desktop The desktop with which this SessionManager is associated.
+	 */
 	SessionManager(::SPDesktop *desktop);
 	~SessionManager();
 
 	// Session tracking data
 	
 	/** 
-	 * @brief pointer to SessionData structure
+	 * Pointer to SessionData structure.
 	 */
 	struct SessionData *session_data;
 
 	// Inkscape interface
 	
 	/**
-	 * @brief set the desktop with which this SessionManager is associated
+	 * Set the desktop with which this SessionManager is associated.
 	 *
 	 * @param desktop the desktop with which this SessionManager should be associated
 	 */
@@ -223,7 +233,7 @@ public:
 	// Session management
 	
 	/**
-	 * @brief connect to a Jabber server
+	 * Connect to a Jabber server.
 	 *
 	 * @param server Jabber server URL
 	 * @param username Jabber username
@@ -236,7 +246,8 @@ public:
 	int connectToServer(Glib::ustring const& server, Glib::ustring const& port, Glib::ustring const& username, Glib::ustring const& pw, bool usessl);
 
 	/**
-	 * @brief handle SSL error based on input from user
+	 * Handle an SSL error by prompting the user for feedback, and continuing or aborting the connection
+	 * process based on that feedback.
 	 *
 	 * @param ssl pointer to LmSSL structure
 	 * @param status The error message
@@ -246,22 +257,30 @@ public:
 	LmSSLResponse handleSSLError(LmSSL* ssl, LmSSLStatus status);
 
 	/**
-	 * @brief disconnect from a Jabber server
+	 * Disconnect from a Jabber server.  
+	 *
+	 * This invokes disconnectFromDocument().
+	 *
+	 * \see Inkscape::Whiteboard::SessionManager::disconnectFromDocument
 	 */
 	void disconnectFromServer();
 
 	/**
-	 * @brief disconnect from a shared document (connection to the Jabber server remains)
+	 * Disconnect from a document session.  The connection to the Jabber server is not 
+	 * broken, and may be reused to connect to a new document session.
+	 *
 	 */
 	void disconnectFromDocument();
 
 	/**
-	 * @brief perform session teardown; does <b>not</b> disconnect from a document or server
+	 * Perform session teardown.  This method by itself does not disconnect from a document or 
+	 * a Jabber server.
+	 *
 	 */
 	void closeSession();
 
 	/**
-	 * @brief set the recipient for all Inkboard messages
+	 * Set the recipient for Inkboard messages.
 	 *
 	 * @param recipientJID the recipient's JID
 	 */
@@ -270,7 +289,11 @@ public:
 	// Message sending utilities
 	
 	/**
-	 * @brief put an Inkboard message into the send queue
+	 * Put an Inkboard message into the send queue.
+	 * This method does not actually send anything to an Inkboard client.
+	 *
+	 * \see Inkscape::Whiteboard::SessionManager::sendMessage
+	 *
 	 *
 	 * @param msg the message to send
 	 * @param type the type of message (only CHANGE_* types permitted)
@@ -279,7 +302,8 @@ public:
 	void sendChange(Glib::ustring const* msg, MessageType type, std::string const& recipientJID, bool chatroom);
 
 	/**
-	 * @brief send a message to the given recipient
+	 * Send a message to an Inkboard client.
+	 *
 	 *
 	 * @param msgtype the type of message to send
 	 * @param sequence message sequence number
@@ -292,14 +316,14 @@ public:
 	int sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const* msg, char const* recipientJID, bool chatroom);
 
 	/**
-	 * @brief inform user of connection error
+	 * Inform the user of a connection error via a Gtk::MessageDialog.
 	 *
 	 * @param errmsg message to display
 	 */
 	void connectionError(Glib::ustring const& errmsg);
 
 	/**
-	 * @brief stream the contents of the document with which this SessionManager is associated with to the given recipient
+	 * Stream the contents of the document with which this SessionManager is associated with to the given recipient.
 	 * 
 	 * @param recipientJID the JID of the recipient
 	 * @param newidsbuf buffer to store IDs of new nodes 
@@ -309,7 +333,8 @@ public:
 	
 	
 	/**
-	 * @brief send connection request to user
+	 * Send a connection request to another Inkboard client.
+	 *
 	 *
 	 * @param recipientJID the JID to connect to
 	 * @param document document message to send
@@ -317,7 +342,7 @@ public:
 	void sendRequestToUser(std::string const& recipientJID);
 
 	/**
-	 * @brief send connection request to chatroom
+	 * Send a connection request to chatroom.
 	 * 
 	 * @param server server to connect to
 	 * @param chatroom name of chatroom
@@ -327,7 +352,7 @@ public:
 	void sendRequestToChatroom(Glib::ustring const& server, Glib::ustring const& chatroom, Glib::ustring const& handle, Glib::ustring const& password);
 
 	/**
-	 * @brief send connection request response to a requesting user
+	 * Send a connection request response to a user who requested to connect to us.
 	 *
 	 * @param requesterJID the JID of the user whom sent us the request
 	 * @param accepted_request whether or not we accepted the request
@@ -335,7 +360,9 @@ public:
 	void sendConnectRequestResponse(char const* requesterJID, gboolean accepted_request); 
 
 	/**
-	 * @brief called when a connection request is received
+	 * Method called when a connection request is received.  This method produces a dialog
+	 * that asks the user whether or not s/he would like to accept the request.
+	 *
 	 *
 	 * @param requesterJID the JID of the user whom sent us the request
 	 * @param msg the message associated with this request
@@ -343,7 +370,10 @@ public:
 	void receiveConnectRequest(gchar const* requesterJID);
 
 	/**
-	 * @brief called when a response to a connection request is received
+	 * Method called when a response to a connection request is received.
+	 * This method performs any necessary session setup/teardown and user notification
+	 * depending on the response received.
+	 *
 	 *
 	 * @param msg the message associated with this request
 	 * @param response the response code
@@ -351,27 +381,116 @@ public:
 	 */
 	void receiveConnectRequestResponse(InvitationResponses response, std::string& sender);
 
+	/**
+	 * Method called when a document synchronization request is received from a new conference
+	 * member in a chatroom.
+	 *
+	 * \param recipient the recipient JID
+	 */
 	void receiveConnectRequestResponseChat(gchar const* recipient);
 
 	// Message parsing and passing
+	
+	/**
+	 * Processes a group of document change messages.
+	 *
+	 * \param changemsg The change message group to process.
+	 */
 	void receiveChange(Glib::ustring const* changemsg);
 
 	// Logging and session file handling
+	/**
+	 * Start a session log with the given filename.
+	 *
+	 * \param filename Full path to the file that the session log should be written to.
+	 * \throw Glib::FileError Thrown if an exception is thrown during session file creation.
+	 */
 	void startLog(Glib::ustring filename);
+
+	/**
+	 * Load a session file for playback.
+	 *
+	 * \param filename Full path to the session file that is to be loaded.
+	 */
 	void loadSessionFile(Glib::ustring filename);
+
+	/**
+	 * Returns whether or not the session is in session file playback mode.
+	 *
+	 * \return Whether or not the session is in session file playback mode.
+	 */
 	bool isPlayingSessionFile();
 
 	// User event notification
+	
+	/**
+	 * Method to notify the user that a whiteboard session to another user has been successfully
+	 * established.
+	 *
+	 * \param JID The JID with whom the user established a session.
+	 */
 	void userConnectedToWhiteboard(gchar const* JID);
+
+	/**
+	 * Method to notify the user that the other user in a user-to-user whiteboard session
+	 * has disconnected.
+	 *
+	 * \param JID The JID of the user who left the whiteboard session.
+	 */
 	void userDisconnectedFromWhiteboard(std::string const& JID);
 
 	// Queue dispatching and UI setup
+	
+	/**
+	 * Start the send queue for this session.
+	 */
 	void startSendQueueDispatch();
+
+	/**
+	 * Stop the send queue for this session.
+	 */
 	void stopSendQueueDispatch();
+
+	/**
+	 * Start the receive queue for this session.
+	 */
 	void startReceiveQueueDispatch();
+
+	/**
+	 * Stop the receive queue for this session.
+	 */
 	void stopReceiveQueueDispatch();
+
+	/**
+	 * Clear all layers, definitions, and metadata from the document with which a
+	 * SessionManager instance is associated. 
+	 *
+	 * Documents are cleared to assist synchronization between two clients
+	 * or a client and a chatroom.
+	 */
 	void clearDocument();
+
+	/**
+	 * Set up objects for handling actions generated by the user interacting with
+	 * Inkscape.  This includes marking the active session as being in a whiteboard session,
+	 * starting send and receive queues, and creating an event serializer and deserializer.
+	 *
+	 * \see Inkscape::Whiteboard::SendMessageQueue
+	 * \see Inkscape::Whiteboard::ReceiveMessageQueue
+	 * \see Inkscape::Whiteboard::SerializerNodeObserver
+	 * \see Inkscape::Whiteboard::Deserializer
+	 */
 	void setupInkscapeInterface();
+
+	/**
+	 * Set up the event commit listener.
+	 *
+	 * The event commit listener watches for events that are committed to the document's undo log,
+	 * serializes those events, and then adds them to the message send queue.
+	 *
+	 * \see Inkscape::Whiteboard::SendMessageQueue
+	 * \see Inkscape::Whiteboard::UndoStackObserver
+	 */
 	void setupCommitListener();
 
 	// Private object retrieval

@@ -42,6 +42,10 @@ namespace Whiteboard {
 // *********************************************************************
 // ChangeHandler begin
 // *********************************************************************
+
+/**
+ * MessageProcessor for document change and event commit messages.
+ */
 struct ChangeHandler : public MessageProcessor {
 public:
 	~ChangeHandler()
@@ -102,6 +106,9 @@ public:
 // *********************************************************************
 // ConnectRequestHandler begin
 // *********************************************************************
+/**
+ * MessageProcessor for connection request messages.
+ */
 struct ConnectRequestHandler : public MessageProcessor {
 public:
 	~ConnectRequestHandler()
@@ -154,6 +161,9 @@ public:
 // *********************************************************************
 // ConnectErrorHandler begin
 // *********************************************************************
+/**
+ * MessageProcessor for connection error messages.  
+ */
 struct ConnectErrorHandler : public MessageProcessor {
 public:
 	~ConnectErrorHandler()
@@ -202,6 +212,9 @@ public:
 // *********************************************************************
 // ChatSynchronizeHandler begin
 // *********************************************************************
+/**
+ * MessageProcessor for messages specific to chatroom synchronization.
+ */
 struct ChatSynchronizeHandler : public MessageProcessor {
 public:
 	~ChatSynchronizeHandler()
@@ -294,7 +307,7 @@ initialize_received_message_processors(SessionManager* sm, MessageProcessorMap& 
 	mpm[CHATROOM_SYNCHRONIZE_RESPONSE] = csh;
 }
 
-/**
+/*
  * This function is provided solely for convenience and style.  You can, of course,
  * delete every MessageProcessor in the map with your own loop.
  */

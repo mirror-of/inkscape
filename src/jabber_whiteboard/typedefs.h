@@ -52,6 +52,11 @@ class ListContainer;
 namespace std {
 using Inkscape::XML::Node;
 
+/**
+ * Specialization of std::less<> for pointers to XML::Nodes.a
+ *
+ * \see Inkscape::XML::Node
+ */
 template<>
 struct less< Node* > : public binary_function < Node*, Node*, bool >
 {
@@ -79,10 +84,13 @@ namespace Whiteboard {
 // but collation keys are rather big.
 //
 // XML node tracker maps
-//
-//
 
+/// Associates node keys to pointers to XML::Nodes.
+/// \see Inkscape::Whiteboard::XMLNodeTracker
 typedef std::map< std::string, XML::Node*, std::less< std::string >, GC::Alloc< std::pair< std::string, XML::Node* >, GC::MANUAL > > KeyToTrackerNodeMap;
+
+/// Associates pointers to XML::Nodes with node keys.
+/// \see Inkscape::Whiteboard::XMLNodeTracker
 typedef std::map< XML::Node*, std::string, std::less< XML::Node* >, GC::Alloc< std::pair< XML::Node*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
 
 

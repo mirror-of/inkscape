@@ -12,7 +12,6 @@ INPUT = \
 	desktop.h       \
 	desktop.cpp     \
 	desktop-style.cpp     \
-	desktop-widget.h      \
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
@@ -110,7 +109,41 @@ INPUT = \
 	xml/quote.cpp	\
 	xml/repr-util.cpp	\
 	xml/repr.h      \
-	xml/repr.cpp
+	xml/repr.cpp \
+	undo-stack-observer.h \
+	composite-undo-stack-observer.h \
+	jabber_whiteboard/buddy-list-manager.h \
+	jabber_whiteboard/callbacks.h \
+	jabber_whiteboard/chat-handler.h \
+	jabber_whiteboard/defines.h \
+	jabber_whiteboard/deserializer.h \
+	jabber_whiteboard/error-codes.h \
+	jabber_whiteboard/internal-constants.h \
+	jabber_whiteboard/invitation-confirm-dialog.h \
+	jabber_whiteboard/jabber-handlers.h \
+	jabber_whiteboard/message-aggregator.h \
+	jabber_whiteboard/message-contexts.h \
+	jabber_whiteboard/message-handler.h \
+	jabber_whiteboard/message-node.h \
+	jabber_whiteboard/message-processors.cpp \
+	jabber_whiteboard/message-processors.h \
+	jabber_whiteboard/message-queue.h \
+	jabber_whiteboard/message-tags.h \
+	jabber_whiteboard/message-utilities.h \
+	jabber_whiteboard/node-tracker-event-tracker.h \
+	jabber_whiteboard/node-tracker.cpp \
+	jabber_whiteboard/node-tracker.h \
+	jabber_whiteboard/node-tracker-observer.h \
+	jabber_whiteboard/node-utilities.h \
+	jabber_whiteboard/serializer-node-observer.h \
+	jabber_whiteboard/session-file.h \
+	jabber_whiteboard/session-file-player.h \
+	jabber_whiteboard/session-file-selector.h \
+	jabber_whiteboard/session-manager.h \
+	jabber_whiteboard/tracker-node.h \
+	jabber_whiteboard/typedefs.h \
+	jabber_whiteboard/undo-stack-observer.h
+
 
 # Uncomment this to treat undocumented things as if they had an empty
 # documentation string; comment it out to suppress all undocumented things from

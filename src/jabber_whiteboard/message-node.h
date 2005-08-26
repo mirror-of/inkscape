@@ -24,8 +24,36 @@ namespace Inkscape {
 
 namespace Whiteboard {
 
+/**
+ * Encapsulates a document change message received by or sent to an Inkboard client.
+ *
+ * Received messages that end up in a MessageNode are of the following types:
+ * <ol>
+ * 	<li>CHANGE_REPEATABLE</li>
+ * 	<li>CHANGE_NOT_REPEATABLE</li>
+ * 	<li>CHANGE_COMMIT</li>
+ * 	<li>DOCUMENT_BEGIN</li>
+ * 	<li>DOCUMENT_END</li>
+ * 	<li>DUMMY_CHANGE</li>
+ * </ol>
+ *
+ * This class is intended for use in MessageQueues, although it could potentially
+ * see use outside of that context.
+ *
+ * \see Inkscape::Whiteboard::MessageQueue
+ */
 class MessageNode : public GC::Managed<>, public GC::Anchored, public GC::Finalized {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * \param seq The sequence number of the message being encapsulated.
+	 * \param sender The sender of the message.
+	 * \param recip The intended recipient. 
+	 * \param message_body The body of the message.
+	 * \param type The type of the message.
+	 * \param chatroom Whether or not this message is to be sent to / was received from a chatroom.
+	 */
 	MessageNode(unsigned int seq, std::string sender, std::string recip, Glib::ustring const* message_body, MessageType type, bool document, bool chatroom) :
 		_seq(seq), _type(type), _document(document), _chatroom(chatroom)
 	{

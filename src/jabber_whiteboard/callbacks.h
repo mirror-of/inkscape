@@ -22,12 +22,37 @@ namespace Whiteboard {
 class SessionManager;
 class SessionData;
 
+/**
+ * Callback methods used in timers to dispatch MessageNodes from message queues.
+ */
 class Callbacks {
 public:
+	/**
+	 * Constructor.
+	 *
+	 * \param sm The SessionManager to associate with.
+	 */
 	Callbacks(SessionManager* sm);
 	~Callbacks();
 
+	/**
+	 * Dispatch a message from the send queue to the associated SessionManager object.
+	 *
+	 * The SessionManager object handles the task of actually sending out a Jabber message.
+	 *
+	 * \see Inkscape::Whiteboard::SessionManager::sendMessage
+	 * \return Whether or not this callback should be called again by the timer routine.
+	 */
 	bool dispatchSendQueue();
+
+	/**
+	 * Dispatch a message from the receive queue to the associated SessionManager object.
+	 *
+	 * The SessionManager object handles the task of actually processing a Jabber message.
+	 *
+	 * \see Inkscape::Whiteboard::SessionManager::receiveChange
+	 * \return Whether or not this callback should be called again by the timer routine.
+	 */
 	bool dispatchReceiveQueue();
 
 private:
