@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 #include "libavoid/vertices.h"
@@ -31,7 +31,7 @@
 #include "libavoid/connector.h"
 #include "libavoid/graph.h"
 #include <vector>
-
+#include <math.h>
 
 namespace Avoid {
 
@@ -69,7 +69,7 @@ static double angleBetween(const Point& p1, const Point& p2, const Point& p3)
 // as well as the distance between these points (dist), as well as
 // possibly the previous point (inf1) [from inf1--inf2], return a
 // cost associated with this route.
-// 
+//
 double cost(const double dist, VertInf *inf1,
         VertInf *inf2, VertInf *inf3)
 {
@@ -86,11 +86,11 @@ double cost(const double dist, VertInf *inf1,
             Point p3 = inf3->point;
 
             double rad = PI - angleBetween(p1, p2, p3);
-            
+
             // make `rad' between 0--10 then take it's log so small
             // angles are not penalised as much as large ones.
             result += (angle_penalty * log((rad * 10 / PI) + 1));
-            
+
             // Don't penalise as an extra segment if there is no turn.
             if (rad > 0.0005)
             {
@@ -99,7 +99,7 @@ double cost(const double dist, VertInf *inf1,
         }
 
     }
-    
+
     return result;
 }
 
@@ -122,7 +122,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
         t->pathNext = NULL;
         t->pathDist = -unseen;
     }
-    
+
     VertInf *min = src;
     while (min != tar)
     {
@@ -142,7 +142,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
         {
             VertInf *t = (*edge)->otherVert(k);
             VertID tID = t->id;
-            
+
             // Only check shape verticies, or endpoints.
             if ((t->pathDist < 0) &&
                     ((tID.shape == src->id.shape) || (tID.shape > 0)))
@@ -150,7 +150,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
                 double kt_dist = (*edge)->getDist();
                 double priority = k->pathDist +
                         cost(kt_dist, k->pathNext, k, t);
-                
+
                 if ((kt_dist != 0) && (t->pathDist < -priority))
                 {
                     t->pathDist = -priority;
@@ -169,7 +169,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
         {
             VertInf *t = (*edge)->otherVert(k);
             VertID tID = t->id;
-            
+
             // Only check shape verticies, or endpoints.
             if ((t->pathDist < 0) &&
                     ((tID.shape == src->id.shape) || (tID.shape > 0)))
@@ -184,7 +184,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
 }
 
 
-class ANode 
+class ANode
 {
     public:
         VertInf* inf;
@@ -245,13 +245,13 @@ static void aStarPath(VertInf *src, VertInf *tar)
     Node.g = 0;
     Node.h = dist(Node.inf->point, tar->point);
     Node.f = Node.g + Node.h;
-    // Set a null parent, so cost function knows this is the first segment.    
+    // Set a null parent, so cost function knows this is the first segment.
     Node.pp = NULL;
 
-    // Populate the PENDING container with the first location 
+    // Populate the PENDING container with the first location
     PENDING.push_back(Node);
     // Create a heap from PENDING for sorting
-    make_heap( PENDING.begin(), PENDING.end() );  
+    make_heap( PENDING.begin(), PENDING.end() );
 
     while (!PENDING.empty())
     {
@@ -264,13 +264,13 @@ static void aStarPath(VertInf *src, VertInf *tar)
         // Pop off the heap.  Actually this moves the
         // far left value to the far right.  The node
         // is not actually removed since the pop is to
-        // the heap and not the container. 
+        // the heap and not the container.
         pop_heap(PENDING.begin(), PENDING.end());
-        
+
 
         // Remove node from right (the value we pop_heap'd)
         PENDING.pop_back();
-    
+
         // Push the BestNode onto DONE
         BestNode.inf->pathNext = BestNode.pp;
         DONE.push_back(BestNode);
@@ -304,7 +304,7 @@ static void aStarPath(VertInf *src, VertInf *tar)
             {
                 continue;
             }
-            
+
             double edgeDist = (*edge)->getDist();
 
             if (edgeDist == 0)
@@ -348,7 +348,7 @@ static void aStarPath(VertInf *src, VertInf *tar)
                 for (unsigned int i = 0; i < DONE.size(); i++)
                 {
                     if (Node.inf == DONE.at(i).inf)
-                    {   
+                    {
                         // If on DONE, Which has lower gone?
                         if (Node.g < DONE.at(i).g)
                         {
@@ -375,7 +375,7 @@ static void aStarPath(VertInf *src, VertInf *tar)
                 push_heap( PENDING.begin(), PENDING.end() );
                 // Re-Assert heap, or will be short by one
                 make_heap( PENDING.begin(), PENDING.end() );
-         
+
 #if 0
                 // Display PENDING and DONE containers (For Debugging)
                 cout << "PENDING:   ";
@@ -393,7 +393,7 @@ static void aStarPath(VertInf *src, VertInf *tar)
                 }
                 cout << endl << endl;
                 int ch = _getch();
-#endif 
+#endif
             }
         }
     }
@@ -409,7 +409,7 @@ void makePath(ConnRef *lineRef, bool *flag)
 {
     VertInf *src = lineRef->src();
     VertInf *tar = lineRef->dst();
-    
+
     // TODO: Could be more efficient here.
     EdgeInf *directEdge = EdgeInf::existingEdge(src, tar);
     if (!IncludeEndpoints && directVis(src, tar))
@@ -454,7 +454,7 @@ void makePath(ConnRef *lineRef, bool *flag)
         for (VertInf *t = vertices.connsBegin(); t != vertices.end();
                 t = t->lstNext)
         {
-            
+
             t->id.print();
             printf(" -> ");
             t->pathNext->id.print();

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 #ifndef AVOID_VERTICES_H
@@ -41,7 +41,7 @@ class VertID
     public:
     	int shape;
     	int vn;
-        
+
         static const int src;
         static const int tar;
         static const VertID nullID;
@@ -67,7 +67,7 @@ class VertInf
         VertInf(const VertID& vid, const Point& vpoint);
         void Reset(const Point& vpoint);
         void removeFromGraph(const bool isConnVert = true);
-        
+
         VertID id;
         Point  point;
         VertInf *lstPrev;
@@ -75,9 +75,9 @@ class VertInf
         VertInf *shPrev;
         VertInf *shNext;
         EdgeInfList visList;
-        uint visListSize;
+        unsigned int visListSize;
         EdgeInfList invisList;
-        uint invisListSize;
+        unsigned int invisListSize;
         VertInf *pathNext;
         double pathDist;
 };
@@ -85,7 +85,7 @@ class VertInf
 
 bool directVis(VertInf *src, VertInf *dst);
 
-    
+
 class VertInfList
 {
     public:
@@ -104,8 +104,8 @@ class VertInfList
         VertInf *_firstConnVert;
         VertInf *_lastShapeVert;
         VertInf *_lastConnVert;
-        uint _shapeVertices;
-        uint _connVertices;
+        unsigned int _shapeVertices;
+        unsigned int _connVertices;
 };
 
 

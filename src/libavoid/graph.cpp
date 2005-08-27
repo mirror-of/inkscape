@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 #include "libavoid/debug.h"
@@ -27,12 +27,13 @@
 #include "libavoid/polyutil.h"
 #include "libavoid/timer.h"
 
+#include <math.h>
 
 namespace Avoid {
 
 
 static int st_checked_edges = 0;
-    
+
 EdgeList visGraph;
 EdgeList invisGraph;
 
@@ -47,7 +48,7 @@ EdgeInf::EdgeInf(VertInf *v1, VertInf *v2)
     , _dist(-1)
 {
     _blockers.clear();
-    _conns.clear(); 
+    _conns.clear();
 }
 
 
@@ -87,7 +88,7 @@ void EdgeInf::makeActive(void)
 void EdgeInf::makeInactive(void)
 {
     assert(_added == true);
-    
+
     if (_visible)
     {
         visGraph.removeEdge(this);
@@ -233,7 +234,7 @@ void EdgeInf::checkVis(void)
                 "\n\t\t");
         db_print();
     }
-    
+
     int blocker = 0;
     bool cone1 = true;
     bool cone2 = true;
@@ -244,7 +245,7 @@ void EdgeInf::checkVis(void)
     const VertID& jID = j->id;
     const Point& iPoint = i->point;
     const Point& jPoint = j->point;
-    
+
     st_checked_edges++;
 
     if (iID.shape > 0)
@@ -286,18 +287,18 @@ void EdgeInf::checkVis(void)
             }
         }
     }
-    
+
     if (cone1 && cone2 && ((blocker = firstBlocker()) == 0))
     {
-      
+
         // if i and j see each other, add edge
         db_printf("\tSetting visibility edge... \n\t\t");
         db_print();
 
         double d = dist(iPoint, jPoint);
-        
+
         setDist(d);
-        
+
     }
     else if (InvisibilityGrph)
     {
@@ -307,7 +308,7 @@ void EdgeInf::checkVis(void)
                 (int) iInfo.point.y, (int) jInfo.point.x,
                 (int) jInfo.point.y);
 #endif
-            
+
         // if i and j can't see each other, add blank edge
         db_printf("\tSetting invisibility edge... \n\t\t");
         db_print();
@@ -319,12 +320,12 @@ void EdgeInf::checkVis(void)
 int EdgeInf::firstBlocker(void)
 {
     ShapeSet ss = ShapeSet();
-    
+
     Point& pti = _v1->point;
     Point& ptj = _v2->point;
-    VertID& iID = _v1->id; 
-    VertID& jID = _v2->id; 
-    
+    VertID& iID = _v1->id;
+    VertID& jID = _v2->id;
+
     if (iID.shape <= 0)
     {
         ss.insert(contains[iID].begin(), contains[iID].end());
@@ -420,7 +421,7 @@ EdgeInf *EdgeInf::checkEdgeVisibility(VertInf *i, VertInf *j, bool knownNew)
 EdgeInf *EdgeInf::existingEdge(VertInf *i, VertInf *j)
 {
     VertInf *selected = NULL;
-    
+
     if (i->visListSize <= j->visListSize)
     {
         selected = i;
@@ -491,12 +492,12 @@ void EdgeList::addEdge(EdgeInf *edge)
     else
     {
         assert(_lastEdge != NULL);
-        
+
         _lastEdge->lstNext = edge;
         edge->lstPrev = _lastEdge;
 
         _lastEdge = edge;
-        
+
         edge->lstNext = NULL;
     }
     _count++;
@@ -526,10 +527,10 @@ void EdgeList::removeEdge(EdgeInf *edge)
         _firstEdge = edge->lstNext;
     }
 
-    
+
     edge->lstPrev = NULL;
     edge->lstNext = NULL;
-    
+
     _count--;
 }
 
@@ -539,14 +540,14 @@ EdgeInf *EdgeList::begin(void)
     return _firstEdge;
 }
 
-    
+
 EdgeInf *EdgeList::end(void)
 {
     return NULL;
 }
 
 
-// General visibility graph utility functions 
+// General visibility graph utility functions
 
 
 void newBlockingShape(Polygn *poly, int pid)
@@ -580,7 +581,7 @@ void newBlockingShape(Polygn *poly, int pid)
 
             for (int pt_i = 0; pt_i < poly->pn; pt_i++)
             {
-                int pt_n = (pt_i == (poly->pn - 1)) ? 0 : pt_i + 1; 
+                int pt_n = (pt_i == (poly->pn - 1)) ? 0 : pt_i + 1;
                 if (segmentIntersect(e1, e2, poly->ps[pt_i], poly->ps[pt_n]))
                 {
                     blocked = true;
@@ -627,7 +628,7 @@ void checkAllBlockedEdges(int pid)
 void checkAllMissingEdges(void)
 {
     assert(!InvisibilityGrph);
-    
+
     VertInf *first = NULL;
 
     if (IncludeEndpoints)
@@ -643,7 +644,7 @@ void checkAllMissingEdges(void)
     for (VertInf *i = first; i != pend; i = i->lstNext)
     {
         VertID iID = i->id;
-        
+
         // Check remaining, earlier vertices
         for (VertInf *j = first ; j != i; j = j->lstNext)
         {
@@ -653,7 +654,7 @@ void checkAllMissingEdges(void)
                 // Don't keep visibility between edges of different conns
                 continue;
             }
-            
+
             // See if the edge is already there?
             bool found = (EdgeInf::existingEdge(i, j) != NULL);
 
@@ -715,13 +716,13 @@ void adjustContainsWithDel(const int p_shape)
 #define MIN(a, b) (((a) <= (b)) ? (a) : (b))
 #define MAX(a, b) (((a) >= (b)) ? (a) : (b))
 
-#ifdef SELECTIVE_DEBUG        
+#ifdef SELECTIVE_DEBUG
 static double AngleAFromThreeSides(const double a, const double b,
         const double c)
-{ 
+{
     // returns angle A, the angle opposite from side a, in radians
     return acos((pow(b, 2) + pow(c, 2) - pow(a, 2)) / (2 * b * c));
-}        
+}
 #endif
 
 void markConnectors(ShapeRef *shape)
@@ -735,9 +736,9 @@ void markConnectors(ShapeRef *shape)
 
         Point start = conn->_route.ps[0];
         Point end = conn->_route.ps[conn->_route.pn - 1];
-        
+
         double conndist = conn->_route_dist;
-        
+
         double estdist;
         double e1, e2;
 
@@ -785,17 +786,17 @@ void markConnectors(ShapeRef *shape)
             {
                 // Need to do rotation
                 Point n_p2 = { p2.x - p1.x, p2.y - p1.y };
-                Point n_start = { start.x - p1.x, start.y - p1.y }; 
+                Point n_start = { start.x - p1.x, start.y - p1.y };
                 Point n_end = { end.x - p1.x, end.y - p1.y };
                 //printf("n_p2:    (%.1f, %.1f)\n", n_p2.x, n_p2.y);
                 //printf("n_start: (%.1f, %.1f)\n", n_start.x, n_start.y);
                 //printf("n_end:   (%.1f, %.1f)\n", n_end.x, n_end.y);
-                
+
                 double theta = 0 - atan2(n_p2.y, n_p2.x);
                 //printf("theta = %.2f\n", theta * (180 / PI));
-                
-                Point r_p1 = {0, 0}; 
-                Point r_p2 = n_p2; 
+
+                Point r_p1 = {0, 0};
+                Point r_p2 = n_p2;
                 start = n_start;
                 end = n_end;
 
@@ -819,7 +820,7 @@ void markConnectors(ShapeRef *shape)
                 }
                 // This might be slightly off.
                 r_p2.y = 0;
-                
+
                 offy = r_p1.y;
                 a = start.x;
                 b = start.y - offy;
@@ -832,16 +833,16 @@ void markConnectors(ShapeRef *shape)
             }
 
             double x;
-            if ((b + d) == 0) 
+            if ((b + d) == 0)
             {
                 db_printf("WARNING: (b + d) == 0\n");
                 d = d * -1;
             }
 
-            if ((b == 0) && (d == 0)) 
+            if ((b == 0) && (d == 0))
             {
                 db_printf("WARNING: b == d == 0\n");
-                if (((a < min) && (c < min)) || 
+                if (((a < min) && (c < min)) ||
                         ((a > max) && (c > max)))
                 {
                     // It's going to get adjusted.
@@ -856,16 +857,16 @@ void markConnectors(ShapeRef *shape)
             {
                 x = ((b*c) + (a*d)) / (b + d);
             }
-            
+
             //printf("%.1f, %.1f, %.1f, %.1f\n", a, b, c, d);
             //printf("x = %.1f\n", x);
-            
+
             // XXX: Use MAX and MIN
             x = (x < min) ? min : x;
             x = (x > max) ? max : x;
 
             //printf("x = %.1f\n", x);
-           
+
             Point xp;
             if (p1.x == p2.x)
             {
@@ -878,16 +879,16 @@ void markConnectors(ShapeRef *shape)
                 xp.y = offy;
             }
             //printf("(%.1f, %.1f)\n", xp.x, xp.y);
-                
+
             e1 = dist(start, xp);
             e2 = dist(xp, end);
             estdist = e1 + e2;
 
-            
+
             //printf("is %.1f < %.1f\n", estdist, conndist);
             if (estdist < conndist)
             {
-#ifdef SELECTIVE_DEBUG        
+#ifdef SELECTIVE_DEBUG
                 //double angle = AngleAFromThreeSides(dist(start, end),
                 //        e1, e2);
                 printf("[%3d] - Possible better path found (%.1f < %.1f)\n",
@@ -896,7 +897,7 @@ void markConnectors(ShapeRef *shape)
                 conn->_needs_reroute_flag = true;
                 break;
             }
-            
+
         }
     }
 }
@@ -908,7 +909,7 @@ void printInfo(void)
     fprintf(fp, "\nVisibility Graph info:\n");
     fprintf(fp, "----------------------\n");
 
-    int currshape = 0; 
+    int currshape = 0;
     int st_shapes = 0;
     int st_vertices = 0;
     int st_endpoints = 0;
@@ -965,7 +966,7 @@ void printInfo(void)
     fprintf(fp, "----------------------\n");
     fprintf(fp, "checkVisEdge tally: %d\n", st_checked_edges);
     fprintf(fp, "----------------------\n");
-    
+
     fprintf(fp, "ADDS:  "); timers.Print(tmAdd);
     fprintf(fp, "DELS:  "); timers.Print(tmDel);
     fprintf(fp, "MOVS:  "); timers.Print(tmMov);

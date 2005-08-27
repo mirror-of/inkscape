@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 #ifndef AVOID_GRAPH_H
@@ -68,7 +68,7 @@ class EdgeInf
         static EdgeInf *checkEdgeVisibility(VertInf *i, VertInf *j,
                 bool knownNew = false);
         static EdgeInf *existingEdge(VertInf *i, VertInf *j);
-        
+
         EdgeInf *lstPrev;
         EdgeInf *lstNext;
     private:
@@ -79,7 +79,7 @@ class EdgeInf
         EdgeInfList::iterator _pos1;
         EdgeInfList::iterator _pos2;
         ShapeList _blockers;
-        FlagList  _conns; 
+        FlagList  _conns;
         double  _dist;
 
         void makeActive(void);
@@ -100,7 +100,7 @@ class EdgeList
     private:
         EdgeInf *_firstEdge;
         EdgeInf *_lastEdge;
-        uint _count;
+        unsigned int _count;
 };
 
 

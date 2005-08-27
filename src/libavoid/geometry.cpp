@@ -23,12 +23,14 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 #include "libavoid/graph.h"
 #include "libavoid/geometry.h"
 #include "libavoid/polyutil.h"
+
+#include <math.h>
 
 namespace Avoid {
 
@@ -42,7 +44,7 @@ static const bool inBetween(const Point& a, const Point& b, const Point& c)
     // We only call this when we know the points are collinear,
     // otherwise we should be checking this here.
     assert(vecDir(a, b, c) == 0);
-    
+
     if (a.x != b.x)
     {
         // not vertical
@@ -70,7 +72,7 @@ bool segmentIntersect(const Point& a, const Point& b, const Point& c,
     {
         return true;
     }
-    
+
     int ab_d = vecDir(a, b, d);
     if ((ab_d == 0) && inBetween(a, b, d))
     {
@@ -79,7 +81,7 @@ bool segmentIntersect(const Point& a, const Point& b, const Point& c,
 
     // It's ok for either of the points a or b to be on the line cd,
     // so we don't have to check the other two cases.
-    
+
     int cd_a = vecDir(c, d, a);
     int cd_b = vecDir(c, d, b);
 
@@ -110,7 +112,7 @@ bool inValidRegion(const Point& a0, const Point& a1, const Point& a2,
 
     bool rOutOn = (rSide >= 0);
     bool sOutOn = (sSide >= 0);
-    
+
     bool rOut = (rSide > 0);
     bool sOut = (sSide > 0);
 
@@ -125,7 +127,7 @@ bool inValidRegion(const Point& a0, const Point& a1, const Point& a2,
         //        |
         //   !rO  r   rO
         //    sO  |   sO
-        // 
+        //
         //
         return (IgnoreRegions ? false : (rOutOn && sOutOn));
     }
@@ -140,7 +142,7 @@ bool inValidRegion(const Point& a0, const Point& a1, const Point& a2,
         //        |
         //   !rO  r   rO
         //   !sO  |  !sO
-        //      
+        //
         //
         if (IgnoreRegions)
         {
@@ -166,7 +168,7 @@ double dist(const Point& a, const Point& b)
 // polygon argpoly.
 //
 // Based on the code of 'InPoly'.
-// 
+//
 bool inPoly(const Polygn& argpoly, const Point& q)
 {
     // Numbers of right and left edge/ray crossings.
@@ -195,12 +197,12 @@ bool inPoly(const Polygn& argpoly, const Point& q)
             freePoly(poly);
             return true;
         }
-        
+
         // point index; i1 = i-1 mod n
         int i1 = ( i + n - 1 ) % n;
 
         // if e "straddles" the x-axis...
-        // The commented-out statement is logically equivalent to the one 
+        // The commented-out statement is logically equivalent to the one
         // following.
         // if( ((P[i].y > 0) && (P[i1].y <= 0)) ||
         //         ((P[i1].y > 0) && (P[i].y <= 0)) )
@@ -249,7 +251,7 @@ bool inPoly(const Polygn& argpoly, const Point& q)
     {
         return true;
     }
-    
+
     // Outside.
     return false;
 }

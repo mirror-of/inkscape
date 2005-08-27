@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 
@@ -30,7 +30,9 @@
 #include "libavoid/graph.h"
 #include "libavoid/geometry.h"
 
-#ifdef LINEDEBUG       
+#include <math.h>
+
+#ifdef LINEDEBUG
   #include "SDL_gfxPrimitives.h"
 #endif
 
@@ -73,7 +75,7 @@ void shapeVis(ShapeRef *shape)
         // Clear shape from graph.
         shape->removeFromGraph();
     }
-    
+
     VertInf *shapeBegin = shape->firstVert();
     VertInf *shapeEnd = shape->lastVert()->lstNext;
 
@@ -90,10 +92,10 @@ void shapeVis(ShapeRef *shape)
     for (VertInf *curr = shapeBegin; curr != shapeEnd; curr = curr->lstNext)
     {
         bool knownNew = true;
-        
+
         db_printf("-- CONSIDERING --\n");
         curr->id.db_print();
-        
+
         db_printf("\tFirst Half:\n");
         for (VertInf *j = pointsBegin ; j != curr; j = j->lstNext)
         {
@@ -117,7 +119,7 @@ void shapeVisSweep(ShapeRef *shape)
         // Clear shape from graph.
         shape->removeFromGraph();
     }
-    
+
     VertInf *startIter = shape->firstVert();
     VertInf *endIter = shape->lastVert()->lstNext;
 
@@ -131,8 +133,8 @@ void shapeVisSweep(ShapeRef *shape)
 void vertexVisibility(VertInf *point, VertInf *partner, bool knownNew,
         const bool gen_contains)
 {
-    const VertID& pID = point->id; 
-    
+    const VertID& pID = point->id;
+
     // Make sure we're only doing ptVis for endpoints.
     assert(pID.shape <= 0);
 
@@ -140,7 +142,7 @@ void vertexVisibility(VertInf *point, VertInf *partner, bool knownNew,
     {
         point->removeFromGraph();
     }
-    
+
     if (gen_contains && pID.shape <= 0)
     {
         generateContains(point);
@@ -158,7 +160,7 @@ void vertexVisibility(VertInf *point, VertInf *partner, bool knownNew,
         {
             EdgeInf::checkEdgeVisibility(point, k, knownNew);
         }
-        if (IncludeEndpoints && partner) 
+        if (IncludeEndpoints && partner)
         {
             EdgeInf::checkEdgeVisibility(point, partner, knownNew);
         }
@@ -176,7 +178,7 @@ static Point centerPoint;
 static VertID centerID;
 static double centerAngle;
 
-#ifdef LINEDEBUG       
+#ifdef LINEDEBUG
     SDL_Surface *avoid_screen = NULL;
 #endif
 
@@ -186,7 +188,7 @@ class PointPair
     public:
         PointPair(VertInf *inf)
             : vInf(inf)
-        { 
+        {
             double x = vInf->point.x - centerPoint.x;
             double y = vInf->point.y - centerPoint.y;
 
@@ -238,7 +240,7 @@ class EdgePair
             {
                 // TODO: This is a bit of a hack, should be
                 //       set by the call to the constructor.
-                return dist(centerPoint, vInf2->point) < 
+                return dist(centerPoint, vInf2->point) <
                         dist(centerPoint, rhs.vInf2->point);
             }
             return (initdist < rhs.initdist);
@@ -246,7 +248,7 @@ class EdgePair
         bool operator==(const EdgePair& rhs) const
         {
             if (((vInf1->id == rhs.vInf1->id) &&
-                        (vInf2->id == rhs.vInf2->id)) || 
+                        (vInf2->id == rhs.vInf2->id)) ||
                 ((vInf1->id == rhs.vInf2->id) &&
                         (vInf2->id == rhs.vInf1->id)))
             {
@@ -257,11 +259,11 @@ class EdgePair
         void SetObsAng(double a)
         {
             obsAngle = fmod(initangle - (a - 180), 360);
-            
+
             //db_printf("SetObsAng: %.2f  (from init %.2f, a %.2f)\n",
             //      obsAngle, initangle, a);
         }
-        
+
         VertInf *vInf1;
         VertInf *vInf2;
         double  initdist;
@@ -278,7 +280,7 @@ static bool ppCompare(PointPair& pp1, PointPair& pp2)
 {
     if (pp1.angle == pp2.angle)
     {
-        // If the points are colinear, then order them in increasing 
+        // If the points are colinear, then order them in increasing
         // distance from the point we are sweeping around.
         return dist(centerPoint, pp1.vInf->point) <
                 dist(centerPoint, pp2.vInf->point);
@@ -298,7 +300,7 @@ class isBoundingShape
         : ss(set)
         { }
         // the following is an overloading of the function call operator
-        bool operator () (const PointPair& pp) 
+        bool operator () (const PointPair& pp)
         {
             if ((pp.vInf->id.shape > 0) &&
                     (ss.find(pp.vInf->id.shape) != ss.end()))
@@ -322,7 +324,7 @@ static bool sweepVisible(EdgeSet& T, VertInf *currInf, VertInf *lastInf,
         EdgeSet::iterator closestIt = T.begin();
         if (closestIt != T.end())
         {
-            
+
             Point &e1 = (*closestIt).vInf1->point;
             Point &e2 = (*closestIt).vInf2->point;
 
@@ -381,7 +383,7 @@ void vertexSweep(VertInf *vert)
     centerPoint = pPoint;
     Point centerPt = pPoint;
     centerAngle = -1;
-    
+
     // List of shape (and maybe endpt) vertices, except p
     // Sort list, around
     VertList v;
@@ -396,7 +398,7 @@ void vertexSweep(VertInf *vert)
             // Don't include the center point
             continue;
         }
-        
+
         if (inf->id.shape > 0)
         {
             // Add shape vertex
@@ -429,8 +431,8 @@ void vertexSweep(VertInf *vert)
     v.sort(ppCompare);
 
     EdgeSet e;
-    ShapeSet& ss = contains[centerID]; 
-    
+    ShapeSet& ss = contains[centerID];
+
     // And edge to T that intersect the initial ray.
     VertInf *last = vertices.end();
     for (VertInf *k = vertices.shapesBegin(); k != last; )
@@ -449,14 +451,14 @@ void vertexSweep(VertInf *vert)
             }
             continue;
         }
-       
+
         VertInf *kPrev = k->shPrev;
         if ((centerInf == k) || (centerInf == kPrev))
         {
             k = k->lstNext;
             continue;
         }
-        
+
         Point xaxis = { DBL_MAX, centerInf->point.y };
 
         if (segmentIntersect(centerInf->point, xaxis, kPrev->point, k->point))
@@ -484,7 +486,7 @@ void vertexSweep(VertInf *vert)
     double   lastAngle   = 0;
     bool     lastVisible = false;
     int      lastBlocker = 0;
-    
+
     isBoundingShape isBounding(contains[centerID]);
     VertList::iterator vfst = v.begin();
     VertList::iterator vfin = v.end();
@@ -494,15 +496,15 @@ void vertexSweep(VertInf *vert)
         VertID& currID = currInf->id;
         Point&  currPt = currInf->point;
         centerAngle = (*t).angle;
-        
-#ifdef LINEDEBUG       
+
+#ifdef LINEDEBUG
         Sint16 ppx = (int) centerPt.x;
         Sint16 ppy = (int) centerPt.y;
 
         Sint16 cx = (int) currPt.x;
         Sint16 cy = (int) currPt.y;
 #endif
-        
+
         double currDist = dist(centerPt, currPt);
         db_printf("Dist: %.1f.\n", currDist);
 
@@ -559,7 +561,7 @@ void vertexSweep(VertInf *vert)
             }
             if (currVisible)
             {
-#ifdef LINEDEBUG       
+#ifdef LINEDEBUG
                 lineRGBA(avoid_screen, ppx, ppy, cx, cy, 255, 0, 0, 32);
 #endif
                 db_printf("\tSetting visibility edge... \n\t\t");
@@ -584,7 +586,7 @@ void vertexSweep(VertInf *vert)
             // This is a shape edge
             Point& prevPt = currInf->shPrev->point;
             Point& nextPt = currInf->shNext->point;
-        
+
             int prevDir = vecDir(centerPt, currPt, prevPt);
             EdgePair prevPair = EdgePair(currInf, currInf->shPrev,
                     currDist, centerAngle);
@@ -608,8 +610,8 @@ void vertexSweep(VertInf *vert)
 
                 ePtr = e.insert(prevPair).first;
             }
-            
-       
+
+
             int nextDir = vecDir(centerPt, currPt, nextPt);
             EdgePair nextPair = EdgePair(currInf, currInf->shNext,
                     currDist, centerAngle);
