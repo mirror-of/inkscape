@@ -113,6 +113,16 @@ void
 SessionManager::receiveConnectRequest(gchar const* requesterJID)
 {
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "receiveConnectRequest");
+	int x, y;
+	Gdk::ModifierType mt;
+	Gdk::Display::get_default()->get_pointer(x, y, mt);
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Pointer is at (%u,%u), modifier: %u", x, y, mt);
+
+	if (mt) {
+		// Attach a polling timeout
+		this->_notify_incoming_request = Glib::signal_timeout().connect(sigc::bind< 0 >(sigc::mem_fun(*this, &SessionManager::_pollReceiveConnectRequest), requesterJID), 50);
+		return;
+	}
 
 	if (this->session_data->status[IN_WHITEBOARD]) {
 		this->sendMessage(ALREADY_IN_SESSION, 0, NULL, requesterJID, false);
@@ -270,10 +280,25 @@ SessionManager::receiveConnectRequestResponseChat(gchar const* recipient)
 	this->resendDocument(recipient, newids, newnodes);
 }
 
+bool
+SessionManager::_pollReceiveConnectRequest(Glib::ustring const recipientJID)
+{
+	int x, y;
+	Gdk::ModifierType mt;
+	Gdk::Display::get_default()->get_pointer(x, y, mt);
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Pointer is at (%u,%u), modifier: %u", x, y, mt);
+
+	if (mt) {
+		return true;
+	} else {
+		this->receiveConnectRequest(recipientJID.c_str());
+		return false;
+	}
 }
 
 }
 
+}
 
 /*
   Local Variables:

@@ -512,6 +512,8 @@ private:
 	void _closeLog();
 	void _tryToStartLog();
 
+	bool _pollReceiveConnectRequest(Glib::ustring const recipient);
+
 	::SPDesktop* _myDesktop;
 	::SPDocument* _myDoc;
 	SerializerNodeObserver* _mySerializer;
@@ -526,6 +528,7 @@ private:
 
 	sigc::connection _send_queue_dispatcher;
 	sigc::connection _receive_queue_dispatcher;
+	sigc::connection _notify_incoming_request;
 
 	// noncopyable, nonassignable
 	SessionManager(SessionManager const&);
