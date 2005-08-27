@@ -57,8 +57,8 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 				g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %p was previously processed for addition, skipping", &child);
 				return;
 		} else {
-			//childid = this->_xnt->generateKey();
-			childid = this->_findOrGenerateNodeID(child);
+			childid = this->_xnt->generateKey();
+			//childid = this->_findOrGenerateNodeID(child);
 		}
 	}
 
@@ -132,6 +132,10 @@ SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XM
 	if (!this->actions.tryToTrack(&child, NODE_REMOVE)) {
 			g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %s (%p) has already been marked for deletion, not generating delete message", childid.c_str(), &child);
 			return;
+	} else {
+		// 2a.  Although we do not have to remove all child nodes of this subtree,
+		// we _do_ have to mark each child node as deleted.
+		this->_recursiveMarkAsRemoved(child);
 	}
 
 	// 2.  Mark this node as deleted.  We don't want to be faced with the possibility of 
@@ -194,8 +198,7 @@ SerializerNodeObserver::notifyContentChanged(XML::Node& node, Util::SharedCStrin
 			return;
 		}
 	}
-
-	// 3.  Serialize the event.
+// 3.  Serialize the event.
 	if (old_content.cString() != NULL) {
 		oldvalmsg = MessageUtilities::makeTagWithContent(MESSAGE_OLDVAL, old_content.cString());
 	}
@@ -242,6 +245,16 @@ SerializerNodeObserver::notifyAttributeChanged(XML::Node& node, GQuark name, Uti
 		Glib::ustring nodeidmsg = MessageUtilities::makeTagWithContent(MESSAGE_ID, nodeid);
 
 		this->_events.push_back(MessageUtilities::makeTagWithContent(MESSAGE_CHANGE, nodeidmsg + keymsg + oldvalmsg + newvalmsg));
+	}
+}
+
+void
+SerializerNodeObserver::_recursiveMarkAsRemoved(XML::Node& node)
+{
+	this->actions.tryToTrack(&node, NODE_REMOVE);
+
+	for(XML::Node* ch = node.firstChild(); ch; ch = ch->next()) {
+		this->_recursiveMarkAsRemoved(*ch);
 	}
 }
 

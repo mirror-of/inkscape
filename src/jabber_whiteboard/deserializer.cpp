@@ -129,6 +129,7 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 		if (childRepr->parent()) {
 			// Unparent it.
 			childRepr->parent()->removeChild(childRepr);
+			g_log(NULL, G_LOG_LEVEL_DEBUG, "childRepr->parent(): %p", childRepr->parent());
 		}
 
 		this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
@@ -139,7 +140,6 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 
 		// We don't need to release the child node, since it was released when it was 
 		// initially created.
-//		Inkscape::GC::release(childRepr);
 		return;
 	}
 	

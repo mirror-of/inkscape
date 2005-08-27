@@ -121,6 +121,7 @@ private:
 	AttributesScannedSet _attributes_scanned;
 
 	void _newObjectEventHelper(XML::Node& parent, XML::Node& child, XML::Node* prev);
+	void _recursiveMarkAsRemoved(XML::Node& node);
 
 };
 
