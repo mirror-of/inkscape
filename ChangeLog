@@ -1,3 +1,8 @@
+2005-07-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* share/icons/icons.svg: Add a couple of icons for the connector
+	  context toolbar.
+
 2005-08-27  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/Makefile.am, src/Makefile_insert, src/libavoid/*:
