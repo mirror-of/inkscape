@@ -1,5 +1,11 @@
 2005-08-27  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/Makefile.am, src/Makefile_insert, src/libavoid/*:
+	  Add libavoid code, the library that does all the path planning
+	  work for autorouting connectors.
+
+2005-08-27  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
 	* src/Makefile_insert: Remove a reference to the previously moved
 	  src/desktop-widget.h.  This wasn't breaking the build, but was
 	  stopping me from generating tags files.

@@ -39,6 +39,7 @@ include jabber_whiteboard/Makefile_insert
 include libcroco/Makefile_insert
 include libnr/Makefile_insert
 include libnrtype/Makefile_insert
+include libavoid/Makefile_insert
 include livarot/Makefile_insert
 include svg/Makefile_insert
 include utest/Makefile_insert
@@ -78,6 +79,7 @@ noinst_LIBRARIES =	\
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
 	libnrtype/libnrtype.a	\
+	libavoid/libavoid.a	\
 	livarot/libvarot.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
@@ -124,6 +126,7 @@ EXTRA_DIST =	\
 	libcroco/makefile.in	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
+	libavoid/makefile.in	\
 	livarot/makefile.in	\
 	svg/makefile.in		\
 	trace/makefile.in	\

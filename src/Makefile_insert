@@ -236,6 +236,7 @@ inkscape_private_libs =	\
 	libcroco/libcroco.a	\
 	libnrtype/libnrtype.a	\
 	libnr/libnr.a		\
+	libavoid/libavoid.a	\
 	livarot/libvarot.a	\
 	ui/view/libuiview.a	\
 	ui/libui.a		\
