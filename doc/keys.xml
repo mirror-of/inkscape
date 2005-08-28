@@ -983,7 +983,7 @@ RFE</a>).</p>
 <mouse><key><left-drag/></key> <action>adjust frame size</action></mouse>
 <note>Dragging the handle in the lower right corner of the selected flowed text changes width/height of the frame.</note>
 <mouse><key><ctrl/><left-drag/></key> <action>lock width, height, or ratio of frame</action></mouse>
-<note>Dragging the corner handle with Ctrl resizes the frame preserving either width, or height, or ratio..</note>
+<note>Dragging the corner handle with Ctrl resizes the frame preserving either width, or height, or ratio.</note>
 </group>
 
 <group>
