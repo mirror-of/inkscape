@@ -76,8 +76,17 @@ XMLNodeTracker::put(std::string key, XML::Node const& node)
 
 void 
 XMLNodeTracker::put(std::string key, XML::Node& node)
-{
+{	
+	KeyToTrackerNodeMap::iterator i = this->_keyToNode.find(key);
+	if (i != this->_keyToNode.end()) {
+		this->_keyToNode.erase(i);
+	}
 	this->_keyToNode.insert(std::make_pair< std::string, XML::Node* >(key, &node));
+
+	TrackerNodeToKeyMap::iterator j = this->_nodeToKey.find(&node);
+	if (j != this->_nodeToKey.end()) {
+		this->_nodeToKey.erase(j);
+	}
 	this->_nodeToKey.insert(std::make_pair< XML::Node*, std::string >(&node, key));
 }
 
@@ -106,7 +115,7 @@ XMLNodeTracker::process(KeyToNodeActionList& actions)
 				break;
 			case NODE_REMOVE:
 //				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", action.first.first.c_str(), action.first.second);
-	//			this->remove(const_cast< XML::Node& >(*(action.second)));
+		//		this->remove(const_cast< XML::Node& >(*action.first.second));
 				break;
 			default:
 				break;
@@ -196,7 +205,7 @@ XMLNodeTracker::remove(std::string& key)
 void
 XMLNodeTracker::remove(XML::Node& node)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node %p", &node);
+//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node %p", &node);
 	if (this->isTracking(node)) {
 		std::string const element = this->get(node);
 		this->_nodeToKey.erase(&node);
@@ -281,7 +290,7 @@ XMLNodeTracker::dump()
 	while(i != this->_keyToNode.end()) {
 		if (!((*i).first.empty())) {
 			if ((*i).second != NULL) {
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s\t->\t%p (%s)", (*i).first.c_str(), (*i).second, (*i).second->name());
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s\t->\t%p (%s) (%s)", (*i).first.c_str(), (*i).second, (*i).second->name(), (*i).second->content());
 			} else {
 				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s\t->\t(null)", (*i).first.c_str());
 			}

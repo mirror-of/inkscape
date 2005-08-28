@@ -49,7 +49,7 @@ class Callbacks;
 class SessionFile;
 class SessionFilePlayer;
 class UndoStackObserver;
-class SerializerNodeObserver;
+class Serializer;
 class Deserializer;
 
 /// Jabber resource name
@@ -477,7 +477,7 @@ public:
 	 *
 	 * \see Inkscape::Whiteboard::SendMessageQueue
 	 * \see Inkscape::Whiteboard::ReceiveMessageQueue
-	 * \see Inkscape::Whiteboard::SerializerNodeObserver
+	 * \see Inkscape::Whiteboard::Serializer
 	 * \see Inkscape::Whiteboard::Deserializer
 	 */
 	void setupInkscapeInterface();
@@ -498,7 +498,7 @@ public:
 	::SPDocument* document();
 	Callbacks* callbacks();
 	Whiteboard::UndoStackObserver* undo_stack_observer();
-	SerializerNodeObserver* serializer();
+	Serializer* serializer();
 	XMLNodeTracker* node_tracker();
 	Deserializer* deserializer();
 	ChatMessageHandler* chat_handler();
@@ -512,11 +512,19 @@ private:
 	void _closeLog();
 	void _tryToStartLog();
 
+	enum SensitivityMode {
+			INITIAL,
+			ESTABLISHED_CONNECTION,
+			ESTABLISHED_SESSION,
+			DISCONNECTED_FROM_SESSION
+	};
+
+	void _setVerbSensitivity(SensitivityMode mode);
+
 	bool _pollReceiveConnectRequest(Glib::ustring const recipient);
 
 	::SPDesktop* _myDesktop;
 	::SPDocument* _myDoc;
-	SerializerNodeObserver* _mySerializer;
 	Whiteboard::UndoStackObserver* _myUndoObserver;
 	XMLNodeTracker* _myTracker;
 	ChatMessageHandler* _myChatHandler;
@@ -524,6 +532,7 @@ private:
 	SessionFile* _mySessionFile;
 	SessionFilePlayer* _mySessionPlayer;
 	MessageHandler* _myMessageHandler;
+	Serializer* _mySerializer;
 	Deserializer* _myDeserializer; 
 
 	sigc::connection _send_queue_dispatcher;

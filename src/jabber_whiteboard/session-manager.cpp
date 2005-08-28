@@ -35,6 +35,7 @@
 #include "desktop.h"
 #include "document.h"
 #include "document-private.h"
+#include "verbs.h"
 
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/typedefs.h"
@@ -50,7 +51,7 @@
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/message-aggregator.h"
 #include "jabber_whiteboard/undo-stack-observer.h"
-#include "jabber_whiteboard/serializer-node-observer.h"
+#include "jabber_whiteboard/serializer.h"
 
 #include "jabber_whiteboard/message-node.h"
 #include "jabber_whiteboard/message-queue.h"
@@ -117,6 +118,7 @@ SessionManager::SessionManager(::SPDesktop *desktop)
 	}
 #endif
 
+	this->_setVerbSensitivity(INITIAL);
 }
 
 SessionManager::~SessionManager()
@@ -284,6 +286,7 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 
 	lm_message_unref(m);
 
+	this->_setVerbSensitivity(ESTABLISHED_CONNECTION);
 	return CONNECT_SUCCESS;
 }
 
@@ -366,6 +369,7 @@ SessionManager::disconnectFromServer()
 
 		this->session_data->connection = NULL;
 		this->session_data->ssl = NULL;
+		this->_setVerbSensitivity(INITIAL);
 	}
 }
 
@@ -376,6 +380,7 @@ SessionManager::disconnectFromDocument()
 		this->sendMessage(DISCONNECTED_FROM_USER_SIGNAL, 0, NULL, this->session_data->recipient, false);
 	}
 	this->closeSession();
+	this->_setVerbSensitivity(DISCONNECTED_FROM_SESSION);
 }
 
 void
@@ -585,7 +590,7 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 	Glib::ustring buf;
 
     for ( Inkscape::XML::Node *child = root->firstChild() ; child != NULL ; child = child->next() ) {
-		// TODO: replace with SerializerNodeObserver methods
+		// TODO: replace with Serializer methods
 		MessageUtilities::newObjectMessage(&buf, newidsbuf, newnodesbuf, newchildren, this->_myTracker, child);
 
 		NewChildObjectMessageList::iterator j = newchildren.begin();
@@ -871,8 +876,11 @@ SessionManager::setupInkscapeInterface()
 		this->_myTracker = new XMLNodeTracker(this);
 	}
 
-	this->_mySerializer = new SerializerNodeObserver(this->node_tracker());
+	this->_mySerializer = new Serializer(this->node_tracker());
 	this->_myDeserializer = new Deserializer(this->node_tracker());
+
+	// We're in a whiteboard session now, so set verb sensitivity accordingly
+	this->_setVerbSensitivity(ESTABLISHED_SESSION);
 }
 
 void
@@ -906,7 +914,7 @@ SessionManager::undo_stack_observer()
 	return this->_myUndoObserver;
 }
 
-SerializerNodeObserver*
+Serializer*
 SessionManager::serializer()
 {
 	return this->_mySerializer;
@@ -1019,6 +1027,54 @@ SessionManager::_tryToStartLog()
 			}
 		}
 	}
+}
+
+void
+SessionManager::_setVerbSensitivity(SensitivityMode mode)
+{
+	return;
+
+	switch (mode) {
+		case ESTABLISHED_CONNECTION:
+			// Upon successful connection, we can disconnect from the server.
+			// We can also start sharing a document with a user or chatroom.
+			// We cannot, however, connect to a new server without first disconnecting.
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_CONNECT)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SERVER)->sensitive(this->_myDoc, true);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHUSER)->sensitive(this->_myDoc, true);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHCHAT)->sensitive(this->_myDoc, true);
+			break;
+
+		case ESTABLISHED_SESSION:
+			// When we have established a session, we should not permit the user to go and
+			// establish another session from the same document without first disconnecting.
+			//
+			// TODO: Well, actually, we probably _should_, but there's no real reconnection logic just yet.
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHUSER)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHCHAT)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SESSION)->sensitive(this->_myDoc, true);
+			break;
+		case DISCONNECTED_FROM_SESSION:
+			// Upon disconnecting from a session, we can establish a new session and disconnect
+			// from the server, but we cannot disconnect from a session (since we just left it.)
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SESSION)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHUSER)->sensitive(this->_myDoc, true);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHCHAT)->sensitive(this->_myDoc, true);
+
+		case INITIAL:
+		default:
+			// Upon construction, there is no active connection, so we cannot do the following:
+			// (1) disconnect from a session
+			// (2) disconnect from a server
+			// (3) share with a user 
+			// (4) share with a chatroom
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_CONNECT)->sensitive(this->_myDoc, true);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHUSER)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_SHAREWITHCHAT)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SESSION)->sensitive(this->_myDoc, false);
+			Inkscape::Verb::get(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SERVER)->sensitive(this->_myDoc, false);
+			break;
+	};
 }
 
 }

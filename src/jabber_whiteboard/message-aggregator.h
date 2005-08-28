@@ -23,7 +23,7 @@ namespace Whiteboard {
  * Aggregates individual serialized XML::Events into larger messages for increased
  * efficiency.
  *
- * \see Inkscape::Whiteboard::SerializerNodeObserver
+ * \see Inkscape::Whiteboard::Serializer
  */
 class MessageAggregator {
 public:

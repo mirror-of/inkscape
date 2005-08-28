@@ -1,5 +1,5 @@
 /**
- * NodeObserver used for serialization of XML::Events
+ * Inkboard message -> XML::Event* serializer
  *
  * Authors:
  * David Yip <yipdw@rose-hulman.edu>
@@ -11,7 +11,7 @@
 
 #include "xml/attribute-record.h"
 
-#include "jabber_whiteboard/serializer-node-observer.h"
+#include "jabber_whiteboard/serializer.h"
 
 #include "util/list.h"
 #include "util/shared-c-string-ptr.h"
@@ -27,17 +27,16 @@ namespace Inkscape {
 
 namespace Whiteboard {
 
-SerializerNodeObserver::SerializerNodeObserver(XMLNodeTracker* xnt) : NodeTrackerObserver(xnt) { }
-SerializerNodeObserver::~SerializerNodeObserver() { }
-
 void
-SerializerNodeObserver::notifyChildAdded(XML::Node& node, XML::Node& child, XML::Node* prev)
+Serializer::notifyChildAdded(XML::Node& node, XML::Node& child, XML::Node* prev)
 {
-	this->_newObjectEventHelper(node, child, prev);
+	// do not recurse upon initial notification
+	this->_newObjectEventHelper(node, child, prev, false);
+	this->_nn.insert(&child);
 }
 
 void
-SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child, XML::Node* prev)
+Serializer::_newObjectEventHelper(XML::Node& node, XML::Node& child, XML::Node* prev, bool recurse)
 {
 	// 1.  Check if we are tracking the parent node,
 	// and issue it an ID if we are not.
@@ -58,7 +57,7 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 				return;
 		} else {
 			childid = this->_xnt->generateKey();
-			//childid = this->_findOrGenerateNodeID(child);
+//			childid = this->_findOrGenerateNodeID(child);
 		}
 	}
 
@@ -81,19 +80,18 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 
 	Glib::ustring buf = MessageUtilities::makeTagWithContent(MESSAGE_NEWOBJ, childmsg + parentmsg + prevmsg + namemsg + nodetype);
 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating add event: child=%s parent=%s prev=%s", childid.c_str(), parentid.c_str(), previd.c_str());
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating add event for node %p: child=%s parent=%s prev=%s", &child, childid.c_str(), parentid.c_str(), previd.c_str());
 
 	this->_events.push_back(buf);
 
 	// 5.  Add the child node to the new nodes buffers.
 	this->newnodes.push_back(SerializedEventNodeAction(KeyNodePair(childid, &child), NODE_ADD));
 	this->newkeys[&child] = childid;
+	this->_parent_child_map[&child] = &node;
 
+	// 6.  Scan attributes and content.
 	Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrlist = child.attributeList();
 
-	// 6.  If the attributes and content of this child have not been serialized, serialize them
-	// and mark this child's attributes and content as serialized to prevent future serializations
-	// from duplication. 
 	for(; attrlist; attrlist++) {
 		this->notifyAttributeChanged(child, attrlist->key, Util::SharedCStringPtr(), attrlist->value);
 	}
@@ -105,14 +103,16 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 	this->_attributes_scanned.insert(childid);
 
 	// 7.  Repeat this process for each child of this child.
-	if (child.childCount() > 0) {
+	if (recurse && child.childCount() > 0) {
 		XML::Node* prev = child.firstChild();
 		for(XML::Node* ch = child.firstChild(); ch; ch = ch->next()) {
 			if (ch == child.firstChild()) {
 				// No prev node in this case.
-				this->_newObjectEventHelper(child, *ch, NULL);
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "Recursing.");
+				this->_newObjectEventHelper(child, *ch, NULL, true);
 			} else {
-				this->_newObjectEventHelper(child, *ch, prev);
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "Recursing.");
+				this->_newObjectEventHelper(child, *ch, prev, true);
 				prev = ch;
 			}
 		}
@@ -121,12 +121,26 @@ SerializerNodeObserver::_newObjectEventHelper(XML::Node& node, XML::Node& child,
 	return;
 }
 
+
 void
-SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XML::Node* prev)
+Serializer::notifyChildRemoved(XML::Node& node, XML::Node& child, XML::Node* prev)
 {
 	// 1.  Get the ID of the child.
-	std::string childid = this->_findOrGenerateNodeID(child);
+	std::string childid;
 
+	_pc_map_type::iterator i = this->_parent_child_map.find(&child);
+	if (i != this->_parent_child_map.end() && i->second != &node) {
+		// Don't look in local! Go for the tracker.
+		childid = this->_xnt->get(child);
+	} else if (i == this->_parent_child_map.end()) {
+		childid = this->_findOrGenerateNodeID(child);
+	} else if (i->second == &node) {
+		childid = this->_findOrGenerateNodeID(child);
+		this->_parent_child_map.erase(i);
+	} else {
+		childid = this->_findOrGenerateNodeID(child);
+	}
+	
 	// 2.  Double-deletes don't make any sense.  If we've seen this node already and if it's
 	// marked for deletion, return.
 	if (!this->actions.tryToTrack(&child, NODE_REMOVE)) {
@@ -142,8 +156,7 @@ SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XM
 	// generating a new key for this deleted node, so insert it into both maps.
 	this->newnodes.push_back(SerializedEventNodeAction(KeyNodePair(childid, &child), NODE_REMOVE));
 	this->newkeys[&child] = childid;
-	
-	// 3.  Find the ID of the parent, or generate an ID if it does not exist.
+	this->_nn.erase(&child);
 	std::string parentid = this->_findOrGenerateNodeID(node);
 
 	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating delete event: child=%s parent=%s", childid.c_str(), parentid.c_str());
@@ -155,8 +168,9 @@ SerializerNodeObserver::notifyChildRemoved(XML::Node& node, XML::Node& child, XM
 	this->_events.push_back(MessageUtilities::makeTagWithContent(MESSAGE_DELETE, childidmsg + parentidmsg));
 }
 
+
 void
-SerializerNodeObserver::notifyChildOrderChanged(XML::Node& node, XML::Node& child, XML::Node* old_prev, XML::Node* new_prev)
+Serializer::notifyChildOrderChanged(XML::Node& node, XML::Node& child, XML::Node* old_prev, XML::Node* new_prev)
 {
 	// 1.  Find the ID of the node, or generate it if it does not exist.
 	std::string nodeid = this->_findOrGenerateNodeID(child);
@@ -180,7 +194,7 @@ SerializerNodeObserver::notifyChildOrderChanged(XML::Node& node, XML::Node& chil
 }
 
 void
-SerializerNodeObserver::notifyContentChanged(XML::Node& node, Util::SharedCStringPtr old_content, Util::SharedCStringPtr new_content)
+Serializer::notifyContentChanged(XML::Node& node, Util::SharedCStringPtr old_content, Util::SharedCStringPtr new_content)
 {
 	// 1.  Find the ID of the node, or generate it if it does not exist.
 	std::string nodeid = this->_findOrGenerateNodeID(node);
@@ -198,7 +212,8 @@ SerializerNodeObserver::notifyContentChanged(XML::Node& node, Util::SharedCStrin
 			return;
 		}
 	}
-// 3.  Serialize the event.
+
+	// 3.  Serialize the event.
 	if (old_content.cString() != NULL) {
 		oldvalmsg = MessageUtilities::makeTagWithContent(MESSAGE_OLDVAL, old_content.cString());
 	}
@@ -212,7 +227,7 @@ SerializerNodeObserver::notifyContentChanged(XML::Node& node, Util::SharedCStrin
 }
 
 void
-SerializerNodeObserver::notifyAttributeChanged(XML::Node& node, GQuark name, Util::SharedCStringPtr old_value, Util::SharedCStringPtr new_value)
+Serializer::notifyAttributeChanged(XML::Node& node, GQuark name, Util::SharedCStringPtr old_value, Util::SharedCStringPtr new_value)
 {
 	// 1.  Find the ID of the node that has had an attribute modified, or generate it if it
 	// does not exist.
@@ -249,7 +264,28 @@ SerializerNodeObserver::notifyAttributeChanged(XML::Node& node, GQuark name, Uti
 }
 
 void
-SerializerNodeObserver::_recursiveMarkAsRemoved(XML::Node& node)
+Serializer::synthesizeChildNodeAddEvents()
+{
+	_New_nodes_type::iterator i = this->_nn.begin();
+	for(; i != this->_nn.end(); ++i) {
+		XML::Node* parent = *i;
+		// The root of the subtree defined by parent has already been considered; now,
+		// recursively look at the rest of the tree.
+		XML::Node* prev = parent->firstChild();
+		for(XML::Node* ch = parent->firstChild(); ch; ch = ch->next()) {
+			if (ch == parent->firstChild()) {
+				this->_newObjectEventHelper(*parent, *ch, NULL, true);
+			} else {
+				this->_newObjectEventHelper(*parent, *ch, prev, true);
+				prev = ch;
+			}
+		}
+	}
+}
+
+
+void
+Serializer::_recursiveMarkAsRemoved(XML::Node& node)
 {
 	this->actions.tryToTrack(&node, NODE_REMOVE);
 

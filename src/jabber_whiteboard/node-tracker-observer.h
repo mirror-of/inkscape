@@ -76,12 +76,15 @@ protected:
 	{
 		NodeToKeyMap::iterator i = newkeys.find(&node);
 		if (i != newkeys.end()) {
+//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Found key for %p (local): %s", &node, i->second.c_str());
 			return i->second;
 		} else {
 			std::string nodeid = this->_xnt->get(node);
 			if (nodeid.empty()) {
+//				g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating key for %p", &node);
 				return this->_xnt->generateKey();
 			} else {
+//				g_log(NULL, G_LOG_LEVEL_DEBUG, "Found key for %p (tracker): %s", &node, nodeid.c_str());
 				return nodeid;
 			}
 		}

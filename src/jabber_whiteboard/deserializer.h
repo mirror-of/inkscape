@@ -31,14 +31,14 @@ namespace Whiteboard {
  * A stateful XML::Event deserializer.
  *
  * The Deserializer class is meant to deserialize XML::Events serialized by 
- * Inkscape::Whiteboard::SerializerNodeObserver or a serializer that serializes
+ * Inkscape::Whiteboard::Serializer or a serializer that serializes
  * XML::Events into the same format.
  *
  * Usage is as follows:
- * <ul>
+ * <ol>
  * 	<li>For each serialized event called, call the appropriate deserialization method.</li>
  * 	<li>Detach the deserialized event.</li>
- * </ul>
+ * </ol>
  *
  * The deserializer does not actually modify any aspect of the document or node-tracking systems.
  * Methods are provided to provide the information necessary to perform the modifications outside

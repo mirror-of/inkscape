@@ -22,7 +22,7 @@
 #include "jabber_whiteboard/defines.h"
 #include "jabber_whiteboard/session-manager.h"
 #include "jabber_whiteboard/node-tracker.h"
-#include "jabber_whiteboard/serializer-node-observer.h"
+#include "jabber_whiteboard/serializer.h"
 #include "jabber_whiteboard/message-utilities.h"
 #include "jabber_whiteboard/message-aggregator.h"
 #include "jabber_whiteboard/message-tags.h"
@@ -131,6 +131,8 @@ UndoStackObserver::_doAction(XML::Event* log)
 	if (this->_sm->serializer()) {
 		bool chatroom = this->_sm->session_data->status.test(IN_CHATROOM);
 		XML::replay_log_to_observer(log, *this->_sm->serializer());
+
+		this->_sm->serializer()->synthesizeChildNodeAddEvents();
 
 		SerializedEventList& events = this->_sm->serializer()->getEventList();
 
