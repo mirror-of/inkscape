@@ -9,9 +9,10 @@ It is generated automatically from doc/keys.xml by doc/keys-html.xsl.
 h1 {margin-top: 0.5em; padding-left: 50px; padding-bottom: 0em; margin-bottom: 0em; letter-spacing: -0.02em}
 h4 {font-weight: bold; font-style: italic; margin-top: 1em; padding-left: 50px; padding-bottom: 0em; margin-bottom: 0em}
 </style></head><body bgcolor="#ffffff"><p>Unless noted otherwise, keypad keys (such as arrows, Home, End, +, -, digits) are
-supposed to work the same as corresponding regular keys. See also KeyboardShortcutsToDo
-on Inkscape Wiki for a discussion of other shortcuts we're planning to implement; you
-can leave your ideas and requests there.</p><table border="0" cellspacing="0" cellpadding="4"><tr><td colspan="3"><h1>Tools</h1></td></tr>
+supposed to work the same as corresponding regular keys. If you have a new shortcut
+idea, please contact the developers (by writing to the <a href="http://lists.sourceforge.net/lists/listinfo/inkscape-devel">devel mailing list</a>
+or by <a href="http://sourceforge.net/tracker/?group_id=93438&amp;atid=604309">submitting an
+RFE</a>).</p><table border="0" cellspacing="0" cellpadding="4"><tr><td colspan="3"><h1>Tools</h1></td></tr>
 
 
 <tr bgcolor="f5f5f5"><td align="right"><span class="key">F1</span>,
@@ -83,10 +84,10 @@ can leave your ideas and requests there.</p><table border="0" cellspacing="0" ce
 <tr bgcolor="f0eae7"><td align="right"><span class="key">Ctrl+PgUp</span>,
 <span class="key">Ctrl+PgDn</span></td><td><span class="action">in a multi-tab dialog, switch tabs</span></td></tr>
 
-<tr><td colspan="3"><h1>Top panel</h1></td></tr>
+<tr><td colspan="3"><h1>Controls bar</h1></td></tr>
 
 
-<tr bgcolor="f8f3e9"><td colspan="3"><span class="note">The panel at the top of the document window provides different fields and controls for each tool.</span></td></tr>
+<tr bgcolor="f8f3e9"><td colspan="3"><span class="note">The Controls bar at the top of the document window provides different buttons and controls for each tool.</span></td></tr>
 <tr bgcolor="f8f3e9"><td align="right"><span class="key">Alt+X</span></td><td><span class="action">jump to the first editable field</span></td></tr>
 <tr bgcolor="f8f3e9"><td align="right"><span class="key">Enter</span></td><td><span class="action">accept the new value</span></td></tr>
 <tr bgcolor="f8f3e9"><td colspan="3"><span class="note">This accepts the new value you typed in a text field and returns focus to canvas.</span></td></tr>
@@ -96,7 +97,7 @@ can leave your ideas and requests there.</p><table border="0" cellspacing="0" ce
 <tr bgcolor="f8f3e9"><td colspan="3"><span class="note">This cancels any changes you made in a text field but you stay in the field.</span></td></tr>
 <tr bgcolor="f8f3e9"><td align="right"><span class="key">Tab</span></td><td><span class="action">jump to next field</span></td></tr>
 <tr bgcolor="f8f3e9"><td align="right"><span class="key">Shift+Tab</span></td><td><span class="action">jump to previous field</span></td></tr>
-<tr bgcolor="f8f3e9"><td colspan="3"><span class="note">Use these to navigate between fields in the top panel (the value in the field you leave, if changed, is accepted).</span></td></tr>
+<tr bgcolor="f8f3e9"><td colspan="3"><span class="note">Use these to navigate between fields in the Controls bar (the value in the field you leave, if changed, is accepted).</span></td></tr>
 
 
 
@@ -269,11 +270,11 @@ can leave your ideas and requests there.</p><table border="0" cellspacing="0" ce
 
 
 
-<tr bgcolor="f4ecf5"><td colspan="3"><h4>Tile</h4></td></tr>
-<tr bgcolor="f4ecf5"><td align="right"><span class="key">Alt+I</span></td><td><span class="action">tile selection</span></td></tr> 
+<tr bgcolor="f4ecf5"><td colspan="3"><h4>Patterns</h4></td></tr>
+<tr bgcolor="f4ecf5"><td align="right"><span class="key">Alt+I</span></td><td><span class="action">object(s) to pattern</span></td></tr> 
 <tr bgcolor="f4ecf5"><td colspan="3"><span class="note">This converts the selection to a rectangle with tiled pattern fill.</span></td></tr>
-<tr bgcolor="f4ecf5"><td align="right"><span class="key">Shift+Alt+I</span></td><td><span class="action">untile selection</span></td></tr> 
-<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">Each selected object with pattern fill is broken into the same object without fill and a single tile object.</span></td></tr>
+<tr bgcolor="f4ecf5"><td align="right"><span class="key">Shift+Alt+I</span></td><td><span class="action">pattern to object(s)</span></td></tr> 
+<tr bgcolor="f4ecf5"><td colspan="3"><span class="note">Each selected object with pattern fill is broken into the same object without fill and a single pattern object.</span></td></tr>
 
 
 
@@ -694,7 +695,7 @@ can leave your ideas and requests there.</p><table border="0" cellspacing="0" ce
 
 
 <tr bgcolor="f9f1d9"><td colspan="3"><h4>Reversing</h4></td></tr>
-<tr bgcolor="f9f1d9"><td align="right"><span class="key">r</span></td><td><span class="action">reverse path direction</span></td></tr> 
+<tr bgcolor="f9f1d9"><td align="right"><span class="key">Shift+r</span></td><td><span class="action">reverse path direction</span></td></tr> 
 
 
 

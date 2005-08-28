@@ -47,6 +47,10 @@ h4 {font-weight: bold; font-style: italic; margin-top: 1em; padding-left: 50px; 
 <p><xsl:apply-templates/></p>
 </xsl:template>
 
+<xsl:template match="k:a">
+<a href="{@href}"><xsl:apply-templates/></a>
+</xsl:template>
+
 <xsl:template match="k:root/text() | k:column/text()"/>
 
 <xsl:template match="k:column">

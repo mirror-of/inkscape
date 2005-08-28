@@ -1,9 +1,11 @@
 <root xmlns="http://www.inkscape.org/namespaces/keys">
 
 <p>Unless noted otherwise, keypad keys (such as arrows, Home, End, +, -, digits) are
-supposed to work the same as corresponding regular keys. See also KeyboardShortcutsToDo
-on Inkscape Wiki for a discussion of other shortcuts we're planning to implement; you
-can leave your ideas and requests there.</p>
+supposed to work the same as corresponding regular keys. If you have a new shortcut
+idea, please contact the developers (by writing to the <a
+href="http://lists.sourceforge.net/lists/listinfo/inkscape-devel">devel mailing list</a>
+or by <a href="http://sourceforge.net/tracker/?group_id=93438&amp;atid=604309">submitting an
+RFE</a>).</p>
 
 <column>
 
@@ -68,10 +70,10 @@ can leave your ideas and requests there.</p>
 </group>
 </section>
 
-*<section title="Top panel" color="f8f3e9">
+*<section title="Controls bar" color="f8f3e9">
 
 <group>
-<note>The panel at the top of the document window provides different fields and controls for each tool.</note>
+<note>The Controls bar at the top of the document window provides different buttons and controls for each tool.</note>
 <keys><key><alt/>X</key> <action>jump to the first editable field</action></keys>
 <keys><key><misc-wide f="Enter"/></key> <action>accept the new value</action></keys>
 <note>This accepts the new value you typed in a text field and returns focus to canvas.</note>
@@ -81,7 +83,7 @@ can leave your ideas and requests there.</p>
 <note>This cancels any changes you made in a text field but you stay in the field.</note>
 <keys><key><misc f="Tab"/></key> <action>jump to next field</action></keys>
 <keys><key><shift/><misc f="Tab"/></key> <action>jump to previous field</action></keys>
-<note>Use these to navigate between fields in the top panel (the value in the field you leave, if changed, is accepted).</note>
+<note>Use these to navigate between fields in the Controls bar (the value in the field you leave, if changed, is accepted).</note>
 </group>
 
 <group>
@@ -262,11 +264,11 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Tile</title>
-<keys><key><alt/>I</key>	 <action>tile selection</action></keys> 
+<title>Patterns</title>
+<keys><key><alt/>I</key>	 <action>object(s) to pattern</action></keys> 
 <note>This converts the selection to a rectangle with tiled pattern fill.</note>
-<keys><key><shift/><alt/>I</key>	 <action>untile selection</action></keys> 
-<note>Each selected object with pattern fill is broken into the same object without fill and a single tile object.</note>
+<keys><key><shift/><alt/>I</key>	 <action>pattern to object(s)</action></keys> 
+<note>Each selected object with pattern fill is broken into the same object without fill and a single pattern object.</note>
 </group>
 
 <group>
@@ -699,7 +701,7 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Reversing</title>
-<keys><key>r</key>  <action>reverse path direction</action></keys> 
+<keys><key><shift/>r</key>  <action>reverse path direction</action></keys> 
 </group>
 
 <group>
