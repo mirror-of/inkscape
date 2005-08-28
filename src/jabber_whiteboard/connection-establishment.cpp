@@ -43,7 +43,7 @@ SessionManager::sendRequestToUser(std::string const& recipientJID)
 	}
 	*/
 	this->session_data->status.set(WAITING_FOR_INVITE_RESPONSE, 1);
-	this->sendMessage(CONNECT_REQUEST_USER, 0, NULL, recipientJID.c_str(), false);
+	this->sendMessage(CONNECT_REQUEST_USER, 0, "", recipientJID.c_str(), false);
 }
 
 void
@@ -104,7 +104,7 @@ SessionManager::sendConnectRequestResponse(char const* recipientJID, gboolean ac
 		this->session_data->status.set(IN_WHITEBOARD, 1);
 	}
 
-	this->sendMessage(CONNECT_REQUEST_RESPONSE_USER, accepted_request, NULL, recipientJID, false);
+	this->sendMessage(CONNECT_REQUEST_RESPONSE_USER, accepted_request, "", recipientJID, false);
 }
 
 // When this method is invoked, it means that the user has received an invitation from another peer
@@ -125,7 +125,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 	}
 
 	if (this->session_data->status[IN_WHITEBOARD]) {
-		this->sendMessage(ALREADY_IN_SESSION, 0, NULL, requesterJID, false);
+		this->sendMessage(ALREADY_IN_SESSION, 0, "", requesterJID, false);
 	}
 
 	// Check to see if the user made any modifications to this document.  If so, 
@@ -203,7 +203,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 			}
 		} else {
 			undecided = false;
-			this->sendMessage(CONNECT_REQUEST_REFUSED_BY_PEER, 0, NULL, requesterJID, false);
+			this->sendMessage(CONNECT_REQUEST_REFUSED_BY_PEER, 0, "", requesterJID, false);
 		}
 	}
 }
@@ -226,11 +226,11 @@ SessionManager::receiveConnectRequestResponse(InvitationResponses response, std:
 			KeyToNodeMap newids;
 			NodeToKeyMap newnodes;
 			this->_myTracker = new XMLNodeTracker(this);
+			this->setupInkscapeInterface();
 			this->_tryToStartLog();
 			this->resendDocument(this->session_data->recipient, newids, newnodes);
 			this->_myTracker->put(newids, newnodes);
 //			this->_myTracker->dump();
-			this->setupInkscapeInterface();
 			this->setupCommitListener();
 			break;
 			}

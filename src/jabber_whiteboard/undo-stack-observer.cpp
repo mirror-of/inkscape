@@ -34,7 +34,10 @@ namespace Inkscape {
 
 namespace Whiteboard {
 
-UndoStackObserver::UndoStackObserver(SessionManager* sm) : _sm(sm), _undoSendEventLocks(0), _redoSendEventLocks(0), _undoCommitSendEventLocks(0) { }
+UndoStackObserver::UndoStackObserver(SessionManager* sm) : _sm(sm), _undoSendEventLocks(0), _redoSendEventLocks(0), _undoCommitSendEventLocks(0) { 
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "UndoStackObserver");
+}
+
 UndoStackObserver::~UndoStackObserver() { }
 
 void
@@ -43,7 +46,7 @@ UndoStackObserver::notifyUndoEvent(XML::Event* log)
 	if (this->_undoSendEventLocks == 0) {
 		bool chatroom = this->_sm->session_data->status.test(IN_CHATROOM);
 		Glib::ustring commit = MessageUtilities::makeTagWithContent(MESSAGE_UNDO, "");
-		this->_sm->sendChange(&commit, CHANGE_COMMIT, "", chatroom);
+		this->_sm->sendChange(commit, CHANGE_COMMIT, "", chatroom);
 	}
 
 	// Retrieve and process added/deleted nodes in the undo log
@@ -64,7 +67,7 @@ UndoStackObserver::notifyRedoEvent(XML::Event* log)
 	if (this->_redoSendEventLocks == 0) {
 		bool chatroom = this->_sm->session_data->status.test(IN_CHATROOM);
 		Glib::ustring commit = MessageUtilities::makeTagWithContent(MESSAGE_REDO, "");
-		this->_sm->sendChange(&commit, CHANGE_COMMIT, "", chatroom);
+		this->_sm->sendChange(commit, CHANGE_COMMIT, "", chatroom);
 	}
 
 	// Retrieve and process added/deleted nodes in the redo log
@@ -151,7 +154,7 @@ UndoStackObserver::_doAction(XML::Event* log)
 				i--;
 			}
 
-			this->_sm->sendChange(&msgbuf, CHANGE_REPEATABLE, "", chatroom);
+			this->_sm->sendChange(msgbuf, CHANGE_REPEATABLE, "", chatroom);
 			msgbuf.clear();
 		}
 
@@ -159,7 +162,7 @@ UndoStackObserver::_doAction(XML::Event* log)
 		this->_sm->node_tracker()->process(node_actions);
 		this->_sm->serializer()->reset();
 		Glib::ustring commit = MessageUtilities::makeTagWithContent(MESSAGE_COMMIT, "");
-		this->_sm->sendChange(&commit, CHANGE_COMMIT, "", chatroom);
+		this->_sm->sendChange(commit, CHANGE_COMMIT, "", chatroom);
 	}
 }
 

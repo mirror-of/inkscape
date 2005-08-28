@@ -128,7 +128,7 @@ SessionFilePlayer::step(unsigned short dir)
 				this->_visited.push_front(std::make_pair< gint64, gint64 >(this->_current, this->_curmsg.bytes()));
 				g_log(NULL, G_LOG_LEVEL_DEBUG, "forward: visited=%u _current=%llu _next=%llu", this->_visited.size(), this->_current, this->_next);
 				this->_outputMessageToWidget();
-				this->_sm->receiveChange(&this->_curmsg);
+				this->_sm->receiveChange(this->_curmsg);
 				sp_document_done(SP_DT_DOCUMENT(this->_sm->desktop()));
 				this->_curdir = FORWARD;
 				return true;

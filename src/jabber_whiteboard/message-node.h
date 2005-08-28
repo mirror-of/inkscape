@@ -54,25 +54,21 @@ public:
 	 * \param type The type of the message.
 	 * \param chatroom Whether or not this message is to be sent to / was received from a chatroom.
 	 */
-	MessageNode(unsigned int seq, std::string sender, std::string recip, Glib::ustring const* message_body, MessageType type, bool document, bool chatroom) :
-		_seq(seq), _type(type), _document(document), _chatroom(chatroom)
+	MessageNode(unsigned int seq, std::string sender, std::string recip, Glib::ustring const& message_body, MessageType type, bool document, bool chatroom) :
+		_seq(seq), _type(type), _message(message_body), _document(document), _chatroom(chatroom)
 	{
 		this->_sender = sender;
 		this->_recipient = recip;
-	
-		if (message_body != NULL) {
-			this->_message = new Glib::ustring(*message_body);
-		} else {
-			this->_message = NULL;
-		}
 	}
 
 	~MessageNode() 
 	{
 //		g_log(NULL, G_LOG_LEVEL_DEBUG, "MessageNode destructor");
+		/*
 		if (this->_message) {
 			delete this->_message;
 		}
+		*/
 	}
 
 	unsigned int sequence()
@@ -105,7 +101,7 @@ public:
 		return this->_sender;
 	}
 
-	Glib::ustring* message()
+	Glib::ustring const& message()
 	{
 		return this->_message;
 	}
@@ -114,8 +110,8 @@ private:
 	unsigned int _seq;
 	std::string _sender;
 	std::string _recipient;
-	Glib::ustring* _message;
 	MessageType _type;
+	Glib::ustring _message;
 	bool _document;
 	bool _chatroom;
 };

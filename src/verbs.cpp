@@ -1583,6 +1583,18 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
 #endif
             break;
         }
+
+		case SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SESSION:
+#ifdef WITH_INKBOARD
+			SP_ACTIVE_DESKTOP->whiteboard_session_manager()->disconnectFromDocument();
+#endif
+			break;
+		case SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SERVER:
+#ifdef WITH_INKBOARD
+			SP_ACTIVE_DESKTOP->whiteboard_session_manager()->disconnectFromServer();
+#endif
+			break;
+
         case SP_VERB_DIALOG_INPUT:
             sp_input_dialog();
             break;
@@ -2158,6 +2170,10 @@ Verb *Verb::_base_verbs[] = {
                    N_("_Open session file..."), N_("Open and browse through records of past whiteboard sessions"), NULL),
     new DialogVerb(SP_VERB_DIALOG_WHITEBOARD_SESSIONPLAYBACK, "DialogWhiteboardSessionPlayback",
                    N_("Session file playback"), "", NULL),
+    new DialogVerb(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SESSION, "DialogWhiteboardDisconnectSession",
+                   N_("_Disconnect from session"), "", NULL),
+    new DialogVerb(SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SERVER, "DialogWhiteboardDisconnectServer",
+                   N_("Disconnect from _server"), "", NULL),
     new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),
                    N_("Configure extended input devices"), NULL),
 

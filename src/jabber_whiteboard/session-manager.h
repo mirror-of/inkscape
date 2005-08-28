@@ -299,7 +299,7 @@ public:
 	 * @param type the type of message (only CHANGE_* types permitted)
 	 * @param chatroom whether or not this message is destined for a chatroom
 	 */
-	void sendChange(Glib::ustring const* msg, MessageType type, std::string const& recipientJID, bool chatroom);
+	void sendChange(Glib::ustring const& msg, MessageType type, std::string const& recipientJID, bool chatroom);
 
 	/**
 	 * Send a message to an Inkboard client.
@@ -313,7 +313,7 @@ public:
 	 *
 	 * @return SEND_SUCCESS if successful; otherwise: UNKNOWN_OUTGOING_TYPE if msgtype is not recognized, NO_RECIPIENT_JID if recipientJID is NULL or blank, CONNECTION_ERROR if Jabber connection error occurred
 	 */
-	int sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const* msg, char const* recipientJID, bool chatroom);
+	int sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const& msg, char const* recipientJID, bool chatroom);
 
 	/**
 	 * Inform the user of a connection error via a Gtk::MessageDialog.
@@ -396,7 +396,7 @@ public:
 	 *
 	 * \param changemsg The change message group to process.
 	 */
-	void receiveChange(Glib::ustring const* changemsg);
+	void receiveChange(Glib::ustring const& changemsg);
 
 	// Logging and session file handling
 	/**

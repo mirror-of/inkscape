@@ -181,6 +181,8 @@ static char const menus_skeleton[] =
 #ifdef WITH_INKBOARD
 "	<submenu name=\"Whiteboard\">\n"
 "		<verb verb-id=\"DialogWhiteboardConnect\" />\n"
+"		<verb verb-id=\"DialogWhiteboardDisconnectSession\" />\n"
+"		<verb verb-id=\"DialogWhiteboardDisconnectServer\" />\n"
 "		<seperator/>\n"
 "		<verb verb-id=\"DialogWhiteboardShareWithUser\" />\n"
 "		<verb verb-id=\"DialogWhiteboardShareWithChat\" />\n"

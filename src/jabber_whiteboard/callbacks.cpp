@@ -135,11 +135,11 @@ Callbacks::dispatchReceiveQueue()
 					case DOCUMENT_END:
 						rcq.pop_front();
 						if (this->_sm->session_data->status[SYNCHRONIZING_WITH_CHAT]) {
-							this->_sm->sendMessage(CONNECTED_SIGNAL, 0, NULL, this->_sm->session_data->recipient, true);
+							this->_sm->sendMessage(CONNECTED_SIGNAL, 0, "", this->_sm->session_data->recipient, true);
 							this->_sm->session_data->status.set(SYNCHRONIZING_WITH_CHAT, 0);
 							this->_sm->session_data->status.set(IN_CHATROOM, 1);
 						} else {
-							this->_sm->sendMessage(CONNECTED_SIGNAL, 0, NULL, msg->sender().c_str(), false);
+							this->_sm->sendMessage(CONNECTED_SIGNAL, 0, "", msg->sender().c_str(), false);
 						}
 						break;
 					case CHANGE_REPEATABLE:

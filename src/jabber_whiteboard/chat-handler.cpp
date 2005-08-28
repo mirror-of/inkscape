@@ -211,7 +211,7 @@ ChatMessageHandler::_finishConnection()
 			g_log(NULL, G_LOG_LEVEL_DEBUG, "Chatters list is not empty; %s is requesting synchronization", lm_connection_get_jid(this->_sm->session_data->connection));
 			this->_sm->session_data->status.set(WAITING_TO_SYNC_TO_CHAT, 1);
 			// Send synchronization request to chatroom
-			this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_REQUEST, 0, NULL, this->_sm->session_data->recipient, true);
+			this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_REQUEST, 0, "", this->_sm->session_data->recipient, true);
 		}
 	}
 	return LM_HANDLER_RESULT_REMOVE_MESSAGE;

@@ -148,7 +148,10 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	// Debugging info
 	childRepr->setAttribute("inkboard:id", child.c_str(), false);
 
-	// 7.  Deserialize the event.
+	// 7.  Check for tree structure integrity, and munge things up if necessary.
+	
+
+	// 8.  Deserialize the event.
 	this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
 	this->_parent_child_map.erase(childRepr);
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting parent_child_map[%p] = %p", childRepr, parentRepr);

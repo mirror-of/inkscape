@@ -71,19 +71,19 @@ public:
 				case CHANGE_REPEATABLE:
 				case CHANGE_NOT_REPEATABLE:
 				case DOCUMENT_BEGIN:
-					msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, mode, false, chatroom);
+					msgNode = new MessageNode(p.sequence, p.sender, "", p.body, mode, false, chatroom);
 					rmq->insert(msgNode);
 					Inkscape::GC::release(msgNode);
 					break;
 				case DOCUMENT_END:
 					this->_sm->session_data->recipients_committed_queue.push_back(p.sender);
-					msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, mode, false, chatroom);
+					msgNode = new MessageNode(p.sequence, p.sender, "", p.body, mode, false, chatroom);
 					rmq->insert(msgNode);
 					Inkscape::GC::release(msgNode);
 					break;
 				case CHANGE_COMMIT:
 					this->_sm->session_data->recipients_committed_queue.push_back(p.sender);
-					msgNode = new MessageNode(p.sequence, p.sender, "", &p.body, CHANGE_COMMIT, false, chatroom);
+					msgNode = new MessageNode(p.sequence, p.sender, "", p.body, CHANGE_COMMIT, false, chatroom);
 					rmq->insert(msgNode);
 					Inkscape::GC::release(msgNode);
 					break;
@@ -241,7 +241,7 @@ public:
 					// but the client will accept only one response.
 					// The response is sent privately to the client
 					// <http://www.jabber.org/jeps/jep-0045.html#privatemessage>
-					this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_RESPONSE, this->_sm->session_data->sequence_number, NULL, m.sender.c_str(), false);
+					this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_RESPONSE, this->_sm->session_data->sequence_number, "", m.sender.c_str(), false);
 				}
 				break;
 			case CHATROOM_SYNCHRONIZE_RESPONSE:
@@ -257,10 +257,10 @@ public:
 					// Send document synchronization request
 					this->_sm->clearDocument();
 					this->_sm->setupInkscapeInterface();
-					this->_sm->sendMessage(CONNECT_REQUEST_RESPONSE_CHAT, m.sequence, NULL, m.sender.c_str(), false);
+					this->_sm->sendMessage(CONNECT_REQUEST_RESPONSE_CHAT, m.sequence, "", m.sender.c_str(), false);
 				} else {
 //					g_log(NULL, G_LOG_LEVEL_DEBUG, "Sequence number from synchronization response was zero; dropping response and trying again.");
-					this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_REQUEST, 0, NULL, this->_sm->session_data->recipient, true);
+					this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_REQUEST, 0, "", this->_sm->session_data->recipient, true);
 				}
 				break;
 			default:

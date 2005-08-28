@@ -377,7 +377,7 @@ void
 SessionManager::disconnectFromDocument()
 {
 	if (this->session_data->status[IN_WHITEBOARD] || !this->session_data->status[IN_CHATROOM]) {
-		this->sendMessage(DISCONNECTED_FROM_USER_SIGNAL, 0, NULL, this->session_data->recipient, false);
+		this->sendMessage(DISCONNECTED_FROM_USER_SIGNAL, 0, "", this->session_data->recipient, false);
 	}
 	this->closeSession();
 	this->_setVerbSensitivity(DISCONNECTED_FROM_SESSION);
@@ -432,8 +432,13 @@ SessionManager::setRecipient(char const* recipientJID)
 }
 
 void
-SessionManager::sendChange(Glib::ustring const* msg, MessageType type, std::string const& recipientJID, bool chatroom)
+SessionManager::sendChange(Glib::ustring const& msg, MessageType type, std::string const& recipientJID, bool chatroom)
 {
+	if (!this->session_data->status[IN_WHITEBOARD]) {
+		g_log(NULL, G_LOG_LEVEL_DEBUG, "Not in whiteboard; exiting sendChange");
+		return;
+	}
+
 	std::string& recipient = const_cast< std::string& >(recipientJID);
 	if (recipient.empty()) {
 		recipient = this->session_data->recipient;
@@ -463,7 +468,7 @@ SessionManager::sendChange(Glib::ustring const* msg, MessageType type, std::stri
 // FIXME:
 // This method needs a massive, massive, massive overhaul.
 int
-SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const* msg, char const* recipientJID, bool chatroom)
+SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const& msg, char const* recipientJID, bool chatroom)
 {
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "sendMessage, message type %s", MessageHandler::ink_type_to_string(msgtype));
 	LmMessage* m;
@@ -502,8 +507,8 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	free(type);
 
 	// add message body
-	if (msg != NULL) {
-		lm_message_node_add_child(m->node, MESSAGE_BODY, msg->data());
+	if (!msg.empty()) {
+		lm_message_node_add_child(m->node, MESSAGE_BODY, msg.c_str());
 //		g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending message from %s to %s: type %s, %s", lm_connection_get_jid(this->session_data->connection), recipientJID, MessageHandler::ink_type_to_string(msgtype), msg->data());
 	} else {
 //		g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending message from %s to %s: type %s", lm_connection_get_jid(this->session_data->connection), recipientJID, MessageHandler::ink_type_to_string(msgtype));
@@ -547,8 +552,8 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	// We want to log messages even if they were not successfully sent,
 	// since the user may opt to re-synchronize a session using the session
 	// file record.
-	if (msg != NULL) {
-		this->_log(*msg);
+	if (!msg.empty()) {
+		this->_log(msg);
 		this->_commitLog();
 	}
 
@@ -577,7 +582,7 @@ void
 SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf, NodeToKeyMap& newnodesbuf)
 {
 	Glib::ustring docbegin = MessageUtilities::makeTagWithContent(MESSAGE_DOCBEGIN, "");
-	this->sendChange(&docbegin, DOCUMENT_BEGIN, recipientJID, false);
+	this->sendChange(docbegin, DOCUMENT_BEGIN, recipientJID, false);
 
 	Inkscape::XML::Node* root = sp_document_repr_root(this->_myDoc);
 
@@ -598,7 +603,7 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 
 		for(; j != newchildren.end(); j++) {
 			if (!agg.addOne(*j, aggbuf)) {
-				this->sendChange(&aggbuf, CHANGE_REPEATABLE, recipientJID, false);
+				this->sendChange(aggbuf, CHANGE_REPEATABLE, recipientJID, false);
 				aggbuf.clear();
 				agg.addOne(*j, aggbuf);
 			}
@@ -606,7 +611,7 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 
 		// send remaining changes
 		if (!aggbuf.empty()) {
-			this->sendChange(&aggbuf, CHANGE_REPEATABLE, recipientJID, false);
+			this->sendChange(aggbuf, CHANGE_REPEATABLE, recipientJID, false);
 			aggbuf.clear();
 		}
 
@@ -615,22 +620,20 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
     }
 
 	Glib::ustring commit = MessageUtilities::makeTagWithContent(MESSAGE_COMMIT, "");
-	this->sendChange(&commit, CHANGE_COMMIT, recipientJID, false);
+	this->sendChange(commit, CHANGE_COMMIT, recipientJID, false);
 	Glib::ustring docend = MessageUtilities::makeTagWithContent(MESSAGE_DOCEND, "");
-	this->sendChange(&docend, DOCUMENT_END, recipientJID, false);
+	this->sendChange(docend, DOCUMENT_END, recipientJID, false);
 }
 
 void
-SessionManager::receiveChange(Glib::ustring const* changemsg)
+SessionManager::receiveChange(Glib::ustring const& changemsg)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) receiveChange operating on %s", lm_connection_get_jid(this->session_data->connection), changemsg->data());
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) receiveChange operating on %s", lm_connection_get_jid(this->session_data->connection), changemsg.c_str());
 
 	struct Node part;
 
-	// TODO: there's no real reason to make a copy anymore; this is a holdover
-	// from the old Inkboard code
-	Glib::ustring msgcopy(changemsg->data());
-	this->_log(*changemsg);
+	Glib::ustring msgcopy = changemsg.c_str();
+	this->_log(changemsg);
 
 	while(MessageUtilities::getFirstMessageTag(part, msgcopy) != false) {
 
@@ -766,6 +769,14 @@ SessionManager::loadSessionFile(Glib::ustring filename)
 
 			if (!this->session_data) {
 				this->session_data = new SessionData(this);
+			}
+
+			if (!this->_myDeserializer) {
+				this->_myDeserializer = new Deserializer(this->node_tracker());
+			}
+
+			if (!this->_myUndoObserver) {
+				this->setupCommitListener();
 			}
 
 			this->session_data->status.set(PLAYING_SESSION_FILE, 1);
