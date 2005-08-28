@@ -1,8 +1,9 @@
 #define __SP_PRINT_C__
 
-/*
+/** \file
  * Frontend to printing
- *
+ */
+/*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -31,69 +32,69 @@
 #include "print.h"
 
 #if 0
-#include <extension/internal/ps.h>
+# include <extension/internal/ps.h>
 
-#ifdef WIN32
-#include <extension/internal/win32.h>
-#endif
+# ifdef WIN32
+#  include <extension/internal/win32.h>
+# endif
 
-#ifdef WITH_GNOME_PRINT
-#include <extension/internal/gnome.h>
-#endif
+# ifdef WITH_GNOME_PRINT
+#  include <extension/internal/gnome.h>
+# endif
 #endif
 
 /* Identity typedef */
 
 unsigned int sp_print_bind(SPPrintContext *ctx, NR::Matrix const &transform, float opacity)
 {
-	NRMatrix const ntransform(transform);
-	return sp_print_bind(ctx, &ntransform, opacity);
+    NRMatrix const ntransform(transform);
+    return sp_print_bind(ctx, &ntransform, opacity);
 }
 
 unsigned int
-sp_print_bind (SPPrintContext *ctx, NRMatrix const *transform, float opacity)
+sp_print_bind(SPPrintContext *ctx, NRMatrix const *transform, float opacity)
 {
-	return ctx->module->bind(transform, opacity);
+    return ctx->module->bind(transform, opacity);
 }
 
 unsigned int
-sp_print_release (SPPrintContext *ctx)
+sp_print_release(SPPrintContext *ctx)
 {
-	return ctx->module->release();
+    return ctx->module->release();
 }
 
 unsigned int
 sp_print_comment(SPPrintContext *ctx, char const *comment)
 {
-	return ctx->module->comment(comment);
+    return ctx->module->comment(comment);
 }
 
 unsigned int
-sp_print_fill (SPPrintContext *ctx, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
-	       NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
+sp_print_fill(SPPrintContext *ctx, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
+              NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
-	return ctx->module->fill(bpath, ctm, style, pbox, dbox, bbox);
+    return ctx->module->fill(bpath, ctm, style, pbox, dbox, bbox);
 }
 
 unsigned int
-sp_print_stroke (SPPrintContext *ctx, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
-		 NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
+sp_print_stroke(SPPrintContext *ctx, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
+                NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
-	return ctx->module->stroke(bpath, ctm, style, pbox, dbox, bbox);
+    return ctx->module->stroke(bpath, ctm, style, pbox, dbox, bbox);
 }
 
 unsigned int
-sp_print_image_R8G8B8A8_N (SPPrintContext *ctx,
-			   guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-			   NRMatrix const *transform, SPStyle const *style)
+sp_print_image_R8G8B8A8_N(SPPrintContext *ctx,
+                          guchar *px, unsigned int w, unsigned int h, unsigned int rs,
+                          NRMatrix const *transform, SPStyle const *style)
 {
-	return ctx->module->image(px, w, h, rs, transform, style);
+    return ctx->module->image(px, w, h, rs, transform, style);
 }
 
-unsigned int sp_print_text (SPPrintContext* ctx, char const *text, NR::Point p,
-			    SPStyle const *style)
+unsigned int sp_print_text(SPPrintContext *ctx, char const *text, NR::Point p,
+                           SPStyle const *style)
 {
-  return ctx->module->text(text, p, style);
+    return ctx->module->text(text, p, style);
 }
 
 #include "display/nr-arena.h"
@@ -102,125 +103,136 @@ unsigned int sp_print_text (SPPrintContext* ctx, char const *text, NR::Point p,
 /* UI */
 
 void
-sp_print_preview_document (SPDocument *doc)
+sp_print_preview_document(SPDocument *doc)
 {
-	Inkscape::Extension::Print *mod;
-	unsigned int ret;
+    Inkscape::Extension::Print *mod;
+    unsigned int ret;
 
-	sp_document_ensure_up_to_date (doc);
+    sp_document_ensure_up_to_date(doc);
 
-	mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_DEFAULT);
+    mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_DEFAULT);
 
-	ret = mod->set_preview ();
+    ret = mod->set_preview();
 
-	if (ret) {
-		SPPrintContext context;
-		context.module = mod;
+    if (ret) {
+        SPPrintContext context;
+        context.module = mod;
 
-		/* fixme: This has to go into module constructor somehow */
-		/* Create new arena */
-		mod->base = SP_ITEM (sp_document_root (doc));
-		mod->arena = NRArena::create();
-		mod->dkey = sp_item_display_key_new (1);
-		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
-		/* Print document */
-		ret = mod->begin (doc);
-		sp_item_invoke_print (mod->base, &context);
-		ret = mod->finish ();
-		/* Release arena */
-		sp_item_invoke_hide (mod->base, mod->dkey);
-		mod->base = NULL;
-		nr_arena_item_unref (mod->root);
-		mod->root = NULL;
-		nr_object_unref ((NRObject *) mod->arena);
-		mod->arena = NULL;
-	}
+        /* fixme: This has to go into module constructor somehow */
+        /* Create new arena */
+        mod->base = SP_ITEM(sp_document_root(doc));
+        mod->arena = NRArena::create();
+        mod->dkey = sp_item_display_key_new(1);
+        mod->root = sp_item_invoke_show(mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
+        /* Print document */
+        ret = mod->begin(doc);
+        sp_item_invoke_print(mod->base, &context);
+        ret = mod->finish();
+        /* Release arena */
+        sp_item_invoke_hide(mod->base, mod->dkey);
+        mod->base = NULL;
+        nr_arena_item_unref(mod->root);
+        mod->root = NULL;
+        nr_object_unref((NRObject *) mod->arena);
+        mod->arena = NULL;
+    }
 
-	return;
+    return;
 }
 
 void
-sp_print_document (SPDocument *doc, unsigned int direct)
+sp_print_document(SPDocument *doc, unsigned int direct)
 {
-	Inkscape::Extension::Print *mod;
-	unsigned int ret;
+    Inkscape::Extension::Print *mod;
+    unsigned int ret;
 
-	sp_document_ensure_up_to_date (doc);
+    sp_document_ensure_up_to_date(doc);
 
-	if (direct) {
-		mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
-	} else {
-		mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_DEFAULT);
-	}
+    if (direct) {
+        mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
+    } else {
+        mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_DEFAULT);
+    }
 
-	ret = mod->setup();
+    ret = mod->setup();
 
-	if (ret) {
-		SPPrintContext context;
-		context.module = mod;
+    if (ret) {
+        SPPrintContext context;
+        context.module = mod;
 
-		/* fixme: This has to go into module constructor somehow */
-		/* Create new arena */
-		mod->base = SP_ITEM (sp_document_root (doc));
-		mod->arena = NRArena::create();
-		mod->dkey = sp_item_display_key_new (1);
-		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
-		/* Print document */
-		ret = mod->begin (doc);
-		sp_item_invoke_print (mod->base, &context);
-		ret = mod->finish ();
-		/* Release arena */
-		sp_item_invoke_hide (mod->base, mod->dkey);
-		mod->base = NULL;
-		nr_arena_item_unref (mod->root);
-		mod->root = NULL;
-		nr_object_unref ((NRObject *) mod->arena);
-		mod->arena = NULL;
-	}
+        /* fixme: This has to go into module constructor somehow */
+        /* Create new arena */
+        mod->base = SP_ITEM(sp_document_root(doc));
+        mod->arena = NRArena::create();
+        mod->dkey = sp_item_display_key_new(1);
+        mod->root = sp_item_invoke_show(mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
+        /* Print document */
+        ret = mod->begin(doc);
+        sp_item_invoke_print(mod->base, &context);
+        ret = mod->finish();
+        /* Release arena */
+        sp_item_invoke_hide(mod->base, mod->dkey);
+        mod->base = NULL;
+        nr_arena_item_unref(mod->root);
+        mod->root = NULL;
+        nr_object_unref((NRObject *) mod->arena);
+        mod->arena = NULL;
+    }
 
-	return;
+    return;
 }
 
 void
-sp_print_document_to_file (SPDocument *doc, gchar const *filename)
+sp_print_document_to_file(SPDocument *doc, gchar const *filename)
 {
-	Inkscape::Extension::Print *mod;
-	SPPrintContext context;
-	gchar const *oldconst;
-	gchar * oldoutput;
-	unsigned int ret;
+    Inkscape::Extension::Print *mod;
+    SPPrintContext context;
+    gchar const *oldconst;
+    gchar *oldoutput;
+    unsigned int ret;
 
-	sp_document_ensure_up_to_date (doc);
+    sp_document_ensure_up_to_date(doc);
 
-	mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
-	oldconst = mod->get_param_string("destination");
-	oldoutput = g_strdup(oldconst);
-	mod->set_param_string("destination", (gchar *)filename);
+    mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
+    oldconst = mod->get_param_string("destination");
+    oldoutput = g_strdup(oldconst);
+    mod->set_param_string("destination", (gchar *)filename);
 
 /* Start */
-	context.module = mod;
-	/* fixme: This has to go into module constructor somehow */
-	/* Create new arena */
-	mod->base = SP_ITEM (sp_document_root (doc));
-	mod->arena = NRArena::create();
-	mod->dkey = sp_item_display_key_new (1);
-	mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
-	/* Print document */
-	ret = mod->begin (doc);
-	sp_item_invoke_print (mod->base, &context);
-	ret = mod->finish ();
-	/* Release arena */
-	sp_item_invoke_hide (mod->base, mod->dkey);
-	mod->base = NULL;
-	nr_arena_item_unref (mod->root);
-	mod->root = NULL;
-	nr_object_unref ((NRObject *) mod->arena);
-	mod->arena = NULL;
+    context.module = mod;
+    /* fixme: This has to go into module constructor somehow */
+    /* Create new arena */
+    mod->base = SP_ITEM(sp_document_root(doc));
+    mod->arena = NRArena::create();
+    mod->dkey = sp_item_display_key_new(1);
+    mod->root = sp_item_invoke_show(mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_DISPLAY);
+    /* Print document */
+    ret = mod->begin(doc);
+    sp_item_invoke_print(mod->base, &context);
+    ret = mod->finish();
+    /* Release arena */
+    sp_item_invoke_hide(mod->base, mod->dkey);
+    mod->base = NULL;
+    nr_arena_item_unref(mod->root);
+    mod->root = NULL;
+    nr_object_unref((NRObject *) mod->arena);
+    mod->arena = NULL;
 /* end */
 
-	mod->set_param_string("destination", oldoutput);
-	g_free(oldoutput);
+    mod->set_param_string("destination", oldoutput);
+    g_free(oldoutput);
 
-	return;
+    return;
 }
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
