@@ -525,24 +525,16 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	const gchar *pat_id = repr->attribute("id");
 	SPObject *pat_object = document->getObjectById(pat_id);
 
-	gchar m[256];
-
 	for (GSList *i = reprs; i != NULL; i = i->next) {
-		Inkscape::XML::Node *dup = ((Inkscape::XML::Node *) i->data)->duplicate();
-		sp_repr_add_child(SP_OBJECT_REPR(pat_object), dup, NULL);
+	        Inkscape::XML::Node *node = (Inkscape::XML::Node *)(i->data);
+		SPItem *copy = SP_ITEM(pat_object->appendChildRepr(node));
 
 		NR::Matrix dup_transform;
-		if (!sp_svg_transform_read (dup->attribute("transform"), &dup_transform)) 
+		if (!sp_svg_transform_read (node->attribute("transform"), &dup_transform)) 
 			dup_transform = NR::identity();
 		dup_transform *= move;
 
-		if (sp_svg_transform_write(m, 256, dup_transform)) {
-			sp_repr_set_attr(dup, "transform", m);
-		} else {
-			sp_repr_set_attr(dup, "transform", NULL);
-		}
-
-		sp_repr_unref(dup);
+		sp_item_write_transform(copy, SP_OBJECT_REPR(copy), dup_transform);
 	}
 
 	sp_repr_unref (repr);

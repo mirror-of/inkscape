@@ -1948,19 +1948,30 @@ sp_selection_tile(bool apply)
         Inkscape::XML::Node *dup = (SP_OBJECT_REPR (i->data))->duplicate();
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
-    
+
     NR::Rect bounds (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max()));
 
-    const gchar *pat_id = pattern_tile (repr_copies, bounds, document, 
-                                 NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))), move);
-
     if (apply) {
-        // delete objects so that their clones don't get alerted; this object will be restored shortly 
+        // delete objects so that their clones don't get alerted; this object will be restored shortly
         for (GSList *i = items; i != NULL; i = i->next) {
             SPObject *item = SP_OBJECT (i->data);
             item->deleteObject (false);
         }
+    }
 
+    // Hack: Temporarily set clone compensation to unmoved, so that we can move clone-originals
+    // without disturbing clones.
+    // See ActorAlign::on_button_click() in src/ui/dialog/align-and-distribute.cpp
+    int saved_compensation = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+    prefs_set_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_UNMOVED);
+
+    const gchar *pat_id = pattern_tile (repr_copies, bounds, document,
+                                        NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))), move);
+
+    // restore compensation setting
+    prefs_set_int_attribute("options.clonecompensation", "value", saved_compensation);
+
+    if (apply) {
         Inkscape::XML::Node *rect = sp_repr_new ("svg:rect");
         sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
         sp_repr_set_double (rect, "width", bounds.extent(NR::X));
