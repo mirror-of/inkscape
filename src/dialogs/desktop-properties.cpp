@@ -190,6 +190,34 @@ static PaperSize const inkscape_papers[] = {
     { NULL, 0, 0, SP_UNIT_PX },
 };
 
+/** 
+ * Returns an index into inkscape_papers of a paper of the specified 
+ * size (specified in px), or -1 if there's no such paper.
+ */
+static int
+find_paper_size(double const w_px, double const h_px)
+{
+    double given[2];
+    if ( w_px < h_px ) {
+        given[0] = w_px; given[1] = h_px;
+    } else {
+        given[0] = h_px; given[1] = w_px;
+    }
+    g_return_val_if_fail(given[0] <= given[1], -1);
+    for (unsigned i = 0; i < G_N_ELEMENTS(inkscape_papers) - 1; ++i) {
+        SPUnit const &i_unit = sp_unit_get_by_id(inkscape_papers[i].unit);
+        double const i_sizes[2] = { sp_units_get_pixels(inkscape_papers[i].smaller, i_unit),
+                                    sp_units_get_pixels(inkscape_papers[i].larger, i_unit) };
+        g_return_val_if_fail(i_sizes[0] <= i_sizes[1], -1);
+        if ((fabs(given[0] - i_sizes[0]) <= .1) &&
+            (fabs(given[1] - i_sizes[1]) <= .1)   )
+        {
+            return (int) i;
+        }
+    }
+    return -1;
+}
+
 /**
  * Called when XML node attribute changed; updates dialog widgets.
  */
@@ -438,6 +466,8 @@ sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     } else 
         g_warning ("sp_doc_dialog_whatever_changed should only be used for width/height");
 
+    sp_dtw_update (dialog, dt);
+
     sp_document_done(doc);
 }
 
@@ -557,13 +587,7 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
 
     PaperSize const *const paper = (PaperSize const *) data;
 
-    GtkWidget *const ww = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "widthsb");
-    GtkWidget *const hw = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "heightsb");
-
     if (paper) {
-        gtk_widget_set_sensitive(ww, FALSE);
-        gtk_widget_set_sensitive(hw, FALSE);
-
         GtkWidget *const om = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
         bool const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
 
@@ -576,10 +600,7 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
         GtkAdjustment *const ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
         gtk_adjustment_set_value(aw, w_h.first);
         gtk_adjustment_set_value(ah, w_h.second);
-    } else {
-        gtk_widget_set_sensitive(ww, TRUE);
-        gtk_widget_set_sensitive(hw, TRUE);
-    }
+    } 
 
     if (!SP_ACTIVE_DESKTOP) {
         return;
@@ -1173,7 +1194,6 @@ sp_desktop_dialog(void)
         gtk_table_attach(GTK_TABLE(tt), sb, 1, 2, 1, 2,
                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                          (GtkAttachOptions)0, 0, 0);
-        gtk_object_set_data(GTK_OBJECT(dlg), "widthsb", sb);
         g_signal_connect(G_OBJECT(a), "value_changed",
                          G_CALLBACK(sp_doc_dialog_whatever_changed), dlg);
 
@@ -1195,7 +1215,6 @@ sp_desktop_dialog(void)
         gtk_table_attach( GTK_TABLE(tt), sb, 1, 2, 2, 3,
                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                           (GtkAttachOptions)0, 0, 0 );
-        gtk_object_set_data(GTK_OBJECT(dlg), "heightsb", sb);
         g_signal_connect( G_OBJECT(a), "value_changed",
                           G_CALLBACK(sp_doc_dialog_whatever_changed), dlg );
 
@@ -1325,34 +1344,6 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
         sp_repr_remove_listener_by_data(SP_OBJECT_REPR(desktop->namedview), dlg);
     }
     sp_dtw_update(dialog, NULL);
-}
-
-/** 
- * Returns an index into inkscape_papers of a paper of the specified 
- * size (specified in px), or -1 if there's no such paper.
- */
-static int
-find_paper_size(double const w_px, double const h_px)
-{
-    double given[2];
-    if ( w_px < h_px ) {
-        given[0] = w_px; given[1] = h_px;
-    } else {
-        given[0] = h_px; given[1] = w_px;
-    }
-    g_return_val_if_fail(given[0] <= given[1], -1);
-    for (unsigned i = 0; i < G_N_ELEMENTS(inkscape_papers) - 1; ++i) {
-        SPUnit const &i_unit = sp_unit_get_by_id(inkscape_papers[i].unit);
-        double const i_sizes[2] = { sp_units_get_pixels(inkscape_papers[i].smaller, i_unit),
-                                    sp_units_get_pixels(inkscape_papers[i].larger, i_unit) };
-        g_return_val_if_fail(i_sizes[0] <= i_sizes[1], -1);
-        if ((fabs(given[0] - i_sizes[0]) <= .1) &&
-            (fabs(given[1] - i_sizes[1]) <= .1)   )
-        {
-            return (int) i;
-        }
-    }
-    return -1;
 }
 
 /**
@@ -1501,8 +1492,6 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         gdouble const doc_w_px = sp_document_width(SP_DT_DOCUMENT(desktop));
         gdouble const doc_h_px = sp_document_height(SP_DT_DOCUMENT(desktop));
 
-        GtkWidget *ww = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "widthsb");
-        GtkWidget *hw = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "heightsb");
         GtkWidget *pm = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "papers");
         GtkWidget *om = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "orientation");
 
@@ -1513,8 +1502,6 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         /* find matching paper size */
         gint const pos = 1 + find_paper_size(doc_w_px, doc_h_px);
         gtk_option_menu_set_history(GTK_OPTION_MENU(pm), pos);
-        gtk_widget_set_sensitive(ww, !pos);
-        gtk_widget_set_sensitive(hw, !pos);
 
         /* Show document width/height in the requested units. */
         {
