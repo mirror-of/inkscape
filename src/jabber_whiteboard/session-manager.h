@@ -209,8 +209,7 @@ public:
 	/**
 	 * Constructor.
 	 *
-	 * \param desktop The desktop with which this SessionManager is associated.
-	 */
+	 * \param desktop The desktop with which this SessionManager is associated.  */
 	SessionManager(::SPDesktop *desktop);
 	~SessionManager();
 
@@ -481,6 +480,13 @@ public:
 	 * \see Inkscape::Whiteboard::Deserializer
 	 */
 	void setupInkscapeInterface();
+
+	/**
+	 * Reset whiteboard verbs to INITIAL state.
+	 */
+	void setInitialVerbSensitivity() {
+		this->_setVerbSensitivity(INITIAL);
+	}
 
 	/**
 	 * Set up the event commit listener.

@@ -398,7 +398,9 @@ SessionManager::closeSession()
 		this->stopReceiveQueueDispatch();
 	}
 
-	this->_myDoc->removeUndoObserver(*this->_myUndoObserver);
+	if (this->_myUndoObserver) {
+		this->_myDoc->removeUndoObserver(*this->_myUndoObserver);
+	}
 
 	delete this->_myUndoObserver;
 	delete this->_mySerializer;
@@ -1045,6 +1047,8 @@ SessionManager::_tryToStartLog()
 void
 SessionManager::_setVerbSensitivity(SensitivityMode mode)
 {
+	return;
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "doc: %p", this->_myDoc);
 	switch (mode) {
 		case ESTABLISHED_CONNECTION:
 			// Upon successful connection, we can disconnect from the server.

@@ -186,7 +186,7 @@ struct SPDesktop : public Inkscape::UI::View::View {
 
 #ifdef WITH_INKBOARD
 	Inkscape::Whiteboard::SessionManager* whiteboard_session_manager() {
-	return _whiteboard_session_manager;
+		return _whiteboard_session_manager;
 	}
 
 	Inkscape::Whiteboard::SessionManager* _whiteboard_session_manager;

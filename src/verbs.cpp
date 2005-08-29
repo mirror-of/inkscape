@@ -1576,11 +1576,21 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
         }
 
 		case SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SESSION:
-			SP_ACTIVE_DESKTOP->whiteboard_session_manager()->disconnectFromDocument();
+		{
+            Inkscape::Whiteboard::SessionManager *sm = SP_ACTIVE_DESKTOP->whiteboard_session_manager();
+            if (sm->session_data && sm->session_data->status[Inkscape::Whiteboard::IN_WHITEBOARD]) {
+				SP_ACTIVE_DESKTOP->whiteboard_session_manager()->disconnectFromDocument();
+			}
 			break;
+		}
 		case SP_VERB_DIALOG_WHITEBOARD_DISCONNECT_FROM_SERVER:
-			SP_ACTIVE_DESKTOP->whiteboard_session_manager()->disconnectFromServer();
+		{
+            Inkscape::Whiteboard::SessionManager *sm = SP_ACTIVE_DESKTOP->whiteboard_session_manager();
+            if (sm->session_data && sm->session_data->status[Inkscape::Whiteboard::LOGGED_IN]) {
+				SP_ACTIVE_DESKTOP->whiteboard_session_manager()->disconnectFromServer();
+			}
 			break;
+		}
 #endif
         case SP_VERB_DIALOG_INPUT:
             sp_input_dialog();
