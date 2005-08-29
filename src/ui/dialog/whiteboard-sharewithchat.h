@@ -61,10 +61,8 @@ private:
 	static unsigned int const CANCEL = 2;
 
 	// GTK+ widgets
-	Gtk::HBox _roomnamebox;
-	Gtk::HBox _roompassbox;
-	Gtk::HBox _confserverbox;
-	Gtk::HBox _handlebox;
+	Gtk::Table _layout;
+
 	Gtk::HBox _buttonsbox;
 	Whiteboard::SessionFileSelectorBox _sfsbox;
 

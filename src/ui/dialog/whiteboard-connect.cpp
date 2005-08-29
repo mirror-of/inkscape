@@ -39,7 +39,7 @@ WhiteboardConnectDialog::create()
 }
 
 WhiteboardConnectDialogImpl::WhiteboardConnectDialogImpl() :
-	_usessl(_("Use _SSL"), true)
+	_layout(4, 4, false), _usessl(_("Use _SSL"), true)
 {
 	this->setSessionManager();
 	this->_construct();
@@ -78,19 +78,23 @@ WhiteboardConnectDialogImpl::_construct()
 
 	this->_port.set_text("5222");
 
-	this->_servbox.pack_start(this->_labels[0], true, true, 0);
-	this->_servbox.pack_start(this->_server, true, true, 0);
-	this->_servbox.pack_start(this->_labels[3], true, true, 0);
-	this->_servbox.pack_start(this->_port, true, true, 0);
+	this->_layout.attach(this->_labels[0], 0, 1, 0, 1);
+	this->_layout.attach(this->_labels[3], 2, 3, 0, 1);
+	this->_layout.attach(this->_labels[1], 0, 1, 1, 2);
+	this->_layout.attach(this->_labels[2], 0, 1, 2, 3);
 
-	this->_userbox.pack_start(this->_labels[1], true, true, 0);
-	this->_userbox.pack_end(this->_username, true, true, 0);
+	this->_layout.attach(this->_server, 1, 2, 0, 1);
+	this->_layout.attach(this->_port, 3, 4, 0, 1);
+	this->_layout.attach(this->_username, 1, 4, 1, 2);
+	this->_layout.attach(this->_password, 1, 4, 2, 3);
+
+	this->_layout.attach(this->_usessl, 1, 4, 3, 4);
+
+	this->_layout.set_col_spacings(1);
+	this->_layout.set_row_spacings(1);
 
 	this->_password.set_visibility(false);
 	this->_password.set_invisible_char('*');
-
-	this->_passbox.pack_start(this->_labels[2], true, true, 0);
-	this->_passbox.pack_end(this->_password, true, true, 0);
 
 	// Buttons
 	this->_ok.set_label(_("Connect"));
@@ -103,10 +107,7 @@ WhiteboardConnectDialogImpl::_construct()
 	this->_buttons.pack_end(this->_ok, true, true, 0);
 
 	// Pack widgets into main vbox
-	main->pack_start(this->_servbox);
-	main->pack_start(this->_userbox);
-	main->pack_start(this->_passbox);
-	main->pack_start(this->_usessl);
+	main->pack_start(this->_layout);
 	main->pack_end(this->_buttons);
 }
 

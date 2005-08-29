@@ -55,9 +55,7 @@ public:
 
 private:
 	// GTK+ widgets
-	Gtk::HBox _servbox;
-	Gtk::HBox _userbox;
-	Gtk::HBox _passbox;
+	Gtk::Table _layout;
 	Gtk::HBox _buttons;
 
 	Gtk::Entry _server;

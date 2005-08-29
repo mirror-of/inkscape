@@ -187,7 +187,7 @@ SessionManager::setDesktop(::SPDesktop* desktop)
 int
 SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const& port, Glib::ustring const& username, Glib::ustring const& pw, bool usessl)
 {
-	GError* error = NULL;
+	GError* error = new GError;
 	Glib::ustring jid;
 
 	// JID format is username@server/resource
@@ -221,9 +221,6 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 		if (lm_ssl_is_supported()) {
 			g_log(NULL, G_LOG_LEVEL_DEBUG, "Initializing SSL");
 			this->session_data->ssl = lm_ssl_new(NULL, ssl_error_handler, reinterpret_cast< gpointer >(this), NULL);
-			if (!this->session_data->ssl) {
-				return SSL_INITIALIZATION_ERROR;
-			}
 
 			lm_ssl_ref(this->session_data->ssl);
 		} else {
@@ -246,6 +243,7 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	// 	to convert this from synchronous to asynchronous Loudmouth calls.
 	if (!lm_connection_open_and_block(this->session_data->connection, &error)) {
 		g_warning("Failed to open: %s", error->message);
+		delete error;
 		return FAILED_TO_CONNECT;
 	}
 
@@ -255,6 +253,7 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 		lm_connection_close(this->session_data->connection, NULL);
 		lm_connection_unref(this->session_data->connection);
 		this->session_data->connection = NULL;
+		delete error;
 		return INVALID_AUTH;
 	}
 
@@ -277,6 +276,7 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 		lm_connection_close(this->session_data->connection, NULL);
 		lm_connection_unref(this->session_data->connection);
 		this->session_data->connection = NULL;
+		delete error;
 		return FAILED_TO_CONNECT;
 	}
 
@@ -287,6 +287,8 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	lm_message_unref(m);
 
 	this->_setVerbSensitivity(ESTABLISHED_CONNECTION);
+
+	delete error;
 	return CONNECT_SUCCESS;
 }
 

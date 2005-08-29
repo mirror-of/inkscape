@@ -44,7 +44,8 @@ WhiteboardShareWithChatroomDialog::create()
 	return new WhiteboardShareWithChatroomDialogImpl();
 }
 
-WhiteboardShareWithChatroomDialogImpl::WhiteboardShareWithChatroomDialogImpl() 
+WhiteboardShareWithChatroomDialogImpl::WhiteboardShareWithChatroomDialogImpl() :
+	_layout(4, 2, false)
 {
 	this->setSessionManager();
 	this->_construct();
@@ -82,18 +83,16 @@ WhiteboardShareWithChatroomDialogImpl::_construct()
 	this->_labels[2].set_mnemonic_widget(this->_roompass);
 	this->_labels[3].set_mnemonic_widget(this->_handle);
 
-	// Pack labels and entry boxes
-	this->_roomnamebox.pack_start(this->_labels[0]);
-	this->_roomnamebox.pack_start(this->_roomname);
+	// Pack table
+	this->_layout.attach(this->_labels[0], 0, 1, 0, 1);
+	this->_layout.attach(this->_labels[1], 0, 1, 1, 2);
+	this->_layout.attach(this->_labels[2], 0, 1, 2, 3);
+	this->_layout.attach(this->_labels[3], 0, 1, 3, 4);
 
-	this->_confserverbox.pack_start(this->_labels[1]);
-	this->_confserverbox.pack_start(this->_confserver);
-
-	this->_roompassbox.pack_start(this->_labels[2]);
-	this->_roompassbox.pack_start(this->_roompass);
-
-	this->_handlebox.pack_start(this->_labels[3]);
-	this->_handlebox.pack_start(this->_handle);
+	this->_layout.attach(this->_roomname, 1, 2, 0, 1);
+	this->_layout.attach(this->_confserver, 1, 2, 1, 2);
+	this->_layout.attach(this->_roompass, 1, 2, 2, 3);
+	this->_layout.attach(this->_handle, 1, 2, 3, 4);
 
 	// Button setup and callback registration
 	this->_share.set_label(_("Connect to chatroom"));
@@ -115,10 +114,7 @@ WhiteboardShareWithChatroomDialogImpl::_construct()
 	this->_roomname.set_text("inkboard");
 
 	// Pack into main box
-	main->pack_start(this->_roomnamebox);
-	main->pack_start(this->_confserverbox);
-	main->pack_start(this->_roompassbox);
-	main->pack_start(this->_handlebox);
+	main->pack_start(this->_layout);
 	main->pack_end(this->_buttonsbox);
 }
 
