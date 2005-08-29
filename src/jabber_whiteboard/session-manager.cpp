@@ -633,10 +633,9 @@ SessionManager::receiveChange(Glib::ustring const& changemsg)
 	struct Node part;
 
 	Glib::ustring msgcopy = changemsg.c_str();
-	this->_log(changemsg);
+
 
 	while(MessageUtilities::getFirstMessageTag(part, msgcopy) != false) {
-
 		// TODO:
 		// Yikes.  This is ugly.
 		if (part.tag == MESSAGE_CHANGE) {
@@ -734,6 +733,8 @@ SessionManager::receiveChange(Glib::ustring const& changemsg)
 		}
 	}
 
+	this->_log(changemsg);
+
 	this->_commitLog();
 }
 
@@ -786,7 +787,6 @@ SessionManager::loadSessionFile(Glib::ustring filename)
 			g_warning("Could not load session file: %s", e.what().data());
 		}
 	}
-
 }
 
 void

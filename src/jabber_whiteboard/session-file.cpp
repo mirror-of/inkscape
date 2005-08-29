@@ -55,8 +55,28 @@ gint64
 SessionFile::nextMessageFrom(gint64 from, Glib::ustring& buf)
 {
 	try {
-		this->fptr->seek(from, Glib::SEEK_TYPE_SET);
-		Glib::IOStatus st = this->fptr->read_line(buf);
+		Glib::ustring line;
+		Glib::IOStatus st;
+		Node part;
+
+		gint64 accum = from;
+		buf = "";
+		this->fptr->seek(accum, Glib::SEEK_TYPE_SET);
+
+		while(part.tag != MESSAGE_COMMIT) {
+			st = this->fptr->read_line(line);
+			if (st == Glib::IO_STATUS_EOF) {
+				break;
+			} else {
+				accum += line.bytes();
+				this->fptr->seek(accum);
+				MessageUtilities::getFirstMessageTag(part, line);
+				buf += line;
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "tag: %s", part.tag.c_str());
+				line.clear();
+			}
+		} 
+		
 		if (st == Glib::IO_STATUS_NORMAL) {
 			// reset eof flag if successful
 			this->_ateof = false;
