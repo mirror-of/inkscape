@@ -328,7 +328,7 @@ static SPString* sp_te_seek_next_string_recursive(SPObject *start_obj)
         }
         if (SP_IS_STRING(start_obj)) return SP_STRING(start_obj);
         start_obj = SP_OBJECT_NEXT(start_obj);
-        if (SP_IS_TSPAN(start_obj) && SP_TSPAN(start_obj)->role != SP_TSPAN_ROLE_UNSPECIFIED)
+        if (is_line_break_object(start_obj))
             break;   // don't cross line breaks
     }
     return NULL;
