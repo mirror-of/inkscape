@@ -1,3 +1,13 @@
+2005-08-29	David Yip		<yipdw@rose-hulman.edu>
+
+	* src/ui/dialog/whiteboard-connect.{cpp,h},
+	  src/ui/dialog/whiteboard-sharewithchat.{cpp,h}:
+	  Improved widget layout (switched to Gtk::Table)
+
+	* src/jabber_whiteboard/session-manager.cpp:
+	  Fixed crash that occurred when connecting via SSL to a Jabber
+	  server that does not support SSL
+	  
 2005-07-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
     * src/Makefile_insert, src/attributes-test.cpp, src/attributes.cpp,
