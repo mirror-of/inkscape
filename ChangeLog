@@ -1,5 +1,10 @@
 2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/libavoid/timer.cpp: Remove some code assuming a fixes size for
+	  timer types.
+
+2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
 	* src/connector-context.cpp: Fix a problem where the context didn't
 	  notice the current selection when it was entered.  Also, fix a 
 	  problem where connectors disappeared for a moment when an endpoint

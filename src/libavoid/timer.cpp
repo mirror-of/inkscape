@@ -36,11 +36,6 @@ Timer timers = Timer();
 
 Timer::Timer()
 {
-    if (sizeof(clock_t) != 4)
-    {
-        fprintf(stderr, "Error: clock_t is not 4 bytes\n");
-        abort();
-    }
     Reset();
 }
 
