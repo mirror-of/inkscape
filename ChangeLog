@@ -1,5 +1,31 @@
 2005-07-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+    * src/Makefile_insert, src/attributes-test.cpp, src/attributes.cpp,
+	  src/attributes.h, src/conn-avoid-ref.cpp, src/conn-avoid-ref.h,
+	  src/forward.h, src/sp-item.cpp, src/sp-item.h:
+	 
+	  Add code that handles the "inkscape:avoid" attribute, used to mark
+	  whether an item should be avoided for the purposes of routing
+	  connectors.  This code also calls libavoid when an 'avoided'
+	  item is moved/transformed.
+	
+	* src/connector-context.cpp, src/connector-context.h,
+	  src/widgets/toolbox.cpp:
+	  
+	  Add a couple of buttons to the connector context's toolbar to
+	  allow selected objects to be marked as avoided or ignored for the
+	  purpose of connector routing.
+	  
+	* src/libavoid/debug.h, src/libavoid/geomtypes.h, 
+	  src/libavoid/polyutil.cpp, src/libavoid/polyutil.h,
+	  src/libavoid/shape.cpp:
+	
+	  Misc fixes: turn off debugging output, put types in the Avoid
+	  namespace, and add an assertion for a special case that can
+	  cause problems.
+
+2005-07-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
 	* share/icons/icons.svg: Add a couple of icons for the connector
 	  context toolbar.
 

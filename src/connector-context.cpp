@@ -45,6 +45,7 @@
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection.h"
+#include "inkscape.h"
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "sp-path.h"
@@ -93,6 +94,7 @@ static void cc_clear_active_shape(SPConnectorContext *cc);
 static void cc_set_active_conn(SPConnectorContext *cc, SPItem *item);
 static void cc_clear_active_conn(SPConnectorContext *cc);
 static gchar *conn_pt_handle_test(SPConnectorContext *cc, NR::Point& w);
+static bool cc_item_is_shape(SPItem *item);
 static void cc_selection_changed(Inkscape::Selection *selection, gpointer data);
 
 static void shape_event_attr_deleted(Inkscape::XML::Node *repr,
@@ -398,17 +400,7 @@ sp_connector_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *ev
             break;
         case GDK_ENTER_NOTIFY:
         {
-            bool is_conn = false;
-            if (SP_IS_PATH(item)) {
-                // Determine if this is an open connector
-                SPPath *path = SP_PATH(item);
-                SPCurve *curve = (SP_SHAPE(path))->curve;
-                // Count closed connectors/paths as shapes.
-                if ( curve && !(curve->closed) ) {
-                    is_conn = true;
-                }
-            }
-            if (!is_conn) {
+            if (cc_item_is_shape(item)) {
                 // This is a shape, so show connection point(s).
                 if (!(cc->active_shape) ||
                         // Don't show handle for another handle.
@@ -683,9 +675,9 @@ connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton con
                 sp_curve_reset(cc->red_curve);
                 sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), NULL);
 
+                // Test whether we clicked on a connection point
                 gchar *shape_label = conn_pt_handle_test(cc, p);
 
-                // Test whether we clicked on a connection point
                 sp_object_setAttribute(cc->clickeditem, "inkscape:type",
                         "connector", false);
                 
@@ -1181,6 +1173,57 @@ cc_set_active_conn(SPConnectorContext *cc, SPItem *item)
 }
 
 
+static bool cc_item_is_shape(SPItem *item)
+{
+    if (SP_IS_PATH(item)) {
+        SPCurve *curve = (SP_SHAPE(item))->curve;
+        if ( curve && !(curve->closed) ) {
+            // Open paths are connectors.
+            return false;
+        }
+    }
+    return true;
+}
+
+    
+void cc_selection_set_avoid(bool const set_avoid)
+{
+    SPDesktop *desktop = inkscape_active_desktop();
+    if (desktop == NULL) {
+        return;
+    }
+
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
+
+    Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+
+    GSList *l = (GSList *) selection->itemList();
+
+    int changes = 0;
+
+    while (l) {
+        SPItem *item = (SPItem *) l->data;
+
+        char const *value = (set_avoid) ? "true" : NULL;
+        
+        if (cc_item_is_shape(item)) {
+            sp_object_setAttribute(item, "inkscape:avoid", value, false);
+            changes++;
+        }
+        
+        l = l->next;
+    }
+
+    if (changes == 0) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE,
+                _("Select <b>at least one non-connector object</b>."));
+        return;
+    }
+
+    sp_document_done(document);
+}
+    
+
 static void
 cc_selection_changed(Inkscape::Selection *selection, gpointer data)
 {
@@ -1200,13 +1243,8 @@ cc_selection_changed(Inkscape::Selection *selection, gpointer data)
         return;
     }
     
-    if (SP_IS_PATH(item)) {
-        // Show connector endpoint handles
-        SPCurve *curve = (SP_SHAPE(item))->curve;
-        if ( curve && !(curve->closed) ) {
-            // Count closed connectors/paths as shapes.
-            cc_set_active_conn(cc, item);
-        }
+    if (!cc_item_is_shape(item)) {
+        cc_set_active_conn(cc, item);
     }
 }
 

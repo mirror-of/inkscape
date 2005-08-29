@@ -55,6 +55,7 @@
 #include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "prefs-utils.h"
+#include "conn-avoid-ref.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-div.h"
@@ -165,6 +166,8 @@ sp_item_init(SPItem *item)
 
     if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 
+    item->avoidRef = new SPAvoidRef(item);
+    
     new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
 }
 
@@ -321,6 +324,7 @@ sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "mask");
     sp_object_read_attr(object, "sodipodi:insensitive");
     sp_object_read_attr(object, "sodipodi:nonprintable");
+    sp_object_read_attr(object, "inkscape:avoid");
 
     if (((SPObjectClass *) (parent_class))->build) {
         (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
@@ -342,6 +346,11 @@ sp_item_release(SPObject *object)
         item->mask_ref->detach();
         delete item->mask_ref;
         item->mask_ref = NULL;
+    }
+
+    if (item->avoidRef) {
+        delete item->avoidRef;
+        item->avoidRef = NULL;
     }
 
     if (((SPObjectClass *) (parent_class))->release) {
@@ -412,6 +421,9 @@ sp_item_set(SPObject *object, unsigned key, gchar const *value)
         case SP_ATTR_STYLE:
             sp_style_read_from_object(object->style, object);
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            break;
+        case SP_ATTR_CONNECTOR_AVOID:
+            item->avoidRef->setAvoid(value);
             break;
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
@@ -521,6 +533,9 @@ sp_item_update(SPObject *object, SPCtx *ctx, guint flags)
             }
         }
     }
+
+    // Update libavoid with item geometry (for connector routing).
+    item->avoidRef->handleSettingChange();
 }
 
 static Inkscape::XML::Node *

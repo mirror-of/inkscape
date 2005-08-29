@@ -156,6 +156,8 @@ class SPClipPathReference;
 
 class SPMaskReference;
 
+class SPAvoidRef;
+
 class SPAnchor;
 class SPAnchorClass;
 

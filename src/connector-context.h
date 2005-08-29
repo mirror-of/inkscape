@@ -88,6 +88,8 @@ struct SPConnectorContextClass : public SPEventContextClass { };
 
 GType sp_connector_context_get_type();
 
+void cc_selection_set_avoid(bool const set_ignore);
+
 
 #endif /* !SEEN_CONNECTOR_CONTEXT_H */
 

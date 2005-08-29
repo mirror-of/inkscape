@@ -85,6 +85,7 @@
 #include "star-context.h"
 #include "spiral-context.h"
 #include "gradient-context.h"
+#include "connector-context.h"
 #include "sp-rect.h"
 #include "sp-star.h"
 #include "sp-spiral.h"
@@ -2987,10 +2988,36 @@ sp_text_toolbox_new(SPDesktop *desktop)
 //##  Connector Toolbox  ##
 //#########################
 
+static void sp_connector_path_set_avoid(void)
+{
+    cc_selection_set_avoid(true);
+}
+
+
+static void sp_connector_path_set_ignore(void)
+{
+    cc_selection_set_avoid(false);
+}
+
+
 static GtkWidget *
 sp_connector_toolbox_new(SPDesktop *desktop)
 {
+    GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tbl = gtk_hbox_new(FALSE, 0);
+
+    gtk_box_pack_start(GTK_BOX(tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE,
+            AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new(tbl, GTK_ICON_SIZE_SMALL_TOOLBAR,
+            "connector_avoid", GTK_SIGNAL_FUNC(sp_connector_path_set_avoid),
+            tt, _("Make connectors avoid selected objects"));
+
+    sp_toolbox_button_new(tbl, GTK_ICON_SIZE_SMALL_TOOLBAR,
+            "connector_ignore", GTK_SIGNAL_FUNC(sp_connector_path_set_ignore),
+            tt, _("Make connectors ignore selected objects"));
+
+    gtk_widget_show_all(tbl);
 
     return tbl;
 

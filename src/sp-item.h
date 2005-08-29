@@ -96,6 +96,9 @@ struct SPItem : public SPObject {
 
 	SPClipPathReference *clip_ref;
 	SPMaskReference *mask_ref;
+        
+        // Used for object-avoiding connectors
+        SPAvoidRef *avoidRef;
 
 	SPItemView *display;
 

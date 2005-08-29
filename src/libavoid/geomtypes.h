@@ -25,10 +25,10 @@
 #define AVOID_GEOMTYPES_H
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace Avoid
+{
 
+    
 typedef struct
 {
     double x;
@@ -56,8 +56,6 @@ typedef struct
 } Edge;
 
 
-#ifdef __cplusplus
 }
-#endif
 
 #endif

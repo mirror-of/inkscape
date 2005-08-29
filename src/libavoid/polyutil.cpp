@@ -31,13 +31,27 @@
 namespace Avoid {
 
 
-Polygn copyPoly(Polygn poly)
+Polygn newPoly(int size)
 {
     Polygn newpoly;
 
-    newpoly.pn = poly.pn;
+    newpoly.pn = size;
+    newpoly.ps = (Point *) calloc(size, sizeof(Point));
+    if (!newpoly.ps)
+    {
+        fprintf(stderr,
+                "Error: Unable to allocate Point array in Avoid::newPoly\n");
+        abort();
+    }
+    return newpoly;
+}
+
+
+Polygn copyPoly(Polygn poly)
+{
+    Polygn newpoly = newPoly(poly.pn);
+
     newpoly.id = poly.id;
-    newpoly.ps = (Point *) malloc(sizeof(Point) * poly.pn);
     for (int i = 0; i < poly.pn; i++)
     {
         newpoly.ps[i] = poly.ps[i];
@@ -49,11 +63,9 @@ Polygn copyPoly(Polygn poly)
 Polygn copyPoly(ShapeRef *shape)
 {
     Polygn poly = shape->poly();
-    Polygn newpoly;
+    Polygn newpoly = newPoly(poly.pn);
 
-    newpoly.pn = poly.pn;
     newpoly.id = poly.id;
-    newpoly.ps = (Point *) malloc(sizeof(Point) * poly.pn);
     for (int i = 0; i < poly.pn; i++)
     {
         newpoly.ps[i] = poly.ps[i];
