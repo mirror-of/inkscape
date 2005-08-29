@@ -35,6 +35,8 @@
 
 #include "text-editing.h"
 
+static bool tidy_xml_tree_recursively(SPObject *root);
+
 Inkscape::Text::Layout const * te_get_layout (SPItem const *item)
 {
     if (SP_IS_TEXT(item)) {
@@ -151,6 +153,19 @@ static bool is_line_break_object(SPObject const *object)
            || SP_IS_FLOWREGIONBREAK(object);
 }
 
+/** returns the attributes for an object, or NULL if it isn't a text,
+tspan or textpath. */
+static TextTagAttributes* attributes_for_object(SPObject *object)
+{
+    if (SP_IS_TSPAN(object))
+        return &SP_TSPAN(object)->attributes;
+    if (SP_IS_TEXT(object))
+        return &SP_TEXT(object)->attributes;
+    if (SP_IS_TEXTPATH(object))
+        return &SP_TEXTPATH(object)->attributes;
+    return NULL;
+}
+
 static const char * span_name_for_text_object(SPObject const *object)
 {
     if (SP_IS_TEXT(object)) return "svg:tspan";
@@ -213,20 +228,10 @@ static unsigned sum_sibling_text_lengths_before(SPObject const *item)
 and moves the ones after that point into \a second_item. */
 static void split_attributes(SPObject *first_item, SPObject *second_item, unsigned char_index)
 {
-    TextTagAttributes *first_attrs = NULL, *second_attrs;
-    if (SP_IS_TEXT(first_item)) {
-        first_attrs = &SP_TEXT(first_item)->attributes;
-        second_attrs = &SP_TEXT(second_item)->attributes;
-    } else if (SP_IS_TSPAN(first_item)) {
-        first_attrs = &SP_TSPAN(first_item)->attributes;
-        second_attrs = &SP_TSPAN(second_item)->attributes;
-    } else if (SP_IS_TEXTPATH(first_item)) {
-        first_attrs = &SP_TEXTPATH(first_item)->attributes;
-        second_attrs = &SP_TEXTPATH(second_item)->attributes;
-    } else
-        return;
-
-    first_attrs->split(char_index, second_attrs);
+    TextTagAttributes *first_attrs = attributes_for_object(first_item);
+    TextTagAttributes *second_attrs = attributes_for_object(second_item);
+    if (first_attrs && second_attrs)
+        first_attrs->split(char_index, second_attrs);
 }
 
 /** recursively divides the XML node tree into two objects: the original will
@@ -349,12 +354,8 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
     SPObject *parent_item = string_item;
     for ( ; ; ) {
         parent_item = SP_OBJECT_PARENT(parent_item);
-        TextTagAttributes *attributes;
-        if (SP_IS_TEXT(parent_item)) attributes = &SP_TEXT(parent_item)->attributes;
-        else if(SP_IS_TSPAN(parent_item)) attributes = &SP_TSPAN(parent_item)->attributes;
-        else if(SP_IS_TEXTPATH(parent_item)) attributes = &SP_TEXTPATH(parent_item)->attributes;
-        else break;
-
+        TextTagAttributes *attributes = attributes_for_object(parent_item);
+        if (!attributes) break;
         attributes->insert(char_index, char_count);
         char_index += sum_sibling_text_lengths_before(parent_item);
     }
@@ -434,70 +435,26 @@ static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node
     }
 }
 
-/** returns the attributes for an object, or NULL if it isn't a text,
-tspan or textpath. */
-static TextTagAttributes* attributes_for_object(SPObject *object)
+/** returns the object in the tree which is the closest ancestor of both
+\a one and \a two. It will never return anything higher than \a text. */
+static SPObject* get_common_ancestor(SPObject *text, SPObject *one, SPObject *two)
 {
-    if (SP_IS_TSPAN(object))
-        return &SP_TSPAN(object)->attributes;
-    if (SP_IS_TEXT(object))
-        return &SP_TEXT(object)->attributes;
-    if (SP_IS_TEXTPATH(object))
-        return &SP_TEXTPATH(object)->attributes;
-    return NULL;
-}
-
-/** returns true if there are any x/y/dx/dy/rotate attributes set on the
-given object. */
-static bool any_attributes_set(SPObject *object)
-{
-    TextTagAttributes *attrs = attributes_for_object(object);
-    if (attrs) return attrs->anyAttributesSet();
-    return false;
-}
-
-/** if \a object and \a other are the same type and the same style and \a other
-isn't needed for layout reasons (ie it's a line break) then all the children
-of \a other are removed and put in to object and other is deleted. It works
-if \a object and \a other are both SPString objects too. */
-static bool merge_nodes_if_possible(SPObject *object, SPObject *other)
-{
-    if (object == NULL || other == NULL) return false;
-
-    Inkscape::XML::Node *object_repr = SP_OBJECT_REPR(object);
-    Inkscape::XML::Node *other_repr = SP_OBJECT_REPR(other);
-
-    if (object_repr->type() != other_repr->type()) return false;
-
-    if (SP_IS_STRING(object) && SP_IS_STRING(other)) {
-        // also amalgamate consecutive SPStrings into one
-        Glib::ustring merged_string = SP_STRING(object)->string + SP_STRING(other)->string;
-        SP_OBJECT_REPR(object)->setContent(merged_string.c_str());
-        other_repr->parent()->removeChild(other_repr);
-        return true;
+    if (one == NULL || two == NULL)
+        return text;
+    SPObject *common_ancestor = one;
+    if (SP_IS_STRING(common_ancestor))
+        common_ancestor = SP_OBJECT_PARENT(common_ancestor);
+    while (!(common_ancestor == two || common_ancestor->isAncestorOf(two))) {
+        g_assert(common_ancestor != text);
+        common_ancestor = SP_OBJECT_PARENT(common_ancestor);
     }
-
-    // merge consecutive spans with identical styles into one
-    if (object_repr->type() != Inkscape::XML::ELEMENT_NODE) return false;
-    if (strcmp(object_repr->name(), other_repr->name()) != 0) return false;
-    if (is_line_break_object(other)) return false;
-    gchar const *object_style = object_repr->attribute("style");
-    gchar const *other_style = other_repr->attribute("style");
-    if (!((object_style == NULL && other_style == NULL)
-          || (object_style != NULL && other_style != NULL && !strcmp(object_style, other_style))))
-        return false;
-    if (any_attributes_set(other))
-        return false;    // actually in these cases it would be possible to move the attributes over to the preceding element
-    // all our tests passed: do the merge
-    move_child_nodes(other_repr, object_repr);
-    other_repr->parent()->removeChild(other_repr);
-    return true;
+    return common_ancestor;
 }
 
 /** positions \a para_obj and \a text_iter to be pointing at the end
 of the last string in the last leaf object of \a para_obj. If the last
 leaf is not an SPString then \a text_iter will be unchanged. */
-void move_to_end_of_paragraph(SPObject **para_obj, Glib::ustring::iterator *text_iter)
+static void move_to_end_of_paragraph(SPObject **para_obj, Glib::ustring::iterator *text_iter)
 {
     while ((*para_obj)->hasChildren())
         *para_obj = (*para_obj)->lastChild();
@@ -505,85 +462,63 @@ void move_to_end_of_paragraph(SPObject **para_obj, Glib::ustring::iterator *text
         *text_iter = SP_STRING(*para_obj)->string.end();
 }
 
-/** delete the line break pointed to \a item by merging its children into
+/** delete the line break pointed to by \a item by merging its children into
 the next suitable object and deleting \a item. Returns the object after the
 ones that have just been moved and sets \a next_is_sibling accordingly. */
 static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is_sibling)
 {
     Inkscape::XML::Node *this_repr = SP_OBJECT_REPR(item);
     SPObject *next_item = NULL;
-    bool done = false;
     unsigned moved_char_count = sp_text_get_length(item) - 1;   // the -1 is because it's going to count the line break
 
-    if (SP_OBJECT_NEXT(item) && !SP_IS_STRING(SP_OBJECT_NEXT(item))) {
-        Inkscape::XML::Node *next_repr = SP_OBJECT_REPR(SP_OBJECT_NEXT(item));
-        gchar const *this_style = this_repr->attribute("style");
-        gchar const *next_style = next_repr->attribute("style");
-        if ((this_style == NULL && next_style == NULL) || (this_style != NULL && next_style != NULL && !strcmp(this_style, next_style))) {
-            // the two paragraphs are compatible, we can just block-move the children
-            next_item = SP_OBJECT_NEXT(item)->firstChild();
-            *next_is_sibling = true;
-            if (next_item == NULL) {
-                next_item = SP_OBJECT_NEXT(item);
-                *next_is_sibling = false;
-            }
-            TextTagAttributes *attributes_this = attributes_for_object(item);
-            TextTagAttributes *attributes_next = attributes_for_object(SP_OBJECT_NEXT(item));
-            if (attributes_next) {
-                TextTagAttributes attributes_next_copy = *attributes_next;
-                attributes_next->join(*attributes_this, attributes_next_copy, moved_char_count);
-            }
-            move_child_nodes(this_repr, next_repr, true);
-            done = true;
-        }
-    }
-    if (!done) {
-        // no compatible place to move it: create a new span then find somewhere to put it
-        /* some sample cases (the div is the item to be deleted, the * represents where to put the new span):
-          <div></div><p>*text</p>
-          <p><div></div>*text</p>
-          <p><div></div></p><p>*text</p>
-        */
-        Inkscape::XML::Node *new_span_repr = sp_repr_new(span_name_for_text_object(root));
+    /* some sample cases (the div is the item to be deleted, the * represents where to put the new span):
+      <div></div><p>*text</p>
+      <p><div></div>*text</p>
+      <p><div></div></p><p>*text</p>
+    */
+    Inkscape::XML::Node *new_span_repr = sp_repr_new(span_name_for_text_object(root));
 
-        SPObject *following_item = item;
-        while(SP_OBJECT_NEXT(following_item) == NULL) {
-            following_item = SP_OBJECT_PARENT(following_item);
-            g_assert(following_item != root);
-        }
-        following_item = SP_OBJECT_NEXT(following_item);
-
-        SPObject *new_parent_item;
-        if (SP_IS_STRING(following_item)) {
-            new_parent_item = SP_OBJECT_PARENT(following_item);
-            SP_OBJECT_REPR(new_parent_item)->addChild(new_span_repr, SP_OBJECT_PREV(following_item) ? SP_OBJECT_REPR(SP_OBJECT_PREV(following_item)) : NULL);
-            next_item = following_item;
-            *next_is_sibling = true;
-        } else {
-            new_parent_item = following_item;
-            next_item = new_parent_item->firstChild();
-            *next_is_sibling = true;
-            if (next_item == NULL) {
-                next_item = new_parent_item;
-                *next_is_sibling = false;
-            }
-            SP_OBJECT_REPR(new_parent_item)->addChild(new_span_repr, NULL);
-        }
-
-        gchar *style = sp_style_write_difference(SP_OBJECT_STYLE(item), SP_OBJECT_STYLE(new_parent_item));
-        new_span_repr->setAttribute("style", style);
-        g_free(style);
-        TextTagAttributes *attributes = attributes_for_object(new_parent_item);
-        if (attributes)
-            attributes->insert(0, moved_char_count);
-        move_child_nodes(this_repr, new_span_repr);
+    SPObject *following_item = item;
+    while (SP_OBJECT_NEXT(following_item) == NULL) {
+        following_item = SP_OBJECT_PARENT(following_item);
+        g_assert(following_item != root);
     }
-    while (!item->hasChildren()) {
-        SPObject *parent = SP_OBJECT_PARENT(item);
-        this_repr->parent()->removeChild(this_repr);
-        item = parent;
-        this_repr = SP_OBJECT_REPR(item);
+    following_item = SP_OBJECT_NEXT(following_item);
+
+    SPObject *new_parent_item;
+    if (SP_IS_STRING(following_item)) {
+        new_parent_item = SP_OBJECT_PARENT(following_item);
+        SP_OBJECT_REPR(new_parent_item)->addChild(new_span_repr, SP_OBJECT_PREV(following_item) ? SP_OBJECT_REPR(SP_OBJECT_PREV(following_item)) : NULL);
+        next_item = following_item;
+        *next_is_sibling = true;
+    } else {
+        new_parent_item = following_item;
+        next_item = new_parent_item->firstChild();
+        *next_is_sibling = true;
+        if (next_item == NULL) {
+            next_item = new_parent_item;
+            *next_is_sibling = false;
+        }
+        SP_OBJECT_REPR(new_parent_item)->addChild(new_span_repr, NULL);
     }
+
+    // work around a bug in sp_style_write_difference() which causes the difference
+    // not to be written if the second param has a style set which the first does not
+    // by causing the first param to have everything set
+    gchar *full_item_style = sp_style_write_string(SP_OBJECT_STYLE(item), SP_STYLE_FLAG_ALWAYS);
+    SPStyle *full_item_spstyle = sp_style_new();
+    sp_style_merge_from_style_string(full_item_spstyle, full_item_style);
+    g_free(full_item_style);
+    gchar *style = sp_style_write_difference(full_item_spstyle, SP_OBJECT_STYLE(new_parent_item));
+    sp_style_unref(full_item_spstyle);
+    new_span_repr->setAttribute("style", style);
+    g_free(style);
+
+    TextTagAttributes *attributes = attributes_for_object(new_parent_item);
+    if (attributes)
+        attributes->insert(0, moved_char_count);
+    move_child_nodes(this_repr, new_span_repr);
+    this_repr->parent()->removeChild(this_repr);
     return next_item;
 }
 
@@ -662,23 +597,7 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
                 if (SP_IS_STRING(sub_item)) {
                     Glib::ustring *string = &SP_STRING(sub_item)->string;
                     erase_from_spstring(SP_STRING(sub_item), string->begin(), end_text_iter);
-                    SPObject *prev_item = SP_OBJECT_PREV(sub_item);
-                    if (merge_nodes_if_possible(prev_item, sub_item))
-                        sub_item = prev_item;
                 }
-                do {
-                    sub_item = SP_OBJECT_PARENT(sub_item);
-                    if (sub_item == item) break;
-                    SPObject *prev_item = SP_OBJECT_PREV(sub_item);
-                    if (prev_item) {
-                        SPObject *last_child = prev_item->lastChild();
-                        if (merge_nodes_if_possible(prev_item, sub_item)) {
-                            sub_item = prev_item;
-                            if (last_child)
-                                merge_nodes_if_possible(last_child, SP_OBJECT_NEXT(last_child));
-                        }
-                    }
-                } while (!is_line_break_object(sub_item));
                 break;
             }
             if (SP_IS_STRING(sub_item)) {
@@ -701,17 +620,8 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
                         is_sibling = false;
                     }
 
-                    Inkscape::XML::Node *this_repr = SP_OBJECT_REPR(sub_item);
                     if (is_line_break_object(sub_item))
                         next_item = delete_line_break(item, sub_item, &is_sibling);
-
-                    else if (SP_IS_STRING(sub_item) && SP_STRING(sub_item)->string.empty())
-                        this_repr->parent()->removeChild(this_repr);
-
-                    else if (!merge_nodes_if_possible(SP_OBJECT_PREV(sub_item), sub_item)) {
-                        if (!SP_IS_STRING(sub_item) && !sub_item->hasChildren() && !is_line_break_object(sub_item))
-                            this_repr->parent()->removeChild(this_repr);
-                    }
 
                     sub_item = next_item;
                     if (is_sibling) break;
@@ -721,7 +631,8 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
         }
     }
 
-    item->updateRepr(SP_OBJECT_REPR(item),SP_OBJECT_WRITE_EXT);
+    SPObject *common_ancestor = get_common_ancestor(item, start_item, end_item);
+    while (tidy_xml_tree_recursively(common_ancestor));
     te_update_layout_now(item);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     layout->validateIterator(&first);
@@ -1377,8 +1288,44 @@ static bool tidy_operator_inexplicable_spans(SPObject **item)
                         -> <font a>abcdef</font>            */
 static bool tidy_operator_repeated_spans(SPObject **item)
 {
-    return merge_nodes_if_possible(*item, SP_OBJECT_NEXT(*item));
-        // *item is still the next object to process
+    SPObject *first = *item;
+    SPObject *second = SP_OBJECT_NEXT(first);
+    if (second == NULL) return false;
+
+    Inkscape::XML::Node *first_repr = SP_OBJECT_REPR(first);
+    Inkscape::XML::Node *second_repr = SP_OBJECT_REPR(second);
+
+    if (first_repr->type() != second_repr->type()) return false;
+
+    if (SP_IS_STRING(first) && SP_IS_STRING(second)) {
+        // also amalgamate consecutive SPStrings into one
+        Glib::ustring merged_string = SP_STRING(first)->string + SP_STRING(second)->string;
+        SP_OBJECT_REPR(first)->setContent(merged_string.c_str());
+        second_repr->parent()->removeChild(second_repr);
+        return true;
+    }
+
+    // merge consecutive spans with identical styles into one
+    if (first_repr->type() != Inkscape::XML::ELEMENT_NODE) return false;
+    if (strcmp(first_repr->name(), second_repr->name()) != 0) return false;
+    if (is_line_break_object(second)) return false;
+    gchar const *first_style = first_repr->attribute("style");
+    gchar const *second_style = second_repr->attribute("style");
+    if (!((first_style == NULL && second_style == NULL)
+          || (first_style != NULL && second_style != NULL && !strcmp(first_style, second_style))))
+        return false;
+
+    // all our tests passed: do the merge
+    TextTagAttributes *attributes_first = attributes_for_object(first);
+    TextTagAttributes *attributes_second = attributes_for_object(second);
+    if (attributes_first && attributes_second && attributes_second->anyAttributesSet()) {
+        TextTagAttributes attributes_first_copy = *attributes_first;
+        attributes_first->join(attributes_first_copy, *attributes_second, sp_text_get_length(first));
+    }
+    move_child_nodes(second_repr, first_repr);
+    second_repr->parent()->removeChild(second_repr);
+    return true;
+    // *item is still the next object to process
 }
 
 /**    redundant nesting: <font a><font b>abc</font></font>
@@ -1588,7 +1535,8 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     if (is_line_break_object(start_item))
         start_item = SP_OBJECT_NEXT(start_item);
     if (is_line_break_object(end_item))
-        end_item = SP_OBJECT_NEXT(end_item);    // NULL is ok as an indicator of 'end'
+        end_item = SP_OBJECT_NEXT(end_item);
+    if (end_item == NULL) end_item = text;
 
     /* stage 1: applying the style. Go up to the closest common ancestor of
     start and end and then semi-recursively apply the style to all the
@@ -1598,15 +1546,7 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     eg: <span>abcDEF</span><span>GHI</span><span>JKLmno</span>
     The recursion may involve creating new spans.
     */
-    SPObject *common_ancestor = start_item;
-    if (end_item == NULL)
-        common_ancestor = end_item = text;
-    else {
-        if (SP_IS_STRING(common_ancestor))
-            common_ancestor = SP_OBJECT_PARENT(common_ancestor);
-        while (!common_ancestor->isAncestorOf(end_item))
-            common_ancestor = SP_OBJECT_PARENT(common_ancestor);
-    }
+    SPObject *common_ancestor = get_common_ancestor(text, start_item, end_item);
     start_item = ascend_while_first(start_item, start_text_iter, common_ancestor);
     end_item = ascend_while_first(end_item, end_text_iter, common_ancestor);
     recursively_apply_style(common_ancestor, css, start_item, start_text_iter, end_item, end_text_iter, span_name_for_text_object(text));
