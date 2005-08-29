@@ -628,7 +628,7 @@ Verb::sensitive(SPDocument *in_doc, bool in_sensitive)
         for (ActionTable::iterator cur_action = _actions->begin();
              cur_action != _actions->end();
              cur_action++) {
-            if (in_doc == NULL || cur_action->first->doc == in_doc) {
+			if (in_doc == NULL || (cur_action->first != NULL && cur_action->first->doc == in_doc)) {
                 sp_action_set_sensitive(cur_action->second, in_sensitive ? 1 : 0);
             }
         }

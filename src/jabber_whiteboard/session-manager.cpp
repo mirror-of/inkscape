@@ -1045,8 +1045,6 @@ SessionManager::_tryToStartLog()
 void
 SessionManager::_setVerbSensitivity(SensitivityMode mode)
 {
-	return;
-
 	switch (mode) {
 		case ESTABLISHED_CONNECTION:
 			// Upon successful connection, we can disconnect from the server.
