@@ -1,3 +1,10 @@
+2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/connector-context.cpp: Fix a problem where the context didn't
+	  notice the current selection when it was entered.  Also, fix a 
+	  problem where connectors disappeared for a moment when an endpoint
+	  was clicked (for rerouting), but before the mouse was moved.
+
 2005-08-29	David Yip		<yipdw@rose-hulman.edu>
 
 	* src/ui/dialog/whiteboard-connect.{cpp,h},
@@ -8,9 +15,9 @@
 	  Fixed crash that occurred when connecting via SSL to a Jabber
 	  server that does not support SSL
 	  
-2005-07-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+2005-08-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
-    * src/Makefile_insert, src/attributes-test.cpp, src/attributes.cpp,
+	* src/Makefile_insert, src/attributes-test.cpp, src/attributes.cpp,
 	  src/attributes.h, src/conn-avoid-ref.cpp, src/conn-avoid-ref.h,
 	  src/forward.h, src/sp-item.cpp, src/sp-item.h:
 	 
@@ -34,7 +41,7 @@
 	  namespace, and add an assertion for a special case that can
 	  cause problems.
 
-2005-07-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+2005-08-28  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* share/icons/icons.svg: Add a couple of icons for the connector
 	  context toolbar.

@@ -11,6 +11,7 @@
  * TODO:
  *  o  Cleanup to remove unecessary borrowed DrawContext code.
  *  o  Draw connectors to shape edges rather than bounding box.
+ *  o  Show a visual indicator for objects with the 'avoid' property set.
  *  o  Create an interface for setting markers (arrow heads).
  *  o  Route connectors automatically with libavoid.
  *  o  Allow user-placeable connection points.
@@ -262,8 +263,10 @@ sp_connector_context_setup(SPEventContext *ec)
 
     /* Create green curve */
     cc->green_curve = sp_curve_new_sized(64);
-    /* No green anchor by default */
 
+    // Notice the initial selection.
+    cc_selection_changed(cc->selection, (gpointer) cc);
+    
     if (prefs_get_int_attribute("tools.connector", "selcue", 0) != 0) {
         ec->enableSelectionCue();
     }
@@ -992,6 +995,14 @@ endpt_handler(SPKnot *knot, GdkEvent *event, SPConnectorContext *cc)
                 else {
                     origin = cc->endpt_handle[0]->pos;
                 }
+
+                // Show the red path for dragging.
+                cc->red_curve = sp_curve_copy(SP_PATH(cc->clickeditem)->curve);
+                NR::Matrix i2d = sp_item_i2d_affine(cc->clickeditem);
+                sp_curve_transform(cc->red_curve, i2d);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath),
+                        cc->red_curve);
+
                 cc->clickeditem->setHidden(true);
 
                 // The rest of the interaction rerouting the connector is
