@@ -1218,7 +1218,8 @@ void cc_selection_set_avoid(bool const set_avoid)
         char const *value = (set_avoid) ? "true" : NULL;
         
         if (cc_item_is_shape(item)) {
-            sp_object_setAttribute(item, "inkscape:avoid", value, false);
+            sp_object_setAttribute(item, "inkscape:connector-avoid",
+                    value, false);
             changes++;
         }
         

@@ -324,7 +324,7 @@ sp_item_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "mask");
     sp_object_read_attr(object, "sodipodi:insensitive");
     sp_object_read_attr(object, "sodipodi:nonprintable");
-    sp_object_read_attr(object, "inkscape:avoid");
+    sp_object_read_attr(object, "inkscape:connector-avoid");
 
     if (((SPObjectClass *) (parent_class))->build) {
         (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);

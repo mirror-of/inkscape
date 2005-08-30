@@ -1,5 +1,10 @@
 2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/attributes.cpp, src/connector-context.cpp, src/sp-item.cpp:
+	  Use "inkscape:connector-avoid" instead of "inkscape:avoid".
+
+2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
 	* src/libavoid/timer.cpp: Remove some code assuming a fixes size for
 	  timer types.
 
