@@ -861,6 +861,12 @@ public:
     bool cursorLeft();
     bool cursorRight();
 
+    //logical cursor movement (by word or paragraph)
+    bool cursorUpWithControl();
+    bool cursorDownWithControl();
+    bool cursorLeftWithControl();
+    bool cursorRightWithControl();
+
 private:
     Layout const *_parent_layout;
     int _glyph_index;      /// index into Layout::glyphs, or -1
@@ -882,6 +888,12 @@ private:
     directionality of the current paragraph, but ignoring block progression.
     Helper for the cursor*() functions. */
     bool _cursorLeftOrRightLocalX(Direction direction);
+
+    /** moves forward or backwards by until the next character with
+    is_word_start according to the directionality of the current paragraph,
+    but ignoring block progression. Helper for the cursor*WithControl()
+    functions. */
+    bool _cursorLeftOrRightLocalXByWord(Direction direction);
 };
 
 // ************************** inline methods

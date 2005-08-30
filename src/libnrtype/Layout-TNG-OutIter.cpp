@@ -890,6 +890,14 @@ bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
     return _char_index != 0;
 }
 
+bool Layout::iterator::_cursorLeftOrRightLocalXByWord(Direction direction)
+{
+    bool r;
+    while ((r = _cursorLeftOrRightLocalX(direction))
+           && !_parent_layout->_characters[_char_index].char_attributes.is_word_start);
+    return r;
+}
+
 bool Layout::iterator::cursorUp()
 {
     Direction block_progression = _parent_layout->_blockProgression();
@@ -932,6 +940,50 @@ bool Layout::iterator::cursorRight()
         return prevLineCursor();
     else
         return _cursorLeftOrRightLocalX(LEFT_TO_RIGHT);
+}
+
+bool Layout::iterator::cursorUpWithControl()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == TOP_TO_BOTTOM)
+        return prevStartOfParagraph();
+    else if(block_progression == BOTTOM_TO_TOP)
+        return nextStartOfParagraph();
+    else
+        return _cursorLeftOrRightLocalXByWord(RIGHT_TO_LEFT);
+}
+
+bool Layout::iterator::cursorDownWithControl()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == TOP_TO_BOTTOM)
+        return nextStartOfParagraph();
+    else if(block_progression == BOTTOM_TO_TOP)
+        return prevStartOfParagraph();
+    else
+        return _cursorLeftOrRightLocalXByWord(LEFT_TO_RIGHT);
+}
+
+bool Layout::iterator::cursorLeftWithControl()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == LEFT_TO_RIGHT)
+        return prevStartOfParagraph();
+    else if(block_progression == RIGHT_TO_LEFT)
+        return nextStartOfParagraph();
+    else
+        return _cursorLeftOrRightLocalXByWord(RIGHT_TO_LEFT);
+}
+
+bool Layout::iterator::cursorRightWithControl()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == LEFT_TO_RIGHT)
+        return nextStartOfParagraph();
+    else if(block_progression == RIGHT_TO_LEFT)
+        return prevStartOfParagraph();
+    else
+        return _cursorLeftOrRightLocalXByWord(LEFT_TO_RIGHT);
 }
 
 }//namespace Text

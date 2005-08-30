@@ -957,7 +957,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_text_context_update_text_selection(tc);
                                         sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:left");
                                     } else {
-                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::prevStartOfWord
+                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::cursorLeftWithControl
                                                                              : &Inkscape::Text::Layout::iterator::cursorLeft;
                                         break;
                                     }
@@ -976,7 +976,7 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_text_context_update_text_selection(tc);
                                         sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:right");
                                     } else {
-                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::nextStartOfWord
+                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::cursorRightWithControl
                                                                              : &Inkscape::Text::Layout::iterator::cursorRight;
                                         break;
                                     }
@@ -995,7 +995,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_text_context_update_text_selection(tc);
                                         sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:up");
                                     } else {
-                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::cursorUp;
+                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::cursorUpWithControl
+                                                                             : &Inkscape::Text::Layout::iterator::cursorUp;
                                         break;
                                     }
                                 }
@@ -1013,7 +1014,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                                         sp_text_context_update_text_selection(tc);
                                         sp_document_maybe_done(SP_DT_DOCUMENT(ec->desktop), "kern:down");
                                     } else {
-                                        cursor_movement_operator = &Inkscape::Text::Layout::iterator::cursorDown;
+                                        cursor_movement_operator = MOD__CTRL ? &Inkscape::Text::Layout::iterator::cursorDownWithControl
+                                                                             : &Inkscape::Text::Layout::iterator::cursorDown;
                                         break;
                                     }
                                 }
