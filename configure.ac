@@ -738,6 +738,7 @@ src/io/makefile
 src/libcroco/makefile
 src/libnr/makefile
 src/libnrtype/makefile
+src/libavoid/makefile
 src/livarot/makefile
 src/jabber_whiteboard/makefile
 src/svg/makefile
