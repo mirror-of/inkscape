@@ -870,18 +870,29 @@ bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
                 new_span_index -= scan_direction;
             break;
         }
-        if (_parent_layout->_spans[new_span_index].in_chunk != _parent_layout->_spans[old_span_index].in_chunk)
+        if (_parent_layout->_spans[new_span_index].in_chunk != _parent_layout->_spans[old_span_index].in_chunk) {
+            if (_parent_layout->_spans[old_span_index].line(_parent_layout).in_paragraph == _parent_layout->_spans[new_span_index].line(_parent_layout).in_paragraph
+                && para_direction == old_span_direction)
+                new_span_index -= scan_direction;
             break;
+        }
     }
 
     // found the correct span, now find the correct character
-    if (_parent_layout->_spans[new_span_index].direction != direction) {
-        if (new_span_index >= _parent_layout->_spans.size() - 1)
-            _char_index = _parent_layout->_characters.size();
+    if (_parent_layout->_spans[old_span_index].line(_parent_layout).in_paragraph != _parent_layout->_spans[new_span_index].line(_parent_layout).in_paragraph) {
+        if (new_span_index > old_span_index)
+            _char_index = _parent_layout->_spanToCharacter(new_span_index);
         else
             _char_index = _parent_layout->_spanToCharacter(new_span_index + 1) - 1;
-    } else
-        _char_index = _parent_layout->_spanToCharacter(new_span_index);
+    } else {
+        if (_parent_layout->_spans[new_span_index].direction != direction) {
+            if (new_span_index >= _parent_layout->_spans.size() - 1)
+                _char_index = _parent_layout->_characters.size();
+            else
+                _char_index = _parent_layout->_spanToCharacter(new_span_index + 1) - 1;
+        } else
+            _char_index = _parent_layout->_spanToCharacter(new_span_index);
+    }
     if (_char_index == _parent_layout->_characters.size()) {
         _glyph_index = _parent_layout->_glyphs.size();
         return false;
