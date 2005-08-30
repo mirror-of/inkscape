@@ -187,7 +187,7 @@ SessionManager::setDesktop(::SPDesktop* desktop)
 int
 SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const& port, Glib::ustring const& username, Glib::ustring const& pw, bool usessl)
 {
-	GError* error = new GError;
+	GError* error = NULL;
 	Glib::ustring jid;
 
 	// JID format is username@server/resource
