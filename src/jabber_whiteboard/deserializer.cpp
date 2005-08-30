@@ -32,6 +32,7 @@ namespace Whiteboard {
 void
 Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 {
+	g_log(NULL, G_LOG_LEVEL_DEBUG, "deserializeEventAdd");
 	// 1.  Extract required attributes: parent, child, node name, and node type.
 	// If any of these cannot be found, return.
 	std::string parent, child, prev;

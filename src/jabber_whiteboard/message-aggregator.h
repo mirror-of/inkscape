@@ -28,7 +28,7 @@ namespace Whiteboard {
 class MessageAggregator {
 public:
 	// TODO: This should be user-configurable; perhaps an option in Inkscape Preferences...
-	/// Maximum size of aggregates in kilobytes; UINT_MAX = no limit.
+	/// Maximum size of aggregates in kilobytes; ULONG_MAX = no limit.
 	static unsigned int const MAX_SIZE = 16384;
 
 	MessageAggregator() { }

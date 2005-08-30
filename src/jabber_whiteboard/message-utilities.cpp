@@ -361,25 +361,24 @@ MessageUtilities::getFirstMessageTag(struct Node& buf, Glib::ustring const& msg)
 	// See if we have a valid start tag, i.e. < ... >.  If we do,
 	// continue; if not, stop and return NULL.
 	//
-	// find_first_of returns UINT_MAX when it cannot find the first
+	// find_first_of returns ULONG_MAX when it cannot find the first
 	// instance of the given character.
 
 	Glib::ustring::size_type startDelim = msg.find_first_of('<');
-	if (startDelim != UINT_MAX) {
+	if (startDelim != ULONG_MAX) {
 		Glib::ustring::size_type endDelim = msg.find_first_of('>');
-		if (endDelim != UINT_MAX) {
+		if (endDelim != ULONG_MAX) {
 			if (endDelim > startDelim) {
 				buf.tag = msg.substr(startDelim+1, (endDelim-startDelim)-1);
-				if (buf.tag.find_first_of('/') == UINT_MAX) { // start tags should not be end tags
+				if (buf.tag.find_first_of('/') == ULONG_MAX) { // start tags should not be end tags
 
-//					g_log(NULL, G_LOG_LEVEL_DEBUG, "getFirstMessageTag: tag: %s", buf.tag.data());
 
 					// construct end tag (</buf.data>)
 					Glib::ustring endTag(buf.tag);
 					endTag.insert(0, "/");
 
 					Glib::ustring::size_type endTagLoc = msg.find(endTag, endDelim);
-					if (endTagLoc != UINT_MAX) {
+					if (endTagLoc != ULONG_MAX) {
 						buf.data = msg.substr(endDelim+1, ((endTagLoc - 1) - (endDelim + 1)));
 						buf.next_pos = endTagLoc + endTag.length() + 1;
 
@@ -408,12 +407,12 @@ MessageUtilities::findTag(struct Node& buf, Glib::ustring const& msg)
 	searchterm + ">";
 
 	Glib::ustring::size_type tagStart = msg.find(searchterm, 0);
-	if (tagStart != UINT_MAX) {
+	if (tagStart != ULONG_MAX) {
 		// Find ending tag starting at the point at the end of
 		// the start tag.
 		searchterm.insert(1, "/");
 		Glib::ustring::size_type tagEnd = msg.find(searchterm, tagStart + searchterm.length());
-		if (tagEnd != UINT_MAX) {
+		if (tagEnd != ULONG_MAX) {
 			Glib::ustring::size_type start = tagStart + searchterm.length();
 			buf.data = msg.substr(start, tagEnd - start);
 			return true;
