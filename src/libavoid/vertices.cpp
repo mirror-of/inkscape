@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
 */
 
 #include "libavoid/vertices.h"
@@ -35,13 +35,13 @@ namespace Avoid {
 
 ContainsMap contains;
 
-    
+
 VertID::VertID()
 {
 }
 
 
-VertID::VertID(uint id, bool s, int n)
+VertID::VertID(unsigned int id, bool s, int n)
     : objID(id)
     , isShape(s)
     , vn(n)
@@ -61,7 +61,7 @@ VertID& VertID::operator= (const VertID& rhs)
 {
     // Gracefully handle self assignment
     //if (this == &rhs) return *this;
-       
+
     objID = rhs.objID;
     isShape = rhs.isShape;
     vn = rhs.vn;
@@ -167,7 +167,7 @@ void VertInf::removeFromGraph(const bool isConnVert)
     }
 
     VertInf *tmp = this;
-    
+
     // For each vertex.
     EdgeInfList& visList = tmp->visList;
     EdgeInfList::iterator finish = visList.end();
@@ -192,13 +192,13 @@ void VertInf::removeFromGraph(const bool isConnVert)
 bool directVis(VertInf *src, VertInf *dst)
 {
     ShapeSet ss = ShapeSet();
-    
+
     Point& p = src->point;
     Point& q = dst->point;
-   
+
     VertID& pID = src->id;
     VertID& qID = dst->id;
-    
+
     if (!(pID.isShape))
     {
         ss.insert(contains[pID].begin(), contains[pID].end());
@@ -269,7 +269,7 @@ void VertInfList::addVertex(VertInf *vert)
             // Join with previous front
             vert->lstNext = _firstConnVert;
             _firstConnVert->lstPrev = vert;
-            
+
             // Make front
             _firstConnVert = vert;
         }
@@ -278,7 +278,7 @@ void VertInfList::addVertex(VertInf *vert)
             // Make front and back
             _firstConnVert = vert;
             _lastConnVert = vert;
-            
+
             // Link to front of shapes list
             vert->lstNext = _firstShapeVert;
         }
@@ -292,7 +292,7 @@ void VertInfList::addVertex(VertInf *vert)
             // Join with previous back
             vert->lstPrev = _lastShapeVert;
             _lastShapeVert->lstNext = vert;
-            
+
             // Make back
             _lastShapeVert = vert;
         }
@@ -301,7 +301,7 @@ void VertInfList::addVertex(VertInf *vert)
             // Make first and last
             _firstShapeVert = vert;
             _lastShapeVert = vert;
-            
+
             // Join with conns list
             if (_lastConnVert)
             {
@@ -320,7 +320,7 @@ void VertInfList::removeVertex(VertInf *vert)
 {
     // Conditions for correct data structure
     checkVertInfListConditions();
-    
+
     if (!(vert->id.isShape))
     {
         // A Connector vertex
@@ -375,7 +375,7 @@ void VertInfList::removeVertex(VertInf *vert)
                     _lastConnVert->lstNext = NULL;
                 }
             }
-            
+
             if (_lastShapeVert)
             {
                 _lastShapeVert->lstNext = NULL;
@@ -391,7 +391,7 @@ void VertInfList::removeVertex(VertInf *vert)
             {
                 _lastConnVert->lstNext = _firstShapeVert;
             }
-            
+
             if (_firstShapeVert)
             {
                 _firstShapeVert->lstPrev = NULL;
@@ -406,7 +406,7 @@ void VertInfList::removeVertex(VertInf *vert)
     }
     vert->lstPrev = NULL;
     vert->lstNext = NULL;
-    
+
     checkVertInfListConditions();
 }
 

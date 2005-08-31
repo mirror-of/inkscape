@@ -39,7 +39,7 @@ typedef std::list<EdgeInf *> EdgeInfList;
 class VertID
 {
     public:
-        uint objID;
+        unsigned int objID;
         bool isShape;
         int vn;
 
@@ -47,7 +47,7 @@ class VertID
         static const int tar;
 
         VertID();
-        VertID(uint id, bool s, int n);
+        VertID(unsigned int id, bool s, int n);
         VertID(const VertID& other);
         VertID& operator= (const VertID& rhs);
         bool operator==(const VertID& rhs) const;
@@ -109,7 +109,7 @@ class VertInfList
 };
 
 
-typedef std::set<uint> ShapeSet;
+typedef std::set<unsigned int> ShapeSet;
 typedef std::map<VertID, ShapeSet> ContainsMap;
 
 extern ContainsMap contains;
