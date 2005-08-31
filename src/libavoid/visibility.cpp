@@ -136,14 +136,14 @@ void vertexVisibility(VertInf *point, VertInf *partner, bool knownNew,
     const VertID& pID = point->id;
 
     // Make sure we're only doing ptVis for endpoints.
-    assert(pID.shape <= 0);
+    assert(!(pID.isShape));
 
     if (!InvisibilityGrph)
     {
         point->removeFromGraph();
     }
 
-    if (gen_contains && pID.shape <= 0)
+    if (gen_contains && !(pID.isShape))
     {
         generateContains(point);
     }
@@ -302,8 +302,8 @@ class isBoundingShape
         // the following is an overloading of the function call operator
         bool operator () (const PointPair& pp)
         {
-            if ((pp.vInf->id.shape > 0) &&
-                    (ss.find(pp.vInf->id.shape) != ss.end()))
+            if (pp.vInf->id.isShape &&
+                    (ss.find(pp.vInf->id.objID) != ss.end()))
             {
                 return true;
             }
@@ -330,7 +330,7 @@ static bool sweepVisible(EdgeSet& T, VertInf *currInf, VertInf *lastInf,
 
             if (segmentIntersect(centerInf->point, currInf->point, e1, e2))
             {
-                *blocker = (*closestIt).vInf1->id.shape;
+                *blocker = (*closestIt).vInf1->id.objID;
                 return false;
             }
             else
@@ -363,7 +363,7 @@ static bool sweepVisible(EdgeSet& T, VertInf *currInf, VertInf *lastInf,
 
                 if (segmentIntersect(lastInf->point, currInf->point, e1, e2))
                 {
-                    *blocker = (*l).vInf1->id.shape;
+                    *blocker = (*l).vInf1->id.objID;
                     return false;
                 }
             }
@@ -399,7 +399,7 @@ void vertexSweep(VertInf *vert)
             continue;
         }
 
-        if (inf->id.shape > 0)
+        if (inf->id.isShape)
         {
             // Add shape vertex
             v.push_back(inf);
@@ -408,7 +408,7 @@ void vertexSweep(VertInf *vert)
         {
             if (IncludeEndpoints)
             {
-                if (centerID.shape > 0)
+                if (centerID.isShape)
                 {
                     // Add endpoint vertex
                     v.push_back(inf);
@@ -417,7 +417,7 @@ void vertexSweep(VertInf *vert)
                 {
                     // Center is an endpoint, so only include the other
                     // endpoint from the matching connector.
-                    VertID partnerID = VertID(centerID.shape,
+                    VertID partnerID = VertID(centerID.objID, false,
                             (centerID.vn == 1) ? 2 : 1);
                     if (inf->id == partnerID)
                     {
@@ -438,13 +438,13 @@ void vertexSweep(VertInf *vert)
     for (VertInf *k = vertices.shapesBegin(); k != last; )
     {
         VertID kID = k->id;
-        if ((centerID.shape <= 0) && (ss.find(kID.shape) != ss.end()))
+        if (!(centerID.isShape) && (ss.find(kID.objID) != ss.end()))
         {
-            int shapen = kID.shape;
-            db_printf("Center is inside shape %d so ignore shape edges.\n",
-                    kID.shape);
+            uint shapeID = kID.objID;
+            db_printf("Center is inside shape %u so ignore shape edges.\n",
+                    shapeID);
             // One of the endpoints is inside this shape so ignore it.
-            while ((k != last) && (k->id.shape == shapen))
+            while ((k != last) && (k->id.objID == shapeID))
             {
                 // And skip the other vertices from this shape.
                 k = k->lstNext;
@@ -514,13 +514,13 @@ void vertexSweep(VertInf *vert)
             edge = new EdgeInf(centerInf, currInf);
         }
         // Ignore vertices from bounding shapes, if sweeping round an endpoint.
-        if ((centerID.shape <= 0) && isBounding(*t))
+        if (!(centerID.isShape) && isBounding(*t))
         {
             if (InvisibilityGrph)
             {
                 // if p and t can't see each other, add blank edge
                 db_printf("\tSkipping visibility edge... \n\t\t");
-                edge->addBlocker(currInf->id.shape);
+                edge->addBlocker(currInf->id.objID);
                 edge->db_print();
             }
             continue;
@@ -528,12 +528,12 @@ void vertexSweep(VertInf *vert)
 
 
         bool cone1 = true, cone2 = true;
-        if (centerID.shape > 0)
+        if (centerID.isShape)
         {
             cone1 = inValidRegion(centerInf->shPrev->point, centerPoint,
                     centerInf->shNext->point, currInf->point);
         }
-        if (currInf->id.shape > 0)
+        if (currInf->id.isShape)
         {
             cone2 = inValidRegion(currInf->shPrev->point, currInf->point,
                     currInf->shNext->point, centerPoint);
@@ -581,7 +581,7 @@ void vertexSweep(VertInf *vert)
             lastBlocker = blocker;
         }
 
-        if (currID.shape > 0)
+        if (currID.isShape)
         {
             // This is a shape edge
             Point& prevPt = currInf->shPrev->point;

@@ -56,14 +56,10 @@ void SPAvoidRef::handleSettingChange(void)
 
         Avoid::Polygn poly = avoid_item_poly(item);
         if (poly.pn > 0) {
-            // TODO: We need an unique integer identifier, but
-            //       it may not be safe to just take the 
-            //       address of the object's unique ID -- type
-            //       size issues?
-            int id = (int) SP_OBJECT(item)->id;
-            g_assert(id > 0);
+            // Get a unique ID for the item.
+            GQuark itemID = g_quark_from_string(SP_OBJECT(item)->id);
 
-            shapeRef = new Avoid::ShapeRef(id, poly);
+            shapeRef = new Avoid::ShapeRef(itemID, poly);
             Avoid::freePoly(poly);
         
             Avoid::addShape(shapeRef);

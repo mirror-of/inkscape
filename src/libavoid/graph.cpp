@@ -248,7 +248,7 @@ void EdgeInf::checkVis(void)
 
     st_checked_edges++;
 
-    if (iID.shape > 0)
+    if (iID.isShape)
     {
         cone1 = inValidRegion(i->shPrev->point, iPoint, i->shNext->point,
                 jPoint);
@@ -257,7 +257,7 @@ void EdgeInf::checkVis(void)
     {
         ShapeSet& ss = contains[iID];
 
-        if ((jID.shape > 0) && (ss.find(jID.shape) != ss.end()))
+        if ((jID.isShape) && (ss.find(jID.objID) != ss.end()))
         {
             db_printf("1: Edge of bounding shape\n");
             // Don't even check this edge, it should be zero,
@@ -269,7 +269,7 @@ void EdgeInf::checkVis(void)
     if (cone1)
     {
         // If outside the first cone, don't even bother checking.
-        if (jID.shape > 0)
+        if (jID.isShape)
         {
             cone2 = inValidRegion(j->shPrev->point, jPoint, j->shNext->point,
                     iPoint);
@@ -278,7 +278,7 @@ void EdgeInf::checkVis(void)
         {
             ShapeSet& ss = contains[jID];
 
-            if ((iID.shape > 0) && (ss.find(iID.shape) != ss.end()))
+            if ((iID.isShape) && (ss.find(iID.objID) != ss.end()))
             {
                 db_printf("2: Edge of bounding shape\n");
                 // Don't even check this edge, it should be zero,
@@ -326,11 +326,11 @@ int EdgeInf::firstBlocker(void)
     VertID& iID = _v1->id;
     VertID& jID = _v2->id;
 
-    if (iID.shape <= 0)
+    if (!(iID.isShape))
     {
         ss.insert(contains[iID].begin(), contains[iID].end());
     }
-    if (jID.shape <= 0)
+    if (!(jID.isShape))
     {
         ss.insert(contains[jID].begin(), contains[jID].end());
     }
@@ -339,13 +339,13 @@ int EdgeInf::firstBlocker(void)
     for (VertInf *k = vertices.shapesBegin(); k != last; )
     {
         VertID kID = k->id;
-        if ((ss.find(kID.shape) != ss.end()))
+        if ((ss.find(kID.objID) != ss.end()))
         {
-            int shapen = kID.shape;
-            db_printf("Endpoint is inside shape %d so ignore shape edges.\n",
-                    kID.shape);
+            uint shapeID = kID.objID;
+            db_printf("Endpoint is inside shape %u so ignore shape edges.\n",
+                    kID.objID);
             // One of the endpoints is inside this shape so ignore it.
-            while ((k != last) && (k->id.shape == shapen))
+            while ((k != last) && (k->id.objID == shapeID))
             {
                 // And skip the other vertices from this shape.
                 k = k->lstNext;
@@ -358,7 +358,7 @@ int EdgeInf::firstBlocker(void)
         if (segmentIntersect(pti, ptj, kPrevPoint, kPoint))
         {
             ss.clear();
-            return kID.shape;
+            return kID.objID;
         }
         k = k->lstNext;
     }
@@ -570,8 +570,8 @@ void newBlockingShape(Polygn *poly, int pid)
             Point e2 = points.second;
             bool blocked = false;
 
-            bool ep_in_poly1 = (eID1.shape < 0) ? inPoly(*poly, e1) : false;
-            bool ep_in_poly2 = (eID2.shape < 0) ? inPoly(*poly, e2) : false;
+            bool ep_in_poly1 = !(eID1.isShape) ? inPoly(*poly, e1) : false;
+            bool ep_in_poly2 = !(eID2.isShape) ? inPoly(*poly, e2) : false;
             if (ep_in_poly1 || ep_in_poly2)
             {
                 // Don't check edges that have a connector endpoint
@@ -649,7 +649,7 @@ void checkAllMissingEdges(void)
         for (VertInf *j = first ; j != i; j = j->lstNext)
         {
             VertID jID = j->id;
-            if ((iID.shape <= 0) && (iID.shape != jID.shape))
+            if (!(iID.isShape) && (iID.objID != jID.objID))
             {
                 // Don't keep visibility between edges of different conns
                 continue;
@@ -909,7 +909,7 @@ void printInfo(void)
     fprintf(fp, "\nVisibility Graph info:\n");
     fprintf(fp, "----------------------\n");
 
-    int currshape = 0;
+    uint currshape = 0;
     int st_shapes = 0;
     int st_vertices = 0;
     int st_endpoints = 0;
@@ -921,16 +921,16 @@ void printInfo(void)
     {
         VertID pID = t->id;
 
-        if ((pID.shape > 0) && (pID.shape != currshape))
+        if ((pID.isShape) && (pID.objID != currshape))
         {
-            currshape = pID.shape;
+            currshape = pID.objID;
             st_shapes++;
         }
-        if (pID.shape > 0)
+        if (pID.isShape)
         {
             st_vertices++;
         }
-        else if (pID.shape < 0)
+        else
         {
             // The shape 0 ones are temporary and not considered.
             st_endpoints++;
@@ -941,7 +941,7 @@ void printInfo(void)
     {
         std::pair<VertID, VertID> idpair = t->ids();
 
-        if ((idpair.first.shape <= 0) || (idpair.second.shape <= 0))
+        if (!(idpair.first.isShape) || !(idpair.second.isShape))
         {
             st_valid_endpt_visedges++;
         }

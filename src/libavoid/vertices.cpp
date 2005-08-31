@@ -41,15 +41,17 @@ VertID::VertID()
 }
 
 
-VertID::VertID(int s, int n)
-    : shape(s)
+VertID::VertID(uint id, bool s, int n)
+    : objID(id)
+    , isShape(s)
     , vn(n)
 {
 }
 
 
 VertID::VertID(const VertID& other)
-    : shape(other.shape)
+    : objID(other.objID)
+    , isShape(other.isShape)
     , vn(other.vn)
 {
 }
@@ -60,7 +62,8 @@ VertID& VertID::operator= (const VertID& rhs)
     // Gracefully handle self assignment
     //if (this == &rhs) return *this;
        
-    shape = rhs.shape;
+    objID = rhs.objID;
+    isShape = rhs.isShape;
     vn = rhs.vn;
 
     return *this;
@@ -69,28 +72,30 @@ VertID& VertID::operator= (const VertID& rhs)
 
 bool VertID::operator==(const VertID& rhs) const
 {
-    if ((shape != rhs.shape) || (vn != rhs.vn))
+    if ((objID != rhs.objID) || (vn != rhs.vn))
     {
         return false;
     }
+    assert(isShape == rhs.isShape);
     return true;
 }
 
 
 bool VertID::operator!=(const VertID& rhs) const
 {
-    if ((shape != rhs.shape) || (vn != rhs.vn))
+    if ((objID != rhs.objID) || (vn != rhs.vn))
     {
         return true;
     }
+    assert(isShape == rhs.isShape);
     return false;
 }
 
 
 bool VertID::operator<(const VertID& rhs) const
 {
-    if ((shape < rhs.shape) ||
-            ((shape == rhs.shape) && (vn < rhs.vn)))
+    if ((objID < rhs.objID) ||
+            ((objID == rhs.objID) && (vn < rhs.vn)))
     {
         return true;
     }
@@ -100,13 +105,13 @@ bool VertID::operator<(const VertID& rhs) const
 
 VertID VertID::operator+(const int& rhs) const
 {
-    return VertID(shape, vn + rhs);
+    return VertID(objID, isShape, vn + rhs);
 }
 
 
 VertID VertID::operator-(const int& rhs) const
 {
-    return VertID(shape, vn - rhs);
+    return VertID(objID, isShape, vn - rhs);
 }
 
 
@@ -119,20 +124,18 @@ VertID& VertID::operator++(int)
 
 void VertID::print(FILE *file) const
 {
-    fprintf(file, "[%2d,%1d]", shape, vn);
+    fprintf(file, "[%u,%d]", objID, vn);
 }
 
 
 void VertID::db_print(void) const
 {
-    db_printf("[%2d,%1d]", shape, vn);
+    db_printf("[%u,%d]", objID, vn);
 }
 
 
 const int VertID::src = 1;
 const int VertID::tar = 2;
-
-const VertID VertID::nullID = VertID(INT_MIN, 0);
 
 
 VertInf::VertInf(const VertID& vid, const Point& vpoint)
@@ -160,7 +163,7 @@ void VertInf::removeFromGraph(const bool isConnVert)
 {
     if (isConnVert)
     {
-        assert(id.shape <= 0);
+        assert(!(id.isShape));
     }
 
     VertInf *tmp = this;
@@ -196,11 +199,11 @@ bool directVis(VertInf *src, VertInf *dst)
     VertID& pID = src->id;
     VertID& qID = dst->id;
     
-    if (pID.shape <= 0)
+    if (!(pID.isShape))
     {
         ss.insert(contains[pID].begin(), contains[pID].end());
     }
-    if (qID.shape <= 0)
+    if (!(qID.isShape))
     {
         ss.insert(contains[qID].begin(), contains[qID].end());
     }
@@ -210,7 +213,7 @@ bool directVis(VertInf *src, VertInf *dst)
     VertInf *endVert = vertices.end();
     for (VertInf *k = vertices.shapesBegin(); k != endVert; k = k->lstNext)
     {
-        if ((ss.find(k->id.shape) == ss.end()))
+        if ((ss.find(k->id.objID) == ss.end()))
         {
             if (segmentIntersect(p, q, k->point, k->shNext->point))
             {
@@ -245,10 +248,10 @@ VertInfList::VertInfList()
                     (_firstConnVert &&  _lastConnVert) ); \
             assert((!_firstShapeVert && !_lastShapeVert) || \
                     (_firstShapeVert &&  _lastShapeVert) ); \
-            assert(!_firstShapeVert || (_firstShapeVert->id.shape > 0)); \
-            assert(!_lastShapeVert || (_lastShapeVert->id.shape > 0)); \
-            assert(!_firstConnVert || (_firstConnVert->id.shape <= 0)); \
-            assert(!_lastConnVert || (_lastConnVert->id.shape <= 0)); \
+            assert(!_firstShapeVert || _firstShapeVert->id.isShape); \
+            assert(!_lastShapeVert || _lastShapeVert->id.isShape); \
+            assert(!_firstConnVert || !(_firstConnVert->id.isShape)); \
+            assert(!_lastConnVert || !(_lastConnVert->id.isShape)); \
         } while(0)
 
 
@@ -258,7 +261,7 @@ void VertInfList::addVertex(VertInf *vert)
     assert(vert->lstPrev == NULL);
     assert(vert->lstNext == NULL);
 
-    if (vert->id.shape <= 0)
+    if (!(vert->id.isShape))
     {
         // A Connector vertex
         if (_firstConnVert)
@@ -318,7 +321,7 @@ void VertInfList::removeVertex(VertInf *vert)
     // Conditions for correct data structure
     checkVertInfListConditions();
     
-    if (vert->id.shape <= 0)
+    if (!(vert->id.isShape))
     {
         // A Connector vertex
         if (vert == _firstConnVert)

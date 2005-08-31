@@ -41,10 +41,8 @@ ShapeRef::ShapeRef(uint id, Polygn& ply)
     , _firstVert(NULL)
     , _lastVert(NULL)
 {
-    // Lower ids are reserved for connectors.
-    assert(id > 0);
-
-    VertID i = VertID(id, 0);
+    bool isShape = true;
+    VertID i = VertID(id, isShape, 0);
     
     VertInf *last = NULL;
     VertInf *node = NULL;

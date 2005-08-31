@@ -1,5 +1,13 @@
 2005-08-30  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/conn-avoid-ref.cpp, src/libavoid/connector.cpp,
+	  src/libavoid/graph.cpp, src/libavoid/makepath.cpp,
+	  src/libavoid/shape.cpp, src/libavoid/vertices.cpp,
+	  src/libavoid/vertices.h, src/libavoid/visibility.cpp:
+
+	Use a better system for unique IDs within libavoid.  This properly
+	addresses a hack in SPAvoidRef that was unsafe on amd64 machines.
+
 	* configure.ac: Add the src/libavoid subdir.
 	
 2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>

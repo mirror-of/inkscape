@@ -145,7 +145,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
 
             // Only check shape verticies, or endpoints.
             if ((t->pathDist < 0) &&
-                    ((tID.shape == src->id.shape) || (tID.shape > 0)))
+                    ((tID.objID == src->id.objID) || tID.isShape))
             {
                 double kt_dist = (*edge)->getDist();
                 double priority = k->pathDist +
@@ -172,7 +172,7 @@ static void dijkstraPath(VertInf *src, VertInf *tar)
 
             // Only check shape verticies, or endpoints.
             if ((t->pathDist < 0) &&
-                    ((tID.shape == src->id.shape) || (tID.shape > 0)))
+                    ((tID.objID == src->id.objID) || tID.isShape > 0))
             {
                 if ((min == NULL) || (t->pathDist > min->pathDist))
                 {
@@ -300,7 +300,7 @@ static void aStarPath(VertInf *src, VertInf *tar)
             Node.inf = (*edge)->otherVert(BestNode.inf);
 
             // Only check shape verticies, or the tar endpoint.
-            if ((Node.inf->id.shape <= 0) && (Node.inf != tar))
+            if (!(Node.inf->id.isShape) && (Node.inf != tar))
             {
                 continue;
             }

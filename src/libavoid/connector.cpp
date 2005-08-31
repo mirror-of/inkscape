@@ -63,8 +63,9 @@ ConnRef::ConnRef(const uint id, const Point& src, const Point& dst)
 
     if (IncludeEndpoints)
     {
-        _srcVert = new VertInf(VertID(0 - id, 1), src);
-        _dstVert = new VertInf(VertID(0 - id, 2), dst);
+        bool isShape = false;
+        _srcVert = new VertInf(VertID(id, isShape, 1), src);
+        _dstVert = new VertInf(VertID(id, isShape, 2), dst);
         vertices.addVertex(_srcVert);
         vertices.addVertex(_dstVert);
         makeActive();
@@ -103,7 +104,7 @@ void ConnRef::updateEndPoint(const uint type, const Point& point)
 
     VertInf *altered = NULL;
     VertInf *partner = NULL;
-
+    bool isShape = false;
 
     if (type == (uint) VertID::src)
     {
@@ -113,7 +114,7 @@ void ConnRef::updateEndPoint(const uint type, const Point& point)
         }
         else
         {
-            _srcVert = new VertInf(VertID(0 - _id, type), point);
+            _srcVert = new VertInf(VertID(_id, isShape, type), point);
             vertices.addVertex(_srcVert);
         }
         
@@ -128,7 +129,7 @@ void ConnRef::updateEndPoint(const uint type, const Point& point)
         }
         else
         {
-            _dstVert = new VertInf(VertID(0 - _id, type), point);
+            _dstVert = new VertInf(VertID(_id, isShape, type), point);
             vertices.addVertex(_dstVert);
         }
         
@@ -221,8 +222,9 @@ void ConnRef::moveRoute(const int& diff_x, const int& diff_y)
 
 void ConnRef::lateSetup(const Point& src, const Point& dst)
 {
-    _srcVert = new VertInf(VertID(0 - _id, 1), src);
-    _dstVert = new VertInf(VertID(0 - _id, 2), dst);
+    bool isShape = false;
+    _srcVert = new VertInf(VertID(_id, isShape, 1), src);
+    _dstVert = new VertInf(VertID(_id, isShape, 2), dst);
     vertices.addVertex(_srcVert);
     vertices.addVertex(_dstVert);
     makeActive();
