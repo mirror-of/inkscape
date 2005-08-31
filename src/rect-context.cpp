@@ -266,7 +266,7 @@ static gint sp_rect_context_item_handler(SPEventContext *event_context, SPItem *
             event_context->within_tolerance = true;
 
             // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
 
             ret = TRUE;
         }
@@ -307,7 +307,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             event_context->within_tolerance = true;
 
             // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
+            event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
             dragging = true;
             /* Position center */

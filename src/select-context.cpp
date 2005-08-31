@@ -307,7 +307,7 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
 
                     // remember the clicked item in sc->item:
                     sc->item = sp_event_context_find_item (desktop, 
-                                              NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
+                                              NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, FALSE);
                     sp_object_ref(sc->item, NULL);
 
                     rb_escaped = drag_escaped = 0;
@@ -573,12 +573,12 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             if (sc->button_press_ctrl) {
                                 // go into groups, honoring Alt
                                 item = sp_event_context_find_item (desktop, 
-                                                   NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                                                   NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
                                 sc->button_press_ctrl = FALSE;
                             } else {
                                 // don't go into groups, honoring Alt
                                 item = sp_event_context_find_item (desktop, 
-                                                   NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
+                                                   NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, FALSE);
                             }
 
                             if (item) {
@@ -591,7 +591,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sc->button_press_ctrl = FALSE;
 
                             item = sp_event_context_find_item (desktop, 
-                                         NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                                         NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
 
                             if (item) {
                                 if (selection->includes(item)) {

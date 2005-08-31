@@ -281,7 +281,7 @@ sp_spiral_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 // Remember clicked item, disregarding groups.
                 NR::Point const button_w(event->button.x,
                                          event->button.y);
-                event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
+                event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
                 dragging = TRUE;
                 /* Position center */

@@ -292,7 +292,7 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             event_context->within_tolerance = true;
 
            // remember clicked item, disregarding groups, honoring Alt
-            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+            event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
 
             dragging = TRUE;
             /* Position center */

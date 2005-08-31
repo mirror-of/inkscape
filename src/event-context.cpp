@@ -940,11 +940,11 @@ get_group0_keyval(GdkEventKey *event)
  */
 SPItem *
 sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, 
-        int state, bool into_groups)
+        bool select_under, bool into_groups)
 {
     SPItem *item;
 
-    if (state & GDK_MOD1_MASK) { // select under
+    if (select_under) {
         SPItem *selected_at_point = 
             sp_desktop_item_from_list_at_point_bottom (
                     desktop,

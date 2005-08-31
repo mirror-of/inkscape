@@ -115,7 +115,7 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEv
 
 guint get_group0_keyval(GdkEventKey *event);
 
-SPItem *sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, int state, bool into_groups);
+SPItem *sp_event_context_find_item (SPDesktop *desktop, NR::Point const p, bool select_under, bool into_groups);
 
 void ec_shape_event_attr_changed(Inkscape::XML::Node *shape_repr,
                                      gchar const *name, gchar const *old_value, gchar const *new_value,

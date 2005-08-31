@@ -391,7 +391,7 @@ sp_connector_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *ev
                 }
                 // find out clicked item, disregarding groups, honoring Alt
                 SPItem *item_ungrouped = sp_event_context_find_item(desktop,
-                        p, event->button.state, TRUE);
+                        p, event->button.state & GDK_MOD1_MASK, TRUE);
 
                 if (event->button.state & GDK_SHIFT_MASK) {
                     cc->selection->toggle(item_ungrouped);

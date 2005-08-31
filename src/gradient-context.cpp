@@ -181,7 +181,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             // remember clicked item, disregarding groups, honoring Alt; do nothing with Crtl to
             // enable Ctrl+doubleclick of exactly the selected item(s)
             if (!(event->button.state & GDK_CONTROL_MASK))
-                event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
+                event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
 
             dragging = true;
             /* Position center */

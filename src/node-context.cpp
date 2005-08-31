@@ -410,7 +410,9 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
             if (event->button.button == 1) {
                 if (!nc->drag) {
                     // find out clicked item, disregarding groups, honoring Alt
-                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, 
+                                           NR::Point(event->button.x, event->button.y),
+                                           (event->button.state & GDK_MOD1_MASK) && !(event->button.state & GDK_CONTROL_MASK), TRUE);
 
                     if (event->button.state & GDK_SHIFT_MASK) {
                         selection->toggle(item_ungrouped);
@@ -452,7 +454,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
             if (event->button.button == 1) {
                 if (!nc->drag) {
                     // find out clicked item, disregarding groups, honoring Alt
-                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
 
                         //add a node if the clicked path is selected
                         if (selection->includes(item_ungrouped) && selection->single()) {
