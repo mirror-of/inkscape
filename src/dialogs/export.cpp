@@ -61,6 +61,8 @@
 
 #define DPI_BASE PX_PER_IN
 
+#define EXPORT_COORD_PRECISION 3
+
 static void sp_export_area_toggled   ( GtkToggleButton *tb, GtkObject *base );
 static void sp_export_export_clicked ( GtkButton *button, GtkObject *base );
 static void sp_export_browse_clicked ( GtkButton *button, gpointer userdata );
@@ -93,12 +95,9 @@ static void sp_export_selection_modified ( Inkscape::Application *inkscape,
                                            guint flags,
                                            GtkObject *base );
 
-static void sp_export_set_area      ( GtkObject *base, float x0, float y0, 
-                                      float x1, float y1 );
-static void sp_export_value_set     ( GtkObject *base, const gchar *key, 
-                                      float val );
-static void sp_export_value_set_px  ( GtkObject *base, const gchar *key, 
-                                      float val );
+static void sp_export_set_area (GtkObject *base, double x0, double y0, double x1, double y1);
+static void sp_export_value_set (GtkObject *base, const gchar *key, double val);
+static void sp_export_value_set_px (GtkObject *base, const gchar *key, double val);
 static float sp_export_value_get    ( GtkObject *base, const gchar *key );
 static float sp_export_value_get_px ( GtkObject *base, const gchar *key );
 
@@ -223,7 +222,7 @@ sp_export_spinbutton_new ( gchar *key, float val, float min, float max,
     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, digits);
     gtk_table_attach ( GTK_TABLE (t), sb, x + pos, x + pos + 1, y, y + 1, 
                        (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
-    gtk_widget_set_size_request (sb, 64, -1);
+    gtk_widget_set_size_request (sb, 80, -1);
     gtk_widget_set_sensitive (sb, sensitive);
     pos += 1;
 
@@ -299,35 +298,34 @@ sp_export_dialog_area_frame (GtkWidget * dlg)
     gtk_container_set_border_width (GTK_CONTAINER (t), 4);
 
     sp_export_spinbutton_new ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
-                               t, 0, 0, _("_x0:"), NULL, 2, 1,
+                               t, 0, 0, _("_x0:"), NULL, EXPORT_COORD_PRECISION, 1,
                                G_CALLBACK ( sp_export_area_x_value_changed), 
                                dlg );
 
     sp_export_spinbutton_new ( "x1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
-                               t, 2, 0, _("x_1:"), NULL, 2, 1,
+                               t, 2, 0, _("x_1:"), NULL, EXPORT_COORD_PRECISION, 1,
                                G_CALLBACK (sp_export_area_x_value_changed), 
                                dlg );
 
     sp_export_spinbutton_new ( "width", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, 
-                               us, t, 4, 0, _("Width:"), NULL, 2, 1,
+                               us, t, 4, 0, _("Width:"), NULL, EXPORT_COORD_PRECISION, 1,
                                G_CALLBACK 
                                    (sp_export_area_width_value_changed), 
                                dlg );
 
     sp_export_spinbutton_new ( "y0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
-                               t, 0, 1, _("_y0:"), NULL, 2, 1,
+                               t, 0, 1, _("_y0:"), NULL, EXPORT_COORD_PRECISION, 1,
                                G_CALLBACK (sp_export_area_y_value_changed), 
                                dlg );
 
     sp_export_spinbutton_new ( "y1", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, us, 
-                               t, 2, 1, _("y_1:"), NULL, 2, 1,
+                               t, 2, 1, _("y_1:"), NULL, EXPORT_COORD_PRECISION, 1,
                                G_CALLBACK (sp_export_area_y_value_changed), 
                                dlg );
 
     sp_export_spinbutton_new ( "height", 0.0, -1000000.0, 1000000.0, 0.1, 1.0, 
-                               us, t, 4, 1, _("Height:"), NULL, 2, 1,
-                               G_CALLBACK 
-                                   (sp_export_area_height_value_changed), 
+                               us, t, 4, 1, _("Height:"), NULL, EXPORT_COORD_PRECISION, 1,
+                               G_CALLBACK (sp_export_area_height_value_changed), 
                                dlg );
 
     /* Adding in the unit box */
@@ -753,8 +751,9 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
         prefs_set_string_attribute ( "dialogs.export.exportarea", 
                                      "value", selection_names[key]);
 
-        if (key != SELECTION_CUSTOM)
+        if (key != SELECTION_CUSTOM) {
             sp_export_set_area (base, bbox.x0, bbox.y0, bbox.x1, bbox.y1);
+        }
     
     } // end of if ( SP_ACTIVE_DESKTOP )
 
@@ -1191,16 +1190,17 @@ sp_export_browse_store (GtkButton *button, gpointer userdata)
     return;
 } // end of sp_export_browse_store()
 
-/** \todo
- * Looks like there is a stack/register bug under certain situations
- * where the doubles of the NR::Rect don't get set up correctly, so
- * an inline == fails.  Instead, we have to call this function to
- * get everything to flush.
- */
 static bool
 sp_export_bbox_equal(NR::Rect &one, NR::Rect &two)
-{
-    return one == two;
+{ 
+    // FIXME: make this an NR::Rect method
+    double epsilon = 1.0 / pow (10, EXPORT_COORD_PRECISION);
+    return (
+        (fabs(one.min()[NR::X] - two.min()[NR::X]) < epsilon) &&
+        (fabs(one.min()[NR::Y] - two.min()[NR::Y]) < epsilon) &&
+        (fabs(one.max()[NR::X] - two.max()[NR::X]) < epsilon) &&
+        (fabs(one.max()[NR::Y] - two.max()[NR::Y]) < epsilon)
+        );
 }
 
 /**
@@ -1237,8 +1237,7 @@ sp_export_detect_size(GtkObject * base) {
     NR::Point y(sp_export_value_get_px (base, "x1"),
                 sp_export_value_get_px (base, "y1"));
     NR::Rect current_bbox(x, y);
-    current_bbox.round(2);
-    // std::cout << "Current " << current_bbox;
+    //std::cout << "Current " << current_bbox;
 
     this_test[0] = (selection_type)(GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(base), "selection-type")));
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
@@ -1256,9 +1255,7 @@ sp_export_detect_size(GtkObject * base) {
                 if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
                     NR::Rect bbox = (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds();
 
-                    bbox.round(2);
-                    // std::cout << "Selection " << bbox2;
-                    //if (bbox == current_bbox) {
+                    //std::cout << "Selection " << bbox;
                     if (sp_export_bbox_equal(bbox,current_bbox)) {
                         key = SELECTION_SELECTION;
                     }
@@ -1269,9 +1266,7 @@ sp_export_detect_size(GtkObject * base) {
 
                 NR::Rect bbox = sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)));
 
-                bbox.round(2);
                 // std::cout << "Drawing " << bbox2;
-                //if (bbox == current_bbox) {
                 if (sp_export_bbox_equal(bbox,current_bbox)) {
                     key = SELECTION_DRAWING;
                 }
@@ -1287,11 +1282,9 @@ sp_export_detect_size(GtkObject * base) {
                 NR::Point y(sp_document_width(doc),
                             sp_document_height(doc));
                 NR::Rect bbox(x, y);
-                bbox.round(2);
 
                 // std::cout << "Page " << bbox;
                 if (sp_export_bbox_equal(bbox,current_bbox)) {
-                //if (bbox == current_bbox) {
                     key = SELECTION_PAGE;
                 }
 
@@ -1633,7 +1626,7 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
     there has been an update.
 */
 static void
-sp_export_set_area ( GtkObject *base, float x0, float y0, float x1, float y1 )
+sp_export_set_area ( GtkObject *base, double x0, double y0, double x1, double y1 )
 {
     gtk_object_set_data ( base, "update", GUINT_TO_POINTER (TRUE) );
     sp_export_value_set_px (base, "x1", x1);
@@ -1646,7 +1639,7 @@ sp_export_set_area ( GtkObject *base, float x0, float y0, float x1, float y1 )
     sp_export_area_y_value_changed ((GtkAdjustment *)gtk_object_get_data (base, "y1"), base);
 
     return;
-} // end of sp_export_set_area()
+}
 
 /**
     \brief  Sets the value of an adjustment
@@ -1659,7 +1652,7 @@ sp_export_set_area ( GtkObject *base, float x0, float y0, float x1, float y1 )
     the value of it.
 */
 static void
-sp_export_value_set ( GtkObject *base, const gchar *key, float val )
+sp_export_value_set ( GtkObject *base, const gchar *key, double val )
 {
     GtkAdjustment *adj;
 
@@ -1680,14 +1673,14 @@ sp_export_value_set ( GtkObject *base, const gchar *key, float val )
     value and sets the adjustment.
 */
 static void
-sp_export_value_set_px (GtkObject *base, const gchar *key, float val)
+sp_export_value_set_px (GtkObject *base, const gchar *key, double val)
 {
     const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data (base, "units") );
 
     sp_export_value_set (base, key, sp_pixels_get_units (val, *unit));
 
     return;
-} // end of sp_export_value_set_px()
+}
 
 /**
     \brief  Get the value of an adjustment in the export dialog
