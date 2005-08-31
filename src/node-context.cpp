@@ -418,7 +418,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                         selection->toggle(item_ungrouped);
                     } else {
                         //add a node if the clicked path is selected
-                        if (selection->includes(item_ungrouped) && selection->single()) {
+                        if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
                             //Translate click point into proper coord system
                             NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
                             p *= sp_item_dt2i_affine(item_ungrouped, desktop);
@@ -452,12 +452,18 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
+                // save drag origin
+                xp = (gint) event->button.x;
+                yp = (gint) event->button.y;
+                within_tolerance = true;
+                nc->hit = false;
+
                 if (!nc->drag) {
                     // find out clicked item, disregarding groups, honoring Alt
                     SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
 
                         //add a node if the clicked path is selected
-                        if (selection->includes(item_ungrouped) && selection->single()) {
+                        if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
 
                             //Translate click point into proper coord system
                             NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
@@ -539,7 +545,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
 
-                if (nc->hit) {
+                if (nc->nodepath && nc->hit) {
                     NR::Point const delta_w(event->motion.x - nc->curvedrag[NR::X],
                                          event->motion.y - nc->curvedrag[NR::Y]);
                     NR::Point const delta_dt(sp_desktop_w2d_xy_point(desktop, delta_w));
