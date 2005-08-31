@@ -64,58 +64,53 @@ sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, con
   return length_src * (dst/src);
 }
 
+/**
+ * Create a human-readable string suitable for status-bar display.
+ */
 GString *
-sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SPMetric metric_dst, gboolean m)
+sp_metric_to_metric_string(gdouble const length,
+                           SPMetric const metric_src, SPMetric const metric_dst,
+                           gboolean const m)
 {
-  gdouble len = sp_absolute_metric_to_metric (length, metric_src, metric_dst);
-  GString *str = g_string_new ("");
-  Inkscape::SVGOStringStream os;
-  os.precision(5);
-  
-  switch (metric_dst) {
-  case SP_M:
-    os << len << (m?" m":"");
-	g_string_printf (str, os.str().c_str());
-    break;
-  case SP_MM:
-    os << len << (m?" mm":"");
-	g_string_printf (str, os.str().c_str());
-    break;
-  case SP_CM:
-    os << len << (m?" cm":"");
-	g_string_printf (str, os.str().c_str());
-    break;
-  case SP_IN:
-    os << len << (m?"\"":"");
-	g_string_printf (str, os.str().c_str());
-    break;
-  case SP_PT:
-	os << len << (m?" pt":"");
-	g_string_printf (str, os.str().c_str());
-    break;
-  case SP_PX:
-	os << len << (m?" px":"");
-	g_string_printf (str, os.str().c_str());
-    break;
-  case NONE:
-	g_string_printf (str, "%s", "ups!");
-    break;
-  }
+    gdouble const len = sp_absolute_metric_to_metric(length, metric_src, metric_dst);
+    GString *str = g_string_new("");
+    g_string_printf(str, "%0.5g", len);
+    /* I've no strong opinion on the best number format here.
+     *
+     * %f has a fixed number of places after the decimal separator, whereas %g aims for a fixed
+     * number of "significant figures": thus, %0.3g gives 0.00123 and 1.23e+03, where %0.3f gives
+     * 0.001 and 1230.000 respectively.
+     *
+     * You may wish to make it conditional on the value of abs(len), e.g. if abs(len) >= 1 then
+     * %0.5g else %0.5f, or if abs(len) >= 100 then %0.5g else %0.3f.
+     */
 
-  return str;
+    if (m) {
+        char const *unit_str;
+        switch (metric_dst) {
+            case SP_M:  unit_str = " m"; break;
+            case SP_MM: unit_str = " mm"; break;
+            case SP_CM: unit_str = " cm"; break;
+            case SP_IN: unit_str = "\""; break;
+            case SP_PT: unit_str = " pt"; break;
+            case SP_PX: unit_str = " px"; break;
+            default: unit_str = NULL; break;
+        }
+        if (unit_str) {
+            g_string_append(str, unit_str);
+        }
+    }
+    return str;
 }
-
-
-
 
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
