@@ -18,6 +18,7 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "message-stack.h"
+#include "prefs-utils.h"
 
 #include "jabber_whiteboard/session-manager.h"
 
@@ -39,7 +40,7 @@ WhiteboardConnectDialog::create()
 }
 
 WhiteboardConnectDialogImpl::WhiteboardConnectDialogImpl() :
-	_layout(4, 4, false), _usessl(_("Use _SSL"), true)
+	_layout(4, 4, false), _usessl(_("_Use SSL"), true)
 {
 	this->setSessionManager();
 	this->_construct();
@@ -48,7 +49,6 @@ WhiteboardConnectDialogImpl::WhiteboardConnectDialogImpl() :
 
 WhiteboardConnectDialogImpl::~WhiteboardConnectDialogImpl()
 {
-
 }
 
 void
@@ -147,6 +147,10 @@ WhiteboardConnectDialogImpl::_respCallback(int resp)
 			case CONNECT_SUCCESS:
 				msg = String::ucompose(_("Connected to Jabber server <b>%1</b> as <b>%2</b>"), server, username);
 				this->_desktop->messageStack()->flash(INFORMATION_MESSAGE, msg.data());
+
+				// Save preferences
+				g_log(NULL, G_LOG_LEVEL_DEBUG, "Saving preferences to %s", this->_prefs_path);
+				prefs_set_string_attribute(this->_prefs_path, "server", this->_server.get_text().c_str());
 				break;
 			default:
 				break;

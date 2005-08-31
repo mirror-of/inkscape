@@ -96,13 +96,16 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	}
 
 	// 5.  Look up the node previous to the child, if it exists.
-	// If we cannot find it, return.
+	// If we cannot find it, we may be in a change conflict situation.
+	// In that case, just append the node.
 	XML::Node* prevRepr = NULL;
 	if (!prev.empty()) {
 		prevRepr = this->_getNodeByID(prev);
 		if (prevRepr == NULL) {
-			g_warning("Cannot find prev node identified by %s", prev.c_str());
-			return;
+			g_warning("Prev node %s could not be found; appending incoming node.  Document may not be synchronized.", prev.c_str());
+			prevRepr = parentRepr->lastChild();
+//			g_warning("Cannot find prev node identified by %s", prev.c_str());
+//			return;
 		}
 	}
 
@@ -126,13 +129,19 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 			if (!MessageUtilities::findTag(buf, msg)) {
 				childRepr = sp_repr_new_text("");
 			} else {
-				childRepr = sp_repr_new_text(buf.data.c_str()); // a little awkward notation here...
+				childRepr = sp_repr_new_text(buf.data.c_str());
 			}
 			break;
 		case XML::DOCUMENT_NODE:
 			// TODO
 		case XML::COMMENT_NODE:
-			// also TODO
+			buf.tag = MESSAGE_CONTENT;
+			if (!MessageUtilities::findTag(buf, msg)) {
+				childRepr = sp_repr_new_comment("");
+			} else {
+				childRepr = sp_repr_new_comment(buf.data.c_str()); 
+			}
+			break;
 		case XML::ELEMENT_NODE: 
 		default:
 			childRepr = sp_repr_new(name.data());
@@ -145,12 +154,6 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	this->_newkeys[childRepr] = child;
 
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "child=%p parent=%p prev=%p", childRepr, parentRepr, prevRepr);
-
-	// Debugging info
-	childRepr->setAttribute("inkboard:id", child.c_str(), false);
-
-	// 7.  Check for tree structure integrity, and munge things up if necessary.
-	
 
 	// 8.  Deserialize the event.
 	this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
@@ -411,3 +414,14 @@ Deserializer::_recursiveMarkForRemoval(XML::Node* node)
 }
 
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
