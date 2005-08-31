@@ -42,6 +42,11 @@ struct SPNodeContext {
 	sigc::connection sel_changed_connection;
 
 	Inkscape::MessageContext *_node_message_context;
+
+	double grab_t;
+	Inkscape::NodePath::Node * grab_node;
+	bool hit;
+	NR::Point curvedrag;
 };
 
 struct SPNodeContextClass {

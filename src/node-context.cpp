@@ -43,6 +43,10 @@
 #include "xml/repr.h"
 #include "xml/node-event-vector.h"
 #include "libnr/nr-point-matrix-ops.h"
+#include "livarot/Path.h"
+
+//from splivarot.cpp
+Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
 
 static void sp_node_context_class_init(SPNodeContextClass *klass);
 static void sp_node_context_init(SPNodeContext *node_context);
@@ -74,6 +78,9 @@ static gint nodeedit_rb_escaped = 0;
 static gint xp = 0, yp = 0; ///< Where drag started.
 static gint tolerance = 0;
 static bool within_tolerance = false;
+static gchar *undo_label_1 = "dragcurve:1";
+static gchar *undo_label_2 = "dragcurve:2";
+static gchar *undo_label = undo_label_1;
 
 GType
 sp_node_context_get_type()
@@ -441,6 +448,42 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                 break;
             }
             break;
+        case GDK_BUTTON_PRESS:
+            if (event->button.button == 1) {
+                if (!nc->drag) {
+                    // find out clicked item, disregarding groups, honoring Alt
+                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+
+                        //add a node if the clicked path is selected
+                        if (selection->includes(item_ungrouped) && selection->single()) {
+
+                            //Translate click point into proper coord system
+                            NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
+                            p *= sp_item_dt2i_affine(item_ungrouped, desktop);
+                            p *= sp_item_i2doc_affine(item_ungrouped);
+
+                            sp_nodepath_select_segment_near_point(item_ungrouped, p);
+
+                            Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
+
+                            //only dragging curves
+                            // save drag origin
+                            nc->curvedrag[NR::X] = (gint) event->button.x;
+                            nc->curvedrag[NR::Y] = (gint) event->button.y;
+                            within_tolerance = true;
+                            nc->hit = true;
+                            nc->grab_t = position.t;
+                            nc->grab_node = sp_nodepath_get_node_by_index(position.piece);
+                            ret = TRUE;
+                        } else {
+                            break;
+                        }
+
+                    ret = TRUE;
+                }
+                break;
+            }
+            break;
         default:
             break;
     }
@@ -472,6 +515,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 xp = (gint) event->button.x;
                 yp = (gint) event->button.y;
                 within_tolerance = true;
+                nc->hit = false;
 
                 NR::Point const button_w(event->button.x,
                                          event->button.y);
@@ -493,10 +537,20 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
 
-                NR::Point const motion_w(event->motion.x,
+                if (nc->hit) {
+                    NR::Point const delta_w(event->motion.x - nc->curvedrag[NR::X],
+                                         event->motion.y - nc->curvedrag[NR::Y]);
+                    NR::Point const delta_dt(sp_desktop_w2d_xy_point(desktop, delta_w));
+                    sp_nodepath_curve_drag (nc->grab_node, nc->grab_t, delta_dt, undo_label);
+                    nc->curvedrag[NR::X] = (gint) event->motion.x;   
+                    nc->curvedrag[NR::Y] = (gint) event->motion.y;
+                    gobble_motion_events(GDK_BUTTON1_MASK);
+                } else {
+                    NR::Point const motion_w(event->motion.x,
                                          event->motion.y);
-                NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
-                sp_rubberband_move(motion_dt);
+                    NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+                    sp_rubberband_move(motion_dt);
+                }
                 nc->drag = TRUE;
                 ret = TRUE;
             }
@@ -505,7 +559,12 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
             xp = yp = 0;
             if (event->button.button == 1) {
                 NRRect b;
-                if (sp_rubberband_rect(&b) && !within_tolerance) { // drag
+                if (nc->hit && !within_tolerance) { //drag curve
+                    if (undo_label == undo_label_1)
+                        undo_label = undo_label_2;
+                    else 
+                        undo_label = undo_label_1;
+                } else if (sp_rubberband_rect(&b) && !within_tolerance) { // drag to select
                     if (nc->nodepath) {
                         sp_nodepath_select_rect(nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
                     }
@@ -521,6 +580,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 sp_rubberband_stop();
                 nodeedit_rb_escaped = 0;
                 nc->drag = FALSE;
+                nc->hit = false;
                 break;
             }
             break;
@@ -597,7 +657,7 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     break;
                 case GDK_R:
                 case GDK_r:
-                    if (!MOD__CTRL && !MOD__ALT) {
+                    if (MOD__SHIFT_ONLY) {
                         // FIXME: add top panel button
                         sp_selected_path_reverse();
                         ret = TRUE;

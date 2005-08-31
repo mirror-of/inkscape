@@ -138,7 +138,6 @@ static void sp_nodepath_node_destroy(Inkscape::NodePath::Node *node);
 static Inkscape::NodePath::NodeSide *sp_node_get_side(Inkscape::NodePath::Node *node, gint which);
 static Inkscape::NodePath::NodeSide *sp_node_opposite_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
 static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Inkscape::NodePath::NodeSide *me);
-static Inkscape::NodePath::Node * sp_nodepath_get_node_by_index(int index);
 //from splivarot.cpp
 Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
 
@@ -1240,10 +1239,7 @@ sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p)
     sp_nodepath_node_select(e, FALSE, FALSE);
     sp_nodepath_node_select(e->p.other, TRUE, FALSE);
 
-    /* fixme: adjust ? */
     sp_nodepath_ensure_ctrls(nodepath);
-
-    update_repr(nodepath);
 
     sp_nodepath_update_statusbar(nodepath);
 }
@@ -1278,6 +1274,52 @@ sp_nodepath_add_node_near_point(SPItem * item, NR::Point p)
 
     sp_nodepath_update_statusbar(nodepath);
 }
+
+/*
+ * Adjusts a segment so that t moves by a certain delta for dragging
+ * converts lines to curves
+ *
+ * method and idea borrowed from Simon Budig  <simon@gimp.org> and the GIMP
+ * cf. app/vectors/gimpbezierstroke.c, gimp_bezier_stroke_point_move_relative()
+ */
+void
+sp_nodepath_curve_drag(Inkscape::NodePath::Node * e, double t, NR::Point delta, char * key) 
+{
+    /* dragging close to endpoints just moves the handle related to
+     * the endpoint. Just make sure that feel_good is in the range from
+     * 0 to 1. The 1.0 / 6.0 and 5.0 / 6.0 are duplicated in
+     * tools/gimpvectortool.c.  */
+    double feel_good;
+    if (t <= 1.0 / 6.0)
+        feel_good = 0;
+    else if (t <= 0.5)
+        feel_good = (pow((6 * t - 1) / 2.0, 3)) / 2;
+    else if (t <= 5.0 / 6.0)
+        feel_good = (1 - pow((6 * (1-t) - 1) / 2.0, 3)) / 2 + 0.5;
+    else
+        feel_good = 1;
+    
+    //if we're dragging a line convert it to a curve
+    if (sp_node_path_code_from_side(e, sp_node_get_side(e, -1))==NR_LINETO) {
+        sp_nodepath_set_line_type(e, NR_CURVETO);
+    }
+
+    NR::Point offsetcoord0 = ((1-feel_good)/(3*t*(1-t)*(1-t))) * delta;
+    NR::Point offsetcoord1 = (feel_good/(3*t*t*(1-t))) * delta;
+    e->p.other->n.pos += offsetcoord0;
+    e->p.pos += offsetcoord1;
+
+    // adjust controls of adjacent segments where necessary
+    sp_node_adjust_knot(e,1);
+    sp_node_adjust_knot(e->p.other,-1);
+
+    sp_nodepath_ensure_ctrls(e->subpath->nodepath);
+
+    update_repr_keyed(e->subpath->nodepath, key);
+
+    sp_nodepath_update_statusbar(e->subpath->nodepath);
+}
+
 
 /**
  * Call sp_nodepath_break() for all selected segments.
@@ -3465,7 +3507,6 @@ static NRPathcode sp_node_path_code_from_side(Inkscape::NodePath::Node *node,Ink
 /**
  * Call sp_nodepath_line_add_node() at t on the segment denoted by piece
  */
-static 
 Inkscape::NodePath::Node * 
 sp_nodepath_get_node_by_index(int index)
 {
