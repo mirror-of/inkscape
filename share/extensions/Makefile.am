@@ -40,7 +40,8 @@ extensions = \
 	wavy.py \
 	whirl.py \
 	addnodes.py \
-	summersnight.py
+	summersnight.py \
+	ps2dxf.py
 
 otherstuff =
 
@@ -75,7 +76,9 @@ modules = \
 	wavy.inx \
 	whirl.inx \
 	addnodes.inx \
-	summersnight.inx
+	summersnight.inx \
+	dxf_output.inx \
+	dxf_input.inx
 
 extension_SCRIPTS = \
 	$(extensions)
