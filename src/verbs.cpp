@@ -2227,8 +2227,4 @@ Verb *Verb::_base_verbs[] = {
   fill-column:99
   End:
 */
-//<<<<<<< verbs.cpp
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
-//=======
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
-//>>>>>>> 1.226
