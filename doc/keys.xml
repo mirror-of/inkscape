@@ -970,7 +970,8 @@ RFE</a>).</p>
 <group>
 <title>Text navigation</title>
 <mouse><key><arrows/></key> <action>move cursor by one character</action></mouse>
-<mouse><key><ctrl/><arrows/></key> <action>move cursor by one word</action></mouse>
+<mouse><key><ctrl/><left-arrow/></key> <key><ctrl/><right-arrow/></key> <action>move cursor by one word</action></mouse>
+<mouse><key><ctrl/><up-arrow/></key> <key><ctrl/><down-arrow/></key> <action>move cursor by one paragraph</action></mouse>
 <keys><key><misc f="Home"/></key> <key><misc f="End"/></key> <action>go to beginning/end of line</action></keys>
 <keys><key><ctrl/><misc f="Home"/></key> <key><ctrl/><misc f="End"/></key> <action>go to beginning/end of text</action></keys>
 <note>All these commands cancel current text selection, if any.</note>

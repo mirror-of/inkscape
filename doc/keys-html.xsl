@@ -143,6 +143,14 @@ h4 {font-weight: bold; font-style: italic; margin-top: 1em; padding-left: 50px; 
 <xsl:text>Right arrow</xsl:text>
 </xsl:template>
 
+<xsl:template match="k:up-arrow">
+<xsl:text>Up arrow</xsl:text>
+</xsl:template>
+
+<xsl:template match="k:down-arrow">
+<xsl:text>Down arrow</xsl:text>
+</xsl:template>
+
 <xsl:template match="k:wheel">
 <xsl:text>mouse wheel</xsl:text>
 </xsl:template>
