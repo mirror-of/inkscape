@@ -1285,10 +1285,10 @@ sp_nodepath_add_node_near_point(SPItem * item, NR::Point p)
 void
 sp_nodepath_curve_drag(Inkscape::NodePath::Node * e, double t, NR::Point delta, char * key) 
 {
-    /* dragging close to endpoints just moves the handle related to
-     * the endpoint. Just make sure that feel_good is in the range from
-     * 0 to 1. The 1.0 / 6.0 and 5.0 / 6.0 are duplicated in
-     * tools/gimpvectortool.c.  */
+    /* feel good is an arbitrary parameter that distributes the delta between handles
+     * if t of the drag point is less than 1/6 distance form the endpoint only
+     * the corresponding hadle is adjusted. This matches the behavior in GIMP
+     */
     double feel_good;
     if (t <= 1.0 / 6.0)
         feel_good = 0;

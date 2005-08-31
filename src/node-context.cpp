@@ -422,6 +422,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                             //Translate click point into proper coord system
                             NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
                             p *= sp_item_dt2i_affine(item_ungrouped, desktop);
+                            p *= sp_item_i2doc_affine(item_ungrouped);
 
                             switch (event->type) {
                                 case GDK_BUTTON_RELEASE:
