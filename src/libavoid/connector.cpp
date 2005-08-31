@@ -41,12 +41,11 @@ ConnRef::ConnRef(const uint id)
     , _route_dist(0)
     , _srcVert(NULL)
     , _dstVert(NULL)
+    , _initialised(false)
 {
     // TODO: Store endpoints and details.
     _route.pn = 0;
     _route.ps = NULL;
-
-    makeActive();
 }
 
 
@@ -57,6 +56,7 @@ ConnRef::ConnRef(const uint id, const Point& src, const Point& dst)
     , _route_dist(0)
     , _srcVert(NULL)
     , _dstVert(NULL)
+    , _initialised(false)
 {
     _route.pn = 0;
     _route.ps = NULL;
@@ -69,6 +69,7 @@ ConnRef::ConnRef(const uint id, const Point& src, const Point& dst)
         vertices.addVertex(_srcVert);
         vertices.addVertex(_dstVert);
         makeActive();
+        _initialised = true;
     }
 }
 
@@ -222,12 +223,15 @@ void ConnRef::moveRoute(const int& diff_x, const int& diff_y)
 
 void ConnRef::lateSetup(const Point& src, const Point& dst)
 {
+    assert(!_initialised);
+
     bool isShape = false;
     _srcVert = new VertInf(VertID(_id, isShape, 1), src);
     _dstVert = new VertInf(VertID(_id, isShape, 2), dst);
     vertices.addVertex(_srcVert);
     vertices.addVertex(_dstVert);
     makeActive();
+    _initialised = true;
 }
 
 
@@ -243,6 +247,12 @@ VertInf *ConnRef::dst(void)
 }
 
 
+bool ConnRef::isInitialised(void)
+{
+    return _initialised;
+}
+
+    
 void ConnRef::removeFromGraph(void)
 {
     for (VertInf *iter = _srcVert; iter != NULL; )

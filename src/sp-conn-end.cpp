@@ -13,6 +13,9 @@
 #include "sp-path.h"
 #include "uri.h"
 
+#include "libavoid/vertices.h"
+#include "libavoid/connector.h"
+
 static void change_endpts(SPCurve *const curve, NR::Point const h2endPt[2]);
 static NR::Point calc_bbox_conn_pt(NR::Rect const &bbox, NR::Point const &p);
 static double signed_one(double const x);
@@ -50,10 +53,14 @@ static void
 sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
                             SPPath *const path)
 {
+    // Get the new route around obstacles.
+    path->connEndPair.reroutePath();
+
     SPItem *h2attItem[2];
     path->connEndPair.getAttachedItems(h2attItem);
-    g_return_if_fail( h2attItem[0] ||
-                      h2attItem[1]   );
+    if ( !h2attItem[0] && !h2attItem[1] ) {
+        return;
+    }
 
     SPItem const *const path_item = SP_ITEM(path);
     SPObject const *const ancestor = get_nearest_common_ancestor(path_item, h2attItem);
@@ -97,16 +104,15 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
             ind = 1;
         }
         NR::Point h2endPt_icoordsys[2];
-        NR::Matrix h2i2anc[2];
+        NR::Matrix h2i2anc;
 
         NR::Rect otherpt_rect = NR::Rect(otherpt, otherpt);
         NR::Rect h2bbox_icoordsys[2] = { otherpt_rect, otherpt_rect };
         h2bbox_icoordsys[ind] = get_bbox(h2attItem[ind], NR::identity());
         
-        h2i2anc[ind] = i2anc_affine(h2attItem[ind], ancestor);
+        h2i2anc = i2anc_affine(h2attItem[ind], ancestor);
         h2endPt_icoordsys[ind] = h2bbox_icoordsys[ind].midpoint();
         
-        h2i2anc[!ind] = NR::Matrix(NR_MATRIX_IDENTITY);
         h2endPt_icoordsys[!ind] = otherpt;
 
         // For the attached object, change the corresponding point to be
@@ -114,9 +120,8 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         NR::Point h2endPt_pcoordsys[2];
         h2endPt_icoordsys[ind] = calc_bbox_conn_pt(h2bbox_icoordsys[ind],
                                                  ( h2endPt_icoordsys[!ind]
-                                                   * h2i2anc[!ind]
-                                                   / h2i2anc[ind] ));
-        h2endPt_pcoordsys[ind] = h2endPt_icoordsys[ind] * h2i2anc[ind] / path2anc;
+                                                   / h2i2anc ));
+        h2endPt_pcoordsys[ind] = h2endPt_icoordsys[ind] * h2i2anc / path2anc;
         
         // Leave the other where it is.
         h2endPt_pcoordsys[!ind] = otherpt;
@@ -150,11 +155,6 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
 void
 sp_conn_adjust_path(SPPath *const path)
 {
-    SPItem *h2attItem[2];
-    path->connEndPair.getAttachedItems(h2attItem);
-    if ( !h2attItem[0] && !h2attItem[1] ) {
-        return;
-    }
     sp_conn_end_move_compensate(NULL, NULL, path);
 }
 
@@ -206,7 +206,7 @@ change_endpts(SPCurve *const curve, NR::Point const h2endPt[2])
     sp_curve_moveto(curve, h2endPt[0]);
     sp_curve_lineto(curve, h2endPt[1]);
 #else
-    sp_curve_stretch_endpoints(curve, h2endPt[0], h2endPt[1]);
+    sp_curve_move_endpoints(curve, h2endPt[0], h2endPt[1]);
 #endif
 }
 

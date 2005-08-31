@@ -100,6 +100,7 @@ static const SPStyleProp props[] = {
 	/* SPPath */
 	{SP_ATTR_D, "d"},
 	/* (Note: XML representation of connectors may change in future.) */
+	{SP_ATTR_CONNECTOR_TYPE, "inkscape:connector-type"},
 	{SP_ATTR_CONNECTION_START, "inkscape:connection-start"},
 	{SP_ATTR_CONNECTION_END, "inkscape:connection-end"},
 	/* SPRect */

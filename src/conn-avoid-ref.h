@@ -1,6 +1,18 @@
 #ifndef SEEN_CONN_AVOID_REF
 #define SEEN_CONN_AVOID_REF
 
+/*
+ * A class for handling shape interaction with libavoid.
+ *
+ * Authors:
+ *   Michael Wybrow <mjwybrow@users.sourceforge.net>
+ *
+ * Copyright (C) 2005 Michael Wybrow
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+
 #include <forward.h>
 #include <sigc++/connection.h>
 #include "libavoid/shape.h"
@@ -10,21 +22,21 @@ public:
     SPAvoidRef(SPItem *spitem);
     ~SPAvoidRef();
 
+    // libavoid's internal representation of the item.
+    Avoid::ShapeRef *shapeRef;
+
+    void setAvoid(char const *value);
+    void handleSettingChange(void);
+
+private:
     SPItem *item;
 
     // true if avoiding, false if not.
     bool setting;
     bool new_setting;
 
-    // libavoid's internal representation of the item.
-    Avoid::ShapeRef *shapeRef;
-
     // A sigc connection for transformed signal.
     sigc::connection _transformed_connection;
-
-    
-    void setAvoid(char const *value);
-    void handleSettingChange(void);
 };
 
 

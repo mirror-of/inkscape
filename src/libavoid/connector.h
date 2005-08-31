@@ -58,6 +58,7 @@ class ConnRef
         VertInf *dst(void);
         void removeFromGraph(void);
         void markAsFalsePath(void);
+        bool isInitialised(void);
         
         friend void markConnectors(ShapeRef *shape);
 
@@ -71,6 +72,7 @@ class ConnRef
         ConnRefList::iterator _pos;
         VertInf *_srcVert;
         VertInf *_dstVert;
+        bool _initialised;
 };
 
 

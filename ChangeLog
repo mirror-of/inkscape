@@ -1,3 +1,32 @@
+2005-08-31  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/conn-avoid-ref.cpp, src/conn-avoid-ref.h: Use the correct
+	  coordinate system when passing shape geometry to libavoid.
+	  Add a small amount of buffer space around objects.
+	
+	* src/attributes-test.cpp, src/attributes.cpp, src/attributes.h,
+	  src/path.cpp: Add code to handle the "inkscape:connector-type"
+	  attribute.
+
+	* src/sp-conn-end-pair.cpp, src/sp-conn-end-pair.h: Store information
+	  about type paths, to determine whether they are connectors.  Keep
+	  a reference to the libavoid representation if necessary.  Add code
+	  to call libavoid to get a path for a connector.
+	
+	* src/sp-conn-end.cpp: Call the connector routing code when connector
+	  ends are moved.  Move connector endpoints rather than stretching
+	  when adjusting to draw to shape edge.
+	  
+	* src/libavoid/connector.cpp, src/libavoid/connector.h: Make the
+	  connector references aware of their own initialisation state.
+
+	* src/connector-context.cpp:  Update TODO list.  Update for other
+	  changes.  Fix a bug where multi-segment connectors had a solid
+	  black fill while being dragged.
+
+	* src/display/curve.cpp, src/display/curve.h: Add a function to 
+	  simply move the two endpoints of a curve.
+
 2005-08-30  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/conn-avoid-ref.cpp, src/libavoid/connector.cpp,

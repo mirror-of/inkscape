@@ -1,9 +1,21 @@
 #ifndef SEEN_SP_CONN_END_PAIR
 #define SEEN_SP_CONN_END_PAIR
 
+/*
+ * A class for handling connector endpoint movement and libavoid interaction.
+ *
+ * Authors:
+ *   Peter Moulder <pmoulder@mail.csse.monash.edu.au>
+ *
+ *    * Copyright (C) 2004 Monash University
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
 #include <glib/gtypes.h>
 
 #include "forward.h"
+#include "libavoid/connector.h"
+
 
 class SPConnEnd;
 namespace Inkscape {
@@ -21,13 +33,28 @@ public:
     void setAttr(unsigned const key, gchar const *const value);
     void writeRepr(Inkscape::XML::Node *const repr) const;
     void getAttachedItems(SPItem *[2]) const;
+    void reroutePath(void);
 
 private:
     SPConnEnd *_connEnd[2];
+    
+    SPPath *_path;
+
+    // libavoid's internal representation of the item.
+    Avoid::ConnRef *_connRef;
+
+    int _connType;
 };
 
 
 void sp_conn_end_pair_build(SPObject *object);
+
+
+// _connType options:
+enum {
+    SP_CONNECTOR_NOAVOID,    // Basic connector - a straight line.
+    SP_CONNECTOR_POLYLINE    // Object avoiding polyline.
+};
 
 
 #endif /* !SEEN_SP_CONN_END_PAIR */

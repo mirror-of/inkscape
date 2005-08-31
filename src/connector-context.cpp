@@ -9,11 +9,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  *
  * TODO:
- *  o  Cleanup to remove unecessary borrowed DrawContext code.
+ *  o  Fix endpoint position error for connected objects.
+ *  o  Show rerouted paths as connectors are being created.
+ *  o  Alert and reroute connectors when a shape is placed on their path.
+ *     Code is there, just requires the hooks.
+ *  o  Have shapes avoid coonvex hulls of objects, rather than their
+ *     bounding box.  Possibly implement the unfinished ConvexHull
+ *     class in libnr.
  *  o  Draw connectors to shape edges rather than bounding box.
  *  o  Show a visual indicator for objects with the 'avoid' property set.
  *  o  Create an interface for setting markers (arrow heads).
- *  o  Route connectors automatically with libavoid.
+ *  o  Better distinguish between paths and connectors to prevent problems
+ *     in the node tool and paths accidently being turned into connectors
+ *     in the connector tool.  Perhaps have a way to convert between.
+ *  o  Cleanup to remove unecessary borrowed DrawContext code.
  *  o  Allow user-placeable connection points.
  *  o  Deal sanely with connectors with both endpoints attached to the 
  *     same connection point, and drawing of connectors attaching
@@ -62,6 +71,7 @@
 #include "snap.h"
 #include "knot.h"
 #include "sp-conn-end.h"
+#include "conn-avoid-ref.h"
 
 #include "prefs-utils.h"  // for prefs_get_int_attribute_limited
 
@@ -95,6 +105,7 @@ static void cc_clear_active_shape(SPConnectorContext *cc);
 static void cc_set_active_conn(SPConnectorContext *cc, SPItem *item);
 static void cc_clear_active_conn(SPConnectorContext *cc);
 static gchar *conn_pt_handle_test(SPConnectorContext *cc, NR::Point& w);
+static bool cc_item_is_connector(SPItem *item);
 static bool cc_item_is_shape(SPItem *item);
 static void cc_selection_changed(Inkscape::Selection *selection, gpointer data);
 
@@ -257,7 +268,10 @@ sp_connector_context_setup(SPEventContext *ec)
     
     /* Create red bpath */
     cc->red_bpath = sp_canvas_bpath_new(SP_DT_SKETCH(ec->desktop), NULL);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cc->red_bpath), cc->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cc->red_bpath), cc->red_color,
+            1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(cc->red_bpath), 0x00000000,
+            SP_WIND_RULE_NONZERO);
     /* Create red curve */
     cc->red_curve = sp_curve_new_sized(4);
 
@@ -681,8 +695,14 @@ connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton con
                 // Test whether we clicked on a connection point
                 gchar *shape_label = conn_pt_handle_test(cc, p);
 
-                sp_object_setAttribute(cc->clickeditem, "inkscape:type",
-                        "connector", false);
+                // We can currently grab the endpoints of a normal path.
+                // This reroutes it, turning it into a connector.
+                // TODO: We probably want better separation between 
+                //       paths and connectors.  Maybe only allow rerouting
+                //       of connectors but allow path conversion into
+                //       connectors.
+                sp_object_setAttribute(cc->clickeditem,
+                        "inkscape:connector-type", "polyline", false);
                 
                 if (shape_label) {
                     if (cc->clickedhandle == cc->endpt_handle[0]) {
@@ -859,7 +879,8 @@ spcc_flush_white(SPConnectorContext *cc, SPCurve *gc)
         cc->newconn->updateRepr();
 
         bool connection = false;
-        sp_object_setAttribute(cc->newconn, "inkscape:type", "connector", false);
+        sp_object_setAttribute(cc->newconn, "inkscape:connector-type",
+                "polyline", false);
         if (cc->sid)
         {
             sp_object_setAttribute(cc->newconn, "inkscape:connection-start",
@@ -1196,6 +1217,15 @@ static bool cc_item_is_shape(SPItem *item)
     return true;
 }
 
+
+static bool cc_item_is_connector(SPItem *item)
+{
+    // TODO: Currently any open path is a connector.  Probably we'll
+    //       want to change this to just be connectors.  This controls
+    //       which objects have endpoint handles shown for them.
+    return !cc_item_is_shape(item);
+}
+
     
 void cc_selection_set_avoid(bool const set_avoid)
 {
@@ -1220,6 +1250,7 @@ void cc_selection_set_avoid(bool const set_avoid)
         if (cc_item_is_shape(item)) {
             sp_object_setAttribute(item, "inkscape:connector-avoid",
                     value, false);
+            item->avoidRef->handleSettingChange();
             changes++;
         }
         
@@ -1255,7 +1286,7 @@ cc_selection_changed(Inkscape::Selection *selection, gpointer data)
         return;
     }
     
-    if (!cc_item_is_shape(item)) {
+    if (cc_item_is_connector(item)) {
         cc_set_active_conn(cc, item);
     }
 }

@@ -1,3 +1,15 @@
+/*
+ * A class for handling shape interaction with libavoid.
+ *
+ * Authors:
+ *   Michael Wybrow <mjwybrow@users.sourceforge.net>
+ *
+ * Copyright (C) 2005 Michael Wybrow
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+
 #include <vector>
 
 #include "sp-item.h"
@@ -5,6 +17,8 @@
 #include "libnr/nr-rect.h"
 #include "libnr/nr-convex-hull.h"
 #include "conn-avoid-ref.h"
+#include "libnr/nr-point-matrix-ops.h"
+#include "libnr/nr-rect-ops.h"
 #include "libavoid/polyutil.h"
 #include "libavoid/incremental.h"
 
@@ -13,11 +27,11 @@ static Avoid::Polygn avoid_item_poly(SPItem const *item);
 static void avoid_item_move(NR::Matrix const *mp, SPItem *moved_item);
 
 
-SPAvoidRef::SPAvoidRef(SPItem *spitem) :
-    item(spitem),
-    setting(false),
-    shapeRef(NULL),
-    _transformed_connection()
+SPAvoidRef::SPAvoidRef(SPItem *spitem)
+    : shapeRef(NULL)
+    , item(spitem)
+    , setting(false)
+    , _transformed_connection()
 {
 }
 
@@ -84,23 +98,30 @@ static Avoid::Polygn avoid_item_poly(SPItem const *item)
 
     std::vector<NR::Point> p;
     sp_item_snappoints(item, SnapPointsIter(p));
-    
+   
+    NR::Matrix i2d = sp_item_i2d_affine(item);
     std::vector<NR::Point>::iterator i = p.begin(); 
-    NR::ConvexHull cvh(*i);
+    NR::ConvexHull cvh(*i * i2d);
     for (++i; i != p.end(); ++i) {
-        cvh.add(*i); 
+        cvh.add(*i * i2d); 
     }
    
-    // TODO: ConvexHull just gives us a rectangular convex hull, rather
-    //       than a real convex hull.
+    // TODO: NR::ConvexHull just keeps a bounding box for the convex
+    //       hull, rather than a real convex hull.  So we're using
+    //       a reactangle for each shape but we'll want to switch to
+    //       using the convex hull of individual shapes.
     
-    NR::Rect rHull = cvh.bounds(); 
+    NR::Rect rHull = cvh.bounds();
+    // Add a little buffer around the edge of each object.
+    NR::Rect rExpandedHull = NR::expand(rHull, -10.0); 
     poly = Avoid::newPoly(4);
     
     for (int n = 0; n < 4; ++n) {
-        poly.ps[n].x = rHull.corner(3 - n)[NR::X];
-        poly.ps[n].y = rHull.corner(3 - n)[NR::Y];
-        //printf("%d: (%.3f, %.3f)\n", n, poly.ps[n].x, poly.ps[n].y);
+        // TODO: I think the winding order in libavoid or inkscape might
+        //       be backwards, probably due to the inverse y co-ordinates
+        //       used for the screen.  The '3 - n' reverses the order.
+        poly.ps[n].x = rExpandedHull.corner(3 - n)[NR::X];
+        poly.ps[n].y = rExpandedHull.corner(3 - n)[NR::Y];
     }
     
     return poly;

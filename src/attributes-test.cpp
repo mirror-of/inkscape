@@ -320,6 +320,7 @@ static struct {char const *attr; bool supported;} const all_attrs[] = {
     {"inkscape:grid-points", true},
     {"inkscape:guide-points", true},
     {"inkscape:current-layer", true},
+    {"inkscape:connector-type", true},
     {"inkscape:connection-start", true},
     {"inkscape:connection-end", true},
     {"inkscape:connector-avoid", true},

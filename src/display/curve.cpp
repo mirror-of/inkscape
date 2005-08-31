@@ -1230,6 +1230,21 @@ sp_curve_stretch_endpoints(SPCurve *curve, NR::Point const &new_p0, NR::Point co
     g_assert(fabs(begin_dist - tot_len) < 1e-18);
 }
 
+void
+sp_curve_move_endpoints(SPCurve *curve, NR::Point const &new_p0,
+        NR::Point const &new_p1)
+{
+    if (sp_curve_empty(curve)) {
+        return;
+    }
+    unsigned const nSegs = SP_CURVE_LENGTH(curve) - 1;
+    g_assert(nSegs != 0);
+
+    curve->bpath->setC(3, new_p0);
+    curve->bpath[nSegs].setC(3, new_p1);
+}
+
+
 /*
   Local Variables:
   mode:c++
