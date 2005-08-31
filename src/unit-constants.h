@@ -11,6 +11,7 @@
 #define PX_PER_PT (1/DEVICESCALE)
 #define PX_PER_IN (PT_PER_IN / PT_PER_PX)
 #define M_PER_IN 0.0254
+#define M_PER_PX (M_PER_IN / PX_PER_IN)
 #define CM_PER_IN 2.54
 #define MM_PER_IN 25.4
 #define MM_PER_MM 1.0
