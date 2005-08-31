@@ -14,6 +14,7 @@
 #include <libnr/nr-dim2.h>
 
 #include "round.h"
+#include "decimal-round.h"
 
 /// A NRPoint consists of x and y coodinates.
 /// \todo
@@ -86,15 +87,10 @@ public:
         \brief A function to lower the precision of the point
         \param  places  The number of decimal places that should be in
                         the final number.
-
-        This function accomplishes its goal by doing a 10^places and
-        multipling the X and Y coordinates by that.  It then casts that
-        to an integer (to get rid of all decimal points) and then divides
-        by 10^places back again.
     */
     inline void round (int places = 0) {
-        _pt[X] = (Coord)(Inkscape::round((double)_pt[X] * pow(10, places)) / pow(10, places));
-        _pt[Y] = (Coord)(Inkscape::round((double)_pt[Y] * pow(10, places)) / pow(10, places));
+        _pt[X] = (Coord)(Inkscape::decimal_round((double)_pt[X], places));
+        _pt[Y] = (Coord)(Inkscape::decimal_round((double)_pt[Y], places));
         return;
     }
 
