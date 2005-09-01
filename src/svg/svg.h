@@ -14,7 +14,7 @@
 #include <glib.h>
 #include <libnr/nr-forward.h>
 #include <svg/svg-types.h>
-
+#include <string>
 
 
 /* Generic */
@@ -55,7 +55,7 @@ void sp_svg_length_set (SPSVGLength *length, SPSVGLengthUnit unit, float value, 
 void sp_svg_length_unset (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed);
 void sp_svg_length_update (SPSVGLength *length, double em, double ex, double scale);
 
-const gchar *sp_svg_length_write_with_units (SPSVGLength *length);
+std::string sp_svg_length_write_with_units(SPSVGLength const &length);
 
 bool sp_svg_transform_read(gchar const *str, NR::Matrix *transform);
 

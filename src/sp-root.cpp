@@ -601,15 +601,11 @@ sp_root_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     if (fabs(root->y.computed) > 1e-9)
         sp_repr_set_double(repr, "y", root->y.computed);
 
-    // Unlike all other SPObject, here we want to preserve units too (and only here, according to
-    // the recommendation in http://www.w3.org/TR/SVG11/coords.html#Units)
-
-    const gchar *width_s = sp_svg_length_write_with_units (&root->width);
-    const gchar *height_s = sp_svg_length_write_with_units (&root->height);
-    sp_repr_set_attr (repr, "width", width_s);
-    sp_repr_set_attr (repr, "height", height_s);
-    g_free ((void*) width_s);
-    g_free ((void*) height_s);
+    /* Unlike all other SPObject, here we want to preserve absolute units too (and only here,
+     * according to the recommendation in http://www.w3.org/TR/SVG11/coords.html#Units).
+     */
+    sp_repr_set_attr(repr, "width", sp_svg_length_write_with_units(root->width).c_str());
+    sp_repr_set_attr(repr, "height", sp_svg_length_write_with_units(root->height).c_str());
 
     if (root->viewBox_set) {
         Inkscape::SVGOStringStream os;

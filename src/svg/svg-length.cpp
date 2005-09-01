@@ -405,15 +405,16 @@ sp_svg_length_get_css_units(SPSVGLengthUnit unit)
  * N.B.\ This routine will sometimes return strings with `e' notation, so is unsuitable for CSS
  * lengths (which don't allow scientific `e' notation).
  */
-gchar const *
-sp_svg_length_write_with_units(SPSVGLength *length)
+std::string
+sp_svg_length_write_with_units(SPSVGLength const &length)
 {
     Inkscape::SVGOStringStream os;
-    if (length->unit == SP_SVG_UNIT_PERCENT)
-        os << 100*length->value << sp_svg_length_get_css_units(length->unit);
-    else
-        os << length->value << sp_svg_length_get_css_units(length->unit);
-    return g_strdup(os.str().c_str());
+    if (length.unit == SP_SVG_UNIT_PERCENT) {
+        os << 100*length.value << sp_svg_length_get_css_units(length.unit);
+    } else {
+        os << length.value << sp_svg_length_get_css_units(length.unit);
+    }
+    return os.str();
 }
 
 
