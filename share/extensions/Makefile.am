@@ -41,7 +41,7 @@ extensions = \
 	whirl.py \
 	addnodes.py \
 	summersnight.py \
-	ps2dxf.py
+	ps2dxf.sh
 
 otherstuff =
 
