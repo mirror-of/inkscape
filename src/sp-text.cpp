@@ -341,7 +341,7 @@ sp_text_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
     // deprecated attribute, but keep it around for backwards compatibility
     if (text->style->line_height.set && !text->style->line_height.inherit && !text->style->line_height.normal && text->style->line_height.unit == SP_CSS_UNIT_PERCENT) {
-	    Inkscape::SVGOStringStream os;
+        Inkscape::SVGOStringStream os;
         os << (text->style->line_height.value * 100.0) << "%";
         SP_OBJECT_REPR(text)->setAttribute("sodipodi:linespacing", os.str().c_str());
     }
@@ -439,7 +439,7 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 // (e.g. it broke stroke width on copy/pasting of style from horizontally stretched to vertically
 // stretched shape). Using fontsize_expansion only here broke setting the style via font
 // dialog. This needs to be investigated further.
-    double const ex = NR::expansion(xform); 
+    double const ex = NR::expansion(xform);
     if (ex == 0) {
         return xform;
     }
@@ -657,12 +657,12 @@ bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value)
     GList *list_base = sp_svg_length_list_read(value);     // FIXME: sp_svg_length_list_read() amalgamates repeated separators. This prevents unset values.
     // simple GList to std::vector<> converter:
     attr_vector->clear();
-	attr_vector->reserve(g_list_length(list_base));
+    attr_vector->reserve(g_list_length(list_base));
     for (GList *list = list_base ; list ; list = list->next) {
         attr_vector->push_back(*reinterpret_cast<SPSVGLength*>(list->data));
         g_free(list->data);
     }
-	g_list_free(list_base);
+    g_list_free(list_base);
     return true;
 }
 
@@ -677,18 +677,18 @@ void TextTagAttributes::writeTo(Inkscape::XML::Node *node) const
 
 void TextTagAttributes::writeSingleAttribute(Inkscape::XML::Node *node, gchar const *key, std::vector<SPSVGLength> const &attr_vector)
 {
-	if (attr_vector.empty())
+    if (attr_vector.empty())
         node->setAttribute(key, NULL);
     else {
         Glib::ustring string;
-	    gchar single_value_string[32];
-	    
+        gchar single_value_string[32];
+
         // FIXME: this has no concept of unset values because sp_svg_length_list_read() can't read them back in
-	    for (std::vector<SPSVGLength>::const_iterator it = attr_vector.begin() ; it != attr_vector.end() ; it++) {
-		    g_ascii_formatd(single_value_string, sizeof (single_value_string), "%.8g", it->computed);
+        for (std::vector<SPSVGLength>::const_iterator it = attr_vector.begin() ; it != attr_vector.end() ; it++) {
+            g_ascii_formatd(single_value_string, sizeof (single_value_string), "%.8g", it->computed);
             if (!string.empty()) string += ' ';
             string += single_value_string;
-	    }
+        }
         node->setAttribute(key, string.c_str());
     }
 }
@@ -853,8 +853,8 @@ void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, doub
     zero_length = 0.0;
 
     /* edge testcases for this code:
-     1) moving text elements whose position is done entirely with transform="...", no x,y attributes
-     2) unflowing multi-line flowtext then moving it (it has x but not y)
+       1) moving text elements whose position is done entirely with transform="...", no x,y attributes
+       2) unflowing multi-line flowtext then moving it (it has x but not y)
     */
     unsigned points_count = std::max(attributes.x.size(), attributes.y.size());
     if (extend_zero_length && points_count < 1)
@@ -910,6 +910,7 @@ void TextTagAttributes::addToRotate(unsigned index, double delta)
     attributes.rotate[index] = mod360(attributes.rotate[index].computed + delta);
 }
 
+
 /*
   Local Variables:
   mode:c++
@@ -919,4 +920,4 @@ void TextTagAttributes::addToRotate(unsigned index, double delta)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
