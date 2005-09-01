@@ -36,7 +36,7 @@ class ConnRef;
 
 typedef std::list<ConnRef *> ConnRefList;
 
-    
+
 class ConnRef
 {
     public:
@@ -45,8 +45,7 @@ class ConnRef
         ~ConnRef();
         
         PolyLine& route(void);
-        bool& needs_reroute(void);
-        void needs_reroute(const bool value);
+        bool needsReroute(void);
         void moveRoute(const int& diff_x, const int& diff_y);
         void freeRoute(void);
         void calcRouteDist(void);
@@ -57,8 +56,11 @@ class ConnRef
         VertInf *src(void);
         VertInf *dst(void);
         void removeFromGraph(void);
-        void markAsFalsePath(void);
         bool isInitialised(void);
+        void setCallback(void (*cb)(void *), void *ptr);
+        void ConnRef::handleInvalid(void);
+        int generatePath(Point p0, Point p1);
+        void makePathInvalid(void);
         
         friend void markConnectors(ShapeRef *shape);
 
@@ -73,12 +75,14 @@ class ConnRef
         VertInf *_srcVert;
         VertInf *_dstVert;
         bool _initialised;
+        void (*_callback)(void *);
+        void *_connector;
 };
 
 
 extern ConnRefList connRefs;
 
-extern int ObstaclePath(Point p0, Point p1, ConnRef *lineRef);
+extern void callbackAllInvalidConnectors(void);
 
 }
 

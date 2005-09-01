@@ -319,6 +319,9 @@ sp_path_update(SPObject *object, SPCtx *ctx, guint flags)
     if (((SPObjectClass *) parent_class)->update) {
         ((SPObjectClass *) parent_class)->update(object, ctx, flags);
     }
+
+    SPPath *path = SP_PATH(object);
+    path->connEndPair.update();
 }
 
 

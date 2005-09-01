@@ -734,6 +734,12 @@ void markConnectors(ShapeRef *shape)
     {
         ConnRef *conn = (*it);
 
+        if (conn->_route.pn == 0)
+        {
+            // Ignore uninitialised connectors.
+            continue;
+        }
+
         Point start = conn->_route.ps[0];
         Point end = conn->_route.ps[conn->_route.pn - 1];
 

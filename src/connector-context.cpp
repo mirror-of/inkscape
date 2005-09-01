@@ -9,14 +9,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  *
  * TODO:
- *  o  Fix endpoint position error for connected objects.
- *  o  Show rerouted paths as connectors are being created.
- *  o  Alert and reroute connectors when a shape is placed on their path.
- *     Code is there, just requires the hooks.
+ *  o  Show auto-routed paths as connectors are being created.
  *  o  Have shapes avoid coonvex hulls of objects, rather than their
  *     bounding box.  Possibly implement the unfinished ConvexHull
  *     class in libnr.
  *  o  Draw connectors to shape edges rather than bounding box.
+ *  o  Fix minor endpoint position error for connected objects.
  *  o  Show a visual indicator for objects with the 'avoid' property set.
  *  o  Create an interface for setting markers (arrow heads).
  *  o  Better distinguish between paths and connectors to prevent problems
@@ -630,7 +628,9 @@ connector_handle_motion_notify(SPConnectorContext *const cc, GdkEventMotion cons
                 sp_curve_stretch_endpoints(curve, o * d2i, p * d2i);
             }
             sp_conn_adjust_path(path);
-            path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+            // TODO: Is this needed if there is no autorouting?
+            //path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
            
             // Copy this to the temporary visible path
             cc->red_curve = sp_curve_copy(SP_SHAPE(path)->curve);
@@ -695,15 +695,6 @@ connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton con
                 // Test whether we clicked on a connection point
                 gchar *shape_label = conn_pt_handle_test(cc, p);
 
-                // We can currently grab the endpoints of a normal path.
-                // This reroutes it, turning it into a connector.
-                // TODO: We probably want better separation between 
-                //       paths and connectors.  Maybe only allow rerouting
-                //       of connectors but allow path conversion into
-                //       connectors.
-                sp_object_setAttribute(cc->clickeditem,
-                        "inkscape:connector-type", "polyline", false);
-                
                 if (shape_label) {
                     if (cc->clickedhandle == cc->endpt_handle[0]) {
                         sp_object_setAttribute(cc->clickeditem,
@@ -1220,10 +1211,13 @@ static bool cc_item_is_shape(SPItem *item)
 
 static bool cc_item_is_connector(SPItem *item)
 {
-    // TODO: Currently any open path is a connector.  Probably we'll
-    //       want to change this to just be connectors.  This controls
-    //       which objects have endpoint handles shown for them.
-    return !cc_item_is_shape(item);
+    if (SP_IS_PATH(item)) {
+        if (SP_PATH(item)->connEndPair.isAutoRoutingConn()) {
+            g_assert( !(SP_SHAPE(item)->curve->closed) );
+            return true;
+        }
+    }
+    return false;
 }
 
     

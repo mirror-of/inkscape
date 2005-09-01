@@ -14,6 +14,10 @@
 #include <glib/gtypes.h>
 
 #include "forward.h"
+#include "libnr/nr-point.h"
+#include <sigc++/connection.h>
+#include <sigc++/functors/slot.h>
+#include <sigc++/signal.h>
 #include "libavoid/connector.h"
 
 
@@ -33,7 +37,20 @@ public:
     void setAttr(unsigned const key, gchar const *const value);
     void writeRepr(Inkscape::XML::Node *const repr) const;
     void getAttachedItems(SPItem *[2]) const;
+    void getEndpoints(NR::Point endPts[]) const;
     void reroutePath(void);
+    void makePathInvalid(void);
+    void update(void);
+    bool isAutoRoutingConn(void);
+    void rerouteFromManipulation(void);
+    void reroute(void);
+    sigc::connection connectInvalidPath(sigc::slot<void, SPPath *> slot);
+
+    // A signal emited by a call back from libavoid.  Used to let 
+    // connectors know when they need to reroute themselves.
+    sigc::signal<void, SPPath *> _invalid_path_signal;
+    // A sigc connection to listen for connector path invalidation.
+    sigc::connection _invalid_path_connection;
 
 private:
     SPConnEnd *_connEnd[2];

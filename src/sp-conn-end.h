@@ -32,6 +32,7 @@ private:
 
 void sp_conn_end_href_changed(SPObject *old_ref, SPObject *ref,
                               SPConnEnd *connEnd, SPPath *path, unsigned const handle_ix);
+void sp_conn_adjust_invalid_path(SPPath *const path);
 void sp_conn_adjust_path(SPPath *const path);
 void sp_conn_end_detach(SPObject *const owner, unsigned const handle_ix);
 

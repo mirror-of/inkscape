@@ -152,9 +152,31 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
     path->updateRepr();
 }
 
+// TODO: This triggering of makeInvalidPath could be cleaned up to be
+//       another option passed to move_compensate.
+static void
+sp_conn_end_shape_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
+                            SPPath *const path)
+{
+    if (path->connEndPair.isAutoRoutingConn()) {
+        path->connEndPair.makePathInvalid();
+    }
+    sp_conn_end_move_compensate(mp, moved_item, path);
+}
+
+
+void
+sp_conn_adjust_invalid_path(SPPath *const path)
+{
+    sp_conn_end_move_compensate(NULL, NULL, path);
+}
+
 void
 sp_conn_adjust_path(SPPath *const path)
 {
+    if (path->connEndPair.isAutoRoutingConn()) {
+        path->connEndPair.makePathInvalid();
+    }
     sp_conn_end_move_compensate(NULL, NULL, path);
 }
 

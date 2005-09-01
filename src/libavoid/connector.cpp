@@ -36,12 +36,14 @@ ConnRefList connRefs;
 ConnRef::ConnRef(const uint id)
     : _id(id)
     , _needs_reroute_flag(false)
-    , _false_path(false)
+    , _false_path(true)
     , _active(false)
     , _route_dist(0)
     , _srcVert(NULL)
     , _dstVert(NULL)
     , _initialised(false)
+    , _callback(NULL)
+    , _connector(NULL)
 {
     // TODO: Store endpoints and details.
     _route.pn = 0;
@@ -52,11 +54,14 @@ ConnRef::ConnRef(const uint id)
 ConnRef::ConnRef(const uint id, const Point& src, const Point& dst)
     : _id(id)
     , _needs_reroute_flag(false)
+    , _false_path(true)
     , _active(false)
     , _route_dist(0)
     , _srcVert(NULL)
     , _dstVert(NULL)
     , _initialised(false)
+    , _callback(NULL)
+    , _connector(NULL)
 {
     _route.pn = 0;
     _route.ps = NULL;
@@ -190,24 +195,9 @@ void ConnRef::calcRouteDist(void)
 }
 
 
-bool& ConnRef::needs_reroute(void)
+bool ConnRef::needsReroute(void)
 {
-    return _needs_reroute_flag;
-}
-
-
-void ConnRef::needs_reroute(const bool value)
-{
-    if (_false_path)
-    {   
-        // Override cancelling the needs_reroute flag
-        _needs_reroute_flag = true;
-        _false_path = false;
-    }
-    else
-    {
-        _needs_reroute_flag = value;
-    }
+    return (_false_path || _needs_reroute_flag);
 }
 
 
@@ -280,34 +270,59 @@ void ConnRef::removeFromGraph(void)
     }
 }
 
-void ConnRef::markAsFalsePath(void)
+
+void ConnRef::setCallback(void (*cb)(void *), void *ptr)
 {
-    _false_path = true;
+    _callback = cb;
+    _connector = ptr;
 }
 
-//============================================================================
 
-int ObstaclePath(Point p0, Point p1, ConnRef *lineRef)
+void ConnRef::handleInvalid(void)
 {
-    VertInf *src = lineRef->src();
-    VertInf *tar = lineRef->dst();
+    if (_false_path || _needs_reroute_flag) {
+        if (_callback) {
+            _callback(_connector);
+        }
+    }
+}
+
+
+void ConnRef::makePathInvalid(void)
+{
+    _needs_reroute_flag = true;
+}
+
+
+int ConnRef::generatePath(Point p0, Point p1)
+{
+    if (!_false_path && !_needs_reroute_flag) {
+        // This connector is up to date.
+        return (int) false;
+    }
+
+    _false_path = false;
+    _needs_reroute_flag = false;
+    
+    VertInf *src = _srcVert;
+    VertInf *tar = _dstVert;
    
     if (!IncludeEndpoints)
     {
-        lineRef->lateSetup(p0, p1);
+        lateSetup(p0, p1);
         
         // Update as they have just been set by lateSetup.
-        src = lineRef->src();
-        tar = lineRef->dst();
+        src = _srcVert;
+        tar = _dstVert;
    
         bool knownNew = true;
         vertexVisibility(src, tar, knownNew);
         vertexVisibility(tar, src, knownNew);
     }
 
-    bool *flag = &(lineRef->needs_reroute());
+    bool *flag = &(_needs_reroute_flag);
     
-    makePath(lineRef, flag);
+    makePath(this, flag);
     
     bool result = true;
     
@@ -349,7 +364,7 @@ int ObstaclePath(Point p0, Point p1, ConnRef *lineRef)
         }
         else
         {
-            lineRef->markAsFalsePath();
+            _false_path = true;
         }
         path[j--] = i->point;
     }
@@ -358,11 +373,25 @@ int ObstaclePath(Point p0, Point p1, ConnRef *lineRef)
 
     // Would clear visibility for endpoints here if required.
 
-    PolyLine& output_route = lineRef->route();
+    PolyLine& output_route = route();
     output_route.pn = pathlen;
     output_route.ps = path;
    
     return (int) result;
+}
+
+
+//============================================================================
+
+
+    // It's intended this function is called after shape movement has 
+    // happened to alert connectors that they need to be rerouted.
+void callbackAllInvalidConnectors(void)
+{
+    ConnRefList::iterator fin = connRefs.end();
+    for (ConnRefList::iterator i = connRefs.begin(); i != fin; ++i) {
+        (*i)->handleInvalid();
+    }
 }
 
 

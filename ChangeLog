@@ -1,5 +1,20 @@
 2005-09-01  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/sp-conn-end.cpp, src/sp-conn-end.h, src/sp-conn-end-pair.cpp,
+	  src/sp-conn-end-pair.h, src/sp-path.cpp, src/libavoid/graph.cpp,
+	  src/libavoid/incremental.cpp:
+
+	Connectors now automagically reroute as a result of any 'avoided'
+	object being placed on their path.  They also update to better
+	paths when blocking shapes are removed.
+	 
+	* src/connector-context.cpp: Update TODO list.  Only show endpoints
+	  and allow manipulation of paths marked as connectors.
+
+	* src/libavoid/connector.cpp, src/libavoid/connector.h: Connectors
+	  with invalid paths cana now notify other code via a callback,
+	  rather than just setting a boolean flag.
+
 	* src/conn-avoid-ref.cpp: Fix an obscure crash bug in the connector
 	  routing code where we were still using a freed data structure.
 

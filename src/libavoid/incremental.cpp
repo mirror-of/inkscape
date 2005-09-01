@@ -51,6 +51,7 @@ void addShape(ShapeRef *shape)
     {
         shapeVis(shape);
     }
+    callbackAllInvalidConnectors();
 }
 
 
@@ -80,6 +81,7 @@ void delShape(ShapeRef *shape)
         // check all edges not in graph
         checkAllMissingEdges();
     }
+    callbackAllInvalidConnectors();
 }
 
 
@@ -131,6 +133,7 @@ ShapeRef *moveShape(ShapeRef *oldShape, Polygn *newPoly)
     {
         shapeVis(newShape);
     }
+    callbackAllInvalidConnectors();
 
     return newShape;
 }

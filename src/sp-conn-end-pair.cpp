@@ -27,7 +27,8 @@
 
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)
-    : _path(owner)
+    : _invalid_path_connection()
+    , _path(owner)
     , _connRef(NULL)
     , _connType(SP_CONNECTOR_NOAVOID)
 {
@@ -38,6 +39,8 @@ SPConnEndPair::SPConnEndPair(SPPath *const owner)
             .connect(sigc::bind(sigc::ptr_fun(sp_conn_end_href_changed),
                                 this->_connEnd[handle_ix], owner, handle_ix));
     }
+    
+    new (&_invalid_path_signal) sigc::signal<void, SPConnEndPair *>();
 }
 
 SPConnEndPair::~SPConnEndPair()
@@ -51,6 +54,9 @@ SPConnEndPair::~SPConnEndPair()
         delete _connRef;
         _connRef = NULL;
     }
+    
+    _invalid_path_connection.disconnect();
+    _invalid_path_signal.~signal();
 }
 
 void
@@ -83,6 +89,8 @@ SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
             
             GQuark itemID = g_quark_from_string(SP_OBJECT(_path)->id);
             _connRef = new Avoid::ConnRef(itemID);
+            _invalid_path_connection = connectInvalidPath(
+                    sigc::ptr_fun(&sp_conn_adjust_invalid_path));
         }
         else {
             _connType = SP_CONNECTOR_NOAVOID;
@@ -91,6 +99,7 @@ SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
                 _connRef->removeFromGraph();
                 delete _connRef;
                 _connRef = NULL;
+                _invalid_path_connection.disconnect();
             }
         }
         return;
@@ -124,9 +133,103 @@ SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
 }
 
 void
+SPConnEndPair::getEndpoints(NR::Point endPts[]) const {
+    SPCurve *curve = _path->curve;
+    SPItem *h2attItem[2];
+    getAttachedItems(h2attItem);
+    
+    for (unsigned h = 0; h < 2; ++h) {
+        if ( h2attItem[h] ) {
+            NRRect bboxrect;
+            sp_item_invoke_bbox(h2attItem[h], &bboxrect, NR::identity(), true);
+            NR::Rect bbox(bboxrect);
+            endPts[h] = bbox.midpoint();
+        }
+        else 
+        {
+            if (h == 0) {
+                endPts[h] = sp_curve_first_point(curve);
+            }
+            else {
+                endPts[h] = sp_curve_last_point(curve);
+            }
+        }
+    }
+}
+
+sigc::connection
+SPConnEndPair::connectInvalidPath(sigc::slot<void, SPPath *> slot)
+{
+    return _invalid_path_signal.connect(slot);
+}
+
+static void emitPathInvalidationNotification(void *ptr)
+{
+    // We emit a signal here rather than just calling the reroute function
+    // since this allows all the movement action computation to happen,
+    // then all connectors (that require it) will be rerouted.  Otherwise,
+    // one connector could get rerouted several times as a result of
+    // dragging a couple of shapes.
+   
+    SPPath *path = SP_PATH(ptr);
+    path->connEndPair._invalid_path_signal.emit(path);
+}
+
+void
+SPConnEndPair::rerouteFromManipulation(void)
+{
+    _connRef->makePathInvalid();
+    sp_conn_adjust_path(_path);
+}
+
+void
+SPConnEndPair::reroute(void)
+{
+    sp_conn_adjust_path(_path);
+}
+
+// Called from sp_path_update to initialise the endpoints.
+void
+SPConnEndPair::update(void)
+{
+    if (_connType != SP_CONNECTOR_NOAVOID) {
+        SPItem *h2attItem[2];
+        getAttachedItems(h2attItem);
+
+        NR::Point endPt[2];
+        getEndpoints(endPt);
+
+        Avoid::Point src = { endPt[0][NR::X], endPt[0][NR::Y] };
+        Avoid::Point dst = { endPt[1][NR::X], endPt[1][NR::Y] };
+
+        g_assert(_connRef != NULL);
+        if (!(_connRef->isInitialised())) {
+            _connRef->lateSetup(src, dst);
+            _connRef->setCallback(&emitPathInvalidationNotification, _path);
+        }
+    }
+}
+    
+
+bool
+SPConnEndPair::isAutoRoutingConn(void)
+{
+    if (_connType != SP_CONNECTOR_NOAVOID) {
+        return true;
+    }
+    return false;
+}
+    
+void
+SPConnEndPair::makePathInvalid(void)
+{
+    _connRef->makePathInvalid();
+}
+
+void
 SPConnEndPair::reroutePath(void)
 {
-    if (_connType == SP_CONNECTOR_NOAVOID) {
+    if (!isAutoRoutingConn()) {
         // Do nothing
         return;
     }
@@ -136,35 +239,15 @@ SPConnEndPair::reroutePath(void)
     SPCurve *curve = _path->curve;
 
     NR::Point endPt[2];
-    for (unsigned h = 0; h < 2; ++h) {
-        if ( h2attItem[h] ) {
-            NRRect bboxrect;
-            sp_item_invoke_bbox(h2attItem[h], &bboxrect, NR::identity(), true);
-            NR::Rect bbox(bboxrect);
-            endPt[h] = bbox.midpoint();
-        }
-        else 
-        {
-            if (h == 0) {
-                endPt[h] = sp_curve_first_point(curve);
-            }
-            else {
-                endPt[h] = sp_curve_last_point(curve);
-            }
-        }
-    }
+    getEndpoints(endPt);
 
     Avoid::Point src = { endPt[0][NR::X], endPt[0][NR::Y] };
     Avoid::Point dst = { endPt[1][NR::X], endPt[1][NR::Y] };
     
-    if (!(_connRef->isInitialised())) {
-        _connRef->lateSetup(src, dst);
-    }
-    
     _connRef->updateEndPoint(Avoid::VertID::src, src);
     _connRef->updateEndPoint(Avoid::VertID::tar, dst);
 
-    ObstaclePath(src, dst, _connRef);
+    _connRef->generatePath(src, dst);
 
     Avoid::PolyLine route = _connRef->route();
     _connRef->calcRouteDist();
@@ -177,7 +260,6 @@ SPConnEndPair::reroutePath(void)
         sp_curve_lineto(curve, p);
     }
 }
-
 
 /*
   Local Variables:
