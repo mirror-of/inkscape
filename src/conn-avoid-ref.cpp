@@ -135,7 +135,8 @@ static void avoid_item_move(NR::Matrix const *mp, SPItem *moved_item)
 
     Avoid::Polygn poly = avoid_item_poly(moved_item);
     if (poly.pn > 0) {
-        shapeRef = Avoid::moveShape(shapeRef, &poly);
+        // moveShape actually destroys the old shapeRef and returns a new one.
+        moved_item->avoidRef->shapeRef = Avoid::moveShape(shapeRef, &poly);
         Avoid::freePoly(poly);
     }
 }

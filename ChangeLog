@@ -1,3 +1,8 @@
+2005-09-01  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/conn-avoid-ref.cpp: Fix an obscure crash bug in the connector
+	  routing code where we were still using a freed data structure.
+
 2005-08-31  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/conn-avoid-ref.cpp, src/conn-avoid-ref.h: Use the correct
