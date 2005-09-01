@@ -15,9 +15,20 @@ AM_CONFIG_HEADER(config.h)
 
 AC_PROG_INTLTOOL(0.22)
 
-dnl These next two lines are needed only while libcroco is in our source tree.
+dnl These next few lines are needed only while libcroco is in our source tree.
 AC_PROG_CC
 AM_PROG_CC_C_O
+if test "$GCC" = "yes"; then
+  # Enable some warnings from gcc.
+
+  # -Wno-pointer-sign is probably new in gcc 4.0; certainly it isn't accepted
+  # by gcc 2.95.
+  ink_svd_CFLAGS="$CFLAGS"
+  CFLAGS="-Wno-pointer-sign $CFLAGS"
+  AC_COMPILE_IFELSE([int dummy;
+], , CFLAGS="$ink_svd_CFLAGS",)
+  CFLAGS="-Wall -W $CFLAGS"
+fi
 
 AC_LANG(C++)
 AC_ISC_POSIX
@@ -571,14 +582,12 @@ fi
 dnl ******************************
 dnl   Compilation warnings
 dnl ******************************
-if test "$GCC" = "yes"; then
+if test "$GXX" = "yes"; then
   # Enable some warnings from g++.
 
   # Rationale: a number of bugs in inkscape have been fixed by enabling g++
   # warnings and addressing the produced warnings.  Usually the committing
   # developer is the best person to address the warnings.
-
-  CFLAGS="-Wall -W $CFLAGS"
 
   ink_svd_CXXFLAGS="$CXXFLAGS"
   CXXFLAGS="-Wno-unused-parameter $CXXFLAGS"
@@ -790,6 +799,7 @@ Configuration:
         Compiler:                 ${CXX}
         CPPFLAGS:                 ${CPPFLAGS}
         CXXFLAGS:                 ${CXXFLAGS}
+        CFLAGS:                   ${CFLAGS}
         LDFLAGS:                  ${LDFLAGS}
 
         Use Xft font database:    ${xft_ok}
