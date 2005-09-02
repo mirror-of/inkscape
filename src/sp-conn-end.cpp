@@ -59,6 +59,8 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
     SPItem *h2attItem[2];
     path->connEndPair.getAttachedItems(h2attItem);
     if ( !h2attItem[0] && !h2attItem[1] ) {
+        path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        path->updateRepr();
         return;
     }
 

@@ -629,9 +629,6 @@ connector_handle_motion_notify(SPConnectorContext *const cc, GdkEventMotion cons
             }
             sp_conn_adjust_path(path);
 
-            // TODO: Is this needed if there is no autorouting?
-            //path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-           
             // Copy this to the temporary visible path
             cc->red_curve = sp_curve_copy(SP_SHAPE(path)->curve);
             sp_curve_transform(cc->red_curve, i2d);
