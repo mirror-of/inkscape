@@ -390,8 +390,20 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
         // the not-so-simple case where we're at a line break or other control char; add to the next child/sibling SPString
         if (cursor_at_start) {
             source_obj = item;
-            if (source_obj->hasChildren())
+            if (source_obj->hasChildren()) {
                 source_obj = source_obj->firstChild();
+                if (SP_IS_FLOWTEXT(item)) {
+                    while (SP_IS_FLOWREGION(source_obj) || SP_IS_FLOWREGIONEXCLUDE(source_obj))
+                        source_obj = SP_OBJECT_NEXT(source_obj);
+                    if (source_obj == NULL)
+                        source_obj = item;
+                }
+            }
+            if (source_obj == item && SP_IS_FLOWTEXT(item)) {
+                Inkscape::XML::Node *para = sp_repr_new("svg:flowPara");
+                SP_OBJECT_REPR(item)->appendChild(para);
+                source_obj = item->lastChild();
+            }
         } else
             source_obj = SP_OBJECT_NEXT(source_obj);
 
