@@ -12,7 +12,7 @@
 	  and allow manipulation of paths marked as connectors.
 
 	* src/libavoid/connector.cpp, src/libavoid/connector.h: Connectors
-	  with invalid paths cana now notify other code via a callback,
+	  with invalid paths can now notify other code via a callback,
 	  rather than just setting a boolean flag.
 
 	* src/conn-avoid-ref.cpp: Fix an obscure crash bug in the connector
@@ -66,7 +66,7 @@
 
 2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
-	* src/libavoid/timer.cpp: Remove some code assuming a fixes size for
+	* src/libavoid/timer.cpp: Remove some code assuming a fixed size for
 	  timer types.
 
 2005-08-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
@@ -219,7 +219,7 @@
 2005-08-20  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/menus-skeleton.h: correct the verb for "Select All In All Layers"
-	  since it was just showning a verb error in the menu.
+	  since it was just showing a verb error in the menu.
 
 2005-08-19  Kees Cook  <kees@outflux.net>
 
@@ -826,7 +826,7 @@
 	* src/extension/implementation/script.cpp,
 	src/extension/implementation/script.h:
 
-	Adding support for information comming back on STDERR from scripts.  This
+	Adding support for information coming back on STDERR from scripts.  This
 	fixes bug #1220959 and RFE #1178941
 
 2005-07-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
@@ -1064,7 +1064,7 @@
 
 	* src/ui/dialog/memory.cpp, src/ui/dialog/memory.h:
 
-	  thousands separators and other nicities.  'apply' now forces a
+	  thousands separators and other niceties.  'apply' now forces a
 	  garbage collection and immediate update.
 
 2005-05-16  MenTaLguY  <mental@rydia.net>
@@ -1428,7 +1428,7 @@
 	src/extension/parameter.cpp, src/extension/parameter.h,
 	src/extension/implementation/script.cpp:
 
-	This is support for having command line arguements from the parameters,
+	This is support for having command line arguments from the parameters,
 	mostly this is a quick hack to get Aaron working, I'll clean it up
 	shortly, I promise.  But, it does seem to be working right now.  More
 	polish shortly.
@@ -1576,7 +1576,7 @@
 
 2005-03-24  MenTaLguY  <mental@rydia.net>
 
-    * src/sp-item.cpp: fix relative transforms to accomodate viewbox
+    * src/sp-item.cpp: fix relative transforms to accommodate viewbox
 
 2005-03-24  Jon A. Cruz  <jon@joncruz.org>
 
@@ -4315,7 +4315,7 @@ src/ui/dialog/inkscape-preferences.h,
 
     Wow, alot of files changed.  The ones that changed the most are
     verb.cpp and verb.h, which are almost entirely different.  What happened
-    here is the the verbs were made object oriented.  So, as the verbs
+    here is the verbs were made object oriented.  So, as the verbs
     are built into everything, lots of files changed.  Now the code
     for the verbs is much cleaner, and I think a little bit faster.
     Also, it will be easier to extend the verbs for use in effects.
@@ -5411,7 +5411,7 @@ match
     * src/dialogs/export.cpp:
 
     Major revisions to do all kinds of fun stuff.  The major one being
-    that filenames and and dpi's can now be stored on selections.  This
+    that filenames and dpi's can now be stored on selections.  This
     makes it so that people working on a section of a document can export
     it consistently.
 
@@ -5819,7 +5819,7 @@ match
     src/extension/internal/ps.cpp, src/extension/internal/svg.cpp,
     src/extension/internal/win32.cpp:
 
-    Changing the the naming of the extensions to be more Java style naming to
+    Changing the naming of the extensions to be more Java style naming to
     allow for more extension in the future.
 
 2004-06-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
@@ -6265,7 +6265,7 @@ src/sp-pattern.h:
     * src/inkscape.cpp, src/main.cpp:
 
     Moving the initialization of the extensions into the Inkscape application
-    init.  I have mixed feelings on this.  One one hand, basically extension
+    init.  I have mixed feelings on this.  On one hand, basically extension
     init gets called directly after applicaiton init and extensions init has
     nothing to do with anything else in main.  On the other hand I'm not sure
     that it is directly related to the structure of the application itself.
@@ -7472,7 +7472,7 @@ buttons,
 
     * widgets/gradient-selector.cpp: Tooltip edits
 
-    * verbs.cpp verbs.cpp verbs.h interface.cpp...: Remove tool options
+    * verbs.cpp verbs.h interface.cpp...: Remove tool options
 
     * seltrans.cpp: Pivot marker made inverse
 
