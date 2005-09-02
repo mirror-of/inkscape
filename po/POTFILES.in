@@ -88,7 +88,6 @@ src/geom.cpp
 src/gradient-chemistry.cpp
 src/gradient-context.cpp
 src/gradient-drag.cpp
-src/gradient-toolbar.cpp
 src/help.cpp
 src/helper/action.cpp
 src/helper/gnome-utils.cpp
@@ -166,7 +165,6 @@ src/rubberband.cpp
 src/satisfied-guide-cns.cpp
 src/selcue.cpp
 src/select-context.cpp
-src/select-toolbar.cpp
 src/selection-chemistry.cpp
 src/selection-describer.cpp
 src/selection.cpp
@@ -232,7 +230,6 @@ src/svg/svg-length.cpp
 src/svg/svg-path.cpp
 src/text-chemistry.cpp
 src/text-context.cpp
-src/toolbox.cpp
 src/tools-switch.cpp
 src/trace/potrace/inkscape-potrace.cpp
 src/trace/trace.cpp
