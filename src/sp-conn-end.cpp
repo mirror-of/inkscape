@@ -296,7 +296,7 @@ sp_conn_end_href_changed(SPObject *old_ref, SPObject *ref,
                 = SP_OBJECT(refobj)->connectDelete(sigc::bind(sigc::ptr_fun(&sp_conn_end_deleted),
                                                               SP_OBJECT(path), handle_ix));
             connEnd._transformed_connection
-                = SP_ITEM(refobj)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_conn_end_move_compensate),
+                = SP_ITEM(refobj)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_conn_end_shape_move_compensate),
                                                                  path));
         }
     }
