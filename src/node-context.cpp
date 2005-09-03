@@ -412,51 +412,49 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                 if (!nc->drag) {
                     // find out clicked item, disregarding groups, honoring Alt
                     SPItem *item_ungrouped = sp_event_context_find_item (desktop, 
-                                           NR::Point(event->button.x, event->button.y),
-                                           (event->button.state & GDK_MOD1_MASK) && !(event->button.state & GDK_CONTROL_MASK), TRUE);
+                            NR::Point(event->button.x, event->button.y),
+                            (event->button.state & GDK_MOD1_MASK) && !(event->button.state & GDK_CONTROL_MASK), TRUE);
 
-                    if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_SHIFT_MASK) {
-                        selection->toggle(item_ungrouped);
-                    } else {
-                        //add a node if the clicked path is selected
-                        if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
-                            //Translate click point into proper coord system
-                            NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
-                            p *= sp_item_dt2i_affine(item_ungrouped, desktop);
-                            p *= sp_item_i2doc_affine(item_ungrouped);
+                    //add a node if the clicked path is selected
+                    if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
+                        //Translate click point into proper coord system
+                        NR::Point p = sp_desktop_w2d_xy_point(desktop, NR::Point(event->button.x, event->button.y));
+                        p *= sp_item_dt2i_affine(item_ungrouped, desktop);
+                        p *= sp_item_i2doc_affine(item_ungrouped);
 
-                            Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
-                            NR::Point nearest = get_point_on_Path(item_ungrouped, position.piece, position.t);
+                        Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
+                        NR::Point nearest = get_point_on_Path(item_ungrouped, position.piece, position.t);
 
-                            NR::Point delta = NR::Point(nearest[NR::X]-p[NR::X], nearest[NR::Y]-p[NR::Y]);
-                            delta = sp_desktop_d2w_xy_point(desktop, delta);                            
+                        NR::Point delta = NR::Point(nearest[NR::X]-p[NR::X], nearest[NR::Y]-p[NR::Y]);
+                        delta = sp_desktop_d2w_xy_point(desktop, delta);                            
 
-                            if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
-                                switch (event->type) {
-                                    case GDK_BUTTON_RELEASE:
-                                        if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
-                                            //add a node
-                                            sp_nodepath_add_node_near_point(item_ungrouped, p);
-                                        } else {
-                                            //select the segment
-                                            if (event->button.state & GDK_SHIFT_MASK) {
-                                                sp_nodepath_select_segment_near_point(item_ungrouped, p, true);
-                                            } else {
-                                                sp_nodepath_select_segment_near_point(item_ungrouped, p, false);
-                                            }
-                                        }
-                                        break; 
-                                    case GDK_2BUTTON_PRESS:
+                        if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
+                            switch (event->type) {
+                                case GDK_BUTTON_RELEASE:
+                                    if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
                                         //add a node
                                         sp_nodepath_add_node_near_point(item_ungrouped, p);
-                                        break;
-                                    default:
-                                        break;
-                                } 
-                            }
-                        } else {
-                            selection->set(item_ungrouped);
+                                    } else {
+                                        //select the segment
+                                        if (event->button.state & GDK_SHIFT_MASK) {
+                                            sp_nodepath_select_segment_near_point(item_ungrouped, p, true);
+                                        } else {
+                                            sp_nodepath_select_segment_near_point(item_ungrouped, p, false);
+                                        }
+                                    }
+                                    break; 
+                                case GDK_2BUTTON_PRESS:
+                                    //add a node
+                                    sp_nodepath_add_node_near_point(item_ungrouped, p);
+                                    break;
+                                default:
+                                    break;
+                            } 
                         }
+                    } else if (event->button.state & GDK_SHIFT_MASK) {
+                        selection->toggle(item_ungrouped);
+                    } else {
+                        selection->set(item_ungrouped);
                     }
 
                     ret = TRUE;

@@ -1235,9 +1235,13 @@ sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p, bool toggle)
 
     //find segment to segment
     Inkscape::NodePath::Node *e = sp_nodepath_get_node_by_index(position.piece);
-   
-    sp_nodepath_node_select(e, (gboolean) toggle, FALSE);
-    sp_nodepath_node_select(e->p.other, TRUE, FALSE);
+
+    gboolean force = FALSE;
+    if (!(e->selected && e->p.other->selected)) {
+        force = TRUE;
+    } 
+    sp_nodepath_node_select(e, (gboolean) toggle, force);
+    sp_nodepath_node_select(e->p.other, TRUE, force);
 
     sp_nodepath_ensure_ctrls(nodepath);
 
