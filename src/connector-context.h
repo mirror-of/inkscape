@@ -19,6 +19,7 @@
 #include <forward.h>
 #include <display/display-forward.h>
 #include <libnr/nr-point.h>
+#include "libavoid/connector.h"
 
 
 #define SP_TYPE_CONNECTOR_CONTEXT (sp_connector_context_get_type())
@@ -58,6 +59,7 @@ struct SPConnectorContext : public SPEventContext {
     
     // The new connector
     SPItem *newconn;
+    Avoid::ConnRef *newConnRef;
     
     // The active shape
     SPItem *active_shape;

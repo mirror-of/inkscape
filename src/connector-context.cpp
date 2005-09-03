@@ -9,7 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  *
  * TODO:
- *  o  Show auto-routed paths as connectors are being created.
  *  o  Have shapes avoid coonvex hulls of objects, rather than their
  *     bounding box.  Possibly implement the unfinished ConvexHull
  *     class in libnr.
@@ -20,6 +19,9 @@
  *  o  Better distinguish between paths and connectors to prevent problems
  *     in the node tool and paths accidently being turned into connectors
  *     in the connector tool.  Perhaps have a way to convert between.
+ *  o  Allow double clicking on connectors to swap to the connector context.
+ *  o  Only call libavoid's updateEndPoint as required.  Currently we do it
+ *     for both endpoints, even if only one is moving.
  *  o  Cleanup to remove unecessary borrowed DrawContext code.
  *  o  Allow user-placeable connection points.
  *  o  Deal sanely with connectors with both endpoints attached to the 
@@ -62,14 +64,13 @@
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
-
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-point-matrix-ops.h"
-
 #include "snap.h"
 #include "knot.h"
 #include "sp-conn-end.h"
 #include "conn-avoid-ref.h"
+#include "libavoid/vertices.h"
 
 #include "prefs-utils.h"  // for prefs_get_int_attribute_limited
 
@@ -190,6 +191,7 @@ sp_connector_context_init(SPConnectorContext *cc)
     cc->red_color = 0xff00007f;
     
     cc->newconn = NULL;
+    cc->newConnRef = NULL;
    
     cc->sel_changed_connection = sigc::connection();
     
@@ -242,6 +244,7 @@ sp_connector_context_dispose(GObject *object)
         g_free(cc->eid);
         cc->eid = NULL;
     }
+    g_assert( cc->newConnRef == NULL );
 
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
@@ -681,6 +684,10 @@ connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton con
                 }
                 cc_set_active_conn(cc, cc->newconn);
                 cc->state = SP_CONNECTOR_CONTEXT_IDLE;
+                
+                cc->newConnRef->removeFromGraph();
+                delete cc->newConnRef;
+                cc->newConnRef = NULL;
                 break;
             }
             case SP_CONNECTOR_CONTEXT_REROUTING:
@@ -782,15 +789,34 @@ static void
 spcc_connector_set_subsequent_point(SPConnectorContext *const cc, NR::Point const p)
 {
     g_assert( cc->npoints != 0 );
-    /* todo: Check callers to see whether 2 <= npoints is guaranteed. */
 
-    cc->p[2] = p;
-    cc->p[3] = p;
-    cc->p[4] = p;
-    cc->npoints = 5;
+    SPDesktop *dt = cc->desktop;
+    NR::Point o = sp_desktop_d2doc_xy_point(dt, cc->p[0]);
+    NR::Point d = sp_desktop_d2doc_xy_point(dt, p);
+    Avoid::Point src = { o[NR::X], o[NR::Y] };
+    Avoid::Point dst = { d[NR::X], d[NR::Y] };
+
+    if (!cc->newConnRef) {
+        cc->newConnRef = new Avoid::ConnRef(0, src, dst);
+        cc->newConnRef->updateEndPoint(Avoid::VertID::src, src);
+    }
+    cc->newConnRef->updateEndPoint(Avoid::VertID::tar, dst);
+
+    cc->newConnRef->makePathInvalid();
+    cc->newConnRef->generatePath(src, dst);
+
+    Avoid::PolyLine route = cc->newConnRef->route();
+    cc->newConnRef->calcRouteDist();
+
     sp_curve_reset(cc->red_curve);
-    sp_curve_moveto(cc->red_curve, cc->p[0]);
-    sp_curve_lineto(cc->red_curve, p);
+    NR::Point pt(route.ps[0].x, route.ps[0].y);
+    sp_curve_moveto(cc->red_curve, pt);
+
+    for (int i = 1; i < route.pn; ++i) {
+        NR::Point p(route.ps[i].x, route.ps[i].y);
+        sp_curve_lineto(cc->red_curve, p);
+    }
+    sp_curve_transform(cc->red_curve, dt->doc2dt);
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve);
 }
 

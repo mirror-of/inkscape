@@ -1,5 +1,8 @@
 2005-09-03  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/libavoid/connector.cpp, src/libavoid/connector.h: Autoroute
+	  connectors while they are being drawn in the connector context.
+
 	* src/sp-conn-end.cpp: Fix a bug where connectors attached to shapes
 	  were not always getting updated.  Their path was sometimes thought
 	  to be valid even when it was not.
