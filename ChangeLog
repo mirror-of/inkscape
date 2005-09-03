@@ -1,3 +1,10 @@
+2005-09-03  Aaron Spike <aaron@ekips.org>
+
+	* src/node-context.cpp, src/livarot.cpp: Fixing a problem where node
+	  adding and curve dragging operate on fills. A special thank you to
+	  Simon Budig of GIMP fame for working with me and giving very 
+	  thorough explainations of his curve dragging code.
+
 2005-09-03  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/libavoid/connector.cpp, src/libavoid/connector.h: Autoroute

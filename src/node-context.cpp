@@ -47,6 +47,7 @@
 
 //from splivarot.cpp
 Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
+NR::Point get_point_on_Path(SPItem * item, int piece, double t);
 
 static void sp_node_context_class_init(SPNodeContextClass *klass);
 static void sp_node_context_init(SPNodeContext *node_context);
@@ -424,23 +425,31 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                             p *= sp_item_dt2i_affine(item_ungrouped, desktop);
                             p *= sp_item_i2doc_affine(item_ungrouped);
 
-                            switch (event->type) {
-                                case GDK_BUTTON_RELEASE:
-                                    if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
+                            Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
+                            NR::Point nearest = get_point_on_Path(item_ungrouped, position.piece, position.t);
+
+                            NR::Point delta = NR::Point(nearest[NR::X]-p[NR::X], nearest[NR::Y]-p[NR::Y]);
+                            delta = sp_desktop_d2w_xy_point(desktop, delta);                            
+
+                            if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
+                                switch (event->type) {
+                                    case GDK_BUTTON_RELEASE:
+                                        if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
+                                            //add a node
+                                            sp_nodepath_add_node_near_point(item_ungrouped, p);
+                                        } else {
+                                            //select the segment
+                                            sp_nodepath_select_segment_near_point(item_ungrouped, p);
+                                        }
+                                        break; 
+                                    case GDK_2BUTTON_PRESS:
                                         //add a node
                                         sp_nodepath_add_node_near_point(item_ungrouped, p);
-                                    } else {
-                                        //select the segment
-                                        sp_nodepath_select_segment_near_point(item_ungrouped, p);
-                                    }
-                                    break; 
-                                case GDK_2BUTTON_PRESS:
-                                    //add a node
-                                    sp_nodepath_add_node_near_point(item_ungrouped, p);
-                                    break;
-                                default:
-                                    break;
-                            } 
+                                        break;
+                                    default:
+                                        break;
+                                } 
+                            }
                         } else {
                             selection->set(item_ungrouped);
                         }
@@ -471,19 +480,27 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                             p *= sp_item_dt2i_affine(item_ungrouped, desktop);
                             p *= sp_item_i2doc_affine(item_ungrouped);
 
-                            sp_nodepath_select_segment_near_point(item_ungrouped, p);
-
                             Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
+                            NR::Point nearest = get_point_on_Path(item_ungrouped, position.piece, position.t);
+
+                            NR::Point delta = NR::Point(nearest[NR::X]-p[NR::X], nearest[NR::Y]-p[NR::Y]);
+                            delta = sp_desktop_d2w_xy_point(desktop, delta);                            
 
                             //only dragging curves
                             // save drag origin
-                            nc->curvedrag[NR::X] = (gint) event->button.x;
-                            nc->curvedrag[NR::Y] = (gint) event->button.y;
-                            within_tolerance = true;
-                            nc->hit = true;
-                            nc->grab_t = position.t;
-                            nc->grab_node = sp_nodepath_get_node_by_index(position.piece);
-                            ret = TRUE;
+                            if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
+                                sp_nodepath_select_segment_near_point(item_ungrouped, p);
+
+                                nc->curvedrag[NR::X] = (gint) event->button.x;
+                                nc->curvedrag[NR::Y] = (gint) event->button.y;
+                                within_tolerance = true;
+                                nc->hit = true;
+                                nc->grab_t = position.t;
+                                nc->grab_node = sp_nodepath_get_node_by_index(position.piece);
+                                ret = TRUE;
+                            } else {
+                                break;
+                            }
                         } else {
                             break;
                         }
