@@ -415,7 +415,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                                            NR::Point(event->button.x, event->button.y),
                                            (event->button.state & GDK_MOD1_MASK) && !(event->button.state & GDK_CONTROL_MASK), TRUE);
 
-                    if (event->button.state & GDK_SHIFT_MASK) {
+                    if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_SHIFT_MASK) {
                         selection->toggle(item_ungrouped);
                     } else {
                         //add a node if the clicked path is selected
@@ -439,7 +439,11 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                                             sp_nodepath_add_node_near_point(item_ungrouped, p);
                                         } else {
                                             //select the segment
-                                            sp_nodepath_select_segment_near_point(item_ungrouped, p);
+                                            if (event->button.state & GDK_SHIFT_MASK) {
+                                                sp_nodepath_select_segment_near_point(item_ungrouped, p, true);
+                                            } else {
+                                                sp_nodepath_select_segment_near_point(item_ungrouped, p, false);
+                                            }
                                         }
                                         break; 
                                     case GDK_2BUTTON_PRESS:
@@ -461,7 +465,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
             }
             break;
         case GDK_BUTTON_PRESS:
-            if (event->button.button == 1) {
+            if (event->button.button == 1 && !(event->button.state & GDK_SHIFT_MASK)) {
                 // save drag origin
                 xp = (gint) event->button.x;
                 yp = (gint) event->button.y;
@@ -472,7 +476,6 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                     // find out clicked item, disregarding groups, honoring Alt
                     SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
 
-                        //add a node if the clicked path is selected
                         if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
 
                             //Translate click point into proper coord system
@@ -489,7 +492,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                             //only dragging curves
                             // save drag origin
                             if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
-                                sp_nodepath_select_segment_near_point(item_ungrouped, p);
+                                sp_nodepath_select_segment_near_point(item_ungrouped, p, false);
 
                                 nc->curvedrag[NR::X] = (gint) event->button.x;
                                 nc->curvedrag[NR::Y] = (gint) event->button.y;

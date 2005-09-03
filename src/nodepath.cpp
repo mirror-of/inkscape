@@ -1224,7 +1224,7 @@ sp_node_selected_add_node(void)
  * Select segment nearest to point
  */
 void
-sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p)
+sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p, bool toggle)
 {
     Inkscape::NodePath::Path *nodepath = sp_nodepath_current();
     if (!nodepath) {
@@ -1236,7 +1236,7 @@ sp_nodepath_select_segment_near_point(SPItem * item, NR::Point p)
     //find segment to segment
     Inkscape::NodePath::Node *e = sp_nodepath_get_node_by_index(position.piece);
    
-    sp_nodepath_node_select(e, FALSE, FALSE);
+    sp_nodepath_node_select(e, (gboolean) toggle, FALSE);
     sp_nodepath_node_select(e->p.other, TRUE, FALSE);
 
     sp_nodepath_ensure_ctrls(nodepath);
