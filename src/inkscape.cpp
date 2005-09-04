@@ -370,14 +370,14 @@ inkscape_unref (void)
 static void
 inkscape_activate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop)
 {
-    sp_desktop_set_active (desktop, TRUE);
+    desktop->set_active (true);
 }
 
 
 static void
 inkscape_deactivate_desktop_private (Inkscape::Application *inkscape, SPDesktop *desktop)
 {
-    sp_desktop_set_active (desktop, FALSE);
+    desktop->set_active (false);
 }
 
 
@@ -887,7 +887,6 @@ inkscape_add_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
-    g_return_if_fail (SP_IS_DESKTOP (desktop));
 
     g_assert (!g_slist_find (inkscape->desktops, desktop));
 
@@ -908,7 +907,6 @@ inkscape_remove_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
-    g_return_if_fail (SP_IS_DESKTOP (desktop));
 
     g_assert (g_slist_find (inkscape->desktops, desktop));
 
@@ -924,7 +922,8 @@ inkscape_remove_desktop (SPDesktop * desktop)
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new_desktop));
         } else {
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
-	    desktop->selection->clear();
+            if (desktop->selection)
+                desktop->selection->clear();
         }
     }
 
@@ -943,7 +942,6 @@ inkscape_activate_desktop (SPDesktop * desktop)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
-    g_return_if_fail (SP_IS_DESKTOP (desktop));
 
     if (DESKTOP_IS_ACTIVE (desktop)) {
         return;
@@ -974,7 +972,7 @@ inkscape_reactivate_desktop (SPDesktop * desktop)
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
 
-    if (SP_IS_DESKTOP (desktop) && DESKTOP_IS_ACTIVE (desktop))
+    if (DESKTOP_IS_ACTIVE (desktop))
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
 }
 
@@ -1069,7 +1067,7 @@ inkscape_prev_desktop ()
 void
 inkscape_switch_desktops_next ()
 {
-    GtkWindow *w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_next_desktop ()), "window");
+    GtkWindow *w = inkscape_next_desktop ()->window;
     gtk_window_present (w);
 }
 
@@ -1078,7 +1076,7 @@ inkscape_switch_desktops_next ()
 void
 inkscape_switch_desktops_prev ()
 {
-    GtkWindow *w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_prev_desktop ()), "window");
+    GtkWindow *w = inkscape_prev_desktop ()->window;
     gtk_window_present (w);
 }
 
@@ -1174,13 +1172,13 @@ inkscape_active_document (void)
 }
 
 bool inkscape_is_sole_desktop_for_document(SPDesktop const &desktop) {
-    SPDocument *document = SP_VIEW_DOCUMENT(&desktop);
+    SPDocument const* document = desktop.doc();
     if (!document) {
         return false;
     }
     for ( GSList *iter = inkscape->desktops ; iter ; iter = iter->next ) {
         SPDesktop *other_desktop=(SPDesktop *)iter->data;
-        SPDocument *other_document=SP_VIEW_DOCUMENT(other_desktop);
+        SPDocument *other_document=other_desktop->doc();
         if ( other_document == document && other_desktop != &desktop ) {
             return false;
         }
@@ -1298,7 +1296,7 @@ void
 inkscape_refresh_display (Inkscape::Application *inkscape)
 {
     for (GSList *l = inkscape->desktops; l != NULL; l = l->next) {
-        sp_view_request_redraw (SP_VIEW (l->data));
+        (static_cast<Inkscape::UI::View::View*>(l->data))->requestRedraw();
     }
 }
 
@@ -1310,6 +1308,8 @@ inkscape_refresh_display (Inkscape::Application *inkscape)
 void
 inkscape_exit (Inkscape::Application *inkscape)
 {
+    g_assert (INKSCAPE);
+        
     //emit shutdown signal so that dialogs could remember layout
     g_signal_emit (G_OBJECT (INKSCAPE), inkscape_signals[SHUTDOWN_SIGNAL], 0);
 
