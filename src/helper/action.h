@@ -25,7 +25,7 @@
 #include "libnr/nr-object.h"
 #include "forward.h"
 
-class Inkscape::UI::View::View; 
+//class Inkscape::UI::View::View; 
 
 namespace Inkscape {
 class Verb;
