@@ -684,10 +684,6 @@ connector_handle_button_release(SPConnectorContext *const cc, GdkEventButton con
                 }
                 cc_set_active_conn(cc, cc->newconn);
                 cc->state = SP_CONNECTOR_CONTEXT_IDLE;
-                
-                cc->newConnRef->removeFromGraph();
-                delete cc->newConnRef;
-                cc->newConnRef = NULL;
                 break;
             }
             case SP_CONNECTOR_CONTEXT_REROUTING:
@@ -949,6 +945,12 @@ spcc_connector_finish(SPConnectorContext *const cc)
     spcc_concat_colors_and_flush(cc);
 
     cc->npoints = 0;
+    
+    if (cc->newConnRef) {
+        cc->newConnRef->removeFromGraph();
+        delete cc->newConnRef;
+        cc->newConnRef = NULL;
+    }
     cc->state = SP_CONNECTOR_CONTEXT_IDLE;
 }
 
