@@ -1,4 +1,4 @@
-/*
+/** \file
  * Per-desktop selection container
  *
  * Authors:
