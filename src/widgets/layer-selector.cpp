@@ -167,7 +167,7 @@ namespace {
 
 /** Helper function - detaches desktop from selector 
  */
-gboolean detach(Inkscape::UI::View::View *view, LayerSelector *selector) {
+bool detach(LayerSelector *selector) {
     selector->setDesktop(NULL);
     return FALSE;
 }
@@ -185,13 +185,16 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
     }
 
     if (_desktop) {
+//        _desktop_shutdown_connection.disconnect();
         _layer_changed_connection.disconnect();
-        g_signal_handlers_disconnect_by_func(_desktop, (gpointer)&detach, this);
+//        g_signal_handlers_disconnect_by_func(_desktop, (gpointer)&detach, this);
     }
     _desktop = desktop;
     if (_desktop) {
-        // TODO we need a different signal for this, really..
-        g_signal_connect_after(_desktop, "shutdown", GCallback(detach), this);
+        // TODO we need a different signal for this, really..s
+//        _desktop_shutdown_connection = _desktop->connectShutdown(
+//          sigc::bind (sigc::ptr_fun (detach), this));
+//        g_signal_connect_after(_desktop, "shutdown", GCallback(detach), this);
 
         _layer_changed_connection = _desktop->connectCurrentLayerChanged(
             sigc::mem_fun(*this, &LayerSelector::_selectLayer)
