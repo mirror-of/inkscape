@@ -26,9 +26,7 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "sp-anchor.h"
-
-/* fixme: This is insane, and should be removed */
-#include "svg-view.h"
+#include "ui/view/view.h"
 
 static void sp_anchor_class_init(SPAnchorClass *ac);
 static void sp_anchor_init(SPAnchor *anchor);
@@ -201,20 +199,10 @@ static gint sp_anchor_event(SPItem *item, SPEvent *event)
             }
             break;
 	case SP_EVENT_MOUSEOVER:
-            /* fixme: */
-            if (SP_IS_SVG_VIEW(event->data)) {
-                SPSVGView *svgview = (SPSVGView *) event->data;
-                GdkCursor *cursor = gdk_cursor_new(GDK_HAND2);
-                gdk_window_set_cursor(GTK_WIDGET(SP_CANVAS_ITEM(svgview->drawing)->canvas)->window, cursor);
-                gdk_cursor_destroy(cursor);
-            }
+            (static_cast<SPView*>(event->data))->mouseover();
             break;
 	case SP_EVENT_MOUSEOUT:
-            /* fixme: */
-            if (SP_IS_SVG_VIEW(event->data)) {
-                SPSVGView *svgview = (SPSVGView *) event->data;
-                gdk_window_set_cursor(GTK_WIDGET(SP_CANVAS_ITEM(svgview->drawing)->canvas)->window, NULL);
-            }
+            (static_cast<SPView*>(event->data))->mouseout();
             break;
 	default:
             break;
