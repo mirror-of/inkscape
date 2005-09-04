@@ -1,3 +1,49 @@
+2005-09-04  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/svg-view-widget.h, src/svg-view-widget.cpp, src/Makefile_insert:
+	    separated SPSVGWidget from SPSVGView
+	* src/desktop.h, src/svg-view.h, src/ui/view/edit.h,
+	  src/ui/view/view-widget.h, src/ui/view/view.h,
+	  src/widgets/desktop-widget.h, src/desktop.cpp,
+	  src/svg-view.cpp, src/ui/view/view-widget.cpp,
+	  src/ui/view/view.cpp, src/widgets/desktop-widget.cpp:
+	    moved SPDesktop from GObject to C++/sigc++
+	* src/forward.h: 
+	    removed SP_DESKTOP*, SP_SVG_VIEW* macros and dependencies
+	* src/widgets/layer-selector.h, src/widgets/layer-selector.cpp:
+	    changed to sigc++ but disabled call
+	* src/desktop-events.cpp:  removed desktop_enter_notify()
+	* src/sp-anchor.cpp:  removed handling of mouse over/out
+	* src/helper/action.h, src/sp-use.cpp:  added missing dependency
+	* src/arc-context.cpp, src/desktop-affine.cpp, src/desktop-events.cpp,
+	  src/desktop-handles.cpp, src/dyna-draw-context.cpp,
+	  src/event-context.cpp, src/file.cpp, src/gradient-context.cpp,
+	  src/gradient-drag.cpp, src/help.cpp, src/inkscape.cpp,
+	  src/inkview.cpp, src/interface.cpp, src/knot.cpp,
+	  src/knotholder.cpp, src/node-context.cpp, src/nodepath.cpp,
+	  src/object-ui.cpp, src/path-chemistry.cpp, src/rect-context.cpp,
+	  src/rubberband.cpp, src/satisfied-guide-cns.cpp,
+	  src/select-context.cpp, src/selection-chemistry.cpp,
+	  src/seltrans.cpp, src/shortcuts.cpp, src/slideshow.cpp,
+	  src/sp-anchor.cpp, src/sp-flowtext.cpp, src/sp-namedview.cpp,
+	  src/sp-text.cpp, src/spiral-context.cpp, src/splivarot.cpp,
+	  src/star-context.cpp, src/text-context.cpp, src/text-editing.cpp,
+	  src/tools-switch.cpp, src/verbs.cpp, src/zoom-context.cpp,
+	  src/dialogs/clonetiler.cpp, src/dialogs/desktop-properties.cpp,
+	  src/dialogs/dialog-events.cpp, src/dialogs/export.cpp,
+	  src/dialogs/filedialog.cpp, src/dialogs/iconpreview.cpp,
+	  src/dialogs/layer-properties.cpp, src/dialogs/stroke-style.cpp,
+	  src/dialogs/transformation.cpp, src/dialogs/xml-tree.cpp,
+	  src/extension/effect.cpp, src/extension/implementation/script.cpp,
+	  src/extension/internal/grid.cpp, src/extension/internal/ps.cpp,
+	  src/helper/window.cpp, src/ui/dialog/dialog.cpp,
+	  src/ui/widget/imageicon.cpp, src/widgets/gradient-toolbar.cpp,
+	  src/widgets/layer-selector.cpp, src/widgets/select-toolbar.cpp,
+	  src/widgets/toolbox.cpp:
+	    minor adaptations due to the above changes
+	* src/desktop-events.h:  removed dependencies 
+	* src/selection.cpp:  improved doxygen documentation
+	
 2005-09-04  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/connector-context.cpp: Fix a bug where a data structure was
