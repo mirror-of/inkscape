@@ -237,7 +237,7 @@ sp_node_context_setup(SPEventContext *ec)
         ec->enableGrDrag();
     }
 
-    nc->_node_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+    nc->_node_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
     sp_nodepath_update_statusbar(nc->nodepath);
 }
 

@@ -607,7 +607,7 @@ Verb::get_action(Inkscape::UI::View::View *view)
             for (ActionTable::iterator cur_action = _actions->begin();
                  cur_action != _actions->end() && view != NULL;
                  cur_action++) {
-                if (cur_action->first != NULL && cur_action->first->doc == view->doc) {
+                if (cur_action->first != NULL && cur_action->first->doc() == view->doc()) {
                     sp_action_set_sensitive(action, cur_action->second->sensitive);
                     break;
                 }
@@ -628,7 +628,7 @@ Verb::sensitive(SPDocument *in_doc, bool in_sensitive)
         for (ActionTable::iterator cur_action = _actions->begin();
              cur_action != _actions->end();
              cur_action++) {
-			if (in_doc == NULL || (cur_action->first != NULL && cur_action->first->doc == in_doc)) {
+			if (in_doc == NULL || (cur_action->first != NULL && cur_action->first->doc() == in_doc)) {
                 sp_action_set_sensitive(cur_action->second, in_sensitive ? 1 : 0);
             }
         }
@@ -748,7 +748,7 @@ FileVerb::perform(SPAction *action, void *data, void *pdata)
     /* These aren't used, but are here to remind people not to use
        the CURRENT_DOCUMENT macros unless they really have to. */
     Inkscape::UI::View::View *current_view = sp_action_get_view(action);
-    SPDocument *current_document = SP_VIEW_DOCUMENT(current_view);
+    SPDocument *current_document = current_view->doc();
 #endif
     switch ((long) data) {
         case SP_VERB_FILE_NEW:
@@ -806,7 +806,7 @@ FileVerb::perform(SPAction *action, void *data, void *pdata)
 void
 EditVerb::perform(SPAction *action, void *data, void *pdata)
 {
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     if (!dt)
         return;
 
@@ -899,7 +899,7 @@ EditVerb::perform(SPAction *action, void *data, void *pdata)
 void
 SelectionVerb::perform(SPAction *action, void *data, void *pdata)
 {
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
 
     if (!dt)
         return;
@@ -1014,7 +1014,7 @@ SelectionVerb::perform(SPAction *action, void *data, void *pdata)
 void
 LayerVerb::perform(SPAction *action, void *data, void *pdata)
 {
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     unsigned int verb = reinterpret_cast<std::size_t>(data);
 
     if ( !dt || !dt->currentLayer() ) {
@@ -1146,7 +1146,7 @@ LayerVerb::perform(SPAction *action, void *data, void *pdata)
 void
 ObjectVerb::perform( SPAction *action, void *data, void *pdata )
 {
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     if (!dt)
         return;
 
@@ -1211,7 +1211,7 @@ ContextVerb::perform(SPAction *action, void *data, void *pdata)
     sp_verb_t verb;
     int vidx;
 
-    dt = SP_DESKTOP(sp_action_get_view(action));
+    dt = static_cast<SPDesktop*>(sp_action_get_view(action));
 
     if (!dt)
         return;
@@ -1223,7 +1223,7 @@ ContextVerb::perform(SPAction *action, void *data, void *pdata)
      */
     for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_DROPPER_PREFS; vidx++)
     {
-        SPAction *tool_action= get((sp_verb_t)vidx)->get_action(SP_VIEW(dt));
+        SPAction *tool_action= get((sp_verb_t)vidx)->get_action(dt);
         if (tool_action) {
             sp_action_set_active(tool_action, vidx == (int)verb);
         }
@@ -1360,7 +1360,7 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
 {
     NRRect d;
 
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     if (!dt)
         return;
 
@@ -1374,47 +1374,42 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
 
     switch (GPOINTER_TO_INT(data)) {
         case SP_VERB_ZOOM_IN:
-            sp_desktop_get_display_area(dt, &d);
-            sp_desktop_zoom_relative( dt, (d.x0 + d.x1) / 2,
-                                      (d.y0 + d.y1) / 2, zoom_inc );
+            dt->get_display_area(&d);
+            dt->zoom_relative( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc );
             break;
         case SP_VERB_ZOOM_OUT:
-            sp_desktop_get_display_area(dt, &d);
-            sp_desktop_zoom_relative( dt, (d.x0 + d.x1) / 2,
-                                      (d.y0 + d.y1) / 2, 1 / zoom_inc );
+            dt->get_display_area(&d);
+            dt->zoom_relative( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc );
             break;
         case SP_VERB_ZOOM_1_1:
-            sp_desktop_get_display_area(dt, &d);
-            sp_desktop_zoom_absolute( dt, (d.x0 + d.x1) / 2,
-                                      (d.y0 + d.y1) / 2, 1.0 );
+            dt->get_display_area(&d);
+            dt->zoom_absolute( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1.0 );
             break;
         case SP_VERB_ZOOM_1_2:
-            sp_desktop_get_display_area(dt, &d);
-            sp_desktop_zoom_absolute( dt, (d.x0 + d.x1) / 2,
-                                      (d.y0 + d.y1) / 2, 0.5);
+            dt->get_display_area(&d);
+            dt->zoom_absolute( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 0.5);
             break;
         case SP_VERB_ZOOM_2_1:
-            sp_desktop_get_display_area(dt, &d);
-            sp_desktop_zoom_absolute( dt, (d.x0 + d.x1) / 2,
-                                      (d.y0 + d.y1) / 2, 2.0 );
+            dt->get_display_area(&d);
+            dt->zoom_absolute( (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 2.0 );
             break;
         case SP_VERB_ZOOM_PAGE:
-            sp_desktop_zoom_page(dt);
+            dt->zoom_page();
             break;
         case SP_VERB_ZOOM_PAGE_WIDTH:
-            sp_desktop_zoom_page_width(dt);
+            dt->zoom_page_width();
             break;
         case SP_VERB_ZOOM_DRAWING:
-            sp_desktop_zoom_drawing(dt);
+            dt->zoom_drawing();
             break;
         case SP_VERB_ZOOM_SELECTION:
-            sp_desktop_zoom_selection(dt);
+            dt->zoom_selection();
             break;
         case SP_VERB_ZOOM_NEXT:
-            sp_desktop_next_zoom(dt);
+            dt->next_zoom();
             break;
         case SP_VERB_ZOOM_PREV:
-            sp_desktop_prev_zoom(dt);
+            dt->prev_zoom();
             break;
         case SP_VERB_TOGGLE_RULERS:
             sp_desktop_widget_toggle_rulers(dt->owner, dt->is_fullscreen);
@@ -1430,7 +1425,7 @@ ZoomVerb::perform(SPAction *action, void *data, void *pdata)
             break;
 #ifdef HAVE_GTK_WINDOW_FULLSCREEN
         case SP_VERB_FULLSCREEN:
-            fullscreen(dt);
+            dt->fullscreen();
             break;
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
         case SP_VERB_VIEW_NEW:
@@ -1457,7 +1452,7 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
         inkscape_dialogs_unhide();
     }
 
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {
@@ -1604,7 +1599,7 @@ DialogVerb::perform(SPAction *action, void *data, void *pdata)
 void
 HelpVerb::perform(SPAction *action, void *data, void *pdata)
 {
-    SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
+    SPDesktop *dt = static_cast<SPDesktop*>(sp_action_get_view(action));
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {

@@ -48,6 +48,7 @@
 #include "inkscape.h"
 #include "document.h"
 #include "selection.h"
+#include "desktop.h"
 #include "desktop-events.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -234,7 +235,7 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
 
     ddc->is_drawing = false;
 
-    ddc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+    ddc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 static void
@@ -280,7 +281,7 @@ static NR::Point
 sp_dyna_draw_get_npoint(SPDynaDrawContext const *dc, NR::Point v)
 {
     NRRect drect;
-    sp_desktop_get_display_area(SP_EVENT_CONTEXT(dc)->desktop, &drect);
+    SP_EVENT_CONTEXT(dc)->desktop->get_display_area(&drect);
     double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
     return NR::Point(( v[NR::X] - drect.x0 ) / max,  ( v[NR::Y] - drect.y0 ) / max);
 }
@@ -290,7 +291,7 @@ static NR::Point
 sp_dyna_draw_get_vpoint(SPDynaDrawContext const *dc, NR::Point n)
 {
     NRRect drect;
-    sp_desktop_get_display_area(SP_EVENT_CONTEXT(dc)->desktop, &drect);
+    SP_EVENT_CONTEXT(dc)->desktop->get_display_area(&drect);
     double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
     return NR::Point(n[NR::X] * max + drect.x0, n[NR::Y] * max + drect.y0);
 }
@@ -299,7 +300,7 @@ sp_dyna_draw_get_vpoint(SPDynaDrawContext const *dc, NR::Point n)
 static NR::Point sp_dyna_draw_get_curr_vpoint(SPDynaDrawContext const *dc)
 {
     NRRect drect;
-    sp_desktop_get_display_area(SP_EVENT_CONTEXT(dc)->desktop, &drect);
+    SP_EVENT_CONTEXT(dc)->desktop->get_display_area(&drect);
     double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
     return NR::Point(dc->cur[NR::X] * max + drect.x0, dc->cur[NR::Y] * max + drect.y0);
 }

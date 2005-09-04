@@ -230,7 +230,7 @@ static void sp_rect_context_setup(SPEventContext *ec)
         ec->enableGrDrag();
     }
 
-    rc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+    rc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
@@ -546,8 +546,8 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), sp_desktop_get_default_metric(desktop));
-    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), sp_desktop_get_default_metric(desktop));
+    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), desktop->get_default_metric());
+    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), desktop->get_default_metric());
     rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);

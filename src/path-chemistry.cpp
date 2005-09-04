@@ -51,8 +51,6 @@ void
 sp_selected_path_combine (void)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop))
-	  return;
 	
 	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 	GSList *items = (GSList *) selection->itemList();
@@ -151,8 +149,6 @@ void
 sp_selected_path_break_apart (void)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop))
-	  return;
 	
 	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
@@ -249,8 +245,6 @@ static void
 sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop))
-	  return;
 
 	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
@@ -345,8 +339,6 @@ void
 sp_selected_path_reverse ()
 {
 	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop))
-	  return;
 	
 	Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 	GSList *items = (GSList *) selection->itemList();

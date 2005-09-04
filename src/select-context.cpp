@@ -477,14 +477,14 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     // not only that; we will end up here when ctrl-dragging as well
                     // and also when we started within tolerance, but trespassed tolerance outside of item
                     sp_rubberband_stop();
-                    item_at_point = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), FALSE);
+                    item_at_point = desktop->item_at_point(NR::Point(event->button.x, event->button.y), FALSE);
                     if (!item_at_point) // if no item at this point, try at the click point (bug 1012200)
-                        item_at_point = sp_desktop_item_at_point(desktop, NR::Point(xp, yp), FALSE);
+                        item_at_point = desktop->item_at_point(NR::Point(xp, yp), FALSE);
                     if (item_at_point || sc->moved || sc->button_press_alt) { 
                         // drag only if starting from an item, or if something is already grabbed, or if alt-dragging
                         if (!sc->moved) {
-                            item_in_group = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
-                            group_at_point = sp_desktop_group_at_point(desktop, NR::Point(event->button.x, event->button.y));
+                            item_in_group = desktop->item_at_point(NR::Point(event->button.x, event->button.y), TRUE);
+                            group_at_point = desktop->group_at_point(NR::Point(event->button.x, event->button.y));
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
                             if ((!item_in_group || !selection->includes(item_in_group)) &&
                                 (!group_at_point || !selection->includes(group_at_point))
@@ -501,7 +501,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         }
                         if (!seltrans->empty)
                             sp_selection_moveto(seltrans, p, event->button.state);
-                        if (sp_desktop_scroll_to_point(desktop, &p))
+                        if (desktop->scroll_to_point(&p))
                             // unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
                             ; //gobble_motion_events(GDK_BUTTON1_MASK);
                         ret = TRUE;
@@ -845,8 +845,8 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     sp_sel_trans_transform(seltrans, move, norm);
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], sp_desktop_get_default_metric(desktop));
-    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], sp_desktop_get_default_metric(desktop));
+    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], desktop->get_default_metric());
+    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], desktop->get_default_metric());
     seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);

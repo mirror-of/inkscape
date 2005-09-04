@@ -1339,7 +1339,7 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
                           SPDesktop *desktop,
                           GtkWidget *dialog)
 {
-    if (desktop && SP_IS_DESKTOP(desktop) && SP_IS_NAMEDVIEW(desktop->namedview) && dlg) {
+    if (desktop && SP_IS_NAMEDVIEW(desktop->namedview) && dlg) {
         // all these checks prevent crash when you close inkscape with the dialog open
         sp_repr_remove_listener_by_data(SP_OBJECT_REPR(desktop->namedview), dlg);
     }

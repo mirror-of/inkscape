@@ -17,7 +17,8 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <glibmm/i18n.h>
-
+#include "ui/view/view-widget.h"
+#include "svg-view-widget.h"
 
 
 namespace Inkscape

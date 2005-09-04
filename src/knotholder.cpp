@@ -48,7 +48,6 @@ sp_knot_holder_new (SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc r
 	Inkscape::XML::Node *repr = SP_OBJECT (item)->repr;
 
 	g_return_val_if_fail (desktop != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DESKTOP(desktop), NULL);
 	g_return_val_if_fail (item != NULL, NULL);
 	g_return_val_if_fail (SP_IS_ITEM(item), NULL);
 

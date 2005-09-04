@@ -174,14 +174,14 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
             if ( event->button.button == 1 ) {
                 NRRect b;
                 if (sp_rubberband_rect (&b) && !within_tolerance) {
-                    sp_desktop_set_display_area(desktop, b.x0, b.y0, b.x1, b.y1, 10);
+                    desktop->set_display_area(b.x0, b.y0, b.x1, b.y1, 10);
                 } else if (!escaped) {
                     NR::Point const button_w(event->button.x, event->button.y);
                     NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
                     double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
                                            ? 1 / zoom_inc
                                            : zoom_inc );
-                    sp_desktop_zoom_relative_keep_point(desktop, button_dt, zoom_rel);
+                    desktop->zoom_relative_keep_point(button_dt, zoom_rel);
                 }
                 ret = TRUE;
             }

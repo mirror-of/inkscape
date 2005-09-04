@@ -159,7 +159,7 @@ static struct {
     { NULL, NULL, NULL }
 };
 
-static void toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func);
+static void toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func, sigc::connection&);
 
 static void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_tool_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
@@ -167,6 +167,10 @@ static void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
+
+static sigc::connection tool_ecc_connection;
+static sigc::connection aux_ecc_connection;
+static sigc::connection command_ecc_connection;
 
 /* Global text entry widgets necessary for update */
 /* GtkWidget *dropper_rgb_entry, 
@@ -229,6 +233,11 @@ GtkWidget * sp_toolbox_button_normal_new_from_verb(GtkWidget *t, GtkIconSize siz
 GtkWidget *
 sp_tool_toolbox_new()
 {
+    if (tool_ecc_connection.connected())
+        tool_ecc_connection.disconnect();
+    else
+        new (&tool_ecc_connection) sigc::connection();
+
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 
@@ -265,6 +274,11 @@ aux_toolbox_detached(GtkHandleBox *toolbox, GtkWidget *child)
 GtkWidget *
 sp_aux_toolbox_new()
 {
+    if (aux_ecc_connection.connected())
+        aux_ecc_connection.disconnect();
+    else
+        new (&aux_ecc_connection) sigc::connection();
+
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 
     GtkWidget *tb_s = gtk_vbox_new(FALSE, 0);
@@ -299,6 +313,11 @@ sp_aux_toolbox_new()
 GtkWidget *
 sp_commands_toolbox_new()
 {
+    if (command_ecc_connection.connected())
+        command_ecc_connection.disconnect();
+    else
+        new (&command_ecc_connection) sigc::connection();
+
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 
     GtkWidget *tb_s = gtk_vbox_new(FALSE, 0);
@@ -404,7 +423,7 @@ sp_node_path_edit_symmetrical(void)
 static GtkWidget *
 sp_node_toolbox_new(SPDesktop *desktop)
 {
-    Inkscape::UI::View::View *view = SP_VIEW(desktop);
+    Inkscape::UI::View::View *view = desktop;
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
@@ -468,7 +487,7 @@ sp_node_toolbox_new(SPDesktop *desktop)
 static GtkWidget *
 sp_zoom_toolbox_new(SPDesktop *desktop)
 {
-    Inkscape::UI::View::View *view=SP_VIEW(desktop);
+    Inkscape::UI::View::View *view=desktop;
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
@@ -513,32 +532,31 @@ sp_zoom_toolbox_new(SPDesktop *desktop)
 void
 sp_tool_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_tool_toolbox, update_tool_toolbox);
+    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_tool_toolbox, update_tool_toolbox, tool_ecc_connection);
 }
 
 
 void
 sp_aux_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_aux_toolbox, update_aux_toolbox);
+    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_aux_toolbox, update_aux_toolbox, aux_ecc_connection);
 }
 
 void
 sp_commands_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_commands_toolbox, update_commands_toolbox);
+    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_commands_toolbox, update_commands_toolbox, command_ecc_connection);
 }
 
 
 static void
-toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func)
+toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func, sigc::connection& conn)
 {
     gpointer ptr = g_object_get_data(G_OBJECT(toolbox), "desktop");
-    SPDesktop *old_desktop = SP_IS_DESKTOP(ptr) ? SP_DESKTOP(ptr) : NULL;
+    SPDesktop *old_desktop = static_cast<SPDesktop*>(ptr);
 
     if (old_desktop) {
         GList *children, *iter;
-        g_signal_handlers_disconnect_by_func( G_OBJECT(old_desktop), (void*)G_CALLBACK(update_func), (gpointer)toolbox );
 
         children = gtk_container_get_children(GTK_CONTAINER(toolbox));
         for ( iter = children ; iter ; iter = iter->next ) {
@@ -552,8 +570,9 @@ toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_
     if (desktop) {
         gtk_widget_set_sensitive(toolbox, TRUE);
         setup_func(toolbox, desktop);
-        update_func(desktop, SP_DESKTOP_EVENT_CONTEXT(desktop), toolbox);
-        g_signal_connect( G_OBJECT(desktop), "event_context_changed", G_CALLBACK(update_func), (gpointer)toolbox);
+        update_func(desktop, desktop->event_context, toolbox);
+        conn =  desktop->connectEventContextChanged 
+            (sigc::bind (sigc::ptr_fun(update_func), toolbox));
     } else {
         gtk_widget_set_sensitive(toolbox, FALSE);
     }
@@ -574,7 +593,7 @@ setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                                                               SP_BUTTON_TYPE_TOGGLE,
                                                               Inkscape::Verb::get(tools[i].verb),
                                                               Inkscape::Verb::get(tools[i].doubleclick_verb),
-                                                              SP_VIEW(desktop),
+                                                              desktop,
                                                               tooltips );
 
         g_object_set_data( G_OBJECT(toolbox), tools[i].data_name,
@@ -635,7 +654,7 @@ update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *
 static void
 setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    Inkscape::UI::View::View *view = SP_VIEW(desktop);
+    Inkscape::UI::View::View *view = desktop;
 
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_hbox_new(FALSE, 0);
@@ -1519,7 +1538,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
     // rx/ry units menu: create
     GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
-    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit(desktop));
+    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), desktop->get_default_unit());
     // fixme: add % meaning per cent of the width/height
 
     /* W */

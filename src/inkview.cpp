@@ -50,6 +50,7 @@
 #include <glibmm/i18n.h>
 #include "document.h"
 #include "svg-view.h"
+#include "svg-view-widget.h"
 
 #ifdef WITH_INKJAR
 #include "inkjar/jar.h"
@@ -376,7 +377,7 @@ sp_svgview_show_next (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[++current], TRUE, false);
     }
     if (doc) {
-	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
+	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;
@@ -394,7 +395,7 @@ sp_svgview_show_prev (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[--current], TRUE, false);
     }
     if (doc) {
-	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
+	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;
@@ -410,7 +411,7 @@ sp_svgview_goto_first (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[current], TRUE, false);
     }
     if (doc) {
-	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
+	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;
@@ -426,7 +427,7 @@ sp_svgview_goto_last (struct SPSlideShow *ss)
 	doc = sp_document_new (ss->slides[current], TRUE, false);
     }
     if (doc) {
-	sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
+	(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
 	sp_document_ensure_up_to_date (doc);
 	ss->doc = doc;
 	ss->current = current;

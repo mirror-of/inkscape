@@ -131,7 +131,7 @@ static void sp_gradient_context_setup(SPEventContext *ec)
 
     ec->enableGrDrag();
 
-    rc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+    rc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)

@@ -983,9 +983,8 @@ sp_node_selected_move_screen(gdouble dx, gdouble dy)
     // borrowed from sp_selection_move_screen in selection-chemistry.c
     // we find out the current zoom factor and divide deltas by it
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
-    gdouble zoom = SP_DESKTOP_ZOOM(desktop);
+    gdouble zoom = desktop->current_zoom();
     gdouble zdx = dx / zoom;
     gdouble zdy = dy / zoom;
 
@@ -2598,7 +2597,7 @@ node_request(SPKnot *knot, NR::Point *p, guint state, gpointer data)
                                         (state & GDK_SHIFT_MASK) == 0);
     }
 
-    sp_desktop_scroll_to_point(n->subpath->nodepath->desktop, p);
+    n->subpath->nodepath->desktop->scroll_to_point(p);
 
     return TRUE;
 }
@@ -2781,7 +2780,7 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     // we cannot emit a "moved" signal because we're now processing it
     if (me->knot->item) SP_CTRL(me->knot->item)->moveto(me->pos);
 
-    sp_desktop_set_coordinate_status(knot->desktop, me->pos, 0);
+    knot->desktop->set_coordinate_status(me->pos, 0);
 
     update_object(n->subpath->nodepath);
 
@@ -2797,7 +2796,7 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     if (degrees > 180) degrees -= 360;
     if (degrees < -180) degrees += 360;
 
-    GString *length = SP_PX_TO_METRIC_STRING(rnew.r, sp_desktop_get_default_metric(desktop));
+    GString *length = SP_PX_TO_METRIC_STRING(rnew.r, desktop->get_default_metric());
 
     mc->setF(Inkscape::NORMAL_MESSAGE,
          _("<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"), degrees, length->str);
@@ -2847,7 +2846,7 @@ static void node_rotate_one_internal(Inkscape::NodePath::Node const &n, gdouble 
 static void node_rotate_one_internal_screen(Inkscape::NodePath::Node const &n, gdouble const angle,
                                         Radial &rme, Radial &rother, gboolean const both)
 {
-    gdouble const norm_angle = angle / SP_DESKTOP_ZOOM(n.subpath->nodepath->desktop);
+    gdouble const norm_angle = angle / n.subpath->nodepath->desktop->current_zoom();
 
     gdouble r;
     if ( both
@@ -2954,7 +2953,7 @@ void sp_nodepath_selected_nodes_rotate(Inkscape::NodePath::Path *nodepath, gdoub
 
         gdouble rot;
         if (screen) {
-            gdouble const zoom = SP_DESKTOP_ZOOM(nodepath->desktop);
+            gdouble const zoom = nodepath->desktop->current_zoom();
             gdouble const zmove = angle / zoom;
             gdouble const r = NR::L2(box.max() - box.midpoint());
             rot = atan2(zmove, r);
@@ -3109,7 +3108,7 @@ void sp_nodepath_selected_nodes_scale(Inkscape::NodePath::Path *nodepath, gdoubl
 void sp_nodepath_selected_nodes_scale_screen(Inkscape::NodePath::Path *nodepath, gdouble const grow, int const which)
 {
     if (!nodepath) return;
-    sp_nodepath_selected_nodes_scale(nodepath, grow / SP_DESKTOP_ZOOM(nodepath->desktop), which);
+    sp_nodepath_selected_nodes_scale(nodepath, grow / nodepath->desktop->current_zoom(), which);
 }
 
 /**

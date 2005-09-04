@@ -47,7 +47,7 @@
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "zoom-context.h"
-#include "svg-view.h"
+#include "svg-view-widget.h"
 #include "widgets/desktop-widget.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
@@ -129,7 +129,7 @@ sp_create_window(SPViewWidget *vw, gboolean editable)
 
     w = sp_window_new("", TRUE);
     g_object_set_data(G_OBJECT(vw), "window", w);
-    g_object_set_data(G_OBJECT(SP_VIEW_WIDGET_VIEW(vw)), "window", w);
+    static_cast<SPDesktop*>(SP_VIEW_WIDGET_VIEW(vw))->window = static_cast<GtkWindow*>((void*)w);
 
     hb = gtk_hbox_new(FALSE, 0);
     gtk_widget_show(hb);
@@ -210,7 +210,7 @@ sp_ui_new_view()
     g_return_if_fail(dtw != NULL);
 
     sp_create_window(dtw, TRUE);
-    sp_namedview_window_from_document(SP_DESKTOP(dtw->view));
+    sp_namedview_window_from_document(static_cast<SPDesktop*>(dtw->view));
 }
 
 /* TODO: not yet working */
@@ -239,8 +239,8 @@ sp_ui_close_view(GtkWidget *widget)
     if (SP_ACTIVE_DESKTOP == NULL) {
         return;
     }
-    w = (GtkWidget*)g_object_get_data(G_OBJECT(SP_ACTIVE_DESKTOP), "window");
-    if (sp_view_shutdown(SP_VIEW(SP_ACTIVE_DESKTOP))) {
+    w = static_cast<GtkWidget*>((void*)(SP_ACTIVE_DESKTOP)->window);
+    if ((SP_ACTIVE_DESKTOP)->shutdown()) {
         return;
     }
     gtk_widget_destroy(w);
@@ -265,8 +265,8 @@ sp_ui_close_all(void)
        become active */
     while (SP_ACTIVE_DESKTOP) {
         GtkWidget *w;
-        w = (GtkWidget*)g_object_get_data(G_OBJECT(SP_ACTIVE_DESKTOP), "window");
-        if (sp_view_shutdown(SP_VIEW(SP_ACTIVE_DESKTOP))) {
+        w = static_cast<GtkWidget*>((void*)(SP_ACTIVE_DESKTOP->window));
+        if ((SP_ACTIVE_DESKTOP)->shutdown()) {
             /* The user cancelled the operation, so end doing the close */
             return FALSE;
         }
@@ -295,7 +295,7 @@ sp_ui_close_all(void)
 static gint
 sp_ui_delete(GtkWidget *widget, GdkEvent *event, Inkscape::UI::View::View *view)
 {
-    return sp_view_shutdown(view);
+    return view->shutdown();
 }
 
 /*
@@ -326,14 +326,14 @@ sp_ui_menu_deselect_action(void *object, SPAction *action)
 static void
 sp_ui_menu_select(gpointer object, gpointer tip)
 {
-    Inkscape::UI::View::View *view = SP_VIEW(g_object_get_data(G_OBJECT(object), "view"));
+    Inkscape::UI::View::View *view = static_cast<Inkscape::UI::View::View*> (g_object_get_data(G_OBJECT(object), "view"));
     view->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, (gchar *)tip);
 }
 
 static void
 sp_ui_menu_deselect(gpointer object)
 {
-    Inkscape::UI::View::View *view = SP_VIEW(g_object_get_data(G_OBJECT(object), "view"));
+    Inkscape::UI::View::View *view = static_cast<Inkscape::UI::View::View*>  (g_object_get_data(G_OBJECT(object), "view"));
     view->tipsMessageContext()->clear();
 }
 
@@ -585,7 +585,7 @@ checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
     Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data(G_OBJECT(menuitem), "view");
 
     gchar const *pref_path;
-    if (SP_DESKTOP(view)->is_fullscreen)
+    if (static_cast<SPDesktop*>(view)->is_fullscreen)
         pref_path = g_strconcat("fullscreen.", pref, NULL);
     else
         pref_path = g_strconcat("window.", pref, NULL);
@@ -593,7 +593,7 @@ checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data)
     gboolean checked = gtk_check_menu_item_get_active(menuitem);
     prefs_set_int_attribute(pref_path, "state", checked);
 
-    sp_desktop_widget_layout(SP_DESKTOP(view)->owner);
+    sp_desktop_widget_layout(static_cast<SPDesktop*>(view)->owner);
 }
 
 static gboolean
@@ -605,7 +605,7 @@ checkitem_update(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
     Inkscape::UI::View::View *view = (Inkscape::UI::View::View *) g_object_get_data(G_OBJECT(menuitem), "view");
 
     gchar const *pref_path;
-    if (SP_DESKTOP(view)->is_fullscreen)
+    if (static_cast<SPDesktop*>(view)->is_fullscreen)
         pref_path = g_strconcat("fullscreen.", pref, NULL);
     else
         pref_path = g_strconcat("window.", pref, NULL);
@@ -913,7 +913,7 @@ sp_ui_context_menu(Inkscape::UI::View::View *view, SPItem *item)
     GtkWidget *m;
     SPDesktop *dt;
 
-    dt = (SP_IS_DESKTOP(view)) ? SP_DESKTOP(view) : NULL;
+    dt = static_cast<SPDesktop*>(view);
 
     m = gtk_menu_new();
 

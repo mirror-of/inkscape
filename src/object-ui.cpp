@@ -141,7 +141,6 @@ sp_item_properties(GtkMenuItem *menuitem, SPItem *item)
 
     desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
     g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     SP_DT_SELECTION(desktop)->set(item);
 
@@ -157,7 +156,6 @@ sp_item_select_this(GtkMenuItem *menuitem, SPItem *item)
 
     desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
     g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     SP_DT_SELECTION(desktop)->set(item);
 }
@@ -170,7 +168,6 @@ sp_item_create_link(GtkMenuItem *menuitem, SPItem *item)
 
     SPDesktop *desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
     g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     Inkscape::XML::Node *repr = sp_repr_new("svg:a");
     sp_repr_add_child(SP_OBJECT_REPR(SP_OBJECT_PARENT(item)), repr, SP_OBJECT_REPR(item));
@@ -217,7 +214,6 @@ sp_item_group_ungroup_activate(GtkMenuItem *menuitem, SPGroup *group)
 
     desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
     g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     children = NULL;
     sp_item_group_ungroup(group, &children);
@@ -329,7 +325,6 @@ sp_shape_fill_settings(GtkMenuItem *menuitem, SPItem *item)
 
     desktop = (SPDesktop*)gtk_object_get_data(GTK_OBJECT(menuitem), "desktop");
     g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     if (SP_DT_SELECTION(desktop)->isEmpty()) {
         SP_DT_SELECTION(desktop)->set(item);

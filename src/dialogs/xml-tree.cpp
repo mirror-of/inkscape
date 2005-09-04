@@ -204,8 +204,6 @@ sp_xml_tree_dialog (void)
     if (!desktop)
         return;
 
-    g_assert (SP_IS_DESKTOP (desktop));
-
     if (dlg == NULL)
     { // very long block
 
@@ -669,7 +667,7 @@ set_tree_desktop (SPDesktop * desktop)
 
     if (current_desktop) {
         sel_changed_connection.disconnect();
-        sp_signal_disconnect_by_data (current_desktop, dlg);
+//        sp_signal_disconnect_by_data (current_desktop, dlg);
     }
     current_desktop = desktop;
     if (desktop) {

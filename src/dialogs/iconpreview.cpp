@@ -169,7 +169,6 @@ void IconPreviewPanel::refreshPreview()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if ( desktop ) {
-        g_assert( SP_IS_DESKTOP( desktop) );
 
         Inkscape::Selection * sel = SP_DT_SELECTION(desktop);
         if ( sel ) {

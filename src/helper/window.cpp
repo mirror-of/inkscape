@@ -16,7 +16,7 @@
 
 #include "inkscape.h"
 #include "shortcuts.h"
-#include "ui/view/view.h"
+#include "desktop.h"
 #include "event-context.h"
 #include "helper/window.h"
 
@@ -31,7 +31,7 @@ sp_window_key_press (GtkWidget *widget, GdkEventKey *event)
 	             SP_SHORTCUT_CONTROL_MASK : 0 ) |
 	           ( event->state & GDK_MOD1_MASK ?
 	             SP_SHORTCUT_ALT_MASK : 0 );
-	return sp_shortcut_invoke (shortcut, SP_VIEW (SP_ACTIVE_DESKTOP));
+	return sp_shortcut_invoke (shortcut, SP_ACTIVE_DESKTOP);
 }
 
 GtkWidget *

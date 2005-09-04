@@ -236,7 +236,7 @@ sp_spiral_context_setup(SPEventContext *ec)
         ec->enableGrDrag();
     }
 
-    sc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+    sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 static void
@@ -467,7 +467,7 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
                            /*t0*/ sc->t0);
 
     /* status text */
-    GString *rads = SP_PX_TO_METRIC_STRING(rad, sp_desktop_get_default_metric(desktop));
+    GString *rads = SP_PX_TO_METRIC_STRING(rad, desktop->get_default_metric());
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
                                _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
                                rads->str, sp_round((arg + 2.0*M_PI*spiral->revo)*180/M_PI, 0.0001));

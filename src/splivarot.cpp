@@ -98,8 +98,6 @@ void
 sp_selected_path_boolop (bool_op bop)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP (desktop))
-        return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
   
@@ -546,8 +544,6 @@ void
 sp_selected_path_outline ()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP (desktop))
-        return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
@@ -778,13 +774,13 @@ sp_selected_path_inset ()
 void
 sp_selected_path_offset_screen (double pixels)
 {
-    sp_selected_path_do_offset (true,  pixels / SP_DESKTOP_ZOOM (SP_ACTIVE_DESKTOP));
+    sp_selected_path_do_offset (true,  pixels / SP_ACTIVE_DESKTOP->current_zoom());
 }
 
 void
 sp_selected_path_inset_screen (double pixels)
 {
-    sp_selected_path_do_offset (false,  pixels / SP_DESKTOP_ZOOM (SP_ACTIVE_DESKTOP));
+    sp_selected_path_do_offset (false,  pixels / SP_ACTIVE_DESKTOP->current_zoom());
 }
 
 
@@ -832,8 +828,6 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     curve = NULL;
   
     desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP (desktop))
-        return;
   
     selection = SP_DT_SELECTION (desktop);
   
@@ -1056,8 +1050,6 @@ void
 sp_selected_path_do_offset (bool expand, double prefOffset)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP (desktop))
-        return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 
@@ -1407,8 +1399,6 @@ sp_selected_path_simplify_selection (float threshold, bool justCoalesce,
                        float angleLimit, bool breakableAngles)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP (desktop))
-        return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
 

@@ -128,88 +128,88 @@ tools_switch(SPDesktop *dt, int num)
 
     switch (num) {
         case TOOLS_SELECT:
-            sp_desktop_set_event_context(dt, SP_TYPE_SELECT_CONTEXT, tool_names[num]);
+            dt->set_event_context(SP_TYPE_SELECT_CONTEXT, tool_names[num]);
             /* fixme: This is really ugly hack. We should bind and unbind class methods */
-            sp_desktop_activate_guides(dt, TRUE);
+            dt->activate_guides(true);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
             break;
         case TOOLS_NODES:
-            sp_desktop_set_event_context(dt, SP_TYPE_NODE_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, TRUE);
+            dt->set_event_context(SP_TYPE_NODE_CONTEXT, tool_names[num]);
+            dt->activate_guides(true);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("To edit a path, <b>click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to select them, then <b>drag</b> nodes and handles. <b>Click</b> on an object to select."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("To edit a path, <b>click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes to select them, then <b>drag</b> nodes and handles. <b>Click</b> on an object to select."));
             break;
         case TOOLS_SHAPES_RECT:
-            sp_desktop_set_event_context(dt, SP_TYPE_RECT_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_RECT_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and resize. <b>Click</b> to select."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a rectangle. <b>Drag controls</b> to round corners and resize. <b>Click</b> to select."));
             break;
         case TOOLS_SHAPES_ARC:
-            sp_desktop_set_event_context(dt, SP_TYPE_ARC_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_ARC_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or segment. <b>Click</b> to select."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create an ellipse. <b>Drag controls</b> to make an arc or segment. <b>Click</b> to select."));
             break;
         case TOOLS_SHAPES_STAR:
-            sp_desktop_set_event_context(dt, SP_TYPE_STAR_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_STAR_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. <b>Click</b> to select."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a star. <b>Drag controls</b> to edit the star shape. <b>Click</b> to select."));
             break;
         case TOOLS_SHAPES_SPIRAL:
-            sp_desktop_set_event_context(dt, SP_TYPE_SPIRAL_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_SPIRAL_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral shape. <b>Click</b> to select."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a spiral. <b>Drag controls</b> to edit the spiral shape. <b>Click</b> to select."));
             break;
         case TOOLS_FREEHAND_PENCIL:
-            sp_desktop_set_event_context(dt, SP_TYPE_PENCIL_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_PENCIL_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a freehand line. Start drawing with <b>Shift</b> to append to selected path."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a freehand line. Start drawing with <b>Shift</b> to append to selected path."));
             break;
         case TOOLS_FREEHAND_PEN:
-            sp_desktop_set_event_context(dt, SP_TYPE_PEN_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_PEN_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to create a node, <b>click and drag</b> to create a smooth node. Start drawing with <b>Shift</b> to append to selected path."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to create a node, <b>click and drag</b> to create a smooth node. Start drawing with <b>Shift</b> to append to selected path."));
             break;
         case TOOLS_CALLIGRAPHIC:
-            sp_desktop_set_event_context(dt, SP_TYPE_DYNA_DRAW_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_DYNA_DRAW_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow keys adjust width, <b>up</b>/<b>down</b> adjust angle."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow keys adjust width, <b>up</b>/<b>down</b> adjust angle."));
             break;
         case TOOLS_TEXT:
-            sp_desktop_set_event_context(dt, SP_TYPE_TEXT_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_TEXT_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text, <b>drag</b> to create flowed text; then type."));
             break;
         case TOOLS_GRADIENT:
-            sp_desktop_set_event_context(dt, SP_TYPE_GRADIENT_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_GRADIENT_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, <b>drag handles</b> to adjust gradients."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> or <b>double click</b> to create a gradient on selected objects, <b>drag handles</b> to adjust gradients."));
             break;
         case TOOLS_ZOOM:
-            sp_desktop_set_event_context(dt, SP_TYPE_ZOOM_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_ZOOM_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to zoom out."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to zoom out."));
             break;
         case TOOLS_DROPPER:
-            sp_desktop_set_event_context(dt, SP_TYPE_DROPPER_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_DROPPER_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> to copy the color under mouse to clipboard"));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to set fill, <b>Shift+click</b> to set stroke; <b>drag</b> to average color in area; with <b>Alt</b> to pick inverse color; <b>Ctrl+C</b> to copy the color under mouse to clipboard"));
             break;
         case TOOLS_CONNECTOR:
-            sp_desktop_set_event_context(dt, SP_TYPE_CONNECTOR_CONTEXT, tool_names[num]);
-            sp_desktop_activate_guides(dt, FALSE);
+            dt->set_event_context(SP_TYPE_CONNECTOR_CONTEXT, tool_names[num]);
+            dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click and drag</b> between shapes to create a connector."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click and drag</b> between shapes to create a connector."));
             break;
     }
 }

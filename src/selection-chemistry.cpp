@@ -801,19 +801,15 @@ void sp_selection_lower_to_bottom()
 void
 sp_undo(SPDesktop *desktop, SPDocument *doc)
 {
-    if (SP_IS_DESKTOP(desktop)) {
         if (!sp_document_undo(SP_DT_DOCUMENT(desktop)))
             desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to undo."));
-    }
 }
 
 void
 sp_redo(SPDesktop *desktop, SPDocument *doc)
 {
-    if (SP_IS_DESKTOP(desktop)) {
         if (!sp_document_redo(SP_DT_DOCUMENT(desktop)))
             desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Nothing to redo."));
-    }
 }
 
 void sp_selection_cut()
@@ -1048,7 +1044,6 @@ void sp_selection_paste(bool in_place)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == NULL) return;
-    g_assert(SP_IS_DESKTOP(desktop));
 
             SPItem *layer=SP_ITEM(desktop->currentLayer());
             if ( !layer || desktop->itemIsHidden(layer)) {
@@ -1081,7 +1076,7 @@ void sp_selection_paste(bool in_place)
     if (!in_place) {
         sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
 
-        NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
+        NR::Point m( desktop->point() - selection->bounds().midpoint() );
 
         /* Snap the offset of the new item(s) to the grid */
         /* FIXME: this gridsnap fiddling is a hack. */
@@ -1099,7 +1094,6 @@ void sp_selection_paste_style()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == NULL) return;
-    g_assert(SP_IS_DESKTOP(desktop));
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
@@ -1366,8 +1360,6 @@ void sp_selection_move_relative(Inkscape::Selection *selection, double dx, doubl
 void sp_selection_rotate_90_cw()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP(desktop))
-        return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
@@ -1395,8 +1387,6 @@ void sp_selection_rotate_90_cw()
 void sp_selection_rotate_90_ccw()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP(desktop))
-        return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
@@ -1441,7 +1431,7 @@ sp_selection_rotate_screen(Inkscape::Selection *selection, gdouble angle)
     NR::Rect const bbox(selection->bounds());
     NR::Point const center(bbox.midpoint());
 
-    gdouble const zoom = SP_DESKTOP_ZOOM(selection->desktop());
+    gdouble const zoom = selection->desktop()->current_zoom();
     gdouble const zmove = angle / zoom;
     gdouble const r = NR::L2(bbox.max() - center);
 
@@ -1483,7 +1473,7 @@ void
 sp_selection_scale_screen(Inkscape::Selection *selection, gdouble grow_pixels)
 {
     sp_selection_scale(selection,
-                       grow_pixels / SP_DESKTOP_ZOOM(selection->desktop()));
+                       grow_pixels / selection->desktop()->current_zoom());
 }
 
 void
@@ -1501,7 +1491,6 @@ void
 sp_selection_move(gdouble dx, gdouble dy)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     if (selection->isEmpty()) {
         return;
@@ -1522,7 +1511,6 @@ void
 sp_selection_move_screen(gdouble dx, gdouble dy)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     if (selection->isEmpty()) {
@@ -1530,7 +1518,7 @@ sp_selection_move_screen(gdouble dx, gdouble dy)
     }
 
     // same as sp_selection_move but divide deltas by zoom factor
-    gdouble const zoom = SP_DESKTOP_ZOOM(desktop);
+    gdouble const zoom = desktop->current_zoom();
     gdouble const zdx = dx / zoom;
     gdouble const zdy = dy / zoom;
     sp_selection_move_relative(selection, zdx, zdy);
@@ -1601,9 +1589,6 @@ sp_selection_item_next(void)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     g_return_if_fail(desktop != NULL);
-    if (!SP_IS_DESKTOP(desktop)) {
-        return;
-    }
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     bool inlayer = prefs_get_int_attribute ("options.kbselection", "inlayer", 1);
@@ -1634,9 +1619,6 @@ sp_selection_item_prev(void)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     g_return_if_fail(document != NULL);
     g_return_if_fail(desktop != NULL);
-    if (!SP_IS_DESKTOP(desktop)) {
-        return;
-    }
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     bool inlayer = prefs_get_int_attribute ("options.kbselection", "inlayer", 1);
@@ -1747,7 +1729,7 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
 void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 {
     NRRect dbox;
-    sp_desktop_get_display_area(desktop, &dbox);
+    desktop->get_display_area(&dbox);
     NRRect sbox;
     sp_item_bbox_desktop(item, &sbox);
     if ( dbox.x0 > sbox.x0  ||
@@ -1764,7 +1746,7 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
         NR::Point const moved_w( d_w - s_w );
         gint const dx = (gint) moved_w[X];
         gint const dy = (gint) moved_w[Y];
-        sp_desktop_scroll_world(desktop, dx, dy);
+        desktop->scroll_world(dx, dy);
     }
 }
 

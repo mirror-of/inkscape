@@ -23,7 +23,7 @@
 #include "document.h"
 #include "sp-text.h"
 #include "text-editing.h"
-#include "svg-view.h"
+#include "svg-view-widget.h"
 #include "help.h"
 #include "file.h"
 #include <glibmm/i18n.h>

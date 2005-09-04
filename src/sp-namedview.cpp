@@ -536,10 +536,10 @@ sp_namedview_child_added (SPObject * object, Inkscape::XML::Node * child, Inksca
 		g_object_set (G_OBJECT (g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
 		if (nv->editable) {
 			for (l = nv->views; l != NULL; l = l->next) {
-				sp_guide_show (g, SP_DESKTOP (l->data)->guides, (GCallback)sp_dt_guide_event);
-				if (SP_DESKTOP (l->data)->guides_active) 
+				sp_guide_show (g, static_cast<SPDesktop*> (l->data)->guides, (GCallback)sp_dt_guide_event);
+				if (static_cast<SPDesktop*> (l->data)->guides_active) 
 					sp_guide_sensitize (g, 
-									SP_DT_CANVAS(SP_DESKTOP (l->data)), 
+									SP_DT_CANVAS(static_cast<SPDesktop*> (l->data)), 
 									TRUE);
 				if (nv->showguides) {
 					for (v = SP_GUIDE (g)->views; v != NULL; v = v->next) {
@@ -656,9 +656,9 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 	if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !isNaN (nv->zoom)
 			&& nv->cx != HUGE_VAL && !isNaN (nv->cx) 
 			&& nv->cy != HUGE_VAL && !isNaN (nv->cy)) {
-		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
+		desktop->zoom_absolute (nv->cx, nv->cy, nv->zoom);
 	} else if (SP_DT_DOCUMENT(desktop)) { // document without saved zoom, zoom to its page
-		sp_desktop_zoom_page (desktop);
+		desktop->zoom_page();
 	}
 
 	// cancel any history of zooms up to this point
@@ -668,7 +668,7 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 	}
 
 	SPObject *layer=NULL;
-	SPDocument *document=SP_VIEW_DOCUMENT(desktop);
+	SPDocument *document=desktop->doc();
 	if ( nv->default_layer_id != 0 ) {
 		layer = document->getObjectById(g_quark_to_string(nv->default_layer_id));
 	}
@@ -699,13 +699,13 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
 	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
 	view = SP_OBJECT_REPR (desktop->namedview);
-	sp_desktop_get_display_area (desktop, &r);
+	desktop->get_display_area (&r);
 
 	// saving window geometry is not undoable
 	gboolean saved = sp_document_get_undo_sensitive(SP_DT_DOCUMENT (desktop));
 	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), FALSE);
 
-	sp_repr_set_double (view, "inkscape:zoom", SP_DESKTOP_ZOOM (desktop));
+	sp_repr_set_double (view, "inkscape:zoom", desktop->current_zoom());
 	sp_repr_set_double (view, "inkscape:cx", (r.x0+r.x1)*0.5);
 	sp_repr_set_double (view, "inkscape:cy", (r.y0+r.y1)*0.5);
 
@@ -732,7 +732,6 @@ sp_namedview_hide(SPNamedView *const nv, SPDesktop *const desktop)
 	g_assert (nv != NULL);
 	g_assert (SP_IS_NAMEDVIEW (nv));
 	g_assert (desktop != NULL);
-	g_assert (SP_IS_DESKTOP (desktop));
 	g_assert (g_slist_find (nv->views, desktop));
 
 	for (l = nv->guides; l != NULL; l = l->next) {
@@ -763,10 +762,9 @@ sp_namedview_activate_guides (SPNamedView * nv, gpointer desktop, gboolean activ
 	g_assert (nv != NULL);
 	g_assert (SP_IS_NAMEDVIEW (nv));
 	g_assert (desktop != NULL);
-	g_assert (SP_IS_DESKTOP (desktop));
 	g_assert (g_slist_find (nv->views, desktop));
 
-	dt = SP_DESKTOP (desktop);
+	dt = static_cast<SPDesktop*> (desktop);
 
 	for (l = nv->guides; l != NULL; l = l->next) {
 		sp_guide_sensitize (SP_GUIDE (l->data), SP_DT_CANVAS (dt), active);

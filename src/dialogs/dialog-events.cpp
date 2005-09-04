@@ -167,14 +167,11 @@ sp_transientize (GtkWidget *dialog)
     
     // if there's an active document window, attach dialog to it as a transient:
     
-        if ( SP_ACTIVE_DESKTOP && 
-             g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window") )
+        if ( SP_ACTIVE_DESKTOP && (SP_ACTIVE_DESKTOP)->window )
         {
         
             gtk_window_set_transient_for ( (GtkWindow *) dialog, 
-                                           (GtkWindow *) g_object_get_data 
-                                               (G_OBJECT (SP_ACTIVE_DESKTOP),
-                                           "window") );
+                                           (SP_ACTIVE_DESKTOP)->window );
         }
 #endif
    
@@ -211,7 +208,7 @@ sp_transientize_callback ( Inkscape::Application *inkscape,
     
     GtkWindow *w;
 
-    w = (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"); 
+    w = desktop->window; 
     
     if (w && wd->win)
     {

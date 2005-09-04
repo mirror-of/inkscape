@@ -477,7 +477,6 @@ void SPFlowtext::_clearFlow(NRArenaGroup *in_arena)
 void SPFlowtext::convert_to_text()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!SP_IS_DESKTOP(desktop)) return;
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
     SPItem *item = selection->singleItem();
     if (!SP_IS_FLOWTEXT(item)) return;

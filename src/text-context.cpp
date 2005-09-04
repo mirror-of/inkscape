@@ -361,7 +361,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
                 // find out clicked item, disregarding groups
-                item_ungrouped = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
+                item_ungrouped = desktop->item_at_point(NR::Point(event->button.x, event->button.y), TRUE);
                 if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
                     SP_DT_SELECTION(ec->desktop)->set(item_ungrouped);
                     if (tc->text) {
@@ -442,7 +442,7 @@ sp_text_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event)
                 break;
             }
             // find out item under mouse, disregarding groups
-            item_ungrouped = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
+            item_ungrouped = desktop->item_at_point(NR::Point(event->button.x, event->button.y), TRUE);
             if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
                 NRRect bbox;
                 sp_item_bbox_desktop(item_ungrouped, &bbox);
@@ -666,8 +666,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 gobble_motion_events(GDK_BUTTON1_MASK);
 
                 // status text
-                GString *xs = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::X]), sp_desktop_get_default_metric(desktop));
-                GString *ys = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::Y]), sp_desktop_get_default_metric(desktop));
+                GString *xs = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::X]), desktop->get_default_metric());
+                GString *ys = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::Y]), desktop->get_default_metric());
                 ec->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs->str, ys->str);
                 g_string_free(xs, FALSE);
                 g_string_free(ys, FALSE);
@@ -1422,7 +1422,7 @@ sp_text_context_update_cursor(SPTextContext *tc,  bool scroll_to_see)
         if (scroll_to_see) {
             NR::Point const dm = (d0 + d1) / 2;
             // unlike mouse moves, here we must scroll all the way at first shot, so we override the autoscrollspeed
-            sp_desktop_scroll_to_point(SP_EVENT_CONTEXT(tc)->desktop, &dm, 1.0);
+            SP_EVENT_CONTEXT(tc)->desktop->scroll_to_point(&dm, 1.0);
         }
 
         sp_canvas_item_show(tc->cursor);

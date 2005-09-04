@@ -55,7 +55,7 @@
 //for the preview widget
 #include "document.h"
 #include "inkscape.h"
-#include "svg-view.h"
+#include "svg-view-widget.h"
 #include "uri.h"
 
 #undef INK_DUMP_FILENAME_CONV

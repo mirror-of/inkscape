@@ -69,7 +69,7 @@ sp_retransientize (Inkscape::Application *inkscape, SPDesktop *desktop, gpointer
         return;
     }
 
-    GtkWindow *desktop_win = (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window");
+    GtkWindow *desktop_win = desktop->window;
 
     if (desktop_win && dialog_win)
     {
@@ -255,7 +255,7 @@ bool Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
           SP_SHORTCUT_CONTROL_MASK : 0 ) |
         ( event->state & GDK_MOD1_MASK ?
           SP_SHORTCUT_ALT_MASK : 0 );
-    return sp_shortcut_invoke( shortcut, SP_VIEW(SP_ACTIVE_DESKTOP) );
+    return sp_shortcut_invoke( shortcut, SP_ACTIVE_DESKTOP );
 }
 
 void

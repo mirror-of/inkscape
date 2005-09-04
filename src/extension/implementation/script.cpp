@@ -614,7 +614,7 @@ Script::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *do
     }
 
     Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
-                              doc->doc, tempfilename_in, FALSE, FALSE, FALSE);
+                              doc->doc(), tempfilename_in, FALSE, FALSE, FALSE);
 
     Glib::ustring local_command(command);
 
@@ -653,9 +653,9 @@ Script::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *do
 
     /* Do something with mydoc.... */
     if (mydoc != NULL) {
-        doc->doc->emitReconstructionStart();
-        copy_doc(doc->doc->rroot, mydoc->rroot);
-        doc->doc->emitReconstructionFinish();
+        doc->doc()->emitReconstructionStart();
+        copy_doc(doc->doc()->rroot, mydoc->rroot);
+        doc->doc()->emitReconstructionFinish();
         mydoc->release();
     }
 }

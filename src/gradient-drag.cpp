@@ -338,7 +338,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
     NR::Point p = *ppointer;
 
     // FIXME: take from prefs
-    double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
+    double snap_dist = SNAP_DIST / dragger->parent->desktop->current_zoom();
 
     if (state & GDK_SHIFT_MASK) {
         // with Shift; unsnap if we carry more than one draggable
@@ -1057,7 +1057,7 @@ GrDrag::selected_move (double x, double y)
 void
 GrDrag::selected_move_screen (double x, double y)
 {
-    gdouble zoom = SP_DESKTOP_ZOOM(desktop);
+    gdouble zoom = desktop->current_zoom();
     gdouble zx = x / zoom;
     gdouble zy = y / zoom;
 

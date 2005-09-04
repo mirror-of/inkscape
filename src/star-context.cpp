@@ -243,7 +243,7 @@ sp_star_context_setup (SPEventContext *ec)
         ec->enableGrDrag();
     }
 
-    sc->_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+    sc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
 }
 
 static void
@@ -466,7 +466,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
                          arg1, arg1 + M_PI / sides, sc->isflatsided, sc->rounded, sc->randomized);
 
     /* status text */
-    GString *rads = SP_PX_TO_METRIC_STRING(r1, sp_desktop_get_default_metric(desktop));
+    GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->get_default_metric());
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
                                       ( sc->isflatsided?
                                       _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")

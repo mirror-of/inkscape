@@ -428,7 +428,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                     NR::Point const motion_w(event->motion.x,
                                              event->motion.y);
                     NR::Point const moved_w( motion_w - button_w );
-                    sp_desktop_scroll_world(event_context->desktop, moved_w);
+                    event_context->desktop->scroll_world(moved_w);
                     ret = TRUE;
                 }
             }
@@ -444,7 +444,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                     NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
                     double const zoom_power = ( (event->button.state & GDK_SHIFT_MASK)
                             ? -dontgrab : dontgrab );
-                    sp_desktop_zoom_relative_keep_point(desktop, event_dt,
+                    desktop->zoom_relative_keep_point(event_dt,
                             pow(zoom_inc, zoom_power));
                     gtk_timeout_add(250, (GtkFunction) grab_allow_again, NULL);
                 }
@@ -466,7 +466,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                     if (event->key.state & GDK_MOD1_MASK) 
                         shortcut |= SP_SHORTCUT_ALT_MASK;
                     ret = sp_shortcut_invoke(shortcut, 
-                            SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(event_context)));
+                            SP_EVENT_CONTEXT_DESKTOP(event_context));
                 case GDK_Tab: // disable tab/shift-tab which cycle widget focus
                 case GDK_ISO_Left_Tab: // they will get different functions
                     if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
@@ -481,7 +481,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         if (event->key.state & GDK_MOD1_MASK) 
                             shortcut |= SP_SHORTCUT_ALT_MASK;
                         ret = sp_shortcut_invoke(shortcut,
-                                SP_VIEW(SP_EVENT_CONTEXT_DESKTOP(event_context)));
+                                SP_EVENT_CONTEXT_DESKTOP(event_context));
                     }
                     break;
                 case GDK_W:
@@ -507,7 +507,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), 
                                 GDK_CONTROL_MASK);
-                        sp_desktop_scroll_world(event_context->desktop, i, 0);
+                        event_context->desktop->scroll_world(i, 0);
                         ret = TRUE;
                     }
                     break;
@@ -518,7 +518,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), 
                                 GDK_CONTROL_MASK);
-                        sp_desktop_scroll_world(event_context->desktop, 0, i);
+                        event_context->desktop->scroll_world(0, i);
                         ret = TRUE;
                     }
                     break;
@@ -529,7 +529,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), 
                                 GDK_CONTROL_MASK);
-                        sp_desktop_scroll_world(event_context->desktop, -i, 0);
+                        event_context->desktop->scroll_world(-i, 0);
                         ret = TRUE;
                     }
                     break;
@@ -540,7 +540,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         int i = (int) floor(key_scroll * accelerate_scroll(event, acceleration));
                         gobble_key_events(get_group0_keyval(&event->key), 
                                 GDK_CONTROL_MASK);
-                        sp_desktop_scroll_world(event_context->desktop, 0, -i);
+                        event_context->desktop->scroll_world(0, -i);
                         ret = TRUE;
                     }
                     break;
@@ -573,10 +573,10 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
             if (event->scroll.state & GDK_SHIFT_MASK) {
                 switch (event->scroll.direction) {
                     case GDK_SCROLL_UP:
-                        sp_desktop_scroll_world(desktop, wheel_scroll, 0);
+                        desktop->scroll_world(wheel_scroll, 0);
                         break;
                     case GDK_SCROLL_DOWN:
-                        sp_desktop_scroll_world(desktop, -wheel_scroll, 0);
+                        desktop->scroll_world(-wheel_scroll, 0);
                         break;
                     default:
                         break;
@@ -597,24 +597,24 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
                         break;
                 }
                 if (rel_zoom != 0.0) {
-                    NR::Point const scroll_dt = sp_desktop_point(desktop);
-                    sp_desktop_zoom_relative_keep_point(desktop, scroll_dt, rel_zoom);
+                    NR::Point const scroll_dt = desktop->point();
+                    desktop->zoom_relative_keep_point(scroll_dt, rel_zoom);
                 }
 
                 /* no modifier, pan up--down (left--right on multiwheel mice?) */
             } else {
                 switch (event->scroll.direction) {
                     case GDK_SCROLL_UP:
-                        sp_desktop_scroll_world(desktop, 0, wheel_scroll);
+                        desktop->scroll_world(0, wheel_scroll);
                         break;
                     case GDK_SCROLL_DOWN:
-                        sp_desktop_scroll_world(desktop, 0, -wheel_scroll);
+                        desktop->scroll_world(0, -wheel_scroll);
                         break;
                     case GDK_SCROLL_LEFT:
-                        sp_desktop_scroll_world(desktop, wheel_scroll, 0);
+                        desktop->scroll_world(wheel_scroll, 0);
                         break;
                     case GDK_SCROLL_RIGHT:
-                        sp_desktop_scroll_world(desktop, -wheel_scroll, 0);
+                        desktop->scroll_world(-wheel_scroll, 0);
                         break;
                 }
             }
@@ -684,7 +684,6 @@ sp_event_context_new(GType type, SPDesktop *desktop, Inkscape::XML::Node *prefs_
 {
     g_return_val_if_fail(g_type_is_a(type, SP_TYPE_EVENT_CONTEXT), NULL);
     g_return_val_if_fail(desktop != NULL, NULL);
-    g_return_val_if_fail(SP_IS_DESKTOP(desktop), NULL);
 
     SPEventContext *const ec = (SPEventContext*)g_object_new(type, NULL);
 
@@ -844,8 +843,8 @@ static void set_event_location(SPDesktop *desktop, GdkEvent *event)
 
     NR::Point const button_w(event->button.x, event->button.y);
     NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
-    sp_view_set_position(SP_VIEW(desktop), button_dt);
-    sp_desktop_set_coordinate_status(desktop, button_dt, 0);
+    desktop-> setPosition (button_dt);
+    desktop->set_coordinate_status(button_dt, 0);
 }
 
 //-------------------------------------------------------------------
@@ -861,7 +860,7 @@ sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
     if (event->type == GDK_KEY_PRESS) {
         item = SP_DT_SELECTION(desktop)->singleItem();
     }
-    menu = sp_ui_context_menu(SP_VIEW(desktop), item);
+    menu = sp_ui_context_menu(desktop, item);
     gtk_widget_show(menu);
 
     switch (event->type) {
@@ -946,17 +945,13 @@ sp_event_context_find_item (SPDesktop *desktop, NR::Point const p,
 
     if (select_under) {
         SPItem *selected_at_point = 
-            sp_desktop_item_from_list_at_point_bottom (
-                    desktop,
-                    SP_DT_SELECTION(desktop)->itemList(), 
-                    p);
-        item = sp_desktop_item_at_point(desktop, 
-                p, into_groups, selected_at_point);
+            desktop->item_from_list_at_point_bottom (desktop->selection->itemList(), p);
+        item = desktop->item_at_point(p, into_groups, selected_at_point);
         if (item == NULL) { // we may have reached bottom, flip over to the top
-            item = sp_desktop_item_at_point(desktop, p, into_groups, NULL);
+            item = desktop->item_at_point(p, into_groups, NULL);
         }
     } else 
-        item = sp_desktop_item_at_point(desktop, p, into_groups, NULL);
+        item = desktop->item_at_point(p, into_groups, NULL);
 
     return item;
 }

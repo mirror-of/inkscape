@@ -111,8 +111,9 @@ sp_file_new(gchar const *templ)
     g_return_val_if_fail(dtw != NULL, NULL);
 
     sp_create_window(dtw, TRUE);
-    sp_namedview_window_from_document(SP_DESKTOP(dtw->view));
-	return SP_DESKTOP(dtw->view);
+    SPDesktop *dt = static_cast<SPDesktop*>(dtw->view);
+    sp_namedview_window_from_document(dt);
+	return dt;
 }
 
 SPDesktop*
@@ -170,12 +171,12 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
         SPDocument *existing = desktop ? SP_DT_DOCUMENT(desktop) : NULL;
         if (existing && existing->virgin) {
             // If the current desktop is empty, open the document there
-            sp_desktop_change_document(desktop, doc);
+            desktop->change_document(doc);
         } else {
             // create a whole new desktop and window
             SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));
             sp_create_window(dtw, TRUE);
-            desktop = SP_DESKTOP(dtw->view);
+            desktop = static_cast<SPDesktop*>(dtw->view);
         }
         // everyone who cares now has a reference, get rid of ours
         sp_document_unref(doc);
@@ -877,7 +878,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
                 int const saved_pref = prefs_get_int_attribute("options.transform", "pattern", 1);
                 prefs_set_int_attribute("options.transform", "pattern", 1);
                 sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
-                NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
+                NR::Point m( desktop->point() - selection->bounds().midpoint() );
                 sp_selection_move_relative(selection, m);
                 prefs_set_int_attribute("options.transform", "pattern", saved_pref);
             }

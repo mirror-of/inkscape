@@ -12,6 +12,7 @@
 #include "prefdialog.h"
 #include "implementation/implementation.h"
 #include "effect.h"
+#include "ui/view/view.h"
 
 /* Inkscape::Extension::Effect */
 
@@ -84,7 +85,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
     set_last_effect(this);
     imp->effect(this, doc);
 
-    sp_document_done(doc->doc);
+    sp_document_done(doc->doc());
 
     return;
 }
@@ -122,7 +123,7 @@ void
 Effect::EffectVerb::perform (SPAction *action, void * data, void *pdata)
 {
     Inkscape::UI::View::View * current_view = sp_action_get_view(action);
-//  SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
+//  SPDocument * current_document = current_view->doc;
     Effect * effect = reinterpret_cast<Effect *>(data);
 
     if (effect == NULL) return;

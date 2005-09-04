@@ -380,10 +380,13 @@ gr_tb_selection_changed (Inkscape::Selection *, gpointer data)
     GtkWidget *widget = (GtkWidget *) data;
 
     SPDesktop *desktop = (SPDesktop *) g_object_get_data (G_OBJECT(widget), "desktop");
-    if (!desktop || !SP_IS_DESKTOP(desktop))
+    if (!desktop)
         return;
 
     Inkscape::Selection *selection = SP_DT_SELECTION (desktop); // take from desktop, not from args
+    if (!selection) 
+        return;
+    
     SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT (widget), "menu");

@@ -2359,7 +2359,7 @@ clonetiler_dialog (void)
 
                 // unitmenu
                 GtkWidget *u = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-                sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), sp_desktop_get_default_unit (SP_ACTIVE_DESKTOP));
+                sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), SP_ACTIVE_DESKTOP->get_default_unit());
     
                 {
                     // Width spinbutton 

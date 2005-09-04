@@ -29,7 +29,6 @@ void sp_rubberband_start (SPDesktop * desktop, NR::Point const &p)
 	using NR::Y;
 
 	g_return_if_fail (desktop != NULL);
-	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
 	if (sp_rb) sp_rubberband_stop ();
 
@@ -57,7 +56,7 @@ sp_rubberband_move (double x, double y)
 	}
 
 	NR::Point p(x, y);
-	sp_desktop_scroll_to_point (sp_rb_desktop, &p);
+	sp_rb_desktop->scroll_to_point (&p);
 
 	sp_rb_rect.x1 = x;
 	sp_rb_rect.y1 = y;

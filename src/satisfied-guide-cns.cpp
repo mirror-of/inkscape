@@ -11,7 +11,6 @@ void satisfied_guide_cns(SPDesktop const &desktop,
                          std::vector<NR::Point> const &snappoints,
                          std::vector<SPGuideConstraint> &cns)
 {
-    g_assert(SP_IS_DESKTOP(&desktop));
     SPNamedView const &nv = *desktop.namedview;
     for (GSList const *l = nv.guides; l != NULL; l = l->next) {
         SPGuide &g = *SP_GUIDE(l->data);

@@ -109,7 +109,6 @@ SPSelTrans::SPSelTrans(SPDesktop *desktop) :
 
     g_return_if_fail(this != NULL);
     g_return_if_fail(desktop != NULL);
-    g_return_if_fail(SP_IS_DESKTOP(desktop));
 
     this->desktop = desktop;
 
@@ -628,8 +627,8 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, g
     SPSelTrans *seltrans = SP_SELECT_CONTEXT(desktop->event_context)->_seltrans;
     SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 
-    sp_desktop_set_coordinate_status(desktop, *position, 0);
-    sp_view_set_position(SP_VIEW(desktop), *position);
+    desktop->set_coordinate_status(*position, 0);
+    desktop->setPosition (*position);
 
     if (state & GDK_MOD1_MASK) {
         NR::Point const &point = seltrans->point;
@@ -1014,8 +1013,8 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
     }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(pt[X], sp_desktop_get_default_metric(desktop));
-    GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], sp_desktop_get_default_metric(desktop));
+    GString *xs = SP_PX_TO_METRIC_STRING(pt[X], desktop->get_default_metric());
+    GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], desktop->get_default_metric());
     seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);

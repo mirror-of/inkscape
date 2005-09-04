@@ -604,7 +604,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 			NR::Point const motion_dt = sp_desktop_w2d_xy_point(knot->desktop, motion_w);
 			NR::Point p = motion_dt - knot->grabbed_rel_pos;
 			sp_knot_request_position (knot, &p, event->motion.state);
-			sp_desktop_scroll_to_point (knot->desktop, &motion_dt);
+			knot->desktop->scroll_to_point (&motion_dt);
 			moved = TRUE;
 		}
 		break;
@@ -676,7 +676,6 @@ SPKnot *
 sp_knot_new (SPDesktop * desktop, const gchar *tip)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (SP_DT_IS_EDITABLE (desktop), NULL);
 
 	SPKnot * knot = (SPKnot*)g_object_new (SP_TYPE_KNOT, 0);

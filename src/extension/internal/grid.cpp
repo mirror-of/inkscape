@@ -64,14 +64,14 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
     NR::Rect bounding_area = NR::Rect(NR::Point(0,0), NR::Point(100,100));
     if (selection->isEmpty()) {
         /* get page size */
-        SPDocument * doc = document->doc;
+        SPDocument * doc = document->doc();
         bounding_area = NR::Rect(NR::Point(0,0),
                                  NR::Point(sp_document_width(doc),
                                            sp_document_height(doc)));
     } else {
         bounding_area = selection->bounds();
 
-        gdouble doc_height  =  sp_document_height(document->doc);
+        gdouble doc_height  =  sp_document_height(document->doc());
         NR::Rect temprec = NR::Rect(NR::Point(bounding_area.min()[NR::X], doc_height - bounding_area.min()[NR::Y]),
                                     NR::Point(bounding_area.max()[NR::X], doc_height - bounding_area.max()[NR::Y]));
 

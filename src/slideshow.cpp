@@ -1,4 +1,4 @@
-#define __SP_HELP_C__
+#define __SLIDESHOW_C__
 
 /*
  * Help/About window
@@ -23,7 +23,8 @@
 #include <glibmm/i18n.h>
 #include "document.h"
 #include "sp-text.h"
-#include "svg-view.h"
+#include "svg-view-widget.h"
+#include "ui/view/view.h"
 
 static gint
 sp_slideshow_event (SPViewWidget *vw, GdkEvent *event, GtkWidget *window)
@@ -68,7 +69,7 @@ sp_slideshow_event (SPViewWidget *vw, GdkEvent *event, GtkWidget *window)
 		g_print ("Trying to load\n");
 		doc = sp_document_new (nname, TRUE);
 		if (doc) {
-			sp_view_set_document (SP_VIEW_WIDGET_VIEW (vw), doc);
+			(SP_VIEW_WIDGET_VIEW (vw))->setDocument (doc);
 			sp_document_unref (doc);
 		}
 		g_object_set_data (G_OBJECT (window), "current", (gpointer) nname);
