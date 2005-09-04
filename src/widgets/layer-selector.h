@@ -69,6 +69,7 @@ private:
     Gtk::CellRendererText _label_renderer;
     Glib::RefPtr<Gtk::ListStore> _layer_model;
 
+//    sigc::connection _desktop_shutdown_connection;
     sigc::connection _layer_changed_connection;
     sigc::connection _selection_changed_connection;
     sigc::connection _visibility_toggled_connection;
