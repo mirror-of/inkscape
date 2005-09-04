@@ -220,10 +220,6 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
 
     number = sp_namedview_viewcount (namedview);
 
-/* Construct SessionManager */
-#ifdef WITH_INKBOARD
-	_whiteboard_session_manager = new Inkscape::Whiteboard::SessionManager(this);
-#endif
 
     /* Setup Canvas */
     g_object_set_data (G_OBJECT (canvas), "SPDesktop", this);
@@ -299,8 +295,16 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
     /* Ugly hack */
     sp_dt_namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
 
-        /* Connect document */
+    /* Connect document */
     setDocument (document);
+
+	/* Construct SessionManager 
+	 * 
+	 * SessionManager construction needs to be done after document connection 
+	 */
+#ifdef WITH_INKBOARD
+	_whiteboard_session_manager = new Inkscape::Whiteboard::SessionManager(this);
+#endif
 
 /* Set up notification of rebuilding the document, this allows
        for saving object related settings in the document. */

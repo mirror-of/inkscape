@@ -28,6 +28,8 @@
 #include "xml/repr.h"
 #include "xml/node-observer.h"
 
+#include "ui/view/view.h"
+
 #include "util/ucompose.hpp"
 
 #include "message-context.h"
@@ -52,6 +54,8 @@
 #include "jabber_whiteboard/message-aggregator.h"
 #include "jabber_whiteboard/undo-stack-observer.h"
 #include "jabber_whiteboard/serializer.h"
+
+//#include "jabber_whiteboard/pedro/pedroxmpp.h"
 
 #include "jabber_whiteboard/message-node.h"
 #include "jabber_whiteboard/message-queue.h"
@@ -86,7 +90,7 @@ SessionData::~SessionData()
 	}
 }
 
-SessionManager::SessionManager(::SPDesktop *desktop)
+SessionManager::SessionManager(::SPDesktop *desktop) 
 {
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Constructing SessionManager.");
 
@@ -104,7 +108,8 @@ SessionManager::SessionManager(::SPDesktop *desktop)
 	this->_myDeserializer = NULL;
 
 	this->setDesktop(desktop);
-	if (desktop->doc == NULL) {
+
+	if (this->_myDoc == NULL) {
 		g_error("Initializing SessionManager on null document object!");
 	}
 
@@ -178,8 +183,8 @@ SessionManager::setDesktop(::SPDesktop* desktop)
 	if (this->_myDoc != NULL) {
 		Inkscape::GC::release(this->_myDoc);
 	}
-	if (desktop->doc != NULL) {
-		this->_myDoc = desktop->doc;
+	if (desktop->doc() != NULL) {
+		this->_myDoc = desktop->doc();
 		Inkscape::GC::anchor(this->_myDoc);
 	}
 }
@@ -1091,6 +1096,37 @@ SessionManager::_setVerbSensitivity(SensitivityMode mode)
 			break;
 	};
 }
+
+/*
+void
+SessionManager::Listener::processXmppEvent(Pedro::XmppEvent const& event)
+{
+	int type = event.getType();
+
+	switch (type) {
+		case Pedro::XmppEvent::EVENT_STATUS:
+			break;
+		case Pedro::XmppEvent::EVENT_ERROR:
+			break;
+		case Pedro::XmppEvent::EVENT_CONNECTED:
+			break;
+		case Pedro::XmppEvent::EVENT_DISCONNECTED:
+			break;
+		case Pedro::XmppEvent::EVENT_MESSAGE:
+			break;
+		case Pedro::XmppEvent::EVENT_PRESENCE:
+			break;
+		case Pedro::XmppEvent::EVENT_MUC_MESSAGE:
+			break;
+		case Pedro::XmppEvent::EVENT_MUC_JOIN:
+			break;
+		case Pedro::XmppEvent::EVENT_MUC_LEAVE:
+			break;
+		case Pedro::XmppEvent::EVENT_MUC_PRESENCE:
+			break;
+	}
+}
+*/
 
 }
 
