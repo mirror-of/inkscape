@@ -17,8 +17,8 @@ bonobo
 dialogs/filedialog-win32.cpp
 display/testnr.cpp
 display/bezier-utils-test.cpp
-ecma
 extension/api.cpp
+extension/dxf2svg
 extension/internal/gnome.cpp
 extension/script/js
 extension/script/bindtest.cpp
@@ -47,7 +47,6 @@ widgets/test-widgets.cpp
 winmain.cpp
 xml/quote-test.cpp
 xml/repr-action-test.cpp
-xpath
 io/streamtest.cpp
 
 
