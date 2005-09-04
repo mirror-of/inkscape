@@ -13,7 +13,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "desktop.h"
+#include <gdk/gdkevents.h>
+#include <gtk/gtkwidget.h>
+
+class SPDesktop;
+class SPDesktopWidget;
+class SPCanvasItem;
 
 /* Item handlers */
 
@@ -22,7 +27,6 @@ int sp_desktop_item_handler (SPCanvasItem *item, GdkEvent *event, gpointer data)
 
 /* Default handlers */
 
-gint sp_desktop_enter_notify (GtkWidget *widget, GdkEventCrossing *event);
 gint sp_canvas_enter_notify (GtkWidget *widget, GdkEventCrossing *event, SPDesktop *desktop);
 gint sp_canvas_leave_notify (GtkWidget *widget, GdkEventCrossing *event, SPDesktop *desktop);
 gint sp_canvas_motion_notify (GtkWidget *widget,GdkEventMotion *motion, SPDesktop *desktop);
