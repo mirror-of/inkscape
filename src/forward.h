@@ -34,10 +34,6 @@ class SPDesktopClass;
 class SPDesktopWidget;
 class SPDesktopWidgetClass;
 
-#define SP_TYPE_DESKTOP (sp_desktop_get_type ())
-#define SP_DESKTOP(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP, SPDesktop))
-#define SP_IS_DESKTOP(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_DESKTOP))
-
 GType sp_desktop_get_type ();
 
 class SPEventContext;
