@@ -192,7 +192,7 @@ class Path
   void             ConvertForcedToVoid();
   struct cut_position {
     int          piece;
-    float        t;
+    double        t;
   };
   cut_position*    CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut);
   cut_position    PointToCurvilignPosition(NR::Point const &pos) const;
