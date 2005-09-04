@@ -28,6 +28,7 @@
 #include "macros.h"
 #include "forward.h"
 #include "inkscape-private.h"
+#include "desktop.h"
 #include "desktop-events.h"
 #include "desktop-affine.h"
 #include "document.h"
@@ -65,7 +66,6 @@ enum {
     LAST_SIGNAL
 };
 
-extern Inkscape::UI::View::View* sp_desktop_new (SPNamedView* namedview, SPCanvas* canvas);
 
 //---------------------------------------------------------------------
 /* SPDesktopWidget */
@@ -79,10 +79,7 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
-static void sp_desktop_widget_view_position_set (Inkscape::UI::View::View *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
 
-static void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
-static void sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
 
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 static void sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWidget *dtw);
@@ -103,10 +100,17 @@ static void sp_dtw_zoom_selection (GtkMenuItem *item, gpointer data);
 
 SPViewWidgetClass *dtw_parent_class;
 
-void SPDesktopWidget::setMessage(Inkscape::MessageType type, const gchar *message)
+void 
+SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
 {
     GtkLabel *sb=GTK_LABEL(this->select_status);
     gtk_label_set_markup (sb, message ? message : "");
+}
+
+void 
+SPDesktopWidget::window_get_pointer (int *x, int *y)
+{
+    gdk_window_get_pointer (GTK_WIDGET (canvas)->window, x, y, NULL);
 }
 
 /**
@@ -306,10 +310,8 @@ sp_desktop_widget_destroy (GtkObject *object)
     dtw->layer_selector->unreference();
 
     if (dtw->desktop) {
-        if (SP_DT_SELECTION (dtw->desktop)) {
-            SP_DT_SELECTION (dtw->desktop)->clear();
-        }
-        g_object_unref (G_OBJECT (dtw->desktop));
+        inkscape_remove_desktop (dtw->desktop); // clears selection too
+        Inkscape::GC::release (dtw->desktop);
         dtw->desktop = NULL;
     }
 
@@ -318,19 +320,22 @@ sp_desktop_widget_destroy (GtkObject *object)
     }
 }
 
+static void
+sp_desktop_widget_set_title (SPDesktopWidget *dtw)
+{
+    sp_desktop_widget_set_title (dtw, SP_DOCUMENT_NAME (dtw->desktop->doc()));
+}
 /**
  * Set the title in the desktop-window (if desktop has an own window).
  * 
  * The title has form file name: desktop number - Inkscape.
  * The desktop number is only shown if it's 2 or higher,
- * the file name is read from the respective document.
  */
-static void
-sp_desktop_widget_set_title (SPDesktopWidget *dtw)
+void
+sp_desktop_widget_set_title (SPDesktopWidget *dtw, gchar const* uri)
 {
     GtkWindow *window = GTK_WINDOW (gtk_object_get_data (GTK_OBJECT(dtw), "window"));
     if (window) {
-        gchar const *uri = SP_DOCUMENT_NAME (SP_VIEW_WIDGET_DOCUMENT (dtw));
         gchar const *fname = ( TRUE
                                ? uri
                                : g_basename(uri) );
@@ -365,8 +370,8 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     if (GTK_WIDGET_REALIZED (widget)) {
         NRRect area;
         double zoom;
-        sp_desktop_get_display_area (dtw->desktop, &area);
-        zoom = SP_DESKTOP_ZOOM (dtw->desktop);
+        dtw->desktop->get_display_area (&area);
+        zoom = dtw->desktop->current_zoom();
 
         if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
             GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
@@ -377,17 +382,18 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             /* Calculate zoom per pixel */
             zpsp = zoom / hypot (area.x1 - area.x0, area.y1 - area.y0);
             /* Find new visible area */
-            sp_desktop_get_display_area (dtw->desktop, &newarea);
+            dtw->desktop->get_display_area (&newarea);
             /* Calculate adjusted zoom */
             zoom = zpsp * hypot (newarea.x1 - newarea.x0, newarea.y1 - newarea.y0);
-            sp_desktop_zoom_absolute (dtw->desktop, 0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
+            dtw->desktop->zoom_absolute (0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
         } else {
-            sp_desktop_zoom_absolute (dtw->desktop, 0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
+            dtw->desktop->zoom_absolute (0.5F * (area.x1 + area.x0), 0.5F * (area.y1 + area.y0), zoom);
         }
 
     } else {
         if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
             GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
+//            this->size_allocate (widget, allocation);
     }
 }
 
@@ -406,12 +412,12 @@ sp_desktop_widget_realize (GtkWidget *widget)
     NRRect d;
     d.x0 = 0.0;
     d.y0 = 0.0;
-    d.x1 = sp_document_width (SP_VIEW_WIDGET_DOCUMENT (dtw));
-    d.y1 = sp_document_height (SP_VIEW_WIDGET_DOCUMENT (dtw));
+    d.x1 = sp_document_width (dtw->desktop->doc());
+    d.y1 = sp_document_height (dtw->desktop->doc());
 
     if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
 
-    sp_desktop_set_display_area (dtw->desktop, d.x0, d.y0, d.x1, d.y1, 10);
+    dtw->desktop->set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
 
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (dtw->desktop->namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
@@ -473,18 +479,17 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
  *  to save, discard, or cancel.  Returns TRUE if the shutdown operation
  *  is cancelled or if the save is cancelled or fails, FALSE otherwise.
  */
-static bool
-sp_dtw_desktop_shutdown (Inkscape::UI::View::View *view, SPDesktopWidget *dtw)
+bool 
+SPDesktopWidget::shutdown()
 {
-    SPDesktop *desktop=SP_DESKTOP(view);
     g_assert(desktop != NULL);
     if (inkscape_is_sole_desktop_for_document(*desktop)) {
-        SPDocument *doc=SP_VIEW_DOCUMENT (view);
+        SPDocument *doc = desktop->doc();
         if (sp_document_repr_root(doc)->attribute("sodipodi:modified") != NULL) {
             GtkWidget *dialog;
 
             dialog = gtk_message_dialog_new(
-                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw))),
+                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))),
                 GTK_DIALOG_DESTROY_WITH_PARENT,
                 GTK_MESSAGE_WARNING,
                 GTK_BUTTONS_NONE,
@@ -547,7 +552,7 @@ sp_dtw_desktop_shutdown (Inkscape::UI::View::View *view, SPDesktopWidget *dtw)
             GtkWidget *dialog;
 
             dialog = gtk_message_dialog_new(
-                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw))),
+                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))),
                 GTK_DIALOG_DESTROY_WITH_PARENT,
                 GTK_MESSAGE_WARNING,
                 GTK_BUTTONS_NONE,
@@ -611,12 +616,6 @@ sp_dtw_desktop_shutdown (Inkscape::UI::View::View *view, SPDesktopWidget *dtw)
     return FALSE;
 }
 
-static void
-sp_desktop_uri_set (Inkscape::UI::View::View *view, const gchar *uri, SPDesktopWidget *dtw)
-{
-    sp_desktop_widget_set_title (dtw);
-}
-
 /**
  * \pre dtw->desktop->main != 0
  */
@@ -632,10 +631,10 @@ sp_desktop_widget_set_coordinate_status (SPDesktopWidget *dtw, gchar *cstr)
     gtk_label_set_text (GTK_LABEL (dtw->coord_status), cstr);
 }
 
-#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 void
 sp_desktop_widget_fullscreen(SPDesktopWidget *dtw)
 {
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
     GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(dtw->canvas)));
     if (GTK_IS_WINDOW(topw)) {
         if (dtw->desktop->is_fullscreen) {
@@ -648,8 +647,8 @@ sp_desktop_widget_fullscreen(SPDesktopWidget *dtw)
             sp_desktop_widget_layout (dtw);
         }
     }
-}
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+}
 
 /**
  * Hide whatever the user does not want to see in the window
@@ -716,30 +715,23 @@ sp_desktop_widget_new (SPNamedView *namedview)
     dtw->dt2r = 1.0 / namedview->doc_units->unittobase;
     dtw->ruler_origin = namedview->gridorigin;
 
-    dtw->desktop = (SPDesktop *) sp_desktop_new (namedview, dtw->canvas);
+    dtw->desktop = new SPDesktop();
+    dtw->desktop = Inkscape::GC::anchor (dtw->desktop);
     dtw->desktop->owner = dtw;
-    g_object_set_data (G_OBJECT (dtw->desktop), "widget", dtw);
+    dtw->desktop->init (namedview, dtw->canvas);
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);
 
-    g_signal_connect (G_OBJECT (dtw->desktop), "uri_set", G_CALLBACK (sp_desktop_uri_set), dtw);
-    sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), SP_VIEW (dtw->desktop));
+    sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
 
-    g_signal_connect (G_OBJECT (dtw->desktop), "position_set", G_CALLBACK (sp_desktop_widget_view_position_set), dtw);
-
-    /* Connect activation signals to update indicator */
-    g_signal_connect (G_OBJECT (dtw->desktop), "activate", G_CALLBACK (sp_dtw_desktop_activate), dtw);
-    g_signal_connect (G_OBJECT (dtw->desktop), "deactivate", G_CALLBACK (sp_dtw_desktop_deactivate), dtw);
-
-    g_signal_connect (G_OBJECT (dtw->desktop), "shutdown", G_CALLBACK (sp_dtw_desktop_shutdown), dtw);
 
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
 
     dtw->layer_selector->setDesktop(dtw->desktop);
 
-    dtw->menubar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));
+    dtw->menubar = sp_ui_main_menubar (dtw->desktop);
     gtk_widget_show_all (dtw->menubar);
     gtk_box_pack_start (GTK_BOX (gtk_bin_get_child (GTK_BIN (dtw))), dtw->menubar, FALSE, FALSE, 0);
 
@@ -752,19 +744,19 @@ sp_desktop_widget_new (SPNamedView *namedview)
     return SP_VIEW_WIDGET (dtw);
 }
 
-static void
-sp_desktop_widget_view_position_set (Inkscape::UI::View::View *view, double x, double y, SPDesktopWidget *dtw)
+void
+SPDesktopWidget::viewSetPosition (double x, double y)
 {
     using NR::X;
     using NR::Y;
 
-    NR::Point const origin = ( NR::Point(x, y) - dtw->ruler_origin );
+    NR::Point const origin = ( NR::Point(x, y) - ruler_origin );
 
-    /* fixme: */
-    GTK_RULER(dtw->hruler)->position = origin[X];
-    gtk_ruler_draw_pos (GTK_RULER (dtw->hruler));
-    GTK_RULER(dtw->vruler)->position = origin[Y];
-    gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
+    /// \todo fixme:
+    GTK_RULER(hruler)->position = origin[X];
+    gtk_ruler_draw_pos (GTK_RULER (hruler));
+    GTK_RULER(vruler)->position = origin[Y];
+    gtk_ruler_draw_pos (GTK_RULER (vruler));
 }
 
 void
@@ -772,7 +764,7 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 {
     NRRect viewbox;
     sp_canvas_get_viewbox (dtw->canvas, &viewbox);
-    double scale = SP_DESKTOP_ZOOM (dtw->desktop);
+    double scale = dtw->desktop->current_zoom();
     double s = viewbox.x0 / scale - dtw->ruler_origin[NR::X];
     double e = viewbox.x1 / scale - dtw->ruler_origin[NR::X];
     gtk_ruler_set_range (GTK_RULER (dtw->hruler), s,  e, GTK_RULER (dtw->hruler)->position, (e - s));
@@ -790,11 +782,11 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
 
         dtw->ruler_origin = nv->gridorigin;
 
-        sp_ruler_set_metric (GTK_RULER (dtw->vruler), sp_desktop_get_default_metric(dtw->desktop));
-        sp_ruler_set_metric (GTK_RULER (dtw->hruler), sp_desktop_get_default_metric(dtw->desktop));
+        sp_ruler_set_metric (GTK_RULER (dtw->vruler), dtw->desktop->get_default_metric());
+        sp_ruler_set_metric (GTK_RULER (dtw->hruler), dtw->desktop->get_default_metric());
 
-        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, gettext(sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop))), NULL);
-        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, gettext(sp_unit_get_plural (sp_desktop_get_default_unit(dtw->desktop))), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, gettext(sp_unit_get_plural (dtw->desktop->get_default_unit())), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, gettext(sp_unit_get_plural (dtw->desktop->get_default_unit())), NULL);
 
         sp_desktop_widget_update_rulers (dtw);
     }
@@ -873,9 +865,9 @@ sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (data);
     SPDesktop *desktop = dtw->desktop;
 
-    sp_desktop_get_display_area (desktop, &d);
+    desktop->get_display_area (&d);
     g_signal_handler_block (spin, dtw->zoom_update);
-    sp_desktop_zoom_absolute (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
+    desktop->zoom_absolute ((d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
     g_signal_handler_unblock (spin, dtw->zoom_update);
 
     spinbutton_defocus (GTK_OBJECT (spin));
@@ -930,44 +922,44 @@ sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
 {
     NRRect d;
 
-    sp_desktop_get_display_area (dt, &d);
-    sp_desktop_zoom_absolute (dt, ( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, factor);
+    dt->get_display_area (&d);
+    dt->zoom_absolute (( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, factor);
 }
 
 static void
 sp_dtw_zoom_50 (GtkMenuItem *item, gpointer data)
 {
-    sp_dtw_zoom_menu_handler (SP_DESKTOP (data), 0.5);
+    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 0.5);
 }
 
 static void
 sp_dtw_zoom_100 (GtkMenuItem *item, gpointer data)
 {
-    sp_dtw_zoom_menu_handler (SP_DESKTOP (data), 1.0);
+    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 1.0);
 }
 
 static void
 sp_dtw_zoom_200 (GtkMenuItem *item, gpointer data)
 {
-    sp_dtw_zoom_menu_handler (SP_DESKTOP (data), 2.0);
+    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 2.0);
 }
 
 static void
 sp_dtw_zoom_page (GtkMenuItem *item, gpointer data)
 {
-    sp_desktop_zoom_page (SP_DESKTOP (data));
+    static_cast<SPDesktop*>(data)->zoom_page();
 }
 
 static void
 sp_dtw_zoom_drawing (GtkMenuItem *item, gpointer data)
 {
-    sp_desktop_zoom_drawing (SP_DESKTOP (data));
+    static_cast<SPDesktop*>(data)->zoom_drawing();
 }
 
 static void
 sp_dtw_zoom_selection (GtkMenuItem *item, gpointer data)
 {
-    sp_desktop_zoom_selection (SP_DESKTOP (data));
+    static_cast<SPDesktop*>(data)->zoom_selection();
 }
 
 
@@ -976,7 +968,7 @@ void
 sp_desktop_widget_update_zoom (SPDesktopWidget *dtw)
 {
     g_signal_handlers_block_by_func (G_OBJECT (dtw->zoom_status), (gpointer)G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (dtw->zoom_status), log(SP_DESKTOP_ZOOM(dtw->desktop)) / log(2));
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (dtw->zoom_status), log(dtw->desktop->current_zoom()) / log(2));
     g_signal_handlers_unblock_by_func (G_OBJECT (dtw->zoom_status), (gpointer)G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 }
 

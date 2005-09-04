@@ -15,7 +15,7 @@
 #include "view.h"
 #include "view-widget.h"
 
-using namespace Inkscape::UI::View;
+//using namespace Inkscape::UI::View;
 
 /* SPViewWidget */
 
@@ -79,8 +79,9 @@ static void sp_view_widget_destroy(GtkObject *object)
     SPViewWidget *vw = SP_VIEW_WIDGET(object);
 
     if (vw->view) {
-        sp_signal_disconnect_by_data(vw->view, vw);
-        g_object_unref(G_OBJECT(vw->view));
+//        sp_signal_disconnect_by_data(vw->view, vw);
+//        delete vw->view;
+//        g_object_unref(G_OBJECT(vw->view));
         vw->view = NULL;
     }
 
@@ -98,13 +99,10 @@ void sp_view_widget_set_view(SPViewWidget *vw, SPView *view)
     g_return_if_fail(vw != NULL);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
     g_return_if_fail(view != NULL);
-    g_return_if_fail(SP_IS_VIEW(view));
     
     g_return_if_fail(vw->view == NULL);
     
     vw->view = view;
-    g_object_ref(G_OBJECT(view));
-    g_signal_connect(G_OBJECT(view), "resized", G_CALLBACK(sp_view_widget_view_resized), vw);
 
     if (((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->set_view) {
         ((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->set_view(vw, view);
@@ -124,17 +122,6 @@ bool sp_view_widget_shutdown(SPViewWidget *vw)
     }
 
     return FALSE;
-}
-
-/**
- * Callback for the 'resized' signal which calls the view_resized() virtual
- * function.
- */
-static void sp_view_widget_view_resized(SPView *view, gdouble width, gdouble height, SPViewWidget *vw)
-{
-    if (((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->view_resized) {
-        ((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->view_resized(vw, view, width, height);
-    }
 }
 
 /*

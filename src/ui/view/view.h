@@ -6,6 +6,7 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ralf Stephan <ralf@ark.in-berlin.de>
  *
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
@@ -13,37 +14,34 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-point.h>
+#include <gdk/gdktypes.h>
 #include <sigc++/connection.h>
-#include <gtk/gtkeventbox.h>
 #include "message.h"
 
-#define SP_TYPE_VIEW (sp_view_get_type ())
-#define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, Inkscape::UI::View::View))
-#define SP_IS_VIEW(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_VIEW))
-
 namespace Inkscape {
-class MessageContext;
-class MessageStack;
+    class MessageContext;
+    class MessageStack;
+}
+namespace NR {
+    class Point;
 }
 class SPView;
 class SPDocument;
 
-
-GType    sp_view_get_type (void);
-void     sp_view_set_document (SPView *view, SPDocument *doc);
-void     sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
-void     sp_view_set_position (SPView *view, gdouble x, gdouble y);
-gboolean sp_view_shutdown (SPView *view);
-void     sp_view_request_redraw (SPView *view);
-
 /**
- * Calls sp_view_set_position() with the point's coordinates.
+ * Iterates until true or returns false.
+ * When used as signal accumulator, stops emission if one slot returns true.
  */
-inline void sp_view_set_position(SPView *view, NR::Point const &p)
-{
-    sp_view_set_position(view, p[NR::X], p[NR::Y]);
-}
+struct StopOnTrue {
+  typedef bool result_type;
+
+  template<typename T_iterator>
+  result_type operator()(T_iterator first, T_iterator last) const{	
+	for (; first != last; ++first)
+		if (*first) return true;
+	return false;      
+  }
+};
 
 /**
  * SPView is an abstract base class of all UI document views.  This
@@ -52,82 +50,66 @@ inline void sp_view_set_position(SPView *view, NR::Point const &p)
  * similar views.  The SPView base class has very little functionality of
  * its own.
  */
-class SPView : public GObject {
- public:
-    GObject object;  /// \todo TODO:  Remove this
+class SPView {
+public:
 
-    SPDocument *doc;
+    SPView::SPView();
+    virtual SPView::~SPView();
 
-    static void init(SPView *view);
-    static void dispose(GObject *obj);
-
+    /// Returns a pointer to the view's document.
+    SPDocument *doc() const 
+      { return _doc; }
     /// Returns a pointer to the view's message stack.
-    Inkscape::MessageStack *messageStack() {
-	return _message_stack;
-    }
-
+    Inkscape::MessageStack *messageStack() const 
+      { return _message_stack; }
     /// Returns a pointer to the view's tipsMessageContext.
-    Inkscape::MessageContext *tipsMessageContext() {
-	return _tips_message_context;
-    }
+    Inkscape::MessageContext *tipsMessageContext() const 
+      { return _tips_message_context; }
 
-    // Wrappers for C versions of routines
-    void setDocument(SPDocument *doc);
-    void emitResized(gdouble width, gdouble height);
+//    bool shutdown();
+//    sigc::connection connectShutdown (const sigc::slot<bool>& slot)
+//      { return _shutdown_signal.connect (slot); }
     void setPosition(gdouble x, gdouble y);
-    void setPosition(NR::Point const &p);
-    gboolean shutdown();
-    void requestRedraw();
+    void setPosition(NR::Point const &p); 
+    void emitResized(gdouble width, gdouble height);
+    void requestRedraw(); 
+    void setDocument(SPDocument *doc);
 
-private:
-    static void _set_status_message(Inkscape::MessageType type, gchar const *message, SPView *view);
+    // view subclasses must give implementations of these methods
+    
+    virtual bool shutdown() = 0;
+    virtual void mouseover() = 0;
+    virtual void mouseout() = 0;
 
+    virtual void onPositionSet (double, double) = 0;
+    virtual void onResized (double, double) = 0;
+    virtual void onRedrawRequested() = 0;
+    virtual void onDocumentSet (SPDocument*) = 0;
+    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) = 0;
+    virtual void onDocumentURISet (gchar const* uri) = 0;
+    virtual void onDocumentResized (double, double) = 0;
+
+protected:
+    SPDocument *_doc;
     Inkscape::MessageStack *_message_stack;
     Inkscape::MessageContext *_tips_message_context;
 
-    sigc::connection _message_changed_connection;
- public: // for now...
-    sigc::connection _document_uri_set_connection;
-    sigc::connection _document_resized_connection;
+//    sigc::signal<bool>::accumulated<StopOnTrue>      _shutdown_signal;
+    sigc::signal<void,double,double>                 _position_set_signal;
+    sigc::signal<void,double,double>                 _resized_signal;
+    sigc::signal<void>                               _redraw_requested_signal;
+    sigc::signal<void,SPDocument*>                   _document_set_signal;
+//    sigc::connection _shutdown_connection;
+
+private:
+    sigc::connection _position_set_connection;
+    sigc::connection _resized_connection;
+    sigc::connection _redraw_requested_connection;
+    sigc::connection _document_set_connection;
+    sigc::connection _message_changed_connection;  // foreign
+    sigc::connection _document_uri_set_connection; // foreign
+    sigc::connection _document_resized_connection; // foreign
 };
-
-namespace Inkscape {
-namespace UI {
-namespace View {
-  typedef SPView View;
-}; // namespace View
-}; // namespace UI
-}; // namespace Inkscape
-
-
-
-/**
- * The Glib-style vtable for the SPView class.
- */
-class SPViewClass {
- public:
-	GObjectClass parent_class;
-
-	/// Request shutdown
-	gboolean (* shutdown) (SPView *view);
-	/// Request redraw of visible area
-	void (* request_redraw) (SPView *view);
-	/// Virtual method to set/change/remove document link
-	void (* set_document) (SPView *view, SPDocument *doc);
-	/// Virtual method about document size change
-	void (* document_resized) (SPView *view, SPDocument *doc, gdouble width, gdouble height);
-
-	/// Signal of view uri change
-	void (* uri_set) (SPView *view, const guchar *uri);
-	/// Signal of view size change
-	void (* resized) (SPView *view, gdouble width, gdouble height);
-	/// Cursor position
-	void (* position_set) (SPView *view, gdouble x, gdouble y);
-	/// Status
-	void (* set_status_message) (SPView *view, Inkscape::MessageType type, gchar const *message);
-};
-
-#define SP_VIEW_DOCUMENT(v) (SP_VIEW (v)->doc)
 
 #endif  // INKSCAPE_UI_VIEW_VIEW_H
 

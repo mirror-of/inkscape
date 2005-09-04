@@ -5,6 +5,7 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Ralf Stephan <ralf@ark.in-berlin.de>
  *
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
@@ -19,92 +20,110 @@
 #include "sp-item.h"
 #include "svg-view.h"
 
-static void sp_svg_view_class_init (SPSVGViewClass *klass);
-static void sp_svg_view_init (SPSVGView *view);
-static void sp_svg_view_dispose (GObject *object);
-
-static void sp_svg_view_set_document (Inkscape::UI::View::View *view, SPDocument *doc);
-static void sp_svg_view_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height);
-
-static void sp_svg_view_rescale (SPSVGView *svgview, bool event);
-
-static SPViewClass *parent_class;
 
 /**
- * Register SPSVGView class with Gtk and return its type number.
+ * Constructs new SPSVGView object and returns pointer to it.
  */
-GtkType
-sp_svg_view_get_type (void)
+SPSVGView::SPSVGView (SPCanvasGroup *parent)
 {
-	static GType type = 0;
-	if (!type) {
-		GTypeInfo info = {
-			sizeof (SPSVGViewClass),
-			NULL, NULL,
-			(GClassInitFunc) sp_svg_view_class_init,
-			NULL, NULL,
-			sizeof (SPSVGView),
-			4,
-			(GInstanceInitFunc) sp_svg_view_init,
-			NULL,	/* value_table */
-		};
-		type = g_type_register_static (SP_TYPE_VIEW, "SPSVGView", &info, (GTypeFlags)0);
-	}
-	return type;
+    _hscale = 1.0;
+    _vscale = 1.0;
+    _rescale = FALSE;
+    _keepaspect = FALSE;
+    _width = 0.0;
+    _height = 0.0;
+
+    _dkey = 0;
+    _parent = parent;
+}
+
+SPSVGView::~SPSVGView()
+{
+    if (_drawing) 
+    {
+        sp_item_invoke_hide (SP_ITEM (sp_document_root (doc())), _dkey);
+        _drawing = NULL;
+    }
 }
 
 /**
- * Callback to initialize the SPSVGView vtable.
+ * Rescales SPSVGView to given proportions.
  */
-static void
-sp_svg_view_class_init (SPSVGViewClass *klass)
+void
+SPSVGView::setScale (gdouble hscale, gdouble vscale)
 {
-	GObjectClass *object_class;
-	SPViewClass *view_class;
-
-	object_class = G_OBJECT_CLASS (klass);
-	view_class = (SPViewClass *) klass;
-
-	parent_class = (SPViewClass*)g_type_class_peek_parent (klass);
-
-	object_class->dispose = sp_svg_view_dispose;
-
-	view_class->set_document = sp_svg_view_set_document;
-	view_class->document_resized = sp_svg_view_document_resized;
+    if (!_rescale && ((hscale != _hscale) || (vscale != _vscale))) {
+        _hscale = hscale;
+        _vscale = vscale;
+        doRescale (true);
+    }
 }
 
 /**
- * Callback to initialize an SPSVGView object.
+ * Rescales SPSVGView and keeps aspect ratio.
  */
-static void
-sp_svg_view_init (SPSVGView *view)
+void
+SPSVGView::setRescale 
+(bool rescale, bool keepaspect, gdouble width, gdouble height)
 {
-	view->hscale = 1.0;
-	view->vscale = 1.0;
-	view->rescale = FALSE;
-	view->keepaspect = FALSE;
-	view->width = 0.0;
-	view->height = 0.0;
+    g_return_if_fail (!rescale || (width >= 0.0));
+    g_return_if_fail (!rescale || (height >= 0.0));
 
-	view->dkey = 0;
+    _rescale = rescale;
+    _keepaspect = keepaspect;
+    _width = width;
+    _height = height;
+
+    doRescale (true);
 }
 
 /**
- * Destructor callback for SPSVGView objects.
+ * Helper function that sets rescale ratio and emits resize event.
  */
-static void
-sp_svg_view_dispose (GObject *object)
+void
+SPSVGView::doRescale (bool event)
 {
-	SPSVGView *svgview = SP_SVG_VIEW (object);
+    if (!doc()) return;
+    if (sp_document_width (doc()) < 1e-9) return;
+    if (sp_document_height (doc()) < 1e-9) return;
 
-	if (svgview->drawing) {
-		sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (svgview))), svgview->dkey);
-		svgview->drawing = NULL;
-	}
+    if (_rescale) {
+        _hscale = _width / sp_document_width (doc());
+        _vscale = _height / sp_document_height (doc());
+        if (_keepaspect) {
+            if (_hscale > _vscale) {
+                _hscale = _vscale;
+                } else {
+                    _vscale = _hscale;
+                }
+        }
+    }
 
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+    if (_drawing) {
+        sp_canvas_item_affine_absolute (_drawing, NR::Matrix(NR::scale(_hscale, _vscale)));
+    }
+
+    if (event) {
+        emitResized (sp_document_width (doc()) * _hscale,
+                sp_document_height (doc()) * _vscale);
+    }
 }
 
+void
+SPSVGView::mouseover()
+{
+    GdkCursor *cursor = gdk_cursor_new(GDK_HAND2);
+    gdk_window_set_cursor(GTK_WIDGET(SP_CANVAS_ITEM(_drawing)->canvas)->window, cursor);
+    gdk_cursor_destroy(cursor);
+}
+
+void
+SPSVGView::mouseout()
+{
+    gdk_window_set_cursor(GTK_WIDGET(SP_CANVAS_ITEM(_drawing)->canvas)->window, NULL);
+}
+
+//----------------------------------------------------------------
 /**
  * Callback connected with arena_event.
  */
@@ -158,350 +177,42 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView
 /**
  * Callback connected with set_document signal.
  */
-static void
-sp_svg_view_set_document (Inkscape::UI::View::View *view, SPDocument *doc)
+void
+SPSVGView::onDocumentSet (SPDocument *document)
 {
-	SPSVGView *svgview = SP_SVG_VIEW (view);
+    if (doc()) {
+        sp_item_invoke_hide (SP_ITEM (sp_document_root (doc())), _dkey);
+    }
 
-	if (view->doc) {
-		sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (view))), svgview->dkey);
-	}
+    if (!_drawing) {
+        _drawing = sp_canvas_item_new (_parent, SP_TYPE_CANVAS_ARENA, NULL);
+        g_signal_connect (G_OBJECT (_drawing), "arena_event", G_CALLBACK (arena_handler), this);
+    }
 
-	if (!svgview->drawing) {
-		svgview->drawing = sp_canvas_item_new (svgview->parent, SP_TYPE_CANVAS_ARENA, NULL);
-		g_signal_connect (G_OBJECT (svgview->drawing), "arena_event", G_CALLBACK (arena_handler), svgview);
-	}
+    if (document) {
+        NRArenaItem *ai = sp_item_invoke_show (
+                SP_ITEM (sp_document_root (document)), 
+                SP_CANVAS_ARENA (_drawing)->arena,
+                _dkey, 
+                SP_ITEM_SHOW_DISPLAY);
+        
+        if (ai) {
+            nr_arena_item_add_child (SP_CANVAS_ARENA (_drawing)->root, ai, NULL);
+            nr_arena_item_unref (ai);
+        }
 
-	if (doc) {
-		NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), SP_CANVAS_ARENA (svgview->drawing)->arena,
-					  svgview->dkey, SP_ITEM_SHOW_DISPLAY);
-		if (ai) {
-			nr_arena_item_add_child (SP_CANVAS_ARENA (svgview->drawing)->root, ai, NULL);
-			nr_arena_item_unref (ai);
-		}
-		sp_svg_view_rescale (svgview, !svgview->rescale);
-	}
+        doRescale (!_rescale);
+    }
 }
 
 /**
  * Callback connected with document_resized signal.
  */
-static void
-sp_svg_view_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height)
-{
-	SPSVGView *svgview = SP_SVG_VIEW (view);
-
-	sp_svg_view_rescale (svgview, !svgview->rescale);
-}
-
-/**
- * Constructs new SPSVGView object and returns pointer to it.
- */
-Inkscape::UI::View::View *
-sp_svg_view_new (SPCanvasGroup *parent)
-{
-	g_return_val_if_fail (parent != NULL, NULL);
-	g_return_val_if_fail (SP_IS_CANVAS_GROUP (parent), NULL);
-
-	SPSVGView *svgview = (SPSVGView*)g_object_new (SP_TYPE_SVG_VIEW, NULL);
-
-	svgview->parent = parent;
-
-	return (Inkscape::UI::View::View *) svgview;
-}
-
-/**
- * Rescales SPSVGView to given proportions.
- */
 void
-sp_svg_view_set_scale (SPSVGView *view, gdouble hscale, gdouble vscale)
+SPSVGView::onDocumentResized (gdouble width, gdouble height)
 {
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_SVG_VIEW (view));
-
-	if (!view->rescale && ((hscale != view->hscale) || (vscale != view->vscale))) {
-		view->hscale = hscale;
-		view->vscale = vscale;
-		sp_svg_view_rescale (view, TRUE);
-	}
-}
-
-/**
- * Rescales SPSVGView and keeps aspect ratio.
- */
-void
-sp_svg_view_set_rescale (SPSVGView *view, bool rescale, bool keepaspect, gdouble width, gdouble height)
-{
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_SVG_VIEW (view));
-	g_return_if_fail (!rescale || (width >= 0.0));
-	g_return_if_fail (!rescale || (height >= 0.0));
-
-	view->rescale = rescale;
-	view->keepaspect = keepaspect;
-	view->width = width;
-	view->height = height;
-
-	sp_svg_view_rescale (view, TRUE);
-}
-
-/**
- * Helper function that sets rescale ratio and emits resize event.
- */
-static void
-sp_svg_view_rescale (SPSVGView *svgview, bool event)
-{
-	SPDocument *doc = SP_VIEW_DOCUMENT (svgview);
-
-	if (!doc) return;
-	if (sp_document_width (doc) < 1e-9) return;
-	if (sp_document_height (doc) < 1e-9) return;
-
-	if (svgview->rescale) {
-		gdouble hscale, vscale;
-		hscale = svgview->width / sp_document_width (doc);
-		vscale = svgview->height / sp_document_height (doc);
-		if (svgview->keepaspect) {
-			if (hscale > vscale) {
-				hscale = vscale;
-			} else {
-				vscale = hscale;
-			}
-		}
-		svgview->hscale = hscale;
-		svgview->vscale = vscale;
-	}
-
-	if (svgview->drawing) {
-		sp_canvas_item_affine_absolute (svgview->drawing, NR::Matrix(NR::scale(svgview->hscale, svgview->vscale)));
-	}
-
-	if (event) {
-		svgview->emitResized (
-		      sp_document_width (doc) * svgview->hscale,
-		      sp_document_height (doc) * svgview->vscale);
-	}
-}
-
-/* SPSVGViewWidget */
-
-static void sp_svg_view_widget_class_init (SPSVGViewWidgetClass *klass);
-static void sp_svg_view_widget_init (SPSVGViewWidget *widget);
-static void sp_svg_view_widget_destroy (GtkObject *object);
-
-static void sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
-static void sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req);
-
-static void sp_svg_view_widget_view_resized (SPViewWidget *vw, Inkscape::UI::View::View *view, gdouble width, gdouble height);
-
-static SPViewWidgetClass *widget_parent_class;
-
-/**
- * Registers SPSVGViewWidget class with Gtk and returns its type number.
- */
-GtkType
-sp_svg_view_widget_get_type (void)
-{
-	static GtkType type = 0;
-	if (!type) {
-		GtkTypeInfo info = {
-			"SPSVGViewWidget",
-			sizeof (SPSVGViewWidget),
-			sizeof (SPSVGViewWidgetClass),
-			(GtkClassInitFunc) sp_svg_view_widget_class_init,
-			(GtkObjectInitFunc) sp_svg_view_widget_init,
-			NULL, NULL, NULL
-		};
-		type = gtk_type_unique (SP_TYPE_VIEW_WIDGET, &info);
-	}
-	return type;
-}
-
-/**
- * Callback to initialize SPSVGViewWidget vtable.
- */
-static void
-sp_svg_view_widget_class_init (SPSVGViewWidgetClass *klass)
-{
-	GtkObjectClass *object_class;
-	GtkWidgetClass *widget_class;
-	SPViewWidgetClass *vw_class;
-
-	object_class = GTK_OBJECT_CLASS (klass);
-	widget_class = GTK_WIDGET_CLASS (klass);
-	vw_class = SP_VIEW_WIDGET_CLASS (klass);
-
-	widget_parent_class = (SPViewWidgetClass*)gtk_type_class (SP_TYPE_VIEW_WIDGET);
-
-	object_class->destroy = sp_svg_view_widget_destroy;
-
-	widget_class->size_allocate = sp_svg_view_widget_size_allocate;
-	widget_class->size_request = sp_svg_view_widget_size_request;
-
-	vw_class->view_resized = sp_svg_view_widget_view_resized;
-}
-
-/**
- * Callback to initialize SPSVGViewWidget object.
- */
-static void
-sp_svg_view_widget_init (SPSVGViewWidget *vw)
-{
-	GtkStyle *style;
-	SPCanvasItem *parent;
-	Inkscape::UI::View::View *view;
-
-	/* Settings */
-	vw->resize = FALSE;
-	vw->maxwidth = 400.0;
-	vw->maxheight = 400.0;
-
-	/* ScrolledWindow */
-	vw->sw = gtk_scrolled_window_new (NULL, NULL);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW(vw->sw), GTK_SHADOW_NONE);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (vw->sw), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_container_add (GTK_CONTAINER (vw), vw->sw);
-	gtk_widget_show (vw->sw);
-
-	/* Canvas */
-	gtk_widget_push_visual (gdk_rgb_get_visual ());
-	gtk_widget_push_colormap (gdk_rgb_get_cmap ());
-	vw->canvas = sp_canvas_new_aa ();
-	gtk_widget_pop_colormap ();
-	gtk_widget_pop_visual ();
-	style = gtk_style_copy (vw->canvas->style);
-	style->bg[GTK_STATE_NORMAL] = style->white;
-	gtk_widget_set_style (vw->canvas, style);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (vw->sw), vw->canvas);
-	gtk_widget_show (vw->canvas);
-
-	/* View */
-	parent = sp_canvas_item_new (sp_canvas_root (SP_CANVAS (vw->canvas)), SP_TYPE_CANVAS_GROUP, NULL);
-	view = sp_svg_view_new (SP_CANVAS_GROUP (parent));
-	sp_view_widget_set_view (SP_VIEW_WIDGET (vw), view);
-	g_object_unref (G_OBJECT (view));
-}
-
-/**
- * Destructor callback for SPSVGViewWidget objects.
- */
-static void
-sp_svg_view_widget_destroy (GtkObject *object)
-{
-	SPSVGViewWidget *vw = SP_SVG_VIEW_WIDGET (object);
-
-	vw->canvas = NULL;
-
-	if (((GtkObjectClass *) (widget_parent_class))->destroy)
-		(* ((GtkObjectClass *) (widget_parent_class))->destroy) (object);
-}
-
-/**
- * Callback connected with size_request signal.
- */
-static void
-sp_svg_view_widget_size_request (GtkWidget *widget, GtkRequisition *req)
-{
-	SPSVGViewWidget *vw = SP_SVG_VIEW_WIDGET (widget);
-	Inkscape::UI::View::View *v = SP_VIEW_WIDGET_VIEW (widget);
-
-	if (((GtkWidgetClass *) (widget_parent_class))->size_request)
-		(* ((GtkWidgetClass *) (widget_parent_class))->size_request) (widget, req);
-
-	if (v->doc) {
-		SPSVGView *svgv;
-		GtkPolicyType hpol, vpol;
-		gdouble width, height;
-
-		svgv = SP_SVG_VIEW (v);
-		width = sp_document_width (v->doc) * svgv->hscale;
-		height = sp_document_height (v->doc) * svgv->vscale;
-
-		if (width <= vw->maxwidth) {
-			hpol = GTK_POLICY_NEVER;
-			req->width = (gint) (width + 0.5);
-		} else {
-			hpol = GTK_POLICY_AUTOMATIC;
-			req->width = (gint) (vw->maxwidth + 0.5);
-		}
-		if (height <= vw->maxheight) {
-			vpol = GTK_POLICY_NEVER;
-			req->height = (gint) (height + 8.0);
-		} else {
-			vpol = GTK_POLICY_AUTOMATIC;
-			req->height = (gint) (vw->maxheight + 2.0);
-		}
-		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (vw->sw), hpol, vpol);
-	}
-}
-
-/**
- * Callback connected with size_allocate signal.
- */
-static void
-sp_svg_view_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
-{
-	SPSVGViewWidget *svgvw = SP_SVG_VIEW_WIDGET (widget);
-
-	if (((GtkWidgetClass *) (widget_parent_class))->size_allocate)
-		(* ((GtkWidgetClass *) (widget_parent_class))->size_allocate) (widget, allocation);
-
-	if (!svgvw->resize) {
-		sp_svg_view_set_rescale (SP_SVG_VIEW (SP_VIEW_WIDGET_VIEW (svgvw)),
-					 TRUE, TRUE,
-					 (gdouble) allocation->width - 1.0, (gdouble) allocation->height - 1.0);
-	}
-}
-
-/**
- * Callback connected with view_resized signal.
- */
-static void
-sp_svg_view_widget_view_resized (SPViewWidget *vw, Inkscape::UI::View::View *view, gdouble width, gdouble height)
-{
-	SPSVGViewWidget *svgvw = SP_SVG_VIEW_WIDGET (vw);
-
-	if (svgvw->resize) {
-		gtk_widget_set_size_request (svgvw->canvas, (int)width, (int)height);
-		gtk_widget_queue_resize (GTK_WIDGET (vw));
-	}
-}
-
-/**
- * Constructs new SPSVGViewWidget object and returns pointer to it.
- */
-GtkWidget *
-sp_svg_view_widget_new (SPDocument *doc)
-{
-	GtkWidget *widget;
-
-	g_return_val_if_fail (doc != NULL, NULL);
-
-	widget = (GtkWidget*)gtk_type_new (SP_TYPE_SVG_VIEW_WIDGET);
-
-	sp_view_set_document (SP_VIEW_WIDGET_VIEW (widget), doc);
-
-	return widget;
-}
-
-/**
- * Flags the SPSVGViewWidget to have its size renegotiated with Gtk.
- */
-void
-sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, bool resize, gdouble width, gdouble height)
-{
-	g_return_if_fail (vw != NULL);
-	g_return_if_fail (SP_IS_SVG_VIEW_WIDGET (vw));
-	g_return_if_fail (!resize || (width > 0.0));
-	g_return_if_fail (!resize || (height > 0.0));
-
-	vw->resize = resize;
-	vw->maxwidth = width;
-	vw->maxheight = height;
-
-	if (resize) {
-		gtk_widget_queue_resize (GTK_WIDGET (vw));
-	}
+    setScale (width, height);
+    doRescale (!_rescale);
 }
 
 

@@ -61,6 +61,7 @@ class SPViewWidget {
 	return sp_view_widget_shutdown(this);
     }
 
+//    void resized (double x, double y) = 0;
 };
 
 /**

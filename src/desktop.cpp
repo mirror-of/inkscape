@@ -84,327 +84,49 @@
 
 namespace Inkscape { namespace XML { class Node; }}
 
-enum {
-    ACTIVATE,
-    DEACTIVATE,
-    MODIFIED,
-    EVENT_CONTEXT_CHANGED,
-    LAST_SIGNAL
-};
-
-static void sp_desktop_class_init(SPDesktopClass *klass);
-static void sp_desktop_init(SPDesktop *desktop);
-static void sp_desktop_dispose(GObject *object);
-
-static void sp_desktop_request_redraw (Inkscape::UI::View::View *view);
-static void sp_desktop_set_document (Inkscape::UI::View::View *view, SPDocument *doc);
-static void sp_desktop_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height);
-
-/* Constructor */
-
 static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
-static void sp_desktop_selection_modified (Inkscape::Selection *selection, guint flags, SPDesktop *desktop);
 
 static void sp_dt_update_snap_distances (SPDesktop *desktop);
 
-SPViewClass *parent_class;
-static guint signals[LAST_SIGNAL] = { 0 };
-
-/**
- * Registers SPDesktop class and returns its type.
- */
-GType
-sp_desktop_get_type (void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof (SPDesktopClass),
-            NULL, NULL,
-            (GClassInitFunc) sp_desktop_class_init,
-            NULL, NULL,
-            sizeof (SPDesktop),
-            4,
-            (GInstanceInitFunc) sp_desktop_init,
-            NULL
-        };
-        type = g_type_register_static (SP_TYPE_VIEW, "SPDesktop", &info, (GTypeFlags)0);
-    }
-    return type;
-}
-
-/**
- * SPDesktop vtable initialization.
- */
 static void
-sp_desktop_class_init (SPDesktopClass *klass)
+_onActivate (SPDesktop* dt)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS (klass);
-    SPViewClass *view_class = (SPViewClass *) klass;
-
-    parent_class = (SPViewClass*)g_type_class_peek_parent (klass);
-
-    signals[ACTIVATE] = g_signal_new ("activate",
-                                      G_TYPE_FROM_CLASS(klass),
-                                      G_SIGNAL_RUN_FIRST,
-                                      G_STRUCT_OFFSET (SPDesktopClass, activate),
-                                      NULL, NULL,
-                                      sp_marshal_NONE__NONE,
-                                      G_TYPE_NONE, 0);
-    signals[DEACTIVATE] = g_signal_new ("deactivate",
-                                        G_TYPE_FROM_CLASS(klass),
-                                        G_SIGNAL_RUN_FIRST,
-                                        G_STRUCT_OFFSET (SPDesktopClass, deactivate),
-                                        NULL, NULL,
-                                        sp_marshal_NONE__NONE,
-                                        G_TYPE_NONE, 0);
-    signals[MODIFIED] = g_signal_new ("modified",
-                                      G_TYPE_FROM_CLASS(klass),
-                                      G_SIGNAL_RUN_FIRST,
-                                      G_STRUCT_OFFSET (SPDesktopClass, modified),
-                                      NULL, NULL,
-                                      sp_marshal_NONE__UINT,
-                                      G_TYPE_NONE, 1,
-                                      G_TYPE_UINT);
-    signals[EVENT_CONTEXT_CHANGED] = g_signal_new ("event_context_changed",
-                                                   G_TYPE_FROM_CLASS(klass),
-                                                   G_SIGNAL_RUN_FIRST,
-                                                   G_STRUCT_OFFSET (SPDesktopClass, event_context_changed),
-                                                   NULL, NULL,
-                                                   sp_marshal_NONE__POINTER,
-                                                   G_TYPE_NONE, 1,
-                                                   G_TYPE_POINTER);
-
-    object_class->dispose = sp_desktop_dispose;
-
-    view_class->request_redraw = sp_desktop_request_redraw;
-    view_class->set_document = sp_desktop_set_document;
-    view_class->document_resized = sp_desktop_document_resized;
-    view_class->set_status_message = &SPDesktop::_set_status_message;
+    if (!dt->owner) return;
+    sp_dtw_desktop_activate (dt, dt->owner);
 }
 
-/**
- * Callback for SPDesktop initialization.
- */
 static void
-sp_desktop_init (SPDesktop *desktop)
+_onDeactivate (SPDesktop* dt)
 {
-    desktop->_dlg_mgr = NULL;
-    desktop->namedview = NULL;
-    desktop->selection = NULL;
-    desktop->acetate = NULL;
-    desktop->main = NULL;
-    desktop->grid = NULL;
-    desktop->guides = NULL;
-    desktop->drawing = NULL;
-    desktop->sketch = NULL;
-    desktop->controls = NULL;
-
-    desktop->d2w.set_identity();
-    desktop->w2d.set_identity();
-    desktop->doc2dt = NR::Matrix(NR::scale(1, -1));
-
-    desktop->guides_active = FALSE;
-
-    desktop->zooms_past = NULL;
-    desktop->zooms_future = NULL;
-
-    desktop->is_fullscreen = FALSE;
-
-    desktop->gr_item = NULL;
-    desktop->gr_point_num = 0;
-    desktop->gr_fill_or_stroke = true;
-
-    new (&desktop->sel_modified_connection) sigc::connection();
-
-    new (&desktop->sel_changed_connection) sigc::connection();
-
-
-    new (&desktop->_set_colorcomponent_signal) sigc::signal<bool, ColorComponent, float, bool, bool>();
-
-    new (&desktop->_set_style_signal) sigc::signal<bool, const SPCSSAttr *, StopOnTrue>();
-
-    new (&desktop->_layer_changed_signal) sigc::signal<void, SPObject *>();
-
-
-    desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());
-
-    desktop->current = sp_repr_css_attr_inherited (inkscape_get_repr (INKSCAPE, "desktop"), "style");
-
-    desktop->_layer_hierarchy = NULL;
+    if (!dt->owner) return;
+    sp_dtw_desktop_deactivate (dt, dt->owner);
 }
 
-/**
- * Called before SPDesktop destruction.
- */
 static void
-sp_desktop_dispose (GObject *object)
+_onSelectionModified 
+(Inkscape::Selection *selection, guint flags, SPDesktop *dt)
 {
-    SPDesktop *dt = SP_DESKTOP (object);
-
-    while (dt->event_context) {
-        SPEventContext *ec = dt->event_context;
-        dt->event_context = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-    }
-
-    dt->sel_modified_connection.disconnect();
-    dt->sel_modified_connection.~connection();
-
-    dt->sel_changed_connection.disconnect();
-    dt->sel_changed_connection.~connection();
-
-    dt->_set_colorcomponent_signal.~signal();
-    dt->_set_style_signal.~accumulated();
-    dt->_layer_changed_signal.~signal();
-
-    if (dt->_layer_hierarchy) {
-        delete dt->_layer_hierarchy;
-    }
-
-    if (dt->inkscape) {
-        inkscape_remove_desktop (dt);
-        dt->inkscape = NULL;
-    }
-
-    if (dt->selection) {
-        Inkscape::GC::release(dt->selection);
-        dt->selection = NULL;
-    }
-
-    if (dt->drawing) {
-        sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (dt))), dt->dkey);
-        dt->drawing = NULL;
-    }
-
-#ifdef WITH_INKBOARD
-	if (dt->_whiteboard_session_manager) {
-		delete dt->_whiteboard_session_manager;
-	}
-#endif
-
-    delete dt->_guides_message_context;
-    dt->_guides_message_context = NULL;
-
-    sp_signal_disconnect_by_data (G_OBJECT (dt->namedview), dt);
-    sp_signal_disconnect_by_data (G_OBJECT (dt->namedview), dt->owner);
-
-    G_OBJECT_CLASS (parent_class)->dispose (object);
-
-    g_list_free (dt->zooms_past);
-    g_list_free (dt->zooms_future);
+    if (!dt->owner) return;
+    sp_desktop_widget_update_scrollbars (dt->owner, dt->doc(), expansion(dt->d2w));
 }
 
-/**
- * Returns current root (=bottom) layer.
- */
-SPObject *SPDesktop::currentRoot() {
-    return _layer_hierarchy ? _layer_hierarchy->top() : NULL;
-}
-
-/**
- * Returns current top layer.
- */
-SPObject *SPDesktop::currentLayer() {
-    return _layer_hierarchy ? _layer_hierarchy->bottom() : NULL;
-}
-
-/**
- * Make \a object the top layer.
- */
-void SPDesktop::setCurrentLayer(SPObject *object) {
-    g_return_if_fail(SP_IS_GROUP(object));
-    g_return_if_fail( currentRoot() == object || currentRoot()->isAncestorOf(object));
-    // printf("Set Layer to ID: %s\n", SP_OBJECT_ID(object));
-    _layer_hierarchy->setBottom(object);
-}
-
-/**
- * Return layer that contains \a object.
- */
-SPObject *SPDesktop::layerForObject(SPObject *object) {
-    g_return_val_if_fail(object != NULL, NULL);
-
-    SPObject *root=currentRoot();
-    object = SP_OBJECT_PARENT(object);
-    while ( object && object != root && !isLayer(object) ) {
-        object = SP_OBJECT_PARENT(object);
-    }
-    return object;
-}
-
-/**
- * True if object is a layer.
- */
-bool SPDesktop::isLayer(SPObject *object) const {
-    return ( SP_IS_GROUP(object)
-             && ( SP_GROUP(object)->effectiveLayerMode(this->dkey)
-                  == SPGroup::LAYER ) );
-}
-
-/**
- * True if desktop viewport fully contains \a item's bbox.
- */
-bool SPDesktop::isWithinViewport(SPItem *item) const {
-    NRRect viewport;
-    NRRect bbox;
-    sp_desktop_get_display_area(const_cast<SPDesktop *>(this), &viewport);
-    sp_item_bbox_desktop(item, &bbox);
-    return NR::Rect(viewport).contains(NR::Rect(bbox));
-}
-
-///
-bool SPDesktop::itemIsHidden(SPItem const *item) const {
-    return item->isHidden(this->dkey);
-}
-
-/**
- * Redraw callback; queues Gtk redraw.
- */
-static void
-sp_desktop_request_redraw (Inkscape::UI::View::View *view)
+static void 
+_onSelectionChanged
+(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    SPDesktop *dt = SP_DESKTOP (view);
-
-    if (dt->main) {
-        sp_desktop_widget_queue_draw (dt->owner);
-    }
-}
-
-/**
- * Resized callback.
- */
-static void
-sp_desktop_document_resized (Inkscape::UI::View::View *view, SPDocument *doc, gdouble width, gdouble height)
-{
-    SPDesktop *desktop = SP_DESKTOP (view);
-
-    desktop->doc2dt[5] = height;
-
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
-
-    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, width, height);
-    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page_border), 0.0, 0.0, width, height);
-}
-
-/**
- * Set activate property of desktop; emit signal if changed.
- */
-void
-sp_desktop_set_active (SPDesktop *desktop, bool active)
-{
-    if (active != desktop->active) {
-        desktop->active = active;
-        if (active) {
-            g_signal_emit (G_OBJECT (desktop), signals[ACTIVATE], 0);
-        } else {
-            g_signal_emit (G_OBJECT (desktop), signals[DEACTIVATE], 0);
+    /** \todo 
+     * only change the layer for single selections, or what?
+     * This seems reasonable -- for multiple selections there can be many
+     * different layers involved.
+     */
+    SPItem *item=selection->singleItem();
+    if (item) {
+        SPObject *layer=desktop->layerForObject(item);
+        if ( layer && layer != desktop->currentLayer() ) {
+            desktop->setCurrentLayer(layer);
         }
     }
 }
-
-/* fixme: */
 
 /**
  * Calls event handler of current event context.
@@ -422,74 +144,114 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPDesktop
     }
 }
 
-static void sp_desktop_set_namedview (SPDesktop *desktop, SPNamedView* namedview)
-{
-    desktop->namedview = namedview;
-    g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), desktop);
-    desktop->number = sp_namedview_viewcount (namedview);
-}
-
-/* Constructor */
-
 /**
  * Return new desktop object.
  * \pre namedview != NULL.
  * \pre canvas != NULL.
  */
-Inkscape::UI::View::View *
-sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
+SPDesktop::SPDesktop()
 {
+    _dlg_mgr = NULL;
+    namedview = NULL;
+    selection = NULL;
+    acetate = NULL;
+    main = NULL;
+    grid = NULL;
+    guides = NULL;
+    drawing = NULL;
+    sketch = NULL;
+    controls = NULL;
+    event_context = 0;
+    window = 0;
+
+    d2w.set_identity();
+    w2d.set_identity();
+    doc2dt = NR::Matrix(NR::scale(1, -1));
+
+    guides_active = false;
+
+    zooms_past = NULL;
+    zooms_future = NULL;
+
+    is_fullscreen = false;
+
+    gr_item = NULL;
+    gr_point_num = 0;
+    gr_fill_or_stroke = true;
+
+    _layer_hierarchy = NULL;
+
+    selection = new Inkscape::Selection (this);
+
+     new (&_activate_signal) sigc::signal<void>();
+    new (&_deactivate_signal) sigc::signal<void>();
+    new (&_set_style_signal) sigc::signal<bool, const SPCSSAttr *, StopOnTrue>();
+    new (&_query_style_signal) sigc::signal<int, SPStyle*,int, StopOnTrue>();
+    new (&_event_context_changed_signal) sigc::signal<void,SPDesktop*,SPEventContext*>();
+    new (&_set_colorcomponent_signal) sigc::signal<bool, ColorComponent, float, bool, bool>();
+    new (&_layer_changed_signal) sigc::signal<void, SPObject *>();
+    new (&_tool_subselection_changed) sigc::signal<void, gpointer>();
+    new (&_tool_changed) sigc::signal<void, sp_verb_t>();
+
+    // foreign signals
+    new (&_sel_modified_connection) sigc::connection();
+    new (&_sel_changed_connection) sigc::connection();
+//fprintf(stderr,"desktop created at %X\n", this);fflush(stderr);
+}
+
+void 
+SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
+
+{
+    _guides_message_context = new Inkscape::MessageContext(const_cast<Inkscape::MessageStack*>(messageStack()));
+
+    current = sp_repr_css_attr_inherited (inkscape_get_repr (INKSCAPE, "desktop"), "style");
+
+    namedview = nv;
+   
     SPDocument *document = SP_OBJECT_DOCUMENT (namedview);
     /* Kill flicker */
     sp_document_ensure_up_to_date (document);
 
-    /* Setup widget */
-    SPDesktop *desktop = (SPDesktop *) g_object_new (SP_TYPE_DESKTOP, NULL);
-
     /* Setup Dialog Manager */
-    desktop->_dlg_mgr = new Inkscape::UI::Dialog::DialogManager();
+    _dlg_mgr = new Inkscape::UI::Dialog::DialogManager();
 
-    desktop->dkey = sp_item_display_key_new (1);
+    dkey = sp_item_display_key_new (1);
 
-    /* Connect document */
-    sp_view_set_document (SP_VIEW (desktop), document);
+    number = sp_namedview_viewcount (namedview);
 
-    sp_desktop_set_namedview (desktop, namedview);
-
-	/* Construct SessionManager */
+/* Construct SessionManager */
 #ifdef WITH_INKBOARD
-	desktop->_whiteboard_session_manager = new Inkscape::Whiteboard::SessionManager(desktop);
+	_whiteboard_session_manager = new Inkscape::Whiteboard::SessionManager(this);
 #endif
 
     /* Setup Canvas */
-    g_object_set_data (G_OBJECT (canvas), "SPDesktop", desktop);
+    g_object_set_data (G_OBJECT (canvas), "SPDesktop", this);
 
     SPCanvasGroup *root = sp_canvas_root (canvas);
 
     /* Setup adminstrative layers */
-    desktop->acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, NULL);
-    g_signal_connect (G_OBJECT (desktop->acetate), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
-    desktop->main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
-    g_signal_connect (G_OBJECT (desktop->main), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
+    acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, NULL);
+    g_signal_connect (G_OBJECT (acetate), "event", G_CALLBACK (sp_desktop_root_handler), this);
+    main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
+    g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
-    desktop->table = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->table), -15000.0, -15000.0, 15000.0, 15000.0);
-    sp_ctrlrect_set_color (SP_CTRLRECT (desktop->table), 0x00000000, TRUE, 0x00000000);
-    sp_canvas_item_move_to_z (desktop->table, 0);
+    table = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_area (SP_CTRLRECT (table), -15000.0, -15000.0, 15000.0, 15000.0);
+    sp_ctrlrect_set_color (SP_CTRLRECT (table), 0x00000000, TRUE, 0x00000000);
+    sp_canvas_item_move_to_z (table, 0);
 
-    desktop->page = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page, 0x00000000, FALSE, 0x00000000);
-    desktop->page_border = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
+    page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
+    sp_ctrlrect_set_color ((SPCtrlRect *) page, 0x00000000, FALSE, 0x00000000);
+    page_border = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
 
-    desktop->drawing = sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_ARENA, NULL);
-    g_signal_connect (G_OBJECT (desktop->drawing), "arena_event", G_CALLBACK (arena_handler), desktop);
+    drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, NULL);
+    g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (arena_handler), this);
 
-    desktop->grid = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
-    desktop->guides = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
-    desktop->sketch = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
-    desktop->controls = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
-
-    desktop->selection = new Inkscape::Selection (desktop);
+    grid = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    guides = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    sketch = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    controls = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
 
     /* Push select tool to the bottom of stack */
     /** \todo
@@ -497,11 +259,11 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
      * call "set" instead of "push".  Can we assume that there is only one
      * context ever?
      */
-    sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
+    push_event_context (SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
-    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
-    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+    sp_ctrlrect_set_area (SP_CTRLRECT (page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+    sp_ctrlrect_set_area (SP_CTRLRECT (page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
 
     /* the following sets the page shadow on the canvas
        It was originally set to 5, which is really cheesy!
@@ -509,60 +271,133 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
        0 is used, then the constructor for a shadow is not initialized.
     */
 
-    if ( desktop->namedview->pageshadow != 0 && 
-         desktop->namedview->showpageshadow ) {
-        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page_border), 
-                                desktop->namedview->pageshadow, 0x3f3f3fff);
+    if ( namedview->pageshadow != 0 && namedview->showpageshadow ) {
+        sp_ctrlrect_set_shadow (SP_CTRLRECT (page_border), 
+                                namedview->pageshadow, 0x3f3f3fff);
     }
     
 
     /* Connect event for page resize */
-    desktop->doc2dt[5] = sp_document_height (document);
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
+    doc2dt[5] = sp_document_height (document);
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt);
 
-    desktop->sel_modified_connection.disconnect();
-    desktop->sel_modified_connection = desktop->selection->connectModified(
-        sigc::bind(
-            sigc::ptr_fun(&sp_desktop_selection_modified),
-            desktop
-        )
-    );
+    g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), this);
 
-    desktop->sel_changed_connection.disconnect();
-    desktop->sel_changed_connection = desktop->selection->connectChanged(
-        sigc::bind(
-            sigc::ptr_fun(&SPDesktop::_selection_changed),
-            desktop
-        )
-    );
 
-    NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))),
-                                           SP_CANVAS_ARENA (desktop->drawing)->arena, desktop->dkey, SP_ITEM_SHOW_DISPLAY);
+    NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (document)),
+            SP_CANVAS_ARENA (drawing)->arena, 
+            dkey, 
+            SP_ITEM_SHOW_DISPLAY);
     if (ai) {
-        nr_arena_item_add_child (SP_CANVAS_ARENA (desktop->drawing)->root, ai, NULL);
+        nr_arena_item_add_child (SP_CANVAS_ARENA (drawing)->root, ai, NULL);
         nr_arena_item_unref (ai);
     }
 
-    sp_namedview_show (desktop->namedview, desktop);
+    sp_namedview_show (namedview, this);
     /* Ugly hack */
-    sp_desktop_activate_guides (desktop, TRUE);
+    activate_guides (true);
     /* Ugly hack */
-    sp_dt_namedview_modified (desktop->namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
+    sp_dt_namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
 
-    /* Set up notification of rebuilding the document, this allows
+        /* Connect document */
+    setDocument (document);
+
+/* Set up notification of rebuilding the document, this allows
        for saving object related settings in the document. */
-    desktop->_reconstruction_start_connection =
-        document->connectReconstructionStart(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_start), desktop));
-    desktop->_reconstruction_finish_connection =
-        document->connectReconstructionFinish(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_finish), desktop));
-    desktop->_reconstruction_old_layer_id = NULL;
+    _reconstruction_start_connection =
+        document->connectReconstructionStart(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_start), this));
+    _reconstruction_finish_connection =
+        document->connectReconstructionFinish(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_finish), this));
+    _reconstruction_old_layer_id = NULL;
 
     // ?
     // sp_active_desktop_set (desktop);
-    inkscape_add_desktop (desktop);
-    desktop->inkscape = INKSCAPE;
+    inkscape_add_desktop (this);
+    inkscape = INKSCAPE;
 
-    return SP_VIEW (desktop);
+    _activate_connection = _activate_signal.connect(
+        sigc::bind(
+            sigc::ptr_fun(_onActivate),
+            this
+        )
+    );
+     _deactivate_connection = _deactivate_signal.connect(
+        sigc::bind(
+            sigc::ptr_fun(_onDeactivate),
+            this
+        )
+    );
+
+    _sel_modified_connection = selection->connectModified(
+        sigc::bind(
+            sigc::ptr_fun(&_onSelectionModified),
+            this
+        )
+    );
+    _sel_changed_connection = selection->connectChanged(
+        sigc::bind(
+            sigc::ptr_fun(&_onSelectionChanged),
+            this
+        )
+    );
+
+}
+
+
+SPDesktop::~SPDesktop()
+{
+    if (selection) {
+        Inkscape::GC::release(selection);
+        selection = NULL;
+    }
+
+    _activate_connection.disconnect();
+    _activate_connection.~connection();
+    _deactivate_connection.disconnect();
+    _deactivate_connection.~connection();
+    _sel_modified_connection.disconnect();
+    _sel_modified_connection.~connection();
+    _sel_changed_connection.disconnect();
+    _sel_changed_connection.~connection();
+
+    while (event_context) {
+        SPEventContext *ec = event_context;
+        event_context = ec->next;
+        sp_event_context_finish (ec);
+        g_object_unref (G_OBJECT (ec));
+    }
+
+//    _set_colorcomponent_signal.~signal();
+//    _set_style_signal.~accumulated();
+//    _layer_changed_signal.~signal();
+
+    if (_layer_hierarchy) {
+        delete _layer_hierarchy;
+    }
+
+    if (inkscape) {
+        inkscape = NULL;
+    }
+
+    if (drawing) {
+        sp_item_invoke_hide (SP_ITEM (sp_document_root (doc())), dkey);
+        drawing = NULL;
+    }
+
+#ifdef WITH_INKBOARD
+	if (_whiteboard_session_manager) {
+		delete _whiteboard_session_manager;
+	}
+#endif
+
+    delete _guides_message_context;
+    _guides_message_context = NULL;
+
+    sp_signal_disconnect_by_data (G_OBJECT (namedview), this);
+    sp_signal_disconnect_by_data (G_OBJECT (namedview), owner);
+
+    g_list_free (zooms_past);
+    g_list_free (zooms_future);
 }
 
 /**
@@ -647,87 +482,115 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
                                                           px));
 }
 
+
+//--------------------------------------------------------------------
+/* Public methods */
+
+/**
+ * Returns current root (=bottom) layer.
+ */
+SPObject *SPDesktop::currentRoot() const 
+{
+    return _layer_hierarchy ? _layer_hierarchy->top() : NULL;
+}
+
+/**
+ * Returns current top layer.
+ */
+SPObject *SPDesktop::currentLayer() const
+{
+    return _layer_hierarchy ? _layer_hierarchy->bottom() : NULL;
+}
+
+/**
+ * Make \a object the top layer.
+ */
+void SPDesktop::setCurrentLayer(SPObject *object) {
+    g_return_if_fail(SP_IS_GROUP(object));
+    g_return_if_fail( currentRoot() == object || currentRoot()->isAncestorOf(object));
+    // printf("Set Layer to ID: %s\n", SP_OBJECT_ID(object));
+    _layer_hierarchy->setBottom(object);
+}
+
+/**
+ * Return layer that contains \a object.
+ */
+SPObject *SPDesktop::layerForObject(SPObject *object) {
+    g_return_val_if_fail(object != NULL, NULL);
+
+    SPObject *root=currentRoot();
+    object = SP_OBJECT_PARENT(object);
+    while ( object && object != root && !isLayer(object) ) {
+        object = SP_OBJECT_PARENT(object);
+    }
+    return object;
+}
+
+/**
+ * True if object is a layer.
+ */
+bool SPDesktop::isLayer(SPObject *object) const {
+    return ( SP_IS_GROUP(object)
+             && ( SP_GROUP(object)->effectiveLayerMode(this->dkey)
+                  == SPGroup::LAYER ) );
+}
+
+/**
+ * True if desktop viewport fully contains \a item's bbox.
+ */
+bool SPDesktop::isWithinViewport (SPItem *item) const 
+{
+    NRRect viewport;
+    NRRect bbox;
+    get_display_area (&viewport);
+    sp_item_bbox_desktop(item, &bbox);
+    return NR::Rect(viewport).contains(NR::Rect(bbox));
+}
+
+///
+bool SPDesktop::itemIsHidden(SPItem const *item) const {
+    return item->isHidden(this->dkey);
+}
+
+/**
+ * Set activate property of desktop; emit signal if changed.
+ */
+void
+SPDesktop::set_active (bool new_active)
+{
+    if (new_active != active) {
+        active = new_active;
+        if (new_active) {
+            _activate_signal.emit();
+        } else {
+            _deactivate_signal.emit();
+        }
+    }
+}
+
 /**
  * Set activate status of current desktop's named view.
  */
 void
-sp_desktop_activate_guides(SPDesktop *desktop, bool activate)
+SPDesktop::activate_guides(bool activate)
 {
-    desktop->guides_active = activate;
-    sp_namedview_activate_guides (desktop->namedview, desktop, activate);
-}
-
-/**
- * Associate document with desktop (view?).
- */
-static void
-sp_desktop_set_document (Inkscape::UI::View::View *view, SPDocument *doc)
-{
-    SPDesktop *desktop = SP_DESKTOP (view);
-
-    if (view->doc) {
-        sp_namedview_hide (desktop->namedview, desktop);
-        sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (desktop))), desktop->dkey);
-    }
-
-    if (desktop->_layer_hierarchy) {
-        desktop->_layer_hierarchy->clear();
-        delete desktop->_layer_hierarchy;
-    }
-    desktop->_layer_hierarchy = new Inkscape::ObjectHierarchy(NULL);
-    desktop->_layer_hierarchy->connectAdded(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_activated), desktop));
-    desktop->_layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_deactivated), desktop));
-    desktop->_layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_hierarchy_changed), desktop));
-    desktop->_layer_hierarchy->setTop(SP_DOCUMENT_ROOT(doc));
-
-    /// \todo fixme:
-    if (desktop->drawing) {
-        NRArenaItem *ai;
-
-        sp_desktop_set_namedview (desktop, sp_document_namedview (doc, NULL));
-
-        ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), SP_CANVAS_ARENA (desktop->drawing)->arena,
-                                  desktop->dkey, SP_ITEM_SHOW_DISPLAY);
-        if (ai) {
-            nr_arena_item_add_child (SP_CANVAS_ARENA (desktop->drawing)->root, ai, NULL);
-            nr_arena_item_unref (ai);
-        }
-        sp_namedview_show (desktop->namedview, desktop);
-        /* Ugly hack */
-        sp_desktop_activate_guides (desktop, TRUE);
-        /* Ugly hack */
-        sp_dt_namedview_modified (desktop->namedview, SP_OBJECT_MODIFIED_FLAG, desktop);
-    }
+    guides_active = activate;
+    sp_namedview_activate_guides (namedview, this, activate);
 }
 
 /**
  * Make desktop switch documents.
  */
 void
-sp_desktop_change_document (SPDesktop *desktop, SPDocument *document)
+SPDesktop::change_document (SPDocument *document)
 {
-    g_return_if_fail (desktop != NULL);
-    g_return_if_fail (SP_IS_DESKTOP (desktop));
     g_return_if_fail (document != NULL);
 
     /* unselect everything before switching documents */
-    SP_DT_SELECTION (desktop)->clear();
+    selection->clear();
 
-    sp_view_set_document (SP_VIEW (desktop), document);
+    setDocument (document);
 }
-
-/* Private methods */
-
-static void
-sp_desktop_selection_modified (Inkscape::Selection *selection, guint flags, SPDesktop *desktop)
-{
-    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (desktop), "widget");
-    if (!dtw) return;
-
-    sp_desktop_widget_update_scrollbars (dtw, SP_VIEW_DOCUMENT (desktop), SP_DESKTOP_ZOOM (desktop));
-}
-
-/* Public methods */
 
 /* Context switching */
 
@@ -735,23 +598,23 @@ sp_desktop_selection_modified (Inkscape::Selection *selection, guint flags, SPDe
  * Make desktop switch event contexts.
  */
 void
-sp_desktop_set_event_context (SPDesktop *dt, GtkType type, const gchar *config)
+SPDesktop::set_event_context (GtkType type, const gchar *config)
 {
     SPEventContext *ec;
-    while (dt->event_context) {
-        ec = dt->event_context;
+    while (event_context) {
+        ec = event_context;
         sp_event_context_deactivate (ec);
-        dt->event_context = ec->next;
+        event_context = ec->next;
         sp_event_context_finish (ec);
         g_object_unref (G_OBJECT (ec));
     }
 
     Inkscape::XML::Node *repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
-    ec = sp_event_context_new (type, dt, repr, SP_EVENT_CONTEXT_STATIC);
-    ec->next = dt->event_context;
-    dt->event_context = ec;
+    ec = sp_event_context_new (type, this, repr, SP_EVENT_CONTEXT_STATIC);
+    ec->next = event_context;
+    event_context = ec;
     sp_event_context_activate (ec);
-    g_signal_emit (G_OBJECT (dt), signals[EVENT_CONTEXT_CHANGED], 0, ec);
+    _event_context_changed_signal.emit (this, ec);
 }
 
 /**
@@ -759,13 +622,13 @@ sp_desktop_set_event_context (SPDesktop *dt, GtkType type, const gchar *config)
  * \see sp_desktop_new()
  */
 void
-sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const gchar *config, unsigned int key)
+SPDesktop::push_event_context (GtkType type, const gchar *config, unsigned int key)
 {
     SPEventContext *ref, *ec;
     Inkscape::XML::Node *repr;
 
-    if (dt->event_context && dt->event_context->key == key) return;
-    ref = dt->event_context;
+    if (event_context && event_context->key == key) return;
+    ref = event_context;
     while (ref && ref->next && ref->next->key != key) ref = ref->next;
     if (ref && ref->next) {
         ec = ref->next;
@@ -774,34 +637,34 @@ sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const gchar *config,
         g_object_unref (G_OBJECT (ec));
     }
 
-    if (dt->event_context) sp_event_context_deactivate (dt->event_context);
+    if (event_context) sp_event_context_deactivate (event_context);
     repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
-    ec = sp_event_context_new (type, dt, repr, key);
-    ec->next = dt->event_context;
-    dt->event_context = ec;
+    ec = sp_event_context_new (type, this, repr, key);
+    ec->next = event_context;
+    event_context = ec;
     sp_event_context_activate (ec);
-    g_signal_emit (G_OBJECT (dt), signals[EVENT_CONTEXT_CHANGED], 0, ec);
+    _event_context_changed_signal.emit (this, ec);
 }
 
 /**
  * Pop event context from desktop's context stack.
  */
 void
-sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
+SPDesktop::pop_event_context (unsigned int key)
 {
     SPEventContext *ec = NULL;
 
-    if (dt->event_context && dt->event_context->key == key) {
-        g_return_if_fail (dt->event_context);
-        g_return_if_fail (dt->event_context->next);
-        ec = dt->event_context;
+    if (event_context && event_context->key == key) {
+        g_return_if_fail (event_context);
+        g_return_if_fail (event_context->next);
+        ec = event_context;
         sp_event_context_deactivate (ec);
-        dt->event_context = ec->next;
-        sp_event_context_activate (dt->event_context);
-        g_signal_emit (G_OBJECT (dt), signals[EVENT_CONTEXT_CHANGED], 0, ec);
+        event_context = ec->next;
+        sp_event_context_activate (event_context);
+        _event_context_changed_signal.emit (this, ec);
     }
 
-    SPEventContext *ref = dt->event_context;
+    SPEventContext *ref = event_context;
     while (ref && ref->next && ref->next->key != key)
         ref = ref->next;
 
@@ -839,77 +702,76 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
  * Thus we may just get rid of it.
  */
 void
-sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underline)
+SPDesktop::set_coordinate_status (NR::Point p, guint underline)
 {
     gchar cstr[64];
 
-    g_snprintf (cstr, 64, "%6.2f, %6.2f", desktop->owner->dt2r * p[NR::X], desktop->owner->dt2r * p[NR::Y]);
+    g_snprintf (cstr, 64, "%6.2f, %6.2f", owner->dt2r * p[NR::X], owner->dt2r * p[NR::Y]);
 
-    sp_desktop_widget_set_coordinate_status (desktop->owner, cstr);
+    sp_desktop_widget_set_coordinate_status (owner, cstr);
 }
 
 /**
  * Returns desktop's default unit.
  */
 const SPUnit *
-sp_desktop_get_default_unit (SPDesktop *dt)
+SPDesktop::get_default_unit() const
 {
-    return dt->namedview->doc_units;
+    return namedview->doc_units;
 }
 
 /**
  * Returns desktop's default metric.
  */
 SPMetric
-sp_desktop_get_default_metric (SPDesktop *dt)
+SPDesktop::get_default_metric() const
 {
-    if (sp_desktop_get_default_unit (dt))
-        return sp_unit_get_metric (sp_desktop_get_default_unit (dt));
+    if (get_default_unit())
+        return sp_unit_get_metric (get_default_unit());
     else
         return SP_PT;
 }
 
 
 SPItem *
-sp_desktop_item_from_list_at_point_bottom (SPDesktop const *desktop, const GSList *list, NR::Point const p)
+SPDesktop::item_from_list_at_point_bottom (const GSList *list, NR::Point const p) const
 {
-    SPDocument *document = SP_VIEW (desktop)->doc;
-    g_return_val_if_fail (document != NULL, NULL);
-    return sp_document_item_from_list_at_point_bottom (desktop->dkey, SP_GROUP (document->root), list, p);
+    g_return_val_if_fail (doc() != NULL, NULL);
+    return sp_document_item_from_list_at_point_bottom (dkey, SP_GROUP (doc()->root), list, p);
 }
 
 SPItem *
-sp_desktop_item_at_point (SPDesktop const *desktop, NR::Point const p, bool into_groups, SPItem *upto)
+SPDesktop::item_at_point (NR::Point const p, bool into_groups, SPItem *upto) const
 {
-    SPDocument *document = SP_VIEW (desktop)->doc;
-    g_return_val_if_fail (document != NULL, NULL);
-    return sp_document_item_at_point (document, desktop->dkey, p, into_groups, upto);
+    g_return_val_if_fail (doc() != NULL, NULL);
+    return sp_document_item_at_point (doc(), dkey, p, into_groups, upto);
 }
 
 SPItem *
-sp_desktop_group_at_point (SPDesktop const *desktop, NR::Point const p)
+SPDesktop::group_at_point (NR::Point const p) const
 {
-    SPDocument *document = SP_VIEW (desktop)->doc;
-    g_return_val_if_fail (document != NULL, NULL);
-    return sp_document_group_at_point (document, desktop->dkey, p);
+    g_return_val_if_fail (doc() != NULL, NULL);
+    return sp_document_group_at_point (doc(), dkey, p);
 }
 
 /**
-\brief  Returns the mouse point in document coordinates; if mouse is outside the canvas, returns the center of canvas viewpoint
-*/
+ * \brief  Returns the mouse point in document coordinates; if mouse is 
+ * outside the canvas, returns the center of canvas viewpoint
+ */
 NR::Point
-sp_desktop_point (SPDesktop const *desktop)
+SPDesktop::point() const
 {
     gint x, y;
-    gdk_window_get_pointer (GTK_WIDGET (desktop->owner->canvas)->window, &x, &y, NULL);
-    NR::Point pw = sp_canvas_window_to_world (desktop->owner->canvas, NR::Point(x, y));
-    NR::Point p = sp_desktop_w2d_xy_point (desktop, pw);
+    
+    owner->window_get_pointer (&x, &y);
+    NR::Point pw = sp_canvas_window_to_world (owner->canvas, NR::Point(x, y));
+    NR::Point p = sp_desktop_w2d_xy_point (this, pw);
 
     NRRect r;
-    sp_canvas_get_viewbox (desktop->owner->canvas, &r);
+    sp_canvas_get_viewbox (owner->canvas, &r);
 
-    NR::Point r0 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x0, r.y0));
-    NR::Point r1 = sp_desktop_w2d_xy_point (desktop, NR::Point(r.x1, r.y1));
+    NR::Point r0 = sp_desktop_w2d_xy_point (this, NR::Point(r.x0, r.y0));
+    NR::Point r1 = sp_desktop_w2d_xy_point (this, NR::Point(r.x1, r.y1));
 
     if (p[NR::X] >= r0[NR::X] &&
         p[NR::X] <= r1[NR::X] &&
@@ -926,10 +788,10 @@ sp_desktop_point (SPDesktop const *desktop)
  * Put current zoom data in history list.
  */
 void
-sp_push_current_zoom (SPDesktop *dt, GList **history)
+SPDesktop::push_current_zoom (GList **history)
 {
     NRRect area;
-    sp_desktop_get_display_area (dt, &area);
+    get_display_area (&area);
 
     NRRect *old_zoom = g_new(NRRect, 1);
     old_zoom->x0 = area.x0;
@@ -950,31 +812,30 @@ sp_push_current_zoom (SPDesktop *dt, GList **history)
  * Set viewbox.
  */
 void
-sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border, bool log)
+SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double border, bool log)
 {
-    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
-    if (!dtw) return;
+    if (!owner) return;
 
     // save the zoom
     if (log) {
-        sp_push_current_zoom (dt, &(dt->zooms_past));
+        push_current_zoom (&zooms_past);
         // if we do a logged zoom, our zoom-forward list is invalidated, so delete it
-        g_list_free (dt->zooms_future);
-        dt->zooms_future = NULL;
+        g_list_free (zooms_future);
+        zooms_future = NULL;
     }
 
     double cx = 0.5 * (x0 + x1);
     double cy = 0.5 * (y0 + y1);
 
     NRRect viewbox;
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+    sp_canvas_get_viewbox (owner->canvas, &viewbox);
 
     viewbox.x0 += border;
     viewbox.y0 += border;
     viewbox.x1 -= border;
     viewbox.y1 -= border;
 
-    double scale = SP_DESKTOP_ZOOM (dt);
+    double scale = expansion(d2w);
     double newscale;
     if (((x1 - x0) * (viewbox.y1 - viewbox.y0)) > ((y1 - y0) * (viewbox.x1 - viewbox.x0))) {
         newscale = (viewbox.x1 - viewbox.x0) / (x1 - x0);
@@ -987,9 +848,9 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     int clear = FALSE;
     if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
         /* Set zoom factors */
-        dt->d2w = NR::Matrix(NR::scale(newscale, -newscale));
-        dt->w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
-        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), dt->d2w);
+        d2w = NR::Matrix(NR::scale(newscale, -newscale));
+        w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
+        sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), d2w);
         clear = TRUE;
     }
 
@@ -998,27 +859,26 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     y1 = cy + 0.5 * (viewbox.y1 - viewbox.y0) / newscale;
 
     /* Scroll */
-    sp_canvas_scroll_to (dtw->canvas, x0 * newscale - border, y1 * -newscale - border, clear);
+    sp_canvas_scroll_to (owner->canvas, x0 * newscale - border, y1 * -newscale - border, clear);
 
-    sp_desktop_widget_update_rulers (dtw);
-    sp_desktop_widget_update_scrollbars (dtw, SP_VIEW_DOCUMENT (dt), SP_DESKTOP_ZOOM (dt));
-    sp_desktop_widget_update_zoom (dtw);
+    sp_desktop_widget_update_rulers (owner);
+    sp_desktop_widget_update_scrollbars (owner, doc(), expansion(d2w));
+    sp_desktop_widget_update_zoom (owner);
 }
 
 /**
  * Return viewbox dimensions.
  */
 NRRect *
-sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
+SPDesktop::get_display_area (NRRect *area) const
 {
     NRRect viewbox;
 
-    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
-    if (!dtw) return NULL;
+    if (!owner) return NULL;
 
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+    sp_canvas_get_viewbox (owner->canvas, &viewbox);
 
-    double scale = dt->d2w[0];
+    double scale = d2w[0];
 
     area->x0 = viewbox.x0 / scale;
     area->y0 = viewbox.y1 / -scale;
@@ -1032,97 +892,98 @@ sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
  * Revert back to previous zoom if possible.
  */
 void
-sp_desktop_prev_zoom (SPDesktop *dt)
+SPDesktop::prev_zoom()
 {
-    if (dt->zooms_past == NULL) {
-        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No previous zoom."));
+    if (zooms_past == NULL) {
+        messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No previous zoom."));
         return;
     }
 
     // push current zoom into forward zooms list
-    sp_push_current_zoom (dt, &(dt->zooms_future));
+    push_current_zoom (&zooms_future);
 
     // restore previous zoom
-    sp_desktop_set_display_area (dt,
-                                 ((NRRect *) dt->zooms_past->data)->x0,
-                                 ((NRRect *) dt->zooms_past->data)->y0,
-                                 ((NRRect *) dt->zooms_past->data)->x1,
-                                 ((NRRect *) dt->zooms_past->data)->y1,
-                                 0, false);
+    set_display_area (((NRRect *) zooms_past->data)->x0,
+            ((NRRect *) zooms_past->data)->y0,
+            ((NRRect *) zooms_past->data)->x1,
+            ((NRRect *) zooms_past->data)->y1,
+            0, false);
 
     // remove the just-added zoom from the past zooms list
-    dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
+    zooms_past = g_list_remove (zooms_past, ((NRRect *) zooms_past->data));
 }
 
 /**
  * Set zoom to next in list.
  */
 void
-sp_desktop_next_zoom (SPDesktop *dt)
+SPDesktop::next_zoom()
 {
-    if (dt->zooms_future == NULL) {
-        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No next zoom."));
+    if (zooms_future == NULL) {
+        this->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No next zoom."));
         return;
     }
 
     // push current zoom into past zooms list
-    sp_push_current_zoom (dt, &(dt->zooms_past));
+    push_current_zoom (&zooms_past);
 
     // restore next zoom
-    sp_desktop_set_display_area (dt,
-                                 ((NRRect *) dt->zooms_future->data)->x0,
-                                 ((NRRect *) dt->zooms_future->data)->y0,
-                                 ((NRRect *) dt->zooms_future->data)->x1,
-                                 ((NRRect *) dt->zooms_future->data)->y1,
-                                 0, false);
+    set_display_area (((NRRect *) zooms_future->data)->x0,
+            ((NRRect *) zooms_future->data)->y0,
+            ((NRRect *) zooms_future->data)->x1,
+            ((NRRect *) zooms_future->data)->y1,
+            0, false);
 
     // remove the just-used zoom from the zooms_future list
-    dt->zooms_future = g_list_remove (dt->zooms_future, ((NRRect *) dt->zooms_future->data));
+    zooms_future = g_list_remove (zooms_future, ((NRRect *) zooms_future->data));
 }
 
 /**
  * Zoom to point with absolute zoom factor.
  */
 void
-sp_desktop_zoom_absolute_keep_point (SPDesktop *dt, double cx, double cy, double px, double py, double zoom)
+SPDesktop::zoom_absolute_keep_point (double cx, double cy, double px, double py, double zoom)
 {
-    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
-    if (!dtw) return;
+    if (!owner) return;
 
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
 
     // maximum or minimum zoom reached, but there's no exact equality because of rounding errors;
     // this check prevents "sliding" when trying to zoom in at maximum zoom;
     /// \todo someone please fix calculations properly and remove this hack
-    if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01))
+    if (fabs(expansion(d2w) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01))
         return;
 
     NRRect viewbox;
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+    sp_canvas_get_viewbox (owner->canvas, &viewbox);
 
     const double width2 = (viewbox.x1 - viewbox.x0) / zoom;
     const double height2 = (viewbox.y1 - viewbox.y0) / zoom;
 
-    sp_desktop_set_display_area (dt, cx - px * width2, cy - py * height2, cx + (1 - px) * width2, cy + (1 - py) * height2, 0.0);
+    set_display_area (cx - px * width2, 
+            cy - py * height2, 
+            cx + (1 - px) * width2, 
+            cy + (1 - py) * height2, 
+            0.0);
 }
 
 /**
  * Zoom to center with absolute zoom factor.
  */
 void
-sp_desktop_zoom_absolute (SPDesktop *dt, double cx, double cy, double zoom)
+SPDesktop::zoom_absolute (double cx, double cy, double zoom)
 {
-    sp_desktop_zoom_absolute_keep_point (dt, cx, cy, 0.5, 0.5, zoom);
+    zoom_absolute_keep_point (cx, cy, 0.5, 0.5, zoom);
 }
 
 /**
  * Zoom to point with relative zoom factor.
  */
 void
-sp_desktop_zoom_relative_keep_point (SPDesktop *dt, double cx, double cy, double zoom)
+SPDesktop::zoom_relative_keep_point (double cx, double cy, double zoom)
 {
     NRRect area;
-    sp_desktop_get_display_area (dt, &area);
+    get_display_area (&area);
 
     if (cx < area.x0)
         cx = area.x0;
@@ -1133,82 +994,81 @@ sp_desktop_zoom_relative_keep_point (SPDesktop *dt, double cx, double cy, double
     if (cy > area.y1)
         cy = area.y1;
 
-    gdouble scale = SP_DESKTOP_ZOOM (dt) * zoom;
+    gdouble scale = expansion(d2w) * zoom;
     double px = (cx - area.x0)/(area.x1 - area.x0);
     double py = (cy - area.y0)/(area.y1 - area.y0);
 
-    sp_desktop_zoom_absolute_keep_point (dt, cx, cy, px, py, scale);
+    zoom_absolute_keep_point (cx, cy, px, py, scale);
 }
 
 /**
  * Zoom to center with relative zoom factor.
  */
 void
-sp_desktop_zoom_relative (SPDesktop *dt, double cx, double cy, double zoom)
+SPDesktop::zoom_relative (double cx, double cy, double zoom)
 {
-    gdouble scale = SP_DESKTOP_ZOOM (dt) * zoom;
-    sp_desktop_zoom_absolute (dt, cx, cy, scale);
+    gdouble scale = expansion(d2w) * zoom;
+    zoom_absolute (cx, cy, scale);
 }
 
 /**
  * Set display area to origin and current document dimensions.
  */
 void
-sp_desktop_zoom_page (SPDesktop *dt)
+SPDesktop::zoom_page()
 {
     NRRect d;
 
     d.x0 = d.y0 = 0.0;
-    d.x1 = sp_document_width (SP_DT_DOCUMENT (dt));
-    d.y1 = sp_document_height (SP_DT_DOCUMENT (dt));
+    d.x1 = sp_document_width (doc());
+    d.y1 = sp_document_height (doc());
 
     if ((fabs (d.x1 - d.x0) < 1.0) || (fabs (d.y1 - d.y0) < 1.0)) return;
 
-    sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
 }
 
 /**
  * Set display area to current document width.
  */
 void
-sp_desktop_zoom_page_width (SPDesktop *dt)
+SPDesktop::zoom_page_width()
 {
     NRRect d;
 
-    sp_desktop_get_display_area (dt, &d);
+    get_display_area (&d);
 
     d.x0 = 0.0;
-    d.x1 = sp_document_width (SP_DT_DOCUMENT (dt));
+    d.x1 = sp_document_width (doc());
 
     if ((fabs (d.x1 - d.x0) < 1.0)) return;
 
     d.y1 = d.y0 = (d.y1 + d.y0) / 2;
 
-    sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
 }
 
 /**
  * Zoom to selection.
  */
 void
-sp_desktop_zoom_selection (SPDesktop *dt)
+SPDesktop::zoom_selection()
 {
     NRRect d;
-    SP_DT_SELECTION(dt)->bounds(&d);
+    selection->bounds(&d);
 
     if ((fabs (d.x1 - d.x0) < 0.1) || (fabs (d.y1 - d.y0) < 0.1)) return;
-    sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
 }
 
 /**
  * Zoom to whole drawing.
  */
 void
-sp_desktop_zoom_drawing (SPDesktop *dt)
+SPDesktop::zoom_drawing()
 {
-    SPDocument *doc = SP_VIEW_DOCUMENT (SP_VIEW (dt));
-    g_return_if_fail (doc != NULL);
-    SPItem *docitem = SP_ITEM (sp_document_root (doc));
+    g_return_if_fail (doc() != NULL);
+    SPItem *docitem = SP_ITEM (sp_document_root (doc()));
     g_return_if_fail (docitem != NULL);
 
     NRRect d;
@@ -1223,36 +1083,36 @@ sp_desktop_zoom_drawing (SPDesktop *dt)
         return;
     }
 
-    sp_desktop_set_display_area (dt, d.x0, d.y0, d.x1, d.y1, 10);
+    set_display_area (d.x0, d.y0, d.x1, d.y1, 10);
 }
 
 /**
  * Scroll canvas by specific coordinate amount.
  */
-void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
+void 
+SPDesktop::scroll_world (double dx, double dy)
 {
-    SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
-    if (!dtw) return;
+    if (!owner) return;
 
     NRRect viewbox;
-    sp_canvas_get_viewbox (dtw->canvas, &viewbox);
+    sp_canvas_get_viewbox (owner->canvas, &viewbox);
 
-    sp_canvas_scroll_to (dtw->canvas, viewbox.x0 - dx, viewbox.y0 - dy, FALSE);
+    sp_canvas_scroll_to (owner->canvas, viewbox.x0 - dx, viewbox.y0 - dy, FALSE);
 
-    sp_desktop_widget_update_rulers (dtw);
-    sp_desktop_widget_update_scrollbars (dtw, SP_VIEW_DOCUMENT (dt), SP_DESKTOP_ZOOM (dt));
+    sp_desktop_widget_update_rulers (owner);
+    sp_desktop_widget_update_scrollbars (owner, doc(), expansion(d2w));
 }
 
 bool
-sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble autoscrollspeed)
+SPDesktop::scroll_to_point (NR::Point const *p, gdouble autoscrollspeed)
 {
     NRRect dbox;
-    sp_desktop_get_display_area (desktop, &dbox);
+    get_display_area (&dbox);
 
     gdouble autoscrolldistance = (gdouble) prefs_get_int_attribute_limited ("options.autoscrolldistance", "value", 0, -1000, 10000);
 
     // autoscrolldistance is in screen pixels, but the display area is in document units
-    autoscrolldistance /= SP_DESKTOP_ZOOM (desktop);
+    autoscrolldistance /= expansion(d2w);
 
     /// \todo FIXME: njh: we need an expandBy function for rects
     dbox.x0 -= autoscrolldistance;
@@ -1263,7 +1123,7 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble auto
     if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) ||
         !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)   ) {
 
-        NR::Point const s_w( (*p) * desktop->d2w );
+        NR::Point const s_w( (*p) * d2w );
 
         gdouble x_to;
         if ((*p)[NR::X] < dbox.x0)
@@ -1282,14 +1142,14 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble auto
             y_to = (*p)[NR::Y];
 
         NR::Point const d_dt(x_to, y_to);
-        NR::Point const d_w( d_dt * desktop->d2w );
+        NR::Point const d_w( d_dt * d2w );
         NR::Point const moved_w( d_w - s_w );
 
         if (autoscrollspeed == 0)
             autoscrollspeed = prefs_get_double_attribute_limited ("options.autoscrollspeed", "value", 1, 0, 10);
 
         if (autoscrollspeed != 0)
-            sp_desktop_scroll_world(desktop, autoscrollspeed * moved_w);
+            scroll_world (autoscrollspeed * moved_w);
 
         return true;
     }
@@ -1297,22 +1157,115 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble auto
 }
 
 void
-fullscreen(SPDesktop *dt)
+SPDesktop::fullscreen()
 {
-    sp_desktop_widget_fullscreen (dt->owner);
+    sp_desktop_widget_fullscreen (owner);
 }
 
-//--------------------------------------------------------------
-//
-
-/// Callback.
-void SPDesktop::_set_status_message(Inkscape::UI::View::View *view, Inkscape::MessageType type, const gchar *message)
+bool
+SPDesktop::shutdown()
 {
-    SPDesktop *desktop=SP_DESKTOP(view);
-    if (desktop->owner) {
-        desktop->owner->setMessage(type, message);
+    return owner->shutdown();
+}
+
+//----------------------------------------------------------------------
+// Callback implementations. The virtual ones are connected by the view.
+
+void 
+SPDesktop::onPositionSet (double x, double y)
+{
+    owner->viewSetPosition (x,y);
+}
+
+void
+SPDesktop::onResized (double x, double y)
+{
+   // Nothing called here 
+}
+
+/**
+ * Redraw callback; queues Gtk redraw; connected by View.
+ */
+void
+SPDesktop::onRedrawRequested ()
+{
+    if (main) {
+        sp_desktop_widget_queue_draw (owner);
     }
 }
+
+/**
+ * Associate document with desktop.
+ */
+void
+SPDesktop::onDocumentSet (SPDocument *doc)
+{
+    if (doc) {
+        sp_namedview_hide (namedview, this);
+        sp_item_invoke_hide (SP_ITEM (sp_document_root (doc)), dkey);
+    }
+
+    if (_layer_hierarchy) {
+        _layer_hierarchy->clear();
+        delete _layer_hierarchy;
+    }
+    _layer_hierarchy = new Inkscape::ObjectHierarchy(NULL);
+    _layer_hierarchy->connectAdded(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_activated), this));
+    _layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_deactivated), this));
+    _layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_hierarchy_changed), this));
+    _layer_hierarchy->setTop(SP_DOCUMENT_ROOT(doc));
+
+    /// \todo fixme:
+    if (drawing) {
+        NRArenaItem *ai;
+
+        namedview = sp_document_namedview (doc, NULL);
+        g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), this);
+        number = sp_namedview_viewcount (namedview);
+
+        ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), 
+                SP_CANVAS_ARENA (drawing)->arena,
+                dkey, 
+                SP_ITEM_SHOW_DISPLAY);
+        if (ai) {
+            nr_arena_item_add_child (SP_CANVAS_ARENA (drawing)->root, ai, NULL);
+            nr_arena_item_unref (ai);
+        }
+        sp_namedview_show (namedview, this);
+        /* Ugly hack */
+        activate_guides (true);
+        /* Ugly hack */
+        sp_dt_namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
+    }
+}
+
+void
+SPDesktop::onStatusMessage
+(Inkscape::MessageType type, gchar const *message)
+{
+    if (owner) {
+        owner->setMessage(type, message);
+    }
+}
+
+void
+SPDesktop::onDocumentURISet (gchar const* uri)
+{
+    sp_desktop_widget_set_title (owner, uri);
+}
+
+/**
+ * Resized callback.
+ */
+void
+SPDesktop::onDocumentResized (gdouble width, gdouble height)
+{
+    doc2dt[5] = height;
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt);
+    sp_ctrlrect_set_area (SP_CTRLRECT (page), 0.0, 0.0, width, height);
+    sp_ctrlrect_set_area (SP_CTRLRECT (page_border), 0.0, 0.0, width, height);
+}
+
 
 /// Callback
 void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
@@ -1330,24 +1283,7 @@ void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
 void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
                                          SPDesktop *desktop)
 {
-    desktop->_layer_changed_signal.emit(bottom);
-}
-
-/// Callback
-void SPDesktop::_selection_changed(Inkscape::Selection *selection, SPDesktop *desktop)
-{
-    /** \todo 
-     * only change the layer for single selections, or what?
-     * This seems reasonable -- for multiple selections there can be many
-     * different layers involved.
-     */
-    SPItem *item=selection->singleItem();
-    if (item) {
-        SPObject *layer=desktop->layerForObject(item);
-        if ( layer && layer != desktop->currentLayer() ) {
-            desktop->setCurrentLayer(layer);
-        }
-    }
+    desktop->_layer_changed_signal.emit (bottom);
 }
 
 /// Called when document is starting to be rebuilt.

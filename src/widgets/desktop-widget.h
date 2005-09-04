@@ -63,6 +63,11 @@ struct SPDesktopWidget {
     Inkscape::Widgets::LayerSelector *layer_selector;
 
     void setMessage(Inkscape::MessageType type, gchar const *message);
+
+    void window_get_pointer (gint* x, gint* y);
+
+    bool shutdown();
+    void viewSetPosition (double x, double y);
 };
 
 /// The SPDesktopWidget vtable
@@ -87,6 +92,10 @@ void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw, bool is_fullscreen);
 void sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw, bool is_fullscreen);
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, SPDocument *doc, double scale);
+
+void sp_desktop_widget_set_title (SPDesktopWidget *dtw, gchar const* uri);
+void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
+void sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw);
 
 #endif /* !SEEN_SP_DESKTOP_WIDGET_H */
 

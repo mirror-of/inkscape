@@ -25,7 +25,7 @@
 #include <gtkmm/drawingarea.h>  // TODO: remove this when SVG Canvas is hooked in
 
 #include "libnr/nr-matrix.h"
-#include "view.h"
+#include "ui/view/view.h"
 
 #include "ui/dialog/dialog-manager.h"
 #include "ui/widget/toolbox.h"
@@ -40,11 +40,13 @@ struct SPEventContext;
 struct SPNamedView;
 struct NRArenaItem;
 
+
 namespace Inkscape {
 class Selection;
 
 namespace UI {
 namespace View {
+typedef ::SPView View;
 
 class Edit : public Gtk::Window, View {
 public:
@@ -96,6 +98,20 @@ public:
 #endif
 
     void onUriChanged();
+
+    // from View
+    virtual void mouseover() {}
+    virtual void mouseout() {}
+
+    virtual bool shutdown() { return true; }
+    virtual void onPositionSet (double, double) {}
+    virtual void onResized (double, double) {}
+    virtual void onRedrawRequested() {}
+    virtual void onDocumentSet (SPDocument*) {}
+    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {}
+    virtual void onDocumentURISet (gchar const* uri) {}
+    virtual void onDocumentResized (double, double) {}
+
 
     SPEventContext       *event_context;
 
