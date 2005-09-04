@@ -481,15 +481,20 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                             p *= sp_item_dt2i_affine(item_ungrouped, desktop);
                             p *= sp_item_i2doc_affine(item_ungrouped);
 
-                            Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
+                            Path::cut_position position = get_nearest_position_on_Path(item_ungrouped, p);
                             NR::Point nearest = get_point_on_Path(item_ungrouped, position.piece, position.t);
 
-                            NR::Point delta = NR::Point(nearest[NR::X]-p[NR::X], nearest[NR::Y]-p[NR::Y]);
-                            delta = sp_desktop_d2w_xy_point(desktop, delta);                            
+                            NR::Point delta = nearest - p;
+
+                            //g_print ("nearest %.9g %.9g,    p %.9g %.9g\n", nearest[NR::X], nearest[NR::Y], p[NR::X], p[NR::Y]);
+
+                            delta = sp_desktop_d2w_xy_point(desktop, delta);
+
+                            //g_print ("l2 %.9g, tol  %.9g\n", NR::L2 (delta), (double) tolerance);
 
                             //only dragging curves
                             // save drag origin
-                            if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
+                            if (NR::L2 (delta) < (double) tolerance) {
                                 sp_nodepath_select_segment_near_point(item_ungrouped, p, false);
 
                                 nc->curvedrag[NR::X] = (gint) event->button.x;
