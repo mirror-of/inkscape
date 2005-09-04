@@ -66,18 +66,11 @@ int sp_desktop_item_handler(SPCanvasItem *item, GdkEvent *event, gpointer data)
     gpointer ddata = gtk_object_get_data(GTK_OBJECT(item->canvas), "SPDesktop");
     g_return_val_if_fail(ddata != NULL, FALSE);
 
-    SPDesktop *desktop = SP_DESKTOP(ddata);
+    SPDesktop *desktop = static_cast<SPDesktop*>(ddata);
 
     return sp_event_context_item_handler(desktop->event_context, SP_ITEM(data), event);
 }
 
-
-// not needed 
-gint sp_desktop_enter_notify(GtkWidget *widget, GdkEventCrossing *event)
-{
-    inkscape_activate_desktop(SP_DESKTOP(widget));
-    return FALSE;
-}
 
 static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz)
 {
@@ -121,10 +114,10 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                                                       ? NR::Y
                                                       : NR::X ];
                 sp_guideline_set_position(SP_GUIDELINE(guide), guide_pos_dt);
-                sp_desktop_set_coordinate_status(desktop, event_dt, ( horiz
+                desktop->set_coordinate_status(event_dt, ( horiz
                                                                       ? SP_COORDINATES_UNDERLINE_Y
                                                                       : SP_COORDINATES_UNDERLINE_X ));
-                sp_view_set_position(SP_VIEW(desktop), event_dt);
+                desktop->setPosition (event_dt);
             }
             break;
 	case GDK_BUTTON_RELEASE:
@@ -150,7 +143,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     sp_repr_unref(repr);
                     sp_document_done(SP_DT_DOCUMENT(desktop));
                 }
-                sp_desktop_set_coordinate_status(desktop, event_dt, 0);
+                desktop->set_coordinate_status(event_dt, 0);
             }
 	default:
             break;
@@ -178,7 +171,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
     gint ret = FALSE;
     
     SPGuide *guide = SP_GUIDE(data);
-    SPDesktop *desktop = SP_DESKTOP(gtk_object_get_data(GTK_OBJECT(item->canvas), "SPDesktop"));
+    SPDesktop *desktop = static_cast<SPDesktop*>(gtk_object_get_data(GTK_OBJECT(item->canvas), "SPDesktop"));
 
     switch (event->type) {
 	case GDK_2BUTTON_PRESS:
@@ -209,8 +202,8 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 NR::Point const motion_dt( motion_w * desktop->w2d );
                 sp_guide_moveto(*guide, sp_guide_position_from_pt(guide, motion_dt), false);
                 moved = true;
-                sp_desktop_set_coordinate_status(desktop, motion_dt, 0);
-                sp_view_set_position(SP_VIEW(desktop), motion_dt);
+                desktop->set_coordinate_status(motion_dt, 0);
+                desktop->setPosition (motion_dt);
                 ret = TRUE;
             }
             break;
@@ -229,8 +222,8 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     }
                     moved = false;
                     sp_document_done(SP_DT_DOCUMENT(desktop));
-                    sp_desktop_set_coordinate_status(desktop, event_dt, 0);
-                    sp_view_set_position(SP_VIEW(desktop), event_dt);
+                    desktop->set_coordinate_status(event_dt, 0);
+                    desktop->setPosition (event_dt);
                 }
                 dragging = false;
                 sp_canvas_item_ungrab(item, event->button.time);
@@ -241,7 +234,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             
             sp_guideline_set_color(SP_GUIDELINE(item), guide->hicolor);
 
-            GString *position_string = SP_PX_TO_METRIC_STRING(guide->position, sp_desktop_get_default_metric(desktop));
+            GString *position_string = SP_PX_TO_METRIC_STRING(guide->position, desktop->get_default_metric());
             char *guide_description = sp_guide_description(guide);
 
             desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("%s at %s"), guide_description, position_string->str);
@@ -409,7 +402,7 @@ static void sp_dt_simple_guide_dialog(SPGuide *guide, SPDesktop *desktop)
         // unitmenu
         /* fixme: We should allow percents here too, as percents of the canvas size */
         u = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(u), sp_desktop_get_default_unit(desktop));
+        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(u), desktop->get_default_unit());
         
         // spinbutton
         GtkObject *a = gtk_adjustment_new(0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);
