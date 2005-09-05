@@ -1,3 +1,9 @@
+2005-09-04  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/io/sys.cpp: Build fix - conditionally include <glib/gstdio.h>
+	  if using glib 2.6.0 or greater, since it is not available in earlier
+	  versions.
+
 2005-09-04  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/svg-view-widget.h, src/svg-view-widget.cpp, src/Makefile_insert:

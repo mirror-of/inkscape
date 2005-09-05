@@ -19,7 +19,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <glib.h>
-#include <glib/gstdio.h>
+#if GLIB_CHECK_VERSION(2,6,0)
+    #include <glib/gstdio.h>
+#endif
 #include <gtkmm.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkmessagedialog.h>
