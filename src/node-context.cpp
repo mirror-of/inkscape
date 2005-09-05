@@ -44,6 +44,7 @@
 #include "xml/node-event-vector.h"
 #include "libnr/nr-point-matrix-ops.h"
 #include "livarot/Path.h"
+#include "style.h"
 
 //from splivarot.cpp
 Path::cut_position get_nearest_position_on_Path(SPItem * item, NR::Point p);
@@ -424,11 +425,12 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
 
                         Path::cut_position position = get_nearest_position_on_Path(item_ungrouped,p);
                         NR::Point nearest = get_point_on_Path(item_ungrouped, position.piece, position.t);
+                        NR::Point delta = nearest - p;
 
-                        NR::Point delta = NR::Point(nearest[NR::X]-p[NR::X], nearest[NR::Y]-p[NR::Y]);
                         delta = sp_desktop_d2w_xy_point(desktop, delta);                            
-
-                        if (( abs( (gint) delta[NR::X]) < tolerance ) && ( abs( (gint) delta[NR::Y]) < tolerance ) ) {
+                        double stroke_tolerance = ((NR::expansion(desktop->w2d)*item_ungrouped->style->stroke_width.computed/2.0))+(double)tolerance;
+                        
+                        if (NR::L2 (delta) < stroke_tolerance) {
                             switch (event->type) {
                                 case GDK_BUTTON_RELEASE:
                                     if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
@@ -490,11 +492,13 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
 
                             delta = sp_desktop_d2w_xy_point(desktop, delta);
 
-                            //g_print ("l2 %.9g, tol  %.9g\n", NR::L2 (delta), (double) tolerance);
+                            double stroke_tolerance = ((NR::expansion(desktop->w2d)*item_ungrouped->style->stroke_width.computed/2.0))+(double)tolerance;
+
+                            //g_print ("l2 %.9g, tol  %.9g\n", NR::L2 (delta), stroke_tolerance);
 
                             //only dragging curves
                             // save drag origin
-                            if (NR::L2 (delta) < (double) tolerance) {
+                            if (NR::L2 (delta) < stroke_tolerance) {
                                 sp_nodepath_select_segment_near_point(item_ungrouped, p, false);
 
                                 nc->curvedrag[NR::X] = (gint) event->button.x;
