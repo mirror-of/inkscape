@@ -10,7 +10,7 @@
 2005-09-04  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/svg-view-widget.h, src/svg-view-widget.cpp, src/Makefile_insert:
-	    separated SPSVGWidget from SPSVGView
+	    separated SPSVGViewWidget from SPSVGView
 	* src/desktop.h, src/svg-view.h, src/ui/view/edit.h,
 	  src/ui/view/view-widget.h, src/ui/view/view.h,
 	  src/widgets/desktop-widget.h, src/desktop.cpp,
