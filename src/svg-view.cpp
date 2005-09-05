@@ -34,6 +34,7 @@ SPSVGView::SPSVGView (SPCanvasGroup *parent)
     _height = 0.0;
 
     _dkey = 0;
+    _drawing = 0;
     _parent = parent;
 }
 
