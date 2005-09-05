@@ -39,8 +39,6 @@ SPConnEndPair::SPConnEndPair(SPPath *const owner)
             .connect(sigc::bind(sigc::ptr_fun(sp_conn_end_href_changed),
                                 this->_connEnd[handle_ix], owner, handle_ix));
     }
-    
-    new (&_invalid_path_signal) sigc::signal<void, SPConnEndPair *>();
 }
 
 SPConnEndPair::~SPConnEndPair()
@@ -56,7 +54,6 @@ SPConnEndPair::~SPConnEndPair()
     }
     
     _invalid_path_connection.disconnect();
-    _invalid_path_signal.~signal();
 }
 
 void

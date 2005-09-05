@@ -1,5 +1,8 @@
 2005-09-04  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
+	* src/sp-conn-end-pair.cpp: Fix a crash bug when undoing connectors
+	  on Linux x86 where we were calling a signal destructor.
+
 	* src/io/sys.cpp: Build fix - conditionally include <glib/gstdio.h>
 	  if using glib 2.6.0 or greater, since it is not available in earlier
 	  versions.
