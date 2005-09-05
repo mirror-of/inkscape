@@ -205,7 +205,7 @@ static char const menus_skeleton[] =
 "       </submenu>\n"
 "       <verb verb-id=\"HelpAboutMemory\" />\n"
 "       <verb verb-id=\"HelpAbout\" />\n"
-"       <verb verb-id=\"ShowLicense\" />\n"
+//"       <verb verb-id=\"ShowLicense\" />\n"
 "   </submenu>\n"
 "</inkscape>\n";
 

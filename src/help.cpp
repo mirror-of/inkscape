@@ -30,14 +30,9 @@
 #include "libnr/nr-macros.h"
 #include "inkscape_version.h"
 
-static GtkWidget *w = NULL;
+#include "ui/dialog/aboutbox.h"
 
-static gint
-sp_help_about_delete (GtkWidget *widget, GdkEvent *event, gpointer data)
-{
-    w = NULL;
-    return FALSE;
-}
+static Inkscape::UI::Dialog::AboutBox * aboutbox = NULL;
 
 #define WINDOW_MIN 20
 #define WINDOW_MAX INT_MAX
@@ -55,7 +50,7 @@ sp_help_about (void)
      * coordinate with the directory reorganization.
      */
 
-    if (!w) {
+    if (!aboutbox) {
         /* TRANSLATORS: This is the filename of the `About Inkscape' picture in
            the `screens' directory.  Thus the translation of "about.svg" should be
            the filename of its translated version, e.g. about.zh.svg for Chinese.
@@ -78,24 +73,17 @@ sp_help_about (void)
         sp_document_ensure_up_to_date (doc);
 
 
-        w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-        gtk_window_set_title (GTK_WINDOW (w), _("About Inkscape"));
-
         width  = static_cast< gint > ( CLAMP( sp_document_width(doc), 
                                               WINDOW_MIN, WINDOW_MAX ));
         
         height = static_cast< gint > ( CLAMP( sp_document_height(doc), 
                                               WINDOW_MIN, WINDOW_MAX ));
 
-        gtk_window_set_default_size ( GTK_WINDOW (w), width, height );
-
+        /*
         gtk_window_set_position( GTK_WINDOW(w), GTK_WIN_POS_CENTER);
 
         gtk_window_set_policy ( GTK_WINDOW (w), TRUE, TRUE, FALSE);
-
-        gtk_signal_connect ( GTK_OBJECT (w), "delete_event", 
-                             GTK_SIGNAL_FUNC (sp_help_about_delete), NULL);
+        */
 
         v = sp_svg_view_widget_new (doc);
 
@@ -105,11 +93,13 @@ sp_help_about (void)
 
         sp_document_unref (doc);
         gtk_widget_show (v);
-        gtk_container_add (GTK_CONTAINER (w), v);
 
-    } // close if (!w)
+        Gtk::Widget * vmm = Glib::wrap(v);
+        aboutbox = new Inkscape::UI::Dialog::AboutBox(*vmm,height,width);
 
-    gtk_window_present (GTK_WINDOW (w));
+    } // close if (!aboutbox)
+
+    aboutbox->show();
 
 } // close sp_help_about()
 

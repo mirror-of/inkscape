@@ -458,9 +458,9 @@ Section Install
     DetailPrint "creating default editor"
     ClearErrors
 	ReadRegStr $0 HKCR ".svg" ""
-    WriteRegStr HKCR "$0\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
+    WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
     ReadRegStr $0 HKCR ".svgz" ""
-    WriteRegStr HKCR "$0\shell\edit\command" "" '$INSTDIR\Inkscape.exe "%1"'
+    WriteRegStr HKCR "$0\shell\edit\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
 	IfErrors 0 +2
 	  DetailPrint "Uups! Problems creating default editor"
   NoEditor:
@@ -469,9 +469,9 @@ Section Install
     DetailPrint "creating default reader"
     ClearErrors
 	ReadRegStr $0 HKCR ".svg" ""
-	WriteRegStr HKCR "$0\shell\open\command" "" '$INSTDIR\Inkscape.exe "%1"'
+	WriteRegStr HKCR "$0\shell\open\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
     ReadRegStr $0 HKCR ".svgz" ""
-	WriteRegStr HKCR "$0\shell\open\command" "" '$INSTDIR\Inkscape.exe "%1"'
+	WriteRegStr HKCR "$0\shell\open\command" "" '"$INSTDIR\Inkscape.exe" "%1"'
 	IfErrors 0 +2
 	  DetailPrint "Uups! Problems creating default reader"
   NoReader:
@@ -537,7 +537,7 @@ Section Uninstall
     ReadRegStr $1 HKCR "$0\shell\edit\command" ""
 	IfErrors 0 +2  
       DetailPrint "svg editor is $1"
-    StrCmp $1 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $1 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svg editor"
       DeleteRegKey HKCR "$0\shell\edit\command"
     DeleteRegKey /ifempty HKCR "$0\shell\edit"
@@ -552,7 +552,7 @@ Section Uninstall
     ReadRegStr $3 HKCR "$2\shell\edit\command" ""
     IfErrors 0 +2  
       DetailPrint "svgz editor is $1"
-    StrCmp $3 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $3 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svgz editor"
       DeleteRegKey HKCR "$2\shell\edit\command"
     DeleteRegKey /ifempty HKCR "$2\shell\edit"
@@ -566,7 +566,7 @@ Section Uninstall
     ReadRegStr $1 HKCR "$0\shell\open\command" ""
     IfErrors 0 +2  
       DetailPrint "svg viewer is $1"
-    StrCmp $1 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $1 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svg viewer"
       DeleteRegKey HKCR "$0\shell\open\command"
     DeleteRegKey /ifempty HKCR "$0\shell\open"
@@ -580,7 +580,7 @@ Section Uninstall
     ReadRegStr $3 HKCR "$2\shell\open\command" ""
     IfErrors 0 +2  
       DetailPrint "svgz viewer is $1"
-    StrCmp $3 '$INSTDIR\Inkscape.exe "%1"' 0 +3
+    StrCmp $3 '"$INSTDIR\Inkscape.exe" "%1"' 0 +3
       DetailPrint "removing default .svgz viewer"
       DeleteRegKey HKCR "$2\shell\open\command"
     DeleteRegKey /ifempty HKCR "$2\shell\open"

@@ -54,4 +54,6 @@ ui_dialog_libuidialog_a_SOURCES =		\
 	ui/dialog/tree-editor.h			\
 	$(inkboard_dialogs)	\
 	ui/dialog/xml-editor.cpp		\
-	ui/dialog/xml-editor.h
+	ui/dialog/xml-editor.h			\
+	ui/dialog/aboutbox.cpp		\
+	ui/dialog/aboutbox.h

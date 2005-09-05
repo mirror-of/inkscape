@@ -1,3 +1,11 @@
+2005-09-04  Kees Cook  <kees@outflux.net>
+
+	* TRANSLATORS, Makefile.am, src/verbs.cpp, src/help.cpp,
+	  src/ui/dialog/aboutbox.h, src/ui/dialog/aboutbox.cpp,
+	  src/menus-skeleton.h, src/ui/dialog/Makefile_insert:
+	  Implemented AboutDialog following the Gnome style.
+	* packaging/win32/inkscape.nsi: added quotes around execution name.
+
 2005-09-04  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/sp-conn-end-pair.cpp: Fix a crash bug when undoing connectors

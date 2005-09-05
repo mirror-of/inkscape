@@ -43,6 +43,7 @@ EXTRA_DIST = \
 	Makefile.mingw.common	\
 	README.txt README.ca.txt README.de.txt README.fr.txt README.it.txt \
 	HACKING.txt HACKING.de.txt HACKING.fr.txt HACKING.it.txt	\
+	TRANSLATORS \
 	inkscape.png \
 	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico \
 	cxxtest/cxxtestgen.pl \
