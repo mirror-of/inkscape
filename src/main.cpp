@@ -160,12 +160,12 @@
  */
 /** \page UI User Interface Classes and Files
  *
- * - SPView [\ref ui/view/view.cpp, \ref ui/view/view.h]
+ * - View [\ref ui/view/view.cpp, \ref ui/view/view.h]
  *   - Inkscape::UI::View::Edit [\ref ui/view/edit.cpp, \ref ui/view/edit.h]
  *   - SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h, \ref desktop-style.h]
  *   - SPSVGView [\ref svg-view.cpp, svg-view.h]
  *
- * SPDesktopWidget [\ref desktop-widget.h] SPSVGViewWidget [\ref svg-view.cpp]
+ * SPDesktopWidget [\ref desktop-widget.h] SPSVGSPViewWidget [\ref svg-view.cpp]
  * SPDocument [\ref document.cpp, \ref document.h] 
  * 
  * SPDrawAnchor [\ref draw-anchor.cpp, \ref draw-anchor.h] 

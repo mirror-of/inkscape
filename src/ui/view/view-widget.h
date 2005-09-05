@@ -16,7 +16,11 @@
 
 #include <gtk/gtkeventbox.h>
 
-class SPView;
+namespace Inkscape {
+    namespace UI {
+        namespace View {
+            class View;
+        }}}
 class SPViewWidget;
 class SPNamedView;
 
@@ -30,7 +34,7 @@ class SPNamedView;
 
 GType sp_view_widget_get_type (void);
 
-void sp_view_widget_set_view (SPViewWidget *vw, SPView *view);
+void sp_view_widget_set_view (SPViewWidget *vw, Inkscape::UI::View::View *view);
 
 /// Allows presenting 'save changes' dialog, FALSE - continue, TRUE - cancel
 bool sp_view_widget_shutdown (SPViewWidget *vw);
@@ -39,21 +43,21 @@ bool sp_view_widget_shutdown (SPViewWidget *vw);
 SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
 
 /**
- * SPViewWidget is a GUI widget that contain a single SPView. It is also
+ * SPViewWidget is a GUI widget that contain a single View. It is also
  * an abstract base class with little functionality of its own.
  */
 class SPViewWidget {
  public:
 	GtkEventBox eventbox;
 
-	SPView *view;
+        Inkscape::UI::View::View *view;
 
     // C++ Wrappers
     GType getType() const {
 	return sp_view_widget_get_type();
     }
 
-    void setView(SPView *view) {
+    void setView(Inkscape::UI::View::View *view) {
 	sp_view_widget_set_view(this, view);
     }
 
@@ -72,9 +76,9 @@ class SPViewWidgetClass {
     GtkEventBoxClass parent_class;
 
     /* Virtual method to set/change/remove view */
-    void (* set_view) (SPViewWidget *vw, SPView *view);
+    void (* set_view) (SPViewWidget *vw, Inkscape::UI::View::View *view);
     /// Virtual method about view size change
-    void (* view_resized) (SPViewWidget *vw, SPView *view, gdouble width, gdouble height);
+    void (* view_resized) (SPViewWidget *vw, Inkscape::UI::View::View *view, gdouble width, gdouble height);
 
     gboolean (* shutdown) (SPViewWidget *vw);
 };

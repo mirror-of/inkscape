@@ -28,8 +28,6 @@
 #include "xml/repr.h"
 #include "xml/node-observer.h"
 
-#include "ui/view/view.h"
-
 #include "util/ucompose.hpp"
 
 #include "message-context.h"

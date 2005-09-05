@@ -18,15 +18,6 @@
 #include <sigc++/connection.h>
 #include "message.h"
 
-namespace Inkscape {
-    class MessageContext;
-    class MessageStack;
-}
-namespace NR {
-    class Point;
-}
-class SPView;
-class SPDocument;
 
 /**
  * Iterates until true or returns false.
@@ -43,18 +34,29 @@ struct StopOnTrue {
   }
 };
 
+namespace NR {
+    class Point;
+}
+class SPDocument;
+
+namespace Inkscape {
+    class MessageContext;
+    class MessageStack;
+    namespace UI {
+        namespace View {
+
 /**
- * SPView is an abstract base class of all UI document views.  This
+ * View is an abstract base class of all UI document views.  This
  * includes both the editing window and the SVG preview, but does not
- * include the non-UI RGBA buffer-based NRArenas nor the XML editor or
- * similar views.  The SPView base class has very little functionality of
+ * include the non-UI RGBA buffer-based NRArena nor the XML editor or
+ * similar views.  The View base class has very little functionality of
  * its own.
  */
-class SPView {
+class View {
 public:
 
-    SPView::SPView();
-    virtual SPView::~SPView();
+    View::View();
+    virtual View::~View();
 
     /// Returns a pointer to the view's document.
     SPDocument *doc() const 
@@ -66,9 +68,6 @@ public:
     Inkscape::MessageContext *tipsMessageContext() const 
       { return _tips_message_context; }
 
-//    bool shutdown();
-//    sigc::connection connectShutdown (const sigc::slot<bool>& slot)
-//      { return _shutdown_signal.connect (slot); }
     void setPosition(gdouble x, gdouble y);
     void setPosition(NR::Point const &p); 
     void emitResized(gdouble width, gdouble height);
@@ -94,12 +93,10 @@ protected:
     Inkscape::MessageStack *_message_stack;
     Inkscape::MessageContext *_tips_message_context;
 
-//    sigc::signal<bool>::accumulated<StopOnTrue>      _shutdown_signal;
     sigc::signal<void,double,double>                 _position_set_signal;
     sigc::signal<void,double,double>                 _resized_signal;
     sigc::signal<void>                               _redraw_requested_signal;
     sigc::signal<void,SPDocument*>                   _document_set_signal;
-//    sigc::connection _shutdown_connection;
 
 private:
     sigc::connection _position_set_connection;
@@ -110,6 +107,8 @@ private:
     sigc::connection _document_uri_set_connection; // foreign
     sigc::connection _document_resized_connection; // foreign
 };
+
+}}}
 
 #endif  // INKSCAPE_UI_VIEW_VIEW_H
 

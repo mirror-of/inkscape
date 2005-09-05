@@ -46,7 +46,6 @@ class Selection;
 
 namespace UI {
 namespace View {
-typedef ::SPView View;
 
 class Edit : public Gtk::Window, View {
 public:

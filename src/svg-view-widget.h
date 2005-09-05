@@ -2,7 +2,7 @@
 #define __SP_SVG_VIEW_WIDGET_H__
 
 /** \file
- * SPSVGView, SPSVGViewWidget: Generic SVG view and widget
+ * SPSVGView, SPSVGSPViewWidget: Generic SVG view and widget
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -17,12 +17,12 @@
 #include "ui/view/view-widget.h"
 
 class SPDocument;
-class SPSVGViewWidget;
-class SPSVGViewWidgetClass;
+class SPSVGSPViewWidget;
+class SPSVGSPViewWidgetClass;
 
 #define SP_TYPE_SVG_VIEW_WIDGET (sp_svg_view_widget_get_type ())
-#define SP_SVG_VIEW_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_SVG_VIEW_WIDGET, SPSVGViewWidget))
-#define SP_SVG_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_SVG_VIEW_WIDGET, SPSVGViewWidgetClass))
+#define SP_SVG_VIEW_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_SVG_VIEW_WIDGET, SPSVGSPViewWidget))
+#define SP_SVG_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_SVG_VIEW_WIDGET, SPSVGSPViewWidgetClass))
 #define SP_IS_SVG_VIEW_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_SVG_VIEW_WIDGET))
 #define SP_IS_SVG_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_SVG_VIEW_WIDGET))
 
@@ -30,12 +30,12 @@ GtkType sp_svg_view_widget_get_type (void);
 
 GtkWidget *sp_svg_view_widget_new (SPDocument *doc);
 
-void sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, bool resize, gdouble width, gdouble height);
+void sp_svg_view_widget_set_resize (SPSVGSPViewWidget *vw, bool resize, gdouble width, gdouble height);
 
 /**
- * An SPSVGViewWidget is an SVG view together with a canvas.
+ * An SPSVGSPViewWidget is an SVG view together with a canvas.
  */
-struct SPSVGViewWidget {
+struct SPSVGSPViewWidget {
     public:
 	SPViewWidget widget;
 
@@ -47,14 +47,14 @@ struct SPSVGViewWidget {
 	gdouble maxwidth, maxheight;
 
     // C++ Wrappers
-    /// Flags the SPSVGViewWidget to have its size changed with Gtk.
+    /// Flags the SPSVGSPViewWidget to have its size changed with Gtk.
     void setResize(bool resize, gdouble width, gdouble height) {
 	sp_svg_view_widget_set_resize(this, resize, width, height);
     }
 };
 
-/// The SPSVGViewWidget vtable.
-struct SPSVGViewWidgetClass {
+/// The SPSVGSPViewWidget vtable.
+struct SPSVGSPViewWidgetClass {
 	SPViewWidgetClass parent_class;
 };
 

@@ -1,7 +1,7 @@
 #define __SP_VIEW_C__
 
 /** \file
- * SPView implementation
+ * View implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -24,59 +24,61 @@
 #include "message-context.h"
 #include "verbs.h"
 
-using namespace Inkscape::UI::View;
+namespace Inkscape {
+namespace UI {
+namespace View {
 
 //static bool 
-//_onShutdown (SPView* v)
+//_onShutdown (View* v)
 //{
 //    return v->onShutdown();
 ///}
 
 static void 
-_onPositionSet (double x, double y, SPView* v)
+_onPositionSet (double x, double y, View* v)
 {
     v->onPositionSet (x,y);
 }
 
 static void 
-_onResized (double x, double y, SPView* v)
+_onResized (double x, double y, View* v)
 {
     v->onResized (x,y);
 }
 
 static void 
-_onRedrawRequested (SPView* v)
+_onRedrawRequested (View* v)
 {
     v->onRedrawRequested();
 }
 
 static void 
-_onDocumentSet (SPDocument* doc, SPView* v)
+_onDocumentSet (SPDocument* doc, View* v)
 {
     v->onDocumentSet (doc);
 }
 
 static void 
-_onStatusMessage (Inkscape::MessageType type, gchar const *message, SPView* v)
+_onStatusMessage (Inkscape::MessageType type, gchar const *message, View* v)
 {
 //fprintf(stderr,"type=%d msg=%s v=%X\n",(int)type, message, v);fflush(stderr);
     v->onStatusMessage (type, message);
 }
 
 static void 
-_onDocumentURISet (gchar const* uri, SPView* v)
+_onDocumentURISet (gchar const* uri, View* v)
 {
     v->onDocumentURISet (uri);
 }
 
 static void 
-_onDocumentResized (double x, double y, SPView* v)
+_onDocumentResized (double x, double y, View* v)
 {
     v->onDocumentResized (x,y);
 }
 
 //--------------------------------------------------------------------
-SPView::SPView()
+View::View()
 :  _doc(0)
 {
     _message_stack = new Inkscape::MessageStack();
@@ -109,9 +111,9 @@ SPView::SPView()
 }
 
 /**
- * Deletes and nulls all SPView message stacks and disconnects it from signals.
+ * Deletes and nulls all View message stacks and disconnects it from signals.
  */
-SPView::~SPView()
+View::~View()
 {
     _message_changed_connection.disconnect();
 
@@ -151,28 +153,28 @@ SPView::~SPView()
  *  \return The result that is returned by the signal handler, which
  *  is 0 (FALSE) if the user cancels the close, or non-zero otherwise.
  *
-bool SPView::shutdown() 
+bool View::shutdown() 
 {
     return _shutdown_signal.emit();
 }
 */
 
-void SPView::setPosition (double x, double y)
+void View::setPosition (double x, double y)
 {
     _position_set_signal.emit (x,y);
 }
 
-void SPView::setPosition(NR::Point const &p) 
+void View::setPosition(NR::Point const &p) 
 { 
     setPosition (double(p[NR::X]), double(p[NR::Y])); 
 }
 
-void SPView::emitResized (double width, double height)
+void View::emitResized (double width, double height)
 {
     _resized_signal.emit (width, height);
 }
 
-void SPView::requestRedraw() 
+void View::requestRedraw() 
 {
     _redraw_requested_signal.emit();
 }
@@ -184,7 +186,7 @@ void SPView::requestRedraw()
  * 
  * \param doc The new document to connect the view to.
  */
-void SPView::setDocument(SPDocument *doc) {
+void View::setDocument(SPDocument *doc) {
     g_return_if_fail(doc != NULL);
 
     if (_doc) {
@@ -200,6 +202,8 @@ void SPView::setDocument(SPDocument *doc) {
         _doc->connectResized(sigc::bind(sigc::ptr_fun(&_onDocumentResized), this));
     _document_set_signal.emit (_doc);
 }
+
+}}}
 
 /*
   Local Variables:

@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <glibmm/i18n.h>
+#include "forward.h"
 #include "display/sp-canvas.h"
 #include "dialogs/object-attributes.h"
 #include "xml/quote.h"
@@ -199,10 +200,10 @@ static gint sp_anchor_event(SPItem *item, SPEvent *event)
             }
             break;
 	case SP_EVENT_MOUSEOVER:
-            (static_cast<SPView*>(event->data))->mouseover();
+            (static_cast<Inkscape::UI::View::View*>(event->data))->mouseover();
             break;
 	case SP_EVENT_MOUSEOUT:
-            (static_cast<SPView*>(event->data))->mouseout();
+            (static_cast<Inkscape::UI::View::View*>(event->data))->mouseout();
             break;
 	default:
             break;

@@ -20,7 +20,6 @@
 
 #include "inkscape.h"
 #include "event-context.h"
-#include "ui/view/view.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "dialog.h"

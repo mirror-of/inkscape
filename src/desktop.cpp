@@ -17,7 +17,7 @@
  */
 
 /** \class SPDesktop
- * SPDesktop is a subclass of SPView, implementing an editable document
+ * SPDesktop is a subclass of View, implementing an editable document
  * canvas.  It is extensively used by many UI controls that need certain
  * visual representations of their own.
  *

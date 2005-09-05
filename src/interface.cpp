@@ -810,7 +810,7 @@ sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
 /** \brief  This function turns XML into a menu
     \param  menus  This is the XML that defines the menu
     \param  menu   Menu to be added to
-    \param  view   The SPView that this menu is being built for
+    \param  view   The View that this menu is being built for
 
     This function is realitively simple as it just goes through the XML
     and parses the individual elements.  In the case of a submenu, it

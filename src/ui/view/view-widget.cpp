@@ -23,7 +23,7 @@ static void sp_view_widget_class_init(SPViewWidgetClass *vwc);
 static void sp_view_widget_init(SPViewWidget *widget);
 static void sp_view_widget_destroy(GtkObject *object);
 
-static void sp_view_widget_view_resized(SPView *view, gdouble width, gdouble height, SPViewWidget *vw);
+static void sp_view_widget_view_resized(Inkscape::UI::View::View *view, gdouble width, gdouble height, SPViewWidget *vw);
 
 static GtkEventBoxClass *widget_parent_class;
 
@@ -94,7 +94,7 @@ static void sp_view_widget_destroy(GtkObject *object)
  * Connects widget to view's 'resized' signal and calls virtual set_view()
  * function.
  */
-void sp_view_widget_set_view(SPViewWidget *vw, SPView *view)
+void sp_view_widget_set_view(SPViewWidget *vw, Inkscape::UI::View::View *view)
 {
     g_return_if_fail(vw != NULL);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));

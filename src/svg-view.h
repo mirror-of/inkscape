@@ -2,7 +2,7 @@
 #define __SP_SVG_VIEW_H__
 
 /** \file
- * SPSVGView, SPSVGViewWidget: Generic SVG view and widget
+ * SPSVGView, SPSVGSPViewWidget: Generic SVG view and widget
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -23,7 +23,7 @@ class SPCanvasItem;
 /**
  * Generic SVG view.
  */
-class SPSVGView : public SPView {
+class SPSVGView : public Inkscape::UI::View::View {
     public:
 	unsigned int _dkey;
 
