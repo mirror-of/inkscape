@@ -142,14 +142,20 @@ AboutBox::on_response(int response_id)
             break;
         }
         case Gtk::RESPONSE_CLOSE: {
-            if (_license) delete _license;
-            if (_credits) delete _credits;
-            delete this;
+            hide();
+            if (_license) _license->hide();
+            if (_credits) _credits->hide();
             break;
         }
         default:
             break;
     }
+}
+
+AboutBox::~AboutBox()
+{
+    if (_license) delete _license;
+    if (_credits) delete _credits;
 }
 
 void

@@ -39,9 +39,6 @@ class LicenseBox: public AboutBoxChild
 {
 public:
     LicenseBox(Gtk::Window& parent, Glib::ustring& text);
-//protected:
-//    Gtk::ScrolledWindow  _scrolled;
-//    Gtk::TextView        _textview;
 };
 
 class CreditsBox: public AboutBoxChild
@@ -61,6 +58,7 @@ class AboutBox: public Gtk::Dialog
 {
 public:
     AboutBox(Gtk::Widget& about_svg_view, gint width, gint height);
+    virtual ~AboutBox();
 protected:
     virtual void    on_response(int response_id);
     
