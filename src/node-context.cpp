@@ -492,7 +492,13 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
 
                             delta = sp_desktop_d2w_xy_point(desktop, delta);
 
-                            double stroke_tolerance = ((NR::expansion(desktop->w2d)*item_ungrouped->style->stroke_width.computed/2.0))+(double)tolerance;
+                            double stroke_tolerance = 
+                                (SP_OBJECT_STYLE (item_ungrouped)->stroke.type != SP_PAINT_TYPE_NONE? 
+                                 desktop->current_zoom() * 
+                                 SP_OBJECT_STYLE (item_ungrouped)->stroke_width.computed * 
+                                 sp_item_i2d_affine (item_ungrouped).expansion() * 0.5 
+                                 : 0.0)
+                                + (double) tolerance;
 
                             //g_print ("l2 %.9g, tol  %.9g\n", NR::L2 (delta), stroke_tolerance);
 
