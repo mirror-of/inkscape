@@ -457,7 +457,7 @@ void   refresh_textpath_source(SPTextPath* tp)
 		
         tp->originalPath = new Path;
         tp->originalPath->Copy(tp->sourcePath->originalPath);
-        tp->originalPath->ConvertWithBackData(0.001);
+        tp->originalPath->ConvertWithBackData(0.01);
 		
     }
 }

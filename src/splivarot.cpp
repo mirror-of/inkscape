@@ -1596,7 +1596,7 @@ get_nearest_position_on_Path(SPItem * item, NR::Point p)
 {
     //Create and initialize a livarot Path
     Path * path = Path_for_item(item,true,true);
-    path->ConvertWithBackData(0.001);
+    path->ConvertWithBackData(0.01);
 
     //get nearest position on path
     return path->PointToCurvilignPosition(p);
@@ -1607,7 +1607,7 @@ get_point_on_Path(SPItem * item, int piece, double t)
 {
     //Create and initialize a livarot Path
     Path * path = Path_for_item(item,true,true);
-    path->ConvertWithBackData(0.001);
+    path->ConvertWithBackData(0.01);
 
     //get nearest position on path
     NR::Point p;
