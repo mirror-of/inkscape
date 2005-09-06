@@ -29,6 +29,7 @@
 #include "forward.h"
 #include "inkscape-private.h"
 #include "desktop.h"
+#include "desktop-handles.h"
 #include "desktop-events.h"
 #include "desktop-affine.h"
 #include "document.h"
@@ -167,6 +168,8 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
     widget = GTK_WIDGET (dtw);
 
+    dtw->window = 0;
+    
     dtw->desktop = NULL;
 
     dtw->tt = gtk_tooltips_new ();
@@ -782,11 +785,11 @@ sp_desktop_widget_namedview_modified (SPNamedView *nv, guint flags, SPDesktopWid
 
         dtw->ruler_origin = nv->gridorigin;
 
-        sp_ruler_set_metric (GTK_RULER (dtw->vruler), dtw->desktop->get_default_metric());
-        sp_ruler_set_metric (GTK_RULER (dtw->hruler), dtw->desktop->get_default_metric());
+        sp_ruler_set_metric (GTK_RULER (dtw->vruler), nv->getDefaultMetric());
+        sp_ruler_set_metric (GTK_RULER (dtw->hruler), nv->getDefaultMetric());
 
-        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, gettext(sp_unit_get_plural (dtw->desktop->get_default_unit())), NULL);
-        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, gettext(sp_unit_get_plural (dtw->desktop->get_default_unit())), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->hruler_box, gettext(sp_unit_get_plural (nv->doc_units)), NULL);
+        gtk_tooltips_set_tip (dtw->tt, dtw->vruler_box, gettext(sp_unit_get_plural (nv->doc_units)), NULL);
 
         sp_desktop_widget_update_rulers (dtw);
     }

@@ -8,6 +8,7 @@
  */
 
 #include <gtk/gtktooltips.h>
+#include <gtk/gtkwindow.h>
 
 #include "display/display-forward.h"
 #include "libnr/nr-point.h"
@@ -33,6 +34,8 @@ struct SPDesktopWidget {
 
     SPDesktop *desktop;
 
+    GtkWindow *window;
+    
     // The root vbox of the window layout.
     GtkWidget *vbox;
 
