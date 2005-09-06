@@ -402,25 +402,47 @@ char* text2text(text txt, int precision, char * units, double scaling, tables pl
 	// If the text is rotated use the transform matrix
 
 	if ( txt.ret_txt_rot() > precision ){
+		double ca = cos(0.017453*txt.ret_txt_rot()); // ca = cosine(a)
+		double sa = sin(-0.017453*txt.ret_txt_rot()); // sa = sine(a)
+		double tx = ent_ptr->ret_x()*scaling;
+		double ty = -ent_ptr->ret_y()*scaling;
+		// Apply a translation to the orgin, then a rotation, then a translation back to the original position
+		double a = ca;
+		double b = sa;
+		double c = -sa;
+		double d = ca;
+		double e = -1*(tx*ca-ty*sa-tx);
+		double f = -1*(tx*sa+ty*ca-ty);
+		
 		strcpy(out, "<g transform=\"matrix(");
-		strcat(out,gcvt(cos(0.017453*txt.ret_txt_rot()),precision,temp) );
+		strcat(out,gcvt(a,precision,temp) );
 		strcat(out," ");
-		strcat(out,gcvt(sin(0.017453*txt.ret_txt_rot()),precision,temp) );
+		strcat(out,gcvt(b,precision,temp) );
 		strcat(out," ");
-		strcat(out,gcvt(-sin(0.017453*txt.ret_txt_rot()),precision,temp) );
+		strcat(out,gcvt(c,precision,temp) );
 		strcat(out," ");
-		strcat(out,gcvt(cos(0.017453*txt.ret_txt_rot()),precision,temp) );
-		strcat(out," 0 0)\" >\n");
-		strcat(out,"<text x=\"");
+		strcat(out,gcvt(d,precision,temp) );
+		strcat(out," ");
+		strcat(out,gcvt(e,precision,temp) );
+		strcat(out," ");
+		strcat(out,gcvt(f,precision,temp) );
+		strcat(out,")\" >\n<text x=\"");
 	}
 	else{
 		strcpy(out,"<text x=\"");
 	}
+	/*
 	strcat(out,gcvt(ent_ptr->ret_x(),precision,temp) );
 	strcat(out,units);
 	strcat(out,"\" y=\"-"); // Put in an extra minus because of the way SVG has defined the axis
 	strcat(out,gcvt(ent_ptr->ret_y(),precision,temp) );
 	strcat(out,units);
+	*/
+	strcat(out,gcvt(ent_ptr->ret_x()*scaling,precision,temp) );
+	//strcat(out,units);
+	strcat(out,"\" y=\"-"); // Put in an extra minus because of the way SVG has defined the axis
+	strcat(out,gcvt(ent_ptr->ret_y()*scaling,precision,temp) );
+	//strcat(out,units);
 	strcat(out,"\" font-family=\"Verdana\" font-size=\"");
 	strcat(out,gcvt(scaling*txt.ret_txt_ht(),precision,temp) );
 	strcat(out,"\" Fill=\"black\"");
