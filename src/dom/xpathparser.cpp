@@ -111,7 +111,7 @@ void XPathParser::lexTokAdd(int type, int loc, long   val)
 void XPathParser::lexicalTokenDump()
 {
     printf("####### LEXICAL TOKENS #######\n");
-    for (int i=0 ; i<lexicalTokens.size() ; i++)
+    for (int i=0 ; i<(int)lexicalTokens.size() ; i++)
         {
         printf("%d : ", i);
         lexicalTokens[i].print();
@@ -123,7 +123,7 @@ void XPathParser::lexicalTokenDump()
 
 LexTok XPathParser::lexTok(int p)
 {
-    if (p < 0 || p>=lexicalTokens.size())
+    if (p < 0 || p>=(int)lexicalTokens.size())
         {
 		LexTok tok;
         return tok;
@@ -133,7 +133,7 @@ LexTok XPathParser::lexTok(int p)
 
 int XPathParser::lexTokType(int p)
 {
-    if (p < 0 || p>lexicalTokens.size())
+    if (p < 0 || p>(int)lexicalTokens.size())
         return -1;
     return lexicalTokens[p].getType();
 }
@@ -1816,12 +1816,10 @@ bool XPathParser::parse(const DOMString &str)
     parsebuf = NULL;
     parselen = 0;
 
-    /*
     if (p <= p0)
         {
-        return false;
+        //return false;
         }
-    */
 
     return true;
 }

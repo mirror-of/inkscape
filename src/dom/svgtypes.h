@@ -781,6 +781,7 @@ public:
                                   throw( DOMException, SVGException )
         {
         items.push_back(newItem);
+        return newItem;
         }
 
     /**
@@ -799,7 +800,7 @@ public:
     virtual SVGTransform consolidate()
         {
         SVGMatrix matrix;
-        for (int i=0 ; i<items.size() ; i++)
+        for (unsigned int i=0 ; i<items.size() ; i++)
             matrix = matrix.multiply(items[i].getMatrix());
         SVGTransform transform;
         transform.setMatrix(matrix);
@@ -2212,7 +2213,7 @@ public:
      */
     virtual double getValueInSpecifiedUnits()
         {
-        double result;
+        double result = 0.0;
         //convert here
         return result;
         }
@@ -3095,7 +3096,7 @@ public:
      */
     virtual SVGElement *getNearestViewportElement()
         {
-        SVGElement *result;
+        SVGElement *result = NULL;
         return result;
         }
 
@@ -3104,7 +3105,7 @@ public:
      */
     virtual SVGElement *getFarthestViewportElement()
         {
-        SVGElement *result;
+        SVGElement *result = NULL;
         return result;
         }
 

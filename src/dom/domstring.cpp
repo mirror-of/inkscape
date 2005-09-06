@@ -84,8 +84,8 @@ void DOMString::init()
 
 DOMString &DOMString::append(const DOMString &str)
 {
-    int len = str.size();
-    for (int i=0 ; i<len ; i++)
+    unsigned int len = str.size();
+    for (unsigned int i=0 ; i<len ; i++)
         {
         XMLCh ch = str.charAt(i);
         chars.push_back(ch);
@@ -109,7 +109,7 @@ DOMString &DOMString::append(const char *str)
 DOMString &DOMString::append(const std::string &str)
 {
     unsigned int len = str.size();
-    for (int i=0 ; i<len ; i++)
+    for (unsigned int i=0 ; i<len ; i++)
         {
         XMLCh ch = str[i];
         chars.push_back(ch);

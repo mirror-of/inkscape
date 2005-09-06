@@ -169,6 +169,7 @@ bool XmlReader::match(int pos, char *str)
  *  Test if the given substring exists at the given position
  *  in a given buffer
  */
+/*
 static bool bufMatch(const DOMString &buf, int pos, char *str)
 {
     while (*str)
@@ -178,7 +179,7 @@ static bool bufMatch(const DOMString &buf, int pos, char *str)
        }
    return true;
 }
-
+*/
 
 
 /**

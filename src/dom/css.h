@@ -231,7 +231,7 @@ friend class CSSStyleSheet;
     /**
      *
      */
-    virtual void deleteRule(long index)
+    virtual void deleteRule(unsigned long index)
         {
         if (index<0 || index>=rules.size())
             return;
@@ -243,7 +243,7 @@ friend class CSSStyleSheet;
     /**
      *
      */
-    virtual long insertRule(const CSSRule &rule, long index)
+    virtual long insertRule(const CSSRule &rule, unsigned long index)
         {
         if (index<0 || index>=rules.size())
             return -1;

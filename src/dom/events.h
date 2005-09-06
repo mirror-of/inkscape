@@ -419,7 +419,7 @@ public:
     virtual bool dispatchEvent(const Event &evt) throw(EventException)
         {
 
-        for (int i=0 ; i<listeners.size() ; i++)
+        for (unsigned int i=0 ; i<listeners.size() ; i++)
             {
             EventListenerEntry listener = listeners[i];
             if (listener.namespaceURI == evt.getNamespaceURI()  &&
@@ -429,6 +429,7 @@ public:
                     listener.listener->handleEvent(evt);
                 }
             }
+        return true;
         }
 
 

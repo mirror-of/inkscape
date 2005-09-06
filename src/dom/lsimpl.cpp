@@ -182,7 +182,7 @@ bool LSSerializerImpl::write(
     LSWriter *writer = destination.getCharacterStream();
     if (writer)
         {
-        for (int i=0 ; i<outbuf.size() ; i++)
+        for (unsigned int i=0 ; i<outbuf.size() ; i++)
             {
             int ch = outbuf[i];
             writer->put(ch);
@@ -193,7 +193,7 @@ bool LSSerializerImpl::write(
     LSOutputStream *outputStream = destination.getByteStream();
     if (outputStream)
         {
-        for (int i=0 ; i<outbuf.size() ; i++)
+        for (unsigned int i=0 ; i<outbuf.size() ; i++)
             {
             int ch = outbuf[i];
             writer->put(ch);
@@ -226,7 +226,7 @@ bool LSSerializerImpl::writeToURI(const Node *nodeArg,
     FILE *f = fopen(fileName, "rb");
     if (!f)
         return false;
-    for (int i=0 ; i<outbuf.size() ; i++)
+    for (unsigned int i=0 ; i<outbuf.size() ; i++)
         {
         int ch = outbuf[i];
         fputc(ch, f);
@@ -286,7 +286,7 @@ void LSSerializerImpl::pos(const DOMString &str)
 
 void LSSerializerImpl::poxml(const DOMString &str)
 {
-    for (int i=0 ; i<str.size() ; i++)
+    for (unsigned int i=0 ; i<str.size() ; i++)
         {
         XMLCh ch = (XMLCh) str[i];
         if (ch == '&')

@@ -42,6 +42,7 @@ namespace dom
  *  Test if the given substring exists for the length of the string
  *  in a given buffer
  */
+/*
 static bool match(const DOMString &buf, char *str)
 {
     int pos = 0;
@@ -52,7 +53,7 @@ static bool match(const DOMString &buf, char *str)
        }
    return true;
 }
-
+*/
 
 
 
@@ -304,6 +305,8 @@ Node *NodeImpl::insertBefore(const Node *newChild,
                    const Node *refChild)
                    throw(DOMException)
 {
+    Node *node = NULL;
+    return node;
 }
 
 /**
@@ -313,6 +316,8 @@ Node *NodeImpl::replaceChild(const Node *newChild,
                    const Node *oldChild)
                    throw(DOMException)
 {
+    Node *node = NULL;
+    return node;
 }
 
 /**
@@ -321,6 +326,8 @@ Node *NodeImpl::replaceChild(const Node *newChild,
 Node *NodeImpl::removeChild(const Node *oldChild)
                   throw(DOMException)
 {
+    Node *node = NULL;
+    return node;
 }
 
 /**
@@ -398,7 +405,7 @@ Node *NodeImpl::cloneNode(bool deep)
 void NodeImpl::normalize()
 {
     //First, concatenate adjoining text nodes
-    NodeImpl *next;
+    NodeImpl *next = NULL;
     for (NodeImpl *child = firstChild ; child ; child=next)
         {
         if (child->getNodeType() != Node::TEXT_NODE)
@@ -845,7 +852,7 @@ void NodeImpl::setNodeName(const DOMString &qualifiedName)
     nodeName  = qualifiedName;
     prefix    = "";
     localName = "";
-    for (int i=0 ; i<qualifiedName.size() ; i++)
+    for (unsigned int i=0 ; i<qualifiedName.size() ; i++)
         {
         int ch = qualifiedName[i];
         if (ch == ':')
@@ -1326,7 +1333,7 @@ void ElementImpl::getElementsByTagNameRecursive(NodeList &list,
         if (node->getNodeType() != Node::ELEMENT_NODE)
             continue;
         Element *childElem = dynamic_cast<Element *>(node);
-        getElementsByTagNameRecursive(list, name, elem);
+        getElementsByTagNameRecursive(list, name, childElem);
         }
 }
 
@@ -2908,10 +2915,11 @@ Node *DocumentImpl::renameNode(const Node *n,
                                const DOMString &qualifiedName)
                                throw (DOMException)
 {
-    Node *node             = (Node *) n;
-    NodeImpl *nodeImpl     = dynamic_cast<NodeImpl *> (node);
+    Node *node = (Node *) n;
+    NodeImpl *nodeImpl = dynamic_cast<NodeImpl *> (node);
     //nodeImpl->namespaceURI = stringCache(namespaceURI);
     nodeImpl->setNodeName(qualifiedName);
+    return node;
 }
 
 

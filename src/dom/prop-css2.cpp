@@ -1274,7 +1274,7 @@ bool parseProperty(char *name, char *value)
                 }
             }
         }
-    printf("Property '%s' not found\n");
+    printf("Property '%s' not found\n",  name);
     return false;
 }
 

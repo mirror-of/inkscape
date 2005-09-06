@@ -219,7 +219,7 @@ public:
      */
     virtual bool contains(const DOMString &str)
         {
-        for (int i=0; i<strings.size() ; i++)
+        for (unsigned int i=0; i<strings.size() ; i++)
             {
             if (strings[i] == str)
                 return true;
@@ -329,7 +329,7 @@ public:
      */
     virtual bool contains(const DOMString &name)
         {
-        for (int i=0; i<namePairs.size() ; i++)
+        for (unsigned int i=0; i<namePairs.size() ; i++)
             {
             if (namePairs[i].name == name )
                 return true;
@@ -342,7 +342,7 @@ public:
      */
     virtual bool containsNS(const DOMString namespaceURI,const DOMString &name)
         {
-        for (int i=0; i<namePairs.size() ; i++)
+        for (unsigned int i=0; i<namePairs.size() ; i++)
             {
             if (namePairs[i].namespaceURI == namespaceURI ||
                 namePairs[i].name         == name           )
