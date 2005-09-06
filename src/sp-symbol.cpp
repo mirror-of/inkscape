@@ -14,6 +14,7 @@
 #include "config.h"
 
 #include <string.h>
+#include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"
@@ -21,7 +22,6 @@
 #include "attributes.h"
 #include "print.h"
 #include "document.h"
-#include "desktop.h"
 #include "sp-defs.h"
 #include "sp-namedview.h"
 #include "sp-symbol.h"

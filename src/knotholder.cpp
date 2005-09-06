@@ -18,7 +18,6 @@
 #include <gtk/gtksignal.h>
 
 #include "document.h"
-#include "desktop.h"
 #include "sp-item.h"
 #include "sp-shape.h"
 #include "knot.h"
@@ -27,6 +26,8 @@
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-matrix-ops.h>
+
+class SPDesktop;
 
 static void knot_clicked_handler (SPKnot *knot, guint state, gpointer data);
 static void knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data);

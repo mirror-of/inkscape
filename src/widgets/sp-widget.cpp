@@ -17,8 +17,6 @@
 #include "macros.h"
 #include "../xml/node-event-vector.h"
 #include "../inkscape.h"
-#include "../desktop.h"
-#include "../desktop-handles.h"
 #include "../selection.h"
 #include "../document.h"
 #include "sp-widget.h"

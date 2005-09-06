@@ -22,8 +22,6 @@
 
 #include "svg/svg.h"
 #include "attributes.h"
-#include "desktop.h"
-#include "desktop-affine.h"
 #include "dialogs/object-attributes.h"
 #include "display/curve.h"
 #include <glibmm/i18n.h>

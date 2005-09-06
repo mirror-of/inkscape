@@ -15,7 +15,6 @@
 
 #include <gtkmm/textbuffer.h>
 
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
 

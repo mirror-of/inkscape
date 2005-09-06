@@ -22,10 +22,11 @@
 #define SP_IS_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_WIDGET))
 
 #include <gtk/gtkbin.h>
-#include "../forward.h"
-#include "../xml/repr.h"
-#include "../inkscape.h"
-#include "../desktop-handles.h"
+
+namespace Inkscape {
+	class Application;
+	class Selection;
+}
 
 struct SPWidget {
 	GtkBin bin;

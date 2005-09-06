@@ -16,7 +16,6 @@
 #include <gtkmm/stock.h>
 
 #include "document.h"
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "transformation.h"
 #include "libnr/nr-rect.h"

@@ -26,7 +26,7 @@
 #include "interface.h"
 #include "document.h"
 #include "inkscape.h"
-#include "desktop.h"
+#include "ui/view/view.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "file.h"
@@ -623,7 +623,7 @@ Script::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *do
     SPDesktop *desktop = (SPDesktop *) doc;
     if (desktop != NULL) {
         using Inkscape::Util::GSListConstIterator;
-        GSListConstIterator<SPItem *> selected = desktop->selection->itemList();
+        GSListConstIterator<SPItem *> selected = SP_DT_SELECTION(desktop)->itemList();
         while ( selected != NULL ) {
             local_command += " --id=";
             local_command += SP_OBJECT_ID(*selected);
@@ -660,7 +660,6 @@ Script::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *do
     }
 }
 
-#include <desktop.h>
 
 /**
     \brief  A function to take all the svg elements from one document

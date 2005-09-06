@@ -406,7 +406,6 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 #include "../widgets/sp-color-notebook.h"
 #include "../widgets/sp-color-preview.h"
 #include "../widgets/widget-sizes.h"
-#include "../desktop-handles.h"
 #include "../selection.h"
 #include "../xml/node-event-vector.h"
 #include "../svg/svg.h"

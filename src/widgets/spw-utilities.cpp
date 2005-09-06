@@ -29,7 +29,6 @@
 #include "widgets/button.h"
 #include "inkscape.h"
 #include "document.h"
-#include "desktop-handles.h"
 #include "selection.h"
 
 #include "helper/unit-menu.h"

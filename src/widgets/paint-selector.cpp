@@ -52,7 +52,6 @@
 #include "gradient-selector.h"
 #include <inkscape.h>
 #include <document-private.h>
-#include <desktop-handles.h>
 #include <desktop-style.h>
 #include <selection.h>
 #include <style.h>

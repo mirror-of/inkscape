@@ -28,7 +28,6 @@
 #include "attributes.h"
 #include "print.h"
 #include "document.h"
-#include "desktop.h"
 #include "sp-defs.h"
 #include "sp-namedview.h"
 #include "sp-marker.h"

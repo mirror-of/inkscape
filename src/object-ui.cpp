@@ -49,7 +49,6 @@ sp_object_menu(SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 #include "sp-spiral.h"
 
 #include "document.h"
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
 

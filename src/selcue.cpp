@@ -14,7 +14,6 @@
 #include <sigc++/sigc++.h>
 #include "desktop-handles.h"
 #include "selection.h"
-#include "desktop.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/sodipodi-ctrl.h"

@@ -25,7 +25,6 @@
 #include "inkscape.h"
 #include "macros.h"
 #include "document.h"
-#include "desktop-handles.h"
 #include "selection.h"
 #include "display/nr-arena.h"
 #include <glib.h>

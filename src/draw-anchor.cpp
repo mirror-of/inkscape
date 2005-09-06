@@ -15,11 +15,9 @@
 #include <gtk/gtktypeutils.h>
 
 #include "draw-anchor.h"
-//#include "desktop.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "event-context.h"
-//#include "message.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-canvas.h"
 #include <glibmm/i18n.h>

@@ -22,7 +22,6 @@
 #include "xml/repr.h"
 #include "document.h"
 #include "inkscape.h"
-#include <desktop-handles.h>
 
 #include "extension/extension.h"
 #include "system.h"

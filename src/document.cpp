@@ -40,6 +40,7 @@
 #include <glib.h>
 #include <string.h>
 #include <gtk/gtkmain.h>
+#include "libnr/nr-matrix-fns.h"
 #include "xml/repr.h"
 #include "xml/event-fns.h"
 #include "helper/sp-marshal.h"
@@ -52,7 +53,6 @@
 #include "sp-root.h"
 #include "sp-namedview.h"
 #include "document-private.h"
-#include "desktop.h"
 #include "version.h"
 #include "dir-util.h"
 #include "unit-constants.h"
@@ -60,7 +60,6 @@
 #include "display/nr-arena-item.h"
 #include "display/nr-arena.h"
 #include "display/canvas-arena.h"
-#include "desktop-handles.h"
 
 #include "dialogs/rdf.h"
 

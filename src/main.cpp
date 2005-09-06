@@ -261,7 +261,6 @@
 #include "macros.h"
 #include "file.h"
 #include "document.h"
-#include "desktop.h"
 #include "sp-object.h"
 #include "interface.h"
 #include "print.h"

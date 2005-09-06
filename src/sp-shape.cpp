@@ -23,6 +23,7 @@
 #include <libnr/n-art-bpath.h>
 #include <libnr/nr-pixblock.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
 #include <libnr/nr-point-fns.h>
@@ -40,10 +41,8 @@
 #include "uri-references.h"
 #include "print.h"
 #include "document.h"
-#include "desktop.h"
 #include "marker-status.h"
 #include "selection.h"
-#include "desktop-handles.h"
 #include "sp-paint-server.h"
 #include "style.h"
 #include "sp-root.h"

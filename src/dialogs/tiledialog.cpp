@@ -27,7 +27,6 @@
 #include "prefs-utils.h"
 #include "inkscape.h"
 #include "macros.h"
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
 #include "xml/repr.h"

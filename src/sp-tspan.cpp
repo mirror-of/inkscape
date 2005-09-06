@@ -47,7 +47,6 @@
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"
 #include "document.h"
-#include "desktop.h"
 #include "style.h"
 
 #include "sp-use-reference.h"

@@ -16,7 +16,6 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
-#include "desktop-handles.h"
 #include "forward.h"
 #include "selcue.h"
 #include "message-context.h"
@@ -24,6 +23,8 @@
 
 struct SPKnot;
 class SPSelTrans;
+class SPDesktop;
+class SPCanvasItem;
 
 enum {
 	SP_SELTRANS_SHOW_CONTENT,

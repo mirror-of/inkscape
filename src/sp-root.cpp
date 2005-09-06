@@ -21,11 +21,11 @@
 #include "attributes.h"
 #include "print.h"
 #include "document.h"
-#include "desktop.h"
 #include "sp-defs.h"
 #include "sp-item.h"
 #include "sp-root.h"
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-translate-ops.h>
 #include <libnr/nr-scale-ops.h>
@@ -33,6 +33,8 @@
 #include <xml/repr.h>
 #include "svg/stringstream.h"
 #include "inkscape_version.h"
+
+class SPDesktop;
 
 static void sp_root_class_init(SPRootClass *klass);
 static void sp_root_init(SPRoot *root);

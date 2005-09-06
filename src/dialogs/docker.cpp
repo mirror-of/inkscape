@@ -2,7 +2,6 @@
 #include  "dialogs/dockable.h"
 #include "dialogs/dialog-events.h"
 #include "inkscape.h"
-#include "desktop.h"
 #include "display/sp-canvas.h"
 
 #include <gtk/gtk.h> // temporary
