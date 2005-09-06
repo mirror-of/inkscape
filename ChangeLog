@@ -1,3 +1,38 @@
+2005-09-06  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop-handles.h, src/desktop-handles.cpp:
+	    added macros SP_DT_MSGSTACK/NAMEDVIEW/WIDGET, moved last
+		macros from desktop.h
+	* src/desktop.h src/desktop.cpp, src/sp-namedview.h, 
+	  src/sp-namedview.cpp:
+	    moved default_metric and default_unit into namedview
+	* src/desktop.h src/desktop.cpp, src/widgets/desktop-widget.h,
+	  src/widgets/desktop-widget.cpp:
+	    moved window member into desktop widget
+	* src/dialogs/clonetiler.cpp, src/dialogs/color-picker.cpp,
+	  src/dialogs/desktop-properties.cpp, src/dialogs/dialog-events.cpp ,
+	  src/dialogs/display-settings.cpp, src/dialogs/export.cpp,
+	  src/dialogs/stroke-style.cpp, src/dialogs/swatches.cpp,
+	  src/dialogs/transformation.cpp, src/dropper-context.cpp,
+	  src/extension/internal/ps.cpp, src/gradient-context.cpp,
+	  src/jabber_whiteboard/callbacks.cpp,
+	  src/jabber_whiteboard/chat-handler.cpp,
+	  src/jabber_whiteboard/message-processors.cpp,
+	  src/jabber_whiteboard/message-queue.cpp,
+	  src/jabber_whiteboard/session-manager.cpp,
+	  src/path-chemistry.cpp, src/satisfied-guide-cns.cpp,
+	  src/sp-text.cpp, src/text-chemistry.cpp,
+	  src/trace/potrace/inkscape-potrace.cpp,
+	  src/trace/trace.cpp, src/ui/dialog/align-and-distribute.cpp:
+	    removed dependency on desktop.h
+	* src/arc-context.cpp, src/desktop-events.cpp, src/inkscape.cpp,
+	  src/interface.cpp, src/nodepath.cpp, src/rect-context.cpp,
+	  src/select-context.cpp, src/seltrans.cpp, src/spiral-context.cpp,
+	  src/star-context.cpp, src/text-context.cpp, src/ui/dialog/dialog.cpp,
+	  src/widgets/select-toolbar.cpp, src/widgets/toolbox.cpp:
+	    minor adaptation due to the above changes
+	* src/ui/dialog/session-player.cpp:   didn't #include config.h
+	
 2005-09-06  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* doc/keys.html, doc/keys.xml, share/screens/keys.svg,
@@ -32,7 +67,7 @@
 	  Implemented AboutDialog following the Gnome style.
 	* packaging/win32/inkscape.nsi: added quotes around execution name.
 
-2005-09-05  Ralf Stephan <ralf@ark.in-berlin.de>
+2005-09-04  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/desktop.cpp, src/dropper-context.cpp, src/forward.h,
 	  src/interface.cpp, src/main.cpp, src/sp-anchor.cpp,
