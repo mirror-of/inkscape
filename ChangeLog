@@ -1,3 +1,23 @@
+2005-09-05  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/document.cpp, src/draw-anchor.cpp, src/knotholder.cpp,
+	  src/main.cpp, src/object-ui.cpp, src/selcue.cpp,
+	  src/sp-marker.cpp, src/sp-root.cpp, src/sp-shape.cpp,
+	  src/sp-star.cpp, src/sp-symbol.cpp, src/sp-tspan.cpp,
+	  src/dialogs/docker.cpp, src/dialogs/extensions.cpp,
+	  src/dialogs/text-edit.cpp, src/dialogs/tiledialog.cpp,
+	  src/extension/system.cpp, src/widgets/gradient-vector.cpp,
+	  src/jabber_whiteboard/session-file-player.cpp,
+	  src/widgets/paint-selector.cpp, src/widgets/sp-widget.cpp,
+	  src/widgets/spw-utilities.cpp, src/extension/implementation/script.cpp,
+	  src/ui/dialog/transformation.cpp, src/seltrans.h,
+	  src/widgets/sp-widget.h:
+	    removed dependency on desktop.h
+	* src/select-context.cpp, src/tools-switch.cpp, 
+	  src/dialogs/display-settings.cpp, src/dialogs/fill-style.cpp,
+	  src/dialogs/object-properties.cpp, src/dialogs/clonetiler.cpp:
+	    added dependencies because of above changes
+	
 2005-09-04  Kees Cook  <kees@outflux.net>
 
 	* TRANSLATORS, Makefile.am, src/verbs.cpp, src/help.cpp,
@@ -5,6 +25,20 @@
 	  src/menus-skeleton.h, src/ui/dialog/Makefile_insert:
 	  Implemented AboutDialog following the Gnome style.
 	* packaging/win32/inkscape.nsi: added quotes around execution name.
+
+2005-09-05  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.cpp, src/dropper-context.cpp, src/forward.h,
+	  src/interface.cpp, src/main.cpp, src/sp-anchor.cpp,
+	  src/sp-text.cpp, src/splivarot.cpp, src/svg-view-widget.cpp,
+	  src/svg-view-widget.h, src/svg-view.h, src/extension/effect.h,
+	  src/extension/implementation/plugin-link.h, 
+	  src/jabber_whiteboard/session-manager.cpp,
+	  src/ui/dialog/dialog.cpp, src/ui/view/edit.h, 
+	  src/ui/view/view-widget.cpp, src/ui/view/view-widget.h,
+	  src/ui/view/view.cpp, src/ui/view/view.h:
+	    minor edits to completely remove SPView identifier, and some
+		dependencies
 
 2005-09-04  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
