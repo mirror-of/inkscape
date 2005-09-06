@@ -9,13 +9,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <glibmm.h>
 #include <glibmm/i18n.h>
 #include <gtk/gtkdialog.h>
 #include <gtkmm.h>
 
 #include "inkscape.h"
-#include "desktop.h"
 #include "path-prefix.h"
 
 #include "desktop.h"
