@@ -58,6 +58,7 @@
 #include "path-chemistry.h"
 #include "inkscape-private.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
@@ -1538,7 +1539,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
     // rx/ry units menu: create
     GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
-    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), desktop->get_default_unit());
+    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), desktop->namedview->doc_units);
     // fixme: add % meaning per cent of the width/height
 
     /* W */
@@ -2905,7 +2906,7 @@ sp_text_toolbox_new(SPDesktop *desktop)
     // horizontal kerning/vertical kerning units menu: create
     GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
-    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), sp_desktop_get_default_unit(desktop));
+    sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), desktop->namedview->doc_units);
 
     aux_toolbox_space(tbl, AUX_BETWEEN_BUTTON_GROUPS);
 

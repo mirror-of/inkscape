@@ -27,6 +27,7 @@
 #include "inkscape.h"
 #include "sp-ellipse.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -493,8 +494,8 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 
     sp_arc_position_set(SP_ARC(ac->item), (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2);
 
-    GString *xs = SP_PX_TO_METRIC_STRING(fabs(x1-x0), desktop->get_default_metric());
-    GString *ys = SP_PX_TO_METRIC_STRING(fabs(y1-y0), desktop->get_default_metric());
+    GString *xs = SP_PX_TO_METRIC_STRING(fabs(x1-x0), desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(fabs(y1-y0), desktop->namedview->getDefaultMetric());
     ac->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make circle or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);

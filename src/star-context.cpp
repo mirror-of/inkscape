@@ -32,6 +32,7 @@
 #include "sp-star.h"
 #include "inkscape.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -466,7 +467,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
                          arg1, arg1 + M_PI / sides, sc->isflatsided, sc->rounded, sc->randomized);
 
     /* status text */
-    GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->get_default_metric());
+    GString *rads = SP_PX_TO_METRIC_STRING(r1, desktop->namedview->getDefaultMetric());
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
                                       ( sc->isflatsided?
                                       _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")

@@ -35,6 +35,7 @@
 #include "sp-flowtext.h"
 #include "inkscape.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "style.h"
 #include "selection.h"
 #include "desktop.h"
@@ -666,8 +667,8 @@ sp_text_context_root_handler(SPEventContext *const ec, GdkEvent *const event)
                 gobble_motion_events(GDK_BUTTON1_MASK);
 
                 // status text
-                GString *xs = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::X]), desktop->get_default_metric());
-                GString *ys = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::Y]), desktop->get_default_metric());
+                GString *xs = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::X]), desktop->namedview->getDefaultMetric());
+                GString *ys = SP_PX_TO_METRIC_STRING(fabs((p - tc->p0)[NR::Y]), desktop->namedview->getDefaultMetric());
                 ec->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs->str, ys->str);
                 g_string_free(xs, FALSE);
                 g_string_free(ys, FALSE);

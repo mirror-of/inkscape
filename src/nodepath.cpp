@@ -25,6 +25,7 @@
 #include "knot.h"
 #include "inkscape.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -2796,7 +2797,7 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     if (degrees > 180) degrees -= 360;
     if (degrees < -180) degrees += 360;
 
-    GString *length = SP_PX_TO_METRIC_STRING(rnew.r, desktop->get_default_metric());
+    GString *length = SP_PX_TO_METRIC_STRING(rnew.r, desktop->namedview->getDefaultMetric());
 
     mc->setF(Inkscape::NORMAL_MESSAGE,
          _("<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"), degrees, length->str);

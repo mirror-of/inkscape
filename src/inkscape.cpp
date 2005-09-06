@@ -60,6 +60,7 @@ using Inkscape::Extension::Internal::PrintWin32;
 #include "helper/sp-marshal.h"
 #include "dialogs/debugdialog.h"
 #include "dialogs/input.h"
+#include "widgets/desktop-widget.h"
 
 #include "shortcuts.h"
 
@@ -922,8 +923,8 @@ inkscape_remove_desktop (SPDesktop * desktop)
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new_desktop));
         } else {
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
-            if (desktop->selection)
-                desktop->selection->clear();
+            if (SP_DT_SELECTION(desktop))
+                SP_DT_SELECTION(desktop)->clear();
         }
     }
 
@@ -1067,7 +1068,7 @@ inkscape_prev_desktop ()
 void
 inkscape_switch_desktops_next ()
 {
-    GtkWindow *w = inkscape_next_desktop ()->window;
+    GtkWindow *w = SP_DT_WIDGET(inkscape_next_desktop ())->window;
     gtk_window_present (w);
 }
 
@@ -1076,7 +1077,7 @@ inkscape_switch_desktops_next ()
 void
 inkscape_switch_desktops_prev ()
 {
-    GtkWindow *w = inkscape_prev_desktop ()->window;
+    GtkWindow *w = SP_DT_WIDGET(inkscape_prev_desktop ())->window;
     gtk_window_present (w);
 }
 

@@ -34,6 +34,7 @@
 #include "inkscape-private.h"
 #include "inkscape.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -1013,8 +1014,8 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
     }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(pt[X], desktop->get_default_metric());
-    GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], desktop->get_default_metric());
+    GString *xs = SP_PX_TO_METRIC_STRING(pt[X], desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(pt[Y], desktop->namedview->getDefaultMetric());
     seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);

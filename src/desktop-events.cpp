@@ -234,7 +234,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             
             sp_guideline_set_color(SP_GUIDELINE(item), guide->hicolor);
 
-            GString *position_string = SP_PX_TO_METRIC_STRING(guide->position, desktop->get_default_metric());
+            GString *position_string = SP_PX_TO_METRIC_STRING(guide->position, desktop->namedview->getDefaultMetric());
             char *guide_description = sp_guide_description(guide);
 
             desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("%s at %s"), guide_description, position_string->str);
@@ -402,7 +402,7 @@ static void sp_dt_simple_guide_dialog(SPGuide *guide, SPDesktop *desktop)
         // unitmenu
         /* fixme: We should allow percents here too, as percents of the canvas size */
         u = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(u), desktop->get_default_unit());
+        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(u), desktop->namedview->doc_units);
         
         // spinbutton
         GtkObject *a = gtk_adjustment_new(0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);

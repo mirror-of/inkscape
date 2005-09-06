@@ -31,6 +31,7 @@
 #include "sp-spiral.h"
 #include "inkscape.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -467,7 +468,7 @@ sp_spiral_drag(SPSpiralContext *sc, NR::Point p, guint state)
                            /*t0*/ sc->t0);
 
     /* status text */
-    GString *rads = SP_PX_TO_METRIC_STRING(rad, desktop->get_default_metric());
+    GString *rads = SP_PX_TO_METRIC_STRING(rad, desktop->namedview->getDefaultMetric());
     sc->_message_context->setF(Inkscape::NORMAL_MESSAGE,
                                _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
                                rads->str, sp_round((arg + 2.0*M_PI*spiral->revo)*180/M_PI, 0.0001));

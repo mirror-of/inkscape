@@ -20,6 +20,7 @@
 
 #include "inkscape.h"
 #include "event-context.h"
+#include "widgets/desktop-widget.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "dialog.h"
@@ -68,7 +69,7 @@ sp_retransientize (Inkscape::Application *inkscape, SPDesktop *desktop, gpointer
         return;
     }
 
-    GtkWindow *desktop_win = desktop->window;
+    GtkWindow *desktop_win = SP_DT_WIDGET(desktop)->window;
 
     if (desktop_win && dialog_win)
     {

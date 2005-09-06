@@ -129,7 +129,8 @@ sp_create_window(SPViewWidget *vw, gboolean editable)
 
     w = sp_window_new("", TRUE);
     g_object_set_data(G_OBJECT(vw), "window", w);
-    static_cast<SPDesktop*>(SP_VIEW_WIDGET_VIEW(vw))->window = static_cast<GtkWindow*>((void*)w);
+    reinterpret_cast<SPDesktopWidget*>(vw)->window = 
+        static_cast<GtkWindow*>((void*)w);
 
     hb = gtk_hbox_new(FALSE, 0);
     gtk_widget_show(hb);
@@ -239,7 +240,7 @@ sp_ui_close_view(GtkWidget *widget)
     if (SP_ACTIVE_DESKTOP == NULL) {
         return;
     }
-    w = static_cast<GtkWidget*>((void*)(SP_ACTIVE_DESKTOP)->window);
+    w = static_cast<GtkWidget*>((void*)SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window);
     if ((SP_ACTIVE_DESKTOP)->shutdown()) {
         return;
     }
@@ -265,7 +266,7 @@ sp_ui_close_all(void)
        become active */
     while (SP_ACTIVE_DESKTOP) {
         GtkWidget *w;
-        w = static_cast<GtkWidget*>((void*)(SP_ACTIVE_DESKTOP->window));
+        w = static_cast<GtkWidget*>((void*)SP_DT_WIDGET(SP_ACTIVE_DESKTOP)->window);
         if ((SP_ACTIVE_DESKTOP)->shutdown()) {
             /* The user cancelled the operation, so end doing the close */
             return FALSE;

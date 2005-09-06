@@ -25,6 +25,7 @@
 #include "rubberband.h"
 #include "inkscape-private.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-affine.h"
 #include "seltrans-handles.h"
@@ -846,8 +847,8 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     sp_sel_trans_transform(seltrans, move, norm);
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], desktop->get_default_metric());
-    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], desktop->get_default_metric());
+    GString *xs = SP_PX_TO_METRIC_STRING(dxy[X], desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(dxy[Y], desktop->namedview->getDefaultMetric());
     seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);

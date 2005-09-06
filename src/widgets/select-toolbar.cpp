@@ -44,9 +44,10 @@
 #include "document.h"
 #include "inkscape.h"
 #include "sp-object.h"
-#include "desktop.h"
 #include "desktop-style.h"
+#include "desktop.h"
 #include "desktop-handles.h"
+#include "sp-namedview.h"
 #include "interface.h"
 #include "toolbox.h"
 #include "helper/gnome-utils.h"
@@ -129,7 +130,7 @@ static void
 sp_selection_layout_widget_modify_selection(SPWidget *spw, Inkscape::Selection *selection, guint flags, gpointer data)
 {
     SPDesktop *desktop = (SPDesktop *) data;
-    if ((desktop->selection == selection) // only respond to changes in our desktop
+    if ((SP_DT_SELECTION(desktop) == selection) // only respond to changes in our desktop
         && (flags & (SP_OBJECT_MODIFIED_FLAG        |
                      SP_OBJECT_PARENT_MODIFIED_FLAG |
                      SP_OBJECT_CHILD_MODIFIED_FLAG   )))
@@ -142,7 +143,7 @@ static void
 sp_selection_layout_widget_change_selection(SPWidget *spw, Inkscape::Selection *selection, gpointer data)
 {
     SPDesktop *desktop = (SPDesktop *) data;
-    if (desktop->selection == selection) // only respond to changes in our desktop
+    if (SP_DT_SELECTION(desktop) == selection) // only respond to changes in our desktop
         sp_selection_layout_widget_update(spw, selection);
 }
 
@@ -456,7 +457,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     GtkWidget *spw = sp_widget_new_global(INKSCAPE);
 
     // Remember the desktop's canvas widget, to be used for defocusing.
-    gtk_object_set_data(GTK_OBJECT(spw), "dtw", desktop->owner->canvas);
+    gtk_object_set_data(GTK_OBJECT(spw), "dtw", SP_DT_WIDGET(desktop)->canvas);
 
     // The vb frame holds all other widgets and is used to set sensitivity depending on selection state.
     GtkWidget *vb = gtk_hbox_new(FALSE, 0);
@@ -468,7 +469,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     sp_unit_selector_setsize(us, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
-    sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), desktop->get_default_unit());
+    sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), SP_DT_NAMEDVIEW(desktop)->doc_units);
     g_signal_connect(G_OBJECT(us), "set_unit", G_CALLBACK(aux_set_unit), spw);
 
     // four spinbuttons

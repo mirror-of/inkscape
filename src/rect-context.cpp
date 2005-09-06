@@ -26,6 +26,7 @@
 #include "sp-rect.h"
 #include "inkscape.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
@@ -546,8 +547,8 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     }
 
     // status text
-    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), desktop->get_default_metric());
-    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), desktop->get_default_metric());
+    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), desktop->namedview->getDefaultMetric());
+    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), desktop->namedview->getDefaultMetric());
     rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Rectangle</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);
