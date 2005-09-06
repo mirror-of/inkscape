@@ -29,7 +29,6 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "document.h"
-#include "desktop.h"
 #include "desktop-events.h"
 #include "desktop-handles.h"
 #include "sp-guide.h"
@@ -975,3 +974,27 @@ sp_document_namedview (SPDocument *document, const gchar *id)
 
 	return (SPNamedView *) nv;
 }
+
+/**
+ * Returns namedview's default metric.
+ */
+SPMetric
+SPNamedView::getDefaultMetric() const
+{
+    if (doc_units)
+        return sp_unit_get_metric (doc_units);
+    else
+        return SP_PT;
+}
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

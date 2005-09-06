@@ -17,17 +17,17 @@
  *
  */
 
+/// @see desktop-handles.h for desktop macros.
+
 #include "config.h"
 
 #include <sigc++/sigc++.h>
 #include <gtk/gtktypeutils.h>
-#include <gtk/gtkwindow.h>
 #include "forward.h"
 #include "display/display-forward.h"
 #include "helper/helper-forward.h"
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include "sp-metric.h"
 #include "gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
@@ -99,7 +99,6 @@ struct SPDesktop : public Inkscape::UI::View::View,
     SPCanvasItem  *page;        ///< page background
     SPCanvasItem  *page_border; ///< page border
     SPCSSAttr     *current;     ///< current style
-    GtkWindow     *window;      /// \todo move it out of here
 
     NR::Matrix d2w, w2d, doc2dt;
     GList *zooms_past;
@@ -216,9 +215,6 @@ struct SPDesktop : public Inkscape::UI::View::View,
     
     void fullscreen();
 
-    const SPUnit *get_default_unit() const;
-    SPMetric get_default_metric() const;
-
     virtual bool shutdown();
     virtual void mouseover() {}
     virtual void mouseout() {}
@@ -261,16 +257,6 @@ private:
     virtual void onDocumentResized (double, double);
 
 };
-
-#define SP_DESKTOP_SCROLL_LIMIT 4000.0
-#define SP_DESKTOP_ZOOM_MAX 256.0
-#define SP_DESKTOP_ZOOM_MIN 0.03125
-
-Inkscape::UI::View::View * sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas);
-
-#define SP_COORDINATES_UNDERLINE_NONE (0)
-#define SP_COORDINATES_UNDERLINE_X (1 << NR::X)
-#define SP_COORDINATES_UNDERLINE_Y (1 << NR::Y)
 
 #endif
 

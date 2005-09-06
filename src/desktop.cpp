@@ -56,6 +56,7 @@
 #include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-events.h"
+#include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "widgets/desktop-widget.h"
 #include "document.h"
@@ -162,7 +163,6 @@ SPDesktop::SPDesktop()
     sketch = NULL;
     controls = NULL;
     event_context = 0;
-    window = 0;
 
     d2w.set_identity();
     w2d.set_identity();
@@ -713,27 +713,6 @@ SPDesktop::set_coordinate_status (NR::Point p, guint underline)
     g_snprintf (cstr, 64, "%6.2f, %6.2f", owner->dt2r * p[NR::X], owner->dt2r * p[NR::Y]);
 
     sp_desktop_widget_set_coordinate_status (owner, cstr);
-}
-
-/**
- * Returns desktop's default unit.
- */
-const SPUnit *
-SPDesktop::get_default_unit() const
-{
-    return namedview->doc_units;
-}
-
-/**
- * Returns desktop's default metric.
- */
-SPMetric
-SPDesktop::get_default_metric() const
-{
-    if (get_default_unit())
-        return sp_unit_get_metric (get_default_unit());
-    else
-        return SP_PT;
 }
 
 

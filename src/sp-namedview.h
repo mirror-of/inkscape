@@ -21,6 +21,7 @@
 #include "helper/helper-forward.h"
 #include "sp-object-group.h"
 #include "libnr/nr-point.h"
+#include "sp-metric.h"
 #include "snap.h"
 
 
@@ -82,6 +83,8 @@ struct SPNamedView : public SPObjectGroup {
     GSList *views;
     GSList *gridviews;
     gint viewcount;
+
+    SPMetric getDefaultMetric() const;
 };
 
 struct SPNamedViewClass {
