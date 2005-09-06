@@ -16,9 +16,19 @@
 #include "display/display-forward.h"
 #include "forward.h"
 
-namespace Inkscape { class Selection; }
+namespace Inkscape { 
+    class MessageStack;
+    class Selection; 
+}
 
 #define SP_DT_IS_EDITABLE(d) (TRUE)
+#define SP_DESKTOP_SCROLL_LIMIT 4000.0
+#define SP_DESKTOP_ZOOM_MAX 256.0
+#define SP_DESKTOP_ZOOM_MIN 0.03125
+
+#define SP_COORDINATES_UNDERLINE_NONE (0)
+#define SP_COORDINATES_UNDERLINE_X (1 << NR::X)
+#define SP_COORDINATES_UNDERLINE_Y (1 << NR::Y)
 
 #define SP_DT_EVENTCONTEXT(d) sp_desktop_event_context (d)
 #define SP_DT_SELECTION(d) sp_desktop_selection (d)
@@ -31,18 +41,24 @@ namespace Inkscape { class Selection; }
 #define SP_DT_DRAWING(d) sp_desktop_drawing (d)
 #define SP_DT_SKETCH(d) sp_desktop_sketch (d)
 #define SP_DT_CONTROLS(d) sp_desktop_controls (d)
+#define SP_DT_MSGSTACK(d) sp_desktop_message_stack (d)
+#define SP_DT_NAMEDVIEW(d) sp_desktop_namedview (d)
+#define SP_DT_WIDGET(d) sp_desktop_widget (d)
 
-SPEventContext * sp_desktop_event_context (SPDesktop * desktop);
-Inkscape::Selection * sp_desktop_selection (SPDesktop * desktop);
-SPDocument * sp_desktop_document (SPDesktop * desktop);
-SPCanvas * sp_desktop_canvas (SPDesktop * desktop);
-SPCanvasItem * sp_desktop_acetate (SPDesktop * desktop);
-SPCanvasGroup * sp_desktop_main (SPDesktop * desktop);
-SPCanvasGroup * sp_desktop_grid (SPDesktop * desktop);
-SPCanvasGroup * sp_desktop_guides (SPDesktop * desktop);
-SPCanvasItem *sp_desktop_drawing (SPDesktop *desktop);
-SPCanvasGroup * sp_desktop_sketch (SPDesktop * desktop);
-SPCanvasGroup * sp_desktop_controls (SPDesktop * desktop);
+SPEventContext * sp_desktop_event_context (SPDesktop const * desktop);
+Inkscape::Selection * sp_desktop_selection (SPDesktop const * desktop);
+SPDocument * sp_desktop_document (SPDesktop const * desktop);
+SPCanvas * sp_desktop_canvas (SPDesktop const * desktop);
+SPCanvasItem * sp_desktop_acetate (SPDesktop const * desktop);
+SPCanvasGroup * sp_desktop_main (SPDesktop const * desktop);
+SPCanvasGroup * sp_desktop_grid (SPDesktop const * desktop);
+SPCanvasGroup * sp_desktop_guides (SPDesktop const * desktop);
+SPCanvasItem *sp_desktop_drawing (SPDesktop const *desktop);
+SPCanvasGroup * sp_desktop_sketch (SPDesktop const * desktop);
+SPCanvasGroup * sp_desktop_controls (SPDesktop const * desktop);
+Inkscape::MessageStack * sp_desktop_message_stack (SPDesktop const * desktop);
+SPNamedView * sp_desktop_namedview (SPDesktop const * desktop);
+SPDesktopWidget * sp_desktop_widget (SPDesktop const * desktop);
 
 #endif
 

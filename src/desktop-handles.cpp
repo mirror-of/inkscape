@@ -17,7 +17,7 @@
 #include "desktop-handles.h"
 
 SPEventContext *
-sp_desktop_event_context (SPDesktop * desktop)
+sp_desktop_event_context (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -25,7 +25,7 @@ sp_desktop_event_context (SPDesktop * desktop)
 }
 
 Inkscape::Selection *
-sp_desktop_selection (SPDesktop * desktop)
+sp_desktop_selection (SPDesktop const * desktop)
 {
 	g_assert(desktop != NULL);
 
@@ -33,7 +33,7 @@ sp_desktop_selection (SPDesktop * desktop)
 }
 
 SPDocument *
-sp_desktop_document (SPDesktop * desktop)
+sp_desktop_document (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -41,7 +41,7 @@ sp_desktop_document (SPDesktop * desktop)
 }
 
 SPCanvas *
-sp_desktop_canvas (SPDesktop * desktop)
+sp_desktop_canvas (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -49,7 +49,7 @@ sp_desktop_canvas (SPDesktop * desktop)
 }
 
 SPCanvasItem *
-sp_desktop_acetate (SPDesktop * desktop)
+sp_desktop_acetate (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -57,7 +57,7 @@ sp_desktop_acetate (SPDesktop * desktop)
 }
 
 SPCanvasGroup *
-sp_desktop_main (SPDesktop * desktop)
+sp_desktop_main (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -65,7 +65,7 @@ sp_desktop_main (SPDesktop * desktop)
 }
 
 SPCanvasGroup *
-sp_desktop_grid (SPDesktop * desktop)
+sp_desktop_grid (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -73,7 +73,7 @@ sp_desktop_grid (SPDesktop * desktop)
 }
 
 SPCanvasGroup *
-sp_desktop_guides (SPDesktop * desktop)
+sp_desktop_guides (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -81,7 +81,7 @@ sp_desktop_guides (SPDesktop * desktop)
 }
 
 SPCanvasItem *
-sp_desktop_drawing (SPDesktop *desktop)
+sp_desktop_drawing (SPDesktop const *desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -89,7 +89,7 @@ sp_desktop_drawing (SPDesktop *desktop)
 }
 
 SPCanvasGroup *
-sp_desktop_sketch (SPDesktop * desktop)
+sp_desktop_sketch (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
@@ -97,10 +97,35 @@ sp_desktop_sketch (SPDesktop * desktop)
 }
 
 SPCanvasGroup *
-sp_desktop_controls (SPDesktop * desktop)
+sp_desktop_controls (SPDesktop const * desktop)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
 
 	return desktop->controls;
 }
+
+Inkscape::MessageStack * 
+sp_desktop_message_stack (SPDesktop const * desktop)
+{
+	g_return_val_if_fail (desktop != NULL, NULL);
+
+	return desktop->messageStack();
+}
+
+SPNamedView * 
+sp_desktop_namedview (SPDesktop const * desktop)
+{
+	g_return_val_if_fail (desktop != NULL, NULL);
+
+	return desktop->namedview;
+}
+
+SPDesktopWidget * 
+sp_desktop_widget (SPDesktop const * desktop)
+{
+	g_return_val_if_fail (desktop != NULL, NULL);
+
+	return desktop->owner;
+}
+
 
