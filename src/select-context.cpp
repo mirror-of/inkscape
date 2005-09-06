@@ -41,6 +41,7 @@
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "desktop.h"
+#include "desktop-handles.h"
 #include "dialogs/object-properties.h"
 #include "sp-metrics.h"
 #include "sp-item.h"

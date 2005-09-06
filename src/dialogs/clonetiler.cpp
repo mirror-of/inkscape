@@ -32,6 +32,7 @@
 #include "../selection-chemistry.h"
 #include "../style.h"
 #include "../desktop.h"
+#include "../desktop-handles.h"
 #include "../document.h"
 #include "../message-stack.h"
 #include "../sp-use.h"

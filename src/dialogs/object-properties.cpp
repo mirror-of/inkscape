@@ -39,8 +39,10 @@
 #include "inkscape-stock.h"
 #include "prefs-utils.h"
 #include "svg/css-ostringstream.h"
+#include "desktop-handles.h"
 #include "desktop-style.h"
 #include "document.h"
+#include "xml/repr.h"
 
 static GtkWidget *dlg = NULL;
 static win_data wd;

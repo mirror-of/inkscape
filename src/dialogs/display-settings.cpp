@@ -36,6 +36,7 @@
 #include "../selection-chemistry.h"
 #include "../style.h"
 #include "../desktop.h"
+#include "../desktop-handles.h"
 #include "../unit-constants.h"
 #include "xml/repr.h"
 

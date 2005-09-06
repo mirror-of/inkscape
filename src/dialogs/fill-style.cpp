@@ -56,7 +56,7 @@
 #include <inkscape.h>
 #include <document-private.h>
 #include <file.h>
-
+#include <xml/repr.h>
 
 #include "fill-style.h"
 

@@ -19,6 +19,7 @@
 #include "file.h"
 #include "document.h"
 #include "desktop.h"
+#include "desktop-handles.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
