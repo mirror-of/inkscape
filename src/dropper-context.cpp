@@ -32,7 +32,6 @@
 #include "enums.h"
 #include "color.h"
 #include "color-rgba.h"
-#include "desktop.h"
 #include "desktop-style.h"
 #include "prefs-utils.h"
 #include "sp-namedview.h"
@@ -332,7 +331,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 
 			if (pick == SP_DROPPER_PICK_VISIBLE) {
 				// compose with page color
-				guint32 bg = ec->desktop->namedview->pagecolor;
+				guint32 bg = SP_DT_NAMEDVIEW(ec->desktop)->pagecolor;
 				R = R + (SP_RGBA32_R_F(bg)) * (1 - A);
 				G = G + (SP_RGBA32_G_F(bg)) * (1 - A);
 				B = B + (SP_RGBA32_B_F(bg)) * (1 - A);
@@ -396,7 +395,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
                     // REJON: set aux. toolbar input to hex color!
                     
                     
-                    if (!(ec->desktop->selection->isEmpty()))
+                    if (!(SP_DT_SELECTION(ec->desktop)->isEmpty()))
                             sp_document_done (SP_DT_DOCUMENT(ec->desktop));
 
                     ret = TRUE;

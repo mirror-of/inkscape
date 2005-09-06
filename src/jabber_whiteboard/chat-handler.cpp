@@ -15,7 +15,7 @@
 //#include <boost/lexical_cast.hpp>
 
 #include "message-stack.h"
-#include "desktop.h"
+#include "desktop-handles.h"
 #include "document.h"
 
 #include "util/ucompose.hpp"
@@ -161,7 +161,7 @@ ChatMessageHandler::parse(LmMessage* message)
 					// Delete the message queue used by this sender
 					this->_sm->session_data->receive_queues.erase(sender.raw());
 
-					this->_sm->desktop()->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("<b>%s</b> has left the chatroom."), sender.c_str());
+					SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::INFORMATION_MESSAGE, _("<b>%s</b> has left the chatroom."), sender.c_str());
 				}
 
 				default:

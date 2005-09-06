@@ -18,7 +18,7 @@ extern "C" {
 
 #include "message-stack.h"
 #include "document.h"
-#include "desktop.h"
+#include "desktop-handles.h"
 
 #include "jabber_whiteboard/undo-stack-observer.h"
 #include "jabber_whiteboard/jabber-handlers.h"
@@ -59,7 +59,7 @@ Callbacks::dispatchSendQueue()
 
 	if (state != LM_CONNECTION_STATE_OPEN && state != LM_CONNECTION_STATE_AUTHENTICATED) {
 		g_log(NULL, G_LOG_LEVEL_DEBUG, "error: connection lost (current state: %u)", state);
-		this->_sm->desktop()->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Jabber connection lost."));
+		SP_DT_MSGSTACK(this->_sm->desktop())->flash(Inkscape::INFORMATION_MESSAGE, _("Jabber connection lost."));
 		return false;
 	}
 
@@ -73,10 +73,10 @@ Callbacks::dispatchSendQueue()
 
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Queue size: %u", this->_sd->send_queue->size());
 
-	this->_sm->desktop()->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Sending message; %u messages remaining in send queue."), this->_sd->send_queue->size());
+	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("Sending message; %u messages remaining in send queue."), this->_sd->send_queue->size());
 
 	if (this->_sd->send_queue->empty()) {
-		this->_sm->desktop()->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Receive queue empty."));
+		SP_DT_MSGSTACK(this->_sm->desktop())->flash(Inkscape::NORMAL_MESSAGE, _("Receive queue empty."));
 	}
 
 	switch (first->type()) {
@@ -151,7 +151,7 @@ Callbacks::dispatchReceiveQueue()
 
 				// Pass the message to the received change handler.
 				this->_sm->receiveChange(msg->message());
-				this->_sm->desktop()->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Receiving change; %u changes left to process."), rmq->size());
+				SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("Receiving change; %u changes left to process."), rmq->size());
 
 
 				

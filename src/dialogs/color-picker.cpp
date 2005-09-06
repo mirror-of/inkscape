@@ -17,7 +17,6 @@
 
 #include "macros.h"
 #include "inkscape.h"
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
 #include "sp-object.h"
@@ -185,7 +184,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
 
     Inkscape::XML::Node *repr = (Inkscape::XML::Node *)g_object_get_data(G_OBJECT(cp), "repr");
     if (!repr)
-         repr = SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview);
+         repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP));
 
     gchar c[32];
     sp_svg_write_color(c, 32, rgba);

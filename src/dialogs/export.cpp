@@ -41,7 +41,6 @@
 #include "selection.h"
 #include "file.h"
 #include "macros.h"
-#include "desktop.h"
 #include "sp-namedview.h"
 
 #include "dialog-events.h"
@@ -265,7 +264,7 @@ sp_export_dialog_area_frame (GtkWidget * dlg)
     us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop)
-        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), desktop->get_default_unit());
+        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), SP_DT_NAMEDVIEW(desktop)->doc_units);
     gtk_box_pack_end (GTK_BOX (unitbox), us, FALSE, FALSE, 0);
     l = gtk_label_new (_("Units:"));
     gtk_box_pack_end (GTK_BOX (unitbox), l, FALSE, FALSE, 3);
@@ -990,7 +989,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     }
     g_free(dirname);
 
-    SPNamedView *nv = (SP_ACTIVE_DESKTOP)->namedview;
+    SPNamedView *nv = SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP);
     GtkWidget *dlg, *prg, *btn; /* progressbar-stuff */
     char *fn;
     gchar *text;

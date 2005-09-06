@@ -25,7 +25,8 @@
 #include "inkscape.h"
 #include <gtk/gtk.h>
 #include "desktop-events.h"
-#include "desktop.h"
+#include "desktop-handles.h"
+#include "widgets/desktop-widget.h"
 #include "inkscape-private.h"
 #include "prefs-utils.h"
 #include "event-context.h"
@@ -167,11 +168,11 @@ sp_transientize (GtkWidget *dialog)
     
     // if there's an active document window, attach dialog to it as a transient:
     
-        if ( SP_ACTIVE_DESKTOP && (SP_ACTIVE_DESKTOP)->window )
+        if ( SP_ACTIVE_DESKTOP && (SP_DT_WIDGET(SP_ACTIVE_DESKTOP))->window )
         {
         
             gtk_window_set_transient_for ( (GtkWindow *) dialog, 
-                                           (SP_ACTIVE_DESKTOP)->window );
+                                           (SP_DT_WIDGET(SP_ACTIVE_DESKTOP))->window );
         }
 #endif
    
@@ -208,7 +209,7 @@ sp_transientize_callback ( Inkscape::Application *inkscape,
     
     GtkWindow *w;
 
-    w = desktop->window; 
+    w = SP_DT_WIDGET(desktop)->window; 
     
     if (w && wd->win)
     {

@@ -18,7 +18,6 @@
 #include "ui/dialog/tracedialog.h"
 
 #include <inkscape.h>
-#include <desktop.h>
 #include <desktop-handles.h>
 #include <document.h>
 #include "message-stack.h"
@@ -48,11 +47,11 @@ Tracer::getSelectedSPImage()
         return NULL;
         }
 
-    Inkscape::Selection *sel = desktop->selection;
+    Inkscape::Selection *sel = SP_DT_SELECTION(desktop);
     if (!sel)
         {
         char *msg = _("Select an <b>image</b> to trace");
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         return NULL;
         }
@@ -61,7 +60,7 @@ Tracer::getSelectedSPImage()
     if (!item)
         {
         char *msg = _("Select an <b>image</b> to trace");  //same as above
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         return NULL;
         }
@@ -69,7 +68,7 @@ Tracer::getSelectedSPImage()
     if (!SP_IS_IMAGE(item))
         {
         char *msg = _("Select an <b>image</b> to trace");
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         return NULL;
         }
@@ -132,7 +131,7 @@ void Tracer::traceThread()
     if (!SP_ACTIVE_DOCUMENT)
         {
         char *msg = _("Trace: No active document");
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         engine = NULL;
         return;
@@ -153,7 +152,7 @@ void Tracer::traceThread()
     if (!pixbuf)
         {
         char *msg = _("Trace: Image has no bitmap data");
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         engine = NULL;
         return;
@@ -266,7 +265,7 @@ void Tracer::traceThread()
     engine = NULL;
 
     char *msg = g_strdup_printf(_("Trace: Done. %ld nodes created"), totalNodeCount);
-    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+    SP_DT_MSGSTACK(desktop)->flash(Inkscape::NORMAL_MESSAGE, msg);
     g_free(msg);
 
 }

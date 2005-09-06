@@ -1,5 +1,5 @@
 #include "satisfied-guide-cns.h"
-#include <desktop.h>
+#include <desktop-handles.h>
 #include <libnr/nr-point-fns.h>
 #include <sp-guide.h>
 #include <sp-guide-attachment.h>
@@ -11,7 +11,7 @@ void satisfied_guide_cns(SPDesktop const &desktop,
                          std::vector<NR::Point> const &snappoints,
                          std::vector<SPGuideConstraint> &cns)
 {
-    SPNamedView const &nv = *desktop.namedview;
+    SPNamedView const &nv = *SP_DT_NAMEDVIEW(&desktop);
     for (GSList const *l = nv.guides; l != NULL; l = l->next) {
         SPGuide &g = *SP_GUIDE(l->data);
         for (unsigned int i = 0; i < snappoints.size(); ++i) {

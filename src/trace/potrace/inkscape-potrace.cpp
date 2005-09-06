@@ -20,7 +20,7 @@
 #include "trace/imagemap-gdk.h"
 
 #include <inkscape.h>
-#include <desktop.h>
+#include <desktop-handles.h>
 #include <document.h>
 #include "message-stack.h"
 #include <selection.h>
@@ -551,7 +551,7 @@ PotraceTracingEngine::traceBrightnessMulti(GdkPixbuf * thePixbuf, int *nrPaths)
         if (desktop)
             {
             gchar *msg = g_strdup_printf(_("Trace: %d.  %ld nodes"), traceCount++, nodeCount);
-            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+            SP_DT_MSGSTACK(desktop)->flash(Inkscape::NORMAL_MESSAGE, msg);
             g_free(msg);
             }
         }
@@ -652,7 +652,7 @@ PotraceTracingEngine::traceQuant(GdkPixbuf * thePixbuf, int *nrPaths)
         if (desktop)
             {
             gchar *msg = g_strdup_printf(_("Trace: %d.  %ld nodes"), colorIndex, nodeCount);
-            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg);
+            SP_DT_MSGSTACK(desktop)->flash(Inkscape::NORMAL_MESSAGE, msg);
             g_free(msg);
             }
 

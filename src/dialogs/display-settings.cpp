@@ -35,7 +35,6 @@
 #include "../selection.h"
 #include "../selection-chemistry.h"
 #include "../style.h"
-#include "../desktop.h"
 #include "../desktop-handles.h"
 #include "../unit-constants.h"
 #include "xml/repr.h"
@@ -721,7 +720,7 @@ style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE,
                                        _("<b>No objects selected</b> to take the style from."));
         return;
     }
@@ -730,7 +729,7 @@ style_from_selection_to_tool(GtkWidget *widget, gchar const *prefs_path)
         /* TODO: If each item in the selection has the same style then don't consider it an error.
          * Maybe we should try to handle multiple selections anyway, e.g. the intersection of the
          * style attributes for the selected items. */
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE,
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE,
                                        _("<b>More than one object selected.</b>  Cannot take style from multiple objects."));
         return;
     }

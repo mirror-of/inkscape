@@ -49,7 +49,6 @@
 #include "document.h"
 #include "selection.h"
 #include "desktop-handles.h"
-#include "desktop.h"
 #include "macros.h"
 #include "sp-item-transform.h"
 #include "prefs-utils.h"
@@ -422,7 +421,7 @@ private :
     {
 
         if (!SP_ACTIVE_DESKTOP) return;
-	SPEventContext *event_context = (SP_ACTIVE_DESKTOP)->event_context;
+	SPEventContext *event_context = SP_DT_EVENTCONTEXT(SP_ACTIVE_DESKTOP);
 	if (!SP_IS_NODE_CONTEXT (event_context)) return ;
 
         Inkscape::NodePath::Path *nodepath = SP_NODE_CONTEXT (event_context)->nodepath;
@@ -645,7 +644,7 @@ private :
 void on_tool_changed(Inkscape::Application *inkscape, SPEventContext *context, AlignAndDistribute *daad)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && desktop->event_context)
+    if (desktop && SP_DT_EVENTCONTEXT(desktop))
         daad->setMode(tools_active(desktop) == TOOLS_NODES);
 }
 

@@ -31,8 +31,8 @@
 #include "../selection.h"
 #include "../selection-chemistry.h"
 #include "../style.h"
-#include "../desktop.h"
 #include "../desktop-handles.h"
+#include "../sp-namedview.h"
 #include "../document.h"
 #include "../message-stack.h"
 #include "../sp-use.h"
@@ -819,7 +819,7 @@ clonetiler_unclump (GtkWidget *widget, void *)
 
     // check if something is selected
     if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
         return;
     }
 
@@ -870,7 +870,7 @@ clonetiler_remove (GtkWidget *widget, void *, bool do_undo = true)
 
     // check if something is selected
     if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
         return;
     }
 
@@ -920,13 +920,13 @@ clonetiler_apply (GtkWidget *widget, void *)
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object</b> to clone."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object</b> to clone."));
         return;
     }
 
     // Check if more than one object is selected.
     if (g_slist_length((GSList *) selection->itemList()) > 1) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, <b>group</b> them and <b>clone the group</b>."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, <b>group</b> them and <b>clone the group</b>."));
         return;
     }
 
@@ -2360,7 +2360,7 @@ clonetiler_dialog (void)
 
                 // unitmenu
                 GtkWidget *u = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
-                sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), SP_ACTIVE_DESKTOP->get_default_unit());
+                sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)->doc_units);
     
                 {
                     // Width spinbutton 

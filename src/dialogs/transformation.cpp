@@ -37,7 +37,7 @@
 #include "macros.h"
 #include "inkscape.h"
 #include "document.h"
-#include "desktop.h"
+#include "sp-namedview.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "desktop-handles.h"
@@ -477,7 +477,7 @@ sp_transformation_page_move_new(GObject *obj)
     g_object_set_data(obj, "move_units", us);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop)
-        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), desktop->get_default_unit());
+        sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), SP_DT_NAMEDVIEW(desktop)->doc_units);
 
     /* Horizontal */
     GtkWidget *img = sp_icon_new( GTK_ICON_SIZE_LARGE_TOOLBAR,

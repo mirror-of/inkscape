@@ -11,7 +11,6 @@
 
 /*
 #include "inkscape.h"
-#include "desktop-handles.h"
 */
 
 #include <cstring>
@@ -32,7 +31,7 @@
 
 #include "message-context.h"
 #include "message-stack.h"
-#include "desktop.h"
+#include "desktop-handles.h"
 #include "document.h"
 #include "document-private.h"
 #include "verbs.h"
@@ -181,8 +180,8 @@ SessionManager::setDesktop(::SPDesktop* desktop)
 	if (this->_myDoc != NULL) {
 		Inkscape::GC::release(this->_myDoc);
 	}
-	if (desktop->doc() != NULL) {
-		this->_myDoc = desktop->doc();
+	if (SP_DT_DOCUMENT(desktop) != NULL) {
+		this->_myDoc = SP_DT_DOCUMENT(desktop);
 		Inkscape::GC::anchor(this->_myDoc);
 	}
 }
@@ -799,7 +798,7 @@ SessionManager::loadSessionFile(Glib::ustring filename)
 void
 SessionManager::userConnectedToWhiteboard(gchar const* JID)
 {
-	this->_myDesktop->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("Established whiteboard session with <b>%s</b>."), JID);
+	SP_DT_MSGSTACK(this->_myDesktop)->flashF(Inkscape::INFORMATION_MESSAGE, _("Established whiteboard session with <b>%s</b>."), JID);
 }
 
 
@@ -808,7 +807,7 @@ SessionManager::userDisconnectedFromWhiteboard(std::string const& JID)
 {
 
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "%s has left the whiteboard session.", JID.c_str());
-	this->_myDesktop->messageStack()->flashF(Inkscape::INFORMATION_MESSAGE, _("<b>%s</b> has <b>left</b> the whiteboard session."), JID.c_str());
+	SP_DT_MSGSTACK(this->_myDesktop)->flashF(Inkscape::INFORMATION_MESSAGE, _("<b>%s</b> has <b>left</b> the whiteboard session."), JID.c_str());
 
 	// Inform the user
 	// TRANSLATORS: %1 is the name of the user that disconnected, %2 is the name of the user whom the disconnected user disconnected from.

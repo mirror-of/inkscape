@@ -34,7 +34,6 @@
 #include "color-picker.h"
 #include "../inkscape.h"
 #include "../document.h"
-#include "../desktop.h"
 #include "../desktop-handles.h"
 #include "../sp-namedview.h"
 #include "widgets/spw-utilities.h"
@@ -250,7 +249,7 @@ sp_dtw_dialog_destroy(GtkObject *object, gpointer data)
     sp_signal_disconnect_by_data(INKSCAPE, dlg);
     gtk_object_destroy ( GTK_OBJECT (tooltips) );
     tooltips = NULL;
-    sp_repr_remove_listener_by_data(SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview), dlg);
+    sp_repr_remove_listener_by_data(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
 }
@@ -291,7 +290,7 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
     gchar const *key = (gchar const *)gtk_object_get_data(GTK_OBJECT(tb), "key");
 
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
@@ -323,7 +322,7 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
@@ -352,7 +351,7 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     }
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
     gchar const *key = (gchar const *)gtk_object_get_data(GTK_OBJECT(adjustment), "key");
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(adjustment),
                                                                 "unit_selector");
@@ -488,7 +487,7 @@ sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
         return;
     }
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
 
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(dialog),
                                                                 "grid_snap_units");
@@ -516,7 +515,7 @@ sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
         return;
     }
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
 
     Inkscape::SVGOStringStream os;
     int value = int(adjustment->value);
@@ -543,7 +542,7 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
         return;
     }
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
 
     SPUnitSelector *us = (SPUnitSelector *) gtk_object_get_data(GTK_OBJECT(dialog),
                                                                 "guide_snap_units");
@@ -657,7 +656,7 @@ static gboolean set_doc_units (SPUnitSelector *,
 
     SPDocument *doc = SP_DT_DOCUMENT(dt);
 
-    Inkscape::XML::Node *repr = SP_OBJECT_REPR(dt->namedview);
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(SP_DT_NAMEDVIEW(dt));
 
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
@@ -1308,7 +1307,7 @@ sp_desktop_dialog(void)
                           G_CALLBACK(sp_dtw_deactivate_desktop), dlg);
         sp_dtw_update(dlg, SP_ACTIVE_DESKTOP);
 
-        sp_repr_add_listener(SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview), &docoptions_repr_events, dlg);
+        sp_repr_add_listener(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)), &docoptions_repr_events, dlg);
 
     } // end of if (!dlg)
 
@@ -1326,7 +1325,7 @@ sp_dtw_activate_desktop(Inkscape::Application *inkscape,
                         GtkWidget *dialog)
 {
     if (desktop && dlg) {
-        sp_repr_add_listener(SP_OBJECT_REPR(desktop->namedview), &docoptions_repr_events, dlg);
+        sp_repr_add_listener(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(desktop)), &docoptions_repr_events, dlg);
     }
     sp_dtw_update(dialog, desktop);
 }
@@ -1339,9 +1338,9 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
                           SPDesktop *desktop,
                           GtkWidget *dialog)
 {
-    if (desktop && SP_IS_NAMEDVIEW(desktop->namedview) && dlg) {
+    if (desktop && SP_IS_NAMEDVIEW(SP_DT_NAMEDVIEW(desktop)) && dlg) {
         // all these checks prevent crash when you close inkscape with the dialog open
-        sp_repr_remove_listener_by_data(SP_OBJECT_REPR(desktop->namedview), dlg);
+        sp_repr_remove_listener_by_data(SP_OBJECT_REPR(SP_DT_NAMEDVIEW(desktop)), dlg);
     }
     sp_dtw_update(dialog, NULL);
 }
@@ -1375,7 +1374,7 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
             gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
         }
     } else {
-        SPNamedView *nv = desktop->namedview;
+        SPNamedView *nv = SP_DT_NAMEDVIEW(desktop);
 
         gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
         gtk_widget_set_sensitive(dialog, TRUE);

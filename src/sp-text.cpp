@@ -50,7 +50,8 @@
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"
 #include "document.h"
-#include "desktop.h"
+#include "desktop-handles.h"
+#include "sp-namedview.h"
 #include "fontsize-expansion.h"
 #include "style.h"
 #include "version.h"
@@ -402,7 +403,7 @@ sp_text_description(SPItem *item)
         n = g_strdup(_("&lt;no name found&gt;"));
     }
 
-    GString *xs = SP_PX_TO_METRIC_STRING(style->font_size.computed, SP_ACTIVE_DESKTOP->get_default_metric());
+    GString *xs = SP_PX_TO_METRIC_STRING(style->font_size.computed, SP_DT_NAMEDVIEW(SP_ACTIVE_DESKTOP)->getDefaultMetric());
 
     char *ret = ( SP_IS_TEXT_TEXTPATH(item)
                   ? g_strdup_printf(_("<b>Text on path</b> (%s, %s)"), n, xs->str)

@@ -49,9 +49,9 @@
 #include "style.h"
 #include "gradient-chemistry.h"
 #include "document.h"
+#include "sp-namedview.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
-#include "desktop.h"
 #include "marker-status.h"
 #include "selection.h"
 #include "sp-item.h"
@@ -998,7 +998,7 @@ sp_stroke_style_line_widget_new(void)
     us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop)
-        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), desktop->get_default_unit());
+        sp_unit_selector_set_unit (SP_UNIT_SELECTOR(us), SP_DT_NAMEDVIEW(desktop)->doc_units);
     sp_unit_selector_add_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT), 0);
     g_signal_connect ( G_OBJECT (us), "set_unit", G_CALLBACK (stroke_width_set_unit), spw );
     gtk_widget_show(us);

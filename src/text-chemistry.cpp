@@ -16,6 +16,7 @@
 #endif
 #include <string.h>
 #include "libnr/nr-macros.h"
+#include "libnr/nr-matrix-fns.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include "display/curve.h"
@@ -30,7 +31,6 @@
 #include "document.h"
 #include "message-stack.h"
 #include "selection.h"
-#include "desktop.h"
 #include "desktop-handles.h"
 #include "text-editing.h"
 #include "sp-flowtext.h"
@@ -87,18 +87,18 @@ text_put_on_path()
     SPItem *shape = shape_in_selection(selection);
 
     if (!text || !shape || g_slist_length((GSList *) selection->itemList()) != 2) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text and a path</b> to put text on path."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text and a path</b> to put text on path."));
         return;
     }
 
     if (SP_IS_TEXT_TEXTPATH(text)) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
         return;
     }
 
     if (SP_IS_RECT(shape)) {
         // rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot put text on a rectangle in this version. Convert rectangle to path first."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, _("You cannot put text on a rectangle in this version. Convert rectangle to path first."));
         return;
     }
 
@@ -156,7 +156,7 @@ text_remove_from_path()
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text on path</b> to remove it from path."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text on path</b> to remove it from path."));
         return;
     }
 
@@ -178,7 +178,7 @@ text_remove_from_path()
     }
 
     if (!did) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
         selection->setList(g_slist_copy((GSList *) selection->itemList())); // reselect to update statusbar description
         sp_document_done(SP_DT_DOCUMENT(desktop));
@@ -206,7 +206,7 @@ text_remove_all_kerns()
     Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
         return;
     }
 
@@ -226,7 +226,7 @@ text_remove_all_kerns()
     }
 
     if (!did) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::ERROR_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
     } else {
         sp_document_done(SP_DT_DOCUMENT(desktop));
     }
@@ -247,7 +247,7 @@ text_flow_into_shape()
     SPItem *shape = shape_in_selection(selection);
 
     if (!text || !shape || g_slist_length((GSList *) selection->itemList()) < 2) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text into frame."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text into frame."));
         return;
     }
 
@@ -319,7 +319,7 @@ text_unflow ()
 
 
     if (!flowtext_in_selection(selection) || g_slist_length((GSList *) selection->itemList()) < 1) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a flowed text</b> to unflow it."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a flowed text</b> to unflow it."));
         return;
     }
 

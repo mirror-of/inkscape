@@ -27,7 +27,6 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
-#include "desktop.h"
 #include "desktop-style.h"
 #include "message-context.h"
 #include "message-stack.h"
@@ -131,7 +130,7 @@ static void sp_gradient_context_setup(SPEventContext *ec)
 
     ec->enableGrDrag();
 
-    rc->_message_context = new Inkscape::MessageContext((ec->desktop)->messageStack());
+    rc->_message_context = new Inkscape::MessageContext(SP_DT_MSGSTACK(ec->desktop));
 }
 
 static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkEvent *event)
@@ -268,7 +267,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
         case GDK_x:
         case GDK_X:
             if (MOD__ALT_ONLY) {
-                gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) "altx-grad");
+                gpointer hb = sp_search_by_data_recursive (SP_DT_WIDGET(desktop)->aux_toolbox, (gpointer) "altx-grad");
                 if (hb && GTK_IS_WIDGET(hb)) {
                     gtk_widget_grab_focus (GTK_WIDGET (hb));
                 }
@@ -447,7 +446,7 @@ static void sp_gradient_drag(SPGradientContext &rc, NR::Point const pt, guint st
         // during drag
         rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle"), g_slist_length((GSList *) selection->itemList()));
     } else {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> on which to create gradient."));
+        SP_DT_MSGSTACK(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> on which to create gradient."));
     }
 }
 
