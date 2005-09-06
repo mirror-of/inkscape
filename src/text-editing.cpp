@@ -1466,6 +1466,63 @@ static bool tidy_operator_redundant_semi_nesting(SPObject **item)
     return false;
 }
 
+/** helper for tidy_operator_styled_whitespace(), finds the last string object
+in a paragraph which is not \a not_obj. */
+static SPString* find_last_string_child_not_equal_to(SPObject *root, SPObject *not_obj)
+{
+    for (SPObject *child = root->lastChild() ; child ; child = SP_OBJECT_PREV(child))
+    {
+        if (child == not_obj) continue;
+        if (child->hasChildren()) {
+            SPString *ret = find_last_string_child_not_equal_to(child, not_obj);
+            if (ret) return ret;
+        } else if (SP_IS_STRING(child))
+            return SP_STRING(child);
+    }
+}
+
+/** whitespace-only spans: abc<font> </font>def
+                            -> abc<font></font> def
+                           abc<b><i>def</i> </b>ghi
+                            -> abc<b><i>def</i></b> ghi   */
+static bool tidy_operator_styled_whitespace(SPObject **item)
+{
+    if (!SP_IS_STRING(*item)) return false;
+    Glib::ustring const &str = SP_STRING(*item)->string;
+    for (Glib::ustring::const_iterator it = str.begin() ; it != str.end() ; ++it)
+        if (!g_unichar_isspace(*it)) return false;
+    
+    SPObject *test_item = *item;
+    SPString *next_string;
+    for ( ; ; ) {  // find the next string
+        next_string = sp_te_seek_next_string_recursive(SP_OBJECT_NEXT(test_item));
+        if (next_string) {
+            next_string->string.insert(0, str);
+            break;
+        }
+        for ( ; ; ) {   // go up one item in the xml
+            test_item = SP_OBJECT_PARENT(test_item);
+            if (is_line_break_object(test_item)) break;
+            SPObject *next = SP_OBJECT_NEXT(test_item);
+            if (next) {
+                test_item = next;
+                break;
+            }
+        }
+        if (is_line_break_object(test_item)) {  // no next string, see if there's a prev string
+            next_string = find_last_string_child_not_equal_to(test_item, *item);
+            if (next_string == NULL) return false;   // an empty paragraph
+            next_string->string += str;
+            break;
+        }
+    }
+    SP_OBJECT_REPR(next_string)->setContent(next_string->string.c_str());
+    SPObject *delete_obj = *item;
+    *item = SP_OBJECT_NEXT(*item);
+    delete_obj->deleteObject();
+    return true;
+}
+
 /* possible tidy operators that are not yet implemented, either because
 they are difficult, occur infrequently, or because I'm not sure that the
 output is tidier in all cases:
@@ -1497,7 +1554,8 @@ static bool tidy_xml_tree_recursively(SPObject *root)
         tidy_operator_repeated_spans,
         tidy_operator_excessive_nesting,
         tidy_operator_redundant_double_nesting,
-        tidy_operator_redundant_semi_nesting
+        tidy_operator_redundant_semi_nesting,
+        tidy_operator_styled_whitespace
     };
     bool changes = false;
 
