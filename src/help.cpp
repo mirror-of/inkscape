@@ -95,7 +95,7 @@ sp_help_about (void)
         gtk_widget_show (v);
 
         Gtk::Widget * vmm = Glib::wrap(v);
-        aboutbox = new Inkscape::UI::Dialog::AboutBox(*vmm,height,width);
+        aboutbox = new Inkscape::UI::Dialog::AboutBox(*vmm,width,height);
 
     } // close if (!aboutbox)
 

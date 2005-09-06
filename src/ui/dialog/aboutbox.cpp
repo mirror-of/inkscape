@@ -20,6 +20,8 @@
 #include <glibmm/i18n.h>
 #include "aboutbox.h"
 
+#include "inkscape_version.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -117,16 +119,21 @@ AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
     _license = NULL;
     _credits = NULL;
 
+    get_vbox()->pack_end(about_svg_view,TRUE,TRUE);
+    // allow window to shrink, but restore window size
+    set_size_request(0,0);
+    // width and height seem very broken... I'm cheating for now
+    //printf("width: %d height: %d\n",width,height);
+    set_default_size(width,width-60);
 
     add_button(_("_Credits"),    INKSCAPE_ABOUT_CREDITS);
     add_button(_("_License"),    INKSCAPE_ABOUT_LICENSE);
     add_button(Gtk::Stock::CLOSE,Gtk::RESPONSE_CLOSE);
 
-    get_vbox()->add(about_svg_view);
-    // allow window to shrink, but restore window size
-    set_size_request(0,0);
-    // "height" seems very broken... I'm cheating for now
-    set_default_size(width,width-60);
+    Gtk::Label * label = new Gtk::Label("Inkscape " INKSCAPE_VERSION);
+    label->set_selectable(TRUE);
+    label->show();
+    get_vbox()->pack_start(*label,FALSE,FALSE);
 }
 
 void
@@ -270,14 +277,12 @@ AboutBox::show_credits(void)
         translators.push_back("Duarte Loreto <happyguy_pt@hotmail.com> 2002,2003 (Maintainer)");
         translators.push_back("Fatih Demir <kabalak@gtranslator.org>, 2000.");
         translators.push_back("Francesc Dorca <f.dorca@filnet.es>, 2003. Traducció sodipodi.");
-        translators.push_back("Francisco Javier F. Serrador <serrador@arrakis.es>, 2003");
         translators.push_back("Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.");
         translators.push_back("Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>, 2001.");
         translators.push_back("Frederic Rodrigo <f.rodrigo free.fr>, 2004-2005.");
         translators.push_back("Ge'ez Frontier Foundation <locales@geez.org>, 2002.");
         translators.push_back("Jörg Müller <jfm@ram-brand.de>, 2005.");
         translators.push_back("Jeroen van der Vegt <ajvdvegt (at) 123mail.org>, 2003, 2005.");
-        translators.push_back("Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003");
         translators.push_back("Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.");
         translators.push_back("Josef Vybiral <josef.vybiral@gmail.com>, 2005.");
         translators.push_back("Juarez Rudsatz <juarez@correio.com>, 2004");
@@ -286,25 +291,21 @@ AboutBox::show_credits(void)
         translators.push_back("Karl Ove Hufthammer <karl@huftis.org>, 2004, 2005.");
         translators.push_back("Keld Simonsen <keld@dkuug.dk>, 2000-2001.");
         translators.push_back("Kjartan Maraas <kmaraas@gnome.org>, 2000-2002.");
-        translators.push_back("Kjartan Maraas <kmaraas@online.no>, 2000.");
-        translators.push_back("Lauris Kaplinski <lauris@ariman.ee>, 2000");
+        translators.push_back("Lauris Kaplinski <lauris@ariman.ee>, 2000.");
         translators.push_back("Luca Bruno <luca.br@uno.it>, 2005.");
         translators.push_back("Lucas Vieites Fariña<lucas@asixinformatica.com>, 2003-2005.");
-        translators.push_back("Lucas Vieites <lucas@asixinformatica.com>, 2003");
         translators.push_back("Martin Srebotnjak, <miles@filmsi.net>, 2005.");
         translators.push_back("Masatake YAMATO <jet@gyve.org>, 2002.");
         translators.push_back("Matiphas <matiphas _a_ free _point_ fr>, 2004.");
         translators.push_back("Mattias Hultgren <mattias_hultgren@tele2.se>, 2005.");
         translators.push_back("Maxim Dziumanenko <mvd@mylinux.com.ua>, 2004");
-        translators.push_back("Mitsuru Oka <oka326@parkcity.ne.jp>, 2002.");
-        translators.push_back("Mitsuru Oka <oka@debian.or.jp>, 2001.");
+        translators.push_back("Mitsuru Oka <oka326@parkcity.ne.jp>, 2001-2002.");
         translators.push_back("Mufit Eribol <meribol@ere.com.tr>, 2000.");
         translators.push_back("Quico Llach <quico@softcatala.org>, 2000. Traducció sodipodi.");
         translators.push_back("Raymond Ostertag <raymond@linuxgraphic.org>, 2002-2003.");
         translators.push_back("shivaken <shivaken@owls-nest.net>, 2004.");
         translators.push_back("Simos Xenitellis <simos@hellug.gr>, 2001.");
         translators.push_back("Takeshi Aihana <aihana@muc.biglobe.ne.jp>, 2000-2001.");
-        translators.push_back("Traducido por Jose Antonio Salgueiro <developer@telefonica.net>.");
         translators.push_back("Traducido por Jose Antonio Salgueiro <developer@telefonica.net>.");
         translators.push_back("translators@gnome.pl");
         translators.push_back("Valek Filippov <frob@df.ru>, 2000, 2003.");
