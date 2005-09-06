@@ -293,8 +293,8 @@ const char *DOMString::c_str()
     cstring = (char *)malloc(length + 1);
 
     int i=0;
-    while ( i<length )
-        cstring[i] = (char) chars[i++];
+    for ( ; i<length ; i++ )
+        cstring[i] = (char) chars[i];
 
     cstring[i] = '\0';
 

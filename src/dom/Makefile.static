@@ -9,7 +9,7 @@ CC = gcc
 CXX = g++
 
 INC = -I.
-CFLAGS = -g
+CFLAGS = -g -Wall
 LIBS =
 
 OBJ = \

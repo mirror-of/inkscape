@@ -555,7 +555,8 @@ int XPathParser::lexicalScan()
             continue;
 
         //### CHAR  (default, none of the above)
-        lexTokAdd(CHAR, p, (long) peek(p++));
+        lexTokAdd(CHAR, p, (long) peek(p));
+        p++;
 
         }//while p
 
