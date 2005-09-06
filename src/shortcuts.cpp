@@ -153,6 +153,10 @@ sp_shortcut_init()
         {GDK_asterisk, SP_VERB_CONTEXT_STAR, false},
         {GDK_KP_Multiply, SP_VERB_CONTEXT_STAR, true},
 
+        {SP_SHORTCUT_CONTROL_MASK | GDK_F2, SP_VERB_CONTEXT_CONNECTOR, true},
+        {GDK_o, SP_VERB_CONTEXT_CONNECTOR, false},
+        {GDK_O, SP_VERB_CONTEXT_CONNECTOR, false},
+
         /* Zooming and desktop */
         {GDK_plus, SP_VERB_ZOOM_IN, true},
         {SP_SHORTCUT_SHIFT_MASK | GDK_plus, SP_VERB_ZOOM_IN, false},

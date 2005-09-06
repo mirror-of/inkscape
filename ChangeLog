@@ -1,3 +1,9 @@
+2005-09-06  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* doc/keys.html, doc/keys.xml, share/screens/keys.svg,
+	  src/shortcuts.cpp:
+	  Add keyboard shortcuts for the connector tool -- Ctrl+F2 and 'o'.
+
 2005-09-05  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/document.cpp, src/draw-anchor.cpp, src/knotholder.cpp,
