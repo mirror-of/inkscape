@@ -74,7 +74,7 @@ sp_metric_to_metric_string(gdouble const length,
 {
     gdouble const len = sp_absolute_metric_to_metric(length, metric_src, metric_dst);
     GString *str = g_string_new("");
-    g_string_printf(str, "%0.5g", len);
+    g_string_printf(str, "%0.02f", len);
     /* I've no strong opinion on the best number format here.
      *
      * %f has a fixed number of places after the decimal separator, whereas %g aims for a fixed
