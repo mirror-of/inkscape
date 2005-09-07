@@ -252,7 +252,6 @@ AboutBox::show_credits(void)
         // Translators
         std::vector<Glib::ustring> translators;
         translators.push_back("Adib Taraben <theadib@yahoo.com>, 2004.");
-        translators.push_back("Agradecimientos: zert, softcatala, 2002-2003");
         translators.push_back("Alastair McKinstry <mckinstry@computer.org>, 2000.");
         translators.push_back("Aleksandar Urošević <urke@users.sourceforge.net>");
         translators.push_back("Alessio Frusciante <algol@firenze.linux.it>, 2002, 2003.");
@@ -306,8 +305,7 @@ AboutBox::show_credits(void)
         translators.push_back("shivaken <shivaken@owls-nest.net>, 2004.");
         translators.push_back("Simos Xenitellis <simos@hellug.gr>, 2001.");
         translators.push_back("Takeshi Aihana <aihana@muc.biglobe.ne.jp>, 2000-2001.");
-        translators.push_back("Traducido por Jose Antonio Salgueiro <developer@telefonica.net>.");
-        translators.push_back("translators@gnome.pl");
+        translators.push_back("Jose Antonio Salgueiro <developer@telefonica.net>.");
         translators.push_back("Valek Filippov <frob@df.ru>, 2000, 2003.");
         translators.push_back("Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.");
         translators.push_back("Vital Khilko <dojlid@mova.org>, 2003");
