@@ -174,7 +174,7 @@ tools_switch(SPDesktop *dt, int num)
             dt->set_event_context(SP_TYPE_PEN_CONTEXT, tool_names[num]);
             dt->activate_guides(false);
             inkscape_eventcontext_set(SP_DT_EVENTCONTEXT(dt));
-            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to create a node, <b>click and drag</b> to create a smooth node. Start drawing with <b>Shift</b> to append to selected path."));
+            dt->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to start a path; with <b>Shift</b> to append to selected path."));
             break;
         case TOOLS_CALLIGRAPHIC:
             dt->set_event_context(SP_TYPE_DYNA_DRAW_CONTEXT, tool_names[num]);

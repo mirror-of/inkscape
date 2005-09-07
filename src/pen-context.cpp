@@ -18,6 +18,8 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "pen-context.h"
+#include "sp-namedview.h"
+#include "sp-metrics.h"
 #include "desktop.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
@@ -25,6 +27,7 @@
 #include "draw-anchor.h"
 #include "message-stack.h"
 #include "message-context.h"
+#include "event-context.h"
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "sp-path.h"
@@ -33,6 +36,7 @@
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
+#include "libnr/nr-point-ops.h"
 #include "libnr/n-art-bpath.h"
 #include "snap.h"
 
@@ -47,7 +51,7 @@ static void sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const
 static gint sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event);
 
 static void spdc_pen_set_initial_point(SPPenContext *pc, NR::Point const p);
-static void spdc_pen_set_subsequent_point(SPPenContext *pc, NR::Point const p);
+static void spdc_pen_set_subsequent_point(SPPenContext *pc, NR::Point const p, bool statusbar);
 static void spdc_pen_set_ctrl(SPPenContext *pc, NR::Point const p, guint state);
 static void spdc_pen_finish_segment(SPPenContext *pc, NR::Point p, guint state);
 
@@ -187,6 +191,8 @@ sp_pen_context_setup(SPEventContext *ec)
     sp_canvas_item_hide(pc->cl1);
 
     sp_event_context_read(ec, "mode");
+
+    pc->anchor_statusbar = false;
 
     if (prefs_get_int_attribute("tools.freehand.pen", "selcue", 0) != 0) {
         ec->enableSelectionCue();
@@ -395,7 +401,7 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                             } else { 
                                 p = event_dt;
                                 spdc_endpoint_snap(pc, p, bevent.state); /* Snap node only if not hitting anchor. */
-                                spdc_pen_set_subsequent_point(pc, p);
+                                spdc_pen_set_subsequent_point(pc, p, true);
                             }
                         }
                         pc->state = SP_PEN_CONTEXT_CONTROL;
@@ -473,7 +479,7 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
                     if ( pc->npoints != 0 ) {
                         /* Only set point, if we are already appending */
                         spdc_endpoint_snap(pc, p, mevent.state);
-                        spdc_pen_set_subsequent_point(pc, p);
+                        spdc_pen_set_subsequent_point(pc, p, true);
                         ret = TRUE;
                     }
                     break;
@@ -501,8 +507,25 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
                             spdc_endpoint_snap(pc, p, mevent.state);
                         }
 
-                        spdc_pen_set_subsequent_point(pc, p);
+                        spdc_pen_set_subsequent_point(pc, p, !anchor);
+
+                        if (anchor && !pc->anchor_statusbar) {
+                            pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to close and finish the path."));
+                            pc->anchor_statusbar = true;
+                        } else if (!anchor && pc->anchor_statusbar) {
+                            pc->_message_context->clear();
+                            pc->anchor_statusbar = false;
+                        }
+
                         ret = TRUE;
+                    } else {
+                        if (anchor && !pc->anchor_statusbar) {
+                            pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> or <b>click and drag</b> to continue the path from this point."));
+                            pc->anchor_statusbar = true;
+                        } else if (!anchor && pc->anchor_statusbar) {
+                            pc->_message_context->clear();
+                            pc->anchor_statusbar = false;
+                        }
                     }
                     break;
                 case SP_PEN_CONTEXT_CONTROL:
@@ -713,7 +736,7 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
                 sp_canvas_item_hide(pc->cl0);
                 sp_canvas_item_hide(pc->cl1);
                 pc->state = SP_PEN_CONTEXT_POINT;
-                spdc_pen_set_subsequent_point(pc, pt);
+                spdc_pen_set_subsequent_point(pc, pt, true);
                 ret = TRUE;
             }
             break;
@@ -760,7 +783,7 @@ spdc_pen_set_initial_point(SPPenContext *const pc, NR::Point const p)
 }
 
 static void
-spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p)
+spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p, bool statusbar)
 {
     g_assert( pc->npoints != 0 );
     /* todo: Check callers to see whether 2 <= npoints is guaranteed. */
@@ -771,14 +794,27 @@ spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p)
     pc->npoints = 5;
     sp_curve_reset(pc->red_curve);
     sp_curve_moveto(pc->red_curve, pc->p[0]);
+    bool is_curve;
     if ( (pc->onlycurves)
          || ( pc->p[1] != pc->p[0] ) )
     {
         sp_curve_curveto(pc->red_curve, pc->p[1], p, p);
+        is_curve = true;
     } else {
         sp_curve_lineto(pc->red_curve, p);
+        is_curve = false;
     }
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
+
+    if (statusbar) {
+        // status text
+        SPDesktop *desktop = SP_EVENT_CONTEXT(pc)->desktop;
+        NR::Point rel = p - pc->p[0];
+        GString *dist = SP_PX_TO_METRIC_STRING(NR::L2(rel), desktop->namedview->getDefaultMetric());
+        double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
+        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: distance %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle, <b>Enter</b> to finish the path"), is_curve? "Curve segment" : "Line segment", dist->str, angle);
+        g_string_free(dist, FALSE);
+    }
 }
 
 static void
@@ -793,14 +829,25 @@ spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
         sp_canvas_item_hide(pc->cl0);
         SP_CTRL(pc->c1)->moveto(pc->p[1]);
         sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), pc->p[0], pc->p[1]);
+
+        // status text
+        SPDesktop *desktop = SP_EVENT_CONTEXT(pc)->desktop;
+        NR::Point rel = p - pc->p[0];
+        GString *dist = SP_PX_TO_METRIC_STRING(NR::L2(rel), desktop->namedview->getDefaultMetric());
+        double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
+        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Curve handle</b>: length %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle"), dist->str, angle);
+        g_string_free(dist, FALSE);
+
     } else if ( pc->npoints == 5 ) {
         pc->p[4] = p;
         sp_canvas_item_show(pc->c0);
         sp_canvas_item_show(pc->cl0);
+        bool is_symm = false;
         if ( ( ( pc->mode == SP_PEN_CONTEXT_MODE_CLICK ) && ( state & GDK_CONTROL_MASK ) ) ||
              ( ( pc->mode == SP_PEN_CONTEXT_MODE_DRAG ) &&  !( state & GDK_SHIFT_MASK  ) ) ) {
             NR::Point delta = p - pc->p[3];
             pc->p[2] = pc->p[3] - delta;
+            is_symm = true;
             sp_curve_reset(pc->red_curve);
             sp_curve_moveto(pc->red_curve, pc->p[0]);
             sp_curve_curveto(pc->red_curve, pc->p[1], pc->p[2], pc->p[3]);
@@ -810,6 +857,15 @@ spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
         sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl0), pc->p[3], pc->p[2]);
         SP_CTRL(pc->c1)->moveto(pc->p[4]);
         sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), pc->p[3], pc->p[4]);
+
+        // status text
+        SPDesktop *desktop = SP_EVENT_CONTEXT(pc)->desktop;
+        NR::Point rel = p - pc->p[3];
+        GString *dist = SP_PX_TO_METRIC_STRING(NR::L2(rel), desktop->namedview->getDefaultMetric());
+        double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
+        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: length %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only"), is_symm? "Curve handle, symmetric" : "Curve handle", dist->str, angle);
+        g_string_free(dist, FALSE);
+
     } else {
         g_warning("Something bad happened - npoints is %d", pc->npoints);
     }
@@ -840,6 +896,7 @@ static void
 spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
 {
     SPDesktop *const desktop = pc->desktop;
+    pc->_message_context->clear();
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing pen"));
 
     sp_curve_reset(pc->red_curve);
