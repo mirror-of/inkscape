@@ -390,13 +390,13 @@ modification follow.\n\
 \n\
   0. This License applies to any program or other work which contains\n\
 a notice placed by the copyright holder saying it may be distributed\n\
-under the terms of this General Public License.  The \n\"Program\n\", below,\n\
-refers to any such program or work, and a \n\"work based on the Program\n\"\n\
+under the terms of this General Public License.  The \"Program\", below,\n\
+refers to any such program or work, and a \"work based on the Program\"\n\
 means either the Program or any derivative work under copyright law:\n\
 that is to say, a work containing the Program or a portion of it,\n\
 either verbatim or with modifications and/or translated into another\n\
 language.  (Hereinafter, translation is included without limitation in\n\
-the term \n\"modification\n\".)  Each licensee is addressed as \n\"you\n\".\n\
+the term \"modification\".)  Each licensee is addressed as \"you\".\n\
 \n\
 Activities other than copying, distribution and modification are not\n\
 covered by this License; they are outside its scope.  The act of\n\
@@ -569,8 +569,8 @@ be similar in spirit to the present version, but may differ in detail to\n\
 address new problems or concerns.\n\
 \n\
 Each version is given a distinguishing version number.  If the Program\n\
-specifies a version number of this License which applies to it and \n\"any\n\
-later version\n\", you have the option of following the terms and conditions\n\
+specifies a version number of this License which applies to it and \"any\n\
+later version\", you have the option of following the terms and conditions\n\
 either of that version or of any later version published by the Free\n\
 Software Foundation.  If the Program does not specify a version number of\n\
 this License, you may choose any version ever published by the Free Software\n\
@@ -589,7 +589,7 @@ of promoting the sharing and reuse of software generally.\n\
   11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY\n\
 FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN\n\
 OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES\n\
-PROVIDE THE PROGRAM \n\"AS IS\n\" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED\n\
+PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED\n\
 OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF\n\
 MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS\n\
 TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE\n\
@@ -617,7 +617,7 @@ free software which everyone can redistribute and change under these terms.\n\
   To do so, attach the following notices to the program.  It is safest\n\
 to attach them to the start of each source file to most effectively\n\
 convey the exclusion of warranty; and each file should have at least\n\
-the \n\"copyright\n\" line and a pointer to where the full notice is found.\n\
+the \"copyright\" line and a pointer to where the full notice is found.\n\
 \n\
     <one line to give the program's name and a brief idea of what it does.>\n\
     Copyright (C) <year>  <name of author>\n\
@@ -653,7 +653,7 @@ be called something other than `show w' and `show c'; they could even be\n\
 mouse-clicks or menu items--whatever suits your program.\n\
 \n\
 You should also get your employer (if you work as a programmer) or your\n\
-school, if any, to sign a \n\"copyright disclaimer\n\" for the program, if\n\
+school, if any, to sign a \"copyright disclaimer\" for the program, if\n\
 necessary.  Here is a sample; alter the names:\n\
 \n\
   Yoyodyne, Inc., hereby disclaims all copyright interest in the program\n\
