@@ -4,80 +4,109 @@
 # switch to recursive scan once we have a large number of inputs.
 #FILE_PATTERNS = *.cpp *.h
 #RECURSIVE = yes
-# find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,    ,;s,$,    \\,'
+# find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,	,;s,$,	\\,'
 INPUT = \
-        color.cpp        \
-        color.h        \
 	color-rgba.h	\
-	desktop.h       \
-	desktop.cpp     \
-	desktop-style.cpp     \
+	color.cpp	\
+	color.h	\
+	composite-undo-stack-observer.h	\
+	desktop-style.cpp	\
+	desktop.cpp	\
+	desktop.h	\
 	dialogs/export.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
 	display/curve.h	\
-	display/sp-canvas.cpp \
-	display/sp-canvas.h   \
-	document.h    \
-	document.cpp    \
-	document-undo.cpp  \
+	display/sp-canvas.cpp	\
+	display/sp-canvas.h	\
+	document-undo.cpp	\
+	document.cpp	\
+	document.h	\
 	draw-anchor.cpp	\
 	draw-anchor.h	\
-	event-context.cpp  \
-	event-context.h  \
+	event-context.cpp	\
+	event-context.h	\
 	extension/extension.cpp	\
 	extension/extension.h	\
 	extension/implementation/plugin-link.h	\
 	extension/implementation/plugin.cpp	\
 	extension/implementation/plugin.h	\
-	extension/internal/gimpgrad.h	\
 	extension/internal/gimpgrad.cpp	\
-	gc-anchored.h   \
-	gc-managed.h    \
+	extension/internal/gimpgrad.h	\
+	gc-anchored.h	\
+	gc-managed.h	\
 	geom.cpp	\
 	helper/action.cpp	\
 	helper/action.h	\
-	knot.cpp        \
-	knot.h          \
+	jabber_whiteboard/buddy-list-manager.h	\
+	jabber_whiteboard/callbacks.h	\
+	jabber_whiteboard/chat-handler.h	\
+	jabber_whiteboard/defines.h	\
+	jabber_whiteboard/deserializer.h	\
+	jabber_whiteboard/error-codes.h	\
+	jabber_whiteboard/internal-constants.h	\
+	jabber_whiteboard/invitation-confirm-dialog.h	\
+	jabber_whiteboard/jabber-handlers.h	\
+	jabber_whiteboard/message-aggregator.h	\
+	jabber_whiteboard/message-contexts.h	\
+	jabber_whiteboard/message-handler.h	\
+	jabber_whiteboard/message-node.h	\
+	jabber_whiteboard/message-processors.cpp	\
+	jabber_whiteboard/message-processors.h	\
+	jabber_whiteboard/message-queue.h	\
+	jabber_whiteboard/message-tags.h	\
+	jabber_whiteboard/message-utilities.h	\
+	jabber_whiteboard/node-tracker-event-tracker.h	\
+	jabber_whiteboard/node-tracker-observer.h	\
+	jabber_whiteboard/node-tracker.cpp	\
+	jabber_whiteboard/node-tracker.h	\
+	jabber_whiteboard/node-utilities.h	\
+	jabber_whiteboard/session-file-player.h	\
+	jabber_whiteboard/session-file-selector.h	\
+	jabber_whiteboard/session-file.h	\
+	jabber_whiteboard/session-manager.h	\
+	jabber_whiteboard/tracker-node.h	\
+	jabber_whiteboard/typedefs.h	\
+	jabber_whiteboard/undo-stack-observer.h	\
 	knot-enums.h	\
 	knot-holder-entity.h	\
+	knot.cpp	\
+	knot.h	\
 	libnr/n-art-bpath.h	\
 	libnr/nr-matrix-scale-ops.h	\
 	libnr/nr-matrix-translate-ops.h	\
 	libnr/nr-matrix.cpp	\
 	libnr/nr-matrix.h	\
-	libnr/nr-path-code.h    \
-	libnr/nr-pixblock.h \
-	libnr/nr-pixblock.cpp \
+	libnr/nr-path-code.h	\
+	libnr/nr-pixblock.cpp	\
+	libnr/nr-pixblock.h	\
 	libnr/nr-point.h	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
 	libnr/nr-rotate.h	\
 	libnr/nr-scale-matrix-ops.h	\
 	libnr/nr-types.cpp	\
-	livarot/float-line.h	\
 	livarot/float-line.cpp	\
-	livarot/int-line.h	\
+	livarot/float-line.h	\
 	livarot/int-line.cpp	\
+	livarot/int-line.h	\
 	livarot/sweep-event-queue.h	\
 	livarot/sweep-event.h	\
-	main.cpp        \
+	main.cpp	\
 	message-context.h	\
 	message-stack.h	\
 	modifier-fns.h	\
-	nodepath.h	\
 	nodepath.cpp	\
-	object-hierarchy.h  \
-	object-hierarchy.cpp  \
+	nodepath.h	\
+	object-hierarchy.cpp	\
+	object-hierarchy.h	\
 	pen-context.cpp	\
 	pen-context.h	\
-	pencil-context.h	\
 	pencil-context.cpp	\
-	selection.h     \
+	pencil-context.h	\
+	selection.h	\
 	snap.cpp	\
 	snap.h	\
-	style.cpp	\
-	style.h	\
 	sp-gradient-fns.h	\
 	sp-gradient.cpp	\
 	sp-gradient.h	\
@@ -86,63 +115,33 @@ INPUT = \
 	sp-item.h	\
 	sp-linear-gradient-fns.h	\
 	sp-linear-gradient.h	\
-	sp-object.h     \
-	sp-object.cpp     \
-	sp-offset.h  	\
+	sp-object.cpp	\
+	sp-object.h	\
 	sp-offset.cpp	\
+	sp-offset.h  	\
 	sp-radial-gradient-fns.h	\
 	sp-radial-gradient.h	\
-	sp-root.h	\
 	sp-root.cpp	\
-	sp-spiral.h	\
+	sp-root.h	\
 	sp-spiral.cpp	\
-	sp-stop.h       \
-	svg-view.cpp    \
-	svg-view.h      \
-	ui/view/view.h  \
-	ui/view/view.cpp  \
-	util/list.h     \
-	verbs.h  	\
+	sp-spiral.h	\
+	sp-stop.h	\
+	style.cpp	\
+	style.h	\
+	svg-view.cpp	\
+	svg-view.h	\
+	ui/view/view.cpp	\
+	ui/view/view.h	\
+	undo-stack-observer.h	\
+	util/list.h	\
 	verbs.cpp	\
-	widgets/paint-selector.h	\
+	verbs.h  	\
 	widgets/paint-selector.cpp	\
+	widgets/paint-selector.h	\
 	xml/quote.cpp	\
 	xml/repr-util.cpp	\
-	xml/repr.h      \
-	xml/repr.cpp \
-	undo-stack-observer.h \
-	composite-undo-stack-observer.h \
-	jabber_whiteboard/buddy-list-manager.h \
-	jabber_whiteboard/callbacks.h \
-	jabber_whiteboard/chat-handler.h \
-	jabber_whiteboard/defines.h \
-	jabber_whiteboard/deserializer.h \
-	jabber_whiteboard/error-codes.h \
-	jabber_whiteboard/internal-constants.h \
-	jabber_whiteboard/invitation-confirm-dialog.h \
-	jabber_whiteboard/jabber-handlers.h \
-	jabber_whiteboard/message-aggregator.h \
-	jabber_whiteboard/message-contexts.h \
-	jabber_whiteboard/message-handler.h \
-	jabber_whiteboard/message-node.h \
-	jabber_whiteboard/message-processors.cpp \
-	jabber_whiteboard/message-processors.h \
-	jabber_whiteboard/message-queue.h \
-	jabber_whiteboard/message-tags.h \
-	jabber_whiteboard/message-utilities.h \
-	jabber_whiteboard/node-tracker-event-tracker.h \
-	jabber_whiteboard/node-tracker.cpp \
-	jabber_whiteboard/node-tracker.h \
-	jabber_whiteboard/node-tracker-observer.h \
-	jabber_whiteboard/node-utilities.h \
-	jabber_whiteboard/serializer-node-observer.h \
-	jabber_whiteboard/session-file.h \
-	jabber_whiteboard/session-file-player.h \
-	jabber_whiteboard/session-file-selector.h \
-	jabber_whiteboard/session-manager.h \
-	jabber_whiteboard/tracker-node.h \
-	jabber_whiteboard/typedefs.h \
-	jabber_whiteboard/undo-stack-observer.h
+	xml/repr.cpp	\
+	xml/repr.h
 
 
 # Uncomment this to treat undocumented things as if they had an empty
