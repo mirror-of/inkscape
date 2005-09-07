@@ -117,6 +117,8 @@ DialogFind & DialogFind::get()
 #include "../interface.h"
 #include "../sp-object.h"
 #include "../sp-text.h"
+#include "../sp-flowtext.h"
+#include "../text-editing.h"
 #include "../sp-tspan.h"
 #include "../selection-chemistry.h"
 #include "../sp-defs.h"
@@ -204,16 +206,21 @@ item_text_match (SPItem *item, const gchar *text, bool exact)
     if (SP_OBJECT_REPR (item) == NULL)
         return false;
 
-    const gchar *item_text = SP_OBJECT_REPR (item)->content();
-    if (item_text == NULL)
-        return false;
-
-    if (exact) {
-        return ((bool) !strcasecmp(item_text, text));
-    } else {
-        //FIXME: strcasestr
-        return ((bool) (strstr(item_text, text) != NULL));
+    if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
+        const gchar *item_text = sp_te_get_string_multiline (item);
+        if (item_text == NULL)
+            return false;
+        bool ret;
+        if (exact) {
+            ret = ((bool) !strcasecmp(item_text, text));
+        } else {
+            //FIXME: strcasestr
+            ret = ((bool) (strstr(item_text, text) != NULL));
+        }
+        g_free ((void*) item_text);
+        return ret;
     }
+    return false;
 }
 
 bool
