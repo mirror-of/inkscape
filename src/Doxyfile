@@ -5,7 +5,9 @@
 #FILE_PATTERNS = *.cpp *.h
 #RECURSIVE = yes
 # find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,	,;s,$,	\\,'
+# (and remove the non source files sp-skeleton.*).
 INPUT = \
+	arc-context.cpp	\
 	color-rgba.h	\
 	color.cpp	\
 	color.h	\
@@ -13,7 +15,12 @@ INPUT = \
 	desktop-style.cpp	\
 	desktop.cpp	\
 	desktop.h	\
+	dialogs/color-picker.h	\
+	dialogs/desktop-properties.cpp	\
 	dialogs/export.cpp	\
+	dialogs/filedialog.h	\
+	dialogs/unclump.h	\
+	dir-util.cpp	\
 	display/bezier-utils.cpp	\
 	display/curve.cpp	\
 	display/curve.h	\
@@ -31,8 +38,14 @@ INPUT = \
 	extension/implementation/plugin-link.h	\
 	extension/implementation/plugin.cpp	\
 	extension/implementation/plugin.h	\
+	extension/implementation/script.cpp	\
+	extension/internal/bluredge.cpp	\
 	extension/internal/gimpgrad.cpp	\
 	extension/internal/gimpgrad.h	\
+	extension/internal/grid.cpp	\
+	extension/parameter.cpp	\
+	extension/parameter.h	\
+	fill-or-stroke.h	\
 	gc-anchored.h	\
 	gc-managed.h	\
 	geom.cpp	\
@@ -80,6 +93,7 @@ INPUT = \
 	libnr/nr-path-code.h	\
 	libnr/nr-pixblock.cpp	\
 	libnr/nr-pixblock.h	\
+	libnr/nr-point-matrix-ops.h	\
 	libnr/nr-point.h	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
@@ -92,6 +106,7 @@ INPUT = \
 	livarot/int-line.h	\
 	livarot/sweep-event-queue.h	\
 	livarot/sweep-event.h	\
+	livarot/sweep-tree-list.h	\
 	main.cpp	\
 	message-context.h	\
 	message-stack.h	\
@@ -104,9 +119,14 @@ INPUT = \
 	pen-context.h	\
 	pencil-context.cpp	\
 	pencil-context.h	\
+	print.cpp	\
+	print.h	\
+	selection.cpp	\
 	selection.h	\
+	shortcuts.cpp	\
 	snap.cpp	\
 	snap.h	\
+	sp-animation.cpp	\
 	sp-gradient-fns.h	\
 	sp-gradient.cpp	\
 	sp-gradient.h	\
@@ -118,7 +138,7 @@ INPUT = \
 	sp-object.cpp	\
 	sp-object.h	\
 	sp-offset.cpp	\
-	sp-offset.h  	\
+	sp-offset.h	\
 	sp-radial-gradient-fns.h	\
 	sp-radial-gradient.h	\
 	sp-root.cpp	\
@@ -128,17 +148,28 @@ INPUT = \
 	sp-stop.h	\
 	style.cpp	\
 	style.h	\
+	svg-view-widget.cpp	\
+	svg-view-widget.h	\
 	svg-view.cpp	\
 	svg-view.h	\
+	ui/view/view-widget.cpp	\
+	ui/view/view-widget.h	\
 	ui/view/view.cpp	\
 	ui/view/view.h	\
 	undo-stack-observer.h	\
+	uri.cpp	\
+	uri.h	\
 	util/list.h	\
 	verbs.cpp	\
-	verbs.h  	\
+	verbs.h	\
+	widgets/desktop-widget.cpp	\
+	widgets/desktop-widget.h	\
+	widgets/icon.cpp	\
 	widgets/paint-selector.cpp	\
 	widgets/paint-selector.h	\
+	widgets/toolbox.cpp	\
 	xml/quote.cpp	\
+	xml/repr-sorting.h	\
 	xml/repr-util.cpp	\
 	xml/repr.cpp	\
 	xml/repr.h
