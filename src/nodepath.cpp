@@ -778,7 +778,10 @@ static Inkscape::NodePath::Node *sp_nodepath_node_duplicate(Inkscape::NodePath::
 
     Inkscape::NodePath::Node *newnode = sp_nodepath_node_new(sp, node, (Inkscape::NodePath::NodeType)node->type, code, &node->p.pos, &node->pos, &node->n.pos);
 
-    return newnode;
+    if (!node->n.other || !node->p.other) // if node is an endnode, select it
+        return node;
+    else
+        return newnode; // otherwise select the newly created node
 }
 
 static void sp_node_control_mirror_n_to_p(Inkscape::NodePath::Node *node)
