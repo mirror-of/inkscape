@@ -69,6 +69,8 @@ struct SPDrawContext : public SPEventContext{
     sigc::connection sel_modified_connection;
 
     bool red_curve_is_valid;
+
+    bool anchor_statusbar;
 };
 
 struct SPDrawContextClass : public SPEventContextClass{};

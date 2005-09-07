@@ -128,6 +128,8 @@ sp_pencil_context_setup(SPEventContext *ec)
 
     SPPencilContext *const pc = SP_PENCIL_CONTEXT(ec);
     pc->is_drawing = false;
+
+    pc->anchor_statusbar = false;
 }
 
 static void
@@ -304,6 +306,25 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
                 if ( pc->npoints != 0 ) { // buttonpress may have happened before we entered draw context!
                     spdc_add_freehand_point(pc, p, mevent.state);
                     ret = TRUE;
+                }
+
+                if (anchor && !pc->anchor_statusbar) {
+                    pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Release</b> here to close and finish the path."));
+                    pc->anchor_statusbar = true;
+                } else if (!anchor && pc->anchor_statusbar) {
+                    pc->_message_context->clear();
+                    pc->anchor_statusbar = false;
+                } else if (!anchor) {
+                    pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("Drawing a freehand path"));
+                }
+
+            } else {
+                if (anchor && !pc->anchor_statusbar) {
+                    pc->_message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to continue the path from this point."));
+                    pc->anchor_statusbar = true;
+                } else if (!anchor && pc->anchor_statusbar) {
+                    pc->_message_context->clear();
+                    pc->anchor_statusbar = false;
                 }
             }
             break;

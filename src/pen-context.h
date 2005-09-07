@@ -39,8 +39,6 @@ struct SPPenContext : public SPDrawContext {
     unsigned int state : 2;
     unsigned int onlycurves : 1;
 
-    bool anchor_statusbar;
-
     SPCanvasItem *c0, *c1, *cl0, *cl1;
 };
 
