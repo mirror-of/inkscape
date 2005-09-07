@@ -229,7 +229,7 @@ sp_selected_path_boolop (bool_op bop)
     if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
         // true boolean op
         // get the polygons of each path, with the winding rule specified, and apply the operation iteratively
-        originaux[0]->ConvertWithBackData (1.0);
+        originaux[0]->ConvertWithBackData (0.001);
      
         originaux[0]->Fill (theShape, 0);
 
@@ -237,7 +237,7 @@ sp_selected_path_boolop (bool_op bop)
     
         curOrig = 1;
         for (GSList *l = il->next; l != NULL; l = l->next) {    
-            originaux[curOrig]->ConvertWithBackData (1.0);
+            originaux[curOrig]->ConvertWithBackData (0.001);
       
             originaux[curOrig]->Fill (theShape, curOrig);
       
@@ -272,6 +272,11 @@ sp_selected_path_boolop (bool_op bop)
     
         // the cut path needs to have the highest pathID in the back data
         // that's how the Booleen() function knows it's an edge of the cut
+
+        // FIXME: this gives poor results, the final paths are full of extraneous nodes. Decreasing
+        // ConvertWithBackData parameter below simply increases the number of nodes, so for now I
+        // left it at 1.0. Investigate replacing this by a combination of difference and
+        // intersection of the same two paths. -- bb
         {
             Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
             int   swai=origWind[0];origWind[0]=origWind[1];origWind[1]=(fill_typ)swai;
@@ -1146,7 +1151,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             Shape *theShape = new Shape;
             Shape *theRes = new Shape;
 
-            orig->ConvertWithBackData (1.0);
+            orig->ConvertWithBackData (0.03);
             orig->Fill (theShape, 0);
 
             css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
