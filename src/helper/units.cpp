@@ -231,6 +231,26 @@ sp_units_table_sane()
     return true;
 }
 
+/** Converts angle (in deg) to compass display */
+double 
+angle_to_compass(double angle)
+{
+    double ret = 90 - angle;
+    if (ret < 0)
+        ret = 360 + ret;
+    return ret;
+}
+
+/** Converts angle (in deg) to compass display */
+double 
+angle_from_compass(double angle)
+{
+    double ret = 90 - angle;
+    if (ret > 180)
+        ret = ret - 180;
+    return ret;
+}
+
 
 /*
   Local Variables:

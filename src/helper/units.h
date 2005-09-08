@@ -140,4 +140,7 @@ gdouble sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SP
 gdouble sp_units_get_pixels(gdouble const units, SPUnit const &unit);
 gdouble sp_pixels_get_units(gdouble const pixels, SPUnit const &unit);
 
+double angle_to_compass(double angle);
+double angle_from_compass(double angle);
+
 #endif 
