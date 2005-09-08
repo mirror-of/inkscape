@@ -177,6 +177,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"transform\" stroke=\"1\" rectcorners=\"0\" pattern=\"1\" gradient=\"1\" />\n"
 "    <group id=\"kbselection\" inlayer=\"1\" onlyvisible=\"1\" onlysensitive=\"1\" />\n"
 "    <group id=\"createbitmap\" minsize=\"250\"/>\n"
+"    <group id=\"compassangledisplay\" value=\"0\"/>\n"
 "  </group>\n"
 "\n"
 "  <group id=\"extensions\" show-effects-menu=\"0\">"

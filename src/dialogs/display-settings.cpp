@@ -1028,6 +1028,14 @@ sp_display_dialog (void)
 
         options_rotation_steps (vb, tt);
 
+options_checkbox (
+    _("Compass-like display of angles"),
+    _("When on, angles are displayed with 0 at north, 0 to 360 range, positive clockwise; otherwise with 0 at east, -180 to 180 range, positive counterclockwise"), tt,
+    vb,
+    "options.compassangledisplay", "value", 1,
+    options_changed_boolean
+    );
+
         options_sb (
             _("Zoom in/out by:"),
             _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), tt,
