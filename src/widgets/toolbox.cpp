@@ -778,7 +778,7 @@ sp_tb_spinbutton(
     gboolean altx, gchar const *altx_mark,
     gdouble lower, gdouble upper, gdouble step, gdouble page,
     void (*callback)(GtkAdjustment *, GtkWidget *),
-    gdouble climb = 0.1, guint digits = 2)
+    gdouble climb = 0.1, guint digits = 3)
 {
     GtkTooltips *tt = gtk_tooltips_new();
 
@@ -799,7 +799,7 @@ sp_tb_spinbutton(
     gtk_tooltips_set_tip(tt, sb, tooltip, NULL);
     if (altx)
         gtk_object_set_data(GTK_OBJECT(sb), altx_mark, sb);
-    gtk_widget_set_size_request(sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+    gtk_widget_set_size_request(sb, AUX_SPINBUTTON_WIDTH_SMALL, -1);
     gtk_widget_show(sb);
     gtk_signal_connect(GTK_OBJECT(sb), "focus-in-event", GTK_SIGNAL_FUNC(spinbutton_focus_in), tbl);
     gtk_signal_connect(GTK_OBJECT(sb), "key-press-event", GTK_SIGNAL_FUNC(spinbutton_keypress), tbl);
@@ -1959,7 +1959,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
                                          "tools.calligraphic", "width", 0.15,
                                          NULL, tbl, TRUE, "altx-calligraphy",
                                          0.01, 1.0, 0.01, 0.1,
-                                         sp_ddc_width_value_changed);
+                                         sp_ddc_width_value_changed,  0.01, 2);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
@@ -1969,7 +1969,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
                                          "tools.calligraphic", "thinning", 0.1,
                                          NULL, tbl, FALSE, NULL,
                                          -1.0, 1.0, 0.01, 0.1,
-                                         sp_ddc_velthin_value_changed);
+                                         sp_ddc_velthin_value_changed, 0.01, 2);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
@@ -1992,7 +1992,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
                                          "tools.calligraphic", "flatness", 0.9,
                                          NULL, tbl, FALSE, NULL,
                                          0.0, 1.0, 0.01, 0.1,
-                                         sp_ddc_flatness_value_changed);
+                                         sp_ddc_flatness_value_changed, 0.01, 2);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
@@ -2005,7 +2005,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
                                          "tools.calligraphic", "mass", 0.02,
                                          NULL, tbl, FALSE, NULL,
                                          0.0, 1.0, 0.01, 0.1,
-                                         sp_ddc_mass_value_changed);
+                                         sp_ddc_mass_value_changed, 0.01, 2);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
@@ -2016,7 +2016,7 @@ sp_calligraphy_toolbox_new(SPDesktop *desktop)
                                          "tools.calligraphic", "drag", 1,
                                          NULL, tbl, FALSE, NULL,
                                          0.0, 1.0, 0.01, 0.1,
-                                         sp_ddc_drag_value_changed);
+                                         sp_ddc_drag_value_changed, 0.01, 2);
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 

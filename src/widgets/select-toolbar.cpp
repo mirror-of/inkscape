@@ -229,14 +229,14 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     }
 
     // do the action only if one of the scales/moves is greater than half the last significant
-    // digit in the spinbox (currently spinboxes have 2 fractional digits, so that makes 0.005). If
+    // digit in the spinbox (currently spinboxes have 3 fractional digits, so that makes 0.0005). If
     // the value was changed by the user, the difference will be at least that much; otherwise it's
     // just rounding difference between the spinbox value and actual value, so no action is
     // performed
-    char const * const actionkey = ( mh > 5e-3 ? "selector:toolbar:move:horizontal" : 
-                                     sh > 5e-3 ? "selector:toolbar:scale:horizontal" : 
-                                     mv > 5e-3 ? "selector:toolbar:move:vertical" : 
-                                     sv > 5e-3 ? "selector:toolbar:scale:vertical" : NULL );
+    char const * const actionkey = ( mh > 5e-4 ? "selector:toolbar:move:horizontal" : 
+                                     sh > 5e-4 ? "selector:toolbar:scale:horizontal" : 
+                                     mv > 5e-4 ? "selector:toolbar:move:vertical" : 
+                                     sv > 5e-4 ? "selector:toolbar:scale:vertical" : NULL );
 
     if (actionkey != NULL) {
         NR::Matrix p2o = NR::Matrix (NR::translate (-bbox.min()));
@@ -331,9 +331,9 @@ sp_select_toolbox_spinbutton(gchar *label, gchar *data, float lower_limit, GtkWi
     sp_unit_selector_add_adjustment(SP_UNIT_SELECTOR(us), GTK_ADJUSTMENT(a));
     gtk_object_set_data(GTK_OBJECT(spw), data, a);
 
-    GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), SPIN_STEP, 2);
+    GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), SPIN_STEP, 3);
     gtk_tooltips_set_tip(tt, sb, tooltip, NULL);
-    gtk_widget_set_size_request(sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+    gtk_widget_set_size_request(sb, AUX_SPINBUTTON_WIDTH, -1);
     gtk_widget_show(sb);
     gtk_signal_connect(GTK_OBJECT(sb), "focus-in-event", GTK_SIGNAL_FUNC(spinbutton_focus_in), spw);
     gtk_signal_connect(GTK_OBJECT(sb), "key-press-event", GTK_SIGNAL_FUNC(spinbutton_keypress), spw);
