@@ -28,6 +28,7 @@ include Makefile_insert
 include application/Makefile_insert
 include dialogs/Makefile_insert
 include display/Makefile_insert
+include dom/Makefile_insert
 include extension/Makefile_insert
 include extension/implementation/Makefile_insert
 include extension/internal/Makefile_insert
@@ -63,6 +64,7 @@ noinst_LIBRARIES =	\
 	dialogs/libspdialogs.a	\
 	jabber_whiteboard/libjabber_whiteboard.a \
 	display/libspdisplay.a	\
+	dom/libdom.a	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
 	extension/libextension.a	\
