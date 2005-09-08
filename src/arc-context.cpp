@@ -32,7 +32,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "snap.h"
-#include "pixmaps/cursor-arc.xpm"
+#include "pixmaps/cursor-ellipse.xpm"
 #include "sp-metrics.h"
 #include "knotholder.h"
 #include "xml/repr.h"
@@ -98,7 +98,7 @@ static void sp_arc_context_init(SPArcContext *arc_context)
 {
     SPEventContext *event_context = SP_EVENT_CONTEXT(arc_context);
 
-    event_context->cursor_shape = cursor_arc_xpm;
+    event_context->cursor_shape = cursor_ellipse_xpm;
     event_context->hot_x = 4;
     event_context->hot_y = 4;
     event_context->xp = 0;
