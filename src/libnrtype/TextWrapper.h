@@ -142,7 +142,7 @@ public:
     void AddTwinBoundaries(text_boundary const &is, text_boundary const &ie);
     void SortBoundaries(void);
     void MakeTextBoundaries(PangoLogAttr *pAttrs, int nAttr);
-    bool Contains(BoundaryType type, int g_st, int g_en, int &c_st, int &c_en);
+    //bool Contains(BoundaryType type, int g_st, int g_en, int &c_st, int &c_en);
     bool IsBound(BoundaryType type, int g_st, int &c_st);
 	
     void MeasureBoxes(void);

@@ -733,60 +733,62 @@ bool text_wrapper::IsBound(BoundaryType const bnd_type, int g_st, int &c_st)
     return false;
 }
 
-bool text_wrapper::Contains(BoundaryType const bnd_type, int g_st, int g_en, int &c_st, int &c_en)
-{
-    if ( c_st < 0 ) c_st = 0;
-    bool found = false;
-    int scan_dir = 0;
-    while ( unsigned(c_st) < nbBound ) {
-        if ( bounds[c_st].type == bnd_type ) {
-            if ( bounds[c_st].start ) {
-                c_en = bounds[c_st].other;
-            } else {
-            }
-        }
-        if ( bounds[c_st].type == bnd_type && unsigned(c_en) == bounds[c_st].other ) {
-            if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
-                // character found
-                found = true;
-                break;
-            }
-        }
-        if ( bounds[c_st].uni_pos < g_st ) {
-            if ( scan_dir < 0 ) break;
-            c_st++;
-            scan_dir = 1;
-        } else if ( bounds[c_st].uni_pos > g_st ) {
-            if ( scan_dir > 0 ) break;
-            c_st--;
-            scan_dir = -1;
-        } else {
-            // good pos, wrong type
-            while ( c_st > 0 && bounds[c_st].uni_pos == g_st ) {
-                c_st--;
-            }
-            if ( bounds[c_st].uni_pos < g_st ) c_st++;
-            while ( unsigned(c_st) < nbBound && bounds[c_st].uni_pos == g_st ) {
-                if ( bounds[c_st].type == bnd_type ) {
-                    if ( bounds[c_st].start ) {
-                        c_en = bounds[c_st].other;
-                    } else {
-                    }
-                }
-                if ( bounds[c_st].type == bnd_type && unsigned(c_en) == bounds[c_st].other ) {
-                    if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
-                        // character found
-                        return true;
-                    }
-                }
-                c_st++;
-            }
-
-            break;
-        }
-    }
-    return found;
-}
+/* Unused.  Retained only because I haven't asked cyreve (Richard Hughes) whether he intends ever
+ * to use it.  You can probably safely remove it. */
+//bool text_wrapper::Contains(BoundaryType const bnd_type, int g_st, int g_en, int &c_st, int &c_en)
+//{
+//    if ( c_st < 0 ) c_st = 0;
+//    bool found = false;
+//    int scan_dir = 0;
+//    while ( unsigned(c_st) < nbBound ) {
+//        if ( bounds[c_st].type == bnd_type ) {
+//            if ( bounds[c_st].start ) {
+//                c_en = bounds[c_st].other;
+//            } else {
+//            }
+//        }
+//        if ( bounds[c_st].type == bnd_type && unsigned(c_en) == bounds[c_st].other ) {
+//            if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
+//                // character found
+//                found = true;
+//                break;
+//            }
+//        }
+//        if ( bounds[c_st].uni_pos < g_st ) {
+//            if ( scan_dir < 0 ) break;
+//            c_st++;
+//            scan_dir = 1;
+//        } else if ( bounds[c_st].uni_pos > g_st ) {
+//            if ( scan_dir > 0 ) break;
+//            c_st--;
+//            scan_dir = -1;
+//        } else {
+//            // good pos, wrong type
+//            while ( c_st > 0 && bounds[c_st].uni_pos == g_st ) {
+//                c_st--;
+//            }
+//            if ( bounds[c_st].uni_pos < g_st ) c_st++;
+//            while ( unsigned(c_st) < nbBound && bounds[c_st].uni_pos == g_st ) {
+//                if ( bounds[c_st].type == bnd_type ) {
+//                    if ( bounds[c_st].start ) {
+//                        c_en = bounds[c_st].other;
+//                    } else {
+//                    }
+//                }
+//                if ( bounds[c_st].type == bnd_type && unsigned(c_en) == bounds[c_st].other ) {
+//                    if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
+//                        // character found
+//                        return true;
+//                    }
+//                }
+//                c_st++;
+//            }
+//
+//            break;
+//        }
+//    }
+//    return found;
+//}
 
 void text_wrapper::MeasureBoxes(void)
 {
