@@ -35,9 +35,8 @@ typedef struct text_boundary {
     // first char of the text chunk if 'start' boundary, char right after the boundary otherwise
     int type;    // kind of boundary
     bool start;   // is it the beginning of a chunk or its end
-    int other;   // index of the boundary this one is paired with in the array
-    int ind;     // utility
-    int inv_ind;
+    unsigned other;   // index of the boundary this one is paired with in the array
+    unsigned old_ix;  ///< Temporary storage used solely SortBoundaries.
     union {   // data for this boundary; usually, one int is enough
         int i;
         double f;
@@ -102,7 +101,7 @@ public:
     double *kern_y;
 		
     // boundaries, in an array
-    int nbBound, maxBound;
+    unsigned nbBound, maxBound;
     text_boundary *bounds;
 	
     // text organization

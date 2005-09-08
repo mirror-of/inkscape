@@ -55,7 +55,7 @@ text_wrapper::~text_wrapper(void)
     if ( paras ) free(paras);
     if ( kern_x ) free(kern_x);
     if ( kern_y ) free(kern_y);
-    for (int i = 0; i < nbBound; i++) {
+    for (unsigned i = 0; i < nbBound; i++) {
         switch ( bounds[i].type ) {
             default:
                 break;
@@ -570,11 +570,9 @@ unsigned text_wrapper::AddBoundary(text_boundary const &ib)
         maxBound = 2 * nbBound + 1;
         bounds = (text_boundary*)realloc(bounds, maxBound * sizeof(text_boundary));
     }
-    int n = nbBound++;
-    bounds[n] = ib;
-    bounds[n].ind = bounds[n].inv_ind = n;
-    bounds[n].other = -1;
-    return n;
+    unsigned const ix = nbBound++;
+    bounds[ix] = ib;
+    return ix;
 }
 
 /**
@@ -582,8 +580,8 @@ unsigned text_wrapper::AddBoundary(text_boundary const &ib)
  */
 void text_wrapper::AddTwinBoundaries(text_boundary const &is, text_boundary const &ie)
 {
-    int ns = AddBoundary(is);
-    int ne = AddBoundary(ie);
+    unsigned const ns = AddBoundary(is);
+    unsigned const ne = AddBoundary(ie);
     bounds[ns].start = true;
     bounds[ns].other = ne;
     bounds[ne].start = false;
@@ -591,31 +589,33 @@ void text_wrapper::AddTwinBoundaries(text_boundary const &is, text_boundary cons
 }
 
 static int CmpBound(void const *a, void const *b) {
-    text_boundary *ta = (text_boundary*)a;
-    text_boundary *tb = (text_boundary*)b;
-    if ( ta->uni_pos < tb->uni_pos ) return -1;
-    if ( ta->uni_pos > tb->uni_pos ) return 1;
-    if ( ta->start && tb->start == false ) return -1;
-    if ( ta->start == false && tb->start ) return 1;
+    text_boundary const &ta = *reinterpret_cast<text_boundary const *>(a);
+    text_boundary const &tb = *reinterpret_cast<text_boundary const *>(b);
+    if ( ta.uni_pos < tb.uni_pos ) return -1;
+    if ( ta.uni_pos > tb.uni_pos ) return 1;
+    /* TODO: I'd guess that for a given uni_pos it would be better for the end boundary to precede the start boundary. */
+    if ( ta.start && !tb.start ) return -1;
+    if ( !ta.start && tb.start ) return 1;
     return 0;
 }
 void text_wrapper::SortBoundaries(void)
 {
     // the 'other' field needs to be updated after sorting by qsort, so we build the inverse permutation
     // by means of the ind field
-    for (int i = 0; i < nbBound; i++) {
-        bounds[i].ind = i;
-        bounds[i].inv_ind = i;
+    for (unsigned i = 0; i < nbBound; i++) {
+        bounds[i].old_ix = i;
     }
     qsort(bounds, nbBound, sizeof(text_boundary), CmpBound);
-    for (int i = 0; i < nbBound; i++) { // compute inverse permutation
-        bounds[bounds[i].ind].inv_ind = i;
+    unsigned *const old2new = g_new(unsigned, nbBound);
+    for (unsigned new_ix = 0; new_ix < nbBound; new_ix++) { // compute inverse permutation
+        old2new[bounds[new_ix].old_ix] = new_ix;
     }
-    for (int i = 0; i < nbBound; i++) { // update 'other'
-        if ( bounds[i].other >= 0 ) {
-            bounds[i].other = bounds[bounds[i].other].inv_ind;
+    for (unsigned i = 0; i < nbBound; i++) { // update 'other'
+        if ( bounds[i].other < nbBound ) {
+            bounds[i].other = old2new[bounds[i].other];
         }
     }
+    g_free(old2new);
 }
 void text_wrapper::MakeTextBoundaries(PangoLogAttr *pAttrs, int nAttr)
 {
@@ -690,7 +690,7 @@ bool text_wrapper::IsBound(int bnd_type, int g_st, int &c_st)
 {
     if ( c_st < 0 ) c_st = 0;
     int scan_dir = 0;
-    while ( c_st >= 0 && c_st < nbBound ) {
+    while ( unsigned(c_st) < nbBound ) {
         if ( bounds[c_st].uni_pos == g_st && bounds[c_st].type == bnd_type ) {
             return true;
         }
@@ -708,7 +708,7 @@ bool text_wrapper::IsBound(int bnd_type, int g_st, int &c_st)
                 c_st--;
             }
             if ( bounds[c_st].uni_pos < g_st ) c_st++;
-            while ( c_st < nbBound && bounds[c_st].uni_pos == g_st ) {
+            while ( unsigned(c_st) < nbBound && bounds[c_st].uni_pos == g_st ) {
                 if ( bounds[c_st].type == bnd_type ) {
                     return true;
                 }
@@ -725,14 +725,14 @@ bool text_wrapper::Contains(int bnd_type, int g_st, int g_en, int &c_st, int &c_
     if ( c_st < 0 ) c_st = 0;
     bool found = false;
     int scan_dir = 0;
-    while ( c_st >= 0 && c_st < nbBound ) {
+    while ( unsigned(c_st) < nbBound ) {
         if ( bounds[c_st].type == bnd_type ) {
             if ( bounds[c_st].start ) {
                 c_en = bounds[c_st].other;
             } else {
             }
         }
-        if ( bounds[c_st].type == bnd_type && c_en == bounds[c_st].other ) {
+        if ( bounds[c_st].type == bnd_type && unsigned(c_en) == bounds[c_st].other ) {
             if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
                 // character found
                 found = true;
@@ -753,14 +753,14 @@ bool text_wrapper::Contains(int bnd_type, int g_st, int g_en, int &c_st, int &c_
                 c_st--;
             }
             if ( bounds[c_st].uni_pos < g_st ) c_st++;
-            while ( c_st < nbBound && bounds[c_st].uni_pos == g_st ) {
+            while ( unsigned(c_st) < nbBound && bounds[c_st].uni_pos == g_st ) {
                 if ( bounds[c_st].type == bnd_type ) {
                     if ( bounds[c_st].start ) {
                         c_en = bounds[c_st].other;
                     } else {
                     }
                 }
-                if ( bounds[c_st].type == bnd_type && c_en == bounds[c_st].other ) {
+                if ( bounds[c_st].type == bnd_type && unsigned(c_en) == bounds[c_st].other ) {
                     if ( g_st >= bounds[c_st].uni_pos && g_en <= bounds[c_en].uni_pos ) {
                         // character found
                         return true;
