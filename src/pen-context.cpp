@@ -31,6 +31,7 @@
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "sp-path.h"
+#include "pixmaps/cursor-pen.xpm"
 #include "display/canvas-bpath.h"
 #include "display/sp-canvas.h"
 #include "display/sp-ctrlline.h"
@@ -121,6 +122,12 @@ sp_pen_context_class_init(SPPenContextClass *klass)
 static void
 sp_pen_context_init(SPPenContext *pc)
 {
+    SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
+
+    event_context->cursor_shape = cursor_pen_xpm;
+    event_context->hot_x = 4;
+    event_context->hot_y = 4;
+    
     pc->npoints = 0;
     pc->mode = SP_PEN_CONTEXT_MODE_CLICK;
     pc->state = SP_PEN_CONTEXT_POINT;

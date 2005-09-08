@@ -31,6 +31,7 @@
 #include "sp-path.h"
 #include "prefs-utils.h"
 #include "snap.h"
+#include "pixmaps/cursor-pencil.xpm"
 #include "display/bezier-utils.h"
 #include "display/canvas-bpath.h"
 #include "display/sp-canvas.h"
@@ -107,6 +108,12 @@ sp_pencil_context_class_init(SPPencilContextClass *klass)
 static void
 sp_pencil_context_init(SPPencilContext *pc)
 {
+    SPEventContext *event_context = SP_EVENT_CONTEXT(pc);
+
+    event_context->cursor_shape = cursor_pencil_xpm;
+    event_context->hot_x = 4;
+    event_context->hot_y = 4;
+    
     pc->npoints = 0;
     pc->state = SP_PENCIL_CONTEXT_IDLE;
     pc->req_tangent = NR::Point(0, 0);

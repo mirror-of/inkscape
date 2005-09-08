@@ -55,6 +55,7 @@
 #include "desktop-style.h"
 #include "message-context.h"
 #include "snap.h"
+#include "pixmaps/cursor-calligraphy.xpm"
 #include "widgets/desktop-widget.h"
 #include "dyna-draw-context.h"
 #include "widgets/spw-utilities.h"
@@ -140,6 +141,12 @@ sp_dyna_draw_context_class_init(SPDynaDrawContextClass *klass)
 static void
 sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
 {
+    SPEventContext *event_context = SP_EVENT_CONTEXT(ddc);
+
+    event_context->cursor_shape = cursor_calligraphy_xpm;
+    event_context->hot_x = 4;
+    event_context->hot_y = 4;
+    
     ddc->accumulated = NULL;
     ddc->segments = NULL;
     ddc->currentcurve = NULL;
