@@ -1524,12 +1524,14 @@ public:
     /**
      *
      */
-    VisualCharacter() {}
+    VisualCharacter()
+        {}
 
     /**
      *
      */
-    VisualCharacter(const VisualCharacter &other) : VisualSegment(other)
+    VisualCharacter(const VisualCharacter &other) : VisualResource(other),
+                                                    VisualSegment(other)
         {
         }
 
@@ -1565,7 +1567,8 @@ public:
     /**
      *
      */
-    VisualCharacterRun(const VisualCharacterRun &other) : VisualSegment(other)
+    VisualCharacterRun(const VisualCharacterRun &other) : VisualResource(other),
+                                                          VisualSegment(other)
         {
         }
 
@@ -1611,7 +1614,8 @@ public:
     /**
      *
      */
-    VisualFrame(const VisualFrame &other) : VisualSegment(other)
+    VisualFrame(const VisualFrame &other) : VisualResource(other),
+                                            VisualSegment(other)
         {
         embedded = other.embedded;
         }
@@ -1664,7 +1668,8 @@ public:
     /**
      *
      */
-    VisualImage(const VisualImage &other) : VisualSegment(other)
+    VisualImage(const VisualImage &other) : VisualResource(other),
+                                            VisualSegment(other)
         {
         imageURL = other.imageURL;
         isLoaded = other.isLoaded;
@@ -1714,7 +1719,8 @@ public:
     /**
      *
      */
-    VisualFormButton(const VisualFormButton &other) : VisualSegment(other)
+    VisualFormButton(const VisualFormButton &other) : VisualResource(other),
+                                                      VisualSegment(other)
         {
         isPressed = other.isPressed;
         }
@@ -1761,7 +1767,8 @@ public:
     /**
      *
      */
-    VisualFormField(const VisualFormField &other) : VisualSegment(other)
+    VisualFormField(const VisualFormField &other) : VisualResource(other),
+                                                    VisualSegment(other)
         {
         formValue = other.formValue;
         }

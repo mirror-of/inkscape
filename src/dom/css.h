@@ -182,7 +182,7 @@ public:
      */
     virtual CSSRule item(unsigned long index)
         {
-        if (index < 0 || index>=rules.size())
+        if (index>=rules.size())
             {
             CSSRule rule;
             return rule;
@@ -233,7 +233,7 @@ friend class CSSStyleSheet;
      */
     virtual void deleteRule(unsigned long index)
         {
-        if (index<0 || index>=rules.size())
+        if (index>=rules.size())
             return;
         std::vector<CSSRule>::iterator iter = rules.begin() + index;
         rules.erase(iter);
@@ -245,7 +245,7 @@ friend class CSSStyleSheet;
      */
     virtual long insertRule(const CSSRule &rule, unsigned long index)
         {
-        if (index<0 || index>=rules.size())
+        if (index>=rules.size())
             return -1;
         std::vector<CSSRule>::iterator iter = rules.begin() + index;
         rules.insert(iter, rule);
@@ -555,7 +555,7 @@ public:
      */
     virtual DOMString item(unsigned long index)
         {
-        if (index<0 || index>=items.size())
+        if (index>=items.size())
             return "";
         DOMString ret = items[index].name;
         ret.append(":");
@@ -714,7 +714,7 @@ public:
                                      unsigned long index)
                                      throw (dom::DOMException)
         {
-        if (index<0 || index>cssRules.getLength())
+        if (index>cssRules.getLength())
             return 0;
         CSSRule rule;
         cssRules.insertRule(rule, index);
@@ -1098,7 +1098,7 @@ public:
      */
     virtual CSSValue item(unsigned long index)
         {
-        if (index<0 || index>=items.size())
+        if (index>=items.size())
             {
             CSSValue dummy;
             return dummy;
@@ -4090,7 +4090,8 @@ public:
     /**
      *
      */
-    DOMImplementationCSS(const DOMImplementationCSS &other)
+    DOMImplementationCSS(const DOMImplementationCSS &other) 
+                         : DOMImplementation(other)
        {
        }
 

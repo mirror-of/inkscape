@@ -93,7 +93,7 @@ public:
      */
     virtual DOMString item(unsigned long index)
         {
-        if (index < 0 || index >= items.size())
+        if (index >= items.size())
             return "";
         return items[index];
         }
@@ -311,7 +311,7 @@ public:
      */
     virtual StyleSheet *item(unsigned long index)
         {
-        if (index < 0 || index >= sheets.size())
+        if (index >= sheets.size())
             return NULL;
         return sheets[index];
         }

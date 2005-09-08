@@ -54,7 +54,7 @@ namespace smil
  *
  */
 class SMILDocumentImpl : virtual public SMILDocument,
-                         public DocumentImpl
+                         virtual public DocumentImpl
 {
 public:
 

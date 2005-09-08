@@ -1446,7 +1446,7 @@ protected:
 /**
  *
  */
-class SMILDocument : public Document,
+class SMILDocument : virtual public Document,
                      public ElementSequentialTimeContainer
 {
 public:
@@ -1472,7 +1472,7 @@ public:
 /**
  *
  */
-class SMILElement : public Element
+class SMILElement : virtual public Element
 {
 public:
 
@@ -1507,7 +1507,7 @@ public:
 /**
  *
  */
-class SMILLayoutElement : public SMILElement
+class SMILLayoutElement : virtual public SMILElement
 {
 public:
 
@@ -1541,7 +1541,8 @@ public:
 /**
  *
  */
-class SMILTopLayoutElement : public SMILElement, public ElementLayout
+class SMILTopLayoutElement : virtual public SMILElement,
+                             virtual public ElementLayout
 {
 public:
 
@@ -1566,7 +1567,8 @@ public:
 /**
  *
  */
-class SMILRootLayoutElement : public SMILElement, public ElementLayout
+class SMILRootLayoutElement : virtual public SMILElement,
+                              virtual public ElementLayout
 {
 public:
 
@@ -1591,7 +1593,8 @@ public:
 /**
  *
  */
-class SMILRegionElement : public SMILElement, public ElementLayout
+class SMILRegionElement : virtual public SMILElement,
+                          virtual public ElementLayout
 {
 public:
 
@@ -1648,8 +1651,8 @@ public:
 /**
  *
  */
-class SMILMediaElement : public ElementTime,
-                         public SMILElement
+class SMILMediaElement : virtual public ElementTime,
+                         virtual public SMILElement
 {
 public:
 
@@ -1826,7 +1829,7 @@ public:
 /**
  *
  */
-class SMILRefElement : public SMILMediaElement
+class SMILRefElement : virtual public SMILMediaElement
 {
 public:
 
@@ -1851,10 +1854,10 @@ public:
 /**
  *
  */
-class SMILAnimation : public SMILElement,
-                      public ElementTargetAttributes,
-                      public ElementTime,
-                      public ElementTimeControl
+class SMILAnimation : virtual public SMILElement,
+                      virtual public ElementTargetAttributes,
+                      virtual public ElementTime,
+                      virtual public ElementTimeControl
 {
 public:
 
@@ -1991,7 +1994,7 @@ public:
 /**
  *
  */
-class SMILAnimateElement : public SMILAnimation
+class SMILAnimateElement : virtual public SMILAnimation
 {
 public:
 
@@ -2016,10 +2019,10 @@ public:
 /**
  *
  */
-class SMILSetElement : public ElementTimeControl,
-                       public ElementTime,
-                       public ElementTargetAttributes,
-                       public SMILElement
+class SMILSetElement : virtual public ElementTimeControl,
+                       virtual public ElementTime,
+                       virtual public ElementTargetAttributes,
+                       virtual public SMILElement
 {
 public:
 
@@ -2053,7 +2056,7 @@ public:
 /**
  *
  */
-class SMILAnimateMotionElement : public SMILAnimateElement
+class SMILAnimateMotionElement : virtual public SMILAnimateElement
 {
 public:
 
@@ -2098,7 +2101,7 @@ public:
 /**
  *
  */
-class SMILAnimateColorElement : public SMILAnimation
+class SMILAnimateColorElement : virtual public SMILAnimation
 {
 public:
 
@@ -2126,7 +2129,7 @@ public:
 /**
  *
  */
-class SMILSwitchElement : public SMILElement
+class SMILSwitchElement : virtual public SMILElement
 {
 public:
 

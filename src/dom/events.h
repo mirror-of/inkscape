@@ -792,7 +792,7 @@ public:
     /**
      *
      */
-    TextEvent(const TextEvent &other) : UIEvent(other)
+    TextEvent(const TextEvent &other) : Event(other), UIEvent(other)
         {
         data = other.data;
         }
@@ -946,7 +946,7 @@ public:
     /**
      *
      */
-    MouseEvent(const MouseEvent &other) : UIEvent(other)
+    MouseEvent(const MouseEvent &other) : Event(other), UIEvent(other)
         {
         screenX       = other.screenX;
         screenY       = other.screenY;
@@ -1088,7 +1088,7 @@ public:
     /**
      *
      */
-    KeyboardEvent(const KeyboardEvent &other) : UIEvent(other)
+    KeyboardEvent(const KeyboardEvent &other) : Event(other), UIEvent(other)
         {
         keyIdentifier = other.keyIdentifier;
         keyLocation   = other.keyLocation;
@@ -1312,7 +1312,8 @@ public:
     /**
      *
      */
-    MutationNameEvent(const MutationNameEvent &other) : MutationEvent(other)
+    MutationNameEvent(const MutationNameEvent &other) 
+                          : Event(other), MutationEvent(other)
         {
         prevNamespaceURI = other.prevNamespaceURI;
         prevNodeName     = other.prevNodeName;

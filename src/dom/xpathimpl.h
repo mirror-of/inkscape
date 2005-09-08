@@ -221,7 +221,7 @@ public:
 /*#########################################################################
 ## XPathNamespaceImpl
 #########################################################################*/
-class XPathNamespaceImpl : public XPathNamespace, NodeImpl
+class XPathNamespaceImpl : public XPathNamespace, public NodeImpl
 {
 public:
 

@@ -201,7 +201,7 @@ public:
      */
     virtual DOMString item(unsigned long index)
         {
-        if (index<0 || index>=strings.size())
+        if (index>=strings.size())
             return "";
         return strings[index];
         }
@@ -301,7 +301,7 @@ public:
      */
     virtual DOMString getName(unsigned long index)
         {
-        if (index<0 || index>=namePairs.size())
+        if (index>=namePairs.size())
             return "";
         return namePairs[index].name;
         }
@@ -311,7 +311,7 @@ public:
      */
     virtual DOMString getNamespaceURI(unsigned long index)
         {
-        if (index<0 || index>=namePairs.size())
+        if (index>=namePairs.size())
             return "";
         return namePairs[index].namespaceURI;
         }
@@ -392,7 +392,7 @@ public:
      */
     virtual DOMImplementation *getDOMImplementation(unsigned long index)
         {
-        if (index<0 || index >implementations.size())
+        if (index >implementations.size())
             return NULL;
         return implementations[index];
         }
@@ -791,7 +791,7 @@ public:
      */
     virtual Node *item(unsigned long index)
         {
-        if (index<0 || index>=nodes.size())
+        if (index>=nodes.size())
             return NULL;
         return nodes[index];
         }
@@ -950,7 +950,7 @@ public:
      */
     virtual Node *item(unsigned long index)
         {
-        if (index<0 || index>=entries.size())
+        if (index>=entries.size())
             return NULL;
         return entries[index].node;
         }

@@ -46,7 +46,6 @@ dom_libdom_a_SOURCES =	     \
 	dom/uri.h            \
 	dom/uristream.cpp    \
 	dom/uristream.h      \
-	dom/uritest.cpp      \
 	dom/views.h          \
 	dom/xmlreader.cpp    \
 	dom/xmlreader.h      \

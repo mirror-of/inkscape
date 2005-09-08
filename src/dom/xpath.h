@@ -302,7 +302,7 @@ public:
 /*#########################################################################
 ## XPathNamespace
 #########################################################################*/
-class XPathNamespace : public Node
+class XPathNamespace : virtual public Node
 {
 public:
 

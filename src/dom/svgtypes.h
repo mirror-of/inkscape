@@ -1095,7 +1095,7 @@ public:
     virtual DOMString getItem ( unsigned long index )
                     throw( DOMException )
         {
-        if (index <0 || index >= items.size())
+        if (index >= items.size())
             return "";
         return items[index];
         }
@@ -1139,7 +1139,7 @@ public:
     virtual DOMString removeItem ( unsigned long index )
                     throw( DOMException )
         {
-        if (index<0 || index>=items.size())
+        if (index>=items.size())
             return "";
         std::vector<DOMString>::iterator iter = items.begin() + index;
         DOMString oldstr = *iter;
@@ -1613,7 +1613,7 @@ public:
     virtual SVGNumber removeItem ( unsigned long index )
                                   throw( DOMException )
         {
-        if (index<0 || index>=items.size())
+        if (index>=items.size())
             {
             SVGNumber num;
             return num;
@@ -1988,10 +1988,10 @@ public:
     /**
      *
      */
-    virtual SVGLength getItem (unsigned long index )
+    virtual SVGLength getItem (unsigned long index)
                     throw( DOMException )
         {
-        if (index<0 || index>=items.size())
+        if (index>=items.size())
             {
             SVGLength ret;
             return ret;
@@ -3214,7 +3214,7 @@ public:
     /**
      *
      */
-    SVGTransformable(const SVGTransformable &other)
+    SVGTransformable(const SVGTransformable &other) : SVGLocatable(other)
         {
         transforms = other.transforms;
         }
@@ -6365,7 +6365,7 @@ public:
     /**
      *
      */
-    SVGPaint(const SVGPaint &other) : SVGColor(other)
+    SVGPaint(const SVGPaint &other) : css::CSSValue(other), SVGColor(other)
         {
         uri       = "";
         paintType = SVG_PAINTTYPE_UNKNOWN;
@@ -6656,7 +6656,8 @@ public:
     /**
      *
      */
-    SVGZoomEvent(const SVGZoomEvent &other) : events::UIEvent(other)
+    SVGZoomEvent(const SVGZoomEvent &other) : events::Event(other),
+                                              events::UIEvent(other)
         {
         zoomRectScreen    = other.zoomRectScreen;
         previousScale     = other.previousScale;
@@ -6771,6 +6772,7 @@ public:
      *
      */
     SVGElementInstance(const SVGElementInstance &other)
+                        : events::EventTarget(other)
         {
         }
 

@@ -2726,7 +2726,7 @@ public:
 /**
  *
  */
-class SVGFEFuncRElement : public SVGComponentTransferFunctionElement
+class SVGFEFuncRElement : virtual public SVGComponentTransferFunctionElement
 {
 public:
 
