@@ -12,6 +12,9 @@
 #include "FontFactory.h"
 #include <libnrtype/font-instance.h>
 #include "libnrtype/text-boundary.h"
+#include "libnrtype/one-glyph.h"
+#include "libnrtype/one-box.h"
+#include "libnrtype/one-para.h"
 
 #include <svg/svg.h>
 

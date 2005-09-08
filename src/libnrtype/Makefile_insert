@@ -20,6 +20,9 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/FontFactory.cpp \
 	libnrtype/FontFactory.h \
 	libnrtype/FontInstance.cpp \
+	libnrtype/one-box.h	\
+	libnrtype/one-glyph.h	\
+	libnrtype/one-para.h	\
 	libnrtype/RasterFont.cpp \
 	libnrtype/RasterFont.h \
 	libnrtype/raster-glyph.h	\

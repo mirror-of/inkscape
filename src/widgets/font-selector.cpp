@@ -36,6 +36,7 @@
 #include <libnrtype/raster-glyph.h>
 #include <libnrtype/RasterFont.h>
 #include <libnrtype/TextWrapper.h>
+#include <libnrtype/one-glyph.h>
 
 #include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>

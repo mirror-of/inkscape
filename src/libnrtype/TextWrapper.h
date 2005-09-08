@@ -21,41 +21,16 @@
 // and more important stuff like letter (ie visual letters)
 
 struct text_boundary;
-
-// pango converts the text into glyphs, but scatters the info for a given glyph
-// here is a structure holding what inkscape needs to know
-typedef struct one_glyph {
-    int gl;  // glyph_id
-    double x, y; // glyph position in the layout (nominal sizes, in the [0..1] range)
-    bool char_start; // is this glyph the beginning of a letter (rtl is taken in account)
-    bool word_start; // is this glyph the beginning of a word
-    bool para_start; // is this glyph the beginning of a paragraph (for indentation)
-    char uni_dir;    // bidi orientation of the run containing this glyph
-    int uni_st, uni_en; /**< Start and end positions of the text corresponding to this glyph.
-                         * You always have uni_st < uni_en. */
-    PangoFont *font;  /**< Font this glyph uses.  (For bidi text, you need several fonts.)
-                       * When rendering glyphs, check if this font is the one you're using. */
-} one_glyph;
-
-// text chunking 2, the comeback
-// this time for sp-typeset
-typedef struct one_box {
-    int g_st, g_en; // first and last glyph of this word
-    double ascent, descent, leading; // measurements 
-    double width;
-    bool word_start, word_end; // 
-} one_box;
-
-typedef struct one_para {
-    int b_st, b_en;
-} one_para;
+struct one_glyph;
+struct one_box;
+struct one_para;
 
 class text_wrapper {
 public:
     char *utf8_text;  // source text
     gunichar *uni32_text; // ucs4 text computed from utf8_text
     one_glyph *glyph_text; // glyph string computed for uni32_text
-		
+
     // maps between the 2
     // These should most definitely be size_t, not int.
     // I am quite sure (but not bored enough to actually test it
@@ -68,20 +43,20 @@ public:
                        * The size of the array is (glyph_length+1) in fact; the last glyph is kind of a '0' char. */
     int *uni32_codepoint; // uni32_codepoint[i] is the index in uni32_text corresponding to utf8_text[i]
     int *utf8_codepoint;  // utf8_codepoint[i] is the index in utf8_text of the beginning of uni32_text[i]
-		
+
     // layout
     font_instance *default_font; // font set as the default font (would need at least one alternate per language)
     PangoLayout *pLayout;      // private structure
-	
+
     // kerning additions
     int last_addition; // index in uni32_text of the beginning of the text added by the last AppendUTF8 call
     double *kern_x;        // dx[i] is the dx for the ith unicode char
     double *kern_y;
-		
+
     // boundaries, in an array
     unsigned nbBound, maxBound;
     text_boundary *bounds;
-	
+
     // text organization
     int nbBox, maxBox;
     one_box *boxes;
@@ -90,7 +65,7 @@ public:
 
     text_wrapper(void);
     ~text_wrapper(void);
-	
+
     // filling the structure with input data
     void SetDefaultFont(font_instance *iFont);
 
@@ -124,7 +99,7 @@ public:
     bool NextChar(int &st, int &en) const;
     bool NextWord(int &st, int &en) const;
     bool NextPara(int &st, int &en) const;
-	
+
     // post-processing after the initial layout
     // for the xml-space property: merges consecutive whitespace, and eats leading whitespace in the text
     void MergeWhiteSpace(void);
@@ -134,7 +109,7 @@ public:
     void AddLetterSpacing(double dx, double dy, int g_st = -1, int g_en = -1);
     // adds the kerning specified by the KernXForLastAddition call to the layout
     void AddDxDy(void);
-	
+
     // boundary handling
 private:
     unsigned AddBoundary(text_boundary const &ib);
@@ -144,7 +119,7 @@ public:
     void MakeTextBoundaries(PangoLogAttr *pAttrs, int nAttr);
     //bool Contains(BoundaryType type, int g_st, int g_en, int &c_st, int &c_en);
     bool IsBound(BoundaryType type, int g_st, int &c_st);
-	
+
     void MeasureBoxes(void);
     int NbLetter(int g_st, int g_en);
 };
