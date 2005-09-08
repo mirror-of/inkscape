@@ -822,7 +822,7 @@ spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p, bool st
         double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
         if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
             angle = angle_to_compass (angle);
-        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: distance %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle, <b>Enter</b> to finish the path"), is_curve? "Curve segment" : "Line segment", dist->str, angle);
+        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap angle, <b>Enter</b> to finish the path"), is_curve? "Curve segment" : "Line segment", angle, dist->str);
         g_string_free(dist, FALSE);
     }
 }
@@ -847,7 +847,7 @@ spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
         double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
         if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
             angle = angle_to_compass (angle);
-        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Curve handle</b>: length %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle"), dist->str, angle);
+        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle"), angle, dist->str);
         g_string_free(dist, FALSE);
 
     } else if ( pc->npoints == 5 ) {
@@ -877,7 +877,7 @@ spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
         double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
         if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
             angle = angle_to_compass (angle);
-        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: length %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only"), is_symm? "Curve handle, symmetric" : "Curve handle", dist->str, angle);
+        pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only"), is_symm? "Curve handle, symmetric" : "Curve handle", angle, dist->str);
         g_string_free(dist, FALSE);
 
     } else {
