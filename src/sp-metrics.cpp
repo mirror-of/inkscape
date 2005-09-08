@@ -74,16 +74,9 @@ sp_metric_to_metric_string(gdouble const length,
 {
     gdouble const len = sp_absolute_metric_to_metric(length, metric_src, metric_dst);
     GString *str = g_string_new("");
-    g_string_printf(str, "%0.02f", len);
-    /* I've no strong opinion on the best number format here.
-     *
-     * %f has a fixed number of places after the decimal separator, whereas %g aims for a fixed
-     * number of "significant figures": thus, %0.3g gives 0.00123 and 1.23e+03, where %0.3f gives
-     * 0.001 and 1230.000 respectively.
-     *
-     * You may wish to make it conditional on the value of abs(len), e.g. if abs(len) >= 1 then
-     * %0.5g else %0.5f, or if abs(len) >= 100 then %0.5g else %0.3f.
-     */
+    g_string_printf(str, "%0.02f", len); 
+    /* We need a fixed number of fractional digits, because otherwise the live statusbar display of
+     * lengths will be too jerky */
 
     if (m) {
         char const *unit_str;
