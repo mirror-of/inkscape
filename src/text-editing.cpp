@@ -283,7 +283,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
 {
     // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
     // texpaths attached to the same path, with a vertical shift
-    if (SP_IS_TEXT_TEXTPATH (item)) 
+    if (SP_IS_TEXT_TEXTPATH (item))
         return position;
 
     Inkscape::Text::Layout const *layout = te_get_layout(item);
@@ -751,7 +751,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
         if (is_textpath) {
             if (e) *e = ' '; // no lines for textpath, replace newlines with spaces
         } else {
-            if (e) *e = '\0'; 
+            if (e) *e = '\0';
             Inkscape::XML::Node *rtspan;
             if (SP_IS_TEXT(text)) { // create a tspan for each line
                 rtspan = sp_repr_new ("svg:tspan");
@@ -767,7 +767,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
         }
         p = (e) ? e + 1 : NULL;
     }
-    if (is_textpath) { 
+    if (is_textpath) {
         Inkscape::XML::Node *rstr = sp_repr_new_text(content);
         sp_repr_add_child (repr, rstr, NULL);
         sp_repr_unref(rstr);
@@ -797,7 +797,7 @@ text_tag_attributes_at_position(SPItem *item, Inkscape::Text::Layout::iterator c
     *char_index = sum_sibling_text_lengths_before(source_item);
     for (Glib::ustring::iterator it = string->begin() ; it != source_text_iter ; it++)
         ++*char_index;
-    
+
     return attributes_for_object(SP_OBJECT_PARENT(source_item));
 }
 
@@ -1479,6 +1479,7 @@ static SPString* find_last_string_child_not_equal_to(SPObject *root, SPObject *n
         } else if (SP_IS_STRING(child))
             return SP_STRING(child);
     }
+    return NULL;
 }
 
 /** whitespace-only spans: abc<font> </font>def
@@ -1491,7 +1492,7 @@ static bool tidy_operator_styled_whitespace(SPObject **item)
     Glib::ustring const &str = SP_STRING(*item)->string;
     for (Glib::ustring::const_iterator it = str.begin() ; it != str.end() ; ++it)
         if (!g_unichar_isspace(*it)) return false;
-    
+
     SPObject *test_item = *item;
     SPString *next_string;
     for ( ; ; ) {  // find the next string
@@ -1612,7 +1613,7 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     start and end and then semi-recursively apply the style to all the
     objects in between. The semi-recursion is because it's only necessary
     at the beginning and end; the style can just be applied to the root
-    child in the middle. 
+    child in the middle.
     eg: <span>abcDEF</span><span>GHI</span><span>JKLmno</span>
     The recursion may involve creating new spans.
     */
