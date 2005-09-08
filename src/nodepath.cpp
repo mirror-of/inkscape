@@ -22,6 +22,7 @@
 #include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
 #include "libnr/n-art-bpath.h"
+#include "helper/units.h"
 #include "knot.h"
 #include "inkscape.h"
 #include "document.h"
@@ -2799,11 +2800,13 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
     double degrees = 180 / M_PI * rnew.a;
     if (degrees > 180) degrees -= 360;
     if (degrees < -180) degrees += 360;
+    if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
+        degrees = angle_to_compass (degrees);
 
     GString *length = SP_PX_TO_METRIC_STRING(rnew.r, desktop->namedview->getDefaultMetric());
 
     mc->setF(Inkscape::NORMAL_MESSAGE,
-         _("<b>Node handle</b>: at %0.2f&#176;, length %s; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"), degrees, length->str);
+         _("<b>Node handle</b>: angle %0.2f&#176;, length %s; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate both handles"), degrees, length->str);
 
     g_string_free(length, TRUE);
 }
