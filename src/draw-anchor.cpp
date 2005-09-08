@@ -41,7 +41,7 @@ sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point 
     a->dp = delta;
     a->wp = sp_desktop_d2w_xy_point(dt, delta);
     a->ctrl = sp_canvas_item_new(SP_DT_CONTROLS(dt), SP_TYPE_CTRL,
-                                 "size", 4.0,
+                                 "size", 6.0,
                                  "filled", 0,
                                  "fill_color", 0xff00007f,
                                  "stroked", 1,
