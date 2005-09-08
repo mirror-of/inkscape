@@ -517,8 +517,14 @@ void text_wrapper::AddLetterSpacing(double dx, double dy, int g_st, int g_en)
     glyph_text[g_en].y += dy * nbLetter;
 }
 
-// misc functions for moving one letter further in the layout (move is ltr)
-bool text_wrapper::NextChar(int &st, int &en)
+/** @name Movement commands
+ * Miscellaneous functions for moving about glyphs.
+ * \a st and \en are start and end glyph indices.
+ * The three methods differ only in whether they look for .char_start, .word_start or .para_start.
+ * \return True iff a next character was found.  (False iff we've already reached the end.)
+ */
+//@{
+bool text_wrapper::NextChar(int &st, int &en) const
 {
     if ( st < 0 || en < 0 ) {st = 0; en = 0;}
     if ( st >= en ) en = st;
@@ -529,7 +535,7 @@ bool text_wrapper::NextChar(int &st, int &en)
     } while ( en < glyph_length && glyph_text[en].char_start == false );
     return true;
 }
-bool text_wrapper::NextWord(int &st, int &en)
+bool text_wrapper::NextWord(int &st, int &en) const
 {
     if ( st < 0 || en < 0 ) {st = 0; en = 0;}
     if ( st >= en ) en = st;
@@ -540,7 +546,7 @@ bool text_wrapper::NextWord(int &st, int &en)
     } while ( en < glyph_length && glyph_text[en].word_start == false );
     return true;
 }
-bool text_wrapper::NextPara(int &st, int &en)
+bool text_wrapper::NextPara(int &st, int &en) const
 {
     if ( st < 0 || en < 0 ) {st = 0; en = 0;}
     if ( st >= en ) en = st;
@@ -551,9 +557,14 @@ bool text_wrapper::NextPara(int &st, int &en)
     } while ( en < glyph_length && glyph_text[en].para_start == false );
     return true;
 }
+//@}
 
 // boundary handling
-int text_wrapper::AddBoundary(text_boundary &ib)
+/**
+ * Append \a ib to our bounds array.
+ * \return The index of the new element.
+ */
+unsigned text_wrapper::AddBoundary(text_boundary const &ib)
 {
     if ( nbBound >= maxBound ) {
         maxBound = 2 * nbBound + 1;
@@ -565,7 +576,11 @@ int text_wrapper::AddBoundary(text_boundary &ib)
     bounds[n].other = -1;
     return n;
 }
-void text_wrapper::AddTwinBoundaries(text_boundary &is, text_boundary &ie)
+
+/**
+ * Add the start \& end boundaries \a is \& \a ie to bounds.
+ */
+void text_wrapper::AddTwinBoundaries(text_boundary const &is, text_boundary const &ie)
 {
     int ns = AddBoundary(is);
     int ne = AddBoundary(ie);
@@ -574,6 +589,7 @@ void text_wrapper::AddTwinBoundaries(text_boundary &is, text_boundary &ie)
     bounds[ne].start = false;
     bounds[ne].other = ns;
 }
+
 static int CmpBound(void const *a, void const *b) {
     text_boundary *ta = (text_boundary*)a;
     text_boundary *tb = (text_boundary*)b;

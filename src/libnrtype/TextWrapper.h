@@ -144,9 +144,9 @@ public:
     // semi-private: computes boundaries in the input text
     void ChunkText(void);
     // utility function to move to the next element
-    bool NextChar(int &st, int &en);
-    bool NextWord(int &st, int &en);
-    bool NextPara(int &st, int &en);
+    bool NextChar(int &st, int &en) const;
+    bool NextWord(int &st, int &en) const;
+    bool NextPara(int &st, int &en) const;
 	
     // post-processing after the initial layout
     // for the xml-space property: merges consecutive whitespace, and eats leading whitespace in the text
@@ -159,8 +159,10 @@ public:
     void AddDxDy(void);
 	
     // boundary handling
-    int AddBoundary(text_boundary &ib);
-    void AddTwinBoundaries(text_boundary &is, text_boundary &ie);
+private:
+    unsigned AddBoundary(text_boundary const &ib);
+public:
+    void AddTwinBoundaries(text_boundary const &is, text_boundary const &ie);
     void SortBoundaries(void);
     void MakeTextBoundaries(PangoLogAttr *pAttrs, int nAttr);
     bool Contains(int type, int g_st, int g_en, int &c_st, int &c_en);
