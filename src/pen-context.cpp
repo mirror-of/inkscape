@@ -39,6 +39,7 @@
 #include <glibmm/i18n.h>
 #include "libnr/nr-point-ops.h"
 #include "libnr/n-art-bpath.h"
+#include "helper/units.h"
 #include "snap.h"
 
 
@@ -819,6 +820,8 @@ spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p, bool st
         NR::Point rel = p - pc->p[0];
         GString *dist = SP_PX_TO_METRIC_STRING(NR::L2(rel), desktop->namedview->getDefaultMetric());
         double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
+        if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
+            angle = angle_to_compass (angle);
         pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: distance %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle, <b>Enter</b> to finish the path"), is_curve? "Curve segment" : "Line segment", dist->str, angle);
         g_string_free(dist, FALSE);
     }
@@ -842,6 +845,8 @@ spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
         NR::Point rel = p - pc->p[0];
         GString *dist = SP_PX_TO_METRIC_STRING(NR::L2(rel), desktop->namedview->getDefaultMetric());
         double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
+        if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
+            angle = angle_to_compass (angle);
         pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Curve handle</b>: length %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle"), dist->str, angle);
         g_string_free(dist, FALSE);
 
@@ -870,6 +875,8 @@ spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
         NR::Point rel = p - pc->p[3];
         GString *dist = SP_PX_TO_METRIC_STRING(NR::L2(rel), desktop->namedview->getDefaultMetric());
         double angle = atan2(rel[NR::Y], rel[NR::X]) * 180 / M_PI;
+        if (prefs_get_int_attribute("options.compassangledisplay", "value", 0) != 0)
+            angle = angle_to_compass (angle);
         pc->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>%s</b>: length %s, angle %3.2f&#176;; with <b>Ctrl</b> to snap angle, with <b>Shift</b> to move this handle only"), is_symm? "Curve handle, symmetric" : "Curve handle", dist->str, angle);
         g_string_free(dist, FALSE);
 
