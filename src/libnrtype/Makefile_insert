@@ -6,6 +6,7 @@ libnrtype/clean:
 	rm -f libnrtype/libnrtype.a $(libnrtype_libnrtype_a_OBJECTS)
 
 libnrtype_libnrtype_a_SOURCES =	\
+	libnrtype/boundary-type.h	\
 	libnrtype/font-style-to-pos.cpp	\
 	libnrtype/font-style-to-pos.h	\
 	libnrtype/font-glyph.h	\
@@ -23,6 +24,7 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/RasterFont.h \
 	libnrtype/raster-glyph.h	\
 	libnrtype/raster-position.h	\
+	libnrtype/text-boundary.h	\
 	libnrtype/TextWrapper.cpp \
 	libnrtype/TextWrapper.h \
 	libnrtype/Layout-TNG-Compute.cpp \

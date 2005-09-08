@@ -11,6 +11,7 @@
 
 #include "FontFactory.h"
 #include <libnrtype/font-instance.h>
+#include "libnrtype/text-boundary.h"
 
 #include <svg/svg.h>
 
@@ -598,10 +599,22 @@ static int CmpBound(void const *a, void const *b) {
     if ( !ta.start && tb.start ) return 1;
     return 0;
 }
+/**
+ * Sort this.bounds by b.uni_pos, updating the .other index values appropriately.
+ */
 void text_wrapper::SortBoundaries(void)
 {
-    // the 'other' field needs to be updated after sorting by qsort, so we build the inverse permutation
-    // by means of the ind field
+    /* effic: If this function (including descendents such as the qsort calll) ever takes
+     * non-negligible time, then we can fairly easily improve it by changing MakeBoundaries add in
+     * sorted order.  It would just have to remember for itself the index of each start boundary
+     * for updating the .other fields appropriately.
+     *
+     * A simpler speedup is just to change qsort to std::sort, which can inline the comparison
+     * function.
+     */
+
+    /* The 'other' field needs to be updated after sorting by qsort, so we build the inverse
+     * permutation. */
     for (unsigned i = 0; i < nbBound; i++) {
         bounds[i].old_ix = i;
     }
@@ -686,7 +699,7 @@ void text_wrapper::MakeTextBoundaries(PangoLogAttr *pAttrs, int nAttr)
     }
 }
 
-bool text_wrapper::IsBound(int bnd_type, int g_st, int &c_st)
+bool text_wrapper::IsBound(BoundaryType const bnd_type, int g_st, int &c_st)
 {
     if ( c_st < 0 ) c_st = 0;
     int scan_dir = 0;
@@ -720,7 +733,7 @@ bool text_wrapper::IsBound(int bnd_type, int g_st, int &c_st)
     return false;
 }
 
-bool text_wrapper::Contains(int bnd_type, int g_st, int g_en, int &c_st, int &c_en)
+bool text_wrapper::Contains(BoundaryType const bnd_type, int g_st, int g_en, int &c_st, int &c_en)
 {
     if ( c_st < 0 ) c_st = 0;
     bool found = false;

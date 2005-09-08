@@ -14,35 +14,13 @@
 #include <pango/pango.h>
 
 #include <libnrtype/nrtype-forward.h>
+#include "libnrtype/boundary-type.h"
 
 // miscanellous but useful data for a given text: chunking into logical pieces
 // pieces include sentence/word, needed for example for the word-spacing property,
 // and more important stuff like letter (ie visual letters)
 
-// internal: different kinds of boundaries in a text
-// the algo to determine these is very buggy...
-enum {
-    bnd_none = 0,
-    bnd_char,
-    bnd_word,
-    bnd_sent,
-    bnd_para
-};
-// one boundary
-// boundaries are paired
-typedef struct text_boundary {
-    int uni_pos; // index of the boundary in the text =
-    // first char of the text chunk if 'start' boundary, char right after the boundary otherwise
-    int type;    // kind of boundary
-    bool start;   // is it the beginning of a chunk or its end
-    unsigned other;   // index of the boundary this one is paired with in the array
-    unsigned old_ix;  ///< Temporary storage used solely SortBoundaries.
-    union {   // data for this boundary; usually, one int is enough
-        int i;
-        double f;
-        void *p;
-    } data; 
-} text_boundary;
+struct text_boundary;
 
 // pango converts the text into glyphs, but scatters the info for a given glyph
 // here is a structure holding what inkscape needs to know
@@ -164,8 +142,8 @@ public:
     void AddTwinBoundaries(text_boundary const &is, text_boundary const &ie);
     void SortBoundaries(void);
     void MakeTextBoundaries(PangoLogAttr *pAttrs, int nAttr);
-    bool Contains(int type, int g_st, int g_en, int &c_st, int &c_en);
-    bool IsBound(int type, int g_st, int &c_st);
+    bool Contains(BoundaryType type, int g_st, int g_en, int &c_st, int &c_en);
+    bool IsBound(BoundaryType type, int g_st, int &c_st);
 	
     void MeasureBoxes(void);
     int NbLetter(int g_st, int g_en);
