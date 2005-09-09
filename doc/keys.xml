@@ -670,6 +670,9 @@ RFE</a>).</p>
 <mouse><key><left-drag/></key> <action>select multiple nodes</action></mouse>
 <note>Dragging around nodes does "rubberband" selection; previous node selection is deselected.</note>
 <mouse><key><shift/><left-drag/></key> <action>add nodes to selection</action></mouse>
+<note>Normally, you need to start from a point not over a path or a node to initiate a rubberband.</note> 
+<note>However, if you press Shift before dragging, Inkscape will do rubberband selection even if you start over the path.</note>
+
 </group>
 
 <group>
