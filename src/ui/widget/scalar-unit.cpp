@@ -134,7 +134,9 @@ ScalarUnit::on_unit_changed()
 {
     g_assert(_unit_menu != NULL);
     _suffix->set_label(_unit_menu->getUnitAbbr());
-    initScalar(0,100.0);
+    //On a callback, we just want to change units.  We dont want to
+    //lose our app-specific settings
+    //initScalar(getRangeMin(), getRangeMax());
 }
 
 } // namespace Widget
