@@ -1273,7 +1273,7 @@ sp_nodepath_add_node_near_point(SPItem * item, NR::Point p)
         position.t = 1.0 - position.t;
     }
     Inkscape::NodePath::Node *n = sp_nodepath_line_add_node(e, position.t);
-    sp_nodepath_node_select(n, FALSE, FALSE);
+    sp_nodepath_node_select(n, FALSE, TRUE);
 
     /* fixme: adjust ? */
     sp_nodepath_ensure_ctrls(nodepath);
@@ -2075,7 +2075,7 @@ void sp_nodepath_select_rect(Inkscape::NodePath::Path *nodepath, NRRect *b, gboo
             NR::Point p = node->pos;
 
             if ((p[NR::X] > b->x0) && (p[NR::X] < b->x1) && (p[NR::Y] > b->y0) && (p[NR::Y] < b->y1)) {
-                sp_nodepath_node_select(node, TRUE, FALSE);
+                sp_nodepath_node_select(node, TRUE, TRUE);
             }
         }
     }

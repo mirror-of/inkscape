@@ -47,6 +47,8 @@ struct SPNodeContext {
 	Inkscape::NodePath::Node * grab_node;
 	bool hit;
 	NR::Point curvedrag;
+
+	bool added_node;
 };
 
 struct SPNodeContextClass {

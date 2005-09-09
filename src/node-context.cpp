@@ -207,6 +207,8 @@ sp_node_context_setup(SPEventContext *ec)
     nc->nodepath = NULL;
     ec->shape_knot_holder = NULL;
 
+    nc->added_node = false;
+
     if (item) {
         nc->nodepath = sp_nodepath_new(ec->desktop, item);
         if ( nc->nodepath) {
@@ -437,6 +439,10 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                                         //add a node
                                         sp_nodepath_add_node_near_point(item_ungrouped, p);
                                     } else {
+                                        if (nc->added_node) { // we just received double click, ignore release
+                                            nc->added_node = false;
+                                            break;
+                                        }
                                         //select the segment
                                         if (event->button.state & GDK_SHIFT_MASK) {
                                             sp_nodepath_select_segment_near_point(item_ungrouped, p, true);
@@ -448,6 +454,7 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                                 case GDK_2BUTTON_PRESS:
                                     //add a node
                                     sp_nodepath_add_node_near_point(item_ungrouped, p);
+                                    nc->added_node = true;
                                     break;
                                 default:
                                     break;
