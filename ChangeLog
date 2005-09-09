@@ -1,3 +1,11 @@
+2005-09-08  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.cpp, src/ui/view/view.cpp:
+	  removed placement new signal construction
+	* src/desktop.cpp:   selection is no longer anchored
+	* src/desktop.cpp, src/desktop.h:   further cleanup
+	* src/main.cpp:   minor changes in doxygen main page
+
 2005-09-08  MenTaLguY  <mental@rydia.net>
 
     * src/xml/document.h, src/xml/session.h, src/xml/simple-session.cpp,
