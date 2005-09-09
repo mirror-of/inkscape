@@ -38,6 +38,10 @@ public:
     void commit();
     Inkscape::XML::Event *commitUndoable();
 
+    Node *createElementNode(char const *name);
+    Node *createTextNode(char const *content);
+    Node *createCommentNode(char const *content);
+
     Session &session() { return *this; }
 
     void notifyChildAdded(Inkscape::XML::Node &parent, Inkscape::XML::Node &child, Inkscape::XML::Node *prev);

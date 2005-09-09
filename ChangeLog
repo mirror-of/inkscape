@@ -1,3 +1,11 @@
+2005-09-08  MenTaLguY  <mental@rydia.net>
+
+    * src/xml/document.h, src/xml/session.h, src/xml/simple-session.cpp,
+	  src/xml/simple-session.h:
+
+	  Add Session and Document createElementNode, createCommentNode,
+	  and createTextNode methods
+
 2005-09-06  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/desktop-handles.h, src/desktop-handles.cpp:

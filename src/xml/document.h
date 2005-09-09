@@ -16,11 +16,22 @@
 #define SEEN_INKSCAPE_XML_SP_REPR_DOC_H
 
 #include "xml/node.h"
+#include "xml/session.h"
 
 namespace Inkscape {
 namespace XML {
 
 struct Document : virtual public Node {
+public:
+    Node *createElementNode(char const *name) {
+        session()->createElementNode(name);
+    }
+    Node *createTextNode(char const *content) {
+        session()->createTextNode(content);
+    }
+    Node *createCommentNode(char const *content) {
+        session()->createCommentNode(content);
+    }
 };
 
 }
