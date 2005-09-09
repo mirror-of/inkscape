@@ -448,12 +448,18 @@ public:
 
 
     /**
-     *
+     *  Normally not called directly unless for string parsing testing
      */
     virtual bool parse(const DOMString &str);
 
     /**
-     * This is the big one.
+     * Normally not called directly except for testing.
+     */
+    virtual NodeList execute(const Node *root, std::vector<Token> &toks);
+
+    /**
+     * This is the big one. Called by the xpath-dom api to fetch
+     * nodes from a DOM tree.
      */
     virtual NodeList evaluate(const Node *root, const DOMString &str);
 
@@ -765,6 +771,10 @@ private:
 
 
 
+    //#################################
+    //# DATA ITEMS
+    //#################################
+
     /**
      *
      */
@@ -796,8 +806,15 @@ private:
     double number;
 
 
+    /**
+     *  The result of the first lexical scan
+     */
     std::vector<LexTok> lexicalTokens;
 
+    /**
+     *  The result of parsing.  If parsing was successful, then
+     *  this is executable via execute()
+     */
     std::vector<Token> tokens;
 
 

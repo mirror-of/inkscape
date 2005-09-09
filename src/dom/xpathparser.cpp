@@ -1803,10 +1803,15 @@ int XPathParser::getExprWhitespace(int p0, int depth)
 
 
 
+
+
 //#########################################################################
 //# H I G H    L E V E L    P A R S I N G
 //#########################################################################
 
+/**
+ * Parse a candidate XPath string.  Leave a copy in 'tokens.'
+ */
 bool XPathParser::parse(const DOMString &xpathString)
 {
     int p0 = 0;
@@ -1822,6 +1827,8 @@ bool XPathParser::parse(const DOMString &xpathString)
     lexicalScan();
     lexicalTokenDump();
 
+    tokens.clear();//Get ready to store new tokens
+    
     int p = getLocationPath(p0, 0);
 
     parsebuf = NULL;
@@ -1836,16 +1843,55 @@ bool XPathParser::parse(const DOMString &xpathString)
 }
 
 
+
+
+
 //#########################################################################
 //# E V A L U A T E
 //#########################################################################
 
-NodeList XPathParser::evaluate(const Node *root, const DOMString &str)
+/**
+ *  This method "executes" a list of Tokens in the context of a DOM root
+ *  Node, returning a list of Nodes that match the xpath expression.
+ */ 
+NodeList XPathParser::execute(const Node *root, 
+                              std::vector<Token> &toks)
 {
     NodeList list;
 
+    if (!root)
+        return list;
+        
+    //### Execute the token list
+    std::vector<Token>::iterator iter;
+    for (iter = toks.begin() ; iter != toks.end() ; iter++)
+        {
+        }
+        
+    return list;
+}
 
 
+
+
+/**
+ * This wraps the two-step call to parse(), then execute() to get a NodeList
+ * of matching DOM nodes
+ */
+NodeList XPathParser::evaluate(const Node *root, const DOMString &xpathString)
+{
+    NodeList list;
+
+    //### Maybe do caching for speed here
+    
+    //### Parse and execute
+    //### Error message can be generated as a side effect
+    if (!parse(xpathString))
+        return list;
+
+    //### Execute the token list
+    list = execute(root, tokens);
+        
     return list;
 }
 
