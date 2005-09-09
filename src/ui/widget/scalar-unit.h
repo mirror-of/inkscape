@@ -45,6 +45,8 @@ public:
 
 protected:
     UnitMenu  *_unit_menu;
+    
+    Glib::ustring lastUnits;
 };
 
 } // namespace Widget

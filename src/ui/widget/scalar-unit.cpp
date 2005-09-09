@@ -88,6 +88,7 @@ ScalarUnit::setUnit(Glib::ustring const &unit) {
     if (!_unit_menu->setUnit(unit)) {
         return false;
     }
+    lastUnits = unit;
     return true;
 }
 
@@ -133,10 +134,13 @@ void
 ScalarUnit::on_unit_changed()
 {
     g_assert(_unit_menu != NULL);
-    _suffix->set_label(_unit_menu->getUnitAbbr());
-    //On a callback, we just want to change units.  We dont want to
-    //lose our app-specific settings
-    //initScalar(getRangeMin(), getRangeMax());
+    Glib::ustring abbr = _unit_menu->getUnitAbbr();
+    _suffix->set_label(abbr);
+    //Show the differences when units are changed
+    double conversion = _unit_menu->getConversion(lastUnits);
+    double convertedVal = Scalar::getValue() / conversion;
+    Scalar::setValue(convertedVal);
+    lastUnits = abbr;
 }
 
 } // namespace Widget
