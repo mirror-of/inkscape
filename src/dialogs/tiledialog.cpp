@@ -11,7 +11,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#define DEBUG_GRID_ARRANGE 1
+//#define DEBUG_GRID_ARRANGE 1
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -150,10 +150,6 @@ void TileDialog::Grid_Arrange ()
         cx = (b.x1 + b.x0)/2;
         cy = (b.y1 + b.y0)/2;
 
-
-        g_print("\n cx = %f cy= %f gridleft=%f",cx,cy,grid_left);
-
-
         if (b.x0 < grid_left) grid_left = b.x0;
         if (b.y0 < grid_top) grid_top = b.y0;
         if (width > col_width) col_width = width;
@@ -259,7 +255,6 @@ void TileDialog::Grid_Arrange ()
     for (a=0;a<NoOfCols; a++){
         if (a<1) col_xs.push_back(0);
         else col_xs.push_back(col_widths[a-1]+paddingx+col_xs[a-1]);
-        g_print("\n Row # = %d x= %f ",a,col_xs[a]);
     }
 
 
@@ -287,8 +282,6 @@ void TileDialog::Grid_Arrange ()
                  row = cnt / NoOfCols;
                  col = cnt % NoOfCols;
 
-                 g_print("\n col = %d row= %d gridleft=%f",col,row,grid_left);
-
                 // original before I started fecking about with it.
                 // new_x = grid_left + (((col_width - width)/2)*HorizAlign) + (( col_width + paddingx ) * (cnt % NoOfCols));
                 // new_y = grid_top + (((row_height - height)/2)*VertAlign) +(( row_height + paddingy ) * (cnt / NoOfCols));
@@ -308,8 +301,6 @@ void TileDialog::Grid_Arrange ()
 
     NRRect b;
             selection->bounds(&b);
-            //g_print("\n NEW b.x0 = %f b.x1= %f b.y0 = %f b.y1= %f",b.x0,b.x1,b.y0,b.y1);
-
 
     sp_document_done (SP_DT_DOCUMENT (desktop));
 
