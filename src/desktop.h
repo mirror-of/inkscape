@@ -17,28 +17,36 @@
  *
  */
 
-/// @see desktop-handles.h for desktop macros.
-
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
-#include <sigc++/sigc++.h>
 #include <gtk/gtktypeutils.h>
-#include "forward.h"
-#include "display/display-forward.h"
-#include "helper/helper-forward.h"
+#include <sigc++/sigc++.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include "gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
-
 #include "ui/view/view.h"
 
 class NRRect;
 class SPCSSAttr;
+struct SPCanvas;
+struct SPCanvasItem;
+struct SPCanvasGroup;
+struct SPDesktopWidget;
+struct SPEventContext;
 struct SPItem;
+struct SPNamedView;
+struct SPObject;
+struct SPStyle;
+
+typedef int sp_verb_t;
 
 namespace Inkscape { 
+  class Application;
+  class MessageContext;
   class Selection; 
   class ObjectHierarchy;
   namespace UI { 
@@ -51,24 +59,11 @@ namespace Inkscape {
   }
 }
 
-
-enum ColorComponent {
-  COMPONENT_R,
-  COMPONENT_G,
-  COMPONENT_B,
-  COMPONENT_A,
-
-  COMPONENT_H,
-  COMPONENT_S,
-  COMPONENT_V,
-
-  COMPONENT_C,
-  COMPONENT_Y,
-  COMPONENT_M,
-  COMPONENT_K
-};
-
-/// Editable view.
+/**
+ * Editable view.
+ *
+ * @see \ref desktop-handles.h for desktop macros.
+ */
 struct SPDesktop : public Inkscape::UI::View::View,
                    public Inkscape::GC::Managed<>,
                    public Inkscape::GC::Finalized,
@@ -76,13 +71,11 @@ struct SPDesktop : public Inkscape::UI::View::View,
 {
 
     SPDesktopWidget           *owner;
-    Inkscape::Application     *inkscape;
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
     SPNamedView               *namedview;
     Inkscape::Selection       *selection;        ///< current selection; will 
                                                  ///< never generally be NULL
     SPEventContext            *event_context;
-    Inkscape::ObjectHierarchy *_layer_hierarchy;
 
     Inkscape::MessageContext *guidesMessageContext() const {
 	return _guides_message_context;
@@ -103,10 +96,8 @@ struct SPDesktop : public Inkscape::UI::View::View,
     NR::Matrix d2w, w2d, doc2dt;
     GList *zooms_past;
     GList *zooms_future;
-    gchar * _reconstruction_old_layer_id;
     unsigned int dkey;
-    gint number;
-    bool active;
+    unsigned int number;
     bool is_fullscreen;
 
     /// \todo fixme: This has to be implemented in different way */
@@ -118,15 +109,14 @@ struct SPDesktop : public Inkscape::UI::View::View,
     guint  gr_point_num;
     bool   gr_fill_or_stroke;   
 
+    Inkscape::ObjectHierarchy *_layer_hierarchy;
+    gchar * _reconstruction_old_layer_id;
+    sigc::signal<void, SPObject *>     _layer_changed_signal;
 
     sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int, SPStyle *, int>::accumulated<StopOnTrue> _query_style_signal;
     sigc::signal<void, sp_verb_t>      _tool_changed;
     
-    sigc::connection connectDestroyed (const sigc::slot<void> & slot) 
-    {
-        return _destroyed_signal.connect (slot);
-    }
     sigc::connection connectEventContextChanged (const sigc::slot<void,SPDesktop*,SPEventContext*> & slot) 
     {
         return _event_context_changed_signal.connect (slot);
@@ -175,7 +165,6 @@ struct SPDesktop : public Inkscape::UI::View::View,
 
     void set_event_context (GtkType type, const gchar *config);
     void push_event_context (GtkType type, const gchar *config, unsigned int key);
-    void pop_event_context (unsigned int key);
 
     void set_coordinate_status (NR::Point p, guint underline);
     SPItem *item_from_list_at_point_bottom (const GSList *list, NR::Point const p) const;
@@ -219,25 +208,16 @@ struct SPDesktop : public Inkscape::UI::View::View,
     virtual void mouseover() {}
     virtual void mouseout() {}
 
-    static void _set_status_message(Inkscape::UI::View::View *view, Inkscape::MessageType type, gchar const *message);
-    // virtual void set_status_message(Inkscape::MessageType type, gchar const *message) { _set_status_message (this, type, message); }
-    static void _layer_activated(SPObject *layer, SPDesktop *desktop);
-    static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
-    static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
-    static void _selection_changed(Inkscape::Selection *selection, SPDesktop *desktop);
-    static void _reconstruction_start(SPDesktop * desktop);
-    static void _reconstruction_finish(SPDesktop * desktop);
-
 private:
+    Inkscape::Application     *inkscape;
     Inkscape::MessageContext  *_guides_message_context;
+    bool active;
+    
     void push_current_zoom (GList**);
 
-    sigc::signal<void>                 _destroyed_signal;
     sigc::signal<void>                 _activate_signal;
     sigc::signal<void>                 _deactivate_signal;
     sigc::signal<void,SPDesktop*,SPEventContext*> _event_context_changed_signal;
-    sigc::signal<void, SPObject *>     _layer_changed_signal;
-    sigc::signal<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
     sigc::signal<void, gpointer>       _tool_subselection_changed;
   
     sigc::connection _activate_connection;
