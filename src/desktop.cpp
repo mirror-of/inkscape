@@ -85,6 +85,12 @@
 
 namespace Inkscape { namespace XML { class Node; }}
 
+static void _layer_activated(SPObject *layer, SPDesktop *desktop);
+static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
+static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
+static void _reconstruction_start(SPDesktop * desktop);
+static void _reconstruction_finish(SPDesktop * desktop);
+
 static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
 
 static void sp_dt_update_snap_distances (SPDesktop *desktop);
@@ -181,22 +187,7 @@ SPDesktop::SPDesktop()
 
     _layer_hierarchy = NULL;
 
-    selection = new Inkscape::Selection (this);
-
-     new (&_activate_signal) sigc::signal<void>();
-    new (&_deactivate_signal) sigc::signal<void>();
-    new (&_set_style_signal) sigc::signal<bool, const SPCSSAttr *, StopOnTrue>();
-    new (&_query_style_signal) sigc::signal<int, SPStyle*,int, StopOnTrue>();
-    new (&_event_context_changed_signal) sigc::signal<void,SPDesktop*,SPEventContext*>();
-    new (&_set_colorcomponent_signal) sigc::signal<bool, ColorComponent, float, bool, bool>();
-    new (&_layer_changed_signal) sigc::signal<void, SPObject *>();
-    new (&_tool_subselection_changed) sigc::signal<void, gpointer>();
-    new (&_tool_changed) sigc::signal<void, sp_verb_t>();
-
-    // foreign signals
-    new (&_sel_modified_connection) sigc::connection();
-    new (&_sel_changed_connection) sigc::connection();
-//fprintf(stderr,"desktop created at %X\n", this);fflush(stderr);
+    selection = Inkscape::GC::release (new Inkscape::Selection (this));
 }
 
 void 
@@ -309,9 +300,9 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
 /* Set up notification of rebuilding the document, this allows
        for saving object related settings in the document. */
     _reconstruction_start_connection =
-        document->connectReconstructionStart(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_start), this));
+        document->connectReconstructionStart(sigc::bind(sigc::ptr_fun(_reconstruction_start), this));
     _reconstruction_finish_connection =
-        document->connectReconstructionFinish(sigc::bind(sigc::ptr_fun(&SPDesktop::_reconstruction_finish), this));
+        document->connectReconstructionFinish(sigc::bind(sigc::ptr_fun(_reconstruction_finish), this));
     _reconstruction_old_layer_id = NULL;
 
     // ?
@@ -350,11 +341,6 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
 
 SPDesktop::~SPDesktop()
 {
-    if (selection) {
-        Inkscape::GC::release(selection);
-        selection = NULL;
-    }
-
     _activate_connection.disconnect();
     _activate_connection.~connection();
     _deactivate_connection.disconnect();
@@ -596,8 +582,6 @@ SPDesktop::change_document (SPDocument *document)
     setDocument (document);
 }
 
-/* Context switching */
-
 /**
  * Make desktop switch event contexts.
  */
@@ -623,7 +607,6 @@ SPDesktop::set_event_context (GtkType type, const gchar *config)
 
 /**
  * Push event context onto desktop's context stack.
- * \see sp_desktop_new()
  */
 void
 SPDesktop::push_event_context (GtkType type, const gchar *config, unsigned int key)
@@ -648,39 +631,6 @@ SPDesktop::push_event_context (GtkType type, const gchar *config, unsigned int k
     event_context = ec;
     sp_event_context_activate (ec);
     _event_context_changed_signal.emit (this, ec);
-}
-
-/**
- * Pop event context from desktop's context stack.
- */
-void
-SPDesktop::pop_event_context (unsigned int key)
-{
-    SPEventContext *ec = NULL;
-
-    if (event_context && event_context->key == key) {
-        g_return_if_fail (event_context);
-        g_return_if_fail (event_context->next);
-        ec = event_context;
-        sp_event_context_deactivate (ec);
-        event_context = ec->next;
-        sp_event_context_activate (event_context);
-        _event_context_changed_signal.emit (this, ec);
-    }
-
-    SPEventContext *ref = event_context;
-    while (ref && ref->next && ref->next->key != key)
-        ref = ref->next;
-
-    if (ref && ref->next) {
-        ec = ref->next;
-        ref->next = ec->next;
-    }
-
-    if (ec) {
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-    }
 }
 
 /**
@@ -1151,6 +1101,13 @@ SPDesktop::shutdown()
     return owner->shutdown();
 }
 
+void 
+SPDesktop::emitToolSubselectionChanged(gpointer data) 
+{
+	_tool_subselection_changed.emit(data);
+	inkscape_subselection_changed (this);
+}
+
 //----------------------------------------------------------------------
 // Callback implementations. The virtual ones are connected by the view.
 
@@ -1193,9 +1150,9 @@ SPDesktop::onDocumentSet (SPDocument *doc)
         delete _layer_hierarchy;
     }
     _layer_hierarchy = new Inkscape::ObjectHierarchy(NULL);
-    _layer_hierarchy->connectAdded(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_activated), this));
-    _layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_deactivated), this));
-    _layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(&SPDesktop::_layer_hierarchy_changed), this));
+    _layer_hierarchy->connectAdded(sigc::bind(sigc::ptr_fun(_layer_activated), this));
+    _layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
+    _layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
     _layer_hierarchy->setTop(SP_DOCUMENT_ROOT(doc));
 
     /// \todo fixme:
@@ -1251,27 +1208,30 @@ SPDesktop::onDocumentResized (gdouble width, gdouble height)
 
 
 /// Callback
-void SPDesktop::_layer_activated(SPObject *layer, SPDesktop *desktop) {
+static void 
+_layer_activated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
     SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::LAYER);
 }
 
 /// Callback
-void SPDesktop::_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
+static void 
+_layer_deactivated(SPObject *layer, SPDesktop *desktop) {
     g_return_if_fail(SP_IS_GROUP(layer));
     SP_GROUP(layer)->setLayerDisplayMode(desktop->dkey, SPGroup::GROUP);
 }
 
 /// Callback
-void SPDesktop::_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
+static void 
+_layer_hierarchy_changed(SPObject *top, SPObject *bottom,
                                          SPDesktop *desktop)
 {
     desktop->_layer_changed_signal.emit (bottom);
 }
 
 /// Called when document is starting to be rebuilt.
-void
-SPDesktop::_reconstruction_start (SPDesktop * desktop)
+static void
+_reconstruction_start (SPDesktop * desktop)
 {
     // printf("Desktop, starting reconstruction\n");
     desktop->_reconstruction_old_layer_id = g_strdup(SP_OBJECT_ID(desktop->currentLayer()));
@@ -1289,8 +1249,8 @@ SPDesktop::_reconstruction_start (SPDesktop * desktop)
 }
 
 /// Called when document rebuild is finished.
-void
-SPDesktop::_reconstruction_finish (SPDesktop * desktop)
+static void
+_reconstruction_finish (SPDesktop * desktop)
 {
     // printf("Desktop, finishing reconstruction\n");
     if (desktop->_reconstruction_old_layer_id == NULL)
@@ -1306,10 +1266,38 @@ SPDesktop::_reconstruction_finish (SPDesktop * desktop)
     return;
 }
 
-void SPDesktop::emitToolSubselectionChanged(gpointer data) {
-	_tool_subselection_changed.emit(data);
-	inkscape_subselection_changed (this);
-}
+/**
+ * Pop event context from desktop's context stack.
+ */
+// void
+// SPDesktop::pop_event_context (unsigned int key)
+// {
+//    SPEventContext *ec = NULL;
+//
+//    if (event_context && event_context->key == key) {
+//        g_return_if_fail (event_context);
+//        g_return_if_fail (event_context->next);
+//        ec = event_context;
+//        sp_event_context_deactivate (ec);
+//        event_context = ec->next;
+//        sp_event_context_activate (event_context);
+//        _event_context_changed_signal.emit (this, ec);
+//    }
+//
+//    SPEventContext *ref = event_context;
+//    while (ref && ref->next && ref->next->key != key)
+//        ref = ref->next;
+//
+//    if (ref && ref->next) {
+//        ec = ref->next;
+//        ref->next = ec->next;
+//    }
+//
+//    if (ec) {
+//        sp_event_context_finish (ec);
+//        g_object_unref (G_OBJECT (ec));
+//    }
+// }
 
 /*
   Local Variables:
