@@ -24,13 +24,13 @@ namespace XML {
 struct Document : virtual public Node {
 public:
     Node *createElementNode(char const *name) {
-        session()->createElementNode(name);
+        return session()->createElementNode(name);
     }
     Node *createTextNode(char const *content) {
-        session()->createTextNode(content);
+        return session()->createTextNode(content);
     }
     Node *createCommentNode(char const *content) {
-        session()->createCommentNode(content);
+        return session()->createCommentNode(content);
     }
 };
 
