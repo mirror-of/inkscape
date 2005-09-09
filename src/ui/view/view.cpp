@@ -84,23 +84,6 @@ View::View()
     _message_stack = new Inkscape::MessageStack();
     _tips_message_context = new Inkscape::MessageContext(_message_stack);
 
-//    new (&_shutdown_signal) sigc::signal<bool,StopOnTrue>();
-    new (&_position_set_signal) sigc::signal<void,double,double>();
-    new (&_resized_signal) sigc::signal<void,double,double>();
-    new (&_redraw_requested_signal) sigc::signal<void>();
-    new (&_document_set_signal) sigc::signal<void,SPDocument*>();
-
-//    new (&_shutdown_connection) sigc::connection();
-    new (&_position_set_connection) sigc::connection();
-    new (&_resized_connection) sigc::connection();
-    new (&_redraw_requested_connection) sigc::connection();
-    new (&_document_set_connection) sigc::connection();
-
-    // foreign signals
-    new (&_message_changed_connection) sigc::connection();
-    new (&_document_uri_set_connection) sigc::connection();
-    new (&_document_resized_connection) sigc::connection();
-
 //    _shutdown_connection = _shutdown_signal.connect (sigc::bind (sigc::ptr_fun (&_onShutdown), this));
     _position_set_connection = _position_set_signal.connect (sigc::bind (sigc::ptr_fun (&_onPositionSet), this));
     _resized_connection = _resized_signal.connect (sigc::bind (sigc::ptr_fun (&_onResized), this));
