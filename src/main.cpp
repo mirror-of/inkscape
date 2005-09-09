@@ -160,10 +160,10 @@
  */
 /** \page UI User Interface Classes and Files
  *
- * - View [\ref ui/view/view.cpp, \ref ui/view/view.h]
+ * - Inkscape::UI::View::View [\ref ui/view/view.cpp, \ref ui/view/view.h]
  *   - Inkscape::UI::View::Edit [\ref ui/view/edit.cpp, \ref ui/view/edit.h]
  *   - SPDesktop [\ref desktop.cpp, \ref desktop-affine.cpp, \ref desktop-events.cpp, \ref desktop-handles.cpp, \ref desktop-style.cpp, \ref desktop.h, \ref desktop-affine.h, \ref desktop-events.h, \ref desktop-handles.h, \ref desktop-style.h]
- *   - SPSVGView [\ref svg-view.cpp, svg-view.h]
+ *   - SPSVGView [\ref svg-view.cpp, \ref svg-view.h]
  *
  * SPDesktopWidget [\ref desktop-widget.h] SPSVGSPViewWidget [\ref svg-view.cpp]
  * SPDocument [\ref document.cpp, \ref document.h] 
@@ -173,8 +173,8 @@
  * SPKnotHolder [\ref knotholder.cpp, \ref knotholder.h, \ref knot-holder-entity.h]
  *
  * [\ref layer-fns.cpp, \ref selection-describer.h]
- * MessageContext [\ref message-context.h] 
- * MessageStack [\ref message-stack.h, \ref message.h] 
+ * Inkscape::MessageContext [\ref message-context.h] 
+ * Inkscape::MessageStack [\ref message-stack.h, \ref message.h] 
  *
  * Snapper, GridSnapper, GuideSnapper [\ref snap.cpp, \ref snap.h]
  *
@@ -194,7 +194,7 @@
  * Media [\ref media.cpp, \ref media.h]
  * [\ref attributes.cpp, \ref attributes.h] 
  *
- * - Inkscape::UriReference [\ref uri-references.cpp, \ref uri-references.h]
+ * - Inkscape::URIReference [\ref uri-references.cpp, \ref uri-references.h]
  *   - SPClipPathReference [\ref sp-clippath.h]
  *   - SPGradientReference [\ref sp-gradient-reference.h]
  *   - SPMarkerReference [\ref sp-marker.h]
@@ -216,7 +216,7 @@
  * 
  * [\ref prefs-utils.cpp] [\ref print.cpp]
  *
- * - Inkscape::GzipBuffer [\ref streams-gzip.h]
+ * - Inkscape::GZipBuffer [\ref streams-gzip.h]
  * - Inkscape::JarBuffer [\ref streams-jar.h]
  * - Inkscape::ZlibBuffer [\ref streams-zlib.h]
  * - Inkscape::URIHandle [\ref streams-handles.h]
@@ -225,7 +225,7 @@
  * Inkscape::URI [\ref uri.h, \ref extract-uri.cpp, \ref uri-references.cpp]
  * Inkscape::BadURIException [\ref bad-uri-exception.h] 
  * 
- * Inkscape::XML::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
+ * Inkscape::Whiteboard::UndoStackObserver [\ref undo-stack-observer.cpp, \ref composite-undo-stack-observer.cpp]
  * [\ref document-undo.cpp]
  * 
  * {\ref dialogs/} [\ref approx-equal.h] [\ref decimal-round.h] [\ref enums.h] [\ref unit-constants.h]
