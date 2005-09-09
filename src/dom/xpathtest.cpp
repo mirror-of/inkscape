@@ -35,6 +35,7 @@
 #include <stdio.h>
 
 using namespace org::w3c::dom;
+using namespace org::w3c::dom::xpath;
 
 
 typedef struct

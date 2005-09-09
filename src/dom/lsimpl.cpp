@@ -175,7 +175,8 @@ bool LSSerializerImpl::write(
                        throw (LSException)
 {
     outbuf = "";
-
+    indent = 0;
+    
     writeNode(nodeArg);
 
     //## Check in order specified in the L&S specs
@@ -219,6 +220,8 @@ bool LSSerializerImpl::writeToURI(const Node *nodeArg,
                                   throw(LSException)
 {
     outbuf = "";
+    indent = 0;
+
     writeNode(nodeArg);
 
     DOMString uri = uriArg;
@@ -242,6 +245,8 @@ DOMString LSSerializerImpl::writeToString(const Node *nodeArg)
                                     throw(dom::DOMException, LSException)
 {
     outbuf = "";
+    indent = 0;
+
     writeNode(nodeArg);
     return outbuf;
 }
@@ -363,8 +368,8 @@ void LSSerializerImpl::writeNode(const Node *nodeArg)
             spaces();
             po("<");
             pos(node->getNodeName());
-            if (nrAttrs>0)
-                pos(newLine);
+            //if (nrAttrs>0)
+            //    pos(newLine);
 
             //### Attributes
             for (int i=0 ; i<nrAttrs ; i++)
@@ -375,17 +380,17 @@ void LSSerializerImpl::writeNode(const Node *nodeArg)
                 po("=\"");
                 pos(attr->getNodeValue());
                 po("\"");
-                pos(newLine);
+                //pos(newLine);
                 }
 
             //### Finish open tag
-            if (nrAttrs>0)
-                spaces();
+            //if (nrAttrs>0)
+            //    spaces();
             po(">");
-            pos(newLine);
+            //pos(newLine);
 
             //### Contents
-            spaces();
+            //spaces();
             pos(node->getNodeValue());
 
             //### Children
@@ -397,7 +402,7 @@ void LSSerializerImpl::writeNode(const Node *nodeArg)
                 }
 
             //### Close tag
-            spaces();
+            //spaces();
             po("</");
             pos(node->getNodeName());
             po(">");

@@ -214,6 +214,7 @@ public:
      */
     LSSerializerImpl()
         {
+        indent = 0;
         }
 
     /**

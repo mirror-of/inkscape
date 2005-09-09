@@ -31,6 +31,15 @@
 #include "xpathparser.h"
 #include "charclass.h"
 
+namespace org
+{
+namespace w3c
+{
+namespace dom
+{
+namespace xpath
+{
+
 
 //#########################################################################
 //# M E S S A G E S
@@ -1798,11 +1807,12 @@ int XPathParser::getExprWhitespace(int p0, int depth)
 //# H I G H    L E V E L    P A R S I N G
 //#########################################################################
 
-bool XPathParser::parse(const DOMString &str)
+bool XPathParser::parse(const DOMString &xpathString)
 {
     int p0 = 0;
 
-
+    DOMString str = xpathString;
+    
     parsebuf = (char *)str.c_str();
     parselen = (int)   str.size();
     position = 0;
@@ -1826,6 +1836,28 @@ bool XPathParser::parse(const DOMString &str)
 }
 
 
+//#########################################################################
+//# E V A L U A T E
+//#########################################################################
+
+NodeList XPathParser::evaluate(const Node *root, const DOMString &str)
+{
+    NodeList list;
+
+
+
+    return list;
+}
+
+
+
+} // namespace xpath
+} // namespace dom
+} // namespace w3c
+} // namespace org
+//#########################################################################
+//# E N D    O F    F I L E
+//#########################################################################
 
 
 

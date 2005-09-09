@@ -37,7 +37,20 @@
 #include <string>
 #include <vector>
 
-typedef std::string DOMString;
+#include "dom.h"
+
+namespace org
+{
+namespace w3c
+{
+namespace dom
+{
+namespace xpath
+{
+
+typedef dom::DOMString DOMString;
+typedef dom::Node Node;
+typedef dom::NodeList  NodeList;
 
 
 
@@ -328,7 +341,8 @@ private:
         sval     = "";
         dval     = 0.0;
         ival     = 0;
-	    }
+        }
+        
     int       type;
     int       location;
     DOMString sval;
@@ -437,6 +451,12 @@ public:
      *
      */
     virtual bool parse(const DOMString &str);
+
+    /**
+     * This is the big one.
+     */
+    virtual NodeList evaluate(const Node *root, const DOMString &str);
+
 
 
 private:
@@ -790,8 +810,18 @@ private:
 
 
 
-
+} // namespace xpath
+} // namespace dom
+} // namespace w3c
+} // namespace org
 #endif /* __XPATHPARSER_H__ */
+//#########################################################################
+//# E N D    O F    F I L E
+//#########################################################################
+
+
+
+
 
 
 
