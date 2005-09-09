@@ -1,3 +1,8 @@
+2005-09-08  Carl Hetherington <inkscape@carlh.net>
+
+	* src/object-edit.cpp: Coding style in SPRect portion.  Add
+	Emacs/vim mode blocks.
+
 2005-09-08  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/desktop.cpp, src/ui/view/view.cpp:
