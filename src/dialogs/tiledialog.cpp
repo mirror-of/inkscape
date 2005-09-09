@@ -11,7 +11,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-//#define DEBUG_GRID_ARRANGE 0
+#define DEBUG_GRID_ARRANGE 1
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -150,20 +150,16 @@ void TileDialog::Grid_Arrange ()
         cx = (b.x1 + b.x0)/2;
         cy = (b.y1 + b.y0)/2;
 
-        #ifdef DEBUG_GRID_ARRANGE
-        g_print("\n cx = %f cy= %f gridleft=%f",cx,cy,grid_left);
-        #endif
 
-        if (cx < grid_left) grid_left = cx;
-        if (cy < grid_top) grid_top = cy;
+        g_print("\n cx = %f cy= %f gridleft=%f",cx,cy,grid_left);
+
+
+        if (b.x0 < grid_left) grid_left = b.x0;
+        if (b.y0 < grid_top) grid_top = b.y0;
         if (width > col_width) col_width = width;
         if (height > row_height) row_height = height;
     }
 
-    /// THIS WAS WRONG, ASSUMED THAT ITS CENTERED.
-
-    grid_top = grid_top - ((row_height / 2)*(2-VertAlign));
-    grid_left = grid_left - ((col_width/2)*(2-HorizAlign));
 
     // require the sorting done before we can calculate row heights etc.
 
@@ -176,7 +172,7 @@ void TileDialog::Grid_Arrange ()
 
     // Calculate individual Row and Column sizes if necessary
 
-    if ((!ColumnWidthButton.get_active()) || (!RowHeightButton.get_active())){
+
         cnt=0;
         const GSList *sizes = sorted;
         for (; sizes != NULL; sizes = sizes->next) {
@@ -189,7 +185,19 @@ void TileDialog::Grid_Arrange ()
             if (height > row_heights[(cnt / NoOfCols)]) row_heights[(cnt / NoOfCols)] = height;
             cnt++;
         }
+
+
+    /// Make sure the top and left of the grid dont move by compensating for align values.
+    if (RowHeightButton.get_active()){
+        grid_top = grid_top - (((row_height - row_heights[0]) / 2)*(VertAlign));
     }
+    if (ColumnWidthButton.get_active()){
+        grid_left = grid_left - (((col_width - col_widths[0]) /2)*(HorizAlign));
+    }
+
+    #ifdef DEBUG_GRID_ARRANGE
+     g_print("\n cx = %f cy= %f gridleft=%f",cx,cy,grid_left);
+    #endif
 
     // Calculate total widths and heights, allowing for columns and rows non uniformly sized.
 
@@ -231,14 +239,27 @@ void TileDialog::Grid_Arrange ()
         paddingy = (fabs (b.y1 - b.y0) - total_row_height) / (NoOfRows -1);
     }
 
+/*
+    Horizontal align  - Left    = 0
+                        Centre  = 1
+                        Right   = 2
+
+    Vertical align    - Top     = 0
+                        Middle  = 1
+                        Bottom  = 2
+
+    X position is calculated by taking the grids left co-ord, adding the distance to the column,
+   then adding 1/2 the spacing multiplied by the align variable above,
+   Y position likewise, takes the top of the grid, adds the y to the current row then adds the padding in to align it.
+
+*/
+
     // Calculate row and column x and y coords required to allow for columns and rows which are non uniformly sized.
 
     for (a=0;a<NoOfCols; a++){
-        if (a<1) {
-            //if (HorizAlign==0) col_xs.push_back(0);
-            col_xs.push_back(0);
-        }
+        if (a<1) col_xs.push_back(0);
         else col_xs.push_back(col_widths[a-1]+paddingx+col_xs[a-1]);
+        g_print("\n Row # = %d x= %f ",a,col_xs[a]);
     }
 
 
@@ -266,6 +287,7 @@ void TileDialog::Grid_Arrange ()
                  row = cnt / NoOfCols;
                  col = cnt % NoOfCols;
 
+                 g_print("\n col = %d row= %d gridleft=%f",col,row,grid_left);
 
                 // original before I started fecking about with it.
                 // new_x = grid_left + (((col_width - width)/2)*HorizAlign) + (( col_width + paddingx ) * (cnt % NoOfCols));
@@ -274,7 +296,7 @@ void TileDialog::Grid_Arrange ()
                  new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
                  new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
 
-                 NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y);
+                 NR::Point move = NR::Point(new_x-b.x0, b.y0 - new_y); // why are the two args the opposite ways round???
                  NR::Matrix const &affine = NR::Matrix(NR::translate(move));
                  sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
                  sp_item_write_transform(item, repr, item->transform,  NULL);
