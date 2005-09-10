@@ -31,6 +31,7 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "display/nr-arena.h"
+#include "xml/repr.h"
 #include <glib.h>
 
 extern "C" {
@@ -88,23 +89,58 @@ IconPreviewPanel::IconPreviewPanel() :
     hot(1),
     refreshButton(0)
 {
-    numEntries = 4;
-    sizes = new int[numEntries];
+    numEntries = 0;
+    Inkscape::XML::Node *things = inkscape_get_repr(INKSCAPE, "iconpreview.sizes.default");
+    if (things) {
+        std::vector<int> rawSizes;
+        for ( Inkscape::XML::Node *child = things->firstChild(); child; child = child->next() )
+        {
+            gchar const *id = child->attribute("id");
+            if ( id )
+            {
+                std::string path("iconpreview.sizes.default.");
+                path += id;
+                gint show = prefs_get_int_attribute_limited( path.c_str(), "show", 1, 0, 1 );
+                gint sizeVal = prefs_get_int_attribute( path.c_str(), "value", -1 );
+                if ( show && (sizeVal > 0) )
+                {
+                    rawSizes.push_back( sizeVal );
+                }
+            }
+        }
+
+        if ( !rawSizes.empty() )
+        {
+            numEntries = rawSizes.size();
+            sizes = new int[numEntries];
+            int i = 0;
+            for ( std::vector<int>::iterator it = rawSizes.begin(); it != rawSizes.end(); ++it, ++i ) {
+                sizes[i] = *it;
+            }
+        }
+    }
+
+    if ( numEntries < 1 )
+    {
+        numEntries = 5;
+        sizes = new int[numEntries];
+        sizes[0] = 16;
+        sizes[1] = 24;
+        sizes[2] = 32;
+        sizes[3] = 48;
+        sizes[5] = 128;
+    }
+
     pixMem = new guchar*[numEntries];
     images = new Gtk::Image*[numEntries];
     labels = new Glib::ustring*[numEntries];
     buttons = new Gtk::ToggleToolButton*[numEntries];
 
-    sizes[0] = 16;
-    labels[0] = new Glib::ustring("16x16");
-    sizes[1] = 24;
-    labels[1] = new Glib::ustring("24x24");
-    sizes[2] = 32;
-    labels[2] = new Glib::ustring("32x32");
-    sizes[3] = 48;
-    labels[3] = new Glib::ustring("48x48");
 
     for ( int i = 0; i < numEntries; i++ ) {
+        char *label = g_strdup_printf(_("%d x %d"), sizes[i], sizes[i]);
+        labels[i] = new Glib::ustring(label);
+        g_free(label);
         pixMem[i] = 0;
         images[i] = 0;
     }
@@ -241,6 +277,17 @@ void IconPreviewPanel::updateMagnify()
 } //namespace Dialogs
 } //namespace UI
 } //namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 
 //#########################################################################
 //## E N D    O F    F I L E
