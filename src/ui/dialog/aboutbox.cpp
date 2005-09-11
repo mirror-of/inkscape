@@ -130,7 +130,7 @@ AboutBox::AboutBox(Gtk::Widget& about_svg_view, gint width, gint height)
     add_button(_("_License"),    INKSCAPE_ABOUT_LICENSE);
     add_button(Gtk::Stock::CLOSE,Gtk::RESPONSE_CLOSE);
 
-    Gtk::Label * label = new Gtk::Label("Inkscape " INKSCAPE_VERSION);
+    Gtk::Label * label = new Gtk::Label("Inkscape " INKSCAPE_VERSION " (" __DATE__ ")");
     label->set_selectable(TRUE);
     label->show();
     get_vbox()->pack_start(*label,FALSE,FALSE);
