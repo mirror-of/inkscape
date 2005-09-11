@@ -1,3 +1,8 @@
+2005-09-11  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* po/nl.po:   replaced all instances of "verkleint" with "verkleind"
+	  (bug #1277695)
+
 2005-09-10  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/preferences-skeleton.h, src/dialogs/iconpreview.cpp:
