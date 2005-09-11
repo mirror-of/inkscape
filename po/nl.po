@@ -1407,7 +1407,7 @@ msgstr "> en < schalen met:"
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in px units)"
 msgstr ""
-"Op > of < drukken vergroot of verkleint de selectie met zoveel pixels"
+"Op > of < drukken vergroot of verkleind de selectie met zoveel pixels"
 
 #: ../src/dialogs/display-settings.cpp:1017
 msgid "Inset/Outset by:"
@@ -1621,7 +1621,7 @@ msgstr "Lijndikte mee schalen"
 #: ../src/dialogs/display-settings.cpp:1290 ../src/select-toolbar.cpp:475
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
-"Wanneer objecten worden vergroot of verkleint, de lijndikte evenveel mee "
+"Wanneer objecten worden vergroot of verkleind, de lijndikte evenveel mee "
 "vergroten of verkleinen"
 
 #: ../src/dialogs/display-settings.cpp:1297
@@ -1631,7 +1631,7 @@ msgstr "Afgeronding van hoeken mee schalen"
 #: ../src/dialogs/display-settings.cpp:1298 ../src/select-toolbar.cpp:487
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
-"Wanneer rechthoeken worden vergroot of verkleint, de straal van de hoek mee "
+"Wanneer rechthoeken worden vergroot of verkleind, de straal van de hoek mee "
 "vergroten of verkleinen"
 
 #: ../src/dialogs/display-settings.cpp:1305
@@ -4590,7 +4590,7 @@ msgid ""
 "with <b>Shift</b> to scale around rotation center"
 msgstr ""
 "De selectie <b>samendrukken of uitrekken</b>; <b>Ctrl</b> behoudt de "
-"verhoudingen; <b>Shift</b> vergroot/verkleint om het draaiings-middelpunt"
+"verhoudingen; <b>Shift</b> vergroot/verkleind om het draaiings-middelpunt"
 
 #: ../src/seltrans.cpp:475
 msgid ""
@@ -4598,7 +4598,7 @@ msgid ""
 "b> to scale around rotation center"
 msgstr ""
 "De selectie <b>vergroten of verkleinen</b>; <b>Ctrl</b> behoudt de "
-"verhoudingen; <b>Shift</b> vergroot/verkleint om het draaiings-middelpunt"
+"verhoudingen; <b>Shift</b> vergroot/verkleind om het draaiings-middelpunt"
 
 #: ../src/seltrans.cpp:479
 #, fuzzy
