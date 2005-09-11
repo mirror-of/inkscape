@@ -1019,7 +1019,23 @@ sp_ui_drag_data_received(GtkWidget *widget,
 
             SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             // Add it to the current layer
-            desktop->currentLayer()->appendChildRepr(newgroup);
+           
+            // Greg's edits to add intelligent positioning of svg drops
+            SPObject *new_obj = NULL;
+            new_obj = desktop->currentLayer()->appendChildRepr(newgroup);
+
+            Inkscape::Selection *selection = SP_DT_SELECTION(desktop);
+            selection->set(SP_ITEM(new_obj));
+            // To move the imported object, we must temporarily set the "transform pattern with
+            // object" option.
+            {
+                int const saved_pref = prefs_get_int_attribute("options.transform", "pattern", 1);
+                prefs_set_int_attribute("options.transform", "pattern", 1);
+                sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
+                NR::Point m( desktop->point() - selection->bounds().midpoint() );
+                sp_selection_move_relative(selection, m);
+                prefs_set_int_attribute("options.transform", "pattern", saved_pref);
+            }
 
             sp_repr_unref(newgroup);
             sp_document_done(doc);
