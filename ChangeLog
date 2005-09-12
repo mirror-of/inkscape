@@ -1,3 +1,7 @@
+2005-09-12  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/widgets/ruler.cpp:   fixed precision problem (bug #1242995)
+
 2005-09-12  Peter Moulder  <pmoulder@bowman.csse.monash.edu.au>
 
 	* src/libnrtype/Layout-TNG-Compute.cpp (Calculator::_measureUnbrokenSpan):
