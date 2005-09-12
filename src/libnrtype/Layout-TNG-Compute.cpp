@@ -300,7 +300,7 @@ class Layout::Calculator
                 return false;
             }
 
-            if (char_attributes.is_line_break || char_attributes.is_white || is_soft_hyphen) {
+            if (char_attributes.is_line_break) {
                 // a suitable position to break at, record where we are
                 *last_emergency_break_span = *last_break_span = *span;
                 if (soft_hyphen_in_word) {
