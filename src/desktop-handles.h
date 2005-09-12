@@ -21,10 +21,9 @@ namespace Inkscape {
     class Selection; 
 }
 
-#define SP_DT_IS_EDITABLE(d) (TRUE)
 #define SP_DESKTOP_SCROLL_LIMIT 4000.0
 #define SP_DESKTOP_ZOOM_MAX 256.0
-#define SP_DESKTOP_ZOOM_MIN 0.03125
+#define SP_DESKTOP_ZOOM_MIN 0.01
 
 #define SP_COORDINATES_UNDERLINE_NONE (0)
 #define SP_COORDINATES_UNDERLINE_X (1 << NR::X)

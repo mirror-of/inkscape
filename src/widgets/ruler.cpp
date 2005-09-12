@@ -243,7 +243,10 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 			 pos, height - length + ythickness);
 
 	  /* draw label */
-	  if (i == 0)
+        double label_spacing_px = (increment*(double)ruler->metric->ruler_scale[scale])/ruler->metric->subdivide[i];
+	  if (i == 0 && 
+				(label_spacing_px > 6*digit_height || tick_index%2 == 0 || cur == 0) && 
+				(label_spacing_px > 3*digit_height || tick_index%4 == 0 ||  cur == 0))
 	    {
 	      sprintf (unit_str, "%d", (int) cur);
 	
@@ -544,7 +547,10 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 			 height + xthickness, pos);
 
 	  /* draw label */
-	  if (i == 0)
+        double label_spacing_px = fabs((increment*(double)ruler->metric->ruler_scale[scale])/ruler->metric->subdivide[i]);
+	  if (i == 0 && 
+				(label_spacing_px > 6*digit_height || tick_index%2 == 0 || cur == 0) && 
+				(label_spacing_px > 3*digit_height || tick_index%4 == 0 || cur == 0))
 	    {
 
 	      sprintf (unit_str, "%d", (int) cur);

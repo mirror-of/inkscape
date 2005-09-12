@@ -884,7 +884,7 @@ SPDesktop::zoom_absolute_keep_point (double cx, double cy, double px, double py,
     // maximum or minimum zoom reached, but there's no exact equality because of rounding errors;
     // this check prevents "sliding" when trying to zoom in at maximum zoom;
     /// \todo someone please fix calculations properly and remove this hack
-    if (fabs(expansion(d2w) - zoom) < 0.025 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01))
+    if (fabs(expansion(d2w) - zoom) < 0.0001*zoom && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.000001))
         return;
 
     NRRect viewbox;

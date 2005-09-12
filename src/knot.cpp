@@ -676,7 +676,6 @@ SPKnot *
 sp_knot_new (SPDesktop * desktop, const gchar *tip)
 {
 	g_return_val_if_fail (desktop != NULL, NULL);
-	g_return_val_if_fail (SP_DT_IS_EDITABLE (desktop), NULL);
 
 	SPKnot * knot = (SPKnot*)g_object_new (SP_TYPE_KNOT, 0);
 
