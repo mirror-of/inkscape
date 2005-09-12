@@ -983,14 +983,18 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
             unsigned span_start_byte_in_source = 0;
             // we'll need to make several spans from each text source, based on the rules described about the UnbrokenSpan definition
             for ( ; ; ) {
-                UnbrokenSpan new_span;
-                unsigned pango_item_bytes;
-                unsigned text_source_bytes;
                 /* we need to change spans at every change of PangoItem, source stream change,
                    or change in one of the attributes altering position/rotation. */
 
-                pango_item_bytes = pango_item_index >= para->pango_items.size() ? 0 : para->pango_items[pango_item_index].item->offset + para->pango_items[pango_item_index].item->length - byte_index_in_para;
-                text_source_bytes = text_source->text_end.base() - text_source->text_begin.base() - span_start_byte_in_source;
+                unsigned const pango_item_bytes = ( pango_item_index >= para->pango_items.size()
+                                                    ? 0
+                                                    : ( para->pango_items[pango_item_index].item->offset
+                                                        + para->pango_items[pango_item_index].item->length
+                                                        - byte_index_in_para ) );
+                unsigned const text_source_bytes = ( text_source->text_end.base()
+                                                     - text_source->text_begin.base()
+                                                     - span_start_byte_in_source );
+                UnbrokenSpan new_span;
                 new_span.text_bytes = std::min(text_source_bytes, pango_item_bytes);
                 new_span.input_stream_first_character = Glib::ustring::const_iterator(text_source->text_begin.base() + span_start_byte_in_source);
                 new_span.char_index_in_para = char_index_in_para + char_index_in_source;
@@ -1197,21 +1201,21 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
                                                std::vector<ChunkInfo> *chunk_info,
                                                LineHeight *line_height) const
 {
-    BrokenSpan new_span, last_span_at_break, last_span_at_emergency_break;
     ChunkInfo new_chunk;
-
     new_chunk.text_width = 0.0;
     new_chunk.whitespace_count = 0;
     new_chunk.scanrun_width = scan_run.width();
     new_chunk.x = scan_run.x_start;
 
     // we haven't done anything yet so the last valid break position is the beginning
+    BrokenSpan last_span_at_break, last_span_at_emergency_break;
     last_span_at_break.start = start_span_pos;
     last_span_at_break.setZero();
     last_span_at_emergency_break.start = start_span_pos;
     last_span_at_emergency_break.setZero();
 
     TRACE("trying chunk from %f to %g", scan_run.x_start, scan_run.x_end);
+    BrokenSpan new_span;
     new_span.end = start_span_pos;
     while (new_span.end.iter_span != para.unbroken_spans.end()) {    // this loops once for each UnbrokenSpan
 
