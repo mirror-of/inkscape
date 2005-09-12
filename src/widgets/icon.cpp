@@ -545,6 +545,15 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
             NRRect dbox;
             sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
 
+            if ( SP_OBJECT_PARENT(object) == NULL )
+            {
+                dbox.x0 = 0;
+                dbox.y0 = 0;
+
+                dbox.x1 = sp_document_width( doc );
+                dbox.y1 = sp_document_height( doc );
+            }
+
             /* This is in document coordinates, i.e. pixels */
             if (!nr_rect_d_test_empty(&dbox)) {
                 NRGC gc(NULL);
