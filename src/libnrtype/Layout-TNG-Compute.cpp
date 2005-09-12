@@ -1049,6 +1049,12 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     // pango_shape() will reorder glyphs in rtl sections which messes us up because
                     // the svg spec requires us to draw glyphs in character order
                     new_span.glyph_string = pango_glyph_string_new();
+                    /* Some assertions intended to help diagnose bug #1277746. */
+                    g_assert( 0 < new_span.text_bytes );
+                    g_assert( span_start_byte_in_source < text_source->text->bytes() );
+                    g_assert( span_start_byte_in_source + new_span.text_bytes <= text_source->text->bytes() );
+                    g_assert( memchr(text_source->text->data() + span_start_byte_in_source, '\0', static_cast<size_t>(new_span.text_bytes))
+                              == NULL );
                     pango_shape(text_source->text->data() + span_start_byte_in_source,
                                 new_span.text_bytes,
                                 &para->pango_items[pango_item_index].item->analysis,
