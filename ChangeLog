@@ -1,3 +1,10 @@
+2005-09-12  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/dialogs/iconpreview.cpp, src/dialogs/iconpreview.h,
+	  src/widgets/icon.cpp:
+	  Icon preview now toggles between selection or whole document.
+	  Fixes REF #1281883.
+
 2005-09-12  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/widgets/ruler.cpp:   fixed precision problem (bug #1242995)

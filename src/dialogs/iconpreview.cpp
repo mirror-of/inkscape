@@ -21,6 +21,7 @@
 
 #include <dialogs/dialog-events.h>
 #include <gtk/gtkdialog.h> //for GTK_RESPONSE* types
+#include <gtkmm/togglebutton.h>
 #include <glibmm/i18n.h>
 #include "interface.h"
 #include "verbs.h"
@@ -30,7 +31,9 @@
 #include "document.h"
 #include "desktop-handles.h"
 #include "selection.h"
+#include "desktop.h"
 #include "display/nr-arena.h"
+#include "sp-root.h"
 #include "xml/repr.h"
 #include <glib.h>
 
@@ -87,7 +90,8 @@ void IconPreviewPanel::on_button_clicked(int which)
 IconPreviewPanel::IconPreviewPanel() :
     Panel(),
     hot(1),
-    refreshButton(0)
+    refreshButton(0),
+    selectionButton(0)
 {
     numEntries = 0;
     Inkscape::XML::Node *things = inkscape_get_repr(INKSCAPE, "iconpreview.sizes.default");
@@ -183,7 +187,17 @@ IconPreviewPanel::IconPreviewPanel() :
     //## The Refresh button
 
 
-    Gtk::HBox* holder = new Gtk::HBox();
+    Gtk::HButtonBox* holder = new Gtk::HButtonBox( Gtk::BUTTONBOX_END );
+
+    selectionButton = new Gtk::ToggleButton(_("Selection")); // , GTK_RESPONSE_APPLY
+    holder->pack_start( *selectionButton, false, false );
+    pack_end( *holder, false, false );
+    tips.set_tip((*selectionButton), _("Selection only or whole document"));
+    selectionButton->signal_clicked().connect( sigc::mem_fun(*this, &IconPreviewPanel::modeToggled) );
+
+    gint val = prefs_get_int_attribute_limited( "iconpreview", "selectionOnly", 0, 0, 1 );
+    selectionButton->set_active( val != 0 );
+
     refreshButton = new Gtk::Button(Gtk::Stock::REFRESH); // , GTK_RESPONSE_APPLY
     holder->pack_end( *refreshButton, false, false );
     pack_end( *holder, false, false );
@@ -206,22 +220,32 @@ void IconPreviewPanel::refreshPreview()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if ( desktop ) {
 
-        Inkscape::Selection * sel = SP_DT_SELECTION(desktop);
-        if ( sel ) {
-            //g_message("found a selection to play with");
+        if ( selectionButton && selectionButton->get_active() )
+        {
+            Inkscape::Selection * sel = SP_DT_SELECTION(desktop);
+            if ( sel ) {
+                //g_message("found a selection to play with");
 
-            GSList const *items = sel->itemList();
-            SPObject *target = 0;
-            while ( items && !target ) {
-                SPItem* item = SP_ITEM( items->data );
-                SPObject * obj = SP_OBJECT(item);
-                gchar const *id = SP_OBJECT_ID( obj );
-                if ( id ) {
-                    target = obj;
+                GSList const *items = sel->itemList();
+                SPObject *target = 0;
+                while ( items && !target ) {
+                    SPItem* item = SP_ITEM( items->data );
+                    SPObject * obj = SP_OBJECT(item);
+                    gchar const *id = SP_OBJECT_ID( obj );
+                    if ( id ) {
+                        target = obj;
+                    }
+
+                    items = g_slist_next(items);
                 }
-
-                items = g_slist_next(items);
+                if ( target ) {
+                    renderPreview(target);
+                }
             }
+        }
+        else
+        {
+            SPObject *target = desktop->currentRoot();
             if ( target ) {
                 renderPreview(target);
             }
@@ -229,13 +253,19 @@ void IconPreviewPanel::refreshPreview()
     }
 }
 
+void IconPreviewPanel::modeToggled()
+{
+    prefs_set_int_attribute( "iconpreview", "selectionOnly", (selectionButton && selectionButton->get_active()) ? 1 : 0 );
+
+    refreshPreview();
+}
 
 void IconPreviewPanel::renderPreview( SPObject* obj )
 {
     SPDocument * doc = SP_OBJECT_DOCUMENT(obj);
     gchar * id = SP_OBJECT_ID(obj);
 
-//     g_message(" setting up to render '%s' as the icon", id );
+//    g_message(" setting up to render '%s' as the icon", id );
 
     NRArenaItem *root = NULL;
 
@@ -243,10 +273,10 @@ void IconPreviewPanel::renderPreview( SPObject* obj )
     NRArena *arena = NRArena::create();
 
     /* Create ArenaItem and set transform */
-    unsigned int visionkey = sp_item_display_key_new (1);
+    unsigned int visionkey = sp_item_display_key_new(1);
 
     /* fixme: Memory manage root if needed (Lauris) */
-    root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)),
+    root = sp_item_invoke_show ( SP_ITEM( SP_DOCUMENT_ROOT(doc) ),
                                  arena, visionkey, SP_ITEM_SHOW_DISPLAY );
 
     for ( int i = 0; i < numEntries; i++ ) {

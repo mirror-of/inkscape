@@ -39,6 +39,7 @@ public:
     static IconPreviewPanel& getInstance();
 
     void refreshPreview();
+    void modeToggled();
 
 private:
     IconPreviewPanel(IconPreviewPanel const &); // no copy
@@ -64,6 +65,7 @@ private:
     Gtk::Label      magLabel;
 
     Gtk::Button           *refreshButton;
+    Gtk::ToggleButton     *selectionButton;
 
     guchar** pixMem;
     Gtk::Image** images;
