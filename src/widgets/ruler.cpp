@@ -14,6 +14,7 @@
  */
 
 #include <gtk/gtkruler.h>
+#include <cmath>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,7 +26,7 @@
 #define MAXIMUM_SUBDIVIDE     5
 #define MAXIMUM_SCALES        10
 
-#define ROUND(x) ((int) ((x) + 0.5))
+#define ROUND(x) int (std::floor ((x) + 0.5000000001))
 
 
 static void sp_hruler_class_init    (SPHRulerClass *klass);
@@ -134,10 +135,10 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
   gint ythickness;
   gint length, ideal_length;
   double lower, upper;		/* Upper and lower limits, in ruler units */
-  gfloat increment;		/* Number of pixels per unit */
+  double increment;		/* Number of pixels per unit */
   gint scale;			/* Number of units per major unit */
-  gfloat subd_incr;
-  gfloat start, end, cur;
+  double subd_incr;
+  double start, end, cur;
   gchar unit_str[32];
   gint digit_height;
   gint text_width;
@@ -185,7 +186,7 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
 
   if ((upper - lower) == 0) 
     return;
-  increment = (gfloat) width / (upper - lower);
+  increment = (double) width / (upper - lower);
 
   /* determine the scale
    *  We calculate the text size as for the vruler instead of using
@@ -207,8 +208,8 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
   length = 0;
   for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--)
     {
-      subd_incr = (gfloat) ruler->metric->ruler_scale[scale] / 
-	          (gfloat) ruler->metric->subdivide[i];
+      subd_incr = ruler->metric->ruler_scale[scale] / 
+	          ruler->metric->subdivide[i];
       if (subd_incr * fabs(increment) <= MINIMUM_INCR) 
 	continue;
 
@@ -258,7 +259,7 @@ sp_hruler_draw_ticks (GtkRuler *ruler)
        * errors in subd_incr.
        */
       ++tick_index;
-      cur = start + (tick_index * subd_incr);
+      cur = start + (((double)tick_index) * (double)ruler->metric->ruler_scale[scale])/ ruler->metric->subdivide[i];
 	}
     }
 }
@@ -433,10 +434,10 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
   gint ythickness;
   gint length, ideal_length;
   double lower, upper;		/* Upper and lower limits, in ruler units */
-  gfloat increment;		/* Number of pixels per unit */
+  double increment;		/* Number of pixels per unit */
   gint scale;			/* Number of units per major unit */
-  gfloat subd_incr;
-  gfloat start, end, cur;
+  double subd_incr;
+  double start, end, cur;
   gchar unit_str[32];
   gchar digit_str[2] = { '\0', '\0' };
   gint digit_height;
@@ -485,7 +486,7 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
 
   if ((upper - lower) == 0)
     return;
-  increment = (gfloat) width / (upper - lower);
+  increment = (double) width / (upper - lower);
 
   /* determine the scale
    *   use the maximum extents of the ruler to determine the largest
@@ -508,8 +509,8 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
   length = 0;
   for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--)
     {
-      subd_incr = (gfloat) ruler->metric->ruler_scale[scale] / 
-	          (gfloat) ruler->metric->subdivide[i];
+      subd_incr = (double) ruler->metric->ruler_scale[scale] / 
+	          (double) ruler->metric->subdivide[i];
       if (subd_incr * fabs(increment) <= MINIMUM_INCR) 
 	continue;
 
@@ -565,7 +566,7 @@ sp_vruler_draw_ticks (GtkRuler *ruler)
        * errors in subd_incr.
        */
       ++tick_index;
-      cur = start + (tick_index * subd_incr);
+      cur = start + (((double)tick_index) * (double)ruler->metric->ruler_scale[scale])/ ruler->metric->subdivide[i];
 	}
     }
 }
