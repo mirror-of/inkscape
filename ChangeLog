@@ -3,6 +3,9 @@
 	* src/object-edit.cpp: Add some comments.  Minor refactoring.
 	Snap points when editing rectangles; partial fix for bug 1282399.
 
+	* packaging/win32/inkscape.nsi: Correct spelling of associations
+	and associated; fix for bug 1283916.
+
 2005-09-12  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/dialogs/iconpreview.cpp, src/dialogs/iconpreview.h,
