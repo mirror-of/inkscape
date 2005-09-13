@@ -16,7 +16,7 @@
 #include <glib/gmessages.h>
 
 unsigned int sp_attribute_lookup(gchar const *key);
-unsigned char const *sp_attribute_name(unsigned char id);
+unsigned char const *sp_attribute_name(unsigned int id);
 
 /**
  * True iff k is a property in SVG, i.e. something that can be written either in a style attribute

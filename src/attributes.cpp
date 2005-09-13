@@ -318,7 +318,7 @@ sp_attribute_lookup(gchar const *key)
 }
 
 unsigned char const *
-sp_attribute_name(unsigned char id)
+sp_attribute_name(unsigned int id)
 {
     if (id >= n_attrs) {
         return NULL;
