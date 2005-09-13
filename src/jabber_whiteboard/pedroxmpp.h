@@ -73,6 +73,7 @@ public:
         subscription = other.subscription;
         group        = other.group;
         show         = other.show;
+        return *this;
         }
     virtual ~XmppUser()
         {}
@@ -399,11 +400,6 @@ public:
     /**
      *
      */
-    virtual void operator=(const XmppEventTarget &other);
-
-    /**
-     *
-     */
     virtual ~XmppEventTarget();
 
 
@@ -507,11 +503,6 @@ public:
      *
      */
     XmppClient(const XmppClient &other);
-
-    /**
-     *
-     */
-    XmppClient &operator=(const XmppClient &other);
 
     /**
      *

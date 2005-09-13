@@ -369,7 +369,7 @@ DOMString Base64Decoder::decodeToString(const DOMString &str)
     decoder.append(str);
     std::vector<unsigned char> ret = decoder.finish();
     DOMString buf;
-    for (int i=0 ; i<ret.size() ; i++)
+    for (unsigned int i=0 ; i<ret.size() ; i++)
         buf.push_back(ret[i]);
     return buf;
 }
@@ -676,16 +676,19 @@ DOMString Md5::hashHex(unsigned char *dataIn, unsigned long len)
 /*
  * Note: this code is harmless on little-endian machines.
  */
+/*
 static void byteReverse(unsigned char *buf, unsigned long longs)
 {
     do
         {
-        unsigned long t = (unsigned long) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
+        unsigned long t = (unsigned long) 
+            ((unsigned) buf[3] << 8 | buf[2]) << 16 |
             ((unsigned) buf[1] << 8 | buf[0]);
         *(unsigned long *) buf = t;
         buf += 4;
         } while (--longs);
 }
+*/
 
 static void md5_memcpy(void *dest, void *src, int n)
 {
@@ -962,6 +965,11 @@ class Runnable
 {
 public:
 
+    Runnable()
+        {}
+    virtual ~Runnable()
+        {}
+        
     /**
      * The method of a delegate class which can
      * be run by a Thread.  Thread is completed when this
@@ -1380,10 +1388,14 @@ bool TcpSocket::connect(const std::string &hostnameArg, int portnoArg)
     return connect();
 }
 
+
+
+#ifdef WITH_SSL
+/*
 static int password_cb(char *buf, int bufLen, int rwflag, void *userdata)
 {
     char *password = "password";
-    if (bufLen < strlen(password)+1)
+    if (bufLen < (int)(strlen(password)+1))
         return 0;
 
     strcpy(buf,password);
@@ -1391,7 +1403,6 @@ static int password_cb(char *buf, int bufLen, int rwflag, void *userdata)
     return ret;
 }
 
-#ifdef WITH_SSL
 static void infoCallback(const SSL *ssl, int where, int ret)
 {
     switch (where)
@@ -1408,7 +1419,9 @@ static void infoCallback(const SSL *ssl, int where, int ret)
             }
         }
 }
+*/
 #endif
+
 
 bool TcpSocket::startTls()
 {
@@ -1645,7 +1658,7 @@ bool TcpSocket::write(char *str)
     if (sslEnabled)
         {
 #ifdef WITH_SSL
-        int r = SSL_write(sslStream, str, len);
+        int r = SSL_write(sslStream, s, len);
         if (r<=0)
             {
             switch(SSL_get_error(sslStream, r))
@@ -1659,7 +1672,7 @@ bool TcpSocket::write(char *str)
         }
     else
         {
-        if (send(sock, str, len, 0) < 0)
+        if (send(sock, s, len, 0) < 0)
         //if (send(sock, &c, 1, 0) < 0)
             {
             printf("write: could not send data\n");
@@ -1729,7 +1742,7 @@ int TcpSocket::read()
         {
         if (recv(sock, (char *)&ch, 1, 0) <= 0)
             {
-            printf("read: could not receive data:%d\n", strerror(errno));
+            printf("read: could not receive data\n");
             disconnect();
             return -1;
             }
@@ -1984,12 +1997,6 @@ XmppEventTarget::XmppEventTarget()
 
 
 XmppEventTarget::XmppEventTarget(const XmppEventTarget &other)
-{
-    listeners         = other.listeners;
-    eventQueueEnabled = other.eventQueueEnabled;
-}
-
-void XmppEventTarget::operator=(const XmppEventTarget &other)
 {
     listeners         = other.listeners;
     eventQueueEnabled = other.eventQueueEnabled;
@@ -2370,17 +2377,10 @@ XmppClient::XmppClient()
 }
 
 
-XmppClient::XmppClient(const XmppClient &other)
+XmppClient::XmppClient(const XmppClient &other) : XmppEventTarget(other)
 {
     init();
     assign(other);
-}
-
-XmppClient &XmppClient::operator=(const XmppClient &other)
-{
-    init();
-    assign(other);
-    return *this;
 }
 
 void XmppClient::assign(const XmppClient &other)
@@ -2446,12 +2446,13 @@ XmppClient::~XmppClient()
 bool XmppClient::pause(unsigned long millis)
 {
     Thread::sleep(millis);
+    return true;
 }
 
 
 static int strIndex(const DOMString &str, char *key)
 {
-    int p = str.find(key);
+    unsigned int p = str.find(key);
     if (p == DOMString::npos)
         return -1;
     return p;
@@ -2465,7 +2466,7 @@ static DOMString toXml(const DOMString &str)
 
 static DOMString trim(const DOMString &str)
 {
-    int i;
+    unsigned int i;
     for (i=0 ; i<str.size() ; i++)
         if (!isspace(str[i]))
             break;
@@ -2626,7 +2627,7 @@ static bool isGroupChat(Element *root)
     if (!root)
         return false;
     std::vector<Element *>elems = root->findElements("x");
-    for (int i=0 ; i<elems.size() ; i++)
+    for (unsigned int i=0 ; i<elems.size() ; i++)
         {
         DOMString xmlns = elems[i]->getAttribute("xmlns");
         //printf("### XMLNS ### %s\n", xmlns.c_str());
@@ -2844,7 +2845,7 @@ bool XmppClient::processIq(Element *root)
     DOMString type  = root->getTagAttribute("iq", "type");
     DOMString xmlns = root->getTagAttribute("query", "xmlns");
 
-    if (id.size()<0)
+    if (id.size()<1)
         return true;
 
     //Group chat
@@ -2985,7 +2986,7 @@ bool XmppClient::processIq(Element *root)
         {
         roster.clear();
         std::vector<Element *>elems = root->findElements("item");
-        for (int i=0 ; i<elems.size() ; i++)
+        for (unsigned int i=0 ; i<elems.size() ; i++)
             {
             Element *item = elems[i];
             DOMString userJid      = item->getAttribute("jid");
@@ -3216,14 +3217,14 @@ bool XmppClient::saslMd5Authenticate()
     DOMString challenge = Base64Decoder::decodeToString(b64challenge);
     status("challenge:'%s'", challenge.c_str());
 
-    int p1 = challenge.find("nonce=\"");
+    unsigned int p1 = challenge.find("nonce=\"");
     if (p1 == DOMString::npos)
         {
         error("login: no SASL nonce sent by server");
         return false;
         }
     p1 += 7;
-    int p2 = challenge.find("\"", p1);
+    unsigned int p2 = challenge.find("\"", p1);
     if (p2 == DOMString::npos)
         {
         error("login: unterminated SASL nonce sent by server");
@@ -3446,7 +3447,7 @@ bool XmppClient::saslAuthenticate()
         }
     bool md5Found = false;
     bool plainFound = false;
-    for (int i=0 ; i<elems.size() ; i++)
+    for (unsigned int i=0 ; i<elems.size() ; i++)
         {
         DOMString mech = elems[i]->getValue();
         if (mech == "DIGEST-MD5")
@@ -3754,7 +3755,7 @@ static bool xmppRosterCompare(const XmppUser& p1, const XmppUser& p2)
 {
     DOMString s1 = p1.group;
     DOMString s2 = p2.group;
-    for (int len=0 ; len<s1.size() && len<s2.size() ; len++)
+    for (unsigned int len=0 ; len<s1.size() && len<s2.size() ; len++)
         {
         int comp = tolower(s1[len]) - tolower(s2[len]);
         if (comp)
@@ -3763,7 +3764,7 @@ static bool xmppRosterCompare(const XmppUser& p1, const XmppUser& p2)
 
     s1 = p1.jid;
     s2 = p2.jid;
-    for (int len=0 ; len<s1.size() && len<s2.size() ; len++)
+    for (unsigned int len=0 ; len<s1.size() && len<s2.size() ; len++)
         {
         int comp = tolower(s1[len]) - tolower(s2[len]);
         if (comp)
@@ -3935,7 +3936,7 @@ static bool xmppUserCompare(const XmppUser& p1, const XmppUser& p2)
     DOMString s1 = p1.nick;
     DOMString s2 = p2.nick;
     int comp = 0;
-    for (int len=0 ; len<s1.size() && len<s2.size() ; len++)
+    for (unsigned int len=0 ; len<s1.size() && len<s2.size() ; len++)
         {
         comp = tolower(s1[len]) - tolower(s2[len]);
         if (comp)
@@ -4149,12 +4150,12 @@ int XmppClient::outputStreamWrite(int streamNr,
 {
     XmppStream *outs = outputStreams[streamNr];
 
-    long outLen = 0;
+    unsigned long outLen = 0;
     unsigned char *p = (unsigned char *)buf;
 
     while (outLen < len)
         {
-        long chunksize = 1024;
+        unsigned long chunksize = 1024;
         if (chunksize + outLen > len)
             chunksize = len - outLen;
 
@@ -4417,13 +4418,13 @@ bool XmppClient::fileSend(const DOMString &destJidArg,
     if (offeredName.size()<1)
         {
         int slashPos = -1;
-        for (int i=0 ; i<fileName.size() ; i++)
+        for (unsigned int i=0 ; i<fileName.size() ; i++)
             {
             int ch = fileName[i];
             if (ch == '/' || ch == '\\')
                 slashPos = i;
             }
-        if (slashPos>=0 && slashPos<=fileName.size()-1)
+        if (slashPos>=0 && slashPos<=(int)(fileName.size()-1))
             {
             offeredName = fileName.substr(slashPos+1,
                                           fileName.size()-slashPos-1);
@@ -4446,7 +4447,6 @@ bool XmppClient::fileSend(const DOMString &destJidArg,
     outf->setPeerId(destJid);
 
     char dtgBuf[81];
-    struct timeval tim;
     struct tm *timeVal = gmtime(&(finfo.st_mtime));
     strftime(dtgBuf, 80, "%Y-%m-%dT%H:%M:%Sz", timeVal);
 
@@ -4592,13 +4592,11 @@ bool XmppClient::fileReceive(const DOMString &fromJid,
         return false;
         }
 
-    unsigned char buf[4097];
     int streamNr = inputStreamOpen(fromJid, streamId, iqId);
     if (streamNr < 0)
         {
         return false;
         }
-
 
 
     Md5 md5;
