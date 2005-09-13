@@ -33,7 +33,9 @@ jabber_whiteboard_SOURCES = \
 	jabber_whiteboard/session-file-player.cpp \
 	jabber_whiteboard/message-queue.cpp \
 	jabber_whiteboard/chat-handler.cpp \
-	jabber_whiteboard/session-manager.cpp 
+	jabber_whiteboard/session-manager.cpp \
+	jabber_whiteboard/pedrodom.cpp \
+	jabber_whiteboard/pedroxmpp.cpp
 endif
 
 jabber_whiteboard_libjabber_whiteboard_a_SOURCES = \
