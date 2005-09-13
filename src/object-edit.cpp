@@ -24,6 +24,10 @@
 #include "sp-offset.h"
 #include "sp-flowtext.h"
 #include "prefs-utils.h"
+#include "inkscape.h"
+#include "snap.h"
+#include "desktop-affine.h"
+#include "desktop-handles.h"
 #include "document.h"
 #include <style.h>
 
@@ -277,26 +281,41 @@ static void sp_rect_ry_set(SPItem *item, const NR::Point &p, const NR::Point &or
     ((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/**
+ *  Remove rounding from a rectangle.
+ */
+static void rect_remove_rounding(SPRect* rect)
+{
+    sp_repr_set_attr(SP_OBJECT_REPR(rect), "rx", NULL);
+    sp_repr_set_attr(SP_OBJECT_REPR(rect), "ry", NULL);
+}
+
+/**
+ *  Called when the horizontal rounding radius knot is clicked.
+ */
 static void sp_rect_rx_knot_click(SPItem *item, guint state)
 {
     SPRect *rect = SP_RECT(item);
     
     if (state & GDK_SHIFT_MASK) {
-        sp_repr_set_attr(SP_OBJECT_REPR(rect), "rx", NULL);
-        sp_repr_set_attr(SP_OBJECT_REPR(rect), "ry", NULL);
+        rect_remove_rounding(rect);
     } else if (state & GDK_CONTROL_MASK) {
+        /* Ctrl-click sets the vertical rounding to be the same as the horizontal */
         sp_repr_set_attr(SP_OBJECT_REPR(rect), "ry", SP_OBJECT_REPR(rect)->attribute("rx"));
     }
 }
 
+/**
+ *  Called when the vertical rounding radius knot is clicked.
+ */
 static void sp_rect_ry_knot_click(SPItem *item, guint state)
 {
     SPRect *rect = SP_RECT(item);
     
     if (state & GDK_SHIFT_MASK) {
-        sp_repr_set_attr(SP_OBJECT_REPR(rect), "rx", NULL);
-        sp_repr_set_attr(SP_OBJECT_REPR(rect), "ry", NULL);
+        rect_remove_rounding(rect);
     } else if (state & GDK_CONTROL_MASK) {
+        /* Ctrl-click sets the vertical rounding to be the same as the horizontal */
         sp_repr_set_attr(SP_OBJECT_REPR(rect), "rx", SP_OBJECT_REPR(rect)->attribute("ry"));
     }
 }
@@ -323,19 +342,29 @@ static NR::Point sp_rect_wh_get(SPItem *item)
     return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed);
 }
 
+static NR::Point rect_snap_knot_position(NR::Point const &p)
+{
+    SPDesktop const *desktop = inkscape_active_desktop();
+    NR::Point s = sp_desktop_dt2root_xy_point(desktop, p);
+    namedview_free_snap_all_types(SP_DT_NAMEDVIEW(desktop), s);
+    return sp_desktop_root2dt_xy_point(desktop, s);
+}
+
 static void sp_rect_wh_set_internal(SPRect *rect, const NR::Point &p, const NR::Point &origin, guint state)
 {
+    NR::Point const s = rect_snap_knot_position(p);
+    
     if (state & GDK_CONTROL_MASK) {
         // original width/height when drag started
-        gdouble w_orig = (origin[NR::X] - rect->x.computed);
-        gdouble h_orig = (origin[NR::Y] - rect->y.computed);
+        gdouble const w_orig = (origin[NR::X] - rect->x.computed);
+        gdouble const h_orig = (origin[NR::Y] - rect->y.computed);
         
         //original ratio
-        gdouble ratio = (w_orig / h_orig);
+        gdouble const ratio = (w_orig / h_orig);
         
         // mouse displacement since drag started
-        gdouble minx = p[NR::X] - origin[NR::X];
-        gdouble miny = p[NR::Y] - origin[NR::Y];
+        gdouble const minx = s[NR::X] - origin[NR::X];
+        gdouble const miny = s[NR::Y] - origin[NR::Y];
         
         if (fabs(minx) > fabs(miny)) {
 
@@ -365,8 +394,8 @@ static void sp_rect_wh_set_internal(SPRect *rect, const NR::Point &p, const NR::
 
     } else {
         // move freely
-        rect->width.computed = MAX(p[NR::X] - rect->x.computed, 0);
-        rect->height.computed = MAX(p[NR::Y] - rect->y.computed, 0);
+        rect->width.computed = MAX(s[NR::X] - rect->x.computed, 0);
+        rect->height.computed = MAX(s[NR::Y] - rect->y.computed, 0);
         rect->width.set = rect->height.set = TRUE;
     }
     
@@ -400,10 +429,12 @@ static void sp_rect_xy_set(SPItem *item, const NR::Point &p, const NR::Point &or
     // original width/height when drag started
     gdouble w_orig = opposite_x - origin[NR::X];
     gdouble h_orig = opposite_y - origin[NR::Y];
+
+    NR::Point const s = rect_snap_knot_position(p);
     
     // mouse displacement since drag started
-    gdouble minx = p[NR::X] - origin[NR::X];
-    gdouble miny = p[NR::Y] - origin[NR::Y];
+    gdouble minx = s[NR::X] - origin[NR::X];
+    gdouble miny = s[NR::Y] - origin[NR::Y];
     
     if (state & GDK_CONTROL_MASK) {
         //original ratio
@@ -412,7 +443,7 @@ static void sp_rect_xy_set(SPItem *item, const NR::Point &p, const NR::Point &or
         if (fabs(minx) > fabs(miny)) {
 
             // snap to horizontal or diagonal
-            rect->x.computed = MIN(p[NR::X], opposite_x);
+            rect->x.computed = MIN(s[NR::X], opposite_x);
             rect->width.computed = MAX(w_orig - minx, 0);
             if (minx != 0 && fabs(miny/minx) > 0.5 * 1/ratio && (SGN(minx) == SGN(miny))) {
                 // closer to the diagonal and in same-sign quarters, change both using ratio
@@ -427,7 +458,7 @@ static void sp_rect_xy_set(SPItem *item, const NR::Point &p, const NR::Point &or
         } else {
 
             // snap to vertical or diagonal
-            rect->y.computed = MIN(p[NR::Y], opposite_y);
+            rect->y.computed = MIN(s[NR::Y], opposite_y);
             rect->height.computed = MAX(h_orig - miny, 0);
             if (miny != 0 && fabs(minx/miny) > 0.5 *ratio && (SGN(minx) == SGN(miny))) {
                 // closer to the diagonal and in same-sign quarters, change both using ratio
@@ -445,9 +476,9 @@ static void sp_rect_xy_set(SPItem *item, const NR::Point &p, const NR::Point &or
         
     } else {
         // move freely
-        rect->x.computed = MIN(p[NR::X], opposite_x);
+        rect->x.computed = MIN(s[NR::X], opposite_x);
         rect->width.computed = MAX(w_orig - minx, 0);
-        rect->y.computed = MIN(p[NR::Y], opposite_y);
+        rect->y.computed = MIN(s[NR::Y], opposite_y);
         rect->height.computed = MAX(h_orig - miny, 0);
         rect->width.set = rect->height.set = rect->x.set = rect->y.set = TRUE;
     }

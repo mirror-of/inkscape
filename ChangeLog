@@ -1,3 +1,8 @@
+2005-09-13  Carl Hetherington <inkscape@carlh.net>
+
+	* src/object-edit.cpp: Add some comments.  Minor refactoring.
+	Snap points when editing rectangles; partial fix for bug 1282399.
+
 2005-09-12  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/dialogs/iconpreview.cpp, src/dialogs/iconpreview.h,
