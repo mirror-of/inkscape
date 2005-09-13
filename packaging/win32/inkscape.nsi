@@ -443,8 +443,8 @@ Section Install
   WriteRegDWORD SHCTX "${PRODUCT_UNINST_KEY}" "NoRepair" "1"
   
   
-  ; create file assoziations, test before if needed
-  DetailPrint "creating file assoziations"
+  ; create file associations, test before if needed
+  DetailPrint "creating file associations"
   ReadRegStr $0 HKCR ".svg" ""
   StrCmp $0 "" 0 +3
     WriteRegStr HKCR ".svg" "" "svgfile"
@@ -528,11 +528,11 @@ Section Uninstall
     RMDir /r "$APPDATA\Inkscape"
   endPurge:
 
-  ; Remove file assoziations
-  DetailPrint "removing file assoziations"
+  ; Remove file associations
+  DetailPrint "removing file associations"
   ClearErrors
   ReadRegStr $0 HKCR ".svg" ""
-  DetailPrint ".svg assoziated as $0"
+  DetailPrint ".svg associated as $0"
   IfErrors endUninstSVGEdit  
     ReadRegStr $1 HKCR "$0\shell\edit\command" ""
 	IfErrors 0 +2  
@@ -547,7 +547,7 @@ Section Uninstall
   
   ClearErrors
   ReadRegStr $2 HKCR ".svgz" ""
-  DetailPrint ".svgz assoziated as $2"
+  DetailPrint ".svgz associated as $2"
   IfErrors endUninstSVGZEdit  
     ReadRegStr $3 HKCR "$2\shell\edit\command" ""
     IfErrors 0 +2  
