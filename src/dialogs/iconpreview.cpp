@@ -188,10 +188,10 @@ IconPreviewPanel::IconPreviewPanel() :
 
 
     Gtk::HButtonBox* holder = new Gtk::HButtonBox( Gtk::BUTTONBOX_END );
+    pack_end( *holder, false, false );
 
     selectionButton = new Gtk::ToggleButton(_("Selection")); // , GTK_RESPONSE_APPLY
     holder->pack_start( *selectionButton, false, false );
-    pack_end( *holder, false, false );
     tips.set_tip((*selectionButton), _("Selection only or whole document"));
     selectionButton->signal_clicked().connect( sigc::mem_fun(*this, &IconPreviewPanel::modeToggled) );
 
@@ -200,7 +200,6 @@ IconPreviewPanel::IconPreviewPanel() :
 
     refreshButton = new Gtk::Button(Gtk::Stock::REFRESH); // , GTK_RESPONSE_APPLY
     holder->pack_end( *refreshButton, false, false );
-    pack_end( *holder, false, false );
     tips.set_tip((*refreshButton), _("Refresh the icons"));
     refreshButton->signal_clicked().connect( sigc::mem_fun(*this, &IconPreviewPanel::refreshPreview) );
 
