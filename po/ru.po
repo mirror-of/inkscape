@@ -6674,7 +6674,7 @@ msgstr "Снять текст с контура"
 
 #: ../src/verbs.cpp:1916
 msgid "Remove Manual _Kerns"
-msgstr "Удалить ручной _кернинг"
+msgstr "Убрать ручной _кернинг"
 
 #. TRANSLATORS: "glyph": An image used in the visual representation of characters;
 #. roughly speaking, how a character looks. A font is a set of glyphs.
