@@ -218,12 +218,11 @@ ChatMessageHandler::_handleError(char const* errcode)
 	Glib::ustring buf;
 	switch (code) {
 		case ErrorCodes::CHAT_HANDLE_IN_USE:
-			// TRANSLATORS: "handle" here refers to the nickname chosen by a Jabber user
-			buf = String::ucompose(_("Chat handle %1 is already in use.  Please choose a different handle."), this->_sm->session_data->chat_handle);
+			buf = String::ucompose(_("Nickname %1 is already in use.  Please choose a different nickname."), this->_sm->session_data->chat_handle);
 			this->_sm->connectionError(buf);
 			break;
 		case ErrorCodes::SERVER_CONNECT_FAILED:
-			buf = _("Connection error encountered while attempting to connect to Jabber conference server.");
+			buf = _("An error was encountered while attempting to connect to the server.");
 			this->_sm->connectionError(buf);
 			break;
 		default:
