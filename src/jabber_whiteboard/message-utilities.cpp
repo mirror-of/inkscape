@@ -50,12 +50,10 @@ MessageUtilities::newObjectMessage(Glib::ustring* msgbuf, KeyToNodeMap& newidsbu
 
 	bool only_add_children = false;
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "newObjectMessage: processing node %p of type %s", node, NodeUtilities::nodeTypeToString(*node).data());
 
 	if (node != NULL) {
 		parent = sp_repr_parent(node);
 		if (parent != NULL) {
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Attempting to find ID for parent node %p (on node %p)", parent, node);
 			parentid = NodeUtilities::findNodeID(*parent, xmt, newnodesbuf);
 			if (parentid.empty()) {
 				g_warning("Parent %p is not being tracked, creating new ID", parent);
@@ -73,7 +71,6 @@ MessageUtilities::newObjectMessage(Glib::ustring* msgbuf, KeyToNodeMap& newidsbu
 		}
 
 		if (ref != NULL) {
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Attempting to find ID for ref node %p (on %p)", ref, node);
 			refid = NodeUtilities::findNodeID(*ref, xmt, newnodesbuf);
 			if (refid.empty() && ref != NULL) {
 				g_warning("Ref %p is not being tracked, creating new ID", ref);
@@ -91,15 +88,12 @@ MessageUtilities::newObjectMessage(Glib::ustring* msgbuf, KeyToNodeMap& newidsbu
 	if (!xmt->isSpecialNode(node->name())) {
 		if (!xmt->isTracking(*node)) {
 			id = xmt->generateKey();	
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting %p with id %s", node, id.c_str());
 			newidsbuf[id] = node;
 			newnodesbuf[node] = id;
 		} else {
 			id = xmt->get(*node);
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Found id %s for node %p; not inserting into new nodes buffers.", id.c_str(), node);
 		}
 	} else {
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Processing special node; not generating key");
 		id = xmt->get(*node);
 		if (id.empty()) {
 			g_warning(_("Node %p (name %s) is a special node, but it could not be found in the node tracker (possible unexpected duplicate?)  Generating unique ID anyway."), node, node->name());
@@ -171,7 +165,6 @@ MessageUtilities::newObjectMessage(Glib::ustring* msgbuf, KeyToNodeMap& newidsbu
 
 	}
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generated message");
 
 	if (!only_collect_nodes && msgbuf != NULL && !id.empty()) {
 		// Collect new object's attributes and append them onto the msgbuf

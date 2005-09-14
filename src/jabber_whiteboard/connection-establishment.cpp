@@ -98,7 +98,6 @@ SessionManager::sendRequestToChatroom(Glib::ustring const& server, Glib::ustring
 void 
 SessionManager::sendConnectRequestResponse(char const* recipientJID, gboolean accepted_request)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "sendConnectRequestResponse");
 	if (accepted_request == TRUE) {
 		this->setRecipient(recipientJID);
 		this->session_data->status.set(IN_WHITEBOARD, 1);
@@ -112,11 +111,9 @@ SessionManager::sendConnectRequestResponse(char const* recipientJID, gboolean ac
 void
 SessionManager::receiveConnectRequest(gchar const* requesterJID)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "receiveConnectRequest");
 	int x, y;
 	Gdk::ModifierType mt;
 	Gdk::Display::get_default()->get_pointer(x, y, mt);
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Pointer is at (%u,%u), modifier: %u", x, y, mt);
 
 	if (mt) {
 		// Attach a polling timeout
@@ -220,7 +217,6 @@ SessionManager::receiveConnectRequestResponse(InvitationResponses response, std:
 			{
 
 			// Create a receive queue for the other peer.
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "%s is creating message queue for %s", lm_connection_get_jid(this->session_data->connection), sender.c_str());
 			this->session_data->receive_queues[sender] = new ReceiveMessageQueue(this);
 				
 			KeyToNodeMap newids;
@@ -276,7 +272,6 @@ SessionManager::receiveConnectRequestResponseChat(gchar const* recipient)
 
 	KeyToNodeMap newids;
 	NodeToKeyMap newnodes;
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Received connection request response from %s, sending document", recipient);
 	this->resendDocument(recipient, newids, newnodes);
 }
 
@@ -286,7 +281,6 @@ SessionManager::_pollReceiveConnectRequest(Glib::ustring const recipientJID)
 	int x, y;
 	Gdk::ModifierType mt;
 	Gdk::Display::get_default()->get_pointer(x, y, mt);
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Pointer is at (%u,%u), modifier: %u", x, y, mt);
 
 	if (mt) {
 		return true;

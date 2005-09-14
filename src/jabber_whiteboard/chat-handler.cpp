@@ -62,11 +62,8 @@ ChatMessageHandler::parse(LmMessage* message)
 
 	LmMessageSubType msubtype;
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) Received message %s", lm_connection_get_jid(this->_sm->session_data->connection), lm_message_node_to_string(root));
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Message type: %d", mtype);
 
 	msubtype = lm_message_get_sub_type(message);
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Message subtype: %d", msubtype);
 
 	switch (mtype) {
 		case LM_MESSAGE_TYPE_MESSAGE:
@@ -81,7 +78,6 @@ ChatMessageHandler::parse(LmMessage* message)
 				}
 				case LM_MESSAGE_SUB_TYPE_GROUPCHAT:
 				{
-//					g_log(NULL, G_LOG_LEVEL_DEBUG, "From: %s", from);
 					// FIXME: We should be checking to see if we're in a room in the presence stanzas as indicated in
 					// <http://www.jabber.org/jeps/jep-0045.html#enter-pres> but current versions of mu-conference
 					// don't broadcast presence in the correct order.
@@ -135,14 +131,11 @@ ChatMessageHandler::parse(LmMessage* message)
 					// (see JEP-0045, section 6.3.3 - <http://www.jabber.org/jeps/jep-0045.html#enter-pres>)
 					Glib::ustring sender = lm_message_node_get_attribute(root, MESSAGE_FROM);
 					Glib::ustring chatter = sender.substr(sender.find_last_of('/') + 1, sender.length());
-					g_log(NULL, G_LOG_LEVEL_DEBUG, "Extract chatter name: original string %s, their chat handle %s, my chat handle: %s", sender.data(), chatter.data(), this->_sm->session_data->chat_handle.data());
 					if (chatter != this->_sm->session_data->chat_handle) {
-//						g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting chatter into tracker list");
 						this->_sm->session_data->chatters.insert(g_strdup(chatter.data()));
 						// Make a receive queue for this chatter
 						this->_sm->session_data->receive_queues[sender.raw()] = new ReceiveMessageQueue(this->_sm);
 						
-//						g_log(NULL, G_LOG_LEVEL_DEBUG, "Adding chatter: %s", chatter.data());
 					} else {
 						// If the presence message is from ourselves, then we know that we 
 						// have successfully entered the chatroom _and_ have received the entire room roster,
@@ -181,11 +174,9 @@ LmHandlerResult
 ChatMessageHandler::_finishConnection()
 {
 	if (this->_sm->session_data->status[CONNECTING_TO_CHAT]) {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Chatroom connection established");
 		this->_sm->session_data->status.set(CONNECTING_TO_CHAT, 0);
 
 		if (this->_sm->session_data->chatters.empty()) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Chatters list is empty; %s is assuming controlling role", lm_connection_get_jid(this->_sm->session_data->connection));
 			// We are the only one in the chatroom, so there is no
 			// need for synchronization
 			this->_sm->session_data->status.set(IN_CHATROOM, 1);
@@ -208,7 +199,6 @@ ChatMessageHandler::_finishConnection()
 	//		this->_sm->node_tracker()->dump();
 
 		} else {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Chatters list is not empty; %s is requesting synchronization", lm_connection_get_jid(this->_sm->session_data->connection));
 			this->_sm->session_data->status.set(WAITING_TO_SYNC_TO_CHAT, 1);
 			// Send synchronization request to chatroom
 			this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_REQUEST, 0, "", this->_sm->session_data->recipient, true);
@@ -237,7 +227,6 @@ ChatMessageHandler::_handleError(char const* errcode)
 			this->_sm->connectionError(buf);
 			break;
 		default:
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Chat message error handler received error code %u", code);
 			break;
 	}
 //	} catch (boost::bad_lexical_cast&) {

@@ -110,11 +110,9 @@ XMLNodeTracker::process(KeyToNodeActionList& actions)
 		SerializedEventNodeAction action = *i;
 		switch(action.second) {
 			case NODE_ADD:
-//				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_ADD event: key %s, node %p", action.first.first.c_str(), action.first.second);
 				this->put(action.first.first, *action.first.second);
 				break;
 			case NODE_REMOVE:
-//				g_log(NULL, G_LOG_LEVEL_DEBUG, "NODE_REMOVE event: key %s, node %p", action.first.first.c_str(), action.first.second);
 		//		this->remove(const_cast< XML::Node& >(*action.first.second));
 				break;
 			default:
@@ -194,7 +192,6 @@ XMLNodeTracker::isRootNode(XML::Node& node)
 void
 XMLNodeTracker::remove(std::string& key)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node with key %s", key.c_str());
 	if (this->isTracking(key)) {
 		XML::Node* element = this->get(key);
 		this->_keyToNode.erase(key);
@@ -205,7 +202,6 @@ XMLNodeTracker::remove(std::string& key)
 void
 XMLNodeTracker::remove(XML::Node& node)
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node %p", &node);
 	if (this->isTracking(node)) {
 		std::string const element = this->get(node);
 		this->_nodeToKey.erase(&node);

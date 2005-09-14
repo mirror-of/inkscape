@@ -28,14 +28,12 @@ namespace Whiteboard {
 SessionFile::SessionFile(Glib::ustring const& filename, bool reading, bool compress) : _filename(filename), _compress(compress), _reading(reading)
 {
 	try {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Opening file %s, reading=%d", filename.c_str(), reading);
 
 		if (!reading) {
 			this->fptr = Glib::IOChannel::create_from_file(filename, "w+");
 		} else {
 			this->fptr = Glib::IOChannel::create_from_file(filename, "r");
 		}
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionFile ctor: fptr=%p", &this->fptr);
 		this->_ateof = false;
 	} catch (Glib::FileError) {
 		throw;
@@ -44,7 +42,6 @@ SessionFile::SessionFile(Glib::ustring const& filename, bool reading, bool compr
 
 SessionFile::~SessionFile() 
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionFile destructor");
 	if (!this->_reading) {
 		this->commit();
 	}
@@ -72,7 +69,6 @@ SessionFile::nextMessageFrom(gint64 from, Glib::ustring& buf)
 				this->fptr->seek(accum);
 				MessageUtilities::getFirstMessageTag(part, line);
 				buf += line;
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "tag: %s", part.tag.c_str());
 				line.clear();
 			}
 		} 

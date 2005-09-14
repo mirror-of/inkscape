@@ -63,7 +63,6 @@ WhiteboardShareWithChatroomDialogImpl::setSessionManager()
 	this->_desktop = SP_ACTIVE_DESKTOP;
 	this->_sm = SP_ACTIVE_DESKTOP->whiteboard_session_manager();
 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "desktop=%p _sm=%p", this->_desktop, this->_sm);
 }
 
 

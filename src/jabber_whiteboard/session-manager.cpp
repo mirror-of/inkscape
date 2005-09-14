@@ -19,9 +19,6 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/messagedialog.h>
 
-//#include <boost/lexical_cast.hpp>
-//#include <boost/function.hpp>
-
 #include "gc-anchored.h"
 
 #include "xml/repr.h"
@@ -67,7 +64,6 @@ static bool lm_initialize_called = false;
 
 SessionData::SessionData(SessionManager *sm)
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionData constructor called.");
 	this->_sm = sm;
 	this->recipient = NULL;
 	this->connection = NULL;
@@ -75,7 +71,6 @@ SessionData::SessionData(SessionManager *sm)
 	this->ignoreFurtherSSLErrors = false;
 	this->send_queue = new SendMessageQueue(sm);
 	this->sequence_number = 1;
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionData construction complete.");
 }
 
 SessionData::~SessionData()
@@ -89,7 +84,6 @@ SessionData::~SessionData()
 
 SessionManager::SessionManager(::SPDesktop *desktop) 
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Constructing SessionManager.");
 
 	// Initialize private members to NULL to facilitate deletion in destructor
 	this->_myDoc = NULL;
@@ -110,7 +104,6 @@ SessionManager::SessionManager(::SPDesktop *desktop)
 		g_error("Initializing SessionManager on null document object!");
 	}
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Completed SessionManager construction.");
 
 #ifdef WIN32
     //# lm_initialize() must be called before any network code
@@ -125,7 +118,6 @@ SessionManager::SessionManager(::SPDesktop *desktop)
 
 SessionManager::~SessionManager()
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Destructing SessionManager.");
 
 	if (this->session_data) {
 		if (this->session_data->status[IN_WHITEBOARD]) {
@@ -170,7 +162,6 @@ SessionManager::~SessionManager()
 
 	Inkscape::GC::release(this->_myDoc);
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "SessionManager destruction complete.");
 }
 
 void
@@ -221,14 +212,12 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 
 	if (usessl) {
 		if (lm_ssl_is_supported()) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Initializing SSL");
 			this->session_data->ssl = lm_ssl_new(NULL, ssl_error_handler, reinterpret_cast< gpointer >(this), NULL);
 
 			lm_ssl_ref(this->session_data->ssl);
 		} else {
 			return SSL_INITIALIZATION_ERROR;
 		}
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting SSL");
 		lm_connection_set_ssl(this->session_data->connection, this->session_data->ssl);
 	}
 
@@ -244,18 +233,20 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	// 	This, of course, is an invitation to anyone more capable than me
 	// 	to convert this from synchronous to asynchronous Loudmouth calls.
 	if (!lm_connection_open_and_block(this->session_data->connection, &error)) {
-		g_warning("Failed to open: %s", error->message);
-		delete error;
+		if (error != NULL) {
+			g_warning("Failed to open: %s", error->message);
+		}
 		return FAILED_TO_CONNECT;
 	}
 
 	// Authenticate
 	if (!lm_connection_authenticate_and_block(this->session_data->connection, username.c_str(), pw.c_str(), RESOURCE_NAME, &error)) {
-		g_warning("Failed to authenticate: %s", error->message);
+		if (error != NULL) {
+			g_warning("Failed to authenticate: %s", error->message);
+		}
 		lm_connection_close(this->session_data->connection, NULL);
 		lm_connection_unref(this->session_data->connection);
 		this->session_data->connection = NULL;
-		delete error;
 		return INVALID_AUTH;
 	}
 
@@ -274,11 +265,12 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 	// Send presence message to server
 	m = lm_message_new_with_sub_type(NULL, LM_MESSAGE_TYPE_PRESENCE, LM_MESSAGE_SUB_TYPE_NOT_SET);
 	if (!lm_connection_send(this->session_data->connection, m, &error)) {
-		g_warning("Presence message could not be sent: %s", error->message);
+		if (error != NULL) {
+			g_warning("Presence message could not be sent: %s", error->message);
+		}
 		lm_connection_close(this->session_data->connection, NULL);
 		lm_connection_unref(this->session_data->connection);
 		this->session_data->connection = NULL;
-		delete error;
 		return FAILED_TO_CONNECT;
 	}
 
@@ -290,7 +282,6 @@ SessionManager::connectToServer(Glib::ustring const& server, Glib::ustring const
 
 	this->_setVerbSensitivity(ESTABLISHED_CONNECTION);
 
-	delete error;
 	return CONNECT_SUCCESS;
 }
 
@@ -390,7 +381,6 @@ SessionManager::disconnectFromDocument()
 void
 SessionManager::closeSession()
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Closing whiteboard session.");
 
 	if (this->session_data->status[IN_WHITEBOARD]) {
 		this->session_data->status.set(IN_WHITEBOARD, 0);
@@ -419,7 +409,6 @@ SessionManager::closeSession()
 
 
 	this->setRecipient(NULL);
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Whiteboard session closed.");
 }
 
 void
@@ -432,7 +421,6 @@ SessionManager::setRecipient(char const* recipientJID)
 	if (recipientJID == NULL) {
 		this->session_data->recipient = NULL;
 	} else {
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting recipient to %s", recipientJID);
 		this->session_data->recipient = g_strdup(recipientJID);
 	}
 }
@@ -441,7 +429,6 @@ void
 SessionManager::sendChange(Glib::ustring const& msg, MessageType type, std::string const& recipientJID, bool chatroom)
 {
 	if (!this->session_data->status[IN_WHITEBOARD]) {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "Not in whiteboard; exiting sendChange");
 		return;
 	}
 
@@ -450,7 +437,6 @@ SessionManager::sendChange(Glib::ustring const& msg, MessageType type, std::stri
 		recipient = this->session_data->recipient;
 	}
 		
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Inserting change: from %s to %s, seq %u, message: %s", lm_connection_get_jid(this->session_data->connection), recipient.c_str(), this->session_data->sequence_number, msg->c_str());
 
 	switch (type) {
 		case DOCUMENT_BEGIN:
@@ -476,7 +462,6 @@ SessionManager::sendChange(Glib::ustring const& msg, MessageType type, std::stri
 int
 SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::ustring const& msg, char const* recipientJID, bool chatroom)
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "sendMessage, message type %s", MessageHandler::ink_type_to_string(msgtype));
 	LmMessage* m;
 	GError* error = NULL;
 	char* type, * seq;
@@ -485,7 +470,6 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 		g_warning("Null recipient JID specified; not sending message.");
 		return NO_RECIPIENT_JID;
 	} else {
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending to %s", recipientJID);
 	}
 
 	// create message
@@ -515,9 +499,7 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 	// add message body
 	if (!msg.empty()) {
 		lm_message_node_add_child(m->node, MESSAGE_BODY, msg.c_str());
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending message from %s to %s: type %s, %s", lm_connection_get_jid(this->session_data->connection), recipientJID, MessageHandler::ink_type_to_string(msgtype), msg->data());
 	} else {
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Sending message from %s to %s: type %s", lm_connection_get_jid(this->session_data->connection), recipientJID, MessageHandler::ink_type_to_string(msgtype));
 	}
 
 	// add sequence number
@@ -571,7 +553,6 @@ SessionManager::sendMessage(MessageType msgtype, unsigned int sequence, Glib::us
 		return CONNECTION_ERROR;
 	}
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Message sent");
 	lm_message_unref(m);
 	return SEND_SUCCESS;
 }
@@ -634,7 +615,6 @@ SessionManager::resendDocument(char const* recipientJID, KeyToNodeMap& newidsbuf
 void
 SessionManager::receiveChange(Glib::ustring const& changemsg)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) receiveChange operating on %s", lm_connection_get_jid(this->session_data->connection), changemsg.c_str());
 
 	struct Node part;
 
@@ -669,7 +649,6 @@ SessionManager::receiveChange(Glib::ustring const& changemsg)
 			msgcopy.erase(0, part.next_pos);
 
 		} else if (part.tag == MESSAGE_COMMIT) {
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Committing changes");
 			// Retrieve the deserialized event log, node actions, and nodes with updated attributes
 			XML::Event* log = this->_myDeserializer->getEventLog();
 			KeyToNodeActionList& node_changes = this->_myDeserializer->getNodeTrackerActions();
@@ -698,7 +677,6 @@ SessionManager::receiveChange(Glib::ustring const& changemsg)
 			this->_myDoc->priv->partial = NULL;
 
 			this->_myDoc->priv->undo = g_slist_prepend(this->_myDoc->priv->undo, log);
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Undo stack: %u", g_slist_length(this->_myDoc->priv->undo));
 
 			// Restore undo sensitivity
 			sp_document_set_undo_sensitive(this->_myDoc, saved);
@@ -759,7 +737,6 @@ SessionManager::loadSessionFile(Glib::ustring filename)
 				delete this->_mySessionFile;
 			}
 			this->_mySessionFile = new SessionFile(filename, true, false);
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Loaded session file %s (%p)", filename.data(), this->_mySessionFile);
 
 			// Initialize objects needed for session playback
 			if (this->_mySessionPlayer == NULL) {
@@ -806,7 +783,6 @@ void
 SessionManager::userDisconnectedFromWhiteboard(std::string const& JID)
 {
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "%s has left the whiteboard session.", JID.c_str());
 	SP_DT_MSGSTACK(this->_myDesktop)->flashF(Inkscape::INFORMATION_MESSAGE, _("<b>%s</b> has <b>left</b> the whiteboard session."), JID.c_str());
 
 	// Inform the user
@@ -966,7 +942,6 @@ void
 SessionManager::_log(Glib::ustring const& message)
 {
 	if (this->_mySessionFile && !this->_mySessionFile->isReadOnly()) {
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Logging message in session file %s: %s", this->_mySessionFile->filename().c_str(), message.c_str());
 		this->_mySessionFile->addMessage(message);
 	}
 }
@@ -975,7 +950,6 @@ void
 SessionManager::_commitLog()
 {
 	if (this->_mySessionFile && !this->_mySessionFile->isReadOnly()) {
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Committing changes to session file %s", this->_mySessionFile->filename().c_str());
 		this->_mySessionFile->commit();
 	}
 }
@@ -1050,7 +1024,7 @@ void
 SessionManager::_setVerbSensitivity(SensitivityMode mode)
 {
 	return;
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "doc: %p", this->_myDoc);
+
 	switch (mode) {
 		case ESTABLISHED_CONNECTION:
 			// Upon successful connection, we can disconnect from the server.

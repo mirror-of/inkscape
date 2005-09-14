@@ -57,7 +57,6 @@ WhiteboardConnectDialogImpl::setSessionManager()
 	this->_desktop = SP_ACTIVE_DESKTOP;
 	this->_sm = SP_ACTIVE_DESKTOP->whiteboard_session_manager();
 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "desktop=%p _sm=%p", this->_desktop, this->_sm);
 }
 
 void
@@ -149,7 +148,6 @@ WhiteboardConnectDialogImpl::_respCallback(int resp)
 				this->_desktop->messageStack()->flash(INFORMATION_MESSAGE, msg.data());
 
 				// Save preferences
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Saving preferences to %s", this->_prefs_path);
 				prefs_set_string_attribute(this->_prefs_path, "server", this->_server.get_text().c_str());
 				break;
 			default:

@@ -53,7 +53,6 @@ Serializer::_newObjectEventHelper(XML::Node& node, XML::Node& child, XML::Node* 
 	} else {
 		// If the child id already exists in the new node buffer, then we've already seen it.
 		if (!this->actions.tryToTrack(&child, NODE_ADD)) {
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %p was previously processed for addition, skipping", &child);
 				return;
 		} else {
 			childid = this->_xnt->generateKey();
@@ -80,7 +79,6 @@ Serializer::_newObjectEventHelper(XML::Node& node, XML::Node& child, XML::Node* 
 
 	Glib::ustring buf = MessageUtilities::makeTagWithContent(MESSAGE_NEWOBJ, childmsg + parentmsg + prevmsg + namemsg + nodetype);
 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating add event for node %p: child=%s parent=%s prev=%s", &child, childid.c_str(), parentid.c_str(), previd.c_str());
 
 	this->_events.push_back(buf);
 
@@ -108,10 +106,8 @@ Serializer::_newObjectEventHelper(XML::Node& node, XML::Node& child, XML::Node* 
 		for(XML::Node* ch = child.firstChild(); ch; ch = ch->next()) {
 			if (ch == child.firstChild()) {
 				// No prev node in this case.
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Recursing.");
 				this->_newObjectEventHelper(child, *ch, NULL, true);
 			} else {
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Recursing.");
 				this->_newObjectEventHelper(child, *ch, prev, true);
 				prev = ch;
 			}
@@ -144,7 +140,6 @@ Serializer::notifyChildRemoved(XML::Node& node, XML::Node& child, XML::Node* pre
 	// 2.  Double-deletes don't make any sense.  If we've seen this node already and if it's
 	// marked for deletion, return.
 	if (!this->actions.tryToTrack(&child, NODE_REMOVE)) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Node %s (%p) has already been marked for deletion, not generating delete message", childid.c_str(), &child);
 			return;
 	} else {
 		// 2a.  Although we do not have to remove all child nodes of this subtree,
@@ -159,7 +154,6 @@ Serializer::notifyChildRemoved(XML::Node& node, XML::Node& child, XML::Node* pre
 	this->_nn.erase(&child);
 	std::string parentid = this->_findOrGenerateNodeID(node);
 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "Generating delete event: child=%s parent=%s", childid.c_str(), parentid.c_str());
 
 	// 4.  Serialize the event.
 	this->_attributes_scanned.erase(childid);

@@ -41,7 +41,6 @@ Callbacks::Callbacks(SessionManager* sm) : _sm(sm)
 
 Callbacks::~Callbacks() 
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Callbacks destructor called.");
 }
 
 bool
@@ -49,7 +48,6 @@ Callbacks::dispatchSendQueue()
 {
 	// If we're not in a whiteboard session, don't dispatch anything
 	if (!(this->_sd->status[IN_WHITEBOARD])) {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "not in whiteboard; not dispatching");
 		return false;
 	}
 
@@ -58,7 +56,6 @@ Callbacks::dispatchSendQueue()
 	LmConnectionState state = lm_connection_get_state(this->_sd->connection);
 
 	if (state != LM_CONNECTION_STATE_OPEN && state != LM_CONNECTION_STATE_AUTHENTICATED) {
-		g_log(NULL, G_LOG_LEVEL_DEBUG, "error: connection lost (current state: %u)", state);
 		SP_DT_MSGSTACK(this->_sm->desktop())->flash(Inkscape::INFORMATION_MESSAGE, _("Jabber connection lost."));
 		return false;
 	}
@@ -70,8 +67,6 @@ Callbacks::dispatchSendQueue()
 
 	// otherwise, send out the first change
 	MessageNode* first = this->_sd->send_queue->first();
-
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Queue size: %u", this->_sd->send_queue->size());
 
 	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("Sending message; %u messages remaining in send queue."), this->_sd->send_queue->size());
 

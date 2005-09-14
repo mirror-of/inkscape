@@ -32,7 +32,6 @@ namespace Whiteboard {
 void
 Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 {
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "deserializeEventAdd");
 	// 1.  Extract required attributes: parent, child, node name, and node type.
 	// If any of these cannot be found, return.
 	std::string parent, child, prev;
@@ -55,7 +54,6 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	KeyToNodeMap::iterator i = this->_newnodes.find(child);
 	if (i != this->_newnodes.end()) {
 		if (this->_node_action_tracker.getAction(i->second) == NODE_ADD) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Adding node %s already marked for addition; ignoring command", child.c_str());
 			return;
 		}
 	}
@@ -104,8 +102,6 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 		if (prevRepr == NULL) {
 			g_warning("Prev node %s could not be found; appending incoming node.  Document may not be synchronized.", prev.c_str());
 			prevRepr = parentRepr->lastChild();
-//			g_warning("Cannot find prev node identified by %s", prev.c_str());
-//			return;
 		}
 	}
 
@@ -153,12 +149,10 @@ Deserializer::deserializeEventAdd(Glib::ustring const& msg)
 	this->_newnodes[child] = childRepr;
 	this->_newkeys[childRepr] = child;
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "child=%p parent=%p prev=%p", childRepr, parentRepr, prevRepr);
 
 	// 8.  Deserialize the event.
 	this->_builder.addChild(*parentRepr, *childRepr, prevRepr);
 	this->_parent_child_map.erase(childRepr);
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Setting parent_child_map[%p] = %p", childRepr, parentRepr);
 	this->_parent_child_map[childRepr] = parentRepr;
 	this->_addOneEvent(this->_builder.detach());
 	Inkscape::GC::release(childRepr);
@@ -188,7 +182,6 @@ Deserializer::deserializeEventDel(Glib::ustring const& msg)
 	KeyToNodeMap::iterator i = this->_newnodes.find(child);
 	if (i != this->_newnodes.end()) {
 		if (this->_node_action_tracker.getAction(i->second) == NODE_REMOVE) {
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Removing node %s already marked for removal; ignoring command", child.c_str());
 			return;
 		}
 	}
@@ -215,7 +208,6 @@ Deserializer::deserializeEventDel(Glib::ustring const& msg)
 		if (childRepr->parent() == parentRepr || this->_parent_child_map[childRepr] == parentRepr) {
 //			this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(child, childRepr), NODE_REMOVE));
 			this->_builder.removeChild(*parentRepr, *childRepr, prevRepr);
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Erasing %p from parent_child_map", childRepr);
 			this->_parent_child_map.erase(childRepr);
 			this->_addOneEvent(this->_builder.detach());
 
@@ -398,11 +390,9 @@ Deserializer::_recursiveMarkForRemoval(XML::Node* node)
 			std::string id = this->_xnt->get(*node);
 			if (!id.empty()) {
 				this->_actions.push_back(SerializedEventNodeAction(KeyNodePair(id, node), NODE_REMOVE));
-				g_log(NULL, G_LOG_LEVEL_DEBUG, "Marked %s (addr: %p) for removal", id.c_str(), node);
 			}
 		} else {
 			this->_actions.push_back(SerializedEventNodeAction(KeyNodePair((*i).second, node), NODE_REMOVE));
-			g_log(NULL, G_LOG_LEVEL_DEBUG, "Marked %s (addr: %p) for removal", i->second.c_str(), node);
 		}
 
 		for (XML::Node* child = node->firstChild(); child; child = child->next()) {

@@ -76,7 +76,6 @@ MessageHandler::_hasValidReceiveContext(LmMessage* message)
 	std::bitset< NUM_FLAGS >& status = this->_sm->session_data->status;
 
 	std::string s1 = status.to_string< char, std::char_traits< char >, std::allocator< char > >();
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Client state for %s: %s", lm_connection_get_jid(this->_sm->session_data->connection), s1.c_str());
 
 
 	if (type == UNKNOWN) {
@@ -120,7 +119,6 @@ MessageHandler::_isValidMessage(LmMessage* message)
 		return false;
 	}
 	
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Message %s is being checked for sanity", lm_message_node_to_string(root));
 
 	// 1.  The message must be of LM_MESSAGE_TYPE_MESSAGE to continue the sanity checks.
 	// If it is not, check to see if it is either
@@ -197,10 +195,8 @@ MessageHandler::_isValidMessage(LmMessage* message)
 		// 4b.
 		// In a chatroom situation, we need to ensure that we don't process messages that
 		// originated from us.
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "Received groupchat message from %s, making sure this isn't us...", sender.data());
 		int cutoff = sender.find_last_of('/') + 1;
 		if (sender.substr(cutoff, sender.length()) == this->_sm->session_data->chat_handle) {
-//			g_log(NULL, G_LOG_LEVEL_DEBUG, "Check 4b failed (message is from us)");
 			return false;
 		}
 		// TODO: 6b.  If the message is NOT from the Jabber server, then check the protocol version.
@@ -210,7 +206,6 @@ MessageHandler::_isValidMessage(LmMessage* message)
 	// Correct context has not yet been established, however; that is the job of the default handler
 	// and hasValidReceiveContext.
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Message passed");
 	return true;
 }
 
@@ -233,7 +228,6 @@ MessageHandler::_getType(LmMessage* message)
 JabberMessage
 MessageHandler::_extractData(LmMessage* message)
 {
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Extracting data from message %p", message);
 
 	JabberMessage jm(message);
 	LmMessageNode* root;
@@ -269,7 +263,6 @@ MessageHandler::_extractData(LmMessage* message)
 		jm.body = "";
 	}
 
-//	g_log(NULL, G_LOG_LEVEL_DEBUG, "Data extraction complete");
 	return jm;
 }
 	
@@ -294,8 +287,6 @@ MessageHandler::_default(LmMessage* message)
 		JabberMessage msg = this->_extractData(message);
 		MessageType type = this->_getType(message);
 
-//		g_log(NULL, G_LOG_LEVEL_DEBUG, "(%s) Handling message: %s", lm_connection_get_jid(this->_sm->session_data->connection), msg.body.c_str());
-//
 		// Call message handler and return instruction value to Loudmouth
 
 		return (*this->_received_message_processors[type])(type, msg);
