@@ -1,3 +1,11 @@
+2005-09-13  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.h, src/desktop.cpp, src/svg-view.h, src/svg-view.cpp,
+	  src/ui/view/view.h, src/ui/view/view.cpp, src/ui/view/edit.h:
+	    View::setDocument() did not call same function in subclass
+	* src/widgets/select-toolbar.cpp:   removed usage of SP_DT_WIDGET
+	* src/desktop.cpp:   removed last sp_desktop_* function names
+
 2005-09-13  Carl Hetherington <inkscape@carlh.net>
 
 	* src/object-edit.cpp: Add some comments.  Minor refactoring.
