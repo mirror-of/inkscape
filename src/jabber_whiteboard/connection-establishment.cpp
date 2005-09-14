@@ -134,7 +134,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 	if (sp_document_repr_root(this->_myDoc)->attribute("sodipodi:modified") == NULL) {
 		primary += String::ucompose(_("Do you wish to accept <b>%1</b>'s whiteboard session invitation?"), requesterJID);
 	} else {
-		primary += String::ucompose(_("You have made changes in the active document window.  Accepting %1's invitation will cause these changes to be lost.  Would you like to accept <b>%1</b>'s invitation in the active document window, or would you like to accept the invitation in a new document window?"), requesterJID);
+		primary += String::ucompose(_("You have made changes in the active document window; accepting <b>%1</b>'s invitation will cause these changes to be lost.  Would you like to accept the invitation in the active document window, or would you like to open a new document window for the whiteboard session?"), requesterJID);
 	}
 
 	// Construct confirmation dialog
