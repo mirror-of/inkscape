@@ -35,7 +35,6 @@ namespace Inkscape {
 namespace Whiteboard {
 
 UndoStackObserver::UndoStackObserver(SessionManager* sm) : _sm(sm), _undoSendEventLocks(0), _redoSendEventLocks(0), _undoCommitSendEventLocks(0) { 
-	g_log(NULL, G_LOG_LEVEL_DEBUG, "UndoStackObserver");
 }
 
 UndoStackObserver::~UndoStackObserver() { }

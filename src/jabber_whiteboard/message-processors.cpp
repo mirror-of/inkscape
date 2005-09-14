@@ -236,7 +236,6 @@ public:
 				break;
 			case CHATROOM_SYNCHRONIZE_REQUEST:
 				if (this->_sm->session_data->status[IN_CHATROOM] && this->_sm->session_data->status[IN_WHITEBOARD]) {
-//					g_log(NULL, G_LOG_LEVEL_DEBUG, "%s received synchronization request from %s", lm_connection_get_jid(this->_sm->session_data->connection), m->sender.c_str());
 					// Send response.  Everyone in the chatroom will do this,
 					// but the client will accept only one response.
 					// The response is sent privately to the client
@@ -245,7 +244,6 @@ public:
 				}
 				break;
 			case CHATROOM_SYNCHRONIZE_RESPONSE:
-//				g_log(NULL, G_LOG_LEVEL_DEBUG, "%s received synchronization response from %s", lm_connection_get_jid(this->_sm->session_data->connection), m->sender.c_str());
 				if (m.sequence != 0) {
 					// Set sequence number
 					this->_sm->session_data->sequence_number = m.sequence;
@@ -259,7 +257,6 @@ public:
 					this->_sm->setupInkscapeInterface();
 					this->_sm->sendMessage(CONNECT_REQUEST_RESPONSE_CHAT, m.sequence, "", m.sender.c_str(), false);
 				} else {
-//					g_log(NULL, G_LOG_LEVEL_DEBUG, "Sequence number from synchronization response was zero; dropping response and trying again.");
 					this->_sm->sendMessage(CHATROOM_SYNCHRONIZE_REQUEST, 0, "", this->_sm->session_data->recipient, true);
 				}
 				break;
