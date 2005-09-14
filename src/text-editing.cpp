@@ -596,6 +596,8 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
     else if (is_line_break_object(end_item))
         move_to_end_of_paragraph(&end_item, &end_text_iter);
 
+    SPObject *common_ancestor = get_common_ancestor(item, start_item, end_item);
+
     if (start_item == end_item) {
         // the quick case where we're deleting stuff all from the same string
         if (SP_IS_STRING(start_item)) {     // always true (if it_start != it_end anyway)
@@ -643,7 +645,6 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inksc
         }
     }
 
-    SPObject *common_ancestor = get_common_ancestor(item, start_item, end_item);
     while (tidy_xml_tree_recursively(common_ancestor));
     te_update_layout_now(item);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
