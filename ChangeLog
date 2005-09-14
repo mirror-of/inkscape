@@ -1,3 +1,7 @@
+2005-09-14  Carl Hetherington <inkscape@carlh.net>
+
+	* src/knot.cpp: coding style.
+
 2005-09-13  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/desktop.h, src/desktop.cpp, src/svg-view.h, src/svg-view.cpp,
