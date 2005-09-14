@@ -85,15 +85,14 @@
 
 namespace Inkscape { namespace XML { class Node; }}
 
+// Callback declarations
 static void _layer_activated(SPObject *layer, SPDesktop *desktop);
 static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);
 static void _layer_hierarchy_changed(SPObject *top, SPObject *bottom, SPDesktop *desktop);
 static void _reconstruction_start(SPDesktop * desktop);
 static void _reconstruction_finish(SPDesktop * desktop);
-
-static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
-
-static void sp_dt_update_snap_distances (SPDesktop *desktop);
+static void _namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
+static void _update_snap_distances (SPDesktop *desktop);
 
 static void
 _onActivate (SPDesktop* dt)
@@ -268,7 +267,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
     doc2dt[5] = sp_document_height (document);
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), doc2dt);
 
-    g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), this);
+    g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (_namedview_modified), this);
 
 
     NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (sp_document_root (document)),
@@ -284,7 +283,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
     /* Ugly hack */
     activate_guides (true);
     /* Ugly hack */
-    sp_dt_namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
+    _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
 
     /* Connect document */
     setDocument (document);
@@ -388,88 +387,6 @@ SPDesktop::~SPDesktop()
 
     g_list_free (zooms_past);
     g_list_free (zooms_future);
-}
-
-/**
- * Namedview_modified callback.
- */
-static void
-sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
-{
-    if (flags & SP_OBJECT_MODIFIED_FLAG) {
-
-        /* Recalculate snap distances */
-        sp_dt_update_snap_distances (desktop);
-
-        /* Show/hide page background */
-        if (nv->pagecolor & 0xff) {
-            sp_canvas_item_show (desktop->table);
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000, 
-                TRUE, nv->pagecolor);
-            sp_canvas_item_move_to_z (desktop->table, 0);
-        } else {
-            sp_canvas_item_hide (desktop->table);
-        }
-
-        /* Show/hide page border */
-        if (nv->showborder) {
-            // show
-            sp_canvas_item_show (desktop->page_border);
-            // set color and shadow
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border, 
-			    nv->bordercolor, FALSE, 0x00000000);
-            if (nv->pageshadow)
-                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
-				nv->pageshadow, nv->bordercolor);
-            // place in the z-order stack
-            if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
-                 sp_canvas_item_move_to_z (desktop->page_border, 2);
-            } else {
-                int order = sp_canvas_item_order (desktop->page_border);
-                int morder = sp_canvas_item_order (desktop->drawing);
-                if (morder > order) sp_canvas_item_raise (desktop->page_border,
-				    morder - order);
-            }
-        } else {
-                sp_canvas_item_hide (desktop->page_border);
-                if (nv->pageshadow)
-                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0, 
-				    0x00000000);
-        }
-	
-        /* Show/hide page shadow */
-        if (nv->showpageshadow && nv->pageshadow) {
-            // show
-            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
-                            nv->pageshadow, nv->bordercolor);
-        } else {
-            // hide
-            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 0, 
-                            0x00000000);
-        }
-
-        
-        
-        
-    }
-}
-
-/**
- * Callback to reset snapper's distances.
- */
-static void
-sp_dt_update_snap_distances (SPDesktop *desktop)
-{
-    SPUnit const &px = sp_unit_get_by_id(SP_UNIT_PX);
-
-    SPNamedView &nv = *desktop->namedview;
-
-    nv.grid_snapper.setDistance(sp_convert_distance_full(nv.gridtolerance,
-                                                         *nv.gridtoleranceunit,
-                                                         px));
-    nv.guide_snapper.setDistance(sp_convert_distance_full(nv.guidetolerance,
-                                                          *nv.guidetoleranceunit,
-                                                          px));
 }
 
 
@@ -1138,7 +1055,7 @@ SPDesktop::onRedrawRequested ()
  * Associate document with desktop.
  */
 void
-SPDesktop::onDocumentSet (SPDocument *doc)
+SPDesktop::setDoc (SPDocument *doc)
 {
     if (doc) {
         sp_namedview_hide (namedview, this);
@@ -1160,7 +1077,7 @@ SPDesktop::onDocumentSet (SPDocument *doc)
         NRArenaItem *ai;
 
         namedview = sp_document_namedview (doc, NULL);
-        g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_dt_namedview_modified), this);
+        g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (_namedview_modified), this);
         number = sp_namedview_viewcount (namedview);
 
         ai = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), 
@@ -1175,7 +1092,7 @@ SPDesktop::onDocumentSet (SPDocument *doc)
         /* Ugly hack */
         activate_guides (true);
         /* Ugly hack */
-        sp_dt_namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
+        _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
     }
 }
 
@@ -1264,6 +1181,88 @@ _reconstruction_finish (SPDesktop * desktop)
     desktop->_reconstruction_old_layer_id = NULL;
     // printf("Desktop, finishing reconstruction end\n");
     return;
+}
+
+/**
+ * Namedview_modified callback.
+ */
+static void
+_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
+{
+    if (flags & SP_OBJECT_MODIFIED_FLAG) {
+
+        /* Recalculate snap distances */
+        _update_snap_distances (desktop);
+
+        /* Show/hide page background */
+        if (nv->pagecolor & 0xff) {
+            sp_canvas_item_show (desktop->table);
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000, 
+                TRUE, nv->pagecolor);
+            sp_canvas_item_move_to_z (desktop->table, 0);
+        } else {
+            sp_canvas_item_hide (desktop->table);
+        }
+
+        /* Show/hide page border */
+        if (nv->showborder) {
+            // show
+            sp_canvas_item_show (desktop->page_border);
+            // set color and shadow
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border, 
+			    nv->bordercolor, FALSE, 0x00000000);
+            if (nv->pageshadow)
+                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
+				nv->pageshadow, nv->bordercolor);
+            // place in the z-order stack
+            if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
+                 sp_canvas_item_move_to_z (desktop->page_border, 2);
+            } else {
+                int order = sp_canvas_item_order (desktop->page_border);
+                int morder = sp_canvas_item_order (desktop->drawing);
+                if (morder > order) sp_canvas_item_raise (desktop->page_border,
+				    morder - order);
+            }
+        } else {
+                sp_canvas_item_hide (desktop->page_border);
+                if (nv->pageshadow)
+                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0, 
+				    0x00000000);
+        }
+	
+        /* Show/hide page shadow */
+        if (nv->showpageshadow && nv->pageshadow) {
+            // show
+            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
+                            nv->pageshadow, nv->bordercolor);
+        } else {
+            // hide
+            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 0, 
+                            0x00000000);
+        }
+
+        
+        
+        
+    }
+}
+
+/**
+ * Callback to reset snapper's distances.
+ */
+static void
+_update_snap_distances (SPDesktop *desktop)
+{
+    SPUnit const &px = sp_unit_get_by_id(SP_UNIT_PX);
+
+    SPNamedView &nv = *desktop->namedview;
+
+    nv.grid_snapper.setDistance(sp_convert_distance_full(nv.gridtolerance,
+                                                         *nv.gridtoleranceunit,
+                                                         px));
+    nv.guide_snapper.setDistance(sp_convert_distance_full(nv.guidetolerance,
+                                                          *nv.guidetoleranceunit,
+                                                          px));
 }
 
 /**
