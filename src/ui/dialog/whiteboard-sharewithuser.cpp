@@ -75,7 +75,7 @@ WhiteboardShareWithUserDialogImpl::_construct()
 	Gtk::VBox* main = this->get_vbox();
 
 	// Construct dialog interface
-	this->_labels[0].set_markup_with_mnemonic(_("_User JID:"));
+	this->_labels[0].set_markup_with_mnemonic(_("_User's Jabber ID:"));
 	this->_labels[0].set_mnemonic_widget(this->_jid);
 	
 	// Buttons
@@ -91,7 +91,7 @@ WhiteboardShareWithUserDialogImpl::_construct()
 	// Construct ListStore for buddy list information
 	this->_buddylistdata = Gtk::ListStore::create(this->_blm);
 	this->_buddylist.set_model(this->_buddylistdata);
-	this->_buddylist.append_column(_("Buddy JID"), this->_blm.jid);
+	this->_buddylist.append_column(_("Buddy List"), this->_blm.jid);
 
 	// Fill buddy list
 	this->_fillBuddyList();
