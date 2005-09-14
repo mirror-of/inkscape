@@ -101,12 +101,12 @@ public:
     // from View
     virtual void mouseover() {}
     virtual void mouseout() {}
-
     virtual bool shutdown() { return true; }
+    virtual void setDoc(SPDocument*) {}
+
     virtual void onPositionSet (double, double) {}
     virtual void onResized (double, double) {}
     virtual void onRedrawRequested() {}
-    virtual void onDocumentSet (SPDocument*) {}
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {}
     virtual void onDocumentURISet (gchar const* uri) {}
     virtual void onDocumentResized (double, double) {}

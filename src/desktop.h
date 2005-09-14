@@ -227,11 +227,11 @@ private:
     sigc::connection _reconstruction_start_connection;
     sigc::connection _reconstruction_finish_connection;
     
+    virtual void setDoc (SPDocument* doc);
 
     virtual void onPositionSet (double, double);
     virtual void onResized (double, double);
     virtual void onRedrawRequested();
-    virtual void onDocumentSet (SPDocument*);
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message);
     virtual void onDocumentURISet (gchar const* uri);
     virtual void onDocumentResized (double, double);

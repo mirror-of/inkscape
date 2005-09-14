@@ -53,12 +53,6 @@ _onRedrawRequested (View* v)
 }
 
 static void 
-_onDocumentSet (SPDocument* doc, View* v)
-{
-    v->onDocumentSet (doc);
-}
-
-static void 
 _onStatusMessage (Inkscape::MessageType type, gchar const *message, View* v)
 {
 //fprintf(stderr,"type=%d msg=%s v=%X\n",(int)type, message, v);fflush(stderr);
@@ -84,11 +78,9 @@ View::View()
     _message_stack = new Inkscape::MessageStack();
     _tips_message_context = new Inkscape::MessageContext(_message_stack);
 
-//    _shutdown_connection = _shutdown_signal.connect (sigc::bind (sigc::ptr_fun (&_onShutdown), this));
     _position_set_connection = _position_set_signal.connect (sigc::bind (sigc::ptr_fun (&_onPositionSet), this));
     _resized_connection = _resized_signal.connect (sigc::bind (sigc::ptr_fun (&_onResized), this));
     _redraw_requested_connection = _redraw_requested_signal.connect (sigc::bind (sigc::ptr_fun (&_onRedrawRequested), this));
-    _document_set_connection = _document_set_signal.connect (sigc::bind (sigc::ptr_fun (&_onDocumentSet), this));
     
     _message_changed_connection = _message_stack->connectChanged (sigc::bind (sigc::ptr_fun (&_onStatusMessage), this));
 }
@@ -116,31 +108,16 @@ View::~View()
     _position_set_connection.~connection();
     _resized_connection.~connection();
     _redraw_requested_connection.~connection();
-    _document_set_connection.~connection();
     _message_changed_connection.~connection();
     _document_uri_set_connection.~connection();
     _document_resized_connection.~connection();
 
-//    _shutdown_signal.~accumulated();
     _position_set_signal.~signal();
     _resized_signal.~signal();
     _redraw_requested_signal.~signal();
-    _document_set_signal.~signal();
 
    Inkscape::Verb::delete_all_view (this);
 }
-
-/**
- *  Closes the given 'view' by issuing the 'SHUTDOWN' signal to it.
- *  
- *  \return The result that is returned by the signal handler, which
- *  is 0 (FALSE) if the user cancels the close, or non-zero otherwise.
- *
-bool View::shutdown() 
-{
-    return _shutdown_signal.emit();
-}
-*/
 
 void View::setPosition (double x, double y)
 {
@@ -172,6 +149,7 @@ void View::requestRedraw()
 void View::setDocument(SPDocument *doc) {
     g_return_if_fail(doc != NULL);
 
+    this->setDoc (doc);
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();
@@ -183,7 +161,7 @@ void View::setDocument(SPDocument *doc) {
         _doc->connectURISet(sigc::bind(sigc::ptr_fun(&_onDocumentURISet), this));
     _document_resized_connection = 
         _doc->connectResized(sigc::bind(sigc::ptr_fun(&_onDocumentResized), this));
-    _document_set_signal.emit (_doc);
+    _document_uri_set_signal.emit (SP_DOCUMENT_URI(_doc));
 }
 
 }}}

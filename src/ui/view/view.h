@@ -55,8 +55,8 @@ namespace Inkscape {
 class View {
 public:
 
-    View::View();
-    virtual View::~View();
+    View();
+    virtual ~View();
 
     /// Returns a pointer to the view's document.
     SPDocument *doc() const 
@@ -83,7 +83,6 @@ public:
     virtual void onPositionSet (double, double) = 0;
     virtual void onResized (double, double) = 0;
     virtual void onRedrawRequested() = 0;
-    virtual void onDocumentSet (SPDocument*) = 0;
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) = 0;
     virtual void onDocumentURISet (gchar const* uri) = 0;
     virtual void onDocumentResized (double, double) = 0;
@@ -93,16 +92,16 @@ protected:
     Inkscape::MessageStack *_message_stack;
     Inkscape::MessageContext *_tips_message_context;
 
-    sigc::signal<void,double,double>                 _position_set_signal;
-    sigc::signal<void,double,double>                 _resized_signal;
-    sigc::signal<void>                               _redraw_requested_signal;
-    sigc::signal<void,SPDocument*>                   _document_set_signal;
+    sigc::signal<void,double,double>   _position_set_signal;
+    sigc::signal<void,double,double>   _resized_signal;
+    sigc::signal<void,gchar const*>    _document_uri_set_signal;
+    sigc::signal<void>                 _redraw_requested_signal;
 
+    virtual void setDoc (SPDocument *doc) = 0;
 private:
     sigc::connection _position_set_connection;
     sigc::connection _resized_connection;
     sigc::connection _redraw_requested_connection;
-    sigc::connection _document_set_connection;
     sigc::connection _message_changed_connection;  // foreign
     sigc::connection _document_uri_set_connection; // foreign
     sigc::connection _document_resized_connection; // foreign

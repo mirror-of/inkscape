@@ -38,7 +38,7 @@ class SPSVGView : public Inkscape::UI::View::View {
 
 
     SPSVGView (SPCanvasGroup* parent);
-    ~SPSVGView();
+    virtual ~SPSVGView();
         
     /// Rescales SPSVGView to given proportions.
     void setScale (gdouble hscale, gdouble vscale);
@@ -54,11 +54,10 @@ class SPSVGView : public Inkscape::UI::View::View {
 
     private:
     
-    virtual bool onShutdown() { return true; }
+    virtual void setDoc (SPDocument*);
     virtual void onPositionSet (double, double) {}
     virtual void onResized (double, double) {}
     virtual void onRedrawRequested() {}
-    virtual void onDocumentSet (SPDocument*);
     virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {}
     virtual void onDocumentURISet (gchar const* uri) {}
     virtual void onDocumentResized (double, double);
