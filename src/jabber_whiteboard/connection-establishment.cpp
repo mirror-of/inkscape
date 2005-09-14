@@ -134,7 +134,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 	if (sp_document_repr_root(this->_myDoc)->attribute("sodipodi:modified") == NULL) {
 		primary += String::ucompose(_("Do you wish to accept <b>%1</b>'s whiteboard session invitation?"), requesterJID);
 	} else {
-		primary += String::ucompose(_("Accepting the invitation in the active document will cause your current changes to be lost.  Would you like to accept <b>%1</b>'s invitation in the active document, or would you like to accept the invitation in a new document?"), requesterJID);
+		primary += String::ucompose(_("You have made changes in the active document window.  Accepting %1's invitation will cause these changes to be lost.  Would you like to accept <b>%1</b>'s invitation in the active document window, or would you like to accept the invitation in a new document window?"), requesterJID);
 	}
 
 	// Construct confirmation dialog
@@ -192,7 +192,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 			} else {
 				// We could not create a new desktop; ask the user if she or he wants to 
 				// replace the current document and accept the invitation, or reject the invitation.
-				Glib::ustring msg = String::ucompose("<span weight=\"bold\" size=\"larger\">" + _("A new document could not be opened for a whiteboard session with <b>%1</b>") + ".</span>\n\nWould you like to accept the whiteboard connection in the active document or refuse the invitation?", requesterJID);
+				Glib::ustring msg = String::ucompose("<span weight=\"bold\" size=\"larger\">" + _("A new document window could not be opened for a whiteboard session with <b>%1</b>") + ".</span>\n\nWould you like to accept the whiteboard connection in the active document or refuse the invitation?", requesterJID);
 				InvitationConfirmDialog replace_dialog(msg);
 				dialog.add_button(_("Accept invitation"), ACCEPT_INVITATION);
 				dialog.add_button(_("Decline invitation"), DECLINE_INVITATION);

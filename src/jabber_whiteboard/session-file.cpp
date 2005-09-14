@@ -84,9 +84,9 @@ SessionFile::nextMessageFrom(gint64 from, Glib::ustring& buf)
 			return from;
 		}
 	} catch (Glib::IOChannelError e) {
-		g_warning(_("Could not read next message due to I/O error (error: %s)!"), e.what().data());
+		g_warning("Could not read next message due to I/O error (error: %s)!", e.what().data());
 	} catch (Glib::ConvertError e) {
-		g_warning(_("Could not read next message due to charset conversion error (error: %s)!"), e.what().data());
+		g_warning("Could not read next message due to charset conversion error (error: %s)!", e.what().data());
 	}
 
 	return from;
@@ -109,9 +109,9 @@ SessionFile::commit()
 				fptr->write(*i);
 				changes.erase(i);
 			} catch (Glib::IOChannelError e) {
-				g_warning(_("Caught I/O exception (error string: %s) while committing change to session file %s.  Attempting to commit remaining changes; session file will be inconsistent with whiteboard session history."), e.what().c_str(), this->_filename.c_str());
+				g_warning("Caught I/O exception (error string: %s) while committing change to session file %s.  Attempting to commit remaining changes; session file will be inconsistent with whiteboard session history.", e.what().c_str(), this->_filename.c_str());
 			} catch (Glib::ConvertError e) {
-				g_warning(_("Caught character set conversion error (error string: %s) while committing change to session file %s.  Attempting to commit remaining changes; session file will be inconsistent with whiteboard session history."), e.what().c_str(), this->_filename.c_str());
+				g_warning("Caught character set conversion error (error string: %s) while committing change to session file %s.  Attempting to commit remaining changes; session file will be inconsistent with whiteboard session history.", e.what().c_str(), this->_filename.c_str());
 			}
 		}
 		fptr->write("\n");

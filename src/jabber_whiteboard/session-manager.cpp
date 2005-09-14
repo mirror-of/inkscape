@@ -968,7 +968,7 @@ SessionManager::startLog(Glib::ustring filename)
 	try {
 		this->_mySessionFile = new SessionFile(filename, false, false);
 	} catch (Glib::FileError e) {
-		g_warning(_("Caught I/O error %s while attemping to open file %s for session recording."), e.what().c_str(), filename.c_str());
+		g_warning("Caught I/O error %s while attemping to open file %s for session recording.", e.what().c_str(), filename.c_str());
 		throw;
 	}
 }

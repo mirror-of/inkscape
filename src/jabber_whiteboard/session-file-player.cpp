@@ -40,7 +40,7 @@ SessionFilePlayer::SessionFilePlayer(unsigned int bufsz, SessionManager* sm)
 	if (sm->session_file() != NULL) {
 		this->_sf = sm->session_file();
 	} else {
-		g_warning(_("Cannot operate on NULL SessionFile."));
+		g_warning("Cannot operate on NULL SessionFile.");
 	}
 }
 

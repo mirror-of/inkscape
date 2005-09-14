@@ -96,7 +96,7 @@ MessageUtilities::newObjectMessage(Glib::ustring* msgbuf, KeyToNodeMap& newidsbu
 	} else {
 		id = xmt->get(*node);
 		if (id.empty()) {
-			g_warning(_("Node %p (name %s) is a special node, but it could not be found in the node tracker (possible unexpected duplicate?)  Generating unique ID anyway."), node, node->name());
+			g_warning("Node %p (name %s) is a special node, but it could not be found in the node tracker (possible unexpected duplicate?)  Generating unique ID anyway.", node, node->name());
 			id = xmt->generateKey();
 			newidsbuf[id] = node;
 			newnodesbuf[node] = id;

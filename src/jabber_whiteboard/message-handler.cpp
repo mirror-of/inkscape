@@ -61,7 +61,7 @@ MessageHandler::handle(LmMessage* message, HandlerMode mode)
 			case ERROR:
 				return this->_error(message);
 			default:
-				g_warning(_("Jabber message handler was asked to process a message of an unhandled type; discarding message."));
+				g_warning("Jabber message handler was asked to process a message of an unhandled type; discarding message.");
 				return LM_HANDLER_RESULT_REMOVE_MESSAGE;
 		}
 	} else {
@@ -291,7 +291,7 @@ MessageHandler::_default(LmMessage* message)
 
 		return (*this->_received_message_processors[type])(type, msg);
 	} else {
-		g_warning(_("Default message handler received message in invalid receive context; discarding message."));
+		g_warning("Default message handler received message in invalid receive context; discarding message.");
 		return LM_HANDLER_RESULT_REMOVE_MESSAGE;
 	}
 }
