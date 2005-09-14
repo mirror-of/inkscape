@@ -1,6 +1,6 @@
 2005-09-14  Carl Hetherington <inkscape@carlh.net>
 
-	* src/knot.cpp: coding style.
+	* src/knot.cpp, src/knotholder.cpp: coding style.
 
 2005-09-13  Ralf Stephan <ralf@ark.in-berlin.de>
 
