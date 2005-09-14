@@ -457,7 +457,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     GtkWidget *spw = sp_widget_new_global(INKSCAPE);
 
     // Remember the desktop's canvas widget, to be used for defocusing.
-    gtk_object_set_data(GTK_OBJECT(spw), "dtw", SP_DT_WIDGET(desktop)->canvas);
+    gtk_object_set_data(GTK_OBJECT(spw), "dtw", SP_DT_CANVAS(desktop));
 
     // The vb frame holds all other widgets and is used to set sensitivity depending on selection state.
     GtkWidget *vb = gtk_hbox_new(FALSE, 0);
