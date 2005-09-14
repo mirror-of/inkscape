@@ -12,6 +12,9 @@
  *  o  Have shapes avoid coonvex hulls of objects, rather than their
  *     bounding box.  Possibly implement the unfinished ConvexHull
  *     class in libnr.
+ *     (HOWEVER, using the convex hull C of a shape S does the wrong thing if a
+ *     connector starts outside of S but inside C, or if the best route around
+ *     an object involves going inside C but without entering S.)
  *  o  Draw connectors to shape edges rather than bounding box.
  *  o  Fix minor endpoint position error for connected objects.
  *  o  Show a visual indicator for objects with the 'avoid' property set.
