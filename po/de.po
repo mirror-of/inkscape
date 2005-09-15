@@ -4849,8 +4849,7 @@ msgstr ""
 msgid ""
 "No objects selected. Click, Shift+click, or drag around objects to select."
 msgstr ""
-"Keine Objekte ausgewählt. Klick, Umschalt+Klick, oder Ziehen um Objekte zum "
-"Auswählen."
+"Keine Objekte ausgewählt. Klick, Umschalt+Klick, oder Ziehen um Objekte auszuwählen."
 
 #: ../src/selection-describer.cpp:51
 #, c-format
