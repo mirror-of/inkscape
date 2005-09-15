@@ -142,7 +142,7 @@ SessionManager::receiveConnectRequest(gchar const* requesterJID)
 	
 	dialog.add_button(_("Accept invitation"), ACCEPT_INVITATION);
 	dialog.add_button(_("Decline invitation"), DECLINE_INVITATION);
-	dialog.add_button(_("Accept invitation in new document"), ACCEPT_INVITATION_IN_NEW_WINDOW);
+	dialog.add_button(_("Accept invitation in new document window"), ACCEPT_INVITATION_IN_NEW_WINDOW);
 
 	bool undecided = true;
 	InvitationResponses resp = static_cast< InvitationResponses >(dialog.run());
