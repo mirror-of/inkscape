@@ -41,7 +41,7 @@ EXTRA_DIST = \
 	inkscape.nsi		\
 	Makefile.mingw	\
 	Makefile.mingw.common	\
-	README.txt README.ca.txt README.de.txt README.fr.txt README.it.txt \
+	README README.ca.txt README.de.txt README.fr.txt README.it.txt	\
 	HACKING.txt HACKING.de.txt HACKING.fr.txt HACKING.it.txt	\
 	TRANSLATORS \
 	inkscape.png \
