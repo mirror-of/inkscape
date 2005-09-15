@@ -799,7 +799,7 @@ sp_tb_spinbutton(
     gtk_tooltips_set_tip(tt, sb, tooltip, NULL);
     if (altx)
         gtk_object_set_data(GTK_OBJECT(sb), altx_mark, sb);
-    gtk_widget_set_size_request(sb, AUX_SPINBUTTON_WIDTH_SMALL, -1);
+    gtk_widget_set_size_request(sb, AUX_SPINBUTTON_WIDTH_SMALL, AUX_SPINBUTTON_HEIGHT);
     gtk_widget_show(sb);
     gtk_signal_connect(GTK_OBJECT(sb), "focus-in-event", GTK_SIGNAL_FUNC(spinbutton_focus_in), tbl);
     gtk_signal_connect(GTK_OBJECT(sb), "key-press-event", GTK_SIGNAL_FUNC(spinbutton_keypress), tbl);
