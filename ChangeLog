@@ -1,3 +1,7 @@
+2005-09-15  Carl Hetherington <inkscape@carlh.net>
+
+	* src/object-edit.cpp: fix idiotic bug introduced in previous commit.
+
 2005-09-14  Carl Hetherington <inkscape@carlh.net>
 
 	* src/knot.cpp, src/knotholder.cpp: coding style.

@@ -273,9 +273,9 @@ static void sp_rect_ry_set(SPItem *item, const NR::Point &p, const NR::Point &or
                 p[NR::Y] - rect->y.computed, 0.0,
                 rect->height.computed / 2.0
                 );
-            
-            rect->ry.set = TRUE;
         }
+            
+        rect->ry.set = TRUE;
     }
         
     ((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
