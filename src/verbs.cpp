@@ -684,7 +684,8 @@ void
 Verb::delete_all_view(Inkscape::UI::View::View *view)
 {
     for (int i = 0; i <= SP_VERB_LAST; i++) {
-        _base_verbs[i]->delete_view(view);
+        if (_base_verbs[i])
+          _base_verbs[i]->delete_view(view);
     }
 
     if (!_verbs.empty()) {
