@@ -112,8 +112,9 @@ EXTRA_DIST =	\
 	application/makefile.in	\
 	debug/makefile.in	\
 	dialogs/makefile.in	\
-	dialogs/filedialog-win32.cpp \
+	dialogs/filedialog-win32.cpp	\
 	display/makefile.in	\
+	dom/makefile.in		\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\
 	extension/makefile.in	\
@@ -121,10 +122,10 @@ EXTRA_DIST =	\
 	extension/script/makefile.in	\
 	helper/makefile.in	\
 	inkjar/makefile.in	\
-	io/makefile.in  	\
-	io/crystalegg.xml  	\
-	io/doc2html.xsl  	\
-	jabber_whiteboard/makefile.in \
+	io/makefile.in	\
+	io/crystalegg.xml	\
+	io/doc2html.xsl 	\
+	jabber_whiteboard/makefile.in	\
 	libcroco/makefile.in	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
@@ -148,9 +149,9 @@ EXTRA_DIST =	\
 	helper/sp-marshal.list	\
 	utest/utest.h	\
 	utest/test-1ary-cases.h	\
-	algorithms/find-if-before.h \
-	algorithms/find-last-if.h \
-	algorithms/longest-common-suffix.h \
+	algorithms/find-if-before.h	\
+	algorithms/find-last-if.h	\
+	algorithms/longest-common-suffix.h	\
 	traits/copy.h	\
 	traits/function.h	\
 	traits/list-copy.h	\
