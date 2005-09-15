@@ -263,10 +263,10 @@ sp_use_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         ((SPObjectClass *) (parent_class))->write(object, repr, flags);
     }
 
-    sp_repr_set_double(repr, "x", use->x.computed);
-    sp_repr_set_double(repr, "y", use->y.computed);
-    sp_repr_set_double(repr, "width", use->width.computed);
-    sp_repr_set_double(repr, "height", use->height.computed);
+    sp_repr_set_svg_double(repr, "x", use->x.computed);
+    sp_repr_set_svg_double(repr, "y", use->y.computed);
+    sp_repr_set_svg_double(repr, "width", use->width.computed);
+    sp_repr_set_svg_double(repr, "height", use->height.computed);
 
     if (use->ref->getURI()) {
         gchar *uri_string = use->ref->getURI()->toString();

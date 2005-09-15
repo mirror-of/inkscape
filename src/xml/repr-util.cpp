@@ -32,6 +32,7 @@
 #include <glib.h>
 
 #include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
 
 #include "xml/repr.h"
 #include "xml/repr-sorting.h"
@@ -503,30 +504,38 @@ sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int val)
     return sp_repr_set_attr(repr, key, c);
 }
 
+/**
+ * Set a property attribute to \a val [slightly rounded], in the format
+ * required for CSS properties: in particular, it never uses exponent
+ * notation.
+ */
 unsigned int
-sp_repr_set_double(Inkscape::XML::Node *repr, gchar const *key, double val)
+sp_repr_set_css_double(Inkscape::XML::Node *repr, gchar const *key, double val)
 {
-    Inkscape::SVGOStringStream os;
-
     g_return_val_if_fail(repr != NULL, FALSE);
     g_return_val_if_fail(key != NULL, FALSE);
 
+    Inkscape::CSSOStringStream os;
     os << val;
 
     return sp_repr_set_attr(repr, key, os.str().c_str());
 }
 
+/**
+ * For attributes where an exponent is allowed.
+ *
+ * Not suitable for property attributes (fill-opacity, font-size etc.).
+ */
 unsigned int
-sp_repr_set_double_default(Inkscape::XML::Node *repr, gchar const *key, double val, double def, double e)
+sp_repr_set_svg_double(Inkscape::XML::Node *repr, gchar const *key, double val)
 {
     g_return_val_if_fail(repr != NULL, FALSE);
     g_return_val_if_fail(key != NULL, FALSE);
 
-    if (fabs(val - def) <= e) {
-        return sp_repr_set_attr(repr, key, NULL);
-    } else {
-        return sp_repr_set_double(repr, key, val);
-    }
+    Inkscape::SVGOStringStream os;
+    os << val;
+
+    return sp_repr_set_attr(repr, key, os.str().c_str());
 }
 
 

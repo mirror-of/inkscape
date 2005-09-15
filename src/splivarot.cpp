@@ -976,18 +976,11 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     
         repr = sp_repr_new ("svg:path");
         sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
-        if (expand > 0)
-        {
-            sp_repr_set_double (repr, "inkscape:radius", o_width);
-        }
-        else if (expand < 0)
-        {
-            sp_repr_set_double (repr, "inkscape:radius", -o_width);
-        }
-        else 
-        {
-            sp_repr_set_double (repr, "inkscape:radius",  0);
-        }
+        sp_repr_set_svg_double(repr, "inkscape:radius", ( expand > 0
+                                                          ? o_width
+                                                          : expand < 0
+                                                          ? -o_width
+                                                          : 0 ));
 
         str = res->svg_dump_path ();
         sp_repr_set_attr (repr, "inkscape:original", str);

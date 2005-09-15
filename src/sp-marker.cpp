@@ -468,22 +468,22 @@ sp_marker_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		sp_repr_set_attr (repr, "markerUnits", NULL);
 	}
 	if (marker->refX.set) {
-		sp_repr_set_double (repr, "refX", marker->refX.computed);
+		sp_repr_set_svg_double(repr, "refX", marker->refX.computed);
 	} else {
 		sp_repr_set_attr (repr, "refX", NULL);
 	}
 	if (marker->refY.set) {
-		sp_repr_set_double (repr, "refY", marker->refY.computed);
+		sp_repr_set_svg_double (repr, "refY", marker->refY.computed);
 	} else {
 		sp_repr_set_attr (repr, "refY", NULL);
 	}
 	if (marker->markerWidth.set) {
-		sp_repr_set_double (repr, "markerWidth", marker->markerWidth.computed);
+		sp_repr_set_svg_double (repr, "markerWidth", marker->markerWidth.computed);
 	} else {
 		sp_repr_set_attr (repr, "markerWidth", NULL);
 	}
 	if (marker->markerHeight.set) {
-		sp_repr_set_double (repr, "markerHeight", marker->markerHeight.computed);
+		sp_repr_set_svg_double (repr, "markerHeight", marker->markerHeight.computed);
 	} else {
 		sp_repr_set_attr (repr, "markerHeight", NULL);
 	}
@@ -491,7 +491,7 @@ sp_marker_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		if (marker->orient_auto) {
 			sp_repr_set_attr (repr, "orient", "auto");
 		} else {
-			sp_repr_set_double (repr, "orient", marker->orient);
+			sp_repr_set_css_double(repr, "orient", marker->orient);
 		}
 	} else {
 		sp_repr_set_attr (repr, "orient", NULL);

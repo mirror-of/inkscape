@@ -510,8 +510,8 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 
 	Inkscape::XML::Node *repr = sp_repr_new ("svg:pattern");
 	sp_repr_set_attr (repr, "patternUnits", "userSpaceOnUse");
-	sp_repr_set_double (repr, "width", bounds.extent(NR::X));
-	sp_repr_set_double (repr, "height", bounds.extent(NR::Y));
+	sp_repr_set_svg_double(repr, "width", bounds.extent(NR::X));
+	sp_repr_set_svg_double(repr, "height", bounds.extent(NR::Y));
 
 	gchar t[256];
 	if (sp_svg_transform_write(t, 256, transform)) {

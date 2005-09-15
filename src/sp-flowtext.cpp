@@ -489,8 +489,8 @@ void SPFlowtext::convert_to_text()
     repr->setAttribute("xml:space", "preserve");
     repr->setAttribute("style", SP_OBJECT_REPR(group)->attribute("style"));
     NR::Point anchor_point = group->layout.characterAnchorPoint(group->layout.begin());
-    sp_repr_set_double(repr, "x", anchor_point[NR::X]);
-    sp_repr_set_double(repr, "y", anchor_point[NR::Y]);
+    sp_repr_set_svg_double(repr, "x", anchor_point[NR::X]);
+    sp_repr_set_svg_double(repr, "y", anchor_point[NR::Y]);
 
     for (Inkscape::Text::Layout::iterator it = group->layout.begin() ; it != group->layout.end() ; ) {
         
@@ -529,9 +529,9 @@ void SPFlowtext::convert_to_text()
                 attrs.dx[0] = 0.0;
             TextTagAttributes(attrs).writeTo(span_tspan);
             if (set_x)
-                sp_repr_set_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
+                sp_repr_set_svg_double(span_tspan, "x", anchor_point[NR::X]);  // FIXME: this will pick up the wrong end of counter-directional runs
             if (set_y)
-                sp_repr_set_double(span_tspan, "y", anchor_point[NR::Y]);
+                sp_repr_set_svg_double(span_tspan, "y", anchor_point[NR::Y]);
 
             SPObject *source_obj;
             Glib::ustring::iterator span_text_start_iter;

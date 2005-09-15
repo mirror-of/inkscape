@@ -573,8 +573,8 @@ void SPText::rebuildLayout()
         if (!tspan->attributes.singleXYCoordinates()) continue;
         Inkscape::Text::Layout::iterator iter = layout.sourceToIterator(tspan);
         NR::Point anchor_point = layout.chunkAnchorPoint(iter);
-        sp_repr_set_double(SP_OBJECT_REPR(tspan), "x", anchor_point[NR::X]);
-        sp_repr_set_double(SP_OBJECT_REPR(tspan), "y", anchor_point[NR::Y]);
+        sp_repr_set_svg_double(SP_OBJECT_REPR(tspan), "x", anchor_point[NR::X]);
+        sp_repr_set_svg_double(SP_OBJECT_REPR(tspan), "y", anchor_point[NR::Y]);
     }
 }
 

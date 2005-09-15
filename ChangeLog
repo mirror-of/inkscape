@@ -1,3 +1,10 @@
+2005-09-15  Peter Moulder <pmoulder@mail.csse.monash.edu.au>
+
+	* src/xml/repr-util.cpp (sp_repr_set_double): Split into two
+	  functions (sp_repr_set_svg_double, sp_repr_set_css_double)
+	  according to whether or not an exponent is allowed.  Update callers.
+	  (sp_repr_set_double_default): Remove this unused function.
+
 2005-09-15  Carl Hetherington <inkscape@carlh.net>
 
 	* src/object-edit.cpp: fix idiotic bug introduced in previous commit.

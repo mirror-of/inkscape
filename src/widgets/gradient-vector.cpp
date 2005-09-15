@@ -471,19 +471,19 @@ verify_grad(SPGradient *gradient)
 		Inkscape::XML::Node *child;
 
 		child = sp_repr_new ("svg:stop");
-		sp_repr_set_double (child, "offset", 0.0);
+		sp_repr_set_css_double(child, "offset", 0.0);
 		sp_repr_set_attr (child, "style", os.str().c_str());
 		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
 
 		child = sp_repr_new ("svg:stop");
-		sp_repr_set_double (child, "offset", 1.0);
+		sp_repr_set_css_double(child, "offset", 1.0);
 		sp_repr_set_attr (child, "style", os.str().c_str());
 		sp_repr_add_child (SP_OBJECT_REPR (gradient), child, NULL);
 	}
 	if (i < 2) {
-		sp_repr_set_double (SP_OBJECT_REPR(stop), "offset", 0.0);
+		sp_repr_set_css_double(SP_OBJECT_REPR(stop), "offset", 0.0);
 		Inkscape::XML::Node *child = SP_OBJECT_REPR(stop)->duplicate();
-		sp_repr_set_double (child, "offset", 1.0);
+		sp_repr_set_css_double(child, "offset", 1.0);
 		sp_repr_add_child (SP_OBJECT_REPR(gradient), child, SP_OBJECT_REPR (stop));
 	}
 }
@@ -650,7 +650,7 @@ offadjustmentChanged( GtkAdjustment *adjustment, GtkWidget *vb)
     SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
 
     stop->offset = adjustment->value;
-    sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
+    sp_repr_set_css_double(SP_OBJECT_REPR(stop), "offset", stop->offset);
 
     sp_document_done (SP_OBJECT_DOCUMENT (stop));
 
@@ -742,13 +742,13 @@ sp_grd_ed_del_stop (GtkWidget *widget,  GtkWidget *vb)
 			SPStop *next = sp_next_stop (stop);
 			if (next) {
 				next->offset = 0;
-				sp_repr_set_double (SP_OBJECT_REPR (next), "offset", 0);
+				sp_repr_set_css_double (SP_OBJECT_REPR (next), "offset", 0);
 			}
 		} else if (stop->offset == 1) {
 			SPStop *prev = sp_prev_stop (stop, gradient);
 			if (prev) {
 				prev->offset = 1;
-				sp_repr_set_double (SP_OBJECT_REPR (prev), "offset", 1);
+				sp_repr_set_css_double (SP_OBJECT_REPR (prev), "offset", 1);
 			}
 		}
 
@@ -1115,7 +1115,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	csel->base->getColorAlpha( color, &alpha );
 	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
-	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
+	sp_repr_set_css_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
 	Inkscape::CSSOStringStream os;
 	gchar c[64];
 	sp_svg_write_color (c, 64, rgb);

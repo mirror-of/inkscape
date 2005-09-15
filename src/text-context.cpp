@@ -493,8 +493,8 @@ sp_text_context_setup_text(SPTextContext *tc)
     /* Set style */
     sp_desktop_apply_style_tool(SP_EVENT_CONTEXT_DESKTOP(ec), rtext, "tools.text", true);
 
-    sp_repr_set_double(rtext, "x", tc->pdoc[NR::X]);
-    sp_repr_set_double(rtext, "y", tc->pdoc[NR::Y]);
+    sp_repr_set_svg_double(rtext, "x", tc->pdoc[NR::X]);
+    sp_repr_set_svg_double(rtext, "y", tc->pdoc[NR::Y]);
 
     /* Create <tspan> */
     Inkscape::XML::Node *rtspan = sp_repr_new("svg:tspan");

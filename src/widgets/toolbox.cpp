@@ -842,7 +842,9 @@ sp_stb_magnitude_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
         if (SP_IS_STAR((SPItem *) items->data)) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
             sp_repr_set_int(repr,"sodipodi:sides",(gint)adj->value);
-            sp_repr_set_double(repr,"sodipodi:arg2",sp_repr_get_double_attribute(repr, "sodipodi:arg1", 0.5) + M_PI / (gint)adj->value);
+            sp_repr_set_svg_double(repr, "sodipodi:arg2",
+                                   (sp_repr_get_double_attribute(repr, "sodipodi:arg1", 0.5)
+                                    + M_PI / (gint)adj->value));
             SP_OBJECT((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }
@@ -881,9 +883,9 @@ sp_stb_proportion_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
             gdouble r1 = sp_repr_get_double_attribute(repr, "sodipodi:r1", 1.0);
             gdouble r2 = sp_repr_get_double_attribute(repr, "sodipodi:r2", 1.0);
             if (r2 < r1) {
-                sp_repr_set_double(repr, "sodipodi:r2", r1*adj->value);
+                sp_repr_set_svg_double(repr, "sodipodi:r2", r1*adj->value);
             } else {
-                sp_repr_set_double(repr, "sodipodi:r1", r2*adj->value);
+                sp_repr_set_svg_double(repr, "sodipodi:r1", r2*adj->value);
             }
 
             SP_OBJECT((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
@@ -975,7 +977,7 @@ sp_stb_rounded_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR((SPItem *) items->data)) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-            sp_repr_set_double(repr, "inkscape:rounded", (gdouble) adj->value);
+            sp_repr_set_svg_double(repr, "inkscape:rounded", (gdouble) adj->value);
             SP_OBJECT(items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }
@@ -1012,7 +1014,7 @@ sp_stb_randomized_value_changed(GtkAdjustment *adj, GtkWidget *tbl)
     for (; items != NULL; items = items->next) {
         if (SP_IS_STAR((SPItem *) items->data)) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-            sp_repr_set_double(repr, "inkscape:randomized", (gdouble) adj->value);
+            sp_repr_set_svg_double(repr, "inkscape:randomized", (gdouble) adj->value);
             SP_OBJECT(items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }
@@ -1646,7 +1648,7 @@ sp_spl_tb_value_changed(GtkAdjustment *adj, GtkWidget *tbl, gchar const *value_n
     {
         if (SP_IS_SPIRAL((SPItem *) items->data)) {
             Inkscape::XML::Node *repr = SP_OBJECT_REPR((SPItem *) items->data);
-            sp_repr_set_double( repr, namespaced_name, adj->value );
+            sp_repr_set_svg_double( repr, namespaced_name, adj->value );
             SP_OBJECT((SPItem *) items->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             modmade = true;
         }

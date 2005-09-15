@@ -1062,12 +1062,12 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
             if (temp_string == NULL || xdpi != atof(temp_string)) {
-                sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
+                sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
                 modified = TRUE;
             }
             temp_string = repr->attribute("inkscape:export-ydpi");
             if (temp_string == NULL || xdpi != atof(temp_string)) {
-                sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
+                sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                 modified = TRUE;
             }
             
@@ -1101,12 +1101,12 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
                 }
                 temp_string = repr->attribute("inkscape:export-xdpi");
                 if (temp_string == NULL || xdpi != atof(temp_string)) {
-                    sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
+                    sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
                     modified = TRUE;
                 }
                 temp_string = repr->attribute("inkscape:export-ydpi");
                 if (temp_string == NULL || xdpi != atof(temp_string)) {
-                    sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
+                    sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                     modified = TRUE;
                 }
             }

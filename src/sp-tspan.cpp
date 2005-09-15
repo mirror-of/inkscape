@@ -493,8 +493,11 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	        Inkscape::SVGOStringStream os;
             os << (textpath->startOffset.computed * 100.0) << "%";
             SP_OBJECT_REPR(textpath)->setAttribute("startOffset", os.str().c_str());
-        } else
-            sp_repr_set_double(repr, "startOffset", textpath->startOffset.computed);
+        } else {
+            /* FIXME: This logic looks rather undesirable if e.g. startOffset is to be
+               in ems. */
+            sp_repr_set_svg_double(repr, "startOffset", textpath->startOffset.computed);
+        }
     }
 
     if ( textpath->sourcePath->sourceHref ) sp_repr_set_attr(repr, "xlink:href", textpath->sourcePath->sourceHref);
@@ -576,9 +579,10 @@ sp_textpath_to_text(SPObject *tp)
     g_slist_free(tp_reprs);
 
     // set x/y on text 
+    /* fixme: Yuck, is this really the right test? */
     if (xy[NR::X] != 1e18 && xy[NR::Y] != 1e18) {
-        sp_repr_set_double(SP_OBJECT_REPR(text), "x", xy[NR::X]);
-        sp_repr_set_double(SP_OBJECT_REPR(text), "y", xy[NR::Y]);
+        sp_repr_set_svg_double(SP_OBJECT_REPR(text), "x", xy[NR::X]);
+        sp_repr_set_svg_double(SP_OBJECT_REPR(text), "y", xy[NR::Y]);
     }
 }
 

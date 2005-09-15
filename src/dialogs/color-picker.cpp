@@ -192,7 +192,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
         sp_repr_set_attr(repr, colorkey, c);
 
     if (alphakey && repr) {
-        sp_repr_set_double(repr, alphakey, (rgba & 0xff) / 255.0);
+        sp_repr_set_css_double(repr, alphakey, (rgba & 0xff) / 255.0);
     }
 
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));

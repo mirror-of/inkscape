@@ -1031,10 +1031,10 @@ clonetiler_apply (GtkWidget *widget, void *)
         w = fabs (r.x1 - r.x0); 
         h = fabs (r.y1 - r.y0); 
 
-        sp_repr_set_double (obj_repr, "inkscape:tile-w", w);
-        sp_repr_set_double (obj_repr, "inkscape:tile-h", h);
-        sp_repr_set_double (obj_repr, "inkscape:tile-cx", c[NR::X]);
-        sp_repr_set_double (obj_repr, "inkscape:tile-cy", c[NR::Y]);
+        sp_repr_set_svg_double(obj_repr, "inkscape:tile-w", w);
+        sp_repr_set_svg_double(obj_repr, "inkscape:tile-h", h);
+        sp_repr_set_svg_double(obj_repr, "inkscape:tile-cx", c[NR::X]);
+        sp_repr_set_svg_double(obj_repr, "inkscape:tile-cy", c[NR::Y]);
     }
 
     NR::Point cur = NR::Point (0, 0);
@@ -1216,7 +1216,7 @@ clonetiler_apply (GtkWidget *widget, void *)
             }
 
             if (opacity < 1.0) {
-                sp_repr_set_double (clone, "opacity", opacity);
+                sp_repr_set_css_double(clone, "opacity", opacity);
             }
 
             if (*color_string) {

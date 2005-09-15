@@ -138,7 +138,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     double const guide_pos_dt = event_dt[ horiz
                                                           ? NR::Y
                                                           : NR::X ];
-                    sp_repr_set_double(repr, "position", guide_pos_dt);
+                    sp_repr_set_svg_double(repr, "position", guide_pos_dt);
                     SP_OBJECT_REPR(desktop->namedview)->appendChild(repr);
                     sp_repr_unref(repr);
                     sp_document_done(SP_DT_DOCUMENT(desktop));

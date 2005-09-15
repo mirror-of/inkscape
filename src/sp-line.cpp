@@ -185,10 +185,10 @@ sp_line_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 		repr->mergeFrom(SP_OBJECT_REPR (object), "id");
 	}
 
-	sp_repr_set_double (repr, "x1", line->x1.computed);
-	sp_repr_set_double (repr, "y1", line->y1.computed);
-	sp_repr_set_double (repr, "x2", line->x2.computed);
-	sp_repr_set_double (repr, "y2", line->y2.computed);
+	sp_repr_set_svg_double(repr, "x1", line->x1.computed);
+	sp_repr_set_svg_double(repr, "y1", line->y1.computed);
+	sp_repr_set_svg_double(repr, "x2", line->x2.computed);
+	sp_repr_set_svg_double(repr, "y2", line->y2.computed);
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);

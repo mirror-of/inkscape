@@ -273,11 +273,11 @@ sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item)
     NR::Point center = NR::Point (0.5 * (bbox.x1 + bbox.x0), 0.5 * (bbox.y1 + bbox.y0));
 
     if (SP_IS_RADIALGRADIENT(gr)) {
-        sp_repr_set_double(repr, "cx", center[NR::X]);
-        sp_repr_set_double(repr, "cy", center[NR::Y]);
-        sp_repr_set_double(repr, "fx", center[NR::X]);
-        sp_repr_set_double(repr, "fy", center[NR::Y]);
-        sp_repr_set_double(repr, "r", width/2);
+        sp_repr_set_svg_double(repr, "cx", center[NR::X]);
+        sp_repr_set_svg_double(repr, "cy", center[NR::Y]);
+        sp_repr_set_svg_double(repr, "fx", center[NR::X]);
+        sp_repr_set_svg_double(repr, "fy", center[NR::Y]);
+        sp_repr_set_svg_double(repr, "r", width/2);
 
         // we want it to be elliptic, not circular
         NR::Matrix squeeze = NR::Matrix (NR::translate (-center)) * 
@@ -294,10 +294,10 @@ sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item)
             }
         }
     } else {
-        sp_repr_set_double(repr, "x1", (center - NR::Point(width/2, 0))[NR::X]);
-        sp_repr_set_double(repr, "y1", (center - NR::Point(width/2, 0))[NR::Y]);
-        sp_repr_set_double(repr, "x2", (center + NR::Point(width/2, 0))[NR::X]);
-        sp_repr_set_double(repr, "y2", (center + NR::Point(width/2, 0))[NR::Y]);
+        sp_repr_set_svg_double(repr, "x1", (center - NR::Point(width/2, 0))[NR::X]);
+        sp_repr_set_svg_double(repr, "y1", (center - NR::Point(width/2, 0))[NR::Y]);
+        sp_repr_set_svg_double(repr, "x2", (center + NR::Point(width/2, 0))[NR::X]);
+        sp_repr_set_svg_double(repr, "y2", (center + NR::Point(width/2, 0))[NR::Y]);
     }
 
     // set the gradientUnits
@@ -380,11 +380,11 @@ sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar const *prop
             NR::Point f_u = f_b * point_convert;
             double r_u = r_b * point_convert.expansion();
 
-            sp_repr_set_double(repr, "cx", c_u[NR::X]);
-            sp_repr_set_double(repr, "cy", c_u[NR::Y]);
-            sp_repr_set_double(repr, "fx", f_u[NR::X]);
-            sp_repr_set_double(repr, "fy", f_u[NR::Y]);
-            sp_repr_set_double(repr, "r", r_u);
+            sp_repr_set_svg_double(repr, "cx", c_u[NR::X]);
+            sp_repr_set_svg_double(repr, "cy", c_u[NR::Y]);
+            sp_repr_set_svg_double(repr, "fx", f_u[NR::X]);
+            sp_repr_set_svg_double(repr, "fy", f_u[NR::Y]);
+            sp_repr_set_svg_double(repr, "r", r_u);
 
         } else {
             SPLinearGradient *lg = SP_LINEARGRADIENT(gr);
@@ -395,10 +395,10 @@ sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar const *prop
             NR::Point p1_u = p1_b * point_convert;
             NR::Point p2_u = p2_b * point_convert;
 
-            sp_repr_set_double(repr, "x1", p1_u[NR::X]);
-            sp_repr_set_double(repr, "y1", p1_u[NR::Y]);
-            sp_repr_set_double(repr, "x2", p2_u[NR::X]);
-            sp_repr_set_double(repr, "y2", p2_u[NR::Y]);
+            sp_repr_set_svg_double(repr, "x1", p1_u[NR::X]);
+            sp_repr_set_svg_double(repr, "y1", p1_u[NR::Y]);
+            sp_repr_set_svg_double(repr, "x2", p2_u[NR::X]);
+            sp_repr_set_svg_double(repr, "y2", p2_u[NR::Y]);
         }
 
         // set the gradientUnits
@@ -662,11 +662,11 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
                 lg->y1.computed = p[NR::Y];
                 if (write_repr) {
                     if (scale) {
-                        sp_repr_set_double (repr, "x2", lg->x2.computed);
-                        sp_repr_set_double (repr, "y2", lg->y2.computed);
+                        sp_repr_set_svg_double(repr, "x2", lg->x2.computed);
+                        sp_repr_set_svg_double(repr, "y2", lg->y2.computed);
                     }
-                    sp_repr_set_double (repr, "x1", lg->x1.computed);
-                    sp_repr_set_double (repr, "y1", lg->y1.computed);
+                    sp_repr_set_svg_double(repr, "x1", lg->x1.computed);
+                    sp_repr_set_svg_double(repr, "y1", lg->y1.computed);
                 } else {
                     SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
                 }
@@ -680,11 +680,11 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
                 lg->y2.computed = p[NR::Y];
                 if (write_repr) {
                     if (scale) {
-                        sp_repr_set_double (repr, "x1", lg->x1.computed);
-                        sp_repr_set_double (repr, "y1", lg->y1.computed);
+                        sp_repr_set_svg_double(repr, "x1", lg->x1.computed);
+                        sp_repr_set_svg_double(repr, "y1", lg->y1.computed);
                     }
-                    sp_repr_set_double (repr, "x2", lg->x2.computed);
-                    sp_repr_set_double (repr, "y2", lg->y2.computed);
+                    sp_repr_set_svg_double(repr, "x2", lg->x2.computed);
+                    sp_repr_set_svg_double(repr, "y2", lg->y2.computed);
                 } else {
                     SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
                 }
@@ -711,10 +711,10 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 			rg->cx.computed = p[NR::X];
 			rg->cy.computed = p[NR::Y];
 			if (write_repr) {
-				sp_repr_set_double (repr, "fx", rg->fx.computed);
-				sp_repr_set_double (repr, "fy", rg->fy.computed);
-				sp_repr_set_double (repr, "cx", rg->cx.computed);
-				sp_repr_set_double (repr, "cy", rg->cy.computed);
+				sp_repr_set_svg_double(repr, "fx", rg->fx.computed);
+				sp_repr_set_svg_double(repr, "fy", rg->fy.computed);
+				sp_repr_set_svg_double(repr, "cx", rg->cx.computed);
+				sp_repr_set_svg_double(repr, "cy", rg->cy.computed);
 			} else {
 				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 			}
@@ -723,8 +723,8 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 			rg->fx.computed = p[NR::X];
 			rg->fy.computed = p[NR::Y];
 			if (write_repr) {
-				sp_repr_set_double (repr, "fx", rg->fx.computed);
-				sp_repr_set_double (repr, "fy", rg->fy.computed);
+				sp_repr_set_svg_double(repr, "fx", rg->fx.computed);
+				sp_repr_set_svg_double(repr, "fy", rg->fy.computed);
 			} else {
 				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
 			}

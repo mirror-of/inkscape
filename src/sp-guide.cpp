@@ -260,10 +260,10 @@ void sp_guide_moveto(SPGuide const &guide, gdouble const position, bool const co
                                   position);
     }
 
-    /* Calling sp_repr_set_double must precede calling sp_item_notify_moveto in the commit
+    /* Calling sp_repr_set_svg_double must precede calling sp_item_notify_moveto in the commit
        case, so that the guide's new position is available for sp_item_rm_unsatisfied_cns. */
     if (commit) {
-        sp_repr_set_double(SP_OBJECT(&guide)->repr,
+        sp_repr_set_svg_double(SP_OBJECT(&guide)->repr,
                            "position", position);
     }
     

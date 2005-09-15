@@ -60,16 +60,16 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             sp_repr_set_attr (repr, "xlink:href", relname);
             sp_repr_set_attr (repr, "sodipodi:absref", uri);
 
-            sp_repr_set_double (repr, "width", width);
-            sp_repr_set_double (repr, "height", height);
+            sp_repr_set_svg_double(repr, "width", width);
+            sp_repr_set_svg_double(repr, "height", height);
 
         } else {
             // import as pattern-filled rect
             Inkscape::XML::Node *pat = sp_repr_new ("svg:pattern");
             sp_repr_set_attr(pat, "inkscape:collect", "always");
             sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
-            sp_repr_set_double (pat, "width", width);
-            sp_repr_set_double (pat, "height", height);
+            sp_repr_set_svg_double(pat, "width", width);
+            sp_repr_set_svg_double(pat, "height", height);
             SP_OBJECT_REPR(SP_DOCUMENT_DEFS(doc))->appendChild(pat);
             const gchar *pat_id = pat->attribute("id");
             SPObject *pat_object = doc->getObjectById(pat_id);
@@ -77,14 +77,14 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             Inkscape::XML::Node *im = sp_repr_new ("svg:image");
             sp_repr_set_attr (im, "xlink:href", relname);
             sp_repr_set_attr (im, "sodipodi:absref", uri);
-            sp_repr_set_double (im, "width", width);
-            sp_repr_set_double (im, "height", height);
+            sp_repr_set_svg_double(im, "width", width);
+            sp_repr_set_svg_double(im, "height", height);
             sp_repr_add_child (SP_OBJECT_REPR(pat_object), im, NULL);
 
             repr = sp_repr_new ("svg:rect");
             sp_repr_set_attr (repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
-            sp_repr_set_double (repr, "width", width);
-            sp_repr_set_double (repr, "height", height);
+            sp_repr_set_svg_double(repr, "width", width);
+            sp_repr_set_svg_double(repr, "height", height);
         }
 
         SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);

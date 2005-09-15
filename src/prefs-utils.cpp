@@ -64,7 +64,7 @@ prefs_set_double_attribute(gchar const *path, gchar const *attr, double value)
 {
     Inkscape::XML::Node *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
-        sp_repr_set_double(repr, attr, value);
+        sp_repr_set_svg_double(repr, attr, value);
     }
 }
 

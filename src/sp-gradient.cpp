@@ -229,7 +229,9 @@ sp_stop_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     sp_repr_set_attr(repr, "style", os.str().c_str());
     sp_repr_set_attr(repr, "stop-color", NULL);
     sp_repr_set_attr(repr, "stop-opacity", NULL);
-    sp_repr_set_double(repr, "offset", stop->offset);
+    sp_repr_set_css_double(repr, "offset", stop->offset);
+    /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
+     * for offset proportions. */
 
     if (((SPObjectClass *) stop_parent_class)->write)
         (* ((SPObjectClass *) stop_parent_class)->write)(object, repr, flags);
@@ -870,7 +872,9 @@ sp_gradient_repr_write_vector(SPGradient *gr)
     for (guint i = 0; i < gr->vector.stops.size(); i++) {
         Inkscape::CSSOStringStream os;
         Inkscape::XML::Node *child = sp_repr_new("svg:stop");
-        sp_repr_set_double(child, "offset", gr->vector.stops[i].offset);
+        sp_repr_set_css_double(child, "offset", gr->vector.stops[i].offset);
+        /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no
+         * sense for offset proportions. */
         gchar c[64];
         sp_svg_write_color(c, 64, sp_color_get_rgba32_ualpha(&gr->vector.stops[i].color, 0x00));
         os << "stop-color:" << c << ";stop-opacity:" << gr->vector.stops[i].opacity;
@@ -1401,13 +1405,13 @@ sp_lineargradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || lg->x1.set)
-        sp_repr_set_double(repr, "x1", lg->x1.computed);
+        sp_repr_set_svg_double(repr, "x1", lg->x1.computed);
     if ((flags & SP_OBJECT_WRITE_ALL) || lg->y1.set)
-        sp_repr_set_double(repr, "y1", lg->y1.computed);
+        sp_repr_set_svg_double(repr, "y1", lg->y1.computed);
     if ((flags & SP_OBJECT_WRITE_ALL) || lg->x2.set)
-        sp_repr_set_double(repr, "x2", lg->x2.computed);
+        sp_repr_set_svg_double(repr, "x2", lg->x2.computed);
     if ((flags & SP_OBJECT_WRITE_ALL) || lg->y2.set)
-        sp_repr_set_double(repr, "y2", lg->y2.computed);
+        sp_repr_set_svg_double(repr, "y2", lg->y2.computed);
 
     if (((SPObjectClass *) lg_parent_class)->write)
         (* ((SPObjectClass *) lg_parent_class)->write)(object, repr, flags);
@@ -1701,11 +1705,11 @@ sp_radialgradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags
         repr = sp_repr_new("svg:radialGradient");
     }
 
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx.set) sp_repr_set_double(repr, "cx", rg->cx.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy.set) sp_repr_set_double(repr, "cy", rg->cy.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->r.set) sp_repr_set_double(repr, "r", rg->r.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx.set) sp_repr_set_double(repr, "fx", rg->fx.computed);
-    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy.set) sp_repr_set_double(repr, "fy", rg->fy.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx.set) sp_repr_set_svg_double(repr, "cx", rg->cx.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy.set) sp_repr_set_svg_double(repr, "cy", rg->cy.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->r.set) sp_repr_set_svg_double(repr, "r", rg->r.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx.set) sp_repr_set_svg_double(repr, "fx", rg->fx.computed);
+    if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy.set) sp_repr_set_svg_double(repr, "fy", rg->fy.computed);
 
     if (((SPObjectClass *) rg_parent_class)->write)
         (* ((SPObjectClass *) rg_parent_class)->write)(object, repr, flags);

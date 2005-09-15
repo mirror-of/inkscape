@@ -141,15 +141,15 @@ sp_star_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:type", "star");
 		sp_repr_set_int (repr, "sodipodi:sides", star->sides);
-		sp_repr_set_double (repr, "sodipodi:cx", star->center[NR::X]);
-		sp_repr_set_double (repr, "sodipodi:cy", star->center[NR::Y]);
-		sp_repr_set_double (repr, "sodipodi:r1", star->r[0]);
-		sp_repr_set_double (repr, "sodipodi:r2", star->r[1]);
-		sp_repr_set_double (repr, "sodipodi:arg1", star->arg[0]);
-		sp_repr_set_double (repr, "sodipodi:arg2", star->arg[1]);
+		sp_repr_set_svg_double(repr, "sodipodi:cx", star->center[NR::X]);
+		sp_repr_set_svg_double(repr, "sodipodi:cy", star->center[NR::Y]);
+		sp_repr_set_svg_double(repr, "sodipodi:r1", star->r[0]);
+		sp_repr_set_svg_double(repr, "sodipodi:r2", star->r[1]);
+		sp_repr_set_svg_double(repr, "sodipodi:arg1", star->arg[0]);
+		sp_repr_set_svg_double(repr, "sodipodi:arg2", star->arg[1]);
 		sp_repr_set_boolean (repr, "inkscape:flatsided", star->flatsided);
-		sp_repr_set_double (repr, "inkscape:rounded", star->rounded);
-		sp_repr_set_double (repr, "inkscape:randomized", star->randomized);
+		sp_repr_set_svg_double(repr, "inkscape:rounded", star->rounded);
+		sp_repr_set_svg_double(repr, "inkscape:randomized", star->randomized);
 	}
 
 	sp_star_set_shape ((SPShape *) star);

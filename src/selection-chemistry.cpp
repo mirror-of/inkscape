@@ -1956,10 +1956,10 @@ sp_selection_tile(bool apply)
     if (apply) {
         Inkscape::XML::Node *rect = sp_repr_new ("svg:rect");
         sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
-        sp_repr_set_double (rect, "width", bounds.extent(NR::X));
-        sp_repr_set_double (rect, "height", bounds.extent(NR::Y));
-        sp_repr_set_double (rect, "x", bounds.min()[NR::X]);
-        sp_repr_set_double (rect, "y", bounds.min()[NR::Y]);
+        sp_repr_set_svg_double(rect, "width", bounds.extent(NR::X));
+        sp_repr_set_svg_double(rect, "height", bounds.extent(NR::Y));
+        sp_repr_set_svg_double(rect, "x", bounds.min()[NR::X]);
+        sp_repr_set_svg_double(rect, "y", bounds.min()[NR::Y]);
 
         // restore parent and position
         SP_OBJECT_REPR (parent)->appendChild(rect);
@@ -2167,8 +2167,8 @@ sp_selection_create_bitmap_copy ()
         Inkscape::XML::Node * repr = sp_repr_new ("svg:image");
         sp_repr_set_attr (repr, "xlink:href", filename);
         sp_repr_set_attr (repr, "sodipodi:absref", filepath);
-        sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
-        sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+        sp_repr_set_svg_double(repr, "width", gdk_pixbuf_get_width(pb));
+        sp_repr_set_svg_double(repr, "height", gdk_pixbuf_get_height(pb));
 
         // Write transform
         gchar c[256];

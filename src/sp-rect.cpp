@@ -228,12 +228,12 @@ sp_rect_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
         repr = sp_repr_new("svg:rect");
     }
 
-    sp_repr_set_double(repr, "width", rect->width.computed);
-    sp_repr_set_double(repr, "height", rect->height.computed);
-    if (rect->rx.set) sp_repr_set_double(repr, "rx", rect->rx.computed);
-    if (rect->ry.set) sp_repr_set_double(repr, "ry", rect->ry.computed);
-    sp_repr_set_double(repr, "x", rect->x.computed);
-    sp_repr_set_double(repr, "y", rect->y.computed);
+    sp_repr_set_svg_double(repr, "width", rect->width.computed);
+    sp_repr_set_svg_double(repr, "height", rect->height.computed);
+    if (rect->rx.set) sp_repr_set_svg_double(repr, "rx", rect->rx.computed);
+    if (rect->ry.set) sp_repr_set_svg_double(repr, "ry", rect->ry.computed);
+    sp_repr_set_svg_double(repr, "x", rect->x.computed);
+    sp_repr_set_svg_double(repr, "y", rect->y.computed);
 
     if (((SPObjectClass *) parent_class)->write)
         ((SPObjectClass *) parent_class)->write(object, repr, flags);

@@ -704,9 +704,9 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	gboolean saved = sp_document_get_undo_sensitive(SP_DT_DOCUMENT (desktop));
 	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), FALSE);
 
-	sp_repr_set_double (view, "inkscape:zoom", desktop->current_zoom());
-	sp_repr_set_double (view, "inkscape:cx", (r.x0+r.x1)*0.5);
-	sp_repr_set_double (view, "inkscape:cy", (r.y0+r.y1)*0.5);
+	sp_repr_set_svg_double(view, "inkscape:zoom", desktop->current_zoom());
+	sp_repr_set_svg_double(view, "inkscape:cx", (r.x0+r.x1)*0.5);
+	sp_repr_set_svg_double(view, "inkscape:cy", (r.y0+r.y1)*0.5);
 
 	if (save_geometry && win) {
 		gtk_window_get_size (win, &w, &h);

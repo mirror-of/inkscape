@@ -599,9 +599,9 @@ sp_root_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     sp_repr_set_attr(repr, "version", SVG_VERSION);
 
     if (fabs(root->x.computed) > 1e-9)
-        sp_repr_set_double(repr, "x", root->x.computed);
+        sp_repr_set_svg_double(repr, "x", root->x.computed);
     if (fabs(root->y.computed) > 1e-9)
-        sp_repr_set_double(repr, "y", root->y.computed);
+        sp_repr_set_svg_double(repr, "y", root->y.computed);
 
     /* Unlike all other SPObject, here we want to preserve absolute units too (and only here,
      * according to the recommendation in http://www.w3.org/TR/SVG11/coords.html#Units).
