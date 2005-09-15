@@ -233,7 +233,6 @@ src/streams-jar.cpp
 src/streams-zlib.cpp
 src/style.cpp
 src/svg-view.cpp
-src/svg/ftos.cpp
 src/svg/gnome-canvas-bpath-util.cpp
 src/svg/itos.cpp
 src/svg/round.cpp
