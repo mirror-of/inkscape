@@ -23,8 +23,6 @@ static void sp_view_widget_class_init(SPViewWidgetClass *vwc);
 static void sp_view_widget_init(SPViewWidget *widget);
 static void sp_view_widget_destroy(GtkObject *object);
 
-static void sp_view_widget_view_resized(Inkscape::UI::View::View *view, gdouble width, gdouble height, SPViewWidget *vw);
-
 static GtkEventBoxClass *widget_parent_class;
 
 /**
@@ -123,6 +121,8 @@ bool sp_view_widget_shutdown(SPViewWidget *vw)
 
     return FALSE;
 }
+
+
 
 /*
   Local Variables:
