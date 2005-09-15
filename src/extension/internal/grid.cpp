@@ -24,7 +24,6 @@
 #include "desktop.h"
 #include "selection.h"
 #include "xml/repr.h"
-#include "svg/ftos.h"
 
 #include "extension/implementation/implementation.h"
 #include "extension/extension.h"
