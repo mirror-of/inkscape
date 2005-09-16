@@ -1,7 +1,7 @@
 <inkscape-extension>
     <name>AI Output</name>
     <id>org.inkscape.output.ai</id>
-    <dependency type="executable" location="path">pstoedit</dependency>
+    <dependency type="executable" location="path">gs</dependency>
     <dependency type="extension">org.inkscape.output.ps</dependency>
     <output>
         <extension>.ai</extension>
@@ -10,7 +10,7 @@
         <filetypetooltip>Write Adobe Illustrator</filetypetooltip>
     </output>
     <script>
-        <command reldir="path">pstoedit -f ps2ai</command>
+        <command reldir="path">gs -q -dNODISPLAY -dSAFER ps2ai.ps</command>
         <helper_extension>org.inkscape.output.ps</helper_extension>
     </script>
 </inkscape-extension>
