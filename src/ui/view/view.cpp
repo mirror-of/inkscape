@@ -105,17 +105,6 @@ View::~View()
         _doc = 0;
     }
     
-    _position_set_connection.~connection();
-    _resized_connection.~connection();
-    _redraw_requested_connection.~connection();
-    _message_changed_connection.~connection();
-    _document_uri_set_connection.~connection();
-    _document_resized_connection.~connection();
-
-    _position_set_signal.~signal();
-    _resized_signal.~signal();
-    _redraw_requested_signal.~signal();
-
    Inkscape::Verb::delete_all_view (this);
 }
 

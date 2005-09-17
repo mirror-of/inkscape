@@ -185,6 +185,7 @@ SPDesktop::SPDesktop()
     gr_fill_or_stroke = true;
 
     _layer_hierarchy = NULL;
+    active = false;
 
     selection = Inkscape::GC::release (new Inkscape::Selection (this));
 }
@@ -341,13 +342,9 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
 SPDesktop::~SPDesktop()
 {
     _activate_connection.disconnect();
-    _activate_connection.~connection();
     _deactivate_connection.disconnect();
-    _deactivate_connection.~connection();
     _sel_modified_connection.disconnect();
-    _sel_modified_connection.~connection();
     _sel_changed_connection.disconnect();
-    _sel_changed_connection.~connection();
 
     while (event_context) {
         SPEventContext *ec = event_context;
@@ -355,10 +352,6 @@ SPDesktop::~SPDesktop()
         sp_event_context_finish (ec);
         g_object_unref (G_OBJECT (ec));
     }
-
-//    _set_colorcomponent_signal.~signal();
-//    _set_style_signal.~accumulated();
-//    _layer_changed_signal.~signal();
 
     if (_layer_hierarchy) {
         delete _layer_hierarchy;

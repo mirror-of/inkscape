@@ -128,9 +128,12 @@ sp_create_window(SPViewWidget *vw, gboolean editable)
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
 
     w = sp_window_new("", TRUE);
-    g_object_set_data(G_OBJECT(vw), "window", w);
-    reinterpret_cast<SPDesktopWidget*>(vw)->window = 
+    
+    if (editable) {
+      g_object_set_data(G_OBJECT(vw), "window", w);
+      reinterpret_cast<SPDesktopWidget*>(vw)->window = 
         static_cast<GtkWindow*>((void*)w);
+    }
 
     hb = gtk_hbox_new(FALSE, 0);
     gtk_widget_show(hb);

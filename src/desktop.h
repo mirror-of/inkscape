@@ -27,7 +27,7 @@
 #include <libnr/nr-matrix-fns.h>
 #include "gc-managed.h"
 #include "gc-finalized.h"
-#include "gc-anchored.h"
+//#include "gc-anchored.h"
 #include "ui/view/view.h"
 
 class NRRect;
@@ -66,8 +66,8 @@ namespace Inkscape {
  */
 struct SPDesktop : public Inkscape::UI::View::View,
                    public Inkscape::GC::Managed<>,
-                   public Inkscape::GC::Finalized,
-                   public Inkscape::GC::Anchored
+                   public Inkscape::GC::Finalized
+//                   public Inkscape::GC::Anchored
 {
 
     SPDesktopWidget           *owner;
