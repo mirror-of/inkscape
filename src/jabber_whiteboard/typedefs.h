@@ -128,7 +128,7 @@ class ReceiveMessageQueue;
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
 typedef std::map< MessageType, MessageProcessor*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, MessageProcessor* >, GC::MANUAL > > MessageProcessorMap;
 
-typedef std::map< std::string, ReceiveMessageQueue*, std::less< std::string >, GC::Alloc< std::pair< std::string, ReceiveMessageQueue* >, GC::MANUAL > > RecipientToReceiveQueueMap;
+typedef std::map< std::string, ReceiveMessageQueue*, std::less< std::string >, GC::Alloc< std::pair< const std::string, ReceiveMessageQueue* >, GC::MANUAL > > RecipientToReceiveQueueMap;
 typedef std::map< std::string, unsigned int > ReceipientToLatestTransactionMap;
 
 typedef std::string ReceivedCommitEvent;
