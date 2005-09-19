@@ -1,3 +1,15 @@
+2005-09-17  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/jabber_whiteboard/typedefs.h:
+	  gcc4 needs more const correctness, fixes #1294298
+
+2005-09-17  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.h, src/desktop.cpp, src/interface.cpp, 
+	  src/dialogs/layer-properties.cpp, src/ui/view/view.cpp,
+	  src/widgets/desktop-widget.cpp:
+	  correcting old and new oversights, fixes #1290982
+	  
 2005-09-15  Peter Moulder <pmoulder@mail.csse.monash.edu.au>
 
 	* src/xml/repr-util.cpp (sp_repr_set_double): Split into two
