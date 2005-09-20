@@ -1,3 +1,8 @@
+2005-09-20  Carl Hetherington <inkscape@carlh.net>
+
+	* src/file.cpp, src/file.h, src/help.cpp: don't replace empty
+	desktops with help files / tutorials.  Fixes 1249067.
+
 2005-09-17  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/jabber_whiteboard/typedefs.h:
