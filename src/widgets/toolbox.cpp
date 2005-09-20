@@ -160,7 +160,7 @@ static struct {
     { NULL, NULL, NULL }
 };
 
-static void toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func, sigc::connection&);
+static void toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func, sigc::connection*);
 
 static void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_tool_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
@@ -168,10 +168,6 @@ static void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
-
-static sigc::connection tool_ecc_connection;
-static sigc::connection aux_ecc_connection;
-static sigc::connection command_ecc_connection;
 
 /* Global text entry widgets necessary for update */
 /* GtkWidget *dropper_rgb_entry, 
@@ -234,11 +230,6 @@ GtkWidget * sp_toolbox_button_normal_new_from_verb(GtkWidget *t, GtkIconSize siz
 GtkWidget *
 sp_tool_toolbox_new()
 {
-    if (tool_ecc_connection.connected())
-        tool_ecc_connection.disconnect();
-    else
-        new (&tool_ecc_connection) sigc::connection();
-
     GtkTooltips *tt = gtk_tooltips_new();
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 
@@ -254,6 +245,9 @@ sp_tool_toolbox_new()
 
     gtk_container_add(GTK_CONTAINER(hb), tb);
     gtk_widget_show(GTK_WIDGET(tb));
+
+    sigc::connection* conn = new sigc::connection;
+    g_object_set_data(G_OBJECT(hb), "event_context_connection", conn);
 
     return hb;
 }
@@ -275,11 +269,6 @@ aux_toolbox_detached(GtkHandleBox *toolbox, GtkWidget *child)
 GtkWidget *
 sp_aux_toolbox_new()
 {
-    if (aux_ecc_connection.connected())
-        aux_ecc_connection.disconnect();
-    else
-        new (&aux_ecc_connection) sigc::connection();
-
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 
     GtkWidget *tb_s = gtk_vbox_new(FALSE, 0);
@@ -304,6 +293,9 @@ sp_aux_toolbox_new()
     gtk_container_add(GTK_CONTAINER(hb), tb);
     gtk_widget_show(GTK_WIDGET(tb));
 
+    sigc::connection* conn = new sigc::connection;
+    g_object_set_data(G_OBJECT(hb), "event_context_connection", conn);
+
     return hb;
 }
 
@@ -314,11 +306,6 @@ sp_aux_toolbox_new()
 GtkWidget *
 sp_commands_toolbox_new()
 {
-    if (command_ecc_connection.connected())
-        command_ecc_connection.disconnect();
-    else
-        new (&command_ecc_connection) sigc::connection();
-
     GtkWidget *tb = gtk_vbox_new(FALSE, 0);
 
     GtkWidget *tb_s = gtk_vbox_new(FALSE, 0);
@@ -340,6 +327,9 @@ sp_commands_toolbox_new()
 
     gtk_container_add(GTK_CONTAINER(hb), tb);
     gtk_widget_show(GTK_WIDGET(tb));
+
+    sigc::connection* conn = new sigc::connection;
+    g_object_set_data(G_OBJECT(hb), "event_context_connection", conn);
 
     return hb;
 }
@@ -533,25 +523,25 @@ sp_zoom_toolbox_new(SPDesktop *desktop)
 void
 sp_tool_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_tool_toolbox, update_tool_toolbox, tool_ecc_connection);
+    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_tool_toolbox, update_tool_toolbox, static_cast<sigc::connection*>(g_object_get_data(G_OBJECT(toolbox), "event_context_connection")));
 }
 
 
 void
 sp_aux_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_aux_toolbox, update_aux_toolbox, aux_ecc_connection);
+    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_aux_toolbox, update_aux_toolbox, static_cast<sigc::connection*>(g_object_get_data(G_OBJECT(toolbox), "event_context_connection")));
 }
 
 void
 sp_commands_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_commands_toolbox, update_commands_toolbox, command_ecc_connection);
+    toolbox_set_desktop(gtk_bin_get_child(GTK_BIN(toolbox)), desktop, setup_commands_toolbox, update_commands_toolbox, static_cast<sigc::connection*>(g_object_get_data(G_OBJECT(toolbox), "event_context_connection")));
 }
 
 
 static void
-toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func, sigc::connection& conn)
+toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func, sigc::connection *conn)
 {
     gpointer ptr = g_object_get_data(G_OBJECT(toolbox), "desktop");
     SPDesktop *old_desktop = static_cast<SPDesktop*>(ptr);
@@ -572,7 +562,7 @@ toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_
         gtk_widget_set_sensitive(toolbox, TRUE);
         setup_func(toolbox, desktop);
         update_func(desktop, desktop->event_context, toolbox);
-        conn =  desktop->connectEventContextChanged 
+        *conn = desktop->connectEventContextChanged 
             (sigc::bind (sigc::ptr_fun(update_func), toolbox));
     } else {
         gtk_widget_set_sensitive(toolbox, FALSE);
