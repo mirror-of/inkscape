@@ -96,22 +96,18 @@ static Avoid::Polygn avoid_item_poly(SPItem const *item)
 {
     Avoid::Polygn poly;
 
-    std::vector<NR::Point> p;
-    sp_item_snappoints(item, SnapPointsIter(p));
-   
-    NR::Matrix i2d = sp_item_i2d_affine(item);
-    std::vector<NR::Point>::iterator i = p.begin(); 
-    NR::ConvexHull cvh(*i * i2d);
-    for (++i; i != p.end(); ++i) {
-        cvh.add(*i * i2d); 
-    }
-   
-    // TODO: NR::ConvexHull just keeps a bounding box for the convex
-    //       hull, rather than a real convex hull.  So we're using
-    //       a reactangle for each shape but we'll want to switch to
-    //       using the convex hull of individual shapes.
+    // TODO: The right way to do this is to return the convex hull of
+    //       the object, or an approximation in the case of a rounded
+    //       object.  Specific SPItems will need to have a new
+    //       function that returns points for the convex hull.
+    //       For some objects it is enough to feed the snappoints to
+    //       some convex hull code, though not NR::ConvexHull as this
+    //       only keeps the bounding box of the convex hull currently.
+
+    NRRect bboxRect;
+    sp_item_invoke_bbox(item, &bboxRect, sp_item_i2doc_affine(item), TRUE);
     
-    NR::Rect rHull = cvh.bounds();
+    NR::Rect rHull(bboxRect);
     // Add a little buffer around the edge of each object.
     NR::Rect rExpandedHull = NR::expand(rHull, -10.0); 
     poly = Avoid::newPoly(4);
@@ -120,8 +116,9 @@ static Avoid::Polygn avoid_item_poly(SPItem const *item)
         // TODO: I think the winding order in libavoid or inkscape might
         //       be backwards, probably due to the inverse y co-ordinates
         //       used for the screen.  The '3 - n' reverses the order.
-        poly.ps[n].x = rExpandedHull.corner(3 - n)[NR::X];
-        poly.ps[n].y = rExpandedHull.corner(3 - n)[NR::Y];
+        NR::Point hullPoint = rExpandedHull.corner(3 - n);
+        poly.ps[n].x = hullPoint[NR::X];
+        poly.ps[n].y = hullPoint[NR::Y];
     }
     
     return poly;
