@@ -39,6 +39,9 @@ struct SPNodeContext {
 	gboolean leftctrl;
 	gboolean rightctrl;
 
+      /// If true, rubberband was cancelled by esc, so the next button release should not deselect.
+	bool rb_escaped;
+
 	sigc::connection sel_changed_connection;
 
 	Inkscape::MessageContext *_node_message_context;
@@ -46,7 +49,8 @@ struct SPNodeContext {
 	double grab_t;
 	Inkscape::NodePath::Node * grab_node;
 	bool hit;
-	NR::Point curvedrag;
+	NR::Point curvepoint_event; // int coords from event
+	NR::Point curvepoint_doc; // same, in doc coords
 
 	bool added_node;
 };
