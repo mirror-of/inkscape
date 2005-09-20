@@ -108,7 +108,7 @@ sp_help_open_tutorial(GtkMenuItem *, gpointer data)
 {
     gchar const *name = static_cast<gchar const *>(data);
     gchar *c = g_build_filename(INKSCAPE_TUTORIALSDIR, name, NULL);
-    sp_file_open(c, NULL, false);
+    sp_file_open(c, NULL, false, false);
     g_free(c);
 }
 
@@ -116,7 +116,7 @@ void
 sp_help_open_screen(gchar const *name)
 {
     gchar *c = g_build_filename(INKSCAPE_SCREENSDIR, name, NULL);
-    sp_file_open(c, NULL, false);
+    sp_file_open(c, NULL, false, false);
     g_free(c);
 }
 
