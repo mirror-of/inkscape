@@ -114,8 +114,18 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, const NR::Point &origin, gu
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
+    NR::Point p_snapped = p;
+
+    if ( state & GDK_CONTROL_MASK ) {
+        if (fabs((p - origin)[NR::X]) > fabs((p - origin)[NR::Y])) {
+            p_snapped[NR::Y] = origin[NR::Y];
+        } else {
+            p_snapped[NR::X] = origin[NR::X];
+        }
+    }
+
      if (state)  {
-	 const NR::Point q = p - sp_pattern_extract_trans(pat);
+	 const NR::Point q = p_snapped - sp_pattern_extract_trans(pat);
          sp_item_adjust_pattern (item, NR::Matrix(NR::translate(q)));
      }
 
