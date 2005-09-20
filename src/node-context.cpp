@@ -395,7 +395,7 @@ sp_node_context_show_modifier_tip(SPEventContext *event_context, GdkEvent *event
 }
 
 bool 
-sp_node_context_is_over_path (SPNodeContext *nc, SPItem *item, NR::Point event_p, bool remember) 
+sp_node_context_is_over_stroke (SPNodeContext *nc, SPItem *item, NR::Point event_p, bool remember) 
 {
     SPDesktop *desktop = SP_EVENT_CONTEXT (nc)->desktop;
 
@@ -447,48 +447,50 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1) {
                 if (!nc->drag) {
+
                     // find out clicked item, disregarding groups, honoring Alt
-                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, 
+                    SPItem *item_clicked = sp_event_context_find_item (desktop, 
                             NR::Point(event->button.x, event->button.y),
                             (event->button.state & GDK_MOD1_MASK) && !(event->button.state & GDK_CONTROL_MASK), TRUE);
+                    // find out if we're over the selected item, disregarding groups
+                    SPItem *item_over = sp_event_context_over_item (desktop, selection->singleItem(), 
+                                                                    NR::Point(event->button.x, event->button.y));
+                    bool over_stroke = false;
+                    if (item_over && nc->nodepath) {
+                        over_stroke = sp_node_context_is_over_stroke (nc, item_over, NR::Point(event->button.x, event->button.y), false);
+                    }
 
-                    //add a node if the clicked path is selected
-                    if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
-
-                        bool over = sp_node_context_is_over_path (nc, item_ungrouped, NR::Point(event->button.x, event->button.y), false);
-                       
-                        if (over) {
-                            switch (event->type) {
-                                case GDK_BUTTON_RELEASE:
-                                    if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
-                                        //add a node
-                                        sp_nodepath_add_node_near_point(item_ungrouped, nc->curvepoint_doc);
-                                    } else {
-                                        if (nc->added_node) { // we just received double click, ignore release
-                                            nc->added_node = false;
-                                            break;
-                                        }
-                                        //select the segment
-                                        if (event->button.state & GDK_SHIFT_MASK) {
-                                            sp_nodepath_select_segment_near_point(item_ungrouped, nc->curvepoint_doc, true);
-                                        } else {
-                                            sp_nodepath_select_segment_near_point(item_ungrouped, nc->curvepoint_doc, false);
-                                        }
-                                    }
-                                    break; 
-                                case GDK_2BUTTON_PRESS:
+                    if (over_stroke || nc->added_node) {
+                        switch (event->type) {
+                            case GDK_BUTTON_RELEASE:
+                                if (event->button.state & GDK_CONTROL_MASK && event->button.state & GDK_MOD1_MASK) {
                                     //add a node
-                                    sp_nodepath_add_node_near_point(item_ungrouped, nc->curvepoint_doc);
-                                    nc->added_node = true;
-                                    break;
-                                default:
-                                    break;
-                            } 
-                        }
+                                    sp_nodepath_add_node_near_point(item_over, nc->curvepoint_doc);
+                                } else {
+                                    if (nc->added_node) { // we just received double click, ignore release
+                                        nc->added_node = false;
+                                        break;
+                                    }
+                                    //select the segment
+                                    if (event->button.state & GDK_SHIFT_MASK) {
+                                        sp_nodepath_select_segment_near_point(item_over, nc->curvepoint_doc, true);
+                                    } else {
+                                        sp_nodepath_select_segment_near_point(item_over, nc->curvepoint_doc, false);
+                                    }
+                                }
+                                break; 
+                            case GDK_2BUTTON_PRESS:
+                                //add a node
+                                sp_nodepath_add_node_near_point(item_over, nc->curvepoint_doc);
+                                nc->added_node = true;
+                                break;
+                            default:
+                                break;
+                        } 
                     } else if (event->button.state & GDK_SHIFT_MASK) {
-                        selection->toggle(item_ungrouped);
+                        selection->toggle(item_clicked);
                     } else {
-                        selection->set(item_ungrouped);
+                        selection->set(item_clicked);
                     }
 
                     ret = TRUE;
@@ -505,17 +507,17 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                 nc->hit = false;
 
                 if (!nc->drag) {
-                    // find out clicked item, disregarding groups, honoring Alt
-                    SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, TRUE);
+                    // find out if we're over the selected item, disregarding groups
+                    SPItem *item_over = sp_event_context_over_item (desktop, selection->singleItem(), 
+                                                                    NR::Point(event->button.x, event->button.y));
 
-                        if (nc->nodepath && selection->includes(item_ungrouped) && selection->single()) {
+                        if (nc->nodepath && selection->single() && item_over) {
 
                             // save drag origin
-                            bool over = sp_node_context_is_over_path (nc, item_ungrouped, NR::Point(event->button.x, event->button.y), true);
-
+                            bool over_stroke = sp_node_context_is_over_stroke (nc, item_over, NR::Point(event->button.x, event->button.y), true);
                             //only dragging curves
-                            if (over) {
-                                sp_nodepath_select_segment_near_point(item_ungrouped, nc->curvepoint_doc, false);
+                            if (over_stroke) {
+                                sp_nodepath_select_segment_near_point(item_over, nc->curvepoint_doc, false);
                                 ret = TRUE;
                             } else {
                                 break;

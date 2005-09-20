@@ -957,6 +957,22 @@ sp_event_context_find_item (SPDesktop *desktop, NR::Point const p,
 }
 
 /**
+ * Returns item if it is under point p in desktop, at any depth; otherwise returns NULL.
+ *
+ * Honors into_groups.
+ */
+SPItem *
+sp_event_context_over_item (SPDesktop *desktop, SPItem *item, NR::Point const p)
+{
+    GSList *temp = NULL;
+    temp = g_slist_prepend (temp, item);
+    SPItem *item_at_point = desktop->item_from_list_at_point_bottom (temp, p);
+    g_slist_free (temp);
+
+    return item_at_point;
+}
+
+/**
  * Called when SPEventContext subclass node attribute changed.
  */
 void 
