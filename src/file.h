@@ -47,7 +47,10 @@ void sp_file_exit (void);
 /**
  * Opens a new file and window from the given URI
  */
-bool sp_file_open (const gchar *uri, Inkscape::Extension::Extension *key, bool add_to_recent = true);
+bool sp_file_open(
+  const gchar *uri, Inkscape::Extension::Extension *key,
+  bool add_to_recent = true, bool replace_empty = true
+  );
 
 /**
  * Displays a file open dialog. Calls sp_file_open on

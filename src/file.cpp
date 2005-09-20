@@ -153,9 +153,12 @@ sp_file_exit()
 
 /**
  *  Open a file, add the document to the desktop
+ *
+ *  \param replace_empty if true, and the current desktop is empty, this document
+ *  will replace the empty one.
  */
 bool
-sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_recent)
+sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_recent, bool replace_empty)
 {
     SPDocument *doc;
     try {
@@ -169,7 +172,7 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
     if (doc) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         SPDocument *existing = desktop ? SP_DT_DOCUMENT(desktop) : NULL;
-        if (existing && existing->virgin) {
+        if (existing && existing->virgin && replace_empty) {
             // If the current desktop is empty, open the document there
             desktop->change_document(doc);
         } else {
