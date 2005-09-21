@@ -1831,6 +1831,7 @@ static void sp_node_set_selected(Inkscape::NodePath::Node *node, gboolean select
                      "fill_mouseover", NODE_FILL_SEL_HI,
                      "stroke", NODE_STROKE_SEL,
                      "stroke_mouseover", NODE_STROKE_SEL_HI,
+                     "size", (node->type == Inkscape::NodePath::NODE_CUSP) ? 11 : 9,
                      NULL);
     } else {
         g_object_set(G_OBJECT(node->knot),
@@ -1838,6 +1839,7 @@ static void sp_node_set_selected(Inkscape::NodePath::Node *node, gboolean select
                      "fill_mouseover", NODE_FILL_HI,
                      "stroke", NODE_STROKE,
                      "stroke_mouseover", NODE_STROKE_HI,
+                     "size", (node->type == Inkscape::NodePath::NODE_CUSP) ? 9 : 7,
                      NULL);
     }
 
