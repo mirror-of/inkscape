@@ -355,14 +355,7 @@ sp_root_child_added(SPObject *object, Inkscape::XML::Node *child, Inkscape::XML:
     if (((SPObjectClass *) (parent_class))->child_added)
         (* ((SPObjectClass *) (parent_class))->child_added)(object, child, ref);
 
-    gchar const *id = child->attribute("id");
-    if (!id) {
-        if (child->type() != Inkscape::XML::TEXT_NODE) {
-            g_error("repr has no id attribute, so cannot get corresponding object");
-        }
-        return;
-    }
-    SPObject *co = object->document->getObjectById(id);
+    SPObject *co = object->document->getObjectByRepr(child);
     g_assert(co != NULL);
 
     if (SP_IS_DEFS(co)) {
