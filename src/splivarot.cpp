@@ -1597,7 +1597,9 @@ get_nearest_position_on_Path(SPItem * item, NR::Point p)
     path->ConvertWithBackData(0.01);
 
     //get nearest position on path
-    return path->PointToCurvilignPosition(p);
+    Path::cut_position pos = path->PointToCurvilignPosition(p);
+    delete path;
+    return pos;
 }
 
 NR::Point 
@@ -1610,6 +1612,7 @@ get_point_on_Path(SPItem * item, int piece, double t)
     //get nearest position on path
     NR::Point p;
     path->PointAt(piece,t,p);
+    delete path;
     return p;
 }
 
