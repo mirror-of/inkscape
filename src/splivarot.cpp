@@ -1263,6 +1263,9 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             sp_repr_unref (repr);
         }
+
+        delete orig;
+        delete res;
     }
   
     if (did) {
