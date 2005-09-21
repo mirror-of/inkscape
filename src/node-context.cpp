@@ -72,7 +72,6 @@ static Inkscape::XML::NodeEventVector nodepath_repr_events = {
 };
 
 static SPEventContextClass *parent_class;
-static GdkCursor *CursorNodeMouseover = NULL, *CursorNodeDragging = NULL;
 
 static gchar *undo_label_1 = "dragcurve:1";
 static gchar *undo_label_2 = "dragcurve:2";
@@ -111,10 +110,6 @@ sp_node_context_class_init(SPNodeContextClass *klass)
     event_context_class->setup = sp_node_context_setup;
     event_context_class->root_handler = sp_node_context_root_handler;
     event_context_class->item_handler = sp_node_context_item_handler;
-
-    // cursors in node context
-    CursorNodeMouseover = sp_cursor_new_from_xpm(cursor_node_m_xpm, 1, 1);
-    CursorNodeDragging = sp_cursor_new_from_xpm(cursor_node_d_xpm, 1, 1);
 }
 
 static void
@@ -172,15 +167,6 @@ sp_node_context_dispose(GObject *object)
         delete nc->_node_message_context;
     }
 
-    if (CursorNodeDragging) {
-        gdk_cursor_unref (CursorNodeDragging);
-        CursorNodeDragging = NULL;
-    }
-    if (CursorNodeMouseover) {
-        gdk_cursor_unref (CursorNodeMouseover);
-        CursorNodeMouseover = NULL;
-    }
-
     G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
@@ -202,6 +188,8 @@ sp_node_context_setup(SPEventContext *ec)
     ec->shape_knot_holder = NULL;
 
     nc->rb_escaped = false;
+
+    nc->cursor_drag = false;
 
     nc->added_node = false;
 
@@ -547,6 +535,8 @@ static gint
 sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
     SPDesktop *desktop = event_context->desktop;
+    Inkscape::Selection *selection = SP_DT_SELECTION (desktop);
+
     SPNodeContext *nc = SP_NODE_CONTEXT(event_context);
     double const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2, 0, 1000); // in px
     event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100); // read every time, to make prefs changes really live
@@ -600,6 +590,31 @@ sp_node_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 }
                 nc->drag = TRUE;
                 ret = TRUE;
+            } else {
+                if (!nc->nodepath || selection->singleItem() == NULL) {
+                    break;
+                }
+
+                SPItem *item_over = sp_event_context_over_item (desktop, selection->singleItem(), 
+                                                                NR::Point(event->motion.x, event->motion.y));
+                bool over_stroke = false;
+                if (item_over && nc->nodepath) {
+                    over_stroke = sp_node_context_is_over_stroke (nc, item_over, NR::Point(event->motion.x, event->motion.y), false);
+                }
+
+                if (nc->cursor_drag && !over_stroke) {
+                    event_context->cursor_shape = cursor_node_xpm;
+                    event_context->hot_x = 1;
+                    event_context->hot_y = 1;
+                    sp_event_context_update_cursor(event_context);
+                    nc->cursor_drag = false;
+                } else if (!nc->cursor_drag && over_stroke) {
+                    event_context->cursor_shape = cursor_node_d_xpm;
+                    event_context->hot_x = 1;
+                    event_context->hot_y = 1;
+                    sp_event_context_update_cursor(event_context);
+                    nc->cursor_drag = true;
+                }
             }
             break;
         case GDK_BUTTON_RELEASE:

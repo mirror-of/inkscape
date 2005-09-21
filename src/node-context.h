@@ -51,6 +51,7 @@ struct SPNodeContext {
 	bool hit;
 	NR::Point curvepoint_event; // int coords from event
 	NR::Point curvepoint_doc; // same, in doc coords
+	bool cursor_drag;
 
 	bool added_node;
 };
