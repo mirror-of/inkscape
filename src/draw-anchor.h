@@ -20,7 +20,6 @@ struct SPDrawAnchor {
     guint start : 1;
     guint active : 1;
     NR::Point dp;
-    NR::Point wp;
     SPCanvasItem *ctrl;
 };
 
