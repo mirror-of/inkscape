@@ -1295,11 +1295,12 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
         //g_message("image href [%s]", href );
         if (spns && !g_path_is_absolute(href)) {
             const gchar *absref = ir->attribute("sodipodi:absref");
+            const gchar *base_href = g_build_filename(base, href, NULL);
             //g_message("      absr [%s]", absref );
 
-            if ( absref && Inkscape::IO::file_test(absref, G_FILE_TEST_EXISTS) )
+            if ( absref && Inkscape::IO::file_test(absref, G_FILE_TEST_EXISTS) && !Inkscape::IO::file_test(base_href, G_FILE_TEST_EXISTS))
             {
-                // only switch over if the absref is still valid
+                // only switch over if the absref is valid while href is not
                 href = absref;
                 //g_message("     copied absref to href");
             }
