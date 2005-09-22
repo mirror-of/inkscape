@@ -37,6 +37,7 @@
 #include "enums.h"
 #include "prefs-utils.h"
 #include "style.h"
+#include "sp-symbol.h"
 #include "sp-use.h"
 #include "sp-use-reference.h"
 
@@ -649,8 +650,16 @@ sp_use_unlink(SPUse *use)
     // Calculate the accumulated transform, starting from the original.
     NR::Matrix t = sp_use_get_root_transform(use);
 
-    // Create copy of the original.
-    Inkscape::XML::Node *copy = SP_OBJECT_REPR(orig)->duplicate();
+    Inkscape::XML::Node *copy = NULL;
+    if (SP_IS_SYMBOL(orig)) { // make a group, copy children
+        copy = sp_repr_new("svg:g");
+        for (Inkscape::XML::Node *child = SP_OBJECT_REPR(orig)->firstChild() ; child != NULL; child = child->next()) {
+                Inkscape::XML::Node *newchild = child->duplicate();
+                copy->appendChild(newchild);
+        }
+    } else { // just copy
+        copy = SP_OBJECT_REPR(orig)->duplicate();
+    }
 
     // Add the duplicate repr just after the existing one.
     sp_repr_add_child(parent, copy, repr);
