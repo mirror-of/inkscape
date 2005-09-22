@@ -87,11 +87,11 @@ namespace Whiteboard {
 
 /// Associates node keys to pointers to XML::Nodes.
 /// \see Inkscape::Whiteboard::XMLNodeTracker
-typedef std::map< std::string, XML::Node*, std::less< std::string >, GC::Alloc< std::pair< std::string, XML::Node* >, GC::MANUAL > > KeyToTrackerNodeMap;
+typedef std::map< std::string, XML::Node*, std::less< std::string >, GC::Alloc< std::pair< const std::string, XML::Node* >, GC::MANUAL > > KeyToTrackerNodeMap;
 
 /// Associates pointers to XML::Nodes with node keys.
 /// \see Inkscape::Whiteboard::XMLNodeTracker
-typedef std::map< XML::Node*, std::string, std::less< XML::Node* >, GC::Alloc< std::pair< XML::Node*, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
+typedef std::map< XML::Node*, std::string, std::less< XML::Node* >, GC::Alloc< std::pair< XML::Node* const, std::string >, GC::MANUAL > > TrackerNodeToKeyMap;
 
 
 // TODO: Clean up these typedefs.  I'm sure quite a few of these aren't used anymore; additionally,
@@ -126,7 +126,7 @@ struct MessageProcessor;
 class ReceiveMessageQueue;
 
 typedef std::map< MessageType, std::bitset< NUM_FLAGS > > MessageContextMap;
-typedef std::map< MessageType, MessageProcessor*, std::less< MessageType >, GC::Alloc< std::pair< MessageType, MessageProcessor* >, GC::MANUAL > > MessageProcessorMap;
+typedef std::map< MessageType, MessageProcessor*, std::less< MessageType >, GC::Alloc< std::pair< const MessageType, MessageProcessor* >, GC::MANUAL > > MessageProcessorMap;
 
 typedef std::map< std::string, ReceiveMessageQueue*, std::less< std::string >, GC::Alloc< std::pair< const std::string, ReceiveMessageQueue* >, GC::MANUAL > > RecipientToReceiveQueueMap;
 typedef std::map< std::string, unsigned int > ReceipientToLatestTransactionMap;
