@@ -1,3 +1,7 @@
+2005-09-23  Ben Fowler  <bpfowler@users.sourceforge.net>
+
+	* autogen.sh: Cleanup error message.
+
 2005-09-20  Carl Hetherington <inkscape@carlh.net>
 
 	* src/file.cpp, src/file.h, src/help.cpp: don't replace empty

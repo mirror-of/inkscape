@@ -59,8 +59,8 @@ attempt_command () {
 
 echo
 echo "I am testing that you have the required versions of libtool, autoconf," 
-echo "automake, glib-gettextize and intltoolize. This test is not foolproof,"
-echo "so if anything goes wrong, see the file HACKING for more information..."
+echo "automake, glib-gettextize and intltoolize. This test is not foolproof and"
+echo "if anything goes wrong, there may be guidance in the file HACKING.txt"
 echo
 
 DIE=0
