@@ -367,6 +367,12 @@ bool	font_instance::IsOutlineFont(void)
 	return FT_IS_SCALABLE(theFace);
 }
 
+void font_instance::SelectUnicodeCharmap()
+{
+	theFace=pango_ft2_font_get_face(pFont);
+	FT_Select_Charmap(theFace,ft_encoding_unicode) && FT_Select_Charmap(theFace,ft_encoding_symbol);
+}
+
 int font_instance::MapUnicodeChar(gunichar c)
 {
 	if ( pFont == NULL ) return 0;

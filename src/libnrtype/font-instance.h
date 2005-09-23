@@ -64,6 +64,7 @@ public:
 		                        // in case the PangoFont is a bitmap font, for example. that way, the calling function 
 		                        // will be able to check the validity of the font before installing it in loadedFaces
 
+    void                 SelectUnicodeCharmap();  // calls FT_Select_Charmap()
     int                  MapUnicodeChar(gunichar c); // calls the relevant unicode->glyph index function
     void                 LoadGlyph(int glyph_id);    // the main backend-dependent function
 		                        // loads the given glyph's info
