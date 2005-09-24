@@ -203,6 +203,8 @@ sub process_line {
 	$path = '';
     } elsif (/^f$/i) {
 	$path .= 'z';
+        warn "Error:  Fill color not defined in source file!\n"
+            unless $fillcolor;
 	print " <g style=\"fill: $fillcolor;\">\n";
 	print "  <path d=\"$path\"/>\n";
 	print " </g>\n";
