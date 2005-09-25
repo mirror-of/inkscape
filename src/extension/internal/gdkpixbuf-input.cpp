@@ -124,6 +124,12 @@ GdkpixbufInput::init (void)
             if (strcmp(extensions[i], "svg") == 0) {
                 continue;
             }
+            if (strcmp(extensions[i], "svgz") == 0) {
+                continue;
+            }
+            if (strcmp(extensions[i], "svg.gz") == 0) {
+                continue;
+            }
 
             gchar *xmlString = g_strdup_printf(
                 "<inkscape-extension>\n"
