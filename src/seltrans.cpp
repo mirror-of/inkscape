@@ -483,7 +483,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
         sp_knot_hide(seltrans.chandle);
     } else {
         sp_knot_show(seltrans.chandle);
-        sp_knot_set_position(seltrans.chandle, &seltrans.center, 0);
+        sp_knot_moveto (seltrans.chandle, &seltrans.center);
     }
 }
 
