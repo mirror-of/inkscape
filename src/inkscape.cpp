@@ -129,7 +129,6 @@ struct Inkscape::Application {
     Inkscape::XML::Document *preferences;
     bool save_preferences;
     Inkscape::XML::Document *menus;
-    bool save_menus;
     GSList *documents;
     GSList *desktops;
     gchar *argv0;
@@ -340,12 +339,10 @@ inkscape_dispose (GObject *object)
         inkscape->save_preferences = FALSE;
     }
 
-    if (inkscape->menus && inkscape->save_menus) {
+    if (inkscape->menus) {
         /* fixme: This is not the best place */
-        inkscape_save_menus (inkscape);
         Inkscape::GC::release(inkscape->menus);
         inkscape->menus = NULL;
-        inkscape->save_menus = FALSE;
     }
 
     G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -498,10 +495,6 @@ inkscape_segv_handler (int signum)
         inkscape_save_preferences (inkscape);
     }
 
-    if (inkscape->menus && inkscape->save_menus) {
-        inkscape_save_menus (inkscape);
-    }
-
     fprintf (stderr, "Emergency save completed. Inkscape will close now.\n");
     fprintf (stderr, "If you can reproduce this crash, please file a bug at www.inkscape.org\n");
     fprintf (stderr, "with a detailed description of the steps leading to the crash, so we can fix it.\n");
@@ -594,7 +587,7 @@ inkscape_application_init (const gchar *argv0, gboolean use_gui)
     /* Attempt to load the preferences, and set the save_preferences flag to TRUE
        if we could, or FALSE if we couldn't */
     inkscape->save_preferences = inkscape_load_preferences(inkscape);
-    inkscape->save_menus = inkscape_load_menus(inkscape);
+    inkscape_load_menus(inkscape);
 
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON */
 #ifdef WIN32
@@ -762,20 +755,6 @@ inkscape_load_menus (Inkscape::Application *inkscape)
 				 _("%s is not a valid menus file.\n%s"),
 				 _("Inkscape will run with default menus.\n"
                              "New menus will not be saved."));
-}
-
-
-/*
- *  Returns true if file was successfully saved, false if not
- */
-bool
-inkscape_save_menus (Inkscape::Application * inkscape)
-{
-    gchar *fn = profile_path(MENUS_FILE);
-    bool retval = sp_repr_save_file (inkscape->menus, fn);
-
-    g_free (fn);
-    return retval;
 }
 
 /**
@@ -1316,9 +1295,6 @@ inkscape_exit (Inkscape::Application *inkscape)
 
     if (inkscape->preferences && inkscape->save_preferences) {
         inkscape_save_preferences (INKSCAPE);
-    }
-    if (inkscape->menus && inkscape->save_menus) {
-        inkscape_save_menus (INKSCAPE);
     }
     gtk_main_quit ();
 }
