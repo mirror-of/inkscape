@@ -554,7 +554,7 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
                      + ( seltrans.box.dimensions()
                          * NR::scale(handle_pt) ) );
 
-        sp_knot_set_position(knot[i], &p, 0);
+        sp_knot_moveto (knot[i], &p);
     }
 }
 
