@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-21 19:33+1000\n"
+"POT-Creation-Date: 2005-09-25 13:05+0200\n"
 "PO-Revision-Date: 2005-09-11 18:09+0530\n"
 "Last-Translator: Amanpreet Singh Brar <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -3258,26 +3258,26 @@ msgstr ""
 msgid "Ex squares"
 msgstr ""
 
-#: ../src/inkscape.cpp:476
+#: ../src/inkscape.cpp:473
 msgid "Untitled document"
 msgstr "ਬਿਨਾਂ-ਨਾਂ ਦਸਤਾਵੇਜ਼"
 
 #. Show nice dialog box
-#: ../src/inkscape.cpp:511
+#: ../src/inkscape.cpp:504
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "ਇੰਕਸਕੇਪੀ ਨੂੰ ਇੱਕ ਅੰਦਰੂਨੀ ਗਲਤੀ ਆਈ ਹੈ ਅਤੇ ਹੁਣ ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ।\n"
 
-#: ../src/inkscape.cpp:512
+#: ../src/inkscape.cpp:505
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr "ਨਾ-ਸੰਭਾਲੇ ਦਸਤਾਵੇਜ਼ਾਂ ਦਾ ਸਵੈ-ਚਾਲਤ ਬੈਕਅੱਪ ਹੇਠ ਦਿੱਤੇ ਟਿਕਾਣਿਆਂ ਉੱਤੇ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:\n"
 
-#: ../src/inkscape.cpp:513
+#: ../src/inkscape.cpp:506
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "ਹੇਠ ਦਿੱਤੇ ਦਸਤਾਵੇਜ਼ ਦਾ ਸਵੈ-ਚਾਲਤ ਬੈਕਅੱਪ ਅਸਫ਼ਲ ਰਿਹਾ ਹੈ:\n"
 
-#: ../src/inkscape.cpp:648
+#: ../src/inkscape.cpp:641
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -3286,7 +3286,7 @@ msgstr ""
 "ਡਾਇਰੈਕਟਰੀ %s ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:649
+#: ../src/inkscape.cpp:642
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -3295,7 +3295,7 @@ msgstr ""
 "%s ਇੱਕ ਠੀਕ ਡਾਇਰੈਕਟਰੀ ਨਹੀਂ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:650
+#: ../src/inkscape.cpp:643
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -3304,7 +3304,7 @@ msgstr ""
 "ਫਾਇਲ %s ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕਦੀ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:651
+#: ../src/inkscape.cpp:644
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -3313,13 +3313,13 @@ msgstr ""
 "ਫਾਇਲ %s ਨੂੰ ਲਿਖਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:652
+#: ../src/inkscape.cpp:645
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
 msgstr ""
 
-#: ../src/inkscape.cpp:721 ../src/inkscape.cpp:759
+#: ../src/inkscape.cpp:714 ../src/inkscape.cpp:752
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -3328,7 +3328,7 @@ msgstr ""
 "%s ਇੱਕ ਨਿਯਮਤ ਫਾਇਲ ਨਹੀਂ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:722 ../src/inkscape.cpp:760
+#: ../src/inkscape.cpp:715 ../src/inkscape.cpp:753
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -3339,7 +3339,7 @@ msgstr ""
 "ਤੁਹਾਨੂੰ ਇਸ ਨੂੰ ਪੜਨ ਦਾ ਅਧਿਕਾਰ ਨਹੀਂ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:724
+#: ../src/inkscape.cpp:717
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
@@ -3348,7 +3348,7 @@ msgstr ""
 "%s ਇੱਕ ਠੀਕ ਪਸੰਦ ਫਾਇਲ ਨਹੀਂ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:725
+#: ../src/inkscape.cpp:718
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
@@ -3356,7 +3356,7 @@ msgstr ""
 "ਇੰਕਸਕੇਪੀ ਮੂਲ ਸਥਾਪਨ ਨਾਲ ਹੀ ਚਲਾਇਆ ਜਾਵੇਗਾ।\n"
 "ਨਵਾਂ ਸਥਾਪਨ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾਵੇਗਾ।"
 
-#: ../src/inkscape.cpp:762
+#: ../src/inkscape.cpp:755
 #, c-format
 msgid ""
 "%s is not a valid menus file.\n"
@@ -3365,7 +3365,7 @@ msgstr ""
 "%s ਇੱਕ ਠੀਕ ਮੇਨੂ ਫਾਇਲ ਨਹੀਂ ਹੈ।\n"
 "%s"
 
-#: ../src/inkscape.cpp:763
+#: ../src/inkscape.cpp:756
 msgid ""
 "Inkscape will run with default menus.\n"
 "New menus will not be saved."
@@ -4506,7 +4506,7 @@ msgstr ""
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
-#: ../src/seltrans.cpp:1019
+#: ../src/seltrans.cpp:1036
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
 msgstr ""
@@ -4681,16 +4681,16 @@ msgstr "<b>ਪਾਠ</b> (%s, %s)"
 
 #. TRANSLATORS: Used for statusbar description for long <use> chains:
 #. * "Clone of: Clone of: ... in Layer 1".
-#: ../src/sp-use.cpp:316
+#: ../src/sp-use.cpp:317
 msgid "..."
 msgstr "..."
 
-#: ../src/sp-use.cpp:324
+#: ../src/sp-use.cpp:325
 #, c-format
 msgid "<b>Clone</b> of: %s"
 msgstr ""
 
-#: ../src/sp-use.cpp:328
+#: ../src/sp-use.cpp:329
 msgid "<b>Orphaned clone</b>"
 msgstr ""
 
