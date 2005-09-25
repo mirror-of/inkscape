@@ -24,6 +24,16 @@ static char const menus_skeleton[] =
 "       <verb verb-id=\"FileImport\" />\n"
 "       <verb verb-id=\"FileExport\" />\n"
 "       <seperator/>\n"
+/* These are ugly, but what needs to happen here is allowing users
+   to use the native PS support if they are using another print driver.
+   This is done through the "Print Direct" command.  Which is inserted
+   here based on if those other drivers are being built. */
+#ifdef WITH_GNOME_PRINT
+"       <verb verb-id=\"FilePrintDirect\" />\n"
+#endif
+#ifdef WIN32
+"       <verb verb-id=\"FilePrintDirect\" />\n"
+#endif
 "       <verb verb-id=\"FilePrint\" />\n"
 "       <seperator/>\n"
 "       <verb verb-id=\"FileVacuum\" />\n"
