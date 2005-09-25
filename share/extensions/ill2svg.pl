@@ -142,8 +142,9 @@ sub xform_xy {
 }
 
 sub strokeparams {
+    $strokecolor ||= 'black';
     my $result = "stroke:$strokecolor";
-    if ($strokewidth != 1) {
+    if ($strokewidth && $strokewidth != 1) {
 	$result .= "; stroke-width:$strokewidth";
     }
     return $result;
@@ -157,8 +158,8 @@ options:
 }
 
 sub process_line {
-      chomp;
-      next if /^%_/;
+    chomp;
+    return if /^%_/;
       
     if (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) k$/) {
 	$fillcolor = cmyk_to_css ($1, $2, $3, $4);
@@ -203,11 +204,14 @@ sub process_line {
 	$path = '';
     } elsif (/^f$/i) {
 	$path .= 'z';
-        warn "Error:  Fill color not defined in source file!\n"
-            unless $fillcolor;
-	print " <g style=\"fill: $fillcolor;\">\n";
-	print "  <path d=\"$path\"/>\n";
-	print " </g>\n";
+        if (! $fillcolor) {
+            warn "Error:  Fill color not defined in source file!\n";
+            print "  <path d=\"$path\"/>\n";
+        } else {
+            print " <g style=\"fill: $fillcolor;\">\n";
+            print "  <path d=\"$path\"/>\n";
+            print " </g>\n";
+        }
 	$path = '';
     } elsif (/^s$/) {
 	$path .= 'z';
@@ -227,7 +231,7 @@ sub process_line {
     } elsif (/^1 XR$/) {
        
        if( $firstChar != 0){
-         print ("</tspan>\n</text>\n");
+         print (" </tspan>\n</text>\n");
        }
       
        $weareintext=0;
@@ -235,7 +239,7 @@ sub process_line {
        $firstChar = 0;	
     } elsif (/^TP$/) {
        #Something do with the text;)
-      $weareintext=1;
+#      $weareintext=1;
     } elsif (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) Tp$/i) {
  
        # Text position etc;
@@ -248,9 +252,9 @@ sub process_line {
     } elsif (/^LB$/) {
       #Everything ends??
       ## Sometimes ain't working
-      #printf("LB!\r\n");
+      warn "Error:  Unexpected 'LB'!  Everything has ended??\n";
       if( $weareintext != 0){
-         print ("</tspan>\n</text>\n");
+         print ("  </tspan>\n</text>\n");
       } 
     
     } elsif (/^\/_([\S\s]+) ([\d\.]+) Tf$/) {
@@ -264,12 +268,13 @@ sub process_line {
          print ("fill:$fillcolor;fill-opacity:1;");
          print ("font-family:$FontName;\" id=\"text$5\">\n<tspan>");
 	 $firstChar = 1;
+         $weareintext=1;
        } else {
 	 print ("</tspan>\n<tspan x=\"$cpx\" y=\"$cpy\"");
 	 print (" style=\"font-size:$FontSize;font-weight:normal;stroke-width:1;");
          print ("fill:$fillcolor;fill-opacity:1;");
          print ("font-family:$FontName;\" id=\"text$5\">");
-
+         $weareintext=1;
        }
 
     } elsif (/^\(([\S\s]+)\) Tx$/) {
@@ -300,11 +305,18 @@ sub process_line {
     } elsif (/\[(.*)\](.*)Xh/) {
 	   my @imagepos = split(/ /, $1);
 	   my @imageinfo = split(/ /, $2);
-	   $imagewidth = $imageinfo[1];
-	   $imageheight = $imageinfo[2];
-	   my $imageposx = $imagepos[4];
-	   my $imageposy = $pagesize - $imagepos[5];
-	   
+           $imagewidth = $imageinfo[1];
+           $imageheight = $imageinfo[2];
+
+           if (! $imagewidth && ! $imageheight ) {
+               die "ERROR:  This fileformat is not supported by "
+                   ."ill2svg.pl.\n(Is it possible you are trying to "
+                   ."use ill2svg.pl on a PDF file?) \n";
+	   }
+
+           my $imageposx = $imagepos[4];
+           my $imageposy = $pagesize - $imagepos[5];
+
 	   #printf("%s %d %d Position x: %f 9y: %f\r\n",$1,@imagepos[4],@imagepos[5],$imageposx,$imageposy);
 	   printf("<image");
 	   printf(" xlink:href=\"%d.png\"",$imagenum);
@@ -335,7 +347,7 @@ sub process_line {
     }
 }
     if( $firstChar != 0){
-       print ("</tspan>\n</text>\n");
+       print ("   </tspan>\n</text>\n");
     }
 
 print "<svg";
