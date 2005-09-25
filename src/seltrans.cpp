@@ -1009,8 +1009,25 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
         }
     }
 
-    if (state & GDK_SHIFT_MASK) {
-        pt = seltrans->box.midpoint();
+    if (!(state & GDK_SHIFT_MASK)) {
+// screen pixels to snap center to bbox
+#define SNAP_DIST 5
+        // FIXME: take from prefs
+        double snap_dist = SNAP_DIST / desktop->current_zoom();
+
+        if (fabs(pt[X] - seltrans->box.min()[NR::X]) < snap_dist)
+            pt[X] = seltrans->box.min()[NR::X];
+        if (fabs(pt[X] - seltrans->box.midpoint()[NR::X]) < snap_dist)
+            pt[X] = seltrans->box.midpoint()[NR::X];
+        if (fabs(pt[X] - seltrans->box.max()[NR::X]) < snap_dist)
+            pt[X] = seltrans->box.max()[NR::X];
+
+        if (fabs(pt[Y] - seltrans->box.min()[NR::Y]) < snap_dist)
+            pt[Y] = seltrans->box.min()[NR::Y];
+        if (fabs(pt[Y] - seltrans->box.midpoint()[NR::Y]) < snap_dist)
+            pt[Y] = seltrans->box.midpoint()[NR::Y];
+        if (fabs(pt[Y] - seltrans->box.max()[NR::Y]) < snap_dist)
+            pt[Y] = seltrans->box.max()[NR::Y];
     }
 
     // status text
