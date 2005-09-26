@@ -127,7 +127,7 @@ clean:
 
 minimal:
 	$(MAKE) -C src -f Makefile.mingw
-	$(RM) inkscape$(S)inkscape.exe
+	-$(RM) inkscape$(S)inkscape.exe
 	$(CP) src$(S)inkscape.exe inkscape
 	@echo "##################### D O N E ####################"
 

@@ -43,7 +43,7 @@ OBJ = $(OBJECTS)
 # O U T P U T S
 ###################################
 
-outputs: inkscape.exe
+outputs: inkscape.exe inkview.exe
 
 
 RES=inkres.o
@@ -57,9 +57,14 @@ inkscape.exe: libinkscape.a main.o winmain.o $(RES)
 #	$(CXX) -o inkscape.exe main.o winmain.o $(RES) inkscape.la $(LIBS)
 #	strip inkscape.exe
 
-inkview.exe: inkscape.dll inkview.o $(RES) 
-	$(CXX) -o inkview.exe inkview.o $(RES) libinkscapedll.a $(LIBS)
-	strip inkview.exe
+inkview.exe: libinkscape.a inkview.o $(RES) 
+	$(CXX) -o inkview.exe inkview.o $(RES) libinkscape.a $(LIBS)
+#	strip inkview.exe
+
+# DLL version.  we need to make this work
+# inkview.exe: inkscape.dll inkview.o $(RES) 
+#	$(CXX) -o inkview.exe inkview.o $(RES) libinkscapedll.a $(LIBS)
+#	strip inkview.exe
 
 inkres.o: inkscape.rc
 	$(WINDRES) inkscape.rc $(RES)
@@ -73,7 +78,7 @@ inkscape.def: libinkscape.a
 	perl makedef.pl
 	
 libinkscape.a: $(OBJ)
-	$(RM) libinkscape.a
+	-$(RM) libinkscape.a
 	ar crv libinkscape.a $(OBJ)
 	$(RANLIB) libinkscape.a
 
@@ -107,12 +112,12 @@ extension/plugin/gimpgrad.dll: extension/plugin/gimpgrad.o inkscape.la
 
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
-	$(RM) main.o winmain.o inkview.o
-	$(RM) *.a
-	$(RM) *.la
-	$(RM) inkscape.def
-	$(RM) *.dll
-	$(RM) extension$(S)plugin$(S)*.o
-	$(RM) extension$(S)plugin$(S)*.dll
+	-$(RM) main.o winmain.o inkview.o
+	-$(RM) *.a
+	-$(RM) *.la
+	-$(RM) inkscape.def
+	-$(RM) *.dll
+	-$(RM) extension$(S)plugin$(S)*.o
+	-$(RM) extension$(S)plugin$(S)*.dll
 
 

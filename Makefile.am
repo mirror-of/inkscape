@@ -39,13 +39,12 @@ EXTRA_DIST = \
 	Info.plist.in	\
 	Info.plist		\
 	inkscape.nsi		\
-	Makefile.mingw	\
-	Makefile.mingw.common	\
+	config.h.mingw Makefile.mingw Makefile.mingw.common mingwenv.bat	\
 	README README.ca.txt README.de.txt README.fr.txt README.it.txt	\
 	HACKING.txt HACKING.de.txt HACKING.fr.txt HACKING.it.txt	\
 	TRANSLATORS \
 	inkscape.png \
-	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico \
+	inkscape.ico inkscape16.ico inkscape32-16.ico inkscape32.ico inkscape64.ico \
 	cxxtest/cxxtestgen.pl \
 	cxxtest/cxxtestgen.py \
 	cxxtest/cxxtest/Descriptions.cpp \
@@ -94,7 +93,10 @@ EXTRA_DIST = \
 	debian/inkscape.xpm	\
 	debian/mime	\
 	debian/rules	\
-	packaging/autopackage/default.apspec.in
+	packaging/autopackage/default.apspec.in	\
+	po/Makefile.mingw \
+	src/Makefile.mingw src/inkscape_version.h.mingw src/inkscape.rc	src/makedef.pl \
+	src/helper/sp-marshal.h.mingw src/helper/sp-marshal.cpp.mingw
 
 # Note: it isn't clear that debian/* belongs in the tar file:
 # tarfile users should be able to use the official Debian packages.
