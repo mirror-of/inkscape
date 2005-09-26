@@ -80,7 +80,8 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 
         double orig_opacity = sp_repr_css_double_property(sp_repr_css_attr(SP_OBJECT_REPR(spitem), "style"), "opacity", 1.0);
         char opacity_string[64];
-        sprintf(opacity_string, "%f", orig_opacity / (steps));
+        g_ascii_formatd(opacity_string, sizeof(opacity_string), "%f",
+                        orig_opacity / (steps));
 
         for (int i = 0; i < steps; i++) {
             double offset = (width / (float)(steps - 1) * (float)i) - (width / 2.0);
