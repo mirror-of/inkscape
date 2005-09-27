@@ -252,7 +252,7 @@ sp_input_dialog (void)
         // Dialog-specific stuff
         gtk_signal_connect_object (GTK_OBJECT(GTK_INPUT_DIALOG(dlg)->close_button),
                                    "clicked",
-                                   (GtkSignalFunc)gtk_widget_hide,
+                                   (GtkSignalFunc)gtk_widget_destroy,
                                    GTK_OBJECT(dlg));
         gtk_signal_connect (GTK_OBJECT(GTK_INPUT_DIALOG(dlg)->save_button),
                             "clicked",
