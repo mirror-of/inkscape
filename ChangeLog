@@ -1,3 +1,14 @@
+2005-09-27  MenTaLguY  <mental@rydia.net>
+
+	* src/gc-anchored.h: emphasize initial refcount
+
+	* src/desktop.h, src/svg-view-widget.cpp, src/ui/view/view-widget.cpp,
+	  src/ui/view/view.cpp, src/ui/view/view.h,
+	  src/widgets/desktop-widget.cpp:
+
+	  Move _whole_ UI::View::View hierarchy over to the garbage collector
+	  and fix anchor imbalances; you can't do this piecemeal.
+
 2005-09-23  Ben Fowler  <bpfowler@users.sourceforge.net>
 
 	* autogen.sh: Cleanup error message.

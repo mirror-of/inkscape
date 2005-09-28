@@ -17,6 +17,9 @@
 #include <gdk/gdktypes.h>
 #include <sigc++/connection.h>
 #include "message.h"
+#include "gc-managed.h"
+#include "gc-finalized.h"
+#include "gc-anchored.h"
 
 
 /**
@@ -52,11 +55,16 @@ namespace Inkscape {
  * similar views.  The View base class has very little functionality of
  * its own.
  */
-class View {
+class View : public GC::Managed<>,
+             public GC::Finalized,
+             public GC::Anchored
+{
 public:
 
     View();
     virtual ~View();
+
+    void close() { _close(); }
 
     /// Returns a pointer to the view's document.
     SPDocument *doc() const 
@@ -91,6 +99,8 @@ protected:
     SPDocument *_doc;
     Inkscape::MessageStack *_message_stack;
     Inkscape::MessageContext *_tips_message_context;
+
+    virtual void _close();
 
     sigc::signal<void,double,double>   _position_set_signal;
     sigc::signal<void,double,double>   _resized_signal;

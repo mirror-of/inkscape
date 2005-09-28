@@ -310,12 +310,10 @@ sp_desktop_widget_destroy (GtkObject *object)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
 
-
     if (dtw->desktop) {
         dtw->layer_selector->unreference();
         inkscape_remove_desktop (dtw->desktop); // clears selection too
-//        Inkscape::GC::release (dtw->desktop);
-          delete dtw->desktop;
+        Inkscape::GC::release (dtw->desktop);
         dtw->desktop = NULL;
     }
 
@@ -720,7 +718,6 @@ sp_desktop_widget_new (SPNamedView *namedview)
     dtw->ruler_origin = namedview->gridorigin;
 
     dtw->desktop = new SPDesktop();
-//    dtw->desktop = Inkscape::GC::anchor (dtw->desktop);
     dtw->desktop->owner = dtw;
     dtw->desktop->init (namedview, dtw->canvas);
 
@@ -728,7 +725,6 @@ sp_desktop_widget_new (SPNamedView *namedview)
     sp_desktop_widget_update_rulers (dtw);
 
     sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
-
 
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);

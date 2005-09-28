@@ -64,12 +64,8 @@ namespace Inkscape {
  *
  * @see \ref desktop-handles.h for desktop macros.
  */
-struct SPDesktop : public Inkscape::UI::View::View,
-                   public Inkscape::GC::Managed<>,
-                   public Inkscape::GC::Finalized
-//                   public Inkscape::GC::Anchored
+struct SPDesktop : public Inkscape::UI::View::View
 {
-
     SPDesktopWidget           *owner;
     Inkscape::UI::Dialog::DialogManager *_dlg_mgr;
     SPNamedView               *namedview;

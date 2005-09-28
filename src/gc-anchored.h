@@ -35,6 +35,9 @@ namespace GC {
  * A newly created anchored object begins with a refcount of one, and
  * will not be collected unless the refcount is zero.
  *
+ * NOTE: If you create an object yourself, it is already anchored for
+ *       you.  You do not need to anchor it a second time.
+ *
  * Note that a cycle involving an anchored object (with nonzero refcount)
  * cannot be collected.  To avoid this, don't increment refcounts for
  * pointers between two garbage-collected objects.

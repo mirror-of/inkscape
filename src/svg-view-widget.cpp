@@ -112,9 +112,8 @@ sp_svg_view_widget_init (SPSVGSPViewWidget *vw)
 
 	/* View */
 	parent = sp_canvas_item_new (sp_canvas_root (SP_CANVAS (vw->canvas)), SP_TYPE_CANVAS_GROUP, NULL);
-	Inkscape::UI::View::View *view = new SPSVGView (SP_CANVAS_GROUP (parent));
+	Inkscape::UI::View::View *view = Inkscape::GC::release(new SPSVGView (SP_CANVAS_GROUP (parent)));
 	sp_view_widget_set_view (SP_VIEW_WIDGET (vw), view);
-//	object_unref (G_OBJECT (view));
 }
 
 /*

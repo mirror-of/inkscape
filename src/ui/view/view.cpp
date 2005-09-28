@@ -28,12 +28,6 @@ namespace Inkscape {
 namespace UI {
 namespace View {
 
-//static bool 
-//_onShutdown (View* v)
-//{
-//    return v->onShutdown();
-///}
-
 static void 
 _onPositionSet (double x, double y, View* v)
 {
@@ -55,7 +49,6 @@ _onRedrawRequested (View* v)
 static void 
 _onStatusMessage (Inkscape::MessageType type, gchar const *message, View* v)
 {
-//fprintf(stderr,"type=%d msg=%s v=%X\n",(int)type, message, v);fflush(stderr);
     v->onStatusMessage (type, message);
 }
 
@@ -75,7 +68,7 @@ _onDocumentResized (double x, double y, View* v)
 View::View()
 :  _doc(0)
 {
-    _message_stack = new Inkscape::MessageStack();
+    _message_stack = GC::release(new Inkscape::MessageStack());
     _tips_message_context = new Inkscape::MessageContext(_message_stack);
 
     _position_set_connection = _position_set_signal.connect (sigc::bind (sigc::ptr_fun (&_onPositionSet), this));
@@ -90,18 +83,20 @@ View::View()
  */
 View::~View()
 {
+    _close();
+}
+
+void View::_close() {
     _message_changed_connection.disconnect();
 
     delete _tips_message_context;
     _tips_message_context = 0;
 
-    Inkscape::GC::release(_message_stack);
     _message_stack = 0;
 
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();
-        sp_document_unref(_doc);
         _doc = 0;
     }
     
@@ -142,10 +137,9 @@ void View::setDocument(SPDocument *doc) {
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();
-        sp_document_unref (_doc);
     }
 
-    _doc = sp_document_ref (doc);
+    _doc = doc;
     _document_uri_set_connection = 
         _doc->connectURISet(sigc::bind(sigc::ptr_fun(&_onDocumentURISet), this));
     _document_resized_connection = 
