@@ -47,7 +47,7 @@ class Selection;
 namespace UI {
 namespace View {
 
-class Edit : public Gtk::Window, View {
+class Edit : public Gtk::Window, public View {
 public:
     Edit();
     ~Edit();
