@@ -172,6 +172,7 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
     if (doc) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         SPDocument *existing = desktop ? SP_DT_DOCUMENT(desktop) : NULL;
+        
         if (existing && existing->virgin && replace_empty) {
             // If the current desktop is empty, open the document there
             desktop->change_document(doc);
@@ -181,6 +182,7 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
             sp_create_window(dtw, TRUE);
             desktop = static_cast<SPDesktop*>(dtw->view);
         }
+        
         // everyone who cares now has a reference, get rid of ours
         sp_document_unref(doc);
         // resize the window to match the document properties
@@ -190,7 +192,6 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
 		desktop->whiteboard_session_manager()->setDesktop(desktop);
 #endif
         sp_namedview_window_from_document(desktop);
-        doc->virgin = FALSE;
 
         if (add_to_recent) {
             prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
