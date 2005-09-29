@@ -137,9 +137,10 @@ void View::setDocument(SPDocument *doc) {
     if (_doc) {
         _document_uri_set_connection.disconnect();
         _document_resized_connection.disconnect();
+        sp_document_unref (_doc);
     }
 
-    _doc = doc;
+    _doc = sp_document_ref (doc);
     _document_uri_set_connection = 
         _doc->connectURISet(sigc::bind(sigc::ptr_fun(&_onDocumentURISet), this));
     _document_resized_connection = 

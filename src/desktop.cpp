@@ -1050,9 +1050,9 @@ SPDesktop::onRedrawRequested ()
 void
 SPDesktop::setDoc (SPDocument *doc)
 {
-    if (doc) {
+    if (this->doc() && doc) {
         sp_namedview_hide (namedview, this);
-        sp_item_invoke_hide (SP_ITEM (sp_document_root (doc)), dkey);
+        sp_item_invoke_hide (SP_ITEM (sp_document_root (this->doc())), dkey);
     }
 
     if (_layer_hierarchy) {
