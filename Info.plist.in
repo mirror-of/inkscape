@@ -17,6 +17,26 @@
         <dict>
             <key>CFBundleTypeExtensions</key>
             <array>
+                <string>SVGZ</string>
+            </array>
+            <key>CFBundleTypeIconFile</key>
+            <string>inkscape_svg.icns</string>
+            <key>CFBundleTypeMIMETypes</key>
+            <array>
+                <string>svgz</string>
+            </array>
+            <key>CFBundleTypeName</key>
+            <string>SVGZ</string>
+            <key>CFBundleTypeOSTypes</key>
+            <array>
+                <string>SVGZ</string>
+            </array>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+        </dict>
+        <dict>
+            <key>CFBundleTypeExtensions</key>
+            <array>
                 <string>EPS</string>
             </array>
             <key>CFBundleTypeIconFile</key>

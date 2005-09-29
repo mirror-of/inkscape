@@ -1,3 +1,8 @@
+2005-09-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* Info.plist.in: Associate .svgz files with Inkscape on OSX.
+	  Fixes bug #1307083.
+
 2005-09-27  MenTaLguY  <mental@rydia.net>
 
 	* src/gc-anchored.h: emphasize initial refcount
