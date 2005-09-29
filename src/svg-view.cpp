@@ -40,7 +40,7 @@ SPSVGView::SPSVGView (SPCanvasGroup *parent)
 
 SPSVGView::~SPSVGView()
 {
-    if (_drawing) 
+    if (doc() && _drawing) 
     {
         sp_item_invoke_hide (SP_ITEM (sp_document_root (doc())), _dkey);
         _drawing = NULL;
