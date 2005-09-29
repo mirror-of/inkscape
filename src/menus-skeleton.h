@@ -89,7 +89,7 @@ static char const menus_skeleton[] =
 "       <verb verb-id=\"ZoomPrev\" />\n"
 "       <verb verb-id=\"ZoomNext\" />\n"
 "       <seperator/>\n"
-"       <submenu name=\"Show/Hide D_ialogs\">\n"
+"       <submenu name=\"Show/Hide\">\n"
 "           <objects-checkboxes/>\n"
 "       </submenu>\n"
 "       <verb verb-id=\"DialogsToggle\" />\n"
