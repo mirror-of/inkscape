@@ -270,12 +270,14 @@ all_libs =			\
 
 desktop.$(OBJEXT): helper/sp-marshal.h
 document.$(OBJEXT): helper/sp-marshal.h inkscape_version.h
+extension/internal/latex-pstricks.$(OBJEXT): inkscape_version.h
 extension/internal/ps.$(OBJEXT): inkscape_version.h
 inkscape.$(OBJEXT): helper/sp-marshal.h inkscape_version.h
 knot.$(OBJEXT): helper/sp-marshal.h
 main.$(OBJEXT): inkscape_version.h
 selection.$(OBJEXT): helper/sp-marshal.h
 sp-object.$(OBJEXT): helper/sp-marshal.h
+sp-root.$(OBJEXT): inkscape_version.h
 view.$(OBJEXT): helper/sp-marshal.h
 help.$(OBJEXT): inkscape_version.h
 
