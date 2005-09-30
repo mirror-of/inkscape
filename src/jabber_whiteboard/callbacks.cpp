@@ -68,7 +68,11 @@ Callbacks::dispatchSendQueue()
 	// otherwise, send out the first change
 	MessageNode* first = this->_sd->send_queue->first();
 
-	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("Sending message; %u messages remaining in send queue."), this->_sd->send_queue->size());
+	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE,
+                                                     ngettext("Sending message; %u message remaining in send queue.",
+                                                              "Sending message; %u messages remaining in send queue.",
+                                                              this->_sd->send_queue->size()),
+                                                     this->_sd->send_queue->size());
 
 	if (this->_sd->send_queue->empty()) {
 		SP_DT_MSGSTACK(this->_sm->desktop())->flash(Inkscape::NORMAL_MESSAGE, _("Receive queue empty."));
@@ -146,8 +150,11 @@ Callbacks::dispatchReceiveQueue()
 
 				// Pass the message to the received change handler.
 				this->_sm->receiveChange(msg->message());
-				SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("Receiving change; %u changes left to process."), rmq->size());
-
+				SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE,
+                                                                             ngettext("Receiving change; %u change left to process.",
+                                                                                      "Receiving change; %u changes left to process.",
+                                                                                      rmq->size()),
+                                                                             rmq->size());
 
 				
 				// Register this message as the latest message received from this

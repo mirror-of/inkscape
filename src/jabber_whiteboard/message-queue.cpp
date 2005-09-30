@@ -83,7 +83,11 @@ ReceiveMessageQueue::insert(MessageNode* msg)
 	// Otherwise, it is safe to insert this message.
 //	Inkscape::GC::anchor(msg);
 	this->_queue.push_back(msg);
-	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("%u changes in receive queue."), this->_queue.size());
+	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE,
+                                                     ngettext("%u change in receive queue.",
+                                                              "%u changes in receive queue.",
+                                                              this->_queue.size()),
+                                                     this->_queue.size());
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Receive queue size (for %s): %u", lm_connection_get_jid(this->_sm->session_data->connection), this->_queue.size());
 }
 
@@ -109,7 +113,11 @@ SendMessageQueue::insert(MessageNode* msg)
 {
 //	Inkscape::GC::anchor(msg);
 	this->_queue.push_back(msg);
-	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE, _("%u changes in send queue."), this->_queue.size());
+	SP_DT_MSGSTACK(this->_sm->desktop())->flashF(Inkscape::NORMAL_MESSAGE,
+                                                     ngettext("%u change in send queue.",
+                                                              "%u changes in send queue.",
+                                                              this->_queue.size()),
+                                                     this->_queue.size());
 //	g_log(NULL, G_LOG_LEVEL_DEBUG, "Send queue size (for %s): %u",  lm_connection_get_jid(this->_sm->session_data->connection), this->_queue.size());
 }
 
