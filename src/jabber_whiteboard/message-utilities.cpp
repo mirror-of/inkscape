@@ -159,6 +159,15 @@ MessageUtilities::newObjectMessage(Glib::ustring* msgbuf, KeyToNodeMap& newidsbu
 		// if ID is NULL, then we have a real problem -- we were not able to find a key
 		// nor generate one.  The only thing we can really do here is abort, since we have
 		// no way to let the other client(s) uniquely identify this object.
+		/* FIXME: If this indicates a programming bug, then don't request translation with
+		 * _(...): it is most useful in untranslated form so that developers may search for
+		 * it when someone reports it in a bug report (as we want users to do for all bugs,
+		 * as indicated by it being a g_warning string).
+		 * 
+		 * Otherwise, if it is not a programming bug but a network error or a bug in the
+		 * remote peer (perhaps running different software) or whatever, then present it in
+		 * an alert box, and avoid use of technical jargon `NULL'.
+		 */
 		g_warning(_("ID for new object is NULL even after generation and lookup attempts: the new object will NOT be sent, nor will any of its child objects!"));
 		return;
 	} else {
