@@ -1,3 +1,8 @@
+2005-09-17  Ralf Stephan <ralf@ark.in-berlin.de>
+
+	* src/desktop.*, src/widget/desktop-widget.cpp:
+	make empty destructor, fixes #1291009
+
 2005-09-29  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* Info.plist.in: Associate .svgz files with Inkscape on OSX.
