@@ -25,9 +25,6 @@
 #include <sigc++/sigc++.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
-#include "gc-managed.h"
-#include "gc-finalized.h"
-//#include "gc-anchored.h"
 #include "ui/view/view.h"
 
 class NRRect;
@@ -144,6 +141,8 @@ struct SPDesktop : public Inkscape::UI::View::View
     SPDesktop();
     void init (SPNamedView* nv, SPCanvas* canvas);
     ~SPDesktop();
+    void destroy();
+
     void set_active (bool new_active);
     SPObject *currentRoot() const;
     SPObject *currentLayer() const;

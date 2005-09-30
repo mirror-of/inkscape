@@ -313,6 +313,7 @@ sp_desktop_widget_destroy (GtkObject *object)
     if (dtw->desktop) {
         dtw->layer_selector->unreference();
         inkscape_remove_desktop (dtw->desktop); // clears selection too
+        dtw->desktop->destroy();
         Inkscape::GC::release (dtw->desktop);
         dtw->desktop = NULL;
     }

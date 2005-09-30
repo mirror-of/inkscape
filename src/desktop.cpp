@@ -339,7 +339,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
 }
 
 
-SPDesktop::~SPDesktop()
+void SPDesktop::destroy()
 {
     _activate_connection.disconnect();
     _deactivate_connection.disconnect();
@@ -382,6 +382,7 @@ SPDesktop::~SPDesktop()
     g_list_free (zooms_future);
 }
 
+SPDesktop::~SPDesktop() {}
 
 //--------------------------------------------------------------------
 /* Public methods */
