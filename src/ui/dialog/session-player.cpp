@@ -80,6 +80,8 @@ SessionPlaybackDialogImpl::_construct()
 	this->_toolbarbox.set_border_width(4);
 
 	// Active session file display
+	// fixme: Does this mean the active file for the session, or the file for the active session?
+	// Please indicate which with a TRANSLATORS comment.
 	this->_labels[0].set_text(_("Active session file:"));
 	this->_labels[1].set_text(_("Delay (milliseconds):"));
 
