@@ -183,6 +183,7 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
             desktop = static_cast<SPDesktop*>(dtw->view);
         }
         
+        doc->virgin = FALSE;
         // everyone who cares now has a reference, get rid of ours
         sp_document_unref(doc);
         // resize the window to match the document properties
