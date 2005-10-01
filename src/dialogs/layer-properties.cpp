@@ -169,10 +169,10 @@ void LayerPropertiesDialog::Create::perform(LayerPropertiesDialog &dialog) {
 
 void LayerPropertiesDialog::_setDesktop(SPDesktop *desktop) {
     if (desktop) {
-//        Inkscape::GC::anchor (desktop);
+        Inkscape::GC::anchor (desktop);
     }
     if (_desktop) {
-//        Inkscape::GC::release (_desktop);
+        Inkscape::GC::release (_desktop);
     }
     _desktop = desktop;
 }
