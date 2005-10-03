@@ -181,7 +181,7 @@ sp_selected_path_break_apart (void)
 
 		gchar *style = g_strdup (SP_OBJECT (item)->repr->attribute("style"));
 
-		NArtBpath *abp = nr_artpath_affine (curve->bpath, sp_item_i2root_affine (SP_ITEM (path)));
+		NArtBpath *abp = nr_artpath_affine (curve->bpath, (SP_ITEM (path))->transform);
 
 		sp_curve_unref (curve);
 
