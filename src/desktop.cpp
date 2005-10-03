@@ -1066,7 +1066,9 @@ SPDesktop::setDoc (SPDocument *doc)
     _layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
     _layer_hierarchy->setTop(SP_DOCUMENT_ROOT(doc));
 
-    /// \todo fixme:
+    /// \todo fixme: This condition exists to make sure the code
+    /// inside is called only once on initialization. But there
+    /// are surely more safe methods to accomplish this.
     if (drawing) {
         NRArenaItem *ai;
 
