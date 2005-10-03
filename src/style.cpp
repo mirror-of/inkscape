@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #endif
 
+#include <glib/gmem.h>
 #include <gtk/gtksignal.h>
 #include "libcroco/cr-prop-list.h"
 #include "libcroco/cr-sel-eng.h"
@@ -1175,7 +1176,6 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
      * string: should we ignore the whole string or just from the first error onwards?) */
 
     gchar property [BMAX];
-    gchar value [BMAX];
 
     for (;;) {
 
@@ -1235,9 +1235,11 @@ sp_style_merge_from_style_string(SPStyle *style, gchar const *p)
         if (idx > 0) {
             if (value_begin < value_end) {
                 size_t const value_len = value_end - value_begin;
+                char *value = (char *) g_malloc(value_len + 1);
                 memcpy(value, value_begin, value_len);
                 value[value_len] = '\0';
                 sp_style_merge_property(style, idx, value);
+                g_free(value);
             } else {
                 /* TODO: Don't use g_warning for SVG errors. */
                 g_warning("No style property value at: %s", property_begin);
