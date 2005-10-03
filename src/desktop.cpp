@@ -209,6 +209,9 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
 
     dkey = sp_item_display_key_new (1);
 
+    /* Connect document */
+    setDocument (document);
+
     number = sp_namedview_viewcount (namedview);
 
 
@@ -285,9 +288,6 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
     activate_guides (true);
     /* Ugly hack */
     _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
-
-    /* Connect document */
-    setDocument (document);
 
 	/* Construct SessionManager 
 	 * 
