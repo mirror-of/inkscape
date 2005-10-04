@@ -517,14 +517,20 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     // work around a bug in sp_style_write_difference() which causes the difference
     // not to be written if the second param has a style set which the first does not
     // by causing the first param to have everything set
-    gchar *full_item_style = sp_style_write_string(SP_OBJECT_STYLE(item), SP_STYLE_FLAG_ALWAYS);
-    SPStyle *full_item_spstyle = sp_style_new();
-    sp_style_merge_from_style_string(full_item_spstyle, full_item_style);
-    g_free(full_item_style);
-    gchar *style = sp_style_write_difference(full_item_spstyle, SP_OBJECT_STYLE(new_parent_item));
-    sp_style_unref(full_item_spstyle);
-    new_span_repr->setAttribute("style", style);
-    g_free(style);
+    SPCSSAttr *dest_node_attrs = sp_repr_css_attr(SP_OBJECT_REPR(new_parent_item), "style");
+    SPCSSAttr *this_node_attrs = sp_repr_css_attr(this_repr, "style");
+    SPCSSAttr *this_node_attrs_inherited = sp_repr_css_attr_inherited(this_repr, "style");
+    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = dest_node_attrs->attributeList();
+    for ( ; attrs ; attrs++) {
+        gchar const *key = g_quark_to_string(attrs->key);
+        gchar const *this_attr = this_node_attrs_inherited->attribute(key);
+        if ((this_attr == NULL || strcmp(attrs->value, this_attr)) && this_node_attrs->attribute(key) == NULL)
+            this_node_attrs->setAttribute(key, this_attr);
+    }
+    sp_repr_css_attr_unref(this_node_attrs_inherited);
+    sp_repr_css_attr_unref(this_node_attrs);
+    sp_repr_css_attr_unref(dest_node_attrs);
+    sp_repr_css_change(new_span_repr, this_node_attrs, "style");
 
     TextTagAttributes *attributes = attributes_for_object(new_parent_item);
     if (attributes)
