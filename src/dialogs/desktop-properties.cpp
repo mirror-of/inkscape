@@ -931,7 +931,7 @@ sp_desktop_dialog(void)
         /// \todo FIXME: gray out snapping when grid is off
         spw_vbox_checkbutton(dlg, v, _("Show grid"), _("Show or hide grid"), "showgrid", cb);
         spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), _("Snap the edges of the object bounding boxes"), "inkscape:grid-bbox", cb);
-        spw_vbox_checkbutton(dlg, v, _("Snap points to grid"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:grid-points", cb);
+        spw_vbox_checkbutton(dlg, v, _("Snap nodes to grid"), _("Snap path nodes, text baselines, ellipse centers, etc."), "inkscape:grid-points", cb);
 
         /*   Commenting out until Nathan implements the grids -- bryce
          *   spw_checkbutton(dlg, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
