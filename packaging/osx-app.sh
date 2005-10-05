@@ -23,6 +23,9 @@
 # Thus, the usual use of this file would be to run it from the within the
 # inkscape/packaging directory, substituting in the inkscape binary path:
 # 	./osx-app.sh /path/to/bin/inkscape ../Info.plist macosx
+#
+# If building on 10.3.x or earlier, you will need to replace the relevant
+# lines below with their commented 10.3 equivilents, marked "10.3"
 
 SW=/sw
 
@@ -93,6 +96,7 @@ fi
 mkdir -p "$package"/Contents/MacOS
 mkdir -p "$package"/Contents/Resources/bin
 mkdir -p "$package"/Contents/Resources/lib
+mkdir -p "$package"/Contents/Resources/locale
 
 binname=`basename "$binary"`
 binpath="$package/Contents/Resources/bin/inkscape-bin"
@@ -106,14 +110,17 @@ cp "$binary" "$binpath"
   unset CC
   
   cd "$resdir/ScriptExec"
-  xcodebuild -buildstyle Deployment clean build
+  # 10.3: xcodebuild -buildstyle Deployment clean build
+  xcodebuild -configuration Deployment clean build
 )
-cp "$resdir/ScriptExec/build/ScriptExec.app/Contents/MacOS/ScriptExec" "$package/Contents/MacOS/Inkscape"
+# 10.3: cp "$resdir/ScriptExec/build/ScriptExec.app/Contents/MacOS/ScriptExec" "$package/Contents/MacOS/Inkscape"
+cp "$resdir/ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS/ScriptExec" "$package/Contents/MacOS/Inkscape"
 
 # Pull down all the share files
 binary_dir=`dirname "$binary"`
 rsync -av "$binary_dir/../share/$binname"/* "$package/Contents/Resources/"
 cp "$plist" "$package/Contents/Info.plist"
+rsync -av "$binary_dir/../share/locale"/* "$package/Contents/Resources/locale"
 
 # PkgInfo must match bundle type and creator code from Info.plist
 echo "APPLInks" > $package/Contents/PkgInfo

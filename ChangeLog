@@ -1,4 +1,14 @@
-2005-09-17  Ralf Stephan <ralf@ark.in-berlin.de>
+2005-10-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* packaging/osx-app.sh: Include locale files in the OSX package and
+	  a couple of minor updates for building packages on OSX 10.4.x.
+
+	* packaging/macosx/Resources/bin/inkscape: Fix a problem in setting
+	  LANG to the current OSX language before launching Inkscape.
+	  With this fix, the Inkscape app bundle will obey the user's
+	  language setting in the system preferences on OSX.
+
+2005-09-30  Ralf Stephan <ralf@ark.in-berlin.de>
 
 	* src/desktop.*, src/widget/desktop-widget.cpp:
 	make empty destructor, fixes #1291009
