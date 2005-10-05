@@ -30,15 +30,16 @@ Copyright (C) 2001-3 Toby Thain, toby@telegraphics.com.au
 '''
 import inkex, simplepath, simplestyle
 from math import *
+from random import *
 
-def drawwave(period, length, width, height, left, top, 
+def drawwave(samples, periods, width, height, left, top, 
 		fx = "sin(x)", fpx = "cos(x)"):
-	step = pi / period
+	step = 2*pi / samples
 	third = step / 3.0
 	
 	xoff = left
 	yoff = top + (height / 2)
-	scalex = width / (step * length)
+	scalex = width / (2*pi * periods)
 	scaley = height / 2
 
 	procx = lambda x: x * scalex + xoff
@@ -49,7 +50,7 @@ def drawwave(period, length, width, height, left, top,
 
 	a = []
 	a.append(['M',[procx(0.0), procy(f(0))]])
-	for i in range(length):
+	for i in range(int(samples * periods)):
 		x = i * step
 		a.append(['C',[procx(x + third), procy(f(x) + (fp(x) * third)), 
 			procx(x + (step - third)), procy(f(x + step) - (fp(x + step) * third)),
@@ -59,14 +60,14 @@ def drawwave(period, length, width, height, left, top,
 class Wavy(inkex.Effect):
 	def __init__(self):
 		inkex.Effect.__init__(self)
-		self.OptionParser.add_option("-p", "--period",
+		self.OptionParser.add_option("-p", "--periods",
 						action="store", type="float", 
-						dest="period", default=4.0,
-						help="pi/period interval between samples")
-		self.OptionParser.add_option("-l", "--length",
+						dest="periods", default=4.0,
+						help="Periods (2*Pi each)")
+		self.OptionParser.add_option("-s", "--samples",
 						action="store", type="int", 
-						dest="length", default=8,
-						help="length of the curve in periods")	
+						dest="samples", default=8,
+						help="Samples per period")	
 		self.OptionParser.add_option("--fofx",
 						action="store", type="string", 
 						dest="fofx", default="sin(x)",
@@ -92,8 +93,8 @@ class Wavy(inkex.Effect):
 				except AttributeError:
 					pass
 				new.setAttribute('d', simplepath.formatPath(
-							drawwave(self.options.period, 
-								self.options.length,
+							drawwave(self.options.samples, 
+								self.options.periods,
 								w,h,x,y,
 								self.options.fofx, 
 								self.options.fpofx)))
