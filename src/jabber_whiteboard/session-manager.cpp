@@ -332,13 +332,12 @@ SessionManager::handleSSLError(LmSSL* ssl, LmSSLStatus status)
 	switch(dlg.run()) {
 		case 0:
 			this->session_data->ignoreFurtherSSLErrors = true;
+                        /* FALL-THROUGH */
 		case 1:
 			return LM_SSL_RESPONSE_CONTINUE;
-			break;
-		case 2:
+
 		default:
 			return LM_SSL_RESPONSE_STOP;
-			break;
 	}
 }
 
