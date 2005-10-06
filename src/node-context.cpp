@@ -36,7 +36,6 @@
 #include "message-context.h"
 #include "node-context.h"
 #include "sp-cursor.h"
-#include "pixmaps/cursor-node-m.xpm"
 #include "pixmaps/cursor-node-d.xpm"
 #include "document.h"
 #include "prefs-utils.h"
