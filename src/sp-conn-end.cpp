@@ -12,6 +12,7 @@
 #include "sp-conn-end.h"
 #include "sp-path.h"
 #include "uri.h"
+#include "document.h"
 
 #include "libavoid/vertices.h"
 #include "libavoid/connector.h"
@@ -53,6 +54,11 @@ static void
 sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
                             SPPath *const path)
 {
+    // TODO: sp_item_invoke_bbox gives the wrong result for some objects
+    //       that have internal representations that are updated later
+    //       by the sp_*_update functions, e.g., text.
+    sp_document_ensure_up_to_date(path->document);
+    
     // Get the new route around obstacles.
     path->connEndPair.reroutePath();
 

@@ -4,6 +4,13 @@
 	  sometimes be given strange routes if there was a transform on
 	  either of the objects that the connector was attached to.
 
+	* src/conn-avoid-ref.cpp, src/sp-conn-end.cpp: Add a call to
+	  sp_document_ensure_up_to_date before checking bounding boxes
+	  in response to a transform signal.  This is because some
+	  objects (e.g., text) will not give the correct bbox until its
+	  update function has been called and its internal representation
+	  has been updated.  This fixes bug #1303523.
+
 2005-10-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* packaging/osx-app.sh: Include locale files in the OSX package and

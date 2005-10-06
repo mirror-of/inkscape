@@ -21,6 +21,7 @@
 #include "libnr/nr-rect-ops.h"
 #include "libavoid/polyutil.h"
 #include "libavoid/incremental.h"
+#include "document.h"
 
 
 static Avoid::Polygn avoid_item_poly(SPItem const *item);
@@ -104,6 +105,11 @@ static Avoid::Polygn avoid_item_poly(SPItem const *item)
     //       some convex hull code, though not NR::ConvexHull as this
     //       only keeps the bounding box of the convex hull currently.
 
+    // TODO: sp_item_invoke_bbox gives the wrong result for some objects
+    //       that have internal representations that are updated later
+    //       by the sp_*_update functions, e.g., text.
+    sp_document_ensure_up_to_date(item->document);
+    
     NRRect bboxRect;
     sp_item_invoke_bbox(item, &bboxRect, sp_item_i2doc_affine(item), TRUE);
     
