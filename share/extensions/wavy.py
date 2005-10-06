@@ -33,28 +33,51 @@ from math import *
 from random import *
 
 def drawwave(samples, periods, width, height, left, top, 
-		fx = "sin(x)", fpx = "cos(x)"):
+		fx = "sin(x)", fpx = "cos(x)", fponum = True):
+
+	# step is the distance between nodes on x
 	step = 2*pi / samples
 	third = step / 3.0
 	
+	# coords and scales based on the source rect
 	xoff = left
 	yoff = top + (height / 2)
 	scalex = width / (2*pi * periods)
 	scaley = height / 2
-
 	procx = lambda x: x * scalex + xoff
 	procy = lambda y: y * scaley + yoff
 
-	f = eval('lambda x: ' + fx)
-	fp = eval('lambda x: ' + fpx)
+	# functions specified by the user
+	if fx != "":
+		f = eval('lambda x: ' + fx)
+	if fpx != "":
+		fp = eval('lambda x: ' + fpx)
 
-	a = []
-	a.append(['M',[procx(0.0), procy(f(0))]])
+	# initialize function and derivative for 0;
+	# they are carried over from one iteration to the next, to avoid extra function calculations 		
+	y0 = f(0) 
+	if fponum == True: # numerical derivative, using 0.001*step as the small differential
+		d0 = (f(0 + 0.001*step) - y0)/(0.001*step)
+	else: # derivative given by the user
+		d0 = fp(0)
+
+	a = [] # path array 
+	a.append(['M',[procx(0.0), procy(y0)]]) # initial moveto
+
 	for i in range(int(samples * periods)):
-		x = i * step
-		a.append(['C',[procx(x + third), procy(f(x) + (fp(x) * third)), 
-			procx(x + (step - third)), procy(f(x + step) - (fp(x + step) * third)),
-			procx(x + step), procy(f(x + step))]])
+		x = i * step 
+		y1 = f(x + step)
+		if fponum == True: # numerical derivative
+			d1 = (y1 - f(x + step - 0.001*step))/(0.001*step)
+		else: # derivative given by the user
+			d1 = fp(x + step)
+		# create curve
+		a.append(['C',[procx(x + third), procy(y0 + (d0 * third)), 
+			procx(x + (step - third)), procy(y1 - (d1 * third)),
+			procx(x + step), procy(y1)]])
+		y0 = y1 # next segment's y0 is this segment's y1
+		d0 = d1 # we assume the function is smooth everywhere, so carry over the derivative too
+		    
 	return a
 
 class Wavy(inkex.Effect):
@@ -72,6 +95,10 @@ class Wavy(inkex.Effect):
 						action="store", type="string", 
 						dest="fofx", default="sin(x)",
 						help="f(x) for plotting")	
+		self.OptionParser.add_option("--fponum",
+						action="store", type="inkbool", 
+						dest="fponum", default=True,
+						help="Calculate the first derivative numerically")	
 		self.OptionParser.add_option("--fpofx",
 						action="store", type="string", 
 						dest="fpofx", default="cos(x)",
@@ -97,7 +124,8 @@ class Wavy(inkex.Effect):
 								self.options.periods,
 								w,h,x,y,
 								self.options.fofx, 
-								self.options.fpofx)))
+								self.options.fpofx,
+								self.options.fponum)))
 				node.parentNode.appendChild(new)
 				node.parentNode.removeChild(node)
 
