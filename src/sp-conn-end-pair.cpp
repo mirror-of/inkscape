@@ -138,7 +138,8 @@ SPConnEndPair::getEndpoints(NR::Point endPts[]) const {
     for (unsigned h = 0; h < 2; ++h) {
         if ( h2attItem[h] ) {
             NRRect bboxrect;
-            sp_item_invoke_bbox(h2attItem[h], &bboxrect, NR::identity(), true);
+            sp_item_invoke_bbox(h2attItem[h], &bboxrect,
+                    sp_item_i2doc_affine(h2attItem[h]), true);
             NR::Rect bbox(bboxrect);
             endPts[h] = bbox.midpoint();
         }
@@ -190,17 +191,14 @@ void
 SPConnEndPair::update(void)
 {
     if (_connType != SP_CONNECTOR_NOAVOID) {
-        SPItem *h2attItem[2];
-        getAttachedItems(h2attItem);
-
-        NR::Point endPt[2];
-        getEndpoints(endPt);
-
-        Avoid::Point src = { endPt[0][NR::X], endPt[0][NR::Y] };
-        Avoid::Point dst = { endPt[1][NR::X], endPt[1][NR::Y] };
-
         g_assert(_connRef != NULL);
         if (!(_connRef->isInitialised())) {
+            NR::Point endPt[2];
+            getEndpoints(endPt);
+
+            Avoid::Point src = { endPt[0][NR::X], endPt[0][NR::Y] };
+            Avoid::Point dst = { endPt[1][NR::X], endPt[1][NR::Y] };
+
             _connRef->lateSetup(src, dst);
             _connRef->setCallback(&emitPathInvalidationNotification, _path);
         }
@@ -231,8 +229,6 @@ SPConnEndPair::reroutePath(void)
         return;
     }
 
-    SPItem *h2attItem[2];
-    getAttachedItems(h2attItem);
     SPCurve *curve = _path->curve;
 
     NR::Point endPt[2];
