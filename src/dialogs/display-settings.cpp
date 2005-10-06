@@ -1173,6 +1173,13 @@ options_checkbox (
             selcue_checkbox (vb_tool, tt, "tools.gradient");
         }
 
+        // Connector
+        {
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Connector"));
+            
+            selcue_checkbox (vb_tool, tt, "tools.connector");
+        }
+
         // Dropper
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Dropper"));
@@ -1180,11 +1187,6 @@ options_checkbox (
             GtkWidget *dropper_page = options_dropper ();
             gtk_widget_show (dropper_page);
             gtk_container_add (GTK_CONTAINER (vb_tool), dropper_page);
-        }
-
-        // Connector
-        {
-            //GtkWidget *vb_tool = new_tab (nb_tools, _("Connector"));
         }
 
         g_signal_connect(GTK_OBJECT (nb_tools), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_tools");

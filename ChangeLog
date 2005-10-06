@@ -11,6 +11,11 @@
 	  update function has been called and its internal representation
 	  has been updated.  This fixes bug #1303523.
 
+	* src/dialogs/display-settings.cpp, src/dialogs/display-settings.h:
+	  Restore the Connector tool preferences tab.  Use same ordering
+	  for tools as on the toolbar.  Add the standard selection cue
+	  option to the connector tool preferences.  Fixes bug #1303360.
+
 2005-10-05  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* packaging/osx-app.sh: Include locale files in the OSX package and
