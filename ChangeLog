@@ -1,3 +1,11 @@
+2005-10-07  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* packaging/macosx/Resources/script, src/path-prefix.h:
+	  Don't assume the OSX app bundle will be named "Inkscape.app".
+	  This caused things like tool icons to disappear if the app
+	  bundle was renamed, e.g., to "Inscape-0.42.2.app".
+	  Fixes bug #1289648.
+
 2005-10-06  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/sp-conn-end-pair.cpp: Fix a bug where connectors could

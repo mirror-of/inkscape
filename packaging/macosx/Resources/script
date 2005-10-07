@@ -30,6 +30,6 @@ if [ "$VERSION" -eq "4" ]; then
   test -f ~/.inkscape/.fccache || exit 12
 fi
 
-BASE="`echo "$0" | sed -e 's/\/[A-Za-z]*.app\/Contents\/Resources\/script/\//'`"
+BASE="`echo "$0" | sed -e 's/\/Contents\/Resources\/script/\//'`"
 cd "$BASE"
 exec "$CWD/bin/inkscape" "$@"
