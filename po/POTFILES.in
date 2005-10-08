@@ -160,6 +160,7 @@ src/livarot/ShapeRaster.cpp
 src/livarot/ShapeSweep.cpp
 src/main.cpp
 src/marker-status.cpp
+src/menus-skeleton.h
 src/message-context.cpp
 src/message-stack.cpp
 src/mod360.cpp
