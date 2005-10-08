@@ -310,7 +310,7 @@ inkscape_init (SPObject * object)
     }
 
     inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
-    inkscape->menus = sp_repr_read_mem (menus_skeleton, MENUS_SKELETON_SIZE, NULL);
+    inkscape->menus = sp_repr_read_mem (_(menus_skeleton), MENUS_SKELETON_SIZE, NULL);
 
     inkscape->documents = NULL;
     inkscape->desktops = NULL;
@@ -747,7 +747,7 @@ inkscape_load_menus (Inkscape::Application *inkscape)
 {
     return inkscape_load_config (MENUS_FILE, 
 				 inkscape->menus, 
-				 menus_skeleton, 
+				 _(menus_skeleton), 
 				 MENUS_SKELETON_SIZE,
 				 _("%s is not a regular file.\n%s"),
 				 _("%s not a valid XML file, or\n"

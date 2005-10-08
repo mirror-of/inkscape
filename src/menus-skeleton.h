@@ -4,7 +4,7 @@
 #include <inkscape_version.h>
 
 static char const menus_skeleton[] =
-"<inkscape version=\"" INKSCAPE_VERSION "\"\n"
+N_("<inkscape version=\"" INKSCAPE_VERSION "\"\n"
 "  xmlns:sodipodi=\"http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd\"\n"
 "  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\">\n"
 "\n"
@@ -217,7 +217,7 @@ static char const menus_skeleton[] =
 "       <verb verb-id=\"HelpAbout\" />\n"
 //"       <verb verb-id=\"ShowLicense\" />\n"
 "   </submenu>\n"
-"</inkscape>\n";
+"</inkscape>\n");
 
 #define MENUS_SKELETON_SIZE (sizeof(menus_skeleton) - 1)
 
