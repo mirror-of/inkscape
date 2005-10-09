@@ -6,7 +6,7 @@ the release notes for the current release.
 
 
 
-                                 Inkscape 0.41
+                                 Inkscape 0.41.1
 
 In brief
 
@@ -204,6 +204,11 @@ Documentation, translations, examples
        Spanish, Ukrainian.
 
 Important bugfixes
+
+  0.41.1:
+     * Security fix for arbitrary code execution in style code.
+
+  0.41:
 
      * Long freezes that happened on Windows and less frequently on Linux
        during opening files, typing text, ungrouping, etc. were tracked down

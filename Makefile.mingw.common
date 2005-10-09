@@ -105,7 +105,7 @@ endif
 
 MAJOR = 0
 MINOR = 41
-VERSION_NR = $(MAJOR).$(MINOR)
+VERSION_NR = $(MAJOR).$(MINOR).1
 VERSION = \"$(VERSION_NR)-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a
