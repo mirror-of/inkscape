@@ -572,18 +572,22 @@ PrintPS::comment(Inkscape::Extension::Print *mod, const char * comment)
 }
 
 void
-PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style, const NRRect *pbox)
+PrintPS::print_fill_style(SVGOStringStream &os, SPStyle const *const style, NRRect const *pbox)
 {
-    g_return_if_fail(style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style)));
+    g_return_if_fail( style->fill.type == SP_PAINT_TYPE_COLOR
+                      || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+                           && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) );
     
-    if (style->fill.type == SP_PAINT_TYPE_COLOR)
-    {
+    if (style->fill.type == SP_PAINT_TYPE_COLOR) {
         float rgb[3];
         sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
 
         os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
 
-    } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
+    } else {
+        g_assert( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+                  && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) );
+
         if (SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
 
             SPLinearGradient *lg=SP_LINEARGRADIENT(SP_STYLE_FILL_SERVER (style));
@@ -715,13 +719,16 @@ PrintPS::print_stroke_style(SVGOStringStream &os, const SPStyle *style)
 
 
 unsigned int
-PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-              const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+PrintPS::fill(Inkscape::Extension::Print *mod, NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *const style,
+              NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
     if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
 
-    if (style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
+    if ( style->fill.type == SP_PAINT_TYPE_COLOR
+         || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+              && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) )
+    {
         Inkscape::SVGOStringStream os;
 
         os << "gsave\n";
@@ -733,8 +740,10 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
         if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
             if (style->fill.type == SP_PAINT_TYPE_COLOR) {
                 os << "eofill\n";
-            } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
-                SPGradient *g=SP_GRADIENT(SP_STYLE_FILL_SERVER (style));
+            } else {
+                g_assert( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+                          && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) );
+                SPGradient const *g = SP_GRADIENT(SP_STYLE_FILL_SERVER(style));
                 os << "eoclip\n";
                 if (g->gradientTransform_set) {
                     os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1] 
@@ -749,8 +758,10 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
         } else {
             if (style->fill.type == SP_PAINT_TYPE_COLOR) {
                 os << "fill\n";
-            } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
-                SPGradient *g=SP_GRADIENT(SP_STYLE_FILL_SERVER (style));
+            } else {
+                g_assert( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+                          && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) );
+                SPGradient const *g = SP_GRADIENT(SP_STYLE_FILL_SERVER(style));
                 os << "clip\n";
                 if (g->gradientTransform_set) {
                     os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1] 
@@ -874,8 +885,8 @@ PrintPS::PSFontName(const SPStyle *style)
 
 
 unsigned int
-PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
-              const SPStyle* style)
+PrintPS::text(Inkscape::Extension::Print *mod, char const *text, NR::Point p,
+              SPStyle const *const style)
 {
     if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
@@ -917,8 +928,10 @@ PrintPS::text(Inkscape::Extension::Print *mod, const char *text, NR::Point p,
     os << "setfont\n";
     g_free((void *) fn);
 
-    if (style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
-
+    if ( style->fill.type == SP_PAINT_TYPE_COLOR
+         || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+              && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) )
+    {
         // set fill style
         print_fill_style(os, style, NULL); 
         // FIXME: we don't know the pbox of text, so have to pass NULL. This means gradients with

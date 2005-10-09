@@ -179,6 +179,51 @@ len are const.
 
 
 
+src/extension/internal/ps.cpp:PrintPS::print_fill_style:
+
+Proof of the
+   g_return_if_fail( style->fill.type == SP_PAINT_TYPE_COLOR
+                     || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+                          && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) )
+at beginning of function:
+
+rgrep print_fill_style reveals no callers in any other files.  There are two calls in ps.cpp, both
+inside an `if' test of that same condition (with no relevant lines between the test and the call).
+Each call uses `style' as its second argument, and `style' in print_fill_style refers to its second
+parameter.  In both caller & callee, `style' is a const pointer to const, and there is very little
+code between the two tests, so the relevant values are very unlikely to change between the two
+tests.
+
+
+Proof of
+    g_assert( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+              && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) :
+
+The g_return_if_fail(style->fill.type == SP_PAINT_TYPE_COLOR
+                     || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+                          && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) )
+call at the beginning of the function, and we're in the `else' branch of a test for
+style->fill.type == SP_PAINT_TYPE_COLOR, and style is a const pointer to const, so it's likely that
+style->fill and the gradient object have the same values throughout.
+
+
+
+src/extensions/internal/ps.cpp:PrintPS::fill:
+
+Proof of the two assertions
+  g_assert( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+            && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) ) :
+
+Each is in the `else' branch of a test for `style->fill.type == SP_PAINT_TYPE_COLOR',
+within a test for
+  ( style->fill.type == SP_PAINT_TYPE_COLOR
+    || ( style->fill.type == SP_PAINT_TYPE_PAINTSERVER
+         && SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style)) )  ).
+
+`style' is a const pointer to const, so the values are unlikely to have changed between the tests.
+
+
+
 src/seltrans.cpp:sp_sel_trans_update_handles
 
 Proof of requirements of sp_show_handles:
