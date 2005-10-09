@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-25 13:05+0200\n"
-"PO-Revision-Date: 2005-09-24 18:11+0200\n"
+"POT-Creation-Date: 2005-10-09 10:07+0200\n"
+"PO-Revision-Date: 2005-09-26 09:29+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,11 +123,11 @@ msgstr "Línea guía"
 msgid "Move %s"
 msgstr "Mover %s"
 
-#: ../src/desktop.cpp:741
+#: ../src/desktop.cpp:742
 msgid "No previous zoom."
 msgstr "No hay menos zoom."
 
-#: ../src/desktop.cpp:766
+#: ../src/desktop.cpp:767
 msgid "No next zoom."
 msgstr "No hay más zoom."
 
@@ -857,7 +857,8 @@ msgid "Snap the edges of the object bounding boxes"
 msgstr "Ajustar los bordes de las cajas de contorno de los objetos"
 
 #: ../src/dialogs/desktop-properties.cpp:934
-msgid "Snap points to grid"
+#, fuzzy
+msgid "Snap nodes to grid"
 msgstr "Ajustar los puntos a la rejilla"
 
 #: ../src/dialogs/desktop-properties.cpp:934
@@ -981,7 +982,7 @@ msgstr "Color de la guía cuando está debajo del ratón"
 #: ../src/dialogs/desktop-properties.cpp:1044
 #: ../src/ui/dialog/align-and-distribute.cpp:778
 #: ../src/ui/dialog/document-preferences.cpp:36
-#: ../src/widgets/desktop-widget.cpp:910
+#: ../src/widgets/desktop-widget.cpp:907
 msgid "Page"
 msgstr "Página"
 
@@ -1123,7 +1124,7 @@ msgstr "Marca de de selección por cada objeto:"
 #: ../src/dialogs/display-settings.cpp:253
 #: ../src/dialogs/display-settings.cpp:390
 #: ../src/dialogs/display-settings.cpp:445
-#: ../src/dialogs/display-settings.cpp:1494
+#: ../src/dialogs/display-settings.cpp:1496
 #: ../src/dialogs/stroke-style.cpp:791 ../src/interface.cpp:764
 #: ../src/ui/dialog/inkscape-preferences.cpp:156 ../src/verbs.cpp:1821
 msgid "None"
@@ -1555,21 +1556,25 @@ msgstr "Texto"
 msgid "Gradient"
 msgstr "Gradiente"
 
-#: ../src/dialogs/display-settings.cpp:1178 ../src/verbs.cpp:2054
+#: ../src/dialogs/display-settings.cpp:1178 ../src/verbs.cpp:2056
+msgid "Connector"
+msgstr "Conector"
+
+#: ../src/dialogs/display-settings.cpp:1185 ../src/verbs.cpp:2054
 msgid "Dropper"
 msgstr "Cuentagotas"
 
 #. Windows
-#: ../src/dialogs/display-settings.cpp:1195
+#: ../src/dialogs/display-settings.cpp:1197
 #: ../src/ui/dialog/inkscape-preferences.cpp:59
 msgid "Windows"
 msgstr "Ventanas"
 
-#: ../src/dialogs/display-settings.cpp:1200
+#: ../src/dialogs/display-settings.cpp:1202
 msgid "Save window geometry"
 msgstr "Guardar geometría de las ventanas"
 
-#: ../src/dialogs/display-settings.cpp:1201
+#: ../src/dialogs/display-settings.cpp:1203
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
@@ -1577,21 +1582,21 @@ msgstr ""
 "Guarda el tamaño y posición de la ventana para cada documento (solamente "
 "para el formato SVG de Inkscape)"
 
-#: ../src/dialogs/display-settings.cpp:1208
+#: ../src/dialogs/display-settings.cpp:1210
 msgid "Dialogs are hidden in taskbar"
 msgstr "Se ocultan los diálogos en la barra de tareas."
 
-#: ../src/dialogs/display-settings.cpp:1209
+#: ../src/dialogs/display-settings.cpp:1211
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
 "Indica si las ventanas de diálogo deben ser ocultada en la barra de tareas "
 "del gestor de ventanas."
 
-#: ../src/dialogs/display-settings.cpp:1216
+#: ../src/dialogs/display-settings.cpp:1218
 msgid "Zoom when window is resized"
 msgstr "Ajustar el dibujo si cambia el tamaño de la ventana"
 
-#: ../src/dialogs/display-settings.cpp:1217
+#: ../src/dialogs/display-settings.cpp:1219
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -1603,36 +1608,36 @@ msgstr ""
 "desplazamiento de la derecha)."
 
 #. Clones
-#: ../src/dialogs/display-settings.cpp:1225 ../src/dialogs/find.cpp:682
+#: ../src/dialogs/display-settings.cpp:1227 ../src/dialogs/find.cpp:682
 #: ../src/ui/dialog/inkscape-preferences.cpp:60
 msgid "Clones"
 msgstr "Clones"
 
-#: ../src/dialogs/display-settings.cpp:1229
+#: ../src/dialogs/display-settings.cpp:1231
 msgid "When the original moves, its clones and linked offsets:"
 msgstr "Cuando se mueve el original, sus clones y desvíos enlazados:"
 
-#: ../src/dialogs/display-settings.cpp:1241
+#: ../src/dialogs/display-settings.cpp:1243
 msgid "Move in parallel"
 msgstr "Se mueven en paralelo"
 
-#: ../src/dialogs/display-settings.cpp:1242
+#: ../src/dialogs/display-settings.cpp:1244
 msgid "Clones are translated by the same vector as their original."
 msgstr "Los clones se trasladan por el mismo vector que su original."
 
-#: ../src/dialogs/display-settings.cpp:1249
+#: ../src/dialogs/display-settings.cpp:1251
 msgid "Stay unmoved"
 msgstr "Permanecen inmóviles"
 
-#: ../src/dialogs/display-settings.cpp:1250
+#: ../src/dialogs/display-settings.cpp:1252
 msgid "Clones preserve their positions when their original is moved."
 msgstr "Los clones conservan sus posiciones cuando se mueve su original."
 
-#: ../src/dialogs/display-settings.cpp:1257
+#: ../src/dialogs/display-settings.cpp:1259
 msgid "Move according to transform"
 msgstr "Se mueven de acuerdo con la transformación"
 
-#: ../src/dialogs/display-settings.cpp:1258
+#: ../src/dialogs/display-settings.cpp:1260
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
@@ -1641,79 +1646,79 @@ msgstr ""
 "Cada clon se mueve de acuerdo con el valor de su atributo «transform=». Por "
 "ejemplo, un clon rotado se moverá en una dirección distinta a su original."
 
-#: ../src/dialogs/display-settings.cpp:1267
+#: ../src/dialogs/display-settings.cpp:1269
 msgid "When the original is deleted, its clones:"
 msgstr "Cuando se borra el original, sus clones:"
 
-#: ../src/dialogs/display-settings.cpp:1279
+#: ../src/dialogs/display-settings.cpp:1281
 msgid "Are unlinked"
 msgstr "Se desconectan"
 
-#: ../src/dialogs/display-settings.cpp:1279
+#: ../src/dialogs/display-settings.cpp:1281
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Los clones huérfanos se convierten en objetos normales."
 
-#: ../src/dialogs/display-settings.cpp:1285
+#: ../src/dialogs/display-settings.cpp:1287
 msgid "Are deleted"
 msgstr "Se borran"
 
-#: ../src/dialogs/display-settings.cpp:1285
+#: ../src/dialogs/display-settings.cpp:1287
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Los clones huérfanos se borran junto con su original."
 
 #. Transforms
 #. TRANSLATORS: Noun, i.e. transformations.
-#: ../src/dialogs/display-settings.cpp:1301
+#: ../src/dialogs/display-settings.cpp:1303
 #: ../src/ui/dialog/inkscape-preferences.cpp:61
 msgid "Transforms"
 msgstr "Transformaciones"
 
-#: ../src/dialogs/display-settings.cpp:1304
+#: ../src/dialogs/display-settings.cpp:1306
 msgid "Scale stroke width"
 msgstr "Escalar ancho de trazo"
 
-#: ../src/dialogs/display-settings.cpp:1305
+#: ../src/dialogs/display-settings.cpp:1307
 #: ../src/widgets/select-toolbar.cpp:542
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "Al escalar objetos, escalar el ancho del trazo en la misma proporción"
 
-#: ../src/dialogs/display-settings.cpp:1312
+#: ../src/dialogs/display-settings.cpp:1314
 msgid "Scale rounded corners in rectangles"
 msgstr "Escalar los ángulos redondeados en los rectángulos"
 
-#: ../src/dialogs/display-settings.cpp:1313
+#: ../src/dialogs/display-settings.cpp:1315
 #: ../src/widgets/select-toolbar.cpp:554
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr "Al escalar rectángulos, escalar los radios de los ángulos redondeados"
 
-#: ../src/dialogs/display-settings.cpp:1320
+#: ../src/dialogs/display-settings.cpp:1322
 msgid "Transform gradients"
 msgstr "Transformar gradientes"
 
-#: ../src/dialogs/display-settings.cpp:1321
+#: ../src/dialogs/display-settings.cpp:1323
 #: ../src/widgets/select-toolbar.cpp:566
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr "Transformar los gradientes (en relleno o borde) junto con los objetos"
 
-#: ../src/dialogs/display-settings.cpp:1328
+#: ../src/dialogs/display-settings.cpp:1330
 msgid "Transform patterns"
 msgstr "Transformar patrones"
 
-#: ../src/dialogs/display-settings.cpp:1329
+#: ../src/dialogs/display-settings.cpp:1331
 #: ../src/widgets/select-toolbar.cpp:578
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr "Transformar los patrones (en relleno o borde) junto con los objetos"
 
 #. TRANSLATORS: How to specify the affine transformation in the SVG file.
-#: ../src/dialogs/display-settings.cpp:1339
+#: ../src/dialogs/display-settings.cpp:1341
 msgid "Store transformation:"
 msgstr "Guardar transformación:"
 
-#: ../src/dialogs/display-settings.cpp:1350
+#: ../src/dialogs/display-settings.cpp:1352
 msgid "Optimized"
 msgstr "Optimizado"
 
-#: ../src/dialogs/display-settings.cpp:1351
+#: ../src/dialogs/display-settings.cpp:1353
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -1721,30 +1726,30 @@ msgstr ""
 "Aplicar la transformación a los objetos sin añadir un atributo «transform=» "
 "cuando sea posible."
 
-#: ../src/dialogs/display-settings.cpp:1358
+#: ../src/dialogs/display-settings.cpp:1360
 msgid "Preserved"
 msgstr "Conservado"
 
-#: ../src/dialogs/display-settings.cpp:1359
+#: ../src/dialogs/display-settings.cpp:1361
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
 "Siempre guardar una transformación como un atributo «transform=» en los "
 "objetos."
 
 #. Selecting
-#: ../src/dialogs/display-settings.cpp:1367
+#: ../src/dialogs/display-settings.cpp:1369
 msgid "Selecting"
 msgstr "Selección"
 
-#: ../src/dialogs/display-settings.cpp:1369
+#: ../src/dialogs/display-settings.cpp:1371
 msgid "Ctrl+A, Tab, Shift+Tab:"
 msgstr "Ctrl+A, Tab, Mayús+Tab:"
 
-#: ../src/dialogs/display-settings.cpp:1378
+#: ../src/dialogs/display-settings.cpp:1380
 msgid "Select only within current layer"
 msgstr "Solamente seleccionar dentro de la capa actual"
 
-#: ../src/dialogs/display-settings.cpp:1379
+#: ../src/dialogs/display-settings.cpp:1381
 msgid ""
 "Uncheck this to make keyboard selection commands work on objects in all "
 "layers"
@@ -1752,11 +1757,11 @@ msgstr ""
 "Desmarque esto para que los comandos de selección del teclado funcionen en "
 "objetos de todas las capas."
 
-#: ../src/dialogs/display-settings.cpp:1386
+#: ../src/dialogs/display-settings.cpp:1388
 msgid "Ignore hidden objects"
 msgstr "Ignorar objetos ocultos"
 
-#: ../src/dialogs/display-settings.cpp:1387
+#: ../src/dialogs/display-settings.cpp:1389
 msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden group or layer)"
@@ -1764,11 +1769,11 @@ msgstr ""
 "Desmarque esto para poder seleccionar objetos ocultos (tanto por sí mismos "
 "como por estar en un grupo o capa ocultos)"
 
-#: ../src/dialogs/display-settings.cpp:1394
+#: ../src/dialogs/display-settings.cpp:1396
 msgid "Ignore locked objects"
 msgstr "Ignorar objetos bloqueados"
 
-#: ../src/dialogs/display-settings.cpp:1395
+#: ../src/dialogs/display-settings.cpp:1397
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
@@ -1777,33 +1782,33 @@ msgstr ""
 "mismos como por estar en un grupo o capa bloqueados)"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: ../src/dialogs/display-settings.cpp:1403
+#: ../src/dialogs/display-settings.cpp:1405
 #: ../src/ui/dialog/inkscape-preferences.cpp:62
 msgid "Misc"
 msgstr "Misc"
 
-#: ../src/dialogs/display-settings.cpp:1406
+#: ../src/dialogs/display-settings.cpp:1408
 msgid "Default export resolution:"
 msgstr "Resolución de exportación predeterminada:"
 
-#: ../src/dialogs/display-settings.cpp:1407
+#: ../src/dialogs/display-settings.cpp:1409
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 "Resolución predeterminada (en puntos por pulgada) de mapa de bits en el "
 "diálogo de exportación"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: ../src/dialogs/display-settings.cpp:1408 ../src/dialogs/export.cpp:442
+#: ../src/dialogs/display-settings.cpp:1410 ../src/dialogs/export.cpp:442
 msgid "dpi"
 msgstr "dpi"
 
 #. TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
 #. * rectangle with bitmap fill.
-#: ../src/dialogs/display-settings.cpp:1419
+#: ../src/dialogs/display-settings.cpp:1421
 msgid "Import bitmap as <image>"
 msgstr "Importar mapa de bits como <image>"
 
-#: ../src/dialogs/display-settings.cpp:1420
+#: ../src/dialogs/display-settings.cpp:1422
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
@@ -1814,11 +1819,11 @@ msgstr ""
 #. TRANSLATORS: When on, the print out (currently Postscript) will have
 #. * a comment with the each object's label visible, marking the section
 #. * of the printing commands that represent the given object.
-#: ../src/dialogs/display-settings.cpp:1430
+#: ../src/dialogs/display-settings.cpp:1432
 msgid "Add label comments to printing output"
 msgstr "Añadir comentarios de etiqueta a la salida de impresión"
 
-#: ../src/dialogs/display-settings.cpp:1431
+#: ../src/dialogs/display-settings.cpp:1433
 msgid ""
 "When on, a comment will be added to the raw print output, marking the "
 "rendered output for an object with its label"
@@ -1827,11 +1832,11 @@ msgstr ""
 "salida generada para un objeto con su etiqueta"
 
 #. TRANSLATORS: When on, enable the effects menu, default is off
-#: ../src/dialogs/display-settings.cpp:1439
+#: ../src/dialogs/display-settings.cpp:1441
 msgid "Enable script effects (requires restart) - EXPERIMENTAL"
 msgstr "Activar efectos de script (necesita reiniciar) - EXPERIMENTAL"
 
-#: ../src/dialogs/display-settings.cpp:1440
+#: ../src/dialogs/display-settings.cpp:1442
 msgid ""
 "When on, the effects menu is enabled, allowing external effect scripts to be "
 "called, requires restart before effective - EXPERIMENTAL"
@@ -1841,20 +1846,20 @@ msgstr ""
 "efecto. - EXPERIMENTAL"
 
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
-#: ../src/dialogs/display-settings.cpp:1448
+#: ../src/dialogs/display-settings.cpp:1450
 msgid "Max recent documents:"
 msgstr "Máximo de documentos recientes"
 
-#: ../src/dialogs/display-settings.cpp:1449
+#: ../src/dialogs/display-settings.cpp:1451
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 "La longitud máxima de la lista de «Abrir recientes» en el menú «Archivo»"
 
-#: ../src/dialogs/display-settings.cpp:1459
+#: ../src/dialogs/display-settings.cpp:1461
 msgid "Simplification threshold:"
 msgstr "Umbral de simplificación:"
 
-#: ../src/dialogs/display-settings.cpp:1460
+#: ../src/dialogs/display-settings.cpp:1462
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -1864,23 +1869,23 @@ msgstr ""
 "varias veces sucesivas, actuará más y más agresivamente; al ejecutarlo "
 "después de una pausa volverá al umbral predeterminado."
 
-#: ../src/dialogs/display-settings.cpp:1481
+#: ../src/dialogs/display-settings.cpp:1483
 msgid "Oversample bitmaps:"
 msgstr "Bitmaps de sobremuestreo:"
 
-#: ../src/dialogs/display-settings.cpp:1500
+#: ../src/dialogs/display-settings.cpp:1502
 msgid "2x2"
 msgstr "2x2"
 
-#: ../src/dialogs/display-settings.cpp:1506
+#: ../src/dialogs/display-settings.cpp:1508
 msgid "4x4"
 msgstr "4x4"
 
-#: ../src/dialogs/display-settings.cpp:1512
+#: ../src/dialogs/display-settings.cpp:1514
 msgid "8x8"
 msgstr "8x8"
 
-#: ../src/dialogs/display-settings.cpp:1518
+#: ../src/dialogs/display-settings.cpp:1520
 msgid "16x16"
 msgstr "16x16"
 
@@ -2226,7 +2231,7 @@ msgstr "%d x %d"
 
 #: ../src/dialogs/iconpreview.cpp:193
 #: ../src/ui/dialog/align-and-distribute.cpp:780
-#: ../src/widgets/desktop-widget.cpp:918
+#: ../src/widgets/desktop-widget.cpp:915
 msgid "Selection"
 msgstr "Selección"
 
@@ -2816,16 +2821,16 @@ msgstr "Movimiento relativo"
 msgid "deg"
 msgstr "grados"
 
-#: ../src/dialogs/xml-tree.cpp:176
+#: ../src/dialogs/xml-tree.cpp:179
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 "<b>Haga clic</b> para seleccionar nodos, <b>arrastre</b> para reordenar."
 
-#: ../src/dialogs/xml-tree.cpp:188
+#: ../src/dialogs/xml-tree.cpp:191
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>Haga clic</b> en el atributo para editarlo."
 
-#: ../src/dialogs/xml-tree.cpp:192
+#: ../src/dialogs/xml-tree.cpp:195
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -2834,81 +2839,81 @@ msgstr ""
 "Ha seleccionado el atributo <b>%s</b>. Cuando termine, pulse <b>Ctrl+Enter</"
 "b> para guardar los cambios."
 
-#: ../src/dialogs/xml-tree.cpp:283
+#: ../src/dialogs/xml-tree.cpp:286
 msgid "Drag to reorder nodes"
 msgstr "Arrastrar para reordenar nodos"
 
-#: ../src/dialogs/xml-tree.cpp:303
+#: ../src/dialogs/xml-tree.cpp:306
 msgid "New element node"
 msgstr "Nuevo nodo elemento"
 
-#: ../src/dialogs/xml-tree.cpp:325
+#: ../src/dialogs/xml-tree.cpp:328
 msgid "New text node"
 msgstr "Siguiente nodo de texto"
 
-#: ../src/dialogs/xml-tree.cpp:346
+#: ../src/dialogs/xml-tree.cpp:349
 msgid "Duplicate node"
 msgstr "Duplicar nodo"
 
-#: ../src/dialogs/xml-tree.cpp:367
+#: ../src/dialogs/xml-tree.cpp:370
 msgid "Delete node"
 msgstr "Borrar nodo"
 
-#: ../src/dialogs/xml-tree.cpp:383
+#: ../src/dialogs/xml-tree.cpp:386
 msgid "Unindent node"
 msgstr "Desangrar nodo"
 
-#: ../src/dialogs/xml-tree.cpp:398
+#: ../src/dialogs/xml-tree.cpp:401
 msgid "Indent node"
 msgstr "Sangrar nodos"
 
-#: ../src/dialogs/xml-tree.cpp:410
+#: ../src/dialogs/xml-tree.cpp:413
 msgid "Raise node"
 msgstr "Elevar nodo"
 
-#: ../src/dialogs/xml-tree.cpp:422
+#: ../src/dialogs/xml-tree.cpp:425
 msgid "Lower node"
 msgstr "Bajar nodo"
 
-#: ../src/dialogs/xml-tree.cpp:467
+#: ../src/dialogs/xml-tree.cpp:470
 msgid "Delete attribute"
 msgstr "Borrar atributo"
 
 #. TRANSLATORS: "Attribute" is a noun here
-#: ../src/dialogs/xml-tree.cpp:512
+#: ../src/dialogs/xml-tree.cpp:515
 msgid "Attribute name"
 msgstr "Nombre de atributo"
 
 #. TRANSLATORS: "Set" is a verb here
-#: ../src/dialogs/xml-tree.cpp:532
+#: ../src/dialogs/xml-tree.cpp:535
 msgid "Set attribute"
 msgstr "Definir atributo"
 
 #. TRANSLATORS: "Set" is a verb here
-#: ../src/dialogs/xml-tree.cpp:534
+#: ../src/dialogs/xml-tree.cpp:537
 msgid "Set"
 msgstr "Aceptar"
 
 #. TRANSLATORS: "Attribute" is a noun here
-#: ../src/dialogs/xml-tree.cpp:557
+#: ../src/dialogs/xml-tree.cpp:560
 msgid "Attribute value"
 msgstr "Valor del atributo"
 
-#: ../src/dialogs/xml-tree.cpp:1357
+#: ../src/dialogs/xml-tree.cpp:1368
 msgid "New element node..."
 msgstr "Nuevo nodo elemento..."
 
-#: ../src/dialogs/xml-tree.cpp:1378
+#: ../src/dialogs/xml-tree.cpp:1389
 #: ../src/ui/dialog/whiteboard-connect.cpp:100
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:98
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../src/dialogs/xml-tree.cpp:1384
+#: ../src/dialogs/xml-tree.cpp:1395
 msgid "Create"
 msgstr "Crear"
 
-#: ../src/dialogs/xml-tree.cpp:1510
+#: ../src/dialogs/xml-tree.cpp:1521
 #, c-format
 msgid ""
 "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
@@ -3207,45 +3212,45 @@ msgstr ""
 msgid "default.svg"
 msgstr "default.svg"
 
-#: ../src/file.cpp:202 ../src/file.cpp:894
+#: ../src/file.cpp:204 ../src/file.cpp:896
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Error al cargar el archivo pedido %s"
 
-#: ../src/file.cpp:227
+#: ../src/file.cpp:229
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Todavía no se ha guardado el documento. No se puede revertir."
 
-#: ../src/file.cpp:233
+#: ../src/file.cpp:235
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 "Se perderán los cambios. ¿Está seguro de querer recargar el documento %s?"
 
-#: ../src/file.cpp:260
+#: ../src/file.cpp:262
 msgid "Document reverted."
 msgstr "Documento revertido."
 
-#: ../src/file.cpp:262
+#: ../src/file.cpp:264
 msgid "Document not reverted."
 msgstr "No se ha revertido el documento."
 
-#: ../src/file.cpp:376
+#: ../src/file.cpp:378
 msgid "Select file to open"
 msgstr "Seleccione el archivo a abrir"
 
-#: ../src/file.cpp:512
+#: ../src/file.cpp:514
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "Se ha eliminado <b>%i</b> definición no usada en &lt;defs&gt;."
 msgstr[1] "Se han eliminado <b>%i</b> definiciones no usadas en &lt;defs&gt;."
 
-#: ../src/file.cpp:517
+#: ../src/file.cpp:519
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "No hay definiciones sin usar en &lt;defs&gt;."
 
-#: ../src/file.cpp:542
+#: ../src/file.cpp:544
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -3254,38 +3259,38 @@ msgstr ""
 "No se ha encontrado una extensión de inkscape para guardar el documento (%"
 "s). Esto pudo ser causado por una extensión de archivo desconocida."
 
-#: ../src/file.cpp:543 ../src/file.cpp:551
+#: ../src/file.cpp:545 ../src/file.cpp:553
 msgid "Document not saved."
 msgstr "No se ha guardado el documento."
 
-#: ../src/file.cpp:550
+#: ../src/file.cpp:552
 #, c-format
 msgid "File %s could not be saved."
 msgstr "No se pudo guardar el archivo %s."
 
-#: ../src/file.cpp:560
+#: ../src/file.cpp:562
 msgid "Document saved."
 msgstr "Documento guardado."
 
-#: ../src/file.cpp:608
+#: ../src/file.cpp:610
 #, c-format
 msgid "drawing%s"
 msgstr "dibujo%s"
 
-#: ../src/file.cpp:614
+#: ../src/file.cpp:616
 #, c-format
 msgid "drawing-%d%s"
 msgstr "dibujo-%d%s"
 
-#: ../src/file.cpp:649
+#: ../src/file.cpp:651
 msgid "Select file to save to"
 msgstr "Seleccione el archivo en el que se guardará"
 
-#: ../src/file.cpp:733
+#: ../src/file.cpp:735
 msgid "No changes need to be saved."
 msgstr "No hay cambios que necesiten ser guardados."
 
-#: ../src/file.cpp:920
+#: ../src/file.cpp:922
 msgid "Select file to import"
 msgstr "Seleccionar el archivo a importar"
 
@@ -3689,19 +3694,23 @@ msgstr ""
 msgid "Jabber connection lost."
 msgstr "Se ha perdido la conexión Jabber."
 
-#: ../src/jabber_whiteboard/callbacks.cpp:71
-#, c-format
-msgid "Sending message; %u messages remaining in send queue."
-msgstr "Enviando mensaje; %u mensajes pendientes en la cola de envío."
+#: ../src/jabber_whiteboard/callbacks.cpp:72
+#, fuzzy, c-format
+msgid "Sending message; %u message remaining in send queue."
+msgid_plural "Sending message; %u messages remaining in send queue."
+msgstr[0] "Enviando mensaje; %u mensajes pendientes en la cola de envío."
+msgstr[1] "Enviando mensaje; %u mensajes pendientes en la cola de envío."
 
-#: ../src/jabber_whiteboard/callbacks.cpp:74
+#: ../src/jabber_whiteboard/callbacks.cpp:78
 msgid "Receive queue empty."
 msgstr "Cola de recepción vacía."
 
-#: ../src/jabber_whiteboard/callbacks.cpp:149
-#, c-format
-msgid "Receiving change; %u changes left to process."
-msgstr "Recibiendo cambio; %u cambios pendientes de procesar."
+#: ../src/jabber_whiteboard/callbacks.cpp:154
+#, fuzzy, c-format
+msgid "Receiving change; %u change left to process."
+msgid_plural "Receiving change; %u changes left to process."
+msgstr[0] "Recibiendo cambio; %u cambios pendientes de procesar."
+msgstr[1] "Recibiendo cambio; %u cambios pendientes de procesar."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:157
 #, c-format
@@ -3709,24 +3718,19 @@ msgid "<b>%s</b> has left the chatroom."
 msgstr "<b>%s</b> ha dejado la sala."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:221
-#, fuzzy
 msgid "Nickname %1 is already in use.  Please choose a different nickname."
-msgstr "El apodo %1 ya está siendo utilizado. Utilice un apodo distinto."
+msgstr "El apodo %1 ya está siendo utilizado. Elija un apodo distinto."
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:225
-#, fuzzy
 msgid "An error was encountered while attempting to connect to the server."
-msgstr ""
-"Se ha producido un error durante el intento de conexión al servidor de "
-"conferencias de Jabber."
+msgstr "Se ha producido un error durante el intento de conexión al servidor."
 
 #. Check to see if the user made any modifications to this document.  If so,
 #. we want to give them the option of (1) letting us clear their document or (2)
 #. opening a new, blank document for the whiteboard session.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:131
-#, fuzzy
 msgid "<b>%1</b> has invited you to a whiteboard session."
-msgstr "<b>%s</b> ha <b>abandonado</b> la sesión de pizarra blanca."
+msgstr "<b>%1</b> le ha invitado a una sesión de pizarra blanca."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:132
 msgid "Incoming whiteboard invitation from %1"
@@ -3741,6 +3745,9 @@ msgid ""
 "Would you like to accept %1's invitation in a new document window?\n"
 "Accepting the invitation in your current window will discard unsaved changes."
 msgstr ""
+"¿Desea aceptar la invitación de %1 en una ventana de documento nuevo?\n"
+"Si acepta la invitación en su ventana actual perderá los cambios que no ha "
+"guardado."
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:143
 #: ../src/jabber_whiteboard/connection-establishment.cpp:197
@@ -3753,9 +3760,8 @@ msgid "Decline invitation"
 msgstr "Rechazar invitación"
 
 #: ../src/jabber_whiteboard/connection-establishment.cpp:145
-#, fuzzy
 msgid "Accept invitation in new document window"
-msgstr "Aceptar la invitación en un documento nuevo"
+msgstr "Aceptar la invitación en una ventana de documento nuevo"
 
 #. We could not create a new desktop; ask the user if she or he wants to
 #. replace the current document and accept the invitation, or reject the invitation.
@@ -3764,6 +3770,8 @@ msgid ""
 "A new document window could not be opened for a whiteboard session with <b>%"
 "1</b>"
 msgstr ""
+"No se ha podido abrir una ventana de documento nuevo para una sesión de "
+"pizarra blanca con <b>%1</b>"
 
 #. TRANSLATORS: %1 is the peer whom refused our invitation.
 #: ../src/jabber_whiteboard/connection-establishment.cpp:237
@@ -3817,20 +3825,33 @@ msgstr "_Guardar archivo de sesión:"
 msgid "<b>%s</b> has joined the chatroom."
 msgstr "<b>%s</b> se ha unido a la sala de chat."
 
-#: ../src/jabber_whiteboard/message-queue.cpp:86
+#: ../src/jabber_whiteboard/message-queue.cpp:87
 #, fuzzy, c-format
-msgid "%u changes in receive queue."
-msgstr "%u cambios a la espera en la cola de recepción."
+msgid "%u change in receive queue."
+msgid_plural "%u changes in receive queue."
+msgstr[0] "%u cambios en la cola de recepción."
+msgstr[1] "%u cambios en la cola de recepción."
 
-#: ../src/jabber_whiteboard/message-queue.cpp:112
+#: ../src/jabber_whiteboard/message-queue.cpp:117
 #, fuzzy, c-format
-msgid "%u changes in send queue."
-msgstr "%u cambios en espera en la lista de envíos."
+msgid "%u change in send queue."
+msgid_plural "%u changes in send queue."
+msgstr[0] "%u cambios en la lista de envíos."
+msgstr[1] "%u cambios en la lista de envíos."
 
 #. if ID is NULL, then we have a real problem -- we were not able to find a key
 #. nor generate one.  The only thing we can really do here is abort, since we have
 #. no way to let the other client(s) uniquely identify this object.
-#: ../src/jabber_whiteboard/message-utilities.cpp:162
+#. FIXME: If this indicates a programming bug, then don't request translation with
+#. * _(...): it is most useful in untranslated form so that developers may search for
+#. * it when someone reports it in a bug report (as we want users to do for all bugs,
+#. * as indicated by it being a g_warning string).
+#. *
+#. * Otherwise, if it is not a programming bug but a network error or a bug in the
+#. * remote peer (perhaps running different software) or whatever, then present it in
+#. * an alert box, and avoid use of technical jargon `NULL'.
+#.
+#: ../src/jabber_whiteboard/message-utilities.cpp:171
 msgid ""
 "ID for new object is NULL even after generation and lookup attempts: the new "
 "object will NOT be sent, nor will any of its child objects!"
@@ -3840,12 +3861,12 @@ msgstr ""
 "de sus objetos hijo."
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
-#: ../src/jabber_whiteboard/session-manager.cpp:995
+#: ../src/jabber_whiteboard/session-manager.cpp:994
 msgid "Select a location and filename"
 msgstr "Seleccione una localización y nombre de archivo"
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:62
-#: ../src/jabber_whiteboard/session-manager.cpp:997
+#: ../src/jabber_whiteboard/session-manager.cpp:996
 msgid "Set filename"
 msgstr "Ajustar el nombre de archivo"
 
@@ -3911,12 +3932,12 @@ msgstr "Continuar la conexión, pero avisarme de los errores"
 msgid "Cancel connection"
 msgstr "Cancelar la conexión"
 
-#: ../src/jabber_whiteboard/session-manager.cpp:778
+#: ../src/jabber_whiteboard/session-manager.cpp:777
 #, c-format
 msgid "Established whiteboard session with <b>%s</b>."
 msgstr "Se ha establecido una sesión de pizarra blanca con <b>%s</b>."
 
-#: ../src/jabber_whiteboard/session-manager.cpp:786
+#: ../src/jabber_whiteboard/session-manager.cpp:785
 #, c-format
 msgid "<b>%s</b> has <b>left</b> the whiteboard session."
 msgstr "<b>%s</b> ha <b>abandonado</b> la sesión de pizarra blanca."
@@ -3924,7 +3945,7 @@ msgstr "<b>%s</b> ha <b>abandonado</b> la sesión de pizarra blanca."
 #. Inform the user
 #. TRANSLATORS: %1 is the name of the user that disconnected, %2 is the name of the user whom the disconnected user disconnected from.
 #. This message is not used in a chatroom context.
-#: ../src/jabber_whiteboard/session-manager.cpp:791
+#: ../src/jabber_whiteboard/session-manager.cpp:790
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The user <b>%1</b> has left the "
 "whiteboard session.</span>\n"
@@ -3934,7 +3955,7 @@ msgstr ""
 "sesión de pizarra blanca.</span>\n"
 "\n"
 
-#: ../src/jabber_whiteboard/session-manager.cpp:792
+#: ../src/jabber_whiteboard/session-manager.cpp:791
 msgid ""
 "You are still connected to a Jabber server as <b>%2</b>, and may establish a "
 "new session to <b>%1</b> or a different user."
@@ -3942,7 +3963,7 @@ msgstr ""
 "Todavía está conectado un servidor Jabber como <b>%2</b> y puede establecer "
 "una nueva sesión con <b>%1</b> u otro usuario."
 
-#: ../src/jabber_whiteboard/session-manager.cpp:988
+#: ../src/jabber_whiteboard/session-manager.cpp:987
 msgid ""
 "Could not open file %1 for session recording.\n"
 "The error encountered was: %2.\n"
@@ -3956,11 +3977,11 @@ msgstr ""
 "Puede elegir un lugar distinto para registrar la sesión o puede elegir no "
 "registrar esta sesión."
 
-#: ../src/jabber_whiteboard/session-manager.cpp:990
+#: ../src/jabber_whiteboard/session-manager.cpp:989
 msgid "Choose a different location"
 msgstr "Seleccionar un lugar distinto"
 
-#: ../src/jabber_whiteboard/session-manager.cpp:991
+#: ../src/jabber_whiteboard/session-manager.cpp:990
 msgid "Skip session recording"
 msgstr "No registrar la sesión"
 
@@ -4184,7 +4205,219 @@ msgstr ""
 "\n"
 "Opciones disponibles:"
 
-#: ../src/node-context.cpp:380
+#: ../src/menus-skeleton.h:7
+#, fuzzy
+msgid "<inkscape version=\""
+msgstr "Mostrar el número de versión de Inkscape"
+
+#: ../src/menus-skeleton.h:7
+msgid ""
+"\"\n"
+"  xmlns:sodipodi=\"http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd\"\n"
+"  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\">\n"
+"\n"
+"   <submenu name=\"_File\">\n"
+"       <submenu name=\"_New\">\n"
+"           <verb verb-id=\"FileNew\" />\n"
+"           <template-list/>\n"
+"       </submenu>\n"
+"       <verb verb-id=\"FileOpen\" />\n"
+"       <submenu name=\"Open _Recent\">\n"
+"           <recent-file-list/>\n"
+"       </submenu>\n"
+"       <verb verb-id=\"FileRevert\" />\n"
+"       <verb verb-id=\"FileSave\" />\n"
+"       <verb verb-id=\"FileSaveAs\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"FileImport\" />\n"
+"       <verb verb-id=\"FileExport\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"FilePrintDirect\" />\n"
+"       <verb verb-id=\"FilePrintDirect\" />\n"
+"       <verb verb-id=\"FilePrint\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"FileVacuum\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"DialogNamedview\" />\n"
+"       <verb verb-id=\"DialogDisplay\" />\n"
+"       <verb verb-id=\"DialogInput\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"FileCloseView\" />\n"
+"       <verb verb-id=\"FileQuit\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"_Edit\">\n"
+"       <verb verb-id=\"EditUndo\" />\n"
+"       <verb verb-id=\"EditRedo\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"EditCut\" />\n"
+"       <verb verb-id=\"EditCopy\" />\n"
+"       <verb verb-id=\"EditPaste\" />\n"
+"       <verb verb-id=\"EditPasteInPlace\" />\n"
+"       <verb verb-id=\"EditPasteStyle\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"DialogFind\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"EditDuplicate\" />\n"
+"       <verb verb-id=\"EditClone\" />\n"
+"       <verb verb-id=\"DialogsClonetiler\" />\n"
+"       <verb verb-id=\"EditUnlinkClone\" />\n"
+"       <verb verb-id=\"EditCloneOriginal\" />\n"
+"       <verb verb-id=\"SelectionCreateBitmap\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"EditTile\" />\n"
+"       <verb verb-id=\"EditUnTile\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"EditDelete\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"EditSelectAll\" />\n"
+"       <verb verb-id=\"EditSelectAllInAllLayers\" />\n"
+"       <verb verb-id=\"EditInvert\" />\n"
+"       <verb verb-id=\"EditDeselect\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"DialogXMLEditor\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"_View\">\n"
+"       <verb verb-id=\"Zoom1:0\" />\n"
+"       <verb verb-id=\"Zoom1:2\" />\n"
+"       <verb verb-id=\"Zoom2:1\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"ZoomSelection\" />\n"
+"       <verb verb-id=\"ZoomDrawing\" />\n"
+"       <verb verb-id=\"ZoomPage\" />\n"
+"       <verb verb-id=\"ZoomPageWidth\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"ZoomPrev\" />\n"
+"       <verb verb-id=\"ZoomNext\" />\n"
+"       <seperator/>\n"
+"       <submenu name=\"Show/Hide\">\n"
+"           <objects-checkboxes/>\n"
+"       </submenu>\n"
+"       <verb verb-id=\"DialogsToggle\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"ToggleGrid\" />\n"
+"       <verb verb-id=\"ToggleGuides\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"FullScreen\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"DialogDebug\" />\n"
+"       <verb verb-id=\"DialogScript\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"FilePrevDesktop\" />\n"
+"       <verb verb-id=\"FileNextDesktop\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"ViewNew\" />\n"
+"       <verb verb-id=\"ViewIconPreview\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"_Layer\">\n"
+"       <verb verb-id=\"LayerNew\" />\n"
+"       <verb verb-id=\"LayerRename\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"LayerNext\" />\n"
+"       <verb verb-id=\"LayerPrev\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"LayerMoveToNext\" />\n"
+"       <verb verb-id=\"LayerMoveToPrev\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"LayerRaise\" />\n"
+"       <verb verb-id=\"LayerLower\" />\n"
+"       <verb verb-id=\"LayerToTop\" />\n"
+"       <verb verb-id=\"LayerToBottom\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"LayerDelete\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"_Object\">\n"
+"       <verb verb-id=\"DialogFillStroke\" />\n"
+"       <verb verb-id=\"DialogSwatches\" />\n"
+"       <verb verb-id=\"DialogItem\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionGroup\" />\n"
+"       <verb verb-id=\"SelectionUnGroup\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionRaise\" />\n"
+"       <verb verb-id=\"SelectionLower\" />\n"
+"       <verb verb-id=\"SelectionToFront\" />\n"
+"       <verb verb-id=\"SelectionToBack\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"ObjectRotate90\" />\n"
+"       <verb verb-id=\"ObjectRotate90CCW\" />\n"
+"       <verb verb-id=\"ObjectFlipHorizontally\" />\n"
+"       <verb verb-id=\"ObjectFlipVertically\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"DialogTransform\" />\n"
+"       <verb verb-id=\"DialogAlignDistribute\" />\n"
+"       <verb verb-id=\"SelectionGridTile\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"_Path\">\n"
+"       <verb verb-id=\"ObjectToCurve\" />\n"
+"       <verb verb-id=\"SelectionOutline\" />\n"
+"       <verb verb-id=\"SelectionTrace\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionUnion\" />\n"
+"       <verb verb-id=\"SelectionDiff\" />\n"
+"       <verb verb-id=\"SelectionIntersect\" />\n"
+"       <verb verb-id=\"SelectionSymDiff\" />\n"
+"       <verb verb-id=\"SelectionDivide\" />\n"
+"       <verb verb-id=\"SelectionCutPath\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionCombine\" />\n"
+"       <verb verb-id=\"SelectionBreakApart\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionInset\" />\n"
+"       <verb verb-id=\"SelectionOffset\" />\n"
+"       <verb verb-id=\"SelectionDynOffset\" />\n"
+"       <verb verb-id=\"SelectionLinkedOffset\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionSimplify\" />\n"
+"       <verb verb-id=\"SelectionReverse\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"_Text\">\n"
+"       <verb verb-id=\"Dialogtext\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionTextFromPath\" />\n"
+"       <verb verb-id=\"SelectionTextToPath\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"ObjectFlowText\" />\n"
+"       <verb verb-id=\"ObjectUnFlowText\" />\n"
+"       <verb verb-id=\"ObjectFlowtextToText\" />\n"
+"       <seperator/>\n"
+"       <verb verb-id=\"SelectionTextRemoveKerns\" />\n"
+"   </submenu>\n"
+"   <submenu name=\"Effects\">\n"
+"       <verb verb-id=\"EffectLast\" />\n"
+"       <verb verb-id=\"EffectLastPref\" />\n"
+"       <seperator/>\n"
+"       <effects-list/>\n"
+"   </submenu>\n"
+"\t<submenu name=\"Whiteboard\">\n"
+"\t\t<verb verb-id=\"DialogWhiteboardConnect\" />\n"
+"\t\t<verb verb-id=\"DialogWhiteboardDisconnectSession\" />\n"
+"\t\t<verb verb-id=\"DialogWhiteboardDisconnectServer\" />\n"
+"\t\t<seperator/>\n"
+"\t\t<verb verb-id=\"DialogWhiteboardShareWithUser\" />\n"
+"\t\t<verb verb-id=\"DialogWhiteboardShareWithChat\" />\n"
+"\t\t<seperator/>\n"
+"\t\t<verb verb-id=\"DialogWhiteboardOpenSessionFile\" />\n"
+"\t\t<seperator/>\n"
+"\t\t<verb verb-id=\"DialogWhiteboardDumpXMLTracker\" />\n"
+"\t</submenu>\n"
+"   <submenu name=\"_Help\">\n"
+"       <verb verb-id=\"HelpKeys\" />\n"
+"       <submenu name=\"Tutorials\">\n"
+"           <verb verb-id=\"TutorialsBasic\" />\n"
+"           <verb verb-id=\"TutorialsShapes\" />\n"
+"           <verb verb-id=\"TutorialsAdvanced\" />\n"
+"           <verb verb-id=\"TutorialsTracing\" />\n"
+"           <verb verb-id=\"TutorialsCalligraphy\" />\n"
+"           <verb verb-id=\"TutorialsDesign\" />\n"
+"           <verb verb-id=\"TutorialsTips\" />\n"
+"       </submenu>\n"
+"       <verb verb-id=\"HelpAboutMemory\" />\n"
+"       <verb verb-id=\"HelpAbout\" />\n"
+"   </submenu>\n"
+"</inkscape>\n"
+msgstr ""
+
+#: ../src/node-context.cpp:379
 msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
@@ -4192,14 +4425,14 @@ msgstr ""
 "<b>Ctrl</b>: conmutar el tipo de nodo, pinzar el ángulo del tirador, mover "
 "hor/vert; <b>Ctrl+Alt</b>: mover a lo largo de los tiradores"
 
-#: ../src/node-context.cpp:381
+#: ../src/node-context.cpp:380
 msgid ""
 "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Mayús:</b> para conmutar a selección de nodos, desactivar ajuste, rotar "
 "ambos tiradores."
 
-#: ../src/node-context.cpp:382
+#: ../src/node-context.cpp:381
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
 msgstr ""
 "<b>Alt</b>: bloquear longitud de tirador; <b>Ctrl+Alt</b>: mover a lo largo "
@@ -4311,7 +4544,7 @@ msgid "Select a single object to edit its nodes or handles."
 msgstr "Seleccione un objeto para editar sus nodos o tiradores."
 
 #: ../src/nodepath.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
@@ -4319,11 +4552,11 @@ msgid_plural ""
 "<b>0</b> out of <b>%i</b> nodes selected. <b>Click</b>, <b>Shift+click</b>, "
 "or <b>drag around</b> nodes to select."
 msgstr[0] ""
-"No se han seleccionado objetos. Haga clic, Mayús+clic o arrastre para "
-"seleccionar los objetos."
+"Seleccionados <b>0</b> de <b>%i</b> nodos. <b>Clic</b>, <b>Mayús+clic</b> o "
+"<b>arrastre alrededor</b> de nodos para seleccionarlos."
 msgstr[1] ""
-"No se han seleccionado objetos. Haga clic, Mayús+clic o arrastre para "
-"seleccionar los objetos."
+"Seleccionados <b>0</b> de <b>%i</b> nodos. <b>Clic</b>, <b>Mayús+clic</b> o "
+"<b>arrastre alrededor</b> de nodos para seleccionarlos."
 
 #: ../src/nodepath.cpp:3650
 msgid "Drag the handles of the object to modify it."
@@ -5613,7 +5846,7 @@ msgid "Smallest item"
 msgstr "Elemento menor"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:779
-#: ../src/widgets/desktop-widget.cpp:914
+#: ../src/widgets/desktop-widget.cpp:911
 msgid "Drawing"
 msgstr "Dibujo"
 
@@ -5760,48 +5993,50 @@ msgid "Message information"
 msgstr "Información del mensaje"
 
 #. Active session file display
-#: ../src/ui/dialog/session-player.cpp:83
+#. fixme: Does this mean the active file for the session, or the file for the active session?
+#. Please indicate which with a TRANSLATORS comment.
+#: ../src/ui/dialog/session-player.cpp:85
 msgid "Active session file:"
 msgstr "Archivo de sesión activo:"
 
-#: ../src/ui/dialog/session-player.cpp:84
+#: ../src/ui/dialog/session-player.cpp:86
 msgid "Delay (milliseconds):"
 msgstr "Retardo (milisegundos):"
 
 #. Unload/load buttons
-#: ../src/ui/dialog/session-player.cpp:92
+#: ../src/ui/dialog/session-player.cpp:94
 msgid "Close file"
 msgstr "Cerrar archivo"
 
-#: ../src/ui/dialog/session-player.cpp:93
+#: ../src/ui/dialog/session-player.cpp:95
 msgid "Open new file"
 msgstr "Abrir un archivo nuevo"
 
-#: ../src/ui/dialog/session-player.cpp:94
+#: ../src/ui/dialog/session-player.cpp:96
 msgid "Set delay"
 msgstr "Ajustar retardo"
 
-#: ../src/ui/dialog/session-player.cpp:136
+#: ../src/ui/dialog/session-player.cpp:138
 msgid "Rewind"
 msgstr "Rebobinar"
 
-#: ../src/ui/dialog/session-player.cpp:137
+#: ../src/ui/dialog/session-player.cpp:139
 msgid "Go back one change"
 msgstr "Atrasar un cambio"
 
-#: ../src/ui/dialog/session-player.cpp:138
+#: ../src/ui/dialog/session-player.cpp:140
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../src/ui/dialog/session-player.cpp:139
+#: ../src/ui/dialog/session-player.cpp:141
 msgid "Go forward one change"
 msgstr "Adelantar un cambio"
 
-#: ../src/ui/dialog/session-player.cpp:140
+#: ../src/ui/dialog/session-player.cpp:142
 msgid "Play"
 msgstr "Reproducir"
 
-#: ../src/ui/dialog/session-player.cpp:175 ../src/verbs.cpp:1553
+#: ../src/ui/dialog/session-player.cpp:177 ../src/verbs.cpp:1553
 msgid "Open session file"
 msgstr "Abrir archivo de sesión"
 
@@ -6066,9 +6301,8 @@ msgstr "Sincronizando con la sala <b>%1@%2</b> con el alias <b>%3</b>"
 
 #. Construct dialog interface
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:78
-#, fuzzy
 msgid "_User's Jabber ID:"
-msgstr "JID de _usuario:"
+msgstr "ID Jabber del _usuario:"
 
 #. Buttons
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:82
@@ -6080,9 +6314,8 @@ msgid "_Cancel"
 msgstr "_Cancelar"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:94
-#, fuzzy
 msgid "Buddy List"
-msgstr "JID de amigo"
+msgstr "Lista de amigos"
 
 #: ../src/ui/dialog/whiteboard-sharewithuser.cpp:170
 msgid "Sending whiteboard invitation to <b>%1</b>"
@@ -7134,10 +7367,6 @@ msgstr "Acercar o alejar"
 msgid "Pick averaged colors from image"
 msgstr "Seleccionar colores medios de la imagen"
 
-#: ../src/verbs.cpp:2056
-msgid "Connector"
-msgstr "Conector"
-
 #: ../src/verbs.cpp:2057
 msgid "Create connectors"
 msgstr "Crear conectores"
@@ -7710,17 +7939,17 @@ msgstr ""
 "alzada para crear objetos; utilice el selector (flecha) para moverlos o "
 "transformarlos."
 
-#: ../src/widgets/desktop-widget.cpp:348
+#: ../src/widgets/desktop-widget.cpp:347
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:350
+#: ../src/widgets/desktop-widget.cpp:349
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:508
+#: ../src/widgets/desktop-widget.cpp:507
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -7733,11 +7962,11 @@ msgstr ""
 "\n"
 "Si cierra sin guardar se perderán los cambios realizados."
 
-#: ../src/widgets/desktop-widget.cpp:524 ../src/widgets/desktop-widget.cpp:588
+#: ../src/widgets/desktop-widget.cpp:523 ../src/widgets/desktop-widget.cpp:587
 msgid "Close _without saving"
 msgstr "Cerrar _sin guardar"
 
-#: ../src/widgets/desktop-widget.cpp:571
+#: ../src/widgets/desktop-widget.cpp:570
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -8486,118 +8715,3 @@ msgstr "Hacer que los conectores eviten los objetos seleccionados"
 #: ../src/widgets/toolbox.cpp:3030
 msgid "Make connectors ignore selected objects"
 msgstr "Hacer que los conectores ignoren los objetos seleccionados"
-
-#~ msgid ""
-#~ "<span weight=\"bold\" size=\"larger\"><b>%1</b> has invited you to a "
-#~ "whiteboard session.</span>\n"
-#~ "\n"
-#~ msgstr ""
-#~ "<span weight=\"bold\" size=\"larger\"><b>%1</b> le ha invitado a una "
-#~ "sesión de pizarra blanca.</span>\n"
-#~ "\n"
-
-#~ msgid ""
-#~ "Accepting the invitation in the active document will cause your current "
-#~ "changes to be lost.  Would you like to accept <b>%1</b>'s invitation in "
-#~ "the active document, or would you like to accept the invitation in a new "
-#~ "document?"
-#~ msgstr ""
-#~ "Al aceptar la invitación en el documento activo perderá los cambios "
-#~ "actuales. ¿Desea aceptar la invitación de <b>%1</b> en el documento "
-#~ "activo o en un documento nuevo?"
-
-#~ msgid ""
-#~ "<span weight=\"bold\" size=\"larger\">A new desktop could not be opened "
-#~ "for a whiteboard session with <b>%1</b>.</span>\n"
-#~ "\n"
-#~ "Would you like to accept the whiteboard connection in the active document "
-#~ "or refuse the invitation?"
-#~ msgstr ""
-#~ "<span weight=\"bold\" size=\"larger\">No se pudo abrir una nueva sesión "
-#~ "de escritorio para una sesión de pizarra blanca con <b>%1</b>.</span>\n"
-#~ "\n"
-#~ "¿Desea aceptar la conexión de pizarra blanca en el documento activo o "
-#~ "prefiere rechazar la invitación?"
-
-#~ msgid ""
-#~ "Jabber message handler was asked to process a message of an unhandled "
-#~ "type; discarding message."
-#~ msgstr ""
-#~ "Se pidió al gestor de mensajes Jabber que procesara un mensaje de tipo "
-#~ "inmanejable; se elimina el mensaje."
-
-#~ msgid ""
-#~ "Default message handler received message in invalid receive context; "
-#~ "discarding message."
-#~ msgstr ""
-#~ "El gestor de mensajes predeterminado ha recibido un mensaje en un "
-#~ "contexto de recepción inválido; de elimina el mensaje."
-
-#~ msgid ""
-#~ "Received late message (message sequence number is %u, but latest "
-#~ "processed message had sequence number %u).  Discarding message; session "
-#~ "may be desynchronized."
-#~ msgstr ""
-#~ "Se ha recibido un mensaje tardío (el número de secuencia del mensaje es %"
-#~ "u, pero el último mensaje procesado tenía el número %u). Se elimina el "
-#~ "mensaje; la sesión podría no estar sincronizada."
-
-#~ msgid ""
-#~ "Node %p (name %s) is a special node, but it could not be found in the "
-#~ "node tracker (possible unexpected duplicate?)  Generating unique ID "
-#~ "anyway."
-#~ msgstr ""
-#~ "El nodo %p (llamado %s) es un nodo especial pero no se pudo encontrar en "
-#~ "el explorador de nodos (¿posiblemente un duplicado inesperado?). Se "
-#~ "genera un ID único de todos modos."
-
-#~ msgid "Could not read next message due to I/O error (error: %s)!"
-#~ msgstr ""
-#~ "No se pudo leer el siguiente mensaje debido a un error de E/S (error: %s)."
-
-#~ msgid ""
-#~ "Could not read next message due to charset conversion error (error: %s)!"
-#~ msgstr ""
-#~ "No se pudo leer el siguiente mensaje debido a un error en la conversión "
-#~ "del juego de caracteres (error %s)."
-
-#~ msgid ""
-#~ "Caught I/O exception (error string: %s) while committing change to "
-#~ "session file %s.  Attempting to commit remaining changes; session file "
-#~ "will be inconsistent with whiteboard session history."
-#~ msgstr ""
-#~ "Se ha interceptado una excepción de E/S (cadena de error: %s) al guardar "
-#~ "un cambio en el archivo de sesión %s. Se intentará guardarlos cambios "
-#~ "restantes, el archivo de sesión tendrá inconsistencias con respecto al "
-#~ "historial de la sesión de pizarra blanca."
-
-#~ msgid ""
-#~ "Caught character set conversion error (error string: %s) while committing "
-#~ "change to session file %s.  Attempting to commit remaining changes; "
-#~ "session file will be inconsistent with whiteboard session history."
-#~ msgstr ""
-#~ "Se ha interceptado un error de conversión de juego de caracteres (cadena "
-#~ "de error: %s) al guardar un cambio en el archivo de sesión %s. Se "
-#~ "intentará guardarlos cambios restantes, el archivo de sesión tendrá "
-#~ "inconsistencias con respecto al historial de la sesión de pizarra blanca."
-
-#~ msgid "Cannot operate on NULL SessionFile."
-#~ msgstr "No se puede utilizar el archivo de sesión NULL."
-
-#~ msgid ""
-#~ "Caught I/O error %s while attemping to open file %s for session recording."
-#~ msgstr ""
-#~ "Se ha interceptado un error de E/S «%s» al intentar abrir el archivo %s "
-#~ "para la grabación de la sesión."
-
-#~ msgid ""
-#~ "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</"
-#~ "b>, or <b>drag around</b> nodes to select.<b>0</b> out of <b>%i</b> nodes "
-#~ "selected. <b>Click</b>, <b>Shift+click</b>, or <b>drag around</b> nodes "
-#~ "to select."
-#~ msgstr ""
-#~ "Se han seleccionado <b>0</b> de <b>%i</b> nodo. <b>Haga clic</b>, <b>Mayús"
-#~ "+clic</b> o <b>arrastre el ratón</b> alrededor de los nodos para "
-#~ "seleccionarlos.Se han seleccionado <b>0</b> de <b>%i</b> nodos. <b>Haga "
-#~ "clic</b>, <b>Mayús+clic</b> o <b>arrastre el ratón</b> alrededor de los "
-#~ "nodos para seleccionarlos."
