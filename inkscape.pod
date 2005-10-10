@@ -19,6 +19,7 @@ options:
     -e, --export-png=FILENAME         
     -a, --export-area=x0:y0:x1:y1     
     -D, --export-area-drawing
+        --export-area-snap
     -i, --export-id=ID     
     -j, --export-id-only     
     -t, --export-use-hints
@@ -91,15 +92,23 @@ Show Inkscape version and build date.
 
 =item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
 
-In PNG export, set the exported area in SVG pixels (anonymous length units normally used
+In PNG export, set the exported area in SVG user units (anonymous length units normally used
 in Inkscape SVG).  The default is to export the entire document canvas.  The point (0,0)
 is the lower-left corner.
 
 =item B<-D>, B<--export-area-drawing>
 
-In PNG export, exported area is the entire drawing (not canvas). With this option, the
-exported image will display just the visible objects of the document without margins or
-cropping. Can be used in combination wtih --export-use-hints.
+In PNG export, exported area is the entire drawing (not canvas), i.e. the bounding box
+of all objects of the document. With this option, the exported image will
+display just the visible objects of the document without margins or cropping. Can be
+used in combination wtih --export-use-hints.
+
+=item B<--export-area-snap>
+
+Snap the export area outwards to the nearest integer SVG user unit (px) values. If you are using the 
+default export resolution of 90dpi and your graphics are pixel-snapped to minimize antialiasing, this switch 
+allows you to preserve this alignment even if you are exporting some object's bounding 
+box (with --export-id or --export-area-drawing) which is itself not pixel-aligned.
 
 =item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
 
@@ -111,7 +120,7 @@ then the page color set in Inkscape in the Document Options dialog will be used 
 =item B<-d> I<DPI>, B<--export-dpi>=I<DPI>
 
 The resolution used for bitmap export.
-The default is 90, which corresponds to 1 SVG pixel 
+The default is 90, which corresponds to 1 SVG user unit 
 (px, also called "user unit") exporting to 1 bitmap pixel.
 This value overrides the DPI hint if used with --export-use-hints.
 
@@ -256,10 +265,6 @@ Display a brief usage message.
 
 =back
 
-=head1 KEYBINDINGS
-
-To get a complete list of keyboard and mouse shortcuts, view doc/keys.html, or use the Keys and Mouse command in Help menu from the GUI to see an SVG chart.
-
 =head1 CONFIGURATION
 
 The preferences.xml configuration file located in ~/.inkscape/ is used
@@ -321,8 +326,6 @@ The program returns zero on success or non-zero on failure.
 A variety of error messages and warnings are printed to STDERR or
 STDOUT.  If the program behaves erratically with a particular SVG file
 or crashes, it is sometimes useful to look at this output for clues.
-For example, it may indicate if a given SVG file contains elements or
-attributes that are not yet supported by the codebase.
 
 =head1 EXAMPLES
 
@@ -333,9 +336,28 @@ Print an SVG file:
 
     inkscape filename.svg -p '| lpr'
 
-Export an SVG file into PNG:
+Export an SVG file into PNG with the default resolution of 90dpi (one SVG user unit translates to one bitmap pixel):
+
+    inkscape filename.svg --export-png=filename.png
+
+Same, but force the PNG file to be 600x400 pixels:
 
     inkscape filename.svg --export-png=filename.png -w600 -h400
+
+Same, but export the drawing (bounding box of all objects), not the page:
+
+    inkscape filename.svg --export-png=filename.png --export-area-drawing
+
+Export to PNG the object with id="text1555", using the output filename and 
+the resolution that were used for that object last time when it was exported from the GUI:
+
+    inkscape filename.svg --export-id=text1555 --export-use-hints
+
+Same, but use the default 90dpi resolution, specify the filename, 
+and snap the exported area outwards to the nearest whole SVG user unit values 
+(to preserve pixel-alignment of objects and thus minimize antialiasing):
+
+    inkscape filename.svg --export-id=text1555 --export-png=text.png --export-snap-area
 
 Convert an Inkscape SVG document to plain SVG:  
 
@@ -413,40 +435,38 @@ I<Arnaud Le Hors et al editors, W3C>
 L<http://www.w3.org/TR/DOM-Level-2-Core/>
 
 
-=head1 NOTES
+=head1 GUI NOTES
 
-Ctrl, Shift, Alt modify dragging and clicking behaviour in most tools. Watch the statusbar
-for helpful hints.
+To learn Inkscape's GUI operation, read the tutorials in Help > Tutorials.
 
-To rotate an object, click it to select with Selector tool, then click again to enable
-rotation handles.
+Inkscape can import (File > Import) most bitmap formats (PNG, BMP, JPG, XPM, GIF etc.),
+plain text (requires Perl), and AI format (Adobe Illustrator documents, versions up to 7 only;
+requires Perl). 
 
-The Import command works with most bitmap formats (PNG, BMP, JPG, XPM, GIF etc.) and SVG
-vector images. The Open command can handle only SVG files.
+Inkscape exports 32-bit PNG images (File > Export) as well as AI, PS, EPS, PDF (requires
+Ghostscript), DXF and several other formats via File > Save as.
 
-A Wacom tablet will work with Inkscape if it is configured to act as a regular pointing
-device. We do not support pressure/tilt sensitivity or any tablet-specific
-features yet.
+Inkscape can use the pressure and tilt of a graphic tablet pen for width and angle of
+the Calligraphic tool.
 
-It works "out of the box" with Apple's X server, but with XFree86 you
-will need to have the "SendCoreEvents" option turned on if you do not
-already.  It does not seem to work as well under Windows.
+Inkscape includes a GUI front-end to the Potrace bitmap tracing engine
+(http://potrace.sf.net) which is embedded into Inkscape.
 
+Inkscape can use external scripts (stdin-to-stdout filters) that are represented by
+commands in the Effects menu. A script can have a GUI dialog for setting various
+parameters and can get the IDs of the selected objects on which to act via the command
+line. Inkscape comes with an assortment of effects written in Python, mostly for path
+manipulation.
+
+=head1 KEYBINDINGS
+
+To get a complete list of keyboard and mouse shortcuts, view doc/keys.html, or use the Keys and Mouse command in Help menu from the GUI to see an SVG chart.
 
 =head1 BUGS
 
-Many bugs are known; please refer to the website for reviewing the
-reported ones and to report newly found issues.  Here are some workarounds:
-
-When importing svg generated with ill2svg, all paths are usually grouped.
-Ungroup these manually.
-
-If you use gradients and stretch the icon of the saved file in Nautilus,
-you'll notice that the gradients don't render right.  This is a
-well-known problem in Nautilus/RSVG and can be worked around by
-specifying the gradient as 'userspaceinuse' in the gradient editor.
-
-See also the Known Issues section in the Release Notes for your version (file `NEWS').
+Many bugs are known; please refer to the website (inkscape.org) for reviewing the reported ones and to
+report newly found issues.  See also the Known Issues section in the Release Notes for
+your version (file `NEWS').
 
 =head1 AUTHORS
 
