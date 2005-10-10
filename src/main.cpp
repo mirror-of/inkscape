@@ -315,6 +315,7 @@ enum {
     SP_ARG_EXPORT_DPI,
     SP_ARG_EXPORT_AREA,
     SP_ARG_EXPORT_AREA_DRAWING,
+    SP_ARG_EXPORT_AREA_SNAP,
     SP_ARG_EXPORT_WIDTH,
     SP_ARG_EXPORT_HEIGHT,
     SP_ARG_EXPORT_ID,
@@ -358,6 +359,7 @@ static gchar *sp_export_height = NULL;
 static gchar *sp_export_id = NULL;
 static gchar *sp_export_background = NULL;
 static gchar *sp_export_background_opacity = NULL;
+static gboolean sp_export_area_snap = FALSE;
 static gboolean sp_export_use_hints = FALSE;
 static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
@@ -417,12 +419,17 @@ struct poptOption options[] = {
 
     {"export-area", 'a', 
      POPT_ARG_STRING, &sp_export_area, SP_ARG_EXPORT_AREA,
-     N_("Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"),
+     N_("Exported area in SVG user units (default is the canvas; 0,0 is lower-left corner)"),
      N_("x0:y0:x1:y1")},
 
     {"export-area-drawing", 'D', 
      POPT_ARG_NONE, &sp_export_area_drawing, SP_ARG_EXPORT_AREA_DRAWING,
      N_("Exported area is the entire drawing (not canvas)"),
+     NULL},
+
+    {"export-area-snap", 0,
+     POPT_ARG_NONE, &sp_export_area_snap, SP_ARG_EXPORT_AREA_SNAP,
+     N_("Snap the bitmap export area outwards to the nearest integer values (in SVG user units)"),
      NULL},
 
     {"export-width", 'w', 
@@ -997,6 +1004,13 @@ sp_do_export_png(SPDocument *doc)
         }
         g_print("DPI: %g\n", dpi);
     } 
+
+    if (sp_export_area_snap) {
+        area.x0 = std::floor (area.x0);
+        area.y0 = std::floor (area.y0);
+        area.x1 = std::ceil (area.x1);
+        area.y1 = std::ceil (area.y1);
+    }
 
     // default dpi
     if (dpi == 0.0)
