@@ -1,3 +1,10 @@
+2005-10-10  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* src/sp-conn-end-pair.cpp, src/sp-conn-end-pair.h:
+	  Reroute connector lines if the object itself is moved or
+	  transformed.  Previously a routed line would not unroute if it
+	  was moved away from the blocking objects.  Fixes bug #1303493.
+
 2005-10-07  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* packaging/macosx/Resources/script, src/path-prefix.h:

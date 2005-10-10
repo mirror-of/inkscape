@@ -61,6 +61,9 @@ private:
     Avoid::ConnRef *_connRef;
 
     int _connType;
+    
+    // A sigc connection for transformed signal.
+    sigc::connection _transformed_connection;
 };
 
 

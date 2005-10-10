@@ -31,6 +31,7 @@ SPConnEndPair::SPConnEndPair(SPPath *const owner)
     , _path(owner)
     , _connRef(NULL)
     , _connType(SP_CONNECTOR_NOAVOID)
+    , _transformed_connection()
 {
     for (unsigned handle_ix = 0; handle_ix <= 1; ++handle_ix) {
         this->_connEnd[handle_ix] = new SPConnEnd(SP_OBJECT(owner));
@@ -54,6 +55,7 @@ SPConnEndPair::~SPConnEndPair()
     }
     
     _invalid_path_connection.disconnect();
+    _transformed_connection.disconnect();
 }
 
 void
@@ -77,6 +79,20 @@ sp_conn_end_pair_build(SPObject *object)
     sp_object_read_attr(object, "inkscape:connection-end");
 }
 
+
+static void 
+avoid_conn_move(NR::Matrix const *mp, SPItem *moved_item)
+{
+    // Detach from objects if attached.
+    sp_conn_end_detach(moved_item, 0);
+    sp_conn_end_detach(moved_item, 1);
+    // Reroute connector
+    SPPath *path = SP_PATH(moved_item);
+    path->connEndPair.makePathInvalid();
+    sp_conn_adjust_invalid_path(path);
+}
+
+
 void
 SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
 {
@@ -88,6 +104,8 @@ SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
             _connRef = new Avoid::ConnRef(itemID);
             _invalid_path_connection = connectInvalidPath(
                     sigc::ptr_fun(&sp_conn_adjust_invalid_path));
+            _transformed_connection = _path->connectTransformed(
+                    sigc::ptr_fun(&avoid_conn_move));
         }
         else {
             _connType = SP_CONNECTOR_NOAVOID;
@@ -97,6 +115,7 @@ SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
                 delete _connRef;
                 _connRef = NULL;
                 _invalid_path_connection.disconnect();
+                _transformed_connection.disconnect();
             }
         }
         return;
