@@ -1110,6 +1110,7 @@ sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
             sp_repr_remove_listener_by_data(oldrepr, tbl);
             sp_repr_unref(oldrepr);
             oldrepr = 0;
+            g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
 
         if (repr) {
@@ -1297,7 +1298,7 @@ sp_rtb_sensitivize (GtkWidget *tbl)
     GtkAdjustment *adj2 = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(tbl), "ry"));
     GtkWidget *not_rounded = (GtkWidget*) g_object_get_data(G_OBJECT(tbl), "not_rounded");
 
-    if (adj1->value == 0 && adj2->value == 0) {
+    if (adj1->value == 0 && adj2->value == 0 && gtk_object_get_data(GTK_OBJECT(tbl), "single")) { // only for a single selected rect (for now)
         gtk_widget_set_sensitive(GTK_WIDGET(not_rounded), FALSE);
     } else {
         gtk_widget_set_sensitive(GTK_WIDGET(not_rounded), TRUE);
@@ -1479,6 +1480,8 @@ sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
 
     GtkWidget *l = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(tbl), "mode_label"));
 
+    g_object_set_data(G_OBJECT(tbl), "single", GINT_TO_POINTER(FALSE));
+
     if (n_selected == 0) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>New:</b>"));
 
@@ -1489,6 +1492,7 @@ sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
 
     } else if (n_selected == 1) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
+        g_object_set_data(G_OBJECT(tbl), "single", GINT_TO_POINTER(TRUE));
 
         GtkWidget *w = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(tbl), "width_sb");
         gtk_widget_set_sensitive(w, TRUE);
@@ -1500,6 +1504,7 @@ sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
             sp_repr_remove_listener_by_data(oldrepr, tbl);
             sp_repr_unref(oldrepr);
             oldrepr = 0;
+            g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
         if (repr) {
             g_object_set_data(G_OBJECT(tbl), "repr", repr);
@@ -1512,6 +1517,7 @@ sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl
         // FIXME: implement averaging of all parameters for multiple selected
         //gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
+        sp_rtb_sensitivize (GTK_WIDGET(tbl));
     }
 }
 
@@ -1595,6 +1601,7 @@ sp_rect_toolbox_new(SPDesktop *desktop)
         gtk_box_pack_start(GTK_BOX(tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
+    g_object_set_data(G_OBJECT(tbl), "single", GINT_TO_POINTER(TRUE));
     sp_rtb_sensitivize (tbl);
 
     gtk_widget_show_all(tbl);
@@ -1766,6 +1773,7 @@ sp_spiral_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *t
             sp_repr_remove_listener_by_data(oldrepr, tbl);
             sp_repr_unref(oldrepr);
             oldrepr = 0;
+            g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
 
         if (repr) {
@@ -2096,8 +2104,10 @@ sp_arctb_sensitivize (GtkWidget *tbl, double v1, double v2)
     GtkWidget *make_whole = (GtkWidget*) g_object_get_data(G_OBJECT(tbl), "make_whole");
 
     if (v1 == 0 && v2 == 0) {
-        gtk_widget_set_sensitive(GTK_WIDGET(ocb), FALSE);
-        gtk_widget_set_sensitive(GTK_WIDGET(make_whole), FALSE);
+        if (gtk_object_get_data(GTK_OBJECT(tbl), "single")) { // only for a single selected ellipse (for now)
+            gtk_widget_set_sensitive(GTK_WIDGET(ocb), FALSE);
+            gtk_widget_set_sensitive(GTK_WIDGET(make_whole), FALSE);
+        }
     } else {
         gtk_widget_set_sensitive(GTK_WIDGET(ocb), TRUE);
         gtk_widget_set_sensitive(GTK_WIDGET(make_whole), TRUE);
@@ -2317,9 +2327,11 @@ sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
 
     GtkWidget *l = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(tbl), "mode_label"));
 
+    g_object_set_data(G_OBJECT(tbl), "single", GINT_TO_POINTER(FALSE));
     if (n_selected == 0) {
         gtk_label_set_markup(GTK_LABEL(l), _("<b>New:</b>"));
     } else if (n_selected == 1) {
+        g_object_set_data(G_OBJECT(tbl), "single", GINT_TO_POINTER(TRUE));
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
 
         oldrepr = (Inkscape::XML::Node *) gtk_object_get_data(GTK_OBJECT(tbl), "repr");
@@ -2328,6 +2340,7 @@ sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
             sp_repr_remove_listener_by_data(oldrepr, tbl);
             sp_repr_unref(oldrepr);
             oldrepr = 0;
+            g_object_set_data(G_OBJECT(tbl), "repr", NULL);
         }
 
         if (repr) {
@@ -2340,6 +2353,7 @@ sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GtkObject *tbl)
         // FIXME: implement averaging of all parameters for multiple selected
         //gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
         gtk_label_set_markup(GTK_LABEL(l), _("<b>Change:</b>"));
+        sp_arctb_sensitivize (GTK_WIDGET(tbl), 1, 0);
     }
 }
 
@@ -2408,11 +2422,11 @@ sp_arc_toolbox_new(SPDesktop *desktop)
         gtk_box_pack_start(GTK_BOX(tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
+    g_object_set_data(G_OBJECT(tbl), "single", GINT_TO_POINTER(TRUE));
     // sensitivize make whole and open checkbox
     {
         GtkAdjustment *adj1 = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(tbl), "start"));
         GtkAdjustment *adj2 = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(tbl), "end"));
-
         sp_arctb_sensitivize (tbl, adj1->value, adj2->value);
     }
 
