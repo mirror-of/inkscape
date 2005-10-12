@@ -176,8 +176,21 @@ Layout::Direction Layout::InputStreamTextSource::styleGetBlockProgression() cons
 
 }
 
-Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direction para_direction) const
+static Layout::Alignment text_anchor_to_alignment(unsigned anchor, Layout::Direction para_direction)
 {
+    switch (anchor) {
+        default:
+        case SP_CSS_TEXT_ANCHOR_START:  return para_direction == Layout::LEFT_TO_RIGHT ? Layout::LEFT : Layout::RIGHT;
+        case SP_CSS_TEXT_ANCHOR_MIDDLE: return Layout::CENTER;
+        case SP_CSS_TEXT_ANCHOR_END:    return para_direction == Layout::LEFT_TO_RIGHT ? Layout::RIGHT : Layout::LEFT;
+    }
+}
+
+Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direction para_direction, bool try_text_align) const
+{
+    if (!try_text_align)
+        return text_anchor_to_alignment(style->text_anchor.computed, para_direction);
+
     // there's no way to tell the difference between text-anchor set higher up the cascade to the default and
     // text-anchor never set anywhere in the cascade, so in order to detect which of text-anchor or text-align
     // to use we'll have to run up the style tree ourselves.
@@ -197,14 +210,8 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
                 case SP_CSS_TEXT_ALIGN_JUSTIFY: return FULL;
             }
         }
-        if (this_style->text_anchor.set) {
-            switch (this_style->text_anchor.computed) {
-                default:
-                case SP_CSS_TEXT_ANCHOR_START:  return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
-                case SP_CSS_TEXT_ANCHOR_MIDDLE: return CENTER;
-                case SP_CSS_TEXT_ANCHOR_END:    return para_direction == LEFT_TO_RIGHT ? RIGHT : LEFT;
-            }
-        }
+        if (this_style->text_anchor.set)
+            return text_anchor_to_alignment(this_style->text_anchor.computed, para_direction);
         if (this_style->object->parent == NULL) break;
         this_style = this_style->object->parent->style;
         if (this_style == NULL) break;

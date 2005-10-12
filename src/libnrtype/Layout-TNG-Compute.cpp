@@ -1361,7 +1361,7 @@ bool Layout::Calculator::calculate()
         unsigned para_end_input_index = _buildSpansForPara(&para);
 
         if (_flow._input_stream[para.first_input_index]->Type() == TEXT_SOURCE)
-            para.alignment = static_cast<InputStreamTextSource*>(_flow._input_stream[para.first_input_index])->styleGetAlignment(para.direction);
+            para.alignment = static_cast<InputStreamTextSource*>(_flow._input_stream[para.first_input_index])->styleGetAlignment(para.direction, !_flow._input_wrap_shapes.empty());
         else
             para.alignment = para.direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
 

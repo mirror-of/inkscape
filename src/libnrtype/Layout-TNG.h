@@ -581,7 +581,7 @@ private:
         float styleComputeFontSize() const;
         font_instance *styleGetFontInstance() const;
         Direction styleGetBlockProgression() const;
-        Alignment styleGetAlignment(Direction para_direction) const;
+        Alignment styleGetAlignment(Direction para_direction, bool try_text_align) const;
     };
 
     /** Represents a control code item in the input stream. See
