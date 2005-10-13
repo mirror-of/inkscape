@@ -1,3 +1,8 @@
+2005-10-13  MenTaLguY  <mental@rydia.net>
+
+    * share/screens/about.svg: New copy for about dialog; did some
+	  vector clean-up and re-enabled the coffee stains.
+
 2005-10-10  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/sp-conn-end-pair.cpp, src/sp-conn-end-pair.h:
