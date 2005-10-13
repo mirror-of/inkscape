@@ -15,8 +15,6 @@
  *
  */
 
- bool set_shape_active = false;
-
 #include <glib/gquark.h>
 #include <glib/gmessages.h>
 #include <glib/gstrfuncs.h>
@@ -389,7 +387,6 @@ void SimpleNode::setContent(gchar const *content) {
     }
 }
 
-
 void
 SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_interactive)
 {
@@ -436,13 +433,11 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const is_in
     }
 
     if ( new_value != old_value ) {
-        if (!set_shape_active) {
         if (_logger) {
             _logger->notifyAttributeChanged(*this, key, old_value, new_value);
         }
 
         _observers.notifyAttributeChanged(*this, key, old_value, new_value);
-        }
     }
 }
 
