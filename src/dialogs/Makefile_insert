@@ -14,10 +14,6 @@ dialogs/clean:
 	rm -f dialogs/libspdialogs.a $(dialogs_libspdialogs_a_OBJECTS)
 
 dialogs_libspdialogs_a_SOURCES = \
-	dialogs/docker.cpp	\
-	dialogs/docker.h	\
-	dialogs/dockable.cpp	\
-	dialogs/dockable.h	\
 	dialogs/color-picker.cpp \
 	dialogs/color-picker.h \
 	dialogs/debugdialog.cpp	\

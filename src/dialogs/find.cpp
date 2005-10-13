@@ -18,47 +18,14 @@
 #include <gtkmm/tooltips.h>
 #include <gtkmm/table.h>
 
-#include "dialogs/dockable.h"
 #include "dialogs/find.h"
 #include "widgets/icon.h"
-#include "dialogs/docker.h"
 
 #include "message-stack.h"
 #include "verbs.h"
 
 //TODO  : delete this
 GtkWidget * sp_find_dialog_old (void);
-
-class DialogFind : public Dockable
-{
-public :
-    static DialogFind & get();
-    virtual Gtk::Container & get_main_widget() {return _widget;}
-
-private :
-    DialogFind();
-    virtual ~DialogFind(){};
-    void addSearchField(Glib::ustring label, Glib::ustring tiptext, int line);
-    Gtk::VBox _widget;
-    Gtk::Table _fieldsTable;
-    Docker *_pDocker;
-    Gtk::Tooltips _tooltips;
-    static int FIND_LABEL_WIDTH;
-    static int FIND_FIED_WIDTH;
-};
-
-int DialogFind::FIND_LABEL_WIDTH = 80;
-int DialogFind::FIND_FIED_WIDTH = 64;
-
-void DialogFind::addSearchField(Glib::ustring label, Glib::ustring tiptext, int line)
-{
-    Gtk::Label *l = Gtk::manage(new Gtk::Label(label, 0.9, 0.5, true));
-    Gtk::Entry *tf = Gtk::manage(new Gtk::Entry);
-    l->set_mnemonic_widget(*tf);
-    _tooltips.set_tip(*tf, tiptext);
-    _fieldsTable.attach(*l, 0, 1, line, line+1, Gtk::FILL, Gtk::FILL);
-    _fieldsTable.attach(*tf, 1, 4, line, line+1);
-}
 
 void
 //GtkWidget *
@@ -67,31 +34,6 @@ sp_find_dialog(){
     sp_find_dialog_old ();
     return;
 }
-
-DialogFind::DialogFind():
-    Dockable("Find", "dialogs.find"),
-    _fieldsTable(5, 4, true),
-    _pDocker(0)
-{
-    Glib::ustring id("inkscape_options");
-    Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon(id, GTK_ICON_SIZE_LARGE_TOOLBAR) );
-    _widget.pack_start(*pIcon);
-    _widget.pack_start(_fieldsTable);
-    addSearchField("_Text", _("Find objects by their text content (exact or partial match)"), 0);
-    addSearchField("_ID", _("Find objects by the value of the id attribute (exact or partial match)"), 1);
-    addSearchField("_Style", _("Find objects by the value of the style attribute (exact or partial match)"), 2);
-    addSearchField("_Attributes", _("Find objects by the name of an attribute (exact or partial match)"), 3);
-
-
-    _widget.show_all();
-}
-
-DialogFind & DialogFind::get()
-{
-    static DialogFind &da = *(new DialogFind());
-    return da;
-}
-
 
 #include "config.h"
 
