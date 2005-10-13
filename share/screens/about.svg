@@ -14,7 +14,7 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.42+devel"
-   sodipodi:docbase="C:\Documents and Settings\ja.SWARTZBIVENS\Desktop"
+   sodipodi:docbase="/home/mental/cvs/inkscape/share/screens"
    sodipodi:docname="about.svg"
    inkscape:export-filename="/home/denis/vector/inksplash/inksplash.png"
    inkscape:export-xdpi="90.000000"
@@ -32,13 +32,13 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.9489305"
      inkscape:cx="361.88594"
-     inkscape:cy="333.09445"
+     inkscape:cy="249.86591"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="930"
      inkscape:window-height="938"
      inkscape:window-x="273"
-     inkscape:window-y="16" />
+     inkscape:window-y="29" />
   <metadata
      id="metadata4">
     <rdf:RDF>
@@ -214,19 +214,19 @@
     <flowRoot
        transform="matrix(1.009867,0.000000,0.000000,1.090274,-3.426805,-35.30932)"
        id="flowRoot4764"
-       style="font-size:11.323658px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:116.56924%;writing-mode:lr-tb;text-anchor:start;fill:#fbf6ed;fill-opacity:1.0000000;font-family:Bitstream Vera Sans">
+       style="font-size:11.32365799px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:116.56924486%;writing-mode:lr-tb;text-anchor:start;fill:#fbf6ed;fill-opacity:1;font-family:Bitstream Vera Sans">
       <flowRegion
          id="flowRegion4766">
         <use
            id="use4768"
            xlink:href="#rect4747"
            y="0"
-           x="0" />
+           x="0"
+           width="750"
+           height="625" />
       </flowRegion>
       <flowPara
-         id="flowPara1365">Warning: to draw freely may cause addiction and severe insomnia. Developers and community members shall not be held responsible for whatever impact Inkscape may have on your social life. Spending the late hours of the night fiddling on doodles and sketches is usually considered an unhealthy habit which may cause your significant other to lose interest in your persona, your family to stop feeding you and your pets to frequent the neighbour's houses more than your own.</flowPara>
-      <flowPara
-         id="flowPara1367">A rational use, however will raise your self-steem, increase your popularity, sex appeal and intelligence quotient, as well as bake you chocolate cookies.</flowPara>
+         id="flowPara1367">[mental is working on copy to go here]</flowPara>
     </flowRoot>
     <path
        d="M 275.96481,487.98917 C 275.96475,487.36243 275.80867,486.67298 275.49656,485.92085 C 274.87217,485.10607 274.15419,485.04339 273.34262,485.73282 C 272.78067,486.29692 272.28119,487.11172 271.84422,488.17720 C 271.40713,489.24273 270.97010,489.99483 270.53313,490.43356 C 270.09604,490.74695 269.50292,490.90364 268.75377,490.90363 L 265.56968,490.90363 C 264.44583,490.90364 263.88394,490.18287 263.88399,488.74130 L 263.88399,452.35757 C 263.88394,450.35199 263.47812,449.34916 262.66654,449.34911 C 261.16810,449.34916 258.95173,450.79072 256.01741,453.67379 C 253.39518,456.24357 250.58568,459.12669 247.58893,462.32314 C 244.65453,465.51968 241.43923,469.06090 237.94299,472.94681 C 234.19699,477.08349 231.01290,480.71872 228.39071,483.85252 C 225.83095,486.98636 223.80187,489.65011 222.30348,491.84378 C 220.43048,494.60155 219.49399,496.51318 219.49399,497.57868 C 219.49399,498.26813 219.71250,498.73820 220.14954,498.98890 C 220.64900,499.30228 221.61671,499.45898 223.05268,499.45897 L 250.30477,499.45897 C 251.99043,499.45898 252.83328,500.14842 252.83331,501.52730 L 252.83331,522.52093 C 252.83328,523.14770 252.83328,523.71178 252.83331,524.21321 C 252.83328,524.71460 252.80206,525.21602 252.73967,525.71744 C 252.55232,526.84561 252.36503,527.84842 252.17776,528.72592 C 252.05286,529.60337 251.92800,530.38683 251.80316,531.07628 C 251.67826,531.57768 251.77191,531.98507 252.08411,532.29847 C 252.27138,532.54916 252.61476,532.67451 253.11426,532.67453 C 260.29404,532.42381 263.88394,530.76288 263.88399,527.69175 L 263.88399,500.30510 C 263.88394,499.74102 264.53949,499.45898 265.85063,499.45897 L 268.28553,499.45897 C 270.09604,499.45898 271.25105,499.39631 271.75057,499.27094 C 272.62458,499.08292 273.37378,498.55017 273.99816,497.67269 C 275.18434,495.72973 275.83988,492.50189 275.96481,487.98917 M 252.83331,489.02334 C 252.83328,490.27688 252.24017,490.90364 251.05396,490.90363 L 229.98276,490.90363 C 229.10869,490.77829 229.07747,490.08885 229.88911,488.83530 C 232.07426,484.94937 238.59852,477.42821 249.46192,466.27176 C 250.83542,464.76757 251.77191,464.01545 252.27142,464.01540 C 252.64598,464.01545 252.83328,464.51686 252.83331,465.51965 L 252.83331,489.02334"
