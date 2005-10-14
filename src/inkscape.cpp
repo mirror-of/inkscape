@@ -745,16 +745,26 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 bool
 inkscape_load_menus (Inkscape::Application *inkscape)
 {
-    return inkscape_load_config (MENUS_FILE, 
+    gchar *fn = profile_path(MENUS_FILE);
+    bool retval = false;
+    if (Inkscape::IO::file_test(fn, G_FILE_TEST_EXISTS)) {
+        retval = inkscape_load_config (MENUS_FILE, 
 				 inkscape->menus, 
-				 _(menus_skeleton), 
+				 menus_skeleton, 
 				 MENUS_SKELETON_SIZE,
 				 _("%s is not a regular file.\n%s"),
 				 _("%s not a valid XML file, or\n"
 				   "you don't have read permissions on it.\n%s"),
 				 _("%s is not a valid menus file.\n%s"),
 				 _("Inkscape will run with default menus.\n"
-                             "New menus will not be saved."));
+                                   "New menus will not be saved."));
+    } else {
+        INKSCAPE->menus = sp_repr_read_mem(menus_skeleton, MENUS_SKELETON_SIZE, NULL);
+        if (INKSCAPE->menus != NULL)
+            retval = true;
+    }
+    g_free(fn);
+    return retval;
 }
 
 /**
