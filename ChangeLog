@@ -1,3 +1,8 @@
+2005-09-12  Jon A. Cruz  <jon@joncruz.org>
+
+	* share/palettes/Makefile.am, share/palettes/Tango-Palette.gpl:
+	  Adding the Tango palette.
+
 2005-10-13  MenTaLguY  <mental@rydia.net>
 
     * share/screens/about.svg: New copy for about dialog; did some
