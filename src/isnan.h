@@ -26,12 +26,14 @@
  * and/or other .h files to use the same header file.
  */
 
-#if defined(__APPLE__) || defined(__isnan)
-# define isNaN(_a) (__isnan(_a))	/* MacOSX/Darwin definition */
+#if defined(__isnan)
+# define isNaN(_a) (__isnan(_a))	/* MacOSX/Darwin definition < 10.4 */
 #elif defined(WIN32) || defined(_isnan)
 # define isNaN(_a) (_isnan(_a)) 	/* Win32 definition */
+#elif defined(isnan)
+# define isNaN(_a) (isnan(_a))		/* GNU definition */
 #else
-# define isNaN(_a) (isnan(_a))	/* GNU definition */
+# define isNaN(_a) (std::isnan(_a))
 #endif
 /* If the above doesn't work, then try (a != a).
  * Also, please report a bug as per http://www.inkscape.org/report_bugs.php,
@@ -39,8 +41,8 @@
  */
 
 
-#if defined(__APPLE__) || defined(__isfinite)
-# define isFinite(_a) (__isfinite(_a))	/* MacOSX/Darwin definition */
+#if defined(__isfinite)
+# define isFinite(_a) (__isfinite(_a))	/* MacOSX/Darwin definition < 10.4 */
 #elif defined(isfinite)
 # define isFinite(_a) (isfinite(_a))
 #else
