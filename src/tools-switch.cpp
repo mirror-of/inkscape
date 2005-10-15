@@ -233,7 +233,12 @@ void tools_switch_by_item(SPDesktop *dt, SPItem *item)
     } else if (SP_IS_SPIRAL(item)) {
         tools_switch(dt, TOOLS_SHAPES_SPIRAL);
     } else if (SP_IS_PATH(item)) {
-        tools_switch(dt, TOOLS_NODES);
+        if (cc_item_is_connector(item)) {
+            tools_switch(dt, TOOLS_CONNECTOR);
+        }
+        else {
+            tools_switch(dt, TOOLS_NODES);
+        }
     } else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))  {
         tools_switch(dt, TOOLS_TEXT);
     }

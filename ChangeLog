@@ -2,6 +2,10 @@
 
 	* src/isnan.h: Update to allow compilation on OSX 10.4.
 
+	* src/connector-context.cpp, src/connector-context.h,
+	  src/tools-switch.cpp: Allow double-clicking on connectors
+	  in the selector tool to swap to the connector tool.
+
 2005-09-12  Jon A. Cruz  <jon@joncruz.org>
 
 	* share/palettes/Makefile.am, share/palettes/Tango-Palette.gpl:

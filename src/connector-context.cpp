@@ -22,7 +22,6 @@
  *  o  Better distinguish between paths and connectors to prevent problems
  *     in the node tool and paths accidently being turned into connectors
  *     in the connector tool.  Perhaps have a way to convert between.
- *  o  Allow double clicking on connectors to swap to the connector context.
  *  o  Only call libavoid's updateEndPoint as required.  Currently we do it
  *     for both endpoints, even if only one is moving.
  *  o  Cleanup to remove unecessary borrowed DrawContext code.
@@ -1237,7 +1236,7 @@ static bool cc_item_is_shape(SPItem *item)
 }
 
 
-static bool cc_item_is_connector(SPItem *item)
+bool cc_item_is_connector(SPItem *item)
 {
     if (SP_IS_PATH(item)) {
         if (SP_PATH(item)->connEndPair.isAutoRoutingConn()) {
