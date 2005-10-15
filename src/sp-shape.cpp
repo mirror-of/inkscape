@@ -70,7 +70,7 @@ static void sp_shape_hide (SPItem *item, unsigned int key);
 static void sp_shape_snappoints (SPItem const *item, SnapPointsIter p);
 
 static void sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai);
-static int sp_shape_has_markers (SPShape* shape);
+static int sp_shape_has_markers (SPShape const *shape);
 static int sp_shape_number_of_markers (SPShape* Shape, int type);
 
 static SPItemClass *parent_class;
@@ -290,7 +290,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 * \return 1 if a marker is required here, otherwise 0.
 */
 static bool
-sp_shape_marker_required(SPShape *shape, int const m, NArtBpath *bp)
+sp_shape_marker_required(SPShape const *shape, int const m, NArtBpath *bp)
 {
     if (shape->marker[m] == NULL) {
         return false;
@@ -605,6 +605,35 @@ static void sp_shape_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &tr
                 }
             }
         }
+
+        // Union with bboxes of the markers, if any
+        if (sp_shape_has_markers (shape)) {
+            for (NArtBpath* bp = shape->curve->bpath; bp->code != NR_END; bp++) {
+                for (int m = SP_MARKER_LOC_START; m < SP_MARKER_LOC_QTY; m++) {
+                    if (sp_shape_marker_required (shape, m, bp)) {
+
+                        SPMarker* marker = SP_MARKER (shape->marker[m]);
+                        SPItem* marker_item = sp_item_first_item_child (SP_OBJECT (shape->marker[m]));
+
+                        NR::Matrix tr(sp_shape_marker_get_transform(shape, bp));
+
+                        if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
+                            tr = NR::scale(style->stroke_width.computed) * tr;
+                        }
+
+                        // total marker transform
+                        tr = marker_item->transform * marker->c2p * tr * transform;
+
+                        // get bbox of the marker with that transform
+                        NRRect marker_bbox;
+                        sp_item_invoke_bbox (marker_item, &marker_bbox, tr, true);
+                        // union it with the shape bbox
+                        nr_rect_d_union (&cbbox, &cbbox, &marker_bbox);
+                    }
+                }
+            }
+        }
+
         if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
             NRRect tbbox=*bbox;
             nr_rect_d_union (bbox, &cbbox, &tbbox);
@@ -756,7 +785,7 @@ sp_shape_hide (SPItem *item, unsigned int key)
 * \return TRUE if the shape has any markers, or FALSE if not.
 */
 static int
-sp_shape_has_markers (SPShape* shape)
+sp_shape_has_markers (SPShape const *shape)
 {
     /* Note, we're ignoring 'marker' settings, which technically should apply for
        all three settings.  This should be fixed later such that if 'marker' is
