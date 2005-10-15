@@ -106,7 +106,6 @@ static void cc_clear_active_shape(SPConnectorContext *cc);
 static void cc_set_active_conn(SPConnectorContext *cc, SPItem *item);
 static void cc_clear_active_conn(SPConnectorContext *cc);
 static gchar *conn_pt_handle_test(SPConnectorContext *cc, NR::Point& w);
-static bool cc_item_is_connector(SPItem *item);
 static bool cc_item_is_shape(SPItem *item);
 static void cc_selection_changed(Inkscape::Selection *selection, gpointer data);
 
