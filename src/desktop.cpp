@@ -227,7 +227,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *canvas)
     g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
     table = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
-    sp_ctrlrect_set_area (SP_CTRLRECT (table), -15000.0, -15000.0, 15000.0, 15000.0);
+    sp_ctrlrect_set_area (SP_CTRLRECT (table), -80000.0, -80000.0, 80000.0, 80000.0);
     sp_ctrlrect_set_color (SP_CTRLRECT (table), 0x00000000, TRUE, 0x00000000);
     sp_canvas_item_move_to_z (table, 0);
 
