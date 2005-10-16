@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-25 13:05+0200\n"
+"POT-Creation-Date: 2005-10-16 22:07+0200\n"
 "PO-Revision-Date: 2005-08-01 22:20+0200\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "<b>Shift</b>: draw around the starting point"
 msgstr "<b>Shift</b>: teken rondom het beginpunt"
 
-#: ../src/arc-context.cpp:416 ../src/connector-context.cpp:495
+#: ../src/arc-context.cpp:416 ../src/connector-context.cpp:493
 #: ../src/dyna-draw-context.cpp:510 ../src/pen-context.cpp:324
 #: ../src/pencil-context.cpp:207 ../src/rect-context.cpp:455
 #: ../src/spiral-context.cpp:425 ../src/star-context.cpp:430
@@ -43,7 +43,7 @@ msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
 msgstr ""
 "<b>De huidige laag is verborgen</b>. Toon hem om er op te kunnen tekenen."
 
-#: ../src/arc-context.cpp:420 ../src/connector-context.cpp:499
+#: ../src/arc-context.cpp:420 ../src/connector-context.cpp:497
 #: ../src/dyna-draw-context.cpp:514 ../src/pen-context.cpp:328
 #: ../src/pencil-context.cpp:211 ../src/rect-context.cpp:459
 #: ../src/spiral-context.cpp:430 ../src/star-context.cpp:434
@@ -62,25 +62,25 @@ msgstr ""
 "'gehele-verhouding' ellips te maken; druk <b>Shift</b> in om rondom het "
 "beginpunt te tekenen"
 
-#: ../src/connector-context.cpp:520
+#: ../src/connector-context.cpp:518
 #, fuzzy
 msgid "Creating new connector"
 msgstr "Nieuw pad maken"
 
-#: ../src/connector-context.cpp:945
+#: ../src/connector-context.cpp:943
 #, fuzzy
 msgid "Finishing connector"
 msgstr "Klaar met het trekken van lijnen"
 
-#: ../src/connector-context.cpp:1114
+#: ../src/connector-context.cpp:1112
 msgid "<b>Connnection point</b>: click or drag to create a new connector"
 msgstr ""
 
-#: ../src/connector-context.cpp:1191
+#: ../src/connector-context.cpp:1189
 msgid "<b>Connnector endpoint</b>: drag to reroute or connect to new shapes"
 msgstr ""
 
-#: ../src/connector-context.cpp:1284
+#: ../src/connector-context.cpp:1282
 #, fuzzy
 msgid "Select <b>at least one non-connector object</b>."
 msgstr "Selecteer <b>tenminste twee objecten</b> om te groeperen."
@@ -112,11 +112,11 @@ msgstr "Hulplijn"
 msgid "Move %s"
 msgstr "%s verplaatsen"
 
-#: ../src/desktop.cpp:741
+#: ../src/desktop.cpp:742
 msgid "No previous zoom."
 msgstr "Geen vorige zoom niveau."
 
-#: ../src/desktop.cpp:766
+#: ../src/desktop.cpp:767
 msgid "No next zoom."
 msgstr "Geen volgend zoom niveau."
 
@@ -756,13 +756,13 @@ msgid "Messages"
 msgstr "Berichten"
 
 #. ## Add a menu for clear()
-#: ../src/dialogs/debugdialog.cpp:144 ../src/ui/dialog/messages.cpp:56
-#: ../src/ui/dialog/scriptdialog.cpp:181
+#: ../src/dialogs/debugdialog.cpp:144 ../src/menus-skeleton.h:16
+#: ../src/ui/dialog/messages.cpp:56 ../src/ui/dialog/scriptdialog.cpp:181
 msgid "_File"
 msgstr "_Bestand"
 
 #. TRANSLATORS: "Clear" is a verb here
-#: ../src/dialogs/debugdialog.cpp:145 ../src/dialogs/find.cpp:811
+#: ../src/dialogs/debugdialog.cpp:145 ../src/dialogs/find.cpp:753
 #: ../src/ui/dialog/messages.cpp:57 ../src/ui/dialog/scriptdialog.cpp:182
 msgid "_Clear"
 msgstr "_Leegmaken"
@@ -801,7 +801,8 @@ msgid "Snap the edges of the object bounding boxes"
 msgstr "Omhullenden van objecten worden aangetrokken "
 
 #: ../src/dialogs/desktop-properties.cpp:934
-msgid "Snap points to grid"
+#, fuzzy
+msgid "Snap nodes to grid"
 msgstr "Het raster is magnetisch voor punten"
 
 #: ../src/dialogs/desktop-properties.cpp:934
@@ -923,7 +924,7 @@ msgstr "Kleur van een hulplijn als de muis erover heen beweegt"
 #: ../src/dialogs/desktop-properties.cpp:1044
 #: ../src/ui/dialog/align-and-distribute.cpp:778
 #: ../src/ui/dialog/document-preferences.cpp:36
-#: ../src/widgets/desktop-widget.cpp:910
+#: ../src/widgets/desktop-widget.cpp:907
 msgid "Page"
 msgstr "Pagina"
 
@@ -1008,7 +1009,7 @@ msgstr "Eenheden:"
 #. Stroke width
 #: ../src/dialogs/desktop-properties.cpp:1179 ../src/dialogs/export.cpp:310
 #: ../src/dialogs/object-attributes.cpp:55 ../src/dialogs/stroke-style.cpp:985
-#: ../src/widgets/toolbox.cpp:1950
+#: ../src/widgets/toolbox.cpp:1958
 msgid "Width:"
 msgstr "Breedte:"
 
@@ -1065,7 +1066,7 @@ msgstr "Selectie-aanduiding per object:"
 #: ../src/dialogs/display-settings.cpp:253
 #: ../src/dialogs/display-settings.cpp:390
 #: ../src/dialogs/display-settings.cpp:445
-#: ../src/dialogs/display-settings.cpp:1494
+#: ../src/dialogs/display-settings.cpp:1496
 #: ../src/dialogs/stroke-style.cpp:791 ../src/interface.cpp:764
 #: ../src/ui/dialog/inkscape-preferences.cpp:156 ../src/verbs.cpp:1821
 msgid "None"
@@ -1482,21 +1483,26 @@ msgstr "Tekst"
 msgid "Gradient"
 msgstr "Kleurverloop"
 
-#: ../src/dialogs/display-settings.cpp:1178 ../src/verbs.cpp:2054
+#: ../src/dialogs/display-settings.cpp:1178 ../src/verbs.cpp:2056
+#, fuzzy
+msgid "Connector"
+msgstr "Ontwerper"
+
+#: ../src/dialogs/display-settings.cpp:1185 ../src/verbs.cpp:2054
 msgid "Dropper"
 msgstr "Pipet"
 
 #. Windows
-#: ../src/dialogs/display-settings.cpp:1195
+#: ../src/dialogs/display-settings.cpp:1197
 #: ../src/ui/dialog/inkscape-preferences.cpp:59
 msgid "Windows"
 msgstr "Vensters"
 
-#: ../src/dialogs/display-settings.cpp:1200
+#: ../src/dialogs/display-settings.cpp:1202
 msgid "Save window geometry"
 msgstr "Venster posities opslaan"
 
-#: ../src/dialogs/display-settings.cpp:1201
+#: ../src/dialogs/display-settings.cpp:1203
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
@@ -1504,19 +1510,19 @@ msgstr ""
 "De positie en grootte van vensters opslaan bij elk document in Inkscape SVG-"
 "formaat"
 
-#: ../src/dialogs/display-settings.cpp:1208
+#: ../src/dialogs/display-settings.cpp:1210
 msgid "Dialogs are hidden in taskbar"
 msgstr "Dialogen zijn verborgen in de taakbalk"
 
-#: ../src/dialogs/display-settings.cpp:1209
+#: ../src/dialogs/display-settings.cpp:1211
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr "Verberg dialoogvensters in de taakbalk"
 
-#: ../src/dialogs/display-settings.cpp:1216
+#: ../src/dialogs/display-settings.cpp:1218
 msgid "Zoom when window is resized"
 msgstr "Zoomen wanneer de venstergrootte verandert"
 
-#: ../src/dialogs/display-settings.cpp:1217
+#: ../src/dialogs/display-settings.cpp:1219
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -1527,36 +1533,36 @@ msgstr ""
 "heeft de mogelijkheid dit aan te passen boven de rechter schuifbalk)"
 
 #. Clones
-#: ../src/dialogs/display-settings.cpp:1225 ../src/dialogs/find.cpp:682
+#: ../src/dialogs/display-settings.cpp:1227 ../src/dialogs/find.cpp:624
 #: ../src/ui/dialog/inkscape-preferences.cpp:60
 msgid "Clones"
 msgstr "Klonen"
 
-#: ../src/dialogs/display-settings.cpp:1229
+#: ../src/dialogs/display-settings.cpp:1231
 msgid "When the original moves, its clones and linked offsets:"
 msgstr "Gedrag van klonen bij het verplaatsen van het origineel:"
 
-#: ../src/dialogs/display-settings.cpp:1241
+#: ../src/dialogs/display-settings.cpp:1243
 msgid "Move in parallel"
 msgstr "Parallel mee verplaatsen"
 
-#: ../src/dialogs/display-settings.cpp:1242
+#: ../src/dialogs/display-settings.cpp:1244
 msgid "Clones are translated by the same vector as their original."
 msgstr "Klonen worden op dezelfde manier verplaatst als het origineel."
 
-#: ../src/dialogs/display-settings.cpp:1249
+#: ../src/dialogs/display-settings.cpp:1251
 msgid "Stay unmoved"
 msgstr "Laten staan"
 
-#: ../src/dialogs/display-settings.cpp:1250
+#: ../src/dialogs/display-settings.cpp:1252
 msgid "Clones preserve their positions when their original is moved."
 msgstr "Klonen blijven op hun plek staan als het origineel wordt verplaatst."
 
-#: ../src/dialogs/display-settings.cpp:1257
+#: ../src/dialogs/display-settings.cpp:1259
 msgid "Move according to transform"
 msgstr "Verplaatsen volgens transformatie"
 
-#: ../src/dialogs/display-settings.cpp:1258
+#: ../src/dialogs/display-settings.cpp:1260
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
@@ -1565,83 +1571,83 @@ msgstr ""
 "Elke kloon verplaatst volgens zijn eigen 'transform='-waarde. Een gedraaide "
 "kloon zal bijvoorbeeld in een andere richting verplaatsen dan zijn origineel."
 
-#: ../src/dialogs/display-settings.cpp:1267
+#: ../src/dialogs/display-settings.cpp:1269
 msgid "When the original is deleted, its clones:"
 msgstr "Gedrag van klonen bij het verwijderen van het origineel:"
 
-#: ../src/dialogs/display-settings.cpp:1279
+#: ../src/dialogs/display-settings.cpp:1281
 msgid "Are unlinked"
 msgstr "Ontkoppelen"
 
-#: ../src/dialogs/display-settings.cpp:1279
+#: ../src/dialogs/display-settings.cpp:1281
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Ontkoppelde klonen worden omgezet naar normale objecten"
 
-#: ../src/dialogs/display-settings.cpp:1285
+#: ../src/dialogs/display-settings.cpp:1287
 msgid "Are deleted"
 msgstr "Verwijderen"
 
-#: ../src/dialogs/display-settings.cpp:1285
+#: ../src/dialogs/display-settings.cpp:1287
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Ontkoppelde klonen worden verwijderd samen met hun origineel"
 
 #. Transforms
 #. TRANSLATORS: Noun, i.e. transformations.
-#: ../src/dialogs/display-settings.cpp:1301
+#: ../src/dialogs/display-settings.cpp:1303
 #: ../src/ui/dialog/inkscape-preferences.cpp:61
 msgid "Transforms"
 msgstr "Transformaties"
 
-#: ../src/dialogs/display-settings.cpp:1304
+#: ../src/dialogs/display-settings.cpp:1306
 msgid "Scale stroke width"
 msgstr "Lijndikte mee schalen"
 
-#: ../src/dialogs/display-settings.cpp:1305
+#: ../src/dialogs/display-settings.cpp:1307
 #: ../src/widgets/select-toolbar.cpp:542
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Wanneer objecten worden vergroot of verkleind, de lijndikte evenveel mee "
 "vergroten of verkleinen"
 
-#: ../src/dialogs/display-settings.cpp:1312
+#: ../src/dialogs/display-settings.cpp:1314
 msgid "Scale rounded corners in rectangles"
 msgstr "Afgeronding van hoeken mee schalen"
 
-#: ../src/dialogs/display-settings.cpp:1313
+#: ../src/dialogs/display-settings.cpp:1315
 #: ../src/widgets/select-toolbar.cpp:554
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Wanneer rechthoeken worden vergroot of verkleind, de straal van de hoek mee "
 "vergroten of verkleinen"
 
-#: ../src/dialogs/display-settings.cpp:1320
+#: ../src/dialogs/display-settings.cpp:1322
 msgid "Transform gradients"
 msgstr "Kleurverlopen transformeren"
 
-#: ../src/dialogs/display-settings.cpp:1321
+#: ../src/dialogs/display-settings.cpp:1323
 #: ../src/widgets/select-toolbar.cpp:566
 msgid "Transform gradients (in fill or stroke) along with the objects"
 msgstr "Kleurverlopen (op lijnen of vlakken) mee transformeren met de objecten"
 
-#: ../src/dialogs/display-settings.cpp:1328
+#: ../src/dialogs/display-settings.cpp:1330
 msgid "Transform patterns"
 msgstr "Patronen transformeren"
 
-#: ../src/dialogs/display-settings.cpp:1329
+#: ../src/dialogs/display-settings.cpp:1331
 #: ../src/widgets/select-toolbar.cpp:578
 msgid "Transform patterns (in fill or stroke) along with the objects"
 msgstr "Patronen (op lijnen of vlakken) mee transformeren met de objecten"
 
 #. TRANSLATORS: How to specify the affine transformation in the SVG file.
-#: ../src/dialogs/display-settings.cpp:1339
+#: ../src/dialogs/display-settings.cpp:1341
 msgid "Store transformation:"
 msgstr "Transformaties opslaan:"
 
-#: ../src/dialogs/display-settings.cpp:1350
+#: ../src/dialogs/display-settings.cpp:1352
 msgid "Optimized"
 msgstr "Optimaliseren"
 
-#: ../src/dialogs/display-settings.cpp:1351
+#: ../src/dialogs/display-settings.cpp:1353
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -1649,29 +1655,29 @@ msgstr ""
 "Pas, indien mogelijk, transformaties op objecten toe zonder een 'transform='-"
 "waarde toe te voegen"
 
-#: ../src/dialogs/display-settings.cpp:1358
+#: ../src/dialogs/display-settings.cpp:1360
 msgid "Preserved"
 msgstr "Behouden"
 
-#: ../src/dialogs/display-settings.cpp:1359
+#: ../src/dialogs/display-settings.cpp:1361
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
 "Transformaties altijd opslaan als een 'transform='-waarde bij objecten."
 
 #. Selecting
-#: ../src/dialogs/display-settings.cpp:1367
+#: ../src/dialogs/display-settings.cpp:1369
 msgid "Selecting"
 msgstr "Selecteren"
 
-#: ../src/dialogs/display-settings.cpp:1369
+#: ../src/dialogs/display-settings.cpp:1371
 msgid "Ctrl+A, Tab, Shift+Tab:"
 msgstr "Ctrl+A, Tab, Shift+Tab:"
 
-#: ../src/dialogs/display-settings.cpp:1378
+#: ../src/dialogs/display-settings.cpp:1380
 msgid "Select only within current layer"
 msgstr "Selecteren alleen binnen de huidige laag"
 
-#: ../src/dialogs/display-settings.cpp:1379
+#: ../src/dialogs/display-settings.cpp:1381
 msgid ""
 "Uncheck this to make keyboard selection commands work on objects in all "
 "layers"
@@ -1679,11 +1685,11 @@ msgstr ""
 "Deselecteer dit om selecteer-opdrachten via het toetsenbord van toepassing "
 "te laten zijn op alle objecten in alle lagen"
 
-#: ../src/dialogs/display-settings.cpp:1386
+#: ../src/dialogs/display-settings.cpp:1388
 msgid "Ignore hidden objects"
 msgstr "Negeer verborgen objecten"
 
-#: ../src/dialogs/display-settings.cpp:1387
+#: ../src/dialogs/display-settings.cpp:1389
 msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden group or layer)"
@@ -1691,11 +1697,11 @@ msgstr ""
 "Deselecteer dit om objecten te kunnen selecteren die verborgen zijn (of die "
 "in een verborgen groep of laag zitten)"
 
-#: ../src/dialogs/display-settings.cpp:1394
+#: ../src/dialogs/display-settings.cpp:1396
 msgid "Ignore locked objects"
 msgstr "Negeer vergrendelde objecten"
 
-#: ../src/dialogs/display-settings.cpp:1395
+#: ../src/dialogs/display-settings.cpp:1397
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
@@ -1704,33 +1710,33 @@ msgstr ""
 "die in een vergrendelde groep of laag zitten)"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: ../src/dialogs/display-settings.cpp:1403
+#: ../src/dialogs/display-settings.cpp:1405
 #: ../src/ui/dialog/inkscape-preferences.cpp:62
 msgid "Misc"
 msgstr "Overig"
 
-#: ../src/dialogs/display-settings.cpp:1406
+#: ../src/dialogs/display-settings.cpp:1408
 msgid "Default export resolution:"
 msgstr "Standaard resolutie voor exporteren:"
 
-#: ../src/dialogs/display-settings.cpp:1407
+#: ../src/dialogs/display-settings.cpp:1409
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 "Standaard resolutie voor bitmaps (in punten per inch) in het 'Bitmap "
 "exporteren' dialoogvenster"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: ../src/dialogs/display-settings.cpp:1408 ../src/dialogs/export.cpp:442
+#: ../src/dialogs/display-settings.cpp:1410 ../src/dialogs/export.cpp:442
 msgid "dpi"
 msgstr "dpi"
 
 #. TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
 #. * rectangle with bitmap fill.
-#: ../src/dialogs/display-settings.cpp:1419
+#: ../src/dialogs/display-settings.cpp:1421
 msgid "Import bitmap as <image>"
 msgstr "Bitmaps in het document importeren als <image>-element"
 
-#: ../src/dialogs/display-settings.cpp:1420
+#: ../src/dialogs/display-settings.cpp:1422
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
@@ -1741,11 +1747,11 @@ msgstr ""
 #. TRANSLATORS: When on, the print out (currently Postscript) will have
 #. * a comment with the each object's label visible, marking the section
 #. * of the printing commands that represent the given object.
-#: ../src/dialogs/display-settings.cpp:1430
+#: ../src/dialogs/display-settings.cpp:1432
 msgid "Add label comments to printing output"
 msgstr "Commentaar-velden toevoegen aan printer-uitvoer"
 
-#: ../src/dialogs/display-settings.cpp:1431
+#: ../src/dialogs/display-settings.cpp:1433
 msgid ""
 "When on, a comment will be added to the raw print output, marking the "
 "rendered output for an object with its label"
@@ -1754,11 +1760,11 @@ msgstr ""
 "het label van een object in staat vermeld."
 
 #. TRANSLATORS: When on, enable the effects menu, default is off
-#: ../src/dialogs/display-settings.cpp:1439
+#: ../src/dialogs/display-settings.cpp:1441
 msgid "Enable script effects (requires restart) - EXPERIMENTAL"
 msgstr "Script-effecten inschakelen (herstart noodzakelijk) - EXPERIMENTEEL"
 
-#: ../src/dialogs/display-settings.cpp:1440
+#: ../src/dialogs/display-settings.cpp:1442
 msgid ""
 "When on, the effects menu is enabled, allowing external effect scripts to be "
 "called, requires restart before effective - EXPERIMENTAL"
@@ -1768,20 +1774,20 @@ msgstr ""
 "voordat dit werkt - EXPERIMENTEEL"
 
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
-#: ../src/dialogs/display-settings.cpp:1448
+#: ../src/dialogs/display-settings.cpp:1450
 msgid "Max recent documents:"
 msgstr "Maximum aantal te onthouden recente bestanden:"
 
-#: ../src/dialogs/display-settings.cpp:1449
+#: ../src/dialogs/display-settings.cpp:1451
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 "Het maximum aantal bestandsnamen in 'Recente bestanden' in het 'Bestand'-menu"
 
-#: ../src/dialogs/display-settings.cpp:1459
+#: ../src/dialogs/display-settings.cpp:1461
 msgid "Simplification threshold:"
 msgstr "Simplificatie grenswaarde:"
 
-#: ../src/dialogs/display-settings.cpp:1460
+#: ../src/dialogs/display-settings.cpp:1462
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -1791,23 +1797,23 @@ msgstr ""
 "vlak na elkaar uitvoert, zal dat steeds meer effect hebben; na een korte "
 "pauze wordt de standaard grenswaarde hersteld."
 
-#: ../src/dialogs/display-settings.cpp:1481
+#: ../src/dialogs/display-settings.cpp:1483
 msgid "Oversample bitmaps:"
 msgstr "Bitmaps oversampelen:"
 
-#: ../src/dialogs/display-settings.cpp:1500
+#: ../src/dialogs/display-settings.cpp:1502
 msgid "2x2"
 msgstr "2x2"
 
-#: ../src/dialogs/display-settings.cpp:1506
+#: ../src/dialogs/display-settings.cpp:1508
 msgid "4x4"
 msgstr "4x4"
 
-#: ../src/dialogs/display-settings.cpp:1512
+#: ../src/dialogs/display-settings.cpp:1514
 msgid "8x8"
 msgstr "8x8"
 
-#: ../src/dialogs/display-settings.cpp:1518
+#: ../src/dialogs/display-settings.cpp:1520
 msgid "16x16"
 msgstr "16x16"
 
@@ -1942,205 +1948,205 @@ msgstr "Kies op basis van extentie"
 msgid "Append filename extension automatically"
 msgstr "Automatisch de bestandsnaam extensie toevoegen"
 
-#: ../src/dialogs/find.cpp:80 ../src/dialogs/find.cpp:752
-msgid "Find objects by their text content (exact or partial match)"
-msgstr ""
-"Zoek objecten op hun tekst inhoud (precieze of gedeeltelijke overeenkomst)"
-
-#: ../src/dialogs/find.cpp:81 ../src/dialogs/find.cpp:753
-msgid "Find objects by the value of the id attribute (exact or partial match)"
-msgstr ""
-"Zoek objecten op naam of op het ID-attribuut (precieze of gedeeltelijke "
-"overeenkomst)"
-
-#: ../src/dialogs/find.cpp:82 ../src/dialogs/find.cpp:754
-msgid ""
-"Find objects by the value of the style attribute (exact or partial match)"
-msgstr ""
-"Zoek objecten op naam of op het stijl-attribuut (precieze of gedeeltelijke "
-"overeenkomst)"
-
-#: ../src/dialogs/find.cpp:83 ../src/dialogs/find.cpp:755
-msgid "Find objects by the name of an attribute (exact or partial match)"
-msgstr ""
-"Zoek objecten op naam of op attribuut (precieze of gedeeltelijke "
-"overeenkomst)"
-
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: ../src/dialogs/find.cpp:436
+#: ../src/dialogs/find.cpp:378
 #, fuzzy, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 msgstr[0] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s komen overeen."
 msgstr[1] "<b>%d</b> objecten gevonden (van <b>%d</b>), %s komen overeen."
 
-#: ../src/dialogs/find.cpp:439
+#: ../src/dialogs/find.cpp:381
 msgid "exact"
 msgstr "precieze"
 
-#: ../src/dialogs/find.cpp:439
+#: ../src/dialogs/find.cpp:381
 msgid "partial"
 msgstr "gedeeltelijke"
 
-#: ../src/dialogs/find.cpp:446
+#: ../src/dialogs/find.cpp:388
 msgid "No objects found"
 msgstr "Geen objecten gevonden"
 
-#: ../src/dialogs/find.cpp:604
+#: ../src/dialogs/find.cpp:546
 msgid "T_ype: "
 msgstr "S_oort:"
 
-#: ../src/dialogs/find.cpp:611
+#: ../src/dialogs/find.cpp:553
 msgid "Search in all object types"
 msgstr "Doorzoek alle soorten objecten"
 
-#: ../src/dialogs/find.cpp:611
+#: ../src/dialogs/find.cpp:553
 msgid "All types"
 msgstr "Alle soorten"
 
-#: ../src/dialogs/find.cpp:622
+#: ../src/dialogs/find.cpp:564
 msgid "Search all shapes"
 msgstr "Doorzoek alle vormen"
 
-#: ../src/dialogs/find.cpp:622
+#: ../src/dialogs/find.cpp:564
 msgid "All shapes"
 msgstr "Alle vormen"
 
-#: ../src/dialogs/find.cpp:639
+#: ../src/dialogs/find.cpp:581
 msgid "Search rectangles"
 msgstr "Doorzoek rechthoeken"
 
-#: ../src/dialogs/find.cpp:639
+#: ../src/dialogs/find.cpp:581
 msgid "Rectangles"
 msgstr "Rechthoeken"
 
-#: ../src/dialogs/find.cpp:644
+#: ../src/dialogs/find.cpp:586
 msgid "Search ellipses, arcs, circles"
 msgstr "Doorzoek ellipsen, veelhoeken en cirkels."
 
-#: ../src/dialogs/find.cpp:644
+#: ../src/dialogs/find.cpp:586
 msgid "Ellipses"
 msgstr "Ellipsen"
 
-#: ../src/dialogs/find.cpp:649
+#: ../src/dialogs/find.cpp:591
 msgid "Search stars and polygons"
 msgstr "Doorzoek sterren en veelhoeken"
 
-#: ../src/dialogs/find.cpp:649
+#: ../src/dialogs/find.cpp:591
 msgid "Stars"
 msgstr "Sterren"
 
-#: ../src/dialogs/find.cpp:654
+#: ../src/dialogs/find.cpp:596
 msgid "Search spirals"
 msgstr "Doorzoek spiralen"
 
-#: ../src/dialogs/find.cpp:654
+#: ../src/dialogs/find.cpp:596
 msgid "Spirals"
 msgstr "Spiralen"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: ../src/dialogs/find.cpp:667
+#: ../src/dialogs/find.cpp:609
 msgid "Search paths, lines, polylines"
 msgstr "Doorzoek paden, lijnen en poly-lijnen"
 
-#: ../src/dialogs/find.cpp:667
+#: ../src/dialogs/find.cpp:609
 msgid "Paths"
 msgstr "Paden"
 
-#: ../src/dialogs/find.cpp:672
+#: ../src/dialogs/find.cpp:614
 msgid "Search text objects"
 msgstr "Doorzoek tekst-objecten"
 
-#: ../src/dialogs/find.cpp:672
+#: ../src/dialogs/find.cpp:614
 msgid "Texts"
 msgstr "Tekst"
 
-#: ../src/dialogs/find.cpp:677
+#: ../src/dialogs/find.cpp:619
 msgid "Search groups"
 msgstr "Doorzoek groepen"
 
-#: ../src/dialogs/find.cpp:677
+#: ../src/dialogs/find.cpp:619
 msgid "Groups"
 msgstr "Groepen"
 
-#: ../src/dialogs/find.cpp:682
+#: ../src/dialogs/find.cpp:624
 msgid "Search clones"
 msgstr "Doorzoek klonen"
 
-#: ../src/dialogs/find.cpp:687
+#: ../src/dialogs/find.cpp:629
 msgid "Search images"
 msgstr "Doorzoek afbeeldingen"
 
-#: ../src/dialogs/find.cpp:687
+#: ../src/dialogs/find.cpp:629
 msgid "Images"
 msgstr "Afbeeldingen"
 
-#: ../src/dialogs/find.cpp:692
+#: ../src/dialogs/find.cpp:634
 msgid "Search offset objects"
 msgstr ""
 
-#: ../src/dialogs/find.cpp:692
+#: ../src/dialogs/find.cpp:634
 msgid "Offsets"
 msgstr ""
 
-#: ../src/dialogs/find.cpp:752
+#: ../src/dialogs/find.cpp:694
 msgid "_Text: "
 msgstr "_Tekst:"
 
-#: ../src/dialogs/find.cpp:753
+#: ../src/dialogs/find.cpp:694
+msgid "Find objects by their text content (exact or partial match)"
+msgstr ""
+"Zoek objecten op hun tekst inhoud (precieze of gedeeltelijke overeenkomst)"
+
+#: ../src/dialogs/find.cpp:695
 msgid "_ID: "
 msgstr "_ID:"
 
-#: ../src/dialogs/find.cpp:754
+#: ../src/dialogs/find.cpp:695
+msgid "Find objects by the value of the id attribute (exact or partial match)"
+msgstr ""
+"Zoek objecten op naam of op het ID-attribuut (precieze of gedeeltelijke "
+"overeenkomst)"
+
+#: ../src/dialogs/find.cpp:696
 msgid "_Style: "
 msgstr "_Stijl:"
 
-#: ../src/dialogs/find.cpp:755
+#: ../src/dialogs/find.cpp:696
+msgid ""
+"Find objects by the value of the style attribute (exact or partial match)"
+msgstr ""
+"Zoek objecten op naam of op het stijl-attribuut (precieze of gedeeltelijke "
+"overeenkomst)"
+
+#: ../src/dialogs/find.cpp:697
 msgid "_Attribute: "
 msgstr "_Attribuut:"
 
-#: ../src/dialogs/find.cpp:769
+#: ../src/dialogs/find.cpp:697
+msgid "Find objects by the name of an attribute (exact or partial match)"
+msgstr ""
+"Zoek objecten op naam of op attribuut (precieze of gedeeltelijke "
+"overeenkomst)"
+
+#: ../src/dialogs/find.cpp:711
 msgid "Search in s_election"
 msgstr "Doorzoek de s_electie"
 
-#: ../src/dialogs/find.cpp:773
+#: ../src/dialogs/find.cpp:715
 msgid "Limit search to the current selection"
 msgstr "Beperk het zoeken tot de selectie"
 
-#: ../src/dialogs/find.cpp:778
+#: ../src/dialogs/find.cpp:720
 msgid "Search in current _layer"
 msgstr "Doorzoek de huidige _laag"
 
-#: ../src/dialogs/find.cpp:782
+#: ../src/dialogs/find.cpp:724
 msgid "Limit search to the current layer"
 msgstr "Beperk het zoeken tot de huidige laag"
 
-#: ../src/dialogs/find.cpp:787
+#: ../src/dialogs/find.cpp:729
 msgid "Include _hidden"
 msgstr "Doorzoek ver_borgen objecten"
 
-#: ../src/dialogs/find.cpp:791
+#: ../src/dialogs/find.cpp:733
 msgid "Include hidden objects in search"
 msgstr "Doorzoek ook verborgen objecten"
 
-#: ../src/dialogs/find.cpp:796
+#: ../src/dialogs/find.cpp:738
 msgid "Include l_ocked"
 msgstr "Doorzoek ver_grendelde objecten"
 
-#: ../src/dialogs/find.cpp:800
+#: ../src/dialogs/find.cpp:742
 msgid "Include locked objects in search"
 msgstr "Doorzoek ook vergrendelde objecten"
 
-#: ../src/dialogs/find.cpp:811
+#: ../src/dialogs/find.cpp:753
 msgid "Clear values"
 msgstr "Maak alle invoervelden leeg om een nieuwe zoekopdracht te beginnen"
 
-#: ../src/dialogs/find.cpp:812
+#: ../src/dialogs/find.cpp:754
 msgid "_Find"
 msgstr "_Zoeken"
 
-#: ../src/dialogs/find.cpp:812
+#: ../src/dialogs/find.cpp:754
 msgid "Select objects matching all of the fields you filled in"
 msgstr "Selecteer alle objecten met de hierboven ingevulde eigenschappen"
 
@@ -2151,7 +2157,7 @@ msgstr ""
 
 #: ../src/dialogs/iconpreview.cpp:193
 #: ../src/ui/dialog/align-and-distribute.cpp:780
-#: ../src/widgets/desktop-widget.cpp:918
+#: ../src/widgets/desktop-widget.cpp:915
 msgid "Selection"
 msgstr "Selectie"
 
@@ -3112,7 +3118,7 @@ msgstr ""
 "af te drukken naar een bestand, of '| programma argument....' \n"
 "om het naar een programma te sturen."
 
-#: ../src/extension/internal/ps.cpp:1237
+#: ../src/extension/internal/ps.cpp:1250
 msgid "write error occurred"
 msgstr "Er vond een schrijffout plaats"
 
@@ -3138,46 +3144,46 @@ msgstr ""
 msgid "default.svg"
 msgstr "standaard.svg"
 
-#: ../src/file.cpp:202 ../src/file.cpp:894
+#: ../src/file.cpp:204 ../src/file.cpp:896
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Het lukte niet om het bestand %s te laden"
 
-#: ../src/file.cpp:227
+#: ../src/file.cpp:229
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Het bestand is nog niet opgeslagen, kan niet terugdraaien."
 
-#: ../src/file.cpp:233
+#: ../src/file.cpp:235
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 "Wijzigingen zullen verloren gaan! Weet u zeker dat u het bestand %s opnieuw "
 "wilt laden?"
 
-#: ../src/file.cpp:260
+#: ../src/file.cpp:262
 msgid "Document reverted."
 msgstr "Het bestand is teruggezet."
 
-#: ../src/file.cpp:262
+#: ../src/file.cpp:264
 msgid "Document not reverted."
 msgstr "Het bestand is niet teruggezet."
 
-#: ../src/file.cpp:376
+#: ../src/file.cpp:378
 msgid "Select file to open"
 msgstr "Selecteer een bestand om te openen"
 
-#: ../src/file.cpp:512
+#: ../src/file.cpp:514
 #, fuzzy, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "<b>%i</b> ongebruikte item(s) verwijderd uit &lt;defs&gt;."
 msgstr[1] "<b>%i</b> ongebruikte item(s) verwijderd uit &lt;defs&gt;."
 
-#: ../src/file.cpp:517
+#: ../src/file.cpp:519
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Er zijn geen ongebruikte definities in &lt;defs&gt;."
 
-#: ../src/file.cpp:542
+#: ../src/file.cpp:544
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -3186,38 +3192,38 @@ msgstr ""
 "Er werden geen Inkscape extenties aangetroffen om het bestand (%s) op te "
 "slaan. Dit kan komen door een onbekende bestands-extentie."
 
-#: ../src/file.cpp:543 ../src/file.cpp:551
+#: ../src/file.cpp:545 ../src/file.cpp:553
 msgid "Document not saved."
 msgstr "Document niet opgeslagen."
 
-#: ../src/file.cpp:550
+#: ../src/file.cpp:552
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Bestand %s kon niet worden opgeslagen."
 
-#: ../src/file.cpp:560
+#: ../src/file.cpp:562
 msgid "Document saved."
 msgstr "Document opgeslagen."
 
-#: ../src/file.cpp:608
+#: ../src/file.cpp:610
 #, c-format
 msgid "drawing%s"
 msgstr "Tekening%s"
 
-#: ../src/file.cpp:614
+#: ../src/file.cpp:616
 #, c-format
 msgid "drawing-%d%s"
 msgstr "Tekening-%d%s"
 
-#: ../src/file.cpp:649
+#: ../src/file.cpp:651
 msgid "Select file to save to"
 msgstr "Selecteer een bestand om in op te slaan"
 
-#: ../src/file.cpp:733
+#: ../src/file.cpp:735
 msgid "No changes need to be saved."
 msgstr "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
 
-#: ../src/file.cpp:920
+#: ../src/file.cpp:922
 msgid "Select file to import"
 msgstr "Selecteer een bestand om te importeren"
 
@@ -3495,7 +3501,7 @@ msgstr ""
 "Inkscape zal nu welliswaar starten met de standaard instellingen,\n"
 "maar wijzigingen in de voorkeuren zullen niet worden opgeslagen."
 
-#: ../src/inkscape.cpp:714 ../src/inkscape.cpp:752
+#: ../src/inkscape.cpp:714 ../src/inkscape.cpp:755
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -3504,7 +3510,7 @@ msgstr ""
 "%s is geen normaal bestand.\n"
 "%s"
 
-#: ../src/inkscape.cpp:715 ../src/inkscape.cpp:753
+#: ../src/inkscape.cpp:715 ../src/inkscape.cpp:756
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -3532,7 +3538,7 @@ msgstr ""
 "Inkscape zal starten met de standaard instellingen.\n"
 "Nieuwe instellingen worden niet opgeslagen."
 
-#: ../src/inkscape.cpp:755
+#: ../src/inkscape.cpp:758
 #, fuzzy, c-format
 msgid ""
 "%s is not a valid menus file.\n"
@@ -3541,7 +3547,7 @@ msgstr ""
 "%s is geen geldig voorkeuren bestand.\n"
 "%s"
 
-#: ../src/inkscape.cpp:756
+#: ../src/inkscape.cpp:759
 #, fuzzy
 msgid ""
 "Inkscape will run with default menus.\n"
@@ -3621,19 +3627,23 @@ msgstr ""
 msgid "Jabber connection lost."
 msgstr ""
 
-#: ../src/jabber_whiteboard/callbacks.cpp:71
+#: ../src/jabber_whiteboard/callbacks.cpp:72
 #, c-format
-msgid "Sending message; %u messages remaining in send queue."
-msgstr ""
+msgid "Sending message; %u message remaining in send queue."
+msgid_plural "Sending message; %u messages remaining in send queue."
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../src/jabber_whiteboard/callbacks.cpp:74
+#: ../src/jabber_whiteboard/callbacks.cpp:78
 msgid "Receive queue empty."
 msgstr ""
 
-#: ../src/jabber_whiteboard/callbacks.cpp:149
+#: ../src/jabber_whiteboard/callbacks.cpp:154
 #, c-format
-msgid "Receiving change; %u changes left to process."
-msgstr ""
+msgid "Receiving change; %u change left to process."
+msgid_plural "Receiving change; %u changes left to process."
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/jabber_whiteboard/chat-handler.cpp:157
 #, c-format
@@ -3734,32 +3744,45 @@ msgstr ""
 msgid "<b>%s</b> has joined the chatroom."
 msgstr ""
 
-#: ../src/jabber_whiteboard/message-queue.cpp:86
+#: ../src/jabber_whiteboard/message-queue.cpp:87
 #, fuzzy, c-format
-msgid "%u changes in receive queue."
-msgstr "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
+msgid "%u change in receive queue."
+msgid_plural "%u changes in receive queue."
+msgstr[0] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
+msgstr[1] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
 
-#: ../src/jabber_whiteboard/message-queue.cpp:112
+#: ../src/jabber_whiteboard/message-queue.cpp:117
 #, fuzzy, c-format
-msgid "%u changes in send queue."
-msgstr "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
+msgid "%u change in send queue."
+msgid_plural "%u changes in send queue."
+msgstr[0] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
+msgstr[1] "Er zijn geen wijzigingen die opgeslagen hoeven te worden."
 
 #. if ID is NULL, then we have a real problem -- we were not able to find a key
 #. nor generate one.  The only thing we can really do here is abort, since we have
 #. no way to let the other client(s) uniquely identify this object.
-#: ../src/jabber_whiteboard/message-utilities.cpp:162
+#. FIXME: If this indicates a programming bug, then don't request translation with
+#. * _(...): it is most useful in untranslated form so that developers may search for
+#. * it when someone reports it in a bug report (as we want users to do for all bugs,
+#. * as indicated by it being a g_warning string).
+#. *
+#. * Otherwise, if it is not a programming bug but a network error or a bug in the
+#. * remote peer (perhaps running different software) or whatever, then present it in
+#. * an alert box, and avoid use of technical jargon `NULL'.
+#.
+#: ../src/jabber_whiteboard/message-utilities.cpp:171
 msgid ""
 "ID for new object is NULL even after generation and lookup attempts: the new "
 "object will NOT be sent, nor will any of its child objects!"
 msgstr ""
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:60
-#: ../src/jabber_whiteboard/session-manager.cpp:995
+#: ../src/jabber_whiteboard/session-manager.cpp:994
 msgid "Select a location and filename"
 msgstr ""
 
 #: ../src/jabber_whiteboard/session-file-selector.cpp:62
-#: ../src/jabber_whiteboard/session-manager.cpp:997
+#: ../src/jabber_whiteboard/session-manager.cpp:996
 #, fuzzy
 msgid "Set filename"
 msgstr "_Bestandsnaam"
@@ -3819,12 +3842,12 @@ msgstr ""
 msgid "Cancel connection"
 msgstr "Selectie"
 
-#: ../src/jabber_whiteboard/session-manager.cpp:778
+#: ../src/jabber_whiteboard/session-manager.cpp:777
 #, c-format
 msgid "Established whiteboard session with <b>%s</b>."
 msgstr ""
 
-#: ../src/jabber_whiteboard/session-manager.cpp:786
+#: ../src/jabber_whiteboard/session-manager.cpp:785
 #, c-format
 msgid "<b>%s</b> has <b>left</b> the whiteboard session."
 msgstr ""
@@ -3832,20 +3855,20 @@ msgstr ""
 #. Inform the user
 #. TRANSLATORS: %1 is the name of the user that disconnected, %2 is the name of the user whom the disconnected user disconnected from.
 #. This message is not used in a chatroom context.
-#: ../src/jabber_whiteboard/session-manager.cpp:791
+#: ../src/jabber_whiteboard/session-manager.cpp:790
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The user <b>%1</b> has left the "
 "whiteboard session.</span>\n"
 "\n"
 msgstr ""
 
-#: ../src/jabber_whiteboard/session-manager.cpp:792
+#: ../src/jabber_whiteboard/session-manager.cpp:791
 msgid ""
 "You are still connected to a Jabber server as <b>%2</b>, and may establish a "
 "new session to <b>%1</b> or a different user."
 msgstr ""
 
-#: ../src/jabber_whiteboard/session-manager.cpp:988
+#: ../src/jabber_whiteboard/session-manager.cpp:987
 msgid ""
 "Could not open file %1 for session recording.\n"
 "The error encountered was: %2.\n"
@@ -3854,11 +3877,11 @@ msgid ""
 "not record this session."
 msgstr ""
 
-#: ../src/jabber_whiteboard/session-manager.cpp:990
+#: ../src/jabber_whiteboard/session-manager.cpp:989
 msgid "Choose a different location"
 msgstr ""
 
-#: ../src/jabber_whiteboard/session-manager.cpp:991
+#: ../src/jabber_whiteboard/session-manager.cpp:990
 msgid "Skip session recording"
 msgstr ""
 
@@ -3870,152 +3893,160 @@ msgstr "Het slepen van het knooppunt of handvat is afgebroken."
 msgid "Ignoring font without family that will crash Pango"
 msgstr "Lettertype zonder familie (welke Pango doet crashen) wordt genegeerd"
 
-#: ../src/main.cpp:385
+#: ../src/main.cpp:387
 msgid "Print the Inkscape version number"
 msgstr "Het Inkscape versienummer tonen."
 
-#: ../src/main.cpp:390
+#: ../src/main.cpp:392
 msgid "Do not use X server (only process files from console)"
 msgstr "X-server niet gebruiken (verwerk alleen bestanden van de terminal)"
 
-#: ../src/main.cpp:395
+#: ../src/main.cpp:397
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Probeer X-server te gebruiken (zelfs als $DISPLAY geen waarde heeft)"
 
-#: ../src/main.cpp:400
+#: ../src/main.cpp:402
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Open de aangeduidde documenten (optie-tekenreeks hoeft niet te worden "
 "opgegeven)"
 
-#: ../src/main.cpp:401 ../src/main.cpp:406 ../src/main.cpp:411
-#: ../src/main.cpp:468 ../src/main.cpp:473 ../src/main.cpp:478
+#: ../src/main.cpp:403 ../src/main.cpp:408 ../src/main.cpp:413
+#: ../src/main.cpp:475 ../src/main.cpp:480 ../src/main.cpp:485
 msgid "FILENAME"
 msgstr "BESTANDSNAAM"
 
-#: ../src/main.cpp:405
+#: ../src/main.cpp:407
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Druk de documenten af naar het opgegeven bestand (gebruik '| programma' voor "
 "een pipe)"
 
-#: ../src/main.cpp:410
+#: ../src/main.cpp:412
 msgid "Export document to a PNG file"
 msgstr "Document exporteren naar .png bestand"
 
-#: ../src/main.cpp:415
+#: ../src/main.cpp:417
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 "De resolutie die gebruikt wordt om SVG naar bitmap te exporteren (standaard "
 "90)"
 
-#: ../src/main.cpp:416
+#: ../src/main.cpp:418
 msgid "DPI"
 msgstr "DPI"
 
-#: ../src/main.cpp:420
+#: ../src/main.cpp:422
+#, fuzzy
 msgid ""
-"Exported area in SVG pixels (default is the canvas; 0,0 is lower-left corner)"
+"Exported area in SVG user units (default is the canvas; 0,0 is lower-left "
+"corner)"
 msgstr ""
 "Te exporteren oppervlakte in SVG pixels (standaard het hele document; 0,0 is "
 "de hoek links-onder)"
 
-#: ../src/main.cpp:421
+#: ../src/main.cpp:423
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: ../src/main.cpp:425
+#: ../src/main.cpp:427
 msgid "Exported area is the entire drawing (not canvas)"
 msgstr ""
 
-#: ../src/main.cpp:430
+#: ../src/main.cpp:432
+msgid ""
+"Snap the bitmap export area outwards to the nearest integer values (in SVG "
+"user units)"
+msgstr ""
+
+#: ../src/main.cpp:437
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "De breedte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
 
-#: ../src/main.cpp:431
+#: ../src/main.cpp:438
 msgid "WIDTH"
 msgstr "BREEDTE"
 
-#: ../src/main.cpp:435
+#: ../src/main.cpp:442
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 "De hoogte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
 
-#: ../src/main.cpp:436
+#: ../src/main.cpp:443
 msgid "HEIGHT"
 msgstr "HOOGTE"
 
-#: ../src/main.cpp:440
+#: ../src/main.cpp:447
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
 "Het ID van het te exporteren object (dit overschijft het te exporteren "
 "gebied)"
 
-#: ../src/main.cpp:441 ../src/main.cpp:517
+#: ../src/main.cpp:448 ../src/main.cpp:524
 msgid "ID"
 msgstr "ID"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: ../src/main.cpp:447
+#: ../src/main.cpp:454
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Exporteer alleen het object met het opgegeven object-id, verberg alle andere "
 "objecten"
 
-#: ../src/main.cpp:452
+#: ../src/main.cpp:459
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Gebruik de opgeslagen bestandsnaam en DPI instellingen bij het exporteren"
 "(alleen met export-id)"
 
-#: ../src/main.cpp:457
+#: ../src/main.cpp:464
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Achtergrondkleur van de geëxporteerde bitmap (kan iedere door SVG "
 "ondersteunde kleur zijn)"
 
-#: ../src/main.cpp:458
+#: ../src/main.cpp:465
 msgid "COLOR"
 msgstr "KLEUR"
 
-#: ../src/main.cpp:462
+#: ../src/main.cpp:469
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 "Achtergrond ondoorzichtigheid van de geëxporteerde bitmap (ofwel tussen 0.0 "
 "en 1.0, of tussen 1 en 255)"
 
-#: ../src/main.cpp:463
+#: ../src/main.cpp:470
 msgid "VALUE"
 msgstr "WAARDE"
 
-#: ../src/main.cpp:467
+#: ../src/main.cpp:474
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Document exporteren naar gewoon SVG bestand (geen sodipodi of "
 "inkscapenaamruimte)"
 
-#: ../src/main.cpp:472
+#: ../src/main.cpp:479
 msgid "Export document to a PS file"
 msgstr "Document exporteren naar PS bestand"
 
-#: ../src/main.cpp:477
+#: ../src/main.cpp:484
 msgid "Export document to an EPS file"
 msgstr "Document exporteren naar EPS bestand"
 
-#: ../src/main.cpp:482
+#: ../src/main.cpp:489
 msgid "Convert text object to paths on export (EPS)"
 msgstr "Tekst omzetten naar paden bij het exporteren (EPS)"
 
-#: ../src/main.cpp:487
+#: ../src/main.cpp:494
 msgid "Export files with the bounding box set to the page size (EPS)"
 msgstr ""
 "Pagina grootte als omhullende gebruiken bij het exporteren van EPS bestanden"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:493
+#: ../src/main.cpp:500
 msgid ""
 "Query the X coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4024,7 +4055,7 @@ msgstr ""
 "id - van het object"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:499
+#: ../src/main.cpp:506
 msgid ""
 "Query the Y coordinate of the drawing or, if specified, of the object with --"
 "query-id"
@@ -4033,7 +4064,7 @@ msgstr ""
 "id - van het object"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:505
+#: ../src/main.cpp:512
 msgid ""
 "Query the width of the drawing or, if specified, of the object with --query-"
 "id"
@@ -4042,7 +4073,7 @@ msgstr ""
 "van het object"
 
 #. TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
-#: ../src/main.cpp:511
+#: ../src/main.cpp:518
 msgid ""
 "Query the height of the drawing or, if specified, of the object with --query-"
 "id"
@@ -4050,31 +4081,31 @@ msgstr ""
 "De hoogte van de tekening opvragen, of - indien opgegeven met --query-id - "
 "van het object"
 
-#: ../src/main.cpp:516
+#: ../src/main.cpp:523
 msgid "The ID of the object whose dimensions are queried"
 msgstr "Het ID van het object waarvan de informatie wordt opgevraagd"
 
 #. TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
-#: ../src/main.cpp:522
+#: ../src/main.cpp:529
 msgid "Print out the extension directory and exit"
 msgstr "Geef de "
 
-#: ../src/main.cpp:527
+#: ../src/main.cpp:534
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "De geselecteerde bestanden één voor één weergeven, en naar de volgende gaan "
 "bij muisklik of toetsenbord gebruik"
 
-#: ../src/main.cpp:532
+#: ../src/main.cpp:539
 msgid "Use the new Gtkmm GUI interface"
 msgstr ""
 
-#: ../src/main.cpp:537
+#: ../src/main.cpp:544
 msgid "Remove unused definitions from the defs section(s) of the document"
 msgstr ""
 "Ongebruikte definities uit het &lt;defs&gt-onderdeel van het bestand halen"
 
-#: ../src/main.cpp:690
+#: ../src/main.cpp:697
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -4084,7 +4115,61 @@ msgstr ""
 "\n"
 "Beschikbare opties:"
 
-#: ../src/node-context.cpp:380
+#: ../src/menus-skeleton.h:17
+msgid "_New"
+msgstr "_Nieuw"
+
+#: ../src/menus-skeleton.h:22
+msgid "Open _Recent"
+msgstr "_Recente bestanden"
+
+#: ../src/menus-skeleton.h:53
+msgid "_Edit"
+msgstr "Be_werken"
+
+#: ../src/menus-skeleton.h:84
+msgid "_View"
+msgstr "Beel_d"
+
+#: ../src/menus-skeleton.h:97
+#, fuzzy
+msgid "Show/Hide"
+msgstr "_Weergeven/verbergen"
+
+#: ../src/menus-skeleton.h:116
+msgid "_Layer"
+msgstr "_Laag"
+
+#: ../src/menus-skeleton.h:133
+msgid "_Object"
+msgstr "_Object"
+
+#: ../src/menus-skeleton.h:155
+msgid "_Path"
+msgstr "_Paden"
+
+#: ../src/menus-skeleton.h:178
+msgid "_Text"
+msgstr "_Tekst"
+
+#: ../src/menus-skeleton.h:190
+msgid "Effects"
+msgstr "Effecten"
+
+#: ../src/menus-skeleton.h:197
+msgid "Whiteboard"
+msgstr ""
+
+#: ../src/menus-skeleton.h:210
+msgid "_Help"
+msgstr "_Hulp"
+
+#: ../src/menus-skeleton.h:212
+#, fuzzy
+msgid "Tutorials"
+msgstr "_Handleidingen"
+
+#: ../src/node-context.cpp:379
 msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
@@ -4092,14 +4177,14 @@ msgstr ""
 "<b>Ctrl</b>: kies knooppunt type, draai in stappen, verplaats horizontaal/"
 "verticaal; <b>Ctrl+Alt</b>: verplaatsen in de richting van de handvatten"
 
-#: ../src/node-context.cpp:381
+#: ../src/node-context.cpp:380
 msgid ""
 "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 "<b>Shift</b>: wissel knooppunt selectie, magnetisch raster uit te zetten, "
 "draai beide handvatten"
 
-#: ../src/node-context.cpp:382
+#: ../src/node-context.cpp:381
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
 msgstr ""
 "<b>Alt</b>: vergrendel handvat lengte; <b>Ctrl+Alt</b>: verplaatsen in de "
@@ -5534,7 +5619,7 @@ msgid "Smallest item"
 msgstr "Kleinste onderdeel"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:779
-#: ../src/widgets/desktop-widget.cpp:914
+#: ../src/widgets/desktop-widget.cpp:911
 msgid "Drawing"
 msgstr "Tekening"
 
@@ -5687,52 +5772,54 @@ msgid "Message information"
 msgstr "_Transformaties verwijderen"
 
 #. Active session file display
-#: ../src/ui/dialog/session-player.cpp:83
+#. fixme: Does this mean the active file for the session, or the file for the active session?
+#. Please indicate which with a TRANSLATORS comment.
+#: ../src/ui/dialog/session-player.cpp:85
 msgid "Active session file:"
 msgstr ""
 
-#: ../src/ui/dialog/session-player.cpp:84
+#: ../src/ui/dialog/session-player.cpp:86
 msgid "Delay (milliseconds):"
 msgstr ""
 
 #. Unload/load buttons
-#: ../src/ui/dialog/session-player.cpp:92
+#: ../src/ui/dialog/session-player.cpp:94
 #, fuzzy
 msgid "Close file"
 msgstr "Sluiten"
 
-#: ../src/ui/dialog/session-player.cpp:93
+#: ../src/ui/dialog/session-player.cpp:95
 msgid "Open new file"
 msgstr ""
 
-#: ../src/ui/dialog/session-player.cpp:94
+#: ../src/ui/dialog/session-player.cpp:96
 #, fuzzy
 msgid "Set delay"
 msgstr "Instellen als standaard"
 
-#: ../src/ui/dialog/session-player.cpp:136
+#: ../src/ui/dialog/session-player.cpp:138
 #, fuzzy
 msgid "Rewind"
 msgstr "Rood"
 
-#: ../src/ui/dialog/session-player.cpp:137
+#: ../src/ui/dialog/session-player.cpp:139
 msgid "Go back one change"
 msgstr ""
 
-#: ../src/ui/dialog/session-player.cpp:138
+#: ../src/ui/dialog/session-player.cpp:140
 #, fuzzy
 msgid "Pause"
 msgstr "_Plakken"
 
-#: ../src/ui/dialog/session-player.cpp:139
+#: ../src/ui/dialog/session-player.cpp:141
 msgid "Go forward one change"
 msgstr ""
 
-#: ../src/ui/dialog/session-player.cpp:140
+#: ../src/ui/dialog/session-player.cpp:142
 msgid "Play"
 msgstr ""
 
-#: ../src/ui/dialog/session-player.cpp:175 ../src/verbs.cpp:1553
+#: ../src/ui/dialog/session-player.cpp:177 ../src/verbs.cpp:1553
 msgid "Open session file"
 msgstr ""
 
@@ -7066,11 +7153,6 @@ msgstr "In- of uit zoomen"
 msgid "Pick averaged colors from image"
 msgstr "Selecteer gemiddelde kleuren van de afbeelding"
 
-#: ../src/verbs.cpp:2056
-#, fuzzy
-msgid "Connector"
-msgstr "Ontwerper"
-
 #: ../src/verbs.cpp:2057
 #, fuzzy
 msgid "Create connectors"
@@ -7645,17 +7727,17 @@ msgstr ""
 "objecten te maken, gebruik de muiscursor om ze te verplaatsen of "
 "transformeren."
 
-#: ../src/widgets/desktop-widget.cpp:348
+#: ../src/widgets/desktop-widget.cpp:347
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:350
+#: ../src/widgets/desktop-widget.cpp:349
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:508
+#: ../src/widgets/desktop-widget.cpp:507
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -7668,11 +7750,11 @@ msgstr ""
 "\n"
 "Als u afsluit zonder op te slaan, zullen de wijzigingen verloren gaan."
 
-#: ../src/widgets/desktop-widget.cpp:524 ../src/widgets/desktop-widget.cpp:588
+#: ../src/widgets/desktop-widget.cpp:523 ../src/widgets/desktop-widget.cpp:587
 msgid "Close _without saving"
 msgstr "Sluiten _zonder opslaan"
 
-#: ../src/widgets/desktop-widget.cpp:571
+#: ../src/widgets/desktop-widget.cpp:570
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -7775,10 +7857,10 @@ msgid "Edit the stops of the gradient"
 msgstr "De overgangen in het kleurverloop aanpassen"
 
 #: ../src/widgets/gradient-toolbar.cpp:593 ../src/widgets/toolbox.cpp:1104
-#: ../src/widgets/toolbox.cpp:1192 ../src/widgets/toolbox.cpp:1483
-#: ../src/widgets/toolbox.cpp:1529 ../src/widgets/toolbox.cpp:1760
-#: ../src/widgets/toolbox.cpp:1794 ../src/widgets/toolbox.cpp:2321
-#: ../src/widgets/toolbox.cpp:2357
+#: ../src/widgets/toolbox.cpp:1193 ../src/widgets/toolbox.cpp:1486
+#: ../src/widgets/toolbox.cpp:1535 ../src/widgets/toolbox.cpp:1767
+#: ../src/widgets/toolbox.cpp:1802 ../src/widgets/toolbox.cpp:2332
+#: ../src/widgets/toolbox.cpp:2371
 msgid "<b>New:</b>"
 msgstr "<b>Nieuw:</b>"
 
@@ -7807,10 +7889,10 @@ msgstr "Kleurverlopen maken voor lijnen"
 #. FIXME: implement averaging of all parameters for multiple selected
 #. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
 #: ../src/widgets/gradient-toolbar.cpp:676 ../src/widgets/toolbox.cpp:1106
-#: ../src/widgets/toolbox.cpp:1124 ../src/widgets/toolbox.cpp:1491
-#: ../src/widgets/toolbox.cpp:1514 ../src/widgets/toolbox.cpp:1762
-#: ../src/widgets/toolbox.cpp:1780 ../src/widgets/toolbox.cpp:2323
-#: ../src/widgets/toolbox.cpp:2342
+#: ../src/widgets/toolbox.cpp:1125 ../src/widgets/toolbox.cpp:1494
+#: ../src/widgets/toolbox.cpp:1519 ../src/widgets/toolbox.cpp:1769
+#: ../src/widgets/toolbox.cpp:1788 ../src/widgets/toolbox.cpp:2335
+#: ../src/widgets/toolbox.cpp:2355
 msgid "<b>Change:</b>"
 msgstr "<b>Wijzigen:</b>"
 
@@ -8178,55 +8260,55 @@ msgstr "De geselecteerde segmenten omzetten naar rechte lijnen"
 msgid "Make selected segments curves"
 msgstr "De geselecteerde segmenten omzetten naar rondingen"
 
-#: ../src/widgets/toolbox.cpp:1199
+#: ../src/widgets/toolbox.cpp:1200
 msgid "Polygon"
 msgstr "Veelhoek"
 
-#: ../src/widgets/toolbox.cpp:1206
+#: ../src/widgets/toolbox.cpp:1207
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Gewone veelhoek (met één handvat) in plaats van een ster"
 
-#: ../src/widgets/toolbox.cpp:1218
+#: ../src/widgets/toolbox.cpp:1219
 msgid "Corners:"
 msgstr "Hoeken:"
 
-#: ../src/widgets/toolbox.cpp:1218
+#: ../src/widgets/toolbox.cpp:1219
 msgid "Number of corners of a polygon or star"
 msgstr "Aantal hoeken van een veelhoek of een ster"
 
-#: ../src/widgets/toolbox.cpp:1228
+#: ../src/widgets/toolbox.cpp:1229
 msgid "Spoke ratio:"
 msgstr "Spaak-verhouding:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/widgets/toolbox.cpp:1231
+#: ../src/widgets/toolbox.cpp:1232
 msgid "Base radius to tip radius ratio"
 msgstr "Verhouding tussen de straal en de lengte van een spaak"
 
-#: ../src/widgets/toolbox.cpp:1246
+#: ../src/widgets/toolbox.cpp:1247
 msgid "Rounded:"
 msgstr "Afgerond:"
 
-#: ../src/widgets/toolbox.cpp:1246
+#: ../src/widgets/toolbox.cpp:1247
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Hoeveel hoeken worden afgerond (0 voor scherpe hoeken)"
 
-#: ../src/widgets/toolbox.cpp:1256
+#: ../src/widgets/toolbox.cpp:1257
 msgid "Randomized:"
 msgstr "Willekeur:"
 
-#: ../src/widgets/toolbox.cpp:1256
+#: ../src/widgets/toolbox.cpp:1257
 msgid "Scatter randomly the corners and angles"
 msgstr "Verspreidt de punten en hoeken willkeurig"
 
-#: ../src/widgets/toolbox.cpp:1269 ../src/widgets/toolbox.cpp:1831
-#: ../src/widgets/toolbox.cpp:2054
+#: ../src/widgets/toolbox.cpp:1270 ../src/widgets/toolbox.cpp:1839
+#: ../src/widgets/toolbox.cpp:2062
 msgid "Defaults"
 msgstr "Standaardwaarden"
 
-#: ../src/widgets/toolbox.cpp:1270 ../src/widgets/toolbox.cpp:1832
-#: ../src/widgets/toolbox.cpp:2055
+#: ../src/widgets/toolbox.cpp:1271 ../src/widgets/toolbox.cpp:1840
+#: ../src/widgets/toolbox.cpp:2063
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -8235,84 +8317,84 @@ msgstr ""
 "(gebruik Bestand -> Inkscape voorkeuren -> Gereedschappen om de standaard "
 "instellingen te wijzigen)"
 
-#: ../src/widgets/toolbox.cpp:1539
+#: ../src/widgets/toolbox.cpp:1545
 msgid "W:"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1539
+#: ../src/widgets/toolbox.cpp:1545
 #, fuzzy
 msgid "Width of rectangle"
 msgstr "Breedte van de selectie"
 
-#: ../src/widgets/toolbox.cpp:1551
+#: ../src/widgets/toolbox.cpp:1557
 msgid "H:"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1551
+#: ../src/widgets/toolbox.cpp:1557
 #, fuzzy
 msgid "Height of rectangle"
 msgstr "Hoogte van de selectie"
 
-#: ../src/widgets/toolbox.cpp:1563
+#: ../src/widgets/toolbox.cpp:1569
 msgid "Rx:"
 msgstr "Rx:"
 
-#: ../src/widgets/toolbox.cpp:1563
+#: ../src/widgets/toolbox.cpp:1569
 msgid "Horizontal radius of rounded corners"
 msgstr "Horizontale straal van afgeronde hoeken"
 
-#: ../src/widgets/toolbox.cpp:1573
+#: ../src/widgets/toolbox.cpp:1579
 msgid "Ry:"
 msgstr "Ry:"
 
-#: ../src/widgets/toolbox.cpp:1573
+#: ../src/widgets/toolbox.cpp:1579
 msgid "Vertical radius of rounded corners"
 msgstr "Verticale straal van afgeronde hoeken"
 
-#: ../src/widgets/toolbox.cpp:1589
+#: ../src/widgets/toolbox.cpp:1595
 msgid "Not rounded"
 msgstr "Niet afgerond"
 
-#: ../src/widgets/toolbox.cpp:1591
+#: ../src/widgets/toolbox.cpp:1597
 msgid "Make corners sharp"
 msgstr "De hoeken weer scherp maken"
 
-#: ../src/widgets/toolbox.cpp:1798
+#: ../src/widgets/toolbox.cpp:1806
 msgid "Turns:"
 msgstr "Omwentelingen:"
 
-#: ../src/widgets/toolbox.cpp:1798
+#: ../src/widgets/toolbox.cpp:1806
 msgid "Number of revolutions"
 msgstr "Aantal omwentelingen"
 
-#: ../src/widgets/toolbox.cpp:1808
+#: ../src/widgets/toolbox.cpp:1816
 msgid "Divergence:"
 msgstr "Uitwaaieren:"
 
-#: ../src/widgets/toolbox.cpp:1808
+#: ../src/widgets/toolbox.cpp:1816
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Hoeveel de buitenste omwentelingen uitwaaieren; 1=gelijkmatig"
 
-#: ../src/widgets/toolbox.cpp:1818
+#: ../src/widgets/toolbox.cpp:1826
 msgid "Inner radius:"
 msgstr "Binnen straal:"
 
-#: ../src/widgets/toolbox.cpp:1818
+#: ../src/widgets/toolbox.cpp:1826
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 "Straal van de binnenste omwenteling (relatief ten opzichte van de spiraal "
 "grootte)"
 
-#: ../src/widgets/toolbox.cpp:1950
+#: ../src/widgets/toolbox.cpp:1958
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr ""
 "De breedte van de kalligrafische-pen (relatief ten opzichte van het canvas)"
 
-#: ../src/widgets/toolbox.cpp:1960
+#: ../src/widgets/toolbox.cpp:1968
 msgid "Thinning:"
 msgstr "Versmalling:"
 
-#: ../src/widgets/toolbox.cpp:1960
+#: ../src/widgets/toolbox.cpp:1968
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -8321,11 +8403,11 @@ msgstr ""
 "lijnen smaller, <0 maakt ze breeder, 0 maakt de breedte onafhankelijk van de "
 "snelheid)"
 
-#: ../src/widgets/toolbox.cpp:1973
+#: ../src/widgets/toolbox.cpp:1981
 msgid "Angle:"
 msgstr "Hoek:"
 
-#: ../src/widgets/toolbox.cpp:1973
+#: ../src/widgets/toolbox.cpp:1981
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
@@ -8333,12 +8415,12 @@ msgstr ""
 "De hoek van de punt van de pen (in graden; 0 = horizontaal. Heeft geen "
 "invloed als de oriëntatie 0 is)."
 
-#: ../src/widgets/toolbox.cpp:1983
+#: ../src/widgets/toolbox.cpp:1991
 #, fuzzy
 msgid "Fixation:"
 msgstr "Oriëntatie:"
 
-#: ../src/widgets/toolbox.cpp:1983
+#: ../src/widgets/toolbox.cpp:1991
 msgid ""
 "How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 "
 "= fixed)"
@@ -8346,67 +8428,67 @@ msgstr ""
 "Oriëntatie van de pen (in graden; 0 = altijd loodrecht op de teken-richting, "
 "1 = vaste oriëntatie)"
 
-#: ../src/widgets/toolbox.cpp:1996
+#: ../src/widgets/toolbox.cpp:2004
 msgid "Mass:"
 msgstr "Massa:"
 
-#: ../src/widgets/toolbox.cpp:1996
+#: ../src/widgets/toolbox.cpp:2004
 msgid "How much inertia affects the movement of the pen"
 msgstr "De invloed van traagheid op de beweging van de pen"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: ../src/widgets/toolbox.cpp:2007
+#: ../src/widgets/toolbox.cpp:2015
 msgid "Drag:"
 msgstr "Weerstand:"
 
-#: ../src/widgets/toolbox.cpp:2007
+#: ../src/widgets/toolbox.cpp:2015
 msgid "How much resistance affects the movement of the pen"
 msgstr "De invloed van weerstand op de beweging van de pen"
 
-#: ../src/widgets/toolbox.cpp:2027
+#: ../src/widgets/toolbox.cpp:2035
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:2040
+#: ../src/widgets/toolbox.cpp:2048
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:2361
+#: ../src/widgets/toolbox.cpp:2375
 msgid "Start:"
 msgstr "Start:"
 
-#: ../src/widgets/toolbox.cpp:2361
+#: ../src/widgets/toolbox.cpp:2375
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 "De hoek (in graden) tussen een horizontale lijn en het begin van de taartpunt"
 
-#: ../src/widgets/toolbox.cpp:2371
+#: ../src/widgets/toolbox.cpp:2385
 msgid "End:"
 msgstr "Einde:"
 
-#: ../src/widgets/toolbox.cpp:2371
+#: ../src/widgets/toolbox.cpp:2385
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 "De hoek (in graden) tussen een horizontale lijn en het einde van de taartpunt"
 
-#: ../src/widgets/toolbox.cpp:2382
+#: ../src/widgets/toolbox.cpp:2396
 msgid "Open arc"
 msgstr "Taartpunt openen"
 
-#: ../src/widgets/toolbox.cpp:2383
+#: ../src/widgets/toolbox.cpp:2397
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr "Wissel tussen arc (open vorm) en taartpunt (gesloten vorm)"
 
-#: ../src/widgets/toolbox.cpp:2402
+#: ../src/widgets/toolbox.cpp:2416
 msgid "Make whole"
 msgstr "Ellips herstellen"
 
-#: ../src/widgets/toolbox.cpp:2404
+#: ../src/widgets/toolbox.cpp:2418
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Maak weer een ellips van de figuur, geen arc of taartpunt "
 
-#: ../src/widgets/toolbox.cpp:2631
+#: ../src/widgets/toolbox.cpp:2645
 msgid ""
 "When pressed, picks visible color without alpha and when not pressed, picks "
 "color including its alpha"
@@ -8414,12 +8496,12 @@ msgstr ""
 "Wanneer ingedrukt wordt de kleur zonder doorzichtigheid gekozen, wanneer "
 "niet ingedrukt wordt de kleur met doorzichtigheid gekozen."
 
-#: ../src/widgets/toolbox.cpp:3026
+#: ../src/widgets/toolbox.cpp:3040
 #, fuzzy
 msgid "Make connectors avoid selected objects"
 msgstr "De overlap tussen de geselecteerde objecten"
 
-#: ../src/widgets/toolbox.cpp:3030
+#: ../src/widgets/toolbox.cpp:3044
 #, fuzzy
 msgid "Make connectors ignore selected objects"
 msgstr "De overlap tussen de geselecteerde objecten"
@@ -8430,17 +8512,8 @@ msgstr "De overlap tussen de geselecteerde objecten"
 #~ "Het fouten-logboekbestand '%s' voor uitbreidingen kon niet worden "
 #~ "aangemaakt"
 
-#~ msgid "_New"
-#~ msgstr "_Nieuw"
-
-#~ msgid "Open _Recent"
-#~ msgstr "_Recente bestanden"
-
 #~ msgid "Open one of the recently visited documents"
 #~ msgstr "Open een recentelijk geopend bestand"
-
-#~ msgid "S_how/Hide"
-#~ msgstr "_Weergeven/verbergen"
 
 #~ msgid ""
 #~ "Show or hide parts of the document window (differently for normal and "
@@ -8449,35 +8522,8 @@ msgstr "De overlap tussen de geselecteerde objecten"
 #~ "Delen van het document venster weergeven of verbergen (dit verschilt voor "
 #~ "normale en volledig-scherm weergave)"
 
-#~ msgid "_Tutorials"
-#~ msgstr "_Handleidingen"
-
 #~ msgid "Interactive Inkscape tutorials"
 #~ msgstr "Interactieve Inkscape handleidingen"
-
-#~ msgid "_Edit"
-#~ msgstr "Be_werken"
-
-#~ msgid "_View"
-#~ msgstr "Beel_d"
-
-#~ msgid "_Layer"
-#~ msgstr "_Laag"
-
-#~ msgid "_Object"
-#~ msgstr "_Object"
-
-#~ msgid "_Path"
-#~ msgstr "_Paden"
-
-#~ msgid "_Text"
-#~ msgstr "_Tekst"
-
-#~ msgid "Effects"
-#~ msgstr "Effecten"
-
-#~ msgid "_Help"
-#~ msgstr "_Hulp"
 
 #~ msgid ""
 #~ "<b>0</b> out of <b>%i</b> node selected. <b>Click</b>, <b>Shift+click</"
