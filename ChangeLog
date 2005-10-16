@@ -1,3 +1,7 @@
+2005-10-16  Michael Wybrow  <mjwybrow@users.sourceforge.net>
+
+	* po/ca.po: Fix unclosed <b> found in translations.
+	
 2005-10-15  Michael Wybrow  <mjwybrow@users.sourceforge.net>
 
 	* src/isnan.h: Update to allow compilation on OSX 10.4.

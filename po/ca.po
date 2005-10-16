@@ -6040,7 +6040,7 @@ msgstr ""
 
 #: ../src/ui/dialog/whiteboard-connect.cpp:147
 msgid "Connected to Jabber server <b>%1</b> as <b>%2</b>"
-msgstr "<b>S'ha connectat al servidor de Jabber <b>%1</b> com a <b>%2</b>"
+msgstr "S'ha connectat al servidor de Jabber <b>%1</b> com a <b>%2</b>"
 
 #. Construct labels
 #: ../src/ui/dialog/whiteboard-sharewithchat.cpp:75
